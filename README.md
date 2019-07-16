@@ -46,7 +46,7 @@ it depends on your hardware.
 - After the compilation is successful, a BIQU_TFT35_V1.x.x.bin file will be generated in the .pioenvs\BIGTREE_TFT35_V1_x directory. We need copy this file to the SD card, and insert this SD Card to TFT35 Touch Screen, then reset the Touch Screen,  the firmware will be updated automatically.
 
 ### how to update firmware
-copy [these files](https://github.com/Msq001/BIGTREETECH-TFT35-V1.2/tree/master/firmware/Copy%20to%20SD%20Card%20root%20directory%20to%20update) to SD Card root directory
+copy [these files](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update) to SD Card root directory
 
 The structure of the files in SD Card should be as follows
 ![firmware](https://user-images.githubusercontent.com/25599056/56635835-8cd04680-6699-11e9-8686-bc805a7f1060.jpg)
