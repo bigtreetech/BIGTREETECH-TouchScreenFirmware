@@ -8,6 +8,7 @@ Modify the value of
 > #define EXTRUDER_NUM 1    //set in 1~6
 
 > #define FAN_NUM      1    //set in 1~6
+
 to config hotend, extruder, fan number
 ### how to compile firmware
 
