@@ -1,6 +1,14 @@
 ### How to install vscode and platformio for compile
 - Install the compilation environment, We recommend vscode + platformio. If you have already installed it, please skip this step.  If not, please see [here](https://github.com/bigtreetech/Document/blob/master/How%20to%20install%20VScode+Platformio.md).
+### how to config firmware
+![image](https://user-images.githubusercontent.com/25599056/61276962-b229a800-a7e3-11e9-83fe-ec5e944f1463.png)
+Modify the value of
+> #define TOOL_NUM     1    //set in 1~6
 
+> #define EXTRUDER_NUM 1    //set in 1~6
+
+> #define FAN_NUM      1    //set in 1~6
+to config hotend, extruder, fan number
 ### how to compile firmware
 
 - Please see the picture(①), which is the PlatformIO plugin, and then click ② Open Project to open the project.
