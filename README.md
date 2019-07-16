@@ -1,15 +1,5 @@
 ### How to install vscode and platformio for compile
 - Install the compilation environment, We recommend vscode + platformio. If you have already installed it, please skip this step.  If not, please see [here](https://github.com/bigtreetech/Document/blob/master/How%20to%20install%20VScode+Platformio.md).
-### how to config firmware
-![image](https://user-images.githubusercontent.com/25599056/61276962-b229a800-a7e3-11e9-83fe-ec5e944f1463.png)
-Modify the value of
-> #define TOOL_NUM     1    //set in 1~6
-
-> #define EXTRUDER_NUM 1    //set in 1~6
-
-> #define FAN_NUM      1    //set in 1~6
-
-to config hotend, extruder, fan number
 ### how to compile firmware
 
 - Please see the picture(①), which is the PlatformIO plugin, and then click ② Open Project to open the project.
@@ -27,7 +17,16 @@ it depends on your hardware.
 ![image](https://user-images.githubusercontent.com/25599056/56637550-809ab800-669e-11e9-99d3-6b502e294688.png)
  
 - After the compilation is successful, a BIQU_TFT35_V1.x.x.bin file will be generated in the .pioenvs\BIGTREE_TFT35_V1_x directory. We need copy this file to the SD card, and insert this SD Card to TFT35 Touch Screen, then reset the Touch Screen,  the firmware will be updated automatically.
+### how to config firmware
+![image](https://user-images.githubusercontent.com/25599056/61276962-b229a800-a7e3-11e9-83fe-ec5e944f1463.png)
+Modify the value of
+> #define TOOL_NUM     1    //set in 1~6
 
+> #define EXTRUDER_NUM 1    //set in 1~6
+
+> #define FAN_NUM      1    //set in 1~6
+
+to config hotend, extruder, fan number
 ### how to update firmware
 copy [these files](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update) to SD Card root directory
 
