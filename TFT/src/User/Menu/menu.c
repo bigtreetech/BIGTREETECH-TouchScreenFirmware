@@ -1,6 +1,7 @@
 #include "menu.h"
 #include "includes.h"
 
+// exhibitRect is 2 ICON Space in the Upper Row and 2 Center Coloum. 
 const GUI_RECT exhibitRect = {
    1*ICON_WIDTH+1*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y,  3*ICON_WIDTH+2*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y
 };
@@ -121,7 +122,7 @@ void loopReminderClear(void)
       return;
   }
 
-  /* 清除警告信息 */		
+  /* Clear warning message */		
   reminder.status = STATUS_IDLE;
   if(curMenuItems == NULL)
     return;
@@ -139,7 +140,7 @@ void loopVolumeReminderClear(void)
       return;
   }
 
-  /* 清除警告信息 */		
+  /* Clear warning message */		
   volumeReminder.status = STATUS_IDLE;
   if(curMenuItems == NULL)
     return;
@@ -181,14 +182,14 @@ void menuDrawTitle(const MENUITEMS * menuItems)
   GUI_SetColor(WHITE);
 }
 
-//绘制整个界面
+//Draw the entire interface
 void menuDrawPage(const MENUITEMS * menuItems)
 {
   u8 i=0;
   curMenuItems = menuItems;
   TSC_ReDrawIcon = itemDrawIconPress;
   //    GUI_Clear(BLACK);
-  menuClearGaps();     //使用此函数而不是 GUI_Clear 是为了消除清屏时的闪屏现象
+  menuClearGaps();     //Use this function instead of GUI_Clear to eliminate the splash screen when clearing the screen.
   menuDrawTitle(menuItems);
   for(i=0; i<ITEM_PER_PAGE; i++)
   {
@@ -196,7 +197,7 @@ void menuDrawPage(const MENUITEMS * menuItems)
   }
 }
 
-//有按键值时，图标变色，并重绘
+//When there is a button value, the icon changes color and redraws
 void itemDrawIconPress(u8 positon, u8 is_press)
 {
   if(curMenuItems == NULL)                                  return;
@@ -204,30 +205,29 @@ void itemDrawIconPress(u8 positon, u8 is_press)
   if(curMenuItems->items[positon].icon == ICON_BACKGROUND)  return;
 
   const GUI_RECT *rect = rect_of_key + positon;   
-  if(is_press)   //按下时变绿
+  if(is_press)   //Turn green when pressed
     ICON_PressedDisplay(rect->x0, rect->y0, curMenuItems->items[positon].icon);
-  else           //松开时重绘正常图标
+  else           //Redraw normal icon when released
     ICON_ReadDisplay(rect->x0, rect->y0, curMenuItems->items[positon].icon);
 }
 
-
-//获取按键值
+//Get button value
 KEY_VALUES menuKeyGetValue(void)
 {    
   return(KEY_VALUES)KEY_GetValue(sizeof(rect_of_key)/sizeof(rect_of_key[0]), rect_of_key);    
 }
 
 
-void loopProcess (void)
+void loopProcess(void)
 {
-  getGcodeFromFile();                 //从待打印的文件中解析出Gcode命令
+  getGcodeFromFile();                 //Parse the Gcode command from the file to be printed
 
   //    parseQueueCmd();                
-  sendQueueCmd();                     //处理并发送队列中的Gcode命令
+  sendQueueCmd();                     //Process and send Gcode commands in the queue
   
-  parseACK();                         //解析接收的从机应答信息
+  parseACK();                         //Parsing the received slave response information
 
-  loopCheckHeater();			            //温度相关的设置
+  loopCheckHeater();			            //Temperature related settings
   
   loopVolumeSource();                 //Check if volume source(SD/U disk) insert
 
@@ -235,7 +235,7 @@ void loopProcess (void)
   loopCheckPrinting();                //Check if there is a SD or USB print running.
 #endif
 
-  loopReminderClear();	              //若状态栏有提示信息，定时清除
+  loopReminderClear();	              //If there is a message in the status bar, timed clear
   
   loopVolumeReminderClear();
 
