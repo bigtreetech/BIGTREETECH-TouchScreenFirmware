@@ -27,12 +27,11 @@ FIL fpPowerFailed;
 bool powerFailedCreate(char *path) 
 { 
   UINT br;
+  create_ok = false;
 
-  if(f_open(&fpPowerFailed, powerFailedFileName, FA_OPEN_ALWAYS | FA_WRITE)!=FR_OK)
-  {
-    create_ok = false;
-    return false;
-  }
+  if(infoFile.source != TFT_SD)  return false;
+  if(f_open(&fpPowerFailed, powerFailedFileName, FA_OPEN_ALWAYS | FA_WRITE) != FR_OK)  return false;
+  
   f_write(&fpPowerFailed, path, MAX_PATH_LEN, &br);
   f_write(&fpPowerFailed, &infoBreakPoint, sizeof(BREAK_POINT), &br);
   f_sync(&fpPowerFailed);

@@ -52,9 +52,9 @@ static float ack_second_value()
 
 void ackPopupInfo(const char *info)
 {
-    popupDrawPage(&bottomSingleBtn ,(u8* )info, (u8 *)ack_rev_buf + ack_index, textSelect(LABEL_CONFIRM), NULL);    
-    if(infoMenu.menu[infoMenu.cur] != menuPopup)
-      infoMenu.menu[++infoMenu.cur] = menuPopup;
+  popupDrawPage(&bottomSingleBtn ,(u8* )info, (u8 *)ack_rev_buf + ack_index, textSelect(LABEL_CONFIRM), NULL);    
+  if(infoMenu.menu[infoMenu.cur] != menuPopup)
+    infoMenu.menu[++infoMenu.cur] = menuPopup;
 }
 
 void parseACK(void)
@@ -132,7 +132,7 @@ void parseACK(void)
       heatSetCurrentTemp(BED,ack_value()+0.5);
       heatSetTargetTemp(BED, ack_second_value()+0.5);
     }
-    else if(infoHost.connected && ack_seen(echomagic) && ack_seen(busymagic) && ack_seen("processing") && infoMenu.menu[infoMenu.cur] != menuPopup)
+    else if(ack_seen(echomagic) && ack_seen(busymagic) && ack_seen("processing"))
     {
       busyIndicator(STATUS_BUSY);
     }
