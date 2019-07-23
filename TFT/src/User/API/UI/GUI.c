@@ -708,8 +708,6 @@ void GUI_DispFloat(int16_t x, int16_t y, float num, uint8_t llen, uint8_t rlen, 
     num = -num;
     isNegative = 1;
   }        
-  //GUI_DispChar(x,y,num>=0 ? ' ':'-',mode);
-  x += BYTE_WIDTH;
 
   num *= GUI_Pow10[(unsigned)rlen];
   num += 0.5f;
