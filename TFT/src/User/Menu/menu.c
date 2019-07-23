@@ -211,6 +211,7 @@ void itemDrawIconPress(u8 positon, u8 is_press)
     ICON_ReadDisplay(rect->x0, rect->y0, curMenuItems->items[positon].icon);
 }
 
+
 //Get button value
 KEY_VALUES menuKeyGetValue(void)
 {    
@@ -220,9 +221,10 @@ KEY_VALUES menuKeyGetValue(void)
 
 void loopProcess(void)
 {
-  getGcodeFromFile();                 //Parse the Gcode command from the file to be printed
+  getGcodeFromFile();                 //Get Gcode command from the file to be printed
 
-  //    parseQueueCmd();                
+  parseQueueCmd();                    //Parse Gcode command before Send
+
   sendQueueCmd();                     //Process and send Gcode commands in the queue
   
   parseACK();                         //Parsing the received slave response information
