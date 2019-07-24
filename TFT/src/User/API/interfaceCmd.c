@@ -111,15 +111,14 @@ void clearCmdQueue(void)
   heatSetUpdateWaiting(false);
 }
 
-
-//void parseQueueCmd(void)
-//{
+//TODO:  Parse command before Send
+void parseQueueCmd(void)
+{
 //    if(infoCmd.parsed == infoCmd.count) return;
 //    
-//    
 //    infoCmd.parsed++;
-//}
-//TODO:  parse and send
+}
+
 void sendQueueCmd(void)
 {
   if(infoHost.wait == true)    return;  
