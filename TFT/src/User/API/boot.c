@@ -123,8 +123,7 @@ void updateIcon(void)
     LOGO_ReadDisplay();
   }
   GUI_Clear(BLACK);
-//  for(int i=0; i<aCount(iconBmpName); i++)
-  for(int i=0; i<58; i++)
+  for(int i=0; i<aCount(iconBmpName); i++)
   {
     my_sprintf(nowBmp, BMP_ROOT_DIR"/%s.bmp", iconBmpName[i]);
     if(bmpDecode(nowBmp, ICON_ADDR(i)))
