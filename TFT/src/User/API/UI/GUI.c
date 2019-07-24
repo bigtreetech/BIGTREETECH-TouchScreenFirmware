@@ -648,20 +648,23 @@ const uint32_t GUI_Pow10[10] = {
 
 void GUI_DispDec(int16_t x, int16_t y,int32_t num, uint8_t len, uint8_t mode, uint8_t leftOrRight)
 {         	
-  uint8_t t,temp,i=0;
-  uint8_t enshow=0;	
-  char isNegative = 0;
+  uint8_t i;
+  uint8_t bit_value;
+  uint8_t blank_bit_len = 0;
+  uint8_t notZero = 0;	
+  char    isNegative = 0;
+
   if(num<0)
   {
     num = -num;
     isNegative = 1;
   }        
-  for(t=0;t<len;t++)
+  for(i=0;i<len;i++)
   {
-    temp=(num/GUI_Pow10[len-t-1])%10;
-    if(enshow==0)
+    bit_value=(num/GUI_Pow10[len-i-1])%10;
+    if(notZero == 0)
     {
-      if(temp==0 && t<(len-1))
+      if(bit_value == 0 && i<(len-1))
       {
         if(leftOrRight==RIGHT)
         {
@@ -670,65 +673,86 @@ void GUI_DispDec(int16_t x, int16_t y,int32_t num, uint8_t len, uint8_t mode, ui
         }
         else
         {
-          i++;
+          blank_bit_len++;
         }
         continue;
       }
       else 
       {
-        enshow=1; 
+        notZero = 1; 
         if(isNegative)
         {                
           GUI_DispChar(x-BYTE_WIDTH,y,'-',mode);
         }
       }
     }
-    GUI_DispChar(x,y,temp+'0',mode); 
+    GUI_DispChar(x,y,bit_value+'0',mode); 
     x += BYTE_WIDTH;
   }
-  for(;i>0;i--)
+  for(; blank_bit_len>0; blank_bit_len--)
   {
     GUI_DispChar(x,y,' ',mode); 
     x += BYTE_WIDTH;
   }
 } 
 
-void GUI_DispFloat(int16_t x, int16_t y, float num, uint8_t llen, uint8_t rlen)
+void GUI_DispFloat(int16_t x, int16_t y, float num, uint8_t llen, uint8_t rlen, uint8_t mode, uint8_t leftOrRight)
 {    
   uint8_t  alen = 0;
   uint8_t  i=0;
   uint8_t  notZero = 0;
-  GUI_DispChar(x,y,num>=0 ? ' ':'-',1);
-  x += BYTE_WIDTH;
-  num= num>=0 ? num : (-num);
+  char     isNegative = 0;
+
+  if(num<0)
+  {
+    num = -num;
+    isNegative = 1;
+  }        
 
   num *= GUI_Pow10[(unsigned)rlen];
   num += 0.5f;
-  num = (float) floor (num);
-  for(i=0;i<llen;i++)
+  num = (float) floor(num);
+  for(i=0; i<llen; i++)
   {
     uint8_t bit_value = ((uint32_t)(num/GUI_Pow10[llen+rlen-1-i]))%10;
-    if(bit_value !=0 || notZero !=0 || i == llen-1)
+    if(notZero == 0) 
     {
-      notZero = 1;
-      GUI_DispChar(x,y,bit_value+'0',1);
-      x += BYTE_WIDTH;
-      alen++;
+      if(bit_value == 0 && i<(llen-1))
+      {
+        if(leftOrRight==RIGHT)
+        {
+          GUI_DispChar(x,y,' ',mode);
+          x += BYTE_WIDTH;
+          alen++;
+        }
+        continue;
+      }
+      else 
+      {
+        notZero = 1; 
+        if(isNegative)
+        {                
+          GUI_DispChar(x-BYTE_WIDTH,y,'-',mode);
+        }
+      }
     }
+    GUI_DispChar(x,y,bit_value+'0',mode);
+    x += BYTE_WIDTH;
+    alen++;
   }
-  GUI_DispChar(x,y,'.',1);
+  GUI_DispChar(x,y,'.',mode);
   x += BYTE_WIDTH;
   alen++;
 
   for(i=0;i<rlen;i++)
   {
-    GUI_DispChar(x,y,(int)(num/GUI_Pow10[rlen-1-i])%10+'0',1);
+    GUI_DispChar(x,y,(int)(num/GUI_Pow10[rlen-1-i])%10+'0',mode);
     x += BYTE_WIDTH;
     alen++;
   }
   for(; alen < llen+rlen; alen++)
   {        
-    GUI_DispChar(x,y,' ',1);
+    GUI_DispChar(x,y,' ',mode);
     x += BYTE_WIDTH;
   }
 } 

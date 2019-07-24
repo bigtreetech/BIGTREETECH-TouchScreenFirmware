@@ -57,7 +57,7 @@ void GUI_DispStringInPrect(const GUI_RECT *rect, const uint8_t *p, uint8_t mode)
 void GUI_DispCharInPrect(const GUI_RECT *rect, uint16_t p, uint8_t mode);
 
 void GUI_DispDec(int16_t x, int16_t y,int32_t num, uint8_t len, uint8_t mode, uint8_t leftOrRight);
-void GUI_DispFloat(int16_t x, int16_t y, float num, uint8_t llen, uint8_t rlen);
+void GUI_DispFloat(int16_t x, int16_t y, float num, uint8_t llen, uint8_t rlen, uint8_t mode, uint8_t leftOrRight);
 
 
 /****************************************************     Widget    *******************************************************************/
