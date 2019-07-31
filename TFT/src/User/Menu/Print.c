@@ -118,7 +118,7 @@ void menuPrintFromSource(void)
   u8 update=0;
 
   GUI_Clear(BK_COLOR);
-  GUI_DispString((LCD_WIDTH - my_strlen(textSelect(LABEL_LOADING))*BYTE_WIDTH)/2, LCD_HEIGHT/2 - BYTE_HEIGHT, textSelect(LABEL_LOADING),1);
+  GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, textSelect(LABEL_LOADING), 1);
 
   if (mountFS() == true && scanPrintFiles() == true)
   {
@@ -127,15 +127,15 @@ void menuPrintFromSource(void)
   }
   else
   {
-    GUI_DispString((LCD_WIDTH-my_strlen(textSelect(labelVolumeError[infoFile.source]))*BYTE_WIDTH)/2, LCD_HEIGHT/2, textSelect(labelVolumeError[infoFile.source]),1);
+    GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, textSelect(labelVolumeError[infoFile.source]), 1);
     Delay_ms(1000);
     infoMenu.cur--;
   }
 
   while(infoMenu.menu[infoMenu.cur] == menuPrintFromSource)
   {
-    Scroll_DispString(&titleScroll,1,LEFT);    //������ʾ·����
-    Scroll_DispString(&gcodeScroll,1,CENTER);  //������ʾ�ļ���
+    Scroll_DispString(&titleScroll,1,LEFT);    //
+    Scroll_DispString(&gcodeScroll,1,CENTER);  //
 
     key_num = menuKeyGetValue();
 

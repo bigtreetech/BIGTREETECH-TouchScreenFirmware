@@ -81,8 +81,11 @@ void menuPopup(void)
   }
 }
 
-
-
-
-
-
+void popupReminder(u8* info, u8* context)
+{
+  popupDrawPage(&bottomSingleBtn , info, context, textSelect(LABEL_CONFIRM), NULL);    
+  if(infoMenu.menu[infoMenu.cur] != menuPopup)
+  {
+    infoMenu.menu[++infoMenu.cur] = menuPopup;
+  }
+}

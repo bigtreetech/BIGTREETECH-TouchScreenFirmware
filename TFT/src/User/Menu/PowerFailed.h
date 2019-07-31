@@ -1,7 +1,7 @@
 #ifndef _POWERFAILED_H_
 #define _POWERFAILED_H_
 
-#include "stm32f10x.h"
+#include "variants.h"
 #include "heat.h"
 #include "coordinate.h"
 #include "ff.h"

@@ -7,7 +7,7 @@ void Serial_ReSourceDeInit(void)
   memset(&infoHost, 0, sizeof(infoHost));
   resetInfoFile();
   SD_DeInit();
-#ifdef BUZZER_SUPPORT
+#ifdef BUZZER_PIN
   Buzzer_DeConfig();
 #endif
   Serial_DeConfig();
@@ -15,7 +15,7 @@ void Serial_ReSourceDeInit(void)
 
 void Serial_ReSourceInit(void)
 {
-#ifdef BUZZER_SUPPORT
+#ifdef BUZZER_PIN
   Buzzer_Config();
 #endif
   Serial_Config(infoSettings.baudrate);
@@ -46,13 +46,15 @@ void infoMenuSelect(void)
       break;
     }
       
+    #ifdef ST7920_SPI
     case LCD12864:
       infoMenu.menu[infoMenu.cur] = menuST7920;      
-      break;    
+      break;
+    #endif
   }
 }
 
-#ifdef LCD_ENCODER_SUPPORT
+#if LCD_ENCODER_SUPPORT
 void menuMode(void)
 {  
   RADIO modeRadio = {

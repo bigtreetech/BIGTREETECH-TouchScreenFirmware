@@ -45,16 +45,11 @@
 #define SD_PARAMETER_ERROR        0x40
 #define SD_RESPONSE_FAILURE       0xFF
 
-//#define SD_CD_SUPPROT
-//#define SD_CD_RCC  RCC_APB2Periph_GPIOA
-//#define SD_CD_PORT GPIOA
-//#define SD_CD_PIN  GPIO_Pin_13
-
 u8 SD_CD_Inserted(void);
 u8 SD_Init(void);							        //初始化
 void SD_DeInit(void);
-u8 SD_Read_Data(u8*buf,u32 sector,u32 cnt);		    //读块
-u8 SD_Write_Data(u8*buf,u32 sector,u32 cnt);		//写块
+u8 SD_ReadDisk(u8*buf,u32 sector,u8 cnt); 	//读SD卡,fatfs/usb调用
+u8 SD_WriteDisk(u8*buf,u32 sector,u8 cnt);	//写SD卡,fatfs/usb调用
 
 u8 SD_Wait_Ready(void);							    //等待SD卡准备
 u8 SD_Get_Ack(u8 Response);					       	//获得应答

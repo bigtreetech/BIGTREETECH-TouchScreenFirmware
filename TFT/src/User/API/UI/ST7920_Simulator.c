@@ -2,6 +2,7 @@
 #include "includes.h"
 #include "GUI.h"
 
+#ifdef ST7920_SPI
 
 ST7920_PIXEL       st7920 = {ST7920_XSTART, ST7920_YSTART, 0};
 ST7920_CTRL_STATUS status = ST7920_IDLE;
@@ -132,16 +133,17 @@ void menuST7920(void)
   
   while(infoMenu.menu[infoMenu.cur] == menuST7920)
   {
-    if(SPISlave.rIndex != SPISlave.wIndex)
+    while(SPISlave.rIndex != SPISlave.wIndex)
     {
       ST7920_ParseRecv(SPISlave.data[SPISlave.rIndex]);
        
       SPISlave.rIndex = (SPISlave.rIndex + 1) % SPI_SLAVE_MAX;
     }
     
-    #ifdef LCD_ENCODER_SUPPORT
+    #if LCD_ENCODER_SUPPORT
       loopCheckMode();
     #endif
   }
   SPI_SlaveDeInit();
 }
+#endif

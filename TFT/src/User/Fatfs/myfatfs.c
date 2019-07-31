@@ -19,14 +19,9 @@ FATFS fatfs[_VOLUMES]; /* FATFS work area*/
 */
  bool mountUDisk(void)
 {
-  for(int i=0; i<100; i++)     //TODO: fix here (u disk read error)
-    USBH_Process(&USB_OTG_Core, &USB_Host);
-  return (f_mount(&fatfs[VOLUMES_U_DISK], "U:", 1) == FR_OK);
+  return (f_mount(&fatfs[VOLUMES_U_DISK], "U:", 1)== FR_OK);
 }
 
-static uint32_t date=0; 
-static FILINFO  finfo;
-static uint16_t len = 0;
 /* 
  scanf gcode file in current path
  true: scanf ok
@@ -34,8 +29,10 @@ static uint16_t len = 0;
 */
 bool scanPrintFilesFatFs(void)
 {
-  DIR     dir;
-  uint8_t i=0;
+  FILINFO  finfo;
+  uint16_t len = 0;
+  DIR      dir;
+  uint8_t  i=0;
 
   clearInfoFile();
 
@@ -67,7 +64,9 @@ bool scanPrintFilesFatFs(void)
       memcpy(infoFile.file[infoFile.f_num++], finfo.fname, len);
     }		
   }
-
+  
+  f_closedir(&dir);
+  
   for(i=0; i < infoFile.F_num/2; i++)
   {
     char *temp = infoFile.folder[i];		
@@ -104,8 +103,11 @@ void GUI_DispDate(uint16_t date, uint16_t time)
 */
 bool Get_NewestGcode(const TCHAR* path)
 {
-  DIR     dirs;
-  char	status = 0;	
+  uint32_t date=0; 
+  FILINFO  finfo;
+  uint16_t len = 0;
+  DIR      dirs;
+  char	   status = 0;
 
   if (f_opendir(&dirs, path) != FR_OK) return false;
 

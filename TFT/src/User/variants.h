@@ -1,24 +1,33 @@
 #ifndef _VARIANTS_H_
 #define _VARIANTS_H_
 
+#define USE_STDPERIPH_DRIVER
 /*
 * hardware source
 * TIM4 for os timer
 * TIM3 for buzzer timer
 */
 
-//MCU type (STM32F103VC - HD, STM32F105 - CL)
-#if defined(TFT35_V1_0) || defined(TFT35_V1_1) || defined(TFT35_V1_2) || defined(TFT28)
-  #define STM32F10X_HD
-#elif defined(TFT24_V1_1)
-  #define STM32F10X_CL
-#endif
-
+//MCU type (STM32F103VC - HD, STM32F105 - CL, STM32F207VC)
 //HSE crystal frequency
 #if defined(TFT35_V1_0) || defined(TFT35_V1_1) || defined(TFT35_V1_2)|| defined(TFT28)  
+  #define VECT_TAB_FLASH 0x08006000
   #define HSE_VALUE ((uint32_t)16000000) //16Mhz
+  #define F_CPUM 72
+  #define STM32F10X_HD
+  #include "stm32f10x.h"
+#elif defined(TFT35_V2_0)
+  #define VECT_TAB_FLASH 0x08003000
+  #define HSE_VALUE ((uint32_t)16000000) //16Mhz
+  #define F_CPUM 72
+  #define STM32F10X_HD
+  #include "stm32f10x.h"
 #elif defined(TFT24_V1_1)
+  #define VECT_TAB_FLASH 0x08006000
   #define HSE_VALUE ((uint32_t)8000000) //8Mhz
+  #define F_CPUM 72
+  #define STM32F10X_CL
+  #include "stm32f10x.h"
 #endif
 
 //LCD interface
@@ -26,7 +35,7 @@
   #define RM68042
   #define STM32_HAS_FSMC
   #define LCD_DATA_16BIT 0
-#elif defined(TFT35_V1_2)
+#elif defined(TFT35_V1_2) || defined(TFT35_V2_0)
   #define ILI9488
   #define STM32_HAS_FSMC
   #define LCD_DATA_16BIT 1
@@ -36,142 +45,123 @@
   #define LCD_DATA_16BIT 1
 #elif defined(TFT24_V1_1)
   #define ILI9341
-//  #define STM32_HAS_FSMC
   #define LCD_DATA_16BIT 1
 #endif
 
 //LCD Backlight pin (PWM can adjust brightness)
-#if defined(TFT35_V1_0) || defined(TFT35_V1_1) || defined(TFT35_V1_2) || defined(TFT28)
-  //don't support LCD Backlight pin
-#elif defined(TFT24_V1_1)
-  #define LCD_LED_SUPPORT
-  #define LCD_LED_RCC  RCC_APB2Periph_GPIOA
-  #define LCD_LED_PORT GPIOA
-  #define LCD_LED_PIN  GPIO_Pin_8
+#if defined(TFT24_V1_1)
+  #define LCD_LED_PIN   PA8
 #endif
 
-#if defined(TFT35_V1_0) || defined(TFT35_V1_1) || defined(TFT35_V1_2) || defined(TFT28) || defined(TFT24_V1_1)
+#if defined(TFT35_V1_0) || defined(TFT35_V1_1) || defined(TFT35_V1_2) || defined(TFT28) || defined(TFT24_V1_1) || defined(TFT35_V2_0)
   #define SERIAL_PORT   _USART1  //default usart port
 #endif
 
 //XPT2046 Software SPI Pins (touch screen ic)
 //need CS/SCK/MISO/MOSI for Software SPI, and TPEN for pen interrupt
 #if defined(TFT35_V1_0) || defined(TFT35_V1_1) || defined(TFT35_V1_2) || defined(TFT28)
-  #define XPT2046_GPIO_RCC  RCC_APB2Periph_GPIOC
-  #define XPT2046_CS_PORT   GPIOC
-  #define XPT2046_CS_PIN    GPIO_Pin_0
-  #define XPT2046_SCK_PORT  GPIOC
-  #define XPT2046_SCK_PIN   GPIO_Pin_1
-  #define XPT2046_MISO_PORT GPIOC
-  #define XPT2046_MISO_PIN  GPIO_Pin_2
-  #define XPT2046_MOSI_PORT GPIOC
-  #define XPT2046_MOSI_PIN  GPIO_Pin_3
-  #define XPT2046_TPEN_PORT GPIOC
-  #define XPT2046_TPEN_PIN  GPIO_Pin_4
-#elif defined(TFT24_V1_1)  
-  #define XPT2046_GPIO_RCC  RCC_APB2Periph_GPIOA
-  #define XPT2046_CS_PORT   GPIOA
-  #define XPT2046_CS_PIN    GPIO_Pin_3
-  #define XPT2046_SCK_PORT  GPIOA
-  #define XPT2046_SCK_PIN   GPIO_Pin_2
-  #define XPT2046_MISO_PORT GPIOA
-  #define XPT2046_MISO_PIN  GPIO_Pin_1
-  #define XPT2046_MOSI_PORT GPIOA
-  #define XPT2046_MOSI_PIN  GPIO_Pin_0
-  #define XPT2046_TPEN_PORT GPIOA
-  #define XPT2046_TPEN_PIN  GPIO_Pin_15
+  #define XPT2046_CS    PC0
+  #define XPT2046_SCK   PC1
+  #define XPT2046_MISO  PC2
+  #define XPT2046_MOSI  PC3
+  #define XPT2046_TPEN  PC4
+#elif defined(TFT24_V1_1)
+  #define XPT2046_CS    PA3
+  #define XPT2046_SCK   PA2
+  #define XPT2046_MISO  PA1
+  #define XPT2046_MOSI  PA0
+  #define XPT2046_TPEN  PA15
+#elif defined(TFT35_V2_0)
+  #define XPT2046_CS    PC0
+  #define XPT2046_SCK   PB3
+  #define XPT2046_MISO  PB4
+  #define XPT2046_MOSI  PB5
+  #define XPT2046_TPEN  PC1
 #else
   #error "xpt2046 need to Implement here by yourself."
 #endif
 
 //SD Card SPI pins
 #if defined(TFT35_V1_0) || defined(TFT35_V1_1) || defined(TFT35_V1_2) || defined(TFT28)
+  #define SD_SPI_SUPPORT
   #define SD_LOW_SPEED  7
   #define SD_HIGH_SPEED 0
   #define SD_SPI        _SPI2
-  #define SPI2_CS_RCC   RCC_APB2Periph_GPIOB
-  #define SPI2_CS_PORT  GPIOB
-  #define SPI2_CS_PIN   GPIO_Pin_12
+  #define SPI2_CS_PIN   PB12
 #elif defined(TFT24_V1_1)
+  #define SD_SPI_SUPPORT
   #define SD_LOW_SPEED  7
   #define SD_HIGH_SPEED 1
   #define SD_SPI        _SPI1
-  #define SPI1_CS_RCC   RCC_APB2Periph_GPIOA
-  #define SPI1_CS_PORT  GPIOA
-  #define SPI1_CS_PIN   GPIO_Pin_4
+  #define SPI1_CS_PIN   PA4
+#elif defined(TFT35_V2_0)
+  #define SD_SDIO_SUPPORT
 #endif
 
 //SD Card CD detect pin
-#if defined(TFT35_V1_0) || defined(TFT35_V1_1) || defined(TFT35_V1_2)
-  //don't support SD CD(insert/remove) detect
-#elif defined(TFT28)
-  #define SD_CD_SUPPROT
-  #define SD_CD_RCC     RCC_APB2Periph_GPIOB
-  #define SD_CD_PORT    GPIOB
-  #define SD_CD_PIN     GPIO_Pin_0
-#elif defined(TFT24_V1_1)  
-  #define SD_CD_SUPPROT
-  #define SD_CD_RCC     RCC_APB2Periph_GPIOA
-  #define SD_CD_PORT    GPIOA
-  #define SD_CD_PIN     GPIO_Pin_13
+#if defined(TFT28)
+  #define SD_CD_PIN     PB0
+#elif defined(TFT24_V1_1)
+  #define SD_CD_PIN     PA13
+#elif defined(TFT35_V2_0)
+  #define SD_CD_PIN     PC6
 #endif
 
 //W25Qxx SPI pins
-#if defined(TFT35_V1_0) || defined(TFT35_V1_1) || defined(TFT35_V1_2) || defined(TFT28)
+#if defined(TFT35_V1_0) || defined(TFT35_V1_1) || defined(TFT35_V1_2) || defined(TFT28) || defined(TFT35_V2_0)
   #define W25Qxx_SPEED  1
   #define W25Qxx_SPI    _SPI1
-  #define SPI1_CS_RCC   RCC_APB2Periph_GPIOA
-  #define SPI1_CS_PORT  GPIOA
-  #define SPI1_CS_PIN   GPIO_Pin_4
+  #define SPI1_CS_PIN   PA4
 #elif defined(TFT24_V1_1)
   #define W25Qxx_SPEED  0
   #define W25Qxx_SPI    _SPI3
-  #define SPI3_CS_RCC   RCC_APB2Periph_GPIOD
-  #define SPI3_CS_PORT  GPIOD
-  #define SPI3_CS_PIN   GPIO_Pin_2
+  #define SPI3_CS_PIN   PD2
 #endif
 
 //ST7920 Simulator SPI pins
-#if defined(TFT35_V1_0) || defined(TFT35_V1_1) || defined(TFT35_V1_2) || defined(TFT28)
-  //don't support ST7920 Simulator
-#elif defined(TFT24_V1_1)
-  #define ST7920_SPI _SPI2
+#if defined(TFT24_V1_1)
+  #define ST7920_SPI    _SPI2
 #endif
 
 //buzzer support
-#if defined(TFT35_V1_0) || defined(TFT35_V1_1) || defined(TFT35_V1_2) || defined(TFT28)
-  //don't support buzzer
-#elif defined(TFT24_V1_1)
-  #define BUZZER_SUPPORT
-  #define BUZZER_RCC   RCC_APB2Periph_GPIOA
-  #define BUZZER_PORT  GPIOA
-  #define BUZZER_PIN   GPIO_Pin_14
+#if defined(TFT24_V1_1)
+  #define BUZZER_PIN    PA14
+#elif defined(TFT35_V2_0)
+  #define BUZZER_PIN    PB2
 #endif
 
 //LCD Encoder support
-#if defined(TFT35_V1_0) || defined(TFT35_V1_1) || defined(TFT35_V1_2) || defined(TFT28)
-  //don't support LCD Encoder
-#elif defined(TFT24_V1_1)
-  #define LCD_ENCODER_SUPPORT
+#if defined(TFT24_V1_1)
   //PB0:ENC-A PB1:ENC-B PB2:BTN 
-  #define LCD_ENCODER_RCC RCC_APB2Periph_GPIOB
-  #define LCD_ENCA_PORT   GPIOB
-  #define LCD_ENCA_PIN    GPIO_Pin_0
-  #define LCD_ENCB_PORT   GPIOB
-  #define LCD_ENCB_PIN    GPIO_Pin_1
-  #define LCD_BTN_PORT    GPIOB
-  #define LCD_BTN_PIN     GPIO_Pin_2
+  #define LCD_ENCA_PIN  PB0
+  #define LCD_ENCB_PIN  PB1
+  #define LCD_BTN_PIN   PB2
 #endif
+#define LCD_ENCODER_SUPPORT (defined(LCD_ENCA_PIN) && defined(LCD_ENCB_PIN) && defined(LCD_BTN_PIN))
 
 //U disk support
-#if defined(TFT35_V1_0) || defined(TFT35_V1_1) || defined(TFT35_V1_2) || defined(TFT28)
-#elif defined(TFT24_V1_1)
+#if defined(TFT24_V1_1)
   #define U_DISK_SUPPROT
   #define USE_USB_OTG_FS
 #endif
 
+//extend function(PS_ON, filament_detect)
+#define PS_ACTIVE_HIGH       true // Set 'false' for ATX (1), 'true' for X-Box (2)
+#define FIL_RUNOUT_INVERTING true  // Set to false to invert the logic of the sensor.
+#if defined(TFT35_V2_0)
+  #define PS_ON_PIN      PE5
+  #define FIL_RUNOUT_PIN PE6
+#endif
+    
+//Debug disable, free pins for other function
+#if defined(TFT35_V1_0) || defined(TFT35_V1_1) || defined(TFT35_V1_2) || defined(TFT28) || defined(TFT35_V2_0)
+  #define DISABLE_JTAG    //free JTAG(PB3/PB4) for SPI3
+#elif defined(TFT24_V1_1)
+  #define DISABLE_DEBUG   //
+#endif
+
 //LCD resolution, font and icon size
-#if defined(TFT35_V1_0) || defined(TFT35_V1_1) || defined(TFT35_V1_2)
+#if defined(TFT35_V1_0) || defined(TFT35_V1_1) || defined(TFT35_V1_2) || defined(TFT35_V2_0)
   #define LCD_WIDTH	  480
   #define LCD_HEIGHT	320
   #define BYTE_HEIGHT 24
@@ -189,17 +179,18 @@
   #define TITLE_END_Y 40
 #endif
 
-//Debug disable, free pins for other function
-#if defined(TFT35_V1_0) || defined(TFT35_V1_1) || defined(TFT35_V1_2) || defined(TFT28)
-  #define DISABLE_JTAG    //free JTAG(PB3/PB4) for SPI3
+#if defined(TFT35_V1_0) || defined(TFT35_V1_1) || defined(TFT35_V1_2)|| defined(TFT35_V2_0)
+  #define ROOT_DIR "TFT35"
+#elif defined(TFT28)
+  #define ROOT_DIR "TFT28"
 #elif defined(TFT24_V1_1)
-  #define DISABLE_DEBUG   //
+  #define ROOT_DIR "TFT24"
 #endif
 
 //hardware version config
 #ifndef HARDWARE_VERSION
   #if defined(TFT35_V1_0)
-      #define HARDWARE_VERSION "TFT35_V1.0"   
+    #define HARDWARE_VERSION "TFT35_V1.0"   
   #elif defined(TFT35_V1_1)
     #define HARDWARE_VERSION "TFT35_V1.1"
   #elif defined(TFT35_V1_2)
@@ -208,6 +199,8 @@
     #define HARDWARE_VERSION "TFT28"
   #elif defined(TFT24_V1_1)
     #define HARDWARE_VERSION "TFT24_V1.1"
+  #elif defined(TFT35_V2_0)
+    #define HARDWARE_VERSION "TFT35_V2.0"
   #endif
 #endif
 

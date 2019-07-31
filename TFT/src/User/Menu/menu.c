@@ -211,7 +211,6 @@ void itemDrawIconPress(u8 positon, u8 is_press)
     ICON_ReadDisplay(rect->x0, rect->y0, curMenuItems->items[positon].icon);
 }
 
-
 //Get button value
 KEY_VALUES menuKeyGetValue(void)
 {    
@@ -222,12 +221,10 @@ KEY_VALUES menuKeyGetValue(void)
 void loopProcess(void)
 {
   getGcodeFromFile();                 //Get Gcode command from the file to be printed
-
-  parseQueueCmd();                    //Parse Gcode command before Send
-
-  sendQueueCmd();                     //Process and send Gcode commands in the queue
+           
+  sendQueueCmd();                     //Parse and send Gcode commands in the queue
   
-  parseACK();                         //Parsing the received slave response information
+  parseACK();                         //Parse the received slave response information
 
   loopCheckHeater();			            //Temperature related settings
   
@@ -247,8 +244,11 @@ void loopProcess(void)
   USBH_Process(&USB_OTG_Core, &USB_Host);
 #endif
 
-#ifdef LCD_ENCODER_SUPPORT
-  if(!isPrinting())
-    loopCheckMode();
+#if LCD_ENCODER_SUPPORT
+  loopCheckMode();
+#endif
+
+#ifdef FIL_RUNOUT_PIN
+  loopFILRunoutDetect();
 #endif
 }
