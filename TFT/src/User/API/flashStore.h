@@ -2,7 +2,7 @@
 #define _FLASHSTORE_H_
 
 #include "stdbool.h"
-#include "stm32f10x.h"
+#include "variants.h"
 #include "Settings.h"
 
 bool readStoredPara(void);

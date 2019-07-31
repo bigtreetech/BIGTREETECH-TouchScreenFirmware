@@ -1,5 +1,5 @@
 #include "xpt2046.h"
-
+#include "GPIO_Init.h"
 /***************************************** XPT2046 SPI 模式底层移植的接口********************************************/
 //XPT2046 SPI相关 - 使用模拟SPI
 _SW_SPI xpt2046;
@@ -20,17 +20,13 @@ u8 XPT2046_ReadWriteByte(u8 TxData)
 void XPT2046_Init(void)
 {
   //PA15-TPEN
-  GPIO_InitTypeDef GPIO_InitStructure;
-  RCC_APB2PeriphClockCmd(XPT2046_GPIO_RCC, ENABLE);
-  GPIO_InitStructure.GPIO_Pin =  XPT2046_TPEN_PIN;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-  GPIO_Init(XPT2046_TPEN_PORT, &GPIO_InitStructure);
+  GPIO_InitSet(XPT2046_TPEN, MGPIO_MODE_IPN, 0);
 
-  SW_SPI_Config(&xpt2046, _SPI_MODE3,
-  XPT2046_CS_PORT,    XPT2046_CS_PIN,     //CS
-  XPT2046_SCK_PORT,   XPT2046_SCK_PIN,    //SCK
-  XPT2046_MISO_PORT,  XPT2046_MISO_PIN,   //MISO
-  XPT2046_MOSI_PORT,  XPT2046_MOSI_PIN    //MOSI
+  SW_SPI_Config(&xpt2046, _SPI_MODE3, 8, // 8bit
+  XPT2046_CS,     //CS
+  XPT2046_SCK,    //SCK
+  XPT2046_MISO,   //MISO
+  XPT2046_MOSI    //MOSI
   );
   XPT2046_CS_Set(1);
 }
@@ -38,7 +34,7 @@ void XPT2046_Init(void)
 //读笔中断
 u8 XPT2046_Read_Pen(void)
 {
-  return GPIO_ReadInputDataBit(XPT2046_TPEN_PORT, XPT2046_TPEN_PIN);
+  return GPIO_GetLevel(XPT2046_TPEN);
 }
 /******************************************************************************************************************/
 

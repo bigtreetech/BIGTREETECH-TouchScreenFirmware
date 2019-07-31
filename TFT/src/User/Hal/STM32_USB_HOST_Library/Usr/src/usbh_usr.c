@@ -375,10 +375,10 @@ uint8_t USBH_UDISK_Status(void)
 
 uint8_t USBH_UDISK_Read(uint8_t* buf, uint32_t sector, uint32_t cnt)
 {
-  BYTE status = USBH_MSC_OK;
+  BYTE status = USBH_MSC_FAIL;
 
   if (HCD_IsDeviceConnected(&USB_OTG_Core))
-  {  
+  {
     do
     {
       status = USBH_MSC_Read10(&USB_OTG_Core, buf, sector,512 * cnt);
@@ -400,7 +400,7 @@ uint8_t USBH_UDISK_Read(uint8_t* buf, uint32_t sector, uint32_t cnt)
 
 uint8_t USBH_UDISK_Write(uint8_t* buf, uint32_t sector, uint32_t cnt)
 {
-  BYTE status = USBH_MSC_OK;
+  BYTE status = USBH_MSC_FAIL;
 
   if (HCD_IsDeviceConnected(&USB_OTG_Core))
   {  

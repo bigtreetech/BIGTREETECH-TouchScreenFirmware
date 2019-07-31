@@ -1,45 +1,69 @@
 #include "flashStore.h"
+#include "STM32_Flash.h"
 
+#define PARA_SIZE 256  //bytes
 #define PARA_SIGN 0x20190710
-#define SIGN_ADDRESS (0x08040000 - 0x800)  //保留最后一页(2KB),用来保存用户参数
 
 extern u32 TSC_Para[7];        //触摸屏校准系数
-#define TSC_ADDRESS (0x08040000 - 0x800 + 4)
-
 extern SETTINGS infoSettings;  //用户设置
-#define SETTING_ADDRESS (0x08040000 - 0x800 + 32) 
 
+void wordToByte(u32 word, u8 *bytes)  //大端模式
+{
+  u8 len = 4;
+  u8 i = 0;
+  for(i = 0; i < len; i++)
+  {
+    bytes[i] = (word >> 24) & 0xFF;
+    word <<= 8;
+  }
+}
+
+u32 byteToWord(u8 *bytes, u8 len)
+{
+  u32 word = 0;
+  u8 i = 0;
+  for(i = 0; i < len; i++)
+  {
+    word <<= 8;
+    word |= bytes[i];
+  }
+  return word;
+}
 
 bool readStoredPara(void)
 {
-  if(*((vu32*)SIGN_ADDRESS) != PARA_SIGN)   return false;
+  u8 data[PARA_SIZE];
+  u32 index = 0;
+  u32 paraSign = 0;
+  STM32_FlashRead(data, PARA_SIZE);
+  
+  paraSign = byteToWord(data + (index += 4), 4);
+  if(paraSign != PARA_SIGN)   return false;
     
   for(int i=0; i<sizeof(TSC_Para)/sizeof(TSC_Para[0]); i++)
   {
-    TSC_Para[i] = *((vu32*)(TSC_ADDRESS + i*4));
+    TSC_Para[i] = byteToWord(data + (index += 4), 4);
   }
-  infoSettings.baudrate = *((vu32*) SETTING_ADDRESS);
-  infoSettings.language = *((vu32*)(SETTING_ADDRESS + 4));
-  infoSettings.mode     = *((vu32*)(SETTING_ADDRESS + 8));
+  infoSettings.baudrate = byteToWord(data + (index += 4), 4);
+  infoSettings.language = byteToWord(data + (index += 4), 4);
+  infoSettings.mode     = byteToWord(data + (index += 4), 4);
     
   return true;
 }
 
 void storePara(void)
 {
-  FLASH_Unlock();
-    
-  FLASH_ErasePage(SIGN_ADDRESS);
-  FLASH_ProgramWord(SIGN_ADDRESS, PARA_SIGN);
-    
+  u8 data[PARA_SIZE]; 
+  u32 index = 0;
+  
+  wordToByte(PARA_SIGN, data + (index += 4));    
   for(int i=0; i<sizeof(TSC_Para)/sizeof(TSC_Para[0]); i++)
   {
-    FLASH_ProgramWord((TSC_ADDRESS + i*4), TSC_Para[i]);
+    wordToByte(TSC_Para[i], data + (index += 4));
   }
-    
-  FLASH_ProgramWord(SETTING_ADDRESS, infoSettings.baudrate);
-  FLASH_ProgramWord(SETTING_ADDRESS + 4, infoSettings.language);
-  FLASH_ProgramWord(SETTING_ADDRESS + 8, infoSettings.mode);
-
-  FLASH_Lock();
+  wordToByte(infoSettings.baudrate, data + (index += 4));
+  wordToByte(infoSettings.language, data + (index += 4));
+  wordToByte(infoSettings.mode, data + (index += 4));
+  
+  STM32_FlashWrite(data, PARA_SIZE);
 }

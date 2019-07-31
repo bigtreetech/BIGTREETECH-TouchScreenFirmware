@@ -57,7 +57,7 @@ bool bmpDecode(char *bmp,u32 addr)
   f_read(&bmpFile, magic, 2 ,&mybr);  
   if (memcmp(magic, "BM", 2))  
     return false;
-  //****************��ȡͷ��Ϣ****************//  
+  
   f_lseek(&bmpFile, 10);  
   f_read(&bmpFile, &offset, sizeof(int),&mybr);  
 
@@ -71,7 +71,7 @@ bool bmpDecode(char *bmp,u32 addr)
     return false;
   bpp >>=3; 
   bytePerLine=w*bpp;     
-  if(bytePerLine%4 !=0) //bmp�ļ�ÿ�е��ֽ��������� 4 ����������������ǣ�����Ҫ����
+  if(bytePerLine%4 !=0) //bmp
     bytePerLine=(bytePerLine/4+1)*4;  
   
   for(bnum=0;bnum<(w*h*2+4095)/4096;bnum++)

@@ -111,14 +111,6 @@ void clearCmdQueue(void)
   heatSetUpdateWaiting(false);
 }
 
-//TODO:  Parse command before Send
-void parseQueueCmd(void)
-{
-//    if(infoCmd.parsed == infoCmd.count) return;
-//    
-//    infoCmd.parsed++;
-}
-
 void sendQueueCmd(void)
 {
   if(infoHost.wait == true)    return;  
@@ -134,6 +126,16 @@ void sendQueueCmd(void)
         case 27: //M27
           printSetUpdateWaiting(false);
         break;
+        
+        #ifdef PS_ON_PIN
+        case 80: //M80
+          PS_ON_On();
+          break;
+        
+        case 81: //M81
+          PS_ON_Off();
+          break;
+        #endif
         
         case 82: //M82
           eSetRelative(false);

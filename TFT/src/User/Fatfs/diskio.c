@@ -1,21 +1,23 @@
-#include "diskio.h"	
-#include "sd.h"	
+#include "diskio.h"
 #include "usb_conf.h"
 #include "usbh_msc_core.h"
 #include "usbh_usr.h"
+#include "variants.h"
 
-
+#ifdef SD_SPI_SUPPORT
+  #include "sd.h"
+#else
+  #include "sdio_sdcard.h"
+#endif
 
 static volatile DSTATUS diskStatus[_VOLUMES] = {STA_NOINIT, STA_NOINIT};	/* Disk status */
-
 
 DSTATUS disk_status (
 	BYTE pdrv		/* Physical drive nmuber to identify the drive */
 )
 { 
-	return RES_OK;
+	return diskStatus[pdrv];
 }  
-
 
 DSTATUS disk_initialize (
 	BYTE pdrv				/* Physical drive nmuber to identify the drive */
@@ -61,7 +63,7 @@ DRESULT disk_read (
 	switch (pdrv)
 	{
 		case VOLUMES_SD_CARD://SD卡
-			while (SD_Read_Data(buff,sector,count))//读出错
+			while (SD_ReadDisk(buff,sector,count))//读出错
 			{
 				SD_Init();	//重新初始化SD卡
 			}
@@ -93,7 +95,7 @@ DRESULT disk_write (
   switch (pdrv)
   {
     case VOLUMES_SD_CARD://SD卡
-      while (SD_Write_Data((u8*)buff,sector,count))//写出错
+      while (SD_WriteDisk((u8*)buff,sector,count))//写出错
       {
         SD_Init();	//重新初始化SD卡
       }
