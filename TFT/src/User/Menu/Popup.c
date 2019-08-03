@@ -20,7 +20,7 @@ WINDOW window = {
   10,                      //四角圆弧的半径
   3,                       //外边的线宽
   0x5D7B,                  //外边和标题栏的背景色
-  {BRED, 0x5D7B, POPUP_TITLE_HEIGHT},   //标题栏 字体色/背景色/高度
+  {MAGENTA, 0x5D7B, POPUP_TITLE_HEIGHT},   //标题栏 字体色/背景色/高度
   {WHITE, BLACK, POPUP_TEXT_HEIGHT},    //文本栏 字体色/背景色/高度
   {WHITE, GRAY,  POPUP_BOTTOM_HEIGHT},  //底部 (字体色)/背景色/(高度)
 };

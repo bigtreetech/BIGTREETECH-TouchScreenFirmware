@@ -31,7 +31,7 @@
 
 /**
  * 12864 Mode Background & Font Color Options
- * Current color options from lcd.h: BLACK, BLUE, BRED, BROWN, BRRED, CYAN, GBLUE, GRAY, GRED, GREEN, MAGENTA, RED, WHITE, YELLOW
+ * Current color options from lcd.h: BLACK, BLUE, BROWN, BRRED, CYAN, GBLUE, GRAY, GREEN, MAGENTA, RED, WHITE, YELLOW
  */
 #define ST7920_BKCOLOR BLACK
 #define ST7920_FNCOLOR WHITE
