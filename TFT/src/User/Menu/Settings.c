@@ -1,4 +1,4 @@
-#include "Settings.h"
+#include "settings.h"
 #include "includes.h"
 
 

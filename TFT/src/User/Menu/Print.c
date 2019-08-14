@@ -1,4 +1,4 @@
-#include "Print.h"
+#include "print.h"
 #include "includes.h"
 
 MENUITEMS printItems = {

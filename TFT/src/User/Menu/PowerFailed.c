@@ -1,4 +1,4 @@
-#include "PowerFailed.h"
+#include "powerfailed.h"
 #include "includes.h"
 
 BREAK_POINT  infoBreakPoint;

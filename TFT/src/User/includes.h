@@ -54,23 +54,23 @@
 
 //menu
 #include "menu.h"
-#include "Mainpage.h"
+#include "mainpage.h"
 
-#include "Heat.h"
-#include "Move.h"
-#include "Home.h"
-#include "Print.h"
-#include "Printing.h"
-#include "Speed.h"
-#include "BabyStep.h"
+#include "heat.h"
+#include "move.h"
+#include "home.h"
+#include "print.h"
+#include "printing.h"
+#include "speed.h"
+#include "babystep.h"
 
-#include "Extrude.h"
-#include "Fan.h"
-#include "Settings.h"
-#include "PowerFailed.h"
+#include "extrude.h"
+#include "fan.h"
+#include "settings.h"
+#include "powerfailed.h"
 
-#include "Popup.h"
-#include "Mode.h"
+#include "popup.h"
+#include "mode.h"
 
 //address in spiflash W25Qxx
 #define LOGO_ADDR               0x0
