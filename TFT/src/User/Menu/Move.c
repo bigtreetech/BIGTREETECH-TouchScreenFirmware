@@ -1,4 +1,4 @@
-#include "move.h"
+#include "Move.h"
 #include "includes.h"
 
 //1个title(标题), ITEM_PER_PAGE个item(图标+标签) 

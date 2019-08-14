@@ -1,4 +1,4 @@
-#include "babystep.h"
+#include "BabyStep.h"
 #include "includes.h"
 
 //1��title(����), ITEM_PER_PAGE��item(ͼ��+��ǩ) 

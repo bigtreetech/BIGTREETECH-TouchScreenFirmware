@@ -1,5 +1,5 @@
 #include "Serial.h"
-#include "USART.h"
+#include "usart.h"
 
 //Config for USART Channel
 #if SERIAL_PORT == _USART1

@@ -17,13 +17,13 @@
 #include "boot.h"
 
 #include "lcd.h"
-#include "lcd_init.h"
+#include "LCD_Init.h"
 #include "lcd_dma.h"
 #include "GUI.h"
-#include "language.h"
+#include "Language.h"
 
 #include "usart.h"
-#include "serial.h"
+#include "Serial.h"
 #include "spi.h"
 #include "sw_spi.h"
 #include "spi_slave.h"
@@ -54,7 +54,7 @@
 
 //menu
 #include "menu.h"
-#include "Mainpage.h"
+#include "MainPage.h"
 
 #include "Heat.h"
 #include "Move.h"

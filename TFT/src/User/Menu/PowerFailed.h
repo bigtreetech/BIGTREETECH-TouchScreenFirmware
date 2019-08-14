@@ -2,7 +2,7 @@
 #define _POWERFAILED_H_
 
 #include "variants.h"
-#include "heat.h"
+#include "Heat.h"
 #include "coordinate.h"
 #include "ff.h"
 #include "Configuration.h"
