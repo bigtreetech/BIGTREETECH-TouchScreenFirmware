@@ -1,28 +1,18 @@
-#include "includes.h"
 #include "spi_slave.h"
+#include "spi.h"
+#include "GPIO_Init.h"
 
+#ifdef ST7920_SPI
 //TODO:
 //now support SPI2 and PB12 CS only
 //more compatibility changes are needed
 //Config for SPI Channel
 #if ST7920_SPI == _SPI1
   #define ST7920_SPI_NUM          SPI1
-  #define W25QXX_SPI_DMA_RCC_AHB  RCC_AHBPeriph_DMA1
-  #define W25QXX_SPI_DMA          DMA1
-  #define W25QXX_SPI_DMA_CHANNEL  DMA1_Channel2
-  #define W25QXX_SPI_DMA_IFCR_BIT 5
 #elif ST7920_SPI == _SPI2
   #define ST7920_SPI_NUM          SPI2
-  #define W25QXX_SPI_DMA          DMA1
-  #define W25QXX_SPI_DMA_RCC_AHB  RCC_AHBPeriph_DMA1
-  #define W25QXX_SPI_DMA_CHANNEL  DMA1_Channel4
-  #define W25QXX_SPI_DMA_IFCR_BIT 13
 #elif ST7920_SPI == _SPI3
   #define W25QXX_SPI_NUM          SPI3
-  #define W25QXX_SPI_DMA          DMA2
-  #define W25QXX_SPI_DMA_RCC_AHB  RCC_AHBPeriph_DMA2
-  #define W25QXX_SPI_DMA_CHANNEL  DMA2_Channel1
-  #define W25QXX_SPI_DMA_IFCR_BIT 1
 #endif
 
 //#define _SPI_SLAVE_IRQ(n)  n##_IRQHandler
@@ -51,37 +41,26 @@ void SPI_ReEnable(u8 mode)
 }
 
 void SPI_Slave(void) 
-{ 
-  GPIO_InitTypeDef GPIO_InitStructure; 
-  NVIC_InitTypeDef   NVIC_InitStructure; 
+{
+  NVIC_InitTypeDef   NVIC_InitStructure;
 
-  //Enable SPI2 clock and GPIO clock for SPI2 and SPI 
-  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB|RCC_APB2Periph_AFIO, ENABLE); 
-  RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2, ENABLE); 
-  //IO初始化 
-
-  //Configure SPI2 pins: SCK, MISO and MOSI 
-  GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15; 
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; 
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP; 
-  GPIO_Init(GPIOB, &GPIO_InitStructure); 
-
-  GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_12;  
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPD; 
-  GPIO_Init(GPIOB, &GPIO_InitStructure); 
-
+  SPI_GPIO_Init(ST7920_SPI);  
+  GPIO_InitSet(PB12, MGPIO_MODE_IPU, 0);  //CS
+  
   NVIC_InitStructure.NVIC_IRQChannel = SPI2_IRQn; 
   NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1; 
   NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0; 
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
   NVIC_Init(&NVIC_InitStructure); 
 
+  RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2,ENABLE);
   SPI_ReEnable(1);
 }
 
 void SPI_SlaveDeInit(void)
 {  
   NVIC_InitTypeDef   NVIC_InitStructure;
+  
   NVIC_InitStructure.NVIC_IRQChannel = SPI2_IRQn; 
   NVIC_InitStructure.NVIC_IRQChannelCmd = DISABLE;
   NVIC_Init(&NVIC_InitStructure);
@@ -106,6 +85,7 @@ void SPI_Slave_CS_Config(void)
   EXTI_InitTypeDef EXTI_InitStructure;
   NVIC_InitTypeDef   NVIC_InitStructure; 
 
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE); 
   /* 将GPIOA_0和中断线连接 */
   GPIO_EXTILineConfig(GPIO_PortSourceGPIOB, GPIO_PinSource12);
 
@@ -115,7 +95,6 @@ void SPI_Slave_CS_Config(void)
   EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising_Falling;
   EXTI_InitStructure.EXTI_LineCmd = ENABLE;
   EXTI_Init(&EXTI_InitStructure);
-
 
   NVIC_InitStructure.NVIC_IRQChannel = EXTI15_10_IRQn;			//使能按键所在的外部中断通道
   NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x00;	//抢占优先级2， 
@@ -141,3 +120,5 @@ void EXTI15_10_IRQHandler(void)
 /* 清除中断状态寄存器 */
   EXTI->PR = 1<<12;
 }
+
+#endif

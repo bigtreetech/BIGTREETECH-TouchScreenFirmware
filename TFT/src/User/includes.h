@@ -10,18 +10,20 @@
 #include <string.h>
 #include "my_misc.h"
 
-#include "stm32f10x.h"
+#include "variants.h"
 #include "os_timer.h"
 #include "delay.h"
 
 #include "boot.h"
 
 #include "lcd.h"
+#include "LCD_Init.h"
+#include "lcd_dma.h"
 #include "GUI.h"
-#include "language.h"
+#include "Language.h"
 
 #include "usart.h"
-#include "serial.h"
+#include "Serial.h"
 #include "spi.h"
 #include "sw_spi.h"
 #include "spi_slave.h"
@@ -48,10 +50,11 @@
 #include "flashStore.h"
 #include "parseACK.h"
 
+#include "extend.h"
 
 //menu
 #include "menu.h"
-#include "Mainpage.h"
+#include "MainPage.h"
 
 #include "Heat.h"
 #include "Move.h"

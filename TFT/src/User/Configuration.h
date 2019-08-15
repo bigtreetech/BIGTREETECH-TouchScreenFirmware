@@ -29,10 +29,19 @@
 #define Y_MAX_POS 300
 #define Z_MAX_POS 400
 
+/**
+ * 12864 Mode Background & Font Color Options
+ * Current color options from lcd.h: BLACK, BLUE, BROWN, BRRED, CYAN, GBLUE, GRAY, GREEN, MAGENTA, RED, WHITE, YELLOW
+ */
+#define ST7920_BKCOLOR BLACK
+#define ST7920_FNCOLOR WHITE
 
 #define SUPPOR_PWC 
 
 #define PWC_ON_LCD 
+
+// Text displayed at the top of the LCD in 12864 mode
+#define ST7920_BANNER_TEXT "LCD12864 Simulator"
 
 // Ability to print gcode from Board SD via Gcode functions.
 #define ONBOARD_SD_SUPPORT

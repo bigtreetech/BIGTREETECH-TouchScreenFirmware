@@ -3,12 +3,11 @@
 HOST  infoHost;  // Information interaction with Marlin
 MENU  infoMenu;  // Menu structure
 
-
 void Hardware_GenericInit(void)
 {
   NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
-  Delay_init(72);  
-  OS_TimerInit(9999,71);  // System clock timer, cycle 10ms
+  Delay_init(F_CPUM);  
+  OS_TimerInit(9999, F_CPUM-1);  // System clock timer, cycle 10ms
   
 #ifdef DISABLE_DEBUG 
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO , ENABLE);
@@ -24,10 +23,18 @@ void Hardware_GenericInit(void)
   W25Qxx_Init();
   LCD_Init();
   
-#ifdef LCD_ENCODER_SUPPORT
+#if LCD_ENCODER_SUPPORT
   LCD_EncoderInit();
 #endif
-    
+
+#ifdef PS_ON_PIN
+  PS_ON_Init();
+#endif
+
+#ifdef FIL_RUNOUT_PIN
+  FIL_Runout_Init();
+#endif
+
   if(readStoredPara() == false)
   {    
     TSC_Calibration();
@@ -42,7 +49,7 @@ void Hardware_GenericInit(void)
 
 int main(void)
 {
-  SCB->VTOR = FLASH_BASE | 0x6000;
+  SCB->VTOR = VECT_TAB_FLASH;
  
   Hardware_GenericInit();
   

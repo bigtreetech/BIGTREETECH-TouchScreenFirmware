@@ -179,9 +179,12 @@ void resumeToPause(bool is_pause)
 
 bool setPrintPause(bool is_pause)
 {
-  if(!isPrinting())                       return false;
-  if(infoPrinting.pause == is_pause)      return false;
+  static bool pauseLock = false;
+  if(pauseLock)                      return false;
+  if(!isPrinting())                  return false;
+  if(infoPrinting.pause == is_pause) return false;
 
+  pauseLock = true;
   switch (infoFile.source)
   {
     case BOARD_SD:
@@ -238,6 +241,7 @@ bool setPrintPause(bool is_pause)
       break;
   }
   resumeToPause(is_pause);
+  pauseLock = false;
   return true;
 }
 
@@ -266,7 +270,7 @@ void reDrawTime(void)
       min = infoPrinting.time%3600/60,
       sec = infoPrinting.time%60;
 
-  GUI_DispChar(progressRect.x0 + 2 * BYTE_WIDTH, TIME_Y, hour/10%10+'0',0);
+  GUI_DispChar(progressRect.x0 + 2 * BYTE_WIDTH, TIME_Y, hour/10%10+'0',1);
   GUI_DispChar(progressRect.x0 + 3 * BYTE_WIDTH, TIME_Y, hour%10+'0', 1);
   GUI_DispChar(progressRect.x0 + 5 * BYTE_WIDTH, TIME_Y, min/10+'0',1);
   GUI_DispChar(progressRect.x0 + 6 * BYTE_WIDTH, TIME_Y, min%10+'0',1);
@@ -432,6 +436,7 @@ void completePrinting(void)
       break;
   }
   infoPrinting.printing = false;
+  powerFailedClose();
   powerFailedDelete();  
   endGcodeExecute();		
 }

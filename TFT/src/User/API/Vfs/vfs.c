@@ -133,8 +133,8 @@ void loopVolumeSource(void)
      
       if(volumeSrcStatus[i] != (*volumeInserted[i])())
       {
-        const int16_t labelSDStates[_VOLUMES][2] = {LABEL_TFTSD_REMOVED,  LABEL_TFTSD_INSERTED,
-                                                    LABEL_U_DISK_REMOVED, LABEL_U_DISK_INSERTED};
+        const int16_t labelSDStates[_VOLUMES][2] = {{LABEL_TFTSD_REMOVED,  LABEL_TFTSD_INSERTED},
+                                                    {LABEL_U_DISK_REMOVED, LABEL_U_DISK_INSERTED}};
         volumeSrcStatus[i] = (*volumeInserted[i])();
         volumeReminderMessage(labelSDStates[i][volumeSrcStatus[i]], STATUS_NORMAL);
       }

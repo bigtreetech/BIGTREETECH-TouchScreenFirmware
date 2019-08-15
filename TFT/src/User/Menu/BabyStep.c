@@ -1,4 +1,4 @@
-#include "babystep.h"
+#include "BabyStep.h"
 #include "includes.h"
 
 //1��title(����), ITEM_PER_PAGE��item(ͼ��+��ǩ) 
@@ -58,11 +58,11 @@ static float baby_step_value=0.0;
 
 void showBabyStep(void)
 {
-  GUI_DispFloat(CENTER_X - 3*BYTE_WIDTH/2, CENTER_Y, baby_step_value,1,2,1,RIGHT);
+  GUI_DispFloat(CENTER_X - 3*BYTE_WIDTH/2, CENTER_Y, baby_step_value, 1, 2, 1, RIGHT);
 }
 void babyStepReDraw(void)
 {
-  GUI_DispFloat(CENTER_X - 3*BYTE_WIDTH/2, CENTER_Y, baby_step_value,1,2,1,RIGHT);
+  GUI_DispFloat(CENTER_X - 3*BYTE_WIDTH/2, CENTER_Y, baby_step_value, 1, 2, 1, RIGHT);
 }
 
 

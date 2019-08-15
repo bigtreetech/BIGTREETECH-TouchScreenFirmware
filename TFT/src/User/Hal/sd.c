@@ -1,5 +1,8 @@
-#include "sd.h"
 #include "variants.h"
+
+#ifdef SD_SPI_SUPPORT
+#include "sd.h"
+#include "GPIO_Init.h"
 
 u8  SD_Type=0;  //SD卡的类型 
 
@@ -20,32 +23,27 @@ void SD_SPI_CS_Set(u8 level)
   SPI_CS_Set(SD_SPI,level);
 }
 
-#ifdef SD_CD_SUPPROT
+#ifdef SD_CD_PIN
 //SD_CD insert detect
 void SD_CD_WP_Init(void)
 {
-  GPIO_InitTypeDef GPIO_InitStructure;
-  
-  RCC_APB2PeriphClockCmd(SD_CD_RCC, ENABLE);
-  GPIO_InitStructure.GPIO_Pin =  SD_CD_PIN;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
-  GPIO_Init(SD_CD_PORT, &GPIO_InitStructure);
+  GPIO_InitSet(SD_CD_PIN, MGPIO_MODE_IPU, 0);
 }
 #endif
 
 u8 SD_CD_Inserted(void)
 {
-#ifdef SD_CD_SUPPROT
-  return !GPIO_ReadInputDataBit(SD_CD_PORT, SD_CD_PIN);
+#ifdef SD_CD_PIN
+  return !GPIO_GetLevel(SD_CD_PIN);
 #else
-  return 1;
+  return 0;
 #endif
 }
 
 //初始化
 void SD_SPI_Init(void)
 {  
-#ifdef SD_CD_SUPPROT
+#ifdef SD_CD_PIN
   SD_CD_WP_Init();
 #endif
   SPI_Config(SD_SPI);
@@ -359,7 +357,7 @@ u8 SD_Init(void)
 **cnt:扇区数
 **返回值:0,ok;其他,失败.
 *************************************************************************************/
-u8 SD_Read_Data(u8*buf,u32 sector,u32 cnt)
+u8 SD_ReadDisk(u8*buf,u32 sector,u8 cnt) 	//读SD卡,fatfs/usb调用x
 {
   u8 r1;
   if(SD_Type != SD_TYPE_V2HC) sector <<= 9;//转换为字节地址
@@ -391,7 +389,7 @@ u8 SD_Read_Data(u8*buf,u32 sector,u32 cnt)
 **cnt:扇区数
 **返回值:0,ok;其他,失败.
 *************************************************************************************/
-u8 SD_Write_Data(u8*buf,u32 sector,u32 cnt)
+u8 SD_WriteDisk(u8*buf,u32 sector,u8 cnt)	//写SD卡,fatfs/usb调用
 {
   u8 r1;
   if(SD_Type!=SD_TYPE_V2HC) sector *= 512;//转换为字节地址
@@ -424,4 +422,4 @@ u8 SD_Write_Data(u8*buf,u32 sector,u32 cnt)
   return r1;//
 }	
 
-
+#endif

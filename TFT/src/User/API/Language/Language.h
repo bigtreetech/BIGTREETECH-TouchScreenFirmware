@@ -2,7 +2,7 @@
 #define _LANGUAGE_H_
 
 #include "stdbool.h"
-#include "stm32f10x.h"
+#include "variants.h"
 
 
 enum

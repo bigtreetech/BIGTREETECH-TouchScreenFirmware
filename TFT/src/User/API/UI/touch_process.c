@@ -1,4 +1,5 @@
 #include "touch_process.h"
+#include "GPIO_Init.h"
 #include "includes.h"
 
 #define XL1 LCD_X[0]
@@ -140,7 +141,7 @@ u16 Key_value(u8 total_rect,const GUI_RECT* menuRect)
   {
     if((x>menuRect[i].x0)&&(x<menuRect[i].x1)&&(y>menuRect[i].y0)&&(y<menuRect[i].y1))
     {
-      #ifdef BUZZER_SUPPORT
+      #ifdef BUZZER_PIN
 			openBuzzer(3, 11);
       #endif
       return i;
@@ -385,7 +386,7 @@ u16 KNOB_GetRV(GUI_RECT *knob)
   return key_return;
 }
 
-#ifdef BUZZER_SUPPORT
+#ifdef BUZZER_PIN
 void TIM3_Config(u16 psc,u16 arr)
 {
 	NVIC_InitTypeDef NVIC_InitStructure;
@@ -396,36 +397,25 @@ void TIM3_Config(u16 psc,u16 arr)
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE; 
 	NVIC_Init(&NVIC_InitStructure); 
 
-	RCC->APB1ENR|=1<<1;	           //TIM3Ê±ÖÓÊ¹ÄÜ    
- 	TIM3->ARR=arr;  	             //Éè¶¨×Ô¶¯ÖØ×°Öµ   
-	TIM3->PSC=psc;  	             //Ô¤·ÖÆµÆ÷
-  TIM3->SR = (uint16_t)~(1<<0);  //Çå³ý¸üÐÂÖÐ¶Ï
-	TIM3->DIER|=1<<0;              //ÔÊÐí¸üÐÂÖÐ¶Ï	  
+	RCC->APB1ENR|=1<<1;	           //TIM3Ê±ï¿½ï¿½Ê¹ï¿½ï¿½    
+ 	TIM3->ARR=arr;  	             //ï¿½è¶¨ï¿½Ô¶ï¿½ï¿½ï¿½×°Öµ   
+	TIM3->PSC=psc;  	             //Ô¤ï¿½ï¿½Æµï¿½ï¿½
+  TIM3->SR = (uint16_t)~(1<<0);  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½
+	TIM3->DIER|=1<<0;              //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½	  
 	TIM3->CNT =0;
-	TIM3->CR1 &= ~(0x01);          //Ê§ÄÜ¶¨Ê±Æ÷3	
+	TIM3->CR1 &= ~(0x01);          //Ê§ï¿½Ü¶ï¿½Ê±ï¿½ï¿½3	
 }
 
 void Buzzer_Config(void)
-{
-  GPIO_InitTypeDef GPIO_InitStructure;
+{  
+  GPIO_InitSet(BUZZER_PIN, MGPIO_MODE_OUT_PP, 0);
   
-  RCC_APB2PeriphClockCmd(BUZZER_RCC, ENABLE);
-
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-  GPIO_InitStructure.GPIO_Pin = BUZZER_PIN;
-  GPIO_InitStructure.GPIO_Speed =GPIO_Speed_50MHz;
-  GPIO_Init(BUZZER_PORT, &GPIO_InitStructure);
-  
-	TIM3_Config(719,100);  //1Khz
+	TIM3_Config(999, F_CPUM-1);  //1Khz
 }
 
 void Buzzer_DeConfig(void)
 {
-  GPIO_InitTypeDef GPIO_InitStructure;  
-
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-  GPIO_InitStructure.GPIO_Pin = BUZZER_PIN;
-  GPIO_Init(BUZZER_PORT, &GPIO_InitStructure);
+  GPIO_InitSet(BUZZER_PIN, MGPIO_MODE_IPN, 0);
 }
 
 typedef struct{
@@ -446,7 +436,7 @@ void openBuzzer(u16 h_us, u16 l_us)
   else
     buzzer.num = 500;        
 
-  TIM3->CR1 |= 0x01;               //Ê¹ÄÜ¶¨Ê±Æ÷3	
+  TIM3->CR1 |= 0x01;               //Ê¹ï¿½Ü¶ï¿½Ê±ï¿½ï¿½3	
 }
 void closeBuzzer(void)   
 {
@@ -454,30 +444,29 @@ void closeBuzzer(void)
 	TIM3->CR1 &= ~(0x01);
 }
 
-void TIM3_IRQHandler(void)   //TIM3ÖÐ¶Ï
+void TIM3_IRQHandler(void)   //TIM3ï¿½Ð¶ï¿½
 {
   static bool flag = false;
-  if ((TIM3->SR&0x01) != 0 ) //¼ì²éÖ¸¶¨µÄTIMÖÐ¶Ï·¢ÉúÓë·ñ:TIM ÖÐ¶ÏÔ´ 
+  if ((TIM3->SR&0x01) != 0 ) //ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½TIMï¿½Ð¶Ï·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:TIM ï¿½Ð¶ï¿½Ô´ 
   {
-    flag = !flag;
+    flag = !flag;    
     if( flag )
     {
-      GPIO_SetBits(BUZZER_PORT, BUZZER_PIN);
       TIM3->ARR = buzzer.h_us;
     }
     else
     {
-      GPIO_ResetBits(BUZZER_PORT, BUZZER_PIN);
       TIM3->ARR = buzzer.l_us;
     }
-
+    
+    GPIO_SetLevel(BUZZER_PIN, flag);
     buzzer.num--;
     if( buzzer.num == 0 )
     {
       TIM3->CR1 &= ~(0x01);
     }
 
-    TIM3->SR = (uint16_t)~(1<<0);  //Çå³ýTIMxµÄÖÐ¶Ï´ý´¦ÀíÎ»:TIM ÖÐ¶ÏÔ´ 
+    TIM3->SR = (uint16_t)~(1<<0);  //ï¿½ï¿½ï¿½TIMxï¿½ï¿½ï¿½Ð¶Ï´ï¿½ï¿½ï¿½ï¿½ï¿½Î»:TIM ï¿½Ð¶ï¿½Ô´ 
   }
 }
 #endif

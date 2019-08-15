@@ -1,6 +1,6 @@
 #ifndef _PRINTING_H_
 #define _PRINTING_H_
-#include "stm32f10x.h"
+#include "variants.h"
 #include "stdbool.h"
 #include "ff.h"
 

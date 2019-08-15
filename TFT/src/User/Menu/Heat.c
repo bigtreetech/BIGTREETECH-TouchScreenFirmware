@@ -1,4 +1,4 @@
-#include "heat.h"
+#include "Heat.h"
 #include "includes.h"
 
 //1 title, ITEM_PER_PAGE items (icon+label) 
@@ -44,7 +44,7 @@ const char* const heatDisplayID[] = HEAT_DISPLAY_ID;
 const char* heatCmd[] = HEAT_CMD;
 const char* heatWaitCmd[] = HEAT_WAIT_CMD;
 
-static HEATER  heater = {{0}, NOZZLE0, NOZZLE0};
+static HEATER  heater = {{}, NOZZLE0, NOZZLE0};
 static u32     update_time = 300;
 static bool    update_waiting = false;
 static bool    send_waiting[HEATER_NUM];

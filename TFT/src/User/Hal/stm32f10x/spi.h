@@ -10,7 +10,7 @@
 #define _SPI_CNT  3
 
 
-
+void SPI_GPIO_Init(uint8_t port);
 void SPI_Config(uint8_t port);
 void SPI_DeConfig(uint8_t port);
 void SPI_Protocol_Init(uint8_t port, uint8_t baudrate);

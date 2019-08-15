@@ -2,9 +2,17 @@
 #define _ST7920_SIMULATOR_H_
 
 #include "stdint.h"
+#include "../../Configuration.h"
 
-#define ST7920_BKCOLOR   (BLACK)
-#define ST7920_FNCOLOR   (GREEN)
+// User-defined colors for 12864 mode from Configuration.h
+#ifndef ST7920_BKCOLOR
+  #define ST7920_BKCOLOR (BLACK)
+#endif
+
+#ifndef ST7920_FNCOLOR
+  #define ST7920_FNCOLOR (GREEN)
+#endif
+
 #define ST7920_XSTART    (0x80)
 #define ST7920_YSTART    (0x80)
 

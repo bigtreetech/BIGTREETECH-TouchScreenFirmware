@@ -2,7 +2,7 @@
 #define _LCD_H_
 
 #include "stdint.h"
-#include "Configuration.h"
+#include "variants.h"
 
 #ifdef STM32_HAS_FSMC
 
@@ -45,33 +45,22 @@
   
 #endif
 
-//TFT35 V1.0 V1.1 RM68042 8bit
-//TFT35 V1.2 ili9488 16bit
-//TFT28 TFT24 ili9341 16bit
-#if LCD_DATA_16BIT == 1
-  #define LCD_WR_16BITS_DATA(c) do{ LCD_WR_DATA(c); }while(0)
-#else
-  #define LCD_WR_16BITS_DATA(c) do{ LCD_WR_DATA(((c)>>8)&0xFF); LCD_WR_DATA((c)&0xFF); }while(0)	
-#endif
-
 
 //
 #define WHITE                 0xFFFF
-#define BLACK                 0x0000    
-#define BLUE                  0x001F  
-#define BRED                  0XF81F
-#define GRED                  0XFFE0
+#define BLACK                 0x0000
+#define BLUE                  0x001F
 #define GBLUE                 0X07FF
 #define RED                   0xF800
 #define MAGENTA               0xF81F
 #define GREEN                 0x07E0
 #define CYAN                  0x7FFF
 #define YELLOW                0xFFE0
-#define BROWN                 0XBC40 //
-#define BRRED                 0XFC07 //
-#define GRAY                  0X8430 //
+#define BROWN                 0XBC40
+#define BRRED                 0XFC07
+#define GRAY                  0X8430
 
-
-void LCD_Init(void);          //
+void LCD_HardwareConfig(void);
+uint16_t LCD_RD_DATA(void);
 
 #endif

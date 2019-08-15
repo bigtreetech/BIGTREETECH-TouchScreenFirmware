@@ -31,13 +31,13 @@ void menuDisconnect(void)
   GUI_Clear(BLACK);
   GUI_DispStringInRect(20, 0, LCD_WIDTH-20, LCD_HEIGHT, textSelect(LABEL_DISCONNECT_INFO), 0);
 
-  GPIOA->CRH &= 0xFFFFF00F;
-  GPIOA->CRH |= 0x00000440;// PA9/PA10
+//  GPIOA->CRH &= 0xFFFFF00F;
+//  GPIOA->CRH |= 0x00000440;// PA9/PA10
 
-  while(!isPress());
-  while(isPress());
-  GPIOA->CRH &= 0xFFFFF00F;
-  GPIOA->CRH |= 0x000008B0;
+//  while(!isPress());
+//  while(isPress());
+//  GPIOA->CRH &= 0xFFFFF00F;
+//  GPIOA->CRH |= 0x000008B0;
   infoMenu.cur--;
 }
 

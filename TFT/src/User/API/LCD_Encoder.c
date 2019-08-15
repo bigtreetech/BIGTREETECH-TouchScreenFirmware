@@ -1,7 +1,8 @@
 #include "LCD_Encoder.h"
+#include "GPIO_Init.h"
 #include "includes.h"
 
-#ifdef LCD_ENCODER_SUPPORT
+#if LCD_ENCODER_SUPPORT
 
 int8_t encoderDirection = 1;
 volatile int8_t encoderDiff; // Updated in update_buttons, added to encoderPosition every LCD update
@@ -10,35 +11,29 @@ uint8_t buttons = 0;
 
 void LCD_EncoderInit(void)
 {
-  GPIO_TypeDef *encPort[] = {LCD_ENCA_PORT, LCD_ENCB_PORT, LCD_BTN_PORT};
-  uint16_t      encPin[]  = {LCD_ENCA_PIN,  LCD_ENCB_PIN,  LCD_BTN_PIN};
-  GPIO_InitTypeDef GPIO_InitStructure;
+  uint16_t encPin[]  = {LCD_ENCA_PIN,  LCD_ENCB_PIN,  LCD_BTN_PIN};
   
-  RCC_APB2PeriphClockCmd(LCD_ENCODER_RCC, ENABLE);
-  
-  for(u8 i = 0; i < aCount(encPort); i++)
+  for(u8 i = 0; i < aCount(encPin); i++)
   {
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
-    GPIO_InitStructure.GPIO_Pin = encPin[i];
-    GPIO_InitStructure.GPIO_Speed =GPIO_Speed_50MHz;
-    GPIO_Init(encPort[i], &GPIO_InitStructure);
+    GPIO_InitSet(encPin[i], MGPIO_MODE_IPU, 0);
   }
 }
 
 bool LCD_ReadEncA(void)
 {
-  return !GPIO_ReadInputDataBit(LCD_ENCA_PORT, LCD_ENCA_PIN);
+  return !GPIO_GetLevel(LCD_ENCA_PIN);
 }
+
 bool LCD_ReadEncB(void)
 {
-  return !GPIO_ReadInputDataBit(LCD_ENCB_PORT, LCD_ENCB_PIN);
+  return !GPIO_GetLevel(LCD_ENCB_PIN);
 }
 
 bool LCD_ReadBtn(uint8_t intervals)
 {
   static u32 nowTime = 0;
   
-  if(!GPIO_ReadInputDataBit(LCD_BTN_PORT, LCD_BTN_PIN))
+  if(!GPIO_GetLevel(LCD_BTN_PIN))
   {
     if(OS_GetTime() - nowTime > intervals)
     {
@@ -92,7 +87,8 @@ void LCD_LoopEncoder(void)
 }
 
 void loopCheckMode(void)
-{
+{  
+  if(isPrinting()) return;
   if(LCD_ReadBtn(LCD_CHANGE_MODE_INTERVALS))
   {
     infoMenu.menu[++infoMenu.cur] = menuMode;
