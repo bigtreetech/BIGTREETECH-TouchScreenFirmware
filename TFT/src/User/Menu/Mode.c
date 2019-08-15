@@ -1,4 +1,4 @@
-#include "mode.h"
+#include "Mode.h"
 #include "includes.h"
 
 

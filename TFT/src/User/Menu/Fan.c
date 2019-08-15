@@ -1,4 +1,4 @@
-#include "fan.h"
+#include "Fan.h"
 #include "includes.h"
 
 

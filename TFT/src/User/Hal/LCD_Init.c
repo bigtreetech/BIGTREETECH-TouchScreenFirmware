@@ -1,4 +1,4 @@
-#include "LCD_init.h"
+#include "LCD_Init.h"
 #include "GPIO_Init.h"
 #include "includes.h"
 

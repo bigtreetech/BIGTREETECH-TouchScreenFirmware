@@ -1,4 +1,4 @@
-#include "language.h"
+#include "Language.h"
 #include "includes.h"
 #include "language_en.h"
 #include "language_cn.h"
