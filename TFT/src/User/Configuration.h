@@ -34,6 +34,9 @@
 
 #define PWC_ON_LCD 
 
+// Text displayed at the top of the LCD in 12864 mode
+#define ST7920_BANNER_TEXT "LCD12864 Simulator"
+
 // Ability to print gcode from Board SD via Gcode functions.
 #define ONBOARD_SD_SUPPORT
 #ifdef ONBOARD_SD_SUPPORT

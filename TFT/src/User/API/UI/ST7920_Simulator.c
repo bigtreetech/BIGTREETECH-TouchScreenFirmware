@@ -1,8 +1,13 @@
 #include "ST7920_Simulator.h"
 #include "includes.h"
 #include "GUI.h"
+#include "../../Configuration.h"
 
 #ifdef ST7920_SPI
+
+#ifndef ST7920_BANNER_TEXT
+  #define ST7920_BANNER_TEXT "LCD12864 Simulator"
+#endif
 
 ST7920_PIXEL       st7920 = {ST7920_XSTART, ST7920_YSTART, 0};
 ST7920_CTRL_STATUS status = ST7920_IDLE;
@@ -127,7 +132,7 @@ void menuST7920(void)
   GUI_Clear(BLACK);
   GUI_SetColor(ST7920_FNCOLOR);
   GUI_SetBkColor(ST7920_BKCOLOR);
-  GUI_DispStringInRect(0, 0, LCD_WIDTH, SIMULATOR_YSTART, "LCD12864 Simulator", 0);
+  GUI_DispStringInRect(0, 0, LCD_WIDTH, SIMULATOR_YSTART, ST7920_BANNER_TEXT, 0);
   SPI_Slave();
   SPI_Slave_CS_Config();
   
