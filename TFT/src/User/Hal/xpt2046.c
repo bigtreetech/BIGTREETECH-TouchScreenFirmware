@@ -1,7 +1,10 @@
 #include "xpt2046.h"
 #include "GPIO_Init.h"
-/***************************************** XPT2046 SPI Ä£Ê½µ×²ãÒÆÖ²µÄ½Ó¿Ú********************************************/
-//XPT2046 SPIÏà¹Ø - Ê¹ÓÃÄ£ÄâSPI
+#include "os_timer.h"
+#include "stdbool.h"
+#include "touch_process.h"
+/***************************************** XPT2046 SPI Ä£Ê½ï¿½×²ï¿½ï¿½ï¿½Ö²ï¿½Ä½Ó¿ï¿½********************************************/
+//XPT2046 SPIï¿½ï¿½ï¿½ - Ê¹ï¿½ï¿½Ä£ï¿½ï¿½SPI
 _SW_SPI xpt2046;
 
 //Æ¬Ñ¡
@@ -10,13 +13,13 @@ void XPT2046_CS_Set(u8 level)
   SW_SPI_CS_Set(&xpt2046, level);
 }
 
-//¶ÁÐ´º¯Êý
+//ï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½
 u8 XPT2046_ReadWriteByte(u8 TxData)
 {		
   return SW_SPI_Read_Write(&xpt2046, TxData);			    
 }
 
-//XPT2046 SPIºÍ±ÊÖÐ¶Ï³õÊ¼»¯
+//XPT2046 SPIï¿½Í±ï¿½ï¿½Ð¶Ï³ï¿½Ê¼ï¿½ï¿½
 void XPT2046_Init(void)
 {
   //PA15-TPEN
@@ -31,7 +34,7 @@ void XPT2046_Init(void)
   XPT2046_CS_Set(1);
 }
 
-//¶Á±ÊÖÐ¶Ï
+//ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½
 u8 XPT2046_Read_Pen(void)
 {
   return GPIO_GetLevel(XPT2046_TPEN);
@@ -39,7 +42,7 @@ u8 XPT2046_Read_Pen(void)
 /******************************************************************************************************************/
 
 
-//¶ÁÈ¡ XPT2046 ×ª»¯ºÃµÄADÖµ
+//ï¿½ï¿½È¡ XPT2046 ×ªï¿½ï¿½ï¿½Ãµï¿½ADÖµ
 u16 XPT2046_Read_AD(u8 CMD)
 {
   u16 ADNum;
@@ -48,14 +51,14 @@ u16 XPT2046_Read_AD(u8 CMD)
   XPT2046_ReadWriteByte(CMD);
   ADNum=XPT2046_ReadWriteByte(0xff);
   ADNum= ((ADNum)<<8) | XPT2046_ReadWriteByte(0xff);
-  ADNum >>= 4;         //XPT2046Êý¾ÝÖ»ÓÐ12bits,ÉáÆúµÍËÄÎ»
+  ADNum >>= 4;         //XPT2046ï¿½ï¿½ï¿½ï¿½Ö»ï¿½ï¿½12bits,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»
 
   XPT2046_CS_Set(1);
   return ADNum;
 }
 
-#define READ_TIMES 5 	//¶ÁÈ¡´ÎÊý
-#define LOST_VAL 1	  	//¶ªÆúÖµ
+#define READ_TIMES 5 	//ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½
+#define LOST_VAL 1	  	//ï¿½ï¿½ï¿½ï¿½Öµ
 u16 XPT2046_Average_AD(u8 CMD)
 {
   u16 i, j;
@@ -63,11 +66,11 @@ u16 XPT2046_Average_AD(u8 CMD)
   u16 sum=0;
   u16 temp;
   for(i=0; i<READ_TIMES; i++) buf[i] = XPT2046_Read_AD(CMD);		 		    
-  for(i=0; i<READ_TIMES-1; i++)//ÅÅÐò
+  for(i=0; i<READ_TIMES-1; i++)//ï¿½ï¿½ï¿½ï¿½
   {
     for(j=i+1; j<READ_TIMES; j++)
     {
-      if(buf[i] > buf[j]) //ÉýÐòÅÅÁÐ
+      if(buf[i] > buf[j]) //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
       {
         temp = buf[i];
         buf[i] = buf[j];
@@ -82,7 +85,7 @@ u16 XPT2046_Average_AD(u8 CMD)
 } 
 
 
-#define ERR_RANGE 50 //Îó²î·¶Î§ 
+#define ERR_RANGE 50 //ï¿½ï¿½î·¶Î§ 
 u16 XPT2046_Repeated_Compare_AD(u8 CMD) 
 {
   u16 ad1, ad2;
@@ -90,10 +93,137 @@ u16 XPT2046_Repeated_Compare_AD(u8 CMD)
   ad2 = XPT2046_Average_AD(CMD);
 
   if((ad2 <= ad1 && ad1 < ad2 + ERR_RANGE) 
-  || (ad1 <= ad2 && ad2 < ad1 + ERR_RANGE)) //Ç°ºóÁ½´ÎÎó²îÐ¡ÓÚ ERR_RANGE
+  || (ad1 <= ad2 && ad2 < ad1 + ERR_RANGE)) //Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½ ERR_RANGE
   {
     return (ad1+ad2)/2;
   }
   else return 0;	  
-} 
+}
+
+bool LCD_ReadPen(uint8_t intervals)
+{
+  static u32 TouchTime = 0;
+  
+  if(!XPT2046_Read_Pen())
+  {
+    if(OS_GetTime() - TouchTime > intervals)
+    {
+      return true;
+    }
+  }
+  else
+  {
+    TouchTime = OS_GetTime();
+  }
+  return false;
+}
+
+bool LCD_BtnTouch(uint8_t intervals)
+{
+	static u32 BtnTime = 0;
+  u16 tx,ty;
+  if(!XPT2046_Read_Pen())
+  {
+		TS_Get_Coordinates(&tx,&ty);
+    if(OS_GetTime() - BtnTime > intervals)
+    {
+			if(tx>280 && ty<40)
+      return true;
+    }
+  }
+  else
+  {
+    BtnTime = OS_GetTime();
+  }
+  return false;
+}
+
+ uint8_t LCD_ReadTouch(void)
+{
+	u16 ex=0,ey=0;
+  static u32 CTime = 0;
+  static u16 sx,sy;
+	static bool MOVE = false;
+	
+	if(!XPT2046_Read_Pen() && CTime < OS_GetTime())
+  {
+		TS_Get_Coordinates(&ex,&ey);
+		if(!MOVE)
+			sy = ey;
+			
+		MOVE = true;
+			
+		if((ey>sy) && sy!=0)
+		{
+			if(ey > sy+25)
+			{
+				MOVE = false;
+				sy = ey = 0;
+				return 3;
+			}
+		}
+		else if((sy>ey) && ey!=0)
+		{
+			if(sy > ey+25)
+			{
+				MOVE = false;
+				sy = ey =0;
+				return 2;
+			}
+		}	
+	}
+	else
+	{
+		CTime = OS_GetTime();
+		sy = ey =0;
+		MOVE = false;
+	}
+	
+	return 0;	
+}
+
+void Touch_Sw(uint8_t num)
+{
+	switch(num)
+	{
+		case 0:
+			break;
+		case 1:
+			GPIO_SetLevel(LCD_BTN_PIN, 0);
+			GPIO_SetLevel(LCD_BTN_PIN, 1);
+			break;
+		case 2:
+			GPIO_SetLevel(LCD_ENCA_PIN, 1);
+			GPIO_SetLevel(LCD_ENCB_PIN, 1);
+			Delay_us(8);
+			GPIO_SetLevel(LCD_ENCA_PIN, 0);
+			GPIO_SetLevel(LCD_ENCB_PIN, 1);
+			Delay_us(8);
+			GPIO_SetLevel(LCD_ENCA_PIN, 0);
+			GPIO_SetLevel(LCD_ENCB_PIN, 0);
+			Delay_us(8);
+			GPIO_SetLevel(LCD_ENCA_PIN, 1);
+			GPIO_SetLevel(LCD_ENCB_PIN, 0);
+			Delay_us(8);
+			GPIO_SetLevel(LCD_ENCA_PIN, 1);
+			GPIO_SetLevel(LCD_ENCB_PIN, 1);
+			break;
+		case 3:
+			GPIO_SetLevel(LCD_ENCA_PIN, 1);
+			GPIO_SetLevel(LCD_ENCB_PIN, 1);
+			Delay_us(8);
+			GPIO_SetLevel(LCD_ENCA_PIN, 1);
+			GPIO_SetLevel(LCD_ENCB_PIN, 0);
+			Delay_us(8);
+			GPIO_SetLevel(LCD_ENCA_PIN, 0);
+			GPIO_SetLevel(LCD_ENCB_PIN, 0);
+			Delay_us(8);
+			GPIO_SetLevel(LCD_ENCA_PIN, 0);
+			GPIO_SetLevel(LCD_ENCB_PIN, 1);
+			Delay_us(8);
+			GPIO_SetLevel(LCD_ENCA_PIN, 1);
+			GPIO_SetLevel(LCD_ENCB_PIN, 1);
+			break;
+	}
+}
 

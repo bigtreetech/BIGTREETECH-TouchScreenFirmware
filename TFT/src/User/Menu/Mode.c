@@ -1,6 +1,7 @@
 #include "mode.h"
 #include "includes.h"
-
+#include "GPIO_Init.h"
+#include "touch_process.h"
 
 void Serial_ReSourceDeInit(void)
 {
@@ -69,22 +70,31 @@ void menuMode(void)
   GUI_Clear(BLACK);
   RADIO_Create(&modeRadio);
   Serial_ReSourceDeInit();
-  while(LCD_ReadBtn(LCD_BUTTON_INTERVALS));      //wait for button release
+  while(!XPT2046_Read_Pen());      //wait for button release
   
   while(infoMenu.menu[infoMenu.cur] == menuMode)
   {
-    if(LCD_ReadBtn(LCD_BUTTON_INTERVALS))
+    if(LCD_BtnTouch(LCD_BUTTON_INTERVALS))
     {
-      break;
-    }
-    if(encoderPosition)
-    {
-      nowMode = limitValue(0, nowMode + encoderPosition, modeRadio.num - 1);
-      RADIO_Select(&modeRadio, nowMode);
-      encoderPosition = 0;    
+      Touch_Sw(1);
+			while(!XPT2046_Read_Pen());
+			break;
     }
     
-    LCD_LoopEncoder();
+    if(LCD_ReadTouch()==2)
+		{			
+			Touch_Sw(2);
+			nowMode = SERIAL_TSC;
+			RADIO_Select(&modeRadio, SERIAL_TSC);
+		}
+		
+		if(LCD_ReadTouch()==3)
+		{
+			Touch_Sw(3);
+			nowMode = LCD12864;
+			RADIO_Select(&modeRadio, LCD12864);
+		}
+    
   }
   if(infoSettings.mode != nowMode)
   {
