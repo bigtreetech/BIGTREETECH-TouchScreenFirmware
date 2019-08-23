@@ -28,7 +28,7 @@ void FIL_Runout_Init(void)
 void loopFILRunoutDetect(void)
 {
   if(!isPrinting() || isPause())  return ;  //not print or print is pause
-  
+  if(infoSettings.runout==0) return;
   if(GPIO_GetLevel(FIL_RUNOUT_PIN) == FIL_RUNOUT_INVERTING)
   {
     if(setPrintPause(true))

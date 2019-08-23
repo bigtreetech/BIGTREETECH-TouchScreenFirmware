@@ -66,6 +66,14 @@ const ITEM itemBaudrate[ITEM_BAUDRATE_NUM] = {
 const  u32 item_baudrate[ITEM_BAUDRATE_NUM] = {115200,250000};
 static u8  item_baudrate_i = 0;
 
+#define ITEM_RUNOUT_NUM 2
+const ITEM itemRunout[ITEM_RUNOUT_NUM] = {
+//   icon                       label
+  {ICON_RUNOUT,             LABEL_RUNOUT_0},
+  {ICON_RUNOUT,             LABEL_RUNOUT_1},
+};
+const  u32 item_runout[ITEM_RUNOUT_NUM] = {0,1};
+static u8  item_runout_i = 0;
 
 void menuSettings(void)
 {
@@ -80,6 +88,16 @@ void menuSettings(void)
       settingsItems.items[KEY_ICON_5] = itemBaudrate[item_baudrate_i];
     }
   }	
+
+  for(u8 k=0; k<ITEM_RUNOUT_NUM; k++)
+  {
+    if(infoSettings.runout == item_runout[k])
+    {
+      item_runout_i = k;
+      settingsItems.items[KEY_ICON_6] = itemRunout[item_runout_i];
+    }
+  }	
+  
   menuDrawPage(&settingsItems);
 
   while(infoMenu.menu[infoMenu.cur] == menuSettings)
@@ -114,6 +132,13 @@ void menuSettings(void)
         Serial_Config(infoSettings.baudrate);
         break;
       
+      case KEY_ICON_6:
+				item_runout_i = (item_runout_i + 1) % ITEM_RUNOUT_NUM;                
+        settingsItems.items[key_num] = itemRunout[item_runout_i];
+        menuDrawItem(&settingsItems.items[key_num], key_num);
+        infoSettings.runout = item_runout[item_runout_i];
+				break;
+
       case KEY_ICON_7:
         infoMenu.cur--;
         break;

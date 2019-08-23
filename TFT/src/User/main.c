@@ -41,6 +41,7 @@ void Hardware_GenericInit(void)
     infoSettings.baudrate = 115200;
     infoSettings.language = ENGLISH;
     infoSettings.mode = SERIAL_TSC;
+    infoSettings.runout = 0;
     storePara();
   }
   

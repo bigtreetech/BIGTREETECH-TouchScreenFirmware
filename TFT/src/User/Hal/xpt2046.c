@@ -155,19 +155,17 @@ bool LCD_BtnTouch(uint8_t intervals)
 			
 		if((ey>sy) && sy!=0)
 		{
-			if(ey > sy+25)
+			if(ey > sy+35)
 			{
-				MOVE = false;
-				sy = ey = 0;
+				sy = ey;
 				return 3;
 			}
 		}
 		else if((sy>ey) && ey!=0)
 		{
-			if(sy > ey+25)
+			if(sy > ey+35)
 			{
-				MOVE = false;
-				sy = ey =0;
+				sy = ey;
 				return 2;
 			}
 		}	
@@ -181,7 +179,7 @@ bool LCD_BtnTouch(uint8_t intervals)
 	
 	return 0;	
 }
-
+#if LCD_ENCODER_SUPPORT
 void Touch_Sw(uint8_t num)
 {
 	switch(num)
@@ -226,4 +224,5 @@ void Touch_Sw(uint8_t num)
 			break;
 	}
 }
+#endif
 

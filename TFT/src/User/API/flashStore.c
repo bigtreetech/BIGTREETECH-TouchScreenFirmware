@@ -4,10 +4,10 @@
 #define PARA_SIZE 256  //bytes
 #define PARA_SIGN 0x20190710
 
-extern u32 TSC_Para[7];        //´¥ÃþÆÁÐ£×¼ÏµÊý
-extern SETTINGS infoSettings;  //ÓÃ»§ÉèÖÃ
+extern u32 TSC_Para[7];        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð£×¼Ïµï¿½ï¿½
+extern SETTINGS infoSettings;  //ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½
 
-void wordToByte(u32 word, u8 *bytes)  //´ó¶ËÄ£Ê½
+void wordToByte(u32 word, u8 *bytes)  //ï¿½ï¿½ï¿½Ä£Ê½
 {
   u8 len = 4;
   u8 i = 0;
@@ -47,6 +47,7 @@ bool readStoredPara(void)
   infoSettings.baudrate = byteToWord(data + (index += 4), 4);
   infoSettings.language = byteToWord(data + (index += 4), 4);
   infoSettings.mode     = byteToWord(data + (index += 4), 4);
+  infoSettings.runout   = byteToWord(data + (index += 4), 4);
     
   return true;
 }
@@ -64,6 +65,7 @@ void storePara(void)
   wordToByte(infoSettings.baudrate, data + (index += 4));
   wordToByte(infoSettings.language, data + (index += 4));
   wordToByte(infoSettings.mode, data + (index += 4));
+  wordToByte(infoSettings.runout, data + (index += 4));
   
   STM32_FlashWrite(data, PARA_SIZE);
 }
