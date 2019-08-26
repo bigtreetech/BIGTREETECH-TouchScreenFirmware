@@ -58,7 +58,7 @@ void infoMenuSelect(void)
 void menuMode(void)
 {  
   RADIO modeRadio = {
-    {"Serial Touch Screen", "LCD12864 Simulator", "LCD2004 Simulator"},
+    {(u8*)"Serial Touch Screen", (u8*)ST7920_BANNER_TEXT, (u8*)"LCD2004 Simulator"},
     SIMULATOR_XSTART, SIMULATOR_YSTART,
     BYTE_HEIGHT*2, 2,
     0
