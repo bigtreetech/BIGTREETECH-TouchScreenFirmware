@@ -305,7 +305,6 @@ void sendQueueCmd(void)
   
   Serial_Puts(infoCmd.queue[infoCmd.index_r]); //
   infoCmd.count--;
-  //    infoCmd.parsed--;
   infoCmd.index_r = (infoCmd.index_r + 1) % CMD_MAX_LIST;
 
   infoHost.wait = infoHost.connected;          //

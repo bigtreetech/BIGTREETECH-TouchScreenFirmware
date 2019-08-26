@@ -33,6 +33,8 @@
     #define CN_DISCONNECT           "断开连接"
     #define CN_BAUDRATE_115200      "115200"
     #define CN_BAUDRATE_250000      "250000"
+    #define CN_RUNOUT_OFF           "耗材检测关"
+    #define CN_RUNOUT_ON            "耗材检测开"
     #define CN_PERCENTAGE           "百分比"
     #define CN_BABYSTEP             "Z-微调"
     #define CN_PERCENTAGE_SPEED     "速度百分比"
@@ -88,5 +90,7 @@
     
     #define CN_ONBOARDSD            "板载SD"
     #define CN_READ_ONBOARDSD_ERROR "读板载SD卡出错!"
+    
+    #define CN_FILAMENT_RUNOUT      "耗材已用尽,请更换耗材!"
 
 #endif

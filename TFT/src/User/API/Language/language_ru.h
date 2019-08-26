@@ -33,6 +33,8 @@
     #define RU_DISCONNECT           "Disconnect"
     #define RU_BAUDRATE_115200      "115200"
     #define RU_BAUDRATE_250000      "250000"
+    #define RU_RUNOUT_OFF           "Runout OFF"
+    #define RU_RUNOUT_ON            "Runout ON"
     #define RU_PERCENTAGE           "Percentage"
     #define RU_BABYSTEP             "§®§Ú§Ü§â§à§ê§Ñ§Ô Z"
     #define RU_PERCENTAGE_SPEED     "§³§Ü§à§â§à§ã§ä§î"
@@ -88,5 +90,7 @@
     
     #define RU_ONBOARDSD            "OnboardSD"
     #define RU_READ_ONBOARDSD_ERROR "Read Onboard SD card error!"
+    
+    #define RU_FILAMENT_RUNOUT      "filament runout!"
     
 #endif

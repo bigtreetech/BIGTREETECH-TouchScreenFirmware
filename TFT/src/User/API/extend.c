@@ -27,12 +27,13 @@ void FIL_Runout_Init(void)
 
 void loopFILRunoutDetect(void)
 {
+  if(!infoSettings.runout)  return ; //filament runout turn off
   if(!isPrinting() || isPause())  return ;  //not print or print is pause
   
   if(GPIO_GetLevel(FIL_RUNOUT_PIN) == FIL_RUNOUT_INVERTING)
   {
     if(setPrintPause(true))
-      popupReminder(textSelect(LABEL_WARNING), "filament runout!");
+      popupReminder(textSelect(LABEL_WARNING), textSelect(LABEL_FILAMENT_RUNOUT));
   }
 }
 #endif

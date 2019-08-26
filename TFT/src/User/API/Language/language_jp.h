@@ -33,6 +33,8 @@
     #define JP_DISCONNECT           "データ接続"
     #define JP_BAUDRATE_115200      "115200"
     #define JP_BAUDRATE_250000      "250000"
+    #define JP_RUNOUT_OFF           "Runout OFF"
+    #define JP_RUNOUT_ON            "Runout ON"
     #define JP_PERCENTAGE           "パーセント"
     #define JP_BABYSTEP             "ベビーステップ"
     #define JP_PERCENTAGE_SPEED     "スビード"
@@ -88,5 +90,7 @@
     
     #define JP_ONBOARDSD            "内部 mSDカード"
     #define JP_READ_ONBOARDSD_ERROR "内部 mSDカードの読み取りがエラー発生しました!"
+    
+    #define JP_FILAMENT_RUNOUT      "filament runout!"
 
 #endif
