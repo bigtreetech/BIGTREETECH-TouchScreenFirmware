@@ -15,3 +15,7 @@ The structure of the files in SD Card should be as follows
 ### Vx.x.21
 - fix unable to print properly from U disk(Stop printing at random)
 - fix busy popup with "Processing" in Printing and Stop Printing
+### Vx.x.22
+- clean up framework
+- add support TFT35 V2.0 (SDIO)
+- add function filament runout detect, power supply control

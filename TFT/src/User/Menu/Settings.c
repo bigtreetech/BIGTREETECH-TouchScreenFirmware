@@ -43,7 +43,7 @@ void menuDisconnect(void)
 
 
 MENUITEMS settingsItems = {
-//   title
+// title
 LABEL_SETTINGS,
 // icon                       label
  {{ICON_POWER_OFF,            LABEL_POWER_OFF},

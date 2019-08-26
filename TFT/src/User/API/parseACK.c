@@ -111,7 +111,7 @@ void parseACK(void)
     {
       infoHost.wait=false;
     }					
-    if(ack_seen("T:")) 
+    if(ack_seen("T:") || ack_seen("T0:")) 
     {
       heatSetCurrentTemp(heatGetCurrentToolNozzle(), ack_value()+0.5);
       heatSetTargetTemp(heatGetCurrentToolNozzle(), ack_second_value()+0.5);
