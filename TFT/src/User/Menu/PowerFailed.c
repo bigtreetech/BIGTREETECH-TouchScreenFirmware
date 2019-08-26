@@ -87,20 +87,16 @@ void powerFailedCache(u32 offset)
 
 void powerFailedClose(void) 
 {
-  FRESULT rst;
   if(create_ok==false)   return;
-
-  rst = f_close(&fpPowerFailed);
-//  printf("close:%d\r\n", rst);
+  
+  f_close(&fpPowerFailed);
 }
 
 void  powerFailedDelete(void) 
 {
-  FRESULT rst;
   if(create_ok==false)   return;
   
-  rst = f_unlink(powerFailedFileName);
-//  printf("unlink:%d\r\n", rst);
+  f_unlink(powerFailedFileName);
   clearPowerFailed();
 }
 

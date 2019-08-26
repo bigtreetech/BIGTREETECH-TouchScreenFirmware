@@ -15,11 +15,13 @@ typedef struct
   uint32_t baudrate;
   uint8_t  language;
   uint8_t  mode;
+  uint8_t  runout;
 }SETTINGS;
 
 
 extern SETTINGS infoSettings;
 
+void infoSettingsReset(void);
 void menuSettings(void);
 
 #endif
