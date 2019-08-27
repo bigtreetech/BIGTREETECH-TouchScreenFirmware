@@ -60,7 +60,7 @@ void parseACK(void)
   if(infoHost.rx_ok != true) return;      //not get response data
   if(infoHost.connected == false)         //not connected to Marlin
   {
-    if(!ack_seen("T:") || !ack_seen("ok"))    goto parse_end;  //the first response should be such as "T:25/50 ok\n"
+    if((!ack_seen("T:") && !ack_seen("T0:")) || !ack_seen("ok"))  goto parse_end;  //the first response should be such as "T:25/50 ok\n"
     infoHost.connected = true;
   }    
 
