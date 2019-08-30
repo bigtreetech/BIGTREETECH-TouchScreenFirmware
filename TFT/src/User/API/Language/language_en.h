@@ -33,6 +33,8 @@
     #define EN_DISCONNECT           "Disconnect"
     #define EN_BAUDRATE_115200      "115200"
     #define EN_BAUDRATE_250000      "250000"
+    #define EN_RUNOUT_OFF           "Runout OFF"
+    #define EN_RUNOUT_ON            "Runout ON"
     #define EN_PERCENTAGE           "Percentage"
     #define EN_BABYSTEP             "BabyStep"
     #define EN_PERCENTAGE_SPEED     "Speed"
@@ -88,5 +90,7 @@
     
     #define EN_ONBOARDSD            "OnboardSD"
     #define EN_READ_ONBOARDSD_ERROR "Read Onboard SD card error!"
+    
+    #define EN_FILAMENT_RUNOUT      "filament runout!"
     
 #endif

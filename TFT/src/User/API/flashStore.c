@@ -2,7 +2,7 @@
 #include "STM32_Flash.h"
 
 #define PARA_SIZE 256  //bytes
-#define PARA_SIGN 0x20190710
+#define PARA_SIGN 0x20190826
 
 extern u32 TSC_Para[7];        //触摸屏校准系数
 extern SETTINGS infoSettings;  //用户设置
@@ -47,6 +47,7 @@ bool readStoredPara(void)
   infoSettings.baudrate = byteToWord(data + (index += 4), 4);
   infoSettings.language = byteToWord(data + (index += 4), 4);
   infoSettings.mode     = byteToWord(data + (index += 4), 4);
+  infoSettings.runout   = byteToWord(data + (index += 4), 4);
     
   return true;
 }
@@ -64,6 +65,7 @@ void storePara(void)
   wordToByte(infoSettings.baudrate, data + (index += 4));
   wordToByte(infoSettings.language, data + (index += 4));
   wordToByte(infoSettings.mode, data + (index += 4));
+  wordToByte(infoSettings.runout, data + (index += 4));
   
   STM32_FlashWrite(data, PARA_SIZE);
 }

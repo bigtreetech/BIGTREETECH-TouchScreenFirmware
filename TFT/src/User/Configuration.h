@@ -36,10 +36,6 @@
 #define ST7920_BKCOLOR BLACK
 #define ST7920_FNCOLOR WHITE
 
-#define SUPPOR_PWC 
-
-#define PWC_ON_LCD 
-
 // Text displayed at the top of the LCD in 12864 mode
 #define ST7920_BANNER_TEXT "LCD12864 Simulator"
 
@@ -51,4 +47,11 @@
   #define M27_WATCH_OTHER_SOURCES    true     // if true the polling on M27 report is always active. Case: SD print start not from TFT35
 #endif
 
+/**
+ * Home before power loss recovery
+ * Many printer will crash printed model when homing, which is not suitable for home before PLR.
+ * This function is suitable for Delta Printer.
+ */
+//#define HOME_BEFORE_PLR
+  
 #endif

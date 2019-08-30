@@ -4,6 +4,15 @@
 
 SETTINGS infoSettings;
 
+void infoSettingsReset(void)
+{
+  TSC_Calibration();
+  infoSettings.baudrate = 115200;
+  infoSettings.language = ENGLISH;
+  infoSettings.mode = SERIAL_TSC;
+  infoSettings.runout = 0;
+  storePara();  
+}
 
 void menuInfo(void)
 {
@@ -31,19 +40,17 @@ void menuDisconnect(void)
   GUI_Clear(BLACK);
   GUI_DispStringInRect(20, 0, LCD_WIDTH-20, LCD_HEIGHT, textSelect(LABEL_DISCONNECT_INFO), 0);
 
-//  GPIOA->CRH &= 0xFFFFF00F;
-//  GPIOA->CRH |= 0x00000440;// PA9/PA10
-
-//  while(!isPress());
-//  while(isPress());
-//  GPIOA->CRH &= 0xFFFFF00F;
-//  GPIOA->CRH |= 0x000008B0;
+  Serial_DeConfig();
+  while(!isPress());
+  while(isPress());
+  Serial_Config(infoSettings.baudrate);
+  
   infoMenu.cur--;
 }
 
 
 MENUITEMS settingsItems = {
-//   title
+// title
 LABEL_SETTINGS,
 // icon                       label
  {{ICON_POWER_OFF,            LABEL_POWER_OFF},
@@ -51,7 +58,7 @@ LABEL_SETTINGS,
   {ICON_TOUCHSCREEN_ADJUST,   LABEL_TOUCHSCREEN_ADJUST},
   {ICON_SCREEN_INFO,          LABEL_SCREEN_INFO},
   {ICON_DISCONNECT,           LABEL_DISCONNECT},
-  {ICON_BAUDRATE,             LABEL_BAUDRATE_115200},
+  {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_BACK,                 LABEL_BACK},}
 };
@@ -59,13 +66,21 @@ LABEL_SETTINGS,
 
 #define ITEM_BAUDRATE_NUM 2
 const ITEM itemBaudrate[ITEM_BAUDRATE_NUM] = {
-//   icon                       label
+// icon                       label
   {ICON_BAUDRATE,             LABEL_BAUDRATE_115200},
   {ICON_BAUDRATE,             LABEL_BAUDRATE_250000},
 };
 const  u32 item_baudrate[ITEM_BAUDRATE_NUM] = {115200,250000};
 static u8  item_baudrate_i = 0;
 
+#define ITEM_RUNOUT_NUM 2
+const ITEM itemRunout[ITEM_RUNOUT_NUM] = {
+// icon                       label
+  {ICON_RUNOUT,             LABEL_RUNOUT_OFF},
+  {ICON_RUNOUT,             LABEL_RUNOUT_ON},
+};
+const  u32 item_runout[ITEM_RUNOUT_NUM] = {0,1};
+static u8  item_runout_i = 0;
 
 void menuSettings(void)
 {
@@ -79,7 +94,17 @@ void menuSettings(void)
       item_baudrate_i = i;
       settingsItems.items[KEY_ICON_5] = itemBaudrate[item_baudrate_i];
     }
-  }	
+  }
+  #ifdef FIL_RUNOUT_PIN
+  for(u8 i=0; i<ITEM_RUNOUT_NUM; i++)
+  {
+    if(infoSettings.runout == item_runout[i])
+    {
+      item_runout_i = i;
+      settingsItems.items[KEY_ICON_6] = itemRunout[item_runout_i];
+    }
+  }
+  #endif
   menuDrawPage(&settingsItems);
 
   while(infoMenu.menu[infoMenu.cur] == menuSettings)
@@ -113,7 +138,14 @@ void menuSettings(void)
         infoSettings.baudrate = item_baudrate[item_baudrate_i];
         Serial_Config(infoSettings.baudrate);
         break;
-      
+      #ifdef FIL_RUNOUT_PIN
+      case KEY_ICON_6:
+        item_runout_i = (item_runout_i + 1) % ITEM_RUNOUT_NUM;                
+        settingsItems.items[key_num] = itemRunout[item_runout_i];
+        menuDrawItem(&settingsItems.items[key_num], key_num);
+        infoSettings.runout = item_runout[item_runout_i];
+        break;
+      #endif
       case KEY_ICON_7:
         infoMenu.cur--;
         break;

@@ -87,20 +87,16 @@ void powerFailedCache(u32 offset)
 
 void powerFailedClose(void) 
 {
-  FRESULT rst;
   if(create_ok==false)   return;
-
-  rst = f_close(&fpPowerFailed);
-//  printf("close:%d\r\n", rst);
+  
+  f_close(&fpPowerFailed);
 }
 
 void  powerFailedDelete(void) 
 {
-  FRESULT rst;
   if(create_ok==false)   return;
   
-  rst = f_unlink(powerFailedFileName);
-//  printf("unlink:%d\r\n", rst);
+  f_unlink(powerFailedFileName);
   clearPowerFailed();
 }
 
@@ -139,7 +135,11 @@ bool powerOffGetData(void)
     if(infoBreakPoint.target[i] != 0)
       mustStoreCacheCmd("%s S%d\n", heatWaitCmd[i], infoBreakPoint.target[i]);
   }
-  mustStoreCacheCmd("G28\n");
+  #ifdef HOME_BEFORE_PLR
+    mustStoreCacheCmd("G28\n");
+  #else
+    mustStoreCacheCmd("G28 X0 Y0\n");
+  #endif
 
   for(u8 i=0; i < FAN_NUM; i++)
   {
@@ -150,7 +150,7 @@ bool powerOffGetData(void)
   mustStoreCacheCmd("%s\n", tool_change[infoBreakPoint.nozzle - NOZZLE0]);
   if(infoBreakPoint.feedrate != 0)
   {        
-    mustStoreCacheCmd("G1 Z%d\n", limitValue(0,infoBreakPoint.axis[Z_AXIS]+10,400));
+    mustStoreCacheCmd("G1 Z%d\n", limitValue(0, infoBreakPoint.axis[Z_AXIS]+10, Z_MAX_POS));
     mustStoreCacheCmd("M83\n");
     mustStoreCacheCmd("G1 E30 F300\n");
     mustStoreCacheCmd("G1 E-10 F4800\n");
