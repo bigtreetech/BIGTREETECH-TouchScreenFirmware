@@ -562,7 +562,7 @@ bool isArmenian(const u8 *const str)
 {
   if(str[0]==0xA1)
   {
-    if(str[1]>=0x40&&str[1]<=0x8B)
+    if(str[1]>=0x40&&str[1]<=0x8C)
     return true;
   }
   return false;
@@ -596,7 +596,7 @@ u8 * textSelect(u8 sel)
 //    case RUSSIAN:   return (u8 *)ru_pack[sel];
     case JAPANESE:  return (u8 *)jp_pack[sel];
     case GERMAN:    return (u8 *)de_pack[sel];
-//    case ARMENIAN:  return (u8 *)am_pack[sel];
+    case ARMENIAN:  return (u8 *)am_pack[sel];
     default:        return NULL;					 
   }
 }

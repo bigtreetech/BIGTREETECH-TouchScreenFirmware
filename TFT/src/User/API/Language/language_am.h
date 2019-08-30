@@ -1,8 +1,28 @@
 #ifndef _LANGUAGE_AM_H_
 #define _LANGUAGE_AM_H_
 
-    #define AM_LANGUAGE             "Armenian"
-    #define AM_HEAT                 "Heat"
+// 0xA140 - Ա   // 0xA153 - Մ   // 0xA166 - ա   // 0xA179 - մ   // 0xA18c - ֆ
+    // 0xA141 - Բ   // 0xA154 - Յ   // 0xA167 - բ   // 0xA17a - յ
+    // 0xA142 - Գ   // 0xA155 - Ն   // 0xA168 - գ   // 0xA17b - ն
+    // 0xA143 - Դ   // 0xA156 - Շ   // 0xA169 - դ   // 0xA17c - շ
+    // 0xA144 - Ե   // 0xA157 - Ո   // 0xA16a - ե   // 0xA17d - ո
+    // 0xA145 - Զ   // 0xA158 - Չ   // 0xA16b - զ   // 0xA17e - չ
+    // 0xA146 - Է   // 0xA159 - Պ   // 0xA16c - է   // 0xA17f - պ
+    // 0xA147 - Ը   // 0xA15a - Ջ   // 0xA16d - ը   // 0xA180 - ջ
+    // 0xA148 - Թ   // 0xA15b - Ռ   // 0xA16e - թ   // 0xA181 - ռ
+    // 0xA149 - Ժ   // 0xA15c - Ս   // 0xA16f - ժ   // 0xA182 - ս
+    // 0xA14a - Ի   // 0xA15d - Վ   // 0xA170 - ի   // 0xA183 - վ
+    // 0xA14b - Լ   // 0xA15e - Տ   // 0xA171 - լ   // 0xA184 - տ
+    // 0xA14c - Խ   // 0xA15f - Ր   // 0xA172 - խ   // 0xA185 - ր
+    // 0xA14d - Ծ   // 0xA160 - Ց   // 0xA173 - ծ   // 0xA186 - ց
+    // 0xA14e - Կ   // 0xA161 - Ւ   // 0xA174 - կ   // 0xA187 - ւ
+    // 0xA14f - Հ   // 0xA162 - Փ   // 0xA175 - հ   // 0xA188 - փ
+    // 0xA150 - Ձ   // 0xA163 - Ք   // 0xA176 - ձ   // 0xA189 - ք
+    // 0xA151 - Ղ   // 0xA164 - Օ   // 0xA177 - ղ   // 0xA18a - և
+    // 0xA152 - Ճ   // 0xA165 - Ֆ   // 0xA178 - ճ   // 0xA18b - օ
+
+    #define AM_LANGUAGE             {{0xA1, 0x4F}, {0xA1, 0x66}, {0xA1, 0x7A}, {0xA1, 0x6A}, {0xA1, 0x85}, {0xA1, 0x6A}, {0xA1, 0x7B}}
+    #define AM_HEAT                 {{0xA1, 0x5A}, {0xA1, 0x6A}, {0xA1, 0x85}, {0xA1, 0x79}, {0xA1, 0x7d}, {0xA1, 0x87}, {0xA1, 0x6e}, {0xA1, 0x7a}, {0xA1, 0x7d}, {0xA1, 0x87}, {0xA1, 0x7b}}
     #define AM_MOVE                 "Move"
     #define AM_HOME                 "Home"
     #define AM_PRINT                "Print"
@@ -40,9 +60,9 @@
     #define AM_PERCENTAGE_SPEED     "Speed"
     #define AM_PERCENTAGE_FLOW      "Flow"
     #define AM_VALUE_ZERO           "Zero"
-    #define AM_1_DEGREE             "1��"
-    #define AM_5_DEGREE             "5��"
-    #define AM_10_DEGREE            "10��"
+    #define AM_1_DEGREE             "1��"
+    #define AM_5_DEGREE             "5��"
+    #define AM_10_DEGREE            "10��"
     #define AM_X_INC                "X+"
     #define AM_Y_INC                "Y+"
     #define AM_Z_INC                "Z+"

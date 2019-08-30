@@ -12,7 +12,7 @@ enum
 //  RUSSIAN,
   JAPANESE,
   GERMAN,
-//  ARMENIAN,
+  ARMENIAN,
   
   LANGUAGE_NUM,
 };
