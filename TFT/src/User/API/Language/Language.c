@@ -562,7 +562,7 @@ bool isArmenian(const u8 *const str)
 {
   if(str[0]==0xA1)
   {
-    if(str[1]>=0x40&&str[1]<=0x8C)
+    if(str[1]>=0x40&&str[1]<=0x8D)
     return true;
   }
   return false;

@@ -466,7 +466,7 @@ void  GUI_FillCircle(uint16_t x0, uint16_t y0, uint16_t r)
 
 //ɨ�跽ʽ: ���ϵ��¡�������
 //0xA7A1-0xA7C1  0xA7D1-0xA7F1 66�������ַ�
-//0xA140-0xA18C  76�����������ַ�
+//0xA140-0xA18D  76�����������ַ�
 void GUI_DispChar(int16_t sx, int16_t sy, const uint16_t ch, uint8_t mode)
 {  		
   uint8_t   x = 0, 
@@ -485,7 +485,7 @@ void GUI_DispChar(int16_t sx, int16_t sy, const uint16_t ch, uint8_t mode)
   {
     offset = (ch-0xA7A1+127) * (BYTE_HEIGHT * BYTE_WIDTH / 8);
   }
-  else if(ch >= 0xA140 && ch <= 0xA18C)  //���������ַ�
+  else if(ch >= 0xA140 && ch <= 0xA18D)  //���������ַ�
   {
     offset = (ch-0xA140+208) * (BYTE_HEIGHT * BYTE_WIDTH / 8);
   }	  
