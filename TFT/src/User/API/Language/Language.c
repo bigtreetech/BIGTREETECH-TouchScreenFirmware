@@ -6,7 +6,7 @@
 #include "language_jp.h"
 #include "language_de.h"
 #include "language_am.h"
-
+#include "language_cz.h"
 
 const char *const en_pack[LABEL_NUM]={
   EN_LANGUAGE,
@@ -548,6 +548,107 @@ const char *const de_pack[LABEL_NUM]={
   DE_FILAMENT_RUNOUT
 };
 
+const char *const cz_pack[LABEL_NUM]={
+  CZ_LANGUAGE,
+  CZ_HEAT,
+  CZ_MOVE,
+  CZ_HOME,
+  CZ_PRINT,
+  CZ_EXTRUDE,
+  CZ_FAN,
+  CZ_SETTINGS,
+  CZ_LEVELING,
+  CZ_INC,
+  CZ_DEC,
+  CZ_NOZZLE,
+  CZ_BED,
+  CZ_STOP,
+  CZ_BACK,
+  CZ_PAGE_UP,
+  CZ_PAGE_DOWN,
+  CZ_PAUSE,
+  CZ_RESUME,
+  CZ_LOAD,
+  CZ_UNLOAD,
+  CZ_SLOW_SPEED,
+  CZ_NORMAL_SPEED,
+  CZ_FAST_SPEED,
+  CZ_FAN_FULL_SPEED,
+  CZ_FAN_HALF_SPEED,
+  CZ_POWER_OFF,
+  CZ_TOUCHSCREEN_ADJUST,
+  CZ_SCREEN_INFO,
+  CZ_DISCONNECT,
+  CZ_BAUDRATE_115200,
+  CZ_BAUDRATE_250000,
+  CZ_RUNOUT_OFF,
+  CZ_RUNOUT_ON,
+  CZ_PERCENTAGE,
+  CZ_BABYSTEP,
+  CZ_PERCENTAGE_SPEED,
+  CZ_PERCENTAGE_FLOW,
+  CZ_VALUE_ZERO,
+  CZ_1_DEGREE,
+  CZ_5_DEGREE,
+  CZ_10_DEGREE,
+  CZ_X_INC,
+  CZ_Y_INC,
+  CZ_Z_INC,
+  CZ_X_DEC,
+  CZ_Y_DEC,
+  CZ_Z_DEC,
+  CZ_X_HOME,
+  CZ_Y_HOME,
+  CZ_Z_HOME,
+  CZ_001_MM,
+  CZ_01_MM,
+  CZ_1_MM,
+  CZ_5_MM,
+  CZ_10_MM,
+  CZ_1_PERCENT,
+  CZ_5_PERCENT,
+  CZ_10_PERCENT,
+
+  CZ_READY,
+  CZ_PRINTING,
+  CZ_BUSY,
+  CZ_UNCONNECTED,
+  CZ_DISCONNECT_INFO,
+  CZ_LOADING,
+  CZ_POWER_FAILED,
+  CZ_CONTINUE,
+  CZ_CANNEL,
+  CZ_ADJUST_TITLE,
+  CZ_ADJUST_INFO,
+  CZ_ADJUST_OK,
+  CZ_ADJUST_FAILED,
+  CZ_WARNING,
+  CZ_STOP_PRINT,
+  CZ_CONFIRM,
+  CZ_TFTSD,
+  CZ_READ_TFTSD_ERROR,
+  CZ_TFTSD_INSERTED,
+  CZ_TFTSD_REMOVED,
+  CZ_U_DISK,
+  CZ_READ_U_DISK_ERROR,
+  CZ_U_DISK_INSERTED,
+  CZ_U_DISK_REMOVED,
+  CZ_ONBOARDSD,
+  CZ_READ_ONBOARDSD_ERROR,
+  CZ_FILAMENT_RUNOUT
+};
+
+bool isCzech(const u8 *const str)
+{
+  if(str[0] == 0xC3 && str[1] >= 0x81 && str[1] <=0xBD)
+    return true;
+  if(str[0] == 0xC4 && str[1] >= 0x8C && str[1] <=0x9B)
+    return true;
+  if(str[0] == 0xC5 && str[1] >= 0x87 && str[1] <=0xBE)
+    return true;
+  return false;
+}
+
 bool isRussia(const u8 *const str)
 {
   if(str[0]==0xA7)
@@ -597,6 +698,7 @@ u8 * textSelect(u8 sel)
     case JAPANESE:  return (u8 *)jp_pack[sel];
     case GERMAN:    return (u8 *)de_pack[sel];
 //    case ARMENIAN:  return (u8 *)am_pack[sel];
+    case CZECH:     return (u8 *)cz_pack[sel];
     default:        return NULL;					 
   }
 }

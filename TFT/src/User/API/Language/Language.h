@@ -13,6 +13,7 @@ enum
   JAPANESE,
   GERMAN,
 //  ARMENIAN,
+  CZECH,
   
   LANGUAGE_NUM,
 };
@@ -114,7 +115,7 @@ enum
 };
 
 
-
+bool isCzech(const u8 *const str);
 bool isRussia(const u8 *const str);
 bool isArmenian(const u8 *const str);
 u16 my_strlen(const u8 *const str);
