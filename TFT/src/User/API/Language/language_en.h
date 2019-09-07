@@ -34,7 +34,7 @@
     #define EN_BAUDRATE_115200      "115200"
     #define EN_BAUDRATE_250000      "250000"
     #define EN_DETECTIONS_OFF       "OFF"
-		#define EN_DETECTIONS_ON        "ON"
+    #define EN_DETECTIONS_ON        "ON"
     #define EN_PERCENTAGE           "Percentage"
     #define EN_BABYSTEP             "BabyStep"
     #define EN_PERCENTAGE_SPEED     "Speed"
