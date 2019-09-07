@@ -4,10 +4,10 @@
 #define PARA_SIZE 256  //bytes
 #define PARA_SIGN 0x20190710
 
-extern u32 TSC_Para[7];        //������У׼ϵ��
-extern SETTINGS infoSettings;  //�û�����
+extern u32 TSC_Para[7];        //触摸屏校准系数
+extern SETTINGS infoSettings;  //用户设置
 
-void wordToByte(u32 word, u8 *bytes)  //���ģʽ
+void wordToByte(u32 word, u8 *bytes)  //大端模式
 {
   u8 len = 4;
   u8 i = 0;
