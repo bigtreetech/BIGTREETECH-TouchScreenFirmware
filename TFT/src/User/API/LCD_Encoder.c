@@ -1,7 +1,6 @@
 #include "LCD_Encoder.h"
 #include "GPIO_Init.h"
 #include "includes.h"
-#include "touch_process.h"
 
 #if LCD_ENCODER_SUPPORT
 
@@ -90,7 +89,7 @@ void LCD_LoopEncoder(void)
 void loopCheckMode(void)
 {  
   if(isPrinting()) return;
-  if(LCD_ReadPen(LCD_CHANGE_MODE_INTERVALS))
+  if(LCD_ReadBtn(LCD_CHANGE_MODE_INTERVALS))
   {
     infoMenu.menu[++infoMenu.cur] = menuMode;
   }

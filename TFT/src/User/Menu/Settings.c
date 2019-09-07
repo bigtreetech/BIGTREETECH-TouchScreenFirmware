@@ -66,14 +66,14 @@ const ITEM itemBaudrate[ITEM_BAUDRATE_NUM] = {
 const  u32 item_baudrate[ITEM_BAUDRATE_NUM] = {115200,250000};
 static u8  item_baudrate_i = 0;
 
-#define ITEM_RUNOUT_NUM 2
-const ITEM itemRunout[ITEM_RUNOUT_NUM] = {
+#define ITEM_DETECTIONS_NUM 2
+const ITEM itemDetections[ITEM_DETECTIONS_NUM] = {
 //   icon                       label
-  {ICON_RUNOUT,             LABEL_RUNOUT_0},
-  {ICON_RUNOUT,             LABEL_RUNOUT_1},
+  {ICON_DETECTIONS,             LABEL_DETECTIONS_OFF},
+  {ICON_DETECTIONS,             LABEL_DETECTIONS_ON},
 };
-const  u32 item_runout[ITEM_RUNOUT_NUM] = {0,1};
-static u8  item_runout_i = 0;
+const  u32 item_detections[ITEM_DETECTIONS_NUM] = {0,1};
+static u8  item_detections_i = 0;
 
 void menuSettings(void)
 {
@@ -87,17 +87,17 @@ void menuSettings(void)
       item_baudrate_i = i;
       settingsItems.items[KEY_ICON_5] = itemBaudrate[item_baudrate_i];
     }
-  }	
+  }
 
-  for(u8 k=0; k<ITEM_RUNOUT_NUM; k++)
+  for(u8 k=0; k<ITEM_DETECTIONS_NUM; k++)
   {
-    if(infoSettings.runout == item_runout[k])
+    if(infoSettings.detections == item_detections[k])
     {
-      item_runout_i = k;
-      settingsItems.items[KEY_ICON_6] = itemRunout[item_runout_i];
+      item_detections_i = k;
+      settingsItems.items[KEY_ICON_6] = itemDetections[item_detections_i];
     }
   }	
-  
+  	
   menuDrawPage(&settingsItems);
 
   while(infoMenu.menu[infoMenu.cur] == menuSettings)
@@ -105,8 +105,31 @@ void menuSettings(void)
     key_num = menuKeyGetValue();
     switch(key_num)
     {
-      case KEY_ICON_0:    mustStoreCmd("M81\n");                                break;
+      case KEY_ICON_0:
+      LCD_WR_REG(0X36);
       
+      if(infoSettings.rotation == 1) infoSettings.rotation = 0;
+      else infoSettings.rotation = 1;
+      
+#if defined(TFT35_V1_2) || defined(TFT35_V2_0)
+      if(infoSettings.rotation == 1) LCD_WR_DATA(0X28);
+      else LCD_WR_DATA(0XE8);
+      
+#elif defined(TFT35_V1_1) || defined(TFT35_V1_0)
+      if(infoSettings.rotation == 1) LCD_WR_DATA(0X28);
+      else LCD_WR_DATA(0X2B);
+      
+#elif defined(TFT28)
+      if(infoSettings.rotation == 1) LCD_WR_DATA(0X68);
+      else LCD_WR_DATA(0XA8);
+#elif defined(TFT24_V1_1)
+      if(infoSettings.rotation == 1) LCD_WR_DATA(0X68);
+      else LCD_WR_DATA(0XA8);
+#endif  
+      TSC_Calibration();
+      menuDrawPage(&settingsItems);     
+      break;
+        
       case KEY_ICON_1: 
         infoSettings.language = (infoSettings.language + 1) % LANGUAGE_NUM;
         menuDrawPage(&settingsItems);
@@ -133,10 +156,10 @@ void menuSettings(void)
         break;
       
       case KEY_ICON_6:
-				item_runout_i = (item_runout_i + 1) % ITEM_RUNOUT_NUM;                
-        settingsItems.items[key_num] = itemRunout[item_runout_i];
+				item_detections_i = (item_detections_i + 1) % ITEM_DETECTIONS_NUM;                
+        settingsItems.items[key_num] = itemDetections[item_detections_i];
         menuDrawItem(&settingsItems.items[key_num], key_num);
-        infoSettings.runout = item_runout[item_runout_i];
+        infoSettings.detections = item_detections[item_detections_i];
 				break;
 
       case KEY_ICON_7:

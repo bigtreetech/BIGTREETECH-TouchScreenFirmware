@@ -1,7 +1,7 @@
 #include "ST7920_Simulator.h"
 #include "includes.h"
 #include "GUI.h"
-#include "GPIO_Init.h"
+
 #ifdef ST7920_SPI
 
 ST7920_PIXEL       st7920 = {ST7920_XSTART, ST7920_YSTART, 0};
@@ -130,10 +130,7 @@ void menuST7920(void)
   GUI_DispStringInRect(0, 0, LCD_WIDTH, SIMULATOR_YSTART, "LCD12864 Simulator", 0);
   SPI_Slave();
   SPI_Slave_CS_Config();
-  GPIO_InitSet(LCD_BTN_PIN, MGPIO_MODE_OUT_PP, 0);
-	GPIO_InitSet(LCD_ENCA_PIN, MGPIO_MODE_OUT_PP, 0);
-	GPIO_InitSet(LCD_ENCB_PIN, MGPIO_MODE_OUT_PP, 0);
-
+  
   while(infoMenu.menu[infoMenu.cur] == menuST7920)
   {
     while(SPISlave.rIndex != SPISlave.wIndex)
@@ -142,12 +139,7 @@ void menuST7920(void)
        
       SPISlave.rIndex = (SPISlave.rIndex + 1) % SPI_SLAVE_MAX;
     }
-
-      Touch_Sw(LCD_ReadTouch());
-
-      if(LCD_BtnTouch(LCD_BUTTON_INTERVALS))
-			Touch_Sw(1);
-      
+    
     #if LCD_ENCODER_SUPPORT
       loopCheckMode();
     #endif

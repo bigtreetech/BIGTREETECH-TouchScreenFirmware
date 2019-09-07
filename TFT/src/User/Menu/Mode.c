@@ -1,7 +1,6 @@
 #include "mode.h"
 #include "includes.h"
-#include "GPIO_Init.h"
-#include "touch_process.h"
+
 
 void Serial_ReSourceDeInit(void)
 {
@@ -34,6 +33,12 @@ void infoMenuSelect(void)
     case SERIAL_TSC:
     {
       Serial_ReSourceInit();
+
+      if(infoSettings.rotation ==0)
+      {
+      TSC_Calibration();
+      infoSettings.rotation = 1;
+      }
       scanUpdates();
       u32 startUpTime = OS_GetTime();
       heatSetUpdateTime(100);
@@ -70,31 +75,22 @@ void menuMode(void)
   GUI_Clear(BLACK);
   RADIO_Create(&modeRadio);
   Serial_ReSourceDeInit();
-  while(!XPT2046_Read_Pen());      //wait for button release
+  while(LCD_ReadBtn(LCD_BUTTON_INTERVALS));      //wait for button release
   
   while(infoMenu.menu[infoMenu.cur] == menuMode)
   {
-    if(LCD_BtnTouch(LCD_BUTTON_INTERVALS))
+    if(LCD_ReadBtn(LCD_BUTTON_INTERVALS))
     {
-      Touch_Sw(1);
-			while(!XPT2046_Read_Pen());
-			break;
+      break;
+    }
+    if(encoderPosition)
+    {
+      nowMode = limitValue(0, nowMode + encoderPosition, modeRadio.num - 1);
+      RADIO_Select(&modeRadio, nowMode);
+      encoderPosition = 0;    
     }
     
-    if(LCD_ReadTouch()==2)
-		{			
-			Touch_Sw(2);
-			nowMode = SERIAL_TSC;
-			RADIO_Select(&modeRadio, SERIAL_TSC);
-		}
-		
-		if(LCD_ReadTouch()==3)
-		{
-			Touch_Sw(3);
-			nowMode = LCD12864;
-			RADIO_Select(&modeRadio, LCD12864);
-		}
-    
+    LCD_LoopEncoder();
   }
   if(infoSettings.mode != nowMode)
   {

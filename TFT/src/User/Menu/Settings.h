@@ -13,9 +13,10 @@ typedef enum
 typedef struct
 {
   uint32_t baudrate;
-  uint32_t runout;
   uint8_t  language;
   uint8_t  mode;
+  uint8_t  detections;
+  uint8_t  rotation;
 }SETTINGS;
 
 
