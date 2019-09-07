@@ -25,9 +25,22 @@
 #define EXTRUDE_FAST_SPEED      1200 //
 
 //size of machine
+#define X_MIN_POS 0
+#define Y_MIN_POS 0
+#define Z_MIN_POS 0
 #define X_MAX_POS 300
 #define Y_MAX_POS 300
 #define Z_MAX_POS 400
+
+// Specify a Pause position as { X, Y, Z_raise }
+#define NOZZLE_PAUSE_RETRACT_LENGTH 15   // (mm)
+#define NOZZLE_PAUSE_PURGE_LENGTH   20   // (mm)
+#define NOZZLE_PAUSE_X_POSITION     (X_MIN_POS + 10)  // (mm) Must be an integer
+#define NOZZLE_PAUSE_Y_POSITION     (Y_MIN_POS + 10)  // (mm) Must be an integer
+#define NOZZLE_PAUSE_Z_RAISE        20   // (mm)
+#define NOZZLE_PAUSE_E_FEEDRATE     6000 // (mm/min) retract & purge feedrate
+#define NOZZLE_PAUSE_XY_FEEDRATE    6000 // (mm/min) X and Y axes feedrate
+#define NOZZLE_PAUSE_Z_FEEDRATE     600  // (mm/min) Z axis feedrate
 
 /**
  * 12864 Mode Background & Font Color Options
