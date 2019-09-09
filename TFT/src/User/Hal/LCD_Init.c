@@ -20,7 +20,7 @@ void LCD_LED_Init(void)
 }
 #endif
 
-#if defined(TFT35_V1_2) || defined(TFT35_V2_0)
+#if defined(TFT35_V1_2) || defined(TFT35_V2_0) || defined(TFT35_V3_0)
 //ILI9488
 void LCD_init_RGB(void) 
 {
