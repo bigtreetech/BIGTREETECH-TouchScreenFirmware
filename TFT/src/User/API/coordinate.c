@@ -1,4 +1,5 @@
 #include "coordinate.h"
+#include "string.h"
 
 const char axis_id[TOTAL_AXIS]={'X','Y','Z','E'};
 
@@ -29,7 +30,7 @@ void eSetRelative(bool mode)
 
 void coordinateSetAxis(AXIS axis,float position)
 {
-  bool r = (axis == axis_id[E_AXIS]) 
+  bool r = (axis == E_AXIS) 
           ? relative_e || relative_mode
           : relative_mode;
 
@@ -56,5 +57,10 @@ float coordinateGetAxis(AXIS axis)
 u32 coordinateGetFeedRate(void)
 {
   return coordinate.feedrate;
+}
+
+void coordinateGetAll(COORDINATE *tmp)
+{
+  memcpy(tmp, &coordinate, sizeof(coordinate));
 }
 

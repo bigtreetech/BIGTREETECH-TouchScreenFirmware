@@ -20,7 +20,7 @@ void LCD_LED_Init(void)
 }
 #endif
 
-#if defined(TFT35_V1_2) || defined(TFT35_V2_0)
+#if defined(TFT35_V1_2) || defined(TFT35_V2_0) || defined(TFT35_V3_0)
 //ILI9488
 void LCD_init_RGB(void) 
 {
@@ -331,6 +331,36 @@ u16 LCD_ReadID(void)
   id <<= 8;
   id |= LCD_RD_DATA();
   return id;
+}
+
+void LCD_RefreshDirection(void)
+{
+  if(infoSettings.rotate_ui)
+  {
+    LCD_WR_REG(0X36);
+    #ifdef RM68042
+      LCD_WR_DATA(0X2B);
+    #endif
+    #ifdef ILI9488
+      LCD_WR_DATA(0XE8);
+    #endif
+    #ifdef ILI9341
+      LCD_WR_DATA(0XA8);
+    #endif  
+  }
+  else
+  {
+    LCD_WR_REG(0X36);
+    #ifdef RM68042
+      LCD_WR_DATA(0X28);
+    #endif
+    #ifdef ILI9488
+      LCD_WR_DATA(0X28);
+    #endif
+    #ifdef ILI9341
+      LCD_WR_DATA(0X68);
+    #endif  
+  }
 }
 
 void LCD_Init(void)
