@@ -27,7 +27,7 @@
     #define CN_FAST_SPEED           "快速"
     #define CN_FAN_FULL_SPEED       "全速"
     #define CN_FAN_HALF_SPEED       "半速"
-    #define CN_POWER_OFF            "关机"
+    #define CN_ROTATE_UI            "旋转界面"
     #define CN_TOUCHSCREEN_ADJUST   "屏幕校准"
     #define CN_SCREEN_INFO          "关于"
     #define CN_DISCONNECT           "断开连接"

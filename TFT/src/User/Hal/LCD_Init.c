@@ -333,6 +333,36 @@ u16 LCD_ReadID(void)
   return id;
 }
 
+void LCD_RefreshDirection(void)
+{
+  if(infoSettings.rotate_ui)
+  {
+    LCD_WR_REG(0X36);
+    #ifdef RM68042
+      LCD_WR_DATA(0X2B);
+    #endif
+    #ifdef ILI9488
+      LCD_WR_DATA(0XE8);
+    #endif
+    #ifdef ILI9341
+      LCD_WR_DATA(0XA8);
+    #endif  
+  }
+  else
+  {
+    LCD_WR_REG(0X36);
+    #ifdef RM68042
+      LCD_WR_DATA(0X28);
+    #endif
+    #ifdef ILI9488
+      LCD_WR_DATA(0X28);
+    #endif
+    #ifdef ILI9341
+      LCD_WR_DATA(0X68);
+    #endif  
+  }
+}
+
 void LCD_Init(void)
 {
   LCD_HardwareConfig();

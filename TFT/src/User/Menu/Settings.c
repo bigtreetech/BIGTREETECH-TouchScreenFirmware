@@ -11,6 +11,7 @@ void infoSettingsReset(void)
   infoSettings.language = ENGLISH;
   infoSettings.mode = SERIAL_TSC;
   infoSettings.runout = 0;
+  infoSettings.rotate_ui = 0;
   storePara();  
 }
 
@@ -53,7 +54,7 @@ MENUITEMS settingsItems = {
 // title
 LABEL_SETTINGS,
 // icon                       label
- {{ICON_POWER_OFF,            LABEL_POWER_OFF},
+ {{ICON_ROTATE_UI,            LABEL_ROTATE_UI},
   {ICON_LANGUAGE,             LABEL_LANGUAGE},
   {ICON_TOUCHSCREEN_ADJUST,   LABEL_TOUCHSCREEN_ADJUST},
   {ICON_SCREEN_INFO,          LABEL_SCREEN_INFO},
@@ -112,14 +113,19 @@ void menuSettings(void)
     key_num = menuKeyGetValue();
     switch(key_num)
     {
-      case KEY_ICON_0:    mustStoreCmd("M81\n");                                break;
+      case KEY_ICON_0:
+        infoSettings.rotate_ui = !infoSettings.rotate_ui;
+        LCD_RefreshDirection();
+        TSC_Calibration();
+        menuDrawPage(&settingsItems);        
+        break;
       
       case KEY_ICON_1: 
         infoSettings.language = (infoSettings.language + 1) % LANGUAGE_NUM;
         menuDrawPage(&settingsItems);
         break;
       
-      case KEY_ICON_2:    
+      case KEY_ICON_2:
         TSC_Calibration();
         menuDrawPage(&settingsItems);
         break;

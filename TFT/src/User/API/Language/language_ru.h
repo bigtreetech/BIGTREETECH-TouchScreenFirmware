@@ -27,7 +27,7 @@
     #define RU_FAST_SPEED           "§¢§í§ã§ä§â§à"
     #define RU_FAN_FULL_SPEED       "§®§Ñ§Ü§ã§Ú§Þ§å§Þ"
     #define RU_FAN_HALF_SPEED       "§³§â§Ö§Õ§ß§ñ§ñ §ã§Ü."
-    #define RU_POWER_OFF            "Power Off"
+    #define RU_ROTATE_UI            "Rotate UI"
     #define RU_TOUCHSCREEN_ADJUST   "§¬§Ñ§Ý§Ú§Ò§â§à§Ó§Ü§Ñ"
     #define RU_SCREEN_INFO          "§ª§ß§æ§à"
     #define RU_DISCONNECT           "Disconnect"

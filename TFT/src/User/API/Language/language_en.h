@@ -27,7 +27,7 @@
     #define EN_FAST_SPEED           "Fast"
     #define EN_FAN_FULL_SPEED       "Full"
     #define EN_FAN_HALF_SPEED       "Half"
-    #define EN_POWER_OFF            "Power Off"
+    #define EN_ROTATE_UI            "Rotate UI"
     #define EN_TOUCHSCREEN_ADJUST   "TS Adjust"
     #define EN_SCREEN_INFO          "Info"
     #define EN_DISCONNECT           "Disconnect"

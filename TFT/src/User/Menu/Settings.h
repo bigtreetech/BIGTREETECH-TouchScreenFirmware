@@ -16,6 +16,7 @@ typedef struct
   uint8_t  language;
   uint8_t  mode;
   uint8_t  runout;
+  uint8_t  rotate_ui;
 }SETTINGS;
 
 
