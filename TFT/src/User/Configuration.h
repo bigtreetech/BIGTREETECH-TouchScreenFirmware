@@ -47,7 +47,7 @@
  * Current color options from lcd.h: BLACK, BLUE, BROWN, BRRED, CYAN, GBLUE, GRAY, GREEN, MAGENTA, RED, WHITE, YELLOW
  */
 #define ST7920_BKCOLOR BLACK
-#define ST7920_FNCOLOR WHITE
+#define ST7920_FNCOLOR GREEN
 
 // Text displayed at the top of the LCD in 12864 mode
 #define ST7920_BANNER_TEXT "LCD12864 Simulator"
