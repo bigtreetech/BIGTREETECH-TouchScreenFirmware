@@ -52,7 +52,7 @@
 // Text displayed at the top of the LCD in 12864 mode
 #define ST7920_BANNER_TEXT "LCD12864 Simulator"
 
-// Make the s imulator run fullscreen,
+// Make the simulator run fullscreen, Not recommended for TFT24
 #define ST7920_FULLSCREEN
 
 // Ability to print gcode from Board SD via Gcode functions.
