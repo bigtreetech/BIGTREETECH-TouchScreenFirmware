@@ -1,7 +1,8 @@
 #ifndef _PARSEACK_H_
 #define _PARSEACK_H_
 
-#include "includes.h"
+#include "stdint.h"
+#include "configuration.h"
 
 static const char errormagic[]        = "Error:";
 static const char echomagic[]         = "echo:";
@@ -13,9 +14,10 @@ static const char bsdnoprintingmagic[] = "Not SD printing";
 
 
 #define ACK_MAX_SIZE 300
-extern char ack_rev_buf[ACK_MAX_SIZE];
 
+void setCurrentAckSrc(uint8_t src);
 void parseACK(void);
+void parseRcvGcode(void);
 
 #endif
 

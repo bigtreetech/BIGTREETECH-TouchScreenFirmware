@@ -11,9 +11,9 @@ static u8 cmd_index=0;
 //
 static bool cmd_seen(char code)
 {  
-  for(cmd_index = 0; infoCmd.queue[infoCmd.index_r][cmd_index] != 0 && cmd_index < CMD_MAX_CHAR; cmd_index++)
+  for(cmd_index = 0; infoCmd.queue[infoCmd.index_r].gcode[cmd_index] != 0 && cmd_index < CMD_MAX_CHAR; cmd_index++)
   {
-    if(infoCmd.queue[infoCmd.index_r][cmd_index] == code)
+    if(infoCmd.queue[infoCmd.index_r].gcode[cmd_index] == code)
     {
       cmd_index+=1;
       return true;
@@ -24,12 +24,12 @@ static bool cmd_seen(char code)
 
 static u32 cmd_value(void)
 {
-  return (strtol(&infoCmd.queue[infoCmd.index_r][cmd_index],NULL,10));
+  return (strtol(&infoCmd.queue[infoCmd.index_r].gcode[cmd_index],NULL,10));
 }
 
 static float cmd_float(void)
 {
-  return (strtod(&infoCmd.queue[infoCmd.index_r][cmd_index],NULL));
+  return (strtod(&infoCmd.queue[infoCmd.index_r].gcode[cmd_index],NULL));
 }
 
 bool storeCmd(const char * format,...)
@@ -44,8 +44,9 @@ bool storeCmd(const char * format,...)
   
   my_va_list ap;
   my_va_start(ap,format);
-  my_vsprintf(pQueue->queue[pQueue->index_w], format, ap);
+  my_vsprintf(pQueue->queue[pQueue->index_w].gcode, format, ap);
   my_va_end(ap);
+  pQueue->queue[pQueue->index_w].src = SERIAL_PORT;
   
   pQueue->index_w = (pQueue->index_w + 1) % CMD_MAX_LIST;
   pQueue->count++;
@@ -66,11 +67,31 @@ void mustStoreCmd(const char * format,...)
   
   my_va_list ap;
   my_va_start(ap,format);
-  my_vsprintf(pQueue->queue[pQueue->index_w], format, ap);
+  my_vsprintf(pQueue->queue[pQueue->index_w].gcode, format, ap);
   my_va_end(ap);
+  pQueue->queue[pQueue->index_w].src = SERIAL_PORT;
   
   pQueue->index_w = (pQueue->index_w + 1) % CMD_MAX_LIST;
   pQueue->count++;
+}
+
+bool storeCmdFromUART(uint8_t port, const char * gcode)
+{
+  QUEUE *pQueue = &infoCmd;
+  
+  if (pQueue->count >= CMD_MAX_LIST)
+  {  
+    reminderMessage(LABEL_BUSY, STATUS_BUSY);
+    return false;
+  }
+  
+  strcpy(pQueue->queue[pQueue->index_w].gcode, gcode);
+  
+  pQueue->queue[pQueue->index_w].src = port;
+  pQueue->index_w = (pQueue->index_w + 1) % CMD_MAX_LIST;
+  pQueue->count++;
+
+  return true;
 }
 
 void mustStoreCacheCmd(const char * format,...)
@@ -86,7 +107,7 @@ void mustStoreCacheCmd(const char * format,...)
   
   my_va_list ap;
   my_va_start(ap,format);
-  my_vsprintf(pQueue->queue[pQueue->index_w], format, ap);
+  my_vsprintf(pQueue->queue[pQueue->index_w].gcode, format, ap);
   my_va_end(ap);
   
   pQueue->index_w = (pQueue->index_w + 1) % CMD_MAX_LIST;
@@ -98,7 +119,7 @@ bool moveCacheToCmd(void)
   if(infoCmd.count >= CMD_MAX_LIST) return false;
   if(infoCacheCmd.count == 0) return false;
   
-  storeCmd("%s", infoCacheCmd.queue[infoCacheCmd.index_r]);
+  storeCmd("%s", infoCacheCmd.queue[infoCacheCmd.index_r].gcode);
   infoCacheCmd.count--;
   infoCacheCmd.index_r = (infoCacheCmd.index_r + 1) % CMD_MAX_LIST;
   return true;
@@ -117,10 +138,10 @@ void sendQueueCmd(void)
   if(infoCmd.count == 0)       return;
   
   u16  cmd=0;
-  switch(infoCmd.queue[infoCmd.index_r][0])
+  switch(infoCmd.queue[infoCmd.index_r].gcode[0])
   {
     case 'M':
-      cmd=strtol(&infoCmd.queue[infoCmd.index_r][1],NULL,10);
+      cmd=strtol(&infoCmd.queue[infoCmd.index_r].gcode[1],NULL,10);
       switch(cmd)
       {
         case 27: //M27
@@ -149,7 +170,7 @@ void sendQueueCmd(void)
         {
           TOOL i = heatGetCurrentToolNozzle();
           if(cmd_seen('T')) i = (TOOL)(cmd_value() + NOZZLE0);
-          infoCmd.queue[infoCmd.index_r][3]='4';
+          infoCmd.queue[infoCmd.index_r].gcode[3]='4';
           heatSetIsWaiting(i,true);
         }
         case 104: //M104
@@ -164,7 +185,7 @@ void sendQueueCmd(void)
           {
             char buf[12];
             sprintf(buf, "S%d\n", heatGetTargetTemp(i));
-            strcat(infoCmd.queue[infoCmd.index_r],(const char*)buf);
+            strcat(infoCmd.queue[infoCmd.index_r].gcode,(const char*)buf);
             heatSetSendWaiting(i, false);
           }
           break;
@@ -186,7 +207,7 @@ void sendQueueCmd(void)
           {
             char buf[12];
             sprintf(buf, "S%d\n", fanGetSpeed(i));
-            strcat(infoCmd.queue[infoCmd.index_r],(const char*)buf);
+            strcat(infoCmd.queue[infoCmd.index_r].gcode,(const char*)buf);
             fanSetSendWaiting(i, false);
           }
           break;
@@ -203,8 +224,12 @@ void sendQueueCmd(void)
         case 114: //M114
           break;
 
+        case 117: //M117
+          popupReminder((u8* )"M117", (u8 *)&infoCmd.queue[infoCmd.index_r].gcode[5]);
+          break;
+
         case 190: //M190
-          infoCmd.queue[infoCmd.index_r][2]='4';
+          infoCmd.queue[infoCmd.index_r].gcode[2]='4';
           heatSetIsWaiting(BED,true);											
         case 140: //M140
           if(cmd_seen('S'))
@@ -215,7 +240,7 @@ void sendQueueCmd(void)
           {
             char buf[12];
             sprintf(buf, "S%d\n", heatGetTargetTemp(BED));
-            strcat(infoCmd.queue[infoCmd.index_r],(const char*)buf);
+            strcat(infoCmd.queue[infoCmd.index_r].gcode,(const char*)buf);
             heatSetSendWaiting(BED, false);
           }
           break;
@@ -229,7 +254,7 @@ void sendQueueCmd(void)
           {
             char buf[12];
             sprintf(buf, "S%d\n", speedGetPercent(0));
-            strcat(infoCmd.queue[infoCmd.index_r],(const char*)buf);
+            strcat(infoCmd.queue[infoCmd.index_r].gcode,(const char*)buf);
             speedSetSendWaiting(0, false);
           }
           break;
@@ -242,7 +267,7 @@ void sendQueueCmd(void)
           {
             char buf[12];
             sprintf(buf, "S%d\n", speedGetPercent(1));
-            strcat(infoCmd.queue[infoCmd.index_r],(const char*)buf);
+            strcat(infoCmd.queue[infoCmd.index_r].gcode,(const char*)buf);
             speedSetSendWaiting(1, false);
           }
           break;
@@ -250,7 +275,7 @@ void sendQueueCmd(void)
       break;
 
     case 'G':
-      cmd=strtol(&infoCmd.queue[infoCmd.index_r][1],NULL,10);
+      cmd=strtol(&infoCmd.queue[infoCmd.index_r].gcode[1],NULL,10);
       switch(cmd)
       {
         case 0: //G0
@@ -298,15 +323,16 @@ void sendQueueCmd(void)
       break;
 
     case 'T':
-      cmd=strtol(&infoCmd.queue[infoCmd.index_r][1], NULL, 10);
+      cmd=strtol(&infoCmd.queue[infoCmd.index_r].gcode[1], NULL, 10);
       heatSetCurrentToolNozzle((TOOL)(cmd + NOZZLE0));
       break;
   }
   
-  Serial_Puts(infoCmd.queue[infoCmd.index_r]); //
+  setCurrentAckSrc(infoCmd.queue[infoCmd.index_r].src);
+  Serial_Puts(SERIAL_PORT, infoCmd.queue[infoCmd.index_r].gcode); //
   infoCmd.count--;
   infoCmd.index_r = (infoCmd.index_r + 1) % CMD_MAX_LIST;
-
+  
   infoHost.wait = infoHost.connected;          //
 
   powerFailedEnable(true);

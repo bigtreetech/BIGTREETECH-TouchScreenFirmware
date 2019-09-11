@@ -225,6 +225,8 @@ void loopProcess(void)
   sendQueueCmd();                     //Parse and send Gcode commands in the queue
   
   parseACK();                         //Parse the received slave response information
+  
+  parseRcvGcode();                    //Parse the received Gcode from other UART, such as: ESP3D, etc...
 
   loopCheckHeater();			            //Temperature related settings
   
