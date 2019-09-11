@@ -7,7 +7,7 @@
 #define _USART2    1
 #define _USART3    2
 #define _UART4     3
-#define _UART5     4
+#define _UART5     4 //UART5 don't support DMA
 #define _USART_CNT 5
 
 void USART_Config(uint8_t port, uint32_t baud, uint16_t usart_it);

@@ -212,7 +212,7 @@ void menuPrintFromSource(void)
       gocdeListDraw();
     }
     
-    #ifdef SD_CD_SUPPROT
+    #ifdef SD_CD_PIN
     if(isVolumeExist(infoFile.source) != true)
     {
       resetInfoFile();

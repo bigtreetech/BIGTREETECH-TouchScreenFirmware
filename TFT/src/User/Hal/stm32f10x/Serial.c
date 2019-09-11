@@ -1,82 +1,107 @@
 #include "Serial.h"
-#include "usart.h"
+#include "includes.h"
+
+//dma rx buffer
+char dma_mem_buf[_USART_CNT][DMA_TRANS_LEN];
 
 //Config for USART Channel
-#if SERIAL_PORT == _USART1
-  #define SERIAL_NUM          USART1
-  #define SERIAL_DMA_RCC_AHB  RCC_AHBPeriph_DMA1
-  #define SERIAL_DMA_CHANNEL  DMA1_Channel5
-#elif SERIAL_PORT == _USART2
-  #define SERIAL_NUM          USART2
-  #define SERIAL_DMA_RCC_AHB  RCC_AHBPeriph_DMA1
-  #define SERIAL_DMA_CHANNEL  DMA1_Channel6
-#elif SERIAL_PORT == _USART3
-  #define SERIAL_NUM          USART3
-  #define SERIAL_DMA_RCC_AHB  RCC_AHBPeriph_DMA1
-  #define SERIAL_DMA_CHANNEL  DMA1_Channel3
-#elif SERIAL_PORT == _UART4
-  #define SERIAL_NUM          UART4
-  #define SERIAL_DMA_RCC_AHB  RCC_AHBPeriph_DMA2
-  #define SERIAL_DMA_CHANNEL  DMA2_Channel3
-#elif SERIAL_PORT == _UART5
-  #error "UART5 don't support DMA"
-#endif
+typedef struct
+{
+  USART_TypeDef *uart;
+  uint32_t dma_rcc;
+  DMA_Channel_TypeDef *dma_chanel;
+}SERIAL_CFG;
 
-#define DMA_TRANS_LEN  ACK_MAX_SIZE
+static const SERIAL_CFG Serial[_USART_CNT] = {
+  {USART1, RCC_AHBPeriph_DMA1, DMA1_Channel5},
+  {USART2, RCC_AHBPeriph_DMA1, DMA1_Channel6},
+  {USART3, RCC_AHBPeriph_DMA1, DMA1_Channel3},
+  {UART4,  RCC_AHBPeriph_DMA2, DMA2_Channel3},
+  //{UART5,  -1, -1}, //UART5 don't support DMA
+};
 
-char *dma_mem_buf = ack_rev_buf;
+void Serial_DMA_Config(uint8_t port)
+{
+  const SERIAL_CFG * cfg = &Serial[port];
+  
+  RCC_AHBPeriphClockCmd(cfg->dma_rcc, ENABLE);  //DMA RCC EN
+
+  cfg->uart->CR3 |= 1<<6;  //DMA enable receiver
+  
+  cfg->dma_chanel->CPAR = (u32)(&cfg->uart->DR);
+  cfg->dma_chanel->CMAR = (u32)(&dma_mem_buf[port]);
+  cfg->dma_chanel->CNDTR = DMA_TRANS_LEN;
+  cfg->dma_chanel->CCR = 0X00000000;
+  cfg->dma_chanel->CCR |= 3<<12;   //Channel priority level
+  cfg->dma_chanel->CCR |= 1<<7;    //Memory increment mode
+  cfg->dma_chanel->CCR |= 1<<0;    //DMA EN
+}
 
 void Serial_Config(u32 baud)
 {
-  RCC_AHBPeriphClockCmd(SERIAL_DMA_RCC_AHB, ENABLE);  //DMA EN  
   USART_Config(SERIAL_PORT, baud, USART_IT_IDLE);  //IDLE interrupt
-
-  SERIAL_NUM->CR3 |= 1<<6;  //DMA enable receiver
+  Serial_DMA_Config(SERIAL_PORT);
   
-  SERIAL_DMA_CHANNEL->CPAR = (u32)(&SERIAL_NUM->DR);
-  SERIAL_DMA_CHANNEL->CMAR = (u32) dma_mem_buf;
-  SERIAL_DMA_CHANNEL->CNDTR = DMA_TRANS_LEN;
-  SERIAL_DMA_CHANNEL->CCR = 0X00000000;
-  SERIAL_DMA_CHANNEL->CCR |= 3<<12;   //Channel priority level
-  SERIAL_DMA_CHANNEL->CCR |= 1<<7;    //Memory increment mode
-  SERIAL_DMA_CHANNEL->CCR |= 1<<0;    //DMA		
+  #ifdef SERIAL_PORT_2
+    USART_Config(SERIAL_PORT_2, baud, USART_IT_IDLE);  //IDLE interrupt
+    Serial_DMA_Config(SERIAL_PORT_2);
+  #endif
+  
+  #ifdef SERIAL_PORT_3
+    USART_Config(SERIAL_PORT_3, baud, USART_IT_IDLE);  //IDLE interrupt
+    Serial_DMA_Config(SERIAL_PORT_3);
+  #endif
+  
+  #ifdef SERIAL_PORT_4
+    USART_Config(SERIAL_PORT_4, baud, USART_IT_IDLE);  //IDLE interrupt
+    Serial_DMA_Config(SERIAL_PORT_4);
+  #endif
 }
 
 void Serial_DeConfig(void)
 {
   USART_DeConfig(SERIAL_PORT);
+  
+  #ifdef SERIAL_PORT_2
+    USART_DeConfig(SERIAL_PORT_2);
+  #endif
+  
+  #ifdef SERIAL_PORT_3
+    USART_DeConfig(SERIAL_PORT_3);
+  #endif
+  
+  #ifdef SERIAL_PORT_4
+    USART_DeConfig(SERIAL_PORT_4);
+  #endif
 }
 
 /*
 
 */
-void Serial_DMAReEnable(void)
+void Serial_DMAReEnable(uint8_t port)
 {
-  memset(dma_mem_buf,0,DMA_TRANS_LEN);
-  SERIAL_DMA_CHANNEL->CCR &= ~(1<<0);
-  SERIAL_DMA_CHANNEL->CNDTR = DMA_TRANS_LEN;  
-  SERIAL_DMA_CHANNEL->CCR |= 1<<0;    //DMA			
+  memset(dma_mem_buf[port], 0, DMA_TRANS_LEN);
+  Serial[port].dma_chanel->CCR &= ~(1<<0);
+  Serial[port].dma_chanel->CNDTR = DMA_TRANS_LEN;  
+  Serial[port].dma_chanel->CCR |= 1<<0;    //DMA			
 }
 
 void USART_IRQHandler(uint8_t port)
 {
   u16 rx_len=0;
 
-  if((SERIAL_NUM->SR & (1<<4))!=0)
+  if((Serial[port].uart->SR & (1<<4))!=0)
   {
-    SERIAL_NUM->SR = ~(1<<4);
-    SERIAL_NUM->DR;
+    Serial[port].uart->SR = ~(1<<4);
+    Serial[port].uart->DR;
 
-    rx_len = DMA_TRANS_LEN - SERIAL_DMA_CHANNEL->CNDTR;
+    rx_len = DMA_TRANS_LEN - Serial[port].dma_chanel->CNDTR;
 
-    if(dma_mem_buf[rx_len-1]=='\n')
+    if(dma_mem_buf[port][rx_len-1]=='\n' || (rx_len > DMA_TRANS_LEN - 5))  //receive completed or overflow buffer
     {
-      infoHost.rx_ok=true;
-    }
-    else if(rx_len > DMA_TRANS_LEN-5)
-    {
-      infoHost.rx_ok=true;
-    }
+      dma_mem_buf[port][rx_len] = 0; //end character
+      infoHost.rx_ok[port]=true;
+    }    
   }
 }
 
@@ -105,18 +130,19 @@ void UART5_IRQHandler(void)
     USART_IRQHandler(_UART5);
 }
 
-void Serial_Puts(char *s )
+void Serial_Puts(uint8_t port, char *s)
 {
   while (*s)
   {
-    while((SERIAL_NUM->SR & USART_FLAG_TC) == (uint16_t)RESET);
-    SERIAL_NUM->DR = ((u16)*s++ & (uint16_t)0x01FF);
+    while((Serial[port].uart->SR & USART_FLAG_TC) == (uint16_t)RESET);
+    Serial[port].uart->DR = ((u16)*s++ & (uint16_t)0x01FF);
   }
 }
 
+#include "stdio.h"
 int fputc(int ch, FILE *f)
 {      
-	while((SERIAL_NUM->SR&0X40)==0);
-    SERIAL_NUM->DR = (u8) ch;      
+	while((Serial[SERIAL_PORT].uart->SR&0X40)==0);
+    Serial[SERIAL_PORT].uart->DR = (u8) ch;
 	return ch;
 }

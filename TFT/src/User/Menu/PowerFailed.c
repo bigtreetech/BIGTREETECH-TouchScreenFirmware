@@ -204,14 +204,14 @@ void menuPowerOff(void)
           infoMenu.cur=2;
           break;
         
-        case KEY_POPUP_CANCEL:  
+        case KEY_POPUP_CANCEL:
           powerFailedDelete();
           ExitDir();
           infoMenu.cur--;
           break;        
       }
       
-      #ifdef SD_CD_SUPPROT
+      #ifdef SD_CD_PIN
       if(isVolumeExist(infoFile.source) != true)
       {
         resetInfoFile();

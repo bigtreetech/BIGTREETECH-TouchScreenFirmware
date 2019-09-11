@@ -516,8 +516,9 @@ void getGcodeFromFile(void)
       sd_comment_space= true;
       if(sd_count!=0)
       {
-        infoCmd.queue[infoCmd.index_w][sd_count++] = '\n'; 
-        infoCmd.queue[infoCmd.index_w][sd_count] = 0; //terminate string
+        infoCmd.queue[infoCmd.index_w].gcode[sd_count++] = '\n'; 
+        infoCmd.queue[infoCmd.index_w].gcode[sd_count] = 0; //terminate string
+        infoCmd.queue[infoCmd.index_w].src = SERIAL_PORT;
         sd_count = 0; //clear buffer
         infoCmd.index_w = (infoCmd.index_w + 1) % CMD_MAX_LIST;
         infoCmd.count++;	
@@ -534,7 +535,7 @@ void getGcodeFromFile(void)
         if(sd_comment_space && (sd_char== 'G'||sd_char == 'M'||sd_char == 'T'))  //ignore ' ' space bytes
           sd_comment_space = false;
         if (!sd_comment_mode && !sd_comment_space && sd_char != '\r')  //normal gcode
-          infoCmd.queue[infoCmd.index_w][sd_count++] = sd_char;
+          infoCmd.queue[infoCmd.index_w].gcode[sd_count++] = sd_char;
       }
     }
   }
