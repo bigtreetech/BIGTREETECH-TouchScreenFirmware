@@ -27,7 +27,7 @@
     #define JP_FAST_SPEED           "早め"
     #define JP_FAN_FULL_SPEED       "全速"
     #define JP_FAN_HALF_SPEED       "50%速さ"
-    #define JP_POWER_OFF            "電源OFF"
+    #define JP_ROTATE_UI            "Rotate UI"
     #define JP_TOUCHSCREEN_ADJUST   "校正する"
     #define JP_SCREEN_INFO          "ついて"
     #define JP_DISCONNECT           "データ接続"

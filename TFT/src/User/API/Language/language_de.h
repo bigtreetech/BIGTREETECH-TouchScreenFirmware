@@ -27,7 +27,7 @@
     #define DE_FAST_SPEED           "Schnell"
     #define DE_FAN_FULL_SPEED       "Voll"
     #define DE_FAN_HALF_SPEED       "Halb"
-    #define DE_POWER_OFF            "Ausschalten"
+    #define DE_ROTATE_UI            "Rotate UI"
     #define DE_TOUCHSCREDE_ADJUST   "TS kalib."
     #define DE_SCREDE_INFO          "Info"
     #define DE_DISCONNECT           "Trennen"

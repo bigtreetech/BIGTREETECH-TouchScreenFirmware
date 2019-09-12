@@ -202,41 +202,36 @@ bool setPrintPause(bool is_pause)
 
       bool isCoorRelative = coorGetRelative();
       bool isExtrudeRelative = eGetRelative();
-
-      infoPrinting.pause = is_pause;    
+      static COORDINATE tmp;
+      
+      infoPrinting.pause = is_pause;
       if(infoPrinting.pause)
-      {             
-        if (isCoorRelative == false)
-        {
-          mustStoreCmd("G91\n");
-        }
-        mustStoreCmd("G1 E-10\n");
-        mustStoreCmd("G1 Z10\n");         
-        if (isCoorRelative == false )
-        {
-          mustStoreCmd("G90\n"); 
-        }
-        if (isExtrudeRelative == true )
-        {
-          mustStoreCmd("M83\n");             
-        }
+      {
+        coordinateGetAll(&tmp);
+        if (isCoorRelative == true)     mustStoreCmd("G90\n");
+        if (isExtrudeRelative == true)  mustStoreCmd("M82\n");
+        
+        mustStoreCmd("G1 E%.5f F%d\n", tmp.axis[E_AXIS] - NOZZLE_PAUSE_RETRACT_LENGTH, NOZZLE_PAUSE_E_FEEDRATE);
+        mustStoreCmd("G1 Z%.3f F%d\n", tmp.axis[Z_AXIS] + NOZZLE_PAUSE_Z_RAISE, NOZZLE_PAUSE_Z_FEEDRATE);
+        mustStoreCmd("G1 X%d Y%d F%d\n", NOZZLE_PAUSE_X_POSITION, NOZZLE_PAUSE_Y_POSITION, NOZZLE_PAUSE_XY_FEEDRATE);
+        
+        if (isCoorRelative == true)     mustStoreCmd("G91\n");
+        if (isExtrudeRelative == true)  mustStoreCmd("M83\n");
       }
       else
-      {		    
-        if (isCoorRelative == false)
-        {
-          mustStoreCmd("G91\n");
-        }
-        mustStoreCmd("G1 Z-10\n");
-        mustStoreCmd("G1 E10\n");        
-        if (isCoorRelative == false )
-        {
-          mustStoreCmd("G90\n"); 
-        }
-        if (isExtrudeRelative == true )
-        {
-          mustStoreCmd("M83\n");             
-        }
+      {
+        if (isCoorRelative == true)     mustStoreCmd("G90\n");
+        if (isExtrudeRelative == true)  mustStoreCmd("M82\n");
+        
+        //restore status before pause
+        mustStoreCmd("G1 X%.3f Y%.3f F%d\n", tmp.axis[X_AXIS], tmp.axis[Y_AXIS], NOZZLE_PAUSE_XY_FEEDRATE);
+        mustStoreCmd("G1 Z%.3f F%d\n", tmp.axis[Z_AXIS], NOZZLE_PAUSE_Z_FEEDRATE);
+        mustStoreCmd("G1 E%.5f F%d\n", tmp.axis[E_AXIS] + NOZZLE_PAUSE_PURGE_LENGTH, NOZZLE_PAUSE_E_FEEDRATE);
+        mustStoreCmd("G92 E%.5f\n", tmp.axis[E_AXIS]);
+        mustStoreCmd("G90 F%d\n", tmp.feedrate);
+        
+        if (isCoorRelative == true)     mustStoreCmd("G91\n");
+        if (isExtrudeRelative == true)  mustStoreCmd("M83\n");
       }
       break;
   }
@@ -521,8 +516,9 @@ void getGcodeFromFile(void)
       sd_comment_space= true;
       if(sd_count!=0)
       {
-        infoCmd.queue[infoCmd.index_w][sd_count++] = '\n'; 
-        infoCmd.queue[infoCmd.index_w][sd_count] = 0; //terminate string
+        infoCmd.queue[infoCmd.index_w].gcode[sd_count++] = '\n'; 
+        infoCmd.queue[infoCmd.index_w].gcode[sd_count] = 0; //terminate string
+        infoCmd.queue[infoCmd.index_w].src = SERIAL_PORT;
         sd_count = 0; //clear buffer
         infoCmd.index_w = (infoCmd.index_w + 1) % CMD_MAX_LIST;
         infoCmd.count++;	
@@ -539,7 +535,7 @@ void getGcodeFromFile(void)
         if(sd_comment_space && (sd_char== 'G'||sd_char == 'M'||sd_char == 'T'))  //ignore ' ' space bytes
           sd_comment_space = false;
         if (!sd_comment_mode && !sd_comment_space && sd_char != '\r')  //normal gcode
-          infoCmd.queue[infoCmd.index_w][sd_count++] = sd_char;
+          infoCmd.queue[infoCmd.index_w].gcode[sd_count++] = sd_char;
       }
     }
   }

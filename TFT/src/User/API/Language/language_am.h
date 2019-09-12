@@ -27,7 +27,7 @@
     #define AM_FAST_SPEED           "Fast"
     #define AM_FAN_FULL_SPEED       "Full"
     #define AM_FAN_HALF_SPEED       "Half"
-    #define AM_POWER_OFF            "Power Off"
+    #define AM_ROTATE_UI            "Rotate UI"
     #define AM_TOUCHSCREEN_ADJUST   "TS Adjust"
     #define AM_SCREEN_INFO          "Info"
     #define AM_DISCONNECT           "Disconnect"

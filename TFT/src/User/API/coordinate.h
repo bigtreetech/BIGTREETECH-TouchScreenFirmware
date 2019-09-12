@@ -31,5 +31,6 @@ float coordinateGetAxis(AXIS axis);
 void  coordinateSetAxis(AXIS axis, float position);
 u32   coordinateGetFeedRate(void);
 void  coordinateSetFeedRate(u32 feedrate);
+void  coordinateGetAll(COORDINATE *tmp);
 
 #endif
