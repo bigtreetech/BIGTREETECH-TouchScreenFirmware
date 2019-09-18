@@ -13,7 +13,7 @@ static const char bsdnoprintingmagic[] = "Not SD printing";
 #endif
 
 
-#define ACK_MAX_SIZE 300
+#define ACK_MAX_SIZE 1024
 
 void setCurrentAckSrc(uint8_t src);
 void parseACK(void);

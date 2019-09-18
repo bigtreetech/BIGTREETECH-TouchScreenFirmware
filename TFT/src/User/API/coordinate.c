@@ -7,6 +7,7 @@ COORDINATE coordinate={{0.0f,0.0f,0.0f,0.0f},3000};
 
 static bool relative_mode = false;
 static bool relative_e = false;
+static bool position_cleared = false;
 
 bool coorGetRelative(void)
 {
@@ -26,6 +27,16 @@ bool eGetRelative(void)
 void eSetRelative(bool mode)
 {
   relative_e = mode;
+}
+
+bool coordinateIsClear(void)
+{
+  return position_cleared;
+}
+
+void coordinateSetClear(bool clear)
+{
+  position_cleared = clear;
 }
 
 void coordinateSetAxis(AXIS axis,float position)
@@ -63,4 +74,3 @@ void coordinateGetAll(COORDINATE *tmp)
 {
   memcpy(tmp, &coordinate, sizeof(coordinate));
 }
-
