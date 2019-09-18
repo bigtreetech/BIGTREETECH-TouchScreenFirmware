@@ -132,7 +132,9 @@ void menuST7920(void)
   GUI_Clear(BLACK);
   GUI_SetColor(ST7920_FNCOLOR);
   GUI_SetBkColor(ST7920_BKCOLOR);
-  GUI_DispStringInRect(0, 0, LCD_WIDTH, SIMULATOR_YSTART, (u8*)ST7920_BANNER_TEXT, 0);
+  #ifndef ST7920_FULLSCREEN
+    GUI_DispStringInRect(0, 0, LCD_WIDTH, SIMULATOR_YSTART, (u8*)ST7920_BANNER_TEXT, 0);
+  #endif
   SPI_Slave();
   SPI_Slave_CS_Config();
   

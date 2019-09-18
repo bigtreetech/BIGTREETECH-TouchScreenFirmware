@@ -567,6 +567,24 @@ uint8_t GUI_DispOne(int16_t x, int16_t y, const uint8_t *p, uint8_t mode)
       GUI_DispChar(x, y,(p[0]<<8)|p[1],mode);
       return ((2<<4) | (1<<0));
     }
+    else if (isCzech(p))
+    {
+      switch(p[0])
+      {
+        case 0xC3:
+          GUI_DispChar(x, y,p[1],mode);
+          break;
+        case 0xC4:
+          GUI_DispChar(x,y,p[1]+10,mode);
+          break;
+        case 0xC5:
+          GUI_DispChar(x,y,p[1]+10,mode);
+          break;
+        default:
+          GUI_DispChar(x,y,'?',mode);
+      }
+      return ((2<<4) | (1<<0));
+    }
     else
     {
       GUI_DispHz(x,y,p,mode);
