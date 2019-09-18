@@ -72,6 +72,9 @@
 #define ST7920_BKCOLOR BLACK
 #define ST7920_FNCOLOR GREEN
 
+// Show BTT bootscreen when starting up
+#define SHOW_BTT_BOOTSCREEN
+
 // Text displayed at the top of the LCD in 12864 mode
 #define ST7920_BANNER_TEXT "LCD12864 Simulator"
 

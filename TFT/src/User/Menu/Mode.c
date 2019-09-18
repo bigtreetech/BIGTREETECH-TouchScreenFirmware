@@ -37,11 +37,13 @@ void infoMenuSelect(void)
       u32 startUpTime = OS_GetTime();
       heatSetUpdateTime(100);
       infoMenu.menu[infoMenu.cur] = menuMain;
+      #ifdef SHOW_BTT_BOOTSCREEN
       LOGO_ReadDisplay();
       while(OS_GetTime() - startUpTime < 300)  //Display 3s logo
       {                                                                                                                     
         loopProcess();	
       }
+      #endif
       heatSetUpdateTime(300);
       break;
     }
