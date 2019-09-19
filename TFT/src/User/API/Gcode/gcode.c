@@ -35,7 +35,7 @@ static void resetRequestCommandInfo(void)
 bool request_M21(void)
 {
   strcpy(requestCommandInfo.command,"M21\n");
-  strcpy(requestCommandInfo.startMagic,echomagic);
+  strcpy(requestCommandInfo.startMagic,"SD card ok");
   strcpy(requestCommandInfo.stopMagic,"\n");
   strcpy(requestCommandInfo.errorMagic,"Error");
 
@@ -48,11 +48,7 @@ bool request_M21(void)
     loopProcess();
   }
   // Check reponse
-  if(strstr(requestCommandInfo.cmd_rev_buf,echomagic) != NULL && strstr(requestCommandInfo.cmd_rev_buf,"SD card ok") != NULL){
-        return true;
-  } else {
-        return false;            
-  }
+  return !requestHasTimeOut();
 }
 
 /*
@@ -99,7 +95,7 @@ char *request_M20(void)
 long request_M23(char *filename)
 {
   sprintf(requestCommandInfo.command, "M23 %s\n",filename);
-  strcpy(requestCommandInfo.startMagic,echomagic);
+  strcpy(requestCommandInfo.startMagic, "File opened");
   strcpy(requestCommandInfo.stopMagic,"File selected");
   strcpy(requestCommandInfo.errorMagic,"open failed");
   resetRequestCommandInfo();

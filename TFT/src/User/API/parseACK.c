@@ -64,7 +64,10 @@ void ackPopupInfo(const char *info)
 
 void parseACK(void)
 {
+startParse:  
   if(infoHost.rx_ok[SERIAL_PORT] != true) return; //not get response data
+  
+  infoHost.rx_ok[SERIAL_PORT] = false;
   if(infoHost.connected == false) //not connected to Marlin
   {
     if((!ack_seen("T:") && !ack_seen("T0:")) || !ack_seen("ok"))  goto parse_end;  //the first response should be such as "T:25/50 ok\n"
@@ -100,7 +103,7 @@ void parseACK(void)
     requestCommandInfo.inError = true;
     gcodeProcessed = true;
   }
-  if(requestCommandInfo.inResponse &&  ack_seen(requestCommandInfo.stopMagic ))
+  if(requestCommandInfo.inResponse && ack_seen(requestCommandInfo.stopMagic ))
   {
     requestCommandInfo.done = true;
     requestCommandInfo.inResponse = false;
@@ -176,8 +179,8 @@ void parseACK(void)
   }
   
 parse_end:
-  infoHost.rx_ok[SERIAL_PORT] = false;
-  
+  if(infoHost.rx_ok[SERIAL_PORT] == true) goto startParse;  // receive new data in parseing, so need parse again
+    
   if(ack_cur_src != SERIAL_PORT)
   {
     Serial_Puts(ack_cur_src, ack_rev_buf);
