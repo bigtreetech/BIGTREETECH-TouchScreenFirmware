@@ -34,7 +34,7 @@
 
 //Specify a Pause position as { X, Y, Z_raise }
 #define NOZZLE_PAUSE_RETRACT_LENGTH 15   // (mm)
-#define NOZZLE_PAUSE_PURGE_LENGTH   20   // (mm)
+#define NOZZLE_PAUSE_PURGE_LENGTH   16   // (mm)
 #define NOZZLE_PAUSE_X_POSITION     (X_MIN_POS + 10)  // (mm) Must be an integer
 #define NOZZLE_PAUSE_Y_POSITION     (Y_MIN_POS + 10)  // (mm) Must be an integer
 #define NOZZLE_PAUSE_Z_RAISE        20   // (mm)
@@ -42,7 +42,7 @@
 #define NOZZLE_PAUSE_XY_FEEDRATE    6000 // (mm/min) X and Y axes feedrate
 #define NOZZLE_PAUSE_Z_FEEDRATE     600  // (mm/min) Z axis feedrate
 
-//#define AUTO_BED_LEVELING
+#define AUTO_BED_LEVELING
 //Move to four corner points to Leveling manually (Point 1, Point 2, Point 3, Point 4)
 #define LEVELING_POINT_1_X         (X_MIN_POS + 20)
 #define LEVELING_POINT_1_Y         (Y_MIN_POS + 20)
@@ -63,7 +63,7 @@
   
 //Filament run out detect
 #define FIL_RUNOUT_INVERTING true  // Set to false to invert the logic of the sensor.
-#define FIL_NOISE_THRESHOLD  10    // 10*10 = 100ms,  Pause print when filament runout is detected for 100ms.
+#define FIL_NOISE_THRESHOLD  5     // 5*10 = 50ms,  Pause print when filament runout is detected for 50ms.
 
 /**
  * 12864 Mode Background & Font Color Options
@@ -79,7 +79,7 @@
 #define ST7920_BANNER_TEXT "LCD12864 Simulator"
 
 // Make the simulator run fullscreen, Not recommended for TFT24
-#define ST7920_FULLSCREEN
+//#define ST7920_FULLSCREEN
 
 // Ability to print gcode from Board SD via Gcode functions.
 #define ONBOARD_SD_SUPPORT
