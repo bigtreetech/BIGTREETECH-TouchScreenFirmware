@@ -397,13 +397,13 @@ void TIM3_Config(u16 psc,u16 arr)
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE; 
 	NVIC_Init(&NVIC_InitStructure); 
 
-	RCC->APB1ENR|=1<<1;	           //TIM3ʱ��ʹ��    
- 	TIM3->ARR=arr;  	             //�趨�Զ���װֵ   
-	TIM3->PSC=psc;  	             //Ԥ��Ƶ��
-  TIM3->SR = (uint16_t)~(1<<0);  //��������ж�
-	TIM3->DIER|=1<<0;              //���������ж�	  
+	RCC->APB1ENR|=1<<1;
+ 	TIM3->ARR=arr;
+	TIM3->PSC=psc;
+  TIM3->SR = (uint16_t)~(1<<0);
+	TIM3->DIER|=1<<0;
 	TIM3->CNT =0;
-	TIM3->CR1 &= ~(0x01);          //ʧ�ܶ�ʱ��3	
+	TIM3->CR1 &= ~(0x01);
 }
 
 void Buzzer_Config(void)

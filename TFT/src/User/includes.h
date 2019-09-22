@@ -67,6 +67,7 @@
 #include "Extrude.h"
 #include "Fan.h"
 #include "Settings.h"
+#include "leveling.h"
 #include "PowerFailed.h"
 
 #include "Popup.h"
@@ -160,6 +161,12 @@ enum
   ICON_SD_SOURCE,
   ICON_U_DISK,
   ICON_RUNOUT,
+  
+  ICON_POINT_1,
+  ICON_POINT_2,
+  ICON_POINT_3,
+  ICON_POINT_4,
+  ICON_ABL,
 //  ICON_RESERVE
 };
 

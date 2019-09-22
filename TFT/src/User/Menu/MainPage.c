@@ -1,9 +1,9 @@
 #include "MainPage.h"
 #include "includes.h"
 
-//1个title(标题), ITEM_PER_PAGE个item(图标+标签) 
+//1 title, ITEM_PER_PAGE items(icon+label) 
 const MENUITEMS mainPageItems = {
-//   title
+// title
 LABEL_READY,
 // icon                       label
  {{ICON_HEAT,                 LABEL_HEAT},
@@ -34,13 +34,9 @@ void menuMain(void)
       case KEY_ICON_4: infoMenu.menu[++infoMenu.cur] = menuExtrude;   break;
       case KEY_ICON_5: infoMenu.menu[++infoMenu.cur] = menuFan;       break;
       case KEY_ICON_6: infoMenu.menu[++infoMenu.cur] = menuSettings;  break;
-      case KEY_ICON_7: 
-        storeCmd("G28\n");
-        storeCmd("G29\n");
-        break;
+      case KEY_ICON_7: infoMenu.menu[++infoMenu.cur] = menuLeveling;  break;
       default:break;
     }		
     loopProcess();
   }
 }
-

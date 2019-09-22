@@ -144,6 +144,11 @@ void sendQueueCmd(void)
       cmd=strtol(&infoCmd.queue[infoCmd.index_r].gcode[1],NULL,10);
       switch(cmd)
       {
+        case 18: //M18/M84 disable steppers
+        case 84:
+          coordinateSetClear(false);
+          break;
+        
         case 27: //M27
           printSetUpdateWaiting(false);
         break;
@@ -297,6 +302,7 @@ void sendQueueCmd(void)
         }
         
         case 28: //G28
+          coordinateSetClear(true);
           break;
 
         case 90: //G90

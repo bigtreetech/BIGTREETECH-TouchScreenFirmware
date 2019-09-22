@@ -182,13 +182,11 @@
 #endif
 
 //extend function(PS_ON, filament_detect)
-#define PS_ACTIVE_HIGH       true // Set 'false' for ATX (1), 'true' for X-Box (2)
-#define FIL_RUNOUT_INVERTING true  // Set to false to invert the logic of the sensor.
 #if defined(TFT35_V2_0)
   #define PS_ON_PIN      PE5
-  #define FIL_RUNOUT_PIN PE6
+  #define FIL_RUNOUT_PIN PD11
 #elif defined(TFT35_V3_0)
-  #define PS_ON_PIN      PC12
+  #define PS_ON_PIN      PA12
   #define FIL_RUNOUT_PIN PA15
 #endif
     

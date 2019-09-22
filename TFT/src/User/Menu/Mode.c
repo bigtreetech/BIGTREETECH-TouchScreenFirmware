@@ -34,20 +34,27 @@ void infoMenuSelect(void)
     {
       Serial_ReSourceInit();
       scanUpdates();
-      u32 startUpTime = OS_GetTime();
-      heatSetUpdateTime(100);
+      GUI_SetColor(FK_COLOR);
+      GUI_SetBkColor(BK_COLOR);
       infoMenu.menu[infoMenu.cur] = menuMain;
-      LOGO_ReadDisplay();
-      while(OS_GetTime() - startUpTime < 300)  //Display 3s logo
-      {                                                                                                                     
-        loopProcess();	
-      }
-      heatSetUpdateTime(300);
+      
+      #ifdef SHOW_BTT_BOOTSCREEN
+        u32 startUpTime = OS_GetTime();
+        heatSetUpdateTime(100);
+        LOGO_ReadDisplay();
+        while(OS_GetTime() - startUpTime < 300)  //Display 3s logo
+        {                                                                                                                     
+          loopProcess();	
+        }
+        heatSetUpdateTime(300);
+      #endif
       break;
     }
       
     #ifdef ST7920_SPI
     case LCD12864:
+      GUI_SetColor(ST7920_FNCOLOR);
+      GUI_SetBkColor(ST7920_BKCOLOR);
       infoMenu.menu[infoMenu.cur] = menuST7920;      
       break;
     #endif
