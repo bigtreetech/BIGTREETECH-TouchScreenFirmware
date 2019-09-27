@@ -2,7 +2,7 @@
 #define _PARSEACK_H_
 
 #include "stdint.h"
-#include "configuration.h"
+#include "Configuration.h"
 
 static const char errormagic[]        = "Error:";
 static const char echomagic[]         = "echo:";
