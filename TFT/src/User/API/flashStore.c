@@ -49,7 +49,9 @@ bool readStoredPara(void)
   infoSettings.mode      = byteToWord(data + (index += 4), 4);
   infoSettings.runout    = byteToWord(data + (index += 4), 4);
   infoSettings.rotate_ui = byteToWord(data + (index += 4), 4);
-    
+  infoSettings.bg_color  = byteToWord(data + (index += 4), 4);
+  infoSettings.font_color  = byteToWord(data + (index += 4), 4);
+  
   return true;
 }
 
@@ -68,6 +70,8 @@ void storePara(void)
   wordToByte(infoSettings.mode, data + (index += 4));
   wordToByte(infoSettings.runout, data + (index += 4));
   wordToByte(infoSettings.rotate_ui, data + (index += 4));
+  wordToByte(infoSettings.bg_color, data + (index += 4));
+  wordToByte(infoSettings.font_color, data + (index += 4));
   
   STM32_FlashWrite(data, PARA_SIZE);
 }

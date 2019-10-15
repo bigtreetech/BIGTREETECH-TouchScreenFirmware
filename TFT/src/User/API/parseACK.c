@@ -4,6 +4,8 @@
 char *ack_rev_buf = dma_mem_buf[SERIAL_PORT];
 static u16 ack_index=0;
 static u8 ack_cur_src = SERIAL_PORT;
+int TGCODE;
+int MODEselect;
 
 void setCurrentAckSrc(uint8_t src)
 {
@@ -166,14 +168,17 @@ startParse:
 #endif    
     else if(ack_seen(errormagic))
     {
+        if(TGCODE==0)
         ackPopupInfo(errormagic);
     }
     else if(ack_seen(busymagic))
     {
+        if(TGCODE==0)
         ackPopupInfo(busymagic);
     }
     else if(ack_seen(echomagic) && !gcodeProcessed)
     {
+        if(TGCODE==0)
         ackPopupInfo(echomagic);
     }
   }

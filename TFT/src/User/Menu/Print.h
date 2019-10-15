@@ -3,5 +3,6 @@
 
 void menuPrintFromSource(void);
 void menuPrint(void);
+void menuSendGcode(void);
 
 #endif
