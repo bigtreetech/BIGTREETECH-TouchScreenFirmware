@@ -647,7 +647,7 @@ const char *const cz_pack[LABEL_NUM]={
   CZ_EXTRUDE,
   CZ_FAN,
   CZ_SETTINGS,
-  CZ_LEVELING,  
+  CZ_LEVELING,
   CZ_POINT_1,
   CZ_POINT_2,
   CZ_POINT_3,
