@@ -9,7 +9,7 @@
     #define CZ_EXTRUDE              "Filament"
     #define CZ_FAN                  "Ofuk"
     #define CZ_SETTINGS             "Nastavení"
-    #define CZ_LEVELING             "Leveling"    
+    #define CZ_LEVELING             "Leveling"
     #define CZ_POINT_1              "Point 1"
     #define CZ_POINT_2              "Point 2"
     #define CZ_POINT_3              "Point 3"
