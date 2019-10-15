@@ -208,6 +208,10 @@
   #define ICON_WIDTH  95
   #define ICON_HEIGHT 95
   #define TITLE_END_Y 60
+  
+  #define selecticonw 95
+  #define GCODE_KEYW  60
+  #define GCODE_KEYH  60
 #elif defined(TFT28) || defined(TFT24_V1_1)
   #define LCD_WIDTH	  320
   #define LCD_HEIGHT	240
@@ -216,6 +220,10 @@
   #define ICON_WIDTH  70
   #define ICON_HEIGHT 70
   #define TITLE_END_Y 40
+  
+  #define selecticonw 70
+  #define GCODE_KEYW  50
+  #define GCODE_KEYH  50
 #endif
 
 #if defined(TFT35_V1_0) || defined(TFT35_V1_1) || defined(TFT35_V1_2)|| defined(TFT35_V2_0) || defined(TFT35_V3_0)
