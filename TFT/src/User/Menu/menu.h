@@ -130,7 +130,7 @@ KEY_VALUES menuKeyGetValue(void);
 //GCODE KEYB fun
 GKEY_VALUES GKeyGetValue(void);
 void DrawGKEY(void);
-void revinfo(void);
+bool revinfo(void);
 void DrawEGKEY(void);
 bool SendGcode(void);
 bool BackGKEY(void);
