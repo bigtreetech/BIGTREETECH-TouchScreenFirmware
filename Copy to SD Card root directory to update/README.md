@@ -16,7 +16,6 @@ The structure of the files in SD Card should be as follows
 - setting -> more set -> Change 12864 background color
 - setting -> more set -> Change 12864 font color
 - setting -> more set -> GCODE
-
 ### Vx.x.23
 - add support TFT35 V3.0 (STM32F207)
 - add filament runout on/off button

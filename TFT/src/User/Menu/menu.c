@@ -279,7 +279,7 @@ void DrawEGKEY(void)
 
 }
 
-void revinfo(void)
+bool revinfo(void)
 {
   u16 x=0, y=0;
   int i=0;
@@ -376,8 +376,12 @@ void revinfo(void)
     //GUI_DispStringInRect(10, 10, LCD_WIDTH-10,LCD_HEIGHT-10,"showbuf3",0);
     bufpage = 3;
     }
+    
+    if(BackGKEY())
+      return true;
   }
   while(XPT2046_Read_Pen());
+  return false;
 }
 
 bool SendGcode(void)

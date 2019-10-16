@@ -48,9 +48,9 @@ void ST7920_DrawByte(u8 data)
   for(; i<8; i++)
   {
     if(data & 0x80)
-      ST7920_DrawPixel(x, y, ST7920_FNCOLOR);
+      ST7920_DrawPixel(x, y, infoSettings.font_color);
     else
-      ST7920_DrawPixel(x, y, ST7920_BKCOLOR);
+      ST7920_DrawPixel(x, y, infoSettings.bg_color);
     data <<= 1;
     x++;
   }

@@ -235,6 +235,7 @@ void menuSendGcode(void)
     bool setcol = false;
     bool send = false;
     bool keyturn = false;
+    bool back = false;
     TGCODE = 1;
     GKEY_VALUES  key_num = GKEY_IDLE;
     GUI_Clear(FK_COLOR);
@@ -337,7 +338,7 @@ void menuSendGcode(void)
         GUI_SetColor(BK_COLOR);
       }
       
-      if(BackGKEY())//·µ»Ø
+      if(BackGKEY()||back)//·µ»Ø
       {
         setcol = true;
         infoMenu.cur--;
@@ -354,13 +355,19 @@ void menuSendGcode(void)
       {
       showb();
       GUI_DispLenString(10,SIMULATOR_YSTART,(uint8_t *)p,0,(LCD_WIDTH-30)/BYTE_WIDTH);
-      revinfo();
+      if(revinfo())
+      {
+      back=true;
+      }
+      else
+      {
       GUI_SetColor(FK_COLOR);
       GUI_FillRect(0,SPACE_GKY+TITLE_END_Y,LCD_WIDTH,LCD_HEIGHT);
       GUI_SetColor(YELLOW);
       GUI_FillRect(LCD_WIDTH-GCODE_KEYW-START_GKX,10,LCD_WIDTH-10,10+BYTE_HEIGHT+5);
       GUI_SetColor(BK_COLOR);
-      GUI_DispStringInRect(LCD_WIDTH-GCODE_KEYW-START_GKX,10,LCD_WIDTH-10,10+BYTE_HEIGHT+5,"Send", 0);
+      GUI_DispStringInRect(LCD_WIDTH-GCODE_KEYW-START_GKX,10,LCD_WIDTH-10,10+BYTE_HEIGHT+5,(uint8_t *)"Send", 0);
+      }
       }
       
       if(j<24)

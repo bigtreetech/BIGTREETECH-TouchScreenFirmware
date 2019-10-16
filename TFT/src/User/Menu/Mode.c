@@ -114,7 +114,7 @@ void menuMode(void)
     if(encoderPosition)
     {
       nowMode = limitValue(0, nowMode + encoderPosition, modeRadio.num - 1);
-      RADIO_Select(&modeRadio, nowMode);
+      selectmode(nowMode);
       encoderPosition = 0;    
     }
     
