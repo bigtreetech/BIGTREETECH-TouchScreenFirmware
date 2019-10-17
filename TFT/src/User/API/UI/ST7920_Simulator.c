@@ -48,9 +48,9 @@ void ST7920_DrawByte(u8 data)
   for(; i<8; i++)
   {
     if(data & 0x80)
-      ST7920_DrawPixel(x, y, ST7920_FNCOLOR);
+      ST7920_DrawPixel(x, y, infoSettings.font_color);
     else
-      ST7920_DrawPixel(x, y, ST7920_BKCOLOR);
+      ST7920_DrawPixel(x, y, infoSettings.bg_color);
     data <<= 1;
     x++;
   }
@@ -129,7 +129,9 @@ void ST7920_ST7920_ParseWCmd(u8 cmd)
 
 void menuST7920(void)
 { 
-  GUI_Clear(ST7920_BKCOLOR);
+  GUI_Clear(infoSettings.bg_color);
+  GUI_SetColor(infoSettings.font_color);
+  GUI_SetBkColor(infoSettings.bg_color);
   #ifndef ST7920_FULLSCREEN
     GUI_DispStringInRect(0, 0, LCD_WIDTH, SIMULATOR_YSTART, (u8*)ST7920_BANNER_TEXT, 0);
   #endif
@@ -144,6 +146,11 @@ void menuST7920(void)
        
       SPISlave.rIndex = (SPISlave.rIndex + 1) % SPI_SLAVE_MAX;
     }
+    
+    Touch_Sw(LCD_ReadTouch());
+    
+    if(LCD_BtnTouch(LCD_BUTTON_INTERVALS))
+			Touch_Sw(1);
     
     #if LCD_ENCODER_SUPPORT
       loopCheckMode();

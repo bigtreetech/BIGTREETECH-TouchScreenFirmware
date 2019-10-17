@@ -10,6 +10,12 @@ The structure of the files in SD Card should be as follows
   - fonts: this is a bitmap fonts of ASCII and GBK. The font is Song typeface (don't need update every time)
 
 # software version
+### Vx.x.24
+- add some settings (Before that, update your icons folder)
+- Long Press Touch Screen or Rotary Encoder entry mode selection(Marlin's mode is SPI mode, touch mode is UART mode)
+- setting -> more set -> Change 12864 background color
+- setting -> more set -> Change 12864 font color
+- setting -> more set -> GCODE
 ### Vx.x.23
 - add support TFT35 V3.0 (STM32F207)
 - add filament runout on/off button

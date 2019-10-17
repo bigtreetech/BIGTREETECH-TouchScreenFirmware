@@ -42,6 +42,46 @@ typedef enum
 
 #define ITEM_PER_PAGE  8
 
+/*-------------------------send gcode-------top*/
+typedef enum
+{
+  GKEY_0 = 0,
+  GKEY_1,
+  GKEY_2,
+  GKEY_3,
+  GKEY_4,
+  GKEY_5,
+  GKEY_6,
+  GKEY_7,
+  GKEY_8,
+  GKEY_9,
+  GKEY_10,
+  GKEY_11,
+  GKEY_12,
+  GKEY_13,
+  GKEY_14,
+  GKEY_15,
+  GKEY_16,
+  GKEY_17,
+  GKEY_18,
+  GKEY_19,
+  GKEY_20,
+  GKEY_21,
+  GKEY_22,
+  GKEY_23,
+  GKEY_IDLE = IDLE_TOUCH,
+}GKEY_VALUES;
+/*-------------------------send gcode-------end*/
+/*-------------------------select mode-------top*/
+#define SELECTMODE 2
+typedef enum
+{
+  MKEY_0 = 0,
+  MKEY_1,
+  MKEY_IDLE = IDLE_TOUCH,
+}MKEY_VALUES;
+/*-------------------------select mode-------end*/
+
 typedef struct
 {
   int16_t icon;
@@ -87,6 +127,19 @@ void menuDrawPage (const MENUITEMS * menuItems);
 void itemDrawIconPress(uint8_t positon, uint8_t is_press);
 KEY_VALUES menuKeyGetValue(void);
 
+//GCODE KEYB fun
+GKEY_VALUES GKeyGetValue(void);
+void DrawGKEY(void);
+bool revinfo(void);
+void DrawEGKEY(void);
+bool SendGcode(void);
+bool BackGKEY(void);
+void showb(void);
+
+//select mode fun
+extern const GUI_RECT rect_of_mode[SELECTMODE];
+extern MKEY_VALUES MKeyGetValue(void);
+extern void selectmode(int8_t  nowMode);
 
 void loopProcess (void);
 

@@ -19,7 +19,7 @@ LABEL_READY,
 void menuMain(void)
 {
   KEY_VALUES key_num=KEY_IDLE;
-
+  GUI_SetBkColor(ST7920_BKCOLOR);
   menuDrawPage(&mainPageItems);
 
   while(infoMenu.menu[infoMenu.cur] == menuMain)

@@ -1,5 +1,6 @@
 #include "xpt2046.h"
 #include "GPIO_Init.h"
+#include "includes.h"
 /***************************************** XPT2046 SPI 模式底层移植的接口********************************************/
 //XPT2046 SPI相关 - 使用模拟SPI
 _SW_SPI xpt2046;
@@ -37,7 +38,142 @@ u8 XPT2046_Read_Pen(void)
   return GPIO_GetLevel(XPT2046_TPEN);
 }
 /******************************************************************************************************************/
+/*---------------------------------select fun-------------------------top--------*/
+bool LCD_ReadPen(uint8_t intervals)
+{
+  static u32 TouchTime = 0;
+  
+  if(!XPT2046_Read_Pen())
+  {
+    if(OS_GetTime() - TouchTime > intervals)
+    {
+      return true;
+    }
+  }
+  else
+  {
+    TouchTime = OS_GetTime();
+  }
+  return false;
+}
 
+bool LCD_BtnTouch(uint8_t intervals)
+{
+	static u32 BtnTime = 0;
+  u16 tx,ty;
+  if(!XPT2046_Read_Pen())
+  {
+		TS_Get_Coordinates(&tx,&ty);
+    if(OS_GetTime() - BtnTime > intervals)
+    {
+			if(tx>LCD_WIDTH-LCD_WIDTH/5 && ty<LCD_HEIGHT/5)
+      return true;
+    }
+  }
+  else
+  {
+    BtnTime = OS_GetTime();
+  }
+  return false;
+}
+
+ uint8_t LCD_ReadTouch(void)
+{
+	u16 ex=0,ey=0;
+  static u32 CTime = 0;
+  static u16 sy;
+	static bool MOVE = false;
+	
+	if(!XPT2046_Read_Pen() && CTime < OS_GetTime())
+  {
+		TS_Get_Coordinates(&ex,&ey);
+		if(!MOVE)
+		sy = ey;
+			
+		MOVE = true;
+			
+		if((ey>sy) && sy!=0)
+		{
+			if(ey > sy+35)
+			{
+				sy = ey;
+				return 3;
+			}
+		}
+		else if((sy>ey) && ey!=0)
+		{
+			if(sy > ey+35)
+			{
+
+				sy = ey;
+				return 2;
+			}
+		}	
+	}
+	else
+	{
+		CTime = OS_GetTime();
+		sy = ey =0;
+		MOVE = false;
+	}
+	
+	return 0;	
+}
+#if LCD_ENCODER_SUPPORT
+void Touch_Sw(uint8_t num)
+{
+  if(num==1 || num==2 || num ==3)
+  {
+  GPIO_InitSet(LCD_BTN_PIN, MGPIO_MODE_OUT_PP, 0);
+	GPIO_InitSet(LCD_ENCA_PIN, MGPIO_MODE_OUT_PP, 0);
+	GPIO_InitSet(LCD_ENCB_PIN, MGPIO_MODE_OUT_PP, 0);
+  }
+	switch(num)
+	{
+		case 0:
+			break;
+		case 1:
+			GPIO_SetLevel(LCD_BTN_PIN, 0);
+			GPIO_SetLevel(LCD_BTN_PIN, 1);
+			break;
+		case 2:
+			GPIO_SetLevel(LCD_ENCA_PIN, 1);
+			GPIO_SetLevel(LCD_ENCB_PIN, 1);
+			Delay_us(8);
+			GPIO_SetLevel(LCD_ENCA_PIN, 0);
+			GPIO_SetLevel(LCD_ENCB_PIN, 1);
+			Delay_us(8);
+			GPIO_SetLevel(LCD_ENCA_PIN, 0);
+			GPIO_SetLevel(LCD_ENCB_PIN, 0);
+			Delay_us(8);
+			GPIO_SetLevel(LCD_ENCA_PIN, 1);
+			GPIO_SetLevel(LCD_ENCB_PIN, 0);
+			Delay_us(8);
+			GPIO_SetLevel(LCD_ENCA_PIN, 1);
+			GPIO_SetLevel(LCD_ENCB_PIN, 1);
+			break;
+		case 3:
+			GPIO_SetLevel(LCD_ENCA_PIN, 1);
+			GPIO_SetLevel(LCD_ENCB_PIN, 1);
+			Delay_us(8);
+			GPIO_SetLevel(LCD_ENCA_PIN, 1);
+			GPIO_SetLevel(LCD_ENCB_PIN, 0);
+			Delay_us(8);
+			GPIO_SetLevel(LCD_ENCA_PIN, 0);
+			GPIO_SetLevel(LCD_ENCB_PIN, 0);
+			Delay_us(8);
+			GPIO_SetLevel(LCD_ENCA_PIN, 0);
+			GPIO_SetLevel(LCD_ENCB_PIN, 1);
+			Delay_us(8);
+			GPIO_SetLevel(LCD_ENCA_PIN, 1);
+			GPIO_SetLevel(LCD_ENCB_PIN, 1);
+			break;
+	}
+  
+  LCD_EncoderInit();
+}
+#endif
+/*---------------------------------select fun-------------------------end--------*/
 
 //读取 XPT2046 转化好的AD值
 u16 XPT2046_Read_AD(u8 CMD)

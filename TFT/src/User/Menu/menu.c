@@ -28,6 +28,40 @@ const GUI_RECT rect_of_key[ITEM_PER_PAGE*2]={
   {3*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y,  4*SPACE_X_PER_ICON,  2*ICON_HEIGHT+2*SPACE_Y+TITLE_END_Y},
 };
 
+const GUI_RECT rect_of_Gkey[24]={
+  //24 GKEY
+  {0*GCODE_KEYW+0*SPACE_GKX+START_GKX, 0*GCODE_KEYH+0*SPACE_GKY+TITLE_END_Y, 1*GCODE_KEYW+0*SPACE_GKX+START_GKX, 1*GCODE_KEYH+0*SPACE_GKY+TITLE_END_Y},
+  {1*GCODE_KEYW+1*SPACE_GKX+START_GKX, 0*GCODE_KEYH+0*SPACE_GKY+TITLE_END_Y, 2*GCODE_KEYW+1*SPACE_GKX+START_GKX, 1*GCODE_KEYH+0*SPACE_GKY+TITLE_END_Y},
+  {2*GCODE_KEYW+2*SPACE_GKX+START_GKX, 0*GCODE_KEYH+0*SPACE_GKY+TITLE_END_Y, 3*GCODE_KEYW+2*SPACE_GKX+START_GKX, 1*GCODE_KEYH+0*SPACE_GKY+TITLE_END_Y},
+  {3*GCODE_KEYW+3*SPACE_GKX+START_GKX, 0*GCODE_KEYH+0*SPACE_GKY+TITLE_END_Y, 4*GCODE_KEYW+3*SPACE_GKX+START_GKX, 1*GCODE_KEYH+0*SPACE_GKY+TITLE_END_Y},
+  {4*GCODE_KEYW+4*SPACE_GKX+START_GKX, 0*GCODE_KEYH+0*SPACE_GKY+TITLE_END_Y, 5*GCODE_KEYW+4*SPACE_GKX+START_GKX, 1*GCODE_KEYH+0*SPACE_GKY+TITLE_END_Y},
+  {5*GCODE_KEYW+5*SPACE_GKX+START_GKX, 0*GCODE_KEYH+0*SPACE_GKY+TITLE_END_Y, 6*GCODE_KEYW+5*SPACE_GKX+START_GKX, 1*GCODE_KEYH+0*SPACE_GKY+TITLE_END_Y},
+  {0*GCODE_KEYW+0*SPACE_GKX+START_GKX, 1*GCODE_KEYH+1*SPACE_GKY+TITLE_END_Y, 1*GCODE_KEYW+0*SPACE_GKX+START_GKX, 2*GCODE_KEYH+1*SPACE_GKY+TITLE_END_Y},
+  {1*GCODE_KEYW+1*SPACE_GKX+START_GKX, 1*GCODE_KEYH+1*SPACE_GKY+TITLE_END_Y, 2*GCODE_KEYW+1*SPACE_GKX+START_GKX, 2*GCODE_KEYH+1*SPACE_GKY+TITLE_END_Y},
+  {2*GCODE_KEYW+2*SPACE_GKX+START_GKX, 1*GCODE_KEYH+1*SPACE_GKY+TITLE_END_Y, 3*GCODE_KEYW+2*SPACE_GKX+START_GKX, 2*GCODE_KEYH+1*SPACE_GKY+TITLE_END_Y},
+  {3*GCODE_KEYW+3*SPACE_GKX+START_GKX, 1*GCODE_KEYH+1*SPACE_GKY+TITLE_END_Y, 4*GCODE_KEYW+3*SPACE_GKX+START_GKX, 2*GCODE_KEYH+1*SPACE_GKY+TITLE_END_Y},
+  {4*GCODE_KEYW+4*SPACE_GKX+START_GKX, 1*GCODE_KEYH+1*SPACE_GKY+TITLE_END_Y, 5*GCODE_KEYW+4*SPACE_GKX+START_GKX, 2*GCODE_KEYH+1*SPACE_GKY+TITLE_END_Y},
+  {5*GCODE_KEYW+5*SPACE_GKX+START_GKX, 1*GCODE_KEYH+1*SPACE_GKY+TITLE_END_Y, 6*GCODE_KEYW+5*SPACE_GKX+START_GKX, 2*GCODE_KEYH+1*SPACE_GKY+TITLE_END_Y},
+  {0*GCODE_KEYW+0*SPACE_GKX+START_GKX, 2*GCODE_KEYH+2*SPACE_GKY+TITLE_END_Y, 1*GCODE_KEYW+0*SPACE_GKX+START_GKX, 3*GCODE_KEYH+2*SPACE_GKY+TITLE_END_Y},
+  {1*GCODE_KEYW+1*SPACE_GKX+START_GKX, 2*GCODE_KEYH+2*SPACE_GKY+TITLE_END_Y, 2*GCODE_KEYW+1*SPACE_GKX+START_GKX, 3*GCODE_KEYH+2*SPACE_GKY+TITLE_END_Y},
+  {2*GCODE_KEYW+2*SPACE_GKX+START_GKX, 2*GCODE_KEYH+2*SPACE_GKY+TITLE_END_Y, 3*GCODE_KEYW+2*SPACE_GKX+START_GKX, 3*GCODE_KEYH+2*SPACE_GKY+TITLE_END_Y},
+  {3*GCODE_KEYW+3*SPACE_GKX+START_GKX, 2*GCODE_KEYH+2*SPACE_GKY+TITLE_END_Y, 4*GCODE_KEYW+3*SPACE_GKX+START_GKX, 3*GCODE_KEYH+2*SPACE_GKY+TITLE_END_Y},
+  {4*GCODE_KEYW+4*SPACE_GKX+START_GKX, 2*GCODE_KEYH+2*SPACE_GKY+TITLE_END_Y, 5*GCODE_KEYW+4*SPACE_GKX+START_GKX, 3*GCODE_KEYH+2*SPACE_GKY+TITLE_END_Y},
+  {5*GCODE_KEYW+5*SPACE_GKX+START_GKX, 2*GCODE_KEYH+2*SPACE_GKY+TITLE_END_Y, 6*GCODE_KEYW+5*SPACE_GKX+START_GKX, 3*GCODE_KEYH+2*SPACE_GKY+TITLE_END_Y},
+  {0*GCODE_KEYW+0*SPACE_GKX+START_GKX, 3*GCODE_KEYH+3*SPACE_GKY+TITLE_END_Y, 1*GCODE_KEYW+0*SPACE_GKX+START_GKX, 4*GCODE_KEYH+3*SPACE_GKY+TITLE_END_Y},
+  {1*GCODE_KEYW+1*SPACE_GKX+START_GKX, 3*GCODE_KEYH+3*SPACE_GKY+TITLE_END_Y, 2*GCODE_KEYW+1*SPACE_GKX+START_GKX, 4*GCODE_KEYH+3*SPACE_GKY+TITLE_END_Y},
+  {2*GCODE_KEYW+2*SPACE_GKX+START_GKX, 3*GCODE_KEYH+3*SPACE_GKY+TITLE_END_Y, 3*GCODE_KEYW+2*SPACE_GKX+START_GKX, 4*GCODE_KEYH+3*SPACE_GKY+TITLE_END_Y},
+  {3*GCODE_KEYW+3*SPACE_GKX+START_GKX, 3*GCODE_KEYH+3*SPACE_GKY+TITLE_END_Y, 4*GCODE_KEYW+3*SPACE_GKX+START_GKX, 4*GCODE_KEYH+3*SPACE_GKY+TITLE_END_Y},
+  {4*GCODE_KEYW+4*SPACE_GKX+START_GKX, 3*GCODE_KEYH+3*SPACE_GKY+TITLE_END_Y, 5*GCODE_KEYW+4*SPACE_GKX+START_GKX, 4*GCODE_KEYH+3*SPACE_GKY+TITLE_END_Y},
+  {5*GCODE_KEYW+5*SPACE_GKX+START_GKX, 3*GCODE_KEYH+3*SPACE_GKY+TITLE_END_Y, 6*GCODE_KEYW+5*SPACE_GKX+START_GKX, 4*GCODE_KEYH+3*SPACE_GKY+TITLE_END_Y},
+};
+
+const GUI_RECT rect_of_mode[SELECTMODE]={
+  //2 select icon
+  {1*SPACE_SELEX+0*selecticonw,SPACE_SELEY,1*SPACE_SELEX+1*selecticonw,SPACE_SELEY+selecticonw},
+  {3*SPACE_SELEX+1*selecticonw,SPACE_SELEY,3*SPACE_SELEX+2*selecticonw,SPACE_SELEY+selecticonw},
+};
+
 //Clean up the gaps outside icons
 void menuClearGaps(void)
 {
@@ -217,6 +251,209 @@ KEY_VALUES menuKeyGetValue(void)
   return(KEY_VALUES)KEY_GetValue(sizeof(rect_of_key)/sizeof(rect_of_key[0]), rect_of_key);    
 }
 
+/*------------------------about GCODE KEY FUN ---------------top-------------*/
+GKEY_VALUES GKeyGetValue(void)
+{    
+  return (GKEY_VALUES)KEY_GetValue(sizeof(rect_of_Gkey)/sizeof(rect_of_Gkey[0]), rect_of_Gkey);    
+}
+
+void DrawGKEY(void)
+{
+  uint8_t i;
+  char *key[24]={"1","2","3","M","G","¡û","4","5","6","X","Y","Spac","7","8","9","Z","E","A-Z",".","0","-"," "," ","Buzz"};
+  for(i=0;i<24;i++)
+  {
+    GUI_DispStringInRect(rect_of_Gkey[i].x0, rect_of_Gkey[i].y0, rect_of_Gkey[i].x1, rect_of_Gkey[i].y1,(uint8_t *)key[i], 0);
+  }
+  
+}
+
+void DrawEGKEY(void)
+{
+  uint8_t i;
+  char *key[24]={"A","B","C","D","F","¡û","H","I","K","L","N","Spac","O","P","Q","R","S","A-Z","T","U","V","W"," "," "};
+  for(i=0;i<24;i++)
+  {
+    GUI_DispStringInRect(rect_of_Gkey[i].x0, rect_of_Gkey[i].y0, rect_of_Gkey[i].x1, rect_of_Gkey[i].y1,(uint8_t *)key[i], 0);
+  }
+
+}
+
+bool revinfo(void)
+{
+  u16 x=0, y=0;
+  int i=0;
+  bool keyback = true;
+  bool only = false;
+  u8 bufpage = 1;
+  
+  char showbuf1[(LCD_WIDTH/BYTE_WIDTH)*(LCD_HEIGHT-(SPACE_GKY+TITLE_END_Y+BYTE_HEIGHT))/BYTE_HEIGHT];
+  char showbuf2[(LCD_WIDTH/BYTE_WIDTH)*(LCD_HEIGHT-(SPACE_GKY+TITLE_END_Y+BYTE_HEIGHT))/BYTE_HEIGHT];
+  char showbuf3[(LCD_WIDTH/BYTE_WIDTH)*(LCD_HEIGHT-(SPACE_GKY+TITLE_END_Y+BYTE_HEIGHT))/BYTE_HEIGHT];
+ 
+  while(i<((LCD_WIDTH-2*BYTE_WIDTH)/BYTE_WIDTH)*(LCD_HEIGHT-(SPACE_GKY+TITLE_END_Y+BYTE_HEIGHT))/BYTE_HEIGHT)
+  {
+    showbuf1[i] = ack_rev_buf[i];
+    i++;  
+  }
+  GUI_SetColor(GRAY);
+  GUI_FillRect(0,SPACE_GKY+TITLE_END_Y,LCD_WIDTH,LCD_HEIGHT);
+  GUI_SetColor(BK_COLOR);
+  GUI_DispStringInRect(0, SPACE_GKY+TITLE_END_Y+BYTE_HEIGHT, LCD_WIDTH,LCD_HEIGHT-BYTE_HEIGHT,(uint8_t *)showbuf1,0);
+    
+  uint16_t stringlen = my_strlen((u8*)showbuf1)*BYTE_WIDTH;
+  uint16_t width = LCD_WIDTH;
+  uint16_t height = (LCD_HEIGHT-BYTE_HEIGHT) - (SPACE_GKY+TITLE_END_Y);
+  uint8_t  nline = (stringlen+width-1)/width ;
+   
+  if(nline >= height/BYTE_HEIGHT)
+  {
+  only = true;
+  i = 0; 
+  while(i<((LCD_WIDTH-2*BYTE_WIDTH)/BYTE_WIDTH)*(LCD_HEIGHT-(SPACE_GKY+TITLE_END_Y+BYTE_HEIGHT))/BYTE_HEIGHT)
+  {
+    showbuf2[i] = ack_rev_buf[((LCD_WIDTH-2*BYTE_WIDTH)/BYTE_WIDTH)*(LCD_HEIGHT-(SPACE_GKY+TITLE_END_Y+BYTE_HEIGHT))/BYTE_HEIGHT+i];
+    i++;  
+  }
+  
+  GUI_DispStringInRect(LCD_WIDTH/2,LCD_HEIGHT-BYTE_HEIGHT,LCD_WIDTH,LCD_HEIGHT,(uint8_t *)"¡·",0);
+
+  i = 0;
+  while(i<((LCD_WIDTH-2*BYTE_WIDTH)/BYTE_WIDTH)*(LCD_HEIGHT-(SPACE_GKY+TITLE_END_Y+BYTE_HEIGHT))/BYTE_HEIGHT)
+  {
+    showbuf3[i] = ack_rev_buf[2*((LCD_WIDTH-2*BYTE_WIDTH)/BYTE_WIDTH)*(LCD_HEIGHT-(SPACE_GKY+TITLE_END_Y+BYTE_HEIGHT))/BYTE_HEIGHT+i];
+    i++;
+  }
+  }    
+
+  
+  while(keyback)
+  {
+    while(XPT2046_Read_Pen());
+    TS_Get_Coordinates(&x,&y);
+    if(x>LCD_WIDTH-(GCODE_KEYW+START_GKX) && x<LCD_WIDTH-10 && y>10 && y<10+BYTE_HEIGHT+5)
+    {
+    #ifdef BUZZER_PIN
+    if(infoSettings.buzzer == 1)
+    openBuzzer(3, 11);
+    #endif
+    keyback = false;
+    }
+    
+    if(x>0 && x<LCD_WIDTH/2 && y>LCD_HEIGHT-BYTE_HEIGHT && y<LCD_HEIGHT && bufpage==2 && only)
+    {
+    while(XPT2046_Read_Pen());
+    GUI_SetColor(GRAY);
+    GUI_FillRect(0,SPACE_GKY+TITLE_END_Y,LCD_WIDTH,LCD_HEIGHT);
+    GUI_SetColor(BK_COLOR);
+    GUI_DispStringInRect(0,SPACE_GKY+TITLE_END_Y+BYTE_HEIGHT,LCD_WIDTH,LCD_HEIGHT-BYTE_HEIGHT,(uint8_t *)showbuf1,0);
+    GUI_DispStringInRect(LCD_WIDTH/2,LCD_HEIGHT-BYTE_HEIGHT,LCD_WIDTH,LCD_HEIGHT,(uint8_t *)"¡·",0);
+    bufpage = 1;
+    }
+    
+    if(  (x>LCD_WIDTH/2 && x<LCD_WIDTH && y>LCD_HEIGHT-BYTE_HEIGHT && y<LCD_HEIGHT && bufpage==1  && only)
+      || (x>0 && x<LCD_WIDTH/2 && y>LCD_HEIGHT-BYTE_HEIGHT && y<LCD_HEIGHT && bufpage==3 && only)
+      )
+    {
+    while(XPT2046_Read_Pen());
+    GUI_SetColor(GRAY);
+    GUI_FillRect(0,SPACE_GKY+TITLE_END_Y,LCD_WIDTH,LCD_HEIGHT);
+    GUI_SetColor(BK_COLOR);
+    GUI_DispStringInRect(0,SPACE_GKY+TITLE_END_Y+BYTE_HEIGHT,LCD_WIDTH,LCD_HEIGHT-BYTE_HEIGHT,(uint8_t *)showbuf2,0);
+    GUI_DispStringInRect(0,LCD_HEIGHT-BYTE_HEIGHT,LCD_WIDTH/2,LCD_HEIGHT,(uint8_t *)"¡¶",0);
+    GUI_DispStringInRect(LCD_WIDTH/2,LCD_HEIGHT-BYTE_HEIGHT,LCD_WIDTH,LCD_HEIGHT,(uint8_t *)"¡·",0);
+    bufpage = 2;
+    }
+    
+    if(x>LCD_WIDTH/2 && x<LCD_WIDTH && y>LCD_HEIGHT-BYTE_HEIGHT && y<LCD_HEIGHT && bufpage==2 && only)
+    {
+    while(XPT2046_Read_Pen());
+    GUI_SetColor(GRAY);
+    GUI_FillRect(0,SPACE_GKY+TITLE_END_Y,LCD_WIDTH,LCD_HEIGHT);
+    GUI_SetColor(BK_COLOR);
+    GUI_DispStringInRect(0,SPACE_GKY+TITLE_END_Y+BYTE_HEIGHT,LCD_WIDTH,LCD_HEIGHT-BYTE_HEIGHT,(uint8_t *)showbuf3,0);
+    GUI_DispStringInRect(0,LCD_HEIGHT-BYTE_HEIGHT,LCD_WIDTH/2,LCD_HEIGHT,(uint8_t *)"¡¶",0);
+    //GUI_DispStringInRect(10, 10, LCD_WIDTH-10,LCD_HEIGHT-10,"showbuf3",0);
+    bufpage = 3;
+    }
+    
+    if(BackGKEY())
+      return true;
+  }
+  while(XPT2046_Read_Pen());
+  return false;
+}
+
+bool SendGcode(void)
+{
+  u16 x=0, y=0;
+  TS_Get_Coordinates(&x,&y);
+  if(x>LCD_WIDTH-GCODE_KEYW+START_GKX && x<LCD_WIDTH-10 && y>10 && y<10+BYTE_HEIGHT+5)
+  {
+  #ifdef BUZZER_PIN
+  if(infoSettings.buzzer == 1)
+	openBuzzer(3, 11);
+  #endif
+  return true;
+  }
+  else
+  return false;
+}
+
+bool BackGKEY(void)
+{
+  u16 x=0, y=0;
+  
+  TS_Get_Coordinates(&x,&y);
+  if(x>10 && x<GCODE_KEYW+START_GKX && y>10 && y<10+BYTE_HEIGHT+5)
+  {
+  #ifdef BUZZER_PIN
+  if(infoSettings.buzzer == 1)
+	openBuzzer(3, 11);
+  #endif
+  return true;
+  }
+  else
+  return false;
+}
+
+void showb(void)
+{
+  GUI_SetColor(FK_COLOR);
+  GUI_FillRect(GCODE_KEYW+START_GKX+10,10,LCD_WIDTH-(GCODE_KEYW+START_GKX+10),10+BYTE_HEIGHT+5);
+  GUI_SetColor(GRAY);
+  GUI_FillRect(0,SPACE_GKY+TITLE_END_Y,LCD_WIDTH,LCD_HEIGHT);
+  GUI_SetColor(YELLOW);
+  GUI_FillRect(LCD_WIDTH-(GCODE_KEYW+START_GKX),10,LCD_WIDTH-10,10+BYTE_HEIGHT+5);
+  GUI_SetColor(BK_COLOR);
+  GUI_DispStringInRect(LCD_WIDTH-(GCODE_KEYW+START_GKX),10,LCD_WIDTH-10,10+BYTE_HEIGHT+5,(uint8_t *)"GKEY", 0);
+}
+/*------------------------about GCODE KEY FUN ---------------end-------------*/
+
+/*------------------------about select mode FUN --------------top-------------*/
+MKEY_VALUES MKeyGetValue(void)
+{    
+  return (MKEY_VALUES)KEY_GetValue(sizeof(rect_of_mode)/sizeof(rect_of_mode[0]), rect_of_mode);    
+}
+
+void selectmode(int8_t  nowMode)
+{
+  if(nowMode==SERIAL_TSC)
+  {
+  GUI_SetColor(ST7920_FNCOLOR);
+  GUI_DispStringInRect(text_startx,rect_of_mode[1].y0-BYTE_HEIGHT+selecticonw+BYTE_WIDTH,LCD_WIDTH,rect_of_mode[1].y0+selecticonw+BYTE_WIDTH,(uint8_t *)"Touch Mode", 0);
+  GUI_SetColor(FK_COLOR);
+  GUI_DispStringInRect(0,rect_of_mode[1].y0-BYTE_HEIGHT+selecticonw+BYTE_WIDTH,text_startx,rect_of_mode[1].y0+selecticonw+BYTE_WIDTH,(uint8_t *)"Marlin's Mode", 0);
+  }
+  else
+  {
+  GUI_SetColor(ST7920_FNCOLOR);
+  GUI_DispStringInRect(0,rect_of_mode[1].y0-BYTE_HEIGHT+selecticonw+BYTE_WIDTH,text_startx,rect_of_mode[1].y0+selecticonw+BYTE_WIDTH,(uint8_t *)"Marlin's Mode", 0);
+  GUI_SetColor(FK_COLOR);
+  GUI_DispStringInRect(text_startx,rect_of_mode[1].y0-BYTE_HEIGHT+selecticonw+BYTE_WIDTH,LCD_WIDTH,rect_of_mode[1].y0+selecticonw+BYTE_WIDTH,(uint8_t *)"Touch Mode", 0);
+  }
+}
+/*------------------------about select mode FUN --------------end-------------*/
 
 void loopProcess(void)
 {

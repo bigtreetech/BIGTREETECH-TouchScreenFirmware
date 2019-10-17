@@ -192,6 +192,7 @@ u16 KEY_GetValue(u8 total_rect,const GUI_RECT* menuRect)
     {
       key_num = Key_value(total_rect, menuRect);
       firstPress = false;
+      if(TGCODE==0 && MODEselect ==0)
       TSC_ReDrawIcon(key_num, 1);
     }
   }
@@ -199,6 +200,7 @@ u16 KEY_GetValue(u8 total_rect,const GUI_RECT* menuRect)
   {
     if (firstPress == false )
     {
+      if(TGCODE==0 && MODEselect ==0)
       TSC_ReDrawIcon(key_num, 0);
       key_return = key_num;
       key_num = IDLE_TOUCH;
