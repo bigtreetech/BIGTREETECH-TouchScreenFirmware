@@ -65,6 +65,12 @@
 #define FIL_RUNOUT_INVERTING true  // Set to false to invert the logic of the sensor.
 #define FIL_NOISE_THRESHOLD  5     // 5*10 = 50ms,  Pause print when filament runout is detected for 50ms.
 
+/* 
+Enable alternative Move Menu Buttons Layout for easy
+update the icons from alternate icon folder
+*/
+#define ALTERNATIVE_MOVE_MENU
+
 /**
  * 12864 Mode Background & Font Color Options
  * Current color options from lcd.h: BLACK, BLUE, BROWN, BRRED, CYAN, GBLUE, GRAY, GREEN, MAGENTA, RED, WHITE, YELLOW
