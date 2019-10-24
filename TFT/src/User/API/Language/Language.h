@@ -14,7 +14,7 @@ enum
   GERMAN,
 //  ARMENIAN,
   CZECH,
-  SPAIN,  //Añado España
+  SPAIN,  
 
   LANGUAGE_NUM,
 };

@@ -7,7 +7,7 @@
 #include "language_de.h"
 #include "language_am.h"
 #include "language_cz.h"
-#include "language_es.h" //Incluyo lenguaje
+#include "language_es.h"
 
 const char *const en_pack[LABEL_NUM]={
   EN_LANGUAGE,
@@ -744,7 +744,7 @@ const char *const cz_pack[LABEL_NUM]={
   CZ_FILAMENT_RUNOUT
 };
 
-const char *const es_pack[LABEL_NUM]={  //Añado esto
+const char *const es_pack[LABEL_NUM]={
   ES_LANGUAGE,
   ES_HEAT,
   ES_MOVE,
@@ -911,7 +911,7 @@ u8 * textSelect(u8 sel)
     case GERMAN:    return (u8 *)de_pack[sel];
 //    case ARMENIAN:  return (u8 *)am_pack[sel];
     case CZECH:     return (u8 *)cz_pack[sel];
-    case SPAIN:     return (u8 *)es_pack[sel]; // Añado Esto
+    case SPAIN:     return (u8 *)es_pack[sel];
 
     default:        return NULL;
   }
