@@ -745,6 +745,8 @@ void Encode_SetUnicode(uint8_t unicode)
 
 CHAR_INFO getCharacterInfo(const u8 *ch)
 {
+  u32 startCodePoint;
+  u32 bitMapStartAddr;
   CHAR_INFO info = {.bytes = 0};
     
   if(ch == NULL || *ch == 0) return info;
@@ -783,45 +785,59 @@ CHAR_INFO getCharacterInfo(const u8 *ch)
   if(info.codePoint >= 0x20 && info.codePoint <= 0x7E)
   {
     info.bitWidth = 1;
-    info.bitMapAddr = BYTE_ASCII_ADDR + (info.codePoint - 0x20) * (BYTE_HEIGHT * BYTE_WIDTH / 8);  
+    bitMapStartAddr = BYTE_ASCII_ADDR;
+    startCodePoint = 0x20;
   }
   // CJK(Chinese, Japanese, Korean) encoder in unicode
   else if(info.codePoint >= 0x4E00 && info.codePoint <= 0x9FA5)
   {
     info.bitWidth = 2;
-    info.bitMapAddr = WORD_CJK_ADDR + (info.codePoint - 0x4E00) * (BYTE_HEIGHT * BYTE_WIDTH * 2 / 8);  
+    bitMapStartAddr = WORD_CJK_ADDR;
+    startCodePoint = 0x4E00;
   }
   // Cyrillic code, from 'Ѐ' to 'ё'
   else if(info.codePoint >= 0x400 && info.codePoint <= 0x451)
   {
     info.bitWidth = 1;
-    info.bitMapAddr = BYTE_CYRILLIC_ADDR + (info.codePoint - 0x400) * (BYTE_HEIGHT * BYTE_WIDTH / 8);  
+    bitMapStartAddr = BYTE_CYRILLIC_ADDR;
+    startCodePoint = 0x400;
   }
   // Japanese:Hiragana & Katakana
   else if(info.codePoint >= 0x3040 && info.codePoint <= 0x30FF)
   {
     info.bitWidth = 2;
-    info.bitMapAddr = WORD_JAPANESE_ADDR + (info.codePoint - 0x3040) * (BYTE_HEIGHT * BYTE_WIDTH * 2 / 8);  
+    bitMapStartAddr = WORD_JAPANESE_ADDR;
+    startCodePoint = 0x3040;
   }
   // Armenian
   else if(info.codePoint >= 0x530 && info.codePoint <= 0x58F)
   {
     info.bitWidth = 1;
-    info.bitMapAddr = BYTE_ARMENIAN_ADDR + (info.codePoint - 0x530) * (BYTE_HEIGHT * BYTE_WIDTH / 8);  
+    bitMapStartAddr = BYTE_ARMENIAN_ADDR;
+    startCodePoint = 0x530;
   }
   // Latin 1 Supplement, Extended-A&B
   else if(info.codePoint >= 0x80 && info.codePoint <= 0x24F)
   {
     info.bitWidth = 1;
-    info.bitMapAddr = BYTE_LATIN_ADDR + (info.codePoint - 0x80) * (BYTE_HEIGHT * BYTE_WIDTH / 8);  
+    bitMapStartAddr = BYTE_LATIN_ADDR;
+    startCodePoint = 0x80;
   }
   // Korean(Hangul Syllables)
   else if(info.codePoint >= 0xAC00 && info.codePoint <= 0xD7AF)
   {
     info.bitWidth = 2;
-    info.bitMapAddr = WORD_KOREAN_ADDR + (info.codePoint - 0xAC00) * (BYTE_HEIGHT * BYTE_WIDTH * 2 / 8);  
+    bitMapStartAddr = WORD_KOREAN_ADDR;
+    startCodePoint = 0xAC00;
   }
-  else info.bitWidth = 1;
+  else
+  {    
+    info.bitWidth = 1;
+    bitMapStartAddr = BYTE_ASCII_ADDR;
+    startCodePoint = 0x20;
+    info.codePoint = '?'; // unknow character
+  }
+  info.bitMapAddr = bitMapStartAddr + (info.codePoint - startCodePoint) * (BYTE_HEIGHT * BYTE_WIDTH * info.bitWidth / 8);  
 
   return info;
 }
