@@ -7,6 +7,7 @@
 #include "language_de.h"
 #include "language_am.h"
 #include "language_cz.h"
+#include "language_es.h"
 
 const char *const en_pack[LABEL_NUM]={
   EN_LANGUAGE,
@@ -743,6 +744,112 @@ const char *const cz_pack[LABEL_NUM]={
   CZ_FILAMENT_RUNOUT
 };
 
+const char *const es_pack[LABEL_NUM]={
+  ES_LANGUAGE,
+  ES_HEAT,
+  ES_MOVE,
+  ES_HOME,
+  ES_PRINT,
+  ES_EXTRUDE,
+  ES_FAN,
+  ES_SETTINGS,
+  ES_LEVELING,
+  ES_POINT_1,
+  ES_POINT_2,
+  ES_POINT_3,
+  ES_POINT_4,
+  ES_ABL,
+  ES_INC,
+  ES_DEC,
+  ES_NOZZLE,
+  ES_BED,
+  ES_STOP,
+  ES_BACK,
+  ES_PAGE_UP,
+  ES_PAGE_DOWN,
+  ES_PAUSE,
+  ES_RESUME,
+  ES_LOAD,
+  ES_UNLOAD,
+  ES_SLOW_SPEED,
+  ES_NORMAL_SPEED,
+  ES_FAST_SPEED,
+  ES_FAN_FULL_SPEED,
+  ES_FAN_HALF_SPEED,
+  ES_ROTATE_UI,
+  ES_TOUCHSCREEN_ADJUST,
+  ES_MORESETTING,
+  ES_SCREEN_INFO,
+  ES_WHITE,
+  ES_BLACK,
+  ES_BLUE,
+  ES_RED,
+  ES_GREEN,
+  ES_CYAN,
+  ES_YELLOW,
+  ES_BROWN,
+  ES_GRAY,
+  ES_DISCONNECT,
+  ES_BAUDRATE_115200,
+  ES_BAUDRATE_250000,
+  ES_RUNOUT_OFF,
+  ES_RUNOUT_ON,
+  ES_PERCENTAGE,
+  ES_BABYSTEP,
+  ES_PERCENTAGE_SPEED,
+  ES_PERCENTAGE_FLOW,
+  ES_VALUE_ZERO,
+  ES_1_DEGREE,
+  ES_5_DEGREE,
+  ES_10_DEGREE,
+  ES_X_INC,
+  ES_Y_INC,
+  ES_Z_INC,
+  ES_X_DEC,
+  ES_Y_DEC,
+  ES_Z_DEC,
+  ES_X_HOME,
+  ES_Y_HOME,
+  ES_Z_HOME,
+  ES_001_MM,
+  ES_01_MM,
+  ES_1_MM,
+  ES_5_MM,
+  ES_10_MM,
+  ES_1_PERCENT,
+  ES_5_PERCENT,
+  ES_10_PERCENT,
+
+  ES_READY,
+  ES_PRINTING,
+  ES_BUSY,
+  ES_UNCONNECTED,
+  ES_DISCONNECT_INFO,
+  ES_LOADING,
+  ES_POWER_FAILED,
+  ES_CONTINUE,
+  ES_CANNEL,
+  ES_ADJUST_TITLE,
+  ES_ADJUST_INFO,
+  ES_ADJUST_OK,
+  ES_ADJUST_FAILED,
+  ES_WARNING,
+  ES_STOP_PRINT,
+  ES_CONFIRM,
+  ES_TFTSD,
+  ES_READ_TFTSD_ERROR,
+  ES_TFTSD_INSERTED,
+  ES_TFTSD_REMOVED,
+  ES_U_DISK,
+  ES_READ_U_DISK_ERROR,
+  ES_U_DISK_INSERTED,
+  ES_U_DISK_REMOVED,
+  ES_ONBOARDSD,
+  ES_READ_ONBOARDSD_ERROR,
+  ES_FILAMENT_RUNOUT
+};
+
+
 bool isCzech(const u8 *const str)
 {
   if(str[0] == 0xC3 && str[1] >= 0x81 && str[1] <=0xBD)
@@ -804,8 +911,8 @@ u8 * textSelect(u8 sel)
     case GERMAN:    return (u8 *)de_pack[sel];
 //    case ARMENIAN:  return (u8 *)am_pack[sel];
     case CZECH:     return (u8 *)cz_pack[sel];
-    default:        return NULL;					 
+    case SPAIN:     return (u8 *)es_pack[sel];
+
+    default:        return NULL;
   }
 }
-
-
