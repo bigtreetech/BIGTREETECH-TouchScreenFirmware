@@ -18,6 +18,7 @@ const char iconBmpName[][20]={
 "Rotate", "Language", "TP_Adjust", "moresetting", "About", "bgcolor", "fontcolor", "Disconnect", "BaudRate",
 "Percentage", "BabyStep", "Mmm_001", "OnBoardSD", "OnTFTSD", "U_Disk", "Runout",
 "Point_1", "Point_2", "Point_3", "Point_4", "marlin", "bigtree", "gcode",
+"Home_Move", "Heat_Fan","ManualLevel", "CoolDown"
 }; 
 
 u8 scanUpdateFile(void)

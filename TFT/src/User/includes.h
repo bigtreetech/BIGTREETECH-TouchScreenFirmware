@@ -73,6 +73,9 @@
 #include "Popup.h"
 #include "Mode.h"
 
+#include "UnifiedMove.h"
+#include "UnifiedHeat.h"
+
 //address in spiflash W25Qxx
 #define LOGO_ADDR               0x0
 #define ICON_ADDR(num)          ((num)*0x5000+0x4B000)
@@ -172,7 +175,10 @@ enum
   ICON_MARLIN,
   ICON_BIGTREE,
   ICON_GCODE,
-  ICON_ABL,
+  ICON_HOME_MOVE,
+  ICON_HEAT_FAN,
+  ICON_MANUAL_LEVEL,
+  ICON_COOLDOWN,
 //  ICON_RESERVE
 };
 
