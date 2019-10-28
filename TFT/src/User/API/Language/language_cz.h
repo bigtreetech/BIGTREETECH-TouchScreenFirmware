@@ -107,5 +107,8 @@
     #define CZ_READ_ONBOARDSD_ERROR "Chyba při čtení Onboard SD!"
 
     #define CZ_FILAMENT_RUNOUT      "Došel filament!"
-
+    #define CZ_UNIFIEDMOVE         "Movement"
+    #define CZ_GCODE               "Send Code"
+    #define CZ_UNIFIEDHEAT         "Heat&Fan"
+    #define CZ_COOLDOWN            "Cool Down"
 #endif

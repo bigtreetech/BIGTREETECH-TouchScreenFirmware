@@ -55,9 +55,9 @@
     #define DE_PERCENTAGE_SPEED     "Speed"
     #define DE_PERCENTAGE_FLOW      "Flow"    
     #define DE_VALUE_ZERO           "Null"
-    #define DE_1_DEGREE             "1¡æ"
-    #define DE_5_DEGREE             "5¡æ"
-    #define DE_10_DEGREE            "10¡æ"
+    #define DE_1_DEGREE             "1ï¿½ï¿½"
+    #define DE_5_DEGREE             "5ï¿½ï¿½"
+    #define DE_10_DEGREE            "10ï¿½ï¿½"
     #define DE_X_INC                "X+"
     #define DE_Y_INC                "Y+"
     #define DE_Z_INC                "Z+"
@@ -108,5 +108,8 @@
     #define DE_READ_ONBOARDSD_ERROR "Read Onboard SD card error!"
     
     #define DE_FILAMENT_RUNOUT      "filament runout!"
-
+    #define DE_UNIFIEDMOVE         "Movement"
+    #define DE_GCODE               "Send Code"
+    #define DE_UNIFIEDHEAT         "Heat&Fan"
+    #define DE_COOLDOWN            "Cool Down"
 #endif
