@@ -191,5 +191,6 @@ void scanUpdates(void)
     {
       updateIcon();
     }
+    if ((result & FONT) || (result & BMP)) f_rename(ROOT_DIR, ROOT_DIR".CUR");
   }
 }
