@@ -71,6 +71,14 @@ update the icons from alternate icon folder
 */
 #define ALTERNATIVE_MOVE_MENU
 
+/* 
+Enable Unified Move Menu
+Move, Home, Extrude, ABL at one Place and bring Gcode Menu and 
+*/
+#define UNIFIED_MENU
+
+
+
 /**
  * 12864 Mode Background & Font Color Options
  * Current color options from lcd.h: BLACK, BLUE, BROWN, BRRED, CYAN, GBLUE, GRAY, GREEN, MAGENTA, RED, WHITE, YELLOW

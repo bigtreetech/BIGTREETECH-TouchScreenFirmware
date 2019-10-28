@@ -10,7 +10,12 @@ LABEL_LEVELING,
   {ICON_POINT_3,              LABEL_POINT_3},
   {ICON_POINT_4,              LABEL_POINT_4},
   #ifdef AUTO_BED_LEVELING
-    {ICON_LEVELING,             LABEL_ABL},
+    #ifndef UNIFIED_MENU //if Unified menu is selected
+
+    {ICON_ABL,             LABEL_ABL},
+    #else
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    #endif
   #else
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
   #endif
@@ -53,10 +58,12 @@ void menuLeveling(void)
       case KEY_ICON_3: moveToLevelingPoint(3); break;
       
       #ifdef AUTO_BED_LEVELING
-      case KEY_ICON_4:
+        #ifndef UNIFIED_MENU //if Unified menu is not selected then ABL will be visible in leveling menu
+        case KEY_ICON_4:
         storeCmd("G28\n");
         storeCmd("G29\n");
         break;
+        #endif
       #endif
       
       case KEY_ICON_7:

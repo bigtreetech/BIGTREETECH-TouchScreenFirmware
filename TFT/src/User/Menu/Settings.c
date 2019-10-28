@@ -56,10 +56,14 @@ MENUITEMS moresettingsItems = {
 // title
 LABEL_SETTINGS,
 // icon                       label
- {{ICON_SCREEN_INFO,          LABEL_SCREEN_INFO},
-  {ICON_BKCOLOR,              LABEL_BACKGROUND},
+ {{ICON_BKCOLOR,              LABEL_BACKGROUND},
   {ICON_FONTCOLOR,            LABEL_BACKGROUND},
-  {ICON_GCODE,                LABEL_BACKGROUND},
+  {ICON_ROTATE_UI,            LABEL_ROTATE_UI},
+  #ifndef UNIFIED_MENU
+  {ICON_TOUCHSCREEN_ADJUST,   LABEL_TOUCHSCREEN_ADJUST},
+  #else
+  {ICON_BACKGROUND,           LABEL_BACKGROUND},
+  #endif
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
@@ -106,7 +110,7 @@ void moremenuSettings(void)
     if(infoSettings.bg_color == item_color[i])
     {
       item_bgcolor_i = i;
-      moresettingsItems.items[KEY_ICON_1] = itemBGcolor[item_bgcolor_i];
+      moresettingsItems.items[KEY_ICON_0] = itemBGcolor[item_bgcolor_i];
     }
   }
   
@@ -115,7 +119,7 @@ void moremenuSettings(void)
     if(infoSettings.font_color == item_color[i])
     {
       item_fontcolor_i = i;
-      moresettingsItems.items[KEY_ICON_2] = itemFontcolor[item_fontcolor_i];
+      moresettingsItems.items[KEY_ICON_1] = itemFontcolor[item_fontcolor_i];
     }
   }
   
@@ -127,26 +131,32 @@ void moremenuSettings(void)
     switch(key_num)
     {
       case KEY_ICON_0:
-        infoMenu.menu[++infoMenu.cur] = menuInfo;
-        break;
-      
-      case KEY_ICON_1:
         item_bgcolor_i = (item_bgcolor_i + 1) % ITEM_color_NUM;                
         moresettingsItems.items[key_num] = itemBGcolor[item_bgcolor_i];
         menuDrawItem(&moresettingsItems.items[key_num], key_num);
         infoSettings.bg_color = item_color[item_bgcolor_i];
         break;
       
-      case KEY_ICON_2:
+      case KEY_ICON_1:
         item_fontcolor_i = (item_fontcolor_i + 1) % ITEM_color_NUM;                
         moresettingsItems.items[key_num] = itemFontcolor[item_fontcolor_i];
         menuDrawItem(&moresettingsItems.items[key_num], key_num);
         infoSettings.font_color = item_color[item_fontcolor_i];
         break;
       
-      case KEY_ICON_3:
-        infoMenu.menu[++infoMenu.cur] = menuSendGcode;
+      case KEY_ICON_2:
+        infoSettings.rotate_ui = !infoSettings.rotate_ui;
+        LCD_RefreshDirection();
+        TSC_Calibration();
+        menuDrawPage(&moresettingsItems);        
         break;
+
+      #ifndef UNIFIED_MENU
+      case KEY_ICON_3:
+        TSC_Calibration();
+        menuDrawPage(&moresettingsItems);
+        break;
+      #endif
       
       case KEY_ICON_7:
         infoMenu.cur--;
@@ -169,13 +179,17 @@ MENUITEMS settingsItems = {
 // title
 LABEL_SETTINGS,
 // icon                       label
- {{ICON_ROTATE_UI,            LABEL_ROTATE_UI},
+ {{ICON_DISCONNECT,           LABEL_DISCONNECT},
   {ICON_LANGUAGE,             LABEL_LANGUAGE},
+  {ICON_BACKGROUND,           LABEL_BACKGROUND},
+  {ICON_BACKGROUND,           LABEL_BACKGROUND},
+  {ICON_SCREEN_INFO,          LABEL_SCREEN_INFO},
+  #ifdef UNIFIED_MENU
   {ICON_TOUCHSCREEN_ADJUST,   LABEL_TOUCHSCREEN_ADJUST},
+  #else
+  {ICON_GCODE,                LABEL_GCODE},
+  #endif
   {ICON_MORESETTING,          LABEL_MORESETTING},
-  {ICON_DISCONNECT,           LABEL_DISCONNECT},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_BACK,                 LABEL_BACK},}
 };
 
@@ -208,7 +222,7 @@ void menuSettings(void)
     if(infoSettings.baudrate == item_baudrate[i])
     {
       item_baudrate_i = i;
-      settingsItems.items[KEY_ICON_5] = itemBaudrate[item_baudrate_i];
+      settingsItems.items[KEY_ICON_2] = itemBaudrate[item_baudrate_i];
     }
   }
   #ifdef FIL_RUNOUT_PIN
@@ -217,7 +231,7 @@ void menuSettings(void)
     if(infoSettings.runout == item_runout[i])
     {
       item_runout_i = i;
-      settingsItems.items[KEY_ICON_6] = itemRunout[item_runout_i];
+      settingsItems.items[KEY_ICON_3] = itemRunout[item_runout_i];
     }
   }
   #endif
@@ -229,10 +243,7 @@ void menuSettings(void)
     switch(key_num)
     {
       case KEY_ICON_0:
-        infoSettings.rotate_ui = !infoSettings.rotate_ui;
-        LCD_RefreshDirection();
-        TSC_Calibration();
-        menuDrawPage(&settingsItems);        
+        infoMenu.menu[++infoMenu.cur] = menuDisconnect;
         break;
       
       case KEY_ICON_1: 
@@ -241,32 +252,42 @@ void menuSettings(void)
         break;
       
       case KEY_ICON_2:
-        TSC_Calibration();
-        menuDrawPage(&settingsItems);
-        break;
-      
-      case KEY_ICON_3:
-        infoMenu.menu[++infoMenu.cur] = moremenuSettings;
-        break;
-      case KEY_ICON_4:
-        infoMenu.menu[++infoMenu.cur] = menuDisconnect;
-        break;
-      
-      case KEY_ICON_5:
         item_baudrate_i = (item_baudrate_i + 1) % ITEM_BAUDRATE_NUM;                
         settingsItems.items[key_num] = itemBaudrate[item_baudrate_i];
         menuDrawItem(&settingsItems.items[key_num], key_num);
         infoSettings.baudrate = item_baudrate[item_baudrate_i];
         Serial_Config(infoSettings.baudrate);
         break;
+      
       #ifdef FIL_RUNOUT_PIN
-      case KEY_ICON_6:
+      case KEY_ICON_3:
         item_runout_i = (item_runout_i + 1) % ITEM_RUNOUT_NUM;                
         settingsItems.items[key_num] = itemRunout[item_runout_i];
         menuDrawItem(&settingsItems.items[key_num], key_num);
         infoSettings.runout = item_runout[item_runout_i];
         break;
       #endif
+
+      case KEY_ICON_4:
+        infoMenu.menu[++infoMenu.cur] = menuInfo;
+        break;
+      
+      #ifdef UNIFIED_MENU
+        case KEY_ICON_5:
+        TSC_Calibration();
+        menuDrawPage(&settingsItems);
+        break;
+
+      #else
+        case KEY_ICON_5:
+        infoMenu.menu[++infoMenu.cur] = menuSendGcode;
+        break;
+
+      #endif
+        case KEY_ICON_6:
+        infoMenu.menu[++infoMenu.cur] = moremenuSettings;
+        break;
+     
       case KEY_ICON_7:
         infoMenu.cur--;
         break;
