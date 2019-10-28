@@ -76,7 +76,9 @@ void normalNameDisp(GUI_RECT *rect, u8 *name)
   x_offset=((NAME_SPACE - (len * BYTE_WIDTH)) >> 1);	
   GUI_ClearRect(rect->x0, rect->y0, rect->x1, rect->y1);
   GUI_SetRange(rect->x0+x_offset, rect->y0, rect->x0+x_offset+len*BYTE_WIDTH, rect->y0+BYTE_HEIGHT);
+  Encode_SetUnicode(0); //fatfs is ANSI/OEM(CP936) encode, not unicode
   GUI_DispLenString(rect->x0+x_offset, rect->y0, (u8 *)name, 0, len);
+  Encode_SetUnicode(1); //reset unicode mode after display gcode name
   GUI_CancelRange();
 }
 
@@ -134,8 +136,10 @@ void menuPrintFromSource(void)
 
   while(infoMenu.menu[infoMenu.cur] == menuPrintFromSource)
   {
+    Encode_SetUnicode(0); //fatfs is ANSI/OEM(CP936) encode, not unicode
     Scroll_DispString(&titleScroll,1,LEFT);    //
     Scroll_DispString(&gcodeScroll,1,CENTER);  //
+    Encode_SetUnicode(1); //reset unicode mode after display gcode name
 
     key_num = menuKeyGetValue();
 

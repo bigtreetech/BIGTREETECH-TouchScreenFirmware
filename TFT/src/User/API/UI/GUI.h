@@ -30,8 +30,8 @@ void LCD_SetWindow(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey);
 
 void GUI_SetColor(uint16_t color);
 void GUI_SetBkColor(uint16_t bkcolor);
-uint16_t  GUI_GetColor(void);
-uint16_t  GUI_GetBkColor(void);
+uint16_t GUI_GetColor(void);
+uint16_t GUI_GetBkColor(void);
 void GUI_Clear(uint16_t color);
 void GUI_DrawPoint(uint16_t x, uint16_t y);
 void GUI_FillRect(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey);

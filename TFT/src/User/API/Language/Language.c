@@ -85,7 +85,6 @@ const char *const en_pack[LABEL_NUM]={
   EN_10_PERCENT,
 
   EN_READY,
-  EN_PRINTING,
   EN_BUSY,
   EN_UNCONNECTED,
   EN_DISCONNECT_INFO,
@@ -190,7 +189,6 @@ const char *const cn_pack[LABEL_NUM]={
   CN_10_PERCENT,
 
   CN_READY,
-  CN_PRINTING,
   CN_BUSY,
   CN_UNCONNECTED,
   CN_DISCONNECT_INFO,
@@ -295,7 +293,6 @@ const char *const ru_pack[LABEL_NUM]={
   RU_10_PERCENT,
 
   RU_READY,
-  RU_PRINTING,
   RU_BUSY,
   RU_UNCONNECTED,
   RU_DISCONNECT_INFO,
@@ -400,7 +397,6 @@ const char *const jp_pack[LABEL_NUM]={
   JP_10_PERCENT,
 
   JP_READY,
-  JP_PRINTING,
   JP_BUSY,
   JP_UNCONNECTED,
   JP_DISCONNECT_INFO,
@@ -505,7 +501,6 @@ const char *const am_pack[LABEL_NUM]={
   AM_10_PERCENT,
 
   AM_READY,
-  AM_PRINTING,
   AM_BUSY,
   AM_UNCONNECTED,
   AM_DISCONNECT_INFO,
@@ -610,7 +605,6 @@ const char *const de_pack[LABEL_NUM]={
   DE_10_PERCENT,
 
   DE_READY,
-  DE_PRINTING,
   DE_BUSY,
   DE_UNCONNECTED,
   DE_DISCONNECT_INFO,
@@ -715,7 +709,6 @@ const char *const cz_pack[LABEL_NUM]={
   CZ_10_PERCENT,
 
   CZ_READY,
-  CZ_PRINTING,
   CZ_BUSY,
   CZ_UNCONNECTED,
   CZ_DISCONNECT_INFO,
@@ -743,52 +736,106 @@ const char *const cz_pack[LABEL_NUM]={
   CZ_FILAMENT_RUNOUT
 };
 
-bool isCzech(const u8 *const str)
+uint8_t isUnicode = 1;
+
+void Encode_SetUnicode(uint8_t unicode)
 {
-  if(str[0] == 0xC3 && str[1] >= 0x81 && str[1] <=0xBD)
-    return true;
-  if(str[0] == 0xC4 && str[1] >= 0x8C && str[1] <=0x9B)
-    return true;
-  if(str[0] == 0xC5 && str[1] >= 0x87 && str[1] <=0xBE)
-    return true;
-  return false;
+  isUnicode = unicode;
 }
 
-bool isRussia(const u8 *const str)
+CHAR_INFO getCharacterInfo(const u8 *ch)
 {
-  if(str[0]==0xA7)
+  CHAR_INFO info = {.bytes = 0};
+    
+  if(ch == NULL || *ch == 0) return info;
+     
+  if(isUnicode) // parse utf-8 encode
   {
-    if(str[1]>=0xA1&&str[1]<=0xF1)
-    return true;
+    u8 bytes = 0; 
+    u8 utfFlg = 0x80;
+    while ((ch[0] & utfFlg) == utfFlg)
+    {
+      utfFlg |= (utfFlg >> 1);
+      bytes++;
+    }
+    // bytes == 0 means 1 byte, ASCII, 0XXX XXXX
+    info.bytes = bytes ? bytes : 1;
+    info.codePoint = ch[0] & (~utfFlg);
+    for (u8 i = 1; i < bytes; i++)
+    {
+      info.codePoint = (info.codePoint << 6) | (ch[i] & 0x3F);
+    }
   }
-  return false;
-}
-
-bool isArmenian(const u8 *const str)
-{
-  if(str[0]==0xA1)
+  else // parse ANSI/OEM(CP936) encode
   {
-    if(str[1]>=0x40&&str[1]<=0x8B)
-    return true;
+    if(*ch < 0x7F)
+    {
+      info.codePoint = *ch;
+      info.bytes = 1;
+    }
+    else
+    {
+      info.codePoint = ff_convert((*ch << 8) | (*(ch + 1)), 1);
+      info.bytes = 2;
+    }
   }
-  return false;
+  // Visible ASCII code, from ' ' to '~'
+  if(info.codePoint >= 0x20 && info.codePoint <= 0x7E)
+  {
+    info.bitWidth = 1;
+    info.bitMapAddr = BYTE_ASCII_ADDR + (info.codePoint - 0x20) * (BYTE_HEIGHT * BYTE_WIDTH / 8);  
+  }
+  // CJK(Chinese, Japanese, Korean) encoder in unicode
+  else if(info.codePoint >= 0x4E00 && info.codePoint <= 0x9FA5)
+  {
+    info.bitWidth = 2;
+    info.bitMapAddr = WORD_CJK_ADDR + (info.codePoint - 0x4E00) * (BYTE_HEIGHT * BYTE_WIDTH * 2 / 8);  
+  }
+  // Cyrillic code, from 'Ѐ' to 'ё'
+  else if(info.codePoint >= 0x400 && info.codePoint <= 0x451)
+  {
+    info.bitWidth = 1;
+    info.bitMapAddr = BYTE_CYRILLIC_ADDR + (info.codePoint - 0x400) * (BYTE_HEIGHT * BYTE_WIDTH / 8);  
+  }
+  // Japanese:Hiragana & Katakana
+  else if(info.codePoint >= 0x3040 && info.codePoint <= 0x30FF)
+  {
+    info.bitWidth = 2;
+    info.bitMapAddr = WORD_JAPANESE_ADDR + (info.codePoint - 0x3040) * (BYTE_HEIGHT * BYTE_WIDTH * 2 / 8);  
+  }
+  // Armenian
+  else if(info.codePoint >= 0x530 && info.codePoint <= 0x58F)
+  {
+    info.bitWidth = 1;
+    info.bitMapAddr = BYTE_ARMENIAN_ADDR + (info.codePoint - 0x530) * (BYTE_HEIGHT * BYTE_WIDTH / 8);  
+  }
+  // Latin 1 Supplement, Extended-A&B
+  else if(info.codePoint >= 0x80 && info.codePoint <= 0x24F)
+  {
+    info.bitWidth = 1;
+    info.bitMapAddr = BYTE_LATIN_ADDR + (info.codePoint - 0x80) * (BYTE_HEIGHT * BYTE_WIDTH / 8);  
+  }
+  // Korean(Hangul Syllables)
+  else if(info.codePoint >= 0xAC00 && info.codePoint <= 0xD7AF)
+  {
+    info.bitWidth = 2;
+    info.bitMapAddr = WORD_KOREAN_ADDR + (info.codePoint - 0xAC00) * (BYTE_HEIGHT * BYTE_WIDTH * 2 / 8);  
+  }
+  else info.bitWidth = 1;
+
+  return info;
 }
 
+// parse UTF-8 char display bit width
 u16 my_strlen(const u8 *const str)
 {
   u16 i=0,len=0;
 
   while(str[i])
   {
-    if(isRussia(str+i) || isArmenian(str+i))
-    {
-      i+=2;
-    }
-    else
-    {
-      i++;
-    }
-    len++;
+    CHAR_INFO info = getCharacterInfo(str + i);
+    i += info.bytes;
+    len += info.bitWidth;
   }
   return len;
 }
@@ -799,10 +846,10 @@ u8 * textSelect(u8 sel)
   {
     case ENGLISH:   return (u8 *)en_pack[sel];
     case CHINESE:   return (u8 *)cn_pack[sel];
-//    case RUSSIAN:   return (u8 *)ru_pack[sel];
+    case RUSSIAN:   return (u8 *)ru_pack[sel];
     case JAPANESE:  return (u8 *)jp_pack[sel];
+    case ARMENIAN:  return (u8 *)am_pack[sel];
     case GERMAN:    return (u8 *)de_pack[sel];
-//    case ARMENIAN:  return (u8 *)am_pack[sel];
     case CZECH:     return (u8 *)cz_pack[sel];
     default:        return NULL;					 
   }

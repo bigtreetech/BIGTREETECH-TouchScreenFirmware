@@ -73,16 +73,6 @@
 #include "Popup.h"
 #include "Mode.h"
 
-//address in spiflash W25Qxx
-#define LOGO_ADDR               0x0
-#define ICON_ADDR(num)          ((num)*0x5000+0x4B000)
-
-#define BYTE_ADDR               0x200000
-#define WORD_ADDR               0x300000
-
-#define UNI2OEM_ADDR            0x600000
-#define OEM2UNI_ADDR            0x700000
-
 
 #define MAX_MENU_DEPTH 10       // max sub menu depth
 typedef void (*FP_MENU)(void); 

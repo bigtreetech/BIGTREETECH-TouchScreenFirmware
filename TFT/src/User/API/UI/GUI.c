@@ -464,32 +464,19 @@ void  GUI_FillCircle(uint16_t x0, uint16_t y0, uint16_t r)
   }
 }
 
-//ɨ�跽ʽ: ���ϵ��¡�������
-//0xA7A1-0xA7C1  0xA7D1-0xA7F1 66�������ַ�
-//0xA140-0xA18B  76�����������ַ�
+//
 void GUI_DispChar(int16_t sx, int16_t sy, const uint16_t ch, uint8_t mode)
-{  		
-  uint8_t   x = 0, 
-            y = 0, 
-            j = 0, 
-            i = 0;
-  uint8_t   font[(BYTE_HEIGHT * BYTE_WIDTH / 8)];
-  uint32_t  offset = 0;
-  uint32_t  temp = 0;
+{
+  uint8_t x = 0, 
+          y = 0, 
+          j = 0, 
+          i = 0;
+  uint16_t bitMapSize = (BYTE_HEIGHT * BYTE_WIDTH / 8);
+  uint8_t  font[bitMapSize];
+  uint32_t addrOffset = (ch - 0x20) * bitMapSize;
+  uint32_t temp = 0;
 
-  if(ch < 0xFF)  //ASCII�ַ�
-  {
-    offset = ch * (BYTE_HEIGHT * BYTE_WIDTH / 8);	
-  }
-  else if(ch >= 0xA7A1 && ch <= 0xA7F1)  //�����ַ�
-  {
-    offset = (ch-0xA7A1+127) * (BYTE_HEIGHT * BYTE_WIDTH / 8);
-  }
-  else if(ch >= 0xA140 && ch <= 0xA18B)  //���������ַ�
-  {
-    offset = (ch-0xA140+208) * (BYTE_HEIGHT * BYTE_WIDTH / 8);
-  }	  
-  W25Qxx_ReadBuffer(font, offset+BYTE_ADDR, (BYTE_HEIGHT * BYTE_WIDTH / 8));
+  W25Qxx_ReadBuffer(font, addrOffset + BYTE_ASCII_ADDR, bitMapSize);
   for(x=0; x < BYTE_WIDTH; x++)
   {   
     for(j=0; j < (BYTE_HEIGHT + 8-1)/8; j++)
@@ -510,24 +497,23 @@ void GUI_DispChar(int16_t sx, int16_t sy, const uint16_t ch, uint8_t mode)
   }
 }
 
-void GUI_DispHz(int16_t sx, int16_t sy, const uint8_t *hz, uint8_t mode)
-{
-  uint8_t     x = 0, 
-              y = 0, 
-              j = 0, 
-              i = 0;
-  uint8_t     font[(BYTE_HEIGHT * BYTE_WIDTH*2 / 8)];
-  uint32_t    offset = 0;					//GBK Encode
-  uint32_t    temp = 0;
+//
+CHAR_INFO GUI_DispOne(int16_t sx, int16_t sy, const uint8_t *p, uint8_t mode)
+{  
+  CHAR_INFO info = getCharacterInfo(p);  
+  if(info.bytes == 0) return info;
+  
+  uint8_t x = 0, 
+          y = 0, 
+          j = 0, 
+          i = 0;
+  uint16_t bitMapSize = (BYTE_HEIGHT * BYTE_WIDTH * info.bitWidth / 8);
+  uint8_t  font[bitMapSize];
+  uint32_t temp = 0;
 
-  if(hz[1]<0x7F) 
-    offset=(190*(hz[0]-0x81)+hz[1]-0x40) * (BYTE_HEIGHT * BYTE_WIDTH*2 / 8);
-  else 
-    offset=(190*(hz[0]-0x81)+hz[1]-0x41) * (BYTE_HEIGHT * BYTE_WIDTH*2 / 8);
+  W25Qxx_ReadBuffer(font, info.bitMapAddr, bitMapSize);
 
-  W25Qxx_ReadBuffer(font, offset+WORD_ADDR, (BYTE_HEIGHT * BYTE_WIDTH*2 / 8));
-
-  for(x=0; x < BYTE_WIDTH*2; x++)
+  for(x=0; x < BYTE_WIDTH*info.bitWidth; x++)
   {           
     for(j=0; j < (BYTE_HEIGHT + 8-1)/8; j++)
     {
@@ -538,82 +524,38 @@ void GUI_DispHz(int16_t sx, int16_t sy, const uint8_t *hz, uint8_t mode)
     for(y=0;y < BYTE_HEIGHT;y++)
     {			    
       if(temp & (1<<(BYTE_HEIGHT-1)))
-        GUI_DrawPixel(sx,sy+y,COLOR);
+        GUI_DrawPixel(sx, sy+y, COLOR);
       else if(mode!=0)
-        GUI_DrawPixel(sx,sy+y,BKCOLOR);
-      temp<<=1;
+        GUI_DrawPixel(sx, sy+y, BKCOLOR);
+      temp <<= 1;
     } 
     sx++;
-  }  	  
-}
-
-//����ֵ��4λ��p��ƫ������*p<0x81 ʱ���ǵ��ֽڱ��룬pÿ�ε�ƫ����Ϊ1. 
-//                                    ������˫�ֽڱ��룬pÿ��ƫ����Ϊ2��
-//      ��4λ��x����ƫ������ASCII�ַ��������ַ������������ַ� �������Ϊ BYTE_WIDTH
-//                          �������ġ����� �������Ϊ 2��BYTE_WIDTH
-uint8_t GUI_DispOne(int16_t x, int16_t y, const uint8_t *p, uint8_t mode)
-{
-  if(p==NULL || *p==0) return 0;
-
-  if(*p<0x81)
-  {			
-    GUI_DispChar(x,y,*p,mode);
-    return ((1<<4) | (1<<0));
   }
-  else
-  {
-    if(isRussia(p) || isArmenian(p))
-    {
-      GUI_DispChar(x, y,(p[0]<<8)|p[1],mode);
-      return ((2<<4) | (1<<0));
-    }
-    else if (isCzech(p))
-    {
-      switch(p[0])
-      {
-        case 0xC3:
-          GUI_DispChar(x, y,p[1],mode);
-          break;
-        case 0xC4:
-          GUI_DispChar(x,y,p[1]+10,mode);
-          break;
-        case 0xC5:
-          GUI_DispChar(x,y,p[1]+10,mode);
-          break;
-        default:
-          GUI_DispChar(x,y,'?',mode);
-      }
-      return ((2<<4) | (1<<0));
-    }
-    else
-    {
-      GUI_DispHz(x,y,p,mode);
-      return ((2<<4) | (2<<0));
-    }
-  }
+  return info;  
 }    
 const uint8_t* GUI_DispString(int16_t x, int16_t y, const uint8_t *p, uint8_t mode)
-{     
-  uint8_t res = 0;    
+{
+  CHAR_INFO info;
   while(1)
   {   
-    res= GUI_DispOne(x, y, p, mode);
-    if(res == 0) return p;
-    x += (res&0x0F) * BYTE_WIDTH; //res����λ��x����ƫ��
-    p += (res&0xF0)>>4;           //res����λ��pƫ����
+    info = GUI_DispOne(x, y, p, mode);
+    if(info.bytes == 0) return p;
+    x += info.bitWidth * BYTE_WIDTH;
+    p += info.bytes;
   }
 }
 
 const uint8_t* GUI_DispLenString(int16_t x, int16_t y, const uint8_t *p, uint8_t mode, uint8_t len)
 {       
-  uint8_t res = 0, nlen = 0;
+  uint8_t nlen = 0;
+  CHAR_INFO info;
   while(nlen < len)
   {   
-    res= GUI_DispOne(x, y, p, mode);
-    if(res == 0) return p;
-    x += (res&0x0F) * BYTE_WIDTH; //res����λ��x����ƫ��
-    nlen += (res&0x0F);
-    p += (res&0xF0)>>4;           //res����λ��pƫ����
+    info = GUI_DispOne(x, y, p, mode);
+    if(info.bytes == 0) return p;
+    x += info.bitWidth * BYTE_WIDTH;
+    nlen += info.bitWidth;
+    p += info.bytes;
   }
   return p;
 }
@@ -857,28 +799,18 @@ void Scroll_DispString(SCROLL * para,uint8_t mode,uint8_t align)
       GUI_SetRange(para->rect->x0, para->rect->y0, para->rect->x1, para->rect->y1);
       if(para->index < para->len_size)
       {
+        CHAR_INFO info = getCharacterInfo(&para->text[para->index]);
         para->off_head++;
-        if((uint8_t)para->text[para->index]<0x81)
-        {
-          if(para->off_head==BYTE_WIDTH) {para->index++; para->off_head=0;}
-        }
-        else if( isRussia(&para->text[para->index]) || isArmenian(&para->text[para->index]) )
-        {
-          if(para->off_head==BYTE_WIDTH) {para->index += 2; para->off_head=0;}      
-        }
-        else
-        {
-          if(para->off_head==BYTE_WIDTH*2) {para->index += 2; para->off_head=0;}      
-        }
-
+        if(para->off_head == BYTE_WIDTH * info.bitWidth) {para->index += info.bytes; para->off_head=0;}
+        
         GUI_DispLenString(para->rect->x0 - para->off_head, para->rect->y0 ,&para->text[para->index],mode,para->len_max+4);
 
-        for(i=para->rect->y0;i<para->rect->y1;i++)					//�����β
+        for(i=para->rect->y0;i<para->rect->y1;i++)
         {
           GUI_DrawPixel(para->rect->x0 - para->off_head + (min(para->len_size - para->index, para->len_max + 4) * BYTE_WIDTH), i, BKCOLOR);
         }
       }      
-      if(para->len_size - para->index < para->len_max-4)  //��β����ĸ��ַ��ļ��
+      if(para->len_size - para->index < para->len_max-4)
       {
         para->off_tail++;
         GUI_DispLenString(para->rect->x1-para->off_tail,para->rect->y0,para->text,mode,(para->off_tail + BYTE_WIDTH - 1)/BYTE_WIDTH);
@@ -919,7 +851,7 @@ void Scroll_DispString(SCROLL * para,uint8_t mode,uint8_t align)
 }
 
 
-//���ư���
+//
 void GUI_DrawButton(const BUTTON *button, uint8_t pressed)
 {
   const uint16_t radius = button->radius;

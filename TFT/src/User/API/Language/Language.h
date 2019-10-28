@@ -9,14 +9,22 @@ enum
 {
   ENGLISH = 0,
   CHINESE,
-//  RUSSIAN,
+  RUSSIAN,
   JAPANESE,
+  ARMENIAN,
   GERMAN,
-//  ARMENIAN,
   CZECH,
   
   LANGUAGE_NUM,
 };
+
+typedef struct
+{
+  uint8_t bytes; // Number of bytes occupied by one character
+  uint8_t bitWidth; // The bit width of a character display
+  uint32_t codePoint; // Actual encoding index of characters
+  uint32_t bitMapAddr; // the address of font bitmap in w25qxx
+}CHAR_INFO;
 
 enum
 {
@@ -97,7 +105,6 @@ enum
   LABEL_10_PERCENT,
   
   LABEL_READY,
-  LABEL_PRINTING,
   LABEL_BUSY,
   LABEL_UNCONNECTED,
   LABEL_DISCONNECT_INFO,
@@ -129,10 +136,8 @@ enum
   LABEL_NUM,
 };
 
-
-bool isCzech(const u8 *const str);
-bool isRussia(const u8 *const str);
-bool isArmenian(const u8 *const str);
+void Encode_SetUnicode(uint8_t unicode);
+CHAR_INFO getCharacterInfo(const u8 *ch);
 u16 my_strlen(const u8 *const str);
 u8 * textSelect(u8 sel);
 
