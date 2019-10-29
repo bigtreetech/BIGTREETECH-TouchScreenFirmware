@@ -7,8 +7,7 @@ const GUI_RECT labelUpdateRect = {0,        (LCD_HEIGHT - ICON_HEIGHT)/2 + ICON_
                                  LCD_WIDTH, (LCD_HEIGHT - ICON_HEIGHT)/2 + ICON_HEIGHT + BYTE_HEIGHT};
 
 const char iconBmpName[][20]={
-"Heat", "Move", "Home", "Print", "Extrude", "Fan", "Settings", "Leveling",
-"Inc",  "Dec", "Nozzle", "Hotbed", "Temp_1", "Temp_5", "Temp_10", "Stop", "Back",
+"Heat", "Move", "Home", "Print", "Extrude", "Fan", "Settings", "Leveling", "BLTouchTest", "BLTouchDeploy", "BLTouchStow", "BLTouchRepeat", "ProbeOffset",
 "Inc_X", "Inc_Y", "Inc_Z", "Mmm_01", "Mmm_1", "Mmm_10", "Dec_X", "Dec_Y","Dec_Z",
 "Home_X", "Home_Y", "Home_Z",
 "Folder", "File", "Page_up", "Page_down",

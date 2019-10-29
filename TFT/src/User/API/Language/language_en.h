@@ -15,6 +15,11 @@
     #define EN_POINT_3              "Point 3"
     #define EN_POINT_4              "Point 4"
     #define EN_ABL                  "ABL"
+    #define EN_BLTOUCH_TEST         "Test",
+    #define EN_BLTOUCH_DEPLOY       "Deploy",
+    #define EN_BLTOUCH_STOW         "Stow",
+    #define EN_BLTOUCH_REPEAT       "Repeat test",
+    #define EN_PROBE_OFFSET         "Offset",
     #define EN_INC                  "Increase"
     #define EN_DEC                  "Decrease"
     #define EN_NOZZLE               "Nozzle"
@@ -55,9 +60,9 @@
     #define EN_PERCENTAGE_SPEED     "Speed"
     #define EN_PERCENTAGE_FLOW      "Flow"    
     #define EN_VALUE_ZERO           "Zero"
-    #define EN_1_DEGREE             "1¡æ"
-    #define EN_5_DEGREE             "5¡æ"
-    #define EN_10_DEGREE            "10¡æ"
+    #define EN_1_DEGREE             "1Â¡Ã¦"
+    #define EN_5_DEGREE             "5Â¡Ã¦"
+    #define EN_10_DEGREE            "10Â¡Ã¦"
     #define EN_X_INC                "X+"
     #define EN_Y_INC                "Y+"
     #define EN_Z_INC                "Z+"
