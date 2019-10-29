@@ -7,7 +7,8 @@ const GUI_RECT labelUpdateRect = {0,        (LCD_HEIGHT - ICON_HEIGHT)/2 + ICON_
                                  LCD_WIDTH, (LCD_HEIGHT - ICON_HEIGHT)/2 + ICON_HEIGHT + BYTE_HEIGHT};
 
 const char iconBmpName[][20]={
-"Heat", "Move", "Home", "Print", "Extrude", "Fan", "Settings", "Leveling", "BLTouchTest", "BLTouchDeploy", "BLTouchStow", "BLTouchRepeat", "ProbeOffset",
+"Heat", "Move", "Home", "Print", "Extrude", "Fan", "Settings", "Leveling",
+"Inc",  "Dec", "Nozzle", "Hotbed", "Temp_1", "Temp_5", "Temp_10", "Stop", "Back",
 "Inc_X", "Inc_Y", "Inc_Z", "Mmm_01", "Mmm_1", "Mmm_10", "Dec_X", "Dec_Y","Dec_Z",
 "Home_X", "Home_Y", "Home_Z",
 "Folder", "File", "Page_up", "Page_down",
@@ -16,7 +17,7 @@ const char iconBmpName[][20]={
 "Full", "Half",
 "Rotate", "Language", "TP_Adjust", "moresetting", "About", "bgcolor", "fontcolor", "Disconnect", "BaudRate",
 "Percentage", "BabyStep", "Mmm_001", "OnBoardSD", "OnTFTSD", "U_Disk", "Runout",
-"Point_1", "Point_2", "Point_3", "Point_4", "marlin", "bigtree", "gcode",
+"Point_1", "Point_2", "Point_3", "Point_4", "marlin", "bigtree", "gcode", "BLTouchDeploy", "BLTouchStow", "BLTouchTest", "BLTouchRepeat",
 }; 
 
 u8 scanUpdateFile(void)

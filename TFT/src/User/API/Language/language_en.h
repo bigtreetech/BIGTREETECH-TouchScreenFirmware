@@ -15,11 +15,11 @@
     #define EN_POINT_3              "Point 3"
     #define EN_POINT_4              "Point 4"
     #define EN_ABL                  "ABL"
-    #define EN_BLTOUCH_TEST         "Test",
-    #define EN_BLTOUCH_DEPLOY       "Deploy",
-    #define EN_BLTOUCH_STOW         "Stow",
-    #define EN_BLTOUCH_REPEAT       "Repeat test",
-    #define EN_PROBE_OFFSET         "Offset",
+    #define EN_BLTOUCH_TEST         "Test"
+    #define EN_BLTOUCH_DEPLOY       "Deploy"
+    #define EN_BLTOUCH_STOW         "Stow"
+    #define EN_BLTOUCH_REPEAT       "Repeat"
+    #define EN_PROBE_OFFSET         "Offset"
     #define EN_INC                  "Increase"
     #define EN_DEC                  "Decrease"
     #define EN_NOZZLE               "Nozzle"

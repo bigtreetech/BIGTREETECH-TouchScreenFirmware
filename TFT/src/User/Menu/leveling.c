@@ -59,16 +59,16 @@ void menuLeveling(void)
           storeCmd("G29\n");
           break;
         case KEY_ICON_1:
-          storeCmd("M280 P0 S10");
+          storeCmd("M280 P0 S10\n");
           break;
         case KEY_ICON_2:
-          storeCmd("M280 P0 S90");
+          storeCmd("M280 P0 S90\n");
           break;
         case KEY_ICON_3:
-          storeCmd("M280 P0 S120");
+          storeCmd("M280 P0 S120\n");
           break;
         case KEY_ICON_4:
-          storeCmd("M48");
+          storeCmd("M48\n");
           break;
       #else
         case KEY_ICON_0: moveToLevelingPoint(0); break;
