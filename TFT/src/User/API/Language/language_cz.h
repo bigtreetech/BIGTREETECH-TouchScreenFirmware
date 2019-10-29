@@ -2,8 +2,8 @@
 #define _LANGUAGE_CZ_H_
 
     #define CZ_LANGUAGE             "Čeština"
-    #define CZ_HEAT                 "Zahřát"
-    #define CZ_MOVE                 "Posunovat"
+    #define CZ_HEAT                 "Teplota"
+    #define CZ_MOVE                 "Posunout"
     #define CZ_HOME                 "Domů"
     #define CZ_PRINT                "Tisknout"
     #define CZ_EXTRUDE              "Filament"
@@ -34,7 +34,17 @@
     #define CZ_FAN_HALF_SPEED       "Poloviční"
     #define CZ_ROTATE_UI            "Otočit UI"
     #define CZ_TOUCHSCREEN_ADJUST   "Kalibr.TFT"
+    #define CZ_MORESETTING          "Další nastavení"
     #define CZ_SCREEN_INFO          "Info"
+    #define CZ_WHITE                "bílá"
+    #define CZ_BLACK                "černá"
+    #define CZ_BLUE                 "modrá"
+    #define CZ_RED                  "červená"
+    #define CZ_GREEN                "zelená"
+    #define CZ_CYAN                 "cyan"
+    #define CZ_YELLOW               "žlutá"
+    #define CZ_BROWN                "hnědá"
+    #define CZ_GRAY                 "šedá"
     #define CZ_DISCONNECT           "Odpojit"
     #define CZ_BAUDRATE_115200      "115200"
     #define CZ_BAUDRATE_250000      "250000"
@@ -83,23 +93,6 @@
     #define CZ_STOP_PRINT           "Zastavit tisk?"
     #define CZ_CONFIRM              "Potvrdit"
     
-    #define CZ_READY                "Ready"
-    #define CZ_PRINTING             "Probíhá tisk"
-    #define CZ_BUSY                 "Zpracovávám, čekejte prosím..."
-    #define CZ_UNCONNECTED          "Tiskárna není připojena!"
-    #define CZ_DISCONNECT_INFO      "Nyní můžete tiskárnu ovládat z počítače!"
-    #define CZ_LOADING              "Nahrávám..."
-    #define CZ_POWER_FAILED         "Obnovit tisk?"
-    #define CZ_CONTINUE             "Pokračovat"
-    #define CZ_CANNEL               "Zrušit"
-    #define CZ_ADJUST_TITLE         "Kalibrace dotykové obrazovky"
-    #define CZ_ADJUST_INFO          "Dotkněte se postupně všech bodů"
-    #define CZ_ADJUST_OK            "Kalibrace úspěšná"
-    #define CZ_ADJUST_FAILED        "Kalibrace selhala, zopakujte znovu"
-    #define CZ_WARNING              "Varování"
-    #define CZ_STOP_PRINT           "Zastavit tisk?"
-    #define CZ_CONFIRM              "Potvrdit"
-    
     #define CZ_TFTSD                "TFT SD"
     #define CZ_READ_TFTSD_ERROR     "Chyba při čtení SD karty!"
     #define CZ_TFTSD_INSERTED       "SD karta vložena!"
@@ -114,9 +107,9 @@
     #define CZ_READ_ONBOARDSD_ERROR "Chyba při čtení Onboard SD!"
 
     #define CZ_FILAMENT_RUNOUT      "Došel filament!"
-
     #define CZ_UNIFIEDMOVE         "Movement"
     #define CZ_GCODE               "Send Code"
     #define CZ_UNIFIEDHEAT         "Heat&Fan"
     #define CZ_COOLDOWN            "Cool Down"
+
 #endif
