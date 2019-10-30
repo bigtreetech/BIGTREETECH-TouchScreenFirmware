@@ -830,12 +830,13 @@ CHAR_INFO getCharacterInfo(const u8 *ch)
     bitMapStartAddr = WORD_KOREAN_ADDR;
     startCodePoint = 0xAC00;
   }
+  // unknow character
   else
   {    
     info.bitWidth = 1;
     bitMapStartAddr = BYTE_ASCII_ADDR;
     startCodePoint = 0x20;
-    info.codePoint = '?'; // unknow character
+    info.codePoint = '?';
   }
   info.bitMapAddr = bitMapStartAddr + (info.codePoint - startCodePoint) * (BYTE_HEIGHT * BYTE_WIDTH * info.bitWidth / 8);  
 
