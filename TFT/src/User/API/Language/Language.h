@@ -14,7 +14,8 @@ enum
   ARMENIAN,
   GERMAN,
   CZECH,
-  
+  SPAIN,  
+
   LANGUAGE_NUM,
 };
 
@@ -103,7 +104,7 @@ enum
   LABEL_1_PERCENT,
   LABEL_5_PERCENT,
   LABEL_10_PERCENT,
-  
+
   LABEL_READY,
   LABEL_BUSY,
   LABEL_UNCONNECTED,
@@ -119,7 +120,7 @@ enum
   LABEL_WARNING,
   LABEL_STOP_PRINT,
   LABEL_CONFIRM,
-  
+
   LABEL_TFTSD,
   LABEL_READ_TFTSD_ERROR,
   LABEL_TFTSD_INSERTED,
@@ -130,9 +131,9 @@ enum
   LABEL_U_DISK_REMOVED,
   LABEL_ONBOARDSD,
   LABEL_READ_ONBOARDSD_ERROR,
-  
+
   LABEL_FILAMENT_RUNOUT,
-  
+
   LABEL_NUM,
 };
 
@@ -142,4 +143,3 @@ u16 my_strlen(const u8 *const str);
 u8 * textSelect(u8 sel);
 
 #endif
-

@@ -5,18 +5,22 @@ const MENUITEMS levelingItems = {
 // title
 LABEL_LEVELING,
 // icon                       label
-  {{ICON_POINT_1,             LABEL_POINT_1},
-  {ICON_POINT_2,              LABEL_POINT_2},
-  {ICON_POINT_3,              LABEL_POINT_3},
-  {ICON_POINT_4,              LABEL_POINT_4},
+{
   #ifdef AUTO_BED_LEVELING
     {ICON_LEVELING,             LABEL_ABL},
-  #else
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+  #else
+    {ICON_POINT_1,              LABEL_POINT_1},
+    {ICON_POINT_2,              LABEL_POINT_2},
+    {ICON_POINT_3,              LABEL_POINT_3},
+    {ICON_POINT_4,              LABEL_POINT_4},
   #endif
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACK,                 LABEL_BACK},}
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_BACK,                 LABEL_BACK},}
 };
 
 void moveToLevelingPoint(u8 point)
@@ -47,16 +51,16 @@ void menuLeveling(void)
     key_num = menuKeyGetValue();
     switch(key_num)
     {
-      case KEY_ICON_0: moveToLevelingPoint(0); break;
-      case KEY_ICON_1: moveToLevelingPoint(1); break;
-      case KEY_ICON_2: moveToLevelingPoint(2); break;
-      case KEY_ICON_3: moveToLevelingPoint(3); break;
-      
       #ifdef AUTO_BED_LEVELING
-      case KEY_ICON_4:
+      case KEY_ICON_0:
         storeCmd("G28\n");
         storeCmd("G29\n");
         break;
+      #else
+        case KEY_ICON_0: moveToLevelingPoint(0); break;
+        case KEY_ICON_1: moveToLevelingPoint(1); break;
+        case KEY_ICON_2: moveToLevelingPoint(2); break;
+        case KEY_ICON_3: moveToLevelingPoint(3); break;
       #endif
       
       case KEY_ICON_7:

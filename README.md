@@ -35,5 +35,5 @@ The structure of the files in SD Card should be as follows
 
 - the **.bin** file is the firmware of BIGTREETECH TFT24, this file needs to be updated every time for update function
 - the **TFT24** folder contains the icons and fonts
-  - icons: If you want to customize icons, see [here](https://github.com/bigtreetech/BIGTREETECH-TFT35-V1.2/blob/master/TFT%2035%20screen%20customize.pdf), and update the folder by SD Card (don't need update every time)
+  - icons: If you want to customize icons, see [here](https://github.com/bigtreetech/BIGTREETECH-TFT35-V1.2/blob/master/TFT35%20screen%20customize.pdf), and update the folder by SD Card (don't need update every time)
   - fonts: this is a bitmap fonts of ASCII and GBK. The font is Song typeface (don't need update every time)
