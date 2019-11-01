@@ -33,7 +33,7 @@ void menuUnifiedHeat(void)
         for(i = BED; i < HEATER_NUM; i++)
         {
           if(i == BED){storeCmd("M140 S0\n");}
-          else{storeCmd("M104 T%d S0\n",i);}   
+          else{storeCmd("M104 T%d S0\n",(i-1));}   
         }
       }
       break;
