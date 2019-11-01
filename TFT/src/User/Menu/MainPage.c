@@ -12,7 +12,7 @@ LABEL_READY,
   {ICON_EXTRUDE,              LABEL_EXTRUDE},
   {ICON_PRINT,                LABEL_PRINT},
   {ICON_GCODE,                LABEL_GCODE},
-  {ICON_STOP,                 LABEL_STOP},
+  {ICON_STOP,                 LABEL_EMERGENCYSTOP},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_SETTINGS,             LABEL_SETTINGS},}
   #else
@@ -45,14 +45,20 @@ void menuMain(void)
       case KEY_ICON_3: infoMenu.menu[++infoMenu.cur] = menuPrint;           break;
       case KEY_ICON_4: infoMenu.menu[++infoMenu.cur] = menuSendGcode;       break;
       case KEY_ICON_5: { 
+        /*
         int i;
         for(i = BED; i < HEATER_NUM; i++)
         {
             if(i == BED){storeCmd("M140 S0\n");} // disable bed heater
-            else{storeCmd("M104 T%d S0\n",i);}   // disable all hotend heaters
+            else{storeCmd("M104 T%d S0\n",(i-1));}   // disable all hotend heaters
         }
-        storeCmd("M18\n",i);  //disable all stepper motors
-        storeCmd("M107\n",i); //disable cooling fan
+        storeCmd("M18\n");  //disable all stepper motors
+        storeCmd("M107\n"); //disable cooling fan
+        */
+        storeCmd("M112\n"); //Emergency Stop : Used for emergency stopping, A reset is required to return to operational mode.
+                            // it may need to wait for a space to open up in the command queue.
+                            // Enable EMERGENCY_PARSER in Marlin Firmware for an instantaneous M112 command.
+
          }
         break;
       
