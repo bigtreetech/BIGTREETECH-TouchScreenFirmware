@@ -12,7 +12,7 @@ LABEL_LEVELING,
     {ICON_BLTOUCH_STOW,            LABEL_BLTOUCH_STOW},
     {ICON_BLTOUCH_TEST,            LABEL_BLTOUCH_TEST},
     {ICON_BLTOUCH_REPEAT,          LABEL_BLTOUCH_REPEAT},
-    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_PROBE_OFFSET,            LABEL_PROBE_OFFSET},
   #else
     {ICON_POINT_1,                 LABEL_POINT_1},
     {ICON_POINT_2,                 LABEL_POINT_2},
@@ -69,6 +69,10 @@ void menuLeveling(void)
           break;
         case KEY_ICON_4:
           storeCmd("M48\n");
+          break;
+        case KEY_ICON_5:
+          storeCmd("M851\n");
+          infoMenu.menu[++infoMenu.cur] = menuProbeOffset;
           break;
       #else
         case KEY_ICON_0: moveToLevelingPoint(0); break;

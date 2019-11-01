@@ -20,6 +20,7 @@
     #define FR_BLTOUCH_STOW         "Stow"
     #define FR_BLTOUCH_REPEAT       "Repeat"
     #define FR_PROBE_OFFSET         "Offset"
+    #define FR_EEPROM_SAVE          "Save"
     #define FR_INC                  "Plus"
     #define FR_DEC                  "Moins"
     #define FR_NOZZLE               "Tete"

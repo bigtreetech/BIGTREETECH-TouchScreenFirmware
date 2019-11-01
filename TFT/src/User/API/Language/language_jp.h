@@ -20,6 +20,7 @@
     #define JP_BLTOUCH_STOW         "Stow"
     #define JP_BLTOUCH_REPEAT       "Repeat"
     #define JP_PROBE_OFFSET         "Offset"
+    #define JP_EEPROM_SAVE          "Save"
     #define JP_INC                  "����"
     #define JP_DEC                  "�p��"
     #define JP_NOZZLE               "�Υ���"

@@ -20,6 +20,7 @@
     #define EN_BLTOUCH_STOW         "Stow"
     #define EN_BLTOUCH_REPEAT       "Repeat"
     #define EN_PROBE_OFFSET         "Offset"
+    #define EN_EEPROM_SAVE          "Save"
     #define EN_INC                  "Increase"
     #define EN_DEC                  "Decrease"
     #define EN_NOZZLE               "Nozzle"

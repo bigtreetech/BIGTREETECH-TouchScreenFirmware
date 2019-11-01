@@ -20,6 +20,7 @@
     #define AM_BLTOUCH_STOW         "Stow"
     #define AM_BLTOUCH_REPEAT       "Repeat"
     #define AM_PROBE_OFFSET         "Offset"
+    #define AM_EEPROM_SAVE          "Save"
     #define AM_INC                  "Increase"
     #define AM_DEC                  "Decrease"
     #define AM_NOZZLE               "Nozzle"

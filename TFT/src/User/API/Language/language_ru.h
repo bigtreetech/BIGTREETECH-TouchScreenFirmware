@@ -20,6 +20,7 @@
     #define RU_BLTOUCH_STOW         "Stow"
     #define RU_BLTOUCH_REPEAT       "Repeat"
     #define RU_PROBE_OFFSET         "Offset"
+    #define RU_EEPROM_SAVE          "Save"
     #define RU_INC                  "���ӧ֧ݧڧ�ڧ��"
     #define RU_DEC                  "���ާ֧ߧ��ڧ��"
     #define RU_NOZZLE               "�����ݧ�"

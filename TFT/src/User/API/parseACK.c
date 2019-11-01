@@ -142,6 +142,18 @@ startParse:
       heatSetCurrentTemp(BED,ack_value()+0.5);
       heatSetTargetTemp(BED, ack_second_value()+0.5);
     }
+    else if(ack_seen("Mean:"))
+    {
+      popupReminder((u8* )"Repeatability Test", (u8 *)ack_rev_buf + ack_index-5);
+      //popupReminder((u8* )"Standard Deviation", (u8 *)&infoCmd.queue[infoCmd.index_r].gcode[5]);
+    }
+    else if(ack_seen("Probe Offset"))
+    {
+      if(ack_seen("Z"))
+      {
+        setCurrentOffset(ack_value());
+      }
+    }
     else if(ack_seen(echomagic) && ack_seen(busymagic) && ack_seen("processing"))
     {
       busyIndicator(STATUS_BUSY);

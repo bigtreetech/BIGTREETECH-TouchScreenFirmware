@@ -20,6 +20,7 @@
     #define CN_BLTOUCH_STOW         "Stow"
     #define CN_BLTOUCH_REPEAT       "Repeat"
     #define CN_PROBE_OFFSET         "Offset"
+    #define CN_EEPROM_SAVE          "Save"
     #define CN_INC                  "����"
     #define CN_DEC                  "����"
     #define CN_NOZZLE               "��ͷ"
