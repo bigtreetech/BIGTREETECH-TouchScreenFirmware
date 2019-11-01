@@ -113,4 +113,5 @@
     #define AM_GCODE               "Send Code"
     #define AM_UNIFIEDHEAT         "Heat&Fan"
     #define AM_COOLDOWN            "Cool Down"
+    #define AM_EMERGENCYSTOP       "EM. STOP"
 #endif

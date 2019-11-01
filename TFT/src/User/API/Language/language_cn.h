@@ -111,4 +111,5 @@
     #define CN_GCODE               "Send Code"
     #define CN_UNIFIEDHEAT         "Heat&Fan"
     #define CN_COOLDOWN            "Cool Down"
+    #define CN_EMERGENCYSTOP       "EM. STOP"
 #endif

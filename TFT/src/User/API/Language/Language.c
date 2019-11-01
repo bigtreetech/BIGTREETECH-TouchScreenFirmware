@@ -116,6 +116,7 @@ const char *const en_pack[LABEL_NUM]={
   EN_GCODE,
   EN_UNIFIEDHEAT,
   EN_COOLDOWN,
+  EN_EMERGENCYSTOP,
 };
 
 const char *const cn_pack[LABEL_NUM]={
@@ -226,6 +227,7 @@ const char *const cn_pack[LABEL_NUM]={
   CN_GCODE,
   CN_UNIFIEDHEAT,
   CN_COOLDOWN,
+  CN_EMERGENCYSTOP,
 };
 
 const char *const ru_pack[LABEL_NUM]={
@@ -335,6 +337,7 @@ const char *const ru_pack[LABEL_NUM]={
   RU_GCODE,
   RU_UNIFIEDHEAT,
   RU_COOLDOWN,
+  RU_EMERGENCYSTOP,
 };
 
 const char *const jp_pack[LABEL_NUM]={
@@ -444,6 +447,7 @@ const char *const jp_pack[LABEL_NUM]={
   JP_GCODE,
   JP_UNIFIEDHEAT,
   JP_COOLDOWN,
+  JP_EMERGENCYSTOP,
 };
 
 const char *const am_pack[LABEL_NUM]={
@@ -553,6 +557,7 @@ const char *const am_pack[LABEL_NUM]={
   AM_GCODE,
   AM_UNIFIEDHEAT,
   AM_COOLDOWN,
+  AM_EMERGENCYSTOP,
 };
 
 const char *const de_pack[LABEL_NUM]={
@@ -662,6 +667,7 @@ const char *const de_pack[LABEL_NUM]={
   DE_GCODE,
   DE_UNIFIEDHEAT,
   DE_COOLDOWN,
+  DE_EMERGENCYSTOP,
 };
 
 const char *const cz_pack[LABEL_NUM]={
@@ -771,6 +777,7 @@ const char *const cz_pack[LABEL_NUM]={
   CZ_GCODE,
   CZ_UNIFIEDHEAT,
   CZ_COOLDOWN,
+  CZ_EMERGENCYSTOP,
 };
 
 bool isCzech(const u8 *const str)

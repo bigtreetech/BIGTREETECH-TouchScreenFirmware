@@ -112,4 +112,5 @@
     #define DE_GCODE               "Send Code"
     #define DE_UNIFIEDHEAT         "Heat&Fan"
     #define DE_COOLDOWN            "Cool Down"
+    #define DE_EMERGENCYSTOP       "EM. STOP"
 #endif

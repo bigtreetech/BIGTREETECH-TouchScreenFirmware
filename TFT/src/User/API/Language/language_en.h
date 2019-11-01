@@ -111,4 +111,5 @@
     #define EN_GCODE                "Send Code"
     #define EN_UNIFIEDHEAT         "Heat/Fan"
     #define EN_COOLDOWN            "Cool Down"
+    #define EN_EMERGENCYSTOP       "EM. STOP"
 #endif

@@ -111,4 +111,5 @@
     #define RU_GCODE               "Send Code"
     #define RU_UNIFIEDHEAT         "Heat&Fan"
     #define RU_COOLDOWN            "Cool Down"
+    #define RU_EMERGENCYSTOP       "EM. STOP"
 #endif

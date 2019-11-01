@@ -111,5 +111,6 @@
     #define CZ_GCODE               "Send Code"
     #define CZ_UNIFIEDHEAT         "Heat&Fan"
     #define CZ_COOLDOWN            "Cool Down"
+    #define CZ_EMERGENCYSTOP       "EM. STOP"
 
 #endif

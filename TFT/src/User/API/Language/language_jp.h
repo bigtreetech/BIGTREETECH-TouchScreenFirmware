@@ -111,4 +111,5 @@
     #define JP_GCODE               "Send Code"
     #define JP_UNIFIEDHEAT         "Heat&Fan"
     #define JP_COOLDOWN            "Cool Down"
+    #define JP_EMERGENCYSTOP       "EM. STOP"
 #endif
