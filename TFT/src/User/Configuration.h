@@ -79,7 +79,7 @@
 // Show BTT bootscreen when starting up
 #define SHOW_BTT_BOOTSCREEN
 
-// Text displayed at the top of the LCD in 12864 mode
+// Text displayed at the top of the LCD in 12864 mode. Comment out to disable.
 #define ST7920_BANNER_TEXT "LCD12864 Simulator"
 
 // Make the simulator run fullscreen, Not recommended for TFT24
