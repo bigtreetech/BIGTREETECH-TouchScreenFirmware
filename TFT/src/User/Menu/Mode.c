@@ -69,12 +69,21 @@ u32 select_mode [SELECTMODE]={
 #if LCD_ENCODER_SUPPORT
 void menuMode(void)
 {  
-  RADIO modeRadio = {
-    {(u8*)"Serial Touch Screen", (u8*)ST7920_BANNER_TEXT, (u8*)"LCD2004 Simulator"},
-    SIMULATOR_XSTART, SIMULATOR_YSTART,
-    BYTE_HEIGHT*2, 2,
-    0
-  };
+  #if defined(ST7920_BANNER_TEXT)
+    RADIO modeRadio = {
+      {(u8*)"Serial Touch Screen", (u8*)ST7920_BANNER_TEXT, (u8*)"LCD2004 Simulator"},
+      SIMULATOR_XSTART, SIMULATOR_YSTART,
+      BYTE_HEIGHT*2, 2,
+      0
+      };
+  #else
+    RADIO modeRadio = {
+      {(u8*)"Serial Touch Screen", (u8*)"12864 Simulator", (u8*)"LCD2004 Simulator"},
+      SIMULATOR_XSTART, SIMULATOR_YSTART,
+      BYTE_HEIGHT*2, 2,
+      0
+      };
+  #endif
   
   MKEY_VALUES  key_num = MKEY_IDLE;
   MODEselect = 1;
