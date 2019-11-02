@@ -17,7 +17,7 @@ const char iconBmpName[][20]={
 "Full", "Half",
 "Rotate", "Language", "TP_Adjust", "moresetting", "About", "bgcolor", "fontcolor", "Disconnect", "BaudRate",
 "Percentage", "BabyStep", "Mmm_001", "OnBoardSD", "OnTFTSD", "U_Disk", "Runout",
-"Point_1", "Point_2", "Point_3", "Point_4", "marlin", "bigtree", "gcode",
+"Point_1", "Point_2", "Point_3", "Point_4", "marlin", "bigtree", "gcode", "BLTouchDeploy", "BLTouchStow", "BLTouchTest", "BLTouchRepeat", "ProbeOffset", "EEPROMSave",
 }; 
 
 u8 scanUpdateFile(void)
