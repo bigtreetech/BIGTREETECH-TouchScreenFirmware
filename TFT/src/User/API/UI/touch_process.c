@@ -431,6 +431,8 @@ static BUZZER buzzer;
 /*  */
 void openBuzzer(u16 h_us, u16 l_us)   
 {
+  if(infoSettings.silent) return;
+  
   buzzer.h_us = h_us;
   buzzer.l_us = l_us;
   if( h_us == 80 )

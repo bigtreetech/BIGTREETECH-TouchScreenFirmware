@@ -99,5 +99,25 @@
  * This function is suitable for Delta Printer.
  */
 //#define HOME_BEFORE_PLR
+
+// Prevent extrusion if the temperature is below this temperature
+#define PREVENT_COLD_EXTRUSION_MINTEMP 170
+  
+#define EXTRUDE_STEPS  100.0f
+  
+#define CUSTOM_0_LABEL "Custom0"
+#define CUSTOM_0_GCODE "M105\n"
+#define CUSTOM_1_LABEL "Custom1"
+#define CUSTOM_1_GCODE "M105\n"
+#define CUSTOM_2_LABEL "Custom2"
+#define CUSTOM_2_GCODE "M105\n"
+#define CUSTOM_3_LABEL "Custom3"
+#define CUSTOM_3_GCODE "M105\n"
+#define CUSTOM_4_LABEL "Custom4"
+#define CUSTOM_4_GCODE "M105\n"
+#define CUSTOM_5_LABEL "Custom5"
+#define CUSTOM_5_GCODE "M105\n"
+#define CUSTOM_6_LABEL "Custom6"
+#define CUSTOM_6_GCODE "M105\n"
   
 #endif
