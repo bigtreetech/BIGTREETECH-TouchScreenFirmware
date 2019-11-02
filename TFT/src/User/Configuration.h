@@ -63,7 +63,11 @@
   
 //Filament run out detect
 #define FIL_RUNOUT_INVERTING true  // Set to false to invert the logic of the sensor.
-#define FIL_NOISE_THRESHOLD  5     // 5*10 = 50ms,  Pause print when filament runout is detected for 50ms.
+#define FIL_NOISE_THRESHOLD  10     // 10*10 = 100ms,  Pause print when filament runout is detected for 100ms.
+
+// Smart filament detecter
+// This option to use an encoder disc that toggles the runout pin as the filament moves
+#define FILAMENT_RUNOUT_DISTANCE_MM 7
 
 /* 
 Enable alternative Move Menu Buttons Layout for easy
@@ -89,7 +93,7 @@ Move, Home, Extrude, ABL at one Place and bring Gcode Menu and
 // Show BTT bootscreen when starting up
 #define SHOW_BTT_BOOTSCREEN
 
-// Text displayed at the top of the LCD in 12864 mode
+// Text displayed at the top of the LCD in 12864 mode. Comment out to disable.
 #define ST7920_BANNER_TEXT "LCD12864 Simulator"
 
 // Make the simulator run fullscreen, Not recommended for TFT24

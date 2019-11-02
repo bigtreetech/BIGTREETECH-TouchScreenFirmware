@@ -3,6 +3,7 @@
 
 #include "stdint.h"
 #include "stdbool.h"
+#include "ff.h"
 
 #define FOLDER_NUM   255
 #define FILE_NUM     255
@@ -16,13 +17,13 @@ typedef enum {
 
 typedef struct 
 {
-	char title[MAX_PATH_LEN];			    //路锟斤拷锟筋长锟斤拷锟斤拷锟斤拷1024锟街斤拷
-	char *folder[FOLDER_NUM];				//锟斤拷锟�255锟斤拷锟侥硷拷锟斤拷
-	char *file[FILE_NUM];					//锟斤拷锟�255锟斤拷锟侥硷拷
-	uint16_t F_num;
-	uint16_t f_num;
-	uint16_t cur_page;					    //锟斤拷前锟斤拷示锟侥第硷拷页
-	FS_SOURCE source;						//The source of the file. TFT SD or ONBOARD SD.
+	TCHAR title[MAX_PATH_LEN]; // max path depth
+	TCHAR *folder[FOLDER_NUM]; // folder name buffer
+	TCHAR *file[FILE_NUM]; // file name buffer
+	uint16_t F_num; // current folder number
+	uint16_t f_num; // current gcode file number
+	uint16_t cur_page; // current display page index (5 files per page)
+	FS_SOURCE source; //The source of the file. TFT SD or ONBOARD SD.
 }MYFILE;	
 
 extern MYFILE  infoFile;
@@ -30,7 +31,7 @@ extern MYFILE  infoFile;
 bool mountFS(void);
 bool scanPrintFiles(void); 
 
-char* getCurFileSource(void);
+TCHAR* getCurFileSource(void);
 void clearInfoFile(void);
 void resetInfoFile(void);
 bool EnterDir(char *nextdir);

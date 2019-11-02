@@ -7,6 +7,8 @@
 #include "language_de.h"
 #include "language_am.h"
 #include "language_cz.h"
+#include "language_es.h"
+#include "language_fr.h"
 
 const char *const en_pack[LABEL_NUM]={
   EN_LANGUAGE,
@@ -23,6 +25,12 @@ const char *const en_pack[LABEL_NUM]={
   EN_POINT_3,
   EN_POINT_4,
   EN_ABL,
+  EN_BLTOUCH_TEST,
+  EN_BLTOUCH_DEPLOY,
+  EN_BLTOUCH_STOW,
+  EN_BLTOUCH_REPEAT,
+  EN_PROBE_OFFSET,
+  EN_EEPROM_SAVE,
   EN_INC,
   EN_DEC,
   EN_NOZZLE,
@@ -58,6 +66,7 @@ const char *const en_pack[LABEL_NUM]={
   EN_BAUDRATE_250000,
   EN_RUNOUT_OFF,
   EN_RUNOUT_ON,
+  EN_SMART_RUNOUT_ON,
   EN_PERCENTAGE,
   EN_BABYSTEP,
   EN_PERCENTAGE_SPEED,
@@ -85,7 +94,6 @@ const char *const en_pack[LABEL_NUM]={
   EN_10_PERCENT,
 
   EN_READY,
-  EN_PRINTING,
   EN_BUSY,
   EN_UNCONNECTED,
   EN_DISCONNECT_INFO,
@@ -134,6 +142,12 @@ const char *const cn_pack[LABEL_NUM]={
   CN_POINT_3,
   CN_POINT_4,
   CN_ABL,
+  CN_BLTOUCH_TEST,
+  CN_BLTOUCH_DEPLOY,
+  CN_BLTOUCH_STOW,
+  CN_BLTOUCH_REPEAT,
+  CN_PROBE_OFFSET,
+  CN_EEPROM_SAVE,
   CN_INC,
   CN_DEC,
   CN_NOZZLE,
@@ -169,6 +183,7 @@ const char *const cn_pack[LABEL_NUM]={
   CN_BAUDRATE_250000,
   CN_RUNOUT_OFF,
   CN_RUNOUT_ON,
+  CN_SMART_RUNOUT_ON,
   CN_PERCENTAGE,
   CN_BABYSTEP,
   CN_PERCENTAGE_SPEED,
@@ -196,7 +211,6 @@ const char *const cn_pack[LABEL_NUM]={
   CN_10_PERCENT,
 
   CN_READY,
-  CN_PRINTING,
   CN_BUSY,
   CN_UNCONNECTED,
   CN_DISCONNECT_INFO,
@@ -245,6 +259,12 @@ const char *const ru_pack[LABEL_NUM]={
   RU_POINT_3,
   RU_POINT_4,
   RU_ABL,
+  RU_BLTOUCH_TEST,
+  RU_BLTOUCH_DEPLOY,
+  RU_BLTOUCH_STOW,
+  RU_BLTOUCH_REPEAT,
+  RU_PROBE_OFFSET,
+  RU_EEPROM_SAVE,
   RU_INC,
   RU_DEC,
   RU_NOZZLE,
@@ -280,6 +300,7 @@ const char *const ru_pack[LABEL_NUM]={
   RU_BAUDRATE_250000,
   RU_RUNOUT_OFF,
   RU_RUNOUT_ON,
+  RU_SMART_RUNOUT_ON,
   RU_PERCENTAGE,
   RU_BABYSTEP,
   RU_PERCENTAGE_SPEED,
@@ -307,7 +328,6 @@ const char *const ru_pack[LABEL_NUM]={
   RU_10_PERCENT,
 
   RU_READY,
-  RU_PRINTING,
   RU_BUSY,
   RU_UNCONNECTED,
   RU_DISCONNECT_INFO,
@@ -333,6 +353,7 @@ const char *const ru_pack[LABEL_NUM]={
   RU_ONBOARDSD,
   RU_READ_ONBOARDSD_ERROR,
   RU_FILAMENT_RUNOUT,
+
   RU_UNIFIEDMOVE,
   RU_GCODE,
   RU_UNIFIEDHEAT,
@@ -355,6 +376,12 @@ const char *const jp_pack[LABEL_NUM]={
   JP_POINT_3,
   JP_POINT_4,
   JP_ABL,
+  JP_BLTOUCH_TEST,
+  JP_BLTOUCH_DEPLOY,
+  JP_BLTOUCH_STOW,
+  JP_BLTOUCH_REPEAT,
+  JP_PROBE_OFFSET,
+  JP_EEPROM_SAVE,
   JP_INC,
   JP_DEC,
   JP_NOZZLE,
@@ -390,6 +417,7 @@ const char *const jp_pack[LABEL_NUM]={
   JP_BAUDRATE_250000,
   JP_RUNOUT_OFF,
   JP_RUNOUT_ON,
+  JP_SMART_RUNOUT_ON,
   JP_PERCENTAGE,
   JP_BABYSTEP,
   JP_PERCENTAGE_SPEED,
@@ -417,7 +445,6 @@ const char *const jp_pack[LABEL_NUM]={
   JP_10_PERCENT,
 
   JP_READY,
-  JP_PRINTING,
   JP_BUSY,
   JP_UNCONNECTED,
   JP_DISCONNECT_INFO,
@@ -443,6 +470,7 @@ const char *const jp_pack[LABEL_NUM]={
   JP_ONBOARDSD,
   JP_READ_ONBOARDSD_ERROR,
   JP_FILAMENT_RUNOUT,
+
   JP_UNIFIEDMOVE,
   JP_GCODE,
   JP_UNIFIEDHEAT,
@@ -465,6 +493,12 @@ const char *const am_pack[LABEL_NUM]={
   AM_POINT_3,
   AM_POINT_4,
   AM_ABL,
+  AM_BLTOUCH_TEST,
+  AM_BLTOUCH_DEPLOY,
+  AM_BLTOUCH_STOW,
+  AM_BLTOUCH_REPEAT,
+  AM_PROBE_OFFSET,
+  AM_EEPROM_SAVE,
   AM_INC,
   AM_DEC,
   AM_NOZZLE,
@@ -500,6 +534,7 @@ const char *const am_pack[LABEL_NUM]={
   AM_BAUDRATE_250000,
   AM_RUNOUT_OFF,
   AM_RUNOUT_ON,
+  AM_SMART_RUNOUT_ON,
   AM_PERCENTAGE,
   AM_BABYSTEP,
   AM_PERCENTAGE_SPEED,
@@ -527,7 +562,6 @@ const char *const am_pack[LABEL_NUM]={
   AM_10_PERCENT,
 
   AM_READY,
-  AM_PRINTING,
   AM_BUSY,
   AM_UNCONNECTED,
   AM_DISCONNECT_INFO,
@@ -553,6 +587,7 @@ const char *const am_pack[LABEL_NUM]={
   AM_ONBOARDSD,
   AM_READ_ONBOARDSD_ERROR,
   AM_FILAMENT_RUNOUT,
+
   AM_UNIFIEDMOVE,
   AM_GCODE,
   AM_UNIFIEDHEAT,
@@ -575,6 +610,12 @@ const char *const de_pack[LABEL_NUM]={
   DE_POINT_3,
   DE_POINT_4,
   DE_ABL,
+  DE_BLTOUCH_TEST,
+  DE_BLTOUCH_DEPLOY,
+  DE_BLTOUCH_STOW,
+  DE_BLTOUCH_REPEAT,
+  DE_PROBE_OFFSET,
+  DE_EEPROM_SAVE,
   DE_INC,
   DE_DEC,
   DE_NOZZLE,
@@ -610,6 +651,7 @@ const char *const de_pack[LABEL_NUM]={
   DE_BAUDRATE_250000,
   DE_RUNOUT_OFF,
   DE_RUNOUT_ON,
+  DE_SMART_RUNOUT_ON,
   DE_PERCENTAGE,
   DE_BABYSTEP,
   DE_PERCENTAGE_SPEED,
@@ -637,7 +679,6 @@ const char *const de_pack[LABEL_NUM]={
   DE_10_PERCENT,
 
   DE_READY,
-  DE_PRINTING,
   DE_BUSY,
   DE_UNCONNECTED,
   DE_DISCONNECT_INFO,
@@ -663,6 +704,7 @@ const char *const de_pack[LABEL_NUM]={
   DE_ONBOARDSD,
   DE_READ_ONBOARDSD_ERROR,
   DE_FILAMENT_RUNOUT,
+
   DE_UNIFIEDMOVE,
   DE_GCODE,
   DE_UNIFIEDHEAT,
@@ -685,6 +727,12 @@ const char *const cz_pack[LABEL_NUM]={
   CZ_POINT_3,
   CZ_POINT_4,
   CZ_ABL,
+  CZ_BLTOUCH_TEST,
+  CZ_BLTOUCH_DEPLOY,
+  CZ_BLTOUCH_STOW,
+  CZ_BLTOUCH_REPEAT,
+  CZ_PROBE_OFFSET,
+  CZ_EEPROM_SAVE,
   CZ_INC,
   CZ_DEC,
   CZ_NOZZLE,
@@ -720,6 +768,7 @@ const char *const cz_pack[LABEL_NUM]={
   CZ_BAUDRATE_250000,
   CZ_RUNOUT_OFF,
   CZ_RUNOUT_ON,
+  CZ_SMART_RUNOUT_ON,
   CZ_PERCENTAGE,
   CZ_BABYSTEP,
   CZ_PERCENTAGE_SPEED,
@@ -747,7 +796,6 @@ const char *const cz_pack[LABEL_NUM]={
   CZ_10_PERCENT,
 
   CZ_READY,
-  CZ_PRINTING,
   CZ_BUSY,
   CZ_UNCONNECTED,
   CZ_DISCONNECT_INFO,
@@ -773,6 +821,7 @@ const char *const cz_pack[LABEL_NUM]={
   CZ_ONBOARDSD,
   CZ_READ_ONBOARDSD_ERROR,
   CZ_FILAMENT_RUNOUT,
+
   CZ_UNIFIEDMOVE,
   CZ_GCODE,
   CZ_UNIFIEDHEAT,
@@ -780,55 +829,233 @@ const char *const cz_pack[LABEL_NUM]={
   CZ_EMERGENCYSTOP,
 };
 
-bool isCzech(const u8 *const str)
-{
-  if(str[0] == 0xC3 && str[1] >= 0x81 && str[1] <=0xBD)
-    return true;
-  if(str[0] == 0xC4 && str[1] >= 0x8C && str[1] <=0x9B)
-    return true;
-  if(str[0] == 0xC5 && str[1] >= 0x87 && str[1] <=0xBE)
-    return true;
-  return false;
-}
+const char *const es_pack[LABEL_NUM]={
+  ES_LANGUAGE,
+  ES_HEAT,
+  ES_MOVE,
+  ES_HOME,
+  ES_PRINT,
+  ES_EXTRUDE,
+  ES_FAN,
+  ES_SETTINGS,
+  ES_LEVELING,
+  ES_POINT_1,
+  ES_POINT_2,
+  ES_POINT_3,
+  ES_POINT_4,
+  ES_ABL,
+  ES_BLTOUCH_TEST,
+  ES_BLTOUCH_DEPLOY,
+  ES_BLTOUCH_STOW,
+  ES_BLTOUCH_REPEAT,
+  ES_PROBE_OFFSET,
+  ES_EEPROM_SAVE,
+  ES_INC,
+  ES_DEC,
+  ES_NOZZLE,
+  ES_BED,
+  ES_STOP,
+  ES_BACK,
+  ES_PAGE_UP,
+  ES_PAGE_DOWN,
+  ES_PAUSE,
+  ES_RESUME,
+  ES_LOAD,
+  ES_UNLOAD,
+  ES_SLOW_SPEED,
+  ES_NORMAL_SPEED,
+  ES_FAST_SPEED,
+  ES_FAN_FULL_SPEED,
+  ES_FAN_HALF_SPEED,
+  ES_ROTATE_UI,
+  ES_TOUCHSCREEN_ADJUST,
+  ES_MORESETTING,
+  ES_SCREEN_INFO,
+  ES_WHITE,
+  ES_BLACK,
+  ES_BLUE,
+  ES_RED,
+  ES_GREEN,
+  ES_CYAN,
+  ES_YELLOW,
+  ES_BROWN,
+  ES_GRAY,
+  ES_DISCONNECT,
+  ES_BAUDRATE_115200,
+  ES_BAUDRATE_250000,
+  ES_RUNOUT_OFF,
+  ES_RUNOUT_ON,
+  ES_SMART_RUNOUT_ON,
+  ES_PERCENTAGE,
+  ES_BABYSTEP,
+  ES_PERCENTAGE_SPEED,
+  ES_PERCENTAGE_FLOW,
+  ES_VALUE_ZERO,
+  ES_1_DEGREE,
+  ES_5_DEGREE,
+  ES_10_DEGREE,
+  ES_X_INC,
+  ES_Y_INC,
+  ES_Z_INC,
+  ES_X_DEC,
+  ES_Y_DEC,
+  ES_Z_DEC,
+  ES_X_HOME,
+  ES_Y_HOME,
+  ES_Z_HOME,
+  ES_001_MM,
+  ES_01_MM,
+  ES_1_MM,
+  ES_5_MM,
+  ES_10_MM,
+  ES_1_PERCENT,
+  ES_5_PERCENT,
+  ES_10_PERCENT,
 
-bool isRussia(const u8 *const str)
-{
-  if(str[0]==0xA7)
-  {
-    if(str[1]>=0xA1&&str[1]<=0xF1)
-    return true;
-  }
-  return false;
-}
+  ES_READY,
+  ES_BUSY,
+  ES_UNCONNECTED,
+  ES_DISCONNECT_INFO,
+  ES_LOADING,
+  ES_POWER_FAILED,
+  ES_CONTINUE,
+  ES_CANNEL,
+  ES_ADJUST_TITLE,
+  ES_ADJUST_INFO,
+  ES_ADJUST_OK,
+  ES_ADJUST_FAILED,
+  ES_WARNING,
+  ES_STOP_PRINT,
+  ES_CONFIRM,
+  ES_TFTSD,
+  ES_READ_TFTSD_ERROR,
+  ES_TFTSD_INSERTED,
+  ES_TFTSD_REMOVED,
+  ES_U_DISK,
+  ES_READ_U_DISK_ERROR,
+  ES_U_DISK_INSERTED,
+  ES_U_DISK_REMOVED,
+  ES_ONBOARDSD,
+  ES_READ_ONBOARDSD_ERROR,
+  ES_FILAMENT_RUNOUT,
+  
+  ES_UNIFIEDMOVE,
+  ES_GCODE,
+  ES_UNIFIEDHEAT,
+  ES_COOLDOWN,
+  ES_EMERGENCYSTOP,
+};
 
-bool isArmenian(const u8 *const str)
-{
-  if(str[0]==0xA1)
-  {
-    if(str[1]>=0x40&&str[1]<=0x8B)
-    return true;
-  }
-  return false;
-}
+const char *const fr_pack[LABEL_NUM]={
+  FR_LANGUAGE,
+  FR_HEAT,
+  FR_MOVE,
+  FR_HOME,
+  FR_PRINT,
+  FR_EXTRUDE,
+  FR_FAN,
+  FR_SETTINGS,
+  FR_LEVELING,
+  FR_POINT_1,
+  FR_POINT_2,
+  FR_POINT_3,
+  FR_POINT_4,
+  FR_ABL,
+  FR_INC,
+  FR_DEC,
+  FR_NOZZLE,
+  FR_BED,
+  FR_STOP,
+  FR_BACK,
+  FR_PAGE_UP,
+  FR_PAGE_DOWN,
+  FR_PAUSE,
+  FR_RESUME,
+  FR_LOAD,
+  FR_UNLOAD,
+  FR_SLOW_SPEED,
+  FR_NORMAL_SPEED,
+  FR_FAST_SPEED,
+  FR_FAN_FULL_SPEED,
+  FR_FAN_HALF_SPEED,
+  FR_ROTATE_UI,
+  FR_TOUCHSCREFR_ADJUST,
+  FR_MORESETTING,
+  FR_SCREFR_INFO,
+  FR_WHITE,
+  FR_BLACK,
+  FR_BLUE,
+  FR_RED,
+  FR_GREEN,
+  FR_CYAN,
+  FR_YELLOW,
+  FR_BROWN,
+  FR_GRAY,
+  FR_DISCONNECT,
+  FR_BAUDRATE_115200,
+  FR_BAUDRATE_250000,
+  FR_RUNOUT_OFF,
+  FR_RUNOUT_ON,
+  FR_SMART_RUNOUT_ON,
+  FR_PERCENTAGE,
+  FR_BABYSTEP,
+  FR_PERCENTAGE_SPEED,
+  FR_PERCENTAGE_FLOW,
+  FR_VALUE_ZERO,
+  FR_1_DEGREE,
+  FR_5_DEGREE,
+  FR_10_DEGREE,
+  FR_X_INC,
+  FR_Y_INC,
+  FR_Z_INC,
+  FR_X_DEC,
+  FR_Y_DEC,
+  FR_Z_DEC,
+  FR_X_HOME,
+  FR_Y_HOME,
+  FR_Z_HOME,
+  FR_001_MM,
+  FR_01_MM,
+  FR_1_MM,
+  FR_5_MM,
+  FR_10_MM,
+  FR_1_PERCENT,
+  FR_5_PERCENT,
+  FR_10_PERCENT,
 
-u16 my_strlen(const u8 *const str)
-{
-  u16 i=0,len=0;
+  FR_READY,
+  FR_BUSY,
+  FR_UNCONNECTED,
+  FR_DISCONNECT_INFO,
+  FR_LOADING,
+  FR_POWER_FAILED,
+  FR_CONTINUE,
+  FR_CANNEL,
+  FR_ADJUST_TITLE,
+  FR_ADJUST_INFO,
+  FR_ADJUST_OK,
+  FR_ADJUST_FAILED,
+  FR_WARNING,
+  FR_STOP_PRINT,
+  FR_CONFIRM,
+  FR_TFTSD,
+  FR_READ_TFTSD_ERROR,
+  FR_TFTSD_INSERTED,
+  FR_TFTSD_REMOVED,
+  FR_U_DISK,
+  FR_READ_U_DISK_ERROR,
+  FR_U_DISK_INSERTED,
+  FR_U_DISK_REMOVED,
+  FR_ONBOARDSD,
+  FR_READ_ONBOARDSD_ERROR,
+  FR_FILAMENT_RUNOUT,
 
-  while(str[i])
-  {
-    if(isRussia(str+i) || isArmenian(str+i))
-    {
-      i+=2;
-    }
-    else
-    {
-      i++;
-    }
-    len++;
-  }
-  return len;
-}
+  FR_UNIFIEDMOVE,
+  FR_GCODE,
+  FR_UNIFIEDHEAT,
+  FR_COOLDOWN,
+  FR_EMERGENCYSTOP,
+};
 
 u8 * textSelect(u8 sel)
 {
@@ -836,12 +1063,15 @@ u8 * textSelect(u8 sel)
   {
     case ENGLISH:   return (u8 *)en_pack[sel];
     case CHINESE:   return (u8 *)cn_pack[sel];
-//    case RUSSIAN:   return (u8 *)ru_pack[sel];
+    case RUSSIAN:   return (u8 *)ru_pack[sel];
     case JAPANESE:  return (u8 *)jp_pack[sel];
+    case ARMENIAN:  return (u8 *)am_pack[sel];
     case GERMAN:    return (u8 *)de_pack[sel];
-//    case ARMENIAN:  return (u8 *)am_pack[sel];
     case CZECH:     return (u8 *)cz_pack[sel];
-    default:        return NULL;					 
+    case SPAIN:     return (u8 *)es_pack[sel];
+    case FRENCH:    return (u8 *)fr_pack[sel];
+
+    default:        return NULL;
   }
 }
 

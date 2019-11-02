@@ -21,6 +21,7 @@
 #include "lcd_dma.h"
 #include "GUI.h"
 #include "Language.h"
+#include "utf8_decode.h"
 
 #include "usart.h"
 #include "Serial.h"
@@ -68,6 +69,7 @@
 #include "Fan.h"
 #include "Settings.h"
 #include "leveling.h"
+#include "ProbeOffset.h"
 #include "PowerFailed.h"
 
 #include "Popup.h"
@@ -75,16 +77,6 @@
 
 #include "UnifiedMove.h"
 #include "UnifiedHeat.h"
-
-//address in spiflash W25Qxx
-#define LOGO_ADDR               0x0
-#define ICON_ADDR(num)          ((num)*0x5000+0x4B000)
-
-#define BYTE_ADDR               0x200000
-#define WORD_ADDR               0x300000
-
-#define UNI2OEM_ADDR            0x600000
-#define OEM2UNI_ADDR            0x700000
 
 
 #define MAX_MENU_DEPTH 10       // max sub menu depth
@@ -175,6 +167,14 @@ enum
   ICON_MARLIN,
   ICON_BIGTREE,
   ICON_GCODE,
+  ICON_BLTOUCH_DEPLOY,
+  ICON_BLTOUCH_STOW,
+  ICON_BLTOUCH_TEST,
+  ICON_BLTOUCH_REPEAT,
+  ICON_PROBE_OFFSET,
+  ICON_EEPROM_SAVE,
+  ICON_ABL,
+
   ICON_HOME_MOVE,
   ICON_HEAT_FAN,
   ICON_MANUAL_LEVEL,
