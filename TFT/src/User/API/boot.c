@@ -17,7 +17,11 @@ const char iconBmpName[][20]={
 "Full", "Half",
 "Rotate", "Language", "TP_Adjust", "moresetting", "About", "bgcolor", "fontcolor", "Disconnect", "BaudRate",
 "Percentage", "BabyStep", "Mmm_001", "OnBoardSD", "OnTFTSD", "U_Disk", "Runout",
-"Point_1", "Point_2", "Point_3", "Point_4", "marlin", "bigtree", "gcode", "BLTouchDeploy", "BLTouchStow", "BLTouchTest", "BLTouchRepeat", "ProbeOffset", "EEPROMSave",
+"Point_1", "Point_2", "Point_3", "Point_4", "marlin", "bigtree", "gcode", 
+"BLTouch", "BLTouchDeploy", "BLTouchStow", "BLTouchTest", "BLTouchRepeat",
+"TSCSettings", "MachineSettings", "FeatureSettings", "ProbeOffset", "EEPROMSave", "SilentMode",
+"ShutDown", "RGB_Settings", "RGB_Red", "RGB_Green", "RGB_Blue", "RGB_White", "RGB_Off",
+"Custom", "Custom0", "Custom1", "Custom2", "Custom3", "Custom4", "Custom5", "Custom6",
 }; 
 
 u8 scanUpdateFile(void)
@@ -115,7 +119,7 @@ bool bmpDecode(char *bmp, u32 addr)
 
 void updateIcon(void)
 {
-  char nowBmp[30];  
+  char nowBmp[64];  
   GUI_Clear(BLACK);
   GUI_DispString(100, 5, (u8*)"Icon Updating...!",0);
 

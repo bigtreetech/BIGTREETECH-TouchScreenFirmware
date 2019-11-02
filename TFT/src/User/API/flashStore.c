@@ -44,13 +44,14 @@ bool readStoredPara(void)
   {
     TSC_Para[i] = byteToWord(data + (index += 4), 4);
   }
-  infoSettings.baudrate  = byteToWord(data + (index += 4), 4);
-  infoSettings.language  = byteToWord(data + (index += 4), 4);
-  infoSettings.mode      = byteToWord(data + (index += 4), 4);
-  infoSettings.runout    = byteToWord(data + (index += 4), 4);
-  infoSettings.rotate_ui = byteToWord(data + (index += 4), 4);
-  infoSettings.bg_color  = byteToWord(data + (index += 4), 4);
-  infoSettings.font_color  = byteToWord(data + (index += 4), 4);
+  infoSettings.baudrate   = byteToWord(data + (index += 4), 4);
+  infoSettings.language   = byteToWord(data + (index += 4), 4);
+  infoSettings.mode       = byteToWord(data + (index += 4), 4);
+  infoSettings.runout     = byteToWord(data + (index += 4), 4);
+  infoSettings.rotate_ui  = byteToWord(data + (index += 4), 4);
+  infoSettings.bg_color   = byteToWord(data + (index += 4), 4);
+  infoSettings.font_color = byteToWord(data + (index += 4), 4);
+  infoSettings.silent     = byteToWord(data + (index += 4), 4);
   
   return true;
 }
@@ -65,13 +66,14 @@ void storePara(void)
   {
     wordToByte(TSC_Para[i], data + (index += 4));
   }
-  wordToByte(infoSettings.baudrate, data + (index += 4));
-  wordToByte(infoSettings.language, data + (index += 4));
-  wordToByte(infoSettings.mode, data + (index += 4));
-  wordToByte(infoSettings.runout, data + (index += 4));
-  wordToByte(infoSettings.rotate_ui, data + (index += 4));
-  wordToByte(infoSettings.bg_color, data + (index += 4));
+  wordToByte(infoSettings.baudrate,   data + (index += 4));
+  wordToByte(infoSettings.language,   data + (index += 4));
+  wordToByte(infoSettings.mode,       data + (index += 4));
+  wordToByte(infoSettings.runout,     data + (index += 4));
+  wordToByte(infoSettings.rotate_ui,  data + (index += 4));
+  wordToByte(infoSettings.bg_color,   data + (index += 4));
   wordToByte(infoSettings.font_color, data + (index += 4));
+  wordToByte(infoSettings.silent,     data + (index += 4));
   
   STM32_FlashWrite(data, PARA_SIZE);
 }

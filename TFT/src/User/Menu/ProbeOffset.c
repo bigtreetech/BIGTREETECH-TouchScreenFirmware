@@ -1,7 +1,7 @@
 #include "ProbeOffset.h"
 #include "includes.h"
 
-//1��title(����), ITEM_PER_PAGE��item(ͼ��+��ǩ) 
+//1 titl, ITEM_PER_PAGE item
 MENUITEMS probeOffsetItems = {
 //   title
   LABEL_PROBE_OFFSET,
