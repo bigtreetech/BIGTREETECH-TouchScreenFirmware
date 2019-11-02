@@ -2,12 +2,12 @@
 #include "STM32_Flash.h"
 
 #define PARA_SIZE 256  //bytes
-#define PARA_SIGN 0x20190826
+#define PARA_SIGN 0x20190827
 
-extern u32 TSC_Para[7];        //触摸屏校准系数
-extern SETTINGS infoSettings;  //用户设置
+extern u32 TSC_Para[7];        //
+extern SETTINGS infoSettings;  //
 
-void wordToByte(u32 word, u8 *bytes)  //大端模式
+void wordToByte(u32 word, u8 *bytes)  //
 {
   u8 len = 4;
   u8 i = 0;

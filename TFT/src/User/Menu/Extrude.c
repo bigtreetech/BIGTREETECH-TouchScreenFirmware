@@ -76,7 +76,7 @@ void menuExtrude(void)
   u32   feedrate = 0;
 
   while(infoCmd.count != 0) {loopProcess();}
-  extrudeCoordinate = eTemp = eSaved = coordinateGetAxis(E_AXIS);                
+  extrudeCoordinate = eTemp = eSaved = coordinateGetAxisTarget(E_AXIS);                
   feedrate = coordinateGetFeedRate();
 
   menuDrawPage(&extrudeItems);

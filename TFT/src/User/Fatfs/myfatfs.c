@@ -2,7 +2,7 @@
 #include "includes.h"
 #include "diskio.h"
 
-FATFS fatfs[_VOLUMES]; /* FATFS work area*/
+FATFS fatfs[FF_VOLUMES]; /* FATFS work area*/
 
 /* 
  mount SD Card from Fatfs

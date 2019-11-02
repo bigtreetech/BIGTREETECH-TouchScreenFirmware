@@ -142,6 +142,10 @@ startParse:
       heatSetCurrentTemp(BED,ack_value()+0.5);
       heatSetTargetTemp(BED, ack_second_value()+0.5);
     }
+    else if(ack_seen("Count E:")) // parse actual position, response of "M114"
+    {
+      coordinateSetAxisActualSteps(E_AXIS, ack_value());    
+    }
     else if(ack_seen(echomagic) && ack_seen(busymagic) && ack_seen("processing"))
     {
       busyIndicator(STATUS_BUSY);

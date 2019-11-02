@@ -9,12 +9,13 @@ enum
 {
   ENGLISH = 0,
   CHINESE,
-//  RUSSIAN,
+  RUSSIAN,
   JAPANESE,
+  ARMENIAN,
   GERMAN,
-//  ARMENIAN,
   CZECH,
-  SPAIN,  
+  SPAIN,
+  FRENCH,
 
   LANGUAGE_NUM,
 };
@@ -71,6 +72,7 @@ enum
   LABEL_BAUDRATE_250000,
   LABEL_RUNOUT_OFF,
   LABEL_RUNOUT_ON,
+  LABEL_SMART_RUNOUT_ON,
   LABEL_PERCENTAGE,
   LABEL_BABYSTEP,
   LABEL_PERCENTAGE_SPEED,
@@ -98,7 +100,6 @@ enum
   LABEL_10_PERCENT,
 
   LABEL_READY,
-  LABEL_PRINTING,
   LABEL_BUSY,
   LABEL_UNCONNECTED,
   LABEL_DISCONNECT_INFO,
@@ -130,11 +131,6 @@ enum
   LABEL_NUM,
 };
 
-
-bool isCzech(const u8 *const str);
-bool isRussia(const u8 *const str);
-bool isArmenian(const u8 *const str);
-u16 my_strlen(const u8 *const str);
 u8 * textSelect(u8 sel);
 
 #endif

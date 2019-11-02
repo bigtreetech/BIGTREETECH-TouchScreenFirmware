@@ -1,4 +1,14 @@
-#include "diskio.h"
+/*-----------------------------------------------------------------------*/
+/* Low level disk I/O module skeleton for FatFs     (C)ChaN, 2019        */
+/*-----------------------------------------------------------------------*/
+/* If a working storage control module is available, it should be        */
+/* attached to the FatFs via a glue function rather than modifying it.   */
+/* This is an example of glue functions to attach various exsisting      */
+/* storage control modules to the FatFs module with a defined API.       */
+/*-----------------------------------------------------------------------*/
+
+#include "ff.h"			/* Obtains integer types */
+#include "diskio.h"		/* Declarations of disk functions */
 #include "usb_conf.h"
 #include "usbh_msc_core.h"
 #include "usbh_usr.h"
@@ -10,124 +20,151 @@
   #include "sdio_sdcard.h"
 #endif
 
-static volatile DSTATUS diskStatus[_VOLUMES] = {STA_NOINIT, STA_NOINIT};	/* Disk status */
+/* Definitions of physical drive number for each drive */\
+#define DEV_MMC		0	/* MMC/SD card to physical drive 0 */
+#define DEV_USB		1	/* USB disk to physical drive 1 */
+
+static volatile DSTATUS diskStatus[FF_VOLUMES] = {STA_NOINIT, STA_NOINIT};	/* Disk status */
+
+
+/*-----------------------------------------------------------------------*/
+/* Get Drive Status                                                      */
+/*-----------------------------------------------------------------------*/
 
 DSTATUS disk_status (
 	BYTE pdrv		/* Physical drive nmuber to identify the drive */
 )
-{ 
+{
+  if (pdrv >= FF_VOLUMES)	return STA_NOINIT;
+  
 	return diskStatus[pdrv];
-}  
+}
+
+
+
+/*-----------------------------------------------------------------------*/
+/* Inidialize a Drive                                                    */
+/*-----------------------------------------------------------------------*/
 
 DSTATUS disk_initialize (
 	BYTE pdrv				/* Physical drive nmuber to identify the drive */
 )
-{
-  for(u8 i = 0; i < _VOLUMES; i++)
+{  
+  for(u8 i = 0; i < FF_VOLUMES; i++)
   {
     diskStatus[i] = STA_NOINIT;
   }
   
-	switch(pdrv)
-	{
-    case VOLUMES_SD_CARD://SD卡
-      if (SD_Init() == 0)
-      {  
-        diskStatus[pdrv] &= ~STA_NOINIT;
-      }      
-      break;
-    
-    case VOLUMES_U_DISK:
-      if (HCD_IsDeviceConnected(&USB_OTG_Core))
-      {  
-        diskStatus[pdrv] &= ~STA_NOINIT;
-      }
-      break;
+	switch (pdrv) {
+	case DEV_MMC :
+		if (SD_Init() == 0)
+    {  
+      diskStatus[pdrv] &= ~STA_NOINIT;
+    } 
+    break;
+      
+	case DEV_USB :
+		if (HCD_IsDeviceConnected(&USB_OTG_Core))
+    {  
+      diskStatus[pdrv] &= ~STA_NOINIT;
+    }
+    break;
       
     default:
       return RES_PARERR;
-	}		 
-	return  diskStatus[pdrv];
-} 
+	}
+	return diskStatus[pdrv];
+}
+
+
+
+/*-----------------------------------------------------------------------*/
+/* Read Sector(s)                                                        */
+/*-----------------------------------------------------------------------*/
 
 DRESULT disk_read (
 	BYTE pdrv,		/* Physical drive nmuber to identify the drive */
 	BYTE *buff,		/* Data buffer to store read data */
-	DWORD sector,	/* Sector address in LBA */
+	LBA_t sector,	/* Start sector in LBA */
 	UINT count		/* Number of sectors to read */
 )
 {
   if (!count) return RES_PARERR;
   if (diskStatus[pdrv] & STA_NOINIT) return RES_NOTRDY;
-  
-	switch (pdrv)
-	{
-		case VOLUMES_SD_CARD://SD卡
-			while (SD_ReadDisk(buff,sector,count))//读出错
-			{
-				SD_Init();	//重新初始化SD卡
-			}
+
+	switch (pdrv) {
+  case DEV_MMC :
+		while (SD_ReadDisk(buff,sector,count)) // read error
+    {
+      SD_Init();	//init again
+    }
+    return RES_OK;
+    
+	case DEV_USB :
+    if(USBH_UDISK_Read(buff, sector, count) == 0)
       return RES_OK;
-      
-    case VOLUMES_U_DISK:
-      if(USBH_UDISK_Read(buff, sector, count) == 0)
-        return RES_OK;
-      else
-        return RES_ERROR;
-      
-    default:
-      return RES_PARERR;
-	}   
+    else
+      return RES_ERROR;
+	}
+
+	return RES_PARERR;
 }
 
-#if _USE_WRITE
+
+
+/*-----------------------------------------------------------------------*/
+/* Write Sector(s)                                                       */
+/*-----------------------------------------------------------------------*/
+
+#if FF_FS_READONLY == 0
+
 DRESULT disk_write (
 	BYTE pdrv,			/* Physical drive nmuber to identify the drive */
 	const BYTE *buff,	/* Data to be written */
-	DWORD sector,		/* Sector address in LBA */
+	LBA_t sector,		/* Start sector in LBA */
 	UINT count			/* Number of sectors to write */
 )
 {
   if (!count) return RES_PARERR;
   if (diskStatus[pdrv] & STA_NOINIT) return RES_NOTRDY;
-  if (diskStatus[pdrv] & STA_PROTECT) return RES_WRPRT; 	 
-  
-  switch (pdrv)
-  {
-    case VOLUMES_SD_CARD://SD卡
-      while (SD_WriteDisk((u8*)buff,sector,count))//写出错
-      {
-        SD_Init();	//重新初始化SD卡
-      }
+  if (diskStatus[pdrv] & STA_PROTECT) return RES_WRPRT;
+
+	switch (pdrv) {
+	case DEV_MMC :
+		while (SD_WriteDisk((u8*)buff,sector,count)) // write error
+    {
+      SD_Init();	// init again
+    }
+    return RES_OK;
+
+	case DEV_USB :
+		if(USBH_UDISK_Write((u8*)buff, sector, count) == 0)
       return RES_OK;
-    
-    case VOLUMES_U_DISK:
-      if(USBH_UDISK_Write((u8*)buff, sector, count) == 0)
-        return RES_OK;
-      else
-        return RES_ERROR;
-    
-    default:
-      return RES_PARERR;
+    else
+      return RES_ERROR;
   }
+
+	return RES_PARERR;
 }
+
 #endif
 
-#if _USE_IOCTL
+
+/*-----------------------------------------------------------------------*/
+/* Miscellaneous Functions                                               */
+/*-----------------------------------------------------------------------*/
+
 DRESULT disk_ioctl (
 	BYTE pdrv,		/* Physical drive nmuber (0..) */
 	BYTE cmd,		/* Control code */
 	void *buff		/* Buffer to send/receive control data */
 )
 {
-  if (diskStatus[pdrv] & STA_NOINIT) return RES_NOTRDY;
-  
-  switch (pdrv)
-  {
-    case VOLUMES_SD_CARD:
-      return RES_OK;
-    
-    case VOLUMES_U_DISK:
+	switch (pdrv) {
+	case DEV_MMC :
+    return RES_OK;
+
+	case DEV_USB : 
     {
       DRESULT res = RES_ERROR;
       switch (cmd) 
@@ -155,27 +192,8 @@ DRESULT disk_ioctl (
       }
       return res;
     }
-      
-    default:
-      return RES_PARERR;
-  }
-}
-#endif
- 
+	}
 
-#include "stdlib.h"
-void *ff_memalloc(UINT msize)
-{
-	return malloc(msize);
-}
-void ff_memfree(void *mblock)
-{
-	free(mblock);
-}
-DWORD get_fattime (void)
-{
-	u32 date;
-	date=(	((2019-1980)<<25)|(3<<21)|(15<<16)|(16<<11)|(40<<5)|(0)  );
-	return date;
+	return RES_PARERR;
 }
 
