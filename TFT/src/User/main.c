@@ -40,9 +40,7 @@ void Hardware_GenericInit(void)
     infoSettingsReset();
   }
   LCD_RefreshDirection();  //refresh display direction after reading settings
-  infoMenuSelect();
-  
-  
+  infoMenuSelect();  
 }
 
 int main(void)

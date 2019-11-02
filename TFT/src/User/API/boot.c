@@ -179,26 +179,13 @@ void scanUpdates(void)
   volatile u8 result = 0;   //must volatile！
   if(mountSDCard())
   {
-    FIL file;
-    f_unlink("test1.gcode");
-    f_unlink("test2.gcode");
-    f_unlink("test3.gcode");
-//    f_open(&file, "test1.gcode", FA_CREATE_ALWAYS);
-    f_open(&file, "test2.gcode", FA_CREATE_ALWAYS);
-    f_open(&file, "test3.gcode", FA_CREATE_ALWAYS);
-    f_close(&file);
     result = scanUpdateFile();
     if (result & FONT)
     {
       updateFont(FONT_ROOT_DIR"/byte_ascii.fon", BYTE_ASCII_ADDR);
-      updateFont(FONT_ROOT_DIR"/word_cjk.fon", WORD_CJK_ADDR);
+      updateFont(FONT_ROOT_DIR"/word_unicode.fon", WORD_UNICODE);
       updateFont(FONT_ROOT_DIR"/byte_cyrillic.fon", BYTE_CYRILLIC_ADDR);
-      updateFont(FONT_ROOT_DIR"/word_japanese.fon", WORD_JAPANESE_ADDR);
-      updateFont(FONT_ROOT_DIR"/byte_armenian.fon", BYTE_ARMENIAN_ADDR);
       updateFont(FONT_ROOT_DIR"/byte_latin.fon", BYTE_LATIN_ADDR);
-      updateFont(FONT_ROOT_DIR"/word_korean.fon", WORD_KOREAN_ADDR);
-      updateFont(FONT_ROOT_DIR"/uni2oem.bin", UNI2OEM_ADDR);
-      updateFont(FONT_ROOT_DIR"/oem2uni.bin", OEM2UNI_ADDR);
     }
     if (result & BMP) //bmp
     {

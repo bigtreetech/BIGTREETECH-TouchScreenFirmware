@@ -8,6 +8,8 @@
 #include "language_am.h"
 #include "language_cz.h"
 #include "language_es.h"
+#include "language_fr.h"
+
 
 const char *const en_pack[LABEL_NUM]={
   EN_LANGUAGE,
@@ -59,6 +61,7 @@ const char *const en_pack[LABEL_NUM]={
   EN_BAUDRATE_250000,
   EN_RUNOUT_OFF,
   EN_RUNOUT_ON,
+  EN_SMART_RUNOUT_ON,
   EN_PERCENTAGE,
   EN_BABYSTEP,
   EN_PERCENTAGE_SPEED,
@@ -163,6 +166,7 @@ const char *const cn_pack[LABEL_NUM]={
   CN_BAUDRATE_250000,
   CN_RUNOUT_OFF,
   CN_RUNOUT_ON,
+  CN_SMART_RUNOUT_ON,
   CN_PERCENTAGE,
   CN_BABYSTEP,
   CN_PERCENTAGE_SPEED,
@@ -267,6 +271,7 @@ const char *const ru_pack[LABEL_NUM]={
   RU_BAUDRATE_250000,
   RU_RUNOUT_OFF,
   RU_RUNOUT_ON,
+  RU_SMART_RUNOUT_ON,
   RU_PERCENTAGE,
   RU_BABYSTEP,
   RU_PERCENTAGE_SPEED,
@@ -371,6 +376,7 @@ const char *const jp_pack[LABEL_NUM]={
   JP_BAUDRATE_250000,
   JP_RUNOUT_OFF,
   JP_RUNOUT_ON,
+  JP_SMART_RUNOUT_ON,
   JP_PERCENTAGE,
   JP_BABYSTEP,
   JP_PERCENTAGE_SPEED,
@@ -475,6 +481,7 @@ const char *const am_pack[LABEL_NUM]={
   AM_BAUDRATE_250000,
   AM_RUNOUT_OFF,
   AM_RUNOUT_ON,
+  AM_SMART_RUNOUT_ON,
   AM_PERCENTAGE,
   AM_BABYSTEP,
   AM_PERCENTAGE_SPEED,
@@ -579,6 +586,7 @@ const char *const de_pack[LABEL_NUM]={
   DE_BAUDRATE_250000,
   DE_RUNOUT_OFF,
   DE_RUNOUT_ON,
+  DE_SMART_RUNOUT_ON,
   DE_PERCENTAGE,
   DE_BABYSTEP,
   DE_PERCENTAGE_SPEED,
@@ -683,6 +691,7 @@ const char *const cz_pack[LABEL_NUM]={
   CZ_BAUDRATE_250000,
   CZ_RUNOUT_OFF,
   CZ_RUNOUT_ON,
+  CZ_SMART_RUNOUT_ON,
   CZ_PERCENTAGE,
   CZ_BABYSTEP,
   CZ_PERCENTAGE_SPEED,
@@ -787,6 +796,7 @@ const char *const es_pack[LABEL_NUM]={
   ES_BAUDRATE_250000,
   ES_RUNOUT_OFF,
   ES_RUNOUT_ON,
+  ES_SMART_RUNOUT_ON,
   ES_PERCENTAGE,
   ES_BABYSTEP,
   ES_PERCENTAGE_SPEED,
@@ -814,7 +824,6 @@ const char *const es_pack[LABEL_NUM]={
   ES_10_PERCENT,
 
   ES_READY,
-  ES_PRINTING,
   ES_BUSY,
   ES_UNCONNECTED,
   ES_DISCONNECT_INFO,
@@ -842,126 +851,110 @@ const char *const es_pack[LABEL_NUM]={
   ES_FILAMENT_RUNOUT
 };
 
+const char *const fr_pack[LABEL_NUM]={
+  FR_LANGUAGE,
+  FR_HEAT,
+  FR_MOVE,
+  FR_HOME,
+  FR_PRINT,
+  FR_EXTRUDE,
+  FR_FAN,
+  FR_SETTINGS,
+  FR_LEVELING,
+  FR_POINT_1,
+  FR_POINT_2,
+  FR_POINT_3,
+  FR_POINT_4,
+  FR_ABL,
+  FR_INC,
+  FR_DEC,
+  FR_NOZZLE,
+  FR_BED,
+  FR_STOP,
+  FR_BACK,
+  FR_PAGE_UP,
+  FR_PAGE_DOWN,
+  FR_PAUSE,
+  FR_RESUME,
+  FR_LOAD,
+  FR_UNLOAD,
+  FR_SLOW_SPEED,
+  FR_NORMAL_SPEED,
+  FR_FAST_SPEED,
+  FR_FAN_FULL_SPEED,
+  FR_FAN_HALF_SPEED,
+  FR_ROTATE_UI,
+  FR_TOUCHSCREFR_ADJUST,
+  FR_MORESETTING,
+  FR_SCREFR_INFO,
+  FR_WHITE,
+  FR_BLACK,
+  FR_BLUE,
+  FR_RED,
+  FR_GREEN,
+  FR_CYAN,
+  FR_YELLOW,
+  FR_BROWN,
+  FR_GRAY,
+  FR_DISCONNECT,
+  FR_BAUDRATE_115200,
+  FR_BAUDRATE_250000,
+  FR_RUNOUT_OFF,
+  FR_RUNOUT_ON,
+  FR_SMART_RUNOUT_ON,
+  FR_PERCENTAGE,
+  FR_BABYSTEP,
+  FR_PERCENTAGE_SPEED,
+  FR_PERCENTAGE_FLOW,
+  FR_VALUE_ZERO,
+  FR_1_DEGREE,
+  FR_5_DEGREE,
+  FR_10_DEGREE,
+  FR_X_INC,
+  FR_Y_INC,
+  FR_Z_INC,
+  FR_X_DEC,
+  FR_Y_DEC,
+  FR_Z_DEC,
+  FR_X_HOME,
+  FR_Y_HOME,
+  FR_Z_HOME,
+  FR_001_MM,
+  FR_01_MM,
+  FR_1_MM,
+  FR_5_MM,
+  FR_10_MM,
+  FR_1_PERCENT,
+  FR_5_PERCENT,
+  FR_10_PERCENT,
 
-uint8_t isUnicode = 1;
-void Encode_SetUnicode(uint8_t unicode)
-{
-  isUnicode = unicode;
-}
-
-CHAR_INFO getCharacterInfo(const u8 *ch)
-{
-  u32 startCodePoint;
-  u32 bitMapStartAddr;
-  CHAR_INFO info = {.bytes = 0};
-    
-  if(ch == NULL || *ch == 0) return info;
-     
-  if(isUnicode) // parse utf-8 encode
-  {
-    u8 bytes = 0; 
-    u8 utfFlg = 0x80;
-    while ((ch[0] & utfFlg) == utfFlg)
-    {
-      utfFlg |= (utfFlg >> 1);
-      bytes++;
-    }
-    // bytes == 0 means 1 byte, ASCII, 0XXX XXXX
-    info.bytes = bytes ? bytes : 1;
-    info.codePoint = ch[0] & (~utfFlg);
-    for (u8 i = 1; i < bytes; i++)
-    {
-      info.codePoint = (info.codePoint << 6) | (ch[i] & 0x3F);
-    }
-  }
-  else // parse ANSI/OEM(CP936) encode
-  {
-    if(*ch < 0x7F)
-    {
-      info.codePoint = *ch;
-      info.bytes = 1;
-    }
-    else
-    {
-      info.codePoint = ff_convert((*ch << 8) | (*(ch + 1)), 1);
-      info.bytes = 2;
-    }
-  }
-  // Visible ASCII code, from ' ' to '~'
-  if(info.codePoint >= 0x20 && info.codePoint <= 0x7E)
-  {
-    info.bitWidth = 1;
-    bitMapStartAddr = BYTE_ASCII_ADDR;
-    startCodePoint = 0x20;
-  }
-  // CJK(Chinese, Japanese, Korean) encoder in unicode
-  else if(info.codePoint >= 0x4E00 && info.codePoint <= 0x9FA5)
-  {
-    info.bitWidth = 2;
-    bitMapStartAddr = WORD_CJK_ADDR;
-    startCodePoint = 0x4E00;
-  }
-  // Cyrillic code, from 'Ѐ' to 'ё'
-  else if(info.codePoint >= 0x400 && info.codePoint <= 0x451)
-  {
-    info.bitWidth = 1;
-    bitMapStartAddr = BYTE_CYRILLIC_ADDR;
-    startCodePoint = 0x400;
-  }
-  // Japanese:Hiragana & Katakana
-  else if(info.codePoint >= 0x3040 && info.codePoint <= 0x30FF)
-  {
-    info.bitWidth = 2;
-    bitMapStartAddr = WORD_JAPANESE_ADDR;
-    startCodePoint = 0x3040;
-  }
-  // Armenian
-  else if(info.codePoint >= 0x530 && info.codePoint <= 0x58F)
-  {
-    info.bitWidth = 1;
-    bitMapStartAddr = BYTE_ARMENIAN_ADDR;
-    startCodePoint = 0x530;
-  }
-  // Latin 1 Supplement, Extended-A&B
-  else if(info.codePoint >= 0x80 && info.codePoint <= 0x24F)
-  {
-    info.bitWidth = 1;
-    bitMapStartAddr = BYTE_LATIN_ADDR;
-    startCodePoint = 0x80;
-  }
-  // Korean(Hangul Syllables)
-  else if(info.codePoint >= 0xAC00 && info.codePoint <= 0xD7AF)
-  {
-    info.bitWidth = 2;
-    bitMapStartAddr = WORD_KOREAN_ADDR;
-    startCodePoint = 0xAC00;
-  }
-  // unknow character
-  else
-  {    
-    info.bitWidth = 1;
-    bitMapStartAddr = BYTE_ASCII_ADDR;
-    startCodePoint = 0x20;
-    info.codePoint = '?';
-  }
-  info.bitMapAddr = bitMapStartAddr + (info.codePoint - startCodePoint) * (BYTE_HEIGHT * BYTE_WIDTH * info.bitWidth / 8);  
-
-  return info;
-}
-
-// parse UTF-8 char display bit width
-u16 my_strlen(const u8 *const str)
-{
-  u16 i=0,len=0;
-
-  while(str[i])
-  {
-    CHAR_INFO info = getCharacterInfo(str + i);
-    i += info.bytes;
-    len += info.bitWidth;
-  }
-  return len;
-}
+  FR_READY,
+  FR_BUSY,
+  FR_UNCONNECTED,
+  FR_DISCONNECT_INFO,
+  FR_LOADING,
+  FR_POWER_FAILED,
+  FR_CONTINUE,
+  FR_CANNEL,
+  FR_ADJUST_TITLE,
+  FR_ADJUST_INFO,
+  FR_ADJUST_OK,
+  FR_ADJUST_FAILED,
+  FR_WARNING,
+  FR_STOP_PRINT,
+  FR_CONFIRM,
+  FR_TFTSD,
+  FR_READ_TFTSD_ERROR,
+  FR_TFTSD_INSERTED,
+  FR_TFTSD_REMOVED,
+  FR_U_DISK,
+  FR_READ_U_DISK_ERROR,
+  FR_U_DISK_INSERTED,
+  FR_U_DISK_REMOVED,
+  FR_ONBOARDSD,
+  FR_READ_ONBOARDSD_ERROR,
+  FR_FILAMENT_RUNOUT
+};
 
 u8 * textSelect(u8 sel)
 {
@@ -975,6 +968,7 @@ u8 * textSelect(u8 sel)
     case GERMAN:    return (u8 *)de_pack[sel];
     case CZECH:     return (u8 *)cz_pack[sel];
     case SPAIN:     return (u8 *)es_pack[sel];
+    case FRENCH:    return (u8 *)fr_pack[sel];
 
     default:        return NULL;
   }

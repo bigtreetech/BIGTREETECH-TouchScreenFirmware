@@ -50,6 +50,7 @@
     #define EN_BAUDRATE_250000      "250000"
     #define EN_RUNOUT_OFF           "Runout OFF"
     #define EN_RUNOUT_ON            "Runout ON"
+    #define EN_SMART_RUNOUT_ON      "Smart ON"
     #define EN_PERCENTAGE           "Percentage"
     #define EN_BABYSTEP             "BabyStep"
     #define EN_PERCENTAGE_SPEED     "Speed"

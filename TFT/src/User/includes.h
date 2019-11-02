@@ -21,6 +21,7 @@
 #include "lcd_dma.h"
 #include "GUI.h"
 #include "Language.h"
+#include "utf8_decode.h"
 
 #include "usart.h"
 #include "Serial.h"

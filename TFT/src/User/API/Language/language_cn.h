@@ -50,6 +50,7 @@
     #define CN_BAUDRATE_250000      "250000"
     #define CN_RUNOUT_OFF           "耗材检测关"
     #define CN_RUNOUT_ON            "耗材检测开"
+    #define CN_SMART_RUNOUT_ON      "智能检测开"
     #define CN_PERCENTAGE           "百分比"
     #define CN_BABYSTEP             "Z-微调"
     #define CN_PERCENTAGE_SPEED     "速度百分比"

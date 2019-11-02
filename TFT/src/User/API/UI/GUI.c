@@ -500,30 +500,33 @@ void GUI_DispChar(int16_t sx, int16_t sy, const uint16_t ch, uint8_t mode)
 //
 CHAR_INFO GUI_DispOne(int16_t sx, int16_t sy, const uint8_t *p, uint8_t mode)
 {  
-  CHAR_INFO info = getCharacterInfo(p);  
-  if(info.bytes == 0) return info;
+  CHAR_INFO info = {.bytes = 0};
+  
+  if(p == NULL || *p == 0) return info;
+  
+  getCharacterInfo(p, &info);
   
   uint8_t x = 0, 
           y = 0, 
           j = 0, 
           i = 0;
-  uint16_t bitMapSize = (BYTE_HEIGHT * BYTE_WIDTH * info.bitWidth / 8);
+  uint16_t bitMapSize = (info.pixelHeight * info.pixelWidth / 8);
   uint8_t  font[bitMapSize];
   uint32_t temp = 0;
 
   W25Qxx_ReadBuffer(font, info.bitMapAddr, bitMapSize);
 
-  for(x=0; x < BYTE_WIDTH*info.bitWidth; x++)
+  for(x=0; x < info.pixelWidth; x++)
   {           
-    for(j=0; j < (BYTE_HEIGHT + 8-1)/8; j++)
+    for(j=0; j < (info.pixelHeight + 8-1)/8; j++)
     {
       temp <<= 8;
       temp |= font[i++];
     }
 
-    for(y=0;y < BYTE_HEIGHT;y++)
+    for(y=0;y < info.pixelHeight;y++)
     {			    
-      if(temp & (1<<(BYTE_HEIGHT-1)))
+      if(temp & (1<<(info.pixelHeight-1)))
         GUI_DrawPixel(sx, sy+y, COLOR);
       else if(mode!=0)
         GUI_DrawPixel(sx, sy+y, BKCOLOR);
@@ -532,29 +535,32 @@ CHAR_INFO GUI_DispOne(int16_t sx, int16_t sy, const uint8_t *p, uint8_t mode)
     sx++;
   }
   return info;  
-}    
-const uint8_t* GUI_DispString(int16_t x, int16_t y, const uint8_t *p, uint8_t mode)
+}
+
+void GUI_DispString(int16_t x, int16_t y, const uint8_t *p, uint8_t mode)
 {
   CHAR_INFO info;
-  while(1)
+  if(p == NULL) return;
+  
+  while(*p)
   {   
     info = GUI_DispOne(x, y, p, mode);
-    if(info.bytes == 0) return p;
-    x += info.bitWidth * BYTE_WIDTH;
+    x += info.pixelWidth;
     p += info.bytes;
   }
 }
 
-const uint8_t* GUI_DispLenString(int16_t x, int16_t y, const uint8_t *p, uint8_t mode, uint8_t len)
+const uint8_t* GUI_DispLenString(int16_t x, int16_t y, const uint8_t *p, uint8_t mode, uint16_t pixelWidth)
 {       
-  uint8_t nlen = 0;
   CHAR_INFO info;
-  while(nlen < len)
+  uint16_t curPixelWidth = 0;
+  if(p == NULL) return NULL;
+  
+  while(curPixelWidth < pixelWidth && *p)
   {   
     info = GUI_DispOne(x, y, p, mode);
-    if(info.bytes == 0) return p;
-    x += info.bitWidth * BYTE_WIDTH;
-    nlen += info.bitWidth;
+    x += info.pixelWidth;
+    curPixelWidth += info.pixelWidth;
     p += info.bytes;
   }
   return p;
@@ -562,13 +568,13 @@ const uint8_t* GUI_DispLenString(int16_t x, int16_t y, const uint8_t *p, uint8_t
 
 void GUI_DispStringRight(int16_t x, int16_t y, const uint8_t *p, uint8_t mode)
 {
-  x -= my_strlen(p) * BYTE_WIDTH; 
+  x -= GUI_StrPixelWidth(p); 
   GUI_DispString(x, y, p, mode);
 }
 
 void GUI_DispStringInRect(int16_t sx, int16_t sy, int16_t ex, int16_t ey, const uint8_t *p, uint8_t mode)
 {    
-  uint16_t stringlen = my_strlen(p)*BYTE_WIDTH;
+  uint16_t stringlen = GUI_StrPixelWidth(p);
   uint16_t width = ex - sx;
   uint16_t height = ey - sy;
   uint8_t  nline = (stringlen+width-1)/width ;
@@ -583,7 +589,7 @@ void GUI_DispStringInRect(int16_t sx, int16_t sy, int16_t ex, int16_t ey, const 
   uint8_t i=0;
   for(i=0; i<nline; i++)
   {
-    p = GUI_DispLenString(x,y,p,mode,width/BYTE_WIDTH);
+    p = GUI_DispLenString(x, y, p, mode, width);
     y += BYTE_HEIGHT;
   }   
 }
@@ -606,7 +612,7 @@ const uint32_t GUI_Pow10[10] = {
 100000, 1000000, 10000000, 100000000, 1000000000
 };
 
-void GUI_DispDec(int16_t x, int16_t y,int32_t num, uint8_t len, uint8_t mode, uint8_t leftOrRight)
+void GUI_DispDec(int16_t x, int16_t y, int32_t num, uint8_t len, uint8_t mode, uint8_t leftOrRight)
 {         	
   uint8_t i;
   uint8_t bit_value;
@@ -761,64 +767,61 @@ void RADIO_Select(RADIO *raido, uint8_t select)
   GUI_SetColor(tmp);
 }
 
-//������ʾ�ַ���
+//
 void Scroll_CreatePara(SCROLL * para, uint8_t *pstr ,GUI_RECT *rect)
 {
   memset(para,0,sizeof(SCROLL));	
   para->text = pstr;
-  para->len_size = strlen((char *)pstr);    
-  para->len_total = my_strlen(pstr);
-  para->len_max = ((rect->x1 - rect->x0)/BYTE_WIDTH);
+  para->maxByte = strlen((char *)pstr);    
+  para->curPixelWidth = para->totalPixelWidth = GUI_StrPixelWidth(pstr);
+  para->maxPixelWidth = rect->x1 - rect->x0;
   para->rect = rect;
-}
-
-int min(int value1,int value2)
-{
-  if(value1>value2)
-  return value2;
-  return value1;  
-}
-
-int max(int value1,int value2)
-{
-  if(value1>value2)
-  return value1;
-  return value2;  
 }
 
 void Scroll_DispString(SCROLL * para,uint8_t mode,uint8_t align)
 {
-  uint16_t i=0;		
-
+  uint16_t i = 0;
+  CHAR_INFO info;
+  
   if(para->text == NULL) return;
-  if(para->len_total > para->len_max)
+  if(para->totalPixelWidth > para->maxPixelWidth)
   {
-    if(OS_GetTime()-para->time>5)
+    if(OS_GetTime() - para->time > 5) // 50ms
     {
-      para->time=OS_GetTime();			      
+      para->time = OS_GetTime();
       GUI_SetRange(para->rect->x0, para->rect->y0, para->rect->x1, para->rect->y1);
-      if(para->index < para->len_size)
+      if(para->curByte < para->maxByte)
       {
-        CHAR_INFO info = getCharacterInfo(&para->text[para->index]);
+        getCharacterInfo(&para->text[para->curByte], &info);
         para->off_head++;
-        if(para->off_head == BYTE_WIDTH * info.bitWidth) {para->index += info.bytes; para->off_head=0;}
-        
-        GUI_DispLenString(para->rect->x0 - para->off_head, para->rect->y0 ,&para->text[para->index],mode,para->len_max+4);
-
-        for(i=para->rect->y0;i<para->rect->y1;i++)
+        if(para->off_head == info.pixelWidth)
         {
-          GUI_DrawPixel(para->rect->x0 - para->off_head + (min(para->len_size - para->index, para->len_max + 4) * BYTE_WIDTH), i, BKCOLOR);
+          para->curByte += info.bytes;
+          para->off_head = 0;
         }
-      }      
-      if(para->len_size - para->index < para->len_max-4)
+        
+        GUI_DispLenString(para->rect->x0 - para->off_head, para->rect->y0, &para->text[para->curByte], mode, para->maxPixelWidth + info.pixelWidth);
+        
+        para->curPixelWidth--;
+        if(para->curPixelWidth < para->maxPixelWidth)
+        {
+          for(i = para->rect->y0; i<para->rect->y1; i++)
+          {
+            GUI_DrawPixel(para->rect->x0 + para->curPixelWidth, i, BKCOLOR);
+          }
+        }
+      }
+      
+      if(para->curPixelWidth + 2*BYTE_WIDTH < para->maxPixelWidth)
       {
         para->off_tail++;
-        GUI_DispLenString(para->rect->x1-para->off_tail,para->rect->y0,para->text,mode,(para->off_tail + BYTE_WIDTH - 1)/BYTE_WIDTH);
-        if(para->off_tail >= para->rect->x1-para->rect->x0)
+        GUI_DispLenString(para->rect->x1-para->off_tail, para->rect->y0, para->text, mode, para->off_tail);
+        if(para->off_tail + para->rect->x0 >= para->rect->x1)
         {
           para->off_head=0;
           para->off_tail=0;
-          para->index=0;
+          para->curByte=0;
+          para->curPixelWidth = para->totalPixelWidth;
         }
       }		
       GUI_CancelRange();
@@ -830,19 +833,19 @@ void Scroll_DispString(SCROLL * para,uint8_t mode,uint8_t align)
     {
       case LEFT: 
       {
-        GUI_DispString(para->rect->x0,para->rect->y0,para->text,mode);
+        GUI_DispString(para->rect->x0, para->rect->y0, para->text, mode);
         break;
       }
       case RIGHT: 
       {
-        uint16_t x_offset=(para->rect->x1 - (para->len_total * BYTE_WIDTH));	
-        GUI_DispString(x_offset,para->rect->y0,para->text,mode);
+        uint16_t x_offset=(para->rect->x1 - para->totalPixelWidth);	
+        GUI_DispString(x_offset, para->rect->y0, para->text, mode);
         break;
       }
       case CENTER:
       {
-        uint16_t x_offset=((para->rect->x1 - para->rect->x0 - (para->len_total * BYTE_WIDTH)) >>1);	
-        GUI_DispString(para->rect->x0+x_offset,para->rect->y0,para->text,mode);
+        uint16_t x_offset=((para->rect->x1 - para->rect->x0 - para->totalPixelWidth) >>1);	
+        GUI_DispString(para->rect->x0+x_offset, para->rect->y0, para->text, mode);
         break;
       }
     }

@@ -50,6 +50,7 @@
     #define JP_BAUDRATE_250000      "250000"
     #define JP_RUNOUT_OFF           "Runout OFF"
     #define JP_RUNOUT_ON            "Runout ON"
+    #define JP_SMART_RUNOUT_ON      "Smart ON"
     #define JP_PERCENTAGE           "パーセント"
     #define JP_BABYSTEP             "ベビーステップ"
     #define JP_PERCENTAGE_SPEED     "スビード"

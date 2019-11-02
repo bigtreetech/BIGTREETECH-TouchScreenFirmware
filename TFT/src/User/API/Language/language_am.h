@@ -50,6 +50,7 @@
     #define AM_BAUDRATE_250000      "250000"
     #define AM_RUNOUT_OFF           "Runout OFF"
     #define AM_RUNOUT_ON            "Runout ON"
+    #define AM_SMART_RUNOUT_ON      "Smart ON"
     #define AM_PERCENTAGE           "Percentage"
     #define AM_BABYSTEP             "Դանդաղ"
     #define AM_PERCENTAGE_SPEED     "Արագություն"

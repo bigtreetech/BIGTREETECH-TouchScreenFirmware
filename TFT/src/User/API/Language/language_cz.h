@@ -50,6 +50,7 @@
     #define CZ_BAUDRATE_250000      "250000"
     #define CZ_RUNOUT_OFF           "Runout VYP"
     #define CZ_RUNOUT_ON            "Runout ZAP"
+    #define CZ_SMART_RUNOUT_ON      "Smart ON"
     #define CZ_PERCENTAGE           "Procenta"
     #define CZ_BABYSTEP             "BabyStep"
     #define CZ_PERCENTAGE_SPEED     "Rychlost"
