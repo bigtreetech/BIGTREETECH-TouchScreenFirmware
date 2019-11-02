@@ -303,14 +303,15 @@ void printingDrawPage(void)
   //	Scroll_CreatePara(&titleScroll, infoFile.title,&titleRect);  //
   GUI_DispLenString(titleRect.x0, titleRect.y0, 
                     getCurGcodeName(infoFile.title), 1, 
-                   (titleRect.x1 - titleRect.x0)/BYTE_WIDTH );
+                   (titleRect.x1 - titleRect.x0) );
+  // printed time
   GUI_DispString(progressRect.x0, TIME_Y, (u8* )"T:", 0);
   GUI_DispChar(progressRect.x0+BYTE_WIDTH*4, TIME_Y, ':', 0);
   GUI_DispChar(progressRect.x0+BYTE_WIDTH*7, TIME_Y, ':', 0);
-  
+  // nozzle temperature 
   GUI_DispString(progressRect.x0+BYTE_WIDTH*2, TEMP_Y,(u8* )":",0);
   GUI_DispChar(progressRect.x0+BYTE_WIDTH*6, TEMP_Y,'/',0);
-  
+  // hotbed temperature
   GUI_DispString(BED_X, TEMP_Y,(u8* )"B:",0);
   GUI_DispChar(BED_X+BYTE_WIDTH*5, TEMP_Y,'/',0);
   reDrawProgress(infoPrinting.progress);
@@ -452,7 +453,7 @@ void haltPrinting(void)
 
   heatClearIsWaiting();
   
-  mustStoreCmd("G0 Z%d F3000\n", limitValue(0, (int)coordinateGetAxis(Z_AXIS) + 10, Z_MAX_POS));
+  mustStoreCmd("G0 Z%d F3000\n", limitValue(0, (int)coordinateGetAxisTarget(Z_AXIS) + 10, Z_MAX_POS));
   mustStoreCmd("G28 X0 Y0\n");
 
   completePrinting();

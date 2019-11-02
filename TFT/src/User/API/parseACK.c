@@ -154,6 +154,10 @@ startParse:
         setCurrentOffset(ack_value());
       }
     }
+    else if(ack_seen("Count E:")) // parse actual position, response of "M114"
+    {
+      coordinateSetAxisActualSteps(E_AXIS, ack_value());
+    }
     else if(ack_seen(echomagic) && ack_seen(busymagic) && ack_seen("processing"))
     {
       busyIndicator(STATUS_BUSY);

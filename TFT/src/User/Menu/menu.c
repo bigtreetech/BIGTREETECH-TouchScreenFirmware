@@ -271,7 +271,7 @@ void DrawGKEY(void)
 void DrawEGKEY(void)
 {
   uint8_t i;
-  char *key[24]={"A","B","C","D","F","¡û","H","I","K","L","N","Spac","O","P","Q","R","S","A-Z","T","U","V","W"," "," "};
+  char *key[24]={"A","B","C","D","F","Del","H","I","K","L","N","Spac","O","P","Q","R","S","A-Z","T","U","V","W"," "," "};
   for(i=0;i<24;i++)
   {
     GUI_DispStringInRect(rect_of_Gkey[i].x0, rect_of_Gkey[i].y0, rect_of_Gkey[i].x1, rect_of_Gkey[i].y1,(uint8_t *)key[i], 0);
@@ -301,7 +301,7 @@ bool revinfo(void)
   GUI_SetColor(BK_COLOR);
   GUI_DispStringInRect(0, SPACE_GKY+TITLE_END_Y+BYTE_HEIGHT, LCD_WIDTH,LCD_HEIGHT-BYTE_HEIGHT,(uint8_t *)showbuf1,0);
     
-  uint16_t stringlen = my_strlen((u8*)showbuf1)*BYTE_WIDTH;
+  uint16_t stringlen = GUI_StrPixelWidth((u8*)showbuf1);
   uint16_t width = LCD_WIDTH;
   uint16_t height = (LCD_HEIGHT-BYTE_HEIGHT) - (SPACE_GKY+TITLE_END_Y);
   uint8_t  nline = (stringlen+width-1)/width ;

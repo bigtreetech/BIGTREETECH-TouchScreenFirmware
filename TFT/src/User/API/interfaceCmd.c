@@ -227,6 +227,7 @@ void sendQueueCmd(void)
         }
 
         case 114: //M114
+          positionSetUpdateWaiting(false);
           break;
 
         case 117: //M117
@@ -291,7 +292,7 @@ void sendQueueCmd(void)
           {						
             if(cmd_seen(axis_id[i]))			
             {
-              coordinateSetAxis(i,cmd_float());
+              coordinateSetAxisTarget(i,cmd_float());
             }
           }
           if(cmd_seen('F'))			
@@ -317,10 +318,10 @@ void sendQueueCmd(void)
         {
           AXIS i;
           for(i=X_AXIS;i<TOTAL_AXIS;i++)
-          {						
-            if(cmd_seen(axis_id[i]))			
+          {
+            if(cmd_seen(axis_id[i]))
             {                       
-              coordinateSetAxis(i,cmd_float());                 
+              coordinateSetAxisTarget(i,cmd_float());
             }
           }
           break;

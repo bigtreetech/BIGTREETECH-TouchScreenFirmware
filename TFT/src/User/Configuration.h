@@ -1,9 +1,9 @@
 #ifndef _CONFIGRATION_H_
 #define _CONFIGRATION_H_
 
-#define TOOL_NUM     1    //set in 1~6
-#define EXTRUDER_NUM 1    //set in 1~6
-#define FAN_NUM      1    //set in 1~6
+#define TOOL_NUM     1    // set in 1~6
+#define EXTRUDER_NUM 1    // set in 1~6
+#define FAN_NUM      1    // set in 1~6
 
 #define HEAT_MAX_TEMP    {150,    275,       275,       275,       275,       275,       275}    //max temperature can be set
 #define HEAT_SIGN_ID     {"B:",   "T0:",     "T1:",     "T2:",     "T3:",     "T4:",     "T5:"}
@@ -18,13 +18,13 @@
 #define FAN_ID           {"Fan0",    "Fan1",    "Fan2",    "Fan3",    "Fan4",    "Fan5"}
 #define FAN_CMD          {"M106 P0", "M106 P1", "M106 P2", "M106 P3", "M106 P4", "M106 P5" };
 
-#define DEFAULT_SPEED_MOVE      3000  //Move default speed  mm/min
+#define DEFAULT_SPEED_MOVE      3000 // Move default speed  mm/min
 
-#define EXTRUDE_SLOW_SPEED      60   //Extrude speed  mm/min
+#define EXTRUDE_SLOW_SPEED      60   // Extrude speed  mm/min
 #define EXTRUDE_NORMAL_SPEED    600  //
 #define EXTRUDE_FAST_SPEED      1200 //
 
-//size of machine
+// Size of machine
 #define X_MIN_POS 0
 #define Y_MIN_POS 0
 #define Z_MIN_POS 0
@@ -32,7 +32,7 @@
 #define Y_MAX_POS 235
 #define Z_MAX_POS 300
 
-//Specify a Pause position as { X, Y, Z_raise }
+// Specify a Pause position as { X, Y, Z_raise }
 #define NOZZLE_PAUSE_RETRACT_LENGTH 15   // (mm)
 #define NOZZLE_PAUSE_PURGE_LENGTH   16   // (mm)
 #define NOZZLE_PAUSE_X_POSITION     (X_MIN_POS + 10)  // (mm) Must be an integer
@@ -43,7 +43,7 @@
 #define NOZZLE_PAUSE_Z_FEEDRATE     600  // (mm/min) Z axis feedrate
 
 #define AUTO_BED_LEVELING
-//Move to four corner points to Leveling manually (Point 1, Point 2, Point 3, Point 4)
+// Move to four corner points to Leveling manually (Point 1, Point 2, Point 3, Point 4)
 #define LEVELING_POINT_1_X         (X_MIN_POS + 20)
 #define LEVELING_POINT_1_Y         (Y_MIN_POS + 20)
 #define LEVELING_POINT_2_X         (X_MAX_POS - 20)
@@ -58,12 +58,16 @@
 #define LEVELING_POINT_Z_FEEDRATE  600   // (mm/min) Z axis move feedrate
 
 
-//Power Supply
+// Power Supply
 #define PS_ON_ACTIVE_HIGH    true   // Set 'false' for ATX (1), 'true' for X-Box (2)
   
-//Filament run out detect
+// Filament run out detect
 #define FIL_RUNOUT_INVERTING true  // Set to false to invert the logic of the sensor.
-#define FIL_NOISE_THRESHOLD  5     // 5*10 = 50ms,  Pause print when filament runout is detected for 50ms.
+#define FIL_NOISE_THRESHOLD  10     // 10*10 = 100ms,  Pause print when filament runout is detected for 100ms.
+
+// Smart filament detecter
+// This option to use an encoder disc that toggles the runout pin as the filament moves
+#define FILAMENT_RUNOUT_DISTANCE_MM 7
 
 /**
  * 12864 Mode Background & Font Color Options
@@ -75,7 +79,7 @@
 // Show BTT bootscreen when starting up
 #define SHOW_BTT_BOOTSCREEN
 
-// Text displayed at the top of the LCD in 12864 mode
+// Text displayed at the top of the LCD in 12864 mode. Comment out to disable.
 #define ST7920_BANNER_TEXT "LCD12864 Simulator"
 
 // Make the simulator run fullscreen, Not recommended for TFT24

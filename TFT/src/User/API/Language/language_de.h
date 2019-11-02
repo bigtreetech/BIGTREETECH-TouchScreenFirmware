@@ -56,14 +56,15 @@
     #define DE_BAUDRATE_250000      "250000"
     #define DE_RUNOUT_OFF           "Runout OFF"
     #define DE_RUNOUT_ON            "Runout ON"
+    #define DE_SMART_RUNOUT_ON      "Smart ON"
     #define DE_PERCENTAGE           "Prozent"
     #define DE_BABYSTEP             "BabyStep"
     #define DE_PERCENTAGE_SPEED     "Speed"
     #define DE_PERCENTAGE_FLOW      "Flow"    
     #define DE_VALUE_ZERO           "Null"
-    #define DE_1_DEGREE             "1��"
-    #define DE_5_DEGREE             "5��"
-    #define DE_10_DEGREE            "10��"
+    #define DE_1_DEGREE             "1℃"
+    #define DE_5_DEGREE             "5℃"
+    #define DE_10_DEGREE            "10℃"
     #define DE_X_INC                "X+"
     #define DE_Y_INC                "Y+"
     #define DE_Z_INC                "Z+"
@@ -83,12 +84,10 @@
     #define DE_10_PERCENT           "10%"
 
     #define DE_READY                "Bereit"
-    #define DE_PRINTING             "Druckt"
     #define DE_BUSY                 "Bitte warten..."
     #define DE_UNCONNECTED          "Keine Verbindung zum Drucker!"
     #define DE_DISCONNECT_INFO      "Verbindung getrennt!"
     #define DE_LOADING              "Laden..."
-    #define DE_READ_SD_ERROR        "SD Lesefehler!"    
     #define DE_POWER_FAILED         "Druck fortsetzen?"
     #define DE_CONTINUE             "Fortsetzen"
     #define DE_CANNEL               "Abbruch"
@@ -101,7 +100,7 @@
     #define DE_CONFIRM              "OK"
 
     #define DE_TFTSD                "TFT SD"
-    #define DE_READ_TFTSD_ERROR     "Read TFT SD card error!"
+    #define DE_READ_TFTSD_ERROR     "TFTSD Lesefehler!"
     #define DE_TFTSD_INSERTED       "Card inserted!"
     #define DE_TFTSD_REMOVED        "Card removed!"
     
@@ -111,7 +110,7 @@
     #define DE_U_DISK_REMOVED       "U Disk removed!"
     
     #define DE_ONBOARDSD            "OnboardSD"
-    #define DE_READ_ONBOARDSD_ERROR "Read Onboard SD card error!"
+    #define DE_READ_ONBOARDSD_ERROR "OnboardSD Lesefehler!"
     
     #define DE_FILAMENT_RUNOUT      "filament runout!"
 

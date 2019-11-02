@@ -22,8 +22,8 @@ void menuInfo(void)
   const char* hardware = "Board   : BIGTREETECH_" HARDWARE_VERSION;
   const char* firmware = "Firmware: "HARDWARE_VERSION"." STRINGIFY(SOFTWARE_VERSION) " " __DATE__;
   
-  u16 HW_X = (LCD_WIDTH - my_strlen((u8 *)hardware)*BYTE_WIDTH)/2;
-  u16 FW_X = (LCD_WIDTH - my_strlen((u8 *)firmware)*BYTE_WIDTH)/2;
+  u16 HW_X = (LCD_WIDTH - GUI_StrPixelWidth((u8 *)hardware))/2;
+  u16 FW_X = (LCD_WIDTH - GUI_StrPixelWidth((u8 *)firmware))/2;
   u16 centerY = LCD_HEIGHT/2;
   u16 startX = MIN(HW_X, FW_X);
   
@@ -189,13 +189,14 @@ const ITEM itemBaudrate[ITEM_BAUDRATE_NUM] = {
 const  u32 item_baudrate[ITEM_BAUDRATE_NUM] = {115200,250000};
 static u8  item_baudrate_i = 0;
 
-#define ITEM_RUNOUT_NUM 2
+#define ITEM_RUNOUT_NUM 3
 const ITEM itemRunout[ITEM_RUNOUT_NUM] = {
 // icon                       label
   {ICON_RUNOUT,             LABEL_RUNOUT_OFF},
   {ICON_RUNOUT,             LABEL_RUNOUT_ON},
+  {ICON_RUNOUT,             LABEL_SMART_RUNOUT_ON},
 };
-const  u32 item_runout[ITEM_RUNOUT_NUM] = {0,1};
+const  u32 item_runout[ITEM_RUNOUT_NUM] = {FILAMENT_RUNOUT_OFF, FILAMENT_RUNOUT_ON, FILAMENT_SMART_RUNOUT_ON};
 static u8  item_runout_i = 0;
 
 void menuSettings(void)

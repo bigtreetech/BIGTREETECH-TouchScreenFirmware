@@ -75,9 +75,9 @@ bool bmpDecode(char *bmp, u32 addr)
   if(bytePerLine%4 !=0) //bmp
     bytePerLine=(bytePerLine/4+1)*4;  
   
-  for(bnum=0;bnum<(w*h*2+4095)/4096;bnum++)
+  for(bnum=0; bnum<(w*h*2+W25QXX_SECTOR_SIZE-1)/W25QXX_SECTOR_SIZE; bnum++)
   {
-    W25Qxx_EraseSector(addr+bnum*4096);
+    W25Qxx_EraseSector(addr+bnum*W25QXX_SECTOR_SIZE);
   }
   bnum=0;
     
@@ -97,7 +97,7 @@ bool bmpDecode(char *bmp, u32 addr)
       buf[bnum++]=(u8)(pix.color>>8);
       buf[bnum++]=(u8)(pix.color&0xFF);
       
-      if(bnum==256)
+      if(bnum == 256)
       {
         W25Qxx_WritePage(buf,addr,256);
         addr+=256;
@@ -147,26 +147,26 @@ void updateFont(char *font, u32 addr)
   
   if (f_open(&myfp, font, FA_OPEN_EXISTING|FA_READ) != FR_OK)  return;
 
-  tempbuf = malloc(4096);
-  if (tempbuf == NULL)  return;  
+  tempbuf = malloc(W25QXX_SECTOR_SIZE);
+  if (tempbuf == NULL)  return;
   GUI_Clear(BLACK);
   my_sprintf((void *)buffer,"%s Size: %dKB",font, (u32)f_size(&myfp)>>10);
-  GUI_DispString(40, 100, (u8*)buffer,0);
-  GUI_DispString(40, 140, (u8*)"Updating:   %",0);
+  GUI_DispString(0, 100, (u8*)buffer,0);
+  GUI_DispString(0, 140, (u8*)"Updating:   %",0);
   
   while(!f_eof(&myfp))
   {
-    if (f_read(&myfp, tempbuf, 4096, &rnum) != FR_OK) break;
+    if (f_read(&myfp, tempbuf, W25QXX_SECTOR_SIZE, &rnum) != FR_OK) break;
     
-    W25Qxx_EraseSector(addr+offset);
-    W25Qxx_WriteBuffer(tempbuf,addr+offset,4096);
-    offset+=rnum;
-    if(progress != offset*100/f_size(&myfp))
+    W25Qxx_EraseSector(addr + offset);
+    W25Qxx_WriteBuffer(tempbuf, addr + offset, W25QXX_SECTOR_SIZE);
+    offset += rnum;
+    if(progress != offset * 100 / f_size(&myfp))
     {
-      progress = offset*100/f_size(&myfp);
-      GUI_DispDec(40 + BYTE_WIDTH*9, 140, progress, 3, 1, RIGHT);
+      progress = offset * 100 / f_size(&myfp);
+      GUI_DispDec(0 + BYTE_WIDTH*9, 140, progress, 3, 1, RIGHT);
     }
-    if(rnum!=4096)break;
+    if(rnum !=W25QXX_SECTOR_SIZE)break;
   }
   
   f_close(&myfp);
@@ -182,10 +182,10 @@ void scanUpdates(void)
     result = scanUpdateFile();
     if (result & FONT)
     {
-      updateFont(FONT_ROOT_DIR"/byte.fon", BYTE_ADDR);
-      updateFont(FONT_ROOT_DIR"/word.fon", WORD_ADDR);
-      updateFont(FONT_ROOT_DIR"/uni2oem.bin", UNI2OEM_ADDR);
-      updateFont(FONT_ROOT_DIR"/oem2uni.bin", OEM2UNI_ADDR);
+      updateFont(FONT_ROOT_DIR"/byte_ascii.fon", BYTE_ASCII_ADDR);
+      updateFont(FONT_ROOT_DIR"/word_unicode.fon", WORD_UNICODE);
+      updateFont(FONT_ROOT_DIR"/byte_cyrillic.fon", BYTE_CYRILLIC_ADDR);
+      updateFont(FONT_ROOT_DIR"/byte_latin.fon", BYTE_LATIN_ADDR);
     }
     if (result & BMP) //bmp
     {
