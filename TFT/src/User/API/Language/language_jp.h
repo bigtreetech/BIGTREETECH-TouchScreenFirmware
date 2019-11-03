@@ -129,4 +129,12 @@
     
     #define JP_FILAMENT_RUNOUT      "filament runout!"
 
+    #define JP_PREHEAT              "Preheat"
+    #define JP_PREHEAT_BOTH         "Both"
+    #define JP_PREHEAT_PLA          "PLA"
+    #define JP_PREHEAT_PETG         "PETG"
+    #define JP_PREHEAT_ABS          "ABS"
+    #define JP_PREHEAT_CUSTOM1      "CUSTOM1"
+    #define JP_PREHEAT_CUSTOM2      "CUSTOM2"
+
 #endif

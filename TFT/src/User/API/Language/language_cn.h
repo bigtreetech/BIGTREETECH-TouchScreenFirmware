@@ -128,4 +128,12 @@
     
     #define CN_FILAMENT_RUNOUT      "耗材已用尽,请更换耗材!"
 
+    #define CN_PREHEAT              "Preheat"
+    #define CN_PREHEAT_BOTH         "Both"
+    #define CN_PREHEAT_PLA          "PLA"
+    #define CN_PREHEAT_PETG         "PETG"
+    #define CN_PREHEAT_ABS          "ABS"
+    #define CN_PREHEAT_CUSTOM1      "CUSTOM1"
+    #define CN_PREHEAT_CUSTOM2      "CUSTOM2"
+
 #endif

@@ -6,7 +6,7 @@ const MENUITEMS mainPageItems = {
 // title
 LABEL_READY,
 // icon                       label
- {{ICON_HEAT,                 LABEL_HEAT},
+ {{ICON_HEAT,                 LABEL_PREHEAT},
   {ICON_MOVE,                 LABEL_MOVE},
   {ICON_HOME,                 LABEL_HOME},
   {ICON_PRINT,                LABEL_PRINT},
@@ -27,7 +27,7 @@ void menuMain(void)
     key_num = menuKeyGetValue();
     switch(key_num)
     {
-      case KEY_ICON_0: infoMenu.menu[++infoMenu.cur] = menuHeat;      break;
+      case KEY_ICON_0: infoMenu.menu[++infoMenu.cur] = menuPreheat;   break;
       case KEY_ICON_1: infoMenu.menu[++infoMenu.cur] = menuMove;      break;
       case KEY_ICON_2: infoMenu.menu[++infoMenu.cur] = menuHome;      break;
       case KEY_ICON_3: infoMenu.menu[++infoMenu.cur] = menuPrint;     break;      
