@@ -1,0 +1,36 @@
+#include "includes.h"
+#include "more.h"
+
+MENUITEMS moreItems = {
+//  title
+LABEL_MORE,
+// icon                       label
+ {{ICON_FAN,                  LABEL_FAN},
+  {ICON_RGB_SETTINGS,         LABEL_RGB_SETTINGS},
+  {ICON_EXTRUDE,              LABEL_EXTRUDE},
+  {ICON_BACKGROUND,           LABEL_BACKGROUND},
+  {ICON_BACKGROUND,           LABEL_BACKGROUND},
+  {ICON_BACKGROUND,           LABEL_BACKGROUND},
+  {ICON_BACKGROUND,           LABEL_BACKGROUND},
+  {ICON_BACK,                 LABEL_BACK},}
+};
+
+void menuMore(void)
+{
+  KEY_VALUES  key_num = KEY_IDLE;
+
+  menuDrawPage(&moreItems);
+  while(infoMenu.menu[infoMenu.cur] == menuMore)
+  {
+    key_num = menuKeyGetValue();
+    switch(key_num)
+    {
+      case KEY_ICON_0: infoMenu.menu[++infoMenu.cur] = menuFan;  break;
+      case KEY_ICON_1: infoMenu.menu[++infoMenu.cur] = menuRGBSettings;  break;
+      case KEY_ICON_2: infoMenu.menu[++infoMenu.cur] = menuExtrude;  break;
+      case KEY_ICON_7: infoMenu.cur--; break;
+      default:break;            
+    }
+    loopProcess();
+  }
+}

@@ -5,10 +5,6 @@
 
 #ifdef ST7920_SPI
 
-#ifndef ST7920_BANNER_TEXT
-  #define ST7920_BANNER_TEXT "LCD12864 Simulator"
-#endif
-
 ST7920_PIXEL       st7920 = {ST7920_XSTART, ST7920_YSTART, 0};
 ST7920_CTRL_STATUS status = ST7920_IDLE;
 
@@ -132,9 +128,11 @@ void menuST7920(void)
   GUI_Clear(infoSettings.bg_color);
   GUI_SetColor(infoSettings.font_color);
   GUI_SetBkColor(infoSettings.bg_color);
-  #ifndef ST7920_FULLSCREEN
+  
+  #if defined(ST7920_BANNER_TEXT) && !(defined(ST7920_FULLSCREEN))
     GUI_DispStringInRect(0, 0, LCD_WIDTH, SIMULATOR_YSTART, (u8*)ST7920_BANNER_TEXT, 0);
   #endif
+  
   SPI_Slave();
   SPI_Slave_CS_Config();
   
