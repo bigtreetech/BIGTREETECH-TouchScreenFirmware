@@ -128,5 +128,13 @@
     #define RU_READ_ONBOARDSD_ERROR "Read Onboard SD card error!"
     
     #define RU_FILAMENT_RUNOUT      "filament runout!"
+
+    #define RU_PREHEAT              "Preheat"
+    #define RU_PREHEAT_BOTH         "Both"
+    #define RU_PREHEAT_PLA          "PLA"
+    #define RU_PREHEAT_PETG         "PETG"
+    #define RU_PREHEAT_ABS          "ABS"
+    #define RU_PREHEAT_CUSTOM1      "CUSTOM1"
+    #define RU_PREHEAT_CUSTOM2      "CUSTOM2"
     
 #endif

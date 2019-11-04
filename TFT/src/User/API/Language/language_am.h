@@ -129,4 +129,12 @@
     
     #define AM_FILAMENT_RUNOUT      "filament runout!"
 
+    #define AM_PREHEAT              "Preheat"
+    #define AM_PREHEAT_BOTH         "Both"
+    #define AM_PREHEAT_PLA          "PLA"
+    #define AM_PREHEAT_PETG         "PETG"
+    #define AM_PREHEAT_ABS          "ABS"
+    #define AM_PREHEAT_CUSTOM1      "CUSTOM1"
+    #define AM_PREHEAT_CUSTOM2      "CUSTOM2"
+
 #endif
