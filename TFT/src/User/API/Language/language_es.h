@@ -133,5 +133,10 @@
     #define ES_IS_PAUSE             "Unable to extrude when printing, Pause printing?"
     #define ES_AUTO_SHUT_DOWN       "Auto Power"
     #define ES_MANUAL_SHUT_DOWN     "Manual"
+    #define ES_UNIFIEDMOVE          "Movement"
+    #define ES_GCODE                "Send Code"
+    #define ES_UNIFIEDHEAT          "Heat/Fan"
+    #define ES_COOLDOWN             "Cool Down"
+    #define ES_EMERGENCYSTOP        "EM. STOP"
 
 #endif
