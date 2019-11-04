@@ -183,7 +183,7 @@
 
 //extend function(PS_ON, filament_detect)
 #if defined(TFT35_V2_0)
-  #define PS_ON_PIN      PE5
+  #define PS_ON_PIN      PD12
   #define FIL_RUNOUT_PIN PD11
 #elif defined(TFT35_V3_0)
   #define PS_ON_PIN      PA12

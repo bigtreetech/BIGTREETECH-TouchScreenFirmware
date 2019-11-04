@@ -21,6 +21,7 @@
 #include "lcd_dma.h"
 #include "GUI.h"
 #include "Language.h"
+#include "utf8_decode.h"
 
 #include "usart.h"
 #include "Serial.h"
@@ -55,34 +56,36 @@
 //menu
 #include "menu.h"
 #include "MainPage.h"
-
+#include "PreHeatMenu.h"
 #include "Heat.h"
 #include "Move.h"
 #include "Home.h"
 #include "Print.h"
 #include "Printing.h"
+#include "More.h"
 #include "Speed.h"
 #include "BabyStep.h"
 
 #include "Extrude.h"
 #include "Fan.h"
 #include "Settings.h"
+#include "ScreenSettings.h"
+#include "MachineSettings.h"
+#include "FeatureSettings.h"
+#include "SendGcode.h"
 #include "leveling.h"
+#include "ProbeOffset.h"
 #include "PowerFailed.h"
 
 #include "Popup.h"
 #include "Mode.h"
 
-//address in spiflash W25Qxx
-#define LOGO_ADDR               0x0
-#define ICON_ADDR(num)          ((num)*0x5000+0x4B000)
+<<<<<<< HEAD
+=======
+#include "UnifiedMove.h"
+#include "UnifiedHeat.h"
 
-#define BYTE_ADDR               0x200000
-#define WORD_ADDR               0x300000
-
-#define UNI2OEM_ADDR            0x600000
-#define OEM2UNI_ADDR            0x700000
-
+>>>>>>> 446c53de5d104df4d22a8682a190591402d11f18
 
 #define MAX_MENU_DEPTH 10       // max sub menu depth
 typedef void (*FP_MENU)(void); 
@@ -94,6 +97,8 @@ typedef struct
 }MENU;
 
 extern MENU infoMenu;
+<<<<<<< HEAD
+=======
 enum
 {
   ICON_BACKGROUND = -1,
@@ -172,11 +177,23 @@ enum
   ICON_MARLIN,
   ICON_BIGTREE,
   ICON_GCODE,
+  ICON_BLTOUCH_DEPLOY,
+  ICON_BLTOUCH_STOW,
+  ICON_BLTOUCH_TEST,
+  ICON_BLTOUCH_REPEAT,
+  ICON_PROBE_OFFSET,
+  ICON_EEPROM_SAVE,
   ICON_ABL,
+
+  ICON_HOME_MOVE,
+  ICON_HEAT_FAN,
+  ICON_MANUAL_LEVEL,
+  ICON_COOLDOWN,
 //  ICON_RESERVE
 };
 
 
+>>>>>>> 446c53de5d104df4d22a8682a190591402d11f18
 
 typedef struct
 {	

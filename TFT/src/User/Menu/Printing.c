@@ -1,7 +1,7 @@
 #include "Printing.h"
 #include "includes.h"
 
-//1锟斤拷title(锟斤拷锟斤拷), ITEM_PER_PAGE锟斤拷item(图锟斤拷+锟斤拷签) 
+//1title, ITEM_PER_PAGE item(icon + label) 
 MENUITEMS printingItems = {
 //  title
 LABEL_BACKGROUND,
@@ -11,9 +11,9 @@ LABEL_BACKGROUND,
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_STOP,                 LABEL_STOP},
   {ICON_HEAT,                 LABEL_HEAT},
-  {ICON_FAN,                  LABEL_FAN},
   {ICON_PERCENTAGE,           LABEL_PERCENTAGE},
-  {ICON_BABYSTEP,             LABEL_BABYSTEP},}
+  {ICON_BABYSTEP,             LABEL_BABYSTEP},
+  {ICON_MORE,                 LABEL_MORE},}
 };
 
 const ITEM itemIsPause[2] = {
@@ -173,6 +173,7 @@ void menuBeforePrinting(void)
 
 void resumeToPause(bool is_pause)
 {
+  if(infoMenu.menu[infoMenu.cur] != menuPrinting) return;
   printingItems.items[KEY_ICON_0] = itemIsPause[is_pause];
   menuDrawItem(&itemIsPause[is_pause],0);
 }
@@ -207,13 +208,18 @@ bool setPrintPause(bool is_pause)
       infoPrinting.pause = is_pause;
       if(infoPrinting.pause)
       {
+        //restore status before pause
         coordinateGetAll(&tmp);
         if (isCoorRelative == true)     mustStoreCmd("G90\n");
         if (isExtrudeRelative == true)  mustStoreCmd("M82\n");
         
-        mustStoreCmd("G1 E%.5f F%d\n", tmp.axis[E_AXIS] - NOZZLE_PAUSE_RETRACT_LENGTH, NOZZLE_PAUSE_E_FEEDRATE);
-        mustStoreCmd("G1 Z%.3f F%d\n", tmp.axis[Z_AXIS] + NOZZLE_PAUSE_Z_RAISE, NOZZLE_PAUSE_Z_FEEDRATE);
-        mustStoreCmd("G1 X%d Y%d F%d\n", NOZZLE_PAUSE_X_POSITION, NOZZLE_PAUSE_Y_POSITION, NOZZLE_PAUSE_XY_FEEDRATE);
+        if (heatGetCurrentTemp(heatGetCurrentToolNozzle()) > PREVENT_COLD_EXTRUSION_MINTEMP)
+          mustStoreCmd("G1 E%.5f F%d\n", tmp.axis[E_AXIS] - NOZZLE_PAUSE_RETRACT_LENGTH, NOZZLE_PAUSE_E_FEEDRATE);
+        if (coordinateIsClear())
+        {
+          mustStoreCmd("G1 Z%.3f F%d\n", tmp.axis[Z_AXIS] + NOZZLE_PAUSE_Z_RAISE, NOZZLE_PAUSE_Z_FEEDRATE);
+          mustStoreCmd("G1 X%d Y%d F%d\n", NOZZLE_PAUSE_X_POSITION, NOZZLE_PAUSE_Y_POSITION, NOZZLE_PAUSE_XY_FEEDRATE);
+        }
         
         if (isCoorRelative == true)     mustStoreCmd("G91\n");
         if (isExtrudeRelative == true)  mustStoreCmd("M83\n");
@@ -223,10 +229,13 @@ bool setPrintPause(bool is_pause)
         if (isCoorRelative == true)     mustStoreCmd("G90\n");
         if (isExtrudeRelative == true)  mustStoreCmd("M82\n");
         
-        //restore status before pause
-        mustStoreCmd("G1 X%.3f Y%.3f F%d\n", tmp.axis[X_AXIS], tmp.axis[Y_AXIS], NOZZLE_PAUSE_XY_FEEDRATE);
-        mustStoreCmd("G1 Z%.3f F%d\n", tmp.axis[Z_AXIS], NOZZLE_PAUSE_Z_FEEDRATE);
-        mustStoreCmd("G1 E%.5f F%d\n", tmp.axis[E_AXIS] + NOZZLE_PAUSE_PURGE_LENGTH, NOZZLE_PAUSE_E_FEEDRATE);
+        if (coordinateIsClear())
+        {
+          mustStoreCmd("G1 X%.3f Y%.3f F%d\n", tmp.axis[X_AXIS], tmp.axis[Y_AXIS], NOZZLE_PAUSE_XY_FEEDRATE);
+          mustStoreCmd("G1 Z%.3f F%d\n", tmp.axis[Z_AXIS], NOZZLE_PAUSE_Z_FEEDRATE);
+        }
+        if(heatGetCurrentTemp(heatGetCurrentToolNozzle()) > PREVENT_COLD_EXTRUSION_MINTEMP)
+          mustStoreCmd("G1 E%.5f F%d\n", tmp.axis[E_AXIS] + NOZZLE_PAUSE_PURGE_LENGTH, NOZZLE_PAUSE_E_FEEDRATE);
         mustStoreCmd("G92 E%.5f\n", tmp.axis[E_AXIS]);
         mustStoreCmd("G90 F%d\n", tmp.feedrate);
         
@@ -303,14 +312,15 @@ void printingDrawPage(void)
   //	Scroll_CreatePara(&titleScroll, infoFile.title,&titleRect);  //
   GUI_DispLenString(titleRect.x0, titleRect.y0, 
                     getCurGcodeName(infoFile.title), 1, 
-                   (titleRect.x1 - titleRect.x0)/BYTE_WIDTH );
+                   (titleRect.x1 - titleRect.x0) );
+  // printed time
   GUI_DispString(progressRect.x0, TIME_Y, (u8* )"T:", 0);
   GUI_DispChar(progressRect.x0+BYTE_WIDTH*4, TIME_Y, ':', 0);
   GUI_DispChar(progressRect.x0+BYTE_WIDTH*7, TIME_Y, ':', 0);
-  
+  // nozzle temperature 
   GUI_DispString(progressRect.x0+BYTE_WIDTH*2, TEMP_Y,(u8* )":",0);
   GUI_DispChar(progressRect.x0+BYTE_WIDTH*6, TEMP_Y,'/',0);
-  
+  // hotbed temperature
   GUI_DispString(BED_X, TEMP_Y,(u8* )"B:",0);
   GUI_DispChar(BED_X+BYTE_WIDTH*5, TEMP_Y,'/',0);
   reDrawProgress(infoPrinting.progress);
@@ -394,15 +404,15 @@ void menuPrinting(void)
         break;
       
       case KEY_ICON_5:
-        infoMenu.menu[++infoMenu.cur] = menuFan;
-        break;
-      
-      case KEY_ICON_6:
         infoMenu.menu[++infoMenu.cur] = menuSpeed;
         break;
       
-      case KEY_ICON_7:
+      case KEY_ICON_6:
         infoMenu.menu[++infoMenu.cur] = menuBabyStep;
+        break;
+      
+      case KEY_ICON_7:
+        infoMenu.menu[++infoMenu.cur] = menuMore;
         break;
       
       default :break;
@@ -417,7 +427,7 @@ void exitPrinting(void)
   ExitDir();	
 }
 
-void completePrinting(void)
+void endPrinting(void)
 {  
   switch (infoFile.source)
   {
@@ -430,10 +440,18 @@ void completePrinting(void)
       f_close(&infoPrinting.file);	
       break;
   }
-  infoPrinting.printing = false;
+  infoPrinting.printing = infoPrinting.pause = false;
   powerFailedClose();
   powerFailedDelete();  
-  endGcodeExecute();		
+  endGcodeExecute();
+}
+
+
+void completePrinting(void)
+{
+  endPrinting();  
+  if(infoSettings.auto_off) // Auto shut down after printing
+    mustStoreCmd("M81\n");
 }
 
 void haltPrinting(void)
@@ -452,39 +470,36 @@ void haltPrinting(void)
 
   heatClearIsWaiting();
   
-  mustStoreCmd("G0 Z%d F3000\n", limitValue(0, (int)coordinateGetAxis(Z_AXIS) + 10, Z_MAX_POS));
+  mustStoreCmd("G0 Z%d F3000\n", limitValue(0, (int)coordinateGetAxisTarget(Z_AXIS) + 10, Z_MAX_POS));
   mustStoreCmd("G28 X0 Y0\n");
 
-  completePrinting();
+  endPrinting();
   exitPrinting();
 }
 
-static const GUI_RECT stopRect[] ={POPUP_RECT_DOUBLE_CONFIRM, POPUP_RECT_DOUBLE_CANCEL};
-
 void menuStopPrinting(void)
 {
-  u16 key_num = IDLE_TOUCH;	
+  u16 key_num = IDLE_TOUCH;
 
   popupDrawPage(bottomDoubleBtn, textSelect(LABEL_WARNING), textSelect(LABEL_STOP_PRINT), textSelect(LABEL_CONFIRM), textSelect(LABEL_CANNEL));
  
   while(infoMenu.menu[infoMenu.cur] == menuStopPrinting)
   {
-    key_num = KEY_GetValue(2, stopRect);
+    key_num = KEY_GetValue(2, doubleBtnRect);
     switch(key_num)
     {
-      case KEY_POPUP_CONFIRM:					
-      haltPrinting();
-      infoMenu.cur-=2;
+      case KEY_POPUP_CONFIRM:
+        haltPrinting();
+        infoMenu.cur-=2;
       break;
 
-      case KEY_POPUP_CANCEL:	
-      infoMenu.cur--;
-      break;		
+      case KEY_POPUP_CANCEL:
+        infoMenu.cur--;
+        break;		
     }
     loopProcess();
   }
 }
-
 
 // get gcode command from sd card
 void getGcodeFromFile(void)

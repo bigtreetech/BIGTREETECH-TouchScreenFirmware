@@ -61,7 +61,7 @@ void powerFailedCache(u32 offset)
   infoBreakPoint.offset = offset;
   for (AXIS i = X_AXIS; i < TOTAL_AXIS; i++)
   {
-    infoBreakPoint.axis[i] = coordinateGetAxis(i);
+    infoBreakPoint.axis[i] = coordinateGetAxisTarget(i);
   }
   infoBreakPoint.feedrate = coordinateGetFeedRate();
   infoBreakPoint.speed = speedGetPercent(0);
@@ -178,23 +178,20 @@ bool powerOffGetData(void)
   return true;
 }
 
-
-static const GUI_RECT powerFailedRect[] ={POPUP_RECT_DOUBLE_CONFIRM, POPUP_RECT_DOUBLE_CANCEL};
-
 void menuPowerOff(void)
 {
   u16 key_num = IDLE_TOUCH;
   clearPowerFailed();
   GUI_Clear(BK_COLOR);
-  GUI_DispString((LCD_WIDTH - my_strlen(textSelect(LABEL_LOADING))*BYTE_WIDTH)/2, LCD_HEIGHT/2 - BYTE_HEIGHT, textSelect(LABEL_LOADING),1);
+  GUI_DispString((LCD_WIDTH - GUI_StrPixelWidth(textSelect(LABEL_LOADING)))/2, LCD_HEIGHT/2 - BYTE_HEIGHT, textSelect(LABEL_LOADING),1);
  
   if(mountFS()==true && powerFailedExist())
-  {    
+  {
     popupDrawPage(bottomDoubleBtn, textSelect(LABEL_POWER_FAILED), (u8* )infoFile.title, textSelect(LABEL_CONFIRM), textSelect(LABEL_CANNEL));
     
     while(infoMenu.menu[infoMenu.cur]==menuPowerOff)
     {
-      key_num = KEY_GetValue(2,powerFailedRect);
+      key_num = KEY_GetValue(2, doubleBtnRect);
       switch(key_num)
       {
         case KEY_POPUP_CONFIRM:    

@@ -260,7 +260,7 @@ GKEY_VALUES GKeyGetValue(void)
 void DrawGKEY(void)
 {
   uint8_t i;
-  char *key[24]={"1","2","3","M","G","¡û","4","5","6","X","Y","Spac","7","8","9","Z","E","A-Z",".","0","-"," "," ","Buzz"};
+  char *key[24]={"1","2","3","M","G","Del","4","5","6","X","Y","Spac","7","8","9","Z","E","A-Z",".","0","-"," "," ","Buzz"};
   for(i=0;i<24;i++)
   {
     GUI_DispStringInRect(rect_of_Gkey[i].x0, rect_of_Gkey[i].y0, rect_of_Gkey[i].x1, rect_of_Gkey[i].y1,(uint8_t *)key[i], 0);
@@ -271,7 +271,7 @@ void DrawGKEY(void)
 void DrawEGKEY(void)
 {
   uint8_t i;
-  char *key[24]={"A","B","C","D","F","¡û","H","I","K","L","N","Spac","O","P","Q","R","S","A-Z","T","U","V","W"," "," "};
+  char *key[24]={"A","B","C","D","F","Del","H","I","K","L","N","Spac","O","P","Q","R","S","A-Z","T","U","V","W"," "," "};
   for(i=0;i<24;i++)
   {
     GUI_DispStringInRect(rect_of_Gkey[i].x0, rect_of_Gkey[i].y0, rect_of_Gkey[i].x1, rect_of_Gkey[i].y1,(uint8_t *)key[i], 0);
@@ -301,7 +301,7 @@ bool revinfo(void)
   GUI_SetColor(BK_COLOR);
   GUI_DispStringInRect(0, SPACE_GKY+TITLE_END_Y+BYTE_HEIGHT, LCD_WIDTH,LCD_HEIGHT-BYTE_HEIGHT,(uint8_t *)showbuf1,0);
     
-  uint16_t stringlen = my_strlen((u8*)showbuf1)*BYTE_WIDTH;
+  uint16_t stringlen = GUI_StrPixelWidth((u8*)showbuf1);
   uint16_t width = LCD_WIDTH;
   uint16_t height = (LCD_HEIGHT-BYTE_HEIGHT) - (SPACE_GKY+TITLE_END_Y);
   uint8_t  nline = (stringlen+width-1)/width ;
@@ -316,7 +316,7 @@ bool revinfo(void)
     i++;  
   }
   
-  GUI_DispStringInRect(LCD_WIDTH/2,LCD_HEIGHT-BYTE_HEIGHT,LCD_WIDTH,LCD_HEIGHT,(uint8_t *)"¡·",0);
+  GUI_DispStringInRect(LCD_WIDTH/2,LCD_HEIGHT-BYTE_HEIGHT,LCD_WIDTH,LCD_HEIGHT,(uint8_t *)"ï¿½ï¿½",0);
 
   i = 0;
   while(i<((LCD_WIDTH-2*BYTE_WIDTH)/BYTE_WIDTH)*(LCD_HEIGHT-(SPACE_GKY+TITLE_END_Y+BYTE_HEIGHT))/BYTE_HEIGHT)
@@ -333,8 +333,7 @@ bool revinfo(void)
     TS_Get_Coordinates(&x,&y);
     if(x>LCD_WIDTH-(GCODE_KEYW+START_GKX) && x<LCD_WIDTH-10 && y>10 && y<10+BYTE_HEIGHT+5)
     {
-    #ifdef BUZZER_PIN
-    if(infoSettings.buzzer == 1)
+    #ifdef BUZZER_PIN    
     openBuzzer(3, 11);
     #endif
     keyback = false;
@@ -347,7 +346,7 @@ bool revinfo(void)
     GUI_FillRect(0,SPACE_GKY+TITLE_END_Y,LCD_WIDTH,LCD_HEIGHT);
     GUI_SetColor(BK_COLOR);
     GUI_DispStringInRect(0,SPACE_GKY+TITLE_END_Y+BYTE_HEIGHT,LCD_WIDTH,LCD_HEIGHT-BYTE_HEIGHT,(uint8_t *)showbuf1,0);
-    GUI_DispStringInRect(LCD_WIDTH/2,LCD_HEIGHT-BYTE_HEIGHT,LCD_WIDTH,LCD_HEIGHT,(uint8_t *)"¡·",0);
+    GUI_DispStringInRect(LCD_WIDTH/2,LCD_HEIGHT-BYTE_HEIGHT,LCD_WIDTH,LCD_HEIGHT,(uint8_t *)"Del",0);
     bufpage = 1;
     }
     
@@ -360,8 +359,8 @@ bool revinfo(void)
     GUI_FillRect(0,SPACE_GKY+TITLE_END_Y,LCD_WIDTH,LCD_HEIGHT);
     GUI_SetColor(BK_COLOR);
     GUI_DispStringInRect(0,SPACE_GKY+TITLE_END_Y+BYTE_HEIGHT,LCD_WIDTH,LCD_HEIGHT-BYTE_HEIGHT,(uint8_t *)showbuf2,0);
-    GUI_DispStringInRect(0,LCD_HEIGHT-BYTE_HEIGHT,LCD_WIDTH/2,LCD_HEIGHT,(uint8_t *)"¡¶",0);
-    GUI_DispStringInRect(LCD_WIDTH/2,LCD_HEIGHT-BYTE_HEIGHT,LCD_WIDTH,LCD_HEIGHT,(uint8_t *)"¡·",0);
+    GUI_DispStringInRect(0,LCD_HEIGHT-BYTE_HEIGHT,LCD_WIDTH/2,LCD_HEIGHT,(uint8_t *)"ï¿½ï¿½",0);
+    GUI_DispStringInRect(LCD_WIDTH/2,LCD_HEIGHT-BYTE_HEIGHT,LCD_WIDTH,LCD_HEIGHT,(uint8_t *)"ï¿½ï¿½",0);
     bufpage = 2;
     }
     
@@ -372,7 +371,7 @@ bool revinfo(void)
     GUI_FillRect(0,SPACE_GKY+TITLE_END_Y,LCD_WIDTH,LCD_HEIGHT);
     GUI_SetColor(BK_COLOR);
     GUI_DispStringInRect(0,SPACE_GKY+TITLE_END_Y+BYTE_HEIGHT,LCD_WIDTH,LCD_HEIGHT-BYTE_HEIGHT,(uint8_t *)showbuf3,0);
-    GUI_DispStringInRect(0,LCD_HEIGHT-BYTE_HEIGHT,LCD_WIDTH/2,LCD_HEIGHT,(uint8_t *)"¡¶",0);
+    GUI_DispStringInRect(0,LCD_HEIGHT-BYTE_HEIGHT,LCD_WIDTH/2,LCD_HEIGHT,(uint8_t *)"ï¿½ï¿½",0);
     //GUI_DispStringInRect(10, 10, LCD_WIDTH-10,LCD_HEIGHT-10,"showbuf3",0);
     bufpage = 3;
     }
@@ -391,8 +390,7 @@ bool SendGcode(void)
   if(x>LCD_WIDTH-GCODE_KEYW+START_GKX && x<LCD_WIDTH-10 && y>10 && y<10+BYTE_HEIGHT+5)
   {
   #ifdef BUZZER_PIN
-  if(infoSettings.buzzer == 1)
-	openBuzzer(3, 11);
+    openBuzzer(3, 11);
   #endif
   return true;
   }
@@ -408,8 +406,7 @@ bool BackGKEY(void)
   if(x>10 && x<GCODE_KEYW+START_GKX && y>10 && y<10+BYTE_HEIGHT+5)
   {
   #ifdef BUZZER_PIN
-  if(infoSettings.buzzer == 1)
-	openBuzzer(3, 11);
+    openBuzzer(3, 11);
   #endif
   return true;
   }
