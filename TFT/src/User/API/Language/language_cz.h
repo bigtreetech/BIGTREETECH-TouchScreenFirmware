@@ -135,7 +135,6 @@
     #define CZ_AUTO_SHUT_DOWN       "Auto Power"
     #define CZ_MANUAL_SHUT_DOWN     "Manual"
     #define CZ_UNIFIEDMOVE          "Movement"
-    #define CZ_GCODE                "Send Code"
     #define CZ_UNIFIEDHEAT          "Heat&Fan"
     #define CZ_COOLDOWN             "Cool Down"
     #define CZ_EMERGENCYSTOP        "EM. STOP"

@@ -136,7 +136,6 @@
     #define DE_READ_ONBOARDSD_ERROR "OnboardSD Lesefehler!"    
     #define DE_FILAMENT_RUNOUT      "filament runout!"    
     #define DE_UNIFIEDMOVE          "Movement"
-    #define DE_GCODE                "Send Code"
     #define DE_UNIFIEDHEAT          "Heat&Fan"
     #define DE_COOLDOWN             "Cool Down"
     #define DE_EMERGENCYSTOP        "EM. STOP"

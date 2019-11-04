@@ -134,7 +134,6 @@
     #define JP_AUTO_SHUT_DOWN       "Auto Power"
     #define JP_MANUAL_SHUT_DOWN     "Manual"
     #define JP_UNIFIEDMOVE          "Movement"
-    #define JP_GCODE                "Send Code"
     #define JP_UNIFIEDHEAT          "Heat&Fan"
     #define JP_COOLDOWN             "Cool Down"
     #define JP_EMERGENCYSTOP        "EM. STOP"
