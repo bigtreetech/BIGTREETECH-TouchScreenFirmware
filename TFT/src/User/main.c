@@ -2,7 +2,7 @@
 
 HOST  infoHost;  // Information interaction with Marlin
 MENU  infoMenu;  // Menu structure
-
+CHAR_INFO info;
 void Hardware_GenericInit(void)
 {
   NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
@@ -39,8 +39,8 @@ void Hardware_GenericInit(void)
   {
     infoSettingsReset();
   }
-  
-  infoMenuSelect();
+  LCD_RefreshDirection();  //refresh display direction after reading settings
+  infoMenuSelect();  
 }
 
 int main(void)

@@ -8,14 +8,12 @@ typedef struct
 {	
   FIL     file;
 
-  u32     time;           //锟斤拷印时锟斤拷  锟斤拷位锟斤拷锟斤拷
-  u32     size;           //锟斤拷锟斤拷印锟侥硷拷锟斤拷锟斤拷锟街斤拷锟斤拷
-  u32     cur;            //锟窖讹拷取锟斤拷锟斤拷锟街斤拷锟斤拷
+  u32     time; // Printed time in sec
+  u32     size; // Gcode file total size
+  u32     cur; // Gcode has printed file size
   u8      progress;
-  bool    printing;      //锟斤拷印锟斤拷志  锟斤拷锟叫★拷准锟斤拷锟叫★拷锟斤拷印锟叫★拷锟斤拷印锟斤拷锟�
-  bool    pause;          //1锟斤拷锟斤拷停  0锟斤拷未锟斤拷停
-
-//  u32     lastUpdate;    // Last OS_time of update
+  bool    printing; // 1 means printing, 0 means idle
+  bool    pause; //1 means paused
 }PRINTING;
 
 void exitPrinting(void);

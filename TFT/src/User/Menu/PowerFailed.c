@@ -61,7 +61,7 @@ void powerFailedCache(u32 offset)
   infoBreakPoint.offset = offset;
   for (AXIS i = X_AXIS; i < TOTAL_AXIS; i++)
   {
-    infoBreakPoint.axis[i] = coordinateGetAxis(i);
+    infoBreakPoint.axis[i] = coordinateGetAxisTarget(i);
   }
   infoBreakPoint.feedrate = coordinateGetFeedRate();
   infoBreakPoint.speed = speedGetPercent(0);
@@ -135,12 +135,7 @@ bool powerOffGetData(void)
     if(infoBreakPoint.target[i] != 0)
       mustStoreCacheCmd("%s S%d\n", heatWaitCmd[i], infoBreakPoint.target[i]);
   }
-  #ifdef HOME_BEFORE_PLR
-    mustStoreCacheCmd("G28\n");
-  #else
-    mustStoreCacheCmd("G28 X0 Y0\n");
-  #endif
-
+  
   for(u8 i=0; i < FAN_NUM; i++)
   {
     if(infoBreakPoint.fan[i] != 0)
@@ -149,16 +144,23 @@ bool powerOffGetData(void)
   
   mustStoreCacheCmd("%s\n", tool_change[infoBreakPoint.nozzle - NOZZLE0]);
   if(infoBreakPoint.feedrate != 0)
-  {        
+  {
+    mustStoreCacheCmd("G92 Z%.3f\n", infoBreakPoint.axis[Z_AXIS]);    
     mustStoreCacheCmd("G1 Z%d\n", limitValue(0, infoBreakPoint.axis[Z_AXIS]+10, Z_MAX_POS));
+    #ifdef HOME_BEFORE_PLR
+      mustStoreCacheCmd("G28\n");
+      mustStoreCacheCmd("G1 Z%d\n", limitValue(0, infoBreakPoint.axis[Z_AXIS]+10, Z_MAX_POS));
+    #else
+      mustStoreCacheCmd("G28 X0 Y0\n");
+    #endif
     mustStoreCacheCmd("M83\n");
     mustStoreCacheCmd("G1 E30 F300\n");
-    mustStoreCacheCmd("G1 E-10 F4800\n");
-    mustStoreCacheCmd("G1 X%.3f Y%.3f Z%.3f F3000\n", 
+    mustStoreCacheCmd("G1 E-%d F4800\n", NOZZLE_PAUSE_RETRACT_LENGTH);
+    mustStoreCacheCmd("G1 X%.3f Y%.3f Z%.3f F3000\n",
                           infoBreakPoint.axis[X_AXIS],
                           infoBreakPoint.axis[Y_AXIS],
                           infoBreakPoint.axis[Z_AXIS]);
-    mustStoreCacheCmd("G1 E10 F4800\n");
+    mustStoreCacheCmd("G1 E%d F4800\n", NOZZLE_PAUSE_PURGE_LENGTH);
     mustStoreCacheCmd("G92 E%.5f\n",infoBreakPoint.axis[E_AXIS]);
     mustStoreCacheCmd("G1 F%d\n",infoBreakPoint.feedrate);        
 
@@ -176,23 +178,20 @@ bool powerOffGetData(void)
   return true;
 }
 
-
-static const GUI_RECT powerFailedRect[] ={POPUP_RECT_DOUBLE_CONFIRM, POPUP_RECT_DOUBLE_CANCEL};
-
 void menuPowerOff(void)
 {
   u16 key_num = IDLE_TOUCH;
   clearPowerFailed();
   GUI_Clear(BK_COLOR);
-  GUI_DispString((LCD_WIDTH - my_strlen(textSelect(LABEL_LOADING))*BYTE_WIDTH)/2, LCD_HEIGHT/2 - BYTE_HEIGHT, textSelect(LABEL_LOADING),1);
+  GUI_DispString((LCD_WIDTH - GUI_StrPixelWidth(textSelect(LABEL_LOADING)))/2, LCD_HEIGHT/2 - BYTE_HEIGHT, textSelect(LABEL_LOADING),1);
  
   if(mountFS()==true && powerFailedExist())
-  {    
+  {
     popupDrawPage(bottomDoubleBtn, textSelect(LABEL_POWER_FAILED), (u8* )infoFile.title, textSelect(LABEL_CONFIRM), textSelect(LABEL_CANNEL));
     
     while(infoMenu.menu[infoMenu.cur]==menuPowerOff)
     {
-      key_num = KEY_GetValue(2,powerFailedRect);
+      key_num = KEY_GetValue(2, doubleBtnRect);
       switch(key_num)
       {
         case KEY_POPUP_CONFIRM:    
@@ -202,14 +201,14 @@ void menuPowerOff(void)
           infoMenu.cur=2;
           break;
         
-        case KEY_POPUP_CANCEL:  
+        case KEY_POPUP_CANCEL:
           powerFailedDelete();
           ExitDir();
           infoMenu.cur--;
           break;        
       }
       
-      #ifdef SD_CD_SUPPROT
+      #ifdef SD_CD_PIN
       if(isVolumeExist(infoFile.source) != true)
       {
         resetInfoFile();

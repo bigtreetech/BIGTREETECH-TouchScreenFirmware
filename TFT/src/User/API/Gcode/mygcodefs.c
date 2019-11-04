@@ -38,17 +38,22 @@ bool scanPrintFilesGcodeFs(void)
   clearInfoFile();
 
   char *data = request_M20();
-
-  const char s[2] = "\n";
+  char s[3];
+  
+  if(strstr(data, "\r\n")) //for smoothieware
+    strcpy(s, "\r\n");
+  else //for Marlin
+    strcpy(s, "\n");
+    
   char *line = strtok(data, s);
   for (;line != NULL;line = strtok(NULL, s))
   {
-    if( strcmp(line,"Begin file list") == 0 || strcmp(line,"End file list") == 0 || strcmp(line,"ok") == 0)continue; // Start and Stop tag
-    if( strlen(line) < strlen(infoFile.title)-4) continue; // No path line exclude
-    if( strlen(infoFile.title) > 4 && strstr(line,infoFile.title+4) == NULL) continue; // No current directory
+    if ( strcmp(line,"Begin file list") == 0 || strcmp(line,"End file list") == 0 || strcmp(line,"ok") == 0) continue; // Start and Stop tag
+    if (strlen(line) < strlen(infoFile.title)-4) continue; // No path line exclude
+    if (strlen(infoFile.title) > 4 && strstr(line,infoFile.title+4) == NULL) continue; // No current directory
 
     char *pline = line + strlen(infoFile.title) - 4;
-    if(strlen(infoFile.title) > 4)pline++;
+    if (strlen(infoFile.title) > 4)pline++;
 
     if (strchr(pline, '/') == NULL)
     {

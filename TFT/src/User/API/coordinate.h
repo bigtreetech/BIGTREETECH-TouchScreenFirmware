@@ -27,9 +27,14 @@ bool  coorGetRelative(void);
 void  coorSetRelative(bool mode);
 bool  eGetRelative(void);
 void  eSetRelative(bool mode);
-float coordinateGetAxis(AXIS axis);
-void  coordinateSetAxis(AXIS axis, float position);
+bool  coordinateIsClear(void);
+void  coordinateSetClear(bool clear);
+float coordinateGetAxisTarget(AXIS axis);
+void  coordinateSetAxisTarget(AXIS axis, float position);
 u32   coordinateGetFeedRate(void);
 void  coordinateSetFeedRate(u32 feedrate);
+void  coordinateGetAll(COORDINATE *tmp);
+float coordinateGetAxisActual(AXIS axis);
+void  coordinateSetAxisActualSteps(AXIS axis, int steps);
 
 #endif

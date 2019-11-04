@@ -65,7 +65,7 @@ u8 calibrationEnsure(u16 x,u16 y)
 
   if(lcd_x < x+TS_ERR_RANGE && lcd_x>x-TS_ERR_RANGE  && lcd_y > y-TS_ERR_RANGE && lcd_y<y+TS_ERR_RANGE)
   {		
-    x_offset=(LCD_WIDTH - (my_strlen(textSelect(LABEL_ADJUST_OK)) * BYTE_WIDTH))>>1;
+    x_offset=(LCD_WIDTH - GUI_StrPixelWidth(textSelect(LABEL_ADJUST_OK))) >> 1;
     GUI_DispString(x_offset, LCD_HEIGHT-40, textSelect(LABEL_ADJUST_OK), 1);
     Delay_ms(1000);
   }
@@ -73,7 +73,7 @@ u8 calibrationEnsure(u16 x,u16 y)
   {
     while(isPress());
     GUI_SetColor(RED);
-    x_offset=(LCD_WIDTH - (my_strlen(textSelect(LABEL_ADJUST_FAILED)) * BYTE_WIDTH))>>1;
+    x_offset=(LCD_WIDTH - GUI_StrPixelWidth(textSelect(LABEL_ADJUST_FAILED))) >> 1;
     GUI_DispString(x_offset, LCD_HEIGHT-40, textSelect(LABEL_ADJUST_FAILED), 1);
     GUI_DispDec(0,0,lcd_x,3,0,0);
     GUI_DispDec(0,20,lcd_y,3,0,0);
@@ -97,10 +97,10 @@ void TSC_Calibration(void)
     GUI_Clear(WHITE);
     GUI_SetColor(BLACK);
     GUI_SetBkColor(WHITE);
-    x_offset=(LCD_WIDTH-(my_strlen(textSelect(LABEL_ADJUST_TITLE))*BYTE_WIDTH))>>1;
-    GUI_DispString(x_offset,5,textSelect(LABEL_ADJUST_TITLE),0);
-    x_offset=(LCD_WIDTH-(my_strlen(textSelect(LABEL_ADJUST_INFO))*BYTE_WIDTH))>>1;
-    GUI_DispString(x_offset,25,textSelect(LABEL_ADJUST_INFO),0);
+    x_offset=(LCD_WIDTH - GUI_StrPixelWidth(textSelect(LABEL_ADJUST_TITLE))) >> 1;
+    GUI_DispString(x_offset, 5, textSelect(LABEL_ADJUST_TITLE), 0);
+    x_offset=(LCD_WIDTH - GUI_StrPixelWidth(textSelect(LABEL_ADJUST_INFO))) >> 1;
+    GUI_DispString(x_offset, 25, textSelect(LABEL_ADJUST_INFO), 0);
     GUI_SetColor(RED);
     for(tp_num = 0;tp_num<3;tp_num++)
     {
@@ -192,6 +192,7 @@ u16 KEY_GetValue(u8 total_rect,const GUI_RECT* menuRect)
     {
       key_num = Key_value(total_rect, menuRect);
       firstPress = false;
+      if(TGCODE==0 && MODEselect ==0)
       TSC_ReDrawIcon(key_num, 1);
     }
   }
@@ -199,6 +200,7 @@ u16 KEY_GetValue(u8 total_rect,const GUI_RECT* menuRect)
   {
     if (firstPress == false )
     {
+      if(TGCODE==0 && MODEselect ==0)
       TSC_ReDrawIcon(key_num, 0);
       key_return = key_num;
       key_num = IDLE_TOUCH;
@@ -397,13 +399,13 @@ void TIM3_Config(u16 psc,u16 arr)
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE; 
 	NVIC_Init(&NVIC_InitStructure); 
 
-	RCC->APB1ENR|=1<<1;	           //TIM3ʱ��ʹ��    
- 	TIM3->ARR=arr;  	             //�趨�Զ���װֵ   
-	TIM3->PSC=psc;  	             //Ԥ��Ƶ��
-  TIM3->SR = (uint16_t)~(1<<0);  //��������ж�
-	TIM3->DIER|=1<<0;              //���������ж�	  
+	RCC->APB1ENR|=1<<1;
+ 	TIM3->ARR=arr;
+	TIM3->PSC=psc;
+  TIM3->SR = (uint16_t)~(1<<0);
+	TIM3->DIER|=1<<0;
 	TIM3->CNT =0;
-	TIM3->CR1 &= ~(0x01);          //ʧ�ܶ�ʱ��3	
+	TIM3->CR1 &= ~(0x01);
 }
 
 void Buzzer_Config(void)
@@ -429,6 +431,8 @@ static BUZZER buzzer;
 /*  */
 void openBuzzer(u16 h_us, u16 l_us)   
 {
+  if(infoSettings.silent) return;
+  
   buzzer.h_us = h_us;
   buzzer.l_us = l_us;
   if( h_us == 80 )

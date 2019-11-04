@@ -39,7 +39,7 @@ void clearInfoFile(void)
   infoFile.f_num = 0;
 }
 
-char* getCurFileSource(void)
+TCHAR* getCurFileSource(void)
 {
   switch (infoFile.source)
   {
@@ -109,21 +109,21 @@ bool IsRootDir(void)
 }
 
 //SD卡检测
-static bool volumeSrcStatus[_VOLUMES] = {false, false};
+static bool volumeSrcStatus[FF_VOLUMES] = {false, false};
 
 bool isVolumeExist(u8 src)
 {
-  if(src >= _VOLUMES) return true;
+  if(src >= FF_VOLUMES) return true;
   return volumeSrcStatus[src];
 }
 
-uint8_t (*volumeInserted[_VOLUMES])(void) = {SD_CD_Inserted, USBH_USR_Inserted};
+uint8_t (*volumeInserted[FF_VOLUMES])(void) = {SD_CD_Inserted, USBH_USR_Inserted};
 
 void loopVolumeSource(void)
 {
-  static u32  src_time[_VOLUMES] = {0, 0};  
+  static u32  src_time[FF_VOLUMES] = {0, 0};  
    
-  for (u8 i = 0; i < _VOLUMES; i++)
+  for (u8 i = 0; i < FF_VOLUMES; i++)
   {
     if (volumeSrcStatus[i] != (*volumeInserted[i])())
     {
@@ -133,7 +133,7 @@ void loopVolumeSource(void)
      
       if(volumeSrcStatus[i] != (*volumeInserted[i])())
       {
-        const int16_t labelSDStates[_VOLUMES][2] = {{LABEL_TFTSD_REMOVED,  LABEL_TFTSD_INSERTED},
+        const int16_t labelSDStates[FF_VOLUMES][2] = {{LABEL_TFTSD_REMOVED,  LABEL_TFTSD_INSERTED},
                                                     {LABEL_U_DISK_REMOVED, LABEL_U_DISK_INSERTED}};
         volumeSrcStatus[i] = (*volumeInserted[i])();
         volumeReminderMessage(labelSDStates[i][volumeSrcStatus[i]], STATUS_NORMAL);

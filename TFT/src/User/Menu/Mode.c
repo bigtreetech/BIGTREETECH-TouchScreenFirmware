@@ -34,45 +34,88 @@ void infoMenuSelect(void)
     {
       Serial_ReSourceInit();
       scanUpdates();
-      u32 startUpTime = OS_GetTime();
-      heatSetUpdateTime(100);
+      GUI_SetColor(FK_COLOR);
+      GUI_SetBkColor(BK_COLOR);
       infoMenu.menu[infoMenu.cur] = menuMain;
-      LOGO_ReadDisplay();
-      while(OS_GetTime() - startUpTime < 300)  //Display 3s logo
-      {                                                                                                                     
-        loopProcess();	
-      }
-      heatSetUpdateTime(300);
+      
+      #ifdef SHOW_BTT_BOOTSCREEN
+        u32 startUpTime = OS_GetTime();
+        heatSetUpdateTime(100);
+        LOGO_ReadDisplay();
+        while(OS_GetTime() - startUpTime < 300)  //Display 3s logo
+        {                                                                                                                     
+          loopProcess();	
+        }
+        heatSetUpdateTime(300);
+      #endif
       break;
     }
       
     #ifdef ST7920_SPI
     case LCD12864:
+      GUI_SetColor(ST7920_FNCOLOR);
+      GUI_SetBkColor(ST7920_BKCOLOR);
       infoMenu.menu[infoMenu.cur] = menuST7920;      
       break;
     #endif
   }
 }
 
+u32 select_mode [SELECTMODE]={
+    ICON_MARLIN,
+    ICON_BIGTREE,
+};
+
 #if LCD_ENCODER_SUPPORT
 void menuMode(void)
 {  
-  RADIO modeRadio = {
-    {(u8*)"Serial Touch Screen", (u8*)ST7920_BANNER_TEXT, (u8*)"LCD2004 Simulator"},
-    SIMULATOR_XSTART, SIMULATOR_YSTART,
-    BYTE_HEIGHT*2, 2,
-    0
-  };
+  #if defined(ST7920_BANNER_TEXT)
+    RADIO modeRadio = {
+      {(u8*)"Serial Touch Screen", (u8*)ST7920_BANNER_TEXT, (u8*)"LCD2004 Simulator"},
+      SIMULATOR_XSTART, SIMULATOR_YSTART,
+      BYTE_HEIGHT*2, 2,
+      0
+      };
+  #else
+    RADIO modeRadio = {
+      {(u8*)"Serial Touch Screen", (u8*)"12864 Simulator", (u8*)"LCD2004 Simulator"},
+      SIMULATOR_XSTART, SIMULATOR_YSTART,
+      BYTE_HEIGHT*2, 2,
+      0
+      };
+  #endif
+  
+  MKEY_VALUES  key_num = MKEY_IDLE;
+  MODEselect = 1;
+  bool keyback = false;
+  
   int16_t nowEncoder = encoderPosition = 0;
   int8_t  nowMode = modeRadio.select = infoSettings.mode;
   
   GUI_Clear(BLACK);
-  RADIO_Create(&modeRadio);
+  //RADIO_Create(&modeRadio);
   Serial_ReSourceDeInit();
-  while(LCD_ReadBtn(LCD_BUTTON_INTERVALS));      //wait for button release
+  
+  for(u8 i=0;i<SELECTMODE;i++)
+  {
+  lcd_frame_display(rect_of_mode[i].x0,rect_of_mode[i].y0-BYTE_HEIGHT,selecticonw,selecticonw,ICON_ADDR(select_mode[i]));
+  }
+  
+  selectmode(nowMode);
+  
+  while(!XPT2046_Read_Pen() || LCD_ReadBtn(LCD_BUTTON_INTERVALS));      //wait for button release
   
   while(infoMenu.menu[infoMenu.cur] == menuMode)
   {
+    key_num = MKeyGetValue();
+    
+		if(keyback)
+    {
+			Touch_Sw(1);
+			while(!XPT2046_Read_Pen());
+			break;
+    }
+    
     if(LCD_ReadBtn(LCD_BUTTON_INTERVALS))
     {
       break;
@@ -80,17 +123,33 @@ void menuMode(void)
     if(encoderPosition)
     {
       nowMode = limitValue(0, nowMode + encoderPosition, modeRadio.num - 1);
-      RADIO_Select(&modeRadio, nowMode);
+      selectmode(nowMode);
       encoderPosition = 0;    
     }
     
     LCD_LoopEncoder();
+    
+    if(key_num==MKEY_1)
+		{	
+			Touch_Sw(2);
+			nowMode = SERIAL_TSC;
+      keyback = true;
+		}
+		
+		if(key_num==MKEY_0)
+		{
+			Touch_Sw(3);
+			nowMode = LCD12864;
+      keyback = true;
+		}
   }
   if(infoSettings.mode != nowMode)
   {
     infoSettings.mode = nowMode;
     storePara();
   }
+  
+  MODEselect = 0;
   infoMenuSelect();
 }
 #endif
