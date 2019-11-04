@@ -86,7 +86,7 @@ void menuSettings(void)
     if(infoSettings.baudrate == item_baudrate[i])
     {
       item_baudrate_i = i;
-      settingsItems.items[KEY_ICON_2] = itemBaudrate[item_baudrate_i];
+      settingsItems.items[KEY_ICON_5] = itemBaudrate[item_baudrate_i];
     }
   }
 

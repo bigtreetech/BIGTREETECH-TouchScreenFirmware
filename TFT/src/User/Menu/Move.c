@@ -1,7 +1,7 @@
 #include "Move.h"
 #include "includes.h"
 
-//1¸ötitle(±êÌâ), ITEM_PER_PAGE¸öitem(Í¼±ê+±êÇ©) 
+//1 title, ITEM_PER_PAGE item
 MENUITEMS moveItems = {
 //  title
 LABEL_MOVE,
