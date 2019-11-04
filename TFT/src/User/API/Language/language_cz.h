@@ -130,4 +130,12 @@
 
     #define CZ_FILAMENT_RUNOUT      "Došel filament!"
 
+    #define CZ_PREHEAT              "Preheat"
+    #define CZ_PREHEAT_BOTH         "Both"
+    #define CZ_PREHEAT_PLA          "PLA"
+    #define CZ_PREHEAT_PETG         "PETG"
+    #define CZ_PREHEAT_ABS          "ABS"
+    #define CZ_PREHEAT_CUSTOM1      "CUSTOM1"
+    #define CZ_PREHEAT_CUSTOM2      "CUSTOM2"
+
 #endif

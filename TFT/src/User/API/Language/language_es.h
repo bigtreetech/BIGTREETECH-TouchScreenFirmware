@@ -129,4 +129,12 @@
 
     #define ES_FILAMENT_RUNOUT      "Filamento agotado!"
 
+    #define ES_PREHEAT              "Preheat"
+    #define ES_PREHEAT_BOTH         "Both"
+    #define ES_PREHEAT_PLA          "PLA"
+    #define ES_PREHEAT_PETG         "PETG"
+    #define ES_PREHEAT_ABS          "ABS"
+    #define ES_PREHEAT_CUSTOM1      "CUSTOM1"
+    #define ES_PREHEAT_CUSTOM2      "CUSTOM2"
+
 #endif

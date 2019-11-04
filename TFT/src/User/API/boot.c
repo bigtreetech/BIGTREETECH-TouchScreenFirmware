@@ -21,6 +21,7 @@ const char iconBmpName[][20]={
 "BLTouch", "BLTouchDeploy", "BLTouchStow", "BLTouchTest", "BLTouchRepeat",
 "TSCSettings", "MachineSettings", "FeatureSettings", "ProbeOffset", "EEPROMSave", "SilentMode",
 "ShutDown", "RGB_Settings", "RGB_Red", "RGB_Green", "RGB_Blue", "RGB_White", "RGB_Off",
+"Preheat_Both", "Preheat_PLA", "Preheat_PETG", "Preheat_ABS", "Preheat_Custom1", "Preheat_Custom2",
 "Custom", "Custom0", "Custom1", "Custom2", "Custom3", "Custom4", "Custom5", "Custom6",
 }; 
 

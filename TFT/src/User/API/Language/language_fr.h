@@ -128,5 +128,13 @@
     #define FR_READ_ONBOARDSD_ERROR "Erreur Lecture TFT SD card !"
     
     #define FR_FILAMENT_RUNOUT      "Fin Filament!"
+
+    #define FR_PREHEAT              "Preheat"
+    #define FR_PREHEAT_BOTH         "Both"
+    #define FR_PREHEAT_PLA          "PLA"
+    #define FR_PREHEAT_PETG         "PETG"
+    #define FR_PREHEAT_ABS          "ABS"
+    #define FR_PREHEAT_CUSTOM1      "CUSTOM1"
+    #define FR_PREHEAT_CUSTOM2      "CUSTOM2"
     
 #endif
