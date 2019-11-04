@@ -132,6 +132,10 @@
     #define RU_PREHEAT_CUSTOM2      "CUSTOM2"
     #define RU_IS_PAUSE             "Unable to extrude when printing, Pause printing?"
     #define RU_AUTO_SHUT_DOWN       "Auto Power"
-    #define RU_MANUAL_SHUT_DOWN     "Manual"
-    
+    #define RU_MANUAL_SHUT_DOWN     "Manual"    
+    #define RU_UNIFIEDMOVE          "Movement"
+    #define RU_GCODE                "Send Code"
+    #define RU_UNIFIEDHEAT          "Heat&Fan"
+    #define RU_COOLDOWN             "Cool Down"
+    #define RU_EMERGENCYSTOP        "EM. STOP"
 #endif

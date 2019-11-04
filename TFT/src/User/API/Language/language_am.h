@@ -133,5 +133,10 @@
     #define AM_IS_PAUSE             "Unable to extrude when printing, Pause printing?"
     #define AM_AUTO_SHUT_DOWN       "Auto Power"
     #define AM_MANUAL_SHUT_DOWN     "Manual"
+    #define AM_UNIFIEDMOVE          "Movemeny"
+    #define AM_GCODE                "Send Code"
+    #define AM_UNIFIEDHEAT          "Heat&Fan"
+    #define AM_COOLDOWN             "Cool Down"
+    #define AM_EMERGENCYSTOP        "EM. STOP"
 
 #endif

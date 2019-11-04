@@ -23,6 +23,7 @@ const char iconBmpName[][32]={
 "ShutDown", "RGB_Settings", "RGB_Red", "RGB_Green", "RGB_Blue", "RGB_White", "RGB_Off",
 "Preheat_Both", "Preheat_PLA", "Preheat_PETG", "Preheat_ABS", "Preheat_Custom1", "Preheat_Custom2", "PowerSupply",
 "Custom", "Custom0", "Custom1", "Custom2", "Custom3", "Custom4", "Custom5", "Custom6",
+"Home_Move", "Heat_Fan","ManualLevel", "CoolDown",
 }; 
 
 u8 scanUpdateFile(void)

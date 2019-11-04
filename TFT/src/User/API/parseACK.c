@@ -224,4 +224,3 @@ void parseRcvGcode(void)
     }
   #endif
 }
-
