@@ -115,7 +115,6 @@ const char *const en_pack[LABEL_NUM]={
   EN_1_PERCENT,
   EN_5_PERCENT,
   EN_10_PERCENT,
-
   EN_READY,
   EN_BUSY,
   EN_UNCONNECTED,
@@ -148,8 +147,10 @@ const char *const en_pack[LABEL_NUM]={
   EN_PREHEAT_PETG,
   EN_PREHEAT_ABS,
   EN_PREHEAT_CUSTOM1,
-  EN_PREHEAT_CUSTOM2
-  
+  EN_PREHEAT_CUSTOM2,
+  EN_IS_PAUSE,
+  EN_AUTO_SHUT_DOWN,
+  EN_MANUAL_SHUT_DOWN,
 };
 
 const char *const cn_pack[LABEL_NUM]={
@@ -256,7 +257,6 @@ const char *const cn_pack[LABEL_NUM]={
   CN_1_PERCENT,
   CN_5_PERCENT,
   CN_10_PERCENT,
-
   CN_READY,
   CN_BUSY,
   CN_UNCONNECTED,
@@ -289,7 +289,10 @@ const char *const cn_pack[LABEL_NUM]={
   CN_PREHEAT_PETG,
   CN_PREHEAT_ABS,
   CN_PREHEAT_CUSTOM1,
-  CN_PREHEAT_CUSTOM2
+  CN_PREHEAT_CUSTOM2,
+  CN_IS_PAUSE,
+  CN_AUTO_SHUT_DOWN,
+  CN_MANUAL_SHUT_DOWN,
 };
 
 const char *const ru_pack[LABEL_NUM]={
@@ -396,7 +399,6 @@ const char *const ru_pack[LABEL_NUM]={
   RU_1_PERCENT,
   RU_5_PERCENT,
   RU_10_PERCENT,
-
   RU_READY,
   RU_BUSY,
   RU_UNCONNECTED,
@@ -429,7 +431,10 @@ const char *const ru_pack[LABEL_NUM]={
   RU_PREHEAT_PETG,
   RU_PREHEAT_ABS,
   RU_PREHEAT_CUSTOM1,
-  RU_PREHEAT_CUSTOM2
+  RU_PREHEAT_CUSTOM2,
+  RU_IS_PAUSE,
+  RU_AUTO_SHUT_DOWN,
+  RU_MANUAL_SHUT_DOWN,
 };
 
 const char *const jp_pack[LABEL_NUM]={
@@ -536,7 +541,6 @@ const char *const jp_pack[LABEL_NUM]={
   JP_1_PERCENT,
   JP_5_PERCENT,
   JP_10_PERCENT,
-
   JP_READY,
   JP_BUSY,
   JP_UNCONNECTED,
@@ -569,7 +573,10 @@ const char *const jp_pack[LABEL_NUM]={
   JP_PREHEAT_PETG,
   JP_PREHEAT_ABS,
   JP_PREHEAT_CUSTOM1,
-  JP_PREHEAT_CUSTOM2
+  JP_PREHEAT_CUSTOM2,
+  JP_IS_PAUSE,
+  JP_AUTO_SHUT_DOWN,
+  JP_MANUAL_SHUT_DOWN,
 };
 
 const char *const am_pack[LABEL_NUM]={
@@ -676,7 +683,6 @@ const char *const am_pack[LABEL_NUM]={
   AM_1_PERCENT,
   AM_5_PERCENT,
   AM_10_PERCENT,
-
   AM_READY,
   AM_BUSY,
   AM_UNCONNECTED,
@@ -709,7 +715,10 @@ const char *const am_pack[LABEL_NUM]={
   AM_PREHEAT_PETG,
   AM_PREHEAT_ABS,
   AM_PREHEAT_CUSTOM1,
-  AM_PREHEAT_CUSTOM2
+  AM_PREHEAT_CUSTOM2,
+  AM_IS_PAUSE,
+  AM_AUTO_SHUT_DOWN,
+  AM_MANUAL_SHUT_DOWN,
 };
 
 const char *const de_pack[LABEL_NUM]={
@@ -816,7 +825,6 @@ const char *const de_pack[LABEL_NUM]={
   DE_1_PERCENT,
   DE_5_PERCENT,
   DE_10_PERCENT,
-
   DE_READY,
   DE_BUSY,
   DE_UNCONNECTED,
@@ -849,7 +857,10 @@ const char *const de_pack[LABEL_NUM]={
   DE_PREHEAT_PETG,
   DE_PREHEAT_ABS,
   DE_PREHEAT_CUSTOM1,
-  DE_PREHEAT_CUSTOM2
+  DE_PREHEAT_CUSTOM2,
+  DE_IS_PAUSE,
+  DE_AUTO_SHUT_DOWN,
+  DE_MANUAL_SHUT_DOWN,
 };
 
 const char *const cz_pack[LABEL_NUM]={
@@ -956,7 +967,6 @@ const char *const cz_pack[LABEL_NUM]={
   CZ_1_PERCENT,
   CZ_5_PERCENT,
   CZ_10_PERCENT,
-
   CZ_READY,
   CZ_BUSY,
   CZ_UNCONNECTED,
@@ -989,7 +999,10 @@ const char *const cz_pack[LABEL_NUM]={
   CZ_PREHEAT_PETG,
   CZ_PREHEAT_ABS,
   CZ_PREHEAT_CUSTOM1,
-  CZ_PREHEAT_CUSTOM2
+  CZ_PREHEAT_CUSTOM2,
+  CZ_IS_PAUSE,
+  CZ_AUTO_SHUT_DOWN,
+  CZ_MANUAL_SHUT_DOWN,
 };
 
 const char *const es_pack[LABEL_NUM]={
@@ -1096,7 +1109,6 @@ const char *const es_pack[LABEL_NUM]={
   ES_1_PERCENT,
   ES_5_PERCENT,
   ES_10_PERCENT,
-
   ES_READY,
   ES_BUSY,
   ES_UNCONNECTED,
@@ -1129,7 +1141,10 @@ const char *const es_pack[LABEL_NUM]={
   ES_PREHEAT_PETG,
   ES_PREHEAT_ABS,
   ES_PREHEAT_CUSTOM1,
-  ES_PREHEAT_CUSTOM2
+  ES_PREHEAT_CUSTOM2,
+  ES_IS_PAUSE,
+  ES_AUTO_SHUT_DOWN,
+  ES_MANUAL_SHUT_DOWN,
 };
 
 const char *const fr_pack[LABEL_NUM]={
@@ -1236,7 +1251,6 @@ const char *const fr_pack[LABEL_NUM]={
   FR_1_PERCENT,
   FR_5_PERCENT,
   FR_10_PERCENT,
-
   FR_READY,
   FR_BUSY,
   FR_UNCONNECTED,
@@ -1269,7 +1283,10 @@ const char *const fr_pack[LABEL_NUM]={
   FR_PREHEAT_PETG,
   FR_PREHEAT_ABS,
   FR_PREHEAT_CUSTOM1,
-  FR_PREHEAT_CUSTOM2
+  FR_PREHEAT_CUSTOM2,
+  FR_IS_PAUSE,
+  FR_AUTO_SHUT_DOWN,
+  FR_MANUAL_SHUT_DOWN,
 };
 
 u8 * textSelect(u8 sel)

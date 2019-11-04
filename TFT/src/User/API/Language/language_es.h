@@ -97,7 +97,6 @@
     #define ES_1_PERCENT            "1%"
     #define ES_5_PERCENT            "5%"
     #define ES_10_PERCENT           "10%"
-
     #define ES_READY                "Listo"
     #define ES_BUSY                 "Procesamiento ocupado, por favor espere ..."
     #define ES_UNCONNECTED          "No hay comunicacion con impresora!"
@@ -113,22 +112,17 @@
     #define ES_WARNING              "Advertencia"
     #define ES_STOP_PRINT           "Desea parar la impresion?"
     #define ES_CONFIRM              "Confirmar"
-
     #define ES_TFTSD                "SD TFT"
     #define ES_READ_TFTSD_ERROR     "Error en la tarjeta SD TFT!"
     #define ES_TFTSD_INSERTED       "Tarjeta insertada!"
     #define ES_TFTSD_REMOVED        "Tarjeta quitada!"
-
     #define ES_U_DISK               "Pendrive"
     #define ES_READ_U_DISK_ERROR    "Error en el Pendrive!"
     #define ES_U_DISK_INSERTED      "Pendrive insertado!"
     #define ES_U_DISK_REMOVED       "Pendrive quitado!"
-
     #define ES_ONBOARDSD            "SD Placa"
     #define ES_READ_ONBOARDSD_ERROR "Error en la tarjeta SD de la placa!"
-
     #define ES_FILAMENT_RUNOUT      "Filamento agotado!"
-
     #define ES_PREHEAT              "Preheat"
     #define ES_PREHEAT_BOTH         "Both"
     #define ES_PREHEAT_PLA          "PLA"
@@ -136,5 +130,8 @@
     #define ES_PREHEAT_ABS          "ABS"
     #define ES_PREHEAT_CUSTOM1      "CUSTOM1"
     #define ES_PREHEAT_CUSTOM2      "CUSTOM2"
+    #define ES_IS_PAUSE             "Unable to extrude when printing, Pause printing?"
+    #define ES_AUTO_SHUT_DOWN       "Auto Power"
+    #define ES_MANUAL_SHUT_DOWN     "Manual"
 
 #endif

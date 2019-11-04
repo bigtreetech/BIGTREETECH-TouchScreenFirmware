@@ -35,6 +35,7 @@ enum
 
 extern BUTTON bottomSingleBtn;
 extern BUTTON bottomDoubleBtn[];
+extern GUI_RECT doubleBtnRect[];
 extern WINDOW window;
 
 void windowSetButton(const BUTTON *btn);

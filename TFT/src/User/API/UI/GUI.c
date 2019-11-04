@@ -558,7 +558,9 @@ const uint8_t* GUI_DispLenString(int16_t x, int16_t y, const uint8_t *p, uint8_t
   
   while(curPixelWidth < pixelWidth && *p)
   {   
-    info = GUI_DispOne(x, y, p, mode);
+    getCharacterInfo(p, &info);
+    if(curPixelWidth + info.pixelWidth > pixelWidth) return p;
+    GUI_DispOne(x, y, p, mode);
     x += info.pixelWidth;
     curPixelWidth += info.pixelWidth;
     p += info.bytes;

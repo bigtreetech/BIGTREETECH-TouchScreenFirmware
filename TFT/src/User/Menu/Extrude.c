@@ -125,11 +125,11 @@ void menuExtrude(void)
       extrudeCoordinateReDraw();
       if(item_extruder_i != heatGetCurrentToolNozzle() - NOZZLE0)
         storeCmd("%s\n", tool_change[item_extruder_i]);
-      storeCmd("G0 E%.3f F%d\n", extrudeCoordinate, item_speed[item_speed_i]);
+      storeCmd("G0 E%.5f F%d\n", extrudeCoordinate, item_speed[item_speed_i]);
     }
     loopProcess();
   }
-  mustStoreCmd("G92 E%.3f\n",eSaved);   
+  mustStoreCmd("G92 E%.5f\n",eSaved);   
   mustStoreCmd("G0 F%d\n",feedrate);
 }
 
