@@ -112,28 +112,26 @@
     #define CN_WARNING              "警告"
     #define CN_STOP_PRINT           "是否停止打印?"
     #define CN_CONFIRM              "确定"
-
     #define CN_TFTSD                "TFT SD"
     #define CN_READ_TFTSD_ERROR     "读TFT SD卡出错!"
     #define CN_TFTSD_INSERTED       "SD卡已插入!"
-    #define CN_TFTSD_REMOVED        "SD卡已拔出!"
-    
+    #define CN_TFTSD_REMOVED        "SD卡已拔出!"    
     #define CN_U_DISK               "U盘"
     #define CN_READ_U_DISK_ERROR    "读U盘出错!"
     #define CN_U_DISK_INSERTED      "U盘已插入!"
-    #define CN_U_DISK_REMOVED       "U盘已拔出!"
-    
+    #define CN_U_DISK_REMOVED       "U盘已拔出!"    
     #define CN_ONBOARDSD            "板载SD"
-    #define CN_READ_ONBOARDSD_ERROR "读板载SD卡出错!"
-    
+    #define CN_READ_ONBOARDSD_ERROR "读板载SD卡出错!"    
     #define CN_FILAMENT_RUNOUT      "耗材已用尽,请更换耗材!"
-
-    #define CN_PREHEAT              "Preheat"
+    #define CN_PREHEAT              "一键预热"
     #define CN_PREHEAT_BOTH         "Both"
     #define CN_PREHEAT_PLA          "PLA"
     #define CN_PREHEAT_PETG         "PETG"
     #define CN_PREHEAT_ABS          "ABS"
     #define CN_PREHEAT_CUSTOM1      "CUSTOM1"
     #define CN_PREHEAT_CUSTOM2      "CUSTOM2"
+    #define CN_IS_PAUSE             "打印中无法挤出耗材, 是否暂停打印?"
+    #define CN_AUTO_SHUT_DOWN       "自动关机"
+    #define CN_MANUAL_SHUT_DOWN     "手动关机"
 
 #endif

@@ -178,9 +178,6 @@ bool powerOffGetData(void)
   return true;
 }
 
-
-static const GUI_RECT powerFailedRect[] ={POPUP_RECT_DOUBLE_CONFIRM, POPUP_RECT_DOUBLE_CANCEL};
-
 void menuPowerOff(void)
 {
   u16 key_num = IDLE_TOUCH;
@@ -194,7 +191,7 @@ void menuPowerOff(void)
     
     while(infoMenu.menu[infoMenu.cur]==menuPowerOff)
     {
-      key_num = KEY_GetValue(2,powerFailedRect);
+      key_num = KEY_GetValue(2, doubleBtnRect);
       switch(key_num)
       {
         case KEY_POPUP_CONFIRM:    

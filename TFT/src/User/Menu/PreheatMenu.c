@@ -47,7 +47,7 @@ void heatSetHotendTargetTemp(u16 temp)
 
 void menuPreheat(void)
 {
-  TOOLPREHEAT nowHeater = BED;
+  static TOOLPREHEAT nowHeater = BOTH;
   KEY_VALUES  key_num = KEY_IDLE;
 
   menuDrawPage(&preheatItems);
