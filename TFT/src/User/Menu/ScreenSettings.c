@@ -31,9 +31,9 @@ LABEL_SCREEN_SETTINGS,
 
 #ifdef ST7920_SPI // LCD12864 color settings
   #ifdef BUZZER_PIN
-    #define LCD12864_BG_INDEX KEY_ICON_3
-  #else
     #define LCD12864_BG_INDEX KEY_ICON_4
+  #else
+    #define LCD12864_BG_INDEX KEY_ICON_3
   #endif
   #define LCD12864_FN_INDEX (LCD12864_BG_INDEX+1)
 
