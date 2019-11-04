@@ -97,7 +97,6 @@
     #define DE_1_PERCENT            "1%"
     #define DE_5_PERCENT            "5%"
     #define DE_10_PERCENT           "10%"
-
     #define DE_READY                "Bereit"
     #define DE_BUSY                 "Bitte warten..."
     #define DE_UNCONNECTED          "Keine Verbindung zum Drucker!"
@@ -134,5 +133,11 @@
     #define DE_IS_PAUSE             "Unable to extrude when printing, Pause printing?"
     #define DE_AUTO_SHUT_DOWN       "Auto Power"
     #define DE_MANUAL_SHUT_DOWN     "Manual"
-    
+    #define DE_READ_ONBOARDSD_ERROR "OnboardSD Lesefehler!"    
+    #define DE_FILAMENT_RUNOUT      "filament runout!"    
+    #define DE_UNIFIEDMOVE          "Movement"
+    #define DE_GCODE                "Send Code"
+    #define DE_UNIFIEDHEAT          "Heat&Fan"
+    #define DE_COOLDOWN             "Cool Down"
+    #define DE_EMERGENCYSTOP        "EM. STOP"
 #endif

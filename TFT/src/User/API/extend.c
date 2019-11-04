@@ -119,7 +119,6 @@ bool FIL_SmartRunoutDetect(void)
   return false;
 }
 
-
 bool FIL_IsRunout(void)
 {
   switch (infoSettings.runout) {
