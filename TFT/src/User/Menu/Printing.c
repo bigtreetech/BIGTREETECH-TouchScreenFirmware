@@ -427,7 +427,7 @@ void exitPrinting(void)
   ExitDir();	
 }
 
-void stopPrinting(void)
+void endPrinting(void)
 {  
   switch (infoFile.source)
   {
@@ -449,7 +449,7 @@ void stopPrinting(void)
 
 void completePrinting(void)
 {
-  stopPrinting();  
+  endPrinting();  
   if(infoSettings.auto_off) // Auto shut down after printing
     mustStoreCmd("M81\n");
 }
@@ -473,13 +473,13 @@ void haltPrinting(void)
   mustStoreCmd("G0 Z%d F3000\n", limitValue(0, (int)coordinateGetAxisTarget(Z_AXIS) + 10, Z_MAX_POS));
   mustStoreCmd("G28 X0 Y0\n");
 
-  stopPrinting();
+  endPrinting();
   exitPrinting();
 }
 
 void menuStopPrinting(void)
 {
-  u16 key_num = IDLE_TOUCH;	
+  u16 key_num = IDLE_TOUCH;
 
   popupDrawPage(bottomDoubleBtn, textSelect(LABEL_WARNING), textSelect(LABEL_STOP_PRINT), textSelect(LABEL_CONFIRM), textSelect(LABEL_CANNEL));
  

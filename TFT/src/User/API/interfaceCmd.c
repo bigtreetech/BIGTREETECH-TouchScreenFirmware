@@ -229,7 +229,9 @@ void sendQueueCmd(void)
         }
 
         case 114: //M114
-          positionSetUpdateWaiting(false);
+          #ifdef FIL_RUNOUT_PIN
+            positionSetUpdateWaiting(false);
+          #endif
           break;
 
         case 117: //M117

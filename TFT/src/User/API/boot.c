@@ -6,7 +6,7 @@ const GUI_RECT iconUpdateRect = {(LCD_WIDTH - ICON_WIDTH)/2,              (LCD_H
 const GUI_RECT labelUpdateRect = {0,        (LCD_HEIGHT - ICON_HEIGHT)/2 + ICON_HEIGHT, 
                                  LCD_WIDTH, (LCD_HEIGHT - ICON_HEIGHT)/2 + ICON_HEIGHT + BYTE_HEIGHT};
 
-const char iconBmpName[][20]={
+const char iconBmpName[][32]={
 "Heat", "Move", "Home", "Print", "Extrude", "Fan", "Settings", "Leveling",
 "Inc",  "Dec", "Nozzle", "Hotbed", "Temp_1", "Temp_5", "Temp_10", "Stop", "Back",
 "Inc_X", "Inc_Y", "Inc_Z", "Mmm_01", "Mmm_1", "Mmm_10", "Dec_X", "Dec_Y","Dec_Z",
@@ -15,9 +15,9 @@ const char iconBmpName[][20]={
 "Pause", "Resume",
 "Load", "Unload", "Slow", "Normal", "Fast", "Emm_1", "Emm_5", "Emm_10",
 "Full", "Half",
-"Rotate", "Language", "TP_Adjust", "moresetting", "About", "bgcolor", "fontcolor", "Disconnect", "BaudRate",
+"Rotate", "Language", "TP_Adjust", "More", "About", "BackGroundColor", "FontColor", "Disconnect", "BaudRate",
 "Percentage", "BabyStep", "Mmm_001", "OnBoardSD", "OnTFTSD", "U_Disk", "Runout",
-"Point_1", "Point_2", "Point_3", "Point_4", "marlin", "bigtree", "gcode", 
+"Point_1", "Point_2", "Point_3", "Point_4", "Marlin", "BigTreeTech", "Gcode", 
 "BLTouch", "BLTouchDeploy", "BLTouchStow", "BLTouchTest", "BLTouchRepeat",
 "TSCSettings", "MachineSettings", "FeatureSettings", "ProbeOffset", "EEPROMSave", "SilentMode",
 "ShutDown", "RGB_Settings", "RGB_Red", "RGB_Green", "RGB_Blue", "RGB_White", "RGB_Off",
