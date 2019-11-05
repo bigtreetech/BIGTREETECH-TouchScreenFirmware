@@ -316,7 +316,7 @@ bool revinfo(void)
     i++;  
   }
   
-  GUI_DispStringInRect(LCD_WIDTH/2,LCD_HEIGHT-BYTE_HEIGHT,LCD_WIDTH,LCD_HEIGHT,(uint8_t *)"¡·",0);
+  GUI_DispStringInRect(LCD_WIDTH/2,LCD_HEIGHT-BYTE_HEIGHT,LCD_WIDTH,LCD_HEIGHT,(uint8_t *)"ï¿½ï¿½",0);
 
   i = 0;
   while(i<((LCD_WIDTH-2*BYTE_WIDTH)/BYTE_WIDTH)*(LCD_HEIGHT-(SPACE_GKY+TITLE_END_Y+BYTE_HEIGHT))/BYTE_HEIGHT)
@@ -359,8 +359,8 @@ bool revinfo(void)
     GUI_FillRect(0,SPACE_GKY+TITLE_END_Y,LCD_WIDTH,LCD_HEIGHT);
     GUI_SetColor(BK_COLOR);
     GUI_DispStringInRect(0,SPACE_GKY+TITLE_END_Y+BYTE_HEIGHT,LCD_WIDTH,LCD_HEIGHT-BYTE_HEIGHT,(uint8_t *)showbuf2,0);
-    GUI_DispStringInRect(0,LCD_HEIGHT-BYTE_HEIGHT,LCD_WIDTH/2,LCD_HEIGHT,(uint8_t *)"¡¶",0);
-    GUI_DispStringInRect(LCD_WIDTH/2,LCD_HEIGHT-BYTE_HEIGHT,LCD_WIDTH,LCD_HEIGHT,(uint8_t *)"¡·",0);
+    GUI_DispStringInRect(0,LCD_HEIGHT-BYTE_HEIGHT,LCD_WIDTH/2,LCD_HEIGHT,(uint8_t *)"ï¿½ï¿½",0);
+    GUI_DispStringInRect(LCD_WIDTH/2,LCD_HEIGHT-BYTE_HEIGHT,LCD_WIDTH,LCD_HEIGHT,(uint8_t *)"ï¿½ï¿½",0);
     bufpage = 2;
     }
     
@@ -371,7 +371,7 @@ bool revinfo(void)
     GUI_FillRect(0,SPACE_GKY+TITLE_END_Y,LCD_WIDTH,LCD_HEIGHT);
     GUI_SetColor(BK_COLOR);
     GUI_DispStringInRect(0,SPACE_GKY+TITLE_END_Y+BYTE_HEIGHT,LCD_WIDTH,LCD_HEIGHT-BYTE_HEIGHT,(uint8_t *)showbuf3,0);
-    GUI_DispStringInRect(0,LCD_HEIGHT-BYTE_HEIGHT,LCD_WIDTH/2,LCD_HEIGHT,(uint8_t *)"¡¶",0);
+    GUI_DispStringInRect(0,LCD_HEIGHT-BYTE_HEIGHT,LCD_WIDTH/2,LCD_HEIGHT,(uint8_t *)"ï¿½ï¿½",0);
     //GUI_DispStringInRect(10, 10, LCD_WIDTH-10,LCD_HEIGHT-10,"showbuf3",0);
     bufpage = 3;
     }

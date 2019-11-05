@@ -173,6 +173,7 @@ void menuBeforePrinting(void)
 
 void resumeToPause(bool is_pause)
 {
+  if(infoMenu.menu[infoMenu.cur] != menuPrinting) return;
   printingItems.items[KEY_ICON_0] = itemIsPause[is_pause];
   menuDrawItem(&itemIsPause[is_pause],0);
 }
@@ -426,7 +427,7 @@ void exitPrinting(void)
   ExitDir();	
 }
 
-void completePrinting(void)
+void endPrinting(void)
 {  
   switch (infoFile.source)
   {
@@ -439,10 +440,18 @@ void completePrinting(void)
       f_close(&infoPrinting.file);	
       break;
   }
-  infoPrinting.printing = false;
+  infoPrinting.printing = infoPrinting.pause = false;
   powerFailedClose();
   powerFailedDelete();  
-  endGcodeExecute();		
+  endGcodeExecute();
+}
+
+
+void completePrinting(void)
+{
+  endPrinting();  
+  if(infoSettings.auto_off) // Auto shut down after printing
+    mustStoreCmd("M81\n");
 }
 
 void haltPrinting(void)
@@ -464,36 +473,33 @@ void haltPrinting(void)
   mustStoreCmd("G0 Z%d F3000\n", limitValue(0, (int)coordinateGetAxisTarget(Z_AXIS) + 10, Z_MAX_POS));
   mustStoreCmd("G28 X0 Y0\n");
 
-  completePrinting();
+  endPrinting();
   exitPrinting();
 }
 
-static const GUI_RECT stopRect[] ={POPUP_RECT_DOUBLE_CONFIRM, POPUP_RECT_DOUBLE_CANCEL};
-
 void menuStopPrinting(void)
 {
-  u16 key_num = IDLE_TOUCH;	
+  u16 key_num = IDLE_TOUCH;
 
   popupDrawPage(bottomDoubleBtn, textSelect(LABEL_WARNING), textSelect(LABEL_STOP_PRINT), textSelect(LABEL_CONFIRM), textSelect(LABEL_CANNEL));
  
   while(infoMenu.menu[infoMenu.cur] == menuStopPrinting)
   {
-    key_num = KEY_GetValue(2, stopRect);
+    key_num = KEY_GetValue(2, doubleBtnRect);
     switch(key_num)
     {
-      case KEY_POPUP_CONFIRM:					
-      haltPrinting();
-      infoMenu.cur-=2;
+      case KEY_POPUP_CONFIRM:
+        haltPrinting();
+        infoMenu.cur-=2;
       break;
 
-      case KEY_POPUP_CANCEL:	
-      infoMenu.cur--;
-      break;		
+      case KEY_POPUP_CANCEL:
+        infoMenu.cur--;
+        break;		
     }
     loopProcess();
   }
 }
-
 
 // get gcode command from sd card
 void getGcodeFromFile(void)

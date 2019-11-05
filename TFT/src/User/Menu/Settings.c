@@ -53,7 +53,6 @@ void menuDisconnect(void)
   infoMenu.cur--;
 }
 
-
 MENUITEMS settingsItems = {
 // title
 LABEL_SETTINGS,
@@ -90,7 +89,7 @@ void menuSettings(void)
       settingsItems.items[KEY_ICON_5] = itemBaudrate[item_baudrate_i];
     }
   }
-  
+
   menuDrawPage(&settingsItems);
 
   while(infoMenu.menu[infoMenu.cur] == menuSettings)
@@ -125,7 +124,7 @@ void menuSettings(void)
         infoSettings.baudrate = item_baudrate[item_baudrate_i];
         Serial_Config(infoSettings.baudrate);
         break;
-      
+
       case KEY_ICON_7:
         infoMenu.cur--;
         break;

@@ -97,7 +97,6 @@
     #define DE_1_PERCENT            "1%"
     #define DE_5_PERCENT            "5%"
     #define DE_10_PERCENT           "10%"
-
     #define DE_READY                "Bereit"
     #define DE_BUSY                 "Bitte warten..."
     #define DE_UNCONNECTED          "Keine Verbindung zum Drucker!"
@@ -113,20 +112,31 @@
     #define DE_WARNING              "Warnung"
     #define DE_STOP_PRINT           "Druch abbrechen?"
     #define DE_CONFIRM              "OK"
-
     #define DE_TFTSD                "TFT SD"
     #define DE_READ_TFTSD_ERROR     "TFTSD Lesefehler!"
     #define DE_TFTSD_INSERTED       "Card inserted!"
-    #define DE_TFTSD_REMOVED        "Card removed!"
-    
+    #define DE_TFTSD_REMOVED        "Card removed!"    
     #define DE_U_DISK               "U Disk"
     #define DE_READ_U_DISK_ERROR    "Read U Disk error!"
     #define DE_U_DISK_INSERTED      "U Disk inserted!"
-    #define DE_U_DISK_REMOVED       "U Disk removed!"
-    
+    #define DE_U_DISK_REMOVED       "U Disk removed!"    
     #define DE_ONBOARDSD            "OnboardSD"
-    #define DE_READ_ONBOARDSD_ERROR "OnboardSD Lesefehler!"
-    
+    #define DE_READ_ONBOARDSD_ERROR "OnboardSD Lesefehler!"    
     #define DE_FILAMENT_RUNOUT      "filament runout!"
-
+    #define DE_PREHEAT              "Preheat"
+    #define DE_PREHEAT_BOTH         "Both"
+    #define DE_PREHEAT_PLA          "PLA"
+    #define DE_PREHEAT_PETG         "PETG"
+    #define DE_PREHEAT_ABS          "ABS"
+    #define DE_PREHEAT_CUSTOM1      "CUSTOM1"
+    #define DE_PREHEAT_CUSTOM2      "CUSTOM2"
+    #define DE_IS_PAUSE             "Unable to extrude when printing, Pause printing?"
+    #define DE_AUTO_SHUT_DOWN       "Auto Power"
+    #define DE_MANUAL_SHUT_DOWN     "Manual"
+    #define DE_READ_ONBOARDSD_ERROR "OnboardSD Lesefehler!"    
+    #define DE_FILAMENT_RUNOUT      "filament runout!"    
+    #define DE_UNIFIEDMOVE          "Movement"
+    #define DE_UNIFIEDHEAT          "Heat&Fan"
+    #define DE_COOLDOWN             "Cool Down"
+    #define DE_EMERGENCYSTOP        "EM. STOP"
 #endif
