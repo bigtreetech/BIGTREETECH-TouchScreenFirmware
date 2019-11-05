@@ -56,7 +56,7 @@
 //menu
 #include "menu.h"
 #include "MainPage.h"
-
+#include "PreHeatMenu.h"
 #include "Heat.h"
 #include "Move.h"
 #include "Home.h"
@@ -79,6 +79,9 @@
 
 #include "Popup.h"
 #include "Mode.h"
+
+#include "UnifiedMove.h"
+#include "UnifiedHeat.h"
 
 
 #define MAX_MENU_DEPTH 10       // max sub menu depth

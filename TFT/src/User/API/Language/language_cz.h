@@ -97,7 +97,6 @@
     #define CZ_1_PERCENT            "1%"
     #define CZ_5_PERCENT            "5%"
     #define CZ_10_PERCENT           "10%"
-
     #define CZ_READY                "Ready"
     #define CZ_PRINTING             "Probíhá tisk"
     #define CZ_BUSY                 "Zpracovávám, čekejte prosím..."
@@ -113,21 +112,31 @@
     #define CZ_ADJUST_FAILED        "Kalibrace selhala, zopakujte znovu"
     #define CZ_WARNING              "Varování"
     #define CZ_STOP_PRINT           "Zastavit tisk?"
-    #define CZ_CONFIRM              "Potvrdit"
-    
+    #define CZ_CONFIRM              "Potvrdit"    
     #define CZ_TFTSD                "TFT SD"
     #define CZ_READ_TFTSD_ERROR     "Chyba při čtení SD karty!"
     #define CZ_TFTSD_INSERTED       "SD karta vložena!"
-    #define CZ_TFTSD_REMOVED        "SD karta vyjmuta!"
-    
+    #define CZ_TFTSD_REMOVED        "SD karta vyjmuta!"    
     #define CZ_U_DISK               "USB Disk"
     #define CZ_READ_U_DISK_ERROR    "Chyba při čtení USB disku!"
     #define CZ_U_DISK_INSERTED      "USB disk  vložen!"
-    #define CZ_U_DISK_REMOVED       "USB disk vyjmut!"
-    
+    #define CZ_U_DISK_REMOVED       "USB disk vyjmut!"    
     #define CZ_ONBOARDSD            "OnboardSD"
     #define CZ_READ_ONBOARDSD_ERROR "Chyba při čtení Onboard SD!"
-
     #define CZ_FILAMENT_RUNOUT      "Došel filament!"
+    #define CZ_PREHEAT              "Preheat"
+    #define CZ_PREHEAT_BOTH         "Both"
+    #define CZ_PREHEAT_PLA          "PLA"
+    #define CZ_PREHEAT_PETG         "PETG"
+    #define CZ_PREHEAT_ABS          "ABS"
+    #define CZ_PREHEAT_CUSTOM1      "CUSTOM1"
+    #define CZ_PREHEAT_CUSTOM2      "CUSTOM2"
+    #define CZ_IS_PAUSE             "Unable to extrude when printing, Pause printing?"
+    #define CZ_AUTO_SHUT_DOWN       "Auto Power"
+    #define CZ_MANUAL_SHUT_DOWN     "Manual"
+    #define CZ_UNIFIEDMOVE          "Movement"
+    #define CZ_UNIFIEDHEAT          "Heat&Fan"
+    #define CZ_COOLDOWN             "Cool Down"
+    #define CZ_EMERGENCYSTOP        "EM. STOP"
 
 #endif

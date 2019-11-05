@@ -97,7 +97,6 @@
     #define JP_1_PERCENT            "1%"
     #define JP_5_PERCENT            "5%"
     #define JP_10_PERCENT           "10%"
-
     #define JP_READY                "準備中"
     #define JP_BUSY                 "ビジー状態、しばらくお待ちください..."
     #define JP_UNCONNECTED          "プリンターに連続していない!"
@@ -112,21 +111,30 @@
     #define JP_ADJUST_FAILED        "校正が失敗しました、も一度お試して下さい"
     #define JP_WARNING              "注意"
     #define JP_STOP_PRINT           "プリントを中止しますか?"
-    #define JP_CONFIRM              "OK"
-    
+    #define JP_CONFIRM              "OK"    
     #define JP_TFTSD                "TFT SD"
     #define JP_READ_TFTSD_ERROR     "TFT SDカードの読み取りがエラー発生しました!"
     #define JP_TFTSD_INSERTED       "SDカード入りました!"
-    #define JP_TFTSD_REMOVED        "SDカード出しました!"
-    
+    #define JP_TFTSD_REMOVED        "SDカード出しました!"    
     #define JP_U_DISK               "USBメモリー"
     #define JP_READ_U_DISK_ERROR    "USBメモリー読み込みエラー!"
     #define JP_U_DISK_INSERTED      "U Diskカード入りました!"
-    #define JP_U_DISK_REMOVED       "U Diskカード出しました!"
-    
+    #define JP_U_DISK_REMOVED       "U Diskカード出しました!"    
     #define JP_ONBOARDSD            "内部 mSDカード"
-    #define JP_READ_ONBOARDSD_ERROR "内部 mSDカードの読み取りがエラー発生しました!"
-    
+    #define JP_READ_ONBOARDSD_ERROR "内部 mSDカードの読み取りがエラー発生しました!"    
     #define JP_FILAMENT_RUNOUT      "filament runout!"
-
+    #define JP_PREHEAT              "Preheat"
+    #define JP_PREHEAT_BOTH         "Both"
+    #define JP_PREHEAT_PLA          "PLA"
+    #define JP_PREHEAT_PETG         "PETG"
+    #define JP_PREHEAT_ABS          "ABS"
+    #define JP_PREHEAT_CUSTOM1      "CUSTOM1"
+    #define JP_PREHEAT_CUSTOM2      "CUSTOM2"
+    #define JP_IS_PAUSE             "Unable to extrude when printing, Pause printing?"
+    #define JP_AUTO_SHUT_DOWN       "Auto Power"
+    #define JP_MANUAL_SHUT_DOWN     "Manual"
+    #define JP_UNIFIEDMOVE          "Movement"
+    #define JP_UNIFIEDHEAT          "Heat&Fan"
+    #define JP_COOLDOWN             "Cool Down"
+    #define JP_EMERGENCYSTOP        "EM. STOP"
 #endif

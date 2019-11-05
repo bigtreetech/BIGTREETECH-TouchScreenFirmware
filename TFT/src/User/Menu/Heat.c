@@ -269,8 +269,9 @@ void menuHeat(void)
 
     loopProcess();
   }
+  
   if(heatHasWaiting()==false)
-  update_time=300;
+    update_time=300;
 }
 
 

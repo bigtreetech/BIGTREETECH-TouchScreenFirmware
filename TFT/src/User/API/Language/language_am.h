@@ -97,7 +97,6 @@
     #define AM_1_PERCENT            "1%"
     #define AM_5_PERCENT            "5%"
     #define AM_10_PERCENT           "10%"
-
     #define AM_READY                "Պատրաստ"
     #define AM_BUSY                 "Ծանրաբեռնված է"
     #define AM_UNCONNECTED          "Տպիչը կցված չէ"
@@ -113,20 +112,30 @@
     #define AM_WARNING              "Warning"
     #define AM_STOP_PRINT           "Stop printing?"
     #define AM_CONFIRM              "Confirm"
-
     #define AM_TFTSD                "TFT SD"
     #define AM_READ_TFTSD_ERROR     "TFTSD հիշողության սարքը չկա"
     #define AM_TFTSD_INSERTED       "Card inserted!"
-    #define AM_TFTSD_REMOVED        "Card removed!"
-    
+    #define AM_TFTSD_REMOVED        "Card removed!"    
     #define AM_U_DISK               "U Disk"
     #define AM_READ_U_DISK_ERROR    "Read U Disk error!"
     #define AM_U_DISK_INSERTED      "U Disk inserted!"
-    #define AM_U_DISK_REMOVED       "U Disk removed!"
-    
+    #define AM_U_DISK_REMOVED       "U Disk removed!"    
     #define AM_ONBOARDSD            "OnboardSD"
-    #define AM_READ_ONBOARDSD_ERROR "OnboardSD հիշողության սարքը չկա"
-    
+    #define AM_READ_ONBOARDSD_ERROR "OnboardSD հիշողության սարքը չկա"    
     #define AM_FILAMENT_RUNOUT      "filament runout!"
+    #define AM_PREHEAT              "Preheat"
+    #define AM_PREHEAT_BOTH         "Both"
+    #define AM_PREHEAT_PLA          "PLA"
+    #define AM_PREHEAT_PETG         "PETG"
+    #define AM_PREHEAT_ABS          "ABS"
+    #define AM_PREHEAT_CUSTOM1      "CUSTOM1"
+    #define AM_PREHEAT_CUSTOM2      "CUSTOM2"
+    #define AM_IS_PAUSE             "Unable to extrude when printing, Pause printing?"
+    #define AM_AUTO_SHUT_DOWN       "Auto Power"
+    #define AM_MANUAL_SHUT_DOWN     "Manual"
+    #define AM_UNIFIEDMOVE          "Movemeny"
+    #define AM_UNIFIEDHEAT          "Heat&Fan"
+    #define AM_COOLDOWN             "Cool Down"
+    #define AM_EMERGENCYSTOP        "EM. STOP"
 
 #endif

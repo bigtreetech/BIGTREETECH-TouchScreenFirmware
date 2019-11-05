@@ -153,15 +153,17 @@ void sendQueueCmd(void)
           printSetUpdateWaiting(false);
         break;
         
-        #ifdef PS_ON_PIN
         case 80: //M80
-          PS_ON_On();
+          #ifdef PS_ON_PIN
+            PS_ON_On();
+          #endif
           break;
         
         case 81: //M81
-          PS_ON_Off();
+          #ifdef PS_ON_PIN
+            PS_ON_Off();
+          #endif
           break;
-        #endif
         
         case 82: //M82
           eSetRelative(false);
@@ -227,7 +229,9 @@ void sendQueueCmd(void)
         }
 
         case 114: //M114
-          positionSetUpdateWaiting(false);
+          #ifdef FIL_RUNOUT_PIN
+            positionSetUpdateWaiting(false);
+          #endif
           break;
 
         case 117: //M117

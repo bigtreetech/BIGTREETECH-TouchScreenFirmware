@@ -97,7 +97,6 @@
     #define EN_1_PERCENT            "1%"
     #define EN_5_PERCENT            "5%"
     #define EN_10_PERCENT           "10%"
-
     #define EN_READY                "Ready"
     #define EN_BUSY                 "Busy processing ,please wait..."
     #define EN_UNCONNECTED          "No printer attached!"
@@ -112,21 +111,31 @@
     #define EN_ADJUST_FAILED        "Adjustment failed, Please Try Again"
     #define EN_WARNING              "Warning"
     #define EN_STOP_PRINT           "Stop printing?"
-    #define EN_CONFIRM              "Confirm"
-    
+    #define EN_CONFIRM              "Confirm"    
     #define EN_TFTSD                "TFT SD"
     #define EN_READ_TFTSD_ERROR     "Read TFT SD card error!"
     #define EN_TFTSD_INSERTED       "Card inserted!"
-    #define EN_TFTSD_REMOVED        "Card removed!"
-    
+    #define EN_TFTSD_REMOVED        "Card removed!"    
     #define EN_U_DISK               "U Disk"
     #define EN_READ_U_DISK_ERROR    "Read U Disk error!"
     #define EN_U_DISK_INSERTED      "U Disk inserted!"
-    #define EN_U_DISK_REMOVED       "U Disk removed!"
-    
+    #define EN_U_DISK_REMOVED       "U Disk removed!"    
     #define EN_ONBOARDSD            "OnboardSD"
-    #define EN_READ_ONBOARDSD_ERROR "Read Onboard SD card error!"
-    
-    #define EN_FILAMENT_RUNOUT      "filament runout!"
+    #define EN_READ_ONBOARDSD_ERROR "Read Onboard SD card error!"    
+    #define EN_FILAMENT_RUNOUT      "filament runout!"    
+    #define EN_PREHEAT              "Preheat"
+    #define EN_PREHEAT_BOTH         "Both"
+    #define EN_PREHEAT_PLA          "PLA"
+    #define EN_PREHEAT_PETG         "PETG"
+    #define EN_PREHEAT_ABS          "ABS"
+    #define EN_PREHEAT_CUSTOM1      "CUSTOM1"
+    #define EN_PREHEAT_CUSTOM2      "CUSTOM2"
+    #define EN_IS_PAUSE             "Unable to extrude when printing, Pause printing?"
+    #define EN_AUTO_SHUT_DOWN       "Auto Power"
+    #define EN_MANUAL_SHUT_DOWN     "Manual"
+    #define EN_UNIFIEDMOVE          "Movement"
+    #define EN_UNIFIEDHEAT          "Heat/Fan"
+    #define EN_COOLDOWN             "Cool Down"
+    #define EN_EMERGENCYSTOP        "EM. STOP"
     
 #endif

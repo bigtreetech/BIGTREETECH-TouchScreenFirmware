@@ -25,9 +25,15 @@ void PS_ON_Off(void)
 }
 #endif
 
-
 // Filament runout detect
 #ifdef FIL_RUNOUT_PIN
+
+static bool update_waiting = false;
+/* Set whether we need to query the current position */
+void positionSetUpdateWaiting(bool isWaiting)
+{
+  update_waiting = isWaiting;
+}
 
 void FIL_Runout_Init(void)
 { 
@@ -64,12 +70,7 @@ bool FIL_RunoutPinFilteredLevel(void)
 
 
 static u32     update_time = 200;
-static bool    update_waiting = false;
-/* Set whether we need to query the current position */
-void positionSetUpdateWaiting(bool isWaiting)
-{
-  update_waiting = isWaiting;
-}
+
 
 // Use an encoder disc to toggles the runout
 // Suitable for BigTreeTech Smart filament detecter 
@@ -117,7 +118,6 @@ bool FIL_SmartRunoutDetect(void)
   }
   return false;
 }
-
 
 bool FIL_IsRunout(void)
 {

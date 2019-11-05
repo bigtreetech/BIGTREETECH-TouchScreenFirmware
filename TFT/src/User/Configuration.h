@@ -5,6 +5,11 @@
 #define EXTRUDER_NUM 1    // set in 1~6
 #define FAN_NUM      1    // set in 1~6
 
+//                       PLA      PETG       ABS     "CUSTOM1" "CUSTOM2"
+#define PREHEAT_BED      {55,      85,       100,       55,       55}
+#define PREHEAT_HOTEND   {205,     230,      230,       200,      200}
+//#define PREHEAT_TEXT     {"PLA",  "PETG",   "ABS",     "T2:",    "T3:"}
+
 #define HEAT_MAX_TEMP    {150,    275,       275,       275,       275,       275,       275}    //max temperature can be set
 #define HEAT_SIGN_ID     {"B:",   "T0:",     "T1:",     "T2:",     "T3:",     "T4:",     "T5:"}
 #define HEAT_DISPLAY_ID  {"Bed",  "T0",      "T1",      "T2",      "T3",      "T4",      "T5"}
@@ -69,6 +74,18 @@
 // This option to use an encoder disc that toggles the runout pin as the filament moves
 #define FILAMENT_RUNOUT_DISTANCE_MM 7
 
+/* 
+Enable alternative Move Menu Buttons Layout for easy
+update the icons from alternate icon folder
+*/
+//#define ALTERNATIVE_MOVE_MENU
+
+/* 
+Enable Unified Move Menu
+Move, Home, Extrude, ABL at one Place and bring Gcode Menu and 
+*/
+//#define UNIFIED_MENU
+
 /**
  * 12864 Mode Background & Font Color Options
  * Current color options from lcd.h: BLACK, BLUE, BROWN, BRRED, CYAN, GBLUE, GRAY, GREEN, MAGENTA, RED, WHITE, YELLOW
@@ -102,6 +119,7 @@
 
 // Prevent extrusion if the temperature is below this temperature
 #define PREVENT_COLD_EXTRUSION_MINTEMP 170
+
   
 #define EXTRUDE_STEPS  100.0f
   

@@ -97,7 +97,6 @@
     #define RU_1_PERCENT            "1%"
     #define RU_5_PERCENT            "5%"
     #define RU_10_PERCENT           "10%"
-
     #define RU_READY                "Готов"
     #define RU_BUSY                 "Система занята..."
     #define RU_UNCONNECTED          "Нет подкл.!"
@@ -113,20 +112,29 @@
     #define RU_WARNING              "Warning"
     #define RU_STOP_PRINT           "Stop printing?"
     #define RU_CONFIRM              "Confirm"
-
     #define RU_TFTSD                "TFT SD"
     #define RU_READ_TFTSD_ERROR     "Read TFT SD card error!"
     #define RU_TFTSD_INSERTED       "Card inserted!"
-    #define RU_TFTSD_REMOVED        "Card removed!"
-    
+    #define RU_TFTSD_REMOVED        "Card removed!"    
     #define RU_U_DISK               "U Disk"
     #define RU_READ_U_DISK_ERROR    "Read U Disk error!"
     #define RU_U_DISK_INSERTED      "U Disk inserted!"
-    #define RU_U_DISK_REMOVED       "U Disk removed!"
-    
+    #define RU_U_DISK_REMOVED       "U Disk removed!"    
     #define RU_ONBOARDSD            "OnboardSD"
-    #define RU_READ_ONBOARDSD_ERROR "Read Onboard SD card error!"
-    
+    #define RU_READ_ONBOARDSD_ERROR "Read Onboard SD card error!"    
     #define RU_FILAMENT_RUNOUT      "filament runout!"
-    
+    #define RU_PREHEAT              "Preheat"
+    #define RU_PREHEAT_BOTH         "Both"
+    #define RU_PREHEAT_PLA          "PLA"
+    #define RU_PREHEAT_PETG         "PETG"
+    #define RU_PREHEAT_ABS          "ABS"
+    #define RU_PREHEAT_CUSTOM1      "CUSTOM1"
+    #define RU_PREHEAT_CUSTOM2      "CUSTOM2"
+    #define RU_IS_PAUSE             "Unable to extrude when printing, Pause printing?"
+    #define RU_AUTO_SHUT_DOWN       "Auto Power"
+    #define RU_MANUAL_SHUT_DOWN     "Manual"    
+    #define RU_UNIFIEDMOVE          "Movement"
+    #define RU_UNIFIEDHEAT          "Heat&Fan"
+    #define RU_COOLDOWN             "Cool Down"
+    #define RU_EMERGENCYSTOP        "EM. STOP"
 #endif
