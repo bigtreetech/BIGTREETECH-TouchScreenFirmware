@@ -100,7 +100,7 @@ static REMINDER busySign = {{LCD_WIDTH - 5, 0, LCD_WIDTH, 5}, 0, STATUS_BUSY, LA
 
 
 void reminderMessage(int16_t inf, SYS_STATUS status)
-{    
+{
   reminder.inf = inf;
   GUI_SetColor(RED);
   GUI_DispStringInPrect(&reminder.rect, textSelect(reminder.inf), 1);
@@ -191,7 +191,7 @@ void loopBusySignClear(void)
     case STATUS_BUSY:
      if(OS_GetTime()<busySign.time+200)
         return;
-    break;            
+     break;
   }
 
   /* End Busy display sing */		
