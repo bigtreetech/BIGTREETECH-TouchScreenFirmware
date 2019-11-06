@@ -3,9 +3,9 @@
 
 //1 titl, ITEM_PER_PAGE item
 MENUITEMS probeOffsetItems = {
-//   title
-  LABEL_PROBE_OFFSET,
-//icon                        label
+// title
+LABEL_PROBE_OFFSET,
+// icon                        label
  {{ICON_DEC,                  LABEL_DEC},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},

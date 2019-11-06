@@ -33,7 +33,6 @@ void infoMenuSelect(void)
     case SERIAL_TSC:
     {
       Serial_ReSourceInit();
-      scanUpdates();
       GUI_SetColor(FK_COLOR);
       GUI_SetBkColor(BK_COLOR);
       infoMenu.menu[infoMenu.cur] = menuMain;
@@ -48,6 +47,8 @@ void infoMenuSelect(void)
         }
         heatSetUpdateTime(300);
       #endif
+        
+      reminderMessage(LABEL_UNCONNECTED, STATUS_UNCONNECT); // reset connect status
       break;
     }
       
@@ -98,7 +99,7 @@ void menuMode(void)
   
   for(u8 i=0;i<SELECTMODE;i++)
   {
-  lcd_frame_display(rect_of_mode[i].x0,rect_of_mode[i].y0-BYTE_HEIGHT,selecticonw,selecticonw,ICON_ADDR(select_mode[i]));
+    lcd_frame_display(rect_of_mode[i].x0,rect_of_mode[i].y0-BYTE_HEIGHT,selecticonw,selecticonw,ICON_ADDR(select_mode[i]));
   }
   
   selectmode(nowMode);

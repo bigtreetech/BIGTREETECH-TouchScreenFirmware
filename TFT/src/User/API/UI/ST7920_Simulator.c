@@ -128,8 +128,8 @@ void menuST7920(void)
   GUI_Clear(infoSettings.bg_color);
   GUI_SetColor(infoSettings.font_color);
   GUI_SetBkColor(infoSettings.bg_color);
-  
-  #if defined(ST7920_BANNER_TEXT) && !(defined(ST7920_FULLSCREEN))
+
+  #if defined(ST7920_BANNER_TEXT)
     GUI_DispStringInRect(0, 0, LCD_WIDTH, SIMULATOR_YSTART, (u8*)ST7920_BANNER_TEXT, 0);
   #endif
   

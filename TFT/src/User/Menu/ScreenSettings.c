@@ -21,8 +21,8 @@ LABEL_SCREEN_SETTINGS,
   #define ITEM_SILENT_NUM 2
   const ITEM itemSilent[ITEM_SILENT_NUM] = {
   // icon                       label
-    {ICON_SILENT_MODE,          LABEL_SILENT_OFF},
-    {ICON_SILENT_MODE,          LABEL_SILENT_ON},
+    {ICON_SILENT_OFF,           LABEL_SILENT_OFF},
+    {ICON_SILENT_ON,            LABEL_SILENT_ON},
   };
   const  u8 item_silent[ITEM_SILENT_NUM] = {0, 1};
   static u8 item_silent_i = 0;

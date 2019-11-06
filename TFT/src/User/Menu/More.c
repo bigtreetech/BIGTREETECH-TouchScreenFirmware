@@ -1,5 +1,5 @@
 #include "includes.h"
-#include "more.h"
+#include "More.h"
 
 void menuIsPause(void)
 {
