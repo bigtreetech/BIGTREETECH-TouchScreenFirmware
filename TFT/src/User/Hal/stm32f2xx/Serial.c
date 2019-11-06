@@ -50,7 +50,8 @@ void Serial_DMA_Config(uint8_t port)
   cfg->dma_stream->CR |= 1<<10;  //Memory increment mode
   cfg->dma_stream->CR |= 0<<9;   //Peripheral not increment mode
   cfg->dma_stream->CR |= 0<<6;   //Data transfer direction: Peripheral-to-memory
-  cfg->dma_stream->CR |= 1<<0;   //enable DMA	
+  cfg->dma_stream->CR |= 1<<0;   //enable DMA
+  Serial_DMAReEnable(port);
 }
 
 void Serial_Config(u32 baud)

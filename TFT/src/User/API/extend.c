@@ -69,9 +69,7 @@ bool FIL_RunoutPinFilteredLevel(void)
 }
 
 
-static u32     update_time = 200;
-
-
+static u32 update_time = 200;
 // Use an encoder disc to toggles the runout
 // Suitable for BigTreeTech Smart filament detecter 
 bool FIL_SmartRunoutDetect(void)
@@ -85,11 +83,11 @@ bool FIL_SmartRunoutDetect(void)
   float actualExtrude = coordinateGetAxisActual(E_AXIS);
 
   do
-  {  /* Send M114 query position continuously	*/
+  {  /* Send M114 E query extrude position continuously	*/
     if(update_waiting == true)                {nowTime=OS_GetTime();break;}
     if(OS_GetTime()<nowTime+update_time)       break;
 
-    if(storeCmd("M114 E\n")==false)              break;
+    if(storeCmd("M114 E\n")==false)            break;
 
     nowTime=OS_GetTime();
     update_waiting=true;
@@ -136,9 +134,9 @@ bool FIL_IsRunout(void)
 
 void loopFILRunoutDetect(void)
 {  
-  if (infoSettings.runout == FILAMENT_RUNOUT_OFF)  return; // filament runout turn off
-  if (!FIL_IsRunout()) return; // filament not runout yet, need constant scanning to filter interference
-  if (!isPrinting() || isPause())  return; // not printing or print is pause
+  if (infoSettings.runout == FILAMENT_RUNOUT_OFF)  return; // Filament runout turn off
+  if (!FIL_IsRunout()) return; // Filament not runout yet, need constant scanning to filter interference
+  if (!isPrinting() || isPause())  return; // No printing or printing paused
   
   if (setPrintPause(true))
   {

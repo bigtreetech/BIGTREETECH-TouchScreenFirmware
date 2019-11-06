@@ -56,7 +56,7 @@
 //menu
 #include "menu.h"
 #include "MainPage.h"
-#include "PreHeatMenu.h"
+#include "PreheatMenu.h"
 #include "Heat.h"
 #include "Move.h"
 #include "Home.h"

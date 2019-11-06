@@ -36,6 +36,7 @@ extern const char* heatWaitCmd[];
 void menuHeat(void);
 
 void heatSetTargetTemp(TOOL tool, uint16_t temp);
+void heatSyncTargetTemp(TOOL tool, uint16_t temp);
 uint16_t heatGetTargetTemp(TOOL tool);
 void heatSetCurrentTemp(TOOL tool, int16_t temp);
 int16_t heatGetCurrentTemp(TOOL tool);

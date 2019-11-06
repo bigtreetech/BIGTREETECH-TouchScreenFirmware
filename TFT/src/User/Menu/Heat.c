@@ -1,9 +1,9 @@
 #include "Heat.h"
 #include "includes.h"
 
-//1 title, ITEM_PER_PAGE items (icon+label) 
+//1 title, ITEM_PER_PAGE items (icon + label) 
 MENUITEMS heatItems = {
-//  title
+// title
 LABEL_HEAT,
 // icon                       label
  {{ICON_DEC,                  LABEL_DEC},
@@ -45,14 +45,20 @@ const char* heatCmd[] = HEAT_CMD;
 const char* heatWaitCmd[] = HEAT_WAIT_CMD;
 
 static HEATER  heater = {{}, NOZZLE0, NOZZLE0};
+static HEATER  lastHeater = {{}, NOZZLE0, NOZZLE0};
 static u32     update_time = 300;
 static bool    update_waiting = false;
 static bool    send_waiting[HEATER_NUM];
 
 /*Set target temperature*/
-void heatSetTargetTemp(TOOL tool,u16 temp)
+void heatSetTargetTemp(TOOL tool, u16 temp)
 {
   heater.T[tool].target = temp;
+}
+/*Sync target temperature*/
+void heatSyncTargetTemp(TOOL tool, u16 temp)
+{
+  lastHeater.T[tool].target = heater.T[tool].target = temp;
 }
 
 /*Get target temperature */
@@ -180,9 +186,9 @@ void targetReDraw(void)
 
 void menuHeat(void)
 {
-  HEATER      nowHeater = heater;
   KEY_VALUES  key_num = KEY_IDLE;
 
+  lastHeater = heater;
   update_time=100;
 
   menuDrawPage(&heatItems);
@@ -214,7 +220,7 @@ void menuHeat(void)
         break;
         
       case KEY_ICON_4:
-        nowHeater.tool = heater.tool = (TOOL)((heater.tool+1) % HEATER_NUM);
+        lastHeater.tool = heater.tool = (TOOL)((heater.tool+1) % HEATER_NUM);
         heatItems.items[key_num] = itemTool[heater.tool];
         menuDrawItem(&heatItems.items[key_num], key_num);
         showTemperature();
@@ -238,35 +244,21 @@ void menuHeat(void)
         break;
     }
 
-    if(nowHeater.tool != heater.tool)
+    if(lastHeater.tool != heater.tool)
     {
-      nowHeater.tool = heater.tool;
+      lastHeater.tool = heater.tool;
       showTemperature();
     }
-    if(nowHeater.T[heater.tool].current != heater.T[heater.tool].current)
+    if(lastHeater.T[heater.tool].current != heater.T[heater.tool].current)
     {      
-      nowHeater.T[heater.tool].current = heater.T[heater.tool].current;
+      lastHeater.T[heater.tool].current = heater.T[heater.tool].current;
       currentReDraw();
     }
-    if(nowHeater.T[heater.tool].target != heater.T[heater.tool].target)
+    if(lastHeater.T[heater.tool].target != heater.T[heater.tool].target)
     {
       targetReDraw();
     }
     
-    for(TOOL i = BED; i < HEATER_NUM; i++)
-    {
-      if(nowHeater.T[i].target != heater.T[i].target)
-      {
-        nowHeater.T[i].target = heater.T[i].target;
-        if(send_waiting[i] != true)
-        {
-          send_waiting[i] = true;
-          storeCmd("%s ",heatCmd[i]);
-        }
-      }
-    }
-    
-
     loopProcess();
   }
   
@@ -309,6 +301,19 @@ void loopCheckHeater(void)
 
     if(infoMenu.menu[infoMenu.cur] == menuHeat)                         break;
     update_time=300;
+  }
+    
+  for(TOOL i = BED; i < HEATER_NUM; i++) // If the target temperature changes, send a Gcode to set the motherboard
+  {
+    if(lastHeater.T[i].target != heater.T[i].target)
+    {
+      lastHeater.T[i].target = heater.T[i].target;
+      if(send_waiting[i] != true)
+      {
+        send_waiting[i] = true;
+        storeCmd("%s ",heatCmd[i]);
+      }
+    }
   }
 }
 

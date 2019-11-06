@@ -14,6 +14,8 @@ void infoSettingsReset(void)
   infoSettings.rotate_ui = 0;
   infoSettings.bg_color = ST7920_BKCOLOR;
   infoSettings.font_color = ST7920_FNCOLOR;
+  infoSettings.silent = 0;
+  infoSettings.auto_off = 0;
   storePara();  
 }
 

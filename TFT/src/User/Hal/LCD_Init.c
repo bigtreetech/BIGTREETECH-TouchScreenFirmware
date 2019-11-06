@@ -109,7 +109,7 @@ void LCD_init_RGB(void)
   LCD_WR_REG(0X29); 	 
 }
 
-#elif defined(TFT28)
+#elif defined(TFT28_V1_0)
 
 void LCD_init_RGB(void) 
 {

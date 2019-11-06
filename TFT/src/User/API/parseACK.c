@@ -126,13 +126,13 @@ startParse:
     if(ack_seen("T:") || ack_seen("T0:")) 
     {
       heatSetCurrentTemp(heatGetCurrentToolNozzle(), ack_value()+0.5);
-      heatSetTargetTemp(heatGetCurrentToolNozzle(), ack_second_value()+0.5);
+      heatSyncTargetTemp(heatGetCurrentToolNozzle(), ack_second_value()+0.5);
       for(TOOL i = BED; i < HEATER_NUM; i++)
       {
         if(ack_seen(toolID[i])) 
         {
           heatSetCurrentTemp(i, ack_value()+0.5);
-          heatSetTargetTemp(i, ack_second_value()+0.5);
+          heatSyncTargetTemp(i, ack_second_value()+0.5);
         }
       
       }
@@ -140,7 +140,7 @@ startParse:
     else if(ack_seen("B:"))		
     {
       heatSetCurrentTemp(BED,ack_value()+0.5);
-      heatSetTargetTemp(BED, ack_second_value()+0.5);
+      heatSyncTargetTemp(BED, ack_second_value()+0.5);
     }
     else if(ack_seen("Mean:"))
     {

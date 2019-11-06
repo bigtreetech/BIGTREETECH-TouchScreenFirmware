@@ -22,6 +22,8 @@ void Hardware_GenericInit(void)
   XPT2046_Init();
   W25Qxx_Init();
   LCD_Init();
+  scanUpdates();
+  SD_DeInit();
   
 #if LCD_ENCODER_SUPPORT
   LCD_EncoderInit();

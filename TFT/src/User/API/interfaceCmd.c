@@ -186,7 +186,7 @@ void sendQueueCmd(void)
           if(cmd_seen('T')) i = (TOOL)(cmd_value() + NOZZLE0);
           if(cmd_seen('S'))
           {	
-            heatSetTargetTemp(i, cmd_value()); 
+            heatSyncTargetTemp(i, cmd_value()); 
           }
           else
           {
@@ -244,7 +244,7 @@ void sendQueueCmd(void)
         case 140: //M140
           if(cmd_seen('S'))
           {
-            heatSetTargetTemp(BED,cmd_value()); 
+            heatSyncTargetTemp(BED,cmd_value()); 
           }
           else
           {
