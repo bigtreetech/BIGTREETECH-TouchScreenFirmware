@@ -25,20 +25,20 @@ GUI_RECT titleRect={10, (TITLE_END_Y - BYTE_HEIGHT) / 2, LCD_WIDTH-10, (TITLE_EN
 
 SCROLL   gcodeScroll;
 GUI_RECT gcodeRect[NUM_PER_PAGE]= { 
-  {2+0*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y+(SPACE_Y-BYTE_HEIGHT)/2,  
-   1*SPACE_X_PER_ICON-2,  1*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
+  {BYTE_WIDTH/2+0*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y+(SPACE_Y-BYTE_HEIGHT)/2,  
+   1*SPACE_X_PER_ICON-BYTE_WIDTH/2,  1*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
   
-  {2+1*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y+(SPACE_Y-BYTE_HEIGHT)/2,
-   2*SPACE_X_PER_ICON-2,  1*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
+  {BYTE_WIDTH/2+1*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y+(SPACE_Y-BYTE_HEIGHT)/2,
+   2*SPACE_X_PER_ICON-BYTE_WIDTH/2,  1*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
   
-  {2+2*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y+(SPACE_Y-BYTE_HEIGHT)/2,
-   3*SPACE_X_PER_ICON-2,  1*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
+  {BYTE_WIDTH/2+2*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y+(SPACE_Y-BYTE_HEIGHT)/2,
+   3*SPACE_X_PER_ICON-BYTE_WIDTH/2,  1*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
   
-  {2+3*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y+(SPACE_Y-BYTE_HEIGHT)/2,
-   4*SPACE_X_PER_ICON-2,  1*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
+  {BYTE_WIDTH/2+3*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y+(SPACE_Y-BYTE_HEIGHT)/2,
+   4*SPACE_X_PER_ICON-BYTE_WIDTH/2,  1*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
   
-  {2+0*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y+(SPACE_Y-BYTE_HEIGHT)/2,
-   1*SPACE_X_PER_ICON-2,  2*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
+  {BYTE_WIDTH/2+0*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y+(SPACE_Y-BYTE_HEIGHT)/2,
+   1*SPACE_X_PER_ICON-BYTE_WIDTH/2,  2*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
 };
 
 void scrollFileNameCreate(u8 i)
@@ -60,29 +60,21 @@ void scrollFileNameCreate(u8 i)
   }
 }
 
-#define NAME_SPACE (SPACE_X_PER_ICON-4)
-#define NAME_LEN   (NAME_SPACE/BYTE_WIDTH)
 void normalNameDisp(GUI_RECT *rect, u8 *name)
 {
-  u8  len, x_offset; 
-
   if(name == NULL) return;
-
-  len = my_strlen((u8 *)name);	
-  if(len > NAME_LEN)
-  {		
-    len = NAME_LEN;
-  }
-  x_offset=((NAME_SPACE - (len * BYTE_WIDTH)) >> 1);	
+  
   GUI_ClearRect(rect->x0, rect->y0, rect->x1, rect->y1);
-  GUI_SetRange(rect->x0+x_offset, rect->y0, rect->x0+x_offset+len*BYTE_WIDTH, rect->y0+BYTE_HEIGHT);
-  GUI_DispLenString(rect->x0+x_offset, rect->y0, (u8 *)name, 0, len);
+  GUI_SetRange(rect->x0, rect->y0, rect->x1, rect->y1);
+  GUI_DispStringInPrect(rect, name, 0);
   GUI_CancelRange();
 }
 
 void gocdeListDraw(void)
 {
   u8 i=0;
+  int gn;
+  char gnew[20];
   ITEM curItem = {ICON_BACKGROUND, LABEL_BACKGROUND};
 
   scrollFileNameCreate(0);
@@ -100,6 +92,21 @@ void gocdeListDraw(void)
           &&(i < NUM_PER_PAGE)                                                   ;i++)  //file
   {	
     curItem.icon = ICON_FILE;
+
+    #if defined(TFT24_V1_1) || defined(TFT28)
+    gn = strlen(infoFile.file[i]);//view
+    strlcpy(gnew,infoFile.file[i],gn-5);
+    if(bmpDecode(strcat(gnew,"_70.bmp"), ICON_ADDR(ICON_ABL+i)))
+    curItem.icon = ICON_ABL+i;   
+    #endif
+    
+    #if defined(TFT35_V1_0) || defined(TFT35_V1_1) || defined(TFT35_V1_2) || defined(TFT35_V3_0)
+    gn = strlen(infoFile.file[i]);//view
+    strlcpy(gnew,infoFile.file[i],gn-5);
+    if(bmpDecode(strcat(gnew,"_95.bmp"), ICON_ADDR(ICON_ABL+i)))
+    curItem.icon = ICON_ABL+i; 
+    #endif
+
     menuDrawItem(&curItem, i);
     normalNameDisp(&gcodeRect[i], (u8* )infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num]);
   }
@@ -118,7 +125,7 @@ void menuPrintFromSource(void)
   u8 update=0;
 
   GUI_Clear(BK_COLOR);
-  GUI_DispString((LCD_WIDTH - my_strlen(textSelect(LABEL_LOADING))*BYTE_WIDTH)/2, LCD_HEIGHT/2 - BYTE_HEIGHT, textSelect(LABEL_LOADING),1);
+  GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, textSelect(LABEL_LOADING), 1);
 
   if (mountFS() == true && scanPrintFiles() == true)
   {
@@ -127,15 +134,15 @@ void menuPrintFromSource(void)
   }
   else
   {
-    GUI_DispString((LCD_WIDTH-my_strlen(textSelect(labelVolumeError[infoFile.source]))*BYTE_WIDTH)/2, LCD_HEIGHT/2, textSelect(labelVolumeError[infoFile.source]),1);
+    GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, textSelect(labelVolumeError[infoFile.source]), 1);
     Delay_ms(1000);
     infoMenu.cur--;
   }
 
   while(infoMenu.menu[infoMenu.cur] == menuPrintFromSource)
   {
-    Scroll_DispString(&titleScroll,1,LEFT);    //������ʾ·����
-    Scroll_DispString(&gcodeScroll,1,CENTER);  //������ʾ�ļ���
+    Scroll_DispString(&titleScroll,1,LEFT);    //
+    Scroll_DispString(&gcodeScroll,1,CENTER);  //
 
     key_num = menuKeyGetValue();
 
@@ -212,7 +219,7 @@ void menuPrintFromSource(void)
       gocdeListDraw();
     }
     
-    #ifdef SD_CD_SUPPROT
+    #ifdef SD_CD_PIN
     if(isVolumeExist(infoFile.source) != true)
     {
       resetInfoFile();
