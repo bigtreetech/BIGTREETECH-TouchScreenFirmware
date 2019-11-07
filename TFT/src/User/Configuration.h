@@ -2,26 +2,26 @@
 #define _CONFIGRATION_H_
 
 //===========================================================================
-//=========================== 12864 Mode Settings ===========================
+//=========================== Marlin Mode Settings ===========================
 //===========================================================================
 
 /**
- * Default 12864 Mode Background & Font Color Options
+ * Default Marlin Mode Background & Font Color Options
  *
  * These colors can be changed in TFT mode, but can also be set here.
  *
  * Current color options from lcd.h: BLACK, BLUE, BROWN, BRRED, CYAN, GBLUE, GRAY, GREEN, MAGENTA, RED, WHITE, YELLOW
  */
 
-// 12864 Mode Background & Font Color Options
+// Marlin Mode Background & Font Color Options
 // Current color options from lcd.h: BLACK, BLUE, BROWN, BRRED, CYAN, GBLUE, GRAY, GREEN, MAGENTA, RED, WHITE, YELLOW
 #define ST7920_BKCOLOR BLACK
 #define ST7920_FNCOLOR GREEN
 
-// Text displayed at the top of the LCD in 12864 Mode. Comment out to disable.
+// Text displayed at the top of the LCD in Marlin Mode. Comment out to disable.
 #define ST7920_BANNER_TEXT "LCD12864 Simulator"
 
-// Run 12864 Mode fullscreen. Not recommended for TFT24.
+// Run Marlin Mode fullscreen. Not recommended for TFT24.
 //#define ST7920_FULLSCREEN
 
 //===========================================================================
