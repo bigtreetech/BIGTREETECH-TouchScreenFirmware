@@ -321,6 +321,11 @@ void sendQueueCmd(void)
         case 92: //G92
         {
           AXIS i;
+          bool coorRelative = coorGetRelative();
+          bool eRelative = eGetRelative();
+          // Set to absolute mode
+          coorSetRelative(false);
+          eSetRelative(false);
           for(i=X_AXIS;i<TOTAL_AXIS;i++)
           {
             if(cmd_seen(axis_id[i]))
@@ -328,6 +333,9 @@ void sendQueueCmd(void)
               coordinateSetAxisTarget(i,cmd_float());
             }
           }
+          // Restore mode
+          coorSetRelative(coorRelative);
+          eSetRelative(eRelative);
           break;
         }
       }
