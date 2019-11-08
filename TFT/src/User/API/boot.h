@@ -130,6 +130,8 @@ enum
   ICON_SILENT_OFF,
 
 //  ICON_RESERVE
+// Preview should be in the last place
+  ICON_PREVIEW,
 };
 
 typedef union
