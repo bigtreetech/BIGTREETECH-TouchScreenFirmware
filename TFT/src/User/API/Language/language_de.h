@@ -138,4 +138,5 @@
     #define DE_UNIFIEDHEAT          "Heat&Fan"
     #define DE_COOLDOWN             "Cool Down"
     #define DE_EMERGENCYSTOP        "EM. STOP"
+    #define DE_TOUCH_TO_EXIT        "Touch anywhere to exit"
 #endif
