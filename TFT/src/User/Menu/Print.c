@@ -73,6 +73,8 @@ void normalNameDisp(GUI_RECT *rect, u8 *name)
 void gocdeListDraw(void)
 {
   u8 i=0;
+  int gn;
+  char gnew[20];
   ITEM curItem = {ICON_BACKGROUND, LABEL_BACKGROUND};
 
   scrollFileNameCreate(0);
@@ -90,6 +92,17 @@ void gocdeListDraw(void)
           &&(i < NUM_PER_PAGE)                                                   ;i++)  //file
   {	
     curItem.icon = ICON_FILE;
+    #if (ICON_WIDTH == 70 && ICON_HEIGHT == 70)
+      gn = strlen(infoFile.file[i]);//view
+      strlcpy(gnew,infoFile.file[i],gn-5);
+      if(bmpDecode(strcat(gnew,"_70.bmp"), ICON_ADDR(ICON_PREVIEW+i)))
+      curItem.icon = ICON_PREVIEW+i;
+    #elif (ICON_WIDTH == 95 && ICON_HEIGHT == 95)
+      gn = strlen(infoFile.file[i]);//view
+      strlcpy(gnew,infoFile.file[i],gn-5);
+      if(bmpDecode(strcat(gnew,"_95.bmp"), ICON_ADDR(ICON_PREVIEW+i)))
+      curItem.icon = ICON_PREVIEW+i; 
+    #endif
     menuDrawItem(&curItem, i);
     normalNameDisp(&gcodeRect[i], (u8* )infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num]);
   }
