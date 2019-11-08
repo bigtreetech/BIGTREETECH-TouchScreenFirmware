@@ -128,9 +128,10 @@ enum
   ICON_MANUAL_LEVEL,
   ICON_COOLDOWN,
   ICON_SILENT_OFF,
-  ICON_PREVIEW,
 
 //  ICON_RESERVE
+// Preview should be in the last place
+  ICON_PREVIEW,
 };
 
 typedef union
