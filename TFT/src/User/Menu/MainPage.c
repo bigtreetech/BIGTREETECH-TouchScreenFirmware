@@ -13,7 +13,7 @@ LABEL_READY,
     {ICON_PRINT,                LABEL_PRINT},
     {ICON_GCODE,                LABEL_GCODE},
     {ICON_STOP,                 LABEL_EMERGENCYSTOP},
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},  //Reserved for status screen
     {ICON_SETTINGS,             LABEL_SETTINGS},}
   #else
    {{ICON_HEAT,                 LABEL_PREHEAT},
