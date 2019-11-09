@@ -137,4 +137,5 @@
     #define FR_UNIFIEDHEAT          "Heat/Fan"
     #define FR_COOLDOWN             "Refroidissement"
     #define FR_EMERGENCYSTOP        "Arrêt d'Urgence"
+    #define FR_TOUCH_TO_EXIT        "Toucher n'importe où pour sortir"
 #endif

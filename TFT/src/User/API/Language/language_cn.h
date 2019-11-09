@@ -137,5 +137,6 @@
     #define CN_UNIFIEDHEAT          "Heat&Fan"
     #define CN_COOLDOWN             "Cool Down"
     #define CN_EMERGENCYSTOP        "EM. STOP"
+    #define CN_TOUCH_TO_EXIT        "Touch anywhere to exit"
 
 #endif
