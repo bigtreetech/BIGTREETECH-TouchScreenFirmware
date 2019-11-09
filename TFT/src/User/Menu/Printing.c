@@ -121,6 +121,7 @@ void menuBeforePrinting(void)
 
       if(size == 0)
       {
+        ExitDir();
         infoMenu.cur--;		
         return;
       }
@@ -149,8 +150,9 @@ void menuBeforePrinting(void)
       
     case TFT_UDISK:
     case TFT_SD: // GCode from file on TFT SD
-      if(f_open(&infoPrinting.file,infoFile.title, FA_OPEN_EXISTING | FA_READ)!=FR_OK)
-      {		
+      if(f_open(&infoPrinting.file,infoFile.title, FA_OPEN_EXISTING | FA_READ) != FR_OK)
+      {
+        ExitDir();
         infoMenu.cur--;		
         return ;
       }
