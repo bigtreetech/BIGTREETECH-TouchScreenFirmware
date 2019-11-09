@@ -73,15 +73,18 @@ void menuExtrude(void)
   KEY_VALUES key_num = KEY_IDLE;
   float eSaved = 0.0f;
   float eTemp  = 0.0f;
+  bool  eRelative = false;
   u32   feedrate = 0;
 
   while(infoCmd.count != 0) {loopProcess();}
   extrudeCoordinate = eTemp = eSaved = coordinateGetAxisTarget(E_AXIS);                
   feedrate = coordinateGetFeedRate();
+  eRelative = eGetRelative();
 
   menuDrawPage(&extrudeItems);
   showExtrudeCoordinate();
   
+  if(eRelative) mustStoreCmd("M82\n"); // Set extruder to absolute
   while(infoMenu.menu[infoMenu.cur] == menuExtrude)
   {
     key_num = menuKeyGetValue();
@@ -131,6 +134,7 @@ void menuExtrude(void)
   }
   mustStoreCmd("G92 E%.5f\n",eSaved);   
   mustStoreCmd("G0 F%d\n",feedrate);
+  if(eRelative) mustStoreCmd("M83\n"); // Set extruder to relative
 }
 
 

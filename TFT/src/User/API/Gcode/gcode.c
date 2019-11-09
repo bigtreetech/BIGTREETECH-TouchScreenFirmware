@@ -2,17 +2,6 @@
 #include "includes.h"
 
 REQUEST_COMMAND_INFO requestCommandInfo;
-u32 timeout = 0;
-
-void requestInitTimeOut(void)
-{
-  timeout = OS_GetTime();
-}
-
-bool requestHasTimeOut(void)
-{
-  return ((OS_GetTime() - timeout) > 300);  //3s
-}
 
 static void resetRequestCommandInfo(void) 
 {
@@ -35,20 +24,19 @@ static void resetRequestCommandInfo(void)
 bool request_M21(void)
 {
   strcpy(requestCommandInfo.command,"M21\n");
-  strcpy(requestCommandInfo.startMagic,"SD card ok");
-  strcpy(requestCommandInfo.stopMagic,"\n");
-  strcpy(requestCommandInfo.errorMagic,"Error");
+  strcpy(requestCommandInfo.startMagic,"SD");
+  strcpy(requestCommandInfo.stopMagic,"card ok");
+  strcpy(requestCommandInfo.errorMagic,"init fail");
 
   resetRequestCommandInfo();
   mustStoreCmd(requestCommandInfo.command);
-  requestInitTimeOut();
   // Wait for response
-  while (!requestCommandInfo.done && !requestHasTimeOut())
+  while (!requestCommandInfo.done)
   {
     loopProcess();
   }
   // Check reponse
-  return !requestHasTimeOut();
+  return !requestCommandInfo.inError;
 }
 
 /*
@@ -73,9 +61,8 @@ char *request_M20(void)
   strcpy(requestCommandInfo.errorMagic,"Error");
   resetRequestCommandInfo();
   mustStoreCmd(requestCommandInfo.command);
-  requestInitTimeOut();
   // Wait for response
-  while (!requestCommandInfo.done && !requestHasTimeOut())
+  while (!requestCommandInfo.done)
   {
     loopProcess();
   }
@@ -100,9 +87,8 @@ long request_M23(char *filename)
   strcpy(requestCommandInfo.errorMagic,"open failed");
   resetRequestCommandInfo();
   mustStoreCmd(requestCommandInfo.command);
-  requestInitTimeOut();
   // Wait for response
-  while (!requestCommandInfo.done && !requestHasTimeOut())
+  while (!requestCommandInfo.done)
   {
     loopProcess();
   }

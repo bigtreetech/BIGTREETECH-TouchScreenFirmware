@@ -6,6 +6,11 @@ static u16 ack_index=0;
 static u8 ack_cur_src = SERIAL_PORT;
 int TGCODE;
 int MODEselect;
+// Ignore reply "echo:" message (don't display in popup menu)
+const char *const ignoreEcho[] = {
+  "Now fresh file:",
+  "Probe Z Offset:",
+};
 
 void setCurrentAckSrc(uint8_t src)
 {
@@ -61,6 +66,7 @@ static float ack_second_value()
 
 void ackPopupInfo(const char *info)
 {
+  if(TGCODE) return;
   popupReminder((u8* )info, (u8 *)ack_rev_buf + ack_index);
 }
 
@@ -77,43 +83,41 @@ startParse:
   }    
 
   // GCode command response
-  bool gcodeProcessed = false;
   if(requestCommandInfo.inWaitResponse && ack_seen(requestCommandInfo.startMagic))
   {
     requestCommandInfo.inResponse = true;
     requestCommandInfo.inWaitResponse = false;
-    gcodeProcessed = true;
   }
   if(requestCommandInfo.inResponse)
   {
     if(strlen(requestCommandInfo.cmd_rev_buf)+strlen(ack_rev_buf) < CMD_MAX_REV)
     {
-        strcat(requestCommandInfo.cmd_rev_buf,ack_rev_buf);
+      strcat(requestCommandInfo.cmd_rev_buf,ack_rev_buf);
+      
+      if(ack_seen(requestCommandInfo.errorMagic ))
+      {
+        requestCommandInfo.done = true;
+        requestCommandInfo.inResponse = false;
+        requestCommandInfo.inError = true;
+      }
+      else if(ack_seen(requestCommandInfo.stopMagic ))
+      {
+        requestCommandInfo.done = true;
+        requestCommandInfo.inResponse = false;
+      }
     }
     else 
     {
-        requestCommandInfo.done = true;
-        requestCommandInfo.inResponse = false;
-        ackPopupInfo(errormagic);
+      requestCommandInfo.done = true;
+      requestCommandInfo.inResponse = false;
+      ackPopupInfo(errormagic);
     }
-    gcodeProcessed = true;
-  }
-  if(requestCommandInfo.inResponse && ack_seen(requestCommandInfo.errorMagic ))
-  {
-    requestCommandInfo.done = true;
-    requestCommandInfo.inResponse = false;
-    requestCommandInfo.inError = true;
-    gcodeProcessed = true;
-  }
-  if(requestCommandInfo.inResponse && ack_seen(requestCommandInfo.stopMagic ))
-  {
-    requestCommandInfo.done = true;
-    requestCommandInfo.inResponse = false;
-    gcodeProcessed = true;
-  }
+    infoHost.wait = false;
+    goto parse_end;
+  }  
   // end 
 
-  if(ack_cmp("ok\r\n") || ack_cmp("ok\n"))
+  if(ack_cmp("ok\n"))
   {
     infoHost.wait = false;	
   }
@@ -133,8 +137,7 @@ startParse:
         {
           heatSetCurrentTemp(i, ack_value()+0.5);
           heatSyncTargetTemp(i, ack_second_value()+0.5);
-        }
-      
+        }      
       }
     }
     else if(ack_seen("B:"))		
@@ -171,8 +174,8 @@ startParse:
     else if(ack_seen(bsdprintingmagic))
     {
       if(infoMenu.menu[infoMenu.cur] != menuPrinting && !infoHost.printing) {
-          infoMenu.menu[++infoMenu.cur] = menuPrinting;
-          infoHost.printing=true;
+        infoMenu.menu[++infoMenu.cur] = menuPrinting;
+        infoHost.printing=true;
       }
       // Parsing printing data
       // Exampre: SD printing byte 123/12345
@@ -184,18 +187,19 @@ startParse:
 #endif    
     else if(ack_seen(errormagic))
     {
-        if(TGCODE==0)
-        ackPopupInfo(errormagic);
+      ackPopupInfo(errormagic);
     }
     else if(ack_seen(busymagic))
     {
-        if(TGCODE==0)
-        ackPopupInfo(busymagic);
+      ackPopupInfo(busymagic);
     }
-    else if(ack_seen(echomagic) && !gcodeProcessed)
+    else if(ack_seen(echomagic))
     {
-        if(TGCODE==0)
-        ackPopupInfo(echomagic);
+      for(u8 i = 0; i < aCount(ignoreEcho); i++)
+      {
+        if(strstr(ack_rev_buf, ignoreEcho[i])) goto parse_end;
+      }
+      ackPopupInfo(echomagic);
     }
   }
   
