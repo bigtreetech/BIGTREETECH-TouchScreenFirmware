@@ -18,8 +18,8 @@
 #define ST7920_BKCOLOR BLACK
 #define ST7920_FNCOLOR GREEN
 
-// Text displayed at the top of the LCD in Marlin Mode. Comment out to disable.
-#define ST7920_BANNER_TEXT "LCD12864 Simulator"
+// Text displayed at the top of the LCD in Marlin Mode.
+//#define ST7920_BANNER_TEXT "LCD12864 Simulator"
 
 // Run Marlin Mode fullscreen. Not recommended for TFT24.
 //#define ST7920_FULLSCREEN
