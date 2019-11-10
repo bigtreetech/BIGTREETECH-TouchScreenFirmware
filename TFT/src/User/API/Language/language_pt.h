@@ -11,7 +11,7 @@
     #define PT_SETTINGS             "Configurar"
     #define PT_SCREPT_SETTINGS      "Ecra"
     #define PT_MACHINE_SETTINGS     "Impressora"
-    #define PT_FEATURE_SETTINGS     "Feature"
+    #define PT_FEATURE_SETTINGS     "Extras"
     #define PT_SILENT_ON            "Som ON"
     #define PT_SILENT_OFF           "Som OFF"
     #define PT_SHUT_DOWN            "Desligar"
