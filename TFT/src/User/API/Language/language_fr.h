@@ -124,7 +124,7 @@
     #define FR_READ_ONBOARDSD_ERROR "Erreur de Lecture de la carte SD interne !"
     #define FR_FILAMENT_RUNOUT      "Fin de Filament !"
     #define FR_PREHEAT              "Préchauffage"
-    #define FR_PREHEAT_BOTH         "Both"
+    #define FR_PREHEAT_BOTH         "Tout"
     #define FR_PREHEAT_PLA          "PLA"
     #define FR_PREHEAT_PETG         "PETG"
     #define FR_PREHEAT_ABS          "ABS"
