@@ -130,7 +130,7 @@
     #define FR_PREHEAT_ABS          "ABS"
     #define FR_PREHEAT_CUSTOM1      "CUSTOM1"
     #define FR_PREHEAT_CUSTOM2      "CUSTOM2"
-    #define FR_IS_PAUSE             "Extrusion impossible quand l’impression est en cours, mettre impression en pause ?"
+    #define FR_IS_PAUSE             "Extrusion impossible quand l’impression est en cours, mettre l'impression en pause ?"
     #define FR_AUTO_SHUT_DOWN       "Auto Power"
     #define FR_MANUAL_SHUT_DOWN     "Manual"
     #define FR_UNIFIEDMOVE          "Mouvement"
