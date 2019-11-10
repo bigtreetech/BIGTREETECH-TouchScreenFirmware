@@ -54,7 +54,7 @@
     #define IT_FAN_FULL_SPEED       "Massimo"
     #define IT_FAN_HALF_SPEED       "Metà"
     #define IT_ROTATE_UI            "Ruota UI"
-    #define IT_TOUCHSCREEN_ADJUST   "Touch Pointer"
+    #define IT_TOUCHSCREEN_ADJUST   "Calibra"
     #define IT_MORE                 "Altro"
     #define IT_SCREEN_INFO          "Info"
     #define IT_WHITE                "Bianco"
