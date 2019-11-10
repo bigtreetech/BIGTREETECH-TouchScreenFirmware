@@ -8,6 +8,7 @@
 enum
 {
   ENGLISH = 0,
+  ITALIAN,
   CHINESE,
   RUSSIAN,
   JAPANESE,
