@@ -31,5 +31,5 @@ jobs:
         run: platformio run --enviroment BIGTREE_TFT24_V1_1
       - uses: actions/checkout@master
       - name: Copy builds
-        run: ls
+        run: ls .pio
 
