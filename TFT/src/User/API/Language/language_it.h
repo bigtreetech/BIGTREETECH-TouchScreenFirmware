@@ -138,6 +138,5 @@
     #define IT_COOLDOWN             "Blocco Freddo"
     #define IT_EMERGENCYSTOP        "EM. STOP"
     #define IT_TOUCH_TO_EXIT        "Premi ovunque per uscire"
-    #define IT_SEND                 "Invia"
     
 #endif
