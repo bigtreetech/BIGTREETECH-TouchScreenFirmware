@@ -1498,6 +1498,6 @@ u8 * textSelect(u8 sel)
     case SPAIN:     return (u8 *)es_pack[sel];
     case FRENCH:    return (u8 *)fr_pack[sel];
 
-    default:        return (u8 *)it_pack[sel];
+    default:        return NULL;
   }
 }
