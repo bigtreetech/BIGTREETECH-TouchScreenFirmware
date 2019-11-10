@@ -8,7 +8,7 @@ void infoSettingsReset(void)
 {
   TSC_Calibration();
   infoSettings.baudrate = 115200;
-  infoSettings.language = ENGLISH;
+  infoSettings.language = ITALIAN;
   infoSettings.mode = SERIAL_TSC;
   infoSettings.runout = 0;
   infoSettings.rotate_ui = 0;
