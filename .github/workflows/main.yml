@@ -31,5 +31,5 @@ jobs:
         run: platformio run --enviroment BIGTREE_TFT24_V1_1
       - uses: actions/checkout@master
       - name: Copy builds
-        run: cp .pio/build/BIGTREE_TFT35_V2_0/*.bin 'Copy to SD Card root directory to update'
+        run: ls
 
