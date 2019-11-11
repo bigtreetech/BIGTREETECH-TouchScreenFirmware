@@ -35,8 +35,11 @@ void infoMenuSelect(void)
       Serial_ReSourceInit();
       GUI_SetColor(FK_COLOR);
       GUI_SetBkColor(BK_COLOR);
+      #ifndef UNIFIED_MENU
       infoMenu.menu[infoMenu.cur] = menuMain;
-      
+      #else
+      infoMenu.menu[infoMenu.cur] = menuStatus; //status screen as default screen on boot
+      #endif
       #ifdef SHOW_BTT_BOOTSCREEN
         u32 startUpTime = OS_GetTime();
         heatSetUpdateTime(100);

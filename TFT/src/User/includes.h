@@ -82,7 +82,7 @@
 
 #include "UnifiedMove.h"
 #include "UnifiedHeat.h"
-
+#include "StatusScreen.h"
 
 #define MAX_MENU_DEPTH 10       // max sub menu depth
 typedef void (*FP_MENU)(void); 

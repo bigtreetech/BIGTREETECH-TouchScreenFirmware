@@ -50,7 +50,7 @@
 #define EXTRUDER_ID      {"E0",   "E1",      "E2",      "E3",      "E4",      "E5"}
 
 #define FAN_MAX_PWM      {255,       255,       255,       255,       255,       255}
-#define FAN_ID           {"Fan0",    "Fan1",    "Fan2",    "Fan3",    "Fan4",    "Fan5"}
+#define FAN_ID           {"F0",    "F1",    "F2",    "F3",    "F4",    "F5"}
 #define FAN_CMD          {"M106 P0", "M106 P1", "M106 P2", "M106 P3", "M106 P4", "M106 P5" };
 
 // Default move speed mm/min
@@ -106,13 +106,13 @@
 // For use with an encoder disc that toggles runout pin as filament moves
 #define FILAMENT_RUNOUT_DISTANCE_MM 7
 
-// Enable alternative Move Menu Buttons Layout for easy
+// Enable alternative Move Menu Buttons Layout matching the direction of actual printer axis.
 // update the icons from alternate icon folder
 //#define ALTERNATIVE_MOVE_MENU
 
 // Enable Unified Move Menu
-// Move, Home, Extrude, ABL at one Place and bring Gcode Menu and
-//#define UNIFIED_MENU
+// Move, Home, Extrude, ABL at one Place and bring Gcode Menu on Home Menu
+#define UNIFIED_MENU
 
 // SD support
 #define ONBOARD_SD_SUPPORT

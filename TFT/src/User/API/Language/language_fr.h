@@ -133,6 +133,7 @@
     #define FR_IS_PAUSE             "Extrusion impossible quand l’impression est en cours, mettre impression en pause ?"
     #define FR_AUTO_SHUT_DOWN       "Auto Power"
     #define FR_MANUAL_SHUT_DOWN     "Manual"
+    #define FR_MAINMENU             "Menu"
     #define FR_UNIFIEDMOVE          "Mouvement"
     #define FR_UNIFIEDHEAT          "Chauffe / Ventiler"
     #define FR_COOLDOWN             "Refroidissement"
@@ -141,4 +142,5 @@
     #define FR_WAIT_TEMP_SHUT_DOWN  "Wait for the temperature of hotend to be lower than "STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP)"℃" // Wait for the temperature of hotend to be lower than 50℃
     #define FR_FORCE_SHUT_DOWN      "Force"
     #define FR_SHUTTING_DOWN        "Shutting down..."
+
 #endif
