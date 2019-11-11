@@ -138,5 +138,6 @@
     #define ES_COOLDOWN             "Cool Down"
     #define ES_EMERGENCYSTOP        "EM. STOP"
     #define ES_TOUCH_TO_EXIT        "Touch anywhere to exit"
+	#define ES_MAINMENU             "Menu"
 
 #endif

@@ -138,5 +138,6 @@
     #define CN_COOLDOWN             "Cool Down"
     #define CN_EMERGENCYSTOP        "EM. STOP"
     #define CN_TOUCH_TO_EXIT        "Touch anywhere to exit"
+	#define CN_MAINMENU             "Menu"
 
 #endif

@@ -138,4 +138,5 @@
     #define RU_COOLDOWN             "Cool Down"
     #define RU_EMERGENCYSTOP        "EM. STOP"
     #define RU_TOUCH_TO_EXIT        "Touch anywhere to exit"
+	#define RU_MAINMENU             "Menu"
 #endif

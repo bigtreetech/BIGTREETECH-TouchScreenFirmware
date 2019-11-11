@@ -139,4 +139,5 @@
     #define DE_COOLDOWN             "Cool Down"
     #define DE_EMERGENCYSTOP        "EM. STOP"
     #define DE_TOUCH_TO_EXIT        "Touch anywhere to exit"
+	#define DE_MAINMENU             "Menu"
 #endif

@@ -138,4 +138,5 @@
     #define FR_COOLDOWN             "Cool Down"
     #define FR_EMERGENCYSTOP        "EM. STOP"
     #define FR_TOUCH_TO_EXIT        "Touch anywhere to exit"
+	#define FR_MAINMENU             "Menu"
 #endif

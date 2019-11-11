@@ -155,6 +155,7 @@ const char *const en_pack[LABEL_NUM]={
   EN_COOLDOWN,
   EN_EMERGENCYSTOP,
   EN_TOUCH_TO_EXIT,
+  EN_MAINMENU,
 };
 
 const char *const cn_pack[LABEL_NUM]={
@@ -302,6 +303,7 @@ const char *const cn_pack[LABEL_NUM]={
   CN_COOLDOWN,
   CN_EMERGENCYSTOP,
   CN_TOUCH_TO_EXIT,
+  CN_MAINMENU,
 };
 
 
@@ -450,6 +452,7 @@ const char *const ru_pack[LABEL_NUM]={
   RU_COOLDOWN,
   RU_EMERGENCYSTOP,
   RU_TOUCH_TO_EXIT,
+  RU_MAINMENU,
 };
 
 
@@ -598,6 +601,7 @@ const char *const jp_pack[LABEL_NUM]={
   JP_COOLDOWN,
   JP_EMERGENCYSTOP,
   JP_TOUCH_TO_EXIT,
+  JP_MAINMENU,
 };
 
 const char *const am_pack[LABEL_NUM]={
@@ -745,6 +749,7 @@ const char *const am_pack[LABEL_NUM]={
   AM_COOLDOWN,
   AM_EMERGENCYSTOP,
   AM_TOUCH_TO_EXIT,
+  AM_MAINMENU,
 };
 
 const char *const de_pack[LABEL_NUM]={
@@ -892,6 +897,7 @@ const char *const de_pack[LABEL_NUM]={
   DE_COOLDOWN,
   DE_EMERGENCYSTOP,
   DE_TOUCH_TO_EXIT,
+  DE_MAINMENU,
 };
 
 const char *const cz_pack[LABEL_NUM]={
@@ -1039,6 +1045,7 @@ const char *const cz_pack[LABEL_NUM]={
   CZ_COOLDOWN,
   CZ_EMERGENCYSTOP,
   CZ_TOUCH_TO_EXIT,
+  CZ_MAINMENU,
 };
 
 const char *const es_pack[LABEL_NUM]={
@@ -1186,6 +1193,7 @@ const char *const es_pack[LABEL_NUM]={
   ES_COOLDOWN,
   ES_EMERGENCYSTOP,
   ES_TOUCH_TO_EXIT,
+  ES_MAINMENU,
 };
 
 const char *const fr_pack[LABEL_NUM]={
@@ -1333,6 +1341,7 @@ const char *const fr_pack[LABEL_NUM]={
   FR_COOLDOWN,
   FR_EMERGENCYSTOP,
   FR_TOUCH_TO_EXIT,
+  FR_MAINMENU,
 };
 
 u8 * textSelect(u8 sel)

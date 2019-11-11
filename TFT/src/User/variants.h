@@ -212,6 +212,16 @@
   #define selecticonw 95
   #define GCODE_KEYW  60
   #define GCODE_KEYH  60
+  
+  //for status screen
+  #define  statusicon_val_x0  5
+  #define  statusicon_val_y0  63
+  //#define  statusicon_val_charcount  7
+  #define  statusicon_name_x0  59
+  #define  statusicon_name_y0  7
+  //#define  statusicon_name_charcount  3
+  //status screen end
+
 #elif defined(TFT28_V1_0) || defined(TFT24_V1_1)
   #define LCD_WIDTH	  320
   #define LCD_HEIGHT	240
@@ -224,6 +234,16 @@
   #define selecticonw 70
   #define GCODE_KEYW  50
   #define GCODE_KEYH  50
+  
+  //for status screen
+  #define  statusicon_val_x0  7
+  #define  statusicon_val_y0  47
+  //#define  statusicon_val_charcount  7
+  #define  statusicon_name_x0  44
+  #define  statusicon_name_y0  5
+  //#define  statusicon_name_charcount  3
+  //status screen end
+
 #endif
 
 #if defined(TFT35_V1_0) || defined(TFT35_V1_1) || defined(TFT35_V1_2)|| defined(TFT35_V2_0) || defined(TFT35_V3_0)

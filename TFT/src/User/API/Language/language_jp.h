@@ -138,4 +138,5 @@
     #define JP_COOLDOWN             "Cool Down"
     #define JP_EMERGENCYSTOP        "EM. STOP"
     #define JP_TOUCH_TO_EXIT        "Touch anywhere to exit"
+	#define JP_MAINMENU             "Menu"
 #endif

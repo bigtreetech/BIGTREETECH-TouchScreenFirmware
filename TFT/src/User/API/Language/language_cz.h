@@ -139,5 +139,6 @@
     #define CZ_COOLDOWN             "Cool Down"
     #define CZ_EMERGENCYSTOP        "EM. STOP"
     #define CZ_TOUCH_TO_EXIT        "Touch anywhere to exit"
+	#define CZ_MAINMENU             "Menu"
 
 #endif

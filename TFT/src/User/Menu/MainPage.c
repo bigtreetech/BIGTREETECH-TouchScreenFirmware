@@ -13,8 +13,8 @@ LABEL_READY,
     {ICON_PRINT,                LABEL_PRINT},
     {ICON_GCODE,                LABEL_GCODE},
     {ICON_STOP,                 LABEL_EMERGENCYSTOP},
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},  //Reserved for status screen
-    {ICON_SETTINGS,             LABEL_SETTINGS},}
+    {ICON_SETTINGS,             LABEL_SETTINGS},  //Reserved for status screen
+    {ICON_BACK,                 LABEL_BACK},}
   #else
    {{ICON_HEAT,                 LABEL_PREHEAT},
     {ICON_MOVE,                 LABEL_MOVE},
@@ -53,14 +53,15 @@ void menuMain(void)
           storeCmd("M18\n");  //disable all stepper motors
           storeCmd("M107\n"); //disable cooling fan
           */
-          storeCmd("M112\n"); //Emergency Stop : Used for emergency stopping, A reset is required to return to operational mode.
+          storeCmd("M112\n"); //Emergency Stop : Used for emergency stopping, a reset is required to return to operational mode.
                               // it may need to wait for a space to open up in the command queue.
                               // Enable EMERGENCY_PARSER in Marlin Firmware for an instantaneous M112 command.
 
            }
           break;
         
-        case KEY_ICON_7: infoMenu.menu[++infoMenu.cur] = menuSettings;        break;
+        case KEY_ICON_6: infoMenu.menu[++infoMenu.cur] = menuSettings;        break;
+        case KEY_ICON_7: infoMenu.cur--;        break;
         default:break;
       #else
         case KEY_ICON_0: infoMenu.menu[++infoMenu.cur] = menuPreheat;   break;
