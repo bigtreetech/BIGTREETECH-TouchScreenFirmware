@@ -74,7 +74,7 @@ void gocdeListDraw(void)
 {
   u8 i=0;
   int gn;
-  char gnew[20];
+  char *gnew;
   ITEM curItem = {ICON_BACKGROUND, LABEL_BACKGROUND};
 
   scrollFileNameCreate(0);
@@ -82,27 +82,27 @@ void gocdeListDraw(void)
   GUI_ClearRect(titleRect.x0, titleRect.y0, titleRect.x1, titleRect.y1);
 
   for(i=0;(i + infoFile.cur_page * NUM_PER_PAGE < infoFile.F_num)
-          &&(i < NUM_PER_PAGE)                                  ; i++)                  //folder
+          &&(i < NUM_PER_PAGE)                                  ; i++)                  // folder
   {
     curItem.icon = ICON_FOLDER;
     menuDrawItem(&curItem, i);
     normalNameDisp(&gcodeRect[i], (u8* )infoFile.folder[i + infoFile.cur_page * NUM_PER_PAGE]);
   }
   for(   ;(i + infoFile.cur_page * NUM_PER_PAGE < infoFile.f_num + infoFile.F_num)
-          &&(i < NUM_PER_PAGE)                                                   ;i++)  //file
-  {	
+          &&(i < NUM_PER_PAGE)                                                   ;i++)  // gcode file
+  {
     curItem.icon = ICON_FILE;
-    #if (ICON_WIDTH == 70 && ICON_HEIGHT == 70)
-      gn = strlen(infoFile.file[i]);//view
-      strlcpy(gnew,infoFile.file[i],gn-5);
-      if(bmpDecode(strcat(gnew,"_70.bmp"), ICON_ADDR(ICON_PREVIEW+i)))
-      curItem.icon = ICON_PREVIEW+i;
-    #elif (ICON_WIDTH == 95 && ICON_HEIGHT == 95)
-      gn = strlen(infoFile.file[i]);//view
-      strlcpy(gnew,infoFile.file[i],gn-5);
-      if(bmpDecode(strcat(gnew,"_95.bmp"), ICON_ADDR(ICON_PREVIEW+i)))
-      curItem.icon = ICON_PREVIEW+i; 
-    #endif
+    // Preview
+    gn = strlen(infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num]) - 6; // -6 means ".gcode"
+    gnew = malloc(gn + 10);
+    if(gnew)
+    {
+      strcpy(gnew, getCurFileSource());
+      strncat(gnew, infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num], gn);
+      if(bmpDecode(strcat(gnew, "_"STRINGIFY(ICON_WIDTH)".bmp"), ICON_ADDR(ICON_PREVIEW+i)))
+        curItem.icon = ICON_PREVIEW+i;
+    }
+    free(gnew);
     menuDrawItem(&curItem, i);
     normalNameDisp(&gcodeRect[i], (u8* )infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num]);
   }
