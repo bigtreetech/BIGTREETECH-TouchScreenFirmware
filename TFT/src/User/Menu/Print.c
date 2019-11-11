@@ -92,17 +92,15 @@ void gocdeListDraw(void)
           &&(i < NUM_PER_PAGE)                                                   ;i++)  // gcode file
   {
     curItem.icon = ICON_FILE;
-    gn = strlen(infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num]); // Preview
-    gnew = malloc(gn+2);
+    // Preview
+    gn = strlen(infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num]) - 6; // -6 means ".gcode"
+    gnew = malloc(gn + 10);
     if(gnew)
     {
-      strlcpy(gnew, infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num], gn-5);
-      #if (ICON_WIDTH == 70 && ICON_HEIGHT == 70)
-        if(bmpDecode(strcat(gnew,"_70.bmp"), ICON_ADDR(ICON_PREVIEW+i)))
-      #elif (ICON_WIDTH == 95 && ICON_HEIGHT == 95)
-        if(bmpDecode(strcat(gnew,"_95.bmp"), ICON_ADDR(ICON_PREVIEW+i)))
-      #endif
-          curItem.icon = ICON_PREVIEW+i;
+      strcpy(gnew, getCurFileSource());
+      strncat(gnew, infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num], gn);
+      if(bmpDecode(strcat(gnew, "_"STRINGIFY(ICON_WIDTH)".bmp"), ICON_ADDR(ICON_PREVIEW+i)))
+        curItem.icon = ICON_PREVIEW+i;
     }
     free(gnew);
     menuDrawItem(&curItem, i);
