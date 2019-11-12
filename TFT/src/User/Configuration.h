@@ -53,6 +53,8 @@
 #define FAN_ID           {"F0",    "F1",    "F2",    "F3",    "F4",    "F5"}
 #define FAN_CMD          {"M106 P0", "M106 P1", "M106 P2", "M106 P3", "M106 P4", "M106 P5" };
 
+#define SPEED_ID         {"Sp.", "Fr."}
+
 // Default move speed mm/min
 #define DEFAULT_SPEED_MOVE      3000
 
@@ -112,7 +114,7 @@
 
 // Enable Unified Move Menu
 // Move, Home, Extrude, ABL at one Place and bring Gcode Menu on Home Menu
-#define UNIFIED_MENU
+//#define UNIFIED_MENU
 
 // SD support
 #define ONBOARD_SD_SUPPORT
