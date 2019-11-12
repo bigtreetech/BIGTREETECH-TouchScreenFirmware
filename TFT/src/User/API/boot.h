@@ -133,6 +133,8 @@ enum
   ICON_STATUSBED,
   ICON_STATUSFAN,
   ICON_MAINMENU,
+  ICON_STATUS_SPEED,
+  ICON_STATUS_FLOW,
   
 //  ICON_RESERVE
 // Preview should be in the last place
