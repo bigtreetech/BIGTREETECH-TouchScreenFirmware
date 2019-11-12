@@ -14,6 +14,8 @@ void infoSettingsReset(void)
   infoSettings.rotate_ui = 0;
   infoSettings.bg_color = ST7920_BKCOLOR;
   infoSettings.font_color = ST7920_FNCOLOR;
+  infoSettings.silent = 0;
+  infoSettings.auto_off = 0;
   storePara();  
 }
 
@@ -32,6 +34,7 @@ void menuInfo(void)
 
   GUI_DispString(startX, centerY - BYTE_HEIGHT, (u8 *)hardware, 0);
   GUI_DispString(startX, centerY, (u8 *)firmware, 0);
+  GUI_DispStringInRect(20, LCD_HEIGHT - (BYTE_HEIGHT*2), LCD_WIDTH-20, LCD_HEIGHT, textSelect(LABEL_TOUCH_TO_EXIT), 0);
 
   while(!isPress()) loopProcess();
   while(isPress())  loopProcess();
@@ -44,6 +47,7 @@ void menuDisconnect(void)
 {
   GUI_Clear(BLACK);
   GUI_DispStringInRect(20, 0, LCD_WIDTH-20, LCD_HEIGHT, textSelect(LABEL_DISCONNECT_INFO), 0);
+  GUI_DispStringInRect(20, LCD_HEIGHT - (BYTE_HEIGHT*2), LCD_WIDTH-20, LCD_HEIGHT, textSelect(LABEL_TOUCH_TO_EXIT), 0);
 
   Serial_DeConfig();
   while(!isPress());
@@ -86,7 +90,7 @@ void menuSettings(void)
     if(infoSettings.baudrate == item_baudrate[i])
     {
       item_baudrate_i = i;
-      settingsItems.items[KEY_ICON_2] = itemBaudrate[item_baudrate_i];
+      settingsItems.items[KEY_ICON_5] = itemBaudrate[item_baudrate_i];
     }
   }
 

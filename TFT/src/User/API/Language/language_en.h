@@ -134,9 +134,9 @@
     #define EN_AUTO_SHUT_DOWN       "Auto Power"
     #define EN_MANUAL_SHUT_DOWN     "Manual"
     #define EN_UNIFIEDMOVE          "Movement"
-    #define EN_GCODE                "Send Code"
     #define EN_UNIFIEDHEAT          "Heat/Fan"
     #define EN_COOLDOWN             "Cool Down"
     #define EN_EMERGENCYSTOP        "EM. STOP"
+    #define EN_TOUCH_TO_EXIT        "Touch anywhere to exit"
     
 #endif

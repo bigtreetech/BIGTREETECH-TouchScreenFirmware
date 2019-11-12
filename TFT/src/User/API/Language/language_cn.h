@@ -134,9 +134,9 @@
     #define CN_AUTO_SHUT_DOWN       "自动关机"
     #define CN_MANUAL_SHUT_DOWN     "手动关机"
     #define CN_UNIFIEDMOVE          "Movement"
-    #define CN_GCODE                "Send Code"
     #define CN_UNIFIEDHEAT          "Heat&Fan"
     #define CN_COOLDOWN             "Cool Down"
     #define CN_EMERGENCYSTOP        "EM. STOP"
+    #define CN_TOUCH_TO_EXIT        "Touch anywhere to exit"
 
 #endif

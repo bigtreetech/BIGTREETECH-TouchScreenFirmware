@@ -3,7 +3,6 @@
 #include "stdbool.h"
 #include "interfaceCmd.h"
 
-#define CMD_MAX_SIZE    100
 #define CMD_MAX_REV     5000
 
 typedef struct {

@@ -24,8 +24,8 @@ void menuSendGcode(void)
     GUI_FillRect(10,10,GCODE_KEYW+START_GKX,10+BYTE_HEIGHT+5);//Back
     GUI_FillRect(LCD_WIDTH-GCODE_KEYW-START_GKX,10,LCD_WIDTH-10,10+BYTE_HEIGHT+5);//Send
     GUI_SetColor(BK_COLOR);
-    GUI_DispStringInRect(LCD_WIDTH-GCODE_KEYW-START_GKX,10,LCD_WIDTH-10,10+BYTE_HEIGHT+5,"Send", 0);
-    GUI_DispStringInRect(10,10,GCODE_KEYW+START_GKX,10+BYTE_HEIGHT+5,"Back", 0);
+    GUI_DispStringInRect(LCD_WIDTH-GCODE_KEYW-START_GKX,10,LCD_WIDTH-10,10+BYTE_HEIGHT+5, (u8 *)"Send", 0);
+    GUI_DispStringInRect(10,10,GCODE_KEYW+START_GKX,10+BYTE_HEIGHT+5, (u8 *)"Back", 0);
       
     while(infoMenu.menu[infoMenu.cur] == menuSendGcode)
     {

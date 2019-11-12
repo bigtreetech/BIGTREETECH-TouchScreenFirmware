@@ -186,7 +186,7 @@ void sendQueueCmd(void)
           if(cmd_seen('T')) i = (TOOL)(cmd_value() + NOZZLE0);
           if(cmd_seen('S'))
           {	
-            heatSetTargetTemp(i, cmd_value()); 
+            heatSyncTargetTemp(i, cmd_value()); 
           }
           else
           {
@@ -244,7 +244,7 @@ void sendQueueCmd(void)
         case 140: //M140
           if(cmd_seen('S'))
           {
-            heatSetTargetTemp(BED,cmd_value()); 
+            heatSyncTargetTemp(BED,cmd_value()); 
           }
           else
           {
@@ -321,6 +321,11 @@ void sendQueueCmd(void)
         case 92: //G92
         {
           AXIS i;
+          bool coorRelative = coorGetRelative();
+          bool eRelative = eGetRelative();
+          // Set to absolute mode
+          coorSetRelative(false);
+          eSetRelative(false);
           for(i=X_AXIS;i<TOTAL_AXIS;i++)
           {
             if(cmd_seen(axis_id[i]))
@@ -328,6 +333,9 @@ void sendQueueCmd(void)
               coordinateSetAxisTarget(i,cmd_float());
             }
           }
+          // Restore mode
+          coorSetRelative(coorRelative);
+          eSetRelative(eRelative);
           break;
         }
       }

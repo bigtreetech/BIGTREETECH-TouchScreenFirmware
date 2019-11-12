@@ -3,9 +3,9 @@
 
 //1 titl, ITEM_PER_PAGE item
 MENUITEMS probeOffsetItems = {
-//   title
-  LABEL_PROBE_OFFSET,
-//icon                        label
+// title
+LABEL_PROBE_OFFSET,
+// icon                        label
  {{ICON_DEC,                  LABEL_DEC},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
@@ -75,7 +75,6 @@ void setCurrentOffset(float offset)
 void menuProbeOffset(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
-  storeCmd("M851;\n");
   float now = probe_offset_value;
   initElements(KEY_ICON_5);
   menuDrawPage(&probeOffsetItems);
