@@ -54,7 +54,7 @@ void extrudeCoordinateReDraw(void)
   char buf[36];
   my_sprintf(buf, "%.2f", extrudeCoordinate);
   GUI_ClearRect(rect.x0, rect.y0, rect.x1, rect.y1);
-  GUI_DispStringInPrect(&rect, (u8*)buf,0);
+  GUI_DispStringInPrect(&rect, (u8*)buf);
 }
 
 const char* tool_change[] =  TOOL_CHANGE;
@@ -64,7 +64,7 @@ void showExtrudeCoordinate(void)
 {
   const GUI_RECT rect = {exhibitRect.x0, CENTER_Y-BYTE_HEIGHT, exhibitRect.x1, CENTER_Y};
   GUI_ClearRect(rect.x0, rect.y0, rect.x1, rect.y1);
-  GUI_DispStringInPrect(&rect, (u8*)extruderDisplayID[item_extruder_i],0);
+  GUI_DispStringInPrect(&rect, (u8*)extruderDisplayID[item_extruder_i]);
   extrudeCoordinateReDraw();
 }
 
@@ -73,15 +73,18 @@ void menuExtrude(void)
   KEY_VALUES key_num = KEY_IDLE;
   float eSaved = 0.0f;
   float eTemp  = 0.0f;
+  bool  eRelative = false;
   u32   feedrate = 0;
 
   while(infoCmd.count != 0) {loopProcess();}
   extrudeCoordinate = eTemp = eSaved = coordinateGetAxisTarget(E_AXIS);                
   feedrate = coordinateGetFeedRate();
+  eRelative = eGetRelative();
 
   menuDrawPage(&extrudeItems);
   showExtrudeCoordinate();
   
+  if(eRelative) mustStoreCmd("M82\n"); // Set extruder to absolute
   while(infoMenu.menu[infoMenu.cur] == menuExtrude)
   {
     key_num = menuKeyGetValue();
@@ -131,6 +134,7 @@ void menuExtrude(void)
   }
   mustStoreCmd("G92 E%.5f\n",eSaved);   
   mustStoreCmd("G0 F%d\n",feedrate);
+  if(eRelative) mustStoreCmd("M83\n"); // Set extruder to relative
 }
 
 

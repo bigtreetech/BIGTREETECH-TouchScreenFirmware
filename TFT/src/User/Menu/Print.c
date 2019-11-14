@@ -16,8 +16,7 @@ LABEL_BACKGROUND,
 };
 
 
-// file list number per page
-
+// File list number per page
 #define NUM_PER_PAGE	5
 
 SCROLL   titleScroll;
@@ -66,13 +65,15 @@ void normalNameDisp(GUI_RECT *rect, u8 *name)
   
   GUI_ClearRect(rect->x0, rect->y0, rect->x1, rect->y1);
   GUI_SetRange(rect->x0, rect->y0, rect->x1, rect->y1);
-  GUI_DispStringInPrect(rect, name, 0);
+  GUI_DispStringInPrect(rect, name);
   GUI_CancelRange();
 }
 
 void gocdeListDraw(void)
 {
   u8 i=0;
+  int gn;
+  char *gnew;
   ITEM curItem = {ICON_BACKGROUND, LABEL_BACKGROUND};
 
   scrollFileNameCreate(0);
@@ -80,16 +81,27 @@ void gocdeListDraw(void)
   GUI_ClearRect(titleRect.x0, titleRect.y0, titleRect.x1, titleRect.y1);
 
   for(i=0;(i + infoFile.cur_page * NUM_PER_PAGE < infoFile.F_num)
-          &&(i < NUM_PER_PAGE)                                  ; i++)                  //folder
+          &&(i < NUM_PER_PAGE)                                  ; i++)                  // folder
   {
     curItem.icon = ICON_FOLDER;
     menuDrawItem(&curItem, i);
     normalNameDisp(&gcodeRect[i], (u8* )infoFile.folder[i + infoFile.cur_page * NUM_PER_PAGE]);
   }
   for(   ;(i + infoFile.cur_page * NUM_PER_PAGE < infoFile.f_num + infoFile.F_num)
-          &&(i < NUM_PER_PAGE)                                                   ;i++)  //file
-  {	
+          &&(i < NUM_PER_PAGE)                                                   ;i++)  // gcode file
+  {
     curItem.icon = ICON_FILE;
+    // Preview
+    gn = strlen(infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num]) - 6; // -6 means ".gcode"
+    gnew = malloc(gn + 10);
+    if(gnew)
+    {
+      strcpy(gnew, getCurFileSource());
+      strncat(gnew, infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num], gn);
+      if(bmpDecode(strcat(gnew, "_"STRINGIFY(ICON_WIDTH)".bmp"), ICON_ADDR(ICON_PREVIEW+i)))
+        curItem.icon = ICON_PREVIEW+i;
+      free(gnew);
+    }
     menuDrawItem(&curItem, i);
     normalNameDisp(&gcodeRect[i], (u8* )infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num]);
   }
@@ -108,7 +120,7 @@ void menuPrintFromSource(void)
   u8 update=0;
 
   GUI_Clear(BK_COLOR);
-  GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, textSelect(LABEL_LOADING), 1);
+  GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, textSelect(LABEL_LOADING));
 
   if (mountFS() == true && scanPrintFiles() == true)
   {
@@ -117,15 +129,15 @@ void menuPrintFromSource(void)
   }
   else
   {
-    GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, textSelect(labelVolumeError[infoFile.source]), 1);
+    GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, textSelect(labelVolumeError[infoFile.source]));
     Delay_ms(1000);
     infoMenu.cur--;
   }
 
   while(infoMenu.menu[infoMenu.cur] == menuPrintFromSource)
   {
-    Scroll_DispString(&titleScroll,1,LEFT);    //
-    Scroll_DispString(&gcodeScroll,1,CENTER);  //
+    Scroll_DispString(&titleScroll, LEFT);    //
+    Scroll_DispString(&gcodeScroll, CENTER);  //
 
     key_num = menuKeyGetValue();
 

@@ -2,6 +2,7 @@
 #define _BOOT_H_
 
 #include "variants.h"
+#include "stdbool.h"
 
 #define W25QXX_SECTOR_SIZE (0x1000) // 4096-4K
 
@@ -130,6 +131,8 @@ enum
   ICON_SILENT_OFF,
 
 //  ICON_RESERVE
+// Preview should be in the last place
+  ICON_PREVIEW,
 };
 
 typedef union
@@ -143,5 +146,6 @@ typedef union
 }GUI_COLOR;
 
 void scanUpdates(void);
+bool bmpDecode(char *bmp, u32 addr);
 
 #endif 

@@ -137,5 +137,6 @@
     #define AM_UNIFIEDHEAT          "Heat&Fan"
     #define AM_COOLDOWN             "Cool Down"
     #define AM_EMERGENCYSTOP        "EM. STOP"
+    #define AM_TOUCH_TO_EXIT        "Touch anywhere to exit"
 
 #endif

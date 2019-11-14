@@ -15,7 +15,11 @@ LABEL_PREHEAT,
 //    {ICON_PREHEAT_CUSTOM1,      LABEL_PREHEAT_CUSTOM1},
 //    {ICON_PREHEAT_CUSTOM2,      LABEL_PREHEAT_CUSTOM2},
     {ICON_PREHEAT_BOTH,         LABEL_PREHEAT_BOTH},
+    #ifdef UNIFIED_MENU
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    #else
     {ICON_HEAT,                 LABEL_HEAT},
+    #endif
     {ICON_BACK,                 LABEL_BACK},
   }
 };
@@ -71,10 +75,12 @@ void menuPreheat(void)
         menuDrawItem(&preheatItems.items[key_num], key_num);;
         break;
       
+      #ifndef UNIFIED_MENU
       case KEY_ICON_6:
         infoMenu.menu[++infoMenu.cur] = menuHeat;
         break;
       
+      #endif
       case KEY_ICON_7:
         infoMenu.cur--; break;
       default:break;
