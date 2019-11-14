@@ -168,20 +168,20 @@ void showTemperature(void)
   
   const GUI_RECT rect = {exhibitRect.x0, CENTER_Y-BYTE_HEIGHT, exhibitRect.x1, CENTER_Y};
   GUI_ClearRect(rect.x0, rect.y0, rect.x1, rect.y1);
-  GUI_DispStringInPrect(&rect, (u8*)heatDisplayID[heater.tool], 1);
-  GUI_DispDec(CENTER_X-BYTE_WIDTH*3, CENTER_Y, heater.T[heater.tool].current, 3, 1, RIGHT);
-  GUI_DispChar(CENTER_X, CENTER_Y, '/', 0);
-  GUI_DispDec(CENTER_X+BYTE_WIDTH*1, CENTER_Y, heater.T[heater.tool].target,3,1,LEFT);
+  GUI_DispStringInPrect(&rect, (u8*)heatDisplayID[heater.tool]);
+  GUI_DispDec(CENTER_X-BYTE_WIDTH*3, CENTER_Y, heater.T[heater.tool].current, 3, RIGHT);
+  GUI_DispString(CENTER_X, CENTER_Y, (u8*)"/");
+  GUI_DispDec(CENTER_X+BYTE_WIDTH*1, CENTER_Y, heater.T[heater.tool].target, 3, LEFT);
 }
 
 void currentReDraw(void)
 {
-  GUI_DispDec(CENTER_X-BYTE_WIDTH*3, CENTER_Y, heater.T[heater.tool].current,3,1,RIGHT);
+  GUI_DispDec(CENTER_X-BYTE_WIDTH*3, CENTER_Y, heater.T[heater.tool].current, 3, RIGHT);
 }
 
 void targetReDraw(void)
 {
-  GUI_DispDec(CENTER_X+BYTE_WIDTH*1, CENTER_Y, heater.T[heater.tool].target,3,1,LEFT);
+  GUI_DispDec(CENTER_X+BYTE_WIDTH*1, CENTER_Y, heater.T[heater.tool].target, 3, LEFT);
 }
 
 void menuHeat(void)

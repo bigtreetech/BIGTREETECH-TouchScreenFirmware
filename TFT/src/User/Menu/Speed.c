@@ -59,12 +59,12 @@ u16 speedGetPercent(u8 tool)
 
 void showPercentage(void)
 {
-  GUI_DispDec(CENTER_X - 3*BYTE_WIDTH/2, CENTER_Y, percentage[item_percentage_i], 3, 1, LEFT);
-  GUI_DispChar(CENTER_X - 3*BYTE_WIDTH/2 + 3* BYTE_WIDTH , CENTER_Y,'%',0);
+  GUI_DispDec(CENTER_X - 3*BYTE_WIDTH/2, CENTER_Y, percentage[item_percentage_i], 3, LEFT);
+  GUI_DispString(CENTER_X - 3*BYTE_WIDTH/2 + 3* BYTE_WIDTH , CENTER_Y, (u8*)"%");
 }
 void percentageReDraw(void)
 {
-  GUI_DispDec(CENTER_X - 3*BYTE_WIDTH/2, CENTER_Y, percentage[item_percentage_i], 3, 1, LEFT);
+  GUI_DispDec(CENTER_X - 3*BYTE_WIDTH/2, CENTER_Y, percentage[item_percentage_i], 3, LEFT);
 }
 
 void menuSpeed(void)

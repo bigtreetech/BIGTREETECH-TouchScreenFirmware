@@ -14,7 +14,6 @@
         "0x0004"
       ]
     ],
-    "ldscript": "BIGTREE_TFT35_V1.ld",
     "mcu": "stm32f105rct6",
     "variant": "stm32f1"
   },

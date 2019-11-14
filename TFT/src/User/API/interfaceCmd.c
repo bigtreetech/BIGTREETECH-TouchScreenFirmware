@@ -349,6 +349,7 @@ void sendQueueCmd(void)
   
   setCurrentAckSrc(infoCmd.queue[infoCmd.index_r].src);
   Serial_Puts(SERIAL_PORT, infoCmd.queue[infoCmd.index_r].gcode); //
+  sendGcodeTerminalCache(infoCmd.queue[infoCmd.index_r].gcode, TERMINAL_GCODE);
   infoCmd.count--;
   infoCmd.index_r = (infoCmd.index_r + 1) % CMD_MAX_LIST;
   

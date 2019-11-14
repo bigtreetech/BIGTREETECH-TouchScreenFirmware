@@ -2,7 +2,7 @@
 
 HOST  infoHost;  // Information interaction with Marlin
 MENU  infoMenu;  // Menu structure
-CHAR_INFO info;
+
 void Hardware_GenericInit(void)
 {
   NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
@@ -22,6 +22,7 @@ void Hardware_GenericInit(void)
   XPT2046_Init();
   W25Qxx_Init();
   LCD_Init();
+  readStoredPara();
   scanUpdates();
   SD_DeInit();
   
@@ -42,7 +43,7 @@ void Hardware_GenericInit(void)
     infoSettingsReset();
   }
   LCD_RefreshDirection();  //refresh display direction after reading settings
-  infoMenuSelect();  
+  infoMenuSelect();
 }
 
 int main(void)
