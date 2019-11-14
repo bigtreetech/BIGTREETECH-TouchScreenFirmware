@@ -132,6 +132,13 @@
 // Prevent extrusion if the temperature is below set temperature
 #define PREVENT_COLD_EXTRUSION_MINTEMP 170
 
+/**
+  * Maximum hotend temperature of automatic shut down after printing.
+  * When enable automatic shutdown(Auto Power), when the hotend temperature is higher than this value
+  * turn on the fan to cool down, wait for the hotend temperature to be lower than this value, then turn off the power automatically
+  */
+#define AUTO_SHUT_DOWN_MAXTEMP 50
+
 #define EXTRUDE_STEPS  100.0f
 
 /**

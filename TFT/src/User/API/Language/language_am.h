@@ -122,7 +122,7 @@
     #define AM_U_DISK_REMOVED       "U Disk removed!"    
     #define AM_ONBOARDSD            "OnboardSD"
     #define AM_READ_ONBOARDSD_ERROR "OnboardSD հիշողության սարքը չկա"    
-    #define AM_FILAMENT_RUNOUT      "filament runout!"
+    #define AM_FILAMENT_RUNOUT      "Filament runout!"
     #define AM_PREHEAT              "Preheat"
     #define AM_PREHEAT_BOTH         "Both"
     #define AM_PREHEAT_PLA          "PLA"
@@ -138,5 +138,8 @@
     #define AM_COOLDOWN             "Cool Down"
     #define AM_EMERGENCYSTOP        "EM. STOP"
     #define AM_TOUCH_TO_EXIT        "Touch anywhere to exit"
+    #define AM_WAIT_TEMP_SHUT_DOWN  "Wait for the temperature of hotend to be lower than"STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP)"℃" // Wait for the temperature of hotend to be lower than 50℃
+    #define AM_FORCE_SHUT_DOWN      "Force"
+    #define AM_SHUTTING_DOWN        "Shutting down..."
 
 #endif

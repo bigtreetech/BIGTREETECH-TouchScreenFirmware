@@ -133,10 +133,13 @@
     #define CN_IS_PAUSE             "打印中无法挤出耗材, 是否暂停打印?"
     #define CN_AUTO_SHUT_DOWN       "自动关机"
     #define CN_MANUAL_SHUT_DOWN     "手动关机"
-    #define CN_UNIFIEDMOVE          "Movement"
-    #define CN_UNIFIEDHEAT          "Heat&Fan"
-    #define CN_COOLDOWN             "Cool Down"
-    #define CN_EMERGENCYSTOP        "EM. STOP"
-    #define CN_TOUCH_TO_EXIT        "Touch anywhere to exit"
+    #define CN_UNIFIEDMOVE          "运动"
+    #define CN_UNIFIEDHEAT          "温度"
+    #define CN_COOLDOWN             "冷却"
+    #define CN_EMERGENCYSTOP        "紧急停止"
+    #define CN_TOUCH_TO_EXIT        "触摸任意点退出当前界面"
+    #define CN_WAIT_TEMP_SHUT_DOWN  "喷头温度正在降温，等待低于"STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP)"℃后自动关机" // 喷头温度正在降温，等待低于50℃后自动关机
+    #define CN_FORCE_SHUT_DOWN      "强制关机"
+    #define CN_SHUTTING_DOWN        "正在关机..."
 
 #endif

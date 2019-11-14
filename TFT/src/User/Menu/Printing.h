@@ -43,6 +43,7 @@ void getGcodeFromFile(void);
 void menuBeforePrinting(void);
 void menuPrinting(void);
 void menuStopPrinting(void);
+void menuShutDown(void);
 
 void printingDrawPage(void);
 void reDrawProgress(u8 progress);

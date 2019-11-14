@@ -132,11 +132,14 @@
     #define DE_PREHEAT_CUSTOM2      "CUSTOM2"
     #define DE_IS_PAUSE             "Unable to extrude when printing, Pause printing?"
     #define DE_AUTO_SHUT_DOWN       "Auto Power"
-    #define DE_MANUAL_SHUT_DOWN     "Manual"
-    
+    #define DE_MANUAL_SHUT_DOWN     "Manual"    
     #define DE_UNIFIEDMOVE          "Movement"
     #define DE_UNIFIEDHEAT          "Heat&Fan"
     #define DE_COOLDOWN             "Cool Down"
     #define DE_EMERGENCYSTOP        "EM. STOP"
     #define DE_TOUCH_TO_EXIT        "Touch anywhere to exit"
+    #define DE_WAIT_TEMP_SHUT_DOWN  "Wait for the temperature of hotend to be lower than"STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP)"℃" // Wait for the temperature of hotend to be lower than 50℃
+    #define DE_FORCE_SHUT_DOWN      "Force"
+    #define DE_SHUTTING_DOWN        "Shutting down..."
+    
 #endif

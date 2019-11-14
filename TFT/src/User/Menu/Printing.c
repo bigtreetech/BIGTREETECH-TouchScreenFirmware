@@ -451,7 +451,9 @@ void completePrinting(void)
 {
   endPrinting();  
   if(infoSettings.auto_off) // Auto shut down after printing
-    mustStoreCmd("M81\n");
+  {
+		infoMenu.menu[++infoMenu.cur] = menuShutDown;
+  }
 }
 
 void haltPrinting(void)
@@ -491,11 +493,60 @@ void menuStopPrinting(void)
       case KEY_POPUP_CONFIRM:
         haltPrinting();
         infoMenu.cur-=2;
-      break;
+        break;
 
       case KEY_POPUP_CANCEL:
         infoMenu.cur--;
         break;		
+    }
+    loopProcess();
+  }
+}
+
+// Shut down menu, when the hotend temperature is higher than "AUTO_SHUT_DOWN_MAXTEMP"
+// wait for cool down, in the meantime, you can shut down by force
+void menuShutDown(void)
+{
+  bool tempIsLower;
+  u16 key_num = IDLE_TOUCH;
+
+  popupDrawPage(bottomDoubleBtn, textSelect(LABEL_SHUT_DOWN), textSelect(LABEL_WAIT_TEMP_SHUT_DOWN), textSelect(LABEL_FORCE_SHUT_DOWN), textSelect(LABEL_CANNEL));
+ 
+  for(u8 i = 0; i < FAN_NUM; i++)
+  {
+    mustStoreCmd("%s S255\n", fanCmd[i]);  
+  }
+  while (infoMenu.menu[infoMenu.cur] == menuShutDown)
+  {
+    key_num = KEY_GetValue(2, doubleBtnRect);
+    switch(key_num)
+    {
+      case KEY_POPUP_CONFIRM:
+        goto shutdown;
+
+      case KEY_POPUP_CANCEL:
+        infoMenu.cur--;
+        break;		
+    }
+    tempIsLower = true;
+    for (TOOL i = NOZZLE0; i < HEATER_NUM; i++)
+    {
+      if(heatGetCurrentTemp(NOZZLE0) >= AUTO_SHUT_DOWN_MAXTEMP)
+        tempIsLower = false;
+    }
+    if(tempIsLower)
+    {   
+      shutdown:
+        for(u8 i = 0; i < FAN_NUM; i++)
+        {
+          mustStoreCmd("%s S0\n", fanCmd[i]);  
+        }
+        mustStoreCmd("M81\n");
+        popupDrawPage(NULL, textSelect(LABEL_SHUT_DOWN), textSelect(LABEL_SHUTTING_DOWN), NULL, NULL);
+        while(1)
+        {
+          loopProcess();
+        }
     }
     loopProcess();
   }
