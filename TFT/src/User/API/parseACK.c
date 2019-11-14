@@ -4,7 +4,6 @@
 char *ack_rev_buf = dma_mem_buf[SERIAL_PORT];
 static u16 ack_index=0;
 static u8 ack_cur_src = SERIAL_PORT;
-int TGCODE;
 int MODEselect;
 // Ignore reply "echo:" message (don't display in popup menu)
 const char *const ignoreEcho[] = {
@@ -66,7 +65,7 @@ static float ack_second_value()
 
 void ackPopupInfo(const char *info)
 {
-  if(TGCODE) return;
+  if(infoMenu.menu[infoMenu.cur] == menuTerminal) return;
   popupReminder((u8* )info, (u8 *)ack_rev_buf + ack_index);
 }
 
@@ -125,7 +124,7 @@ startParse:
   {
     if(ack_seen("ok"))
     {
-      infoHost.wait=false;
+      infoHost.wait = false;
     }					
     if(ack_seen("T:") || ack_seen("T0:")) 
     {
@@ -189,10 +188,6 @@ startParse:
     {
       ackPopupInfo(errormagic);
     }
-    else if(ack_seen(busymagic))
-    {
-      ackPopupInfo(busymagic);
-    }
     else if(ack_seen(echomagic))
     {
       for(u8 i = 0; i < aCount(ignoreEcho); i++)
@@ -210,6 +205,7 @@ parse_end:
   {
     Serial_Puts(ack_cur_src, ack_rev_buf);
   }
+  sendGcodeTerminalCache(ack_rev_buf, TERMINAL_ACK);
   Serial_DMAReEnable(SERIAL_PORT);
 }
 

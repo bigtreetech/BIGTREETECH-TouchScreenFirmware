@@ -1,9 +1,10 @@
 #include "GUI.h"
 #include "includes.h"
 
-uint16_t COLOR = FK_COLOR;
-uint16_t BKCOLOR = BK_COLOR;
-
+uint16_t foreGroundColor = FK_COLOR;
+uint16_t backGroundColor = BK_COLOR;
+GUI_TEXT_MODE guiTextMode = GUI_TEXTMODE_NORMAL;
+GUI_NUM_MODE guiNumMode = GUI_NUMMODE_SPACE;
 
 void LCD_SetWindow(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey)
 {
@@ -17,22 +18,41 @@ void LCD_SetWindow(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey)
 
 void GUI_SetColor(uint16_t color)
 {
-  COLOR=color;
-}
-
-void GUI_SetBkColor(uint16_t bkcolor)
-{
-  BKCOLOR=bkcolor;
+  foreGroundColor = color;
 }
 
 uint16_t GUI_GetColor(void)
 {
-  return COLOR;
+  return foreGroundColor;
+}
+
+void GUI_SetBkColor(uint16_t bkcolor)
+{
+  backGroundColor = bkcolor;
 }
 
 uint16_t GUI_GetBkColor(void)
 {
-  return BKCOLOR;
+  return backGroundColor;
+}
+
+void GUI_SetTextMode(GUI_TEXT_MODE mode)
+{
+  guiTextMode = mode;
+}
+
+GUI_TEXT_MODE GUI_GetTextMode(void)
+{
+  return guiTextMode;
+}
+void GUI_SetNumMode(GUI_NUM_MODE mode)
+{
+  guiNumMode = mode;
+}
+
+GUI_NUM_MODE GUI_GetNumMode(void)
+{
+  return guiNumMode;
 }
 
 void GUI_Clear(uint16_t color)
@@ -81,7 +101,7 @@ void GUI_DrawPoint(uint16_t x, uint16_t y)
 {	   
   LCD_SetWindow(x, y, x, y);			 	 
   LCD_WR_REG(0x2C);
-  LCD_WR_16BITS_DATA(COLOR);	
+  LCD_WR_16BITS_DATA(foreGroundColor);	
 }
 
 void GUI_FillRect(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey)
@@ -93,10 +113,16 @@ void GUI_FillRect(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey)
   {
     for(j=sy; j<ey; j++)
     {
-      LCD_WR_16BITS_DATA(COLOR);
+      LCD_WR_16BITS_DATA(foreGroundColor);
     }
   }
 }
+
+void GUI_FillPrect(const GUI_RECT *rect)
+{
+  GUI_FillRect(rect->x0, rect->y0, rect->x1, rect->y1);
+}
+
 void GUI_ClearRect(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey)
 {
   uint16_t i=0, j=0;
@@ -106,10 +132,16 @@ void GUI_ClearRect(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey)
   {
     for(j=sy; j<ey; j++)
     {
-      LCD_WR_16BITS_DATA(BKCOLOR);
+      LCD_WR_16BITS_DATA(backGroundColor);
     }
   }
 }
+
+void GUI_ClearPrect(const GUI_RECT *rect)
+{
+  GUI_ClearRect(rect->x0, rect->y0, rect->x1, rect->y1);
+}
+
 void GUI_FillRectColor(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey, uint16_t color)
 {
   uint16_t i=0, j=0;
@@ -206,15 +238,17 @@ void GUI_HLine(uint16_t x1, uint16_t y, uint16_t x2)
   LCD_WR_REG(0x2C);
   for(i=x1; i<x2; i++)
   {
-    LCD_WR_16BITS_DATA(COLOR);	
+    LCD_WR_16BITS_DATA(foreGroundColor);	
   }
 }
 void GUI_VLine(uint16_t x, uint16_t y1, uint16_t y2)
 {
-  uint16_t i;
+  uint16_t i=0;
+  LCD_SetWindow(x, y1, x, y2-1);	
+  LCD_WR_REG(0x2C);
   for(i=y1; i<y2; i++)
   {
-    GUI_DrawPoint(x, i);
+    LCD_WR_16BITS_DATA(foreGroundColor);	
   }
 }
 
@@ -227,6 +261,11 @@ void GUI_DrawRect(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2)
   GUI_HLine(x1, y2-1, x2);
   GUI_VLine(x1, y1, y2);
   GUI_VLine(x2-1, y1, y2);
+}
+
+void GUI_DrawPrect(const GUI_RECT *rect)
+{
+  GUI_DrawRect(rect->x0, rect->y0, rect->x1, rect->y1);
 }
 
 //��ָ��λ�û�һ��ָ����С��Բ
@@ -465,40 +504,7 @@ void  GUI_FillCircle(uint16_t x0, uint16_t y0, uint16_t r)
 }
 
 //
-void GUI_DispChar(int16_t sx, int16_t sy, const uint16_t ch, uint8_t mode)
-{
-  uint8_t x = 0, 
-          y = 0, 
-          j = 0, 
-          i = 0;
-  uint16_t bitMapSize = (BYTE_HEIGHT * BYTE_WIDTH / 8);
-  uint8_t  font[bitMapSize];
-  uint32_t addrOffset = (ch - 0x20) * bitMapSize;
-  uint32_t temp = 0;
-
-  W25Qxx_ReadBuffer(font, addrOffset + BYTE_ASCII_ADDR, bitMapSize);
-  for(x=0; x < BYTE_WIDTH; x++)
-  {   
-    for(j=0; j < (BYTE_HEIGHT + 8-1)/8; j++)
-    {
-      temp <<= 8;
-      temp |= font[i++];
-    }
-
-    for(y=0;y < BYTE_HEIGHT;y++)
-    {			    
-      if(temp & (1<<(BYTE_HEIGHT-1)))
-      GUI_DrawPixel(sx,sy+y,COLOR);
-      else if(mode!=0)
-      GUI_DrawPixel(sx,sy+y,BKCOLOR);
-      temp<<=1;
-    } 
-    sx++;
-  }
-}
-
-//
-CHAR_INFO GUI_DispOne(int16_t sx, int16_t sy, const uint8_t *p, uint8_t mode)
+CHAR_INFO GUI_DispOne(int16_t sx, int16_t sy, const uint8_t *p)
 {  
   CHAR_INFO info = {.bytes = 0};
   
@@ -527,9 +533,9 @@ CHAR_INFO GUI_DispOne(int16_t sx, int16_t sy, const uint8_t *p, uint8_t mode)
     for(y=0;y < info.pixelHeight;y++)
     {			    
       if(temp & (1<<(info.pixelHeight-1)))
-        GUI_DrawPixel(sx, sy+y, COLOR);
-      else if(mode!=0)
-        GUI_DrawPixel(sx, sy+y, BKCOLOR);
+        GUI_DrawPixel(sx, sy+y, foreGroundColor);
+      else if(guiTextMode == GUI_TEXTMODE_NORMAL)
+        GUI_DrawPixel(sx, sy+y, backGroundColor);
       temp <<= 1;
     } 
     sx++;
@@ -537,20 +543,20 @@ CHAR_INFO GUI_DispOne(int16_t sx, int16_t sy, const uint8_t *p, uint8_t mode)
   return info;  
 }
 
-void GUI_DispString(int16_t x, int16_t y, const uint8_t *p, uint8_t mode)
+void GUI_DispString(int16_t x, int16_t y, const uint8_t *p)
 {
   CHAR_INFO info;
   if(p == NULL) return;
   
   while(*p)
   {   
-    info = GUI_DispOne(x, y, p, mode);
+    info = GUI_DispOne(x, y, p);
     x += info.pixelWidth;
     p += info.bytes;
   }
 }
 
-const uint8_t* GUI_DispLenString(int16_t x, int16_t y, const uint8_t *p, uint8_t mode, uint16_t pixelWidth)
+const uint8_t* GUI_DispLenString(int16_t x, int16_t y, const uint8_t *p, uint16_t pixelWidth)
 {       
   CHAR_INFO info;
   uint16_t curPixelWidth = 0;
@@ -560,7 +566,7 @@ const uint8_t* GUI_DispLenString(int16_t x, int16_t y, const uint8_t *p, uint8_t
   {
     getCharacterInfo(p, &info);
     if(curPixelWidth + info.pixelWidth > pixelWidth) return p;
-    GUI_DispOne(x, y, p, mode);
+    GUI_DispOne(x, y, p);
     x += info.pixelWidth;
     curPixelWidth += info.pixelWidth;
     p += info.bytes;
@@ -568,13 +574,13 @@ const uint8_t* GUI_DispLenString(int16_t x, int16_t y, const uint8_t *p, uint8_t
   return p;
 }
 
-void GUI_DispStringRight(int16_t x, int16_t y, const uint8_t *p, uint8_t mode)
+void GUI_DispStringRight(int16_t x, int16_t y, const uint8_t *p)
 {
   x -= GUI_StrPixelWidth(p); 
-  GUI_DispString(x, y, p, mode);
+  GUI_DispString(x, y, p);
 }
 
-void GUI_DispStringInRect(int16_t sx, int16_t sy, int16_t ex, int16_t ey, const uint8_t *p, uint8_t mode)
+void GUI_DispStringInRect(int16_t sx, int16_t sy, int16_t ex, int16_t ey, const uint8_t *p)
 {    
   uint16_t stringlen = GUI_StrPixelWidth(p);
   uint16_t width = ex - sx;
@@ -591,36 +597,53 @@ void GUI_DispStringInRect(int16_t sx, int16_t sy, int16_t ex, int16_t ey, const 
   uint8_t i=0;
   for(i=0; i<nline; i++)
   {
-    p = GUI_DispLenString(x, y, p, mode, width);
+    p = GUI_DispLenString(x, y, p, width);
     y += BYTE_HEIGHT;
   }   
 }
 
-void GUI_DispStringInPrect(const GUI_RECT *rect, const uint8_t *p, uint8_t mode)
+void GUI_DispStringInPrect(const GUI_RECT *rect, const uint8_t *p)
 {    
-  GUI_DispStringInRect(rect->x0, rect->y0, rect->x1, rect->y1,p,mode);
+  GUI_DispStringInRect(rect->x0, rect->y0, rect->x1, rect->y1,p);
 }
 
-void GUI_DispCharInPrect(const GUI_RECT *rect, uint16_t p, uint8_t mode)
-{    
-  uint16_t x_offset = (rect->x1 - rect->x0 - BYTE_WIDTH)>>1;
-  uint16_t y_offset = (rect->y1 - rect->y0 - BYTE_HEIGHT)>>1;
-  GUI_DispChar(rect->x0+x_offset,rect->y0+y_offset,p,mode);	
+void GUI_DispStringInRectEOL(int16_t sx, int16_t sy, int16_t ex, int16_t ey, const uint8_t *p)
+{
+  if (p == NULL || *p == 0) return;
+  CHAR_INFO info;
+  int16_t x = sx;
+  while (*p)
+  {
+    getCharacterInfo(p, &info);
+    if (x + info.pixelWidth > ex || (*p == '\n' && x != sx))
+    {
+      x = sx;
+      sy += info.pixelHeight;
+      if (sy + info.pixelHeight > ey) return;
+    }
+    if(*p != '\n')
+    {
+      GUI_DispOne(x, sy, p);
+      x += info.pixelWidth;
+    }
+    p += info.bytes;
+  } 
 }
-
 
 const uint32_t GUI_Pow10[10] = {
 1 , 10, 100, 1000, 10000,
 100000, 1000000, 10000000, 100000000, 1000000000
 };
 
-void GUI_DispDec(int16_t x, int16_t y, int32_t num, uint8_t len, uint8_t mode, uint8_t leftOrRight)
+void GUI_DispDec(int16_t x, int16_t y, int32_t num, uint8_t len, uint8_t leftOrRight)
 {         	
   uint8_t i;
   uint8_t bit_value;
   uint8_t blank_bit_len = 0;
   uint8_t notZero = 0;	
   char    isNegative = 0;
+  uint8_t decBuf[64];
+  uint8_t bufIndex = 0;
 
   if(num<0)
   {
@@ -636,8 +659,7 @@ void GUI_DispDec(int16_t x, int16_t y, int32_t num, uint8_t len, uint8_t mode, u
       {
         if(leftOrRight==RIGHT)
         {
-          GUI_DispChar(x,y,' ',mode);
-          x += BYTE_WIDTH;
+          decBuf[bufIndex++] = (guiNumMode == GUI_NUMMODE_SPACE) ? ' ' : '0';
         }
         else
         {
@@ -649,27 +671,29 @@ void GUI_DispDec(int16_t x, int16_t y, int32_t num, uint8_t len, uint8_t mode, u
       {
         notZero = 1; 
         if(isNegative)
-        {                
-          GUI_DispChar(x-BYTE_WIDTH,y,'-',mode);
+        {
+          decBuf[bufIndex++] = '-';
         }
       }
     }
-    GUI_DispChar(x,y,bit_value+'0',mode); 
-    x += BYTE_WIDTH;
+    decBuf[bufIndex++] = bit_value + '0';
   }
   for(; blank_bit_len>0; blank_bit_len--)
   {
-    GUI_DispChar(x,y,' ',mode); 
-    x += BYTE_WIDTH;
+    decBuf[bufIndex++] = ' ';
   }
+  decBuf[bufIndex] = 0;
+  GUI_DispString(x, y, decBuf);
 } 
 
-void GUI_DispFloat(int16_t x, int16_t y, float num, uint8_t llen, uint8_t rlen, uint8_t mode, uint8_t leftOrRight)
+void GUI_DispFloat(int16_t x, int16_t y, float num, uint8_t llen, uint8_t rlen, uint8_t leftOrRight)
 {    
   uint8_t  alen = 0;
   uint8_t  i=0;
   uint8_t  notZero = 0;
   char     isNegative = 0;
+  uint8_t  floatBuf[64];
+  uint8_t  bufIndex = 0;
 
   if(num<0)
   {
@@ -689,8 +713,7 @@ void GUI_DispFloat(int16_t x, int16_t y, float num, uint8_t llen, uint8_t rlen, 
       {
         if(leftOrRight==RIGHT)
         {
-          GUI_DispChar(x,y,' ',mode);
-          x += BYTE_WIDTH;
+          floatBuf[bufIndex++] = (guiNumMode == GUI_NUMMODE_SPACE) ? ' ' : '0';
           alen++;
         }
         continue;
@@ -699,30 +722,28 @@ void GUI_DispFloat(int16_t x, int16_t y, float num, uint8_t llen, uint8_t rlen, 
       {
         notZero = 1; 
         if(isNegative)
-        {                
-          GUI_DispChar(x-BYTE_WIDTH,y,'-',mode);
+        {     
+          floatBuf[bufIndex++] = '-';
         }
       }
     }
-    GUI_DispChar(x,y,bit_value+'0',mode);
-    x += BYTE_WIDTH;
+    floatBuf[bufIndex++] = bit_value + '0';
     alen++;
   }
-  GUI_DispChar(x,y,'.',mode);
-  x += BYTE_WIDTH;
+  floatBuf[bufIndex++] = '.';
   alen++;
 
   for(i=0;i<rlen;i++)
   {
-    GUI_DispChar(x,y,(int)(num/GUI_Pow10[rlen-1-i])%10+'0',mode);
-    x += BYTE_WIDTH;
+    floatBuf[bufIndex++] = (int)(num/GUI_Pow10[rlen-1-i])%10+'0';
     alen++;
   }
   for(; alen < llen+rlen; alen++)
   {        
-    GUI_DispChar(x,y,' ',mode);
-    x += BYTE_WIDTH;
+    floatBuf[bufIndex++] = ' ';
   }
+  floatBuf[bufIndex] = 0;
+  GUI_DispString(x, y, floatBuf);
 } 
 
 /****************************************************     Widget    *******************************************************************/
@@ -740,7 +761,7 @@ void RADIO_Create(RADIO *raido)
       GUI_SetColor(RADIO_IDLE_COLOR);
     GUI_FillCircle(raido->sx+BYTE_HEIGHT/2, i*raido->distance+raido->sy+BYTE_HEIGHT/2, BYTE_HEIGHT/8);
     GUI_DrawCircle(raido->sx+BYTE_HEIGHT/2, i*raido->distance+raido->sy+BYTE_HEIGHT/2, BYTE_HEIGHT/4);
-    GUI_DispString(raido->sx+BYTE_HEIGHT,   i*raido->distance+raido->sy, raido->context[i], 1);
+    GUI_DispString(raido->sx+BYTE_HEIGHT,   i*raido->distance+raido->sy, raido->context[i]);
   }	
   GUI_SetColor(tmp);
 }
@@ -764,7 +785,7 @@ void RADIO_Select(RADIO *raido, uint8_t select)
     }
     GUI_FillCircle(raido->sx+BYTE_HEIGHT/2, raido->select*raido->distance+raido->sy+BYTE_HEIGHT/2, BYTE_HEIGHT/8);
     GUI_DrawCircle(raido->sx+BYTE_HEIGHT/2, raido->select*raido->distance+raido->sy+BYTE_HEIGHT/2, BYTE_HEIGHT/4);
-    GUI_DispString(raido->sx+BYTE_HEIGHT,   raido->select*raido->distance+raido->sy, raido->context[raido->select], 1);
+    GUI_DispString(raido->sx+BYTE_HEIGHT,   raido->select*raido->distance+raido->sy, raido->context[raido->select]);
   }
   GUI_SetColor(tmp);
 }
@@ -780,7 +801,7 @@ void Scroll_CreatePara(SCROLL * para, uint8_t *pstr ,GUI_RECT *rect)
   para->rect = rect;
 }
 
-void Scroll_DispString(SCROLL * para,uint8_t mode,uint8_t align)
+void Scroll_DispString(SCROLL * para, uint8_t align)
 {
   uint16_t i = 0;
   CHAR_INFO info;
@@ -802,14 +823,14 @@ void Scroll_DispString(SCROLL * para,uint8_t mode,uint8_t align)
           para->off_head = 0;
         }
         
-        GUI_DispLenString(para->rect->x0 - para->off_head, para->rect->y0, &para->text[para->curByte], mode, para->maxPixelWidth + info.pixelWidth);
+        GUI_DispLenString(para->rect->x0 - para->off_head, para->rect->y0, &para->text[para->curByte], para->maxPixelWidth + info.pixelWidth);
         
         para->curPixelWidth--;
         if(para->curPixelWidth < para->maxPixelWidth)
         {
           for(i = para->rect->y0; i<para->rect->y1; i++)
           {
-            GUI_DrawPixel(para->rect->x0 + para->curPixelWidth, i, BKCOLOR);
+            GUI_DrawPixel(para->rect->x0 + para->curPixelWidth, i, backGroundColor);
           }
         }
       }
@@ -817,7 +838,7 @@ void Scroll_DispString(SCROLL * para,uint8_t mode,uint8_t align)
       if(para->curPixelWidth + 2*BYTE_WIDTH < para->maxPixelWidth)
       {
         para->off_tail++;
-        GUI_DispLenString(para->rect->x1-para->off_tail, para->rect->y0, para->text, mode, para->off_tail);
+        GUI_DispLenString(para->rect->x1-para->off_tail, para->rect->y0, para->text, para->off_tail);
         if(para->off_tail + para->rect->x0 >= para->rect->x1)
         {
           para->off_head=0;
@@ -835,19 +856,19 @@ void Scroll_DispString(SCROLL * para,uint8_t mode,uint8_t align)
     {
       case LEFT: 
       {
-        GUI_DispString(para->rect->x0, para->rect->y0, para->text, mode);
+        GUI_DispString(para->rect->x0, para->rect->y0, para->text);
         break;
       }
       case RIGHT: 
       {
         uint16_t x_offset=(para->rect->x1 - para->totalPixelWidth);	
-        GUI_DispString(x_offset, para->rect->y0, para->text, mode);
+        GUI_DispString(x_offset, para->rect->y0, para->text);
         break;
       }
       case CENTER:
       {
         uint16_t x_offset=((para->rect->x1 - para->rect->x0 - para->totalPixelWidth) >>1);	
-        GUI_DispString(para->rect->x0+x_offset, para->rect->y0, para->text, mode);
+        GUI_DispString(para->rect->x0+x_offset, para->rect->y0, para->text);
         break;
       }
     }
@@ -867,6 +888,7 @@ void GUI_DrawButton(const BUTTON *button, uint8_t pressed)
   ey = button->rect.y1;
   const uint16_t nowBackColor = GUI_GetBkColor();
   const uint16_t nowFontColor = GUI_GetColor();
+  const GUI_TEXT_MODE nowTextMode = GUI_GetTextMode();
 
   const uint16_t lineColor = pressed ? button->pLineColor : button->lineColor;
   const uint16_t backColor = pressed ? button->pBackColor : button->backColor;
@@ -895,10 +917,12 @@ void GUI_DrawButton(const BUTTON *button, uint8_t pressed)
   GUI_FillRect(sx + radius, ey - lineWidth - radius, ex - radius, ey - lineWidth);
 
   GUI_SetColor(fontColor);
-  GUI_DispStringInPrect(&button->rect, button->context, 0);
+  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
+  GUI_DispStringInPrect(&button->rect, button->context);
 
   GUI_SetBkColor(nowBackColor);
   GUI_SetColor(nowFontColor);
+  GUI_SetTextMode(nowTextMode);
 }
 
 
@@ -917,6 +941,7 @@ void GUI_DrawWindow(const WINDOW *window, const uint8_t *title, const uint8_t *i
   ey = window->rect.y1;
   const uint16_t nowBackColor = GUI_GetBkColor();
   const uint16_t nowFontColor = GUI_GetColor();
+  const GUI_TEXT_MODE nowTextMode = GUI_GetTextMode();
 
   GUI_SetColor(lineColor);
   GUI_FillCircle(sx + radius,      sy + radius,  radius);
@@ -940,12 +965,14 @@ void GUI_DrawWindow(const WINDOW *window, const uint8_t *title, const uint8_t *i
   GUI_FillRect(sx + lineWidth,          sy + titleHeight + infoHeight, ex - lineWidth,          ey - lineWidth - radius);
   GUI_FillRect(sx + lineWidth + radius, ey - lineWidth - radius,       ex - lineWidth - radius, ey - lineWidth);
 
+  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
   GUI_SetColor(window->title.fontColor);
   //    GUI_DispStringInRect(rect.x0, rect.y0, rect.x1, rect.y0+titleHeight,title,0);
-  GUI_DispString(sx+radius, sy+8, title,0);
+  GUI_DispString(sx+radius, sy+8, title);
   GUI_SetColor(window->info.fontColor);
-  GUI_DispStringInRect(sx+lineWidth+BYTE_WIDTH, sy+titleHeight, ex-lineWidth-BYTE_WIDTH, sy+titleHeight+infoHeight, inf, 0); 
+  GUI_DispStringInRect(sx+lineWidth+BYTE_WIDTH, sy+titleHeight, ex-lineWidth-BYTE_WIDTH, sy+titleHeight+infoHeight, inf); 
 
   GUI_SetBkColor(nowBackColor);
   GUI_SetColor(nowFontColor);
+  GUI_SetTextMode(nowTextMode);
 }

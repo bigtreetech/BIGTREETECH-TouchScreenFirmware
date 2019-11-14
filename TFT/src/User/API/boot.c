@@ -117,7 +117,7 @@ void updateIcon(void)
 {
   char nowBmp[64];  
   GUI_Clear(BLACK);
-  GUI_DispString(100, 5, (u8*)"Icon Updating...!",0);
+  GUI_DispString(100, 5, (u8*)"Icon Updating...!");
 
   if(bmpDecode(BMP_ROOT_DIR"/Logo.bmp", LOGO_ADDR))
   {
@@ -130,7 +130,7 @@ void updateIcon(void)
     if(bmpDecode(nowBmp, ICON_ADDR(i)))
     {
       GUI_ClearRect(labelUpdateRect.x0, labelUpdateRect.y0, labelUpdateRect.x1, labelUpdateRect.y1);
-      GUI_DispStringInPrect(&labelUpdateRect, (u8 *)nowBmp, 0);
+      GUI_DispStringInPrect(&labelUpdateRect, (u8 *)nowBmp);
       ICON_ReadDisplay(iconUpdateRect.x0, iconUpdateRect.y0, i);
     }
   }
@@ -151,8 +151,8 @@ void updateFont(char *font, u32 addr)
   if (tempbuf == NULL)  return;
   GUI_Clear(BLACK);
   my_sprintf((void *)buffer,"%s Size: %dKB",font, (u32)f_size(&myfp)>>10);
-  GUI_DispString(0, 100, (u8*)buffer,0);
-  GUI_DispString(0, 140, (u8*)"Updating:   %",0);
+  GUI_DispString(0, 100, (u8*)buffer);
+  GUI_DispString(0, 140, (u8*)"Updating:   %");
   
   while(!f_eof(&myfp))
   {
@@ -164,7 +164,7 @@ void updateFont(char *font, u32 addr)
     if(progress != offset * 100 / f_size(&myfp))
     {
       progress = offset * 100 / f_size(&myfp);
-      GUI_DispDec(0 + BYTE_WIDTH*9, 140, progress, 3, 1, RIGHT);
+      GUI_DispDec(0 + BYTE_WIDTH*9, 140, progress, 3, RIGHT);
     }
     if(rnum !=W25QXX_SECTOR_SIZE)break;
   }

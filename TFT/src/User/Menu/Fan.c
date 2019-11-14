@@ -2,7 +2,7 @@
 #include "includes.h"
 
 
-//1个title(标题), ITEM_PER_PAGE个item(图标+标签) 
+//1 title, ITEM_PER_PAGE items(icon+label) 
 const MENUITEMS fanItems = {
 //   title
 LABEL_FAN,
@@ -46,7 +46,6 @@ u8 fanGetCurIndex(u8 i)
   return curIndex;
 }
 
-/* 设置是否已经发送风扇 */
 void fanSetSendWaiting(u8 i, bool isWaiting)
 {
   send_waiting[i] = isWaiting;
@@ -56,13 +55,13 @@ void showFanSpeed(void)
 {
   const GUI_RECT rect = {exhibitRect.x0, CENTER_Y-BYTE_HEIGHT, exhibitRect.x1, CENTER_Y};
   GUI_ClearRect(rect.x0, rect.y0, rect.x1, rect.y1);
-  GUI_DispStringInPrect(&rect, (u8*)fanID[curIndex], 1);
-  GUI_DispDec(CENTER_X-BYTE_WIDTH, CENTER_Y, fanSpeed[curIndex], 3, 1, LEFT);
+  GUI_DispStringInPrect(&rect, (u8*)fanID[curIndex]);
+  GUI_DispDec(CENTER_X-BYTE_WIDTH, CENTER_Y, fanSpeed[curIndex], 3, LEFT);
 }
 
 void fanSpeedReDraw(void)
 {
-  GUI_DispDec(CENTER_X-BYTE_WIDTH, CENTER_Y, fanSpeed[curIndex], 3, 1, LEFT);
+  GUI_DispDec(CENTER_X-BYTE_WIDTH, CENTER_Y, fanSpeed[curIndex], 3, LEFT);
 }
 
 void menuFan(void)

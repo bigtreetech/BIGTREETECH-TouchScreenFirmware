@@ -10,6 +10,28 @@
 #include "language_es.h"
 #include "language_fr.h"
 
+#ifndef CUSTOM_0_LABEL
+  #define CUSTOM_0_LABEL "Custom0"
+#endif
+#ifndef CUSTOM_1_LABEL
+  #define CUSTOM_1_LABEL "Custom1"
+#endif
+#ifndef CUSTOM_2_LABEL
+  #define CUSTOM_2_LABEL "Custom2"
+#endif
+#ifndef CUSTOM_3_LABEL
+  #define CUSTOM_3_LABEL "Custom3"
+#endif
+#ifndef CUSTOM_4_LABEL
+  #define CUSTOM_4_LABEL "Custom4"
+#endif
+#ifndef CUSTOM_5_LABEL
+  #define CUSTOM_5_LABEL "Custom5"
+#endif
+#ifndef CUSTOM_6_LABEL
+  #define CUSTOM_6_LABEL "Custom6"
+#endif
+
 const char *const en_pack[LABEL_NUM]={
   EN_LANGUAGE,
   EN_HEAT,

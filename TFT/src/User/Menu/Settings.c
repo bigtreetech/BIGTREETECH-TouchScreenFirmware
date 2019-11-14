@@ -32,9 +32,9 @@ void menuInfo(void)
   
   GUI_Clear(BLACK);
 
-  GUI_DispString(startX, centerY - BYTE_HEIGHT, (u8 *)hardware, 0);
-  GUI_DispString(startX, centerY, (u8 *)firmware, 0);
-  GUI_DispStringInRect(20, LCD_HEIGHT - (BYTE_HEIGHT*2), LCD_WIDTH-20, LCD_HEIGHT, textSelect(LABEL_TOUCH_TO_EXIT), 0);
+  GUI_DispString(startX, centerY - BYTE_HEIGHT, (u8 *)hardware);
+  GUI_DispString(startX, centerY, (u8 *)firmware);
+  GUI_DispStringInRect(20, LCD_HEIGHT - (BYTE_HEIGHT*2), LCD_WIDTH-20, LCD_HEIGHT, textSelect(LABEL_TOUCH_TO_EXIT));
 
   while(!isPress()) loopProcess();
   while(isPress())  loopProcess();
@@ -46,8 +46,8 @@ void menuInfo(void)
 void menuDisconnect(void)
 {
   GUI_Clear(BLACK);
-  GUI_DispStringInRect(20, 0, LCD_WIDTH-20, LCD_HEIGHT, textSelect(LABEL_DISCONNECT_INFO), 0);
-  GUI_DispStringInRect(20, LCD_HEIGHT - (BYTE_HEIGHT*2), LCD_WIDTH-20, LCD_HEIGHT, textSelect(LABEL_TOUCH_TO_EXIT), 0);
+  GUI_DispStringInRect(20, 0, LCD_WIDTH-20, LCD_HEIGHT, textSelect(LABEL_DISCONNECT_INFO));
+  GUI_DispStringInRect(20, LCD_HEIGHT - (BYTE_HEIGHT*2), LCD_WIDTH-20, LCD_HEIGHT, textSelect(LABEL_TOUCH_TO_EXIT));
 
   Serial_DeConfig();
   while(!isPress());
