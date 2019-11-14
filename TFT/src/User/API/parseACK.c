@@ -66,7 +66,13 @@ static float ack_second_value()
 void ackPopupInfo(const char *info)
 {
   if(infoMenu.menu[infoMenu.cur] == menuTerminal) return;
+    if(info == echomagic && infoMenu.menu[infoMenu.cur] == menuStatus){
+    statusScreen_setMsg((u8* )info, (u8 *)ack_rev_buf + ack_index);
+  }
+  else{
   popupReminder((u8* )info, (u8 *)ack_rev_buf + ack_index);
+  }
+  //popupReminder((u8* )info, (u8 *)ack_rev_buf + ack_index);
 }
 
 void parseACK(void)
