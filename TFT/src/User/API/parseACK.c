@@ -66,7 +66,12 @@ static float ack_second_value()
 void ackPopupInfo(const char *info)
 {
   if(infoMenu.menu[infoMenu.cur] == menuTerminal) return;
-  popupReminder((u8* )info, (u8 *)dmaL2Cache + ack_index);
+  if(info == echomagic && infoMenu.menu[infoMenu.cur] == menuStatus) {
+    statusScreen_setMsg((u8* )info, (u8 *)dmaL2Cache + ack_index);
+  }
+  else{
+    popupReminder((u8* )info, (u8 *)dmaL2Cache + ack_index);
+  }
 }
 
 void syncL2CacheFromL1(uint8_t port)

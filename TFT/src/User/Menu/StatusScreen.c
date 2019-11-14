@@ -35,6 +35,12 @@ const ITEM SpeedItems[2] = {
 
 static u32       nowTime = 0;
 static u32   update_time = 200; // 1 seconds is 100
+SCROLL   msgScroll;
+static int lastConnection_status = -1;
+
+static char* msgtitle[20];
+static char* msgbody[512];
+
 
 int current_Ext = 1;
 int current_fan = 0;
@@ -51,19 +57,19 @@ const GUI_RECT RecA2 = {START_X + 0 * ICON_WIDTH + 0 * SPACE_X,                 
 const GUI_RECT RecB1 = {START_X + 1 * ICON_WIDTH + 1 * SPACE_X + statusicon_name_x0,    TITLE_END_Y + 0 * ICON_HEIGHT + 0 * SPACE_Y + statusicon_name_y0,
                         START_X + 2 * ICON_WIDTH + 1 * SPACE_X,                         TITLE_END_Y + 0 * ICON_HEIGHT + 0 * SPACE_Y + statusicon_name_y0 + BYTE_HEIGHT};
 
-const  GUI_RECT RecB2 = {START_X + 1 * ICON_WIDTH + 1 * SPACE_X,                        TITLE_END_Y +  0 * ICON_HEIGHT + 0 * SPACE_Y + statusicon_val_y0,
+const GUI_RECT RecB2 = {START_X + 1 * ICON_WIDTH + 1 * SPACE_X,                        TITLE_END_Y +  0 * ICON_HEIGHT + 0 * SPACE_Y + statusicon_val_y0,
                         START_X + 2 * ICON_WIDTH + 1 * SPACE_X,                         TITLE_END_Y +  0 * ICON_HEIGHT + 0 * SPACE_Y + statusicon_val_y0 + BYTE_HEIGHT};
 //icon 2
-const  GUI_RECT RecC1 = {START_X + 2 * ICON_WIDTH + 2 * SPACE_X + statusicon_name_x0,   TITLE_END_Y + 0 * ICON_HEIGHT + 0 * SPACE_Y + statusicon_name_y0,
+const GUI_RECT RecC1 = {START_X + 2 * ICON_WIDTH + 2 * SPACE_X + statusicon_name_x0,   TITLE_END_Y + 0 * ICON_HEIGHT + 0 * SPACE_Y + statusicon_name_y0,
                         START_X + 3 * ICON_WIDTH + 2 * SPACE_X,                         TITLE_END_Y + 0 * ICON_HEIGHT + 0 * SPACE_Y + statusicon_name_y0 + BYTE_HEIGHT};
 
-const  GUI_RECT RecC2 = {START_X + 2 * ICON_WIDTH + 2 * SPACE_X,                        TITLE_END_Y +  0 * ICON_HEIGHT + 0 * SPACE_Y + statusicon_val_y0,
+const GUI_RECT RecC2 = {START_X + 2 * ICON_WIDTH + 2 * SPACE_X,                        TITLE_END_Y +  0 * ICON_HEIGHT + 0 * SPACE_Y + statusicon_val_y0,
                         START_X + 3 * ICON_WIDTH + 2 * SPACE_X,                         TITLE_END_Y +  0 * ICON_HEIGHT + 0 * SPACE_Y + statusicon_val_y0 + BYTE_HEIGHT};
 //icon 3
-const  GUI_RECT RecD1 = {START_X + 3 * ICON_WIDTH + 3 * SPACE_X + statusicon_name_x0,   TITLE_END_Y + 0 * ICON_HEIGHT + 0 * SPACE_Y + statusicon_name_y0,
+const GUI_RECT RecD1 = {START_X + 3 * ICON_WIDTH + 3 * SPACE_X + statusicon_name_x0,   TITLE_END_Y + 0 * ICON_HEIGHT + 0 * SPACE_Y + statusicon_name_y0,
                         START_X + 4 * ICON_WIDTH + 3 * SPACE_X,                         TITLE_END_Y + 0 * ICON_HEIGHT + 0 * SPACE_Y + statusicon_name_y0 + BYTE_HEIGHT};
 
-const  GUI_RECT RecD2 = {START_X + 3 * ICON_WIDTH + 3 * SPACE_X,                        TITLE_END_Y +  0 * ICON_HEIGHT + 0 * SPACE_Y + statusicon_val_y0,
+const GUI_RECT RecD2 = {START_X + 3 * ICON_WIDTH + 3 * SPACE_X,                        TITLE_END_Y +  0 * ICON_HEIGHT + 0 * SPACE_Y + statusicon_val_y0,
                         START_X + 4 * ICON_WIDTH + 3 * SPACE_X,                         TITLE_END_Y +  0 * ICON_HEIGHT + 0 * SPACE_Y + statusicon_val_y0 + BYTE_HEIGHT};
 //icon 4
 const GUI_RECT RecE1 = {START_X + 0 * ICON_WIDTH + 0 * SPACE_X + statusicon_name_x0,    TITLE_END_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + statusicon_name_y0,
@@ -75,22 +81,27 @@ const GUI_RECT RecE2 = {START_X + 0 * ICON_WIDTH + 0 * SPACE_X,                 
 const GUI_RECT RecF1 = {START_X + 1 * ICON_WIDTH + 1 * SPACE_X + statusicon_name_x0,    TITLE_END_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + statusicon_name_y0,
                         START_X + 2 * ICON_WIDTH + 1 * SPACE_X,                         TITLE_END_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + statusicon_name_y0 + BYTE_HEIGHT};
 
-const  GUI_RECT RecF2 = {START_X + 1 * ICON_WIDTH + 1 * SPACE_X,                        TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + statusicon_val_y0,
+const GUI_RECT RecF2 = {START_X + 1 * ICON_WIDTH + 1 * SPACE_X,                        TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + statusicon_val_y0,
                         START_X + 2 * ICON_WIDTH + 1 * SPACE_X,                         TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + statusicon_val_y0 + BYTE_HEIGHT};
 //icon 6
-const  GUI_RECT RecG1 = {START_X + 2 * ICON_WIDTH + 2 * SPACE_X + statusicon_name_x0,   TITLE_END_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + statusicon_name_y0,
+const GUI_RECT RecG1 = {START_X + 2 * ICON_WIDTH + 2 * SPACE_X + statusicon_name_x0,   TITLE_END_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + statusicon_name_y0,
                         START_X + 3 * ICON_WIDTH + 2 * SPACE_X,                         TITLE_END_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + statusicon_name_y0 + BYTE_HEIGHT};
 
-const  GUI_RECT RecG2 = {START_X + 2 * ICON_WIDTH + 2 * SPACE_X,                        TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + statusicon_val_y0,
+const GUI_RECT RecG2 = {START_X + 2 * ICON_WIDTH + 2 * SPACE_X,                        TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + statusicon_val_y0,
                         START_X + 3 * ICON_WIDTH + 2 * SPACE_X,                         TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + statusicon_val_y0 + BYTE_HEIGHT};
 //icon 7
-const  GUI_RECT RecH1 = {START_X + 3 * ICON_WIDTH + 3 * SPACE_X + statusicon_name_x0,   TITLE_END_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + statusicon_name_y0,
+const GUI_RECT RecH1 = {START_X + 3 * ICON_WIDTH + 3 * SPACE_X + statusicon_name_x0,   TITLE_END_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + statusicon_name_y0,
                         START_X + 4 * ICON_WIDTH + 3 * SPACE_X,                         TITLE_END_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + statusicon_name_y0 + BYTE_HEIGHT};
 
-const  GUI_RECT RecH2 = {START_X + 3 * ICON_WIDTH + 3 * SPACE_X,                        TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + statusicon_val_y0,
+const GUI_RECT RecH2 = {START_X + 3 * ICON_WIDTH + 3 * SPACE_X,                        TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + statusicon_val_y0,
                         START_X + 4 * ICON_WIDTH + 3 * SPACE_X,                         TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + statusicon_val_y0 + BYTE_HEIGHT};
 
+//info rectangle
+const GUI_RECT RecIinfo = {START_X + 1 * ICON_WIDTH + 1 * SPACE_X,                        TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y,
+                           START_X + 3 * ICON_WIDTH + 2 * SPACE_X,                         TITLE_END_Y +  2 * ICON_HEIGHT + 1 * SPACE_Y};
 
+        GUI_RECT msgRect ={START_X + 1 * ICON_WIDTH + 1 * SPACE_X,                        TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + STATUS_MSGBOX_BODY_YOFFSET,
+                           START_X + 3 * ICON_WIDTH + 2 * SPACE_X,                         TITLE_END_Y +  2 * ICON_HEIGHT + 1 * SPACE_Y - STATUS_MSGBOX_BODY_BOTTOM};
 /*set status icons */
 void set_status_icon(void)
 {
@@ -106,36 +117,84 @@ void drawTemperature(void)
         //icons and their values are updated one by one to reduce flicker/clipping
     
     char *tempstr[7];
-
+        GUI_SetTextMode(GUI_TEXTMODE_TRANS);
         GUI_SetColor(WHITE);
         menuDrawItem(&ToolItems[0],0);                                                                  //Ext icon
-        GUI_DispStringInPrect(&RecA1, (u8 *)heatDisplayID[current_Ext],   0);                           //Ext label
+        GUI_DispStringInPrect(&RecA1, (u8 *)heatDisplayID[current_Ext]);                           //Ext label
+        
         GUI_SetColor(BLACK);
         sprintf(tempstr, "%d/%d", heatGetCurrentTemp(current_Ext), heatGetTargetTemp(current_Ext)); 
-        GUI_DispStringInPrect(&RecA2, (u8 *)tempstr, 0);                                                //Ext value
+        GUI_DispStringInPrect(&RecA2, (u8 *)tempstr);                                                //Ext value
 
         GUI_SetColor(WHITE);
         menuDrawItem(&ToolItems[1],1);                                          //bed icon
-        GUI_DispStringInPrect(&RecB1, (u8 *)heatDisplayID[0],   0);             //Bed label
+        GUI_DispStringInPrect(&RecB1, (u8 *)heatDisplayID[0]);             //Bed label
         GUI_SetColor(BLACK);
         sprintf(tempstr, "%d/%d", heatGetCurrentTemp(0), heatGetTargetTemp(0)); 
-        GUI_DispStringInPrect(&RecB2, (u8 *)tempstr, 0);                        //Bed value
+        GUI_DispStringInPrect(&RecB2, (u8 *)tempstr);                        //Bed value
 
         GUI_SetColor(WHITE);
         menuDrawItem(&ToolItems[2],2);                                          //fan icon
-        GUI_DispStringInPrect(&RecC1, (u8 *)fanID[current_fan], 0);             //Fan label
+        GUI_DispStringInPrect(&RecC1, (u8 *)fanID[current_fan]);             //Fan label
         GUI_SetColor(BLACK);
         sprintf(tempstr, "%d", fanGetSpeed(current_fan)); 
-        GUI_DispStringInPrect(&RecC2, (u8 *)tempstr, 0);                        //Fan value
+        GUI_DispStringInPrect(&RecC2, (u8 *)tempstr);                        //Fan value
 
         GUI_SetColor(WHITE);
         menuDrawItem(&SpeedItems[current_speedID],3);                           //Speed / flow icon
-        GUI_DispStringInPrect(&RecD1, (u8 *)SpeedID[current_speedID], 0);       //Speed / flow label
+        GUI_DispStringInPrect(&RecD1, (u8 *)SpeedID[current_speedID]);       //Speed / flow label
         GUI_SetColor(BLACK);
         sprintf(tempstr, "%d", speedGetPercent(current_speedID)); 
-        GUI_DispStringInPrect(&RecD2, (u8 *)tempstr, 0);                        //speed / Flow value
-        GUI_SetColor(WHITE);
+        GUI_DispStringInPrect(&RecD2, (u8 *)tempstr);                        //speed / Flow value
+        GUI_SetBkColor(BK_COLOR);
+        GUI_SetColor(FK_COLOR);
+        GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
+
+void statusScreen_setMsg(uint8_t *title,uint8_t *msg)
+{
+    memcpy(msgtitle,(char*)title,sizeof(msgtitle));
+    memcpy(msgbody,(char*)msg,sizeof(msgbody));
+    drawStatusScreenMsg();
+}
+void drawStatusScreenMsg(void)
+{
+//GUI_ClearRect(RecIinfo.x0,RecIinfo.y0,RecIinfo.x1,RecIinfo.y1);
+    GUI_SetTextMode(GUI_TEXTMODE_TRANS);
+    u8* iconChar = (u8 *)"i";
+
+    GUI_SetColor(0x4b0d);
+    GUI_FillRect(RecIinfo.x0, RecIinfo.y0, RecIinfo.x1, RecIinfo.y1);
+
+    GUI_SetColor(0x03BF);
+    GUI_FillCircle(RecIinfo.x0 + STATUS_MSGBOX_ICON_XCENTER, RecIinfo.y0 + STATUS_MSGBOX_ICON_YCENTER, BYTE_WIDTH); //icon circle
+
+    GUI_SetColor(WHITE);
+    GUI_DrawCircle(RecIinfo.x0 + STATUS_MSGBOX_ICON_XCENTER, RecIinfo.y0 + STATUS_MSGBOX_ICON_YCENTER, BYTE_WIDTH); //circle outline
+    GUI_FillRect(msgRect.x0, msgRect.y0, msgRect.x1, msgRect.y1); //rectangle for msg scroller
+    
+    GUI_DispString(RecIinfo.x0 + STATUS_MSGBOX_ICON_XCENTER-(BYTE_WIDTH/2), RecIinfo.y0 + STATUS_MSGBOX_ICON_YCENTER - (BYTE_HEIGHT/2), iconChar);
+
+    GUI_DispString(RecIinfo.x0 + STATUS_MSGBOX_TITLE_XOFFSET,RecIinfo.y0 + STATUS_MSGBOX_ICON_YCENTER - (BYTE_HEIGHT/2),(u8*)msgtitle); 
+    GUI_SetBkColor(0x03BF);
+    GUI_FillRect(msgRect.x0, msgRect.y0, msgRect.x1, msgRect.y1);
+    GUI_SetColor(BLACK);
+    Scroll_CreatePara(&msgScroll,(u8*)msgbody,&msgRect);
+    GUI_SetBkColor(BK_COLOR);
+    GUI_SetColor(FK_COLOR);
+    
+    GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
+}
+
+void scrollMsg(void){
+    GUI_SetBkColor(WHITE);
+    GUI_SetColor(BLACK);
+    Scroll_DispString(&msgScroll,CENTER); 
+    GUI_SetBkColor(BK_COLOR);
+    GUI_SetColor(FK_COLOR);
+}
+
+
 
 void toggleTool(void)
 {
@@ -155,32 +214,56 @@ void toggleTool(void)
         }
         current_speedID = (current_speedID + 1) % 2;
         nowTime = OS_GetTime();
-        drawTemperature();
+        drawTemperature();  
     }
 }
 
 void menuStatus(void)
 {
-  KEY_VALUES  key_num = KEY_IDLE;
-  GUI_SetBkColor(ST7920_BKCOLOR);
-  set_status_icon();
-  menuDrawPage(&StatusItems);
-     drawTemperature();
-  while(infoMenu.menu[infoMenu.cur] == menuStatus)
-  {
-   
-    key_num = menuKeyGetValue();
-    switch(key_num)
+    KEY_VALUES key_num = KEY_IDLE;
+    GUI_SetBkColor(BK_COLOR);
+    set_status_icon();
+    menuDrawPage(&StatusItems);
+    
+    drawTemperature();
+    drawStatusScreenMsg();
+
+    while (infoMenu.menu[infoMenu.cur] == menuStatus)
     {
+        if(infoHost.connected != lastConnection_status){
+            if(infoHost.connected == false){
+            statusScreen_setMsg(textSelect(LABEL_SCREEN_INFO), textSelect(LABEL_UNCONNECTED));
+            }
+            else{
+                statusScreen_setMsg(textSelect(LABEL_SCREEN_INFO), textSelect(LABEL_READY));
+            }
+            lastConnection_status = infoHost.connected;
+        } 
+        scrollMsg();
+        key_num = menuKeyGetValue();
+        switch (key_num)
+        {
 
-    case KEY_ICON_0: infoMenu.menu[++infoMenu.cur] = menuUnifiedHeat;   break;
-    case KEY_ICON_1: infoMenu.menu[++infoMenu.cur] = menuUnifiedHeat;   break;
-    case KEY_ICON_2: infoMenu.menu[++infoMenu.cur] = menuFan;           break;
-    case KEY_ICON_3: infoMenu.menu[++infoMenu.cur] = menuSpeed;         break;
-    case KEY_ICON_4: infoMenu.menu[++infoMenu.cur] = menuMain;          break;
-    case KEY_ICON_7: infoMenu.menu[++infoMenu.cur] = menuPrint;         break;
+        case KEY_ICON_0:
+            infoMenu.menu[++infoMenu.cur] = menuUnifiedHeat;
+            break;
+        case KEY_ICON_1:
+            infoMenu.menu[++infoMenu.cur] = menuUnifiedHeat;
+            break;
+        case KEY_ICON_2:
+            infoMenu.menu[++infoMenu.cur] = menuFan;
+            break;
+        case KEY_ICON_3:
+            infoMenu.menu[++infoMenu.cur] = menuSpeed;
+            break;
+        case KEY_ICON_4:
+            infoMenu.menu[++infoMenu.cur] = menuMain;
+            break;
+        case KEY_ICON_7:
+            infoMenu.menu[++infoMenu.cur] = menuPrint;
+            break;
 
-    default:break;
+        default:break;
     }
     toggleTool();
     loopProcess();

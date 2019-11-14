@@ -176,7 +176,7 @@ void updateFont(char *font, u32 addr)
 
 void scanUpdates(void)
 {
-  volatile u8 result = 0;   //must volatile！
+  volatile u8 result = 0;   //must volatileï¼
   if(mountSDCard())
   {
     result = scanUpdateFile();

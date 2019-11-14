@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #include "Language.h"
 #include "includes.h"
 #include "language_en.h"
