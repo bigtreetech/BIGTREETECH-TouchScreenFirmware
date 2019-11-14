@@ -58,11 +58,11 @@ static float probe_offset_value=0.0;
 
 void showProbeOffset(void)
 {
-  GUI_DispFloat(CENTER_X - 3*BYTE_WIDTH/2, CENTER_Y, probe_offset_value, 1, 2, 1, RIGHT);
+  GUI_DispFloat(CENTER_X - 3*BYTE_WIDTH/2, CENTER_Y, probe_offset_value, 1, 2, RIGHT);
 }
 void probeOffsetReDraw(void)
 {
-  GUI_DispFloat(CENTER_X - 3*BYTE_WIDTH/2, CENTER_Y, probe_offset_value, 1, 2, 1, RIGHT);
+  GUI_DispFloat(CENTER_X - 3*BYTE_WIDTH/2, CENTER_Y, probe_offset_value, 1, 2, RIGHT);
 }
 
 /* Set current offset */
