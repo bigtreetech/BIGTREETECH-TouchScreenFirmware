@@ -18,8 +18,8 @@
 #define ST7920_BKCOLOR BLACK
 #define ST7920_FNCOLOR GREEN
 
-// Text displayed at the top of the LCD in Marlin Mode. Comment out to disable.
-#define ST7920_BANNER_TEXT "LCD12864 Simulator"
+// Text displayed at the top of the LCD in Marlin Mode.
+//#define ST7920_BANNER_TEXT "LCD12864 Simulator"
 
 // Run Marlin Mode fullscreen. Not recommended for TFT24.
 //#define ST7920_FULLSCREEN
@@ -134,19 +134,28 @@
 
 #define EXTRUDE_STEPS  100.0f
 
-#define CUSTOM_0_LABEL "Custom0"
-#define CUSTOM_0_GCODE "M105\n"
-#define CUSTOM_1_LABEL "Custom1"
-#define CUSTOM_1_GCODE "M105\n"
-#define CUSTOM_2_LABEL "Custom2"
-#define CUSTOM_2_GCODE "M105\n"
-#define CUSTOM_3_LABEL "Custom3"
-#define CUSTOM_3_GCODE "M105\n"
-#define CUSTOM_4_LABEL "Custom4"
-#define CUSTOM_4_GCODE "M105\n"
-#define CUSTOM_5_LABEL "Custom5"
-#define CUSTOM_5_GCODE "M105\n"
-#define CUSTOM_6_LABEL "Custom6"
-#define CUSTOM_6_GCODE "M105\n"
+/**
+ * Support up to 7 custom gcodes, uncomment CUSTOM_X_LABEL and CUSTOM_X_GCODE to enable custom gcode
+ * CUSTOM_X_LABEL is the name of the custom button, CUSTOM_X_GCODE
+ * CUSTOM_X_GCODE is the gcode to be sent by the custom button, end with '\n'
+ * You also need to customize the icon corresponding to the command
+ * Copy your custom icon to the SD card to be updated, such as:"TFT35/bmp/Custom0.bmp", "TFT24/bmp/Custom1.bmp", etc...
+ * The format of the custom icon is as follows
+ * Bit depth: 24 / 32 bit, Pixel size: 95*95(for TFT35), 70*70(for TFT28/TFT24)
+ */
+#define CUSTOM_0_LABEL "Home"
+#define CUSTOM_0_GCODE "G28\n"
+//#define CUSTOM_1_LABEL "Custom1"
+//#define CUSTOM_1_GCODE "M105\n"
+//#define CUSTOM_2_LABEL "Custom2"
+//#define CUSTOM_2_GCODE "M105\n"
+//#define CUSTOM_3_LABEL "Custom3"
+//#define CUSTOM_3_GCODE "M105\n"
+//#define CUSTOM_4_LABEL "Custom4"
+//#define CUSTOM_4_GCODE "M105\n"
+//#define CUSTOM_5_LABEL "Custom5"
+//#define CUSTOM_5_GCODE "M105\n"
+//#define CUSTOM_6_LABEL "Custom6"
+//#define CUSTOM_6_GCODE "M105\n"
 
 #endif

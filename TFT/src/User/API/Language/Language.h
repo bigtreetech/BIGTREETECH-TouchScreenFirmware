@@ -8,7 +8,6 @@
 enum
 {
   ENGLISH = 0,
-  ITALIAN,
   CHINESE,
   RUSSIAN,
   JAPANESE,
@@ -17,6 +16,8 @@ enum
   CZECH,
   SPAIN,
   FRENCH,
+  PORTUGUESE,
+  ITALIAN,
 
   LANGUAGE_NUM,
 };

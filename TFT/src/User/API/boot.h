@@ -2,6 +2,7 @@
 #define _BOOT_H_
 
 #include "variants.h"
+#include "stdbool.h"
 
 #define W25QXX_SECTOR_SIZE (0x1000) // 4096-4K
 
@@ -145,5 +146,6 @@ typedef union
 }GUI_COLOR;
 
 void scanUpdates(void);
+bool bmpDecode(char *bmp, u32 addr);
 
 #endif 
