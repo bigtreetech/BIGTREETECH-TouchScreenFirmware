@@ -6,7 +6,6 @@ SETTINGS infoSettings;
 // Reset settings data
 void infoSettingsReset(void)
 {
-  TSC_Calibration();
   infoSettings.baudrate = 115200;
   infoSettings.language = ENGLISH;
   infoSettings.mode = SERIAL_TSC;

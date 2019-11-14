@@ -180,6 +180,9 @@ const char *const en_pack[LABEL_NUM]={
   EN_EMERGENCYSTOP,
   EN_TOUCH_TO_EXIT,
   EN_MAINMENU,
+  EN_WAIT_TEMP_SHUT_DOWN,
+  EN_FORCE_SHUT_DOWN,
+  EN_SHUTTING_DOWN,
 };
 
 const char *const cn_pack[LABEL_NUM]={
@@ -328,6 +331,9 @@ const char *const cn_pack[LABEL_NUM]={
   CN_EMERGENCYSTOP,
   CN_TOUCH_TO_EXIT,
   CN_MAINMENU,
+  CN_WAIT_TEMP_SHUT_DOWN,
+  CN_FORCE_SHUT_DOWN,
+  CN_SHUTTING_DOWN,
 };
 
 const char *const ru_pack[LABEL_NUM]={
@@ -476,6 +482,9 @@ const char *const ru_pack[LABEL_NUM]={
   RU_EMERGENCYSTOP,
   RU_TOUCH_TO_EXIT,
   RU_MAINMENU,
+  RU_WAIT_TEMP_SHUT_DOWN,
+  RU_FORCE_SHUT_DOWN,
+  RU_SHUTTING_DOWN,
 };
 
 const char *const jp_pack[LABEL_NUM]={
@@ -624,6 +633,9 @@ const char *const jp_pack[LABEL_NUM]={
   JP_EMERGENCYSTOP,
   JP_TOUCH_TO_EXIT,
   JP_MAINMENU,
+  JP_WAIT_TEMP_SHUT_DOWN,
+  JP_FORCE_SHUT_DOWN,
+  JP_SHUTTING_DOWN,
 };
 
 const char *const am_pack[LABEL_NUM]={
@@ -772,6 +784,9 @@ const char *const am_pack[LABEL_NUM]={
   AM_EMERGENCYSTOP,
   AM_TOUCH_TO_EXIT,
   AM_MAINMENU,
+  AM_WAIT_TEMP_SHUT_DOWN,
+  AM_FORCE_SHUT_DOWN,
+  AM_SHUTTING_DOWN,
 };
 
 const char *const de_pack[LABEL_NUM]={
@@ -920,6 +935,9 @@ const char *const de_pack[LABEL_NUM]={
   DE_EMERGENCYSTOP,
   DE_TOUCH_TO_EXIT,
   DE_MAINMENU,
+  DE_WAIT_TEMP_SHUT_DOWN,
+  DE_FORCE_SHUT_DOWN,
+  DE_SHUTTING_DOWN,
 };
 
 const char *const cz_pack[LABEL_NUM]={
@@ -1068,6 +1086,9 @@ const char *const cz_pack[LABEL_NUM]={
   CZ_EMERGENCYSTOP,
   CZ_TOUCH_TO_EXIT,
   CZ_MAINMENU,
+  CZ_WAIT_TEMP_SHUT_DOWN,
+  CZ_FORCE_SHUT_DOWN,
+  CZ_SHUTTING_DOWN,
 };
 
 const char *const es_pack[LABEL_NUM]={
@@ -1216,6 +1237,9 @@ const char *const es_pack[LABEL_NUM]={
   ES_EMERGENCYSTOP,
   ES_TOUCH_TO_EXIT,
   ES_MAINMENU,
+  ES_WAIT_TEMP_SHUT_DOWN,
+  ES_FORCE_SHUT_DOWN,
+  ES_SHUTTING_DOWN,
 };
 
 const char *const fr_pack[LABEL_NUM]={
@@ -1364,6 +1388,9 @@ const char *const fr_pack[LABEL_NUM]={
   FR_EMERGENCYSTOP,
   FR_TOUCH_TO_EXIT,
   FR_MAINMENU,
+  FR_WAIT_TEMP_SHUT_DOWN,
+  FR_FORCE_SHUT_DOWN,
+  FR_SHUTTING_DOWN,
 };
 
 const char *const pt_pack[LABEL_NUM]={
@@ -1512,6 +1539,9 @@ const char *const pt_pack[LABEL_NUM]={
   PT_EMERGENCYSTOP,
   PT_TOUCH_TO_EXIT,
   PT_MAINMENU,
+  PT_WAIT_TEMP_SHUT_DOWN,
+  PT_FORCE_SHUT_DOWN,
+  PT_SHUTTING_DOWN,
 };
 
 const char *const it_pack[LABEL_NUM]={
@@ -1660,10 +1690,13 @@ const char *const it_pack[LABEL_NUM]={
   IT_EMERGENCYSTOP,
   IT_TOUCH_TO_EXIT,
   IT_MAINMENU,
+  IT_WAIT_TEMP_SHUT_DOWN,
+  IT_FORCE_SHUT_DOWN,
+  IT_SHUTTING_DOWN,
 };
 
 u8 * textSelect(u8 sel)
-{
+{  
   switch(infoSettings.language)
   {
     case ENGLISH:     return (u8 *)en_pack[sel];
