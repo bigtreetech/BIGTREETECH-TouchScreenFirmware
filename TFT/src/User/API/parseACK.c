@@ -1,7 +1,7 @@
 #include "includes.h"
 #include "parseACK.h"
 
-char *ack_rev_buf = dma_mem_buf[SERIAL_PORT];
+char dmaL2Cache[ACK_MAX_SIZE];
 static u16 ack_index=0;
 static u8 ack_cur_src = SERIAL_PORT;
 int MODEselect;
@@ -19,9 +19,9 @@ void setCurrentAckSrc(uint8_t src)
 static char ack_seen(const char *str)
 {
   u16 i;	
-  for(ack_index=0; ack_index<ACK_MAX_SIZE && ack_rev_buf[ack_index]!=0; ack_index++)
+  for(ack_index=0; ack_index<ACK_MAX_SIZE && dmaL2Cache[ack_index]!=0; ack_index++)
   {
-    for(i=0; str[i]!=0 && ack_rev_buf[ack_index+i]!=0 && ack_rev_buf[ack_index+i]==str[i]; i++)
+    for(i=0; str[i]!=0 && dmaL2Cache[ack_index+i]!=0 && dmaL2Cache[ack_index+i]==str[i]; i++)
     {}
     if(str[i]==0)
     {
@@ -34,25 +34,25 @@ static char ack_seen(const char *str)
 static char ack_cmp(const char *str)
 {
   u16 i;
-  for(i=0; i<ACK_MAX_SIZE && str[i]!=0 && ack_rev_buf[i]!=0; i++)
+  for(i=0; i<ACK_MAX_SIZE && str[i]!=0 && dmaL2Cache[i]!=0; i++)
   {
-    if(str[i] != ack_rev_buf[i])
+    if(str[i] != dmaL2Cache[i])
     return false;
   }
-  if(ack_rev_buf[i] != 0) return false;
+  if(dmaL2Cache[i] != 0) return false;
   return true;
 }
 
 
 static float ack_value()
 {
-  return (strtod(&ack_rev_buf[ack_index], NULL));
+  return (strtod(&dmaL2Cache[ack_index], NULL));
 }
 
 // Read the value after the / if exists
 static float ack_second_value()
 {
-  char *secondValue = strchr(&ack_rev_buf[ack_index],'/');
+  char *secondValue = strchr(&dmaL2Cache[ack_index],'/');
   if(secondValue != NULL)
   {
     return (strtod(secondValue+1, NULL));
@@ -66,15 +66,27 @@ static float ack_second_value()
 void ackPopupInfo(const char *info)
 {
   if(infoMenu.menu[infoMenu.cur] == menuTerminal) return;
-  popupReminder((u8* )info, (u8 *)ack_rev_buf + ack_index);
+  popupReminder((u8* )info, (u8 *)dmaL2Cache + ack_index);
+}
+
+void syncL2CacheFromL1(uint8_t port)
+{
+  uint16_t i = 0;
+  for (i = 0; dmaL1Data[port].rIndex != dmaL1Data[port].wIndex; i++)
+  {
+    dmaL2Cache[i] = dmaL1Data[port].cache[dmaL1Data[port].rIndex];
+    dmaL1Data[port].rIndex = (dmaL1Data[port].rIndex + 1) % DMA_TRANS_LEN;
+  }
+  dmaL2Cache[i] = 0; // End character
 }
 
 void parseACK(void)
-{
-startParse:  
+{ 
   if(infoHost.rx_ok[SERIAL_PORT] != true) return; //not get response data
   
+  syncL2CacheFromL1(SERIAL_PORT);
   infoHost.rx_ok[SERIAL_PORT] = false;
+  
   if(infoHost.connected == false) //not connected to Marlin
   {
     if((!ack_seen("T:") && !ack_seen("T0:")) || !ack_seen("ok"))  goto parse_end;  //the first response should be such as "T:25/50 ok\n"
@@ -89,9 +101,9 @@ startParse:
   }
   if(requestCommandInfo.inResponse)
   {
-    if(strlen(requestCommandInfo.cmd_rev_buf)+strlen(ack_rev_buf) < CMD_MAX_REV)
+    if(strlen(requestCommandInfo.cmd_rev_buf)+strlen(dmaL2Cache) < CMD_MAX_REV)
     {
-      strcat(requestCommandInfo.cmd_rev_buf,ack_rev_buf);
+      strcat(requestCommandInfo.cmd_rev_buf, dmaL2Cache);
       
       if(ack_seen(requestCommandInfo.errorMagic ))
       {
@@ -146,7 +158,7 @@ startParse:
     }
     else if(ack_seen("Mean:"))
     {
-      popupReminder((u8* )"Repeatability Test", (u8 *)ack_rev_buf + ack_index-5);
+      popupReminder((u8* )"Repeatability Test", (u8 *)dmaL2Cache + ack_index-5);
       //popupReminder((u8* )"Standard Deviation", (u8 *)&infoCmd.queue[infoCmd.index_r].gcode[5]);
     }
     else if(ack_seen("Probe Offset"))
@@ -179,7 +191,7 @@ startParse:
       // Parsing printing data
       // Exampre: SD printing byte 123/12345
       char *ptr;
-      u32 position = strtol(strstr(ack_rev_buf,"byte ")+5, &ptr, 10); 
+      u32 position = strtol(strstr(dmaL2Cache, "byte ")+5, &ptr, 10); 
       setPrintCur(position);
 //      powerFailedCache(position);
     }    
@@ -192,21 +204,18 @@ startParse:
     {
       for(u8 i = 0; i < aCount(ignoreEcho); i++)
       {
-        if(strstr(ack_rev_buf, ignoreEcho[i])) goto parse_end;
+        if(strstr(dmaL2Cache, ignoreEcho[i])) goto parse_end;
       }
       ackPopupInfo(echomagic);
     }
   }
   
-parse_end:
-  if(infoHost.rx_ok[SERIAL_PORT] == true) goto startParse;  // receive new data in parseing, so need parse again
-    
+parse_end:    
   if(ack_cur_src != SERIAL_PORT)
   {
-    Serial_Puts(ack_cur_src, ack_rev_buf);
+    Serial_Puts(ack_cur_src, dmaL2Cache);
   }
-  sendGcodeTerminalCache(ack_rev_buf, TERMINAL_ACK);
-  Serial_DMAReEnable(SERIAL_PORT);
+  sendGcodeTerminalCache(dmaL2Cache, TERMINAL_ACK);
 }
 
 void parseRcvGcode(void)
@@ -218,8 +227,8 @@ void parseRcvGcode(void)
       if(i != SERIAL_PORT && infoHost.rx_ok[i] == true)
       {
         infoHost.rx_ok[i] = false;
-        storeCmdFromUART(i, dma_mem_buf[i]);
-        Serial_DMAReEnable(i);
+        syncL2CacheFromL1(i);
+        storeCmdFromUART(i, dmaL2Cache);
       }
     }
   #endif

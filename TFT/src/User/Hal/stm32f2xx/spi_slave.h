@@ -7,7 +7,7 @@
 
 typedef struct
 {
-  u8  data[SPI_SLAVE_MAX];
+  u8  *data;
   u16 rIndex;
   u16 wIndex;
 }SPI_QUEUE;

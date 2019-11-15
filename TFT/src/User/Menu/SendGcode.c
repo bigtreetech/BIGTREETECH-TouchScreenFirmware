@@ -217,7 +217,7 @@ void menuTerminal(void)
   GUI_SetColor(BLACK);
   GUI_SetBkColor(GRAY);
   GUI_ClearRect(CURSOR_START_X, CURSOR_START_Y, CURSOR_END_X, CURSOR_END_Y);
-  TSC_ReDrawIcon = NULL; // Close icon redraw callback function
+  TSC_ReDrawIcon = NULL; // Disable icon redraw callback function
 
   while(infoMenu.menu[infoMenu.cur] == menuTerminal)
   {
