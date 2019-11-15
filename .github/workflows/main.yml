@@ -29,6 +29,4 @@ jobs:
         run: platformio run --environment BIGTREE_TFT28_V1_0
       - name: Build TFT24 V1.1
         run: platformio run --environment BIGTREE_TFT24_V1_1
-      - name: Copy builds
-        run: ls 
 
