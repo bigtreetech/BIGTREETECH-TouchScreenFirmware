@@ -542,11 +542,8 @@ void menuShutDown(void)
           mustStoreCmd("%s S0\n", fanCmd[i]);  
         }
         mustStoreCmd("M81\n");
-        popupDrawPage(NULL, textSelect(LABEL_SHUT_DOWN), textSelect(LABEL_SHUTTING_DOWN), NULL, NULL);
-        while(1)
-        {
-          loopProcess();
-        }
+        infoMenu.cur--;
+        popupReminder(textSelect(LABEL_SHUT_DOWN), textSelect(LABEL_SHUTTING_DOWN));
     }
     loopProcess();
   }
