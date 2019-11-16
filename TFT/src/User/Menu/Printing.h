@@ -19,7 +19,7 @@ typedef struct
 void exitPrinting(void);
 void endPrinting(void);
 void completePrinting(void);
-void haltPrinting(void);
+void abortPrinting(void);
 
 bool setPrintPause(bool is_pause);
 

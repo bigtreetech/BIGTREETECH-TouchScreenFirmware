@@ -10,7 +10,7 @@ void Serial_ReSourceDeInit(void)
 #ifdef BUZZER_PIN
   Buzzer_DeConfig();
 #endif
-  Serial_DeConfig();
+  Serial_DeInit();
 }
 
 void Serial_ReSourceInit(void)
@@ -18,7 +18,7 @@ void Serial_ReSourceInit(void)
 #ifdef BUZZER_PIN
   Buzzer_Config();
 #endif
-  Serial_Config(infoSettings.baudrate);
+  Serial_Init(infoSettings.baudrate);
   
 #ifdef U_DISK_SUPPROT
   USBH_Init(&USB_OTG_Core, USB_OTG_FS_CORE_ID, &USB_Host, &USBH_MSC_cb, &USR_cb);
@@ -101,6 +101,7 @@ void menuMode(void)
   {
     lcd_frame_display(rect_of_mode[i].x0,rect_of_mode[i].y0-BYTE_HEIGHT,selecticonw,selecticonw,ICON_ADDR(select_mode[i]));
   }
+  TSC_ReDrawIcon = NULL; // Disable icon redraw callback function
   
   selectmode(nowMode);
   
