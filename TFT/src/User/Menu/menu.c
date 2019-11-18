@@ -28,6 +28,28 @@ const GUI_RECT rect_of_key[ITEM_PER_PAGE*2]={
   {3*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y,  4*SPACE_X_PER_ICON,  2*ICON_HEIGHT+2*SPACE_Y+TITLE_END_Y},
 };
 
+const GUI_RECT rect_of_keyStatus[ITEM_PER_PAGE*2]={
+  //8 icons area
+  {0*ICON_WIDTH+0*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+SS_TITLE_END_Y,    1*ICON_WIDTH+0*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+SS_TITLE_END_Y},
+  {1*ICON_WIDTH+1*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+SS_TITLE_END_Y,    2*ICON_WIDTH+1*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+SS_TITLE_END_Y},
+  {2*ICON_WIDTH+2*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+SS_TITLE_END_Y,    3*ICON_WIDTH+2*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+SS_TITLE_END_Y},
+  {3*ICON_WIDTH+3*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+SS_TITLE_END_Y,    4*ICON_WIDTH+3*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+SS_TITLE_END_Y},
+  {0*ICON_WIDTH+0*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y,  1*ICON_WIDTH+0*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y},
+  {1*ICON_WIDTH+1*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y,  2*ICON_WIDTH+1*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y},
+  {2*ICON_WIDTH+2*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y,  3*ICON_WIDTH+2*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y},
+  {3*ICON_WIDTH+3*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y,  4*ICON_WIDTH+3*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y},
+
+  //8 labels area
+  {0,  0,   0, 0 },
+  {0,  0,   0, 0 },
+  {0,  0,   0, 0 },
+  {0,  0,   0, 0 },
+  {0*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y,                      1*SPACE_X_PER_ICON,  2*ICON_HEIGHT+SPACE_Y+SPACE_Y+TITLE_END_Y},
+  {1*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y,                      2*SPACE_X_PER_ICON,  2*ICON_HEIGHT+SPACE_Y+SPACE_Y+TITLE_END_Y},
+  {2*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y,                      3*SPACE_X_PER_ICON,  2*ICON_HEIGHT+SPACE_Y+SPACE_Y+TITLE_END_Y},
+  {3*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y,                      4*SPACE_X_PER_ICON,  2*ICON_HEIGHT+SPACE_Y+SPACE_Y+TITLE_END_Y},
+};
+
 const GUI_RECT rect_of_mode[SELECTMODE]={
   //2 select icon
   {1*SPACE_SELEX+0*selecticonw,SPACE_SELEY,1*SPACE_SELEX+1*selecticonw,SPACE_SELEY+selecticonw},
@@ -45,26 +67,48 @@ void menuClearGaps(void)
   {3*ICON_WIDTH+2*SPACE_X+START_X,  SPACE_Y,  3*ICON_WIDTH+3*SPACE_X+START_X,  LCD_HEIGHT},
   {4*ICON_WIDTH+3*SPACE_X+START_X,  SPACE_Y,  LCD_WIDTH,                       LCD_HEIGHT}};
 
+  const GUI_RECT ssGap[2] ={
+{0*ICON_WIDTH+0*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+SS_TITLE_END_Y,  4*ICON_WIDTH+3*SPACE_X+START_X, 1*ICON_HEIGHT+0*SPACE_Y+SS_TITLE_END_Y+STATUS_GANTRY_YOFFSET },
+{0*ICON_WIDTH+0*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y-STATUS_GANTRY_YOFFSET,  4*ICON_WIDTH+3*SPACE_X+START_X, 1*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y}
+} ;
+
   for(int i=0; i < sizeof(gaps)/sizeof(gaps[0]); i++)
   GUI_ClearRect(gaps[i].x0, gaps[i].y0, gaps[i].x1, gaps[i].y1);
+   if (infoMenu.menu[infoMenu.cur] == menuStatus){
+    GUI_ClearPrect(&ssGap[0]);
+    GUI_ClearPrect(&ssGap[1]);
+  }
 }
 
 static const MENUITEMS * curMenuItems = NULL;   //current menu
 
 void menuDrawItem(const ITEM * item, u8 positon)
 {
-  const GUI_RECT *rect = rect_of_key + positon;    
+   const GUI_RECT *rect = rect_of_key + positon;
+  if (infoMenu.menu[infoMenu.cur] == menuStatus){
+     rect = rect_of_keyStatus + positon;
+  }
+     
   if(item->icon != ICON_BACKGROUND)
     ICON_ReadDisplay(rect->x0, rect->y0, item->icon);
   else
     GUI_ClearRect(rect->x0, rect->y0, rect->x1, rect->y1);
 
-  rect = rect_of_key + ITEM_PER_PAGE + positon;
+  if (infoMenu.menu[infoMenu.cur] == menuStatus){
+     rect = rect_of_keyStatus + ITEM_PER_PAGE + positon;
+  }
+  else
+  {
+    rect = rect_of_key + ITEM_PER_PAGE + positon;
+  }
+
   GUI_ClearRect(rect->x0, rect->y0, rect->x1, rect->y1);
   if(item->label != LABEL_BACKGROUND)
     GUI_DispStringInPrect(rect,textSelect(item->label));
 }
 
+const GUI_RECT reminderRect = {0, 0, LCD_WIDTH, TITLE_END_Y};
+const GUI_RECT reminderRectSS ={0, 0, LCD_WIDTH, SS_TITLE_END_Y};
 
 static REMINDER reminder = {{0, 0, LCD_WIDTH, TITLE_END_Y}, 0, STATUS_UNCONNECT, LABEL_UNCONNECTED};
 static REMINDER volumeReminder = {{0, 0, LCD_WIDTH, TITLE_END_Y}, 0, STATUS_IDLE, LABEL_BACKGROUND};
@@ -73,6 +117,12 @@ static REMINDER busySign = {{LCD_WIDTH - 5, 0, LCD_WIDTH, 5}, 0, STATUS_BUSY, LA
 
 void reminderMessage(int16_t inf, SYS_STATUS status)
 {
+  if (infoMenu.menu[infoMenu.cur] == menuStatus){
+    reminder.rect = reminderRectSS;
+  }
+  else{
+    reminder.rect = reminderRect;
+  }
   reminder.inf = inf;
   GUI_SetColor(RED);
   GUI_DispStringInPrect(&reminder.rect, textSelect(reminder.inf));
@@ -82,7 +132,13 @@ void reminderMessage(int16_t inf, SYS_STATUS status)
 }
 
 void volumeReminderMessage(int16_t inf, SYS_STATUS status)
-{    
+{
+  if (infoMenu.menu[infoMenu.cur] == menuStatus){
+    volumeReminder.rect = reminderRectSS;
+  }
+  else{
+    volumeReminder.rect = reminderRect;
+  }   
   volumeReminder.inf = inf;
   GUI_SetColor(GBLUE);
   GUI_DispStringInPrect(&volumeReminder.rect, textSelect(volumeReminder.inf));
@@ -176,7 +232,16 @@ void loopBusySignClear(void)
 
 void menuDrawTitle(const MENUITEMS * menuItems)
 {
-  u16 start_y = (TITLE_END_Y - BYTE_HEIGHT) / 2;
+  u16 start_y;
+  if (infoMenu.menu[infoMenu.cur] == menuStatus)
+  {
+    start_y = (SS_TITLE_END_Y - BYTE_HEIGHT) / 2;
+  }
+  else
+  {
+    start_y = (TITLE_END_Y - BYTE_HEIGHT) / 2;
+  }
+
   GUI_ClearRect(10, start_y, LCD_WIDTH-10, start_y+BYTE_HEIGHT);
   
   if(menuItems->title != LABEL_BACKGROUND)
@@ -210,7 +275,12 @@ void itemDrawIconPress(u8 positon, u8 is_press)
   if(positon > KEY_ICON_7)                                  return;
   if(curMenuItems->items[positon].icon == ICON_BACKGROUND)  return;
 
-  const GUI_RECT *rect = rect_of_key + positon;   
+  const GUI_RECT *rect = rect_of_key + positon;
+
+  if (infoMenu.menu[infoMenu.cur] == menuStatus){
+     rect = rect_of_keyStatus + positon;
+  }   
+
   if(is_press)   //Turn green when pressed
     ICON_PressedDisplay(rect->x0, rect->y0, curMenuItems->items[positon].icon);
   else           //Redraw normal icon when released
@@ -219,9 +289,65 @@ void itemDrawIconPress(u8 positon, u8 is_press)
 
 // Get button value
 KEY_VALUES menuKeyGetValue(void)
-{    
-  return(KEY_VALUES)KEY_GetValue(sizeof(rect_of_key)/sizeof(rect_of_key[0]), rect_of_key);    
+{
+  if (infoMenu.menu[infoMenu.cur] == menuStatus)
+  {
+    return (KEY_VALUES)KEY_GetValue(sizeof(rect_of_keyStatus) / sizeof(rect_of_keyStatus[0]), rect_of_keyStatus);
+  }
+  else
+  {
+    return (KEY_VALUES)KEY_GetValue(sizeof(rect_of_key) / sizeof(rect_of_key[0]), rect_of_key);
+  }
 }
+//---------StatusScreen Draw----------
+/* void menuDrawStatusItem(const ITEM * item, u8 positon)
+{
+  const GUI_RECT *rect = rect_of_keyStatus + positon;    
+  if(item->icon != ICON_BACKGROUND)
+    ICON_ReadDisplay(rect->x0, rect->y0, item->icon);
+  else
+    GUI_ClearRect(rect->x0, rect->y0, rect->x1, rect->y1);
+
+  rect = rect_of_keyStatus + ITEM_PER_PAGE + positon;
+  GUI_ClearRect(rect->x0, rect->y0, rect->x1, rect->y1);
+  if(item->label != LABEL_BACKGROUND)
+    GUI_DispStringInPrect(rect,textSelect(item->label));
+} 
+//When there is a button value, the icon changes color and redraws
+void StatusitemDrawIconPress(u8 positon, u8 is_press)
+{
+  if(curMenuItems == NULL)                                  return;
+  if(positon > KEY_ICON_7)                                  return;
+  if(curMenuItems->items[positon].icon == ICON_BACKGROUND)  return;
+
+  const GUI_RECT *rect = rect_of_keyStatus + positon;   
+  if(is_press)   //Turn green when pressed
+    ICON_PressedDisplay(rect->x0, rect->y0, curMenuItems->items[positon].icon);
+  else           //Redraw normal icon when released
+    ICON_ReadDisplay(rect->x0, rect->y0, curMenuItems->items[positon].icon);
+}
+
+//Draw the entire interface
+void menuDrawStatusPage(const MENUITEMS * menuItems)
+{
+  u8 i=0;
+  curMenuItems = menuItems;
+  TSC_ReDrawIcon = StatusitemDrawIconPress;
+  //    GUI_Clear(BLACK);
+  menuClearGaps();     //Use this function instead of GUI_Clear to eliminate the splash screen when clearing the screen.
+  menuDrawTitle(menuItems);
+  for(i=0; i<ITEM_PER_PAGE; i++)
+  {
+    menuDrawStatusItem(&menuItems->items[i], i);            
+  }
+}
+MKEY_VALUES StatusScreenKeyGetValue(void)
+{    
+  return (MKEY_VALUES)KEY_GetValue(sizeof(rect_of_keyStatus)/sizeof(rect_of_keyStatus[0]), rect_of_keyStatus);    
+}*/
+
+//------------------------------------
+
 
 /*------------------------about select mode FUN --------------top-------------*/
 MKEY_VALUES MKeyGetValue(void)
