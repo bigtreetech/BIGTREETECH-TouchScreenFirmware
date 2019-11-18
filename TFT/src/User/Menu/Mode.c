@@ -35,7 +35,7 @@ void infoMenuSelect(void)
       Serial_ReSourceInit();
       GUI_SetColor(FK_COLOR);
       GUI_SetBkColor(BK_COLOR);
-      #ifndef UNIFIED_MENU
+      #ifndef STATUS_SCREEN
       infoMenu.menu[infoMenu.cur] = menuMain;
       #else
       infoMenu.menu[infoMenu.cur] = menuStatus; //status screen as default screen on boot
