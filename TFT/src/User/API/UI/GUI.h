@@ -99,7 +99,7 @@ void RADIO_Select(RADIO *raido, uint8_t select);
 
 typedef struct
 {
-  GUI_RECT *rect;
+  const GUI_RECT *rect;
   uint8_t  *text;
   uint32_t time;
   int16_t	 off_head;
@@ -111,7 +111,7 @@ typedef struct
   uint16_t maxPixelWidth;
   uint8_t  has_disp; 
 }SCROLL;
-void Scroll_CreatePara(SCROLL * para, uint8_t *pstr, GUI_RECT *rect);
+void Scroll_CreatePara(SCROLL * para, uint8_t *pstr, const GUI_RECT *rect);
 void Scroll_DispString(SCROLL * para, uint8_t align);
 
 typedef struct

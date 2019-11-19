@@ -791,7 +791,7 @@ void RADIO_Select(RADIO *raido, uint8_t select)
 }
 
 //
-void Scroll_CreatePara(SCROLL * para, uint8_t *pstr ,GUI_RECT *rect)
+void Scroll_CreatePara(SCROLL * para, uint8_t *pstr, const GUI_RECT *rect)
 {
   memset(para,0,sizeof(SCROLL));	
   para->text = pstr;

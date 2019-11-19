@@ -59,7 +59,7 @@ void scrollFileNameCreate(u8 i)
   }
 }
 
-void normalNameDisp(GUI_RECT *rect, u8 *name)
+void normalNameDisp(const GUI_RECT *rect, u8 *name)
 {
   if(name == NULL) return;
   
