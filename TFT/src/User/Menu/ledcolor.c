@@ -26,9 +26,6 @@ void LED_color_PIN_IPN(void)
 {
     GPIO_InitSet(LED_color_PIN,MGPIO_MODE_IPN,0);
 }
-#endif
-
-
 
 void ws2812_send_DAT(uint32_t ws2812_dat)
 {
@@ -59,3 +56,5 @@ void ws2812_send_DAT(uint32_t ws2812_dat)
         }	 
     TIM6->CR1&=~(1<<0);
 }
+#endif
+
