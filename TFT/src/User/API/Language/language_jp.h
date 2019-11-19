@@ -138,7 +138,8 @@
     #define JP_COOLDOWN             "Cool Down"
     #define JP_EMERGENCYSTOP        "EM. STOP"
     #define JP_TOUCH_TO_EXIT        "Touch anywhere to exit"
-    #define JP_WAIT_TEMP_SHUT_DOWN  "Wait for the temperature of hotend to be lower than"STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP)"℃" // Wait for the temperature of hotend to be lower than 50℃
+	  #define JP_MAINMENU             "Menu"
+    #define JP_WAIT_TEMP_SHUT_DOWN  "Wait for the temperature of hotend to be lower than "STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP)"℃" // Wait for the temperature of hotend to be lower than 50℃
     #define JP_FORCE_SHUT_DOWN      "Force"
     #define JP_SHUTTING_DOWN        "Shutting down..."
     

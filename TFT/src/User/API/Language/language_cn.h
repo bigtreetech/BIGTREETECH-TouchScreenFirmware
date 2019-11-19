@@ -138,6 +138,7 @@
     #define CN_COOLDOWN             "冷却"
     #define CN_EMERGENCYSTOP        "紧急停止"
     #define CN_TOUCH_TO_EXIT        "触摸任意点退出当前界面"
+    #define CN_MAINMENU             "菜单"
     #define CN_WAIT_TEMP_SHUT_DOWN  "喷头温度正在降温，等待低于"STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP)"℃后自动关机" // 喷头温度正在降温，等待低于50℃后自动关机
     #define CN_FORCE_SHUT_DOWN      "强制关机"
     #define CN_SHUTTING_DOWN        "正在关机..."

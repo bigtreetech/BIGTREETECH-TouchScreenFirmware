@@ -138,7 +138,8 @@
     #define PT_COOLDOWN             "Arrefecer"
     #define PT_EMERGENCYSTOP        "EMERGENCIA STOP"
     #define PT_TOUCH_TO_EXIT        "Toque em qualquer lugar para sair"
-    #define PT_WAIT_TEMP_SHUT_DOWN  "Wait for the temperature of hotend to be lower than"STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP)"℃" // Wait for the temperature of hotend to be lower than 50℃
+    #define PT_MAINMENU             "Menu"
+    #define PT_WAIT_TEMP_SHUT_DOWN  "Wait for the temperature of hotend to be lower than "STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP)"℃" // Wait for the temperature of hotend to be lower than 50℃
     #define PT_FORCE_SHUT_DOWN      "Force"
     #define PT_SHUTTING_DOWN        "Shutting down..."
     

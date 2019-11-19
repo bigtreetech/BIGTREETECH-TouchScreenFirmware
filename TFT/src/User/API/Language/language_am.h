@@ -138,8 +138,8 @@
     #define AM_COOLDOWN             "Cool Down"
     #define AM_EMERGENCYSTOP        "EM. STOP"
     #define AM_TOUCH_TO_EXIT        "Touch anywhere to exit"
-    #define AM_WAIT_TEMP_SHUT_DOWN  "Wait for the temperature of hotend to be lower than"STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP)"℃" // Wait for the temperature of hotend to be lower than 50℃
+	  #define AM_MAINMENU             "Menu"
+    #define AM_WAIT_TEMP_SHUT_DOWN  "Wait for the temperature of hotend to be lower than "STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP)"℃" // Wait for the temperature of hotend to be lower than 50℃
     #define AM_FORCE_SHUT_DOWN      "Force"
     #define AM_SHUTTING_DOWN        "Shutting down..."
-
 #endif

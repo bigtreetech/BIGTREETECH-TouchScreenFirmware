@@ -138,7 +138,8 @@
     #define IT_COOLDOWN             "Blocco Freddo"
     #define IT_EMERGENCYSTOP        "EM. STOP"
     #define IT_TOUCH_TO_EXIT        "Premi ovunque per uscire"
-    #define IT_WAIT_TEMP_SHUT_DOWN  "Wait for the temperature of hotend to be lower than"STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP)"℃" // Wait for the temperature of hotend to be lower than 50℃
+    #define IT_MAINMENU             "Menu"
+    #define IT_WAIT_TEMP_SHUT_DOWN  "Wait for the temperature of hotend to be lower than "STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP)"℃" // Wait for the temperature of hotend to be lower than 50℃
     #define IT_FORCE_SHUT_DOWN      "Force"
     #define IT_SHUTTING_DOWN        "Shutting down..."
     

@@ -48,6 +48,7 @@ void Hardware_GenericInit(void)
 
 int main(void)
 {
+
   SCB->VTOR = VECT_TAB_FLASH;
  
   Hardware_GenericInit();
