@@ -67,7 +67,7 @@ void ackPopupInfo(const char *info)
 {
   if (info == echomagic)
   {
-    statusScreen_setMsg((u8 *)info, (u8 *)ack_rev_buf + ack_index);
+    statusScreen_setMsg((u8 *)info, (u8 *)dmaL2Cache + ack_index);
   }  
   if (infoMenu.menu[infoMenu.cur] == menuTerminal) return;
   if (infoMenu.menu[infoMenu.cur] == menuStatus && info == echomagic) return;
