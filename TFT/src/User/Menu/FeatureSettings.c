@@ -38,6 +38,39 @@ static u8  item_power_off_i = 0;
   static u8  item_runout_i = 0;
 #endif
 
+#ifdef LED_color_PIN
+  #define LED_color_NUM 9
+const ITEM itemLedcolor[LED_color_NUM] = {
+// icon                       label
+  {ICON_LEDCOLOR,             LABEL_LEDOFF},
+  {ICON_LEDCOLOR,             LABEL_LEDWHITE},
+  {ICON_LEDCOLOR,             LABEL_LEDRED},
+  {ICON_LEDCOLOR,             LABEL_LEDORANGE},
+  {ICON_LEDCOLOR,             LABEL_LEDYELLOW},
+  {ICON_LEDCOLOR,             LABEL_LEDGREEN},  
+  {ICON_LEDCOLOR,             LABEL_LEDBLUE},
+  {ICON_LEDCOLOR,             LABEL_LEDINDIGO},
+  {ICON_LEDCOLOR,             LABEL_LEDVIOLET},
+};
+
+const  uint32_t led_color[LED_color_NUM] = {
+                                        LED_OFF,
+                                        LED_WHITE,
+                                        LED_RED,
+                                        LED_ORANGE,
+                                        LED_YELLOW,
+                                        LED_GREEN,
+                                        LED_BLUE,
+                                        LED_INDIGO,
+                                        LED_VIOLET
+                                        };
+//////////////
+static u8  item_ledcolor_i = 0;
+#endif
+
+
+
+
 void menuFeatureSettings(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
@@ -63,6 +96,18 @@ void menuFeatureSettings(void)
   }
   #endif  
   
+  #ifdef LED_color_PIN
+    for(u8 i=0; i<LED_color_NUM; i++)
+  {
+    if(infoSettings.led_color == led_color[i])
+    {
+      item_ledcolor_i = i;
+      featureSettingsItems.items[KEY_ICON_4] = itemLedcolor[item_ledcolor_i];
+    }
+  }
+  #endif
+
+
   menuDrawPage(&featureSettingsItems);
 
   while(infoMenu.menu[infoMenu.cur] == menuFeatureSettings)
@@ -87,7 +132,23 @@ void menuFeatureSettings(void)
         infoSettings.runout = item_runout[item_runout_i];
         break;
       #endif
-      
+
+      #ifdef LED_color_PIN
+      case KEY_ICON_4:
+        item_ledcolor_i = (item_ledcolor_i + 1) % LED_color_NUM;                
+        featureSettingsItems.items[key_num] = itemLedcolor[item_ledcolor_i];
+        menuDrawItem(&featureSettingsItems.items[key_num], key_num);
+        infoSettings.led_color = led_color[item_ledcolor_i];
+        ws2812_send_DAT(led_color[item_ledcolor_i]);
+        ws2812_send_DAT(led_color[item_ledcolor_i]);
+        ws2812_send_DAT(led_color[item_ledcolor_i]);
+        ws2812_send_DAT(led_color[item_ledcolor_i]);
+
+        break;
+      #endif
+
+
+
       case KEY_ICON_7:
         infoMenu.cur--;
         break;
