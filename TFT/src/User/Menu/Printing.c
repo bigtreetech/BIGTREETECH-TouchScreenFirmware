@@ -391,7 +391,7 @@ void menuPrinting(void)
       
       case KEY_ICON_3:
         if(isPrinting())				
-          infoMenu.menu[++infoMenu.cur]=menuStopPrinting;	
+          infoMenu.menu[++infoMenu.cur] = menuStopPrinting;	
         else
         {
           exitPrinting();
@@ -456,7 +456,7 @@ void completePrinting(void)
   }
 }
 
-void haltPrinting(void)
+void abortPrinting(void)
 {
   switch (infoFile.source)
   {
@@ -491,7 +491,7 @@ void menuStopPrinting(void)
     switch(key_num)
     {
       case KEY_POPUP_CONFIRM:
-        haltPrinting();
+        abortPrinting();
         infoMenu.cur-=2;
         break;
 
@@ -542,11 +542,8 @@ void menuShutDown(void)
           mustStoreCmd("%s S0\n", fanCmd[i]);  
         }
         mustStoreCmd("M81\n");
-        popupDrawPage(NULL, textSelect(LABEL_SHUT_DOWN), textSelect(LABEL_SHUTTING_DOWN), NULL, NULL);
-        while(1)
-        {
-          loopProcess();
-        }
+        infoMenu.cur--;
+        popupReminder(textSelect(LABEL_SHUT_DOWN), textSelect(LABEL_SHUTTING_DOWN));
     }
     loopProcess();
   }

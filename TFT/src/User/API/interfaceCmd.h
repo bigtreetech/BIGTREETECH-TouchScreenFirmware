@@ -16,13 +16,12 @@ typedef struct
 typedef struct 
 {
   GCODE   queue[CMD_MAX_LIST];
-  uint8_t index_r ; // Ring buffer read position
-  uint8_t index_w ; // Ring buffer write position
-//    u8      parsed ;  //
-  uint8_t count ;   // Count of commands in the queue  
+  uint8_t index_r; // Ring buffer read position
+  uint8_t index_w; // Ring buffer write position
+  uint8_t count;   // Count of commands in the queue  
 }QUEUE;
 
-extern QUEUE infoCmd ;
+extern QUEUE infoCmd;
 extern QUEUE infoCacheCmd;
 
 
