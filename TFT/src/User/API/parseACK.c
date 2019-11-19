@@ -71,8 +71,8 @@ void ackPopupInfo(const char *info)
   }  
   if (infoMenu.menu[infoMenu.cur] == menuTerminal) return;
   if (infoMenu.menu[infoMenu.cur] == menuStatus && info == echomagic) return;
-
-  popupReminder((u8 *)info, (u8 *)dmaL2Cache + ack_index);
+  
+  popupReminder((u8* )info, (u8 *)dmaL2Cache + ack_index);
 }
 
 void syncL2CacheFromL1(uint8_t port)
