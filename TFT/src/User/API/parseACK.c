@@ -65,7 +65,13 @@ static float ack_second_value()
 
 void ackPopupInfo(const char *info)
 {
-  if(infoMenu.menu[infoMenu.cur] == menuTerminal) return;
+  if (info == echomagic)
+  {
+    statusScreen_setMsg((u8 *)info, (u8 *)dmaL2Cache + ack_index);
+  }  
+  if (infoMenu.menu[infoMenu.cur] == menuTerminal) return;
+  if (infoMenu.menu[infoMenu.cur] == menuStatus && info == echomagic) return;
+  
   popupReminder((u8* )info, (u8 *)dmaL2Cache + ack_index);
 }
 
@@ -171,6 +177,19 @@ void parseACK(void)
     else if(ack_seen("Count E:")) // parse actual position, response of "M114"
     {
       coordinateSetAxisActualSteps(E_AXIS, ack_value());
+    }
+    else if (ack_seen("X:"))
+    {
+      storegantry(0, ack_value());
+      if (ack_seen("Y:"))
+      {
+        storegantry(1, ack_value());
+
+        if (ack_seen("Z:"))
+        {
+          storegantry(2, ack_value());
+        }
+      }
     }
     else if(ack_seen(echomagic) && ack_seen(busymagic) && ack_seen("processing"))
     {
