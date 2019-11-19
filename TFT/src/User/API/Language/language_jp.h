@@ -144,4 +144,3 @@
     #define JP_SHUTTING_DOWN        "Shutting down..."
     
 #endif
-
