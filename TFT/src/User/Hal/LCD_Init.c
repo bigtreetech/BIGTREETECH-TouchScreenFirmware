@@ -20,7 +20,7 @@ void LCD_LED_Init(void)
 }
 #endif
 
-#if defined(TFT35_V1_2) || defined(TFT35_V2_0) || defined(TFT35_V3_0) || defined(TFT28_V3_0)
+#if defined(TFT35_V1_2) || defined(TFT35_V2_0) || defined(TFT35_V3_0)
 //ILI9488
 void LCD_init_RGB(void) 
 {
@@ -109,7 +109,7 @@ void LCD_init_RGB(void)
   LCD_WR_REG(0X29); 	 
 }
 
-#elif defined(TFT28_V1_0)
+#elif defined(TFT28_V1_0) || defined(TFT28_V3_0)
 
 void LCD_init_RGB(void) 
 {
@@ -345,7 +345,11 @@ void LCD_RefreshDirection(void)
       LCD_WR_DATA(0XE8);
     #endif
     #ifdef ILI9341
-      LCD_WR_DATA(0XA8);
+	#if defined (TFT28_V3_0)
+        LCD_WR_DATA(0X60);//
+      	#else
+        LCD_WR_DATA(0XA8);
+      	#endif 
     #endif  
   }
   else
@@ -358,7 +362,11 @@ void LCD_RefreshDirection(void)
       LCD_WR_DATA(0X28);
     #endif
     #ifdef ILI9341
-      LCD_WR_DATA(0X68);
+      #if defined (TFT28_V3_0)
+      LCD_WR_DATA(0XA0);//
+      #else
+       LCD_WR_DATA(0X68);
+      #endif
     #endif  
   }
 }
