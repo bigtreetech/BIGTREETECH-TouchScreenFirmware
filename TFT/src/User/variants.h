@@ -41,11 +41,11 @@
   #define RM68042
   #define STM32_HAS_FSMC
   #define LCD_DATA_16BIT 0
-#elif defined(TFT35_V1_2) || defined(TFT35_V2_0) || defined(TFT35_V3_0) || defined(TFT28_V3_0)
+#elif defined(TFT35_V1_2) || defined(TFT35_V2_0) || defined(TFT35_V3_0) 
   #define ILI9488
   #define STM32_HAS_FSMC
   #define LCD_DATA_16BIT 1
-#elif defined(TFT28_V1_0)
+#elif defined(TFT28_V1_0) || defined(TFT28_V3_0)
   #define ILI9341
   #define STM32_HAS_FSMC
   #define LCD_DATA_16BIT 1
