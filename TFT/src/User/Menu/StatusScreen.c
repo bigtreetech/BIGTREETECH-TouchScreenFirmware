@@ -44,7 +44,18 @@ static float xaxis;
 static float yaxis;
 static float zaxis;
 static bool gantryCmdWait = false;
-#define matt_gray  0x2187
+
+//Colors for drawing the icons
+#define GANTRYLBL_BKCOLOR   0x2187
+#define GANTRYLBL_COLOR     WHITE
+#define HEADING_COLOR       WHITE
+#define VAL_COLOR           BLACK
+#define INFOBOX_BORDER      BLACK
+#define INFOBOX_BKCOLOR     0x4b0d
+#define INFOBOX_BORDER      0x4b0d
+#define INFOBOX_ICON_COLOR  0x03BF
+#define INFOMSG_BKCOLOR     WHITE
+#define INFOMSG_COLOR       BLACK
 
 TOOL current_Ext = NOZZLE0;
 int current_fan = 0;
@@ -53,117 +64,68 @@ const char* SpeedID[2] = SPEED_ID;
 // text position rectangles for Live icons 
 //icon 0
 const GUI_RECT rectA[8] = {
-  {START_X + 0 * ICON_WIDTH + 0 * SPACE_X + SSICON_NAME_X0,   SS_TITLE_END_Y + 0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_NAME_Y0,
-   START_X + 1 * ICON_WIDTH + 0 * SPACE_X,                    SS_TITLE_END_Y + 0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_NAME_Y0 + BYTE_HEIGHT},
+  {START_X + 0 * ICON_WIDTH + 0 * SPACE_X + SSICON_NAME_X0,                   SS_TITLE_END_Y + 0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_NAME_Y0,
+   START_X + 0 * ICON_WIDTH + 0 * SPACE_X + SSICON_NAME_X0 + BYTE_WIDTH * 3,  SS_TITLE_END_Y + 0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_NAME_Y0 + BYTE_HEIGHT},
 
-  {START_X + 1 * ICON_WIDTH + 1 * SPACE_X + SSICON_NAME_X0,   SS_TITLE_END_Y + 0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_NAME_Y0,
-   START_X + 2 * ICON_WIDTH + 1 * SPACE_X,                    SS_TITLE_END_Y + 0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_NAME_Y0 + BYTE_HEIGHT},
+  {START_X + 1 * ICON_WIDTH + 1 * SPACE_X + SSICON_NAME_X0,                   SS_TITLE_END_Y + 0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_NAME_Y0,
+   START_X + 1 * ICON_WIDTH + 1 * SPACE_X + SSICON_NAME_X0 + BYTE_WIDTH * 3,  SS_TITLE_END_Y + 0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_NAME_Y0 + BYTE_HEIGHT},
 
-  {START_X + 2 * ICON_WIDTH + 2 * SPACE_X + SSICON_NAME_X0,   SS_TITLE_END_Y + 0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_NAME_Y0,
-   START_X + 3 * ICON_WIDTH + 2 * SPACE_X,                    SS_TITLE_END_Y + 0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_NAME_Y0 + BYTE_HEIGHT},
+  {START_X + 2 * ICON_WIDTH + 2 * SPACE_X + SSICON_NAME_X0,                   SS_TITLE_END_Y + 0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_NAME_Y0,
+   START_X + 2 * ICON_WIDTH + 2 * SPACE_X + SSICON_NAME_X0 + BYTE_WIDTH * 3,  SS_TITLE_END_Y + 0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_NAME_Y0 + BYTE_HEIGHT},
 
-  {START_X + 3 * ICON_WIDTH + 3 * SPACE_X + SSICON_NAME_X0,   SS_TITLE_END_Y + 0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_NAME_Y0,
-   START_X + 4 * ICON_WIDTH + 3 * SPACE_X,                    SS_TITLE_END_Y + 0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_NAME_Y0 + BYTE_HEIGHT},
+  {START_X + 3 * ICON_WIDTH + 3 * SPACE_X + SSICON_NAME_X0,                   SS_TITLE_END_Y + 0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_NAME_Y0,
+   START_X + 3 * ICON_WIDTH + 3 * SPACE_X + SSICON_NAME_X0 + BYTE_WIDTH * 3,  SS_TITLE_END_Y + 0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_NAME_Y0 + BYTE_HEIGHT},
   /*---- rect for label in icons in second row
-  {START_X + 0 * ICON_WIDTH + 0 * SPACE_X + SSICON_NAME_X0,   SS_TITLE_END_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_NAME_Y0,
-   START_X + 1 * ICON_WIDTH + 0 * SPACE_X,                    SS_TITLE_END_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_NAME_Y0 + BYTE_HEIGHT},
+  {START_X + 0 * ICON_WIDTH + 0 * SPACE_X + SSICON_NAME_X0,                   SS_TITLE_END_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_NAME_Y0,
+   START_X + 0 * ICON_WIDTH + 0 * SPACE_X + SSICON_NAME_X0 + BYTE_WIDTH * 3,  SS_TITLE_END_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_NAME_Y0 + BYTE_HEIGHT},
 
-  {START_X + 1 * ICON_WIDTH + 1 * SPACE_X + SSICON_NAME_X0,   SS_TITLE_END_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_NAME_Y0,
-   START_X + 2 * ICON_WIDTH + 1 * SPACE_X,                    SS_TITLE_END_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_NAME_Y0 + BYTE_HEIGHT},
+  {START_X + 1 * ICON_WIDTH + 1 * SPACE_X + SSICON_NAME_X0,                   SS_TITLE_END_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_NAME_Y0,
+   START_X + 1 * ICON_WIDTH + 1 * SPACE_X + SSICON_NAME_X0 + BYTE_WIDTH * 3,  SS_TITLE_END_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_NAME_Y0 + BYTE_HEIGHT},
 
-  {START_X + 2 * ICON_WIDTH + 2 * SPACE_X + SSICON_NAME_X0,   SS_TITLE_END_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_NAME_Y0,
-   START_X + 3 * ICON_WIDTH + 2 * SPACE_X,                    SS_TITLE_END_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_NAME_Y0 + BYTE_HEIGHT},
+  {START_X + 2 * ICON_WIDTH + 2 * SPACE_X + SSICON_NAME_X0,                   SS_TITLE_END_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_NAME_Y0,
+   START_X + 2 * ICON_WIDTH + 2 * SPACE_X + SSICON_NAME_X0 + BYTE_WIDTH * 3,  SS_TITLE_END_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_NAME_Y0 + BYTE_HEIGHT},
 
-  {START_X + 3 * ICON_WIDTH + 3 * SPACE_X + SSICON_NAME_X0,   SS_TITLE_END_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_NAME_Y0,
-   START_X + 4 * ICON_WIDTH + 3 * SPACE_X,                    SS_TITLE_END_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_NAME_Y0 + BYTE_HEIGHT}
+  {START_X + 3 * ICON_WIDTH + 3 * SPACE_X + SSICON_NAME_X0,                   SS_TITLE_END_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_NAME_Y0,
+   START_X + 3 * ICON_WIDTH + 3 * SPACE_X + SSICON_NAME_X0 + BYTE_WIDTH * 3,  SS_TITLE_END_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_NAME_Y0 + BYTE_HEIGHT}
   */
 };
 const GUI_RECT rectB[8] = {
-  {START_X + 0 * ICON_WIDTH + 0 * SPACE_X,                         SS_TITLE_END_Y +  0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_VAL_Y0,
-                      START_X + 1 * ICON_WIDTH + 0 * SPACE_X,                         SS_TITLE_END_Y +  0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_VAL_Y0 + BYTE_HEIGHT},
+  {START_X + 0 * ICON_WIDTH + 0 * SPACE_X,  SS_TITLE_END_Y +  0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_VAL_Y0,
+   START_X + 1 * ICON_WIDTH + 0 * SPACE_X,  SS_TITLE_END_Y +  0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_VAL_Y0 + BYTE_HEIGHT},
   
-  {START_X + 1 * ICON_WIDTH + 1 * SPACE_X,                        SS_TITLE_END_Y +  0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_VAL_Y0,
-                      START_X + 2 * ICON_WIDTH + 1 * SPACE_X,                         SS_TITLE_END_Y +  0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_VAL_Y0 + BYTE_HEIGHT},
+  {START_X + 1 * ICON_WIDTH + 1 * SPACE_X,  SS_TITLE_END_Y +  0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_VAL_Y0,
+   START_X + 2 * ICON_WIDTH + 1 * SPACE_X,  SS_TITLE_END_Y +  0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_VAL_Y0 + BYTE_HEIGHT},
   
-  {START_X + 2 * ICON_WIDTH + 2 * SPACE_X,                        SS_TITLE_END_Y +  0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_VAL_Y0,
-                      START_X + 3 * ICON_WIDTH + 2 * SPACE_X,                         SS_TITLE_END_Y +  0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_VAL_Y0 + BYTE_HEIGHT},
+  {START_X + 2 * ICON_WIDTH + 2 * SPACE_X,  SS_TITLE_END_Y +  0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_VAL_Y0,
+   START_X + 3 * ICON_WIDTH + 2 * SPACE_X,  SS_TITLE_END_Y +  0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_VAL_Y0 + BYTE_HEIGHT},
   
-  {START_X + 3 * ICON_WIDTH + 3 * SPACE_X,                        SS_TITLE_END_Y +  0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_VAL_Y0,
-                      START_X + 4 * ICON_WIDTH + 3 * SPACE_X,                         SS_TITLE_END_Y +  0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_VAL_Y0 + BYTE_HEIGHT},
+  {START_X + 3 * ICON_WIDTH + 3 * SPACE_X,  SS_TITLE_END_Y +  0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_VAL_Y0,
+   START_X + 4 * ICON_WIDTH + 3 * SPACE_X,  SS_TITLE_END_Y +  0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_VAL_Y0 + BYTE_HEIGHT},
   /*---- rect for values in icons in second row
-  {START_X + 0 * ICON_WIDTH + 0 * SPACE_X,                         SS_TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_VAL_Y0,
-                      START_X + 1 * ICON_WIDTH + 0 * SPACE_X,                         SS_TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_VAL_Y0 + BYTE_HEIGHT},
+  {START_X + 0 * ICON_WIDTH + 0 * SPACE_X, SS_TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_VAL_Y0,
+   START_X + 1 * ICON_WIDTH + 0 * SPACE_X, SS_TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_VAL_Y0 + BYTE_HEIGHT},
   
-  {START_X + 1 * ICON_WIDTH + 1 * SPACE_X,                        SS_TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_VAL_Y0,
-                      START_X + 2 * ICON_WIDTH + 1 * SPACE_X,                         SS_TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_VAL_Y0 + BYTE_HEIGHT},
+  {START_X + 1 * ICON_WIDTH + 1 * SPACE_X, SS_TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_VAL_Y0,
+   START_X + 2 * ICON_WIDTH + 1 * SPACE_X, SS_TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_VAL_Y0 + BYTE_HEIGHT},
   
-  {START_X + 2 * ICON_WIDTH + 2 * SPACE_X,                        SS_TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_VAL_Y0,
-                      START_X + 3 * ICON_WIDTH + 2 * SPACE_X,                         SS_TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_VAL_Y0 + BYTE_HEIGHT},
+  {START_X + 2 * ICON_WIDTH + 2 * SPACE_X, SS_TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_VAL_Y0,
+   START_X + 3 * ICON_WIDTH + 2 * SPACE_X, SS_TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_VAL_Y0 + BYTE_HEIGHT},
   
-  {START_X + 3 * ICON_WIDTH + 3 * SPACE_X,                        SS_TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_VAL_Y0,
-                      START_X + 4 * ICON_WIDTH + 3 * SPACE_X,                         SS_TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_VAL_Y0 + BYTE_HEIGHT}
+  {START_X + 3 * ICON_WIDTH + 3 * SPACE_X, SS_TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_VAL_Y0,
+   START_X + 4 * ICON_WIDTH + 3 * SPACE_X, SS_TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_VAL_Y0 + BYTE_HEIGHT}
   */
 };
-/* const GUI_RECT RecA1 = {START_X + 0 * ICON_WIDTH + 0 * SPACE_X + SSICON_NAME_X0,    SS_TITLE_END_Y + 0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_NAME_Y0,
-                        START_X + 1 * ICON_WIDTH + 0 * SPACE_X,                         SS_TITLE_END_Y + 0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_NAME_Y0 + BYTE_HEIGHT};
-
-const GUI_RECT RecA2 = {START_X + 0 * ICON_WIDTH + 0 * SPACE_X,                         SS_TITLE_END_Y +  0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_VAL_Y0,
-                        START_X + 1 * ICON_WIDTH + 0 * SPACE_X,                         SS_TITLE_END_Y +  0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_VAL_Y0 + BYTE_HEIGHT};
-//icon 1
-const GUI_RECT RecB1 = {START_X + 1 * ICON_WIDTH + 1 * SPACE_X + SSICON_NAME_X0,    SS_TITLE_END_Y + 0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_NAME_Y0,
-                        START_X + 2 * ICON_WIDTH + 1 * SPACE_X,                         SS_TITLE_END_Y + 0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_NAME_Y0 + BYTE_HEIGHT};
-
-const GUI_RECT RecB2 = {START_X + 1 * ICON_WIDTH + 1 * SPACE_X,                        SS_TITLE_END_Y +  0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_VAL_Y0,
-                        START_X + 2 * ICON_WIDTH + 1 * SPACE_X,                         SS_TITLE_END_Y +  0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_VAL_Y0 + BYTE_HEIGHT};
-//icon 2
-const GUI_RECT RecC1 = {START_X + 2 * ICON_WIDTH + 2 * SPACE_X + SSICON_NAME_X0,   SS_TITLE_END_Y + 0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_NAME_Y0,
-                        START_X + 3 * ICON_WIDTH + 2 * SPACE_X,                         SS_TITLE_END_Y + 0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_NAME_Y0 + BYTE_HEIGHT};
-
-const GUI_RECT RecC2 = {START_X + 2 * ICON_WIDTH + 2 * SPACE_X,                        SS_TITLE_END_Y +  0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_VAL_Y0,
-                        START_X + 3 * ICON_WIDTH + 2 * SPACE_X,                         SS_TITLE_END_Y +  0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_VAL_Y0 + BYTE_HEIGHT};
-//icon 3
-const GUI_RECT RecD1 = {START_X + 3 * ICON_WIDTH + 3 * SPACE_X + SSICON_NAME_X0,   SS_TITLE_END_Y + 0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_NAME_Y0,
-                        START_X + 4 * ICON_WIDTH + 3 * SPACE_X,                         SS_TITLE_END_Y + 0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_NAME_Y0 + BYTE_HEIGHT};
-
-const GUI_RECT RecD2 = {START_X + 3 * ICON_WIDTH + 3 * SPACE_X,                        SS_TITLE_END_Y +  0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_VAL_Y0,
-                        START_X + 4 * ICON_WIDTH + 3 * SPACE_X,                         SS_TITLE_END_Y +  0 * ICON_HEIGHT + 0 * SPACE_Y + SSICON_VAL_Y0 + BYTE_HEIGHT};
-//icon 4
-const GUI_RECT RecE1 = {START_X + 0 * ICON_WIDTH + 0 * SPACE_X + SSICON_NAME_X0,    SS_TITLE_END_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_NAME_Y0,
-                        START_X + 1 * ICON_WIDTH + 0 * SPACE_X,                         SS_TITLE_END_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_NAME_Y0 + BYTE_HEIGHT};
-
-const GUI_RECT RecE2 = {START_X + 0 * ICON_WIDTH + 0 * SPACE_X,                         SS_TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_VAL_Y0,
-                        START_X + 1 * ICON_WIDTH + 0 * SPACE_X,                         SS_TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_VAL_Y0 + BYTE_HEIGHT};
-//icon 5
-const GUI_RECT RecF1 = {START_X + 1 * ICON_WIDTH + 1 * SPACE_X + SSICON_NAME_X0,    SS_TITLE_END_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_NAME_Y0,
-                        START_X + 2 * ICON_WIDTH + 1 * SPACE_X,                         SS_TITLE_END_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_NAME_Y0 + BYTE_HEIGHT};
-
-const GUI_RECT RecF2 = {START_X + 1 * ICON_WIDTH + 1 * SPACE_X,                        SS_TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_VAL_Y0,
-                        START_X + 2 * ICON_WIDTH + 1 * SPACE_X,                         SS_TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_VAL_Y0 + BYTE_HEIGHT};
-//icon 6
-const GUI_RECT RecG1 = {START_X + 2 * ICON_WIDTH + 2 * SPACE_X + SSICON_NAME_X0,   SS_TITLE_END_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_NAME_Y0,
-                        START_X + 3 * ICON_WIDTH + 2 * SPACE_X,                         SS_TITLE_END_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_NAME_Y0 + BYTE_HEIGHT};
-
-const GUI_RECT RecG2 = {START_X + 2 * ICON_WIDTH + 2 * SPACE_X,                        SS_TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_VAL_Y0,
-                        START_X + 3 * ICON_WIDTH + 2 * SPACE_X,                         SS_TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_VAL_Y0 + BYTE_HEIGHT};
-//icon 7
-const GUI_RECT RecH1 = {START_X + 3 * ICON_WIDTH + 3 * SPACE_X + SSICON_NAME_X0,   SS_TITLE_END_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_NAME_Y0,
-                        START_X + 4 * ICON_WIDTH + 3 * SPACE_X,                         SS_TITLE_END_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_NAME_Y0 + BYTE_HEIGHT};
-
-const GUI_RECT RecH2 = {START_X + 3 * ICON_WIDTH + 3 * SPACE_X,                        SS_TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_VAL_Y0,
-                        START_X + 4 * ICON_WIDTH + 3 * SPACE_X,                         SS_TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + SSICON_VAL_Y0 + BYTE_HEIGHT}; */
 
 //info rectangle          
 const GUI_RECT RecIinfo = {START_X + 1 * ICON_WIDTH + 1 * SPACE_X,  TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y,
                            START_X + 3 * ICON_WIDTH + 2 * SPACE_X,  TITLE_END_Y +  2 * ICON_HEIGHT + 1 * SPACE_Y};
 
-const  GUI_RECT msgRect ={START_X + 1 * ICON_WIDTH + 1 * SPACE_X,   TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + STATUS_MSG_BODY_YOFFSET,
-                          START_X + 3 * ICON_WIDTH + 2 * SPACE_X,   TITLE_END_Y +  2 * ICON_HEIGHT + 1 * SPACE_Y - STATUS_MSG_BODY_BOTTOM};
+const  GUI_RECT msgRect ={START_X + 1 * ICON_WIDTH + 1 * SPACE_X + 2,   TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + STATUS_MSG_BODY_YOFFSET,
+                          START_X + 3 * ICON_WIDTH + 2 * SPACE_X - 2,   TITLE_END_Y +  2 * ICON_HEIGHT + 1 * SPACE_Y - STATUS_MSG_BODY_BOTTOM};
 
-const GUI_RECT RecGantry = {START_X,  1*ICON_HEIGHT+0*SPACE_Y+SS_TITLE_END_Y+STATUS_GANTRY_YOFFSET,   4*ICON_WIDTH+3*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y-STATUS_GANTRY_YOFFSET};
+const GUI_RECT RecGantry = {START_X,                        1*ICON_HEIGHT+0*SPACE_Y+SS_TITLE_END_Y+STATUS_GANTRY_YOFFSET,
+                            4*ICON_WIDTH+3*SPACE_X+START_X, 1*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y-STATUS_GANTRY_YOFFSET};
                                 
-
-
-
 
 /*set status icons */
 /* void set_status_icon(void)
@@ -181,40 +143,38 @@ void drawTemperature(void)
     
   char tempstr[100];
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-  GUI_SetColor(WHITE);
+  GUI_SetColor(HEADING_COLOR);
   menuDrawItem(&ToolItems[0],0);                                                                //Ext icon
   GUI_DispStringInPrect(&rectA[0], (u8 *)heatDisplayID[current_Ext]);                           //Ext label
   
-  GUI_SetColor(BLACK);
+  GUI_SetColor(VAL_COLOR);
   my_sprintf(tempstr, "%d/%d", heatGetCurrentTemp(current_Ext), heatGetTargetTemp(current_Ext)); 
   GUI_DispStringInPrect(&rectB[0], (u8 *)tempstr);                                                //Ext value
 
-  GUI_SetColor(WHITE);
+  GUI_SetColor(HEADING_COLOR);
   menuDrawItem(&ToolItems[1],1);                                          //Bed icon
   GUI_DispStringInPrect(&rectA[1], (u8 *)heatDisplayID[BED]);             //Bed label
-  GUI_SetColor(BLACK);
+  GUI_SetColor(VAL_COLOR);
   my_sprintf(tempstr, "%d/%d", heatGetCurrentTemp(BED), heatGetTargetTemp(BED)); 
   GUI_DispStringInPrect(&rectB[1], (u8 *)tempstr);                        //Bed value
 
-  GUI_SetColor(WHITE);
+  GUI_SetColor(HEADING_COLOR);
   menuDrawItem(&ToolItems[2],2);                                          //Fan icon
   GUI_DispStringInPrect(&rectA[2],(u8 *)fanID[current_fan]);              //Fan label
-  GUI_SetColor(BLACK);
+  GUI_SetColor(VAL_COLOR);
   my_sprintf(tempstr, "%d", fanGetSpeed(current_fan)); 
   GUI_DispStringInPrect(&rectB[2], (u8 *)tempstr);                        //Fan value
 
-  GUI_SetColor(WHITE);
+  GUI_SetColor(HEADING_COLOR);
   menuDrawItem(&SpeedItems[current_speedID],3);                           //Speed / flow icon
   GUI_DispStringInPrect(&rectA[3], (u8 *)SpeedID[current_speedID]);       //Speed / flow label
-  GUI_SetColor(BLACK);
-  my_sprintf(tempstr, "%d", speedGetPercent(current_speedID)); 
+  GUI_SetColor(VAL_COLOR);
+  my_sprintf(tempstr, "%d%s", speedGetPercent(current_speedID),"%"); 
   GUI_DispStringInPrect(&rectB[3], (u8 *)tempstr);                        //Speed / Flow value
 
-  GUI_SetColor(matt_gray);
-  
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
-  GUI_SetColor(FK_COLOR);
-  GUI_SetBkColor(matt_gray);
+  GUI_SetColor(GANTRYLBL_COLOR);
+  GUI_SetBkColor(GANTRYLBL_BKCOLOR);
   my_sprintf(tempstr, "X: %.2f   Y: %.2f   Z: %.2f", xaxis, yaxis, zaxis);
   GUI_DispStringInPrect(&RecGantry,(u8 *)tempstr);
   
@@ -256,32 +216,33 @@ void drawStatusScreenMsg(void)
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
   u8* iconChar = (u8 *)"i";
 
-  GUI_SetColor(0x4b0d);
+  GUI_SetColor(INFOBOX_BKCOLOR);
   GUI_FillRect(RecIinfo.x0, RecIinfo.y0, RecIinfo.x1, RecIinfo.y1);
+  
+  GUI_SetColor(INFOBOX_BORDER);
+  GUI_DrawRect(RecIinfo.x0, RecIinfo.y0, RecIinfo.x1, RecIinfo.y1);
 
-  GUI_SetColor(0x03BF);
+  GUI_SetColor(INFOBOX_ICON_COLOR);
   GUI_FillCircle(RecIinfo.x0 + STATUS_MSG_ICON_XCENTER, RecIinfo.y0 + STATUS_MSG_ICON_YCENTER, BYTE_WIDTH); //icon circle
 
-  GUI_SetColor(WHITE);
+  GUI_SetColor(INFOMSG_BKCOLOR);
   GUI_DrawCircle(RecIinfo.x0 + STATUS_MSG_ICON_XCENTER, RecIinfo.y0 + STATUS_MSG_ICON_YCENTER, BYTE_WIDTH); //circle outline
-  GUI_FillRect(msgRect.x0, msgRect.y0, msgRect.x1, msgRect.y1); //rectangle for msg scroller
+  GUI_FillRect(RecIinfo.x0, msgRect.y0, RecIinfo.x1, msgRect.y1); //rectangle for msg scroller
   
   GUI_DispString(RecIinfo.x0 + STATUS_MSG_ICON_XCENTER-(BYTE_WIDTH/2), RecIinfo.y0 + STATUS_MSG_ICON_YCENTER - (BYTE_HEIGHT/2), iconChar);
 
   GUI_DispString(RecIinfo.x0 + STATUS_MSG_TITLE_XOFFSET,RecIinfo.y0 + STATUS_MSG_ICON_YCENTER - (BYTE_HEIGHT/2),(u8*)msgtitle); 
-  GUI_SetBkColor(0x03BF);
+  GUI_SetBkColor(INFOMSG_BKCOLOR);
   GUI_FillRect(msgRect.x0, msgRect.y0, msgRect.x1, msgRect.y1);
-  GUI_SetColor(BLACK);
   
   GUI_SetBkColor(BK_COLOR);
   GUI_SetColor(FK_COLOR);
-  
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
 
 void scrollMsg(void){
-  GUI_SetBkColor(WHITE);
-  GUI_SetColor(BLACK);
+  GUI_SetBkColor(INFOMSG_BKCOLOR);
+  GUI_SetColor(INFOMSG_COLOR);
   Scroll_DispString(&msgScroll,CENTER); 
   GUI_SetBkColor(BK_COLOR);
   GUI_SetColor(FK_COLOR);
@@ -328,7 +289,7 @@ void menuStatus(void)
   GUI_SetBkColor(BK_COLOR);
   //set_status_icon();
   menuDrawPage(&StatusItems);
-  GUI_SetColor(matt_gray);
+  GUI_SetColor(GANTRYLBL_BKCOLOR);
       //GUI_ClearPrect(&RecGantry);
   GUI_FillPrect(&RecGantry);
   drawTemperature();
