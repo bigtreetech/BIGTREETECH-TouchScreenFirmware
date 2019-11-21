@@ -43,7 +43,7 @@ static char msgbody[512];
 static float xaxis;
 static float yaxis;
 static float zaxis;
-
+static bool gantryCmdWait = false;
 #define matt_gray  0x2187
 
 TOOL current_Ext = NOZZLE0;
@@ -239,6 +239,7 @@ void storegantry(int n, float val){
   default:
     break;
   }
+  gantryCmdWait = false;
 }
 
 
@@ -305,8 +306,18 @@ void toggleTool(void)
     current_speedID = (current_speedID + 1) % 2;
     nowTime = OS_GetTime();
     drawTemperature();
-    if(infoHost.connected == true){  
-      storeCmd("M114 \n");
+    
+    if (infoHost.connected == true)
+    {
+      if (gantryCmdWait != true)
+      {
+        gantryCmdWait = true;
+        storeCmd("M114\n");
+      }
+    }
+    else
+    {
+      gantryCmdWait = false;
     }
   }
 }
