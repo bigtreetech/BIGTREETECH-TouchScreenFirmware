@@ -114,7 +114,7 @@
 
 // Enable Unified Move Menu
 // Move, Home, Extrude, ABL at one Place and bring Gcode Menu on Home Menu
-#define UNIFIED_MENU
+//#define UNIFIED_MENU
 
 //Enable Status Screen
 //----USE ICONS FROM MATERIAL THEME ONLY---//
@@ -158,8 +158,8 @@
  */
 #define CUSTOM_0_LABEL "Home"
 #define CUSTOM_0_GCODE "G28\n"
-//#define CUSTOM_1_LABEL "Custom1"
-//#define CUSTOM_1_GCODE "M105\n"
+#define CUSTOM_1_LABEL "Restore EEPROM"
+#define CUSTOM_1_GCODE "M501\n"
 //#define CUSTOM_2_LABEL "Custom2"
 //#define CUSTOM_2_GCODE "M105\n"
 //#define CUSTOM_3_LABEL "Custom3"
