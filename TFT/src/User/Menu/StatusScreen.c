@@ -16,7 +16,7 @@ LABEL_READY,
   {ICON_PRINT,                LABEL_PRINT},}
 };
 
-const ITEM ToolItems[5] = {
+const ITEM ToolItems[3] = {
 // icon                       label
   {ICON_STATUSNOZZLE,         LABEL_BACKGROUND},
   {ICON_STATUSBED,            LABEL_BACKGROUND},
@@ -288,7 +288,7 @@ void menuStatus(void)
   KEY_VALUES key_num = KEY_IDLE;
   GUI_SetBkColor(BK_COLOR);
   //set_status_icon();
-  menuDrawPage(&StatusItems);
+  menuDrawPage(&StatusItems,false);
   GUI_SetColor(GANTRYLBL_BKCOLOR);
       //GUI_ClearPrect(&RecGantry);
   GUI_FillPrect(&RecGantry);

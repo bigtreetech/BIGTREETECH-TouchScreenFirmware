@@ -19,7 +19,7 @@ lABEL_UNIFIEDHEAT,
 void menuUnifiedHeat(void)
 {
   KEY_VALUES key_num = KEY_IDLE;	
-  menuDrawPage(&UnifiedHeatItems);
+  menuDrawPage(&UnifiedHeatItems,false);
   while(infoMenu.menu[infoMenu.cur] == menuUnifiedHeat)
   {
     key_num = menuKeyGetValue();

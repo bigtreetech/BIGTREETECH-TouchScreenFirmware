@@ -81,7 +81,7 @@ void menuExtrude(void)
   feedrate = coordinateGetFeedRate();
   eRelative = eGetRelative();
 
-  menuDrawPage(&extrudeItems);
+  menuDrawPage(&extrudeItems,false);
   showExtrudeCoordinate();
   
   if(eRelative) mustStoreCmd("M82\n"); // Set extruder to absolute

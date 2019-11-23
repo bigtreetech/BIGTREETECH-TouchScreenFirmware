@@ -71,7 +71,7 @@ void menuFan(void)
   memcpy(nowFanSpeed, fanSpeed, sizeof(fanSpeed));
   KEY_VALUES key_num = KEY_IDLE;	
 
-  menuDrawPage(&fanItems);
+  menuDrawPage(&fanItems,false);
   showFanSpeed();
   while(infoMenu.menu[infoMenu.cur] == menuFan)
   {

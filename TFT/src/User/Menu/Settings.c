@@ -93,7 +93,7 @@ void menuSettings(void)
     }
   }
 
-  menuDrawPage(&settingsItems);
+  menuDrawPage(&settingsItems,false);
 
   while(infoMenu.menu[infoMenu.cur] == menuSettings)
   {

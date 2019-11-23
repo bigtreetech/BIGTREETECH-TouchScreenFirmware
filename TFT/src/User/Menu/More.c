@@ -43,7 +43,7 @@ void menuMore(void)
 {
   KEY_VALUES  key_num = KEY_IDLE;
 
-  menuDrawPage(&moreItems);
+  menuDrawPage(&moreItems,false);
   while(infoMenu.menu[infoMenu.cur] == menuMore)
   {
     key_num = menuKeyGetValue();
