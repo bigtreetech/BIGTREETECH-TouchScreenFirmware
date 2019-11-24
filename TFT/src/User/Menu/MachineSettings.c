@@ -48,7 +48,7 @@ void menuCustom(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
 
-  menuDrawPage(&customItems);
+  menuDrawPage(&customItems,false);
 
   while(infoMenu.menu[infoMenu.cur] == menuCustom)
   {
@@ -119,7 +119,7 @@ void menuRGBSettings(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
 
-  menuDrawPage(&RGBItems);
+  menuDrawPage(&RGBItems,false);
 
   while(infoMenu.menu[infoMenu.cur] == menuRGBSettings)
   {
@@ -177,7 +177,7 @@ void menuMachineSettings(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
   
-  menuDrawPage(&machineSettingsItems);
+  menuDrawPage(&machineSettingsItems,false);
   
   while(infoMenu.menu[infoMenu.cur] == menuMachineSettings)
   {

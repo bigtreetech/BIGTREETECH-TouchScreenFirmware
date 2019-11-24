@@ -211,6 +211,9 @@
   #define ICON_HEIGHT 95
   #define TITLE_END_Y 60
   
+  #define LIST_ICON_WIDTH   85
+  #define LIST_ICON_HEIGHT  70
+
   #define selecticonw 95
 #elif defined(TFT28_V1_0) || defined(TFT24_V1_1)
   #define LCD_WIDTH	  320
@@ -222,6 +225,9 @@
   #define ICON_WIDTH  70
   #define ICON_HEIGHT 70
   #define TITLE_END_Y 40
+  
+  #define LIST_ICON_WIDTH   55
+  #define LIST_ICON_HEIGHT  50
   
   #define selecticonw 70
 #endif

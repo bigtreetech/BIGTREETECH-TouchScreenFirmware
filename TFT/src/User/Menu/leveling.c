@@ -18,7 +18,7 @@ LABEL_ABL,
 void menuAutoLeveling(void)
 {
   KEY_VALUES key_num=KEY_IDLE;
-  menuDrawPage(&autoLevelingItems);
+  menuDrawPage(&autoLevelingItems,false);
   while(infoMenu.menu[infoMenu.cur] == menuAutoLeveling)
   {
     key_num = menuKeyGetValue();
@@ -90,7 +90,7 @@ void moveToLevelingPoint(u8 point)
 void menuManualLeveling(void)
 {
   KEY_VALUES key_num=KEY_IDLE;
-  menuDrawPage(&manualLevelingItems);
+  menuDrawPage(&manualLevelingItems,false);
   while(infoMenu.menu[infoMenu.cur] == menuManualLeveling)
   {
     key_num = menuKeyGetValue();

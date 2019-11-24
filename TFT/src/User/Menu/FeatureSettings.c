@@ -63,7 +63,7 @@ void menuFeatureSettings(void)
   }
   #endif  
   
-  menuDrawPage(&featureSettingsItems);
+  menuDrawPage(&featureSettingsItems,false);
 
   while(infoMenu.menu[infoMenu.cur] == menuFeatureSettings)
   {

@@ -310,7 +310,7 @@ u8 *getCurGcodeName(char *path)
 
 void printingDrawPage(void)
 {
-  menuDrawPage(&printingItems);
+  menuDrawPage(&printingItems,false);
   //	Scroll_CreatePara(&titleScroll, infoFile.title,&titleRect);  //
   GUI_DispLenString(titleRect.x0, titleRect.y0, getCurGcodeName(infoFile.title), (titleRect.x1 - titleRect.x0));
   // printed time

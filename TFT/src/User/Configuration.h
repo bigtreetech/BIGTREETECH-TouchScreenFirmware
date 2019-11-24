@@ -114,7 +114,7 @@
 
 // Enable Unified Move Menu
 // Move, Home, Extrude, ABL at one Place and bring Gcode Menu on Home Menu
-//#define UNIFIED_MENU
+#define UNIFIED_MENU
 
 //Enable Status Screen
 //----USE ICONS FROM MATERIAL THEME ONLY---//
