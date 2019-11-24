@@ -50,7 +50,6 @@ static bool gantryCmdWait = false;
 #define GANTRYLBL_COLOR     WHITE
 #define HEADING_COLOR       WHITE
 #define VAL_COLOR           BLACK
-#define INFOBOX_BORDER      BLACK
 #define INFOBOX_BKCOLOR     0x4b0d
 #define INFOBOX_BORDER      0x4b0d
 #define INFOBOX_ICON_COLOR  0x03BF
