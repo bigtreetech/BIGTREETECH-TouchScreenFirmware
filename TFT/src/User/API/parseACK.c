@@ -208,7 +208,7 @@ void parseACK(void)
         infoHost.printing=true;
       }
       // Parsing printing data
-      // Exampre: SD printing byte 123/12345
+      // Example: SD printing byte 123/12345
       char *ptr;
       u32 position = strtol(strstr(dmaL2Cache, "byte ")+5, &ptr, 10); 
       setPrintCur(position);

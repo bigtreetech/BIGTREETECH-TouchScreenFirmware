@@ -22,14 +22,21 @@ const ITEM itemIsPause[2] = {
   {ICON_RESUME,               LABEL_RESUME},
 };
 
+#ifndef M27_WATCH_OTHER_SOURCES
+#define M27_WATCH_OTHER_SOURCES    false
+#endif
+
+#ifndef M27_REFRESH
+#define M27_REFRESH   3
+#endif
 
 static PRINTING infoPrinting;
-
 static u32     update_time = M27_REFRESH * 100;
+
 #ifdef ONBOARD_SD_SUPPORT
-static bool    update_waiting = false;
-#else
 static bool    update_waiting = M27_WATCH_OTHER_SOURCES;
+#else
+static bool    update_waiting = false;
 #endif
 
 
@@ -616,7 +623,7 @@ void loopCheckPrinting(void)
   do
   {  /* WAIT FOR M27	*/
     if(update_waiting == true)                {nowTime=OS_GetTime();break;}
-    if(OS_GetTime()<nowTime+update_time)       break;
+    if(OS_GetTime() < nowTime+update_time)       break;
 
     if(storeCmd("M27\n")==false)               break;
 
