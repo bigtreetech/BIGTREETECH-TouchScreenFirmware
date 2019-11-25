@@ -18,6 +18,7 @@ enum
   FRENCH,
   PORTUGUESE,
   ITALIAN,
+  POLISH,
 
   LANGUAGE_NUM,
 };
