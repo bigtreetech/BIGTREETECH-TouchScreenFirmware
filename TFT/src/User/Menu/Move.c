@@ -46,7 +46,7 @@ void menuMove(void)
 {
   KEY_VALUES  key_num = KEY_IDLE;
 
-  menuDrawPage(&moveItems);
+  menuDrawPage(&moveItems,false);
   mustStoreCmd("G91\n");
   mustStoreCmd("G1 F%d\n",DEFAULT_SPEED_MOVE);
   while(infoMenu.menu[infoMenu.cur] == menuMove)

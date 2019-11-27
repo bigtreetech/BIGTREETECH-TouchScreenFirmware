@@ -19,7 +19,7 @@ LABEL_UNIFIEDMOVE,
 void menuUnifiedMove(void)
 {
   KEY_VALUES key_num = KEY_IDLE;	
-  menuDrawPage(&UnifiedMoveItems);
+  menuDrawPage(&UnifiedMoveItems,false);
   while(infoMenu.menu[infoMenu.cur] == menuUnifiedMove)
   {
     key_num = menuKeyGetValue();

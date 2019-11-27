@@ -72,7 +72,7 @@ void menuBabyStep(void)
   float now = baby_step_value;
 
   initElements(KEY_ICON_5);
-  menuDrawPage(&babyStepItems);
+  menuDrawPage(&babyStepItems,false);
   showBabyStep();
 
   while(infoMenu.menu[infoMenu.cur] == menuBabyStep)

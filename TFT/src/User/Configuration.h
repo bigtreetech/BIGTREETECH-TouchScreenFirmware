@@ -120,6 +120,13 @@
 //----USE ICONS FROM MATERIAL THEME ONLY---//
 #define STATUS_SCREEN
 
+/**
+ * Enable gocde files list mode
+ * It is friendly to display long file name, but the model preview feature is not available
+ * Disable this if you want to use the model preview feature
+ */
+//#define GCODE_LIST_MODE
+
 // SD support
 #define ONBOARD_SD_SUPPORT
 #ifdef ONBOARD_SD_SUPPORT
@@ -156,9 +163,9 @@
  * The format of the custom icon is as follows
  * Bit depth: 24 / 32 bit, Pixel size: 95*95(for TFT35), 70*70(for TFT28/TFT24)
  */
-#define CUSTOM_0_LABEL "Home"
-#define CUSTOM_0_GCODE "G28\n"
-//#define CUSTOM_1_LABEL "Custom1"
+#define CUSTOM_0_LABEL "Restore EEPROM"
+#define CUSTOM_0_GCODE "M501\n"
+//#define CUSTOM_1_LABEL "Custom2"
 //#define CUSTOM_1_GCODE "M105\n"
 //#define CUSTOM_2_LABEL "Custom2"
 //#define CUSTOM_2_GCODE "M105\n"

@@ -649,7 +649,8 @@ void GUI_DispDec(int16_t x, int16_t y, int32_t num, uint8_t len, uint8_t leftOrR
   {
     num = -num;
     isNegative = 1;
-  }        
+    len--; // Negative '-' takes up a display length
+  }
   for(i=0;i<len;i++)
   {
     bit_value=(num/GUI_Pow10[len-i-1])%10;
@@ -699,6 +700,7 @@ void GUI_DispFloat(int16_t x, int16_t y, float num, uint8_t llen, uint8_t rlen, 
   {
     num = -num;
     isNegative = 1;
+    llen--; // Negative '-' takes up a display length
   }        
 
   num *= GUI_Pow10[(unsigned)rlen];
