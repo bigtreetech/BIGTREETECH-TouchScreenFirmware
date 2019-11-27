@@ -13,6 +13,7 @@ void Hardware_GenericInit(void)
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO , ENABLE);
   GPIO_PinRemapConfig(GPIO_Remap_SWJ_Disable, ENABLE); //disable JTAG & SWD
 #endif
+  
  
 #ifdef DISABLE_JTAG
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO , ENABLE);
@@ -42,6 +43,7 @@ void Hardware_GenericInit(void)
   if(readStoredPara() == false) // Read settings parameter
   {    
     TSC_Calibration();
+    storePara();
   }
   infoMenuSelect();
 }
