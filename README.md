@@ -18,7 +18,7 @@
   - Gcode file under unified menu is in list mode, unable to preview the model, but more friendly for long filename
 - Fixed the bug that tft35 V3.0 could not connect to printer when switching from LCD12864 mode to touch screen mode
 - Fixed the bug of printing from SD card on board
-- Fixed print random stop when enable "Keep alive" feature in Marlin
+- Fixed print random stop when enable "keep alive" feature in Marlin
 ### Vx.x.24
 - add some settings (Before that, update your icons folder)
 - Long Press Touch Screen or Rotary Encoder entry mode selection(Marlin's mode is SPI mode, touch mode is UART mode)
