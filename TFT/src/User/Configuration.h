@@ -120,6 +120,13 @@
 //----USE ICONS FROM MATERIAL THEME ONLY---//
 #define STATUS_SCREEN
 
+/**
+ * Enable gocde files list mode
+ * It is friendly to display long file name, but the model preview feature is not available
+ * Disable this if you want to use the model preview feature
+ */
+#define GCODE_LIST_MODE
+
 // SD support
 #define ONBOARD_SD_SUPPORT
 #ifdef ONBOARD_SD_SUPPORT
