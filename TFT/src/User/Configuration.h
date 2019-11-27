@@ -112,6 +112,10 @@
 // update the icons from alternate icon folder
 #define ALTERNATIVE_MOVE_MENU
 
+//Invert the Y Axis move Direction
+//#define INVERT_YAXIS
+
+
 // Enable Unified Move Menu
 // Move, Home, Extrude, ABL at one Place and bring Gcode Menu on Home Menu
 #define UNIFIED_MENU
