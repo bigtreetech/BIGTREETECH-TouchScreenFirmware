@@ -132,7 +132,7 @@
 #ifdef ONBOARD_SD_SUPPORT
   #define M27_AUTOREPORT                      // Disable M27 polling if you enable enable AUTO_REPORT_SD_STATUS in Marlin
   #define M27_REFRESH                3        // Time in sec for M27 command
-  #define M27_WATCH_OTHER_SOURCES    false     // if true the polling on M27 report is always active. Case: SD print started not from TFT35
+  #define M27_WATCH_OTHER_SOURCES    true     // if true the polling on M27 report is always active. Case: SD print started not from TFT35
 #endif
 
 /**
