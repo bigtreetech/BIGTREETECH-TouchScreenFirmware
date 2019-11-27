@@ -143,8 +143,23 @@ void parseACK(void)
     if(ack_seen("ok"))
     {
       infoHost.wait = false;
+    }
+    if(ack_seen("X:"))
+    {
+      storegantry(0, ack_value());
+      //storeCmd("M118 %d\n", ack_value());
+      if (ack_seen("Y:"))
+      {
+        storegantry(1, ack_value());
+        //storeCmd("M118 %d\n", ack_value());
+        if (ack_seen("Z:"))
+        {
+          //storeCmd("M118 %d\n", ack_value());
+          storegantry(2, ack_value());
+        }
+      }
     }					
-    if(ack_seen("T:") || ack_seen("T0:")) 
+    else if(ack_seen("T:") || ack_seen("T0:")) 
     {
       heatSetCurrentTemp(heatGetCurrentToolNozzle(), ack_value()+0.5);
       heatSyncTargetTemp(heatGetCurrentToolNozzle(), ack_second_value()+0.5);
@@ -177,19 +192,6 @@ void parseACK(void)
     else if(ack_seen("Count E:")) // parse actual position, response of "M114"
     {
       coordinateSetAxisActualSteps(E_AXIS, ack_value());
-    }
-    else if (ack_seen("X:"))
-    {
-      storegantry(0, ack_value());
-      if (ack_seen("Y:"))
-      {
-        storegantry(1, ack_value());
-
-        if (ack_seen("Z:"))
-        {
-          storegantry(2, ack_value());
-        }
-      }
     }
     else if(ack_seen(echomagic) && ack_seen(busymagic) && ack_seen("processing"))
     {
