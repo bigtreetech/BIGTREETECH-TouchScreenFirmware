@@ -112,6 +112,10 @@
 // update the icons from alternate icon folder
 #define ALTERNATIVE_MOVE_MENU
 
+//Invert the Y Axis move Direction
+//#define INVERT_YAXIS
+
+
 // Enable Unified Move Menu
 // Move, Home, Extrude, ABL at one Place and bring Gcode Menu on Home Menu
 #define UNIFIED_MENU
@@ -126,6 +130,11 @@
  * Disable this if you want to use the model preview feature
  */
 //#define GCODE_LIST_MODE
+
+
+//-------RESET SETTINGS & TOUCH SCREEN CALIBRATION------||
+//to reset the touch screen create a text file with name 'reset.txt' in root folder of the sd card and press reset button.
+
 
 // SD support
 #define ONBOARD_SD_SUPPORT

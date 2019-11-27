@@ -11,8 +11,10 @@
   - New languages, currently supporting 11 languages: English, simplified Chinese, Russian, Japanese, Armenian, German, Czech, Spanish, French, Portuguese, Italian
 - Added a Custom gcode menu
 - Added unified menu
-  - [unified menu](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update%20-%20Unified%20Menu%20Material%20theme) ![image](https://user-images.githubusercontent.com/38851044/69716869-efb12100-1145-11ea-9b4e-e50a215e2def.png)
-  - [classic menu](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update) ![image](https://user-images.githubusercontent.com/38851044/69717274-b7f6a900-1146-11ea-94c4-4033f23215bb.png)
+  - [unified menu](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update%20-%20Unified%20Menu%20Material%20theme)
+  - <img src="https://user-images.githubusercontent.com/38851044/69716869-efb12100-1145-11ea-9b4e-e50a215e2def.png" width="500"></img>
+  - [classic menu](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update)
+  - <img src="https://user-images.githubusercontent.com/38851044/69717274-b7f6a900-1146-11ea-94c4-4033f23215bb.png" width="500"></img>
   - Unified menu add status menu (hotend & bed temperature, fan speed, move speed, flow, XYZ position)
   - Gcode file under classic menu is in icon mode, and model preview feature is added(Use with this [tool](https://github.com/bigtreetech/BiQU_Tool))
   - Gcode file under unified menu is in list mode, unable to preview the model, but more friendly for long filename

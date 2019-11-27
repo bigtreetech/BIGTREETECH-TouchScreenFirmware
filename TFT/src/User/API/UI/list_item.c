@@ -28,21 +28,21 @@ const uint16_t ICON_COLOR[ICONCHAR_NUM]=
 
 };
 
-#define   CHAR_INFO       "1"
-#define   CHAR_ERROR      "2"
+#define   CHAR_INFO       "ࢄ"
+#define   CHAR_ERROR	    "ࢂ"
 #define   CHAR_ALERT      ""
 #define   CHAR_CHECKED    ""
 #define   CHAR_UNCHECKED  ""
 #define   CHAR_ON         ""
 #define   CHAR_OFF        ""
-#define   CHAR_RADIO_ON   ""
-#define   CHAR_RADIO_OFF  ""
+#define   CHAR_RADIO_CHECKED   ""
+#define   CHAR_RADIO_UNCHECKED  ""
 #define   CHAR_OK         ""
 #define   CHAR_CANCEL     ""
 #define   CHAR_PAGEUP     "ࡧࡨ"
 #define   CHAR_PAGEDOWN   "ࡩࡪ"
-#define   CHAR_NEXT       ""
-#define   CHAR_PREVIOUS   ""
+#define   CHAR_RIGHT       ""
+#define   CHAR_LEFT         ""
 #define   CHAR_BACK       "࡫࡬"
 #define   CHAR_FOLDER     "ࡢ"
 #define   CHAR_FILE       "ࡣ"
@@ -60,14 +60,14 @@ const char *const GET_ICONCHAR[ICONCHAR_NUM]={
   CHAR_UNCHECKED,
   CHAR_ON,
   CHAR_OFF,
-  CHAR_RADIO_ON,
-  CHAR_RADIO_OFF,
+  CHAR_RADIO_CHECKED,
+  CHAR_RADIO_UNCHECKED,
   CHAR_OK,
   CHAR_CANCEL,
   CHAR_PAGEUP,
   CHAR_PAGEDOWN,
-  CHAR_NEXT,
-  CHAR_PREVIOUS,
+  CHAR_RIGHT,
+  CHAR_LEFT,
   CHAR_BACK,
   CHAR_FOLDER,
   CHAR_FILE,

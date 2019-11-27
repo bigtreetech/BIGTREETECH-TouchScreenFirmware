@@ -21,6 +21,7 @@
 
 #define BMP_ROOT_DIR "0:"ROOT_DIR"/bmp"
 #define FONT_ROOT_DIR "0:"ROOT_DIR"/font"
+#define TFT_RESET_FILE "0:reset.txt"
 
 enum
 {

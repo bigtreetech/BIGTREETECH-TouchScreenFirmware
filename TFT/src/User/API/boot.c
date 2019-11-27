@@ -173,6 +173,17 @@ void updateFont(char *font, u32 addr)
   free(tempbuf);
 }
 
+void scanResetDir(void)
+{
+  FIL resetfile;
+  if (f_open(&resetfile, TFT_RESET_FILE, FA_OPEN_EXISTING | FA_READ) == FR_OK)
+  {
+    f_close(&resetfile);
+    f_rename(TFT_RESET_FILE, TFT_RESET_FILE ".DONE");
+    infoSettingsReset();
+    TSC_Calibration();
+  }
+}
 
 void scanUpdates(void)
 {
@@ -190,5 +201,6 @@ void scanUpdates(void)
       updateIcon();
     }
     if (result) f_rename(ROOT_DIR, ROOT_DIR".CUR");
+    scanResetDir();
   }
 }
