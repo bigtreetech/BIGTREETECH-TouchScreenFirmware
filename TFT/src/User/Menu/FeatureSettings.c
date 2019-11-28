@@ -140,10 +140,6 @@ void menuFeatureSettings(void)
         menuDrawItem(&featureSettingsItems.items[key_num], key_num);
         infoSettings.led_color = led_color[item_ledcolor_i];
         ws2812_send_DAT(led_color[item_ledcolor_i]);
-        ws2812_send_DAT(led_color[item_ledcolor_i]);
-        ws2812_send_DAT(led_color[item_ledcolor_i]);
-        ws2812_send_DAT(led_color[item_ledcolor_i]);
-
         break;
       #endif
 

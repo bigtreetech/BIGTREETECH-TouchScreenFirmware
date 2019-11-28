@@ -34,6 +34,7 @@ void infoMenuSelect(void)
     {
       #ifdef LED_color_PIN
       led_color_Init(6,5);//
+      ws2812_send_DAT(LED_OFF);
       #endif 
       Serial_ReSourceInit();
       GUI_SetColor(FK_COLOR);
