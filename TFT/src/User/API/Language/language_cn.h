@@ -142,4 +142,15 @@
     #define CN_FORCE_SHUT_DOWN      "强制关机"
     #define CN_SHUTTING_DOWN        "正在关机..."
 
+        //LEDCOLOR
+    #define CN_LEDOFF               "关" 
+    #define CN_LEDWHITE             "白"
+    #define CN_LEDRED               "红"
+    #define CN_LEDORANGE            "橙"
+    #define CN_LEDYELLOW            "黄"
+    #define CN_LEDGREEN             "绿"
+    #define CN_LEDBLUE              "蓝"
+    #define CN_LEDINDIGO            "靛"
+    #define CN_LEDVIOLET            "紫"
+
 #endif

@@ -182,6 +182,17 @@ const char *const en_pack[LABEL_NUM]={
   EN_WAIT_TEMP_SHUT_DOWN,
   EN_FORCE_SHUT_DOWN,
   EN_SHUTTING_DOWN,
+  
+  EN_LEDOFF,
+  EN_LEDWHITE,
+  EN_LEDRED,
+  EN_LEDORANGE,
+  EN_LEDYELLOW,
+  EN_LEDGREEN,
+  EN_LEDBLUE,
+  EN_LEDINDIGO,
+  EN_LEDVIOLET,
+
 };
 
 const char *const cn_pack[LABEL_NUM]={
@@ -332,6 +343,16 @@ const char *const cn_pack[LABEL_NUM]={
   CN_WAIT_TEMP_SHUT_DOWN,
   CN_FORCE_SHUT_DOWN,
   CN_SHUTTING_DOWN,
+	
+  CN_LEDOFF,
+  CN_LEDWHITE,
+  CN_LEDRED,
+  CN_LEDORANGE,
+  CN_LEDYELLOW,
+  CN_LEDGREEN,
+  CN_LEDBLUE,
+  CN_LEDINDIGO,
+  CN_LEDVIOLET,
 };
 
 const char *const ru_pack[LABEL_NUM]={
