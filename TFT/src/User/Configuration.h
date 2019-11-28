@@ -131,6 +131,11 @@
  */
 //#define GCODE_LIST_MODE
 
+
+//-------RESET SETTINGS & TOUCH SCREEN CALIBRATION------||
+//to reset the touch screen create a text file with name 'reset.txt' in root folder of the sd card and press reset button.
+
+
 // SD support
 #define ONBOARD_SD_SUPPORT
 #ifdef ONBOARD_SD_SUPPORT

@@ -175,11 +175,11 @@ void updateFont(char *font, u32 addr)
 
 void scanResetDir(void)
 {
-  DIR dir;
-  if (f_opendir(&dir, TFT_RESET_DIR) == FR_OK)
+  FIL resetfile;
+  if (f_open(&resetfile, TFT_RESET_FILE, FA_OPEN_EXISTING | FA_READ) == FR_OK)
   {
-    f_closedir(&dir);
-    f_rename(TFT_RESET_DIR, TFT_RESET_DIR".DONE");
+    f_close(&resetfile);
+    f_rename(TFT_RESET_FILE, TFT_RESET_FILE ".DONE");
     infoSettingsReset();
     TSC_Calibration();
   }
