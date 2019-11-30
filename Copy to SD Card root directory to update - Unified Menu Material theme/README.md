@@ -8,7 +8,9 @@
 # how to update firmware
 copy firmware(.bin), fonts(TFT24/font) and icons(TFT24/bmp) to SD Card root directory, insert SD card to touch screen, reset touch screen and then it will be updated automatically.
 
-unified menu ![image](https://user-images.githubusercontent.com/38851044/69716869-efb12100-1145-11ea-9b4e-e50a215e2def.png)
+unified menu
+
+<img src="https://user-images.githubusercontent.com/38851044/69716869-efb12100-1145-11ea-9b4e-e50a215e2def.png" width="500"></img>
 
 The structure of the files in SD Card should be as follows
 ![image](https://user-images.githubusercontent.com/25599056/61274462-75a77d80-a7de-11e9-8e86-04d3d2abfb4d.png)

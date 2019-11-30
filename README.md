@@ -77,9 +77,13 @@ to config hotend, extruder, fan number
 # how to update firmware
 copy firmware(.bin), fonts(TFT24/font) and icons(TFT24/bmp) to SD Card root directory, insert SD card to touch screen, reset touch screen and then it will be updated automatically.
 
-unified menu in [here](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update%20-%20Unified%20Menu%20Material%20theme) ![image](https://user-images.githubusercontent.com/38851044/69716869-efb12100-1145-11ea-9b4e-e50a215e2def.png)
+unified menu in [here](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update%20-%20Unified%20Menu%20Material%20theme)
 
-classic menu in [here](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update) ![image](https://user-images.githubusercontent.com/38851044/69717274-b7f6a900-1146-11ea-94c4-4033f23215bb.png)
+<img src="https://user-images.githubusercontent.com/38851044/69716869-efb12100-1145-11ea-9b4e-e50a215e2def.png" width="500"></img>
+
+classic menu in [here](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update)
+
+<img src="https://user-images.githubusercontent.com/38851044/69717274-b7f6a900-1146-11ea-94c4-4033f23215bb.png" width="500"></img>
   
 The structure of the files in SD Card should be as follows
 ![image](https://user-images.githubusercontent.com/25599056/61274462-75a77d80-a7de-11e9-8e86-04d3d2abfb4d.png)
