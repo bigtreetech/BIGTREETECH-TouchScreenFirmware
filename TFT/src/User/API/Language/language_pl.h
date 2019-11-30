@@ -142,5 +142,6 @@
     #define PL_WAIT_TEMP_SHUT_DOWN  "Czekam na schłodzenie do "STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP)"℃" // Wait for the temperature of hotend to be lower than 50℃
     #define PL_FORCE_SHUT_DOWN      "Wymuś"
     #define PL_SHUTTING_DOWN        "Wyłączanie..."
+    #define PL_PARAMETER_SETTING    "Parametr"
 
 #endif

@@ -50,6 +50,8 @@
 #include "Gcode/mygcodefs.h"
 #include "flashStore.h"
 #include "parseACK.h"
+#include "Selectmode.h"
+#include "Parametersetting.h"
 
 #include "extend.h"
 

@@ -42,16 +42,6 @@ typedef enum
 
 #define ITEM_PER_PAGE  8
 
-/*-------------------------select mode-------top*/
-#define SELECTMODE 2
-typedef enum
-{
-  MKEY_0 = 0,
-  MKEY_1,
-  MKEY_IDLE = IDLE_TOUCH,
-}MKEY_VALUES;
-/*-------------------------select mode-------end*/
-
 typedef struct
 {
   int16_t icon;
@@ -100,11 +90,6 @@ void menuDrawPage (const MENUITEMS * menuItems, bool listview);
 
 void itemDrawIconPress(uint8_t positon, uint8_t is_press);
 KEY_VALUES menuKeyGetValue(void);
-
-//select mode fun
-extern const GUI_RECT rect_of_mode[SELECTMODE];
-extern MKEY_VALUES MKeyGetValue(void);
-extern void selectmode(int8_t  nowMode);
 
 void loopBackEnd(void);
 void loopFrontEnd(void);

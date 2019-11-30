@@ -65,6 +65,8 @@ static float ack_second_value()
 
 void ackPopupInfo(const char *info)
 {
+  if(infoMenu.menu[infoMenu.cur] == parametersetting) return;
+
   if (info == echomagic)
   {
     statusScreen_setMsg((u8 *)info, (u8 *)dmaL2Cache + ack_index);
@@ -196,6 +198,32 @@ void parseACK(void)
     else if(ack_seen(echomagic) && ack_seen(busymagic) && ack_seen("processing"))
     {
       busyIndicator(STATUS_BUSY);
+    }
+    else if(ack_seen("X driver current: "))
+    {
+      Get_parameter_value[0] = ack_value();
+
+      if(ack_seen("Y driver current: "))
+      Get_parameter_value[1] = ack_value();
+
+      if(ack_seen("Z driver current: "))
+      Get_parameter_value[2] = ack_value();
+
+      if(ack_seen("E driver current: "))
+      Get_parameter_value[3] = ack_value();
+    }
+    else if(ack_seen("M92 X"))
+    {
+      Get_parameter_value[4] = ack_value();
+
+      if(ack_seen("Y"))
+      Get_parameter_value[5] = ack_value();
+
+      if(ack_seen("Z"))
+      Get_parameter_value[6] = ack_value();
+
+      if(ack_seen("E"))
+      Get_parameter_value[7] = ack_value();
     }
 #ifdef ONBOARD_SD_SUPPORT     
     else if(ack_seen(bsdnoprintingmagic) && infoMenu.menu[infoMenu.cur] == menuPrinting)

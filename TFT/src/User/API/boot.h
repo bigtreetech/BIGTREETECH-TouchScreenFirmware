@@ -136,6 +136,9 @@ enum
   ICON_MAINMENU,
   ICON_STATUS_SPEED,
   ICON_STATUS_FLOW,
+  ICON_PARAMETER,
+  ICON_GLOBAL_NOZZLE0,
+  ICON_GLOBAL_BED,
   
 //  ICON_RESERVE
 // Preview should be in the last place

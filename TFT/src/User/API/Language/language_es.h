@@ -142,5 +142,6 @@
     #define ES_WAIT_TEMP_SHUT_DOWN  "Espere a que la temperatura del hotend sea inferior a "STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP)"℃" // Wait for the temperature of hotend to be lower than 50℃
     #define ES_FORCE_SHUT_DOWN      "Forzar Apagado"
     #define ES_SHUTTING_DOWN        "Apagando..."
+    #define ES_PARAMETER_SETTING    "Parámetro"
 
 #endif

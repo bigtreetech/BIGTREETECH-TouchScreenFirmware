@@ -142,5 +142,6 @@
     #define CN_WAIT_TEMP_SHUT_DOWN  "喷头温度正在降温，等待低于"STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP)"℃后自动关机" // 喷头温度正在降温，等待低于50℃后自动关机
     #define CN_FORCE_SHUT_DOWN      "强制关机"
     #define CN_SHUTTING_DOWN        "正在关机..."
+    #define CN_PARAMETER_SETTING    "参数设置"
 
 #endif

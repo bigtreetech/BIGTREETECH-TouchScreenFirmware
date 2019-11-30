@@ -65,11 +65,6 @@ void infoMenuSelect(void)
   }
 }
 
-u32 select_mode [SELECTMODE]={
-    ICON_MARLIN,
-    ICON_BIGTREE,
-};
-
 #if LCD_ENCODER_SUPPORT
 void menuMode(void)
 {  
@@ -99,11 +94,8 @@ void menuMode(void)
   GUI_Clear(BLACK);
   //RADIO_Create(&modeRadio);
   Serial_ReSourceDeInit();
-  
-  for(u8 i=0;i<SELECTMODE;i++)
-  {
-    lcd_frame_display(rect_of_mode[i].x0,rect_of_mode[i].y0-BYTE_HEIGHT,selecticonw,selecticonw,ICON_ADDR(select_mode[i]));
-  }
+
+  show_selectICON();
   TSC_ReDrawIcon = NULL; // Disable icon redraw callback function
   
   selectmode(nowMode);

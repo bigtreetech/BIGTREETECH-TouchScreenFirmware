@@ -142,5 +142,6 @@
     #define RU_WAIT_TEMP_SHUT_DOWN  "Wait for the temperature of hotend to be lower than "STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP)"℃" // Wait for the temperature of hotend to be lower than 50℃
     #define RU_FORCE_SHUT_DOWN      "Force"
     #define RU_SHUTTING_DOWN        "Shutting down..."
+    #define RU_PARAMETER_SETTING    "Nараметры"
     
 #endif
