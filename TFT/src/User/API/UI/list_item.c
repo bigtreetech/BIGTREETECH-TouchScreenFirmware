@@ -84,10 +84,12 @@ char * IconChar(uint8_t sel)
 return (char *)GET_ICONCHAR[sel];
 }
 
-void ListItem_Display(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey, uint8_t iconchar, ICON_POS pos, uint8_t * label, bool pressed)
+void ListItem_Display(const GUI_RECT* rect, uint8_t iconchar, ICON_POS pos, uint8_t * label, bool pressed)
 {
-
-  GUI_RECT rect_item = {sx, sy, ex, ey};
+  uint16_t sx = rect->x0,
+           sy = rect->y0,
+           ex = rect->x1,
+           ey = rect->y1;
   uint16_t w = ex- sx;
   uint16_t h = ey- sy;
   uint16_t icon_x= sx + 1;
@@ -98,7 +100,7 @@ void ListItem_Display(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey, uint8_
   //uint8_t * p = IconCharSelect(iconchar);
   size_t charIcon_w = strlen(IconChar(iconchar))/3 * BYTE_HEIGHT;
   //storeCmd("%d\n",charIcon_w);
-  GUI_ClearPrect(&rect_item);
+  GUI_ClearPrect(rect);
   
   switch (pos)
   {
@@ -163,7 +165,7 @@ void ListItem_Display(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey, uint8_
   }
   if (pressed){
     GUI_SetColor(WHITE);
-    GUI_DrawPrect(&rect_item);
+    GUI_DrawPrect(rect);
 
   }
       GUI_SetColor(FK_COLOR);

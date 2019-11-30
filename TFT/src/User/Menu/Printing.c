@@ -112,6 +112,16 @@ void endGcodeExecute(void)
   mustStoreCmd("M18\n");
 }
 
+//only return gcode file name except path
+//for example:"SD:/test/123.gcode"
+//only return "123.gcode"
+u8 *getCurGcodeName(char *path)
+{
+  int i=strlen(path);
+  for(; path[i]!='/'&& i>0; i--)
+  {}
+  return (u8* )(&path[i+1]);
+}
 
 void menuBeforePrinting(void)
 {
@@ -177,6 +187,7 @@ void menuBeforePrinting(void)
   }
   infoPrinting.printing = true;
   infoMenu.menu[infoMenu.cur] = menuPrinting;
+  printingItems.title.address = getCurGcodeName(infoFile.title);
 }
 
 
@@ -304,22 +315,11 @@ void reDrawProgress(u8 progress)
 extern SCROLL   titleScroll;
 extern GUI_RECT titleRect;
 
-//only return gcode file name except path
-//for example:"SD:/test/123.gcode"
-//only return "123.gcode"
-u8 *getCurGcodeName(char *path)
-{
-  int i=strlen(path);
-  for(; path[i]!='/'&& i>0; i--)
-  {}
-  return (u8* )(&path[i+1]);
-}
 
 void printingDrawPage(void)
 {
   menuDrawPage(&printingItems,false);
   //	Scroll_CreatePara(&titleScroll, infoFile.title,&titleRect);  //
-  GUI_DispLenString(titleRect.x0, titleRect.y0, getCurGcodeName(infoFile.title), (titleRect.x1 - titleRect.x0));
   // printed time
   GUI_DispString(progressRect.x0, TIME_Y, (u8* )"T:");
   GUI_DispString(progressRect.x0+BYTE_WIDTH*4, TIME_Y, (u8* )":");
