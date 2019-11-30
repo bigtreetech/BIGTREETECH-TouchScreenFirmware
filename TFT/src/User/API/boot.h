@@ -25,7 +25,6 @@
 
 enum
 {
-  ICON_BACKGROUND = -1,
   ICON_HEAT = 0,
   ICON_MOVE,
   ICON_HOME,
@@ -140,6 +139,8 @@ enum
 //  ICON_RESERVE
 // Preview should be in the last place
   ICON_PREVIEW,
+// Back ground sign
+  ICON_BACKGROUND,
 };
 
 typedef union

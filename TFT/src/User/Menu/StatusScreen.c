@@ -248,16 +248,12 @@ float getAxisLocation(u8 n){
   {
   case 0:
     return xaxis;
-    break;
   case 1:
     return yaxis;
-    break;
   case 2:
     return zaxis;
-    break;
   default:
     return xaxis;
-    break;
   }
 }
 

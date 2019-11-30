@@ -97,9 +97,19 @@ void menuClearGaps(void)
 static const MENUITEMS * curMenuItems = NULL;   //current menu
 static bool isListview;
 
+uint8_t *labelGetAddress(const LABEL *label)
+{
+  if (label->index == LABEL_BACKGROUND) return NULL;  // No content in label
+  if (label->index < LABEL_NUM) // Index of language
+    return textSelect(label->index);
+  else // Address of string
+    return label->address;
+}
+
 void menuDrawItem(const ITEM * item, u8 positon)
 {
-   const GUI_RECT *rect = rect_of_key + positon;
+  uint8_t *content = labelGetAddress(&item->label);
+  const GUI_RECT *rect = rect_of_key + positon;
   if (infoMenu.menu[infoMenu.cur] == menuStatus){
      rect = rect_of_keyStatus + positon;
   }
@@ -116,16 +126,16 @@ void menuDrawItem(const ITEM * item, u8 positon)
   {
     rect = rect_of_key + ITEM_PER_PAGE + positon;
   }
-
-  GUI_ClearRect(rect->x0, rect->y0, rect->x1, rect->y1);
-  if(item->label != LABEL_BACKGROUND)
-    GUI_DispStringInPrect(rect,textSelect(item->label));
+  
+  GUI_ClearPrect(rect);
+  if (content)  
+    GUI_DispStringInPrect(rect, content);
 }
 
 void menuDrawListItem(const ITEM *item, uint8_t positon)
 {
   const GUI_RECT *rect = rect_of_keyListView + positon;
-  if (item->icon == ICONCHAR_BACKGROUND && item->label == LABEL_BACKGROUND)
+  if (item->icon == ICONCHAR_BACKGROUND && item->label.index == LABEL_BACKGROUND)
   {
     GUI_ClearPrect(rect);
   }
@@ -134,13 +144,13 @@ void menuDrawListItem(const ITEM *item, uint8_t positon)
     if (positon > 4)
     {
       GUI_SetBkColor(LISTBTN_BKCOLOR);
-      ListItem_Display(rect->x0, rect->y0, rect->x1, rect->y1, item->icon, MIDDLE, item->label, false);
+      ListItem_Display(rect, item->icon, MIDDLE, item->label.address, false);
       GUI_SetBkColor(BK_COLOR);
     }
     else
     {
 
-      ListItem_Display(rect->x0, rect->y0, rect->x1, rect->y1, item->icon, LEFT_CENTER, item->label, false);
+      ListItem_Display(rect, item->icon, LEFT_CENTER, item->label.address, false);
     }
   }
 }
@@ -270,7 +280,8 @@ void loopBusySignClear(void)
 
 void menuDrawTitle(const MENUITEMS * menuItems)
 {
-  u16 start_y;
+  const uint8_t *content = labelGetAddress(&menuItems->title);
+  uint16_t start_y;
   if (infoMenu.menu[infoMenu.cur] == menuStatus)
   {
     start_y = (SS_TITLE_END_Y - BYTE_HEIGHT) / 2;
@@ -282,8 +293,10 @@ void menuDrawTitle(const MENUITEMS * menuItems)
 
   GUI_ClearRect(10, start_y, LCD_WIDTH-10, start_y+BYTE_HEIGHT);
   
-  if(menuItems->title != LABEL_BACKGROUND)
-    GUI_DispString(10, start_y, textSelect(menuItems->title));
+  if(content)
+  {
+    GUI_DispLenString(10, start_y, content, LCD_WIDTH-20);
+  }
 
   if(reminder.status == STATUS_IDLE) return;
   GUI_SetColor(RED);
@@ -347,35 +360,35 @@ void itemDrawIconPress(u8 positon, u8 is_press)
   }
   else
   { //draw rec over list item if pressed
-    if (curMenuItems->items[positon].icon == ICONCHAR_BACKGROUND && curMenuItems->items[positon].label == LABEL_BACKGROUND)
+    if (curMenuItems->items[positon].icon == ICONCHAR_BACKGROUND && curMenuItems->items[positon].label.index == LABEL_BACKGROUND)
       return;
 
     const GUI_RECT *rect = rect_of_keyListView + positon;
 /*     ICON_POS ps = LEFT_CENTER;
         if (positon > 4){ ps = MIDDLE;}
         if (is_press) //draw rec over list item if pressed
-            ListItem_Display(rect->x0, rect->y0, rect->x1, rect->y1, curMenuItems->items[positon].icon, ps, (u8 *)curMenuItems->items[positon].label, true);
+            ListItem_Display(rect, curMenuItems->items[positon].icon, ps, (u8 *)curMenuItems->items[positon].label, true);
         else //Redraw normal item when released
-            ListItem_Display(rect->x0, rect->y0, rect->x1, rect->y1, curMenuItems->items[positon].icon, ps, (u8 *)curMenuItems->items[positon].label, false);
+            ListItem_Display(rect, curMenuItems->items[positon].icon, ps, (u8 *)curMenuItems->items[positon].label, false);
      */
     if (positon > 4)
     {
       GUI_SetBkColor(LISTBTN_BKCOLOR);
       if (is_press) //draw rec over list item if pressed
       {
-      ListItem_Display(rect->x0, rect->y0, rect->x1, rect->y1, curMenuItems->items[positon].icon, MIDDLE, (u8 *)curMenuItems->items[positon].label, true);
+      ListItem_Display(rect, curMenuItems->items[positon].icon, MIDDLE, curMenuItems->items[positon].label.address, true);
       }
       else{
-      ListItem_Display(rect->x0, rect->y0, rect->x1, rect->y1, curMenuItems->items[positon].icon, MIDDLE, (u8 *)curMenuItems->items[positon].label, false);
+      ListItem_Display(rect, curMenuItems->items[positon].icon, MIDDLE, curMenuItems->items[positon].label.address, false);
       }
       GUI_SetBkColor(BK_COLOR);
     }
     else
     {
         if (is_press) //draw rec over list item if pressed
-            ListItem_Display(rect->x0, rect->y0, rect->x1, rect->y1, curMenuItems->items[positon].icon, LEFT_CENTER, (u8 *)curMenuItems->items[positon].label, true);
+            ListItem_Display(rect, curMenuItems->items[positon].icon, LEFT_CENTER, curMenuItems->items[positon].label.address, true);
         else //Redraw normal item when released
-            ListItem_Display(rect->x0, rect->y0, rect->x1, rect->y1, curMenuItems->items[positon].icon, LEFT_CENTER, (u8 *)curMenuItems->items[positon].label, false);
+            ListItem_Display(rect, curMenuItems->items[positon].icon, LEFT_CENTER, curMenuItems->items[positon].label.address, false);
     }
   
   
