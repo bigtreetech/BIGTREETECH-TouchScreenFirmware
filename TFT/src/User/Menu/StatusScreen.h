@@ -44,6 +44,9 @@ void gantry_inc(int n, float val);
   #define STATUS_TITLE_SHORT          20
   #define SS_TITLE_END_Y              50
   #define STATUS_GANTRY_YOFFSET       8
+  #define INFOBOX_P1_WIDTH            108
+  #define INFOBOX_P2_WIDTH            107
+
 
 #elif defined(TFT28_V1_0) || defined(TFT24_V1_1)
 
@@ -64,6 +67,8 @@ void gantry_inc(int n, float val);
   #define STATUS_TITLE_SHORT          10
   #define SS_TITLE_END_Y              30
   #define STATUS_GANTRY_YOFFSET       6
+  #define INFOBOX_P1_WIDTH            75
+  #define INFOBOX_P2_WIDTH            75
   #endif
 
 #endif

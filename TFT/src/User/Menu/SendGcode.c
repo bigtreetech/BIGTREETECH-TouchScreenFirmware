@@ -179,8 +179,7 @@ void menuSendGcode(void)
     
     loopBackEnd();
   }
-  GUI_SetColor(FK_COLOR);
-  GUI_SetBkColor(BK_COLOR);
+  GUI_RestoreColorDefault();
 }
 
 
@@ -258,6 +257,5 @@ void menuTerminal(void)
     
     loopBackEnd();
   }
-  GUI_SetColor(FK_COLOR);
-  GUI_SetBkColor(BK_COLOR);
+  GUI_RestoreColorDefault();
 }

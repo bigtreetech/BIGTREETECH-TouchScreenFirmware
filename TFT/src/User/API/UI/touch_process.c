@@ -126,8 +126,7 @@ void TSC_Calibration(void)
     F = (Y1*(X3*YL2 - X2*YL3) + Y2*(X1*YL3 - X3*YL1) + Y3*(X2*YL1 - X1*YL2));
   }while(calibrationEnsure(LCD_WIDTH/2, LCD_HEIGHT/2)==0);
 
-  GUI_SetColor(FK_COLOR);
-  GUI_SetBkColor(BK_COLOR);
+  GUI_RestoreColorDefault();
 }
 
 
