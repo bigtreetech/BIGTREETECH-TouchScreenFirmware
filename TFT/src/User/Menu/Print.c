@@ -303,7 +303,11 @@ MENUITEMS sourceSelItems = {
 LABEL_PRINT,
 // icon                       label
  {{ICON_SD_SOURCE,            LABEL_TFTSD},
+ #ifdef ONBOARD_SD_SUPPORT
   {ICON_BSD_SOURCE,           LABEL_ONBOARDSD},
+ #else
+  {ICON_BACKGROUND,           LABEL_BACKGROUND},
+ #endif
  #ifdef U_DISK_SUPPROT
   {ICON_U_DISK,               LABEL_U_DISK},
  #else

@@ -143,8 +143,23 @@ void parseACK(void)
     if(ack_seen("ok"))
     {
       infoHost.wait = false;
+    }
+    if(ack_seen("X:"))
+    {
+      storegantry(0, ack_value());
+      //storeCmd("M118 %d\n", ack_value());
+      if (ack_seen("Y:"))
+      {
+        storegantry(1, ack_value());
+        //storeCmd("M118 %d\n", ack_value());
+        if (ack_seen("Z:"))
+        {
+          //storeCmd("M118 %d\n", ack_value());
+          storegantry(2, ack_value());
+        }
+      }
     }					
-    if(ack_seen("T:") || ack_seen("T0:")) 
+    else if(ack_seen("T:") || ack_seen("T0:")) 
     {
       heatSetCurrentTemp(heatGetCurrentToolNozzle(), ack_value()+0.5);
       heatSyncTargetTemp(heatGetCurrentToolNozzle(), ack_second_value()+0.5);
@@ -178,19 +193,6 @@ void parseACK(void)
     {
       coordinateSetAxisActualSteps(E_AXIS, ack_value());
     }
-    else if (ack_seen("X:"))
-    {
-      storegantry(0, ack_value());
-      if (ack_seen("Y:"))
-      {
-        storegantry(1, ack_value());
-
-        if (ack_seen("Z:"))
-        {
-          storegantry(2, ack_value());
-        }
-      }
-    }
     else if(ack_seen(echomagic) && ack_seen(busymagic) && ack_seen("processing"))
     {
       busyIndicator(STATUS_BUSY);
@@ -208,7 +210,7 @@ void parseACK(void)
         infoHost.printing=true;
       }
       // Parsing printing data
-      // Exampre: SD printing byte 123/12345
+      // Example: SD printing byte 123/12345
       char *ptr;
       u32 position = strtol(strstr(dmaL2Cache, "byte ")+5, &ptr, 10); 
       setPrintCur(position);
