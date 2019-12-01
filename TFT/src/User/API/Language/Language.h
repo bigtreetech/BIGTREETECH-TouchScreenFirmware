@@ -19,6 +19,7 @@ enum
   PORTUGUESE,
   ITALIAN,
   POLISH,
+  SLOVAK,
 
   LANGUAGE_NUM,
 };
