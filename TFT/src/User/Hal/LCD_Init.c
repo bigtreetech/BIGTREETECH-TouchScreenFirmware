@@ -248,7 +248,7 @@ void LCD_init_RGB(void)
 	LCD_WR_DATA(0x33);
 	LCD_WR_DATA(0x33);
 	LCD_WR_REG(0xb7);
-	LCD_WR_DATA(0OAx35);
+	LCD_WR_DATA(0x35);
 	//---------------------------------ST7789V Power setting--------------------------------------//
 	LCD_WR_REG(0xbb);
 	LCD_WR_DATA(0x28);
