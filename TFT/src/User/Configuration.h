@@ -16,13 +16,13 @@
 // Marlin Mode Background & Font Color Options
 // Current color options from lcd.h: BLACK, BLUE, BROWN, BRRED, CYAN, GBLUE, GRAY, GREEN, MAGENTA, RED, WHITE, YELLOW
 #define ST7920_BKCOLOR BLACK
-#define ST7920_FNCOLOR GREEN
+#define ST7920_FNCOLOR GRAY
 
 // Text displayed at the top of the LCD in Marlin Mode.
-//#define ST7920_BANNER_TEXT "LCD12864 Simulator"
+#define ST7920_BANNER_TEXT "Anycubic Chiron - SKR V1.3"
 
 // Run Marlin Mode fullscreen. Not recommended for TFT24.
-//#define ST7920_FULLSCREEN
+#define ST7920_FULLSCREEN
 
 //===========================================================================
 //============================ TFT Mode Settings ============================
@@ -37,7 +37,7 @@
 
 //                       PLA      PETG       ABS     "CUSTOM1" "CUSTOM2"
 #define PREHEAT_BED      {55,      85,       100,       55,       55}
-#define PREHEAT_HOTEND   {205,     230,      230,       200,      200}
+#define PREHEAT_HOTEND   {200,     230,      230,       200,      200}
 //#define PREHEAT_TEXT     {"PLA",  "PETG",   "ABS",     "T2:",    "T3:"}
 
 #define HEAT_MAX_TEMP    {150,    275,       275,       275,       275,       275,       275}    //max temperature can be set
@@ -56,7 +56,7 @@
 #define SPEED_ID         {"Sp.", "Fr."}
 
 // Default move speed mm/min
-#define DEFAULT_SPEED_MOVE      3000
+#define DEFAULT_SPEED_MOVE      3600
 
 // Extrude speed mm/min
 #define EXTRUDE_SLOW_SPEED      60
@@ -64,12 +64,12 @@
 #define EXTRUDE_FAST_SPEED      1200
 
 // Size of machine
-#define X_MIN_POS 0
+#define X_MIN_POS -10
 #define Y_MIN_POS 0
 #define Z_MIN_POS 0
-#define X_MAX_POS 235
-#define Y_MAX_POS 235
-#define Z_MAX_POS 250
+#define X_MAX_POS 410     // Anycubic Chiron
+#define Y_MAX_POS 410     // Anycubic Chiron
+#define Z_MAX_POS 450     // Anycubic Chiron
 
 // Specify a pause position as { X, Y, Z_raise }
 #define NOZZLE_PAUSE_RETRACT_LENGTH 15   // (mm)
@@ -172,12 +172,12 @@
  * The format of the custom icon is as follows
  * Bit depth: 24 / 32 bit, Pixel size: 95*95(for TFT35), 70*70(for TFT28/TFT24)
  */
-#define CUSTOM_0_LABEL "Restore EEPROM"
-#define CUSTOM_0_GCODE "M501\n"
-//#define CUSTOM_1_LABEL "Custom2"
-//#define CUSTOM_1_GCODE "M105\n"
-//#define CUSTOM_2_LABEL "Custom2"
-//#define CUSTOM_2_GCODE "M105\n"
+#define CUSTOM_0_LABEL "Save EEProm"
+#define CUSTOM_0_GCODE "M500\n"
+#define CUSTOM_1_LABEL "Load EEProm"
+#define CUSTOM_1_GCODE "M501\n"
+#define CUSTOM_2_LABEL "Factory Reset"
+#define CUSTOM_2_GCODE "M502\n"
 //#define CUSTOM_3_LABEL "Custom3"
 //#define CUSTOM_3_GCODE "M105\n"
 //#define CUSTOM_4_LABEL "Custom4"
