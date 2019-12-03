@@ -3,9 +3,9 @@
 
 #include "stdint.h"
 #include "stdbool.h"
+#include "GUI.h"
 
 enum{
-  ICONCHAR_BACKGROUND = -1,
   ICONCHAR_INFO = 0,
   ICONCHAR_ERROR,
   ICONCHAR_ALERT,
@@ -28,7 +28,8 @@ enum{
   ICONCHAR_BED,
   ICONCHAR_FAN,
 
-  ICONCHAR_NUM
+  ICONCHAR_NUM,
+  ICONCHAR_BACKGROUND,
 };
 
 typedef enum
@@ -50,6 +51,6 @@ typedef enum
 
 
 uint8_t * IconCharSelect(uint8_t sel);
-void ListItem_Display(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey, uint8_t iconchar, ICON_POS pos, uint8_t * label, bool pressed);
+void ListItem_Display(const GUI_RECT* rect, uint8_t iconchar, ICON_POS pos, uint8_t * label, bool pressed);
 
 #endif

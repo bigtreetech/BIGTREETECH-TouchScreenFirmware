@@ -52,16 +52,22 @@ typedef enum
 }MKEY_VALUES;
 /*-------------------------select mode-------end*/
 
+typedef union
+{
+  uint32_t index;    // language index, address = textSelect(index);
+  uint8_t *address;
+}LABEL;
+
 typedef struct
 {
-  int16_t icon;
-  int16_t label;
+  uint16_t icon;
+  LABEL label;
 }ITEM;
 
 typedef struct
 {
-  int16_t title;
-  ITEM    items[ITEM_PER_PAGE];
+  LABEL title;
+  ITEM  items[ITEM_PER_PAGE];
 }MENUITEMS;
 
 
