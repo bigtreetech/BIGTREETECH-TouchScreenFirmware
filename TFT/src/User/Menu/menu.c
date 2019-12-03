@@ -140,10 +140,10 @@ void menuDrawListItem(const ITEM *item, uint8_t positon)
 }
 
 const GUI_RECT reminderRect = {0, 0, LCD_WIDTH, TITLE_END_Y};
-//const GUI_RECT reminderRectSS ={0, 0, LCD_WIDTH, SS_TITLE_END_Y};
-const GUI_RECT reminderRectSS ={START_X + 1 * ICON_WIDTH + 1 * SPACE_X + 2,   TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + STATUS_MSG_BODY_YOFFSET,
+GUI_RECT reminderRectSS ={0, 0, LCD_WIDTH, SS_TITLE_END_Y};
+const GUI_RECT reminderRectSS0 ={START_X + 1 * ICON_WIDTH + 1 * SPACE_X + 2,   TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + STATUS_MSG_BODY_YOFFSET,
                           START_X + 3 * ICON_WIDTH + 2 * SPACE_X - 2,   TITLE_END_Y +  2 * ICON_HEIGHT + 1 * SPACE_Y - STATUS_MSG_BODY_BOTTOM};
-
+const GUI_RECT reminderRectSS1 = {0, 0, LCD_WIDTH, SS_TITLE_END_Y};
 static REMINDER reminder = {{0, 0, LCD_WIDTH, TITLE_END_Y}, 0, STATUS_UNCONNECT, LABEL_UNCONNECTED};
 static REMINDER volumeReminder = {{0, 0, LCD_WIDTH, TITLE_END_Y}, 0, STATUS_IDLE, LABEL_BACKGROUND};
 static REMINDER busySign = {{LCD_WIDTH - 5, 0, LCD_WIDTH, 5}, 0, STATUS_BUSY, LABEL_BUSY};
@@ -151,6 +151,15 @@ static REMINDER busySign = {{LCD_WIDTH - 5, 0, LCD_WIDTH, 5}, 0, STATUS_BUSY, LA
 
 void reminderMessage(int16_t inf, SYS_STATUS status)
 {
+  if(infoHost.connected == false )
+  {
+  reminderRectSS =reminderRectSS1;
+  }
+  else if(infoMenu.menu[infoMenu.cur] ==menuStatus && infoHost.connected == true)
+  {
+  reminderRectSS =reminderRectSS0;
+  }
+  
   if (infoMenu.menu[infoMenu.cur] == menuStatus){
     reminder.rect = reminderRectSS;
   }
