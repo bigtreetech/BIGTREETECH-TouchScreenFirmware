@@ -65,6 +65,7 @@ typedef enum
 void parametersetting(void);
 char getparameterbuf[CDM_NUM][100];
 void show_globalinfo(void);
+void Temp_change(void);
 extern bool getsetparameter;
 extern int cmd_getparameter_num;
 extern float Get_parameter_value[VALUE_NUM];

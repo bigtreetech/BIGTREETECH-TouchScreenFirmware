@@ -304,8 +304,9 @@ void parametersetting(void)
     return ;
 }
 
-void show_globalinfo(void)
+void Temp_change(void)
 {
+    //static FP_MENU NUM[MAX_MENU_DEPTH];
     char tempstr[10];
     static int16_t compare [2] ;
     #ifndef STATUS_SCREEN
@@ -313,12 +314,14 @@ void show_globalinfo(void)
     #endif 
     if(infoHost.connected == false)    return;
     
-    if(heatGetCurrentTemp(NOZZLE0) != compare[0] || heatGetCurrentTemp(BED) != compare[1])
+    if(heatGetCurrentTemp(NOZZLE0) != compare[0] || heatGetCurrentTemp(BED) != compare[1] )
+    //|| strcmp((char *)infoMenu.menu[infoMenu.cur],(char *)NUM)!=0)
     {
+        //strcpy((char *)NUM ,(char *)infoMenu.menu[infoMenu.cur]);
         compare[0] = heatGetCurrentTemp(NOZZLE0);
         compare[1] = heatGetCurrentTemp(BED);
         GUI_ClearRect(LCD_WIDTH/3, 0, LCD_WIDTH, BYTE_HEIGHT);
-    } 
+        
     
     //global nozzle 
         lcd_frame_display(ICON_NOZZLE_X, 0, 2*BYTE_WIDTH, BYTE_HEIGHT, ICON_ADDR(ICON_GLOBAL_NOZZLE0));
@@ -329,6 +332,27 @@ void show_globalinfo(void)
         lcd_frame_display(ICON_BED_X, 0, 2*BYTE_WIDTH, BYTE_HEIGHT, ICON_ADDR(ICON_GLOBAL_BED));
         my_sprintf(tempstr, "%d/%d", heatGetCurrentTemp(BED), heatGetTargetTemp(BED)); 
         GUI_DispStringInRect(VALUE_BED_X,0,VALUE_BED_X+8*BYTE_WIDTH,BYTE_HEIGHT, (u8 *)tempstr);
-        
+    } 
+    
     return ;
+}
+
+void show_globalinfo(void)
+{
+    if(infoHost.connected == false)    return;
+    char tempstr[10];
+
+     GUI_ClearRect(LCD_WIDTH/3, 0, LCD_WIDTH, BYTE_HEIGHT);
+    
+    //global nozzle 
+    lcd_frame_display(ICON_NOZZLE_X, 0, 2*BYTE_WIDTH, BYTE_HEIGHT, ICON_ADDR(ICON_GLOBAL_NOZZLE0));
+    my_sprintf(tempstr, "%d/%d", heatGetCurrentTemp(NOZZLE0), heatGetTargetTemp(NOZZLE0)); 
+    GUI_DispStringInRect(VALUE_NOZZLE_X,0,VALUE_NOZZLE_X+8*BYTE_WIDTH,BYTE_HEIGHT, (u8 *)tempstr);
+        
+    //global bed 
+    lcd_frame_display(ICON_BED_X, 0, 2*BYTE_WIDTH, BYTE_HEIGHT, ICON_ADDR(ICON_GLOBAL_BED));
+    my_sprintf(tempstr, "%d/%d", heatGetCurrentTemp(BED), heatGetTargetTemp(BED)); 
+    GUI_DispStringInRect(VALUE_BED_X,0,VALUE_BED_X+8*BYTE_WIDTH,BYTE_HEIGHT, (u8 *)tempstr);
+
+    return;
 }
