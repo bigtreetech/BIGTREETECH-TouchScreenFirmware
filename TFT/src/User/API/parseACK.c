@@ -230,6 +230,10 @@ void parseACK(void)
       ackPopupInfo(echomagic);
     }
   }
+  if (ack_seen(" F0:"))
+  {
+      fanSetSpeed(0, ack_value());
+  }
   
 parse_end:    
   if(ack_cur_src != SERIAL_PORT)

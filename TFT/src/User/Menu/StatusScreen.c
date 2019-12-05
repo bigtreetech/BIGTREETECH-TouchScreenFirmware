@@ -45,7 +45,6 @@ static float yaxis;
 static float zaxis;
 static bool gantryCmdWait = false;
 
-
 TOOL current_Ext = NOZZLE0;
 int current_fan = 0;
 int current_speedID = 0;
@@ -151,7 +150,15 @@ void drawTemperature(void)
   menuDrawItem(&ToolItems[2],2);                                          //Fan icon
   GUI_DispStringInPrect(&rectA[2],(u8 *)fanID[current_fan]);              //Fan label
   GUI_SetColor(VAL_COLOR);
-  my_sprintf(tempstr, "%d", fanGetSpeed(current_fan)); 
+  
+  u8 fs;
+  #ifdef SHOW_FAN_PERCENTAGE
+    fs = (fanGetSpeed(current_fan)*100)/255;
+    my_sprintf(tempstr, "%d%%", fs); 
+  #else
+    fs = fanSpeed[curIndex];
+    my_sprintf(tempstr, "%d", fs);
+  #endif 
   GUI_DispStringInPrect(&rectB[2], (u8 *)tempstr);                        //Fan value
 
   GUI_SetColor(HEADING_COLOR);
@@ -297,7 +304,7 @@ void drawStatusScreenMsg(void)
 void scrollMsg(void){
   GUI_SetBkColor(INFOMSG_BKCOLOR);
   GUI_SetColor(INFOMSG_COLOR);
-  Scroll_DispString(&msgScroll,CENTER); 
+  Scroll_DispString(&msgScroll,CENTER);
   GUI_RestoreColorDefault();
 }
 
