@@ -45,7 +45,6 @@ static float yaxis;
 static float zaxis;
 static bool gantryCmdWait = false;
 
-
 TOOL current_Ext = NOZZLE0;
 int current_fan = 0;
 int current_speedID = 0;
@@ -151,7 +150,15 @@ void drawTemperature(void)
   menuDrawItem(&ToolItems[2],2);                                          //Fan icon
   GUI_DispStringInPrect(&rectA[2],(u8 *)fanID[current_fan]);              //Fan label
   GUI_SetColor(VAL_COLOR);
-  my_sprintf(tempstr, "%d", fanGetSpeed(current_fan)); 
+  
+  u8 fs;
+  #ifdef SHOW_FAN_PERCENTAGE
+    fs = (fanGetSpeed(current_fan)*100)/255;
+    my_sprintf(tempstr, "%d%%", fs); 
+  #else
+    fs = fanSpeed[curIndex];
+    my_sprintf(tempstr, "%d", fs);
+  #endif 
   GUI_DispStringInPrect(&rectB[2], (u8 *)tempstr);                        //Fan value
 
   GUI_SetColor(HEADING_COLOR);
@@ -167,7 +174,9 @@ void drawTemperature(void)
   my_sprintf(tempstr, "X: %.2f   Y: %.2f   Z: %.2f", xaxis, yaxis, zaxis);
   GUI_DispStringInPrect(&RecGantry,(u8 *)tempstr);
   
-  GUI_RestoreColorDefault();
+  GUI_SetBkColor(BK_COLOR);
+  GUI_SetColor(FK_COLOR);
+  //GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
 
 void storegantry(int n, float val){
@@ -247,12 +256,16 @@ float getAxisLocation(u8 n){
   {
   case 0:
     return xaxis;
+    break;
   case 1:
     return yaxis;
+    break;
   case 2:
     return zaxis;
+    break;
   default:
     return xaxis;
+    break;
   }
 }
 
@@ -273,17 +286,15 @@ void drawStatusScreenMsg(void)
 //GUI_ClearRect(RectInfo.x0,RectInfo.y0,RectInfo.x1,RectInfo.y1);
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
  
-  //GUI_SetColor(INFOBOX_BKCOLOR);
-  //GUI_FillRect(RectInfo.x0, RectInfo.y0, RectInfo.x1, RectInfo.y1);
+  GUI_SetColor(INFOBOX_BKCOLOR);
+  GUI_FillRect(RectInfo.x0, RectInfo.y0, RectInfo.x1, RectInfo.y1);
   
-  //GUI_SetColor(INFOBOX_BORDER);
-  //GUI_DrawRect(RectInfo.x0, RectInfo.y0, RectInfo.x1, RectInfo.y1);
-  lcd_frame_display(RectInfo.x0, RectInfo.y0, INFOBOX_P1_WIDTH, ICON_HEIGHT, ICON_ADDR(ICON_INFOBOX_PART1));
-  lcd_frame_display(RectInfo.x0+INFOBOX_P1_WIDTH, RectInfo.y0, INFOBOX_P2_WIDTH, ICON_HEIGHT, ICON_ADDR(ICON_INFOBOX_PART2));
+  GUI_SetColor(INFOBOX_BORDER);
+  GUI_DrawRect(RectInfo.x0, RectInfo.y0, RectInfo.x1, RectInfo.y1);
 
   GUI_SetColor(INFOMSG_BKCOLOR);
   GUI_DispString(RectInfo.x0 + STATUS_MSG_ICON_XOFFSET, RectInfo.y0 + STATUS_MSG_ICON_YOFFSET,IconCharSelect(ICONCHAR_INFO));
-  //GUI_FillRect(RectInfo.x0, msgRect.y0, RectInfo.x1, msgRect.y1); //rectangle for msg scroller
+  GUI_FillRect(RectInfo.x0, msgRect.y0, RectInfo.x1, msgRect.y1); //rectangle for msg scroller
 
   GUI_DispString(RectInfo.x0 + BYTE_HEIGHT+ STATUS_MSG_TITLE_XOFFSET,RectInfo.y0 + STATUS_MSG_ICON_YOFFSET,(u8*)msgtitle); 
   GUI_SetBkColor(INFOMSG_BKCOLOR);
@@ -291,14 +302,17 @@ void drawStatusScreenMsg(void)
   
   Scroll_CreatePara(&msgScroll, (u8 *)msgbody, &msgRect);
 
-  GUI_RestoreColorDefault();
+  GUI_SetBkColor(BK_COLOR);
+  GUI_SetColor(FK_COLOR);
+  GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
 
 void scrollMsg(void){
   GUI_SetBkColor(INFOMSG_BKCOLOR);
   GUI_SetColor(INFOMSG_COLOR);
   Scroll_DispString(&msgScroll,CENTER); 
-  GUI_RestoreColorDefault();
+  GUI_SetBkColor(BK_COLOR);
+  GUI_SetColor(FK_COLOR);
 }
 
 void toggleTool(void)
