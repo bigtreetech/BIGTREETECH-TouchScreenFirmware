@@ -1,7 +1,7 @@
 #include "Speed.h"
 #include "includes.h"
 
-//1¸ötitle(±êÌâ), ITEM_PER_PAGE¸öitem(Í¼±ê+±êÇ©) 
+//1ï¿½ï¿½title(ï¿½ï¿½ï¿½ï¿½), ITEM_PER_PAGEï¿½ï¿½item(Í¼ï¿½ï¿½+ï¿½ï¿½Ç©) 
 MENUITEMS percentageItems = {
 //   title
 LABEL_PERCENTAGE_SPEED,
@@ -46,12 +46,12 @@ void speedSetSendWaiting(u8 tool, bool isWaiting)
   send_waiting[tool] = isWaiting;
 }
 
-/* ÉèÖÃµ±Ç°µÄ°Ù·Ö±È */
+/* ï¿½ï¿½ï¿½Ãµï¿½Ç°ï¿½Ä°Ù·Ö±ï¿½ */
 void speedSetPercent(u8 tool, u16 per)
 {
   percentage[tool]=limitValue(10, per, 999);
 }
-/* »ñµÃµ±Ç°µÄ°Ù·Ö±È */
+/* ï¿½ï¿½Ãµï¿½Ç°ï¿½Ä°Ù·Ö±ï¿½ */
 u16 speedGetPercent(u8 tool)
 {
   return percentage[tool];
@@ -75,7 +75,7 @@ void menuSpeed(void)
   for(u8 i=0; i<ITEM_PERCENTAGE_NUM; i++)
   now[i] = percentage[i];
 
-  menuDrawPage(&percentageItems);
+  menuDrawPage(&percentageItems,false);
   showPercentage();
 
   while(infoMenu.menu[infoMenu.cur] == menuSpeed)
@@ -107,7 +107,7 @@ void menuSpeed(void)
         item_percentage_i = (item_percentage_i+1) % ITEM_PERCENTAGE_NUM;
         percentageItems.items[key_num] = itemPercentage[item_percentage_i];
         menuDrawItem(&percentageItems.items[key_num], key_num);      
-        percentageItems.title = itemPercentageTitle[item_percentage_i];
+        percentageItems.title.index = itemPercentageTitle[item_percentage_i];
         menuDrawTitle(&percentageItems);
         showPercentage();
         break;

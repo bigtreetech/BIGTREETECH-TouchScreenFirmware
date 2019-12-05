@@ -6,7 +6,6 @@ SETTINGS infoSettings;
 // Reset settings data
 void infoSettingsReset(void)
 {
-  TSC_Calibration();
   infoSettings.baudrate = 115200;
   infoSettings.language = ENGLISH;
   infoSettings.mode = SERIAL_TSC;
@@ -16,7 +15,6 @@ void infoSettingsReset(void)
   infoSettings.font_color = ST7920_FNCOLOR;
   infoSettings.silent = 0;
   infoSettings.auto_off = 0;
-  storePara();  
 }
 
 // Version infomation
@@ -49,10 +47,10 @@ void menuDisconnect(void)
   GUI_DispStringInRect(20, 0, LCD_WIDTH-20, LCD_HEIGHT, textSelect(LABEL_DISCONNECT_INFO));
   GUI_DispStringInRect(20, LCD_HEIGHT - (BYTE_HEIGHT*2), LCD_WIDTH-20, LCD_HEIGHT, textSelect(LABEL_TOUCH_TO_EXIT));
 
-  Serial_DeConfig();
+  Serial_DeInit();
   while(!isPress());
   while(isPress());
-  Serial_Config(infoSettings.baudrate);
+  Serial_Init(infoSettings.baudrate);
   
   infoMenu.cur--;
 }
@@ -94,7 +92,7 @@ void menuSettings(void)
     }
   }
 
-  menuDrawPage(&settingsItems);
+  menuDrawPage(&settingsItems,false);
 
   while(infoMenu.menu[infoMenu.cur] == menuSettings)
   {
@@ -126,7 +124,8 @@ void menuSettings(void)
         settingsItems.items[key_num] = itemBaudrate[item_baudrate_i];
         menuDrawItem(&settingsItems.items[key_num], key_num);
         infoSettings.baudrate = item_baudrate[item_baudrate_i];
-        Serial_Config(infoSettings.baudrate);
+        Serial_DeInit(); // Serial_Init() will malloc a dynamic memory, so Serial_DeInit() first to free, then malloc again.
+        Serial_Init(infoSettings.baudrate);
         break;
 
       case KEY_ICON_7:

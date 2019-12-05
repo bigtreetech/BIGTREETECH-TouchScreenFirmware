@@ -21,10 +21,10 @@
 
 #define BMP_ROOT_DIR "0:"ROOT_DIR"/bmp"
 #define FONT_ROOT_DIR "0:"ROOT_DIR"/font"
+#define TFT_RESET_FILE "0:reset.txt"
 
 enum
 {
-  ICON_BACKGROUND = -1,
   ICON_HEAT = 0,
   ICON_MOVE,
   ICON_HOME,
@@ -129,10 +129,20 @@ enum
   ICON_MANUAL_LEVEL,
   ICON_COOLDOWN,
   ICON_SILENT_OFF,
-
+  ICON_STATUSNOZZLE,
+  ICON_STATUSBED,
+  ICON_STATUSFAN,
+  ICON_MAINMENU,
+  ICON_STATUS_SPEED,
+  ICON_STATUS_FLOW,
+  ICON_INFOBOX_PART1,
+  ICON_INFOBOX_PART2,
+  
 //  ICON_RESERVE
 // Preview should be in the last place
   ICON_PREVIEW,
+// Back ground sign
+  ICON_BACKGROUND,
 };
 
 typedef union

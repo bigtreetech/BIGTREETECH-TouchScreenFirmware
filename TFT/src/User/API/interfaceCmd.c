@@ -3,35 +3,38 @@
 
 
 QUEUE infoCmd;       //
-QUEUE infoCacheCmd;  //only heatHasWaiting() is false 
-                     //the cmd in this cache will move to infoCmd 
+QUEUE infoCacheCmd;  // Only when heatHasWaiting() is false the cmd in this cache will move to infoCmd queue.
 
 static u8 cmd_index=0;
 
-//
+// Is there a code character in the current gcode command.
 static bool cmd_seen(char code)
 {  
   for(cmd_index = 0; infoCmd.queue[infoCmd.index_r].gcode[cmd_index] != 0 && cmd_index < CMD_MAX_CHAR; cmd_index++)
   {
     if(infoCmd.queue[infoCmd.index_r].gcode[cmd_index] == code)
     {
-      cmd_index+=1;
+      cmd_index += 1;
       return true;
     }
   }
   return false;
 }
 
+// Get the int after 'code', Call after cmd_seen('code').
 static u32 cmd_value(void)
 {
-  return (strtol(&infoCmd.queue[infoCmd.index_r].gcode[cmd_index],NULL,10));
+  return (strtol(&infoCmd.queue[infoCmd.index_r].gcode[cmd_index], NULL, 10));
 }
 
+// Get the float after 'code', Call after cmd_seen('code').
 static float cmd_float(void)
 {
-  return (strtod(&infoCmd.queue[infoCmd.index_r].gcode[cmd_index],NULL));
+  return (strtod(&infoCmd.queue[infoCmd.index_r].gcode[cmd_index], NULL));
 }
 
+// Store gcode cmd to infoCmd queue, this cmd will be sent by UART in sendQueueCmd(),
+// If the infoCmd queue is full, reminde in title bar.
 bool storeCmd(const char * format,...)
 {
   QUEUE *pQueue = &infoCmd;
@@ -54,6 +57,8 @@ bool storeCmd(const char * format,...)
   return true;
 }
 
+// Store gcode cmd to infoCmd queue, this cmd will be sent by UART in sendQueueCmd(),
+// If the infoCmd queue is full, reminde in title bar,  waiting for available queue and store the command.
 void mustStoreCmd(const char * format,...)
 {
   QUEUE *pQueue = &infoCmd;
@@ -75,6 +80,8 @@ void mustStoreCmd(const char * format,...)
   pQueue->count++;
 }
 
+// Store from UART cmd(such as: ESP3D, OctoPrint, else TouchScreen) to infoCmd queue, this cmd will be sent by UART in sendQueueCmd(),
+// If the infoCmd queue is full, reminde in title bar.
 bool storeCmdFromUART(uint8_t port, const char * gcode)
 {
   QUEUE *pQueue = &infoCmd;
@@ -94,6 +101,8 @@ bool storeCmdFromUART(uint8_t port, const char * gcode)
   return true;
 }
 
+// Store gcode cmd to infoCacheCmd queue, this cmd will be move to infoCmd in getGcodeFromFile() -> moveCacheToCmd(),
+// this function is only for restore printing status after power failed.
 void mustStoreCacheCmd(const char * format,...)
 {
   QUEUE *pQueue = &infoCacheCmd;
@@ -114,6 +123,7 @@ void mustStoreCacheCmd(const char * format,...)
   pQueue->count++;
 }
 
+// Move gcode cmd from infoCacheCmd to infoCmd queue.
 bool moveCacheToCmd(void)
 {
   if(infoCmd.count >= CMD_MAX_LIST) return false;
@@ -125,6 +135,7 @@ bool moveCacheToCmd(void)
   return true;
 }
 
+// Clear all gcode cmd in infoCmd queue for abort printing.
 void clearCmdQueue(void)
 {
   infoCmd.count = infoCmd.index_w = infoCmd.index_r =0;  
@@ -132,6 +143,7 @@ void clearCmdQueue(void)
   heatSetUpdateWaiting(false);
 }
 
+// Parse and send gcode cmd in infoCmd.
 void sendQueueCmd(void)
 {
   if(infoHost.wait == true)    return;  
@@ -235,9 +247,12 @@ void sendQueueCmd(void)
           break;
 
         case 117: //M117
-          popupReminder((u8* )"M117", (u8 *)&infoCmd.queue[infoCmd.index_r].gcode[5]);
+          statusScreen_setMsg((u8 *)"M117", (u8 *)&infoCmd.queue[infoCmd.index_r].gcode[5]);
+          if (infoMenu.menu[infoMenu.cur] != menuStatus)
+          {
+            popupReminder((u8 *)"M117", (u8 *)&infoCmd.queue[infoCmd.index_r].gcode[5]);
+          }
           break;
-
         case 190: //M190
           infoCmd.queue[infoCmd.index_r].gcode[2]='4';
           heatSetIsWaiting(BED,true);											

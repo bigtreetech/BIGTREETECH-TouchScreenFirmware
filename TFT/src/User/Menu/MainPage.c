@@ -13,10 +13,20 @@ LABEL_READY,
     {ICON_PRINT,                LABEL_PRINT},
     {ICON_GCODE,                LABEL_GCODE},
     {ICON_STOP,                 LABEL_EMERGENCYSTOP},
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},  //Reserved for status screen
-    {ICON_SETTINGS,             LABEL_SETTINGS},}
+    {ICON_SETTINGS,             LABEL_SETTINGS},
+    {ICON_BACK,                 LABEL_BACK},}
   #else
+  #ifdef STATUS_SCREEN
    {{ICON_HEAT,                 LABEL_PREHEAT},
+    {ICON_MOVE,                 LABEL_MOVE},
+    {ICON_HOME,                 LABEL_HOME},
+    {ICON_LEVELING,             LABEL_LEVELING},
+    {ICON_EXTRUDE,              LABEL_EXTRUDE},
+    {ICON_FAN,                  LABEL_FAN},
+    {ICON_SETTINGS,             LABEL_SETTINGS},
+    {ICON_BACK,                 LABEL_BACK},}
+    #else
+    {{ICON_HEAT,                 LABEL_PREHEAT},
     {ICON_MOVE,                 LABEL_MOVE},
     {ICON_HOME,                 LABEL_HOME},
     {ICON_PRINT,                LABEL_PRINT},
@@ -24,6 +34,7 @@ LABEL_READY,
     {ICON_FAN,                  LABEL_FAN},
     {ICON_SETTINGS,             LABEL_SETTINGS},
     {ICON_LEVELING,             LABEL_LEVELING},}
+    #endif
   #endif
 };
 
@@ -31,7 +42,7 @@ void menuMain(void)
 {
   KEY_VALUES key_num=KEY_IDLE;
   GUI_SetBkColor(ST7920_BKCOLOR);
-  menuDrawPage(&mainPageItems);
+  menuDrawPage(&mainPageItems,false);
 
   while(infoMenu.menu[infoMenu.cur] == menuMain)
   {
@@ -53,14 +64,32 @@ void menuMain(void)
           storeCmd("M18\n");  //disable all stepper motors
           storeCmd("M107\n"); //disable cooling fan
           */
-          storeCmd("M112\n"); //Emergency Stop : Used for emergency stopping, A reset is required to return to operational mode.
+          storeCmd("M112\n"); //Emergency Stop : Used for emergency stopping, a reset is required to return to operational mode.
                               // it may need to wait for a space to open up in the command queue.
                               // Enable EMERGENCY_PARSER in Marlin Firmware for an instantaneous M112 command.
 
            }
           break;
         
-        case KEY_ICON_7: infoMenu.menu[++infoMenu.cur] = menuSettings;        break;
+        case KEY_ICON_6: infoMenu.menu[++infoMenu.cur] = menuSettings;        break;
+        case KEY_ICON_7: infoMenu.cur--;        break;
+        default:break;
+      #else
+      #ifdef STATUS_SCREEN
+        case KEY_ICON_0: infoMenu.menu[++infoMenu.cur] = menuPreheat;   break;
+        case KEY_ICON_1: infoMenu.menu[++infoMenu.cur] = menuMove;      break;
+        case KEY_ICON_2: infoMenu.menu[++infoMenu.cur] = menuHome;      break;
+        case KEY_ICON_3:
+          #ifdef AUTO_BED_LEVELING
+            infoMenu.menu[++infoMenu.cur] = menuAutoLeveling;
+          #else
+            infoMenu.menu[++infoMenu.cur] = menuManualLeveling;
+          #endif
+          break;      
+        case KEY_ICON_4: infoMenu.menu[++infoMenu.cur] = menuExtrude;   break;
+        case KEY_ICON_5: infoMenu.menu[++infoMenu.cur] = menuFan;       break;
+        case KEY_ICON_6: infoMenu.menu[++infoMenu.cur] = menuSettings;  break;
+        case KEY_ICON_7: infoMenu.cur--;        break;
         default:break;
       #else
         case KEY_ICON_0: infoMenu.menu[++infoMenu.cur] = menuPreheat;   break;
@@ -78,6 +107,7 @@ void menuMain(void)
           #endif
           break;
         default:break;
+      #endif
       #endif
     }		
     loopProcess();

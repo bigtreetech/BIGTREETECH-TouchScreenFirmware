@@ -48,7 +48,7 @@ void menuCustom(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
 
-  menuDrawPage(&customItems);
+  menuDrawPage(&customItems,false);
 
   while(infoMenu.menu[infoMenu.cur] == menuCustom)
   {
@@ -119,7 +119,7 @@ void menuRGBSettings(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
 
-  menuDrawPage(&RGBItems);
+  menuDrawPage(&RGBItems,false);
 
   while(infoMenu.menu[infoMenu.cur] == menuRGBSettings)
   {
@@ -167,7 +167,7 @@ LABEL_MACHINE_SETTINGS,
 //  {ICON_BLTOUCH,              LABEL_BLTOUCH},
   {ICON_GCODE,                LABEL_GCODE},
   {ICON_SHUT_DOWN,            LABEL_SHUT_DOWN},
-  {ICON_BABYSTEP,             LABEL_BABYSTEP},
+  {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_BACK,                 LABEL_BACK},}
@@ -177,7 +177,7 @@ void menuMachineSettings(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
   
-  menuDrawPage(&machineSettingsItems);
+  menuDrawPage(&machineSettingsItems,false);
   
   while(infoMenu.menu[infoMenu.cur] == menuMachineSettings)
   {
@@ -198,10 +198,6 @@ void menuMachineSettings(void)
       
       case KEY_ICON_3:
         storeCmd("M81\n");
-        break;
-      
-      case KEY_ICON_4:
-        infoMenu.menu[++infoMenu.cur] = menuBabyStep;
         break;
       
       case KEY_ICON_7:

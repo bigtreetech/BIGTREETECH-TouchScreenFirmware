@@ -10,7 +10,7 @@ void Serial_ReSourceDeInit(void)
 #ifdef BUZZER_PIN
   Buzzer_DeConfig();
 #endif
-  Serial_DeConfig();
+  Serial_DeInit();
 }
 
 void Serial_ReSourceInit(void)
@@ -18,7 +18,7 @@ void Serial_ReSourceInit(void)
 #ifdef BUZZER_PIN
   Buzzer_Config();
 #endif
-  Serial_Config(infoSettings.baudrate);
+  Serial_Init(infoSettings.baudrate);
   
 #ifdef U_DISK_SUPPROT
   USBH_Init(&USB_OTG_Core, USB_OTG_FS_CORE_ID, &USB_Host, &USBH_MSC_cb, &USR_cb);
@@ -35,8 +35,11 @@ void infoMenuSelect(void)
       Serial_ReSourceInit();
       GUI_SetColor(FK_COLOR);
       GUI_SetBkColor(BK_COLOR);
+      #ifndef STATUS_SCREEN
       infoMenu.menu[infoMenu.cur] = menuMain;
-      
+      #else
+      infoMenu.menu[infoMenu.cur] = menuStatus; //status screen as default screen on boot
+      #endif
       #ifdef SHOW_BTT_BOOTSCREEN
         u32 startUpTime = OS_GetTime();
         heatSetUpdateTime(100);
@@ -101,6 +104,7 @@ void menuMode(void)
   {
     lcd_frame_display(rect_of_mode[i].x0,rect_of_mode[i].y0-BYTE_HEIGHT,selecticonw,selecticonw,ICON_ADDR(select_mode[i]));
   }
+  TSC_ReDrawIcon = NULL; // Disable icon redraw callback function
   
   selectmode(nowMode);
   

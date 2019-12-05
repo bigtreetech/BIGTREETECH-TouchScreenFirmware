@@ -1,6 +1,7 @@
 #include "spi_slave.h"
 #include "spi.h"
 #include "GPIO_Init.h"
+#include "stdlib.h"
 
 #ifdef ST7920_SPI
 //TODO:
@@ -22,30 +23,32 @@ SPI_QUEUE SPISlave;
 
 void SPI_ReEnable(u8 mode)
 {
-  ST7920_SPI_NUM->CR1 = (0<<15)  //0:双线双向 1:单线双向
-                      | (0<<14)  //单线双向时使用（0:只收 1:只发）
-                      | (0<<13)  //1:启用硬件CRC
-                      | (0<<12)  //0:下一个发送的值来自发送缓冲区 1:下一个发送的值来自发送CRC寄存器。
-                      | (0<<11)  //0:8位数据帧 1:16位数据帧
-                      | (1<<10)  //0:全双工 1:只接收
-                      | (1<<9)   //0:硬件NSS 1:软件NSS
-                      | (0<<8)   //SSM位为’1’时有意义。它决定了NSS上的电平
-                      | (0<<7)   //0:MSB 1:LSB
-                      | (7<<3)   //bit3-5   000： fPCLK/2 001： fPCLK/4 010： fPCLK/8 011： fPCLK/16
-                                 //         100： fPCLK/32 101： fPCLK/64 110： fPCLK/128 111： fPCLK/256
-                      | (0<<2)   //0:从设备 1:主设备
-                      | (mode<<1)   //CPOL
-                      | (mode<<0);  //CPHA
+  ST7920_SPI_NUM->CR1 = (0<<15)  // 0:2-line 1: 1-line
+                      | (0<<14)  // in bidirectional mode 0:read only 1: read/write
+                      | (0<<13)  // 0:disable CRC 1:enable CRC
+                      | (0<<12)  // 0:Data phase (no CRC phase) 1:Next transfer is CRC (CRC phase)
+                      | (0<<11)  // 0:8-bit data frame 1:16-bit data frame
+                      | (1<<10)  // 0:Full duplex 1:Receive-only
+                      | (1<<9)   // 0:enable NSS 1:disable NSS (Software slave management)
+                      | (0<<8)   // This bit has an effect only when the SSM bit is set. The value of this bit is forced onto the NSS pin and the IO value of the NSS pin is ignored
+                      | (0<<7)   // 0:MSB 1:LSB
+                      | (7<<3)   // bit3-5   000:fPCLK/2    001:fPCLK/4    010:fPCLK/8     011:fPCLK/16
+                                 //          100:fPCLK/32   101:fPCLK/64   110:fPCLK/128   111:fPCLK/256
+                      | (0<<2)   // 0:Slave 1:Master
+                      | (mode<<1)   // CPOL
+                      | (mode<<0);  // CPHA
             
-  ST7920_SPI_NUM->CR2 |= 1<<6;  //接收中断使能 SPI_I2S_IT_RXNE
+  ST7920_SPI_NUM->CR2 |= 1<<6; // RX buffer not empty interrupt enable SPI_I2S_IT_RXNE
 }
 
 void SPI_Slave(void) 
 {
   NVIC_InitTypeDef   NVIC_InitStructure;
 
+  SPISlave.data = malloc(SPI_SLAVE_MAX);
+  while(!SPISlave.data); // malloc failed
   SPI_GPIO_Init(ST7920_SPI);  
-  GPIO_InitSet(PB12, MGPIO_MODE_IPU, 0);  //CS
+  GPIO_InitSet(PB12, MGPIO_MODE_IPU, 0);  // CS
   
   NVIC_InitStructure.NVIC_IRQChannel = SPI2_IRQn; 
   NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1; 
@@ -70,6 +73,8 @@ void SPI_SlaveDeInit(void)
   
   RCC_APB1PeriphResetCmd(RCC_APB1Periph_SPI2, ENABLE); 
   RCC_APB1PeriphResetCmd(RCC_APB1Periph_SPI2, DISABLE);  
+  free(SPISlave.data);
+  SPISlave.data = NULL;
 }
 
 

@@ -5,11 +5,18 @@ REQUEST_COMMAND_INFO requestCommandInfo;
 
 static void resetRequestCommandInfo(void) 
 {
+  requestCommandInfo.cmd_rev_buf = malloc(CMD_MAX_REV);
+  while(!requestCommandInfo.cmd_rev_buf); // malloc failed
   memset(requestCommandInfo.cmd_rev_buf,0,CMD_MAX_REV);
   requestCommandInfo.inWaitResponse = true;
   requestCommandInfo.inResponse = false;
   requestCommandInfo.done = false;
   requestCommandInfo.inError = false;
+}
+
+static void clearRequestCommandInfo(void) 
+{
+  free(requestCommandInfo.cmd_rev_buf);
 }
 
 /*
@@ -35,6 +42,7 @@ bool request_M21(void)
   {
     loopProcess();
   }
+  clearRequestCommandInfo();
   // Check reponse
   return !requestCommandInfo.inError;
 }
@@ -66,6 +74,7 @@ char *request_M20(void)
   {
     loopProcess();
   }
+  clearRequestCommandInfo();
   return requestCommandInfo.cmd_rev_buf;
 }
 
@@ -95,7 +104,9 @@ long request_M23(char *filename)
 
   // Find file size and report its.
   char *ptr;
-  return strtol(strstr(requestCommandInfo.cmd_rev_buf,"Size:")+5, &ptr, 10);
+  long size = strtol(strstr(requestCommandInfo.cmd_rev_buf,"Size:")+5, &ptr, 10);  
+  clearRequestCommandInfo();
+  return size;
 }
 
 /**

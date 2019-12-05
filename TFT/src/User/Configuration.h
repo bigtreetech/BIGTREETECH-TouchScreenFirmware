@@ -50,8 +50,10 @@
 #define EXTRUDER_ID      {"E0",   "E1",      "E2",      "E3",      "E4",      "E5"}
 
 #define FAN_MAX_PWM      {255,       255,       255,       255,       255,       255}
-#define FAN_ID           {"Fan0",    "Fan1",    "Fan2",    "Fan3",    "Fan4",    "Fan5"}
+#define FAN_ID           {"F0",    "F1",    "F2",    "F3",    "F4",    "F5"}
 #define FAN_CMD          {"M106 P0", "M106 P1", "M106 P2", "M106 P3", "M106 P4", "M106 P5" };
+
+#define SPEED_ID         {"Sp.", "Fr."}
 
 // Default move speed mm/min
 #define DEFAULT_SPEED_MOVE      3000
@@ -106,13 +108,33 @@
 // For use with an encoder disc that toggles runout pin as filament moves
 #define FILAMENT_RUNOUT_DISTANCE_MM 7
 
-// Enable alternative Move Menu Buttons Layout for easy
+// Enable alternative Move Menu Buttons Layout matching the direction of actual printer axis.
 // update the icons from alternate icon folder
-//#define ALTERNATIVE_MOVE_MENU
+#define ALTERNATIVE_MOVE_MENU
+
+//Invert the Y Axis move Direction
+//#define INVERT_YAXIS
+
 
 // Enable Unified Move Menu
-// Move, Home, Extrude, ABL at one Place and bring Gcode Menu and
-//#define UNIFIED_MENU
+// Move, Home, Extrude, ABL at one Place and bring Gcode Menu on Home Menu
+#define UNIFIED_MENU
+
+//Enable Status Screen
+//----USE ICONS FROM MATERIAL THEME ONLY---//
+#define STATUS_SCREEN
+
+/**
+ * Enable gocde files list mode
+ * It is friendly to display long file name, but the model preview feature is not available
+ * Disable this if you want to use the model preview feature
+ */
+//#define GCODE_LIST_MODE
+
+
+//-------RESET SETTINGS & TOUCH SCREEN CALIBRATION------||
+//to reset the touch screen create a text file with name 'reset.txt' in root folder of the sd card and press reset button.
+
 
 // SD support
 #define ONBOARD_SD_SUPPORT
@@ -132,6 +154,13 @@
 // Prevent extrusion if the temperature is below set temperature
 #define PREVENT_COLD_EXTRUSION_MINTEMP 170
 
+/**
+  * Maximum hotend temperature of automatic shut down after printing.
+  * When enable automatic shutdown(Auto Power), when the hotend temperature is higher than this value
+  * turn on the fan to cool down, wait for the hotend temperature to be lower than this value, then turn off the power automatically
+  */
+#define AUTO_SHUT_DOWN_MAXTEMP 50
+
 #define EXTRUDE_STEPS  100.0f
 
 /**
@@ -143,9 +172,9 @@
  * The format of the custom icon is as follows
  * Bit depth: 24 / 32 bit, Pixel size: 95*95(for TFT35), 70*70(for TFT28/TFT24)
  */
-#define CUSTOM_0_LABEL "Home"
-#define CUSTOM_0_GCODE "G28\n"
-//#define CUSTOM_1_LABEL "Custom1"
+#define CUSTOM_0_LABEL "Restore EEPROM"
+#define CUSTOM_0_GCODE "M501\n"
+//#define CUSTOM_1_LABEL "Custom2"
 //#define CUSTOM_1_GCODE "M105\n"
 //#define CUSTOM_2_LABEL "Custom2"
 //#define CUSTOM_2_GCODE "M105\n"

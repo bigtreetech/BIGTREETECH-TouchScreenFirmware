@@ -13,6 +13,7 @@ void Hardware_GenericInit(void)
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO , ENABLE);
   GPIO_PinRemapConfig(GPIO_Remap_SWJ_Disable, ENABLE); //disable JTAG & SWD
 #endif
+  
  
 #ifdef DISABLE_JTAG
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO , ENABLE);
@@ -23,6 +24,7 @@ void Hardware_GenericInit(void)
   W25Qxx_Init();
   LCD_Init();
   readStoredPara();
+  LCD_RefreshDirection();  //refresh display direction after reading settings
   scanUpdates();
   SD_DeInit();
   
@@ -38,16 +40,17 @@ void Hardware_GenericInit(void)
   FIL_Runout_Init();
 #endif
 
-  if(readStoredPara() == false)
-  {
-    infoSettingsReset();
+  if(readStoredPara() == false) // Read settings parameter
+  {    
+    TSC_Calibration();
+    storePara();
   }
-  LCD_RefreshDirection();  //refresh display direction after reading settings
   infoMenuSelect();
 }
 
 int main(void)
 {
+
   SCB->VTOR = VECT_TAB_FLASH;
  
   Hardware_GenericInit();

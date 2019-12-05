@@ -22,14 +22,21 @@ const ITEM itemIsPause[2] = {
   {ICON_RESUME,               LABEL_RESUME},
 };
 
+#ifndef M27_WATCH_OTHER_SOURCES
+#define M27_WATCH_OTHER_SOURCES    false
+#endif
+
+#ifndef M27_REFRESH
+#define M27_REFRESH   3
+#endif
 
 static PRINTING infoPrinting;
-
 static u32     update_time = M27_REFRESH * 100;
+
 #ifdef ONBOARD_SD_SUPPORT
-static bool    update_waiting = false;
-#else
 static bool    update_waiting = M27_WATCH_OTHER_SOURCES;
+#else
+static bool    update_waiting = false;
 #endif
 
 
@@ -105,6 +112,16 @@ void endGcodeExecute(void)
   mustStoreCmd("M18\n");
 }
 
+//only return gcode file name except path
+//for example:"SD:/test/123.gcode"
+//only return "123.gcode"
+u8 *getCurGcodeName(char *path)
+{
+  int i=strlen(path);
+  for(; path[i]!='/'&& i>0; i--)
+  {}
+  return (u8* )(&path[i+1]);
+}
 
 void menuBeforePrinting(void)
 {
@@ -170,6 +187,7 @@ void menuBeforePrinting(void)
   }
   infoPrinting.printing = true;
   infoMenu.menu[infoMenu.cur] = menuPrinting;
+  printingItems.title.address = getCurGcodeName(infoFile.title);
 }
 
 
@@ -297,22 +315,11 @@ void reDrawProgress(u8 progress)
 extern SCROLL   titleScroll;
 extern GUI_RECT titleRect;
 
-//only return gcode file name except path
-//for example:"SD:/test/123.gcode"
-//only return "123.gcode"
-u8 *getCurGcodeName(char *path)
-{
-  int i=strlen(path);
-  for(; path[i]!='/'&& i>0; i--)
-  {}
-  return (u8* )(&path[i+1]);
-}
 
 void printingDrawPage(void)
 {
-  menuDrawPage(&printingItems);
+  menuDrawPage(&printingItems,false);
   //	Scroll_CreatePara(&titleScroll, infoFile.title,&titleRect);  //
-  GUI_DispLenString(titleRect.x0, titleRect.y0, getCurGcodeName(infoFile.title), (titleRect.x1 - titleRect.x0));
   // printed time
   GUI_DispString(progressRect.x0, TIME_Y, (u8* )"T:");
   GUI_DispString(progressRect.x0+BYTE_WIDTH*4, TIME_Y, (u8* )":");
@@ -391,7 +398,7 @@ void menuPrinting(void)
       
       case KEY_ICON_3:
         if(isPrinting())				
-          infoMenu.menu[++infoMenu.cur]=menuStopPrinting;	
+          infoMenu.menu[++infoMenu.cur] = menuStopPrinting;	
         else
         {
           exitPrinting();
@@ -451,10 +458,12 @@ void completePrinting(void)
 {
   endPrinting();  
   if(infoSettings.auto_off) // Auto shut down after printing
-    mustStoreCmd("M81\n");
+  {
+		infoMenu.menu[++infoMenu.cur] = menuShutDown;
+  }
 }
 
-void haltPrinting(void)
+void abortPrinting(void)
 {
   switch (infoFile.source)
   {
@@ -489,13 +498,59 @@ void menuStopPrinting(void)
     switch(key_num)
     {
       case KEY_POPUP_CONFIRM:
-        haltPrinting();
+        abortPrinting();
         infoMenu.cur-=2;
-      break;
+        break;
 
       case KEY_POPUP_CANCEL:
         infoMenu.cur--;
         break;		
+    }
+    loopProcess();
+  }
+}
+
+// Shut down menu, when the hotend temperature is higher than "AUTO_SHUT_DOWN_MAXTEMP"
+// wait for cool down, in the meantime, you can shut down by force
+void menuShutDown(void)
+{
+  bool tempIsLower;
+  u16 key_num = IDLE_TOUCH;
+
+  popupDrawPage(bottomDoubleBtn, textSelect(LABEL_SHUT_DOWN), textSelect(LABEL_WAIT_TEMP_SHUT_DOWN), textSelect(LABEL_FORCE_SHUT_DOWN), textSelect(LABEL_CANNEL));
+ 
+  for(u8 i = 0; i < FAN_NUM; i++)
+  {
+    mustStoreCmd("%s S255\n", fanCmd[i]);  
+  }
+  while (infoMenu.menu[infoMenu.cur] == menuShutDown)
+  {
+    key_num = KEY_GetValue(2, doubleBtnRect);
+    switch(key_num)
+    {
+      case KEY_POPUP_CONFIRM:
+        goto shutdown;
+
+      case KEY_POPUP_CANCEL:
+        infoMenu.cur--;
+        break;		
+    }
+    tempIsLower = true;
+    for (TOOL i = NOZZLE0; i < HEATER_NUM; i++)
+    {
+      if(heatGetCurrentTemp(NOZZLE0) >= AUTO_SHUT_DOWN_MAXTEMP)
+        tempIsLower = false;
+    }
+    if(tempIsLower)
+    {   
+      shutdown:
+        for(u8 i = 0; i < FAN_NUM; i++)
+        {
+          mustStoreCmd("%s S0\n", fanCmd[i]);  
+        }
+        mustStoreCmd("M81\n");
+        infoMenu.cur--;
+        popupReminder(textSelect(LABEL_SHUT_DOWN), textSelect(LABEL_SHUTTING_DOWN));
     }
     loopProcess();
   }
@@ -568,7 +623,7 @@ void loopCheckPrinting(void)
   do
   {  /* WAIT FOR M27	*/
     if(update_waiting == true)                {nowTime=OS_GetTime();break;}
-    if(OS_GetTime()<nowTime+update_time)       break;
+    if(OS_GetTime() < nowTime+update_time)       break;
 
     if(storeCmd("M27\n")==false)               break;
 
