@@ -19,14 +19,14 @@ enum
   PORTUGUESE,
   ITALIAN,
   POLISH,
+  SLOVAK,
 
   LANGUAGE_NUM,
 };
 
 enum
 {
-  LABEL_BACKGROUND = -1,
-  LABEL_LANGUAGE =0 ,
+  LABEL_LANGUAGE =0,
   LABEL_HEAT,
   LABEL_MOVE,
   LABEL_HOME,
@@ -177,6 +177,7 @@ enum
   LABEL_SETTING_PARAMETER,
   
   LABEL_NUM,
+  LABEL_BACKGROUND,
 };
 
 u8 * textSelect(u8 sel);

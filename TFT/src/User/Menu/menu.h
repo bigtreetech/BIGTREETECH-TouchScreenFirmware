@@ -5,19 +5,6 @@
 #include "stdbool.h"
 #include "GUI.h"
 
-typedef enum
-{
-  PAGE_MAIN = 0,
-  PAGE_HEAT,
-  PAGE_MOVE,
-  PAGE_HOME,
-  PAGE_PRINT,
-  PAGE_EXTRUDE,
-  PAGE_FAN,
-  PAGE_SETTINGS,
-  PAGE_NUM
-}PAGE;
-
 #define IDLE_TOUCH	0xFFFF
 typedef enum
 {
@@ -42,16 +29,22 @@ typedef enum
 
 #define ITEM_PER_PAGE  8
 
+typedef union
+{
+  uint32_t index;    // language index, address = textSelect(index);
+  uint8_t *address;
+}LABEL;
+
 typedef struct
 {
-  int16_t icon;
-  int16_t label;
+  uint16_t icon;
+  LABEL label;
 }ITEM;
 
 typedef struct
 {
-  int16_t title;
-  ITEM    items[ITEM_PER_PAGE];
+  LABEL title;
+  ITEM  items[ITEM_PER_PAGE];
 }MENUITEMS;
 
 
