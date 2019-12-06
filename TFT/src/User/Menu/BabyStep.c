@@ -10,7 +10,7 @@ MENUITEMS babyStepItems = {
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_INC,                  LABEL_INC},
-  {ICON_NOZZLE,               LABEL_NOZZLE},
+  {ICON_EEPROM_SAVE,          LABEL_EEPROM_SAVE},
   {ICON_01_MM,                LABEL_01_MM},
   {ICON_NORMAL_SPEED,         LABEL_VALUE_ZERO},
   {ICON_BACK,                 LABEL_BACK},}
@@ -93,6 +93,9 @@ void menuBabyStep(void)
           if(storeCmd("M290 Z%.2f\n",elementsUnit.ele[elementsUnit.cur]))
             baby_step_value += elementsUnit.ele[elementsUnit.cur];
         }
+        break;
+      case KEY_ICON_4:
+        storeCmd("M500\n");
         break;
       case KEY_ICON_5:
         elementsUnit.cur = (elementsUnit.cur + 1) % elementsUnit.totaled;
