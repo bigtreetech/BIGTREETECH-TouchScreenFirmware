@@ -97,6 +97,9 @@ void parseACK(void)
   {
     if((!ack_seen("T:") && !ack_seen("T0:")) || !ack_seen("ok"))  goto parse_end;  //the first response should be such as "T:25/50 ok\n"
     infoHost.connected = true;
+    #ifdef AUTO_SAVE_LOAD_LEVELING_VALUE
+      storeCmd("M420 S1\n");
+    #endif
   }    
 
   // GCode command response
