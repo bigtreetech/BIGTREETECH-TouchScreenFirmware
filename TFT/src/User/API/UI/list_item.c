@@ -28,21 +28,21 @@ const uint16_t ICON_COLOR[ICONCHAR_NUM]=
 
 };
 
-#define   CHAR_INFO       "1"
-#define   CHAR_ERROR      "2"
+#define   CHAR_INFO       "ࢄ"
+#define   CHAR_ERROR	    "ࢂ"
 #define   CHAR_ALERT      ""
 #define   CHAR_CHECKED    ""
 #define   CHAR_UNCHECKED  ""
 #define   CHAR_ON         ""
 #define   CHAR_OFF        ""
-#define   CHAR_RADIO_ON   ""
-#define   CHAR_RADIO_OFF  ""
+#define   CHAR_RADIO_CHECKED   ""
+#define   CHAR_RADIO_UNCHECKED  ""
 #define   CHAR_OK         ""
 #define   CHAR_CANCEL     ""
 #define   CHAR_PAGEUP     "ࡧࡨ"
 #define   CHAR_PAGEDOWN   "ࡩࡪ"
-#define   CHAR_NEXT       ""
-#define   CHAR_PREVIOUS   ""
+#define   CHAR_RIGHT       ""
+#define   CHAR_LEFT         ""
 #define   CHAR_BACK       "࡫࡬"
 #define   CHAR_FOLDER     "ࡢ"
 #define   CHAR_FILE       "ࡣ"
@@ -60,14 +60,14 @@ const char *const GET_ICONCHAR[ICONCHAR_NUM]={
   CHAR_UNCHECKED,
   CHAR_ON,
   CHAR_OFF,
-  CHAR_RADIO_ON,
-  CHAR_RADIO_OFF,
+  CHAR_RADIO_CHECKED,
+  CHAR_RADIO_UNCHECKED,
   CHAR_OK,
   CHAR_CANCEL,
   CHAR_PAGEUP,
   CHAR_PAGEDOWN,
-  CHAR_NEXT,
-  CHAR_PREVIOUS,
+  CHAR_RIGHT,
+  CHAR_LEFT,
   CHAR_BACK,
   CHAR_FOLDER,
   CHAR_FILE,
@@ -84,10 +84,12 @@ char * IconChar(uint8_t sel)
 return (char *)GET_ICONCHAR[sel];
 }
 
-void ListItem_Display(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey, uint8_t iconchar, ICON_POS pos, uint8_t * label, bool pressed)
+void ListItem_Display(const GUI_RECT* rect, uint8_t iconchar, ICON_POS pos, uint8_t * label, bool pressed)
 {
-
-  GUI_RECT rect_item = {sx, sy, ex, ey};
+  uint16_t sx = rect->x0,
+           sy = rect->y0,
+           ex = rect->x1,
+           ey = rect->y1;
   uint16_t w = ex- sx;
   uint16_t h = ey- sy;
   uint16_t icon_x= sx + 1;
@@ -98,7 +100,7 @@ void ListItem_Display(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey, uint8_
   //uint8_t * p = IconCharSelect(iconchar);
   size_t charIcon_w = strlen(IconChar(iconchar))/3 * BYTE_HEIGHT;
   //storeCmd("%d\n",charIcon_w);
-  GUI_ClearPrect(&rect_item);
+  GUI_ClearPrect(rect);
   
   switch (pos)
   {
@@ -163,7 +165,7 @@ void ListItem_Display(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey, uint8_
   }
   if (pressed){
     GUI_SetColor(WHITE);
-    GUI_DrawPrect(&rect_item);
+    GUI_DrawPrect(rect);
 
   }
       GUI_SetColor(FK_COLOR);

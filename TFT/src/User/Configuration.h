@@ -36,9 +36,9 @@
 #define FAN_NUM      1    // set in 1~6
 
 //                       PLA      PETG       ABS     "CUSTOM1" "CUSTOM2"
-#define PREHEAT_BED      {55,      85,       100,       55,       55}
-#define PREHEAT_HOTEND   {205,     230,      230,       200,      200}
-//#define PREHEAT_TEXT     {"PLA",  "PETG",   "ABS",     "T2:",    "T3:"}
+#define PREHEAT_BED      {60,      70,       100,       55,       55}
+#define PREHEAT_HOTEND   {200,     250,      230,       200,      200}
+#define PREHEAT_TEXT     {"PLA",  "PETG",   "ABS",     "T2:",    "T3:"}
 
 #define HEAT_MAX_TEMP    {150,    275,       275,       275,       275,       275,       275}    //max temperature can be set
 #define HEAT_SIGN_ID     {"B:",   "T0:",     "T1:",     "T2:",     "T3:",     "T4:",     "T5:"}
@@ -112,6 +112,10 @@
 // update the icons from alternate icon folder
 #define ALTERNATIVE_MOVE_MENU
 
+//Invert the Y Axis move Direction
+//#define INVERT_YAXIS
+
+
 // Enable Unified Move Menu
 // Move, Home, Extrude, ABL at one Place and bring Gcode Menu on Home Menu
 #define UNIFIED_MENU
@@ -127,6 +131,11 @@
  */
 #define GCODE_LIST_MODE
 
+
+//-------RESET SETTINGS & TOUCH SCREEN CALIBRATION------||
+//to reset the touch screen create a text file with name 'reset.txt' in root folder of the sd card and press reset button.
+
+
 // SD support
 #define ONBOARD_SD_SUPPORT
 #ifdef ONBOARD_SD_SUPPORT
@@ -141,6 +150,9 @@
  * This function is suitable for Delta Printer.
  */
 //#define HOME_BEFORE_PLR
+//#define BTT_MINI_UPS // Backup power / UPS to move the Z axis steppers on power loss
+#define POWER_LOSS_ZRAISE 10 // (mm) Z axis raise on resume (on power loss with UPS)
+
 
 // Prevent extrusion if the temperature is below set temperature
 #define PREVENT_COLD_EXTRUSION_MINTEMP 170
@@ -153,6 +165,8 @@
 #define AUTO_SHUT_DOWN_MAXTEMP 50
 
 #define EXTRUDE_STEPS  100.0f
+
+#define SHOW_FAN_PERCENTAGE // enable to show fan speed as a percentage instead of a value
 
 /**
  * Support up to 7 custom gcodes, uncomment CUSTOM_X_LABEL and CUSTOM_X_GCODE to enable custom gcode

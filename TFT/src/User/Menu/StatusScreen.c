@@ -45,18 +45,6 @@ static float yaxis;
 static float zaxis;
 static bool gantryCmdWait = false;
 
-//Colors for drawing the icons
-#define GANTRYLBL_BKCOLOR   0x2187
-#define GANTRYLBL_COLOR     WHITE
-#define HEADING_COLOR       WHITE
-#define VAL_COLOR           BLACK
-#define INFOBOX_BORDER      BLACK
-#define INFOBOX_BKCOLOR     0x4b0d
-#define INFOBOX_BORDER      0x4b0d
-#define INFOBOX_ICON_COLOR  0x03BF
-#define INFOMSG_BKCOLOR     WHITE
-#define INFOMSG_COLOR       BLACK
-
 TOOL current_Ext = NOZZLE0;
 int current_fan = 0;
 int current_speedID = 0;
@@ -117,7 +105,7 @@ const GUI_RECT rectB[8] = {
 };
 
 //info rectangle          
-const GUI_RECT RecIinfo = {START_X + 1 * ICON_WIDTH + 1 * SPACE_X,  TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y,
+const GUI_RECT RectInfo = {START_X + 1 * ICON_WIDTH + 1 * SPACE_X,  TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y,
                            START_X + 3 * ICON_WIDTH + 2 * SPACE_X,  TITLE_END_Y +  2 * ICON_HEIGHT + 1 * SPACE_Y};
 
 const  GUI_RECT msgRect ={START_X + 1 * ICON_WIDTH + 1 * SPACE_X + 2,   TITLE_END_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + STATUS_MSG_BODY_YOFFSET,
@@ -162,7 +150,15 @@ void drawTemperature(void)
   menuDrawItem(&ToolItems[2],2);                                          //Fan icon
   GUI_DispStringInPrect(&rectA[2],(u8 *)fanID[current_fan]);              //Fan label
   GUI_SetColor(VAL_COLOR);
-  my_sprintf(tempstr, "%d", fanGetSpeed(current_fan)); 
+  
+  u8 fs;
+  #ifdef SHOW_FAN_PERCENTAGE
+    fs = (fanGetSpeed(current_fan)*100)/255;
+    my_sprintf(tempstr, "%d%%", fs); 
+  #else
+    fs = fanSpeed[curIndex];
+    my_sprintf(tempstr, "%d", fs);
+  #endif 
   GUI_DispStringInPrect(&rectB[2], (u8 *)tempstr);                        //Fan value
 
   GUI_SetColor(HEADING_COLOR);
@@ -178,9 +174,7 @@ void drawTemperature(void)
   my_sprintf(tempstr, "X: %.2f   Y: %.2f   Z: %.2f", xaxis, yaxis, zaxis);
   GUI_DispStringInPrect(&RecGantry,(u8 *)tempstr);
   
-  GUI_SetBkColor(BK_COLOR);
-  GUI_SetColor(FK_COLOR);
-  //GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
+  GUI_RestoreColorDefault();
 }
 
 void storegantry(int n, float val){
@@ -202,50 +196,116 @@ void storegantry(int n, float val){
   gantryCmdWait = false;
 }
 
-
-void statusScreen_setMsg(const uint8_t *title,const uint8_t *msg)
-{
-  memcpy(msgtitle,(char*)title,sizeof(msgtitle));
-  memcpy(msgbody,(char*)msg,sizeof(msgbody));
-  drawStatusScreenMsg();
-  Scroll_CreatePara(&msgScroll,(u8*)msgbody,&msgRect);
+void gantry_inc(int n, float val){
+    //float* px = &val;
+  switch (n)
+  {
+  case 0:
+    xaxis += val;
+    if ( xaxis > X_MAX_POS){
+      xaxis = X_MAX_POS;
+    }
+    break;
+  case 1:
+    yaxis += val;
+    if ( yaxis > Y_MAX_POS){
+      yaxis = Y_MAX_POS;
+    }
+    break;
+  case 2:
+    zaxis += val;
+    if ( zaxis > Z_MAX_POS){
+      zaxis = Z_MAX_POS;
+    }
+    break;   
+  default:
+    break;
+  }
 }
+void gantry_dec(int n, float val){
+    //float* px = &val;
+  switch (n)
+  {
+  case 0:
+    xaxis -= val;
+    if ( xaxis < X_MIN_POS){
+      xaxis = X_MIN_POS;
+    }
+    break;
+  case 1:
+    yaxis -= val;
+    if ( yaxis < Y_MIN_POS){
+      yaxis = Y_MIN_POS;
+    }
+    break;
+  case 2:
+    zaxis -= val;
+    if ( zaxis < Z_MIN_POS){
+      zaxis = Z_MIN_POS;
+    }
+    break;   
+  default:
+    break;
+  }
+}
+
+float getAxisLocation(u8 n){
+  switch (n)
+  {
+  case 0:
+    return xaxis;
+  case 1:
+    return yaxis;
+  case 2:
+    return zaxis;
+  default:
+    return xaxis;
+  }
+}
+
+
+void statusScreen_setMsg(const uint8_t *title, const uint8_t *msg)
+{
+  memcpy(msgtitle, (char *)title, sizeof(msgtitle));
+  memcpy(msgbody, (char *)msg, sizeof(msgbody));
+
+  if (infoMenu.menu[infoMenu.cur] == menuStatus)
+  {
+    drawStatusScreenMsg();
+  }
+}
+
 void drawStatusScreenMsg(void)
 {
-//GUI_ClearRect(RecIinfo.x0,RecIinfo.y0,RecIinfo.x1,RecIinfo.y1);
+//GUI_ClearRect(RectInfo.x0,RectInfo.y0,RectInfo.x1,RectInfo.y1);
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-  u8* iconChar = (u8 *)"i";
-
-  GUI_SetColor(INFOBOX_BKCOLOR);
-  GUI_FillRect(RecIinfo.x0, RecIinfo.y0, RecIinfo.x1, RecIinfo.y1);
+ 
+  //GUI_SetColor(INFOBOX_BKCOLOR);
+  //GUI_FillRect(RectInfo.x0, RectInfo.y0, RectInfo.x1, RectInfo.y1);
   
-  GUI_SetColor(INFOBOX_BORDER);
-  GUI_DrawRect(RecIinfo.x0, RecIinfo.y0, RecIinfo.x1, RecIinfo.y1);
-
-  GUI_SetColor(INFOBOX_ICON_COLOR);
-  GUI_FillCircle(RecIinfo.x0 + STATUS_MSG_ICON_XCENTER, RecIinfo.y0 + STATUS_MSG_ICON_YCENTER, BYTE_WIDTH); //icon circle
+  //GUI_SetColor(INFOBOX_BORDER);
+  //GUI_DrawRect(RectInfo.x0, RectInfo.y0, RectInfo.x1, RectInfo.y1);
+  lcd_frame_display(RectInfo.x0, RectInfo.y0, INFOBOX_P1_WIDTH, ICON_HEIGHT, ICON_ADDR(ICON_INFOBOX_PART1));
+  lcd_frame_display(RectInfo.x0+INFOBOX_P1_WIDTH, RectInfo.y0, INFOBOX_P2_WIDTH, ICON_HEIGHT, ICON_ADDR(ICON_INFOBOX_PART2));
 
   GUI_SetColor(INFOMSG_BKCOLOR);
-  GUI_DrawCircle(RecIinfo.x0 + STATUS_MSG_ICON_XCENTER, RecIinfo.y0 + STATUS_MSG_ICON_YCENTER, BYTE_WIDTH); //circle outline
-  GUI_FillRect(RecIinfo.x0, msgRect.y0, RecIinfo.x1, msgRect.y1); //rectangle for msg scroller
-  
-  GUI_DispString(RecIinfo.x0 + STATUS_MSG_ICON_XCENTER-(BYTE_WIDTH/2), RecIinfo.y0 + STATUS_MSG_ICON_YCENTER - (BYTE_HEIGHT/2), iconChar);
+  GUI_DispString(RectInfo.x0 + STATUS_MSG_ICON_XOFFSET, RectInfo.y0 + STATUS_MSG_ICON_YOFFSET,IconCharSelect(ICONCHAR_INFO));
+  //GUI_FillRect(RectInfo.x0, msgRect.y0, RectInfo.x1, msgRect.y1); //rectangle for msg scroller
 
-  GUI_DispString(RecIinfo.x0 + STATUS_MSG_TITLE_XOFFSET,RecIinfo.y0 + STATUS_MSG_ICON_YCENTER - (BYTE_HEIGHT/2),(u8*)msgtitle); 
+  GUI_DispString(RectInfo.x0 + BYTE_HEIGHT+ STATUS_MSG_TITLE_XOFFSET,RectInfo.y0 + STATUS_MSG_ICON_YOFFSET,(u8*)msgtitle); 
   GUI_SetBkColor(INFOMSG_BKCOLOR);
   GUI_FillRect(msgRect.x0, msgRect.y0, msgRect.x1, msgRect.y1);
   
-  GUI_SetBkColor(BK_COLOR);
-  GUI_SetColor(FK_COLOR);
-  GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
+  Scroll_CreatePara(&msgScroll, (u8 *)msgbody, &msgRect);
+
+  GUI_RestoreColorDefault();
 }
 
 void scrollMsg(void){
   GUI_SetBkColor(INFOMSG_BKCOLOR);
   GUI_SetColor(INFOMSG_COLOR);
-  Scroll_DispString(&msgScroll,CENTER); 
-  GUI_SetBkColor(BK_COLOR);
-  GUI_SetColor(FK_COLOR);
+  Scroll_DispString(&msgScroll,CENTER);
+  GUI_RestoreColorDefault();
 }
 
 void toggleTool(void)

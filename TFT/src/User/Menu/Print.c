@@ -62,26 +62,26 @@ SCROLL   gcodeScroll;
    {BYTE_WIDTH/2+0*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y+(SPACE_Y-BYTE_HEIGHT)/2,
     1*SPACE_X_PER_ICON-BYTE_WIDTH/2,  2*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
   };
-#endif
-void scrollFileNameCreate(u8 i)
-{
   
-  u8 num=infoFile.cur_page * NUM_PER_PAGE + i;	
+  void scrollFileNameCreate(u8 i)
+  {    
+    u8 num=infoFile.cur_page * NUM_PER_PAGE + i;	
 
-  if(infoFile.F_num + infoFile.f_num==0)
-  {
-    memset(&gcodeScroll,0,sizeof(SCROLL));
-    return;
+    if(infoFile.F_num + infoFile.f_num==0)
+    {
+      memset(&gcodeScroll,0,sizeof(SCROLL));
+      return;
+    }
+    if(num<infoFile.F_num)
+    {
+      Scroll_CreatePara(&gcodeScroll, (u8* )infoFile.folder[num],&gcodeRect[i]);
+    }
+    else if(num<infoFile.F_num+infoFile.f_num)
+    {
+      Scroll_CreatePara(&gcodeScroll, (u8* )infoFile.file[num-infoFile.F_num],&gcodeRect[i]);
+    }
   }
-  if(num<infoFile.F_num)
-  {
-    Scroll_CreatePara(&gcodeScroll, (u8* )infoFile.folder[num],&gcodeRect[i]);
-  }
-  else if(num<infoFile.F_num+infoFile.f_num)
-  {
-    Scroll_CreatePara(&gcodeScroll, (u8* )infoFile.file[num-infoFile.F_num],&gcodeRect[i]);
-  }
-}
+#endif
 
 void normalNameDisp(const GUI_RECT *rect, u8 *name)
 {
@@ -106,6 +106,7 @@ void normalNameDisp(const GUI_RECT *rect, u8 *name)
 
     //scrollFileNameCreate(0);
     Scroll_CreatePara(&titleScroll, (u8 *)infoFile.title, &titleRect);
+    printItems.title.address = (u8 *)infoFile.title;
     GUI_ClearRect(titleRect.x0, titleRect.y0, titleRect.x1, titleRect.y1);
 
     for (i = 0; (i + infoFile.cur_page * NUM_PER_PAGE < infoFile.F_num) && (i < NUM_PER_PAGE); i++) // folder
@@ -127,7 +128,7 @@ void normalNameDisp(const GUI_RECT *rect, u8 *name)
     for (; (i < NUM_PER_PAGE); i++) //background
     {
       curItem.icon = ICONCHAR_BACKGROUND;
-      curItem.label = LABEL_BACKGROUND;
+      curItem.label.index = LABEL_BACKGROUND;
       menuDrawListItem(&curItem, i);
     }
   }
@@ -141,6 +142,8 @@ void normalNameDisp(const GUI_RECT *rect, u8 *name)
 
     scrollFileNameCreate(0);
     Scroll_CreatePara(&titleScroll, (u8* )infoFile.title,&titleRect);
+    printItems.title.address = (u8 *)infoFile.title;
+//    menuDrawTitle(&printItems);
     GUI_ClearRect(titleRect.x0, titleRect.y0, titleRect.x1, titleRect.y1);
 
     for(i=0;(i + infoFile.cur_page * NUM_PER_PAGE < infoFile.F_num)
@@ -269,17 +272,17 @@ void menuPrintFromSource(void)
             
             infoMenu.menu[++infoMenu.cur] = menuBeforePrinting;	
           }				
-        }                  
+        }
+        #ifndef GCODE_LIST_MODE                
         else if(key_num >=KEY_LABEL_0 && key_num <= KEY_LABEL_4)     
         {                  
           if(key_num - KEY_LABEL_0 + infoFile.cur_page * NUM_PER_PAGE < infoFile.F_num + infoFile.f_num)
           {
-            normalNameDisp(gcodeScroll.rect, gcodeScroll.text);            
-            #ifndef GCODE_LIST_MODE
-              scrollFileNameCreate(key_num - KEY_LABEL_0);
-            #endif
+            normalNameDisp(gcodeScroll.rect, gcodeScroll.text);
+            scrollFileNameCreate(key_num - KEY_LABEL_0);
           }
-        }	
+        }
+        #endif
         break;
     }
     
@@ -305,10 +308,15 @@ MENUITEMS sourceSelItems = {
 LABEL_PRINT,
 // icon                       label
  {{ICON_SD_SOURCE,            LABEL_TFTSD},
+ #ifdef ONBOARD_SD_SUPPORT
   {ICON_BSD_SOURCE,           LABEL_ONBOARDSD},
+ #endif
  #ifdef U_DISK_SUPPROT
   {ICON_U_DISK,               LABEL_U_DISK},
  #else
+  {ICON_BACKGROUND,           LABEL_BACKGROUND},
+ #endif
+ #ifndef ONBOARD_SD_SUPPORT
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
  #endif
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
@@ -334,13 +342,19 @@ void menuPrint(void)
         infoMenu.menu[++infoMenu.cur] = menuPowerOff;
         goto selectEnd;
       
+      #ifdef ONBOARD_SD_SUPPORT
       case KEY_ICON_1:
         infoFile.source = BOARD_SD;
         infoMenu.menu[++infoMenu.cur] = menuPrintFromSource;   //TODO: fix here,  onboard sd card PLR feature
         goto selectEnd;
+      #endif
       
       #ifdef U_DISK_SUPPROT
+      #ifdef ONBOARD_SD_SUPPORT
       case KEY_ICON_2:
+      #else
+      case KEY_ICON_1:
+      #endif
         infoFile.source = TFT_UDISK;
         infoMenu.menu[++infoMenu.cur] = menuPrintFromSource;
         infoMenu.menu[++infoMenu.cur] = menuPowerOff;

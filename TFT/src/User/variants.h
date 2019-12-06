@@ -186,7 +186,7 @@
   #define PS_ON_PIN      PD12
   #define FIL_RUNOUT_PIN PD11
 #elif defined(TFT35_V3_0)
-  #define PS_ON_PIN      PA12
+  #define PS_ON_PIN      PC12
   #define FIL_RUNOUT_PIN PA15
 #endif
     

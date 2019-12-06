@@ -978,3 +978,12 @@ void GUI_DrawWindow(const WINDOW *window, const uint8_t *title, const uint8_t *i
   GUI_SetColor(nowFontColor);
   GUI_SetTextMode(nowTextMode);
 }
+
+void GUI_RestoreColorDefault(void){
+  
+  GUI_SetBkColor(BK_COLOR);
+  GUI_SetColor(FK_COLOR);
+  GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
+  GUI_SetNumMode(GUI_NUMMODE_SPACE);
+
+}

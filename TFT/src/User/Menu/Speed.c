@@ -107,7 +107,7 @@ void menuSpeed(void)
         item_percentage_i = (item_percentage_i+1) % ITEM_PERCENTAGE_NUM;
         percentageItems.items[key_num] = itemPercentage[item_percentage_i];
         menuDrawItem(&percentageItems.items[key_num], key_num);      
-        percentageItems.title = itemPercentageTitle[item_percentage_i];
+        percentageItems.title.index = itemPercentageTitle[item_percentage_i];
         menuDrawTitle(&percentageItems);
         showPercentage();
         break;

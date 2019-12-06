@@ -1,16 +1,16 @@
 #include "BabyStep.h"
 #include "includes.h"
 
-//1��title(����), ITEM_PER_PAGE��item(ͼ��+��ǩ) 
+//1 title, ITEM_PER_PAGE items(icon+label) 
 MENUITEMS babyStepItems = {
-//   title
+//title
   LABEL_BABYSTEP,
 //icon                        label
  {{ICON_DEC,                  LABEL_DEC},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_INC,                  LABEL_INC},
-  {ICON_NOZZLE,               LABEL_NOZZLE},
+  {ICON_EEPROM_SAVE,          LABEL_EEPROM_SAVE},
   {ICON_01_MM,                LABEL_01_MM},
   {ICON_NORMAL_SPEED,         LABEL_VALUE_ZERO},
   {ICON_BACK,                 LABEL_BACK},}
@@ -58,11 +58,11 @@ static float baby_step_value=0.0;
 
 void showBabyStep(void)
 {
-  GUI_DispFloat(CENTER_X - 3*BYTE_WIDTH/2, CENTER_Y, baby_step_value, 1, 2, RIGHT);
+  GUI_DispFloat(CENTER_X - 5*BYTE_WIDTH/2, CENTER_Y, baby_step_value, 3, 2, RIGHT);
 }
 void babyStepReDraw(void)
 {
-  GUI_DispFloat(CENTER_X - 3*BYTE_WIDTH/2, CENTER_Y, baby_step_value, 1, 2, RIGHT);
+  GUI_DispFloat(CENTER_X - 5*BYTE_WIDTH/2, CENTER_Y, baby_step_value, 3, 2, RIGHT);
 }
 
 
@@ -93,6 +93,9 @@ void menuBabyStep(void)
           if(storeCmd("M290 Z%.2f\n",elementsUnit.ele[elementsUnit.cur]))
             baby_step_value += elementsUnit.ele[elementsUnit.cur];
         }
+        break;
+      case KEY_ICON_4:
+        storeCmd("M500\n");
         break;
       case KEY_ICON_5:
         elementsUnit.cur = (elementsUnit.cur + 1) % elementsUnit.totaled;
