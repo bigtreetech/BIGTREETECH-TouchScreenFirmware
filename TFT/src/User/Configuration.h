@@ -35,10 +35,10 @@
 #define EXTRUDER_NUM 1    // set in 1~6
 #define FAN_NUM      1    // set in 1~6
 
-//                       PLA      PETG       NYL     "CUSTOM1" "CUSTOM2"
-#define PREHEAT_BED      {60,      70,       65,       55,       55}
-#define PREHEAT_HOTEND   {200,     250,      255,       200,      200}
-#define PREHEAT_TEXT     {"PLA",  "PETG",   "NYL",     "T2:",    "T3:"}
+//                       PLA      PETG       ABS     "CUSTOM1" "CUSTOM2"
+#define PREHEAT_BED      {60,      70,       100,       55,       55}
+#define PREHEAT_HOTEND   {200,     250,      230,       200,      200}
+#define PREHEAT_TEXT     {"PLA",  "PETG",   "ABS",     "T2:",    "T3:"}
 
 #define HEAT_MAX_TEMP    {150,    275,       275,       275,       275,       275,       275}    //max temperature can be set
 #define HEAT_SIGN_ID     {"B:",   "T0:",     "T1:",     "T2:",     "T3:",     "T4:",     "T5:"}
@@ -129,7 +129,7 @@
  * It is friendly to display long file name, but the model preview feature is not available
  * Disable this if you want to use the model preview feature
  */
-// #define GCODE_LIST_MODE
+//#define GCODE_LIST_MODE
 
 
 //-------RESET SETTINGS & TOUCH SCREEN CALIBRATION------||
@@ -152,7 +152,7 @@
 //#define HOME_BEFORE_PLR
 
 // Prevent extrusion if the temperature is below set temperature
-#define PREVENT_COLD_EXTRUSION_MINTEMP 150
+#define PREVENT_COLD_EXTRUSION_MINTEMP 170
 
 /**
   * Maximum hotend temperature of automatic shut down after printing.
