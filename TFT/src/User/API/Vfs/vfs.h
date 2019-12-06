@@ -24,7 +24,8 @@ typedef struct
 	uint16_t f_num; // current gcode file number
 	uint16_t cur_page; // current display page index (5 files per page)
 	FS_SOURCE source; //The source of the file. TFT SD or ONBOARD SD.
-}MYFILE;	
+	TCHAR *Longfile[FILE_NUM]; // Long file name buffer from ONBOARD SD only
+}MYFILE;
 
 extern MYFILE  infoFile;
 
