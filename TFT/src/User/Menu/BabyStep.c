@@ -1,9 +1,9 @@
 #include "BabyStep.h"
 #include "includes.h"
 
-//1 title, ITEM_PER_PAGE items(icon+label) 
+//1��title(����), ITEM_PER_PAGE��item(ͼ��+��ǩ) 
 MENUITEMS babyStepItems = {
-//title
+//   title
   LABEL_BABYSTEP,
 //icon                        label
  {{ICON_DEC,                  LABEL_DEC},
@@ -58,11 +58,11 @@ static float baby_step_value=0.0;
 
 void showBabyStep(void)
 {
-  GUI_DispFloat(CENTER_X - 5*BYTE_WIDTH/2, CENTER_Y, baby_step_value, 3, 2, RIGHT);
+  GUI_DispFloat(CENTER_X - 3*BYTE_WIDTH/2, CENTER_Y, baby_step_value, 1, 2, RIGHT);
 }
 void babyStepReDraw(void)
 {
-  GUI_DispFloat(CENTER_X - 5*BYTE_WIDTH/2, CENTER_Y, baby_step_value, 3, 2, RIGHT);
+  GUI_DispFloat(CENTER_X - 3*BYTE_WIDTH/2, CENTER_Y, baby_step_value, 1, 2, RIGHT);
 }
 
 
