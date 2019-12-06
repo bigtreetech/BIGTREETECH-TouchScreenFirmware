@@ -150,8 +150,7 @@
  * This function is suitable for Delta Printer.
  */
 //#define HOME_BEFORE_PLR
-// 
-#define BTT_MINI_UPS // Backup power / UPS to move the Z axis steppers on power loss
+//#define BTT_MINI_UPS // Backup power / UPS to move the Z axis steppers on power loss
 #define POWER_LOSS_ZRAISE 10 // (mm) Z axis raise on resume (on power loss with UPS)
 
 
