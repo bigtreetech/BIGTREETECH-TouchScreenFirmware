@@ -182,6 +182,7 @@ void scanResetDir(void)
     f_rename(TFT_RESET_FILE, TFT_RESET_FILE ".DONE");
     infoSettingsReset();
     TSC_Calibration();
+    storePara();
   }
 }
 

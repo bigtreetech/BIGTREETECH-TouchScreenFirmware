@@ -64,8 +64,7 @@ SCROLL   gcodeScroll;
   };
   
   void scrollFileNameCreate(u8 i)
-  {
-    
+  {    
     u8 num=infoFile.cur_page * NUM_PER_PAGE + i;	
 
     if(infoFile.F_num + infoFile.f_num==0)
@@ -309,12 +308,13 @@ LABEL_PRINT,
  {{ICON_SD_SOURCE,            LABEL_TFTSD},
  #ifdef ONBOARD_SD_SUPPORT
   {ICON_BSD_SOURCE,           LABEL_ONBOARDSD},
- #else
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
  #endif
  #ifdef U_DISK_SUPPROT
   {ICON_U_DISK,               LABEL_U_DISK},
  #else
+  {ICON_BACKGROUND,           LABEL_BACKGROUND},
+ #endif
+ #ifndef ONBOARD_SD_SUPPORT
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
  #endif
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
@@ -340,13 +340,19 @@ void menuPrint(void)
         infoMenu.menu[++infoMenu.cur] = menuPowerOff;
         goto selectEnd;
       
+      #ifdef ONBOARD_SD_SUPPORT
       case KEY_ICON_1:
         infoFile.source = BOARD_SD;
         infoMenu.menu[++infoMenu.cur] = menuPrintFromSource;   //TODO: fix here,  onboard sd card PLR feature
         goto selectEnd;
+      #endif
       
       #ifdef U_DISK_SUPPROT
+      #ifdef ONBOARD_SD_SUPPORT
       case KEY_ICON_2:
+      #else
+      case KEY_ICON_1:
+      #endif
         infoFile.source = TFT_UDISK;
         infoMenu.menu[++infoMenu.cur] = menuPrintFromSource;
         infoMenu.menu[++infoMenu.cur] = menuPowerOff;

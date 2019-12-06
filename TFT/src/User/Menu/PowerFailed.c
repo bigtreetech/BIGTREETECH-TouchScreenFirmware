@@ -145,11 +145,15 @@ bool powerOffGetData(void)
   mustStoreCacheCmd("%s\n", tool_change[infoBreakPoint.nozzle - NOZZLE0]);
   if(infoBreakPoint.feedrate != 0)
   {
-    mustStoreCacheCmd("G92 Z%.3f\n", infoBreakPoint.axis[Z_AXIS]);    
-    mustStoreCacheCmd("G1 Z%d\n", limitValue(0, infoBreakPoint.axis[Z_AXIS]+10, Z_MAX_POS));
+    mustStoreCacheCmd("G92 Z%.3f\n", infoBreakPoint.axis[Z_AXIS]
+      #ifdef BTT_MINI_UPS
+        + POWER_LOSS_ZRAISE
+      #endif
+      );    
+    mustStoreCacheCmd("G1 Z%d\n", limitValue(0, infoBreakPoint.axis[Z_AXIS]+POWER_LOSS_ZRAISE, Z_MAX_POS));
     #ifdef HOME_BEFORE_PLR
       mustStoreCacheCmd("G28\n");
-      mustStoreCacheCmd("G1 Z%d\n", limitValue(0, infoBreakPoint.axis[Z_AXIS]+10, Z_MAX_POS));
+      mustStoreCacheCmd("G1 Z%d\n", limitValue(0, infoBreakPoint.axis[Z_AXIS]+POWER_LOSS_ZRAISE, Z_MAX_POS));
     #else
       mustStoreCacheCmd("G28 X0 Y0\n");
     #endif
