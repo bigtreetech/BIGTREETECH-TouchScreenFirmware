@@ -36,9 +36,9 @@
 #define FAN_NUM      1    // set in 1~6
 
 //                       PLA      PETG       ABS     "CUSTOM1" "CUSTOM2"
-#define PREHEAT_BED      {55,      85,       100,       55,       55}
-#define PREHEAT_HOTEND   {205,     230,      230,       200,      200}
-//#define PREHEAT_TEXT     {"PLA",  "PETG",   "ABS",     "T2:",    "T3:"}
+#define PREHEAT_BED      {60,      70,       100,       55,       55}
+#define PREHEAT_HOTEND   {200,     250,      230,       200,      200}
+#define PREHEAT_TEXT     {"PLA",  "PETG",   "ABS",     "T2:",    "T3:"}
 
 #define HEAT_MAX_TEMP    {150,    275,       275,       275,       275,       275,       275}    //max temperature can be set
 #define HEAT_SIGN_ID     {"B:",   "T0:",     "T1:",     "T2:",     "T3:",     "T4:",     "T5:"}
@@ -162,6 +162,8 @@
 #define AUTO_SHUT_DOWN_MAXTEMP 50
 
 #define EXTRUDE_STEPS  100.0f
+
+#define SHOW_FAN_PERCENTAGE // enable to show fan speed as a percentage instead of a value
 
 /**
  * Support up to 7 custom gcodes, uncomment CUSTOM_X_LABEL and CUSTOM_X_GCODE to enable custom gcode
