@@ -64,8 +64,7 @@ SCROLL   gcodeScroll;
   };
   
   void scrollFileNameCreate(u8 i)
-  {
-    
+  {    
     u8 num=infoFile.cur_page * NUM_PER_PAGE + i;	
 
     if(infoFile.F_num + infoFile.f_num==0)
