@@ -6,16 +6,29 @@
 //                         4*ICON_WIDTH+3*SPACE_X+START_X,TITLE_END_Y-STATUS_GANTRY_YOFFSET};
 
 #ifdef INVERT_YAXIS
-#define LABEL_YAXIS_UP LABEL_Y_DEC
-#define LABEL_YAXIS_DOWN LABEL_Y_INC
-#define YGCODE_UP "G1 Y-%.1f\n"
-#define YGCODE_DOWN "G1 Y%.1f\n"
+  #define LABEL_YAXIS_UP LABEL_Y_DEC
+  #define LABEL_YAXIS_DOWN LABEL_Y_INC
+  #define YGCODE_UP "G1 Y-%.1f\n"
+  #define YGCODE_DOWN "G1 Y%.1f\n"
 #else
-#define LABEL_YAXIS_UP LABEL_Y_INC
-#define LABEL_YAXIS_DOWN LABEL_Y_DEC
-#define YGCODE_UP "G1 Y%.1f\n"
-#define YGCODE_DOWN "G1 Y-%.1f\n"
+  #define LABEL_YAXIS_UP LABEL_Y_INC
+  #define LABEL_YAXIS_DOWN LABEL_Y_DEC
+  #define YGCODE_UP "G1 Y%.1f\n"
+  #define YGCODE_DOWN "G1 Y-%.1f\n"
 #endif
+
+#ifdef INVERT_ZAXIS
+  #define LABEL_ZAXIS_UP LABEL_Z_DEC
+  #define LABEL_ZAXIS_DOWN LABEL_Z_INC
+  #define ZGCODE_UP "G1 Z%.1f\n"
+  #define ZGCODE_DOWN "G1 Z-%.1f\n"
+#else
+  #define LABEL_ZAXIS_UP LABEL_Z_INC
+  #define LABEL_ZAXIS_DOWN LABEL_Z_DEC
+  #define ZGCODE_UP "G1 Z-%.1f\n"
+  #define ZGCODE_DOWN "G1 Z%.1f\n"
+#endif
+
 //1 title, ITEM_PER_PAGE item
 MENUITEMS moveItems = {
 //  title
@@ -23,9 +36,9 @@ LABEL_MOVE,
 // icon                       label
  { 
   #ifdef ALTERNATIVE_MOVE_MENU 
-  {ICON_Z_DEC,                LABEL_Z_DEC},
+  {ICON_Z_DEC,                LABEL_ZAXIS_DOWN},
   {ICON_Y_INC,                LABEL_YAXIS_UP},
-  {ICON_Z_INC,                LABEL_Z_INC},
+  {ICON_Z_INC,                LABEL_ZAXIS_UP},
   {ICON_1_MM,                 LABEL_1_MM},
   {ICON_X_DEC,                LABEL_X_DEC},
   {ICON_Y_DEC,                LABEL_YAXIS_DOWN},
@@ -36,11 +49,11 @@ LABEL_MOVE,
   
   {ICON_X_INC,                LABEL_X_INC},
   {ICON_Y_INC,                LABEL_YAXIS_UP},
-  {ICON_Z_INC,                LABEL_Z_INC},
+  {ICON_Z_INC,                LABEL_ZAXIS_UP},
   {ICON_1_MM,                 LABEL_1_MM},
   {ICON_X_DEC,                LABEL_X_DEC},
   {ICON_Y_DEC,                LABEL_YAXIS_DOWN},
-  {ICON_Z_DEC,                LABEL_Z_DEC},
+  {ICON_Z_DEC,                LABEL_ZAXIS_DOWN},
   {ICON_BACK,                 LABEL_BACK},
   #endif
  }
@@ -76,9 +89,9 @@ void menuMove(void)
     switch(key_num)
     {
       #ifdef ALTERNATIVE_MOVE_MENU
-      case KEY_ICON_0: storeCmd("G1 Z-%.1f\n",   item_move_len[item_move_len_i]);  break;
+      case KEY_ICON_0: storeCmd(ZGCODE_UP,   item_move_len[item_move_len_i]);  break;
       case KEY_ICON_1: storeCmd(YGCODE_UP,   item_move_len[item_move_len_i]);    break;
-      case KEY_ICON_2: storeCmd("G1 Z%.1f\n",   item_move_len[item_move_len_i]);  break;
+      case KEY_ICON_2: storeCmd(ZGCODE_DOWN, item_move_len[item_move_len_i]);  break;
       case KEY_ICON_3: 
         item_move_len_i = (item_move_len_i+1)%ITEM_MOVE_LEN_NUM;            
         moveItems.items[key_num] = itemMoveLen[item_move_len_i];
@@ -93,14 +106,14 @@ void menuMove(void)
  
       case KEY_ICON_0: storeCmd("G1 X%.1f\n",   item_move_len[item_move_len_i]);  break;
       case KEY_ICON_1: storeCmd(YGCODE_UP,   item_move_len[item_move_len_i]);     break;
-      case KEY_ICON_2: storeCmd("G1 Z%.1f\n",   item_move_len[item_move_len_i]);  break;
+      case KEY_ICON_2: storeCmd(ZGCODE_UP,   item_move_len[item_move_len_i]);  break;
       case KEY_ICON_3: 
         item_move_len_i = (item_move_len_i+1)%ITEM_MOVE_LEN_NUM;            
         moveItems.items[key_num] = itemMoveLen[item_move_len_i];
         menuDrawItem(&moveItems.items[key_num], key_num);                         break;
       case KEY_ICON_4: storeCmd("G1 X-%.1f\n", item_move_len[item_move_len_i]);   break;
       case KEY_ICON_5: storeCmd(YGCODE_DOWN,   item_move_len[item_move_len_i]);   break;
-      case KEY_ICON_6: storeCmd("G1 Z-%.1f\n",   item_move_len[item_move_len_i]); break;
+      case KEY_ICON_6: storeCmd(ZGCODE_DOWN,   item_move_len[item_move_len_i]); break;
       case KEY_ICON_7: infoMenu.cur--; break;
       default:break;  
       #endif
