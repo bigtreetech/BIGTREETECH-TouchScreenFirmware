@@ -22,12 +22,11 @@ long map(long x, long in_min, long in_max, long out_min, long out_max)
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
-int intToString(char* str, int n,int radix)  //将整数表达成字符形态
+int intToString(char* str, int n, int radix, char isNegative)  //将整数表达成字符形态
 {
   int i = 0, j = 0, remain = 0;
   int len = 0;
   char tmp = 0;
-  char isNegative = 0;
 
   if (n < 0)
   {
@@ -95,13 +94,13 @@ int my_vsprintf(char *buf, const char *fmt, my_va_list args)
       case 'd': //十进制整数
       {
         int n = my_va_arg(p_next_arg, int);
-        p += intToString(p, n, 10);
+        p += intToString(p, n, 10, 0);
         break;
       }
       case 'x': //十六进制整数
       {
         int n = my_va_arg(p_next_arg, int);
-        p += intToString(p, n, 16);
+        p += intToString(p, n, 16, 0);
         break;
       }
       case 'f': //浮点数
@@ -113,7 +112,7 @@ int my_vsprintf(char *buf, const char *fmt, my_va_list args)
         }
         double f = my_va_arg(p_next_arg, double);  //%f，输出浮点数
         int n = (int)f;
-        p += intToString(p, n, 10);
+        p += intToString(p, n, 10, f < 0);
         *p++ = '.';
         
         double d = ABS(f - n) + 0.5/MIN(1000000, POW_10[bit_width[1]]);

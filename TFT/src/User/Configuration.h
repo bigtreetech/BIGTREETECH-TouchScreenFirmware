@@ -73,7 +73,7 @@
 
 // Specify a pause position as { X, Y, Z_raise }
 #define NOZZLE_PAUSE_RETRACT_LENGTH 15   // (mm)
-#define NOZZLE_PAUSE_PURGE_LENGTH   16   // (mm)
+#define NOZZLE_RESUME_PURGE_LENGTH  16   // (mm)
 #define NOZZLE_PAUSE_X_POSITION     (X_MIN_POS + 10)  // (mm) Must be an integer
 #define NOZZLE_PAUSE_Y_POSITION     (Y_MIN_POS + 10)  // (mm) Must be an integer
 #define NOZZLE_PAUSE_Z_RAISE        20   // (mm)
@@ -81,7 +81,13 @@
 #define NOZZLE_PAUSE_XY_FEEDRATE    6000 // (mm/min) X and Y axes feedrate
 #define NOZZLE_PAUSE_Z_FEEDRATE     600  // (mm/min) Z axis feedrate
 
+// Send G29 for auto bed leveling
 #define AUTO_BED_LEVELING
+#ifdef AUTO_BED_LEVELING
+  // Enable this will send "M500" after "G29" to store leveling value
+  // and send "M420 S1" to enable leveling state after startup
+  #define AUTO_SAVE_LOAD_LEVELING_VALUE
+#endif
 
 // Move to four corner points to Leveling manually (Point 1, Point 2, Point 3, Point 4)
 #define LEVELING_POINT_1_X         (X_MIN_POS + 20)

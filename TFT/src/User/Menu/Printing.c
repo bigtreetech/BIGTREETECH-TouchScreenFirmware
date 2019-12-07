@@ -255,9 +255,9 @@ bool setPrintPause(bool is_pause)
           mustStoreCmd("G1 Z%.3f F%d\n", tmp.axis[Z_AXIS], NOZZLE_PAUSE_Z_FEEDRATE);
         }
         if(heatGetCurrentTemp(heatGetCurrentToolNozzle()) > PREVENT_COLD_EXTRUSION_MINTEMP)
-          mustStoreCmd("G1 E%.5f F%d\n", tmp.axis[E_AXIS] + NOZZLE_PAUSE_PURGE_LENGTH, NOZZLE_PAUSE_E_FEEDRATE);
+          mustStoreCmd("G1 E%.5f F%d\n", tmp.axis[E_AXIS] - NOZZLE_PAUSE_RETRACT_LENGTH + NOZZLE_RESUME_PURGE_LENGTH, NOZZLE_PAUSE_E_FEEDRATE);
         mustStoreCmd("G92 E%.5f\n", tmp.axis[E_AXIS]);
-        mustStoreCmd("G90 F%d\n", tmp.feedrate);
+        mustStoreCmd("G1 F%d\n", tmp.feedrate);
         
         if (isCoorRelative == true)     mustStoreCmd("G91\n");
         if (isExtrudeRelative == true)  mustStoreCmd("M83\n");
