@@ -198,4 +198,5 @@
 //#define CUSTOM_6_LABEL "Custom6"
 //#define CUSTOM_6_GCODE "M105\n"
 
+#define CANCEL_PRINT_GCODE "G28 X0 Y0\n"
 #endif
