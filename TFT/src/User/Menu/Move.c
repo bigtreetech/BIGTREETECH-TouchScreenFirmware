@@ -76,9 +76,9 @@ void menuMove(void)
     switch(key_num)
     {
       #ifdef ALTERNATIVE_MOVE_MENU
-      case KEY_ICON_0: storeCmd("G1 Z-%.1f\n",   item_move_len[item_move_len_i]);  break;
+      case KEY_ICON_0: storeCmd("G1 F100 Z-%.1f\n",   item_move_len[item_move_len_i]);  break;
       case KEY_ICON_1: storeCmd(YGCODE_UP,   item_move_len[item_move_len_i]);    break;
-      case KEY_ICON_2: storeCmd("G1 Z%.1f\n",   item_move_len[item_move_len_i]);  break;
+      case KEY_ICON_2: storeCmd("G1 F100 Z%.1f\n",   item_move_len[item_move_len_i]);  break;
       case KEY_ICON_3: 
         item_move_len_i = (item_move_len_i+1)%ITEM_MOVE_LEN_NUM;            
         moveItems.items[key_num] = itemMoveLen[item_move_len_i];
@@ -93,14 +93,14 @@ void menuMove(void)
  
       case KEY_ICON_0: storeCmd("G1 X%.1f\n",   item_move_len[item_move_len_i]);  break;
       case KEY_ICON_1: storeCmd(YGCODE_UP,   item_move_len[item_move_len_i]);     break;
-      case KEY_ICON_2: storeCmd("G1 Z%.1f\n",   item_move_len[item_move_len_i]);  break;
+      case KEY_ICON_2: storeCmd("G1 F100 Z%.1f\n",   item_move_len[item_move_len_i]);  break;
       case KEY_ICON_3: 
         item_move_len_i = (item_move_len_i+1)%ITEM_MOVE_LEN_NUM;            
         moveItems.items[key_num] = itemMoveLen[item_move_len_i];
         menuDrawItem(&moveItems.items[key_num], key_num);                         break;
       case KEY_ICON_4: storeCmd("G1 X-%.1f\n", item_move_len[item_move_len_i]);   break;
       case KEY_ICON_5: storeCmd(YGCODE_DOWN,   item_move_len[item_move_len_i]);   break;
-      case KEY_ICON_6: storeCmd("G1 Z-%.1f\n",   item_move_len[item_move_len_i]); break;
+      case KEY_ICON_6: storeCmd("G1 F100 Z-%.1f\n",   item_move_len[item_move_len_i]); break;
       case KEY_ICON_7: infoMenu.cur--; break;
       default:break;  
       #endif
