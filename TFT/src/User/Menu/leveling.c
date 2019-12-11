@@ -29,10 +29,12 @@ void menuAutoLeveling(void)
         storeCmd("G29\n");
         break;
       case KEY_ICON_1:
-        storeCmd("M280 P0 S10\n");
+        storeCmd("M280 P0 S10\n"); //Push-pin Down (deploy) 
+        //storeCmd("M280 P0 S60\n"); //Alarm Release & Touch SW Mode(M119) 
         break;
       case KEY_ICON_2:
-        storeCmd("M280 P0 S90\n");
+        //storeCmd("M280 P0 S90\n"); //Push-pin Up (Stow)
+        storeCmd("M280 P0 S160\n"); //Alarm Release & Push-pin UP
         break;
       case KEY_ICON_3:
         storeCmd("M280 P0 S120\n");
