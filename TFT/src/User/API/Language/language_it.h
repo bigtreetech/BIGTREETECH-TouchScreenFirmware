@@ -142,5 +142,12 @@
     #define IT_WAIT_TEMP_SHUT_DOWN  "Wait for the temperature of hotend to be lower than "STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP)"℃" // Wait for the temperature of hotend to be lower than 50℃
     #define IT_FORCE_SHUT_DOWN      "Force"
     #define IT_SHUTTING_DOWN        "Shutting down..."
+    #define IT_ON                   "ON"
+    #define IT_OFF                  "OFF"
+    #define IT_AUTO                 "AUTO"
+    #define IT_SMART                "SMART"
+    #define IT_TERMINAL_ACK         "Hide Terminal ACK"
+    #define IT_INVERT_YAXIS         "Invert Y Axis"
+    #define IT_MOVE_SPEED           "Move speed(X Y Z)"
     
 #endif

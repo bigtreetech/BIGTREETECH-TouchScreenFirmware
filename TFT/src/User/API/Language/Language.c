@@ -185,6 +185,13 @@ const char *const en_pack[LABEL_NUM]={
   EN_WAIT_TEMP_SHUT_DOWN,
   EN_FORCE_SHUT_DOWN,
   EN_SHUTTING_DOWN,
+  EN_ON,
+  EN_OFF,
+  EN_AUTO,
+  EN_SMART,
+  EN_TERMINAL_ACK,
+  EN_INVERT_YAXIS,
+  EN_MOVE_SPEED,
 };
 
 const char *const cn_pack[LABEL_NUM]={
@@ -336,6 +343,13 @@ const char *const cn_pack[LABEL_NUM]={
   CN_WAIT_TEMP_SHUT_DOWN,
   CN_FORCE_SHUT_DOWN,
   CN_SHUTTING_DOWN,
+  CN_ON,
+  CN_OFF,
+  CN_AUTO,
+  CN_SMART,
+  CN_TERMINAL_ACK,
+  CN_INVERT_YAXIS,
+  CN_MOVE_SPEED,
 };
 
 const char *const ru_pack[LABEL_NUM]={
@@ -487,6 +501,13 @@ const char *const ru_pack[LABEL_NUM]={
   RU_WAIT_TEMP_SHUT_DOWN,
   RU_FORCE_SHUT_DOWN,
   RU_SHUTTING_DOWN,
+  RU_ON,
+  RU_OFF,
+  RU_AUTO,
+  RU_SMART,
+  RU_TERMINAL_ACK,
+  RU_INVERT_YAXIS,
+  RU_MOVE_SPEED,
 };
 
 const char *const jp_pack[LABEL_NUM]={
@@ -638,6 +659,13 @@ const char *const jp_pack[LABEL_NUM]={
   JP_WAIT_TEMP_SHUT_DOWN,
   JP_FORCE_SHUT_DOWN,
   JP_SHUTTING_DOWN,
+  JP_ON,
+  JP_OFF,
+  JP_AUTO,
+  JP_SMART,
+  JP_TERMINAL_ACK,
+  JP_INVERT_YAXIS,
+  JP_MOVE_SPEED,
 };
 
 const char *const am_pack[LABEL_NUM]={
@@ -789,6 +817,13 @@ const char *const am_pack[LABEL_NUM]={
   AM_WAIT_TEMP_SHUT_DOWN,
   AM_FORCE_SHUT_DOWN,
   AM_SHUTTING_DOWN,
+  AM_ON,
+  AM_OFF,
+  AM_AUTO,
+  AM_SMART,
+  AM_TERMINAL_ACK,
+  AM_INVERT_YAXIS,
+  AM_MOVE_SPEED,
 };
 
 const char *const de_pack[LABEL_NUM]={
@@ -940,6 +975,13 @@ const char *const de_pack[LABEL_NUM]={
   DE_WAIT_TEMP_SHUT_DOWN,
   DE_FORCE_SHUT_DOWN,
   DE_SHUTTING_DOWN,
+  DE_ON,
+  DE_OFF,
+  DE_AUTO,
+  DE_SMART,
+  DE_TERMINAL_ACK,
+  DE_INVERT_YAXIS,
+  DE_MOVE_SPEED,
 };
 
 const char *const cz_pack[LABEL_NUM]={
@@ -1091,6 +1133,13 @@ const char *const cz_pack[LABEL_NUM]={
   CZ_WAIT_TEMP_SHUT_DOWN,
   CZ_FORCE_SHUT_DOWN,
   CZ_SHUTTING_DOWN,
+  CZ_ON,
+  CZ_OFF,
+  CZ_AUTO,
+  CZ_SMART,
+  CZ_TERMINAL_ACK,
+  CZ_INVERT_YAXIS,
+  CZ_MOVE_SPEED,
 };
 
 const char *const es_pack[LABEL_NUM]={
@@ -1242,6 +1291,13 @@ const char *const es_pack[LABEL_NUM]={
   ES_WAIT_TEMP_SHUT_DOWN,
   ES_FORCE_SHUT_DOWN,
   ES_SHUTTING_DOWN,
+  ES_ON,
+  ES_OFF,
+  ES_AUTO,
+  ES_SMART,
+  ES_TERMINAL_ACK,
+  ES_INVERT_YAXIS,
+  ES_MOVE_SPEED,
 };
 
 const char *const fr_pack[LABEL_NUM]={
@@ -1393,6 +1449,13 @@ const char *const fr_pack[LABEL_NUM]={
   FR_WAIT_TEMP_SHUT_DOWN,
   FR_FORCE_SHUT_DOWN,
   FR_SHUTTING_DOWN,
+  FR_ON,
+  FR_OFF,
+  FR_AUTO,
+  FR_SMART,
+  FR_TERMINAL_ACK,
+  FR_INVERT_YAXIS,
+  FR_MOVE_SPEED,
 };
 
 const char *const pt_pack[LABEL_NUM]={
@@ -1544,6 +1607,13 @@ const char *const pt_pack[LABEL_NUM]={
   PT_WAIT_TEMP_SHUT_DOWN,
   PT_FORCE_SHUT_DOWN,
   PT_SHUTTING_DOWN,
+  PT_ON,
+  PT_OFF,
+  PT_AUTO,
+  PT_SMART,
+  PT_TERMINAL_ACK,
+  PT_INVERT_YAXIS,
+  PT_MOVE_SPEED,
 };
 
 const char *const it_pack[LABEL_NUM]={
@@ -1695,6 +1765,13 @@ const char *const it_pack[LABEL_NUM]={
   IT_WAIT_TEMP_SHUT_DOWN,
   IT_FORCE_SHUT_DOWN,
   IT_SHUTTING_DOWN,
+  IT_ON,
+  IT_OFF,
+  IT_AUTO,
+  IT_SMART,
+  IT_TERMINAL_ACK,
+  IT_INVERT_YAXIS,
+  IT_MOVE_SPEED,
 };
 
 const char *const pl_pack[LABEL_NUM]={
@@ -1846,6 +1923,13 @@ const char *const pl_pack[LABEL_NUM]={
   PL_WAIT_TEMP_SHUT_DOWN,
   PL_FORCE_SHUT_DOWN,
   PL_SHUTTING_DOWN,
+  PL_ON,
+  PL_OFF,
+  PL_AUTO,
+  PL_SMART,
+  PL_TERMINAL_ACK,
+  PL_INVERT_YAXIS,
+  PL_MOVE_SPEED,
 };
 
 const char *const sk_pack[LABEL_NUM]={
@@ -1997,6 +2081,13 @@ const char *const sk_pack[LABEL_NUM]={
   SK_WAIT_TEMP_SHUT_DOWN,
   SK_FORCE_SHUT_DOWN,
   SK_SHUTTING_DOWN,
+  SK_ON,
+  SK_OFF,
+  SK_AUTO,
+  SK_SMART,
+  SK_TERMINAL_ACK,
+  SK_INVERT_YAXIS,
+  SK_MOVE_SPEED,
 };
 
 u8 * textSelect(u8 sel)
