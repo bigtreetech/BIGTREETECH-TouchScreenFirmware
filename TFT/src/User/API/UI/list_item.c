@@ -156,7 +156,6 @@ void ListItem_Display(const GUI_RECT* rect, uint8_t iconchar, ICON_POS pos, uint
   if (iconchar != ICONCHAR_BACKGROUND){
     GUI_SetColor(ICON_COLOR[iconchar]);
     GUI_DispString(icon_x, icon_y,IconCharSelect(iconchar));
-    GUI_DispString(icon_x + BYTE_HEIGHT + 3, icon_y , label);
   }
   else
   {
