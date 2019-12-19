@@ -318,7 +318,7 @@ extern GUI_RECT titleRect;
 
 void printingDrawPage(void)
 {
-  menuDrawPage(&printingItems,false);
+  menuDrawPage(&printingItems);
   //	Scroll_CreatePara(&titleScroll, infoFile.title,&titleRect);  //
   // printed time
   GUI_DispString(progressRect.x0, TIME_Y, (u8* )"T:");

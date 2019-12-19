@@ -191,7 +191,7 @@ void menuHeat(void)
   lastHeater = heater;
   update_time=100;
 
-  menuDrawPage(&heatItems,false);
+  menuDrawPage(&heatItems);
   showTemperature();
 
   while(infoMenu.menu[infoMenu.cur] == menuHeat)

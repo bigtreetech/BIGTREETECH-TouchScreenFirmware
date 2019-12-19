@@ -77,7 +77,7 @@ void menuProbeOffset(void)
   KEY_VALUES key_num = KEY_IDLE;
   float now = probe_offset_value;
   initElements(KEY_ICON_5);
-  menuDrawPage(&probeOffsetItems,false);
+  menuDrawPage(&probeOffsetItems);
   showProbeOffset();
   while(infoMenu.menu[infoMenu.cur] == menuProbeOffset)
   {
