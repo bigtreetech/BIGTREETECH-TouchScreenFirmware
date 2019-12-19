@@ -57,7 +57,8 @@
 
 // Default move speed mm/min
 #define DEFAULT_SPEED_MOVE      3000
-
+#define SPEED_MOVE_SLOW         1000
+#define SPEED_MOVE_FAST         5000
 // Extrude speed mm/min
 #define EXTRUDE_SLOW_SPEED      60
 #define EXTRUDE_NORMAL_SPEED    600
@@ -118,7 +119,8 @@
 // update the icons from alternate icon folder
 #define ALTERNATIVE_MOVE_MENU
 
-//Invert the Y Axis move Direction
+// Invert the Y Axis move Direction
+// this does not work if LIST MODE is enabled. To invert y axis in LIST MODE go to setting->feature settings
 //#define INVERT_YAXIS
 
 
@@ -131,15 +133,15 @@
 #define STATUS_SCREEN
 
 /**
- * Enable gocde files list mode
+ * Enable list mode in Files menu and settings menu
  * It is friendly to display long file name, but the model preview feature is not available
  * Disable this if you want to use the model preview feature
  */
-//#define GCODE_LIST_MODE
+#define MENU_LIST_MODE
 
 
 //-------RESET SETTINGS & TOUCH SCREEN CALIBRATION------||
-//to reset the touch screen create a text file with name 'reset.txt' in root folder of the sd card and press reset button.
+// To reset the touch screen create a text file with name 'reset.txt' in root folder of the sd card and press reset button.
 
 
 // SD support
@@ -197,5 +199,25 @@
 //#define CUSTOM_5_GCODE "M105\n"
 //#define CUSTOM_6_LABEL "Custom6"
 //#define CUSTOM_6_GCODE "M105\n"
-
+/*
+custom gcode below are compatible only in if LIST_MODE is active
+*/
+#ifdef MENU_LIST_MODE
+//#define CUSTOM_7_LABEL "Custom7"
+//#define CUSTOM_7_GCODE "M105\n"
+//#define CUSTOM_8_LABEL "Custom8"
+//#define CUSTOM_8_GCODE "M105\n"
+//#define CUSTOM_9_LABEL "Custom9"
+//#define CUSTOM_9_GCODE "M105\n"
+//#define CUSTOM_10_LABEL "Custom10"
+//#define CUSTOM_10_GCODE "M105\n"
+//#define CUSTOM_11_LABEL "Custom11"
+//#define CUSTOM_11_GCODE "M105\n"
+//#define CUSTOM_12_LABEL "Custom12"
+//#define CUSTOM_12_GCODE "M105\n"
+//#define CUSTOM_13_LABEL "Custom13"
+//#define CUSTOM_13_GCODE "M105\n"
+//#define CUSTOM_14_LABEL "Custom14"
+//#define CUSTOM_14_GCODE "M105\n"
+#endif
 #endif
