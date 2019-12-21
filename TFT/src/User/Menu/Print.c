@@ -12,9 +12,9 @@
       {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
       {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
       {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
-      {ICONCHAR_PAGEUP,     LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
-      {ICONCHAR_PAGEDOWN,   LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
-      {ICONCHAR_BACK,       LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},}
+      {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
+      {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
+      {ICONCHAR_BACK,       LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},}
     };
 
 #else
@@ -46,15 +46,15 @@ GUI_RECT titleRect={10, (TITLE_END_Y - BYTE_HEIGHT) / 2, LCD_WIDTH-10, (TITLE_EN
 
 SCROLL   gcodeScroll;
   
-#ifdef MENU_LIST_MODE
-  GUI_RECT gcodeRect[NUM_PER_PAGE] = { 
+#ifndef MENU_LIST_MODE
+/*   GUI_RECT gcodeRect[NUM_PER_PAGE] = { 
     {START_X + BYTE_HEIGHT + 4,  0*LISTITEM_HEIGHT+TITLE_END_Y+1,    LISTITEM_WIDTH+START_X - 2,  1*LISTITEM_HEIGHT+TITLE_END_Y-1},
     {START_X + BYTE_HEIGHT + 4,  1*LISTITEM_HEIGHT+TITLE_END_Y+1,    LISTITEM_WIDTH+START_X - 2,  2*LISTITEM_HEIGHT+TITLE_END_Y-1},
     {START_X + BYTE_HEIGHT + 4,  2*LISTITEM_HEIGHT+TITLE_END_Y+1,    LISTITEM_WIDTH+START_X - 2,  3*LISTITEM_HEIGHT+TITLE_END_Y-1},
     {START_X + BYTE_HEIGHT + 4,  3*LISTITEM_HEIGHT+TITLE_END_Y+1,    LISTITEM_WIDTH+START_X - 2,  4*LISTITEM_HEIGHT+TITLE_END_Y-1},
     {START_X + BYTE_HEIGHT + 4,  4*LISTITEM_HEIGHT+TITLE_END_Y+1,    LISTITEM_WIDTH+START_X - 2,  5*LISTITEM_HEIGHT+TITLE_END_Y-1},
   };
-#else
+#else */
   GUI_RECT gcodeRect[NUM_PER_PAGE] = { 
    {BYTE_WIDTH/2+0*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y+(SPACE_Y-BYTE_HEIGHT)/2,  
     1*SPACE_X_PER_ICON-BYTE_WIDTH/2,  1*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
@@ -137,8 +137,35 @@ void normalNameDisp(const GUI_RECT *rect, u8 *name)
       printItems.items[i].titlelabel.index = LABEL_BACKGROUND;
       menuDrawListItem(&printItems.items[i], i);
     }
+      // set page up down button according to page count and current page
+      int t_pagenum = (infoFile.F_num+infoFile.f_num+(LISTITEM_PER_PAGE-1))/LISTITEM_PER_PAGE;
+      if ((infoFile.F_num+infoFile.f_num) <= LISTITEM_PER_PAGE)
+      {
+        printItems.items[5].icon = ICONCHAR_BACKGROUND;
+        printItems.items[6].icon = ICONCHAR_BACKGROUND;
+      }
+      else
+      {
+        if(infoFile.cur_page == 0){
+          printItems.items[5].icon = ICONCHAR_BACKGROUND;
+          printItems.items[6].icon = ICONCHAR_PAGEDOWN;
+        }
+        else if(infoFile.cur_page == (t_pagenum-1)){
+          printItems.items[5].icon = ICONCHAR_PAGEUP;
+          printItems.items[6].icon = ICONCHAR_BACKGROUND;
+        }
+        else
+        {
+          printItems.items[5].icon = ICONCHAR_PAGEUP;
+          printItems.items[6].icon = ICONCHAR_PAGEDOWN;
+        }
+      }
+      menuDrawListItem(&printItems.items[5],5);
+      menuDrawListItem(&printItems.items[6],6);
   }
+
 #else
+
   void gocdeListDraw(void)
   {
     u8 i=0;
