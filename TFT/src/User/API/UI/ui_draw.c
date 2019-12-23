@@ -45,6 +45,11 @@ void ICON_ReadDisplay(u16 sx,u16 sy, u8 icon)
   lcd_frame_display(sx, sy, ICON_WIDTH, ICON_HEIGHT, ICON_ADDR(icon));
 }
 
+void SMALLICON_ReadDisplay(u16 sx,u16 sy, u8 icon)
+{
+  lcd_frame_display(sx, sy, SMALLICON_WIDTH, SMALLICON_HEIGHT, SMALL_ICON_ADDR(icon));
+}
+
 void ICON_PressedDisplay(u16 sx,u16 sy, u8 icon)
 {
   u16 mode=0x0FF0;

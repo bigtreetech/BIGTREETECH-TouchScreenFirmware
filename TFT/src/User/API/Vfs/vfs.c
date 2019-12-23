@@ -1,7 +1,7 @@
 #include "vfs.h"
 #include "includes.h"
 
-MYFILE infoFile={"?:", {0}, {0}, 0, 0, 0, TFT_SD};
+MYFILE infoFile={"?:", {0}, {0}, 0, 0, 0, TFT_SD, {0}};
 
 bool mountFS(void)
 {
@@ -34,6 +34,8 @@ void clearInfoFile(void)
   {
     free(infoFile.file[i]);
     infoFile.file[i] = 0;
+    free(infoFile.Longfile[i]);
+    infoFile.Longfile[i] = 0;    
   }
   infoFile.F_num = 0;
   infoFile.f_num = 0;

@@ -11,7 +11,7 @@ LABEL_ABL,
   {ICON_BLTOUCH_TEST,          LABEL_BLTOUCH_TEST},
   {ICON_BLTOUCH_REPEAT,        LABEL_BLTOUCH_REPEAT},
   {ICON_PROBE_OFFSET,          LABEL_PROBE_OFFSET},
-  {ICON_BACKGROUND,            LABEL_BACKGROUND},
+  {ICON_BABYSTEP,              LABEL_BABYSTEP},
   {ICON_BACK,                  LABEL_BACK},}
 };
 
@@ -27,6 +27,9 @@ void menuAutoLeveling(void)
       case KEY_ICON_0:
         storeCmd("G28\n");
         storeCmd("G29\n");
+        #ifdef AUTO_SAVE_LOAD_LEVELING_VALUE
+          storeCmd("M500\n");
+        #endif
         break;
       case KEY_ICON_1:
         storeCmd("M280 P0 S10\n");
@@ -44,6 +47,9 @@ void menuAutoLeveling(void)
         storeCmd("M851\n");
         infoMenu.menu[++infoMenu.cur] = menuProbeOffset;
         break;      
+      case KEY_ICON_6:
+        infoMenu.menu[++infoMenu.cur] = menuBabyStep;
+        break; 
       case KEY_ICON_7:
         infoMenu.cur--; break;
       default:break;

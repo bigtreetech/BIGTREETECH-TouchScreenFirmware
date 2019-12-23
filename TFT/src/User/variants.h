@@ -6,6 +6,7 @@
 * hardware source
 * TIM4 for os timer
 * TIM3 for buzzer timer
+* TIM6 for Neopixel RGB
 */
 
 //MCU type (STM32F103VC - HD, STM32F105 - CL, STM32F207VC)
@@ -258,7 +259,6 @@
     #define HARDWARE_VERSION "TFT35_V3.0"
   #elif defined(TFT28_V3_0)
     #define HARDWARE_VERSION "TFT28_V3.0"
-
   #endif
 #endif
 

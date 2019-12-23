@@ -1,7 +1,7 @@
 #include "Home.h"
 #include "includes.h"
 
-//1¸ötitle(±êÌâ), ITEM_PER_PAGE¸öitem(Í¼±ê+±êÇ©) 
+//1ï¿½ï¿½title(ï¿½ï¿½ï¿½ï¿½), ITEM_PER_PAGEï¿½ï¿½item(Í¼ï¿½ï¿½+ï¿½ï¿½Ç©) 
 const MENUITEMS homeItems = {
 //   title
 LABEL_HOME,

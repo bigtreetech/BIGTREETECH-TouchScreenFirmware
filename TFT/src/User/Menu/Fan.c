@@ -54,14 +54,32 @@ void fanSetSendWaiting(u8 i, bool isWaiting)
 void showFanSpeed(void)
 {
   const GUI_RECT rect = {exhibitRect.x0, CENTER_Y-BYTE_HEIGHT, exhibitRect.x1, CENTER_Y};
+  u8 fs;
+  #ifdef SHOW_FAN_PERCENTAGE
+    fs = (fanSpeed[curIndex]*100)/255;
+  #else
+    fs = fanSpeed[curIndex]
+  #endif 
   GUI_ClearRect(rect.x0, rect.y0, rect.x1, rect.y1);
   GUI_DispStringInPrect(&rect, (u8*)fanID[curIndex]);
-  GUI_DispDec(CENTER_X-BYTE_WIDTH, CENTER_Y, fanSpeed[curIndex], 3, LEFT);
+  #ifdef SHOW_FAN_PERCENTAGE
+    char fan_s[5];
+    sprintf(fan_s, "%3d%%", fs); 
+    GUI_DispString(CENTER_X-BYTE_WIDTH, CENTER_Y, (u8 *)fan_s);
+  #else
+    GUI_DispDec(CENTER_X-BYTE_WIDTH, CENTER_Y, fs, 3, LEFT);
+  #endif 
 }
 
 void fanSpeedReDraw(void)
 {
-  GUI_DispDec(CENTER_X-BYTE_WIDTH, CENTER_Y, fanSpeed[curIndex], 3, LEFT);
+  #ifdef SHOW_FAN_PERCENTAGE
+    char fan_s[5] = "";
+    sprintf(fan_s, "%3d%%", (fanSpeed[curIndex]*100)/255); 
+    GUI_DispString(CENTER_X-BYTE_WIDTH, CENTER_Y, (u8 *)fan_s);
+  #else
+    GUI_DispDec(CENTER_X-BYTE_WIDTH, CENTER_Y, fanSpeed[curIndex];, 3, LEFT);
+  #endif   
 }
 
 void menuFan(void)
@@ -80,12 +98,29 @@ void menuFan(void)
     {
       case KEY_ICON_0:
         if (fanSpeed[curIndex] > 0)
-          fanSpeed[curIndex]--;
+            #ifdef SHOW_FAN_PERCENTAGE
+              if ((fanSpeed[curIndex]-2) > 0) {
+                fanSpeed[curIndex]-=2; //2.55 is 1 percent, rounding down
+              } else {
+                fanSpeed[curIndex]=0;
+              }
+            #else
+              fanSpeed[curIndex]--;
+            #endif   
         break;
         
       case KEY_ICON_3:
-        if (fanSpeed[curIndex] < fanMaxPWM[curIndex])
-          fanSpeed[curIndex]++;
+        if (fanSpeed[curIndex] < fanMaxPWM[curIndex]){
+            #ifdef SHOW_FAN_PERCENTAGE
+              if (fanSpeed[curIndex]+2 <= fanMaxPWM[curIndex]){
+                fanSpeed[curIndex]+=2; //2.55 is 1 percent, rounding down
+              } else {
+                fanSpeed[curIndex]=fanMaxPWM[curIndex];
+              }
+            #else
+              fanSpeed[curIndex]++;
+            #endif   
+        }
         break;
         
       case KEY_ICON_4:
@@ -127,3 +162,4 @@ void menuFan(void)
     loopProcess();
   }
 }
+

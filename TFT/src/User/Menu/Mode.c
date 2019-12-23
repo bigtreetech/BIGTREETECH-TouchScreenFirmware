@@ -39,8 +39,11 @@ void infoMenuSelect(void)
       Serial_ReSourceInit();
       GUI_SetColor(FK_COLOR);
       GUI_SetBkColor(BK_COLOR);
+      #ifndef STATUS_SCREEN
       infoMenu.menu[infoMenu.cur] = menuMain;
-      
+      #else
+      infoMenu.menu[infoMenu.cur] = menuStatus; //status screen as default screen on boot
+      #endif
       #ifdef SHOW_BTT_BOOTSCREEN
         u32 startUpTime = OS_GetTime();
         heatSetUpdateTime(100);
@@ -68,11 +71,6 @@ void infoMenuSelect(void)
     #endif
   }
 }
-
-u32 select_mode [SELECTMODE]={
-    ICON_MARLIN,
-    ICON_BIGTREE,
-};
 
 #if LCD_ENCODER_SUPPORT
 void menuMode(void)
@@ -103,11 +101,8 @@ void menuMode(void)
   GUI_Clear(BLACK);
   //RADIO_Create(&modeRadio);
   Serial_ReSourceDeInit();
-  
-  for(u8 i=0;i<SELECTMODE;i++)
-  {
-    lcd_frame_display(rect_of_mode[i].x0,rect_of_mode[i].y0-BYTE_HEIGHT,selecticonw,selecticonw,ICON_ADDR(select_mode[i]));
-  }
+
+  show_selectICON();
   TSC_ReDrawIcon = NULL; // Disable icon redraw callback function
   
   selectmode(nowMode);
