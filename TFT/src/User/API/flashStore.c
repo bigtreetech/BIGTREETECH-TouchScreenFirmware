@@ -3,7 +3,7 @@
 
 #define PARA_SIZE 256  //bytes
 #define TSC_SIGN  0x20190827 // DO NOT MODIFY
-#define PARA_SIGN 0x20191114 // If a new setting parameter is added, modify here and initialize the initial value in the "infoSettingsReset()" function
+#define PARA_SIGN 0x20191219 // If a new setting parameter is added, modify here and initialize the initial value in the "infoSettingsReset()" function
 
 extern u32 TSC_Para[7];        //
 extern SETTINGS infoSettings;  //
@@ -55,15 +55,18 @@ bool readStoredPara(void)
   }
   else
   {
-    infoSettings.baudrate   = byteToWord(data + (index += 4), 4);
-    infoSettings.language   = byteToWord(data + (index += 4), 4);
-    infoSettings.mode       = byteToWord(data + (index += 4), 4);
-    infoSettings.runout     = byteToWord(data + (index += 4), 4);
-    infoSettings.rotate_ui  = byteToWord(data + (index += 4), 4);
-    infoSettings.bg_color   = byteToWord(data + (index += 4), 4);
-    infoSettings.font_color = byteToWord(data + (index += 4), 4);
-    infoSettings.silent     = byteToWord(data + (index += 4), 4);
-    infoSettings.auto_off   = byteToWord(data + (index += 4), 4);
+    infoSettings.baudrate         = byteToWord(data + (index += 4), 4);
+    infoSettings.language         = byteToWord(data + (index += 4), 4);
+    infoSettings.mode             = byteToWord(data + (index += 4), 4);
+    infoSettings.runout           = byteToWord(data + (index += 4), 4);
+    infoSettings.rotate_ui        = byteToWord(data + (index += 4), 4);
+    infoSettings.bg_color         = byteToWord(data + (index += 4), 4);
+    infoSettings.font_color       = byteToWord(data + (index += 4), 4);
+    infoSettings.silent           = byteToWord(data + (index += 4), 4);
+    infoSettings.auto_off         = byteToWord(data + (index += 4), 4);
+    infoSettings.terminalACK      = byteToWord(data + (index += 4), 4);
+    infoSettings.invert_yaxis     = byteToWord(data + (index += 4), 4);
+    infoSettings.move_speed       = byteToWord(data + (index += 4), 4);
   }
   
   return paraExist;
@@ -80,15 +83,18 @@ void storePara(void)
     wordToByte(TSC_Para[i], data + (index += 4));
   }
   wordToByte(PARA_SIGN, data + (index += 4));
-  wordToByte(infoSettings.baudrate,   data + (index += 4));
-  wordToByte(infoSettings.language,   data + (index += 4));
-  wordToByte(infoSettings.mode,       data + (index += 4));
-  wordToByte(infoSettings.runout,     data + (index += 4));
-  wordToByte(infoSettings.rotate_ui,  data + (index += 4));
-  wordToByte(infoSettings.bg_color,   data + (index += 4));
-  wordToByte(infoSettings.font_color, data + (index += 4));
-  wordToByte(infoSettings.silent,     data + (index += 4));
-  wordToByte(infoSettings.auto_off,   data + (index += 4));
+  wordToByte(infoSettings.baudrate,           data + (index += 4));
+  wordToByte(infoSettings.language,           data + (index += 4));
+  wordToByte(infoSettings.mode,               data + (index += 4));
+  wordToByte(infoSettings.runout,             data + (index += 4));
+  wordToByte(infoSettings.rotate_ui,          data + (index += 4));
+  wordToByte(infoSettings.bg_color,           data + (index += 4));
+  wordToByte(infoSettings.font_color,         data + (index += 4));
+  wordToByte(infoSettings.silent,             data + (index += 4));
+  wordToByte(infoSettings.auto_off,           data + (index += 4));
+  wordToByte(infoSettings.terminalACK,        data + (index += 4));
+  wordToByte(infoSettings.invert_yaxis,       data + (index += 4));
+  wordToByte(infoSettings.move_speed,         data + (index += 4));
   
   STM32_FlashWrite(data, PARA_SIZE);
 }

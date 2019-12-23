@@ -15,6 +15,10 @@ void infoSettingsReset(void)
   infoSettings.font_color = ST7920_FNCOLOR;
   infoSettings.silent = 0;
   infoSettings.auto_off = 0;
+  infoSettings.terminalACK = 0;
+  infoSettings.invert_yaxis = 0;
+  infoSettings.move_speed = 0;
+  
 }
 
 // Version infomation
@@ -92,7 +96,7 @@ void menuSettings(void)
     }
   }
 
-  menuDrawPage(&settingsItems,false);
+  menuDrawPage(&settingsItems);
 
   while(infoMenu.menu[infoMenu.cur] == menuSettings)
   {

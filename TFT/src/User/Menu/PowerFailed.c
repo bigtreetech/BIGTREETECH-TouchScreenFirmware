@@ -145,13 +145,17 @@ bool powerOffGetData(void)
   mustStoreCacheCmd("%s\n", tool_change[infoBreakPoint.nozzle - NOZZLE0]);
   if(infoBreakPoint.feedrate != 0)
   {
-    mustStoreCacheCmd("G92 Z%.3f\n", infoBreakPoint.axis[Z_AXIS]);    
-    mustStoreCacheCmd("G1 Z%d\n", limitValue(0, infoBreakPoint.axis[Z_AXIS]+10, Z_MAX_POS));
+    mustStoreCacheCmd("G92 Z%.3f\n", infoBreakPoint.axis[Z_AXIS]
+      #ifdef BTT_MINI_UPS
+        + POWER_LOSS_ZRAISE
+      #endif
+      );
+    mustStoreCacheCmd("G1 Z%.3f\n", infoBreakPoint.axis[Z_AXIS]+POWER_LOSS_ZRAISE);
     #ifdef HOME_BEFORE_PLR
       mustStoreCacheCmd("G28\n");
-      mustStoreCacheCmd("G1 Z%d\n", limitValue(0, infoBreakPoint.axis[Z_AXIS]+10, Z_MAX_POS));
+      mustStoreCacheCmd("G1 Z%.3f\n", infoBreakPoint.axis[Z_AXIS]+POWER_LOSS_ZRAISE);
     #else
-      mustStoreCacheCmd("G28 X0 Y0\n");
+      mustStoreCacheCmd("G28 R0 XY\n");
     #endif
     mustStoreCacheCmd("M83\n");
     mustStoreCacheCmd("G1 E30 F300\n");
@@ -160,7 +164,7 @@ bool powerOffGetData(void)
                           infoBreakPoint.axis[X_AXIS],
                           infoBreakPoint.axis[Y_AXIS],
                           infoBreakPoint.axis[Z_AXIS]);
-    mustStoreCacheCmd("G1 E%d F4800\n", NOZZLE_PAUSE_PURGE_LENGTH);
+    mustStoreCacheCmd("G1 E%d F4800\n", NOZZLE_RESUME_PURGE_LENGTH);
     mustStoreCacheCmd("G92 E%.5f\n",infoBreakPoint.axis[E_AXIS]);
     mustStoreCacheCmd("G1 F%d\n",infoBreakPoint.feedrate);        
 

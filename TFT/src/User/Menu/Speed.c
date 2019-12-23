@@ -75,7 +75,7 @@ void menuSpeed(void)
   for(u8 i=0; i<ITEM_PERCENTAGE_NUM; i++)
   now[i] = percentage[i];
 
-  menuDrawPage(&percentageItems,false);
+  menuDrawPage(&percentageItems);
   showPercentage();
 
   while(infoMenu.menu[infoMenu.cur] == menuSpeed)
@@ -108,7 +108,7 @@ void menuSpeed(void)
         percentageItems.items[key_num] = itemPercentage[item_percentage_i];
         menuDrawItem(&percentageItems.items[key_num], key_num);      
         percentageItems.title.index = itemPercentageTitle[item_percentage_i];
-        menuDrawTitle(&percentageItems);
+        menuDrawTitle(textSelect(percentageItems.title.index));
         showPercentage();
         break;
       

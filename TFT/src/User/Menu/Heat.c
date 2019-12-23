@@ -191,7 +191,7 @@ void menuHeat(void)
   lastHeater = heater;
   update_time=100;
 
-  menuDrawPage(&heatItems,false);
+  menuDrawPage(&heatItems);
   showTemperature();
 
   while(infoMenu.menu[infoMenu.cur] == menuHeat)
@@ -276,7 +276,7 @@ void loopCheckHeater(void)
   {  /* Send M105 query temperature continuously	*/
     if(update_waiting == true)                {nowTime=OS_GetTime();break;}
     if(OS_GetTime()<nowTime+update_time)       break;
-
+    if(RequestCommandInfoIsRunning())          break; //to avoid colision in Gcode response processing
     if(storeCmd("M105\n")==false)              break;
 
     nowTime=OS_GetTime();

@@ -90,6 +90,7 @@ void syncL2CacheFromL1(uint8_t port)
 
 void parseACK(void)
 { 
+  bool avoid_terminal = false;
   if(infoHost.rx_ok[SERIAL_PORT] != true) return; //not get response data
   
   syncL2CacheFromL1(SERIAL_PORT);
@@ -99,6 +100,9 @@ void parseACK(void)
   {
     if((!ack_seen("T:") && !ack_seen("T0:")) || !ack_seen("ok"))  goto parse_end;  //the first response should be such as "T:25/50 ok\n"
     infoHost.connected = true;
+    #ifdef AUTO_SAVE_LOAD_LEVELING_VALUE
+      storeCmd("M420 S1\n");
+    #endif
   }    
 
   // GCode command response
@@ -173,11 +177,17 @@ void parseACK(void)
           heatSyncTargetTemp(i, ack_second_value()+0.5);
         }      
       }
+     #ifdef MENU_LIST_MODE
+      avoid_terminal = infoSettings.terminalACK;
+    #endif
     }
     else if(ack_seen("B:"))		
     {
       heatSetCurrentTemp(BED,ack_value()+0.5);
       heatSyncTargetTemp(BED, ack_second_value()+0.5);
+      #ifdef MENU_LIST_MODE
+      avoid_terminal = infoSettings.terminalACK;
+      #endif
     }
     else if(ack_seen("Mean:"))
     {
@@ -268,7 +278,9 @@ parse_end:
   {
     Serial_Puts(ack_cur_src, dmaL2Cache);
   }
-  sendGcodeTerminalCache(dmaL2Cache, TERMINAL_ACK);
+  if (avoid_terminal != true){
+    sendGcodeTerminalCache(dmaL2Cache, TERMINAL_ACK);
+  }
 }
 
 void parseRcvGcode(void)

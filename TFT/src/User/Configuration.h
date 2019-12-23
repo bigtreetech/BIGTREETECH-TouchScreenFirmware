@@ -57,7 +57,8 @@
 
 // Default move speed mm/min
 #define DEFAULT_SPEED_MOVE      3000
-
+#define SPEED_MOVE_SLOW         1000
+#define SPEED_MOVE_FAST         5000
 // Extrude speed mm/min
 #define EXTRUDE_SLOW_SPEED      60
 #define EXTRUDE_NORMAL_SPEED    600
@@ -73,7 +74,7 @@
 
 // Specify a pause position as { X, Y, Z_raise }
 #define NOZZLE_PAUSE_RETRACT_LENGTH 15   // (mm)
-#define NOZZLE_PAUSE_PURGE_LENGTH   16   // (mm)
+#define NOZZLE_RESUME_PURGE_LENGTH  16   // (mm)
 #define NOZZLE_PAUSE_X_POSITION     (X_MIN_POS + 10)  // (mm) Must be an integer
 #define NOZZLE_PAUSE_Y_POSITION     (Y_MIN_POS + 10)  // (mm) Must be an integer
 #define NOZZLE_PAUSE_Z_RAISE        20   // (mm)
@@ -81,7 +82,13 @@
 #define NOZZLE_PAUSE_XY_FEEDRATE    6000 // (mm/min) X and Y axes feedrate
 #define NOZZLE_PAUSE_Z_FEEDRATE     600  // (mm/min) Z axis feedrate
 
+// Send G29 for auto bed leveling
 #define AUTO_BED_LEVELING
+#ifdef AUTO_BED_LEVELING
+  // Enable this will send "M500" after "G29" to store leveling value
+  // and send "M420 S1" to enable leveling state after startup
+  #define AUTO_SAVE_LOAD_LEVELING_VALUE
+#endif
 
 // Move to four corner points to Leveling manually (Point 1, Point 2, Point 3, Point 4)
 #define LEVELING_POINT_1_X         (X_MIN_POS + 20)
@@ -112,9 +119,12 @@
 // update the icons from alternate icon folder
 #define ALTERNATIVE_MOVE_MENU
 
-//Invert the Y Axis move Direction
+// Invert the Y Axis move Direction
+// this does not work if LIST MODE is enabled. To invert y axis in LIST MODE go to setting->feature settings
 //#define INVERT_YAXIS
 
+//Invert the Z Axis move Direction
+//#define INVERT_ZAXIS
 
 // Enable Unified Move Menu
 // Move, Home, Extrude, ABL at one Place and bring Gcode Menu on Home Menu
@@ -125,15 +135,15 @@
 #define STATUS_SCREEN
 
 /**
- * Enable gocde files list mode
+ * Enable list mode in Files menu and settings menu
  * It is friendly to display long file name, but the model preview feature is not available
  * Disable this if you want to use the model preview feature
  */
-//#define GCODE_LIST_MODE
+#define MENU_LIST_MODE
 
 
 //-------RESET SETTINGS & TOUCH SCREEN CALIBRATION------||
-//to reset the touch screen create a text file with name 'reset.txt' in root folder of the sd card and press reset button.
+// To reset the touch screen create a text file with name 'reset.txt' in root folder of the sd card and press reset button.
 
 
 // SD support
@@ -150,6 +160,9 @@
  * This function is suitable for Delta Printer.
  */
 //#define HOME_BEFORE_PLR
+//#define BTT_MINI_UPS // Backup power / UPS to move the Z axis steppers on power loss
+#define POWER_LOSS_ZRAISE 10 // (mm) Z axis raise on resume (on power loss with UPS)
+
 
 // Prevent extrusion if the temperature is below set temperature
 #define PREVENT_COLD_EXTRUSION_MINTEMP 170
@@ -188,5 +201,29 @@
 //#define CUSTOM_5_GCODE "M105\n"
 //#define CUSTOM_6_LABEL "Custom6"
 //#define CUSTOM_6_GCODE "M105\n"
+
+/*
+custom gcode below are compatible only in if LIST_MODE is active
+*/
+#ifdef MENU_LIST_MODE
+//#define CUSTOM_7_LABEL "Custom7"
+//#define CUSTOM_7_GCODE "M105\n"
+//#define CUSTOM_8_LABEL "Custom8"
+//#define CUSTOM_8_GCODE "M105\n"
+//#define CUSTOM_9_LABEL "Custom9"
+//#define CUSTOM_9_GCODE "M105\n"
+//#define CUSTOM_10_LABEL "Custom10"
+//#define CUSTOM_10_GCODE "M105\n"
+//#define CUSTOM_11_LABEL "Custom11"
+//#define CUSTOM_11_GCODE "M105\n"
+//#define CUSTOM_12_LABEL "Custom12"
+//#define CUSTOM_12_GCODE "M105\n"
+//#define CUSTOM_13_LABEL "Custom13"
+//#define CUSTOM_13_GCODE "M105\n"
+//#define CUSTOM_14_LABEL "Custom14"
+//#define CUSTOM_14_GCODE "M105\n"
+#endif
+
+#define CANCEL_PRINT_GCODE "G28 X0 Y0\n"
 
 #endif
