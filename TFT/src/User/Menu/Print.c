@@ -127,7 +127,7 @@ void normalNameDisp(const GUI_RECT *rect, u8 *name)
     for (; (i + infoFile.cur_page * NUM_PER_PAGE < infoFile.f_num + infoFile.F_num) && (i < NUM_PER_PAGE); i++) // gcode file
     {
       printItems.items[i].icon = ICONCHAR_FILE;
-      dynamic_label[i] = infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num];
+      dynamic_label[i] = (infoFile.source == BOARD_SD) ? infoFile.Longfile[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num] : infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num];
       printItems.items[i].titlelabel.index = LABEL_DYNAMIC;
       menuDrawListItem(&printItems.items[i], i);
     }

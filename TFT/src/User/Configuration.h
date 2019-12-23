@@ -123,6 +123,8 @@
 // this does not work if LIST MODE is enabled. To invert y axis in LIST MODE go to setting->feature settings
 //#define INVERT_YAXIS
 
+//Invert the Z Axis move Direction
+//#define INVERT_ZAXIS
 
 // Enable Unified Move Menu
 // Move, Home, Extrude, ABL at one Place and bring Gcode Menu on Home Menu
@@ -199,6 +201,7 @@
 //#define CUSTOM_5_GCODE "M105\n"
 //#define CUSTOM_6_LABEL "Custom6"
 //#define CUSTOM_6_GCODE "M105\n"
+
 /*
 custom gcode below are compatible only in if LIST_MODE is active
 */
@@ -220,4 +223,7 @@ custom gcode below are compatible only in if LIST_MODE is active
 //#define CUSTOM_14_LABEL "Custom14"
 //#define CUSTOM_14_GCODE "M105\n"
 #endif
+
+#define CANCEL_PRINT_GCODE "G28 X0 Y0\n"
+
 #endif
