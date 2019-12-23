@@ -69,7 +69,7 @@ LABEL_SETTINGS,
   {ICON_SCREEN_INFO,          LABEL_SCREEN_INFO},
   {ICON_DISCONNECT,           LABEL_DISCONNECT},
   {ICON_BAUDRATE,             LABEL_BAUDRATE_115200},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
+  {ICON_PARAMETER,            LABEL_SETTING_PARAMETER},
   {ICON_BACK,                 LABEL_BACK},}
 };
 
@@ -130,6 +130,10 @@ void menuSettings(void)
         infoSettings.baudrate = item_baudrate[item_baudrate_i];
         Serial_DeInit(); // Serial_Init() will malloc a dynamic memory, so Serial_DeInit() first to free, then malloc again.
         Serial_Init(infoSettings.baudrate);
+        break;
+
+      case KEY_ICON_6:
+        infoMenu.menu[++infoMenu.cur] = parametersetting;
         break;
 
       case KEY_ICON_7:

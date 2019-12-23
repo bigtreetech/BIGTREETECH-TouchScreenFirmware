@@ -139,9 +139,10 @@
     #define ES_EMERGENCYSTOP        "PARADA EMERGENCIA"
     #define ES_TOUCH_TO_EXIT        "Toca cualquier lugar para salir"
     #define ES_MAINMENU             "Menu"
-    #define ES_WAIT_TEMP_SHUT_DOWN  "Espere a que la temperatura del hotend sea inferior a "STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP)"℃" // Wait for the temperature of hotend to be lower than 50℃
+    #define ES_WAIT_TEMP_SHUT_DOWN  "Espere a que la temperatura del hotend sea inferior a " STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP) "℃" // Wait for the temperature of hotend to be lower than 50℃
     #define ES_FORCE_SHUT_DOWN      "Forzar Apagado"
     #define ES_SHUTTING_DOWN        "Apagando..."
+    #define ES_PARAMETER_SETTING    "Parámetro"
     #define ES_ON                   "ON"
     #define ES_OFF                  "OFF"
     #define ES_AUTO                 "AUTO"
