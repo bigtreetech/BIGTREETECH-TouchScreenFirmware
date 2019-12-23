@@ -139,9 +139,16 @@
     #define SK_COOLDOWN             "Ochladiť"
     #define SK_EMERGENCYSTOP        "STOP"
     #define SK_TOUCH_TO_EXIT        "Dotknite sa obrazovky pre ukončenie"
-	  #define SK_MAINMENU             "Menu"
+	#define SK_MAINMENU             "Menu"
     #define SK_WAIT_TEMP_SHUT_DOWN  "Počkať na teplotu trysky menej ako"STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP)"℃" // Wait for the temperature of hotend to be lower than 50℃
     #define SK_FORCE_SHUT_DOWN      "Vynútené vypnutie"
     #define SK_SHUTTING_DOWN        "Vypínanie..."
+    #define SK_ON                   "ON"
+    #define SK_OFF                  "OFF"
+    #define SK_AUTO                 "AUTO"
+    #define SK_SMART                "SMART"
+    #define SK_TERMINAL_ACK         "Hide Terminal ACK"
+    #define SK_INVERT_YAXIS         "Invert Y Axis"
+    #define SK_MOVE_SPEED           "Move speed(X Y Z)"
 
 #endif

@@ -255,9 +255,9 @@ bool setPrintPause(bool is_pause)
           mustStoreCmd("G1 Z%.3f F%d\n", tmp.axis[Z_AXIS], NOZZLE_PAUSE_Z_FEEDRATE);
         }
         if(heatGetCurrentTemp(heatGetCurrentToolNozzle()) > PREVENT_COLD_EXTRUSION_MINTEMP)
-          mustStoreCmd("G1 E%.5f F%d\n", tmp.axis[E_AXIS] + NOZZLE_PAUSE_PURGE_LENGTH, NOZZLE_PAUSE_E_FEEDRATE);
+          mustStoreCmd("G1 E%.5f F%d\n", tmp.axis[E_AXIS] - NOZZLE_PAUSE_RETRACT_LENGTH + NOZZLE_RESUME_PURGE_LENGTH, NOZZLE_PAUSE_E_FEEDRATE);
         mustStoreCmd("G92 E%.5f\n", tmp.axis[E_AXIS]);
-        mustStoreCmd("G90 F%d\n", tmp.feedrate);
+        mustStoreCmd("G1 F%d\n", tmp.feedrate);
         
         if (isCoorRelative == true)     mustStoreCmd("G91\n");
         if (isExtrudeRelative == true)  mustStoreCmd("M83\n");
@@ -318,7 +318,7 @@ extern GUI_RECT titleRect;
 
 void printingDrawPage(void)
 {
-  menuDrawPage(&printingItems,false);
+  menuDrawPage(&printingItems);
   //	Scroll_CreatePara(&titleScroll, infoFile.title,&titleRect);  //
   // printed time
   GUI_DispString(progressRect.x0, TIME_Y, (u8* )"T:");
@@ -480,7 +480,7 @@ void abortPrinting(void)
   heatClearIsWaiting();
   
   mustStoreCmd("G0 Z%d F3000\n", limitValue(0, (int)coordinateGetAxisTarget(Z_AXIS) + 10, Z_MAX_POS));
-  mustStoreCmd("G28 X0 Y0\n");
+  mustStoreCmd(CANCEL_PRINT_GCODE);
 
   endPrinting();
   exitPrinting();

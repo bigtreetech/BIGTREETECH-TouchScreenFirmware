@@ -103,7 +103,7 @@ void menuScreenSettings(void)
     }
   #endif
 
-  menuDrawPage(&screenSettingsItems,false);
+  menuDrawPage(&screenSettingsItems);
 
   while(infoMenu.menu[infoMenu.cur] == menuScreenSettings)
   {
@@ -114,17 +114,17 @@ void menuScreenSettings(void)
         infoSettings.rotate_ui = !infoSettings.rotate_ui;
         LCD_RefreshDirection();
         TSC_Calibration();
-        menuDrawPage(&screenSettingsItems,false);        
+        menuDrawPage(&screenSettingsItems);        
         break;
       
       case KEY_ICON_1:
         TSC_Calibration();
-        menuDrawPage(&screenSettingsItems,false);
+        menuDrawPage(&screenSettingsItems);
         break;
       
       case KEY_ICON_2: 
         infoSettings.language = (infoSettings.language + 1) % LANGUAGE_NUM;
-        menuDrawPage(&screenSettingsItems,false);
+        menuDrawPage(&screenSettingsItems);
         break;
       
       #ifdef BUZZER_PIN

@@ -65,6 +65,8 @@ static float ack_second_value()
 
 void ackPopupInfo(const char *info)
 {
+  if(infoMenu.menu[infoMenu.cur] == parametersetting) return;
+
   if (info == echomagic)
   {
     statusScreen_setMsg((u8 *)info, (u8 *)dmaL2Cache + ack_index);
@@ -88,6 +90,7 @@ void syncL2CacheFromL1(uint8_t port)
 
 void parseACK(void)
 { 
+  bool avoid_terminal = false;
   if(infoHost.rx_ok[SERIAL_PORT] != true) return; //not get response data
   
   syncL2CacheFromL1(SERIAL_PORT);
@@ -97,6 +100,9 @@ void parseACK(void)
   {
     if((!ack_seen("T:") && !ack_seen("T0:")) || !ack_seen("ok"))  goto parse_end;  //the first response should be such as "T:25/50 ok\n"
     infoHost.connected = true;
+    #ifdef AUTO_SAVE_LOAD_LEVELING_VALUE
+      storeCmd("M420 S1\n");
+    #endif
   }    
 
   // GCode command response
@@ -171,11 +177,17 @@ void parseACK(void)
           heatSyncTargetTemp(i, ack_second_value()+0.5);
         }      
       }
+     #ifdef MENU_LIST_MODE
+      avoid_terminal = infoSettings.terminalACK;
+    #endif
     }
     else if(ack_seen("B:"))		
     {
       heatSetCurrentTemp(BED,ack_value()+0.5);
       heatSyncTargetTemp(BED, ack_second_value()+0.5);
+      #ifdef MENU_LIST_MODE
+      avoid_terminal = infoSettings.terminalACK;
+      #endif
     }
     else if(ack_seen("Mean:"))
     {
@@ -196,6 +208,32 @@ void parseACK(void)
     else if(ack_seen(echomagic) && ack_seen(busymagic) && ack_seen("processing"))
     {
       busyIndicator(STATUS_BUSY);
+    }
+    else if(ack_seen("X driver current: "))
+    {
+      Get_parameter_value[0] = ack_value();
+
+      if(ack_seen("Y driver current: "))
+      Get_parameter_value[1] = ack_value();
+
+      if(ack_seen("Z driver current: "))
+      Get_parameter_value[2] = ack_value();
+
+      if(ack_seen("E driver current: "))
+      Get_parameter_value[3] = ack_value();
+    }
+    else if(ack_seen("M92 X"))
+    {
+      Get_parameter_value[4] = ack_value();
+
+      if(ack_seen("Y"))
+      Get_parameter_value[5] = ack_value();
+
+      if(ack_seen("Z"))
+      Get_parameter_value[6] = ack_value();
+
+      if(ack_seen("E"))
+      Get_parameter_value[7] = ack_value();
     }
 #ifdef ONBOARD_SD_SUPPORT     
     else if(ack_seen(bsdnoprintingmagic) && infoMenu.menu[infoMenu.cur] == menuPrinting)
@@ -230,13 +268,19 @@ void parseACK(void)
       ackPopupInfo(echomagic);
     }
   }
+  if (ack_seen(" F0:"))
+  {
+      fanSetSpeed(0, ack_value());
+  }
   
 parse_end:    
   if(ack_cur_src != SERIAL_PORT)
   {
     Serial_Puts(ack_cur_src, dmaL2Cache);
   }
-  sendGcodeTerminalCache(dmaL2Cache, TERMINAL_ACK);
+  if (avoid_terminal != true){
+    sendGcodeTerminalCache(dmaL2Cache, TERMINAL_ACK);
+  }
 }
 
 void parseRcvGcode(void)

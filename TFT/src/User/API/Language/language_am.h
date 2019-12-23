@@ -138,8 +138,17 @@
     #define AM_COOLDOWN             "Cool Down"
     #define AM_EMERGENCYSTOP        "EM. STOP"
     #define AM_TOUCH_TO_EXIT        "Touch anywhere to exit"
-	  #define AM_MAINMENU             "Menu"
-    #define AM_WAIT_TEMP_SHUT_DOWN  "Wait for the temperature of hotend to be lower than "STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP)"℃" // Wait for the temperature of hotend to be lower than 50℃
+    #define AM_MAINMENU             "Menu"
+    #define AM_WAIT_TEMP_SHUT_DOWN  "Wait for the temperature of hotend to be lower than " STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP) "℃" // Wait for the temperature of hotend to be lower than 50℃
     #define AM_FORCE_SHUT_DOWN      "Force"
     #define AM_SHUTTING_DOWN        "Shutting down..."
+    #define AM_PARAMETER_SETTING    "Պարամետր"
+    #define AM_ON                   "ON"
+    #define AM_OFF                  "OFF"
+    #define AM_AUTO                 "AUTO"
+    #define AM_SMART                "SMART"
+    #define AM_TERMINAL_ACK         "Hide Terminal ACK"
+    #define AM_INVERT_YAXIS         "Invert Y Axis"
+    #define AM_MOVE_SPEED           "Move speed(X Y Z)"
+
 #endif

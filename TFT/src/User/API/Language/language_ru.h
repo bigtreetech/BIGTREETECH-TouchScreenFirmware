@@ -137,10 +137,18 @@
     #define RU_UNIFIEDHEAT          "Heat&Fan"
     #define RU_COOLDOWN             "Cool Down"
     #define RU_EMERGENCYSTOP        "EM. STOP"
-	  #define RU_MAINMENU             "Menu"
+    #define RU_MAINMENU             "Menu"
     #define RU_TOUCH_TO_EXIT        "Touch anywhere to exit"
-    #define RU_WAIT_TEMP_SHUT_DOWN  "Wait for the temperature of hotend to be lower than "STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP)"℃" // Wait for the temperature of hotend to be lower than 50℃
+    #define RU_WAIT_TEMP_SHUT_DOWN  "Wait for the temperature of hotend to be lower than " STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP) "℃" // Wait for the temperature of hotend to be lower than 50℃
     #define RU_FORCE_SHUT_DOWN      "Force"
     #define RU_SHUTTING_DOWN        "Shutting down..."
+    #define RU_PARAMETER_SETTING    "Nараметры"
+    #define RU_ON                   "ON"
+    #define RU_OFF                  "OFF"
+    #define RU_AUTO                 "AUTO"
+    #define RU_SMART                "SMART"
+    #define RU_TERMINAL_ACK         "Hide Terminal ACK"
+    #define RU_INVERT_YAXIS         "Invert Y Axis"
+    #define RU_MOVE_SPEED           "Move speed(X Y Z)"
     
 #endif

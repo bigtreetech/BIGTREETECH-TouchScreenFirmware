@@ -174,9 +174,20 @@ enum
   LABEL_WAIT_TEMP_SHUT_DOWN,
   LABEL_FORCE_SHUT_DOWN,
   LABEL_SHUTTING_DOWN,
-  
+  LABEL_SETTING_PARAMETER,
+  LABEL_ON,
+  LABEL_OFF,
+  LABEL_AUTO,
+  LABEL_SMART,
+  LABEL_TERMINAL_ACK,
+  LABEL_INVERT_YAXIS,
+  LABEL_MOVE_SPEED,
+
+  //add new keywords above this line only
+  //keep the following always at the end of this list
   LABEL_NUM,
   LABEL_BACKGROUND,
+  LABEL_DYNAMIC
 };
 
 u8 * textSelect(u8 sel);

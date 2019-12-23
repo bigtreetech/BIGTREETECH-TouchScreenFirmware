@@ -142,5 +142,13 @@
     #define CN_WAIT_TEMP_SHUT_DOWN  "喷头温度正在降温，等待低于"STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP)"℃后自动关机" // 喷头温度正在降温，等待低于50℃后自动关机
     #define CN_FORCE_SHUT_DOWN      "强制关机"
     #define CN_SHUTTING_DOWN        "正在关机..."
+    #define CN_PARAMETER_SETTING    "参数设置"
+    #define CN_ON                   "ON"
+    #define CN_OFF                  "OFF"
+    #define CN_AUTO                 "AUTO"
+    #define CN_SMART                "SMART"
+    #define CN_TERMINAL_ACK         "Hide Terminal ACK"
+    #define CN_INVERT_YAXIS         "Invert Y Axis"
+    #define CN_MOVE_SPEED           "Move speed(X Y Z)"
 
 #endif

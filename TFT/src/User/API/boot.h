@@ -15,6 +15,8 @@
 #define BYTE_ASCII_ADDR         0x700000 // ascii (+0x1000 4K)
 //#define BYTE_RESERVE_ADDR      0x710000
 
+#define SMALL_ICON_START_ADDR     ICON_ADDR(ICON_PREVIEW+1)
+#define SMALL_ICON_ADDR(num)     ((num)*0x1000+SMALL_ICON_START_ADDR)
 
 #define BMP		(1<<1)
 #define FONT	(1<<2)
@@ -137,6 +139,9 @@ enum
   ICON_STATUS_FLOW,
   ICON_INFOBOX_PART1,
   ICON_INFOBOX_PART2,
+  ICON_PARAMETER,
+  ICON_GLOBAL_NOZZLE0,
+  ICON_GLOBAL_BED,
   
 //  ICON_RESERVE
 // Preview should be in the last place

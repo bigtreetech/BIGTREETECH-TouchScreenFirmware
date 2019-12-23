@@ -138,9 +138,17 @@
     #define DE_COOLDOWN             "Cool Down"
     #define DE_EMERGENCYSTOP        "EM. STOP"
     #define DE_TOUCH_TO_EXIT        "Touch anywhere to exit"
-	  #define DE_MAINMENU             "Menu"
-    #define DE_WAIT_TEMP_SHUT_DOWN  "Wait for the temperature of hotend to be lower than "STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP)"℃" // Wait for the temperature of hotend to be lower than 50℃
+    #define DE_MAINMENU             "Menu"
+    #define DE_WAIT_TEMP_SHUT_DOWN  "Wait for the temperature of hotend to be lower than " STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP) "℃" // Wait for the temperature of hotend to be lower than 50℃
     #define DE_FORCE_SHUT_DOWN      "Force"
     #define DE_SHUTTING_DOWN        "Shutting down..."
+    #define DE_PARAMETER_SETTING    "Parameter"
+    #define DE_ON                   "ON"
+    #define DE_OFF                  "OFF"
+    #define DE_AUTO                 "AUTO"
+    #define DE_SMART                "SMART"
+    #define DE_TERMINAL_ACK         "Hide Terminal ACK"
+    #define DE_INVERT_YAXIS         "Invert Y Axis"
+    #define DE_MOVE_SPEED           "Move speed(X Y Z)"
     
 #endif
