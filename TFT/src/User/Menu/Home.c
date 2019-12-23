@@ -19,7 +19,7 @@ LABEL_HOME,
 void menuHome(void)
 {
   KEY_VALUES key_num = KEY_IDLE;	
-  menuDrawPage(&homeItems,false);
+  menuDrawPage(&homeItems);
   while(infoMenu.menu[infoMenu.cur] == menuHome)
   {
     key_num = menuKeyGetValue();

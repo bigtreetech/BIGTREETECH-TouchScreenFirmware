@@ -40,8 +40,8 @@ typedef enum
   KEY_IDLE = IDLE_TOUCH,
 }KEY_VALUES;
 
-#define ITEM_PER_PAGE  8
-
+#define ITEM_PER_PAGE       8
+#define LISTITEM_PER_PAGE   5
 /*-------------------------select mode-------top*/
 #define SELECTMODE 2
 typedef enum
@@ -87,6 +87,30 @@ typedef struct
   int16_t inf;
 }REMINDER;
 
+typedef enum
+{
+  LIST_LABEL = 0,
+  LIST_TOGGLE,
+  LIST_RADIO,
+  LIST_MOREBUTTON,
+  LIST_CUSTOMVALUE,
+}LISTITEM_TYPE;
+
+typedef struct
+{
+  uint16_t icon;
+  LISTITEM_TYPE itemType;
+  LABEL titlelabel;
+  LABEL valueLabel;
+}LISTITEM;
+
+typedef struct
+{
+  LABEL title;
+  //uint16_t titleIconChar;
+  LISTITEM  items[ITEM_PER_PAGE];
+}LISTITEMS;
+
 extern const GUI_RECT exhibitRect;
 #define CENTER_Y  ((exhibitRect.y1 - exhibitRect.y0)/2 + exhibitRect.y0)
 #define CENTER_X  ((exhibitRect.x1 - exhibitRect.x0 - BYTE_WIDTH)/2 + exhibitRect.x0)
@@ -100,10 +124,10 @@ void volumeReminderMessage(int16_t inf, SYS_STATUS status);
 void busyIndicator(SYS_STATUS status);
 
 void menuDrawItem (const ITEM * menuItem, uint8_t positon);
-void menuDrawListItem(const ITEM *item, uint8_t positon);
-void menuDrawTitle(const MENUITEMS * menuItems);
-void menuDrawPage (const MENUITEMS * menuItems, bool listview);
-
+void menuDrawListItem(const LISTITEM *item, uint8_t positon);
+void menuDrawTitle(const uint8_t *content); //(const MENUITEMS * menuItems);
+void menuDrawPage (const MENUITEMS * menuItems);
+void menuDrawListPage(const LISTITEMS *listItems);
 void itemDrawIconPress(uint8_t positon, uint8_t is_press);
 KEY_VALUES menuKeyGetValue(void);
 

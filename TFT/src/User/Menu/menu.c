@@ -95,6 +95,9 @@ void menuClearGaps(void)
 }
 
 static const MENUITEMS * curMenuItems = NULL;   //current menu
+
+static const LISTITEMS * curListItems = NULL;   //current listmenu
+
 static bool isListview;
 
 uint8_t *labelGetAddress(const LABEL *label)
@@ -106,12 +109,12 @@ uint8_t *labelGetAddress(const LABEL *label)
     return label->address;
 }
 
-void menuDrawItem(const ITEM * item, u8 positon)
+void menuDrawItem(const ITEM * item, u8 position)
 {
   uint8_t *content = labelGetAddress(&item->label);
-  const GUI_RECT *rect = rect_of_key + positon;
+  const GUI_RECT *rect = rect_of_key + position;
   if (infoMenu.menu[infoMenu.cur] == menuStatus){
-     rect = rect_of_keyStatus + positon;
+     rect = rect_of_keyStatus + position;
   }
      
   if(item->icon != ICON_BACKGROUND)
@@ -120,11 +123,11 @@ void menuDrawItem(const ITEM * item, u8 positon)
     GUI_ClearRect(rect->x0, rect->y0, rect->x1, rect->y1);
 
   if (infoMenu.menu[infoMenu.cur] == menuStatus){
-     rect = rect_of_keyStatus + ITEM_PER_PAGE + positon;
+     rect = rect_of_keyStatus + ITEM_PER_PAGE + position;
   }
   else
   {
-    rect = rect_of_key + ITEM_PER_PAGE + positon;
+    rect = rect_of_key + ITEM_PER_PAGE + position;
   }
   
   GUI_ClearPrect(rect);
@@ -132,26 +135,16 @@ void menuDrawItem(const ITEM * item, u8 positon)
     GUI_DispStringInPrect(rect, content);
 }
 
-void menuDrawListItem(const ITEM *item, uint8_t positon)
+ void menuDrawListItem(const LISTITEM *item, uint8_t position)
 {
-  const GUI_RECT *rect = rect_of_keyListView + positon;
-  if (item->icon == ICONCHAR_BACKGROUND && item->label.index == LABEL_BACKGROUND)
+   const GUI_RECT *rect = rect_of_keyListView + position;
+  if (item->icon == ICONCHAR_BACKGROUND)
   {
     GUI_ClearPrect(rect);
   }
   else
   {
-    if (positon > 4)
-    {
-      GUI_SetBkColor(LISTBTN_BKCOLOR);
-      ListItem_Display(rect, item->icon, MIDDLE, item->label.address, false);
-      GUI_SetBkColor(BK_COLOR);
-    }
-    else
-    {
-
-      ListItem_Display(rect, item->icon, LEFT_CENTER, item->label.address, false);
-    }
+    ListItem_Display(rect, position, item, false);
   }
 }
 
@@ -236,8 +229,9 @@ void loopReminderClear(void)
   reminder.status = STATUS_IDLE;
   if(curMenuItems == NULL)
     return;
-  menuDrawTitle(curMenuItems);
+  menuDrawTitle(labelGetAddress(&curMenuItems->title));
 }
+
 void loopVolumeReminderClear(void)
 {	
   switch(volumeReminder.status)
@@ -254,7 +248,7 @@ void loopVolumeReminderClear(void)
   volumeReminder.status = STATUS_IDLE;
   if(curMenuItems == NULL)
     return;
-  menuDrawTitle(curMenuItems);
+  menuDrawTitle(labelGetAddress(&curMenuItems->title));
 }
 
 void loopBusySignClear(void)
@@ -278,9 +272,9 @@ void loopBusySignClear(void)
 }
 
 
-void menuDrawTitle(const MENUITEMS * menuItems)
+void menuDrawTitle(const uint8_t *content) //(const MENUITEMS * menuItems)
 {
-  const uint8_t *content = labelGetAddress(&menuItems->title);
+  //const uint8_t *content = labelGetAddress(&menuItems->title);
   uint16_t start_y;
   if (infoMenu.menu[infoMenu.cur] == menuStatus)
   {
@@ -305,93 +299,89 @@ void menuDrawTitle(const MENUITEMS * menuItems)
 }
 
 //Draw the entire interface
-void menuDrawPage(const MENUITEMS *menuItems, bool listview)
+void menuDrawPage(const MENUITEMS *menuItems)
 {
   u8 i = 0;
-    isListview = listview;
+  isListview = false;
   curMenuItems = menuItems;
   TSC_ReDrawIcon = itemDrawIconPress;
 
-  if (listview == false)
-  {
     //GUI_Clear(BLACK);
     menuClearGaps(); //Use this function instead of GUI_Clear to eliminate the splash screen when clearing the screen.
-    menuDrawTitle(menuItems);
+    menuDrawTitle(labelGetAddress(&menuItems->title));
     for (i = 0; i < ITEM_PER_PAGE; i++)
     {
       menuDrawItem(&menuItems->items[i], i);
     }
-  }
-  else
-  {
+}
+
+//Draw the entire interface
+void menuDrawListPage(const LISTITEMS *listItems)
+{
+  u8 i = 0;
+  isListview = true;
+  curListItems = listItems;
+  TSC_ReDrawIcon = itemDrawIconPress;
+
     GUI_Clear(BLACK);
-    menuDrawTitle(menuItems);
+    //menuClearGaps(); //Use this function instead of GUI_Clear to eliminate the splash screen when clearing the screen.
+    menuDrawTitle(labelGetAddress(&listItems->title));
+
     for (i = 0; i < ITEM_PER_PAGE; i++)
     {
-      menuDrawListItem(&menuItems->items[i], i);
-    }
-  }
+      //const GUI_RECT *rect = rect_of_keyListView + i;
+     if (curListItems->items[i].icon != ICONCHAR_BACKGROUND)
+    
+      menuDrawListItem(&curListItems->items[i], i);
+      }
+    
 }
 
 //When there is a button value, the icon changes color and redraws
-void itemDrawIconPress(u8 positon, u8 is_press)
+void itemDrawIconPress(u8 position, u8 is_press)
 {
-  if (curMenuItems == NULL)
-    return;
-  if (positon > KEY_ICON_7)
+ 
+  if (position > KEY_ICON_7)
     return;
 
   if (isListview == false)
   {
-    if (curMenuItems->items[positon].icon == ICON_BACKGROUND)
+    if (curMenuItems == NULL)
+    return;
+
+    if (curMenuItems->items[position].icon == ICON_BACKGROUND)
       return;
 
-    const GUI_RECT *rect = rect_of_key + positon;
+    const GUI_RECT *rect = rect_of_key + position;
 
     if (infoMenu.menu[infoMenu.cur] == menuStatus)
     {
-      rect = rect_of_keyStatus + positon;
+      rect = rect_of_keyStatus + position;
     }
 
     if (is_press) //Turn green when pressed
-      ICON_PressedDisplay(rect->x0, rect->y0, curMenuItems->items[positon].icon);
+      ICON_PressedDisplay(rect->x0, rect->y0, curMenuItems->items[position].icon);
     else //Redraw normal icon when released
-      ICON_ReadDisplay(rect->x0, rect->y0, curMenuItems->items[positon].icon);
+      ICON_ReadDisplay(rect->x0, rect->y0, curMenuItems->items[position].icon);
   }
   else
   { //draw rec over list item if pressed
-    if (curMenuItems->items[positon].icon == ICONCHAR_BACKGROUND && curMenuItems->items[positon].label.index == LABEL_BACKGROUND)
-      return;
+    if (curListItems == NULL)
+    return;
 
-    const GUI_RECT *rect = rect_of_keyListView + positon;
-/*     ICON_POS ps = LEFT_CENTER;
-        if (positon > 4){ ps = MIDDLE;}
-        if (is_press) //draw rec over list item if pressed
-            ListItem_Display(rect, curMenuItems->items[positon].icon, ps, (u8 *)curMenuItems->items[positon].label, true);
-        else //Redraw normal item when released
-            ListItem_Display(rect, curMenuItems->items[positon].icon, ps, (u8 *)curMenuItems->items[positon].label, false);
-     */
-    if (positon > 4)
+    const GUI_RECT *rect = rect_of_keyListView + position;
+
+    if (curListItems->items[position].icon == ICONCHAR_BACKGROUND)
     {
-      GUI_SetBkColor(LISTBTN_BKCOLOR);
-      if (is_press) //draw rec over list item if pressed
-      {
-      ListItem_Display(rect, curMenuItems->items[positon].icon, MIDDLE, curMenuItems->items[positon].label.address, true);
-      }
-      else{
-      ListItem_Display(rect, curMenuItems->items[positon].icon, MIDDLE, curMenuItems->items[positon].label.address, false);
-      }
-      GUI_SetBkColor(BK_COLOR);
+    GUI_ClearPrect(rect);
+    return;
     }
-    else
-    {
-        if (is_press) //draw rec over list item if pressed
-            ListItem_Display(rect, curMenuItems->items[positon].icon, LEFT_CENTER, curMenuItems->items[positon].label.address, true);
-        else //Redraw normal item when released
-            ListItem_Display(rect, curMenuItems->items[positon].icon, LEFT_CENTER, curMenuItems->items[positon].label.address, false);
+    if (is_press){
+    ListItem_Display(rect,position,&curListItems->items[position], true);
     }
-  
-  
+    else{ 
+    ListItem_Display(rect,position,&curListItems->items[position], false);
+    }
   
   }
 }

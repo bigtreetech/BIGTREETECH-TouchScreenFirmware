@@ -348,7 +348,7 @@ void menuStatus(void)
   KEY_VALUES key_num = KEY_IDLE;
   GUI_SetBkColor(BK_COLOR);
   //set_status_icon();
-  menuDrawPage(&StatusItems,false);
+  menuDrawPage(&StatusItems);
   GUI_SetColor(GANTRYLBL_BKCOLOR);
       //GUI_ClearPrect(&RecGantry);
   GUI_FillPrect(&RecGantry);

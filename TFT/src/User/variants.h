@@ -34,7 +34,7 @@
   #define F_CPUM 120
   #define STM32F2XX
   #include "stm32f2xx.h"
-#endif
+#endif 
 
 //LCD interface
 #if defined(TFT35_V1_0) || defined(TFT35_V1_1)
@@ -214,6 +214,9 @@
   #define LIST_ICON_WIDTH   85
   #define LIST_ICON_HEIGHT  70
 
+  #define SMALLICON_WIDTH   24
+  #define SMALLICON_HEIGHT   24
+
   #define selecticonw 95
 #elif defined(TFT28_V1_0) || defined(TFT24_V1_1)
   #define LCD_WIDTH	  320
@@ -228,6 +231,9 @@
   
   #define LIST_ICON_WIDTH   55
   #define LIST_ICON_HEIGHT  50
+  
+  #define SMALLICON_WIDTH   16
+  #define SMALLICON_HEIGHT   16
   
   #define selecticonw 70
 #endif
