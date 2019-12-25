@@ -192,6 +192,7 @@ const char *const en_pack[LABEL_NUM]={
   EN_SMART,
   EN_TERMINAL_ACK,
   EN_INVERT_YAXIS,
+  EN_INVERT_ZAXIS,
   EN_MOVE_SPEED,
 };
 
@@ -351,6 +352,7 @@ const char *const cn_pack[LABEL_NUM]={
   CN_SMART,
   CN_TERMINAL_ACK,
   CN_INVERT_YAXIS,
+  CN_INVERT_ZAXIS,
   CN_MOVE_SPEED,
 };
 
@@ -510,6 +512,7 @@ const char *const ru_pack[LABEL_NUM]={
   RU_SMART,
   RU_TERMINAL_ACK,
   RU_INVERT_YAXIS,
+  RU_INVERT_ZAXIS,
   RU_MOVE_SPEED,
 };
 
@@ -669,6 +672,7 @@ const char *const jp_pack[LABEL_NUM]={
   JP_SMART,
   JP_TERMINAL_ACK,
   JP_INVERT_YAXIS,
+  JP_INVERT_ZAXIS,
   JP_MOVE_SPEED,
 };
 
@@ -828,6 +832,7 @@ const char *const am_pack[LABEL_NUM]={
   AM_SMART,
   AM_TERMINAL_ACK,
   AM_INVERT_YAXIS,
+  AM_INVERT_ZAXIS,
   AM_MOVE_SPEED,
 };
 
@@ -987,6 +992,7 @@ const char *const de_pack[LABEL_NUM]={
   DE_SMART,
   DE_TERMINAL_ACK,
   DE_INVERT_YAXIS,
+  DE_INVERT_ZAXIS,
   DE_MOVE_SPEED,
 };
 
@@ -1146,6 +1152,7 @@ const char *const cz_pack[LABEL_NUM]={
   CZ_SMART,
   CZ_TERMINAL_ACK,
   CZ_INVERT_YAXIS,
+  CZ_INVERT_ZAXIS,
   CZ_MOVE_SPEED,
 };
 
@@ -1305,6 +1312,7 @@ const char *const es_pack[LABEL_NUM]={
   ES_SMART,
   ES_TERMINAL_ACK,
   ES_INVERT_YAXIS,
+  ES_INVERT_ZAXIS,
   ES_MOVE_SPEED,
 };
 
@@ -1464,6 +1472,7 @@ const char *const fr_pack[LABEL_NUM]={
   FR_SMART,
   FR_TERMINAL_ACK,
   FR_INVERT_YAXIS,
+  FR_INVERT_ZAXIS,
   FR_MOVE_SPEED,
 };
 
@@ -1623,6 +1632,7 @@ const char *const pt_pack[LABEL_NUM]={
   PT_SMART,
   PT_TERMINAL_ACK,
   PT_INVERT_YAXIS,
+  PT_INVERT_ZAXIS,
   PT_MOVE_SPEED,
 };
 
@@ -1782,6 +1792,7 @@ const char *const it_pack[LABEL_NUM]={
   IT_SMART,
   IT_TERMINAL_ACK,
   IT_INVERT_YAXIS,
+  IT_INVERT_ZAXIS,
   IT_MOVE_SPEED,
 };
 
@@ -1941,6 +1952,7 @@ const char *const pl_pack[LABEL_NUM]={
   PL_SMART,
   PL_TERMINAL_ACK,
   PL_INVERT_YAXIS,
+  PL_INVERT_ZAXIS,
   PL_MOVE_SPEED,
 };
 
@@ -2099,6 +2111,7 @@ const char *const sk_pack[LABEL_NUM]={
   SK_SMART,
   SK_TERMINAL_ACK,
   SK_INVERT_YAXIS,
+  SK_INVERT_ZAXIS,
   SK_MOVE_SPEED,
 };
 
