@@ -334,6 +334,8 @@ void printingDrawPage(void)
   reValueNozzle();
   reValueBed();
   reDrawTime();
+  // z_axis coordinate
+  GUI_DispString(BED_X,TIME_Y, (u8* )"Z:");
 }
 
 
@@ -388,7 +390,11 @@ void menuPrinting(void)
       time=infoPrinting.time;
       reDrawTime();
     }
-
+    //Z_AXIS coordinate
+    static COORDINATE tmp;
+    coordinateGetAll(&tmp);
+    GUI_DispFloat(BED_X+BYTE_WIDTH*2,TIME_Y,tmp.axis[Z_AXIS],3,3,LEFT);
+    
     key_num = menuKeyGetValue();
     switch(key_num)
     {

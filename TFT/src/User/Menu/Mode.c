@@ -32,6 +32,10 @@ void infoMenuSelect(void)
   {
     case SERIAL_TSC:
     {
+      #ifdef LED_color_PIN
+      led_color_Init(6,5);//
+      ws2812_send_DAT(LED_OFF);
+      #endif 
       Serial_ReSourceInit();
       GUI_SetColor(FK_COLOR);
       GUI_SetBkColor(BK_COLOR);
@@ -57,6 +61,9 @@ void infoMenuSelect(void)
       
     #ifdef ST7920_SPI
     case LCD12864:
+      #ifdef LED_color_PIN
+      LED_color_PIN_IPN();////
+      #endif  
       GUI_SetColor(ST7920_FNCOLOR);
       GUI_SetBkColor(ST7920_BKCOLOR);
       infoMenu.menu[infoMenu.cur] = menuST7920;      

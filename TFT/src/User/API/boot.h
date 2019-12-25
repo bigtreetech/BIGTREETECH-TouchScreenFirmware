@@ -142,6 +142,7 @@ enum
   ICON_PARAMETER,
   ICON_GLOBAL_NOZZLE0,
   ICON_GLOBAL_BED,
+  ICON_LEDCOLOR,
   
 //  ICON_RESERVE
 // Preview should be in the last place
