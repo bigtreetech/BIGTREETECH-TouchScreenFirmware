@@ -19,6 +19,8 @@ void infoSettingsReset(void)
   infoSettings.invert_yaxis = 0;
   infoSettings.move_speed = 0;
   infoSettings.led_color = LED_OFF;
+  infoSettings.invert_zaxis = 0;
+  
 }
 
 // Version infomation

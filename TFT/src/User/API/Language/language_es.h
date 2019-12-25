@@ -158,6 +158,7 @@
     #define ES_SMART                "SMART"
     #define ES_TERMINAL_ACK         "Hide Terminal ACK"
     #define ES_INVERT_YAXIS         "Invert Y Axis"
+    #define ES_INVERT_ZAXIS         "Invert Z Axis"
     #define ES_MOVE_SPEED           "Move speed(X Y Z)"
 
 #endif

@@ -158,6 +158,7 @@
     #define RU_SMART                "SMART"
     #define RU_TERMINAL_ACK         "Hide Terminal ACK"
     #define RU_INVERT_YAXIS         "Invert Y Axis"
+    #define RU_INVERT_ZAXIS         "Invert Z Axis"
     #define RU_MOVE_SPEED           "Move speed(X Y Z)"
     
 #endif

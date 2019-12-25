@@ -159,6 +159,7 @@
     #define CZ_SMART                "SMART"
     #define CZ_TERMINAL_ACK         "Hide Terminal ACK"
     #define CZ_INVERT_YAXIS         "Invert Y Axis"
+    #define CZ_INVERT_ZAXIS         "Invert Z Axis"
     #define CZ_MOVE_SPEED           "Move speed(X Y Z)"
 
 #endif

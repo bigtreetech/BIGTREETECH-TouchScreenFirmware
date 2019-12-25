@@ -158,6 +158,7 @@
     #define AM_SMART                "SMART"
     #define AM_TERMINAL_ACK         "Hide Terminal ACK"
     #define AM_INVERT_YAXIS         "Invert Y Axis"
+    #define AM_INVERT_ZAXIS         "Invert Z Axis"
     #define AM_MOVE_SPEED           "Move speed(X Y Z)"
 
 #endif
