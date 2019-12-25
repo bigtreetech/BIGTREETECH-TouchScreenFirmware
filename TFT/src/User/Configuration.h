@@ -124,6 +124,7 @@
 //#define INVERT_YAXIS
 
 //Invert the Z Axis move Direction
+// this does not work if LIST MODE is enabled. To invert z axis in LIST MODE go to setting->feature settings
 //#define INVERT_ZAXIS
 
 // Enable Unified Move Menu

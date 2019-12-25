@@ -18,6 +18,7 @@ void infoSettingsReset(void)
   infoSettings.terminalACK = 0;
   infoSettings.invert_yaxis = 0;
   infoSettings.move_speed = 0;
+  infoSettings.invert_zaxis = 0;
   
 }
 

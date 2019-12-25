@@ -161,10 +161,6 @@
     const uint16_t toggleitem[2] = {ICONCHAR_TOGGLE_OFF,ICONCHAR_TOGGLE_ON};
     const  u8  item_toggleState[2]    = {0, 1};
 
-    static u8  item_terminalACK_i     = 0; //for hide ack
-    static u8  item_invert_yaxis_i    = 0; //for invert y axis
-    static u8  item_movespeed_i       = 0; //for move speed
-
 //
 //add key number index of the items
 //
@@ -172,6 +168,7 @@
     {
       SKEY_HIDEACK = 0,
       SKEY_INVERT_Y,
+      SKEY_INVERT_Z,
       #ifdef PS_ON_PIN
         SKEY_POWER,
       #endif
@@ -191,6 +188,7 @@
     LISTITEM settingPage[SKEY_COUNT] = {  
       {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_TERMINAL_ACK,       LABEL_BACKGROUND},
       {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_INVERT_YAXIS,       LABEL_BACKGROUND},
+      {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_INVERT_ZAXIS,       LABEL_BACKGROUND},
       #ifdef PS_ON_PIN
       {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_AUTO_SHUT_DOWN,     LABEL_BACKGROUND},
       #endif
@@ -210,19 +208,24 @@
       switch (item_index)
       {
         case SKEY_HIDEACK:
-        item_terminalACK_i = (item_terminalACK_i + 1) % 2;
-        settingPage[item_index].icon = toggleitem[item_terminalACK_i];
-        featureSettingsItems.items[key_val].icon = toggleitem[item_terminalACK_i];;
+        infoSettings.terminalACK = (infoSettings.terminalACK + 1) % 2;
+        settingPage[item_index].icon = toggleitem[infoSettings.terminalACK];
+        featureSettingsItems.items[key_val].icon = toggleitem[infoSettings.terminalACK];;
         menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
-        infoSettings.terminalACK = item_terminalACK_i;
         break;
 
         case SKEY_INVERT_Y:
-        item_invert_yaxis_i = (item_invert_yaxis_i + 1) % 2;
-        settingPage[item_index].icon = toggleitem[item_invert_yaxis_i];
+        infoSettings.invert_yaxis = (infoSettings.invert_yaxis + 1) % 2;
+        settingPage[item_index].icon = toggleitem[infoSettings.invert_yaxis];
         featureSettingsItems.items[key_val] = settingPage[item_index];
         menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
-        infoSettings.invert_yaxis = item_invert_yaxis_i;
+        break;
+
+        case SKEY_INVERT_Z:
+        infoSettings.invert_yaxis = (infoSettings.invert_yaxis + 1) % 2;
+        settingPage[item_index].icon = toggleitem[infoSettings.invert_yaxis];
+        featureSettingsItems.items[key_val] = settingPage[item_index];
+        menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
         break;
 
         #ifdef PS_ON_PIN
@@ -246,11 +249,10 @@
         #endif
 
         case SKEY_SPEED:
-        item_movespeed_i = (item_movespeed_i + 1) % ITEM_SPEED_NUM;
-        settingPage[item_index] = itemMoveSpeed[item_movespeed_i];
+        infoSettings.move_speed = (infoSettings.move_speed + 1) % ITEM_SPEED_NUM;
+        settingPage[item_index] = itemMoveSpeed[infoSettings.move_speed];
         featureSettingsItems.items[key_val] = settingPage[item_index];
         menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
-        infoSettings.move_speed = item_movespeed_i;
         break;
       default:
         break;
@@ -267,15 +269,21 @@
         switch (item_index)
         {
           case SKEY_HIDEACK:
-            item_terminalACK_i = infoSettings.terminalACK;
-            settingPage[SKEY_HIDEACK].icon = toggleitem[item_terminalACK_i];
+            //item_terminalACK_i = infoSettings.terminalACK;
+            settingPage[SKEY_HIDEACK].icon = toggleitem[infoSettings.terminalACK];
             featureSettingsItems.items[i] = settingPage[SKEY_HIDEACK];
             break;
 
           case SKEY_INVERT_Y:
-            item_invert_yaxis_i = infoSettings.invert_yaxis;
-            settingPage[SKEY_INVERT_Y].icon = toggleitem[item_invert_yaxis_i];
+            //item_invert_yaxis_i = infoSettings.invert_yaxis;
+            settingPage[SKEY_INVERT_Y].icon = toggleitem[infoSettings.invert_yaxis];
             featureSettingsItems.items[i] = settingPage[SKEY_INVERT_Y];
+            break;
+
+          case SKEY_INVERT_Z:
+            //item_invert_zaxis_i = infoSettings.invert_zaxis;
+            settingPage[SKEY_INVERT_Z].icon = toggleitem[infoSettings.invert_yaxis];
+            featureSettingsItems.items[i] = settingPage[SKEY_INVERT_Z];
             break;
 
           #ifdef PS_ON_PIN
@@ -301,8 +309,7 @@
           #endif
 
           case SKEY_SPEED:
-             item_movespeed_i = infoSettings.move_speed; 
-              featureSettingsItems.items[i] = itemMoveSpeed[item_movespeed_i];
+              featureSettingsItems.items[i] = itemMoveSpeed[infoSettings.move_speed];
             break;
           default:
             settingPage[item_index].icon = ICONCHAR_BACKGROUND;
