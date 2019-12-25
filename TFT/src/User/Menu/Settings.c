@@ -32,7 +32,7 @@ void menuInfo(void)
   u16 centerY = LCD_HEIGHT/2;
   u16 startX = MIN(HW_X, FW_X);
   
-  GUI_Clear(BLACK);
+  GUI_Clear(BACKGROUND_COLOR);
 
   GUI_DispString(startX, centerY - BYTE_HEIGHT, (u8 *)hardware);
   GUI_DispString(startX, centerY, (u8 *)firmware);
@@ -47,7 +47,7 @@ void menuInfo(void)
 // Set uart pins to input, free uart
 void menuDisconnect(void)
 {
-  GUI_Clear(BLACK);
+  GUI_Clear(BACKGROUND_COLOR);
   GUI_DispStringInRect(20, 0, LCD_WIDTH-20, LCD_HEIGHT, textSelect(LABEL_DISCONNECT_INFO));
   GUI_DispStringInRect(20, LCD_HEIGHT - (BYTE_HEIGHT*2), LCD_WIDTH-20, LCD_HEIGHT, textSelect(LABEL_TOUCH_TO_EXIT));
 
@@ -69,7 +69,7 @@ LABEL_SETTINGS,
   {ICON_SCREEN_INFO,          LABEL_SCREEN_INFO},
   {ICON_DISCONNECT,           LABEL_DISCONNECT},
   {ICON_BAUDRATE,             LABEL_BAUDRATE_115200},
-  {ICON_PARAMETER,            LABEL_SETTING_PARAMETER},
+  {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_BACK,                 LABEL_BACK},}
 };
 
@@ -130,10 +130,6 @@ void menuSettings(void)
         infoSettings.baudrate = item_baudrate[item_baudrate_i];
         Serial_DeInit(); // Serial_Init() will malloc a dynamic memory, so Serial_DeInit() first to free, then malloc again.
         Serial_Init(infoSettings.baudrate);
-        break;
-
-      case KEY_ICON_6:
-        infoMenu.menu[++infoMenu.cur] = parametersetting;
         break;
 
       case KEY_ICON_7:

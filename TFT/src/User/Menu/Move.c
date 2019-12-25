@@ -3,7 +3,7 @@
 
 
 //const GUI_RECT RecXYZ = {START_X + 1*ICON_WIDTH,        STATUS_GANTRY_YOFFSET,
-//                         4*ICON_WIDTH+3*SPACE_X+START_X,TITLE_END_Y-STATUS_GANTRY_YOFFSET};
+//                         4*ICON_WIDTH+3*SPACE_X+START_X,ICON_START_Y-STATUS_GANTRY_YOFFSET};
 #ifdef MENU_LIST_MODE
     #define YGCODE_INC "G1 Y%.1f\n"
     #define YGCODE_DEC "G1 Y-%.1f\n"
@@ -201,12 +201,12 @@ void drawXYZ(void){
   //GUI_SetColor(GANTRYLBL_BKCOLOR);
   //GUI_FillPrect(&RecXYZ);
   my_sprintf(tempstr, "X:%.1f  ", getAxisLocation(0));  
-  GUI_DispString(START_X+1*SPACE_X+1*ICON_WIDTH,(TITLE_END_Y-BYTE_HEIGHT)/2,(u8 *)tempstr);
+  GUI_DispString(START_X+1*SPACE_X+1*ICON_WIDTH,(ICON_START_Y-BYTE_HEIGHT)/2,(u8 *)tempstr);
   my_sprintf(tempstr, "Y:%.1f  ", getAxisLocation(1));
-  GUI_DispString(START_X+2*SPACE_X+2*ICON_WIDTH,(TITLE_END_Y-BYTE_HEIGHT)/2,(u8 *)tempstr);
+  GUI_DispString(START_X+2*SPACE_X+2*ICON_WIDTH,(ICON_START_Y-BYTE_HEIGHT)/2,(u8 *)tempstr);
   my_sprintf(tempstr, "Z:%.1f  ", getAxisLocation(2));
-  GUI_DispString(START_X+3*SPACE_X+3*ICON_WIDTH,(TITLE_END_Y-BYTE_HEIGHT)/2,(u8 *)tempstr);
+  GUI_DispString(START_X+3*SPACE_X+3*ICON_WIDTH,(ICON_START_Y-BYTE_HEIGHT)/2,(u8 *)tempstr);
   
-  //GUI_SetBkColor(BK_COLOR);
-  //GUI_SetColor(FK_COLOR);
+  //GUI_SetBkColor(BACKGROUND_COLOR);
+  //GUI_SetColor(FONT_COLOR);
 }

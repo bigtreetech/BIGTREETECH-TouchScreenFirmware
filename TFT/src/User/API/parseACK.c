@@ -261,7 +261,7 @@ void parseACK(void)
     }
     else if(ack_seen(echomagic))
     {
-      for(u8 i = 0; i < aCount(ignoreEcho); i++)
+      for(u8 i = 0; i < COUNT(ignoreEcho); i++)
       {
         if(strstr(dmaL2Cache, ignoreEcho[i])) goto parse_end;
       }

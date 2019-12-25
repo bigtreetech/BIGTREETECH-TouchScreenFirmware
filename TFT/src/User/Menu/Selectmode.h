@@ -1,5 +1,8 @@
 #ifndef _SELECTMODE_H_
 #define _SELECTMODE_H_
+
+#include "GUI.h"
+#include "stdint.h"
 #include "stdbool.h"
 
 #define IDLE_TOUCH	0xFFFF
@@ -18,7 +21,6 @@ bool LCD_BtnTouch(uint8_t intervals);
 
 //select mode fun
 void show_selectICON(void);
-const GUI_RECT rect_of_mode[SELECTMODE];
 MKEY_VALUES MKeyGetValue(void);
 void selectmode(int8_t  nowMode);
 

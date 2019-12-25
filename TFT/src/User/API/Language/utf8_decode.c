@@ -88,7 +88,7 @@ static void getUTF8EncodeInfo(const uint8_t *ch, CHAR_INFO *pInfo)
 static void getBitMapFontInfo(CHAR_INFO *pInfo)
 {
   uint8_t i;
-  for (i = 0; i < aCount(font); i++)
+  for (i = 0; i < COUNT(font); i++)
   {
     if(pInfo->codePoint >= font[i].startCodePoint && pInfo->codePoint <= font[i].endCodePoint)
     {

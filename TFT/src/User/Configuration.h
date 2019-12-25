@@ -31,14 +31,22 @@
 // Show BTT bootscreen when starting up
 #define SHOW_BTT_BOOTSCREEN
 
+// TFT mode color
+#define TITLE_BACKGROUND_COLOR      BLACK  // Title background color // 0xD928
+#define BACKGROUND_COLOR            BLACK  // Background color // 0x0A29
+#define FONT_COLOR                  WHITE  // Font foreground color
+#define REMINDER_FONT_COLOR         RED    // Reminder font color, such as: "No print attached", "Busy process", etc...
+#define VOLUME_REMINDER_FONT_COLOR  GBLUE  // Volume reminder font color,such as: "Card inserted", "Card removed"
+
+
 #define TOOL_NUM     1    // set in 1~6
 #define EXTRUDER_NUM 1    // set in 1~6
 #define FAN_NUM      1    // set in 1~6
 
-//                       PLA      PETG       ABS     "CUSTOM1" "CUSTOM2"
-#define PREHEAT_BED      {60,      70,       100,       55,       55}
-#define PREHEAT_HOTEND   {200,     250,      230,       200,      200}
-#define PREHEAT_TEXT     {"PLA",  "PETG",   "ABS",     "T2:",    "T3:"}
+//                       PLA      PETG       ABS
+#define PREHEAT_BED      {60,      70,       100}
+#define PREHEAT_HOTEND   {200,     250,      230}
+#define PREHEAT_TEXT     {"PLA",  "PETG",   "ABS"}
 
 #define HEAT_MAX_TEMP    {150,    275,       275,       275,       275,       275,       275}    //max temperature can be set
 #define HEAT_SIGN_ID     {"B:",   "T0:",     "T1:",     "T2:",     "T3:",     "T4:",     "T5:"}
@@ -128,11 +136,7 @@
 
 // Enable Unified Move Menu
 // Move, Home, Extrude, ABL at one Place and bring Gcode Menu on Home Menu
-#define UNIFIED_MENU
-
-//Enable Status Screen
-//----USE ICONS FROM MATERIAL THEME ONLY---//
-#define STATUS_SCREEN
+//#define UNIFIED_MENU
 
 /**
  * Enable list mode in Files menu and settings menu

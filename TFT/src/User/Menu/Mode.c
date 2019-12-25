@@ -37,13 +37,9 @@ void infoMenuSelect(void)
       ws2812_send_DAT(LED_OFF);
       #endif 
       Serial_ReSourceInit();
-      GUI_SetColor(FK_COLOR);
-      GUI_SetBkColor(BK_COLOR);
-      #ifndef STATUS_SCREEN
-      infoMenu.menu[infoMenu.cur] = menuMain;
-      #else
+      GUI_SetColor(FONT_COLOR);
+      GUI_SetBkColor(BACKGROUND_COLOR);
       infoMenu.menu[infoMenu.cur] = menuStatus; //status screen as default screen on boot
-      #endif
       #ifdef SHOW_BTT_BOOTSCREEN
         u32 startUpTime = OS_GetTime();
         heatSetUpdateTime(100);
@@ -98,7 +94,7 @@ void menuMode(void)
   int16_t nowEncoder = encoderPosition = 0;
   int8_t  nowMode = modeRadio.select = infoSettings.mode;
   
-  GUI_Clear(BLACK);
+  GUI_Clear(BACKGROUND_COLOR);
   //RADIO_Create(&modeRadio);
   Serial_ReSourceDeInit();
 

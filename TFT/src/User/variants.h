@@ -208,9 +208,10 @@
   #define BYTE_HEIGHT 24
   #define BYTE_WIDTH  (BYTE_HEIGHT/2)
   
-  #define ICON_WIDTH  95
-  #define ICON_HEIGHT 95
-  #define TITLE_END_Y 60
+  #define ICON_WIDTH   95
+  #define ICON_HEIGHT  95
+  #define TITLE_END_Y  40
+  #define ICON_START_Y (TITLE_END_Y+10)
   
   #define LIST_ICON_WIDTH   85
   #define LIST_ICON_HEIGHT  70
@@ -228,7 +229,8 @@
   
   #define ICON_WIDTH  70
   #define ICON_HEIGHT 70
-  #define TITLE_END_Y 40
+  #define TITLE_END_Y  30
+  #define ICON_START_Y (TITLE_END_Y+10)
   
   #define LIST_ICON_WIDTH   55
   #define LIST_ICON_HEIGHT  50

@@ -1,8 +1,8 @@
 #include "GUI.h"
 #include "includes.h"
 
-uint16_t foreGroundColor = FK_COLOR;
-uint16_t backGroundColor = BK_COLOR;
+uint16_t foreGroundColor = WHITE;
+uint16_t backGroundColor = BLACK;
 GUI_TEXT_MODE guiTextMode = GUI_TEXTMODE_NORMAL;
 GUI_NUM_MODE guiNumMode = GUI_NUMMODE_SPACE;
 
@@ -740,7 +740,7 @@ void GUI_DispFloat(int16_t x, int16_t y, float num, uint8_t llen, uint8_t rlen, 
     floatBuf[bufIndex++] = (int)(num/GUI_Pow10[rlen-1-i])%10+'0';
     alen++;
   }
-  for(; alen < llen+rlen; alen++)
+  for(; alen < llen+rlen+1; alen++)
   {        
     floatBuf[bufIndex++] = ' ';
   }
@@ -977,13 +977,4 @@ void GUI_DrawWindow(const WINDOW *window, const uint8_t *title, const uint8_t *i
   GUI_SetBkColor(nowBackColor);
   GUI_SetColor(nowFontColor);
   GUI_SetTextMode(nowTextMode);
-}
-
-void GUI_RestoreColorDefault(void){
-  
-  GUI_SetBkColor(BK_COLOR);
-  GUI_SetColor(FK_COLOR);
-  GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
-  GUI_SetNumMode(GUI_NUMMODE_SPACE);
-
 }

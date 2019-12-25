@@ -1,30 +1,29 @@
 #include "Print.h"
 #include "includes.h"
 
-  #ifdef MENU_LIST_MODE
-    LISTITEMS printItems = {
-    // title
-    LABEL_BACKGROUND,
-    // icon                 ItemType      Item Title        item value text(only for custom value)
-    {
-      {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
-      {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
-      {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
-      {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
-      {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
-      {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
-      {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
-      {ICONCHAR_BACK,       LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},}
-    };
+#ifdef MENU_LIST_MODE
+  LISTITEMS printItems = {
+  // title
+  LABEL_BACKGROUND,
+  // icon                 ItemType      Item Title        item value text(only for custom value)
+  {
+    {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
+    {ICONCHAR_BACK,       LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},}
+  };
 
 #else
 
-    MENUITEMS printItems = {
+  MENUITEMS printItems = {
     //  title
     LABEL_BACKGROUND,
     // icon                       label
     {
-
       {ICON_BACKGROUND,           LABEL_BACKGROUND},
       {ICON_BACKGROUND,           LABEL_BACKGROUND},
       {ICON_BACKGROUND,           LABEL_BACKGROUND},
@@ -33,10 +32,9 @@
       {ICON_PAGE_UP,              LABEL_PAGE_UP},
       {ICON_PAGE_DOWN,            LABEL_PAGE_DOWN},
       {ICON_BACK,                 LABEL_BACK},
-
     }
-    };
-  #endif
+  };
+#endif
 
 // File list number per page
 #define NUM_PER_PAGE	5
@@ -48,28 +46,28 @@ SCROLL   gcodeScroll;
   
 #ifndef MENU_LIST_MODE
 /*   GUI_RECT gcodeRect[NUM_PER_PAGE] = { 
-    {START_X + BYTE_HEIGHT + 4,  0*LISTITEM_HEIGHT+TITLE_END_Y+1,    LISTITEM_WIDTH+START_X - 2,  1*LISTITEM_HEIGHT+TITLE_END_Y-1},
-    {START_X + BYTE_HEIGHT + 4,  1*LISTITEM_HEIGHT+TITLE_END_Y+1,    LISTITEM_WIDTH+START_X - 2,  2*LISTITEM_HEIGHT+TITLE_END_Y-1},
-    {START_X + BYTE_HEIGHT + 4,  2*LISTITEM_HEIGHT+TITLE_END_Y+1,    LISTITEM_WIDTH+START_X - 2,  3*LISTITEM_HEIGHT+TITLE_END_Y-1},
-    {START_X + BYTE_HEIGHT + 4,  3*LISTITEM_HEIGHT+TITLE_END_Y+1,    LISTITEM_WIDTH+START_X - 2,  4*LISTITEM_HEIGHT+TITLE_END_Y-1},
-    {START_X + BYTE_HEIGHT + 4,  4*LISTITEM_HEIGHT+TITLE_END_Y+1,    LISTITEM_WIDTH+START_X - 2,  5*LISTITEM_HEIGHT+TITLE_END_Y-1},
+    {START_X + BYTE_HEIGHT + 4,  0*LISTITEM_HEIGHT+ICON_START_Y+1,    LISTITEM_WIDTH+START_X - 2,  1*LISTITEM_HEIGHT+ICON_START_Y-1},
+    {START_X + BYTE_HEIGHT + 4,  1*LISTITEM_HEIGHT+ICON_START_Y+1,    LISTITEM_WIDTH+START_X - 2,  2*LISTITEM_HEIGHT+ICON_START_Y-1},
+    {START_X + BYTE_HEIGHT + 4,  2*LISTITEM_HEIGHT+ICON_START_Y+1,    LISTITEM_WIDTH+START_X - 2,  3*LISTITEM_HEIGHT+ICON_START_Y-1},
+    {START_X + BYTE_HEIGHT + 4,  3*LISTITEM_HEIGHT+ICON_START_Y+1,    LISTITEM_WIDTH+START_X - 2,  4*LISTITEM_HEIGHT+ICON_START_Y-1},
+    {START_X + BYTE_HEIGHT + 4,  4*LISTITEM_HEIGHT+ICON_START_Y+1,    LISTITEM_WIDTH+START_X - 2,  5*LISTITEM_HEIGHT+ICON_START_Y-1},
   };
 #else */
   GUI_RECT gcodeRect[NUM_PER_PAGE] = { 
-   {BYTE_WIDTH/2+0*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y+(SPACE_Y-BYTE_HEIGHT)/2,  
-    1*SPACE_X_PER_ICON-BYTE_WIDTH/2,  1*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
+   {BYTE_WIDTH/2+0*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2,  
+    1*SPACE_X_PER_ICON-BYTE_WIDTH/2,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
 
-   {BYTE_WIDTH/2+1*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y+(SPACE_Y-BYTE_HEIGHT)/2,
-    2*SPACE_X_PER_ICON-BYTE_WIDTH/2,  1*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
+   {BYTE_WIDTH/2+1*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2,
+    2*SPACE_X_PER_ICON-BYTE_WIDTH/2,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
 
-   {BYTE_WIDTH/2+2*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y+(SPACE_Y-BYTE_HEIGHT)/2,
-    3*SPACE_X_PER_ICON-BYTE_WIDTH/2,  1*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
+   {BYTE_WIDTH/2+2*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2,
+    3*SPACE_X_PER_ICON-BYTE_WIDTH/2,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
 
-   {BYTE_WIDTH/2+3*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y+(SPACE_Y-BYTE_HEIGHT)/2,
-    4*SPACE_X_PER_ICON-BYTE_WIDTH/2,  1*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
+   {BYTE_WIDTH/2+3*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2,
+    4*SPACE_X_PER_ICON-BYTE_WIDTH/2,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
 
-   {BYTE_WIDTH/2+0*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y+(SPACE_Y-BYTE_HEIGHT)/2,
-    1*SPACE_X_PER_ICON-BYTE_WIDTH/2,  2*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
+   {BYTE_WIDTH/2+0*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2,
+    1*SPACE_X_PER_ICON-BYTE_WIDTH/2,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
   };
   
   void scrollFileNameCreate(u8 i)
@@ -115,7 +113,9 @@ void normalNameDisp(const GUI_RECT *rect, u8 *name)
     //scrollFileNameCreate(0);
     Scroll_CreatePara(&titleScroll, (u8 *)infoFile.title, &titleRect);
     printItems.title.address = (u8 *)infoFile.title;
-    GUI_ClearRect(titleRect.x0, titleRect.y0, titleRect.x1, titleRect.y1);
+    GUI_SetBkColor(TITLE_BACKGROUND_COLOR);
+    GUI_ClearRect(0, 0, LCD_WIDTH, TITLE_END_Y);
+    GUI_SetBkColor(BACKGROUND_COLOR);
 
     for (i = 0; (i + infoFile.cur_page * NUM_PER_PAGE < infoFile.F_num) && (i < NUM_PER_PAGE); i++) // folder
     {
@@ -172,12 +172,13 @@ void normalNameDisp(const GUI_RECT *rect, u8 *name)
     int gn;
     char *gnew;
     ITEM curItem = {ICON_BACKGROUND, LABEL_BACKGROUND};
-
+   
     scrollFileNameCreate(0);
-    Scroll_CreatePara(&titleScroll, (u8* )infoFile.title,&titleRect);
-    printItems.title.address = (u8 *)infoFile.title;
-//    menuDrawTitle(&printItems);
-    GUI_ClearRect(titleRect.x0, titleRect.y0, titleRect.x1, titleRect.y1);
+    Scroll_CreatePara(&titleScroll, (uint8_t* )infoFile.title, &titleRect);
+    printItems.title.address = (uint8_t* )infoFile.title;
+    GUI_SetBkColor(TITLE_BACKGROUND_COLOR);
+    GUI_ClearPrect(&titleRect);
+    GUI_SetBkColor(BACKGROUND_COLOR);
 
     for(i=0;(i + infoFile.cur_page * NUM_PER_PAGE < infoFile.F_num)
             &&(i < NUM_PER_PAGE)                                  ; i++)                  // folder
@@ -220,18 +221,17 @@ void menuPrintFromSource(void)
 
   u8 update=0;
 
-  GUI_Clear(BK_COLOR);
+  GUI_Clear(BACKGROUND_COLOR);
   GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, textSelect(LABEL_LOADING));
 
   if (mountFS() == true && scanPrintFiles() == true)
   {
-      #ifdef MENU_LIST_MODE
-        menuDrawListPage(&printItems);
-            gocdeListDraw();	
-      #else
-        menuDrawPage(&printItems);
-      #endif
-	
+    #ifdef MENU_LIST_MODE
+      menuDrawListPage(&printItems);
+    #else
+      menuDrawPage(&printItems);
+    #endif
+    gocdeListDraw();	
   }
   else
   {
@@ -242,7 +242,9 @@ void menuPrintFromSource(void)
 
   while(infoMenu.menu[infoMenu.cur] == menuPrintFromSource)
   {
+    GUI_SetBkColor(TITLE_BACKGROUND_COLOR);
     Scroll_DispString(&titleScroll, LEFT);    //
+    GUI_SetBkColor(BACKGROUND_COLOR);
     #ifndef MENU_LIST_MODE
       Scroll_DispString(&gcodeScroll, CENTER); //
     #endif
