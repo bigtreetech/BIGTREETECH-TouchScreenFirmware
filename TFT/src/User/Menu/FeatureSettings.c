@@ -131,7 +131,7 @@
           #endif
             
           #ifdef LED_color_PIN
-          case KEY_ICON_4:
+          case KEY_ICON_2:
             item_ledcolor_i = (item_ledcolor_i + 1) % LED_color_NUM;                
             featureSettingsItems.items[key_num] = itemLedcolor[item_ledcolor_i];
             menuDrawItem(&featureSettingsItems.items[key_num], key_num);
