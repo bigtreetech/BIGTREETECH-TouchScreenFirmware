@@ -158,6 +158,7 @@
     #define JP_SMART                "SMART"
     #define JP_TERMINAL_ACK         "Hide Terminal ACK"
     #define JP_INVERT_YAXIS         "Invert Y Axis"
+    #define JP_INVERT_ZAXIS         "Invert Z Axis"
     #define JP_MOVE_SPEED           "Move speed(X Y Z)"
     
 #endif

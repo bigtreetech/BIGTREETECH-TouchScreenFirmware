@@ -132,6 +132,7 @@
 //#define INVERT_YAXIS
 
 //Invert the Z Axis move Direction
+// this does not work if LIST MODE is enabled. To invert z axis in LIST MODE go to setting->feature settings
 //#define INVERT_ZAXIS
 
 // Enable Unified Move Menu
@@ -182,11 +183,12 @@
 
 #define SHOW_FAN_PERCENTAGE // enable to show fan speed as a percentage instead of a value
 
-/**
- * Support up to 7 custom gcodes, uncomment CUSTOM_X_LABEL and CUSTOM_X_GCODE to enable custom gcode
+/** CUSTOM GCODE COMMANDS
+ * Support up to 7 custom gcodes in Icon mode and 15 in List Mode.
+ * Uncomment CUSTOM_X_LABEL and CUSTOM_X_GCODE to enable custom gcode.
  * CUSTOM_X_LABEL is the name of the custom button, CUSTOM_X_GCODE
  * CUSTOM_X_GCODE is the gcode to be sent by the custom button, end with '\n'
- * You also need to customize the icon corresponding to the command
+ * You also need to customize the icon corresponding to the command if MENU_LIST_MODE is not enabled.
  * Copy your custom icon to the SD card to be updated, such as:"TFT35/bmp/Custom0.bmp", "TFT24/bmp/Custom1.bmp", etc...
  * The format of the custom icon is as follows
  * Bit depth: 24 / 32 bit, Pixel size: 95*95(for TFT35), 70*70(for TFT28/TFT24)
@@ -207,7 +209,7 @@
 //#define CUSTOM_6_GCODE "M105\n"
 
 /*
-custom gcode below are compatible only in if LIST_MODE is active
+custom gcode below are compatible only if MENU_LIST_MODE is active
 */
 #ifdef MENU_LIST_MODE
 //#define CUSTOM_7_LABEL "Custom7"

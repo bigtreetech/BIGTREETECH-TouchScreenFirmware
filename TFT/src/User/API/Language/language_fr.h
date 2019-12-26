@@ -159,6 +159,7 @@
     #define FR_SMART                "SMART"
     #define FR_TERMINAL_ACK         "Hide Terminal ACK"
     #define FR_INVERT_YAXIS         "Invert Y Axis"
+    #define FR_INVERT_ZAXIS         "Invert Z Axis"
     #define FR_MOVE_SPEED           "Move speed(X Y Z)"
 
 #endif

@@ -158,6 +158,7 @@
     #define IT_SMART                "SMART"
     #define IT_TERMINAL_ACK         "Hide Terminal ACK"
     #define IT_INVERT_YAXIS         "Invert Y Axis"
+    #define IT_INVERT_ZAXIS         "Invert Z Axis"
     #define IT_MOVE_SPEED           "Move speed(X Y Z)"
     
 #endif

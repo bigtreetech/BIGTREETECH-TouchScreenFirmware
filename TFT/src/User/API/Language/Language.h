@@ -183,6 +183,7 @@ enum
   LABEL_SMART,
   LABEL_TERMINAL_ACK,
   LABEL_INVERT_YAXIS,
+  LABEL_INVERT_ZAXIS,
   LABEL_MOVE_SPEED,
 
   //add new keywords above this line only
