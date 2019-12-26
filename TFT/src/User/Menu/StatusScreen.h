@@ -40,6 +40,7 @@ void gantry_inc(int n, float val);
   #define STATUS_MSG_BODY_YOFFSET     59
   #define STATUS_MSG_BODY_BOTTOM      6
   #define STATUS_TITLE_SHORT          20
+  #define STATUS_GANTRY_YOFFSET       6
 
 
 #elif defined(TFT28_V1_0) || defined(TFT24_V1_1)
@@ -58,7 +59,7 @@ void gantry_inc(int n, float val);
   #define STATUS_MSG_BODY_BOTTOM      4
   #define STATUS_TITLE_SHORT          10
   #define SS_ICON_START_Y              30
-  #define STATUS_GANTRY_YOFFSET       6
+  #define STATUS_GANTRY_YOFFSET       4
 #endif
 
 #endif

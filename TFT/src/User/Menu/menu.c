@@ -98,6 +98,16 @@ void menuDrawItem(const ITEM *item, uint8_t positon)
     GUI_DispStringInPrect(rect, content);
 }
 
+void menuDrawIconOnly(const ITEM *item, uint8_t positon)
+{
+  uint8_t *content = labelGetAddress(&item->label);
+  const GUI_RECT *rect = rect_of_key + positon;
+  if(item->icon != ICON_BACKGROUND)
+    ICON_ReadDisplay(rect->x0, rect->y0, item->icon);
+  else
+    GUI_ClearPrect(rect);
+}
+
  void menuDrawListItem(const LISTITEM *item, uint8_t position)
 {
    const GUI_RECT *rect = rect_of_keyListView + position;
