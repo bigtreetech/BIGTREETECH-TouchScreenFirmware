@@ -31,7 +31,7 @@
     #define LABEL_ZAXIS_UP LABEL_Z_INC
     #define LABEL_ZAXIS_DOWN LABEL_Z_DEC
     #define ZGCODE_UP "G1 Z%.1f\n"
-    #define ZGCODE_DOWN "G1 Z%.1f\n"
+    #define ZGCODE_DOWN "G1 Z-%.1f\n"
   #endif
 
 #endif
