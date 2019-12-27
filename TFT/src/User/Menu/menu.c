@@ -119,6 +119,7 @@ static REMINDER busySign = {{LCD_WIDTH - 5, 0, LCD_WIDTH, 5}, 0, STATUS_BUSY, LA
 void reminderMessage(int16_t inf, SYS_STATUS status)
 {
   reminder.inf = inf;
+  show_globalinfo();
   GUI_SetColor(REMINDER_FONT_COLOR);
   GUI_DispStringInPrect(&reminder.rect, textSelect(reminder.inf));
   GUI_SetColor(FONT_COLOR);
@@ -129,6 +130,7 @@ void reminderMessage(int16_t inf, SYS_STATUS status)
 void volumeReminderMessage(int16_t inf, SYS_STATUS status)
 { 
   volumeReminder.inf = inf;
+  show_globalinfo();
   GUI_SetColor(VOLUME_REMINDER_FONT_COLOR);
   GUI_DispStringInPrect(&volumeReminder.rect, textSelect(volumeReminder.inf));
   GUI_SetColor(FONT_COLOR);
@@ -178,6 +180,7 @@ void loopReminderClear(void)
   if(curMenuItems == NULL)
     return;
   menuDrawTitle(labelGetAddress(&curMenuItems->title));
+  show_globalinfo();
 }
 
 void loopVolumeReminderClear(void)
@@ -197,6 +200,7 @@ void loopVolumeReminderClear(void)
   if(curMenuItems == NULL)
     return;
   menuDrawTitle(labelGetAddress(&curMenuItems->title));
+  show_globalinfo();
 }
 
 void loopBusySignClear(void)
@@ -231,6 +235,7 @@ void menuDrawTitle(const uint8_t *content) //(const MENUITEMS * menuItems)
     GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
   }
 
+  show_globalinfo();
   if(reminder.status == STATUS_IDLE) return;
   GUI_SetColor(RED);
   GUI_DispStringInPrect(&reminder.rect, textSelect(reminder.inf));
@@ -276,7 +281,6 @@ void menuDrawListPage(const LISTITEMS *listItems)
    if (curListItems->items[i].icon != ICONCHAR_BACKGROUND)    
      menuDrawListItem(&curListItems->items[i], i);
   }    
-//  show_globalinfo();
 }
 
 //When there is a button value, the icon changes color and redraws
