@@ -119,7 +119,6 @@ static REMINDER busySign = {{LCD_WIDTH - 5, 0, LCD_WIDTH, 5}, 0, STATUS_BUSY, LA
 void reminderMessage(int16_t inf, SYS_STATUS status)
 {
   reminder.inf = inf;
-  show_globalinfo();
   GUI_SetColor(REMINDER_FONT_COLOR);
   GUI_DispStringInPrect(&reminder.rect, textSelect(reminder.inf));
   GUI_SetColor(FONT_COLOR);
@@ -130,7 +129,6 @@ void reminderMessage(int16_t inf, SYS_STATUS status)
 void volumeReminderMessage(int16_t inf, SYS_STATUS status)
 { 
   volumeReminder.inf = inf;
-  show_globalinfo();
   GUI_SetColor(VOLUME_REMINDER_FONT_COLOR);
   GUI_DispStringInPrect(&volumeReminder.rect, textSelect(volumeReminder.inf));
   GUI_SetColor(FONT_COLOR);
