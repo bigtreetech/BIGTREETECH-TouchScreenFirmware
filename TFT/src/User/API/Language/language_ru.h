@@ -39,11 +39,11 @@
     #define RU_INC                  "Увеличить"
     #define RU_DEC                  "Уменьшить"
     #define RU_NOZZLE               "Сопло"
-    #define RU_BED                  "Под.стола"
+    #define RU_BED                  "Стол"
     #define RU_STOP                 "Стоп"
     #define RU_BACK                 "Назад"
-    #define RU_PAGE_UP              "<--"
-    #define RU_PAGE_DOWN            "-->"
+    #define RU_PAGE_UP              "<-Стр"
+    #define RU_PAGE_DOWN            "Стр->"
     #define RU_PAUSE                "Пауза"
     #define RU_RESUME               "Продолжить"
     #define RU_LOAD                 "Загрузка"
@@ -139,7 +139,7 @@
     #define RU_EMERGENCYSTOP        "Экст.стоп"
     #define RU_MAINMENU             "Меню"
     #define RU_TOUCH_TO_EXIT        "Нажмите для возврата"
-    #define RU_WAIT_TEMP_SHUT_DOWN  "Дождитесь температуры сопла не ниже чем " STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP) "°C" // Wait for the temperature of hotend to be lower than 50?
+    #define RU_WAIT_TEMP_SHUT_DOWN  "Дождитесь температуры сопла не ниже чем " STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP) "°C" // Wait for the temperature of hotend to be lower than 50°C
     #define RU_FORCE_SHUT_DOWN      "Принудительно выкл"
     #define RU_SHUTTING_DOWN        "Выключаю..."
     #define RU_LEDOFF               "Выкл" 
