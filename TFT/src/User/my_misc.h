@@ -6,7 +6,7 @@
 #define STRINGIFY_(M) #M
 #define STRINGIFY(M) STRINGIFY_(M)
 
-#define aCount(n) (sizeof(n)/sizeof(n[0]))
+#define COUNT(n) (sizeof(n)/sizeof(n[0]))
 
 typedef char*  my_va_list;
 //_INTSIZEOF(n)宏：将sizeof(n)按sizeof(int)对齐。

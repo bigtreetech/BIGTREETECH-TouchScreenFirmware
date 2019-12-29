@@ -142,6 +142,15 @@
     #define PL_WAIT_TEMP_SHUT_DOWN  "Czekam na schłodzenie do " STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP) "℃" // Wait for the temperature of hotend to be lower than 50℃
     #define PL_FORCE_SHUT_DOWN      "Wymuś"
     #define PL_SHUTTING_DOWN        "Wyłączanie..."
+    #define PL_LEDOFF               "OFF" 
+    #define PL_LEDWHITE             "White"
+    #define PL_LEDRED               "Red"
+    #define PL_LEDORANGE            "Orange"
+    #define PL_LEDYELLOW            "Yellow"
+    #define PL_LEDGREEN             "Green"
+    #define PL_LEDBLUE              "Blue"
+    #define PL_LEDINDIGO            "Indigo"
+    #define PL_LEDVIOLET            "Violet"
     #define PL_PARAMETER_SETTING    "Parametr"
     #define PL_ON                   "ON"
     #define PL_OFF                  "OFF"
@@ -149,6 +158,7 @@
     #define PL_SMART                "SMART"
     #define PL_TERMINAL_ACK         "Hide Terminal ACK"
     #define PL_INVERT_YAXIS         "Invert Y Axis"
+    #define PL_INVERT_ZAXIS         "Invert Z Axis"
     #define PL_MOVE_SPEED           "Move speed(X Y Z)"
 
 #endif

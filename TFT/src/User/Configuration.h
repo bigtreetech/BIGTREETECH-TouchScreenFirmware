@@ -31,14 +31,22 @@
 // Show BTT bootscreen when starting up
 #define SHOW_BTT_BOOTSCREEN
 
+// TFT mode color
+#define TITLE_BACKGROUND_COLOR      BLACK  // Title background color // 0xD928
+#define BACKGROUND_COLOR            BLACK  // Background color // 0x0A29
+#define FONT_COLOR                  WHITE  // Font foreground color
+#define REMINDER_FONT_COLOR         RED    // Reminder font color, such as: "No print attached", "Busy process", etc...
+#define VOLUME_REMINDER_FONT_COLOR  GBLUE  // Volume reminder font color,such as: "Card inserted", "Card removed"
+
+
 #define TOOL_NUM     1    // set in 1~6
 #define EXTRUDER_NUM 1    // set in 1~6
 #define FAN_NUM      1    // set in 1~6
 
-//                       PLA      PETG       ABS     "CUSTOM1" "CUSTOM2"
-#define PREHEAT_BED      {60,      70,       100,       55,       55}
-#define PREHEAT_HOTEND   {200,     250,      230,       200,      200}
-#define PREHEAT_TEXT     {"PLA",  "PETG",   "ABS",     "T2:",    "T3:"}
+//                       PLA      PETG       ABS
+#define PREHEAT_BED      {60,      70,       100}
+#define PREHEAT_HOTEND   {200,     250,      230}
+#define PREHEAT_TEXT     {"PLA",  "PETG",   "ABS"}
 
 #define HEAT_MAX_TEMP    {150,    275,       275,       275,       275,       275,       275}    //max temperature can be set
 #define HEAT_SIGN_ID     {"B:",   "T0:",     "T1:",     "T2:",     "T3:",     "T4:",     "T5:"}
@@ -124,15 +132,12 @@
 //#define INVERT_YAXIS
 
 //Invert the Z Axis move Direction
+// this does not work if LIST MODE is enabled. To invert z axis in LIST MODE go to setting->feature settings
 //#define INVERT_ZAXIS
 
 // Enable Unified Move Menu
 // Move, Home, Extrude, ABL at one Place and bring Gcode Menu on Home Menu
-#define UNIFIED_MENU
-
-//Enable Status Screen
-//----USE ICONS FROM MATERIAL THEME ONLY---//
-#define STATUS_SCREEN
+//#define UNIFIED_MENU
 
 /**
  * Enable list mode in Files menu and settings menu
@@ -178,11 +183,12 @@
 
 #define SHOW_FAN_PERCENTAGE // enable to show fan speed as a percentage instead of a value
 
-/**
- * Support up to 7 custom gcodes, uncomment CUSTOM_X_LABEL and CUSTOM_X_GCODE to enable custom gcode
+/** CUSTOM GCODE COMMANDS
+ * Support up to 7 custom gcodes in Icon mode and 15 in List Mode.
+ * Uncomment CUSTOM_X_LABEL and CUSTOM_X_GCODE to enable custom gcode.
  * CUSTOM_X_LABEL is the name of the custom button, CUSTOM_X_GCODE
  * CUSTOM_X_GCODE is the gcode to be sent by the custom button, end with '\n'
- * You also need to customize the icon corresponding to the command
+ * You also need to customize the icon corresponding to the command if MENU_LIST_MODE is not enabled.
  * Copy your custom icon to the SD card to be updated, such as:"TFT35/bmp/Custom0.bmp", "TFT24/bmp/Custom1.bmp", etc...
  * The format of the custom icon is as follows
  * Bit depth: 24 / 32 bit, Pixel size: 95*95(for TFT35), 70*70(for TFT28/TFT24)
@@ -203,7 +209,7 @@
 //#define CUSTOM_6_GCODE "M105\n"
 
 /*
-custom gcode below are compatible only in if LIST_MODE is active
+custom gcode below are compatible only if MENU_LIST_MODE is active
 */
 #ifdef MENU_LIST_MODE
 //#define CUSTOM_7_LABEL "Custom7"

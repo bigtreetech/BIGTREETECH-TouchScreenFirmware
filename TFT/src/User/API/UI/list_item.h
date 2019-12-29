@@ -133,7 +133,7 @@ typedef enum
   BOTTOM_RIGHT
 }ICON_POS;
 
-char * dynamic_label[LISTITEM_PER_PAGE];
+extern char * dynamic_label[LISTITEM_PER_PAGE];
 
 #define LISTBTN_BKCOLOR 0x2187
 #define MAT_RED         0xE124

@@ -8,37 +8,37 @@ LABEL_CUSTOM,
 // icon                       label
  {
    #ifdef CUSTOM_0_GCODE
-    {ICON_CUSTOM_0,             LABEL_CUSTOM_0},
+    {ICON_CUSTOM_0,             {.address = (uint8_t *)CUSTOM_0_LABEL}},
    #else
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
    #endif
    #ifdef CUSTOM_1_GCODE
-    {ICON_CUSTOM_1,             LABEL_CUSTOM_1},
+    {ICON_CUSTOM_1,             {.address = (uint8_t *)CUSTOM_1_LABEL}},
    #else
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
    #endif
    #ifdef CUSTOM_2_GCODE
-    {ICON_CUSTOM_2,             LABEL_CUSTOM_2},
+    {ICON_CUSTOM_2,             {.address = (uint8_t *)CUSTOM_2_LABEL}},
    #else
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
    #endif
    #ifdef CUSTOM_3_GCODE
-    {ICON_CUSTOM_3,             LABEL_CUSTOM_3},
+    {ICON_CUSTOM_3,             {.address = (uint8_t *)CUSTOM_3_LABEL}},
    #else
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
    #endif
    #ifdef CUSTOM_4_GCODE
-    {ICON_CUSTOM_4,             LABEL_CUSTOM_4},
+    {ICON_CUSTOM_4,             {.address = (uint8_t *)CUSTOM_4_LABEL}},
    #else
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
    #endif
    #ifdef CUSTOM_5_GCODE
-    {ICON_CUSTOM_5,             LABEL_CUSTOM_5},
+    {ICON_CUSTOM_5,             {.address = (uint8_t *)CUSTOM_5_LABEL}},
    #else
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
    #endif
    #ifdef CUSTOM_6_GCODE
-    {ICON_CUSTOM_6,             LABEL_CUSTOM_6},
+    {ICON_CUSTOM_6,             {.address = (uint8_t *)CUSTOM_6_LABEL}},
    #else
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
    #endif
@@ -107,12 +107,11 @@ void menuCustom(void)
     LABEL_CUSTOM,
     // icon                 ItemType      Item Title        item value text(only for custom value)
     {
-      
       {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
       {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
       {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
-      {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_CUSTOM_3, LABEL_BACKGROUND},
-      {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_CUSTOM_4, LABEL_BACKGROUND},
+      {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
+      {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
       {ICONCHAR_PAGEUP,     LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
       {ICONCHAR_PAGEDOWN,   LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
       {ICONCHAR_BACK,       LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},}
@@ -385,10 +384,9 @@ LABEL_MACHINE_SETTINGS,
 // icon                       label
  {{ICON_CUSTOM,               LABEL_CUSTOM},
   {ICON_RGB_SETTINGS,         LABEL_RGB_SETTINGS},
-//{ICON_BLTOUCH,              LABEL_BLTOUCH},
   {ICON_GCODE,                LABEL_GCODE},
   {ICON_SHUT_DOWN,            LABEL_SHUT_DOWN},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
+  {ICON_PARAMETER,            LABEL_SETTING_PARAMETER},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_BACK,                 LABEL_BACK},}
@@ -419,6 +417,10 @@ void menuMachineSettings(void)
       
       case KEY_ICON_3:
         storeCmd("M81\n");
+        break;
+
+      case KEY_ICON_4:
+        infoMenu.menu[++infoMenu.cur] = parametersetting;
         break;
       
       case KEY_ICON_7:

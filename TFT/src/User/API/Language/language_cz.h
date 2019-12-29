@@ -139,10 +139,19 @@
     #define CZ_COOLDOWN             "Zchladit"
     #define CZ_EMERGENCYSTOP        "!!STOP!!"
     #define CZ_TOUCH_TO_EXIT        "Pro návrat se dotkněte obrazovky..."
-	  #define CZ_MAINMENU             "Menu"
+    #define CZ_MAINMENU             "Menu"
     #define CZ_WAIT_TEMP_SHUT_DOWN  "Čekám na zchladnutí extruderu pod " STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP) "℃" // Wait for the temperature of hotend to be lower than 50℃
     #define CZ_FORCE_SHUT_DOWN      "Vynutit"
     #define CZ_SHUTTING_DOWN        "Vypínám se..."
+    #define CZ_LEDOFF               "OFF" 
+    #define CZ_LEDWHITE             "White"
+    #define CZ_LEDRED               "Red"
+    #define CZ_LEDORANGE            "Orange"
+    #define CZ_LEDYELLOW            "Yellow"
+    #define CZ_LEDGREEN             "Green"
+    #define CZ_LEDBLUE              "Blue"
+    #define CZ_LEDINDIGO            "Indigo"
+    #define CZ_LEDVIOLET            "Violet"
     #define CZ_PARAMETER_SETTING    "Parametr"
     #define CZ_ON                   "ON"
     #define CZ_OFF                  "OFF"
@@ -150,6 +159,7 @@
     #define CZ_SMART                "SMART"
     #define CZ_TERMINAL_ACK         "Hide Terminal ACK"
     #define CZ_INVERT_YAXIS         "Invert Y Axis"
+    #define CZ_INVERT_ZAXIS         "Invert Z Axis"
     #define CZ_MOVE_SPEED           "Move speed(X Y Z)"
 
 #endif

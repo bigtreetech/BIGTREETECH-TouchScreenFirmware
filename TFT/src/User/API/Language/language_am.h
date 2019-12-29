@@ -142,6 +142,15 @@
     #define AM_WAIT_TEMP_SHUT_DOWN  "Wait for the temperature of hotend to be lower than " STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP) "℃" // Wait for the temperature of hotend to be lower than 50℃
     #define AM_FORCE_SHUT_DOWN      "Force"
     #define AM_SHUTTING_DOWN        "Shutting down..."
+    #define AM_LEDOFF               "OFF" 
+    #define AM_LEDWHITE             "White"
+    #define AM_LEDRED               "Red"
+    #define AM_LEDORANGE            "Orange"
+    #define AM_LEDYELLOW            "Yellow"
+    #define AM_LEDGREEN             "Green"
+    #define AM_LEDBLUE              "Blue"
+    #define AM_LEDINDIGO            "Indigo"
+    #define AM_LEDVIOLET            "Violet"
     #define AM_PARAMETER_SETTING    "Պարամետր"
     #define AM_ON                   "ON"
     #define AM_OFF                  "OFF"
@@ -149,6 +158,7 @@
     #define AM_SMART                "SMART"
     #define AM_TERMINAL_ACK         "Hide Terminal ACK"
     #define AM_INVERT_YAXIS         "Invert Y Axis"
+    #define AM_INVERT_ZAXIS         "Invert Z Axis"
     #define AM_MOVE_SPEED           "Move speed(X Y Z)"
 
 #endif

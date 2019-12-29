@@ -269,8 +269,8 @@ bool setPrintPause(bool is_pause)
   return true;
 }
 
-const GUI_RECT progressRect = {1*SPACE_X_PER_ICON, 0*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y + ICON_HEIGHT/4,
-                               3*SPACE_X_PER_ICON, 0*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y + ICON_HEIGHT*3/4};
+const GUI_RECT progressRect = {1*SPACE_X_PER_ICON, 0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y + ICON_HEIGHT/4,
+                               3*SPACE_X_PER_ICON, 0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y + ICON_HEIGHT*3/4};
 
 #define BED_X  (progressRect.x1 - 9 * BYTE_WIDTH)
 #define TEMP_Y (progressRect.y1 + 3)
@@ -334,6 +334,8 @@ void printingDrawPage(void)
   reValueNozzle();
   reValueBed();
   reDrawTime();
+  // z_axis coordinate
+  GUI_DispString(BED_X,TIME_Y, (u8* )"Z:");
 }
 
 
@@ -388,7 +390,11 @@ void menuPrinting(void)
       time=infoPrinting.time;
       reDrawTime();
     }
-
+    //Z_AXIS coordinate
+    static COORDINATE tmp;
+    coordinateGetAll(&tmp);
+    GUI_DispFloat(BED_X+BYTE_WIDTH*2,TIME_Y,tmp.axis[Z_AXIS],3,3,LEFT);
+    
     key_num = menuKeyGetValue();
     switch(key_num)
     {

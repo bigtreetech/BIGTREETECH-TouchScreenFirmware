@@ -5,6 +5,8 @@
 #include "menu.h"
 #include "GUI.h"
 
+char * dynamic_label[LISTITEM_PER_PAGE];
+
 const uint16_t ICON_COLOR[ICONCHAR_NUM]=
 {
   BLACK,     //ICONCHAR_BLANK = 0
@@ -420,7 +422,7 @@ void DrawListItemPress(const GUI_RECT * rect, bool pressed){
       }
       else
       {
-        GUI_SetColor(BK_COLOR);
+        GUI_SetColor(BACKGROUND_COLOR);
         GUI_DrawPrect(rect);
 
         GUI_SetColor(LISTBTN_BKCOLOR);
@@ -453,7 +455,7 @@ void ListItem_Display(const GUI_RECT* rect, uint8_t positon, const LISTITEM * cu
     case LIST_LABEL:
 
       if(curitem->icon != ICONCHAR_BLANK) {
-        ListDrawIcon(rect,LEFT_CENTER,curitem->icon,BLACK);
+        ListDrawIcon(rect,LEFT_CENTER,curitem->icon, BACKGROUND_COLOR);
         pos.x += (BYTE_HEIGHT + 1);
        }
         
