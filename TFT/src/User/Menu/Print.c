@@ -125,7 +125,6 @@ int16_t get_Pre_Icon(char * filename)
     u8 i = 0,k = 0;
     int gn;
     char *gnew;
-    uint16_t snum=0;
 
     //scrollFileNameCreate(0);
     Scroll_CreatePara(&titleScroll, (u8 *)infoFile.title, &titleRect);
@@ -148,7 +147,6 @@ int16_t get_Pre_Icon(char * filename)
       printItems.items[i].titlelabel.index = LABEL_DYNAMIC;
       menuDrawListItem(&printItems.items[i], i);
 
-      snum++;
       k = i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num;
       gn = strlen(infoFile.file[k]) - 6; // -6 means ".gcode"
       gnew = malloc(gn + 10);
@@ -208,7 +206,6 @@ int16_t get_Pre_Icon(char * filename)
     u8 i=0,k = 0;
     int gn;
     char *gnew;
-    static uint16_t snum;
     ITEM curItem = {ICON_BACKGROUND, LABEL_BACKGROUND};
    
     scrollFileNameCreate(0);
@@ -230,7 +227,6 @@ int16_t get_Pre_Icon(char * filename)
     {
       curItem.icon = ICON_FILE;
       // Preview
-      snum++;
       k = i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num;
       gn = strlen(infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num]) - 6; // -6 means ".gcode"
       gnew = malloc(gn + 10);

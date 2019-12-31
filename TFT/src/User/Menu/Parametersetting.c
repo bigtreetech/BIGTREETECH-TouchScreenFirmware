@@ -304,13 +304,13 @@ void parametersetting(void)
     return ;
 }
 
-void Temp_change(void)
+void temp_Change(void)
 {
     //static FP_MENU NUM[MAX_MENU_DEPTH];
     char tempstr[10];
     static int16_t compare [2];
   
-    if(infoHost.connected == false)    return;
+    if(infoHost.connected == false || infoMenu.menu[infoMenu.cur] == menuPrinting)    return;
     
     if(heatGetCurrentTemp(NOZZLE0) != compare[0] || heatGetCurrentTemp(BED) != compare[1] )
     //|| strcmp((char *)infoMenu.menu[infoMenu.cur],(char *)NUM)!=0)
@@ -337,7 +337,7 @@ void Temp_change(void)
 
 void show_GlobalInfo(void)
 {
-    if(infoHost.connected == false)    return;
+    if(infoHost.connected == false || infoMenu.menu[infoMenu.cur] == menuPrinting)    return;
     char tempstr[10];
 
      GUI_ClearRect(LCD_WIDTH/3, 0, LCD_WIDTH, BYTE_HEIGHT);

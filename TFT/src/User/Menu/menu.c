@@ -376,7 +376,7 @@ void loopFrontEnd(void)
 
 void loopProcess(void)
 {
-  Temp_change();
+  temp_Change();
   loopBackEnd();
   loopFrontEnd();
 }
