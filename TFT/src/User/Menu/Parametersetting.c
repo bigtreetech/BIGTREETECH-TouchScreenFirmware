@@ -335,7 +335,7 @@ void Temp_change(void)
     return ;
 }
 
-void show_globalinfo(void)
+void show_GlobalInfo(void)
 {
     if(infoHost.connected == false)    return;
     char tempstr[10];
