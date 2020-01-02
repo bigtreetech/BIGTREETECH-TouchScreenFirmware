@@ -15,12 +15,21 @@ void infoSettingsReset(void)
   infoSettings.font_color = ST7920_FNCOLOR;
   infoSettings.silent = 0;
   infoSettings.auto_off = 0;
+  infoSettings.terminalACK = 0;
+  infoSettings.invert_yaxis = 0;
+  infoSettings.move_speed = 0;
+  
 }
 
 // Version infomation
 void menuInfo(void)
 {
+  
+  #if defined(MKS_32_V1_4)
+  const char* hardware = "Board   : MKS_" HARDWARE_VERSION;
+  #else
   const char* hardware = "Board   : BIGTREETECH_" HARDWARE_VERSION;
+  #endif
   const char* firmware = "Firmware: "HARDWARE_VERSION"." STRINGIFY(SOFTWARE_VERSION) " " __DATE__;
   
   u16 HW_X = (LCD_WIDTH - GUI_StrPixelWidth((u8 *)hardware))/2;
@@ -92,7 +101,7 @@ void menuSettings(void)
     }
   }
 
-  menuDrawPage(&settingsItems,false);
+  menuDrawPage(&settingsItems);
 
   while(infoMenu.menu[infoMenu.cur] == menuSettings)
   {

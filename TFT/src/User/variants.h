@@ -292,8 +292,11 @@
   #define LIST_ICON_WIDTH   85
   #define LIST_ICON_HEIGHT  70
 
+  #define SMALLICON_WIDTH   24
+  #define SMALLICON_HEIGHT   24
+
   #define selecticonw 95
-#elif defined(TFT28_V1_0) || defined(TFT24_V1_1)
+#elif defined(TFT28_V1_0) || defined(TFT24_V1_1) || defined(MKS_32_V1_4)
   #define LCD_WIDTH	  320
   #define LCD_HEIGHT	240
   
@@ -307,21 +310,8 @@
   #define LIST_ICON_WIDTH   55
   #define LIST_ICON_HEIGHT  50
   
-  #define selecticonw 70
-#elif defined(MKS_32_V1_4)
- #define LCD_WIDTH	  320
-  #define LCD_HEIGHT	240
-
-
-  #define BYTE_HEIGHT 16
-  #define BYTE_WIDTH  (BYTE_HEIGHT/2)
-  
-  #define ICON_WIDTH  70
-  #define ICON_HEIGHT 70
-  #define TITLE_END_Y 40
-  
-  #define LIST_ICON_WIDTH   55
-  #define LIST_ICON_HEIGHT  50
+  #define SMALLICON_WIDTH   16
+  #define SMALLICON_HEIGHT   16
   
   #define selecticonw 70
 #endif

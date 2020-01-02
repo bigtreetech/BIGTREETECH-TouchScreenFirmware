@@ -15,6 +15,8 @@
 #define BYTE_ASCII_ADDR         0x700000 // ascii (+0x1000 4K)
 //#define BYTE_RESERVE_ADDR      0x710000
 
+#define SMALL_ICON_START_ADDR     ICON_ADDR(ICON_PREVIEW+1)
+#define SMALL_ICON_ADDR(num)     ((num)*0x1000+SMALL_ICON_START_ADDR)
 
 #define BMP		(1<<1)
 #define FONT	(1<<2)
