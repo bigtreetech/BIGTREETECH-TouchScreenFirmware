@@ -48,7 +48,7 @@ void gantry_inc(int n, float val);
   #define INFOBOX_P2_WIDTH            107
 
 
-#elif defined(TFT28_V1_0) || defined(TFT24_V1_1)
+#elif defined(TFT28_V1_0) || defined(TFT24_V1_1) ||defined(MKS_32_V1_4)
 
   #define SSICON_VAL_X0           2
   #define SSICON_VAL_Y0           47

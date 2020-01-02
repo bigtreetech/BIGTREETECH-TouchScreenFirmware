@@ -1,16 +1,28 @@
 #include "usart.h"
 #include "GPIO_Init.h"
 
+#if defined(MKS_32_V1_4)
 static USART_TypeDef *usart[_USART_CNT] = {
   USART1,  //TX--PA9  RX--PA10
-  USART2,  //TX--PA2  RX--PA3
+  USART2,  //TX--PD5  RX--PD6 UART2 ALT CONFIG (Speaker on Defaulty Pin)
+  USART3   //TX--PD8 RX--PD9 UART3 ALT CONFIG
+};
+#else
+static USART_TypeDef *usart[_USART_CNT] = {
+  USART1,  //TX--PA9  RX--PA10
+  USART2,  //PD5 PD6 --TX--PA2  RX--PA3
   USART3,  //TX--PB10 RX--PB11
   UART4,   //TX--PC10 RX--PC11
   UART5};  //TX--PC12 RX--PD2
+#endif
 
+#if defined(MKS_32_V1_4)
+static const uint16_t uart_tx[_USART_CNT] = {PA9,  PD5, PD8}; //TX
+static const uint16_t uart_rx[_USART_CNT] = {PA10, PD6, PD9};  //RX
+#else
 static const uint16_t uart_tx[_USART_CNT] = {PA9,  PA2, PB10, PC10, PC12}; //TX
 static const uint16_t uart_rx[_USART_CNT] = {PA10, PA3, PB11, PC11, PD2};  //RX
-
+#endif
 void USART_GPIO_Init(uint8_t port)
 {
   GPIO_InitSet(uart_tx[port], MGPIO_MODE_AF_PP, 0);

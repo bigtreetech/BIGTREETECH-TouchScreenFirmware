@@ -62,7 +62,11 @@ void GUI_Clear(uint16_t color)
   LCD_WR_REG(0x2C);  
   for(index=0; index<LCD_WIDTH*LCD_HEIGHT; index++)
   {
+  #if defined(MKS_32_V1_4)
+    LCD_WR_DATA(color);
+  #else
     LCD_WR_16BITS_DATA(color);
+  #endif
   }
 }  
 
