@@ -328,12 +328,10 @@
 
 #if defined(TFT35_V1_0) || defined(TFT35_V1_1) || defined(TFT35_V1_2)|| defined(TFT35_V2_0) || defined(TFT35_V3_0)
   #define ROOT_DIR "TFT35"
-#elif defined(TFT28_V1_0)
+#elif defined(TFT28_V1_0) || defined(MKS_32_V1_4)
   #define ROOT_DIR "TFT28"
 #elif defined(TFT24_V1_1)
   #define ROOT_DIR "TFT24"
-#elif defined(MKS_32_V1_4)
-  #define ROOT_DIR "MKS"
 #endif
 
 //hardware version config
