@@ -18,8 +18,34 @@
   #define LCD_WR_REG(regval) do{ LCD->LCD_REG = regval; }while(0)
   #define LCD_WR_DATA(data)  do{ LCD->LCD_RAM = data; }while(0)
   
-#else
-  
+ #elif defined(MKS_32_V1_4)
+ /*
+#define LCD_WR PB14
+#define LCD_RS PD13
+#define LCD_CS PC8
+#define LCD_RD PD15
+
+
+ */
+
+  #define	LCD_CS_SET  GPIOC->BSRR=1<<8    //片选端口    PC8
+  #define	LCD_RS_SET	GPIOD->BSRR=1<<13    //数据/命令 	PD13	   
+  #define	LCD_WR_SET	GPIOB->BSRR=1<<14    //写数据			PB14
+  #define	LCD_RD_SET	GPIOD->BSRR=1<<15    //读数据			PD15
+
+ #define	LCD_CS_CLR  GPIOC->BRR=1<<8    //片选端口    PC8
+  #define	LCD_RS_CLR	GPIOD->BRR=1<<13    //数据/命令 	PD13   
+  #define	LCD_WR_CLR	GPIOB->BRR=1<<14    //写数据			PB14
+  #define	LCD_RD_CLR	GPIOD->BRR=1<<15    //读数据			PD15
+
+
+  #define DATAOUT(x) do{GPIOE->ODR = x;}while(0) //数据输出
+  #define DATAIN()     GPIOE->IDR                //数据输入	
+
+  void LCD_WR_REG(uint16_t data);
+  void LCD_WR_DATA(uint16_t data);
+ #else
+
   /* 配置控制线
   * PB6   :LCD-RD
   * PB7   :LCD-WR

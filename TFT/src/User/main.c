@@ -19,14 +19,23 @@ void Hardware_GenericInit(void)
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO , ENABLE);
   GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);
 #endif
-  
+
+#if defined(MKS_32_V1_4)
+  //GPIO_Remap_USART2 
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
+  GPIO_PinRemapConfig(GPIO_Remap_USART2, ENABLE);
+#endif  
   XPT2046_Init();
   W25Qxx_Init();
   LCD_Init();
   readStoredPara();
   LCD_RefreshDirection();  //refresh display direction after reading settings
+  GUI_Clear(BLACK);
+  GUI_DispString(100, 0, (u8*)"System Start");
+  Delay_ms(500);
   scanUpdates();
-  SD_DeInit();
+  //causes a hang but no code is executed , bug 
+  //SD_DeInit();
   
 #if LCD_ENCODER_SUPPORT
   LCD_EncoderInit();
