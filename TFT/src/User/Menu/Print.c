@@ -121,7 +121,8 @@ void normalNameDisp(const GUI_RECT *rect, u8 *name)
       curItem.icon = ICONCHAR_FILE;
   //    curItem.label = infoFile.folder[i + infoFile.cur_page * NUM_PER_PAGE];
       menuDrawListItem(&curItem, i);
-      normalNameDisp(&gcodeRect[i], (u8 *)infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num]);
+      if (infoFile.source == BOARD_SD) normalNameDisp(&gcodeRect[i], (u8 *)infoFile.Longfile[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num]);        
+      else normalNameDisp(&gcodeRect[i], (u8 *)infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num]);
     }
     for (; (i < NUM_PER_PAGE); i++) //background
     {
