@@ -255,7 +255,7 @@
 //
     void updateFeatureSettings(uint8_t key_val)
     {
-      uint8_t item_index = fe_cur_page*FE_PAGE_COUNT+ key_val;
+      uint8_t item_index = fe_cur_page*LISTITEM_PER_PAGE+ key_val;
       switch (item_index)
       {
         case SKEY_HIDEACK:
@@ -273,8 +273,8 @@
         break;
 
         case SKEY_INVERT_Z:
-        infoSettings.invert_yaxis = (infoSettings.invert_yaxis + 1) % 2;
-        settingPage[item_index].icon = toggleitem[infoSettings.invert_yaxis];
+        infoSettings.invert_zaxis = (infoSettings.invert_zaxis + 1) % 2;
+        settingPage[item_index].icon = toggleitem[infoSettings.invert_zaxis];
         featureSettingsItems.items[key_val] = settingPage[item_index];
         menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
         break;
@@ -316,25 +316,25 @@
     void loadFeatureSettings(){
       for (uint8_t i = 0; i < LISTITEM_PER_PAGE; i++)
       {
-        uint8_t item_index = fe_cur_page*FE_PAGE_COUNT + i;
+        uint8_t item_index = fe_cur_page*LISTITEM_PER_PAGE + i;
         switch (item_index)
         {
           case SKEY_HIDEACK:
             //item_terminalACK_i = infoSettings.terminalACK;
-            settingPage[SKEY_HIDEACK].icon = toggleitem[infoSettings.terminalACK];
-            featureSettingsItems.items[i] = settingPage[SKEY_HIDEACK];
+            settingPage[item_index].icon = toggleitem[infoSettings.terminalACK];
+            featureSettingsItems.items[i] = settingPage[item_index];
             break;
 
           case SKEY_INVERT_Y:
             //item_invert_yaxis_i = infoSettings.invert_yaxis;
-            settingPage[SKEY_INVERT_Y].icon = toggleitem[infoSettings.invert_yaxis];
-            featureSettingsItems.items[i] = settingPage[SKEY_INVERT_Y];
+            settingPage[item_index].icon = toggleitem[infoSettings.invert_yaxis];
+            featureSettingsItems.items[i] = settingPage[item_index];
             break;
 
           case SKEY_INVERT_Z:
             //item_invert_zaxis_i = infoSettings.invert_zaxis;
-            settingPage[SKEY_INVERT_Z].icon = toggleitem[infoSettings.invert_yaxis];
-            featureSettingsItems.items[i] = settingPage[SKEY_INVERT_Z];
+            settingPage[item_index].icon = toggleitem[infoSettings.invert_zaxis];
+            featureSettingsItems.items[i] = settingPage[item_index];
             break;
 
           #ifdef PS_ON_PIN
@@ -362,6 +362,7 @@
           case SKEY_SPEED:
               featureSettingsItems.items[i] = itemMoveSpeed[infoSettings.move_speed];
             break;
+
           default:
             settingPage[item_index].icon = ICONCHAR_BACKGROUND;
             featureSettingsItems.items[i] = settingPage[item_index];
@@ -390,7 +391,16 @@
           featureSettingsItems.items[6].icon = ICONCHAR_PAGEDOWN;
         }
       }
+      //menuDrawListItem(&featureSettingsItems.items[5],5);
+      //menuDrawListItem(&featureSettingsItems.items[6],6);
       
+    }
+
+    void refreshItemsDisplay(){
+      for (uint8_t i = 0; i < ITEM_PER_PAGE; i++)
+      {
+        menuDrawListItem(&featureSettingsItems.items[i],i);
+      }
     }
 
     void menuFeatureSettings(void)
@@ -411,22 +421,29 @@
             if (fe_cur_page > 0){
               fe_cur_page--;
               loadFeatureSettings();
+              refreshItemsDisplay();
             }
           }
           break;
+
         case KEY_ICON_6:
           if(FE_PAGE_COUNT > 1){
-            if (fe_cur_page < FE_PAGE_COUNT){
+            if (fe_cur_page < FE_PAGE_COUNT - 1){
               fe_cur_page++;
               loadFeatureSettings();
+              refreshItemsDisplay();
             }
           }
           break;
+
         case KEY_ICON_7:
           infoMenu.cur--;
           break;
         default:
+          if(key_num < LISTITEM_PER_PAGE){
           updateFeatureSettings(key_num);
+          menuDrawListItem(&featureSettingsItems.items[key_num],key_num);
+          }
           break;
         }
 
