@@ -140,9 +140,10 @@
     #define FR_EMERGENCYSTOP        "Arrêt d'urgence"
     #define FR_TOUCH_TO_EXIT        "Toucher n'importe où pour sortir"
     #define FR_MAINMENU             "Menu"
-    #define FR_WAIT_TEMP_SHUT_DOWN  "Veuillez, patientez que la température de la buse soit inférieure à"STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP)"℃" // Wait for the temperature of hotend to be lower than 50℃
+    #define FR_WAIT_TEMP_SHUT_DOWN  "Veuillez, patientez que la température de la buse soit inférieure à" STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP) "℃" // Wait for the temperature of hotend to be lower than 50℃
     #define FR_FORCE_SHUT_DOWN      "Forcer Extinction"
     #define FR_SHUTTING_DOWN        "Extinction en cours..."
+    #define FR_PARAMETER_SETTING    "Paramètre"
     #define FR_ON                   "ON"
     #define FR_OFF                  "OFF"
     #define FR_AUTO                 "AUTO"

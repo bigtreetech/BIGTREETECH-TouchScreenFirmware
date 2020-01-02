@@ -140,9 +140,10 @@
     #define CZ_EMERGENCYSTOP        "!!STOP!!"
     #define CZ_TOUCH_TO_EXIT        "Pro návrat se dotkněte obrazovky..."
 	  #define CZ_MAINMENU             "Menu"
-    #define CZ_WAIT_TEMP_SHUT_DOWN  "Čekám na zchladnutí extruderu pod "STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP)"℃" // Wait for the temperature of hotend to be lower than 50℃
+    #define CZ_WAIT_TEMP_SHUT_DOWN  "Čekám na zchladnutí extruderu pod " STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP) "℃" // Wait for the temperature of hotend to be lower than 50℃
     #define CZ_FORCE_SHUT_DOWN      "Vynutit"
     #define CZ_SHUTTING_DOWN        "Vypínám se..."
+    #define CZ_PARAMETER_SETTING    "Parametr"
     #define CZ_ON                   "ON"
     #define CZ_OFF                  "OFF"
     #define CZ_AUTO                 "AUTO"

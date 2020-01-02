@@ -64,12 +64,6 @@ const GUI_RECT rect_of_keyListView[ITEM_PER_PAGE]={
   {2*START_X + LISTITEM_WIDTH,  2*LIST_ICON_HEIGHT+2*LISTICON_SPACE_Y+TITLE_END_Y,  2*START_X + LISTITEM_WIDTH + 1*LIST_ICON_WIDTH,  3*LIST_ICON_HEIGHT+2*LISTICON_SPACE_Y+TITLE_END_Y},
 };
 
-const GUI_RECT rect_of_mode[SELECTMODE]={
-  //2 select icon
-  {1*SPACE_SELEX+0*selecticonw,SPACE_SELEY,1*SPACE_SELEX+1*selecticonw,SPACE_SELEY+selecticonw},
-  {3*SPACE_SELEX+1*selecticonw,SPACE_SELEY,3*SPACE_SELEX+2*selecticonw,SPACE_SELEY+selecticonw},
-};
-
 //Clean up the gaps outside icons
 void menuClearGaps(void)
 {
@@ -150,7 +144,6 @@ void menuDrawItem(const ITEM * item, u8 position)
 
 const GUI_RECT reminderRect = {0, 0, LCD_WIDTH, TITLE_END_Y};
 const GUI_RECT reminderRectSS ={0, 0, LCD_WIDTH, SS_TITLE_END_Y};
-
 static REMINDER reminder = {{0, 0, LCD_WIDTH, TITLE_END_Y}, 0, STATUS_UNCONNECT, LABEL_UNCONNECTED};
 static REMINDER volumeReminder = {{0, 0, LCD_WIDTH, TITLE_END_Y}, 0, STATUS_IDLE, LABEL_BACKGROUND};
 static REMINDER busySign = {{LCD_WIDTH - 5, 0, LCD_WIDTH, 5}, 0, STATUS_BUSY, LABEL_BUSY};
@@ -330,11 +323,10 @@ void menuDrawListPage(const LISTITEMS *listItems)
     for (i = 0; i < ITEM_PER_PAGE; i++)
     {
       //const GUI_RECT *rect = rect_of_keyListView + i;
-     if (curListItems->items[i].icon != ICONCHAR_BACKGROUND)
-    
-      menuDrawListItem(&curListItems->items[i], i);
-      }
-    
+     if (curListItems->items[i].icon != ICONCHAR_BACKGROUND)    
+       menuDrawListItem(&curListItems->items[i], i);
+    }    
+  show_globalinfo();
 }
 
 //When there is a button value, the icon changes color and redraws
@@ -406,30 +398,6 @@ KEY_VALUES menuKeyGetValue(void)
   }
 }
 
-/*------------------------about select mode FUN --------------top-------------*/
-MKEY_VALUES MKeyGetValue(void)
-{    
-  return (MKEY_VALUES)KEY_GetValue(sizeof(rect_of_mode)/sizeof(rect_of_mode[0]), rect_of_mode);    
-}
-
-void selectmode(int8_t  nowMode)
-{
-  if(nowMode==SERIAL_TSC)
-  {
-    GUI_SetColor(ST7920_FNCOLOR);
-    GUI_DispStringInRect(text_startx,rect_of_mode[1].y0-BYTE_HEIGHT+selecticonw+BYTE_WIDTH,LCD_WIDTH,rect_of_mode[1].y0+selecticonw+BYTE_WIDTH,(uint8_t *)"Touch Mode");
-    GUI_SetColor(FK_COLOR);
-    GUI_DispStringInRect(0,rect_of_mode[1].y0-BYTE_HEIGHT+selecticonw+BYTE_WIDTH,text_startx,rect_of_mode[1].y0+selecticonw+BYTE_WIDTH,(uint8_t *)"Marlin Mode");
-  }
-  else
-  {
-    GUI_SetColor(ST7920_FNCOLOR);
-    GUI_DispStringInRect(0,rect_of_mode[1].y0-BYTE_HEIGHT+selecticonw+BYTE_WIDTH,text_startx,rect_of_mode[1].y0+selecticonw+BYTE_WIDTH,(uint8_t *)"Marlin Mode");
-    GUI_SetColor(FK_COLOR);
-    GUI_DispStringInRect(text_startx,rect_of_mode[1].y0-BYTE_HEIGHT+selecticonw+BYTE_WIDTH,LCD_WIDTH,rect_of_mode[1].y0+selecticonw+BYTE_WIDTH,(uint8_t *)"Touch Mode");
-  }
-}
-/*------------------------about select mode FUN --------------end-------------*/
 void loopBackEnd(void)
 {
   getGcodeFromFile();                 //Get Gcode command from the file to be printed
@@ -473,6 +441,7 @@ void loopFrontEnd(void)
 
 void loopProcess(void)
 {
+  Temp_change();
   loopBackEnd();
   loopFrontEnd();
 }

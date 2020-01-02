@@ -174,6 +174,7 @@ enum
   LABEL_WAIT_TEMP_SHUT_DOWN,
   LABEL_FORCE_SHUT_DOWN,
   LABEL_SHUTTING_DOWN,
+  LABEL_SETTING_PARAMETER,
   LABEL_ON,
   LABEL_OFF,
   LABEL_AUTO,
@@ -184,7 +185,7 @@ enum
 
   //add new keywords above this line only
   //keep the following always at the end of this list
-  LABEL_NUM,            
+  LABEL_NUM,
   LABEL_BACKGROUND,
   LABEL_DYNAMIC
 };

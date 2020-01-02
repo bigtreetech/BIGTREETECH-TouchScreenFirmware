@@ -5,19 +5,6 @@
 #include "stdbool.h"
 #include "GUI.h"
 
-typedef enum
-{
-  PAGE_MAIN = 0,
-  PAGE_HEAT,
-  PAGE_MOVE,
-  PAGE_HOME,
-  PAGE_PRINT,
-  PAGE_EXTRUDE,
-  PAGE_FAN,
-  PAGE_SETTINGS,
-  PAGE_NUM
-}PAGE;
-
 #define IDLE_TOUCH	0xFFFF
 typedef enum
 {
@@ -42,15 +29,6 @@ typedef enum
 
 #define ITEM_PER_PAGE       8
 #define LISTITEM_PER_PAGE   5
-/*-------------------------select mode-------top*/
-#define SELECTMODE 2
-typedef enum
-{
-  MKEY_0 = 0,
-  MKEY_1,
-  MKEY_IDLE = IDLE_TOUCH,
-}MKEY_VALUES;
-/*-------------------------select mode-------end*/
 
 typedef union
 {
@@ -130,11 +108,6 @@ void menuDrawPage (const MENUITEMS * menuItems);
 void menuDrawListPage(const LISTITEMS *listItems);
 void itemDrawIconPress(uint8_t positon, uint8_t is_press);
 KEY_VALUES menuKeyGetValue(void);
-
-//select mode fun
-extern const GUI_RECT rect_of_mode[SELECTMODE];
-extern MKEY_VALUES MKeyGetValue(void);
-extern void selectmode(int8_t  nowMode);
 
 void loopBackEnd(void);
 void loopFrontEnd(void);
