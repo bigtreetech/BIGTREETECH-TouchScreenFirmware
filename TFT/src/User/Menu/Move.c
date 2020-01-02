@@ -102,12 +102,12 @@ void menuMove(void)
     moveItems.items[5].label.index = LABEL_Y_DEC;
   }
     if(infoSettings.invert_zaxis == 1){
-    moveItems.items[0].label.index = LABEL_Z_DEC;
-    moveItems.items[2].label.index = LABEL_Z_INC;
-  }
-  else{
     moveItems.items[0].label.index = LABEL_Z_INC;
     moveItems.items[2].label.index = LABEL_Z_DEC;
+  }
+  else{
+    moveItems.items[0].label.index = LABEL_Z_DEC;
+    moveItems.items[2].label.index = LABEL_Z_INC;
   }
   #endif
   menuDrawPage(&moveItems);
@@ -141,10 +141,10 @@ void menuMove(void)
       case KEY_ICON_0:
       #ifdef MENU_LIST_MODE
           if(infoSettings.invert_zaxis == 1){
-            storeCmd(ZGCODE_DEC, item_move_len[item_move_len_i]);
+            storeCmd(ZGCODE_INC, item_move_len[item_move_len_i]);
           }
           else{
-            storeCmd(ZGCODE_INC, item_move_len[item_move_len_i]);
+            storeCmd(ZGCODE_DEC, item_move_len[item_move_len_i]);
           }
         #else
       storeCmd(ZGCODE_DOWN,   item_move_len[item_move_len_i]);  break;
@@ -167,10 +167,10 @@ void menuMove(void)
       case KEY_ICON_2: 
         #ifdef MENU_LIST_MODE
           if(infoSettings.invert_zaxis == 1){
-            storeCmd(ZGCODE_INC, item_move_len[item_move_len_i]);
+            storeCmd(ZGCODE_DEC, item_move_len[item_move_len_i]);
           }
           else{
-            storeCmd(ZGCODE_DEC, item_move_len[item_move_len_i]);
+            storeCmd(ZGCODE_INC, item_move_len[item_move_len_i]);
           }
         #else
           storeCmd(ZGCODE_UP,   item_move_len[item_move_len_i]);  break;
