@@ -186,7 +186,7 @@ void menuPowerOff(void)
 {
   u16 key_num = IDLE_TOUCH;
   clearPowerFailed();
-  GUI_Clear(BK_COLOR);
+  GUI_Clear(BACKGROUND_COLOR);
   GUI_DispString((LCD_WIDTH - GUI_StrPixelWidth(textSelect(LABEL_LOADING)))/2, LCD_HEIGHT/2 - BYTE_HEIGHT, textSelect(LABEL_LOADING));
  
   if(mountFS()==true && powerFailedExist())

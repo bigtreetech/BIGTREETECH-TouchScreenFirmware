@@ -4,93 +4,73 @@
 
 // exhibitRect is 2 ICON Space in the Upper Row and 2 Center Coloum. 
 const GUI_RECT exhibitRect = {
-   1*ICON_WIDTH+1*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y,  3*ICON_WIDTH+2*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y
+   1*ICON_WIDTH+1*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  3*ICON_WIDTH+2*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y
 };
 
 const GUI_RECT rect_of_key[ITEM_PER_PAGE*2]={
   //8 icons area
-  {0*ICON_WIDTH+0*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y,  1*ICON_WIDTH+0*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y},
-  {1*ICON_WIDTH+1*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y,  2*ICON_WIDTH+1*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y},
-  {2*ICON_WIDTH+2*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y,  3*ICON_WIDTH+2*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y},
-  {3*ICON_WIDTH+3*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y,  4*ICON_WIDTH+3*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y},
-  {0*ICON_WIDTH+0*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y,  1*ICON_WIDTH+0*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y},
-  {1*ICON_WIDTH+1*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y,  2*ICON_WIDTH+1*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y},
-  {2*ICON_WIDTH+2*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y,  3*ICON_WIDTH+2*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y},
-  {3*ICON_WIDTH+3*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y,  4*ICON_WIDTH+3*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y},
+  {0*ICON_WIDTH+0*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  1*ICON_WIDTH+0*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
+  {1*ICON_WIDTH+1*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  2*ICON_WIDTH+1*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
+  {2*ICON_WIDTH+2*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  3*ICON_WIDTH+2*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
+  {3*ICON_WIDTH+3*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  4*ICON_WIDTH+3*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
+  {0*ICON_WIDTH+0*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  1*ICON_WIDTH+0*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
+  {1*ICON_WIDTH+1*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  2*ICON_WIDTH+1*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
+  {2*ICON_WIDTH+2*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  3*ICON_WIDTH+2*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
+  {3*ICON_WIDTH+3*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  4*ICON_WIDTH+3*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
 
   //8 labels area
-  {0*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y,  1*SPACE_X_PER_ICON,  1*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y},
-  {1*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y,  2*SPACE_X_PER_ICON,  1*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y},
-  {2*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y,  3*SPACE_X_PER_ICON,  1*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y},
-  {3*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+TITLE_END_Y,  4*SPACE_X_PER_ICON,  1*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y},
-  {0*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y,  1*SPACE_X_PER_ICON,  2*ICON_HEIGHT+2*SPACE_Y+TITLE_END_Y},
-  {1*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y,  2*SPACE_X_PER_ICON,  2*ICON_HEIGHT+2*SPACE_Y+TITLE_END_Y},
-  {2*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y,  3*SPACE_X_PER_ICON,  2*ICON_HEIGHT+2*SPACE_Y+TITLE_END_Y},
-  {3*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y,  4*SPACE_X_PER_ICON,  2*ICON_HEIGHT+2*SPACE_Y+TITLE_END_Y},
-};
-
-const GUI_RECT rect_of_keyStatus[ITEM_PER_PAGE*2]={
-  //8 icons area
-  {0*ICON_WIDTH+0*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+SS_TITLE_END_Y,    1*ICON_WIDTH+0*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+SS_TITLE_END_Y},
-  {1*ICON_WIDTH+1*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+SS_TITLE_END_Y,    2*ICON_WIDTH+1*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+SS_TITLE_END_Y},
-  {2*ICON_WIDTH+2*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+SS_TITLE_END_Y,    3*ICON_WIDTH+2*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+SS_TITLE_END_Y},
-  {3*ICON_WIDTH+3*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+SS_TITLE_END_Y,    4*ICON_WIDTH+3*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+SS_TITLE_END_Y},
-  {0*ICON_WIDTH+0*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y,  1*ICON_WIDTH+0*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y},
-  {1*ICON_WIDTH+1*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y,  2*ICON_WIDTH+1*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y},
-  {2*ICON_WIDTH+2*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y,  3*ICON_WIDTH+2*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y},
-  {3*ICON_WIDTH+3*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y,  4*ICON_WIDTH+3*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y},
-
-  //8 labels area
-  {0,  0,   0, 0 },
-  {0,  0,   0, 0 },
-  {0,  0,   0, 0 },
-  {0,  0,   0, 0 },
-  {0*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y,                      1*SPACE_X_PER_ICON,  2*ICON_HEIGHT+SPACE_Y+SPACE_Y+TITLE_END_Y},
-  {1*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y,                      2*SPACE_X_PER_ICON,  2*ICON_HEIGHT+SPACE_Y+SPACE_Y+TITLE_END_Y},
-  {2*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y,                      3*SPACE_X_PER_ICON,  2*ICON_HEIGHT+SPACE_Y+SPACE_Y+TITLE_END_Y},
-  {3*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y,                      4*SPACE_X_PER_ICON,  2*ICON_HEIGHT+SPACE_Y+SPACE_Y+TITLE_END_Y},
+  {0*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  1*SPACE_X_PER_ICON,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
+  {1*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  2*SPACE_X_PER_ICON,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
+  {2*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  3*SPACE_X_PER_ICON,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
+  {3*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  4*SPACE_X_PER_ICON,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
+  {0*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  1*SPACE_X_PER_ICON,  2*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y},
+  {1*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  2*SPACE_X_PER_ICON,  2*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y},
+  {2*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  3*SPACE_X_PER_ICON,  2*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y},
+  {3*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  4*SPACE_X_PER_ICON,  2*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y},
 };
 
 const GUI_RECT rect_of_keyListView[ITEM_PER_PAGE]={
   //8 icons area
-  {START_X,  0*LISTITEM_HEIGHT+TITLE_END_Y,    LISTITEM_WIDTH+START_X,  1*LISTITEM_HEIGHT+TITLE_END_Y},
-  {START_X,  1*LISTITEM_HEIGHT+TITLE_END_Y,    LISTITEM_WIDTH+START_X,  2*LISTITEM_HEIGHT+TITLE_END_Y},
-  {START_X,  2*LISTITEM_HEIGHT+TITLE_END_Y,    LISTITEM_WIDTH+START_X,  3*LISTITEM_HEIGHT+TITLE_END_Y},
-  {START_X,  3*LISTITEM_HEIGHT+TITLE_END_Y,    LISTITEM_WIDTH+START_X,  4*LISTITEM_HEIGHT+TITLE_END_Y},
-  {START_X,  4*LISTITEM_HEIGHT+TITLE_END_Y,    LISTITEM_WIDTH+START_X,  5*LISTITEM_HEIGHT+TITLE_END_Y},
+  {START_X,  0*LISTITEM_HEIGHT+ICON_START_Y,    LISTITEM_WIDTH+START_X,  1*LISTITEM_HEIGHT+ICON_START_Y},
+  {START_X,  1*LISTITEM_HEIGHT+ICON_START_Y,    LISTITEM_WIDTH+START_X,  2*LISTITEM_HEIGHT+ICON_START_Y},
+  {START_X,  2*LISTITEM_HEIGHT+ICON_START_Y,    LISTITEM_WIDTH+START_X,  3*LISTITEM_HEIGHT+ICON_START_Y},
+  {START_X,  3*LISTITEM_HEIGHT+ICON_START_Y,    LISTITEM_WIDTH+START_X,  4*LISTITEM_HEIGHT+ICON_START_Y},
+  {START_X,  4*LISTITEM_HEIGHT+ICON_START_Y,    LISTITEM_WIDTH+START_X,  5*LISTITEM_HEIGHT+ICON_START_Y},
 
-  {2*START_X + LISTITEM_WIDTH,  0*LIST_ICON_HEIGHT+0*LISTICON_SPACE_Y+TITLE_END_Y,  2*START_X + LISTITEM_WIDTH + 1*LIST_ICON_WIDTH,  1*LIST_ICON_HEIGHT+0*LISTICON_SPACE_Y+TITLE_END_Y},
-  {2*START_X + LISTITEM_WIDTH,  1*LIST_ICON_HEIGHT+1*LISTICON_SPACE_Y+TITLE_END_Y,  2*START_X + LISTITEM_WIDTH + 1*LIST_ICON_WIDTH,  2*LIST_ICON_HEIGHT+1*LISTICON_SPACE_Y+TITLE_END_Y},
-  {2*START_X + LISTITEM_WIDTH,  2*LIST_ICON_HEIGHT+2*LISTICON_SPACE_Y+TITLE_END_Y,  2*START_X + LISTITEM_WIDTH + 1*LIST_ICON_WIDTH,  3*LIST_ICON_HEIGHT+2*LISTICON_SPACE_Y+TITLE_END_Y},
+  {2*START_X + LISTITEM_WIDTH,  0*LIST_ICON_HEIGHT+0*LISTICON_SPACE_Y+ICON_START_Y,  2*START_X + LISTITEM_WIDTH + 1*LIST_ICON_WIDTH,  1*LIST_ICON_HEIGHT+0*LISTICON_SPACE_Y+ICON_START_Y},
+  {2*START_X + LISTITEM_WIDTH,  1*LIST_ICON_HEIGHT+1*LISTICON_SPACE_Y+ICON_START_Y,  2*START_X + LISTITEM_WIDTH + 1*LIST_ICON_WIDTH,  2*LIST_ICON_HEIGHT+1*LISTICON_SPACE_Y+ICON_START_Y},
+  {2*START_X + LISTITEM_WIDTH,  2*LIST_ICON_HEIGHT+2*LISTICON_SPACE_Y+ICON_START_Y,  2*START_X + LISTITEM_WIDTH + 1*LIST_ICON_WIDTH,  3*LIST_ICON_HEIGHT+2*LISTICON_SPACE_Y+ICON_START_Y},
 };
 
 //Clean up the gaps outside icons
 void menuClearGaps(void)
 {
   const GUI_RECT gaps[]={
-  {0,                               0,        LCD_WIDTH,                       TITLE_END_Y},
-  {0,                               SPACE_Y,  0*ICON_WIDTH+0*SPACE_X+START_X,  LCD_HEIGHT},
-  {1*ICON_WIDTH+0*SPACE_X+START_X,  SPACE_Y,  1*ICON_WIDTH+1*SPACE_X+START_X,  LCD_HEIGHT},
-  {2*ICON_WIDTH+1*SPACE_X+START_X,  SPACE_Y,  2*ICON_WIDTH+2*SPACE_X+START_X,  LCD_HEIGHT},
-  {3*ICON_WIDTH+2*SPACE_X+START_X,  SPACE_Y,  3*ICON_WIDTH+3*SPACE_X+START_X,  LCD_HEIGHT},
-  {4*ICON_WIDTH+3*SPACE_X+START_X,  SPACE_Y,  LCD_WIDTH,                       LCD_HEIGHT}};
+  {0,                               0,               LCD_WIDTH,                       TITLE_END_Y},
+  {0,                               TITLE_END_Y,     LCD_WIDTH,                       ICON_START_Y},
+  {0,                               ICON_START_Y,    0*ICON_WIDTH+0*SPACE_X+START_X,  LCD_HEIGHT},
+  {1*ICON_WIDTH+0*SPACE_X+START_X,  ICON_START_Y,    1*ICON_WIDTH+1*SPACE_X+START_X,  LCD_HEIGHT},
+  {2*ICON_WIDTH+1*SPACE_X+START_X,  ICON_START_Y,    2*ICON_WIDTH+2*SPACE_X+START_X,  LCD_HEIGHT},
+  {3*ICON_WIDTH+2*SPACE_X+START_X,  ICON_START_Y,    3*ICON_WIDTH+3*SPACE_X+START_X,  LCD_HEIGHT},
+  {4*ICON_WIDTH+3*SPACE_X+START_X,  ICON_START_Y,    LCD_WIDTH,                       LCD_HEIGHT}};
 
-  const GUI_RECT ssGap[2] ={
-{0*ICON_WIDTH+0*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+SS_TITLE_END_Y,  4*ICON_WIDTH+3*SPACE_X+START_X, 1*ICON_HEIGHT+0*SPACE_Y+SS_TITLE_END_Y+STATUS_GANTRY_YOFFSET },
-{0*ICON_WIDTH+0*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y-STATUS_GANTRY_YOFFSET,  4*ICON_WIDTH+3*SPACE_X+START_X, 1*ICON_HEIGHT+1*SPACE_Y+TITLE_END_Y}
-} ;
-
-  for(int i=0; i < sizeof(gaps)/sizeof(gaps[0]); i++)
-  GUI_ClearRect(gaps[i].x0, gaps[i].y0, gaps[i].x1, gaps[i].y1);
-   if (infoMenu.menu[infoMenu.cur] == menuStatus){
-    GUI_ClearPrect(&ssGap[0]);
-    GUI_ClearPrect(&ssGap[1]);
-  }
+  GUI_SetBkColor(TITLE_BACKGROUND_COLOR);
+  GUI_ClearPrect(gaps);
+  GUI_SetBkColor(BACKGROUND_COLOR);
+  for(uint8_t i = 1; i < COUNT(gaps); i++)
+    GUI_ClearPrect(gaps + i);
 }
 
-static const MENUITEMS * curMenuItems = NULL;   //current menu
+void GUI_RestoreColorDefault(void){  
+  GUI_SetBkColor(BACKGROUND_COLOR);
+  GUI_SetColor(FONT_COLOR);
+  GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
+  GUI_SetNumMode(GUI_NUMMODE_SPACE);
+}
 
-static const LISTITEMS * curListItems = NULL;   //current listmenu
+static const MENUITEMS *curMenuItems = NULL;   //current menu
+
+static const LISTITEMS *curListItems = NULL;   //current listmenu
 
 static bool isListview;
 
@@ -103,30 +83,29 @@ uint8_t *labelGetAddress(const LABEL *label)
     return label->address;
 }
 
-void menuDrawItem(const ITEM * item, u8 position)
+void menuDrawItem(const ITEM *item, uint8_t positon)
 {
   uint8_t *content = labelGetAddress(&item->label);
-  const GUI_RECT *rect = rect_of_key + position;
-  if (infoMenu.menu[infoMenu.cur] == menuStatus){
-     rect = rect_of_keyStatus + position;
-  }
-     
+  const GUI_RECT *rect = rect_of_key + positon;
   if(item->icon != ICON_BACKGROUND)
     ICON_ReadDisplay(rect->x0, rect->y0, item->icon);
   else
-    GUI_ClearRect(rect->x0, rect->y0, rect->x1, rect->y1);
+    GUI_ClearPrect(rect);
 
-  if (infoMenu.menu[infoMenu.cur] == menuStatus){
-     rect = rect_of_keyStatus + ITEM_PER_PAGE + position;
-  }
-  else
-  {
-    rect = rect_of_key + ITEM_PER_PAGE + position;
-  }
-  
+  rect = rect_of_key + ITEM_PER_PAGE + positon;
   GUI_ClearPrect(rect);
-  if (content)  
+  if (content)
     GUI_DispStringInPrect(rect, content);
+}
+
+void menuDrawIconOnly(const ITEM *item, uint8_t positon)
+{
+  uint8_t *content = labelGetAddress(&item->label);
+  const GUI_RECT *rect = rect_of_key + positon;
+  if(item->icon != ICON_BACKGROUND)
+    ICON_ReadDisplay(rect->x0, rect->y0, item->icon);
+  else
+    GUI_ClearPrect(rect);
 }
 
  void menuDrawListItem(const LISTITEM *item, uint8_t position)
@@ -142,8 +121,6 @@ void menuDrawItem(const ITEM * item, u8 position)
   }
 }
 
-const GUI_RECT reminderRect = {0, 0, LCD_WIDTH, TITLE_END_Y};
-const GUI_RECT reminderRectSS ={0, 0, LCD_WIDTH, SS_TITLE_END_Y};
 static REMINDER reminder = {{0, 0, LCD_WIDTH, TITLE_END_Y}, 0, STATUS_UNCONNECT, LABEL_UNCONNECTED};
 static REMINDER volumeReminder = {{0, 0, LCD_WIDTH, TITLE_END_Y}, 0, STATUS_IDLE, LABEL_BACKGROUND};
 static REMINDER busySign = {{LCD_WIDTH - 5, 0, LCD_WIDTH, 5}, 0, STATUS_BUSY, LABEL_BUSY};
@@ -151,32 +128,20 @@ static REMINDER busySign = {{LCD_WIDTH - 5, 0, LCD_WIDTH, 5}, 0, STATUS_BUSY, LA
 
 void reminderMessage(int16_t inf, SYS_STATUS status)
 {
-  if (infoMenu.menu[infoMenu.cur] == menuStatus){
-    reminder.rect = reminderRectSS;
-  }
-  else{
-    reminder.rect = reminderRect;
-  }
   reminder.inf = inf;
-  GUI_SetColor(RED);
+  GUI_SetColor(REMINDER_FONT_COLOR);
   GUI_DispStringInPrect(&reminder.rect, textSelect(reminder.inf));
-  GUI_SetColor(FK_COLOR);
+  GUI_SetColor(FONT_COLOR);
   reminder.status = status;
   reminder.time = OS_GetTime();
 }
 
 void volumeReminderMessage(int16_t inf, SYS_STATUS status)
-{
-  if (infoMenu.menu[infoMenu.cur] == menuStatus){
-    volumeReminder.rect = reminderRectSS;
-  }
-  else{
-    volumeReminder.rect = reminderRect;
-  }   
+{ 
   volumeReminder.inf = inf;
-  GUI_SetColor(GBLUE);
+  GUI_SetColor(VOLUME_REMINDER_FONT_COLOR);
   GUI_DispStringInPrect(&volumeReminder.rect, textSelect(volumeReminder.inf));
-  GUI_SetColor(FK_COLOR);
+  GUI_SetColor(FONT_COLOR);
   volumeReminder.status = status;
   volumeReminder.time = OS_GetTime();
 }
@@ -187,7 +152,7 @@ void busyIndicator(SYS_STATUS status)
   {
     GUI_SetColor(YELLOW);
     GUI_FillCircle(busySign.rect.x0, (busySign.rect.y1 - busySign.rect.y0) / 2, (busySign.rect.x1-busySign.rect.x0)/2);
-    GUI_SetColor(FK_COLOR);
+    GUI_SetColor(FONT_COLOR);
   }
   busySign.status = status;
   busySign.time = OS_GetTime();
@@ -259,36 +224,27 @@ void loopBusySignClear(void)
 
   /* End Busy display sing */		
   busySign.status = STATUS_IDLE;
-  GUI_SetColor(BK_COLOR);
+  GUI_SetColor(BACKGROUND_COLOR);
   GUI_FillCircle(busySign.rect.x0, (busySign.rect.y1 - busySign.rect.y0) / 2, (busySign.rect.x1-busySign.rect.x0)/2);
-  GUI_SetColor(FK_COLOR);
+  GUI_SetColor(FONT_COLOR);
 }
-
 
 void menuDrawTitle(const uint8_t *content) //(const MENUITEMS * menuItems)
 {
-  //const uint8_t *content = labelGetAddress(&menuItems->title);
-  uint16_t start_y;
-  if (infoMenu.menu[infoMenu.cur] == menuStatus)
-  {
-    start_y = (SS_TITLE_END_Y - BYTE_HEIGHT) / 2;
-  }
-  else
-  {
-    start_y = (TITLE_END_Y - BYTE_HEIGHT) / 2;
-  }
-
-  GUI_ClearRect(10, start_y, LCD_WIDTH-10, start_y+BYTE_HEIGHT);
+  uint16_t start_y = (TITLE_END_Y - BYTE_HEIGHT) / 2;
+  GUI_FillRectColor(10, start_y, LCD_WIDTH-10, start_y+BYTE_HEIGHT, TITLE_BACKGROUND_COLOR);
   
-  if(content)
+  if (content)
   {
+    GUI_SetTextMode(GUI_TEXTMODE_TRANS);
     GUI_DispLenString(10, start_y, content, LCD_WIDTH-20);
+    GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
   }
 
   if(reminder.status == STATUS_IDLE) return;
   GUI_SetColor(RED);
   GUI_DispStringInPrect(&reminder.rect, textSelect(reminder.inf));
-  GUI_SetColor(FK_COLOR);
+  GUI_SetColor(FONT_COLOR);
 }
 
 //Draw the entire interface
@@ -299,13 +255,13 @@ void menuDrawPage(const MENUITEMS *menuItems)
   curMenuItems = menuItems;
   TSC_ReDrawIcon = itemDrawIconPress;
 
-    //GUI_Clear(BLACK);
-    menuClearGaps(); //Use this function instead of GUI_Clear to eliminate the splash screen when clearing the screen.
-    menuDrawTitle(labelGetAddress(&menuItems->title));
-    for (i = 0; i < ITEM_PER_PAGE; i++)
-    {
-      menuDrawItem(&menuItems->items[i], i);
-    }
+  //GUI_Clear(BLACK);
+  menuClearGaps(); //Use this function instead of GUI_Clear to eliminate the splash screen when clearing the screen.
+  menuDrawTitle(labelGetAddress(&menuItems->title));
+  for (i = 0; i < ITEM_PER_PAGE; i++)
+  {
+    menuDrawItem(&menuItems->items[i], i);
+  }
 }
 
 //Draw the entire interface
@@ -315,45 +271,40 @@ void menuDrawListPage(const LISTITEMS *listItems)
   isListview = true;
   curListItems = listItems;
   TSC_ReDrawIcon = itemDrawIconPress;
+  
+  GUI_SetBkColor(TITLE_BACKGROUND_COLOR);
+  GUI_ClearRect(0, 0, LCD_WIDTH, TITLE_END_Y);
+  GUI_SetBkColor(BACKGROUND_COLOR);
+  GUI_ClearRect(0, TITLE_END_Y, LCD_WIDTH, LCD_HEIGHT);
 
-    GUI_Clear(BLACK);
-    //menuClearGaps(); //Use this function instead of GUI_Clear to eliminate the splash screen when clearing the screen.
-    menuDrawTitle(labelGetAddress(&listItems->title));
+  //menuClearGaps(); //Use this function instead of GUI_Clear to eliminate the splash screen when clearing the screen.
+  menuDrawTitle(labelGetAddress(&listItems->title));
 
-    for (i = 0; i < ITEM_PER_PAGE; i++)
-    {
-      //const GUI_RECT *rect = rect_of_keyListView + i;
-     if (curListItems->items[i].icon != ICONCHAR_BACKGROUND)    
-       menuDrawListItem(&curListItems->items[i], i);
-    }    
-  show_globalinfo();
+  for (i = 0; i < ITEM_PER_PAGE; i++)
+  {
+    //const GUI_RECT *rect = rect_of_keyListView + i;
+   if (curListItems->items[i].icon != ICONCHAR_BACKGROUND)    
+     menuDrawListItem(&curListItems->items[i], i);
+  }    
+//  show_globalinfo();
 }
 
 //When there is a button value, the icon changes color and redraws
 void itemDrawIconPress(u8 position, u8 is_press)
 {
  
-  if (position > KEY_ICON_7)
-    return;
+  if (position > KEY_ICON_7) return;
 
   if (isListview == false)
   {
-    if (curMenuItems == NULL)
-    return;
-
-    if (curMenuItems->items[position].icon == ICON_BACKGROUND)
-      return;
-
+    if (curMenuItems == NULL) return;
+    if (curMenuItems->items[position].icon == ICON_BACKGROUND) return;
+    
     const GUI_RECT *rect = rect_of_key + position;
-
-    if (infoMenu.menu[infoMenu.cur] == menuStatus)
-    {
-      rect = rect_of_keyStatus + position;
-    }
-
-    if (is_press) //Turn green when pressed
+    
+    if (is_press) // Turn green when pressed
       ICON_PressedDisplay(rect->x0, rect->y0, curMenuItems->items[position].icon);
-    else //Redraw normal icon when released
+    else // Redraw normal icon when released
       ICON_ReadDisplay(rect->x0, rect->y0, curMenuItems->items[position].icon);
   }
   else
@@ -381,20 +332,13 @@ void itemDrawIconPress(u8 position, u8 is_press)
 // Get button value
 KEY_VALUES menuKeyGetValue(void)
 {
-  if (infoMenu.menu[infoMenu.cur] == menuStatus) // for status screen
+  if (isListview == false)
   {
-    return (KEY_VALUES)KEY_GetValue(sizeof(rect_of_keyStatus) / sizeof(rect_of_keyStatus[0]), rect_of_keyStatus);
+    return (KEY_VALUES)KEY_GetValue(sizeof(rect_of_key) / sizeof(rect_of_key[0]), rect_of_key); // for normal menu
   }
   else
   {
-    if (isListview == false)
-    {
-      return (KEY_VALUES)KEY_GetValue(sizeof(rect_of_key) / sizeof(rect_of_key[0]), rect_of_key);   // for normal menu
-    }
-    else
-    {
-      return (KEY_VALUES)KEY_GetValue(sizeof(rect_of_keyListView) / sizeof(rect_of_keyListView[0]), rect_of_keyListView); //for listview
-    }
+    return (KEY_VALUES)KEY_GetValue(sizeof(rect_of_keyListView) / sizeof(rect_of_keyListView[0]), rect_of_keyListView); //for listview
   }
 }
 

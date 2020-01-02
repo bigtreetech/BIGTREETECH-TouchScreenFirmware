@@ -13,7 +13,7 @@ void LCD_EncoderInit(void)
 {
   uint16_t encPin[]  = {LCD_ENCA_PIN,  LCD_ENCB_PIN,  LCD_BTN_PIN};
   
-  for(u8 i = 0; i < aCount(encPin); i++)
+  for(u8 i = 0; i < COUNT(encPin); i++)
   {
     GPIO_InitSet(encPin[i], MGPIO_MODE_IPU, 0);
   }

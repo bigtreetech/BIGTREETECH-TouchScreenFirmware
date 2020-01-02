@@ -9,7 +9,7 @@
 #define BUTTON_SPACE    BYTE_WIDTH/2
 #define BUTTON_WIDTH    (LCD_WIDTH-BUTTON_SPACE*5)/4
 
-#define TITLE_SY        (TITLE_END_Y - BYTE_HEIGHT) / 2
+#define TITLE_SY        (ICON_START_Y - BYTE_HEIGHT) / 2
 
 #define ICON_NOZZLE_X   2*ICON_WIDTH+ICON_WIDTH/2
 #define VALUE_NOZZLE_X  ICON_NOZZLE_X+BYTE_WIDTH
@@ -17,7 +17,7 @@
 #define ICON_BED_X      3*ICON_WIDTH+2*BYTE_WIDTH+ICON_WIDTH/2
 #define VALUE_BED_X     ICON_BED_X+BYTE_WIDTH
 
-#define SET_BK_COLOR    GRAY
+#define SET_BACKGROUND_COLOR    GRAY
 
 #define KEY_NUM 14
 #define PARANMETER_NUM 12
@@ -63,7 +63,6 @@ typedef enum
 }NUM_KEY_VALUES;
 
 void parametersetting(void);
-char getparameterbuf[CDM_NUM][100];
 void show_globalinfo(void);
 void Temp_change(void);
 extern bool getsetparameter;

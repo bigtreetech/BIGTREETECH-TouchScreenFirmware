@@ -67,6 +67,7 @@
 #include "More.h"
 #include "Speed.h"
 #include "BabyStep.h"
+#include "ledcolor.h"
 
 #include "Extrude.h"
 #include "Fan.h"

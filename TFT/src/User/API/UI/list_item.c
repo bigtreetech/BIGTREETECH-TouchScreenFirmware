@@ -5,6 +5,8 @@
 #include "menu.h"
 #include "GUI.h"
 
+char * dynamic_label[LISTITEM_PER_PAGE];
+
 const uint16_t ICON_COLOR[ICONCHAR_NUM]=
 {
   BLACK,     //ICONCHAR_BLANK = 0
@@ -420,12 +422,12 @@ void DrawListItemPress(const GUI_RECT * rect, bool pressed){
       }
       else
       {
-        GUI_SetColor(BK_COLOR);
+        GUI_SetColor(BACKGROUND_COLOR);
         GUI_DrawPrect(rect);
 
         GUI_SetColor(LISTBTN_BKCOLOR);
-        GUI_DrawLine(rect->x0, rect->y0 , rect->x1, rect->y0 );
-        GUI_DrawLine(rect->x0, rect->y1 , rect->x1, rect->y1 );
+        GUI_DrawLine(rect->x0, rect->y0-1 , rect->x1-1, rect->y0-1 );
+        GUI_DrawLine(rect->x0, rect->y1-1 , rect->x1-1, rect->y1-1 );
       }
       GUI_RestoreColorDefault();
 }
@@ -453,7 +455,7 @@ void ListItem_Display(const GUI_RECT* rect, uint8_t positon, const LISTITEM * cu
     case LIST_LABEL:
 
       if(curitem->icon != ICONCHAR_BLANK) {
-        ListDrawIcon(rect,LEFT_CENTER,curitem->icon,BLACK);
+        ListDrawIcon(rect,LEFT_CENTER,curitem->icon, BACKGROUND_COLOR);
         pos.x += (BYTE_HEIGHT + 1);
        }
         
@@ -480,6 +482,7 @@ void ListItem_Display(const GUI_RECT* rect, uint8_t positon, const LISTITEM * cu
       
       GUI_DispLenString(pos.x , pos.y, textSelect(curitem->titlelabel.index),textarea_width);
       pos = getTextStartPoint(rect->x0, rect->y0, rect->x1,rect->y1,RIGHT_CENTER,GET_ICONCHAR[ICONCHAR_TOGGLE_BODY]);
+      GUI_ClearRect(rect->x1-wy,rect->y0,rect->x1,rect->y1);
       ListItem_DisplayToggle(pos.x, pos.y, curitem->icon);
       DrawListItemPress(rect,pressed);
       break;
@@ -507,7 +510,7 @@ void ListItem_Display(const GUI_RECT* rect, uint8_t positon, const LISTITEM * cu
     case LIST_CUSTOMVALUE:
       if(curitem->icon != ICONCHAR_BLANK) {
         ListDrawIcon(rect,LEFT_CENTER,curitem->icon,BLACK);
-        pos.x += (BYTE_HEIGHT + 1);
+        pos.x += (BYTE_HEIGHT + 3);
       }
       GUI_DispString(pos.x, pos.y, textSelect(curitem->titlelabel.index));
         
@@ -541,7 +544,7 @@ void ListItem_DisplayToggle(uint16_t sx, uint16_t sy, uint8_t iconchar_state)
   GUI_DispString(sx, sy, (uint8_t*)GET_ICONCHAR[ICONCHAR_TOGGLE_BODY]);
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
   
-    GUI_SetColor(ICON_COLOR[iconchar_state]);
+  GUI_SetColor(ICON_COLOR[iconchar_state]);
   if (iconchar_state == ICONCHAR_TOGGLE_OFF)
   {
       GUI_DispString(sx, sy, IconCharSelect(ICONCHAR_TOGGLE_SWITCH));
@@ -558,7 +561,7 @@ void ListItem_DisplayToggle(uint16_t sx, uint16_t sy, uint8_t iconchar_state)
 void ListItem_DisplayCustomValue(const GUI_RECT* rect,uint8_t * value)
 {
  
-   const GUI_RECT rectVal = {rect->x1-BYTE_WIDTH*8 -2,rect->y0+(LISTITEM_HEIGHT-BYTE_HEIGHT)/2,rect->x1-2,rect->y1-(LISTITEM_HEIGHT-BYTE_HEIGHT)/2};
+   const GUI_RECT rectVal = {rect->x1-BYTE_WIDTH*8 -1,rect->y0+(LISTITEM_HEIGHT-BYTE_HEIGHT)/2,rect->x1-1,rect->y1-(LISTITEM_HEIGHT-BYTE_HEIGHT)/2};
 //GUI_POINT pos = getTextStartPoint(rect_of_keyListView.x0, rect->y0, rect->x1,rect->y1, pos, iconchar);
 
   GUI_ClearPrect(&rectVal);

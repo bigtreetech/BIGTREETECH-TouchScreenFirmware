@@ -17,8 +17,8 @@ const char iconBmpName[][32]={
 "BLTouchStow", "BLTouchTest", "BLTouchRepeat", "TSCSettings", "MachineSettings", "FeatureSettings", "ProbeOffset", "EEPROMSave", "SilentOn", "ShutDown",
 "RGB_Settings", "RGB_Red", "RGB_Green", "RGB_Blue", "RGB_White", "RGB_Off", "Preheat_Both", "Preheat_PLA", "Preheat_PETG", "Preheat_ABS",
 "PowerSupply", "Custom", "Custom0", "Custom1", "Custom2", "Custom3", "Custom4", "Custom5", "Custom6", "Home_Move", "Heat_Fan",
-"ManualLevel", "CoolDown", "SilentOff","StatusNozzle","StatusBed","StatusFan","MainMenu","StatusSpeed","StatusFlow","InfoBox_part1", "InfoBox_part2",
-"parametersetting", "global_nozzle", "global_bed",
+"ManualLevel", "CoolDown", "SilentOff","StatusNozzle","StatusBed","StatusFan","MainMenu","StatusSpeed","StatusFlow",
+"parametersetting", "global_nozzle", "global_bed", "ledcolor",
 }; 
 
 u8 scanUpdateFile(void)
@@ -117,15 +117,15 @@ bool bmpDecode(char *bmp, u32 addr)
 void updateIcon(void)
 {
   char nowBmp[64];  
-  GUI_Clear(BLACK);
+  GUI_Clear(BACKGROUND_COLOR);
   GUI_DispString(100, 5, (u8*)"Icon Updating...!");
 
   if(bmpDecode(BMP_ROOT_DIR"/Logo.bmp", LOGO_ADDR))
   {
     LOGO_ReadDisplay();
   }
-  GUI_Clear(BLACK);
-  for(int i=0; i<aCount(iconBmpName); i++)
+  GUI_Clear(BACKGROUND_COLOR);
+  for(int i=0; i<COUNT(iconBmpName); i++)
   {
     my_sprintf(nowBmp, BMP_ROOT_DIR"/%s.bmp", iconBmpName[i]);
     if(bmpDecode(nowBmp, ICON_ADDR(i)))
@@ -150,7 +150,7 @@ void updateFont(char *font, u32 addr)
 
   tempbuf = malloc(W25QXX_SECTOR_SIZE);
   if (tempbuf == NULL)  return;
-  GUI_Clear(BLACK);
+  GUI_Clear(BACKGROUND_COLOR);
   my_sprintf((void *)buffer,"%s Size: %dKB",font, (u32)f_size(&myfp)>>10);
   GUI_DispString(0, 100, (u8*)buffer);
   GUI_DispString(0, 140, (u8*)"Updating:   %");

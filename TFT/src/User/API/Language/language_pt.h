@@ -142,6 +142,15 @@
     #define PT_WAIT_TEMP_SHUT_DOWN  "Wait for the temperature of hotend to be lower than " STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP) "℃" // Wait for the temperature of hotend to be lower than 50℃
     #define PT_FORCE_SHUT_DOWN      "Force"
     #define PT_SHUTTING_DOWN        "Shutting down..."
+    #define PT_LEDOFF               "OFF" 
+    #define PT_LEDWHITE             "White"
+    #define PT_LEDRED               "Red"
+    #define PT_LEDORANGE            "Orange"
+    #define PT_LEDYELLOW            "Yellow"
+    #define PT_LEDGREEN             "Green"
+    #define PT_LEDBLUE              "Blue"
+    #define PT_LEDINDIGO            "Indigo"
+    #define PT_LEDVIOLET            "Violet"
     #define PT_PARAMETER_SETTING    "Parâmetro"
     #define PT_ON                   "ON"
     #define PT_OFF                  "OFF"
@@ -149,6 +158,7 @@
     #define PT_SMART                "SMART"
     #define PT_TERMINAL_ACK         "Hide Terminal ACK"
     #define PT_INVERT_YAXIS         "Invert Y Axis"
+    #define PT_INVERT_ZAXIS         "Invert Z Axis"
     #define PT_MOVE_SPEED           "Move speed(X Y Z)"
     
 #endif

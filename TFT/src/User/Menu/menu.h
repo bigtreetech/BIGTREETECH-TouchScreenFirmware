@@ -93,15 +93,17 @@ extern const GUI_RECT exhibitRect;
 #define CENTER_Y  ((exhibitRect.y1 - exhibitRect.y0)/2 + exhibitRect.y0)
 #define CENTER_X  ((exhibitRect.x1 - exhibitRect.x0 - BYTE_WIDTH)/2 + exhibitRect.x0)
 #define LISTITEM_WIDTH (LCD_WIDTH-(3*START_X)-LIST_ICON_WIDTH)
-#define LISTITEM_HEIGHT ((LCD_HEIGHT-TITLE_END_Y-START_X)/5)
-#define LISTICON_SPACE_Y ((LCD_HEIGHT-TITLE_END_Y-START_X-(3*LIST_ICON_HEIGHT))/ 2)
+#define LISTITEM_HEIGHT ((LCD_HEIGHT-ICON_START_Y-START_X)/5)
+#define LISTICON_SPACE_Y ((LCD_HEIGHT-ICON_START_Y-START_X-(3*LIST_ICON_HEIGHT))/ 2)
 
 void reminderMessage(int16_t inf, SYS_STATUS status);
 void volumeReminderMessage(int16_t inf, SYS_STATUS status);
 
 void busyIndicator(SYS_STATUS status);
 
+void GUI_RestoreColorDefault(void);
 void menuDrawItem (const ITEM * menuItem, uint8_t positon);
+void menuDrawIconOnly(const ITEM *item, uint8_t positon);
 void menuDrawListItem(const LISTITEM *item, uint8_t positon);
 void menuDrawTitle(const uint8_t *content); //(const MENUITEMS * menuItems);
 void menuDrawPage (const MENUITEMS * menuItems);

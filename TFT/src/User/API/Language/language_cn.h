@@ -142,6 +142,15 @@
     #define CN_WAIT_TEMP_SHUT_DOWN  "喷头温度正在降温，等待低于"STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP)"℃后自动关机" // 喷头温度正在降温，等待低于50℃后自动关机
     #define CN_FORCE_SHUT_DOWN      "强制关机"
     #define CN_SHUTTING_DOWN        "正在关机..."
+    #define CN_LEDOFF               "关闭" 
+    #define CN_LEDWHITE             "白色"
+    #define CN_LEDRED               "红色"
+    #define CN_LEDORANGE            "橙色"
+    #define CN_LEDYELLOW            "黄色"
+    #define CN_LEDGREEN             "绿色"
+    #define CN_LEDBLUE              "蓝色"
+    #define CN_LEDINDIGO            "靛"
+    #define CN_LEDVIOLET            "紫色"
     #define CN_PARAMETER_SETTING    "参数设置"
     #define CN_ON                   "ON"
     #define CN_OFF                  "OFF"
@@ -149,6 +158,7 @@
     #define CN_SMART                "SMART"
     #define CN_TERMINAL_ACK         "Hide Terminal ACK"
     #define CN_INVERT_YAXIS         "Invert Y Axis"
+    #define CN_INVERT_ZAXIS         "Invert Z Axis"
     #define CN_MOVE_SPEED           "Move speed(X Y Z)"
 
 #endif
