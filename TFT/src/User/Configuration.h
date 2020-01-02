@@ -195,8 +195,8 @@
  */
 #define CUSTOM_0_LABEL "Restore EEPROM"
 #define CUSTOM_0_GCODE "M501\n"
-//#define CUSTOM_1_LABEL "Custom2"
-//#define CUSTOM_1_GCODE "M105\n"
+#define CUSTOM_1_LABEL "Disable Steppers"
+#define CUSTOM_1_GCODE "M84\n"
 //#define CUSTOM_2_LABEL "Custom2"
 //#define CUSTOM_2_GCODE "M105\n"
 //#define CUSTOM_3_LABEL "Custom3"
