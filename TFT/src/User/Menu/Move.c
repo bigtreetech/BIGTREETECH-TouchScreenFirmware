@@ -92,24 +92,6 @@ static u32 update_time = 50; // 1 seconds is 100
 void menuMove(void)
 {
   KEY_VALUES  key_num = KEY_IDLE;
-  #ifdef MENU_LIST_MODE
-  if(infoSettings.invert_yaxis == 1){
-    moveItems.items[1].label.index = LABEL_Y_DEC;
-    moveItems.items[5].label.index = LABEL_Y_INC;
-  }
-  else{
-    moveItems.items[1].label.index = LABEL_Y_INC;
-    moveItems.items[5].label.index = LABEL_Y_DEC;
-  }
-    if(infoSettings.invert_zaxis == 1){
-    moveItems.items[0].label.index = LABEL_Z_DEC;
-    moveItems.items[2].label.index = LABEL_Z_INC;
-  }
-  else{
-    moveItems.items[0].label.index = LABEL_Z_INC;
-    moveItems.items[2].label.index = LABEL_Z_DEC;
-  }
-  #endif
   menuDrawPage(&moveItems);
   mustStoreCmd("G91\n");
 
@@ -139,12 +121,12 @@ void menuMove(void)
     {
       #ifdef ALTERNATIVE_MOVE_MENU
       case KEY_ICON_0:
-      #ifdef MENU_LIST_MODE
-          if(infoSettings.invert_zaxis == 1){
-            storeCmd(ZGCODE_DEC, item_move_len[item_move_len_i]);
+      #ifdef MENU_LIST_MODE //normaly decrease
+          if(infoSettings.invert_zaxis == 1){ //if inverted increase
+            storeCmd(ZGCODE_INC, item_move_len[item_move_len_i]);
           }
           else{
-            storeCmd(ZGCODE_INC, item_move_len[item_move_len_i]);
+            storeCmd(ZGCODE_DEC, item_move_len[item_move_len_i]); //else decrease
           }
         #else
       storeCmd(ZGCODE_DOWN,   item_move_len[item_move_len_i]);  break;
@@ -165,12 +147,12 @@ void menuMove(void)
         break;
 
       case KEY_ICON_2: 
-        #ifdef MENU_LIST_MODE
-          if(infoSettings.invert_zaxis == 1){
-            storeCmd(ZGCODE_INC, item_move_len[item_move_len_i]);
+        #ifdef MENU_LIST_MODE //normaly increase
+          if(infoSettings.invert_zaxis == 1){ //if inverted decrease
+            storeCmd(ZGCODE_DEC, item_move_len[item_move_len_i]);
           }
           else{
-            storeCmd(ZGCODE_DEC, item_move_len[item_move_len_i]);
+            storeCmd(ZGCODE_INC, item_move_len[item_move_len_i]); //normaly increase
           }
         #else
           storeCmd(ZGCODE_UP,   item_move_len[item_move_len_i]);  break;
