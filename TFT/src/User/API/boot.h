@@ -143,10 +143,11 @@ enum
   ICON_LEDCOLOR,
   
 //  ICON_RESERVE
-// Preview should be in the last place
-  ICON_PREVIEW,
 // Back ground sign
   ICON_BACKGROUND,
+
+  // Preview should be in the last place
+  ICON_PREVIEW,
 };
 
 typedef union
