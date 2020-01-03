@@ -236,7 +236,7 @@ void menuMove(void)
                       storeCmd(YGCODE_DEC, item_move_len[item_move_len_i]);
                     }
                   #else
-                    storeCmd(YGCODE_UP, item_move_len[item_move_len_i]);
+                    storeCmd(YGCODE_DOWN, item_move_len[item_move_len_i]);
                   #endif
                   break;
 
