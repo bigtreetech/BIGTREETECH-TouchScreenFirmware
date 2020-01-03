@@ -29,9 +29,7 @@ void Hardware_GenericInit(void)
   LCD_Init();
   readStoredPara();
   LCD_RefreshDirection();  //refresh display direction after reading settings
-  GUI_Clear(BLACK);
   GUI_DispString(100, 0, (u8*)"System Start");
-  Delay_ms(500);
   scanUpdates();
   //causes a hang but no code is executed , bug 
   //SD_DeInit();
