@@ -15,7 +15,7 @@ def after_build(source, target, env):
     dst_filename = dst_dir + env['PROGNAME'] + ".bin"
     shutil.copyfile(source_filename, dst_filename)
     # Copy BMP folder to SD Card Folder
-    src_dir = env['PROJECT_DIR'] + "/Copy to SD Card root directory to update/TFT28"
+    src_dir = env['PROJECT_DIR'] + "/Copy to SD Card root directory to update - Unified Menu Material theme/TFT28"
     copy_tree(src_dir, dst_dir + "TFT28/")
     
 env.AddPostAction("buildprog", after_build)
