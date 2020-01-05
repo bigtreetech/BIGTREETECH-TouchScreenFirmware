@@ -71,7 +71,7 @@
 #ifndef BOOTLOADER
   #define VECT_TAB_FLASH 0x08000000
 #else
-  #define VECT_TAB_FLASH 0x0807000
+  #define VECT_TAB_FLASH 0x08007000
 #endif
   #define HSE_VALUE ((uint32_t)25000000) //25Mhz XTAL
   #define F_CPUM 48
