@@ -227,6 +227,7 @@
         SKEY_RUNOUT,
       #endif
       SKEY_SPEED,
+      SKEY_SILENT,
       SKEY_COUNT //keep this always at the end
     }SKEY_LIST; 
     
@@ -246,8 +247,8 @@
       #ifdef FIL_RUNOUT_PIN
       {ICONCHAR_TOGGLE_ON,  LIST_CUSTOMVALUE,   LABEL_FILAMENT_RUNOUT,    LABEL_OFF       },
       #endif
-      {ICONCHAR_TOGGLE_ON,  LIST_CUSTOMVALUE,   LABEL_MOVE_SPEED,   LABEL_NORMAL_SPEED},
-      
+      {ICONCHAR_TOGGLE_ON,  LIST_CUSTOMVALUE,   LABEL_MOVE_SPEED,         LABEL_NORMAL_SPEED},
+      {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_SILENT_ON,          LABEL_BACKGROUND},
     };
 
 //
@@ -305,6 +306,13 @@
         featureSettingsItems.items[key_val] = settingPage[item_index];
         menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
         break;
+
+        case SKEY_SILENT:
+        infoSettings.silent = (infoSettings.silent + 1) % 2;
+        settingPage[item_index].icon = toggleitem[infoSettings.silent];
+        featureSettingsItems.items[key_val] = settingPage[item_index];
+        menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
+
       default:
         break;
       }
@@ -361,6 +369,11 @@
 
           case SKEY_SPEED:
               featureSettingsItems.items[i] = itemMoveSpeed[infoSettings.move_speed];
+            break;
+
+          case SKEY_SILENT:
+            settingPage[item_index].icon = toggleitem[infoSettings.silent];
+            featureSettingsItems.items[i] = settingPage[item_index];
             break;
 
           default:
