@@ -62,7 +62,17 @@ LABEL_MOVE,
       {ICON_X_INC,                LABEL_X_INC},
       {ICON_BACK,                 LABEL_BACK},
     #endif
-  #else  
+  #else
+    #ifdef MENU_LIST_MODE  
+    {ICON_X_INC,                LABEL_X_INC},
+    {ICON_Y_INC,                LABEL_Y_INC},
+    {ICON_Z_INC,                LABEL_Z_INC},
+    {ICON_1_MM,                 LABEL_1_MM},
+    {ICON_X_DEC,                LABEL_X_DEC},
+    {ICON_Y_DEC,                LABEL_Y_DEC},
+    {ICON_Z_DEC,                LABEL_Z_DEC},
+    {ICON_BACK,                 LABEL_BACK},
+    #else
     {ICON_X_INC,                LABEL_X_INC},
     {ICON_Y_INC,                LABEL_YAXIS_UP},
     {ICON_Z_INC,                LABEL_ZAXIS_UP},
@@ -71,6 +81,7 @@ LABEL_MOVE,
     {ICON_Y_DEC,                LABEL_YAXIS_DOWN},
     {ICON_Z_DEC,                LABEL_ZAXIS_DOWN},
     {ICON_BACK,                 LABEL_BACK},
+    #endif
   #endif
  }
 };
@@ -92,24 +103,54 @@ static u32 update_time = 50; // 1 seconds is 100
 void menuMove(void)
 {
   KEY_VALUES  key_num = KEY_IDLE;
-  #ifdef MENU_LIST_MODE
-  if(infoSettings.invert_yaxis == 1){
-    moveItems.items[1].label.index = LABEL_Y_DEC;
-    moveItems.items[5].label.index = LABEL_Y_INC;
-  }
-  else{
-    moveItems.items[1].label.index = LABEL_Y_INC;
-    moveItems.items[5].label.index = LABEL_Y_DEC;
-  }
-    if(infoSettings.invert_zaxis == 1){
-    moveItems.items[0].label.index = LABEL_Z_DEC;
-    moveItems.items[2].label.index = LABEL_Z_INC;
-  }
-  else{
-    moveItems.items[0].label.index = LABEL_Z_INC;
-    moveItems.items[2].label.index = LABEL_Z_DEC;
-  }
+  uint32_t B0;
+  uint32_t B1;
+  uint32_t B2;
+  uint32_t B5;
+  uint32_t B6;
+  uint32_t B7;
+
+
+  #ifdef ALTERNATIVE_MOVE_MENU
+    #ifdef MENU_LIST_MODE
+      if(infoSettings.invert_yaxis == 1){
+        moveItems.items[1].label.index = LABEL_Y_DEC;
+        moveItems.items[5].label.index = LABEL_Y_INC;
+      }
+      else{
+        moveItems.items[1].label.index = LABEL_Y_INC;
+        moveItems.items[5].label.index = LABEL_Y_DEC;
+      }
+        if(infoSettings.invert_zaxis == 1){
+        moveItems.items[0].label.index = LABEL_Z_INC;
+        moveItems.items[2].label.index = LABEL_Z_DEC;
+      }
+      else{
+        moveItems.items[0].label.index = LABEL_Z_DEC;
+        moveItems.items[2].label.index = LABEL_Z_INC;
+      }
+    #endif
+  #else
+    #ifdef MENU_LIST_MODE
+      if(infoSettings.invert_yaxis == 1){
+        moveItems.items[1].label.index = LABEL_Y_DEC;
+        moveItems.items[5].label.index = LABEL_Y_INC;
+      }
+      else{
+        moveItems.items[1].label.index = LABEL_Y_INC;
+        moveItems.items[5].label.index = LABEL_Y_DEC;
+      }
+        if(infoSettings.invert_zaxis == 1){
+        moveItems.items[2].label.index = LABEL_Z_DEC;
+        moveItems.items[6].label.index = LABEL_Z_INC;
+      }
+      else{
+        moveItems.items[2].label.index = LABEL_Z_INC;
+        moveItems.items[6].label.index = LABEL_Z_DEC;
+      }
+    #endif
   #endif
+
   menuDrawPage(&moveItems);
   mustStoreCmd("G91\n");
 
@@ -138,84 +179,138 @@ void menuMove(void)
     switch(key_num)
     {
       #ifdef ALTERNATIVE_MOVE_MENU
-      case KEY_ICON_0:
-      #ifdef MENU_LIST_MODE
-          if(infoSettings.invert_zaxis == 1){
-            storeCmd(ZGCODE_DEC, item_move_len[item_move_len_i]);
-          }
-          else{
-            storeCmd(ZGCODE_INC, item_move_len[item_move_len_i]);
-          }
-        #else
-      storeCmd(ZGCODE_DOWN,   item_move_len[item_move_len_i]);  break;
-        #endif
-        break;
+          
+            case KEY_ICON_0:
+                  #ifdef MENU_LIST_MODE
+                    if(infoSettings.invert_zaxis == 1){
+                      storeCmd(ZGCODE_INC, item_move_len[item_move_len_i]);
+                    }
+                    else{
+                      storeCmd(ZGCODE_DEC, item_move_len[item_move_len_i]);
+                    }
+                  #else
+                    storeCmd(ZGCODE_DOWN,   item_move_len[item_move_len_i]);  break;
+                  #endif
+                  break;
 
-      case KEY_ICON_1:
-        #ifdef MENU_LIST_MODE
-          if(infoSettings.invert_yaxis == 1){
-            storeCmd(YGCODE_DEC, item_move_len[item_move_len_i]);
-          }
-          else{
-            storeCmd(YGCODE_INC, item_move_len[item_move_len_i]);
-          }
-        #else
-          storeCmd(YGCODE_UP, item_move_len[item_move_len_i]);
-        #endif
-        break;
+            case KEY_ICON_1:
+                  #ifdef MENU_LIST_MODE
+                    if(infoSettings.invert_yaxis == 1){
+                      storeCmd(YGCODE_DEC, item_move_len[item_move_len_i]);
+                    }
+                    else{
+                      storeCmd(YGCODE_INC, item_move_len[item_move_len_i]);
+                    }
+                  #else
+                    storeCmd(YGCODE_UP, item_move_len[item_move_len_i]);
+                  #endif
+                  break;
 
-      case KEY_ICON_2: 
-        #ifdef MENU_LIST_MODE
-          if(infoSettings.invert_zaxis == 1){
-            storeCmd(ZGCODE_INC, item_move_len[item_move_len_i]);
-          }
-          else{
-            storeCmd(ZGCODE_DEC, item_move_len[item_move_len_i]);
-          }
-        #else
-          storeCmd(ZGCODE_UP,   item_move_len[item_move_len_i]);  break;
-        #endif
-        break;
+            case KEY_ICON_2: 
+                  #ifdef MENU_LIST_MODE
+                    if(infoSettings.invert_zaxis == 1){
+                      storeCmd(ZGCODE_DEC, item_move_len[item_move_len_i]);
+                    }
+                    else{
+                      storeCmd(ZGCODE_INC, item_move_len[item_move_len_i]);
+                    }
+                  #else
+                    storeCmd(ZGCODE_UP,   item_move_len[item_move_len_i]);  break;
+                  #endif
+                  break;
 
-      case KEY_ICON_3: 
-        item_move_len_i = (item_move_len_i+1)%ITEM_MOVE_LEN_NUM;            
-        moveItems.items[key_num] = itemMoveLen[item_move_len_i];
-        menuDrawItem(&moveItems.items[key_num], key_num);
-        break;
-      case KEY_ICON_4: storeCmd("G1 X-%.1f\n", item_move_len[item_move_len_i]);  break;
+            case KEY_ICON_3: 
+                  item_move_len_i = (item_move_len_i+1)%ITEM_MOVE_LEN_NUM;            
+                  moveItems.items[key_num] = itemMoveLen[item_move_len_i];
+                  menuDrawItem(&moveItems.items[key_num], key_num);
+                  break;
 
-      case KEY_ICON_5:
-        #ifdef MENU_LIST_MODE
-          if(infoSettings.invert_yaxis == 1){
-            storeCmd(YGCODE_INC, item_move_len[item_move_len_i]);
-          }
-          else{
-            storeCmd(YGCODE_DEC, item_move_len[item_move_len_i]);
-          }
-        #else
-          storeCmd(YGCODE_UP, item_move_len[item_move_len_i]);
-        #endif
-        break;
-      case KEY_ICON_6: storeCmd("G1 X%.1f\n",  item_move_len[item_move_len_i]);  break;
-      case KEY_ICON_7: infoMenu.cur--; break;
-      default:break; 
-      
-    #else
- 
-      case KEY_ICON_0: storeCmd("G1 X%.1f\n",   item_move_len[item_move_len_i]);  break;
-      case KEY_ICON_1: storeCmd(YGCODE_UP,   item_move_len[item_move_len_i]);     break;
-      case KEY_ICON_2: storeCmd(ZGCODE_UP,   item_move_len[item_move_len_i]);  break;
-      case KEY_ICON_3: 
-        item_move_len_i = (item_move_len_i+1)%ITEM_MOVE_LEN_NUM;            
-        moveItems.items[key_num] = itemMoveLen[item_move_len_i];
-        menuDrawItem(&moveItems.items[key_num], key_num);                         break;
-      case KEY_ICON_4: storeCmd("G1 X-%.1f\n", item_move_len[item_move_len_i]);   break;
-      case KEY_ICON_5: storeCmd(YGCODE_DOWN,   item_move_len[item_move_len_i]);   break;
-      case KEY_ICON_6: storeCmd(ZGCODE_DOWN,   item_move_len[item_move_len_i]); break;
-      case KEY_ICON_7: infoMenu.cur--; break;
-      default:break;  
-      #endif
-            
+            case KEY_ICON_4: storeCmd("G1 X-%.1f\n", item_move_len[item_move_len_i]);  break;
+
+            case KEY_ICON_5:
+                  #ifdef MENU_LIST_MODE
+                    if(infoSettings.invert_yaxis == 1){
+                      storeCmd(YGCODE_INC, item_move_len[item_move_len_i]);
+                    }
+                    else{
+                      storeCmd(YGCODE_DEC, item_move_len[item_move_len_i]);
+                    }
+                  #else
+                    storeCmd(YGCODE_DOWN, item_move_len[item_move_len_i]);
+                  #endif
+                  break;
+
+            case KEY_ICON_6: storeCmd("G1 X%.1f\n",  item_move_len[item_move_len_i]);  break;
+            case KEY_ICON_7: infoMenu.cur--; break;
+            default:break; 
+        
+      #else
+
+            case KEY_ICON_0: storeCmd("G1 X%.1f\n",  item_move_len[item_move_len_i]);  break;
+
+            case KEY_ICON_1:
+                  #ifdef MENU_LIST_MODE
+                    if(infoSettings.invert_yaxis == 1){
+                      storeCmd(YGCODE_DEC, item_move_len[item_move_len_i]);
+                    }
+                    else{
+                      storeCmd(YGCODE_INC, item_move_len[item_move_len_i]);
+                    }
+                  #else
+                    storeCmd(YGCODE_UP, item_move_len[item_move_len_i]);
+                  #endif
+                  break;
+
+            case KEY_ICON_2:
+            #ifdef MENU_LIST_MODE
+                    if(infoSettings.invert_zaxis == 1){
+                      storeCmd(ZGCODE_DEC, item_move_len[item_move_len_i]);
+                    }
+                    else{
+                      storeCmd(ZGCODE_INC, item_move_len[item_move_len_i]);
+                    }
+                  #else
+                  storeCmd(ZGCODE_DOWN,   item_move_len[item_move_len_i]);  break;
+                  #endif
+                  break;
+
+            case KEY_ICON_3: 
+                  item_move_len_i = (item_move_len_i+1)%ITEM_MOVE_LEN_NUM;            
+                  moveItems.items[key_num] = itemMoveLen[item_move_len_i];
+                  menuDrawItem(&moveItems.items[key_num], key_num);
+                  break;
+
+            case KEY_ICON_4: storeCmd("G1 X-%.1f\n", item_move_len[item_move_len_i]);  break;
+
+            case KEY_ICON_5:
+                  #ifdef MENU_LIST_MODE
+                    if(infoSettings.invert_yaxis == 1){
+                      storeCmd(YGCODE_INC, item_move_len[item_move_len_i]);
+                    }
+                    else{
+                      storeCmd(YGCODE_DEC, item_move_len[item_move_len_i]);
+                    }
+                  #else
+                    storeCmd(YGCODE_UP, item_move_len[item_move_len_i]);
+                  #endif
+                  break;
+
+            case KEY_ICON_6: 
+                  #ifdef MENU_LIST_MODE
+                    if(infoSettings.invert_zaxis == 1){
+                      storeCmd(ZGCODE_INC, item_move_len[item_move_len_i]);
+                    }
+                    else{
+                      storeCmd(ZGCODE_DEC, item_move_len[item_move_len_i]);
+                    }
+                  #else
+                    storeCmd(ZGCODE_UP,   item_move_len[item_move_len_i]);  break;
+                  #endif
+                  break;
+
+            case KEY_ICON_7: infoMenu.cur--; break;
+            default:break; 
+      #endif    
     }
     loopProcess();
     update_gantry();

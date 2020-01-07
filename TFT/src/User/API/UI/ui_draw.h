@@ -23,6 +23,7 @@ void LCD_DMA_Config(void);
 
 void LOGO_ReadDisplay(void);
 void ICON_ReadDisplay(uint16_t sx, uint16_t sy, uint8_t icon);
+void ICON_CustomReadDisplay(u16 sx,u16 sy,u16 w, u16 h, u32 addr);
 void ICON_PressedDisplay(uint16_t sx, uint16_t sy, uint8_t icon);
 
 #endif
