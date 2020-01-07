@@ -9,6 +9,8 @@ int MODEselect;
 const char *const ignoreEcho[] = {
   "Now fresh file:",
   "Probe Z Offset:",
+  "Printing... ch@",
+  "Active Extruder:"
 };
 
 void setCurrentAckSrc(uint8_t src)

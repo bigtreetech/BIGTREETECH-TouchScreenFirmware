@@ -310,16 +310,15 @@ void temp_Change(void)
     char tempstr[10];
     static int16_t compare [2];
   
-    if(infoHost.connected == false || infoMenu.menu[infoMenu.cur] == menuPrinting)    return;
-    if(infoMenu.menu[infoMenu.cur] == menuMove || infoMenu.menu[infoMenu.cur] == menuStatus) return;
-
+    if(infoHost.connected == false || infoMenu.menu[infoMenu.cur] == menuPrinting || infoMenu.menu[infoMenu.cur] == menuStatus || infoMenu.menu[infoMenu.cur] == menuMove)    return;
+    
     if(heatGetCurrentTemp(NOZZLE0) != compare[0] || heatGetCurrentTemp(BED) != compare[1] )
     //|| strcmp((char *)infoMenu.menu[infoMenu.cur],(char *)NUM)!=0)
     {
         //strcpy((char *)NUM ,(char *)infoMenu.menu[infoMenu.cur]);
         compare[0] = heatGetCurrentTemp(NOZZLE0);
         compare[1] = heatGetCurrentTemp(BED);
-
+        
         drawGlobalInfo();
     } 
     
@@ -328,15 +327,14 @@ void temp_Change(void)
 
 void show_GlobalInfo(void)
 {
-    if(infoHost.connected == false)    return;
-    if(infoMenu.menu[infoMenu.cur] == menuMove || infoMenu.menu[infoMenu.cur] == menuStatus) return;
+    if(infoHost.connected == false || infoMenu.menu[infoMenu.cur] == menuPrinting || infoMenu.menu[infoMenu.cur] == menuStatus || infoMenu.menu[infoMenu.cur] == menuMove)    return;
+
     drawGlobalInfo();
 
-    return;
+return ;
 }
+
 void drawGlobalInfo(void){
-    
-    
     char tempstr[10];
 
     GUI_ClearRect(LCD_WIDTH/3, 0, LCD_WIDTH, BYTE_HEIGHT);
