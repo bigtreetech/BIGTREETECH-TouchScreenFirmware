@@ -247,9 +247,7 @@ void drawStatusScreenMsg(void)
 //GUI_ClearRect(RectInfo.x0,RectInfo.y0,RectInfo.x1,RectInfo.y1);
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
  
-  GUI_SetColor(INFOBOX_BKCOLOR);
-  GUI_FillPrect(&RectInfo);
-
+  ICON_CustomReadDisplay(RectInfo.x0,RectInfo.y0,INFOBOX_WIDTH,INFOBOX_HEIGHT,INFOBOX_ADDR);
   GUI_SetColor(INFOMSG_BKCOLOR);
   GUI_DispString(RectInfo.x0 + STATUS_MSG_ICON_XOFFSET, RectInfo.y0 + STATUS_MSG_ICON_YOFFSET,IconCharSelect(ICONCHAR_INFO));
 

@@ -15,8 +15,9 @@
 #define BYTE_ASCII_ADDR         0x700000 // ascii (+0x1000 4K)
 //#define BYTE_RESERVE_ADDR      0x710000
 
-#define SMALL_ICON_START_ADDR     ICON_ADDR(ICON_PREVIEW+1)
-#define SMALL_ICON_ADDR(num)     ((num)*0x1000+SMALL_ICON_START_ADDR)
+#define INFOBOX_ADDR            (BYTE_ASCII_ADDR + 0x1000) // total byte size 0xA7F8
+#define SMALL_ICON_START_ADDR   (INFOBOX_ADDR+0xA7F8)
+#define SMALL_ICON_ADDR(num)    ((num)*0x1000+SMALL_ICON_START_ADDR)
 
 #define BMP		(1<<1)
 #define FONT	(1<<2)
@@ -141,13 +142,14 @@ enum
   ICON_GLOBAL_NOZZLE0,
   ICON_GLOBAL_BED,
   ICON_LEDCOLOR,
-  
-//  ICON_RESERVE
-// Back ground sign
-  ICON_BACKGROUND,
 
-  // Preview should be in the last place
+//add new icons above this line  only 
+//  ICON_RESERVE
+
+// Preview should be in the last place before ICON_BACKGROUND to save flash storage space
   ICON_PREVIEW,
+// Back ground sign
+  ICON_BACKGROUND
 };
 
 typedef union

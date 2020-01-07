@@ -45,6 +45,12 @@ void ICON_ReadDisplay(u16 sx,u16 sy, u8 icon)
   lcd_frame_display(sx, sy, ICON_WIDTH, ICON_HEIGHT, ICON_ADDR(icon));
 }
 
+//draw icon with different length and width (sx & sy cordinates for top left of icon, w width, h height, addr flash byte address)
+void ICON_CustomReadDisplay(u16 sx,u16 sy,u16 w, u16 h, u32 addr)
+{
+  lcd_frame_display(sx, sy, w, h, addr);
+}
+
 void SMALLICON_ReadDisplay(u16 sx,u16 sy, u8 icon)
 {
   lcd_frame_display(sx, sy, SMALLICON_WIDTH, SMALLICON_HEIGHT, SMALL_ICON_ADDR(icon));
