@@ -2,7 +2,7 @@
 name: Bug report
 about: Create a report to help us improve
 title: '[BUG] (short description)'
-labels: ''
+labels: 'bug'
 assignees: ''
 
 ---
@@ -24,6 +24,11 @@ Do you want to ask a question? Are you looking for support? Please don't post he
 
 **Actual behavior**
 <!-- What actually happens -->
+
+### Hardware Variant
+<!-- which TFT controller did you used?-->
+### TFT Firmware Version & Main Board Firmware details
+<!-- current TFT Firmware version number & Marlin firmware version number -->
 
 ### Additional Information
 * Include a ZIP file containing your `Configuration.h` or use [Pastebin](https://pastebin.com/) and paste a link in this issue.

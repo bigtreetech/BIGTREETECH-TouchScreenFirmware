@@ -78,8 +78,8 @@ const GUI_RECT RectInfo = {START_X + 1 * ICON_WIDTH + 1 * SPACE_X,  ICON_START_Y
 const  GUI_RECT msgRect ={START_X + 1 * ICON_WIDTH + 1 * SPACE_X + 2,   ICON_START_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + STATUS_MSG_BODY_YOFFSET,
                           START_X + 3 * ICON_WIDTH + 2 * SPACE_X - 2,   ICON_START_Y +  2 * ICON_HEIGHT + 1 * SPACE_Y - STATUS_MSG_BODY_BOTTOM};
 
-const GUI_RECT RecGantry = {START_X,                        1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,
-                            4*ICON_WIDTH+3*SPACE_X+START_X, 1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y};
+const GUI_RECT RecGantry = {START_X,                        1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y + STATUS_GANTRY_YOFFSET,
+                            4*ICON_WIDTH+3*SPACE_X+START_X, 1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y - STATUS_GANTRY_YOFFSET};
                                 
 
 /*set status icons */
@@ -99,7 +99,7 @@ void drawTemperature(void)
   char tempstr[100];
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
   GUI_SetColor(HEADING_COLOR);
-  menuDrawItem(&ToolItems[0],0);                                                                //Ext icon
+  menuDrawIconOnly(&ToolItems[0],0);                                                                //Ext icon
   GUI_DispStringRight(pointID[0].x, pointID[0].y, (u8 *)heatDisplayID[current_Ext]);                           //Ext label
   
   GUI_SetColor(VAL_COLOR);
@@ -107,14 +107,14 @@ void drawTemperature(void)
   GUI_DispStringInPrect(&rectB[0], (u8 *)tempstr);                                                //Ext value
 
   GUI_SetColor(HEADING_COLOR);
-  menuDrawItem(&ToolItems[1],1);                                          //Bed icon
+  menuDrawIconOnly(&ToolItems[1],1);                                          //Bed icon
   GUI_DispStringRight(pointID[1].x, pointID[1].y, (u8 *)heatDisplayID[BED]);             //Bed label
   GUI_SetColor(VAL_COLOR);
   my_sprintf(tempstr, "%d/%d", heatGetCurrentTemp(BED), heatGetTargetTemp(BED)); 
   GUI_DispStringInPrect(&rectB[1], (u8 *)tempstr);                        //Bed value
 
   GUI_SetColor(HEADING_COLOR);
-  menuDrawItem(&ToolItems[2],2);                                          //Fan icon
+  menuDrawIconOnly(&ToolItems[2],2);                                          //Fan icon
   GUI_DispStringRight(pointID[2].x, pointID[2].y, (u8 *)fanID[current_fan]);              //Fan label
   GUI_SetColor(VAL_COLOR);
   
@@ -129,7 +129,7 @@ void drawTemperature(void)
   GUI_DispStringInPrect(&rectB[2], (u8 *)tempstr);                        //Fan value
 
   GUI_SetColor(HEADING_COLOR);
-  menuDrawItem(&SpeedItems[current_speedID],3);                           //Speed / flow icon
+  menuDrawIconOnly(&SpeedItems[current_speedID],3);                           //Speed / flow icon
   GUI_DispStringRight(pointID[3].x, pointID[3].y, (u8 *)SpeedID[current_speedID]);       //Speed / flow label
   GUI_SetColor(VAL_COLOR);
   my_sprintf(tempstr, "%d%s", speedGetPercent(current_speedID),"%"); 
@@ -138,7 +138,7 @@ void drawTemperature(void)
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
   GUI_SetColor(GANTRYLBL_COLOR);
   GUI_SetBkColor(GANTRYLBL_BKCOLOR);
-  my_sprintf(tempstr, "X: %.2f   Y: %.2f   Z: %.2f", xaxis, yaxis, zaxis);
+  my_sprintf(tempstr, "   X: %.2f   Y: %.2f   Z: %.2f   ", xaxis, yaxis, zaxis);
   GUI_DispStringInPrect(&RecGantry,(u8 *)tempstr);
   
   GUI_RestoreColorDefault();
@@ -247,9 +247,7 @@ void drawStatusScreenMsg(void)
 //GUI_ClearRect(RectInfo.x0,RectInfo.y0,RectInfo.x1,RectInfo.y1);
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
  
-  GUI_SetColor(INFOBOX_BKCOLOR);
-  GUI_FillPrect(&RectInfo);
-
+  ICON_CustomReadDisplay(RectInfo.x0,RectInfo.y0,INFOBOX_WIDTH,INFOBOX_HEIGHT,INFOBOX_ADDR);
   GUI_SetColor(INFOMSG_BKCOLOR);
   GUI_DispString(RectInfo.x0 + STATUS_MSG_ICON_XOFFSET, RectInfo.y0 + STATUS_MSG_ICON_YOFFSET,IconCharSelect(ICONCHAR_INFO));
 

@@ -227,7 +227,6 @@ void menuCustom(void)
     void sendCustomGcode(uint32_t key_val)
     {
       uint32_t item_index = gc_cur_page*LISTITEM_PER_PAGE+ key_val;
-      storeCmd("%d",item_index);
        if (item_index < CKEY_COUNT){
         storeCmd(gcodelist[item_index][1]);
       }

@@ -124,6 +124,7 @@ void updateIcon(void)
   {
     LOGO_ReadDisplay();
   }
+
   GUI_Clear(BACKGROUND_COLOR);
   for(int i=0; i<COUNT(iconBmpName); i++)
   {
@@ -134,6 +135,10 @@ void updateIcon(void)
       GUI_DispStringInPrect(&labelUpdateRect, (u8 *)nowBmp);
       ICON_ReadDisplay(iconUpdateRect.x0, iconUpdateRect.y0, i);
     }
+  }
+    if(bmpDecode(BMP_ROOT_DIR"/InfoBox.bmp", INFOBOX_ADDR))
+  {
+    ICON_CustomReadDisplay(iconUpdateRect.x0, iconUpdateRect.y0, INFOBOX_WIDTH, INFOBOX_HEIGHT,INFOBOX_ADDR);
   }
 }
 
