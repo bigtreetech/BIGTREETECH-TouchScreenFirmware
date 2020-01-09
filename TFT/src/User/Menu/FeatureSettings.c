@@ -43,15 +43,15 @@
       #define LED_color_NUM 9
        const ITEM itemLedcolor[LED_color_NUM] = {
        // icon                       label
-         {ICON_LEDCOLOR,             LABEL_LEDOFF},
-         {ICON_LEDCOLOR,             LABEL_LEDWHITE},
-         {ICON_LEDCOLOR,             LABEL_LEDRED},
-         {ICON_LEDCOLOR,             LABEL_LEDORANGE},
-         {ICON_LEDCOLOR,             LABEL_LEDYELLOW},
-         {ICON_LEDCOLOR,             LABEL_LEDGREEN},  
-         {ICON_LEDCOLOR,             LABEL_LEDBLUE},
-         {ICON_LEDCOLOR,             LABEL_LEDINDIGO},
-         {ICON_LEDCOLOR,             LABEL_LEDVIOLET},
+         {ICON_LEDCOLOR,             LABEL_OFF},
+         {ICON_LEDCOLOR,             LABEL_WHITE},
+         {ICON_LEDCOLOR,             LABEL_RED},
+         {ICON_LEDCOLOR,             LABEL_ORANGE},
+         {ICON_LEDCOLOR,             LABEL_YELLOW},
+         {ICON_LEDCOLOR,             LABEL_GREEN},  
+         {ICON_LEDCOLOR,             LABEL_BLUE},
+         {ICON_LEDCOLOR,             LABEL_INDIGO},
+         {ICON_LEDCOLOR,             LABEL_VIOLET},
        };
 
        const  uint32_t led_color[LED_color_NUM] = {
@@ -176,6 +176,9 @@
 //
 //setup item states
 //
+    const uint16_t toggleitem[2] = {ICONCHAR_TOGGLE_OFF,ICONCHAR_TOGGLE_ON};
+    const  u8  item_toggleState[2]    = {0, 1};
+    
     #ifdef PS_ON_PIN
       #define ITEM_PS_ON_NUM 2
       const LISTITEM itemPowerOff[ITEM_PS_ON_NUM] = {
@@ -209,9 +212,33 @@
     };
     const  u8 item_movespeed[ITEM_SPEED_NUM] = {LABEL_NORMAL_SPEED, LABEL_SLOW_SPEED, LABEL_FAST_SPEED};
 
-    const uint16_t toggleitem[2] = {ICONCHAR_TOGGLE_OFF,ICONCHAR_TOGGLE_ON};
-    const  u8  item_toggleState[2]    = {0, 1};
+    #ifdef LED_color_PIN
+      #define LED_color_NUM 9
+      const LISTITEM itemLedcolor[LED_color_NUM] = {
+      // icon                       label
+        {ICONCHAR_BLANK, LIST_CUSTOMVALUE, LABEL_KNOB_LED, LABEL_OFF},
+        {ICONCHAR_BLANK, LIST_CUSTOMVALUE, LABEL_KNOB_LED, LABEL_WHITE},
+        {ICONCHAR_BLANK, LIST_CUSTOMVALUE, LABEL_KNOB_LED, LABEL_RED},
+        {ICONCHAR_BLANK, LIST_CUSTOMVALUE, LABEL_KNOB_LED, LABEL_ORANGE},
+        {ICONCHAR_BLANK, LIST_CUSTOMVALUE, LABEL_KNOB_LED, LABEL_YELLOW},
+        {ICONCHAR_BLANK, LIST_CUSTOMVALUE, LABEL_KNOB_LED, LABEL_GREEN},  
+        {ICONCHAR_BLANK, LIST_CUSTOMVALUE, LABEL_KNOB_LED, LABEL_BLUE},
+        {ICONCHAR_BLANK, LIST_CUSTOMVALUE, LABEL_KNOB_LED, LABEL_INDIGO},
+        {ICONCHAR_BLANK, LIST_CUSTOMVALUE, LABEL_KNOB_LED, LABEL_VIOLET},
+      };
+      const  uint32_t led_color[LED_color_NUM] = {
+                                        LED_OFF,
+                                        LED_WHITE,
+                                        LED_RED,
+                                        LED_ORANGE,
+                                        LED_YELLOW,
+                                        LED_GREEN,
+                                        LED_BLUE,
+                                        LED_INDIGO,
+                                        LED_VIOLET
+                                        };
 
+    #endif
 //
 //add key number index of the items
 //
@@ -227,6 +254,9 @@
         SKEY_RUNOUT,
       #endif
       SKEY_SPEED,
+      #ifdef LED_color_PIN
+      SKEY_KNOB,
+      #endif
       SKEY_COUNT //keep this always at the end
     }SKEY_LIST; 
     
@@ -246,7 +276,10 @@
       #ifdef FIL_RUNOUT_PIN
       {ICONCHAR_TOGGLE_ON,  LIST_CUSTOMVALUE,   LABEL_FILAMENT_RUNOUT,    LABEL_OFF       },
       #endif
-      {ICONCHAR_TOGGLE_ON,  LIST_CUSTOMVALUE,   LABEL_MOVE_SPEED,   LABEL_NORMAL_SPEED},
+      {ICONCHAR_TOGGLE_ON,  LIST_CUSTOMVALUE,   LABEL_MOVE_SPEED,         LABEL_NORMAL_SPEED},
+      #ifdef LED_color_PIN
+      {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_KNOB_LED,           LABEL_OFF       },
+      #endif
       
     };
 
@@ -305,6 +338,17 @@
         featureSettingsItems.items[key_val] = settingPage[item_index];
         menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
         break;
+
+        #ifdef LED_color_PIN
+        case SKEY_KNOB:            
+        infoSettings.led_color = (infoSettings.led_color + 1) % LED_color_NUM;                
+        settingPage[item_index] = itemLedcolor[infoSettings.led_color];
+        featureSettingsItems.items[key_val] = settingPage[item_index];
+        menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
+        ws2812_send_DAT(led_color[infoSettings.led_color]);
+        break;
+        #endif
+
       default:
         break;
       }
@@ -362,6 +406,13 @@
           case SKEY_SPEED:
               featureSettingsItems.items[i] = itemMoveSpeed[infoSettings.move_speed];
             break;
+
+          #ifdef LED_color_PIN
+            case SKEY_KNOB:                           
+            settingPage[item_index] = itemLedcolor[infoSettings.led_color];
+            featureSettingsItems.items[i] = settingPage[item_index];
+            break;
+          #endif
 
           default:
             settingPage[item_index].icon = ICONCHAR_BACKGROUND;
