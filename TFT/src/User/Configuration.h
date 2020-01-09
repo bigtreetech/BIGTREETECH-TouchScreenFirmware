@@ -39,8 +39,8 @@
 #define VOLUME_REMINDER_FONT_COLOR  GBLUE  // Volume reminder font color,such as: "Card inserted", "Card removed"
 
 
-#define TOOL_NUM     1    // set in 1~6
-#define EXTRUDER_NUM 1    // set in 1~6
+#define TOOL_NUM     2    // set in 1~6
+#define EXTRUDER_NUM 2    // set in 1~6
 #define FAN_NUM      1    // set in 1~6
 
 //                       PLA      PETG       ABS
