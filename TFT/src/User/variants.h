@@ -231,7 +231,6 @@
 #elif defined(TFT35_V3_0) || defined(TFT28_V3_0)
   #define BUZZER_PIN    PD13
 #elif defined(MKS_32_V1_4)
-  //Keep Things quiet 
   #define BUZZER_PIN    PA2
 #endif
 
@@ -247,7 +246,6 @@
   #define LCD_ENCB_PIN  PC9
   #define LCD_BTN_PIN   PC8
 #elif defined(MKS_32_V1_4)
-
 #endif
 #define LCD_ENCODER_SUPPORT (defined(LCD_ENCA_PIN) && defined(LCD_ENCB_PIN) && defined(LCD_BTN_PIN))
 
@@ -294,10 +292,14 @@
   #define LIST_ICON_WIDTH   85
   #define LIST_ICON_HEIGHT  70
 
-  #define SMALLICON_WIDTH   24
+  #define INFOBOX_WIDTH     215
+  #define INFOBOX_HEIGHT    95
+
+  #define SMALLICON_WIDTH    24
   #define SMALLICON_HEIGHT   24
 
   #define selecticonw 95
+  
 #elif defined(TFT28_V1_0) || defined(TFT24_V1_1) || defined(TFT28_V3_0) || defined(MKS_32_V1_4)
   #define LCD_WIDTH	  320
   #define LCD_HEIGHT	240
@@ -313,6 +315,9 @@
   #define LIST_ICON_WIDTH   55
   #define LIST_ICON_HEIGHT  50
   
+  #define INFOBOX_WIDTH     150
+  #define INFOBOX_HEIGHT    70
+
   #define SMALLICON_WIDTH   16
   #define SMALLICON_HEIGHT   16
   

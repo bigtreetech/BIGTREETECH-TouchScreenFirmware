@@ -227,7 +227,6 @@ void menuCustom(void)
     void sendCustomGcode(uint32_t key_val)
     {
       uint32_t item_index = gc_cur_page*LISTITEM_PER_PAGE+ key_val;
-      storeCmd("%d",item_index);
        if (item_index < CKEY_COUNT){
         storeCmd(gcodelist[item_index][1]);
       }
@@ -325,11 +324,11 @@ MENUITEMS RGBItems = {
 // title
 LABEL_RGB_SETTINGS,
 // icon                       label
- {{ICON_RGB_RED,              LABEL_RGB_RED},
-  {ICON_RGB_GREEN,            LABEL_RGB_GREEN},
-  {ICON_RGB_BLUE,             LABEL_RGB_BLUE},
-  {ICON_RGB_WHITE,            LABEL_RGB_WHITE},
-  {ICON_RGB_OFF,              LABEL_RGB_OFF},
+ {{ICON_RGB_RED,              LABEL_RED},
+  {ICON_RGB_GREEN,            LABEL_GREEN},
+  {ICON_RGB_BLUE,             LABEL_BLUE},
+  {ICON_RGB_WHITE,            LABEL_WHITE},
+  {ICON_RGB_OFF,              LABEL_OFF},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_BACK,                 LABEL_BACK},}
