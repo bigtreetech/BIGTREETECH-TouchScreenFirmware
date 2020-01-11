@@ -16,10 +16,6 @@
     #define DU_SILENT_OFF           "Stil Uit"
     #define DU_SHUT_DOWN            "Uitschakelen"
     #define DU_RGB_SETTINGS         "LED Kleur"
-    #define DU_RGB_RED              "Rood"
-    #define DU_RGB_GREEN            "Groen"
-    #define DU_RGB_BLUE             "Blauw"
-    #define DU_RGB_WHITE            "Wit"
     #define DU_RGB_OFF              "LED Uit"
     #define DU_GCODE                "Gcode"
     #define DU_CUSTOM               "Aangepast"
@@ -66,6 +62,9 @@
     #define DU_YELLOW               "Geel"
     #define DU_BROWN                "Bruin"
     #define DU_GRAY                 "Grijs"
+    #define DU_ORANGE               "Oranje"
+    #define DU_INDIGO               "Indigo"
+    #define DU_VIOLET               "Violet
     #define DU_DISCONNECT           "Loskoppelen"
     #define DU_BAUDRATE_115200      "115200"
     #define DU_BAUDRATE_250000      "250000"
@@ -142,15 +141,6 @@
     #define DU_WAIT_TEMP_SHUT_DOWN  "Wacht tot de temperatuur van de spuitkop lager dan " STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP) "℃ is" // Wait for the temperature of hotend to be lower than 50℃
     #define DU_FORCE_SHUT_DOWN      "Forceer Afsluiten"
     #define DU_SHUTTING_DOWN        "Afsluiten..."
-    #define DU_LEDOFF               "UIT"
-    #define DU_LEDWHITE             "Wit"
-    #define DU_LEDRED               "Rood"
-    #define DU_LEDORANGE            "Oranje"
-    #define DU_LEDYELLOW            "Geel"
-    #define DU_LEDGREEN             "Groen"
-    #define DU_LEDBLUE              "Blauw"
-    #define DU_LEDINDIGO            "Indigo"
-    #define DU_LEDVIOLET            "Violet"
     #define DU_PARAMETER_SETTING    "Parameter"
     #define DU_ON                   "AAN"
     #define DU_OFF                  "UIT"
@@ -160,5 +150,6 @@
     #define DU_INVERT_YAXIS         "Inverteer Y Axis"
     #define DU_INVERT_ZAXIS         "Inverteer Z Axis"
     #define DU_MOVE_SPEED           "Bewegingssnelheid(X Y Z)"
+    #define EN_KNOB_LED             "Rotary Knob LED"
 
 #endif
