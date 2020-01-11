@@ -150,6 +150,6 @@
     #define DU_INVERT_YAXIS         "Inverteer Y Axis"
     #define DU_INVERT_ZAXIS         "Inverteer Z Axis"
     #define DU_MOVE_SPEED           "Bewegingssnelheid(X Y Z)"
-    #define EN_KNOB_LED             "Rotary Knob LED"
+    #define DU_KNOB_LED             "Rotary Knob LED"
 
 #endif
