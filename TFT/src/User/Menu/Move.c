@@ -270,7 +270,7 @@ void menuMove(void)
                       storeCmd(ZGCODE_INC, item_move_len[item_move_len_i]);
                     }
                   #else
-                  storeCmd(ZGCODE_DOWN,   item_move_len[item_move_len_i]);  break;
+                  storeCmd(ZGCODE_UP,   item_move_len[item_move_len_i]);  break;
                   #endif
                   break;
 
@@ -291,7 +291,7 @@ void menuMove(void)
                       storeCmd(YGCODE_DEC, item_move_len[item_move_len_i]);
                     }
                   #else
-                    storeCmd(YGCODE_UP, item_move_len[item_move_len_i]);
+                    storeCmd(YGCODE_DOWN, item_move_len[item_move_len_i]);
                   #endif
                   break;
 
@@ -304,7 +304,7 @@ void menuMove(void)
                       storeCmd(ZGCODE_DEC, item_move_len[item_move_len_i]);
                     }
                   #else
-                    storeCmd(ZGCODE_UP,   item_move_len[item_move_len_i]);  break;
+                    storeCmd(ZGCODE_DOWN,   item_move_len[item_move_len_i]);  break;
                   #endif
                   break;
 
