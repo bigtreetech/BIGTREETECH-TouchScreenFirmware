@@ -64,7 +64,7 @@
     #define DU_GRAY                 "Grijs"
     #define DU_ORANGE               "Oranje"
     #define DU_INDIGO               "Indigo"
-    #define DU_VIOLET               "Violet
+    #define DU_VIOLET               "Violet"
     #define DU_DISCONNECT           "Loskoppelen"
     #define DU_BAUDRATE_115200      "115200"
     #define DU_BAUDRATE_250000      "250000"
