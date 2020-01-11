@@ -43,7 +43,7 @@ void gantry_inc(int n, float val);
   #define STATUS_GANTRY_YOFFSET       6
 
 
-#elif defined(TFT28_V1_0) || defined(TFT24_V1_1)
+#elif defined(TFT28_V1_0) || defined(TFT24_V1_1) || defined(TFT28_V3_0)
 
   #define SSICON_VAL_Y0           47
   //#define  statusicon_val_charcount  7
