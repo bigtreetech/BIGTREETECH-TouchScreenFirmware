@@ -294,22 +294,19 @@
         case SKEY_HIDEACK:
         infoSettings.terminalACK = (infoSettings.terminalACK + 1) % 2;
         settingPage[item_index].icon = toggleitem[infoSettings.terminalACK];
-        featureSettingsItems.items[key_val].icon = toggleitem[infoSettings.terminalACK];;
-        menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
+        featureSettingsItems.items[key_val].icon = toggleitem[infoSettings.terminalACK];
         break;
 
         case SKEY_INVERT_Y:
         infoSettings.invert_yaxis = (infoSettings.invert_yaxis + 1) % 2;
         settingPage[item_index].icon = toggleitem[infoSettings.invert_yaxis];
         featureSettingsItems.items[key_val] = settingPage[item_index];
-        menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
         break;
 
         case SKEY_INVERT_Z:
         infoSettings.invert_zaxis = (infoSettings.invert_zaxis + 1) % 2;
         settingPage[item_index].icon = toggleitem[infoSettings.invert_zaxis];
         featureSettingsItems.items[key_val] = settingPage[item_index];
-        menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
         break;
 
         #ifdef PS_ON_PIN
@@ -317,7 +314,6 @@
         item_power_off_i = (item_power_off_i + 1) % ITEM_PS_ON_NUM;
         settingPage[item_index] = itemPowerOff[item_power_off_i];
         featureSettingsItems.items[key_val] = settingPage[item_index];
-        menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
         infoSettings.auto_off = item_power_off[item_power_off_i];
         break;
         #endif
@@ -327,7 +323,6 @@
         item_runout_i = (item_runout_i + 1) % ITEM_RUNOUT_NUM;
         settingPage[item_index] = itemRunout[item_runout_i];
         featureSettingsItems.items[key_val] = settingPage[item_index];
-        menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
         infoSettings.runout = item_runout[item_runout_i];
         break;
         #endif
@@ -336,7 +331,6 @@
         infoSettings.move_speed = (infoSettings.move_speed + 1) % ITEM_SPEED_NUM;
         settingPage[item_index] = itemMoveSpeed[infoSettings.move_speed];
         featureSettingsItems.items[key_val] = settingPage[item_index];
-        menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
         break;
 
         #ifdef LED_color_PIN
@@ -344,7 +338,6 @@
         infoSettings.led_color = (infoSettings.led_color + 1) % LED_color_NUM;                
         settingPage[item_index] = itemLedcolor[infoSettings.led_color];
         featureSettingsItems.items[key_val] = settingPage[item_index];
-        menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
         ws2812_send_DAT(led_color[infoSettings.led_color]);
         break;
         #endif
@@ -447,13 +440,6 @@
       
     }
 
-    void refreshItemsDisplay(){
-      for (uint8_t i = 0; i < ITEM_PER_PAGE; i++)
-      {
-        menuDrawListItem(&featureSettingsItems.items[i],i);
-      }
-    }
-
     void menuFeatureSettings(void)
     {
       KEY_VALUES key_num = KEY_IDLE;
@@ -472,7 +458,7 @@
             if (fe_cur_page > 0){
               fe_cur_page--;
               loadFeatureSettings();
-              refreshItemsDisplay();
+              menuRefreshListPage();
             }
           }
           break;
@@ -482,7 +468,7 @@
             if (fe_cur_page < FE_PAGE_COUNT - 1){
               fe_cur_page++;
               loadFeatureSettings();
-              refreshItemsDisplay();
+              menuRefreshListPage();
             }
           }
           break;

@@ -151,5 +151,6 @@
     #define ES_INVERT_ZAXIS         "Invert Z Axis"
     #define ES_MOVE_SPEED           "Move speed(X Y Z)"
     #define ES_KNOB_LED             "Rotary Knob LED"
+    #define ES_M0_PAUSE             "Paused by M0 command"
 
 #endif

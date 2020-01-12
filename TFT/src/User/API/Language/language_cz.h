@@ -151,5 +151,6 @@
     #define CZ_INVERT_ZAXIS         "Invert Z Axis"
     #define CZ_MOVE_SPEED           "Move speed(X Y Z)"
     #define CZ_KNOB_LED             "Rotary Knob LED"
+    #define CZ_M0_PAUSE             "Paused by M0 command"
 
 #endif

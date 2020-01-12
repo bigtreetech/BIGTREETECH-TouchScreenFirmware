@@ -151,5 +151,6 @@
     #define PL_INVERT_ZAXIS         "Invert Z Axis"
     #define PL_MOVE_SPEED           "Move speed(X Y Z)"
     #define PL_KNOB_LED             "Rotary Knob LED"
+    #define PL_M0_PAUSE             "Przerwa wywolana rozkazem M0"
 
 #endif
