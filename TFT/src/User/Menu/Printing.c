@@ -240,7 +240,11 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
       {
         //restore status before pause
         //if pause was triggered through M0/M1 then break
-      if(is_m0pause == true) {setM0Pause(is_m0pause);break;}
+      if(is_m0pause == true) {
+        setM0Pause(is_m0pause);
+        popupReminder(textSelect(LABEL_PAUSE), textSelect(LABEL_M0_PAUSE));
+        break;
+        }
       
         coordinateGetAll(&tmp);
         if (isCoorRelative == true)     mustStoreCmd("G90\n");
@@ -261,7 +265,7 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
       {
       if(isM0_Pause() == true) {
         setM0Pause(is_m0pause);
-        mustStoreCmd("M108\n");
+        Serial_Puts(SERIAL_PORT, "M108\n");
         break;
         }
         if (isCoorRelative == true)     mustStoreCmd("G90\n");

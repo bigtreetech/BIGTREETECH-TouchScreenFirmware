@@ -152,5 +152,6 @@
     #define SK_INVERT_ZAXIS         "Invert Z Axis"
     #define SK_MOVE_SPEED           "Move speed(X Y Z)"
     #define SK_KNOB_LED             "Rotary Knob LED"
+    #define SK_M0_PAUSE             "Paused by M0 command"
 
 #endif
