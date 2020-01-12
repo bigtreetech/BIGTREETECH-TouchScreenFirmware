@@ -259,7 +259,11 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
       }
       else
       {
-      if(isM0_Pause() == true) {  setM0Pause(is_m0pause);break;}
+      if(isM0_Pause() == true) {
+        setM0Pause(is_m0pause);
+        mustStoreCmd("M108\n");
+        break;
+        }
         if (isCoorRelative == true)     mustStoreCmd("G90\n");
         if (isExtrudeRelative == true)  mustStoreCmd("M82\n");
         
@@ -419,10 +423,6 @@ void menuPrinting(void)
     {
       case KEY_ICON_0:
         setPrintPause(!isPause(),false);
-        if(isM0_Pause() == true){
-          storeCmd("M108\n");
-          }
-
         break;
       
       case KEY_ICON_3:
