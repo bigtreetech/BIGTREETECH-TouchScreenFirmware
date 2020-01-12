@@ -333,11 +333,11 @@ void drawXYZ(void){
   char tempstr[100];
   //GUI_SetColor(GANTRYLBL_BKCOLOR);
   //GUI_FillPrect(&RecXYZ);
-  my_sprintf(tempstr, "X:%.1f  ", getAxisLocation(0));  
+  my_sprintf(tempstr, "X:%.2f  ", getAxisLocation(0));  
   GUI_DispString(START_X+1*SPACE_X+1*ICON_WIDTH,(ICON_START_Y-BYTE_HEIGHT)/2,(u8 *)tempstr);
-  my_sprintf(tempstr, "Y:%.1f  ", getAxisLocation(1));
+  my_sprintf(tempstr, "Y:%.2f  ", getAxisLocation(1));
   GUI_DispString(START_X+2*SPACE_X+2*ICON_WIDTH,(ICON_START_Y-BYTE_HEIGHT)/2,(u8 *)tempstr);
-  my_sprintf(tempstr, "Z:%.1f  ", getAxisLocation(2));
+  my_sprintf(tempstr, "Z:%.2f  ", getAxisLocation(2));
   GUI_DispString(START_X+3*SPACE_X+3*ICON_WIDTH,(ICON_START_Y-BYTE_HEIGHT)/2,(u8 *)tempstr);
   
   //GUI_SetBkColor(BACKGROUND_COLOR);
