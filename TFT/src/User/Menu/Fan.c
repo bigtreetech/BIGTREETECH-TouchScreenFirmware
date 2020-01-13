@@ -97,8 +97,8 @@ void menuFan(void)
     switch(key_num)
     {
       case KEY_ICON_0:
-        if (fanSpeed[curIndex] > 0)
-            #ifdef SHOW_FAN_PERCENTAGE
+        if (fanSpeed[curIndex] > 0) {
+            #ifdef SHOW_FAN_PERCENTAGE 
               if ((fanSpeed[curIndex]-2) > 0) {
                 fanSpeed[curIndex]-=2; //2.55 is 1 percent, rounding down
               } else {
@@ -107,6 +107,7 @@ void menuFan(void)
             #else
               fanSpeed[curIndex]--;
             #endif   
+        }
         break;
         
       case KEY_ICON_3:

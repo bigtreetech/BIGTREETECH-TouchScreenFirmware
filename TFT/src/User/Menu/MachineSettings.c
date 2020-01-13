@@ -248,7 +248,6 @@ void menuCustom(void)
           customItems.items[i].icon = ICONCHAR_BACKGROUND;
           customItems.items[i].titlelabel.index = LABEL_BACKGROUND;
         }
-        menuDrawListItem(&customItems.items[i],i);
      }
       // set page up down button according to page count and current page
       if (CKEY_COUNT <= LISTITEM_PER_PAGE)
@@ -272,8 +271,8 @@ void menuCustom(void)
           customItems.items[6].icon = ICONCHAR_PAGEDOWN;
         }
       }
-      menuDrawListItem(&customItems.items[5],5);
-      menuDrawListItem(&customItems.items[6],6);
+         // menuDrawListItem(&customItems.items[5],5);
+          //menuDrawListItem(&customItems.items[6],6);
     }
 
 void menuCustom(void)
@@ -296,7 +295,7 @@ void menuCustom(void)
           if(GC_PAGE_COUNT > 1){
             if (gc_cur_page > 0){
               gc_cur_page--;
-              loaditemsCustomGcode();
+              menuRefreshListPage();
             }
           }
           break;
@@ -304,7 +303,7 @@ void menuCustom(void)
           if(GC_PAGE_COUNT > 1){
             if (gc_cur_page < GC_PAGE_COUNT-1){
               gc_cur_page++;
-              loaditemsCustomGcode();
+              menuRefreshListPage();
             }
           }
           break;
