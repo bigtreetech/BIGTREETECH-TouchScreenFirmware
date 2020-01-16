@@ -209,6 +209,10 @@ void parseACK(void)
     {
       busyIndicator(STATUS_BUSY);
     }
+    else if(ack_seen(echomagic) && ack_seen(busymagic) && ack_seen("paused for user"))
+    {
+      goto parse_end;
+    }
     else if(ack_seen("X driver current: "))
     {
       Get_parameter_value[0] = ack_value();

@@ -151,5 +151,6 @@
     #define AM_INVERT_ZAXIS         "Invert Z Axis"
     #define AM_MOVE_SPEED           "Move speed(X Y Z)"
     #define AM_KNOB_LED             "Rotary Knob LED"
+    #define AM_M0_PAUSE             "Paused by M0 command"
 
 #endif

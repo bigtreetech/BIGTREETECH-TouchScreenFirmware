@@ -138,7 +138,7 @@ void loopFILRunoutDetect(void)
   if (!FIL_IsRunout()) return; // Filament not runout yet, need constant scanning to filter interference
   if (!isPrinting() || isPause())  return; // No printing or printing paused
   
-  if (setPrintPause(true))
+  if (setPrintPause(true,false))
   {
     popupReminder(textSelect(LABEL_WARNING), textSelect(LABEL_FILAMENT_RUNOUT));
   }

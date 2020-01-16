@@ -14,6 +14,7 @@ typedef struct
   u8      progress;
   bool    printing; // 1 means printing, 0 means idle
   bool    pause; //1 means paused
+  bool    m0_pause; //pause triggered through M0/M1 gcode
 }PRINTING;
 
 void exitPrinting(void);
@@ -21,10 +22,12 @@ void endPrinting(void);
 void completePrinting(void);
 void abortPrinting(void);
 
-bool setPrintPause(bool is_pause);
+void setM0Pause(bool m0_pause);
+bool setPrintPause(bool is_pause,bool is_m0pause);
 
 bool isPrinting(void);	
 bool isPause(void);
+bool isM0_Pause(void);
 void setPrintingTime(u32 RTtime);
 
 void setPrintSize(u32 size);
