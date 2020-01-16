@@ -307,7 +307,6 @@ void parametersetting(void)
 void temp_Change(void)
 {
     //static FP_MENU NUM[MAX_MENU_DEPTH];
-    char tempstr[10];
     static int16_t compare [2];
   
     if(infoHost.connected == false || infoMenu.menu[infoMenu.cur] == menuPrinting)    return;
