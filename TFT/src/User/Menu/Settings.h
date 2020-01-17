@@ -26,6 +26,8 @@ typedef struct
   uint8_t  move_speed;
   uint32_t led_color;
   uint8_t  invert_zaxis;
+  uint8_t  send_start_gcode;
+  uint8_t  send_end_gcode;
 }SETTINGS;
 
 

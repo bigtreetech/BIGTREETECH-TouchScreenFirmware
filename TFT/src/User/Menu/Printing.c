@@ -97,13 +97,12 @@ void printSetUpdateWaiting(bool isWaiting)
 
 void startGcodeExecute(void)
 {    
-
+  mustStoreCmd(PRINT_START_GCODE);
 }
 
 void endGcodeExecute(void)
 {
-  mustStoreCmd("G90\n");
-  mustStoreCmd("G92 E0\n");
+
   for(TOOL i = BED; i < HEATER_NUM; i++)
   {
     mustStoreCmd("%s S0\n", heatCmd[i]);  
@@ -112,8 +111,7 @@ void endGcodeExecute(void)
   {
     mustStoreCmd("%s S0\n", fanCmd[i]);  
   }
-  mustStoreCmd("T0\n");
-  mustStoreCmd("M18\n");
+  mustStoreCmd(PRINT_END_GCODE);
 }
 
 //only return gcode file name except path
@@ -185,8 +183,9 @@ void menuBeforePrinting(void)
 
       infoPrinting.size  = f_size(&infoPrinting.file);
       infoPrinting.cur   = infoPrinting.file.fptr;
-
-      startGcodeExecute();
+      if(infoSettings.send_start_gcode == 1){
+        startGcodeExecute();
+      }
       break;
   }
   infoPrinting.printing = true;
@@ -483,7 +482,9 @@ void endPrinting(void)
   infoPrinting.printing = infoPrinting.pause = false;
   powerFailedClose();
   powerFailedDelete();  
-  endGcodeExecute();
+  if(infoSettings.send_end_gcode == 1){  
+    endGcodeExecute();
+  }
 }
 
 

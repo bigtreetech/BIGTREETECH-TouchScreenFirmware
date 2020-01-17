@@ -152,5 +152,7 @@
     #define CZ_MOVE_SPEED           "Move speed(X Y Z)"
     #define CZ_KNOB_LED             "Rotary Knob LED"
     #define CZ_M0_PAUSE             "Paused by M0 command"
+    #define CZ_SEND_START_GCODE     "Start Gcode before print"
+    #define CZ_SEND_END_GCODE       "End Gcode after print"
 
 #endif

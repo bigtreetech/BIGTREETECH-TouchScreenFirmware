@@ -152,5 +152,7 @@
     #define DE_MOVE_SPEED           "Move speed(X Y Z)"
     #define DE_KNOB_LED             "Rotary Knob LED"
     #define DE_M0_PAUSE             "Paused by M0 command"
+    #define DE_SEND_START_GCODE     "Start Gcode before print"
+    #define DE_SEND_END_GCODE       "End Gcode after print"
     
 #endif

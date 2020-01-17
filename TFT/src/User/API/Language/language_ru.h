@@ -152,5 +152,7 @@
     #define RU_MOVE_SPEED           "Скорость (X Y Z)"
     #define RU_KNOB_LED             "Rotary Knob LED"
     #define RU_M0_PAUSE             "Paused by M0 command"
+    #define RU_SEND_START_GCODE     "Start Gcode before print"
+    #define RU_SEND_END_GCODE       "End Gcode after print"
     
 #endif
