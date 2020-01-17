@@ -150,7 +150,7 @@
     #define RU_INVERT_YAXIS         "Инверсия оси Y"
     #define RU_INVERT_ZAXIS         "Инверсия оси Z"
     #define RU_MOVE_SPEED           "Скорость (X Y Z)"
-    #define RU_KNOB_LED             "Rotary Knob LED"
-    #define RU_M0_PAUSE             "Paused by M0 command"
+    #define RU_KNOB_LED             "LED энкодер"
+    #define RU_M0_PAUSE             "Пауза по команде M0"
     
 #endif
