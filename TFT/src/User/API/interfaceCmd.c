@@ -157,6 +157,16 @@ void sendQueueCmd(void)
       cmd=strtol(&infoCmd.queue[infoCmd.index_r].gcode[1],NULL,10);
       switch(cmd)
       {
+        case 0:
+          if (isPrinting()) {
+            setPrintPause(true,true);
+          }
+          break;
+        case 1:
+          if (isPrinting()) {
+            setPrintPause(true,true);
+          }
+          break;
         case 18: //M18/M84 disable steppers
         case 84:
           coordinateSetClear(false);
