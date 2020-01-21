@@ -22,6 +22,7 @@ void infoSettingsReset(void)
   infoSettings.invert_zaxis = 0;
   infoSettings.send_start_gcode = 1;
   infoSettings.send_end_gcode = 1;
+  infoSettings.persistent_info = 1;
   
 }
 

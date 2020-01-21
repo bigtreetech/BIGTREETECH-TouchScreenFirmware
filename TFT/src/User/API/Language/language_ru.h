@@ -154,5 +154,6 @@
     #define RU_M0_PAUSE             "Paused by M0 command"
     #define RU_SEND_START_GCODE     "Start Gcode before print"
     #define RU_SEND_END_GCODE       "End Gcode after print"
+    #define RU_PERSISTANT_STATUS_INFO "Persistent Status Info"
     
 #endif

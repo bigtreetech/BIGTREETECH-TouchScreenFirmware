@@ -154,5 +154,6 @@
     #define JP_M0_PAUSE             "Paused by M0 command"
     #define JP_SEND_START_GCODE     "Start Gcode before print"
     #define JP_SEND_END_GCODE       "End Gcode after print"
+    #define JP_PERSISTANT_STATUS_INFO "Persistent Status Info"
     
 #endif

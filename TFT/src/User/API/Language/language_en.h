@@ -154,5 +154,6 @@
     #define EN_M0_PAUSE             "Paused by M0 command"
     #define EN_SEND_START_GCODE     "Start Gcode before print"
     #define EN_SEND_END_GCODE       "End Gcode after print"
+    #define EN_PERSISTANT_STATUS_INFO "Persistent Status Info"
 
 #endif

@@ -246,6 +246,7 @@
       SKEY_SPEED,
       SKEY_STARTGCODE,
       SKEY_ENDGCODE,
+      SKEY_PERSISTENTINFO,
       #ifdef LED_color_PIN
       SKEY_KNOB,
       #endif
@@ -266,11 +267,12 @@
       {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_AUTO_SHUT_DOWN,     LABEL_BACKGROUND},
       #endif
       #ifdef FIL_RUNOUT_PIN
-      {ICONCHAR_BLANK,  LIST_CUSTOMVALUE,   LABEL_FILAMENT_RUNOUT,    LABEL_OFF       },
+      {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_FILAMENT_RUNOUT,    LABEL_OFF       },
       #endif
-      {ICONCHAR_BLANK,  LIST_CUSTOMVALUE,   LABEL_MOVE_SPEED,         LABEL_NORMAL_SPEED},
-      {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_SEND_START_GCODE,   LABEL_BACKGROUND},
-      {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_SEND_END_GCODE,     LABEL_BACKGROUND},
+      {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_MOVE_SPEED,                 LABEL_NORMAL_SPEED},
+      {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_SEND_START_GCODE,           LABEL_BACKGROUND},
+      {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_SEND_END_GCODE,             LABEL_BACKGROUND},
+      {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_PERSISTENT_STATUS_INFO,     LABEL_BACKGROUND},
       #ifdef LED_color_PIN
       {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_KNOB_LED,           LABEL_OFF       },
       #endif
@@ -352,6 +354,14 @@
 
         menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
         break;
+        
+        case SKEY_PERSISTENTINFO:
+        infoSettings.persistent_info = (infoSettings.persistent_info + 1) % TOGGLE_NUM;
+        settingPage[item_index].icon = toggleitem[infoSettings.persistent_info];
+        featureSettingsItems.items[key_val] = settingPage[item_index];
+
+        menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
+        break;
 
         #ifdef LED_color_PIN
         case SKEY_KNOB:            
@@ -419,6 +429,11 @@
 
           case SKEY_ENDGCODE:
             settingPage[item_index].icon  = toggleitem[infoSettings.send_end_gcode];
+            featureSettingsItems.items[i] = settingPage[item_index];
+            break;
+
+          case SKEY_PERSISTENTINFO:
+            settingPage[item_index].icon  = toggleitem[infoSettings.persistent_info];
             featureSettingsItems.items[i] = settingPage[item_index];
             break;
 

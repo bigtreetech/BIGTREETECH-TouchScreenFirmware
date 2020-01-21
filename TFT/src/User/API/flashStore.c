@@ -70,6 +70,7 @@ bool readStoredPara(void)
     infoSettings.invert_zaxis     = byteToWord(data + (index += 4), 4);
     infoSettings.send_start_gcode = byteToWord(data + (index += 4), 4);
     infoSettings.send_end_gcode   = byteToWord(data + (index += 4), 4);
+    infoSettings.persistent_info  = byteToWord(data + (index += 4), 4);
   }
   
   return paraExist;
@@ -101,6 +102,7 @@ void storePara(void)
   wordToByte(infoSettings.invert_zaxis,       data + (index += 4));
   wordToByte(infoSettings.send_start_gcode,   data + (index += 4));
   wordToByte(infoSettings.send_end_gcode,     data + (index += 4));
+  wordToByte(infoSettings.persistent_info,    data + (index += 4));
   
   STM32_FlashWrite(data, PARA_SIZE);
 }

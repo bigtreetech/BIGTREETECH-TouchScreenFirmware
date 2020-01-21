@@ -180,6 +180,7 @@ enum
   LABEL_M0_PAUSE,
   LABEL_SEND_START_GCODE,
   LABEL_SEND_END_GCODE,
+  LABEL_PERSISTENT_STATUS_INFO,
   
   //add new keywords above this line only
   //keep the following always at the end of this list
