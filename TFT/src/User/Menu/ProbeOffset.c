@@ -80,7 +80,9 @@ void menuProbeOffset(void)
   menuDrawPage(&probeOffsetItems);
   showProbeOffset();
 
-  encoderPosition = 0;
+  #if LCD_ENCODER_SUPPORT
+    encoderPosition = 0;    
+  #endif
 
   while(infoMenu.menu[infoMenu.cur] == menuProbeOffset)
   {

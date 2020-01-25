@@ -75,7 +75,9 @@ void menuBabyStep(void)
   menuDrawPage(&babyStepItems);
   showBabyStep();
 
-  encoderPosition = 0;
+  #if LCD_ENCODER_SUPPORT
+    encoderPosition = 0;    
+  #endif
 
   while(infoMenu.menu[infoMenu.cur] == menuBabyStep)
   {
