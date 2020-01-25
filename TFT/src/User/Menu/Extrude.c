@@ -83,6 +83,8 @@ void menuExtrude(void)
 
   menuDrawPage(&extrudeItems);
   showExtrudeCoordinate();
+
+  encoderPosition = 0; 
   
   if(eRelative) mustStoreCmd("M82\n"); // Set extruder to absolute
   while(infoMenu.menu[infoMenu.cur] == menuExtrude)
@@ -120,6 +122,14 @@ void menuExtrude(void)
         break;
       
       default:
+        #if LCD_ENCODER_SUPPORT
+          if(encoderPosition)
+          {
+            eTemp += item_len[item_len_i]*encoderPosition;
+            encoderPosition = 0;    
+          }
+          LCD_LoopEncoder();
+        #endif
         break;            
     }	
     if(extrudeCoordinate != eTemp)
