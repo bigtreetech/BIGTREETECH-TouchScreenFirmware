@@ -34,7 +34,15 @@
     #define ZGCODE_DOWN "G1 Z-%.1f\n"
   #endif
 
+  #define X 0
+  #define Y 1
+  #define Z 2
+
 #endif
+
+AXIS a = X_AXIS;
+
+
 
 //1 title, ITEM_PER_PAGE item
 MENUITEMS moveItems = {
@@ -167,6 +175,8 @@ void menuMove(void)
   mustStoreCmd("M114\n");
   drawXYZ();
 
+  encoderPosition = 0;
+
   while(infoMenu.menu[infoMenu.cur] == menuMove)
   {
     key_num = menuKeyGetValue();
@@ -240,7 +250,10 @@ void menuMove(void)
         
       #else
 
-            case KEY_ICON_0: storeCmd("G1 X%.1f\n",  item_move_len[item_move_len_i]);  break;
+            case KEY_ICON_0: 
+              a = X_AXIS;
+              storeCmd("G1 X%.1f\n",  item_move_len[item_move_len_i]);  
+              break;
 
             case KEY_ICON_1:
                   #ifdef MENU_LIST_MODE
@@ -251,6 +264,7 @@ void menuMove(void)
                       storeCmd(YGCODE_INC, item_move_len[item_move_len_i]);
                     }
                   #else
+                    a = Y_AXIS;
                     storeCmd(YGCODE_UP, item_move_len[item_move_len_i]);
                   #endif
                   break;
@@ -264,6 +278,7 @@ void menuMove(void)
                       storeCmd(ZGCODE_INC, item_move_len[item_move_len_i]);
                     }
                   #else
+                  a = Z_AXIS;
                   storeCmd(ZGCODE_UP,   item_move_len[item_move_len_i]);  break;
                   #endif
                   break;
@@ -274,7 +289,10 @@ void menuMove(void)
                   menuDrawItem(&moveItems.items[key_num], key_num);
                   break;
 
-            case KEY_ICON_4: storeCmd("G1 X-%.1f\n", item_move_len[item_move_len_i]);  break;
+            case KEY_ICON_4: 
+              a = X_AXIS;
+              storeCmd("G1 X-%.1f\n", item_move_len[item_move_len_i]);  
+              break;
 
             case KEY_ICON_5:
                   #ifdef MENU_LIST_MODE
@@ -285,6 +303,7 @@ void menuMove(void)
                       storeCmd(YGCODE_DEC, item_move_len[item_move_len_i]);
                     }
                   #else
+                    a = Y_AXIS;
                     storeCmd(YGCODE_DOWN, item_move_len[item_move_len_i]);
                   #endif
                   break;
@@ -298,12 +317,55 @@ void menuMove(void)
                       storeCmd(ZGCODE_DEC, item_move_len[item_move_len_i]);
                     }
                   #else
+                    a = Z_AXIS;
                     storeCmd(ZGCODE_DOWN,   item_move_len[item_move_len_i]);  break;
                   #endif
                   break;
 
             case KEY_ICON_7: infoMenu.cur--; break;
-            default:break; 
+            default:
+            #if LCD_ENCODER_SUPPORT && !MENU_LIST_MODE
+              if(encoderPosition)
+              {
+                if(encoderPosition > 0)
+                {
+                  switch(a)
+                  {
+                  case X_AXIS:
+                    storeCmd("G1 X%.1f\n", item_move_len[item_move_len_i]);  
+                    break;
+                  case Y_AXIS:
+                    storeCmd(YGCODE_UP, item_move_len[item_move_len_i]);
+                    break;
+                  case Z_AXIS:
+                    storeCmd(ZGCODE_UP, item_move_len[item_move_len_i]);
+                    break;
+                  default:
+                    break;
+                  }
+                }
+                if(encoderPosition < 0)
+                {
+                  switch(a)
+                  {
+                  case X_AXIS:
+                    storeCmd("G1 X-%.1f\n", item_move_len[item_move_len_i]);  
+                    break;
+                  case Y_AXIS:
+                    storeCmd(YGCODE_DOWN, item_move_len[item_move_len_i]);
+                    break;
+                  case Z_AXIS:
+                    storeCmd(ZGCODE_DOWN, item_move_len[item_move_len_i]);
+                    break;
+                  default:
+                    break;
+                  }
+                }
+                encoderPosition = 0;    
+              }
+              LCD_LoopEncoder();
+            #endif
+            break; 
       #endif    
     }
     loopProcess();
@@ -328,12 +390,17 @@ void drawXYZ(void){
   //GUI_SetColor(GANTRYLBL_BKCOLOR);
   //GUI_FillPrect(&RecXYZ);
   my_sprintf(tempstr, "X:%.1f  ", getAxisLocation(0));  
+  if (a == X_AXIS) GUI_SetColor(INFOBOX_ICON_COLOR);
   GUI_DispString(START_X+1*SPACE_X+1*ICON_WIDTH,(ICON_START_Y-BYTE_HEIGHT)/2,(u8 *)tempstr);
+  GUI_SetColor(FONT_COLOR);
   my_sprintf(tempstr, "Y:%.1f  ", getAxisLocation(1));
+  if (a == Y_AXIS) GUI_SetColor(INFOBOX_ICON_COLOR);
   GUI_DispString(START_X+2*SPACE_X+2*ICON_WIDTH,(ICON_START_Y-BYTE_HEIGHT)/2,(u8 *)tempstr);
+  GUI_SetColor(FONT_COLOR);
   my_sprintf(tempstr, "Z:%.1f  ", getAxisLocation(2));
+  if (a == Z_AXIS) GUI_SetColor(INFOBOX_ICON_COLOR);
   GUI_DispString(START_X+3*SPACE_X+3*ICON_WIDTH,(ICON_START_Y-BYTE_HEIGHT)/2,(u8 *)tempstr);
   
   //GUI_SetBkColor(BACKGROUND_COLOR);
-  //GUI_SetColor(FONT_COLOR);
+  GUI_SetColor(FONT_COLOR);
 }
