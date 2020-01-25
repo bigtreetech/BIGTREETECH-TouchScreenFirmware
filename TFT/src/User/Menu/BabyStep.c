@@ -75,6 +75,8 @@ void menuBabyStep(void)
   menuDrawPage(&babyStepItems);
   showBabyStep();
 
+  encoderPosition = 0;
+
   while(infoMenu.menu[infoMenu.cur] == menuBabyStep)
   {
     key_num = menuKeyGetValue();
@@ -110,6 +112,14 @@ void menuBabyStep(void)
         infoMenu.cur--;
         break;
       default :
+        #if LCD_ENCODER_SUPPORT
+          if(encoderPosition)
+          {
+            baby_step_value += elementsUnit.ele[elementsUnit.cur]*encoderPosition;
+            encoderPosition = 0;    
+          }
+          LCD_LoopEncoder();
+        #endif
         break;
       }
     if(now != baby_step_value)
