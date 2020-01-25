@@ -194,6 +194,8 @@ void menuHeat(void)
   menuDrawPage(&heatItems);
   showTemperature();
 
+  encoderPosition = 0;
+
   while(infoMenu.menu[infoMenu.cur] == menuHeat)
   {
     key_num = menuKeyGetValue();
@@ -241,6 +243,27 @@ void menuHeat(void)
         break;
       
       default :
+        #if LCD_ENCODER_SUPPORT
+          if(encoderPosition)
+          {
+            if(heater.T[heater.tool].target < heat_max_temp[heater.tool] && encoderPosition > 0)
+            {
+              heater.T[heater.tool].target = 
+                limitValue( 0, 
+                            heater.T[heater.tool].target + item_degree[item_degree_i], 
+                            heat_max_temp[heater.tool]);
+            }
+            if(heater.T[heater.tool].target > 0 && encoderPosition < 0)
+            {
+              heater.T[heater.tool].target = 
+                limitValue( 0, 
+                            heater.T[heater.tool].target - item_degree[item_degree_i], 
+                            heat_max_temp[heater.tool]);
+            }
+            encoderPosition = 0;    
+          }
+          LCD_LoopEncoder();
+        #endif
         break;
     }
 
