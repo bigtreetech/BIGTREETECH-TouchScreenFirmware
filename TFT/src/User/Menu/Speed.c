@@ -78,6 +78,8 @@ void menuSpeed(void)
   menuDrawPage(&percentageItems);
   showPercentage();
 
+  encoderPosition = 0;
+
   while(infoMenu.menu[infoMenu.cur] == menuSpeed)
   {
     key_num = menuKeyGetValue();
@@ -123,7 +125,29 @@ void menuSpeed(void)
       case KEY_ICON_7:
         infoMenu.cur--;
         break;
-      default:break;
+      default:
+        #if LCD_ENCODER_SUPPORT
+          if(encoderPosition)
+          {
+            if(percentage[item_percentage_i] < 999 && encoderPosition > 0)
+            {
+              percentage[item_percentage_i] = 
+                limitValue( 10, 
+                            percentage[item_percentage_i] + item_percent_unit[item_percent_unit_i], 
+                            999);
+            }
+            if(percentage[item_percentage_i] > 10 && encoderPosition < 0)
+            {
+              percentage[item_percentage_i] = 
+                limitValue( 10, 
+                            percentage[item_percentage_i] - item_percent_unit[item_percent_unit_i], 
+                            999);
+            }
+            encoderPosition = 0; 
+          }
+          LCD_LoopEncoder();
+        #endif
+      break;
     }
 
     char *speedCmd[ITEM_PERCENTAGE_NUM] = {"M220","M221"};
