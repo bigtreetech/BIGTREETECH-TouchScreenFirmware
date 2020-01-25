@@ -84,7 +84,9 @@ void menuExtrude(void)
   menuDrawPage(&extrudeItems);
   showExtrudeCoordinate();
 
-  encoderPosition = 0; 
+  #if LCD_ENCODER_SUPPORT
+    encoderPosition = 0;    
+  #endif
   
   if(eRelative) mustStoreCmd("M82\n"); // Set extruder to absolute
   while(infoMenu.menu[infoMenu.cur] == menuExtrude)

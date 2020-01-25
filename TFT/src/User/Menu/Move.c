@@ -175,7 +175,9 @@ void menuMove(void)
   mustStoreCmd("M114\n");
   drawXYZ();
 
-  encoderPosition = 0;
+  #if LCD_ENCODER_SUPPORT
+    encoderPosition = 0;    
+  #endif
 
   while(infoMenu.menu[infoMenu.cur] == menuMove)
   {

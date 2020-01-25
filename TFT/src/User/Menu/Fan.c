@@ -92,7 +92,9 @@ void menuFan(void)
   menuDrawPage(&fanItems);
   showFanSpeed();
 
-  encoderPosition = 0;
+  #if LCD_ENCODER_SUPPORT
+    encoderPosition = 0;    
+  #endif
 
   while(infoMenu.menu[infoMenu.cur] == menuFan)
   {
