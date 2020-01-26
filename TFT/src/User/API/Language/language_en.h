@@ -97,7 +97,7 @@
     #define EN_5_PERCENT            "5%"
     #define EN_10_PERCENT           "10%"
     #define EN_READY                "Ready"
-    #define EN_BUSY                 "Busy processing ,please wait..."
+    #define EN_BUSY                 "Busy processing, please wait..."
     #define EN_UNCONNECTED          "No printer attached!"
     #define EN_DISCONNECT_INFO      "Now you can control the printer by your computer!"
     #define EN_LOADING              "Loading..."
