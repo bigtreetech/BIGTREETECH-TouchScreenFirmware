@@ -518,7 +518,8 @@ void printingDrawPage(void)
 
   menuDrawPage(&printingItems);
   if(i != ICON_BACKGROUND){
-    lcd_frame_display(1*ICON_WIDTH+1*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,ICON_WIDTH,ICON_HEIGHT,ICON_ADDR(i));
+    
+    ICON_CustomReadDisplay(0*ICON_WIDTH+0*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  ICON_WIDTH,  ICON_HEIGHT,  ICON_ADDR(i));
   }
   reValueNozzle(EXT_ICON_POS);
   reValueBed(BED_ICON_POS);
