@@ -268,6 +268,11 @@ void menuDrawPage(const MENUITEMS *menuItems)
   for (i = 0; i < ITEM_PER_PAGE; i++)
   {
     menuDrawItem(&menuItems->items[i], i);
+    #ifdef RAPID_SERIAL_COMM
+      if(isPrinting() == true){
+        loopBackEnd();	 //perform backend printing loop between drawing icons to avoid printer idling
+      }
+    #endif
   }
 }
 
@@ -388,11 +393,12 @@ void loopFrontEnd(void)
   loopVolumeReminderClear();
 
   loopBusySignClear();                //Busy Indicator clear
+
+  temp_Change();
 }
 
 void loopProcess(void)
 {
-  temp_Change();
   loopBackEnd();
   loopFrontEnd();
 }

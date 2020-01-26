@@ -137,7 +137,7 @@
 
 // Enable Unified Move Menu
 // Move, Home, Extrude, ABL at one Place and bring Gcode Menu on Home Menu
-//#define UNIFIED_MENU
+#define UNIFIED_MENU
 
 /**
  * Enable list mode in Files menu and settings menu
@@ -182,6 +182,16 @@
 #define EXTRUDE_STEPS  100.0f
 
 #define SHOW_FAN_PERCENTAGE // enable to show fan speed as a percentage instead of a value
+
+/*
+  Rapid Serial Communication:More frequent Serial communicaiton while printing.
+  The controller will send and parse  gcodes more frequently  while drawing on 
+  screen to prevent printer idling and stuttering  due to empty printer buffer.
+  
+  Note: this might make the  graphics slow when switching menus while printing.
+*/
+//#define RAPID_SERIAL_COMM
+
 
 /** CUSTOM GCODE COMMANDS
  * Support up to 7 custom gcodes in Icon mode and 15 in List Mode.
