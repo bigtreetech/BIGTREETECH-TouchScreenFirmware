@@ -354,6 +354,12 @@ KEY_VALUES menuKeyGetValue(void)
   }
 }
 
+//Get the top left point of the corresponding icon position)
+GUI_POINT getIconStartPoint(int index){
+  GUI_POINT p = {rect_of_key[index].x0,rect_of_key[index].y0};
+  return p;
+}
+
 void loopBackEnd(void)
 {
   getGcodeFromFile();                 //Get Gcode command from the file to be printed

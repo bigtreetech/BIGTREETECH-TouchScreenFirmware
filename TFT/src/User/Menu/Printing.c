@@ -502,25 +502,23 @@ void toggleinfo(void)
 
 void printingDrawPage(void)
 {
-  int16_t i;
+
   //	Scroll_CreatePara(&titleScroll, infoFile.title,&titleRect);  //
 
-  i = get_Pre_Icon((char *)getCurGcodeName(infoFile.title));
-  if(i != ICON_BACKGROUND){
+  if(get_Pre_Icon() == true){
     key_pause = 5;
-    printingItems.items[key_pause - 1] = itemBlank;
+    //printingItems.items[key_pause - 1] = itemBlank;
+    printingItems.items[key_pause - 1].icon = ICON_PREVIEW;
+    printingItems.items[key_pause - 1].label.index = LABEL_BACKGROUND;
   }
   else{
     key_pause = 4;
+    printingItems.items[key_pause+1] = itemBabyStep;
   }
-    printingItems.items[key_pause] = itemIsPause[isPause()];
   
+    printingItems.items[key_pause] = itemIsPause[isPause()];  
 
   menuDrawPage(&printingItems);
-  if(i != ICON_BACKGROUND){
-    
-    ICON_CustomReadDisplay(0*ICON_WIDTH+0*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  ICON_WIDTH,  ICON_HEIGHT,  ICON_ADDR(i));
-  }
   reValueNozzle(EXT_ICON_POS);
   reValueBed(BED_ICON_POS);
   reDrawFan(FAN_ICON_POS);
@@ -541,9 +539,10 @@ void menuPrinting(void)
   u8          nowFan[FAN_NUM] = {0};
   uint16_t    curspeed[2] = {0};
   memset(&nowHeat, 0, sizeof(HEATER));
-  
-  printingItems.items[key_pause] = itemIsPause[infoPrinting.pause];
+
   printingDrawPage();
+  printingItems.items[key_pause] = itemIsPause[infoPrinting.pause];
+
 
   while(infoMenu.menu[infoMenu.cur] == menuPrinting)
   {		
@@ -617,13 +616,13 @@ void menuPrinting(void)
     switch(key_num)
     {
       case KEY_ICON_4:
-        if(get_Pre_Icon((char *)getCurGcodeName(infoFile.title)) == ICON_BACKGROUND){
+        if(get_Pre_Icon() != true){
         setPrintPause(!isPause(),false);
         }
         break;
       
       case KEY_ICON_5:
-        if(get_Pre_Icon((char *)getCurGcodeName(infoFile.title)) != ICON_BACKGROUND){
+        if(get_Pre_Icon() == true){
         setPrintPause(!isPause(),false);
         }
         else{

@@ -43,7 +43,8 @@ SCROLL   titleScroll;
 GUI_RECT titleRect={10, (TITLE_END_Y - BYTE_HEIGHT) / 2, LCD_WIDTH-10, (TITLE_END_Y - BYTE_HEIGHT) / 2 + BYTE_HEIGHT};
 
 SCROLL   gcodeScroll;
-  
+bool icon_pre = false;
+
 #ifndef MENU_LIST_MODE
 /*   GUI_RECT gcodeRect[NUM_PER_PAGE] = { 
     {START_X + BYTE_HEIGHT + 4,  0*LISTITEM_HEIGHT+ICON_START_Y+1,    LISTITEM_WIDTH+START_X - 2,  1*LISTITEM_HEIGHT+ICON_START_Y-1},
@@ -104,27 +105,15 @@ void normalNameDisp(const GUI_RECT *rect, u8 *name)
   GUI_CancelRange();
 }
 
-u8 show_Num = 0;
-bool icon_pre = true;
-int16_t icon_Enum[25];
-char * icon_File_Name[25];
-
-int16_t get_Pre_Icon(char * filename)
+bool get_Pre_Icon(void)
 {
-  for(u8 i=0;i<show_Num;i++)
-  {
-    if(strcmp(icon_File_Name[i],filename)==0)
-    return icon_Enum[i];
-  }
-  return ICON_BACKGROUND;
+  return icon_pre;
 }
 
 #ifdef MENU_LIST_MODE
   void gocdeListDraw(void)
   {
-    u8 i = 0,k = 0;
-    int gn;
-    char *gnew;
+    u8 i = 0;
 
     //scrollFileNameCreate(0);
     Scroll_CreatePara(&titleScroll, (u8 *)infoFile.title, &titleRect);
@@ -147,23 +136,6 @@ int16_t get_Pre_Icon(char * filename)
       printItems.items[i].titlelabel.index = LABEL_DYNAMIC;
       menuDrawListItem(&printItems.items[i], i);
 
-      k = i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num;
-      gn = strlen(infoFile.file[k]) - 6; // -6 means ".gcode"
-      gnew = malloc(gn + 10);
-
-      if(gnew && get_Pre_Icon(infoFile.file[k]) == ICON_BACKGROUND)
-      {
-
-        strcpy(gnew, getCurFileSource());
-        strncat(gnew, infoFile.file[k], gn);
-        if(bmpDecode(strcat(gnew, "_"STRINGIFY(ICON_WIDTH)".bmp"), ICON_ADDR(ICON_PREVIEW+show_Num)))
-        {
-          icon_File_Name[show_Num]=infoFile.file[k];
-          icon_Enum[show_Num]=ICON_PREVIEW+show_Num;
-          show_Num++;
-        }
-        free(gnew);
-      }
     }
 
     for (; (i < NUM_PER_PAGE); i++) //background
@@ -203,7 +175,7 @@ int16_t get_Pre_Icon(char * filename)
 
   void gocdeListDraw(void)
   {
-    u8 i=0,k = 0;
+    u8 i=0;//k = 0;
     int gn;
     char *gnew;
     ITEM curItem = {ICON_BACKGROUND, LABEL_BACKGROUND};
@@ -226,24 +198,17 @@ int16_t get_Pre_Icon(char * filename)
             &&(i < NUM_PER_PAGE)                                                   ;i++)  // gcode file
     {
       curItem.icon = ICON_FILE;
-      // Preview
-      k = i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num;
+      // if model preview bmp exists, display bmp directly without writing to flash 
       gn = strlen(infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num]) - 6; // -6 means ".gcode"
       gnew = malloc(gn + 10);
-      if(gnew && get_Pre_Icon(infoFile.file[k]) == ICON_BACKGROUND)
-      {
-        strcpy(gnew, getCurFileSource());
-        strncat(gnew, infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num], gn);
-        if(bmpDecode(strcat(gnew, "_"STRINGIFY(ICON_WIDTH)".bmp"), ICON_ADDR(ICON_PREVIEW+i)))
-        {
-          curItem.icon = ICON_PREVIEW+i;
-          icon_File_Name[show_Num]=infoFile.file[k];
-          icon_Enum[show_Num]=ICON_PREVIEW+show_Num;
-          show_Num++;
-        }
-        free(gnew);
+      strcpy(gnew, getCurFileSource());
+      strncat(gnew, infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num], gn);
+      
+      if(bmp_DirectDisplay(getIconStartPoint(i),strcat(gnew, "_"STRINGIFY(ICON_WIDTH)".bmp")) != true){
+        menuDrawItem(&curItem, i);
       }
-      menuDrawItem(&curItem, i);
+      free(gnew);
+      // model preview -- end
       normalNameDisp(&gcodeRect[i], (u8* )infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num]);
     }
     for(; (i<NUM_PER_PAGE); i++)			//background
@@ -345,6 +310,22 @@ void menuPrintFromSource(void)
             if(infoHost.connected !=true) break;
             if(EnterDir(infoFile.file[key_num + start - infoFile.F_num]) == false) break;	
             
+            //load bmp preview in flash if file exists
+            int gn;
+            char *gnew;
+            gn = strlen(infoFile.file[key_num + start - infoFile.F_num]) - 6; // -6 means ".gcode"
+            gnew = malloc(gn + 10);
+            strcpy(gnew, getCurFileSource());
+            strncat(gnew, infoFile.file[key_num + start - infoFile.F_num], gn);
+            
+            if(bmpDecode(strcat(gnew, "_"STRINGIFY(ICON_WIDTH)".bmp"),ICON_ADDR(ICON_PREVIEW)) == true){
+              icon_pre = true;
+            }
+            else{
+              icon_pre = false;
+            }
+            free(gnew);
+            //-load bmp preview in flash if file exists - end
             infoMenu.menu[++infoMenu.cur] = menuBeforePrinting;	
           }				
         }
