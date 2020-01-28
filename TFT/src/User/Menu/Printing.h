@@ -53,6 +53,7 @@ void reDrawProgress(u8 progress);
 void reValueNozzle(void);
 void reValueBed(void);
 void reDrawTime(void);
+void reDrawFan(void);
 
 void loopCheckPrinting(void);
 
