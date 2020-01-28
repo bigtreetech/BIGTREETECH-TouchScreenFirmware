@@ -329,7 +329,7 @@ void temp_Change(void)
 void show_GlobalInfo(void)
 {
     if(infoSettings.persistent_info != 1) return;
-    if(infoHost.connected == false)    return;
+    if(infoHost.connected == false || infoMenu.menu[infoMenu.cur] == menuPrinting)    return;
     if(infoMenu.menu[infoMenu.cur] == menuMove || infoMenu.menu[infoMenu.cur] == menuStatus) return;
     drawGlobalInfo();
 
