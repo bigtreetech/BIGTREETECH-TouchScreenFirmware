@@ -291,23 +291,23 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
   return true;
 }
 
-const GUI_RECT progressRect = {1*SPACE_X_PER_ICON, 0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y + ICON_HEIGHT/4,
-                               3*SPACE_X_PER_ICON, 0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y + ICON_HEIGHT*3/4};
+const GUI_RECT progressRect = {1 * SPACE_X_PER_ICON, 0 * ICON_HEIGHT + 0 * SPACE_Y + ICON_START_Y + ICON_HEIGHT / 4,
+                               3 * SPACE_X_PER_ICON, 0 * ICON_HEIGHT + 0 * SPACE_Y + ICON_START_Y + ICON_HEIGHT * 3 / 4};
 
-#define BED_X  (progressRect.x1 - 9 * BYTE_WIDTH)
+#define BED_X  (progressRect.x1 - 10 * BYTE_WIDTH)
 #define TEMP_Y (progressRect.y1 + 3)
 #define TIME_Y (TEMP_Y + 1 * BYTE_HEIGHT + 3)
 void reValueNozzle(void)
 {
-  GUI_DispString(BED_X, TEMP_Y-2*BYTE_HEIGHT, (u8* )heatDisplayID[heatGetCurrentToolNozzle()]);
-  GUI_DispDec(BED_X + 2 * BYTE_WIDTH, TEMP_Y-2*BYTE_HEIGHT , heatGetCurrentTemp(heatGetCurrentToolNozzle()), 3, RIGHT);
-  GUI_DispDec(BED_X + 6 * BYTE_WIDTH, TEMP_Y-2*BYTE_HEIGHT, heatGetTargetTemp(heatGetCurrentToolNozzle()),  3, LEFT);
+  GUI_DispString(BED_X, TEMP_Y - 2 * BYTE_HEIGHT, (u8* )heatDisplayID[heatGetCurrentToolNozzle()]);
+  GUI_DispDec(BED_X + 3 * BYTE_WIDTH, TEMP_Y - 2 * BYTE_HEIGHT , heatGetCurrentTemp(heatGetCurrentToolNozzle()), 3, RIGHT);
+  GUI_DispDec(BED_X + 7 * BYTE_WIDTH, TEMP_Y - 2 * BYTE_HEIGHT, heatGetTargetTemp(heatGetCurrentToolNozzle()),  3, LEFT);
 }
 
 void reValueBed(void)
 {
-  GUI_DispDec(BED_X + 2 * BYTE_WIDTH, TEMP_Y-BYTE_HEIGHT, heatGetCurrentTemp(BED), 3, RIGHT);
-  GUI_DispDec(BED_X + 6 * BYTE_WIDTH, TEMP_Y-BYTE_HEIGHT, heatGetTargetTemp(BED),  3, LEFT);
+  GUI_DispDec(BED_X + 3 * BYTE_WIDTH, TEMP_Y - BYTE_HEIGHT, heatGetCurrentTemp(BED), 3, RIGHT);
+  GUI_DispDec(BED_X + 7 * BYTE_WIDTH, TEMP_Y - BYTE_HEIGHT, heatGetTargetTemp(BED),  3, LEFT);
 }
 
 void reDrawTime(void)
@@ -322,16 +322,35 @@ void reDrawTime(void)
   GUI_SetNumMode(GUI_NUMMODE_SPACE);
 }
 
+void reDrawFan(void)
+{
+  //FAN - now only F0
+  u8 fs;
+  #ifdef SHOW_FAN_PERCENTAGE
+    fs = (fanGetSpeed(0)*100)/255;
+  #else
+    fs = fanGetSpeed(0);
+  #endif 
+  #ifdef SHOW_FAN_PERCENTAGE
+    char fan_s[5];
+    sprintf(fan_s, "%d%%", fs); 
+    GUI_DispString(BED_X + 3 * BYTE_WIDTH, TEMP_Y, (u8* )fan_s);
+  #else
+    GUI_DispDec(BED_X+BYTE_WIDTH, TEMP_Y, fs, 3, LEFT);
+  #endif 
+}
+
 void reDrawProgress(u8 progress)
 {	  
   char buf[5];
-  const GUI_RECT percentageRect = {BED_X, TEMP_Y-3*BYTE_HEIGHT, BED_X+5*BYTE_WIDTH, TEMP_Y-2*BYTE_HEIGHT};
-  //GUI_FillRectColor(progressRect.x0, progressRect.y0, progressX, progressRect.y1,BLUE);
-  //GUI_FillRectColor(progressX, progressRect.y0, progressRect.x1, progressRect.y1,GRAY);
+  const GUI_RECT percentageRect = {BED_X, TEMP_Y - 3 * BYTE_HEIGHT, BED_X + 10 * BYTE_WIDTH, TEMP_Y - 2 * BYTE_HEIGHT};
+  u16 progressX = map(progress, 0, 100, percentageRect.x0, percentageRect.x1);
+  GUI_FillRectColor(percentageRect.x0, percentageRect.y0, progressX, percentageRect.y1, BLUE);
+  GUI_FillRectColor(progressX, percentageRect.y0, percentageRect.x1, percentageRect.y1, GRAY);
   my_sprintf(buf, "%d%%", progress);
-  //GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-  GUI_DispStringInPrect(&percentageRect, (u8 *)buf);    
-  //GUI_SetTextMode(GUI_TEXTMODE_NORMAL);                     
+  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
+  GUI_DispStringInPrect(&percentageRect, (u8* )buf);    
+  GUI_SetTextMode(GUI_TEXTMODE_NORMAL);                     
 }
 
 extern SCROLL   titleScroll;
@@ -345,24 +364,27 @@ void printingDrawPage(void)
   //	Scroll_CreatePara(&titleScroll, infoFile.title,&titleRect);  //
   // printed time
   GUI_DispString(progressRect.x0, TIME_Y, (u8* )"T:");
-  GUI_DispString(progressRect.x0+BYTE_WIDTH*4, TIME_Y, (u8* )":");
-  GUI_DispString(progressRect.x0+BYTE_WIDTH*7, TIME_Y, (u8* )":");
+  GUI_DispString(progressRect.x0 + 4 * BYTE_WIDTH, TIME_Y, (u8* )":");
+  GUI_DispString(progressRect.x0 + 7 * BYTE_WIDTH, TIME_Y, (u8* )":");
   // nozzle temperature 
-  GUI_DispString(BED_X, TEMP_Y-2*BYTE_HEIGHT ,(u8* )":");
-  GUI_DispString(BED_X+BYTE_WIDTH*5, TEMP_Y-2*BYTE_HEIGHT,(u8* )"/");
+  GUI_DispString(BED_X + 2 * BYTE_WIDTH, TEMP_Y - 2 * BYTE_HEIGHT , (u8* )":");
+  GUI_DispString(BED_X + 6 * BYTE_WIDTH, TEMP_Y - 2 * BYTE_HEIGHT, (u8* )"/");
   // hotbed temperature
-  GUI_DispString(BED_X, TEMP_Y-BYTE_HEIGHT, (u8* )"B:");
-  GUI_DispString(BED_X+BYTE_WIDTH*5, TEMP_Y-BYTE_HEIGHT, (u8* )"/");
+  GUI_DispString(BED_X + BYTE_WIDTH, TEMP_Y - BYTE_HEIGHT, (u8* )"B:");
+  GUI_DispString(BED_X + 6 * BYTE_WIDTH, TEMP_Y - BYTE_HEIGHT, (u8* )"/");
+  // fan speed
+  GUI_DispString(BED_X + BYTE_WIDTH, TEMP_Y, (u8* )"F:");
   reDrawProgress(infoPrinting.progress);
   reValueNozzle();
   reValueBed();
+  reDrawFan();
   reDrawTime();
   // z_axis coordinate
-  GUI_DispString(BED_X,TIME_Y-BYTE_HEIGHT, (u8* )"Z:");
-
+  GUI_DispString(BED_X + BYTE_WIDTH, TIME_Y, (u8* )"Z:");
+  
   i = get_Pre_Icon((char *)getCurGcodeName(infoFile.title));
   if(i != ICON_BACKGROUND)
-  lcd_frame_display(1*ICON_WIDTH+1*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,ICON_WIDTH,ICON_HEIGHT,ICON_ADDR(i));
+    lcd_frame_display(1*ICON_WIDTH + 1 * SPACE_X + START_X, 0 * ICON_HEIGHT + 0 * SPACE_Y + ICON_START_Y, ICON_WIDTH, ICON_HEIGHT, ICON_ADDR(i));
 }
 
 
@@ -420,7 +442,8 @@ void menuPrinting(void)
     //Z_AXIS coordinate
     static COORDINATE tmp;
     coordinateGetAll(&tmp);
-    GUI_DispFloat(BED_X+BYTE_WIDTH*2,TIME_Y-BYTE_HEIGHT,tmp.axis[Z_AXIS],3,3,LEFT);
+    GUI_DispFloat(BED_X + 3 * BYTE_WIDTH, TIME_Y, tmp.axis[Z_AXIS], 3, 3, LEFT);
+    reDrawFan();
     
     key_num = menuKeyGetValue();
     switch(key_num)
