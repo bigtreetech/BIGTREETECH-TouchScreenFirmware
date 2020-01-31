@@ -12,7 +12,7 @@
 #define BYTE_ASCII_ADDR         (WORD_UNICODE+0x480000) // ascii (+0x1000 4K)
 //#define BYTE_RESERVE_ADDR      0x710000
 #define ICON_ADDR(num)          ((num)*0x5000+BYTE_ASCII_ADDR+0x1000)
-#define INFOBOX_ADDR            (ICON_ADDR(ICON_PREVIEW+5) + 0x5000) // total byte size 0xA7F8
+#define INFOBOX_ADDR            (ICON_ADDR(ICON_PREVIEW) + 0x5000) // total byte size 0xA7F8
 #define SMALL_ICON_START_ADDR   (INFOBOX_ADDR+0xA7F8)
 #define SMALL_ICON_ADDR(num)    ((num)*0x1000+SMALL_ICON_START_ADDR)
 
