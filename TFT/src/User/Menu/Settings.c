@@ -6,7 +6,7 @@ SETTINGS infoSettings;
 // Reset settings data
 void infoSettingsReset(void)
 {
-  infoSettings.baudrate = 115200;
+  infoSettings.baudrate = 250000;
   infoSettings.language = ENGLISH;
   infoSettings.mode = SERIAL_TSC;
   infoSettings.runout = 0;
