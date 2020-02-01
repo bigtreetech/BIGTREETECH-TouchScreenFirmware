@@ -127,24 +127,9 @@
 // update the icons from alternate icon folder
 #define ALTERNATIVE_MOVE_MENU
 
-// Invert the Y Axis move Direction
-// this does not work if LIST MODE is enabled. To invert y axis in LIST MODE go to setting->feature settings
-//#define INVERT_YAXIS
-
-//Invert the Z Axis move Direction
-// this does not work if LIST MODE is enabled. To invert z axis in LIST MODE go to setting->feature settings
-//#define INVERT_ZAXIS
-
 // Enable Unified Move Menu
 // Move, Home, Extrude, ABL at one Place and bring Gcode Menu on Home Menu
 #define UNIFIED_MENU
-
-/**
- * Enable list mode in Files menu and settings menu
- * It is friendly to display long file name, but the model preview feature is not available
- * Disable this if you want to use the model preview feature
- */
-#define MENU_LIST_MODE
 
 
 //-------RESET SETTINGS & TOUCH SCREEN CALIBRATION------||
@@ -192,13 +177,18 @@
 */
 //#define RAPID_SERIAL_COMM
 
+/**
+ * Enable list mode in Custom G-Code menu
+ * 7 codes in icon mode, 15 items in list mode
+ */
+#define CUSTOM_GCODE_LIST_MODE
 
 /** CUSTOM GCODE COMMANDS
  * Support up to 7 custom gcodes in Icon mode and 15 in List Mode.
  * Uncomment CUSTOM_X_LABEL and CUSTOM_X_GCODE to enable custom gcode.
  * CUSTOM_X_LABEL is the name of the custom button, CUSTOM_X_GCODE
  * CUSTOM_X_GCODE is the gcode to be sent by the custom button, end with '\n'
- * You also need to customize the icon corresponding to the command if MENU_LIST_MODE is not enabled.
+ * You also need to customize the icon corresponding to the command if CUSTOM_GCODE_LIST_MODE is not enabled.
  * Copy your custom icon to the SD card to be updated, such as:"TFT35/bmp/Custom0.bmp", "TFT24/bmp/Custom1.bmp", etc...
  * The format of the custom icon is as follows
  * Bit depth: 24 / 32 bit, Pixel size: 95*95(for TFT35), 70*70(for TFT28/TFT24)
@@ -219,9 +209,9 @@
 //#define CUSTOM_6_GCODE "M105\n"
 
 /*
-custom gcode below are compatible only if MENU_LIST_MODE is active
+custom gcode below are compatible only if CUSTOM_GCODE_LIST_MODE is active
 */
-#ifdef MENU_LIST_MODE
+#ifdef CUSTOM_GCODE_LIST_MODE
 //#define CUSTOM_7_LABEL "Custom7"
 //#define CUSTOM_7_GCODE "M105\n"
 //#define CUSTOM_8_LABEL "Custom8"

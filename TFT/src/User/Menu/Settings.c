@@ -23,6 +23,7 @@ void infoSettingsReset(void)
   infoSettings.send_start_gcode = 1;
   infoSettings.send_end_gcode = 1;
   infoSettings.persistent_info = 1;
+  infoSettings.file_listmode = 1;
   
 }
 

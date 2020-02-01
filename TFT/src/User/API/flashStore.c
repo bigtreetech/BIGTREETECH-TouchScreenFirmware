@@ -3,7 +3,7 @@
 
 #define PARA_SIZE 256  //bytes
 #define TSC_SIGN  0x20190827 // DO NOT MODIFY
-#define PARA_SIGN 0x20200116 // If a new setting parameter is added, modify here and initialize the initial value in the "infoSettingsReset()" function
+#define PARA_SIGN 0x20200201 // If a new setting parameter is added, modify here and initialize the initial value in the "infoSettingsReset()" function
 
 extern u32 TSC_Para[7];        //
 extern SETTINGS infoSettings;  //
@@ -71,6 +71,7 @@ bool readStoredPara(void)
     infoSettings.send_start_gcode = byteToWord(data + (index += 4), 4);
     infoSettings.send_end_gcode   = byteToWord(data + (index += 4), 4);
     infoSettings.persistent_info  = byteToWord(data + (index += 4), 4);
+    infoSettings.file_listmode    = byteToWord(data + (index += 4), 4);
   }
   
   return paraExist;
@@ -103,6 +104,7 @@ void storePara(void)
   wordToByte(infoSettings.send_start_gcode,   data + (index += 4));
   wordToByte(infoSettings.send_end_gcode,     data + (index += 4));
   wordToByte(infoSettings.persistent_info,    data + (index += 4));
+  wordToByte(infoSettings.file_listmode,      data + (index += 4));
   
   STM32_FlashWrite(data, PARA_SIZE);
 }

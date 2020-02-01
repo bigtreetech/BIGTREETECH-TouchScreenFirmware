@@ -29,6 +29,7 @@ typedef struct
   uint8_t  send_start_gcode;
   uint8_t  send_end_gcode;
   uint8_t  persistent_info;
+  uint8_t  file_listmode;
 }SETTINGS;
 
 

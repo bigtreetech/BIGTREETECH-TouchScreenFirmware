@@ -223,9 +223,9 @@ void sendQueueCmd(void)
 
         case 105: //M105
           heatSetUpdateWaiting(false);
-          #ifdef MENU_LIST_MODE
+
             avoid_terminal = infoSettings.terminalACK;
-          #endif
+
           break;
 
         case 106: //M106

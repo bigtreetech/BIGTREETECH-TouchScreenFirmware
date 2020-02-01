@@ -155,5 +155,6 @@
     #define IT_SEND_START_GCODE     "Start Gcode before print"
     #define IT_SEND_END_GCODE       "End Gcode after print"
     #define IT_PERSISTANT_STATUS_INFO "Persistent Status Info"
+    #define IT_FILE_LISTMODE        "Files viewer List Mode"
     
 #endif

@@ -155,5 +155,6 @@
     #define JP_SEND_START_GCODE     "Start Gcode before print"
     #define JP_SEND_END_GCODE       "End Gcode after print"
     #define JP_PERSISTANT_STATUS_INFO "Persistent Status Info"
+    #define JP_FILE_LISTMODE        "Files viewer List Mode"
     
 #endif

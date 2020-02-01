@@ -155,5 +155,6 @@
     #define DU_SEND_START_GCODE     "Start Gcode before print"
     #define DU_SEND_END_GCODE       "End Gcode after print"
     #define DU_PERSISTANT_STATUS_INFO "Persistent Status Info"
+    #define DU_FILE_LISTMODE        "Files viewer List Mode"
 
 #endif
