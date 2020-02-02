@@ -18,14 +18,19 @@ void Hardware_GenericInit(void)
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO , ENABLE);
   GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);
 #endif
-  
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
+  GPIO_PinRemapConfig(GPIO_Remap_USART2, ENABLE);
   XPT2046_Init();
   W25Qxx_Init();
   LCD_Init();
   readStoredPara();
   LCD_RefreshDirection();  //refresh display direction after reading settings
+ 
+  #ifndef MKS_32_V1_4
+  //MKS updates are done via darkspr1te bootloader - all others via this routine
   scanUpdates();
   SD_DeInit();
+  #endif
   
 #if LCD_ENCODER_SUPPORT
   LCD_EncoderInit();
