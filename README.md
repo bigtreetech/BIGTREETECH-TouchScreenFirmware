@@ -1,3 +1,8 @@
+# MKS TFT v4.0 Branch of BIGTREETECH-TouchScreenFirmware
+This branch of BTT's Touch Screen Firmware is built to include the .bin firmware file which can be loaded into the MKS TFT Display using the stock bootloader. It only supports the v4.0 display (version normally on the back of the PCB). If you have any other version of the display that you'd like to donate to science so that the build can be ported, DM me . :). 
+
+- Guide to Installing the FW on MKS TFT28 and TFT32, [here](https://www.youtube.com/watch?v=X0uNrfhmlAI). 
+
 # software version
 ### Vx.x.25
 - change character encoding from GBK to UTF-8, compatible with new languages
