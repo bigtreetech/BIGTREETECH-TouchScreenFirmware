@@ -3,8 +3,8 @@
   * @file    stm32f2xx_rng.h
   * @author  MCD Application Team
   * @version V1.1.2
-  * @date    05-March-2012 
-  * @brief   This file contains all the functions prototypes for the Random 
+  * @date    05-March-2012
+  * @brief   This file contains all the functions prototypes for the Random
   *          Number Generator(RNG) firmware library.
   ******************************************************************************
   * @attention
@@ -17,8 +17,8 @@
   *
   *        http://www.st.com/software_license_agreement_liberty_v2
   *
-  * Unless required by applicable law or agreed to in writing, software 
-  * distributed under the License is distributed on an "AS IS" BASIS, 
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
@@ -43,18 +43,18 @@
 
 /** @addtogroup RNG
   * @{
-  */ 
+  */
 
 /* Exported types ------------------------------------------------------------*/
-/* Exported constants --------------------------------------------------------*/ 
+/* Exported constants --------------------------------------------------------*/
 
 /** @defgroup RNG_Exported_Constants
   * @{
   */
-  
-/** @defgroup RNG_flags_definition  
+
+/** @defgroup RNG_flags_definition
   * @{
-  */ 
+  */
 #define RNG_FLAG_DRDY               ((uint8_t)0x0001) /*!< Data ready */
 #define RNG_FLAG_CECS               ((uint8_t)0x0002) /*!< Clock error current status */
 #define RNG_FLAG_SECS               ((uint8_t)0x0004) /*!< Seed error current status */
@@ -66,11 +66,11 @@
                                     ((RNG_FLAG) == RNG_FLAG_SECS))
 /**
   * @}
-  */ 
+  */
 
-/** @defgroup RNG_interrupts_definition   
+/** @defgroup RNG_interrupts_definition
   * @{
-  */  
+  */
 #define RNG_IT_CEI                  ((uint8_t)0x20) /*!< Clock error interrupt */
 #define RNG_IT_SEI                  ((uint8_t)0x40) /*!< Seed error interrupt */
 
@@ -78,16 +78,16 @@
 #define IS_RNG_GET_IT(RNG_IT) (((RNG_IT) == RNG_IT_CEI) || ((RNG_IT) == RNG_IT_SEI))
 /**
   * @}
-  */ 
+  */
 
 /**
   * @}
-  */ 
+  */
 
 /* Exported macro ------------------------------------------------------------*/
-/* Exported functions --------------------------------------------------------*/ 
+/* Exported functions --------------------------------------------------------*/
 
-/*  Function used to set the RNG configuration to the default reset state *****/ 
+/*  Function used to set the RNG configuration to the default reset state *****/
 void RNG_DeInit(void);
 
 /* Configuration function *****************************************************/
@@ -111,10 +111,10 @@ void RNG_ClearITPendingBit(uint8_t RNG_IT);
 
 /**
   * @}
-  */ 
+  */
 
 /**
   * @}
-  */ 
+  */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

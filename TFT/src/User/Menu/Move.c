@@ -21,7 +21,7 @@
     #define YGCODE_UP "G1 Y%.1f\n"
     #define YGCODE_DOWN "G1 Y-%.1f\n"
   #endif
-  
+
   #ifdef INVERT_ZAXIS
     #define LABEL_ZAXIS_UP LABEL_Z_DEC
     #define LABEL_ZAXIS_DOWN LABEL_Z_INC
@@ -41,8 +41,8 @@ MENUITEMS moveItems = {
 //  title
 LABEL_MOVE,
 // icon                       label
- { 
-  #ifdef ALTERNATIVE_MOVE_MENU 
+ {
+  #ifdef ALTERNATIVE_MOVE_MENU
     #ifdef MENU_LIST_MODE
       {ICON_Z_DEC,                LABEL_Z_DEC},
       {ICON_Y_INC,                LABEL_Y_INC},
@@ -63,7 +63,7 @@ LABEL_MOVE,
       {ICON_BACK,                 LABEL_BACK},
     #endif
   #else
-    #ifdef MENU_LIST_MODE  
+    #ifdef MENU_LIST_MODE
     {ICON_X_INC,                LABEL_X_INC},
     {ICON_Y_INC,                LABEL_Y_INC},
     {ICON_Z_INC,                LABEL_Z_INC},
@@ -173,7 +173,7 @@ void menuMove(void)
     switch(key_num)
     {
       #ifdef ALTERNATIVE_MOVE_MENU
-          
+
             case KEY_ICON_0:
                   #ifdef MENU_LIST_MODE
                     if(infoSettings.invert_zaxis == 1){
@@ -200,7 +200,7 @@ void menuMove(void)
                   #endif
                   break;
 
-            case KEY_ICON_2: 
+            case KEY_ICON_2:
                   #ifdef MENU_LIST_MODE
                     if(infoSettings.invert_zaxis == 1){
                       storeCmd(ZGCODE_DEC, item_move_len[item_move_len_i]);
@@ -213,8 +213,8 @@ void menuMove(void)
                   #endif
                   break;
 
-            case KEY_ICON_3: 
-                  item_move_len_i = (item_move_len_i+1)%ITEM_MOVE_LEN_NUM;            
+            case KEY_ICON_3:
+                  item_move_len_i = (item_move_len_i+1)%ITEM_MOVE_LEN_NUM;
                   moveItems.items[key_num] = itemMoveLen[item_move_len_i];
                   menuDrawItem(&moveItems.items[key_num], key_num);
                   break;
@@ -236,8 +236,8 @@ void menuMove(void)
 
             case KEY_ICON_6: storeCmd("G1 X%.1f\n",  item_move_len[item_move_len_i]);  break;
             case KEY_ICON_7: infoMenu.cur--; break;
-            default:break; 
-        
+            default:break;
+
       #else
 
             case KEY_ICON_0: storeCmd("G1 X%.1f\n",  item_move_len[item_move_len_i]);  break;
@@ -268,8 +268,8 @@ void menuMove(void)
                   #endif
                   break;
 
-            case KEY_ICON_3: 
-                  item_move_len_i = (item_move_len_i+1)%ITEM_MOVE_LEN_NUM;            
+            case KEY_ICON_3:
+                  item_move_len_i = (item_move_len_i+1)%ITEM_MOVE_LEN_NUM;
                   moveItems.items[key_num] = itemMoveLen[item_move_len_i];
                   menuDrawItem(&moveItems.items[key_num], key_num);
                   break;
@@ -289,7 +289,7 @@ void menuMove(void)
                   #endif
                   break;
 
-            case KEY_ICON_6: 
+            case KEY_ICON_6:
                   #ifdef MENU_LIST_MODE
                     if(infoSettings.invert_zaxis == 1){
                       storeCmd(ZGCODE_INC, item_move_len[item_move_len_i]);
@@ -303,8 +303,8 @@ void menuMove(void)
                   break;
 
             case KEY_ICON_7: infoMenu.cur--; break;
-            default:break; 
-      #endif    
+            default:break;
+      #endif
     }
     loopProcess();
     update_gantry();
@@ -327,13 +327,13 @@ void drawXYZ(void){
   char tempstr[100];
   //GUI_SetColor(GANTRYLBL_BKCOLOR);
   //GUI_FillPrect(&RecXYZ);
-  my_sprintf(tempstr, "X:%.1f  ", getAxisLocation(0));  
+  my_sprintf(tempstr, "X:%.1f  ", getAxisLocation(0));
   GUI_DispString(START_X+1*SPACE_X+1*ICON_WIDTH,(ICON_START_Y-BYTE_HEIGHT)/2,(u8 *)tempstr);
   my_sprintf(tempstr, "Y:%.1f  ", getAxisLocation(1));
   GUI_DispString(START_X+2*SPACE_X+2*ICON_WIDTH,(ICON_START_Y-BYTE_HEIGHT)/2,(u8 *)tempstr);
   my_sprintf(tempstr, "Z:%.1f  ", getAxisLocation(2));
   GUI_DispString(START_X+3*SPACE_X+3*ICON_WIDTH,(ICON_START_Y-BYTE_HEIGHT)/2,(u8 *)tempstr);
-  
+
   //GUI_SetBkColor(BACKGROUND_COLOR);
   //GUI_SetColor(FONT_COLOR);
 }

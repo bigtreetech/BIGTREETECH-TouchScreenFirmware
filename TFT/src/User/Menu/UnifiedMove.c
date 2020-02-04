@@ -18,7 +18,7 @@ LABEL_UNIFIEDMOVE,
 
 void menuUnifiedMove(void)
 {
-  KEY_VALUES key_num = KEY_IDLE;	
+  KEY_VALUES key_num = KEY_IDLE;
   menuDrawPage(&UnifiedMoveItems);
   while(infoMenu.menu[infoMenu.cur] == menuUnifiedMove)
   {
@@ -30,9 +30,8 @@ void menuUnifiedMove(void)
       case KEY_ICON_2: infoMenu.menu[++infoMenu.cur] = menuAutoLeveling; break;
       case KEY_ICON_3: infoMenu.menu[++infoMenu.cur] = menuManualLeveling; break;
       case KEY_ICON_7: infoMenu.cur--; break;
-      default: break;            
+      default: break;
     }
     loopProcess();
   }
 }
-

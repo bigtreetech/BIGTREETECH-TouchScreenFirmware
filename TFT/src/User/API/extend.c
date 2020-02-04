@@ -36,17 +36,17 @@ void positionSetUpdateWaiting(bool isWaiting)
 }
 
 void FIL_Runout_Init(void)
-{ 
+{
   GPIO_InitSet(FIL_RUNOUT_PIN, FIL_RUNOUT_INVERTING ? MGPIO_MODE_IPD : MGPIO_MODE_IPU, 0);
 }
 
 bool FIL_RunoutPinFilteredLevel(void)
 {
-  static bool rst = false;  
+  static bool rst = false;
   static u32 nowTime = 0;
   static u32 trueTimes = 0;
   static u32 falseTimes = 0;
-  
+
   if (OS_GetTime() > nowTime + FIL_NOISE_THRESHOLD)
   {
     rst = trueTimes > falseTimes ? true : false;
@@ -71,14 +71,14 @@ bool FIL_RunoutPinFilteredLevel(void)
 
 static u32 update_time = 200;
 // Use an encoder disc to toggles the runout
-// Suitable for BigTreeTech Smart filament detecter 
+// Suitable for BigTreeTech Smart filament detecter
 bool FIL_SmartRunoutDetect(void)
 {
   static float lastExtrudePosition = 0.0f;
   static uint8_t lastRunoutPinLevel = 0;
-  static uint8_t isAlive = false;  
+  static uint8_t isAlive = false;
   static u32  nowTime=0;
-  
+
   bool pinLevel = FIL_RunoutPinFilteredLevel();
   float actualExtrude = coordinateGetAxisActual(E_AXIS);
 
@@ -92,15 +92,15 @@ bool FIL_SmartRunoutDetect(void)
     nowTime=OS_GetTime();
     update_waiting=true;
   }while(0);
-  
+
   if (isAlive == false)
   {
     if (lastRunoutPinLevel != pinLevel)
     {
       isAlive = true;
-    }  
+    }
   }
-  
+
   if (ABS(actualExtrude - lastExtrudePosition) >= FILAMENT_RUNOUT_DISTANCE_MM)
   {
     lastExtrudePosition = actualExtrude;
@@ -123,21 +123,21 @@ bool FIL_IsRunout(void)
     case FILAMENT_RUNOUT_ON:
       // Detect HIGH/LOW level, Suitable for general mechanical / photoelectric switches
       return (FIL_RunoutPinFilteredLevel() == FIL_RUNOUT_INVERTING);
-    
+
     case FILAMENT_SMART_RUNOUT_ON:
       return FIL_SmartRunoutDetect();
-    
+
     default:
       return false;
   }
 }
 
 void loopFILRunoutDetect(void)
-{  
+{
   if (infoSettings.runout == FILAMENT_RUNOUT_OFF)  return; // Filament runout turn off
   if (!FIL_IsRunout()) return; // Filament not runout yet, need constant scanning to filter interference
   if (!isPrinting() || isPause())  return; // No printing or printing paused
-  
+
   if (setPrintPause(true,false))
   {
     popupReminder(textSelect(LABEL_WARNING), textSelect(LABEL_FILAMENT_RUNOUT));

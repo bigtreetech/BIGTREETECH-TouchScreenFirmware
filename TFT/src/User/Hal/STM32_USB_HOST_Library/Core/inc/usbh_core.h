@@ -17,7 +17,7 @@
   *                      <http://www.st.com/SLA0044>
   *
   ******************************************************************************
-  */ 
+  */
 
 /* Define to prevent recursive  ----------------------------------------------*/
 #ifndef __USBH_CORE_H
@@ -35,16 +35,16 @@
 /** @addtogroup USBH_LIB_CORE
 * @{
 */
-  
+
 /** @defgroup USBH_CORE
   * @brief This file is the Header file for usbh_core.c
   * @{
-  */ 
+  */
 
 
 /** @defgroup USBH_CORE_Exported_Defines
   * @{
-  */ 
+  */
 
 #define MSC_CLASS                             0x08 /* MSC */
 #define HID_CLASS                             0x03 /* HID */
@@ -74,7 +74,7 @@
 
 /**
   * @}
-  */ 
+  */
 
 
 /** @defgroup USBH_CORE_Exported_Types
@@ -96,17 +96,17 @@ typedef enum {
   HOST_IDLE =0,
   HOST_WAIT_PRT_ENABLED,
   HOST_DEV_ATTACHED,
-  HOST_DEV_DISCONNECTED,  
+  HOST_DEV_DISCONNECTED,
   HOST_DETECT_DEVICE_SPEED,
   HOST_ENUMERATION,
-  HOST_CLASS_REQUEST,  
+  HOST_CLASS_REQUEST,
   HOST_CLASS,
   HOST_CTRL_XFER,
   HOST_USR_INPUT,
   HOST_SUSPENDED,
   HOST_WAKEUP,
-  HOST_ERROR_STATE  
-}HOST_State;  
+  HOST_ERROR_STATE
+}HOST_State;
 
 /* Following states are used for EnumerationState */
 typedef enum {
@@ -120,7 +120,7 @@ typedef enum {
   ENUM_GET_SERIALNUM_STRING_DESC,
   ENUM_SET_CONFIGURATION,
   ENUM_DEV_CONFIGURED
-} ENUM_State;  
+} ENUM_State;
 
 
 
@@ -139,9 +139,9 @@ typedef enum {
   CTRL_STATUS_OUT_WAIT,
   CTRL_ERROR,
   CTRL_STALLED,
-  CTRL_COMPLETE    
+  CTRL_COMPLETE
 }
-CTRL_State;  
+CTRL_State;
 
 typedef enum {
   USBH_USR_NO_RESP   = 0,
@@ -154,22 +154,22 @@ typedef enum {
   CMD_IDLE =0,
   CMD_SEND,
   CMD_WAIT
-} CMD_State;  
+} CMD_State;
 
 
 
 typedef struct _Ctrl
 {
-  uint8_t               hc_num_in; 
-  uint8_t               hc_num_out; 
-  uint8_t               ep0size;  
+  uint8_t               hc_num_in;
+  uint8_t               hc_num_out;
+  uint8_t               ep0size;
   uint8_t               *buff;
   uint16_t              length;
   uint8_t               errorcount;
-  uint16_t              timer;  
+  uint16_t              timer;
   CTRL_STATUS           status;
   USB_Setup_TypeDef     setup;
-  CTRL_State            state;  
+  CTRL_State            state;
 
 } USBH_Ctrl_TypeDef;
 
@@ -177,15 +177,15 @@ typedef struct _Ctrl
 
 typedef struct _DeviceProp
 {
-  
+
   uint8_t                           address;
   uint8_t                           speed;
   USBH_DevDesc_TypeDef              Dev_Desc;
-  USBH_CfgDesc_TypeDef              Cfg_Desc;  
+  USBH_CfgDesc_TypeDef              Cfg_Desc;
   USBH_InterfaceDesc_TypeDef        Itf_Desc[USBH_MAX_NUM_INTERFACES];
   USBH_EpDesc_TypeDef               Ep_Desc[USBH_MAX_NUM_INTERFACES][USBH_MAX_NUM_ENDPOINTS];
   USBH_HIDDesc_TypeDef              HID_Desc;
-  
+
 }USBH_Device_TypeDef;
 
 typedef struct _USBH_Class_cb
@@ -195,27 +195,27 @@ typedef struct _USBH_Class_cb
   void         (*DeInit)\
     (USB_OTG_CORE_HANDLE *pdev , void *phost);
   USBH_Status  (*Requests)\
-    (USB_OTG_CORE_HANDLE *pdev ,void *phost);  
+    (USB_OTG_CORE_HANDLE *pdev ,void *phost);
   USBH_Status  (*Machine)\
-    (USB_OTG_CORE_HANDLE *pdev, void *phost);     
-  
+    (USB_OTG_CORE_HANDLE *pdev, void *phost);
+
 } USBH_Class_cb_TypeDef;
 
 
 typedef struct _USBH_USR_PROP
 {
   void (*Init)(void);       /* HostLibInitialized */
-  void (*DeInit)(void);       /* HostLibInitialized */  
+  void (*DeInit)(void);       /* HostLibInitialized */
   void (*DeviceAttached)(void);           /* DeviceAttached */
   void (*ResetDevice)(void);
-  void (*DeviceDisconnected)(void); 
-  void (*OverCurrentDetected)(void);  
+  void (*DeviceDisconnected)(void);
+  void (*OverCurrentDetected)(void);
   void (*DeviceSpeedDetected)(uint8_t DeviceSpeed);          /* DeviceSpeed */
   void (*DeviceDescAvailable)(void *);    /* DeviceDescriptor is available */
   void (*DeviceAddressAssigned)(void);  /* Address is assigned to USB Device */
   void (*ConfigurationDescAvailable)(USBH_CfgDesc_TypeDef *,
                                      USBH_InterfaceDesc_TypeDef *,
-                                     USBH_EpDesc_TypeDef *); 
+                                     USBH_EpDesc_TypeDef *);
   /* Configuration Descriptor available */
   void (*ManufacturerString)(void *);     /* ManufacturerString*/
   void (*ProductString)(void *);          /* ProductString*/
@@ -234,73 +234,70 @@ typedef struct _Host_TypeDef
   HOST_State            gState;       /*  Host State Machine Value */
   HOST_State            gStateBkp;    /* backup of previous State machine value */
   ENUM_State            EnumState;    /* Enumeration state Machine */
-  CMD_State             RequestState;       
+  CMD_State             RequestState;
   USBH_Ctrl_TypeDef     Control;
-  
-  USBH_Device_TypeDef   device_prop; 
-  
-  USBH_Class_cb_TypeDef               *class_cb;  
+
+  USBH_Device_TypeDef   device_prop;
+
+  USBH_Class_cb_TypeDef               *class_cb;
   USBH_Usr_cb_TypeDef  	              *usr_cb;
 
-  
+
 } USBH_HOST, *pUSBH_HOST;
 
 /**
   * @}
-  */ 
+  */
 
 
 
 /** @defgroup USBH_CORE_Exported_Macros
   * @{
-  */ 
+  */
 
 /**
   * @}
-  */ 
+  */
 
 /** @defgroup USBH_CORE_Exported_Variables
   * @{
-  */ 
+  */
 
 /**
   * @}
-  */ 
+  */
 
 /** @defgroup USBH_CORE_Exported_FunctionsPrototype
   * @{
-  */ 
+  */
 void USBH_Init(USB_OTG_CORE_HANDLE *pdev,
-               USB_OTG_CORE_ID_TypeDef coreID, 
-               USBH_HOST *phost,                    
-               USBH_Class_cb_TypeDef *class_cb, 
+               USB_OTG_CORE_ID_TypeDef coreID,
+               USBH_HOST *phost,
+               USBH_Class_cb_TypeDef *class_cb,
                USBH_Usr_cb_TypeDef *usr_cb);
-               
-USBH_Status USBH_DeInit(USB_OTG_CORE_HANDLE *pdev, 
+
+USBH_Status USBH_DeInit(USB_OTG_CORE_HANDLE *pdev,
                         USBH_HOST *phost);
-void USBH_Process(USB_OTG_CORE_HANDLE *pdev , 
+void USBH_Process(USB_OTG_CORE_HANDLE *pdev ,
                   USBH_HOST *phost);
-void USBH_ErrorHandle(USBH_HOST *phost, 
+void USBH_ErrorHandle(USBH_HOST *phost,
                       USBH_Status errType);
 
 /**
   * @}
-  */ 
+  */
 
 #endif /* __USBH_CORE_H */
 /**
   * @}
-  */ 
+  */
 
 /**
   * @}
-  */ 
+  */
 
 /**
 * @}
-*/ 
+*/
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-
-
-

@@ -3,16 +3,16 @@
 
 #ifdef STM32_HAS_FSMC
 u16 LCD_RD_DATA(void)
-{										    	   
-  vu16 ram;			
-  ram=LCD->LCD_RAM;	
-  return ram;	 		 
-}					   
+{
+  vu16 ram;
+  ram=LCD->LCD_RAM;
+  return ram;
+}
 
 void LCD_WriteReg(u8 LCD_Reg, u16 LCD_RegValue)
 {
   LCD->LCD_REG = LCD_Reg;
-  LCD->LCD_RAM = LCD_RegValue;    		 
+  LCD->LCD_RAM = LCD_RegValue;
 }
 
 u16 LCD_ReadReg(u8 LCD_Reg)
@@ -25,15 +25,15 @@ u16 LCD_ReadReg(u8 LCD_Reg)
 void LCD_GPIO_Config(void)
 {
   GPIO_InitTypeDef GPIO_InitStructure;
-          
+
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD |RCC_APB2Periph_GPIOE ,ENABLE);
- 
+
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_InitStructure.GPIO_Mode =  GPIO_Mode_AF_PP;
-  /* 配置FSMC相对应的数据线,FSMC-D0~D15: PD 14 15 0 1 8 9 10,PE 7 8 9 10 11 12 13 14 15*/	
+  /* 配置FSMC相对应的数据线,FSMC-D0~D15: PD 14 15 0 1 8 9 10,PE 7 8 9 10 11 12 13 14 15*/
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_14 | GPIO_Pin_15 | GPIO_Pin_0  | GPIO_Pin_1
                               | GPIO_Pin_8  | GPIO_Pin_9  | GPIO_Pin_10;
-  GPIO_Init(GPIOD, &GPIO_InitStructure);	
+  GPIO_Init(GPIOD, &GPIO_InitStructure);
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7  | GPIO_Pin_8  | GPIO_Pin_9  | GPIO_Pin_10
                               | GPIO_Pin_11 | GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14
                               | GPIO_Pin_15 | GPIO_Pin_2;
@@ -49,28 +49,28 @@ void LCD_GPIO_Config(void)
 }
 
 void LCD_FSMC_Config(void)
-{	
+{
   FSMC_NORSRAMInitTypeDef  FSMC_NORSRAMInitStructure;
-  FSMC_NORSRAMTimingInitTypeDef  readWriteTiming,writeTiming; 
+  FSMC_NORSRAMTimingInitTypeDef  readWriteTiming,writeTiming;
 
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
   RCC_AHBPeriphClockCmd(RCC_AHBPeriph_FSMC, ENABLE);
 
-  readWriteTiming.FSMC_AddressSetupTime = 0x01;	 //地址建立时间（ADDSET）为2个HCLK 1/36M=27ns
+  readWriteTiming.FSMC_AddressSetupTime = 0x01;	 //??????????ADDSET???2??HCLK 1/36M=27ns
   readWriteTiming.FSMC_AddressHoldTime = 0x00;
   readWriteTiming.FSMC_DataSetupTime = 0x0f;
   readWriteTiming.FSMC_BusTurnAroundDuration = 0x00;
   readWriteTiming.FSMC_CLKDivision = 0x00;
   readWriteTiming.FSMC_DataLatency = 0x00;
-  readWriteTiming.FSMC_AccessMode = FSMC_AccessMode_A;	 //模式A 
+  readWriteTiming.FSMC_AccessMode = FSMC_AccessMode_A;	 //模式A
 
-  writeTiming.FSMC_AddressSetupTime = 0x00;	 //地址建立时间（ADDSET）为1个HCLK  
+  writeTiming.FSMC_AddressSetupTime = 0x00;	 //地址建立时间（ADDSET）为1个HCLK
   writeTiming.FSMC_AddressHoldTime = 0x00;
-  writeTiming.FSMC_DataSetupTime = 0x03;		 ////数据保存时间为4个HCLK	
+  writeTiming.FSMC_DataSetupTime = 0x03;		 ////数据保存时间为4个HCLK
   writeTiming.FSMC_BusTurnAroundDuration = 0x00;
   writeTiming.FSMC_CLKDivision = 0x00;
   writeTiming.FSMC_DataLatency = 0x00;
-  writeTiming.FSMC_AccessMode = FSMC_AccessMode_A;	 //模式A 
+  writeTiming.FSMC_AccessMode = FSMC_AccessMode_A;	 //模式A
 
   FSMC_NORSRAMInitStructure.FSMC_Bank = FSMC_Bank1_NORSRAM1;  //选择外接存储区域的地址
   FSMC_NORSRAMInitStructure.FSMC_DataAddressMux = FSMC_DataAddressMux_Disable;//配置数据线和地址线是否复用
@@ -92,7 +92,7 @@ void LCD_FSMC_Config(void)
   FSMC_NORSRAMInitStructure.FSMC_ReadWriteTimingStruct = &readWriteTiming;//读时序
   FSMC_NORSRAMInitStructure.FSMC_WriteTimingStruct = &writeTiming;  //写时序
 
-  FSMC_NORSRAMInit(&FSMC_NORSRAMInitStructure); 
+  FSMC_NORSRAMInit(&FSMC_NORSRAMInitStructure);
     /* 使能 FSMC Bank1_SRAM Bank */
   FSMC_NORSRAMCmd(FSMC_Bank1_NORSRAM1, ENABLE);
 }
@@ -107,13 +107,13 @@ void LCD_HardwareConfig(void)
 //写寄存器函数
 //data:寄存器值
 void LCD_WR_REG(u16 data)
-{ 
-	LCD_RS_CLR;//写地址  
- 	LCD_CS_CLR; 
-	DATAOUT(data); 
-	LCD_WR_CLR; 
-	LCD_WR_SET; 
- 	LCD_CS_SET;   
+{
+	LCD_RS_CLR;//写地址
+ 	LCD_CS_CLR;
+	DATAOUT(data);
+	LCD_WR_CLR;
+	LCD_WR_SET;
+ 	LCD_CS_SET;
 }
 
 //写数据函数
@@ -142,30 +142,30 @@ u16 LCD_RD_DATA(void)
 	LCD_CS_CLR;
 	//读取数据(读寄存器时,并不需要读2次)
 	LCD_RD_CLR;
-  
-	ram = DATAIN();  
+
+	ram = DATAIN();
 	LCD_RD_SET;
-	LCD_CS_SET; 
+	LCD_CS_SET;
 
 	GPIOC->CRL = 0X33333333; //PC0-7  上拉输出
 	GPIOC->CRH = 0X33333333; //PC8-15 上拉输出
 	GPIOC->ODR = 0XFFFF;    //全部输出高
-	return ram;  
+	return ram;
 }
 
 void LCD_GPIO_Config(void)
 {
   GPIO_InitTypeDef GPIO_InitStructure;
-          
+
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB |RCC_APB2Periph_GPIOC, ENABLE);
- 
+
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_InitStructure.GPIO_Mode =  GPIO_Mode_Out_PP;
-  /*D0 - D15: PC0 - PC15 */  
+  /*D0 - D15: PC0 - PC15 */
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_All;
   GPIO_Init(GPIOC, &GPIO_InitStructure);
 	GPIO_SetBits(GPIOC, GPIO_Pin_All);
-  
+
   /* 配置控制线
   * PB6   :LCD-RD
   * PB7   :LCD-WR
@@ -182,4 +182,3 @@ void LCD_HardwareConfig(void)
   LCD_GPIO_Config();
 }
 #endif
-

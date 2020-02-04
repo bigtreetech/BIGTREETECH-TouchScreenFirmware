@@ -10,7 +10,7 @@ bit 2:3 - Input  00:Analog input  01:input floating(reset value)  10:pull up/dow
         - Output 00:Output push-pull  01:Output open-drain  10:AF push-pull  11:AF open-drain
 */
 typedef enum
-{  
+{
   MGPIO_MODE_AIN = (0<<2)|(0),
   MGPIO_MODE_IPN = (1<<2)|(0),
   MGPIO_MODE_IPU = (2<<2)|(0),

@@ -131,7 +131,7 @@
     #define DE_PREHEAT_CUSTOM2      "CUSTOM2"
     #define DE_IS_PAUSE             "Unable to extrude when printing, Pause printing?"
     #define DE_AUTO_SHUT_DOWN       "Auto Power"
-    #define DE_MANUAL_SHUT_DOWN     "Manual"    
+    #define DE_MANUAL_SHUT_DOWN     "Manual"
     #define DE_UNIFIEDMOVE          "Movement"
     #define DE_UNIFIEDHEAT          "Heat&Fan"
     #define DE_COOLDOWN             "Cool Down"
@@ -152,5 +152,5 @@
     #define DE_MOVE_SPEED           "Move speed(X Y Z)"
     #define DE_KNOB_LED             "Rotary Knob LED"
     #define DE_M0_PAUSE             "Paused by M0 command"
-    
+
 #endif

@@ -54,4 +54,3 @@ void heatSetSendWaiting(TOOL tool, bool isWaiting);
 void loopCheckHeater(void);
 
 #endif
-

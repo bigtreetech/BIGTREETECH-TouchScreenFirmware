@@ -26,7 +26,7 @@
     };
     const  u8 item_power_off[ITEM_PS_ON_NUM] = {0, 1};
     static u8  item_power_off_i = 0;
-      
+
     #ifdef FIL_RUNOUT_PIN
       #define ITEM_RUNOUT_NUM 3
       const ITEM itemRunout[ITEM_RUNOUT_NUM] = {
@@ -48,7 +48,7 @@
          {ICON_LEDCOLOR,             LABEL_RED},
          {ICON_LEDCOLOR,             LABEL_ORANGE},
          {ICON_LEDCOLOR,             LABEL_YELLOW},
-         {ICON_LEDCOLOR,             LABEL_GREEN},  
+         {ICON_LEDCOLOR,             LABEL_GREEN},
          {ICON_LEDCOLOR,             LABEL_BLUE},
          {ICON_LEDCOLOR,             LABEL_INDIGO},
          {ICON_LEDCOLOR,             LABEL_VIOLET},
@@ -82,7 +82,7 @@
           featureSettingsItems.items[KEY_ICON_0] = itemPowerOff[item_power_off_i];
         }
       }
-      
+
       #ifdef FIL_RUNOUT_PIN
       for(u8 i=0; i<ITEM_RUNOUT_NUM; i++)
       {
@@ -93,7 +93,7 @@
         }
       }
       #endif
-      
+
       #ifdef LED_color_PIN
       for(u8 i=0; i<LED_color_NUM; i++)
       {
@@ -104,7 +104,7 @@
         }
       }
       #endif
-      
+
       menuDrawPage(&featureSettingsItems);
 
       while(infoMenu.menu[infoMenu.cur] == menuFeatureSettings)
@@ -114,40 +114,40 @@
         {
           #ifdef FIL_RUNOUT_PIN
           case KEY_ICON_0:
-            item_power_off_i = (item_power_off_i + 1) % ITEM_PS_ON_NUM;                
+            item_power_off_i = (item_power_off_i + 1) % ITEM_PS_ON_NUM;
             featureSettingsItems.items[key_num] = itemPowerOff[item_power_off_i];
             menuDrawItem(&featureSettingsItems.items[key_num], key_num);
             infoSettings.auto_off = item_power_off[item_power_off_i];
             break;
           #endif
-          
+
           #ifdef FIL_RUNOUT_PIN
           case KEY_ICON_1:
-            item_runout_i = (item_runout_i + 1) % ITEM_RUNOUT_NUM;                
+            item_runout_i = (item_runout_i + 1) % ITEM_RUNOUT_NUM;
             featureSettingsItems.items[key_num] = itemRunout[item_runout_i];
             menuDrawItem(&featureSettingsItems.items[key_num], key_num);
             infoSettings.runout = item_runout[item_runout_i];
             break;
           #endif
-            
+
           #ifdef LED_color_PIN
           case KEY_ICON_2:
-            item_ledcolor_i = (item_ledcolor_i + 1) % LED_color_NUM;                
+            item_ledcolor_i = (item_ledcolor_i + 1) % LED_color_NUM;
             featureSettingsItems.items[key_num] = itemLedcolor[item_ledcolor_i];
             menuDrawItem(&featureSettingsItems.items[key_num], key_num);
             infoSettings.led_color = led_color[item_ledcolor_i];
             ws2812_send_DAT(led_color[item_ledcolor_i]);
             break;
           #endif
-          
+
           case KEY_ICON_7:
             infoMenu.cur--;
             break;
-          
+
           default:
             break;
         }
-        loopProcess();		
+        loopProcess();
       }
 
       if(memcmp(&now, &infoSettings, sizeof(SETTINGS)))
@@ -178,7 +178,7 @@
 //
     const uint16_t toggleitem[2] = {ICONCHAR_TOGGLE_OFF,ICONCHAR_TOGGLE_ON};
     const  u8  item_toggleState[2]    = {0, 1};
-    
+
     #ifdef PS_ON_PIN
       #define ITEM_PS_ON_NUM 2
       const LISTITEM itemPowerOff[ITEM_PS_ON_NUM] = {
@@ -189,7 +189,7 @@
       const  u8 item_power_off[ITEM_PS_ON_NUM] = {0, 1};
       static u8  item_power_off_i = 0; //for auto power
     #endif
-    
+
     #ifdef FIL_RUNOUT_PIN
       #define ITEM_RUNOUT_NUM 3
       const LISTITEM itemRunout[ITEM_RUNOUT_NUM] = {
@@ -202,7 +202,7 @@
       const  u8 item_runout[ITEM_RUNOUT_NUM] = {FILAMENT_RUNOUT_OFF, FILAMENT_RUNOUT_ON, FILAMENT_SMART_RUNOUT_ON};
       static u8  item_runout_i = 0; //for runout sensor
     #endif
-    
+
     #define ITEM_SPEED_NUM 3
     const LISTITEM itemMoveSpeed[ITEM_SPEED_NUM] = {
       // icon          ItemType           Item Title              item value text(only for custom value)
@@ -221,7 +221,7 @@
         {ICONCHAR_BLANK, LIST_CUSTOMVALUE, LABEL_KNOB_LED, LABEL_RED},
         {ICONCHAR_BLANK, LIST_CUSTOMVALUE, LABEL_KNOB_LED, LABEL_ORANGE},
         {ICONCHAR_BLANK, LIST_CUSTOMVALUE, LABEL_KNOB_LED, LABEL_YELLOW},
-        {ICONCHAR_BLANK, LIST_CUSTOMVALUE, LABEL_KNOB_LED, LABEL_GREEN},  
+        {ICONCHAR_BLANK, LIST_CUSTOMVALUE, LABEL_KNOB_LED, LABEL_GREEN},
         {ICONCHAR_BLANK, LIST_CUSTOMVALUE, LABEL_KNOB_LED, LABEL_BLUE},
         {ICONCHAR_BLANK, LIST_CUSTOMVALUE, LABEL_KNOB_LED, LABEL_INDIGO},
         {ICONCHAR_BLANK, LIST_CUSTOMVALUE, LABEL_KNOB_LED, LABEL_VIOLET},
@@ -258,15 +258,15 @@
       SKEY_KNOB,
       #endif
       SKEY_COUNT //keep this always at the end
-    }SKEY_LIST; 
-    
+    }SKEY_LIST;
+
     #define FE_PAGE_COUNT  (SKEY_COUNT+LISTITEM_PER_PAGE-1)/LISTITEM_PER_PAGE
     int fe_cur_page = 0;
 
 //
 //set item types
 //
-    LISTITEM settingPage[SKEY_COUNT] = {  
+    LISTITEM settingPage[SKEY_COUNT] = {
       {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_TERMINAL_ACK,       LABEL_BACKGROUND},
       {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_INVERT_YAXIS,       LABEL_BACKGROUND},
       {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_INVERT_ZAXIS,       LABEL_BACKGROUND},
@@ -280,7 +280,7 @@
       #ifdef LED_color_PIN
       {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_KNOB_LED,           LABEL_OFF       },
       #endif
-      
+
     };
 
 //
@@ -334,8 +334,8 @@
         break;
 
         #ifdef LED_color_PIN
-        case SKEY_KNOB:            
-        infoSettings.led_color = (infoSettings.led_color + 1) % LED_color_NUM;                
+        case SKEY_KNOB:
+        infoSettings.led_color = (infoSettings.led_color + 1) % LED_color_NUM;
         settingPage[item_index] = itemLedcolor[infoSettings.led_color];
         featureSettingsItems.items[key_val] = settingPage[item_index];
         ws2812_send_DAT(led_color[infoSettings.led_color]);
@@ -380,7 +380,7 @@
               {
                 if (infoSettings.auto_off == item_power_off[n])
                 { item_power_off_i = n; }
-              }  
+              }
               featureSettingsItems.items[i] = itemPowerOff[item_power_off_i];
             break;
           #endif
@@ -401,7 +401,7 @@
             break;
 
           #ifdef LED_color_PIN
-            case SKEY_KNOB:                           
+            case SKEY_KNOB:
             settingPage[item_index] = itemLedcolor[infoSettings.led_color];
             featureSettingsItems.items[i] = settingPage[item_index];
             break;
@@ -437,7 +437,7 @@
       }
       //menuDrawListItem(&featureSettingsItems.items[5],5);
       //menuDrawListItem(&featureSettingsItems.items[6],6);
-      
+
     }
 
 
@@ -485,7 +485,7 @@
           break;
         }
 
-      loopProcess();		
+      loopProcess();
     }
 
       if(memcmp(&now, &infoSettings, sizeof(SETTINGS)))

@@ -1,7 +1,7 @@
 #include "mygcodefs.h"
 #include "includes.h"
 
-/* 
+/*
 */
 bool mountGcodeSDCard(void)
 {
@@ -42,12 +42,12 @@ bool scanPrintFilesGcodeFs(void)
   strcpy(data,ret);
   clearRequestCommandInfo();
   char s[3];
-  
+
   if(strstr(data, "\r\n")) //for smoothieware
     strcpy(s, "\r\n");
   else //for Marlin
     strcpy(s, "\n");
-    
+
   char *line = strtok(data, s);
   for (;line != NULL;line = strtok(NULL, s))
   {
@@ -72,17 +72,17 @@ bool scanPrintFilesGcodeFs(void)
       Pstr_tmp = strrchr (longfilemane ,'/'); //remove folder information
       if (Pstr_tmp == NULL) Pstr_tmp = longfilemane;
       else Pstr_tmp++;
-      infoFile.Longfile[infoFile.f_num]= malloc(strlen(Pstr_tmp) + 1);      
+      infoFile.Longfile[infoFile.f_num]= malloc(strlen(Pstr_tmp) + 1);
       if (infoFile.Longfile[infoFile.f_num] == NULL)
       {
         clearRequestCommandInfo();
         break;
-      } 
-      strcpy(infoFile.Longfile[infoFile.f_num], Pstr_tmp);      
+      }
+      strcpy(infoFile.Longfile[infoFile.f_num], Pstr_tmp);
       clearRequestCommandInfo();  // for M33
 
-      char* rest = pline;  
-      char* file = strtok_r(rest," ",&rest);   //remove file size from pline   
+      char* rest = pline;
+      char* file = strtok_r(rest," ",&rest);   //remove file size from pline
       infoFile.file[infoFile.f_num] = malloc(strlen(file) + 1);
       if (infoFile.file[infoFile.f_num] == NULL) break;
       strcpy(infoFile.file[infoFile.f_num++], file);
@@ -93,7 +93,7 @@ bool scanPrintFilesGcodeFs(void)
       if (infoFile.F_num >= FOLDER_NUM)
         continue; /* floder max number is FOLDER_NUM */
 
-      char* rest = pline;  
+      char* rest = pline;
       char* folder = strtok_r(rest,"/",&rest);
 
       bool found = false;
@@ -104,7 +104,7 @@ bool scanPrintFilesGcodeFs(void)
           found = true;
           break;
         }
-      }  
+      }
 
       if(!found)
       {
@@ -120,4 +120,3 @@ bool scanPrintFilesGcodeFs(void)
   free(data);
   return true;
 }
-

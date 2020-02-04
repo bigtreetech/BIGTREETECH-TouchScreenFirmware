@@ -3,10 +3,10 @@
 
 void menuIsPause(void)
 {
-  u16 key_num = IDLE_TOUCH;	
+  u16 key_num = IDLE_TOUCH;
 
   popupDrawPage(bottomDoubleBtn, textSelect(LABEL_WARNING), textSelect(LABEL_IS_PAUSE), textSelect(LABEL_CONFIRM), textSelect(LABEL_CANNEL));
- 
+
   while(infoMenu.menu[infoMenu.cur] == menuIsPause)
   {
     key_num = KEY_GetValue(2, doubleBtnRect);
@@ -17,9 +17,9 @@ void menuIsPause(void)
 			    infoMenu.menu[infoMenu.cur]=menuExtrude;
 			  break;
 
-      case KEY_POPUP_CANCEL:	
+      case KEY_POPUP_CANCEL:
         infoMenu.cur--;
-        break;		
+        break;
     }
     loopProcess();
   }
@@ -52,28 +52,28 @@ void menuMore(void)
       case KEY_ICON_0:
         infoMenu.menu[++infoMenu.cur] = menuFan;
         break;
-      
+
       case KEY_ICON_1:
         infoMenu.menu[++infoMenu.cur] = menuRGBSettings;
         break;
-      
+
       case KEY_ICON_2:
 				if (isPrinting() && !isPause()) // need paused before extrude
 				  infoMenu.menu[++infoMenu.cur] = menuIsPause;
 				else
-				  infoMenu.menu[++infoMenu.cur] = menuExtrude; 
+				  infoMenu.menu[++infoMenu.cur] = menuExtrude;
         break;
-      
+
       case KEY_ICON_3:
         infoMenu.menu[++infoMenu.cur] = menuFeatureSettings;
         break;
-      
+
       case KEY_ICON_7:
         infoMenu.cur--;
         break;
-      
+
       default:
-        break;            
+        break;
     }
     loopProcess();
   }

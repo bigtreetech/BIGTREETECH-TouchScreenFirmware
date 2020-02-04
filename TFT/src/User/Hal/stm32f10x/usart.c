@@ -92,7 +92,7 @@ void USART_DeConfig(uint8_t port)
     case _UART5:
       RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART5, ENABLE);
       RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART5, DISABLE);
-      break;  
+      break;
   }
 }
 

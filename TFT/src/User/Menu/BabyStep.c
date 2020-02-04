@@ -1,7 +1,7 @@
 #include "BabyStep.h"
 #include "includes.h"
 
-//1 title, ITEM_PER_PAGE items(icon+label) 
+//1 title, ITEM_PER_PAGE items(icon+label)
 MENUITEMS babyStepItems = {
 //title
   LABEL_BABYSTEP,
@@ -120,8 +120,3 @@ void menuBabyStep(void)
     loopProcess();
   }
 }
-
-
-
-
-

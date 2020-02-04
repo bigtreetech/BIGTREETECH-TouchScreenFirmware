@@ -45,7 +45,7 @@ void coordinateSetClear(bool clear)
 
 void coordinateSetAxisTarget(AXIS axis,float position)
 {
-  bool r = (axis == E_AXIS) 
+  bool r = (axis == E_AXIS)
           ? relative_e || relative_mode
           : relative_mode;
 
@@ -83,7 +83,7 @@ void coordinateGetAll(COORDINATE *tmp)
 COORDINATE curPosition={{0.0f,0.0f,0.0f,0.0f},3000};
 
 void coordinateSetAxisActualSteps(AXIS axis, int steps)
-{ 
+{
   curPosition.axis[axis] = steps / EXTRUDE_STEPS; // TODO: NEED fix, M92 auto get
 }
 
@@ -91,4 +91,3 @@ float coordinateGetAxisActual(AXIS axis)
 {
   return curPosition.axis[axis];
 }
-
