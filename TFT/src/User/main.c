@@ -18,7 +18,6 @@ void Hardware_GenericInit(void)
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO , ENABLE);
   GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);
 #endif
-  RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
   GPIO_PinRemapConfig(GPIO_Remap_USART2, ENABLE);
   XPT2046_Init();
   W25Qxx_Init();
