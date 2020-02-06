@@ -28,10 +28,9 @@ GPIO_PinRemapConfig(GPIO_Remap_USART2, ENABLE);
   LCD_Init();
   readStoredPara();
   LCD_RefreshDirection();  //refresh display direction after reading settings
- 
-  #ifndef MKS_32_V1_4
-  //MKS updates are done via darkspr1te bootloader - all others via this routine
   scanUpdates();
+  #ifndef MKS_32_V1_4
+  //causes hang if we deinit spi1 
   SD_DeInit();
   #endif
   
