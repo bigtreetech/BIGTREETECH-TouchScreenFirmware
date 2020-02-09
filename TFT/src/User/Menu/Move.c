@@ -36,6 +36,12 @@
 
 #endif
 
+#define X 0
+#define Y 1
+#define Z 2
+
+AXIS a = X_AXIS;
+
 //1 title, ITEM_PER_PAGE item
 MENUITEMS moveItems = {
 //  title
@@ -103,12 +109,6 @@ static u32 update_time = 50; // 1 seconds is 100
 void menuMove(void)
 {
   KEY_VALUES  key_num = KEY_IDLE;
-  uint32_t B0;
-  uint32_t B1;
-  uint32_t B2;
-  uint32_t B5;
-  uint32_t B6;
-  uint32_t B7;
 
 
   #ifdef ALTERNATIVE_MOVE_MENU
@@ -173,6 +173,10 @@ void menuMove(void)
   mustStoreCmd("M114\n");
   drawXYZ();
 
+  #if LCD_ENCODER_SUPPORT
+    encoderPosition = 0;    
+  #endif
+
   while(infoMenu.menu[infoMenu.cur] == menuMove)
   {
     key_num = menuKeyGetValue();
@@ -181,6 +185,7 @@ void menuMove(void)
       #ifdef ALTERNATIVE_MOVE_MENU
           
             case KEY_ICON_0:
+                  a = Z_AXIS;
                   #ifdef MENU_LIST_MODE
                     if(infoSettings.invert_zaxis == 1){
                       storeCmd(ZGCODE_INC, item_move_len[item_move_len_i]);
@@ -194,6 +199,7 @@ void menuMove(void)
                   break;
 
             case KEY_ICON_1:
+                  a = Y_AXIS;
                   #ifdef MENU_LIST_MODE
                     if(infoSettings.invert_yaxis == 1){
                       storeCmd(YGCODE_DEC, item_move_len[item_move_len_i]);
@@ -207,6 +213,7 @@ void menuMove(void)
                   break;
 
             case KEY_ICON_2: 
+                  a = Z_AXIS;
                   #ifdef MENU_LIST_MODE
                     if(infoSettings.invert_zaxis == 1){
                       storeCmd(ZGCODE_DEC, item_move_len[item_move_len_i]);
@@ -225,64 +232,13 @@ void menuMove(void)
                   menuDrawItem(&moveItems.items[key_num], key_num);
                   break;
 
-            case KEY_ICON_4: storeCmd("G1 X-%.1f\n", item_move_len[item_move_len_i]);  break;
+            case KEY_ICON_4: 
+              a = X_AXIS;
+              storeCmd("G1 X-%.1f\n", item_move_len[item_move_len_i]);  
+              break;
 
             case KEY_ICON_5:
-                  #ifdef MENU_LIST_MODE
-                    if(infoSettings.invert_yaxis == 1){
-                      storeCmd(YGCODE_INC, item_move_len[item_move_len_i]);
-                    }
-                    else{
-                      storeCmd(YGCODE_DEC, item_move_len[item_move_len_i]);
-                    }
-                  #else
-                    storeCmd(YGCODE_DOWN, item_move_len[item_move_len_i]);
-                  #endif
-                  break;
-
-            case KEY_ICON_6: storeCmd("G1 X%.1f\n",  item_move_len[item_move_len_i]);  break;
-            case KEY_ICON_7: infoMenu.cur--; break;
-            default:break; 
-        
-      #else
-
-            case KEY_ICON_0: storeCmd("G1 X%.1f\n",  item_move_len[item_move_len_i]);  break;
-
-            case KEY_ICON_1:
-                  #ifdef MENU_LIST_MODE
-                    if(infoSettings.invert_yaxis == 1){
-                      storeCmd(YGCODE_DEC, item_move_len[item_move_len_i]);
-                    }
-                    else{
-                      storeCmd(YGCODE_INC, item_move_len[item_move_len_i]);
-                    }
-                  #else
-                    storeCmd(YGCODE_UP, item_move_len[item_move_len_i]);
-                  #endif
-                  break;
-
-            case KEY_ICON_2:
-            #ifdef MENU_LIST_MODE
-                    if(infoSettings.invert_zaxis == 1){
-                      storeCmd(ZGCODE_DEC, item_move_len[item_move_len_i]);
-                    }
-                    else{
-                      storeCmd(ZGCODE_INC, item_move_len[item_move_len_i]);
-                    }
-                  #else
-                  storeCmd(ZGCODE_UP,   item_move_len[item_move_len_i]);  break;
-                  #endif
-                  break;
-
-            case KEY_ICON_3: 
-                  item_move_len_i = (item_move_len_i+1)%ITEM_MOVE_LEN_NUM;            
-                  moveItems.items[key_num] = itemMoveLen[item_move_len_i];
-                  menuDrawItem(&moveItems.items[key_num], key_num);
-                  break;
-
-            case KEY_ICON_4: storeCmd("G1 X-%.1f\n", item_move_len[item_move_len_i]);  break;
-
-            case KEY_ICON_5:
+                  a = Y_AXIS;
                   #ifdef MENU_LIST_MODE
                     if(infoSettings.invert_yaxis == 1){
                       storeCmd(YGCODE_INC, item_move_len[item_move_len_i]);
@@ -296,6 +252,121 @@ void menuMove(void)
                   break;
 
             case KEY_ICON_6: 
+                  a = X_AXIS;
+                  storeCmd("G1 X%.1f\n",  item_move_len[item_move_len_i]);  
+                  break;
+            case KEY_ICON_7: infoMenu.cur--; break;
+            default:
+            #if LCD_ENCODER_SUPPORT
+              if(encoderPosition)
+              {
+                if(encoderPosition > 0)
+                {
+                  switch(a)
+                  {
+                  case X_AXIS:
+                    storeCmd("G1 X%.1f\n", item_move_len[item_move_len_i]);  
+                    break;
+                  case Y_AXIS:
+                    storeCmd(YGCODE_INC, item_move_len[item_move_len_i]);
+                    break;
+                  case Z_AXIS:
+                    storeCmd(ZGCODE_INC, item_move_len[item_move_len_i]);
+                    break;
+                  default:
+                    break;
+                  }
+                }
+                if(encoderPosition < 0)
+                {
+                  switch(a)
+                  {
+                  case X_AXIS:
+                    storeCmd("G1 X-%.1f\n", item_move_len[item_move_len_i]);  
+                    break;
+                  case Y_AXIS:
+                    storeCmd(YGCODE_DEC, item_move_len[item_move_len_i]);
+                    break;
+                  case Z_AXIS:
+                    storeCmd(ZGCODE_DEC, item_move_len[item_move_len_i]);
+                    break;
+                  default:
+                    break;
+                  }
+                }
+                encoderPosition = 0;    
+              }
+              else if(LCD_ReadBtn(LCD_BUTTON_INTERVALS))
+              {
+                a++;
+                if(a>2) a=0;
+                break;
+              }
+              LCD_LoopEncoder();
+            #endif
+            break; 
+        
+      #else
+
+            case KEY_ICON_0: 
+              a = X_AXIS;
+              storeCmd("G1 X%.1f\n",  item_move_len[item_move_len_i]);  
+              break;
+
+            case KEY_ICON_1:
+                  #ifdef MENU_LIST_MODE
+                    if(infoSettings.invert_yaxis == 1){
+                      storeCmd(YGCODE_DEC, item_move_len[item_move_len_i]);
+                    }
+                    else{
+                      storeCmd(YGCODE_INC, item_move_len[item_move_len_i]);
+                    }
+                  #else
+                    a = Y_AXIS;
+                    storeCmd(YGCODE_UP, item_move_len[item_move_len_i]);
+                  #endif
+                  break;
+
+            case KEY_ICON_2:
+            #ifdef MENU_LIST_MODE
+                    if(infoSettings.invert_zaxis == 1){
+                      storeCmd(ZGCODE_DEC, item_move_len[item_move_len_i]);
+                    }
+                    else{
+                      storeCmd(ZGCODE_INC, item_move_len[item_move_len_i]);
+                    }
+                  #else
+                  a = Y_AXIS;
+                  storeCmd(ZGCODE_UP,   item_move_len[item_move_len_i]);  break;
+                  #endif
+                  break;
+
+            case KEY_ICON_3: 
+                  item_move_len_i = (item_move_len_i+1)%ITEM_MOVE_LEN_NUM;            
+                  moveItems.items[key_num] = itemMoveLen[item_move_len_i];
+                  menuDrawItem(&moveItems.items[key_num], key_num);
+                  break;
+
+            case KEY_ICON_4: 
+              a = X_AXIS;
+              storeCmd("G1 X-%.1f\n", item_move_len[item_move_len_i]);  
+              break;
+
+            case KEY_ICON_5:
+                  #ifdef MENU_LIST_MODE
+                    if(infoSettings.invert_yaxis == 1){
+                      storeCmd(YGCODE_INC, item_move_len[item_move_len_i]);
+                    }
+                    else{
+                      storeCmd(YGCODE_DEC, item_move_len[item_move_len_i]);
+                    }
+                  #else
+                    a = Y_AXIS;
+                    storeCmd(YGCODE_DOWN, item_move_len[item_move_len_i]);
+                  #endif
+                  break;
+
+            case KEY_ICON_6: 
                   #ifdef MENU_LIST_MODE
                     if(infoSettings.invert_zaxis == 1){
                       storeCmd(ZGCODE_INC, item_move_len[item_move_len_i]);
@@ -304,12 +375,55 @@ void menuMove(void)
                       storeCmd(ZGCODE_DEC, item_move_len[item_move_len_i]);
                     }
                   #else
+                    a = Y_AXIS;
                     storeCmd(ZGCODE_DOWN,   item_move_len[item_move_len_i]);  break;
                   #endif
                   break;
 
             case KEY_ICON_7: infoMenu.cur--; break;
-            default:break; 
+            default:
+            #if LCD_ENCODER_SUPPORT && !MENU_LIST_MODE
+              if(encoderPosition)
+              {
+                if(encoderPosition > 0)
+                {
+                  switch(a)
+                  {
+                  case X_AXIS:
+                    storeCmd("G1 X%.1f\n", item_move_len[item_move_len_i]);  
+                    break;
+                  case Y_AXIS:
+                    storeCmd(YGCODE_UP, item_move_len[item_move_len_i]);
+                    break;
+                  case Z_AXIS:
+                    storeCmd(ZGCODE_UP, item_move_len[item_move_len_i]);
+                    break;
+                  default:
+                    break;
+                  }
+                }
+                if(encoderPosition < 0)
+                {
+                  switch(a)
+                  {
+                  case X_AXIS:
+                    storeCmd("G1 X-%.1f\n", item_move_len[item_move_len_i]);  
+                    break;
+                  case Y_AXIS:
+                    storeCmd(YGCODE_DOWN, item_move_len[item_move_len_i]);
+                    break;
+                  case Z_AXIS:
+                    storeCmd(ZGCODE_DOWN, item_move_len[item_move_len_i]);
+                    break;
+                  default:
+                    break;
+                  }
+                }
+                encoderPosition = 0;    
+              }
+              LCD_LoopEncoder();
+            #endif
+            break; 
       #endif    
     }
     loopProcess();
@@ -333,13 +447,18 @@ void drawXYZ(void){
   char tempstr[100];
   //GUI_SetColor(GANTRYLBL_BKCOLOR);
   //GUI_FillPrect(&RecXYZ);
-  my_sprintf(tempstr, "X:%.2f  ", getAxisLocation(0));  
+  my_sprintf(tempstr, "X:%.1f  ", getAxisLocation(0));  
+  if (a == X_AXIS) GUI_SetColor(INFOBOX_ICON_COLOR);
   GUI_DispString(START_X+1*SPACE_X+1*ICON_WIDTH,(ICON_START_Y-BYTE_HEIGHT)/2,(u8 *)tempstr);
-  my_sprintf(tempstr, "Y:%.2f  ", getAxisLocation(1));
+  GUI_SetColor(FONT_COLOR);
+  my_sprintf(tempstr, "Y:%.1f  ", getAxisLocation(1));
+  if (a == Y_AXIS) GUI_SetColor(INFOBOX_ICON_COLOR);
   GUI_DispString(START_X+2*SPACE_X+2*ICON_WIDTH,(ICON_START_Y-BYTE_HEIGHT)/2,(u8 *)tempstr);
-  my_sprintf(tempstr, "Z:%.2f  ", getAxisLocation(2));
+  GUI_SetColor(FONT_COLOR);
+  my_sprintf(tempstr, "Z:%.1f  ", getAxisLocation(2));
+  if (a == Z_AXIS) GUI_SetColor(INFOBOX_ICON_COLOR);
   GUI_DispString(START_X+3*SPACE_X+3*ICON_WIDTH,(ICON_START_Y-BYTE_HEIGHT)/2,(u8 *)tempstr);
   
   //GUI_SetBkColor(BACKGROUND_COLOR);
-  //GUI_SetColor(FONT_COLOR);
+  GUI_SetColor(FONT_COLOR);
 }

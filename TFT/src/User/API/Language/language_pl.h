@@ -152,5 +152,8 @@
     #define PL_MOVE_SPEED           "Move speed(X Y Z)"
     #define PL_KNOB_LED             "Rotary Knob LED"
     #define PL_M0_PAUSE             "Przerwa wywolana rozkazem M0"
+    #define PL_SEND_START_GCODE     "Start Gcode before print"
+    #define PL_SEND_END_GCODE       "End Gcode after print"
+    #define PL_PERSISTANT_STATUS_INFO "Persistent Status Info"
 
 #endif

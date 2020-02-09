@@ -183,6 +183,16 @@
 
 #define SHOW_FAN_PERCENTAGE // enable to show fan speed as a percentage instead of a value
 
+/*
+  Rapid Serial Communication:More frequent Serial communicaiton while printing.
+  The controller will send and parse  gcodes more frequently  while drawing on 
+  screen to prevent printer idling and stuttering  due to empty printer buffer.
+  
+  Note: this might make the  graphics slow when switching menus while printing.
+*/
+//#define RAPID_SERIAL_COMM
+
+
 /** CUSTOM GCODE COMMANDS
  * Support up to 7 custom gcodes in Icon mode and 15 in List Mode.
  * Uncomment CUSTOM_X_LABEL and CUSTOM_X_GCODE to enable custom gcode.
@@ -229,6 +239,16 @@ custom gcode below are compatible only if MENU_LIST_MODE is active
 //#define CUSTOM_14_LABEL "Custom14"
 //#define CUSTOM_14_GCODE "M105\n"
 #endif
+
+//
+//Start Gcode - run this gcode before starting print
+//
+#define PRINT_START_GCODE "G28\nG29\n" // home and abl
+
+//
+//End Gcode - run this gcode after finishing print
+//
+#define PRINT_END_GCODE "G90\nG1 E-4\nG92 E0\nM18\n" //reduce filament pressure , reset Extruder position, disable steppers
 
 #define CANCEL_PRINT_GCODE "G28 X0 Y0\n"
 

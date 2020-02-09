@@ -181,7 +181,7 @@ void parseACK(void)
       }
      #ifdef MENU_LIST_MODE
       avoid_terminal = infoSettings.terminalACK;
-    #endif
+     #endif
     }
     else if(ack_seen("B:"))		
     {
@@ -265,14 +265,31 @@ void parseACK(void)
     {
       ackPopupInfo(errormagic);
     }
+    else if(ack_seen(unknowmagic))
+    {
+      ackPopupInfo(unknowmagic);
+    }
     else if(ack_seen(echomagic))
     {
       for(u8 i = 0; i < COUNT(ignoreEcho); i++)
       {
         if(strstr(dmaL2Cache, ignoreEcho[i])) goto parse_end;
       }
+      if(ack_seen("S") || ack_seen("R"))		
+      {
+        float tVal = ack_value();
+        if(tVal && tVal > 0)
+        {
+          heatSyncTargetTemp(heatGetCurrentToolNozzle(), tVal+0.5);
+          goto parse_end;
+        }
+      }
       ackPopupInfo(echomagic);
     }
+    //else if(ack_seen("S") || ack_seen("R"))		
+    //{
+    //  heatSyncTargetTemp(heatGetCurrentToolNozzle(), ack_value()+0.5);
+    //}
   }
   if (ack_seen(" F0:"))
   {

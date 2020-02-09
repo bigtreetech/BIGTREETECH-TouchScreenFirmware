@@ -14,7 +14,7 @@ LABEL_READY,
     {ICON_GCODE,                LABEL_GCODE},
     {ICON_CUSTOM,               LABEL_CUSTOM},
     {ICON_SETTINGS,             LABEL_SETTINGS},
-    {ICON_BACK,                 LABEL_BACK},}
+    {ICON_BACK,                 LABEL_BACK}}
   #else
    {{ICON_HEAT,                 LABEL_PREHEAT},
     {ICON_MOVE,                 LABEL_MOVE},
@@ -23,7 +23,7 @@ LABEL_READY,
     {ICON_EXTRUDE,              LABEL_EXTRUDE},
     {ICON_SETTINGS,             LABEL_SETTINGS},
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
-    {ICON_BACK,                 LABEL_BACK},}
+    {ICON_BACK,                 LABEL_BACK}}
   #endif
 };
 

@@ -152,5 +152,8 @@
     #define CN_MOVE_SPEED           "Move speed(X Y Z)"
     #define CN_KNOB_LED             "Rotary Knob LED"
     #define CN_M0_PAUSE             "Paused by M0 command"
-
+    #define CN_SEND_START_GCODE     "Start Gcode before print"
+    #define CN_SEND_END_GCODE       "End Gcode after print"
+    #define CN_PERSISTANT_STATUS_INFO "Persistent Status Info"
+    
 #endif

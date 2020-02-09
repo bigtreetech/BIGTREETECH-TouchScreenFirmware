@@ -271,8 +271,8 @@ void menuCustom(void)
           customItems.items[6].icon = ICONCHAR_PAGEDOWN;
         }
       }
-      //menuDrawListItem(&customItems.items[5],5);
-      //menuDrawListItem(&customItems.items[6],6);
+         // menuDrawListItem(&customItems.items[5],5);
+          //menuDrawListItem(&customItems.items[6],6);
     }
 
 void menuCustom(void)

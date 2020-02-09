@@ -151,6 +151,9 @@
     #define DE_INVERT_ZAXIS         "Invert Z Axis"
     #define DE_MOVE_SPEED           "Move speed(X Y Z)"
     #define DE_KNOB_LED             "Rotary Knob LED"
-    #define DE_M0_PAUSE             "Pausiert durch M0 Befehl"
+    #define DE_M0_PAUSE             "Paused by M0 command"
+    #define DE_SEND_START_GCODE     "Start Gcode before print"
+    #define DE_SEND_END_GCODE       "End Gcode after print"
+    #define DE_PERSISTANT_STATUS_INFO "Persistent Status Info"
     
 #endif
