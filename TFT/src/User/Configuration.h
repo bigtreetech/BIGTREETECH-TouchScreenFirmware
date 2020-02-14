@@ -127,6 +127,10 @@
 // update the icons from alternate icon folder
 #define ALTERNATIVE_MOVE_MENU
 
+//Invert the X Axis move Direction
+// this does not work if LIST MODE is enabled. To invert x axis in LIST MODE go to setting->feature settings
+//#define INVERT_XAXIS
+
 // Invert the Y Axis move Direction
 // this does not work if LIST MODE is enabled. To invert y axis in LIST MODE go to setting->feature settings
 //#define INVERT_YAXIS
@@ -137,14 +141,14 @@
 
 // Enable Unified Move Menu
 // Move, Home, Extrude, ABL at one Place and bring Gcode Menu on Home Menu
-//#define UNIFIED_MENU
+#define UNIFIED_MENU
 
 /**
  * Enable list mode in Files menu and settings menu
  * It is friendly to display long file name, but the model preview feature is not available
  * Disable this if you want to use the model preview feature
  */
-#define MENU_LIST_MODE
+// #define MENU_LIST_MODE
 
 
 //-------RESET SETTINGS & TOUCH SCREEN CALIBRATION------||
