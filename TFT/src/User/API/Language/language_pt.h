@@ -147,6 +147,7 @@
     #define PT_AUTO                 "AUTO"
     #define PT_SMART                "SMART"
     #define PT_TERMINAL_ACK         "Hide Terminal ACK"
+	#define PT_INVERT_XAXIS         "Invert X Axis"
     #define PT_INVERT_YAXIS         "Invert Y Axis"
     #define PT_INVERT_ZAXIS         "Invert Z Axis"
     #define PT_MOVE_SPEED           "Move speed(X Y Z)"

@@ -65,6 +65,7 @@ bool readStoredPara(void)
     infoSettings.silent           = byteToWord(data + (index += 4), 4);
     infoSettings.auto_off         = byteToWord(data + (index += 4), 4);
     infoSettings.terminalACK      = byteToWord(data + (index += 4), 4);
+	infoSettings.invert_xaxis     = byteToWord(data + (index += 4), 4);
     infoSettings.invert_yaxis     = byteToWord(data + (index += 4), 4);
     infoSettings.move_speed       = byteToWord(data + (index += 4), 4);
     infoSettings.invert_zaxis     = byteToWord(data + (index += 4), 4);
@@ -94,6 +95,7 @@ void storePara(void)
   wordToByte(infoSettings.silent,             data + (index += 4));
   wordToByte(infoSettings.auto_off,           data + (index += 4));
   wordToByte(infoSettings.terminalACK,        data + (index += 4));
+  wordToByte(infoSettings.invert_xaxis,       data + (index += 4));
   wordToByte(infoSettings.invert_yaxis,       data + (index += 4));
   wordToByte(infoSettings.move_speed,         data + (index += 4));
   wordToByte(infoSettings.invert_zaxis,       data + (index += 4));

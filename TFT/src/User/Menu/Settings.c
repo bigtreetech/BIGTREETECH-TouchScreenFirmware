@@ -16,6 +16,7 @@ void infoSettingsReset(void)
   infoSettings.silent = 0;
   infoSettings.auto_off = 0;
   infoSettings.terminalACK = 0;
+  infoSettings.invert_xaxis = 0;
   infoSettings.invert_yaxis = 0;
   infoSettings.move_speed = 0;
   infoSettings.led_color = LED_OFF;

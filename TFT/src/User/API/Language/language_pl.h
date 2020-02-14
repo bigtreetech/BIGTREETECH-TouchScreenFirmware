@@ -147,6 +147,7 @@
     #define PL_AUTO                 "AUTO"
     #define PL_SMART                "SMART"
     #define PL_TERMINAL_ACK         "Hide Terminal ACK"
+	#define PL_INVERT_XAXIS         "Invert X Axis"
     #define PL_INVERT_YAXIS         "Invert Y Axis"
     #define PL_INVERT_ZAXIS         "Invert Z Axis"
     #define PL_MOVE_SPEED           "Move speed(X Y Z)"

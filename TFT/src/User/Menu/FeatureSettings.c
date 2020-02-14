@@ -245,6 +245,7 @@
     typedef enum
     {
       SKEY_HIDEACK = 0,
+	  SKEY_INVERT_X,
       SKEY_INVERT_Y,
       SKEY_INVERT_Z,
       #ifdef PS_ON_PIN
@@ -268,6 +269,7 @@
 //
     LISTITEM settingPage[SKEY_COUNT] = {  
       {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_TERMINAL_ACK,       LABEL_BACKGROUND},
+	  {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_INVERT_XAXIS,       LABEL_BACKGROUND},
       {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_INVERT_YAXIS,       LABEL_BACKGROUND},
       {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_INVERT_ZAXIS,       LABEL_BACKGROUND},
       #ifdef PS_ON_PIN
@@ -295,6 +297,12 @@
         infoSettings.terminalACK = (infoSettings.terminalACK + 1) % 2;
         settingPage[item_index].icon = toggleitem[infoSettings.terminalACK];
         featureSettingsItems.items[key_val].icon = toggleitem[infoSettings.terminalACK];
+        break;
+
+		case SKEY_INVERT_X:
+        infoSettings.invert_xaxis = (infoSettings.invert_xaxis + 1) % 2;
+        settingPage[item_index].icon = toggleitem[infoSettings.invert_xaxis];
+        featureSettingsItems.items[key_val] = settingPage[item_index];
         break;
 
         case SKEY_INVERT_Y:
@@ -359,6 +367,11 @@
           case SKEY_HIDEACK:
             //item_terminalACK_i = infoSettings.terminalACK;
             settingPage[item_index].icon = toggleitem[infoSettings.terminalACK];
+            featureSettingsItems.items[i] = settingPage[item_index];
+            break;
+
+		case SKEY_INVERT_X:
+            settingPage[item_index].icon = toggleitem[infoSettings.invert_xaxis];
             featureSettingsItems.items[i] = settingPage[item_index];
             break;
 

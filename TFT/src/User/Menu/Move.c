@@ -119,9 +119,17 @@ void menuMove(void)
 {
   KEY_VALUES  key_num = KEY_IDLE;
 
-
   #ifdef ALTERNATIVE_MOVE_MENU
     #ifdef MENU_LIST_MODE
+	if(infoSettings.invert_xaxis == 1){
+        moveItems.items[4].label.index = LABEL_X_INC;
+        moveItems.items[6].label.index = LABEL_X_DEC;
+      }
+      else{
+        moveItems.items[4].label.index = LABEL_X_DEC;
+        moveItems.items[6].label.index = LABEL_X_INC;
+      }
+	
       if(infoSettings.invert_yaxis == 1){
         moveItems.items[1].label.index = LABEL_Y_DEC;
         moveItems.items[5].label.index = LABEL_Y_INC;
@@ -141,6 +149,15 @@ void menuMove(void)
     #endif
   #else
     #ifdef MENU_LIST_MODE
+		// TODO: ADD X AXIS INVERSION HERE FOR NON-ALTERNATIVE MOVE MENU
+	  if(infoSettings.invert_xaxis == 1){
+        moveItems.items[0].label.index = LABEL_X_DEC;
+        moveItems.items[4].label.index = LABEL_X_INC;
+      }
+      else{
+        moveItems.items[0].label.index = LABEL_X_INC;
+        moveItems.items[4].label.index = LABEL_X_DEC;
+      }
       if(infoSettings.invert_yaxis == 1){
         moveItems.items[1].label.index = LABEL_Y_DEC;
         moveItems.items[5].label.index = LABEL_Y_INC;
@@ -236,7 +253,7 @@ void menuMove(void)
 
             case KEY_ICON_4: 
 				#ifdef MENU_LIST_MODE
-                    if(infoSettings.invert_zaxis == 1){
+                    if(infoSettings.invert_xaxis == 1){
                       storeCmd(XGCODE_INC, item_move_len[item_move_len_i]);
                     }
                     else{
@@ -262,7 +279,7 @@ void menuMove(void)
 
             case KEY_ICON_6: 
 				#ifdef MENU_LIST_MODE
-                    if(infoSettings.invert_zaxis == 1){
+                    if(infoSettings.invert_xaxis == 1){
                       storeCmd(XGCODE_DEC, item_move_len[item_move_len_i]);
                     }
                     else{
@@ -278,7 +295,18 @@ void menuMove(void)
         
       #else
 
-            case KEY_ICON_0: storeCmd("G1 X%.1f\n",  item_move_len[item_move_len_i]);  break;
+            case KEY_ICON_0: 
+				#ifdef MENU_LIST_MODE
+                    if(infoSettings.invert_xaxis == 1){
+                      storeCmd(XGCODE_DEC, item_move_len[item_move_len_i]);
+                    }
+                    else{
+                      storeCmd(XGCODE_INC, item_move_len[item_move_len_i]);
+                    }
+                  #else
+                    storeCmd(XGCODE_UP, item_move_len[item_move_len_i]);
+                  #endif
+                  break;
 
             case KEY_ICON_1:
                   #ifdef MENU_LIST_MODE
@@ -312,7 +340,18 @@ void menuMove(void)
                   menuDrawItem(&moveItems.items[key_num], key_num);
                   break;
 
-            case KEY_ICON_4: storeCmd("G1 X-%.1f\n", item_move_len[item_move_len_i]);  break;
+            case KEY_ICON_4: 
+				#ifdef MENU_LIST_MODE
+                    if(infoSettings.invert_xaxis == 1){
+                      storeCmd(XGCODE_INC, item_move_len[item_move_len_i]);
+                    }
+                    else{
+                      storeCmd(XGCODE_DEC, item_move_len[item_move_len_i]);
+                    }
+                  #else
+                    storeCmd(XGCODE_DOWN, item_move_len[item_move_len_i]);
+                  #endif
+                  break;
 
             case KEY_ICON_5:
                   #ifdef MENU_LIST_MODE

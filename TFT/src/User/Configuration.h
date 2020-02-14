@@ -141,14 +141,14 @@
 
 // Enable Unified Move Menu
 // Move, Home, Extrude, ABL at one Place and bring Gcode Menu on Home Menu
-#define UNIFIED_MENU
+//#define UNIFIED_MENU
 
 /**
  * Enable list mode in Files menu and settings menu
  * It is friendly to display long file name, but the model preview feature is not available
  * Disable this if you want to use the model preview feature
  */
-// #define MENU_LIST_MODE
+#define MENU_LIST_MODE
 
 
 //-------RESET SETTINGS & TOUCH SCREEN CALIBRATION------||

@@ -147,6 +147,7 @@
     #define DU_AUTO                 "AUTO"
     #define DU_SMART                "SMART"
     #define DU_TERMINAL_ACK         "Verberg Terminal ACK"
+	#define DU_INVERT_XAXIS         "Inverteer X Axis"
     #define DU_INVERT_YAXIS         "Inverteer Y Axis"
     #define DU_INVERT_ZAXIS         "Inverteer Z Axis"
     #define DU_MOVE_SPEED           "Bewegingssnelheid(X Y Z)"

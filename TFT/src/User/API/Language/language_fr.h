@@ -147,6 +147,7 @@
     #define FR_AUTO                 "AUTO"
     #define FR_SMART                "SMART"
     #define FR_TERMINAL_ACK         "Cacher le Terminal ACK"
+	#define FR_INVERT_XAXIS         "Inverser Axe X"
     #define FR_INVERT_YAXIS         "Inverser Axe Y"
     #define FR_INVERT_ZAXIS         "Inverser Axe Z"
     #define FR_MOVE_SPEED           "Vitesse de déplacement (X Y Z)"

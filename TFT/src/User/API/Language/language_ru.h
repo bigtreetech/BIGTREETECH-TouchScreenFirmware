@@ -147,6 +147,7 @@
     #define RU_AUTO                 "Авто"
     #define RU_SMART                "Умный"
     #define RU_TERMINAL_ACK         "Скрыть ACK терминала"
+	#define RU_INVERT_XAXIS         "Инверсия оси X"
     #define RU_INVERT_YAXIS         "Инверсия оси Y"
     #define RU_INVERT_ZAXIS         "Инверсия оси Z"
     #define RU_MOVE_SPEED           "Скорость (X Y Z)"

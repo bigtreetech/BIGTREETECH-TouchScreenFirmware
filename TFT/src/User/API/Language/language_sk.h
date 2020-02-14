@@ -148,6 +148,7 @@
     #define SK_AUTO                 "AUTO"
     #define SK_SMART                "SMART"
     #define SK_TERMINAL_ACK         "Hide Terminal ACK"
+	#define SK_INVERT_XAXIS         "Invert X Axis"
     #define SK_INVERT_YAXIS         "Invert Y Axis"
     #define SK_INVERT_ZAXIS         "Invert Z Axis"
     #define SK_MOVE_SPEED           "Move speed(X Y Z)"

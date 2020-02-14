@@ -147,6 +147,7 @@
     #define DE_AUTO                 "AUTO"
     #define DE_SMART                "SMART"
     #define DE_TERMINAL_ACK         "Hide Terminal ACK"
+	#define DE_INVERT_XAXIS         "Invert X Axis"
     #define DE_INVERT_YAXIS         "Invert Y Axis"
     #define DE_INVERT_ZAXIS         "Invert Z Axis"
     #define DE_MOVE_SPEED           "Move speed(X Y Z)"
