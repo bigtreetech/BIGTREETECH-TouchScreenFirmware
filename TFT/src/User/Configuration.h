@@ -168,12 +168,11 @@
 
 #define SHOW_FAN_PERCENTAGE // enable to show fan speed as a percentage instead of a value
 
-/*
-  Rapid Serial Communication:More frequent Serial communicaiton while printing.
-  The controller will send and parse  gcodes more frequently  while drawing on 
-  screen to prevent printer idling and stuttering  due to empty printer buffer.
-  
-  Note: this might make the  graphics slow when switching menus while printing.
+/**
+ * Rapid Serial Communication:More frequent Serial communicaiton while printing.
+ * The controller will send and parse  gcodes more frequently  while drawing on 
+ * screen to prevent printer idling and stuttering  due to empty printer buffer.
+ * Note: this might make the  graphics slow when switching menus while printing.
 */
 //#define RAPID_SERIAL_COMM
 
