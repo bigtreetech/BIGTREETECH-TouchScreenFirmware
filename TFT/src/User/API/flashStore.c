@@ -3,7 +3,7 @@
 
 #define PARA_SIZE 256  //bytes
 #define TSC_SIGN  0x20190827 // DO NOT MODIFY
-#define PARA_SIGN 0x20191225 // If a new setting parameter is added, modify here and initialize the initial value in the "infoSettingsReset()" function
+#define PARA_SIGN 0x20200219 // If a new setting parameter is added, modify here and initialize the initial value in the "infoSettingsReset()" function
 
 extern u32 TSC_Para[7];        //
 extern SETTINGS infoSettings;  //
