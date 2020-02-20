@@ -151,5 +151,6 @@
     #define JP_INVERT_ZAXIS         "Invert Z Axis"
     #define JP_MOVE_SPEED           "Move speed(X Y Z)"
     #define JP_KNOB_LED             "Rotary Knob LED"
+    #define JP_M0_PAUSE             "Paused by M0 command"
     
 #endif

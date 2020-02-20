@@ -151,5 +151,6 @@
     #define PT_INVERT_ZAXIS         "Invert Z Axis"
     #define PT_MOVE_SPEED           "Move speed(X Y Z)"
     #define PT_KNOB_LED             "Rotary Knob LED"
+    #define PT_M0_PAUSE             "Paused by M0 command"
     
 #endif

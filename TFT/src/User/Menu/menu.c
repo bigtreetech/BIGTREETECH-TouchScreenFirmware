@@ -100,7 +100,6 @@ void menuDrawItem(const ITEM *item, uint8_t positon)
 
 void menuDrawIconOnly(const ITEM *item, uint8_t positon)
 {
-  uint8_t *content = labelGetAddress(&item->label);
   const GUI_RECT *rect = rect_of_key + positon;
   if(item->icon != ICON_BACKGROUND)
     ICON_ReadDisplay(rect->x0, rect->y0, item->icon);
@@ -119,6 +118,13 @@ void menuDrawIconOnly(const ITEM *item, uint8_t positon)
   {
     ListItem_Display(rect, position, item, false);
   }
+}
+void menuRefreshListPage(void){
+ for (uint8_t i = 0; i < ITEM_PER_PAGE; i++)
+    {
+      menuDrawListItem(&curListItems->items[i], i);
+    }
+
 }
 
 static REMINDER reminder = {{0, 0, LCD_WIDTH, TITLE_END_Y}, 0, STATUS_UNCONNECT, LABEL_UNCONNECTED};

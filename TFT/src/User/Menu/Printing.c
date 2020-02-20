@@ -39,7 +39,6 @@ static bool    update_waiting = M27_WATCH_OTHER_SOURCES;
 static bool    update_waiting = false;
 #endif
 
-
 //
 bool isPrinting(void)
 {
@@ -50,6 +49,11 @@ bool isPrinting(void)
 bool isPause(void)
 {
   return infoPrinting.pause;
+}
+
+bool isM0_Pause(void)
+{
+return infoPrinting.m0_pause;
 }
 
 //
@@ -198,7 +202,11 @@ void resumeToPause(bool is_pause)
   menuDrawItem(&itemIsPause[is_pause],0);
 }
 
-bool setPrintPause(bool is_pause)
+void setM0Pause(bool m0_pause){
+  infoPrinting.m0_pause = m0_pause;
+}
+
+bool setPrintPause(bool is_pause, bool is_m0pause)
 {
   static bool pauseLock = false;
   if(pauseLock)                      return false;
@@ -219,16 +227,25 @@ bool setPrintPause(bool is_pause)
       
     case TFT_UDISK:
     case TFT_SD:
+      infoPrinting.pause = is_pause;
+      if(infoPrinting.pause == true && is_m0pause == false){
       while (infoCmd.count != 0) {loopProcess();}
+      }
 
       bool isCoorRelative = coorGetRelative();
       bool isExtrudeRelative = eGetRelative();
       static COORDINATE tmp;
       
-      infoPrinting.pause = is_pause;
       if(infoPrinting.pause)
       {
         //restore status before pause
+        //if pause was triggered through M0/M1 then break
+      if(is_m0pause == true) {
+        setM0Pause(is_m0pause);
+        popupReminder(textSelect(LABEL_PAUSE), textSelect(LABEL_M0_PAUSE));
+        break;
+        }
+      
         coordinateGetAll(&tmp);
         if (isCoorRelative == true)     mustStoreCmd("G90\n");
         if (isExtrudeRelative == true)  mustStoreCmd("M82\n");
@@ -246,6 +263,11 @@ bool setPrintPause(bool is_pause)
       }
       else
       {
+      if(isM0_Pause() == true) {
+        setM0Pause(is_m0pause);
+        Serial_Puts(SERIAL_PORT, "M108\n");
+        break;
+        }
         if (isCoorRelative == true)     mustStoreCmd("G90\n");
         if (isExtrudeRelative == true)  mustStoreCmd("M82\n");
         
@@ -404,7 +426,7 @@ void menuPrinting(void)
     switch(key_num)
     {
       case KEY_ICON_0:
-        setPrintPause(!isPause());
+        setPrintPause(!isPause(),false);
         break;
       
       case KEY_ICON_3:
