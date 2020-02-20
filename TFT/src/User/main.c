@@ -31,6 +31,12 @@ void Hardware_GenericInit(void)
   LCD_EncoderInit();
 #endif
 
+#ifndef ST7920_SPI
+  #ifdef CLEAN_MODE_SWITCHING_SUPPORT 
+  #error "CLEAN_MODE_SWITCHING_SUPPORT can only be enabled for TFT controllers which support ST7920 Emulator/Marlin Mode. Disable CLEAN_MODE_SWITCHING_SUPPORT in Configuration.h"
+  #endif
+#endif
+
 #ifdef PS_ON_PIN
   PS_ON_Init();
 #endif
