@@ -1,7 +1,7 @@
 #include "gcode.h"
 #include "includes.h"
 
-static REQUEST_COMMAND_INFO requestCommandInfo; //static fields are iniatialized by {0}
+REQUEST_COMMAND_INFO requestCommandInfo  =  {0}; //static fields are iniatialized by {0}
 bool WaitingGcodeResponse=0;
 
 static void resetRequestCommandInfo(void) 
