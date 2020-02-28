@@ -152,8 +152,8 @@
     #define RU_MOVE_SPEED           "Скорость (X Y Z)"
     #define RU_KNOB_LED             "Подсветка энкодера"
     #define RU_M0_PAUSE             "Пауза по команде M0"
-    #define RU_SEND_START_GCODE     "Начальный Gcode печати"
-    #define RU_SEND_END_GCODE       "Конечный Gcode печати"
+    #define RU_SEND_START_GCODE     "Gcode перед печатью"
+    #define RU_SEND_END_GCODE       "Gcode после печати"
     #define RU_PERSISTANT_STATUS_INFO "Нагрев в инфостроке"
     #define RU_FILE_LISTMODE        "Файлы в режиме строк"
     
