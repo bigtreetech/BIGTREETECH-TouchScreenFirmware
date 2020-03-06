@@ -199,7 +199,7 @@ void scanResetDir(void)
 
 void scanUpdates(void)
 {
-  volatile u8 result = 0;   //must volatileï¼
+  volatile u8 result = 0;   //must volatile
   if(mountSDCard())
   {
     result = scanUpdateFile();

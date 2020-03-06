@@ -44,34 +44,6 @@ const LABEL itemMoveSpeed[ITEM_SPEED_NUM] = {
                                             };
 const  u8 item_movespeed[ITEM_SPEED_NUM] = {LABEL_NORMAL_SPEED, LABEL_SLOW_SPEED, LABEL_FAST_SPEED};
 
-#ifdef LED_color_PIN
-  #define LED_color_NUM 9
-  const LABEL itemLedcolor[LED_color_NUM] = {
-                                              //label
-                                              LABEL_OFF,
-                                              LABEL_WHITE,
-                                              LABEL_RED,
-                                              LABEL_ORANGE,
-                                              LABEL_YELLOW,
-                                              LABEL_GREEN,
-                                              LABEL_BLUE,
-                                              LABEL_INDIGO,
-                                              LABEL_VIOLET,
-                                            };
-
-  const  uint32_t led_color[LED_color_NUM] = {
-                                              LED_OFF,
-                                              LED_WHITE,
-                                              LED_RED,
-                                              LED_ORANGE,
-                                              LED_YELLOW,
-                                              LED_GREEN,
-                                              LED_BLUE,
-                                              LED_INDIGO,
-                                              LED_VIOLET
-                                              };
-
-#endif
 //
 //add key number index of the items
 //
@@ -217,14 +189,15 @@ void updateFeatureSettings(uint8_t key_val)
     break;
 
     #ifdef LED_color_PIN
-    case SKEY_KNOB:            
-    infoSettings.led_color = (infoSettings.led_color + 1) % LED_color_NUM;                
-    settingPage[item_index].valueLabel = itemLedcolor[infoSettings.led_color];
+    case SKEY_KNOB:
+    infoSettings.knob_led_color = (infoSettings.knob_led_color + 1 ) % LED_color_NUM;                
+    settingPage[item_index].valueLabel = itemLedcolor[infoSettings.knob_led_color];
     featureSettingsItems.items[key_val] = settingPage[item_index];
-    ws2812_send_DAT(led_color[infoSettings.led_color]);
+    ws2812_send_DAT(led_color[infoSettings.knob_led_color]);
 
     menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
     break;
+
     #endif
 
   default:
@@ -296,8 +269,8 @@ void loadFeatureSettings(){
         break;
 
       #ifdef LED_color_PIN
-        case SKEY_KNOB:                           
-        settingPage[item_index].valueLabel = itemLedcolor[infoSettings.led_color];
+        case SKEY_KNOB:
+        settingPage[item_index].valueLabel = itemLedcolor[infoSettings.knob_led_color];
         featureSettingsItems.items[i] = settingPage[item_index];
         break;
       #endif
@@ -388,3 +361,4 @@ void menuFeatureSettings(void)
     storePara();
   }
 }
+

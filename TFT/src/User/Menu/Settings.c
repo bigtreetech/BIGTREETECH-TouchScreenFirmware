@@ -6,9 +6,9 @@ SETTINGS infoSettings;
 // Reset settings data
 void infoSettingsReset(void)
 {
-  infoSettings.baudrate = 115200;
-  infoSettings.language = ENGLISH;
-  infoSettings.mode = SERIAL_TSC;
+  infoSettings.baudrate = BAUDRATE;
+  infoSettings.language = DEFAULT_LANGUAGE;
+  infoSettings.mode = DEFAULT_LCD_MODE;
   infoSettings.runout = 0;
   infoSettings.rotate_ui = 0;
   infoSettings.bg_color = ST7920_BKCOLOR;
@@ -18,7 +18,7 @@ void infoSettingsReset(void)
   infoSettings.terminalACK = 0;
   infoSettings.invert_yaxis = 0;
   infoSettings.move_speed = 0;
-  infoSettings.led_color = LED_OFF;
+  infoSettings.knob_led_color = (STARTUP_KNOB_LED_COLOR - 1); 
   infoSettings.invert_zaxis = 0;
   infoSettings.send_start_gcode = 1;
   infoSettings.send_end_gcode = 1;

@@ -45,6 +45,25 @@ void Hardware_GenericInit(void)
   FIL_Runout_Init();
 #endif
 
+#ifdef LED_color_PIN
+  #ifdef STARTUP_KNOB_LED_COLOR
+    #if STARTUP_KNOB_LED_COLOR < 1
+    #error STARTUP_KNOB_LED_COLOR cannot be less than 1
+    #endif
+    
+    #if STARTUP_KNOB_LED_COLOR > 9
+    #error STARTUP_KNOB_LED_COLOR cannot be greater than 9
+    #endif
+  #else
+  #define STARTUP_KNOB_LED_COLOR 1
+  #endif
+  
+  knob_LED_Init();
+  
+#else
+  #define STARTUP_KNOB_LED_COLOR 1
+#endif
+
   if(readStoredPara() == false) // Read settings parameter
   {    
     TSC_Calibration();

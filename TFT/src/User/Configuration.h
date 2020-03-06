@@ -13,15 +13,60 @@
  * Current color options from lcd.h: BLACK, BLUE, BROWN, BRRED, CYAN, GBLUE, GRAY, GREEN, MAGENTA, RED, WHITE, YELLOW
  */
 
+/**
+ * This setting determines the communication speed of the printer.
+ *
+ * 250000 works in most cases, but you might try a lower speed if
+ * you commonly experience drop-outs during host printing.
+ * You may try up to 1000000 to speed up SD file transfer.
+ *
+ * :[2400, 9600, 19200, 38400, 57600, 115200, 250000, 500000, 1000000]
+ */
+#define BAUDRATE 115200
+
+/**
+ * Default LANGUAGE
+ *
+ * Select the language to display on the LCD. These languages are available:
+ * ENGLISH, CHINESE, RUSSIAN, JAPANESE, ARMENIAN, GERMAN, CZECH, SPAIN, FRENCH, PORTUGUESE, ITALIAN, POLISH, SLOVAK, DUTCH
+ * 
+ */
+#define DEFAULT_LANGUAGE ENGLISH
+
+/**
+ * Default LCD Mode
+ *
+ * Select the default LCD mode. You can always switch between the modes. 
+ * 
+ * These are available:
+ * ST7920_SPI // LCD12864 Sumilator
+ * SERIAL_TSC // Default 
+ * 
+ */
+#define DEFAULT_LCD_MODE SERIAL_TSC
+
+/**
+ * The duration and frequency for the UI feedback sound.
+ * Set these to 0 to disable audio feedback in the LCD menus.
+ * Only valid for SERIAL_TSC LCD MODE anf if BUZZER_PIN is set or availible.
+ */
+#define LCD_FEEDBACK_FREQUENCY_DURATION_L_US 11   // Default 11
+#define LCD_FEEDBACK_FREQUENCY_H_US          3    // Default 3
+
 // Marlin Mode Background & Font Color Options
 // Current color options from lcd.h: BLACK, BLUE, BROWN, BRRED, CYAN, GBLUE, GRAY, GREEN, MAGENTA, RED, WHITE, YELLOW
 #define ST7920_BKCOLOR BLACK
 #define ST7920_FNCOLOR YELLOW
 
-// Text displayed at the top of the LCD in Marlin Mode.
+/**
+ *  Text displayed at the top of the LCD in Marlin Mode. 
+ */
 //#define ST7920_BANNER_TEXT "LCD12864 Simulator"
 
-// Run Marlin Mode fullscreen. Not recommended for TFT24.
+/**
+ * Run Marlin Mode fullscreen. 
+ * Not recommended for TFT24.
+ */
 //#define ST7920_FULLSCREEN
 
 /**
@@ -30,17 +75,31 @@
  * Gives the ability to connect Octoprint over UART to the TFT UART/serial 
  * expansion port and have it work seamlessly no matter which mode the TFT is in. 
  * Only for TFT24 V1.1, TFT35 V3.0 or TFT28 V3.0
-*/ 
+ */ 
 //#define CLEAN_MODE_SWITCHING_SUPPORT  // Enable CLEAN MODE SWITCHING SUPPORT
+
+/**
+ * DEFAULT STARTUP KNOB LED COLOR
+ * Choose one of the following numbers -->  1: LED_OFF,     2: LED_WHITE,   3: LED_RED,
+ *                                          4: LED_ORANGE,  5: LED_YELLOW,  6: LED_GREEN,
+ *                                          7: LED_BLUE,    8: LED_INDIGO,  9: LED_VIOLET
+ * Default value is: 1 for LED_OFF
+ * 
+*/
+#define STARTUP_KNOB_LED_COLOR 1 //LED_OFF
 
 //===========================================================================
 //============================ TFT Mode Settings ============================
 //===========================================================================
 
-// Show BTT bootscreen when starting up
+/**
+ *  Show BTT bootscreen when starting up
+ */
 #define SHOW_BTT_BOOTSCREEN
 
-// TFT mode color
+/**
+ * TFT mode color
+ */ 
 #define TITLE_BACKGROUND_COLOR      BLACK  // Title background color // 0xD928
 #define BACKGROUND_COLOR            BLACK  // Background color // 0x0A29
 #define FONT_COLOR                  WHITE  // Font foreground color
@@ -205,9 +264,9 @@
 #define CUSTOM_0_GCODE "M501\n"
 #define CUSTOM_1_LABEL "Disable Steppers"
 #define CUSTOM_1_GCODE "M84\n"
-#define CUSTOM_2_LABEL "init SD Card"
+#define CUSTOM_2_LABEL "Init SD Card"
 #define CUSTOM_2_GCODE "M21\n"
-#define CUSTOM_3_LABEL "Release Sd Card"
+#define CUSTOM_3_LABEL "Release SD Card"
 #define CUSTOM_3_GCODE "M22\n"
 //#define CUSTOM_4_LABEL "Custom4"
 //#define CUSTOM_4_GCODE "M105\n"

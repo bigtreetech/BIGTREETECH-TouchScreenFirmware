@@ -24,7 +24,7 @@ typedef struct
   uint8_t  terminalACK;
   uint8_t  invert_yaxis;
   uint8_t  move_speed;
-  uint32_t led_color;
+  uint8_t  knob_led_color;
   uint8_t  invert_zaxis;
   uint8_t  send_start_gcode;
   uint8_t  send_end_gcode;
