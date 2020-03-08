@@ -21,7 +21,7 @@
 #elif LCD_WIDTH == 320 && LCD_HEIGHT == 240
 
   #define PICON_LG_WIDTH     106
-  #define PICON_SM_WIDTH     187
+  #define PICON_SM_WIDTH     87
   #define PICON_HEIGHT       36
   #define PICON_SPACE_X      ((LCD_WIDTH - PICON_LG_WIDTH*2 - PICON_SM_WIDTH - SPACE_X )/2)
   #define PICON_SPACE_Y      (ICON_HEIGHT + SPACE_Y - PICON_HEIGHT*2)/2
