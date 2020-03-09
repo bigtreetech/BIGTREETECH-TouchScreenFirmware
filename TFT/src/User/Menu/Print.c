@@ -223,7 +223,7 @@ void menuPrintFromSource(void)
     else{
       menuDrawListPage(&printListItems);
       gocdeListDraw();
-    }	
+    }
   }
   else
   {
