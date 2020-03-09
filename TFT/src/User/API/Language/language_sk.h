@@ -97,7 +97,6 @@
     #define SK_5_PERCENT            "5%"
     #define SK_10_PERCENT           "10%"
     #define SK_READY                "Tlačiareň pripravená"
-    #define SK_PRINTING             "Tlačím"
     #define SK_BUSY                 "Počkajte prosím..."
     #define SK_UNCONNECTED          "Tlačiareň odpojená!"
     #define SK_DISCONNECT_INFO      "Teraz môžete tlačiareň ovládať z počítača!"

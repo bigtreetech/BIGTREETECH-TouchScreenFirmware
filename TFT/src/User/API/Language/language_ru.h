@@ -147,7 +147,7 @@
     #define RU_AUTO                 "Авто"
     #define RU_SMART                "Умный"
     #define RU_TERMINAL_ACK         "Скрыть ACK терминала"
-	#define RU_INVERT_XAXIS         "Инверсия оси X"
+	  #define RU_INVERT_XAXIS         "Инверсия оси X"
     #define RU_INVERT_YAXIS         "Инверсия оси Y"
     #define RU_INVERT_ZAXIS         "Инверсия оси Z"
     #define RU_MOVE_SPEED           "Скорость (X Y Z)"
@@ -157,7 +157,5 @@
     #define RU_SEND_END_GCODE       "Gcode после печати"
     #define RU_PERSISTANT_STATUS_INFO "Нагрев в инфостроке"
     #define RU_FILE_LISTMODE        "Файлы в режиме строк"
-    #define RU_KNOB_LED             "Rotary Knob LED"
-    #define RU_M0_PAUSE             "Paused by M0 command"
 
 #endif
