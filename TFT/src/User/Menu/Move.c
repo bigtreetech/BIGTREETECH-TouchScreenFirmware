@@ -192,7 +192,7 @@ void menuMove(void)
               storeCmd(y_axis_down, item_move_len[item_move_len_i]);
               break;
 
-        case KEY_ICON_6::
+        case KEY_ICON_6:
               storeCmd(x_axis_up, item_move_len[item_move_len_i]);
               break;
         
