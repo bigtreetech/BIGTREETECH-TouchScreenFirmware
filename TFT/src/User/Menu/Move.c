@@ -112,8 +112,7 @@ void menuMove(void)
         z_axis_down = ZGCODE_INC;
       }
   #else
-		// TODO: ADD X AXIS INVERSION HERE FOR NON-ALTERNATIVE MOVE MENU
-	  if(infoSettings.invert_xaxis == 1){
+      if(infoSettings.invert_xaxis == 1){
         moveItems.items[0].label.index = LABEL_X_DEC;
         moveItems.items[4].label.index = LABEL_X_INC;
       }
@@ -186,7 +185,7 @@ void menuMove(void)
               break;
 
         case KEY_ICON_4:
-              storeCmd(X_axis_down, item_move_len[item_move_len_i]);
+              storeCmd(x_axis_down, item_move_len[item_move_len_i]);
               break;
 
         case KEY_ICON_5:
@@ -249,7 +248,7 @@ void menuMove(void)
                     switch(a)
                     {
                     case X_AXIS:
-                      storeCmd("G1 X%.1f\n", item_move_len[item_move_len_i]);  
+                      storeCmd(XGCODE_UP, item_move_len[item_move_len_i]);  
                       break;
                     case Y_AXIS:
                       storeCmd(YGCODE_UP, item_move_len[item_move_len_i]);
@@ -266,7 +265,7 @@ void menuMove(void)
                     switch(a)
                     {
                     case X_AXIS:
-                      storeCmd("G1 X-%.1f\n", item_move_len[item_move_len_i]);  
+                      storeCmd(XGCODE_DOWN, item_move_len[item_move_len_i]);  
                       break;
                     case Y_AXIS:
                       storeCmd(YGCODE_DOWN, item_move_len[item_move_len_i]);
