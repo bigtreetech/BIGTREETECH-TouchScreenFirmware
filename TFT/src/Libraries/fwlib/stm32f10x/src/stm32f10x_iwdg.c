@@ -26,10 +26,10 @@
   * @{
   */
 
-/** @defgroup IWDG 
+/** @defgroup IWDG
   * @brief IWDG driver modules
   * @{
-  */ 
+  */
 
 /** @defgroup IWDG_Private_TypesDefinitions
   * @{
@@ -41,7 +41,7 @@
 
 /** @defgroup IWDG_Private_Defines
   * @{
-  */ 
+  */
 
 /* ---------------------- IWDG registers bit mask ----------------------------*/
 
@@ -51,7 +51,7 @@
 
 /**
   * @}
-  */ 
+  */
 
 /** @defgroup IWDG_Private_Macros
   * @{

@@ -53,32 +53,32 @@ void popupDrawPage(BUTTON *btn, const u8 *title, const u8 *context, const u8 *ye
   {
     windowButton[buttonNum++].context = no;
   }
-  
+
   TSC_ReDrawIcon = windowReDrawButton;
   GUI_DrawWindow(&window, title, context);
-  
+
   for(u8 i = 0; i < buttonNum; i++)
-    GUI_DrawButton(&windowButton[i], 0);    
+    GUI_DrawButton(&windowButton[i], 0);
 }
 
 static const GUI_RECT popupMenuRect = POPUP_RECT_SINGLE_CONFIRM;
 
 void menuPopup(void)
 {
-  u16 key_num = IDLE_TOUCH;    
+  u16 key_num = IDLE_TOUCH;
 
   while(infoMenu.menu[infoMenu.cur] == menuPopup)
   {
     key_num = KEY_GetValue(BUTTON_NUM, &popupMenuRect);
     switch(key_num)
-    {            
-      case KEY_POPUP_CONFIRM: 
-        infoMenu.cur--; 
+    {
+      case KEY_POPUP_CONFIRM:
+        infoMenu.cur--;
         break;
-      
+
       default:
-        break;            
-    }    
+        break;
+    }
     loopProcess();
   }
 }
@@ -88,7 +88,7 @@ void popupReminder(u8* info, u8* context)
   #ifdef CLEAN_MODE_SWITCHING_SUPPORT
     if (infoSettings.mode == LCD12864) return;
   #endif
-  popupDrawPage(&bottomSingleBtn , info, context, textSelect(LABEL_CONFIRM), NULL);    
+  popupDrawPage(&bottomSingleBtn , info, context, textSelect(LABEL_CONFIRM), NULL);
   if(infoMenu.menu[infoMenu.cur] != menuPopup)
   {
     infoMenu.menu[++infoMenu.cur] = menuPopup;

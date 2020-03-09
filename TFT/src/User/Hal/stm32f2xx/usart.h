@@ -15,5 +15,5 @@ void USART_Config(uint8_t port, uint32_t baud, uint16_t usart_it);
 void USART_DeConfig(uint8_t port);
 void USART_Puts(uint8_t port, uint8_t *str);
 void USART_Write(uint8_t port, uint8_t d);
-    
+
 #endif

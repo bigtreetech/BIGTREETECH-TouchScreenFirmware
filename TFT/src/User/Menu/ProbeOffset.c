@@ -137,8 +137,3 @@ void menuProbeOffset(void)
     loopProcess();
   }
 }
-
-
-
-
-

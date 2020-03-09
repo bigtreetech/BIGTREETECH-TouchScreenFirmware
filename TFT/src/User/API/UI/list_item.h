@@ -1,4 +1,4 @@
-// *List View Mode ** Author: Gurmeet Athwal https://github.com/guruathwal ** 
+// *List View Mode ** Author: Gurmeet Athwal https://github.com/guruathwal **
 
 #ifndef _LIST_ITEM_H_
 #define _LIST_ITEM_H_

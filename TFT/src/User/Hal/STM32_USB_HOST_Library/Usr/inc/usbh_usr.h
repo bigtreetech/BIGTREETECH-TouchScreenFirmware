@@ -17,7 +17,7 @@
   *                      <http://www.st.com/SLA0044>
   *
   ******************************************************************************
-  */ 
+  */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __USH_USR_H__
@@ -37,13 +37,13 @@ extern USBH_Usr_cb_TypeDef USR_cb;
 
 /**
   * @}
-  */ 
+  */
 
 
 
 /** @defgroup USBH_USR_Exported_Defines
   * @{
-  */ 
+  */
 /* State Machine for the USBH_USR_ApplicationState */
 #define USH_USR_FS_INIT       0
 #define USH_USR_FS_READLIST   1
@@ -52,7 +52,7 @@ extern USBH_Usr_cb_TypeDef USR_cb;
 
 /** @defgroup USBH_USR_Exported_FunctionsPrototype
   * @{
-  */ 
+  */
 void USBH_USR_ApplicationSelected(void);
 void USBH_USR_Init(void);
 void USBH_USR_DeInit(void);
@@ -60,7 +60,7 @@ void USBH_USR_DeviceAttached(void);
 void USBH_USR_ResetDevice(void);
 void USBH_USR_DeviceDisconnected (void);
 void USBH_USR_OverCurrentDetected (void);
-void USBH_USR_DeviceSpeedDetected(uint8_t DeviceSpeed); 
+void USBH_USR_DeviceSpeedDetected(uint8_t DeviceSpeed);
 void USBH_USR_Device_DescAvailable(void *);
 void USBH_USR_DeviceAddressAssigned(void);
 void USBH_USR_Configuration_DescAvailable(USBH_CfgDesc_TypeDef * cfgDesc,
@@ -81,21 +81,20 @@ uint8_t USBH_UDISK_Read(uint8_t* buf, uint32_t sector, uint32_t cnt);
 uint8_t USBH_UDISK_Write(uint8_t* buf, uint32_t sector, uint32_t cnt);
 /**
   * @}
-  */ 
+  */
 
 #endif /*__USH_USR_H__*/
 
 /**
   * @}
-  */ 
+  */
 
 /**
   * @}
-  */ 
+  */
 
 /**
   * @}
-  */ 
+  */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-

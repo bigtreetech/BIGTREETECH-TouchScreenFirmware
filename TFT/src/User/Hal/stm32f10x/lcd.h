@@ -36,7 +36,6 @@
     #define	LCD_WR_CLR	GPIOB->BRR=1<<14    //写数据			PB14
     #define	LCD_RD_CLR	GPIOD->BRR=1<<15    //读数据			PD15
 
-
     #define DATAOUT(x) do{GPIOE->ODR = x;}while(0) //数据输出
     #define DATAIN()     GPIOE->IDR                //数据输入	
   #else

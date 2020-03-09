@@ -27,7 +27,7 @@
   * @{
   */
 
-/** @defgroup WWDG 
+/** @defgroup WWDG
   * @brief WWDG driver modules
   * @{
   */
@@ -177,7 +177,7 @@ void WWDG_SetCounter(uint8_t Counter)
 }
 
 /**
-  * @brief  Enables WWDG and load the counter value.                  
+  * @brief  Enables WWDG and load the counter value.
   * @param  Counter: specifies the watchdog counter value.
   *   This parameter must be a number between 0x40 and 0x7F.
   * @retval None

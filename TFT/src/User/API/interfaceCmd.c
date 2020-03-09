@@ -9,7 +9,7 @@ static u8 cmd_index=0;
 
 // Is there a code character in the current gcode command.
 static bool cmd_seen(char code)
-{  
+{
   for(cmd_index = 0; infoCmd.queue[infoCmd.index_r].gcode[cmd_index] != 0 && cmd_index < CMD_MAX_CHAR; cmd_index++)
   {
     if(infoCmd.queue[infoCmd.index_r].gcode[cmd_index] == code)
@@ -38,19 +38,19 @@ static float cmd_float(void)
 bool storeCmd(const char * format,...)
 {
   QUEUE *pQueue = &infoCmd;
-  
+
   if (pQueue->count >= CMD_MAX_LIST)
-  {  
+  {
     reminderMessage(LABEL_BUSY, STATUS_BUSY);
     return false;
   }
-  
+
   my_va_list ap;
   my_va_start(ap,format);
   my_vsprintf(pQueue->queue[pQueue->index_w].gcode, format, ap);
   my_va_end(ap);
   pQueue->queue[pQueue->index_w].src = SERIAL_PORT;
-  
+
   pQueue->index_w = (pQueue->index_w + 1) % CMD_MAX_LIST;
   pQueue->count++;
 
@@ -62,20 +62,20 @@ bool storeCmd(const char * format,...)
 void mustStoreCmd(const char * format,...)
 {
   QUEUE *pQueue = &infoCmd;
-  
+
   if(pQueue->count >= CMD_MAX_LIST) reminderMessage(LABEL_BUSY, STATUS_BUSY);
 
   while (pQueue->count >= CMD_MAX_LIST)
-  {  
+  {
     loopProcess();
   }
-  
+
   my_va_list ap;
   my_va_start(ap,format);
   my_vsprintf(pQueue->queue[pQueue->index_w].gcode, format, ap);
   my_va_end(ap);
   pQueue->queue[pQueue->index_w].src = SERIAL_PORT;
-  
+
   pQueue->index_w = (pQueue->index_w + 1) % CMD_MAX_LIST;
   pQueue->count++;
 }
@@ -85,15 +85,15 @@ void mustStoreCmd(const char * format,...)
 bool storeCmdFromUART(uint8_t port, const char * gcode)
 {
   QUEUE *pQueue = &infoCmd;
-  
+
   if (pQueue->count >= CMD_MAX_LIST)
-  {  
+  {
     reminderMessage(LABEL_BUSY, STATUS_BUSY);
     return false;
   }
-  
+
   strcpy(pQueue->queue[pQueue->index_w].gcode, gcode);
-  
+
   pQueue->queue[pQueue->index_w].src = port;
   pQueue->index_w = (pQueue->index_w + 1) % CMD_MAX_LIST;
   pQueue->count++;
@@ -106,19 +106,19 @@ bool storeCmdFromUART(uint8_t port, const char * gcode)
 void mustStoreCacheCmd(const char * format,...)
 {
   QUEUE *pQueue = &infoCacheCmd;
-  
+
   if(pQueue->count == CMD_MAX_LIST) reminderMessage(LABEL_BUSY, STATUS_BUSY);
 
   while (pQueue->count >= CMD_MAX_LIST)
-  {  
+  {
     loopProcess();
   }
-  
+
   my_va_list ap;
   my_va_start(ap,format);
   my_vsprintf(pQueue->queue[pQueue->index_w].gcode, format, ap);
   my_va_end(ap);
-  
+
   pQueue->index_w = (pQueue->index_w + 1) % CMD_MAX_LIST;
   pQueue->count++;
 }
@@ -128,7 +128,7 @@ bool moveCacheToCmd(void)
 {
   if(infoCmd.count >= CMD_MAX_LIST) return false;
   if(infoCacheCmd.count == 0) return false;
-  
+
   storeCmd("%s", infoCacheCmd.queue[infoCacheCmd.index_r].gcode);
   infoCacheCmd.count--;
   infoCacheCmd.index_r = (infoCacheCmd.index_r + 1) % CMD_MAX_LIST;
@@ -138,17 +138,17 @@ bool moveCacheToCmd(void)
 // Clear all gcode cmd in infoCmd queue for abort printing.
 void clearCmdQueue(void)
 {
-  infoCmd.count = infoCmd.index_w = infoCmd.index_r =0;  
-  infoCacheCmd.count = infoCacheCmd.index_w = infoCacheCmd.index_r =0;
+  infoCmd.count = infoCmd.index_w = infoCmd.index_r =0;
+  infoCacheCmd.count = infoCacheCmd.index_w = infoCacheCmd.index_r = 0;
   heatSetUpdateWaiting(false);
 }
 
 // Parse and send gcode cmd in infoCmd.
 void sendQueueCmd(void)
 {
-  if(infoHost.wait == true)    return;  
+  if(infoHost.wait == true)    return;
   if(infoCmd.count == 0)       return;
-  
+
   bool avoid_terminal = false;
   u16  cmd=0;
 
@@ -156,7 +156,7 @@ void sendQueueCmd(void)
   {
     // this command did not originate with the TFT
     // look for certain commands even when they are couched behind N commands (line numbers)
-    if (cmd_seen('M')) 
+    if (cmd_seen('M'))
     {
       cmd = cmd_value();
       switch(cmd)
@@ -179,7 +179,7 @@ void sendQueueCmd(void)
           {
             popupReminder((u8 *)"M117", (u8 *)&message);
           }
-          break; 
+          break;
         }
         case 106: //M106
         {
@@ -187,7 +187,7 @@ void sendQueueCmd(void)
           if(cmd_seen('P')) i = cmd_value();
           if(cmd_seen('S'))
           {
-            fanSetSpeed(i, cmd_value()); 
+            fanSetSpeed(i, cmd_value());
           }
           break;
         }
@@ -195,23 +195,23 @@ void sendQueueCmd(void)
         {
           u8 i = 0;
           if(cmd_seen('P')) i = cmd_value();
-          fanSetSpeed(i, 0); 
+          fanSetSpeed(i, 0);
           break;
         }
         case 220: //M220
           if(cmd_seen('S'))
           {
-            speedSetPercent(0,cmd_value()); 
+            speedSetPercent(0,cmd_value());
           }
           break;
         case 221: //M221
           if(cmd_seen('S'))
           {
-            speedSetPercent(1,cmd_value()); 
+            speedSetPercent(1,cmd_value());
           }
           break;
-      }     
-    }   
+      }
+    }
   }
   else
   {
@@ -273,8 +273,8 @@ void sendQueueCmd(void)
             TOOL i = heatGetCurrentToolNozzle();
             if(cmd_seen('T')) i = (TOOL)(cmd_value() + NOZZLE0);
             if(cmd_seen('S'))
-            {	
-              heatSyncTargetTemp(i, cmd_value()); 
+            {
+              heatSyncTargetTemp(i, cmd_value());
             }
             else
             {
@@ -288,8 +288,7 @@ void sendQueueCmd(void)
 
           case 105: //M105
             heatSetUpdateWaiting(false);
-
-              avoid_terminal = infoSettings.terminalACK;
+            avoid_terminal = infoSettings.terminalACK;
 
             break;
 
@@ -299,7 +298,7 @@ void sendQueueCmd(void)
             if(cmd_seen('P')) i = cmd_value();
             if(cmd_seen('S'))
             {
-              fanSetSpeed(i, cmd_value()); 
+              fanSetSpeed(i, cmd_value());
             }
             else
             {
@@ -315,7 +314,7 @@ void sendQueueCmd(void)
           {
             u8 i = 0;
             if(cmd_seen('P')) i = cmd_value();
-            fanSetSpeed(i, 0); 
+            fanSetSpeed(i, 0);
             break;
           }
 
@@ -335,11 +334,11 @@ void sendQueueCmd(void)
 
           case 190: //M190
             infoCmd.queue[infoCmd.index_r].gcode[2]='4';
-            heatSetIsWaiting(BED,true);											
+            heatSetIsWaiting(BED,true);
           case 140: //M140
             if(cmd_seen('S'))
             {
-              heatSyncTargetTemp(BED,cmd_value()); 
+              heatSyncTargetTemp(BED,cmd_value());
             }
             else
             {
@@ -353,7 +352,7 @@ void sendQueueCmd(void)
           case 220: //M220
             if(cmd_seen('S'))
             {
-              speedSetPercent(0,cmd_value()); 
+              speedSetPercent(0,cmd_value());
             }
             else
             {
@@ -366,7 +365,7 @@ void sendQueueCmd(void)
           case 221: //M221
             if(cmd_seen('S'))
             {
-              speedSetPercent(1,cmd_value()); 
+              speedSetPercent(1,cmd_value());
             }
             else
             {
@@ -388,13 +387,13 @@ void sendQueueCmd(void)
           {
             AXIS i;
             for(i=X_AXIS;i<TOTAL_AXIS;i++)
-            {						
-              if(cmd_seen(axis_id[i]))			
+            {
+              if(cmd_seen(axis_id[i]))
               {
                 coordinateSetAxisTarget(i,cmd_float());
               }
             }
-            if(cmd_seen('F'))			
+            if(cmd_seen('F'))
             {
               coordinateSetFeedRate(cmd_value());
             }
@@ -406,11 +405,11 @@ void sendQueueCmd(void)
             break;
 
           case 90: //G90
-            coorSetRelative(false);                
+            coorSetRelative(false);
             break;
 
           case 91: //G91
-            coorSetRelative(true);          
+            coorSetRelative(true);
             break;
 
           case 92: //G92
@@ -443,7 +442,7 @@ void sendQueueCmd(void)
     }
 
   }
-  
+
   setCurrentAckSrc(infoCmd.queue[infoCmd.index_r].src);
   Serial_Puts(SERIAL_PORT, infoCmd.queue[infoCmd.index_r].gcode); //
   if (avoid_terminal != true){
@@ -451,7 +450,7 @@ void sendQueueCmd(void)
   }
   infoCmd.count--;
   infoCmd.index_r = (infoCmd.index_r + 1) % CMD_MAX_LIST;
-  
+
   infoHost.wait = infoHost.connected;          //
 
   powerFailedEnable(true);

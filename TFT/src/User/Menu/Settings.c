@@ -24,7 +24,6 @@ void infoSettingsReset(void)
   infoSettings.send_end_gcode = 1;
   infoSettings.persistent_info = 1;
   infoSettings.file_listmode = 1;
-  
 }
 
 // Version infomation
@@ -32,12 +31,12 @@ void menuInfo(void)
 {
   const char* hardware = "Board   : BIGTREETECH_" HARDWARE_VERSION;
   const char* firmware = "Firmware: "HARDWARE_VERSION"." STRINGIFY(SOFTWARE_VERSION) " " __DATE__;
-  
+
   u16 HW_X = (LCD_WIDTH - GUI_StrPixelWidth((u8 *)hardware))/2;
   u16 FW_X = (LCD_WIDTH - GUI_StrPixelWidth((u8 *)firmware))/2;
   u16 centerY = LCD_HEIGHT/2;
   u16 startX = MIN(HW_X, FW_X);
-  
+
   GUI_Clear(BACKGROUND_COLOR);
 
   GUI_DispString(startX, centerY - BYTE_HEIGHT, (u8 *)hardware);
@@ -61,7 +60,7 @@ void menuDisconnect(void)
   while(!isPress());
   while(isPress());
   Serial_Init(infoSettings.baudrate);
-  
+
   infoMenu.cur--;
 }
 
@@ -112,25 +111,25 @@ void menuSettings(void)
       case KEY_ICON_0:
         infoMenu.menu[++infoMenu.cur] = menuScreenSettings;
         break;
-      
-      case KEY_ICON_1: 
+
+      case KEY_ICON_1:
         infoMenu.menu[++infoMenu.cur] = menuMachineSettings;
         break;
-      
+
       case KEY_ICON_2:
         infoMenu.menu[++infoMenu.cur] = menuFeatureSettings;
         break;
-      
+
       case KEY_ICON_3:
         infoMenu.menu[++infoMenu.cur] = menuInfo;
         break;
-      
+
       case KEY_ICON_4:
         infoMenu.menu[++infoMenu.cur] = menuDisconnect;
         break;
-      
+
       case KEY_ICON_5:
-        item_baudrate_i = (item_baudrate_i + 1) % ITEM_BAUDRATE_NUM;                
+        item_baudrate_i = (item_baudrate_i + 1) % ITEM_BAUDRATE_NUM;
         settingsItems.items[key_num] = itemBaudrate[item_baudrate_i];
         menuDrawItem(&settingsItems.items[key_num], key_num);
         infoSettings.baudrate = item_baudrate[item_baudrate_i];
@@ -141,11 +140,11 @@ void menuSettings(void)
       case KEY_ICON_7:
         infoMenu.cur--;
         break;
-      
+
       default:
         break;
     }
-    loopProcess();		
+    loopProcess();
   }
 
   if(memcmp(&now, &infoSettings, sizeof(SETTINGS)))

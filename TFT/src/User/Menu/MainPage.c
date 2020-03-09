@@ -1,7 +1,7 @@
 #include "MainPage.h"
 #include "includes.h"
 
-//1 title, ITEM_PER_PAGE items(icon+label) 
+//1 title, ITEM_PER_PAGE items(icon+label)
 const MENUITEMS mainPageItems = {
 // title
 LABEL_READY,
@@ -40,7 +40,7 @@ void menuMain(void)
     {
       #ifdef UNIFIED_MENU //if Unified menu is selected
         case KEY_ICON_0: infoMenu.menu[++infoMenu.cur] = menuUnifiedHeat;     break;
-        case KEY_ICON_1: infoMenu.menu[++infoMenu.cur] = menuUnifiedMove;     break;      
+        case KEY_ICON_1: infoMenu.menu[++infoMenu.cur] = menuUnifiedMove;     break;
         case KEY_ICON_2: infoMenu.menu[++infoMenu.cur] = menuExtrude;         break;
         case KEY_ICON_3: { storeCmd("M112\n");} break;  // Emergency Stop : Used for emergency stopping, a reset is required to return to operational mode.
                                                         // it may need to wait for a space to open up in the command queue.
@@ -60,13 +60,13 @@ void menuMain(void)
           #else
             infoMenu.menu[++infoMenu.cur] = menuManualLeveling;
           #endif
-          break;      
+          break;
         case KEY_ICON_4: infoMenu.menu[++infoMenu.cur] = menuExtrude;   break;
         case KEY_ICON_5: infoMenu.menu[++infoMenu.cur] = menuSettings;  break;
         case KEY_ICON_7: infoMenu.cur--;        break;
         default:break;
       #endif
-    }		
+    }
     loopProcess();
   }
 }

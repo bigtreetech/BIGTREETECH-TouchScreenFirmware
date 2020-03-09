@@ -7,7 +7,7 @@ typedef enum
 {
   SERIAL_TSC = 0,
   LCD12864,
-  LCD2004  
+  LCD2004
 }LCD_MODE;
 
 typedef struct

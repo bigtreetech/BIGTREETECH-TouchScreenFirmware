@@ -4,16 +4,16 @@
 
 #ifdef STM32_HAS_FSMC
 u16 LCD_RD_DATA(void)
-{										    	   
-  vu16 ram;			
-  ram=LCD->LCD_RAM;	
-  return ram;	 		 
-}					   
+{
+  vu16 ram;
+  ram=LCD->LCD_RAM;
+  return ram;
+}
 
 void LCD_WriteReg(u8 LCD_Reg, u16 LCD_RegValue)
 {
   LCD->LCD_REG = LCD_Reg;
-  LCD->LCD_RAM = LCD_RegValue;    		 
+  LCD->LCD_RAM = LCD_RegValue;
 }
 
 u16 LCD_ReadReg(u8 LCD_Reg)
@@ -51,15 +51,15 @@ void LCD_GPIO_Config(void)
   */
   GPIO_InitSet(PD4, MGPIO_MODE_AF_PP, GPIO_AF_FSMC);
   GPIO_InitSet(PD5, MGPIO_MODE_AF_PP, GPIO_AF_FSMC);
-  GPIO_InitSet(PE2, MGPIO_MODE_AF_PP, GPIO_AF_FSMC); 
+  GPIO_InitSet(PE2, MGPIO_MODE_AF_PP, GPIO_AF_FSMC);
   GPIO_InitSet(PD7, MGPIO_MODE_AF_PP, GPIO_AF_FSMC);
 }
 
 void LCD_FSMC_Config(void)
-{	
+{
   FSMC_NORSRAMInitTypeDef  FSMC_NORSRAMInitStructure;
-  FSMC_NORSRAMTimingInitTypeDef  readWriteTiming,writeTiming; 
-  
+  FSMC_NORSRAMTimingInitTypeDef  readWriteTiming,writeTiming;
+
   RCC_AHB3PeriphClockCmd(RCC_AHB3Periph_FSMC, ENABLE);
 
   readWriteTiming.FSMC_AddressSetupTime = 0x01;	 //地址建立时间（ADDSET）为2个HCLK 1/36M=27ns
@@ -68,15 +68,15 @@ void LCD_FSMC_Config(void)
   readWriteTiming.FSMC_BusTurnAroundDuration = 0x00;
   readWriteTiming.FSMC_CLKDivision = 0x00;
   readWriteTiming.FSMC_DataLatency = 0x00;
-  readWriteTiming.FSMC_AccessMode = FSMC_AccessMode_A;	 //模式A 
+  readWriteTiming.FSMC_AccessMode = FSMC_AccessMode_A;	 //模式A
 
-  writeTiming.FSMC_AddressSetupTime = 0x00;	 //地址建立时间（ADDSET）为1个HCLK  
+  writeTiming.FSMC_AddressSetupTime = 0x00;	 //地址建立时间（ADDSET）为1个HCLK
   writeTiming.FSMC_AddressHoldTime = 0x00;
-  writeTiming.FSMC_DataSetupTime = 0x03;		 ////数据保存时间为4个HCLK	
+  writeTiming.FSMC_DataSetupTime = 0x03;		 ////数据保存时间为4个HCLK
   writeTiming.FSMC_BusTurnAroundDuration = 0x00;
   writeTiming.FSMC_CLKDivision = 0x00;
   writeTiming.FSMC_DataLatency = 0x00;
-  writeTiming.FSMC_AccessMode = FSMC_AccessMode_A;	 //模式A 
+  writeTiming.FSMC_AccessMode = FSMC_AccessMode_A;	 //模式A
 
   FSMC_NORSRAMInitStructure.FSMC_Bank = FSMC_Bank1_NORSRAM1;  //选择外接存储区域的地址
   FSMC_NORSRAMInitStructure.FSMC_DataAddressMux = FSMC_DataAddressMux_Disable;//配置数据线和地址线是否复用
@@ -98,7 +98,7 @@ void LCD_FSMC_Config(void)
   FSMC_NORSRAMInitStructure.FSMC_ReadWriteTimingStruct = &readWriteTiming;//读时序
   FSMC_NORSRAMInitStructure.FSMC_WriteTimingStruct = &writeTiming;  //写时序
 
-  FSMC_NORSRAMInit(&FSMC_NORSRAMInitStructure); 
+  FSMC_NORSRAMInit(&FSMC_NORSRAMInitStructure);
     /* 使能 FSMC Bank1_SRAM Bank */
   FSMC_NORSRAMCmd(FSMC_Bank1_NORSRAM1, ENABLE);
 }

@@ -1,6 +1,6 @@
-/** 
+/**
   ******************************************************************************
-  * @file    usbh_ioreq.c 
+  * @file    usbh_ioreq.c
   * @author  MCD Application Team
   * @version V2.2.1
   * @date    17-March-2018
@@ -17,7 +17,7 @@
   *                      <http://www.st.com/SLA0044>
   *
   ******************************************************************************
-  */ 
+  */
 /* Includes ------------------------------------------------------------------*/
 
 #include "usbh_ioreq.h"
@@ -30,8 +30,8 @@
 /** @addtogroup USBH_LIB_CORE
 * @{
 */
-  
-/** @defgroup USBH_IOREQ 
+
+/** @defgroup USBH_IOREQ
   * @brief This file handles the standard protocol processing (USB v2.0)
   * @{
   */
@@ -39,57 +39,57 @@
 
 /** @defgroup USBH_IOREQ_Private_Defines
   * @{
-  */ 
+  */
 /**
   * @}
-  */ 
- 
+  */
+
 
 /** @defgroup USBH_IOREQ_Private_TypesDefinitions
   * @{
-  */ 
+  */
 /**
   * @}
-  */ 
+  */
 
 
 
 /** @defgroup USBH_IOREQ_Private_Macros
   * @{
-  */ 
+  */
 /**
   * @}
-  */ 
+  */
 
 
 /** @defgroup USBH_IOREQ_Private_Variables
   * @{
-  */ 
+  */
 /**
   * @}
-  */ 
+  */
 
 
 /** @defgroup USBH_IOREQ_Private_FunctionPrototypes
   * @{
-  */ 
+  */
 static USBH_Status USBH_SubmitSetupRequest(USBH_HOST *phost,
-                                           uint8_t* buff, 
+                                           uint8_t* buff,
                                            uint16_t length);
 
 /**
   * @}
-  */ 
+  */
 
 
 /** @defgroup USBH_IOREQ_Private_Functions
   * @{
-  */ 
+  */
 
 
 /**
   * @brief  USBH_CtlReq
-  *         USBH_CtlReq sends a control request and provide the status after 
+  *         USBH_CtlReq sends a control request and provide the status after
   *            completion of the request
   * @param  pdev: Selected device
   * @param  req: Setup Request Structure
@@ -97,14 +97,14 @@ static USBH_Status USBH_SubmitSetupRequest(USBH_HOST *phost,
   * @param  length: length of the response
   * @retval Status
   */
-USBH_Status USBH_CtlReq     (USB_OTG_CORE_HANDLE *pdev, 
-                             USBH_HOST           *phost, 
+USBH_Status USBH_CtlReq     (USB_OTG_CORE_HANDLE *pdev,
+                             USBH_HOST           *phost,
                              uint8_t             *buff,
                              uint16_t            length)
 {
   USBH_Status status;
   status = USBH_BUSY;
-  
+
   switch (phost->RequestState)
   {
   case CMD_SEND:
@@ -113,31 +113,31 @@ USBH_Status USBH_CtlReq     (USB_OTG_CORE_HANDLE *pdev,
     phost->RequestState = CMD_WAIT;
     status = USBH_BUSY;
     break;
-    
+
   case CMD_WAIT:
-     if (phost->Control.state == CTRL_COMPLETE ) 
+     if (phost->Control.state == CTRL_COMPLETE )
     {
-      /* Commands successfully sent and Response Received  */       
+      /* Commands successfully sent and Response Received  */
       phost->RequestState = CMD_SEND;
-      phost->Control.state =CTRL_IDLE;  
-      status = USBH_OK;      
+      phost->Control.state =CTRL_IDLE;
+      status = USBH_OK;
     }
     else if  (phost->Control.state == CTRL_ERROR)
     {
       /* Failure Mode */
       phost->RequestState = CMD_SEND;
       status = USBH_FAIL;
-    }   
+    }
      else if  (phost->Control.state == CTRL_STALLED )
     {
-      /* Commands successfully sent and Response Received  */       
+      /* Commands successfully sent and Response Received  */
       phost->RequestState = CMD_SEND;
       status = USBH_NOT_SUPPORTED;
     }
     break;
-    
+
   default:
-    break; 
+    break;
   }
   return status;
 }
@@ -150,15 +150,15 @@ USBH_Status USBH_CtlReq     (USB_OTG_CORE_HANDLE *pdev,
   * @param  hc_num: Host channel Number
   * @retval Status
   */
-USBH_Status USBH_CtlSendSetup ( USB_OTG_CORE_HANDLE *pdev, 
-                                uint8_t *buff, 
+USBH_Status USBH_CtlSendSetup ( USB_OTG_CORE_HANDLE *pdev,
+                                uint8_t *buff,
                                 uint8_t hc_num){
   pdev->host.hc[hc_num].ep_is_in = 0;
-  pdev->host.hc[hc_num].data_pid = HC_PID_SETUP;   
+  pdev->host.hc[hc_num].data_pid = HC_PID_SETUP;
   pdev->host.hc[hc_num].xfer_buff = buff;
-  pdev->host.hc[hc_num].xfer_len = USBH_SETUP_PKT_SIZE;   
+  pdev->host.hc[hc_num].xfer_len = USBH_SETUP_PKT_SIZE;
 
-  return (USBH_Status)HCD_SubmitRequest (pdev , hc_num);   
+  return (USBH_Status)HCD_SubmitRequest (pdev , hc_num);
 }
 
 
@@ -171,32 +171,32 @@ USBH_Status USBH_CtlSendSetup ( USB_OTG_CORE_HANDLE *pdev,
   * @param  hc_num: Host channel Number
   * @retval Status
   */
-USBH_Status USBH_CtlSendData ( USB_OTG_CORE_HANDLE *pdev, 
-                                uint8_t *buff, 
+USBH_Status USBH_CtlSendData ( USB_OTG_CORE_HANDLE *pdev,
+                                uint8_t *buff,
                                 uint16_t length,
                                 uint8_t hc_num)
 {
   pdev->host.hc[hc_num].ep_is_in = 0;
   pdev->host.hc[hc_num].xfer_buff = buff;
   pdev->host.hc[hc_num].xfer_len = length;
- 
+
   if ( length == 0 )
   { /* For Status OUT stage, Length==0, Status Out PID = 1 */
-    pdev->host.hc[hc_num].toggle_out = 1;   
+    pdev->host.hc[hc_num].toggle_out = 1;
   }
- 
+
  /* Set the Data Toggle bit as per the Flag */
   if ( pdev->host.hc[hc_num].toggle_out == 0)
   { /* Put the PID 0 */
-      pdev->host.hc[hc_num].data_pid = HC_PID_DATA0;    
+      pdev->host.hc[hc_num].data_pid = HC_PID_DATA0;
   }
  else
  { /* Put the PID 1 */
       pdev->host.hc[hc_num].data_pid = HC_PID_DATA1 ;
  }
 
-  HCD_SubmitRequest (pdev , hc_num);   
-   
+  HCD_SubmitRequest (pdev , hc_num);
+
   return USBH_OK;
 }
 
@@ -208,10 +208,10 @@ USBH_Status USBH_CtlSendData ( USB_OTG_CORE_HANDLE *pdev,
   * @param  buff: Buffer pointer in which the response needs to be copied
   * @param  length: Length of the data to be received
   * @param  hc_num: Host channel Number
-  * @retval Status. 
+  * @retval Status.
   */
-USBH_Status USBH_CtlReceiveData(USB_OTG_CORE_HANDLE *pdev, 
-                                uint8_t* buff, 
+USBH_Status USBH_CtlReceiveData(USB_OTG_CORE_HANDLE *pdev,
+                                uint8_t* buff,
                                 uint16_t length,
                                 uint8_t hc_num)
 {
@@ -219,12 +219,12 @@ USBH_Status USBH_CtlReceiveData(USB_OTG_CORE_HANDLE *pdev,
   pdev->host.hc[hc_num].ep_is_in = 1;
   pdev->host.hc[hc_num].data_pid = HC_PID_DATA1;
   pdev->host.hc[hc_num].xfer_buff = buff;
-  pdev->host.hc[hc_num].xfer_len = length;  
+  pdev->host.hc[hc_num].xfer_len = length;
 
-  HCD_SubmitRequest (pdev , hc_num);   
-  
+  HCD_SubmitRequest (pdev , hc_num);
+
   return USBH_OK;
-  
+
 }
 
 
@@ -237,26 +237,26 @@ USBH_Status USBH_CtlReceiveData(USB_OTG_CORE_HANDLE *pdev,
   * @param  hc_num: Host channel Number
   * @retval Status
   */
-USBH_Status USBH_BulkSendData ( USB_OTG_CORE_HANDLE *pdev, 
-                                uint8_t *buff, 
+USBH_Status USBH_BulkSendData ( USB_OTG_CORE_HANDLE *pdev,
+                                uint8_t *buff,
                                 uint16_t length,
                                 uint8_t hc_num)
-{ 
+{
   pdev->host.hc[hc_num].ep_is_in = 0;
   pdev->host.hc[hc_num].xfer_buff = buff;
-  pdev->host.hc[hc_num].xfer_len = length;  
+  pdev->host.hc[hc_num].xfer_len = length;
 
  /* Set the Data Toggle bit as per the Flag */
   if ( pdev->host.hc[hc_num].toggle_out == 0)
   { /* Put the PID 0 */
-      pdev->host.hc[hc_num].data_pid = HC_PID_DATA0;    
+      pdev->host.hc[hc_num].data_pid = HC_PID_DATA0;
   }
  else
  { /* Put the PID 1 */
       pdev->host.hc[hc_num].data_pid = HC_PID_DATA1 ;
  }
 
-  HCD_SubmitRequest (pdev , hc_num);   
+  HCD_SubmitRequest (pdev , hc_num);
   return USBH_OK;
 }
 
@@ -268,17 +268,17 @@ USBH_Status USBH_BulkSendData ( USB_OTG_CORE_HANDLE *pdev,
   * @param  buff: Buffer pointer in which the received data packet to be copied
   * @param  length: Length of the data to be received
   * @param  hc_num: Host channel Number
-  * @retval Status. 
+  * @retval Status.
   */
-USBH_Status USBH_BulkReceiveData( USB_OTG_CORE_HANDLE *pdev, 
-                                uint8_t *buff, 
+USBH_Status USBH_BulkReceiveData( USB_OTG_CORE_HANDLE *pdev,
+                                uint8_t *buff,
                                 uint16_t length,
                                 uint8_t hc_num)
 {
-  pdev->host.hc[hc_num].ep_is_in = 1;   
+  pdev->host.hc[hc_num].ep_is_in = 1;
   pdev->host.hc[hc_num].xfer_buff = buff;
   pdev->host.hc[hc_num].xfer_len = length;
-  
+
 
   if( pdev->host.hc[hc_num].toggle_in == 0)
   {
@@ -289,7 +289,7 @@ USBH_Status USBH_BulkReceiveData( USB_OTG_CORE_HANDLE *pdev,
     pdev->host.hc[hc_num].data_pid = HC_PID_DATA1;
   }
 
-  HCD_SubmitRequest (pdev , hc_num);  
+  HCD_SubmitRequest (pdev , hc_num);
   return USBH_OK;
 }
 
@@ -301,20 +301,20 @@ USBH_Status USBH_BulkReceiveData( USB_OTG_CORE_HANDLE *pdev,
   * @param  buff: Buffer pointer in which the response needs to be copied
   * @param  length: Length of the data to be received
   * @param  hc_num: Host channel Number
-  * @retval Status. 
+  * @retval Status.
   */
-USBH_Status USBH_InterruptReceiveData( USB_OTG_CORE_HANDLE *pdev, 
-                                uint8_t *buff, 
+USBH_Status USBH_InterruptReceiveData( USB_OTG_CORE_HANDLE *pdev,
+                                uint8_t *buff,
                                 uint8_t length,
                                 uint8_t hc_num)
 {
 
-  pdev->host.hc[hc_num].ep_is_in = 1;  
+  pdev->host.hc[hc_num].ep_is_in = 1;
   pdev->host.hc[hc_num].xfer_buff = buff;
   pdev->host.hc[hc_num].xfer_len = length;
-  
 
-  
+
+
   if(pdev->host.hc[hc_num].toggle_in == 0)
   {
     pdev->host.hc[hc_num].data_pid = HC_PID_DATA0;
@@ -325,10 +325,10 @@ USBH_Status USBH_InterruptReceiveData( USB_OTG_CORE_HANDLE *pdev,
   }
 
   /* toggle DATA PID */
-  pdev->host.hc[hc_num].toggle_in ^= 1;  
-  
-  HCD_SubmitRequest (pdev , hc_num);  
-  
+  pdev->host.hc[hc_num].toggle_in ^= 1;
+
+  HCD_SubmitRequest (pdev , hc_num);
+
   return USBH_OK;
 }
 
@@ -339,18 +339,18 @@ USBH_Status USBH_InterruptReceiveData( USB_OTG_CORE_HANDLE *pdev,
   * @param  buff: Buffer pointer from where the data needs to be copied
   * @param  length: Length of the data to be sent
   * @param  hc_num: Host channel Number
-  * @retval Status. 
+  * @retval Status.
   */
-USBH_Status USBH_InterruptSendData( USB_OTG_CORE_HANDLE *pdev, 
-                                uint8_t *buff, 
+USBH_Status USBH_InterruptSendData( USB_OTG_CORE_HANDLE *pdev,
+                                uint8_t *buff,
                                 uint8_t length,
                                 uint8_t hc_num)
 {
 
-  pdev->host.hc[hc_num].ep_is_in = 0;  
+  pdev->host.hc[hc_num].ep_is_in = 0;
   pdev->host.hc[hc_num].xfer_buff = buff;
   pdev->host.hc[hc_num].xfer_len = length;
-  
+
   if(pdev->host.hc[hc_num].toggle_in == 0)
   {
     pdev->host.hc[hc_num].data_pid = HC_PID_DATA0;
@@ -360,39 +360,39 @@ USBH_Status USBH_InterruptSendData( USB_OTG_CORE_HANDLE *pdev,
     pdev->host.hc[hc_num].data_pid = HC_PID_DATA1;
   }
 
-  pdev->host.hc[hc_num].toggle_in ^= 1;  
-  
-  HCD_SubmitRequest (pdev , hc_num);  
-  
+  pdev->host.hc[hc_num].toggle_in ^= 1;
+
+  HCD_SubmitRequest (pdev , hc_num);
+
   return USBH_OK;
 }
 
 
 /**
   * @brief  USBH_SubmitSetupRequest
-  *         Start a setup transfer by changing the state-machine and 
+  *         Start a setup transfer by changing the state-machine and
   *         initializing  the required variables needed for the Control Transfer
   * @param  pdev: Selected device
   * @param  setup: Setup Request Structure
   * @param  buff: Buffer used for setup request
   * @param  length: Length of the data
-  * @retval Status. 
+  * @retval Status.
 */
 static USBH_Status USBH_SubmitSetupRequest(USBH_HOST *phost,
-                                           uint8_t* buff, 
+                                           uint8_t* buff,
                                            uint16_t length)
 {
-  
+
   /* Save Global State */
-  phost->gStateBkp =   phost->gState; 
-  
+  phost->gStateBkp =   phost->gState;
+
   /* Prepare the Transactions */
   phost->gState = HOST_CTRL_XFER;
-  phost->Control.buff = buff; 
+  phost->Control.buff = buff;
   phost->Control.length = length;
-  phost->Control.state = CTRL_SETUP;  
+  phost->Control.state = CTRL_SETUP;
 
-  return USBH_OK;  
+  return USBH_OK;
 }
 
 
@@ -403,22 +403,22 @@ static USBH_Status USBH_SubmitSetupRequest(USBH_HOST *phost,
   * @param  buff: Buffer pointer in which the response needs to be copied
   * @param  length: Length of the data to be received
   * @param  hc_num: Host channel Number
-  * @retval Status. 
+  * @retval Status.
   */
-USBH_Status USBH_IsocReceiveData( USB_OTG_CORE_HANDLE *pdev, 
-                                uint8_t *buff, 
+USBH_Status USBH_IsocReceiveData( USB_OTG_CORE_HANDLE *pdev,
+                                uint8_t *buff,
                                 uint32_t length,
                                 uint8_t hc_num)
-{    
-  
-  pdev->host.hc[hc_num].ep_is_in = 1;  
+{
+
+  pdev->host.hc[hc_num].ep_is_in = 1;
   pdev->host.hc[hc_num].xfer_buff = buff;
   pdev->host.hc[hc_num].xfer_len = length;
   pdev->host.hc[hc_num].data_pid = HC_PID_DATA0;
-  
 
-  HCD_SubmitRequest (pdev , hc_num);  
-  
+
+  HCD_SubmitRequest (pdev , hc_num);
+
   return USBH_OK;
 }
 
@@ -429,32 +429,28 @@ USBH_Status USBH_IsocReceiveData( USB_OTG_CORE_HANDLE *pdev,
   * @param  buff: Buffer pointer from where the data needs to be copied
   * @param  length: Length of the data to be sent
   * @param  hc_num: Host channel Number
-  * @retval Status. 
+  * @retval Status.
   */
-USBH_Status USBH_IsocSendData( USB_OTG_CORE_HANDLE *pdev, 
-                                uint8_t *buff, 
+USBH_Status USBH_IsocSendData( USB_OTG_CORE_HANDLE *pdev,
+                                uint8_t *buff,
                                 uint32_t length,
                                 uint8_t hc_num)
 {
-  
-  pdev->host.hc[hc_num].ep_is_in = 0;  
+
+  pdev->host.hc[hc_num].ep_is_in = 0;
   pdev->host.hc[hc_num].xfer_buff = buff;
   pdev->host.hc[hc_num].xfer_len = length;
   pdev->host.hc[hc_num].data_pid = HC_PID_DATA0;
-  
-  HCD_SubmitRequest (pdev , hc_num);  
-  
+
+  HCD_SubmitRequest (pdev , hc_num);
+
   return USBH_OK;
 }
 
 #endif
 /**
 * @}
-*/ 
-
-/**
-* @}
-*/ 
+*/
 
 /**
 * @}
@@ -462,9 +458,10 @@ USBH_Status USBH_IsocSendData( USB_OTG_CORE_HANDLE *pdev,
 
 /**
 * @}
-*/ 
+*/
+
+/**
+* @}
+*/
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-
-
-

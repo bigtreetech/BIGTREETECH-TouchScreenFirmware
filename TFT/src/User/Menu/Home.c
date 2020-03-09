@@ -1,7 +1,7 @@
 #include "Home.h"
 #include "includes.h"
 
-//1��title(����), ITEM_PER_PAGE��item(ͼ��+��ǩ) 
+//1��title(����), ITEM_PER_PAGE��item(ͼ��+��ǩ)
 const MENUITEMS homeItems = {
 //   title
 LABEL_HOME,
@@ -18,7 +18,7 @@ LABEL_HOME,
 
 void menuHome(void)
 {
-  KEY_VALUES key_num = KEY_IDLE;	
+  KEY_VALUES key_num = KEY_IDLE;
   menuDrawPage(&homeItems);
   while(infoMenu.menu[infoMenu.cur] == menuHome)
   {
@@ -30,9 +30,8 @@ void menuHome(void)
       case KEY_ICON_2: storeCmd("G28 Y\n"); break;
       case KEY_ICON_3: storeCmd("G28 Z\n"); break;
       case KEY_ICON_7: infoMenu.cur--;      break;
-      default:break;            
+      default:break;
     }
     loopProcess();
   }
 }
-

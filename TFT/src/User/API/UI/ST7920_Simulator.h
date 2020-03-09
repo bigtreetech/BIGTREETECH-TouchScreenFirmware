@@ -39,7 +39,7 @@ typedef enum
   ST7920_RDATA = 0xFE,
 } ST7920_CTRL_STATUS;
 
-typedef struct 
+typedef struct
 {
   int16_t x, y;
   uint8_t x_cur;
@@ -52,5 +52,5 @@ void ST7920_ST7920_ParseWCmd(uint8_t cmd);
 void ST7920_DrawPixel(int16_t x, int16_t y, uint16_t color);
 
 void menuST7920(void);
-  
+
 #endif

@@ -52,7 +52,7 @@ void W25Qxx_WaitForWriteEnd(void)
   {
     flashstatus = W25Qxx_SPI_Read_Write_Byte(W25QXX_DUMMY_BYTE);
   }
-  while ((flashstatus & 0x01) == SET); 
+  while ((flashstatus & 0x01) == SET);
   W25Qxx_SPI_CS_Set(1);
 }
 
@@ -61,18 +61,18 @@ void W25Qxx_WritePage(uint8_t* pBuffer, uint32_t WriteAddr, uint16_t NumByteToWr
 {
   W25Qxx_WriteEnable();
   W25Qxx_SPI_CS_Set(0);
-	
+
   W25Qxx_SPI_Read_Write_Byte(CMD_PAGE_PROGRAM);
   W25Qxx_SPI_Read_Write_Byte((WriteAddr & 0xFF0000) >> 16);
   W25Qxx_SPI_Read_Write_Byte((WriteAddr & 0xFF00) >> 8);
   W25Qxx_SPI_Read_Write_Byte(WriteAddr & 0xFF);
-	
+
   while (NumByteToWrite--)
   {
     W25Qxx_SPI_Read_Write_Byte(*pBuffer);
     pBuffer++;
   }
-	
+
   W25Qxx_SPI_CS_Set(1);
   W25Qxx_WaitForWriteEnd();
 }
@@ -164,7 +164,7 @@ void W25Qxx_ReadBuffer(uint8_t* pBuffer, uint32_t ReadAddr, uint16_t NumByteToRe
     *pBuffer = W25Qxx_SPI_Read_Write_Byte(W25QXX_DUMMY_BYTE);
     pBuffer++;
   }
-	
+
   W25Qxx_SPI_CS_Set(1);
 }
 
@@ -204,7 +204,7 @@ void W25Qxx_EraseSector(uint32_t SectorAddr)
 void W25Qxx_EraseBlock(uint32_t BlockAddr)
 {
   W25Qxx_WriteEnable();
-	
+
   W25Qxx_SPI_CS_Set(0);
   W25Qxx_SPI_Read_Write_Byte(CMD_BLOCK_ERASE);
   W25Qxx_SPI_Read_Write_Byte((BlockAddr & 0xFF0000) >> 16);
@@ -226,5 +226,3 @@ void W25Qxx_EraseBulk(void)
 
   W25Qxx_WaitForWriteEnd();
 }
-
-

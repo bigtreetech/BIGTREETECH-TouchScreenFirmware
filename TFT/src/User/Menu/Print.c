@@ -223,7 +223,7 @@ void menuPrintFromSource(void)
     else{
       menuDrawListPage(&printListItems);
       gocdeListDraw();
-    }	
+    }
   }
   else
   {
@@ -246,7 +246,7 @@ void menuPrintFromSource(void)
 
     switch(key_num)
     {
-      case KEY_ICON_5:			
+      case KEY_ICON_5:
         if(infoFile.cur_page > 0)
         {
           infoFile.cur_page--;
@@ -254,12 +254,12 @@ void menuPrintFromSource(void)
         }
         break;
 
-      case KEY_ICON_6:	
+      case KEY_ICON_6:
         if(infoFile.cur_page+1 < (infoFile.F_num+infoFile.f_num+(NUM_PER_PAGE-1))/NUM_PER_PAGE)
         {
           infoFile.cur_page++;
           update=1;
-        }	
+        }
         break;
 
       case KEY_ICON_7:
@@ -272,8 +272,8 @@ void menuPrintFromSource(void)
         }
         else
         {
-          ExitDir();				
-          scanPrintFiles();			
+          ExitDir();
+          scanPrintFiles();
           update = 1;
         }
         break;
@@ -281,19 +281,19 @@ void menuPrintFromSource(void)
       case KEY_IDLE:
         break;
 
-      default:                   
+      default:
         if(key_num <= KEY_ICON_4)
-        {	
+        {
           u16 start = infoFile.cur_page * NUM_PER_PAGE;
           if(key_num + start < infoFile.F_num)						//folder
           {
-            if(EnterDir(infoFile.folder[key_num + start]) == false)  break;						
+            if(EnterDir(infoFile.folder[key_num + start]) == false)  break;
             scanPrintFiles();
             update=1;
             infoFile.cur_page=0;
           }
           else if(key_num+start < infoFile.F_num+infoFile.f_num)	//gcode
-          {	
+          {
             if(infoHost.connected !=true) break;
             if(EnterDir(infoFile.file[key_num + start - infoFile.F_num]) == false) break;	
             
@@ -329,7 +329,7 @@ void menuPrintFromSource(void)
         }
         break;
     }
-    
+
     if(update)
     {
       update=0;
@@ -341,7 +341,7 @@ void menuPrintFromSource(void)
         gocdeListDraw();
       }
     }
-    
+
     #ifdef SD_CD_PIN
     if(isVolumeExist(infoFile.source) != true)
     {
@@ -379,7 +379,7 @@ LABEL_PRINT,
 void menuPrint(void)
 {
   KEY_VALUES  key_num = KEY_IDLE;
-  
+
   menuDrawPage(&sourceSelItems);
   while(infoMenu.menu[infoMenu.cur] == menuPrint)
   {
@@ -391,14 +391,14 @@ void menuPrint(void)
         infoMenu.menu[++infoMenu.cur] = menuPrintFromSource;
         infoMenu.menu[++infoMenu.cur] = menuPowerOff;
         goto selectEnd;
-      
+
       #ifdef ONBOARD_SD_SUPPORT
       case KEY_ICON_1:
         infoFile.source = BOARD_SD;
         infoMenu.menu[++infoMenu.cur] = menuPrintFromSource;   //TODO: fix here,  onboard sd card PLR feature
         goto selectEnd;
       #endif
-      
+
       #ifdef U_DISK_SUPPROT
       #ifdef ONBOARD_SD_SUPPORT
       case KEY_ICON_2:
@@ -410,17 +410,17 @@ void menuPrint(void)
         infoMenu.menu[++infoMenu.cur] = menuPowerOff;
         goto selectEnd;
       #endif
-      
+
       case KEY_ICON_7:
         infoMenu.cur--;
         return;
-      
+
       default: break;
     }
     loopProcess();
   }
-  
-selectEnd:  
+
+selectEnd:
   resetInfoFile();
   powerFailedSetDriverSource(getCurFileSource());
 }

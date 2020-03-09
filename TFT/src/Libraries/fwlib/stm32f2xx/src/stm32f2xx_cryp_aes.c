@@ -3,8 +3,8 @@
   * @file    stm32f2xx_cryp_aes.c
   * @author  MCD Application Team
   * @version V1.1.2
-  * @date    05-March-2012 
-  * @brief   This file provides high level functions to encrypt and decrypt an 
+  * @date    05-March-2012
+  * @brief   This file provides high level functions to encrypt and decrypt an
   *          input message using AES in ECB/CBC/CTR modes.
   *          It uses the stm32f2xx_cryp.c/.h drivers to access the STM32F2xx CRYP
   *          peripheral.
@@ -14,7 +14,7 @@
   *          ===================================================================
   *                                   How to use this driver
   *          ===================================================================
-  *          1. Enable The CRYP controller clock using 
+  *          1. Enable The CRYP controller clock using
   *            RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_CRYP, ENABLE); function.
   *
   *          2. Encrypt and decrypt using AES in ECB Mode using CRYP_AES_ECB()
@@ -39,8 +39,8 @@
   *
   *        http://www.st.com/software_license_agreement_liberty_v2
   *
-  * Unless required by applicable law or agreed to in writing, software 
-  * distributed under the License is distributed on an "AS IS" BASIS, 
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
@@ -55,7 +55,7 @@
   * @{
   */
 
-/** @defgroup CRYP 
+/** @defgroup CRYP
   * @brief CRYP driver modules
   * @{
   */
@@ -71,12 +71,12 @@
 
 /** @defgroup CRYP_Private_Functions
   * @{
-  */ 
+  */
 
 /** @defgroup CRYP_Group6 High Level AES functions
- *  @brief   High Level AES functions 
+ *  @brief   High Level AES functions
  *
-@verbatim   
+@verbatim
  ===============================================================================
                           High Level AES functions
  ===============================================================================
@@ -196,7 +196,7 @@ ErrorStatus CRYP_AES_ECB(uint8_t Mode, uint8_t* Key, uint16_t Keysize,
     }
     else
     {
-      /* Crypto Init for decryption process */  
+      /* Crypto Init for decryption process */
       AES_CRYP_InitStructure.CRYP_AlgoDir = CRYP_AlgoDir_Decrypt;
     }
   }
@@ -255,7 +255,7 @@ ErrorStatus CRYP_AES_ECB(uint8_t Mode, uint8_t* Key, uint16_t Keysize,
       outputaddr+=4;
       *(uint32_t*)(outputaddr) = CRYP_DataOut();
       outputaddr+=4;
-      *(uint32_t*)(outputaddr) = CRYP_DataOut(); 
+      *(uint32_t*)(outputaddr) = CRYP_DataOut();
       outputaddr+=4;
     }
   }
@@ -263,7 +263,7 @@ ErrorStatus CRYP_AES_ECB(uint8_t Mode, uint8_t* Key, uint16_t Keysize,
   /* Disable Crypto */
   CRYP_Cmd(DISABLE);
 
-  return status; 
+  return status;
 }
 
 /**
@@ -391,7 +391,7 @@ ErrorStatus CRYP_AES_CBC(uint8_t Mode, uint8_t InitVectors[16], uint8_t *Key,
     }
     else
     {
-      /* Crypto Init for decryption process */  
+      /* Crypto Init for decryption process */
       AES_CRYP_InitStructure.CRYP_AlgoDir = CRYP_AlgoDir_Decrypt;
     }
   }
@@ -478,7 +478,7 @@ ErrorStatus CRYP_AES_CBC(uint8_t Mode, uint8_t InitVectors[16], uint8_t *Key,
   *          - SUCCESS: Operation done
   *          - ERROR: Operation failed
   */
-ErrorStatus CRYP_AES_CTR(uint8_t Mode, uint8_t InitVectors[16], uint8_t *Key, 
+ErrorStatus CRYP_AES_CTR(uint8_t Mode, uint8_t InitVectors[16], uint8_t *Key,
                          uint16_t Keysize, uint8_t *Input, uint32_t Ilength,
                          uint8_t *Output)
 {
@@ -626,19 +626,18 @@ ErrorStatus CRYP_AES_CTR(uint8_t Mode, uint8_t InitVectors[16], uint8_t *Key,
 }
 /**
   * @}
-  */ 
+  */
 
 /**
   * @}
-  */ 
+  */
 
 /**
   * @}
-  */ 
+  */
 
 /**
   * @}
-  */ 
+  */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-
