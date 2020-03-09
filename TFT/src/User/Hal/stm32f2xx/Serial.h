@@ -20,24 +20,4 @@ void Serial_Init(u32 baud);
 void Serial_DeInit(void);
 void Serial_Puts(uint8_t port, char *s);
 
-#endif 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#endif

@@ -37,92 +37,92 @@ void SPI_ReEnable(u8 mode)
                       | (0<<2)   // 0:Slave 1:Master
                       | (mode<<1)   // CPOL
                       | (mode<<0);  // CPHA
-            
+
   ST7920_SPI_NUM->CR2 |= 1<<6; // RX buffer not empty interrupt enable SPI_I2S_IT_RXNE
 }
 
-void SPI_Slave(void) 
+void SPI_Slave(void)
 {
   NVIC_InitTypeDef   NVIC_InitStructure;
 
   SPISlave.data = malloc(SPI_SLAVE_MAX);
   while(!SPISlave.data); // malloc failed
-  SPI_GPIO_Init(ST7920_SPI);  
+  SPI_GPIO_Init(ST7920_SPI);
   GPIO_InitSet(PB12, MGPIO_MODE_IPU, 0);  // CS
-  
-  NVIC_InitStructure.NVIC_IRQChannel = SPI2_IRQn; 
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1; 
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0; 
+
+  NVIC_InitStructure.NVIC_IRQChannel = SPI2_IRQn;
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-  NVIC_Init(&NVIC_InitStructure); 
+  NVIC_Init(&NVIC_InitStructure);
 
   RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2,ENABLE);
   SPI_ReEnable(1);
 }
 
 void SPI_SlaveDeInit(void)
-{  
+{
   NVIC_InitTypeDef   NVIC_InitStructure;
-  
-  NVIC_InitStructure.NVIC_IRQChannel = SPI2_IRQn; 
+
+  NVIC_InitStructure.NVIC_IRQChannel = SPI2_IRQn;
   NVIC_InitStructure.NVIC_IRQChannelCmd = DISABLE;
   NVIC_Init(&NVIC_InitStructure);
-  NVIC_InitStructure.NVIC_IRQChannel = EXTI15_10_IRQn; 
+  NVIC_InitStructure.NVIC_IRQChannel = EXTI15_10_IRQn;
   NVIC_InitStructure.NVIC_IRQChannelCmd = DISABLE;
   NVIC_Init(&NVIC_InitStructure);
-  
-  RCC_APB1PeriphResetCmd(RCC_APB1Periph_SPI2, ENABLE); 
-  RCC_APB1PeriphResetCmd(RCC_APB1Periph_SPI2, DISABLE);  
+
+  RCC_APB1PeriphResetCmd(RCC_APB1Periph_SPI2, ENABLE);
+  RCC_APB1PeriphResetCmd(RCC_APB1Periph_SPI2, DISABLE);
   free(SPISlave.data);
   SPISlave.data = NULL;
 }
 
 
-void SPI2_IRQHandler(void) 
-{ 
+void SPI2_IRQHandler(void)
+{
   SPISlave.data[SPISlave.wIndex] =  ST7920_SPI_NUM->DR;
   SPISlave.wIndex = (SPISlave.wIndex + 1) % SPI_SLAVE_MAX;
-} 
+}
 
-/* Íâ²¿ÖÐ¶ÏÅäÖÃ */
+/* ï¿½â²¿ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½ */
 void SPI_Slave_CS_Config(void)
 {
   EXTI_InitTypeDef EXTI_InitStructure;
-  NVIC_InitTypeDef   NVIC_InitStructure; 
+  NVIC_InitTypeDef   NVIC_InitStructure;
 
-  RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE); 
-  /* ½«GPIOA_0ºÍÖÐ¶ÏÏßÁ¬½Ó */
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
+  /* ï¿½ï¿½GPIOA_0ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
   GPIO_EXTILineConfig(GPIO_PortSourceGPIOB, GPIO_PinSource12);
 
-  /* ÉèÖÃÖÐ¶ÏÏß0Î»Íâ²¿ÏÂ½µÑØÖÐ¶Ï */
+  /* ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½0Î»ï¿½â²¿ï¿½Â½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ */
   EXTI_InitStructure.EXTI_Line = EXTI_Line12;
   EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
   EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising_Falling;
   EXTI_InitStructure.EXTI_LineCmd = ENABLE;
   EXTI_Init(&EXTI_InitStructure);
 
-  NVIC_InitStructure.NVIC_IRQChannel = EXTI15_10_IRQn;			//Ê¹ÄÜ°´¼üËùÔÚµÄÍâ²¿ÖÐ¶ÏÍ¨µÀ
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x00;	//ÇÀÕ¼ÓÅÏÈ¼¶2£¬ 
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x01;					//×ÓÓÅÏÈ¼¶1
-  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;								//Ê¹ÄÜÍâ²¿ÖÐ¶ÏÍ¨µÀ
-  NVIC_Init(&NVIC_InitStructure); 
+  NVIC_InitStructure.NVIC_IRQChannel = EXTI15_10_IRQn;			//Ê¹ï¿½Ü°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½ï¿½â²¿ï¿½Ð¶ï¿½Í¨ï¿½ï¿½
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x00;	//ï¿½ï¿½Õ¼ï¿½ï¿½ï¿½È¼ï¿½2ï¿½ï¿½
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x01;					//ï¿½ï¿½ï¿½ï¿½ï¿½È¼ï¿½1
+  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;								//Ê¹ï¿½ï¿½ï¿½â²¿ï¿½Ð¶ï¿½Í¨ï¿½ï¿½
+  NVIC_Init(&NVIC_InitStructure);
 }
 
 
-/* Íâ²¿ÖÐ¶Ï */
+/* ï¿½â²¿ï¿½Ð¶ï¿½ */
 void EXTI15_10_IRQHandler(void)
 {
   if((GPIOB->IDR & (1<<12)) != 0)
   {
-    SPI_ReEnable(!!(GPIOB->IDR & (1<<13))); //×ÔÊÊÓ¦ spi mode0/mode3
+    SPI_ReEnable(!!(GPIOB->IDR & (1<<13))); //ï¿½ï¿½ï¿½ï¿½Ó¦ spi mode0/mode3
     ST7920_SPI_NUM->CR1 |= (1<<6);
   }
   else
   {
-    RCC->APB1RSTR |= 1<<14;	//¸´Î»SPI1
+    RCC->APB1RSTR |= 1<<14;	//ï¿½ï¿½Î»SPI1
     RCC->APB1RSTR &= ~(1<<14);
   }
-/* Çå³ýÖÐ¶Ï×´Ì¬¼Ä´æÆ÷ */
+/* ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½×´Ì?ï¿½Ä´ï¿½ï¿½ï¿½ */
   EXTI->PR = 1<<12;
 }
 

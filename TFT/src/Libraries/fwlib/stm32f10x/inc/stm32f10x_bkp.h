@@ -4,7 +4,7 @@
   * @author  MCD Application Team
   * @version V3.5.0
   * @date    11-March-2011
-  * @brief   This file contains all the functions prototypes for the BKP firmware 
+  * @brief   This file contains all the functions prototypes for the BKP firmware
   *          library.
   ******************************************************************************
   * @attention
@@ -51,7 +51,7 @@
   * @{
   */
 
-/** @defgroup Tamper_Pin_active_level 
+/** @defgroup Tamper_Pin_active_level
   * @{
   */
 
@@ -63,7 +63,7 @@
   * @}
   */
 
-/** @defgroup RTC_output_source_to_output_on_the_Tamper_pin 
+/** @defgroup RTC_output_source_to_output_on_the_Tamper_pin
   * @{
   */
 
@@ -79,7 +79,7 @@
   * @}
   */
 
-/** @defgroup Data_Backup_Register 
+/** @defgroup Data_Backup_Register
   * @{
   */
 

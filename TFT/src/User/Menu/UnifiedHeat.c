@@ -18,7 +18,7 @@ lABEL_UNIFIEDHEAT,
 
 void menuUnifiedHeat(void)
 {
-  KEY_VALUES key_num = KEY_IDLE;	
+  KEY_VALUES key_num = KEY_IDLE;
   menuDrawPage(&UnifiedHeatItems);
   while(infoMenu.menu[infoMenu.cur] == menuUnifiedHeat)
   {
@@ -34,9 +34,9 @@ void menuUnifiedHeat(void)
           heatSetTargetTemp(i, 0);
         }
         break;
-        
+
       case KEY_ICON_7: infoMenu.cur--;      break;
-      default:break;            
+      default:break;
     }
     loopProcess();
   }

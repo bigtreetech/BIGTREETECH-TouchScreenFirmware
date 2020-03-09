@@ -8,37 +8,37 @@ void OS_TimerInit(u16 psc,u16 arr)
 {
   NVIC_InitTypeDef NVIC_InitStructure;
 
-  NVIC_InitStructure.NVIC_IRQChannel = TIM4_IRQn;  
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;  
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0; 
-  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE; 
-  NVIC_Init(&NVIC_InitStructure); 
+  NVIC_InitStructure.NVIC_IRQChannel = TIM4_IRQn;
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+  NVIC_Init(&NVIC_InitStructure);
 
-  RCC->APB1ENR|=1<<2;	           //TIM4时钟使能    
-  TIM4->ARR=arr;  	             //设定自动重装值   
+  RCC->APB1ENR|=1<<2;	           //TIM4时钟使能
+  TIM4->ARR=arr;  	             //设定自动重装值
   TIM4->PSC=psc;  	             //预分频器
   TIM4->SR = (uint16_t)~(1<<0);  //清除更新中断
-  TIM4->DIER|=1<<0;              //允许更新中断	  
-  TIM4->CR1|=0x01;               //使能定时器3	
+  TIM4->DIER|=1<<0;              //允许更新中断
+  TIM4->CR1|=0x01;               //使能定时器3
 }
 
 void TIM4_IRQHandler(void)   //TIM4中断
 {
-  if ((TIM4->SR&0x01) != 0) //检查指定的TIM中断发生与否:TIM 中断源 
+  if ((TIM4->SR&0x01) != 0) //检查指定的TIM中断发生与否:TIM 中断源
   {
     os_counter++;
-    //打印过程中统计打印耗时		
+    //打印过程中统计打印耗时
     setPrintingTime(os_counter);
 
     loopTouchScreen();
 
-    //计时溢出		
+    //计时溢出
     if(os_counter==(1<<30))
     {
       os_counter=0;
     }
 
-    TIM4->SR = (uint16_t)~(1<<0);  //清除TIMx的中断待处理位:TIM 中断源 
+    TIM4->SR = (uint16_t)~(1<<0);  //清除TIMx的中断待处理位:TIM 中断源
   }
 }
 
@@ -72,7 +72,7 @@ void OS_TaskCheck(OS_TASK *task_t)
   if(OS_GetTime()<task_t->start_time+task_t->time)  return;
   if(task_t->is_repeat==0)
   {
-    task_t->is_exist=0; 
+    task_t->is_exist=0;
   }
   else
   {
@@ -90,10 +90,10 @@ is_repeat：此任务是否重复执行
 */
 void OS_TaskEnable(OS_TASK *task_t,u8 is_exec,u8 is_repeat)
 {
-  task_t->is_exist=1; 
-  task_t->is_repeat=is_repeat; 
+  task_t->is_exist=1;
+  task_t->is_repeat=is_repeat;
   task_t->start_time=OS_GetTime();
-  if(is_exec)    
+  if(is_exec)
     (*task_t->task)(task_t->para);
 }
 

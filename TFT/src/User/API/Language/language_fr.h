@@ -65,7 +65,7 @@
     #define FR_ORANGE               "Orange"
     #define FR_INDIGO               "Indigo"
     #define FR_VIOLET               "Violet"
-    #define FR_DISCONNECT           "Déconnexion" 
+    #define FR_DISCONNECT           "Déconnexion"
     #define FR_BAUDRATE_115200      "115200"
     #define FR_BAUDRATE_250000      "250000"
     #define FR_RUNOUT_OFF           "Détection OFF"

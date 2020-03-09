@@ -4,7 +4,7 @@
   * @author  MCD Application Team
   * @version V3.5.0
   * @date    11-March-2011
-  * @brief   This file contains all the functions prototypes for the RTC firmware 
+  * @brief   This file contains all the functions prototypes for the RTC firmware
   *          library.
   ******************************************************************************
   * @attention
@@ -37,21 +37,21 @@
 
 /** @addtogroup RTC
   * @{
-  */ 
+  */
 
 /** @defgroup RTC_Exported_Types
   * @{
-  */ 
+  */
 
 /**
   * @}
-  */ 
+  */
 
 /** @defgroup RTC_Exported_Constants
   * @{
   */
 
-/** @defgroup RTC_interrupts_define 
+/** @defgroup RTC_interrupts_define
   * @{
   */
 
@@ -63,9 +63,9 @@
                            ((IT) == RTC_IT_SEC))
 /**
   * @}
-  */ 
+  */
 
-/** @defgroup RTC_interrupts_flags 
+/** @defgroup RTC_interrupts_flags
   * @{
   */
 

@@ -4,7 +4,6 @@
 
 //const GUI_RECT RecXYZ = {START_X + 1*ICON_WIDTH,        STATUS_GANTRY_YOFFSET,
 //                         4*ICON_WIDTH+3*SPACE_X+START_X,ICON_START_Y-STATUS_GANTRY_YOFFSET};
-
 #define X 0
 #define Y 1
 #define Z 2
@@ -142,7 +141,6 @@ void menuMove(void)
     switch(key_num)
     {
       #ifdef ALTERNATIVE_MOVE_MENU
-          
         case KEY_ICON_0:
               storeCmd(z_axis_up, item_move_len[item_move_len_i]);
               break;
@@ -255,6 +253,7 @@ void menuMove(void)
               #endif
               break;
       #endif    
+
     }
     loopProcess();
     update_gantry();
@@ -288,7 +287,7 @@ void drawXYZ(void){
   my_sprintf(tempstr, "Z:%.1f  ", getAxisLocation(2));
   if (a == Z_AXIS) GUI_SetColor(INFOBOX_ICON_COLOR);
   GUI_DispString(START_X+3*SPACE_X+3*ICON_WIDTH,(ICON_START_Y-BYTE_HEIGHT)/2,(u8 *)tempstr);
-  
+
   //GUI_SetBkColor(BACKGROUND_COLOR);
   GUI_SetColor(FONT_COLOR);
 }

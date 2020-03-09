@@ -39,7 +39,23 @@ SCROLL   titleScroll;
 const GUI_RECT titleRect={10, (TITLE_END_Y - BYTE_HEIGHT) / 2, LCD_WIDTH-10, (TITLE_END_Y - BYTE_HEIGHT) / 2 + BYTE_HEIGHT};
 
 SCROLL   gcodeScroll;
+<<<<<<< HEAD
 bool icon_pre = false;
+=======
+
+#ifndef MENU_LIST_MODE
+/*   GUI_RECT gcodeRect[NUM_PER_PAGE] = {
+    {START_X + BYTE_HEIGHT + 4,  0*LISTITEM_HEIGHT+ICON_START_Y+1,    LISTITEM_WIDTH+START_X - 2,  1*LISTITEM_HEIGHT+ICON_START_Y-1},
+    {START_X + BYTE_HEIGHT + 4,  1*LISTITEM_HEIGHT+ICON_START_Y+1,    LISTITEM_WIDTH+START_X - 2,  2*LISTITEM_HEIGHT+ICON_START_Y-1},
+    {START_X + BYTE_HEIGHT + 4,  2*LISTITEM_HEIGHT+ICON_START_Y+1,    LISTITEM_WIDTH+START_X - 2,  3*LISTITEM_HEIGHT+ICON_START_Y-1},
+    {START_X + BYTE_HEIGHT + 4,  3*LISTITEM_HEIGHT+ICON_START_Y+1,    LISTITEM_WIDTH+START_X - 2,  4*LISTITEM_HEIGHT+ICON_START_Y-1},
+    {START_X + BYTE_HEIGHT + 4,  4*LISTITEM_HEIGHT+ICON_START_Y+1,    LISTITEM_WIDTH+START_X - 2,  5*LISTITEM_HEIGHT+ICON_START_Y-1},
+  };
+#else */
+  GUI_RECT gcodeRect[NUM_PER_PAGE] = {
+   {BYTE_WIDTH/2+0*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2,
+    1*SPACE_X_PER_ICON-BYTE_WIDTH/2,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
+>>>>>>> 2ea1b42a10cdc224a44c1d9791d2774d40766695
 
 const GUI_RECT gcodeRect[NUM_PER_PAGE] = { 
   {BYTE_WIDTH/2+0*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2,  
@@ -51,6 +67,7 @@ const GUI_RECT gcodeRect[NUM_PER_PAGE] = {
   {BYTE_WIDTH/2+2*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2,
   3*SPACE_X_PER_ICON-BYTE_WIDTH/2,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
 
+<<<<<<< HEAD
   {BYTE_WIDTH/2+3*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2,
   4*SPACE_X_PER_ICON-BYTE_WIDTH/2,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
 
@@ -61,6 +78,15 @@ const GUI_RECT gcodeRect[NUM_PER_PAGE] = {
 void scrollFileNameCreate(u8 i)
 {    
   u8 num=infoFile.cur_page * NUM_PER_PAGE + i;	
+=======
+   {BYTE_WIDTH/2+0*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2,
+    1*SPACE_X_PER_ICON-BYTE_WIDTH/2,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
+  };
+
+  void scrollFileNameCreate(u8 i)
+  {
+    u8 num=infoFile.cur_page * NUM_PER_PAGE + i;
+>>>>>>> 2ea1b42a10cdc224a44c1d9791d2774d40766695
 
   if(infoFile.F_num + infoFile.f_num==0)
   {
@@ -171,6 +197,7 @@ void gocdeListDraw(void)
 
   for (; (i < NUM_PER_PAGE); i++) //background
   {
+<<<<<<< HEAD
     printListItems.items[i].icon = ICONCHAR_BACKGROUND;
     printListItems.items[i].titlelabel.index = LABEL_BACKGROUND;
     menuDrawListItem(&printListItems.items[i], i);
@@ -178,6 +205,22 @@ void gocdeListDraw(void)
     // set page up down button according to page count and current page
     int t_pagenum = (infoFile.F_num+infoFile.f_num+(LISTITEM_PER_PAGE-1))/LISTITEM_PER_PAGE;
     if ((infoFile.F_num+infoFile.f_num) <= LISTITEM_PER_PAGE)
+=======
+    u8 i=0,k = 0;
+    int gn;
+    char *gnew;
+    ITEM curItem = {ICON_BACKGROUND, LABEL_BACKGROUND};
+
+    scrollFileNameCreate(0);
+    Scroll_CreatePara(&titleScroll, (uint8_t* )infoFile.title, &titleRect);
+    printItems.title.address = (uint8_t* )infoFile.title;
+    GUI_SetBkColor(TITLE_BACKGROUND_COLOR);
+    GUI_ClearPrect(&titleRect);
+    GUI_SetBkColor(BACKGROUND_COLOR);
+
+    for(i=0;(i + infoFile.cur_page * NUM_PER_PAGE < infoFile.F_num)
+            &&(i < NUM_PER_PAGE)                                  ; i++)                  // folder
+>>>>>>> 2ea1b42a10cdc224a44c1d9791d2774d40766695
     {
       printListItems.items[5].icon = ICONCHAR_BACKGROUND;
       printListItems.items[6].icon = ICONCHAR_BACKGROUND;
@@ -197,6 +240,16 @@ void gocdeListDraw(void)
         printListItems.items[5].icon = ICONCHAR_PAGEUP;
         printListItems.items[6].icon = ICONCHAR_PAGEDOWN;
       }
+<<<<<<< HEAD
+=======
+      menuDrawItem(&curItem, i);
+      normalNameDisp(&gcodeRect[i], (u8* )infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num]);
+    }
+    for(; (i<NUM_PER_PAGE); i++)			//background
+    {
+      curItem.icon = ICON_BACKGROUND;
+      menuDrawItem(&curItem, i);
+>>>>>>> 2ea1b42a10cdc224a44c1d9791d2774d40766695
     }
     menuDrawListItem(&printListItems.items[5],5);
     menuDrawListItem(&printListItems.items[6],6);
@@ -216,6 +269,7 @@ void menuPrintFromSource(void)
 
   if (mountFS() == true && scanPrintFiles() == true)
   {
+<<<<<<< HEAD
     if(infoSettings.file_listmode != true){
       menuDrawPage(&printIconItems);
       gocdeIconDraw();
@@ -224,6 +278,14 @@ void menuPrintFromSource(void)
       menuDrawListPage(&printListItems);
       gocdeListDraw();
     }	
+=======
+    #ifdef MENU_LIST_MODE
+      menuDrawListPage(&printItems);
+    #else
+      menuDrawPage(&printItems);
+    #endif
+    gocdeListDraw();
+>>>>>>> 2ea1b42a10cdc224a44c1d9791d2774d40766695
   }
   else
   {
@@ -246,7 +308,7 @@ void menuPrintFromSource(void)
 
     switch(key_num)
     {
-      case KEY_ICON_5:			
+      case KEY_ICON_5:
         if(infoFile.cur_page > 0)
         {
           infoFile.cur_page--;
@@ -254,12 +316,12 @@ void menuPrintFromSource(void)
         }
         break;
 
-      case KEY_ICON_6:	
+      case KEY_ICON_6:
         if(infoFile.cur_page+1 < (infoFile.F_num+infoFile.f_num+(NUM_PER_PAGE-1))/NUM_PER_PAGE)
         {
           infoFile.cur_page++;
           update=1;
-        }	
+        }
         break;
 
       case KEY_ICON_7:
@@ -272,8 +334,8 @@ void menuPrintFromSource(void)
         }
         else
         {
-          ExitDir();				
-          scanPrintFiles();			
+          ExitDir();
+          scanPrintFiles();
           update = 1;
         }
         break;
@@ -281,20 +343,21 @@ void menuPrintFromSource(void)
       case KEY_IDLE:
         break;
 
-      default:                   
+      default:
         if(key_num <= KEY_ICON_4)
-        {	
+        {
           u16 start = infoFile.cur_page * NUM_PER_PAGE;
           if(key_num + start < infoFile.F_num)						//folder
           {
-            if(EnterDir(infoFile.folder[key_num + start]) == false)  break;						
+            if(EnterDir(infoFile.folder[key_num + start]) == false)  break;
             scanPrintFiles();
             update=1;
             infoFile.cur_page=0;
           }
           else if(key_num+start < infoFile.F_num+infoFile.f_num)	//gcode
-          {	
+          {
             if(infoHost.connected !=true) break;
+<<<<<<< HEAD
             if(EnterDir(infoFile.file[key_num + start - infoFile.F_num]) == false) break;	
             
             //load bmp preview in flash if file exists
@@ -325,11 +388,25 @@ void menuPrintFromSource(void)
               normalNameDisp(gcodeScroll.rect, gcodeScroll.text);
               scrollFileNameCreate(key_num - KEY_LABEL_0);
             }
+=======
+            if(EnterDir(infoFile.file[key_num + start - infoFile.F_num]) == false) break;
+
+            infoMenu.menu[++infoMenu.cur] = menuBeforePrinting;
+          }
+        }
+        #ifndef MENU_LIST_MODE
+        else if(key_num >=KEY_LABEL_0 && key_num <= KEY_LABEL_4)
+        {
+          if(key_num - KEY_LABEL_0 + infoFile.cur_page * NUM_PER_PAGE < infoFile.F_num + infoFile.f_num)
+          {
+            normalNameDisp(gcodeScroll.rect, gcodeScroll.text);
+            scrollFileNameCreate(key_num - KEY_LABEL_0);
+>>>>>>> 2ea1b42a10cdc224a44c1d9791d2774d40766695
           }
         }
         break;
     }
-    
+
     if(update)
     {
       update=0;
@@ -341,7 +418,7 @@ void menuPrintFromSource(void)
         gocdeListDraw();
       }
     }
-    
+
     #ifdef SD_CD_PIN
     if(isVolumeExist(infoFile.source) != true)
     {
@@ -379,7 +456,7 @@ LABEL_PRINT,
 void menuPrint(void)
 {
   KEY_VALUES  key_num = KEY_IDLE;
-  
+
   menuDrawPage(&sourceSelItems);
   while(infoMenu.menu[infoMenu.cur] == menuPrint)
   {
@@ -391,14 +468,14 @@ void menuPrint(void)
         infoMenu.menu[++infoMenu.cur] = menuPrintFromSource;
         infoMenu.menu[++infoMenu.cur] = menuPowerOff;
         goto selectEnd;
-      
+
       #ifdef ONBOARD_SD_SUPPORT
       case KEY_ICON_1:
         infoFile.source = BOARD_SD;
         infoMenu.menu[++infoMenu.cur] = menuPrintFromSource;   //TODO: fix here,  onboard sd card PLR feature
         goto selectEnd;
       #endif
-      
+
       #ifdef U_DISK_SUPPROT
       #ifdef ONBOARD_SD_SUPPORT
       case KEY_ICON_2:
@@ -410,17 +487,17 @@ void menuPrint(void)
         infoMenu.menu[++infoMenu.cur] = menuPowerOff;
         goto selectEnd;
       #endif
-      
+
       case KEY_ICON_7:
         infoMenu.cur--;
         return;
-      
+
       default: break;
     }
     loopProcess();
   }
-  
-selectEnd:  
+
+selectEnd:
   resetInfoFile();
   powerFailedSetDriverSource(getCurFileSource());
 }

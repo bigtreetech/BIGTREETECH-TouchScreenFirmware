@@ -2,15 +2,15 @@
 #define _SD_H_
 
 #include "spi.h"
-				
-// SD卡类型定义  
+
+// SD卡类型定义
 #define SD_TYPE_ERR     0X00
 #define SD_TYPE_MMC     0X01
 #define SD_TYPE_V1      0X02
 #define SD_TYPE_V2      0X04
-#define SD_TYPE_V2HC    0X06	   
+#define SD_TYPE_V2HC    0X06
 
-// SD卡指令表  	   
+// SD卡指令表
 #define CMD0    0       //卡复位
 #define CMD1    1
 #define CMD8    8       //命令8 ，SEND_IF_COND
@@ -58,5 +58,3 @@ u8 SD_GetCID(u8 *cid_data);                         //读SD卡CID
 u8 SD_GetCSD(u8 *csd_data);                         //读SD卡CSD
 
 #endif
-
-

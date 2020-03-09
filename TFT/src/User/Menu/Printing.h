@@ -35,7 +35,7 @@
 #endif
 
 typedef struct 
-{	
+{
   FIL     file;
 
   u32     time; // Printed time in sec
@@ -55,7 +55,7 @@ void abortPrinting(void);
 void setM0Pause(bool m0_pause);
 bool setPrintPause(bool is_pause,bool is_m0pause);
 
-bool isPrinting(void);	
+bool isPrinting(void);
 bool isPause(void);
 bool isM0_Pause(void);
 void setPrintingTime(u32 RTtime);

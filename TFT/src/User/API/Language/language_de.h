@@ -156,5 +156,5 @@
     #define DE_SEND_END_GCODE       "End-Gcode nach druck"
     #define DE_PERSISTANT_STATUS_INFO "Speicherungs-status Information"
     #define DE_FILE_LISTMODE        "Datei-Ansicht als Liste"
-    
+
 #endif

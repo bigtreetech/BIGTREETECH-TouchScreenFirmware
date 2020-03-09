@@ -32,7 +32,7 @@ enum
   ICON_EXTRUDE,
   ICON_FAN,
   ICON_SETTINGS,
-  ICON_LEVELING,  
+  ICON_LEVELING,
   ICON_INC,
   ICON_DEC,
   ICON_NOZZLE,
@@ -59,7 +59,7 @@ enum
   ICON_PAGE_UP,
   ICON_PAGE_DOWN,
   ICON_PAUSE,
-  ICON_RESUME,  
+  ICON_RESUME,
   ICON_LOAD,
   ICON_UNLOAD,
   ICON_SLOW_SPEED,
@@ -78,7 +78,7 @@ enum
   ICON_BKCOLOR,
   ICON_FONTCOLOR,
   ICON_DISCONNECT,
-  ICON_BAUDRATE,  
+  ICON_BAUDRATE,
   ICON_PERCENTAGE,
   ICON_BABYSTEP,
   ICON_001_MM,
@@ -144,7 +144,7 @@ enum
   ICON_PRINTING_SPEED,
   ICON_PRINTING_FLOW,
 
-//add new icons above this line  only 
+//add new icons above this line  only
 //  ICON_RESERVE
 
 // Preview should be in the last place before ICON_BACKGROUND to save flash storage space
@@ -166,4 +166,4 @@ typedef union
 void scanUpdates(void);
 bool bmpDecode(char *bmp, u32 addr);
 
-#endif 
+#endif

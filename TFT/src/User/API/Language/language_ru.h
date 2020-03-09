@@ -131,7 +131,7 @@
     #define RU_PREHEAT_CUSTOM2      "CUSTOM2"
     #define RU_IS_PAUSE             "Невозможна экструзия при печати, поставить на паузу?"
     #define RU_AUTO_SHUT_DOWN       "Автопитание"
-    #define RU_MANUAL_SHUT_DOWN     "Выключить"    
+    #define RU_MANUAL_SHUT_DOWN     "Выключить"
     #define RU_UNIFIEDMOVE          "Движение"
     #define RU_UNIFIEDHEAT          "Нагрев"
     #define RU_COOLDOWN             "Охладить"
@@ -156,5 +156,7 @@
     #define RU_SEND_END_GCODE       "Gcode после печати"
     #define RU_PERSISTANT_STATUS_INFO "Нагрев в инфостроке"
     #define RU_FILE_LISTMODE        "Файлы в режиме строк"
-    
+    #define RU_KNOB_LED             "Rotary Knob LED"
+    #define RU_M0_PAUSE             "Paused by M0 command"
+
 #endif
