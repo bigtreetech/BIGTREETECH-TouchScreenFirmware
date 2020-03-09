@@ -88,7 +88,12 @@ void LCD_LoopEncoder(void)
 
 void loopCheckMode(void)
 {  
-  if(isPrinting()) return;
+//  #ifndef CLEAN_MODE_SWITCHING_SUPPORT
+//  IDEALLY I would like to be able to swap even when the TFT is in printing mode 
+//  but before I can allow that I need a way to make sure that we swap back into the right mode (and correct screen)
+//  and I really want a reliable way to DETECT that the TFT should be in printing mode even when the print was started externally.
+    if(isPrinting()) return;
+//  #endif
   if(LCD_ReadBtn(LCD_CHANGE_MODE_INTERVALS) || LCD_ReadPen(LCD_CHANGE_MODE_INTERVALS))
   {
     infoMenu.menu[++infoMenu.cur] = menuMode;

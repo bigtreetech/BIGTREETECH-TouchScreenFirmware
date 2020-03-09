@@ -152,5 +152,9 @@
     #define IT_MOVE_SPEED           "Move speed(X Y Z)"
     #define IT_KNOB_LED             "Rotary Knob LED"
     #define IT_M0_PAUSE             "Paused by M0 command"
+    #define IT_SEND_START_GCODE     "Start Gcode before print"
+    #define IT_SEND_END_GCODE       "End Gcode after print"
+    #define IT_PERSISTANT_STATUS_INFO "Persistent Status Info"
+    #define IT_FILE_LISTMODE        "Files viewer List Mode"
     
 #endif

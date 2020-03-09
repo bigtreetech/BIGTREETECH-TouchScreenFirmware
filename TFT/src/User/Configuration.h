@@ -13,25 +13,93 @@
  * Current color options from lcd.h: BLACK, BLUE, BROWN, BRRED, CYAN, GBLUE, GRAY, GREEN, MAGENTA, RED, WHITE, YELLOW
  */
 
+/**
+ * This setting determines the communication speed of the printer.
+ *
+ * 250000 works in most cases, but you might try a lower speed if
+ * you commonly experience drop-outs during host printing.
+ * You may try up to 1000000 to speed up SD file transfer.
+ *
+ * :[2400, 9600, 19200, 38400, 57600, 115200, 250000, 500000, 1000000]
+ */
+#define BAUDRATE 115200
+
+/**
+ * Default LANGUAGE
+ *
+ * Select the language to display on the LCD. These languages are available:
+ * ENGLISH, CHINESE, RUSSIAN, JAPANESE, ARMENIAN, GERMAN, CZECH, SPAIN, FRENCH, PORTUGUESE, ITALIAN, POLISH, SLOVAK, DUTCH
+ * 
+ */
+#define DEFAULT_LANGUAGE ENGLISH
+
+/**
+ * Default LCD Mode
+ *
+ * Select the default LCD mode. You can always switch between the modes. 
+ * 
+ * These are available:
+ * ST7920_SPI // LCD12864 Sumilator
+ * SERIAL_TSC // Default 
+ * 
+ */
+#define DEFAULT_LCD_MODE SERIAL_TSC
+
+/**
+ * The duration and frequency for the UI feedback sound.
+ * Set these to 0 to disable audio feedback in the LCD menus.
+ * Only valid for SERIAL_TSC LCD MODE anf if BUZZER_PIN is set or availible.
+ */
+#define LCD_FEEDBACK_FREQUENCY_DURATION_L_US 11   // Default 11
+#define LCD_FEEDBACK_FREQUENCY_H_US          3    // Default 3
+
 // Marlin Mode Background & Font Color Options
 // Current color options from lcd.h: BLACK, BLUE, BROWN, BRRED, CYAN, GBLUE, GRAY, GREEN, MAGENTA, RED, WHITE, YELLOW
 #define ST7920_BKCOLOR BLACK
-#define ST7920_FNCOLOR GREEN
+#define ST7920_FNCOLOR YELLOW
 
-// Text displayed at the top of the LCD in Marlin Mode.
+/**
+ *  Text displayed at the top of the LCD in Marlin Mode. 
+ */
 //#define ST7920_BANNER_TEXT "LCD12864 Simulator"
 
-// Run Marlin Mode fullscreen. Not recommended for TFT24.
+/**
+ * Run Marlin Mode fullscreen. 
+ * Not recommended for TFT24.
+ */
 //#define ST7920_FULLSCREEN
+
+/**
+ * CLEAN MODE SWITCHING SUPPORT
+ * Support for keeping UART(Serial communication) alive in Marlin Mode
+ * Gives the ability to connect Octoprint over UART to the TFT UART/serial 
+ * expansion port and have it work seamlessly no matter which mode the TFT is in. 
+ * Only for TFT24 V1.1, TFT35 V3.0 or TFT28 V3.0
+ */ 
+//#define CLEAN_MODE_SWITCHING_SUPPORT  // Enable CLEAN MODE SWITCHING SUPPORT
+
+/**
+ * DEFAULT STARTUP KNOB LED COLOR
+ * Choose one of the following numbers -->  1: LED_OFF,     2: LED_WHITE,   3: LED_RED,
+ *                                          4: LED_ORANGE,  5: LED_YELLOW,  6: LED_GREEN,
+ *                                          7: LED_BLUE,    8: LED_INDIGO,  9: LED_VIOLET
+ * Default value is: 1 for LED_OFF
+ * 
+*/
+#define STARTUP_KNOB_LED_COLOR 1 //LED_OFF
 
 //===========================================================================
 //============================ TFT Mode Settings ============================
 //===========================================================================
 
-// Show BTT bootscreen when starting up
+/**
+ *  Show BTT bootscreen when starting up
+ */
 #define SHOW_BTT_BOOTSCREEN
 
-// TFT mode color
+/**
+ * TFT mode color
+ */ 
 #define TITLE_BACKGROUND_COLOR      BLACK  // Title background color // 0xD928
 #define BACKGROUND_COLOR            BLACK  // Background color // 0x0A29
 #define FONT_COLOR                  WHITE  // Font foreground color
@@ -127,24 +195,9 @@
 // update the icons from alternate icon folder
 #define ALTERNATIVE_MOVE_MENU
 
-// Invert the Y Axis move Direction
-// this does not work if LIST MODE is enabled. To invert y axis in LIST MODE go to setting->feature settings
-//#define INVERT_YAXIS
-
-//Invert the Z Axis move Direction
-// this does not work if LIST MODE is enabled. To invert z axis in LIST MODE go to setting->feature settings
-//#define INVERT_ZAXIS
-
 // Enable Unified Move Menu
 // Move, Home, Extrude, ABL at one Place and bring Gcode Menu on Home Menu
-//#define UNIFIED_MENU
-
-/**
- * Enable list mode in Files menu and settings menu
- * It is friendly to display long file name, but the model preview feature is not available
- * Disable this if you want to use the model preview feature
- */
-#define MENU_LIST_MODE
+#define UNIFIED_MENU
 
 
 //-------RESET SETTINGS & TOUCH SCREEN CALIBRATION------||
@@ -183,12 +236,26 @@
 
 #define SHOW_FAN_PERCENTAGE // enable to show fan speed as a percentage instead of a value
 
+/**
+ * Rapid Serial Communication:More frequent Serial communicaiton while printing.
+ * The controller will send and parse  gcodes more frequently  while drawing on 
+ * screen to prevent printer idling and stuttering  due to empty printer buffer.
+ * Note: this might make the  graphics slow when switching menus while printing.
+*/
+#define RAPID_SERIAL_COMM
+
+/**
+ * Enable list mode in Custom G-Code menu
+ * 7 codes in icon mode, 15 items in list mode
+ */
+#define CUSTOM_GCODE_LIST_MODE
+
 /** CUSTOM GCODE COMMANDS
  * Support up to 7 custom gcodes in Icon mode and 15 in List Mode.
  * Uncomment CUSTOM_X_LABEL and CUSTOM_X_GCODE to enable custom gcode.
  * CUSTOM_X_LABEL is the name of the custom button, CUSTOM_X_GCODE
  * CUSTOM_X_GCODE is the gcode to be sent by the custom button, end with '\n'
- * You also need to customize the icon corresponding to the command if MENU_LIST_MODE is not enabled.
+ * You also need to customize the icon corresponding to the command if CUSTOM_GCODE_LIST_MODE is not enabled.
  * Copy your custom icon to the SD card to be updated, such as:"TFT35/bmp/Custom0.bmp", "TFT24/bmp/Custom1.bmp", etc...
  * The format of the custom icon is as follows
  * Bit depth: 24 / 32 bit, Pixel size: 95*95(for TFT35), 70*70(for TFT28/TFT24)
@@ -197,9 +264,9 @@
 #define CUSTOM_0_GCODE "M501\n"
 #define CUSTOM_1_LABEL "Disable Steppers"
 #define CUSTOM_1_GCODE "M84\n"
-#define CUSTOM_2_LABEL "init SD Card"
+#define CUSTOM_2_LABEL "Init SD Card"
 #define CUSTOM_2_GCODE "M21\n"
-#define CUSTOM_3_LABEL "Release Sd Card"
+#define CUSTOM_3_LABEL "Release SD Card"
 #define CUSTOM_3_GCODE "M22\n"
 //#define CUSTOM_4_LABEL "Custom4"
 //#define CUSTOM_4_GCODE "M105\n"
@@ -209,9 +276,9 @@
 //#define CUSTOM_6_GCODE "M105\n"
 
 /*
-custom gcode below are compatible only if MENU_LIST_MODE is active
+custom gcode below are compatible only if CUSTOM_GCODE_LIST_MODE is active
 */
-#ifdef MENU_LIST_MODE
+#ifdef CUSTOM_GCODE_LIST_MODE
 //#define CUSTOM_7_LABEL "Custom7"
 //#define CUSTOM_7_GCODE "M105\n"
 //#define CUSTOM_8_LABEL "Custom8"
@@ -229,6 +296,16 @@ custom gcode below are compatible only if MENU_LIST_MODE is active
 //#define CUSTOM_14_LABEL "Custom14"
 //#define CUSTOM_14_GCODE "M105\n"
 #endif
+
+//
+//Start Gcode - run this gcode before starting print
+//
+#define PRINT_START_GCODE "G28\nG29\n" // home and abl
+
+//
+//End Gcode - run this gcode after finishing print
+//
+#define PRINT_END_GCODE "G90\nG1 E-4\nG92 E0\nM18\n" //reduce filament pressure , reset Extruder position, disable steppers
 
 #define CANCEL_PRINT_GCODE "G28 X0 Y0\n"
 

@@ -1,7 +1,7 @@
 #include "MachineSettings.h"
 #include "includes.h"
 
-#ifndef MENU_LIST_MODE
+#ifndef CUSTOM_GCODE_LIST_MODE
 MENUITEMS customItems = {
 // title
 LABEL_CUSTOM,
@@ -295,6 +295,7 @@ void menuCustom(void)
           if(GC_PAGE_COUNT > 1){
             if (gc_cur_page > 0){
               gc_cur_page--;
+              loaditemsCustomGcode();
               menuRefreshListPage();
             }
           }
@@ -303,6 +304,7 @@ void menuCustom(void)
           if(GC_PAGE_COUNT > 1){
             if (gc_cur_page < GC_PAGE_COUNT-1){
               gc_cur_page++;
+              loaditemsCustomGcode();
               menuRefreshListPage();
             }
           }

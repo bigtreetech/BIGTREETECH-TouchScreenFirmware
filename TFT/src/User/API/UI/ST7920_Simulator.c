@@ -153,6 +153,9 @@ void menuST7920(void)
     #if LCD_ENCODER_SUPPORT
       loopCheckMode();
     #endif
+    #ifdef CLEAN_MODE_SWITCHING_SUPPORT
+      loopBackEnd();
+    #endif
   }
   SPI_SlaveDeInit();
 }

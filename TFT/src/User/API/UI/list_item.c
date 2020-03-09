@@ -339,6 +339,15 @@ char * IconChar(uint8_t sel)
 return (char *)GET_ICONCHAR[sel];
 }
 
+// save dynamic text label ( i : index of the label position, label: char * to the text)
+void setDynamicLabel(uint8_t i,char *label){
+dynamic_label[i] = label;
+}
+
+// get dynamic text label ( i : index of the label position)
+char * getDynamicLabel(uint8_t i){
+  return dynamic_label[i];
+}
 
 GUI_POINT getTextStartPoint(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey, ICON_POS pos, const char * textchar){
   
@@ -465,7 +474,7 @@ void ListItem_Display(const GUI_RECT* rect, uint8_t positon, const LISTITEM * cu
 
           if (curitem->titlelabel.index == LABEL_DYNAMIC)
           {
-            GUI_DispLenString(pos.x, pos.y, (u8*)dynamic_label[positon],textarea_width);
+            GUI_DispLenString(pos.x, pos.y, (u8*)getDynamicLabel(positon),textarea_width);
           }
           else
           {
@@ -477,7 +486,7 @@ void ListItem_Display(const GUI_RECT* rect, uint8_t positon, const LISTITEM * cu
 
     case LIST_TOGGLE:;
       int16_t wy = (1 + GUI_StrPixelWidth(IconCharSelect(ICONCHAR_TOGGLE_BODY)) + 1);   //right edge of text area
-      GUI_ClearRect(rect->x0, rect->y0, rect->x1 - wy, rect->y1);                     // clear only tect area
+      GUI_ClearRect(rect->x0, rect->y0, rect->x1 - wy, rect->y1);                     // clear only text area
       textarea_width = LISTITEM_WIDTH - (pos.x + wy);                                 //width after removing the width for icon
       
       GUI_DispLenString(pos.x , pos.y, textSelect(curitem->titlelabel.index),textarea_width);
@@ -512,6 +521,7 @@ void ListItem_Display(const GUI_RECT* rect, uint8_t positon, const LISTITEM * cu
         ListDrawIcon(rect,LEFT_CENTER,curitem->icon,BLACK);
         pos.x += (BYTE_HEIGHT + 3);
       }
+      GUI_ClearRect(pos.x, rect->y0, rect->x1 - BYTE_WIDTH*8 -1, rect->y1);        // clear only text area
       GUI_DispString(pos.x, pos.y, textSelect(curitem->titlelabel.index));
         
       ListItem_DisplayCustomValue(rect,textSelect(curitem->valueLabel.index));
