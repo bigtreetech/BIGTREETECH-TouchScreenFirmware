@@ -194,6 +194,10 @@ void menuHeat(void)
   menuDrawPage(&heatItems);
   showTemperature();
 
+  #if LCD_ENCODER_SUPPORT
+    encoderPosition = 0;    
+  #endif
+
   while(infoMenu.menu[infoMenu.cur] == menuHeat)
   {
     key_num = menuKeyGetValue();
@@ -241,6 +245,27 @@ void menuHeat(void)
         break;
       
       default :
+        #if LCD_ENCODER_SUPPORT
+          if(encoderPosition)
+          {
+            if(heater.T[heater.tool].target < heat_max_temp[heater.tool] && encoderPosition > 0)
+            {
+              heater.T[heater.tool].target = 
+                limitValue( 0, 
+                            heater.T[heater.tool].target + item_degree[item_degree_i], 
+                            heat_max_temp[heater.tool]);
+            }
+            if(heater.T[heater.tool].target > 0 && encoderPosition < 0)
+            {
+              heater.T[heater.tool].target = 
+                limitValue( 0, 
+                            heater.T[heater.tool].target - item_degree[item_degree_i], 
+                            heat_max_temp[heater.tool]);
+            }
+            encoderPosition = 0;    
+          }
+          LCD_LoopEncoder();
+        #endif
         break;
     }
 
@@ -266,20 +291,24 @@ void menuHeat(void)
     update_time=300;
 }
 
+u32 lastHeatCheckTime = 0;
+void updateLastHeatCheckTime(void)
+{
+  lastHeatCheckTime = OS_GetTime();
+}
+
 
 void loopCheckHeater(void)
 {
   u8 i;
-  static u32  nowTime=0;
 
   do
   {  /* Send M105 query temperature continuously	*/
-    if(update_waiting == true)                {nowTime=OS_GetTime();break;}
-    if(OS_GetTime()<nowTime+update_time)       break;
+    if(update_waiting == true)                {updateLastHeatCheckTime();break;}
+    if(OS_GetTime() - lastHeatCheckTime < update_time)       break;
     if(RequestCommandInfoIsRunning())          break; //to avoid colision in Gcode response processing
     if(storeCmd("M105\n")==false)              break;
-
-    nowTime=OS_GetTime();
+    updateLastHeatCheckTime();
     update_waiting=true;
   }while(0);
 

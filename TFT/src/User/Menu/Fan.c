@@ -91,6 +91,11 @@ void menuFan(void)
 
   menuDrawPage(&fanItems);
   showFanSpeed();
+
+  #if LCD_ENCODER_SUPPORT
+    encoderPosition = 0;    
+  #endif
+
   while(infoMenu.menu[infoMenu.cur] == menuFan)
   {
     key_num = menuKeyGetValue();
@@ -142,6 +147,37 @@ void menuFan(void)
         break;
       
       default:
+        #if LCD_ENCODER_SUPPORT
+          if(encoderPosition)
+          {
+            if (fanSpeed[curIndex] < fanMaxPWM[curIndex] && encoderPosition > 0){
+              #ifdef SHOW_FAN_PERCENTAGE
+                if (fanSpeed[curIndex]+2 <= fanMaxPWM[curIndex]){
+                  fanSpeed[curIndex]+=2; //2.55 is 1 percent, rounding down
+                } else {
+                  fanSpeed[curIndex]=fanMaxPWM[curIndex];
+                }
+              #else
+                fanSpeed[curIndex]++;
+              #endif   
+            }
+
+            if (fanSpeed[curIndex] > 0 && encoderPosition < 0) {
+              #ifdef SHOW_FAN_PERCENTAGE 
+                if ((fanSpeed[curIndex]-2) > 0) {
+                  fanSpeed[curIndex]-=2; //2.55 is 1 percent, rounding down
+                } else {
+                  fanSpeed[curIndex]=0;
+                }
+              #else
+                fanSpeed[curIndex]--;
+              #endif   
+            }
+
+            encoderPosition = 0;    
+          }
+          LCD_LoopEncoder();
+        #endif
         break;
     }
     
