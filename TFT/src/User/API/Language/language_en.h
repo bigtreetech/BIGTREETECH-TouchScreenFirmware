@@ -147,6 +147,7 @@
     #define EN_AUTO                 "AUTO"
     #define EN_SMART                "SMART"
     #define EN_TERMINAL_ACK         "Hide Terminal ACK"
+	#define EN_INVERT_XAXIS         "Invert X Axis"
     #define EN_INVERT_YAXIS         "Invert Y Axis"
     #define EN_INVERT_ZAXIS         "Invert Z Axis"
     #define EN_MOVE_SPEED           "Move speed(X Y Z)"

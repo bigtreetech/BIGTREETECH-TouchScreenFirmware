@@ -49,6 +49,7 @@ const  u8 item_movespeed[ITEM_SPEED_NUM] = {LABEL_NORMAL_SPEED, LABEL_SLOW_SPEED
 typedef enum
 {
   SKEY_HIDEACK = 0,
+  SKEY_INVERT_X,
   SKEY_INVERT_Y,
   SKEY_INVERT_Z,
   #ifdef PS_ON_PIN
@@ -76,6 +77,7 @@ int fe_cur_page = 0;
 //
 LISTITEM settingPage[SKEY_COUNT] = {  
   {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_TERMINAL_ACK,       LABEL_BACKGROUND},
+  {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_INVERT_XAXIS,       LABEL_BACKGROUND},
   {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_INVERT_YAXIS,       LABEL_BACKGROUND},
   {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_INVERT_ZAXIS,       LABEL_BACKGROUND},
   #ifdef PS_ON_PIN
@@ -106,6 +108,14 @@ void updateFeatureSettings(uint8_t key_val)
     case SKEY_HIDEACK:
     infoSettings.terminalACK = (infoSettings.terminalACK + 1) % TOGGLE_NUM;
     settingPage[item_index].icon = toggleitem[infoSettings.terminalACK];
+    featureSettingsItems.items[key_val] = settingPage[item_index];
+
+    menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
+    break;
+      
+    case SKEY_INVERT_X:
+    infoSettings.invert_xaxis = (infoSettings.invert_xaxis + 1) % TOGGLE_NUM;
+    settingPage[item_index].icon = toggleitem[infoSettings.invert_xaxis];
     featureSettingsItems.items[key_val] = settingPage[item_index];
 
     menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
@@ -196,7 +206,6 @@ void updateFeatureSettings(uint8_t key_val)
 
     menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
     break;
-
     #endif
 
   default:
@@ -218,6 +227,11 @@ void loadFeatureSettings(){
         featureSettingsItems.items[i] = settingPage[item_index];
         break;
 
+		case SKEY_INVERT_X:
+        settingPage[item_index].icon = toggleitem[infoSettings.invert_xaxis];
+        featureSettingsItems.items[i] = settingPage[item_index];
+        break;
+        
       case SKEY_INVERT_Y:
         settingPage[item_index].icon = toggleitem[infoSettings.invert_yaxis];
         featureSettingsItems.items[i] = settingPage[item_index];

@@ -147,6 +147,7 @@
     #define CN_AUTO                 "自动"
     #define CN_SMART                "聪明"
     #define CN_TERMINAL_ACK         "Hide Terminal ACK"
+	#define CN_INVERT_XAXIS         "Invert X Axis"
     #define CN_INVERT_YAXIS         "Invert Y Axis"
     #define CN_INVERT_ZAXIS         "Invert Z Axis"
     #define CN_MOVE_SPEED           "Move speed(X Y Z)"

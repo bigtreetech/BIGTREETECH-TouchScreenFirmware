@@ -7,6 +7,8 @@
 #define X 0
 #define Y 1
 #define Z 2
+#define XGCODE_INC "G1 X%.1f\n"
+#define XGCODE_DEC "G1 X-%.1f\n"
 #define YGCODE_INC "G1 Y%.1f\n"
 #define YGCODE_DEC "G1 Y-%.1f\n"
 #define ZGCODE_INC "G1 Z%.1f\n"
@@ -14,7 +16,6 @@
 
 
 AXIS a = X_AXIS;
-
 
 
 //1 title, ITEM_PER_PAGE item
@@ -63,12 +64,28 @@ static u32 update_time = 50; // 1 seconds is 100
 void menuMove(void)
 {
   KEY_VALUES  key_num = KEY_IDLE;
+  
+  char * x_axis_up;
+  char * x_axis_down;
   char * y_axis_up;
   char * y_axis_down;
   char * z_axis_up;
   char * z_axis_down;
   
   #ifdef ALTERNATIVE_MOVE_MENU
+      if(infoSettings.invert_xaxis == 1){
+        moveItems.items[4].label.index = LABEL_X_INC;
+        moveItems.items[6].label.index = LABEL_X_DEC;
+        x_axis_up   = XGCODE_DEC;
+        x_axis_down = XGCODE_INC;
+      }
+      else{
+        moveItems.items[4].label.index = LABEL_X_DEC;
+        moveItems.items[6].label.index = LABEL_X_INC;
+        x_axis_up   = XGCODE_INC;
+        x_axis_down = XGCODE_DEC;
+      }
+  
       if(infoSettings.invert_yaxis == 1){
         moveItems.items[1].label.index = LABEL_Y_DEC;
         moveItems.items[5].label.index = LABEL_Y_INC;
@@ -95,6 +112,14 @@ void menuMove(void)
         z_axis_down = ZGCODE_INC;
       }
   #else
+      if(infoSettings.invert_xaxis == 1){
+        moveItems.items[0].label.index = LABEL_X_DEC;
+        moveItems.items[4].label.index = LABEL_X_INC;
+      }
+      else{
+        moveItems.items[0].label.index = LABEL_X_INC;
+        moveItems.items[4].label.index = LABEL_X_DEC;
+      }
       if(infoSettings.invert_yaxis == 1){
         moveItems.items[1].label.index = LABEL_Y_DEC;
         moveItems.items[5].label.index = LABEL_Y_INC;
@@ -159,23 +184,28 @@ void menuMove(void)
               menuDrawItem(&moveItems.items[key_num], key_num);
               break;
 
-        case KEY_ICON_4: storeCmd("G1 X-%.1f\n", item_move_len[item_move_len_i]);  break;
+        case KEY_ICON_4:
+              storeCmd(x_axis_down, item_move_len[item_move_len_i]);
+              break;
 
         case KEY_ICON_5:
               storeCmd(y_axis_down, item_move_len[item_move_len_i]);
               break;
 
-        case KEY_ICON_6: storeCmd("G1 X%.1f\n",  item_move_len[item_move_len_i]);  break;
+        case KEY_ICON_6:
+              storeCmd(x_axis_up, item_move_len[item_move_len_i]);
+              break;
+        
         case KEY_ICON_7: infoMenu.cur--; break;
         default:break;
 
       #else
         
-        case KEY_ICON_0: 
+        case KEY_ICON_0:
               a = X_AXIS;
-              storeCmd("G1 X%.1f\n",  item_move_len[item_move_len_i]);
+              storeCmd(x_axis_up, item_move_len[item_move_len_i]);
               break;
-
+        
         case KEY_ICON_1:
               a = Y_AXIS;
               storeCmd(y_axis_up, item_move_len[item_move_len_i]);
@@ -194,7 +224,7 @@ void menuMove(void)
             
         case KEY_ICON_4:
               a = X_AXIS;
-              storeCmd("G1 X-%.1f\n", item_move_len[item_move_len_i]);
+              storeCmd(x_axis_down, item_move_len[item_move_len_i]);
               break;
 
         case KEY_ICON_5:
@@ -218,7 +248,7 @@ void menuMove(void)
                     switch(a)
                     {
                     case X_AXIS:
-                      storeCmd("G1 X%.1f\n", item_move_len[item_move_len_i]);  
+                      storeCmd(XGCODE_UP, item_move_len[item_move_len_i]);  
                       break;
                     case Y_AXIS:
                       storeCmd(YGCODE_UP, item_move_len[item_move_len_i]);
@@ -235,7 +265,7 @@ void menuMove(void)
                     switch(a)
                     {
                     case X_AXIS:
-                      storeCmd("G1 X-%.1f\n", item_move_len[item_move_len_i]);  
+                      storeCmd(XGCODE_DOWN, item_move_len[item_move_len_i]);  
                       break;
                     case Y_AXIS:
                       storeCmd(YGCODE_DOWN, item_move_len[item_move_len_i]);
