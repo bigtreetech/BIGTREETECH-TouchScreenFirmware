@@ -3,18 +3,18 @@
   * @file    stm32f2xx_hash_md5.c
   * @author  MCD Application Team
   * @version V1.1.2
-  * @date    05-March-2012 
+  * @date    05-March-2012
   * @brief   This file provides high level functions to compute the HASH MD5 and
   *          HMAC MD5 Digest of an input message.
   *          It uses the stm32f2xx_hash.c/.h drivers to access the STM32F2xx HASH
   *          peripheral.
   *
   *  @verbatim
-  *    
+  *
   *          ===================================================================
   *                                   How to use this driver
   *          ===================================================================
-  *          1. Enable The HASH controller clock using 
+  *          1. Enable The HASH controller clock using
   *            RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_HASH, ENABLE); function.
   *
   *          2. Calculate the HASH MD5 Digest using HASH_MD5() function.
@@ -34,8 +34,8 @@
   *
   *        http://www.st.com/software_license_agreement_liberty_v2
   *
-  * Unless required by applicable law or agreed to in writing, software 
-  * distributed under the License is distributed on an "AS IS" BASIS, 
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
@@ -50,7 +50,7 @@
   * @{
   */
 
-/** @defgroup HASH 
+/** @defgroup HASH
   * @brief HASH driver modules
   * @{
   */
@@ -66,12 +66,12 @@
 
 /** @defgroup HASH_Private_Functions
   * @{
-  */ 
+  */
 
 /** @defgroup HASH_Group7 High Level MD5 functions
- *  @brief   High Level MD5 Hash and HMAC functions 
+ *  @brief   High Level MD5 Hash and HMAC functions
  *
-@verbatim   
+@verbatim
  ===============================================================================
                           High Level MD5 Hash and HMAC functions
  ===============================================================================
@@ -151,7 +151,7 @@ ErrorStatus HASH_MD5(uint8_t *Input, uint32_t Ilen, uint8_t Output[16])
     outputaddr+=4;
     *(uint32_t*)(outputaddr)  = __REV(MD5_MessageDigest.Data[3]);
   }
-  return status; 
+  return status;
 }
 
 /**
@@ -160,12 +160,12 @@ ErrorStatus HASH_MD5(uint8_t *Input, uint32_t Ilen, uint8_t Output[16])
   * @param  Keylen: length of the Key used for HMAC.
   * @param  Input: pointer to the Input buffer to be treated.
   * @param  Ilen: length of the Input buffer.
-  * @param  Output: the returned digest  
+  * @param  Output: the returned digest
   * @retval An ErrorStatus enumeration value:
   *          - SUCCESS: digest computation done
   *          - ERROR: digest computation failed
   */
-ErrorStatus HMAC_MD5(uint8_t *Key, uint32_t Keylen, uint8_t *Input, 
+ErrorStatus HMAC_MD5(uint8_t *Key, uint32_t Keylen, uint8_t *Input,
                      uint32_t Ilen, uint8_t Output[16])
 {
   HASH_InitTypeDef MD5_HASH_InitStructure;
@@ -185,7 +185,7 @@ ErrorStatus HMAC_MD5(uint8_t *Key, uint32_t Keylen, uint8_t *Input,
 
   /* Number of valid bits in last word of the Key */
   nbvalidbitskey = 8 * (Keylen % 4);
-   
+
   /* HASH peripheral initialization */
   HASH_DeInit();
 
@@ -214,7 +214,7 @@ ErrorStatus HMAC_MD5(uint8_t *Key, uint32_t Keylen, uint8_t *Input,
     HASH_DataIn(*(uint32_t*)keyaddr);
     keyaddr+=4;
   }
-  
+
   /* Start the HASH processor */
   HASH_StartDigest();
 
@@ -257,7 +257,7 @@ ErrorStatus HMAC_MD5(uint8_t *Key, uint32_t Keylen, uint8_t *Input,
       status = ERROR;
     }
     else
-    {  
+    {
       /* Configure the number of valid bits in last word of the Key */
       HASH_SetLastWordValidBitsNbr(nbvalidbitskey);
 
@@ -268,7 +268,7 @@ ErrorStatus HMAC_MD5(uint8_t *Key, uint32_t Keylen, uint8_t *Input,
         HASH_DataIn(*(uint32_t*)keyaddr);
         keyaddr+=4;
       }
-  
+
        /* Start the HASH processor */
        HASH_StartDigest();
 
@@ -298,23 +298,22 @@ ErrorStatus HMAC_MD5(uint8_t *Key, uint32_t Keylen, uint8_t *Input,
       }
     }
   }
-  return status;  
+  return status;
 }
 /**
   * @}
-  */ 
+  */
 
 /**
   * @}
-  */ 
+  */
 
 /**
   * @}
-  */ 
+  */
 
 /**
   * @}
-  */ 
+  */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-

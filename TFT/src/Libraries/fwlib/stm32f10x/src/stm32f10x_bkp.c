@@ -27,7 +27,7 @@
   * @{
   */
 
-/** @defgroup BKP 
+/** @defgroup BKP
   * @brief BKP driver modules
   * @{
   */
@@ -81,7 +81,7 @@
 
 /**
   * @}
-  */ 
+  */
 
 
 /** @defgroup BKP_Private_Macros
@@ -174,7 +174,7 @@ void BKP_ITConfig(FunctionalState NewState)
   *     @arg BKP_RTCOutputSource_Alarm: output the RTC Alarm pulse signal on
   *                                     the Tamper pin.
   *     @arg BKP_RTCOutputSource_Second: output the RTC Second pulse signal on
-  *                                      the Tamper pin.  
+  *                                      the Tamper pin.
   * @retval None
   */
 void BKP_RTCOutputConfig(uint16_t BKP_RTCOutputSource)
@@ -185,7 +185,7 @@ void BKP_RTCOutputConfig(uint16_t BKP_RTCOutputSource)
   tmpreg = BKP->RTCCR;
   /* Clear CCO, ASOE and ASOS bits */
   tmpreg &= RTCCR_MASK;
-  
+
   /* Set CCO, ASOE and ASOS bits according to BKP_RTCOutputSource value */
   tmpreg |= BKP_RTCOutputSource;
   /* Store the new value */
@@ -226,7 +226,7 @@ void BKP_WriteBackupRegister(uint16_t BKP_DR, uint16_t Data)
   /* Check the parameters */
   assert_param(IS_BKP_DR(BKP_DR));
 
-  tmp = (uint32_t)BKP_BASE; 
+  tmp = (uint32_t)BKP_BASE;
   tmp += BKP_DR;
 
   *(__IO uint32_t *) tmp = Data;
@@ -245,7 +245,7 @@ uint16_t BKP_ReadBackupRegister(uint16_t BKP_DR)
   /* Check the parameters */
   assert_param(IS_BKP_DR(BKP_DR));
 
-  tmp = (uint32_t)BKP_BASE; 
+  tmp = (uint32_t)BKP_BASE;
   tmp += BKP_DR;
 
   return (*(__IO uint16_t *) tmp);

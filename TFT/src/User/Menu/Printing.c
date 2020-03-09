@@ -1,21 +1,71 @@
 #include "Printing.h"
 #include "includes.h"
 
-//1title, ITEM_PER_PAGE item(icon + label) 
+const GUI_POINT printinfo_points[6] = {
+{START_X + PICON_LG_WIDTH*0 + PICON_SPACE_X*0, ICON_START_Y + PICON_HEIGHT*0 + PICON_SPACE_Y*0},
+{START_X + PICON_LG_WIDTH*1 + PICON_SPACE_X*1, ICON_START_Y + PICON_HEIGHT*0 + PICON_SPACE_Y*0},
+{START_X + PICON_LG_WIDTH*2 + PICON_SPACE_X*2, ICON_START_Y + PICON_HEIGHT*0 + PICON_SPACE_Y*0},
+{START_X + PICON_LG_WIDTH*0 + PICON_SPACE_X*0, ICON_START_Y + PICON_HEIGHT*1 + PICON_SPACE_Y*1},
+{START_X + PICON_LG_WIDTH*1 + PICON_SPACE_X*1, ICON_START_Y + PICON_HEIGHT*1 + PICON_SPACE_Y*1},
+{START_X + PICON_LG_WIDTH*2 + PICON_SPACE_X*2, ICON_START_Y + PICON_HEIGHT*1 + PICON_SPACE_Y*1},
+};
+
+const GUI_RECT printinfo_val_rect[6] = {
+  {START_X + PICON_LG_WIDTH*0 + PICON_SPACE_X*0 + PICON_VAL_X,              ICON_START_Y + PICON_HEIGHT*0 + PICON_SPACE_Y*0 + PICON_VAL_Y,
+        START_X + PICON_LG_WIDTH*0 + PICON_SPACE_X*0 + PICON_VAL_LG_EX,     ICON_START_Y + PICON_HEIGHT*0 + PICON_SPACE_Y*0 + PICON_VAL_Y + BYTE_HEIGHT},
+
+  {START_X + PICON_LG_WIDTH*1 + PICON_SPACE_X*1 + PICON_VAL_X,              ICON_START_Y + PICON_HEIGHT*0 + PICON_SPACE_Y*0 + PICON_VAL_Y,
+        START_X + PICON_LG_WIDTH*1 + PICON_SPACE_X*1 + PICON_VAL_LG_EX,     ICON_START_Y + PICON_HEIGHT*0 + PICON_SPACE_Y*0 + PICON_VAL_Y + BYTE_HEIGHT},
+
+  {START_X + PICON_LG_WIDTH*2 + PICON_SPACE_X*2 + PICON_VAL_X,              ICON_START_Y + PICON_HEIGHT*0 + PICON_SPACE_Y*0 + PICON_VAL_Y,
+        START_X + PICON_LG_WIDTH*2 + PICON_SPACE_X*2 + PICON_VAL_SM_EX,     ICON_START_Y + PICON_HEIGHT*0 + PICON_SPACE_Y*0 + PICON_VAL_Y + BYTE_HEIGHT},
+
+  {START_X + PICON_LG_WIDTH*0 + PICON_SPACE_X*0 + PICON_VAL_X,              ICON_START_Y + PICON_HEIGHT*1 + PICON_SPACE_Y*1 + PICON_VAL_Y,
+        START_X + PICON_LG_WIDTH*0 + PICON_SPACE_X*0 + PICON_VAL_LG_EX,     ICON_START_Y + PICON_HEIGHT*1 + PICON_SPACE_Y*1 + PICON_VAL_Y + BYTE_HEIGHT},
+
+  {START_X + PICON_LG_WIDTH*1 + PICON_SPACE_X*1 + PICON_VAL_X,              ICON_START_Y + PICON_HEIGHT*1 + PICON_SPACE_Y*1 + PICON_VAL_Y,
+        START_X + PICON_LG_WIDTH*1 + PICON_SPACE_X*1 + PICON_VAL_LG_EX,     ICON_START_Y + PICON_HEIGHT*1 + PICON_SPACE_Y*1 + PICON_VAL_Y + BYTE_HEIGHT},
+
+  {START_X + PICON_LG_WIDTH*2 + PICON_SPACE_X*2 + PICON_VAL_X,               ICON_START_Y + PICON_HEIGHT*1 + PICON_SPACE_Y*1 + PICON_VAL_Y,
+        START_X + PICON_LG_WIDTH*2 + PICON_SPACE_X*2 + PICON_VAL_SM_EX,     ICON_START_Y + PICON_HEIGHT*1 + PICON_SPACE_Y*1 + PICON_VAL_Y + BYTE_HEIGHT},
+};
+
+static u32 nowTime = 0;
+static u32 toggle_time = 200; // 1 seconds is 100
+TOOL c_Ext = NOZZLE0;
+static int c_fan = 0;
+static int c_speedID = 0;
+static int key_pause = 4;
+const char* Speed_ID[2] = {"Speed","Flow"};
+#define LAYER_TITLE "Layer"
+#define EXT_ICON_POS  0
+#define BED_ICON_POS  1
+#define FAN_ICON_POS  2
+#define TIM_ICON_POS  3
+#define Z_ICON_POS    4
+#define SPD_ICON_POS  5
+
+#ifdef RAPID_SERIAL_COMM
+#define rapid_serial_loop()  loopBackEnd()
+#else
+#define rapid_serial_loop()
+#endif
+//1title, ITEM_PER_PAGE item(icon + label)
 MENUITEMS printingItems = {
 //  title
 LABEL_BACKGROUND,
 // icon                       label
- {{ICON_PAUSE,                LABEL_PAUSE},
+ {{ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_STOP,                 LABEL_STOP},
-  {ICON_HEAT,                 LABEL_HEAT},
-  {ICON_PERCENTAGE,           LABEL_PERCENTAGE},
+  {ICON_BACKGROUND,           LABEL_BACKGROUND},
+  {ICON_PAUSE,                LABEL_PAUSE},
   {ICON_BABYSTEP,             LABEL_BABYSTEP},
-  {ICON_MORE,                 LABEL_MORE},}
+  {ICON_MORE,                 LABEL_MORE},
+  {ICON_STOP,                 LABEL_STOP},}
 };
-
+const ITEM itemBlank      = {ICON_BACKGROUND, LABEL_BACKGROUND};
+const ITEM itemBabyStep   = {ICON_BABYSTEP, LABEL_BABYSTEP};
 const ITEM itemIsPause[2] = {
 // icon                       label
   {ICON_PAUSE,                LABEL_PAUSE},
@@ -63,7 +113,7 @@ void setPrintingTime(u32 RTtime)
   {
     if(isPrinting() && !isPause())
     {
-      infoPrinting.time++;      
+      infoPrinting.time++;
     }
   }
 }
@@ -97,23 +147,20 @@ void printSetUpdateWaiting(bool isWaiting)
 
 void startGcodeExecute(void)
 {    
-
+  mustStoreCmd(PRINT_START_GCODE);
 }
 
 void endGcodeExecute(void)
 {
-  mustStoreCmd("G90\n");
-  mustStoreCmd("G92 E0\n");
   for(TOOL i = BED; i < HEATER_NUM; i++)
   {
-    mustStoreCmd("%s S0\n", heatCmd[i]);  
+    mustStoreCmd("%s S0\n", heatCmd[i]);
   }
   for(u8 i = 0; i < FAN_NUM; i++)
   {
-    mustStoreCmd("%s S0\n", fanCmd[i]);  
+    mustStoreCmd("%s S0\n", fanCmd[i]);
   }
-  mustStoreCmd("T0\n");
-  mustStoreCmd("M18\n");
+  mustStoreCmd(PRINT_END_GCODE);
 }
 
 //only return gcode file name except path
@@ -132,7 +179,7 @@ void menuBeforePrinting(void)
   long size = 0;
   switch (infoFile.source)
   {
-    case BOARD_SD: // GCode from file on ONBOARD SD      
+    case BOARD_SD: // GCode from file on ONBOARD SD
       size = request_M23(infoFile.title+5);
 
       //  if( powerFailedCreate(infoFile.title)==false)
@@ -143,7 +190,7 @@ void menuBeforePrinting(void)
       if(size == 0)
       {
         ExitDir();
-        infoMenu.cur--;		
+        infoMenu.cur--;
         return;
       }
 
@@ -160,21 +207,21 @@ void menuBeforePrinting(void)
       printSetUpdateWaiting(true);
 
       #ifdef M27_AUTOREPORT
-        request_M27(M27_REFRESH); 
+        request_M27(M27_REFRESH);
       #else
-        request_M27(0); 
+        request_M27(0);
       #endif
 
       infoHost.printing=true; // Global lock info on printer is busy in printing.
 
       break;
-      
+
     case TFT_UDISK:
     case TFT_SD: // GCode from file on TFT SD
       if(f_open(&infoPrinting.file,infoFile.title, FA_OPEN_EXISTING | FA_READ) != FR_OK)
       {
         ExitDir();
-        infoMenu.cur--;		
+        infoMenu.cur--;
         return ;
       }
       if( powerFailedCreate(infoFile.title)==false)
@@ -185,8 +232,9 @@ void menuBeforePrinting(void)
 
       infoPrinting.size  = f_size(&infoPrinting.file);
       infoPrinting.cur   = infoPrinting.file.fptr;
-
-      startGcodeExecute();
+      if(infoSettings.send_start_gcode == 1){
+        startGcodeExecute();
+      }
       break;
   }
   infoPrinting.printing = true;
@@ -198,8 +246,8 @@ void menuBeforePrinting(void)
 void resumeToPause(bool is_pause)
 {
   if(infoMenu.menu[infoMenu.cur] != menuPrinting) return;
-  printingItems.items[KEY_ICON_0] = itemIsPause[is_pause];
-  menuDrawItem(&itemIsPause[is_pause],0);
+  printingItems.items[key_pause] = itemIsPause[is_pause];
+  menuDrawItem(&printingItems.items[key_pause],key_pause);
 }
 
 void setM0Pause(bool m0_pause){
@@ -217,14 +265,14 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
   switch (infoFile.source)
   {
     case BOARD_SD:
-      infoPrinting.pause = is_pause;    
+      infoPrinting.pause = is_pause;
       if (is_pause){
         request_M25();
       } else {
         request_M24(0);
       }
       break;
-      
+
     case TFT_UDISK:
     case TFT_SD:
       infoPrinting.pause = is_pause;
@@ -235,7 +283,7 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
       bool isCoorRelative = coorGetRelative();
       bool isExtrudeRelative = eGetRelative();
       static COORDINATE tmp;
-      
+
       if(infoPrinting.pause)
       {
         //restore status before pause
@@ -245,42 +293,47 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
         popupReminder(textSelect(LABEL_PAUSE), textSelect(LABEL_M0_PAUSE));
         break;
         }
-      
+
         coordinateGetAll(&tmp);
         if (isCoorRelative == true)     mustStoreCmd("G90\n");
         if (isExtrudeRelative == true)  mustStoreCmd("M82\n");
-        
+
         if (heatGetCurrentTemp(heatGetCurrentToolNozzle()) > PREVENT_COLD_EXTRUSION_MINTEMP)
+        {
           mustStoreCmd("G1 E%.5f F%d\n", tmp.axis[E_AXIS] - NOZZLE_PAUSE_RETRACT_LENGTH, NOZZLE_PAUSE_E_FEEDRATE);
+        }
         if (coordinateIsClear())
         {
           mustStoreCmd("G1 Z%.3f F%d\n", tmp.axis[Z_AXIS] + NOZZLE_PAUSE_Z_RAISE, NOZZLE_PAUSE_Z_FEEDRATE);
           mustStoreCmd("G1 X%d Y%d F%d\n", NOZZLE_PAUSE_X_POSITION, NOZZLE_PAUSE_Y_POSITION, NOZZLE_PAUSE_XY_FEEDRATE);
         }
-        
+
         if (isCoorRelative == true)     mustStoreCmd("G91\n");
         if (isExtrudeRelative == true)  mustStoreCmd("M83\n");
       }
       else
       {
-      if(isM0_Pause() == true) {
-        setM0Pause(is_m0pause);
-        Serial_Puts(SERIAL_PORT, "M108\n");
-        break;
+        if(isM0_Pause() == true)
+        {
+          setM0Pause(is_m0pause);
+          Serial_Puts(SERIAL_PORT, "M108\n");
+          break;
         }
         if (isCoorRelative == true)     mustStoreCmd("G90\n");
         if (isExtrudeRelative == true)  mustStoreCmd("M82\n");
-        
+
         if (coordinateIsClear())
         {
           mustStoreCmd("G1 X%.3f Y%.3f F%d\n", tmp.axis[X_AXIS], tmp.axis[Y_AXIS], NOZZLE_PAUSE_XY_FEEDRATE);
           mustStoreCmd("G1 Z%.3f F%d\n", tmp.axis[Z_AXIS], NOZZLE_PAUSE_Z_FEEDRATE);
         }
         if(heatGetCurrentTemp(heatGetCurrentToolNozzle()) > PREVENT_COLD_EXTRUSION_MINTEMP)
+        {
           mustStoreCmd("G1 E%.5f F%d\n", tmp.axis[E_AXIS] - NOZZLE_PAUSE_RETRACT_LENGTH + NOZZLE_RESUME_PURGE_LENGTH, NOZZLE_PAUSE_E_FEEDRATE);
+        }
         mustStoreCmd("G92 E%.5f\n", tmp.axis[E_AXIS]);
         mustStoreCmd("G1 F%d\n", tmp.feedrate);
-        
+
         if (isCoorRelative == true)     mustStoreCmd("G91\n");
         if (isExtrudeRelative == true)  mustStoreCmd("M83\n");
       }
@@ -297,139 +350,286 @@ const GUI_RECT progressRect = {1*SPACE_X_PER_ICON, 0*ICON_HEIGHT+0*SPACE_Y+ICON_
 #define BED_X  (progressRect.x1 - 9 * BYTE_WIDTH)
 #define TEMP_Y (progressRect.y1 + 3)
 #define TIME_Y (TEMP_Y + 1 * BYTE_HEIGHT + 3)
-void reValueNozzle(void)
+
+void reValueNozzle(int icon_pos)
 {
-  GUI_DispString(BED_X, TEMP_Y-2*BYTE_HEIGHT, (u8* )heatDisplayID[heatGetCurrentToolNozzle()]);
-  GUI_DispDec(BED_X + 2 * BYTE_WIDTH, TEMP_Y-2*BYTE_HEIGHT , heatGetCurrentTemp(heatGetCurrentToolNozzle()), 3, RIGHT);
-  GUI_DispDec(BED_X + 6 * BYTE_WIDTH, TEMP_Y-2*BYTE_HEIGHT, heatGetTargetTemp(heatGetCurrentToolNozzle()),  3, LEFT);
+  char tempstr[10];
+  my_sprintf(tempstr, "%d/%d", heatGetCurrentTemp(c_Ext), heatGetTargetTemp(c_Ext)); 
+  
+  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
+  
+  ICON_CustomReadDisplay(printinfo_points[icon_pos].x,printinfo_points[icon_pos].y,PICON_LG_WIDTH,PICON_HEIGHT,ICON_ADDR(ICON_PRINTING_NOZZLE));
+  GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (u8* )heatDisplayID[c_Ext]);
+  GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (u8 *)tempstr); 
+  
+  GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
 
-void reValueBed(void)
+void reValueBed(int icon_pos)
 {
-  GUI_DispDec(BED_X + 2 * BYTE_WIDTH, TEMP_Y-BYTE_HEIGHT, heatGetCurrentTemp(BED), 3, RIGHT);
-  GUI_DispDec(BED_X + 6 * BYTE_WIDTH, TEMP_Y-BYTE_HEIGHT, heatGetTargetTemp(BED),  3, LEFT);
+  char tempstr[10];
+  my_sprintf(tempstr, "%d/%d", heatGetCurrentTemp(BED), heatGetTargetTemp(BED)); 
+
+  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
+  
+  ICON_CustomReadDisplay(printinfo_points[icon_pos].x,printinfo_points[icon_pos].y,PICON_LG_WIDTH,PICON_HEIGHT,ICON_ADDR(ICON_PRINTING_BED));
+  GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (u8* )heatDisplayID[BED]);  
+  GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (u8 *)tempstr); 
+
+  GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
 
-void reDrawTime(void)
+void reDrawFan(int icon_pos)
+{
+  char tempstr[10];
+  u8 fs;
+  #ifdef SHOW_FAN_PERCENTAGE
+    fs = (fanGetSpeed(c_fan)*100)/255;
+    my_sprintf(tempstr, "%d%%", fs); 
+  #else
+    fs = fanSpeed[curIndex];
+    my_sprintf(tempstr, "%d", fs);
+  #endif 
+
+  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
+
+  ICON_CustomReadDisplay(printinfo_points[icon_pos].x,printinfo_points[icon_pos].y,PICON_SM_WIDTH,PICON_HEIGHT,ICON_ADDR(ICON_PRINTING_FAN));
+  GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (u8*)fanID[c_fan]);
+  GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (u8 *)tempstr); 
+
+  GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
+}
+
+
+void reDrawSpeed(int icon_pos)
+{
+  char tempstr[10];
+  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
+  
+  my_sprintf(tempstr, "%d%%", speedGetPercent(c_speedID) ); 
+  
+  if(c_speedID == 0){
+  ICON_CustomReadDisplay(printinfo_points[icon_pos].x,printinfo_points[icon_pos].y,PICON_SM_WIDTH,PICON_HEIGHT,ICON_ADDR(ICON_PRINTING_SPEED));
+  }
+  else{
+  ICON_CustomReadDisplay(printinfo_points[icon_pos].x,printinfo_points[icon_pos].y,PICON_SM_WIDTH,PICON_HEIGHT,ICON_ADDR(ICON_PRINTING_FLOW));
+  }
+  GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (u8 *)Speed_ID[c_speedID]);
+  GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (u8 *)tempstr); 
+
+  GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
+}
+
+void reDrawTime(int icon_pos)
 {
   u8  hour = infoPrinting.time/3600,
       min = infoPrinting.time%3600/60,
       sec = infoPrinting.time%60;
+
   GUI_SetNumMode(GUI_NUMMODE_ZERO);
-  GUI_DispDec(progressRect.x0 + 2 * BYTE_WIDTH, TIME_Y, hour, 2, RIGHT);
-  GUI_DispDec(progressRect.x0 + 5 * BYTE_WIDTH, TIME_Y, min, 2, RIGHT);
-  GUI_DispDec(progressRect.x0 + 8 * BYTE_WIDTH, TIME_Y, sec, 2, RIGHT);
+  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
+  char tempstr[10];
+  sprintf(tempstr, "%02d:%02d:%02d", hour,min,sec); 
+  ICON_CustomReadDisplay(printinfo_points[icon_pos].x,printinfo_points[icon_pos].y,PICON_LG_WIDTH,PICON_HEIGHT,ICON_ADDR(ICON_PRINTING_TIMER));
+  GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (u8 *)tempstr);
+  //GUI_DispDec(printinfo_val_rect[icon_pos].x0 + 2 * BYTE_WIDTH, TIME_Y, hour, 2, LEFT);
+  //GUI_DispDec(printinfo_val_rect[icon_pos].x0 + 5 * BYTE_WIDTH, TIME_Y, min, 2, LEFT);
+  //GUI_DispDec(printinfo_val_rect[icon_pos].x0 + 8 * BYTE_WIDTH, TIME_Y, sec, 2, LEFT);
+
   GUI_SetNumMode(GUI_NUMMODE_SPACE);
+  GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
 
-void reDrawProgress(u8 progress)
+void reDrawProgress(int icon_pos)
 {	  
-  char buf[5];
-  const GUI_RECT percentageRect = {BED_X, TEMP_Y-3*BYTE_HEIGHT, BED_X+5*BYTE_WIDTH, TEMP_Y-2*BYTE_HEIGHT};
-  //GUI_FillRectColor(progressRect.x0, progressRect.y0, progressX, progressRect.y1,BLUE);
-  //GUI_FillRectColor(progressX, progressRect.y0, progressRect.x1, progressRect.y1,GRAY);
-  my_sprintf(buf, "%d%%", progress);
-  //GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-  GUI_DispStringInPrect(&percentageRect, (u8 *)buf);    
-  //GUI_SetTextMode(GUI_TEXTMODE_NORMAL);                     
+  char buf[6];
+  my_sprintf(buf, "%d%%", infoPrinting.progress);
+
+  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
+
+  GUI_DispString(printinfo_points[3].x + PICON_TITLE_X, printinfo_points[3].y + PICON_TITLE_Y, (u8 *)buf);
+
+  GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
 
-extern SCROLL   titleScroll;
-extern GUI_RECT titleRect;
+void reDrawLayer(int icon_pos)
+{
+  char tempstr[10];
+  my_sprintf(tempstr, "%.2fMM",coordinateGetAxisTarget(Z_AXIS)); 
+
+  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
+  
+  ICON_CustomReadDisplay(printinfo_points[icon_pos].x,printinfo_points[icon_pos].y,PICON_LG_WIDTH,PICON_HEIGHT,ICON_ADDR(ICON_PRINTING_ZLAYER));
+  GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (u8* )LAYER_TITLE);  
+  GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (u8 *)tempstr); 
+
+  GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
+}
+
+void toggleinfo(void)
+{
+  if (OS_GetTime() > nowTime + toggle_time)
+  {
+    if (EXTRUDER_NUM > 1)
+    {
+      c_Ext = (TOOL)((c_Ext + 1) % HEATER_NUM);
+      if (c_Ext == 0)
+      {
+        c_Ext += 1;
+      }
+      rapid_serial_loop();	 //perform backend printing loop before drawing to avoid printer idling
+      reValueNozzle(EXT_ICON_POS);
+    }
+    
+    if (FAN_NUM > 1)
+    {
+      c_fan = (c_fan + 1) % FAN_NUM;
+      rapid_serial_loop();	 //perform backend printing loop before drawing to avoid printer idling
+      reDrawFan(FAN_ICON_POS);
+    }
+
+    c_speedID = (c_speedID + 1) % 2;
+    nowTime = OS_GetTime(); 
+    rapid_serial_loop();	 //perform backend printing loop before drawing to avoid printer idling
+    reDrawSpeed(SPD_ICON_POS);
+  }
+}
+
+//extern SCROLL   titleScroll;
+//extern GUI_RECT titleRect;
 
 
 void printingDrawPage(void)
 {
-  int16_t i;
-  menuDrawPage(&printingItems);
   //	Scroll_CreatePara(&titleScroll, infoFile.title,&titleRect);  //
-  // printed time
-  GUI_DispString(progressRect.x0, TIME_Y, (u8* )"T:");
-  GUI_DispString(progressRect.x0+BYTE_WIDTH*4, TIME_Y, (u8* )":");
-  GUI_DispString(progressRect.x0+BYTE_WIDTH*7, TIME_Y, (u8* )":");
-  // nozzle temperature 
-  GUI_DispString(BED_X, TEMP_Y-2*BYTE_HEIGHT ,(u8* )":");
-  GUI_DispString(BED_X+BYTE_WIDTH*5, TEMP_Y-2*BYTE_HEIGHT,(u8* )"/");
-  // hotbed temperature
-  GUI_DispString(BED_X, TEMP_Y-BYTE_HEIGHT, (u8* )"B:");
-  GUI_DispString(BED_X+BYTE_WIDTH*5, TEMP_Y-BYTE_HEIGHT, (u8* )"/");
-  reDrawProgress(infoPrinting.progress);
-  reValueNozzle();
-  reValueBed();
-  reDrawTime();
-  // z_axis coordinate
-  GUI_DispString(BED_X,TIME_Y-BYTE_HEIGHT, (u8* )"Z:");
+  if(get_Pre_Icon() == true){
+    key_pause = 5;
+    //printingItems.items[key_pause - 1] = itemBlank;
+    printingItems.items[key_pause - 1].icon = ICON_PREVIEW;
+    printingItems.items[key_pause - 1].label.index = LABEL_BACKGROUND;
+  }
+  else{
+    key_pause = 4;
+    printingItems.items[key_pause+1] = itemBabyStep;
+  }
+  
+    printingItems.items[key_pause] = itemIsPause[isPause()];  
 
-  i = get_Pre_Icon((char *)getCurGcodeName(infoFile.title));
-  if(i != ICON_BACKGROUND)
-  lcd_frame_display(1*ICON_WIDTH+1*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,ICON_WIDTH,ICON_HEIGHT,ICON_ADDR(i));
+  menuDrawPage(&printingItems);
+  reValueNozzle(EXT_ICON_POS);
+  reValueBed(BED_ICON_POS);
+  reDrawFan(FAN_ICON_POS);
+  reDrawTime(TIM_ICON_POS);
+  reDrawProgress(TIM_ICON_POS);
+  reDrawLayer(Z_ICON_POS);
+  reDrawSpeed(SPD_ICON_POS);
 }
 
 
-void menuPrinting(void)	
+void menuPrinting(void)
 {
-  KEY_VALUES  key_num = KEY_IDLE;		
+  KEY_VALUES  key_num = KEY_IDLE;
   u32         time = 0;
-  HEATER      nowHeat; 
+  HEATER      nowHeat;
+  float       curLayer = 0;
+  u8          nowFan[FAN_NUM] = {0};
+  uint16_t    curspeed[2] = {0};
   memset(&nowHeat, 0, sizeof(HEATER));
-  
-  printingItems.items[KEY_ICON_0] = itemIsPause[infoPrinting.pause];
+
   printingDrawPage();
+  printingItems.items[key_pause] = itemIsPause[infoPrinting.pause];
+
 
   while(infoMenu.menu[infoMenu.cur] == menuPrinting)
-  {		
+  {
 //    Scroll_DispString(&titleScroll, LEFT); //Scroll display file name will take too many CPU cycles
 
+    //check nozzle temp change
+      if (nowHeat.T[c_Ext].current != heatGetCurrentTemp(c_Ext) || nowHeat.T[c_Ext].target != heatGetTargetTemp(c_Ext))
+      {
+        nowHeat.T[c_Ext].current = heatGetCurrentTemp(c_Ext);
+        nowHeat.T[c_Ext].target = heatGetTargetTemp(c_Ext);
+        rapid_serial_loop();	 //perform backend printing loop before drawing to avoid printer idling
+        reValueNozzle(EXT_ICON_POS);
+      }
+
+    //check bed temp change
+    if (nowHeat.T[BED].current != heatGetCurrentTemp(BED) || nowHeat.T[BED].target != heatGetTargetTemp(BED))
+    {
+      nowHeat.T[BED].current = heatGetCurrentTemp(BED);
+      nowHeat.T[BED].target = heatGetTargetTemp(BED);
+      rapid_serial_loop();	 //perform backend printing loop before drawing to avoid printer idling
+      reValueBed(BED_ICON_POS);
+    }
+    
+    //check Fan speed change
+    if (nowFan[c_fan] != fanGetSpeed(c_fan))
+    {
+      nowFan[c_fan] = fanGetSpeed(c_fan);
+      rapid_serial_loop();  //perform backend printing loop before drawing to avoid printer idling
+      reDrawFan(FAN_ICON_POS);
+    }
+
+    //check printing progress
     if( infoPrinting.size != 0)
     {
-      if(infoPrinting.progress!=limitValue(0,(uint64_t)infoPrinting.cur*100/infoPrinting.size,100))
+      //check print time change
+      if(time!=infoPrinting.time || infoPrinting.progress!=limitValue(0,(uint64_t)infoPrinting.cur*100/infoPrinting.size,100))
       {
+        time=infoPrinting.time;
         infoPrinting.progress=limitValue(0,(uint64_t)infoPrinting.cur*100/infoPrinting.size,100);
-        reDrawProgress(infoPrinting.progress);
-      }	
+        rapid_serial_loop();  //perform backend printing loop before drawing to avoid printer idling
+        reDrawTime(TIM_ICON_POS);
+        reDrawProgress(TIM_ICON_POS);
+      }
     }
     else
     {
       if(infoPrinting.progress != 100)
       {
         infoPrinting.progress = 100;
-        reDrawProgress(infoPrinting.progress);
+        reDrawTime(TIM_ICON_POS);
+        reDrawProgress(TIM_ICON_POS);
       }	
-    }            
+    }
 
-    if (nowHeat.T[heatGetCurrentToolNozzle()].current != heatGetCurrentTemp(heatGetCurrentToolNozzle()) 
-     || nowHeat.T[heatGetCurrentToolNozzle()].target != heatGetTargetTemp(heatGetCurrentToolNozzle()))
-    {
-      nowHeat.T[heatGetCurrentToolNozzle()].current = heatGetCurrentTemp(heatGetCurrentToolNozzle());
-      nowHeat.T[heatGetCurrentToolNozzle()].target = heatGetTargetTemp(heatGetCurrentToolNozzle());
-      reValueNozzle();	
-    }
-    if (nowHeat.T[BED].current != heatGetCurrentTemp(BED) 
-     || nowHeat.T[BED].target != heatGetTargetTemp(BED))
-    {
-      nowHeat.T[BED].current = heatGetCurrentTemp(BED);
-      nowHeat.T[BED].target = heatGetTargetTemp(BED);
-      reValueBed();	
-    }
-    
-    if(time!=infoPrinting.time)
-    {
-      time=infoPrinting.time;
-      reDrawTime();
-    }
     //Z_AXIS coordinate
-    static COORDINATE tmp;
-    coordinateGetAll(&tmp);
-    GUI_DispFloat(BED_X+BYTE_WIDTH*2,TIME_Y-BYTE_HEIGHT,tmp.axis[Z_AXIS],3,3,LEFT);
+    if(curLayer != coordinateGetAxisTarget(Z_AXIS)){
+      curLayer = coordinateGetAxisTarget(Z_AXIS);
+      rapid_serial_loop();  //perform backend printing loop before drawing to avoid printer idling
+      reDrawLayer(Z_ICON_POS);
+    }
+
+    //check change in speed or flow
+    if(curspeed[c_speedID] != speedGetPercent(c_speedID)){
+      curspeed[c_speedID] = speedGetPercent(c_speedID);
+      rapid_serial_loop();  //perform backend printing loop before drawing to avoid printer idling
+      reDrawSpeed(SPD_ICON_POS);
+    }
     
     key_num = menuKeyGetValue();
     switch(key_num)
     {
-      case KEY_ICON_0:
+      case KEY_ICON_4:
+        if(get_Pre_Icon() != true){
         setPrintPause(!isPause(),false);
+        }
         break;
-      
-      case KEY_ICON_3:
+
+      case KEY_ICON_5:
+        if(get_Pre_Icon() == true){
+        setPrintPause(!isPause(),false);
+        }
+        else{
+        infoMenu.menu[++infoMenu.cur] = menuBabyStep;
+        }
+        break;
+
+      case KEY_ICON_6:
+        infoMenu.menu[++infoMenu.cur] = menuMore;
+        break;
+
+      case KEY_ICON_7:
         if(isPrinting())				
           infoMenu.menu[++infoMenu.cur] = menuStopPrinting;	
         else
@@ -438,58 +638,45 @@ void menuPrinting(void)
           infoMenu.cur--;
         }					
         break;
-        
-      case KEY_ICON_4:
-        infoMenu.menu[++infoMenu.cur] = menuHeat;
-        break;
-      
-      case KEY_ICON_5:
-        infoMenu.menu[++infoMenu.cur] = menuSpeed;
-        break;
-      
-      case KEY_ICON_6:
-        infoMenu.menu[++infoMenu.cur] = menuBabyStep;
-        break;
-      
-      case KEY_ICON_7:
-        infoMenu.menu[++infoMenu.cur] = menuMore;
-        break;
-      
+
       default :break;
-    }                
+    }
     loopProcess();
+    toggleinfo();
   }	
 }
 
 void exitPrinting(void)
-{	
+{
   memset(&infoPrinting,0,sizeof(PRINTING));
-  ExitDir();	
+  ExitDir();
 }
 
 void endPrinting(void)
-{  
+{
   switch (infoFile.source)
   {
     case BOARD_SD:
       printSetUpdateWaiting(M27_WATCH_OTHER_SOURCES);
       break;
-    
+
     case TFT_UDISK:
     case TFT_SD:
-      f_close(&infoPrinting.file);	
+      f_close(&infoPrinting.file);
       break;
   }
   infoPrinting.printing = infoPrinting.pause = false;
   powerFailedClose();
   powerFailedDelete();  
-  endGcodeExecute();
+  if(infoSettings.send_end_gcode == 1){  
+    endGcodeExecute();
+  }
 }
 
 
 void completePrinting(void)
 {
-  endPrinting();  
+  endPrinting();
   if(infoSettings.auto_off) // Auto shut down after printing
   {
 		infoMenu.menu[++infoMenu.cur] = menuShutDown;
@@ -503,15 +690,15 @@ void abortPrinting(void)
     case BOARD_SD:
       request_M524();
       break;
-  
+
     case TFT_UDISK:
     case TFT_SD:
-      clearCmdQueue();	
+      clearCmdQueue();
       break;
   }
 
   heatClearIsWaiting();
-  
+
   mustStoreCmd("G0 Z%d F3000\n", limitValue(0, (int)coordinateGetAxisTarget(Z_AXIS) + 10, Z_MAX_POS));
   mustStoreCmd(CANCEL_PRINT_GCODE);
 
@@ -524,7 +711,7 @@ void menuStopPrinting(void)
   u16 key_num = IDLE_TOUCH;
 
   popupDrawPage(bottomDoubleBtn, textSelect(LABEL_WARNING), textSelect(LABEL_STOP_PRINT), textSelect(LABEL_CONFIRM), textSelect(LABEL_CANNEL));
- 
+
   while(infoMenu.menu[infoMenu.cur] == menuStopPrinting)
   {
     key_num = KEY_GetValue(2, doubleBtnRect);
@@ -537,7 +724,7 @@ void menuStopPrinting(void)
 
       case KEY_POPUP_CANCEL:
         infoMenu.cur--;
-        break;		
+        break;
     }
     loopProcess();
   }
@@ -551,10 +738,10 @@ void menuShutDown(void)
   u16 key_num = IDLE_TOUCH;
 
   popupDrawPage(bottomDoubleBtn, textSelect(LABEL_SHUT_DOWN), textSelect(LABEL_WAIT_TEMP_SHUT_DOWN), textSelect(LABEL_FORCE_SHUT_DOWN), textSelect(LABEL_CANNEL));
- 
+
   for(u8 i = 0; i < FAN_NUM; i++)
   {
-    mustStoreCmd("%s S255\n", fanCmd[i]);  
+    mustStoreCmd("%s S255\n", fanCmd[i]);
   }
   while (infoMenu.menu[infoMenu.cur] == menuShutDown)
   {
@@ -566,7 +753,7 @@ void menuShutDown(void)
 
       case KEY_POPUP_CANCEL:
         infoMenu.cur--;
-        break;		
+        break;
     }
     tempIsLower = true;
     for (TOOL i = NOZZLE0; i < HEATER_NUM; i++)
@@ -575,11 +762,11 @@ void menuShutDown(void)
         tempIsLower = false;
     }
     if(tempIsLower)
-    {   
+    {
       shutdown:
         for(u8 i = 0; i < FAN_NUM; i++)
         {
-          mustStoreCmd("%s S0\n", fanCmd[i]);  
+          mustStoreCmd("%s S0\n", fanCmd[i]);
         }
         mustStoreCmd("M81\n");
         infoMenu.cur--;
@@ -591,7 +778,7 @@ void menuShutDown(void)
 
 // get gcode command from sd card
 void getGcodeFromFile(void)
-{	
+{
   bool    sd_comment_mode = false;
   bool    sd_comment_space = true;
   char    sd_char;
@@ -599,11 +786,11 @@ void getGcodeFromFile(void)
   UINT    br = 0;
 
   if(isPrinting()==false || infoFile.source == BOARD_SD)  return;
-  
+
   powerFailedCache(infoPrinting.file.fptr);
-  
+
   if(heatHasWaiting() || infoCmd.count || infoPrinting.pause )  return;
-  
+
   if(moveCacheToCmd() == true) return;
 
   for(;infoPrinting.cur < infoPrinting.size;)
@@ -619,21 +806,21 @@ void getGcodeFromFile(void)
       sd_comment_space= true;
       if(sd_count!=0)
       {
-        infoCmd.queue[infoCmd.index_w].gcode[sd_count++] = '\n'; 
+        infoCmd.queue[infoCmd.index_w].gcode[sd_count++] = '\n';
         infoCmd.queue[infoCmd.index_w].gcode[sd_count] = 0; //terminate string
         infoCmd.queue[infoCmd.index_w].src = SERIAL_PORT;
         sd_count = 0; //clear buffer
         infoCmd.index_w = (infoCmd.index_w + 1) % CMD_MAX_LIST;
-        infoCmd.count++;	
-        break;			
+        infoCmd.count++;
+        break;
       }
     }
     else if (sd_count >= CMD_MAX_CHAR - 2) {	}   //when the command length beyond the maximum, ignore the following bytes
-    else 
+    else
     {
       if (sd_char == ';')             //';' is comment out flag
         sd_comment_mode = true;
-      else 
+      else
       {
         if(sd_comment_space && (sd_char== 'G'||sd_char == 'M'||sd_char == 'T'))  //ignore ' ' space bytes
           sd_comment_space = false;
@@ -664,7 +851,3 @@ void loopCheckPrinting(void)
     update_waiting=true;
   }while(0);
 }
-
-
-
-

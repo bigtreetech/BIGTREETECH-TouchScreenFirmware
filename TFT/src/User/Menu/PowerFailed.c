@@ -24,25 +24,25 @@ void clearPowerFailed(void)
 }
 
 FIL fpPowerFailed;
-bool powerFailedCreate(char *path) 
-{ 
+bool powerFailedCreate(char *path)
+{
   UINT br;
-  
+
   create_ok = false;
 
   if(infoFile.source != TFT_SD)  return false;//support SD Card only now
-  
+
   if(f_open(&fpPowerFailed, powerFailedFileName, FA_OPEN_ALWAYS | FA_WRITE) != FR_OK)  return false;
-  
+
   f_write(&fpPowerFailed, path, MAX_PATH_LEN, &br);
   f_write(&fpPowerFailed, &infoBreakPoint, sizeof(BREAK_POINT), &br);
   f_sync(&fpPowerFailed);
 
   create_ok = true;
-  return true;  
+  return true;
 }
 
-void powerFailedCache(u32 offset) 
+void powerFailedCache(u32 offset)
 {
   UINT        br;
   static u32  nowTime = 0;
@@ -51,7 +51,7 @@ void powerFailedCache(u32 offset)
   if (create_ok == false )              return;
   if (powerFailedSave == false)         return;
   if (isPause() == true)                return;
-  
+
   if (infoCacheCmd.count != 0)          return;
 
   powerFailedSave = false;
@@ -66,13 +66,13 @@ void powerFailedCache(u32 offset)
   infoBreakPoint.feedrate = coordinateGetFeedRate();
   infoBreakPoint.speed = speedGetPercent(0);
   infoBreakPoint.flow = speedGetPercent(1);
-  
+
   for(TOOL i = BED; i < HEATER_NUM; i++)
   {
     infoBreakPoint.target[i] = heatGetTargetTemp(i);
   }
   infoBreakPoint.nozzle = heatGetCurrentToolNozzle();
-  
+
   for(u8 i = 0; i < FAN_NUM; i++)
   {
    infoBreakPoint.fan[i] = fanGetSpeed(i);
@@ -85,17 +85,17 @@ void powerFailedCache(u32 offset)
   f_sync(&fpPowerFailed);
 }
 
-void powerFailedClose(void) 
+void powerFailedClose(void)
 {
   if(create_ok==false)   return;
-  
+
   f_close(&fpPowerFailed);
 }
 
-void  powerFailedDelete(void) 
+void  powerFailedDelete(void)
 {
   if(create_ok==false)   return;
-  
+
   f_unlink(powerFailedFileName);
   clearPowerFailed();
 }
@@ -116,7 +116,7 @@ static bool powerFailedExist(void)
 bool powerFailedlSeek(FIL* fp)
 {
   if(f_lseek(fp,infoBreakPoint.offset) != FR_OK)  return false;
-  
+
   return true;
 }
 
@@ -127,7 +127,7 @@ bool powerOffGetData(void)
   UINT  br;
 
   if(f_open(&fp, powerFailedFileName, FA_OPEN_EXISTING|FA_READ) != FR_OK)        return false;
-  if(f_lseek(&fp, MAX_PATH_LEN)                                 != FR_OK)        return false;  
+  if(f_lseek(&fp, MAX_PATH_LEN)                                 != FR_OK)        return false;
   if(f_read(&fp, &infoBreakPoint,  sizeof(infoBreakPoint), &br) != FR_OK)        return false;
 
   for(TOOL i = BED; i < HEATER_NUM; i++)
@@ -135,13 +135,13 @@ bool powerOffGetData(void)
     if(infoBreakPoint.target[i] != 0)
       mustStoreCacheCmd("%s S%d\n", heatWaitCmd[i], infoBreakPoint.target[i]);
   }
-  
+
   for(u8 i=0; i < FAN_NUM; i++)
   {
     if(infoBreakPoint.fan[i] != 0)
       mustStoreCacheCmd("%s S%d\n", fanCmd[i], infoBreakPoint.fan[i]);
   }
-  
+
   mustStoreCacheCmd("%s\n", tool_change[infoBreakPoint.nozzle - NOZZLE0]);
   if(infoBreakPoint.feedrate != 0)
   {
@@ -166,7 +166,7 @@ bool powerOffGetData(void)
                           infoBreakPoint.axis[Z_AXIS]);
     mustStoreCacheCmd("G1 E%d F4800\n", NOZZLE_RESUME_PURGE_LENGTH);
     mustStoreCacheCmd("G92 E%.5f\n",infoBreakPoint.axis[E_AXIS]);
-    mustStoreCacheCmd("G1 F%d\n",infoBreakPoint.feedrate);        
+    mustStoreCacheCmd("G1 F%d\n",infoBreakPoint.feedrate);
 
     if(infoBreakPoint.relative_e == false)
     {
@@ -188,30 +188,30 @@ void menuPowerOff(void)
   clearPowerFailed();
   GUI_Clear(BACKGROUND_COLOR);
   GUI_DispString((LCD_WIDTH - GUI_StrPixelWidth(textSelect(LABEL_LOADING)))/2, LCD_HEIGHT/2 - BYTE_HEIGHT, textSelect(LABEL_LOADING));
- 
+
   if(mountFS()==true && powerFailedExist())
   {
     popupDrawPage(bottomDoubleBtn, textSelect(LABEL_POWER_FAILED), (u8* )infoFile.title, textSelect(LABEL_CONFIRM), textSelect(LABEL_CANNEL));
-    
+
     while(infoMenu.menu[infoMenu.cur]==menuPowerOff)
     {
       key_num = KEY_GetValue(2, doubleBtnRect);
       switch(key_num)
       {
-        case KEY_POPUP_CONFIRM:    
+        case KEY_POPUP_CONFIRM:
           powerOffGetData();
           infoMenu.menu[1] = menuPrintFromSource;
           infoMenu.menu[2] = menuBeforePrinting;
           infoMenu.cur=2;
           break;
-        
+
         case KEY_POPUP_CANCEL:
           powerFailedDelete();
           ExitDir();
           infoMenu.cur--;
-          break;        
+          break;
       }
-      
+
       #ifdef SD_CD_PIN
       if(isVolumeExist(infoFile.source) != true)
       {
@@ -228,5 +228,3 @@ void menuPowerOff(void)
     infoMenu.cur--;
   }
 }
-
-

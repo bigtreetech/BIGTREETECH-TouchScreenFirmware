@@ -89,7 +89,7 @@
 #include "list_item.h"
 
 #define MAX_MENU_DEPTH 10       // max sub menu depth
-typedef void (*FP_MENU)(void); 
+typedef void (*FP_MENU)(void);
 
 typedef struct
 {
@@ -100,7 +100,7 @@ typedef struct
 extern MENU infoMenu;
 
 typedef struct
-{	
+{
   bool wait;       //Whether wait for Marlin's response
   bool rx_ok[_USART_CNT]; //Whether receive Marlin's response or get Gcode by other UART(ESP3D/OctoPrint)
   bool connected;  //Whether have connected to Marlin
@@ -110,4 +110,3 @@ typedef struct
 extern HOST infoHost;
 
 #endif
-

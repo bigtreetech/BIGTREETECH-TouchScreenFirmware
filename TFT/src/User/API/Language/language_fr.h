@@ -65,7 +65,7 @@
     #define FR_ORANGE               "Orange"
     #define FR_INDIGO               "Indigo"
     #define FR_VIOLET               "Violet"
-    #define FR_DISCONNECT           "Déconnexion" 
+    #define FR_DISCONNECT           "Déconnexion"
     #define FR_BAUDRATE_115200      "115200"
     #define FR_BAUDRATE_250000      "250000"
     #define FR_RUNOUT_OFF           "Détection OFF"
@@ -153,5 +153,9 @@
     #define FR_MOVE_SPEED           "Vitesse de déplacement (X Y Z)"
     #define FR_KNOB_LED             "Rotary Knob LED"
     #define FR_M0_PAUSE             "Paused by M0 command"
+    #define FR_SEND_START_GCODE     "Start Gcode before print"
+    #define FR_SEND_END_GCODE       "End Gcode after print"
+    #define FR_PERSISTANT_STATUS_INFO "Persistent Status Info"
+    #define FR_FILE_LISTMODE        "Files viewer List Mode"
 
 #endif

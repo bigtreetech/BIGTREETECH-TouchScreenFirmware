@@ -111,10 +111,10 @@ void menuDrawPage (const MENUITEMS * menuItems);
 void menuDrawListPage(const LISTITEMS *listItems);
 void itemDrawIconPress(uint8_t positon, uint8_t is_press);
 KEY_VALUES menuKeyGetValue(void);
+GUI_POINT getIconStartPoint(int index);
 
 void loopBackEnd(void);
 void loopFrontEnd(void);
 void loopProcess (void);
 
 #endif
-
