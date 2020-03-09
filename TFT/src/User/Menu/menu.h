@@ -105,15 +105,16 @@ void GUI_RestoreColorDefault(void);
 void menuDrawItem (const ITEM * menuItem, uint8_t positon);
 void menuDrawIconOnly(const ITEM *item, uint8_t positon);
 void menuDrawListItem(const LISTITEM *item, uint8_t positon);
+void menuRefreshListPage(void);
 void menuDrawTitle(const uint8_t *content); //(const MENUITEMS * menuItems);
 void menuDrawPage (const MENUITEMS * menuItems);
 void menuDrawListPage(const LISTITEMS *listItems);
 void itemDrawIconPress(uint8_t positon, uint8_t is_press);
 KEY_VALUES menuKeyGetValue(void);
+GUI_POINT getIconStartPoint(int index);
 
 void loopBackEnd(void);
 void loopFrontEnd(void);
 void loopProcess (void);
 
 #endif
-

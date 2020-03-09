@@ -4,7 +4,7 @@
   * @author  MCD Application Team
   * @version V3.5.0
   * @date    11-March-2011
-  * @brief   This file contains all the functions prototypes for the DBGMCU 
+  * @brief   This file contains all the functions prototypes for the DBGMCU
   *          firmware library.
   ******************************************************************************
   * @attention
@@ -77,11 +77,11 @@
 #define DBGMCU_TIM9_STOP             ((uint32_t)0x10000000)
 #define DBGMCU_TIM10_STOP            ((uint32_t)0x20000000)
 #define DBGMCU_TIM11_STOP            ((uint32_t)0x40000000)
-                                              
+
 #define IS_DBGMCU_PERIPH(PERIPH) ((((PERIPH) & 0x800000F8) == 0x00) && ((PERIPH) != 0x00))
 /**
   * @}
-  */ 
+  */
 
 /** @defgroup DBGMCU_Exported_Macros
   * @{

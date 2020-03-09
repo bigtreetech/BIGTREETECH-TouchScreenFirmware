@@ -1,7 +1,7 @@
 #include "BabyStep.h"
 #include "includes.h"
 
-//1 title, ITEM_PER_PAGE items(icon+label) 
+//1 title, ITEM_PER_PAGE items(icon+label)
 MENUITEMS babyStepItems = {
 //title
   LABEL_BABYSTEP,
@@ -75,6 +75,10 @@ void menuBabyStep(void)
   menuDrawPage(&babyStepItems);
   showBabyStep();
 
+  #if LCD_ENCODER_SUPPORT
+    encoderPosition = 0;    
+  #endif
+
   while(infoMenu.menu[infoMenu.cur] == menuBabyStep)
   {
     key_num = menuKeyGetValue();
@@ -110,6 +114,14 @@ void menuBabyStep(void)
         infoMenu.cur--;
         break;
       default :
+        #if LCD_ENCODER_SUPPORT
+          if(encoderPosition)
+          {
+            baby_step_value += elementsUnit.ele[elementsUnit.cur]*encoderPosition;
+            encoderPosition = 0;    
+          }
+          LCD_LoopEncoder();
+        #endif
         break;
       }
     if(now != baby_step_value)
@@ -120,8 +132,3 @@ void menuBabyStep(void)
     loopProcess();
   }
 }
-
-
-
-
-

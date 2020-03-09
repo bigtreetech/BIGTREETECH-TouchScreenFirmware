@@ -18,13 +18,13 @@ GUI_RECT doubleBtnRect[] ={POPUP_RECT_DOUBLE_CONFIRM, POPUP_RECT_DOUBLE_CANCEL};
 
 
 WINDOW window = {
-  POPUP_RECT_WINDOW,       //弹窗的区域
-  10,                      //四角圆弧的半径
-  3,                       //外边的线宽
-  0x5D7B,                  //外边和标题栏的背景色
-  {MAGENTA, 0x5D7B, POPUP_TITLE_HEIGHT},   //标题栏 字体色/背景色/高度
-  {WHITE, BLACK, POPUP_TEXT_HEIGHT},    //文本栏 字体色/背景色/高度
-  {WHITE, GRAY,  POPUP_BOTTOM_HEIGHT},  //底部 (字体色)/背景色/(高度)
+  POPUP_RECT_WINDOW,                      //rectangle position and size of popup window
+  10,                                     //Four-corner arc radius
+  3,                                      //Outer line width
+  0x5D7B,                                 //Outer and title bar background color
+  {MAGENTA, 0x5D7B, POPUP_TITLE_HEIGHT},  //Title bar font color / background color / height
+  {WHITE, BLACK, POPUP_TEXT_HEIGHT},      //Message area font color / background color / height
+  {WHITE, GRAY,  POPUP_BOTTOM_HEIGHT},    //Bottom (font color) / background color / (height)
 };
 
 static BUTTON *windowButton =  NULL;
@@ -53,39 +53,42 @@ void popupDrawPage(BUTTON *btn, const u8 *title, const u8 *context, const u8 *ye
   {
     windowButton[buttonNum++].context = no;
   }
-  
+
   TSC_ReDrawIcon = windowReDrawButton;
   GUI_DrawWindow(&window, title, context);
-  
+
   for(u8 i = 0; i < buttonNum; i++)
-    GUI_DrawButton(&windowButton[i], 0);    
+    GUI_DrawButton(&windowButton[i], 0);
 }
 
 static const GUI_RECT popupMenuRect = POPUP_RECT_SINGLE_CONFIRM;
 
 void menuPopup(void)
 {
-  u16 key_num = IDLE_TOUCH;    
+  u16 key_num = IDLE_TOUCH;
 
   while(infoMenu.menu[infoMenu.cur] == menuPopup)
   {
     key_num = KEY_GetValue(BUTTON_NUM, &popupMenuRect);
     switch(key_num)
-    {            
-      case KEY_POPUP_CONFIRM: 
-        infoMenu.cur--; 
+    {
+      case KEY_POPUP_CONFIRM:
+        infoMenu.cur--;
         break;
-      
+
       default:
-        break;            
-    }    
+        break;
+    }
     loopProcess();
   }
 }
 
 void popupReminder(u8* info, u8* context)
 {
-  popupDrawPage(&bottomSingleBtn , info, context, textSelect(LABEL_CONFIRM), NULL);    
+  #ifdef CLEAN_MODE_SWITCHING_SUPPORT
+    if (infoSettings.mode == LCD12864) return;
+  #endif
+  popupDrawPage(&bottomSingleBtn , info, context, textSelect(LABEL_CONFIRM), NULL);
   if(infoMenu.menu[infoMenu.cur] != menuPopup)
   {
     infoMenu.menu[++infoMenu.cur] = menuPopup;

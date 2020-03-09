@@ -1,4 +1,4 @@
-// *List View Mode ** Author: Gurmeet Athwal https://github.com/guruathwal ** 
+// *List View Mode ** Author: Gurmeet Athwal https://github.com/guruathwal **
 
 #ifndef _LIST_ITEM_H_
 #define _LIST_ITEM_H_
@@ -149,6 +149,8 @@ extern char * dynamic_label[LISTITEM_PER_PAGE];
 
 
 uint8_t * IconCharSelect(uint8_t sel);
+void setDynamicLabel(uint8_t i,char *label);
+char * getDynamicLabel(uint8_t i);
 void ListItem_Display(const GUI_RECT* rect, uint8_t positon, const LISTITEM * curitem, bool pressed);
 void ListMenuSetItem (const LISTITEM * menuItem, uint8_t positon);
 void ListItem_DisplayToggle(uint16_t sx, uint16_t sy, uint8_t iconchar_state);

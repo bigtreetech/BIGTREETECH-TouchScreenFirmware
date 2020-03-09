@@ -1,7 +1,7 @@
 #include "Speed.h"
 #include "includes.h"
 
-//1��title(����), ITEM_PER_PAGE��item(ͼ��+��ǩ) 
+//1��title(����), ITEM_PER_PAGE��item(ͼ��+��ǩ)
 MENUITEMS percentageItems = {
 //   title
 LABEL_PERCENTAGE_SPEED,
@@ -51,7 +51,7 @@ void speedSetPercent(u8 tool, u16 per)
 {
   percentage[tool]=limitValue(10, per, 999);
 }
-/* ��õ�ǰ�İٷֱ� */
+/* ��õ�ǰ�İٷֱ�? */
 u16 speedGetPercent(u8 tool)
 {
   return percentage[tool];
@@ -69,7 +69,7 @@ void percentageReDraw(void)
 
 void menuSpeed(void)
 {
-  KEY_VALUES  key_num=KEY_IDLE;	
+  KEY_VALUES  key_num=KEY_IDLE;
   u16         now[ITEM_PERCENTAGE_NUM];
 
   for(u8 i=0; i<ITEM_PERCENTAGE_NUM; i++)
@@ -77,6 +77,10 @@ void menuSpeed(void)
 
   menuDrawPage(&percentageItems);
   showPercentage();
+
+  #if LCD_ENCODER_SUPPORT
+    encoderPosition = 0;    
+  #endif
 
   while(infoMenu.menu[infoMenu.cur] == menuSpeed)
   {
@@ -86,32 +90,32 @@ void menuSpeed(void)
       case KEY_ICON_0:
         if(percentage[item_percentage_i] > 10)
         {
-          percentage[item_percentage_i] = 
-            limitValue( 10, 
-                        percentage[item_percentage_i] - item_percent_unit[item_percent_unit_i], 
+          percentage[item_percentage_i] =
+            limitValue( 10,
+                        percentage[item_percentage_i] - item_percent_unit[item_percent_unit_i],
                         999);
         }
         break;
-        
+
       case KEY_ICON_3:
         if(percentage[item_percentage_i] < 999)
         {
-          percentage[item_percentage_i] = 
-            limitValue( 10, 
-                        percentage[item_percentage_i] + item_percent_unit[item_percent_unit_i], 
+          percentage[item_percentage_i] =
+            limitValue( 10,
+                        percentage[item_percentage_i] + item_percent_unit[item_percent_unit_i],
                         999);
         }
         break;
-        
+
       case KEY_ICON_4:
         item_percentage_i = (item_percentage_i+1) % ITEM_PERCENTAGE_NUM;
         percentageItems.items[key_num] = itemPercentage[item_percentage_i];
-        menuDrawItem(&percentageItems.items[key_num], key_num);      
+        menuDrawItem(&percentageItems.items[key_num], key_num);
         percentageItems.title.index = itemPercentageTitle[item_percentage_i];
         menuDrawTitle(textSelect(percentageItems.title.index));
         showPercentage();
         break;
-      
+
       case KEY_ICON_5:
         item_percent_unit_i = (item_percent_unit_i+1) % ITEM_PERCENT_UNIT_NUM;
         percentageItems.items[key_num] = itemPercentUnit[item_percent_unit_i];
@@ -123,7 +127,29 @@ void menuSpeed(void)
       case KEY_ICON_7:
         infoMenu.cur--;
         break;
-      default:break;
+      default:
+        #if LCD_ENCODER_SUPPORT
+          if(encoderPosition)
+          {
+            if(percentage[item_percentage_i] < 999 && encoderPosition > 0)
+            {
+              percentage[item_percentage_i] = 
+                limitValue( 10, 
+                            percentage[item_percentage_i] + item_percent_unit[item_percent_unit_i], 
+                            999);
+            }
+            if(percentage[item_percentage_i] > 10 && encoderPosition < 0)
+            {
+              percentage[item_percentage_i] = 
+                limitValue( 10, 
+                            percentage[item_percentage_i] - item_percent_unit[item_percent_unit_i], 
+                            999);
+            }
+            encoderPosition = 0; 
+          }
+          LCD_LoopEncoder();
+        #endif
+      break;
     }
 
     char *speedCmd[ITEM_PERCENTAGE_NUM] = {"M220","M221"};

@@ -12,7 +12,7 @@ uint8_t buttons = 0;
 void LCD_EncoderInit(void)
 {
   uint16_t encPin[]  = {LCD_ENCA_PIN,  LCD_ENCB_PIN,  LCD_BTN_PIN};
-  
+
   for(u8 i = 0; i < COUNT(encPin); i++)
   {
     GPIO_InitSet(encPin[i], MGPIO_MODE_IPU, 0);
@@ -32,7 +32,7 @@ bool LCD_ReadEncB(void)
 bool LCD_ReadBtn(uint8_t intervals)
 {
   static u32 nowTime = 0;
-  
+
   if(!GPIO_GetLevel(LCD_BTN_PIN))
   {
     if(OS_GetTime() - nowTime > intervals)
@@ -51,12 +51,12 @@ void LCD_LoopEncoder(void)
 {
   static uint8_t lastEncoderBits = 0;
   uint8_t newbutton = 0;
-  
+
   if(LCD_ReadEncA()) newbutton |= EN_A;
   if(LCD_ReadEncB()) newbutton |= EN_B;
-  
+
   buttons = newbutton;
-  
+
   #define encrot0 0
   #define encrot1 2
   #define encrot2 3
@@ -65,9 +65,9 @@ void LCD_LoopEncoder(void)
   // Manage encoder rotation
   #define ENCODER_SPIN(_E1, _E2) switch (lastEncoderBits) { case _E1: encoderDiff += encoderDirection; break; case _E2: encoderDiff -= encoderDirection; }
 
-  if (buttons != lastEncoderBits) 
+  if (buttons != lastEncoderBits)
   {
-    switch (buttons) 
+    switch (buttons)
     {
       case encrot0: ENCODER_SPIN(encrot3, encrot1); break;
       case encrot1: ENCODER_SPIN(encrot0, encrot2); break;
@@ -75,8 +75,8 @@ void LCD_LoopEncoder(void)
       case encrot3: ENCODER_SPIN(encrot2, encrot0); break;
     }
     lastEncoderBits = buttons;
-  }  
-  
+  }
+
   const float abs_diff = ABS(encoderDiff);
   const bool encoderPastThreshold = (abs_diff >= (ENCODER_PULSES_PER_STEP));
   if (encoderPastThreshold)
@@ -87,8 +87,13 @@ void LCD_LoopEncoder(void)
 }
 
 void loopCheckMode(void)
-{  
-  if(isPrinting()) return;
+{
+//  #ifndef CLEAN_MODE_SWITCHING_SUPPORT
+//  IDEALLY I would like to be able to swap even when the TFT is in printing mode 
+//  but before I can allow that I need a way to make sure that we swap back into the right mode (and correct screen)
+//  and I really want a reliable way to DETECT that the TFT should be in printing mode even when the print was started externally.
+    if(isPrinting()) return;
+//  #endif
   if(LCD_ReadBtn(LCD_CHANGE_MODE_INTERVALS) || LCD_ReadPen(LCD_CHANGE_MODE_INTERVALS))
   {
     infoMenu.menu[++infoMenu.cur] = menuMode;

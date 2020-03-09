@@ -15,7 +15,7 @@ typedef enum {
     BOARD_SD
 }FS_SOURCE;
 
-typedef struct 
+typedef struct
 {
 	TCHAR title[MAX_PATH_LEN]; // max path depth
 	TCHAR *folder[FOLDER_NUM]; // folder name buffer
@@ -30,7 +30,7 @@ typedef struct
 extern MYFILE  infoFile;
 
 bool mountFS(void);
-bool scanPrintFiles(void); 
+bool scanPrintFiles(void);
 
 TCHAR* getCurFileSource(void);
 void clearInfoFile(void);
@@ -42,4 +42,4 @@ bool IsRootDir(void);
 bool isVolumeExist(uint8_t src);
 void loopVolumeSource(void);
 
-#endif 
+#endif

@@ -13,7 +13,7 @@ static const uint16_t uart_tx[_USART_CNT] = {PA9,  PA2, PB10, PC10, PC12, PG14};
 static const uint16_t uart_rx[_USART_CNT] = {PA10, PA3, PB11, PC11, PD2,  PG9};  //RX
 
 void USART_GPIO_Init(uint8_t port)
-{    
+{
   uint8_t UART_AF_NUM[_USART_CNT] = {GPIO_AF_USART1, GPIO_AF_USART2, GPIO_AF_USART3, GPIO_AF_UART4, GPIO_AF_UART5, GPIO_AF_USART6};
 
   GPIO_InitSet(uart_tx[port], MGPIO_MODE_AF_PP, UART_AF_NUM[port]);
@@ -96,7 +96,7 @@ void USART_DeConfig(uint8_t port)
     case _UART5:
       RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART5, ENABLE);
       RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART5, DISABLE);
-      break;  
+      break;
   }
 }
 

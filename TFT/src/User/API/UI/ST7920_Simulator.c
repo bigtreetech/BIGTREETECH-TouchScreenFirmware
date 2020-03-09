@@ -12,7 +12,7 @@ void ST7920_DrawPixel(int16_t x, int16_t y, uint16_t color)
 {
 //  GUI_DrawPixel(x, y, color);
   GUI_FillRectColor(SIMULATOR_XSTART + PIXEL_XSIZE*x,
-                    SIMULATOR_YSTART + PIXEL_YSIZE*y, 
+                    SIMULATOR_YSTART + PIXEL_YSIZE*y,
                     SIMULATOR_XSTART + PIXEL_XSIZE*(x+1),
                     SIMULATOR_YSTART + PIXEL_YSIZE*(y+1), color);
 }
@@ -40,7 +40,7 @@ void ST7920_DrawByte(u8 data)
   uint8_t i = 0;
   int16_t x = ST7920_MapCoordinateX(),
           y = ST7920_MapCoordinateY();
-  
+
   for(; i<8; i++)
   {
     if(data & 0x80)
@@ -79,28 +79,28 @@ void ST7920_ParseRecv(u8 val)
   else
   {
     rcvData[rcvIndex++] = val;
-    if(rcvIndex == 1) return;  //high 4 bits in first byte and 
+    if(rcvIndex == 1) return;  //high 4 bits in first byte and
     rcvIndex = 0;              //low 4 bits in second byte is valid
-    
+
     switch (status)
     {
       case ST7920_WCMD:
         ST7920_ST7920_ParseWCmd(rcvData[0] | (rcvData[1]>>4));
         break;
-      
+
       case ST7920_WDATA:
-        ST7920_DrawByte(rcvData[0] | (rcvData[1]>>4));        
+        ST7920_DrawByte(rcvData[0] | (rcvData[1]>>4));
         break;
-      
+
       case ST7920_RCMD:
         break;
-      
+
       case ST7920_RDATA:
         break;
-      
+
       default:
         break;
-    }  
+    }
   }
 }
 
@@ -124,7 +124,7 @@ void ST7920_ST7920_ParseWCmd(u8 cmd)
 
 
 void menuST7920(void)
-{ 
+{
   GUI_Clear(infoSettings.bg_color);
   GUI_SetColor(infoSettings.font_color);
   GUI_SetBkColor(infoSettings.bg_color);
@@ -132,26 +132,29 @@ void menuST7920(void)
   #if defined(ST7920_BANNER_TEXT)
     GUI_DispStringInRect(0, 0, LCD_WIDTH, SIMULATOR_YSTART, (u8*)ST7920_BANNER_TEXT);
   #endif
-  
+
   SPI_Slave();
   SPI_Slave_CS_Config();
-  
+
   while(infoMenu.menu[infoMenu.cur] == menuST7920)
   {
     while(SPISlave.rIndex != SPISlave.wIndex)
     {
       ST7920_ParseRecv(SPISlave.data[SPISlave.rIndex]);
-       
+
       SPISlave.rIndex = (SPISlave.rIndex + 1) % SPI_SLAVE_MAX;
     }
-    
+
     Touch_Sw(LCD_ReadTouch());
-    
+
     if(LCD_BtnTouch(LCD_BUTTON_INTERVALS))
 			Touch_Sw(1);
-    
+
     #if LCD_ENCODER_SUPPORT
       loopCheckMode();
+    #endif
+    #ifdef CLEAN_MODE_SWITCHING_SUPPORT
+      loopBackEnd();
     #endif
   }
   SPI_SlaveDeInit();

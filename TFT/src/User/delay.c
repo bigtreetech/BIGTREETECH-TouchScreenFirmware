@@ -6,7 +6,7 @@ static u8 fac_us=0;
 void Delay_init(u8 clk)
 {
   SysTick->CTRL&=0xfffffffb;		//bit2清空，选外部时钟 HCLK/8
-  fac_us=clk/8;									//8分频后的频率 单位M 即1us次数 
+  fac_us=clk/8;									//8分频后的频率 单位M 即1us次数
   fac_ms=(u16)fac_us*1000;			// 1ms的次数 即为1us的1000倍
 }
 
