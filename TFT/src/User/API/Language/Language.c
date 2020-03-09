@@ -167,6 +167,10 @@ const char *const en_pack[LABEL_NUM]={
   EN_MOVE_SPEED,
   EN_KNOB_LED,
   EN_M0_PAUSE,
+  EN_SEND_START_GCODE,
+  EN_SEND_END_GCODE,
+  EN_PERSISTANT_STATUS_INFO,
+  EN_FILE_LISTMODE,
 };
 
 const char *const cn_pack[LABEL_NUM]={
@@ -321,6 +325,10 @@ const char *const cn_pack[LABEL_NUM]={
   CN_MOVE_SPEED,
   CN_KNOB_LED,
   CN_M0_PAUSE,
+  CN_SEND_START_GCODE,
+  CN_SEND_END_GCODE,
+  CN_PERSISTANT_STATUS_INFO,
+  CN_FILE_LISTMODE,
 };
 
 const char *const ru_pack[LABEL_NUM]={
@@ -475,6 +483,10 @@ const char *const ru_pack[LABEL_NUM]={
   RU_MOVE_SPEED,
   RU_KNOB_LED,
   RU_M0_PAUSE,
+  RU_SEND_START_GCODE,
+  RU_SEND_END_GCODE,
+  RU_PERSISTANT_STATUS_INFO,
+  RU_FILE_LISTMODE,
 };
 
 const char *const jp_pack[LABEL_NUM]={
@@ -629,6 +641,10 @@ const char *const jp_pack[LABEL_NUM]={
   JP_MOVE_SPEED,
   JP_KNOB_LED,
   JP_M0_PAUSE,
+  JP_SEND_START_GCODE,
+  JP_SEND_END_GCODE,
+  JP_PERSISTANT_STATUS_INFO,
+  JP_FILE_LISTMODE,
 };
 
 const char *const am_pack[LABEL_NUM]={
@@ -783,6 +799,10 @@ const char *const am_pack[LABEL_NUM]={
   AM_MOVE_SPEED,
   AM_KNOB_LED,
   AM_M0_PAUSE,
+  AM_SEND_START_GCODE,
+  AM_SEND_END_GCODE,
+  AM_PERSISTANT_STATUS_INFO,
+  AM_FILE_LISTMODE,
 };
 
 const char *const de_pack[LABEL_NUM]={
@@ -937,6 +957,10 @@ const char *const de_pack[LABEL_NUM]={
   DE_MOVE_SPEED,
   DE_KNOB_LED,
   DE_M0_PAUSE,
+  DE_SEND_START_GCODE,
+  DE_SEND_END_GCODE,
+  DE_PERSISTANT_STATUS_INFO,
+  DE_FILE_LISTMODE,
 };
 
 const char *const cz_pack[LABEL_NUM]={
@@ -1091,6 +1115,10 @@ const char *const cz_pack[LABEL_NUM]={
   CZ_MOVE_SPEED,
   CZ_KNOB_LED,
   CZ_M0_PAUSE,
+  CZ_SEND_START_GCODE,
+  CZ_SEND_END_GCODE,
+  CZ_PERSISTANT_STATUS_INFO,
+  CZ_FILE_LISTMODE,
 };
 
 const char *const es_pack[LABEL_NUM]={
@@ -1245,6 +1273,10 @@ const char *const es_pack[LABEL_NUM]={
   ES_MOVE_SPEED,
   ES_KNOB_LED,
   ES_M0_PAUSE,
+  ES_SEND_START_GCODE,
+  ES_SEND_END_GCODE,
+  ES_PERSISTANT_STATUS_INFO,
+  ES_FILE_LISTMODE,
 };
 
 const char *const fr_pack[LABEL_NUM]={
@@ -1399,6 +1431,10 @@ const char *const fr_pack[LABEL_NUM]={
   FR_MOVE_SPEED,
   FR_KNOB_LED,
   FR_M0_PAUSE,
+  FR_SEND_START_GCODE,
+  FR_SEND_END_GCODE,
+  FR_PERSISTANT_STATUS_INFO,
+  FR_FILE_LISTMODE,
 };
 
 const char *const pt_pack[LABEL_NUM]={
@@ -1553,6 +1589,10 @@ const char *const pt_pack[LABEL_NUM]={
   PT_MOVE_SPEED,
   PT_KNOB_LED,
   PT_M0_PAUSE,
+  PT_SEND_START_GCODE,
+  PT_SEND_END_GCODE,
+  PT_PERSISTANT_STATUS_INFO,
+  PT_FILE_LISTMODE,
 };
 
 const char *const it_pack[LABEL_NUM]={
@@ -1707,6 +1747,10 @@ const char *const it_pack[LABEL_NUM]={
   IT_MOVE_SPEED,
   IT_KNOB_LED,
   IT_M0_PAUSE,
+  IT_SEND_START_GCODE,
+  IT_SEND_END_GCODE,
+  IT_PERSISTANT_STATUS_INFO,
+  IT_FILE_LISTMODE,
 };
 
 const char *const pl_pack[LABEL_NUM]={
@@ -1861,6 +1905,10 @@ const char *const pl_pack[LABEL_NUM]={
   PL_MOVE_SPEED,
   PL_KNOB_LED,
   PL_M0_PAUSE,
+  PL_SEND_START_GCODE,
+  PL_SEND_END_GCODE,
+  PL_PERSISTANT_STATUS_INFO,
+  PL_FILE_LISTMODE,
 };
 
 const char *const sk_pack[LABEL_NUM]={
@@ -2015,6 +2063,10 @@ const char *const sk_pack[LABEL_NUM]={
   SK_MOVE_SPEED,
   SK_KNOB_LED,
   SK_M0_PAUSE,
+  SK_SEND_START_GCODE,
+  SK_SEND_END_GCODE,
+  SK_PERSISTANT_STATUS_INFO,
+  SK_FILE_LISTMODE,
 };
 
 const char *const du_pack[LABEL_NUM]={
@@ -2169,6 +2221,10 @@ const char *const du_pack[LABEL_NUM]={
   DU_MOVE_SPEED,
   DU_KNOB_LED,
   DU_M0_PAUSE,
+  DU_SEND_START_GCODE,
+  DU_SEND_END_GCODE,
+  DU_PERSISTANT_STATUS_INFO,
+  DU_FILE_LISTMODE,
 };
 
 u8 * textSelect(u8 sel)

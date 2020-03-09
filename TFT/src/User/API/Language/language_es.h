@@ -152,5 +152,9 @@
     #define ES_MOVE_SPEED           "Move speed(X Y Z)"
     #define ES_KNOB_LED             "Rotary Knob LED"
     #define ES_M0_PAUSE             "Paused by M0 command"
+    #define ES_SEND_START_GCODE     "Start Gcode before print"
+    #define ES_SEND_END_GCODE       "End Gcode after print"
+    #define ES_PERSISTANT_STATUS_INFO "Persistent Status Info"
+    #define ES_FILE_LISTMODE        "Files viewer List Mode"
 
 #endif

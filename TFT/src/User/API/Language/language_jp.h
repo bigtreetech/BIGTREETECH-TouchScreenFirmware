@@ -152,5 +152,9 @@
     #define JP_MOVE_SPEED           "Move speed(X Y Z)"
     #define JP_KNOB_LED             "Rotary Knob LED"
     #define JP_M0_PAUSE             "Paused by M0 command"
+    #define JP_SEND_START_GCODE     "Start Gcode before print"
+    #define JP_SEND_END_GCODE       "End Gcode after print"
+    #define JP_PERSISTANT_STATUS_INFO "Persistent Status Info"
+    #define JP_FILE_LISTMODE        "Files viewer List Mode"
     
 #endif

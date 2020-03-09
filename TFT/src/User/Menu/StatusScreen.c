@@ -123,7 +123,7 @@ void drawTemperature(void)
     fs = (fanGetSpeed(current_fan)*100)/255;
     my_sprintf(tempstr, "%d%%", fs); 
   #else
-    fs = fanSpeed[curIndex];
+    fs = fanSpeed[current_fan];
     my_sprintf(tempstr, "%d", fs);
   #endif 
   GUI_DispStringInPrect(&rectB[2], (u8 *)tempstr);                        //Fan value

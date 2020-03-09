@@ -141,7 +141,7 @@ u16 Key_value(u8 total_rect,const GUI_RECT* menuRect)
     if((x>menuRect[i].x0)&&(x<menuRect[i].x1)&&(y>menuRect[i].y0)&&(y<menuRect[i].y1))
     {
       #ifdef BUZZER_PIN
-        openBuzzer(3, 11);
+        openBuzzer(LCD_FEEDBACK_FREQUENCY_H_US, LCD_FEEDBACK_FREQUENCY_DURATION_L_US);
       #endif
       return i;
     }
