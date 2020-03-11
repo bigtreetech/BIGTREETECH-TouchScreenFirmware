@@ -85,9 +85,9 @@
     #define SK_X_DEC                "X-"
     #define SK_Y_DEC                "Y-"
     #define SK_Z_DEC                "Z-"
-    #define SK_X_HOME               "X"
-    #define SK_Y_HOME               "Y"
-    #define SK_Z_HOME               "Z"
+    #define SK_X                    "X"
+    #define SK_Y                    "Y"
+    #define SK_Z                    "Z"
     #define SK_001_MM               "0.01mm"
     #define SK_01_MM                "0.1mm"
     #define SK_1_MM                 "1mm"
@@ -157,5 +157,7 @@
     #define SK_SEND_END_GCODE       "End Gcode after print"
     #define SK_PERSISTANT_STATUS_INFO "Persistent Status Info"
     #define SK_FILE_LISTMODE        "Files viewer List Mode"
+    #define SK_CURRENT_SETTING      "Driver Current Settings"
+    #define SK_STEPS_SETTING        "Steps per MM Settings"
 
 #endif

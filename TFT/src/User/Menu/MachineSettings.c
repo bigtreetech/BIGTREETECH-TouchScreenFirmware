@@ -242,7 +242,8 @@ void menuCustom(void)
         if (item_index < CKEY_COUNT){
           customItems.items[i].icon = ICONCHAR_CODE;
           customItems.items[i].titlelabel.index = LABEL_DYNAMIC;
-          dynamic_label[i] = (char *)gcodelist[item_index][0];
+          //dynamic_label[i] = (char *)gcodelist[item_index][0];
+          setDynamicLabel(i,(char *)gcodelist[item_index][0]);
         }
         else{
           customItems.items[i].icon = ICONCHAR_BACKGROUND;

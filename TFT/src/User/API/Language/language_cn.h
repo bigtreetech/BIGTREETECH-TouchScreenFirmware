@@ -85,9 +85,9 @@
     #define CN_X_DEC                "X-"
     #define CN_Y_DEC                "Y-"
     #define CN_Z_DEC                "Z-"
-    #define CN_X_HOME               "X"
-    #define CN_Y_HOME               "Y"
-    #define CN_Z_HOME               "Z"
+    #define CN_X                    "X"
+    #define CN_Y                    "Y"
+    #define CN_Z                    "Z"
     #define CN_001_MM               "0.01mm"
     #define CN_01_MM                "0.1mm"
     #define CN_1_MM                 "1mm"
@@ -157,5 +157,7 @@
     #define CN_SEND_END_GCODE       "End Gcode after print"
     #define CN_PERSISTANT_STATUS_INFO "Persistent Status Info"
     #define CN_FILE_LISTMODE        "Files viewer List Mode"
+    #define CN_CURRENT_SETTING      "Driver Current Settings"
+    #define CN_STEPS_SETTING        "Steps per MM Settings"
 
 #endif

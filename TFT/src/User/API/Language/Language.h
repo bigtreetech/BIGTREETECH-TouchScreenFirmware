@@ -111,9 +111,9 @@ enum
   LABEL_X_DEC,
   LABEL_Y_DEC,
   LABEL_Z_DEC,
-  LABEL_X_HOME,
-  LABEL_Y_HOME,
-  LABEL_Z_HOME,
+  LABEL_X,
+  LABEL_Y,
+  LABEL_Z,
   LABEL_001_MM,
   LABEL_01_MM,
   LABEL_1_MM,
@@ -183,6 +183,8 @@ enum
   LABEL_SEND_END_GCODE,
   LABEL_PERSISTENT_STATUS_INFO,
   LABEL_FILE_LISTMODE,
+  LABEL_CURRENT_SETTING,
+  LABEL_STEPS_SETTING,
   
   //add new keywords above this line only
   //keep the following always at the end of this list

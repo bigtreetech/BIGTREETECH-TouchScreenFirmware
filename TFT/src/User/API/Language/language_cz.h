@@ -85,9 +85,9 @@
     #define CZ_X_DEC                "X-"
     #define CZ_Y_DEC                "Y-"
     #define CZ_Z_DEC                "Z-"
-    #define CZ_X_HOME               "X"
-    #define CZ_Y_HOME               "Y"
-    #define CZ_Z_HOME               "Z"
+    #define CZ_X                    "X"
+    #define CZ_Y                    "Y"
+    #define CZ_Z                    "Z"
     #define CZ_001_MM               "0,01mm"
     #define CZ_01_MM                "0,1mm"
     #define CZ_1_MM                 "1mm"
@@ -157,5 +157,7 @@
     #define CZ_SEND_END_GCODE       "End Gcode after print"
     #define CZ_PERSISTANT_STATUS_INFO "Persistent Status Info"
     #define CZ_FILE_LISTMODE        "Files viewer List Mode"
+    #define CZ_CURRENT_SETTING      "Driver Current Settings"
+    #define CZ_STEPS_SETTING        "Steps per MM Settings"
 
 #endif

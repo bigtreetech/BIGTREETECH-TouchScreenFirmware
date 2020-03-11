@@ -85,9 +85,9 @@
     #define ES_X_DEC                "-X"
     #define ES_Y_DEC                "-Y"
     #define ES_Z_DEC                "-Z"
-    #define ES_X_HOME               "X"
-    #define ES_Y_HOME               "Y"
-    #define ES_Z_HOME               "Z"
+    #define ES_X                    "X"
+    #define ES_Y                    "Y"
+    #define ES_Z                    "Z"
     #define ES_001_MM               "0.01mm"
     #define ES_01_MM                "0.1mm"
     #define ES_1_MM                 "1mm"
@@ -157,5 +157,7 @@
     #define ES_SEND_END_GCODE       "End Gcode after print"
     #define ES_PERSISTANT_STATUS_INFO "Persistent Status Info"
     #define ES_FILE_LISTMODE        "Files viewer List Mode"
+    #define ES_CURRENT_SETTING      "Driver Current Settings"
+    #define ES_STEPS_SETTING        "Steps per MM Settings"
 
 #endif

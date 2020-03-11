@@ -85,9 +85,9 @@
     #define IT_X_DEC                "X-"
     #define IT_Y_DEC                "Y-"
     #define IT_Z_DEC                "Z-"
-    #define IT_X_HOME               "X"
-    #define IT_Y_HOME               "Y"
-    #define IT_Z_HOME               "Z"
+    #define IT_X                    "X"
+    #define IT_Y                    "Y"
+    #define IT_Z                    "Z"
     #define IT_001_MM               "0.01mm"
     #define IT_01_MM                "0.1mm"
     #define IT_1_MM                 "1mm"
@@ -157,5 +157,7 @@
     #define IT_SEND_END_GCODE       "End Gcode after print"
     #define IT_PERSISTANT_STATUS_INFO "Persistent Status Info"
     #define IT_FILE_LISTMODE        "Files viewer List Mode"
+    #define IT_CURRENT_SETTING      "Driver Current Settings"
+    #define IT_STEPS_SETTING        "Steps per MM Settings"
 
 #endif
