@@ -13,7 +13,7 @@
   #define PICON_SPACE_Y      (ICON_HEIGHT + SPACE_Y - PICON_HEIGHT*2)/2
   #define PICON_TITLE_X      52
   #define PICON_TITLE_Y      1
-  #define PICON_VAL_X        52
+  #define PICON_VAL_X        PICON_TITLE_X
   #define PICON_VAL_Y        (PICON_HEIGHT/2)
   #define PICON_VAL_LG_EX    150
   #define PICON_VAL_SM_EX    117
@@ -27,14 +27,14 @@
   #define PICON_SPACE_Y      (ICON_HEIGHT + SPACE_Y - PICON_HEIGHT*2)/2
   #define PICON_TITLE_X      37
   #define PICON_TITLE_Y      1
-  #define PICON_VAL_X        (PICON_HEIGHT/2)
-  #define PICON_VAL_Y        25
+  #define PICON_VAL_X        PICON_TITLE_X
+  #define PICON_VAL_Y        PICON_HEIGHT - BYTE_HEIGHT - 2
   #define PICON_VAL_LG_EX    104
   #define PICON_VAL_SM_EX    85
 
 #endif
 
-typedef struct 
+typedef struct
 {
   FIL     file;
 

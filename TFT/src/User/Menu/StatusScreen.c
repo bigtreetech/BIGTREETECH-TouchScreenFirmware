@@ -2,7 +2,7 @@
 #include "includes.h"
 #include "GUI.h"
 //1 title, ITEM_PER_PAGE items (icon + label)
-MENUITEMS StatusItems = {
+const MENUITEMS StatusItems = {
 // title
 LABEL_READY,
 // icon                       label
@@ -11,8 +11,8 @@ LABEL_READY,
   {ICON_STATUSFAN,            LABEL_BACKGROUND},
   {ICON_STATUS_SPEED,         LABEL_BACKGROUND},
   {ICON_MAINMENU,             LABEL_MAINMENU},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND}, //Reserved for gantry position to be added later
-  {ICON_BACKGROUND,           LABEL_BACKGROUND}, //Reserved for gantry position to be added later
+  {ICON_BACKGROUND,           LABEL_BACKGROUND},
+  {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_PRINT,                LABEL_PRINT},}
 };
 
@@ -21,9 +21,6 @@ const ITEM ToolItems[3] = {
   {ICON_STATUSNOZZLE,         LABEL_BACKGROUND},
   {ICON_STATUSBED,            LABEL_BACKGROUND},
   {ICON_STATUSFAN,            LABEL_BACKGROUND},
-//{ICON_HEAT_STATUS,          LABEL_BACKGROUND},
-//{ICON_BED_STATUS,           LABEL_BACKGROUND},
-//{ICON_FAN_STATUS,           LABEL_BACKGROUND},
 };
 const ITEM SpeedItems[2] = {
 // icon                       label
@@ -39,7 +36,6 @@ static int lastConnection_status = -1;
 static char msgtitle[20];
 static char msgbody[512];
 
-//static char msgxyz[512];
 static float xaxis;
 static float yaxis;
 static float zaxis;

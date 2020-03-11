@@ -54,6 +54,7 @@
 #include "Parametersetting.h"
 
 #include "extend.h"
+#include "SanityCheck.h"
 
 //menu
 #include "menu.h"

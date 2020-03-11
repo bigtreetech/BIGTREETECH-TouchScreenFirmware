@@ -29,19 +29,19 @@
  *
  * Select the language to display on the LCD. These languages are available:
  * ENGLISH, CHINESE, RUSSIAN, JAPANESE, ARMENIAN, GERMAN, CZECH, SPAIN, FRENCH, PORTUGUESE, ITALIAN, POLISH, SLOVAK, DUTCH
- * 
+ *
  */
 #define DEFAULT_LANGUAGE ENGLISH
 
 /**
  * Default LCD Mode
  *
- * Select the default LCD mode. You can always switch between the modes. 
- * 
+ * Select the default LCD mode. You can always switch between the modes.
+ *
  * These are available:
  * ST7920_SPI // LCD12864 Sumilator
- * SERIAL_TSC // Default 
- * 
+ * SERIAL_TSC // Default
+ *
  */
 #define DEFAULT_LCD_MODE SERIAL_TSC
 
@@ -59,12 +59,12 @@
 #define ST7920_FNCOLOR YELLOW
 
 /**
- *  Text displayed at the top of the LCD in Marlin Mode. 
+ *  Text displayed at the top of the LCD in Marlin Mode.
  */
 //#define ST7920_BANNER_TEXT "LCD12864 Simulator"
 
 /**
- * Run Marlin Mode fullscreen. 
+ * Run Marlin Mode fullscreen.
  * Not recommended for TFT24.
  */
 //#define ST7920_FULLSCREEN
@@ -72,10 +72,10 @@
 /**
  * CLEAN MODE SWITCHING SUPPORT
  * Support for keeping UART(Serial communication) alive in Marlin Mode
- * Gives the ability to connect Octoprint over UART to the TFT UART/serial 
- * expansion port and have it work seamlessly no matter which mode the TFT is in. 
+ * Gives the ability to connect Octoprint over UART to the TFT UART/serial
+ * expansion port and have it work seamlessly no matter which mode the TFT is in.
  * Only for TFT24 V1.1, TFT35 V3.0 or TFT28 V3.0
- */ 
+ */
 //#define CLEAN_MODE_SWITCHING_SUPPORT  // Enable CLEAN MODE SWITCHING SUPPORT
 
 /**
@@ -84,7 +84,7 @@
  *                                          4: LED_ORANGE,  5: LED_YELLOW,  6: LED_GREEN,
  *                                          7: LED_BLUE,    8: LED_INDIGO,  9: LED_VIOLET
  * Default value is: 1 for LED_OFF
- * 
+ *
 */
 #define STARTUP_KNOB_LED_COLOR 1 //LED_OFF
 
@@ -99,7 +99,7 @@
 
 /**
  * TFT mode color
- */ 
+ */
 #define TITLE_BACKGROUND_COLOR      BLACK  // Title background color // 0xD928
 #define BACKGROUND_COLOR            BLACK  // Background color // 0x0A29
 #define FONT_COLOR                  WHITE  // Font foreground color
@@ -238,7 +238,7 @@
 
 /**
  * Rapid Serial Communication:More frequent Serial communicaiton while printing.
- * The controller will send and parse  gcodes more frequently  while drawing on 
+ * The controller will send and parse  gcodes more frequently  while drawing on
  * screen to prevent printer idling and stuttering  due to empty printer buffer.
  * Note: this might make the  graphics slow when switching menus while printing.
 */
@@ -300,7 +300,7 @@ custom gcode below are compatible only if CUSTOM_GCODE_LIST_MODE is active
 //
 //Start Gcode - run this gcode before starting print
 //
-#define PRINT_START_GCODE "G28\nG29\n" // home and abl
+#define PRINT_START_GCODE "G28\nG29\nG1 Z20\n" // home and abl
 
 //
 //End Gcode - run this gcode after finishing print
