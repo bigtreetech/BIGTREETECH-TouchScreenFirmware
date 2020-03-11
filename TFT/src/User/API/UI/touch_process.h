@@ -34,4 +34,3 @@ void Buzzer_DeConfig(void);
 void openBuzzer(u16 h_us, u16 l_us);
 
 #endif
-

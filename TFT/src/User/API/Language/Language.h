@@ -173,12 +173,17 @@ enum
   LABEL_AUTO,
   LABEL_SMART,
   LABEL_TERMINAL_ACK,
+  LABEL_INVERT_XAXIS,
   LABEL_INVERT_YAXIS,
   LABEL_INVERT_ZAXIS,
   LABEL_MOVE_SPEED,
   LABEL_KNOB_LED,
   LABEL_M0_PAUSE,
-
+  LABEL_SEND_START_GCODE,
+  LABEL_SEND_END_GCODE,
+  LABEL_PERSISTENT_STATUS_INFO,
+  LABEL_FILE_LISTMODE,
+  
   //add new keywords above this line only
   //keep the following always at the end of this list
   LABEL_NUM,

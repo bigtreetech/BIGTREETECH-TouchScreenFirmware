@@ -11,21 +11,24 @@ const char *const ignoreEcho[] = {
   "Probe Z Offset:",
 };
 
+bool portSeen[_USART_CNT] = {false, false, false, false, false, false};
+
 void setCurrentAckSrc(uint8_t src)
 {
   ack_cur_src = src;
+  portSeen[src] = true;
 }
 
 static char ack_seen(const char *str)
 {
-  u16 i;	
+  u16 i;
   for(ack_index=0; ack_index<ACK_MAX_SIZE && dmaL2Cache[ack_index]!=0; ack_index++)
   {
     for(i=0; str[i]!=0 && dmaL2Cache[ack_index+i]!=0 && dmaL2Cache[ack_index+i]==str[i]; i++)
     {}
     if(str[i]==0)
     {
-      ack_index += i;      
+      ack_index += i;
       return true;
     }
   }
@@ -57,7 +60,7 @@ static float ack_second_value()
   {
     return (strtod(secondValue+1, NULL));
   }
-  else 
+  else
   {
     return -0.5;
   }
@@ -70,10 +73,10 @@ void ackPopupInfo(const char *info)
   if (info == echomagic)
   {
     statusScreen_setMsg((u8 *)info, (u8 *)dmaL2Cache + ack_index);
-  }  
+  }
   if (infoMenu.menu[infoMenu.cur] == menuTerminal) return;
   if (infoMenu.menu[infoMenu.cur] == menuStatus && info == echomagic) return;
-  
+
   popupReminder((u8* )info, (u8 *)dmaL2Cache + ack_index);
 }
 
@@ -89,21 +92,22 @@ void syncL2CacheFromL1(uint8_t port)
 }
 
 void parseACK(void)
-{ 
+{
   bool avoid_terminal = false;
   if(infoHost.rx_ok[SERIAL_PORT] != true) return; //not get response data
-  
+
   syncL2CacheFromL1(SERIAL_PORT);
   infoHost.rx_ok[SERIAL_PORT] = false;
-  
+
   if(infoHost.connected == false) //not connected to Marlin
   {
     if((!ack_seen("T:") && !ack_seen("T0:")) || !ack_seen("ok"))  goto parse_end;  //the first response should be such as "T:25/50 ok\n"
+    updateLastHeatCheckTime();
     infoHost.connected = true;
     #ifdef AUTO_SAVE_LOAD_LEVELING_VALUE
       storeCmd("M420 S1\n");
     #endif
-  }    
+  }
 
   // GCode command response
   if(requestCommandInfo.inWaitResponse && ack_seen(requestCommandInfo.startMagic))
@@ -116,7 +120,7 @@ void parseACK(void)
     if(strlen(requestCommandInfo.cmd_rev_buf)+strlen(dmaL2Cache) < CMD_MAX_REV)
     {
       strcat(requestCommandInfo.cmd_rev_buf, dmaL2Cache);
-      
+
       if(ack_seen(requestCommandInfo.errorMagic ))
       {
         requestCommandInfo.done = true;
@@ -129,7 +133,7 @@ void parseACK(void)
         requestCommandInfo.inResponse = false;
       }
     }
-    else 
+    else
     {
       requestCommandInfo.done = true;
       requestCommandInfo.inResponse = false;
@@ -137,12 +141,12 @@ void parseACK(void)
     }
     infoHost.wait = false;
     goto parse_end;
-  }  
-  // end 
+  }
+  // end
 
   if(ack_cmp("ok\n"))
   {
-    infoHost.wait = false;	
+    infoHost.wait = false;
   }
   else
   {
@@ -164,30 +168,28 @@ void parseACK(void)
           storegantry(2, ack_value());
         }
       }
-    }					
-    else if(ack_seen("T:") || ack_seen("T0:")) 
+    }
+    else if(ack_seen("T:") || ack_seen("T0:"))
     {
       heatSetCurrentTemp(heatGetCurrentToolNozzle(), ack_value()+0.5);
       heatSyncTargetTemp(heatGetCurrentToolNozzle(), ack_second_value()+0.5);
       for(TOOL i = BED; i < HEATER_NUM; i++)
       {
-        if(ack_seen(toolID[i])) 
+        if(ack_seen(toolID[i]))
         {
           heatSetCurrentTemp(i, ack_value()+0.5);
           heatSyncTargetTemp(i, ack_second_value()+0.5);
-        }      
+        }
       }
-     #ifdef MENU_LIST_MODE
       avoid_terminal = infoSettings.terminalACK;
-    #endif
+      updateLastHeatCheckTime();
     }
-    else if(ack_seen("B:"))		
+    else if(ack_seen("B:"))
     {
-      heatSetCurrentTemp(BED,ack_value()+0.5);
+      heatSetCurrentTemp(BED, ack_value()+0.5);
       heatSyncTargetTemp(BED, ack_second_value()+0.5);
-      #ifdef MENU_LIST_MODE
       avoid_terminal = infoSettings.terminalACK;
-      #endif
+      updateLastHeatCheckTime();
     }
     else if(ack_seen("Mean:"))
     {
@@ -239,7 +241,7 @@ void parseACK(void)
       if(ack_seen("E"))
       Get_parameter_value[7] = ack_value();
     }
-#ifdef ONBOARD_SD_SUPPORT     
+#ifdef ONBOARD_SD_SUPPORT
     else if(ack_seen(bsdnoprintingmagic) && infoMenu.menu[infoMenu.cur] == menuPrinting)
     {
       infoHost.printing = false;
@@ -254,11 +256,11 @@ void parseACK(void)
       // Parsing printing data
       // Example: SD printing byte 123/12345
       char *ptr;
-      u32 position = strtol(strstr(dmaL2Cache, "byte ")+5, &ptr, 10); 
+      u32 position = strtol(strstr(dmaL2Cache, "byte ")+5, &ptr, 10);
       setPrintCur(position);
 //      powerFailedCache(position);
-    }    
-#endif    
+    }
+#endif
     else if(ack_seen(errormagic))
     {
       ackPopupInfo(errormagic);
@@ -276,12 +278,25 @@ void parseACK(void)
   {
       fanSetSpeed(0, ack_value());
   }
-  
-parse_end:    
+
+parse_end:
   if(ack_cur_src != SERIAL_PORT)
   {
     Serial_Puts(ack_cur_src, dmaL2Cache);
   }
+  else if (!ack_seen("ok"))
+  {
+    // make sure we pass on spontaneous messages to all connected ports (since these can come unrequested)
+    for (int port = 0; port < _USART_CNT; port++)
+    {
+      if (port != SERIAL_PORT && portSeen[port])
+      {
+        // pass on this one to anyone else who might be listening
+        Serial_Puts(port, dmaL2Cache);
+      }
+    }        
+  }
+
   if (avoid_terminal != true){
     sendGcodeTerminalCache(dmaL2Cache, TERMINAL_ACK);
   }

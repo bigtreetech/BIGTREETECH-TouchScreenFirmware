@@ -1,7 +1,7 @@
 #include "Extrude.h"
 #include "includes.h"
 
-//1��title(����), ITEM_PER_PAGE��item(ͼ��+��ǩ) 
+//1��title(����), ITEM_PER_PAGE��item(ͼ��+��ǩ)
 MENUITEMS extrudeItems = {
 //   title
 LABEL_EXTRUDE,
@@ -77,13 +77,16 @@ void menuExtrude(void)
   u32   feedrate = 0;
 
   while(infoCmd.count != 0) {loopProcess();}
-  extrudeCoordinate = eTemp = eSaved = coordinateGetAxisTarget(E_AXIS);                
+  extrudeCoordinate = eTemp = eSaved = coordinateGetAxisTarget(E_AXIS);
   feedrate = coordinateGetFeedRate();
   eRelative = eGetRelative();
 
   menuDrawPage(&extrudeItems);
   showExtrudeCoordinate();
-  
+
+  #if LCD_ENCODER_SUPPORT
+    encoderPosition = 0;
+  #endif
   if(eRelative) mustStoreCmd("M82\n"); // Set extruder to absolute
   while(infoMenu.menu[infoMenu.cur] == menuExtrude)
   {
@@ -93,11 +96,11 @@ void menuExtrude(void)
       case KEY_ICON_0:
         eTemp -= item_len[item_len_i];
         break;
-      
+
       case KEY_ICON_3:
         eTemp += item_len[item_len_i];
         break;
-      
+
       case KEY_ICON_4:
         item_extruder_i = (item_extruder_i + 1) % ITEM_EXTRUDER_NUM;
         showExtrudeCoordinate();
@@ -108,20 +111,28 @@ void menuExtrude(void)
         extrudeItems.items[key_num] = itemSpeed[item_speed_i];
         menuDrawItem(&extrudeItems.items[key_num], key_num);
         break;
-      
+
       case KEY_ICON_6:
         item_len_i = (item_len_i+1) % ITEM_LEN_NUM;
         extrudeItems.items[key_num] = itemLen[item_len_i];
         menuDrawItem(&extrudeItems.items[key_num], key_num);
         break;
 
-      case KEY_ICON_7: 
-        infoMenu.cur--; 
+      case KEY_ICON_7:
+        infoMenu.cur--;
         break;
-      
+
       default:
-        break;            
-    }	
+        #if LCD_ENCODER_SUPPORT
+          if(encoderPosition)
+          {
+            eTemp += item_len[item_len_i]*encoderPosition;
+            encoderPosition = 0;
+          }
+          LCD_LoopEncoder();
+        #endif
+        break;
+    }
     if(extrudeCoordinate != eTemp)
     {
       extrudeCoordinate = eTemp;
@@ -132,16 +143,7 @@ void menuExtrude(void)
     }
     loopProcess();
   }
-  mustStoreCmd("G92 E%.5f\n",eSaved);   
+  mustStoreCmd("G92 E%.5f\n",eSaved);
   mustStoreCmd("G0 F%d\n",feedrate);
   if(eRelative) mustStoreCmd("M83\n"); // Set extruder to relative
 }
-
-
-
-
-
-
-
-
-

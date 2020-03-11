@@ -27,7 +27,7 @@ void show_selectICON(void)
 bool LCD_ReadPen(uint8_t intervals)
 {
   static u32 TouchTime = 0;
-  
+
   if(!XPT2046_Read_Pen())
   {
     if(OS_GetTime() - TouchTime > intervals)
@@ -69,15 +69,15 @@ bool LCD_BtnTouch(uint8_t intervals)
   static u32 CTime = 0;
   static u16 sy;
 	static bool MOVE = false;
-	
+
 	if(!XPT2046_Read_Pen() && CTime < OS_GetTime())
   {
 		TS_Get_Coordinates(&ex,&ey);
 		if(!MOVE)
 		sy = ey;
-			
+
 		MOVE = true;
-			
+
 		if((sy>ey) && ey!=0)
 		{
             if(sy-ey > LCD_HEIGHT/9 && sy-ey < LCD_HEIGHT/7)//7-5
@@ -88,7 +88,7 @@ bool LCD_BtnTouch(uint8_t intervals)
 			}
             return 0;
 		}
-    else 
+    else
 		{
             if(ey-sy > LCD_HEIGHT/9 && ey-sy < LCD_HEIGHT/7)
 			{
@@ -104,7 +104,7 @@ bool LCD_BtnTouch(uint8_t intervals)
 		sy = ey =0;
 		MOVE = false;
     return 0;
-	}	
+	}
 }
 #endif
 
@@ -158,13 +158,13 @@ void Touch_Sw(uint8_t num)
 			GPIO_SetLevel(LCD_ENCB_PIN, 1);
 			break;
 	}
-  
+
   LCD_EncoderInit();
 }
 
 MKEY_VALUES MKeyGetValue(void)
-{    
-  return (MKEY_VALUES)KEY_GetValue(sizeof(rect_of_mode)/sizeof(rect_of_mode[0]), rect_of_mode);    
+{
+  return (MKEY_VALUES)KEY_GetValue(sizeof(rect_of_mode)/sizeof(rect_of_mode[0]), rect_of_mode);
 }
 
 void selectmode(int8_t  nowMode)

@@ -34,6 +34,4 @@ void W25Qxx_EraseBulk(void);
 uint32_t W25Qxx_ReadID(void);
 
 
-#endif 
-
-
+#endif

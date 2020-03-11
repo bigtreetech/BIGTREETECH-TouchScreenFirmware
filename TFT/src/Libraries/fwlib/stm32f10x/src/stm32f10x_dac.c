@@ -27,10 +27,10 @@
   * @{
   */
 
-/** @defgroup DAC 
+/** @defgroup DAC
   * @brief DAC driver modules
   * @{
-  */ 
+  */
 
 /** @defgroup DAC_Private_TypesDefinitions
   * @{
@@ -104,9 +104,9 @@ void DAC_DeInit(void)
 }
 
 /**
-  * @brief  Initializes the DAC peripheral according to the specified 
+  * @brief  Initializes the DAC peripheral according to the specified
   *         parameters in the DAC_InitStruct.
-  * @param  DAC_Channel: the selected DAC channel. 
+  * @param  DAC_Channel: the selected DAC channel.
   *   This parameter can be one of the following values:
   *     @arg DAC_Channel_1: DAC Channel1 selected
   *     @arg DAC_Channel_2: DAC Channel2 selected
@@ -131,8 +131,8 @@ void DAC_Init(uint32_t DAC_Channel, DAC_InitTypeDef* DAC_InitStruct)
      mask/amplitude for wave generation */
   /* Set TSELx and TENx bits according to DAC_Trigger value */
   /* Set WAVEx bits according to DAC_WaveGeneration value */
-  /* Set MAMPx bits according to DAC_LFSRUnmask_TriangleAmplitude value */ 
-  /* Set BOFFx bit according to DAC_OutputBuffer value */   
+  /* Set MAMPx bits according to DAC_LFSRUnmask_TriangleAmplitude value */
+  /* Set BOFFx bit according to DAC_OutputBuffer value */
   tmpreg2 = (DAC_InitStruct->DAC_Trigger | DAC_InitStruct->DAC_WaveGeneration |
              DAC_InitStruct->DAC_LFSRUnmask_TriangleAmplitude | DAC_InitStruct->DAC_OutputBuffer);
   /* Calculate CR register value depending on DAC_Channel */
@@ -162,11 +162,11 @@ void DAC_StructInit(DAC_InitTypeDef* DAC_InitStruct)
 
 /**
   * @brief  Enables or disables the specified DAC channel.
-  * @param  DAC_Channel: the selected DAC channel. 
+  * @param  DAC_Channel: the selected DAC channel.
   *   This parameter can be one of the following values:
   *     @arg DAC_Channel_1: DAC Channel1 selected
   *     @arg DAC_Channel_2: DAC Channel2 selected
-  * @param  NewState: new state of the DAC channel. 
+  * @param  NewState: new state of the DAC channel.
   *   This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
@@ -189,23 +189,23 @@ void DAC_Cmd(uint32_t DAC_Channel, FunctionalState NewState)
 #if defined (STM32F10X_LD_VL) || defined (STM32F10X_MD_VL) || defined (STM32F10X_HD_VL)
 /**
   * @brief  Enables or disables the specified DAC interrupts.
-  * @param  DAC_Channel: the selected DAC channel. 
+  * @param  DAC_Channel: the selected DAC channel.
   *   This parameter can be one of the following values:
   *     @arg DAC_Channel_1: DAC Channel1 selected
   *     @arg DAC_Channel_2: DAC Channel2 selected
-  * @param  DAC_IT: specifies the DAC interrupt sources to be enabled or disabled. 
+  * @param  DAC_IT: specifies the DAC interrupt sources to be enabled or disabled.
   *   This parameter can be the following values:
-  *     @arg DAC_IT_DMAUDR: DMA underrun interrupt mask                      
+  *     @arg DAC_IT_DMAUDR: DMA underrun interrupt mask
   * @param  NewState: new state of the specified DAC interrupts.
   *   This parameter can be: ENABLE or DISABLE.
   * @retval None
-  */ 
-void DAC_ITConfig(uint32_t DAC_Channel, uint32_t DAC_IT, FunctionalState NewState)  
+  */
+void DAC_ITConfig(uint32_t DAC_Channel, uint32_t DAC_IT, FunctionalState NewState)
 {
   /* Check the parameters */
   assert_param(IS_DAC_CHANNEL(DAC_Channel));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
-  assert_param(IS_DAC_IT(DAC_IT)); 
+  assert_param(IS_DAC_IT(DAC_IT));
 
   if (NewState != DISABLE)
   {
@@ -222,7 +222,7 @@ void DAC_ITConfig(uint32_t DAC_Channel, uint32_t DAC_IT, FunctionalState NewStat
 
 /**
   * @brief  Enables or disables the specified DAC channel DMA request.
-  * @param  DAC_Channel: the selected DAC channel. 
+  * @param  DAC_Channel: the selected DAC channel.
   *   This parameter can be one of the following values:
   *     @arg DAC_Channel_1: DAC Channel1 selected
   *     @arg DAC_Channel_2: DAC Channel2 selected
@@ -249,7 +249,7 @@ void DAC_DMACmd(uint32_t DAC_Channel, FunctionalState NewState)
 
 /**
   * @brief  Enables or disables the selected DAC channel software trigger.
-  * @param  DAC_Channel: the selected DAC channel. 
+  * @param  DAC_Channel: the selected DAC channel.
   *   This parameter can be one of the following values:
   *     @arg DAC_Channel_1: DAC Channel1 selected
   *     @arg DAC_Channel_2: DAC Channel2 selected
@@ -299,7 +299,7 @@ void DAC_DualSoftwareTriggerCmd(FunctionalState NewState)
 
 /**
   * @brief  Enables or disables the selected DAC channel wave generation.
-  * @param  DAC_Channel: the selected DAC channel. 
+  * @param  DAC_Channel: the selected DAC channel.
   *   This parameter can be one of the following values:
   *     @arg DAC_Channel_1: DAC Channel1 selected
   *     @arg DAC_Channel_2: DAC Channel2 selected
@@ -315,7 +315,7 @@ void DAC_WaveGenerationCmd(uint32_t DAC_Channel, uint32_t DAC_Wave, FunctionalSt
 {
   /* Check the parameters */
   assert_param(IS_DAC_CHANNEL(DAC_Channel));
-  assert_param(IS_DAC_WAVE(DAC_Wave)); 
+  assert_param(IS_DAC_WAVE(DAC_Wave));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
   if (NewState != DISABLE)
   {
@@ -340,14 +340,14 @@ void DAC_WaveGenerationCmd(uint32_t DAC_Channel, uint32_t DAC_Wave, FunctionalSt
   * @retval None
   */
 void DAC_SetChannel1Data(uint32_t DAC_Align, uint16_t Data)
-{  
+{
   __IO uint32_t tmp = 0;
-  
+
   /* Check the parameters */
   assert_param(IS_DAC_ALIGN(DAC_Align));
   assert_param(IS_DAC_DATA(Data));
-  
-  tmp = (uint32_t)DAC_BASE; 
+
+  tmp = (uint32_t)DAC_BASE;
   tmp += DHR12R1_OFFSET + DAC_Align;
 
   /* Set the DAC channel1 selected data holding register */
@@ -371,7 +371,7 @@ void DAC_SetChannel2Data(uint32_t DAC_Align, uint16_t Data)
   /* Check the parameters */
   assert_param(IS_DAC_ALIGN(DAC_Align));
   assert_param(IS_DAC_DATA(Data));
-  
+
   tmp = (uint32_t)DAC_BASE;
   tmp += DHR12R2_OFFSET + DAC_Align;
 
@@ -387,31 +387,31 @@ void DAC_SetChannel2Data(uint32_t DAC_Align, uint16_t Data)
   *     @arg DAC_Align_8b_R: 8bit right data alignment selected
   *     @arg DAC_Align_12b_L: 12bit left data alignment selected
   *     @arg DAC_Align_12b_R: 12bit right data alignment selected
-  * @param  Data2: Data for DAC Channel2 to be loaded in the selected data 
+  * @param  Data2: Data for DAC Channel2 to be loaded in the selected data
   *   holding register.
-  * @param  Data1: Data for DAC Channel1 to be loaded in the selected data 
+  * @param  Data1: Data for DAC Channel1 to be loaded in the selected data
   *   holding register.
   * @retval None
   */
 void DAC_SetDualChannelData(uint32_t DAC_Align, uint16_t Data2, uint16_t Data1)
 {
   uint32_t data = 0, tmp = 0;
-  
+
   /* Check the parameters */
   assert_param(IS_DAC_ALIGN(DAC_Align));
   assert_param(IS_DAC_DATA(Data1));
   assert_param(IS_DAC_DATA(Data2));
-  
+
   /* Calculate and set dual DAC data holding register value */
   if (DAC_Align == DAC_Align_8b_R)
   {
-    data = ((uint32_t)Data2 << 8) | Data1; 
+    data = ((uint32_t)Data2 << 8) | Data1;
   }
   else
   {
     data = ((uint32_t)Data2 << 16) | Data1;
   }
-  
+
   tmp = (uint32_t)DAC_BASE;
   tmp += DHR12RD_OFFSET + DAC_Align;
 
@@ -421,7 +421,7 @@ void DAC_SetDualChannelData(uint32_t DAC_Align, uint16_t Data2, uint16_t Data1)
 
 /**
   * @brief  Returns the last data output value of the selected DAC channel.
-  * @param  DAC_Channel: the selected DAC channel. 
+  * @param  DAC_Channel: the selected DAC channel.
   *   This parameter can be one of the following values:
   *     @arg DAC_Channel_1: DAC Channel1 selected
   *     @arg DAC_Channel_2: DAC Channel2 selected
@@ -430,13 +430,13 @@ void DAC_SetDualChannelData(uint32_t DAC_Align, uint16_t Data2, uint16_t Data1)
 uint16_t DAC_GetDataOutputValue(uint32_t DAC_Channel)
 {
   __IO uint32_t tmp = 0;
-  
+
   /* Check the parameters */
   assert_param(IS_DAC_CHANNEL(DAC_Channel));
-  
+
   tmp = (uint32_t) DAC_BASE ;
   tmp += DOR_OFFSET + ((uint32_t)DAC_Channel >> 2);
-  
+
   /* Returns the DAC channel data output register value */
   return (uint16_t) (*(__IO uint32_t*) tmp);
 }
@@ -444,13 +444,13 @@ uint16_t DAC_GetDataOutputValue(uint32_t DAC_Channel)
 #if defined (STM32F10X_LD_VL) || defined (STM32F10X_MD_VL) || defined (STM32F10X_HD_VL)
 /**
   * @brief  Checks whether the specified DAC flag is set or not.
-  * @param  DAC_Channel: thee selected DAC channel. 
+  * @param  DAC_Channel: thee selected DAC channel.
   *   This parameter can be one of the following values:
   *     @arg DAC_Channel_1: DAC Channel1 selected
   *     @arg DAC_Channel_2: DAC Channel2 selected
-  * @param  DAC_FLAG: specifies the flag to check. 
+  * @param  DAC_FLAG: specifies the flag to check.
   *   This parameter can be only of the following value:
-  *     @arg DAC_FLAG_DMAUDR: DMA underrun flag                                                 
+  *     @arg DAC_FLAG_DMAUDR: DMA underrun flag
   * @retval The new state of DAC_FLAG (SET or RESET).
   */
 FlagStatus DAC_GetFlagStatus(uint32_t DAC_Channel, uint32_t DAC_FLAG)
@@ -477,13 +477,13 @@ FlagStatus DAC_GetFlagStatus(uint32_t DAC_Channel, uint32_t DAC_FLAG)
 
 /**
   * @brief  Clears the DAC channelx's pending flags.
-  * @param  DAC_Channel: the selected DAC channel. 
+  * @param  DAC_Channel: the selected DAC channel.
   *   This parameter can be one of the following values:
   *     @arg DAC_Channel_1: DAC Channel1 selected
   *     @arg DAC_Channel_2: DAC Channel2 selected
-  * @param  DAC_FLAG: specifies the flag to clear. 
+  * @param  DAC_FLAG: specifies the flag to clear.
   *   This parameter can be of the following value:
-  *     @arg DAC_FLAG_DMAUDR: DMA underrun flag                           
+  *     @arg DAC_FLAG_DMAUDR: DMA underrun flag
   * @retval None
   */
 void DAC_ClearFlag(uint32_t DAC_Channel, uint32_t DAC_FLAG)
@@ -498,27 +498,27 @@ void DAC_ClearFlag(uint32_t DAC_Channel, uint32_t DAC_FLAG)
 
 /**
   * @brief  Checks whether the specified DAC interrupt has occurred or not.
-  * @param  DAC_Channel: the selected DAC channel. 
+  * @param  DAC_Channel: the selected DAC channel.
   *   This parameter can be one of the following values:
   *     @arg DAC_Channel_1: DAC Channel1 selected
   *     @arg DAC_Channel_2: DAC Channel2 selected
-  * @param  DAC_IT: specifies the DAC interrupt source to check. 
+  * @param  DAC_IT: specifies the DAC interrupt source to check.
   *   This parameter can be the following values:
-  *     @arg DAC_IT_DMAUDR: DMA underrun interrupt mask                       
+  *     @arg DAC_IT_DMAUDR: DMA underrun interrupt mask
   * @retval The new state of DAC_IT (SET or RESET).
   */
 ITStatus DAC_GetITStatus(uint32_t DAC_Channel, uint32_t DAC_IT)
 {
   ITStatus bitstatus = RESET;
   uint32_t enablestatus = 0;
-  
+
   /* Check the parameters */
   assert_param(IS_DAC_CHANNEL(DAC_Channel));
   assert_param(IS_DAC_IT(DAC_IT));
 
   /* Get the DAC_IT enable bit status */
   enablestatus = (DAC->CR & (DAC_IT << DAC_Channel)) ;
-  
+
   /* Check the status of the specified DAC interrupt */
   if (((DAC->SR & (DAC_IT << DAC_Channel)) != (uint32_t)RESET) && enablestatus)
   {
@@ -536,20 +536,20 @@ ITStatus DAC_GetITStatus(uint32_t DAC_Channel, uint32_t DAC_IT)
 
 /**
   * @brief  Clears the DAC channelx's interrupt pending bits.
-  * @param  DAC_Channel: the selected DAC channel. 
+  * @param  DAC_Channel: the selected DAC channel.
   *   This parameter can be one of the following values:
   *     @arg DAC_Channel_1: DAC Channel1 selected
   *     @arg DAC_Channel_2: DAC Channel2 selected
   * @param  DAC_IT: specifies the DAC interrupt pending bit to clear.
   *   This parameter can be the following values:
-  *     @arg DAC_IT_DMAUDR: DMA underrun interrupt mask                         
+  *     @arg DAC_IT_DMAUDR: DMA underrun interrupt mask
   * @retval None
   */
 void DAC_ClearITPendingBit(uint32_t DAC_Channel, uint32_t DAC_IT)
 {
   /* Check the parameters */
   assert_param(IS_DAC_CHANNEL(DAC_Channel));
-  assert_param(IS_DAC_IT(DAC_IT)); 
+  assert_param(IS_DAC_IT(DAC_IT));
 
   /* Clear the selected DAC interrupt pending bits */
   DAC->SR = (DAC_IT << DAC_Channel);

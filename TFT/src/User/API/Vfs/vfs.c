@@ -10,20 +10,20 @@ bool mountFS(void)
   {
     case TFT_SD:
       return mountSDCard();
-    
+
     case TFT_UDISK:
       return mountUDisk();
-    
+
     case BOARD_SD:
       return mountGcodeSDCard();
   }
   return false;
 }
 
-/* 
+/*
 */
 void clearInfoFile(void)
-{	
+{
   uint8_t i=0;
   for (i=0; i<infoFile.F_num; i++)
   {
@@ -35,7 +35,7 @@ void clearInfoFile(void)
     free(infoFile.file[i]);
     infoFile.file[i] = 0;
     free(infoFile.Longfile[i]);
-    infoFile.Longfile[i] = 0;    
+    infoFile.Longfile[i] = 0;
   }
   infoFile.F_num = 0;
   infoFile.f_num = 0;
@@ -52,7 +52,7 @@ TCHAR* getCurFileSource(void)
   return NULL;
 }
 
-/* 
+/*
 infoFile
 */
 void resetInfoFile(void)
@@ -61,11 +61,11 @@ void resetInfoFile(void)
   clearInfoFile();
   memset(&infoFile, 0, sizeof(infoFile));
   infoFile.source = source;
-  
+
   strcpy(infoFile.title, getCurFileSource());
 }
 
-/* 
+/*
 */
 bool scanPrintFiles(void)
 {
@@ -75,7 +75,7 @@ bool scanPrintFiles(void)
     case TFT_SD:
     case TFT_UDISK:
       return scanPrintFilesFatFs();
-    
+
     case BOARD_SD:
       return scanPrintFilesGcodeFs();
   }
@@ -92,18 +92,18 @@ bool EnterDir(char *nextdir)
   return 1;
 }
 
-/* 
+/*
 */
 void ExitDir(void)
 {
   int i=strlen(infoFile.title);
   for(;i>0&&infoFile.title[i]!='/';i--)
-  {	
+  {
   }
   infoFile.title[i]=0;
 }
 
-/* 
+/*
 */
 bool IsRootDir(void)
 {
@@ -122,9 +122,9 @@ bool isVolumeExist(u8 src)
 uint8_t (*volumeInserted[FF_VOLUMES])(void) = {SD_CD_Inserted, USBH_USR_Inserted};
 
 void loopVolumeSource(void)
-{   
+{
   for (u8 i = 0; i < FF_VOLUMES; i++)
-  {     
+  {
     if(volumeSrcStatus[i] != (*volumeInserted[i])())
     {
       const int16_t labelSDStates[FF_VOLUMES][2] = {{LABEL_TFTSD_REMOVED,  LABEL_TFTSD_INSERTED},

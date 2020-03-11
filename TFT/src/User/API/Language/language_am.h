@@ -147,10 +147,14 @@
     #define AM_AUTO                 "AUTO"
     #define AM_SMART                "SMART"
     #define AM_TERMINAL_ACK         "Hide Terminal ACK"
+	#define AM_INVERT_XAXIS         "Invert X Axis"
     #define AM_INVERT_YAXIS         "Invert Y Axis"
     #define AM_INVERT_ZAXIS         "Invert Z Axis"
     #define AM_MOVE_SPEED           "Move speed(X Y Z)"
     #define AM_KNOB_LED             "Rotary Knob LED"
     #define AM_M0_PAUSE             "Paused by M0 command"
-
+    #define AM_SEND_START_GCODE     "Start Gcode before print"
+    #define AM_SEND_END_GCODE       "End Gcode after print"
+    #define AM_PERSISTANT_STATUS_INFO "Persistent Status Info"
+    #define AM_FILE_LISTMODE        "Files viewer List Mode"
 #endif

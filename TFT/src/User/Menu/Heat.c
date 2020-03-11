@@ -1,7 +1,7 @@
 #include "Heat.h"
 #include "includes.h"
 
-//1 title, ITEM_PER_PAGE items (icon + label) 
+//1 title, ITEM_PER_PAGE items (icon + label)
 MENUITEMS heatItems = {
 // title
 LABEL_HEAT,
@@ -26,7 +26,7 @@ const ITEM itemTool[] = {
   {ICON_NOZZLE,               LABEL_NOZZLE},
   {ICON_NOZZLE,               LABEL_NOZZLE},
   {ICON_NOZZLE,               LABEL_NOZZLE},
-};    
+};
 
 #define ITEM_DEGREE_NUM 3
 const ITEM itemDegree[ITEM_DEGREE_NUM] = {
@@ -107,7 +107,7 @@ void heatSetIsWaiting(TOOL tool, bool isWaiting)
   }
   else if(heatHasWaiting() == false)
   {
-    update_time = 300;		
+    update_time = 300;
   }
 }
 
@@ -165,7 +165,7 @@ void heatSetSendWaiting(TOOL tool, bool isWaiting)
 
 void showTemperature(void)
 {
-  
+
   const GUI_RECT rect = {exhibitRect.x0, CENTER_Y-BYTE_HEIGHT, exhibitRect.x1, CENTER_Y};
   GUI_ClearRect(rect.x0, rect.y0, rect.x1, rect.y1);
   GUI_DispStringInPrect(&rect, (u8*)heatDisplayID[heater.tool]);
@@ -194,6 +194,10 @@ void menuHeat(void)
   menuDrawPage(&heatItems);
   showTemperature();
 
+  #if LCD_ENCODER_SUPPORT
+    encoderPosition = 0;    
+  #endif
+
   while(infoMenu.menu[infoMenu.cur] == menuHeat)
   {
     key_num = menuKeyGetValue();
@@ -202,45 +206,66 @@ void menuHeat(void)
       case KEY_ICON_0:
         if(heater.T[heater.tool].target > 0)
         {
-          heater.T[heater.tool].target = 
-            limitValue( 0, 
-                        heater.T[heater.tool].target - item_degree[item_degree_i], 
+          heater.T[heater.tool].target =
+            limitValue( 0,
+                        heater.T[heater.tool].target - item_degree[item_degree_i],
                         heat_max_temp[heater.tool]);
         }
         break;
-      
+
       case KEY_ICON_3:
         if(heater.T[heater.tool].target < heat_max_temp[heater.tool])
         {
-          heater.T[heater.tool].target = 
-            limitValue( 0, 
-                        heater.T[heater.tool].target + item_degree[item_degree_i], 
+          heater.T[heater.tool].target =
+            limitValue( 0,
+                        heater.T[heater.tool].target + item_degree[item_degree_i],
                         heat_max_temp[heater.tool]);
         }
         break;
-        
+
       case KEY_ICON_4:
         lastHeater.tool = heater.tool = (TOOL)((heater.tool+1) % HEATER_NUM);
         heatItems.items[key_num] = itemTool[heater.tool];
         menuDrawItem(&heatItems.items[key_num], key_num);
         showTemperature();
         break;
-      
+
       case KEY_ICON_5:
         item_degree_i = (item_degree_i+1) % ITEM_DEGREE_NUM;
         heatItems.items[key_num] = itemDegree[item_degree_i];
         menuDrawItem(&heatItems.items[key_num], key_num);
         break;
-      
+
       case KEY_ICON_6:
         heater.T[heater.tool].target = 0;
         break;
-      
+
       case KEY_ICON_7:
         infoMenu.cur--;
         break;
-      
+
       default :
+        #if LCD_ENCODER_SUPPORT
+          if(encoderPosition)
+          {
+            if(heater.T[heater.tool].target < heat_max_temp[heater.tool] && encoderPosition > 0)
+            {
+              heater.T[heater.tool].target = 
+                limitValue( 0, 
+                            heater.T[heater.tool].target + item_degree[item_degree_i], 
+                            heat_max_temp[heater.tool]);
+            }
+            if(heater.T[heater.tool].target > 0 && encoderPosition < 0)
+            {
+              heater.T[heater.tool].target = 
+                limitValue( 0, 
+                            heater.T[heater.tool].target - item_degree[item_degree_i], 
+                            heat_max_temp[heater.tool]);
+            }
+            encoderPosition = 0;    
+          }
+          LCD_LoopEncoder();
+        #endif
         break;
     }
 
@@ -250,7 +275,7 @@ void menuHeat(void)
       showTemperature();
     }
     if(lastHeater.T[heater.tool].current != heater.T[heater.tool].current)
-    {      
+    {
       lastHeater.T[heater.tool].current = heater.T[heater.tool].current;
       currentReDraw();
     }
@@ -258,28 +283,32 @@ void menuHeat(void)
     {
       targetReDraw();
     }
-    
+
     loopProcess();
   }
-  
+
   if(heatHasWaiting()==false)
     update_time=300;
+}
+
+u32 lastHeatCheckTime = 0;
+void updateLastHeatCheckTime(void)
+{
+  lastHeatCheckTime = OS_GetTime();
 }
 
 
 void loopCheckHeater(void)
 {
   u8 i;
-  static u32  nowTime=0;
 
   do
   {  /* Send M105 query temperature continuously	*/
-    if(update_waiting == true)                {nowTime=OS_GetTime();break;}
-    if(OS_GetTime()<nowTime+update_time)       break;
+    if(update_waiting == true)                {updateLastHeatCheckTime();break;}
+    if(OS_GetTime() - lastHeatCheckTime < update_time)       break;
     if(RequestCommandInfoIsRunning())          break; //to avoid colision in Gcode response processing
     if(storeCmd("M105\n")==false)              break;
-
-    nowTime=OS_GetTime();
+    updateLastHeatCheckTime();
     update_waiting=true;
   }while(0);
 
@@ -302,7 +331,7 @@ void loopCheckHeater(void)
     if(infoMenu.menu[infoMenu.cur] == menuHeat)                         break;
     update_time=300;
   }
-    
+
   for(TOOL i = BED; i < HEATER_NUM; i++) // If the target temperature changes, send a Gcode to set the motherboard
   {
     if(lastHeater.T[i].target != heater.T[i].target)
@@ -316,8 +345,3 @@ void loopCheckHeater(void)
     }
   }
 }
-
-
-
-
-

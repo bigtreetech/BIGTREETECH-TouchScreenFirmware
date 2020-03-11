@@ -20,7 +20,7 @@ const GUI_RECT rect_of_Skey[PARANMETER_NUM]={
   {LCD_WIDTH-1*BUTTON_WIDTH, ICON_START_Y+BYTE_HEIGHT/2+4*BYTE_HEIGHT+8*BUTTON_SPACE, LCD_WIDTH, ICON_START_Y+BYTE_HEIGHT/2+5*BYTE_HEIGHT+8*BUTTON_SPACE},//M92_Y
   {LCD_WIDTH-1*BUTTON_WIDTH, ICON_START_Y+BYTE_HEIGHT/2+5*BYTE_HEIGHT+9*BUTTON_SPACE, LCD_WIDTH, ICON_START_Y+BYTE_HEIGHT/2+6*BYTE_HEIGHT+9*BUTTON_SPACE},//M92_Z
   {LCD_WIDTH-1*BUTTON_WIDTH, ICON_START_Y+BYTE_HEIGHT/2+6*BYTE_HEIGHT+10*BUTTON_SPACE, LCD_WIDTH, ICON_START_Y+BYTE_HEIGHT/2+7*BYTE_HEIGHT+10*BUTTON_SPACE},//M92_E
-  
+
   // Back
   //{0, 0, BUTTON_WIDTH/2, LCD_HEIGHT/8},
   {LCD_WIDTH-BUTTON_WIDTH/2, 0, LCD_WIDTH, LCD_HEIGHT/8},
@@ -70,17 +70,17 @@ const char *const Key_Num[KEY_NUM] = {
 float Get_parameter_value[VALUE_NUM];
 
 SKEY_VALUES SKeyGetValue(void)
-{    
-  return (SKEY_VALUES)KEY_GetValue(sizeof(rect_of_Skey)/sizeof(rect_of_Skey[0]), rect_of_Skey);    
+{
+  return (SKEY_VALUES)KEY_GetValue(sizeof(rect_of_Skey)/sizeof(rect_of_Skey[0]), rect_of_Skey);
 }
 
 NUM_KEY_VALUES NumKeyGetValue(void)
-{    
-  return (NUM_KEY_VALUES)KEY_GetValue(sizeof(rect_of_numkey)/sizeof(rect_of_numkey[0]), rect_of_numkey);    
+{
+  return (NUM_KEY_VALUES)KEY_GetValue(sizeof(rect_of_numkey)/sizeof(rect_of_numkey[0]), rect_of_numkey);
 }
 
 void Send_Settingcmd(void)
-{  
+{
     storeCmd("M906\n");
     storeCmd("M92\n");
     return ;
@@ -93,7 +93,7 @@ void Draw_parameterbutton(void)
     GUI_ClearRect(0, 0, LCD_WIDTH, LCD_HEIGHT);
 
     for (uint8_t k = 3; k < PARANMETER_NUM-1; k++)
-    {   
+    {
         GUI_SetBkColor(SET_BACKGROUND_COLOR);
         GUI_ClearRect(rect_of_Skey[k].x0,rect_of_Skey[k].y0,rect_of_Skey[k].x1,rect_of_Skey[k].y1);
     }
@@ -108,7 +108,7 @@ void Draw_parameterbutton(void)
         }
         else if(i>=1 && i<3)
         {
-        GUI_SetColor(BLACK); 
+        GUI_SetColor(BLACK);
         GUI_DrawLine(0,(rect_of_Skey[2].y0+rect_of_Skey[6].y1)/2,LCD_WIDTH,(rect_of_Skey[2].y0+rect_of_Skey[6].y1)/2);
         GUI_DrawLine(0,(rect_of_Skey[2].y0+rect_of_Skey[6].y1)/2+1,LCD_WIDTH,(rect_of_Skey[2].y0+rect_of_Skey[6].y1)/2+1);
 
@@ -137,7 +137,7 @@ void Draw_parameterbutton(void)
         GUI_SetColor(YELLOW);
         GUI_DrawCircle(rect_of_Skey[i].x0-BYTE_WIDTH, rect_of_Skey[i].y0+BYTE_HEIGHT/2, BYTE_WIDTH/2);
         }
-    }  
+    }
     GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
     GUI_SetBkColor(BLACK);
 
@@ -196,7 +196,7 @@ const GUI_POINT value_xy[VALUE_NUM]={
     return ;
 }
 void Setting_parameter(void)
-{   
+{
     GUI_RECT ParameterRect = {0, 0, LCD_WIDTH, rect_of_numkey[0].y0};
     uint8_t nowIndex = 0,lastIndex = 0;
     char ParameterBuf[BUFLONG] = {0};
@@ -221,7 +221,7 @@ void Setting_parameter(void)
         case NUM_KEY_13:
             if(nowIndex)
             {
-             ParameterBuf[nowIndex++] = '\n'; 
+             ParameterBuf[nowIndex++] = '\n';
              ParameterBuf[nowIndex] = 0;
              #if 1
              cmd_long = strlen(parameter_cmd[Select_Paranmeter]);
@@ -282,7 +282,7 @@ void parametersetting(void)
     case SKEY_4:
     case SKEY_5:
     case SKEY_6:
-    case SKEY_7:   
+    case SKEY_7:
     case SKEY_8:
     case SKEY_9:
     case SKEY_10:
@@ -306,9 +306,10 @@ void parametersetting(void)
 
 void temp_Change(void)
 {
+    if(infoSettings.persistent_info != 1) return;
     //static FP_MENU NUM[MAX_MENU_DEPTH];
     static int16_t compare [2];
-  
+
     if(infoHost.connected == false || infoMenu.menu[infoMenu.cur] == menuPrinting)    return;
     if(infoMenu.menu[infoMenu.cur] == menuMove || infoMenu.menu[infoMenu.cur] == menuStatus) return;
 
@@ -320,33 +321,34 @@ void temp_Change(void)
         compare[1] = heatGetCurrentTemp(BED);
 
         drawGlobalInfo();
-    } 
-    
+    }
+
     return ;
 }
 
 void show_GlobalInfo(void)
 {
-    if(infoHost.connected == false)    return;
+    if(infoSettings.persistent_info != 1) return;
+    if(infoHost.connected == false || infoMenu.menu[infoMenu.cur] == menuPrinting)    return;
     if(infoMenu.menu[infoMenu.cur] == menuMove || infoMenu.menu[infoMenu.cur] == menuStatus) return;
     drawGlobalInfo();
 
     return;
 }
 void drawGlobalInfo(void){
-    
-    
+
+
     char tempstr[10];
 
     GUI_ClearRect(LCD_WIDTH/3, 0, LCD_WIDTH, BYTE_HEIGHT);
-    
-    //global nozzle 
+
+    //global nozzle
     lcd_frame_display(ICON_NOZZLE_X, 0, 2*BYTE_WIDTH, BYTE_HEIGHT, ICON_ADDR(ICON_GLOBAL_NOZZLE0));
-    my_sprintf(tempstr, "%d/%d", heatGetCurrentTemp(NOZZLE0), heatGetTargetTemp(NOZZLE0)); 
+    my_sprintf(tempstr, "%d/%d", heatGetCurrentTemp(NOZZLE0), heatGetTargetTemp(NOZZLE0));
     GUI_DispStringInRect(VALUE_NOZZLE_X,0,VALUE_NOZZLE_X+8*BYTE_WIDTH,BYTE_HEIGHT, (u8 *)tempstr);
-        
-    //global bed 
+
+    //global bed
     lcd_frame_display(ICON_BED_X, 0, 2*BYTE_WIDTH, BYTE_HEIGHT, ICON_ADDR(ICON_GLOBAL_BED));
-    my_sprintf(tempstr, "%d/%d", heatGetCurrentTemp(BED), heatGetTargetTemp(BED)); 
+    my_sprintf(tempstr, "%d/%d", heatGetCurrentTemp(BED), heatGetTargetTemp(BED));
     GUI_DispStringInRect(VALUE_BED_X,0,VALUE_BED_X+8*BYTE_WIDTH,BYTE_HEIGHT, (u8 *)tempstr);
 }

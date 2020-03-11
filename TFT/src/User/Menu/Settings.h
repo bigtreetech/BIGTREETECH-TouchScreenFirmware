@@ -7,7 +7,7 @@ typedef enum
 {
   SERIAL_TSC = 0,
   LCD12864,
-  LCD2004  
+  LCD2004
 }LCD_MODE;
 
 typedef struct
@@ -22,10 +22,15 @@ typedef struct
   uint8_t  silent;
   uint8_t  auto_off;
   uint8_t  terminalACK;
+  uint8_t  invert_xaxis;
   uint8_t  invert_yaxis;
   uint8_t  move_speed;
-  uint32_t led_color;
+  uint8_t  knob_led_color;
   uint8_t  invert_zaxis;
+  uint8_t  send_start_gcode;
+  uint8_t  send_end_gcode;
+  uint8_t  persistent_info;
+  uint8_t  file_listmode;
 }SETTINGS;
 
 

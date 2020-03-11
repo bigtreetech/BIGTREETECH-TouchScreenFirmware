@@ -147,10 +147,15 @@
     #define CN_AUTO                 "自动"
     #define CN_SMART                "聪明"
     #define CN_TERMINAL_ACK         "Hide Terminal ACK"
+	#define CN_INVERT_XAXIS         "Invert X Axis"
     #define CN_INVERT_YAXIS         "Invert Y Axis"
     #define CN_INVERT_ZAXIS         "Invert Z Axis"
     #define CN_MOVE_SPEED           "Move speed(X Y Z)"
     #define CN_KNOB_LED             "Rotary Knob LED"
     #define CN_M0_PAUSE             "Paused by M0 command"
+    #define CN_SEND_START_GCODE     "Start Gcode before print"
+    #define CN_SEND_END_GCODE       "End Gcode after print"
+    #define CN_PERSISTANT_STATUS_INFO "Persistent Status Info"
+    #define CN_FILE_LISTMODE        "Files viewer List Mode"
 
 #endif
