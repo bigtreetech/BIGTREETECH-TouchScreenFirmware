@@ -89,6 +89,18 @@ static bool    update_waiting = M27_WATCH_OTHER_SOURCES;
 static bool    update_waiting = false;
 #endif
 
+#ifndef PRINT_START_GCODE
+  #define PRINT_START_GCODE ""
+#endif
+
+#ifndef PRINT_END_GCODE
+  #define PRINT_END_GCODE ""
+#endif
+
+#ifndef CANCEL_PRINT_GCODE
+  #define CANCEL_PRINT_GCODE ""
+#endif
+
 //
 bool isPrinting(void)
 {

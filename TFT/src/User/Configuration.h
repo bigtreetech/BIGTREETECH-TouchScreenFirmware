@@ -2,7 +2,7 @@
 #define _CONFIGRATION_H_
 
 //===========================================================================
-//=========================== Marlin Mode Settings ===========================
+//========================== Marlin Mode Settings ===========================
 //===========================================================================
 
 /**
@@ -297,16 +297,25 @@ custom gcode below are compatible only if CUSTOM_GCODE_LIST_MODE is active
 //#define CUSTOM_14_GCODE "M105\n"
 #endif
 
-//
-//Start Gcode - run this gcode before starting print
-//
-#define PRINT_START_GCODE "G28\nG29\n" // home and abl
+/**
+ * Start Gcode
+ *
+ * Uncomment to run custom Gcode before starting print.
+*/
+//#define PRINT_START_GCODE "G28\nG29\nG1 Z20\n" // Home all axis, run ABL, raise Z 20mm
 
-//
-//End Gcode - run this gcode after finishing print
-//
-#define PRINT_END_GCODE "G90\nG1 E-4\nG92 E0\nM18\n" //reduce filament pressure , reset Extruder position, disable steppers
+/**
+ * End Gcode
+ *
+ * Uncomment to run custom Gcode after print is complete.
+*/
+//#define PRINT_END_GCODE "G90\nG1 E-4\nG92 E0\nM18\n" // Reduce filament pressure, reset extruder position, disable steppers
 
-#define CANCEL_PRINT_GCODE "G28 X0 Y0\n"
+/**
+ * Cancel Gcode
+ *
+ * Comment out to disable custom Gcode after canceling print.
+*/
+#define CANCEL_PRINT_GCODE "G28 X0 Y0\n" // Home X & Y
 
 #endif
