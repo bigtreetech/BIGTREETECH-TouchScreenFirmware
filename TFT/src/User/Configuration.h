@@ -207,7 +207,7 @@
 // SD support
 #define ONBOARD_SD_SUPPORT
 #ifdef ONBOARD_SD_SUPPORT
-  #define M27_AUTOREPORT                      // Disable M27 polling if you enable enable AUTO_REPORT_SD_STATUS in Marlin
+  #define M27_AUTOREPORT                      // Disable M27 polling if you enable AUTO_REPORT_SD_STATUS in Marlin
   #define M27_REFRESH                3        // Time in sec for M27 command
   #define M27_WATCH_OTHER_SOURCES    true     // if true the polling on M27 report is always active. Case: SD print started not from TFT35
 #endif
@@ -244,41 +244,27 @@
 */
 #define RAPID_SERIAL_COMM
 
-/**
- * Enable list mode in Custom G-Code menu
- * 7 codes in icon mode, 15 items in list mode
- */
-#define CUSTOM_GCODE_LIST_MODE
 
 /** CUSTOM GCODE COMMANDS
- * Support up to 7 custom gcodes in Icon mode and 15 in List Mode.
+ * Support up to 15 custom gcodes.
  * Uncomment CUSTOM_X_LABEL and CUSTOM_X_GCODE to enable custom gcode.
  * CUSTOM_X_LABEL is the name of the custom button, CUSTOM_X_GCODE
- * CUSTOM_X_GCODE is the gcode to be sent by the custom button, end with '\n'
- * You also need to customize the icon corresponding to the command if CUSTOM_GCODE_LIST_MODE is not enabled.
- * Copy your custom icon to the SD card to be updated, such as:"TFT35/bmp/Custom0.bmp", "TFT24/bmp/Custom1.bmp", etc...
- * The format of the custom icon is as follows
- * Bit depth: 24 / 32 bit, Pixel size: 95*95(for TFT35), 70*70(for TFT28/TFT24)
+ * CUSTOM_X_GCODE is the gcode to be sent by the custom button, this should always end with a New-Line character '\n'
  */
-#define CUSTOM_0_LABEL "Restore EEPROM"
-#define CUSTOM_0_GCODE "M501\n"
-#define CUSTOM_1_LABEL "Disable Steppers"
-#define CUSTOM_1_GCODE "M84\n"
-#define CUSTOM_2_LABEL "Init SD Card"
-#define CUSTOM_2_GCODE "M21\n"
-#define CUSTOM_3_LABEL "Release SD Card"
-#define CUSTOM_3_GCODE "M22\n"
-//#define CUSTOM_4_LABEL "Custom4"
-//#define CUSTOM_4_GCODE "M105\n"
-//#define CUSTOM_5_LABEL "Custom5"
-//#define CUSTOM_5_GCODE "M105\n"
-//#define CUSTOM_6_LABEL "Custom6"
-//#define CUSTOM_6_GCODE "M105\n"
-
-/*
-custom gcode below are compatible only if CUSTOM_GCODE_LIST_MODE is active
-*/
-#ifdef CUSTOM_GCODE_LIST_MODE
+#define CUSTOM_0_LABEL "Disable Steppers"
+#define CUSTOM_0_GCODE "M84\n"
+#define CUSTOM_1_LABEL "Init SD Card"
+#define CUSTOM_1_GCODE "M21\n"
+#define CUSTOM_2_LABEL "Release SD Card"
+#define CUSTOM_2_GCODE "M22\n"
+#define CUSTOM_3_LABEL "Enable Leveling State"
+#define CUSTOM_3_GCODE "M420 S1\n"
+#define CUSTOM_4_LABEL "Save to EEPROM"
+#define CUSTOM_4_GCODE "M500\n"
+#define CUSTOM_5_LABEL "Restore from EEPROM"
+#define CUSTOM_5_GCODE "M501\n"
+#define CUSTOM_6_LABEL "EEPROM Defaults"
+#define CUSTOM_6_GCODE "M502\n"
 //#define CUSTOM_7_LABEL "Custom7"
 //#define CUSTOM_7_GCODE "M105\n"
 //#define CUSTOM_8_LABEL "Custom8"
@@ -295,7 +281,6 @@ custom gcode below are compatible only if CUSTOM_GCODE_LIST_MODE is active
 //#define CUSTOM_13_GCODE "M105\n"
 //#define CUSTOM_14_LABEL "Custom14"
 //#define CUSTOM_14_GCODE "M105\n"
-#endif
 
 //
 //Start Gcode - run this gcode before starting print

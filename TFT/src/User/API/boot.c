@@ -16,8 +16,8 @@ const char iconBmpName[][32]={
 "Point_1", "Point_2", "Point_3", "Point_4", "Marlin", "BigTreeTech", "Gcode", "BLTouch", "BLTouchDeploy",
 "BLTouchStow", "BLTouchTest", "BLTouchRepeat", "TSCSettings", "MachineSettings", "FeatureSettings", "ProbeOffset", "EEPROMSave", "SilentOn", "ShutDown",
 "RGB_Settings", "RGB_Red", "RGB_Green", "RGB_Blue", "RGB_White", "RGB_Off", "Preheat_Both", "Preheat_PLA", "Preheat_PETG", "Preheat_ABS",
-"Custom", "Custom0", "Custom1", "Custom2", "Custom3", "Custom4", "Custom5", "Custom6", "Home_Move", "Heat_Fan",
-"ManualLevel", "CoolDown", "SilentOff","StatusNozzle","StatusBed","StatusFan","MainMenu","StatusSpeed","StatusFlow",
+"Custom", "Home_Move", "Heat_Fan", "ManualLevel", "CoolDown", "SilentOff",
+"StatusNozzle","StatusBed","StatusFan","MainMenu","StatusSpeed","StatusFlow",
 "parametersetting", "global_nozzle", "global_bed",
 "printing_nozzle", "printing_bed", "printing_fan","printing_timer","printing_layer","printing_speed","printing_flow",
 };
@@ -57,12 +57,12 @@ bool bmpDecode(char *bmp, u32 addr)
   if(f_open(&bmpFile,bmp,FA_OPEN_EXISTING | FA_READ)!=FR_OK)
     return false;
 
-  f_read(&bmpFile, magic, 2 ,&mybr);  
+  f_read(&bmpFile, magic, 2 ,&mybr);
   if (memcmp(magic, "BM", 2)){
     f_close(&bmpFile);
     return false;
   }
-  
+
   f_lseek(&bmpFile, 10);
   f_read(&bmpFile, &offset, sizeof(int),&mybr);
 
