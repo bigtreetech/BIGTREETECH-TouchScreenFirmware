@@ -141,13 +141,13 @@
     #define RU_WAIT_TEMP_SHUT_DOWN  "Дождитесь температуры сопла не ниже чем " STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP) "°C" // Wait for the temperature of hotend to be lower than 50°C
     #define RU_FORCE_SHUT_DOWN      "Принудительно выкл"
     #define RU_SHUTTING_DOWN        "Выключаю..."
-    #define RU_PARAMETER_SETTING    "Параметры"
+    #define RU_PARAMETER_SETTING    "Драйверы"
     #define RU_ON                   "Вкл"
     #define RU_OFF                  "Выкл"
     #define RU_AUTO                 "Авто"
     #define RU_SMART                "Умный"
     #define RU_TERMINAL_ACK         "Скрыть ACK терминала"
-	#define RU_INVERT_XAXIS         "Инверсия оси X"
+    #define RU_INVERT_XAXIS         "Инверсия оси X"
     #define RU_INVERT_YAXIS         "Инверсия оси Y"
     #define RU_INVERT_ZAXIS         "Инверсия оси Z"
     #define RU_MOVE_SPEED           "Скорость (X Y Z)"
@@ -157,7 +157,7 @@
     #define RU_SEND_END_GCODE       "Gcode после печати"
     #define RU_PERSISTANT_STATUS_INFO "Нагрев в инфостроке"
     #define RU_FILE_LISTMODE        "Файлы в режиме строк"
-    #define RU_CURRENT_SETTING      "Driver Current Settings"
-    #define RU_STEPS_SETTING        "Steps per MM Settings"
+    #define RU_CURRENT_SETTING      "Настройка TMC драйверов"
+    #define RU_STEPS_SETTING        "Настройка шагов на mm"
 
 #endif
