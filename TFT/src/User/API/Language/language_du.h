@@ -66,8 +66,6 @@
     #define DU_INDIGO               "Indigo"
     #define DU_VIOLET               "Violet"
     #define DU_DISCONNECT           "Loskoppelen"
-    #define DU_BAUDRATE_115200      "115200"
-    #define DU_BAUDRATE_250000      "250000"
     #define DU_RUNOUT_OFF           "Uitloop AF"
     #define DU_RUNOUT_ON            "Uitloop AAN"
     #define DU_SMART_RUNOUT_ON      "Smart AAN"

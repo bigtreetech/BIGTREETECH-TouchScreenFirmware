@@ -66,8 +66,6 @@
     #define AM_INDIGO               "Indigo"
     #define AM_VIOLET               "Violet"
     #define AM_DISCONNECT           "Անջատել"
-    #define AM_BAUDRATE_115200      "115200"
-    #define AM_BAUDRATE_250000      "250000"
     #define AM_RUNOUT_OFF           "Runout OFF"
     #define AM_RUNOUT_ON            "Runout ON"
     #define AM_SMART_RUNOUT_ON      "Smart ON"

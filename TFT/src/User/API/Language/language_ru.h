@@ -66,8 +66,6 @@
     #define RU_INDIGO               "Индиго"
     #define RU_VIOLET               "Фиолетовый"
     #define RU_DISCONNECT           "Отключить"
-    #define RU_BAUDRATE_115200      "115200"
-    #define RU_BAUDRATE_250000      "250000"
     #define RU_RUNOUT_OFF           "Окончание OFF"
     #define RU_RUNOUT_ON            "Окончание ON"
     #define RU_SMART_RUNOUT_ON      "Окончание Smart"

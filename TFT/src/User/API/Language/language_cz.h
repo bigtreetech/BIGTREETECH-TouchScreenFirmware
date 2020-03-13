@@ -66,8 +66,6 @@
     #define CZ_INDIGO               "Indigo"
     #define CZ_VIOLET               "Violet"
     #define CZ_DISCONNECT           "Odpojit"
-    #define CZ_BAUDRATE_115200      "115200"
-    #define CZ_BAUDRATE_250000      "250000"
     #define CZ_RUNOUT_OFF           "Runout VYP"
     #define CZ_RUNOUT_ON            "Runout ZAP"
     #define CZ_SMART_RUNOUT_ON      "Smart ON"

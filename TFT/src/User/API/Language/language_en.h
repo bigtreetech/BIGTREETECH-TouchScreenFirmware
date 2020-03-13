@@ -66,8 +66,6 @@
     #define EN_INDIGO               "Indigo"
     #define EN_VIOLET               "Violet"
     #define EN_DISCONNECT           "Disconnect"
-    #define EN_BAUDRATE_115200      "115200"
-    #define EN_BAUDRATE_250000      "250000"
     #define EN_RUNOUT_OFF           "Runout OFF"
     #define EN_RUNOUT_ON            "Runout ON"
     #define EN_SMART_RUNOUT_ON      "Smart ON"
