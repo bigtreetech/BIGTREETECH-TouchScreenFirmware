@@ -2,7 +2,7 @@
 #define _CONFIGRATION_H_
 
 //===========================================================================
-//=========================== Marlin Mode Settings ===========================
+//=========================== Marlin Mode Settings ==========================
 //===========================================================================
 
 /**
@@ -12,6 +12,8 @@
  *
  * Current color options from lcd.h: BLACK, BLUE, BROWN, BRRED, CYAN, GBLUE, GRAY, GREEN, MAGENTA, RED, WHITE, YELLOW
  */
+#define ST7920_BKCOLOR BLACK
+#define ST7920_FNCOLOR YELLOW
 
 /**
  * This setting determines the communication speed of the printer.
@@ -52,11 +54,6 @@
  */
 #define LCD_FEEDBACK_FREQUENCY_DURATION_L_US 11   // Default 11
 #define LCD_FEEDBACK_FREQUENCY_H_US          3    // Default 3
-
-// Marlin Mode Background & Font Color Options
-// Current color options from lcd.h: BLACK, BLUE, BROWN, BRRED, CYAN, GBLUE, GRAY, GREEN, MAGENTA, RED, WHITE, YELLOW
-#define ST7920_BKCOLOR BLACK
-#define ST7920_FNCOLOR YELLOW
 
 /**
  *  Text displayed at the top of the LCD in Marlin Mode.
