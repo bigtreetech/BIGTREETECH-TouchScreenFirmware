@@ -19,11 +19,11 @@ LABEL_READY,
    {{ICON_HEAT,                 LABEL_PREHEAT},
     {ICON_MOVE,                 LABEL_MOVE},
     {ICON_HOME,                 LABEL_HOME},
-    {ICON_LEVELING,             LABEL_LEVELING},
+    {ICON_PRINT,                LABEL_PRINT},
     {ICON_EXTRUDE,              LABEL_EXTRUDE},
+    {ICON_FAN,                  LABEL_FAN},
     {ICON_SETTINGS,             LABEL_SETTINGS},
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},
-    {ICON_BACK,                 LABEL_BACK}}
+    {ICON_LEVELING,             LABEL_LEVELING}}
   #endif
 };
 
@@ -46,7 +46,7 @@ void menuMain(void)
                                                         // it may need to wait for a space to open up in the command queue.
                                                         // Enable EMERGENCY_PARSER in Marlin Firmware for an instantaneous M112 command.
         case KEY_ICON_4: infoMenu.menu[++infoMenu.cur] = menuSendGcode;       break;
-        case KEY_ICON_5: infoMenu.menu[++infoMenu.cur] = menuCustom ;       break;
+        case KEY_ICON_5: infoMenu.menu[++infoMenu.cur] = menuCustom;          break;
         case KEY_ICON_6: infoMenu.menu[++infoMenu.cur] = menuSettings;        break;
         case KEY_ICON_7: infoMenu.cur--;        break;
         default:break;
@@ -54,16 +54,17 @@ void menuMain(void)
         case KEY_ICON_0: infoMenu.menu[++infoMenu.cur] = menuPreheat;   break;
         case KEY_ICON_1: infoMenu.menu[++infoMenu.cur] = menuMove;      break;
         case KEY_ICON_2: infoMenu.menu[++infoMenu.cur] = menuHome;      break;
-        case KEY_ICON_3:
+        case KEY_ICON_3: infoMenu.menu[++infoMenu.cur] = menuPrint;     break;
+        case KEY_ICON_4: infoMenu.menu[++infoMenu.cur] = menuExtrude;   break;
+        case KEY_ICON_5: infoMenu.menu[++infoMenu.cur] = menuFan;       break;
+        case KEY_ICON_6: infoMenu.menu[++infoMenu.cur] = menuSettings;  break;
+        case KEY_ICON_7:
           #ifdef AUTO_BED_LEVELING
             infoMenu.menu[++infoMenu.cur] = menuAutoLeveling;
           #else
             infoMenu.menu[++infoMenu.cur] = menuManualLeveling;
           #endif
           break;
-        case KEY_ICON_4: infoMenu.menu[++infoMenu.cur] = menuExtrude;   break;
-        case KEY_ICON_5: infoMenu.menu[++infoMenu.cur] = menuSettings;  break;
-        case KEY_ICON_7: infoMenu.cur--;        break;
         default:break;
       #endif
     }
