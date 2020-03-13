@@ -66,8 +66,6 @@
     #define CN_INDIGO               "靛"
     #define CN_VIOLET               "紫色"
     #define CN_DISCONNECT           "断开连接"
-    #define CN_BAUDRATE_115200      "115200"
-    #define CN_BAUDRATE_250000      "250000"
     #define CN_RUNOUT_OFF           "耗材检测关"
     #define CN_RUNOUT_ON            "耗材检测开"
     #define CN_SMART_RUNOUT_ON      "智能检测开"

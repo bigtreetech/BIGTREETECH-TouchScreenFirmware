@@ -33,7 +33,7 @@ typedef enum
 typedef union
 {
   uint32_t index;    // language index, address = textSelect(index);
-  uint8_t *address;
+  void *address;
 }LABEL;
 
 typedef struct

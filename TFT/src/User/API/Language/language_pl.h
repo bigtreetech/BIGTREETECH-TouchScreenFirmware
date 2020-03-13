@@ -66,8 +66,6 @@
     #define PL_INDIGO               "Indigo"
     #define PL_VIOLET               "Violet"
     #define PL_DISCONNECT           "Odłącz"
-    #define PL_BAUDRATE_115200      "115200"
-    #define PL_BAUDRATE_250000      "250000"
     #define PL_RUNOUT_OFF           "Czujnik filamentu Wł."
     #define PL_RUNOUT_ON            "Czujnik filamentu Wył."
     #define PL_SMART_RUNOUT_ON      "Smart Wł."

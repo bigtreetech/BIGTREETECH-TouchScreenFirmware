@@ -66,8 +66,6 @@
     #define SK_INDIGO               "Indigo"
     #define SK_VIOLET               "Violet"
     #define SK_DISCONNECT           "Odpojiť"
-    #define SK_BAUDRATE_115200      "115200"
-    #define SK_BAUDRATE_250000      "250000"
     #define SK_RUNOUT_OFF           "Runout VYP"
     #define SK_RUNOUT_ON            "Runout ZAP"
     #define SK_SMART_RUNOUT_ON      "Smart ZAP"
