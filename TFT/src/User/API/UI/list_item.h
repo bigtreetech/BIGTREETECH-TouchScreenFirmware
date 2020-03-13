@@ -8,7 +8,7 @@
 #include "GUI.h"
 #include "menu.h"
 
-enum{
+typedef enum{
 ICONCHAR_BLANK = 0,
 ICONCHAR_NOZZLE,
 ICONCHAR_BED,
