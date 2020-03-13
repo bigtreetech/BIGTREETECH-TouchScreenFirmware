@@ -85,9 +85,9 @@
     #define FR_X_DEC                "X-"
     #define FR_Y_DEC                "Y-"
     #define FR_Z_DEC                "Z-"
-    #define FR_X_HOME               "X"
-    #define FR_Y_HOME               "Y"
-    #define FR_Z_HOME               "Z"
+    #define FR_X                    "X"
+    #define FR_Y                    "Y"
+    #define FR_Z                    "Z"
     #define FR_001_MM               "0.01mm"
     #define FR_01_MM                "0.1mm"
     #define FR_1_MM                 "1mm"
@@ -157,5 +157,7 @@
     #define FR_SEND_END_GCODE       "End Gcode after print"
     #define FR_PERSISTANT_STATUS_INFO "Persistent Status Info"
     #define FR_FILE_LISTMODE        "Files viewer List Mode"
+    #define FR_CURRENT_SETTING      "Driver Current Settings"
+    #define FR_STEPS_SETTING        "Steps per MM Settings"
 
 #endif

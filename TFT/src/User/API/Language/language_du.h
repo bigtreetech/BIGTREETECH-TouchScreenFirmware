@@ -85,9 +85,9 @@
     #define DU_X_DEC                "X-"
     #define DU_Y_DEC                "Y-"
     #define DU_Z_DEC                "Z-"
-    #define DU_X_HOME               "X"
-    #define DU_Y_HOME               "Y"
-    #define DU_Z_HOME               "Z"
+    #define DU_X                    "X"
+    #define DU_Y                    "Y"
+    #define DU_Z                    "Z"
     #define DU_001_MM               "0.01mm"
     #define DU_01_MM                "0.1mm"
     #define DU_1_MM                 "1mm"
@@ -157,5 +157,7 @@
     #define DU_SEND_END_GCODE       "End Gcode after print"
     #define DU_PERSISTANT_STATUS_INFO "Persistent Status Info"
     #define DU_FILE_LISTMODE        "Files viewer List Mode"
+    #define DU_CURRENT_SETTING      "Driver Current Settings"
+    #define DU_STEPS_SETTING        "Steps per MM Settings"
 
 #endif

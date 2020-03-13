@@ -85,9 +85,9 @@
     #define RU_X_DEC                "X-"
     #define RU_Y_DEC                "Y-"
     #define RU_Z_DEC                "Z-"
-    #define RU_X_HOME               "X"
-    #define RU_Y_HOME               "Y"
-    #define RU_Z_HOME               "Z"
+    #define RU_X                    "X"
+    #define RU_Y                    "Y"
+    #define RU_Z                    "Z"
     #define RU_001_MM               "0.01mm"
     #define RU_01_MM                "0.1mm"
     #define RU_1_MM                 "1mm"
@@ -141,7 +141,7 @@
     #define RU_WAIT_TEMP_SHUT_DOWN  "Дождитесь температуры сопла не ниже чем " STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP) "°C" // Wait for the temperature of hotend to be lower than 50°C
     #define RU_FORCE_SHUT_DOWN      "Принудительно выкл"
     #define RU_SHUTTING_DOWN        "Выключаю..."
-    #define RU_PARAMETER_SETTING    "Параметры"
+    #define RU_PARAMETER_SETTING    "Драйверы"
     #define RU_ON                   "Вкл"
     #define RU_OFF                  "Выкл"
     #define RU_AUTO                 "Авто"
@@ -157,5 +157,7 @@
     #define RU_SEND_END_GCODE       "Gcode после печати"
     #define RU_PERSISTANT_STATUS_INFO "Нагрев в инфостроке"
     #define RU_FILE_LISTMODE        "Файлы в режиме строк"
+    #define RU_CURRENT_SETTING      "Настройка TMC драйверов"
+    #define RU_STEPS_SETTING        "Настройка шагов на mm"
 
 #endif

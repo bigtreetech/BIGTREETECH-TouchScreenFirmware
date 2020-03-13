@@ -85,9 +85,9 @@
     #define PT_X_DEC                "X-"
     #define PT_Y_DEC                "Y-"
     #define PT_Z_DEC                "Z-"
-    #define PT_X_HOME               "X"
-    #define PT_Y_HOME               "Y"
-    #define PT_Z_HOME               "Z"
+    #define PT_X                    "X"
+    #define PT_Y                    "Y"
+    #define PT_Z                    "Z"
     #define PT_001_MM               "0.01mm"
     #define PT_01_MM                "0.1mm"
     #define PT_1_MM                 "1mm"
@@ -157,5 +157,7 @@
     #define PT_SEND_END_GCODE       "End Gcode after print"
     #define PT_PERSISTANT_STATUS_INFO "Persistent Status Info"
     #define PT_FILE_LISTMODE        "Files viewer List Mode"
+    #define PT_CURRENT_SETTING      "Driver Current Settings"
+    #define PT_STEPS_SETTING        "Steps per MM Settings"
 
 #endif

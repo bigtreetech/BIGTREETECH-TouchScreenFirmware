@@ -85,9 +85,9 @@
     #define JP_X_DEC                "X-"
     #define JP_Y_DEC                "Y-"
     #define JP_Z_DEC                "Z-"
-    #define JP_X_HOME               "X"
-    #define JP_Y_HOME               "Y"
-    #define JP_Z_HOME               "Z"
+    #define JP_X                    "X"
+    #define JP_Y                    "Y"
+    #define JP_Z                    "Z"
     #define JP_001_MM               "0.01mm"
     #define JP_01_MM                "0.1mm"
     #define JP_1_MM                 "1mm"
@@ -157,5 +157,7 @@
     #define JP_SEND_END_GCODE       "End Gcode after print"
     #define JP_PERSISTANT_STATUS_INFO "Persistent Status Info"
     #define JP_FILE_LISTMODE        "Files viewer List Mode"
+    #define JP_CURRENT_SETTING      "Driver Current Settings"
+    #define JP_STEPS_SETTING        "Steps per MM Settings"
     
 #endif

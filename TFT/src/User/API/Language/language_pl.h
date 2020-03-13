@@ -85,9 +85,9 @@
     #define PL_X_DEC                "X-"
     #define PL_Y_DEC                "Y-"
     #define PL_Z_DEC                "Z-"
-    #define PL_X_HOME               "X"
-    #define PL_Y_HOME               "Y"
-    #define PL_Z_HOME               "Z"
+    #define PL_X                    "X"
+    #define PL_Y                    "Y"
+    #define PL_Z                    "Z"
     #define PL_001_MM               "0.01mm"
     #define PL_01_MM                "0.1mm"
     #define PL_1_MM                 "1mm"
@@ -157,5 +157,7 @@
     #define PL_SEND_END_GCODE       "End Gcode after print"
     #define PL_PERSISTANT_STATUS_INFO "Persistent Status Info"
     #define PL_FILE_LISTMODE        "Files viewer List Mode"
+    #define PL_CURRENT_SETTING      "Driver Current Settings"
+    #define PL_STEPS_SETTING        "Steps per MM Settings"
 
 #endif

@@ -1,77 +1,89 @@
 #include "Parametersetting.h"
 #include "includes.h"
 
-SKEY_VALUES Select_Paranmeter;
-bool getsetparameter,rev_success;
-int cmd_getparameter_num = 0;
-char * Get_value[VALUE_NUM];
-
-const GUI_RECT rect_of_Skey[PARANMETER_NUM]={
-  {BUTTON_WIDTH/2, 0, LCD_WIDTH-BUTTON_WIDTH/2,TITLE_SY+BYTE_HEIGHT}, //TITLE
-  {3*START_X, ICON_START_Y-BYTE_HEIGHT/2, LCD_WIDTH-BUTTON_WIDTH,ICON_START_Y+BYTE_HEIGHT/2},//M906
-  {3*START_X, ICON_START_Y-BYTE_HEIGHT/2+4*BYTE_HEIGHT+7*BUTTON_SPACE, LCD_WIDTH-BUTTON_WIDTH,ICON_START_Y-BYTE_HEIGHT/2+5*BYTE_HEIGHT+7*BUTTON_SPACE},//M92
-
-  {LCD_WIDTH-1*BUTTON_WIDTH, ICON_START_Y-BYTE_HEIGHT/2, LCD_WIDTH, ICON_START_Y+BYTE_HEIGHT/2},//M906_X
-  {LCD_WIDTH-1*BUTTON_WIDTH, ICON_START_Y+BYTE_HEIGHT/2+0*BYTE_HEIGHT+1*BUTTON_SPACE, LCD_WIDTH, ICON_START_Y+BYTE_HEIGHT/2+1*BYTE_HEIGHT+1*BUTTON_SPACE},//M906_Y
-  {LCD_WIDTH-1*BUTTON_WIDTH, ICON_START_Y+BYTE_HEIGHT/2+1*BYTE_HEIGHT+2*BUTTON_SPACE, LCD_WIDTH, ICON_START_Y+BYTE_HEIGHT/2+2*BYTE_HEIGHT+2*BUTTON_SPACE},//M906_Z
-  {LCD_WIDTH-1*BUTTON_WIDTH, ICON_START_Y+BYTE_HEIGHT/2+2*BYTE_HEIGHT+3*BUTTON_SPACE, LCD_WIDTH, ICON_START_Y+BYTE_HEIGHT/2+3*BYTE_HEIGHT+3*BUTTON_SPACE},//M906_E
-
-  {LCD_WIDTH-1*BUTTON_WIDTH, ICON_START_Y+BYTE_HEIGHT/2+3*BYTE_HEIGHT+7*BUTTON_SPACE, LCD_WIDTH, ICON_START_Y+BYTE_HEIGHT/2+4*BYTE_HEIGHT+7*BUTTON_SPACE},//M92_X
-  {LCD_WIDTH-1*BUTTON_WIDTH, ICON_START_Y+BYTE_HEIGHT/2+4*BYTE_HEIGHT+8*BUTTON_SPACE, LCD_WIDTH, ICON_START_Y+BYTE_HEIGHT/2+5*BYTE_HEIGHT+8*BUTTON_SPACE},//M92_Y
-  {LCD_WIDTH-1*BUTTON_WIDTH, ICON_START_Y+BYTE_HEIGHT/2+5*BYTE_HEIGHT+9*BUTTON_SPACE, LCD_WIDTH, ICON_START_Y+BYTE_HEIGHT/2+6*BYTE_HEIGHT+9*BUTTON_SPACE},//M92_Z
-  {LCD_WIDTH-1*BUTTON_WIDTH, ICON_START_Y+BYTE_HEIGHT/2+6*BYTE_HEIGHT+10*BUTTON_SPACE, LCD_WIDTH, ICON_START_Y+BYTE_HEIGHT/2+7*BYTE_HEIGHT+10*BUTTON_SPACE},//M92_E
-
-  // Back
-  //{0, 0, BUTTON_WIDTH/2, LCD_HEIGHT/8},
-  {LCD_WIDTH-BUTTON_WIDTH/2, 0, LCD_WIDTH, LCD_HEIGHT/8},
-};
-
 const GUI_RECT rect_of_numkey[KEY_NUM]={
-  {0*SkeyWIDTH, P_height+0*Key_height, 1*SkeyWIDTH, P_height+1*Key_height},//1
-  {1*SkeyWIDTH, P_height+0*Key_height, 2*SkeyWIDTH, P_height+1*Key_height},//2
-  {2*SkeyWIDTH, P_height+0*Key_height, 3*SkeyWIDTH, P_height+1*Key_height},//3
-  {3*SkeyWIDTH, P_height+0*Key_height, 4*SkeyWIDTH, P_height+1*Key_height},//del
+  {0*SKEYWIDTH, ICON_START_Y+0*SKEYHEIGHT, 1*SKEYWIDTH, ICON_START_Y+1*SKEYHEIGHT},//1
+  {1*SKEYWIDTH, ICON_START_Y+0*SKEYHEIGHT, 2*SKEYWIDTH, ICON_START_Y+1*SKEYHEIGHT},//2
+  {2*SKEYWIDTH, ICON_START_Y+0*SKEYHEIGHT, 3*SKEYWIDTH, ICON_START_Y+1*SKEYHEIGHT},//3
+  {3*SKEYWIDTH, ICON_START_Y+0*SKEYHEIGHT, 4*SKEYWIDTH, ICON_START_Y+1*SKEYHEIGHT},//OK
 
-  {0*SkeyWIDTH, P_height+1*Key_height, 1*SkeyWIDTH, P_height+2*Key_height},//4
-  {1*SkeyWIDTH, P_height+1*Key_height, 2*SkeyWIDTH, P_height+2*Key_height},//5
-  {2*SkeyWIDTH, P_height+1*Key_height, 3*SkeyWIDTH, P_height+2*Key_height},//6
-  {3*SkeyWIDTH, P_height+1*Key_height, 4*SkeyWIDTH, P_height+2*Key_height},//.
+  {0*SKEYWIDTH, ICON_START_Y+1*SKEYHEIGHT, 1*SKEYWIDTH, ICON_START_Y+2*SKEYHEIGHT},//4
+  {1*SKEYWIDTH, ICON_START_Y+1*SKEYHEIGHT, 2*SKEYWIDTH, ICON_START_Y+2*SKEYHEIGHT},//5
+  {2*SKEYWIDTH, ICON_START_Y+1*SKEYHEIGHT, 3*SKEYWIDTH, ICON_START_Y+2*SKEYHEIGHT},//6
+  {3*SKEYWIDTH, ICON_START_Y+1*SKEYHEIGHT, 4*SKEYWIDTH, ICON_START_Y+2*SKEYHEIGHT},//Del
 
-  {0*SkeyWIDTH, P_height+2*Key_height, 1*SkeyWIDTH, P_height+3*Key_height},//7
-  {1*SkeyWIDTH, P_height+2*Key_height, 2*SkeyWIDTH, P_height+3*Key_height},//8
-  {2*SkeyWIDTH, P_height+2*Key_height, 3*SkeyWIDTH, P_height+3*Key_height},//9
-  {3*SkeyWIDTH, P_height+2*Key_height, 4*SkeyWIDTH, P_height+3*Key_height},//0
+  {0*SKEYWIDTH, ICON_START_Y+2*SKEYHEIGHT, 1*SKEYWIDTH, ICON_START_Y+3*SKEYHEIGHT},//7
+  {1*SKEYWIDTH, ICON_START_Y+2*SKEYHEIGHT, 2*SKEYWIDTH, ICON_START_Y+3*SKEYHEIGHT},//8
+  {2*SKEYWIDTH, ICON_START_Y+2*SKEYHEIGHT, 3*SKEYWIDTH, ICON_START_Y+3*SKEYHEIGHT},//9
+  {3*SKEYWIDTH, ICON_START_Y+2*SKEYHEIGHT, 4*SKEYWIDTH, ICON_START_Y+3*SKEYHEIGHT},//
 
-  {0*SkeyWIDTH, P_height+3*Key_height, 2*SkeyWIDTH-BUTTON_SPACE, LCD_HEIGHT},//X
-  {2*SkeyWIDTH+BUTTON_SPACE, P_height+3*Key_height, 4*SkeyWIDTH, LCD_HEIGHT},//OK
+  {0*SKEYWIDTH, ICON_START_Y+3*SKEYHEIGHT, 1*SKEYWIDTH, ICON_START_Y+4*SKEYHEIGHT},//.
+  {1*SKEYWIDTH, ICON_START_Y+3*SKEYHEIGHT, 2*SKEYWIDTH, ICON_START_Y+4*SKEYHEIGHT},//0
+  {2*SKEYWIDTH, ICON_START_Y+3*SKEYHEIGHT, 3*SKEYWIDTH, ICON_START_Y+4*SKEYHEIGHT},//
+  {3*SKEYWIDTH, ICON_START_Y+3*SKEYHEIGHT, 4*SKEYWIDTH, ICON_START_Y+4*SKEYHEIGHT},//
 };
 
-const char *const parameter[PARANMETER_NUM] = {
-    "Parametersetting",
-    "Set TMC Motor Current:","Set Axis Steps-per-unit:",
-    "X","Y","Z","E",
-    "X","Y","Z","E",
-    "back",
+const char *const parameterCurrent[STEPPER_COUNT] = {
+    "X Axis Current(mA)",
+    "Y Axis Current(mA)",
+    "Z Axis Current(mA)",
+    "E Current(mA)"
 };
 
-const char *const parameter_cmd[PARANMETER_NUM] = {
-    "0","0","0",
-    "M906 X","M906 Y","M906 Z","M906 E",
-    "M92 X","M92 Y","M92 Z","M92 E",
+const char *const parameterSteps[STEPPER_COUNT] = {
+    "X Axis Steps/MM",
+    "Y Axis Steps/MM",
+    "Z Axis Steps/MM",
+    "E Steps/MM"
+};
+
+const char *const parameter_currentCmd[STEPPER_COUNT] = {
+    "M906 X%.1f\n","M906 Y%.1f\n","M906 Z%.1f\n","M906 E%.1f\n",
+};
+
+const char *const parameter_stepsCmd[STEPPER_COUNT] = {
+    "M92 X%.1f\n","M92 Y%.1f\n","M92 Z%.1f\n","M92 E%.1f\n",
 };
 
 const char *const Key_Num[KEY_NUM] = {
-  "1","2","3","del",
-  "4","5","6",".",
-  "7","8","9","0",
-  "X","OK",
+  "1","2","3","\u0894",
+  "4","5","6","\u0899",
+  "7","8","9","\u0895",
+  ".","0","",""
 };
 
-float Get_parameter_value[VALUE_NUM];
-
-SKEY_VALUES SKeyGetValue(void)
+const LISTITEMS parameterMainItems = {
+// title
+LABEL_SETTING_PARAMETER,
+// icon                     ItemType         Item Title                item value text(only for custom value)
 {
-  return (SKEY_VALUES)KEY_GetValue(sizeof(rect_of_Skey)/sizeof(rect_of_Skey[0]), rect_of_Skey);
+    {ICONCHAR_SETTING1,     LIST_MOREBUTTON,    LABEL_STEPS_SETTING,    LABEL_BACKGROUND},
+    {ICONCHAR_SETTING1,     LIST_MOREBUTTON,    LABEL_CURRENT_SETTING,  LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND,     LIST_LABEL,         LABEL_BACKGROUND,       LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND,     LIST_LABEL,         LABEL_BACKGROUND,       LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND,     LIST_LABEL,         LABEL_BACKGROUND,       LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND,     LIST_LABEL,         LABEL_BACKGROUND,       LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND,     LIST_LABEL,         LABEL_BACKGROUND,       LABEL_BACKGROUND},
+    {ICONCHAR_BACK,           LIST_LABEL,         LABEL_BACKGROUND,       LABEL_BACKGROUND},}
+};
+
+float parameter_current_value[STEPPER_COUNT];
+float parameter_steps_value[STEPPER_COUNT];
+
+float getParameterCurrent(int index){
+    return parameter_current_value[index];
+}
+
+float getParameterSteps(int index){
+    return parameter_steps_value[index];
+}
+
+void setParameterCurrent(int index, float val){
+    parameter_current_value[index] = val;
+}
+
+void setParameterSteps(int index, float val){
+    parameter_steps_value[index] = val;
 }
 
 NUM_KEY_VALUES NumKeyGetValue(void)
@@ -86,158 +98,211 @@ void Send_Settingcmd(void)
     return ;
 }
 
-void Draw_parameterbutton(void)
-{
-    TSC_ReDrawIcon = NULL;
-    GUI_SetBkColor(SET_BACKGROUND_COLOR);
-    GUI_ClearRect(0, 0, LCD_WIDTH, LCD_HEIGHT);
 
-    for (uint8_t k = 3; k < PARANMETER_NUM-1; k++)
-    {
-        GUI_SetBkColor(SET_BACKGROUND_COLOR);
-        GUI_ClearRect(rect_of_Skey[k].x0,rect_of_Skey[k].y0,rect_of_Skey[k].x1,rect_of_Skey[k].y1);
+void setCurrentMenuItems(){
+
+    KEY_VALUES key_num = KEY_IDLE;
+
+    LISTITEMS currentmenuitems ={
+    // title
+    LABEL_SETTING_PARAMETER,
+    // icon                     ItemType        Item Title               item value text(only for custom value)
+    {{ICONCHAR_BLANK,           LIST_CUSTOMVALUE,     LABEL_DYNAMIC,     LABEL_DYNAMIC},
+    {ICONCHAR_BLANK,            LIST_CUSTOMVALUE,     LABEL_DYNAMIC,     LABEL_DYNAMIC},
+    {ICONCHAR_BLANK,            LIST_CUSTOMVALUE,     LABEL_DYNAMIC,     LABEL_DYNAMIC},
+    {ICONCHAR_BLANK,            LIST_CUSTOMVALUE,     LABEL_DYNAMIC,     LABEL_DYNAMIC},
+    {ICONCHAR_BACKGROUND,       LIST_LABEL,           LABEL_BACKGROUND,     LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND,       LIST_LABEL,           LABEL_BACKGROUND,     LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND,       LIST_LABEL,           LABEL_BACKGROUND,     LABEL_BACKGROUND},
+    {ICONCHAR_BACK,             LIST_LABEL,           LABEL_BACKGROUND,     LABEL_BACKGROUND},}
+    };
+
+    for(int i = 0; i < STEPPER_COUNT; i++){
+        setDynamicLabel(i,(char*)parameterCurrent[i]);
+        setDynamicValue(i,parameter_current_value[i]);
     }
-    for(uint8_t i = 0;i<PARANMETER_NUM;i++)
+
+    menuDrawListPage(&currentmenuitems);
+
+    while (infoMenu.menu[infoMenu.cur] == setCurrentMenuItems)
     {
-        GUI_SetColor(BLACK);
-        if(i<1)
-        {
-        GUI_DispStringInRect(rect_of_Skey[i].x0,rect_of_Skey[i].y0,rect_of_Skey[i].x1,rect_of_Skey[i].y1,(u8*)parameter[i]);
-        GUI_DrawLine(0,rect_of_Skey[i].y1,LCD_WIDTH,rect_of_Skey[i].y1);
-        GUI_DrawLine(0,rect_of_Skey[i].y1+1,LCD_WIDTH,rect_of_Skey[i].y1+1);
-        }
-        else if(i>=1 && i<3)
-        {
-        GUI_SetColor(BLACK);
-        GUI_DrawLine(0,(rect_of_Skey[2].y0+rect_of_Skey[6].y1)/2,LCD_WIDTH,(rect_of_Skey[2].y0+rect_of_Skey[6].y1)/2);
-        GUI_DrawLine(0,(rect_of_Skey[2].y0+rect_of_Skey[6].y1)/2+1,LCD_WIDTH,(rect_of_Skey[2].y0+rect_of_Skey[6].y1)/2+1);
+        key_num = menuKeyGetValue();
 
-        GUI_DispLenString(rect_of_Skey[i].x0,rect_of_Skey[i].y0,(u8*)parameter[i],LCD_WIDTH-BUTTON_WIDTH);
-        GUI_SetColor(WHITE);
-        }
-        else if(i>=3 && i<PARANMETER_NUM-1)
-        GUI_DispLenString(rect_of_Skey[i].x0,rect_of_Skey[i].y0,(u8*)parameter[i],rect_of_Skey[i].x1-rect_of_Skey[i].x0);
-        else
+        switch (key_num)
         {
-        GUI_SetColor(WHITE);
-        GUI_SetBkColor(WHITE);
-        GUI_FillCircle((rect_of_Skey[i].x0+rect_of_Skey[i].x1)/2,(rect_of_Skey[i].y0+rect_of_Skey[i].y1)/2,BUTTON_WIDTH/6);
-        GUI_SetColor(BLACK);
-        GUI_DispStringInPrect(&rect_of_Skey[i],(u8*)"X");
-        //GUI_DrawCircle((rect_of_Skey[i].x0+rect_of_Skey[i].x1)/2,(rect_of_Skey[i].y0+rect_of_Skey[i].y1)/2,BUTTON_WIDTH/6);
-        GUI_SetBkColor(SET_BACKGROUND_COLOR);
-        GUI_SetColor(BLACK);
-        //GUI_DispStringInPrect(&rect_of_Skey[i],(u8*)parameter[i]);//GUI_FillCircle()  GUI_DrawCircle(RecIinfo.x0 + STATUS_MSG_ICON_XCENTER, RecIinfo.y0 + STATUS_MSG_ICON_YCENTER, BYTE_WIDTH);
-        }
+        case KEY_ICON_7:
+            storeCmd("M500\n");
+            infoMenu.cur--;
+            break;
 
-        if(i>0 && i<3)
-        {
-        GUI_SetColor(GREEN);
-        GUI_FillCircle(rect_of_Skey[i].x0-BYTE_WIDTH, rect_of_Skey[i].y0+BYTE_HEIGHT/2, BYTE_WIDTH/2);
-        GUI_SetColor(YELLOW);
-        GUI_DrawCircle(rect_of_Skey[i].x0-BYTE_WIDTH, rect_of_Skey[i].y0+BYTE_HEIGHT/2, BYTE_WIDTH/2);
+        default:
+            if(key_num < STEPPER_COUNT){
+                float v = num_pad(getParameterCurrent(key_num));
+                if (v != getParameterCurrent(key_num))
+                {
+                    storeCmd(parameter_currentCmd[key_num],v);
+                    setDynamicValue(key_num,v);
+                    setParameterCurrent(key_num,v);
+                }
+                    menuDrawListPage(&currentmenuitems);
+            }
+            break;
+
+        }
+    for(int i = 0; i < STEPPER_COUNT; i++){
+        if(getDynamicValue(i) != getParameterCurrent(i)){
+        setDynamicValue(i,parameter_current_value[i]);
+        menuDrawListItem(&currentmenuitems.items[i],i);
         }
     }
-    GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
-    GUI_SetBkColor(BLACK);
+    loopProcess();
+    }
 
-    return ;
 }
+void setStepsMenuItems(){
+
+    KEY_VALUES key_num = KEY_IDLE;
+
+    LISTITEMS stepsmenuitems ={
+    // title
+    LABEL_SETTING_PARAMETER,
+    // icon                     ItemType        Item Title               item value text(only for custom value)
+    {{ICONCHAR_BLANK,           LIST_CUSTOMVALUE,     LABEL_DYNAMIC,     LABEL_DYNAMIC},
+    {ICONCHAR_BLANK,            LIST_CUSTOMVALUE,     LABEL_DYNAMIC,     LABEL_DYNAMIC},
+    {ICONCHAR_BLANK,            LIST_CUSTOMVALUE,     LABEL_DYNAMIC,     LABEL_DYNAMIC},
+    {ICONCHAR_BLANK,            LIST_CUSTOMVALUE,     LABEL_DYNAMIC,     LABEL_DYNAMIC},
+    {ICONCHAR_BACKGROUND,       LIST_LABEL,           LABEL_BACKGROUND,     LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND,       LIST_LABEL,           LABEL_BACKGROUND,     LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND,       LIST_LABEL,           LABEL_BACKGROUND,     LABEL_BACKGROUND},
+    {ICONCHAR_BACK,             LIST_LABEL,           LABEL_BACKGROUND,     LABEL_BACKGROUND},}
+    };
+
+    for(int i = 0; i < STEPPER_COUNT; i++){
+        setDynamicLabel(i,(char*)parameterSteps[i]);
+        setDynamicValue(i,parameter_steps_value[i]);
+    }
+
+    menuDrawListPage(&stepsmenuitems);
+    while (infoMenu.menu[infoMenu.cur] == setStepsMenuItems)
+    {
+        key_num = menuKeyGetValue();
+
+        switch (key_num)
+        {
+
+        case KEY_ICON_7:
+            storeCmd("M500\n");
+            infoMenu.cur--;
+            break;
+
+        default:
+            if(key_num < STEPPER_COUNT){
+                float v = num_pad(getParameterSteps(key_num));
+                if (v != getParameterSteps(key_num)){
+                    storeCmd(parameter_stepsCmd[key_num],v);
+                    setDynamicValue(key_num,v);
+                    setParameterSteps(key_num,v);
+                }
+                    menuDrawListPage(&stepsmenuitems);
+            }
+            break;
+
+        }
+    for(int i = 0; i < STEPPER_COUNT; i++){
+        if(getDynamicValue(i) != getParameterSteps(i)){
+        setDynamicValue(i,parameter_steps_value[i]);
+        menuDrawListItem(&stepsmenuitems.items[i],i);
+        }
+    }
+    loopProcess();
+    }
+
+}
+
+void parametersetting(){
+    KEY_VALUES key_num = KEY_IDLE;
+    Send_Settingcmd();
+    menuDrawListPage(&parameterMainItems);
+    while (infoMenu.menu[infoMenu.cur] == parametersetting)
+    {
+        key_num = menuKeyGetValue();
+        switch (key_num)
+        {
+        case KEY_ICON_0:
+            infoMenu.menu[++infoMenu.cur] = setStepsMenuItems;   break;
+        break;
+
+        case KEY_ICON_1:
+            infoMenu.menu[++infoMenu.cur] = setCurrentMenuItems;   break;
+        break;
+
+        case KEY_ICON_7:
+        infoMenu.cur--;
+        break;
+
+        default:
+        break;
+
+        }
+
+    loopProcess();
+    }
+
+}
+
 
 void Draw_keyboard(void)
 {
-    GUI_SetBkColor(WHITE);
+    TSC_ReDrawIcon = NULL;
+    GUI_SetBkColor(BLACK);
     GUI_ClearRect(0, 0, LCD_WIDTH, rect_of_numkey[0].y0);
-    GUI_SetBkColor(BLUE);
+    GUI_SetBkColor(WHITE);
     GUI_ClearRect(0, rect_of_numkey[0].y0, LCD_WIDTH, LCD_HEIGHT);
+    GUI_SetColor(BLACK);
+
+    for (int i = 0;i<3;i++){
+        GUI_DrawLine(rect_of_numkey[i].x1,rect_of_numkey[i].y0,rect_of_numkey[12+i].x1,rect_of_numkey[12+i].y1);
+        GUI_DrawLine(rect_of_numkey[i*4].x0,rect_of_numkey[i*4].y1,rect_of_numkey[3+i*4].x1,rect_of_numkey[3+i*4].y1);
+    }
+
     for(uint8_t i=0 ;i<KEY_NUM ;i++)
     {
-      if(i>=KEY_NUM-2)//return & sure
-      {
-        GUI_SetColor(GRAY);
-        GUI_FillPrect(&rect_of_numkey[i]);
+
+        //GUI_DrawPrect(&rect_of_numkey[i]);
         GUI_SetTextMode(GUI_TEXTMODE_TRANS);
         GUI_SetColor(BLACK);
         GUI_DispStringInPrect(&rect_of_numkey[i],(u8*)Key_Num[i]);
         GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
-      }
-      else
-      {
-        GUI_SetColor(BLACK);
-        GUI_DispStringInPrect(&rect_of_numkey[i],(u8*)Key_Num[i]);
-      }
+
     }
-    return ;
+    GUI_RestoreColorDefault();
 }
 
-void show_value(void)
-{
-    //8 value
-const GUI_POINT value_xy[VALUE_NUM]={
-  {rect_of_Skey[3].x0+2*BYTE_WIDTH,  (rect_of_Skey[3].y1-rect_of_Skey[3].y0-BYTE_HEIGHT)/2+rect_of_Skey[3].y0},
-  {rect_of_Skey[4].x0+2*BYTE_WIDTH,  (rect_of_Skey[4].y1-rect_of_Skey[4].y0-BYTE_HEIGHT)/2+rect_of_Skey[4].y0},
-  {rect_of_Skey[5].x0+2*BYTE_WIDTH,  (rect_of_Skey[5].y1-rect_of_Skey[5].y0-BYTE_HEIGHT)/2+rect_of_Skey[5].y0},
-  {rect_of_Skey[6].x0+2*BYTE_WIDTH,  (rect_of_Skey[6].y1-rect_of_Skey[6].y0-BYTE_HEIGHT)/2+rect_of_Skey[6].y0},
-  {rect_of_Skey[7].x0+2*BYTE_WIDTH,  (rect_of_Skey[7].y1-rect_of_Skey[7].y0-BYTE_HEIGHT)/2+rect_of_Skey[7].y0},
-  {rect_of_Skey[8].x0+2*BYTE_WIDTH,  (rect_of_Skey[8].y1-rect_of_Skey[8].y0-BYTE_HEIGHT)/2+rect_of_Skey[8].y0},
-  {rect_of_Skey[9].x0+2*BYTE_WIDTH,  (rect_of_Skey[9].y1-rect_of_Skey[9].y0-BYTE_HEIGHT)/2+rect_of_Skey[9].y0},
-  {rect_of_Skey[10].x0+2*BYTE_WIDTH, (rect_of_Skey[10].y1-rect_of_Skey[10].y0-BYTE_HEIGHT)/2+rect_of_Skey[10].y0},
-};
 
-    GUI_SetBkColor(WHITE);
-    GUI_SetColor(BLACK);
-    for(int i = 0;i<VALUE_NUM;i++)
-    {
-        GUI_DispFloat(value_xy[i].x, value_xy[i].y, Get_parameter_value[i], 4, 1, CENTER);
-    }
-    GUI_SetColor(WHITE);
-    GUI_SetBkColor(BLACK);
-
-    return ;
-}
-void Setting_parameter(void)
+float num_pad(float old_val)
 {
-    GUI_RECT ParameterRect = {0, 0, LCD_WIDTH, rect_of_numkey[0].y0};
+    //bool exit = false;
+    GUI_RECT oldParameterRect = {0, 0, LCD_WIDTH/2 - BYTE_WIDTH, rect_of_numkey[0].y0};
+    GUI_RECT newParameterRect = {LCD_WIDTH/2 + BYTE_WIDTH, 0, LCD_WIDTH, rect_of_numkey[0].y0};
+    GUI_RECT arrowRect = {LCD_WIDTH/2 - BYTE_WIDTH, 0, LCD_WIDTH/2 + BYTE_WIDTH, rect_of_numkey[0].y0};
     uint8_t nowIndex = 0,lastIndex = 0;
     char ParameterBuf[BUFLONG] = {0};
-    int cmd_long;
-    char * cmd_buff;
     NUM_KEY_VALUES key_num = NUM_KEY_IDLE;
-
+    my_sprintf(ParameterBuf,"%f",old_val);
     Draw_keyboard();
-    while (infoMenu.menu[infoMenu.cur] == Setting_parameter)
+    GUI_DispStringInPrect(&arrowRect,(u8 *)">");
+    char tempstr[BUFLONG];
+    my_sprintf(tempstr, "%.2f", old_val);
+    GUI_SetColor(WHITE);
+    GUI_DispStringInPrect(&oldParameterRect,(u8*)tempstr);
+    while (1)
     {
         key_num = NumKeyGetValue();
         switch (key_num)
         {
-        case NUM_KEY_IDLE:
-            break;
-
-        case NUM_KEY_12:
+        case NUM_KEY_EXIT:
             Send_Settingcmd();
-            infoMenu.cur--;
-            break;
-
-        case NUM_KEY_13:
-            if(nowIndex)
-            {
-             ParameterBuf[nowIndex++] = '\n';
-             ParameterBuf[nowIndex] = 0;
-             #if 1
-             cmd_long = strlen(parameter_cmd[Select_Paranmeter]);
-             cmd_buff = malloc(cmd_long + strlen(ParameterBuf));
-             if(cmd_buff)
-             {
-                strcpy(cmd_buff, parameter_cmd[Select_Paranmeter]);
-                storeCmd(strcat(cmd_buff, ParameterBuf));
-                free(cmd_buff);
-             }
-             #endif
-             ParameterBuf[nowIndex = 0] = 0;
-
-            }
-            Send_Settingcmd();
-            infoMenu.cur--;
+            return old_val;
             break;
 
         case NUM_KEY_DEL:
@@ -245,64 +310,74 @@ void Setting_parameter(void)
             ParameterBuf[--nowIndex] = 0;
         break;
 
-        default:
+        case NUM_KEY_1:
+        case NUM_KEY_2:
+        case NUM_KEY_3:
+        case NUM_KEY_4:
+        case NUM_KEY_5:
+        case NUM_KEY_6:
+        case NUM_KEY_7:
+        case NUM_KEY_8:
+        case NUM_KEY_9:
+        case NUM_KEY_0:
             if(nowIndex < BUFLONG-1)
             {
-            ParameterBuf[nowIndex++] = Key_Num[key_num][0];
-            ParameterBuf[nowIndex] = 0;
+                ParameterBuf[nowIndex++] = Key_Num[key_num][0];
+                ParameterBuf[nowIndex] = 0;
             }
+            break;
+        case NUM_KEY_DEC:
+            if(!strchr(&ParameterBuf, Key_Num[key_num][0])){
+                if(nowIndex < BUFLONG-1)
+                {
+                    ParameterBuf[nowIndex++] = Key_Num[key_num][0];
+                    ParameterBuf[nowIndex] = 0;
+                }
+            }
+            break;
+
+        case NUM_KEY_OK:
+           /*  if(nowIndex)
+            {
+             ParameterBuf[nowIndex++] = '\n';
+             ParameterBuf[nowIndex] = 0;
+
+             cmd_long = strlen(para_cmd);
+             cmd_buff = malloc(cmd_long + strlen(ParameterBuf));
+             if(cmd_buff)
+             {
+                strcpy(cmd_buff, para_cmd);
+                storeCmd(strcat(cmd_buff, ParameterBuf));
+                free(cmd_buff);
+             }
+
+             ParameterBuf[nowIndex = 0] = 0;
+
+            } */
+
+            //Send_Settingcmd();
+            return strtof(ParameterBuf,NULL);
+            break;
+
+            default:
             break;
         }
 
         if(lastIndex != nowIndex)
         {
             lastIndex = nowIndex;
-            GUI_SetBkColor(WHITE);
-            GUI_ClearRect(0, 0, LCD_WIDTH, rect_of_numkey[0].y0);
-            GUI_DispStringInPrect(&ParameterRect, (u8 *)ParameterBuf);
+            GUI_SetBkColor(BLACK);
+            GUI_SetColor(WHITE);
+            GUI_ClearPrect(&newParameterRect);
+            GUI_DispStringInPrect(&newParameterRect, (u8 *)ParameterBuf);
+            GUI_RestoreColorDefault();
         }
+
     }
-    return ;
+
+
 }
 
-void parametersetting(void)
-{
-
-    TSC_ReDrawIcon = NULL;
-    Draw_parameterbutton();
-    Send_Settingcmd();
-    SKEY_VALUES key_num = SKEY_IDLE;
-
-    while (infoMenu.menu[infoMenu.cur] == parametersetting)
-    {
-    key_num = SKeyGetValue();
-    switch (key_num)
-    {
-    case SKEY_3:
-    case SKEY_4:
-    case SKEY_5:
-    case SKEY_6:
-    case SKEY_7:
-    case SKEY_8:
-    case SKEY_9:
-    case SKEY_10:
-        Select_Paranmeter = key_num;
-        infoMenu.menu[++infoMenu.cur] = Setting_parameter;
-        break;
-
-    case SKEY_11:
-        infoMenu.cur--;
-        break;
-
-    default:
-        break;
-    }
-
-    show_value();
-    loopBackEnd();
-    }
-    return ;
-}
 
 void temp_Change(void)
 {
@@ -335,6 +410,7 @@ void show_GlobalInfo(void)
 
     return;
 }
+
 void drawGlobalInfo(void){
 
 

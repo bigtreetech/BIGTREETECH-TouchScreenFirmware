@@ -215,32 +215,35 @@ void parseACK(void)
     {
       goto parse_end;
     }
+    //parse and store stepper driver current values
     else if(ack_seen("X driver current: "))
     {
-      Get_parameter_value[0] = ack_value();
+      setParameterCurrent(0,ack_value());
 
       if(ack_seen("Y driver current: "))
-      Get_parameter_value[1] = ack_value();
+      setParameterCurrent(1,ack_value());
 
       if(ack_seen("Z driver current: "))
-      Get_parameter_value[2] = ack_value();
+      setParameterCurrent(2,ack_value());
 
       if(ack_seen("E driver current: "))
-      Get_parameter_value[3] = ack_value();
+      setParameterCurrent(3,ack_value());
     }
+    //parse and store stepper steps/mm values
     else if(ack_seen("M92 X"))
     {
-      Get_parameter_value[4] = ack_value();
+      setParameterSteps(0,ack_value());
 
       if(ack_seen("Y"))
-      Get_parameter_value[5] = ack_value();
+      setParameterSteps(1,ack_value());
 
       if(ack_seen("Z"))
-      Get_parameter_value[6] = ack_value();
+      setParameterSteps(2,ack_value());
 
       if(ack_seen("E"))
-      Get_parameter_value[7] = ack_value();
+      setParameterSteps(3,ack_value());
     }
+
 #ifdef ONBOARD_SD_SUPPORT
     else if(ack_seen(bsdnoprintingmagic) && infoMenu.menu[infoMenu.cur] == menuPrinting)
     {
@@ -294,7 +297,7 @@ parse_end:
         // pass on this one to anyone else who might be listening
         Serial_Puts(port, dmaL2Cache);
       }
-    }        
+    }
   }
 
   if (avoid_terminal != true){

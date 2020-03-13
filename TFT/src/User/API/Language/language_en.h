@@ -12,8 +12,8 @@
     #define EN_SCREEN_SETTINGS      "Screen"
     #define EN_MACHINE_SETTINGS     "Machine"
     #define EN_FEATURE_SETTINGS     "Feature"
-    #define EN_SILENT_ON            "Silent On"
-    #define EN_SILENT_OFF           "Silent Off"
+    #define EN_SILENT_ON            "Sound Off"
+    #define EN_SILENT_OFF           "Sound On"
     #define EN_SHUT_DOWN            "Shut Down"
     #define EN_RGB_SETTINGS         "LED Color"
     #define EN_RGB_OFF              "LED Off"
@@ -85,9 +85,9 @@
     #define EN_X_DEC                "X-"
     #define EN_Y_DEC                "Y-"
     #define EN_Z_DEC                "Z-"
-    #define EN_X_HOME               "X"
-    #define EN_Y_HOME               "Y"
-    #define EN_Z_HOME               "Z"
+    #define EN_X                    "X"
+    #define EN_Y                    "Y"
+    #define EN_Z                    "Z"
     #define EN_001_MM               "0.01mm"
     #define EN_01_MM                "0.1mm"
     #define EN_1_MM                 "1mm"
@@ -141,7 +141,7 @@
     #define EN_WAIT_TEMP_SHUT_DOWN  "Wait for the temperature of hotend to be lower than " STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP) "℃" // Wait for the temperature of hotend to be lower than 50℃
     #define EN_FORCE_SHUT_DOWN      "Force"
     #define EN_SHUTTING_DOWN        "Shutting down..."
-    #define EN_PARAMETER_SETTING    "Parameter"
+    #define EN_PARAMETER_SETTING    "Parameter Settings"
     #define EN_ON                   "ON"
     #define EN_OFF                  "OFF"
     #define EN_AUTO                 "AUTO"
@@ -157,5 +157,8 @@
     #define EN_SEND_END_GCODE       "End Gcode after print"
     #define EN_PERSISTANT_STATUS_INFO "Persistent Status Info"
     #define EN_FILE_LISTMODE        "Files viewer List Mode"
+    #define EN_CURRENT_SETTING      "Driver Current Settings"
+    #define EN_STEPS_SETTING        "Steps per MM Settings"
+    
 
 #endif

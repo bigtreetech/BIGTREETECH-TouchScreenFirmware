@@ -100,9 +100,9 @@ const char *const en_pack[LABEL_NUM]={
   EN_X_DEC,
   EN_Y_DEC,
   EN_Z_DEC,
-  EN_X_HOME,
-  EN_Y_HOME,
-  EN_Z_HOME,
+  EN_X,
+  EN_Y,
+  EN_Z,
   EN_001_MM,
   EN_01_MM,
   EN_1_MM,
@@ -172,6 +172,8 @@ const char *const en_pack[LABEL_NUM]={
   EN_SEND_END_GCODE,
   EN_PERSISTANT_STATUS_INFO,
   EN_FILE_LISTMODE,
+  EN_CURRENT_SETTING,
+  EN_STEPS_SETTING,
 };
 
 const char *const cn_pack[LABEL_NUM]={
@@ -259,9 +261,9 @@ const char *const cn_pack[LABEL_NUM]={
   CN_X_DEC,
   CN_Y_DEC,
   CN_Z_DEC,
-  CN_X_HOME,
-  CN_Y_HOME,
-  CN_Z_HOME,
+  CN_X,
+  CN_Y,
+  CN_Z,
   CN_001_MM,
   CN_01_MM,
   CN_1_MM,
@@ -331,6 +333,8 @@ const char *const cn_pack[LABEL_NUM]={
   CN_SEND_END_GCODE,
   CN_PERSISTANT_STATUS_INFO,
   CN_FILE_LISTMODE,
+  CN_CURRENT_SETTING,
+  CN_STEPS_SETTING,
 };
 
 const char *const ru_pack[LABEL_NUM]={
@@ -418,9 +422,9 @@ const char *const ru_pack[LABEL_NUM]={
   RU_X_DEC,
   RU_Y_DEC,
   RU_Z_DEC,
-  RU_X_HOME,
-  RU_Y_HOME,
-  RU_Z_HOME,
+  RU_X,
+  RU_Y,
+  RU_Z,
   RU_001_MM,
   RU_01_MM,
   RU_1_MM,
@@ -490,6 +494,8 @@ const char *const ru_pack[LABEL_NUM]={
   RU_SEND_END_GCODE,
   RU_PERSISTANT_STATUS_INFO,
   RU_FILE_LISTMODE,
+  RU_CURRENT_SETTING,
+  RU_STEPS_SETTING,
 };
 
 const char *const jp_pack[LABEL_NUM]={
@@ -577,9 +583,9 @@ const char *const jp_pack[LABEL_NUM]={
   JP_X_DEC,
   JP_Y_DEC,
   JP_Z_DEC,
-  JP_X_HOME,
-  JP_Y_HOME,
-  JP_Z_HOME,
+  JP_X,
+  JP_Y,
+  JP_Z,
   JP_001_MM,
   JP_01_MM,
   JP_1_MM,
@@ -649,6 +655,8 @@ const char *const jp_pack[LABEL_NUM]={
   JP_SEND_END_GCODE,
   JP_PERSISTANT_STATUS_INFO,
   JP_FILE_LISTMODE,
+  JP_CURRENT_SETTING,
+  JP_STEPS_SETTING,
 };
 
 const char *const am_pack[LABEL_NUM]={
@@ -736,9 +744,9 @@ const char *const am_pack[LABEL_NUM]={
   AM_X_DEC,
   AM_Y_DEC,
   AM_Z_DEC,
-  AM_X_HOME,
-  AM_Y_HOME,
-  AM_Z_HOME,
+  AM_X,
+  AM_Y,
+  AM_Z,
   AM_001_MM,
   AM_01_MM,
   AM_1_MM,
@@ -808,6 +816,8 @@ const char *const am_pack[LABEL_NUM]={
   AM_SEND_END_GCODE,
   AM_PERSISTANT_STATUS_INFO,
   AM_FILE_LISTMODE,
+  AM_CURRENT_SETTING,
+  AM_STEPS_SETTING,
 };
 
 const char *const de_pack[LABEL_NUM]={
@@ -895,9 +905,9 @@ const char *const de_pack[LABEL_NUM]={
   DE_X_DEC,
   DE_Y_DEC,
   DE_Z_DEC,
-  DE_X_HOME,
-  DE_Y_HOME,
-  DE_Z_HOME,
+  DE_X,
+  DE_Y,
+  DE_Z,
   DE_001_MM,
   DE_01_MM,
   DE_1_MM,
@@ -967,6 +977,8 @@ const char *const de_pack[LABEL_NUM]={
   DE_SEND_END_GCODE,
   DE_PERSISTANT_STATUS_INFO,
   DE_FILE_LISTMODE,
+  DE_CURRENT_SETTING,
+  DE_STEPS_SETTING,
 };
 
 const char *const cz_pack[LABEL_NUM]={
@@ -1054,9 +1066,9 @@ const char *const cz_pack[LABEL_NUM]={
   CZ_X_DEC,
   CZ_Y_DEC,
   CZ_Z_DEC,
-  CZ_X_HOME,
-  CZ_Y_HOME,
-  CZ_Z_HOME,
+  CZ_X,
+  CZ_Y,
+  CZ_Z,
   CZ_001_MM,
   CZ_01_MM,
   CZ_1_MM,
@@ -1126,6 +1138,8 @@ const char *const cz_pack[LABEL_NUM]={
   CZ_SEND_END_GCODE,
   CZ_PERSISTANT_STATUS_INFO,
   CZ_FILE_LISTMODE,
+  CZ_CURRENT_SETTING,
+  CZ_STEPS_SETTING,
 };
 
 const char *const es_pack[LABEL_NUM]={
@@ -1213,9 +1227,9 @@ const char *const es_pack[LABEL_NUM]={
   ES_X_DEC,
   ES_Y_DEC,
   ES_Z_DEC,
-  ES_X_HOME,
-  ES_Y_HOME,
-  ES_Z_HOME,
+  ES_X,
+  ES_Y,
+  ES_Z,
   ES_001_MM,
   ES_01_MM,
   ES_1_MM,
@@ -1285,6 +1299,8 @@ const char *const es_pack[LABEL_NUM]={
   ES_SEND_END_GCODE,
   ES_PERSISTANT_STATUS_INFO,
   ES_FILE_LISTMODE,
+  ES_CURRENT_SETTING,
+  ES_STEPS_SETTING,
 };
 
 const char *const fr_pack[LABEL_NUM]={
@@ -1372,9 +1388,9 @@ const char *const fr_pack[LABEL_NUM]={
   FR_X_DEC,
   FR_Y_DEC,
   FR_Z_DEC,
-  FR_X_HOME,
-  FR_Y_HOME,
-  FR_Z_HOME,
+  FR_X,
+  FR_Y,
+  FR_Z,
   FR_001_MM,
   FR_01_MM,
   FR_1_MM,
@@ -1444,6 +1460,8 @@ const char *const fr_pack[LABEL_NUM]={
   FR_SEND_END_GCODE,
   FR_PERSISTANT_STATUS_INFO,
   FR_FILE_LISTMODE,
+  FR_CURRENT_SETTING,
+  FR_STEPS_SETTING,
 };
 
 const char *const pt_pack[LABEL_NUM]={
@@ -1531,9 +1549,9 @@ const char *const pt_pack[LABEL_NUM]={
   PT_X_DEC,
   PT_Y_DEC,
   PT_Z_DEC,
-  PT_X_HOME,
-  PT_Y_HOME,
-  PT_Z_HOME,
+  PT_X,
+  PT_Y,
+  PT_Z,
   PT_001_MM,
   PT_01_MM,
   PT_1_MM,
@@ -1603,6 +1621,8 @@ const char *const pt_pack[LABEL_NUM]={
   PT_SEND_END_GCODE,
   PT_PERSISTANT_STATUS_INFO,
   PT_FILE_LISTMODE,
+  PT_CURRENT_SETTING,
+  PT_STEPS_SETTING,
 };
 
 const char *const it_pack[LABEL_NUM]={
@@ -1690,9 +1710,9 @@ const char *const it_pack[LABEL_NUM]={
   IT_X_DEC,
   IT_Y_DEC,
   IT_Z_DEC,
-  IT_X_HOME,
-  IT_Y_HOME,
-  IT_Z_HOME,
+  IT_X,
+  IT_Y,
+  IT_Z,
   IT_001_MM,
   IT_01_MM,
   IT_1_MM,
@@ -1762,6 +1782,8 @@ const char *const it_pack[LABEL_NUM]={
   IT_SEND_END_GCODE,
   IT_PERSISTANT_STATUS_INFO,
   IT_FILE_LISTMODE,
+  IT_CURRENT_SETTING,
+  IT_STEPS_SETTING,
 };
 
 const char *const pl_pack[LABEL_NUM]={
@@ -1849,9 +1871,9 @@ const char *const pl_pack[LABEL_NUM]={
   PL_X_DEC,
   PL_Y_DEC,
   PL_Z_DEC,
-  PL_X_HOME,
-  PL_Y_HOME,
-  PL_Z_HOME,
+  PL_X,
+  PL_Y,
+  PL_Z,
   PL_001_MM,
   PL_01_MM,
   PL_1_MM,
@@ -1921,6 +1943,8 @@ const char *const pl_pack[LABEL_NUM]={
   PL_SEND_END_GCODE,
   PL_PERSISTANT_STATUS_INFO,
   PL_FILE_LISTMODE,
+  PL_CURRENT_SETTING,
+  PL_STEPS_SETTING,
 };
 
 const char *const sk_pack[LABEL_NUM]={
@@ -2008,9 +2032,9 @@ const char *const sk_pack[LABEL_NUM]={
   SK_X_DEC,
   SK_Y_DEC,
   SK_Z_DEC,
-  SK_X_HOME,
-  SK_Y_HOME,
-  SK_Z_HOME,
+  SK_X,
+  SK_Y,
+  SK_Z,
   SK_001_MM,
   SK_01_MM,
   SK_1_MM,
@@ -2080,6 +2104,8 @@ const char *const sk_pack[LABEL_NUM]={
   SK_SEND_END_GCODE,
   SK_PERSISTANT_STATUS_INFO,
   SK_FILE_LISTMODE,
+  SK_CURRENT_SETTING,
+  SK_STEPS_SETTING,
 };
 
 const char *const du_pack[LABEL_NUM]={
@@ -2167,9 +2193,9 @@ const char *const du_pack[LABEL_NUM]={
   DU_X_DEC,
   DU_Y_DEC,
   DU_Z_DEC,
-  DU_X_HOME,
-  DU_Y_HOME,
-  DU_Z_HOME,
+  DU_X,
+  DU_Y,
+  DU_Z,
   DU_001_MM,
   DU_01_MM,
   DU_1_MM,
@@ -2239,6 +2265,8 @@ const char *const du_pack[LABEL_NUM]={
   DU_SEND_END_GCODE,
   DU_PERSISTANT_STATUS_INFO,
   DU_FILE_LISTMODE,
+  DU_CURRENT_SETTING,
+  DU_STEPS_SETTING,
 };
 
 u8 * textSelect(u8 sel)

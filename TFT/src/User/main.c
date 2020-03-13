@@ -31,17 +31,11 @@ void Hardware_GenericInit(void)
   LCD_RefreshDirection();  //refresh display direction after reading settings
   scanUpdates();
   #ifndef MKS_32_V1_4
-    //causes hang if we deinit spi1 
+    //causes hang if we deinit spi1
     SD_DeInit();
   #endif
   #if LCD_ENCODER_SUPPORT
     LCD_EncoderInit();
-  #endif
-
-  #ifndef ST7920_SPI
-    #ifdef CLEAN_MODE_SWITCHING_SUPPORT 
-    #error "CLEAN_MODE_SWITCHING_SUPPORT can only be enabled for TFT controllers which support ST7920 Emulator/Marlin Mode. Disable CLEAN_MODE_SWITCHING_SUPPORT in Configuration.h"
-    #endif
   #endif
 
   #ifdef PS_ON_PIN
@@ -53,20 +47,9 @@ void Hardware_GenericInit(void)
   #endif
 
   #ifdef LED_color_PIN
-    #ifdef STARTUP_KNOB_LED_COLOR
-      #if STARTUP_KNOB_LED_COLOR < 1
-      #error STARTUP_KNOB_LED_COLOR cannot be less than 1
-      #endif
-      
-      #if STARTUP_KNOB_LED_COLOR > 9
-      #error STARTUP_KNOB_LED_COLOR cannot be greater than 9
-      #endif
-    #else
-    #define STARTUP_KNOB_LED_COLOR 1
-    #endif
-    
+
     knob_LED_Init();
-    
+
   #else
     #define STARTUP_KNOB_LED_COLOR 1
   #endif
