@@ -229,19 +229,19 @@ void parametersetting(){
         switch (key_num)
         {
         case KEY_ICON_0:
-            infoMenu.menu[++infoMenu.cur] = setStepsMenuItems;   break;
-        break;
+            infoMenu.menu[++infoMenu.cur] = setStepsMenuItems;
+            break;
 
         case KEY_ICON_1:
-            infoMenu.menu[++infoMenu.cur] = setCurrentMenuItems;   break;
-        break;
+            infoMenu.menu[++infoMenu.cur] = setCurrentMenuItems;
+            break;
 
         case KEY_ICON_7:
-        infoMenu.cur--;
-        break;
+            infoMenu.cur--;
+            break;
 
         default:
-        break;
+            break;
 
         }
 
@@ -303,12 +303,11 @@ float num_pad(float old_val)
         case NUM_KEY_EXIT:
             Send_Settingcmd();
             return old_val;
-            break;
 
         case NUM_KEY_DEL:
             if(nowIndex)
             ParameterBuf[--nowIndex] = 0;
-        break;
+            break;
 
         case NUM_KEY_1:
         case NUM_KEY_2:
@@ -357,7 +356,6 @@ float num_pad(float old_val)
 
             //Send_Settingcmd();
             return strtof(ParameterBuf,NULL);
-            break;
 
             default:
             break;

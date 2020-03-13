@@ -2,6 +2,7 @@
 #define _SETTINGS_H_
 
 #include "stdint.h"
+#include "coordinate.h"
 
 typedef enum
 {
@@ -22,11 +23,9 @@ typedef struct
   uint8_t  silent;
   uint8_t  auto_off;
   uint8_t  terminalACK;
-  uint8_t  invert_xaxis;
-  uint8_t  invert_yaxis;
+  uint8_t  invert_axis[TOTAL_AXIS];
   uint8_t  move_speed;
   uint8_t  knob_led_color;
-  uint8_t  invert_zaxis;
   uint8_t  send_start_gcode;
   uint8_t  send_end_gcode;
   uint8_t  persistent_info;

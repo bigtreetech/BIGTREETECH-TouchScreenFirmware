@@ -47,9 +47,7 @@ void Hardware_GenericInit(void)
   #endif
 
   #ifdef LED_color_PIN
-
     knob_LED_Init();
-
   #else
     #define STARTUP_KNOB_LED_COLOR 1
   #endif
@@ -65,7 +63,6 @@ void Hardware_GenericInit(void)
 
 int main(void)
 {
-
   SCB->VTOR = VECT_TAB_FLASH;
 
   Hardware_GenericInit();

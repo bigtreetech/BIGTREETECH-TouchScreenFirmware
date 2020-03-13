@@ -163,7 +163,7 @@
 #ifdef AUTO_BED_LEVELING
   // Enable this will send "M500" after "G29" to store leveling value
   // and send "M420 S1" to enable leveling state after startup
-  #define AUTO_SAVE_LOAD_LEVELING_VALUE
+  //#define AUTO_SAVE_LOAD_LEVELING_VALUE
 #endif
 
 // Move to four corner points to Leveling manually (Point 1, Point 2, Point 3, Point 4)

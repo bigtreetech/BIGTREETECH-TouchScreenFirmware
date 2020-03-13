@@ -114,24 +114,24 @@ void updateFeatureSettings(uint8_t key_val)
     break;
       
     case SKEY_INVERT_X:
-    infoSettings.invert_xaxis = (infoSettings.invert_xaxis + 1) % TOGGLE_NUM;
-    settingPage[item_index].icon = toggleitem[infoSettings.invert_xaxis];
+    infoSettings.invert_axis[X_AXIS] = (infoSettings.invert_axis[X_AXIS] + 1) % TOGGLE_NUM;
+    settingPage[item_index].icon = toggleitem[infoSettings.invert_axis[X_AXIS]];
     featureSettingsItems.items[key_val] = settingPage[item_index];
 
     menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
     break;
 
     case SKEY_INVERT_Y:
-    infoSettings.invert_yaxis = (infoSettings.invert_yaxis + 1) % TOGGLE_NUM;
-    settingPage[item_index].icon = toggleitem[infoSettings.invert_yaxis];
+    infoSettings.invert_axis[Y_AXIS] = (infoSettings.invert_axis[Y_AXIS] + 1) % TOGGLE_NUM;
+    settingPage[item_index].icon = toggleitem[infoSettings.invert_axis[Y_AXIS]];
     featureSettingsItems.items[key_val] = settingPage[item_index];
 
     menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
     break;
 
     case SKEY_INVERT_Z:
-    infoSettings.invert_zaxis = (infoSettings.invert_zaxis + 1) % TOGGLE_NUM;
-    settingPage[item_index].icon = toggleitem[infoSettings.invert_zaxis];
+    infoSettings.invert_axis[Z_AXIS] = (infoSettings.invert_axis[Z_AXIS] + 1) % TOGGLE_NUM;
+    settingPage[item_index].icon = toggleitem[infoSettings.invert_axis[Z_AXIS]];
     featureSettingsItems.items[key_val] = settingPage[item_index];
 
     menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
@@ -228,17 +228,17 @@ void loadFeatureSettings(){
         break;
 
 		case SKEY_INVERT_X:
-        settingPage[item_index].icon = toggleitem[infoSettings.invert_xaxis];
+        settingPage[item_index].icon = toggleitem[infoSettings.invert_axis[X_AXIS]];
         featureSettingsItems.items[i] = settingPage[item_index];
         break;
         
       case SKEY_INVERT_Y:
-        settingPage[item_index].icon = toggleitem[infoSettings.invert_yaxis];
+        settingPage[item_index].icon = toggleitem[infoSettings.invert_axis[Y_AXIS]];
         featureSettingsItems.items[i] = settingPage[item_index];
         break;
 
       case SKEY_INVERT_Z:
-        settingPage[item_index].icon = toggleitem[infoSettings.invert_zaxis];
+        settingPage[item_index].icon = toggleitem[infoSettings.invert_axis[Z_AXIS]];
         featureSettingsItems.items[i] = settingPage[item_index];
         break;
 

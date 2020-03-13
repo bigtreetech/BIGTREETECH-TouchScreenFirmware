@@ -166,7 +166,7 @@
     extern const uint32_t led_color[LED_color_NUM];
 
 
-    void knob_LED_Init();
+    void knob_LED_Init(void);
     void knob_LED_DeInit(void);
     void ws2812_send_DAT(uint32_t ws2812_dat);
     #endif

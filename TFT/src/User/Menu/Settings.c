@@ -16,11 +16,11 @@ void infoSettingsReset(void)
   infoSettings.silent = 0;
   infoSettings.auto_off = 0;
   infoSettings.terminalACK = 0;
-  infoSettings.invert_xaxis = 0;
-  infoSettings.invert_yaxis = 0;
+  infoSettings.invert_axis[X_AXIS] = 0;
+  infoSettings.invert_axis[Y_AXIS] = 0;
+  infoSettings.invert_axis[Z_AXIS] = 0;
   infoSettings.move_speed = 0;
   infoSettings.knob_led_color = (STARTUP_KNOB_LED_COLOR - 1); 
-  infoSettings.invert_zaxis = 0;
   infoSettings.send_start_gcode = 1;
   infoSettings.send_end_gcode = 1;
   infoSettings.persistent_info = 1;

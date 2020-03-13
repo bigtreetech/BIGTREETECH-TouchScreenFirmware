@@ -31,7 +31,7 @@
                                               LED_VIOLET
                                               };
 
-void knob_LED_Init() // 12 11
+void knob_LED_Init(void) // 12 11
 {
     uint16_t psc = _PSC;
     uint16_t arr = _ARR;
