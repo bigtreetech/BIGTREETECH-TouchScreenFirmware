@@ -115,26 +115,38 @@ void menuMove(void)
       if(infoSettings.invert_xaxis == 1){
         moveItems.items[0].label.index = LABEL_X_DEC;
         moveItems.items[4].label.index = LABEL_X_INC;
+        x_axis_up   = XGCODE_DEC;
+        x_axis_down = XGCODE_INC;
       }
       else{
         moveItems.items[0].label.index = LABEL_X_INC;
         moveItems.items[4].label.index = LABEL_X_DEC;
+        x_axis_up   = XGCODE_INC;
+        x_axis_down = XGCODE_DEC;
       }
       if(infoSettings.invert_yaxis == 1){
         moveItems.items[1].label.index = LABEL_Y_DEC;
         moveItems.items[5].label.index = LABEL_Y_INC;
+        y_axis_up   = YGCODE_DEC;
+        y_axis_down = YGCODE_INC;
       }
       else{
         moveItems.items[1].label.index = LABEL_Y_INC;
         moveItems.items[5].label.index = LABEL_Y_DEC;
+        y_axis_up   = YGCODE_INC;
+        y_axis_down = YGCODE_DEC;
       }
         if(infoSettings.invert_zaxis == 1){
         moveItems.items[2].label.index = LABEL_Z_DEC;
         moveItems.items[6].label.index = LABEL_Z_INC;
+        z_axis_up   = ZGCODE_DEC;
+        z_axis_down = ZGCODE_INC;
       }
       else{
         moveItems.items[2].label.index = LABEL_Z_INC;
         moveItems.items[6].label.index = LABEL_Z_DEC;
+        z_axis_up   = ZGCODE_INC;
+        z_axis_down = ZGCODE_DEC;
       }
   #endif
 
@@ -240,7 +252,7 @@ void menuMove(void)
         case KEY_ICON_7: infoMenu.cur--; break;
         
         default:
-              #if LCD_ENCODER_SUPPORT && !MENU_LIST_MODE
+              #if LCD_ENCODER_SUPPORT
                 if(encoderPosition)
                 {
                   if(encoderPosition > 0)
@@ -248,13 +260,13 @@ void menuMove(void)
                     switch(a)
                     {
                     case X_AXIS:
-                      storeCmd(XGCODE_UP, item_move_len[item_move_len_i]);  
+                      storeCmd(x_axis_up, item_move_len[item_move_len_i]);  
                       break;
                     case Y_AXIS:
-                      storeCmd(YGCODE_UP, item_move_len[item_move_len_i]);
+                      storeCmd(y_axis_up, item_move_len[item_move_len_i]);
                       break;
                     case Z_AXIS:
-                      storeCmd(ZGCODE_UP, item_move_len[item_move_len_i]);
+                      storeCmd(z_axis_up, item_move_len[item_move_len_i]);
                       break;
                     default:
                       break;
@@ -265,13 +277,13 @@ void menuMove(void)
                     switch(a)
                     {
                     case X_AXIS:
-                      storeCmd(XGCODE_DOWN, item_move_len[item_move_len_i]);  
+                      storeCmd(x_axis_down, item_move_len[item_move_len_i]);  
                       break;
                     case Y_AXIS:
-                      storeCmd(YGCODE_DOWN, item_move_len[item_move_len_i]);
+                      storeCmd(y_axis_down, item_move_len[item_move_len_i]);
                       break;
                     case Z_AXIS:
-                      storeCmd(ZGCODE_DOWN, item_move_len[item_move_len_i]);
+                      storeCmd(z_axis_down, item_move_len[item_move_len_i]);
                       break;
                     default:
                       break;
