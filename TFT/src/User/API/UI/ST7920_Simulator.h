@@ -16,7 +16,7 @@
 #define ST7920_XSTART    (0x80)
 #define ST7920_YSTART    (0x80)
 
-#ifndef ST7920_FULLSCREEN
+#ifdef ST7920_WINDOWED
   #define LCD_XROWS 128
   #define LCD_YROWS 64
 #else

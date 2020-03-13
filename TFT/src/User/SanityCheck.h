@@ -25,5 +25,8 @@
   #define STARTUP_KNOB_LED_COLOR 1
 #endif
 
+#ifdef ST7920_FULLSCREEN
+  #error "Fullscreen Marlin Mode is enabled by default and ST7920_FULLSCREEN is now ST7920_WINDOWED. Please update your configuration."
+#endif
 
 #endif
