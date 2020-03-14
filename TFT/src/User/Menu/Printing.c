@@ -30,7 +30,7 @@ const GUI_RECT printinfo_val_rect[6] = {
         START_X + PICON_LG_WIDTH*2 + PICON_SPACE_X*2 + PICON_VAL_SM_EX,     ICON_START_Y + PICON_HEIGHT*1 + PICON_SPACE_Y*1 + PICON_VAL_Y + BYTE_HEIGHT},
 };
 
-static u32 nowTime = 0;
+static u32 nextTime = 0;
 static u32 toggle_time = 200; // 1 seconds is 100
 TOOL c_Ext = NOZZLE0;
 static int c_fan = 0;
@@ -468,7 +468,7 @@ void reDrawLayer(int icon_pos)
 
 void toggleinfo(void)
 {
-  if (OS_GetTime() > nowTime + toggle_time)
+  if (OS_GetTime() > nextTime)
   {
     if (EXTRUDER_NUM > 1)
     {
@@ -489,7 +489,7 @@ void toggleinfo(void)
     }
 
     c_speedID = (c_speedID + 1) % 2;
-    nowTime = OS_GetTime(); 
+    nextTime = OS_GetTime() + toggle_time; 
     rapid_serial_loop();	 //perform backend printing loop before drawing to avoid printer idling
     reDrawSpeed(SPD_ICON_POS);
   }
@@ -838,16 +838,16 @@ void getGcodeFromFile(void)
 
 void loopCheckPrinting(void)
 {
-  static u32  nowTime=0;
+  static u32  nextTime=0;
 
   do
   {  /* WAIT FOR M27	*/
-    if(update_waiting == true)                {nowTime=OS_GetTime();break;}
-    if(OS_GetTime() < nowTime+update_time)       break;
+    if(update_waiting == true) {nextTime=OS_GetTime()+update_time; break;}
+    if(OS_GetTime() < nextTime) break;
 
-    if(storeCmd("M27\n")==false)               break;
+    if(storeCmd("M27\n")==false) break;
 
-    nowTime=OS_GetTime();
+    nextTime=OS_GetTime()+update_time;
     update_waiting=true;
   }while(0);
 }

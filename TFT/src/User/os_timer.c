@@ -69,14 +69,14 @@ void OS_TaskInit(OS_TASK *task, u32 time, FP_TASK function, void *para)
 void OS_TaskCheck(OS_TASK *task_t)
 {
   if(task_t->is_exist==0)   return;
-  if(OS_GetTime()<task_t->start_time+task_t->time)  return;
+  if(OS_GetTime()<task_t->start_time)  return;
   if(task_t->is_repeat==0)
   {
     task_t->is_exist=0;
   }
   else
   {
-    task_t->start_time=OS_GetTime();
+    task_t->start_time=OS_GetTime()+task_t->time;
   }
   (*task_t->task)(task_t->para);
 }
@@ -92,7 +92,7 @@ void OS_TaskEnable(OS_TASK *task_t,u8 is_exec,u8 is_repeat)
 {
   task_t->is_exist=1;
   task_t->is_repeat=is_repeat;
-  task_t->start_time=OS_GetTime();
+  task_t->start_time=OS_GetTime()+task_t->time;
   if(is_exec)
     (*task_t->task)(task_t->para);
 }

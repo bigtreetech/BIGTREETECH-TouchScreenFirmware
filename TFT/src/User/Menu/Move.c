@@ -54,7 +54,7 @@ const ITEM itemMoveLen[ITEM_MOVE_LEN_NUM] = {
 const  float item_move_len[ITEM_MOVE_LEN_NUM] = {0.1f, 1, 10};
 static u8    item_move_len_i = 1;
 
-static u32 nowTime = 0;
+static u32 nextTime = 0;
 static u32 update_time = 50; // 1 seconds is 100
 
 AXIS nowAxis = X_AXIS;
@@ -180,13 +180,13 @@ void menuMove(void)
 
 void update_gantry(void)
 {
-  if (OS_GetTime() > nowTime + update_time)
+  if (OS_GetTime() > nextTime)
   {
     if (infoHost.connected == true && infoHost.wait == false){
       storeCmd("M114\n");
     }
     drawXYZ();
-    nowTime = OS_GetTime();
+    nextTime = OS_GetTime() + update_time;
   }
 }
 void drawXYZ(void){
