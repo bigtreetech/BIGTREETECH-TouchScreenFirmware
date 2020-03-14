@@ -283,7 +283,7 @@ void sendQueueCmd(void)
             {
               heatSyncTargetTemp(i, cmd_value());
             }
-            else
+            else if (!cmd_seen('\n'))
             {
               char buf[12];
               sprintf(buf, "S%d\n", heatGetTargetTemp(i));
@@ -307,7 +307,7 @@ void sendQueueCmd(void)
             {
               fanSetSpeed(i, cmd_value());
             }
-            else
+            else if (!cmd_seen('\n'))
             {
               char buf[12];
               sprintf(buf, "S%d\n", fanGetSpeed(i));
@@ -347,7 +347,7 @@ void sendQueueCmd(void)
             {
               heatSyncTargetTemp(BED,cmd_value());
             }
-            else
+            else if (!cmd_seen('\n'))
             {
               char buf[12];
               sprintf(buf, "S%d\n", heatGetTargetTemp(BED));
@@ -361,7 +361,7 @@ void sendQueueCmd(void)
             {
               speedSetPercent(0,cmd_value());
             }
-            else
+            else if (!cmd_seen('\n'))
             {
               char buf[12];
               sprintf(buf, "S%d\n", speedGetPercent(0));
@@ -374,7 +374,7 @@ void sendQueueCmd(void)
             {
               speedSetPercent(1,cmd_value());
             }
-            else
+            else if (!cmd_seen('\n'))
             {
               char buf[12];
               sprintf(buf, "S%d\n", speedGetPercent(1));
