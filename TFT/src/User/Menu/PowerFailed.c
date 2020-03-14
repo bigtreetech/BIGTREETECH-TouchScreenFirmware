@@ -45,18 +45,18 @@ bool powerFailedCreate(char *path)
 void powerFailedCache(u32 offset)
 {
   UINT        br;
-  static u32  nowTime = 0;
+  static u32  nextTime = 0;
 
-  if (OS_GetTime() < nowTime + 100)     return;
-  if (create_ok == false )              return;
-  if (powerFailedSave == false)         return;
-  if (isPause() == true)                return;
+  if (OS_GetTime() < nextTime)  return;
+  if (create_ok == false )      return;
+  if (powerFailedSave == false) return;
+  if (isPause() == true)        return;
 
-  if (infoCacheCmd.count != 0)          return;
+  if (infoCacheCmd.count != 0)  return;
 
   powerFailedSave = false;
 
-  nowTime = OS_GetTime();
+  nextTime = OS_GetTime() + 100;
 
   infoBreakPoint.offset = offset;
   for (AXIS i = X_AXIS; i < TOTAL_AXIS; i++)

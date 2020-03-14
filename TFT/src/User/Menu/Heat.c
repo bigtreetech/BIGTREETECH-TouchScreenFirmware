@@ -291,10 +291,10 @@ void menuHeat(void)
     update_time=300;
 }
 
-u32 lastHeatCheckTime = 0;
+u32 nextHeatCheckTime = 0;
 void updateLastHeatCheckTime(void)
 {
-  lastHeatCheckTime = OS_GetTime();
+  nextHeatCheckTime = OS_GetTime() + update_time;
 }
 
 
@@ -305,7 +305,7 @@ void loopCheckHeater(void)
   do
   {  /* Send M105 query temperature continuously	*/
     if(update_waiting == true)                {updateLastHeatCheckTime();break;}
-    if(OS_GetTime() - lastHeatCheckTime < update_time)       break;
+    if(OS_GetTime() < nextHeatCheckTime)       break;
     if(RequestCommandInfoIsRunning())          break; //to avoid colision in Gcode response processing
     if(storeCmd("M105\n")==false)              break;
     updateLastHeatCheckTime();

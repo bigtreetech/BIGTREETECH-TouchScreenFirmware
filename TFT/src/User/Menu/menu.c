@@ -147,7 +147,7 @@ void reminderMessage(int16_t inf, SYS_STATUS status)
   GUI_DispStringInPrect(&reminder.rect, textSelect(reminder.inf));
   GUI_SetColor(FONT_COLOR);
   reminder.status = status;
-  reminder.time = OS_GetTime();
+  reminder.time = OS_GetTime() + 200;
 }
 
 void volumeReminderMessage(int16_t inf, SYS_STATUS status)
@@ -157,7 +157,7 @@ void volumeReminderMessage(int16_t inf, SYS_STATUS status)
   GUI_DispStringInPrect(&volumeReminder.rect, textSelect(volumeReminder.inf));
   GUI_SetColor(FONT_COLOR);
   volumeReminder.status = status;
-  volumeReminder.time = OS_GetTime();
+  volumeReminder.time = OS_GetTime() + 200;
 }
 
 void busyIndicator(SYS_STATUS status)
@@ -169,7 +169,7 @@ void busyIndicator(SYS_STATUS status)
     GUI_SetColor(FONT_COLOR);
   }
   busySign.status = status;
-  busySign.time = OS_GetTime();
+  busySign.time = OS_GetTime() + 200;
 }
 
 void loopReminderClear(void)
@@ -190,7 +190,7 @@ void loopReminderClear(void)
       break;
 
     case STATUS_NORMAL:
-      if(OS_GetTime()<reminder.time+200)
+      if(OS_GetTime()<reminder.time)
         return;
       break;
     default:
@@ -209,7 +209,7 @@ void loopVolumeReminderClear(void)
   switch(volumeReminder.status)
   {
     case STATUS_NORMAL:
-      if(OS_GetTime()<volumeReminder.time + 200)
+      if(OS_GetTime()<volumeReminder.time)
         return;
       break;
     default:
@@ -231,7 +231,7 @@ void loopBusySignClear(void)
       return;
 
     case STATUS_BUSY:
-     if(OS_GetTime()<busySign.time+200)
+     if(OS_GetTime()<busySign.time)
         return;
      break;
   }

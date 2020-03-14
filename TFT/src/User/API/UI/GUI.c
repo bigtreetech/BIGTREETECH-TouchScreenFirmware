@@ -811,9 +811,9 @@ void Scroll_DispString(SCROLL * para, uint8_t align)
   if(para->text == NULL) return;
   if(para->totalPixelWidth > para->maxPixelWidth)
   {
-    if(OS_GetTime() - para->time > 5) // 50ms
+    if(OS_GetTime() > para->time)
     {
-      para->time = OS_GetTime();
+      para->time = OS_GetTime() + 5; // 50ms
       GUI_SetRange(para->rect->x0, para->rect->y0, para->rect->x1, para->rect->y1);
       if(para->curByte < para->maxByte)
       {

@@ -43,14 +43,14 @@ void FIL_Runout_Init(void)
 bool FIL_RunoutPinFilteredLevel(void)
 {
   static bool rst = false;
-  static u32 nowTime = 0;
+  static u32 nextTime = 0;
   static u32 trueTimes = 0;
   static u32 falseTimes = 0;
 
-  if (OS_GetTime() > nowTime + FIL_NOISE_THRESHOLD)
+  if (OS_GetTime() > nextTime)
   {
     rst = trueTimes > falseTimes ? true : false;
-    nowTime = OS_GetTime();
+    nextTime = OS_GetTime() + FIL_NOISE_THRESHOLD;
     trueTimes = 0;
     falseTimes = 0;
   }
@@ -77,19 +77,19 @@ bool FIL_SmartRunoutDetect(void)
   static float lastExtrudePosition = 0.0f;
   static uint8_t lastRunoutPinLevel = 0;
   static uint8_t isAlive = false;
-  static u32  nowTime=0;
+  static u32  nextTime=0;
 
   bool pinLevel = FIL_RunoutPinFilteredLevel();
   float actualExtrude = coordinateGetAxisActual(E_AXIS);
 
   do
   {  /* Send M114 E query extrude position continuously	*/
-    if(update_waiting == true)                {nowTime=OS_GetTime();break;}
-    if(OS_GetTime()<nowTime+update_time)       break;
-    if(RequestCommandInfoIsRunning())          break; //to avoid colision in Gcode response processing
-    if(storeCmd("M114 E\n")==false)            break;
+    if(update_waiting == true)        {nextTime=OS_GetTime()+update_time;break;}
+    if(OS_GetTime()<nextTime)         break;
+    if(RequestCommandInfoIsRunning()) break; //to avoid colision in Gcode response processing
+    if(storeCmd("M114 E\n")==false)   break;
 
-    nowTime=OS_GetTime();
+    nextTime=OS_GetTime()+update_time;
     update_waiting=true;
   }while(0);
 
