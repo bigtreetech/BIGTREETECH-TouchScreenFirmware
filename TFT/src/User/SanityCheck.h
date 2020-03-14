@@ -25,5 +25,8 @@
   #define STARTUP_KNOB_LED_COLOR 1
 #endif
 
+#ifdef EXTRUDE_STEPS
+  #error "NEED NOT THIS, E Steps will be auto get by M92 after start up"
+#endif
 
 #endif

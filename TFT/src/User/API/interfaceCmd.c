@@ -255,11 +255,18 @@ void sendQueueCmd(void)
           
           case 82: //M82
             eSetRelative(false);
-          break;
+            break;
 
           case 83: //M83
             eSetRelative(true);
-          break;
+            break;
+
+          case 92: //M92
+            if(cmd_seen('X')) setParameterSteps(X_AXIS, cmd_value());
+            if(cmd_seen('Y')) setParameterSteps(Y_AXIS, cmd_value());
+            if(cmd_seen('Z')) setParameterSteps(Z_AXIS, cmd_value());
+            if(cmd_seen('E')) setParameterSteps(E_AXIS, cmd_value());
+            break;
 
           case 109: //M109
           {
@@ -375,6 +382,13 @@ void sendQueueCmd(void)
               speedSetSendWaiting(1, false);
             }
             break;
+
+          case 906: //M906
+            if(cmd_seen('X')) setParameterCurrent(X_AXIS, cmd_value());
+            if(cmd_seen('Y')) setParameterCurrent(Y_AXIS, cmd_value());
+            if(cmd_seen('Z')) setParameterCurrent(Z_AXIS, cmd_value());
+            if(cmd_seen('E')) setParameterCurrent(E_AXIS, cmd_value());
+            break;
         }
         break;
 
@@ -446,7 +460,7 @@ void sendQueueCmd(void)
   setCurrentAckSrc(infoCmd.queue[infoCmd.index_r].src);
   Serial_Puts(SERIAL_PORT, infoCmd.queue[infoCmd.index_r].gcode); //
   if (avoid_terminal != true){
-  sendGcodeTerminalCache(infoCmd.queue[infoCmd.index_r].gcode, TERMINAL_GCODE);
+    sendGcodeTerminalCache(infoCmd.queue[infoCmd.index_r].gcode, TERMINAL_GCODE);
   }
   infoCmd.count--;
   infoCmd.index_r = (infoCmd.index_r + 1) % CMD_MAX_LIST;

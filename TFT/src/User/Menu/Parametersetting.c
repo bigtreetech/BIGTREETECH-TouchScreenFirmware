@@ -23,25 +23,25 @@ const GUI_RECT rect_of_numkey[KEY_NUM]={
   {3*SKEYWIDTH, ICON_START_Y+3*SKEYHEIGHT, 4*SKEYWIDTH, ICON_START_Y+4*SKEYHEIGHT},//
 };
 
-const char *const parameterCurrent[STEPPER_COUNT] = {
+const char *const parameterCurrent[TOTAL_AXIS] = {
     "X Axis Current(mA)",
     "Y Axis Current(mA)",
     "Z Axis Current(mA)",
     "E Current(mA)"
 };
 
-const char *const parameterSteps[STEPPER_COUNT] = {
+const char *const parameterSteps[TOTAL_AXIS] = {
     "X Axis Steps/MM",
     "Y Axis Steps/MM",
     "Z Axis Steps/MM",
     "E Steps/MM"
 };
 
-const char *const parameter_currentCmd[STEPPER_COUNT] = {
+const char *const parameter_currentCmd[TOTAL_AXIS] = {
     "M906 X%.1f\n","M906 Y%.1f\n","M906 Z%.1f\n","M906 E%.1f\n",
 };
 
-const char *const parameter_stepsCmd[STEPPER_COUNT] = {
+const char *const parameter_stepsCmd[TOTAL_AXIS] = {
     "M92 X%.1f\n","M92 Y%.1f\n","M92 Z%.1f\n","M92 E%.1f\n",
 };
 
@@ -67,22 +67,22 @@ LABEL_SETTING_PARAMETER,
     {ICONCHAR_BACK,           LIST_LABEL,         LABEL_BACKGROUND,       LABEL_BACKGROUND},}
 };
 
-float parameter_current_value[STEPPER_COUNT];
-float parameter_steps_value[STEPPER_COUNT];
+float parameter_current_value[TOTAL_AXIS];
+float parameter_steps_value[TOTAL_AXIS];
 
-float getParameterCurrent(int index){
+float getParameterCurrent(AXIS index){
     return parameter_current_value[index];
 }
 
-float getParameterSteps(int index){
+float getParameterSteps(AXIS index){
     return parameter_steps_value[index];
 }
 
-void setParameterCurrent(int index, float val){
+void setParameterCurrent(AXIS index, float val){
     parameter_current_value[index] = val;
 }
 
-void setParameterSteps(int index, float val){
+void setParameterSteps(AXIS index, float val){
     parameter_steps_value[index] = val;
 }
 
@@ -117,7 +117,7 @@ void setCurrentMenuItems(){
     {ICONCHAR_BACK,             LIST_LABEL,           LABEL_BACKGROUND,     LABEL_BACKGROUND},}
     };
 
-    for(int i = 0; i < STEPPER_COUNT; i++){
+    for(int i = 0; i < TOTAL_AXIS; i++){
         setDynamicLabel(i,(char*)parameterCurrent[i]);
         setDynamicValue(i,parameter_current_value[i]);
     }
@@ -136,26 +136,26 @@ void setCurrentMenuItems(){
             break;
 
         default:
-            if(key_num < STEPPER_COUNT){
-                float v = num_pad(getParameterCurrent(key_num));
-                if (v != getParameterCurrent(key_num))
+            if(key_num < TOTAL_AXIS){
+                float v = num_pad(getParameterCurrent((AXIS)key_num));
+                if (v != getParameterCurrent((AXIS)key_num))
                 {
                     storeCmd(parameter_currentCmd[key_num],v);
                     setDynamicValue(key_num,v);
-                    setParameterCurrent(key_num,v);
+                    setParameterCurrent((AXIS)key_num,v);
                 }
-                    menuDrawListPage(&currentmenuitems);
+                menuDrawListPage(&currentmenuitems);
             }
             break;
 
         }
-    for(int i = 0; i < STEPPER_COUNT; i++){
-        if(getDynamicValue(i) != getParameterCurrent(i)){
-        setDynamicValue(i,parameter_current_value[i]);
-        menuDrawListItem(&currentmenuitems.items[i],i);
+        for(AXIS i = X_AXIS; i < TOTAL_AXIS; i++){
+            if(getDynamicValue(i) != getParameterCurrent(i)){
+                setDynamicValue(i,parameter_current_value[i]);
+                menuDrawListItem(&currentmenuitems.items[i],i);
+            }
         }
-    }
-    loopProcess();
+        loopProcess();
     }
 
 }
@@ -177,7 +177,7 @@ void setStepsMenuItems(){
     {ICONCHAR_BACK,             LIST_LABEL,           LABEL_BACKGROUND,     LABEL_BACKGROUND},}
     };
 
-    for(int i = 0; i < STEPPER_COUNT; i++){
+    for(int i = 0; i < TOTAL_AXIS; i++){
         setDynamicLabel(i,(char*)parameterSteps[i]);
         setDynamicValue(i,parameter_steps_value[i]);
     }
@@ -196,19 +196,19 @@ void setStepsMenuItems(){
             break;
 
         default:
-            if(key_num < STEPPER_COUNT){
-                float v = num_pad(getParameterSteps(key_num));
-                if (v != getParameterSteps(key_num)){
+            if(key_num < TOTAL_AXIS){
+                float v = num_pad(getParameterSteps((AXIS)key_num));
+                if (v != getParameterSteps((AXIS)key_num)){
                     storeCmd(parameter_stepsCmd[key_num],v);
-                    setDynamicValue(key_num,v);
-                    setParameterSteps(key_num,v);
+                    setDynamicValue((AXIS)key_num,v);
+                    setParameterSteps((AXIS)key_num,v);
                 }
                     menuDrawListPage(&stepsmenuitems);
             }
             break;
 
         }
-    for(int i = 0; i < STEPPER_COUNT; i++){
+    for(int i = 0; i < TOTAL_AXIS; i++){
         if(getDynamicValue(i) != getParameterSteps(i)){
         setDynamicValue(i,parameter_steps_value[i]);
         menuDrawListItem(&stepsmenuitems.items[i],i);

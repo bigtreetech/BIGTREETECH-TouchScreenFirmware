@@ -1,6 +1,7 @@
 #ifndef _PARAMETERSETTING_H_
 #define _PARAMETERSETTING_H_
 #include "menu.h"
+#include "coordinate.h"
 
 #define SKEYHEIGHT      (LCD_HEIGHT-ICON_START_Y)/4
 #define SKEYWIDTH       LCD_WIDTH/4
@@ -13,7 +14,6 @@
 
 #define KEY_NUM 16
 #define BUFLONG 6
-#define STEPPER_COUNT 4
 typedef enum
 {
   SKEY_0 = 0,
@@ -54,10 +54,10 @@ typedef enum
 }NUM_KEY_VALUES;
 
 
-float getParameterCurrent(int index);
-float getParameterSteps(int index);
-void setParameterCurrent(int index, float val);
-void setParameterSteps(int index, float val);
+float getParameterCurrent(AXIS index);
+float getParameterSteps(AXIS index);
+void setParameterCurrent(AXIS index, float val);
+void setParameterSteps(AXIS index, float val);
 void parametersetting(void);
 float num_pad(float old_val);
 

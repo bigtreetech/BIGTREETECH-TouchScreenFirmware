@@ -1,6 +1,7 @@
 #include "coordinate.h"
 #include "string.h"
 #include "Configuration.h"
+#include "Parametersetting.h"
 
 const char axis_id[TOTAL_AXIS]={'X','Y','Z','E'};
 
@@ -84,7 +85,7 @@ COORDINATE curPosition={{0.0f,0.0f,0.0f,0.0f},3000};
 
 void coordinateSetAxisActualSteps(AXIS axis, int steps)
 {
-  curPosition.axis[axis] = steps / EXTRUDE_STEPS; // TODO: NEED fix, M92 auto get
+  curPosition.axis[axis] = steps / getParameterSteps(E_AXIS);
 }
 
 float coordinateGetAxisActual(AXIS axis)

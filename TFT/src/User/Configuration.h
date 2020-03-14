@@ -231,8 +231,6 @@
   */
 #define AUTO_SHUT_DOWN_MAXTEMP 50
 
-#define EXTRUDE_STEPS  100.0f
-
 #define SHOW_FAN_PERCENTAGE // enable to show fan speed as a percentage instead of a value
 
 /**
