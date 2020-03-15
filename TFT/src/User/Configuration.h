@@ -13,25 +13,93 @@
  * Current color options from lcd.h: BLACK, BLUE, BROWN, BRRED, CYAN, GBLUE, GRAY, GREEN, MAGENTA, RED, WHITE, YELLOW
  */
 
+/**
+ * This setting determines the communication speed of the printer.
+ *
+ * 250000 works in most cases, but you might try a lower speed if
+ * you commonly experience drop-outs during host printing.
+ * You may try up to 1000000 to speed up SD file transfer.
+ *
+ * :[2400, 9600, 19200, 38400, 57600, 115200, 250000, 500000, 1000000]
+ */
+#define BAUDRATE 250000
+
+/**
+ * Default LANGUAGE
+ *
+ * Select the language to display on the LCD. These languages are available:
+ * ENGLISH, CHINESE, RUSSIAN, JAPANESE, ARMENIAN, GERMAN, CZECH, SPAIN, FRENCH, PORTUGUESE, ITALIAN, POLISH, SLOVAK, DUTCH
+ *
+ */
+#define DEFAULT_LANGUAGE ENGLISH
+
+/**
+ * Default LCD Mode
+ *
+ * Select the default LCD mode. You can always switch between the modes.
+ *
+ * These are available:
+ * ST7920_SPI // LCD12864 Sumilator
+ * SERIAL_TSC // Default
+ *
+ */
+#define DEFAULT_LCD_MODE SERIAL_TSC
+
+/**
+ * The duration and frequency for the UI feedback sound.
+ * Set these to 0 to disable audio feedback in the LCD menus.
+ * Only valid for SERIAL_TSC LCD MODE anf if BUZZER_PIN is set or availible.
+ */
+#define LCD_FEEDBACK_FREQUENCY_DURATION_L_US 11   // Default 11
+#define LCD_FEEDBACK_FREQUENCY_H_US          3    // Default 3
+
 // Marlin Mode Background & Font Color Options
 // Current color options from lcd.h: BLACK, BLUE, BROWN, BRRED, CYAN, GBLUE, GRAY, GREEN, MAGENTA, RED, WHITE, YELLOW
 #define ST7920_BKCOLOR BLACK
 #define ST7920_FNCOLOR GREEN
 
-// Text displayed at the top of the LCD in Marlin Mode.
+/**
+ *  Text displayed at the top of the LCD in Marlin Mode.
+ */
 //#define ST7920_BANNER_TEXT "LCD12864 Simulator"
 
-// Run Marlin Mode fullscreen. Not recommended for TFT24.
+/**
+ * Run Marlin Mode fullscreen.
+ * Not recommended for TFT24.
+ */
 //#define ST7920_FULLSCREEN
+
+/**
+ * CLEAN MODE SWITCHING SUPPORT
+ * Support for keeping UART(Serial communication) alive in Marlin Mode
+ * Gives the ability to connect Octoprint over UART to the TFT UART/serial 
+ * expansion port and have it work seamlessly no matter which mode the TFT is in. 
+ * Only for TFT24 V1.1, TFT35 V3.0 or TFT28 V3.0
+*/ 
+//#define CLEAN_MODE_SWITCHING_SUPPORT  // Enable CLEAN MODE SWITCHING SUPPORT
+
+/**
+ * DEFAULT STARTUP KNOB LED COLOR
+ * Choose one of the following numbers -->  1: LED_OFF,     2: LED_WHITE,   3: LED_RED,
+ *                                          4: LED_ORANGE,  5: LED_YELLOW,  6: LED_GREEN,
+ *                                          7: LED_BLUE,    8: LED_INDIGO,  9: LED_VIOLET
+ * Default value is: 1 for LED_OFF
+ *
+*/
+#define STARTUP_KNOB_LED_COLOR 1 //LED_OFF
 
 //===========================================================================
 //============================ TFT Mode Settings ============================
 //===========================================================================
 
-// Show BTT bootscreen when starting up
+/**
+ *  Show BTT bootscreen when starting up
+ */
 #define SHOW_BTT_BOOTSCREEN
 
-// TFT mode color
+/**
+ * TFT mode color
+ */
 #define TITLE_BACKGROUND_COLOR      BLACK  // Title background color // 0xD928
 #define BACKGROUND_COLOR            BLACK  // Background color // 0x0A29
 #define FONT_COLOR                  WHITE  // Font foreground color
@@ -45,7 +113,7 @@
 
 //                       PLA      PETG       ABS
 #define PREHEAT_BED      {60,      70,       100}
-#define PREHEAT_HOTEND   {200,     250,      230}
+#define PREHEAT_HOTEND   {200,     230,      230}
 #define PREHEAT_TEXT     {"PLA",  "PETG",   "ABS"}
 
 #define HEAT_MAX_TEMP    {150,    275,       275,       275,       275,       275,       275}    //max temperature can be set
@@ -73,12 +141,12 @@
 #define EXTRUDE_FAST_SPEED      1200
 
 // Size of machine
-#define X_MIN_POS 0
-#define Y_MIN_POS 0
+#define X_MIN_POS -4
+#define Y_MIN_POS -6
 #define Z_MIN_POS 0
-#define X_MAX_POS 235
-#define Y_MAX_POS 235
-#define Z_MAX_POS 250
+#define X_MAX_POS 320
+#define Y_MAX_POS 320
+#define Z_MAX_POS 450
 
 // Specify a pause position as { X, Y, Z_raise }
 #define NOZZLE_PAUSE_RETRACT_LENGTH 15   // (mm)
@@ -127,24 +195,9 @@
 // update the icons from alternate icon folder
 #define ALTERNATIVE_MOVE_MENU
 
-// Invert the Y Axis move Direction
-// this does not work if LIST MODE is enabled. To invert y axis in LIST MODE go to setting->feature settings
-//#define INVERT_YAXIS
-
-//Invert the Z Axis move Direction
-// this does not work if LIST MODE is enabled. To invert z axis in LIST MODE go to setting->feature settings
-//#define INVERT_ZAXIS
-
 // Enable Unified Move Menu
 // Move, Home, Extrude, ABL at one Place and bring Gcode Menu on Home Menu
-//#define UNIFIED_MENU
-
-/**
- * Enable list mode in Files menu and settings menu
- * It is friendly to display long file name, but the model preview feature is not available
- * Disable this if you want to use the model preview feature
- */
-#define MENU_LIST_MODE
+#define UNIFIED_MENU
 
 
 //-------RESET SETTINGS & TOUCH SCREEN CALIBRATION------||
@@ -154,7 +207,7 @@
 // SD support
 #define ONBOARD_SD_SUPPORT
 #ifdef ONBOARD_SD_SUPPORT
-  #define M27_AUTOREPORT                      // Disable M27 polling if you enable enable AUTO_REPORT_SD_STATUS in Marlin
+  #define M27_AUTOREPORT                      // Disable M27 polling if you enable AUTO_REPORT_SD_STATUS in Marlin
   #define M27_REFRESH                3        // Time in sec for M27 command
   #define M27_WATCH_OTHER_SOURCES    true     // if true the polling on M27 report is always active. Case: SD print started not from TFT35
 #endif
@@ -179,49 +232,37 @@
   */
 #define AUTO_SHUT_DOWN_MAXTEMP 50
 
-#define EXTRUDE_STEPS  100.0f
-
 #define SHOW_FAN_PERCENTAGE // enable to show fan speed as a percentage instead of a value
 
-/*
-  Rapid Serial Communication:More frequent Serial communicaiton while printing.
-  The controller will send and parse  gcodes more frequently  while drawing on 
-  screen to prevent printer idling and stuttering  due to empty printer buffer.
-  
-  Note: this might make the  graphics slow when switching menus while printing.
+/**
+ * Rapid Serial Communication:More frequent Serial communicaiton while printing.
+ * The controller will send and parse  gcodes more frequently  while drawing on 
+ * screen to prevent printer idling and stuttering  due to empty printer buffer.
+ * Note: this might make the  graphics slow when switching menus while printing.
 */
-//#define RAPID_SERIAL_COMM
+#define RAPID_SERIAL_COMM
 
 
 /** CUSTOM GCODE COMMANDS
- * Support up to 7 custom gcodes in Icon mode and 15 in List Mode.
+ * Support up to 15 custom gcodes.
  * Uncomment CUSTOM_X_LABEL and CUSTOM_X_GCODE to enable custom gcode.
  * CUSTOM_X_LABEL is the name of the custom button, CUSTOM_X_GCODE
- * CUSTOM_X_GCODE is the gcode to be sent by the custom button, end with '\n'
- * You also need to customize the icon corresponding to the command if MENU_LIST_MODE is not enabled.
- * Copy your custom icon to the SD card to be updated, such as:"TFT35/bmp/Custom0.bmp", "TFT24/bmp/Custom1.bmp", etc...
- * The format of the custom icon is as follows
- * Bit depth: 24 / 32 bit, Pixel size: 95*95(for TFT35), 70*70(for TFT28/TFT24)
+ * CUSTOM_X_GCODE is the gcode to be sent by the custom button, this should always end with a New-Line character '\n'
  */
-#define CUSTOM_0_LABEL "Restore EEPROM"
-#define CUSTOM_0_GCODE "M501\n"
-#define CUSTOM_1_LABEL "Disable Steppers"
-#define CUSTOM_1_GCODE "M84\n"
-#define CUSTOM_2_LABEL "init SD Card"
-#define CUSTOM_2_GCODE "M21\n"
-#define CUSTOM_3_LABEL "Release Sd Card"
-#define CUSTOM_3_GCODE "M22\n"
-//#define CUSTOM_4_LABEL "Custom4"
-//#define CUSTOM_4_GCODE "M105\n"
-//#define CUSTOM_5_LABEL "Custom5"
-//#define CUSTOM_5_GCODE "M105\n"
-//#define CUSTOM_6_LABEL "Custom6"
-//#define CUSTOM_6_GCODE "M105\n"
-
-/*
-custom gcode below are compatible only if MENU_LIST_MODE is active
-*/
-#ifdef MENU_LIST_MODE
+#define CUSTOM_0_LABEL "Disable Steppers"
+#define CUSTOM_0_GCODE "M84\n"
+#define CUSTOM_1_LABEL "Init SD Card"
+#define CUSTOM_1_GCODE "M21\n"
+#define CUSTOM_2_LABEL "Release SD Card"
+#define CUSTOM_2_GCODE "M22\n"
+#define CUSTOM_3_LABEL "Enable Leveling State"
+#define CUSTOM_3_GCODE "M420 S1\n"
+#define CUSTOM_4_LABEL "Save to EEPROM"
+#define CUSTOM_4_GCODE "M500\n"
+#define CUSTOM_5_LABEL "Restore from EEPROM"
+#define CUSTOM_5_GCODE "M501\n"
+#define CUSTOM_6_LABEL "EEPROM Defaults"
+#define CUSTOM_6_GCODE "M502\n"
 //#define CUSTOM_7_LABEL "Custom7"
 //#define CUSTOM_7_GCODE "M105\n"
 //#define CUSTOM_8_LABEL "Custom8"
@@ -238,7 +279,6 @@ custom gcode below are compatible only if MENU_LIST_MODE is active
 //#define CUSTOM_13_GCODE "M105\n"
 //#define CUSTOM_14_LABEL "Custom14"
 //#define CUSTOM_14_GCODE "M105\n"
-#endif
 
 //
 //Start Gcode - run this gcode before starting print

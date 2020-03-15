@@ -119,7 +119,7 @@ void menuProbeOffset(void)
         infoMenu.cur--;
         break;
       default :
-      #if LCD_ENCODER_SUPPORT
+        #if LCD_ENCODER_SUPPORT
           if(encoderPosition)
           {
             probe_offset_value += elementsUnit.ele[elementsUnit.cur]*encoderPosition;
@@ -137,8 +137,3 @@ void menuProbeOffset(void)
     loopProcess();
   }
 }
-
-
-
-
-

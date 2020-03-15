@@ -1,4 +1,4 @@
-// *List View Mode ** Author: Gurmeet Athwal https://github.com/guruathwal ** 
+// *List View Mode ** Author: Gurmeet Athwal https://github.com/guruathwal **
 
 #include "list_item.h"
 #include "includes.h"
@@ -6,6 +6,8 @@
 #include "GUI.h"
 
 char * dynamic_label[LISTITEM_PER_PAGE];
+
+float dynamic_value[LISTITEM_PER_PAGE];
 
 const uint16_t ICON_COLOR[ICONCHAR_NUM]=
 {
@@ -331,23 +333,43 @@ const char *const GET_ICONCHAR[ICONCHAR_NUM]={
 
 
 uint8_t * IconCharSelect(uint8_t sel)
-{ 
+{
 return (uint8_t *)GET_ICONCHAR[sel];
 }
 char * IconChar(uint8_t sel)
-{ 
+{
 return (char *)GET_ICONCHAR[sel];
 }
 
+// save dynamic text label ( i : index of the label position, label: char * to the text)
+void setDynamicLabel(uint8_t i, char *label){
+  dynamic_label[i] = label;
+}
 
+// get dynamic text label ( i : index of the label position)
+char * getDynamicLabel(uint8_t i){
+  return dynamic_label[i];
+}
+
+// save dynamic value ( i : index of the value position, value:float value)
+void setDynamicValue(uint8_t i,float value){
+dynamic_value[i] = value;
+}
+
+// get dynamic numerical value ( i : index of the value position)
+float getDynamicValue(uint8_t i){
+  return dynamic_value[i];
+}
+
+// get the text starting point on screen based on rectangle edges and desired icon position
 GUI_POINT getTextStartPoint(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey, ICON_POS pos, const char * textchar){
-  
+
   GUI_POINT point_item = {sx, sy};
   uint16_t w = ex- sx;
   uint16_t h = ey- sy;
 
   size_t charIcon_w = strlen(textchar)/3 * BYTE_HEIGHT;
-  
+
   switch (pos)
   {
   case TOP_LEFT:
@@ -403,8 +425,9 @@ GUI_POINT getTextStartPoint(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey, 
   return point_item;
 }
 
-void ListDrawIcon (const GUI_RECT * rect,ICON_POS iconalign, uint16_t iconindex, uint16_t btn_color){
-      
+//draw icons in item
+void DrawCharIcon(const GUI_RECT * rect,ICON_POS iconalign, uint16_t iconindex, uint16_t btn_color){
+
       GUI_POINT icon_p = getTextStartPoint(rect->x0, rect->y0, rect->x1,rect->y1,iconalign,GET_ICONCHAR[iconindex]);
       GUI_SetColor(ICON_COLOR[iconindex]);
       GUI_SetBkColor(btn_color);
@@ -414,6 +437,7 @@ void ListDrawIcon (const GUI_RECT * rect,ICON_POS iconalign, uint16_t iconindex,
 
 }
 
+//draw item pressed feedback
 void DrawListItemPress(const GUI_RECT * rect, bool pressed){
       if (pressed != false)
       {
@@ -432,20 +456,21 @@ void DrawListItemPress(const GUI_RECT * rect, bool pressed){
       GUI_RestoreColorDefault();
 }
 
-void ListItem_Display(const GUI_RECT* rect, uint8_t positon, const LISTITEM * curitem, bool pressed)
+void ListItem_Display(const GUI_RECT* rect, uint8_t position, const LISTITEM * curitem, bool pressed)
 {
-  //storeCmd("%d\n",curitem->titlelabel.index);
-  if(positon > 4){
+  //draw navigation icons
+  if(position >= LISTITEM_PER_PAGE){
     if(curitem->icon != ICONCHAR_BACKGROUND){
-      ListDrawIcon(rect,MIDDLE,curitem->icon,LISTBTN_BKCOLOR);
+      DrawCharIcon(rect,MIDDLE,curitem->icon,LISTBTN_BKCOLOR);
       if (pressed != false){
         GUI_DrawPrect(rect);
       }
     }
     else{
       GUI_ClearPrect(rect);
-    }      
+    }
   }
+  //draw list tiems
   else if (curitem->icon != ICONCHAR_BACKGROUND){
 
     GUI_POINT pos = getTextStartPoint(rect->x0, rect->y0, rect->x1,rect->y1,LEFT_CENTER,GET_ICONCHAR[curitem->icon]);
@@ -455,32 +480,21 @@ void ListItem_Display(const GUI_RECT* rect, uint8_t positon, const LISTITEM * cu
     case LIST_LABEL:
 
       if(curitem->icon != ICONCHAR_BLANK) {
-        ListDrawIcon(rect,LEFT_CENTER,curitem->icon, BACKGROUND_COLOR);
+        DrawCharIcon(rect,LEFT_CENTER,curitem->icon, BACKGROUND_COLOR);
         pos.x += (BYTE_HEIGHT + 1);
        }
-        
-        if (curitem->titlelabel.index != LABEL_BACKGROUND)
-        {
-          textarea_width = LISTITEM_WIDTH - (pos.x + 1); //width after removing the width for icon
+      textarea_width = LISTITEM_WIDTH - (pos.x + 1); //width after removing the width for icon
+      draw_itemtitle(pos,curitem->titlelabel,position,textarea_width);
 
-          if (curitem->titlelabel.index == LABEL_DYNAMIC)
-          {
-            GUI_DispLenString(pos.x, pos.y, (u8*)dynamic_label[positon],textarea_width);
-          }
-          else
-          {
-            GUI_DispLenString(pos.x, pos.y, textSelect(curitem->titlelabel.index),textarea_width);
-          }
-        }
       DrawListItemPress(rect, pressed);
       break;
 
     case LIST_TOGGLE:;
       int16_t wy = (1 + GUI_StrPixelWidth(IconCharSelect(ICONCHAR_TOGGLE_BODY)) + 1);   //right edge of text area
-      GUI_ClearRect(rect->x0, rect->y0, rect->x1 - wy, rect->y1);                     // clear only tect area
+      GUI_ClearRect(rect->x0, rect->y0, rect->x1 - wy, rect->y1);                     // clear only text area
       textarea_width = LISTITEM_WIDTH - (pos.x + wy);                                 //width after removing the width for icon
-      
-      GUI_DispLenString(pos.x , pos.y, textSelect(curitem->titlelabel.index),textarea_width);
+      draw_itemtitle(pos,curitem->titlelabel,position,textarea_width);
+
       pos = getTextStartPoint(rect->x0, rect->y0, rect->x1,rect->y1,RIGHT_CENTER,GET_ICONCHAR[ICONCHAR_TOGGLE_BODY]);
       GUI_ClearRect(rect->x1-wy,rect->y0,rect->x1,rect->y1);
       ListItem_DisplayToggle(pos.x, pos.y, curitem->icon);
@@ -492,29 +506,30 @@ void ListItem_Display(const GUI_RECT* rect, uint8_t positon, const LISTITEM * cu
       GUI_ClearPrect(rect);
 
       if(curitem->icon != ICONCHAR_BLANK) {
-        ListDrawIcon(rect,LEFT_CENTER,curitem->icon,BLACK);
+        DrawCharIcon(rect,LEFT_CENTER,curitem->icon,BLACK);
         pos.x += (BYTE_HEIGHT + 1);
        }
-        textarea_width = LISTITEM_WIDTH - (pos.x + BYTE_HEIGHT + 2);  //width after removing the width for icon
+      textarea_width = LISTITEM_WIDTH - (pos.x + BYTE_HEIGHT + 2);  //width after removing the width for icon
+      draw_itemtitle(pos,curitem->titlelabel,position,textarea_width);
 
-        GUI_DispLenString(pos.x, pos.y, textSelect(curitem->titlelabel.index),textarea_width);
+      pos = getTextStartPoint(rect->x0, rect->y0, rect->x1,rect->y1,RIGHT_CENTER,GET_ICONCHAR[ICONCHAR_DETAIL2]);
+      GUI_SetColor(ICON_COLOR[ICONCHAR_DETAIL2]);
+      GUI_DispString(pos.x, pos.y,IconCharSelect(ICONCHAR_DETAIL2));
 
-        pos = getTextStartPoint(rect->x0, rect->y0, rect->x1,rect->y1,RIGHT_CENTER,GET_ICONCHAR[ICONCHAR_DETAIL]);
-        GUI_SetColor(ICON_COLOR[ICONCHAR_DETAIL]);
-        GUI_DispString(pos.x, pos.y,IconCharSelect(ICONCHAR_DETAIL));
-     
 
       DrawListItemPress(rect,pressed);
       break;
 
     case LIST_CUSTOMVALUE:
       if(curitem->icon != ICONCHAR_BLANK) {
-        ListDrawIcon(rect,LEFT_CENTER,curitem->icon,BLACK);
+        DrawCharIcon(rect,LEFT_CENTER,curitem->icon,BLACK);
         pos.x += (BYTE_HEIGHT + 3);
       }
-      GUI_DispString(pos.x, pos.y, textSelect(curitem->titlelabel.index));
-        
-      ListItem_DisplayCustomValue(rect,textSelect(curitem->valueLabel.index));
+      GUI_ClearRect(pos.x, rect->y0, rect->x1 - BYTE_WIDTH*8 -1, rect->y1);        // clear only text area
+      textarea_width = LISTITEM_WIDTH - (pos.x + 1); //width after removing the width for icon
+      draw_itemtitle(pos,curitem->titlelabel,position,textarea_width);
+
+      ListItem_DisplayCustomValue(rect,curitem->valueLabel,position);
 
       DrawListItemPress(rect,pressed);
       break;
@@ -522,7 +537,7 @@ void ListItem_Display(const GUI_RECT* rect, uint8_t positon, const LISTITEM * cu
     default:
       break;
     }
-  
+
   }
    else
   {
@@ -532,49 +547,68 @@ void ListItem_Display(const GUI_RECT* rect, uint8_t positon, const LISTITEM * cu
   GUI_RestoreColorDefault();
 }
 
+//draw title text of list item
+void draw_itemtitle(GUI_POINT pos,LABEL label, uint8_t position, int textarea_width){
+  if (label.index != LABEL_BACKGROUND)
+  {
+    int textarea_width = LISTITEM_WIDTH - (pos.x + 1); //width after removing the width for icon
+    if (label.index == LABEL_DYNAMIC)
+    {GUI_DispLenString(pos.x, pos.y, (u8*)getDynamicLabel(position),textarea_width);
+    }
+    else
+    {GUI_DispLenString(pos.x, pos.y, textSelect(label.index),textarea_width);
+    }
+  }
+}
 
+//display toggle button
 void ListItem_DisplayToggle(uint16_t sx, uint16_t sy, uint8_t iconchar_state)
 {
-  //const GUI_RECT *rect = rect_of_keyListView + positon;
-//GUI_POINT pos = getTextStartPoint(rect_of_keyListView.x0, rect->y0, rect->x1,rect->y1, pos, iconchar);
+  //const GUI_RECT *rect = rect_of_keyListView + position;
+  //GUI_POINT pos = getTextStartPoint(rect_of_keyListView.x0, rect->y0, rect->x1,rect->y1, pos, iconchar);
 
   //GUI_ClearPrect(&rect_item);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
   GUI_SetColor(LISTBTN_BKCOLOR);
   GUI_DispString(sx, sy, (uint8_t*)GET_ICONCHAR[ICONCHAR_TOGGLE_BODY]);
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-  
+
   GUI_SetColor(ICON_COLOR[iconchar_state]);
   if (iconchar_state == ICONCHAR_TOGGLE_OFF)
   {
-      GUI_DispString(sx, sy, IconCharSelect(ICONCHAR_TOGGLE_SWITCH));
+    GUI_DispString(sx, sy, IconCharSelect(ICONCHAR_TOGGLE_SWITCH));
   }
   else
   {
-      GUI_DispString(sx+BYTE_HEIGHT, sy, IconCharSelect(ICONCHAR_TOGGLE_SWITCH));
+    GUI_DispString(sx+BYTE_HEIGHT, sy, IconCharSelect(ICONCHAR_TOGGLE_SWITCH));
   }
 
   GUI_RestoreColorDefault();
 
 }
 
-void ListItem_DisplayCustomValue(const GUI_RECT* rect,uint8_t * value)
+//draw custom value for list item
+void ListItem_DisplayCustomValue(const GUI_RECT* rect,LABEL value,int i)
 {
- 
-   const GUI_RECT rectVal = {rect->x1-BYTE_WIDTH*8 -1,rect->y0+(LISTITEM_HEIGHT-BYTE_HEIGHT)/2,rect->x1-1,rect->y1-(LISTITEM_HEIGHT-BYTE_HEIGHT)/2};
+
+  const GUI_RECT rectVal = {rect->x1-BYTE_WIDTH*8 -1,rect->y0+(LISTITEM_HEIGHT-BYTE_HEIGHT)/2,rect->x1-1,rect->y1-(LISTITEM_HEIGHT-BYTE_HEIGHT)/2};
 //GUI_POINT pos = getTextStartPoint(rect_of_keyListView.x0, rect->y0, rect->x1,rect->y1, pos, iconchar);
 
   GUI_ClearPrect(&rectVal);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
-  
+
   GUI_SetColor(LISTBTN_BKCOLOR);
-  
+
   GUI_DrawPrect(&rectVal);
-  
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-  GUI_SetBkColor(LISTBTN_BKCOLOR);
   GUI_SetColor(MAT_LOWWHITE);
-  GUI_DispStringInPrect(&rectVal,value);
+
+  if(value.index == LABEL_DYNAMIC){
+    GUI_DispFloat(rectVal.x0,rectVal.y0,dynamic_value[i],4,1,RIGHT);
+  }
+  else{
+    GUI_DispStringInPrect(&rectVal,textSelect(value.index));
+  }
 
   GUI_RestoreColorDefault();
 }

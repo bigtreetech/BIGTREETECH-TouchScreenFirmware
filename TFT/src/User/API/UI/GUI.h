@@ -23,7 +23,7 @@ typedef enum
   GUI_NUMMODE_ZERO,
 }GUI_NUM_MODE;
 
-typedef struct 
+typedef struct
 {
   int16_t x, y;
 }GUI_POINT;
@@ -104,7 +104,7 @@ typedef struct
   uint16_t totalPixelWidth;
   int16_t  curPixelWidth;
   uint16_t maxPixelWidth;
-  uint8_t  has_disp; 
+  uint8_t  has_disp;
 }SCROLL;
 void Scroll_CreatePara(SCROLL * para, uint8_t *pstr, const GUI_RECT *rect);
 void Scroll_DispString(SCROLL * para, uint8_t align);
@@ -146,4 +146,3 @@ typedef struct
 void GUI_DrawWindow(const WINDOW *window, const uint8_t *title, const uint8_t *inf);
 
 #endif
-

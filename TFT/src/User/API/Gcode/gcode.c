@@ -1,14 +1,17 @@
 #include "gcode.h"
 #include "includes.h"
 
-REQUEST_COMMAND_INFO requestCommandInfo;
+REQUEST_COMMAND_INFO requestCommandInfo = {0}; //static fields are iniatialized by {0}
 bool WaitingGcodeResponse=0;
 
 static void resetRequestCommandInfo(void) 
 {
-  requestCommandInfo.cmd_rev_buf = malloc(CMD_MAX_REV);
-  while(!requestCommandInfo.cmd_rev_buf); // malloc failed
-  memset(requestCommandInfo.cmd_rev_buf,0,CMD_MAX_REV);
+   if (!requestCommandInfo.cmd_rev_buf) 
+   {
+    requestCommandInfo.cmd_rev_buf = malloc(CMD_MAX_REV);
+    while(!requestCommandInfo.cmd_rev_buf); // malloc failed
+  }
+  clearRequestCommandInfo();
   requestCommandInfo.inWaitResponse = true;
   requestCommandInfo.inResponse = false;
   requestCommandInfo.done = false;
@@ -22,7 +25,7 @@ bool RequestCommandInfoIsRunning(void)
 
 void clearRequestCommandInfo(void) 
 {
-  free(requestCommandInfo.cmd_rev_buf);
+    memset(requestCommandInfo.cmd_rev_buf,0,CMD_MAX_REV); // it's  better to avoid allocations if we can re-use memory.
 }
 
 /*

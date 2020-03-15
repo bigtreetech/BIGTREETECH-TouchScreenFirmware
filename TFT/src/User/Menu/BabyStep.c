@@ -1,7 +1,7 @@
 #include "BabyStep.h"
 #include "includes.h"
 
-//1 title, ITEM_PER_PAGE items(icon+label) 
+//1 title, ITEM_PER_PAGE items(icon+label)
 MENUITEMS babyStepItems = {
 //title
   LABEL_BABYSTEP,
@@ -114,7 +114,7 @@ void menuBabyStep(void)
         infoMenu.cur--;
         break;
       default :
-      #if LCD_ENCODER_SUPPORT
+        #if LCD_ENCODER_SUPPORT
           if(encoderPosition)
           {
             baby_step_value += elementsUnit.ele[elementsUnit.cur]*encoderPosition;
@@ -132,8 +132,3 @@ void menuBabyStep(void)
     loopProcess();
   }
 }
-
-
-
-
-

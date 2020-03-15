@@ -69,7 +69,7 @@ static void getUTF8EncodeInfo(const uint8_t *ch, CHAR_INFO *pInfo)
   uint8_t i;
   uint8_t bytes = 0;
   uint8_t utfFlg = 0x80;
-  
+
   while ((ch[0] & utfFlg) == utfFlg)
   {
     utfFlg |= (utfFlg >> 1);
@@ -104,11 +104,11 @@ static void getBitMapFontInfo(CHAR_INFO *pInfo)
 void getCharacterInfo(const uint8_t *ch, CHAR_INFO *pInfo)
 {
   pInfo->bytes = 0;
-    
+
   if(ch == NULL || *ch == 0) return;
-  
+
   getUTF8EncodeInfo(ch, pInfo);
-  
+
   getBitMapFontInfo(pInfo);
 }
 
@@ -117,7 +117,7 @@ uint16_t GUI_StrPixelWidth(const uint8_t *const str)
 {
   uint16_t i = 0, len = 0;
   CHAR_INFO info;
-  
+
   if(str == NULL) return 0;
   while(str[i])
   {

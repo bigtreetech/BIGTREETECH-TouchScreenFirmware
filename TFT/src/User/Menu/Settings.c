@@ -6,9 +6,9 @@ SETTINGS infoSettings;
 // Reset settings data
 void infoSettingsReset(void)
 {
-  infoSettings.baudrate = 115200;
-  infoSettings.language = ENGLISH;
-  infoSettings.mode = SERIAL_TSC;
+  infoSettings.baudrate = BAUDRATE;
+  infoSettings.language = DEFAULT_LANGUAGE;
+  infoSettings.mode = DEFAULT_LCD_MODE;
   infoSettings.runout = 0;
   infoSettings.rotate_ui = 0;
   infoSettings.bg_color = ST7920_BKCOLOR;
@@ -16,14 +16,15 @@ void infoSettingsReset(void)
   infoSettings.silent = 0;
   infoSettings.auto_off = 0;
   infoSettings.terminalACK = 0;
-  infoSettings.invert_yaxis = 0;
+  infoSettings.invert_axis[X_AXIS] = 0;
+  infoSettings.invert_axis[Y_AXIS] = 0;
+  infoSettings.invert_axis[Z_AXIS] = 0;
   infoSettings.move_speed = 0;
-  infoSettings.led_color = LED_OFF;
-  infoSettings.invert_zaxis = 0;
+  infoSettings.knob_led_color = (STARTUP_KNOB_LED_COLOR - 1); 
   infoSettings.send_start_gcode = 1;
   infoSettings.send_end_gcode = 1;
   infoSettings.persistent_info = 1;
-  
+  infoSettings.file_listmode = 1;
 }
 
 // Version infomation
@@ -73,19 +74,26 @@ LABEL_SETTINGS,
   {ICON_FEATURE_SETTINGS,     LABEL_FEATURE_SETTINGS},
   {ICON_SCREEN_INFO,          LABEL_SCREEN_INFO},
   {ICON_DISCONNECT,           LABEL_DISCONNECT},
-  {ICON_BAUDRATE,             LABEL_BAUDRATE_115200},
+  {ICON_BAUDRATE,             LABEL_BACKGROUND},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_BACK,                 LABEL_BACK},}
 };
 
-#define ITEM_BAUDRATE_NUM 2
+#define ITEM_BAUDRATE_NUM 9
 const ITEM itemBaudrate[ITEM_BAUDRATE_NUM] = {
 // icon                       label
-  {ICON_BAUDRATE,             LABEL_BAUDRATE_115200},
-  {ICON_BAUDRATE,             LABEL_BAUDRATE_250000},
+  {ICON_BAUDRATE,             {.address = "2400"}},
+  {ICON_BAUDRATE,             {.address = "9600"}},
+  {ICON_BAUDRATE,             {.address = "19200"}},
+  {ICON_BAUDRATE,             {.address = "38400"}},
+  {ICON_BAUDRATE,             {.address = "57600"}},
+  {ICON_BAUDRATE,             {.address = "115200"}},
+  {ICON_BAUDRATE,             {.address = "250000"}},
+  {ICON_BAUDRATE,             {.address = "500000"}},
+  {ICON_BAUDRATE,             {.address = "1000000"}},
 };
-const  u32 item_baudrate[ITEM_BAUDRATE_NUM] = {115200, 250000};
-static u8  item_baudrate_i = 0;
+const  u32 item_baudrate[ITEM_BAUDRATE_NUM] = {2400, 9600, 19200, 38400, 57600, 115200, 250000, 500000, 1000000};
+static u8  item_baudrate_i = 5;
 
 void menuSettings(void)
 {

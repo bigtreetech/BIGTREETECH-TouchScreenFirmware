@@ -12,7 +12,7 @@
 #define BYTE_ASCII_ADDR         (WORD_UNICODE+0x480000) // ascii (+0x1000 4K)
 //#define BYTE_RESERVE_ADDR      0x710000
 #define ICON_ADDR(num)          ((num)*0x5000+BYTE_ASCII_ADDR+0x1000)
-#define INFOBOX_ADDR            (ICON_ADDR(ICON_PREVIEW+5) + 0x5000) // total byte size 0xA7F8
+#define INFOBOX_ADDR            (ICON_ADDR(ICON_PREVIEW) + 0x5000) // total byte size 0xA7F8
 #define SMALL_ICON_START_ADDR   (INFOBOX_ADDR+0xA7F8)
 #define SMALL_ICON_ADDR(num)    ((num)*0x1000+SMALL_ICON_START_ADDR)
 
@@ -32,7 +32,7 @@ enum
   ICON_EXTRUDE,
   ICON_FAN,
   ICON_SETTINGS,
-  ICON_LEVELING,  
+  ICON_LEVELING,
   ICON_INC,
   ICON_DEC,
   ICON_NOZZLE,
@@ -50,7 +50,7 @@ enum
   ICON_10_MM,
   ICON_X_DEC,
   ICON_Y_DEC,
-  ICON_Z_DEC,  
+  ICON_Z_DEC,
   ICON_X_HOME,
   ICON_Y_HOME,
   ICON_Z_HOME,
@@ -59,7 +59,7 @@ enum
   ICON_PAGE_UP,
   ICON_PAGE_DOWN,
   ICON_PAUSE,
-  ICON_RESUME,  
+  ICON_RESUME,
   ICON_LOAD,
   ICON_UNLOAD,
   ICON_SLOW_SPEED,
@@ -67,7 +67,7 @@ enum
   ICON_FAST_SPEED,
   ICON_E_1_MM,
   ICON_E_5_MM,
-  ICON_E_10_MM,  
+  ICON_E_10_MM,
   ICON_FAN_FULL_SPEED,
   ICON_FAN_HALF_SPEED,
   ICON_ROTATE_UI,
@@ -78,14 +78,13 @@ enum
   ICON_BKCOLOR,
   ICON_FONTCOLOR,
   ICON_DISCONNECT,
-  ICON_BAUDRATE,  
+  ICON_BAUDRATE,
   ICON_PERCENTAGE,
   ICON_BABYSTEP,
   ICON_001_MM,
   ICON_BSD_SOURCE,
   ICON_SD_SOURCE,
   ICON_U_DISK,
-  ICON_RUNOUT,  
   ICON_POINT_1,
   ICON_POINT_2,
   ICON_POINT_3,
@@ -115,15 +114,7 @@ enum
   ICON_PREHEAT_PLA,
   ICON_PREHEAT_PETG,
   ICON_PREHEAT_ABS,
-  ICON_POWER_SUPPLY,
   ICON_CUSTOM,
-  ICON_CUSTOM_0,
-  ICON_CUSTOM_1,
-  ICON_CUSTOM_2,
-  ICON_CUSTOM_3,
-  ICON_CUSTOM_4,
-  ICON_CUSTOM_5,
-  ICON_CUSTOM_6,
   ICON_HOME_MOVE,
   ICON_HEAT_FAN,
   ICON_MANUAL_LEVEL,
@@ -138,7 +129,6 @@ enum
   ICON_PARAMETER,
   ICON_GLOBAL_NOZZLE0,
   ICON_GLOBAL_BED,
-  ICON_LEDCOLOR,
   ICON_PRINTING_NOZZLE,
   ICON_PRINTING_BED,
   ICON_PRINTING_FAN,
@@ -147,7 +137,7 @@ enum
   ICON_PRINTING_SPEED,
   ICON_PRINTING_FLOW,
 
-//add new icons above this line  only 
+//add new icons above this line  only
 //  ICON_RESERVE
 
 // Preview should be in the last place before ICON_BACKGROUND to save flash storage space
@@ -169,4 +159,4 @@ typedef union
 void scanUpdates(void);
 bool bmpDecode(char *bmp, u32 addr);
 
-#endif 
+#endif

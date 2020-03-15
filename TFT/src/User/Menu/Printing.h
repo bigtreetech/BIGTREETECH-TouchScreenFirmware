@@ -13,7 +13,7 @@
   #define PICON_SPACE_Y      (ICON_HEIGHT + SPACE_Y - PICON_HEIGHT*2)/2
   #define PICON_TITLE_X      52
   #define PICON_TITLE_Y      1
-  #define PICON_VAL_X        52
+  #define PICON_VAL_X        PICON_TITLE_X
   #define PICON_VAL_Y        (PICON_HEIGHT/2)
   #define PICON_VAL_LG_EX    150
   #define PICON_VAL_SM_EX    117
@@ -21,21 +21,21 @@
 #elif LCD_WIDTH == 320 && LCD_HEIGHT == 240
 
   #define PICON_LG_WIDTH     106
-  #define PICON_SM_WIDTH     187
+  #define PICON_SM_WIDTH     87
   #define PICON_HEIGHT       36
   #define PICON_SPACE_X      ((LCD_WIDTH - PICON_LG_WIDTH*2 - PICON_SM_WIDTH - SPACE_X )/2)
   #define PICON_SPACE_Y      (ICON_HEIGHT + SPACE_Y - PICON_HEIGHT*2)/2
   #define PICON_TITLE_X      37
   #define PICON_TITLE_Y      1
-  #define PICON_VAL_X        (PICON_HEIGHT/2)
-  #define PICON_VAL_Y        25
+  #define PICON_VAL_X        PICON_TITLE_X
+  #define PICON_VAL_Y        PICON_HEIGHT - BYTE_HEIGHT - 2
   #define PICON_VAL_LG_EX    104
   #define PICON_VAL_SM_EX    85
 
 #endif
 
-typedef struct 
-{	
+typedef struct
+{
   FIL     file;
 
   u32     time; // Printed time in sec
@@ -55,7 +55,7 @@ void abortPrinting(void);
 void setM0Pause(bool m0_pause);
 bool setPrintPause(bool is_pause,bool is_m0pause);
 
-bool isPrinting(void);	
+bool isPrinting(void);
 bool isPause(void);
 bool isM0_Pause(void);
 void setPrintingTime(u32 RTtime);

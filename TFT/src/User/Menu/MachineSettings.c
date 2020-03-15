@@ -1,279 +1,179 @@
 #include "MachineSettings.h"
 #include "includes.h"
 
-#ifndef MENU_LIST_MODE
-MENUITEMS customItems = {
+LISTITEMS customItems = {
 // title
 LABEL_CUSTOM,
-// icon                       label
- {
-   #ifdef CUSTOM_0_GCODE
-    {ICON_CUSTOM_0,             {.address = (uint8_t *)CUSTOM_0_LABEL}},
-   #else
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},
-   #endif
-   #ifdef CUSTOM_1_GCODE
-    {ICON_CUSTOM_1,             {.address = (uint8_t *)CUSTOM_1_LABEL}},
-   #else
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},
-   #endif
-   #ifdef CUSTOM_2_GCODE
-    {ICON_CUSTOM_2,             {.address = (uint8_t *)CUSTOM_2_LABEL}},
-   #else
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},
-   #endif
-   #ifdef CUSTOM_3_GCODE
-    {ICON_CUSTOM_3,             {.address = (uint8_t *)CUSTOM_3_LABEL}},
-   #else
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},
-   #endif
-   #ifdef CUSTOM_4_GCODE
-    {ICON_CUSTOM_4,             {.address = (uint8_t *)CUSTOM_4_LABEL}},
-   #else
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},
-   #endif
-   #ifdef CUSTOM_5_GCODE
-    {ICON_CUSTOM_5,             {.address = (uint8_t *)CUSTOM_5_LABEL}},
-   #else
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},
-   #endif
-   #ifdef CUSTOM_6_GCODE
-    {ICON_CUSTOM_6,             {.address = (uint8_t *)CUSTOM_6_LABEL}},
-   #else
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},
-   #endif
-  {ICON_BACK,                 LABEL_BACK},}
-};
-
-void menuCustom(void)
+// icon                 ItemType      Item Title        item value text(only for custom value)
 {
-  KEY_VALUES key_num = KEY_IDLE;
-
-  menuDrawPage(&customItems);
-
-  while(infoMenu.menu[infoMenu.cur] == menuCustom)
-  {
-    key_num = menuKeyGetValue();
-    switch(key_num)
-    {
-     #ifdef CUSTOM_0_GCODE
-      case KEY_ICON_0:
-        storeCmd(CUSTOM_0_GCODE);
-        break;
-     #endif
-     #ifdef CUSTOM_1_GCODE
-      case KEY_ICON_1:
-        storeCmd(CUSTOM_1_GCODE);
-        break;
-     #endif
-     #ifdef CUSTOM_2_GCODE
-      case KEY_ICON_2:
-        storeCmd(CUSTOM_2_GCODE);
-        break;
-     #endif
-     #ifdef CUSTOM_3_GCODE
-      case KEY_ICON_3:
-        storeCmd(CUSTOM_3_GCODE);
-        break;
-     #endif
-     #ifdef CUSTOM_4_GCODE
-      case KEY_ICON_4:
-        storeCmd(CUSTOM_4_GCODE);
-        break;
-     #endif
-     #ifdef CUSTOM_5_GCODE
-      case KEY_ICON_5:
-        storeCmd(CUSTOM_5_GCODE);
-        break;
-     #endif
-     #ifdef CUSTOM_6_GCODE
-      case KEY_ICON_6:
-        storeCmd(CUSTOM_6_GCODE);
-        break;
-     #endif
-      case KEY_ICON_7:
-        infoMenu.cur--;
-        break;
-      
-      default:
-        break;
-    }
-    loopProcess();		
-  }
-}
-#else
-    LISTITEMS customItems = {
-    // title
-    LABEL_CUSTOM,
-    // icon                 ItemType      Item Title        item value text(only for custom value)
-    {
-      {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
-      {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
-      {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
-      {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
-      {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
-      {ICONCHAR_PAGEUP,     LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
-      {ICONCHAR_PAGEDOWN,   LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
-      {ICONCHAR_BACK,       LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},}
-    };
+  {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
+  {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
+  {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
+  {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
+  {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
+  {ICONCHAR_PAGEUP,     LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
+  {ICONCHAR_PAGEDOWN,   LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
+  {ICONCHAR_BACK,       LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},}
+};
 
 //
 //add key number index of the items
 //
-    typedef enum
-    {
-    #ifdef CUSTOM_0_GCODE
+typedef enum
+{
+  #ifdef CUSTOM_0_GCODE
     CKEY0,
-    #endif
-    #ifdef CUSTOM_1_GCODE
+  #endif
+  #ifdef CUSTOM_1_GCODE
     CKEY1,
-    #endif
-    #ifdef CUSTOM_2_GCODE
+  #endif
+  #ifdef CUSTOM_2_GCODE
     CKEY2,
-    #endif
-    #ifdef CUSTOM_3_GCODE
+  #endif
+  #ifdef CUSTOM_3_GCODE
     CKEY3,
-    #endif
-    #ifdef CUSTOM_4_GCODE
+  #endif
+  #ifdef CUSTOM_4_GCODE
     CKEY4,
-    #endif
-    #ifdef CUSTOM_5_GCODE
+  #endif
+  #ifdef CUSTOM_5_GCODE
     CKEY5,
-    #endif
-    #ifdef CUSTOM_6_GCODE
+  #endif
+  #ifdef CUSTOM_6_GCODE
     CKEY6,
-    #endif
-    #ifdef CUSTOM_7_GCODE
+  #endif
+  #ifdef CUSTOM_7_GCODE
     CKEY7,
-    #endif
-    #ifdef CUSTOM_8_GCODE
+  #endif
+  #ifdef CUSTOM_8_GCODE
     CKEY8,
-    #endif
-    #ifdef CUSTOM_9_GCODE
+  #endif
+  #ifdef CUSTOM_9_GCODE
     CKEY9,
-    #endif
-    #ifdef CUSTOM_10_GCODE
+  #endif
+  #ifdef CUSTOM_10_GCODE
     CKEY10,
-    #endif
-    #ifdef CUSTOM_11_GCODE
+  #endif
+  #ifdef CUSTOM_11_GCODE
     CKEY11,
-    #endif
-    #ifdef CUSTOM_12_GCODE
+  #endif
+  #ifdef CUSTOM_12_GCODE
     CKEY12,
-    #endif
-    #ifdef CUSTOM_13_GCODE
+  #endif
+  #ifdef CUSTOM_13_GCODE
     CKEY13,
-    #endif
-    #ifdef CUSTOM_14_GCODE
+  #endif
+  #ifdef CUSTOM_14_GCODE
     CKEY14,
-    #endif
-    
-    CKEY_COUNT //keep this always at the end
-    }CKEY_LIST; 
-    
-    #define GC_PAGE_COUNT  (CKEY_COUNT+LISTITEM_PER_PAGE-1)/LISTITEM_PER_PAGE
-    int gc_cur_page = 0;
+  #endif
 
-  const char *const gcodelist[CKEY_COUNT][2] = {
-    #ifdef CUSTOM_0_GCODE
-    {CUSTOM_0_LABEL, CUSTOM_0_GCODE},
-    #endif
-    #ifdef CUSTOM_1_GCODE
-    {CUSTOM_1_LABEL, CUSTOM_1_GCODE},
-    #endif
-    #ifdef CUSTOM_2_GCODE
-    {CUSTOM_2_LABEL, CUSTOM_2_GCODE},
-    #endif
-    #ifdef CUSTOM_3_GCODE
-    {CUSTOM_3_LABEL, CUSTOM_3_GCODE},
-    #endif
-    #ifdef CUSTOM_4_GCODE
-    {CUSTOM_4_LABEL, CUSTOM_4_GCODE},
-    #endif
-    #ifdef CUSTOM_5_GCODE
-    {CUSTOM_5_LABEL, CUSTOM_5_GCODE},
-    #endif
-    #ifdef CUSTOM_6_GCODE
-    {CUSTOM_6_LABEL, CUSTOM_6_GCODE},
-    #endif
-    #ifdef CUSTOM_7_GCODE
-    {CUSTOM_7_LABEL, CUSTOM_7_GCODE},
-    #endif
-    #ifdef CUSTOM_8_GCODE
-    {CUSTOM_8_LABEL, CUSTOM_8_GCODE},
-    #endif
-    #ifdef CUSTOM_9_GCODE
-    {CUSTOM_9_LABEL, CUSTOM_9_GCODE},
-    #endif
-    #ifdef CUSTOM_10_GCODE
-    {CUSTOM_10_LABEL, CUSTOM_10_GCODE},
-    #endif
-    #ifdef CUSTOM_11_GCODE
-    {CUSTOM_11_LABEL, CUSTOM_11_GCODE},
-    #endif
-    #ifdef CUSTOM_12_GCODE
-    {CUSTOM_12_LABEL, CUSTOM_12_GCODE},
-    #endif
-    #ifdef CUSTOM_13_GCODE
-    {CUSTOM_13_LABEL, CUSTOM_13_GCODE},
-    #endif
-    #ifdef CUSTOM_14_GCODE
-    {CUSTOM_14_LABEL, CUSTOM_14_GCODE},
-    #endif
-    };
+CKEY_COUNT //keep this always at the end
+}CKEY_LIST;
+
+#define GC_PAGE_COUNT  (CKEY_COUNT+LISTITEM_PER_PAGE-1)/LISTITEM_PER_PAGE
+int gc_cur_page = 0;
+
+const char *const gcodelist[CKEY_COUNT][2] = {
+  #ifdef CUSTOM_0_GCODE
+  {CUSTOM_0_LABEL, CUSTOM_0_GCODE},
+  #endif
+  #ifdef CUSTOM_1_GCODE
+  {CUSTOM_1_LABEL, CUSTOM_1_GCODE},
+  #endif
+  #ifdef CUSTOM_2_GCODE
+  {CUSTOM_2_LABEL, CUSTOM_2_GCODE},
+  #endif
+  #ifdef CUSTOM_3_GCODE
+  {CUSTOM_3_LABEL, CUSTOM_3_GCODE},
+  #endif
+  #ifdef CUSTOM_4_GCODE
+  {CUSTOM_4_LABEL, CUSTOM_4_GCODE},
+  #endif
+  #ifdef CUSTOM_5_GCODE
+  {CUSTOM_5_LABEL, CUSTOM_5_GCODE},
+  #endif
+  #ifdef CUSTOM_6_GCODE
+  {CUSTOM_6_LABEL, CUSTOM_6_GCODE},
+  #endif
+  #ifdef CUSTOM_7_GCODE
+  {CUSTOM_7_LABEL, CUSTOM_7_GCODE},
+  #endif
+  #ifdef CUSTOM_8_GCODE
+  {CUSTOM_8_LABEL, CUSTOM_8_GCODE},
+  #endif
+  #ifdef CUSTOM_9_GCODE
+  {CUSTOM_9_LABEL, CUSTOM_9_GCODE},
+  #endif
+  #ifdef CUSTOM_10_GCODE
+  {CUSTOM_10_LABEL, CUSTOM_10_GCODE},
+  #endif
+  #ifdef CUSTOM_11_GCODE
+  {CUSTOM_11_LABEL, CUSTOM_11_GCODE},
+  #endif
+  #ifdef CUSTOM_12_GCODE
+  {CUSTOM_12_LABEL, CUSTOM_12_GCODE},
+  #endif
+  #ifdef CUSTOM_13_GCODE
+  {CUSTOM_13_LABEL, CUSTOM_13_GCODE},
+  #endif
+  #ifdef CUSTOM_14_GCODE
+  {CUSTOM_14_LABEL, CUSTOM_14_GCODE},
+  #endif
+};
 //
 //perform action on button press
 //
-    void sendCustomGcode(uint32_t key_val)
-    {
-      uint32_t item_index = gc_cur_page*LISTITEM_PER_PAGE+ key_val;
-       if (item_index < CKEY_COUNT){
-        storeCmd(gcodelist[item_index][1]);
-      }
-    }
+void sendCustomGcode(uint32_t key_val)
+{
+  uint32_t item_index = gc_cur_page*LISTITEM_PER_PAGE+ key_val;
+    if (item_index < CKEY_COUNT){
+    storeCmd(gcodelist[item_index][1]);
+  }
+}
 
 //
 //load values on page change and reload
 //
-    void loaditemsCustomGcode(void){
-      for (uint32_t i = 0; i < LISTITEM_PER_PAGE; i++)
-      {
-        uint32_t item_index = gc_cur_page*LISTITEM_PER_PAGE + i;
-        if (item_index < CKEY_COUNT){
-          customItems.items[i].icon = ICONCHAR_CODE;
-          customItems.items[i].titlelabel.index = LABEL_DYNAMIC;
-          dynamic_label[i] = (char *)gcodelist[item_index][0];
-        }
-        else{
-          customItems.items[i].icon = ICONCHAR_BACKGROUND;
-          customItems.items[i].titlelabel.index = LABEL_BACKGROUND;
-        }
-     }
-      // set page up down button according to page count and current page
-      if (CKEY_COUNT <= LISTITEM_PER_PAGE)
-      {
-        customItems.items[5].icon = ICONCHAR_BACKGROUND;
-        customItems.items[6].icon = ICONCHAR_BACKGROUND;
-      }
-      else
-      {
-        if(gc_cur_page == 0){
-          customItems.items[5].icon = ICONCHAR_BACKGROUND;
-          customItems.items[6].icon = ICONCHAR_PAGEDOWN;
-        }
-        else if(gc_cur_page == (GC_PAGE_COUNT-1)){
-          customItems.items[5].icon = ICONCHAR_PAGEUP;
-          customItems.items[6].icon = ICONCHAR_BACKGROUND;
-        }
-        else
-        {
-          customItems.items[5].icon = ICONCHAR_PAGEUP;
-          customItems.items[6].icon = ICONCHAR_PAGEDOWN;
-        }
-      }
-         // menuDrawListItem(&customItems.items[5],5);
-          //menuDrawListItem(&customItems.items[6],6);
+void loaditemsCustomGcode(void){
+  for (uint32_t i = 0; i < LISTITEM_PER_PAGE; i++)
+  {
+    uint32_t item_index = gc_cur_page*LISTITEM_PER_PAGE + i;
+    if (item_index < CKEY_COUNT){
+      customItems.items[i].icon = ICONCHAR_CODE;
+      customItems.items[i].titlelabel.index = LABEL_DYNAMIC;
+      //dynamic_label[i] = (char *)gcodelist[item_index][0];
+      setDynamicLabel(i,(char *)gcodelist[item_index][0]);
     }
+    else{
+      customItems.items[i].icon = ICONCHAR_BACKGROUND;
+      customItems.items[i].titlelabel.index = LABEL_BACKGROUND;
+    }
+  }
+  // set page up down button according to page count and current page
+  if (CKEY_COUNT <= LISTITEM_PER_PAGE)
+  {
+    customItems.items[5].icon = ICONCHAR_BACKGROUND;
+    customItems.items[6].icon = ICONCHAR_BACKGROUND;
+  }
+  else
+  {
+    if(gc_cur_page == 0){
+      customItems.items[5].icon = ICONCHAR_BACKGROUND;
+      customItems.items[6].icon = ICONCHAR_PAGEDOWN;
+    }
+    else if(gc_cur_page == (GC_PAGE_COUNT-1)){
+      customItems.items[5].icon = ICONCHAR_PAGEUP;
+      customItems.items[6].icon = ICONCHAR_BACKGROUND;
+    }
+    else
+    {
+      customItems.items[5].icon = ICONCHAR_PAGEUP;
+      customItems.items[6].icon = ICONCHAR_PAGEDOWN;
+    }
+  }
+      // menuDrawListItem(&customItems.items[5],5);
+      //menuDrawListItem(&customItems.items[6],6);
+}
 
 void menuCustom(void)
 {
@@ -295,6 +195,7 @@ void menuCustom(void)
           if(GC_PAGE_COUNT > 1){
             if (gc_cur_page > 0){
               gc_cur_page--;
+              loaditemsCustomGcode();
               menuRefreshListPage();
             }
           }
@@ -303,6 +204,7 @@ void menuCustom(void)
           if(GC_PAGE_COUNT > 1){
             if (gc_cur_page < GC_PAGE_COUNT-1){
               gc_cur_page++;
+              loaditemsCustomGcode();
               menuRefreshListPage();
             }
           }
@@ -313,11 +215,10 @@ void menuCustom(void)
       default:
         break;
     }
-    loopProcess();		
+    loopProcess();
   }
 }
 
-#endif
 
 MENUITEMS RGBItems = {
 // title
@@ -347,31 +248,31 @@ void menuRGBSettings(void)
       case KEY_ICON_0:  //Red
         storeCmd("M150 R255 U0 B0 P255\n");
         break;
-      
+
       case KEY_ICON_1:  //Green
         storeCmd("M150 R0 U255 B0 P255\n");
         break;
-      
+
       case KEY_ICON_2:  //Blue
         storeCmd("M150 R0 U0 B255 P255\n");
         break;
-      
+
       case KEY_ICON_3:  //White
         storeCmd("M150 R255 U255 B255 P255\n");
         break;
-      
+
       case KEY_ICON_4:  //Turn Off
         storeCmd("M150 R0 U0 B0 P0\n");
         break;
-      
+
       case KEY_ICON_7:
         infoMenu.cur--;
         break;
-      
+
       default:
         break;
     }
-    loopProcess();		
+    loopProcess();
   }
 }
 
@@ -393,9 +294,9 @@ LABEL_MACHINE_SETTINGS,
 void menuMachineSettings(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
-  
+
   menuDrawPage(&machineSettingsItems);
-  
+
   while(infoMenu.menu[infoMenu.cur] == menuMachineSettings)
   {
     key_num = menuKeyGetValue();
@@ -404,15 +305,15 @@ void menuMachineSettings(void)
       case KEY_ICON_0:
         infoMenu.menu[++infoMenu.cur] =  menuCustom;
         break;
-      
+
       case KEY_ICON_1:
         infoMenu.menu[++infoMenu.cur] = menuRGBSettings;
         break;
-      
+
       case KEY_ICON_2:
         infoMenu.menu[++infoMenu.cur] = menuSendGcode;
         break;
-      
+
       case KEY_ICON_3:
         storeCmd("M81\n");
         break;
@@ -420,15 +321,15 @@ void menuMachineSettings(void)
       case KEY_ICON_4:
         infoMenu.menu[++infoMenu.cur] = parametersetting;
         break;
-      
+
       case KEY_ICON_7:
         infoMenu.cur--;
         break;
-      
+
       default:
         break;
     }
-    
-    loopProcess();  
+
+    loopProcess();
   }
 }

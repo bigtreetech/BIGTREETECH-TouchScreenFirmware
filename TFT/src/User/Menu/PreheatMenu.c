@@ -12,8 +12,6 @@ LABEL_PREHEAT,
     {ICON_PREHEAT_ABS,          LABEL_PREHEAT_ABS},
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
-//    {ICON_PREHEAT_CUSTOM1,      LABEL_PREHEAT_CUSTOM1},
-//    {ICON_PREHEAT_CUSTOM2,      LABEL_PREHEAT_CUSTOM2},
     {ICON_PREHEAT_BOTH,         LABEL_PREHEAT_BOTH},
     #ifdef UNIFIED_MENU
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
@@ -34,7 +32,7 @@ const ITEM itemToolPreheat[] = {
   {ICON_NOZZLE,               LABEL_NOZZLE},
   {ICON_NOZZLE,               LABEL_NOZZLE},
   {ICON_NOZZLE,               LABEL_NOZZLE},
-};   
+};
 
 const u16   preheat_bed_temp[] = PREHEAT_BED;
 const u16   preheat_hotend_temp[] = PREHEAT_HOTEND;
@@ -68,18 +66,18 @@ void menuPreheat(void)
             break;
         }
         break;
-        
+
       case KEY_ICON_5:
         nowHeater = (TOOLPREHEAT)((nowHeater+1) % 3);
         preheatItems.items[key_num] = itemToolPreheat[nowHeater];
         menuDrawItem(&preheatItems.items[key_num], key_num);;
         break;
-      
+
       #ifndef UNIFIED_MENU
       case KEY_ICON_6:
         infoMenu.menu[++infoMenu.cur] = menuHeat;
         break;
-      
+
       #endif
       case KEY_ICON_7:
         infoMenu.cur--; break;

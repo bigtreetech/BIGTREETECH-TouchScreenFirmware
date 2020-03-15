@@ -33,7 +33,7 @@ const GUI_RECT printinfo_val_rect[7] = {
         START_X + PICON_LG_WIDTH*0 + PICON_SPACE_X*0 + PICON_VAL_LG_EX,     ICON_START_Y + PICON_HEIGHT*1 + PICON_SPACE_Y*1 /*+ PICON_VAL_Y*/ + BYTE_HEIGHT},
 };
 
-static u32 nowTime = 0;
+static u32 nextTime = 0;
 static u32 toggle_time = 300; // 1 seconds is 100
 TOOL c_Ext = NOZZLE0;
 static int c_fan = 0;
@@ -473,7 +473,7 @@ void reDrawLayer(int icon_pos)
 
 void toggleinfo(void)
 {
-  if (OS_GetTime() > nowTime + toggle_time)
+  if (OS_GetTime() > nextTime)
   {
     if (EXTRUDER_NUM > 1)
     {
@@ -494,7 +494,7 @@ void toggleinfo(void)
     }
 
     c_speedID = (c_speedID + 1) % 2;
-    nowTime = OS_GetTime(); 
+    nextTime = OS_GetTime() + toggle_time; 
     rapid_serial_loop();	 //perform backend printing loop before drawing to avoid printer idling
     reDrawSpeed(SPD_ICON_POS);
   }
@@ -506,25 +506,22 @@ void toggleinfo(void)
 
 void printingDrawPage(void)
 {
-  int16_t i;
   //	Scroll_CreatePara(&titleScroll, infoFile.title,&titleRect);  //
 
-  i = get_Pre_Icon((char *)getCurGcodeName(infoFile.title));
-  if(i != ICON_BACKGROUND){
+  if(get_Pre_Icon() == true){
     key_pause = 5;
-    printingItems.items[key_pause - 1] = itemBlank;
+    //printingItems.items[key_pause - 1] = itemBlank;
+    printingItems.items[key_pause - 1].icon = ICON_PREVIEW;
+    printingItems.items[key_pause - 1].label.index = LABEL_BACKGROUND;
   }
   else{
     key_pause = 4;
+    printingItems.items[key_pause+1] = itemBabyStep;
   }
+  
     printingItems.items[key_pause] = itemIsPause[isPause()];
   
-
   menuDrawPage(&printingItems);
-  if(i != ICON_BACKGROUND){
-    
-    ICON_CustomReadDisplay(0*ICON_WIDTH+0*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  ICON_WIDTH,  ICON_HEIGHT,  ICON_ADDR(i));
-  }
   reValueNozzle(EXT_ICON_POS);
   reValueBed(BED_ICON_POS);
   reDrawFan(FAN_ICON_POS);
@@ -532,7 +529,6 @@ void printingDrawPage(void)
   reDrawProgress(TIM_ICON_POS);
   reDrawLayer(Z_ICON_POS);
   reDrawSpeed(SPD_ICON_POS);
-
 }
 
 
@@ -546,8 +542,9 @@ void menuPrinting(void)
   uint16_t    curspeed[2] = {0};
   memset(&nowHeat, 0, sizeof(HEATER));
   
-  printingItems.items[key_pause] = itemIsPause[infoPrinting.pause];
   printingDrawPage();
+  printingItems.items[key_pause] = itemIsPause[infoPrinting.pause];
+
 
   while(infoMenu.menu[infoMenu.cur] == menuPrinting)
   {		
@@ -583,7 +580,7 @@ void menuPrinting(void)
     if( infoPrinting.size != 0)
     {
       //check print time change
-      if(time!=infoPrinting.time || infoPrinting.progress!=limitValue(0,(uint64_t)infoPrinting.cur*100/infoPrinting.size,100) )
+      if(time!=infoPrinting.time || infoPrinting.progress!=limitValue(0,(uint64_t)infoPrinting.cur*100/infoPrinting.size,100))
       {
         time=infoPrinting.time;
         infoPrinting.progress=limitValue(0,(uint64_t)infoPrinting.cur*100/infoPrinting.size,100);
@@ -601,7 +598,6 @@ void menuPrinting(void)
         reDrawProgress(TIM_ICON_POS);
       }	
     }
-
 
     //Z_AXIS coordinate
     if(curLayer != coordinateGetAxisTarget(Z_AXIS)){
@@ -621,13 +617,13 @@ void menuPrinting(void)
     switch(key_num)
     {
       case KEY_ICON_4:
-        if(get_Pre_Icon((char *)getCurGcodeName(infoFile.title)) == ICON_BACKGROUND){
+        if(get_Pre_Icon() != true){
         setPrintPause(!isPause(),false);
         }
         break;
       
       case KEY_ICON_5:
-        if(get_Pre_Icon((char *)getCurGcodeName(infoFile.title)) != ICON_BACKGROUND){
+        if(get_Pre_Icon() == true){
         setPrintPause(!isPause(),false);
         }
         else{
@@ -648,6 +644,7 @@ void menuPrinting(void)
           infoMenu.cur--;
         }					
         break;
+
       default :break;
     }                
     loopProcess();
@@ -851,20 +848,16 @@ void getGcodeFromFile(void)
 
 void loopCheckPrinting(void)
 {
-  static u32  nowTime=0;
+  static u32  nextTime=0;
 
   do
   {  /* WAIT FOR M27	*/
-    if(update_waiting == true)                {nowTime=OS_GetTime();break;}
-    if(OS_GetTime() < nowTime+update_time)       break;
+    if(update_waiting == true) {nextTime=OS_GetTime()+update_time; break;}
+    if(OS_GetTime() < nextTime) break;
 
     if(storeCmd("M27\n")==false)               break;
 
-    nowTime=OS_GetTime();
+    nextTime=OS_GetTime()+update_time;
     update_waiting=true;
   }while(0);
 }
-
-
-
-
