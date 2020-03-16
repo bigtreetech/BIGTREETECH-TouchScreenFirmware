@@ -4,18 +4,12 @@
 BREAK_POINT  infoBreakPoint;
 char powerFailedFileName[256];
 
-static bool powerFailedSave = false;
 static bool create_ok = false;
 
 void powerFailedSetDriverSource(char *src)
 {
   strcpy(powerFailedFileName, src);
   strcat(powerFailedFileName, BREAK_POINT_FILE);
-}
-
-void powerFailedEnable(bool enable)
-{
-  powerFailedSave = enable;
 }
 
 void clearPowerFailed(void)
@@ -45,18 +39,11 @@ bool powerFailedCreate(char *path)
 void powerFailedCache(u32 offset)
 {
   UINT        br;
-  static u32  nextTime = 0;
 
-  if (OS_GetTime() < nextTime)  return;
+  if (infoBreakPoint.axis[Z_AXIS] == coordinateGetAxisTarget(Z_AXIS)) return; // Z axis no raise.
   if (create_ok == false )      return;
-  if (powerFailedSave == false) return;
   if (isPause() == true)        return;
-
   if (infoCacheCmd.count != 0)  return;
-
-  powerFailedSave = false;
-
-  nextTime = OS_GetTime() + 100;
 
   infoBreakPoint.offset = offset;
   for (AXIS i = X_AXIS; i < TOTAL_AXIS; i++)
@@ -64,8 +51,8 @@ void powerFailedCache(u32 offset)
     infoBreakPoint.axis[i] = coordinateGetAxisTarget(i);
   }
   infoBreakPoint.feedrate = coordinateGetFeedRate();
-  infoBreakPoint.speed = speedGetPercent(0);
-  infoBreakPoint.flow = speedGetPercent(1);
+  infoBreakPoint.speed = speedGetPercent(0); // Move speed percent
+  infoBreakPoint.flow = speedGetPercent(1); // Flow percent
 
   for(TOOL i = BED; i < HEATER_NUM; i++)
   {

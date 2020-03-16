@@ -476,6 +476,4 @@ void sendQueueCmd(void)
   infoCmd.index_r = (infoCmd.index_r + 1) % CMD_MAX_LIST;
 
   infoHost.wait = infoHost.connected;          //
-
-  powerFailedEnable(true);
 }
