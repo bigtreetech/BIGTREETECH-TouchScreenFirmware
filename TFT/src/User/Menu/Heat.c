@@ -163,6 +163,12 @@ void heatSetSendWaiting(TOOL tool, bool isWaiting)
   send_waiting[tool] = isWaiting;
 }
 
+/* Get whether has heating command in Queue */
+bool heatGetSendWaiting(TOOL tool)
+{
+  return send_waiting[tool];
+}
+
 void showTemperature(void)
 {
 

@@ -179,14 +179,19 @@ void parseACK(void)
       }
       else if(ack_seen("T:") || ack_seen("T0:"))
       {
-        heatSetCurrentTemp(heatGetCurrentToolNozzle(), ack_value()+0.5);
-        heatSyncTargetTemp(heatGetCurrentToolNozzle(), ack_second_value()+0.5);
+        TOOL i = heatGetCurrentToolNozzle();
+        heatSetCurrentTemp(i, ack_value()+0.5);
+        if(!heatGetSendWaiting(i)){
+          heatSyncTargetTemp(i, ack_second_value()+0.5);
+        }
         for(TOOL i = BED; i < HEATER_NUM; i++)
         {
           if(ack_seen(toolID[i]))
           {
             heatSetCurrentTemp(i, ack_value()+0.5);
-            heatSyncTargetTemp(i, ack_second_value()+0.5);
+            if(!heatGetSendWaiting(i)) {
+              heatSyncTargetTemp(i, ack_second_value()+0.5);
+            }
           }
         }
         avoid_terminal = infoSettings.terminalACK;
@@ -195,7 +200,9 @@ void parseACK(void)
       else if(ack_seen("B:"))
       {
         heatSetCurrentTemp(BED, ack_value()+0.5);
-        heatSyncTargetTemp(BED, ack_second_value()+0.5);
+        if(!heatGetSendWaiting(BED)) {
+          heatSyncTargetTemp(BED, ack_second_value()+0.5);
+        }
         avoid_terminal = infoSettings.terminalACK;
         updateNextHeatCheckTime();
       }
