@@ -82,7 +82,7 @@ s16 heatGetCurrentTemp(TOOL tool)
 /* Is heating waiting to heat up */
 bool heatGetIsWaiting(TOOL tool)
 {
-  return heater.T[tool].waiting;
+  return (heater.T[tool].waiting != WAIT_NONE);
 }
 
 /* Check all heater if there is a heater waiting to be waited */
@@ -91,17 +91,17 @@ bool heatHasWaiting(void)
   TOOL i;
   for(i = BED; i < HEATER_NUM; i++)
   {
-    if(heater.T[i].waiting == true)
-    return true;
+    if(heater.T[i].waiting != WAIT_NONE)
+      return true;
   }
   return false;
 }
 
 /* Set heater waiting status */
-void heatSetIsWaiting(TOOL tool, bool isWaiting)
+void heatSetIsWaiting(TOOL tool, HEATER_WAIT isWaiting)
 {
   heater.T[tool].waiting = isWaiting;
-  if(isWaiting == true)
+  if(isWaiting != WAIT_NONE)
   {
     update_time = 100;
   }
@@ -292,7 +292,7 @@ void menuHeat(void)
 }
 
 u32 nextHeatCheckTime = 0;
-void updateLastHeatCheckTime(void)
+void updateNextHeatCheckTime(void)
 {
   nextHeatCheckTime = OS_GetTime() + update_time;
 }
@@ -304,31 +304,29 @@ void loopCheckHeater(void)
 
   do
   {  /* Send M105 query temperature continuously	*/
-    if(update_waiting == true)                {updateLastHeatCheckTime();break;}
+    if(update_waiting == true)                {updateNextHeatCheckTime();break;}
     if(OS_GetTime() < nextHeatCheckTime)       break;
     if(RequestCommandInfoIsRunning())          break; //to avoid colision in Gcode response processing
     if(storeCmd("M105\n")==false)              break;
-    updateLastHeatCheckTime();
+    updateNextHeatCheckTime();
     update_waiting=true;
   }while(0);
 
   /* Query the heater that needs to wait for the temperature to rise, whether it reaches the set temperature */
   for(i=0; i<HEATER_NUM; i++)
   {
-    if (heater.T[i].waiting == false)                                   continue;
-    if (i==BED)
-    {
-      if (heater.T[BED].current+2 <= heater.T[BED].target)              continue;
+    if (heater.T[i].waiting == WAIT_NONE)                              continue;
+    else if (heater.T[i].waiting == WAIT_HEATING) {
+      if (heater.T[i].current+2 <= heater.T[i].target)                 continue;
     }
-    else
-    {
-      if (inRange(heater.T[i].current, heater.T[i].target, 2) != true)  continue;
+    else if (heater.T[i].waiting == WAIT_COOLING_HEATING) {
+      if (inRange(heater.T[i].current, heater.T[i].target, 2) != true) continue;
     }
 
-    heater.T[i].waiting = false;
-    if(heatHasWaiting() == true)                                        continue;
+    heater.T[i].waiting = WAIT_NONE;
+    if (heatHasWaiting())                                              continue;
 
-    if(infoMenu.menu[infoMenu.cur] == menuHeat)                         break;
+    if(infoMenu.menu[infoMenu.cur] == menuHeat)                        break;
     update_time=300;
   }
 

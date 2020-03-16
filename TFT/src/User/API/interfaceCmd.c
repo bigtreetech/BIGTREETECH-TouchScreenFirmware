@@ -273,7 +273,12 @@ void sendQueueCmd(void)
             TOOL i = heatGetCurrentToolNozzle();
             if(cmd_seen('T')) i = (TOOL)(cmd_value() + NOZZLE0);
             infoCmd.queue[infoCmd.index_r].gcode[3]='4';
-            heatSetIsWaiting(i,true);
+            if (cmd_seen('R')) {
+              infoCmd.queue[infoCmd.index_r].gcode[cmd_index-1] = 'S';
+              heatSetIsWaiting(i, WAIT_COOLING_HEATING);
+            } else {
+              heatSetIsWaiting(i, WAIT_HEATING);
+            }
           }
           case 104: //M104
           {
@@ -283,7 +288,7 @@ void sendQueueCmd(void)
             {
               heatSyncTargetTemp(i, cmd_value());
             }
-            else
+            else if (!cmd_seen('\n'))
             {
               char buf[12];
               sprintf(buf, "S%d\n", heatGetTargetTemp(i));
@@ -307,7 +312,7 @@ void sendQueueCmd(void)
             {
               fanSetSpeed(i, cmd_value());
             }
-            else
+            else if (!cmd_seen('\n'))
             {
               char buf[12];
               sprintf(buf, "S%d\n", fanGetSpeed(i));
@@ -341,13 +346,18 @@ void sendQueueCmd(void)
 
           case 190: //M190
             infoCmd.queue[infoCmd.index_r].gcode[2]='4';
-            heatSetIsWaiting(BED,true);
+            if (cmd_seen('R')) {
+              infoCmd.queue[infoCmd.index_r].gcode[cmd_index-1] = 'S';
+              heatSetIsWaiting(BED, WAIT_COOLING_HEATING);
+            } else {
+              heatSetIsWaiting(BED, WAIT_HEATING);
+            }
           case 140: //M140
             if(cmd_seen('S'))
             {
               heatSyncTargetTemp(BED,cmd_value());
             }
-            else
+            else if (!cmd_seen('\n'))
             {
               char buf[12];
               sprintf(buf, "S%d\n", heatGetTargetTemp(BED));
@@ -361,7 +371,7 @@ void sendQueueCmd(void)
             {
               speedSetPercent(0,cmd_value());
             }
-            else
+            else if (!cmd_seen('\n'))
             {
               char buf[12];
               sprintf(buf, "S%d\n", speedGetPercent(0));
@@ -374,7 +384,7 @@ void sendQueueCmd(void)
             {
               speedSetPercent(1,cmd_value());
             }
-            else
+            else if (!cmd_seen('\n'))
             {
               char buf[12];
               sprintf(buf, "S%d\n", speedGetPercent(1));
