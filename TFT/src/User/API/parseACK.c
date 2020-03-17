@@ -7,8 +7,10 @@ static u8 ack_cur_src = SERIAL_PORT;
 int MODEselect;
 // Ignore reply "echo:" message (don't display in popup menu)
 const char *const ignoreEcho[] = {
+  "busy: processing",
   "Now fresh file:",
   "Probe Z Offset:",
+  "paused for user",
 };
 
 bool portSeen[_USART_CNT] = {false, false, false, false, false, false};
@@ -206,44 +208,9 @@ void parseACK(void)
         avoid_terminal = infoSettings.terminalACK;
         updateNextHeatCheckTime();
       }
-      else if(ack_seen("Mean:"))
-      {
-        popupReminder((u8* )"Repeatability Test", (u8 *)dmaL2Cache + ack_index-5);
-      }
-      else if(ack_seen("Probe Offset"))
-      {
-        if(ack_seen("Z"))
-        {
-          setCurrentOffset(ack_value());
-        }
-      }
       else if(ack_seen("Count E:")) // parse actual position, response of "M114"
       {
         coordinateSetAxisActualSteps(E_AXIS, ack_value());
-      }
-      else if(ack_seen(echomagic) && ack_seen(busymagic) && ack_seen("processing"))
-      {
-        busyIndicator(STATUS_BUSY);
-      }
-      else if(ack_seen(echomagic) && ack_seen(busymagic) && ack_seen("paused for user"))
-      {
-        goto parse_end;
-      }
-      //parse and store stepper driver current values
-      else if(ack_seen("X driver current: "))
-      {
-        setParameterCurrent(X_AXIS, ack_value());
-        if(ack_seen("Y driver current: ")) setParameterCurrent(Y_AXIS, ack_value());
-        if(ack_seen("Z driver current: ")) setParameterCurrent(Z_AXIS, ack_value());
-        if(ack_seen("E driver current: ")) setParameterCurrent(E_AXIS, ack_value());
-      }
-      //parse and store stepper steps/mm values
-      else if(ack_seen("M92 X"))
-      {
-        setParameterSteps(X_AXIS, ack_value());
-        if(ack_seen("Y")) setParameterSteps(Y_AXIS, ack_value());
-        if(ack_seen("Z")) setParameterSteps(Z_AXIS, ack_value());
-        if(ack_seen("E")) setParameterSteps(E_AXIS, ack_value());
       }
 
   #ifdef ONBOARD_SD_SUPPORT
@@ -266,6 +233,42 @@ void parseACK(void)
   //      powerFailedCache(position);
       }
   #endif
+      //parse and store stepper steps/mm values
+      else if(ack_seen("M92 X"))
+      {
+        setParameterSteps(X_AXIS, ack_value());
+        if(ack_seen("Y")) setParameterSteps(Y_AXIS, ack_value());
+        if(ack_seen("Z")) setParameterSteps(Z_AXIS, ack_value());
+        if(ack_seen("E")) setParameterSteps(E_AXIS, ack_value());
+      }
+      //parse and store stepper driver current values
+      else if(ack_seen("X driver current: "))
+      {
+        setParameterCurrent(X_AXIS, ack_value());
+      }
+      else if(ack_seen("Y driver current: "))
+      {
+        setParameterCurrent(Y_AXIS, ack_value());
+      }
+      else if(ack_seen("Z driver current: "))
+      {
+        setParameterCurrent(Z_AXIS, ack_value());
+      }
+      else if(ack_seen("E driver current: "))
+      {
+        setParameterCurrent(E_AXIS, ack_value());
+      }
+      else if(ack_seen("Mean:"))
+      {
+        popupReminder((u8* )"Repeatability Test", (u8 *)dmaL2Cache + ack_index-5);
+      }
+      else if(ack_seen("Probe Offset"))
+      {
+        if(ack_seen("Z"))
+        {
+          setCurrentOffset(ack_value());
+        }
+      }
       else if(ack_seen(errormagic))
       {
         ackPopupInfo(errormagic);
@@ -274,14 +277,18 @@ void parseACK(void)
       {
         for(u8 i = 0; i < COUNT(ignoreEcho); i++)
         {
-          if(strstr(dmaL2Cache, ignoreEcho[i])) goto parse_end;
+          if(strstr(dmaL2Cache, ignoreEcho[i]))
+          {
+            busyIndicator(STATUS_BUSY);
+            goto parse_end;
+          }
         }
         ackPopupInfo(echomagic);
       }
-    }
-    if (ack_seen(" F0:"))
-    {
+      else if (ack_seen(" F0:"))
+      {
         fanSetSpeed(0, ack_value());
+      }
     }
 
   parse_end:
