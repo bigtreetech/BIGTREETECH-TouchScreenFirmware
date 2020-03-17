@@ -141,7 +141,7 @@ u16 Key_value(u8 total_rect,const GUI_RECT* menuRect)
     if((x>menuRect[i].x0)&&(x<menuRect[i].x1)&&(y>menuRect[i].y0)&&(y<menuRect[i].y1))
     {
       #ifdef BUZZER_PIN
-        openBuzzer(LCD_FEEDBACK_FREQUENCY_H_US, LCD_FEEDBACK_FREQUENCY_DURATION_L_US);
+        openBuzzer(BUZZER_FREQUENCY_DURATION_MS, BUZZER_FREQUENCY_HZ);
       #endif
       return i;
     }
@@ -388,7 +388,7 @@ u16 KNOB_GetRV(GUI_RECT *knob)
 }
 
 #ifdef BUZZER_PIN
-void TIM3_Config(u16 psc,u16 arr)
+void TIM3_Config(void)
 {
 	NVIC_InitTypeDef NVIC_InitStructure;
 
@@ -399,19 +399,17 @@ void TIM3_Config(u16 psc,u16 arr)
 	NVIC_Init(&NVIC_InitStructure);
 
 	RCC->APB1ENR|=1<<1;
- 	TIM3->ARR=arr;
-	TIM3->PSC=psc;
-  TIM3->SR = (uint16_t)~(1<<0);
-	TIM3->DIER|=1<<0;
-	TIM3->CNT =0;
 	TIM3->CR1 &= ~(0x01);
+	TIM3->DIER|=1<<0;
+  TIM3->SR = (uint16_t)~(1<<0);
+ 	TIM3->ARR = F_CPUM-1; // 20hz to 1Mhz
 }
 
 void Buzzer_Config(void)
 {
   GPIO_InitSet(BUZZER_PIN, MGPIO_MODE_OUT_PP, 0);
 
-	TIM3_Config(999, F_CPUM-1);  //1Khz
+	TIM3_Config();
 }
 
 void Buzzer_DeConfig(void)
@@ -419,57 +417,40 @@ void Buzzer_DeConfig(void)
   GPIO_InitSet(BUZZER_PIN, MGPIO_MODE_IPN, 0);
 }
 
-typedef struct{
-	u16 h_us,
-	    l_us,
-	    num;
-}BUZZER;
 
-static BUZZER buzzer;
+static uint32_t buzzer_tick_num;
 
 /*  */
-void openBuzzer(u16 h_us, u16 l_us)
+void openBuzzer(uint16_t ms, uint16_t hz)
 {
   if(infoSettings.silent) return;
 
-  buzzer.h_us = h_us;
-  buzzer.l_us = l_us;
-  if( h_us == 80 )
-    buzzer.num = 1000;
-  else
-    buzzer.num = 500;
-
-  TIM3->CR1 |= 0x01;               //ʹ�ܶ�ʱ��3
+  uint16_t psc = 1000000 / hz;
+  
+  buzzer_tick_num = ms * hz / 1000;
+  
+  TIM3->CR1 &= ~(0x01);
+	TIM3->CNT =0;
+	TIM3->PSC = psc - 1;
+  TIM3->CR1 |= 0x01;
 }
+
 void closeBuzzer(void)
 {
-	buzzer.num = 0;
+	buzzer_tick_num = 0;
 	TIM3->CR1 &= ~(0x01);
 }
 
-void TIM3_IRQHandler(void)   //TIM3�ж�
+void TIM3_IRQHandler(void)
 {
-  static bool flag = false;
-  if ((TIM3->SR&0x01) != 0 ) //���ָ����TIM�жϷ������?:TIM �ж�Դ
+  if ((TIM3->SR&0x01) != 0) // Undate interrupt flag
   {
-    flag = !flag;
-    if( flag )
-    {
-      TIM3->ARR = buzzer.h_us;
-    }
-    else
-    {
-      TIM3->ARR = buzzer.l_us;
-    }
-
-    GPIO_SetLevel(BUZZER_PIN, flag);
-    buzzer.num--;
-    if( buzzer.num == 0 )
+    GPIO_ToggleLevel(BUZZER_PIN);
+    if(--buzzer_tick_num == 0)
     {
       TIM3->CR1 &= ~(0x01);
     }
-
-    TIM3->SR = (uint16_t)~(1<<0);  //���TIMx���жϴ�����λ:TIM �ж�Դ
+    TIM3->SR = (uint16_t)~(1<<0); // Clear interrupt flag
   }
 }
 #endif

@@ -31,6 +31,6 @@ extern void TS_Get_Coordinates(u16 *x, u16 *y);
 
 void Buzzer_Config(void);
 void Buzzer_DeConfig(void);
-void openBuzzer(u16 h_us, u16 l_us);
+void openBuzzer(u16 ms, u16 hz);
 
 #endif
