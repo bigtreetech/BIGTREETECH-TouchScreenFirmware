@@ -87,6 +87,7 @@
  *
 */
 #define STARTUP_KNOB_LED_COLOR 1 //LED_OFF
+#define KEEP_KNOP_LED_COLOR_MARLIN_MODE   // Keed the LED stete on Marlin Mode!
 
 //===========================================================================
 //============================ TFT Mode Settings ============================

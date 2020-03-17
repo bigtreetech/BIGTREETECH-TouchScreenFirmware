@@ -74,7 +74,9 @@ void infoMenuSelect(void)
       #endif
       
       #ifdef LED_color_PIN
-        knob_LED_DeInit();
+        #ifndef KEEP_KNOP_LED_COLOR_MARLIN_MODE
+          knob_LED_DeInit();
+        #endif
       #endif
       GUI_SetColor(ST7920_FNCOLOR);
       GUI_SetBkColor(ST7920_BKCOLOR);
