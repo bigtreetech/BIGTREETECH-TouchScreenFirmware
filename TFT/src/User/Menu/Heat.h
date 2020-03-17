@@ -57,6 +57,7 @@ TOOL heatGetCurrentToolNozzle(void);
 void heatSetUpdateTime(uint32_t time);
 void heatSetUpdateWaiting(bool isWaiting);
 void heatSetSendWaiting(TOOL tool, bool isWaiting);
+bool heatGetSendWaiting(TOOL tool);
 void loopCheckHeater(void);
 
 #endif
