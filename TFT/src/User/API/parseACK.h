@@ -6,7 +6,6 @@
 
 static const char errormagic[]        = "Error:";
 static const char echomagic[]         = "echo:";
-static const char busymagic[]         = "busy:";
 static const char unknowmagic[]       = "Unknown command:";
 #ifdef ONBOARD_SD_SUPPORT
 static const char bsdprintingmagic[]   = "SD printing byte";
