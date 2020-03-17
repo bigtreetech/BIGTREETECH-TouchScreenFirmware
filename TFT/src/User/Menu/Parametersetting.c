@@ -203,18 +203,18 @@ void setStepsMenuItems(){
                     setDynamicValue((AXIS)key_num,v);
                     setParameterSteps((AXIS)key_num,v);
                 }
-                    menuDrawListPage(&stepsmenuitems);
+                menuDrawListPage(&stepsmenuitems);
             }
             break;
 
         }
-    for(int i = 0; i < TOTAL_AXIS; i++){
-        if(getDynamicValue(i) != getParameterSteps(i)){
-        setDynamicValue(i,parameter_steps_value[i]);
-        menuDrawListItem(&stepsmenuitems.items[i],i);
+        for(AXIS i = X_AXIS; i < TOTAL_AXIS; i++){
+            if(getDynamicValue(i) != getParameterSteps(i)){
+                setDynamicValue(i,parameter_steps_value[i]);
+                menuDrawListItem(&stepsmenuitems.items[i],i);
+            }
         }
-    }
-    loopProcess();
+        loopProcess();
     }
 
 }

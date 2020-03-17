@@ -289,6 +289,6 @@
 //
 #define PRINT_END_GCODE "G90\nG1 E-4\nG92 E0\nM18\n" //reduce filament pressure , reset Extruder position, disable steppers
 
-#define CANCEL_PRINT_GCODE "G28 X0 Y0\n"
+#define CANCEL_PRINT_GCODE "G28 XY R10\n" // Raise Z-axis 10mm before Home XY
 
 #endif

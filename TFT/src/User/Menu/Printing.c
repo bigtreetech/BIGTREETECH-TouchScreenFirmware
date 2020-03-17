@@ -232,7 +232,7 @@ void menuBeforePrinting(void)
 
       infoPrinting.size  = f_size(&infoPrinting.file);
       infoPrinting.cur   = infoPrinting.file.fptr;
-      if(infoSettings.send_start_gcode == 1){
+      if(infoSettings.send_start_gcode == 1 && infoPrinting.cur == 0){ // PLR continue printing, CAN NOT use start gcode
         startGcodeExecute();
       }
       break;
@@ -698,8 +698,7 @@ void abortPrinting(void)
   }
 
   heatClearIsWaiting();
-
-  mustStoreCmd("G0 Z%d F3000\n", limitValue(0, (int)coordinateGetAxisTarget(Z_AXIS) + 10, Z_MAX_POS));
+  
   mustStoreCmd(CANCEL_PRINT_GCODE);
 
   endPrinting();

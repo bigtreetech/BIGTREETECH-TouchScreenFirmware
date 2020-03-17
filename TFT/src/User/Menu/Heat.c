@@ -115,7 +115,7 @@ void heatClearIsWaiting(void)
 {
   for(TOOL i = BED; i < HEATER_NUM; i++)
   {
-    heater.T[i].waiting = false;
+    heater.T[i].waiting = WAIT_NONE;
   }
   update_time = 300;
 }
