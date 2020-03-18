@@ -391,7 +391,10 @@ void loopBackEnd(void)
 
   loopCheckHeater();			            //Temperature related settings
 
-
+#ifdef BUZZER_PIN
+  loopBuzzer();
+#endif
+  
 #if defined ONBOARD_SD_SUPPORT && !defined M27_AUTOREPORT
   loopCheckPrinting();                //Check if there is a SD or USB print running.
 #endif

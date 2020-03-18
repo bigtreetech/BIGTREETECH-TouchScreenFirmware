@@ -141,7 +141,7 @@ u16 Key_value(u8 total_rect,const GUI_RECT* menuRect)
     if((x>menuRect[i].x0)&&(x<menuRect[i].x1)&&(y>menuRect[i].y0)&&(y<menuRect[i].y1))
     {
       #ifdef BUZZER_PIN
-        openBuzzer(BUZZER_FREQUENCY_DURATION_MS, BUZZER_FREQUENCY_HZ);
+        Buzzer_TurnOn(BUZZER_FREQUENCY_HZ, BUZZER_FREQUENCY_DURATION_MS);
       #endif
       return i;
     }
@@ -386,71 +386,3 @@ u16 KNOB_GetRV(GUI_RECT *knob)
   }
   return key_return;
 }
-
-#ifdef BUZZER_PIN
-void TIM3_Config(void)
-{
-	NVIC_InitTypeDef NVIC_InitStructure;
-
-	NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
-	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-	NVIC_Init(&NVIC_InitStructure);
-
-	RCC->APB1ENR|=1<<1;
-	TIM3->CR1 &= ~(0x01);
-	TIM3->DIER|=1<<0;
-  TIM3->SR = (uint16_t)~(1<<0);
- 	TIM3->ARR = F_CPUM-1; // 20hz to 1Mhz
-}
-
-void Buzzer_Config(void)
-{
-  GPIO_InitSet(BUZZER_PIN, MGPIO_MODE_OUT_PP, 0);
-
-	TIM3_Config();
-}
-
-void Buzzer_DeConfig(void)
-{
-  GPIO_InitSet(BUZZER_PIN, MGPIO_MODE_IPN, 0);
-}
-
-
-static uint32_t buzzer_tick_num;
-
-/*  */
-void openBuzzer(uint16_t ms, uint16_t hz)
-{
-  if(infoSettings.silent) return;
-
-  uint16_t psc = 1000000 / hz;
-  
-  buzzer_tick_num = ms * hz / 1000;
-  
-  TIM3->CR1 &= ~(0x01);
-	TIM3->CNT =0;
-	TIM3->PSC = psc - 1;
-  TIM3->CR1 |= 0x01;
-}
-
-void closeBuzzer(void)
-{
-	buzzer_tick_num = 0;
-	TIM3->CR1 &= ~(0x01);
-}
-
-void TIM3_IRQHandler(void)
-{
-  if ((TIM3->SR&0x01) != 0) // Undate interrupt flag
-  {
-    GPIO_ToggleLevel(BUZZER_PIN);
-    if(--buzzer_tick_num == 0)
-    {
-      TIM3->CR1 &= ~(0x01);
-    }
-    TIM3->SR = (uint16_t)~(1<<0); // Clear interrupt flag
-  }
-}
-#endif
