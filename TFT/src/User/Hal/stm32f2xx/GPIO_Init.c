@@ -41,10 +41,19 @@ void GPIO_SetLevel(uint16_t io, uint8_t level)
 {
   u16 port = GPIO_GET_PORT(io);
   u16 pin = GPIO_GET_PIN(io);
+  
   if(level)
     GPIO_Port[port]->BSRRL = 1 << pin;
   else
     GPIO_Port[port]->BSRRH = 1 << pin;
+}
+
+void GPIO_ToggleLevel(uint16_t io)
+{
+  u16 port = GPIO_GET_PORT(io);
+  u16 pin = GPIO_GET_PIN(io);
+  
+  GPIO_Port[port]->ODR ^= (1 << pin);
 }
 
 uint8_t GPIO_GetLevel(uint16_t io)

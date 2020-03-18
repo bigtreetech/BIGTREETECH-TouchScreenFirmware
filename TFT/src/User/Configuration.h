@@ -29,7 +29,6 @@
  *
  * Select the language to display on the LCD. These languages are available:
  * ENGLISH, CHINESE, RUSSIAN, JAPANESE, ARMENIAN, GERMAN, CZECH, SPAIN, FRENCH, PORTUGUESE, ITALIAN, POLISH, SLOVAK, DUTCH
- *
  */
 #define DEFAULT_LANGUAGE ENGLISH
 
@@ -41,7 +40,6 @@
  * These are available:
  * ST7920_SPI // LCD12864 Sumilator
  * SERIAL_TSC // Default
- *
  */
 #define DEFAULT_LCD_MODE SERIAL_TSC
 
@@ -49,9 +47,14 @@
  * The duration and frequency for the UI feedback sound.
  * Set these to 0 to disable audio feedback in the LCD menus.
  * Only valid for SERIAL_TSC LCD MODE anf if BUZZER_PIN is set or availible.
+ *
+ * Note: Test audio output with the G-Code:
+ * M300 S<frequency Hz> P<duration ms>
  */
-#define LCD_FEEDBACK_FREQUENCY_DURATION_L_US 11   // Default 11
-#define LCD_FEEDBACK_FREQUENCY_H_US          3    // Default 3
+#define BUZZER_FREQUENCY_DURATION_MS 20 // Default 20
+#define BUZZER_FREQUENCY_HZ 10000       // Default 10000, 20Hz to 60KHz
+#define BUZZER_STOP_LEVEL false
+
 
 // Marlin Mode Background & Font Color Options
 // Current color options from lcd.h: BLACK, BLUE, BROWN, BRRED, CYAN, GBLUE, GRAY, GREEN, MAGENTA, RED, WHITE, YELLOW
