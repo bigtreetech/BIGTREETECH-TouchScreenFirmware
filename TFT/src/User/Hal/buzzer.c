@@ -16,7 +16,7 @@ void TIM3_Config(void)
 
 	RCC->APB1ENR |= RCC_APB1Periph_TIM3;
 	TIM3->CR1 &= ~(0x01);
-	TIM3->DIER|=1<<0;
+	TIM3->DIER |= 1<<0;
   TIM3->SR = (uint16_t)~(1<<0);
  	TIM3->ARR = F_CPUM - 1; // 20hz to 1Mhz
 }
@@ -38,12 +38,12 @@ volatile uint32_t buzzerEndTime = 0;
 
 void tone(const uint32_t frequency, const uint32_t duration);
 void loopBuzzer(void) {
-  const uint32_t now = OS_GetTime();
+  const uint32_t now = OS_GetTimeMs();
 
   if (!buzzerEndTime) {
     if (buzzer.count == 0) return;
 
-    buzzerEndTime = now + buzzer.duration[buzzer.rIndex] / 10;
+    buzzerEndTime = now + buzzer.duration[buzzer.rIndex];
 
     if (buzzer.frequency[buzzer.rIndex] > 0) {
       tone(buzzer.frequency[buzzer.rIndex], buzzer.duration[buzzer.rIndex]);
@@ -70,12 +70,12 @@ void Buzzer_TurnOn(const uint32_t frequency, const uint32_t duration)
 }
 
 
-volatile int32_t toggles = 0;
+volatile uint32_t toggles = 0;
 void tone(const uint32_t frequency, const uint32_t duration) {
-  if (frequency == 0) return;
+  if (frequency == 0 || duration == 0) return;
   
   NVIC_DisableIRQ(TIM3_IRQn);
-  toggles = duration ? 2 * frequency * duration / 1000 : -1;
+  toggles = 2 * frequency * duration / 1000;
 
   TIM3->CR1 &= ~(0x01);
 	TIM3->CNT =0;

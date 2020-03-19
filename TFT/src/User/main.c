@@ -7,7 +7,7 @@ void Hardware_GenericInit(void)
 {
   NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
   Delay_init(F_CPUM);
-  OS_TimerInit(9999, F_CPUM-1);  // System clock timer, cycle 10ms
+  OS_TimerInit(999, F_CPUM-1);  // System clock timer, cycle 1ms
 
   #ifdef DISABLE_DEBUG
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO , ENABLE);
@@ -50,6 +50,9 @@ void Hardware_GenericInit(void)
     knob_LED_Init();
   #else
     #define STARTUP_KNOB_LED_COLOR 1
+  #endif
+  #ifdef U_DISK_SUPPROT
+    USBH_Init(&USB_OTG_Core, USB_OTG_FS_CORE_ID, &USB_Host, &USBH_MSC_cb, &USR_cb);
   #endif
 
   if(readStoredPara() == false) // Read settings parameter

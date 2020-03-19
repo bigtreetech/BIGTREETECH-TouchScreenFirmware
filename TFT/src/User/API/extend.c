@@ -47,10 +47,10 @@ bool FIL_RunoutPinFilteredLevel(void)
   static u32 trueTimes = 0;
   static u32 falseTimes = 0;
 
-  if (OS_GetTime() > nextTime)
+  if (OS_GetTimeMs() > nextTime)
   {
     rst = trueTimes > falseTimes ? true : false;
-    nextTime = OS_GetTime() + FIL_NOISE_THRESHOLD;
+    nextTime = OS_GetTimeMs() + FIL_NOISE_THRESHOLD;
     trueTimes = 0;
     falseTimes = 0;
   }
@@ -69,7 +69,7 @@ bool FIL_RunoutPinFilteredLevel(void)
 }
 
 
-static u32 update_time = 200;
+static u32 update_time = 2000;
 // Use an encoder disc to toggles the runout
 // Suitable for BigTreeTech Smart filament detecter
 bool FIL_SmartRunoutDetect(void)
@@ -84,12 +84,12 @@ bool FIL_SmartRunoutDetect(void)
 
   do
   {  /* Send M114 E query extrude position continuously	*/
-    if(update_waiting == true)        {nextTime=OS_GetTime()+update_time;break;}
-    if(OS_GetTime()<nextTime)         break;
+    if(update_waiting == true)        {nextTime=OS_GetTimeMs()+update_time;break;}
+    if(OS_GetTimeMs()<nextTime)       break;
     if(RequestCommandInfoIsRunning()) break; //to avoid colision in Gcode response processing
     if(storeCmd("M114 E\n")==false)   break;
 
-    nextTime=OS_GetTime()+update_time;
+    nextTime=OS_GetTimeMs()+update_time;
     update_waiting=true;
   }while(0);
 

@@ -29,7 +29,7 @@ const ITEM SpeedItems[2] = {
 };
 
 static u32 nextTime = 0;
-static u32 update_time = 200; // 1 seconds is 100
+static u32 update_time = 2000; // 1 seconds is 100
 SCROLL     msgScroll;
 static int lastConnection_status = -1;
 
@@ -265,7 +265,7 @@ void scrollMsg(void){
 
 void toggleTool(void)
 {
-  if (OS_GetTime() > nextTime)
+  if (OS_GetTimeMs() > nextTime)
   {
     if (EXTRUDER_NUM > 1)
     {
@@ -280,7 +280,7 @@ void toggleTool(void)
       current_fan = (current_fan + 1) % FAN_NUM;
     }
     current_speedID = (current_speedID + 1) % 2;
-    nextTime = OS_GetTime() + update_time;
+    nextTime = OS_GetTimeMs() + update_time;
     drawTemperature();
 
     if (infoHost.connected == true)

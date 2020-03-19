@@ -57,10 +57,10 @@ void menuDisconnect(void)
   GUI_DispStringInRect(20, 0, LCD_WIDTH-20, LCD_HEIGHT, textSelect(LABEL_DISCONNECT_INFO));
   GUI_DispStringInRect(20, LCD_HEIGHT - (BYTE_HEIGHT*2), LCD_WIDTH-20, LCD_HEIGHT, textSelect(LABEL_TOUCH_TO_EXIT));
 
-  Serial_DeInit();
+  Serial_ReSourceDeInit();
   while(!isPress());
   while(isPress());
-  Serial_Init(infoSettings.baudrate);
+  Serial_ReSourceInit();
 
   infoMenu.cur--;
 }
@@ -141,8 +141,9 @@ void menuSettings(void)
         settingsItems.items[key_num] = itemBaudrate[item_baudrate_i];
         menuDrawItem(&settingsItems.items[key_num], key_num);
         infoSettings.baudrate = item_baudrate[item_baudrate_i];
-        Serial_DeInit(); // Serial_Init() will malloc a dynamic memory, so Serial_DeInit() first to free, then malloc again.
-        Serial_Init(infoSettings.baudrate);
+        Serial_ReSourceDeInit(); // Serial_Init() will malloc a dynamic memory, so Serial_DeInit() first to free, then malloc again.
+        Serial_ReSourceInit();
+        reminderMessage(LABEL_UNCONNECTED, STATUS_UNCONNECT);
         break;
 
       case KEY_ICON_7:

@@ -149,14 +149,14 @@ u16 Key_value(u8 total_rect,const GUI_RECT* menuRect)
   return IDLE_TOUCH;
 }
 
-void loopTouchScreen(void)
+void loopTouchScreen(void) // Handle in interrupt
 {
   static u8 touch;
   if(!XPT2046_Read_Pen())
   {
-    if(touch>=2)
+    if(touch >= 20) // 20ms
     {
-      touchScreenIsPress=true;
+      touchScreenIsPress = true;
     }
     else
     {
@@ -165,8 +165,8 @@ void loopTouchScreen(void)
   }
   else
   {
-    touchScreenIsPress=false;
-    touch=0;
+    touchScreenIsPress = false;
+    touch = 0;
   }
 }
 
@@ -327,9 +327,9 @@ u16 KNOB_GetRV(GUI_RECT *knob)
   static u16 oldx=0,oldy=0;
   static u32 mytime;
 
-  if(touchScreenIsPress && OS_GetTime() > mytime)
+  if(touchScreenIsPress && OS_GetTimeMs() > mytime)
   {
-    mytime=OS_GetTime();
+    mytime = OS_GetTimeMs() + 10;
     TS_Get_Coordinates(&x,&y);
     if(x>knob->x0&&x<knob->x1&&y>knob->y0&&y<knob->y1)
     {

@@ -29,20 +29,20 @@ bool LCD_ReadEncB(void)
   return !GPIO_GetLevel(LCD_ENCB_PIN);
 }
 
-bool LCD_ReadBtn(uint8_t intervals)
+bool LCD_ReadBtn(uint16_t intervals)
 {
   static u32 nowTime = 0;
 
   if(!GPIO_GetLevel(LCD_BTN_PIN))
   {
-    if(OS_GetTime() - nowTime > intervals)
+    if(OS_GetTimeMs() - nowTime > intervals)
     {
       return true;
     }
   }
   else
   {
-    nowTime = OS_GetTime();
+    nowTime = OS_GetTimeMs();
   }
   return false;
 }

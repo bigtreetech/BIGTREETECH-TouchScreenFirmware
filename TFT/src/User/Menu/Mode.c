@@ -7,9 +7,6 @@ void Serial_ReSourceDeInit(void)
 {
   if (!serialHasBeenInitialized) return;
   serialHasBeenInitialized = false;
-  memset(&infoHost, 0, sizeof(infoHost));
-  resetInfoFile();
-  SD_DeInit();
   Serial_DeInit();
 }
 
@@ -18,11 +15,9 @@ void Serial_ReSourceInit(void)
   if (serialHasBeenInitialized) return;
   serialHasBeenInitialized = true;
   
+  memset(&infoHost, 0, sizeof(infoHost));
+  reminderSetUnConnected(); // reset connect status
   Serial_Init(infoSettings.baudrate);
-
-#ifdef U_DISK_SUPPROT
-  USBH_Init(&USB_OTG_Core, USB_OTG_FS_CORE_ID, &USB_Host, &USBH_MSC_cb, &USR_cb);
-#endif
 }
 
 void infoMenuSelect(void)
@@ -51,17 +46,15 @@ void infoMenuSelect(void)
         infoMenu.menu[infoMenu.cur] = menuMain;
       #endif
       #ifdef SHOW_BTT_BOOTSCREEN
-        u32 startUpTime = OS_GetTime();
-        heatSetUpdateTime(100);
+        u32 startUpTime = OS_GetTimeMs();
+        heatSetUpdateTime(TEMPERATURE_QUERY_FAST_DURATION);
         LOGO_ReadDisplay();
-        while(OS_GetTime() - startUpTime < 300)  //Display 3s logo
+        while(OS_GetTimeMs() - startUpTime < 3000)  //Display 3s logo
         {
           loopProcess();
         }
-        heatSetUpdateTime(300);
+        heatSetUpdateTime(TEMPERATURE_QUERY_SLOW_DURATION);
       #endif
-
-      reminderMessage(LABEL_UNCONNECTED, STATUS_UNCONNECT); // reset connect status
       break;
     }
 
@@ -116,6 +109,8 @@ void menuMode(void)
   #ifndef CLEAN_MODE_SWITCHING_SUPPORT  
     Serial_ReSourceDeInit();
   #endif
+  resetInfoFile();
+  SD_DeInit();
 
   show_selectICON();
   TSC_ReDrawIcon = NULL; // Disable icon redraw callback function
