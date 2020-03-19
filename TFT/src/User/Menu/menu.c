@@ -139,6 +139,11 @@ static REMINDER reminder = {{0, 0, LCD_WIDTH, TITLE_END_Y}, 0, STATUS_UNCONNECT,
 static REMINDER volumeReminder = {{0, 0, LCD_WIDTH, TITLE_END_Y}, 0, STATUS_IDLE, LABEL_BACKGROUND};
 static REMINDER busySign = {{LCD_WIDTH - 5, 0, LCD_WIDTH, 5}, 0, STATUS_BUSY, LABEL_BUSY};
 
+void reminderSetUnConnected(void)
+{
+  reminder.status = STATUS_UNCONNECT;
+  reminder.inf = LABEL_UNCONNECTED;
+}
 
 void reminderMessage(int16_t inf, SYS_STATUS status)
 {
@@ -147,7 +152,7 @@ void reminderMessage(int16_t inf, SYS_STATUS status)
   GUI_DispStringInPrect(&reminder.rect, textSelect(reminder.inf));
   GUI_SetColor(FONT_COLOR);
   reminder.status = status;
-  reminder.time = OS_GetTime() + 200;
+  reminder.time = OS_GetTimeMs() + 2000; // 2 seconds
 }
 
 void volumeReminderMessage(int16_t inf, SYS_STATUS status)
@@ -157,7 +162,7 @@ void volumeReminderMessage(int16_t inf, SYS_STATUS status)
   GUI_DispStringInPrect(&volumeReminder.rect, textSelect(volumeReminder.inf));
   GUI_SetColor(FONT_COLOR);
   volumeReminder.status = status;
-  volumeReminder.time = OS_GetTime() + 200;
+  volumeReminder.time = OS_GetTimeMs() + 2000;
 }
 
 void busyIndicator(SYS_STATUS status)
@@ -169,7 +174,7 @@ void busyIndicator(SYS_STATUS status)
     GUI_SetColor(FONT_COLOR);
   }
   busySign.status = status;
-  busySign.time = OS_GetTime() + 200;
+  busySign.time = OS_GetTimeMs() + 2000;
 }
 
 void loopReminderClear(void)
@@ -190,7 +195,7 @@ void loopReminderClear(void)
       break;
 
     case STATUS_NORMAL:
-      if(OS_GetTime()<reminder.time)
+      if(OS_GetTimeMs() < reminder.time)
         return;
       break;
     default:
@@ -209,7 +214,7 @@ void loopVolumeReminderClear(void)
   switch(volumeReminder.status)
   {
     case STATUS_NORMAL:
-      if(OS_GetTime()<volumeReminder.time)
+      if(OS_GetTimeMs() < volumeReminder.time)
         return;
       break;
     default:
@@ -231,7 +236,7 @@ void loopBusySignClear(void)
       return;
 
     case STATUS_BUSY:
-     if(OS_GetTime()<busySign.time)
+     if(OS_GetTimeMs() < busySign.time)
         return;
      break;
   }

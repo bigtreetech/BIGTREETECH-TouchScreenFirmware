@@ -46,7 +46,7 @@ const char* heatWaitCmd[] = HEAT_WAIT_CMD;
 
 static HEATER  heater = {{}, NOZZLE0, NOZZLE0};
 static HEATER  lastHeater = {{}, NOZZLE0, NOZZLE0};
-static u32     update_time = 300;
+static u32     update_time = TEMPERATURE_QUERY_SLOW_DURATION;
 static bool    update_waiting = false;
 static bool    send_waiting[HEATER_NUM];
 
@@ -101,13 +101,13 @@ bool heatHasWaiting(void)
 void heatSetIsWaiting(TOOL tool, HEATER_WAIT isWaiting)
 {
   heater.T[tool].waiting = isWaiting;
-  if(isWaiting != WAIT_NONE)
+  if(isWaiting != WAIT_NONE) // wait heating now, query more frequently
   {
-    update_time = 100;
+    update_time = TEMPERATURE_QUERY_FAST_DURATION;
   }
   else if(heatHasWaiting() == false)
   {
-    update_time = 300;
+    update_time = TEMPERATURE_QUERY_SLOW_DURATION;
   }
 }
 
@@ -117,7 +117,7 @@ void heatClearIsWaiting(void)
   {
     heater.T[i].waiting = WAIT_NONE;
   }
-  update_time = 300;
+  update_time = TEMPERATURE_QUERY_SLOW_DURATION;
 }
 
 /* Set current heater tool, nozzle or hot bed */
@@ -195,7 +195,7 @@ void menuHeat(void)
   KEY_VALUES  key_num = KEY_IDLE;
 
   lastHeater = heater;
-  update_time=100;
+  update_time = TEMPERATURE_QUERY_FAST_DURATION;
 
   menuDrawPage(&heatItems);
   showTemperature();
@@ -293,14 +293,14 @@ void menuHeat(void)
     loopProcess();
   }
 
-  if(heatHasWaiting()==false)
-    update_time=300;
+  if(heatHasWaiting() == false)
+    update_time = TEMPERATURE_QUERY_SLOW_DURATION;
 }
 
 u32 nextHeatCheckTime = 0;
 void updateNextHeatCheckTime(void)
 {
-  nextHeatCheckTime = OS_GetTime() + update_time;
+  nextHeatCheckTime = OS_GetTimeMs() + update_time;
 }
 
 
@@ -311,11 +311,11 @@ void loopCheckHeater(void)
   do
   {  /* Send M105 query temperature continuously	*/
     if(update_waiting == true)                {updateNextHeatCheckTime();break;}
-    if(OS_GetTime() < nextHeatCheckTime)       break;
+    if(OS_GetTimeMs() < nextHeatCheckTime)     break;
     if(RequestCommandInfoIsRunning())          break; //to avoid colision in Gcode response processing
-    if(storeCmd("M105\n")==false)              break;
+    if(storeCmd("M105\n") == false)            break;
     updateNextHeatCheckTime();
-    update_waiting=true;
+    update_waiting = true;
   }while(0);
 
   /* Query the heater that needs to wait for the temperature to rise, whether it reaches the set temperature */
@@ -333,7 +333,7 @@ void loopCheckHeater(void)
     if (heatHasWaiting())                                              continue;
 
     if(infoMenu.menu[infoMenu.cur] == menuHeat)                        break;
-    update_time=300;
+    update_time = TEMPERATURE_QUERY_SLOW_DURATION;
   }
 
   for(TOOL i = BED; i < HEATER_NUM; i++) // If the target temperature changes, send a Gcode to set the motherboard
