@@ -2,16 +2,71 @@
 #define _CONFIGRATION_H_
 
 //===========================================================================
-//=========================== Marlin Mode Settings ===========================
+//============================= General Settings ============================
+//===========================================================================
+
+/**
+ * Default Mode
+ *
+ * Mode switching is still possible by by holding down the encorder for two seconds.
+ *
+ * Options:
+ * ST7920_SPI // Marlin Mode
+ * SERIAL_TSC // Touch Mode
+ */
+#define DEFAULT_LCD_MODE SERIAL_TSC
+
+/**
+ * Default Startup Knob LED Color (TFT35 E3)
+ *
+ * Options:  1: LED_OFF,     2: LED_WHITE,   3: LED_RED,
+ *           4: LED_ORANGE,  5: LED_YELLOW,  6: LED_GREEN,
+ *           7: LED_BLUE,    8: LED_INDIGO,  9: LED_VIOLET
+ *
+ * Default value is: 1 for LED_OFF
+*/
+#define STARTUP_KNOB_LED_COLOR 1  // LED_OFF
+
+//===========================================================================
+//=========================== Marlin Mode Settings ==========================
 //===========================================================================
 
 /**
  * Default Marlin Mode Background & Font Color Options
  *
- * These colors can be changed in TFT mode, but can also be set here.
+ * These colors can be changed in Touch mode, but can also be set here.
  *
- * Current color options from lcd.h: BLACK, BLUE, BROWN, BRRED, CYAN, GBLUE, GRAY, GREEN, MAGENTA, RED, WHITE, YELLOW
+ * Options: BLACK, BLUE, BROWN, BRRED, CYAN, GBLUE, GRAY, GREEN, MAGENTA, RED, WHITE, YELLOW
  */
+#define ST7920_BKCOLOR BLACK
+#define ST7920_FNCOLOR YELLOW
+
+/**
+ *  Text displayed at the top of the TFT in Marlin Mode.
+ */
+//#define ST7920_BANNER_TEXT "LCD12864 Simulator"
+
+/**
+ * Run Marlin Mode Fullscreen
+ *
+ *  *** NOT RECOMMENDED FOR TFT24 ***
+ */
+//#define ST7920_FULLSCREEN
+
+/**
+ * Clean Mode Switching Support
+ *
+ * Keep UART (Serial communication) alive in Marlin Mode
+ *
+ * Allow seamless OctoPrint UART connection to the TFT's UART/serial expansion port no matter which mode the TFT is in.
+ *
+ * *** ONLY SUPPORTED ON TFT24 V1.1, TFT35 V3.0, AND TFT28 V3.0 ***
+ */
+//#define CLEAN_MODE_SWITCHING_SUPPORT  // Enable CLEAN MODE SWITCHING SUPPORT
+
+//===========================================================================
+//========================== Touch Mode Settings ============================
+//===========================================================================
 
 /**
  * This setting determines the communication speed of the printer.
@@ -25,28 +80,23 @@
 #define BAUDRATE 115200
 
 /**
- * Default LANGUAGE
+ * Default Touch Mode Language
  *
- * Select the language to display on the LCD. These languages are available:
- * ENGLISH, CHINESE, RUSSIAN, JAPANESE, ARMENIAN, GERMAN, CZECH, SPAIN, FRENCH, PORTUGUESE, ITALIAN, POLISH, SLOVAK, DUTCH
+ * Select the language to display on the LCD while in Touch Mode.
+ *
+ * Option: ENGLISH, CHINESE, RUSSIAN, JAPANESE, ARMENIAN, GERMAN, CZECH, SPAIN, FRENCH, PORTUGUESE, ITALIAN, POLISH, SLOVAK, DUTCH
  */
 #define DEFAULT_LANGUAGE ENGLISH
 
 /**
- * Default LCD Mode
- *
- * Select the default LCD mode. You can always switch between the modes.
- *
- * These are available:
- * ST7920_SPI // LCD12864 Sumilator
- * SERIAL_TSC // Default
+ *  Show bootscreen when starting up
  */
-#define DEFAULT_LCD_MODE SERIAL_TSC
+#define SHOW_BTT_BOOTSCREEN
 
 /**
  * The duration and frequency for the UI feedback sound.
  * Set these to 0 to disable audio feedback in the LCD menus.
- * Only valid for SERIAL_TSC LCD MODE anf if BUZZER_PIN is set or availible.
+ * Only valid for SERIAL_TSC LCD MODE and if BUZZER_PIN is set or available.
  *
  * Note: Test audio output with the G-Code:
  * M300 S<frequency Hz> P<duration ms>
@@ -55,60 +105,14 @@
 #define BUZZER_FREQUENCY_HZ 10000       // Default 10000, 20Hz to 60KHz
 #define BUZZER_STOP_LEVEL false
 
-
-// Marlin Mode Background & Font Color Options
-// Current color options from lcd.h: BLACK, BLUE, BROWN, BRRED, CYAN, GBLUE, GRAY, GREEN, MAGENTA, RED, WHITE, YELLOW
-#define ST7920_BKCOLOR BLACK
-#define ST7920_FNCOLOR YELLOW
-
 /**
- *  Text displayed at the top of the LCD in Marlin Mode.
- */
-//#define ST7920_BANNER_TEXT "LCD12864 Simulator"
-
-/**
- * Run Marlin Mode fullscreen.
- * Not recommended for TFT24.
- */
-//#define ST7920_FULLSCREEN
-
-/**
- * CLEAN MODE SWITCHING SUPPORT
- * Support for keeping UART(Serial communication) alive in Marlin Mode
- * Gives the ability to connect Octoprint over UART to the TFT UART/serial
- * expansion port and have it work seamlessly no matter which mode the TFT is in.
- * Only for TFT24 V1.1, TFT35 V3.0 or TFT28 V3.0
- */
-//#define CLEAN_MODE_SWITCHING_SUPPORT  // Enable CLEAN MODE SWITCHING SUPPORT
-
-/**
- * DEFAULT STARTUP KNOB LED COLOR
- * Choose one of the following numbers -->  1: LED_OFF,     2: LED_WHITE,   3: LED_RED,
- *                                          4: LED_ORANGE,  5: LED_YELLOW,  6: LED_GREEN,
- *                                          7: LED_BLUE,    8: LED_INDIGO,  9: LED_VIOLET
- * Default value is: 1 for LED_OFF
- *
-*/
-#define STARTUP_KNOB_LED_COLOR 1 //LED_OFF
-
-//===========================================================================
-//============================ TFT Mode Settings ============================
-//===========================================================================
-
-/**
- *  Show BTT bootscreen when starting up
- */
-#define SHOW_BTT_BOOTSCREEN
-
-/**
- * TFT mode color
+ * Default Touch Mode Color Options
  */
 #define TITLE_BACKGROUND_COLOR      BLACK  // Title background color // 0xD928
 #define BACKGROUND_COLOR            BLACK  // Background color // 0x0A29
 #define FONT_COLOR                  WHITE  // Font foreground color
-#define REMINDER_FONT_COLOR         RED    // Reminder font color, such as: "No print attached", "Busy process", etc...
-#define VOLUME_REMINDER_FONT_COLOR  GBLUE  // Volume reminder font color,such as: "Card inserted", "Card removed"
-
+#define REMINDER_FONT_COLOR         RED    // Reminder font color, such as: "No print attached", "Busy processing", etc.
+#define VOLUME_REMINDER_FONT_COLOR  GBLUE  // Volume reminder font color, such as: "Card inserted", "Card removed"
 
 #define TOOL_NUM     1    // set in 1~6
 #define EXTRUDER_NUM 1    // set in 1~6
@@ -137,6 +141,7 @@
 #define DEFAULT_SPEED_MOVE      3000
 #define SPEED_MOVE_SLOW         1000
 #define SPEED_MOVE_FAST         5000
+
 // Extrude speed mm/min
 #define EXTRUDE_SLOW_SPEED      60
 #define EXTRUDE_NORMAL_SPEED    600
@@ -198,13 +203,8 @@
 #define ALTERNATIVE_MOVE_MENU
 
 // Enable Unified Move Menu
-// Move, Home, Extrude, ABL at one Place and bring Gcode Menu on Home Menu
+// Move, Home, Extrude, ABL at one Place and bring G-code Menu on Home Menu
 #define UNIFIED_MENU
-
-
-//-------RESET SETTINGS & TOUCH SCREEN CALIBRATION------||
-// To reset the touch screen create a text file with name 'reset.txt' in root folder of the sd card and press reset button.
-
 
 // SD support
 #define ONBOARD_SD_SUPPORT
@@ -215,14 +215,13 @@
 #endif
 
 /**
- * Home before power loss recovery
- * Many printer will crash printed model when homing, which is not suitable for home before PLR.
- * This function is suitable for Delta Printer.
+ * Power Loss Recovery
+ *
+ * Most suitable for Delta printers since most printers will crash into printed model when homing after powerloss.
  */
-//#define HOME_BEFORE_PLR
-//#define BTT_MINI_UPS // Backup power / UPS to move the Z axis steppers on power loss
-#define POWER_LOSS_ZRAISE 10 // (mm) Z axis raise on resume (on power loss with UPS)
-
+//#define HOME_BEFORE_PLR // Home before power loss recovery
+//#define BTT_MINI_UPS // Backup power / UPS to move Z axis on power loss
+#define POWER_LOSS_ZRAISE 10 // (mm) Raise Z axis on resume (on power loss with UPS)
 
 // Prevent extrusion if the temperature is below set temperature
 #define PREVENT_COLD_EXTRUSION_MINTEMP 170
@@ -237,19 +236,22 @@
 #define SHOW_FAN_PERCENTAGE // enable to show fan speed as a percentage instead of a value
 
 /**
- * Rapid Serial Communication:More frequent Serial communicaiton while printing.
- * The controller will send and parse  gcodes more frequently  while drawing on
- * screen to prevent printer idling and stuttering  due to empty printer buffer.
- * Note: this might make the  graphics slow when switching menus while printing.
+ * Rapid Serial Communication
+ *
+ * More frequent Serial communicaiton while printing.
+ *
+ * Send and parse G-codes more frequently while drawing on screen to prevent printer idling and stuttering due to empty printer buffer.
+ *
+ * Note: This may slow down graphics while switching menus while printing.
 */
 #define RAPID_SERIAL_COMM
 
-
-/** CUSTOM GCODE COMMANDS
- * Support up to 15 custom gcodes.
- * Uncomment CUSTOM_X_LABEL and CUSTOM_X_GCODE to enable custom gcode.
- * CUSTOM_X_LABEL is the name of the custom button, CUSTOM_X_GCODE
- * CUSTOM_X_GCODE is the gcode to be sent by the custom button, this should always end with a New-Line character '\n'
+/**
+ * Custom G-code Commands
+ *
+ * Support for up to 15 custom G-codes. Uncomment CUSTOM_*_LABEL and CUSTOM_*_GCODE to enable custom G-code.
+ *
+ * CUSTOM_X_LABEL is the name of the custom button, CUSTOM_X_GCODE is the G-code to be sent by the custom button, this should always end with a New-Line character '\n'
  */
 #define CUSTOM_0_LABEL "Disable Steppers"
 #define CUSTOM_0_GCODE "M84\n"
@@ -282,16 +284,20 @@
 //#define CUSTOM_14_LABEL "Custom14"
 //#define CUSTOM_14_GCODE "M105\n"
 
-//
-//Start Gcode - run this gcode before starting print
-//
-#define PRINT_START_GCODE "G28\nG29\nG1 Z20\n" // home and abl
+/**
+ * Start/End/Cancel G-code
+ *
+ * G-code that runs after a print starts, ends, or canceled.
+ *
+ * Disable in SETTINGS -> FEATURE menu.
+ */
+// Start G-code - run this G-code before starting print
+#define PRINT_START_GCODE "G28\nG29\nG1 Z20\n" // Home all, run ABL routine, raise Z 20 mm.
 
-//
-//End Gcode - run this gcode after finishing print
-//
-#define PRINT_END_GCODE "G90\nG1 E-4\nG92 E0\nM18\n" //reduce filament pressure , reset Extruder position, disable steppers
+// End G-code - run this G-code after finishing print
+#define PRINT_END_GCODE "G90\nG1 E-4\nG92 E0\nM18\n" // Switch to absolute positioning, reduce filament pressure by performing small retract, reset extruder position, disable steppers
 
-#define CANCEL_PRINT_GCODE "G28 XY R10\n" // Raise Z-axis 10mm before Home XY
+// Cancel G-code - run this G-code after canceling print
+#define CANCEL_PRINT_GCODE "G28 XY R10\n" // Raise Z 10mm before homing X & Y
 
 #endif
