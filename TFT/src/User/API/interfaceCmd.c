@@ -379,6 +379,7 @@ void sendQueueCmd(void)
               speedSetSendWaiting(0, false);
             }
             break;
+            
           case 221: //M221
             if(cmd_seen('S'))
             {
@@ -392,6 +393,18 @@ void sendQueueCmd(void)
               speedSetSendWaiting(1, false);
             }
             break;
+
+          #ifdef BUZZER_PIN
+            case 300: //M300
+              if (cmd_seen('S')) {
+                uint16_t hz = cmd_value();
+                if (cmd_seen('P')) {
+                  uint16_t ms = cmd_value();
+                  Buzzer_TurnOn(hz, ms);
+                }
+              }
+              break;
+          #endif
 
           case 906: //M906
             if(cmd_seen('X')) setParameterCurrent(X_AXIS, cmd_value());

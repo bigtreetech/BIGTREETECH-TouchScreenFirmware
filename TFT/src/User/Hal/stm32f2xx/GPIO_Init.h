@@ -149,6 +149,7 @@ typedef enum
 
 void GPIO_InitSet(uint16_t io, GPIO_MODE mode, uint8_t AF);
 void GPIO_SetLevel(uint16_t io, uint8_t level);
+void GPIO_ToggleLevel(uint16_t io);
 uint8_t GPIO_GetLevel(uint16_t io);
 
 #endif

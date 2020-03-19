@@ -36,6 +36,7 @@
 #include "sd.h"
 #include "w25qxx.h"
 #include "xpt2046.h"
+#include "buzzer.h"
 
 #include "LCD_Encoder.h"
 #include "ST7920_Simulator.h"

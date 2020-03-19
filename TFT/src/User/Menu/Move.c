@@ -180,13 +180,13 @@ void menuMove(void)
 
 void update_gantry(void)
 {
-  if (OS_GetTime() > nextTime)
+  if (OS_GetTimeMs() > nextTime)
   {
     if (infoHost.connected == true && infoHost.wait == false){
       storeCmd("M114\n");
     }
     drawXYZ();
-    nextTime = OS_GetTime() + update_time;
+    nextTime = OS_GetTimeMs() + update_time;
   }
 }
 void drawXYZ(void){

@@ -29,8 +29,4 @@ void loopTouchScreen(void);
 extern void (*TSC_ReDrawIcon)(u8 positon, u8 is_press);
 extern void TS_Get_Coordinates(u16 *x, u16 *y);
 
-void Buzzer_Config(void);
-void Buzzer_DeConfig(void);
-void openBuzzer(u16 h_us, u16 l_us);
-
 #endif

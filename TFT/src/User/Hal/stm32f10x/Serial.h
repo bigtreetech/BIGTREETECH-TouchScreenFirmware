@@ -1,8 +1,6 @@
 #ifndef _SERIAL_H_
 #define _SERIAL_H_
 
-#include "stm32f10x.h"
-#include "parseACK.h"
 #include "usart.h"
 
 typedef struct

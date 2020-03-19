@@ -5,6 +5,9 @@
 #include "stdbool.h"
 #include "Configuration.h"
 
+#define TEMPERATURE_QUERY_FAST_DURATION 1000  // "M105" query temperature every 1s
+#define TEMPERATURE_QUERY_SLOW_DURATION 3000  // 3s
+
 typedef enum {
   WAIT_NONE = 0,
   WAIT_HEATING,
