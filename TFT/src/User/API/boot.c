@@ -22,24 +22,6 @@ const char iconBmpName[][32]={
 "printing_nozzle", "printing_bed", "printing_fan","printing_timer","printing_layer","printing_speed","printing_flow",
 };
 
-u8 scanUpdateFile(void)
-{
-  DIR dir;
-  u8 rst = 0;
-
-  if (f_opendir(&dir, BMP_ROOT_DIR) == FR_OK)
-  {
-    rst |= BMP;
-    f_closedir(&dir);
-  }
-  if (f_opendir(&dir, FONT_ROOT_DIR) == FR_OK)
-  {
-    rst |= FONT;
-    f_closedir(&dir);
-  }
-  return rst;
-}
-
 bool bmpDecode(char *bmp, u32 addr)
 {
   FIL   bmpFile;
@@ -184,12 +166,11 @@ void updateFont(char *font, u32 addr)
   free(tempbuf);
 }
 
-void scanResetDir(void)
-{
-  FIL resetfile;
-  if (f_open(&resetfile, TFT_RESET_FILE, FA_OPEN_EXISTING | FA_READ) == FR_OK)
-  {
-    f_close(&resetfile);
+void scanResetDir(void) {
+  if (f_file_exists(TFT_RESET_FILE)) {
+    if (f_file_exists(TFT_RESET_FILE ".DONE")) {
+      f_unlink(TFT_RESET_FILE ".DONE");
+    }
     f_rename(TFT_RESET_FILE, TFT_RESET_FILE ".DONE");
     infoSettingsReset();
     TSC_Calibration();
@@ -197,22 +178,38 @@ void scanResetDir(void)
   }
 }
 
+void scanRenameUpdate(void) {
+  if (f_file_exists(ADMIN_MODE_FILE)) return; // admin mode, need not rename
+
+  if (f_dir_exists(ROOT_DIR)) { // ROOT_DIR exists
+    if (f_dir_exists(ROOT_DIR ".CUR")) { // old ROOT_DIR also exists
+      GUI_Clear(BACKGROUND_COLOR);
+      // It will take some time to delete the old ROOT_DIR, so display "Deleting" on the screen to tell user.
+      GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, (uint8_t *)"Deleting old ROOT_DIR...");
+      f_remove_full_dir(ROOT_DIR ".CUR");
+    }
+    f_rename(ROOT_DIR, ROOT_DIR ".CUR");
+  }
+
+  if (f_file_exists(FIRMWARE_NAME ".bin")) { // firmware exists
+    if (f_file_exists(FIRMWARE_NAME ".CUR")) { // old firmware also exists
+      f_unlink(FIRMWARE_NAME ".CUR");
+    }
+    f_rename(FIRMWARE_NAME ".bin", FIRMWARE_NAME ".CUR");
+  }
+}
+
 void scanUpdates(void)
 {
-  volatile u8 result = 0;   //must volatile
-  if(mountSDCard())
-  {
-    result = scanUpdateFile();
-    if (result & FONT)
-    {
+  if(mountSDCard()) {
+    if (f_dir_exists(FONT_ROOT_DIR)) {
       updateFont(FONT_ROOT_DIR"/byte_ascii.fon", BYTE_ASCII_ADDR);
       updateFont(FONT_ROOT_DIR"/word_unicode.fon", WORD_UNICODE);
     }
-    if (result & BMP) //bmp
-    {
+    if (f_dir_exists(BMP_ROOT_DIR)) {
       updateIcon();
     }
-    if (result) f_rename(ROOT_DIR, ROOT_DIR".CUR");
+    scanRenameUpdate();
     scanResetDir();
   }
 }
