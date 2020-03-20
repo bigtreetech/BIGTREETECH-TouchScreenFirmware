@@ -14,7 +14,7 @@
 #include "language_pl.h"
 #include "language_sk.h"
 #include "language_du.h"
-#include "language_Hu.h"
+#include "language_hu.h"
 
 const char *const en_pack[LABEL_NUM]={
   EN_LANGUAGE,
