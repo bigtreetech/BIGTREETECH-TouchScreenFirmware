@@ -57,7 +57,7 @@ bool scanPrintFilesFatFs(void)
     {
       if (infoFile.f_num >= FILE_NUM)  continue;
 
-      if (strstr(finfo.fname, ".gcode") == NULL)  continue;
+      if (strstr(finfo.fname, ".g") == NULL)  continue; // support "*.g","*.gco" and "*.gcode"
 
       infoFile.file[infoFile.f_num] = malloc(len);
       if (infoFile.file[infoFile.f_num] == NULL)  break;

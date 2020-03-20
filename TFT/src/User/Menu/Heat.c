@@ -306,8 +306,6 @@ void updateNextHeatCheckTime(void)
 
 void loopCheckHeater(void)
 {
-  u8 i;
-
   do
   {  /* Send M105 query temperature continuously	*/
     if(update_waiting == true)                {updateNextHeatCheckTime();break;}
@@ -319,7 +317,7 @@ void loopCheckHeater(void)
   }while(0);
 
   /* Query the heater that needs to wait for the temperature to rise, whether it reaches the set temperature */
-  for(i=0; i<HEATER_NUM; i++)
+  for(u8 i=0; i<HEATER_NUM; i++)
   {
     if (heater.T[i].waiting == WAIT_NONE)                              continue;
     else if (heater.T[i].waiting == WAIT_HEATING) {
