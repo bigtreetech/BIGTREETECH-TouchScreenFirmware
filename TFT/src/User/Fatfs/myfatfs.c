@@ -57,7 +57,7 @@ bool scanPrintFilesFatFs(void)
     {
       if (infoFile.f_num >= FILE_NUM)  continue;
 
-      if (strstr(finfo.fname, ".gcode") == NULL)  continue;
+      if (strstr(finfo.fname, ".g") == NULL)  continue; // support "*.g","*.gco" and "*.gcode"
 
       infoFile.file[infoFile.f_num] = malloc(len);
       if (infoFile.file[infoFile.f_num] == NULL)  break;
@@ -147,4 +147,74 @@ bool Get_NewestGcode(const TCHAR* path)
     }
   }
   return status;
+}
+
+bool f_file_exists(const TCHAR* path) {
+  FIL tmp;
+  if (f_open(&tmp, path, FA_OPEN_EXISTING) == FR_OK) {
+    f_close(&tmp);
+    return true;
+  }
+  return false;
+}
+
+bool f_dir_exists(const TCHAR* path) {
+  DIR tmp;
+  if (f_opendir(&tmp, path) == FR_OK) {
+    f_closedir(&tmp);
+    return true;
+  }
+  return false;
+}
+
+FRESULT f_remove_node (
+  TCHAR* path,    /* Path name buffer with the sub-directory to delete */
+  UINT sz_buff,   /* Size of path name buffer (items) */
+  FILINFO* fno    /* Name read buffer */
+)
+{
+  UINT i, j;
+  FRESULT fr;
+  DIR dir;
+
+  fr = f_opendir(&dir, path); /* Open the directory */
+  if (fr != FR_OK) return fr;
+
+  for (i = 0; path[i]; i++); /* Get current path length */
+  path[i++] = '/';
+
+  for (;;) {
+      fr = f_readdir(&dir, fno);  /* Get a directory item */
+      if (fr != FR_OK || !fno->fname[0]) break;   /* End of directory? */
+      j = 0;
+      do {    /* Make a path name */
+          if (i + j >= sz_buff) { /* Buffer over flow? */
+              fr = 100; break;    /* Fails with 100 when buffer overflow */
+          }
+          path[i + j] = fno->fname[j];
+      } while (fno->fname[j++]);
+      if (fno->fattrib & AM_DIR) {    /* Item is a directory */
+          fr = f_remove_node(path, sz_buff, fno);
+      } else {                        /* Item is a file */
+          fr = f_unlink(path);
+      }
+      if (fr != FR_OK) break;
+  }
+
+  path[--i] = 0;  /* Restore the path name */
+  f_closedir(&dir);
+
+  if (fr == FR_OK) fr = f_unlink(path);  /* Delete the empty directory */
+  return fr;
+}
+
+bool f_remove_full_dir(const TCHAR* path) {
+  #define BUFFER_SIZE 256
+  char dirBuffer[BUFFER_SIZE];
+  FILINFO tmpInfo;
+  strncpy(dirBuffer, path, BUFFER_SIZE);
+  if (f_remove_node(dirBuffer, BUFFER_SIZE, &tmpInfo) == FR_OK) {
+    return true;
+  }
+  return false;
 }
