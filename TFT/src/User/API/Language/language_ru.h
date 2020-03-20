@@ -11,7 +11,7 @@
     #define RU_SETTINGS               "Настройки"
     #define RU_SCREEN_SETTINGS        "Экран"
     #define RU_MACHINE_SETTINGS       "Принтер"
-    #define RU_FEATURE_SETTINGS       "Другие \u08D2" //Checkbox Sign
+    #define RU_FEATURE_SETTINGS       "Опции"
     #define RU_SILENT_ON              "Звук выкл"
     #define RU_SILENT_OFF             "Звук вкл"
     #define RU_SHUT_DOWN              "Выключить"
