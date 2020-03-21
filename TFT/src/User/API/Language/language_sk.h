@@ -152,5 +152,9 @@
     #define SK_FILE_LISTMODE        "Files viewer List Mode"
     #define SK_CURRENT_SETTING      "Driver Current Settings"
     #define SK_STEPS_SETTING        "Steps per MM Settings"
+    #define SK_RESET                "Reset"
+    #define SK_RESET_SETTINGS       "All Settings will be reset to default Setting."
+    #define SK_RESET_SETTINGS_DONE  "Resetting all settings successfully done. To take full effect, please restart the device."
+    #define SK_INFO                 "Info"
 
 #endif

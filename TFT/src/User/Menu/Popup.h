@@ -41,6 +41,7 @@ extern WINDOW window;
 void windowSetButton(const BUTTON *btn);
 void windowReDrawButton(uint8_t positon, uint8_t is_press);
 void popupDrawPage(BUTTON *btn, const uint8_t *title, const uint8_t *context, const uint8_t *yes, const uint8_t *no);
+void popupReminderIgnoreLCDMode(u8* info, u8* context, const u8 ignore_lcd_mode);
 void popupReminder(u8* info, u8* context);
 
 #endif

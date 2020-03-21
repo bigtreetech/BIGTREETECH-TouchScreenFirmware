@@ -43,6 +43,9 @@ const LABEL itemMoveSpeed[ITEM_SPEED_NUM] = {
                                             };
 const  u8 item_movespeed[ITEM_SPEED_NUM] = {LABEL_NORMAL_SPEED, LABEL_SLOW_SPEED, LABEL_FAST_SPEED};
 
+#define ACTION_NUM   1
+const LABEL itemAction[ACTION_NUM]       = {LABEL_RESET};
+
 //
 //add key number index of the items
 //
@@ -66,8 +69,9 @@ typedef enum
   #ifdef LED_color_PIN
   SKEY_KNOB,
   #endif
+  SKEY_RESET_SETTINGS,
   SKEY_COUNT //keep this always at the end
-}SKEY_LIST; 
+}SKEY_LIST;
 
 #define FE_PAGE_COUNT  (SKEY_COUNT+LISTITEM_PER_PAGE-1)/LISTITEM_PER_PAGE
 int fe_cur_page = 0;
@@ -94,8 +98,32 @@ LISTITEM settingPage[SKEY_COUNT] = {
   #ifdef LED_color_PIN
   {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_KNOB_LED,           LABEL_OFF       },
   #endif
-  
+  {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_SETTINGS,           LABEL_RESET   },                 // SKEY_RESET_SETTINGS,
 };
+
+void menuResetSettings(void)
+{
+  uint16_t key_num = IDLE_TOUCH;
+  popupDrawPage(bottomDoubleBtn, textSelect(LABEL_WARNING), textSelect(LABEL_RESET_SETTINGS), textSelect(LABEL_CONFIRM), textSelect(LABEL_CANNEL));
+  while(infoMenu.menu[infoMenu.cur] == menuResetSettings)
+  {
+    key_num = KEY_GetValue(2, doubleBtnRect);
+    switch(key_num)
+    {
+      case KEY_POPUP_CONFIRM:
+        infoSettingsReset();
+        storePara();
+        infoMenu.cur--;       // Just go back to the previos view
+        popupReminderIgnoreLCDMode(textSelect(LABEL_INFO), textSelect(LABEL_RESET_SETTINGS_DONE),TRUE);
+        break;
+
+      case KEY_POPUP_CANCEL:
+        infoMenu.cur--;  // Just go back to the previos view
+        break;
+    }
+    loopProcess();
+  }
+}
 
 //
 //perform action on button press
@@ -208,6 +236,12 @@ void updateFeatureSettings(uint8_t key_val)
     break;
     #endif
 
+    case SKEY_RESET_SETTINGS:
+    settingPage[item_index].valueLabel = itemAction[0];
+    infoMenu.menu[++infoMenu.cur] = menuResetSettings;
+    menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
+    break;
+
   default:
     break;
   }
@@ -280,12 +314,15 @@ void loadFeatureSettings(){
         settingPage[item_index].icon  = toggleitem[infoSettings.file_listmode];
         featureSettingsItems.items[i] = settingPage[item_index];
         break;
-
+      case SKEY_RESET_SETTINGS:
+        settingPage[item_index].valueLabel = itemAction[0];
+        featureSettingsItems.items[i] = settingPage[item_index];
+        break;
       #ifdef LED_color_PIN
-        case SKEY_KNOB:
-          settingPage[item_index].valueLabel = itemLedcolor[infoSettings.knob_led_color];
-          featureSettingsItems.items[i] = settingPage[item_index];
-          break;
+      case SKEY_KNOB:
+        settingPage[item_index].valueLabel = itemLedcolor[infoSettings.knob_led_color];
+        featureSettingsItems.items[i] = settingPage[item_index];
+        break;
       #endif
 
       default:
@@ -367,7 +404,7 @@ void menuFeatureSettings(void)
 
     loopProcess();		
   }
-
+  
   if(memcmp(&now, &infoSettings, sizeof(SETTINGS)))
   {
     storePara();

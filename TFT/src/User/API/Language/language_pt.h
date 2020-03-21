@@ -152,5 +152,9 @@
     #define PT_FILE_LISTMODE        "Files viewer List Mode"
     #define PT_CURRENT_SETTING      "Driver Current Settings"
     #define PT_STEPS_SETTING        "Steps per MM Settings"
+    #define PT_RESET                "Reset"
+    #define PT_RESET_SETTINGS       "All settings will be reset to it's default values. Continue?"
+    #define PT_RESET_SETTINGS_DONE  "Resetting all settings successfully done. To take full effect, please restart the device."
+    #define PT_INFO                 "Info"
 
 #endif
