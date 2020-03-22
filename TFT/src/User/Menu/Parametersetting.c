@@ -136,7 +136,7 @@ void setCurrentMenuItems(){
             break;
 
         default:
-            if(key_num < TOTAL_AXIS){
+            if(key_num < (KEY_VALUES)TOTAL_AXIS){
                 float v = num_pad(getParameterCurrent((AXIS)key_num));
                 if (v != getParameterCurrent((AXIS)key_num))
                 {
@@ -196,7 +196,7 @@ void setStepsMenuItems(){
             break;
 
         default:
-            if(key_num < TOTAL_AXIS){
+            if(key_num < (KEY_VALUES)TOTAL_AXIS){
                 float v = num_pad(getParameterSteps((AXIS)key_num));
                 if (v != getParameterSteps((AXIS)key_num)){
                     storeCmd(parameter_stepsCmd[key_num],v);
