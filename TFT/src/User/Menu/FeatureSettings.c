@@ -234,7 +234,6 @@ void updateFeatureSettings(uint8_t key_val)
     #endif
 
     case SKEY_RESET_SETTINGS:
-    settingPage[item_index].valueLabel = itemAction[0];
     infoMenu.menu[++infoMenu.cur] = menuResetSettings;
     menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
     break;
