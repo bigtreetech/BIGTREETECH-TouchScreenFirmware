@@ -43,9 +43,6 @@ const LABEL itemMoveSpeed[ITEM_SPEED_NUM] = {
                                             };
 const  u8 item_movespeed[ITEM_SPEED_NUM] = {LABEL_NORMAL_SPEED, LABEL_SLOW_SPEED, LABEL_FAST_SPEED};
 
-#define ACTION_NUM   1
-const LABEL itemAction[ACTION_NUM]       = {LABEL_RESET};
-
 //
 //add key number index of the items
 //
