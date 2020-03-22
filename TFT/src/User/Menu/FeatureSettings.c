@@ -311,7 +311,6 @@ void loadFeatureSettings(){
         featureSettingsItems.items[i] = settingPage[item_index];
         break;
       case SKEY_RESET_SETTINGS:
-        settingPage[item_index].valueLabel = itemAction[0];
         featureSettingsItems.items[i] = settingPage[item_index];
         break;
       #ifdef LED_color_PIN
