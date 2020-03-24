@@ -104,6 +104,7 @@ void menuMode(void)
   bool keyback = false;
 
   int16_t nowEncoder = encoderPosition = 0;
+  int16_t /*nowEncoder =*/ encoderPosition = 0;
   int8_t  nowMode = modeRadio.select = infoSettings.mode;
 
   GUI_Clear(BACKGROUND_COLOR);
