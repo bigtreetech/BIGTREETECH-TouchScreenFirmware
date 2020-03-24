@@ -3,6 +3,7 @@
 #
 applet/
 *.DS_Store
+desktop.ini
 
 #
 # Misc
