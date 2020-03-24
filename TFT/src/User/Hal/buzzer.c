@@ -60,6 +60,7 @@ void loopBuzzer(void) {
 
 void Buzzer_TurnOn(const uint32_t frequency, const uint32_t duration)
 {
+    if(infoSettings.silent) return;  
   while (buzzer.count == BUZZER_CACHE_SIZE) {
     loopBuzzer();
   }
