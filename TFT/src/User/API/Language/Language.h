@@ -179,6 +179,10 @@ enum
   LABEL_FILE_LISTMODE,
   LABEL_CURRENT_SETTING,
   LABEL_STEPS_SETTING,
+  LABEL_RESET,
+  LABEL_RESET_SETTINGS,
+  LABEL_RESET_SETTINGS_DONE,
+  LABEL_INFO,
   
   //add new keywords above this line only
   //keep the following always at the end of this list

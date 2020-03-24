@@ -152,5 +152,9 @@
     #define FR_FILE_LISTMODE        "Files viewer List Mode"
     #define FR_CURRENT_SETTING      "Driver Current Settings"
     #define FR_STEPS_SETTING        "Steps per MM Settings"
+    #define FR_RESET                "Reset"
+    #define FR_RESET_SETTINGS       "All settings will be reset to it's default values. Continue?"
+    #define FR_RESET_SETTINGS_DONE  "Resetting all settings successfully done. To take full effect, please restart the device."
+    #define FR_INFO                 "Info"
 
 #endif

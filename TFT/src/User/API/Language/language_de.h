@@ -8,7 +8,7 @@
     #define DE_PRINT                "Drucken"
     #define DE_EXTRUDE              "Extruder"
     #define DE_FAN                  "Lüfter"
-    #define DE_SETTINGS             "Setup"
+    #define DE_SETTINGS             "Einstellung"
     #define DE_SCREEN_SETTINGS      "Bildschirm"
     #define DE_MACHINE_SETTINGS     "Drucker"
     #define DE_FEATURE_SETTINGS     "Feature"
@@ -130,7 +130,7 @@
     #define DE_UNIFIEDHEAT          "Heiz.Lüft."
     #define DE_COOLDOWN             "Abkühlen"
     #define DE_EMERGENCYSTOP        "NOT STOP!"
-    #define DE_TOUCH_TO_EXIT        "Zum verlassen, Bildschirm berühren"
+    #define DE_TOUCH_TO_EXIT        "Zum verlassen, Bildschirm berühren."
     #define DE_MAINMENU             "Menü"
     #define DE_WAIT_TEMP_SHUT_DOWN  "Warte bis Hotend-Temperatur unter " STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP) "℃ fällt." // Wait for the temperature of hotend to be lower than 50℃
     #define DE_FORCE_SHUT_DOWN      "Erzwinge"
@@ -146,11 +146,15 @@
     #define DE_MOVE_SPEED           "Geschwindigkeit (XYZ)"
     #define DE_KNOB_LED             "Drehknopf LED Farbe"
     #define DE_M0_PAUSE             "Pause durch M0 kommando"
-    #define DE_SEND_START_GCODE     "Start-Gcode vor druck"
-    #define DE_SEND_END_GCODE       "End-Gcode nach druck"
+    #define DE_SEND_START_GCODE     "Start-Gcode vor Druck"
+    #define DE_SEND_END_GCODE       "End-Gcode nach Druck"
     #define DE_PERSISTANT_STATUS_INFO "Speicherungs-status Information"
     #define DE_FILE_LISTMODE        "Datei-Ansicht als Liste"
     #define DE_CURRENT_SETTING      "Driver Current Settings"
     #define DE_STEPS_SETTING        "Steps per MM Settings"
-    
+    #define DE_RESET                "Resetten"
+    #define DE_RESET_SETTINGS       "Hiermit werden alle Einstellungen auf Werkseinstellungen zurückgesetzt. Fortfahren?"
+    #define DE_RESET_SETTINGS_DONE  "Einstellungen wurden erfolgreich zurückgesetzt. Bitte starten Sie das Gerät neu."
+    #define DE_INFO                 "Info"
+
 #endif

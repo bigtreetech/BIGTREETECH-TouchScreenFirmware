@@ -152,5 +152,9 @@
     #define CN_FILE_LISTMODE        "文件浏览列表模式"
     #define CN_CURRENT_SETTING      "TMC驱动电流设置"
     #define CN_STEPS_SETTING        "电机每毫米脉冲数(Steps/mm)"
+    #define CN_RESET                "Reset"
+    #define CN_RESET_SETTINGS       "All settings will be reset to it's default values. Continue?"
+    #define CN_RESET_SETTINGS_DONE  "Resetting all settings successfully done. To take full effect, please restart the device."
+    #define CN_INFO                 "Info"
 
 #endif

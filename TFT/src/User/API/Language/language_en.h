@@ -105,7 +105,7 @@
     #define EN_ADJUST_FAILED        "Adjustment failed, Please Try Again"
     #define EN_WARNING              "Warning"
     #define EN_STOP_PRINT           "Stop printing?"
-    #define EN_CONFIRM              "Confirm"
+    #define EN_CONFIRM              "OK"                // String: Confirm - Usually reinterpreted and used as OK, so lets do it so.   
     #define EN_TFTSD                "TFT SD"
     #define EN_READ_TFTSD_ERROR     "Read TFT SD card error!"
     #define EN_TFTSD_INSERTED       "Card inserted!"
@@ -152,6 +152,9 @@
     #define EN_FILE_LISTMODE        "Files viewer List Mode"
     #define EN_CURRENT_SETTING      "Driver Current Settings"
     #define EN_STEPS_SETTING        "Steps per MM Settings"
-    
+    #define EN_RESET                "Reset"
+    #define EN_RESET_SETTINGS       "All settings will be reset to it's default values. Continue?"
+    #define EN_RESET_SETTINGS_DONE  "Resetting all settings successfully done. To take full effect, please restart the device."
+    #define EN_INFO                 "Info"
 
 #endif

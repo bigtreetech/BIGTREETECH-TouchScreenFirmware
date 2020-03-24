@@ -168,6 +168,10 @@ const char *const en_pack[LABEL_NUM]={
   EN_FILE_LISTMODE,
   EN_CURRENT_SETTING,
   EN_STEPS_SETTING,
+  EN_RESET,
+  EN_RESET_SETTINGS,
+  EN_RESET_SETTINGS_DONE,
+  EN_INFO
 };
 
 const char *const cn_pack[LABEL_NUM]={
@@ -322,6 +326,10 @@ const char *const cn_pack[LABEL_NUM]={
   CN_FILE_LISTMODE,
   CN_CURRENT_SETTING,
   CN_STEPS_SETTING,
+  CN_RESET,
+  CN_RESET_SETTINGS,
+  CN_RESET_SETTINGS_DONE,
+  CN_INFO
 };
 
 const char *const ru_pack[LABEL_NUM]={
@@ -476,6 +484,10 @@ const char *const ru_pack[LABEL_NUM]={
   RU_FILE_LISTMODE,
   RU_CURRENT_SETTING,
   RU_STEPS_SETTING,
+  RU_RESET,
+  RU_RESET_SETTINGS,
+  RU_RESET_SETTINGS_DONE,
+  RU_INFO  
 };
 
 const char *const jp_pack[LABEL_NUM]={
@@ -630,6 +642,10 @@ const char *const jp_pack[LABEL_NUM]={
   JP_FILE_LISTMODE,
   JP_CURRENT_SETTING,
   JP_STEPS_SETTING,
+  JP_RESET,
+  JP_RESET_SETTINGS,
+  JP_RESET_SETTINGS_DONE,
+  JP_INFO
 };
 
 const char *const am_pack[LABEL_NUM]={
@@ -784,6 +800,10 @@ const char *const am_pack[LABEL_NUM]={
   AM_FILE_LISTMODE,
   AM_CURRENT_SETTING,
   AM_STEPS_SETTING,
+  AM_RESET,
+  AM_RESET_SETTINGS,
+  AM_RESET_SETTINGS_DONE,
+  AM_INFO
 };
 
 const char *const de_pack[LABEL_NUM]={
@@ -938,6 +958,10 @@ const char *const de_pack[LABEL_NUM]={
   DE_FILE_LISTMODE,
   DE_CURRENT_SETTING,
   DE_STEPS_SETTING,
+  DE_RESET,
+  DE_RESET_SETTINGS,
+  DE_RESET_SETTINGS_DONE,
+  DE_INFO
 };
 
 const char *const cz_pack[LABEL_NUM]={
@@ -1092,6 +1116,10 @@ const char *const cz_pack[LABEL_NUM]={
   CZ_FILE_LISTMODE,
   CZ_CURRENT_SETTING,
   CZ_STEPS_SETTING,
+  CZ_RESET,
+  CZ_RESET_SETTINGS,
+  CZ_RESET_SETTINGS_DONE,
+  CZ_INFO
 };
 
 const char *const es_pack[LABEL_NUM]={
@@ -1246,6 +1274,10 @@ const char *const es_pack[LABEL_NUM]={
   ES_FILE_LISTMODE,
   ES_CURRENT_SETTING,
   ES_STEPS_SETTING,
+  ES_RESET,
+  ES_RESET_SETTINGS,
+  ES_RESET_SETTINGS_DONE,
+  ES_INFO
 };
 
 const char *const fr_pack[LABEL_NUM]={
@@ -1400,6 +1432,10 @@ const char *const fr_pack[LABEL_NUM]={
   FR_FILE_LISTMODE,
   FR_CURRENT_SETTING,
   FR_STEPS_SETTING,
+  FR_RESET,
+  FR_RESET_SETTINGS,
+  FR_RESET_SETTINGS_DONE,
+  FR_INFO
 };
 
 const char *const pt_pack[LABEL_NUM]={
@@ -1554,6 +1590,10 @@ const char *const pt_pack[LABEL_NUM]={
   PT_FILE_LISTMODE,
   PT_CURRENT_SETTING,
   PT_STEPS_SETTING,
+  PT_RESET,
+  PT_RESET_SETTINGS
+  PT_RESET_SETTINGS_DONE,
+  PT_INFO
 };
 
 const char *const it_pack[LABEL_NUM]={
@@ -1708,6 +1748,10 @@ const char *const it_pack[LABEL_NUM]={
   IT_FILE_LISTMODE,
   IT_CURRENT_SETTING,
   IT_STEPS_SETTING,
+  IT_RESET,
+  IT_RESET_SETTINGS,
+  IT_RESET_SETTINGS_DONE,
+  IT_INFO
 };
 
 const char *const pl_pack[LABEL_NUM]={
@@ -1862,6 +1906,10 @@ const char *const pl_pack[LABEL_NUM]={
   PL_FILE_LISTMODE,
   PL_CURRENT_SETTING,
   PL_STEPS_SETTING,
+  PL_RESET,
+  PL_RESET_SETTINGS,
+  PL_RESET_SETTINGS_DONE,
+  PL_INFO
 };
 
 const char *const sk_pack[LABEL_NUM]={
@@ -2016,6 +2064,10 @@ const char *const sk_pack[LABEL_NUM]={
   SK_FILE_LISTMODE,
   SK_CURRENT_SETTING,
   SK_STEPS_SETTING,
+  SK_RESET,
+  SK_RESET_SETTINGS,
+  SK_RESET_SETTINGS_DONE,
+  SK_INFO
 };
 
 const char *const du_pack[LABEL_NUM]={
@@ -2170,6 +2222,10 @@ const char *const du_pack[LABEL_NUM]={
   DU_FILE_LISTMODE,
   DU_CURRENT_SETTING,
   DU_STEPS_SETTING,
+  DU_RESET,
+  DU_RESET_SETTINGS,
+  DU_RESET_SETTINGS_DONE,
+  DU_INFO
 };
 
 const char *const hu_pack[LABEL_NUM]={

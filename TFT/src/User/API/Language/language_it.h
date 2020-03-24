@@ -152,5 +152,9 @@
     #define IT_FILE_LISTMODE        "Files viewer List Mode"
     #define IT_CURRENT_SETTING      "Driver Current Settings"
     #define IT_STEPS_SETTING        "Steps per MM Settings"
+    #define IT_RESET                "Reset"
+    #define IT_RESET_SETTINGS       "All settings will be reset to it's default values. Continue?"
+    #define IT_RESET_SETTINGS_DONE  "Resetting all settings successfully done. To take full effect, please restart the device."
+    #define IT_INFO                 "Info"
 
 #endif
