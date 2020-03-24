@@ -91,6 +91,15 @@
     #define ES_1_PERCENT            "1%"
     #define ES_5_PERCENT            "5%"
     #define ES_10_PERCENT           "10%"
+    #define ES_20_PERCENT           "20%"
+    #define ES_30_PERCENT           "30%"
+    #define ES_40_PERCENT           "40%"
+    #define ES_50_PERCENT           "50%"
+    #define ES_60_PERCENT           "60%"
+    #define ES_70_PERCENT           "70%"
+    #define ES_80_PERCENT           "80%"
+    #define ES_90_PERCENT           "90%"
+    #define ES_100_PERCENT          "100%"
     #define ES_READY                "Preparado"
     #define ES_BUSY                 "Procesamiento ocupado, por favor espere..."
     #define ES_UNCONNECTED          "¡No hay comunicación con impresora!"
@@ -155,5 +164,6 @@
     #define ES_RESET_SETTINGS       "All settings will be reset to it's default values. Continue?"
     #define ES_RESET_SETTINGS_DONE  "Resetting all settings successfully done. To take full effect, please restart the device."
     #define ES_INFO                 "Info"
+    #define ES_LCD_BRIGHTNESS       "LCD Brightness"
 
 #endif

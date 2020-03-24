@@ -91,6 +91,15 @@
     #define PT_1_PERCENT            "1%"
     #define PT_5_PERCENT            "5%"
     #define PT_10_PERCENT           "10%"
+    #define PT_20_PERCENT           "20%"
+    #define PT_30_PERCENT           "30%"
+    #define PT_40_PERCENT           "40%"
+    #define PT_50_PERCENT           "50%"
+    #define PT_60_PERCENT           "60%"
+    #define PT_70_PERCENT           "70%"
+    #define PT_80_PERCENT           "80%"
+    #define PT_90_PERCENT           "90%"
+    #define PT_100_PERCENT          "100%"
     #define PT_READY                "Pronto"
     #define PT_BUSY                 "Em processamento, aguarde..."
     #define PT_UNCONNECTED          "Nenhuma impressora conectada!"
@@ -155,5 +164,6 @@
     #define PT_RESET_SETTINGS       "All settings will be reset to it's default values. Continue?"
     #define PT_RESET_SETTINGS_DONE  "Resetting all settings successfully done. To take full effect, please restart the device."
     #define PT_INFO                 "Info"
+    #define PT_LCD_BRIGHTNESS       "LCD Brightness"
 
 #endif

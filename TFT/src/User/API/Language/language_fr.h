@@ -91,6 +91,15 @@
     #define FR_1_PERCENT            "1%"
     #define FR_5_PERCENT            "5%"
     #define FR_10_PERCENT           "10%"
+    #define FR_20_PERCENT           "20%"
+    #define FR_30_PERCENT           "30%"
+    #define FR_40_PERCENT           "40%"
+    #define FR_50_PERCENT           "50%"
+    #define FR_60_PERCENT           "60%"
+    #define FR_70_PERCENT           "70%"
+    #define FR_80_PERCENT           "80%"
+    #define FR_90_PERCENT           "90%"
+    #define FR_100_PERCENT          "100%"
     #define FR_READY                "Prêt"
     #define FR_BUSY                 "Occupée, veuillez patienter..."
     #define FR_UNCONNECTED          "L'imprimante n'est pas reliée !"
@@ -155,5 +164,6 @@
     #define FR_RESET_SETTINGS       "All settings will be reset to it's default values. Continue?"
     #define FR_RESET_SETTINGS_DONE  "Resetting all settings successfully done. To take full effect, please restart the device."
     #define FR_INFO                 "Info"
+    #define FR_LCD_BRIGHTNESS       "LCD Brightness"
 
 #endif

@@ -91,6 +91,15 @@
     #define RU_1_PERCENT              "1%"
     #define RU_5_PERCENT              "5%"
     #define RU_10_PERCENT             "10%"
+    #define RU_20_PERCENT             "20%"
+    #define RU_30_PERCENT             "30%"
+    #define RU_40_PERCENT             "40%"
+    #define RU_50_PERCENT             "50%"
+    #define RU_60_PERCENT             "60%"
+    #define RU_70_PERCENT             "70%"
+    #define RU_80_PERCENT             "80%"
+    #define RU_90_PERCENT             "90%"
+    #define RU_100_PERCENT            "100%"
     #define RU_READY                  "Готов"
     #define RU_BUSY                   "Занято процессом, подождите..."
     #define RU_UNCONNECTED            "Нет подключения!"
@@ -155,5 +164,6 @@
     #define RU_RESET_SETTINGS         "Все настройки экрана    будут сброшены по       умолчанию. Продолжить?"
     #define RU_RESET_SETTINGS_DONE    "Успешный сброс настроек экрана. Для полного     вступления в силу,      перегрузите устройство."
     #define RU_INFO                   "\u0884 Информация" //Info Sign
+    #define RU_LCD_BRIGHTNESS         "LCD Brightness"
 
 #endif

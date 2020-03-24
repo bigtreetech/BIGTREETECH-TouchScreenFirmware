@@ -326,7 +326,7 @@ float num_pad(float old_val)
             }
             break;
         case NUM_KEY_DEC:
-            if(!strchr(&ParameterBuf, Key_Num[key_num][0])){
+            if(!strchr((const char *)&ParameterBuf, Key_Num[key_num][0])){
                 if(nowIndex < BUFLONG-1)
                 {
                     ParameterBuf[nowIndex++] = Key_Num[key_num][0];
