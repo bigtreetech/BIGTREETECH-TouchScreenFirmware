@@ -125,7 +125,6 @@
     #define DU_PREHEAT_ABS          "ABS"
     #define DU_IS_PAUSE             "Kan niet extruderen tijdens printen, Pauzeer printen?"
     #define DU_AUTO_SHUT_DOWN       "Auto Power"
-    #define DU_MANUAL_SHUT_DOWN     "Manueel"
     #define DU_UNIFIEDMOVE          "Beweging"
     #define DU_UNIFIEDHEAT          "Verwarm/Ventilator"
     #define DU_COOLDOWN             "Afkoelen"

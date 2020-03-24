@@ -125,7 +125,6 @@
     #define CZ_PREHEAT_ABS          "ABS"
     #define CZ_IS_PAUSE             "Během tisku nelze extrudovat, mám pozastavit tisk?"
     #define CZ_AUTO_SHUT_DOWN       "Automat"
-    #define CZ_MANUAL_SHUT_DOWN     "Ručně"
     #define CZ_UNIFIEDMOVE          "Movement"
     #define CZ_UNIFIEDHEAT          "Heat&Fan"
     #define CZ_COOLDOWN             "Zchladit"

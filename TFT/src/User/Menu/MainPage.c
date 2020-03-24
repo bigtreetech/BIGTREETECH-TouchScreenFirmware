@@ -4,7 +4,7 @@
 //1 title, ITEM_PER_PAGE items(icon+label)
 const MENUITEMS mainPageItems = {
 // title
-LABEL_READY,
+LABEL_MAINMENU,
 // icon                       label
   #ifdef UNIFIED_MENU //if Unified menu is selected
    {{ICON_HEAT_FAN,             lABEL_UNIFIEDHEAT},

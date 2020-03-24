@@ -91,7 +91,7 @@
     #define RU_1_PERCENT              "1%"
     #define RU_5_PERCENT              "5%"
     #define RU_10_PERCENT             "10%"
-    #define RU_READY                  "Готов \u0894"  //Check Sign
+    #define RU_READY                  "Готов"
     #define RU_BUSY                   "Занято процессом, подождите..."
     #define RU_UNCONNECTED            "Нет подключения!"
     #define RU_DISCONNECT_INFO        "Управление принтером через компьютер"
@@ -125,7 +125,6 @@
     #define RU_PREHEAT_ABS            "ABS"
     #define RU_IS_PAUSE               "Невозможна экструзия    при печати, поставить   на паузу?"
     #define RU_AUTO_SHUT_DOWN         "Автовыключение"
-    #define RU_MANUAL_SHUT_DOWN       "Выключить"
     #define RU_UNIFIEDMOVE            "Движение"
     #define RU_UNIFIEDHEAT            "Нагрев"
     #define RU_COOLDOWN               "Охладить"

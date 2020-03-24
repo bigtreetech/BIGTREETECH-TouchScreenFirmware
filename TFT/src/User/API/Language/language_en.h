@@ -91,7 +91,7 @@
     #define EN_1_PERCENT              "1%"
     #define EN_5_PERCENT              "5%"
     #define EN_10_PERCENT             "10%"
-    #define EN_READY                  "Ready \u0894" //Check Sign
+    #define EN_READY                  "Ready"
     #define EN_BUSY                   "Busy processing, please wait..."
     #define EN_UNCONNECTED            "No printer attached!"
     #define EN_DISCONNECT_INFO        "Now you can control the printer by your computer!"
@@ -125,7 +125,6 @@
     #define EN_PREHEAT_ABS            "ABS"
     #define EN_IS_PAUSE               "Unable to extrude       when printing,          Pause printing?"
     #define EN_AUTO_SHUT_DOWN         "Auto Power"
-    #define EN_MANUAL_SHUT_DOWN       "Manual"
     #define EN_UNIFIEDMOVE            "Movement"
     #define EN_UNIFIEDHEAT            "Heat/Fan"
     #define EN_COOLDOWN               "Cool Down"

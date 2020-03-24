@@ -125,7 +125,6 @@
     #define DE_PREHEAT_ABS          "ABS"
     #define DE_IS_PAUSE             "Extrudierung während Druckvorgangs nicht möglich, Druck Pausieren?"
     #define DE_AUTO_SHUT_DOWN       "Automatisch AUS (PS_ON)"
-    #define DE_MANUAL_SHUT_DOWN     "Manuel"
     #define DE_UNIFIEDMOVE          "Bewegung"
     #define DE_UNIFIEDHEAT          "Heiz.Lüft."
     #define DE_COOLDOWN             "Abkühlen"

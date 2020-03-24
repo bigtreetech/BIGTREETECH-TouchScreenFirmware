@@ -125,7 +125,6 @@
     #define CN_PREHEAT_ABS          "ABS"
     #define CN_IS_PAUSE             "打印中无法挤出耗材, 是否暂停打印?"
     #define CN_AUTO_SHUT_DOWN       "自动关机"
-    #define CN_MANUAL_SHUT_DOWN     "手动关机"
     #define CN_UNIFIEDMOVE          "运动"
     #define CN_UNIFIEDHEAT          "温度"
     #define CN_COOLDOWN             "冷却"
