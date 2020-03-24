@@ -105,16 +105,16 @@
     #define DE_UNCONNECTED          "Keine Verbindung zum Drucker!"
     #define DE_DISCONNECT_INFO      "Verbindung getrennt!"
     #define DE_LOADING              "Laden..."
-    #define DE_POWER_FAILED         "Druck fortsetzen?"
+    #define DE_POWER_FAILED         "\u0887 Druck fortsetzen?" //Question Sign
     #define DE_CONTINUE             "Fortsetzen"
-    #define DE_CANNEL               "Abbruch"
+    #define DE_CANNEL               "\u088F Abbruch" //Cancel Sign
     #define DE_ADJUST_TITLE         "Touchscreen kalibrieren"
     #define DE_ADJUST_INFO          "Auf den roten Punkt drücken"
     #define DE_ADJUST_OK            "Anpassung erfolgreich"
     #define DE_ADJUST_FAILED        "Anpassung fehlgeschlagen, erneut versuchen"
-    #define DE_WARNING              "Warnung"
+    #define DE_WARNING              "\u0881 Warnung" //Exclamation Sign
     #define DE_STOP_PRINT           "Druck abbrechen?"
-    #define DE_CONFIRM              "OK"
+    #define DE_CONFIRM              "\u088E OK" //Confirm Sign
     #define DE_TFTSD                "TFT SD"
     #define DE_READ_TFTSD_ERROR     "TFT SD Lesefehler!"
     #define DE_TFTSD_INSERTED       "SD-Karte gesteckt!"
@@ -163,7 +163,7 @@
     #define DE_RESET                "Resetten"
     #define DE_RESET_SETTINGS       "Hiermit werden alle Einstellungen auf Werkseinstellungen zurückgesetzt. Fortfahren?"
     #define DE_RESET_SETTINGS_DONE  "Einstellungen wurden erfolgreich zurückgesetzt. Bitte starten Sie das Gerät neu."
-    #define DE_INFO                 "Info"
+    #define DE_INFO                 "\u0884 Info" //Info Sign
     #define DE_LCD_BRIGHTNESS       "LCD Helligkeit"
 
 #endif
