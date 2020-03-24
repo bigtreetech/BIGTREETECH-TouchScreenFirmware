@@ -123,7 +123,7 @@
     #define RU_PREHEAT_PLA            "PLA"
     #define RU_PREHEAT_PETG           "PETG"
     #define RU_PREHEAT_ABS            "ABS"
-    #define RU_IS_PAUSE               "Невозможна экструзия при печати, поставить на паузу?"
+    #define RU_IS_PAUSE               "Невозможна экструзия    при печати, поставить   на паузу?"
     #define RU_AUTO_SHUT_DOWN         "Автовыключение"
     #define RU_MANUAL_SHUT_DOWN       "Выключить"
     #define RU_UNIFIEDMOVE            "Движение"
@@ -132,7 +132,7 @@
     #define RU_EMERGENCYSTOP          "Экст.стоп"
     #define RU_MAINMENU               "Меню"
     #define RU_TOUCH_TO_EXIT          "Нажмите для возврата"
-    #define RU_WAIT_TEMP_SHUT_DOWN    "Дождитесь температуры сопла не ниже чем " STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP) "°C" // Wait for the temperature of hotend to be lower than 50°C
+    #define RU_WAIT_TEMP_SHUT_DOWN    "Дождитесь температуры   сопла не ниже чем " STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP) "°C" // Wait for the temperature of hotend to be lower than 50°C
     #define RU_FORCE_SHUT_DOWN        "Принудительно выкл"
     #define RU_SHUTTING_DOWN          "Выключаю..."
     #define RU_PARAMETER_SETTING      "Драйверы"
@@ -152,9 +152,9 @@
     #define RU_FILE_LISTMODE          "Файлы в режиме строк"
     #define RU_CURRENT_SETTING        "Настройка TMC драйверов"
     #define RU_STEPS_SETTING          "Настройка шагов на mm"
-    #define RU_RESET                  "Reset"
-    #define RU_RESET_SETTINGS         "All settings will be reset to it's default values. Continue?"
-    #define RU_RESET_SETTINGS_DONE    "Resetting all settings successfully done. To take full effect, please restart the device."
-    #define RU_INFO                   "Info"
+    #define RU_RESET                  "Сброс"
+    #define RU_RESET_SETTINGS         "Все настройки экрана    будут сброшены по       умолчанию. Продолжить?"
+    #define RU_RESET_SETTINGS_DONE    "Успешный сброс настроек экрана. Для полного     вступления в силу,      перегрузите устройство."
+    #define RU_INFO                   "\u0884 Информация" //Info Sign
 
 #endif
