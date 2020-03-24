@@ -67,7 +67,7 @@ void infoMenuSelect(void)
       #endif
       
       #ifdef LED_color_PIN
-        #ifndef KEEP_KNOP_LED_COLOR_MARLIN_MODE
+        #ifndef KEEP_KNOB_LED_COLOR_MARLIN_MODE
           knob_LED_DeInit();
         #endif
       #endif
