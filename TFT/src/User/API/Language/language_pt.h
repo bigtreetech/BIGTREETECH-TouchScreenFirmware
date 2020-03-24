@@ -125,7 +125,6 @@
     #define PT_PREHEAT_ABS          "ABS"
     #define PT_IS_PAUSE             "Nao e possível a extrusão durante a impressao, pausar a impressao?"
     #define PT_AUTO_SHUT_DOWN       "Auto Power"
-    #define PT_MANUAL_SHUT_DOWN     "Manual"
     #define PT_UNIFIEDMOVE          "Movimento"
     #define PT_UNIFIEDHEAT          "Heat/Fan"
     #define PT_COOLDOWN             "Arrefecer"

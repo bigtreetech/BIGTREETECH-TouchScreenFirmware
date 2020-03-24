@@ -111,7 +111,7 @@ void menuResetSettings(void)
         infoSettingsReset();
         storePara();
         infoMenu.cur--;       // Just go back to the previos view
-        popupReminderIgnoreLCDMode(textSelect(LABEL_INFO), textSelect(LABEL_RESET_SETTINGS_DONE),TRUE);
+        popupReminder(textSelect(LABEL_INFO), textSelect(LABEL_RESET_SETTINGS_DONE));
         break;
 
       case KEY_POPUP_CANCEL:

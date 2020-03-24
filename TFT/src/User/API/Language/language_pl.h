@@ -125,7 +125,6 @@
     #define PL_PREHEAT_ABS          "ABS"
     #define PL_IS_PAUSE             "Operacja niedostępna w trakcie drukowania, wstrzymać drukowanie?"
     #define PL_AUTO_SHUT_DOWN       "Auto Wył."
-    #define PL_MANUAL_SHUT_DOWN     "Ręczne Wył."
     #define PL_UNIFIEDMOVE          "Ruch"
     #define PL_UNIFIEDHEAT          "Temperatura"
     #define PL_COOLDOWN             "Chłodzenie"

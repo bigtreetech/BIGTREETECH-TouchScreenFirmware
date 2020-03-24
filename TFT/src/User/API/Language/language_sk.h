@@ -125,7 +125,6 @@
     #define SK_PREHEAT_ABS          "ABS"
     #define SK_IS_PAUSE             "Nemožné extrúdovať počas tlače, Pozastaviť tlač?"
     #define SK_AUTO_SHUT_DOWN       "Auto vyp."
-    #define SK_MANUAL_SHUT_DOWN     "Manuálne vyp."
     #define SK_UNIFIEDMOVE          "Pohyb"
     #define SK_UNIFIEDHEAT          "Nahriať"
     #define SK_COOLDOWN             "Ochladiť"

@@ -83,14 +83,9 @@ void menuPopup(void)
   }
 }
 
-void popupReminder(u8* info, u8* context) { 
-  popupReminderIgnoreLCDMode(info, context, FALSE);
-}
-
-void popupReminderIgnoreLCDMode(u8* info, u8* context, const u8 ignore_lcd_mode)
-{
+void popupReminder(u8* info, u8* context) {
   #ifdef CLEAN_MODE_SWITCHING_SUPPORT
-    if (infoSettings.mode == LCD12864 && !ignore_lcd_mode) return;
+    if (infoSettings.mode == LCD12864) return;
   #endif
   popupDrawPage(&bottomSingleBtn , info, context, textSelect(LABEL_CONFIRM), NULL);
   if(infoMenu.menu[infoMenu.cur] != menuPopup)
@@ -98,3 +93,4 @@ void popupReminderIgnoreLCDMode(u8* info, u8* context, const u8 ignore_lcd_mode)
     infoMenu.menu[++infoMenu.cur] = menuPopup;
   }
 }
+

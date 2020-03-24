@@ -125,7 +125,6 @@
     #define FR_PREHEAT_ABS          "ABS"
     #define FR_IS_PAUSE             "Extrusion impossible quand l’impression est en cours, mettre impression en pause ?"
     #define FR_AUTO_SHUT_DOWN       "Auto Power"
-    #define FR_MANUAL_SHUT_DOWN     "Manual"
     #define FR_UNIFIEDMOVE          "Mouvement"
     #define FR_UNIFIEDHEAT          "Chauffer / Ventiler"
     #define FR_COOLDOWN             "Refroidissement"

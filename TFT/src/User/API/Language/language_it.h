@@ -125,7 +125,6 @@
     #define IT_PREHEAT_ABS          "ABS"
     #define IT_IS_PAUSE             "Impossibile estrudere durante la stampa, vuoi sospendere?"
     #define IT_AUTO_SHUT_DOWN       "Auto Spegnimento"
-    #define IT_MANUAL_SHUT_DOWN     "Manuale"
     #define IT_UNIFIEDMOVE          "Movimento"
     #define IT_UNIFIEDHEAT          "Caldo/Fan"
     #define IT_COOLDOWN             "Blocco Freddo"

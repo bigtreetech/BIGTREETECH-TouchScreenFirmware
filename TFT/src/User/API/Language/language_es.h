@@ -125,7 +125,6 @@
     #define ES_PREHEAT_ABS          "ABS"
     #define ES_IS_PAUSE             "No se puede extruir al imprimir,¿Pausar la impresión?"
     #define ES_AUTO_SHUT_DOWN       "Apag. aut."
-    #define ES_MANUAL_SHUT_DOWN     "Apag. man."
     #define ES_UNIFIEDMOVE          "Movimiento"
     #define ES_UNIFIEDHEAT          "Calor/Ventilador"
     #define ES_COOLDOWN             "Enfriarse"
