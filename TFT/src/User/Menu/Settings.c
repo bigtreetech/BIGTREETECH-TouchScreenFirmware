@@ -25,6 +25,9 @@ void infoSettingsReset(void)
   infoSettings.send_end_gcode = 1;
   infoSettings.persistent_info = 1;
   infoSettings.file_listmode = 1;
+  #ifdef LCD_LED_PIN
+  infoSettings.lcd_brightness = DEFAULT_LCD_BRIGHTNESS;
+  #endif
 }
 
 // Version infomation

@@ -60,6 +60,9 @@ void Hardware_GenericInit(void)
     TSC_Calibration();
     storePara();
   }
+  #ifdef LCD_LED_PIN
+  Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
+  #endif
   GUI_RestoreColorDefault();
   infoMenuSelect();
 }

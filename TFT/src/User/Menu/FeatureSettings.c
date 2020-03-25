@@ -67,6 +67,7 @@ typedef enum
   SKEY_KNOB,
   #endif
   SKEY_RESET_SETTINGS,
+  SKEY_LCD_BRIGHTNESS,
   SKEY_COUNT //keep this always at the end
 }SKEY_LIST;
 
@@ -95,7 +96,8 @@ LISTITEM settingPage[SKEY_COUNT] = {
   #ifdef LED_color_PIN
   {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_KNOB_LED,           LABEL_OFF       },
   #endif
-  {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_SETTINGS,           LABEL_RESET   },                 // SKEY_RESET_SETTINGS,
+  {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_SETTINGS,           LABEL_RESET   },  
+  {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_LCD_BRIGHTNESS,     LABEL_100_PERCENT   },
 };
 
 void menuResetSettings(void)
@@ -237,6 +239,16 @@ void updateFeatureSettings(uint8_t key_val)
     infoMenu.menu[++infoMenu.cur] = menuResetSettings;
     menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
     break;
+    
+    #ifdef LCD_LED_PIN
+    case SKEY_LCD_BRIGHTNESS:
+    infoSettings.lcd_brightness = (infoSettings.lcd_brightness + 1) % ITEM_BRIGHTNESS_NUM;                
+    settingPage[item_index].valueLabel = itemBrightness[infoSettings.lcd_brightness];
+    featureSettingsItems.items[key_val] = settingPage[item_index];
+    Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness])
+    menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
+    break;
+    #endif
 
   default:
     break;
@@ -319,7 +331,12 @@ void loadFeatureSettings(){
         featureSettingsItems.items[i] = settingPage[item_index];
         break;
       #endif
-
+      #ifdef LCD_LED_PIN
+      case SKEY_LCD_BRIGHTNESS:
+        settingPage[item_index].valueLabel = itemBrightness[infoSettings.lcd_brightness];
+        featureSettingsItems.items[i] = settingPage[item_index];
+        break;
+      #endif
       default:
         featureSettingsItems.items[i].icon = ICONCHAR_BACKGROUND;
       break;

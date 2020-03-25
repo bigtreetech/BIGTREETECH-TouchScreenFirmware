@@ -91,6 +91,15 @@
     #define DU_1_PERCENT            "1%"
     #define DU_5_PERCENT            "5%"
     #define DU_10_PERCENT           "10%"
+    #define DU_20_PERCENT           "20%"
+    #define DU_30_PERCENT           "30%"
+    #define DU_40_PERCENT           "40%"
+    #define DU_50_PERCENT           "50%"
+    #define DU_60_PERCENT           "60%"
+    #define DU_70_PERCENT           "70%"
+    #define DU_80_PERCENT           "80%"
+    #define DU_90_PERCENT           "90%"
+    #define DU_100_PERCENT          "100%"
     #define DU_READY                "Gereed"
     #define DU_BUSY                 "In verwerking ,wacht aub..."
     #define DU_UNCONNECTED          "Geen printer gekoppeld!"
@@ -155,5 +164,6 @@
     #define DU_RESET_SETTINGS       "All settings will be reset to it's default values. Continue?"
     #define DU_RESET_SETTINGS_DONE  "Resetting all settings successfully done. To take full effect, please restart the device."
     #define DU_INFO                 "Info"
+    #define DU_LCD_BRIGHTNESS       "LCD Brightness"
 
 #endif

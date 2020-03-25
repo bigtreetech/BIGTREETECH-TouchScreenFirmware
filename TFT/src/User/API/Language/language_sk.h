@@ -91,6 +91,15 @@
     #define SK_1_PERCENT            "1%"
     #define SK_5_PERCENT            "5%"
     #define SK_10_PERCENT           "10%"
+    #define SK_20_PERCENT           "20%"
+    #define SK_30_PERCENT           "30%"
+    #define SK_40_PERCENT           "40%"
+    #define SK_50_PERCENT           "50%"
+    #define SK_60_PERCENT           "60%"
+    #define SK_70_PERCENT           "70%"
+    #define SK_80_PERCENT           "80%"
+    #define SK_90_PERCENT           "90%"
+    #define SK_100_PERCENT          "100%"
     #define SK_READY                "Tlačiareň pripravená"
     #define SK_BUSY                 "Počkajte prosím..."
     #define SK_UNCONNECTED          "Tlačiareň odpojená!"
@@ -155,5 +164,6 @@
     #define SK_RESET_SETTINGS       "All Settings will be reset to default Setting."
     #define SK_RESET_SETTINGS_DONE  "Resetting all settings successfully done. To take full effect, please restart the device."
     #define SK_INFO                 "Info"
+    #define SK_LCD_BRIGHTNESS       "LCD Brightness"
 
 #endif

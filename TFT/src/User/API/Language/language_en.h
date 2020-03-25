@@ -91,6 +91,15 @@
     #define EN_1_PERCENT              "1%"
     #define EN_5_PERCENT              "5%"
     #define EN_10_PERCENT             "10%"
+    #define EN_20_PERCENT             "20%"
+    #define EN_30_PERCENT             "30%"
+    #define EN_40_PERCENT             "40%"
+    #define EN_50_PERCENT             "50%"
+    #define EN_60_PERCENT             "60%"
+    #define EN_70_PERCENT             "70%"
+    #define EN_80_PERCENT             "80%"
+    #define EN_90_PERCENT             "90%"
+    #define EN_100_PERCENT            "100%"
     #define EN_READY                  "Ready"
     #define EN_BUSY                   "Busy processing, please wait..."
     #define EN_UNCONNECTED            "No printer attached!"
@@ -155,5 +164,6 @@
     #define EN_RESET_SETTINGS         "All settings will be    reset to it's default   values. Continue?"
     #define EN_RESET_SETTINGS_DONE    "Resetting all settings  successfully done. To   take full effect, please restart the device."
     #define EN_INFO                   "\u0884 Info" //Info Sign
+    #define EN_LCD_BRIGHTNESS         "LCD Brightness"
 
 #endif

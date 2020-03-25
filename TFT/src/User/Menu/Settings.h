@@ -26,6 +26,9 @@ typedef struct
   uint8_t  invert_axis[TOTAL_AXIS];
   uint8_t  move_speed;
   uint8_t  knob_led_color;
+  #ifdef LCD_LED_PIN
+  uint8_t  lcd_brightness;
+  #endif
   uint8_t  send_start_gcode;
   uint8_t  send_end_gcode;
   uint8_t  persistent_info;

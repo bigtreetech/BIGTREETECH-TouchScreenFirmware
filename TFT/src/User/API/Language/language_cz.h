@@ -91,6 +91,15 @@
     #define CZ_1_PERCENT            "1%"
     #define CZ_5_PERCENT            "5%"
     #define CZ_10_PERCENT           "10%"
+    #define CZ_20_PERCENT           "20%"
+    #define CZ_30_PERCENT           "30%"
+    #define CZ_40_PERCENT           "40%"
+    #define CZ_50_PERCENT           "50%"
+    #define CZ_60_PERCENT           "60%"
+    #define CZ_70_PERCENT           "70%"
+    #define CZ_80_PERCENT           "80%"
+    #define CZ_90_PERCENT           "90%"
+    #define CZ_100_PERCENT          "100%"
     #define CZ_READY                "Ready"
     #define CZ_BUSY                 "Zpracovávám, čekejte prosím..."
     #define CZ_UNCONNECTED          "Tiskárna není připojena!"
@@ -155,5 +164,6 @@
     #define CZ_RESET_SETTINGS       "All settings will be reset to it's default values. Continue?"
     #define CZ_RESET_SETTINGS_DONE  "Resetting all settings successfully done. To take full effect, please restart the device."
     #define CZ_INFO                 "Info"
+    #define CZ_LCD_BRIGHTNESS       "LCD Brightness"
 
 #endif

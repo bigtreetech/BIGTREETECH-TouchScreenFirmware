@@ -91,6 +91,15 @@
     #define AM_1_PERCENT            "1%"
     #define AM_5_PERCENT            "5%"
     #define AM_10_PERCENT           "10%"
+    #define AM_20_PERCENT           "20%"
+    #define AM_30_PERCENT           "30%"
+    #define AM_40_PERCENT           "40%"
+    #define AM_50_PERCENT           "50%"
+    #define AM_60_PERCENT           "60%"
+    #define AM_70_PERCENT           "70%"
+    #define AM_80_PERCENT           "80%"
+    #define AM_90_PERCENT           "90%"
+    #define AM_100_PERCENT          "100%"
     #define AM_READY                "Պատրաստ"
     #define AM_BUSY                 "Ծանրաբեռնված է"
     #define AM_UNCONNECTED          "Տպիչը կցված չէ"
@@ -155,5 +164,6 @@
     #define AM_RESET_SETTINGS       "All settings will be reset to it's default values. Continue?"
     #define AM_RESET_SETTINGS_DONE  "Resetting all settings successfully done. To take full effect, please restart the device."
     #define AM_INFO                 "Info"
+    #define AM_LCD_BRIGHTNESS       "LCD Brightness"
 
 #endif

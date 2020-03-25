@@ -96,6 +96,18 @@
 #define SHOW_BTT_BOOTSCREEN
 
 /**
+ * Default LCD Brightness
+ * 
+ * Choose one of the following definitions: LCD_5_PERCENT, LCD_10_PERCENT,
+ *                                          LCD_20_PERCENT, LCD_30_PERCENT, LCD_40_PERCENT,
+ *                                          LCD_50_PERCENT, LCD_60_PERCENT, LCD_70_PERCENT, 
+ *                                          LCD_80_PERCENT, LCD_90_PERCENT, LCD_100_PERCENT
+ */
+#ifdef LCD_LED_PIN
+#define DEFAULT_LCD_BRIGHTNESS  LCD_100_PERCENT
+#endif
+
+/**
  * The duration and frequency for the UI feedback sound.
  * Set these to 0 to disable audio feedback in the LCD menus.
  * Only valid for SERIAL_TSC LCD MODE and if BUZZER_PIN is set or available.

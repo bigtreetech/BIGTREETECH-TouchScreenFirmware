@@ -91,6 +91,15 @@
     #define CN_1_PERCENT            "1%"
     #define CN_5_PERCENT            "5%"
     #define CN_10_PERCENT           "10%"
+    #define CN_20_PERCENT           "20%"
+    #define CN_30_PERCENT           "30%"
+    #define CN_40_PERCENT           "40%"
+    #define CN_50_PERCENT           "50%"
+    #define CN_60_PERCENT           "60%"
+    #define CN_70_PERCENT           "70%"
+    #define CN_80_PERCENT           "80%"
+    #define CN_90_PERCENT           "90%"
+    #define CN_100_PERCENT          "100%"
     #define CN_READY                "准备打印"
     #define CN_BUSY                 "系统繁忙,请稍候..."
     #define CN_UNCONNECTED          "未连接到打印机!"
@@ -155,5 +164,6 @@
     #define CN_RESET_SETTINGS       "All settings will be reset to it's default values. Continue?"
     #define CN_RESET_SETTINGS_DONE  "Resetting all settings successfully done. To take full effect, please restart the device."
     #define CN_INFO                 "Info"
+    #define CN_LCD_BRIGHTNESS       "LCD Brightness"
 
 #endif

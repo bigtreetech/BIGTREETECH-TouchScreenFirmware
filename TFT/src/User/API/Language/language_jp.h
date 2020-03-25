@@ -91,6 +91,15 @@
     #define JP_1_PERCENT            "1%"
     #define JP_5_PERCENT            "5%"
     #define JP_10_PERCENT           "10%"
+    #define JP_20_PERCENT           "20%"
+    #define JP_30_PERCENT           "30%"
+    #define JP_40_PERCENT           "40%"
+    #define JP_50_PERCENT           "50%"
+    #define JP_60_PERCENT           "60%"
+    #define JP_70_PERCENT           "70%"
+    #define JP_80_PERCENT           "80%"
+    #define JP_90_PERCENT           "90%"
+    #define JP_100_PERCENT          "100%"
     #define JP_READY                "準備中"
     #define JP_BUSY                 "ビジー状態、しばらくお待ちください..."
     #define JP_UNCONNECTED          "プリンターに連続していない!"
@@ -155,5 +164,6 @@
     #define JP_RESET_SETTINGS       "All settings will be reset to it's default values. Continue?"
     #define JP_RESET_SETTINGS_DONE  "Resetting all settings successfully done. To take full effect, please restart the device."
     #define JP_INFO                 "Info"
+    #define JP_LCD_BRIGHTNESS       "LCD Brightness"
 
 #endif

@@ -91,6 +91,15 @@
     #define DE_1_PERCENT            "1%"
     #define DE_5_PERCENT            "5%"
     #define DE_10_PERCENT           "10%"
+    #define DE_20_PERCENT           "20%"
+    #define DE_30_PERCENT           "30%"
+    #define DE_40_PERCENT           "40%"
+    #define DE_50_PERCENT           "50%"
+    #define DE_60_PERCENT           "60%"
+    #define DE_70_PERCENT           "70%"
+    #define DE_80_PERCENT           "80%"
+    #define DE_90_PERCENT           "90%"
+    #define DE_100_PERCENT          "100%"
     #define DE_READY                "Bereit"
     #define DE_BUSY                 "Bitte warten..."
     #define DE_UNCONNECTED          "Keine Verbindung zum Drucker!"
@@ -155,5 +164,6 @@
     #define DE_RESET_SETTINGS       "Hiermit werden alle Einstellungen auf Werkseinstellungen zurückgesetzt. Fortfahren?"
     #define DE_RESET_SETTINGS_DONE  "Einstellungen wurden erfolgreich zurückgesetzt. Bitte starten Sie das Gerät neu."
     #define DE_INFO                 "\u0884 Info" //Info Sign
+    #define DE_LCD_BRIGHTNESS       "LCD Helligkeit"
 
 #endif

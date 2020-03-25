@@ -91,6 +91,15 @@
     #define IT_1_PERCENT            "1%"
     #define IT_5_PERCENT            "5%"
     #define IT_10_PERCENT           "10%"
+    #define IT_20_PERCENT           "20%"
+    #define IT_30_PERCENT           "30%"
+    #define IT_40_PERCENT           "40%"
+    #define IT_50_PERCENT           "50%"
+    #define IT_60_PERCENT           "60%"
+    #define IT_70_PERCENT           "70%"
+    #define IT_80_PERCENT           "80%"
+    #define IT_90_PERCENT           "90%"
+    #define IT_100_PERCENT          "100%"
     #define IT_READY                "Pronto"
     #define IT_BUSY                 "Processo in carico, attendi..."
     #define IT_UNCONNECTED          "Stampante non connessa"
@@ -155,5 +164,6 @@
     #define IT_RESET_SETTINGS       "All settings will be reset to it's default values. Continue?"
     #define IT_RESET_SETTINGS_DONE  "Resetting all settings successfully done. To take full effect, please restart the device."
     #define IT_INFO                 "Info"
+    #define IT_LCD_BRIGHTNESS       "LCD Brightness"
 
 #endif
