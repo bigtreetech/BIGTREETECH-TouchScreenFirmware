@@ -603,8 +603,16 @@ void ListItem_DisplayCustomValue(const GUI_RECT* rect,LABEL value,int i)
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
   GUI_SetColor(MAT_LOWWHITE);
 
+  char tempstr[10];
+
   if(value.index == LABEL_DYNAMIC){
-    GUI_DispFloat(rectVal.x0,rectVal.y0,dynamic_value[i],4,1,RIGHT);
+    if (dynamic_value[i] < 1000.0f){
+      my_sprintf(tempstr, "%.2f",dynamic_value[i]);
+    }
+    else{
+      my_sprintf(tempstr, "%.1f",dynamic_value[i]);
+    }
+      GUI_DispStringInPrect(&rectVal,(u8*)tempstr);
   }
   else{
     GUI_DispStringInPrect(&rectVal,textSelect(value.index));
