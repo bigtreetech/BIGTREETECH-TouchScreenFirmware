@@ -517,7 +517,7 @@ CHAR_INFO GUI_DispOne(int16_t sx, int16_t sy, const uint8_t *p)
           j = 0,
           i = 0;
   uint16_t bitMapSize = (info.pixelHeight * info.pixelWidth / 8);
-  uint8_t  font[bitMapSize];
+  uint8_t  font[BYTE_HEIGHT * BYTE_HEIGHT / 8]; // TODO: match bitMapSize
   uint32_t temp = 0;
 
   W25Qxx_ReadBuffer(font, info.bitMapAddr, bitMapSize);
