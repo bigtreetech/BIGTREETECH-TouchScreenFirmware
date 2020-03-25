@@ -1,5 +1,5 @@
 /**
-* Language Kewords Generation
+* Icon Keywords Generation
 * Usage: X_ICON(VALUE)
 * 'VALUE' is the keyword name without the 'ICON_'
 *
