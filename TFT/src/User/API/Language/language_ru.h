@@ -164,7 +164,7 @@
     #define RU_RESET_SETTINGS           "Все настройки экрана    будут сброшены по       умолчанию. Продолжить?"
     #define RU_RESET_SETTINGS_DONE      "Успешный сброс настроек экрана. Для полного     вступления в силу,      перегрузите устройство."
     #define RU_INFO                     "\u0884 Информация" //Info Sign
-    #define RU_LCD_BRIGHTNESS           "LCD Brightness"
+    #define RU_LCD_BRIGHTNESS           "LCD яркость"
     #define RU_EMERGENCYPARSER          "EMERGENCY_PARSER is not enable in your Printer's firmware. Some features may not work properly."
 
 #endif
