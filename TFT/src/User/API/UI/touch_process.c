@@ -29,6 +29,7 @@
 
 u32 TSC_Para[7];//У׼ϵ��
 static volatile bool touchScreenIsPress=false;
+bool touchSound = true;
 
 void TS_Get_Coordinates(u16 *x, u16 *y)
 {
@@ -141,7 +142,7 @@ u16 Key_value(u8 total_rect,const GUI_RECT* menuRect)
     if((x>menuRect[i].x0)&&(x<menuRect[i].x1)&&(y>menuRect[i].y0)&&(y<menuRect[i].y1))
     {
       #ifdef BUZZER_PIN
-        Buzzer_TurnOn(BUZZER_FREQUENCY_HZ, BUZZER_FREQUENCY_DURATION_MS);
+        if(touchSound == true) BUZZER_PLAY(sound_keypress);
       #endif
       return i;
     }
@@ -218,10 +219,10 @@ typedef enum
   LONG_PRESS,
 }KEY_STATUS;
 
-#define KEY_DOUOBLE_SPACE        15     //�೤ʱ���ڵ�������ж��?˫��
-#define KEY_LONG_PRESS_START     200     //��������ÿ�ʼ�ж��? ���� ��ֵ
+#define KEY_DOUOBLE_SPACE        15     //�೤ʱ���ڵ�������ж��?˫��
+#define KEY_LONG_PRESS_START     200     //��������ÿ�ʼ�ж��? ���� ��ֵ
 
-#define KEY_LONG_PRESS_SPACE_MAX 10     //����ʱ ���÷���һ�μ��?
+#define KEY_LONG_PRESS_SPACE_MAX 10     //����ʱ ���÷���һ�μ��?
 #define KEY_LONG_PRESS_SPACE_MIN 2      //����ʱ ��̶�÷���һ�μ�ֵ
 
 //u16 KEY_GetValue(u8 total_rect,const GUI_RECT* menuRect)

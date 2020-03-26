@@ -160,11 +160,18 @@
     #define RU_FILE_LISTMODE            "Файлы в режиме строк"
     #define RU_CURRENT_SETTING          "Настройка TMC драйверов"
     #define RU_STEPS_SETTING            "Настройка шагов на mm"
+    #define RU_MAXFEEDRATE              "Max Feed Rate"
+    #define RU_MAXACCELERATION          "Max Acceleration"
+    #define RU_ACCELERATION             "Acceleration"
+    #define RU_PRINT_ACCELERATION       "Print Acceleration"
+    #define RU_RETRACT_ACCELERATION     "Retract Acceleration"
+    #define RU_TRAVEL_ACCELERATION      "Travel Acceleration"
+    #define RU_BUMP_SENSITIVITY         "TMC bump sensitivity"
     #define RU_RESET                    "Сброс"
     #define RU_RESET_SETTINGS           "Все настройки экрана    будут сброшены по       умолчанию. Продолжить?"
     #define RU_RESET_SETTINGS_DONE      "Успешный сброс настроек экрана. Для полного     вступления в силу,      перегрузите устройство."
     #define RU_INFO                     "\u0884 Информация" //Info Sign
     #define RU_LCD_BRIGHTNESS           "LCD яркость"
-    #define RU_EMERGENCYPARSER          "EMERGENCY_PARSER is not enable in your Printer's firmware. Some features may not work properly."
+    #define RU_EMERGENCYPARSER          "EMERGENCY_PARSER is disabled in Printer Firmware."
 
 #endif
