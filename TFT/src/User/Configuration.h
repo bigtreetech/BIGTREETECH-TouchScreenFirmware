@@ -25,9 +25,20 @@
  *
  * Default value is: 1 for LED_OFF
 */
-#define STARTUP_KNOB_LED_COLOR 1  // LED_OFF
+#define STARTUP_KNOB_LED_COLOR 1         // LED_OFF
+#define KEEP_KNOB_LED_COLOR_MARLIN_MODE  // Keeps the LED state in Marlin Mode
 
-#define KEEP_KNOB_LED_COLOR_MARLIN_MODE     // Keeps the LED state in Marlin Mode!
+/**
+ * Default LCD Brightness
+ *
+ * Options:  LCD_5_PERCENT, LCD_10_PERCENT, LCD_20_PERCENT,
+ *           LCD_30_PERCENT, LCD_40_PERCENT, LCD_50_PERCENT,
+ *           LCD_60_PERCENT, LCD_70_PERCENT, LCD_80_PERCENT,
+ *           LCD_90_PERCENT, LCD_100_PERCENT
+ */
+#ifdef LCD_LED_PIN
+  #define DEFAULT_LCD_BRIGHTNESS LCD_100_PERCENT
+#endif
 
 //===========================================================================
 //=========================== Marlin Mode Settings ==========================
@@ -94,18 +105,6 @@
  *  Show bootscreen when starting up
  */
 #define SHOW_BTT_BOOTSCREEN
-
-/**
- * Default LCD Brightness
- *
- * Choose one of the following definitions: LCD_5_PERCENT, LCD_10_PERCENT,
- *                                          LCD_20_PERCENT, LCD_30_PERCENT, LCD_40_PERCENT,
- *                                          LCD_50_PERCENT, LCD_60_PERCENT, LCD_70_PERCENT,
- *                                          LCD_80_PERCENT, LCD_90_PERCENT, LCD_100_PERCENT
- */
-#ifdef LCD_LED_PIN
-#define DEFAULT_LCD_BRIGHTNESS  LCD_100_PERCENT
-#endif
 
 /**
  * The duration and frequency for the UI feedback sound.
@@ -184,8 +183,8 @@
  * The TFT will auto detect if Auto Bed Level is available.
  * Enable this will send "M500" after "G29" to store leveling value
  * and send "M420 S1" to enable leveling state after startup
-*/
-//#define AUTO_SAVE_LOAD_LEVELING_VALUE
+ */
+#define AUTO_SAVE_LOAD_LEVELING_VALUE
 
 /**
  * Manual Leveling
@@ -227,7 +226,7 @@
  * SD support
  * The TFT will auto configure M27 AutoReport with M115 command
  * Set the time interval to poll SD Printing status if Marlin reports M27 disabled.
-*/
+ */
 #define ONBOARD_SD_SUPPORT
 #ifdef ONBOARD_SD_SUPPORT
   #define M27_REFRESH                3        // Time in sec for M27 command
@@ -247,10 +246,10 @@
 #define PREVENT_COLD_EXTRUSION_MINTEMP 170
 
 /**
-  * Maximum hotend temperature of automatic shut down after printing.
-  * When enable automatic shutdown(Auto Power), when the hotend temperature is higher than this value
-  * turn on the fan to cool down, wait for the hotend temperature to be lower than this value, then turn off the power automatically
-  */
+ * Maximum hotend temperature of automatic shut down after printing.
+ * When enable automatic shutdown(Auto Power), when the hotend temperature is higher than this value
+ * turn on the fan to cool down, wait for the hotend temperature to be lower than this value, then turn off the power automatically
+ */
 #define AUTO_SHUT_DOWN_MAXTEMP 50
 
 #define SHOW_FAN_PERCENTAGE // enable to show fan speed as a percentage instead of a value
@@ -312,7 +311,7 @@
  * Disable in SETTINGS -> FEATURE menu.
  */
 // Start G-code - run this G-code before starting print
-#define PRINT_START_GCODE "G28\nG29\nG1 Z20\n" // Home all, run ABL routine, raise Z 20 mm.
+#define PRINT_START_GCODE "G28\nG29\nG1 Z20\n" // Home all, run ABL routine, raise Z 20 mm
 
 // End G-code - run this G-code after finishing print
 #define PRINT_END_GCODE "G90\nG1 E-4\nG92 E0\nM18\n" // Switch to absolute positioning, reduce filament pressure by performing small retract, reset extruder position, disable steppers
