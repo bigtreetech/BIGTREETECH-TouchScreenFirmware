@@ -255,7 +255,7 @@ for (uint8_t i = 0; i < LISTITEM_PER_PAGE; i++)
             parameterMainItems.items[i] = parametertypes[item_index];
         }
         else{
-            parameterMainItems.items[i].icon = ICONCHAR_BACKGROUND;;
+            parameterMainItems.items[i].icon = ICONCHAR_BACKGROUND;
         }
     }
 // set page up down button according to page count and current page
@@ -294,21 +294,25 @@ void menuParameterSettings(void){
         switch (key_num)
         {
         case KEY_ICON_5:
-            if(PS_PAGE_COUNT > 1){
-                if (ps_cur_page > 0){
-                ps_cur_page--;
-                loadParameterPage();
-                menuRefreshListPage();
+            if(PS_PAGE_COUNT > 1)
+            {
+                if (ps_cur_page > 0)
+                {
+                    ps_cur_page--;
+                    loadParameterPage();
+                    menuRefreshListPage();
                 }
             }
             break;
 
         case KEY_ICON_6:
-            if(PS_PAGE_COUNT > 1){
-                if (ps_cur_page < PS_PAGE_COUNT - 1){
-                ps_cur_page++;
-                loadParameterPage();
-                menuRefreshListPage();
+            if(PS_PAGE_COUNT > 1)
+            {
+                if (ps_cur_page < PS_PAGE_COUNT - 1)
+                {
+                    ps_cur_page++;
+                    loadParameterPage();
+                    menuRefreshListPage();
                 }
             }
             break;
@@ -317,9 +321,12 @@ void menuParameterSettings(void){
             break;
 
         default:
-            if(key_num < LISTITEM_PER_PAGE){
-            cur_parameter = ps_cur_page*LISTITEM_PER_PAGE + key_num;
-            infoMenu.menu[++infoMenu.cur] = menuShowParameter;  break;
+            {
+                int cp = ps_cur_page*LISTITEM_PER_PAGE + key_num;
+                if(key_num < LISTITEM_PER_PAGE && cp < PARAMETERS_COUNT){
+                    cur_parameter = cp;
+                    infoMenu.menu[++infoMenu.cur] = menuShowParameter;  break;
+                }
             }
             break;
         }
