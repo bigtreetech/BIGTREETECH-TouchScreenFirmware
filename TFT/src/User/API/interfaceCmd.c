@@ -247,9 +247,9 @@ void sendQueueCmd(void)
           if(cmd_seen('E')) setParameter(P_CURRENT, E_AXIS, cmd_value());
           if(cmd_seen('I'))
           {
-            if(cmd_seen('X')) dualstepper[X_STEPPER] = true; //setParameter(P_CURRENT, X_AXIS, cmd_value());
-            if(cmd_seen('Y')) dualstepper[Y_STEPPER] = true; //setParameter(P_CURRENT, Y_AXIS, cmd_value());
-            if(cmd_seen('Z')) dualstepper[Z_STEPPER] = true; //setParameter(P_CURRENT, Z_AXIS, cmd_value());
+            if(cmd_seen('X')) dualstepper[X_STEPPER] = true;
+            if(cmd_seen('Y')) dualstepper[Y_STEPPER] = true;
+            if(cmd_seen('Z')) dualstepper[Z_STEPPER] = true;
           }
           if(cmd_seen('T') && cmd_value() == 0)
           {
@@ -260,8 +260,12 @@ void sendQueueCmd(void)
             if(cmd_seen('E')) setParameter(P_CURRENT,E2_STEPPER,cmd_value());
             dualstepper[E_STEPPER] = true;
           }
-
           break;
+          case 914: //parse and store TMC Bump sensitivity values
+            if(cmd_seen('X')) setParameter(P_BUMPSENSITIVITY, X_STEPPER, cmd_float());
+            if(cmd_seen('Y')) setParameter(P_BUMPSENSITIVITY, Y_STEPPER, cmd_float());
+            if(cmd_seen('Z')) setParameter(P_BUMPSENSITIVITY, Z_STEPPER, cmd_float());
+            break;
       }
     } //parse M code end
   }
@@ -485,20 +489,23 @@ void sendQueueCmd(void)
             if(cmd_seen('E')) setParameter(P_CURRENT, E_AXIS, cmd_value());
             if(cmd_seen('I'))
             {
-              if(cmd_seen('X')) dualstepper[X_STEPPER] = true; //setParameter(P_CURRENT, X_AXIS, cmd_value());
-              if(cmd_seen('Y')) dualstepper[Y_STEPPER] = true; //setParameter(P_CURRENT, Y_AXIS, cmd_value());
-              if(cmd_seen('Z')) dualstepper[Z_STEPPER] = true; //setParameter(P_CURRENT, Z_AXIS, cmd_value());
-              if(cmd_seen('E'))
-              {
-                setParameter(P_CURRENT, E2_STEPPER, cmd_value());
-                dualstepper[E_STEPPER] = true; //
-              }
+              if(cmd_seen('X')) dualstepper[X_STEPPER] = true;
+              if(cmd_seen('Y')) dualstepper[Y_STEPPER] = true;
+              if(cmd_seen('Z')) dualstepper[Z_STEPPER] = true;
             }
-            break;
+            if(cmd_seen('T') && cmd_value() == 0)
+            {
+              if(cmd_seen('E')) setParameter(P_CURRENT,E_STEPPER,cmd_value());
+            }
+            if(cmd_seen('T') && cmd_value() == 1)
+            {
+              if(cmd_seen('E')) setParameter(P_CURRENT,E2_STEPPER,cmd_value());
+              dualstepper[E_STEPPER] = true;
+            }
           case 914: //parse and store TMC Bump sensitivity values
-            if(cmd_seen('X')) setParameter(P_BUMPSENSITIVITY, X_STEPPER, cmd_value());
-            if(cmd_seen('Y')) setParameter(P_BUMPSENSITIVITY, Y_STEPPER, cmd_value());
-            if(cmd_seen('Z')) setParameter(P_BUMPSENSITIVITY, Z_STEPPER, cmd_value());
+            if(cmd_seen('X')) setParameter(P_BUMPSENSITIVITY, X_STEPPER, cmd_float());
+            if(cmd_seen('Y')) setParameter(P_BUMPSENSITIVITY, Y_STEPPER, cmd_float());
+            if(cmd_seen('Z')) setParameter(P_BUMPSENSITIVITY, Z_STEPPER, cmd_float());
             break;
         }
         break; //end parsing M-codes
