@@ -672,6 +672,9 @@ void endPrinting(void)
   if(infoSettings.send_end_gcode == 1){
     endGcodeExecute();
   }
+  printingItems.items[KEY_ICON_7].icon = ICON_BACK;
+  printingItems.items[KEY_ICON_7].label.index = LABEL_BACK;
+  menuDrawItem(&printingItems.items[KEY_ICON_7], KEY_ICON_7);
 }
 
 
