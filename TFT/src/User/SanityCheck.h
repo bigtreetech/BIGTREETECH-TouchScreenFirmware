@@ -28,5 +28,7 @@
 #ifdef EXTRUDE_STEPS
   #error "NEED NOT THIS, E Steps will be auto get by M92 after start up"
 #endif
-
+#ifdef AUTO_BED_LEVELING
+  #error "AUTO_BED_LEVELING is now auto configured by the TFT Controller with 'M115' command. Please update your Configuration.h file"
+#endif
 #endif

@@ -4,7 +4,7 @@
 //1 title, ITEM_PER_PAGE items(icon + label)
 const MENUITEMS UnifiedHeatItems = {
 // title
-lABEL_UNIFIEDHEAT,
+LABEL_UNIFIEDHEAT,
 // icon                       label
  {{ICON_HEAT,                 LABEL_PREHEAT},
   {ICON_HEAT,                 LABEL_HEAT},

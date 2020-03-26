@@ -41,8 +41,8 @@ const GUI_RECT titleRect={10, (TITLE_END_Y - BYTE_HEIGHT) / 2, LCD_WIDTH-10, (TI
 SCROLL   gcodeScroll;
 bool icon_pre = false;
 
-const GUI_RECT gcodeRect[NUM_PER_PAGE] = { 
-  {BYTE_WIDTH/2+0*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2,  
+const GUI_RECT gcodeRect[NUM_PER_PAGE] = {
+  {BYTE_WIDTH/2+0*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2,
   1*SPACE_X_PER_ICON-BYTE_WIDTH/2,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
 
   {BYTE_WIDTH/2+1*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2,
@@ -57,10 +57,10 @@ const GUI_RECT gcodeRect[NUM_PER_PAGE] = {
   {BYTE_WIDTH/2+0*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2,
   1*SPACE_X_PER_ICON-BYTE_WIDTH/2,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
 };
-  
+
 void scrollFileNameCreate(u8 i)
-{    
-  u8 num=infoFile.cur_page * NUM_PER_PAGE + i;	
+{
+  u8 num=infoFile.cur_page * NUM_PER_PAGE + i;
 
   if(infoFile.F_num + infoFile.f_num==0)
   {
@@ -100,14 +100,14 @@ void gocdeIconDraw(void)
   int gn;
   char *gnew;
   ITEM curItem = {ICON_BACKGROUND, LABEL_BACKGROUND};
-  
+
   scrollFileNameCreate(0);
   Scroll_CreatePara(&titleScroll, (uint8_t* )infoFile.title, &titleRect);
   printIconItems.title.address = (uint8_t* )infoFile.title;
   GUI_SetBkColor(TITLE_BACKGROUND_COLOR);
   GUI_ClearPrect(&titleRect);
   GUI_SetBkColor(BACKGROUND_COLOR);
-  
+
   //draw folders
   for(i=0;(i + infoFile.cur_page * NUM_PER_PAGE < infoFile.F_num) && (i < NUM_PER_PAGE) ; i++)                  // folder
   {
@@ -124,12 +124,12 @@ void gocdeIconDraw(void)
       menuDrawItem(&curItem, i);
       normalNameDisp(&gcodeRect[i], (u8* )infoFile.Longfile[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num]);
     } else {
-      // if model preview bmp exists, display bmp directly without writing to flash 
+      // if model preview bmp exists, display bmp directly without writing to flash
       gn = strlen(infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num]) - 6; // -6 means ".gcode"
       gnew = malloc(gn + 10);
       strcpy(gnew, getCurFileSource());
       strncat(gnew, infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num], gn);
-      
+
       if(bmp_DirectDisplay(getIconStartPoint(i),strcat(gnew, "_"STRINGIFY(ICON_WIDTH)".bmp")) != true){
         menuDrawItem(&curItem, i);
       }
@@ -138,10 +138,10 @@ void gocdeIconDraw(void)
       normalNameDisp(&gcodeRect[i], (u8* )infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num]);
     }
   }
-  
+
   //clear blank icons
   for(; (i<NUM_PER_PAGE); i++)
-  {		
+  {
     curItem.icon = ICON_BACKGROUND;
     menuDrawItem(&curItem, i);
   }
@@ -241,7 +241,7 @@ void menuPrintFromSource(void)
     GUI_SetBkColor(TITLE_BACKGROUND_COLOR);
     Scroll_DispString(&titleScroll, LEFT);    //
     GUI_SetBkColor(BACKGROUND_COLOR);
-    
+
     if(infoSettings.file_listmode != true){
       Scroll_DispString(&gcodeScroll, CENTER); //
     }
@@ -299,8 +299,8 @@ void menuPrintFromSource(void)
           else if(key_num+start < infoFile.F_num+infoFile.f_num)	//gcode
           {
             if(infoHost.connected !=true) break;
-            if(EnterDir(infoFile.file[key_num + start - infoFile.F_num]) == false) break;	
-            
+            if(EnterDir(infoFile.file[key_num + start - infoFile.F_num]) == false) break;
+
             if (infoFile.source != BOARD_SD) {
               //load bmp preview in flash if file exists
               int gn;
@@ -309,7 +309,7 @@ void menuPrintFromSource(void)
               gnew = malloc(gn + 10);
               strcpy(gnew, getCurFileSource());
               strncat(gnew, infoFile.file[key_num + start - infoFile.F_num], gn);
-              
+
               if(bmpDecode(strcat(gnew, "_"STRINGIFY(ICON_WIDTH)".bmp"),ICON_ADDR(ICON_PREVIEW)) == true){
                 icon_pre = true;
               }
@@ -319,13 +319,13 @@ void menuPrintFromSource(void)
               free(gnew);
               //-load bmp preview in flash if file exists - end
             }
-            infoMenu.menu[++infoMenu.cur] = menuBeforePrinting;	
-          }				
+            infoMenu.menu[++infoMenu.cur] = menuBeforePrinting;
+          }
         }
-                
-        else if(key_num >=KEY_LABEL_0 && key_num <= KEY_LABEL_4)     
+
+        else if(key_num >=KEY_LABEL_0 && key_num <= KEY_LABEL_4)
         {
-          if(infoSettings.file_listmode != true){                  
+          if(infoSettings.file_listmode != true){
             if(key_num - KEY_LABEL_0 + infoFile.cur_page * NUM_PER_PAGE < infoFile.F_num + infoFile.f_num)
             {
               normalNameDisp(gcodeScroll.rect, gcodeScroll.text);
@@ -339,7 +339,7 @@ void menuPrintFromSource(void)
     if(update)
     {
       update=0;
-        
+
       if(infoSettings.file_listmode != true){
         gocdeIconDraw();
       }
@@ -363,9 +363,9 @@ MENUITEMS sourceSelItems = {
 //  title
 LABEL_PRINT,
 // icon                       label
- {{ICON_SD_SOURCE,            LABEL_TFTSD},
+ {{ICON_ONTFT_SD,            LABEL_TFTSD},
  #ifdef ONBOARD_SD_SUPPORT
-  {ICON_BSD_SOURCE,           LABEL_ONBOARDSD},
+  {ICON_ONBOARD_SD,           LABEL_ONBOARDSD},
  #endif
  #ifdef U_DISK_SUPPROT
   {ICON_U_DISK,               LABEL_U_DISK},
