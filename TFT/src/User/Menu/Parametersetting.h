@@ -47,7 +47,7 @@ typedef enum
   NUM_KEY_EXIT,
   NUM_KEY_DEC,
   NUM_KEY_0,
-  NUM_KEY_14,
+  NUM_KEY_MINUS,
   NUM_KEY_15,
 
   NUM_KEY_IDLE = IDLE_TOUCH,
@@ -58,8 +58,8 @@ float getParameterCurrent(AXIS index);
 float getParameterSteps(AXIS index);
 void setParameterCurrent(AXIS index, float val);
 void setParameterSteps(AXIS index, float val);
-void parametersetting(void);
-float num_pad(float old_val);
+void menuParameterSettings(void);
+float num_pad(float old_val, bool negative_val);
 
 void show_GlobalInfo(void);
 void temp_Change(void);

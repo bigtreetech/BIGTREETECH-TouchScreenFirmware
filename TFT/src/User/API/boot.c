@@ -6,20 +6,12 @@ const GUI_RECT iconUpdateRect = {(LCD_WIDTH - ICON_WIDTH)/2,              (LCD_H
 const GUI_RECT labelUpdateRect = {0,        (LCD_HEIGHT - ICON_HEIGHT)/2 + ICON_HEIGHT,
                                  LCD_WIDTH, (LCD_HEIGHT - ICON_HEIGHT)/2 + ICON_HEIGHT + BYTE_HEIGHT};
 
+//This List is Auto-Generated. Please add new icons in icon_list.inc only
 const char iconBmpName[][32]={
-"Heat", "Move", "Home", "Print", "Extrude", "Fan", "Settings", "Leveling", "Inc", "Dec",
-"Nozzle", "Hotbed", "Temp_1", "Temp_5", "Temp_10", "Stop", "Back", "Inc_X", "Inc_Y", "Inc_Z",
-"Mmm_01", "Mmm_1", "Mmm_10", "Dec_X", "Dec_Y","Dec_Z", "Home_X", "Home_Y", "Home_Z", "Folder",
-"File", "Page_up", "Page_down", "Pause", "Resume", "Load", "Unload", "Slow", "Normal", "Fast",
-"Emm_1", "Emm_5", "Emm_10", "Full", "Half", "Rotate", "Language", "TP_Adjust", "More", "About",
-"BackGroundColor", "FontColor", "Disconnect", "BaudRate", "Percentage", "BabyStep", "Mmm_001", "OnBoardSD", "OnTFTSD", "U_Disk",
-"Point_1", "Point_2", "Point_3", "Point_4", "Marlin", "BigTreeTech", "Gcode", "BLTouch", "BLTouchDeploy",
-"BLTouchStow", "BLTouchTest", "BLTouchRepeat", "TSCSettings", "MachineSettings", "FeatureSettings", "ProbeOffset", "EEPROMSave", "SilentOn", "ShutDown",
-"RGB_Settings", "RGB_Red", "RGB_Green", "RGB_Blue", "RGB_White", "RGB_Off", "Preheat_Both", "Preheat_PLA", "Preheat_PETG", "Preheat_ABS",
-"Custom", "Home_Move", "Heat_Fan", "ManualLevel", "CoolDown", "SilentOff",
-"StatusNozzle","StatusBed","StatusFan","MainMenu","StatusSpeed","StatusFlow",
-"parametersetting", "global_nozzle", "global_bed",
-"printing_nozzle", "printing_bed", "printing_fan","printing_timer","printing_layer","printing_speed","printing_flow",
+#define X_ICON(NAME) STRINGIFY(NAME) ,
+#include "icon_list.inc"
+#undef  X_ICON
+//add new icons in icon_list.inc only
 };
 
 bool bmpDecode(char *bmp, u32 addr)
