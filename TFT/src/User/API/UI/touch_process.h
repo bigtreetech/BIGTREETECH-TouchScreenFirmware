@@ -13,10 +13,11 @@ enum
   KNOB_DEC,
 };
 
-#define KEY_CLICK          0x0000  // key����Ϊ u16, 16(u16 16bit) - 3(3 bits flag ) = 13 bit ���� u16 ���֧�� 2^13 = 8192 ����ֵ
-#define KEY_DOUBLE_CLICK   0x2000  //����λ������ʶ˫������
-#define KEY_LONG_RELEASE   0x4000  //�ڶ�λ������ʶ�������ͷŶ���
-#define KEY_LONG_CLICK     0x8000  //��һλ������ʶ��������
+#define KEY_CLICK          0x0000  // The key is defined as u16, 16 (u16 16bit)-3 (3 bits flag) = 13 bit, so u16 supports a maximum of 2 ^ 13 = 8192 key values
+#define KEY_DOUBLE_CLICK   0x2000  //The third bit is used to identify the double-click action
+#define KEY_LONG_RELEASE   0x4000  // The second bit is used to identify the release action after a long press
+#define KEY_LONG_CLICK     0x8000  // The first bit is used to identify the long press action
+
 
 extern bool touchSound;
 void TSC_Calibration(void);
