@@ -130,7 +130,7 @@ void menuRefreshListPage(void){
         {
           loopBackEnd();	 //perform backend printing loop between drawing icons to avoid printer idling
         }
-      #endif      
+      #endif
     }
 
 }
@@ -399,9 +399,11 @@ void loopBackEnd(void)
 #ifdef BUZZER_PIN
   loopBuzzer();
 #endif
-  
-#if defined ONBOARD_SD_SUPPORT && !defined M27_AUTOREPORT
-  loopCheckPrinting();                //Check if there is a SD or USB print running.
+
+#if defined ONBOARD_SD_SUPPORT
+  if (infoMachineSettings.autoReportSDStatus !=1){
+    loopCheckPrinting();                //Check if there is a SD or USB print running.
+  }
 #endif
 
 #ifdef U_DISK_SUPPROT

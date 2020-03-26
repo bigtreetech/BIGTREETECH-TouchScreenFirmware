@@ -97,10 +97,10 @@
 
 /**
  * Default LCD Brightness
- * 
+ *
  * Choose one of the following definitions: LCD_5_PERCENT, LCD_10_PERCENT,
  *                                          LCD_20_PERCENT, LCD_30_PERCENT, LCD_40_PERCENT,
- *                                          LCD_50_PERCENT, LCD_60_PERCENT, LCD_70_PERCENT, 
+ *                                          LCD_50_PERCENT, LCD_60_PERCENT, LCD_70_PERCENT,
  *                                          LCD_80_PERCENT, LCD_90_PERCENT, LCD_100_PERCENT
  */
 #ifdef LCD_LED_PIN
@@ -179,15 +179,18 @@
 #define NOZZLE_PAUSE_XY_FEEDRATE    6000 // (mm/min) X and Y axes feedrate
 #define NOZZLE_PAUSE_Z_FEEDRATE     600  // (mm/min) Z axis feedrate
 
-// Send G29 for auto bed leveling
-#define AUTO_BED_LEVELING
-#ifdef AUTO_BED_LEVELING
-  // Enable this will send "M500" after "G29" to store leveling value
-  // and send "M420 S1" to enable leveling state after startup
-  //#define AUTO_SAVE_LOAD_LEVELING_VALUE
-#endif
+/**
+ * Auto Save Load Leveling Data
+ * The TFT will auto detect if Auto Bed Level is available.
+ * Enable this will send "M500" after "G29" to store leveling value
+ * and send "M420 S1" to enable leveling state after startup
+*/
+//#define AUTO_SAVE_LOAD_LEVELING_VALUE
 
-// Move to four corner points to Leveling manually (Point 1, Point 2, Point 3, Point 4)
+/**
+ * Manual Leveling
+ * Move to four corner points to Leveling manually (Point 1, Point 2, Point 3, Point 4)
+ */
 #define LEVELING_POINT_1_X         (X_MIN_POS + 20)
 #define LEVELING_POINT_1_Y         (Y_MIN_POS + 20)
 #define LEVELING_POINT_2_X         (X_MAX_POS - 20)
@@ -220,10 +223,13 @@
 // Move, Home, Extrude, ABL at one Place and bring G-code Menu on Home Menu
 #define UNIFIED_MENU
 
-// SD support
+/**
+ * SD support
+ * The TFT will auto configure M27 AutoReport with M115 command
+ * Set the time interval to poll SD Printing status if Marlin reports M27 disabled.
+*/
 #define ONBOARD_SD_SUPPORT
 #ifdef ONBOARD_SD_SUPPORT
-  #define M27_AUTOREPORT                      // Disable M27 polling if you enable AUTO_REPORT_SD_STATUS in Marlin
   #define M27_REFRESH                3        // Time in sec for M27 command
   #define M27_WATCH_OTHER_SOURCES    true     // if true the polling on M27 report is always active. Case: SD print started not from TFT35
 #endif

@@ -49,12 +49,12 @@ const char *const Key_Num[KEY_NUM] = {
   "1","2","3","\u0894",
   "4","5","6","\u0899",
   "7","8","9","\u0895",
-  ".","0","",""
+  ".","0","-",""
 };
 
 const LISTITEMS parameterMainItems = {
 // title
-LABEL_SETTING_PARAMETER,
+LABEL_PARAMETER_SETTING,
 // icon                     ItemType         Item Title                item value text(only for custom value)
 {
     {ICONCHAR_SETTING1,     LIST_MOREBUTTON,    LABEL_STEPS_SETTING,    LABEL_BACKGROUND},
@@ -105,7 +105,7 @@ void setCurrentMenuItems(){
 
     LISTITEMS currentmenuitems ={
     // title
-    LABEL_SETTING_PARAMETER,
+    LABEL_PARAMETER_SETTING,
     // icon                     ItemType        Item Title               item value text(only for custom value)
     {{ICONCHAR_BLANK,           LIST_CUSTOMVALUE,     LABEL_DYNAMIC,     LABEL_DYNAMIC},
     {ICONCHAR_BLANK,            LIST_CUSTOMVALUE,     LABEL_DYNAMIC,     LABEL_DYNAMIC},
@@ -137,7 +137,7 @@ void setCurrentMenuItems(){
 
         default:
             if(key_num < (KEY_VALUES)TOTAL_AXIS){
-                float v = num_pad(getParameterCurrent((AXIS)key_num));
+                float v = num_pad(getParameterCurrent((AXIS)key_num),false);
                 if (v != getParameterCurrent((AXIS)key_num))
                 {
                     storeCmd(parameter_currentCmd[key_num],v);
@@ -165,7 +165,7 @@ void setStepsMenuItems(){
 
     LISTITEMS stepsmenuitems ={
     // title
-    LABEL_SETTING_PARAMETER,
+    LABEL_PARAMETER_SETTING,
     // icon                     ItemType        Item Title               item value text(only for custom value)
     {{ICONCHAR_BLANK,           LIST_CUSTOMVALUE,     LABEL_DYNAMIC,     LABEL_DYNAMIC},
     {ICONCHAR_BLANK,            LIST_CUSTOMVALUE,     LABEL_DYNAMIC,     LABEL_DYNAMIC},
@@ -197,7 +197,7 @@ void setStepsMenuItems(){
 
         default:
             if(key_num < (KEY_VALUES)TOTAL_AXIS){
-                float v = num_pad(getParameterSteps((AXIS)key_num));
+                float v = num_pad(getParameterSteps((AXIS)key_num),false);
                 if (v != getParameterSteps((AXIS)key_num)){
                     storeCmd(parameter_stepsCmd[key_num],v);
                     setDynamicValue((AXIS)key_num,v);
@@ -219,11 +219,11 @@ void setStepsMenuItems(){
 
 }
 
-void parametersetting(){
+void menuParameterSettings(){
     KEY_VALUES key_num = KEY_IDLE;
     Send_Settingcmd();
     menuDrawListPage(&parameterMainItems);
-    while (infoMenu.menu[infoMenu.cur] == parametersetting)
+    while (infoMenu.menu[infoMenu.cur] == menuParameterSettings)
     {
         key_num = menuKeyGetValue();
         switch (key_num)
@@ -279,7 +279,7 @@ void Draw_keyboard(void)
 }
 
 
-float num_pad(float old_val)
+float num_pad(float old_val, bool negative_val)
 {
     //bool exit = false;
     GUI_RECT oldParameterRect = {0, 0, LCD_WIDTH/2 - BYTE_WIDTH, rect_of_numkey[0].y0};
@@ -301,7 +301,6 @@ float num_pad(float old_val)
         switch (key_num)
         {
         case NUM_KEY_EXIT:
-            Send_Settingcmd();
             return old_val;
 
         case NUM_KEY_DEL:
@@ -326,8 +325,17 @@ float num_pad(float old_val)
             }
             break;
         case NUM_KEY_DEC:
-            if(!strchr((const char *)&ParameterBuf, Key_Num[key_num][0])){
+            if(!strchr((const char *)ParameterBuf, Key_Num[key_num][0])){
                 if(nowIndex < BUFLONG-1)
+                {
+                    ParameterBuf[nowIndex++] = Key_Num[key_num][0];
+                    ParameterBuf[nowIndex] = 0;
+                }
+            }
+            break;
+        case NUM_KEY_MINUS:
+            if(!strchr((const char *)ParameterBuf, Key_Num[key_num][0]) && negative_val){
+                if(nowIndex == 0)
                 {
                     ParameterBuf[nowIndex++] = Key_Num[key_num][0];
                     ParameterBuf[nowIndex] = 0;
@@ -370,9 +378,7 @@ float num_pad(float old_val)
             GUI_DispStringInPrect(&newParameterRect, (u8 *)ParameterBuf);
             GUI_RestoreColorDefault();
         }
-
     }
-
 
 }
 
@@ -417,7 +423,7 @@ void drawGlobalInfo(void){
     GUI_ClearRect(LCD_WIDTH/3, 0, LCD_WIDTH, BYTE_HEIGHT);
 
     //global nozzle
-    lcd_frame_display(ICON_NOZZLE_X, 0, 2*BYTE_WIDTH, BYTE_HEIGHT, ICON_ADDR(ICON_GLOBAL_NOZZLE0));
+    lcd_frame_display(ICON_NOZZLE_X, 0, 2*BYTE_WIDTH, BYTE_HEIGHT, ICON_ADDR(ICON_GLOBAL_NOZZLE));
     my_sprintf(tempstr, "%d/%d", heatGetCurrentTemp(NOZZLE0), heatGetTargetTemp(NOZZLE0));
     GUI_DispStringInRect(VALUE_NOZZLE_X,0,VALUE_NOZZLE_X+8*BYTE_WIDTH,BYTE_HEIGHT, (u8 *)tempstr);
 

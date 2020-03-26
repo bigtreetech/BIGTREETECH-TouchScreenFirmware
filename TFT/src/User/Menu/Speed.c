@@ -51,7 +51,7 @@ void speedSetPercent(u8 tool, u16 per)
 {
   percentage[tool]=limitValue(10, per, 999);
 }
-/* ��õ�ǰ�İٷֱ�? */
+/* ��õ�ǰ�İٷֱ�? */
 u16 speedGetPercent(u8 tool)
 {
   return percentage[tool];
@@ -69,6 +69,7 @@ void percentageReDraw(void)
 
 void menuSpeed(void)
 {
+  storeCmd("M220\nM221\n");
   KEY_VALUES  key_num=KEY_IDLE;
   u16         now[ITEM_PERCENTAGE_NUM];
 
@@ -79,7 +80,7 @@ void menuSpeed(void)
   showPercentage();
 
   #if LCD_ENCODER_SUPPORT
-    encoderPosition = 0;    
+    encoderPosition = 0;
   #endif
 
   while(infoMenu.menu[infoMenu.cur] == menuSpeed)
@@ -133,19 +134,19 @@ void menuSpeed(void)
           {
             if(percentage[item_percentage_i] < 999 && encoderPosition > 0)
             {
-              percentage[item_percentage_i] = 
-                limitValue( 10, 
-                            percentage[item_percentage_i] + item_percent_unit[item_percent_unit_i], 
+              percentage[item_percentage_i] =
+                limitValue( 10,
+                            percentage[item_percentage_i] + item_percent_unit[item_percent_unit_i],
                             999);
             }
             if(percentage[item_percentage_i] > 10 && encoderPosition < 0)
             {
-              percentage[item_percentage_i] = 
-                limitValue( 10, 
-                            percentage[item_percentage_i] - item_percent_unit[item_percent_unit_i], 
+              percentage[item_percentage_i] =
+                limitValue( 10,
+                            percentage[item_percentage_i] - item_percent_unit[item_percent_unit_i],
                             999);
             }
-            encoderPosition = 0; 
+            encoderPosition = 0;
           }
           LCD_LoopEncoder();
         #endif

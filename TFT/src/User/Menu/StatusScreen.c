@@ -29,9 +29,10 @@ const ITEM SpeedItems[2] = {
 };
 
 static u32 nextTime = 0;
-static u32 update_time = 2000; // 1 seconds is 100
+static u32 update_time = 2000; // 1 seconds is 1000
 SCROLL     msgScroll;
 static int lastConnection_status = -1;
+static bool booted = false;
 
 static char msgtitle[20];
 static char msgbody[512];
@@ -232,7 +233,7 @@ void statusScreen_setMsg(const uint8_t *title, const uint8_t *msg)
   memcpy(msgtitle, (char *)title, sizeof(msgtitle));
   memcpy(msgbody, (char *)msg, sizeof(msgbody));
 
-  if (infoMenu.menu[infoMenu.cur] == menuStatus)
+  if (infoMenu.menu[infoMenu.cur] == menuStatus && booted == true)
   {
     drawStatusScreenMsg();
   }
@@ -289,6 +290,7 @@ void toggleTool(void)
       {
         gantryCmdWait = true;
         storeCmd("M114\n");
+        storeCmd("M220\nM221\n");
       }
     }
     else
@@ -300,6 +302,7 @@ void toggleTool(void)
 
 void menuStatus(void)
 {
+  booted = true;
   KEY_VALUES key_num = KEY_IDLE;
   GUI_SetBkColor(BACKGROUND_COLOR);
   //set_status_icon();

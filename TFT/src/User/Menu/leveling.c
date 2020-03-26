@@ -27,9 +27,9 @@ void menuAutoLeveling(void)
       case KEY_ICON_0:
         storeCmd("G28\n");
         storeCmd("G29\n");
-        #ifdef AUTO_SAVE_LOAD_LEVELING_VALUE
-          storeCmd("M500\n");
-        #endif
+        if(infoMachineSettings.EEPROM == 1){
+           storeCmd("M500\n");
+        }
         break;
       case KEY_ICON_1:
         storeCmd("M280 P0 S10\n");
