@@ -35,9 +35,26 @@ typedef struct
   uint8_t  file_listmode;
 }SETTINGS;
 
+typedef struct
+{
+  int EEPROM;
+  int autoReportTemp;
+  int autoLevel;
+  int zProbe;
+  int levelingData;
+  int softwarePower;
+  int toggleLights;
+  int caseLightsBrightness;
+  int emergencyParser;
+  int promptSupport;
+  int autoReportSDStatus;
+}MACHINESETTINGS;
+
 
 extern SETTINGS infoSettings;
+extern MACHINESETTINGS infoMachineSettings;
 
+void setupMachine(void);
 void infoSettingsReset(void);
 void menuSettings(void);
 

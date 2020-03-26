@@ -11,6 +11,7 @@ const char *const ignoreEcho[] = {
   "Now fresh file:",
   "Probe Z Offset:",
   "paused for user",
+  "Flow:"
 };
 
 bool portSeen[_USART_CNT] = {false, false, false, false, false, false};
@@ -70,7 +71,7 @@ static float ack_second_value()
 
 void ackPopupInfo(const char *info)
 {
-  if(infoMenu.menu[infoMenu.cur] == parametersetting) return;
+  if(infoMenu.menu[infoMenu.cur] == menuParameterSettings) return;
 
   if (info == echomagic)
   {
@@ -113,9 +114,7 @@ void parseACK(void)
       if((!ack_seen("T:") && !ack_seen("T0:")) || !ack_seen("ok"))  goto parse_end;  //the first response should be such as "T:25/50 ok\n"
         updateNextHeatCheckTime();
         infoHost.connected = true;
-        #ifdef AUTO_SAVE_LOAD_LEVELING_VALUE
-          storeCmd("M420 S1\n");
-        #endif
+        storeCmd("M115\n");
         storeCmd("M92\n"); // Get steps/mm for smart filament sensor after start up
     }
 
@@ -179,6 +178,7 @@ void parseACK(void)
           }
         }
       }
+    //parse temperature
       else if(ack_seen("T:") || ack_seen("T0:"))
       {
         TOOL i = heatGetCurrentToolNozzle();
@@ -195,15 +195,6 @@ void parseACK(void)
               heatSyncTargetTemp(i, ack_second_value()+0.5);
             }
           }
-        }
-        avoid_terminal = infoSettings.terminalACK;
-        updateNextHeatCheckTime();
-      }
-      else if(ack_seen("B:"))
-      {
-        heatSetCurrentTemp(BED, ack_value()+0.5);
-        if(!heatGetSendWaiting(BED)) {
-          heatSyncTargetTemp(BED, ack_second_value()+0.5);
         }
         avoid_terminal = infoSettings.terminalACK;
         updateNextHeatCheckTime();
@@ -233,7 +224,49 @@ void parseACK(void)
   //      powerFailedCache(position);
       }
   #endif
-      //parse and store stepper steps/mm values
+    // Parse M115 capability report
+      else if(ack_seen("Cap:AUTOREPORT_TEMP:"))
+      {
+        infoMachineSettings.autoReportTemp = ack_value();
+      }
+      else if(ack_seen("Cap:AUTOLEVEL:"))
+      {
+        infoMachineSettings.autoLevel = ack_value();
+      }
+      else if(ack_seen("Cap:Z_PROBE:"))
+      {
+        infoMachineSettings.zProbe = ack_value();
+      }
+      else if(ack_seen("Cap:LEVELING_DATA:"))
+      {
+        infoMachineSettings.levelingData = ack_value();
+      }
+      else if(ack_seen("Cap:SOFTWARE_POWER:"))
+      {
+        infoMachineSettings.softwarePower = ack_value();
+      }
+      else if(ack_seen("Cap:TOGGLE_LIGHTS:"))
+      {
+        infoMachineSettings.toggleLights = ack_value();
+      }
+      else if(ack_seen("Cap:CASE_LIGHT_BRIGHTNESS:"))
+      {
+        infoMachineSettings.caseLightsBrightness = ack_value();
+      }
+      else if(ack_seen("Cap:EMERGENCY_PARSER:"))
+      {
+        infoMachineSettings.emergencyParser = ack_value();
+      }
+      else if(ack_seen("Cap:AUTOREPORT_SD_STATUS:"))
+      {
+        infoMachineSettings.autoReportSDStatus = ack_value();
+      }
+      else if(ack_seen("Cap:CHAMBER_TEMPERATURE:"))
+      {
+        setupMachine();
+        goto  parse_end;
+      }
+    //parse and store stepper steps/mm values
       else if(ack_seen("M92 X"))
       {
         setParameterSteps(X_AXIS, ack_value());
@@ -241,7 +274,7 @@ void parseACK(void)
         if(ack_seen("Z")) setParameterSteps(Z_AXIS, ack_value());
         if(ack_seen("E")) setParameterSteps(E_AXIS, ack_value());
       }
-      //parse and store stepper driver current values
+    //parse and store stepper driver current values
       else if(ack_seen("X driver current: "))
       {
         setParameterCurrent(X_AXIS, ack_value());
@@ -258,6 +291,7 @@ void parseACK(void)
       {
         setParameterCurrent(E_AXIS, ack_value());
       }
+    //parse Repeatability Test
       else if(ack_seen("Mean:"))
       {
         popupReminder((u8* )"Repeatability Test", (u8 *)dmaL2Cache + ack_index-5);
@@ -269,6 +303,21 @@ void parseACK(void)
           setCurrentOffset(ack_value());
         }
       }
+      else if (ack_seen(" F0:"))
+      {
+        fanSetSpeed(0, ack_value());
+      }
+    // parse and store feed rate percentage
+      else if(ack_seen("FR:"))
+      {
+        speedSetPercent(0,ack_value());
+      }
+    // parse and store flow rate percentage
+      else if(ack_seen("Flow: "))
+      {
+        speedSetPercent(1,ack_value());
+      }
+    //Parse error messages & Echo messages
       else if(ack_seen(errormagic))
       {
         ackPopupInfo(errormagic);
@@ -284,10 +333,6 @@ void parseACK(void)
           }
         }
         ackPopupInfo(echomagic);
-      }
-      else if (ack_seen(" F0:"))
-      {
-        fanSetSpeed(0, ack_value());
       }
     }
 

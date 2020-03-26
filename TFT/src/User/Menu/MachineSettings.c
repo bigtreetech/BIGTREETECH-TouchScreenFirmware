@@ -285,7 +285,7 @@ LABEL_MACHINE_SETTINGS,
   {ICON_RGB_SETTINGS,         LABEL_RGB_SETTINGS},
   {ICON_GCODE,                LABEL_GCODE},
   {ICON_SHUT_DOWN,            LABEL_SHUT_DOWN},
-  {ICON_PARAMETER,            LABEL_SETTING_PARAMETER},
+  {ICON_PARAMETER,            LABEL_PARAMETER_SETTING},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_BACK,                 LABEL_BACK},}
@@ -302,6 +302,7 @@ void menuMachineSettings(void)
     key_num = menuKeyGetValue();
     switch(key_num)
     {
+
       case KEY_ICON_0:
         infoMenu.menu[++infoMenu.cur] =  menuCustom;
         break;
@@ -319,7 +320,7 @@ void menuMachineSettings(void)
         break;
 
       case KEY_ICON_4:
-        infoMenu.menu[++infoMenu.cur] = parametersetting;
+        infoMenu.menu[++infoMenu.cur] = menuParameterSettings;
         break;
 
       case KEY_ICON_7:

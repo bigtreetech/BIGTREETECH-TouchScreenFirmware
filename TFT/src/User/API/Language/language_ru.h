@@ -156,14 +156,15 @@
     #define RU_M0_PAUSE               "Пауза по команде M0"
     #define RU_SEND_START_GCODE       "G-код перед печатью"
     #define RU_SEND_END_GCODE         "G-код после печати"
-    #define RU_PERSISTANT_STATUS_INFO "Нагрев в инфостроке"
-    #define RU_FILE_LISTMODE          "Файлы в режиме строк"
-    #define RU_CURRENT_SETTING        "Настройка TMC драйверов"
-    #define RU_STEPS_SETTING          "Настройка шагов на mm"
-    #define RU_RESET                  "Сброс"
-    #define RU_RESET_SETTINGS         "Все настройки экрана    будут сброшены по       умолчанию. Продолжить?"
-    #define RU_RESET_SETTINGS_DONE    "Успешный сброс настроек экрана. Для полного     вступления в силу,      перегрузите устройство."
-    #define RU_INFO                   "\u0884 Информация" //Info Sign
-    #define RU_LCD_BRIGHTNESS         "LCD Brightness"
+    #define RU_PERSISTENT_STATUS_INFO   "Нагрев в инфостроке"
+    #define RU_FILE_LISTMODE            "Файлы в режиме строк"
+    #define RU_CURRENT_SETTING          "Настройка TMC драйверов"
+    #define RU_STEPS_SETTING            "Настройка шагов на mm"
+    #define RU_RESET                    "Сброс"
+    #define RU_RESET_SETTINGS           "Все настройки экрана    будут сброшены по       умолчанию. Продолжить?"
+    #define RU_RESET_SETTINGS_DONE      "Успешный сброс настроек экрана. Для полного     вступления в силу,      перегрузите устройство."
+    #define RU_INFO                     "\u0884 Информация" //Info Sign
+    #define RU_LCD_BRIGHTNESS           "LCD яркость"
+    #define RU_EMERGENCYPARSER          "EMERGENCY_PARSER is not enable in your Printer's firmware. Some features may not work properly."
 
 #endif

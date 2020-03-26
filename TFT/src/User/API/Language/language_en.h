@@ -156,14 +156,15 @@
     #define EN_M0_PAUSE               "Paused by M0 command"
     #define EN_SEND_START_GCODE       "Start Gcode before print"
     #define EN_SEND_END_GCODE         "End Gcode after print"
-    #define EN_PERSISTANT_STATUS_INFO "Persistent Status Info"
-    #define EN_FILE_LISTMODE          "Files viewer List Mode"
-    #define EN_CURRENT_SETTING        "Driver Current Settings"
-    #define EN_STEPS_SETTING          "Steps per MM Settings"
-    #define EN_RESET                  "Reset"
-    #define EN_RESET_SETTINGS         "All settings will be    reset to it's default   values. Continue?"
-    #define EN_RESET_SETTINGS_DONE    "Resetting all settings  successfully done. To   take full effect, please restart the device."
-    #define EN_INFO                   "\u0884 Info" //Info Sign
-    #define EN_LCD_BRIGHTNESS         "LCD Brightness"
+    #define EN_PERSISTENT_STATUS_INFO   "Persistent Status Info"
+    #define EN_FILE_LISTMODE            "Files viewer List Mode"
+    #define EN_CURRENT_SETTING          "Driver Current Settings"
+    #define EN_STEPS_SETTING            "Steps per MM Settings"
+    #define EN_RESET                    "Reset"
+    #define EN_RESET_SETTINGS           "All settings will be    reset to it's default   values. Continue?"
+    #define EN_RESET_SETTINGS_DONE      "Resetting all settings  successfully done. To   take full effect, please restart the device."
+    #define EN_INFO                     "\u0884 Info" //Info Sign
+    #define EN_LCD_BRIGHTNESS           "LCD Brightness"
+    #define EN_EMERGENCYPARSER          "EMERGENCY_PARSER is not enable in your Printer's firmware. Some features may not work properly."
 
 #endif

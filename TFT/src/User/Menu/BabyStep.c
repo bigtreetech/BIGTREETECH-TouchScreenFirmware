@@ -76,7 +76,7 @@ void menuBabyStep(void)
   showBabyStep();
 
   #if LCD_ENCODER_SUPPORT
-    encoderPosition = 0;    
+    encoderPosition = 0;
   #endif
 
   while(infoMenu.menu[infoMenu.cur] == menuBabyStep)
@@ -99,7 +99,9 @@ void menuBabyStep(void)
         }
         break;
       case KEY_ICON_4:
-        storeCmd("M500\n");
+        if(infoMachineSettings.EEPROM == 1){
+           storeCmd("M500\n");
+        }
         break;
       case KEY_ICON_5:
         elementsUnit.cur = (elementsUnit.cur + 1) % elementsUnit.totaled;
@@ -118,7 +120,7 @@ void menuBabyStep(void)
           if(encoderPosition)
           {
             baby_step_value += elementsUnit.ele[elementsUnit.cur]*encoderPosition;
-            encoderPosition = 0;    
+            encoderPosition = 0;
           }
           LCD_LoopEncoder();
         #endif
