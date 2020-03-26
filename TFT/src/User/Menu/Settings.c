@@ -28,6 +28,8 @@ void infoSettingsReset(void)
   infoSettings.file_listmode        = 1;
   #ifdef LCD_LED_PIN
   infoSettings.lcd_brightness       = DEFAULT_LCD_BRIGHTNESS;
+  infoSettings.lcd_idle_brightness  = DEFAULT_LCD_IDLE_BRIGHTNESS;
+  infoSettings.lcd_idle_timer       = DEFAULT_LCD_IDLE_TIMER;
   #endif
 }
 

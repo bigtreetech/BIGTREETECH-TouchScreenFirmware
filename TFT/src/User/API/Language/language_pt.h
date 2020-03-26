@@ -166,5 +166,14 @@
     #define PT_INFO                     "Info"
     #define PT_LCD_BRIGHTNESS           "LCD Brightness"
     #define PT_EMERGENCYPARSER          "EMERGENCY_PARSER is not enable in your Printer's firmware. Some features may not work properly."
+    #define PT_LCD_BRIGHTNESS_DIM       "LCD Brightness dim"
+    #define PT_LCD_DIM_TIMER            "LCD dimm timer"
+    #define PT_5_SECONDS                "5 Sec."
+    #define PT_10_SECONDS               "10 Sec."
+    #define PT_30_SECONDS               "30 Sec."
+    #define PT_60_SECONDS               "1 Min."
+    #define PT_120_SECONDS              "2 Min."
+    #define PT_300_SECONDS              "5 Min."
+    #define PT_CUSTOM_SECONDS           "Custom"
 
 #endif

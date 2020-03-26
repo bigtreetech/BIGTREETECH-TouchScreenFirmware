@@ -166,6 +166,15 @@
     #define HU_RESET_SETTINGS_DONE      "Resetting all settings successfully done. To take full effect, please restart the device."
     #define HU_INFO                     "Info"
     #define HU_LCD_BRIGHTNESS           "LCD Brightness"
-    #define FR_EMERGENCYPARSER          "EMERGENCY_PARSER is not enable in your Printer's firmware. Some features may not work properly."
+    #define HU_EMERGENCYPARSER          "EMERGENCY_PARSER is not enable in your Printer's firmware. Some features may not work properly."
+    #define HU_LCD_BRIGHTNESS_DIM       "LCD Brightness dim"
+    #define HU_LCD_DIM_TIMER            "LCD dimm timer"
+    #define HU_5_SECONDS                "5 Sec."
+    #define HU_10_SECONDS               "10 Sec."
+    #define HU_30_SECONDS               "30 Sec."
+    #define HU_60_SECONDS               "1 Min."
+    #define HU_120_SECONDS              "2 Min."
+    #define HU_300_SECONDS              "5 Min."
+    #define HU_CUSTOM_SECONDS           "Custom"
 
 #endif

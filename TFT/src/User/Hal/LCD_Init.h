@@ -18,16 +18,45 @@
   #define LCD_90_PERCENT   90
   #define LCD_100_PERCENT  100
 
+  #define LCD_DIM_5_SECONDS   5    // Seconds
+  #define LCD_DIM_10_SECONDS  10   // Seconds
+  #define LCD_DIM_30_SECONDS  30   // Seconds
+  #define LCD_DIM_60_SECONDS  60   // Seconds
+  #define LCD_DIM_120_SECONDS 120  // Seconds
+  #define LCD_DIM_300_SECONDS 300  // Seconds
+  /*
+   // Custom value, will be predefined in configuration.h
+   #define LCD_DIM_CUSTOM_SECONDS LCD_DIM_5_SECONDS
+  */
+
+  typedef struct 
+  {
+    uint32_t timer_idle;
+    bool     timer_reset;
+    bool     _last_dim_state;
+  } LCD_AUTO_DIM;
+  extern LCD_AUTO_DIM lcd_dim;
+  
+  #define ITEM_SECONDS_NUM 7
   #define ITEM_BRIGHTNESS_NUM 11
+  
+  extern const uint32_t LCD_DIM_TIMER[ITEM_SECONDS_NUM];
+  extern const LABEL itemDimmTime[ITEM_SECONDS_NUM];
+
   extern const  uint32_t LCD_BRIGHTNESS[ITEM_BRIGHTNESS_NUM];
   extern const LABEL itemBrightness[ITEM_BRIGHTNESS_NUM];
+  
+  void LCD_Dimmer_init();
+  void LCD_Dim_timer();
   void LCD_LED_PWM_Init();
+
   #if defined(TFT35_V1_2) || defined(TFT35_V2_0) || defined(TFT35_V3_0)
-  #define Set_LCD_Brightness(level) TIM4->CCR1= (uint32_t)(level * (F_CPUM/100));
+    #define Set_LCD_Brightness(level) TIM4->CCR1= (uint32_t)(level * (F_CPUM/100));
   #else
     #define Set_LCD_Brightness(level) ;
   #endif
-#endif
+#endif //LCD_LED_PIN
+
 //TFT35 V1.0 V1.1 RM68042 8bit
 //TFT35 V1.2 ili9488 16bit
 //TFT28 TFT24 ili9341 16bit

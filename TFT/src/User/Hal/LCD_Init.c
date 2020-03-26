@@ -4,6 +4,8 @@
 
 
 #ifdef LCD_LED_PIN
+LCD_AUTO_DIM lcd_dim;
+
 void LCD_LED_On()
 {
   GPIO_SetLevel(LCD_LED_PIN, 1);
@@ -40,6 +42,50 @@ const LABEL itemBrightness[ITEM_BRIGHTNESS_NUM] = {
   LABEL_90_PERCENT,
   LABEL_100_PERCENT
 };
+
+const LABEL itemDimmTime[ITEM_SECONDS_NUM] = {
+  //item value text(only for custom value)
+  LABEL_5_SECONDS,
+  LABEL_10_SECONDS,
+  LABEL_30_SECONDS,
+  LABEL_60_SECONDS,
+  LABEL_120_SECONDS,
+  LABEL_300_SECONDS,
+  LABEL_CUSTOM_SECONDS
+};
+const  uint32_t LCD_DIM_TIMER[ITEM_SECONDS_NUM] = {
+  LCD_DIM_5_SECONDS,
+  LCD_DIM_10_SECONDS,
+  LCD_DIM_30_SECONDS,
+  LCD_DIM_60_SECONDS,
+  LCD_DIM_120_SECONDS,
+  LCD_DIM_300_SECONDS,
+  LCD_DIM_CUSTOM_SECONDS
+};
+
+
+void LCD_Dimmer_init()
+{
+ lcd_dim.timer_idle= 0; // start with no idle!
+ lcd_dim._last_dim_state= false;
+ lcd_dim.timer_reset= false;
+}
+
+void LCD_Dim_timer(){
+  if(lcd_dim.timer_idle >= (LCD_DIM_TIMER[infoSettings.lcd_idle_timer] * 1000) ) {
+    Set_LCD_Brightness( LCD_BRIGHTNESS[infoSettings.lcd_idle_brightness] );
+    lcd_dim._last_dim_state= true;
+  } else lcd_dim.timer_idle++; 
+
+  if (lcd_dim.timer_reset) {
+    if(lcd_dim._last_dim_state) {
+      Set_LCD_Brightness( LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
+      lcd_dim._last_dim_state= false;
+    }
+    lcd_dim.timer_reset= false;
+    lcd_dim.timer_idle= 0;
+  }
+}
 
 void LCD_LED_PWM_Init()
 {
@@ -615,6 +661,7 @@ void LCD_Init(void)
   LCD_LED_Init();
   LCD_LED_On();
   LCD_LED_PWM_Init();
+  LCD_Dimmer_init();
 #endif
 
 #ifdef STM32_HAS_FSMC

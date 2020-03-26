@@ -166,5 +166,14 @@
     #define DE_INFO                     "\u0884 Info" //Info Sign
     #define DE_LCD_BRIGHTNESS           "LCD Helligkeit"
     #define DE_EMERGENCYPARSER          "EMERGENCY_PARSER is not enable in your Printer's firmware. Some features may not work properly."
+    #define DE_LCD_BRIGHTNESS_DIM      "LCD Abdunkel Helligkeit"
+    #define DE_LCD_DIM_TIMER            "LCD Timer Abdunkeln"
+    #define DE_5_SECONDS                "5 Sek."
+    #define DE_10_SECONDS               "10 Sek."
+    #define DE_30_SECONDS               "30 Sek."
+    #define DE_60_SECONDS               "1 Min."
+    #define DE_120_SECONDS              "2 Min."
+    #define DE_300_SECONDS              "5 Min."
+    #define DE_CUSTOM_SECONDS           "Benutz."
 
 #endif

@@ -68,6 +68,8 @@ typedef enum
   #endif
   SKEY_RESET_SETTINGS,
   SKEY_LCD_BRIGHTNESS,
+  SKEY_LCD_BRIGTHNESS_DIM,
+  SKEY_LCD_DIM_TIMER,
   SKEY_COUNT //keep this always at the end
 }SKEY_LIST;
 
@@ -98,6 +100,8 @@ LISTITEM settingPage[SKEY_COUNT] = {
   #endif
   {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_SETTINGS,           LABEL_RESET},
   {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_LCD_BRIGHTNESS,     LABEL_100_PERCENT},
+  {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_LCD_BRIGHTNESS_DIM, LABEL_100_PERCENT},
+  {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_LCD_DIM_TIMER,       LABEL_60_SECONDS}
 };
 
 void menuResetSettings(void)
@@ -248,7 +252,21 @@ void updateFeatureSettings(uint8_t key_val)
     Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness])
     menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
     break;
-    #endif
+
+    case SKEY_LCD_BRIGTHNESS_DIM:
+    infoSettings.lcd_idle_brightness = (infoSettings.lcd_idle_brightness + 1) % ITEM_BRIGHTNESS_NUM;
+    settingPage[item_index].valueLabel = itemBrightness[infoSettings.lcd_idle_brightness];
+    featureSettingsItems.items[key_val] = settingPage[item_index];
+    menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
+    break;
+
+    case SKEY_LCD_DIM_TIMER:
+    infoSettings.lcd_idle_timer = (infoSettings.lcd_idle_timer + 1) % ITEM_SECONDS_NUM;
+    settingPage[item_index].valueLabel = itemDimmTime[infoSettings.lcd_idle_timer];
+    featureSettingsItems.items[key_val] = settingPage[item_index];
+    menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
+    break;
+    #endif //LCD_LED_PIN
 
   default:
     break;
@@ -336,7 +354,16 @@ void loadFeatureSettings(){
         settingPage[item_index].valueLabel = itemBrightness[infoSettings.lcd_brightness];
         featureSettingsItems.items[i] = settingPage[item_index];
         break;
-      #endif
+      
+      case SKEY_LCD_BRIGTHNESS_DIM:
+        settingPage[item_index].valueLabel = itemBrightness[infoSettings.lcd_idle_brightness];
+        featureSettingsItems.items[i] = settingPage[item_index];
+        break;
+      case SKEY_LCD_DIM_TIMER:
+        settingPage[item_index].valueLabel = itemDimmTime[infoSettings.lcd_idle_timer];
+        featureSettingsItems.items[i] = settingPage[item_index];
+        break;
+      #endif //LCD_LED_PIN
       default:
         featureSettingsItems.items[i].icon = ICONCHAR_BACKGROUND;
       break;

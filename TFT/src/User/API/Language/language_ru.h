@@ -166,5 +166,14 @@
     #define RU_INFO                     "\u0884 Информация" //Info Sign
     #define RU_LCD_BRIGHTNESS           "LCD яркость"
     #define RU_EMERGENCYPARSER          "EMERGENCY_PARSER is not enable in your Printer's firmware. Some features may not work properly."
+    #define RU_LCD_BRIGHTNESS_DIM       "LCD Brightness dim"
+    #define RU_LCD_DIM_TIMER            "LCD dimm timer"
+    #define RU_5_SECONDS                "5 Sec."
+    #define RU_10_SECONDS               "10 Sec."
+    #define RU_30_SECONDS               "30 Sec."
+    #define RU_60_SECONDS               "1 Min."
+    #define RU_120_SECONDS              "2 Min."
+    #define RU_300_SECONDS              "5 Min."
+    #define RU_CUSTOM_SECONDS           "Custom"
 
 #endif

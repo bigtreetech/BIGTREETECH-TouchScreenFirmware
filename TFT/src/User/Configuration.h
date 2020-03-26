@@ -29,15 +29,22 @@
 #define KEEP_KNOB_LED_COLOR_MARLIN_MODE  // Keeps the LED state in Marlin Mode
 
 /**
- * Default LCD Brightness
+ * Default LCD Brightness and LCD IDLE Brightness
  *
- * Options:  LCD_5_PERCENT, LCD_10_PERCENT, LCD_20_PERCENT,
- *           LCD_30_PERCENT, LCD_40_PERCENT, LCD_50_PERCENT,
- *           LCD_60_PERCENT, LCD_70_PERCENT, LCD_80_PERCENT,
- *           LCD_90_PERCENT, LCD_100_PERCENT
+ * Brightness:  LCD_5_PERCENT, LCD_10_PERCENT, LCD_20_PERCENT,
+ *              LCD_30_PERCENT, LCD_40_PERCENT, LCD_50_PERCENT,
+ *              LCD_60_PERCENT, LCD_70_PERCENT, LCD_80_PERCENT,
+ *              LCD_90_PERCENT, LCD_100_PERCENT
+ * Idle Timer:  LCD_DIM_5_SECONDS. LCD_DIM_10_SECONDS, LCD_DIM_30_SECONDS, 
+ *              LCD_DIM_60_SECONDS, LCD_DIM_120_SECONDS, LCD_DIM_300_SECONDS
+ * 
  */
 #ifdef LCD_LED_PIN
   #define DEFAULT_LCD_BRIGHTNESS LCD_100_PERCENT
+  #define DEFAULT_LCD_IDLE_BRIGHTNESS LCD_5_PERCENT
+
+  #define DEFAULT_LCD_IDLE_TIMER      LCD_DIM_60_SECONDS
+  #define LCD_DIM_CUSTOM_SECONDS     600  // Custom value in seconds
 #endif
 
 //===========================================================================

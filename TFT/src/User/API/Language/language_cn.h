@@ -166,5 +166,14 @@
     #define CN_INFO                     "Info"
     #define CN_LCD_BRIGHTNESS           "LCD Brightness"
     #define CN_EMERGENCYPARSER          "EMERGENCY_PARSER is not enable in your Printer's firmware. Some features may not work properly."
+    #define CN_LCD_BRIGHTNESS_DIM       "LCD Brightness dim"
+    #define CN_LCD_DIM_TIMER            "LCD dimm timer"
+    #define CN_5_SECONDS                "5 Sec."
+    #define CN_10_SECONDS               "10 Sec."
+    #define CN_30_SECONDS               "30 Sec."
+    #define CN_60_SECONDS               "1 Min."
+    #define CN_120_SECONDS              "2 Min."
+    #define CN_300_SECONDS              "5 Min."
+    #define CN_CUSTOM_SECONDS           "Custom"
 
 #endif
