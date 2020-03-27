@@ -186,7 +186,7 @@ void parseACK(void)
           updateNextHeatCheckTime();
         }
       }
-      if(ack_seen("X:"))
+      if(ack_seen("X:") && ack_index == 2)
       {
         storegantry(0, ack_value());
         if (ack_seen("Y:"))
