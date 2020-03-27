@@ -37,6 +37,13 @@ enum
   ICON_BACKGROUND
 };
 
+typedef enum{
+BMP_SUCCESS,
+BMP_NOTFOUND,
+BMP_NOT24BIT,
+BMP_INVALIDFILE
+}BMPUPDATE_STAT;
+
 typedef union
 {
 	u16 color;
@@ -48,6 +55,7 @@ typedef union
 }GUI_COLOR;
 
 void scanUpdates(void);
+void dispIconFail(u8 *lbl);
 bool bmpDecode(char *bmp, u32 addr);
 
 #endif

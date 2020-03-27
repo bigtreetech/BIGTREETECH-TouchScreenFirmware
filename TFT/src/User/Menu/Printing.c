@@ -677,6 +677,7 @@ void endPrinting(void)
 
 void completePrinting(void)
 {
+  BUZZER_PLAY(sound_success);
   endPrinting();
   if(infoSettings.auto_off) // Auto shut down after printing
   {

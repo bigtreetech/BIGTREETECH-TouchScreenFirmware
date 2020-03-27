@@ -158,13 +158,20 @@
     #define DE_SEND_END_GCODE       "End-Gcode nach Druck"
     #define DE_PERSISTENT_STATUS_INFO   "Speicherungs-status Information"
     #define DE_FILE_LISTMODE            "Datei-Ansicht als Liste"
-    #define DE_CURRENT_SETTING          "Driver Current Settings"
-    #define DE_STEPS_SETTING            "Steps per MM Settings"
+    #define DE_CURRENT_SETTING          "Driver Current (mA)"
+    #define DE_STEPS_SETTING            "Steps per MM"
+    #define DE_MAXFEEDRATE              "Max Feed Rate"
+    #define DE_MAXACCELERATION          "Max Acceleration"
+    #define DE_ACCELERATION             "Acceleration"
+    #define DE_PRINT_ACCELERATION       "Print Acceleration"
+    #define DE_RETRACT_ACCELERATION     "Retract Acceleration"
+    #define DE_TRAVEL_ACCELERATION      "Travel Acceleration"
+    #define DE_BUMP_SENSITIVITY         "TMC bump sensitivity"
     #define DE_RESET                    "Resetten"
     #define DE_RESET_SETTINGS           "Hiermit werden alle Einstellungen auf Werkseinstellungen zurückgesetzt. Fortfahren?"
     #define DE_RESET_SETTINGS_DONE      "Einstellungen wurden erfolgreich zurückgesetzt. Bitte starten Sie das Gerät neu."
     #define DE_INFO                     "\u0884 Info" //Info Sign
     #define DE_LCD_BRIGHTNESS           "LCD Helligkeit"
-    #define DE_EMERGENCYPARSER          "EMERGENCY_PARSER is not enable in your Printer's firmware. Some features may not work properly."
+    #define DE_EMERGENCYPARSER          "EMERGENCY_PARSER is disabled in Printer Firmware."
 
 #endif
