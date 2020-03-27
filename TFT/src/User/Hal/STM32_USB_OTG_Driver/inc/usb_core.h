@@ -32,16 +32,16 @@
 /** @addtogroup USB_OTG_DRIVER
   * @{
   */
-  
+
 /** @defgroup USB_CORE
   * @brief usb otg driver core layer
   * @{
-  */ 
+  */
 
 
 /** @defgroup USB_CORE_Exported_Defines
   * @{
-  */ 
+  */
 
 #define USB_OTG_EP0_IDLE                          0
 #define USB_OTG_EP0_SETUP                         1
@@ -55,19 +55,19 @@
 #define USB_OTG_EP_TX_STALL     0x0010
 #define USB_OTG_EP_TX_NAK       0x0020
 #define USB_OTG_EP_TX_VALID     0x0030
- 
+
 #define USB_OTG_EP_RX_DIS       0x0000
 #define USB_OTG_EP_RX_STALL     0x1000
 #define USB_OTG_EP_RX_NAK       0x2000
 #define USB_OTG_EP_RX_VALID     0x3000
 /**
   * @}
-  */ 
+  */
 #define   MAX_DATA_LENGTH                        0x200
 
 /** @defgroup USB_CORE_Exported_Types
   * @{
-  */ 
+  */
 
 
 typedef enum {
@@ -82,9 +82,9 @@ typedef enum {
   HC_NAK,
   HC_NYET,
   HC_STALL,
-  HC_XACTERR,  
-  HC_BBLERR,   
-  HC_DATATGLERR,  
+  HC_XACTERR,
+  HC_BBLERR,
+  HC_DATATGLERR,
 }HC_STATUS;
 
 typedef enum {
@@ -101,9 +101,9 @@ typedef enum {
   CTRL_HALTED,
   CTRL_NAK,
   CTRL_STALL,
-  CTRL_XACTERR,  
-  CTRL_BBLERR,   
-  CTRL_DATATGLERR,  
+  CTRL_XACTERR,
+  CTRL_BBLERR,
+  CTRL_DATATGLERR,
   CTRL_FAIL
 }CTRL_STATUS;
 
@@ -114,16 +114,16 @@ typedef struct USB_OTG_hc
   uint8_t       ep_num;
   uint8_t       ep_is_in;
   uint8_t       speed;
-  uint8_t       do_ping;  
+  uint8_t       do_ping;
   uint8_t       ep_type;
   uint16_t      max_packet;
   uint8_t       data_pid;
   uint8_t       *xfer_buff;
   uint32_t      xfer_len;
-  uint32_t      xfer_count;  
+  uint32_t      xfer_count;
   uint8_t       toggle_in;
   uint8_t       toggle_out;
-  uint32_t       dma_addr;  
+  uint32_t       dma_addr;
 }
 USB_OTG_HC , *PUSB_OTG_HC;
 
@@ -131,7 +131,7 @@ typedef struct USB_OTG_ep
 {
   uint8_t        num;
   uint8_t        is_in;
-  uint8_t        is_stall;  
+  uint8_t        is_stall;
   uint8_t        type;
   uint8_t        data_pid_start;
   uint8_t        even_odd_frame;
@@ -139,13 +139,13 @@ typedef struct USB_OTG_ep
   uint32_t       maxpacket;
   /* transaction level variables*/
   uint8_t        *xfer_buff;
-  uint32_t       dma_addr;  
+  uint32_t       dma_addr;
   uint32_t       xfer_len;
   uint32_t       xfer_count;
-  /* Transfer level variables*/  
+  /* Transfer level variables*/
   uint32_t       rem_data_len;
   uint32_t       total_data_len;
-  uint32_t       ctl_data_len;  
+  uint32_t       ctl_data_len;
 
 }
 
@@ -165,34 +165,34 @@ typedef struct USB_OTG_core_cfg
   uint8_t       Sof_output;
   uint8_t       low_power;
   uint8_t       coreID;
- 
+
 }
 USB_OTG_CORE_CFGS, *PUSB_OTG_CORE_CFGS;
 
 
 
 typedef  struct  usb_setup_req {
-    
-    uint8_t   bmRequest;                      
-    uint8_t   bRequest;                           
-    uint16_t  wValue;                             
-    uint16_t  wIndex;                             
-    uint16_t  wLength;                            
+
+    uint8_t   bmRequest;
+    uint8_t   bRequest;
+    uint16_t  wValue;
+    uint16_t  wIndex;
+    uint16_t  wLength;
 } USB_SETUP_REQ;
 
 typedef struct _Device_TypeDef
 {
-  uint8_t  *(*GetDeviceDescriptor)( uint8_t speed , uint16_t *length);  
-  uint8_t  *(*GetLangIDStrDescriptor)( uint8_t speed , uint16_t *length); 
-  uint8_t  *(*GetManufacturerStrDescriptor)( uint8_t speed , uint16_t *length);  
-  uint8_t  *(*GetProductStrDescriptor)( uint8_t speed , uint16_t *length);  
-  uint8_t  *(*GetSerialStrDescriptor)( uint8_t speed , uint16_t *length);  
-  uint8_t  *(*GetConfigurationStrDescriptor)( uint8_t speed , uint16_t *length);  
-  uint8_t  *(*GetInterfaceStrDescriptor)( uint8_t speed , uint16_t *length); 
+  uint8_t  *(*GetDeviceDescriptor)( uint8_t speed , uint16_t *length);
+  uint8_t  *(*GetLangIDStrDescriptor)( uint8_t speed , uint16_t *length);
+  uint8_t  *(*GetManufacturerStrDescriptor)( uint8_t speed , uint16_t *length);
+  uint8_t  *(*GetProductStrDescriptor)( uint8_t speed , uint16_t *length);
+  uint8_t  *(*GetSerialStrDescriptor)( uint8_t speed , uint16_t *length);
+  uint8_t  *(*GetConfigurationStrDescriptor)( uint8_t speed , uint16_t *length);
+  uint8_t  *(*GetInterfaceStrDescriptor)( uint8_t speed , uint16_t *length);
 
 #if (USBD_LPM_ENABLED == 1)
-  uint8_t  *(*GetBOSDescriptor)( uint8_t speed , uint16_t *length); 
-#endif   
+  uint8_t  *(*GetBOSDescriptor)( uint8_t speed , uint16_t *length);
+#endif
 } USBD_DEVICE, *pUSBD_DEVICE;
 
 typedef struct _Device_cb
@@ -200,40 +200,40 @@ typedef struct _Device_cb
   uint8_t  (*Init)         (void *pdev , uint8_t cfgidx);
   uint8_t  (*DeInit)       (void *pdev , uint8_t cfgidx);
  /* Control Endpoints*/
-  uint8_t  (*Setup)        (void *pdev , USB_SETUP_REQ  *req);  
-  uint8_t  (*EP0_TxSent)   (void *pdev );    
-  uint8_t  (*EP0_RxReady)  (void *pdev );  
+  uint8_t  (*Setup)        (void *pdev , USB_SETUP_REQ  *req);
+  uint8_t  (*EP0_TxSent)   (void *pdev );
+  uint8_t  (*EP0_RxReady)  (void *pdev );
   /* Class Specific Endpoints*/
-  uint8_t  (*DataIn)       (void *pdev , uint8_t epnum);   
-  uint8_t  (*DataOut)      (void *pdev , uint8_t epnum); 
-  uint8_t  (*SOF)          (void *pdev); 
-  uint8_t  (*IsoINIncomplete)  (void *pdev); 
-  uint8_t  (*IsoOUTIncomplete)  (void *pdev);   
+  uint8_t  (*DataIn)       (void *pdev , uint8_t epnum);
+  uint8_t  (*DataOut)      (void *pdev , uint8_t epnum);
+  uint8_t  (*SOF)          (void *pdev);
+  uint8_t  (*IsoINIncomplete)  (void *pdev);
+  uint8_t  (*IsoOUTIncomplete)  (void *pdev);
 
-  uint8_t  *(*GetConfigDescriptor)( uint8_t speed , uint16_t *length); 
-#ifdef USB_OTG_HS_CORE 
-  uint8_t  *(*GetOtherConfigDescriptor)( uint8_t speed , uint16_t *length);   
+  uint8_t  *(*GetConfigDescriptor)( uint8_t speed , uint16_t *length);
+#ifdef USB_OTG_HS_CORE
+  uint8_t  *(*GetOtherConfigDescriptor)( uint8_t speed , uint16_t *length);
 #endif
 
-#ifdef USB_SUPPORT_USER_STRING_DESC 
-  uint8_t  *(*GetUsrStrDescriptor)( uint8_t speed ,uint8_t index,  uint16_t *length);   
-#endif  
-  
+#ifdef USB_SUPPORT_USER_STRING_DESC
+  uint8_t  *(*GetUsrStrDescriptor)( uint8_t speed ,uint8_t index,  uint16_t *length);
+#endif
+
 } USBD_Class_cb_TypeDef;
 
 
 
 typedef struct _USBD_USR_PROP
 {
-  void (*Init)(void);   
-  void (*DeviceReset)(uint8_t speed); 
+  void (*Init)(void);
+  void (*DeviceReset)(uint8_t speed);
   void (*DeviceConfigured)(void);
   void (*DeviceSuspended)(void);
-  void (*DeviceResumed)(void);  
-  
-  void (*DeviceConnected)(void);  
-  void (*DeviceDisconnected)(void);    
-  
+  void (*DeviceResumed)(void);
+
+  void (*DeviceConnected)(void);
+  void (*DeviceDisconnected)(void);
+
 }
 USBD_Usr_cb_TypeDef;
 
@@ -244,7 +244,7 @@ typedef struct _DCD
   uint8_t        device_status;
   uint8_t        device_old_status;
   uint8_t        device_address;
-  uint8_t        connection_status;  
+  uint8_t        connection_status;
   uint8_t        test_mode;
   uint32_t       DevRemoteWakeup;
   USB_OTG_EP     in_ep   [USB_OTG_MAX_TX_FIFOS];
@@ -252,7 +252,7 @@ typedef struct _DCD
   uint8_t        setup_packet [8*3];
   USBD_Class_cb_TypeDef         *class_cb;
   USBD_Usr_cb_TypeDef           *usr_cb;
-  USBD_DEVICE                   *usr_device;  
+  USBD_DEVICE                   *usr_device;
   uint8_t        *pConfig_descriptor;
  }
 DCD_DEV , *DCD_PDEV;
@@ -260,12 +260,12 @@ DCD_DEV , *DCD_PDEV;
 
 typedef struct _HCD
 {
-  uint8_t                  Rx_Buffer [MAX_DATA_LENGTH];  
+  uint8_t                  Rx_Buffer [MAX_DATA_LENGTH];
   __IO uint32_t            ConnSts;
   __IO uint32_t            PortEnabled;
   __IO uint32_t            ErrCnt[USB_OTG_MAX_TX_FIFOS];
   __IO uint32_t            XferCnt[USB_OTG_MAX_TX_FIFOS];
-  __IO HC_STATUS           HC_Status[USB_OTG_MAX_TX_FIFOS];  
+  __IO HC_STATUS           HC_Status[USB_OTG_MAX_TX_FIFOS];
   __IO URB_STATE           URB_State[USB_OTG_MAX_TX_FIFOS];
   USB_OTG_HC               hc [USB_OTG_MAX_TX_FIFOS];
   uint16_t                 channel [USB_OTG_MAX_TX_FIFOS];
@@ -276,8 +276,8 @@ HCD_DEV , *USB_OTG_USBH_PDEV;
 typedef struct _OTG
 {
   uint8_t    OTG_State;
-  uint8_t    OTG_PrevState;  
-  uint8_t    OTG_Mode;    
+  uint8_t    OTG_PrevState;
+  uint8_t    OTG_Mode;
 }
 OTG_DEV , *USB_OTG_USBO_PDEV;
 
@@ -299,31 +299,31 @@ USB_OTG_CORE_HANDLE , *PUSB_OTG_CORE_HANDLE;
 
 /**
   * @}
-  */ 
+  */
 
 
 /** @defgroup USB_CORE_Exported_Macros
   * @{
-  */ 
+  */
 
 /**
   * @}
-  */ 
+  */
 
 /** @defgroup USB_CORE_Exported_Variables
   * @{
-  */ 
+  */
 /**
   * @}
-  */ 
+  */
 
 /** @defgroup USB_CORE_Exported_FunctionsPrototype
   * @{
-  */ 
+  */
 
 
 USB_OTG_STS  USB_OTG_CoreInit        (USB_OTG_CORE_HANDLE *pdev);
-USB_OTG_STS  USB_OTG_SelectCore      (USB_OTG_CORE_HANDLE *pdev, 
+USB_OTG_STS  USB_OTG_SelectCore      (USB_OTG_CORE_HANDLE *pdev,
                                       USB_OTG_CORE_ID_TypeDef coreID);
 USB_OTG_STS  USB_OTG_EnableGlobalInt (USB_OTG_CORE_HANDLE *pdev);
 USB_OTG_STS  USB_OTG_DisableGlobalInt(USB_OTG_CORE_HANDLE *pdev);
@@ -389,17 +389,17 @@ uint32_t     USB_OTG_GetEPStatus(USB_OTG_CORE_HANDLE *pdev ,USB_OTG_EP *ep);
 #endif
 /**
   * @}
-  */ 
+  */
 
 #endif  /* __USB_CORE_H__ */
 
 
 /**
   * @}
-  */ 
+  */
 
 /**
   * @}
-  */ 
+  */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 

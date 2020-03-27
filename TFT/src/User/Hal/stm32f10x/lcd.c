@@ -30,7 +30,7 @@ void LCD_GPIO_Config(void)
 
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_InitStructure.GPIO_Mode =  GPIO_Mode_AF_PP;
-  
+
   /*FSMC-D0~D15: PD 14 15 0 1 8 9 10,PE 7 8 9 10 11 12 13 14 15*/
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_14 | GPIO_Pin_15 | GPIO_Pin_0  | GPIO_Pin_1
                               | GPIO_Pin_8  | GPIO_Pin_9  | GPIO_Pin_10;
@@ -93,7 +93,7 @@ void LCD_FSMC_Config(void)
   FSMC_NORSRAMInitStructure.FSMC_ReadWriteTimingStruct = &readWriteTiming;
   FSMC_NORSRAMInitStructure.FSMC_WriteTimingStruct = &writeTiming;
 
-  FSMC_NORSRAMInit(&FSMC_NORSRAMInitStructure); 
+  FSMC_NORSRAMInit(&FSMC_NORSRAMInitStructure);
   /*FSMC Bank1_SRAM Bank */
   FSMC_NORSRAMCmd(FSMC_Bank1_NORSRAM1, ENABLE);
 }
@@ -106,12 +106,12 @@ void LCD_HardwareConfig(void)
 
 #else
 void LCD_WR_REG(u16 data)
-{ 
+{
 	LCD_RS_CLR;
- 	LCD_CS_CLR; 
-	DATAOUT(data); 
-	LCD_WR_CLR; 
-	LCD_WR_SET; 
+ 	LCD_CS_CLR;
+	DATAOUT(data);
+	LCD_WR_CLR;
+	LCD_WR_SET;
  	LCD_CS_SET;
 }
 
@@ -137,7 +137,7 @@ u16 LCD_RD_DATA(void)
   LCD_RD_CLR;
   uint8_t lo_bytes = GPIOE->IDR;
   LCD_RD_SET;
-	LCD_CS_SET; 
+	LCD_CS_SET;
 
   // uint16_t data =(uint16_t)((hi_bytes<<8)+lo_bytes);
   //vu16 ram = data;
@@ -160,15 +160,15 @@ u16 LCD_RD_DATA(void)
 	GPIOC->CRL = 0X33333333; //PC0-7  �������
 	GPIOC->CRH = 0X33333333; //PC8-15 �������
 	GPIOC->ODR = 0XFFFF;    //ȫ�������
-  return ram;  
+  return ram;
   #endif
 }
 
 void LCD_GPIO_Config(void)
 {
-  
+
  #if defined(MKS_32_V1_4)
- 
+
  GPIO_InitTypeDef GPIO_InitStructure;
   /* GPIO Ports Clock Enable */
 
@@ -204,7 +204,7 @@ void LCD_GPIO_Config(void)
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_InitStructure.GPIO_Mode =  GPIO_Mode_Out_PP;
   GPIO_Init(GPIOE, &GPIO_InitStructure);
-  LCD_RD_SET;//set this as we only change it when reading 
+  LCD_RD_SET;//set this as we only change it when reading
 
   #else
 
@@ -218,7 +218,7 @@ void LCD_GPIO_Config(void)
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_All;
   GPIO_Init(GPIOC, &GPIO_InitStructure);
 	GPIO_SetBits(GPIOC, GPIO_Pin_All);
-  
+
   /*
   * PB6   :LCD-RD
   * PB7   :LCD-WR

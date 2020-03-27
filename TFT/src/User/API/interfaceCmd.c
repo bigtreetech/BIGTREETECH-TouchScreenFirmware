@@ -236,23 +236,23 @@ void sendQueueCmd(void)
           case 84:
             coordinateSetClear(false);
             break;
-          
+
           case 27: //M27
             printSetUpdateWaiting(false);
           break;
-          
+
           case 80: //M80
             #ifdef PS_ON_PIN
               PS_ON_On();
             #endif
             break;
-          
+
           case 81: //M81
             #ifdef PS_ON_PIN
               PS_ON_Off();
             #endif
             break;
-          
+
           case 82: //M82
             eSetRelative(false);
             break;
@@ -365,7 +365,7 @@ void sendQueueCmd(void)
               heatSetSendWaiting(BED, false);
             }
             break;
-            
+
           case 220: //M220
             if(cmd_seen('S'))
             {
@@ -379,7 +379,7 @@ void sendQueueCmd(void)
               speedSetSendWaiting(0, false);
             }
             break;
-            
+
           case 221: //M221
             if(cmd_seen('S'))
             {
@@ -436,7 +436,7 @@ void sendQueueCmd(void)
             }
             break;
           }
-          
+
           case 28: //G28
             coordinateSetClear(true);
             break;
@@ -460,7 +460,7 @@ void sendQueueCmd(void)
             for(i=X_AXIS;i<TOTAL_AXIS;i++)
             {
               if(cmd_seen(axis_id[i]))
-              {                       
+              {
                 coordinateSetAxisTarget(i,cmd_float());
               }
             }

@@ -3,41 +3,41 @@
 
 #include "spi.h"
 
-// SD¿¨ÀàÐÍ¶¨Òå
+// SDï¿½ï¿½ï¿½ï¿½ï¿½Í¶ï¿½ï¿½ï¿½
 #define SD_TYPE_ERR     0X00
 #define SD_TYPE_MMC     0X01
 #define SD_TYPE_V1      0X02
 #define SD_TYPE_V2      0X04
 #define SD_TYPE_V2HC    0X06
 
-// SD¿¨Ö¸Áî±í
-#define CMD0    0       //¿¨¸´Î»
+// SDï¿½ï¿½Ö¸ï¿½ï¿½ï¿½
+#define CMD0    0       //ï¿½ï¿½ï¿½ï¿½Î»
 #define CMD1    1
-#define CMD8    8       //ÃüÁî8 £¬SEND_IF_COND
-#define CMD9    9       //ÃüÁî9 £¬¶ÁCSDÊý¾Ý
-#define CMD10   10      //ÃüÁî10£¬¶ÁCIDÊý¾Ý
-#define CMD12   12      //ÃüÁî12£¬Í£Ö¹Êý¾Ý´«Êä
-#define CMD16   16      //ÃüÁî16£¬ÉèÖÃÉÈÇø´óÐ¡ Ó¦·µ»Ø0x00
-#define CMD17   17      //ÃüÁî17£¬¶ÁÉÈÇø
-#define CMD18   18      //ÃüÁî18£¬¶ÁMulti ÉÈÇø
-#define CMD23   23      //ÃüÁî23£¬ÉèÖÃ¶àÉÈÇøÐ´ÈëÇ°Ô¤ÏÈ²Á³ýN¸öblock
-#define CMD24   24      //ÃüÁî24£¬Ð´ÉÈÇø
-#define CMD25   25      //ÃüÁî25£¬Ð´¶à¸öÉÈÇø
-#define CMD41   41      //ÃüÁî41£¬Ó¦·µ»Ø0x00
-#define CMD55   55      //ÃüÁî55£¬Ó¦·µ»Ø0x01
-#define CMD58   58      //ÃüÁî58£¬¶ÁOCRÐÅÏ¢
-#define CMD59   59      //ÃüÁî59£¬Ê¹ÄÜ/½ûÖ¹CRC£¬Ó¦·µ»Ø0x00¡¢
+#define CMD8    8       //ï¿½ï¿½ï¿½ï¿½8 ï¿½ï¿½SEND_IF_COND
+#define CMD9    9       //ï¿½ï¿½ï¿½ï¿½9 ï¿½ï¿½ï¿½ï¿½CSDï¿½ï¿½ï¿½ï¿½
+#define CMD10   10      //ï¿½ï¿½ï¿½ï¿½10ï¿½ï¿½ï¿½ï¿½CIDï¿½ï¿½ï¿½ï¿½
+#define CMD12   12      //ï¿½ï¿½ï¿½ï¿½12ï¿½ï¿½Í£Ö¹ï¿½ï¿½ï¿½Ý´ï¿½ï¿½ï¿½
+#define CMD16   16      //ï¿½ï¿½ï¿½ï¿½16ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡ Ó¦ï¿½ï¿½ï¿½ï¿½0x00
+#define CMD17   17      //ï¿½ï¿½ï¿½ï¿½17ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+#define CMD18   18      //ï¿½ï¿½ï¿½ï¿½18ï¿½ï¿½ï¿½ï¿½Multi ï¿½ï¿½ï¿½ï¿½
+#define CMD23   23      //ï¿½ï¿½ï¿½ï¿½23ï¿½ï¿½ï¿½ï¿½ï¿½Ã¶ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½Ç°Ô¤ï¿½È²ï¿½ï¿½ï¿½Nï¿½ï¿½block
+#define CMD24   24      //ï¿½ï¿½ï¿½ï¿½24ï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½
+#define CMD25   25      //ï¿½ï¿½ï¿½ï¿½25ï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+#define CMD41   41      //ï¿½ï¿½ï¿½ï¿½41ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½0x00
+#define CMD55   55      //ï¿½ï¿½ï¿½ï¿½55ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½0x01
+#define CMD58   58      //ï¿½ï¿½ï¿½ï¿½58ï¿½ï¿½ï¿½ï¿½OCRï¿½ï¿½Ï¢
+#define CMD59   59      //ï¿½ï¿½ï¿½ï¿½59ï¿½ï¿½Ê¹ï¿½ï¿½/ï¿½ï¿½Ö¹CRCï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½0x00ï¿½ï¿½
 
-/*Êý¾ÝÐ´Èë»ØÓ¦×ÖÒâÒå*/
+/*ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
 #define SD_DATA_OK                0x05
 #define SD_DATA_CRC_ERROR         0x0B
 #define SD_DATA_WRITE_ERROR       0x0D
 #define SD_DATA_OTHER_ERROR       0xFF
 
-/*SD¿¨»ØÓ¦±ê¼Ç×Ö*/
-#define SD_RESPONSE_NO_ERROR      0x00   //ÏìÓ¦´íÎó
-#define SD_IN_IDLE_STATE          0x01   //ÏÐÖÃ×´Ì¬
-#define SD_ERASE_RESET            0x02   //²Á³ý¸´Î»
+/*SDï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½*/
+#define SD_RESPONSE_NO_ERROR      0x00   //ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½
+#define SD_IN_IDLE_STATE          0x01   //ï¿½ï¿½ï¿½ï¿½×´Ì¬
+#define SD_ERASE_RESET            0x02   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»
 #define SD_ILLEGAL_COMMAND        0x04
 #define SD_COM_CRC_ERROR          0x08
 #define SD_ERASE_SEQUENCE_ERROR   0x10
@@ -46,15 +46,15 @@
 #define SD_RESPONSE_FAILURE       0xFF
 
 u8 SD_CD_Inserted(void);
-u8 SD_Init(void);							        //³õÊ¼»¯
+u8 SD_Init(void);							        //ï¿½ï¿½Ê¼ï¿½ï¿½
 void SD_DeInit(void);
-u8 SD_ReadDisk(u8*buf,u32 sector,u8 cnt); 	//¶ÁSD¿¨,fatfs/usbµ÷ÓÃ
-u8 SD_WriteDisk(u8*buf,u32 sector,u8 cnt);	//Ð´SD¿¨,fatfs/usbµ÷ÓÃ
+u8 SD_ReadDisk(u8*buf,u32 sector,u8 cnt); 	//ï¿½ï¿½SDï¿½ï¿½,fatfs/usbï¿½ï¿½ï¿½ï¿½
+u8 SD_WriteDisk(u8*buf,u32 sector,u8 cnt);	//Ð´SDï¿½ï¿½,fatfs/usbï¿½ï¿½ï¿½ï¿½
 
-u8 SD_Wait_Ready(void);							    //µÈ´ýSD¿¨×¼±¸
-u8 SD_Get_Ack(u8 Response);					       	//»ñµÃÓ¦´ð
-u32 SD_Get_Sector_Count(void);   					//¶ÁÉÈÇøÊý
-u8 SD_GetCID(u8 *cid_data);                         //¶ÁSD¿¨CID
-u8 SD_GetCSD(u8 *csd_data);                         //¶ÁSD¿¨CSD
+u8 SD_Wait_Ready(void);							    //ï¿½È´ï¿½SDï¿½ï¿½×¼ï¿½ï¿½
+u8 SD_Get_Ack(u8 Response);					       	//ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½
+u32 SD_Get_Sector_Count(void);   					//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+u8 SD_GetCID(u8 *cid_data);                         //ï¿½ï¿½SDï¿½ï¿½CID
+u8 SD_GetCSD(u8 *csd_data);                         //ï¿½ï¿½SDï¿½ï¿½CSD
 
 #endif

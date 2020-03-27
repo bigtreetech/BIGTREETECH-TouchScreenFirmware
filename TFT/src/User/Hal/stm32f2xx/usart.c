@@ -69,7 +69,7 @@ void USART_Config(uint8_t port, uint32_t baud, uint16_t usart_it)
 {
   USART_Protocol_Init(port, baud);
   USART_IRQ_Init(port, usart_it);
-  USART_GPIO_Init(port);   //ËùÓÐ³õÊ¼»¯Íê³Éºó,ÔÙÊ¹ÄÜIO, ·ñÔòÉÏµçºó»á×Ô¶¯·¢ËÍÒ»¸ö 0xFF
+  USART_GPIO_Init(port);   //ï¿½ï¿½ï¿½Ð³ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Éºï¿½,ï¿½ï¿½Ê¹ï¿½ï¿½IO, ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ 0xFF
 }
 
 void USART_DeConfig(uint8_t port)

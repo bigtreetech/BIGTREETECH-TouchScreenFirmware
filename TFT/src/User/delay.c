@@ -5,26 +5,26 @@ static u8 fac_us=0;
 
 void Delay_init(u8 clk)
 {
-  SysTick->CTRL&=0xfffffffb;		//bit2Çå¿Õ£¬Ñ¡Íâ²¿Ê±ÖÓ HCLK/8
-  fac_us=clk/8;									//8·ÖÆµºóµÄÆµÂÊ µ¥Î»M ¼´1us´ÎÊý
-  fac_ms=(u16)fac_us*1000;			// 1msµÄ´ÎÊý ¼´Îª1usµÄ1000±¶
+  SysTick->CTRL&=0xfffffffb;		//bit2ï¿½ï¿½Õ£ï¿½Ñ¡ï¿½â²¿Ê±ï¿½ï¿½ HCLK/8
+  fac_us=clk/8;									//8ï¿½ï¿½Æµï¿½ï¿½ï¿½Æµï¿½ï¿½ ï¿½ï¿½Î»M ï¿½ï¿½1usï¿½ï¿½ï¿½ï¿½
+  fac_ms=(u16)fac_us*1000;			// 1msï¿½Ä´ï¿½ï¿½ï¿½ ï¿½ï¿½Îª1usï¿½ï¿½1000ï¿½ï¿½
 }
 
-void Delay_us(u32 us)					//ÑÓÊ±Ð¡ÓÚ1800*1000us
+void Delay_us(u32 us)					//ï¿½ï¿½Ê±Ð¡ï¿½ï¿½1800*1000us
 {
   u32 temp;
-  SysTick->LOAD=us*fac_us;  		//×°ÔØ´ÎÊý,1us fac_us´Î£¬usÎ¢Ãë us*fac_us´Î
-  SysTick->VAL=0x00;						//Çå¿Õ¼ÆÊýÆ÷
-  SysTick->CTRL=0x01;						//¿ªÊ¼µ¹Êý
+  SysTick->LOAD=us*fac_us;  		//×°ï¿½Ø´ï¿½ï¿½ï¿½,1us fac_usï¿½Î£ï¿½usÎ¢ï¿½ï¿½ us*fac_usï¿½ï¿½
+  SysTick->VAL=0x00;						//ï¿½ï¿½Õ¼ï¿½ï¿½ï¿½ï¿½ï¿½
+  SysTick->CTRL=0x01;						//ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½
   do
   {
     temp=SysTick->CTRL;
-  }while(temp&0x01&&!(temp&(1<<16)));	 	//µÈ´ýÊ±¼äµ½´ï£¨µ¹ÊýÍê³Éºó£¬Ó²¼þ½«SysTick->CTRLµÚ16Î»ÖÃ1£©
-  SysTick->CTRL=0x00;						//¹Ø±Õ¼ÆÊýÆ÷
-  SysTick->VAL=0x00;						//Çå¿Õ¼ÆÊýÆ÷
+  }while(temp&0x01&&!(temp&(1<<16)));	 	//ï¿½È´ï¿½Ê±ï¿½äµ½ï¿½ï£¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Éºï¿½Ó²ï¿½ï¿½ï¿½ï¿½SysTick->CTRLï¿½ï¿½16Î»ï¿½ï¿½1ï¿½ï¿½
+  SysTick->CTRL=0x00;						//ï¿½Ø±Õ¼ï¿½ï¿½ï¿½ï¿½ï¿½
+  SysTick->VAL=0x00;						//ï¿½ï¿½Õ¼ï¿½ï¿½ï¿½ï¿½ï¿½
 }
 
-void Delay_ms(u16 ms)					//ÑÓÊ±Ð¡ÓÚ1800ms
+void Delay_ms(u16 ms)					//ï¿½ï¿½Ê±Ð¡ï¿½ï¿½1800ms
 {
   u32 temp;
   SysTick->LOAD=(u32)ms*fac_ms;

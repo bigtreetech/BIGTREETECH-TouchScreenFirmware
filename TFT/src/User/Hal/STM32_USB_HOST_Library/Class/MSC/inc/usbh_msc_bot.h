@@ -17,7 +17,7 @@
   *                      <http://www.st.com/SLA0044>
   *
   ******************************************************************************
-  */ 
+  */
 
 /* Define to prevent recursive  ----------------------------------------------*/
 #ifndef __USBH_MSC_BOT_H__
@@ -38,16 +38,16 @@
 /** @addtogroup USBH_MSC_CLASS
   * @{
   */
-  
+
 /** @defgroup USBH_MSC_BOT
   * @brief This file is the Header file for usbh_msc_core.c
   * @{
-  */ 
+  */
 
 
 /** @defgroup USBH_MSC_BOT_Exported_Types
   * @{
-  */ 
+  */
 
 typedef union _USBH_CBW_Block
 {
@@ -57,7 +57,7 @@ typedef union _USBH_CBW_Block
     uint32_t CBWTag;
     uint32_t CBWTransferLength;
     uint8_t CBWFlags;
-    uint8_t CBWLUN; 
+    uint8_t CBWLUN;
     uint8_t CBWLength;
     uint8_t CBWCB[16];
 }field;
@@ -66,15 +66,15 @@ typedef union _USBH_CBW_Block
 
 typedef enum
 {
-  USBH_MSC_BOT_INIT_STATE = 0,                
-  USBH_MSC_BOT_RESET,                
-  USBH_MSC_GET_MAX_LUN,              
-  USBH_MSC_TEST_UNIT_READY,          
+  USBH_MSC_BOT_INIT_STATE = 0,
+  USBH_MSC_BOT_RESET,
+  USBH_MSC_GET_MAX_LUN,
+  USBH_MSC_TEST_UNIT_READY,
   USBH_MSC_READ_CAPACITY10,
   USBH_MSC_MODE_SENSE6,
-  USBH_MSC_REQUEST_SENSE,            
-  USBH_MSC_BOT_USB_TRANSFERS,        
-  USBH_MSC_DEFAULT_APPLI_STATE,  
+  USBH_MSC_REQUEST_SENSE,
+  USBH_MSC_BOT_USB_TRANSFERS,
+  USBH_MSC_DEFAULT_APPLI_STATE,
   USBH_MSC_CTRL_ERROR_STATE,
   USBH_MSC_UNRECOVERED_STATE
 }
@@ -110,13 +110,13 @@ typedef union _USBH_CSW_Block
 
 /**
   * @}
-  */ 
+  */
 
 
 
 /** @defgroup USBH_MSC_BOT_Exported_Defines
   * @{
-  */ 
+  */
 #define USBH_MSC_SEND_CBW                 1
 #define USBH_MSC_SENT_CBW                 2
 #define USBH_MSC_BOT_DATAIN_STATE         3
@@ -128,12 +128,12 @@ typedef union _USBH_CSW_Block
 
 
 #define USBH_MSC_BOT_CBW_SIGNATURE        0x43425355
-#define USBH_MSC_BOT_CBW_TAG              0x20304050             
-#define USBH_MSC_BOT_CSW_SIGNATURE        0x53425355           
+#define USBH_MSC_BOT_CBW_TAG              0x20304050
+#define USBH_MSC_BOT_CSW_SIGNATURE        0x53425355
 #define USBH_MSC_CSW_DATA_LENGTH          0x000D
 #define USBH_MSC_BOT_CBW_PACKET_LENGTH    31
-#define USBH_MSC_CSW_LENGTH               13  
-#define USBH_MSC_CSW_MAX_LENGTH           63     
+#define USBH_MSC_CSW_LENGTH               13
+#define USBH_MSC_CSW_MAX_LENGTH           63
 
 /* CSW Status Definitions */
 #define USBH_MSC_CSW_CMD_PASSED           0x00
@@ -158,53 +158,49 @@ typedef union _USBH_CSW_Block
 #define USB_REQ_BOT_RESET                0xFF
 #define USB_REQ_GET_MAX_LUN              0xFE
 
-#define MAX_BULK_STALL_COUNT_LIMIT       0x04   /* If STALL is seen on Bulk 
-                                         Endpoint continuously, this means 
+#define MAX_BULK_STALL_COUNT_LIMIT       0x04   /* If STALL is seen on Bulk
+                                         Endpoint continuously, this means
                                          that device and Host has phase error
                                          Hence a Reset is needed */
 
 /**
   * @}
-  */ 
+  */
 
 /** @defgroup USBH_MSC_BOT_Exported_Macros
   * @{
-  */ 
+  */
 /**
   * @}
-  */ 
+  */
 
 /** @defgroup USBH_MSC_BOT_Exported_Variables
   * @{
-  */ 
+  */
 extern USBH_BOTXfer_TypeDef USBH_MSC_BOTXferParam;
 extern HostCBWPkt_TypeDef USBH_MSC_CBWData;
 extern HostCSWPkt_TypeDef USBH_MSC_CSWData;
 /**
   * @}
-  */ 
+  */
 
 /** @defgroup USBH_MSC_BOT_Exported_FunctionsPrototype
   * @{
-  */ 
+  */
 void USBH_MSC_HandleBOTXfer(USB_OTG_CORE_HANDLE *pdev,
                             USBH_HOST *phost);
 uint8_t USBH_MSC_DecodeCSW(USB_OTG_CORE_HANDLE *pdev,
                            USBH_HOST *phost);
 void USBH_MSC_Init(USB_OTG_CORE_HANDLE *pdev);
-USBH_Status USBH_MSC_BOT_Abort(USB_OTG_CORE_HANDLE *pdev, 
+USBH_Status USBH_MSC_BOT_Abort(USB_OTG_CORE_HANDLE *pdev,
                                USBH_HOST *phost,
                                uint8_t direction);
 /**
   * @}
-  */ 
+  */
 
 #endif  //__USBH_MSC_BOT_H__
 
-
-/**
-  * @}
-  */ 
 
 /**
   * @}
@@ -212,7 +208,11 @@ USBH_Status USBH_MSC_BOT_Abort(USB_OTG_CORE_HANDLE *pdev,
 
 /**
   * @}
-  */ 
+  */
+
+/**
+  * @}
+  */
 
 /**
   * @}

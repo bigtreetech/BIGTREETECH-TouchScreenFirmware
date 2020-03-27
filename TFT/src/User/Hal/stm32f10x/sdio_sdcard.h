@@ -3,7 +3,7 @@
 #include "stm32f10x.h"
 
 
-//SDIOÏà¹Ø±êÖ¾Î»
+//SDIOï¿½ï¿½Ø±ï¿½Ö¾Î»
 #define SDIO_FLAG_CCRCFAIL                  ((uint32_t)0x00000001)
 #define SDIO_FLAG_DCRCFAIL                  ((uint32_t)0x00000002)
 #define SDIO_FLAG_CTIMEOUT                  ((uint32_t)0x00000004)
@@ -30,23 +30,23 @@
 #define SDIO_FLAG_CEATAEND                  ((uint32_t)0x00800000)
 
 
-//ÓÃ»§ÅäÖÃÇø
-//SDIOÊ±ÖÓ¼ÆËã¹«Ê½:SDIO_CKÊ±ÖÓ=SDIOCLK/[clkdiv+2];ÆäÖÐ,SDIOCLKÒ»°ãÎª72Mhz
-//Ê¹ÓÃDMAÄ£Ê½µÄÊ±ºò,´«ÊäËÙÂÊ¿ÉÒÔµ½24Mhz,²»¹ýÈç¹ûÄãµÄ¿¨²»ÊÇ¸ßËÙ¿¨,¿ÉÄÜÒ²»á³ö´í
-//³ö´í¾ÍÇë½µµÍÊ±ÖÓ,Ê¹ÓÃ²éÑ¯Ä£Ê½µÄ»°,ÍÆ¼öSDIO_TRANSFER_CLK_DIVÉèÖÃÎª3»òÕß¸ü´ó
-#define SDIO_INIT_CLK_DIV        0xB2 		//SDIO³õÊ¼»¯ÆµÂÊ£¬×î´ó400Kh
-#define SDIO_TRANSFER_CLK_DIV    0x04		//SDIO´«ÊäÆµÂÊ,¸ÃÖµÌ«Ð¡¿ÉÄÜ»áµ¼ÖÂ¶ÁÐ´ÎÄ¼þ³ö´í
+//ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+//SDIOÊ±ï¿½Ó¼ï¿½ï¿½ã¹«Ê½:SDIO_CKÊ±ï¿½ï¿½=SDIOCLK/[clkdiv+2];ï¿½ï¿½ï¿½ï¿½,SDIOCLKÒ»ï¿½ï¿½Îª72Mhz
+//Ê¹ï¿½ï¿½DMAÄ£Ê½ï¿½ï¿½Ê±ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¿ï¿½ï¿½Ôµï¿½24Mhz,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½Ç¸ï¿½ï¿½Ù¿ï¿½,ï¿½ï¿½ï¿½ï¿½Ò²ï¿½ï¿½ï¿½ï¿½ï¿½
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ë½µï¿½ï¿½Ê±ï¿½ï¿½,Ê¹ï¿½Ã²ï¿½Ñ¯Ä£Ê½ï¿½Ä»ï¿½,ï¿½Æ¼ï¿½SDIO_TRANSFER_CLK_DIVï¿½ï¿½ï¿½ï¿½Îª3ï¿½ï¿½ï¿½ß¸ï¿½ï¿½ï¿½
+#define SDIO_INIT_CLK_DIV        0xB2 		//SDIOï¿½ï¿½Ê¼ï¿½ï¿½Æµï¿½Ê£ï¿½ï¿½ï¿½ï¿½400Kh
+#define SDIO_TRANSFER_CLK_DIV    0x04		//SDIOï¿½ï¿½ï¿½ï¿½Æµï¿½ï¿½,ï¿½ï¿½ÖµÌ«Ð¡ï¿½ï¿½ï¿½Ü»áµ¼ï¿½Â¶ï¿½Ð´ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-//SDIO¹¤×÷Ä£Ê½¶¨Òå,Í¨¹ýSD_SetDeviceModeº¯ÊýÉèÖÃ.
-#define SD_POLLING_MODE    	0  	//²éÑ¯Ä£Ê½,¸ÃÄ£Ê½ÏÂ,Èç¹û¶ÁÐ´ÓÐÎÊÌâ,½¨ÒéÔö´óSDIO_TRANSFER_CLK_DIVµÄÉèÖÃ.
-#define SD_DMA_MODE    		1	//DMAÄ£Ê½,¸ÃÄ£Ê½ÏÂ,Èç¹û¶ÁÐ´ÓÐÎÊÌâ,½¨ÒéÔö´óSDIO_TRANSFER_CLK_DIVµÄÉèÖÃ.
+//SDIOï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½ï¿½ï¿½,Í¨ï¿½ï¿½SD_SetDeviceModeï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
+#define SD_POLLING_MODE    	0  	//ï¿½ï¿½Ñ¯Ä£Ê½,ï¿½ï¿½Ä£Ê½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½SDIO_TRANSFER_CLK_DIVï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
+#define SD_DMA_MODE    		1	//DMAÄ£Ê½,ï¿½ï¿½Ä£Ê½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½SDIO_TRANSFER_CLK_DIVï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
 
-//SDIO ¸÷ÖÖ´íÎóÃ¶¾Ù¶¨Òå
+//SDIO ï¿½ï¿½ï¿½Ö´ï¿½ï¿½ï¿½Ã¶ï¿½Ù¶ï¿½ï¿½ï¿½
 typedef enum
 {
-	//ÌØÊâ´íÎó¶¨Òå
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	SD_CMD_CRC_FAIL                    = (1), /*!< Command response received (but CRC check failed) */
 	SD_DATA_CRC_FAIL                   = (2), /*!< Data bock sent/received (CRC check Failed) */
 	SD_CMD_RSP_TIMEOUT                 = (3), /*!< Command response timeout */
@@ -80,7 +80,7 @@ typedef enum
 	SD_SDIO_FUNCTION_BUSY              = (31),
 	SD_SDIO_FUNCTION_FAILED            = (32),
 	SD_SDIO_UNKNOWN_FUNCTION           = (33),
-	//±ê×¼´íÎó¶¨Òå
+	//ï¿½ï¿½×¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	SD_INTERNAL_ERROR,
 	SD_NOT_CONFIGURED,
 	SD_REQUEST_PENDING,
@@ -92,7 +92,7 @@ typedef enum
 	SD_OK = 0
 } SD_Error;
 
-//SD¿¨CSD¼Ä´æÆ÷Êý¾Ý
+//SDï¿½ï¿½CSDï¿½Ä´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 typedef struct
 {
 	u8  CSDStruct;            /*!< CSD structure */
@@ -134,7 +134,7 @@ typedef struct
 	u8  Reserved4;            /*!< always 1*/
 } SD_CSD;
 
-//SD¿¨CID¼Ä´æÆ÷Êý¾Ý
+//SDï¿½ï¿½CIDï¿½Ä´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 typedef struct
 {
 	u8  ManufacturerID;       /*!< ManufacturerID */
@@ -148,7 +148,7 @@ typedef struct
 	u8  CID_CRC;              /*!< CID CRC */
 	u8  Reserved2;            /*!< always 1 */
 } SD_CID;
-//SD¿¨×´Ì¬
+//SDï¿½ï¿½×´Ì¬
 typedef enum
 {
 	SD_CARD_READY                  = ((uint32_t)0x00000001),
@@ -162,19 +162,19 @@ typedef enum
 	SD_CARD_ERROR                  = ((uint32_t)0x000000FF)
 }SDCardState;
 
-//SD¿¨ÐÅÏ¢,°üÀ¨CSD,CIDµÈÊý¾Ý
+//SDï¿½ï¿½ï¿½ï¿½Ï¢,ï¿½ï¿½ï¿½ï¿½CSD,CIDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 typedef struct
 {
   SD_CSD SD_csd;
   SD_CID SD_cid;
-  long long CardCapacity;  	//SD¿¨ÈÝÁ¿,µ¥Î»:×Ö½Ú,×î´óÖ§³Ö2^64×Ö½Ú´óÐ¡µÄ¿¨.
-  u32 CardBlockSize; 		//SD¿¨¿é´óÐ¡
-  u16 RCA;					//¿¨Ïà¶ÔµØÖ·
-  u8 CardType;				//¿¨ÀàÐÍ
+  long long CardCapacity;  	//SDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½Î»:ï¿½Ö½ï¿½,ï¿½ï¿½ï¿½Ö§ï¿½ï¿½2^64ï¿½Ö½Ú´ï¿½Ð¡ï¿½Ä¿ï¿½.
+  u32 CardBlockSize; 		//SDï¿½ï¿½ï¿½ï¿½ï¿½Ð¡
+  u16 RCA;					//ï¿½ï¿½ï¿½ï¿½Ôµï¿½Ö·
+  u8 CardType;				//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 } SD_CardInfo;
-extern SD_CardInfo SDCardInfo;//SD¿¨ÐÅÏ¢
+extern SD_CardInfo SDCardInfo;//SDï¿½ï¿½ï¿½ï¿½Ï¢
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-//SDIO Ö¸Áî¼¯
+//SDIO Ö¸ï¿½î¼¯
 #define SD_CMD_GO_IDLE_STATE                       ((u8)0)
 #define SD_CMD_SEND_OP_COND                        ((u8)1)
 #define SD_CMD_ALL_SEND_CID                        ((u8)2)
@@ -224,7 +224,7 @@ extern SD_CardInfo SDCardInfo;//SD¿¨ÐÅÏ¢
 
 /**
   * @brief Following commands are SD Card Specific commands.
-  *        SDIO_APP_CMD £ºCMD55 should be sent before sending these commands.
+  *        SDIO_APP_CMD ï¿½ï¿½CMD55 should be sent before sending these commands.
   */
 #define SD_CMD_APP_SD_SET_BUSWIDTH                 ((u8)6)  /*!< For SD Card only */
 #define SD_CMD_SD_APP_STAUS                        ((u8)13) /*!< For SD Card only */
@@ -251,7 +251,7 @@ extern SD_CardInfo SDCardInfo;//SD¿¨ÐÅÏ¢
 #define SD_CMD_SD_APP_CHANGE_SECURE_AREA           ((u8)49) /*!< For SD Card only */
 #define SD_CMD_SD_APP_SECURE_WRITE_MKB             ((u8)48) /*!< For SD Card only */
 
-//Ö§³ÖµÄSD¿¨¶¨Òå
+//Ö§ï¿½Öµï¿½SDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 #define SDIO_STD_CAPACITY_SD_CARD_V1_1             ((u32)0x00000000)
 #define SDIO_STD_CAPACITY_SD_CARD_V2_0             ((u32)0x00000001)
 #define SDIO_HIGH_CAPACITY_SD_CARD                 ((u32)0x00000002)
@@ -261,7 +261,7 @@ extern SD_CardInfo SDCardInfo;//SD¿¨ÐÅÏ¢
 #define SDIO_SECURE_DIGITAL_IO_COMBO_CARD          ((u32)0x00000006)
 #define SDIO_HIGH_CAPACITY_MMC_CARD                ((u32)0x00000007)
 
-//SDIOÏà¹Ø²ÎÊý¶¨Òå
+//SDIOï¿½ï¿½Ø²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 #define NULL 0
 #define SDIO_STATIC_FLAGS               ((u32)0x000005FF)
 #define SDIO_CMD0TIMEOUT                ((u32)0x00010000)
@@ -324,17 +324,17 @@ extern SD_CardInfo SDCardInfo;//SD¿¨ÐÅÏ¢
 #define SD_CCCC_WRITE_PROT              ((u32)0x00000040)
 #define SD_CCCC_ERASE                   ((u32)0x00000020)
 
-//CMD8Ö¸Áî
+//CMD8Ö¸ï¿½ï¿½
 #define SDIO_SEND_IF_COND               ((u32)0x00000008)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-//¹Ø±ÕËùÓÐÖÐ¶Ï
+//ï¿½Ø±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½
 #define INTX_DISABLE()	__ASM volatile("cpsid i")
-//¿ªÆôËùÓÐÖÐ¶Ï
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½
 #define INTX_ENABLE()	__ASM volatile("cpsie i")
 
-//Ïà¹Øº¯Êý¶¨Òå
+//ï¿½ï¿½Øºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 uint8_t SD_CD_Inserted(void);
 SD_Error SD_Init(void);
 void SD_DeInit(void);
@@ -367,7 +367,7 @@ SD_Error FindSCR(u16 rca,u32 *pscr);
 u8 convert_from_bytes_to_power_of_two(u16 NumberOfBytes);
 void SD_DMA_Config(u32*mbuf,u32 bufsize,u8 dir);
 
-u8 SD_ReadDisk(u8*buf,u32 sector,u8 cnt); 	//¶ÁSD¿¨,fatfs/usbµ÷ÓÃ
-u8 SD_WriteDisk(u8*buf,u32 sector,u8 cnt);	//Ð´SD¿¨,fatfs/usbµ÷ÓÃ
+u8 SD_ReadDisk(u8*buf,u32 sector,u8 cnt); 	//ï¿½ï¿½SDï¿½ï¿½,fatfs/usbï¿½ï¿½ï¿½ï¿½
+u8 SD_WriteDisk(u8*buf,u32 sector,u8 cnt);	//Ð´SDï¿½ï¿½,fatfs/usbï¿½ï¿½ï¿½ï¿½
 
 #endif

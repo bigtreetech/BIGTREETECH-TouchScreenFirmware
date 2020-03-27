@@ -37,21 +37,21 @@
 //16bits, SPI_RX to LCD_RAM.
 void LCD_DMA_Config(void)
 {
-  RCC->AHB1ENR |= W25QXX_SPI_DMA_RCC_AHB;				//¿ªÆôDMAÊ±ÖÓ
-  Delay_ms(5);					//µÈ´ýDMAÊ±ÖÓÎÈ¶¨
-  W25QXX_SPI_DMA_STREAM->PAR = (u32)&W25QXX_SPI_NUM->DR;			//ÍâÉèµØÖ·Îª:SPI->DR
-  W25QXX_SPI_DMA_STREAM->M0AR = (u32)&LCD->LCD_RAM;//Ä¿±êµØÖ·ÎªLCD_RAM
+  RCC->AHB1ENR |= W25QXX_SPI_DMA_RCC_AHB;				//ï¿½ï¿½ï¿½ï¿½DMAÊ±ï¿½ï¿½
+  Delay_ms(5);					//ï¿½È´ï¿½DMAÊ±ï¿½ï¿½ï¿½È¶ï¿½
+  W25QXX_SPI_DMA_STREAM->PAR = (u32)&W25QXX_SPI_NUM->DR;			//ï¿½ï¿½ï¿½ï¿½ï¿½Ö·Îª:SPI->DR
+  W25QXX_SPI_DMA_STREAM->M0AR = (u32)&LCD->LCD_RAM;//Ä¿ï¿½ï¿½ï¿½Ö·ÎªLCD_RAM
 //  W25QXX_SPI_DMA_STREAM->M1AR = 0; // (used in case of Double buffer mode)
 //  W25QXX_SPI_DMA_CHANNEL->CMAR =
-  W25QXX_SPI_DMA_STREAM->NDTR = 0;			// DMA,´«ÊäÊý¾ÝÁ¿,ÔÝÊ±ÉèÖÃÎª0
+  W25QXX_SPI_DMA_STREAM->NDTR = 0;			// DMA,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½Îª0
 
   W25QXX_SPI_DMA_STREAM->CR = W25QXX_SPI_DMA_CHANNEL << 25;
   W25QXX_SPI_DMA_STREAM->CR |= 1<<16;  // Priority level: Medium
-  W25QXX_SPI_DMA_STREAM->CR |= LCD_DATA_16BIT<<13;  //´æ´¢Æ÷Êý¾Ý¿í¶È16Î»
-  W25QXX_SPI_DMA_STREAM->CR |= LCD_DATA_16BIT<<11;  //ÍâÉèÊý¾Ý¿í¶ÈÎª16Î»
-  W25QXX_SPI_DMA_STREAM->CR |= 0<<10;  //´æ´¢Æ÷·ÇÔöÁ¿Ä£Ê½
-  W25QXX_SPI_DMA_STREAM->CR |= 0<<9;   //ÍâÉèµØÖ··ÇÔöÁ¿Ä£Ê½
-  W25QXX_SPI_DMA_STREAM->CR |= 0<<6;   //·Ç´æ´¢Æ÷µ½´æ´¢Æ÷Ä£Ê½
+  W25QXX_SPI_DMA_STREAM->CR |= LCD_DATA_16BIT<<13;  //ï¿½æ´¢ï¿½ï¿½ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½ï¿½16Î»
+  W25QXX_SPI_DMA_STREAM->CR |= LCD_DATA_16BIT<<11;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½ï¿½Îª16Î»
+  W25QXX_SPI_DMA_STREAM->CR |= 0<<10;  //ï¿½æ´¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½
+  W25QXX_SPI_DMA_STREAM->CR |= 0<<9;   //ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½
+  W25QXX_SPI_DMA_STREAM->CR |= 0<<6;   //ï¿½Ç´æ´¢ï¿½ï¿½ï¿½ï¿½ï¿½æ´¢ï¿½ï¿½Ä£Ê½
 }
 
 #define LCD_DMA_MAX_TRANS	65535		//DMA 65535 bytes one frame

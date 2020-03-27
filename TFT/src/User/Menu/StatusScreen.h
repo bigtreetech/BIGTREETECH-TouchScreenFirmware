@@ -25,7 +25,7 @@ float getAxisLocation(uint8_t n);
 void gantry_dec(int n, float val);
 void gantry_inc(int n, float val);
 //LCD resolution, font and icon size
-#if defined(TFT35_V1_0) || defined(TFT35_V1_1) || defined(TFT35_V1_2) || defined(TFT35_V2_0) || defined(TFT35_V3_0) 
+#if defined(TFT35_V1_0) || defined(TFT35_V1_1) || defined(TFT35_V1_2) || defined(TFT35_V2_0) || defined(TFT35_V3_0)
 
   #define SSICON_VAL_Y0           63
   //#define  statusicon_val_charcount  7

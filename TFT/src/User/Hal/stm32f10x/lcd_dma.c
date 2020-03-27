@@ -31,20 +31,20 @@
 //16bits, SPI_RX to LCD_RAM.
 void LCD_DMA_Config(void)
 {
-  RCC->AHBENR |= W25QXX_SPI_DMA_RCC_AHB;				//¿ªÆôDMAÊ±ÖÓ
-  Delay_ms(5);					//µÈ´ýDMAÊ±ÖÓÎÈ¶¨
-  W25QXX_SPI_DMA_CHANNEL->CPAR = (u32)&W25QXX_SPI_NUM->DR;			//ÍâÉèµØÖ·Îª:SPI->DR
-  W25QXX_SPI_DMA_CHANNEL->CMAR = (u32)&LCD->LCD_RAM;//Ä¿±êµØÖ·ÎªLCD_RAM
-  W25QXX_SPI_DMA_CHANNEL->CNDTR = 0;			//DMA1,´«ÊäÊý¾ÝÁ¿,ÔÝÊ±ÉèÖÃÎª0
-  W25QXX_SPI_DMA_CHANNEL->CCR = 0X00000000;	//¸´Î»
-  W25QXX_SPI_DMA_CHANNEL->CCR |= 0<<4;		//´ÓÍâÉè¶Á
-  W25QXX_SPI_DMA_CHANNEL->CCR |= 0<<5;		//ÆÕÍ¨Ä£Ê½
-  W25QXX_SPI_DMA_CHANNEL->CCR |= 0<<6;		//ÍâÉèµØÖ··ÇÔöÁ¿Ä£Ê½
-  W25QXX_SPI_DMA_CHANNEL->CCR |= 0<<7;		//´æ´¢Æ÷·ÇÔöÁ¿Ä£Ê½
-  W25QXX_SPI_DMA_CHANNEL->CCR |= LCD_DATA_16BIT<<8;		//ÍâÉèÊý¾Ý¿í¶ÈÎª16Î»
-  W25QXX_SPI_DMA_CHANNEL->CCR |= LCD_DATA_16BIT<<10;		//´æ´¢Æ÷Êý¾Ý¿í¶È16Î»
-  W25QXX_SPI_DMA_CHANNEL->CCR |= 1<<12;		//ÖÐµÈÓÅÏÈ¼¶
-  W25QXX_SPI_DMA_CHANNEL->CCR |= 0<<14;		//·Ç´æ´¢Æ÷µ½´æ´¢Æ÷Ä£Ê½
+  RCC->AHBENR |= W25QXX_SPI_DMA_RCC_AHB;				//ï¿½ï¿½ï¿½ï¿½DMAÊ±ï¿½ï¿½
+  Delay_ms(5);					//ï¿½È´ï¿½DMAÊ±ï¿½ï¿½ï¿½È¶ï¿½
+  W25QXX_SPI_DMA_CHANNEL->CPAR = (u32)&W25QXX_SPI_NUM->DR;			//ï¿½ï¿½ï¿½ï¿½ï¿½Ö·Îª:SPI->DR
+  W25QXX_SPI_DMA_CHANNEL->CMAR = (u32)&LCD->LCD_RAM;//Ä¿ï¿½ï¿½ï¿½Ö·ÎªLCD_RAM
+  W25QXX_SPI_DMA_CHANNEL->CNDTR = 0;			//DMA1,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½Îª0
+  W25QXX_SPI_DMA_CHANNEL->CCR = 0X00000000;	//ï¿½ï¿½Î»
+  W25QXX_SPI_DMA_CHANNEL->CCR |= 0<<4;		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  W25QXX_SPI_DMA_CHANNEL->CCR |= 0<<5;		//ï¿½ï¿½Í¨Ä£Ê½
+  W25QXX_SPI_DMA_CHANNEL->CCR |= 0<<6;		//ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½
+  W25QXX_SPI_DMA_CHANNEL->CCR |= 0<<7;		//ï¿½æ´¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½
+  W25QXX_SPI_DMA_CHANNEL->CCR |= LCD_DATA_16BIT<<8;		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½ï¿½Îª16Î»
+  W25QXX_SPI_DMA_CHANNEL->CCR |= LCD_DATA_16BIT<<10;		//ï¿½æ´¢ï¿½ï¿½ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½ï¿½16Î»
+  W25QXX_SPI_DMA_CHANNEL->CCR |= 1<<12;		//ï¿½Ðµï¿½ï¿½ï¿½ï¿½È¼ï¿½
+  W25QXX_SPI_DMA_CHANNEL->CCR |= 0<<14;		//ï¿½Ç´æ´¢ï¿½ï¿½ï¿½ï¿½ï¿½æ´¢ï¿½ï¿½Ä£Ê½
 }
 
 #define LCD_DMA_MAX_TRANS	65535		//DMA 65535 bytes one frame

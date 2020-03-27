@@ -43,7 +43,7 @@ void SPI_GPIO_DeInit(uint8_t port)
   GPIO_InitSet(spi_cs[port], MGPIO_MODE_IPN, 0);  //CS
 }
 
-// Ӳ��SPIЭ���ʼ��?
+// Ӳ��SPIЭ���ʼ��?
 // baudrate��ȡֵ��ΧΪ 0-7
 // ��������Ϊ 2^(baudrate+1) ��Ƶ��2-256��Ƶ
 void SPI_Protocol_Init(uint8_t port, uint8_t baudrate)

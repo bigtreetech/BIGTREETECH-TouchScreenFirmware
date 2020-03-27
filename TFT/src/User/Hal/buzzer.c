@@ -48,7 +48,7 @@ void loopBuzzer(void) {
     if (buzzer.frequency[buzzer.rIndex] > 0) {
       tone(buzzer.frequency[buzzer.rIndex], buzzer.duration[buzzer.rIndex]);
     }
-    
+
     buzzer.rIndex = (buzzer.rIndex + 1) % BUZZER_CACHE_SIZE;
     buzzer.count--;
   }
@@ -60,7 +60,7 @@ void loopBuzzer(void) {
 
 void Buzzer_TurnOn(const uint32_t frequency, const uint32_t duration)
 {
-    if(infoSettings.silent) return;  
+    if(infoSettings.silent) return;
   while (buzzer.count == BUZZER_CACHE_SIZE) {
     loopBuzzer();
   }
@@ -74,7 +74,7 @@ void Buzzer_TurnOn(const uint32_t frequency, const uint32_t duration)
 volatile uint32_t toggles = 0;
 void tone(const uint32_t frequency, const uint32_t duration) {
   if (frequency == 0 || duration == 0) return;
-  
+
   NVIC_DisableIRQ(TIM3_IRQn);
   toggles = 2 * frequency * duration / 1000;
 

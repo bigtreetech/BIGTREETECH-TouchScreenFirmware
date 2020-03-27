@@ -13,10 +13,10 @@ enum
   KNOB_DEC,
 };
 
-#define KEY_CLICK          0x0000  // key¶¨ÒåÎª u16, 16(u16 16bit) - 3(3 bits flag ) = 13 bit ËùÒÔ u16 ×î´óÖ§³Ö 2^13 = 8192 ¸ö¼üÖµ
-#define KEY_DOUBLE_CLICK   0x2000  //µÚÈýÎ»ÓÃÀ´±êÊ¶Ë«»÷¶¯×÷
-#define KEY_LONG_RELEASE   0x4000  //µÚ¶þÎ»ÓÃÀ´±êÊ¶³¤°´ºóÊÍ·Å¶¯×÷
-#define KEY_LONG_CLICK     0x8000  //µÚÒ»Î»ÓÃÀ´±êÊ¶³¤°´¶¯×÷
+#define KEY_CLICK          0x0000  // keyï¿½ï¿½ï¿½ï¿½Îª u16, 16(u16 16bit) - 3(3 bits flag ) = 13 bit ï¿½ï¿½ï¿½ï¿½ u16 ï¿½ï¿½ï¿½Ö§ï¿½ï¿½ 2^13 = 8192 ï¿½ï¿½ï¿½ï¿½Öµ
+#define KEY_DOUBLE_CLICK   0x2000  //ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¶Ë«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+#define KEY_LONG_RELEASE   0x4000  //ï¿½Ú¶ï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í·Å¶ï¿½ï¿½ï¿½
+#define KEY_LONG_CLICK     0x8000  //ï¿½ï¿½Ò»Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 
 void TSC_Calibration(void);

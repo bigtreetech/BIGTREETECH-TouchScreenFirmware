@@ -50,7 +50,7 @@ void LCD_LED_PWM_Init()
     GPIO_InitStructure.GPIO_Mode   = GPIO_Mode_AF;
     GPIO_InitStructure.GPIO_Speed  = GPIO_Speed_50MHz;
   GPIO_Init(GPIOD, &GPIO_InitStructure);
-  
+
   GPIO_PinAFConfig(GPIOD, GPIO_PinSource12, GPIO_AF_TIM4);
 
   TIM_OCInitTypeDef outputChannelInit = {0,};
@@ -443,11 +443,11 @@ void LCD_init_RGB(void)
 }
 #elif defined(MKS_32_V1_4)
 
-void LCD_init_RGB(void) 
+void LCD_init_RGB(void)
 {
-  Delay_ms(50); // delay 50 ms 
-  
- LCD_WR_REG(0xFE);                     // 
+  Delay_ms(50); // delay 50 ms
+
+ LCD_WR_REG(0xFE);                     //
  LCD_WR_REG(0xEF);
  LCD_WR_REG(0x3A);
  LCD_WR_DATA(5);
@@ -540,7 +540,7 @@ LCD_WR_DATA(0x35);
 LCD_WR_DATA(0x39);
 LCD_WR_DATA(0);
 LCD_WR_REG(0x11);
-	
+
 	    Delay_ms(150);
 LCD_WR_REG(0x29);
 LCD_WR_REG(0x2C);
