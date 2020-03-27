@@ -85,7 +85,7 @@ COORDINATE curPosition={{0.0f,0.0f,0.0f,0.0f},3000};
 
 void coordinateSetAxisActualSteps(AXIS axis, int steps)
 {
-  curPosition.axis[axis] = steps / getParameterSteps(E_AXIS);
+  curPosition.axis[axis] = steps / getParameter(P_STEPS_PER_MM, E_AXIS);
 }
 
 float coordinateGetAxisActual(AXIS axis)

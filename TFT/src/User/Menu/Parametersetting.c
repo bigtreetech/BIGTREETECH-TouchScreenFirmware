@@ -19,30 +19,8 @@ const GUI_RECT rect_of_numkey[KEY_NUM]={
 
   {0*SKEYWIDTH, ICON_START_Y+3*SKEYHEIGHT, 1*SKEYWIDTH, ICON_START_Y+4*SKEYHEIGHT},//.
   {1*SKEYWIDTH, ICON_START_Y+3*SKEYHEIGHT, 2*SKEYWIDTH, ICON_START_Y+4*SKEYHEIGHT},//0
-  {2*SKEYWIDTH, ICON_START_Y+3*SKEYHEIGHT, 3*SKEYWIDTH, ICON_START_Y+4*SKEYHEIGHT},//
+  {2*SKEYWIDTH, ICON_START_Y+3*SKEYHEIGHT, 3*SKEYWIDTH, ICON_START_Y+4*SKEYHEIGHT},//-
   {3*SKEYWIDTH, ICON_START_Y+3*SKEYHEIGHT, 4*SKEYWIDTH, ICON_START_Y+4*SKEYHEIGHT},//
-};
-
-const char *const parameterCurrent[TOTAL_AXIS] = {
-    "X Axis Current(mA)",
-    "Y Axis Current(mA)",
-    "Z Axis Current(mA)",
-    "E Current(mA)"
-};
-
-const char *const parameterSteps[TOTAL_AXIS] = {
-    "X Axis Steps/MM",
-    "Y Axis Steps/MM",
-    "Z Axis Steps/MM",
-    "E Steps/MM"
-};
-
-const char *const parameter_currentCmd[TOTAL_AXIS] = {
-    "M906 X%.1f\n","M906 Y%.1f\n","M906 Z%.1f\n","M906 E%.1f\n",
-};
-
-const char *const parameter_stepsCmd[TOTAL_AXIS] = {
-    "M92 X%.1f\n","M92 Y%.1f\n","M92 Z%.1f\n","M92 E%.1f\n",
 };
 
 const char *const Key_Num[KEY_NUM] = {
@@ -52,201 +30,312 @@ const char *const Key_Num[KEY_NUM] = {
   ".","0","-",""
 };
 
-const LISTITEMS parameterMainItems = {
+const char *const parameter_Cmd[PARAMETERS_COUNT][STEPPER_COUNT] = {
+    {"M92 X%.2f\n",   "M92 Y%.2f\n",  "M92 Z%.2f\n",  "M92 T0 E%.2f\n",  "M92 T1 E%.2f\n"}, //Steps/mm
+    {"M906 X%.0f\n", "M906 Y%.0f\n", "M906 Z%.0f\n", "M906 T0 E%.0f\n", "M906 I1 E%.0f\n"}, //Current
+    {"M203 X%.0f\n", "M203 Y%.0f\n", "M203 Z%.0f\n", "M203 T0 E%.0f\n", "M203 T1 E%.0f\n"}, //MaxFeedrate
+    {"M201 X%.0f\n", "M201 Y%.0f\n", "M201 Z%.0f\n", "M201 T0 E%.0f\n", "M201 T1 E%.0f\n"}, //MaxAcceleration
+    {"M204 P%.0f\n", "M204 R%.0f\n", "M204 T%.0f\n", NULL, NULL}, //Acceleration
+    {"M851 X%.2f\n", "M851 Y%.2f\n", "M851 Z%.2f\n", NULL, NULL}, //Probe offset
+    {"M914 X%.2f\n", "M914 Y%.2f\n", "M914 Z%.2f\n", NULL, NULL}, //bump Sensitivity
+};
+
+//Extra teppers current gcode command
+const char *const dualstepper_current_Cmd[3] = {"M906 I1 X%.1f\n", "M906 I1 Y%.1f\n", "M906 I1 Z%.1f\n"};
+const char *const dualstepper_bump_Cmd[3] = {"M914 I1 X%.1f\n", "M914 I1 Y%.1f\n", "M914 I1 Z%.1f\n"};
+
+const uint32_t parameter_names[PARAMETERS_COUNT] = {LABEL_STEPS_SETTING,
+                                                    LABEL_CURRENT_SETTING,
+                                                    LABEL_MAXFEEDRATE,
+                                                    LABEL_MAXACCELERATION,
+                                                    LABEL_ACCELERATION,
+                                                    LABEL_PROBE_OFFSET,
+                                                    LABEL_BUMP_SENSITIVITY
+                                                    };
+
+int ps_cur_page = 0;
+int cur_parameter = 0;
+bool dualstepper[TOTAL_AXIS] = {false,false,false,false};
+char *const axisDisplayID[STEPPER_COUNT] = AXIS_DISPLAY_ID;
+const LABEL Accel_disp_ID[3] = {LABEL_PRINT_ACCELERATION,LABEL_RETRACT_ACCELERATION, LABEL_TRAVEL_ACCELERATION};
+
+const LISTITEM parametertypes[PARAMETERS_COUNT] = {
+    // icon                 ItemType            Item Title                  item value text(only for custom value)
+    {ICONCHAR_SETTING1,     LIST_MOREBUTTON,    LABEL_STEPS_SETTING,        LABEL_BACKGROUND},
+    {ICONCHAR_SETTING1,     LIST_MOREBUTTON,    LABEL_CURRENT_SETTING,      LABEL_BACKGROUND},
+    {ICONCHAR_SETTING1,     LIST_MOREBUTTON,    LABEL_MAXFEEDRATE,          LABEL_BACKGROUND},
+    {ICONCHAR_SETTING1,     LIST_MOREBUTTON,    LABEL_MAXACCELERATION,      LABEL_BACKGROUND},
+    {ICONCHAR_SETTING1,     LIST_MOREBUTTON,    LABEL_ACCELERATION,         LABEL_BACKGROUND},
+    {ICONCHAR_SETTING1,     LIST_MOREBUTTON,    LABEL_PROBE_OFFSET,         LABEL_BACKGROUND},
+    {ICONCHAR_SETTING1,     LIST_MOREBUTTON,    LABEL_BUMP_SENSITIVITY,     LABEL_BACKGROUND},
+};
+
+LISTITEMS parameterMainItems = {
 // title
 LABEL_PARAMETER_SETTING,
 // icon                     ItemType         Item Title                item value text(only for custom value)
 {
-    {ICONCHAR_SETTING1,     LIST_MOREBUTTON,    LABEL_STEPS_SETTING,    LABEL_BACKGROUND},
-    {ICONCHAR_SETTING1,     LIST_MOREBUTTON,    LABEL_CURRENT_SETTING,  LABEL_BACKGROUND},
-    {ICONCHAR_BACKGROUND,     LIST_LABEL,         LABEL_BACKGROUND,       LABEL_BACKGROUND},
-    {ICONCHAR_BACKGROUND,     LIST_LABEL,         LABEL_BACKGROUND,       LABEL_BACKGROUND},
-    {ICONCHAR_BACKGROUND,     LIST_LABEL,         LABEL_BACKGROUND,       LABEL_BACKGROUND},
-    {ICONCHAR_BACKGROUND,     LIST_LABEL,         LABEL_BACKGROUND,       LABEL_BACKGROUND},
-    {ICONCHAR_BACKGROUND,     LIST_LABEL,         LABEL_BACKGROUND,       LABEL_BACKGROUND},
-    {ICONCHAR_BACK,           LIST_LABEL,         LABEL_BACKGROUND,       LABEL_BACKGROUND},}
+    {ICONCHAR_BACKGROUND,     LIST_LABEL,       LABEL_BACKGROUND,       LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND,     LIST_LABEL,       LABEL_BACKGROUND,       LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND,     LIST_LABEL,       LABEL_BACKGROUND,       LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND,     LIST_LABEL,       LABEL_BACKGROUND,       LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND,     LIST_LABEL,       LABEL_BACKGROUND,       LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND,     LIST_LABEL,       LABEL_BACKGROUND,       LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND,     LIST_LABEL,       LABEL_BACKGROUND,       LABEL_BACKGROUND},
+    {ICONCHAR_BACK,           LIST_LABEL,       LABEL_BACKGROUND,       LABEL_BACKGROUND},}
 };
 
-float parameter_current_value[TOTAL_AXIS];
-float parameter_steps_value[TOTAL_AXIS];
+PARAMETERS infoParameters;
 
-float getParameterCurrent(AXIS index){
-    return parameter_current_value[index];
+float getParameter(PARAMETER_NAME name, int index){
+        switch (name)
+        {
+        case P_STEPS_PER_MM:
+            return infoParameters.StepsPerMM[index];
+        case P_CURRENT:
+            return infoParameters.Current[index];
+        case P_MAX_FEED_RATE:
+            return infoParameters.MaxFeedRate[index];
+        case P_MAX_ACCELERATION:
+            return infoParameters.MaxAcceleration[index];
+        case P_ACCELERATION:
+            return infoParameters.Acceleration[index];
+        case P_PROBE_OFFSET:
+            if(index > Z_AXIS){ return 0.0f;}
+            else{ return infoParameters.ProbeOffset[index]; }
+        case P_BUMPSENSITIVITY:
+            if(index > Z_AXIS){ return 0.0f;}
+            else{ return infoParameters.BumpSensitivity[index]; }
+        default:
+            return 0.0f;
+        }
 }
 
-float getParameterSteps(AXIS index){
-    return parameter_steps_value[index];
+void setParameter(PARAMETER_NAME name, int index, float val){
+        switch (name)
+        {
+        case P_STEPS_PER_MM:
+            infoParameters.StepsPerMM[index] = val;
+            break;
+        case P_CURRENT:
+            infoParameters.Current[index] = val;
+            break;
+        case P_MAX_FEED_RATE:
+            infoParameters.MaxFeedRate[index]  = val;
+            break;
+        case P_MAX_ACCELERATION:
+            infoParameters.MaxAcceleration[index] = val;
+            break;
+        case P_ACCELERATION:
+            infoParameters.Acceleration[index] = val;
+            break;
+        case P_PROBE_OFFSET:
+            if(index < E_AXIS){infoParameters.ProbeOffset[index] = val; }
+            break;
+        case P_BUMPSENSITIVITY:
+            if(index < E_AXIS){infoParameters.BumpSensitivity[index] = val; }
+            break;
+        default:
+            break;
+        }
 }
 
-void setParameterCurrent(AXIS index, float val){
-    parameter_current_value[index] = val;
-}
-
-void setParameterSteps(AXIS index, float val){
-    parameter_steps_value[index] = val;
-}
-
+//get keypress for NumPad
 NUM_KEY_VALUES NumKeyGetValue(void)
 {
   return (NUM_KEY_VALUES)KEY_GetValue(sizeof(rect_of_numkey)/sizeof(rect_of_numkey[0]), rect_of_numkey);
 }
 
-void Send_Settingcmd(void)
-{
-    storeCmd("M906\n");
-    storeCmd("M92\n");
-    return ;
-}
-
-
-void setCurrentMenuItems(){
-
+//show menu for selected parameter type
+void menuShowParameter(void){
     KEY_VALUES key_num = KEY_IDLE;
 
-    LISTITEMS currentmenuitems ={
+    LISTITEMS parameter_menuitems ={
     // title
-    LABEL_PARAMETER_SETTING,
-    // icon                     ItemType        Item Title               item value text(only for custom value)
-    {{ICONCHAR_BLANK,           LIST_CUSTOMVALUE,     LABEL_DYNAMIC,     LABEL_DYNAMIC},
-    {ICONCHAR_BLANK,            LIST_CUSTOMVALUE,     LABEL_DYNAMIC,     LABEL_DYNAMIC},
-    {ICONCHAR_BLANK,            LIST_CUSTOMVALUE,     LABEL_DYNAMIC,     LABEL_DYNAMIC},
-    {ICONCHAR_BLANK,            LIST_CUSTOMVALUE,     LABEL_DYNAMIC,     LABEL_DYNAMIC},
-    {ICONCHAR_BACKGROUND,       LIST_LABEL,           LABEL_BACKGROUND,     LABEL_BACKGROUND},
-    {ICONCHAR_BACKGROUND,       LIST_LABEL,           LABEL_BACKGROUND,     LABEL_BACKGROUND},
-    {ICONCHAR_BACKGROUND,       LIST_LABEL,           LABEL_BACKGROUND,     LABEL_BACKGROUND},
-    {ICONCHAR_BACK,             LIST_LABEL,           LABEL_BACKGROUND,     LABEL_BACKGROUND},}
+    parameter_names[cur_parameter],
+    // icon                     ItemType                Item Title            item value text(only for custom value)
+    {{ICONCHAR_EDIT,           LIST_CUSTOMVALUE,       LABEL_DYNAMIC,      LABEL_DYNAMIC},
+    {ICONCHAR_EDIT,            LIST_CUSTOMVALUE,       LABEL_DYNAMIC,      LABEL_DYNAMIC},
+    {ICONCHAR_EDIT,            LIST_CUSTOMVALUE,       LABEL_DYNAMIC,      LABEL_DYNAMIC},
+    {ICONCHAR_EDIT,            LIST_CUSTOMVALUE,       LABEL_DYNAMIC,      LABEL_DYNAMIC},
+    {ICONCHAR_BACKGROUND,       LIST_CUSTOMVALUE,       LABEL_DYNAMIC,      LABEL_DYNAMIC},
+    {ICONCHAR_BACKGROUND,       LIST_LABEL,             LABEL_BACKGROUND,      LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND,       LIST_LABEL,             LABEL_BACKGROUND,      LABEL_BACKGROUND},
+    {ICONCHAR_BACK,             LIST_LABEL,             LABEL_BACKGROUND,      LABEL_BACKGROUND},}
     };
 
-    for(int i = 0; i < TOTAL_AXIS; i++){
-        setDynamicLabel(i,(char*)parameterCurrent[i]);
-        setDynamicValue(i,parameter_current_value[i]);
+    for (int i = 0; i < STEPPER_COUNT; i++) {
+        setDynamicLabel(i, axisDisplayID[i]);
+        setDynamicValue(i, getParameter(cur_parameter,i));
+        //prevent Extruder icon from showing when probe offset setting is opened
+        switch (cur_parameter)
+        {
+        case P_PROBE_OFFSET:
+        case P_BUMPSENSITIVITY:
+            if(i > (Z_STEPPER)) parameter_menuitems.items[i].icon = ICONCHAR_BACKGROUND;
+            break;
+
+        case P_ACCELERATION:
+            if(i > (Z_STEPPER)){ parameter_menuitems.items[i].icon = ICONCHAR_BACKGROUND;}
+            else { parameter_menuitems.items[i].titlelabel = Accel_disp_ID[i];}
+            break;
+
+        default:
+            if(dualstepper[E_STEPPER] == true && i == E2_STEPPER)
+            {
+                parameter_menuitems.items[i].icon = ICONCHAR_EDIT;
+            }
+            break;
+        }
     }
 
-    menuDrawListPage(&currentmenuitems);
+    menuDrawListPage(&parameter_menuitems);
 
-    while (infoMenu.menu[infoMenu.cur] == setCurrentMenuItems)
+    while (infoMenu.menu[infoMenu.cur] == menuShowParameter)
     {
         key_num = menuKeyGetValue();
 
         switch (key_num)
         {
         case KEY_ICON_7:
-            storeCmd("M500\n");
             infoMenu.cur--;
             break;
 
         default:
-            if(key_num < (KEY_VALUES)TOTAL_AXIS){
-                float v = num_pad(getParameterCurrent((AXIS)key_num),false);
-                if (v != getParameterCurrent((AXIS)key_num))
+            if(key_num < (KEY_VALUES)STEPPER_COUNT){
+                if(parameter_menuitems.items[key_num].icon == ICONCHAR_BACKGROUND)
                 {
-                    storeCmd(parameter_currentCmd[key_num],v);
-                    setDynamicValue(key_num,v);
-                    setParameterCurrent((AXIS)key_num,v);
+                    break;
                 }
-                menuDrawListPage(&currentmenuitems);
+             //accept negative values only for probe offset
+                bool negative_val = false;
+                if(cur_parameter == P_PROBE_OFFSET || cur_parameter == P_BUMPSENSITIVITY) negative_val = true;
+                float v = num_pad(getParameter(cur_parameter,key_num),negative_val);
+                if (v != getParameter(cur_parameter,key_num))
+                {
+                    storeCmd(parameter_Cmd[cur_parameter][key_num],v);
+                //send current setting gcode for dual steppers(x,y & z only) if they exists
+                    if(cur_parameter == P_CURRENT && key_num < E_STEPPER)
+                    {
+                        if(dualstepper[key_num] == true){
+                            storeCmd(dualstepper_current_Cmd[key_num],v);
+                        }
+                    }
+                    else if(cur_parameter == P_BUMPSENSITIVITY && key_num < E_STEPPER)
+                    {
+                        if(dualstepper[key_num] == true){
+                            storeCmd(dualstepper_bump_Cmd[key_num],v);
+                        }
+                    }
+                    setDynamicValue(key_num,v);
+                }
+                 menuDrawListPage(&parameter_menuitems);
             }
             break;
-
         }
-        for(AXIS i = X_AXIS; i < TOTAL_AXIS; i++){
-            if(getDynamicValue(i) != getParameterCurrent(i)){
-                setDynamicValue(i,parameter_current_value[i]);
-                menuDrawListItem(&currentmenuitems.items[i],i);
-            }
-        }
-        loopProcess();
-    }
-
-}
-void setStepsMenuItems(){
-
-    KEY_VALUES key_num = KEY_IDLE;
-
-    LISTITEMS stepsmenuitems ={
-    // title
-    LABEL_PARAMETER_SETTING,
-    // icon                     ItemType        Item Title               item value text(only for custom value)
-    {{ICONCHAR_BLANK,           LIST_CUSTOMVALUE,     LABEL_DYNAMIC,     LABEL_DYNAMIC},
-    {ICONCHAR_BLANK,            LIST_CUSTOMVALUE,     LABEL_DYNAMIC,     LABEL_DYNAMIC},
-    {ICONCHAR_BLANK,            LIST_CUSTOMVALUE,     LABEL_DYNAMIC,     LABEL_DYNAMIC},
-    {ICONCHAR_BLANK,            LIST_CUSTOMVALUE,     LABEL_DYNAMIC,     LABEL_DYNAMIC},
-    {ICONCHAR_BACKGROUND,       LIST_LABEL,           LABEL_BACKGROUND,     LABEL_BACKGROUND},
-    {ICONCHAR_BACKGROUND,       LIST_LABEL,           LABEL_BACKGROUND,     LABEL_BACKGROUND},
-    {ICONCHAR_BACKGROUND,       LIST_LABEL,           LABEL_BACKGROUND,     LABEL_BACKGROUND},
-    {ICONCHAR_BACK,             LIST_LABEL,           LABEL_BACKGROUND,     LABEL_BACKGROUND},}
-    };
 
     for(int i = 0; i < TOTAL_AXIS; i++){
-        setDynamicLabel(i,(char*)parameterSteps[i]);
-        setDynamicValue(i,parameter_steps_value[i]);
+        if(getDynamicValue(i) != getParameter(cur_parameter,i)){
+            setDynamicValue(i,getParameter(cur_parameter,i));
+            menuDrawListItem(&parameter_menuitems.items[i],i);
+        }
     }
-
-    menuDrawListPage(&stepsmenuitems);
-    while (infoMenu.menu[infoMenu.cur] == setStepsMenuItems)
-    {
-        key_num = menuKeyGetValue();
-
-        switch (key_num)
-        {
-
-        case KEY_ICON_7:
-            storeCmd("M500\n");
-            infoMenu.cur--;
-            break;
-
-        default:
-            if(key_num < (KEY_VALUES)TOTAL_AXIS){
-                float v = num_pad(getParameterSteps((AXIS)key_num),false);
-                if (v != getParameterSteps((AXIS)key_num)){
-                    storeCmd(parameter_stepsCmd[key_num],v);
-                    setDynamicValue((AXIS)key_num,v);
-                    setParameterSteps((AXIS)key_num,v);
-                }
-                menuDrawListPage(&stepsmenuitems);
-            }
-            break;
-
-        }
-        for(AXIS i = X_AXIS; i < TOTAL_AXIS; i++){
-            if(getDynamicValue(i) != getParameterSteps(i)){
-                setDynamicValue(i,parameter_steps_value[i]);
-                menuDrawListItem(&stepsmenuitems.items[i],i);
-            }
-        }
-        loopProcess();
+    loopProcess();
     }
 
 }
 
-void menuParameterSettings(){
+//Load main parameter list page
+void loadParameterPage(void){
+for (uint8_t i = 0; i < LISTITEM_PER_PAGE; i++)
+    {
+        uint8_t item_index = ps_cur_page*LISTITEM_PER_PAGE + i;
+        if(item_index < PARAMETERS_COUNT)
+        {
+            parameterMainItems.items[i] = parametertypes[item_index];
+        }
+        else{
+            parameterMainItems.items[i].icon = ICONCHAR_BACKGROUND;
+        }
+    }
+// set page up down button according to page count and current page
+  if (PARAMETERS_COUNT <= LISTITEM_PER_PAGE)
+  {
+    parameterMainItems.items[5].icon = ICONCHAR_BACKGROUND;
+    parameterMainItems.items[6].icon = ICONCHAR_BACKGROUND;
+  }
+  else
+  {
+    if(ps_cur_page == 0){
+      parameterMainItems.items[5].icon = ICONCHAR_BACKGROUND;
+      parameterMainItems.items[6].icon = ICONCHAR_PAGEDOWN;
+    }
+    else if(ps_cur_page == (PS_PAGE_COUNT-1)){
+      parameterMainItems.items[5].icon = ICONCHAR_PAGEUP;
+      parameterMainItems.items[6].icon = ICONCHAR_BACKGROUND;
+    }
+    else
+    {
+      parameterMainItems.items[5].icon = ICONCHAR_PAGEUP;
+      parameterMainItems.items[6].icon = ICONCHAR_PAGEDOWN;
+    }
+  }
+};
+
+void menuParameterSettings(void){
     KEY_VALUES key_num = KEY_IDLE;
-    Send_Settingcmd();
+    PARAMETERS now = infoParameters;
+    ps_cur_page = 0;
+    loadParameterPage();
     menuDrawListPage(&parameterMainItems);
     while (infoMenu.menu[infoMenu.cur] == menuParameterSettings)
     {
         key_num = menuKeyGetValue();
         switch (key_num)
         {
-        case KEY_ICON_0:
-            infoMenu.menu[++infoMenu.cur] = setStepsMenuItems;
+        case KEY_ICON_5:
+            if(PS_PAGE_COUNT > 1)
+            {
+                if (ps_cur_page > 0)
+                {
+                    ps_cur_page--;
+                    loadParameterPage();
+                    menuRefreshListPage();
+                }
+            }
             break;
 
-        case KEY_ICON_1:
-            infoMenu.menu[++infoMenu.cur] = setCurrentMenuItems;
+        case KEY_ICON_6:
+            if(PS_PAGE_COUNT > 1)
+            {
+                if (ps_cur_page < PS_PAGE_COUNT - 1)
+                {
+                    ps_cur_page++;
+                    loadParameterPage();
+                    menuRefreshListPage();
+                }
+            }
             break;
-
         case KEY_ICON_7:
             infoMenu.cur--;
             break;
 
         default:
+            {
+                int cp = ps_cur_page*LISTITEM_PER_PAGE + key_num;
+                if(key_num < LISTITEM_PER_PAGE && cp < PARAMETERS_COUNT){
+                    cur_parameter = cp;
+                    infoMenu.menu[++infoMenu.cur] = menuShowParameter;  break;
+                }
+            }
             break;
-
         }
-
     loopProcess();
     }
+  if(memcmp(&now, &infoParameters, sizeof(PARAMETERS)))
+  {
+    storeCmd("M500\n");
+  }
 
 }
 
@@ -295,15 +384,19 @@ float num_pad(float old_val, bool negative_val)
     my_sprintf(tempstr, "%.2f", old_val);
     GUI_SetColor(WHITE);
     GUI_DispStringInPrect(&oldParameterRect,(u8*)tempstr);
+    touchSound = false;
     while (1)
     {
         key_num = NumKeyGetValue();
         switch (key_num)
         {
         case NUM_KEY_EXIT:
+            BUZZER_PLAY(sound_cancel);
+            touchSound = true;
             return old_val;
 
         case NUM_KEY_DEL:
+            BUZZER_PLAY(sound_keypress);
             if(nowIndex)
             ParameterBuf[--nowIndex] = 0;
             break;
@@ -318,6 +411,7 @@ float num_pad(float old_val, bool negative_val)
         case NUM_KEY_8:
         case NUM_KEY_9:
         case NUM_KEY_0:
+            BUZZER_PLAY(sound_keypress);
             if(nowIndex < BUFLONG-1)
             {
                 ParameterBuf[nowIndex++] = Key_Num[key_num][0];
@@ -325,6 +419,7 @@ float num_pad(float old_val, bool negative_val)
             }
             break;
         case NUM_KEY_DEC:
+            BUZZER_PLAY(sound_keypress);
             if(!strchr((const char *)ParameterBuf, Key_Num[key_num][0])){
                 if(nowIndex < BUFLONG-1)
                 {
@@ -334,6 +429,7 @@ float num_pad(float old_val, bool negative_val)
             }
             break;
         case NUM_KEY_MINUS:
+            BUZZER_PLAY(sound_keypress);
             if(!strchr((const char *)ParameterBuf, Key_Num[key_num][0]) && negative_val){
                 if(nowIndex == 0)
                 {
@@ -363,6 +459,8 @@ float num_pad(float old_val, bool negative_val)
             } */
 
             //Send_Settingcmd();
+            BUZZER_PLAY(sound_ok);
+            touchSound = true;
             return strtof(ParameterBuf,NULL);
 
             default:
@@ -378,6 +476,7 @@ float num_pad(float old_val, bool negative_val)
             GUI_DispStringInPrect(&newParameterRect, (u8 *)ParameterBuf);
             GUI_RestoreColorDefault();
         }
+        loopBackEnd();
     }
 
 }

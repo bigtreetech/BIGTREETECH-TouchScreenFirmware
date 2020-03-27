@@ -150,6 +150,8 @@
 
 #define SPEED_ID         {"Sp.", "Fr."}
 
+#define AXIS_DISPLAY_ID  {"X",  "Y",  "Z",   "E",  "E2"}
+
 // Default move speed mm/min
 #define DEFAULT_SPEED_MOVE      3000
 #define SPEED_MOVE_SLOW         1000

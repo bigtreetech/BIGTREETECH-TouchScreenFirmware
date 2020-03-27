@@ -48,7 +48,7 @@ void loopBuzzer(void) {
     if (buzzer.frequency[buzzer.rIndex] > 0) {
       tone(buzzer.frequency[buzzer.rIndex], buzzer.duration[buzzer.rIndex]);
     }
-    
+
     buzzer.rIndex = (buzzer.rIndex + 1) % BUZZER_CACHE_SIZE;
     buzzer.count--;
   }
@@ -60,7 +60,7 @@ void loopBuzzer(void) {
 
 void Buzzer_TurnOn(const uint32_t frequency, const uint32_t duration)
 {
-    if(infoSettings.silent) return;  
+    if(infoSettings.silent) return;
   while (buzzer.count == BUZZER_CACHE_SIZE) {
     loopBuzzer();
   }
@@ -70,11 +70,50 @@ void Buzzer_TurnOn(const uint32_t frequency, const uint32_t duration)
   buzzer.count++;
 }
 
+void Buzzer_play(SOUND sound){
+switch (sound)
+{
+case sound_ok:
+  Buzzer_TurnOn(3800,40);
+  Buzzer_TurnOn(0,20);
+  Buzzer_TurnOn(5500,50);
+  break;
+case sound_success:
+
+  Buzzer_TurnOn(3500,50);
+  Buzzer_TurnOn(0,50);
+  Buzzer_TurnOn(3500,50);
+  Buzzer_TurnOn(0,50);
+  Buzzer_TurnOn(3500,50);
+  break;
+case sound_cancel:
+  Buzzer_TurnOn(5500,50);
+  Buzzer_TurnOn(0,20);
+  Buzzer_TurnOn(3800,40);
+  break;
+  case sound_notify:
+  Buzzer_TurnOn(3090,50);
+  Buzzer_TurnOn(0,50);
+  Buzzer_TurnOn(4190,50);
+  break;
+case sound_error:
+   Buzzer_TurnOn(2200,200);
+   Buzzer_TurnOn(0,60);
+   Buzzer_TurnOn(2200,200);
+   Buzzer_TurnOn(0,60);
+   Buzzer_TurnOn(2200,200);
+  break;
+case sound_keypress:
+default:
+  Buzzer_TurnOn(BUZZER_FREQUENCY_HZ,BUZZER_FREQUENCY_DURATION_MS);
+  break;
+}
+}
 
 volatile uint32_t toggles = 0;
 void tone(const uint32_t frequency, const uint32_t duration) {
   if (frequency == 0 || duration == 0) return;
-  
+
   NVIC_DisableIRQ(TIM3_IRQn);
   toggles = 2 * frequency * duration / 1000;
 
