@@ -157,6 +157,8 @@
 
 #define SPEED_ID         {"Sp.", "Fr."}
 
+#define AXIS_DISPLAY_ID  {"X",  "Y",  "Z",   "E",  "E2"}
+
 // Default move speed mm/min
 #define DEFAULT_SPEED_MOVE      3000
 #define SPEED_MOVE_SLOW         1000
@@ -315,7 +317,7 @@
  *
  * G-code that runs after a print starts, ends, or canceled.
  *
- * Disable in SETTINGS -> FEATURE menu.
+ * Enable Start & End G-code in SETTINGS -> FEATURE menu.
  */
 // Start G-code - run this G-code before starting print
 #define PRINT_START_GCODE "G28\nG29\nG1 Z20\n" // Home all, run ABL routine, raise Z 20 mm

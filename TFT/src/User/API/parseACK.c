@@ -11,7 +11,10 @@ const char *const ignoreEcho[] = {
   "Now fresh file:",
   "Probe Z Offset:",
   "paused for user",
-  "Flow:"
+  "Flow:",
+  "echo:;",
+  "echo:  G",
+  "echo:  M",
 };
 
 bool portSeen[_USART_CNT] = {false, false, false, false, false, false};
@@ -115,7 +118,6 @@ void parseACK(void)
         updateNextHeatCheckTime();
         infoHost.connected = true;
         storeCmd("M115\n");
-        storeCmd("M92\n"); // Get steps/mm for smart filament sensor after start up
     }
 
     // Gcode command response
@@ -162,42 +164,39 @@ void parseACK(void)
       if(ack_seen("ok"))
       {
         infoHost.wait = false;
+    //parse temperature
+        if(ack_seen("T:") || ack_seen("T0:"))
+        {
+          TOOL i = heatGetCurrentToolNozzle();
+          heatSetCurrentTemp(i, ack_value()+0.5);
+          if(!heatGetSendWaiting(i)){
+            heatSyncTargetTemp(i, ack_second_value()+0.5);
+          }
+          for(TOOL i = BED; i < HEATER_NUM; i++)
+          {
+            if(ack_seen(toolID[i]))
+            {
+              heatSetCurrentTemp(i, ack_value()+0.5);
+              if(!heatGetSendWaiting(i)) {
+                heatSyncTargetTemp(i, ack_second_value()+0.5);
+              }
+            }
+          }
+          avoid_terminal = infoSettings.terminalACK;
+          updateNextHeatCheckTime();
+        }
       }
-      if(ack_seen("X:"))
+      if(ack_seen("X:") && ack_index == 2)
       {
         storegantry(0, ack_value());
-        //storeCmd("M118 %d\n", ack_value());
         if (ack_seen("Y:"))
         {
           storegantry(1, ack_value());
-          //storeCmd("M118 %d\n", ack_value());
           if (ack_seen("Z:"))
           {
-            //storeCmd("M118 %d\n", ack_value());
             storegantry(2, ack_value());
           }
         }
-      }
-    //parse temperature
-      else if(ack_seen("T:") || ack_seen("T0:"))
-      {
-        TOOL i = heatGetCurrentToolNozzle();
-        heatSetCurrentTemp(i, ack_value()+0.5);
-        if(!heatGetSendWaiting(i)){
-          heatSyncTargetTemp(i, ack_second_value()+0.5);
-        }
-        for(TOOL i = BED; i < HEATER_NUM; i++)
-        {
-          if(ack_seen(toolID[i]))
-          {
-            heatSetCurrentTemp(i, ack_value()+0.5);
-            if(!heatGetSendWaiting(i)) {
-              heatSyncTargetTemp(i, ack_second_value()+0.5);
-            }
-          }
-        }
-        avoid_terminal = infoSettings.terminalACK;
-        updateNextHeatCheckTime();
       }
       else if(ack_seen("Count E:")) // parse actual position, response of "M114"
       {
@@ -224,6 +223,65 @@ void parseACK(void)
   //      powerFailedCache(position);
       }
   #endif
+    //parse and store stepper steps/mm values
+      else if(ack_seen("M92 X"))
+      {
+                          setParameter(P_STEPS_PER_MM, X_STEPPER, ack_value());
+        if(ack_seen("Y")) setParameter(P_STEPS_PER_MM, Y_STEPPER, ack_value());
+        if(ack_seen("Z")) setParameter(P_STEPS_PER_MM, Z_STEPPER, ack_value());
+        if(ack_seen("E")) setParameter(P_STEPS_PER_MM, E_STEPPER, ack_value());
+      }
+    //parse and store Max Feed Rate values
+     else if(ack_seen("M203 X")){
+                          setParameter(P_MAX_FEED_RATE, X_STEPPER, ack_value());
+        if(ack_seen("Y")) setParameter(P_MAX_FEED_RATE, Y_STEPPER, ack_value());
+        if(ack_seen("Z")) setParameter(P_MAX_FEED_RATE, Z_STEPPER, ack_value());
+        if(ack_seen("E")) setParameter(P_MAX_FEED_RATE, E_STEPPER, ack_value());
+      }
+    //parse and store Max Acceleration values
+      else if(ack_seen("M201 X")){
+                          setParameter(P_MAX_ACCELERATION, X_STEPPER, ack_value());
+        if(ack_seen("Y")) setParameter(P_MAX_ACCELERATION, Y_STEPPER, ack_value());
+        if(ack_seen("Z")) setParameter(P_MAX_ACCELERATION, Z_STEPPER, ack_value());
+        if(ack_seen("E")) setParameter(P_MAX_ACCELERATION, E_STEPPER, ack_value());
+
+      }
+    //parse and store Acceleration values
+      else if(ack_seen("M204 P")){
+                          setParameter(P_ACCELERATION, X_STEPPER, ack_value());
+        if(ack_seen("R")) setParameter(P_ACCELERATION, Y_STEPPER, ack_value());
+        if(ack_seen("T")) setParameter(P_ACCELERATION, Z_STEPPER, ack_value());
+      }
+    //parse and store Probe Offset values
+      else if(ack_seen("M851 X")){
+                          setParameter(P_PROBE_OFFSET, X_STEPPER, ack_value());
+        if(ack_seen("Y")) setParameter(P_PROBE_OFFSET, Y_STEPPER, ack_value());
+        if(ack_seen("Z")) setParameter(P_PROBE_OFFSET, Z_STEPPER, ack_value());
+      }
+    //parse and store TMC Bump sensitivity values
+      else if(ack_seen("M914 X")){
+                          setParameter(P_BUMPSENSITIVITY, X_STEPPER, ack_value());
+        if(ack_seen("Y")) setParameter(P_BUMPSENSITIVITY, Y_STEPPER, ack_value());
+        if(ack_seen("Z")) setParameter(P_BUMPSENSITIVITY, Z_STEPPER, ack_value());
+      }
+    //parse and store stepper driver current values
+      else if(ack_seen("M906 X")){
+                          setParameter(P_CURRENT, X_STEPPER, ack_value());
+        if(ack_seen("Y")) setParameter(P_CURRENT, Y_STEPPER, ack_value());
+        if(ack_seen("Z")) setParameter(P_CURRENT, Z_STEPPER, ack_value());
+      }
+      else if(ack_seen("M906 I1")){
+        if(ack_seen("X")) dualstepper[X_STEPPER] = true;
+        if(ack_seen("Y")) dualstepper[Y_STEPPER] = true;
+        if(ack_seen("Z")) dualstepper[Z_STEPPER] = true;
+      }
+      else if(ack_seen("M906 T0 E")){
+        setParameter(P_CURRENT, E_STEPPER, ack_value());
+      }
+      else if(ack_seen("M906 T1 E")){
+        setParameter(P_CURRENT, E2_STEPPER, ack_value());
+        dualstepper[E_STEPPER] = true;
+      }
     // Parse M115 capability report
       else if(ack_seen("Cap:AUTOREPORT_TEMP:"))
       {
@@ -264,32 +322,6 @@ void parseACK(void)
       else if(ack_seen("Cap:CHAMBER_TEMPERATURE:"))
       {
         setupMachine();
-        goto  parse_end;
-      }
-    //parse and store stepper steps/mm values
-      else if(ack_seen("M92 X"))
-      {
-        setParameterSteps(X_AXIS, ack_value());
-        if(ack_seen("Y")) setParameterSteps(Y_AXIS, ack_value());
-        if(ack_seen("Z")) setParameterSteps(Z_AXIS, ack_value());
-        if(ack_seen("E")) setParameterSteps(E_AXIS, ack_value());
-      }
-    //parse and store stepper driver current values
-      else if(ack_seen("X driver current: "))
-      {
-        setParameterCurrent(X_AXIS, ack_value());
-      }
-      else if(ack_seen("Y driver current: "))
-      {
-        setParameterCurrent(Y_AXIS, ack_value());
-      }
-      else if(ack_seen("Z driver current: "))
-      {
-        setParameterCurrent(Z_AXIS, ack_value());
-      }
-      else if(ack_seen("E driver current: "))
-      {
-        setParameterCurrent(E_AXIS, ack_value());
       }
     //parse Repeatability Test
       else if(ack_seen("Mean:"))
@@ -300,7 +332,7 @@ void parseACK(void)
       {
         if(ack_seen("Z"))
         {
-          setCurrentOffset(ack_value());
+          setParameter(P_PROBE_OFFSET,Z_STEPPER, ack_value());
         }
       }
       else if (ack_seen(" F0:"))
@@ -320,6 +352,8 @@ void parseACK(void)
     //Parse error messages & Echo messages
       else if(ack_seen(errormagic))
       {
+        BUZZER_PLAY(sound_error);
+
         ackPopupInfo(errormagic);
       }
       else if(ack_seen(echomagic))
@@ -332,6 +366,7 @@ void parseACK(void)
             goto parse_end;
           }
         }
+        BUZZER_PLAY(sound_notify);
         ackPopupInfo(echomagic);
       }
     }

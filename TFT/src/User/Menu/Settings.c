@@ -22,8 +22,8 @@ void infoSettingsReset(void)
   infoSettings.invert_axis[Z_AXIS]  = 0;
   infoSettings.move_speed           = 0;
   infoSettings.knob_led_color       = (STARTUP_KNOB_LED_COLOR - 1);
-  infoSettings.send_start_gcode     = 1;
-  infoSettings.send_end_gcode       = 1;
+  infoSettings.send_start_gcode     = 0;
+  infoSettings.send_end_gcode       = 0;
   infoSettings.persistent_info      = 1;
   infoSettings.file_listmode        = 1;
   #ifdef LCD_LED_PIN
@@ -106,7 +106,7 @@ LABEL_SETTINGS,
   {ICON_FEATURE_SETTINGS,     LABEL_FEATURE_SETTINGS},
   {ICON_SCREEN_INFO,          LABEL_SCREEN_INFO},
   {ICON_DISCONNECT,           LABEL_DISCONNECT},
-  {ICON_BAUDRATE,             LABEL_BACKGROUND},
+  {ICON_BAUD_RATE,             LABEL_BACKGROUND},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_BACK,                 LABEL_BACK},}
 };
@@ -114,15 +114,15 @@ LABEL_SETTINGS,
 #define ITEM_BAUDRATE_NUM 9
 const ITEM itemBaudrate[ITEM_BAUDRATE_NUM] = {
 // icon                       label
-  {ICON_BAUDRATE,             {.address = "2400"}},
-  {ICON_BAUDRATE,             {.address = "9600"}},
-  {ICON_BAUDRATE,             {.address = "19200"}},
-  {ICON_BAUDRATE,             {.address = "38400"}},
-  {ICON_BAUDRATE,             {.address = "57600"}},
-  {ICON_BAUDRATE,             {.address = "115200"}},
-  {ICON_BAUDRATE,             {.address = "250000"}},
-  {ICON_BAUDRATE,             {.address = "500000"}},
-  {ICON_BAUDRATE,             {.address = "1000000"}},
+  {ICON_BAUD_RATE,             {.address = "2400"}},
+  {ICON_BAUD_RATE,             {.address = "9600"}},
+  {ICON_BAUD_RATE,             {.address = "19200"}},
+  {ICON_BAUD_RATE,             {.address = "38400"}},
+  {ICON_BAUD_RATE,             {.address = "57600"}},
+  {ICON_BAUD_RATE,             {.address = "115200"}},
+  {ICON_BAUD_RATE,             {.address = "250000"}},
+  {ICON_BAUD_RATE,             {.address = "500000"}},
+  {ICON_BAUD_RATE,             {.address = "1000000"}},
 };
 const  u32 item_baudrate[ITEM_BAUDRATE_NUM] = {2400, 9600, 19200, 38400, 57600, 115200, 250000, 500000, 1000000};
 static u8  item_baudrate_i = 0;
