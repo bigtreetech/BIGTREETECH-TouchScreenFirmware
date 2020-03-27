@@ -31,23 +31,23 @@
 
   typedef struct 
   {
-    uint32_t timer_idle;
-    bool     timer_reset;
-    bool     _last_dim_state;
+    uint32_t idle_time_counter;
+    bool idle_timer_reset;
+    bool _last_dim_state;
   } LCD_AUTO_DIM;
   extern LCD_AUTO_DIM lcd_dim;
   
   #define ITEM_SECONDS_NUM 7
   #define ITEM_BRIGHTNESS_NUM 11
   
-  extern const uint32_t LCD_DIM_TIMER[ITEM_SECONDS_NUM];
-  extern const LABEL itemDimmTime[ITEM_SECONDS_NUM];
+  extern const uint32_t LCD_DIM_IDLE_TIME[ITEM_SECONDS_NUM];
+  extern const LABEL itemDimTime[ITEM_SECONDS_NUM];
 
   extern const  uint32_t LCD_BRIGHTNESS[ITEM_BRIGHTNESS_NUM];
   extern const LABEL itemBrightness[ITEM_BRIGHTNESS_NUM];
   
-  void LCD_Dimmer_init();
-  void LCD_Dim_timer();
+  void LCD_Dim_Idle_Timer_init();
+  void LCD_Dim_Idle_Timer();
   void LCD_LED_PWM_Init();
 
   #if defined(TFT35_V1_2) || defined(TFT35_V2_0) || defined(TFT35_V3_0)

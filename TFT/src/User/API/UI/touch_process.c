@@ -157,7 +157,7 @@ void loopTouchScreen(void) // Handle in interrupt
     if(touch >= 20) // 20ms
     {
       touchScreenIsPress = true;
-      lcd_dim.timer_reset= true;
+      lcd_dim.idle_timer_reset= true;
     }
     else
     {
@@ -168,7 +168,7 @@ void loopTouchScreen(void) // Handle in interrupt
   {
     touchScreenIsPress = false;
     touch = 0;
-    LCD_Dim_timer();
+    LCD_Dim_Idle_Timer();
   }
 }
 

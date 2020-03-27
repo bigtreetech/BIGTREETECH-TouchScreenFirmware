@@ -167,7 +167,7 @@
     #define CZ_LCD_BRIGHTNESS           "LCD Brightness"
     #define CZ_EMERGENCYPARSER          "EMERGENCY_PARSER is not enable in your Printer's firmware. Some features may not work properly."
     #define CZ_LCD_BRIGHTNESS_DIM       "LCD Brightness dim"
-    #define CZ_LCD_DIM_TIMER            "LCD dimm timer"
+    #define CZ_LCD_DIM_IDLE_TIMER       "LCD dim idle timer"
     #define CZ_5_SECONDS                "5 Sec."
     #define CZ_10_SECONDS               "10 Sec."
     #define CZ_30_SECONDS               "30 Sec."

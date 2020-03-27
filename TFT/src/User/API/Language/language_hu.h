@@ -167,7 +167,7 @@
     #define HU_LCD_BRIGHTNESS           "LCD Fényerő"
     #define HU_EMERGENCYPARSER          "VÉSZHELYZETI_ELEMZŐ nincs engedélyezve a nyomtató firmware-ben. Egyes funkciók nem működnek megfelelően."
     #define HU_LCD_BRIGHTNESS_DIM       "LCD Brightness dim"
-    #define HU_LCD_DIM_TIMER            "LCD dimm timer"
+    #define HU_LCD_DIM_IDLE_TIMER       "LCD dim idle timer"
     #define HU_5_SECONDS                "5 Sec."
     #define HU_10_SECONDS               "10 Sec."
     #define HU_30_SECONDS               "30 Sec."
