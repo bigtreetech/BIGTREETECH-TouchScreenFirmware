@@ -44,6 +44,7 @@ const LABEL itemBrightness[ITEM_BRIGHTNESS_NUM] = {
 };
 const LABEL itemDimTime[ITEM_SECONDS_NUM] = {
   //item value text(only for custom value)
+  LABEL_OFF,
   LABEL_5_SECONDS,
   LABEL_10_SECONDS,
   LABEL_30_SECONDS,
@@ -53,6 +54,7 @@ const LABEL itemDimTime[ITEM_SECONDS_NUM] = {
   LABEL_CUSTOM_SECONDS
 };
 const uint32_t LCD_DIM_IDLE_TIME[ITEM_SECONDS_NUM] = {
+  LCD_DIM_OFF,
   LCD_DIM_5_SECONDS,
   LCD_DIM_10_SECONDS,
   LCD_DIM_30_SECONDS,
@@ -64,29 +66,38 @@ const uint32_t LCD_DIM_IDLE_TIME[ITEM_SECONDS_NUM] = {
 
 void LCD_Dim_Idle_Timer_init()
 {
- lcd_dim.idle_time_counter  = 0;
- lcd_dim._last_dim_state    = false;
- lcd_dim.idle_timer_reset   = false;
+  lcd_dim.idle_time_counter  = 0;
+  lcd_dim._last_dim_state    = false;
+  lcd_dim.idle_timer_reset   = false;
 }
 
+void LCD_Dim_Idle_Timer_Reset()
+{
+  if(infoSettings.lcd_idle_timer > LCD_DIM_OFF) {
+    lcd_dim.idle_timer_reset= true;
+  }
+}
 void LCD_Dim_Idle_Timer()
 {
-  if(lcd_dim.idle_time_counter >= (LCD_DIM_IDLE_TIME[infoSettings.lcd_idle_timer] * 1000) )
+  if(infoSettings.lcd_idle_timer > LCD_DIM_OFF)
   {
-    Set_LCD_Brightness( LCD_BRIGHTNESS[infoSettings.lcd_idle_brightness] );
-    lcd_dim._last_dim_state= true;
-  } else lcd_dim.idle_time_counter++; 
-
-  if (lcd_dim.idle_timer_reset) 
-  {
-    if(lcd_dim._last_dim_state) 
+    if(lcd_dim.idle_time_counter >= (LCD_DIM_IDLE_TIME[infoSettings.lcd_idle_timer] * 1000))
     {
-      Set_LCD_Brightness( LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
-      lcd_dim._last_dim_state = false;
-    }
+      Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_idle_brightness]);
+      lcd_dim._last_dim_state= true;
+    } else lcd_dim.idle_time_counter++; 
 
-    lcd_dim.idle_timer_reset  = false;
-    lcd_dim.idle_time_counter = 0;
+    if(lcd_dim.idle_timer_reset) 
+    {
+      if(lcd_dim._last_dim_state) 
+      {
+        Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
+        lcd_dim._last_dim_state = false;
+      }
+
+      lcd_dim.idle_timer_reset  = false;
+      lcd_dim.idle_time_counter = 0;
+    }
   }
 }
 

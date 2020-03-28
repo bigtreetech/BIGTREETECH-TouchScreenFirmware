@@ -159,7 +159,7 @@ void loopTouchScreen(void) // Handle in interrupt
     {
       touchScreenIsPress = true;
       #ifdef LCD_LED_PIN
-        lcd_dim.idle_timer_reset= true;
+        LCD_Dim_Idle_Timer_Reset();
       #endif
     }
     else

@@ -18,6 +18,7 @@
   #define LCD_90_PERCENT   90
   #define LCD_100_PERCENT  100
 
+  #define LCD_DIM_OFF         0    // Off
   #define LCD_DIM_5_SECONDS   5    // Seconds
   #define LCD_DIM_10_SECONDS  10   // Seconds
   #define LCD_DIM_30_SECONDS  30   // Seconds
@@ -37,7 +38,7 @@
   } LCD_AUTO_DIM;
   extern LCD_AUTO_DIM lcd_dim;
   
-  #define ITEM_SECONDS_NUM 7
+  #define ITEM_SECONDS_NUM 8
   #define ITEM_BRIGHTNESS_NUM 11
   
   extern const uint32_t LCD_DIM_IDLE_TIME[ITEM_SECONDS_NUM];
@@ -47,6 +48,7 @@
   extern const LABEL itemBrightness[ITEM_BRIGHTNESS_NUM];
   
   void LCD_Dim_Idle_Timer_init();
+  void LCD_Dim_Idle_Timer_Reset();
   void LCD_Dim_Idle_Timer();
   void LCD_LED_PWM_Init();
 

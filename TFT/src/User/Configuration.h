@@ -39,16 +39,16 @@
  * Settings for the idle dim timer. The LCD screen will dim to idle brightness, 
  * if the display is not touched for the period of the lcd idle timer. 
  *  
- * Idle Timer:  1: LCD_DIM_5_SECONDS.   2: LCD_DIM_10_SECONDS,  3: LCD_DIM_30_SECONDS, 
- *              4: LCD_DIM_60_SECONDS,  4: LCD_DIM_120_SECONDS, 5: LCD_DIM_300_SECONDS,
- *              6: LCD_DIM_CUSTOM_SECONDS
+ * Idle Timer:  1: LCD_DIM_OFF,         2: LCD_DIM_5_SECONDS.   3: LCD_DIM_10_SECONDS,  
+ *              4: LCD_DIM_30_SECONDS,  4: LCD_DIM_60_SECONDS,  5: LCD_DIM_120_SECONDS, 
+ *              6: LCD_DIM_300_SECONDS, 7: LCD_DIM_CUSTOM_SECONDS
  * 
  */
 #ifdef LCD_LED_PIN
   #define DEFAULT_LCD_BRIGHTNESS      11  // 11: LCD_100_PERCENT - Brightness value from list
   
   #define DEFAULT_LCD_IDLE_BRIGHTNESS 2   // 2: LCD_10_PERCENT - Brightness value from list
-  #define DEFAULT_LCD_IDLE_TIMER      4   // 4: LCD_DIM_60_SECONDS - Idle timer from list
+  #define DEFAULT_LCD_IDLE_TIMER      1   // 1: LCD_DIM_OFF
   #define LCD_DIM_CUSTOM_SECONDS      600 // Custom value in seconds. Will be used if 
                                           // LCD_DIM_CUSTOM_SECONDS is set as idle timer.
 #endif
