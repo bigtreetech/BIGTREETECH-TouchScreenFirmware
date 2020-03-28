@@ -71,10 +71,11 @@ typedef enum
   #ifdef LED_color_PIN
   SKEY_KNOB,
   #endif
-  SKEY_RESET_SETTINGS,
   SKEY_LCD_BRIGHTNESS,
   SKEY_LCD_BRIGTHNESS_DIM,
   SKEY_LCD_DIM_IDLE_TIMER,
+  
+  SKEY_RESET_SETTINGS, // Keep reset always at the bottom of the settings menu list. 
   SKEY_COUNT //keep this always at the end
 }SKEY_LIST;
 
@@ -103,10 +104,10 @@ LISTITEM settingPage[SKEY_COUNT] = {
   #ifdef LED_color_PIN
   {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_KNOB_LED,                 LABEL_OFF         },
   #endif
-  {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_SETTINGS,                 LABEL_RESET       },
   {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_LCD_BRIGHTNESS,           LABEL_100_PERCENT },
   {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_LCD_BRIGHTNESS_DIM,       LABEL_100_PERCENT },
-  {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_LCD_DIM_IDLE_TIMER,       LABEL_60_SECONDS  }
+  {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_LCD_DIM_IDLE_TIMER,       LABEL_60_SECONDS  }, 
+  {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_SETTINGS,                 LABEL_RESET       }   // Keep reset always at the bottom of the settings menu list. 
 };
 
 void menuResetSettings(void)
