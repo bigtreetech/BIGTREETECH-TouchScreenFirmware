@@ -37,7 +37,7 @@
  *              10: LCD_90_PERCENT, 11: LCD_100_PERCENT
  * 
  * Settings for the idle dim timer. The LCD screen will dim to idle brightness, 
- * if the display is not touched for the period the lcd idle timer. 
+ * if the display is not touched for the period of the lcd idle timer. 
  *  
  * Idle Timer:  1: LCD_DIM_5_SECONDS.   2: LCD_DIM_10_SECONDS,  3: LCD_DIM_30_SECONDS, 
  *              4: LCD_DIM_60_SECONDS,  4: LCD_DIM_120_SECONDS, 5: LCD_DIM_300_SECONDS,
