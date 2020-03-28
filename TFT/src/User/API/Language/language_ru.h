@@ -182,5 +182,6 @@
     #define RU_120_SECONDS              "2 Min."
     #define RU_300_SECONDS              "5 Min."
     #define RU_CUSTOM_SECONDS           "Custom"
+    #define RU_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
 
 #endif

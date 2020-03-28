@@ -74,6 +74,7 @@ typedef enum
   SKEY_LCD_BRIGHTNESS,
   SKEY_LCD_BRIGTHNESS_DIM,
   SKEY_LCD_DIM_IDLE_TIMER,
+  SKEY_ST7920_FULLSCREEN,
   
   SKEY_RESET_SETTINGS, // Keep reset always at the bottom of the settings menu list. 
   SKEY_COUNT //keep this always at the end
@@ -107,6 +108,7 @@ LISTITEM settingPage[SKEY_COUNT] = {
   {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_LCD_BRIGHTNESS,           LABEL_100_PERCENT },
   {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_LCD_BRIGHTNESS_DIM,       LABEL_100_PERCENT },
   {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_LCD_DIM_IDLE_TIMER,       LABEL_60_SECONDS  }, 
+  {ICONCHAR_BLANK,      LIST_TOGGLE,        LABEL_ST7920_FULLSCREEN,        LABEL_OFF         },
   {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_SETTINGS,                 LABEL_RESET       }   // Keep reset always at the bottom of the settings menu list. 
 };
 
@@ -278,6 +280,14 @@ void updateFeatureSettings(uint8_t key_val)
       break;
     #endif //LCD_LED_PIN
 
+    case SKEY_ST7920_FULLSCREEN:
+      infoSettings.marlin_mode_fullscreen = (infoSettings.marlin_mode_fullscreen + 1) % TOGGLE_NUM;
+      settingPage[item_index].icon = toggleitem[infoSettings.marlin_mode_fullscreen];
+      featureSettingsItems.items[key_val] = settingPage[item_index];
+
+      menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
+      break;
+
     default:
       break;
   }
@@ -374,6 +384,12 @@ void loadFeatureSettings(){
         featureSettingsItems.items[i] = settingPage[item_index];
         break;
       #endif //LCD_LED_PIN
+
+      case SKEY_ST7920_FULLSCREEN:
+        settingPage[item_index].icon  = toggleitem[infoSettings.marlin_mode_fullscreen];
+        featureSettingsItems.items[i] = settingPage[item_index];
+        break;
+
       default:
         featureSettingsItems.items[i].icon = ICONCHAR_BACKGROUND;
       break;

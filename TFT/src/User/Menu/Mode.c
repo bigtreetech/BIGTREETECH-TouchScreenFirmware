@@ -86,14 +86,16 @@ void menuMode(void)
   #if defined(ST7920_BANNER_TEXT)
     RADIO modeRadio = {
       {(u8*)"Serial Touch Screen", (u8*)ST7920_BANNER_TEXT, (u8*)"LCD2004 Simulator"},
-      SIMULATOR_XSTART, SIMULATOR_YSTART,
+      infoSettings.marlin_mode_fullscreen ? SIMULATOR_XSTART_FULLSCREEN : SIMULATOR_XSTART,
+      infoSettings.marlin_mode_fullscreen ? SIMULATOR_YSTART_FULLSCREEN : SIMULATOR_YSTART,
       BYTE_HEIGHT*2, 2,
       0
       };
   #else
     RADIO modeRadio = {
       {(u8*)"Serial Touch Screen", (u8*)"12864 Simulator", (u8*)"LCD2004 Simulator"},
-      SIMULATOR_XSTART, SIMULATOR_YSTART,
+      infoSettings.marlin_mode_fullscreen ? SIMULATOR_XSTART_FULLSCREEN : SIMULATOR_XSTART, 
+      infoSettings.marlin_mode_fullscreen ? SIMULATOR_YSTART_FULLSCREEN : SIMULATOR_YSTART,
       BYTE_HEIGHT*2, 2,
       0
       };
