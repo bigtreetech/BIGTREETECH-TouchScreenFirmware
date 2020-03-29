@@ -108,7 +108,7 @@
     #define SK_POWER_FAILED         "Pokračovať v tlači?"
     #define SK_CONTINUE             "Pokračovať"
     #define SK_CANNEL               "Zrušiť"
-    #define SK_ADJUST_TITLE         "Kalibrácia obrazovky"
+    #define SK_ADJUST_TITLE         "Kalibrácia"
     #define SK_ADJUST_INFO          "Dotknite sa postupne všetkých bodov"
     #define SK_ADJUST_OK            "Kalibrácia úspešná"
     #define SK_ADJUST_FAILED        "Kalibrácia zlyhala, opakovať"
