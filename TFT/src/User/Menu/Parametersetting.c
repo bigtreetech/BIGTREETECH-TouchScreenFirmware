@@ -317,6 +317,10 @@ void menuParameterSettings(void){
             }
             break;
         case KEY_ICON_7:
+            if(memcmp(&now, &infoParameters, sizeof(PARAMETERS)))
+                {
+                    storeCmd("M500\n");
+                }
             infoMenu.cur--;
             break;
 
@@ -332,10 +336,6 @@ void menuParameterSettings(void){
         }
     loopProcess();
     }
-  if(memcmp(&now, &infoParameters, sizeof(PARAMETERS)))
-  {
-    storeCmd("M500\n");
-  }
 
 }
 
