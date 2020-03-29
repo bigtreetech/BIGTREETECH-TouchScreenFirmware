@@ -152,7 +152,7 @@
     #define SK_INVERT_YAXIS         "Invertovať os Y"
     #define SK_INVERT_ZAXIS         "Invertovať os Z"
     #define SK_MOVE_SPEED           "Rýchlosť pohybu XYZ"
-    #define SK_KNOB_LED             "Podsvietenie otočneho tlačidla"
+    #define SK_KNOB_LED             "LED otočného tlačidla"
     #define SK_M0_PAUSE             "Pauza príkazom M0"
     #define SK_SEND_START_GCODE     "Začiatočný Gcode"
     #define SK_SEND_END_GCODE       "Koncový Gcode"
