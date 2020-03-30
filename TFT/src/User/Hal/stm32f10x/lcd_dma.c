@@ -31,20 +31,20 @@
 //16bits, SPI_RX to LCD_RAM.
 void LCD_DMA_Config(void)
 {
-  RCC->AHBENR |= W25QXX_SPI_DMA_RCC_AHB;				//开启DMA时钟
-  Delay_ms(5);					//等待DMA时钟稳定
-  W25QXX_SPI_DMA_CHANNEL->CPAR = (u32)&W25QXX_SPI_NUM->DR;			//外设地址为:SPI->DR
-  W25QXX_SPI_DMA_CHANNEL->CMAR = (u32)&LCD->LCD_RAM;//目标地址为LCD_RAM
-  W25QXX_SPI_DMA_CHANNEL->CNDTR = 0;			//DMA1,传输数据量,暂时设置为0
-  W25QXX_SPI_DMA_CHANNEL->CCR = 0X00000000;	//复位
-  W25QXX_SPI_DMA_CHANNEL->CCR |= 0<<4;		//从外设读
-  W25QXX_SPI_DMA_CHANNEL->CCR |= 0<<5;		//普通模式
-  W25QXX_SPI_DMA_CHANNEL->CCR |= 0<<6;		//外设地址非增量模式
-  W25QXX_SPI_DMA_CHANNEL->CCR |= 0<<7;		//存储器非增量模式
-  W25QXX_SPI_DMA_CHANNEL->CCR |= LCD_DATA_16BIT<<8;		//外设数据宽度为16位
-  W25QXX_SPI_DMA_CHANNEL->CCR |= LCD_DATA_16BIT<<10;		//存储器数据宽度16位
-  W25QXX_SPI_DMA_CHANNEL->CCR |= 1<<12;		//中等优先级
-  W25QXX_SPI_DMA_CHANNEL->CCR |= 0<<14;		//非存储器到存储器模式
+  RCC->AHBENR |= W25QXX_SPI_DMA_RCC_AHB;				//Turn on the DMA clock
+  Delay_ms(5);					//Wait for the DMA clock to stabilize
+  W25QXX_SPI_DMA_CHANNEL->CPAR = (u32)&W25QXX_SPI_NUM->DR;			//The peripheral address is: SPI-> DR
+  W25QXX_SPI_DMA_CHANNEL->CMAR = (u32)&LCD->LCD_RAM;//The target address is LCD_RAM
+  W25QXX_SPI_DMA_CHANNEL->CNDTR = 0;			//DMA1, the amount of data transferred, temporarily set to 0
+  W25QXX_SPI_DMA_CHANNEL->CCR = 0X00000000;	//Reset
+  W25QXX_SPI_DMA_CHANNEL->CCR |= 0<<4;		//Read from peripheral
+  W25QXX_SPI_DMA_CHANNEL->CCR |= 0<<5;		//Normal mode
+  W25QXX_SPI_DMA_CHANNEL->CCR |= 0<<6;		//Peripheral address non-incremental mode
+  W25QXX_SPI_DMA_CHANNEL->CCR |= 0<<7;		//Memory non-incremental mode
+  W25QXX_SPI_DMA_CHANNEL->CCR |= LCD_DATA_16BIT<<8;		//Peripheral data width is 16 bits
+  W25QXX_SPI_DMA_CHANNEL->CCR |= LCD_DATA_16BIT<<10;		//Memory data width 16 bits
+  W25QXX_SPI_DMA_CHANNEL->CCR |= 1<<12;		//Medium priority
+  W25QXX_SPI_DMA_CHANNEL->CCR |= 0<<14;		//Non-memory to memory mode
 }
 
 #define LCD_DMA_MAX_TRANS	65535		//DMA 65535 bytes one frame

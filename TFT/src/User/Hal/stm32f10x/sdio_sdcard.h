@@ -30,23 +30,23 @@
 #define SDIO_FLAG_CEATAEND                  ((uint32_t)0x00800000)
 
 
-//用户配置区
-//SDIO时钟计算公式:SDIO_CK时钟=SDIOCLK/[clkdiv+2];其中,SDIOCLK一般为72Mhz
-//使用DMA模式的时候,传输速率可以到24Mhz,不过如果你的卡不是高速卡,可能也会出错
-//出错就请降低时钟,使用查询模式的话,推荐SDIO_TRANSFER_CLK_DIV设置为3或者更大
-#define SDIO_INIT_CLK_DIV        0xB2 		//SDIO初始化频率，最大400Kh
-#define SDIO_TRANSFER_CLK_DIV    0x04		//SDIO传输频率,该值太小可能会导致读写文件出错
+//User configuration area
+// SDIO clock calculation formula: SDIO_CK clock = SDIOCLK / [clkdiv + 2]; Among them, SDIOCLK is generally 72Mhz
+// When using DMA mode, the transmission rate can reach 24Mhz, but if your card is not a high-speed card, it may cause errors.
+// Please reduce the clock if you make a mistake. If you use the query mode, it is recommended that SDIO_TRANSFER_CLK_DIV be set to 3 or greater.
+#define SDIO_INIT_CLK_DIV        0xB2 		//SDIO initialization frequency, maximum 400Kh
+#define SDIO_TRANSFER_CLK_DIV    0x04		//SDIO transmission frequency, this value is too small may cause errors in reading and writing files
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-//SDIO工作模式定义,通过SD_SetDeviceMode函数设置.
-#define SD_POLLING_MODE    	0  	//查询模式,该模式下,如果读写有问题,建议增大SDIO_TRANSFER_CLK_DIV的设置.
-#define SD_DMA_MODE    		1	//DMA模式,该模式下,如果读写有问题,建议增大SDIO_TRANSFER_CLK_DIV的设置.
+// SDIO working mode definition, set by SD_SetDeviceMode function.
+#define SD_POLLING_MODE    	0  	//Query mode. In this mode, if there are problems with reading and writing, it is recommended to increase the setting of SDIO_TRANSFER_CLK_DIV.
+#define SD_DMA_MODE    		1	//DMA mode. In this mode, if there is a problem with reading and writing, it is recommended to increase the setting of SDIO_TRANSFER_CLK_DIV.
 
-//SDIO 各种错误枚举定义
+//SDIO Various error enumeration definitions
 typedef enum
 {
-	//特殊错误定义
+	//Special error definition
 	SD_CMD_CRC_FAIL                    = (1), /*!< Command response received (but CRC check failed) */
 	SD_DATA_CRC_FAIL                   = (2), /*!< Data bock sent/received (CRC check Failed) */
 	SD_CMD_RSP_TIMEOUT                 = (3), /*!< Command response timeout */
@@ -80,7 +80,7 @@ typedef enum
 	SD_SDIO_FUNCTION_BUSY              = (31),
 	SD_SDIO_FUNCTION_FAILED            = (32),
 	SD_SDIO_UNKNOWN_FUNCTION           = (33),
-	//标准错误定义
+	//Standard error definition
 	SD_INTERNAL_ERROR,
 	SD_NOT_CONFIGURED,
 	SD_REQUEST_PENDING,
@@ -92,7 +92,7 @@ typedef enum
 	SD_OK = 0
 } SD_Error;
 
-//SD卡CSD寄存器数据
+//SD card CSD register data
 typedef struct
 {
 	u8  CSDStruct;            /*!< CSD structure */
@@ -134,7 +134,7 @@ typedef struct
 	u8  Reserved4;            /*!< always 1*/
 } SD_CSD;
 
-//SD卡CID寄存器数据
+//SD card CID register data
 typedef struct
 {
 	u8  ManufacturerID;       /*!< ManufacturerID */
@@ -148,7 +148,7 @@ typedef struct
 	u8  CID_CRC;              /*!< CID CRC */
 	u8  Reserved2;            /*!< always 1 */
 } SD_CID;
-//SD卡状态
+//SD card status
 typedef enum
 {
 	SD_CARD_READY                  = ((uint32_t)0x00000001),
@@ -162,17 +162,17 @@ typedef enum
 	SD_CARD_ERROR                  = ((uint32_t)0x000000FF)
 }SDCardState;
 
-//SD卡信息,包括CSD,CID等数据
+//SD card information, including CSD, CID and other data
 typedef struct
 {
   SD_CSD SD_csd;
   SD_CID SD_cid;
-  long long CardCapacity;  	//SD卡容量,单位:字节,最大支持2^64字节大小的卡.
-  u32 CardBlockSize; 		//SD卡块大小
-  u16 RCA;					//卡相对地址
-  u8 CardType;				//卡类型
+  long long CardCapacity;  	//SD card capacity, unit: byte, supports up to 2 ^ 64 byte card.
+  u32 CardBlockSize; 		//SD card block size
+  u16 RCA;					//Card relative address
+  u8 CardType;				//card type
 } SD_CardInfo;
-extern SD_CardInfo SDCardInfo;//SD卡信息
+extern SD_CardInfo SDCardInfo;//SD card information
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //SDIO 指令集
 #define SD_CMD_GO_IDLE_STATE                       ((u8)0)
@@ -251,7 +251,7 @@ extern SD_CardInfo SDCardInfo;//SD卡信息
 #define SD_CMD_SD_APP_CHANGE_SECURE_AREA           ((u8)49) /*!< For SD Card only */
 #define SD_CMD_SD_APP_SECURE_WRITE_MKB             ((u8)48) /*!< For SD Card only */
 
-//支持的SD卡定义
+//Supported SD card definitions
 #define SDIO_STD_CAPACITY_SD_CARD_V1_1             ((u32)0x00000000)
 #define SDIO_STD_CAPACITY_SD_CARD_V2_0             ((u32)0x00000001)
 #define SDIO_HIGH_CAPACITY_SD_CARD                 ((u32)0x00000002)
@@ -261,7 +261,7 @@ extern SD_CardInfo SDCardInfo;//SD卡信息
 #define SDIO_SECURE_DIGITAL_IO_COMBO_CARD          ((u32)0x00000006)
 #define SDIO_HIGH_CAPACITY_MMC_CARD                ((u32)0x00000007)
 
-//SDIO相关参数定义
+//SDIO related parameter definition
 #define NULL 0
 #define SDIO_STATIC_FLAGS               ((u32)0x000005FF)
 #define SDIO_CMD0TIMEOUT                ((u32)0x00010000)
@@ -324,17 +324,17 @@ extern SD_CardInfo SDCardInfo;//SD卡信息
 #define SD_CCCC_WRITE_PROT              ((u32)0x00000040)
 #define SD_CCCC_ERASE                   ((u32)0x00000020)
 
-//CMD8指令
+//CMD8 instruction
 #define SDIO_SEND_IF_COND               ((u32)0x00000008)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-//关闭所有中断
+//Turn off all interrupts
 #define INTX_DISABLE()	__ASM volatile("cpsid i")
-//开启所有中断
+//Enable all interrupts
 #define INTX_ENABLE()	__ASM volatile("cpsie i")
 
-//相关函数定义
+//Related function definitions
 uint8_t SD_CD_Inserted(void);
 SD_Error SD_Init(void);
 void SD_DeInit(void);
@@ -367,7 +367,7 @@ SD_Error FindSCR(u16 rca,u32 *pscr);
 u8 convert_from_bytes_to_power_of_two(u16 NumberOfBytes);
 void SD_DMA_Config(u32*mbuf,u32 bufsize,u8 dir);
 
-u8 SD_ReadDisk(u8*buf,u32 sector,u8 cnt); 	//读SD卡,fatfs/usb调用
-u8 SD_WriteDisk(u8*buf,u32 sector,u8 cnt);	//写SD卡,fatfs/usb调用
+u8 SD_ReadDisk(u8*buf,u32 sector,u8 cnt); 	//Read SD card, fatfs / usb call
+u8 SD_WriteDisk(u8*buf,u32 sector,u8 cnt);	//Write SD card, fatfs / usb call
 
 #endif
