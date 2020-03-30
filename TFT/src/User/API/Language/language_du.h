@@ -173,5 +173,14 @@
     #define DU_INFO                     "Info"
     #define DU_LCD_BRIGHTNESS           "LCD Brightness"
     #define DU_EMERGENCYPARSER          "EMERGENCY_PARSER is disabled in Printer Firmware."
+    #define DU_LCD_BRIGHTNESS_DIM       "LCD Brightness dim"
+    #define DU_LCD_DIM_IDLE_TIMER       "LCD dim idle timer"
+    #define DU_5_SECONDS                "5 Sec."
+    #define DU_10_SECONDS               "10 Sec."
+    #define DU_30_SECONDS               "30 Sec."
+    #define DU_60_SECONDS               "1 Min."
+    #define DU_120_SECONDS              "2 Min."
+    #define DU_300_SECONDS              "5 Min."
+    #define DU_CUSTOM_SECONDS           "Custom"
 
 #endif

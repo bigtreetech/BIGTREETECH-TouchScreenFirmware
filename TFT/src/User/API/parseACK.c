@@ -118,6 +118,7 @@ void parseACK(void)
         updateNextHeatCheckTime();
         infoHost.connected = true;
         storeCmd("M115\n");
+        storeCmd("M503 S0\n");
     }
 
     // Gcode command response

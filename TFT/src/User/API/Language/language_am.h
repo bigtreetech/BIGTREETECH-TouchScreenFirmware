@@ -173,5 +173,14 @@
     #define AM_INFO                     "Info"
     #define AM_LCD_BRIGHTNESS           "LCD Brightness"
     #define AM_EMERGENCYPARSER          "EMERGENCY_PARSER is disabled in Printer Firmware."
+    #define AM_LCD_BRIGHTNESS_DIM       "LCD Brightness dim"
+    #define AM_LCD_DIM_IDLE_TIMER       "LCD dim idle timer"
+    #define AM_5_SECONDS                "5 Sec."
+    #define AM_10_SECONDS               "10 Sec."
+    #define AM_30_SECONDS               "30 Sec."
+    #define AM_60_SECONDS               "1 Min."
+    #define AM_120_SECONDS              "2 Min."
+    #define AM_300_SECONDS              "5 Min."
+    #define AM_CUSTOM_SECONDS           "Custom"
 
 #endif

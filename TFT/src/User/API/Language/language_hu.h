@@ -173,5 +173,14 @@
     #define HU_INFO                     "Infó"
     #define HU_LCD_BRIGHTNESS           "LCD Fényerő"
     #define HU_EMERGENCYPARSER          "VÉSZHELYZETI_ELEMZŐ nincs engedélyezve a nyomtató firmware-ben."
+    #define HU_LCD_BRIGHTNESS_DIM       "LCD Brightness dim"
+    #define HU_LCD_DIM_IDLE_TIMER       "LCD dim idle timer"
+    #define HU_5_SECONDS                "5 Sec."
+    #define HU_10_SECONDS               "10 Sec."
+    #define HU_30_SECONDS               "30 Sec."
+    #define HU_60_SECONDS               "1 Min."
+    #define HU_120_SECONDS              "2 Min."
+    #define HU_300_SECONDS              "5 Min."
+    #define HU_CUSTOM_SECONDS           "Custom"
 
 #endif

@@ -320,7 +320,7 @@ void menuMachineSettings(void)
         break;
 
       case KEY_ICON_4:
-        mustStoreCmd("M503\n");
+        mustStoreCmd("M503 S0\n");
         infoMenu.menu[++infoMenu.cur] = menuParameterSettings;
         break;
 

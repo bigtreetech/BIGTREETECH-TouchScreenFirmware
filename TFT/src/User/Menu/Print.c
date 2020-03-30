@@ -34,7 +34,7 @@
 
 // File list number per page
 #define NUM_PER_PAGE	5
-
+static bool list_mode = true;
 SCROLL   titleScroll;
 const GUI_RECT titleRect={10, (TITLE_END_Y - BYTE_HEIGHT) / 2, LCD_WIDTH-10, (TITLE_END_Y - BYTE_HEIGHT) / 2 + BYTE_HEIGHT};
 
@@ -220,7 +220,7 @@ void menuPrintFromSource(void)
 
   if (mountFS() == true && scanPrintFiles() == true)
   {
-    if(infoSettings.file_listmode != true){
+    if(list_mode != true){
       menuDrawPage(&printIconItems);
       gocdeIconDraw();
     }
@@ -242,7 +242,7 @@ void menuPrintFromSource(void)
     Scroll_DispString(&titleScroll, LEFT);    //
     GUI_SetBkColor(BACKGROUND_COLOR);
 
-    if(infoSettings.file_listmode != true){
+    if(list_mode != true){
       Scroll_DispString(&gcodeScroll, CENTER); //
     }
 
@@ -325,7 +325,7 @@ void menuPrintFromSource(void)
 
         else if(key_num >=KEY_LABEL_0 && key_num <= KEY_LABEL_4)
         {
-          if(infoSettings.file_listmode != true){
+          if(list_mode != true){
             if(key_num - KEY_LABEL_0 + infoFile.cur_page * NUM_PER_PAGE < infoFile.F_num + infoFile.f_num)
             {
               normalNameDisp(gcodeScroll.rect, gcodeScroll.text);
@@ -340,7 +340,7 @@ void menuPrintFromSource(void)
     {
       update=0;
 
-      if(infoSettings.file_listmode != true){
+      if(list_mode != true){
         gocdeIconDraw();
       }
       else{
@@ -393,6 +393,7 @@ void menuPrint(void)
     switch(key_num)
     {
       case KEY_ICON_0:
+        list_mode = infoSettings.file_listmode; //follow list mode setting in TFT sd card
         infoFile.source = TFT_SD;
         infoMenu.menu[++infoMenu.cur] = menuPrintFromSource;
         infoMenu.menu[++infoMenu.cur] = menuPowerOff;
@@ -400,17 +401,19 @@ void menuPrint(void)
 
       #ifdef ONBOARD_SD_SUPPORT
       case KEY_ICON_1:
+        list_mode = true; //force list mode in Onboard sd casd
         infoFile.source = BOARD_SD;
         infoMenu.menu[++infoMenu.cur] = menuPrintFromSource;   //TODO: fix here,  onboard sd card PLR feature
         goto selectEnd;
       #endif
 
       #ifdef U_DISK_SUPPROT
-      #ifdef ONBOARD_SD_SUPPORT
-      case KEY_ICON_2:
-      #else
-      case KEY_ICON_1:
-      #endif
+        #ifdef ONBOARD_SD_SUPPORT
+          case KEY_ICON_2:
+        #else
+          case KEY_ICON_1:
+        #endif
+        list_mode = infoSettings.file_listmode; //follow list mode setting in usb disk
         infoFile.source = TFT_UDISK;
         infoMenu.menu[++infoMenu.cur] = menuPrintFromSource;
         infoMenu.menu[++infoMenu.cur] = menuPowerOff;
