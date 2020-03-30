@@ -154,14 +154,14 @@ void menuShowParameter(void){
     // title
     parameter_names[cur_parameter],
     // icon                     ItemType                Item Title            item value text(only for custom value)
-    {{ICONCHAR_EDIT,           LIST_CUSTOMVALUE,       LABEL_DYNAMIC,      LABEL_DYNAMIC},
-    {ICONCHAR_EDIT,            LIST_CUSTOMVALUE,       LABEL_DYNAMIC,      LABEL_DYNAMIC},
-    {ICONCHAR_EDIT,            LIST_CUSTOMVALUE,       LABEL_DYNAMIC,      LABEL_DYNAMIC},
-    {ICONCHAR_EDIT,            LIST_CUSTOMVALUE,       LABEL_DYNAMIC,      LABEL_DYNAMIC},
-    {ICONCHAR_BACKGROUND,       LIST_CUSTOMVALUE,       LABEL_DYNAMIC,      LABEL_DYNAMIC},
-    {ICONCHAR_BACKGROUND,       LIST_LABEL,             LABEL_BACKGROUND,      LABEL_BACKGROUND},
-    {ICONCHAR_BACKGROUND,       LIST_LABEL,             LABEL_BACKGROUND,      LABEL_BACKGROUND},
-    {ICONCHAR_BACK,             LIST_LABEL,             LABEL_BACKGROUND,      LABEL_BACKGROUND},}
+    {{ICONCHAR_EDIT,            LIST_CUSTOMVALUE,       LABEL_DYNAMIC,        LABEL_DYNAMIC},
+    {ICONCHAR_EDIT,             LIST_CUSTOMVALUE,       LABEL_DYNAMIC,        LABEL_DYNAMIC},
+    {ICONCHAR_EDIT,             LIST_CUSTOMVALUE,       LABEL_DYNAMIC,        LABEL_DYNAMIC},
+    {ICONCHAR_EDIT,             LIST_CUSTOMVALUE,       LABEL_DYNAMIC,        LABEL_DYNAMIC},
+    {ICONCHAR_BACKGROUND,       LIST_CUSTOMVALUE,       LABEL_DYNAMIC,        LABEL_DYNAMIC},
+    {ICONCHAR_BACKGROUND,       LIST_LABEL,             LABEL_BACKGROUND,     LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND,       LIST_LABEL,             LABEL_BACKGROUND,     LABEL_BACKGROUND},
+    {ICONCHAR_BACK,             LIST_LABEL,             LABEL_BACKGROUND,     LABEL_BACKGROUND},}
     };
 
     for (int i = 0; i < STEPPER_COUNT; i++) {

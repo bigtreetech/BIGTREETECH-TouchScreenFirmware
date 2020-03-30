@@ -184,23 +184,25 @@ FRESULT f_remove_node (
   path[i++] = '/';
 
   for (;;) {
-      fr = f_readdir(&dir, fno);  /* Get a directory item */
-      if (fr != FR_OK || !fno->fname[0]) break;   /* End of directory? */
-      j = 0;
-      do {    /* Make a path name */
-          if (i + j >= sz_buff) { /* Buffer over flow? */
-              fr = 100; break;    /* Fails with 100 when buffer overflow */
-          }
-          path[i + j] = fno->fname[j];
-      } while (fno->fname[j++]);
-      if (fno->fattrib & AM_DIR) {    /* Item is a directory */
-          fr = f_remove_node(path, sz_buff, fno);
-      } else {                        /* Item is a file */
-          fr = f_unlink(path);
+    fr = f_readdir(&dir, fno);  /* Get a directory item */
+    if (fr != FR_OK || !fno->fname[0]) break;   /* End of directory? */
+    j = 0;
+    do {    /* Make a path name */
+      if (i + j >= sz_buff) { /* Buffer over flow? */
+        fr = FR_DENIED;
+        goto end_delete;    /* Fails with 100 when buffer overflow */
       }
-      if (fr != FR_OK) break;
+      path[i + j] = fno->fname[j];
+    } while (fno->fname[j++]);
+    if (fno->fattrib & AM_DIR) {    /* Item is a directory */
+      fr = f_remove_node(path, sz_buff, fno);
+    } else {                        /* Item is a file */
+      fr = f_unlink(path);
+    }
+    if (fr != FR_OK) break;
   }
-
+  
+end_delete:
   path[--i] = 0;  /* Restore the path name */
   f_closedir(&dir);
 

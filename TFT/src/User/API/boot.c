@@ -12,7 +12,7 @@ const GUI_RECT labelFailedRect = {0,(BYTE_HEIGHT*4) + PADDING*4 + ICON_HEIGHT, L
 
 
 GUI_POINT bmp_size;
-BMPUPDATE_STAT bmp_stat = SUCCESS;
+BMPUPDATE_STAT bmp_stat = BMP_SUCCESS;
 
 //This List is Auto-Generated. Please add new icons in icon_list.inc only
 const char iconBmpName[][32]={
