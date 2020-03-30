@@ -28,6 +28,8 @@ typedef struct
   uint8_t  knob_led_color;
   #ifdef LCD_LED_PIN
   uint8_t  lcd_brightness;
+  uint8_t  lcd_idle_brightness;
+  uint8_t  lcd_idle_timer;
   #endif
   uint8_t  send_start_gcode;
   uint8_t  send_end_gcode;

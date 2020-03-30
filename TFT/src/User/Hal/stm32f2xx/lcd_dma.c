@@ -37,21 +37,21 @@
 //16bits, SPI_RX to LCD_RAM.
 void LCD_DMA_Config(void)
 {
-  RCC->AHB1ENR |= W25QXX_SPI_DMA_RCC_AHB;				//开启DMA时钟
-  Delay_ms(5);					//等待DMA时钟稳定
-  W25QXX_SPI_DMA_STREAM->PAR = (u32)&W25QXX_SPI_NUM->DR;			//外设地址为:SPI->DR
-  W25QXX_SPI_DMA_STREAM->M0AR = (u32)&LCD->LCD_RAM;//目标地址为LCD_RAM
+  RCC->AHB1ENR |= W25QXX_SPI_DMA_RCC_AHB;				//Turn on the DMA clock
+  Delay_ms(5);					//Wait for the DMA clock to stabilize
+  W25QXX_SPI_DMA_STREAM->PAR = (u32)&W25QXX_SPI_NUM->DR;			//The peripheral address is: SPI-> DR
+  W25QXX_SPI_DMA_STREAM->M0AR = (u32)&LCD->LCD_RAM;//The target address is LCD_RAM
 //  W25QXX_SPI_DMA_STREAM->M1AR = 0; // (used in case of Double buffer mode)
 //  W25QXX_SPI_DMA_CHANNEL->CMAR =
-  W25QXX_SPI_DMA_STREAM->NDTR = 0;			// DMA,传输数据量,暂时设置为0
+  W25QXX_SPI_DMA_STREAM->NDTR = 0;			// DMA, the amount of data transferred, temporarily set to 0
 
   W25QXX_SPI_DMA_STREAM->CR = W25QXX_SPI_DMA_CHANNEL << 25;
   W25QXX_SPI_DMA_STREAM->CR |= 1<<16;  // Priority level: Medium
-  W25QXX_SPI_DMA_STREAM->CR |= LCD_DATA_16BIT<<13;  //存储器数据宽度16位
-  W25QXX_SPI_DMA_STREAM->CR |= LCD_DATA_16BIT<<11;  //外设数据宽度为16位
-  W25QXX_SPI_DMA_STREAM->CR |= 0<<10;  //存储器非增量模式
-  W25QXX_SPI_DMA_STREAM->CR |= 0<<9;   //外设地址非增量模式
-  W25QXX_SPI_DMA_STREAM->CR |= 0<<6;   //非存储器到存储器模式
+  W25QXX_SPI_DMA_STREAM->CR |= LCD_DATA_16BIT<<13;  //Memory data width 16 bits
+  W25QXX_SPI_DMA_STREAM->CR |= LCD_DATA_16BIT<<11;  //Peripheral data width is 16 bits
+  W25QXX_SPI_DMA_STREAM->CR |= 0<<10;  //Memory non-incremental mode
+  W25QXX_SPI_DMA_STREAM->CR |= 0<<9;   //Peripheral address non-incremental mode
+  W25QXX_SPI_DMA_STREAM->CR |= 0<<6;   //Non-memory to memory mode
 }
 
 #define LCD_DMA_MAX_TRANS	65535		//DMA 65535 bytes one frame

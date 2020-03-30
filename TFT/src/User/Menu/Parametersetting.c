@@ -215,13 +215,13 @@ void menuShowParameter(void){
                 {
                     storeCmd(parameter_Cmd[cur_parameter][key_num],v);
                 //send current setting gcode for dual steppers(x,y & z only) if they exists
-                    if(cur_parameter == P_CURRENT && key_num < E_STEPPER)
+                    if(cur_parameter == P_CURRENT && key_num < (KEY_VALUES)E_STEPPER)
                     {
                         if(dualstepper[key_num] == true){
                             storeCmd(dualstepper_current_Cmd[key_num],v);
                         }
                     }
-                    else if(cur_parameter == P_BUMPSENSITIVITY && key_num < E_STEPPER)
+                    else if(cur_parameter == P_BUMPSENSITIVITY && key_num < (KEY_VALUES)E_STEPPER)
                     {
                         if(dualstepper[key_num] == true){
                             storeCmd(dualstepper_bump_Cmd[key_num],v);
@@ -317,6 +317,10 @@ void menuParameterSettings(void){
             }
             break;
         case KEY_ICON_7:
+            if(memcmp(&now, &infoParameters, sizeof(PARAMETERS)))
+                {
+                    storeCmd("M500\n");
+                }
             infoMenu.cur--;
             break;
 
@@ -332,10 +336,6 @@ void menuParameterSettings(void){
         }
     loopProcess();
     }
-  if(memcmp(&now, &infoParameters, sizeof(PARAMETERS)))
-  {
-    storeCmd("M500\n");
-  }
 
 }
 

@@ -3,7 +3,7 @@
 
 #define PARA_SIZE 256  //bytes
 #define TSC_SIGN  0x20190827 // DO NOT MODIFY
-#define PARA_SIGN 0x20200321 // If a new setting parameter is added, modify here and initialize the initial value in the "infoSettingsReset()" function
+#define PARA_SIGN 0x20200326 // If a new setting parameter is added, modify here and initialize the initial value in the "infoSettingsReset()" function
 
 extern u32 TSC_Para[7];        //
 extern SETTINGS infoSettings;  //
@@ -76,6 +76,8 @@ bool readStoredPara(void)
     infoSettings.knob_led_color      = byteToWord(data + (index += 4), 4);
     #ifdef LCD_LED_PIN
     infoSettings.lcd_brightness      = byteToWord(data + (index += 4), 4);
+    infoSettings.lcd_idle_brightness = byteToWord(data + (index += 4), 4);
+    infoSettings.lcd_idle_timer      = byteToWord(data + (index += 4), 4);
     #endif
   }
 
@@ -113,7 +115,9 @@ void storePara(void)
   wordToByte(infoSettings.file_listmode,      data + (index += 4));
   wordToByte(infoSettings.knob_led_color,     data + (index += 4));
   #ifdef LCD_LED_PIN
-  wordToByte(infoSettings.lcd_brightness,     data + (index += 4));
+  wordToByte(infoSettings.lcd_brightness,      data + (index += 4));
+  wordToByte(infoSettings.lcd_idle_brightness, data + (index += 4));
+  wordToByte(infoSettings.lcd_idle_timer,      data + (index += 4));
   #endif
 
   STM32_FlashWrite(data, PARA_SIZE);

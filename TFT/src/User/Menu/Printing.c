@@ -241,6 +241,8 @@ void menuBeforePrinting(void)
   infoPrinting.printing = true;
   infoMenu.menu[infoMenu.cur] = menuPrinting;
   printingItems.title.address = getCurGcodeName(infoFile.title);
+  printingItems.items[KEY_ICON_7].icon = ICON_STOP;
+  printingItems.items[KEY_ICON_7].label.index = LABEL_STOP;
 }
 
 
@@ -672,9 +674,6 @@ void endPrinting(void)
   if(infoSettings.send_end_gcode == 1){
     endGcodeExecute();
   }
-  printingItems.items[KEY_ICON_7].icon = ICON_BACK;
-  printingItems.items[KEY_ICON_7].label.index = LABEL_BACK;
-  menuDrawItem(&printingItems.items[KEY_ICON_7], KEY_ICON_7);
 }
 
 
@@ -682,6 +681,10 @@ void completePrinting(void)
 {
   BUZZER_PLAY(sound_success);
   endPrinting();
+  printingItems.items[KEY_ICON_7].icon = ICON_BACK;
+  printingItems.items[KEY_ICON_7].label.index = LABEL_BACK;
+  if (infoMenu.menu[infoMenu.cur] == menuPrinting)
+    menuDrawItem(&printingItems.items[KEY_ICON_7], KEY_ICON_7);
   if(infoSettings.auto_off) // Auto shut down after printing
   {
 		infoMenu.menu[++infoMenu.cur] = menuShutDown;
