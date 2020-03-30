@@ -1,5 +1,4 @@
 #include "w25qxx.h"
-#include "variants.h"
 
 /*************************** W25Qxx SPI Interface ported by the underlying pattern ***************************/
 //#define W25Qxx_SPI     _SPI3
@@ -8,14 +7,7 @@
 //Chip Select
 void W25Qxx_SPI_CS_Set(u8 level)
 {
-  #if defined(MKS_32_V1_4)
-  if (level==0)
-  GPIO_ResetBits(GPIOB,GPIO_Pin_9);
-  else
-  GPIO_SetBits(GPIOB,GPIO_Pin_9);
-  #else
   SPI_CS_Set(W25Qxx_SPI,level);
-  #endif
 }
 
 //Read and write functions

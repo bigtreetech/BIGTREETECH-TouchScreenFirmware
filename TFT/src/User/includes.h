@@ -10,7 +10,6 @@
 #include <string.h>
 #include "my_misc.h"
 
-#include "variants.h"
 #include "os_timer.h"
 #include "delay.h"
 
