@@ -215,13 +215,13 @@ void menuShowParameter(void){
                 {
                     storeCmd(parameter_Cmd[cur_parameter][key_num],v);
                 //send current setting gcode for dual steppers(x,y & z only) if they exists
-                    if(cur_parameter == P_CURRENT && key_num < E_STEPPER)
+                    if(cur_parameter == P_CURRENT && key_num < (KEY_VALUES)E_STEPPER)
                     {
                         if(dualstepper[key_num] == true){
                             storeCmd(dualstepper_current_Cmd[key_num],v);
                         }
                     }
-                    else if(cur_parameter == P_BUMPSENSITIVITY && key_num < E_STEPPER)
+                    else if(cur_parameter == P_BUMPSENSITIVITY && key_num < (KEY_VALUES)E_STEPPER)
                     {
                         if(dualstepper[key_num] == true){
                             storeCmd(dualstepper_bump_Cmd[key_num],v);

@@ -158,6 +158,9 @@ void loopTouchScreen(void) // Handle in interrupt
     if(touch >= 20) // 20ms
     {
       touchScreenIsPress = true;
+      #ifdef LCD_LED_PIN
+        LCD_Dim_Idle_Timer_Reset();
+      #endif
     }
     else
     {
@@ -168,6 +171,9 @@ void loopTouchScreen(void) // Handle in interrupt
   {
     touchScreenIsPress = false;
     touch = 0;
+    #ifdef LCD_LED_PIN
+      LCD_Dim_Idle_Timer();
+    #endif
   }
 }
 

@@ -173,5 +173,14 @@
     #define JP_INFO                     "Info"
     #define JP_LCD_BRIGHTNESS           "LCD Brightness"
     #define JP_EMERGENCYPARSER          "EMERGENCY_PARSER is disabled in Printer Firmware."
+    #define JP_LCD_BRIGHTNESS_DIM       "LCD Brightness dim"
+    #define JP_LCD_DIM_IDLE_TIMER       "LCD dim idle timer"
+    #define JP_5_SECONDS                "5 Sec."
+    #define JP_10_SECONDS               "10 Sec."
+    #define JP_30_SECONDS               "30 Sec."
+    #define JP_60_SECONDS               "1 Min."
+    #define JP_120_SECONDS              "2 Min."
+    #define JP_300_SECONDS              "5 Min."
+    #define JP_CUSTOM_SECONDS           "Custom"
 
 #endif

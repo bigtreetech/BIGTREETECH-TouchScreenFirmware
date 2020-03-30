@@ -4,6 +4,8 @@
 
 
 #ifdef LCD_LED_PIN
+LCD_AUTO_DIM lcd_dim;
+
 void LCD_LED_On()
 {
   GPIO_SetLevel(LCD_LED_PIN, 1);
@@ -13,7 +15,7 @@ void LCD_LED_Off()
   GPIO_SetLevel(LCD_LED_PIN, 0);
 }
 
-const  uint32_t LCD_BRIGHTNESS[ITEM_BRIGHTNESS_NUM] = {
+const uint32_t LCD_BRIGHTNESS[ITEM_BRIGHTNESS_NUM] = {
   LCD_5_PERCENT,
   LCD_10_PERCENT,
   LCD_20_PERCENT,
@@ -40,6 +42,64 @@ const LABEL itemBrightness[ITEM_BRIGHTNESS_NUM] = {
   LABEL_90_PERCENT,
   LABEL_100_PERCENT
 };
+const LABEL itemDimTime[ITEM_SECONDS_NUM] = {
+  //item value text(only for custom value)
+  LABEL_OFF,
+  LABEL_5_SECONDS,
+  LABEL_10_SECONDS,
+  LABEL_30_SECONDS,
+  LABEL_60_SECONDS,
+  LABEL_120_SECONDS,
+  LABEL_300_SECONDS,
+  LABEL_CUSTOM_SECONDS
+};
+const uint32_t LCD_DIM_IDLE_TIME[ITEM_SECONDS_NUM] = {
+  LCD_DIM_OFF,
+  LCD_DIM_5_SECONDS,
+  LCD_DIM_10_SECONDS,
+  LCD_DIM_30_SECONDS,
+  LCD_DIM_60_SECONDS,
+  LCD_DIM_120_SECONDS,
+  LCD_DIM_300_SECONDS,
+  LCD_DIM_CUSTOM_SECONDS
+};
+
+void LCD_Dim_Idle_Timer_init()
+{
+  lcd_dim.idle_time_counter  = 0;
+  lcd_dim._last_dim_state    = false;
+  lcd_dim.idle_timer_reset   = false;
+}
+
+void LCD_Dim_Idle_Timer_Reset()
+{
+  if(infoSettings.lcd_idle_timer > LCD_DIM_OFF) {
+    lcd_dim.idle_timer_reset= true;
+  }
+}
+void LCD_Dim_Idle_Timer()
+{
+  if(infoSettings.lcd_idle_timer > LCD_DIM_OFF)
+  {
+    if(lcd_dim.idle_time_counter >= (LCD_DIM_IDLE_TIME[infoSettings.lcd_idle_timer] * 1000))
+    {
+      Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_idle_brightness]);
+      lcd_dim._last_dim_state= true;
+    } else lcd_dim.idle_time_counter++; 
+
+    if(lcd_dim.idle_timer_reset) 
+    {
+      if(lcd_dim._last_dim_state) 
+      {
+        Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
+        lcd_dim._last_dim_state = false;
+      }
+
+      lcd_dim.idle_timer_reset  = false;
+      lcd_dim.idle_time_counter = 0;
+    }
+  }
+}
 
 void LCD_LED_PWM_Init()
 {
@@ -441,109 +501,112 @@ void LCD_init_RGB(void)
   Delay_ms(120);
   LCD_WR_REG(0x29); //Display on
 }
+
+
 #elif defined(MKS_32_V1_4)
 
 void LCD_init_RGB(void) 
 {
   Delay_ms(50); // delay 50 ms 
   
- LCD_WR_REG(0xFE);                     // 
- LCD_WR_REG(0xEF);
- LCD_WR_REG(0x3A);
- LCD_WR_DATA(5);
- LCD_WR_REG(0X36);
-LCD_WR_DATA(0x64);
-LCD_WR_REG(0xE8);
-LCD_WR_DATA(0x12);
-LCD_WR_DATA(0x22);
-LCD_WR_REG(0xE3);
-LCD_WR_DATA(1);
-LCD_WR_DATA(4);
-LCD_WR_REG(0xA5);
-LCD_WR_DATA(0x40);
-LCD_WR_DATA(0x40);
-LCD_WR_REG(0xA4);
-LCD_WR_DATA(0x44);
-LCD_WR_DATA(0x44);
-LCD_WR_REG(0xAB);
-LCD_WR_DATA(8);
-LCD_WR_REG(0xAA);
-LCD_WR_DATA(0x88);
-LCD_WR_DATA(0x88);
-LCD_WR_REG(0xAE);
-LCD_WR_DATA(0xB);
-LCD_WR_REG(0xAC);
-LCD_WR_DATA(0);
-LCD_WR_REG(0xAF);
-LCD_WR_DATA(0x77);
-LCD_WR_REG(0xAD);
-LCD_WR_DATA(0x77);
+  LCD_WR_REG(0xFE);                     // 
+  LCD_WR_REG(0xEF);
+  LCD_WR_REG(0x3A);
+  LCD_WR_DATA(5);
+  LCD_WR_REG(0X36);
+  LCD_WR_DATA(0x64);
+  LCD_WR_REG(0xE8);
+  LCD_WR_DATA(0x12);
+  LCD_WR_DATA(0x22);
+  LCD_WR_REG(0xE3);
+  LCD_WR_DATA(1);
+  LCD_WR_DATA(4);
+  LCD_WR_REG(0xA5);
+  LCD_WR_DATA(0x40);
+  LCD_WR_DATA(0x40);
+  LCD_WR_REG(0xA4);
+  LCD_WR_DATA(0x44);
+  LCD_WR_DATA(0x44);
+  LCD_WR_REG(0xAB);
+  LCD_WR_DATA(8);
+  LCD_WR_REG(0xAA);
+  LCD_WR_DATA(0x88);
+  LCD_WR_DATA(0x88);
+  LCD_WR_REG(0xAE);
+  LCD_WR_DATA(0xB);
+  LCD_WR_REG(0xAC);
+  LCD_WR_DATA(0);
+  LCD_WR_REG(0xAF);
+  LCD_WR_DATA(0x77);
+  LCD_WR_REG(0xAD);
+  LCD_WR_DATA(0x77);
 
-LCD_WR_REG(0x2A);
-LCD_WR_DATA(0);
-LCD_WR_DATA(0);
-LCD_WR_DATA(0);
-LCD_WR_DATA(0xEF);
-LCD_WR_REG(0x2B);
-LCD_WR_DATA(0);
-LCD_WR_DATA(0);
-LCD_WR_DATA(1);
-LCD_WR_DATA(0x3F);
+  LCD_WR_REG(0x2A);
+  LCD_WR_DATA(0);
+  LCD_WR_DATA(0);
+  LCD_WR_DATA(0);
+  LCD_WR_DATA(0xEF);
+  LCD_WR_REG(0x2B);
+  LCD_WR_DATA(0);
+  LCD_WR_DATA(0);
+  LCD_WR_DATA(1);
+  LCD_WR_DATA(0x3F);
 
-LCD_WR_REG(0x2C);
+  LCD_WR_REG(0x2C);
 
-LCD_WR_REG(0xF0);
-LCD_WR_DATA(2);
-LCD_WR_DATA(0);
-LCD_WR_DATA(0);
-LCD_WR_DATA(1);
-LCD_WR_DATA(1);
-LCD_WR_DATA(7);
+  LCD_WR_REG(0xF0);
+  LCD_WR_DATA(2);
+  LCD_WR_DATA(0);
+  LCD_WR_DATA(0);
+  LCD_WR_DATA(1);
+  LCD_WR_DATA(1);
+  LCD_WR_DATA(7);
 
-LCD_WR_REG(0xF1);
-LCD_WR_DATA(1);
-LCD_WR_DATA(3);
-LCD_WR_DATA(0);
-LCD_WR_DATA(0x36);
-LCD_WR_DATA(41);
-LCD_WR_DATA(0x13);
+  LCD_WR_REG(0xF1);
+  LCD_WR_DATA(1);
+  LCD_WR_DATA(3);
+  LCD_WR_DATA(0);
+  LCD_WR_DATA(0x36);
+  LCD_WR_DATA(41);
+  LCD_WR_DATA(0x13);
 
-LCD_WR_REG(0xF2);
-LCD_WR_DATA(8);
-LCD_WR_DATA(6);
-LCD_WR_DATA(0x24);
-LCD_WR_DATA(3);
-LCD_WR_DATA(5);
-LCD_WR_DATA(0x34);
+  LCD_WR_REG(0xF2);
+  LCD_WR_DATA(8);
+  LCD_WR_DATA(6);
+  LCD_WR_DATA(0x24);
+  LCD_WR_DATA(3);
+  LCD_WR_DATA(5);
+  LCD_WR_DATA(0x34);
 
-LCD_WR_REG(0xF3);
-LCD_WR_DATA(0x16);
-LCD_WR_DATA(0xC);
-LCD_WR_DATA(0x5A);
-LCD_WR_DATA(4);
-LCD_WR_DATA(3);
-LCD_WR_DATA(0x69);
+  LCD_WR_REG(0xF3);
+  LCD_WR_DATA(0x16);
+  LCD_WR_DATA(0xC);
+  LCD_WR_DATA(0x5A);
+  LCD_WR_DATA(4);
+  LCD_WR_DATA(3);
+  LCD_WR_DATA(0x69);
 
-LCD_WR_REG(0xF4);
-LCD_WR_DATA(0xD);
-LCD_WR_DATA(0x18);
-LCD_WR_DATA(0x15);
-LCD_WR_DATA(5);
-LCD_WR_DATA(5);
-LCD_WR_DATA(0);
+  LCD_WR_REG(0xF4);
+  LCD_WR_DATA(0xD);
+  LCD_WR_DATA(0x18);
+  LCD_WR_DATA(0x15);
+  LCD_WR_DATA(5);
+  LCD_WR_DATA(5);
+  LCD_WR_DATA(0);
 
-LCD_WR_REG(0xF5);
-LCD_WR_DATA(0xD);
-LCD_WR_DATA(0x18);
-LCD_WR_DATA(0x17);
-LCD_WR_DATA(0x35);
-LCD_WR_DATA(0x39);
-LCD_WR_DATA(0);
-LCD_WR_REG(0x11);
-	
-	    Delay_ms(150);
-LCD_WR_REG(0x29);
-LCD_WR_REG(0x2C);
+  LCD_WR_REG(0xF5);
+  LCD_WR_DATA(0xD);
+  LCD_WR_DATA(0x18);
+  LCD_WR_DATA(0x17);
+  LCD_WR_DATA(0x35);
+  LCD_WR_DATA(0x39);
+  LCD_WR_DATA(0);
+  LCD_WR_REG(0x11);
+  
+  Delay_ms(150);
+
+  LCD_WR_REG(0x29);
+  LCD_WR_REG(0x2C);
 }
 
 #endif
@@ -615,6 +678,7 @@ void LCD_Init(void)
   LCD_LED_Init();
   LCD_LED_On();
   LCD_LED_PWM_Init();
+  LCD_Dim_Idle_Timer_init();
 #endif
 
 #ifdef STM32_HAS_FSMC
