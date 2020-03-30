@@ -68,9 +68,6 @@ u32  getPrintTime(void);
 
 void printSetUpdateWaiting(bool isWaiting);
 
-void startGcodeExecute(void);
-void endGcodeExecute(void);
-
 void getGcodeFromFile(void);
 
 void menuBeforePrinting(void);
