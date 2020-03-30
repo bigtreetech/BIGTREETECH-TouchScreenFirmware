@@ -6,8 +6,8 @@
 
 const GUI_RECT rect_of_mode[SELECTMODE]={
   //2 select icon
-  {1*SPACE_SELEX+0*selecticonw,SPACE_SELEY,1*SPACE_SELEX+1*selecticonw,SPACE_SELEY+selecticonw},
-  {3*SPACE_SELEX+1*selecticonw,SPACE_SELEY,3*SPACE_SELEX+2*selecticonw,SPACE_SELEY+selecticonw},
+  {1*SPACE_SELEX+0*ICON_WIDTH, SPACE_SELEY, 1*SPACE_SELEX+1*ICON_WIDTH, SPACE_SELEY+ICON_HEIGHT},
+  {3*SPACE_SELEX+1*ICON_WIDTH, SPACE_SELEY, 3*SPACE_SELEX+2*ICON_WIDTH, SPACE_SELEY+ICON_HEIGHT},
 };
 
 u32 select_mode [SELECTMODE]={
@@ -19,7 +19,7 @@ void show_selectICON(void)
 {
     for(u8 i=0;i<SELECTMODE;i++)
     {
-        lcd_frame_display(rect_of_mode[i].x0,rect_of_mode[i].y0-BYTE_HEIGHT,selecticonw,selecticonw,ICON_ADDR(select_mode[i]));
+        lcd_frame_display(rect_of_mode[i].x0, rect_of_mode[i].y0-BYTE_HEIGHT, ICON_WIDTH, ICON_HEIGHT,ICON_ADDR(select_mode[i]));
     }
     return ;
 }
@@ -170,22 +170,22 @@ MKEY_VALUES MKeyGetValue(void)
 void selectmode(int8_t  nowMode)
 {
 	GUI_SetBkColor(BLACK);
-    GUI_ClearRect(text_startx,rect_of_mode[1].y0-BYTE_HEIGHT+selecticonw+BYTE_WIDTH,LCD_WIDTH,rect_of_mode[1].y0+selecticonw+BYTE_WIDTH);
-	GUI_ClearRect(0,rect_of_mode[1].y0-BYTE_HEIGHT+selecticonw+BYTE_WIDTH,text_startx,rect_of_mode[1].y0+selecticonw+BYTE_WIDTH);
+  GUI_ClearRect(text_startx, rect_of_mode[1].y0-BYTE_HEIGHT+ICON_WIDTH+BYTE_WIDTH, LCD_WIDTH, rect_of_mode[1].y0+ICON_WIDTH+BYTE_WIDTH);
+	GUI_ClearRect(0, rect_of_mode[1].y0-BYTE_HEIGHT+ICON_WIDTH+BYTE_WIDTH, text_startx, rect_of_mode[1].y0+ICON_WIDTH+BYTE_WIDTH);
 
   if(nowMode==SERIAL_TSC)
   {
     GUI_SetColor(ST7920_FNCOLOR);
-    GUI_DispStringInRect(text_startx,rect_of_mode[1].y0-BYTE_HEIGHT+selecticonw+BYTE_WIDTH,LCD_WIDTH,rect_of_mode[1].y0+selecticonw+BYTE_WIDTH,(uint8_t *)"Touch Mode");
+    GUI_DispStringInRect(text_startx, rect_of_mode[1].y0-BYTE_HEIGHT+ICON_WIDTH+BYTE_WIDTH, LCD_WIDTH, rect_of_mode[1].y0+ICON_WIDTH+BYTE_WIDTH,(uint8_t *)"Touch Mode");
     GUI_SetColor(FONT_COLOR);
-    GUI_DispStringInRect(0,rect_of_mode[1].y0-BYTE_HEIGHT+selecticonw+BYTE_WIDTH,text_startx,rect_of_mode[1].y0+selecticonw+BYTE_WIDTH,(uint8_t *)"Marlin Mode");
+    GUI_DispStringInRect(0, rect_of_mode[1].y0-BYTE_HEIGHT+ICON_WIDTH+BYTE_WIDTH, text_startx, rect_of_mode[1].y0+ICON_WIDTH+BYTE_WIDTH,(uint8_t *)"Marlin Mode");
   }
   else
   {
     GUI_SetColor(ST7920_FNCOLOR);
-    GUI_DispStringInRect(0,rect_of_mode[1].y0-BYTE_HEIGHT+selecticonw+BYTE_WIDTH,text_startx,rect_of_mode[1].y0+selecticonw+BYTE_WIDTH,(uint8_t *)"Marlin Mode");
+    GUI_DispStringInRect(0, rect_of_mode[1].y0-BYTE_HEIGHT+ICON_WIDTH+BYTE_WIDTH, text_startx,rect_of_mode[1].y0+ICON_WIDTH+BYTE_WIDTH,(uint8_t *)"Marlin Mode");
     GUI_SetColor(FONT_COLOR);
-    GUI_DispStringInRect(text_startx,rect_of_mode[1].y0-BYTE_HEIGHT+selecticonw+BYTE_WIDTH,LCD_WIDTH,rect_of_mode[1].y0+selecticonw+BYTE_WIDTH,(uint8_t *)"Touch Mode");
+    GUI_DispStringInRect(text_startx,rect_of_mode[1].y0-BYTE_HEIGHT+ICON_WIDTH+BYTE_WIDTH,LCD_WIDTH,rect_of_mode[1].y0+ICON_WIDTH+BYTE_WIDTH,(uint8_t *)"Touch Mode");
   }
 }
 

@@ -2,6 +2,7 @@
 #include "spi.h"
 #include "GPIO_Init.h"
 #include "stdlib.h"
+#include "variants.h"
 
 //TODO:
 //now support SPI2 and PB12 CS only

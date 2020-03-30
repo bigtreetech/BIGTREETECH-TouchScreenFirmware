@@ -9,18 +9,18 @@ void Hardware_GenericInit(void)
   Delay_init(F_CPUM);
   OS_TimerInit(999, F_CPUM-1);  // System clock timer, cycle 1ms
 
+  #ifdef DISABLE_JTAG
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
+    GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE); // disable JTAG, enable SWD
+  #endif
+  
   #ifdef DISABLE_DEBUG
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO , ENABLE);
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
     GPIO_PinRemapConfig(GPIO_Remap_SWJ_Disable, ENABLE); //disable JTAG & SWD
   #endif
 
-  #ifdef DISABLE_JTAG
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO , ENABLE);
-    GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);
-  #endif
-
   #ifdef MKS_32_V1_4
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
     GPIO_PinRemapConfig(GPIO_Remap_USART2, ENABLE);
   #endif
 
