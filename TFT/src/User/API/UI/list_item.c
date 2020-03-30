@@ -375,7 +375,6 @@ void ListItem_Display(const GUI_RECT* rect, uint8_t position, const LISTITEM * c
     switch (curitem->itemType)
     {
     case LIST_LABEL:
-
       if(curitem->icon != ICONCHAR_BLANK) {
         DrawCharIcon(rect,LEFT_CENTER,curitem->icon, BACKGROUND_COLOR);
         pos.x += (BYTE_HEIGHT + 1);
@@ -386,20 +385,20 @@ void ListItem_Display(const GUI_RECT* rect, uint8_t position, const LISTITEM * c
       DrawListItemPress(rect, pressed);
       break;
 
-    case LIST_TOGGLE:;
-      int16_t wy = (1 + GUI_StrPixelWidth(IconCharSelect(ICONCHAR_TOGGLE_BODY)) + 1);   //right edge of text area
-      GUI_ClearRect(rect->x0, rect->y0, rect->x1 - wy, rect->y1);                     // clear only text area
-      textarea_width = LISTITEM_WIDTH - (pos.x + wy);                                 //width after removing the width for icon
-      draw_itemtitle(pos,curitem->titlelabel,position,textarea_width);
+    case LIST_TOGGLE: {
+        int16_t wy = (1 + GUI_StrPixelWidth(IconCharSelect(ICONCHAR_TOGGLE_BODY)) + 1);   //right edge of text area
+        GUI_ClearRect(rect->x0, rect->y0, rect->x1 - wy, rect->y1);                     // clear only text area
+        textarea_width = LISTITEM_WIDTH - (pos.x + wy);                                 //width after removing the width for icon
+        draw_itemtitle(pos,curitem->titlelabel,position,textarea_width);
 
-      pos = getTextStartPoint(rect->x0, rect->y0, rect->x1,rect->y1,RIGHT_CENTER,GET_ICONCHAR[ICONCHAR_TOGGLE_BODY]);
-      GUI_ClearRect(rect->x1-wy,rect->y0,rect->x1,rect->y1);
-      ListItem_DisplayToggle(pos.x, pos.y, curitem->icon);
-      DrawListItemPress(rect,pressed);
+        pos = getTextStartPoint(rect->x0, rect->y0, rect->x1,rect->y1,RIGHT_CENTER,GET_ICONCHAR[ICONCHAR_TOGGLE_BODY]);
+        GUI_ClearRect(rect->x1-wy,rect->y0,rect->x1,rect->y1);
+        ListItem_DisplayToggle(pos.x, pos.y, curitem->icon);
+        DrawListItemPress(rect,pressed);
+      }
       break;
 
     case LIST_MOREBUTTON:
-
       GUI_ClearPrect(rect);
 
       if(curitem->icon != ICONCHAR_BLANK) {

@@ -47,10 +47,10 @@
   extern const  uint32_t LCD_BRIGHTNESS[ITEM_BRIGHTNESS_NUM];
   extern const LABEL itemBrightness[ITEM_BRIGHTNESS_NUM];
   
-  void LCD_Dim_Idle_Timer_init();
-  void LCD_Dim_Idle_Timer_Reset();
-  void LCD_Dim_Idle_Timer();
-  void LCD_LED_PWM_Init();
+  void LCD_Dim_Idle_Timer_init(void);
+  void LCD_Dim_Idle_Timer_Reset(void);
+  void LCD_Dim_Idle_Timer(void);
+  void LCD_LED_PWM_Init(void);
 
   #if defined(TFT35_V1_2) || defined(TFT35_V2_0) || defined(TFT35_V3_0)
     #define Set_LCD_Brightness(level) TIM4->CCR1= (uint32_t)(level * (F_CPUM/100));
