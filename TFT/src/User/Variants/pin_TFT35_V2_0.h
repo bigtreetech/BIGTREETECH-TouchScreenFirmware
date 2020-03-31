@@ -31,7 +31,7 @@
 #endif
 
 // Debug disable, free pins for other function
-//#define DISABLE_JTAG  // free JTAG(PB3/PB4) for SPI3
+#define DISABLE_JTAG  // free JTAG(PB3/PB4) for SPI3
 //#define DISABLE_DEBUG // free all pins
 
 // LCD Backlight pin (PWM can adjust brightness)
