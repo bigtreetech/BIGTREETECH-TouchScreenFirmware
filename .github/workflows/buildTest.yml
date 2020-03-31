@@ -25,6 +25,8 @@ jobs:
         run: platformio run --environment BIGTREE_TFT35_V2_0
       - name: Build TFT35 V3.0
         run: platformio run --environment BIGTREE_TFT35_V3_0
+      - name: Build TFT35 E3 V3.0
+        run: platformio run --environment BIGTREE_TFT35_E3_V3_0
       - name: Build TFT28 V1.0
         run: platformio run --environment BIGTREE_TFT28_V1_0
       - name: Build TFT28 V3.0
