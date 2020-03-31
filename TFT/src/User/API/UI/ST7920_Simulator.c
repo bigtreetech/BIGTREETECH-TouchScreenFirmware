@@ -152,6 +152,7 @@ void menuST7920(void)
 
     #if LCD_ENCODER_SUPPORT
       loopCheckMode();
+      LCD_loopCheckEncoder();
     #endif
     #ifdef CLEAN_MODE_SWITCHING_SUPPORT
       loopBackEnd();
