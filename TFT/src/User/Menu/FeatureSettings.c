@@ -43,7 +43,7 @@ const LABEL itemMoveSpeed[ITEM_SPEED_NUM] = {
                                             };
 
 const  u8 item_movespeed[ITEM_SPEED_NUM]  = {
-                                              LABEL_NORMAL_SPEED, 
+                                              LABEL_NORMAL_SPEED,
                                               LABEL_SLOW_SPEED,
                                               LABEL_FAST_SPEED
                                             };
@@ -249,7 +249,7 @@ void updateFeatureSettings(uint8_t key_val)
 
     case SKEY_RESET_SETTINGS:
       infoMenu.menu[++infoMenu.cur] = menuResetSettings;
-      
+
       menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
       break;
 
@@ -259,7 +259,7 @@ void updateFeatureSettings(uint8_t key_val)
       settingPage[item_index].valueLabel = itemBrightness[infoSettings.lcd_brightness];
       featureSettingsItems.items[key_val] = settingPage[item_index];
       Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness])
-    
+
       menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
       break;
 
@@ -267,7 +267,7 @@ void updateFeatureSettings(uint8_t key_val)
       infoSettings.lcd_idle_brightness = (infoSettings.lcd_idle_brightness + 1) % ITEM_BRIGHTNESS_NUM;
       settingPage[item_index].valueLabel = itemBrightness[infoSettings.lcd_idle_brightness];
       featureSettingsItems.items[key_val] = settingPage[item_index];
-      
+
       menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
       break;
 
@@ -275,7 +275,7 @@ void updateFeatureSettings(uint8_t key_val)
       infoSettings.lcd_idle_timer = (infoSettings.lcd_idle_timer + 1) % ITEM_SECONDS_NUM;
       settingPage[item_index].valueLabel = itemDimTime[infoSettings.lcd_idle_timer];
       featureSettingsItems.items[key_val] = settingPage[item_index];
-      
+
       menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
       break;
     #endif //LCD_LED_PIN
@@ -374,7 +374,7 @@ void loadFeatureSettings(){
         settingPage[item_index].valueLabel = itemBrightness[infoSettings.lcd_brightness];
         featureSettingsItems.items[i] = settingPage[item_index];
         break;
-      
+
       case SKEY_LCD_BRIGTHNESS_DIM:
         settingPage[item_index].valueLabel = itemBrightness[infoSettings.lcd_idle_brightness];
         featureSettingsItems.items[i] = settingPage[item_index];

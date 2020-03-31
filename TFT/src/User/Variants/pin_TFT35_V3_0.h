@@ -63,7 +63,7 @@
   #define SD_SPI        _SPI1
   #define SD_CS_PIN     PA4
 #endif
-  
+
 // SD Card CD detect pin
 #define SD_CD_PIN     PC4
 
