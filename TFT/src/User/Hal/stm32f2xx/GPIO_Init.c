@@ -1,6 +1,4 @@
 #include "GPIO_Init.h"
-
-
 /*
 * bit 0:1 gpio mode  00: Input (reset state)  01: General purpose output mode  10: Alternate function mode  11: Analog mode
 * bit 2   gpio output type  0: Output push-pull (reset state) 1: Output open-drain
@@ -8,7 +6,7 @@
 * bit 5:6 gpio pull-up/pull-down  00: No pull-up, pull-down 01: Pull-up 10: Pull-down 11: Reserved
 * bit 7   reserved
 */
-GPIO_TypeDef* GPIO_Port[] = {GPIOA, GPIOB, GPIOC, GPIOD, GPIOE, GPIOF, GPIOG, GPIOH, GPIOI};
+GPIO_TypeDef* const GPIO_Port[] = {GPIOA, GPIOB, GPIOC, GPIOD, GPIOE, GPIOF, GPIOG, GPIOH, GPIOI};
 
 void GPIO_InitSet(uint16_t io, GPIO_MODE mode, uint8_t AF)
 {

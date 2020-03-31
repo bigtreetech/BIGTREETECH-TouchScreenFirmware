@@ -104,14 +104,7 @@ void LCD_Dim_Idle_Timer()
 void LCD_LED_PWM_Init()
 {
 #if defined(TFT35_V1_2) || defined(TFT35_V2_0) || defined(TFT35_V3_0)
-  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
-  GPIO_InitTypeDef GPIO_InitStructure;
-    GPIO_InitStructure.GPIO_Pin    = GPIO_Pin_12;  //LCD_LED_PIN PD12
-    GPIO_InitStructure.GPIO_Mode   = GPIO_Mode_AF;
-    GPIO_InitStructure.GPIO_Speed  = GPIO_Speed_50MHz;
-  GPIO_Init(GPIOD, &GPIO_InitStructure);
-  
-  GPIO_PinAFConfig(GPIOD, GPIO_PinSource12, GPIO_AF_TIM4);
+  GPIO_InitSet(LCD_LED_PIN, MGPIO_MODE_AF_PP, GPIO_AF_TIM4);
 
   TIM_OCInitTypeDef outputChannelInit = {0,};
     outputChannelInit.TIM_OCMode      = TIM_OCMode_PWM1;

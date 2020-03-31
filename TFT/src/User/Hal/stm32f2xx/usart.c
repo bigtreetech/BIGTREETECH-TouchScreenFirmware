@@ -1,7 +1,7 @@
 #include "usart.h"
 #include "GPIO_Init.h"
 
-static USART_TypeDef *usart[_USART_CNT] = {
+static USART_TypeDef * const usart[_USART_CNT] = {
   USART1,  //TX--PA9  RX--PA10
   USART2,  //TX--PA2  RX--PA3
   USART3,  //TX--PB10 RX--PB11
