@@ -14,7 +14,7 @@ void Serial_ReSourceInit(void)
 {
   if (serialHasBeenInitialized) return;
   serialHasBeenInitialized = true;
-  
+
   memset(&infoHost, 0, sizeof(infoHost));
   reminderSetUnConnected(); // reset connect status
   Serial_Init(infoSettings.baudrate);
@@ -39,7 +39,7 @@ void infoMenuSelect(void)
       #endif
       GUI_SetColor(FONT_COLOR);
       GUI_SetBkColor(BACKGROUND_COLOR);
-      
+
       #ifdef UNIFIED_MENU //if Unified menu is selected
         infoMenu.menu[infoMenu.cur] = menuStatus; //status screen as default screen on boot
       #else // classic UI
@@ -65,7 +65,7 @@ void infoMenuSelect(void)
       #ifdef BUZZER_PIN
         Buzzer_DeConfig();  // Disable buzzer in LCD12864 Simulations mode.
       #endif
-      
+
       #ifdef LED_color_PIN
         #ifndef KEEP_KNOB_LED_COLOR_MARLIN_MODE
           knob_LED_DeInit();
@@ -75,7 +75,7 @@ void infoMenuSelect(void)
       GUI_SetBkColor(ST7920_BKCOLOR);
       infoMenu.menu[infoMenu.cur] = menuST7920;
       break;
-      
+
     #endif
   }
 }
@@ -86,16 +86,14 @@ void menuMode(void)
   #if defined(ST7920_BANNER_TEXT)
     RADIO modeRadio = {
       {(u8*)"Serial Touch Screen", (u8*)ST7920_BANNER_TEXT, (u8*)"LCD2004 Simulator"},
-      infoSettings.marlin_mode_fullscreen ? SIMULATOR_XSTART_FULLSCREEN : SIMULATOR_XSTART,
-      infoSettings.marlin_mode_fullscreen ? SIMULATOR_YSTART_FULLSCREEN : SIMULATOR_YSTART,
+      SIMULATOR_XSTART, SIMULATOR_YSTART,
       BYTE_HEIGHT*2, 2,
       0
       };
   #else
     RADIO modeRadio = {
       {(u8*)"Serial Touch Screen", (u8*)"12864 Simulator", (u8*)"LCD2004 Simulator"},
-      infoSettings.marlin_mode_fullscreen ? SIMULATOR_XSTART_FULLSCREEN : SIMULATOR_XSTART, 
-      infoSettings.marlin_mode_fullscreen ? SIMULATOR_YSTART_FULLSCREEN : SIMULATOR_YSTART,
+      SIMULATOR_XSTART, SIMULATOR_YSTART,
       BYTE_HEIGHT*2, 2,
       0
       };
@@ -110,7 +108,7 @@ void menuMode(void)
 
   GUI_Clear(BACKGROUND_COLOR);
   //RADIO_Create(&modeRadio);
-  #ifndef CLEAN_MODE_SWITCHING_SUPPORT  
+  #ifndef CLEAN_MODE_SWITCHING_SUPPORT
     Serial_ReSourceDeInit();
   #endif
   resetInfoFile();
@@ -146,6 +144,7 @@ void menuMode(void)
     }
 
     LCD_LoopEncoder();
+    LCD_loopCheckEncoder();
     #ifdef CLEAN_MODE_SWITCHING_SUPPORT
       loopBackEnd();
     #endif

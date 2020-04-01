@@ -11,8 +11,6 @@ ST7920_CTRL_STATUS status = ST7920_IDLE;
 void ST7920_DrawPixel(int16_t x, int16_t y, uint16_t color)
 {
 //  GUI_DrawPixel(x, y, color);
-
-
   if(infoSettings.marlin_mode_fullscreen)
   {
     GUI_FillRectColor(SIMULATOR_XSTART_FULLSCREEN + PIXEL_XSIZE_FULLSCREEN*x,
@@ -163,6 +161,7 @@ void menuST7920(void)
 
     #if LCD_ENCODER_SUPPORT
       loopCheckMode();
+      LCD_loopCheckEncoder();
     #endif
     #ifdef CLEAN_MODE_SWITCHING_SUPPORT
       loopBackEnd();
