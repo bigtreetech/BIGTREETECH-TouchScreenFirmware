@@ -43,7 +43,7 @@
  */
 #define SERIAL_PORT   _USART2
 #define USART2_TX_PIN PD5
-#define USART2_RX_PIN PD6  
+#define USART2_RX_PIN PD6
 #define SERIAL_PORT_2 _USART1
 #define SERIAL_PORT_3 _USART3
 #define USART3_TX_PIN PD8
