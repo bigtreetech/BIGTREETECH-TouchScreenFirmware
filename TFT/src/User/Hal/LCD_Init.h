@@ -30,23 +30,23 @@
    #define LCD_DIM_CUSTOM_SECONDS LCD_DIM_5_SECONDS
   */
 
-  typedef struct 
+  typedef struct
   {
     uint32_t idle_time_counter;
     bool idle_timer_reset;
     bool _last_dim_state;
   } LCD_AUTO_DIM;
   extern LCD_AUTO_DIM lcd_dim;
-  
+
   #define ITEM_SECONDS_NUM 8
   #define ITEM_BRIGHTNESS_NUM 11
-  
+
   extern const uint32_t LCD_DIM_IDLE_TIME[ITEM_SECONDS_NUM];
   extern const LABEL itemDimTime[ITEM_SECONDS_NUM];
 
   extern const  uint32_t LCD_BRIGHTNESS[ITEM_BRIGHTNESS_NUM];
   extern const LABEL itemBrightness[ITEM_BRIGHTNESS_NUM];
-  
+
   void LCD_Dim_Idle_Timer_init(void);
   void LCD_Dim_Idle_Timer_Reset(void);
   void LCD_Dim_Idle_Timer(void);

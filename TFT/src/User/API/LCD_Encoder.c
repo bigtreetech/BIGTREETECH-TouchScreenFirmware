@@ -8,6 +8,7 @@ int8_t encoderDirection = 1;
 volatile int8_t encoderDiff; // Updated in update_buttons, added to encoderPosition every LCD update
 int16_t encoderPosition = 0;
 uint8_t buttons = 0;
+uint8_t _encLastBtn =0;
 
 void LCD_EncoderInit(void)
 {
@@ -17,6 +18,7 @@ void LCD_EncoderInit(void)
   {
     GPIO_InitSet(encPin[i], MGPIO_MODE_IPU, 0);
   }
+  _encLastBtn= LCD_GetEncoderButton();
 }
 
 bool LCD_ReadEncA(void)
@@ -47,15 +49,29 @@ bool LCD_ReadBtn(uint16_t intervals)
   return false;
 }
 
-void LCD_LoopEncoder(void)
+
+uint8_t LCD_GetEncoderButton()
 {
-  static uint8_t lastEncoderBits = 0;
   uint8_t newbutton = 0;
 
   if(LCD_ReadEncA()) newbutton |= EN_A;
   if(LCD_ReadEncB()) newbutton |= EN_B;
+  return newbutton;
+}
 
-  buttons = newbutton;
+bool LCD_CheckEncoderState()
+{
+ if(LCD_ReadBtn(LCD_BUTTON_INTERVALS) || _encLastBtn != LCD_GetEncoderButton())
+  {
+    _encLastBtn = LCD_GetEncoderButton();
+    return true;
+  } else return false;
+}
+
+void LCD_LoopEncoder(void)
+{
+  static uint8_t lastEncoderBits = 0;
+  buttons = LCD_GetEncoderButton();
 
   #define encrot0 0
   #define encrot1 2
@@ -86,10 +102,19 @@ void LCD_LoopEncoder(void)
   }
 }
 
+
+void LCD_loopCheckEncoder() {
+  if(LCD_CheckEncoderState() ||           // Check for any encoder changes
+     LCD_ReadBtn(LCD_BUTTON_INTERVALS))   // Check for encoder button press
+  {
+    LCD_Dim_Idle_Timer_Reset();           // Reset LCD dim idle timer if enabled.
+  }
+}
+
 void loopCheckMode(void)
 {
 //  #ifndef CLEAN_MODE_SWITCHING_SUPPORT
-//  IDEALLY I would like to be able to swap even when the TFT is in printing mode 
+//  IDEALLY I would like to be able to swap even when the TFT is in printing mode
 //  but before I can allow that I need a way to make sure that we swap back into the right mode (and correct screen)
 //  and I really want a reliable way to DETECT that the TFT should be in printing mode even when the print was started externally.
     if(isPrinting()) return;

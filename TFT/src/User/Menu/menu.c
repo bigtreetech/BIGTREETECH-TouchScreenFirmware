@@ -412,6 +412,7 @@ void loopBackEnd(void)
 
 #if LCD_ENCODER_SUPPORT
   loopCheckMode();
+  LCD_loopCheckEncoder();
 #endif
 
 #ifdef FIL_RUNOUT_PIN
