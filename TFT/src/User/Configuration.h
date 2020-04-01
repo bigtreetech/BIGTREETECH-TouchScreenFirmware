@@ -135,7 +135,7 @@
 #define BACKGROUND_COLOR            BLACK  // Background color // 0x0A29
 #define FONT_COLOR                  WHITE  // Font foreground color
 #define REMINDER_FONT_COLOR         RED    // Reminder font color, such as: "No print attached", "Busy processing", etc.
-#define VOLUME_REMINDER_FONT_COLOR  GBLUE  // Volume reminder font color, such as: "Card inserted", "Card removed"
+#define VOLUME_REMINDER_FONT_COLOR  BLUE  // Volume reminder font color, such as: "Card inserted", "Card removed"
 
 #define EXTRUDER_NUM 1    // set in 1~6
 #define FAN_NUM      1    // set in 1~6
