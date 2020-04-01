@@ -26,7 +26,7 @@
 #define CMD41   41      //Command 41, should return 0x00
 #define CMD55   55      //Command 55, should return 0x01
 #define CMD58   58      // Command 58, read OCR information
-#define CMD59   59      // Command 59, enable / disable CRC, should return 0x00¡¢
+#define CMD59   59      // Command 59, enable / disable CRC, should return 0x00ï¿½ï¿½
 
 /* Data write response word meaning */
 #define SD_DATA_OK                0x05

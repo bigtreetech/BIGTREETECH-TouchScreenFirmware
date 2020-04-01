@@ -25,7 +25,7 @@
 #ifndef LCD_DATA_16BIT
   #define LCD_DATA_16BIT 1 // LCD data 16bit or 8bit
 #endif
-  
+
 // SD Card CD detect pin
 #define SD_CD_PIN     PB0
 

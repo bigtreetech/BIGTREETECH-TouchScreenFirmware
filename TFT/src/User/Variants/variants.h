@@ -41,6 +41,6 @@
 
 #define LCD_ENCODER_SUPPORT (defined(LCD_ENCA_PIN) && defined(LCD_ENCB_PIN) && defined(LCD_BTN_PIN))
 
-#define LCD_DRIVER_IS(n) (TFTLCD_DRIVER == n) 
+#define LCD_DRIVER_IS(n) (TFTLCD_DRIVER == n)
 
 #endif

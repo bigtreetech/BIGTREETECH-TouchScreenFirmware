@@ -46,7 +46,7 @@ void knob_LED_Init(void) // 12 11
 	TIM6->CNT=0;
 	TIM6->PSC=psc-1;
 	TIM6->ARR=arr;
-	//TIM6->CR1|=1<<0;//Enable timer 6 
+	//TIM6->CR1|=1<<0;//Enable timer 6
 
     ws2812_send_DAT(led_color[infoSettings.knob_led_color]); //set last saved color after initialization
 }

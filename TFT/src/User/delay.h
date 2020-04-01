@@ -2,9 +2,9 @@
 #define _DELAY_H_
 #include "stdint.h"
 
-void Delay_init(uint8_t clk);   //³õÊ¼»¯
-void Delay_ms(uint16_t ms);     //ÑÓÊ±ºÁÃë¼¶
-void Delay_us(uint32_t us);     //ÑÓÊ±Î¢Ãë¼¶
-void Delay(uint32_t time);      //Èí¼þÑÓÊ±
+void Delay_init(uint8_t clk);   //ï¿½ï¿½Ê¼ï¿½ï¿½
+void Delay_ms(uint16_t ms);     //ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ë¼¶
+void Delay_us(uint32_t us);     //ï¿½ï¿½Ê±Î¢ï¿½ë¼¶
+void Delay(uint32_t time);      //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±
 
 #endif

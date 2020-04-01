@@ -18,8 +18,8 @@ MENUITEMS moveItems = {
 //  title
 LABEL_MOVE,
 // icon                       label
- { 
-  #ifdef ALTERNATIVE_MOVE_MENU 
+ {
+  #ifdef ALTERNATIVE_MOVE_MENU
     {ICON_Z_DEC,                LABEL_Z_DEC},
     {ICON_Y_INC,                LABEL_Y_INC},
     {ICON_Z_INC,                LABEL_Z_INC},
@@ -75,9 +75,9 @@ void storeMoveCmd(AXIS xyz, int8_t direction) {
 void menuMove(void)
 {
   KEY_VALUES  key_num = KEY_IDLE;
-  
+
   // postion table of key
-  uint8_t table[TOTAL_AXIS][2] = 
+  uint8_t table[TOTAL_AXIS][2] =
   #ifdef ALTERNATIVE_MOVE_MENU
     /*-------*-------*-------*---------*
      | Z-(0) | Y+(1) | Z+(2) | unit(3) |
@@ -120,7 +120,7 @@ void menuMove(void)
   drawXYZ();
 
   #if LCD_ENCODER_SUPPORT
-    encoderPosition = 0;    
+    encoderPosition = 0;
   #endif
 
   while(infoMenu.menu[infoMenu.cur] == menuMove)
@@ -134,7 +134,7 @@ void menuMove(void)
         case KEY_ICON_2: storeMoveCmd(Z_AXIS, 1); break;  // Z move up if no invert
 
         case KEY_ICON_3:
-              item_move_len_i = (item_move_len_i+1)%ITEM_MOVE_LEN_NUM;            
+              item_move_len_i = (item_move_len_i+1)%ITEM_MOVE_LEN_NUM;
               moveItems.items[key_num] = itemMoveLen[item_move_len_i];
               menuDrawItem(&moveItems.items[key_num], key_num);
               break;
@@ -142,15 +142,15 @@ void menuMove(void)
         case KEY_ICON_4: storeMoveCmd(X_AXIS, -1); break; // X move decrease if no invert
         case KEY_ICON_5: storeMoveCmd(Y_AXIS, -1); break; // Y move decrease if no invert
         case KEY_ICON_6: storeMoveCmd(X_AXIS, 1); break;  // X move increase if no invert
-        
+
         case KEY_ICON_7: infoMenu.cur--; break;
       #else
         case KEY_ICON_0: storeMoveCmd(X_AXIS, 1); break;  // X move increase if no invert
         case KEY_ICON_1: storeMoveCmd(Y_AXIS, 1); break;  // Y move increase if no invert
         case KEY_ICON_2: storeMoveCmd(Z_AXIS, 1); break;  // Z move up if no invert
-        
+
         case KEY_ICON_3:
-              item_move_len_i = (item_move_len_i+1)%ITEM_MOVE_LEN_NUM;            
+              item_move_len_i = (item_move_len_i+1)%ITEM_MOVE_LEN_NUM;
               moveItems.items[key_num] = itemMoveLen[item_move_len_i];
               menuDrawItem(&moveItems.items[key_num], key_num);
               break;
@@ -160,13 +160,13 @@ void menuMove(void)
         case KEY_ICON_6: storeMoveCmd(Z_AXIS, -1); break; // Z move down if no invert
 
         case KEY_ICON_7: infoMenu.cur--; break;
-      #endif        
+      #endif
         default:
           #if LCD_ENCODER_SUPPORT
             if(encoderPosition)
             {
-              storeMoveCmd(nowAxis, encoderPosition > 0 ? 1 : -1);             
-              encoderPosition = 0;    
+              storeMoveCmd(nowAxis, encoderPosition > 0 ? 1 : -1);
+              encoderPosition = 0;
             }
             LCD_LoopEncoder();
           #endif
@@ -193,7 +193,7 @@ void drawXYZ(void){
   char tempstr[100];
   //GUI_SetColor(GANTRYLBL_BKCOLOR);
   //GUI_FillPrect(&RecXYZ);
-  my_sprintf(tempstr, "X:%.1f  ", getAxisLocation(0));  
+  my_sprintf(tempstr, "X:%.1f  ", getAxisLocation(0));
   if (nowAxis == X_AXIS) GUI_SetColor(INFOBOX_ICON_COLOR);
   GUI_DispString(START_X+1*SPACE_X+1*ICON_WIDTH,(ICON_START_Y-BYTE_HEIGHT)/2,(u8 *)tempstr);
   GUI_SetColor(FONT_COLOR);
