@@ -1,6 +1,6 @@
 #include "GPIO_Init.h"
 
-GPIO_TypeDef* GPIO_Port[] = {GPIOA, GPIOB, GPIOC, GPIOD, GPIOE, GPIOF, GPIOG};
+GPIO_TypeDef* const GPIO_Port[] = {GPIOA, GPIOB, GPIOC, GPIOD, GPIOE, GPIOF, GPIOG};
 
 void GPIO_InitSet(uint16_t io, GPIO_MODE mode, uint8_t AF)
 {

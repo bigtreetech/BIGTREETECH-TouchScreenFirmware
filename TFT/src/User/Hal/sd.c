@@ -20,7 +20,7 @@ u8 SD_SPI_Read_Write_Byte( u8 data)
 //Chip Select
 void SD_SPI_CS_Set(u8 level)
 {
-  SPI_CS_Set(SD_SPI,level);
+  GPIO_SetLevel(SD_CS_PIN, level);
 }
 
 #ifdef SD_CD_PIN
@@ -46,12 +46,14 @@ void SD_SPI_Init(void)
 #ifdef SD_CD_PIN
   SD_CD_WP_Init();
 #endif
+  GPIO_InitSet(SD_CS_PIN, MGPIO_MODE_OUT_PP, 0);
   SPI_Config(SD_SPI);
   SD_SPI_CS_Set(1);
 }
 
 void SD_DeInit(void)
 {
+  GPIO_InitSet(SD_CS_PIN, MGPIO_MODE_IPN, 0);
   SPI_DeConfig(SD_SPI);
 }
 
