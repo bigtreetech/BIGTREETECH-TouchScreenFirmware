@@ -70,11 +70,12 @@
 //#define ST7920_BANNER_TEXT "LCD12864 Simulator"
 
 /**
- * Run Marlin Mode Fullscreen
+ * Run Marlin Mode in Fullscreen
  *
- *  *** NOT RECOMMENDED FOR TFT24 ***
+ *  Options:  0: Disabled. RECOMMENDED FOR TFT24
+ *            1: Enabled Marlin Fullscreen mode.
  */
-//#define ST7920_FULLSCREEN
+#define DEFAULT_ST7920_FULLSCREEN_MODE 0 // 0: Disabled. RECOMMENDED FOR TFT24
 
 /**
  * Clean Mode Switching Support
@@ -107,7 +108,7 @@
  *
  * Select the language to display on the LCD while in Touch Mode.
  *
- * Options: ARMENIAN, CHINESE, CZECH, DUTCH, ENGLISH, FRENCH, GERMAN, HUNGARY, ITALIAN, JAPANESE, POLISH, PORTUGUESE, RUSSIAN, SLOVAK, SPAIN
+ * Options: ARMENIAN, CHINESE, CZECH, DUTCH, ENGLISH, FRENCH, GERMAN, HUNGARIAN, ITALIAN, JAPANESE, POLISH, PORTUGUESE, RUSSIAN, SLOVAK, SPAIN
  */
 #define DEFAULT_LANGUAGE ENGLISH
 

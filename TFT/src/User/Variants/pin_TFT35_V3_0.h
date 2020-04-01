@@ -61,16 +61,16 @@
   #define SD_LOW_SPEED  7 // 2^(SPEED+1) = 256 frequency division
   #define SD_HIGH_SPEED 1 // 2 frequency division
   #define SD_SPI        _SPI1
-  #define SPI1_CS_PIN   PA4
+  #define SD_CS_PIN     PA4
 #endif
-  
+
 // SD Card CD detect pin
 #define SD_CD_PIN     PC4
 
 // W25Qxx SPI pins
 #define W25Qxx_SPEED  2 // stm32f103 spi1 max 4 division
 #define W25Qxx_SPI    _SPI3
-#define SPI3_CS_PIN   PB6
+#define W25Qxx_CS_PIN PB6
 
 // ST7920 Simulator SPI pins
 #define ST7920_SPI    _SPI2

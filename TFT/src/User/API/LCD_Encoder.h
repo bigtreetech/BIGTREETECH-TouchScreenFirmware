@@ -21,5 +21,8 @@ void LCD_EncoderInit(void);
 bool LCD_ReadBtn(uint16_t intervals);
 void LCD_LoopEncoder(void);
 void loopCheckMode(void);
+uint8_t LCD_GetEncoderButton(void);
+bool LCD_CheckEncoderState(void);
+void LCD_loopCheckEncoder(void);
 
 #endif

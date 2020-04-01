@@ -666,7 +666,7 @@ void endPrinting(void)
   infoPrinting.printing = infoPrinting.pause = false;
   powerFailedClose();
   powerFailedDelete();
-  if(infoSettings.send_end_gcode == 1){    
+  if(infoSettings.send_end_gcode == 1){
     mustStoreCmd(PRINT_END_GCODE);
   }
   printerGotoIdle();

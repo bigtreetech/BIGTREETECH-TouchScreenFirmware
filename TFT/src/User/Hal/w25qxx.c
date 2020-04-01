@@ -3,11 +3,12 @@
 /*************************** W25Qxx SPI Interface ported by the underlying pattern ***************************/
 //#define W25Qxx_SPI     _SPI3
 //#define W25Qxx_SPEED   0
+//#define W25Qxx_CS_PIN PA4
 
 //Chip Select
 void W25Qxx_SPI_CS_Set(u8 level)
 {
-  SPI_CS_Set(W25Qxx_SPI,level);
+  GPIO_SetLevel(W25Qxx_CS_PIN, level);
 }
 
 //Read and write functions
@@ -18,7 +19,8 @@ uint8_t W25Qxx_SPI_Read_Write_Byte(uint8_t data)
 
 //initialization
 void W25Qxx_Init(void)
-{
+{  
+  GPIO_InitSet(W25Qxx_CS_PIN, MGPIO_MODE_OUT_PP, 0);
   SPI_Config(W25Qxx_SPI);
   SPI_Protocol_Init(W25Qxx_SPI, W25Qxx_SPEED);
   W25Qxx_SPI_CS_Set(1);

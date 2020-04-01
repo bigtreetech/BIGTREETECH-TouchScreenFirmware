@@ -127,7 +127,7 @@ u8 * textSelect(u8 sel)
     case POLISH:      return (u8 *)pl_pack[sel];
     case SLOVAK:      return (u8 *)sk_pack[sel];
     case DUTCH:       return (u8 *)du_pack[sel];
-    case HUNGARY:     return (u8 *)hu_pack[sel];
+    case HUNGARIAN:   return (u8 *)hu_pack[sel];
 
     default:        return NULL;
   }

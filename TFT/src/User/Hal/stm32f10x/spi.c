@@ -1,74 +1,104 @@
 #include "spi.h"
 #include "GPIO_Init.h"
 
-#ifndef SPI1_CS_PIN
-  #define SPI1_CS_PIN  PA4
+// SPI1 default pins config
+#ifndef SPI1_SCK_PIN
+  #define SPI1_SCK_PIN  PA5
+#endif
+#ifndef SPI1_MISO_PIN
+  #define SPI1_MISO_PIN PA6
+#endif
+#ifndef SPI1_MOSI_PIN
+  #define SPI1_MOSI_PIN PA7
+#endif
+// SPI2 default pins config
+#ifndef SPI2_SCK_PIN
+  #define SPI2_SCK_PIN  PB13
+#endif
+#ifndef SPI2_MISO_PIN
+  #define SPI2_MISO_PIN PB14
+#endif
+#ifndef SPI2_MOSI_PIN
+  #define SPI2_MOSI_PIN PB15
+#endif
+// SPI3 default pins config
+#ifndef SPI3_SCK_PIN
+  #define SPI3_SCK_PIN  PB3
+#endif
+#ifndef SPI3_MISO_PIN
+  #define SPI3_MISO_PIN PB4
+#endif
+#ifndef SPI3_MOSI_PIN
+  #define SPI3_MOSI_PIN PB5
 #endif
 
-#ifndef SPI2_CS_PIN
-  #define SPI2_CS_PIN  PB12
-#endif
+static volatile uint32_t* const rcc_spi_rst[_SPI_CNT] = {
+  &RCC->APB2RSTR,
+  &RCC->APB1RSTR,
+  &RCC->APB1RSTR,
+};
 
-#ifndef SPI3_CS_PIN
-  #define SPI3_CS_PIN  PA15
-#endif
+static volatile uint32_t* const rcc_spi_en[_SPI_CNT] = {
+  &RCC->APB2ENR,
+  &RCC->APB1ENR,
+  &RCC->APB1ENR,
+};
 
-static SPI_TypeDef *spi[_SPI_CNT] = {
-  SPI1,  //CS--PA4   SCK--PA5   MISO--PA6   MOSI--PA7
-  SPI2,  //CS--PB12  SCK--PB13  MISO--PB14  MOSI--PB15
-  SPI3}; //CS--PA15  SCK--PB3   MISO--PB4   MOSI--PB5
+static const uint32_t rcc_spi_bit[_SPI_CNT] = {
+  0x00001000, // RCC_APB2  bit 12
+  0x00004000, // RCC_APB1  bit 14
+  0x00008000, // RCC_APB1  bit 15
+};
 
-static const uint16_t spi_cs[_SPI_CNT] = {SPI1_CS_PIN, SPI2_CS_PIN, SPI3_CS_PIN};  //CS
-static const uint16_t spi_sck[_SPI_CNT]  = {PA5,  PB13, PB3};  //SCK
-static const uint16_t spi_miso[_SPI_CNT] = {PA6,  PB14, PB4};  //MISO
-static const uint16_t spi_mosi[_SPI_CNT] = {PA7,  PB15, PB5};  //MOSI
+static SPI_TypeDef* const spi[_SPI_CNT] = {
+  SPI1, // SCK--PA5   MISO--PA6   MOSI--PA7
+  SPI2, // SCK--PB13  MISO--PB14  MOSI--PB15
+  SPI3, // SCK--PB3   MISO--PB4   MOSI--PB5
+};
+
+static const uint16_t spi_sck[_SPI_CNT]  = {SPI1_SCK_PIN,  SPI2_SCK_PIN,  SPI3_SCK_PIN};  // SCK
+static const uint16_t spi_miso[_SPI_CNT] = {SPI1_MISO_PIN, SPI2_MISO_PIN, SPI3_MISO_PIN}; // MISO
+static const uint16_t spi_mosi[_SPI_CNT] = {SPI1_MOSI_PIN, SPI2_MOSI_PIN, SPI3_MOSI_PIN}; // MOSI
 
 void SPI_GPIO_Init(uint8_t port)
 {
-  GPIO_InitSet(spi_sck[port], MGPIO_MODE_AF_PP, 0);  //SCK
-  GPIO_InitSet(spi_miso[port], MGPIO_MODE_AF_PP, 0);  //MISO
-  GPIO_InitSet(spi_mosi[port], MGPIO_MODE_AF_PP, 0);  //MOSI
-  GPIO_InitSet(spi_cs[port], MGPIO_MODE_OUT_PP, 0);  //CS
-  GPIO_SetLevel(spi_cs[port], 1);
+  GPIO_InitSet(spi_sck[port],  MGPIO_MODE_AF_PP, 0); // SCK
+  GPIO_InitSet(spi_miso[port], MGPIO_MODE_AF_PP, 0); // MISO
+  GPIO_InitSet(spi_mosi[port], MGPIO_MODE_AF_PP, 0); // MOSI
 }
 
 void SPI_GPIO_DeInit(uint8_t port)
 {
-  //set all of spi pins to input
-  GPIO_InitSet(spi_sck[port], MGPIO_MODE_IPN, 0);  //SCK
-  GPIO_InitSet(spi_miso[port], MGPIO_MODE_IPN, 0);  //MISO
-  GPIO_InitSet(spi_mosi[port], MGPIO_MODE_IPN, 0);  //MOSI
-  GPIO_InitSet(spi_cs[port], MGPIO_MODE_IPN, 0);  //CS
+  // Set all of spi pins to input
+  GPIO_InitSet(spi_sck[port],  MGPIO_MODE_IPN, 0); // SCK
+  GPIO_InitSet(spi_miso[port], MGPIO_MODE_IPN, 0); // MISO
+  GPIO_InitSet(spi_mosi[port], MGPIO_MODE_IPN, 0); // MOSI
 }
 
-// Ӳ��SPIЭ���ʼ��?
-// baudrate��ȡֵ��ΧΪ 0-7
-// ��������Ϊ 2^(baudrate+1) ��Ƶ��2-256��Ƶ
+// port: SPI index
+// baudrate:0-7, 2^(baudrate+1) : 2~256
 void SPI_Protocol_Init(uint8_t port, uint8_t baudrate)
 {
-  SPI_InitTypeDef SPI_InitStructure;
+  *rcc_spi_rst[port] |= rcc_spi_bit[port];
+  *rcc_spi_rst[port] &= ~rcc_spi_bit[port]; // Reset SPI clock
+  
+  *rcc_spi_en[port] |= rcc_spi_bit[port]; // Enable SPI clock
 
-  SPI_I2S_DeInit(spi[port]);  //reset SPI clock
-  switch(port)
-  {
-    case _SPI1: RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1,ENABLE); break;
-    case _SPI2: RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2,ENABLE); break;
-    case _SPI3: RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI3,ENABLE); break;
-    default: break;
-  }
-
-  SPI_InitStructure.SPI_BaudRatePrescaler = baudrate<<3;
-  SPI_InitStructure.SPI_CPHA = SPI_CPHA_2Edge;
-  SPI_InitStructure.SPI_CPOL = SPI_CPOL_High;
-  SPI_InitStructure.SPI_CRCPolynomial = 7;
-  SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;
-  SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;
-  SPI_InitStructure.SPI_FirstBit =SPI_FirstBit_MSB;
-  SPI_InitStructure.SPI_Mode = SPI_Mode_Master;
-  SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;
-  SPI_Init(spi[port], &SPI_InitStructure);
-
-  SPI_Cmd(spi[port],ENABLE);
+  spi[port]->CR1 = (0<<15)        // 0:2-line 1: 1-line
+                 | (0<<14)        // in bidirectional mode 0:read only 1: read/write
+                 | (0<<13)        // 0:disable CRC 1:enable CRC
+                 | (0<<12)        // 0:Data phase (no CRC phase) 1:Next transfer is CRC (CRC phase)
+                 | (0<<11)        // 0:8-bit data frame 1:16-bit data frame
+                 | (0<<10)        // 0:Full duplex 1:Receive-only
+                 | (1<<9)         // 0:enable NSS 1:disable NSS (Software slave management)
+                 | (1<<8)         // This bit has an effect only when the SSM bit is set. The value of this bit is forced onto the NSS pin and the IO value of the NSS pin is ignored
+                 | (0<<7)         // 0:MSB 1:LSB
+                 | (1<<6)         // Enable SPI
+                 | (baudrate<<3)  // bit3-5   000:fPCLK/2    001:fPCLK/4    010:fPCLK/8     011:fPCLK/16
+                                  //          100:fPCLK/32   101:fPCLK/64   110:fPCLK/128   111:fPCLK/256
+                 | (1<<2)         // 0:Slave 1:Master
+                 | (1<<1)         // CPOL
+                 | (1<<0);        // CPHA
 }
 
 void SPI_Config(uint8_t port)
@@ -80,18 +110,14 @@ void SPI_Config(uint8_t port)
 void SPI_DeConfig(uint8_t port)
 {
   SPI_GPIO_DeInit(port);
-  SPI_I2S_DeInit(spi[port]);
+  *rcc_spi_rst[port] |= rcc_spi_bit[port];
+  *rcc_spi_rst[port] &= ~rcc_spi_bit[port]; // Reset SPI clock
 }
 
 uint16_t SPI_Read_Write(uint8_t port, uint16_t d)
 {
-  while(SPI_I2S_GetFlagStatus(spi[port], SPI_I2S_FLAG_TXE) == RESET);
-  SPI_I2S_SendData(spi[port], d);
-  while(SPI_I2S_GetFlagStatus(spi[port], SPI_I2S_FLAG_RXNE) == RESET);
-  return SPI_I2S_ReceiveData(spi[port]);
-}
-
-void SPI_CS_Set(uint8_t port, uint8_t level)
-{
-  GPIO_SetLevel(spi_cs[port], level);
+  while((spi[port]->SR & (1 << 1)) == RESET); // wait for tx empty
+  spi[port]->DR = d;
+  while((spi[port]->SR & (1 << 0)) == RESET); // wait for rx no empty
+  return spi[port]->DR;
 }

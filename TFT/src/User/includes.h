@@ -14,6 +14,7 @@
 #include "delay.h"
 
 #include "boot.h"
+
 #include "Colors.h"
 #include "lcd.h"
 #include "LCD_Init.h"
@@ -22,7 +23,7 @@
 #include "Language.h"
 #include "utf8_decode.h"
 
-#include "usart.h"
+#include "uart.h"
 #include "Serial.h"
 #include "spi.h"
 #include "sw_spi.h"
@@ -103,7 +104,7 @@ extern MENU infoMenu;
 typedef struct
 {
   bool wait;       //Whether wait for Marlin's response
-  bool rx_ok[_USART_CNT]; //Whether receive Marlin's response or get Gcode by other UART(ESP3D/OctoPrint)
+  bool rx_ok[_UART_CNT]; //Whether receive Marlin's response or get Gcode by other UART(ESP3D/OctoPrint)
   bool connected;  //Whether have connected to Marlin
   bool printing;   //Whether the host is busy in printing execution. ( USB serial printing and GCODE print from onboard)
 }HOST;

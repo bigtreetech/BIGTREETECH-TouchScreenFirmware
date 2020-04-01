@@ -1,7 +1,7 @@
 #ifndef _SERIAL_H_
 #define _SERIAL_H_
 
-#include "usart.h"
+#include "uart.h"
 
 typedef struct
 {
@@ -12,7 +12,7 @@ typedef struct
 
 #define DMA_TRANS_LEN  ACK_MAX_SIZE
 
-extern DMA_CIRCULAR_BUFFER dmaL1Data[_USART_CNT];
+extern DMA_CIRCULAR_BUFFER dmaL1Data[_UART_CNT];
 
 void Serial_Init(u32 baud);
 void Serial_DeInit(void);

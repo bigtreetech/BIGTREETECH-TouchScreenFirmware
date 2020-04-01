@@ -201,7 +201,7 @@ FRESULT f_remove_node (
     }
     if (fr != FR_OK) break;
   }
-  
+
 end_delete:
   path[--i] = 0;  /* Restore the path name */
   f_closedir(&dir);

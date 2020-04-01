@@ -1,6 +1,6 @@
 #include "GPIO_Init.h"
 
-GPIO_TypeDef* GPIO_Port[] = {GPIOA, GPIOB, GPIOC, GPIOD, GPIOE, GPIOF, GPIOG};
+GPIO_TypeDef* const GPIO_Port[] = {GPIOA, GPIOB, GPIOC, GPIOD, GPIOE, GPIOF, GPIOG};
 
 void GPIO_InitSet(uint16_t io, GPIO_MODE mode, uint8_t AF)
 {
@@ -43,7 +43,7 @@ void GPIO_ToggleLevel(uint16_t io)
 {
   u16 port = GPIO_GET_PORT(io);
   u16 pin = GPIO_GET_PIN(io);
-  
+
   GPIO_Port[port]->ODR ^= (1 << pin);
 }
 

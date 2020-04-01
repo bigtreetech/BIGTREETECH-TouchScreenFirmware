@@ -42,8 +42,12 @@
  * SERIAL_PORT_X: communicating with other controller(Octoprint, ESP3D, other UART Touch Screen, etc...)
  */
 #define SERIAL_PORT   _USART2
+#define USART2_TX_PIN PD5
+#define USART2_RX_PIN PD6
 #define SERIAL_PORT_2 _USART1
 #define SERIAL_PORT_3 _USART3
+#define USART3_TX_PIN PD8
+#define USART3_RX_PIN PD9
 //#define SERIAL_PORT_4 _UART4
 
 //XPT2046 Software SPI Pins (touch screen ic)
@@ -61,16 +65,16 @@
   #define SD_LOW_SPEED  7 // 2^(SPEED+1) = 256 frequency division
   #define SD_HIGH_SPEED 1 // 2 frequency division
   #define SD_SPI        _SPI1
-  #define SPI1_CS_PIN   PD11
+  #define SD_CS_PIN     PD11
 #endif
-  
+
 // SD Card CD detect pin
 #define SD_CD_PIN     PB15
 
 // W25Qxx SPI pins
 #define W25Qxx_SPEED  1
 #define W25Qxx_SPI    _SPI1
-#define SPI1_CS_PIN   PB9
+#define W25Qxx_CS_PIN PB9
 
 // ST7920 Simulator SPI pins
 //#define ST7920_SPI    _SPI1

@@ -43,7 +43,7 @@ const LABEL itemMoveSpeed[ITEM_SPEED_NUM] = {
                                             };
 
 const  u8 item_movespeed[ITEM_SPEED_NUM]  = {
-                                              LABEL_NORMAL_SPEED, 
+                                              LABEL_NORMAL_SPEED,
                                               LABEL_SLOW_SPEED,
                                               LABEL_FAST_SPEED
                                             };
@@ -74,6 +74,7 @@ typedef enum
   SKEY_LCD_BRIGHTNESS,
   SKEY_LCD_BRIGTHNESS_DIM,
   SKEY_LCD_DIM_IDLE_TIMER,
+  SKEY_ST7920_FULLSCREEN,
   
   SKEY_RESET_SETTINGS, // Keep reset always at the bottom of the settings menu list. 
   SKEY_COUNT //keep this always at the end
@@ -107,6 +108,7 @@ LISTITEM settingPage[SKEY_COUNT] = {
   {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_LCD_BRIGHTNESS,           LABEL_100_PERCENT },
   {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_LCD_BRIGHTNESS_DIM,       LABEL_100_PERCENT },
   {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_LCD_DIM_IDLE_TIMER,       LABEL_60_SECONDS  }, 
+  {ICONCHAR_BLANK,      LIST_TOGGLE,        LABEL_ST7920_FULLSCREEN,        LABEL_OFF         },
   {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_SETTINGS,                 LABEL_RESET       }   // Keep reset always at the bottom of the settings menu list. 
 };
 
@@ -247,7 +249,7 @@ void updateFeatureSettings(uint8_t key_val)
 
     case SKEY_RESET_SETTINGS:
       infoMenu.menu[++infoMenu.cur] = menuResetSettings;
-      
+
       menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
       break;
 
@@ -257,7 +259,7 @@ void updateFeatureSettings(uint8_t key_val)
       settingPage[item_index].valueLabel = itemBrightness[infoSettings.lcd_brightness];
       featureSettingsItems.items[key_val] = settingPage[item_index];
       Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness])
-    
+
       menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
       break;
 
@@ -265,7 +267,7 @@ void updateFeatureSettings(uint8_t key_val)
       infoSettings.lcd_idle_brightness = (infoSettings.lcd_idle_brightness + 1) % ITEM_BRIGHTNESS_NUM;
       settingPage[item_index].valueLabel = itemBrightness[infoSettings.lcd_idle_brightness];
       featureSettingsItems.items[key_val] = settingPage[item_index];
-      
+
       menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
       break;
 
@@ -273,10 +275,18 @@ void updateFeatureSettings(uint8_t key_val)
       infoSettings.lcd_idle_timer = (infoSettings.lcd_idle_timer + 1) % ITEM_SECONDS_NUM;
       settingPage[item_index].valueLabel = itemDimTime[infoSettings.lcd_idle_timer];
       featureSettingsItems.items[key_val] = settingPage[item_index];
-      
+
       menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
       break;
     #endif //LCD_LED_PIN
+
+    case SKEY_ST7920_FULLSCREEN:
+      infoSettings.marlin_mode_fullscreen = (infoSettings.marlin_mode_fullscreen + 1) % TOGGLE_NUM;
+      settingPage[item_index].icon = toggleitem[infoSettings.marlin_mode_fullscreen];
+      featureSettingsItems.items[key_val] = settingPage[item_index];
+
+      menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
+      break;
 
     default:
       break;
@@ -364,7 +374,7 @@ void loadFeatureSettings(){
         settingPage[item_index].valueLabel = itemBrightness[infoSettings.lcd_brightness];
         featureSettingsItems.items[i] = settingPage[item_index];
         break;
-      
+
       case SKEY_LCD_BRIGTHNESS_DIM:
         settingPage[item_index].valueLabel = itemBrightness[infoSettings.lcd_idle_brightness];
         featureSettingsItems.items[i] = settingPage[item_index];
@@ -374,6 +384,12 @@ void loadFeatureSettings(){
         featureSettingsItems.items[i] = settingPage[item_index];
         break;
       #endif //LCD_LED_PIN
+
+      case SKEY_ST7920_FULLSCREEN:
+        settingPage[item_index].icon  = toggleitem[infoSettings.marlin_mode_fullscreen];
+        featureSettingsItems.items[i] = settingPage[item_index];
+        break;
+
       default:
         featureSettingsItems.items[i].icon = ICONCHAR_BACKGROUND;
       break;

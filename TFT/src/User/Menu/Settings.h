@@ -35,6 +35,7 @@ typedef struct
   uint8_t  send_end_gcode;
   uint8_t  persistent_info;
   uint8_t  file_listmode;
+  uint8_t  marlin_mode_fullscreen;
 }SETTINGS;
 
 typedef struct

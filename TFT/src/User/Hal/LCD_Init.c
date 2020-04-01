@@ -77,6 +77,7 @@ void LCD_Dim_Idle_Timer_Reset()
     lcd_dim.idle_timer_reset= true;
   }
 }
+
 void LCD_Dim_Idle_Timer()
 {
   if(infoSettings.lcd_idle_timer > LCD_DIM_OFF)
@@ -85,11 +86,11 @@ void LCD_Dim_Idle_Timer()
     {
       Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_idle_brightness]);
       lcd_dim._last_dim_state= true;
-    } else lcd_dim.idle_time_counter++; 
+    } else lcd_dim.idle_time_counter++;
 
-    if(lcd_dim.idle_timer_reset) 
+    if(lcd_dim.idle_timer_reset)
     {
-      if(lcd_dim._last_dim_state) 
+      if(lcd_dim._last_dim_state)
       {
         Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
         lcd_dim._last_dim_state = false;
@@ -104,14 +105,7 @@ void LCD_Dim_Idle_Timer()
 void LCD_LED_PWM_Init()
 {
 #if defined(TFT35_V1_2) || defined(TFT35_V2_0) || defined(TFT35_V3_0)
-  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
-  GPIO_InitTypeDef GPIO_InitStructure;
-    GPIO_InitStructure.GPIO_Pin    = GPIO_Pin_12;  //LCD_LED_PIN PD12
-    GPIO_InitStructure.GPIO_Mode   = GPIO_Mode_AF;
-    GPIO_InitStructure.GPIO_Speed  = GPIO_Speed_50MHz;
-  GPIO_Init(GPIOD, &GPIO_InitStructure);
-  
-  GPIO_PinAFConfig(GPIOD, GPIO_PinSource12, GPIO_AF_TIM4);
+  GPIO_InitSet(LCD_LED_PIN, MGPIO_MODE_AF_PP, GPIO_AF_TIM4);
 
   TIM_OCInitTypeDef outputChannelInit = {0,};
     outputChannelInit.TIM_OCMode      = TIM_OCMode_PWM1;
@@ -412,11 +406,11 @@ void LCD_init_RGB(void)
 
 #elif LCD_DRIVER_IS(HX8558)
 // HX8558
-void LCD_init_RGB(void) 
+void LCD_init_RGB(void)
 {
-  Delay_ms(50); // delay 50 ms 
-  
-  LCD_WR_REG(0xFE);                     // 
+  Delay_ms(50); // delay 50 ms
+
+  LCD_WR_REG(0xFE);                     //
   LCD_WR_REG(0xEF);
   LCD_WR_REG(0x3A);
   LCD_WR_DATA(5);
@@ -509,7 +503,7 @@ void LCD_init_RGB(void)
   LCD_WR_DATA(0x39);
   LCD_WR_DATA(0);
   LCD_WR_REG(0x11);
-  
+
   Delay_ms(150);
 
   LCD_WR_REG(0x29);
@@ -526,7 +520,7 @@ u16 LCD_ReadID(void)
   id = LCD_RD_DATA();
   id = LCD_RD_DATA();
   id <<= 8;
-  
+
   id |= LCD_RD_DATA();
   return id;
 }

@@ -26,7 +26,7 @@ void TIM4_IRQHandler(void)
 {
   if ((TIM4->SR & 0x01) != 0) {   // update interrupt flag
     TIM4->SR = (uint16_t)~(1<<0); // clear interrupt flag
-    
+
     os_counter++;
 
     setPrintingTime(os_counter);
@@ -47,7 +47,7 @@ uint32_t OS_GetTimeMs(void)
 
 /*
  * task: task structure to be filled
- * time_ms: 
+ * time_ms:
  */
 void OS_TaskInit(OS_TASK *task, uint32_t time_ms, FP_TASK function, void *para)
 {
