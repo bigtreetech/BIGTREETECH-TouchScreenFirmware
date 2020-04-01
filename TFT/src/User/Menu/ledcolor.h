@@ -3,16 +3,16 @@
 
 #include "variants.h"
 #include "menu.h"
-//24bit                           // G  R  B
-#define LED_OFF                   0x00000000
-#define LED_WHITE                 0x00FFFFFF
-#define LED_RED                   0x0000FF00
-#define LED_ORANGE                0x00FF8C00
-#define LED_YELLOW                0x00FFFF00
-#define LED_GREEN                 0x00FF0000
-#define LED_BLUE                  0x000000FF
-#define LED_INDIGO                0x004B0082D
-#define LED_VIOLET                0x0000FEFE
+//24bit                          // G R B
+#define LED_OFF                   0x000000
+#define LED_WHITE                 0xFFFFFF
+#define LED_RED                   0x00FF00
+#define LED_ORANGE                0xFF8C00
+#define LED_YELLOW                0xFFFF00
+#define LED_GREEN                 0xFF0000
+#define LED_BLUE                  0x0000FF
+#define LED_INDIGO                0x4B0082
+#define LED_VIOLET                0x00FEFE
 
 //Color macro  //颜色宏定            /*R G B*/
 #define COLOR_LIGHTPINK             0xFFB6C1  //浅粉
