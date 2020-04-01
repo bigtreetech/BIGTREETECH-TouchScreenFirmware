@@ -9,7 +9,7 @@
 #define _UART4     3
 #define _UART5     4
 #define _USART6    5
-#define _UART_CNT 6
+#define _UART_CNT  6
 
 void UART_Config(uint8_t port, uint32_t baud, uint16_t usart_it);
 void UART_DeConfig(uint8_t port);
