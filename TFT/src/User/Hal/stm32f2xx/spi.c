@@ -1,16 +1,47 @@
 #include "spi.h"
 #include "GPIO_Init.h"
 
-static uint32_t * const rcc_spi_rst[_SPI_CNT] = {
-  (uint32_t *)(&RCC->APB2RSTR),
-  (uint32_t *)(&RCC->APB1RSTR),
-  (uint32_t *)(&RCC->APB1RSTR),
+// SPI1 default pins config
+#ifndef SPI1_SCK_PIN
+  #define SPI1_SCK_PIN  PA5
+#endif
+#ifndef SPI1_MISO_PIN
+  #define SPI1_MISO_PIN PA6
+#endif
+#ifndef SPI1_MOSI_PIN
+  #define SPI1_MOSI_PIN PA7
+#endif
+// SPI2 default pins config
+#ifndef SPI2_SCK_PIN
+  #define SPI2_SCK_PIN  PB13
+#endif
+#ifndef SPI2_MISO_PIN
+  #define SPI2_MISO_PIN PB14
+#endif
+#ifndef SPI2_MOSI_PIN
+  #define SPI2_MOSI_PIN PB15
+#endif
+// SPI3 default pins config
+#ifndef SPI3_SCK_PIN
+  #define SPI3_SCK_PIN  PB3
+#endif
+#ifndef SPI3_MISO_PIN
+  #define SPI3_MISO_PIN PB4
+#endif
+#ifndef SPI3_MOSI_PIN
+  #define SPI3_MOSI_PIN PB5
+#endif
+
+static volatile uint32_t* const rcc_spi_rst[_SPI_CNT] = {
+  &RCC->APB2RSTR,
+  &RCC->APB1RSTR,
+  &RCC->APB1RSTR,
 };
 
-static uint32_t * const rcc_spi_en[_SPI_CNT] = {
-  (uint32_t *)(&RCC->APB2ENR),
-  (uint32_t *)(&RCC->APB1ENR),
-  (uint32_t *)(&RCC->APB1ENR),
+static volatile uint32_t* const rcc_spi_en[_SPI_CNT] = {
+  &RCC->APB2ENR,
+  &RCC->APB1ENR,
+  &RCC->APB1ENR,
 };
 
 static const uint32_t rcc_spi_bit[_SPI_CNT] = {
@@ -19,21 +50,21 @@ static const uint32_t rcc_spi_bit[_SPI_CNT] = {
   0x00008000, // RCC_APB1  bit 15
 };
 
-static SPI_TypeDef * const spi[_SPI_CNT] = {
+static SPI_TypeDef* const spi[_SPI_CNT] = {
   SPI1, // SCK--PA5   MISO--PA6   MOSI--PA7
   SPI2, // SCK--PB13  MISO--PB14  MOSI--PB15
   SPI3, // SCK--PB3   MISO--PB4   MOSI--PB5
 };
 
-static const uint16_t spi_sck[_SPI_CNT]  = {PA5, PB13, PB3};  // SCK
-static const uint16_t spi_miso[_SPI_CNT] = {PA6, PB14, PB4};  // MISO
-static const uint16_t spi_mosi[_SPI_CNT] = {PA7, PB15, PB5};  // MOSI
+static const uint16_t spi_sck[_SPI_CNT]  = {SPI1_SCK_PIN,  SPI2_SCK_PIN,  SPI3_SCK_PIN};  // SCK
+static const uint16_t spi_miso[_SPI_CNT] = {SPI1_MISO_PIN, SPI2_MISO_PIN, SPI3_MISO_PIN}; // MISO
+static const uint16_t spi_mosi[_SPI_CNT] = {SPI1_MOSI_PIN, SPI2_MOSI_PIN, SPI3_MOSI_PIN}; // MOSI
 
 void SPI_GPIO_Init(uint8_t port)
 {
   uint8_t SPI_AF_NUM[_SPI_CNT] = {GPIO_AF_SPI1, GPIO_AF_SPI2, GPIO_AF_SPI3};
 
-  GPIO_InitSet(spi_sck[port], MGPIO_MODE_AF_PP, SPI_AF_NUM[port]);  // SCK
+  GPIO_InitSet(spi_sck[port],  MGPIO_MODE_AF_PP, SPI_AF_NUM[port]); // SCK
   GPIO_InitSet(spi_miso[port], MGPIO_MODE_AF_PP, SPI_AF_NUM[port]); // MISO
   GPIO_InitSet(spi_mosi[port], MGPIO_MODE_AF_PP, SPI_AF_NUM[port]); // MOSI
 }
@@ -41,7 +72,7 @@ void SPI_GPIO_Init(uint8_t port)
 void SPI_GPIO_DeInit(uint8_t port)
 {
   // Set all of spi pins to input
-  GPIO_InitSet(spi_sck[port], MGPIO_MODE_IPN, 0);  // SCK
+  GPIO_InitSet(spi_sck[port],  MGPIO_MODE_IPN, 0); // SCK
   GPIO_InitSet(spi_miso[port], MGPIO_MODE_IPN, 0); // MISO
   GPIO_InitSet(spi_mosi[port], MGPIO_MODE_IPN, 0); // MOSI
 }
