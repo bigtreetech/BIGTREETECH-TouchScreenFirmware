@@ -52,7 +52,7 @@
   void LCD_Dim_Idle_Timer(void);
   void LCD_LED_PWM_Init(void);
 
-  #if defined(TFT35_V1_2) || defined(TFT35_V2_0) || defined(TFT35_V3_0)
+  #if defined(TFT35_V1_2) || defined(TFT35_V2_0) || defined(TFT35_V3_0) || defined(TFT35_E3_V3_0)
     #define Set_LCD_Brightness(level) TIM4->CCR1= (uint32_t)(level * (F_CPUM/100));
   #else
     #define Set_LCD_Brightness(level) ;

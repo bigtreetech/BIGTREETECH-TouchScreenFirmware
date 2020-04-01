@@ -104,8 +104,8 @@ void LCD_Dim_Idle_Timer()
 
 void LCD_LED_PWM_Init()
 {
-#if defined(TFT35_V1_2) || defined(TFT35_V2_0) || defined(TFT35_V3_0)
-  GPIO_InitSet(LCD_LED_PIN, MGPIO_MODE_AF_PP, GPIO_AF_TIM4);
+#if defined(TFT35_V1_2) || defined(TFT35_V2_0) || defined(TFT35_V3_0) || defined(TFT35_E3_V3_0)
+   GPIO_InitSet(LCD_LED_PIN, MGPIO_MODE_AF_PP, GPIO_AF_TIM4);
 
   TIM_OCInitTypeDef outputChannelInit = {0,};
     outputChannelInit.TIM_OCMode      = TIM_OCMode_PWM1;
