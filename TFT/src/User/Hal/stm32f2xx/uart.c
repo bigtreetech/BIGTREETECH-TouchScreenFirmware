@@ -1,6 +1,76 @@
 #include "uart.h"
 #include "GPIO_Init.h"
 
+// USART1 default pins config
+#ifndef USART1_TX_PIN
+  #define USART1_TX_PIN PA9
+#endif
+#ifndef USART1_RX_PIN
+  #define USART1_RX_PIN PA10
+#endif
+// USART2 default pins config
+#ifndef USART2_TX_PIN
+  #define USART2_TX_PIN PA2
+#endif
+#ifndef USART2_RX_PIN
+  #define USART2_RX_PIN PA3
+#endif
+// USART3 default pins config
+#ifndef USART3_TX_PIN
+  #define USART3_TX_PIN PB10
+#endif
+#ifndef USART3_RX_PIN
+  #define USART3_RX_PIN PB11
+#endif
+// UART4 default pins config
+#ifndef UART4_TX_PIN
+  #define UART4_TX_PIN  PC10
+#endif
+#ifndef UART4_RX_PIN
+  #define UART4_RX_PIN  PC11
+#endif
+// UART5 default pins config
+#ifndef UART5_TX_PIN
+  #define UART5_TX_PIN  PC12
+#endif
+#ifndef UART5_RX_PIN
+  #define UART5_RX_PIN  PD2
+#endif
+// USART6 default pins config
+#ifndef USART6_TX_PIN
+  #define USART6_TX_PIN PG14
+#endif
+#ifndef USART6_RX_PIN
+  #define USART6_RX_PIN PG9
+#endif
+
+static volatile uint32_t* const rcc_uart_rst[_UART_CNT] = {
+  &RCC->APB2RSTR,
+  &RCC->APB1RSTR,
+  &RCC->APB1RSTR,
+  &RCC->APB1RSTR,
+  &RCC->APB1RSTR,
+  &RCC->APB2RSTR,
+};
+
+static volatile uint32_t* const rcc_uart_en[_UART_CNT] = {
+  &RCC->APB2ENR,
+  &RCC->APB1ENR,
+  &RCC->APB1ENR,
+  &RCC->APB1ENR,
+  &RCC->APB1ENR,
+  &RCC->APB2ENR,
+};
+
+static const uint32_t rcc_uart_bit[_UART_CNT] = {
+  0x00000010, // RCC_APB2  bit 4
+  0x00020000, // RCC_APB1  bit 17
+  0x00040000, // RCC_APB1  bit 18
+  0x00080000, // RCC_APB1  bit 19
+  0x00100000, // RCC_APB1  bit 20
+  0x00000020, // RCC_APB2  bit 5
+};
+
 static USART_TypeDef* const uart[_UART_CNT] = {
   USART1,  //TX--PA9  RX--PA10
   USART2,  //TX--PA2  RX--PA3
@@ -9,8 +79,8 @@ static USART_TypeDef* const uart[_UART_CNT] = {
   UART5,   //TX--PC12 RX--PD2
   USART6}; //TX--PG14 RX--PG9
 
-static const uint16_t uart_tx[_UART_CNT] = {PA9,  PA2, PB10, PC10, PC12, PG14}; //TX
-static const uint16_t uart_rx[_UART_CNT] = {PA10, PA3, PB11, PC11, PD2,  PG9};  //RX
+static const uint16_t uart_tx[_UART_CNT] = {USART1_TX_PIN, USART2_TX_PIN, USART3_TX_PIN, UART4_TX_PIN, UART5_TX_PIN, USART6_TX_PIN}; // TX
+static const uint16_t uart_rx[_UART_CNT] = {USART1_RX_PIN, USART2_RX_PIN, USART3_RX_PIN, UART4_RX_PIN, UART5_RX_PIN, USART6_RX_PIN}; // RX
 
 void UART_GPIO_Init(uint8_t port)
 {
@@ -30,15 +100,9 @@ void UART_GPIO_DeInit(uint8_t port)
 void UART_Protocol_Init(uint8_t port,uint32_t baud)
 {
   USART_InitTypeDef USART_InitStructure;
-  switch(port)
-  {
-    case _USART1: RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE); break;
-    case _USART2: RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE); break;
-    case _USART3: RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE); break;
-    case _UART4:  RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART4, ENABLE);  break;
-    case _UART5:  RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART5, ENABLE);  break;
-    case _USART6: RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART6, ENABLE);  break;
-  }
+
+  *rcc_uart_en[port] |= rcc_uart_bit[port]; // Enable clock
+
   USART_InitStructure.USART_BaudRate = baud;
   USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
   USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
@@ -75,29 +139,9 @@ void UART_Config(uint8_t port, uint32_t baud, uint16_t usart_it)
 void UART_DeConfig(uint8_t port)
 {
   UART_GPIO_DeInit(port);
-  switch(port)
-  {
-    case _USART1:
-      RCC_APB2PeriphResetCmd(RCC_APB2Periph_USART1, ENABLE);
-      RCC_APB2PeriphResetCmd(RCC_APB2Periph_USART1, DISABLE);
-      break;
-    case _USART2:
-      RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
-      RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, DISABLE);
-      break;
-    case _USART3:
-      RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);
-      RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, DISABLE);
-      break;
-    case _UART4:
-      RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART4, ENABLE);
-      RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART4, DISABLE);
-      break;
-    case _UART5:
-      RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART5, ENABLE);
-      RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART5, DISABLE);
-      break;
-  }
+  
+  *rcc_uart_rst[port] |= rcc_uart_bit[port];
+  *rcc_uart_rst[port] &= ~rcc_uart_bit[port]; // Reset clock
 }
 
 void UART_Write(uint8_t port, uint8_t d)
