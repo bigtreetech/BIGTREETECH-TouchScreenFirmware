@@ -182,5 +182,6 @@
     #define CN_120_SECONDS              "2 Min."
     #define CN_300_SECONDS              "5 Min."
     #define CN_CUSTOM_SECONDS           "Custom"
+    #define CN_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
 
 #endif

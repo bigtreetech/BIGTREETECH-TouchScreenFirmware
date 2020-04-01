@@ -182,5 +182,6 @@
     #define PT_120_SECONDS              "2 Min."
     #define PT_300_SECONDS              "5 Min."
     #define PT_CUSTOM_SECONDS           "Custom"
+    #define PT_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
 
 #endif
