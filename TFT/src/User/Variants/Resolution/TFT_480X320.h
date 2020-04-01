@@ -36,7 +36,7 @@
 #define STATUS_MSG_BODY_BOTTOM    6
 #define STATUS_TITLE_SHORT        20
 #define STATUS_GANTRY_YOFFSET     6
-  
+
 // Printing menu
 #define PICON_LG_WIDTH     154
 #define PICON_SM_WIDTH     121

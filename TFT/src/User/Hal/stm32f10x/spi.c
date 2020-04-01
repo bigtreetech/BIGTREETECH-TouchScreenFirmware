@@ -50,12 +50,17 @@ static const uint32_t rcc_spi_bit[_SPI_CNT] = {
   0x00008000, // RCC_APB1  bit 15
 };
 
+<<<<<<< HEAD
 static SPI_TypeDef* const spi[_SPI_CNT] = {
+=======
+static SPI_TypeDef * const spi[_SPI_CNT] = {
+>>>>>>> 72da6161a4425f738a4283d7dad6d4d336a98022
   SPI1, // SCK--PA5   MISO--PA6   MOSI--PA7
   SPI2, // SCK--PB13  MISO--PB14  MOSI--PB15
   SPI3, // SCK--PB3   MISO--PB4   MOSI--PB5
 };
 
+<<<<<<< HEAD
 static const uint16_t spi_sck[_SPI_CNT]  = {SPI1_SCK_PIN,  SPI2_SCK_PIN,  SPI3_SCK_PIN};  // SCK
 static const uint16_t spi_miso[_SPI_CNT] = {SPI1_MISO_PIN, SPI2_MISO_PIN, SPI3_MISO_PIN}; // MISO
 static const uint16_t spi_mosi[_SPI_CNT] = {SPI1_MOSI_PIN, SPI2_MOSI_PIN, SPI3_MOSI_PIN}; // MOSI
@@ -63,6 +68,15 @@ static const uint16_t spi_mosi[_SPI_CNT] = {SPI1_MOSI_PIN, SPI2_MOSI_PIN, SPI3_M
 void SPI_GPIO_Init(uint8_t port)
 {
   GPIO_InitSet(spi_sck[port],  MGPIO_MODE_AF_PP, 0); // SCK
+=======
+static const uint16_t spi_sck[_SPI_CNT]  = {PA5, PB13, PB3};  // SCK
+static const uint16_t spi_miso[_SPI_CNT] = {PA6, PB14, PB4};  // MISO
+static const uint16_t spi_mosi[_SPI_CNT] = {PA7, PB15, PB5};  // MOSI
+
+void SPI_GPIO_Init(uint8_t port)
+{
+  GPIO_InitSet(spi_sck[port], MGPIO_MODE_AF_PP, 0);  // SCK
+>>>>>>> 72da6161a4425f738a4283d7dad6d4d336a98022
   GPIO_InitSet(spi_miso[port], MGPIO_MODE_AF_PP, 0); // MISO
   GPIO_InitSet(spi_mosi[port], MGPIO_MODE_AF_PP, 0); // MOSI
 }
@@ -70,7 +84,11 @@ void SPI_GPIO_Init(uint8_t port)
 void SPI_GPIO_DeInit(uint8_t port)
 {
   // Set all of spi pins to input
+<<<<<<< HEAD
   GPIO_InitSet(spi_sck[port],  MGPIO_MODE_IPN, 0); // SCK
+=======
+  GPIO_InitSet(spi_sck[port], MGPIO_MODE_IPN, 0);  // SCK
+>>>>>>> 72da6161a4425f738a4283d7dad6d4d336a98022
   GPIO_InitSet(spi_miso[port], MGPIO_MODE_IPN, 0); // MISO
   GPIO_InitSet(spi_mosi[port], MGPIO_MODE_IPN, 0); // MOSI
 }

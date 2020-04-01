@@ -141,7 +141,7 @@ u8 SD_RecvData(u8*buf,u16 len)
     *buf=SD_SPI_Read_Write_Byte(0xFF);
     buf++;
   }
-  //Here are 2 pseudo CRCs£¨dummy CRC£©
+  //Here are 2 pseudo CRCsï¿½ï¿½dummy CRCï¿½ï¿½
   SD_SPI_Read_Write_Byte(0xFF);
   SD_SPI_Read_Write_Byte(0xFF);
   return 0;//Read succeeded
@@ -210,7 +210,7 @@ u8 SD_SendCmd(u8 cmd, u32 arg, u8 crc)
 **Get CID information of SD card, including manufacturer information
 **Input: u8 * cid_data (memory for CID, at least 16Byte)
 **Return value: 0: NO_ERR
-**		 1£ºerror
+**		 1ï¿½ï¿½error
 *************************************************************************************/
 u8 SD_GetCID(u8 *cid_data)
 {
@@ -348,7 +348,7 @@ u8 SD_Init(void)
   SD_SetHighSpeed();
   if(SD_Type) return 0;
   else if(r1) return r1;
-  return 0xaa;//ÆäËû´íÎó
+  return 0xaa;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 }
 
 
