@@ -172,7 +172,7 @@
     #define HU_RESET_SETTINGS_DONE      "A beállítások visszaállítása sikeresen megtörtént. Az érvénybelépéshez indítsa újra az eszközt."
     #define HU_INFO                     "Infó"
     #define HU_LCD_BRIGHTNESS           "LCD Fényerő"
-    #define HU_EMERGENCYPARSER          "VÉSZHELYZETI_ELEMZŐ nincs engedélyezve a nyomtató firmware-ben."
+    #define HU_EMERGENCYPARSER          "EMERGENCY_PARSER nincs engedélyezve a nyomtató firmware-ben."
     #define HU_LCD_BRIGHTNESS_DIM       "LCD Fényerő elhalványítás"
     #define HU_LCD_DIM_IDLE_TIMER       "LCD elhalványítási idő"
     #define HU_5_SECONDS                "5 Mp."
