@@ -30,6 +30,7 @@
     #define CZ_BLTOUCH_DEPLOY       "Vysunout"
     #define CZ_BLTOUCH_STOW         "Zasunout"
     #define CZ_BLTOUCH_REPEAT       "Opakovat"
+    #define CZ_Z_OFFSET             "Z Offset"
     #define CZ_PROBE_OFFSET         "Probe Ofset"
     #define CZ_EEPROM_SAVE          "Uložit"
     #define CZ_INC                  "Přidat"

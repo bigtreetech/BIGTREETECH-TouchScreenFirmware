@@ -30,6 +30,7 @@
     #define AM_BLTOUCH_DEPLOY       "Deploy"
     #define AM_BLTOUCH_STOW         "Stow"
     #define AM_BLTOUCH_REPEAT       "Repeat"
+    #define AM_Z_OFFSET             "Z Offset"
     #define AM_PROBE_OFFSET         "Probe Offset"
     #define AM_EEPROM_SAVE          "Save"
     #define AM_INC                  "Ավելացնել"
