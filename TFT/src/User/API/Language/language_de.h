@@ -30,6 +30,7 @@
     #define DE_BLTOUCH_DEPLOY       "Ausfahren"
     #define DE_BLTOUCH_STOW         "Einfahren"
     #define DE_BLTOUCH_REPEAT       "Widerholen"
+    #define DE_Z_OFFSET             "Z Offset"
     #define DE_PROBE_OFFSET         "Probe Offset"
     #define DE_EEPROM_SAVE          "Speichern"
     #define DE_INC                  "Erhöhen"
