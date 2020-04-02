@@ -153,7 +153,7 @@
 #define COLOR_BLACK                 0x000000
 
 //preset color list
-#ifdef LED_color_PIN
+#ifdef LED_COLOR_PIN
   #define _PSC  6 //presacler register
   #define _ARR  5 //reload value of the timer counter
 
