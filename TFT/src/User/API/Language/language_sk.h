@@ -183,5 +183,8 @@
     #define SK_300_SECONDS              "5 Min."
     #define SK_CUSTOM_SECONDS           "Custom"
     #define SK_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
+    #define SK_PROBE                    "PROBE"
+    #define SK_TOUCHMI_INIT             "INIT"
+    #define SK_TOUCHMI_ZTEST            "ZTEST"
 
 #endif

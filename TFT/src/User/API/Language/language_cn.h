@@ -183,5 +183,8 @@
     #define CN_300_SECONDS              "5 Min."
     #define CN_CUSTOM_SECONDS           "Custom"
     #define CN_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
+    #define CN_PROBE                    "PROBE"
+    #define CN_TOUCHMI_INIT             "INIT"
+    #define CN_TOUCHMI_ZTEST            "ZTEST"
 
 #endif

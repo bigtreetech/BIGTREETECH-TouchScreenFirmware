@@ -183,5 +183,8 @@
     #define CZ_300_SECONDS              "5 Min."
     #define CZ_CUSTOM_SECONDS           "Custom"
     #define CZ_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
+    #define CZ_PROBE                    "PROBE"
+    #define CZ_TOUCHMI_INIT             "INIT"
+    #define CZ_TOUCHMI_ZTEST            "ZTEST"
 
 #endif
