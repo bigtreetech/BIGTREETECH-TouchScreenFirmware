@@ -18,7 +18,7 @@ typedef enum
 {
   BED = 0,
   NOZZLE0 = 1,
-  HEATER_NUM = EXTRUDER_NUM + NOZZLE0,
+  HEATER_NUM = TOOL_NUM + NOZZLE0,
 }TOOL;
 
 typedef struct
