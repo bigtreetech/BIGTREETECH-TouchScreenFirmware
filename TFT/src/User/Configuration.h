@@ -138,6 +138,7 @@
 #define REMINDER_FONT_COLOR         RED    // Reminder font color, such as: "No print attached", "Busy processing", etc.
 #define VOLUME_REMINDER_FONT_COLOR  BLUE  // Volume reminder font color, such as: "Card inserted", "Card removed"
 
+#define TOOL_NUM     1    // set in 1~6
 #define EXTRUDER_NUM 1    // set in 1~6
 #define FAN_NUM      1    // set in 1~6
 
