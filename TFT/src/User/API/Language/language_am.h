@@ -184,7 +184,6 @@
     #define AM_300_SECONDS              "5 Min."
     #define AM_CUSTOM_SECONDS           "Custom"
     #define AM_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
-    #define AM_PROBE                    "PROBE"
     #define AM_TOUCHMI_INIT             "INIT"
     #define AM_TOUCHMI_ZTEST            "ZTEST"
 

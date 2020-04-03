@@ -333,3 +333,5 @@
 #define CANCEL_PRINT_GCODE "G28 XY R10\n" // Raise Z 10mm before homing X & Y
 
 #endif
+// Touchmi probe in ABL menu
+#define TOUCHMI_PROBE
