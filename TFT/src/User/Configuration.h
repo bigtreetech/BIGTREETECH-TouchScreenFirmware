@@ -335,4 +335,4 @@
 #endif
 
 // Touchmi probe in ABL menu
-#define TOUCHMI_PROBE
+//#define TOUCHMI_PROBE
