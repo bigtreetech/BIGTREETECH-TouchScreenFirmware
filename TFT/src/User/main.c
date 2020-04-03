@@ -78,11 +78,13 @@ void Hardware_GenericInit(void)
     TSC_Calibration();
     storePara();
   }
+  printSetUpdateWaiting(infoSettings.m27_active);
   #ifdef LCD_LED_PWM_CHANNEL
-    Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
+  Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
   #endif
   GUI_RestoreColorDefault();
   infoMenuSelect();
+
 }
 
 int main(void)

@@ -15,6 +15,7 @@
 
 #include "boot.h"
 
+#include "Colors.h"
 #include "lcd.h"
 #include "LCD_Init.h"
 #include "lcd_dma.h"

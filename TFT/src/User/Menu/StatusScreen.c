@@ -1,6 +1,5 @@
 #include "StatusScreen.h"
-#include "includes.h"
-#include "GUI.h"
+
 //1 title, ITEM_PER_PAGE items (icon + label)
 const MENUITEMS StatusItems = {
 // title
@@ -116,13 +115,17 @@ void drawTemperature(void)
   GUI_SetColor(VAL_COLOR);
 
   u8 fs;
-  #ifdef SHOW_FAN_PERCENTAGE
-    fs = (fanGetSpeed(current_fan)*100)/255;
+  if (infoSettings.fan_percentage == 1)
+  {
+    fs = (fanGetSpeed(current_fan) * 100) / 255;
     my_sprintf(tempstr, "%d%%", fs);
-  #else
+  }
+  else
+  {
     fs = fanGetSpeed(current_fan);
     my_sprintf(tempstr, "%d", fs);
-  #endif
+  }
+
   GUI_DispStringInPrect(&rectB[2], (u8 *)tempstr);                        //Fan value
 
   GUI_SetColor(HEADING_COLOR);
@@ -166,20 +169,20 @@ void gantry_inc(int n, float val){
   {
   case 0:
     xaxis += val;
-    if ( xaxis > X_MAX_POS){
-      xaxis = X_MAX_POS;
+    if ( xaxis > infoSettings.machine_size_max[X_AXIS]){
+      xaxis = infoSettings.machine_size_max[X_AXIS];
     }
     break;
   case 1:
     yaxis += val;
-    if ( yaxis > Y_MAX_POS){
-      yaxis = Y_MAX_POS;
+    if ( yaxis > infoSettings.machine_size_max[Y_AXIS]){
+      yaxis = infoSettings.machine_size_max[Y_AXIS];
     }
     break;
   case 2:
     zaxis += val;
-    if ( zaxis > Z_MAX_POS){
-      zaxis = Z_MAX_POS;
+    if ( zaxis > infoSettings.machine_size_max[Z_AXIS]){
+      zaxis = infoSettings.machine_size_max[Z_AXIS];
     }
     break;
   default:
@@ -192,20 +195,20 @@ void gantry_dec(int n, float val){
   {
   case 0:
     xaxis -= val;
-    if ( xaxis < X_MIN_POS){
-      xaxis = X_MIN_POS;
+    if ( xaxis < infoSettings.machine_size_min[X_AXIS]){
+      xaxis = infoSettings.machine_size_min[X_AXIS];
     }
     break;
   case 1:
     yaxis -= val;
-    if ( yaxis < Y_MIN_POS){
-      yaxis = Y_MIN_POS;
+    if ( yaxis < infoSettings.machine_size_min[Y_AXIS]){
+      yaxis = infoSettings.machine_size_min[Y_AXIS];
     }
     break;
   case 2:
     zaxis -= val;
-    if ( zaxis < Z_MIN_POS){
-      zaxis = Z_MIN_POS;
+    if ( zaxis < infoSettings.machine_size_min[Z_AXIS]){
+      zaxis = infoSettings.machine_size_min[Z_AXIS];
     }
     break;
   default:
@@ -305,7 +308,7 @@ void menuStatus(void)
 {
   booted = true;
   KEY_VALUES key_num = KEY_IDLE;
-  GUI_SetBkColor(BACKGROUND_COLOR);
+  GUI_SetBkColor(lcd_colors[infoSettings.bg_color]);
   //set_status_icon();
   menuDrawPage(&StatusItems);
   GUI_SetColor(GANTRYLBL_BKCOLOR);

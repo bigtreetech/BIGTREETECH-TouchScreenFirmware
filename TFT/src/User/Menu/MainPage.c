@@ -43,7 +43,7 @@ void menuMain(void)
   #endif
 
   KEY_VALUES key_num=KEY_IDLE;
-  GUI_SetBkColor(ST7920_BKCOLOR);
+  GUI_SetBkColor(infoSettings.bg_color);
   menuDrawPage(&mainPageItems);
 
   while(infoMenu.menu[infoMenu.cur] == menuMain)

@@ -343,7 +343,7 @@ void DrawListItemPress(const GUI_RECT * rect, bool pressed){
       }
       else
       {
-        GUI_SetColor(BACKGROUND_COLOR);
+        GUI_SetColor(lcd_colors[infoSettings.bg_color]);
         GUI_DrawPrect(rect);
 
         GUI_SetColor(LISTBTN_BKCOLOR);
@@ -376,7 +376,7 @@ void ListItem_Display(const GUI_RECT* rect, uint8_t position, const LISTITEM * c
     {
     case LIST_LABEL:
       if(curitem->icon != ICONCHAR_BLANK) {
-        DrawCharIcon(rect,LEFT_CENTER,curitem->icon, BACKGROUND_COLOR);
+        DrawCharIcon(rect,LEFT_CENTER,curitem->icon, lcd_colors[infoSettings.bg_color]);
         pos.x += (BYTE_HEIGHT + 1);
        }
       textarea_width = LISTITEM_WIDTH - (pos.x + 1); //width after removing the width for icon

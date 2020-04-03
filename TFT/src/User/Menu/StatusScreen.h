@@ -1,6 +1,6 @@
 #ifndef _STATUSSCREEN_H_
 #define _STATUSSCREEN_H_
-#include "GUI.h"
+#include "includes.h"
 
 //Colors for drawing the icons
 #define GANTRYLBL_BKCOLOR   0x2187

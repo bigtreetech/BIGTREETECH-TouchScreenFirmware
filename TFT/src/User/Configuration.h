@@ -1,6 +1,6 @@
 #ifndef _CONFIGRATION_H_
 #define _CONFIGRATION_H_
-
+#define CONFIG_VERSION 200404
 //===========================================================================
 //============================= General Settings ============================
 //===========================================================================
@@ -59,16 +59,22 @@
  *
  * These colors can be changed in Touch mode, but can also be set here.
  *
- * Options: BLACK, BLUE, BROWN, BRRED, CYAN, GBLUE, GRAY, GREEN, MAGENTA, RED, WHITE, YELLOW
+ * Options: 0: WHITE,     1: BLACK,      2: RED,    3: GREEN,   4: BLUE,   5: CYAN,
+ *          6: MAGENTA,   7: YELLOW,     8: ORANGE, 9: PURPLE, 10: LIME,  11: BROWN,
+ *         12: DARKBLUE, 13: DARKGREEN, 14: GRAY, 15: DARKGRAY
  */
-#define ST7920_BKCOLOR BLACK
-#define ST7920_FNCOLOR YELLOW
+#define ST7920_BKCOLOR 1
+#define ST7920_FNCOLOR 0
 
 /**
  *  Text displayed at the top of the TFT in Marlin Mode.
  */
-//#define ST7920_BANNER_TEXT "LCD12864 Simulator"
+#define ST7920_BANNER_TEXT "LCD12864 Simulator"
 
+/**
+ *  show banner text at the top of the TFT in Marlin Mode.
+ */
+#define ST7920_SHOW_BANNER true //to enabled: true | to disabled: false
 /**
  * Run Marlin Mode in Fullscreen
  *
@@ -108,7 +114,7 @@
  *
  * Select the language to display on the LCD while in Touch Mode.
  *
- * Options: ARMENIAN, CHINESE, CZECH, DUTCH, ENGLISH, FRENCH, GERMAN, HUNGARIAN, ITALIAN, JAPANESE, POLISH, PORTUGUESE, RUSSIAN, SLOVAK, SPAIN
+ * Options: ARMENIAN, CHINESE, CZECH, DUTCH, ENGLISH, FRENCH, GERMAN, HUNGARY, ITALIAN, JAPANESE, POLISH, PORTUGUESE, RUSSIAN, SLOVAK, SPAIN
  */
 #define DEFAULT_LANGUAGE ENGLISH
 
@@ -131,18 +137,22 @@
 
 /**
  * Default Touch Mode Color Options
+ * Options: 0: WHITE,     1: BLACK,      2: RED,    3: GREEN,   4: BLUE,   5: CYAN,
+ *          6: MAGENTA,   7: YELLOW,     8: ORANGE, 9: PURPLE, 10: LIME,  11: BROWN,
+ *         12: DARKBLUE, 13: DARKGREEN, 14: GRAY, 15: DARKGRAY
  */
-#define TITLE_BACKGROUND_COLOR      BLACK  // Title background color // 0xD928
-#define BACKGROUND_COLOR            BLACK  // Background color // 0x0A29
-#define FONT_COLOR                  WHITE  // Font foreground color
-#define REMINDER_FONT_COLOR         RED    // Reminder font color, such as: "No print attached", "Busy processing", etc.
-#define VOLUME_REMINDER_FONT_COLOR  GBLUE  // Volume reminder font color, such as: "Card inserted", "Card removed"
+#define TITLE_BACKGROUND_COLOR      1  // Title background color // 0xD928
+#define BACKGROUND_COLOR            1  // Background color // 0x0A29
+#define FONT_COLOR                  0  // Font foreground color
+#define REMINDER_FONT_COLOR         2    // Reminder font color, such as: "No print attached", "Busy processing", etc.
+#define VOLUME_REMINDER_FONT_COLOR  5  // Volume reminder font color, such as: "Card inserted", "Card removed"
 
 #define TOOL_NUM     1    // set in 1~6
 #define EXTRUDER_NUM 1    // set in 1~6
 #define FAN_NUM      1    // set in 1~6
 
 //                       PLA      PETG       ABS
+#define PREHEAT_LABELS    {"PLA",   "PETG",   "ABS"}
 #define PREHEAT_BED      {60,      70,       100}
 #define PREHEAT_HOTEND   {200,     250,      230}
 
@@ -197,7 +207,7 @@
  * Enable this will send "M500" after "G29" to store leveling value
  * and send "M420 S1" to enable leveling state after startup
  */
-#define AUTO_SAVE_LOAD_LEVELING_VALUE
+#define AUTO_SAVE_LOAD_LEVELING_VALUE true //to enabled: true | to disabled: false
 
 /**
  * Manual Leveling
@@ -249,9 +259,14 @@
  *
  * Most suitable for Delta printers since most printers will crash into printed model when homing after powerloss.
  */
-//#define HOME_BEFORE_PLR // Home before power loss recovery
-//#define BTT_MINI_UPS // Backup power / UPS to move Z axis on power loss
-#define POWER_LOSS_ZRAISE 10 // (mm) Raise Z axis on resume (on power loss with UPS)
+// Home before power loss recovery
+#define HOME_BEFORE_PLR false   //to enabled: true | to disabled: false
+
+// Backup power / UPS to move Z axis on power loss
+#define BTT_MINI_UPS     false   //to enabled: true | to disabled: false
+
+// (mm) Raise Z axis on resume (on power loss with UPS)
+#define POWER_LOSS_ZRAISE 10
 
 // Prevent extrusion if the temperature is below set temperature
 #define PREVENT_COLD_EXTRUSION_MINTEMP 170
@@ -263,7 +278,7 @@
  */
 #define AUTO_SHUT_DOWN_MAXTEMP 50
 
-#define SHOW_FAN_PERCENTAGE // enable to show fan speed as a percentage instead of a value
+#define SHOW_FAN_PERCENTAGE  true// enable to show fan speed as a percentage instead of a value. to enabled: true | to disabled: false
 
 /**
  * Rapid Serial Communication

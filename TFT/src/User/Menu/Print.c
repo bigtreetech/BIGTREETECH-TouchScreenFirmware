@@ -104,9 +104,9 @@ void gocdeIconDraw(void)
   scrollFileNameCreate(0);
   Scroll_CreatePara(&titleScroll, (uint8_t* )infoFile.title, &titleRect);
   printIconItems.title.address = (uint8_t* )infoFile.title;
-  GUI_SetBkColor(TITLE_BACKGROUND_COLOR);
+  GUI_SetBkColor(lcd_colors[infoSettings.title_bg_color]);
   GUI_ClearPrect(&titleRect);
-  GUI_SetBkColor(BACKGROUND_COLOR);
+  GUI_SetBkColor(lcd_colors[infoSettings.bg_color]);
 
   //draw folders
   for(i=0;(i + infoFile.cur_page * NUM_PER_PAGE < infoFile.F_num) && (i < NUM_PER_PAGE) ; i++)                  // folder
@@ -153,9 +153,9 @@ void gocdeListDraw(void)
 
   Scroll_CreatePara(&titleScroll, (u8 *)infoFile.title, &titleRect);
   printListItems.title.address = (u8 *)infoFile.title;
-  GUI_SetBkColor(TITLE_BACKGROUND_COLOR);
+  GUI_SetBkColor(lcd_colors[infoSettings.title_bg_color]);
   GUI_ClearRect(0, 0, LCD_WIDTH, TITLE_END_Y);
-  GUI_SetBkColor(BACKGROUND_COLOR);
+  GUI_SetBkColor(lcd_colors[infoSettings.bg_color]);
 
   for (i = 0; (i + infoFile.cur_page * NUM_PER_PAGE < infoFile.F_num) && (i < NUM_PER_PAGE); i++) // folder
   {
@@ -215,7 +215,7 @@ void menuPrintFromSource(void)
 
   u8 update=0;
 
-  GUI_Clear(BACKGROUND_COLOR);
+  GUI_Clear(lcd_colors[infoSettings.bg_color]);
   GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, textSelect(LABEL_LOADING));
 
   if (mountFS() == true && scanPrintFiles() == true)
@@ -238,9 +238,9 @@ void menuPrintFromSource(void)
 
   while(infoMenu.menu[infoMenu.cur] == menuPrintFromSource)
   {
-    GUI_SetBkColor(TITLE_BACKGROUND_COLOR);
+    GUI_SetBkColor(lcd_colors[infoSettings.title_bg_color]);
     Scroll_DispString(&titleScroll, LEFT);    //
-    GUI_SetBkColor(BACKGROUND_COLOR);
+    GUI_SetBkColor(lcd_colors[infoSettings.bg_color]);
 
     if(list_mode != true){
       Scroll_DispString(&gcodeScroll, CENTER); //

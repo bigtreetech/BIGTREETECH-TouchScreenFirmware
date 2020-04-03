@@ -66,6 +66,12 @@
     #define RU_ORANGE                 "Оранжевый"
     #define RU_INDIGO                 "Индиго"
     #define RU_VIOLET                 "Фиолетовый"
+    #define RU_MAGENTA                "Magenta"
+    #define RU_PURPLE                 "Purple"
+    #define RU_LIME                   "Lime"
+    #define RU_DARKBLUE               "DarkBlue"
+    #define RU_DARKGREEN              "DarkGreen"
+    #define RU_DARKGRAY               "DarkGray"
     #define RU_DISCONNECT             "Отключить"
     #define RU_PERCENTAGE             "Подстройки"
     #define RU_BABYSTEP               "Микрошаг Z"
@@ -108,7 +114,7 @@
     #define RU_LOADING                "Загрузка..."
     #define RU_POWER_FAILED           "\u0887 Продолжить печать?" //Question Sign
     #define RU_CONTINUE               "Продолжение"
-    #define RU_CANNEL                 "\u088F Отмена" //Cancel Sign
+    #define RU_CANCEL                 "\u088F Отмена" //Cancel Sign
     #define RU_ADJUST_TITLE           "Калибровка экрана"
     #define RU_ADJUST_INFO            "Нажмите на красную точку"
     #define RU_ADJUST_OK              "Успешная калибровка"
@@ -130,9 +136,6 @@
     #define RU_FILAMENT_RUNOUT        "Пруток закончился"
     #define RU_PREHEAT                "Преднагрев"
     #define RU_PREHEAT_BOTH           "Оба"
-    #define RU_PREHEAT_PLA            "PLA"
-    #define RU_PREHEAT_PETG           "PETG"
-    #define RU_PREHEAT_ABS            "ABS"
     #define RU_IS_PAUSE               "Невозможна экструзия    при печати, поставить   на паузу?"
     #define RU_AUTO_SHUT_DOWN         "Автовыключение"
     #define RU_UNIFIEDMOVE            "Движение"
@@ -141,7 +144,7 @@
     #define RU_EMERGENCYSTOP          "Экст.стоп"
     #define RU_MAINMENU               "Меню"
     #define RU_TOUCH_TO_EXIT          "Нажмите для возврата"
-    #define RU_WAIT_TEMP_SHUT_DOWN    "Дождитесь температуры   сопла не ниже чем " STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP) "°C" // Wait for the temperature of hotend to be lower than 50°C
+    #define RU_WAIT_TEMP_SHUT_DOWN    "Дождитесь температуры   сопла не ниже чем %d°C" // Wait for the temperature of hotend to be lower than 50°C
     #define RU_FORCE_SHUT_DOWN        "Принудительно выкл"
     #define RU_SHUTTING_DOWN          "Выключаю..."
     #define RU_PARAMETER_SETTING      "Параметры"

@@ -66,6 +66,12 @@
     #define DE_ORANGE               "Orange"
     #define DE_INDIGO               "Indigo"
     #define DE_VIOLET               "Violet"
+    #define DE_MAGENTA              "Magenta"
+    #define DE_PURPLE               "Purple"
+    #define DE_LIME                 "Lime"
+    #define DE_DARKBLUE             "DarkBlue"
+    #define DE_DARKGREEN            "DarkGreen"
+    #define DE_DARKGRAY             "DarkGray"
     #define DE_DISCONNECT           "Trennen"
     #define DE_PERCENTAGE           "Prozent"
     #define DE_BABYSTEP             "BabyStep"
@@ -108,7 +114,7 @@
     #define DE_LOADING              "Laden..."
     #define DE_POWER_FAILED         "\u0887 Druck fortsetzen?" //Question Sign
     #define DE_CONTINUE             "Fortsetzen"
-    #define DE_CANNEL               "\u088F Abbruch" //Cancel Sign
+    #define DE_CANCEL               "\u088F Abbruch" //Cancel Sign
     #define DE_ADJUST_TITLE         "Touchscreen kalibrieren"
     #define DE_ADJUST_INFO          "Auf den roten Punkt drücken"
     #define DE_ADJUST_OK            "Anpassung erfolgreich"
@@ -130,9 +136,6 @@
     #define DE_FILAMENT_RUNOUT      "Filament runout!"
     #define DE_PREHEAT              "Vorheizen"
     #define DE_PREHEAT_BOTH         "Beide"
-    #define DE_PREHEAT_PLA          "PLA"
-    #define DE_PREHEAT_PETG         "PETG"
-    #define DE_PREHEAT_ABS          "ABS"
     #define DE_IS_PAUSE             "Extrudierung während Druckvorgangs nicht möglich, Druck Pausieren?"
     #define DE_AUTO_SHUT_DOWN       "Automatisch AUS (PS_ON)"
     #define DE_UNIFIEDMOVE          "Bewegung"
@@ -141,7 +144,7 @@
     #define DE_EMERGENCYSTOP        "NOT STOP!"
     #define DE_TOUCH_TO_EXIT        "Zum verlassen, Bildschirm berühren."
     #define DE_MAINMENU             "Menü"
-    #define DE_WAIT_TEMP_SHUT_DOWN  "Warte bis Hotend-Temperatur unter " STRINGIFY(AUTO_SHUT_DOWN_MAXTEMP) "℃ fällt." // Wait for the temperature of hotend to be lower than 50℃
+    #define DE_WAIT_TEMP_SHUT_DOWN  "Warte bis Hotend-Temperatur unter %d℃ fällt." // Wait for the temperature of hotend to be lower than 50℃
     #define DE_FORCE_SHUT_DOWN      "Erzwinge"
     #define DE_SHUTTING_DOWN        "Fahre herunter..."
     #define DE_PARAMETER_SETTING    "Parameter"

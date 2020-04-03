@@ -37,16 +37,11 @@ const uint16_t toggleitem[TOGGLE_NUM] = {ICONCHAR_TOGGLE_OFF,ICONCHAR_TOGGLE_ON}
 #define ITEM_SPEED_NUM 3
 const LABEL itemMoveSpeed[ITEM_SPEED_NUM] = {
                                               //item value text(only for custom value)
-                                              LABEL_NORMAL_SPEED,
                                               LABEL_SLOW_SPEED,
+                                              LABEL_NORMAL_SPEED,
                                               LABEL_FAST_SPEED
                                             };
 
-const  u8 item_movespeed[ITEM_SPEED_NUM]  = {
-                                              LABEL_NORMAL_SPEED,
-                                              LABEL_SLOW_SPEED,
-                                              LABEL_FAST_SPEED
-                                            };
 
 //
 //add key number index of the items
@@ -73,14 +68,13 @@ typedef enum
     SKEY_KNOB,
   #endif
   #ifdef LCD_LED_PWM_CHANNEL
-    SKEY_LCD_BRIGHTNESS,
-    SKEY_LCD_BRIGTHNESS_DIM,
-    SKEY_LCD_DIM_IDLE_TIMER,
+  SKEY_LCD_BRIGHTNESS,
+  SKEY_LCD_BRIGTHNESS_DIM,
+  SKEY_LCD_DIM_IDLE_TIMER,
   #endif
   #ifdef ST7920_SPI
-    SKEY_ST7920_FULLSCREEN,
+  SKEY_ST7920_FULLSCREEN,
   #endif
-
   SKEY_RESET_SETTINGS, // Keep reset always at the bottom of the settings menu list.
   SKEY_COUNT //keep this always at the end
 }SKEY_LIST;
@@ -112,12 +106,12 @@ LISTITEM settingPage[SKEY_COUNT] = {
     {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_KNOB_LED,                 LABEL_OFF         },
   #endif
   #ifdef LCD_LED_PWM_CHANNEL
-    {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_LCD_BRIGHTNESS,           LABEL_100_PERCENT },
-    {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_LCD_BRIGHTNESS_DIM,       LABEL_100_PERCENT },
-    {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_LCD_DIM_IDLE_TIMER,       LABEL_60_SECONDS  },
+  {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_LCD_BRIGHTNESS,           LABEL_100_PERCENT },
+  {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_LCD_BRIGHTNESS_DIM,       LABEL_100_PERCENT },
+  {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_LCD_DIM_IDLE_TIMER,       LABEL_60_SECONDS  },
   #endif
   #ifdef ST7920_SPI
-    {ICONCHAR_BLANK,      LIST_TOGGLE,        LABEL_ST7920_FULLSCREEN,        LABEL_OFF         },
+  {ICONCHAR_BLANK,      LIST_TOGGLE,        LABEL_ST7920_FULLSCREEN,        LABEL_OFF         },
   #endif
   {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_SETTINGS,                 LABEL_RESET       }   // Keep reset always at the bottom of the settings menu list.
 };
@@ -125,7 +119,7 @@ LISTITEM settingPage[SKEY_COUNT] = {
 void menuResetSettings(void)
 {
   uint16_t key_num = IDLE_TOUCH;
-  popupDrawPage(bottomDoubleBtn, textSelect(LABEL_WARNING), textSelect(LABEL_RESET_SETTINGS), textSelect(LABEL_CONFIRM), textSelect(LABEL_CANNEL));
+  popupDrawPage(bottomDoubleBtn, textSelect(LABEL_WARNING), textSelect(LABEL_RESET_SETTINGS), textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL));
   while(infoMenu.menu[infoMenu.cur] == menuResetSettings)
   {
     key_num = KEY_GetValue(2, doubleBtnRect);
@@ -299,15 +293,14 @@ void updateFeatureSettings(uint8_t key_val)
     #endif //LCD_LED_PWM_CHANNEL
 
     #ifdef ST7920_SPI
-      case SKEY_ST7920_FULLSCREEN:
-        infoSettings.marlin_mode_fullscreen = (infoSettings.marlin_mode_fullscreen + 1) % TOGGLE_NUM;
-        settingPage[item_index].icon = toggleitem[infoSettings.marlin_mode_fullscreen];
-        featureSettingsItems.items[key_val] = settingPage[item_index];
+    case SKEY_ST7920_FULLSCREEN:
+      infoSettings.marlin_mode_fullscreen = (infoSettings.marlin_mode_fullscreen + 1) % TOGGLE_NUM;
+      settingPage[item_index].icon = toggleitem[infoSettings.marlin_mode_fullscreen];
+      featureSettingsItems.items[key_val] = settingPage[item_index];
 
-        menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
-        break;
+      menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
+      break;
     #endif
-
     default:
       break;
   }
@@ -411,12 +404,11 @@ void loadFeatureSettings(){
       #endif //LCD_LED_PWM_CHANNEL
 
       #ifdef ST7920_SPI
-        case SKEY_ST7920_FULLSCREEN:
-          settingPage[item_index].icon  = toggleitem[infoSettings.marlin_mode_fullscreen];
-          featureSettingsItems.items[i] = settingPage[item_index];
-          break;
+      case SKEY_ST7920_FULLSCREEN:
+        settingPage[item_index].icon  = toggleitem[infoSettings.marlin_mode_fullscreen];
+        featureSettingsItems.items[i] = settingPage[item_index];
+        break;
       #endif
-
       default:
         featureSettingsItems.items[i].icon = ICONCHAR_BACKGROUND;
       break;

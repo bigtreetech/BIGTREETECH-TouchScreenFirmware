@@ -23,7 +23,7 @@ void GUI_SetColor(uint16_t color)
 
 uint16_t GUI_GetColor(void)
 {
-  return foreGroundColor;
+  return lcd_colors[infoSettings.font_color];
 }
 
 void GUI_SetBkColor(uint16_t bkcolor)
