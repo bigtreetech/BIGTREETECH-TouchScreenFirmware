@@ -30,6 +30,7 @@
     #define PL_BLTOUCH_DEPLOY       "Wysuń"
     #define PL_BLTOUCH_STOW         "Schowaj"
     #define PL_BLTOUCH_REPEAT       "Powtórz"
+    #define PL_Z_OFFSET             "Z Offset"
     #define PL_PROBE_OFFSET         "Przesunięcie"
     #define PL_EEPROM_SAVE          "Zapisz"
     #define PL_INC                  "Więcej"
