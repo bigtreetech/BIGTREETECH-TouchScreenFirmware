@@ -30,6 +30,7 @@
     #define SK_BLTOUCH_DEPLOY       "Vystrčiť"
     #define SK_BLTOUCH_STOW         "Stiahnuť"
     #define SK_BLTOUCH_REPEAT       "Opakovať"
+    #define SK_Z_OFFSET             "Z Offset"
     #define SK_PROBE_OFFSET         "Probe Offset"
     #define SK_EEPROM_SAVE          "Uložiť"
     #define SK_INC                  "Pridať"
@@ -183,5 +184,8 @@
     #define SK_300_SECONDS              "5 Min."
     #define SK_CUSTOM_SECONDS           "Custom"
     #define SK_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
+    #define SK_PROBE                    "PROBE"
+    #define SK_TOUCHMI_INIT             "INIT"
+    #define SK_TOUCHMI_ZTEST            "ZTEST"
 
 #endif

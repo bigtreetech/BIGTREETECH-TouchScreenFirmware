@@ -30,6 +30,7 @@
     #define RU_BLTOUCH_DEPLOY         "BLT вниз"
     #define RU_BLTOUCH_STOW           "BLT вверх"
     #define RU_BLTOUCH_REPEAT         "Точность Z"
+    #define RU_Z_OFFSET             "Z Offset"
     #define RU_PROBE_OFFSET           "Отступ Z"
     #define RU_EEPROM_SAVE            "Сохранить"
     #define RU_INC                    "Увеличить"
@@ -183,5 +184,8 @@
     #define RU_300_SECONDS            "5 мин."
     #define RU_CUSTOM_SECONDS         "Своё"
     #define RU_ST7920_FULLSCREEN      "Marlin на весь экран"
+    #define RU_PROBE                  "PROBE"
+    #define RU_TOUCHMI_INIT           "INIT"
+    #define RU_TOUCHMI_ZTEST          "ZTEST"
 
 #endif

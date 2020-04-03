@@ -30,6 +30,7 @@
     #define PT_BLTOUCH_DEPLOY       "Abrir"
     #define PT_BLTOUCH_STOW         "Encolher"
     #define PT_BLTOUCH_REPEAT       "Repetir"
+    #define PT_Z_OFFSET             "Z Offset"
     #define PT_PROBE_OFFSET         "Probe Offset"
     #define PT_EEPROM_SAVE          "Gravar"
     #define PT_INC                  "Aumentar"
@@ -183,5 +184,8 @@
     #define PT_300_SECONDS              "5 Min."
     #define PT_CUSTOM_SECONDS           "Custom"
     #define PT_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
+    #define PT_PROBE                    "PROBE"
+    #define PT_TOUCHMI_INIT             "INIT"
+    #define PT_TOUCHMI_ZTEST            "ZTEST"
 
 #endif

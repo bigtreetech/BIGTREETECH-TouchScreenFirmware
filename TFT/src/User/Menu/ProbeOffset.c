@@ -4,7 +4,7 @@
 //1 titl, ITEM_PER_PAGE item
 MENUITEMS probeOffsetItems = {
 // title
-LABEL_PROBE_OFFSET,
+LABEL_Z_OFFSET,
 // icon                        label
  {{ICON_DEC,                  LABEL_DEC},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
@@ -51,8 +51,6 @@ static void initElements(u8 position)
   }
 }
 
-static float probe_offset_value=0.0;
-
 #define PROBE_OFFSET_MAX_VALUE 20.0f
 #define PROBE_OFFSET_MIN_VALUE -20.0f
 
@@ -61,18 +59,11 @@ void showProbeOffset(float val)
   GUI_DispFloat(CENTER_X - 5*BYTE_WIDTH/2, CENTER_Y, val, 3, 2, RIGHT);
 }
 
-/* Set current offset */
-void setCurrentOffset(float offset)
-{
-  //probe_offset_value = limitValue(PROBE_OFFSET_MIN_VALUE, offset, PROBE_OFFSET_MAX_VALUE);
-  probe_offset_value = offset;
-  showProbeOffset(offset);
-}
-
 void menuProbeOffset(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
-  float now = probe_offset_value;
+  float probe_offset_value;
+  float now = probe_offset_value = getParameter(P_PROBE_OFFSET, Z_STEPPER);
   initElements(KEY_ICON_5);
   menuDrawPage(&probeOffsetItems);
   showProbeOffset(now);
@@ -83,6 +74,7 @@ void menuProbeOffset(void)
 
   while(infoMenu.menu[infoMenu.cur] == menuProbeOffset)
   {
+    probe_offset_value = getParameter(P_PROBE_OFFSET, Z_STEPPER);
     key_num = menuKeyGetValue();
     switch(key_num)
     {

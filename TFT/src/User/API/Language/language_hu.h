@@ -30,6 +30,7 @@
     #define HU_BLTOUCH_DEPLOY       "Telepítés"
     #define HU_BLTOUCH_STOW         "Elhelyez"
     #define HU_BLTOUCH_REPEAT       "Ismétlés"
+    #define HU_Z_OFFSET             "Z Offset"
     #define HU_PROBE_OFFSET         "Eltol"
     #define HU_EEPROM_SAVE          "Mentés"
     #define HU_INC                  "Növel"
@@ -183,5 +184,7 @@
     #define HU_300_SECONDS              "5 Perc."
     #define HU_CUSTOM_SECONDS           "Egyedi"
     #define HU_ST7920_FULLSCREEN        "Marlin mód teljes képernyőn"
-
+    #define HU_PROBE                    "PROBE"
+    #define HU_TOUCHMI_INIT             "INIT"
+    #define HU_TOUCHMI_ZTEST            "ZTEST"
 #endif

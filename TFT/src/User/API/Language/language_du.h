@@ -30,6 +30,7 @@
     #define DU_BLTOUCH_DEPLOY       "Gebruiken"
     #define DU_BLTOUCH_STOW         "Inzetten"
     #define DU_BLTOUCH_REPEAT       "Herhaal"
+    #define DU_Z_OFFSET             "Z Offset"
     #define DU_PROBE_OFFSET         "Probe Offset"
     #define DU_EEPROM_SAVE          "Bewaren"
     #define DU_INC                  "Verhogen"
@@ -183,5 +184,8 @@
     #define DU_300_SECONDS              "5 Min."
     #define DU_CUSTOM_SECONDS           "Custom"
     #define DU_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
+    #define DU_PROBE                    "PROBE"
+    #define DU_TOUCHMI_INIT             "INIT"
+    #define DU_TOUCHMI_ZTEST            "ZTEST"
 
 #endif

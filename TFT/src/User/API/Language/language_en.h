@@ -30,6 +30,7 @@
     #define EN_BLTOUCH_DEPLOY         "Deploy"
     #define EN_BLTOUCH_STOW           "Stow"
     #define EN_BLTOUCH_REPEAT         "Repeat"
+    #define EN_Z_OFFSET             "Z Offset"
     #define EN_PROBE_OFFSET           "Probe Offset"
     #define EN_EEPROM_SAVE            "Save"
     #define EN_INC                    "Increase"
@@ -183,5 +184,8 @@
     #define EN_300_SECONDS              "5 Min."
     #define EN_CUSTOM_SECONDS           "Custom"
     #define EN_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
+    #define EN_PROBE                    "PROBE"
+    #define EN_TOUCHMI_INIT             "INIT"
+    #define EN_TOUCHMI_ZTEST            "ZTEST"
 
 #endif
