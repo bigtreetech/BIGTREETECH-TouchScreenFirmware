@@ -78,6 +78,7 @@
 #include "FeatureSettings.h"
 #include "SendGcode.h"
 #include "leveling.h"
+#include "probe.h"
 #include "ProbeOffset.h"
 #include "PowerFailed.h"
 

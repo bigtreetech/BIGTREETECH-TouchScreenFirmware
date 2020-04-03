@@ -184,5 +184,8 @@
     #define CN_300_SECONDS              "5分钟"
     #define CN_CUSTOM_SECONDS           "自定义"
     #define CN_ST7920_FULLSCREEN        "全屏显示Marlin模式"
+    #define CN_PROBE                    "PROBE"
+    #define CN_TOUCHMI_INIT             "INIT"
+    #define CN_TOUCHMI_ZTEST            "ZTEST"
 
 #endif
