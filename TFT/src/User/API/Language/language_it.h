@@ -184,7 +184,6 @@
     #define IT_300_SECONDS              "5 Min."
     #define IT_CUSTOM_SECONDS           "Custom"
     #define IT_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
-    #define IT_PROBE                    "PROBE"
     #define IT_TOUCHMI_INIT             "INIT"
     #define IT_TOUCHMI_ZTEST            "ZTEST"
 

@@ -184,7 +184,6 @@
     #define JP_300_SECONDS              "5 Min."
     #define JP_CUSTOM_SECONDS           "Custom"
     #define JP_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
-    #define JP_PROBE                    "PROBE"
     #define JP_TOUCHMI_INIT             "INIT"
     #define JP_TOUCHMI_ZTEST            "ZTEST"
 
