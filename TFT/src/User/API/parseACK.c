@@ -185,7 +185,7 @@ void parseACK(void)
             }
           }
         }
-        avoid_terminal = infoSettings.terminalACK;
+        avoid_terminal = !infoSettings.terminalACK;
         updateNextHeatCheckTime();
       }
       else if(ack_seen("X:") && ack_index == 2)

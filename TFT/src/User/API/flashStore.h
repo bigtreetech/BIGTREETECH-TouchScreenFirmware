@@ -4,9 +4,9 @@
 #include "stdbool.h"
 #include "variants.h"
 #include "Settings.h"
-#include "includes.h"
 
 extern bool wasRestored;
+#define PARA_SIZE 512  //bytes
 
 bool readStoredPara(void);
 void storePara(void);

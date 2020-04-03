@@ -41,14 +41,16 @@ void menuPreheat(void)
       {ICON_BACKGROUND,           LABEL_BACKGROUND},
       {ICON_BACKGROUND,           LABEL_BACKGROUND},
       {ICON_PREHEAT_BOTH,         LABEL_PREHEAT_BOTH},
-      #ifdef UNIFIED_MENU
       {ICON_BACKGROUND,           LABEL_BACKGROUND},
-      #else
-      {ICON_HEAT,                 LABEL_HEAT},
-      #endif
       {ICON_BACK,                 LABEL_BACK},
     }
   };
+
+  if(infoSettings.unified_menu !=1)
+    {
+      preheatItems.items[6].icon = ICON_HEAT;
+      preheatItems.items[6].label.index = LABEL_HEAT;
+    }
 
   preheatnames = (STRINGS_STORE*)malloc(sizeof(STRINGS_STORE));
   uint8_t *data_p = (uint8_t *)preheatnames;
@@ -88,12 +90,13 @@ void menuPreheat(void)
         menuDrawItem(&preheatItems.items[key_num], key_num);;
         break;
 
-      #ifndef UNIFIED_MENU
       case KEY_ICON_6:
-        infoMenu.menu[++infoMenu.cur] = menuHeat;
+        if(infoSettings.unified_menu != 1)
+         {
+           infoMenu.menu[++infoMenu.cur] = menuHeat;
+         }
         break;
 
-      #endif
       case KEY_ICON_7:
         free(preheatnames);
         infoMenu.cur--; break;

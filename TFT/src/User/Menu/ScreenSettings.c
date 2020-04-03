@@ -78,9 +78,11 @@ LABEL_SCREEN_SETTINGS,
 
   #ifdef ST7920_SPI
     // LCD12864 background color
+    screenSettingsItems.items[KEY_ICON_4].icon = ICON_BKCOLOR;
     screenSettingsItems.items[KEY_ICON_4].label = lcd_color_names[infoSettings.marlin_mode_bg_color];
 
     // LCD12864 font color
+    screenSettingsItems.items[KEY_ICON_5].icon = ICON_FONTCOLOR;
     screenSettingsItems.items[KEY_ICON_5].label = lcd_color_names[infoSettings.marlin_mode_font_color];
 
   #endif

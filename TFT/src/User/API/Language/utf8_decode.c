@@ -127,3 +127,18 @@ uint16_t GUI_StrPixelWidth(const uint8_t *const str)
   }
   return len;
 }
+uint16_t getUTF8Length(const uint8_t *const str)
+{
+ uint16_t i = 0, len = 0;
+  CHAR_INFO info;
+
+  if(str == NULL) return 0;
+  while(str[i])
+  {
+    info.bytes = 0;
+    getUTF8EncodeInfo(str + i, &info);
+    i += info.bytes;
+    len ++;
+  }
+  return len;
+}

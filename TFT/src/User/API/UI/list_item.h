@@ -45,10 +45,17 @@ typedef enum
 
 
 uint8_t * IconCharSelect(uint8_t sel);
-void setDynamicLabel(uint8_t i,char *label);
-char * getDynamicLabel(uint8_t i);
-void setDynamicValue(uint8_t i,float value);
-float getDynamicValue(uint8_t i);
+
+void setDynamicLabel(uint8_t i,char *label); //set list item title to any text
+char * getDynamicLabel(uint8_t i);           //get the custom text of the list item title
+
+void setDynamicTextValue(uint8_t i, char *label); //set list item value to any text (upto 7 characters)
+char * getDynamicTextValue(uint8_t i);            //get the custom text of the list item value
+
+void setDynamicValue(uint8_t i,float value); //set list item value to any numeric value (upto 7 digits)
+float getDynamicValue(uint8_t i);            //get the custom numeric value of the list item value
+
+
 void DrawCharIcon(const GUI_RECT * rect,ICON_POS iconalign, uint16_t iconindex, uint16_t btn_color);
 void ListItem_Display(const GUI_RECT* rect, uint8_t positon, const LISTITEM * curitem, bool pressed);
 void ListMenuSetItem (const LISTITEM * menuItem, uint8_t positon);

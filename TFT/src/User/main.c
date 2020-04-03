@@ -66,9 +66,8 @@ void Hardware_GenericInit(void)
 
   #ifdef LED_COLOR_PIN
     knob_LED_Init();
-  #else
-    #define STARTUP_KNOB_LED_COLOR 1
   #endif
+  
   #ifdef U_DISK_SUPPORT
     USBH_Init(&USB_OTG_Core, USB_OTG_FS_CORE_ID, &USB_Host, &USBH_MSC_cb, &USR_cb);
   #endif

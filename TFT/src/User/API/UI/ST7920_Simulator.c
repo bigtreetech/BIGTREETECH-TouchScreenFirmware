@@ -53,9 +53,9 @@ void ST7920_DrawByte(u8 data)
   for(; i<8; i++)
   {
     if(data & 0x80)
-      ST7920_DrawPixel(x, y, lcd_colors[infoSettings.font_color]);
+      ST7920_DrawPixel(x, y, lcd_colors[infoSettings.marlin_mode_font_color]);
     else
-      ST7920_DrawPixel(x, y, lcd_colors[infoSettings.bg_color]);
+      ST7920_DrawPixel(x, y, lcd_colors[infoSettings.marlin_mode_bg_color]);
     data <<= 1;
     x++;
   }
@@ -134,9 +134,9 @@ void ST7920_ST7920_ParseWCmd(u8 cmd)
 
 void menuST7920(void)
 {
-  GUI_Clear(lcd_colors[infoSettings.bg_color]);
-  GUI_SetColor(lcd_colors[infoSettings.font_color]);
-  GUI_SetBkColor(lcd_colors[infoSettings.bg_color]);
+  GUI_Clear(lcd_colors[infoSettings.marlin_mode_bg_color]);
+  GUI_SetColor(lcd_colors[infoSettings.marlin_mode_font_color]);
+  GUI_SetBkColor(lcd_colors[infoSettings.marlin_mode_bg_color]);
 
   if(infoSettings.marlin_mode_showtitle == 1){
   STRINGS_STORE tempST;

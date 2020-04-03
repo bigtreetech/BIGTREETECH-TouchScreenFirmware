@@ -1,32 +1,43 @@
 #ifndef _SANITYCHECK_H_
 #define _SANITYCHECK_H_
+
 #include "includes.h"
 #include "Configuration.h"
+#include "flashStore.h"
+#include "Settings.h"
+//
+//check size of settings against max allocated size at compile time
+#define SIZE_CHECK(object) ((void)sizeof(char[1 - 2*!!(object)]))
+
 
 #if CONFIG_VERSION != CONFIG_SUPPPORT
- #error "the Configuration.h is old. please use the latest Configuration.h file"
+    #error "the Configuration.h is old. please use the latest Configuration.h file"
 #endif
 
 #ifndef ST7920_SPI
-  #ifdef CLEAN_MODE_SWITCHING_SUPPORT
-  #error "CLEAN_MODE_SWITCHING_SUPPORT can only be enabled for TFT controllers which support ST7920 Emulator/Marlin Mode. Disable CLEAN_MODE_SWITCHING_SUPPORT in Configuration.h"
-  #endif
+    #ifdef CLEAN_MODE_SWITCHING_SUPPORT
+    #error "CLEAN_MODE_SWITCHING_SUPPORT can only be enabled for TFT controllers which support ST7920 Emulator/Marlin Mode. Disable CLEAN_MODE_SWITCHING_SUPPORT in Configuration.h"
+    #endif
 #endif
 
 #ifdef LED_COLOR_PIN
+
   #ifdef STARTUP_KNOB_LED_COLOR
-    #if STARTUP_KNOB_LED_COLOR < 1
-    #error "STARTUP_knob_LED_COLOR cannot be less than 1"
+    #if STARTUP_KNOB_LED_COLOR < 0
+        #error "STARTUP_knob_LED_COLOR cannot be less than 1"
     #endif
 
-    #if STARTUP_KNOB_LED_COLOR > 9
-    #error "STARTUP_knob_LED_COLOR cannot be greater than 9"
+    #if STARTUP_KNOB_LED_COLOR > 8
+        #error "STARTUP_knob_LED_COLOR cannot be greater than 9"
     #endif
   #else
-  #define STARTUP_KNOB_LED_COLOR 1
+        #define STARTUP_KNOB_LED_COLOR 0
   #endif
-  #else
-  #define STARTUP_KNOB_LED_COLOR 1
+
+#else
+
+    #define STARTUP_KNOB_LED_COLOR 0
+
 #endif
 
 #ifdef EXTRUDE_STEPS
@@ -41,11 +52,22 @@
   #error "CANCEL_PRINT_GCODE is now PRINT_CANCEL_GCODE. Please update your Configuration.h file."
 #endif
 
+#ifndef ST7920_BANNER_TEXT
+    #define ST7920_BANNER_TEXT "LCD12864 Simulator"
 #endif
 
-#ifndef ST7920_BANNER_TEXT
-#define ST7920_BANNER_TEXT "LCD12864 Simulator"
+#if TOOL_NUM > MAX_TOOL_COUNT
+    #error "TOOL_NUM can not be more than 6"
 #endif
+
+#if EXT_NUM > MAX_TOOL_COUNT
+    #error "EXT_NUM can not be more than 6"
+#endif
+
+#if FAN_NUM > MAX_TOOL_COUNT
+    #error "FAN_NUM can not be more than 6"
+#endif
+
 #ifdef CUSTOM_0_LABEL
     #define ENABLE_CUSTOM0 1
 #else
@@ -167,7 +189,6 @@
 #endif
 
 
-
 #define CUSTOM_GCODE_ENABLED {ENABLE_CUSTOM0, ENABLE_CUSTOM1, ENABLE_CUSTOM2, ENABLE_CUSTOM3, ENABLE_CUSTOM4,\
                               ENABLE_CUSTOM5, ENABLE_CUSTOM6, ENABLE_CUSTOM7, ENABLE_CUSTOM8, ENABLE_CUSTOM9,\
                               ENABLE_CUSTOM10,ENABLE_CUSTOM11,ENABLE_CUSTOM12,ENABLE_CUSTOM13,ENABLE_CUSTOM14}
@@ -182,3 +203,5 @@
 
 
 
+
+#endif

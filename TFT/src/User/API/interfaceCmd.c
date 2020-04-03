@@ -356,7 +356,7 @@ void sendQueueCmd(void)
 
           case 105: //M105
             heatSetUpdateWaiting(false);
-            avoid_terminal = infoSettings.terminalACK;
+            avoid_terminal = !infoSettings.terminalACK;
 
             break;
 

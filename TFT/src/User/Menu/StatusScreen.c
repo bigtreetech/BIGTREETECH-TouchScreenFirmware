@@ -95,23 +95,23 @@ void drawTemperature(void)
   char tempstr[100];
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
   GUI_SetColor(HEADING_COLOR);
-  menuDrawIconOnly(&ToolItems[0],0);                                                                //Ext icon
-  GUI_DispStringRight(pointID[0].x, pointID[0].y, (u8 *)heatDisplayID[current_Ext]);                           //Ext label
+  menuDrawIconOnly(&ToolItems[0],0);                                                   //Ext icon
+  GUI_DispStringRight(pointID[0].x, pointID[0].y, (u8 *)heatDisplayID[current_Ext]);   //Ext label
 
   GUI_SetColor(VAL_COLOR);
   my_sprintf(tempstr, "%d/%d", heatGetCurrentTemp(current_Ext), heatGetTargetTemp(current_Ext));
-  GUI_DispStringInPrect(&rectB[0], (u8 *)tempstr);                                                //Ext value
+  GUI_DispStringInPrect(&rectB[0], (u8 *)tempstr);                            //Ext value
 
   GUI_SetColor(HEADING_COLOR);
   menuDrawIconOnly(&ToolItems[1],1);                                          //Bed icon
-  GUI_DispStringRight(pointID[1].x, pointID[1].y, (u8 *)heatDisplayID[BED]);             //Bed label
+  GUI_DispStringRight(pointID[1].x, pointID[1].y, (u8 *)heatDisplayID[BED]);  //Bed label
   GUI_SetColor(VAL_COLOR);
   my_sprintf(tempstr, "%d/%d", heatGetCurrentTemp(BED), heatGetTargetTemp(BED));
-  GUI_DispStringInPrect(&rectB[1], (u8 *)tempstr);                        //Bed value
+  GUI_DispStringInPrect(&rectB[1], (u8 *)tempstr);                            //Bed value
 
   GUI_SetColor(HEADING_COLOR);
   menuDrawIconOnly(&ToolItems[2],2);                                          //Fan icon
-  GUI_DispStringRight(pointID[2].x, pointID[2].y, (u8 *)fanID[current_fan]);              //Fan label
+  GUI_DispStringRight(pointID[2].x, pointID[2].y, (u8 *)fanID[current_fan]);  //Fan label
   GUI_SetColor(VAL_COLOR);
 
   u8 fs;
@@ -126,18 +126,18 @@ void drawTemperature(void)
     my_sprintf(tempstr, "%d", fs);
   }
 
-  GUI_DispStringInPrect(&rectB[2], (u8 *)tempstr);                        //Fan value
+  GUI_DispStringInPrect(&rectB[2], (u8 *)tempstr);                                //Fan value
 
   GUI_SetColor(HEADING_COLOR);
-  menuDrawIconOnly(&SpeedItems[current_speedID],3);                           //Speed / flow icon
-  GUI_DispStringRight(pointID[3].x, pointID[3].y, (u8 *)SpeedID[current_speedID]);       //Speed / flow label
+  menuDrawIconOnly(&SpeedItems[current_speedID],3);                               //Speed / flow icon
+  GUI_DispStringRight(pointID[3].x, pointID[3].y, (u8 *)SpeedID[current_speedID]);//Speed / flow label
   GUI_SetColor(VAL_COLOR);
   my_sprintf(tempstr, "%d%s", speedGetPercent(current_speedID),"%");
-  GUI_DispStringInPrect(&rectB[3], (u8 *)tempstr);                        //Speed / Flow value
+  GUI_DispStringInPrect(&rectB[3], (u8 *)tempstr);                                //Speed / Flow value
 
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
   GUI_SetColor(GANTRYLBL_COLOR);
-  GUI_SetBkColor(GANTRYLBL_BKCOLOR);
+  GUI_SetBkColor(lcd_colors[infoSettings.status_xyz_bg_color]);
   my_sprintf(tempstr, "   X: %.2f   Y: %.2f   Z: %.2f   ", xaxis, yaxis, zaxis);
   GUI_DispStringInPrect(&RecGantry,(u8 *)tempstr);
 
@@ -311,12 +311,11 @@ void menuStatus(void)
   GUI_SetBkColor(lcd_colors[infoSettings.bg_color]);
   //set_status_icon();
   menuDrawPage(&StatusItems);
-  GUI_SetColor(GANTRYLBL_BKCOLOR);
+  GUI_SetColor(lcd_colors[infoSettings.status_xyz_bg_color]);
       //GUI_ClearPrect(&RecGantry);
   GUI_FillPrect(&RecGantry);
   drawTemperature();
   drawStatusScreenMsg();
-
   while (infoMenu.menu[infoMenu.cur] == menuStatus)
   {
     if(infoHost.connected != lastConnection_status){
@@ -345,7 +344,7 @@ void menuStatus(void)
         infoMenu.menu[++infoMenu.cur] = menuSpeed;
         break;
       case KEY_ICON_4:
-        infoMenu.menu[++infoMenu.cur] = menuMain;
+        infoMenu.menu[++infoMenu.cur] = unifiedMenu;
         break;
       case KEY_ICON_7:
         infoMenu.menu[++infoMenu.cur] = menuPrint;

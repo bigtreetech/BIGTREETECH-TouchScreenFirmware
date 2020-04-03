@@ -149,8 +149,9 @@ void reminderMessage(int16_t inf, SYS_STATUS status)
 {
   reminder.inf = inf;
   GUI_SetColor(lcd_colors[infoSettings.reminder_color]);
+  GUI_SetBkColor(lcd_colors[infoSettings.title_bg_color]);
   GUI_DispStringInPrect(&reminder.rect, textSelect(reminder.inf));
-  GUI_SetColor(lcd_colors[infoSettings.font_color]);
+  GUI_RestoreColorDefault();
   reminder.status = status;
   reminder.time = OS_GetTimeMs() + 2000; // 2 seconds
 }
@@ -159,10 +160,11 @@ void volumeReminderMessage(int16_t inf, SYS_STATUS status)
 {
   volumeReminder.inf = inf;
   GUI_SetColor(lcd_colors[infoSettings.sd_reminder_color]);
+  GUI_SetBkColor(lcd_colors[infoSettings.title_bg_color]);
   GUI_DispStringInPrect(&volumeReminder.rect, textSelect(volumeReminder.inf));
-  GUI_SetColor(lcd_colors[infoSettings.font_color]);
   volumeReminder.status = status;
   volumeReminder.time = OS_GetTimeMs() + 2000;
+  GUI_RestoreColorDefault();
 }
 
 void busyIndicator(SYS_STATUS status)
@@ -204,9 +206,18 @@ void loopReminderClear(void)
 
   /* Clear warning message */
   reminder.status = STATUS_IDLE;
-  if(curMenuItems == NULL)
+  if (isListview)
+  {
+    if (curListItems == NULL)
     return;
-  menuDrawTitle(labelGetAddress(&curMenuItems->title));
+    menuDrawTitle(labelGetAddress(&curListItems->title));
+  }
+  else
+  {
+    if (curMenuItems == NULL)
+      return;
+    menuDrawTitle(labelGetAddress(&curMenuItems->title));
+  }
 }
 
 void loopVolumeReminderClear(void)
@@ -223,9 +234,19 @@ void loopVolumeReminderClear(void)
 
   /* Clear warning message */
   volumeReminder.status = STATUS_IDLE;
+  if(isListview)
+  {
+    if(curListItems == NULL)
+      return;
+    menuDrawTitle(labelGetAddress(&curListItems->title));
+  }
+  else
+  {
   if(curMenuItems == NULL)
     return;
   menuDrawTitle(labelGetAddress(&curMenuItems->title));
+  }
+
 }
 
 void loopBusySignClear(void)
@@ -243,7 +264,7 @@ void loopBusySignClear(void)
 
   /* End Busy display sing */
   busySign.status = STATUS_IDLE;
-  GUI_SetColor(lcd_colors[infoSettings.bg_color]);
+  GUI_SetColor(lcd_colors[infoSettings.title_bg_color]);
   GUI_FillCircle(busySign.rect.x0, (busySign.rect.y1 - busySign.rect.y0) / 2, (busySign.rect.x1-busySign.rect.x0)/2);
   GUI_SetColor(lcd_colors[infoSettings.font_color]);
 }
@@ -262,9 +283,10 @@ void menuDrawTitle(const uint8_t *content) //(const MENUITEMS * menuItems)
 
   show_GlobalInfo();
   if(reminder.status == STATUS_IDLE) return;
-  GUI_SetColor(RED);
+  GUI_SetColor(lcd_colors[infoSettings.reminder_color]);
+  GUI_SetBkColor(lcd_colors[infoSettings.title_bg_color]);
   GUI_DispStringInPrect(&reminder.rect, textSelect(reminder.inf));
-  GUI_SetColor(lcd_colors[infoSettings.font_color]);
+  GUI_RestoreColorDefault();
 }
 
 //Draw the entire interface

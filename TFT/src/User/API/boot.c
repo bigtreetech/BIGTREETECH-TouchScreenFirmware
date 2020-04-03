@@ -145,7 +145,7 @@ void updateIcon(void)
     dispIconFail((u8 *)(BMP_ROOT_DIR "/Logo.bmp"));
   }
 
-  GUI_Clear(BACKGROUND_COLOR);
+  GUI_Clear(lcd_colors[infoSettings.bg_color]);
   GUI_DispString(5, PADDING, (u8 *)"Updating Icons");
 
   for (int i = 0; i < COUNT(iconBmpName); i++)

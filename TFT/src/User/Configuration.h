@@ -19,34 +19,34 @@
 /**
  * Default Startup Knob LED Color (TFT35 E3)
  *
- * Options:  1: LED_OFF,     2: LED_WHITE,   3: LED_RED,
- *           4: LED_ORANGE,  5: LED_YELLOW,  6: LED_GREEN,
- *           7: LED_BLUE,    8: LED_INDIGO,  9: LED_VIOLET
+ * Options:  0: LED_OFF,     1: LED_WHITE,   2: LED_RED,
+ *           3: LED_ORANGE,  4: LED_YELLOW,  5: LED_GREEN,
+ *           6: LED_BLUE,    7: LED_INDIGO,  8: LED_VIOLET
  *
  * Default value is: 1 for LED_OFF
 */
-#define STARTUP_KNOB_LED_COLOR 1         // LED_OFF
+#define STARTUP_KNOB_LED_COLOR 0         // LED_OFF
 #define KEEP_KNOB_LED_COLOR_MARLIN_MODE  // Keeps the LED state in Marlin Mode
 
 /**
  * Default LCD Brightness and LCD IDLE Brightness
  *
- * Brightness:  1: LCD_5_PERCENT,  2: LCD_10_PERCENT, 3: LCD_20_PERCENT,
- *              4: LCD_30_PERCENT, 5: LCD_40_PERCENT, 6: LCD_50_PERCENT,
- *              7: LCD_60_PERCENT, 8: LCD_70_PERCENT, 9: LCD_80_PERCENT,
- *              10: LCD_90_PERCENT, 11: LCD_100_PERCENT
+ * Brightness:  0: LCD_5_PERCENT,  1: LCD_10_PERCENT, 2: LCD_20_PERCENT,
+ *              3: LCD_30_PERCENT, 4: LCD_40_PERCENT, 5: LCD_50_PERCENT,
+ *              6: LCD_60_PERCENT, 7: LCD_70_PERCENT, 8: LCD_80_PERCENT,
+ *              9: LCD_90_PERCENT, 10: LCD_100_PERCENT
  *
  * Settings for the idle dim timer. The LCD screen will dim to idle brightness,
  * if the display is not touched for the period of the lcd idle timer.
  *
- * Idle Timer:  1: LCD_DIM_OFF,         2: LCD_DIM_5_SECONDS.   3: LCD_DIM_10_SECONDS,
- *              4: LCD_DIM_30_SECONDS,  5: LCD_DIM_60_SECONDS,  6: LCD_DIM_120_SECONDS,
- *              7: LCD_DIM_300_SECONDS, 8: LCD_DIM_CUSTOM_SECONDS
+ * Idle Timer:  0: LCD_DIM_OFF,         1: LCD_DIM_5_SECONDS.   2: LCD_DIM_10_SECONDS,
+ *              3: LCD_DIM_30_SECONDS,  4: LCD_DIM_60_SECONDS,  5: LCD_DIM_120_SECONDS,
+ *              6: LCD_DIM_300_SECONDS, 7: LCD_DIM_CUSTOM_SECONDS
  *
  */
-#define DEFAULT_LCD_BRIGHTNESS      11  // 11: LCD_100_PERCENT - Brightness value from list
+#define DEFAULT_LCD_BRIGHTNESS      10  // 10: LCD_100_PERCENT - Brightness value from list
 #define DEFAULT_LCD_IDLE_BRIGHTNESS 2   // 2: LCD_10_PERCENT - Brightness value from list
-#define DEFAULT_LCD_IDLE_TIMER      1   // 1: LCD_DIM_OFF
+#define DEFAULT_LCD_IDLE_TIMER      0   // 0: LCD_DIM_OFF
 #define LCD_DIM_CUSTOM_SECONDS      600 // Custom value in seconds. Will be used if
                                           // LCD_DIM_CUSTOM_SECONDS is set as idle timer.
 
@@ -146,6 +146,9 @@
 #define FONT_COLOR                  0  // Font foreground color
 #define REMINDER_FONT_COLOR         2    // Reminder font color, such as: "No print attached", "Busy processing", etc.
 #define VOLUME_REMINDER_FONT_COLOR  5  // Volume reminder font color, such as: "Card inserted", "Card removed"
+#define STATUS_XYZ_BG_COLOR         15 // Backgroud color for X Y Z positon display in Status Screen.
+#define LISTVIEW_BORDER_COLOR       15 //Border color in List view
+#define LISTVIEW_ICON_COLOR         15 //icon color in List view
 
 #define TOOL_NUM     1    // set in 1~6
 #define EXTRUDER_NUM 1    // set in 1~6
@@ -213,14 +216,7 @@
  * Manual Leveling
  * Move to four corner points to Leveling manually (Point 1, Point 2, Point 3, Point 4)
  */
-#define LEVELING_POINT_1_X         (X_MIN_POS + 20)
-#define LEVELING_POINT_1_Y         (Y_MIN_POS + 20)
-#define LEVELING_POINT_2_X         (X_MAX_POS - 20)
-#define LEVELING_POINT_2_Y         (Y_MIN_POS + 20)
-#define LEVELING_POINT_3_X         (X_MAX_POS - 20)
-#define LEVELING_POINT_3_Y         (Y_MAX_POS - 20)
-#define LEVELING_POINT_4_X         (X_MIN_POS + 20)
-#define LEVELING_POINT_4_Y         (Y_MAX_POS - 20)
+#define LEVELING_EDGE_DISTANCE     20    // Inset distance from bed's edge for calulating leveling point location.
 #define LEVELING_POINT_Z           0.2f  // Z-axis position when nozzle stays for leveling
 #define LEVELING_POINT_MOVE_Z      10.0f // Z-axis position when nozzle move to next point
 #define LEVELING_POINT_XY_FEEDRATE 6000  // (mm/min) X and Y axes move feedrate
@@ -243,7 +239,7 @@
 
 // Enable Unified Move Menu
 // Move, Home, Extrude, ABL at one Place and bring G-code Menu on Home Menu
-#define UNIFIED_MENU
+#define UNIFIED_MENU true //for unified menu: true | for classic menu: false
 
 /**
  * SD support
