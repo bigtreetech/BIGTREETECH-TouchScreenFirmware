@@ -192,7 +192,7 @@ void menuInfo(void)
 
   my_sprintf(buf, "P2Tim:%dMhz", mcuClocks.PCLK2_Timer_Frequency / 1000000);
   GUI_DispString(clocks[5].x, clocks[5].y, (uint8_t *)buf);
-                             
+
   GUI_DispString(startX, centerY - BYTE_HEIGHT, (u8 *)hardware);
   GUI_DispString(startX, centerY, (u8 *)firmware);
   GUI_DispStringInRect(20, LCD_HEIGHT - (BYTE_HEIGHT*2), LCD_WIDTH-20, LCD_HEIGHT, textSelect(LABEL_TOUCH_TO_EXIT));
