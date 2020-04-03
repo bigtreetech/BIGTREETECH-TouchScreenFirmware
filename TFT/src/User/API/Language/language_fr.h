@@ -30,6 +30,7 @@
     #define FR_BLTOUCH_DEPLOY       "Déployer"
     #define FR_BLTOUCH_STOW         "Rentrer"
     #define FR_BLTOUCH_REPEAT       "Répéter"
+    #define FR_Z_OFFSET             "Z Offset"
     #define FR_PROBE_OFFSET         "Probe Offset"
     #define FR_EEPROM_SAVE          "Sauver"
     #define FR_INC                  "Plus"

@@ -30,6 +30,7 @@
     #define DU_BLTOUCH_DEPLOY       "Gebruiken"
     #define DU_BLTOUCH_STOW         "Inzetten"
     #define DU_BLTOUCH_REPEAT       "Herhaal"
+    #define DU_Z_OFFSET             "Z Offset"
     #define DU_PROBE_OFFSET         "Probe Offset"
     #define DU_EEPROM_SAVE          "Bewaren"
     #define DU_INC                  "Verhogen"
