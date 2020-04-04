@@ -30,6 +30,7 @@
     #define HU_BLTOUCH_DEPLOY       "Telepítés"
     #define HU_BLTOUCH_STOW         "Elhelyez"
     #define HU_BLTOUCH_REPEAT       "Ismétlés"
+    #define HU_Z_OFFSET             "Z Eltolás"
     #define HU_PROBE_OFFSET         "Szonda Eltolás"
     #define HU_EEPROM_SAVE          "Mentés"
     #define HU_INC                  "Növel"
