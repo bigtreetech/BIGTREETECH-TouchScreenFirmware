@@ -66,7 +66,7 @@ void infoMenuSelect(void)
         Buzzer_DeConfig();  // Disable buzzer in LCD12864 Simulations mode.
       #endif
 
-      #ifdef LED_color_PIN
+      #ifdef LED_COLOR_PIN
         #ifndef KEEP_KNOB_LED_COLOR_MARLIN_MODE
           knob_LED_DeInit();
         #endif
