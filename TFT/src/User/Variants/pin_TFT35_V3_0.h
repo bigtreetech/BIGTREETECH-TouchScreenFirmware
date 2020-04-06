@@ -35,7 +35,9 @@
 //#define DISABLE_DEBUG // free all pins
 
 // LCD Backlight pin (PWM can adjust brightness)
-#define LCD_LED_PIN   PD12
+#define LCD_LED_PIN            PD12
+#define LCD_LED_PIN_ALTERNATE  GPIO_AF_TIM4
+#define LCD_LED_PWM_CHANNEL    _TIM4_CH1
 
 /*
  * SERIAL_PORT: communicating with host(Marlin, smoothieware, etc...)
@@ -95,6 +97,6 @@
   #define FIL_RUNOUT_PIN PA15
 #endif
 
-//#define LED_color_PIN PC7
+//#define LED_COLOR_PIN PC7
 
 #endif

@@ -107,7 +107,9 @@ void LCD_loopCheckEncoder() {
   if(LCD_CheckEncoderState() ||           // Check for any encoder changes
      LCD_ReadBtn(LCD_BUTTON_INTERVALS))   // Check for encoder button press
   {
-    LCD_Dim_Idle_Timer_Reset();           // Reset LCD dim idle timer if enabled.
+    #ifdef LCD_LED_PWM_CHANNEL
+      LCD_Dim_Idle_Timer_Reset();           // Reset LCD dim idle timer if enabled.
+    #endif
   }
 }
 

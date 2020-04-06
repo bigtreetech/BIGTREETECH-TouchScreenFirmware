@@ -5,7 +5,7 @@
 #include "variants.h"
 #include "menu.h"
 
-#ifdef LCD_LED_PIN
+#ifdef LCD_LED_PWM_CHANNEL
   #define LCD_5_PERCENT    5
   #define LCD_10_PERCENT   10
   #define LCD_20_PERCENT   20
@@ -52,12 +52,8 @@
   void LCD_Dim_Idle_Timer(void);
   void LCD_LED_PWM_Init(void);
 
-  #if defined(TFT35_V1_2) || defined(TFT35_V2_0) || defined(TFT35_V3_0)
-    #define Set_LCD_Brightness(level) TIM4->CCR1= (uint32_t)(level * (F_CPUM/100));
-  #else
-    #define Set_LCD_Brightness(level) ;
-  #endif
-#endif //LCD_LED_PIN
+   #define Set_LCD_Brightness(percentage) TIM_PWM_SetDutyCycle(LCD_LED_PWM_CHANNEL, percentage)
+#endif // LCD_LED_PWM_CHANNEL
 
 //TFT35 V1.0 V1.1 RM68042 8bit
 //TFT35 V1.2 ili9488 16bit

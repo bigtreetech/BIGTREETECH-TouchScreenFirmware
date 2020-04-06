@@ -27,6 +27,7 @@
 #include "spi.h"
 #include "sw_spi.h"
 #include "spi_slave.h"
+#include "timer_pwm.h"
 
 #include "usbh_core.h"
 #include "usbh_usr.h"

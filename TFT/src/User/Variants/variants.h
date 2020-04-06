@@ -5,9 +5,9 @@
 
 /*
 * hardware source
-* TIM4 for OS Timer
 * TIM3 for Buzzer timer
 * TIM6 for Neopixel RGB
+* TIM7 for OS Timer
 */
 
 // Type of LCD driver, now support[RM68042, ILI9488, ILI9341, ST7789, HX8558].
