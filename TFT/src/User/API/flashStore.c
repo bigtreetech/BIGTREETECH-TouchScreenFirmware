@@ -74,7 +74,7 @@ bool readStoredPara(void)
     infoSettings.persistent_info     = byteToWord(data + (index += 4), 4);
     infoSettings.file_listmode       = byteToWord(data + (index += 4), 4);
     infoSettings.knob_led_color      = byteToWord(data + (index += 4), 4);
-    #ifdef LCD_LED_PIN
+    #ifdef LCD_LED_PWM_CHANNEL
     infoSettings.lcd_brightness      = byteToWord(data + (index += 4), 4);
     infoSettings.lcd_idle_brightness = byteToWord(data + (index += 4), 4);
     infoSettings.lcd_idle_timer      = byteToWord(data + (index += 4), 4);
@@ -115,7 +115,7 @@ void storePara(void)
   wordToByte(infoSettings.persistent_info,    data + (index += 4));
   wordToByte(infoSettings.file_listmode,      data + (index += 4));
   wordToByte(infoSettings.knob_led_color,     data + (index += 4));
-  #ifdef LCD_LED_PIN
+  #ifdef LCD_LED_PWM_CHANNEL
   wordToByte(infoSettings.lcd_brightness,      data + (index += 4));
   wordToByte(infoSettings.lcd_idle_brightness, data + (index += 4));
   wordToByte(infoSettings.lcd_idle_timer,      data + (index += 4));

@@ -9,7 +9,7 @@
   #endif
 #endif
 
-#ifdef LED_color_PIN
+#ifdef LED_COLOR_PIN
   #ifdef STARTUP_KNOB_LED_COLOR
     #if STARTUP_KNOB_LED_COLOR < 1
     #error "STARTUP_knob_LED_COLOR cannot be less than 1"
