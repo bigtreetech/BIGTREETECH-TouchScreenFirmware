@@ -5,15 +5,26 @@ const MENUITEMS autoLevelingItems = {
 // title
 LABEL_ABL,
 // icon                        label
- {{ICON_LEVELING,              LABEL_ABL},
-  {ICON_BACKGROUND,            LABEL_BACKGROUND},
-  {ICON_PROBE,                 LABEL_PROBE},
-  {ICON_BACKGROUND,            LABEL_BACKGROUND},
-  {ICON_PROBE_OFFSET,          LABEL_PROBE_OFFSET},
-  {ICON_BACKGROUND,            LABEL_BACKGROUND},
-  {ICON_BABYSTEP,              LABEL_BABYSTEP},
-  {ICON_BACK,                  LABEL_BACK},}
-};
+{{ICON_LEVELING,             LABEL_ABL},
+   #ifdef TOUCHMI_PROBE
+    
+    {ICON_TOUCHMI,               LABEL_TOUCHMI_INIT},
+    {ICON_TOUCHMI,               LABEL_TOUCHMI_ZTEST},
+    {ICON_BACKGROUND,            LABEL_BACKGROUND},
+    {ICON_BACKGROUND,            LABEL_BACKGROUND},
+
+  #else
+
+      {ICON_BLTOUCH_DEPLOY,        LABEL_BLTOUCH_DEPLOY},
+      {ICON_BLTOUCH_STOW,          LABEL_BLTOUCH_STOW},
+      {ICON_BLTOUCH_TEST,          LABEL_BLTOUCH_TEST},
+      {ICON_BLTOUCH_REPEAT,        LABEL_BLTOUCH_REPEAT},
+
+  #endif
+    {ICON_PROBE_OFFSET,          LABEL_PROBE_OFFSET},
+    {ICON_BABYSTEP,              LABEL_BABYSTEP},
+    {ICON_BACK,                  LABEL_BACK},}
+    };
 
 void menuAutoLeveling(void)
 {
@@ -31,8 +42,27 @@ void menuAutoLeveling(void)
            storeCmd("M500\n");
         }
         break;
-      case KEY_ICON_2: infoMenu.menu[++infoMenu.cur] = menuProbe; break; 
-      case KEY_ICON_4:
+          #ifdef TOUCHMI_PROBE
+            case KEY_ICON_1:
+              storeCmd("M851 Z0\nG28\nG1 F200 Z0");
+              break;
+            case KEY_ICON_2:
+              storeCmd("G28\nG1 F200 Z0");
+          #else
+            case KEY_ICON_1:
+              storeCmd("M280 P0 S10\n");
+              break;
+            case KEY_ICON_2:
+              storeCmd("M280 P0 S90\n");
+              break;
+            case KEY_ICON_3:
+              storeCmd("M280 P0 S120\n");
+              break;
+            case KEY_ICON_4:
+              storeCmd("M48\n");
+          #endif
+        break;
+      case KEY_ICON_5:
         storeCmd("M851\n");
         infoMenu.menu[++infoMenu.cur] = menuProbeOffset;
         break;

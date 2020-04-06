@@ -184,7 +184,6 @@
     #define FR_300_SECONDS              "5 Min."
     #define FR_CUSTOM_SECONDS           "Custom"
     #define FR_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
-    #define FR_PROBE                    "PROBE"
     #define FR_TOUCHMI_INIT             "INIT"
     #define FR_TOUCHMI_ZTEST            "ZTEST"
 #endif
