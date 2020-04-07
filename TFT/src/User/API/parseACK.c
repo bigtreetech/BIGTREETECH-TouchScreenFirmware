@@ -119,6 +119,8 @@ void parseACK(void)
         infoHost.connected = true;
         storeCmd("M115\n");
         storeCmd("M503 S0\n");
+        storeCmd("M92\n"); // Steps/mm of extruder is an important parameter for Smart filament runout
+                           // Avoid can't getting this parameter due to disabled M503 in Marlin
     }
 
     // Gcode command response
@@ -199,7 +201,7 @@ void parseACK(void)
           }
         }
       }
-      else if(ack_seen("Count E:")) // parse actual position, response of "M114"
+      else if(ack_seen("Count E:")) // Parse actual extruder position, response of "M114 E\n", required "M114_DETAIL" in Marlin
       {
         coordinateSetAxisActualSteps(E_AXIS, ack_value());
       }

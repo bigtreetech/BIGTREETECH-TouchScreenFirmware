@@ -51,7 +51,12 @@ static void initElements(u8 position)
   }
 }
 
-static float baby_step_value=0.0;
+static float baby_step_value = 0.0f;
+
+void babyStepReset(void)
+{
+  baby_step_value = 0.0f;
+}
 
 #define BABYSTEP_MAX_VALUE 5.0f
 #define BABYSTEP_MIN_VALUE -5.0f
