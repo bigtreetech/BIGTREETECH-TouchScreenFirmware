@@ -4,17 +4,25 @@
 
 
 #ifdef LCD_LED_PIN
-LCD_AUTO_DIM lcd_dim;
-
 void LCD_LED_On()
 {
-  GPIO_SetLevel(LCD_LED_PIN, 1);
+  #ifdef LCD_LED_PWM_CHANNEL
+    Set_LCD_Brightness(100);
+  #else
+    GPIO_SetLevel(LCD_LED_PIN, 1);
+  #endif
 }
 void LCD_LED_Off()
 {
-  GPIO_SetLevel(LCD_LED_PIN, 0);
+  #ifdef LCD_LED_PWM_CHANNEL
+    Set_LCD_Brightness(0);
+  #else
+    GPIO_SetLevel(LCD_LED_PIN, 0);
+  #endif
 }
 
+#ifdef LCD_LED_PWM_CHANNEL
+LCD_AUTO_DIM lcd_dim;
 const uint32_t LCD_BRIGHTNESS[ITEM_BRIGHTNESS_NUM] = {
   LCD_5_PERCENT,
   LCD_10_PERCENT,
@@ -101,26 +109,18 @@ void LCD_Dim_Idle_Timer()
     }
   }
 }
-
-void LCD_LED_PWM_Init()
-{
-#if defined(TFT35_V1_2) || defined(TFT35_V2_0) || defined(TFT35_V3_0)
-  GPIO_InitSet(LCD_LED_PIN, MGPIO_MODE_AF_PP, GPIO_AF_TIM4);
-
-  TIM_OCInitTypeDef outputChannelInit = {0,};
-    outputChannelInit.TIM_OCMode      = TIM_OCMode_PWM1;
-    outputChannelInit.TIM_OCPolarity  = TIM_OCPolarity_High;
-    outputChannelInit.TIM_OutputState = TIM_OutputState_Enable;
-    outputChannelInit.TIM_Pulse       = F_CPUM;
-  TIM_OC1Init(TIM4, &outputChannelInit);
-  TIM_OC1PreloadConfig(TIM4, TIM_OCPreload_Enable);
 #endif
-}
 
 void LCD_LED_Init(void)
 {
-  LCD_LED_Off();
-  GPIO_InitSet(LCD_LED_PIN, MGPIO_MODE_OUT_PP, 0);
+  #ifdef LCD_LED_PWM_CHANNEL
+    GPIO_InitSet(LCD_LED_PIN, MGPIO_MODE_AF_PP, LCD_LED_PIN_ALTERNATE);
+    TIM_PWM_Init(LCD_LED_PWM_CHANNEL);
+    LCD_Dim_Idle_Timer_init();
+  #else
+    LCD_LED_Off();
+    GPIO_InitSet(LCD_LED_PIN, MGPIO_MODE_OUT_PP, 0);
+  #endif
 }
 #endif
 
@@ -541,8 +541,6 @@ void LCD_Init(void)
 #ifdef LCD_LED_PIN
   LCD_LED_Init();
   LCD_LED_On();
-  LCD_LED_PWM_Init();
-  LCD_Dim_Idle_Timer_init();
 #endif
 
 #ifdef STM32_HAS_FSMC

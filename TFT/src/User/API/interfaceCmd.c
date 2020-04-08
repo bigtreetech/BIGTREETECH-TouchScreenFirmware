@@ -290,7 +290,7 @@ void sendQueueCmd(void)
             break;
           case 18: //M18/M84 disable steppers
           case 84:
-            coordinateSetClear(false);
+            coordinateSetKnown(false);
             break;
 
           case 27: //M27
@@ -533,7 +533,8 @@ void sendQueueCmd(void)
           }
 
           case 28: //G28
-            coordinateSetClear(true);
+            coordinateSetKnown(true);
+            babyStepReset();
             break;
 
           case 90: //G90

@@ -26,7 +26,7 @@ typedef struct
   uint8_t  invert_axis[TOTAL_AXIS];
   uint8_t  move_speed;
   uint8_t  knob_led_color;
-  #ifdef LCD_LED_PIN
+  #ifdef LCD_LED_PWM_CHANNEL
   uint8_t  lcd_brightness;
   uint8_t  lcd_idle_brightness;
   uint8_t  lcd_idle_timer;

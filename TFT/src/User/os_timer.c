@@ -8,24 +8,24 @@ void OS_TimerInit(uint16_t psc, uint16_t arr)
 {
   NVIC_InitTypeDef NVIC_InitStructure;
 
-  NVIC_InitStructure.NVIC_IRQChannel = TIM4_IRQn;
+  NVIC_InitStructure.NVIC_IRQChannel = TIM7_IRQn;
   NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
   NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
   NVIC_Init(&NVIC_InitStructure);
 
-  RCC->APB1ENR |= 1<<2;
-  TIM4->ARR = arr;
-  TIM4->PSC = psc;
-  TIM4->SR = (uint16_t)~(1<<0);
-  TIM4->DIER |= 1<<0;
-  TIM4->CR1 |= 0x01;
+  RCC->APB1ENR |= 1<<5;
+  TIM7->ARR = arr;
+  TIM7->PSC = psc;
+  TIM7->SR = (uint16_t)~(1<<0);
+  TIM7->DIER |= 1<<0;
+  TIM7->CR1 |= 0x01;
 }
 
-void TIM4_IRQHandler(void)
+void TIM7_IRQHandler(void)
 {
-  if ((TIM4->SR & 0x01) != 0) {   // update interrupt flag
-    TIM4->SR = (uint16_t)~(1<<0); // clear interrupt flag
+  if ((TIM7->SR & 0x01) != 0) {   // update interrupt flag
+    TIM7->SR = (uint16_t)~(1<<0); // clear interrupt flag
 
     os_counter++;
 

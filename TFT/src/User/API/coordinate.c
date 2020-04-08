@@ -10,9 +10,9 @@ COORDINATE targetPosition={{0.0f,0.0f,0.0f,0.0f},3000};
 //
 static bool relative_mode = false;
 static bool relative_e = false;
-// false means current position is not clear
+// false means current position is unknown
 // false after M18/M84 disable stepper or power up, true after G28
-static bool position_cleared = false;
+static bool position_known = false;
 
 bool coorGetRelative(void)
 {
@@ -34,14 +34,14 @@ void eSetRelative(bool mode)
   relative_e = mode;
 }
 
-bool coordinateIsClear(void)
+bool coordinateIsKnown(void)
 {
-  return position_cleared;
+  return position_known;
 }
 
-void coordinateSetClear(bool clear)
+void coordinateSetKnown(bool known)
 {
-  position_cleared = clear;
+  position_known = known;
 }
 
 void coordinateSetAxisTarget(AXIS axis,float position)
