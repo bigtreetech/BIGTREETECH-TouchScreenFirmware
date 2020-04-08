@@ -55,8 +55,8 @@ void setupMachine(void){
       storeCmd("M420 S1\n");
     }
   #endif
-  if (infoMachineSettings.emergencyParser != 1){
-    statusScreen_setMsg(textSelect(LABEL_WARNING), textSelect(LABEL_EMERGENCYPARSER));
+  if (infoMachineSettings.emergencyParser != 1 && wasRestored == true){
+    popupReminder(textSelect(LABEL_WARNING), textSelect(LABEL_EMERGENCYPARSER));
   }
 }
 
