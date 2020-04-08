@@ -301,7 +301,7 @@ void menuPrintFromSource(void)
             if(infoHost.connected !=true) break;
             if(EnterDir(infoFile.file[key_num + start - infoFile.F_num]) == false) break;
 
-            if (infoFile.source != BOARD_SD) {
+            /*if (infoFile.source != BOARD_SD) {
               //load bmp preview in flash if file exists
               int gn;
               char *gnew;
@@ -318,7 +318,7 @@ void menuPrintFromSource(void)
               }
               free(gnew);
               //-load bmp preview in flash if file exists - end
-            }
+            }*/
             infoMenu.menu[++infoMenu.cur] = menuBeforePrinting;
           }
         }
