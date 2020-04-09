@@ -36,8 +36,8 @@
 
 // LCD Backlight pin (PWM can adjust brightness)
 #define LCD_LED_PIN            PD14
-#define LCD_LED_PIN_ALTERNATE  0
-#define LCD_LED_PWM_CHANNEL    _TIM4_CH3
+//#define LCD_LED_PIN_ALTERNATE  0
+//#define LCD_LED_PWM_CHANNEL    _TIM4_CH3
 
 /*
  * SERIAL_PORT: communicating with host(Marlin, smoothieware, etc...)
