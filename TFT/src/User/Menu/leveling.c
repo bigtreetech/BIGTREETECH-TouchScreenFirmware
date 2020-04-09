@@ -41,7 +41,7 @@ void menuAutoLeveling(void)
         storeCmd("M280 P0 S120\n");
         break;
       case KEY_ICON_4:
-        storeCmd("M48\n");
+        storeCmd("G28\nM48\n");
         break;
       case KEY_ICON_5:
         storeCmd("M851\n");
