@@ -301,22 +301,24 @@ void menuPrintFromSource(void)
             if(infoHost.connected !=true) break;
             if(EnterDir(infoFile.file[key_num + start - infoFile.F_num]) == false) break;
 
-            if (infoFile.source != BOARD_SD) {
+            if (infoFile.source == TFT_SD) {
               //load bmp preview in flash if file exists
               int gn;
               char *gnew;
               gn = strlen(infoFile.file[key_num + start - infoFile.F_num]) - 6; // -6 means ".gcode"
               gnew = malloc(gn + 10);
-              strcpy(gnew, getCurFileSource());
-              strncat(gnew, infoFile.file[key_num + start - infoFile.F_num], gn);
+              if (gnew != NULL) {
+                strcpy(gnew, getCurFileSource());
+                strncat(gnew, infoFile.file[key_num + start - infoFile.F_num], gn);
 
-              if(bmpDecode(strcat(gnew, "_"STRINGIFY(ICON_WIDTH)".bmp"),ICON_ADDR(ICON_PREVIEW)) == true){
-                icon_pre = true;
+                if(bmpDecode(strcat(gnew, "_"STRINGIFY(ICON_WIDTH)".bmp"),ICON_ADDR(ICON_PREVIEW)) == true){
+                  icon_pre = true;
+                }
+                else{
+                  icon_pre = false;
+                }
+                free(gnew);
               }
-              else{
-                icon_pre = false;
-              }
-              free(gnew);
               //-load bmp preview in flash if file exists - end
             }
             infoMenu.menu[++infoMenu.cur] = menuBeforePrinting;
