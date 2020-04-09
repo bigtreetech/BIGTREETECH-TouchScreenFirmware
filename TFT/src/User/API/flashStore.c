@@ -7,6 +7,7 @@
 
 extern u32 TSC_Para[7];        //
 extern SETTINGS infoSettings;  //
+bool wasRestored = false;
 
 void wordToByte(u32 word, u8 *bytes)  //
 {
@@ -51,6 +52,7 @@ bool readStoredPara(void)
   sign = byteToWord(data + (index += 4), 4);
   if(sign != PARA_SIGN) // If the settings parameter is illegal, reset settings parameter
   {
+    wasRestored = true;
     infoSettingsReset();
   }
   else

@@ -5,6 +5,8 @@
 #include "variants.h"
 #include "Settings.h"
 
+extern bool wasRestored;
+
 bool readStoredPara(void);
 void storePara(void);
 
