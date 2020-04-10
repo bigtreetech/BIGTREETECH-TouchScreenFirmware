@@ -176,7 +176,6 @@ void menuFan(void)
 
             encoderPosition = 0;
           }
-          LCD_LoopEncoder();
         #endif
         break;
     }

@@ -35,7 +35,7 @@ void Hardware_GenericInit(void)
     SD_DeInit();
   #endif
   #if LCD_ENCODER_SUPPORT
-    LCD_EncoderInit();
+    HW_EncoderInit();
   #endif
 
   #ifdef PS_ON_PIN

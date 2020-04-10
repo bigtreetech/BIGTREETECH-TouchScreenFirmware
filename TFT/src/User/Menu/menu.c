@@ -411,8 +411,15 @@ void loopBackEnd(void)
 #endif
 
 #if LCD_ENCODER_SUPPORT
+  loopCheckEncoder();
+  if(infoMenu.menu[infoMenu.cur] != menuST7920)
+    {
+      loopCheckEncoderSteps(); //check change in encoder steps
+    }
+#endif
+
+#ifdef ST7920_SPI
   loopCheckMode();
-  LCD_loopCheckEncoder();
 #endif
 
 #ifdef FIL_RUNOUT_PIN
