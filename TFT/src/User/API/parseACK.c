@@ -366,6 +366,9 @@ void parseACK(void)
           if(strstr(dmaL2Cache, ignoreEcho[i]))
           {
             busyIndicator(STATUS_BUSY);
+            if (i == 3 && isPrinting() == false){
+              popupPauseForUser();
+            }
             goto parse_end;
           }
         }
