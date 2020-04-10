@@ -303,9 +303,10 @@ void menuPrintFromSource(void)
 
             if (infoFile.source == TFT_SD) {
               //load bmp preview in flash if file exists
-              int gn;
+              int16_t gn;
               char *gnew;
               gn = strlen(infoFile.file[key_num + start - infoFile.F_num]) - 6; // -6 means ".gcode"
+              if(gn < 0) gn = 0; // for extension name ".g", ".gco" file, TODO: improve here in next version 
               gnew = malloc(gn + 10);
               if (gnew != NULL) {
                 strcpy(gnew, getCurFileSource());

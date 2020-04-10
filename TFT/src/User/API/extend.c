@@ -37,7 +37,7 @@ void positionSetUpdateWaiting(bool isWaiting)
 
 void FIL_Runout_Init(void)
 {
-  GPIO_InitSet(FIL_RUNOUT_PIN, FIL_RUNOUT_INVERTING ? MGPIO_MODE_IPD : MGPIO_MODE_IPU, 0);
+  GPIO_InitSet(FIL_RUNOUT_PIN, FIL_RUNOUT_INVERTING ? MGPIO_MODE_IPU : MGPIO_MODE_IPD, 0);
 }
 
 bool FIL_RunoutPinFilteredLevel(void)

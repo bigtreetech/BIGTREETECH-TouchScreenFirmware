@@ -792,7 +792,7 @@ void getGcodeFromFile(void)
 
   powerFailedCache(infoPrinting.file.fptr);
 
-  if(heatHasWaiting() || infoCmd.count >= 3 || infoPrinting.pause )  return;
+  if(heatHasWaiting() || infoCmd.count || infoPrinting.pause )  return;
 
   if(moveCacheToCmd() == true) return;
 
