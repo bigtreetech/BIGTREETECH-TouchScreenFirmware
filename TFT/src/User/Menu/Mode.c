@@ -2,6 +2,7 @@
 #include "includes.h"
 
 bool serialHasBeenInitialized = false;
+bool freshboot = true;
 
 void Serial_ReSourceDeInit(void)
 {
@@ -46,14 +47,18 @@ void infoMenuSelect(void)
         infoMenu.menu[infoMenu.cur] = menuMain;
       #endif
       #ifdef SHOW_BTT_BOOTSCREEN
-        u32 startUpTime = OS_GetTimeMs();
-        heatSetUpdateTime(TEMPERATURE_QUERY_FAST_DURATION);
-        LOGO_ReadDisplay();
-        while(OS_GetTimeMs() - startUpTime < 3000)  //Display 3s logo
+        if (freshboot)
         {
-          loopProcess();
+          u32 startUpTime = OS_GetTimeMs();
+          heatSetUpdateTime(TEMPERATURE_QUERY_FAST_DURATION);
+          LOGO_ReadDisplay();
+          while (OS_GetTimeMs() - startUpTime < 3000) //Display 3s logo
+          {
+            loopProcess();
+          }
+          heatSetUpdateTime(TEMPERATURE_QUERY_SLOW_DURATION);
+          freshboot = false;
         }
-        heatSetUpdateTime(TEMPERATURE_QUERY_SLOW_DURATION);
       #endif
       break;
     }
