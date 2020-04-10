@@ -22,10 +22,10 @@ typedef enum
   MGPIO_MODE_AIN = (0<<5)|(3<<3)|(0<<2)|(3),
 }GPIO_MODE;
 
-#define GPIO_MODE_GET_MODE(n) (n & 0x3)
-#define GPIO_MODE_GET_OTYPE(n) ((n>>2) & 0x1)
-#define GPIO_MODE_GET_OSPEED(n) ((n>>3) & 0x3)
-#define GPIO_MODE_GET_PULL(n) ((n>>5) & 0x3)
+#define GPIO_MODE_GET_MODE(n) ((n) & 0x3)
+#define GPIO_MODE_GET_OTYPE(n) (((n)>>2) & 0x1)
+#define GPIO_MODE_GET_OSPEED(n) (((n)>>3) & 0x3)
+#define GPIO_MODE_GET_PULL(n) (((n)>>5) & 0x3)
 
 #define GPIO_MODE_AF 2
 #define GPIO_AF0 0
