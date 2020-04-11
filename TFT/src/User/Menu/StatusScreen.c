@@ -290,7 +290,8 @@ void toggleTool(void)
       {
         gantryCmdWait = true;
         storeCmd("M114\n");
-        storeCmd("M220\nM221\n");
+        storeCmd("M220\n");
+        storeCmd("M221\n");
       }
     }
     else
