@@ -407,8 +407,11 @@ void parseRcvGcode(void)
       if(i != SERIAL_PORT && infoHost.rx_ok[i] == true)
       {
         infoHost.rx_ok[i] = false;
-        syncL2CacheFromL1(i);
-        storeCmdFromUART(i, dmaL2Cache);
+        while(dmaL1NotEmpty(i))
+        {
+          syncL2CacheFromL1(i);
+          storeCmdFromUART(i, dmaL2Cache);
+        }
       }
     }
   #endif
