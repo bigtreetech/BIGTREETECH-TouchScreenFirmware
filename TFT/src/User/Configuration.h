@@ -229,11 +229,11 @@
 
 // Enable alternative Move Menu Buttons Layout matching the direction of actual printer axis.
 // update the icons from alternate icon folder
-//#define ALTERNATIVE_MOVE_MENU
+#define ALTERNATIVE_MOVE_MENU
 
 // Enable Unified Move Menu
 // Move, Home, Extrude, ABL at one Place and bring G-code Menu on Home Menu
-//#define UNIFIED_MENU
+#define UNIFIED_MENU
 
 /**
  * SD support
