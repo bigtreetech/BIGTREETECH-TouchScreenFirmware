@@ -32,7 +32,7 @@ void menuMain(void)
 
 
   #ifndef UNIFIED_MENU
-  if(infoMachineSettings.autoLevel = 1){
+  if(infoMachineSettings.autoLevel == 1){
     mainPageItems.items[7].icon = ICON_LEVELING;
     mainPageItems.items[7].label.index = LABEL_ABL;
   }
@@ -72,7 +72,7 @@ void menuMain(void)
         case KEY_ICON_5: infoMenu.menu[++infoMenu.cur] = menuFan;       break;
         case KEY_ICON_6: infoMenu.menu[++infoMenu.cur] = menuSettings;  break;
         case KEY_ICON_7:
-          if(infoMachineSettings.autoLevel = 1){
+          if(infoMachineSettings.autoLevel == 1){
               infoMenu.menu[++infoMenu.cur] = menuAutoLeveling;
             }
           else{
