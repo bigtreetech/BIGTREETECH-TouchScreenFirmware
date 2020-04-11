@@ -55,7 +55,7 @@ const  float item_move_len[ITEM_MOVE_LEN_NUM] = {0.1f, 1, 10};
 static u8    item_move_len_i = 1;
 
 static u32 nextTime = 0;
-static u32 update_time = 50; // 1 seconds is 100
+static u32 update_time = 500; // 1 seconds is 1000
 
 AXIS nowAxis = X_AXIS;
 
