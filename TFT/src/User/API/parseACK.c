@@ -10,7 +10,6 @@ const char *const ignoreEcho[] = {
   "busy: processing",
   "Now fresh file:",
   "Probe Z Offset:",
-  "paused for user",
   "Flow:",
   "echo:;",
   "echo:  G",
@@ -352,6 +351,10 @@ void parseACK(void)
       {
         speedSetPercent(1,ack_value());
       }
+      else if(ack_seen("paused for user"))
+      {
+        popupPauseForUser();
+      }
     //Parse error messages & Echo messages
       else if(ack_seen(errormagic))
       {
@@ -366,9 +369,6 @@ void parseACK(void)
           if(strstr(dmaL2Cache, ignoreEcho[i]))
           {
             busyIndicator(STATUS_BUSY);
-            if (i == 3 && isPrinting() == false){
-              popupPauseForUser();
-            }
             goto parse_end;
           }
         }
