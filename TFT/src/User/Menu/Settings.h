@@ -27,12 +27,13 @@ typedef struct
   uint8_t  move_speed;
   uint8_t  knob_led_color;
   #ifdef LCD_LED_PWM_CHANNEL
-  uint8_t  lcd_brightness;
-  uint8_t  lcd_idle_brightness;
-  uint8_t  lcd_idle_timer;
+    uint8_t  lcd_brightness;
+    uint8_t  lcd_idle_brightness;
+    uint8_t  lcd_idle_timer;
   #endif
   uint8_t  send_start_gcode;
   uint8_t  send_end_gcode;
+  uint8_t  send_cancel_gcode;
   uint8_t  persistent_info;
   uint8_t  file_listmode;
   uint8_t  marlin_mode_fullscreen;

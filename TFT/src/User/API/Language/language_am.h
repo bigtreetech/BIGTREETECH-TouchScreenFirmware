@@ -157,6 +157,7 @@
     #define AM_M0_PAUSE             "Paused by M0 command"
     #define AM_SEND_START_GCODE     "Start Gcode before print"
     #define AM_SEND_END_GCODE       "End Gcode after print"
+    #define AM_SEND_CANCEL_GCODE    "Cancel Gcode"
     #define AM_PERSISTENT_STATUS_INFO   "Persistent Status Info"
     #define AM_FILE_LISTMODE            "Files viewer List Mode"
     #define AM_CURRENT_SETTING          "Driver Current (mA)"

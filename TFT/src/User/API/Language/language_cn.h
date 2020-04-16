@@ -157,6 +157,7 @@
     #define CN_M0_PAUSE             "M0暂停"
     #define CN_SEND_START_GCODE     "执行打印前起始Gcode"
     #define CN_SEND_END_GCODE       "执行打印后结束Gcode"
+    #define CN_SEND_CANCEL_GCODE    "Cancel Gcode"
     #define CN_PERSISTENT_STATUS_INFO   "顶部温度信息"
     #define CN_FILE_LISTMODE            "文件浏览列表模式"
     #define CN_CURRENT_SETTING          "TMC驱动电流设置"

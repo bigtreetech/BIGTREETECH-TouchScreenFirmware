@@ -73,6 +73,7 @@ bool readStoredPara(void)
     infoSettings.move_speed          = byteToWord(data + (index += 4), 4);
     infoSettings.send_start_gcode    = byteToWord(data + (index += 4), 4);
     infoSettings.send_end_gcode      = byteToWord(data + (index += 4), 4);
+    infoSettings.send_cancel_gcode   = byteToWord(data + (index += 4), 4);
     infoSettings.persistent_info     = byteToWord(data + (index += 4), 4);
     infoSettings.file_listmode       = byteToWord(data + (index += 4), 4);
     infoSettings.knob_led_color      = byteToWord(data + (index += 4), 4);
@@ -114,6 +115,7 @@ void storePara(void)
   wordToByte(infoSettings.move_speed,         data + (index += 4));
   wordToByte(infoSettings.send_start_gcode,   data + (index += 4));
   wordToByte(infoSettings.send_end_gcode,     data + (index += 4));
+  wordToByte(infoSettings.send_cancel_gcode,  data + (index += 4));
   wordToByte(infoSettings.persistent_info,    data + (index += 4));
   wordToByte(infoSettings.file_listmode,      data + (index += 4));
   wordToByte(infoSettings.knob_led_color,     data + (index += 4));

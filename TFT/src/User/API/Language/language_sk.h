@@ -157,6 +157,7 @@
     #define SK_M0_PAUSE             "Pauza príkazom M0"
     #define SK_SEND_START_GCODE     "Začiatočný Gcode"
     #define SK_SEND_END_GCODE       "Koncový Gcode"
+    #define SK_SEND_CANCEL_GCODE    "Cancel Gcode"
     #define SK_PERSISTENT_STATUS_INFO   "Trvalé info o stave"
     #define SK_FILE_LISTMODE            "Typ zoznamu suborov list"
     #define SK_CURRENT_SETTING          "Prúd ovládača (mA)"
