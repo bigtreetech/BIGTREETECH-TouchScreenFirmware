@@ -330,6 +330,6 @@
 #define PRINT_END_GCODE "G90\nG1 E-4\nG92 E0\nM18\n" // Switch to absolute positioning, reduce filament pressure by performing small retract, reset extruder position, disable steppers
 
 // Cancel G-code - run this G-code after canceling print
-#define CANCEL_PRINT_GCODE "G28 XY R10\n" // Raise Z 10mm before homing X & Y
+#define PRINT_CANCEL_GCODE "G28 XY R10\n" // Home XY and raise Z 10mm
 
 #endif

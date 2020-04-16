@@ -31,4 +31,7 @@
 #ifdef AUTO_BED_LEVELING
   #error "AUTO_BED_LEVELING is now auto configured by the TFT Controller with 'M115' command. Please update your Configuration.h file"
 #endif
+
+#ifdef CANCEL_PRINT_GCODE
+  #error "CANCEL_PRINT_GCODE is now PRINT_CANCEL_GCODE. Please update your Configuration.h file."
 #endif

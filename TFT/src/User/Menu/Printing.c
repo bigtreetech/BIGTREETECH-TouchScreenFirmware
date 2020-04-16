@@ -704,7 +704,7 @@ void abortPrinting(void)
   heatClearIsWaiting();
 
   if(infoSettings.send_cancel_gcode == 1){
-    mustStoreCmd(CANCEL_PRINT_GCODE);
+    mustStoreCmd(PRINT_CANCEL_GCODE);
   }
 
   endPrinting();
