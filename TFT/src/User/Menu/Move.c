@@ -168,7 +168,6 @@ void menuMove(void)
               storeMoveCmd(nowAxis, encoderPosition > 0 ? 1 : -1);
               encoderPosition = 0;
             }
-            LCD_LoopEncoder();
           #endif
           break;
     }

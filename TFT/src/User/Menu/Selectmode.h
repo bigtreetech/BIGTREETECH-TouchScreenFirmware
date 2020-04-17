@@ -14,14 +14,13 @@ typedef enum
   MKEY_IDLE = IDLE_TOUCH,
 }MKEY_VALUES;
 
-bool LCD_ReadPen(uint16_t intervals);
-uint8_t LCD_ReadTouch(void);
-void Touch_Sw(uint8_t num);
-bool LCD_BtnTouch(uint16_t intervals);
+extern bool skipMode;
 
 //select mode fun
 void show_selectICON(void);
 MKEY_VALUES MKeyGetValue(void);
 void selectmode(int8_t  nowMode);
+void menuMode(void);
+void loopCheckMode(void);
 
 #endif
