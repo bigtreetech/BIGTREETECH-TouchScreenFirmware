@@ -10,7 +10,6 @@ const char *const ignoreEcho[] = {
   "busy: processing",
   "Now fresh file:",
   "Probe Z Offset:",
-  "paused for user",
   "Flow:",
   "echo:;",
   "echo:  G",
@@ -351,6 +350,10 @@ void parseACK(void)
       else if(ack_seen("Flow: "))
       {
         speedSetPercent(1,ack_value());
+      }
+      else if(ack_seen("paused for user"))
+      {
+        popupPauseForUser();
       }
     //Parse error messages & Echo messages
       else if(ack_seen(errormagic))
