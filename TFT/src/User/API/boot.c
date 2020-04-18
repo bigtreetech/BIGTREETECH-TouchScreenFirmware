@@ -177,16 +177,17 @@ void updateIcon(void)
     my_sprintf(tempstr, "Updated: %d | Not Updated: %d", found, notfound);
     GUI_DispString(statUpdateRect.x0, statUpdateRect.y0, (u8 *)tempstr);
   }
-
-  if (bmpDecode(BMP_ROOT_DIR "/InfoBox.bmp", INFOBOX_ADDR))
-  {
-    found++;
-  }
-  else
-  {
-    notfound++;
-    dispIconFail((u8 *)(BMP_ROOT_DIR "/InfoBox.bmp"));
-  }
+  #ifdef UNIFIED_MENU
+    if (bmpDecode(BMP_ROOT_DIR "/InfoBox.bmp", INFOBOX_ADDR))
+    {
+      found++;
+    }
+    else
+    {
+      notfound++;
+      dispIconFail((u8 *)(BMP_ROOT_DIR "/InfoBox.bmp"));
+    }
+  #endif
   GUI_DispStringInPrect(&statUpdateRect, (u8 *)tempstr);
 }
 
