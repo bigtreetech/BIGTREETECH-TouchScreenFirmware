@@ -58,7 +58,7 @@ void showFanSpeed(void)
   #ifdef SHOW_FAN_PERCENTAGE
     fs = (fanSpeed[curIndex]*100)/255;
   #else
-    fs = fanSpeed[curIndex]
+    fs = fanSpeed[curIndex];
   #endif
   GUI_ClearRect(rect.x0, rect.y0, rect.x1, rect.y1);
   GUI_DispStringInPrect(&rect, (u8*)fanID[curIndex]);
@@ -78,7 +78,7 @@ void fanSpeedReDraw(void)
     sprintf(fan_s, "%3d%%", (fanSpeed[curIndex]*100)/255);
     GUI_DispString(CENTER_X-BYTE_WIDTH, CENTER_Y, (u8 *)fan_s);
   #else
-    GUI_DispDec(CENTER_X-BYTE_WIDTH, CENTER_Y, fanSpeed[curIndex];, 3, LEFT);
+    GUI_DispDec(CENTER_X-BYTE_WIDTH, CENTER_Y, fanSpeed[curIndex], 3, LEFT);
   #endif
 }
 
