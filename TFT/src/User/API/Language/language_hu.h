@@ -89,6 +89,7 @@
     #define HU_1_MM                 "1mm"
     #define HU_5_MM                 "5mm"
     #define HU_10_MM                "10mm"
+    #define HU_100_MM               "100mm"
     #define HU_1_PERCENT            "1%"
     #define HU_5_PERCENT            "5%"
     #define HU_10_PERCENT           "10%"
@@ -184,5 +185,6 @@
     #define HU_300_SECONDS              "5 Perc."
     #define HU_CUSTOM_SECONDS           "Egyedi"
     #define HU_ST7920_FULLSCREEN        "Nagyképernyős Marlin mód"
+    #define HU_SOFT_ENDSTOP_OFF         "\u0881 No Endstop \u0881"
 
 #endif

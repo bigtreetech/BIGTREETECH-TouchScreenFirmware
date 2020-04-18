@@ -89,6 +89,7 @@
     #define CZ_1_MM                 "1mm"
     #define CZ_5_MM                 "5mm"
     #define CZ_10_MM                "10mm"
+    #define CZ_100_MM               "100mm"
     #define CZ_1_PERCENT            "1%"
     #define CZ_5_PERCENT            "5%"
     #define CZ_10_PERCENT           "10%"
@@ -184,5 +185,6 @@
     #define CZ_300_SECONDS              "5 Min."
     #define CZ_CUSTOM_SECONDS           "Custom"
     #define CZ_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
+    #define CZ_SOFT_ENDSTOP_OFF         "\u0881 No Endstop \u0881"
 
 #endif

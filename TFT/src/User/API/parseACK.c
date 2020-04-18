@@ -14,7 +14,9 @@ const char *const ignoreEcho[] = {
   "echo:;",
   "echo:  G",
   "echo:  M",
-};
+  "Soft endstops:",
+  "Settings Stored",
+  };
 
 bool portSeen[_UART_CNT] = {false, false, false, false, false, false};
 

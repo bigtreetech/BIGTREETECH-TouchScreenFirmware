@@ -89,6 +89,7 @@
     #define RU_1_MM                   "1мм"
     #define RU_5_MM                   "5мм"
     #define RU_10_MM                  "10мм"
+    #define RU_100_MM                 "100мм"
     #define RU_1_PERCENT              "1%"
     #define RU_5_PERCENT              "5%"
     #define RU_10_PERCENT             "10%"
@@ -184,5 +185,6 @@
     #define RU_300_SECONDS            "5 мин."
     #define RU_CUSTOM_SECONDS         "Своё"
     #define RU_ST7920_FULLSCREEN      "Marlin на весь экран"
+    #define RU_SOFT_ENDSTOP_OFF       "\u0881 No Endstop \u0881"
 
 #endif

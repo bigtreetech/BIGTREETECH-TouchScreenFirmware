@@ -89,6 +89,7 @@
     #define JP_1_MM                 "1mm"
     #define JP_5_MM                 "5mm"
     #define JP_10_MM                "10mm"
+    #define JP_100_MM               "100mm"
     #define JP_1_PERCENT            "1%"
     #define JP_5_PERCENT            "5%"
     #define JP_10_PERCENT           "10%"
@@ -184,5 +185,6 @@
     #define JP_300_SECONDS              "5 Min."
     #define JP_CUSTOM_SECONDS           "Custom"
     #define JP_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
+    #define JP_SOFT_ENDSTOP_OFF         "\u0881 No Endstop \u0881"
 
 #endif

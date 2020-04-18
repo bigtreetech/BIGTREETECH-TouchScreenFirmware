@@ -89,6 +89,7 @@
     #define IT_1_MM                 "1mm"
     #define IT_5_MM                 "5mm"
     #define IT_10_MM                "10mm"
+    #define IT_100_MM               "100mm"
     #define IT_1_PERCENT            "1%"
     #define IT_5_PERCENT            "5%"
     #define IT_10_PERCENT           "10%"
@@ -184,5 +185,6 @@
     #define IT_300_SECONDS              "5 Min."
     #define IT_CUSTOM_SECONDS           "Custom"
     #define IT_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
+    #define IT_SOFT_ENDSTOP_OFF          "\u0881 No Endstop \u0881"
 
 #endif

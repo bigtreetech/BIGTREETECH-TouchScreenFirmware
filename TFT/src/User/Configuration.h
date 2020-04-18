@@ -46,7 +46,7 @@
  */
 #define DEFAULT_LCD_BRIGHTNESS      11  // 11: LCD_100_PERCENT - Brightness value from list
 #define DEFAULT_LCD_IDLE_BRIGHTNESS 2   // 2: LCD_10_PERCENT - Brightness value from list
-#define DEFAULT_LCD_IDLE_TIMER      1   // 1: LCD_DIM_OFF
+#define DEFAULT_LCD_IDLE_TIMER      7   // 1: LCD_DIM_OFF
 #define LCD_DIM_CUSTOM_SECONDS      600 // Custom value in seconds. Will be used if
                                           // LCD_DIM_CUSTOM_SECONDS is set as idle timer.
 
@@ -62,12 +62,12 @@
  * Options: BLACK, BLUE, BROWN, BRRED, CYAN, GBLUE, GRAY, GREEN, MAGENTA, RED, WHITE, YELLOW
  */
 #define ST7920_BKCOLOR BLACK
-#define ST7920_FNCOLOR YELLOW
+#define ST7920_FNCOLOR CYAN
 
 /**
  *  Text displayed at the top of the TFT in Marlin Mode.
  */
-//#define ST7920_BANNER_TEXT "LCD12864 Simulator"
+#define ST7920_BANNER_TEXT "XY-2 PRO"
 
 /**
  * Run Marlin Mode in Fullscreen
@@ -86,7 +86,7 @@
  *
  * *** ONLY SUPPORTED ON TFT24 V1.1, TFT35 V3.0, AND TFT28 V3.0 ***
  */
-//#define CLEAN_MODE_SWITCHING_SUPPORT  // Enable CLEAN MODE SWITCHING SUPPORT
+#define CLEAN_MODE_SWITCHING_SUPPORT  // Enable CLEAN MODE SWITCHING SUPPORT
 
 //===========================================================================
 //========================== Touch Mode Settings ============================
@@ -134,7 +134,7 @@
  */
 #define TITLE_BACKGROUND_COLOR      BLACK  // Title background color // 0xD928
 #define BACKGROUND_COLOR            BLACK  // Background color // 0x0A29
-#define FONT_COLOR                  WHITE  // Font foreground color
+#define FONT_COLOR                  CYAN  // Font foreground color
 #define REMINDER_FONT_COLOR         RED    // Reminder font color, such as: "No print attached", "Busy processing", etc.
 #define VOLUME_REMINDER_FONT_COLOR  GBLUE  // Volume reminder font color, such as: "Card inserted", "Card removed"
 
@@ -143,10 +143,10 @@
 #define FAN_NUM      1    // set in 1~6
 
 //                       PLA      PETG       ABS
-#define PREHEAT_BED      {60,      70,       100}
-#define PREHEAT_HOTEND   {200,     250,      230}
+#define PREHEAT_BED      {50,      80,       100}
+#define PREHEAT_HOTEND   {200,     235,      230}
 
-#define HEAT_MAX_TEMP    {150,    275,       275,       275,       275,       275,       275}    //max temperature can be set
+#define HEAT_MAX_TEMP    {130,    275,       275,       275,       275,       275,       275}    //max temperature can be set
 #define HEAT_SIGN_ID     {"B:",   "T0:",     "T1:",     "T2:",     "T3:",     "T4:",     "T5:"}
 #define HEAT_DISPLAY_ID  {"Bed",  "T0",      "T1",      "T2",      "T3",      "T4",      "T5"}
 #define HEAT_CMD         {"M140", "M104 T0", "M104 T1", "M104 T2", "M104 T3", "M104 T4", "M104 T5" };
@@ -177,16 +177,16 @@
 #define X_MIN_POS 0
 #define Y_MIN_POS 0
 #define Z_MIN_POS 0
-#define X_MAX_POS 235
+#define X_MAX_POS 253
 #define Y_MAX_POS 235
-#define Z_MAX_POS 250
+#define Z_MAX_POS 260
 
 // Specify a pause position as { X, Y, Z_raise }
 #define NOZZLE_PAUSE_RETRACT_LENGTH 15   // (mm)
 #define NOZZLE_RESUME_PURGE_LENGTH  16   // (mm)
-#define NOZZLE_PAUSE_X_POSITION     (X_MIN_POS + 10)  // (mm) Must be an integer
-#define NOZZLE_PAUSE_Y_POSITION     (Y_MIN_POS + 10)  // (mm) Must be an integer
-#define NOZZLE_PAUSE_Z_RAISE        20   // (mm)
+#define NOZZLE_PAUSE_X_POSITION     (X_MIN_POS + 15)  // (mm) Must be an integer
+#define NOZZLE_PAUSE_Y_POSITION     (Y_MIN_POS + 15)  // (mm) Must be an integer
+#define NOZZLE_PAUSE_Z_RAISE        10   // (mm)
 #define NOZZLE_PAUSE_E_FEEDRATE     6000 // (mm/min) retract & purge feedrate
 #define NOZZLE_PAUSE_XY_FEEDRATE    6000 // (mm/min) X and Y axes feedrate
 #define NOZZLE_PAUSE_Z_FEEDRATE     600  // (mm/min) Z axis feedrate
@@ -203,18 +203,18 @@
  * Manual Leveling
  * Move to four corner points to Leveling manually (Point 1, Point 2, Point 3, Point 4)
  */
-#define LEVELING_POINT_1_X         (X_MIN_POS + 20)
-#define LEVELING_POINT_1_Y         (Y_MIN_POS + 20)
-#define LEVELING_POINT_2_X         (X_MAX_POS - 20)
-#define LEVELING_POINT_2_Y         (Y_MIN_POS + 20)
-#define LEVELING_POINT_3_X         (X_MAX_POS - 20)
-#define LEVELING_POINT_3_Y         (Y_MAX_POS - 20)
-#define LEVELING_POINT_4_X         (X_MIN_POS + 20)
-#define LEVELING_POINT_4_Y         (Y_MAX_POS - 20)
+#define LEVELING_POINT_1_X         (X_MIN_POS + 15)
+#define LEVELING_POINT_1_Y         (Y_MIN_POS + 15)
+#define LEVELING_POINT_2_X         (X_MAX_POS - 15)
+#define LEVELING_POINT_2_Y         (Y_MIN_POS + 15)
+#define LEVELING_POINT_3_X         (X_MAX_POS - 15)
+#define LEVELING_POINT_3_Y         (Y_MAX_POS - 15)
+#define LEVELING_POINT_4_X         (X_MIN_POS + 15)
+#define LEVELING_POINT_4_Y         (Y_MAX_POS - 15)
 #define LEVELING_POINT_Z           0.2f  // Z-axis position when nozzle stays for leveling
-#define LEVELING_POINT_MOVE_Z      10.0f // Z-axis position when nozzle move to next point
+#define LEVELING_POINT_MOVE_Z      4.0f // Z-axis position when nozzle move to next point
 #define LEVELING_POINT_XY_FEEDRATE 6000  // (mm/min) X and Y axes move feedrate
-#define LEVELING_POINT_Z_FEEDRATE  600   // (mm/min) Z axis move feedrate
+#define LEVELING_POINT_Z_FEEDRATE  480   // (mm/min) Z axis move feedrate
 
 // Power Supply
 #define PS_ON_ACTIVE_HIGH    true   // Set 'false' for ATX (1), 'true' for X-Box (2)
@@ -299,10 +299,10 @@
 #define CUSTOM_5_GCODE "M501\n"
 #define CUSTOM_6_LABEL "EEPROM Defaults"
 #define CUSTOM_6_GCODE "M502\n"
-//#define CUSTOM_7_LABEL "Custom7"
-//#define CUSTOM_7_GCODE "M105\n"
-//#define CUSTOM_8_LABEL "Custom8"
-//#define CUSTOM_8_GCODE "M105\n"
+#define CUSTOM_7_LABEL "Recovery ON"
+#define CUSTOM_7_GCODE "M413 S1\n"
+#define CUSTOM_8_LABEL "Recovery OFF"
+#define CUSTOM_8_GCODE "M413 S0\n"
 //#define CUSTOM_9_LABEL "Custom9"
 //#define CUSTOM_9_GCODE "M105\n"
 //#define CUSTOM_10_LABEL "Custom10"
@@ -331,5 +331,8 @@
 
 // Cancel G-code - run this G-code after canceling print
 #define CANCEL_PRINT_GCODE "G28 XY R10\n" // Raise Z 10mm before homing X & Y
+
+// Offset G-code for offset leveling
+#define OFFSET_GCODE "G1 X15 F6000\n"
 
 #endif

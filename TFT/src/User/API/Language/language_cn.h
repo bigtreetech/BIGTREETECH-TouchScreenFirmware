@@ -89,6 +89,7 @@
     #define CN_1_MM                 "1mm"
     #define CN_5_MM                 "5mm"
     #define CN_10_MM                "10mm"
+    #define CN_100_MM               "100mm"
     #define CN_1_PERCENT            "1%"
     #define CN_5_PERCENT            "5%"
     #define CN_10_PERCENT           "10%"
@@ -184,5 +185,6 @@
     #define CN_300_SECONDS              "5分钟"
     #define CN_CUSTOM_SECONDS           "自定义"
     #define CN_ST7920_FULLSCREEN        "全屏显示Marlin模式"
+    #define CN_SOFT_ENDSTOP_OFF          "\u0881 No Endstop \u0881"
 
 #endif

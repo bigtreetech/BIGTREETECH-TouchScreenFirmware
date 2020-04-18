@@ -89,6 +89,7 @@
     #define DU_1_MM                 "1mm"
     #define DU_5_MM                 "5mm"
     #define DU_10_MM                "10mm"
+    #define DU_100_MM               "100mm"
     #define DU_1_PERCENT            "1%"
     #define DU_5_PERCENT            "5%"
     #define DU_10_PERCENT           "10%"
@@ -184,5 +185,6 @@
     #define DU_300_SECONDS              "5 Min."
     #define DU_CUSTOM_SECONDS           "Custom"
     #define DU_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
+    #define DU_SOFT_ENDSTOP_OFF          "\u0881 No Endstop \u0881"
 
 #endif
