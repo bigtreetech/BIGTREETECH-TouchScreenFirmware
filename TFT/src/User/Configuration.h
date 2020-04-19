@@ -71,7 +71,7 @@
 /**
  *  Text displayed at the top of the TFT in Marlin Mode.
  */
-#define ST7920_BANNER_TEXT "XY-2 PRO"
+//#define ST7920_BANNER_TEXT "XY-2 PRO"
 
 /**
  * Run Marlin Mode in Fullscreen
