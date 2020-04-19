@@ -32,8 +32,9 @@ void show_selectICON(void)
 
 	//GUI_ClearPrect(&mode_title_rect[1]);
 	//GUI_ClearPrect(&mode_title_rect[0]);
-	GUI_DispStringInPrect(&mode_title_rect[0],(uint8_t *)"Marlin Mode");
-	GUI_DispStringInPrect(&mode_title_rect[1],(uint8_t *)"Touch Mode");
+  
+	GUI_DispStringInPrect(&mode_title_rect[0],(uint8_t *)textSelect(LABEL_MARLIN_MODE)); 
+	GUI_DispStringInPrect(&mode_title_rect[1],(uint8_t *)textSelect(LABEL_TOUCH_MODE));
 }
 
 bool LCD_ReadPen(uint16_t intervals)

@@ -68,10 +68,8 @@ void storeMoveCmdZ(AXIS xyz, int8_t direction) {
 #define PROBE_OFFSET_MAX_VALUE 20.0f
 #define PROBE_OFFSET_MIN_VALUE -20.0f
 
-void showProbeOffset(float val, float probval)
+void showProbeOffset(float val)
 {
-  GUI_SetColor(REMINDER_FONT_COLOR);
-  GUI_DispFloat(CENTER_X - 5*BYTE_WIDTH/2, CENTER_Y - 20, probval ,3, 2, RIGHT);  // show actual Z offset
   GUI_SetColor(FONT_COLOR);
   GUI_DispFloat(CENTER_X - 5*BYTE_WIDTH/2, CENTER_Y + 20, val, 3, 2, RIGHT);
 }
@@ -90,6 +88,8 @@ void menuProbeOffset(void)
   menuDrawPage(&probeOffsetItems);
   GUI_SetColor(REMINDER_FONT_COLOR);
   GUI_DispString(SW_X, CENTER_Y - 50, (u8 *)softendstop);  // show endstop warning
+  GUI_DispFloat(CENTER_X - 5*BYTE_WIDTH/2, CENTER_Y - 20, probe_offset_value ,3, 2, RIGHT);  // show actual Z offset
+  showProbeOffset(now);
 
   // Z offset g code sequence start
     storeCmd("G28\n");                          // home printer
@@ -100,9 +100,8 @@ void menuProbeOffset(void)
     mustStoreCmd("G1 F%d\n",SPEED_MOVE_SLOW);   // set Z axis movement rate to slow
   // Z offset g code sequence end
 
-  showProbeOffset(now, probe_offset_value);
-  //popupReminder(textSelect(LABEL_WARNING), textSelect(LABEL_SOFTENDSTOP_OFF));  // show warning 
   
+    
   #if LCD_ENCODER_SUPPORT
     encoderPosition = 0;
   #endif
@@ -131,13 +130,13 @@ void menuProbeOffset(void)
         break;
       case KEY_ICON_4:
         probe_offset_value = now;
-        showProbeOffset(now, probe_offset_value);
-        storeCmd("M851 Z%.2f\n",probe_offset_value);    // set new Z offset
+        mustStoreCmd("M851 Z%.2f\n",probe_offset_value);    // set new Z offset
+        mustStoreCmd("M500\n");                         // store new Z offset in EEprom
         mustStoreCmd("G90\n");                          // set absolute position mode
-        storeCmd("M211 S1\n");                          // enable Software Endstop
-		storeCmd("G28\n");                          	// home printer
+        mustStoreCmd("M211 S1\n");                          // enable Software Endstop
+		    storeCmd("G28\n");                            	// home printer
         if(infoMachineSettings.EEPROM == 1){
-           storeCmd("M500\n");                          // store new Z offset in EEprom
+          // storeCmd("M500\n");                          // store new Z offset in EEprom
         }
         infoMenu.cur--;
         break;
@@ -173,7 +172,7 @@ void menuProbeOffset(void)
     if(now != new_offset)
     {
       new_offset = now;
-      showProbeOffset(now, probe_offset_value);
+      showProbeOffset(now);
     }
     loopProcess();
   }

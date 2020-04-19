@@ -186,5 +186,7 @@
     #define DE_CUSTOM_SECONDS           "Benutz."
     #define DE_ST7920_FULLSCREEN        "Display mode in fullscreen"
     #define DE_SOFT_ENDSTOP_OFF         "\u0881 Kein Endstop \u0881"
+    #define DE_MARLIN_MODE              "Display Mode"
+    #define DE_TOUCH_MODE               "Touch Mode"
 
 #endif

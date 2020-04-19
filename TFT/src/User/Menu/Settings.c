@@ -36,7 +36,7 @@ void infoSettingsReset(void)
 
 void initMachineSetting(void){
 
-  infoMachineSettings.EEPROM                  = 0;
+  infoMachineSettings.EEPROM                  = 1;
   infoMachineSettings.autoReportTemp          = 0;
   infoMachineSettings.autoLevel               = 0;
   infoMachineSettings.zProbe                  = 0;
@@ -63,6 +63,8 @@ void setupMachine(void){
 // Version infomation
 void menuInfo(void)
 {
+  const char* printerboard = "Board   : " PRINTERBOARD;
+  const char* printerfirmw = "Firmware: " PRINTERFIRMWARE;
   const char* hardware = "Board   : BIGTREETECH_" HARDWARE_VERSION;
   const char* firmware = "Firmware: "HARDWARE_VERSION"." STRINGIFY(SOFTWARE_VERSION) " " __DATE__;
 
@@ -73,8 +75,12 @@ void menuInfo(void)
 
   GUI_Clear(BACKGROUND_COLOR);
 
-  GUI_DispString(startX, centerY - BYTE_HEIGHT, (u8 *)hardware);
-  GUI_DispString(startX, centerY, (u8 *)firmware);
+  GUI_DispString(startX, centerY - BYTE_HEIGHT*3, (u8 *)"Printer");
+  GUI_DispString(startX, centerY - BYTE_HEIGHT*2, (u8 *)printerboard);
+  GUI_DispString(startX, centerY - BYTE_HEIGHT, (u8 *)printerfirmw);
+  GUI_DispString(startX, centerY + BYTE_HEIGHT, (u8 *)"TFT");
+  GUI_DispString(startX, centerY + BYTE_HEIGHT*2, (u8 *)hardware);
+  GUI_DispString(startX, centerY + BYTE_HEIGHT*3, (u8 *)firmware);
   GUI_DispStringInRect(20, LCD_HEIGHT - (BYTE_HEIGHT*2), LCD_WIDTH-20, LCD_HEIGHT, textSelect(LABEL_TOUCH_TO_EXIT));
 
   while(!isPress()) loopProcess();

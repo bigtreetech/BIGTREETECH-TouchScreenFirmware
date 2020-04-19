@@ -186,5 +186,7 @@
     #define ES_CUSTOM_SECONDS           "Custom"
     #define ES_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
     #define ES_SOFT_ENDSTOP_OFF         "\u0881 No Endstop \u0881"
+    #define ES_MARLIN_MODE              "Marlin Mode"
+    #define ES_TOUCH_MODE               "Touch Mode"
 
 #endif

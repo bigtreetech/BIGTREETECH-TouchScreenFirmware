@@ -186,5 +186,7 @@
     #define PL_CUSTOM_SECONDS           "Custom"
     #define PL_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
     #define PL_SOFT_ENDSTOP_OFF         "\u0881 No Endstop \u0881"
+    #define PL_MARLIN_MODE              "Marlin Mode"
+    #define PL_TOUCH_MODE               "Touch Mode"
 
 #endif

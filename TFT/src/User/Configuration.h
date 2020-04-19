@@ -49,6 +49,10 @@
 #define DEFAULT_LCD_IDLE_TIMER      7   // 1: LCD_DIM_OFF
 #define LCD_DIM_CUSTOM_SECONDS      600 // Custom value in seconds. Will be used if
                                           // LCD_DIM_CUSTOM_SECONDS is set as idle timer.
+// 3D Printer Info
+
+#define PRINTERBOARD      "BTT SKR V1.4"
+#define PRINTERFIRMWARE   "Marlin bugfix 2.0.x"
 
 //===========================================================================
 //=========================== Marlin Mode Settings ==========================
@@ -86,7 +90,7 @@
  *
  * *** ONLY SUPPORTED ON TFT24 V1.1, TFT35 V3.0, AND TFT28 V3.0 ***
  */
-#define CLEAN_MODE_SWITCHING_SUPPORT  // Enable CLEAN MODE SWITCHING SUPPORT
+//#define CLEAN_MODE_SWITCHING_SUPPORT  // Enable CLEAN MODE SWITCHING SUPPORT
 
 //===========================================================================
 //========================== Touch Mode Settings ============================

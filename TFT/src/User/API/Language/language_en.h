@@ -120,7 +120,7 @@
     #define EN_TFTSD                  "TFT SD"
     #define EN_READ_TFTSD_ERROR       "Read TFT SD card error!"
     #define EN_TFTSD_INSERTED         "Card inserted!"
-    #define EN_TFTSD_REMOVED          "Card removed!"
+    #define EN_TFTSD_REMOVED          "Card removed! "
     #define EN_U_DISK                 "U Disk"
     #define EN_READ_U_DISK_ERROR      "Read U Disk error!"
     #define EN_U_DISK_INSERTED        "U Disk inserted!"
@@ -186,5 +186,7 @@
     #define EN_CUSTOM_SECONDS           "Custom"
     #define EN_ST7920_FULLSCREEN        "Display mode in fullscreen"
     #define EN_SOFT_ENDSTOP_OFF         "\u0881 No Endstop \u0881"
+    #define EN_MARLIN_MODE              "Display Mode"
+    #define EN_TOUCH_MODE               "Touch Mode"
 
 #endif

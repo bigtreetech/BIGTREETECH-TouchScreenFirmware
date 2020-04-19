@@ -186,5 +186,7 @@
     #define JP_CUSTOM_SECONDS           "Custom"
     #define JP_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
     #define JP_SOFT_ENDSTOP_OFF         "\u0881 No Endstop \u0881"
+    #define JP_MARLIN_MODE              "Marlin Mode"
+    #define JP_TOUCH_MODE               "Touch Mode"
 
 #endif

@@ -186,5 +186,7 @@
     #define FR_CUSTOM_SECONDS           "Custom"
     #define FR_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
     #define FR_SOFT_ENDSTOP_OFF         "\u0881 No Endstop \u0881"
+    #define FR_MARLIN_MODE              "Marlin Mode"
+    #define FR_TOUCH_MODE               "Touch Mode"
 
 #endif

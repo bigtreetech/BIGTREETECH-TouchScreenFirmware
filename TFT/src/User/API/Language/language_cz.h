@@ -186,5 +186,7 @@
     #define CZ_CUSTOM_SECONDS           "Custom"
     #define CZ_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
     #define CZ_SOFT_ENDSTOP_OFF         "\u0881 No Endstop \u0881"
+    #define CZ_MARLIN_MODE              "Marlin Mode"
+    #define CZ_TOUCH_MODE               "Touch Mode"
 
 #endif

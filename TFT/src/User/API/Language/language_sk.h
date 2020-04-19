@@ -186,5 +186,7 @@
     #define SK_CUSTOM_SECONDS           "Custom"
     #define SK_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
     #define SK_SOFT_ENDSTOP_OFF         "\u0881 No Endstop \u0881"
+    #define SK_MARLIN_MODE              "Marlin Mode"
+    #define SK_TOUCH_MODE               "Touch Mode"
 
 #endif
