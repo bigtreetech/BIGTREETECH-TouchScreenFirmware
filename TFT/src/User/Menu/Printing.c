@@ -145,11 +145,11 @@ void printSetUpdateWaiting(bool isWaiting)
 void printerGotoIdle(void)
 {
   // disable all heater
-  for(TOOL i = BED; i < HEATER_NUM; i++) {
+  for(TOOL i = BED; i < (infoSettings.tool_count+1); i++) {
     mustStoreCmd("%s S0\n", heatCmd[i]);
   }
   // disable all fan
-  for(u8 i = 0; i < FAN_NUM; i++) {
+  for(u8 i = 0; i < (infoSettings.fan_count+1); i++) {
     mustStoreCmd("%s S0\n", fanCmd[i]);
   }
   // disable all stepper
@@ -475,9 +475,9 @@ void toggleinfo(void)
 {
   if (OS_GetTimeMs() > nextTime)
   {
-    if (EXTRUDER_NUM > 1)
+    if (infoSettings.tool_count > 1)
     {
-      c_Ext = (TOOL)((c_Ext + 1) % HEATER_NUM);
+      c_Ext = (TOOL)((c_Ext + 1) % (infoSettings.tool_count+1));
       if (c_Ext == 0)
       {
         c_Ext += 1;
@@ -486,7 +486,7 @@ void toggleinfo(void)
       reValueNozzle(EXT_ICON_POS);
     }
 
-    if (FAN_NUM > 1)
+    if (infoSettings.fan_count > 1)
     {
       c_fan = (c_fan + 1) % FAN_NUM;
       rapid_serial_loop();	 //perform backend printing loop before drawing to avoid printer idling
