@@ -157,6 +157,7 @@
     #define ES_M0_PAUSE             "Paused by M0 command"
     #define ES_SEND_START_GCODE     "Start Gcode before print"
     #define ES_SEND_END_GCODE       "End Gcode after print"
+    #define ES_SEND_CANCEL_GCODE    "Cancel Gcode"
     #define ES_PERSISTENT_STATUS_INFO   "Persistent Status Info"
     #define ES_FILE_LISTMODE            "Files viewer List Mode"
     #define ES_CURRENT_SETTING          "Driver Current (mA)"

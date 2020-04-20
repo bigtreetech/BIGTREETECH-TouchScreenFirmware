@@ -26,9 +26,15 @@
 #endif
 
 #ifdef EXTRUDE_STEPS
-  #error "NEED NOT THIS, E Steps will be auto get by M92 after start up"
+  #error "EXTRUDE_STEPS is now auto-configured with 'M92'. Please remove EXTRUDE_STEPS from your Configuration.h file."
 #endif
+
 #ifdef AUTO_BED_LEVELING
-  #error "AUTO_BED_LEVELING is now auto configured by the TFT Controller with 'M115' command. Please update your Configuration.h file"
+  #error "AUTO_BED_LEVELING is now auto-configured with 'M115'. Please remove AUTO_BED_LEVELING from your Configuration.h file."
 #endif
+
+#ifdef CANCEL_PRINT_GCODE
+  #error "CANCEL_PRINT_GCODE is now PRINT_CANCEL_GCODE. Please update your Configuration.h file."
+#endif
+
 #endif

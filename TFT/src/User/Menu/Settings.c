@@ -24,6 +24,7 @@ void infoSettingsReset(void)
   infoSettings.knob_led_color       = (STARTUP_KNOB_LED_COLOR - 1);
   infoSettings.send_start_gcode     = 0;
   infoSettings.send_end_gcode       = 0;
+  infoSettings.send_cancel_gcode    = 0;
   infoSettings.persistent_info      = 1;
   infoSettings.file_listmode        = 1;
   #ifdef LCD_LED_PWM_CHANNEL

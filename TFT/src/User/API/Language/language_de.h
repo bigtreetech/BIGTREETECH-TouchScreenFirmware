@@ -157,6 +157,7 @@
     #define DE_M0_PAUSE             "Pause durch M0 kommando"
     #define DE_SEND_START_GCODE     "Start-Gcode vor Druck"
     #define DE_SEND_END_GCODE       "End-Gcode nach Druck"
+    #define DE_SEND_CANCEL_GCODE    "Cancel Gcode"
     #define DE_PERSISTENT_STATUS_INFO   "Speicherungs-status Information"
     #define DE_FILE_LISTMODE            "Datei-Ansicht als Liste"
     #define DE_CURRENT_SETTING          "Driver Current (mA)"
