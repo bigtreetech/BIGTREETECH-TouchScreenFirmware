@@ -186,7 +186,7 @@
     #define EN_CUSTOM_SECONDS           "Custom"
     #define EN_ST7920_FULLSCREEN        "Display mode in fullscreen"
     #define EN_SOFT_ENDSTOP_OFF         "\u0881 No Endstop \u0881"
-    #define EN_MARLIN_MODE              "Display Mode"
+    #define EN_MARLIN_MODE              "LCD Mode"
     #define EN_TOUCH_MODE               "Touch Mode"
 
 #endif
