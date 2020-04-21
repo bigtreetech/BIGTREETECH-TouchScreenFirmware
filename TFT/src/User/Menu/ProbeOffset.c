@@ -24,7 +24,7 @@ typedef struct
   uint8_t totaled;
 }ELEMENTS;
 
-#define Z_GCODE "G1 Z%.1f\n"
+#define Z_GCODE "G1 Z%.2f\n"
 
 
 #define ITEM_PROBE_OFFSET_UNIT_NUM 3
