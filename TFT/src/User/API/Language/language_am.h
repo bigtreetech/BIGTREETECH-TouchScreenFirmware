@@ -186,7 +186,7 @@
     #define AM_CUSTOM_SECONDS           "Custom"
     #define AM_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
     #define AM_SOFT_ENDSTOP_OFF         "\u0881 No Endstop \u0881"
-    #define AM_MARLIN_MODE              "Marlin Mode"
+    #define AM_MARLIN_MODE              "LCD Mode"
     #define AM_TOUCH_MODE               "Touch Mode"
 
 #endif
