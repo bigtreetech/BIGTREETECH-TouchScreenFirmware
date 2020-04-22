@@ -92,14 +92,14 @@ void menuBabyStep(void)
       case KEY_ICON_0:
         if(baby_step_value - elementsUnit.ele[elementsUnit.cur] > BABYSTEP_MIN_VALUE)
         {
-            mustStoreCmd("M290 Z-%.2f\n",elementsUnit.ele[elementsUnit.cur])
+            mustStoreCmd("M290 Z-%.2f\n",elementsUnit.ele[elementsUnit.cur]);
             baby_step_value -= elementsUnit.ele[elementsUnit.cur];
         }
         break;
       case KEY_ICON_3:
         if(baby_step_value + elementsUnit.ele[elementsUnit.cur] < BABYSTEP_MAX_VALUE)
         {
-            mustStoreCmd("M290 Z%.2f\n",elementsUnit.ele[elementsUnit.cur])
+            mustStoreCmd("M290 Z%.2f\n",elementsUnit.ele[elementsUnit.cur]);
             baby_step_value += elementsUnit.ele[elementsUnit.cur];
         }
         break;
@@ -109,7 +109,7 @@ void menuBabyStep(void)
         menuDrawItem(&babyStepItems.items[key_num], key_num);
         break;
       case KEY_ICON_6:
-          mustStoreCmd("M290 Z%.2f\n",-baby_step_value)
+          mustStoreCmd("M290 Z%.2f\n",-baby_step_value);
           baby_step_value = 0.0f;
         break;
       case KEY_ICON_7:
