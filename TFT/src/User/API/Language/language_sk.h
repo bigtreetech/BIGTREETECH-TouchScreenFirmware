@@ -184,5 +184,11 @@
     #define SK_300_SECONDS              "5 Min."
     #define SK_CUSTOM_SECONDS           "Custom"
     #define SK_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
-
+    #define SK_ZERO_X                   "Zero X"
+    #define SK_ZERO_Y                   "Zero Y"
+    #define SK_ZERO_Z                   "Zero Z"
+    #define SK_XY                       "XY"
+    #define SK_SPINDLE                  "Spindle"
+	#define SK_CUT                      "Cut"
+    
 #endif

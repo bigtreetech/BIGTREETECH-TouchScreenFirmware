@@ -184,5 +184,11 @@
     #define CZ_300_SECONDS              "5 Min."
     #define CZ_CUSTOM_SECONDS           "Custom"
     #define CZ_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
+	#define CZ_ZERO_X                   "Zero X"
+    #define CZ_ZERO_Y                   "Zero Y"
+    #define CZ_ZERO_Z                   "Zero Z"
+    #define CZ_XY                       "XY"
+    #define CZ_SPINDLE                  "Spindle"
+	#define CZ_CUT                      "Cut"
 
 #endif

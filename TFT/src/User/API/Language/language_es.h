@@ -184,5 +184,11 @@
     #define ES_300_SECONDS              "5 Min."
     #define ES_CUSTOM_SECONDS           "Custom"
     #define ES_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
+	#define ES_ZERO_X                   "Zero X"
+    #define ES_ZERO_Y                   "Zero Y"
+    #define ES_ZERO_Z                   "Zero Z"
+    #define ES_XY                       "XY"
+    #define ES_SPINDLE                  "Spindle"
+	#define ES_CUT                      "Cut"
 
 #endif

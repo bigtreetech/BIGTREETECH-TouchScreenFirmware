@@ -184,5 +184,11 @@
     #define CN_300_SECONDS              "5分钟"
     #define CN_CUSTOM_SECONDS           "自定义"
     #define CN_ST7920_FULLSCREEN        "全屏显示Marlin模式"
-
+    #define CN_ZERO_X                   "Zero X"
+    #define CN_ZERO_Y                   "Zero Y"
+    #define CN_ZERO_Z                   "Zero Z"
+    #define CN_XY                       "XY"
+    #define CN_SPINDLE                  "Spindle"
+	#define CN_CUT                      "Cut"
+    
 #endif

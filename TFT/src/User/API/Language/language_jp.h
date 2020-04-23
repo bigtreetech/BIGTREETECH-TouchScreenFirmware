@@ -184,5 +184,11 @@
     #define JP_300_SECONDS              "5 Min."
     #define JP_CUSTOM_SECONDS           "Custom"
     #define JP_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
+	#define JP_ZERO_X                   "Zero X"
+    #define JP_ZERO_Y                   "Zero Y"
+    #define JP_ZERO_Z                   "Zero Z"
+    #define JP_XY                       "XY"
+    #define JP_SPINDLE                  "Spindle"
+	#define JP_CUT                      "Cut"
 
 #endif

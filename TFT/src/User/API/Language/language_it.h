@@ -184,5 +184,11 @@
     #define IT_300_SECONDS              "5 Min."
     #define IT_CUSTOM_SECONDS           "Custom"
     #define IT_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
+	#define IT_ZERO_X                   "Zero X"
+    #define IT_ZERO_Y                   "Zero Y"
+    #define IT_ZERO_Z                   "Zero Z"
+    #define IT_XY                       "XY"
+    #define IT_SPINDLE                  "Spindle"
+	#define IT_CUT                      "Cut"
 
 #endif

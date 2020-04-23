@@ -184,5 +184,11 @@
     #define PL_300_SECONDS              "5 Min."
     #define PL_CUSTOM_SECONDS           "Custom"
     #define PL_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
+	#define PL_ZERO_X                   "Zero X"
+    #define PL_ZERO_Y                   "Zero Y"
+    #define PL_ZERO_Z                   "Zero Z"
+    #define PL_XY                       "XY"
+    #define PL_SPINDLE                  "Spindle"
+	#define PL_CUT                      "Cut"
 
 #endif

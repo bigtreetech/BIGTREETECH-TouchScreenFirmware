@@ -184,5 +184,11 @@
     #define PT_300_SECONDS              "5 Min."
     #define PT_CUSTOM_SECONDS           "Custom"
     #define PT_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
+	#define PT_ZERO_X                   "Zero X"
+    #define PT_ZERO_Y                   "Zero Y"
+    #define PT_ZERO_Z                   "Zero Z"
+    #define PT_XY                       "XY"
+    #define PT_SPINDLE                  "Spindle"
+	#define PT_CUT                      "Cut"
 
 #endif

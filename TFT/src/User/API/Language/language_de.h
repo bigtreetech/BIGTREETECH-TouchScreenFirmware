@@ -184,5 +184,11 @@
     #define DE_300_SECONDS              "5 Min."
     #define DE_CUSTOM_SECONDS           "Benutz."
     #define DE_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
+	#define DE_ZERO_X                   "Zero X"
+    #define DE_ZERO_Y                   "Zero Y"
+    #define DE_ZERO_Z                   "Zero Z"
+    #define DE_XY                       "XY"
+    #define DE_SPINDLE                  "Spindle"
+	#define DE_CUT                      "Cut"
 
 #endif

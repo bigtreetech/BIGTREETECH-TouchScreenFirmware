@@ -184,5 +184,11 @@
     #define FR_300_SECONDS              "5 Min."
     #define FR_CUSTOM_SECONDS           "Custom"
     #define FR_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
+	#define FR_ZERO_X                   "Zero X"
+    #define FR_ZERO_Y                   "Zero Y"
+    #define FR_ZERO_Z                   "Zero Z"
+    #define FR_XY                       "XY"
+    #define FR_SPINDLE                  "Spindle"
+	#define FR_CUT                      "Cut"
 
 #endif

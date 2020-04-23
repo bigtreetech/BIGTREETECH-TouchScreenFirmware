@@ -184,5 +184,11 @@
     #define HU_300_SECONDS              "5 Perc."
     #define HU_CUSTOM_SECONDS           "Egyedi"
     #define HU_ST7920_FULLSCREEN        "Nagyképernyős Marlin mód"
-
+	#define HU_ZERO_X                   "Zero X"
+    #define HU_ZERO_Y                   "Zero Y"
+    #define HU_ZERO_Z                   "Zero Z"
+    #define HU_XY                       "XY"
+    #define HU_SPINDLE                  "Spindle"
+	#define HU_CUT                      "Cut"
+    
 #endif

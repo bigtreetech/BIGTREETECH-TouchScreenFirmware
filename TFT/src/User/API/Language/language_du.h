@@ -184,5 +184,11 @@
     #define DU_300_SECONDS              "5 Min."
     #define DU_CUSTOM_SECONDS           "Custom"
     #define DU_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
+	#define DU_ZERO_X                   "Zero X"
+    #define DU_ZERO_Y                   "Zero Y"
+    #define DU_ZERO_Z                   "Zero Z"
+    #define DU_XY                       "XY"
+    #define DU_SPINDLE                  "Spindle"
+	#define DU_CUT                      "Cut"
 
 #endif

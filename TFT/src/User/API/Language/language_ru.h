@@ -184,5 +184,11 @@
     #define RU_300_SECONDS            "5 мин."
     #define RU_CUSTOM_SECONDS         "Своё"
     #define RU_ST7920_FULLSCREEN      "Marlin на весь экран"
+	#define RU_ZERO_X                   "Zero X"
+    #define RU_ZERO_Y                   "Zero Y"
+    #define RU_ZERO_Z                   "Zero Z"
+    #define RU_XY                       "XY"
+    #define RU_SPINDLE                  "Spindle"
+	#define RU_CUT                      "Cut"
 
 #endif
