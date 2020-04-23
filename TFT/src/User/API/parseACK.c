@@ -285,6 +285,10 @@ void parseACK(void)
         dualstepper[E_STEPPER] = true;
       }
     // Parse M115 capability report
+      else if(ack_seen("Cap:EEPROM:"))
+      {
+        infoMachineSettings.EEPROM = ack_value();
+      }
       else if(ack_seen("Cap:AUTOREPORT_TEMP:"))
       {
         infoMachineSettings.autoReportTemp = ack_value();
