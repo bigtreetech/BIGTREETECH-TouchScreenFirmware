@@ -42,7 +42,7 @@ void menuHome(void)
         case KEY_ICON_1: storeCmd("G28 Z\n"); break;
         case KEY_ICON_4: storeCmd("G92 X0\n"); break;
         case KEY_ICON_5: storeCmd("G92 Y0\n"); break;
-        case KEY_ICON_6: storeCmd("G92 Z19.75\n"); break;
+        case KEY_ICON_6: storeCmd("G92 Z0\n"); break;
       #else
         case KEY_ICON_0: storeCmd("G28\n");   break;
         case KEY_ICON_1: storeCmd("G28 X\n"); break;
