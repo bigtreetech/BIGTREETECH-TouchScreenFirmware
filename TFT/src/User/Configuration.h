@@ -44,9 +44,9 @@
  *              7: LCD_DIM_300_SECONDS, 8: LCD_DIM_CUSTOM_SECONDS
  *
  */
-#define DEFAULT_LCD_BRIGHTNESS      11  // 11: LCD_100_PERCENT - Brightness value from list
-#define DEFAULT_LCD_IDLE_BRIGHTNESS 2   // 2: LCD_10_PERCENT - Brightness value from list
-#define DEFAULT_LCD_IDLE_TIMER      1   // 1: LCD_DIM_OFF
+#define DEFAULT_LCD_BRIGHTNESS      3  // 11: LCD_100_PERCENT - Brightness value from list
+#define DEFAULT_LCD_IDLE_BRIGHTNESS 1   // 2: LCD_10_PERCENT - Brightness value from list
+#define DEFAULT_LCD_IDLE_TIMER      3   // 1: LCD_DIM_OFF
 #define LCD_DIM_CUSTOM_SECONDS      600 // Custom value in seconds. Will be used if
                                           // LCD_DIM_CUSTOM_SECONDS is set as idle timer.
 
@@ -75,7 +75,7 @@
  *  Options:  0: Disabled. RECOMMENDED FOR TFT24
  *            1: Enabled Marlin Fullscreen mode.
  */
-#define DEFAULT_ST7920_FULLSCREEN_MODE 0 // 0: Disabled. RECOMMENDED FOR TFT24
+#define DEFAULT_ST7920_FULLSCREEN_MODE 1 // 0: Disabled. RECOMMENDED FOR TFT24
 
 /**
  * Clean Mode Switching Support

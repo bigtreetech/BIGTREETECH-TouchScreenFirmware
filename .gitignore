@@ -105,6 +105,7 @@ tags
 .vscode/launch.json
 .vscode/ipch
 .vscode/*.db
+.code-workspace
 
 #cmake
 CMakeLists.txt
