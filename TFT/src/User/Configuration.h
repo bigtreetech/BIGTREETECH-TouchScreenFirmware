@@ -177,9 +177,9 @@
 #define X_MIN_POS 0
 #define Y_MIN_POS 0
 #define Z_MIN_POS 0
-#define X_MAX_POS 235
-#define Y_MAX_POS 235
-#define Z_MAX_POS 250
+#define X_MAX_POS 480 // LOK mod MPCNC Size
+#define Y_MAX_POS 480 // LOK mod MPCNC Size
+#define Z_MAX_POS 80 // LOK mod MPCNC Size
 
 // Specify a pause position as { X, Y, Z_raise }
 #define NOZZLE_PAUSE_RETRACT_LENGTH 15   // (mm)
@@ -197,7 +197,7 @@
  * Enable this will send "M500" after "G29" to store leveling value
  * and send "M420 S1" to enable leveling state after startup
  */
-#define AUTO_SAVE_LOAD_LEVELING_VALUE
+// #define AUTO_SAVE_LOAD_LEVELING_VALUE // LOK mod MPCNC no bed levelling
 
 /**
  * Manual Leveling
@@ -233,7 +233,11 @@
 
 // Enable Unified Move Menu
 // Move, Home, Extrude, ABL at one Place and bring G-code Menu on Home Menu
-#define UNIFIED_MENU
+
+// #define UNIFIED_MENU
+
+// Enable CNC Menu mutually exclusive to UNIFIED_MENU
+#define CNC_MENU
 
 /**
  * SD support
