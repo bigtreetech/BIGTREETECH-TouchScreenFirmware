@@ -385,7 +385,7 @@ void reDrawFan(int icon_pos)
     fs = (fanGetSpeed(c_fan)*100)/255;
     my_sprintf(tempstr, "%d%%", fs);
   #else
-    fs = fanSpeed[curIndex];
+    fs = fanGetSpeed(c_fan);
     my_sprintf(tempstr, "%d", fs);
   #endif
 

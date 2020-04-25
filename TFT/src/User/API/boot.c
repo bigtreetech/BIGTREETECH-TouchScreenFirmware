@@ -10,6 +10,15 @@ const GUI_RECT statUpdateRect = {0, (BYTE_HEIGHT*3) + PADDING*3 + ICON_HEIGHT, L
 
 const GUI_RECT labelFailedRect = {0,(BYTE_HEIGHT*4) + PADDING*4 + ICON_HEIGHT, LCD_WIDTH, (BYTE_HEIGHT*5) + PADDING*4 + ICON_HEIGHT};
 
+const u16 skipped_icons[] = {ICON_STATUS_NOZZLE,
+                            ICON_STATUS_BED,
+                            ICON_STATUS_FAN,
+                            ICON_STATUS_FLOW,
+                            ICON_STATUS_SPEED,
+                            ICON_HEAT_FAN,
+                            ICON_HOME_MOVE,
+                            ICON_COOLDOWN
+                            };
 
 GUI_POINT bmp_size;
 BMPUPDATE_STAT bmp_stat = BMP_SUCCESS;
@@ -21,6 +30,16 @@ const char iconBmpName[][32]={
 #undef  X_ICON
 //add new icons in icon_list.inc only
 };
+
+bool skipIcon(u16 index)
+{
+  for (int i = 0; i < COUNT(skipped_icons); i++)
+  {
+    if (index == skipped_icons[i])
+      return true;
+  }
+  return false;
+}
 
 bool bmpDecode(char *bmp, u32 addr)
 {
@@ -131,6 +150,10 @@ void updateIcon(void)
 
   for (int i = 0; i < COUNT(iconBmpName); i++)
   {
+    #ifndef UNIFIED_MENU
+      if (skipIcon(i) == true)
+        continue;
+    #endif
     my_sprintf(nowBmp, BMP_ROOT_DIR "/%s.bmp", iconBmpName[i]);
     GUI_ClearPrect(&labelUpdateRect);
     GUI_DispString(labelUpdateRect.x0, labelUpdateRect.y0, (u8 *)nowBmp);
@@ -154,16 +177,17 @@ void updateIcon(void)
     my_sprintf(tempstr, "Updated: %d | Not Updated: %d", found, notfound);
     GUI_DispString(statUpdateRect.x0, statUpdateRect.y0, (u8 *)tempstr);
   }
-
-  if (bmpDecode(BMP_ROOT_DIR "/InfoBox.bmp", INFOBOX_ADDR))
-  {
-    found++;
-  }
-  else
-  {
-    notfound++;
-    dispIconFail((u8 *)(BMP_ROOT_DIR "/InfoBox.bmp"));
-  }
+  #ifdef UNIFIED_MENU
+    if (bmpDecode(BMP_ROOT_DIR "/InfoBox.bmp", INFOBOX_ADDR))
+    {
+      found++;
+    }
+    else
+    {
+      notfound++;
+      dispIconFail((u8 *)(BMP_ROOT_DIR "/InfoBox.bmp"));
+    }
+  #endif
   GUI_DispStringInPrect(&statUpdateRect, (u8 *)tempstr);
 }
 
