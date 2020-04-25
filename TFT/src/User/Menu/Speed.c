@@ -32,9 +32,9 @@ static u8 item_percentage_i = 0;
 #define ITEM_PERCENT_UNIT_NUM 3
 const ITEM itemPercentUnit[ITEM_PERCENT_UNIT_NUM] = {
 // icon                       label
-  {ICON_E_1_MM,               LABEL_1_PERCENT},
-  {ICON_E_5_MM,               LABEL_5_PERCENT},
-  {ICON_E_10_MM,              LABEL_10_PERCENT},
+  {ICON_E_1_PERCENT,               LABEL_1_PERCENT},
+  {ICON_E_5_PERCENT,               LABEL_5_PERCENT},
+  {ICON_E_10_PERCENT,              LABEL_10_PERCENT},
 };
 const  u8 item_percent_unit[ITEM_PERCENT_UNIT_NUM] = {1, 5, 10};
 static u8 item_percent_unit_i = 1;
