@@ -24,7 +24,7 @@
     #define CZ_POINT_2              "Bod 2"
     #define CZ_POINT_3              "Bod 3"
     #define CZ_POINT_4              "Bod 4"
-    #define CZ_ABL                  "Varovnat"
+    #define CZ_ABL                  "Vyrovnat"
     #define CZ_BLTOUCH              "Bltouch"
     #define CZ_BLTOUCH_TEST         "Test"
     #define CZ_BLTOUCH_DEPLOY       "Vysunout"

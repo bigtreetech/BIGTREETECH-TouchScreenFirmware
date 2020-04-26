@@ -190,6 +190,7 @@ void loopCheckEncoder()
     skipMode = false; //resume mode change loop
     return 0;
 	}
+	return 0;
 }
 #endif
 
