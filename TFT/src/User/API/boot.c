@@ -146,7 +146,7 @@ void updateIcon(void)
   }
 
   GUI_Clear(BACKGROUND_COLOR);
-  GUI_DispString(5, PADDING, (u8 *)"Updating Logo");
+  GUI_DispString(5, PADDING, (u8 *)"Updating Icons");
 
   for (int i = 0; i < COUNT(iconBmpName); i++)
   {
