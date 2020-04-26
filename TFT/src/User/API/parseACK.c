@@ -233,12 +233,26 @@ void parseACK(void)
         if(ack_seen("Z")) setParameter(P_STEPS_PER_MM, Z_STEPPER, ack_value());
         if(ack_seen("E")) setParameter(P_STEPS_PER_MM, E_STEPPER, ack_value());
       }
+      else if(ack_seen("M92 T0 E")){
+        setParameter(P_STEPS_PER_MM, E_STEPPER, ack_value());
+      }
+      else if(ack_seen("M92 T1 E")){
+        setParameter(P_STEPS_PER_MM, E2_STEPPER, ack_value());
+        dualstepper[E_STEPPER] = true;
+      }
     //parse and store Max Feed Rate values
      else if(ack_seen("M203 X")){
                           setParameter(P_MAX_FEED_RATE, X_STEPPER, ack_value());
         if(ack_seen("Y")) setParameter(P_MAX_FEED_RATE, Y_STEPPER, ack_value());
         if(ack_seen("Z")) setParameter(P_MAX_FEED_RATE, Z_STEPPER, ack_value());
         if(ack_seen("E")) setParameter(P_MAX_FEED_RATE, E_STEPPER, ack_value());
+      }
+      else if(ack_seen("M203 T0 E")){
+        setParameter(P_MAX_FEED_RATE, E_STEPPER, ack_value());
+      }
+      else if(ack_seen("M203 T1 E")){
+        setParameter(P_MAX_FEED_RATE, E2_STEPPER, ack_value());
+        dualstepper[E_STEPPER] = true;
       }
     //parse and store Max Acceleration values
       else if(ack_seen("M201 X")){
@@ -247,6 +261,13 @@ void parseACK(void)
         if(ack_seen("Z")) setParameter(P_MAX_ACCELERATION, Z_STEPPER, ack_value());
         if(ack_seen("E")) setParameter(P_MAX_ACCELERATION, E_STEPPER, ack_value());
 
+      }
+      else if(ack_seen("M201 T0 E")){
+        setParameter(P_MAX_ACCELERATION, E_STEPPER, ack_value());
+      }
+      else if(ack_seen("M201 T1 E")){
+        setParameter(P_MAX_ACCELERATION, E2_STEPPER, ack_value());
+        dualstepper[E_STEPPER] = true;
       }
     //parse and store Acceleration values
       else if(ack_seen("M204 P")){
