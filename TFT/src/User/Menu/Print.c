@@ -364,7 +364,12 @@ void menuPrintFromSource(void)
 
 MENUITEMS sourceSelItems = {
 //  title
-LABEL_PRINT,
+  #ifdef CNC_MENU
+    LABEL_CUT,
+  #else
+    LABEL_PRINT,
+  #endif
+
 // icon                       label
  {{ICON_ONTFT_SD,            LABEL_TFTSD},
  #ifdef ONBOARD_SD_SUPPORT
