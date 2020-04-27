@@ -205,13 +205,12 @@ void parseACK(void)
         coordinateSetAxisActualSteps(E_AXIS, ack_value());
       }
 
-  #ifdef ONBOARD_SD_SUPPORT
-      else if(ack_seen(bsdnoprintingmagic) && infoMenu.menu[infoMenu.cur] == menuPrinting)
+      else if(ack_seen(bsdnoprintingmagic) && infoMenu.menu[infoMenu.cur] == menuPrinting && infoMachineSettings.onboard_sd_support == 1)
       {
         infoHost.printing = false;
         completePrinting();
       }
-      else if(ack_seen(bsdprintingmagic))
+      else if(ack_seen(bsdprintingmagic) && infoMachineSettings.onboard_sd_support == 1)
       {
         if(infoMenu.menu[infoMenu.cur] != menuPrinting && !infoHost.printing) {
           infoMenu.menu[++infoMenu.cur] = menuPrinting;
@@ -224,7 +223,7 @@ void parseACK(void)
         setPrintCur(position);
   //      powerFailedCache(position);
       }
-  #endif
+
     //parse and store stepper steps/mm values
       else if(ack_seen("M92 X"))
       {
@@ -320,6 +319,10 @@ void parseACK(void)
       else if(ack_seen("Cap:EMERGENCY_PARSER:"))
       {
         infoMachineSettings.emergencyParser = ack_value();
+      }
+      else if(ack_seen("Cap:SDCARD:"))
+      {
+        infoMachineSettings.onboard_sd_support = ack_value();
       }
       else if(ack_seen("Cap:AUTOREPORT_SD_STATUS:"))
       {

@@ -41,17 +41,19 @@ typedef struct
 
 typedef struct
 {
-  int EEPROM;
-  int autoReportTemp;
-  int autoLevel;
-  int zProbe;
-  int levelingData;
-  int softwarePower;
-  int toggleLights;
-  int caseLightsBrightness;
-  int emergencyParser;
-  int promptSupport;
-  int autoReportSDStatus;
+  uint8_t EEPROM;
+  uint8_t autoReportTemp;
+  uint8_t autoLevel;
+  uint8_t zProbe;
+  uint8_t levelingData;
+  uint8_t softwarePower;
+  uint8_t toggleLights;
+  uint8_t caseLightsBrightness;
+  uint8_t emergencyParser;
+  uint8_t promptSupport;
+  uint8_t onboard_sd_support;
+  uint8_t autoReportSDStatus;
+  uint8_t babyStepping;
 }MACHINESETTINGS;
 
 
