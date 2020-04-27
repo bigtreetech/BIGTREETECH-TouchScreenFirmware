@@ -237,7 +237,7 @@
 
 /**
  * SD support
- * Starting from Marlin Bufix 2.0.x Distribution Date: 2020-04-27 & above, The TFT will auto detect
+ * Starting from Marlin Bugfix 2.0.x Distribution Date: 2020-04-27 & above, The TFT will auto detect
  * On-Board SD Card and auto-configure M27 AutoReport with M115 command
  * Set the time interval to poll SD Printing status if Marlin reports M27 AutoReport as disabled.
  */
