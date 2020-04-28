@@ -2,5 +2,6 @@
 #define _BABYSTEP_H_
 
 void menuBabyStep(void);
+void babyStepReset(void);
 
 #endif

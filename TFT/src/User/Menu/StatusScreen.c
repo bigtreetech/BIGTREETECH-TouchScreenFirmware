@@ -2,28 +2,25 @@
 #include "includes.h"
 #include "GUI.h"
 //1 title, ITEM_PER_PAGE items (icon + label)
-MENUITEMS StatusItems = {
+const MENUITEMS StatusItems = {
 // title
 LABEL_READY,
 // icon                       label
- {{ICON_STATUSNOZZLE,         LABEL_BACKGROUND},
-  {ICON_STATUSBED,            LABEL_BACKGROUND},
-  {ICON_STATUSFAN,            LABEL_BACKGROUND},
+ {{ICON_STATUS_NOZZLE,         LABEL_BACKGROUND},
+  {ICON_STATUS_BED,            LABEL_BACKGROUND},
+  {ICON_STATUS_FAN,            LABEL_BACKGROUND},
   {ICON_STATUS_SPEED,         LABEL_BACKGROUND},
   {ICON_MAINMENU,             LABEL_MAINMENU},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND}, //Reserved for gantry position to be added later
-  {ICON_BACKGROUND,           LABEL_BACKGROUND}, //Reserved for gantry position to be added later
+  {ICON_BACKGROUND,           LABEL_BACKGROUND},
+  {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_PRINT,                LABEL_PRINT},}
 };
 
 const ITEM ToolItems[3] = {
 // icon                       label
-  {ICON_STATUSNOZZLE,         LABEL_BACKGROUND},
-  {ICON_STATUSBED,            LABEL_BACKGROUND},
-  {ICON_STATUSFAN,            LABEL_BACKGROUND},
-//{ICON_HEAT_STATUS,          LABEL_BACKGROUND},
-//{ICON_BED_STATUS,           LABEL_BACKGROUND},
-//{ICON_FAN_STATUS,           LABEL_BACKGROUND},
+  {ICON_STATUS_NOZZLE,         LABEL_BACKGROUND},
+  {ICON_STATUS_BED,            LABEL_BACKGROUND},
+  {ICON_STATUS_FAN,            LABEL_BACKGROUND},
 };
 const ITEM SpeedItems[2] = {
 // icon                       label
@@ -31,15 +28,15 @@ const ITEM SpeedItems[2] = {
   {ICON_STATUS_FLOW,          LABEL_BACKGROUND},
 };
 
-static u32 nowTime = 0;
-static u32 update_time = 200; // 1 seconds is 100
+static u32 nextTime = 0;
+static u32 update_time = 2000; // 1 seconds is 1000
 SCROLL     msgScroll;
 static int lastConnection_status = -1;
+static bool booted = false;
 
 static char msgtitle[20];
 static char msgbody[512];
 
-//static char msgxyz[512];
 static float xaxis;
 static float yaxis;
 static float zaxis;
@@ -123,7 +120,7 @@ void drawTemperature(void)
     fs = (fanGetSpeed(current_fan)*100)/255;
     my_sprintf(tempstr, "%d%%", fs);
   #else
-    fs = fanSpeed[current_fan];
+    fs = fanGetSpeed(current_fan);
     my_sprintf(tempstr, "%d", fs);
   #endif
   GUI_DispStringInPrect(&rectB[2], (u8 *)tempstr);                        //Fan value
@@ -236,7 +233,7 @@ void statusScreen_setMsg(const uint8_t *title, const uint8_t *msg)
   memcpy(msgtitle, (char *)title, sizeof(msgtitle));
   memcpy(msgbody, (char *)msg, sizeof(msgbody));
 
-  if (infoMenu.menu[infoMenu.cur] == menuStatus)
+  if (infoMenu.menu[infoMenu.cur] == menuStatus && booted == true)
   {
     drawStatusScreenMsg();
   }
@@ -269,7 +266,7 @@ void scrollMsg(void){
 
 void toggleTool(void)
 {
-  if (OS_GetTime() > nowTime + update_time)
+  if (OS_GetTimeMs() > nextTime)
   {
     if (EXTRUDER_NUM > 1)
     {
@@ -284,7 +281,7 @@ void toggleTool(void)
       current_fan = (current_fan + 1) % FAN_NUM;
     }
     current_speedID = (current_speedID + 1) % 2;
-    nowTime = OS_GetTime();
+    nextTime = OS_GetTimeMs() + update_time;
     drawTemperature();
 
     if (infoHost.connected == true)
@@ -293,6 +290,8 @@ void toggleTool(void)
       {
         gantryCmdWait = true;
         storeCmd("M114\n");
+        storeCmd("M220\n");
+        storeCmd("M221\n");
       }
     }
     else
@@ -304,6 +303,7 @@ void toggleTool(void)
 
 void menuStatus(void)
 {
+  booted = true;
   KEY_VALUES key_num = KEY_IDLE;
   GUI_SetBkColor(BACKGROUND_COLOR);
   //set_status_icon();

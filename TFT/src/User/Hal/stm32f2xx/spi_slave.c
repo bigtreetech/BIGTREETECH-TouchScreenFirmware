@@ -80,17 +80,17 @@ void SPI2_IRQHandler(void)
   SPISlave.wIndex = (SPISlave.wIndex + 1) % SPI_SLAVE_MAX;
 }
 
-/* �ⲿ�ж����� */
+/*External interruption arrangement*/
 void SPI_Slave_CS_Config(void)
 {
   EXTI_InitTypeDef EXTI_InitStructure;
   NVIC_InitTypeDef   NVIC_InitStructure;
 
-  /* ��GPIOA_0���ж������� */
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);//ʹ��SYSCFGʱ��
-	SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOB, EXTI_PinSource12);//PB12 ���ӵ��ж���12
+  /* Connect GPIOA_0 to the interrupt line */
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);//Enable SYSCFG clock
+	SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOB, EXTI_PinSource12);//PB12 is connected to interrupt line 12
 
-  /* �����ж���0λ�ⲿ�½����ж� */
+  /*Set interrupt line 0 bit external falling edge interrupt */
   EXTI_InitStructure.EXTI_Line = EXTI_Line12;
   EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
   EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising_Falling;
@@ -98,27 +98,27 @@ void SPI_Slave_CS_Config(void)
   EXTI_Init(&EXTI_InitStructure);
 
 
-  NVIC_InitStructure.NVIC_IRQChannel = EXTI15_10_IRQn;			//ʹ�ܰ������ڵ��ⲿ�ж�ͨ��
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x00;	//��ռ���ȼ�2��
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x01;					//�����ȼ�1
-  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;								//ʹ���ⲿ�ж�ͨ��
+  NVIC_InitStructure.NVIC_IRQChannel = EXTI15_10_IRQn;			//External interrupt channel where the key is enabled
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x00;	//Preemption priority 2?
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x01;					//Sub-priority 1
+  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;								//Enable external interrupt channel
   NVIC_Init(&NVIC_InitStructure);
 }
 
 
-/* �ⲿ�ж� */
+/*External interruption*/
 void EXTI15_10_IRQHandler(void)
 {
   if((GPIOB->IDR & (1<<12)) != 0)
   {
-    SPI_ReEnable(!!(GPIOB->IDR & (1<<13))); //����Ӧ spi mode0/mode3
+    SPI_ReEnable(!!(GPIOB->IDR & (1<<13))); // Adaptive spi mode0 / mode3
     ST7920_SPI_NUM->CR1 |= (1<<6);
   }
   else
   {
-    RCC->APB1RSTR |= 1<<14;	//��λSPI1
+    RCC->APB1RSTR |= 1<<14;	//Reset SPI1
     RCC->APB1RSTR &= ~(1<<14);
   }
-/* ����ж�״�?�Ĵ��� */
+/* Clear interrupt status register */
   EXTI->PR = 1<<12;
 }

@@ -29,6 +29,7 @@
 
 u32 TSC_Para[7];//У׼ϵ��
 static volatile bool touchScreenIsPress=false;
+bool touchSound = true;
 
 void TS_Get_Coordinates(u16 *x, u16 *y)
 {
@@ -141,7 +142,7 @@ u16 Key_value(u8 total_rect,const GUI_RECT* menuRect)
     if((x>menuRect[i].x0)&&(x<menuRect[i].x1)&&(y>menuRect[i].y0)&&(y<menuRect[i].y1))
     {
       #ifdef BUZZER_PIN
-        openBuzzer(LCD_FEEDBACK_FREQUENCY_H_US, LCD_FEEDBACK_FREQUENCY_DURATION_L_US);
+        if(touchSound == true) BUZZER_PLAY(sound_keypress);
       #endif
       return i;
     }
@@ -149,14 +150,17 @@ u16 Key_value(u8 total_rect,const GUI_RECT* menuRect)
   return IDLE_TOUCH;
 }
 
-void loopTouchScreen(void)
+void loopTouchScreen(void) // Handle in interrupt
 {
   static u8 touch;
   if(!XPT2046_Read_Pen())
   {
-    if(touch>=2)
+    if(touch >= 20) // 20ms
     {
-      touchScreenIsPress=true;
+      touchScreenIsPress = true;
+      #ifdef LCD_LED_PWM_CHANNEL
+        LCD_Dim_Idle_Timer_Reset();
+      #endif
     }
     else
     {
@@ -165,8 +169,11 @@ void loopTouchScreen(void)
   }
   else
   {
-    touchScreenIsPress=false;
-    touch=0;
+    touchScreenIsPress = false;
+    touch = 0;
+    #ifdef LCD_LED_PWM_CHANNEL
+      LCD_Dim_Idle_Timer();
+    #endif
   }
 }
 
@@ -218,10 +225,10 @@ typedef enum
   LONG_PRESS,
 }KEY_STATUS;
 
-#define KEY_DOUOBLE_SPACE        15     //�೤ʱ���ڵ�������ж��?˫��
-#define KEY_LONG_PRESS_START     200     //��������ÿ�ʼ�ж��? ���� ��ֵ
+#define KEY_DOUOBLE_SPACE        15     //锟洁长时锟斤拷锟节碉拷锟斤拷锟斤拷锟斤拷卸锟轿?双锟斤拷
+#define KEY_LONG_PRESS_START     200     //锟斤拷锟斤拷锟斤拷锟斤拷每锟绞硷拷卸锟轿? 锟斤拷锟斤拷 锟斤拷值
 
-#define KEY_LONG_PRESS_SPACE_MAX 10     //����ʱ ���÷���һ�μ��?
+#define KEY_LONG_PRESS_SPACE_MAX 10     //锟斤拷锟斤拷时 锟筋长锟斤拷梅锟斤拷锟揭伙拷渭锟街?
 #define KEY_LONG_PRESS_SPACE_MIN 2      //����ʱ ��̶�÷���һ�μ�ֵ
 
 //u16 KEY_GetValue(u8 total_rect,const GUI_RECT* menuRect)
@@ -327,9 +334,9 @@ u16 KNOB_GetRV(GUI_RECT *knob)
   static u16 oldx=0,oldy=0;
   static u32 mytime;
 
-  if(touchScreenIsPress && OS_GetTime() > mytime)
+  if(touchScreenIsPress && OS_GetTimeMs() > mytime)
   {
-    mytime=OS_GetTime();
+    mytime = OS_GetTimeMs() + 10;
     TS_Get_Coordinates(&x,&y);
     if(x>knob->x0&&x<knob->x1&&y>knob->y0&&y<knob->y1)
     {
@@ -386,90 +393,3 @@ u16 KNOB_GetRV(GUI_RECT *knob)
   }
   return key_return;
 }
-
-#ifdef BUZZER_PIN
-void TIM3_Config(u16 psc,u16 arr)
-{
-	NVIC_InitTypeDef NVIC_InitStructure;
-
-	NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
-	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-	NVIC_Init(&NVIC_InitStructure);
-
-	RCC->APB1ENR|=1<<1;
- 	TIM3->ARR=arr;
-	TIM3->PSC=psc;
-  TIM3->SR = (uint16_t)~(1<<0);
-	TIM3->DIER|=1<<0;
-	TIM3->CNT =0;
-	TIM3->CR1 &= ~(0x01);
-}
-
-void Buzzer_Config(void)
-{
-  GPIO_InitSet(BUZZER_PIN, MGPIO_MODE_OUT_PP, 0);
-
-	TIM3_Config(999, F_CPUM-1);  //1Khz
-}
-
-void Buzzer_DeConfig(void)
-{
-  GPIO_InitSet(BUZZER_PIN, MGPIO_MODE_IPN, 0);
-}
-
-typedef struct{
-	u16 h_us,
-	    l_us,
-	    num;
-}BUZZER;
-
-static BUZZER buzzer;
-
-/*  */
-void openBuzzer(u16 h_us, u16 l_us)
-{
-  if(infoSettings.silent) return;
-
-  buzzer.h_us = h_us;
-  buzzer.l_us = l_us;
-  if( h_us == 80 )
-    buzzer.num = 1000;
-  else
-    buzzer.num = 500;
-
-  TIM3->CR1 |= 0x01;               //ʹ�ܶ�ʱ��3
-}
-void closeBuzzer(void)
-{
-	buzzer.num = 0;
-	TIM3->CR1 &= ~(0x01);
-}
-
-void TIM3_IRQHandler(void)   //TIM3�ж�
-{
-  static bool flag = false;
-  if ((TIM3->SR&0x01) != 0 ) //���ָ����TIM�жϷ������?:TIM �ж�Դ
-  {
-    flag = !flag;
-    if( flag )
-    {
-      TIM3->ARR = buzzer.h_us;
-    }
-    else
-    {
-      TIM3->ARR = buzzer.l_us;
-    }
-
-    GPIO_SetLevel(BUZZER_PIN, flag);
-    buzzer.num--;
-    if( buzzer.num == 0 )
-    {
-      TIM3->CR1 &= ~(0x01);
-    }
-
-    TIM3->SR = (uint16_t)~(1<<0);  //���TIMx���жϴ�����λ:TIM �ж�Դ
-  }
-}
-#endif

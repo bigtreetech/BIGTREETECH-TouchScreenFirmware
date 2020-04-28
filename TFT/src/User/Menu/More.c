@@ -25,7 +25,7 @@ void menuIsPause(void)
   }
 }
 
-MENUITEMS moreItems = {
+const MENUITEMS moreItems = {
 //  title
 LABEL_MORE,
 // icon                       label

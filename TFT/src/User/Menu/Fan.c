@@ -58,7 +58,7 @@ void showFanSpeed(void)
   #ifdef SHOW_FAN_PERCENTAGE
     fs = (fanSpeed[curIndex]*100)/255;
   #else
-    fs = fanSpeed[curIndex]
+    fs = fanSpeed[curIndex];
   #endif
   GUI_ClearRect(rect.x0, rect.y0, rect.x1, rect.y1);
   GUI_DispStringInPrect(&rect, (u8*)fanID[curIndex]);
@@ -78,7 +78,7 @@ void fanSpeedReDraw(void)
     sprintf(fan_s, "%3d%%", (fanSpeed[curIndex]*100)/255);
     GUI_DispString(CENTER_X-BYTE_WIDTH, CENTER_Y, (u8 *)fan_s);
   #else
-    GUI_DispDec(CENTER_X-BYTE_WIDTH, CENTER_Y, fanSpeed[curIndex];, 3, LEFT);
+    GUI_DispDec(CENTER_X-BYTE_WIDTH, CENTER_Y, fanSpeed[curIndex], 3, LEFT);
   #endif
 }
 
@@ -93,7 +93,7 @@ void menuFan(void)
   showFanSpeed();
 
   #if LCD_ENCODER_SUPPORT
-    encoderPosition = 0;    
+    encoderPosition = 0;
   #endif
 
   while(infoMenu.menu[infoMenu.cur] == menuFan)
@@ -159,11 +159,11 @@ void menuFan(void)
                 }
               #else
                 fanSpeed[curIndex]++;
-              #endif   
+              #endif
             }
 
             if (fanSpeed[curIndex] > 0 && encoderPosition < 0) {
-              #ifdef SHOW_FAN_PERCENTAGE 
+              #ifdef SHOW_FAN_PERCENTAGE
                 if ((fanSpeed[curIndex]-2) > 0) {
                   fanSpeed[curIndex]-=2; //2.55 is 1 percent, rounding down
                 } else {
@@ -171,12 +171,11 @@ void menuFan(void)
                 }
               #else
                 fanSpeed[curIndex]--;
-              #endif   
+              #endif
             }
 
-            encoderPosition = 0;    
+            encoderPosition = 0;
           }
-          LCD_LoopEncoder();
         #endif
         break;
     }

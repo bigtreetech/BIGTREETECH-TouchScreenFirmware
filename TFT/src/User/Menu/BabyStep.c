@@ -12,7 +12,7 @@ MENUITEMS babyStepItems = {
   {ICON_INC,                  LABEL_INC},
   {ICON_EEPROM_SAVE,          LABEL_EEPROM_SAVE},
   {ICON_01_MM,                LABEL_01_MM},
-  {ICON_NORMAL_SPEED,         LABEL_VALUE_ZERO},
+  {ICON_RESET_VALUE,          LABEL_RESET},
   {ICON_BACK,                 LABEL_BACK},}
 };
 
@@ -51,7 +51,12 @@ static void initElements(u8 position)
   }
 }
 
-static float baby_step_value=0.0;
+static float baby_step_value = 0.0f;
+
+void babyStepReset(void)
+{
+  baby_step_value = 0.0f;
+}
 
 #define BABYSTEP_MAX_VALUE 5.0f
 #define BABYSTEP_MIN_VALUE -5.0f
@@ -76,7 +81,7 @@ void menuBabyStep(void)
   showBabyStep();
 
   #if LCD_ENCODER_SUPPORT
-    encoderPosition = 0;    
+    encoderPosition = 0;
   #endif
 
   while(infoMenu.menu[infoMenu.cur] == menuBabyStep)
@@ -99,7 +104,9 @@ void menuBabyStep(void)
         }
         break;
       case KEY_ICON_4:
-        storeCmd("M500\n");
+        if(infoMachineSettings.EEPROM == 1){
+           storeCmd("M500\n");
+        }
         break;
       case KEY_ICON_5:
         elementsUnit.cur = (elementsUnit.cur + 1) % elementsUnit.totaled;
@@ -118,9 +125,8 @@ void menuBabyStep(void)
           if(encoderPosition)
           {
             baby_step_value += elementsUnit.ele[elementsUnit.cur]*encoderPosition;
-            encoderPosition = 0;    
+            encoderPosition = 0;
           }
-          LCD_LoopEncoder();
         #endif
         break;
       }

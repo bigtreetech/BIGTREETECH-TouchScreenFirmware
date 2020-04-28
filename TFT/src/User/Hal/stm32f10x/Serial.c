@@ -2,7 +2,7 @@
 #include "includes.h"
 
 // dma rx buffer
-DMA_CIRCULAR_BUFFER dmaL1Data[_USART_CNT];
+DMA_CIRCULAR_BUFFER dmaL1Data[_UART_CNT];
 
 // Config for USART Channel
 typedef struct
@@ -12,7 +12,7 @@ typedef struct
   DMA_Channel_TypeDef *dma_chanel;
 }SERIAL_CFG;
 
-static const SERIAL_CFG Serial[_USART_CNT] = {
+static const SERIAL_CFG Serial[_UART_CNT] = {
   {USART1, RCC_AHBPeriph_DMA1, DMA1_Channel5},
   {USART2, RCC_AHBPeriph_DMA1, DMA1_Channel6},
   {USART3, RCC_AHBPeriph_DMA1, DMA1_Channel3},
@@ -44,7 +44,7 @@ void Serial_Config(uint8_t port, u32 baud)
   dmaL1Data[port].rIndex = dmaL1Data[port].wIndex = 0;
   dmaL1Data[port].cache = malloc(DMA_TRANS_LEN);
   while(!dmaL1Data[port].cache); // malloc failed
-  USART_Config(port, baud, USART_IT_IDLE);  //IDLE interrupt
+  UART_Config(port, baud, USART_IT_IDLE);  //IDLE interrupt
   Serial_DMA_Config(port);
 }
 
@@ -53,7 +53,7 @@ void Serial_DeConfig(uint8_t port)
   free(dmaL1Data[port].cache);
   dmaL1Data[port].cache = NULL;
   Serial[port].dma_chanel->CCR &= ~(1<<0); // Disable DMA
-  USART_DeConfig(port);
+  UART_DeConfig(port);
 }
 
 void Serial_Init(u32 baud)

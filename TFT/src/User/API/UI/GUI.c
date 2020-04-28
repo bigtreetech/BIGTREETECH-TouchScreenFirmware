@@ -174,7 +174,7 @@ void GUI_FillRectArry(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey, uint8_
 }
 
 //����
-//x1,y1:�������?
+//x1,y1:�������?
 //x2,y2:�յ�����
 void GUI_DrawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2)
 {
@@ -204,7 +204,7 @@ void GUI_DrawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2)
   else
     distance = delta_y;
 
-  for(t=0; t <= distance+1; t++ )//�������?
+  for(t=0; t <= distance+1; t++ )//�������?
   {
     GUI_DrawPoint(uRow,uCol);//����
     xerr += delta_x;
@@ -300,7 +300,7 @@ void GUI_DrawCircle(uint16_t x0, uint16_t y0, uint16_t r)
 }
 void  GUI_FillCircle(uint16_t x0, uint16_t y0, uint16_t r)
 {
-  int16_t  draw_x0, draw_y0;			// ��ͼ���������?
+  int16_t  draw_x0, draw_y0;			// ��ͼ���������?
   int16_t  draw_x1, draw_y1;
   int16_t  draw_x2, draw_y2;
   int16_t  draw_x3, draw_y3;
@@ -308,7 +308,7 @@ void  GUI_FillCircle(uint16_t x0, uint16_t y0, uint16_t r)
   int16_t  draw_x5, draw_y5;
   int16_t  draw_x6, draw_y6;
   int16_t  draw_x7, draw_y7;
-  int16_t  fill_x0, fill_y0;			// �������ı�����ʹ�ô�ֱ�����?
+  int16_t  fill_x0, fill_y0;			// �������ı�����ʹ�ô�ֱ�����?
   int16_t  fill_x1;
   int16_t  xx, yy;					// ��Բ���Ʊ���
 
@@ -317,7 +317,7 @@ void  GUI_FillCircle(uint16_t x0, uint16_t y0, uint16_t r)
   /* �������� */
   if(0 == r) return;
 
-  /* �����?4�������?(0��90��180��270��)��������ʾ */
+  /* �����?4�������?(0��90��180��270��)��������ʾ */
   draw_x0 = draw_x1 = x0;
   draw_y0 = draw_y1 = y0 + r;
   if(draw_y0 < LCD_HEIGHT)
@@ -404,7 +404,7 @@ void  GUI_FillCircle(uint16_t x0, uint16_t y0, uint16_t r)
       GUI_DrawPoint(draw_x1, draw_y1);
     }
 
-    /* �ڶ���ˮֱ�����?(�°�Բ�ĵ�) */
+    /* �ڶ���ˮֱ�����?(�°�Բ�ĵ�) */
     if(draw_x1 >= 0)
     {  /* �������������ʼ��fill_x0 */
       fill_x0 = draw_x1;
@@ -431,7 +431,7 @@ void  GUI_FillCircle(uint16_t x0, uint16_t y0, uint16_t r)
       GUI_DrawPoint(draw_x3, draw_y3);
     }
 
-    /* ���ĵ㴹ֱ�����?(�ϰ�Բ�ĵ�) */
+    /* ���ĵ㴹ֱ�����?(�ϰ�Բ�ĵ�) */
     if(draw_x3 >= 0)
     {  /* �������������ʼ��fill_x0 */
       fill_x0 = draw_x3;
@@ -457,7 +457,7 @@ void  GUI_FillCircle(uint16_t x0, uint16_t y0, uint16_t r)
       GUI_DrawPoint(draw_x5, draw_y5);
     }
 
-    /* �����㴹ֱ�����?(�ϰ�Բ�ĵ�) */
+    /* �����㴹ֱ�����?(�ϰ�Բ�ĵ�) */
     if(draw_x5 >= 0)
     {  /* �������������ʼ��fill_x0 */
       fill_x0 = draw_x5;
@@ -484,7 +484,7 @@ void  GUI_FillCircle(uint16_t x0, uint16_t y0, uint16_t r)
       GUI_DrawPoint(draw_x7, draw_y7);
     }
 
-    /* �ڰ˵㴹ֱ�����?(�ϰ�Բ�ĵ�) */
+    /* �ڰ˵㴹ֱ�����?(�ϰ�Բ�ĵ�) */
     if(draw_x7 >= 0)
     {  /* �������������ʼ��fill_x0 */
       fill_x0 = draw_x7;
@@ -517,7 +517,7 @@ CHAR_INFO GUI_DispOne(int16_t sx, int16_t sy, const uint8_t *p)
           j = 0,
           i = 0;
   uint16_t bitMapSize = (info.pixelHeight * info.pixelWidth / 8);
-  uint8_t  font[bitMapSize];
+  uint8_t  font[BYTE_HEIGHT * BYTE_HEIGHT / 8]; // TODO: match bitMapSize
   uint32_t temp = 0;
 
   W25Qxx_ReadBuffer(font, info.bitMapAddr, bitMapSize);
@@ -811,9 +811,9 @@ void Scroll_DispString(SCROLL * para, uint8_t align)
   if(para->text == NULL) return;
   if(para->totalPixelWidth > para->maxPixelWidth)
   {
-    if(OS_GetTime() - para->time > 5) // 50ms
+    if(OS_GetTimeMs() > para->time)
     {
-      para->time = OS_GetTime();
+      para->time = OS_GetTimeMs() + 50; // 50ms
       GUI_SetRange(para->rect->x0, para->rect->y0, para->rect->x1, para->rect->y1);
       if(para->curByte < para->maxByte)
       {
@@ -904,13 +904,13 @@ void GUI_DrawButton(const BUTTON *button, uint8_t pressed)
 
   for(uint16_t i=0; i<lineWidth ;i++)
   {
-    GUI_HLine(sx + radius, sy + i,      ex - radius);  //�ĸ����?
+    GUI_HLine(sx + radius, sy + i,      ex - radius);  //�ĸ����?
     GUI_HLine(sx + radius, ey - 1 - i,  ex - radius);
     GUI_VLine(sx + i,      sy + radius, ey - radius);
     GUI_VLine(ex - 1 - i,  sy + radius, ey - radius);
   }
   GUI_SetColor(backColor);
-  GUI_FillCircle(sx + radius,     sy + radius,  radius - lineWidth);   //����ĸ��ǵ�Բ��?
+  GUI_FillCircle(sx + radius,     sy + radius,  radius - lineWidth);   //����ĸ��ǵ�Բ��?
   GUI_FillCircle(ex - radius - 1, sy + radius,  radius - lineWidth);
   GUI_FillCircle(sx + radius,     ey - radius - 1, radius - lineWidth);
   GUI_FillCircle(ex - radius - 1, ey - radius - 1, radius - lineWidth);

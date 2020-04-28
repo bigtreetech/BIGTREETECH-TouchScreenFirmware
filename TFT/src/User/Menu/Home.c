@@ -7,9 +7,9 @@ const MENUITEMS homeItems = {
 LABEL_HOME,
 // icon                       label
  {{ICON_HOME,                 LABEL_HOME},
-  {ICON_X_HOME,               LABEL_X_HOME},
-  {ICON_Y_HOME,               LABEL_Y_HOME},
-  {ICON_Z_HOME,               LABEL_Z_HOME},
+  {ICON_X_HOME,               LABEL_X},
+  {ICON_Y_HOME,               LABEL_Y},
+  {ICON_Z_HOME,               LABEL_Z},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
@@ -35,3 +35,4 @@ void menuHome(void)
     loopProcess();
   }
 }
+

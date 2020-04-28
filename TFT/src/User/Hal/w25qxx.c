@@ -1,32 +1,26 @@
 #include "w25qxx.h"
-#include "variants.h"
 
-/*************************** W25Qxx SPI ģʽ�ײ���ֲ�Ľӿ� ***************************/
+/*************************** W25Qxx SPI Interface ported by the underlying pattern ***************************/
 //#define W25Qxx_SPI     _SPI3
 //#define W25Qxx_SPEED   0
+//#define W25Qxx_CS_PIN PA4
 
-//Ƭѡ
+//Chip Select
 void W25Qxx_SPI_CS_Set(u8 level)
 {
-  #if defined(MKS_32_V1_4)
-  if (level==0)
-  GPIO_ResetBits(GPIOB,GPIO_Pin_9);
-  else
-  GPIO_SetBits(GPIOB,GPIO_Pin_9);
-  #else
-  SPI_CS_Set(W25Qxx_SPI,level);
-  #endif
+  GPIO_SetLevel(W25Qxx_CS_PIN, level);
 }
 
-//��д����
+//Read and write functions
 uint8_t W25Qxx_SPI_Read_Write_Byte(uint8_t data)
 {
   return SPI_Read_Write(W25Qxx_SPI,data);
 }
 
-//��ʼ��
+//initialization
 void W25Qxx_Init(void)
-{
+{  
+  GPIO_InitSet(W25Qxx_CS_PIN, MGPIO_MODE_OUT_PP, 0);
   SPI_Config(W25Qxx_SPI);
   SPI_Protocol_Init(W25Qxx_SPI, W25Qxx_SPEED);
   W25Qxx_SPI_CS_Set(1);
@@ -34,14 +28,14 @@ void W25Qxx_Init(void)
 /*************************************************************************************/
 
 
-// дʹ��
+// Write enable
 void W25Qxx_WriteEnable(void)
 {
   W25Qxx_SPI_CS_Set(0);
   W25Qxx_SPI_Read_Write_Byte(CMD_WRITE_ENABLE);
   W25Qxx_SPI_CS_Set(1);
 }
-//�ȴ�W25Qxx����
+//Waiting for W25Qxx to be idle
 void W25Qxx_WaitForWriteEnd(void)
 {
   uint8_t flashstatus = 0;
@@ -56,7 +50,7 @@ void W25Qxx_WaitForWriteEnd(void)
   W25Qxx_SPI_CS_Set(1);
 }
 
-//��ҳд
+//Write by page
 void W25Qxx_WritePage(uint8_t* pBuffer, uint32_t WriteAddr, uint16_t NumByteToWrite)
 {
   W25Qxx_WriteEnable();
@@ -77,15 +71,15 @@ void W25Qxx_WritePage(uint8_t* pBuffer, uint32_t WriteAddr, uint16_t NumByteToWr
   W25Qxx_WaitForWriteEnd();
 }
 
-//��FLASH�з���buffer������
+//Send buffer data to FLASH
 void W25Qxx_WriteBuffer(uint8_t* pBuffer, uint32_t WriteAddr, uint16_t NumByteToWrite)
 {
   uint8_t NumOfPage = 0, NumOfSingle = 0, Addr = 0, count = 0, temp = 0;
 
-  Addr = WriteAddr % W25QXX_SPI_PAGESIZE;//������һҳ���ĸ���ַ��ʼд����
-  count = W25QXX_SPI_PAGESIZE - Addr;//������ҳ������д��������
-  NumOfPage =  NumByteToWrite / W25QXX_SPI_PAGESIZE;//����Ҫ��������ݳ��ȿ���д����ҳ
-  NumOfSingle = NumByteToWrite % W25QXX_SPI_PAGESIZE;//����������ҳ�����⣬������д�����ݳ���
+  Addr = WriteAddr % W25QXX_SPI_PAGESIZE;//Represents which address in a page starts to write data
+  count = W25QXX_SPI_PAGESIZE - Addr;//How much data can be written on this page
+  NumOfPage =  NumByteToWrite / W25QXX_SPI_PAGESIZE;//Represents how many pages can be written to the length of the data to be stored
+  NumOfSingle = NumByteToWrite % W25QXX_SPI_PAGESIZE;//Represents the length of data that can be written in addition to the entire page of data
 
   if (Addr == 0) /*!< WriteAddr is sFLASH_PAGESIZE aligned  */
   {
@@ -148,7 +142,7 @@ void W25Qxx_WriteBuffer(uint8_t* pBuffer, uint32_t WriteAddr, uint16_t NumByteTo
   }
 }
 
-/*��FLASH�ж�����*/
+/*Reading data from flash*/
 void W25Qxx_ReadBuffer(uint8_t* pBuffer, uint32_t ReadAddr, uint16_t NumByteToRead)
 {
   W25Qxx_SPI_CS_Set(0);
@@ -168,7 +162,7 @@ void W25Qxx_ReadBuffer(uint8_t* pBuffer, uint32_t ReadAddr, uint16_t NumByteToRe
   W25Qxx_SPI_CS_Set(1);
 }
 
-//��ID
+//Read ID
 uint32_t W25Qxx_ReadID(void)
 {
   uint32_t Temp = 0;
@@ -185,7 +179,7 @@ uint32_t W25Qxx_ReadID(void)
   return Temp;
 }
 
-//��������
+//Sector erase
 void W25Qxx_EraseSector(uint32_t SectorAddr)
 {
   W25Qxx_WriteEnable();
@@ -200,7 +194,7 @@ void W25Qxx_EraseSector(uint32_t SectorAddr)
   W25Qxx_WaitForWriteEnd();
 }
 
-//�����
+//Block erase
 void W25Qxx_EraseBlock(uint32_t BlockAddr)
 {
   W25Qxx_WriteEnable();
@@ -215,7 +209,7 @@ void W25Qxx_EraseBlock(uint32_t BlockAddr)
   W25Qxx_WaitForWriteEnd();
 }
 
-//ȫƬ����
+//Full-chip erase
 void W25Qxx_EraseBulk(void)
 {
   W25Qxx_WriteEnable();
