@@ -239,6 +239,11 @@
 // Enable CNC Menu mutually exclusive to UNIFIED_MENU
 #define CNC_MENU
 
+#ifdef CNC_MENU
+  //#define CNC_LASER // Enable Laser Interface instead of Fan Interface
+#endif
+
+
 /**
  * SD support
  * The TFT will auto configure M27 AutoReport with M115 command
