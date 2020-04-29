@@ -195,7 +195,11 @@ void sendQueueCmd(void)
           if(cmd_seen('P')) i = cmd_value();
           if(cmd_seen('S'))
           {
-            fanSetSpeed(i, cmd_value());
+			#ifdef CNC_LASER
+				laserSetSpeed(i, cmd_value());
+			#else
+				fanSetSpeed(i, cmd_value());
+			#endif
           }
           break;
         }
@@ -203,7 +207,11 @@ void sendQueueCmd(void)
         {
           u8 i = 0;
           if(cmd_seen('P')) i = cmd_value();
-          fanSetSpeed(i, 0);
+			#ifdef CNC_LASER
+				laserSetSpeed(i, 0);
+			#else
+				fanSetSpeed(i, 0);
+			#endif		
           break;
         }
         case 201: //M201 Maximum Acceleration (units/s2)
@@ -366,14 +374,25 @@ void sendQueueCmd(void)
             if(cmd_seen('P')) i = cmd_value();
             if(cmd_seen('S'))
             {
-              fanSetSpeed(i, cmd_value());
+				#ifdef CNC_LASER
+					laserSetSpeed(i, cmd_value());
+				#else
+					fanSetSpeed(i, cmd_value());	
+				#endif
             }
             else if (!cmd_seen('\n'))
             {
               char buf[12];
-              sprintf(buf, "S%d\n", fanGetSpeed(i));
-              strcat(infoCmd.queue[infoCmd.index_r].gcode,(const char*)buf);
-              fanSetSendWaiting(i, false);
+              
+				#ifdef CNC_LASER
+					sprintf(buf, "S%d\n", laserGetSpeed(i));
+					strcat(infoCmd.queue[infoCmd.index_r].gcode,(const char*)buf);
+					laserSetSendWaiting(i, false);
+				#else
+					sprintf(buf, "S%d\n", fanGetSpeed(i));
+					strcat(infoCmd.queue[infoCmd.index_r].gcode,(const char*)buf);
+					fanSetSendWaiting(i, false);
+				#endif
             }
             break;
           }
@@ -382,7 +401,11 @@ void sendQueueCmd(void)
           {
             u8 i = 0;
             if(cmd_seen('P')) i = cmd_value();
-            fanSetSpeed(i, 0);
+				#ifdef CNC_LASER
+					laserSetSpeed(i, 0);
+				#else
+					fanSetSpeed(i, 0);
+				#endif
             break;
           }
 

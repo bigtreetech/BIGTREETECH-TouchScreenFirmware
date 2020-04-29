@@ -340,7 +340,11 @@ void parseACK(void)
       }
       else if (ack_seen(" F0:"))
       {
-        fanSetSpeed(0, ack_value());
+        #ifdef CNC_LASER
+			laserSetSpeed(0, ack_value());
+		#else
+			fanSetSpeed(0, ack_value());
+		#endif
       }
     // parse and store feed rate percentage
       else if(ack_seen("FR:"))
