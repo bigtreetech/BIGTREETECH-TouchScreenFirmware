@@ -190,5 +190,9 @@
     #define JP_XY                       "XY"
     #define JP_SPINDLE                  "Spindle"
 	#define JP_CUT                      "Cut"
+	#define JP_LASER					"Laser"
+	#define JP_LASER_2					"Laser 2%"
+	#define JP_LASER_100				"Laser 100%"
+	#define JP_LASER_OFF				"Laser Off"
 
 #endif

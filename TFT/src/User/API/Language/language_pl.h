@@ -190,5 +190,9 @@
     #define PL_XY                       "XY"
     #define PL_SPINDLE                  "Spindle"
 	#define PL_CUT                      "Cut"
+	#define PL_LASER					"Laser"
+	#define PL_LASER_2					"Laser 2%"
+	#define PL_LASER_100				"Laser 100%"
+	#define PL_LASER_OFF				"Laser Off"
 
 #endif

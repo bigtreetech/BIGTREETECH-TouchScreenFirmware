@@ -190,5 +190,9 @@
     #define CZ_XY                       "XY"
     #define CZ_SPINDLE                  "Spindle"
 	#define CZ_CUT                      "Cut"
+	#define CZ_LASER					"Laser"
+	#define CZ_LASER_2					"Laser 2%"
+	#define CZ_LASER_100				"Laser 100%"
+	#define CZ_LASER_OFF				"Laser Off"
 
 #endif

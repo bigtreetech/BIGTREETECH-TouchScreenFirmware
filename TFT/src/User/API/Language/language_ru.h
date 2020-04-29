@@ -190,5 +190,9 @@
     #define RU_XY                       "XY"
     #define RU_SPINDLE                  "Spindle"
 	#define RU_CUT                      "Cut"
+	#define RU_LASER					"Laser"
+	#define RU_LASER_2					"Laser 2%"
+	#define RU_LASER_100				"Laser 100%"
+	#define RU_LASER_OFF				"Laser Off"
 
 #endif

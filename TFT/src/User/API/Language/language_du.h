@@ -190,5 +190,9 @@
     #define DU_XY                       "XY"
     #define DU_SPINDLE                  "Spindle"
 	#define DU_CUT                      "Cut"
+	#define DU_LASER					"Laser"
+	#define DU_LASER_2					"Laser 2%"
+	#define DU_LASER_100				"Laser 100%"
+	#define DU_LASER_OFF				"Laser Off"
 
 #endif

@@ -190,5 +190,9 @@
     #define IT_XY                       "XY"
     #define IT_SPINDLE                  "Spindle"
 	#define IT_CUT                      "Cut"
+	#define IT_LASER					"Laser"
+	#define IT_LASER_2					"Laser 2%"
+	#define IT_LASER_100				"Laser 100%"
+	#define IT_LASER_OFF				"Laser Off"
 
 #endif

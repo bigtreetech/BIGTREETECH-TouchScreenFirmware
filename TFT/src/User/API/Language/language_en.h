@@ -190,5 +190,9 @@
     #define EN_XY                       "XY"
     #define EN_SPINDLE                  "Spindle"
     #define EN_CUT                      "Cut"
+	#define EN_LASER					"Laser"
+	#define EN_LASER_2					"Laser 2%"
+	#define EN_LASER_100				"Laser 100%"
+	#define EN_LASER_OFF				"Laser Off"
 
 #endif

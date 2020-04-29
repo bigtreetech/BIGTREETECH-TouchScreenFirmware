@@ -190,5 +190,9 @@
     #define FR_XY                       "XY"
     #define FR_SPINDLE                  "Spindle"
 	#define FR_CUT                      "Cut"
+	#define FR_LASER					"Laser"
+	#define FR_LASER_2					"Laser 2%"
+	#define FR_LASER_100				"Laser 100%"
+	#define FR_LASER_OFF				"Laser Off"
 
 #endif
