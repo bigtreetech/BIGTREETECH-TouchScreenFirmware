@@ -100,11 +100,14 @@ See [BIGTREETECH-TouchScreenFirmware/releases](https://github.com/bigtreetech/BI
 5. Removed Bed and Extruder Heating menu items from Mainpage.c
 6. Forced configuration in order to remove persistent Bed/Extruder temperature indication on all the pages
 7. Modified the Home menu in order to support G28 XY and G28 Z and Zero axes
+8. Possibility to define CNC_LASER in configuration.h in order to introduce menù for laser management (instead of fan)
 
 See:
 
 1.[TFT35 Home Menu (Home XY)](https://youtu.be/tTO4IgWAW1k)
+
 2.[TFT35 Home Menu (Home Z - Zero 0)](https://youtu.be/vSVPUKN2T6w)
+
 3.[TFT35 Home Spindle (Spindle ON/OFF)](https://youtu.be/DXpbi54GyoA)
 
 
