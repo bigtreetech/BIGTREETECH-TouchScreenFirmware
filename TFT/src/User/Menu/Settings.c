@@ -70,7 +70,6 @@ void infoSettingsReset(void)
   infoSettings.tool_count             = TOOL_NUM;
   infoSettings.ext_count              = EXTRUDER_NUM;
   infoSettings.fan_count              = FAN_NUM;
-  infoSettings.onboard_sd_support     = ONBOARD_SD_SUPPORT;
   infoSettings.auto_load_leveling     = AUTO_SAVE_LOAD_LEVELING_VALUE;
   infoSettings.m27_refresh_time       = M27_REFRESH;
   infoSettings.m27_active             = M27_WATCH_OTHER_SOURCES;

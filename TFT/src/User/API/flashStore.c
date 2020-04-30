@@ -103,7 +103,6 @@ bool readStoredPara(void)
   infoSettings.tool_count           = byteToWord(data + (index += 4), 4);
   infoSettings.ext_count            = byteToWord(data + (index += 4), 4);
   infoSettings.fan_count            = byteToWord(data + (index += 4), 4);
-  infoSettings.onboard_sd_support   = byteToWord(data + (index += 4), 4);
   infoSettings.auto_load_leveling   = byteToWord(data + (index += 4), 4);
   infoSettings.m27_refresh_time     = byteToWord(data + (index += 4), 4);
   infoSettings.m27_active           = byteToWord(data + (index += 4), 4);
@@ -221,7 +220,6 @@ void storePara(void)
   wordToByte(infoSettings.tool_count,                 data + (index += 4));
   wordToByte(infoSettings.ext_count,                  data + (index += 4));
   wordToByte(infoSettings.fan_count,                  data + (index += 4));
-  wordToByte(infoSettings.onboard_sd_support,         data + (index += 4));
   wordToByte(infoSettings.auto_load_leveling,         data + (index += 4));
   wordToByte(infoSettings.m27_refresh_time,           data + (index += 4));
   wordToByte(infoSettings.m27_active,                 data + (index += 4));

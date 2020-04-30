@@ -82,7 +82,6 @@ typedef struct
   uint16_t  tool_count;
   uint16_t  ext_count;
   uint8_t   fan_count;
-  uint8_t   onboard_sd_support;
   uint8_t   auto_load_leveling;
   uint8_t   m27_refresh_time;
   uint8_t   m27_active;
