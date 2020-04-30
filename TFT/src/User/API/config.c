@@ -627,17 +627,13 @@ void parseConfigKey(u16 index)
       infoSettings.auto_load_leveling = getOnOff();
   break;
 
-  case C_INDEX_ONBOARD_SD:
-      infoSettings.onboard_sd_support = getOnOff();
-  break;
-
   case C_INDEX_M27_DELAY:
     if (inLimit(config_value(), MIN_DELAY_SEC, MAX_DELAY_SEC))
       infoSettings.m27_refresh_time = config_value();
   break;
 
   case C_INDEX_M27_KEEP_ON:
-      infoSettings.onboard_sd_support = getOnOff();
+      infoSettings.m27_active = getOnOff();
   break;
 
   case C_INDEX_FAN_PERCENT:
