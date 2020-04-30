@@ -6,9 +6,9 @@ const MENUITEMS StatusItems = {
 // title
 LABEL_READY,
 // icon                       label
- {{ICON_STATUSNOZZLE,         LABEL_BACKGROUND},
-  {ICON_STATUSBED,            LABEL_BACKGROUND},
-  {ICON_STATUSFAN,            LABEL_BACKGROUND},
+ {{ICON_STATUS_NOZZLE,         LABEL_BACKGROUND},
+  {ICON_STATUS_BED,            LABEL_BACKGROUND},
+  {ICON_STATUS_FAN,            LABEL_BACKGROUND},
   {ICON_STATUS_SPEED,         LABEL_BACKGROUND},
   {ICON_MAINMENU,             LABEL_MAINMENU},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
@@ -18,9 +18,9 @@ LABEL_READY,
 
 const ITEM ToolItems[3] = {
 // icon                       label
-  {ICON_STATUSNOZZLE,         LABEL_BACKGROUND},
-  {ICON_STATUSBED,            LABEL_BACKGROUND},
-  {ICON_STATUSFAN,            LABEL_BACKGROUND},
+  {ICON_STATUS_NOZZLE,         LABEL_BACKGROUND},
+  {ICON_STATUS_BED,            LABEL_BACKGROUND},
+  {ICON_STATUS_FAN,            LABEL_BACKGROUND},
 };
 const ITEM SpeedItems[2] = {
 // icon                       label
@@ -120,7 +120,7 @@ void drawTemperature(void)
     fs = (fanGetSpeed(current_fan)*100)/255;
     my_sprintf(tempstr, "%d%%", fs);
   #else
-    fs = fanSpeed[current_fan];
+    fs = fanGetSpeed(current_fan);
     my_sprintf(tempstr, "%d", fs);
   #endif
   GUI_DispStringInPrect(&rectB[2], (u8 *)tempstr);                        //Fan value

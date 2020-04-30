@@ -237,14 +237,12 @@
 
 /**
  * SD support
- * The TFT will auto configure M27 AutoReport with M115 command
- * Set the time interval to poll SD Printing status if Marlin reports M27 disabled.
+ * Starting from Marlin Bugfix 2.0.x Distribution Date: 2020-04-27 & above, The TFT will auto detect
+ * On-Board SD Card and auto-configure M27 AutoReport with M115 command
+ * Set the time interval to poll SD Printing status if Marlin reports M27 AutoReport as disabled.
  */
-#define ONBOARD_SD_SUPPORT
-#ifdef ONBOARD_SD_SUPPORT
-  #define M27_REFRESH                3        // Time in sec for M27 command
-  #define M27_WATCH_OTHER_SOURCES    true     // if true the polling on M27 report is always active. Case: SD print started not from TFT35
-#endif
+#define M27_REFRESH                3        // Time in sec for M27 command
+#define M27_WATCH_OTHER_SOURCES    true     // if true the polling on M27 report is always active. Case: SD print started not from TFT35
 
 /**
  * Power Loss Recovery

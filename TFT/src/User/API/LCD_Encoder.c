@@ -169,7 +169,7 @@ void loopCheckEncoder()
           sy = ey;
           return 2;
         }
-        return 0;
+        //return 0;
       }
       else
       {
@@ -178,7 +178,7 @@ void loopCheckEncoder()
           sy = ey;
           return 3;
         }
-        return 0;
+        //return 0;
       }
     }
   }
@@ -188,8 +188,9 @@ void loopCheckEncoder()
 		sy = ey =0;
 		MOVE = false;
     skipMode = false; //resume mode change loop
-    return 0;
+    //return 0;
 	}
+	return 0;
 }
 #endif
 

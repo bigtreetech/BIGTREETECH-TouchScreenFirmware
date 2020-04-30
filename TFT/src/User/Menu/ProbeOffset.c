@@ -12,7 +12,7 @@ LABEL_Z_OFFSET,
   {ICON_INC,                  LABEL_INC},
   {ICON_EEPROM_SAVE,          LABEL_EEPROM_SAVE},
   {ICON_01_MM,                LABEL_01_MM},
-  {ICON_NORMAL_SPEED,         LABEL_VALUE_ZERO},
+  {ICON_RESET_VALUE,          LABEL_RESET},
   {ICON_BACK,                 LABEL_BACK},}
 };
 
@@ -113,6 +113,7 @@ void menuProbeOffset(void)
         #if LCD_ENCODER_SUPPORT
           if(encoderPosition)
           {
+            storeCmd("M851 Z%.2f\n",probe_offset_value+elementsUnit.ele[elementsUnit.cur]*encoderPosition);																				
             probe_offset_value += elementsUnit.ele[elementsUnit.cur]*encoderPosition;
             encoderPosition = 0;
           }

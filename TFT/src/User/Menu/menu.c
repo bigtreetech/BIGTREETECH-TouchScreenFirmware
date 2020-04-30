@@ -400,11 +400,10 @@ void loopBackEnd(void)
   loopBuzzer();
 #endif
 
-#if defined ONBOARD_SD_SUPPORT
-  if (infoMachineSettings.autoReportSDStatus !=1){
-    loopCheckPrinting();                //Check if there is a SD or USB print running.
+if(infoMachineSettings.onboard_sd_support == 1 && infoMachineSettings.autoReportSDStatus != 1)
+  {
+    loopCheckPrinting(); //Check if there is a SD or USB print running.
   }
-#endif
 
 #ifdef U_DISK_SUPPROT
   USBH_Process(&USB_OTG_Core, &USB_Host);
