@@ -24,7 +24,7 @@ void infoSettingsReset(void)
   infoSettings.knob_led_color       = (STARTUP_KNOB_LED_COLOR - 1);
   infoSettings.send_start_gcode     = 0;
   infoSettings.send_end_gcode       = 0;
-  infoSettings.send_cancel_gcode    = 0;
+  infoSettings.send_cancel_gcode    = 1;
   infoSettings.persistent_info      = 1;
   infoSettings.file_listmode        = 1;
   #ifdef LCD_LED_PWM_CHANNEL
@@ -36,17 +36,18 @@ void infoSettingsReset(void)
 }
 
 void initMachineSetting(void){
-
-  infoMachineSettings.EEPROM                  = 0;
+  // some settings are assumes as active unless reported disabled by marlin
+  infoMachineSettings.EEPROM                  = 1;
   infoMachineSettings.autoReportTemp          = 0;
-  infoMachineSettings.autoLevel               = 0;
-  infoMachineSettings.zProbe                  = 0;
-  infoMachineSettings.levelingData            = 0;
+  infoMachineSettings.autoLevel               = 1;
+  infoMachineSettings.zProbe                  = 1;
+  infoMachineSettings.levelingData            = 1;
   infoMachineSettings.softwarePower           = 0;
   infoMachineSettings.toggleLights            = 0;
   infoMachineSettings.caseLightsBrightness    = 0;
   infoMachineSettings.emergencyParser         = 0;
   infoMachineSettings.promptSupport           = 0;
+  infoMachineSettings.onboard_sd_support      = 1;
   infoMachineSettings.autoReportSDStatus      = 0;
 }
 
@@ -59,6 +60,7 @@ void setupMachine(void){
   if (infoMachineSettings.emergencyParser != 1 && wasRestored == true){
     popupReminder(textSelect(LABEL_WARNING), textSelect(LABEL_EMERGENCYPARSER));
   }
+  printSetUpdateWaiting(M27_WATCH_OTHER_SOURCES);
 }
 
 // Version infomation
