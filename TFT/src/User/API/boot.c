@@ -259,10 +259,11 @@ void scanResetDir(void) {
     if (f_file_exists(TFT_RESET_FILE ".DONE")) {
       f_unlink(TFT_RESET_FILE ".DONE");
     }
-    f_rename(TFT_RESET_FILE, TFT_RESET_FILE ".DONE");
     infoSettingsReset();
+    LCD_RefreshDirection();
     TSC_Calibration();
     storePara();
+    f_rename(TFT_RESET_FILE, TFT_RESET_FILE ".DONE");
   }
 }
 
