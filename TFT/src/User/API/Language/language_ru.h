@@ -144,7 +144,7 @@
     #define RU_ON                     "Вкл"
     #define RU_OFF                    "Выкл"
     #define RU_SMART                  "Умный"
-    #define RU_TERMINAL_ACK           "показать ACK в Терминале"
+    #define RU_TERMINAL_ACK           "ACK терминала (C°)"
     #define RU_INVERT_XAXIS           "Инверсия оси X"
     #define RU_INVERT_YAXIS           "Инверсия оси Y"
     #define RU_INVERT_ZAXIS           "Инверсия оси Z"
