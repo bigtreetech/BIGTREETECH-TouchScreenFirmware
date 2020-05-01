@@ -41,7 +41,7 @@ __ALIGN_BEGIN USB_OTG_CORE_HANDLE USB_OTG_Core __ALIGN_END;
 __ALIGN_BEGIN USBH_HOST USB_Host __ALIGN_END;
 
 
-#ifdef U_DISK_SUPPROT
+#ifdef U_DISK_SUPPORT
 
 uint8_t u_disk_inserted = 0;
 

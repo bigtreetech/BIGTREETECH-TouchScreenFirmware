@@ -28,7 +28,7 @@
 #include "usbh_core.h"
 #include "usb_hcd_int.h"
 
-#ifdef U_DISK_SUPPROT
+#ifdef U_DISK_SUPPORT
 
 /** @addtogroup USBH_LIB
   * @{
