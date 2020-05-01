@@ -330,4 +330,7 @@
 // Cancel G-code - run this G-code after canceling print
 #define PRINT_CANCEL_GCODE "G28 XY R10\n" // Home XY and raise Z 10mm
 
+// Offset G-code for offset leveling
+#define OFFSET_GCODE "G1 X15 F6000\n"   // Z offset level point
+
 #endif
