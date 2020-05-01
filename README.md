@@ -53,7 +53,7 @@ The Firmware can be configured using the **config.ini** file from from one of th
 [`Copy to SD Card root directory to update - Unified Menu Material theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update%20-%20Unified%20Menu%20Material%20theme)
 
 ### Editing configuration (config.ini) file
-To edit the **config.ini** file follow the instruction here: [Detailed Instrucions here](config_instructions.md)
+To edit the **config.ini** file follow the instruction here: [Detailed Instructions here](config_instructions.md)
 
 ### Updating Firmware Configuration
 To update the Firmware configuration:
