@@ -185,5 +185,6 @@
     #define HU_300_SECONDS              "5 Perc."
     #define HU_CUSTOM_SECONDS           "Egyedi"
     #define HU_ST7920_FULLSCREEN        "Nagyképernyős Marlin mód"
+    #define HU_SOFT_ENDSTOP_OFF         "\u0881 No Endstop \u0881"
 
 #endif

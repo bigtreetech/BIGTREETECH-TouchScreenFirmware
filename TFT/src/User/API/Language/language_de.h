@@ -185,5 +185,6 @@
     #define DE_300_SECONDS              "5 Min."
     #define DE_CUSTOM_SECONDS           "Benutz."
     #define DE_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
+    #define DE_SOFT_ENDSTOP_OFF         "\u0881 Kein Endstop \u0881"
 
 #endif

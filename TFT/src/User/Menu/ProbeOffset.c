@@ -51,22 +51,45 @@ static void initElements(u8 position)
   }
 }
 
+void storeMoveCmdZ(AXIS xyz, int8_t direction) {
+  const char *xyzMoveCmd[] = {"G1 Z%.2f\n"};
+  // if invert is true, 'direction' multiplied by -1
+  storeCmd(xyzMoveCmd[xyz], (infoSettings.invert_axis[xyz] ? -direction : direction) * elementsUnit.ele[elementsUnit.cur]);
+}
+
 #define PROBE_OFFSET_MAX_VALUE 20.0f
 #define PROBE_OFFSET_MIN_VALUE -20.0f
 
 void showProbeOffset(float val)
 {
+  GUI_SetColor(FONT_COLOR);
   GUI_DispFloat(CENTER_X - 5*BYTE_WIDTH/2, CENTER_Y, val, 3, 2, RIGHT);
 }
 
 void menuProbeOffset(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
-  float probe_offset_value;
-  float now = probe_offset_value = getParameter(P_PROBE_OFFSET, Z_STEPPER);
+  storeCmd("M851\n");                         // get actual Z offset in Buffer
+  float probe_offset_value = getParameter(P_PROBE_OFFSET, Z_STEPPER);
+  float now = 0.0f;
+  float new_offset = 0.0f;
+  const char* softendstop = textSelect(LABEL_SOFT_ENDSTOP_OFF);
+  u16 SW_X = (LCD_WIDTH - GUI_StrPixelWidth((u8 *)softendstop))/2;
+
   initElements(KEY_ICON_5);
   menuDrawPage(&probeOffsetItems);
+  GUI_SetColor(REMINDER_FONT_COLOR);
+  GUI_DispString(SW_X, CENTER_Y - 50, (u8 *)softendstop);  // show endstop warning
+  GUI_DispFloat(CENTER_X - 5*BYTE_WIDTH/2, CENTER_Y - 20, probe_offset_value ,3, 2, RIGHT);  // show actual Z offset
   showProbeOffset(now);
+
+  // Z offset g code sequence start
+    storeCmd("G28\n");                          // home printer
+    storeCmd(OFFSET_GCODE);                     // move nozzle to Z offset test point set in Configuration.h
+    storeCmd("M211 S0\n");                      // disable Software Endstop to move nozzle minus Zero (Z0) if necessary
+    mustStoreCmd("G91\n");                      // set relative position mode 
+    mustStoreCmd("G1 F%d\n",SPEED_MOVE_SLOW);   // set Z axis movement rate to slow
+  // Z offset g code sequence end
 
   #if LCD_ENCODER_SUPPORT
     encoderPosition = 0;
@@ -74,27 +97,34 @@ void menuProbeOffset(void)
 
   while(infoMenu.menu[infoMenu.cur] == menuProbeOffset)
   {
-    probe_offset_value = getParameter(P_PROBE_OFFSET, Z_STEPPER);
+    //probe_offset_value = getParameter(P_PROBE_OFFSET, Z_STEPPER);
     key_num = menuKeyGetValue();
     switch(key_num)
     {
       case KEY_ICON_0:
-        if(probe_offset_value - elementsUnit.ele[elementsUnit.cur] > PROBE_OFFSET_MIN_VALUE)
+        if(now - elementsUnit.ele[elementsUnit.cur] > PROBE_OFFSET_MIN_VALUE)
         {
-          if(storeCmd("M851 Z%.2f\n",probe_offset_value-elementsUnit.ele[elementsUnit.cur]))
-            probe_offset_value -= elementsUnit.ele[elementsUnit.cur];
+          //if(storeCmd("M851 Z%.2f\n",probe_offset_value-elementsUnit.ele[elementsUnit.cur]))
+            now -= elementsUnit.ele[elementsUnit.cur];
+            storeMoveCmdZ(Z_AXIS, -1);
         }
         break;
       case KEY_ICON_3:
-        if(probe_offset_value + elementsUnit.ele[elementsUnit.cur] < PROBE_OFFSET_MAX_VALUE)
+        if(now + elementsUnit.ele[elementsUnit.cur] < PROBE_OFFSET_MAX_VALUE)
         {
-          if(storeCmd("M851 Z%.2f\n",probe_offset_value+elementsUnit.ele[elementsUnit.cur]))
-            probe_offset_value += elementsUnit.ele[elementsUnit.cur];
+          //if(storeCmd("M851 Z%.2f\n",probe_offset_value+elementsUnit.ele[elementsUnit.cur]))
+            now += elementsUnit.ele[elementsUnit.cur];
+            storeMoveCmdZ(Z_AXIS, 1);
         }
         break;
       case KEY_ICON_4:
+        probe_offset_value = now;
+        mustStoreCmd("M851 Z%.2f\n",probe_offset_value);     // set new Z offset
+        mustStoreCmd("G90\n");                               // set absolute position mode
+        mustStoreCmd("M211 S1\n");                           // enable Software Endstop
+		    storeCmd("G28\n");                            	     // home printer
         if(infoMachineSettings.EEPROM == 1){
-           storeCmd("M500\n");
+          mustStoreCmd("M500\n");                            // store new Z offset in EEprom
         }
         break;
       case KEY_ICON_5:
@@ -103,28 +133,35 @@ void menuProbeOffset(void)
         menuDrawItem(&probeOffsetItems.items[key_num], key_num);
         break;
       case KEY_ICON_6:
-        if(storeCmd("M851 Z%.2f\n",0))
-          probe_offset_value = 0.0f;
+        //if(storeCmd("M851 Z%.2f\n",0))
+        if(now != 0)
+        {
+          storeCmd("G1 Z%.2f\n",(now * -1));          // move nozzle back to z0
+          now = 0.0f;                                 // reset Z offset to z0
+        }
         break;
       case KEY_ICON_7:
+        mustStoreCmd("G90\n");                        // set absolute position mode
+        storeCmd("M211 S1\n");                        // enable Software Endstop
         infoMenu.cur--;
         break;
       default :
         #if LCD_ENCODER_SUPPORT
           if(encoderPosition)
           {
-            storeCmd("M851 Z%.2f\n",probe_offset_value+elementsUnit.ele[elementsUnit.cur]*encoderPosition);																				
-            probe_offset_value += elementsUnit.ele[elementsUnit.cur]*encoderPosition;
+            now += elementsUnit.ele[elementsUnit.cur]*encoderPosition;
+            storeMoveCmdZ(Z_AXIS, encoderPosition > 0 ? 1 : -1);
             encoderPosition = 0;
           }
         #endif
         break;
       }
-    if(now != probe_offset_value)
+    if(now != new_offset)
     {
-      now = probe_offset_value;
+      new_offset = now;
       showProbeOffset(now);
     }
     loopProcess();
   }
 }
+
