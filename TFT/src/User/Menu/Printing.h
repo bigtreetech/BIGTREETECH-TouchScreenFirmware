@@ -4,8 +4,8 @@
 #include "stdbool.h"
 #include "ff.h"
 
-typedef struct 
-{	
+typedef struct
+{
   FIL     file;
 
   u32     time; // Printed time in sec
@@ -25,7 +25,7 @@ void abortPrinting(void);
 void setM0Pause(bool m0_pause);
 bool setPrintPause(bool is_pause,bool is_m0pause);
 
-bool isPrinting(void);	
+bool isPrinting(void);
 bool isPause(void);
 bool isM0_Pause(void);
 void setPrintingTime(u32 RTtime);
@@ -38,9 +38,6 @@ u32  getPrintTime(void);
 
 void printSetUpdateWaiting(bool isWaiting);
 
-void startGcodeExecute(void);
-void endGcodeExecute(void);
-
 void getGcodeFromFile(void);
 
 void menuBeforePrinting(void);
@@ -49,10 +46,11 @@ void menuStopPrinting(void);
 void menuShutDown(void);
 
 void printingDrawPage(void);
-void reDrawProgress(u8 progress);
-void reValueNozzle(void);
-void reValueBed(void);
-void reDrawTime(void);
+void reDrawProgress(int icon_pos);
+void reValueNozzle(int icon_pos);
+void reValueBed(int icon_pos);
+void reDrawTime(int icon_pos);
+void reDrawLayer(int icon_pos);
 
 void loopCheckPrinting(void);
 

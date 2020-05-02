@@ -33,7 +33,7 @@ typedef enum
 typedef union
 {
   uint32_t index;    // language index, address = textSelect(index);
-  uint8_t *address;
+  void *address;
 }LABEL;
 
 typedef struct
@@ -96,6 +96,7 @@ extern const GUI_RECT exhibitRect;
 #define LISTITEM_HEIGHT ((LCD_HEIGHT-ICON_START_Y-START_X)/5)
 #define LISTICON_SPACE_Y ((LCD_HEIGHT-ICON_START_Y-START_X-(3*LIST_ICON_HEIGHT))/ 2)
 
+void reminderSetUnConnected(void);
 void reminderMessage(int16_t inf, SYS_STATUS status);
 void volumeReminderMessage(int16_t inf, SYS_STATUS status);
 
@@ -111,10 +112,10 @@ void menuDrawPage (const MENUITEMS * menuItems);
 void menuDrawListPage(const LISTITEMS *listItems);
 void itemDrawIconPress(uint8_t positon, uint8_t is_press);
 KEY_VALUES menuKeyGetValue(void);
+GUI_POINT getIconStartPoint(int index);
 
 void loopBackEnd(void);
 void loopFrontEnd(void);
 void loopProcess (void);
 
 #endif
-

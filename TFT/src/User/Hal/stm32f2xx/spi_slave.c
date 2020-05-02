@@ -36,24 +36,24 @@ void SPI_ReEnable(u8 mode)
                       | (0<<2)   // 0:Slave 1:Master
                       | (mode<<1)   // CPOL
                       | (mode<<0);  // CPHA
-            
+
   ST7920_SPI_NUM->CR2 |= 1<<6; // RX buffer not empty interrupt enable SPI_I2S_IT_RXNE
 }
 
-void SPI_Slave(void) 
+void SPI_Slave(void)
 {
   NVIC_InitTypeDef   NVIC_InitStructure;
 
   SPISlave.data = malloc(SPI_SLAVE_MAX);
   while(!SPISlave.data); // malloc failed
-  SPI_GPIO_Init(ST7920_SPI);  
+  SPI_GPIO_Init(ST7920_SPI);
   GPIO_InitSet(PB12, MGPIO_MODE_IPU, 0);  // CS
-  
-  NVIC_InitStructure.NVIC_IRQChannel = SPI2_IRQn; 
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1; 
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0; 
+
+  NVIC_InitStructure.NVIC_IRQChannel = SPI2_IRQn;
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-  NVIC_Init(&NVIC_InitStructure); 
+  NVIC_Init(&NVIC_InitStructure);
 
   RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2,ENABLE);
   SPI_ReEnable(1);
@@ -62,35 +62,35 @@ void SPI_Slave(void)
 void SPI_SlaveDeInit(void)
 {
   NVIC_InitTypeDef   NVIC_InitStructure;
-  NVIC_InitStructure.NVIC_IRQChannel = SPI2_IRQn; 
+  NVIC_InitStructure.NVIC_IRQChannel = SPI2_IRQn;
   NVIC_InitStructure.NVIC_IRQChannelCmd = DISABLE;
   NVIC_Init(&NVIC_InitStructure);
-  NVIC_InitStructure.NVIC_IRQChannel = EXTI15_10_IRQn; 
+  NVIC_InitStructure.NVIC_IRQChannel = EXTI15_10_IRQn;
   NVIC_InitStructure.NVIC_IRQChannelCmd = DISABLE;
   NVIC_Init(&NVIC_InitStructure);
-  
+
   SPI_I2S_DeInit(ST7920_SPI_NUM);
   free(SPISlave.data);
   SPISlave.data = NULL;
 }
 
-void SPI2_IRQHandler(void) 
-{ 
+void SPI2_IRQHandler(void)
+{
   SPISlave.data[SPISlave.wIndex] =  ST7920_SPI_NUM->DR;
   SPISlave.wIndex = (SPISlave.wIndex + 1) % SPI_SLAVE_MAX;
-} 
+}
 
-/* 外部中断配置 */
+/*External interruption arrangement*/
 void SPI_Slave_CS_Config(void)
 {
   EXTI_InitTypeDef EXTI_InitStructure;
-  NVIC_InitTypeDef   NVIC_InitStructure; 
+  NVIC_InitTypeDef   NVIC_InitStructure;
 
-  /* 将GPIOA_0和中断线连接 */
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);//使能SYSCFG时钟 
-	SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOB, EXTI_PinSource12);//PB12 连接到中断线12
+  /* Connect GPIOA_0 to the interrupt line */
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);//Enable SYSCFG clock
+	SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOB, EXTI_PinSource12);//PB12 is connected to interrupt line 12
 
-  /* 设置中断线0位外部下降沿中断 */
+  /*Set interrupt line 0 bit external falling edge interrupt */
   EXTI_InitStructure.EXTI_Line = EXTI_Line12;
   EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
   EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising_Falling;
@@ -98,27 +98,27 @@ void SPI_Slave_CS_Config(void)
   EXTI_Init(&EXTI_InitStructure);
 
 
-  NVIC_InitStructure.NVIC_IRQChannel = EXTI15_10_IRQn;			//使能按键所在的外部中断通道
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x00;	//抢占优先级2， 
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x01;					//子优先级1
-  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;								//使能外部中断通道
-  NVIC_Init(&NVIC_InitStructure); 
+  NVIC_InitStructure.NVIC_IRQChannel = EXTI15_10_IRQn;			//External interrupt channel where the key is enabled
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x00;	//Preemption priority 2?
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x01;					//Sub-priority 1
+  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;								//Enable external interrupt channel
+  NVIC_Init(&NVIC_InitStructure);
 }
 
 
-/* 外部中断 */
+/*External interruption*/
 void EXTI15_10_IRQHandler(void)
 {
   if((GPIOB->IDR & (1<<12)) != 0)
   {
-    SPI_ReEnable(!!(GPIOB->IDR & (1<<13))); //自适应 spi mode0/mode3
+    SPI_ReEnable(!!(GPIOB->IDR & (1<<13))); // Adaptive spi mode0 / mode3
     ST7920_SPI_NUM->CR1 |= (1<<6);
   }
   else
   {
-    RCC->APB1RSTR |= 1<<14;	//复位SPI1
+    RCC->APB1RSTR |= 1<<14;	//Reset SPI1
     RCC->APB1RSTR &= ~(1<<14);
   }
-/* 清除中断状态寄存器 */
+/* Clear interrupt status register */
   EXTI->PR = 1<<12;
 }

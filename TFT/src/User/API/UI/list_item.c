@@ -1,4 +1,4 @@
-// *List View Mode ** Author: Gurmeet Athwal https://github.com/guruathwal ** 
+// *List View Mode ** Author: Gurmeet Athwal https://github.com/guruathwal **
 
 #include "list_item.h"
 #include "includes.h"
@@ -6,6 +6,8 @@
 #include "GUI.h"
 
 char * dynamic_label[LISTITEM_PER_PAGE];
+
+float dynamic_value[LISTITEM_PER_PAGE];
 
 const uint16_t ICON_COLOR[ICONCHAR_NUM]=
 {
@@ -18,10 +20,8 @@ const uint16_t ICON_COLOR[ICONCHAR_NUM]=
   WHITE,    //ICONCHAR_PAGEUP
   WHITE,    //ICONCHAR_PAGEDOWN
   WHITE,    //ICONCHAR_BACK
-  WHITE,    //ICONCHAR_LEFT
   WHITE,    //ICONCHAR_LEFT_TOP
   WHITE,    //ICONCHAR_LEFT_BOTTOM
-  WHITE,    //ICONCHAR_RIGHT
   WHITE,    //ICONCHAR_RIGHT_TOP
   WHITE,    //ICONCHAR_RIGHT_BOTTOM
   MAT_YELLOW,    //ICONCHAR_ALERT
@@ -108,246 +108,165 @@ const uint16_t ICON_COLOR[ICONCHAR_NUM]=
   WHITE,    //ICONCHAR_PAINT
   MAT_GREEN,      //ICONCHAR_TOGGLE_SMALL_ON
   MAT_RED,        //ICONCHAR_TOGGLE_SMALL_OFF
-  MAT_GREEN,      //ICONCHAR_TOGGLE_ON
-  MAT_RED,        //ICONCHAR_TOGGLE_OFF
   MATT_DARKGRAY,  //ICONCHAR_TOGGLE_BODY
   WHITE,          //ICONCHAR_TOGGLE_SWITCH
+  MAT_GREEN,      //ICONCHAR_TOGGLE_ON
+  MAT_RED,        //ICONCHAR_TOGGLE_OFF
 
 
 };
 
-#define CHAR_BLANK            ""
-#define CHAR_NOZZLE           "࡟"
-#define CHAR_BED              "ࡠ"
-#define CHAR_FAN              "ࡡ"
-#define CHAR_FOLDER           "ࡢ"
-#define CHAR_FILE             "ࡣ"
+#define CHAR_BLANK                 ""
+#define CHAR_NOZZLE                "\u085F"
+#define CHAR_BED                   "\u0860"
+#define CHAR_FAN                   "\u0861"
+#define CHAR_FOLDER                "\u0862"
+#define CHAR_FILE                  "\u0863"
 
-#define CHAR_PAGEUP           "ࡧࡨ"
-#define CHAR_PAGEDOWN         "ࡩࡪ"
-#define CHAR_BACK             "࡫࡬"
-#define CHAR_LEFT             ""
-#define CHAR_LEFT_PART1       "࡭"
-#define CHAR_LEFT_PART2       "࡮"
-#define CHAR_RIGHT            ""
-#define CHAR_RIGHT_PART1      "࡯"
-#define CHAR_RIGHT_PART2      "ࡰ"
+#define CHAR_PAGEUP                "\u0867\u0868"
+#define CHAR_PAGEDOWN              "\u0869\u086A"
+#define CHAR_BACK                  "\u086B\u086C"
+#define CHAR_LEFT_PART1            "\u086D"
+#define CHAR_LEFT_PART2            "\u086E"
+#define CHAR_RIGHT_PART1           "\u086F"
+#define CHAR_RIGHT_PART2           "\u0870"
 
-#define CHAR_ALERT            "ࢀ"
-#define CHAR_WARNING          "ࢁ"
-#define CHAR_ERROR            "ࢂ"
-#define CHAR_CAUTION          "ࢃ"
-#define CHAR_INFO             "ࢄ"
-#define CHAR_HAND             "ࢅ"
-#define CHAR_WAIT             "ࢆ"
-#define CHAR_QUESTION         "ࢇ"
-#define CHAR_PLAY             "࢈"
-#define CHAR_PAUSE            "ࢉ"
-#define CHAR_STOP             "ࢊ"
-#define CHAR_EJECT            "ࢋ"
-#define CHAR_PLAY_ROUND       "ࢌ"
-#define CHAR_PAUSE_ROUND      "ࢍ"
-#define CHAR_OK_ROUND         "ࢎ"
-#define CHAR_CANCEL_ROUND     "࢏"
-#define CHAR_MINUS_ROUND      "࢐"
-#define CHAR_PLUS_ROUND       "࢑"
-#define CHAR_MINUS            "࢒"
-#define CHAR_PLUS             "࢓"
-#define CHAR_OK               "࢔"
-#define CHAR_CANCEL           "࢕"
-#define CHAR_HALT             "࢖"
-#define CHAR_UP_DOWN          "ࢗ"
-#define CHAR_LEFT_RIGHT       "࢘"
-#define CHAR_POINT_LEFT       "࢙"
-#define CHAR_POINT_RIGHT      "࢚"
-#define CHAR_RETURN           "࢛"
-#define CHAR_REDO             "࢜"
-#define CHAR_UNDO             "࢝"
-#define CHAR_DOWNLOAD         "࢞"
-#define CHAR_UPLOAD           "࢟"
-#define CHAR_BULLET           "ࢠ"
-#define CHAR_BACK_SMALL       "ࢡ"
-#define CHAR_EXPAND           "ࢢ"
-#define CHAR_MOVE             "ࢣ"
-#define CHAR_ROTATE           "ࢤ"
-#define CHAR_RESET            "ࢥ"
-#define CHAR_EDIT             "ࢦ"
-#define CHAR_SAVE             "ࢧ"
-#define CHAR_DELETE           "ࢨ"
-#define CHAR_RADIO_CHECKED     "ࢩ"
-#define CHAR_RADIO_UNCHECKED   "ࢪ"
-#define CHAR_CHECKED          "ࢫ"
-#define CHAR_UNCHECKED        "ࢬ"
-#define CHAR_SOUND_OFF        "ࢭ"
-#define CHAR_SOUND_ON        "ࢮ"
-#define CHAR_ALERT_OFF        "ࢯ"
-#define CHAR_ALERT_ON         "ࢰ"
-#define CHAR_POWER_OFF        "ࢱ"
-#define CHAR_POWER_ON         "ࢲ"
-#define CHAR_WIFI_OFF         "ࢳ"
-#define CHAR_WIFI_ON          "ࢴ"
-#define CHAR_KEYBOARD         "ࢵ"
-#define CHAR_SD_ERROR         "ࢶ"
-#define CHAR_SD_OK            "ࢷ"
-#define CHAR_SD_REFRESH       "ࢸ"
-#define CHAR_USB_ERROR        "ࢹ"
-#define CHAR_USB_OK           "ࢺ"
-#define CHAR_PRINTER_ERROR    "ࢻ"
-#define CHAR_PRINTER_OK       "ࢼ"
-#define CHAR_BOARD            "ࢽ"
-#define CHAR_EEPROM           "ࢾ"
-#define CHAR_PRINT            "ࢿ"
-#define CHAR_SETTING1         "ࣀ"
-#define CHAR_PLUGIN           "ࣁ"
-#define CHAR_FEATURE          "ࣂ"
-#define CHAR_SETTING2         "ࣃ"
-#define CHAR_DETAIL           "ࣄ"
-#define CHAR_DETAIL2          "ࣅ"
-#define CHAR_ADJUST           "ࣆ"
-#define CHAR_MENU             "ࣇ"
-#define CHAR_POWER            "ࣈ"
-#define CHAR_TOUCH            "ࣉ"
-#define CHAR_LANGUAGE         "࣊"
-#define CHAR_CODE             "࣋"
-#define CHAR_POWER_PLUG       "࣌"
-#define CHAR_ROTATE_DEVICE    "࣍"
-#define CHAR_WINDOW           "࣎"
-#define CHAR_BACKGROUND_COLOR "࣏"
-#define CHAR_FONT_COLOR       "࣐"
-#define CHAR_PAINT            "࣑"
-#define CHAR_TOGGLE_SMALL_ON  "࣒"
-#define CHAR_TOGGLE_SMALL_OFF "࣓"
-#define CHAR_TOGGLE_ON         "ࣖ"
-#define CHAR_TOGGLE_OFF        "ࣖ"
-#define CHAR_TOGGLE_BODY       "ࣔࣕ"
-#define CHAR_TOGGLE_SWITCH     "ࣖ"
+#define CHAR_ALERT                 "\u0880"
+#define CHAR_WARNING               "\u0881"
+#define CHAR_ERROR                 "\u0882"
+#define CHAR_CAUTION               "\u0883"
+#define CHAR_INFO                  "\u0884"
+#define CHAR_HAND                  "\u0885"
+#define CHAR_WAIT                  "\u0886"
+#define CHAR_QUESTION              "\u0887"
+#define CHAR_PLAY                  "\u0888"
+#define CHAR_PAUSE                 "\u0889"
+#define CHAR_STOP                  "\u088A"
+#define CHAR_EJECT                 "\u088B"
+#define CHAR_PLAY_ROUND            "\u088C"
+#define CHAR_PAUSE_ROUND           "\u088D"
+#define CHAR_OK_ROUND              "\u088E"
+#define CHAR_CANCEL_ROUND          "\u088F"
+#define CHAR_MINUS_ROUND           "\u0890"
+#define CHAR_PLUS_ROUND            "\u0891"
+#define CHAR_MINUS                 "\u0892"
+#define CHAR_PLUS                  "\u0893"
+#define CHAR_OK                    "\u0894"
+#define CHAR_CANCEL                "\u0895"
+#define CHAR_HALT                  "\u0896"
+#define CHAR_UP_DOWN               "\u0897"
+#define CHAR_LEFT_RIGHT            "\u0898"
+#define CHAR_POINT_LEFT            "\u0899"
+#define CHAR_POINT_RIGHT           "\u089A"
+#define CHAR_RETURN                "\u089B"
+#define CHAR_REDO                  "\u089C"
+#define CHAR_UNDO                  "\u089D"
+#define CHAR_DOWNLOAD              "\u089E"
+#define CHAR_UPLOAD                "\u089F"
+#define CHAR_BULLET                "\u08A0"
+#define CHAR_BACK_SMALL            "\u08A1"
+#define CHAR_EXPAND                "\u08A2"
+#define CHAR_MOVE                  "\u08A3"
+#define CHAR_ROTATE                "\u08A4"
+#define CHAR_RESET                 "\u08A5"
+#define CHAR_EDIT                  "\u08A6"
+#define CHAR_SAVE                  "\u08A7"
+#define CHAR_DELETE                "\u08A8"
+#define CHAR_RADIO_CHECKED         "\u08A9"
+#define CHAR_RADIO_UNCHECKED       "\u08AA"
+#define CHAR_CHECKED               "\u08AB"
+#define CHAR_UNCHECKED             "\u08AC"
+#define CHAR_SOUND_OFF             "\u08AD"
+#define CHAR_SOUND_ON              "\u08AE"
+#define CHAR_ALERT_OFF             "\u08AF"
+#define CHAR_ALERT_ON              "\u08B0"
+#define CHAR_POWER_OFF             "\u08B1"
+#define CHAR_POWER_ON              "\u08B2"
+#define CHAR_WIFI_OFF              "\u08B3"
+#define CHAR_WIFI_ON               "\u08B4"
+#define CHAR_KEYBOARD              "\u08B5"
+#define CHAR_SD_ERROR              "\u08B6"
+#define CHAR_SD_OK                 "\u08B7"
+#define CHAR_SD_REFRESH            "\u08B8"
+#define CHAR_USB_ERROR             "\u08B9"
+#define CHAR_USB_OK                "\u08BA"
+#define CHAR_PRINTER_ERROR         "\u08BB"
+#define CHAR_PRINTER_OK            "\u08BC"
+#define CHAR_BOARD                 "\u08BD"
+#define CHAR_EEPROM                "\u08BE"
+#define CHAR_PRINT                 "\u08BF"
+#define CHAR_SETTING1              "\u08C0"
+#define CHAR_PLUGIN                "\u08C1"
+#define CHAR_FEATURE               "\u08C2"
+#define CHAR_SETTING2              "\u08C3"
+#define CHAR_DETAIL                "\u08C4"
+#define CHAR_DETAIL2               "\u08C5"
+#define CHAR_ADJUST                "\u08C6"
+#define CHAR_MENU                  "\u08C7"
+#define CHAR_POWER                 "\u08C8"
+#define CHAR_TOUCH                 "\u08C9"
+#define CHAR_LANGUAGE              "\u08CA"
+#define CHAR_CODE                  "\u08CB"
+#define CHAR_POWER_PLUG            "\u08CC"
+#define CHAR_ROTATE_DEVICE         "\u08CD"
+#define CHAR_WINDOW                "\u08CE"
+#define CHAR_BACKGROUND_COLOR      "\u08CF"
+#define CHAR_FONT_COLOR            "\u08D0"
+#define CHAR_PAINT                 "\u08D1"
+#define CHAR_TOGGLE_SMALL_ON       "\u08D2"
+#define CHAR_TOGGLE_SMALL_OFF      "\u08D3"
+#define CHAR_TOGGLE_BODY           "\u08D4\u08D5"
+#define CHAR_TOGGLE_SWITCH         "\u08D6"
+#define CHAR_TOGGLE_ON             ""       //only for toggle state detection
+#define CHAR_TOGGLE_OFF            ""       //only for toggle state detection
 
 const char *const GET_ICONCHAR[ICONCHAR_NUM]={
-  CHAR_BLANK,
-  CHAR_NOZZLE,
-  CHAR_BED,
-  CHAR_FAN,
-  CHAR_FOLDER,
-  CHAR_FILE,
-  CHAR_PAGEUP,
-  CHAR_PAGEDOWN,
-  CHAR_BACK,
-  CHAR_LEFT,
-  CHAR_LEFT_PART1,
-  CHAR_LEFT_PART2,
-  CHAR_LEFT,
-  CHAR_RIGHT_PART1,
-  CHAR_RIGHT_PART2,
-  CHAR_ALERT,
-  CHAR_WARNING,
-  CHAR_ERROR,
-  CHAR_CAUTION,
-  CHAR_INFO,
-  CHAR_HAND,
-  CHAR_WAIT,
-  CHAR_QUESTION,
-  CHAR_PLAY,
-  CHAR_PAUSE,
-  CHAR_STOP,
-  CHAR_EJECT,
-  CHAR_PLAY_ROUND,
-  CHAR_PAUSE_ROUND,
-  CHAR_OK_ROUND,
-  CHAR_CANCEL_ROUND,
-  CHAR_MINUS_ROUND,
-  CHAR_PLUS_ROUND,
-  CHAR_MINUS,
-  CHAR_PLUS,
-  CHAR_OK,
-  CHAR_CANCEL,
-  CHAR_HALT,
-  CHAR_UP_DOWN,
-  CHAR_LEFT_RIGHT,
-  CHAR_POINT_LEFT,
-  CHAR_POINT_RIGHT,
-  CHAR_RETURN,
-  CHAR_REDO,
-  CHAR_UNDO,
-  CHAR_DOWNLOAD,
-  CHAR_UPLOAD,
-  CHAR_BULLET,
-  CHAR_BACK_SMALL,
-  CHAR_EXPAND,
-  CHAR_MOVE,
-  CHAR_ROTATE,
-  CHAR_RESET,
-  CHAR_EDIT,
-  CHAR_SAVE,
-  CHAR_DELETE,
-  CHAR_RADIO_CHECKED,
-  CHAR_RADIO_UNCHECKED,
-  CHAR_CHECKED,
-  CHAR_UNCHECKED,
-  CHAR_SOUND_OFF,
-  CHAR_SOUND_ON,
-  CHAR_ALERT_OFF,
-  CHAR_ALERT_ON,
-  CHAR_POWER_OFF,
-  CHAR_POWER_ON,
-  CHAR_WIFI_OFF,
-  CHAR_WIFI_ON,
-  CHAR_KEYBOARD,
-  CHAR_SD_ERROR,
-  CHAR_SD_OK,
-  CHAR_SD_REFRESH,
-  CHAR_USB_ERROR,
-  CHAR_USB_OK,
-  CHAR_PRINTER_ERROR,
-  CHAR_PRINTER_OK,
-  CHAR_BOARD,
-  CHAR_EEPROM,
-  CHAR_PRINT,
-  CHAR_SETTING1,
-  CHAR_PLUGIN,
-  CHAR_FEATURE,
-  CHAR_SETTING2,
-  CHAR_DETAIL,
-  CHAR_DETAIL2,
-  CHAR_ADJUST,
-  CHAR_MENU,
-  CHAR_POWER,
-  CHAR_TOUCH,
-  CHAR_LANGUAGE,
-  CHAR_CODE,
-  CHAR_POWER_PLUG,
-  CHAR_ROTATE_DEVICE,
-  CHAR_WINDOW,
-  CHAR_BACKGROUND_COLOR,
-  CHAR_FONT_COLOR,
-  CHAR_PAINT,
-  CHAR_TOGGLE_SMALL_ON,
-  CHAR_TOGGLE_SMALL_OFF,
-  CHAR_TOGGLE_ON,
-  CHAR_TOGGLE_OFF,
-  CHAR_TOGGLE_BODY,
-  CHAR_TOGGLE_SWITCH,
+  #define X_CHAR(NAME) CHAR_##NAME ,
+  #include "Char_Icon.inc"
+  #undef  X_CHAR
+//add new icons in icon_list.inc only
 
 };
 
 
 uint8_t * IconCharSelect(uint8_t sel)
-{ 
+{
 return (uint8_t *)GET_ICONCHAR[sel];
 }
 char * IconChar(uint8_t sel)
-{ 
+{
 return (char *)GET_ICONCHAR[sel];
 }
 
+// save dynamic text label ( i : index of the label position, label: char * to the text)
+void setDynamicLabel(uint8_t i, char *label){
+  dynamic_label[i] = label;
+}
 
+// get dynamic text label ( i : index of the label position)
+char * getDynamicLabel(uint8_t i){
+  return dynamic_label[i];
+}
+
+// save dynamic value ( i : index of the value position, value:float value)
+void setDynamicValue(uint8_t i,float value){
+dynamic_value[i] = value;
+}
+
+// get dynamic numerical value ( i : index of the value position)
+float getDynamicValue(uint8_t i){
+  return dynamic_value[i];
+}
+
+// get the text starting point on screen based on rectangle edges and desired icon position
 GUI_POINT getTextStartPoint(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey, ICON_POS pos, const char * textchar){
-  
+
   GUI_POINT point_item = {sx, sy};
   uint16_t w = ex- sx;
   uint16_t h = ey- sy;
 
   size_t charIcon_w = strlen(textchar)/3 * BYTE_HEIGHT;
-  
+
   switch (pos)
   {
   case TOP_LEFT:
@@ -403,8 +322,9 @@ GUI_POINT getTextStartPoint(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey, 
   return point_item;
 }
 
-void ListDrawIcon (const GUI_RECT * rect,ICON_POS iconalign, uint16_t iconindex, uint16_t btn_color){
-      
+//draw icons in item
+void DrawCharIcon(const GUI_RECT * rect,ICON_POS iconalign, uint16_t iconindex, uint16_t btn_color){
+
       GUI_POINT icon_p = getTextStartPoint(rect->x0, rect->y0, rect->x1,rect->y1,iconalign,GET_ICONCHAR[iconindex]);
       GUI_SetColor(ICON_COLOR[iconindex]);
       GUI_SetBkColor(btn_color);
@@ -414,6 +334,7 @@ void ListDrawIcon (const GUI_RECT * rect,ICON_POS iconalign, uint16_t iconindex,
 
 }
 
+//draw item pressed feedback
 void DrawListItemPress(const GUI_RECT * rect, bool pressed){
       if (pressed != false)
       {
@@ -432,20 +353,21 @@ void DrawListItemPress(const GUI_RECT * rect, bool pressed){
       GUI_RestoreColorDefault();
 }
 
-void ListItem_Display(const GUI_RECT* rect, uint8_t positon, const LISTITEM * curitem, bool pressed)
+void ListItem_Display(const GUI_RECT* rect, uint8_t position, const LISTITEM * curitem, bool pressed)
 {
-  //storeCmd("%d\n",curitem->titlelabel.index);
-  if(positon > 4){
+  //draw navigation icons
+  if(position >= LISTITEM_PER_PAGE){
     if(curitem->icon != ICONCHAR_BACKGROUND){
-      ListDrawIcon(rect,MIDDLE,curitem->icon,LISTBTN_BKCOLOR);
+      DrawCharIcon(rect,MIDDLE,curitem->icon,LISTBTN_BKCOLOR);
       if (pressed != false){
         GUI_DrawPrect(rect);
       }
     }
     else{
       GUI_ClearPrect(rect);
-    }      
+    }
   }
+  //draw list tiems
   else if (curitem->icon != ICONCHAR_BACKGROUND){
 
     GUI_POINT pos = getTextStartPoint(rect->x0, rect->y0, rect->x1,rect->y1,LEFT_CENTER,GET_ICONCHAR[curitem->icon]);
@@ -453,68 +375,57 @@ void ListItem_Display(const GUI_RECT* rect, uint8_t positon, const LISTITEM * cu
     switch (curitem->itemType)
     {
     case LIST_LABEL:
-
       if(curitem->icon != ICONCHAR_BLANK) {
-        ListDrawIcon(rect,LEFT_CENTER,curitem->icon, BACKGROUND_COLOR);
+        DrawCharIcon(rect,LEFT_CENTER,curitem->icon, BACKGROUND_COLOR);
         pos.x += (BYTE_HEIGHT + 1);
        }
-        
-        if (curitem->titlelabel.index != LABEL_BACKGROUND)
-        {
-          textarea_width = LISTITEM_WIDTH - (pos.x + 1); //width after removing the width for icon
+      textarea_width = LISTITEM_WIDTH - (pos.x + 1); //width after removing the width for icon
+      draw_itemtitle(pos,curitem->titlelabel,position,textarea_width);
 
-          if (curitem->titlelabel.index == LABEL_DYNAMIC)
-          {
-            GUI_DispLenString(pos.x, pos.y, (u8*)dynamic_label[positon],textarea_width);
-          }
-          else
-          {
-            GUI_DispLenString(pos.x, pos.y, textSelect(curitem->titlelabel.index),textarea_width);
-          }
-        }
       DrawListItemPress(rect, pressed);
       break;
 
-    case LIST_TOGGLE:;
-      int16_t wy = (1 + GUI_StrPixelWidth(IconCharSelect(ICONCHAR_TOGGLE_BODY)) + 1);   //right edge of text area
-      GUI_ClearRect(rect->x0, rect->y0, rect->x1 - wy, rect->y1);                     // clear only tect area
-      textarea_width = LISTITEM_WIDTH - (pos.x + wy);                                 //width after removing the width for icon
-      
-      GUI_DispLenString(pos.x , pos.y, textSelect(curitem->titlelabel.index),textarea_width);
-      pos = getTextStartPoint(rect->x0, rect->y0, rect->x1,rect->y1,RIGHT_CENTER,GET_ICONCHAR[ICONCHAR_TOGGLE_BODY]);
-      GUI_ClearRect(rect->x1-wy,rect->y0,rect->x1,rect->y1);
-      ListItem_DisplayToggle(pos.x, pos.y, curitem->icon);
-      DrawListItemPress(rect,pressed);
+    case LIST_TOGGLE: {
+        int16_t wy = (1 + GUI_StrPixelWidth(IconCharSelect(ICONCHAR_TOGGLE_BODY)) + 1);   //right edge of text area
+        GUI_ClearRect(rect->x0, rect->y0, rect->x1 - wy, rect->y1);                     // clear only text area
+        textarea_width = LISTITEM_WIDTH - (pos.x + wy);                                 //width after removing the width for icon
+        draw_itemtitle(pos,curitem->titlelabel,position,textarea_width);
+
+        pos = getTextStartPoint(rect->x0, rect->y0, rect->x1,rect->y1,RIGHT_CENTER,GET_ICONCHAR[ICONCHAR_TOGGLE_BODY]);
+        GUI_ClearRect(rect->x1-wy,rect->y0,rect->x1,rect->y1);
+        ListItem_DisplayToggle(pos.x, pos.y, curitem->icon);
+        DrawListItemPress(rect,pressed);
+      }
       break;
 
     case LIST_MOREBUTTON:
-
       GUI_ClearPrect(rect);
 
       if(curitem->icon != ICONCHAR_BLANK) {
-        ListDrawIcon(rect,LEFT_CENTER,curitem->icon,BLACK);
+        DrawCharIcon(rect,LEFT_CENTER,curitem->icon,BLACK);
         pos.x += (BYTE_HEIGHT + 1);
        }
-        textarea_width = LISTITEM_WIDTH - (pos.x + BYTE_HEIGHT + 2);  //width after removing the width for icon
+      textarea_width = LISTITEM_WIDTH - (pos.x + BYTE_HEIGHT + 2);  //width after removing the width for icon
+      draw_itemtitle(pos,curitem->titlelabel,position,textarea_width);
 
-        GUI_DispLenString(pos.x, pos.y, textSelect(curitem->titlelabel.index),textarea_width);
+      pos = getTextStartPoint(rect->x0, rect->y0, rect->x1,rect->y1,RIGHT_CENTER,GET_ICONCHAR[ICONCHAR_DETAIL2]);
+      GUI_SetColor(ICON_COLOR[ICONCHAR_DETAIL2]);
+      GUI_DispString(pos.x, pos.y,IconCharSelect(ICONCHAR_DETAIL2));
 
-        pos = getTextStartPoint(rect->x0, rect->y0, rect->x1,rect->y1,RIGHT_CENTER,GET_ICONCHAR[ICONCHAR_DETAIL]);
-        GUI_SetColor(ICON_COLOR[ICONCHAR_DETAIL]);
-        GUI_DispString(pos.x, pos.y,IconCharSelect(ICONCHAR_DETAIL));
-     
 
       DrawListItemPress(rect,pressed);
       break;
 
     case LIST_CUSTOMVALUE:
       if(curitem->icon != ICONCHAR_BLANK) {
-        ListDrawIcon(rect,LEFT_CENTER,curitem->icon,BLACK);
+        DrawCharIcon(rect,LEFT_CENTER,curitem->icon,BLACK);
         pos.x += (BYTE_HEIGHT + 3);
       }
-      GUI_DispString(pos.x, pos.y, textSelect(curitem->titlelabel.index));
-        
-      ListItem_DisplayCustomValue(rect,textSelect(curitem->valueLabel.index));
+      GUI_ClearRect(pos.x, rect->y0, rect->x1 - BYTE_WIDTH*8 -1, rect->y1);        // clear only text area
+      textarea_width = LISTITEM_WIDTH - (pos.x + 1); //width after removing the width for icon
+      draw_itemtitle(pos,curitem->titlelabel,position,textarea_width);
+
+      ListItem_DisplayCustomValue(rect,curitem->valueLabel,position);
 
       DrawListItemPress(rect,pressed);
       break;
@@ -522,7 +433,7 @@ void ListItem_Display(const GUI_RECT* rect, uint8_t positon, const LISTITEM * cu
     default:
       break;
     }
-  
+
   }
    else
   {
@@ -532,49 +443,76 @@ void ListItem_Display(const GUI_RECT* rect, uint8_t positon, const LISTITEM * cu
   GUI_RestoreColorDefault();
 }
 
+//draw title text of list item
+void draw_itemtitle(GUI_POINT pos,LABEL label, uint8_t position, int textarea_width){
+  if (label.index != LABEL_BACKGROUND)
+  {
+    int textarea_width = LISTITEM_WIDTH - (pos.x + 1); //width after removing the width for icon
+    if (label.index == LABEL_DYNAMIC)
+    {GUI_DispLenString(pos.x, pos.y, (u8*)getDynamicLabel(position),textarea_width);
+    }
+    else
+    {GUI_DispLenString(pos.x, pos.y, textSelect(label.index),textarea_width);
+    }
+  }
+}
 
+//display toggle button
 void ListItem_DisplayToggle(uint16_t sx, uint16_t sy, uint8_t iconchar_state)
 {
-  //const GUI_RECT *rect = rect_of_keyListView + positon;
-//GUI_POINT pos = getTextStartPoint(rect_of_keyListView.x0, rect->y0, rect->x1,rect->y1, pos, iconchar);
+  //const GUI_RECT *rect = rect_of_keyListView + position;
+  //GUI_POINT pos = getTextStartPoint(rect_of_keyListView.x0, rect->y0, rect->x1,rect->y1, pos, iconchar);
 
   //GUI_ClearPrect(&rect_item);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
   GUI_SetColor(LISTBTN_BKCOLOR);
   GUI_DispString(sx, sy, (uint8_t*)GET_ICONCHAR[ICONCHAR_TOGGLE_BODY]);
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-  
+
   GUI_SetColor(ICON_COLOR[iconchar_state]);
   if (iconchar_state == ICONCHAR_TOGGLE_OFF)
   {
-      GUI_DispString(sx, sy, IconCharSelect(ICONCHAR_TOGGLE_SWITCH));
+    GUI_DispString(sx, sy, IconCharSelect(ICONCHAR_TOGGLE_SWITCH));
   }
   else
   {
-      GUI_DispString(sx+BYTE_HEIGHT, sy, IconCharSelect(ICONCHAR_TOGGLE_SWITCH));
+    GUI_DispString(sx+BYTE_HEIGHT, sy, IconCharSelect(ICONCHAR_TOGGLE_SWITCH));
   }
 
   GUI_RestoreColorDefault();
 
 }
 
-void ListItem_DisplayCustomValue(const GUI_RECT* rect,uint8_t * value)
+//draw custom value for list item
+void ListItem_DisplayCustomValue(const GUI_RECT* rect,LABEL value,int i)
 {
- 
-   const GUI_RECT rectVal = {rect->x1-BYTE_WIDTH*8 -1,rect->y0+(LISTITEM_HEIGHT-BYTE_HEIGHT)/2,rect->x1-1,rect->y1-(LISTITEM_HEIGHT-BYTE_HEIGHT)/2};
+
+  const GUI_RECT rectVal = {rect->x1-BYTE_WIDTH*8 -1,rect->y0+(LISTITEM_HEIGHT-BYTE_HEIGHT)/2,rect->x1-1,rect->y1-(LISTITEM_HEIGHT-BYTE_HEIGHT)/2};
 //GUI_POINT pos = getTextStartPoint(rect_of_keyListView.x0, rect->y0, rect->x1,rect->y1, pos, iconchar);
 
   GUI_ClearPrect(&rectVal);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
-  
+
   GUI_SetColor(LISTBTN_BKCOLOR);
-  
+
   GUI_DrawPrect(&rectVal);
-  
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-  GUI_SetBkColor(LISTBTN_BKCOLOR);
   GUI_SetColor(MAT_LOWWHITE);
-  GUI_DispStringInPrect(&rectVal,value);
+
+  char tempstr[10];
+
+  if(value.index == LABEL_DYNAMIC){
+    if (dynamic_value[i] < 1000.0f){
+      my_sprintf(tempstr, "%.2f",dynamic_value[i]);
+    }
+    else{
+      my_sprintf(tempstr, "%.1f",dynamic_value[i]);
+    }
+      GUI_DispStringInPrect(&rectVal,(u8*)tempstr);
+  }
+  else{
+    GUI_DispStringInPrect(&rectVal,textSelect(value.index));
+  }
 
   GUI_RestoreColorDefault();
 }

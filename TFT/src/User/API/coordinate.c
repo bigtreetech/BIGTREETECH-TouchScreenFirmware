@@ -1,6 +1,7 @@
 #include "coordinate.h"
 #include "string.h"
 #include "Configuration.h"
+#include "Parametersetting.h"
 
 const char axis_id[TOTAL_AXIS]={'X','Y','Z','E'};
 
@@ -9,9 +10,9 @@ COORDINATE targetPosition={{0.0f,0.0f,0.0f,0.0f},3000};
 //
 static bool relative_mode = false;
 static bool relative_e = false;
-// false means current position is not clear
+// false means current position is unknown
 // false after M18/M84 disable stepper or power up, true after G28
-static bool position_cleared = false;
+static bool position_known = false;
 
 bool coorGetRelative(void)
 {
@@ -33,19 +34,19 @@ void eSetRelative(bool mode)
   relative_e = mode;
 }
 
-bool coordinateIsClear(void)
+bool coordinateIsKnown(void)
 {
-  return position_cleared;
+  return position_known;
 }
 
-void coordinateSetClear(bool clear)
+void coordinateSetKnown(bool known)
 {
-  position_cleared = clear;
+  position_known = known;
 }
 
 void coordinateSetAxisTarget(AXIS axis,float position)
 {
-  bool r = (axis == E_AXIS) 
+  bool r = (axis == E_AXIS)
           ? relative_e || relative_mode
           : relative_mode;
 
@@ -83,12 +84,11 @@ void coordinateGetAll(COORDINATE *tmp)
 COORDINATE curPosition={{0.0f,0.0f,0.0f,0.0f},3000};
 
 void coordinateSetAxisActualSteps(AXIS axis, int steps)
-{ 
-  curPosition.axis[axis] = steps / EXTRUDE_STEPS; // TODO: NEED fix, M92 auto get
+{
+  curPosition.axis[axis] = steps / getParameter(P_STEPS_PER_MM, E_AXIS);
 }
 
 float coordinateGetAxisActual(AXIS axis)
 {
   return curPosition.axis[axis];
 }
-

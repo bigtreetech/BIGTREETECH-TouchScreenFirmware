@@ -11,8 +11,8 @@ extern "C" {
 
 enum
 {
- VOLUMES_SD_CARD = 0,  //SD卡,卷标为0
- VOLUMES_U_DISK,       //U盘, 卷标为1
+ VOLUMES_SD_CARD = 0,  //SD�?,卷标�?0
+ VOLUMES_U_DISK,       //U�?, 卷标�?1
 };
 
 /* Status of Disk Functions */

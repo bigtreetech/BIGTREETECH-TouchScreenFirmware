@@ -6,5 +6,4 @@
 
 void menuProbeOffset(void);
 
-void setCurrentOffset(float offset);
 #endif

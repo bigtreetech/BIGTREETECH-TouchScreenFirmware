@@ -2,9 +2,9 @@
 #include "GPIO_Init.h"
 
 void SW_SPI_Config(_SW_SPI *sw_spi, _SPI_MODE mode, u8 dataSize,
-uint16_t  cs, 
-uint16_t  sck, 
-uint16_t  miso, 
+uint16_t  cs,
+uint16_t  sck,
+uint16_t  miso,
 uint16_t  mosi)
 {
   sw_spi->cs = cs;
@@ -13,7 +13,7 @@ uint16_t  mosi)
   sw_spi->mosi = mosi;
   sw_spi->mode = mode;
   sw_spi->dataSize = dataSize;
-  
+
   GPIO_InitSet(sw_spi->cs, MGPIO_MODE_OUT_PP, 0);  //CS
   GPIO_InitSet(sw_spi->sck, MGPIO_MODE_OUT_PP, 0);  //SCK
   GPIO_InitSet(sw_spi->miso, MGPIO_MODE_IPN, 0);  //MISO

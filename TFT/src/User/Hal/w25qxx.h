@@ -2,6 +2,7 @@
 #define _W25QXX_H_
 
 #include "spi.h"
+#include "GPIO_Init.h"
 
 #define CMD_WRITE_ENABLE   0x06
 #define CMD_WRITE_DISABLE  0x04
@@ -34,6 +35,4 @@ void W25Qxx_EraseBulk(void);
 uint32_t W25Qxx_ReadID(void);
 
 
-#endif 
-
-
+#endif

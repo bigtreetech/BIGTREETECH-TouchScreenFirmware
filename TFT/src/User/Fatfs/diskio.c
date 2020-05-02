@@ -36,7 +36,7 @@ DSTATUS disk_status (
 )
 {
   if (pdrv >= FF_VOLUMES)	return STA_NOINIT;
-  
+
 	return diskStatus[pdrv];
 }
 
@@ -49,27 +49,27 @@ DSTATUS disk_status (
 DSTATUS disk_initialize (
 	BYTE pdrv				/* Physical drive nmuber to identify the drive */
 )
-{  
+{
   for(u8 i = 0; i < FF_VOLUMES; i++)
   {
     diskStatus[i] = STA_NOINIT;
   }
-  
+
 	switch (pdrv) {
 	case DEV_MMC :
 		if (SD_Init() == 0)
-    {  
-      diskStatus[pdrv] &= ~STA_NOINIT;
-    } 
-    break;
-      
-	case DEV_USB :
-		if (HCD_IsDeviceConnected(&USB_OTG_Core))
-    {  
+    {
       diskStatus[pdrv] &= ~STA_NOINIT;
     }
     break;
-      
+
+	case DEV_USB :
+		if (HCD_IsDeviceConnected(&USB_OTG_Core))
+    {
+      diskStatus[pdrv] &= ~STA_NOINIT;
+    }
+    break;
+
     default:
       return RES_PARERR;
 	}
@@ -99,7 +99,7 @@ DRESULT disk_read (
       SD_Init();	//init again
     }
     return RES_OK;
-    
+
 	case DEV_USB :
     if(USBH_UDISK_Read(buff, sector, count) == 0)
       return RES_OK;
@@ -164,10 +164,10 @@ DRESULT disk_ioctl (
 	case DEV_MMC :
     return RES_OK;
 
-	case DEV_USB : 
+	case DEV_USB :
     {
       DRESULT res = RES_ERROR;
-      switch (cmd) 
+      switch (cmd)
       {
         case CTRL_SYNC :		/* Make sure that no pending write process */
           res = RES_OK;
@@ -196,4 +196,3 @@ DRESULT disk_ioctl (
 
 	return RES_PARERR;
 }
-

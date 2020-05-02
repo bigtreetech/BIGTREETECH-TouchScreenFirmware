@@ -2,7 +2,7 @@
 #include "includes.h"
 
 // dma rx buffer
-DMA_CIRCULAR_BUFFER dmaL1Data[_USART_CNT];
+DMA_CIRCULAR_BUFFER dmaL1Data[_UART_CNT];
 
 
 // Config for USART Channel
@@ -22,7 +22,7 @@ typedef struct
   DMA_Stream_TypeDef *dma_stream;
 }SERIAL_CFG;
 
-static const SERIAL_CFG Serial[_USART_CNT] = {
+static const SERIAL_CFG Serial[_UART_CNT] = {
   {USART1, RCC_AHB1Periph_DMA2, 4, DMA2_Stream2},
   {USART2, RCC_AHB1Periph_DMA1, 4, DMA1_Stream5},
   {USART3, RCC_AHB1Periph_DMA1, 4, DMA1_Stream1},
@@ -34,17 +34,17 @@ static const SERIAL_CFG Serial[_USART_CNT] = {
 void Serial_DMA_Config(uint8_t port)
 {
   const SERIAL_CFG * cfg = &Serial[port];
-  
+
   RCC_AHB1PeriphClockCmd(cfg->dma_rcc, ENABLE);  // DMA RCC EN
 
   cfg->dma_stream->CR &= ~(1<<0); // Disable DMA
   Serial_DMAClearFlag(port);
-  cfg->uart->CR3 |= 1<<6;  // DMA enable receiver  
-  
+  cfg->uart->CR3 |= 1<<6;  // DMA enable receiver
+
   cfg->dma_stream->PAR = (u32)(&cfg->uart->DR);
   cfg->dma_stream->M0AR = (u32)(dmaL1Data[port].cache);
   cfg->dma_stream->NDTR = DMA_TRANS_LEN;
-  
+
   cfg->dma_stream->CR = cfg->dma_channel << 25;
   cfg->dma_stream->CR |= 3<<16;  // Priority level: Very high
   cfg->dma_stream->CR |= 0<<13;  // Memory data size: 8
@@ -61,7 +61,7 @@ void Serial_Config(uint8_t port, u32 baud)
   dmaL1Data[port].rIndex = dmaL1Data[port].wIndex = 0;
   dmaL1Data[port].cache = malloc(DMA_TRANS_LEN);
   while(!dmaL1Data[port].cache); // malloc failed
-  USART_Config(port, baud, USART_IT_IDLE);  // IDLE interrupt
+  UART_Config(port, baud, USART_IT_IDLE);  // IDLE interrupt
   Serial_DMA_Config(port);
 }
 
@@ -71,21 +71,21 @@ void Serial_DeConfig(uint8_t port)
   dmaL1Data[port].cache = NULL;
   Serial[port].dma_stream->CR &= ~(1<<0); // Disable DMA
   Serial_DMAClearFlag(port);
-  USART_DeConfig(port);
+  UART_DeConfig(port);
 }
 
 void Serial_Init(u32 baud)
 {
   Serial_Config(SERIAL_PORT, baud);
-  
+
   #ifdef SERIAL_PORT_2
     Serial_Config(SERIAL_PORT_2, baud);
   #endif
-  
+
   #ifdef SERIAL_PORT_3
     Serial_Config(SERIAL_PORT_3, baud);
   #endif
-  
+
   #ifdef SERIAL_PORT_4
     Serial_Config(SERIAL_PORT_4, baud);
   #endif
@@ -94,15 +94,15 @@ void Serial_Init(u32 baud)
 void Serial_DeInit(void)
 {
   Serial_DeConfig(SERIAL_PORT);
-  
+
   #ifdef SERIAL_PORT_2
     Serial_DeConfig(SERIAL_PORT_2);
   #endif
-  
+
   #ifdef SERIAL_PORT_3
     Serial_DeConfig(SERIAL_PORT_3);
   #endif
-  
+
   #ifdef SERIAL_PORT_4
     Serial_DeConfig(SERIAL_PORT_4);
   #endif
@@ -179,7 +179,7 @@ void Serial_Puts(uint8_t port, char *s)
 
 #include "stdio.h"
 int fputc(int ch, FILE *f)
-{      
+{
 	while((Serial[SERIAL_PORT].uart->SR&0X40)==0);
     Serial[SERIAL_PORT].uart->DR = (u8) ch;
 	return ch;

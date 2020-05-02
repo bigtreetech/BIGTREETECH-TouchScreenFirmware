@@ -27,10 +27,10 @@
   * @{
   */
 
-/** @defgroup CAN 
+/** @defgroup CAN
   * @brief CAN driver modules
   * @{
-  */ 
+  */
 
 /** @defgroup CAN_Private_TypesDefinitions
   * @{
@@ -62,20 +62,20 @@
 
 
 /* Flags in TSR register */
-#define CAN_FLAGS_TSR              ((uint32_t)0x08000000) 
+#define CAN_FLAGS_TSR              ((uint32_t)0x08000000)
 /* Flags in RF1R register */
-#define CAN_FLAGS_RF1R             ((uint32_t)0x04000000) 
+#define CAN_FLAGS_RF1R             ((uint32_t)0x04000000)
 /* Flags in RF0R register */
-#define CAN_FLAGS_RF0R             ((uint32_t)0x02000000) 
+#define CAN_FLAGS_RF0R             ((uint32_t)0x02000000)
 /* Flags in MSR register */
-#define CAN_FLAGS_MSR              ((uint32_t)0x01000000) 
+#define CAN_FLAGS_MSR              ((uint32_t)0x01000000)
 /* Flags in ESR register */
-#define CAN_FLAGS_ESR              ((uint32_t)0x00F00000) 
+#define CAN_FLAGS_ESR              ((uint32_t)0x00F00000)
 
 /* Mailboxes definition */
 #define CAN_TXMAILBOX_0                   ((uint8_t)0x00)
 #define CAN_TXMAILBOX_1                   ((uint8_t)0x01)
-#define CAN_TXMAILBOX_2                   ((uint8_t)0x02) 
+#define CAN_TXMAILBOX_2                   ((uint8_t)0x02)
 
 
 
@@ -123,7 +123,7 @@ void CAN_DeInit(CAN_TypeDef* CANx)
 {
   /* Check the parameters */
   assert_param(IS_CAN_ALL_PERIPH(CANx));
- 
+
   if (CANx == CAN1)
   {
     /* Enable CAN1 reset state */
@@ -132,7 +132,7 @@ void CAN_DeInit(CAN_TypeDef* CANx)
     RCC_APB1PeriphResetCmd(RCC_APB1Periph_CAN1, DISABLE);
   }
   else
-  {  
+  {
     /* Enable CAN2 reset state */
     RCC_APB1PeriphResetCmd(RCC_APB1Periph_CAN2, ENABLE);
     /* Release CAN2 from reset state */
@@ -143,12 +143,12 @@ void CAN_DeInit(CAN_TypeDef* CANx)
 /**
   * @brief  Initializes the CAN peripheral according to the specified
   *         parameters in the CAN_InitStruct.
-  * @param  CANx:           where x can be 1 or 2 to to select the CAN 
+  * @param  CANx:           where x can be 1 or 2 to to select the CAN
   *                         peripheral.
   * @param  CAN_InitStruct: pointer to a CAN_InitTypeDef structure that
-  *                         contains the configuration information for the 
+  *                         contains the configuration information for the
   *                         CAN peripheral.
-  * @retval Constant indicates initialization succeed which will be 
+  * @retval Constant indicates initialization succeed which will be
   *         CAN_InitStatus_Failed or CAN_InitStatus_Success.
   */
 uint8_t CAN_Init(CAN_TypeDef* CANx, CAN_InitTypeDef* CAN_InitStruct)
@@ -186,7 +186,7 @@ uint8_t CAN_Init(CAN_TypeDef* CANx, CAN_InitTypeDef* CAN_InitStruct)
   {
     InitStatus = CAN_InitStatus_Failed;
   }
-  else 
+  else
   {
     /* Set the time triggered communication mode */
     if (CAN_InitStruct->CAN_TTCM == ENABLE)
@@ -285,7 +285,7 @@ uint8_t CAN_Init(CAN_TypeDef* CANx, CAN_InitTypeDef* CAN_InitStruct)
   * @brief  Initializes the CAN peripheral according to the specified
   *         parameters in the CAN_FilterInitStruct.
   * @param  CAN_FilterInitStruct: pointer to a CAN_FilterInitTypeDef
-  *                               structure that contains the configuration 
+  *                               structure that contains the configuration
   *                               information.
   * @retval None.
   */
@@ -315,13 +315,13 @@ void CAN_FilterInit(CAN_FilterInitTypeDef* CAN_FilterInitStruct)
 
     /* First 16-bit identifier and First 16-bit mask */
     /* Or First 16-bit identifier and Second 16-bit identifier */
-    CAN1->sFilterRegister[CAN_FilterInitStruct->CAN_FilterNumber].FR1 = 
+    CAN1->sFilterRegister[CAN_FilterInitStruct->CAN_FilterNumber].FR1 =
     ((0x0000FFFF & (uint32_t)CAN_FilterInitStruct->CAN_FilterMaskIdLow) << 16) |
         (0x0000FFFF & (uint32_t)CAN_FilterInitStruct->CAN_FilterIdLow);
 
     /* Second 16-bit identifier and Second 16-bit mask */
     /* Or Third 16-bit identifier and Fourth 16-bit identifier */
-    CAN1->sFilterRegister[CAN_FilterInitStruct->CAN_FilterNumber].FR2 = 
+    CAN1->sFilterRegister[CAN_FilterInitStruct->CAN_FilterNumber].FR2 =
     ((0x0000FFFF & (uint32_t)CAN_FilterInitStruct->CAN_FilterMaskIdHigh) << 16) |
         (0x0000FFFF & (uint32_t)CAN_FilterInitStruct->CAN_FilterIdHigh);
   }
@@ -331,11 +331,11 @@ void CAN_FilterInit(CAN_FilterInitTypeDef* CAN_FilterInitStruct)
     /* 32-bit scale for the filter */
     CAN1->FS1R |= filter_number_bit_pos;
     /* 32-bit identifier or First 32-bit identifier */
-    CAN1->sFilterRegister[CAN_FilterInitStruct->CAN_FilterNumber].FR1 = 
+    CAN1->sFilterRegister[CAN_FilterInitStruct->CAN_FilterNumber].FR1 =
     ((0x0000FFFF & (uint32_t)CAN_FilterInitStruct->CAN_FilterIdHigh) << 16) |
         (0x0000FFFF & (uint32_t)CAN_FilterInitStruct->CAN_FilterIdLow);
     /* 32-bit mask or Second 32-bit identifier */
-    CAN1->sFilterRegister[CAN_FilterInitStruct->CAN_FilterNumber].FR2 = 
+    CAN1->sFilterRegister[CAN_FilterInitStruct->CAN_FilterNumber].FR2 =
     ((0x0000FFFF & (uint32_t)CAN_FilterInitStruct->CAN_FilterMaskIdHigh) << 16) |
         (0x0000FFFF & (uint32_t)CAN_FilterInitStruct->CAN_FilterMaskIdLow);
   }
@@ -364,7 +364,7 @@ void CAN_FilterInit(CAN_FilterInitTypeDef* CAN_FilterInitStruct)
     /* FIFO 1 assignation for the filter */
     CAN1->FFA1R |= (uint32_t)filter_number_bit_pos;
   }
-  
+
   /* Filter activation */
   if (CAN_FilterInitStruct->CAN_FilterActivation == ENABLE)
   {
@@ -384,37 +384,37 @@ void CAN_FilterInit(CAN_FilterInitTypeDef* CAN_FilterInitStruct)
 void CAN_StructInit(CAN_InitTypeDef* CAN_InitStruct)
 {
   /* Reset CAN init structure parameters values */
-  
+
   /* Initialize the time triggered communication mode */
   CAN_InitStruct->CAN_TTCM = DISABLE;
-  
+
   /* Initialize the automatic bus-off management */
   CAN_InitStruct->CAN_ABOM = DISABLE;
-  
+
   /* Initialize the automatic wake-up mode */
   CAN_InitStruct->CAN_AWUM = DISABLE;
-  
+
   /* Initialize the no automatic retransmission */
   CAN_InitStruct->CAN_NART = DISABLE;
-  
+
   /* Initialize the receive FIFO locked mode */
   CAN_InitStruct->CAN_RFLM = DISABLE;
-  
+
   /* Initialize the transmit FIFO priority */
   CAN_InitStruct->CAN_TXFP = DISABLE;
-  
+
   /* Initialize the CAN_Mode member */
   CAN_InitStruct->CAN_Mode = CAN_Mode_Normal;
-  
+
   /* Initialize the CAN_SJW member */
   CAN_InitStruct->CAN_SJW = CAN_SJW_1tq;
-  
+
   /* Initialize the CAN_BS1 member */
   CAN_InitStruct->CAN_BS1 = CAN_BS1_4tq;
-  
+
   /* Initialize the CAN_BS2 member */
   CAN_InitStruct->CAN_BS2 = CAN_BS2_3tq;
-  
+
   /* Initialize the CAN_Prescaler member */
   CAN_InitStruct->CAN_Prescaler = 1;
 }
@@ -425,18 +425,18 @@ void CAN_StructInit(CAN_InitTypeDef* CAN_InitStruct)
   * @param  CAN_BankNumber: Select the start slave bank filter from 1..27.
   * @retval None.
   */
-void CAN_SlaveStartBank(uint8_t CAN_BankNumber) 
+void CAN_SlaveStartBank(uint8_t CAN_BankNumber)
 {
   /* Check the parameters */
   assert_param(IS_CAN_BANKNUMBER(CAN_BankNumber));
-  
+
   /* Enter Initialisation mode for the filter */
   CAN1->FMR |= FMR_FINIT;
-  
+
   /* Select the start slave bank */
   CAN1->FMR &= (uint32_t)0xFFFFC0F1 ;
   CAN1->FMR |= (uint32_t)(CAN_BankNumber)<<8;
-  
+
   /* Leave Initialisation mode for the filter */
   CAN1->FMR &= ~FMR_FINIT;
 }
@@ -444,7 +444,7 @@ void CAN_SlaveStartBank(uint8_t CAN_BankNumber)
 /**
   * @brief  Enables or disables the DBG Freeze for CAN.
   * @param  CANx:     where x can be 1 or 2 to to select the CAN peripheral.
-  * @param  NewState: new state of the CAN peripheral. This parameter can 
+  * @param  NewState: new state of the CAN peripheral. This parameter can
   *                   be: ENABLE or DISABLE.
   * @retval None.
   */
@@ -453,7 +453,7 @@ void CAN_DBGFreeze(CAN_TypeDef* CANx, FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_CAN_ALL_PERIPH(CANx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
-  
+
   if (NewState != DISABLE)
   {
     /* Enable Debug Freeze  */
@@ -471,11 +471,11 @@ void CAN_DBGFreeze(CAN_TypeDef* CANx, FunctionalState NewState)
   * @brief  Enables or disabes the CAN Time TriggerOperation communication mode.
   * @param  CANx:      where x can be 1 or 2 to to select the CAN peripheral.
   * @param  NewState : Mode new state , can be one of @ref FunctionalState.
-  * @note   when enabled, Time stamp (TIME[15:0]) value is sent in the last 
-  *         two data bytes of the 8-byte message: TIME[7:0] in data byte 6 
-  *         and TIME[15:8] in data byte 7 
-  * @note   DLC must be programmed as 8 in order Time Stamp (2 bytes) to be 
-  *         sent over the CAN bus.  
+  * @note   when enabled, Time stamp (TIME[15:0]) value is sent in the last
+  *         two data bytes of the 8-byte message: TIME[7:0] in data byte 6
+  *         and TIME[15:8] in data byte 7
+  * @note   DLC must be programmed as 8 in order Time Stamp (2 bytes) to be
+  *         sent over the CAN bus.
   * @retval None
   */
 void CAN_TTComModeCmd(CAN_TypeDef* CANx, FunctionalState NewState)
@@ -545,7 +545,7 @@ uint8_t CAN_Transmit(CAN_TypeDef* CANx, CanTxMsg* TxMessage)
     CANx->sTxMailBox[transmit_mailbox].TIR &= TMIDxR_TXRQ;
     if (TxMessage->IDE == CAN_Id_Standard)
     {
-      assert_param(IS_CAN_STDID(TxMessage->StdId));  
+      assert_param(IS_CAN_STDID(TxMessage->StdId));
       CANx->sTxMailBox[transmit_mailbox].TIR |= ((TxMessage->StdId << 21) | \
                                                   TxMessage->RTR);
     }
@@ -556,18 +556,18 @@ uint8_t CAN_Transmit(CAN_TypeDef* CANx, CanTxMsg* TxMessage)
                                                   TxMessage->IDE | \
                                                   TxMessage->RTR);
     }
-    
+
     /* Set up the DLC */
     TxMessage->DLC &= (uint8_t)0x0000000F;
     CANx->sTxMailBox[transmit_mailbox].TDTR &= (uint32_t)0xFFFFFFF0;
     CANx->sTxMailBox[transmit_mailbox].TDTR |= TxMessage->DLC;
 
     /* Set up the data field */
-    CANx->sTxMailBox[transmit_mailbox].TDLR = (((uint32_t)TxMessage->Data[3] << 24) | 
+    CANx->sTxMailBox[transmit_mailbox].TDLR = (((uint32_t)TxMessage->Data[3] << 24) |
                                              ((uint32_t)TxMessage->Data[2] << 16) |
-                                             ((uint32_t)TxMessage->Data[1] << 8) | 
+                                             ((uint32_t)TxMessage->Data[1] << 8) |
                                              ((uint32_t)TxMessage->Data[0]));
-    CANx->sTxMailBox[transmit_mailbox].TDHR = (((uint32_t)TxMessage->Data[7] << 24) | 
+    CANx->sTxMailBox[transmit_mailbox].TDHR = (((uint32_t)TxMessage->Data[7] << 24) |
                                              ((uint32_t)TxMessage->Data[6] << 16) |
                                              ((uint32_t)TxMessage->Data[5] << 8) |
                                              ((uint32_t)TxMessage->Data[4]));
@@ -579,11 +579,11 @@ uint8_t CAN_Transmit(CAN_TypeDef* CANx, CanTxMsg* TxMessage)
 
 /**
   * @brief  Checks the transmission of a message.
-  * @param  CANx:            where x can be 1 or 2 to to select the 
+  * @param  CANx:            where x can be 1 or 2 to to select the
   *                          CAN peripheral.
-  * @param  TransmitMailbox: the number of the mailbox that is used for 
+  * @param  TransmitMailbox: the number of the mailbox that is used for
   *                          transmission.
-  * @retval CAN_TxStatus_Ok if the CAN driver transmits the message, CAN_TxStatus_Failed 
+  * @retval CAN_TxStatus_Ok if the CAN driver transmits the message, CAN_TxStatus_Failed
   *         in an other case.
   */
 uint8_t CAN_TransmitStatus(CAN_TypeDef* CANx, uint8_t TransmitMailbox)
@@ -593,16 +593,16 @@ uint8_t CAN_TransmitStatus(CAN_TypeDef* CANx, uint8_t TransmitMailbox)
   /* Check the parameters */
   assert_param(IS_CAN_ALL_PERIPH(CANx));
   assert_param(IS_CAN_TRANSMITMAILBOX(TransmitMailbox));
- 
+
   switch (TransmitMailbox)
   {
-    case (CAN_TXMAILBOX_0): 
+    case (CAN_TXMAILBOX_0):
       state =   CANx->TSR &  (CAN_TSR_RQCP0 | CAN_TSR_TXOK0 | CAN_TSR_TME0);
       break;
-    case (CAN_TXMAILBOX_1): 
+    case (CAN_TXMAILBOX_1):
       state =   CANx->TSR &  (CAN_TSR_RQCP1 | CAN_TSR_TXOK1 | CAN_TSR_TME1);
       break;
-    case (CAN_TXMAILBOX_2): 
+    case (CAN_TXMAILBOX_2):
       state =   CANx->TSR &  (CAN_TSR_RQCP2 | CAN_TSR_TXOK2 | CAN_TSR_TME2);
       break;
     default:
@@ -636,7 +636,7 @@ uint8_t CAN_TransmitStatus(CAN_TypeDef* CANx, uint8_t TransmitMailbox)
 
 /**
   * @brief  Cancels a transmit request.
-  * @param  CANx:     where x can be 1 or 2 to to select the CAN peripheral. 
+  * @param  CANx:     where x can be 1 or 2 to to select the CAN peripheral.
   * @param  Mailbox:  Mailbox number.
   * @retval None.
   */
@@ -664,7 +664,7 @@ void CAN_CancelTransmit(CAN_TypeDef* CANx, uint8_t Mailbox)
   * @brief  Receives a message.
   * @param  CANx:       where x can be 1 or 2 to to select the CAN peripheral.
   * @param  FIFONumber: Receive FIFO number, CAN_FIFO0 or CAN_FIFO1.
-  * @param  RxMessage:  pointer to a structure receive message which contains 
+  * @param  RxMessage:  pointer to a structure receive message which contains
   *                     CAN Id, CAN DLC, CAN datas and FMI number.
   * @retval None.
   */
@@ -683,7 +683,7 @@ void CAN_Receive(CAN_TypeDef* CANx, uint8_t FIFONumber, CanRxMsg* RxMessage)
   {
     RxMessage->ExtId = (uint32_t)0x1FFFFFFF & (CANx->sFIFOMailBox[FIFONumber].RIR >> 3);
   }
-  
+
   RxMessage->RTR = (uint8_t)0x02 & CANx->sFIFOMailBox[FIFONumber].RIR;
   /* Get the DLC */
   RxMessage->DLC = (uint8_t)0x0F & CANx->sFIFOMailBox[FIFONumber].RDTR;
@@ -713,7 +713,7 @@ void CAN_Receive(CAN_TypeDef* CANx, uint8_t FIFONumber, CanRxMsg* RxMessage)
 
 /**
   * @brief  Releases the specified FIFO.
-  * @param  CANx:       where x can be 1 or 2 to to select the CAN peripheral. 
+  * @param  CANx:       where x can be 1 or 2 to to select the CAN peripheral.
   * @param  FIFONumber: FIFO to release, CAN_FIFO0 or CAN_FIFO1.
   * @retval None.
   */
@@ -764,19 +764,19 @@ uint8_t CAN_MessagePending(CAN_TypeDef* CANx, uint8_t FIFONumber)
 
 /**
   * @brief   Select the CAN Operation mode.
-  * @param CAN_OperatingMode : CAN Operating Mode. This parameter can be one 
+  * @param CAN_OperatingMode : CAN Operating Mode. This parameter can be one
   *                            of @ref CAN_OperatingMode_TypeDef enumeration.
-  * @retval status of the requested mode which can be 
-  *         - CAN_ModeStatus_Failed    CAN failed entering the specific mode 
-  *         - CAN_ModeStatus_Success   CAN Succeed entering the specific mode 
+  * @retval status of the requested mode which can be
+  *         - CAN_ModeStatus_Failed    CAN failed entering the specific mode
+  *         - CAN_ModeStatus_Success   CAN Succeed entering the specific mode
 
   */
 uint8_t CAN_OperatingModeRequest(CAN_TypeDef* CANx, uint8_t CAN_OperatingMode)
 {
   uint8_t status = CAN_ModeStatus_Failed;
-  
+
   /* Timeout for INAK or also for SLAK bits*/
-  uint32_t timeout = INAK_TIMEOUT; 
+  uint32_t timeout = INAK_TIMEOUT;
 
   /* Check the parameters */
   assert_param(IS_CAN_ALL_PERIPH(CANx));
@@ -850,19 +850,19 @@ uint8_t CAN_OperatingModeRequest(CAN_TypeDef* CANx, uint8_t CAN_OperatingMode)
 /**
   * @brief  Enters the low power mode.
   * @param  CANx:   where x can be 1 or 2 to to select the CAN peripheral.
-  * @retval status: CAN_Sleep_Ok if sleep entered, CAN_Sleep_Failed in an 
+  * @retval status: CAN_Sleep_Ok if sleep entered, CAN_Sleep_Failed in an
   *                 other case.
   */
 uint8_t CAN_Sleep(CAN_TypeDef* CANx)
 {
   uint8_t sleepstatus = CAN_Sleep_Failed;
-  
+
   /* Check the parameters */
   assert_param(IS_CAN_ALL_PERIPH(CANx));
-    
+
   /* Request Sleep mode */
    CANx->MCR = (((CANx->MCR) & (uint32_t)(~(uint32_t)CAN_MCR_INRQ)) | CAN_MCR_SLEEP);
-   
+
   /* Sleep mode status */
   if ((CANx->MSR & (CAN_MSR_SLAK|CAN_MSR_INAK)) == CAN_MSR_SLAK)
   {
@@ -876,20 +876,20 @@ uint8_t CAN_Sleep(CAN_TypeDef* CANx)
 /**
   * @brief  Wakes the CAN up.
   * @param  CANx:    where x can be 1 or 2 to to select the CAN peripheral.
-  * @retval status:  CAN_WakeUp_Ok if sleep mode left, CAN_WakeUp_Failed in an 
+  * @retval status:  CAN_WakeUp_Ok if sleep mode left, CAN_WakeUp_Failed in an
   *                  other case.
   */
 uint8_t CAN_WakeUp(CAN_TypeDef* CANx)
 {
   uint32_t wait_slak = SLAK_TIMEOUT;
   uint8_t wakeupstatus = CAN_WakeUp_Failed;
-  
+
   /* Check the parameters */
   assert_param(IS_CAN_ALL_PERIPH(CANx));
-    
+
   /* Wake up request */
   CANx->MCR &= ~(uint32_t)CAN_MCR_SLEEP;
-    
+
   /* Sleep mode status */
   while(((CANx->MSR & CAN_MSR_SLAK) == CAN_MSR_SLAK)&&(wait_slak!=0x00))
   {
@@ -907,52 +907,52 @@ uint8_t CAN_WakeUp(CAN_TypeDef* CANx)
 
 /**
   * @brief  Returns the CANx's last error code (LEC).
-  * @param  CANx:          where x can be 1 or 2 to to select the CAN peripheral.  
-  * @retval CAN_ErrorCode: specifies the Error code : 
-  *                        - CAN_ERRORCODE_NoErr            No Error  
+  * @param  CANx:          where x can be 1 or 2 to to select the CAN peripheral.
+  * @retval CAN_ErrorCode: specifies the Error code :
+  *                        - CAN_ERRORCODE_NoErr            No Error
   *                        - CAN_ERRORCODE_StuffErr         Stuff Error
   *                        - CAN_ERRORCODE_FormErr          Form Error
   *                        - CAN_ERRORCODE_ACKErr           Acknowledgment Error
   *                        - CAN_ERRORCODE_BitRecessiveErr  Bit Recessive Error
   *                        - CAN_ERRORCODE_BitDominantErr   Bit Dominant Error
   *                        - CAN_ERRORCODE_CRCErr           CRC Error
-  *                        - CAN_ERRORCODE_SoftwareSetErr   Software Set Error  
+  *                        - CAN_ERRORCODE_SoftwareSetErr   Software Set Error
   */
- 
+
 uint8_t CAN_GetLastErrorCode(CAN_TypeDef* CANx)
 {
   uint8_t errorcode=0;
-  
+
   /* Check the parameters */
   assert_param(IS_CAN_ALL_PERIPH(CANx));
-  
+
   /* Get the error code*/
   errorcode = (((uint8_t)CANx->ESR) & (uint8_t)CAN_ESR_LEC);
-  
+
   /* Return the error code*/
   return errorcode;
 }
 /**
   * @brief  Returns the CANx Receive Error Counter (REC).
-  * @note   In case of an error during reception, this counter is incremented 
-  *         by 1 or by 8 depending on the error condition as defined by the CAN 
-  *         standard. After every successful reception, the counter is 
-  *         decremented by 1 or reset to 120 if its value was higher than 128. 
-  *         When the counter value exceeds 127, the CAN controller enters the 
-  *         error passive state.  
-  * @param  CANx: where x can be 1 or 2 to to select the CAN peripheral.  
-  * @retval CAN Receive Error Counter. 
+  * @note   In case of an error during reception, this counter is incremented
+  *         by 1 or by 8 depending on the error condition as defined by the CAN
+  *         standard. After every successful reception, the counter is
+  *         decremented by 1 or reset to 120 if its value was higher than 128.
+  *         When the counter value exceeds 127, the CAN controller enters the
+  *         error passive state.
+  * @param  CANx: where x can be 1 or 2 to to select the CAN peripheral.
+  * @retval CAN Receive Error Counter.
   */
 uint8_t CAN_GetReceiveErrorCounter(CAN_TypeDef* CANx)
 {
   uint8_t counter=0;
-  
+
   /* Check the parameters */
   assert_param(IS_CAN_ALL_PERIPH(CANx));
-  
+
   /* Get the Receive Error Counter*/
   counter = (uint8_t)((CANx->ESR & CAN_ESR_REC)>> 24);
-  
+
   /* Return the Receive Error Counter*/
   return counter;
 }
@@ -960,19 +960,19 @@ uint8_t CAN_GetReceiveErrorCounter(CAN_TypeDef* CANx)
 
 /**
   * @brief  Returns the LSB of the 9-bit CANx Transmit Error Counter(TEC).
-  * @param  CANx:   where x can be 1 or 2 to to select the CAN peripheral.  
-  * @retval LSB of the 9-bit CAN Transmit Error Counter. 
+  * @param  CANx:   where x can be 1 or 2 to to select the CAN peripheral.
+  * @retval LSB of the 9-bit CAN Transmit Error Counter.
   */
 uint8_t CAN_GetLSBTransmitErrorCounter(CAN_TypeDef* CANx)
 {
   uint8_t counter=0;
-  
+
   /* Check the parameters */
   assert_param(IS_CAN_ALL_PERIPH(CANx));
-  
+
   /* Get the LSB of the 9-bit CANx Transmit Error Counter(TEC) */
   counter = (uint8_t)((CANx->ESR & CAN_ESR_TEC)>> 16);
-  
+
   /* Return the LSB of the 9-bit CANx Transmit Error Counter(TEC) */
   return counter;
 }
@@ -982,19 +982,19 @@ uint8_t CAN_GetLSBTransmitErrorCounter(CAN_TypeDef* CANx)
   * @brief  Enables or disables the specified CANx interrupts.
   * @param  CANx:   where x can be 1 or 2 to to select the CAN peripheral.
   * @param  CAN_IT: specifies the CAN interrupt sources to be enabled or disabled.
-  *                 This parameter can be: 
-  *                 - CAN_IT_TME, 
-  *                 - CAN_IT_FMP0, 
+  *                 This parameter can be:
+  *                 - CAN_IT_TME,
+  *                 - CAN_IT_FMP0,
   *                 - CAN_IT_FF0,
-  *                 - CAN_IT_FOV0, 
-  *                 - CAN_IT_FMP1, 
+  *                 - CAN_IT_FOV0,
+  *                 - CAN_IT_FMP1,
   *                 - CAN_IT_FF1,
-  *                 - CAN_IT_FOV1, 
-  *                 - CAN_IT_EWG, 
+  *                 - CAN_IT_FOV1,
+  *                 - CAN_IT_EWG,
   *                 - CAN_IT_EPV,
-  *                 - CAN_IT_LEC, 
-  *                 - CAN_IT_ERR, 
-  *                 - CAN_IT_WKU or 
+  *                 - CAN_IT_LEC,
+  *                 - CAN_IT_ERR,
+  *                 - CAN_IT_WKU or
   *                 - CAN_IT_SLK.
   * @param  NewState: new state of the CAN interrupts.
   *                   This parameter can be: ENABLE or DISABLE.
@@ -1022,99 +1022,99 @@ void CAN_ITConfig(CAN_TypeDef* CANx, uint32_t CAN_IT, FunctionalState NewState)
   * @brief  Checks whether the specified CAN flag is set or not.
   * @param  CANx:     where x can be 1 or 2 to to select the CAN peripheral.
   * @param  CAN_FLAG: specifies the flag to check.
-  *                   This parameter can be one of the following flags: 
+  *                   This parameter can be one of the following flags:
   *                  - CAN_FLAG_EWG
-  *                  - CAN_FLAG_EPV 
+  *                  - CAN_FLAG_EPV
   *                  - CAN_FLAG_BOF
   *                  - CAN_FLAG_RQCP0
   *                  - CAN_FLAG_RQCP1
   *                  - CAN_FLAG_RQCP2
-  *                  - CAN_FLAG_FMP1   
-  *                  - CAN_FLAG_FF1       
-  *                  - CAN_FLAG_FOV1   
-  *                  - CAN_FLAG_FMP0   
-  *                  - CAN_FLAG_FF0       
-  *                  - CAN_FLAG_FOV0   
-  *                  - CAN_FLAG_WKU 
-  *                  - CAN_FLAG_SLAK  
-  *                  - CAN_FLAG_LEC       
+  *                  - CAN_FLAG_FMP1
+  *                  - CAN_FLAG_FF1
+  *                  - CAN_FLAG_FOV1
+  *                  - CAN_FLAG_FMP0
+  *                  - CAN_FLAG_FF0
+  *                  - CAN_FLAG_FOV0
+  *                  - CAN_FLAG_WKU
+  *                  - CAN_FLAG_SLAK
+  *                  - CAN_FLAG_LEC
   * @retval The new state of CAN_FLAG (SET or RESET).
   */
 FlagStatus CAN_GetFlagStatus(CAN_TypeDef* CANx, uint32_t CAN_FLAG)
 {
   FlagStatus bitstatus = RESET;
-  
+
   /* Check the parameters */
   assert_param(IS_CAN_ALL_PERIPH(CANx));
   assert_param(IS_CAN_GET_FLAG(CAN_FLAG));
-  
+
 
   if((CAN_FLAG & CAN_FLAGS_ESR) != (uint32_t)RESET)
-  { 
+  {
     /* Check the status of the specified CAN flag */
     if ((CANx->ESR & (CAN_FLAG & 0x000FFFFF)) != (uint32_t)RESET)
-    { 
+    {
       /* CAN_FLAG is set */
       bitstatus = SET;
     }
     else
-    { 
+    {
       /* CAN_FLAG is reset */
       bitstatus = RESET;
     }
   }
   else if((CAN_FLAG & CAN_FLAGS_MSR) != (uint32_t)RESET)
-  { 
+  {
     /* Check the status of the specified CAN flag */
     if ((CANx->MSR & (CAN_FLAG & 0x000FFFFF)) != (uint32_t)RESET)
-    { 
+    {
       /* CAN_FLAG is set */
       bitstatus = SET;
     }
     else
-    { 
+    {
       /* CAN_FLAG is reset */
       bitstatus = RESET;
     }
   }
   else if((CAN_FLAG & CAN_FLAGS_TSR) != (uint32_t)RESET)
-  { 
+  {
     /* Check the status of the specified CAN flag */
     if ((CANx->TSR & (CAN_FLAG & 0x000FFFFF)) != (uint32_t)RESET)
-    { 
+    {
       /* CAN_FLAG is set */
       bitstatus = SET;
     }
     else
-    { 
+    {
       /* CAN_FLAG is reset */
       bitstatus = RESET;
     }
   }
   else if((CAN_FLAG & CAN_FLAGS_RF0R) != (uint32_t)RESET)
-  { 
+  {
     /* Check the status of the specified CAN flag */
     if ((CANx->RF0R & (CAN_FLAG & 0x000FFFFF)) != (uint32_t)RESET)
-    { 
+    {
       /* CAN_FLAG is set */
       bitstatus = SET;
     }
     else
-    { 
+    {
       /* CAN_FLAG is reset */
       bitstatus = RESET;
     }
   }
   else /* If(CAN_FLAG & CAN_FLAGS_RF1R != (uint32_t)RESET) */
-  { 
+  {
     /* Check the status of the specified CAN flag */
     if ((uint32_t)(CANx->RF1R & (CAN_FLAG & 0x000FFFFF)) != (uint32_t)RESET)
-    { 
+    {
       /* CAN_FLAG is set */
       bitstatus = SET;
     }
     else
-    { 
+    {
       /* CAN_FLAG is reset */
       bitstatus = RESET;
     }
@@ -1127,17 +1127,17 @@ FlagStatus CAN_GetFlagStatus(CAN_TypeDef* CANx, uint32_t CAN_FLAG)
   * @brief  Clears the CAN's pending flags.
   * @param  CANx:     where x can be 1 or 2 to to select the CAN peripheral.
   * @param  CAN_FLAG: specifies the flag to clear.
-  *                   This parameter can be one of the following flags: 
+  *                   This parameter can be one of the following flags:
   *                    - CAN_FLAG_RQCP0
   *                    - CAN_FLAG_RQCP1
   *                    - CAN_FLAG_RQCP2
-  *                    - CAN_FLAG_FF1       
-  *                    - CAN_FLAG_FOV1   
-  *                    - CAN_FLAG_FF0       
-  *                    - CAN_FLAG_FOV0   
-  *                    - CAN_FLAG_WKU   
-  *                    - CAN_FLAG_SLAK    
-  *                    - CAN_FLAG_LEC       
+  *                    - CAN_FLAG_FF1
+  *                    - CAN_FLAG_FOV1
+  *                    - CAN_FLAG_FF0
+  *                    - CAN_FLAG_FOV0
+  *                    - CAN_FLAG_WKU
+  *                    - CAN_FLAG_SLAK
+  *                    - CAN_FLAG_LEC
   * @retval None.
   */
 void CAN_ClearFlag(CAN_TypeDef* CANx, uint32_t CAN_FLAG)
@@ -1146,7 +1146,7 @@ void CAN_ClearFlag(CAN_TypeDef* CANx, uint32_t CAN_FLAG)
   /* Check the parameters */
   assert_param(IS_CAN_ALL_PERIPH(CANx));
   assert_param(IS_CAN_CLEAR_FLAG(CAN_FLAG));
-  
+
   if (CAN_FLAG == CAN_FLAG_LEC) /* ESR register */
   {
     /* Clear the selected CAN flags */
@@ -1183,21 +1183,21 @@ void CAN_ClearFlag(CAN_TypeDef* CANx, uint32_t CAN_FLAG)
   * @brief  Checks whether the specified CANx interrupt has occurred or not.
   * @param  CANx:    where x can be 1 or 2 to to select the CAN peripheral.
   * @param  CAN_IT:  specifies the CAN interrupt source to check.
-  *                  This parameter can be one of the following flags: 
-  *                 -  CAN_IT_TME               
-  *                 -  CAN_IT_FMP0              
-  *                 -  CAN_IT_FF0               
-  *                 -  CAN_IT_FOV0              
-  *                 -  CAN_IT_FMP1              
-  *                 -  CAN_IT_FF1               
-  *                 -  CAN_IT_FOV1              
-  *                 -  CAN_IT_WKU  
-  *                 -  CAN_IT_SLK  
-  *                 -  CAN_IT_EWG    
-  *                 -  CAN_IT_EPV    
-  *                 -  CAN_IT_BOF    
-  *                 -  CAN_IT_LEC    
-  *                 -  CAN_IT_ERR 
+  *                  This parameter can be one of the following flags:
+  *                 -  CAN_IT_TME
+  *                 -  CAN_IT_FMP0
+  *                 -  CAN_IT_FF0
+  *                 -  CAN_IT_FOV0
+  *                 -  CAN_IT_FMP1
+  *                 -  CAN_IT_FF1
+  *                 -  CAN_IT_FOV1
+  *                 -  CAN_IT_WKU
+  *                 -  CAN_IT_SLK
+  *                 -  CAN_IT_EWG
+  *                 -  CAN_IT_EPV
+  *                 -  CAN_IT_BOF
+  *                 -  CAN_IT_LEC
+  *                 -  CAN_IT_ERR
   * @retval The current state of CAN_IT (SET or RESET).
   */
 ITStatus CAN_GetITStatus(CAN_TypeDef* CANx, uint32_t CAN_IT)
@@ -1206,7 +1206,7 @@ ITStatus CAN_GetITStatus(CAN_TypeDef* CANx, uint32_t CAN_IT)
   /* Check the parameters */
   assert_param(IS_CAN_ALL_PERIPH(CANx));
   assert_param(IS_CAN_IT(CAN_IT));
-  
+
   /* check the enable interrupt bit */
  if((CANx->IER & CAN_IT) != RESET)
  {
@@ -1215,59 +1215,59 @@ ITStatus CAN_GetITStatus(CAN_TypeDef* CANx, uint32_t CAN_IT)
     {
       case CAN_IT_TME:
                /* Check CAN_TSR_RQCPx bits */
-	             itstatus = CheckITStatus(CANx->TSR, CAN_TSR_RQCP0|CAN_TSR_RQCP1|CAN_TSR_RQCP2);  
+	             itstatus = CheckITStatus(CANx->TSR, CAN_TSR_RQCP0|CAN_TSR_RQCP1|CAN_TSR_RQCP2);
 	      break;
       case CAN_IT_FMP0:
                /* Check CAN_RF0R_FMP0 bit */
-	             itstatus = CheckITStatus(CANx->RF0R, CAN_RF0R_FMP0);  
+	             itstatus = CheckITStatus(CANx->RF0R, CAN_RF0R_FMP0);
 	      break;
       case CAN_IT_FF0:
                /* Check CAN_RF0R_FULL0 bit */
-               itstatus = CheckITStatus(CANx->RF0R, CAN_RF0R_FULL0);  
+               itstatus = CheckITStatus(CANx->RF0R, CAN_RF0R_FULL0);
 	      break;
       case CAN_IT_FOV0:
                /* Check CAN_RF0R_FOVR0 bit */
-               itstatus = CheckITStatus(CANx->RF0R, CAN_RF0R_FOVR0);  
+               itstatus = CheckITStatus(CANx->RF0R, CAN_RF0R_FOVR0);
 	      break;
       case CAN_IT_FMP1:
                /* Check CAN_RF1R_FMP1 bit */
-               itstatus = CheckITStatus(CANx->RF1R, CAN_RF1R_FMP1);  
+               itstatus = CheckITStatus(CANx->RF1R, CAN_RF1R_FMP1);
 	      break;
       case CAN_IT_FF1:
                /* Check CAN_RF1R_FULL1 bit */
-	             itstatus = CheckITStatus(CANx->RF1R, CAN_RF1R_FULL1);  
+	             itstatus = CheckITStatus(CANx->RF1R, CAN_RF1R_FULL1);
 	      break;
       case CAN_IT_FOV1:
                /* Check CAN_RF1R_FOVR1 bit */
-	             itstatus = CheckITStatus(CANx->RF1R, CAN_RF1R_FOVR1);  
+	             itstatus = CheckITStatus(CANx->RF1R, CAN_RF1R_FOVR1);
 	      break;
       case CAN_IT_WKU:
                /* Check CAN_MSR_WKUI bit */
-               itstatus = CheckITStatus(CANx->MSR, CAN_MSR_WKUI);  
+               itstatus = CheckITStatus(CANx->MSR, CAN_MSR_WKUI);
 	      break;
       case CAN_IT_SLK:
                /* Check CAN_MSR_SLAKI bit */
-	             itstatus = CheckITStatus(CANx->MSR, CAN_MSR_SLAKI);  
+	             itstatus = CheckITStatus(CANx->MSR, CAN_MSR_SLAKI);
 	      break;
       case CAN_IT_EWG:
                /* Check CAN_ESR_EWGF bit */
-	             itstatus = CheckITStatus(CANx->ESR, CAN_ESR_EWGF);  
+	             itstatus = CheckITStatus(CANx->ESR, CAN_ESR_EWGF);
 	      break;
       case CAN_IT_EPV:
                /* Check CAN_ESR_EPVF bit */
-	             itstatus = CheckITStatus(CANx->ESR, CAN_ESR_EPVF);  
+	             itstatus = CheckITStatus(CANx->ESR, CAN_ESR_EPVF);
 	      break;
       case CAN_IT_BOF:
                /* Check CAN_ESR_BOFF bit */
-	             itstatus = CheckITStatus(CANx->ESR, CAN_ESR_BOFF);  
+	             itstatus = CheckITStatus(CANx->ESR, CAN_ESR_BOFF);
 	      break;
       case CAN_IT_LEC:
                /* Check CAN_ESR_LEC bit */
-	             itstatus = CheckITStatus(CANx->ESR, CAN_ESR_LEC);  
+	             itstatus = CheckITStatus(CANx->ESR, CAN_ESR_LEC);
 	      break;
       case CAN_IT_ERR:
-               /* Check CAN_MSR_ERRI bit */ 
-               itstatus = CheckITStatus(CANx->MSR, CAN_MSR_ERRI); 
+               /* Check CAN_MSR_ERRI bit */
+               itstatus = CheckITStatus(CANx->MSR, CAN_MSR_ERRI);
 	      break;
       default :
                /* in case of error, return RESET */
@@ -1280,7 +1280,7 @@ ITStatus CAN_GetITStatus(CAN_TypeDef* CANx, uint32_t CAN_IT)
    /* in case the Interrupt is not enabled, return RESET */
     itstatus  = RESET;
   }
-  
+
   /* Return the CAN_IT status */
   return  itstatus;
 }
@@ -1289,18 +1289,18 @@ ITStatus CAN_GetITStatus(CAN_TypeDef* CANx, uint32_t CAN_IT)
   * @brief  Clears the CANx's interrupt pending bits.
   * @param  CANx:    where x can be 1 or 2 to to select the CAN peripheral.
   * @param  CAN_IT: specifies the interrupt pending bit to clear.
-  *                  -  CAN_IT_TME                     
-  *                  -  CAN_IT_FF0               
-  *                  -  CAN_IT_FOV0                     
-  *                  -  CAN_IT_FF1               
-  *                  -  CAN_IT_FOV1              
-  *                  -  CAN_IT_WKU  
-  *                  -  CAN_IT_SLK  
-  *                  -  CAN_IT_EWG    
-  *                  -  CAN_IT_EPV    
-  *                  -  CAN_IT_BOF    
-  *                  -  CAN_IT_LEC    
-  *                  -  CAN_IT_ERR 
+  *                  -  CAN_IT_TME
+  *                  -  CAN_IT_FF0
+  *                  -  CAN_IT_FOV0
+  *                  -  CAN_IT_FF1
+  *                  -  CAN_IT_FOV1
+  *                  -  CAN_IT_WKU
+  *                  -  CAN_IT_SLK
+  *                  -  CAN_IT_EWG
+  *                  -  CAN_IT_EPV
+  *                  -  CAN_IT_BOF
+  *                  -  CAN_IT_LEC
+  *                  -  CAN_IT_ERR
   * @retval None.
   */
 void CAN_ClearITPendingBit(CAN_TypeDef* CANx, uint32_t CAN_IT)
@@ -1313,62 +1313,62 @@ void CAN_ClearITPendingBit(CAN_TypeDef* CANx, uint32_t CAN_IT)
   {
       case CAN_IT_TME:
               /* Clear CAN_TSR_RQCPx (rc_w1)*/
-	      CANx->TSR = CAN_TSR_RQCP0|CAN_TSR_RQCP1|CAN_TSR_RQCP2;  
+	      CANx->TSR = CAN_TSR_RQCP0|CAN_TSR_RQCP1|CAN_TSR_RQCP2;
 	      break;
       case CAN_IT_FF0:
               /* Clear CAN_RF0R_FULL0 (rc_w1)*/
-	      CANx->RF0R = CAN_RF0R_FULL0; 
+	      CANx->RF0R = CAN_RF0R_FULL0;
 	      break;
       case CAN_IT_FOV0:
               /* Clear CAN_RF0R_FOVR0 (rc_w1)*/
-	      CANx->RF0R = CAN_RF0R_FOVR0; 
+	      CANx->RF0R = CAN_RF0R_FOVR0;
 	      break;
       case CAN_IT_FF1:
               /* Clear CAN_RF1R_FULL1 (rc_w1)*/
-	      CANx->RF1R = CAN_RF1R_FULL1;  
+	      CANx->RF1R = CAN_RF1R_FULL1;
 	      break;
       case CAN_IT_FOV1:
               /* Clear CAN_RF1R_FOVR1 (rc_w1)*/
-	      CANx->RF1R = CAN_RF1R_FOVR1; 
+	      CANx->RF1R = CAN_RF1R_FOVR1;
 	      break;
       case CAN_IT_WKU:
               /* Clear CAN_MSR_WKUI (rc_w1)*/
-	      CANx->MSR = CAN_MSR_WKUI;  
+	      CANx->MSR = CAN_MSR_WKUI;
 	      break;
       case CAN_IT_SLK:
-              /* Clear CAN_MSR_SLAKI (rc_w1)*/ 
-	      CANx->MSR = CAN_MSR_SLAKI;   
+              /* Clear CAN_MSR_SLAKI (rc_w1)*/
+	      CANx->MSR = CAN_MSR_SLAKI;
 	      break;
       case CAN_IT_EWG:
               /* Clear CAN_MSR_ERRI (rc_w1) */
 	      CANx->MSR = CAN_MSR_ERRI;
-              /* Note : the corresponding Flag is cleared by hardware depending 
-                        of the CAN Bus status*/ 
+              /* Note : the corresponding Flag is cleared by hardware depending
+                        of the CAN Bus status*/
 	      break;
       case CAN_IT_EPV:
               /* Clear CAN_MSR_ERRI (rc_w1) */
-	      CANx->MSR = CAN_MSR_ERRI; 
-              /* Note : the corresponding Flag is cleared by hardware depending 
+	      CANx->MSR = CAN_MSR_ERRI;
+              /* Note : the corresponding Flag is cleared by hardware depending
                         of the CAN Bus status*/
 	      break;
       case CAN_IT_BOF:
-              /* Clear CAN_MSR_ERRI (rc_w1) */ 
-	      CANx->MSR = CAN_MSR_ERRI; 
-              /* Note : the corresponding Flag is cleared by hardware depending 
+              /* Clear CAN_MSR_ERRI (rc_w1) */
+	      CANx->MSR = CAN_MSR_ERRI;
+              /* Note : the corresponding Flag is cleared by hardware depending
                         of the CAN Bus status*/
 	      break;
       case CAN_IT_LEC:
               /*  Clear LEC bits */
-	      CANx->ESR = RESET; 
+	      CANx->ESR = RESET;
               /* Clear CAN_MSR_ERRI (rc_w1) */
-	      CANx->MSR = CAN_MSR_ERRI; 
+	      CANx->MSR = CAN_MSR_ERRI;
 	      break;
       case CAN_IT_ERR:
               /*Clear LEC bits */
-	      CANx->ESR = RESET; 
+	      CANx->ESR = RESET;
               /* Clear CAN_MSR_ERRI (rc_w1) */
-	      CANx->MSR = CAN_MSR_ERRI; 
-	      /* Note : BOFF, EPVF and EWGF Flags are cleared by hardware depending 
+	      CANx->MSR = CAN_MSR_ERRI;
+	      /* Note : BOFF, EPVF and EWGF Flags are cleared by hardware depending
                   of the CAN Bus status*/
 	      break;
       default :
@@ -1385,7 +1385,7 @@ void CAN_ClearITPendingBit(CAN_TypeDef* CANx, uint32_t CAN_IT)
 static ITStatus CheckITStatus(uint32_t CAN_Reg, uint32_t It_Bit)
 {
   ITStatus pendingbitstatus = RESET;
-  
+
   if ((CAN_Reg & It_Bit) != (uint32_t)RESET)
   {
     /* CAN_IT is set */

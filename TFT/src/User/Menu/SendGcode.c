@@ -15,28 +15,28 @@ const GUI_RECT rect_of_Gkey[]={
   {3*GKEY_WIDTH, 0*GKEY_HEIGHT+ICON_START_Y, 4*GKEY_WIDTH, 1*GKEY_HEIGHT+ICON_START_Y},
   {4*GKEY_WIDTH, 0*GKEY_HEIGHT+ICON_START_Y, 5*GKEY_WIDTH, 1*GKEY_HEIGHT+ICON_START_Y},
   {5*GKEY_WIDTH, 0*GKEY_HEIGHT+ICON_START_Y, 6*GKEY_WIDTH, 1*GKEY_HEIGHT+ICON_START_Y}, // Del
-  
+
   {0*GKEY_WIDTH, 1*GKEY_HEIGHT+ICON_START_Y, 1*GKEY_WIDTH, 2*GKEY_HEIGHT+ICON_START_Y},
   {1*GKEY_WIDTH, 1*GKEY_HEIGHT+ICON_START_Y, 2*GKEY_WIDTH, 2*GKEY_HEIGHT+ICON_START_Y},
   {2*GKEY_WIDTH, 1*GKEY_HEIGHT+ICON_START_Y, 3*GKEY_WIDTH, 2*GKEY_HEIGHT+ICON_START_Y},
   {3*GKEY_WIDTH, 1*GKEY_HEIGHT+ICON_START_Y, 4*GKEY_WIDTH, 2*GKEY_HEIGHT+ICON_START_Y},
   {4*GKEY_WIDTH, 1*GKEY_HEIGHT+ICON_START_Y, 5*GKEY_WIDTH, 2*GKEY_HEIGHT+ICON_START_Y},
   {5*GKEY_WIDTH, 1*GKEY_HEIGHT+ICON_START_Y, 6*GKEY_WIDTH, 2*GKEY_HEIGHT+ICON_START_Y}, // Space
-  
+
   {0*GKEY_WIDTH, 2*GKEY_HEIGHT+ICON_START_Y, 1*GKEY_WIDTH, 3*GKEY_HEIGHT+ICON_START_Y},
   {1*GKEY_WIDTH, 2*GKEY_HEIGHT+ICON_START_Y, 2*GKEY_WIDTH, 3*GKEY_HEIGHT+ICON_START_Y},
   {2*GKEY_WIDTH, 2*GKEY_HEIGHT+ICON_START_Y, 3*GKEY_WIDTH, 3*GKEY_HEIGHT+ICON_START_Y},
   {3*GKEY_WIDTH, 2*GKEY_HEIGHT+ICON_START_Y, 4*GKEY_WIDTH, 3*GKEY_HEIGHT+ICON_START_Y},
   {4*GKEY_WIDTH, 2*GKEY_HEIGHT+ICON_START_Y, 5*GKEY_WIDTH, 3*GKEY_HEIGHT+ICON_START_Y},
   {5*GKEY_WIDTH, 2*GKEY_HEIGHT+ICON_START_Y, 6*GKEY_WIDTH, 3*GKEY_HEIGHT+ICON_START_Y}, // ABC to 123
-  
+
   {0*GKEY_WIDTH, 3*GKEY_HEIGHT+ICON_START_Y, 1*GKEY_WIDTH, 4*GKEY_HEIGHT+ICON_START_Y},
   {1*GKEY_WIDTH, 3*GKEY_HEIGHT+ICON_START_Y, 2*GKEY_WIDTH, 4*GKEY_HEIGHT+ICON_START_Y},
   {2*GKEY_WIDTH, 3*GKEY_HEIGHT+ICON_START_Y, 3*GKEY_WIDTH, 4*GKEY_HEIGHT+ICON_START_Y},
   {3*GKEY_WIDTH, 3*GKEY_HEIGHT+ICON_START_Y, 4*GKEY_WIDTH, 4*GKEY_HEIGHT+ICON_START_Y},
   {4*GKEY_WIDTH, 3*GKEY_HEIGHT+ICON_START_Y, 5*GKEY_WIDTH, 4*GKEY_HEIGHT+ICON_START_Y},
   {5*GKEY_WIDTH, 3*GKEY_HEIGHT+ICON_START_Y, 6*GKEY_WIDTH, 4*GKEY_HEIGHT+ICON_START_Y},
-  
+
   // Back
   {0*GKEY_WIDTH+5, 0*GKEY_HEIGHT+5,  1*GKEY_WIDTH-5, ICON_START_Y-5},
   // Send
@@ -48,14 +48,14 @@ const char * const softKeyValue[][26] = {
     "1", "2", "3", "M", "G", "Del",
     "4", "5", "6", "X", "Y", "Space",
     "7", "8", "9", "Z", "E", "ABC",
-    ".", "0", "-", " ", " ", " ",
+    ".", "0", "-", "S", "T", " ",
     "Back", "Send",
   },
   {
     "A", "B", "C", "D", "F", "Del",
     "H", "I", "J", "K", "L", "Space",
     "N", "O", "P", "Q", "R", "123",
-    "S", "T", "U", "V", "W", " ",
+    "U", "V", "W", " ", " ", " ",
     "Back", "Send",
   }
 };
@@ -63,8 +63,8 @@ const char * const softKeyValue[][26] = {
 SOFT_KEY_TYPE softKeyType = SOFT_KEY_123;
 
 GKEY_VALUES GKeyGetValue(void)
-{    
-  return (GKEY_VALUES)KEY_GetValue(sizeof(rect_of_Gkey)/sizeof(rect_of_Gkey[0]), rect_of_Gkey);    
+{
+  return (GKEY_VALUES)KEY_GetValue(sizeof(rect_of_Gkey)/sizeof(rect_of_Gkey[0]), rect_of_Gkey);
 }
 
 void sendGcodeReDrawButton(u8 positon, u8 pressed)
@@ -87,16 +87,16 @@ void sendGcodeReDrawButton(u8 positon, u8 pressed)
 void menuDrawSendGcode(void)
 {
   GUI_RECT gcodeRect = {rect_of_Gkey[GKEY_BACK].x1+10, rect_of_Gkey[GKEY_BACK].y0, rect_of_Gkey[GKEY_SEND].x0-10, rect_of_Gkey[GKEY_SEND].y1};
-  
+
   GUI_SetBkColor(BLUE);
-  GUI_ClearRect(0, 0, LCD_WIDTH, rect_of_Gkey[0].y0);    
+  GUI_ClearRect(0, 0, LCD_WIDTH, rect_of_Gkey[0].y0);
   GUI_SetBkColor(WHITE);
   GUI_ClearPrect(&gcodeRect);
   GUI_ClearRect(0, rect_of_Gkey[0].y0, LCD_WIDTH, LCD_HEIGHT);
-  
+
   GUI_SetColor(YELLOW);
   GUI_FillPrect(&rect_of_Gkey[GKEY_BACK]); // Back
-  GUI_FillPrect(&rect_of_Gkey[GKEY_SEND]); // Send    
+  GUI_FillPrect(&rect_of_Gkey[GKEY_SEND]); // Send
   GUI_SetColor(BLACK);
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
   for (uint8_t i = 0; i < COUNT(softKeyValue[0]); i++)
@@ -111,7 +111,7 @@ void menuDrawSendGcode(void)
 void menuSendGcode(void)
 {
   GUI_RECT gcodeRect = {rect_of_Gkey[GKEY_BACK].x1+10, rect_of_Gkey[GKEY_BACK].y0, rect_of_Gkey[GKEY_SEND].x0-10, rect_of_Gkey[GKEY_SEND].y1};
-  
+
   char gcodeBuf[CMD_MAX_CHAR] = {0};
   uint8_t nowIndex = 0,
           lastIndex = 0;
@@ -120,16 +120,16 @@ void menuSendGcode(void)
   while(infoMenu.menu[infoMenu.cur] == menuSendGcode)
   {
     key_num = GKeyGetValue();
-    
+
     switch(key_num)
-    {      
+    {
       case GKEY_IDLE:
         break;
-      
+
       case GKEY_BACK:
         infoMenu.cur--;
         break;
-      
+
       case GKEY_SEND:
         if (nowIndex)
         {
@@ -140,20 +140,20 @@ void menuSendGcode(void)
         }
         infoMenu.menu[++infoMenu.cur] = menuTerminal;
         break;
-      
+
       case GKEY_ABC_123:
-        softKeyType = (softKeyType == SOFT_KEY_123) ? SOFT_KEY_ABC : SOFT_KEY_123;        
+        softKeyType = (softKeyType == SOFT_KEY_123) ? SOFT_KEY_ABC : SOFT_KEY_123;
         for (uint8_t i = 0; i < GKEY_BACK; i++)
         {
           GUI_DispStringInPrect(rect_of_Gkey + i, (u8 *)softKeyValue[softKeyType][i]);
         }
         break;
-      
+
       case GKEY_DEL:
         if(nowIndex)
           gcodeBuf[--nowIndex] = 0;
         break;
-      
+
       case GKEY_SPACE:
         if(nowIndex < CMD_MAX_CHAR - 1)
         {
@@ -161,7 +161,7 @@ void menuSendGcode(void)
           gcodeBuf[nowIndex] = 0;
         }
         break;
-      
+
       default:
         if(nowIndex < CMD_MAX_CHAR - 1)
         {
@@ -176,7 +176,7 @@ void menuSendGcode(void)
       GUI_ClearPrect(&gcodeRect);
       GUI_DispStringInPrect(&gcodeRect, (u8 *)gcodeBuf);
     }
-    
+
     loopBackEnd();
   }
   GUI_RestoreColorDefault();
@@ -193,7 +193,7 @@ void sendGcodeTerminalCache(char *stream, TERMINAL_SRC src)
   if (strlen(terminalBuf) + strlen(stream) + strlen(terminalSign[src]) >= TERMINAL_MAX_CHAR)
   {
     terminalBuf[0] = 0;
-  }  
+  }
   strlcat(terminalBuf, terminalSign[src], TERMINAL_MAX_CHAR);
   strlcat(terminalBuf, stream, TERMINAL_MAX_CHAR);
 }
@@ -210,9 +210,9 @@ void menuTerminal(void)
           cursorY = CURSOR_START_Y;
   uint16_t lastTerminalIndex = 0;
   u16 key_num = IDLE_TOUCH;
-  
+
   GUI_ClearRect(0, 0, LCD_WIDTH, CURSOR_START_Y);
-  GUI_DispStringInRect(0, 0, LCD_WIDTH, CURSOR_START_Y, textSelect(LABEL_TOUCH_TO_EXIT));  
+  GUI_DispStringInRect(0, 0, LCD_WIDTH, CURSOR_START_Y, textSelect(LABEL_TOUCH_TO_EXIT));
   GUI_SetColor(BLACK);
   GUI_SetBkColor(GRAY);
   GUI_ClearRect(CURSOR_START_X, CURSOR_START_Y, CURSOR_END_X, CURSOR_END_Y);
@@ -221,12 +221,12 @@ void menuTerminal(void)
   while(infoMenu.menu[infoMenu.cur] == menuTerminal)
   {
     key_num = KEY_GetValue(1, &terminalRect);
-    
+
     if(key_num != IDLE_TOUCH)
     {
       infoMenu.cur--;
     }
-     
+
     while (terminalBuf[lastTerminalIndex])
     {
       getCharacterInfo((u8 *)&terminalBuf[lastTerminalIndex], &info);
@@ -254,7 +254,7 @@ void menuTerminal(void)
       }
       lastTerminalIndex += info.bytes;
     }
-    
+
     loopBackEnd();
   }
   GUI_RestoreColorDefault();

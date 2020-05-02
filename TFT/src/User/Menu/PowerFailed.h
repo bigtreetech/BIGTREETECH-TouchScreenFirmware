@@ -31,7 +31,6 @@ void powerFailedCache(u32 offset);
 void powerFailedClose(void);
 void powerFailedDelete(void);
 
-void powerFailedEnable(bool enable);
 bool powerFailedlSeek(FIL* fp);
 
 #endif

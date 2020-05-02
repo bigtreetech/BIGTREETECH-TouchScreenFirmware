@@ -1,9 +1,5 @@
-the "byte.fon" is the bitmap fonts of ASCII
+The "byte_ascii.fon" is the bitmap fonts of ASCII, size: 12*24
 
-the "word.fon" is the bitmap fonts of GBK
-
-"byte.fon" fonts size: 12*24
-
-"word.fon" fonts size: 24*24
+The "word_unicode.fon" is the bitmap fonts of UTF-16, size: 24*24
 
 Scan direction: form UP to DOWN, from LEFT to RIGHT
