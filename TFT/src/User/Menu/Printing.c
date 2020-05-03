@@ -115,9 +115,21 @@ void setPrintingTime(u32 RTtime)
 }
 
 //
+u32 getPrintSize(void)
+{
+  return infoPrinting.size;
+}
+
+//
 void setPrintSize(u32 size)
 {
   infoPrinting.size = size;
+}
+
+//
+u32 getPrintCur(void)
+{
+  return infoPrinting.cur;
 }
 
 //
