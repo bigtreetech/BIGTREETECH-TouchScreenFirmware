@@ -338,8 +338,6 @@ void sendQueueCmd(void)
             Serial_Puts(SERIAL_PORT_2, "ok\n");
             infoCmd.count--;
             infoCmd.index_r = (infoCmd.index_r + 1) % CMD_MAX_LIST;
-            infoMenu.cur = 1;
-            menuBeforePrinting();
             return;
           }
           break;
@@ -428,6 +426,22 @@ void sendQueueCmd(void)
             speedSetPercent(1,cmd_value());
           }
           break;
+        #ifdef BUZZER_PIN
+            case 300: //M300
+              if (cmd_seen('S')) {
+                uint16_t hz = cmd_value();
+                if (cmd_seen('P')) {
+                  uint16_t ms = cmd_value();
+                  Buzzer_TurnOn(hz, ms);
+                  if (startsWith("M300 TFT", infoCmd.queue[infoCmd.index_r].gcode)) {
+                    infoCmd.count--;
+                    infoCmd.index_r = (infoCmd.index_r + 1) % CMD_MAX_LIST;
+                    return;
+                  }
+                }
+              }
+              break;
+          #endif
         case 851: //M203 Maximum feedrates (units/s)
           if(cmd_seen('X')) setParameter(P_PROBE_OFFSET, X_AXIS, cmd_float());
           if(cmd_seen('Y')) setParameter(P_PROBE_OFFSET, Y_AXIS, cmd_float());
