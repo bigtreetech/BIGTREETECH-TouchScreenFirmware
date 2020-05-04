@@ -205,13 +205,12 @@ void parseACK(void)
         coordinateSetAxisActualSteps(E_AXIS, ack_value());
       }
 
-  #ifdef ONBOARD_SD_SUPPORT
-      else if(ack_seen(bsdnoprintingmagic) && infoMenu.menu[infoMenu.cur] == menuPrinting)
+      else if(ack_seen(bsdnoprintingmagic) && infoMenu.menu[infoMenu.cur] == menuPrinting && infoMachineSettings.onboard_sd_support == 1)
       {
         infoHost.printing = false;
         completePrinting();
       }
-      else if(ack_seen(bsdprintingmagic))
+      else if(ack_seen(bsdprintingmagic) && infoMachineSettings.onboard_sd_support == 1)
       {
         if(infoMenu.menu[infoMenu.cur] != menuPrinting && !infoHost.printing) {
           infoMenu.menu[++infoMenu.cur] = menuPrinting;
@@ -224,7 +223,7 @@ void parseACK(void)
         setPrintCur(position);
   //      powerFailedCache(position);
       }
-  #endif
+
     //parse and store stepper steps/mm values
       else if(ack_seen("M92 X"))
       {
@@ -233,12 +232,26 @@ void parseACK(void)
         if(ack_seen("Z")) setParameter(P_STEPS_PER_MM, Z_STEPPER, ack_value());
         if(ack_seen("E")) setParameter(P_STEPS_PER_MM, E_STEPPER, ack_value());
       }
+      else if(ack_seen("M92 T0 E")){
+        setParameter(P_STEPS_PER_MM, E_STEPPER, ack_value());
+      }
+      else if(ack_seen("M92 T1 E")){
+        setParameter(P_STEPS_PER_MM, E2_STEPPER, ack_value());
+        dualstepper[E_STEPPER] = true;
+      }
     //parse and store Max Feed Rate values
      else if(ack_seen("M203 X")){
                           setParameter(P_MAX_FEED_RATE, X_STEPPER, ack_value());
         if(ack_seen("Y")) setParameter(P_MAX_FEED_RATE, Y_STEPPER, ack_value());
         if(ack_seen("Z")) setParameter(P_MAX_FEED_RATE, Z_STEPPER, ack_value());
         if(ack_seen("E")) setParameter(P_MAX_FEED_RATE, E_STEPPER, ack_value());
+      }
+      else if(ack_seen("M203 T0 E")){
+        setParameter(P_MAX_FEED_RATE, E_STEPPER, ack_value());
+      }
+      else if(ack_seen("M203 T1 E")){
+        setParameter(P_MAX_FEED_RATE, E2_STEPPER, ack_value());
+        dualstepper[E_STEPPER] = true;
       }
     //parse and store Max Acceleration values
       else if(ack_seen("M201 X")){
@@ -247,6 +260,13 @@ void parseACK(void)
         if(ack_seen("Z")) setParameter(P_MAX_ACCELERATION, Z_STEPPER, ack_value());
         if(ack_seen("E")) setParameter(P_MAX_ACCELERATION, E_STEPPER, ack_value());
 
+      }
+      else if(ack_seen("M201 T0 E")){
+        setParameter(P_MAX_ACCELERATION, E_STEPPER, ack_value());
+      }
+      else if(ack_seen("M201 T1 E")){
+        setParameter(P_MAX_ACCELERATION, E2_STEPPER, ack_value());
+        dualstepper[E_STEPPER] = true;
       }
     //parse and store Acceleration values
       else if(ack_seen("M204 P")){
@@ -320,6 +340,10 @@ void parseACK(void)
       else if(ack_seen("Cap:EMERGENCY_PARSER:"))
       {
         infoMachineSettings.emergencyParser = ack_value();
+      }
+      else if(ack_seen("Cap:SDCARD:"))
+      {
+        infoMachineSettings.onboard_sd_support = ack_value();
       }
       else if(ack_seen("Cap:AUTOREPORT_SD_STATUS:"))
       {
