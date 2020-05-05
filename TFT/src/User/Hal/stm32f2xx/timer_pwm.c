@@ -1,4 +1,5 @@
 #include "timer_pwm.h"
+#include "includes.h"
 
 typedef struct {
   TIM_TypeDef* tim;
@@ -41,12 +42,13 @@ void TIM_PWM_Init(uint16_t tim_ch)
   uint16_t timerIndex = TIMER_GET_TIM(tim_ch);
   uint16_t channel = TIMER_GET_CH(tim_ch);
   const TIMER* timer = &pwmTimer[timerIndex];
+	uint32_t timerTmpClk = (timer->rcc_src == &RCC->APB1ENR) ? mcuClocks.PCLK1_Timer_Frequency : mcuClocks.PCLK2_Timer_Frequency;
 
   *timer->rcc_src |= (1 << timer->rcc_bit); // Enable timer clock
 
-  // Set PWM frequency to 10kHz
+  // Set PWM frequency to 500Hz
   timer->tim->ARR = 100 - 1;
-  timer->tim->PSC = F_CPUM - 1;
+  timer->tim->PSC = timerTmpClk / (500 * 100) - 1;
 
   switch (channel) {
     case 0: timer->tim->CCMR1 |= (6<<4)  | (1<<3);   break; // CH1 PWM1 mode

@@ -1,5 +1,5 @@
 #ifndef _LEDCOLOR_H_
-#define _LEDCPLOR_H_
+#define _LEDCOLOR_H_
 
 #include "variants.h"
 #include "menu.h"
@@ -154,18 +154,15 @@
 
 //preset color list
 #ifdef LED_COLOR_PIN
-  #define _PSC  6 //presacler register
-  #define _ARR  5 //reload value of the timer counter
+  #define LED_COLOR_NUM 9
 
-  #define LED_color_NUM 9
+  extern const LABEL itemLedcolor[LED_COLOR_NUM];
 
-  extern const LABEL itemLedcolor[LED_color_NUM];
-
-  extern const uint32_t led_color[LED_color_NUM];
+  extern const uint32_t led_color[LED_COLOR_NUM];
 
   void knob_LED_Init(void);
   void knob_LED_DeInit(void);
-  void ws2812_send_DAT(uint32_t ws2812_dat);
+  void WS2812_Send_DAT(uint32_t ws2812_dat);
 #endif
 
 #endif
