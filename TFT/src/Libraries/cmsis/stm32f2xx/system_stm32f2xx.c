@@ -346,6 +346,7 @@ static void SetSysClock(void)
 /******************************************************************************/
   __IO uint32_t StartUpCounter = 0, HSEStatus = 0;
 
+  RCC->CR = 0x83; // restore "Reset value", reset the value be setted in bootloader
   /* Enable HSE */
   RCC->CR |= ((uint32_t)RCC_CR_HSEON);
 
@@ -367,14 +368,14 @@ static void SetSysClock(void)
 
   if (HSEStatus == (uint32_t)0x01)
   {
-    /* HCLK = SYSCLK / 1*/
+    /* HCLK = SYSCLK / 1  AHB run in 120MHz */
     RCC->CFGR |= RCC_CFGR_HPRE_DIV1;
 
-    /* PCLK2 = HCLK / 2*/
-    RCC->CFGR |= RCC_CFGR_PPRE2_DIV1;
+    /* PCLK2 = HCLK / 2  APB2 max 60MHz */
+    RCC->CFGR |= RCC_CFGR_PPRE2_DIV2;
 
-    /* PCLK1 = HCLK / 4*/
-    RCC->CFGR |= RCC_CFGR_PPRE1_DIV1;
+    /* PCLK1 = HCLK / 4  APB1 max 30MHz */
+    RCC->CFGR |= RCC_CFGR_PPRE1_DIV4;
 
     /* Configure the main PLL */
     RCC->PLLCFGR = PLL_M | (PLL_N << 6) | (((PLL_P >> 1) -1) << 16) |

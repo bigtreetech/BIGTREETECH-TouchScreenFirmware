@@ -256,10 +256,10 @@ void updateFeatureSettings(uint8_t key_val)
 
     #ifdef LED_COLOR_PIN
       case SKEY_KNOB:
-        infoSettings.knob_led_color = (infoSettings.knob_led_color + 1 ) % LED_color_NUM;
+        infoSettings.knob_led_color = (infoSettings.knob_led_color + 1 ) % LED_COLOR_NUM;
         settingPage[item_index].valueLabel = itemLedcolor[infoSettings.knob_led_color];
         featureSettingsItems.items[key_val] = settingPage[item_index];
-        ws2812_send_DAT(led_color[infoSettings.knob_led_color]);
+        WS2812_Send_DAT(led_color[infoSettings.knob_led_color]);
 
         menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
         break;

@@ -66,6 +66,13 @@ void setupMachine(void){
 // Version infomation
 void menuInfo(void)
 {
+  char buf[128];
+  const GUI_POINT clocks[] = {{0 * LCD_WIDTH / 3, 0 * BYTE_HEIGHT},
+                             {1 * LCD_WIDTH / 3, 0 * BYTE_HEIGHT},
+                             {2 * LCD_WIDTH / 3, 0 * BYTE_HEIGHT},
+                             {0 * LCD_WIDTH / 3, 1 * BYTE_HEIGHT},
+                             {1 * LCD_WIDTH / 3, 1 * BYTE_HEIGHT},
+                             {2 * LCD_WIDTH / 3, 1 * BYTE_HEIGHT},};
   const char* hardware = "Board   : BIGTREETECH_" HARDWARE_VERSION;
   const char* firmware = "Firmware: "HARDWARE_VERSION"." STRINGIFY(SOFTWARE_VERSION) " " __DATE__;
 
@@ -76,6 +83,24 @@ void menuInfo(void)
 
   GUI_Clear(BACKGROUND_COLOR);
 
+  my_sprintf(buf, "SYS:%dMhz", mcuClocks.rccClocks.SYSCLK_Frequency / 1000000);
+  GUI_DispString(clocks[0].x, clocks[0].y, (uint8_t *)buf);
+
+  my_sprintf(buf, "APB1:%dMhz", mcuClocks.rccClocks.PCLK1_Frequency / 1000000);
+  GUI_DispString(clocks[1].x, clocks[1].y, (uint8_t *)buf);
+
+  my_sprintf(buf, "P1Tim:%dMhz", mcuClocks.PCLK1_Timer_Frequency / 1000000);
+  GUI_DispString(clocks[2].x, clocks[2].y, (uint8_t *)buf);
+
+  my_sprintf(buf, "AHB:%dMhz", mcuClocks.rccClocks.HCLK_Frequency / 1000000);
+  GUI_DispString(clocks[3].x, clocks[3].y, (uint8_t *)buf);
+
+  my_sprintf(buf, "APB2:%dMhz", mcuClocks.rccClocks.PCLK2_Frequency / 1000000);
+  GUI_DispString(clocks[4].x, clocks[4].y, (uint8_t *)buf);
+
+  my_sprintf(buf, "P2Tim:%dMhz", mcuClocks.PCLK2_Timer_Frequency / 1000000);
+  GUI_DispString(clocks[5].x, clocks[5].y, (uint8_t *)buf);
+                             
   GUI_DispString(startX, centerY - BYTE_HEIGHT, (u8 *)hardware);
   GUI_DispString(startX, centerY, (u8 *)firmware);
   GUI_DispStringInRect(20, LCD_HEIGHT - (BYTE_HEIGHT*2), LCD_WIDTH-20, LCD_HEIGHT, textSelect(LABEL_TOUCH_TO_EXIT));

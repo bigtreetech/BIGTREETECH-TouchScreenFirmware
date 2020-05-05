@@ -98,5 +98,8 @@
 #endif
 
 //#define LED_COLOR_PIN PC7
+#ifndef NEOPIXEL_PIXELS
+  //#define NEOPIXEL_PIXELS  4
+#endif
 
 #endif
