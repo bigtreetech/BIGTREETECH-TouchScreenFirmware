@@ -61,7 +61,7 @@
 //#define SD_SDIO_SUPPORT
 #ifdef SD_SPI_SUPPORT
   #define SD_LOW_SPEED  7 // 2^(SPEED+1) = 256 frequency division
-  #define SD_HIGH_SPEED 1 // 2 frequency division
+  #define SD_HIGH_SPEED 0 // 2 frequency division
   #define SD_SPI        _SPI1
   #define SD_CS_PIN     PA4
 #endif
@@ -70,7 +70,7 @@
 #define SD_CD_PIN     PC4
 
 // W25Qxx SPI pins
-#define W25Qxx_SPEED  2 // stm32f103 spi1 max 4 division
+#define W25Qxx_SPEED  0
 #define W25Qxx_SPI    _SPI3
 #define W25Qxx_CS_PIN PB6
 

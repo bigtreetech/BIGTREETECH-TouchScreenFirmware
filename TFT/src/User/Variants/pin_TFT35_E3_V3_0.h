@@ -7,6 +7,9 @@
 #endif
 
 #define LED_COLOR_PIN PC7
+#ifndef NEOPIXEL_PIXELS
+  #define NEOPIXEL_PIXELS  4
+#endif
 
 #include "pin_TFT35_V3_0.h"
 

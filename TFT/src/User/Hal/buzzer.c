@@ -18,7 +18,7 @@ void TIM3_Config(void)
 	TIM3->CR1 &= ~(0x01);
 	TIM3->DIER |= 1<<0;
   TIM3->SR = (uint16_t)~(1<<0);
- 	TIM3->ARR = F_CPUM - 1; // 20hz to 1Mhz
+ 	TIM3->ARR = mcuClocks.PCLK1_Timer_Frequency / 1000000 - 1; // 20hz to 1Mhz
 }
 
 void Buzzer_Config(void)
