@@ -824,7 +824,7 @@ void parseConfigKey(u16 index)
 
 #ifdef LED_COLOR_PIN
   case C_INDEX_KNOB_COLOR:
-    if (inLimit(config_value(), 0, LED_color_NUM-1))
+    if (inLimit(config_value(), 0, LED_COLOR_NUM-1))
       infoSettings.knob_led_color = config_value();
   break;
 #endif
