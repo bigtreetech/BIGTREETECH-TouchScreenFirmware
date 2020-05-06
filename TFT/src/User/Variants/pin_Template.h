@@ -98,6 +98,8 @@
 #endif
 
 //#define LED_COLOR_PIN PC7
+//#define WS2812_FAST_WRITE_HIGH() GPIOC->BSRRL = 1<<7
+//#define WS2812_FAST_WRITE_LOW()  GPIOC->BSRRH = 1<<7
 #ifndef NEOPIXEL_PIXELS
   //#define NEOPIXEL_PIXELS  4
 #endif

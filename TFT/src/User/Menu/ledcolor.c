@@ -38,7 +38,6 @@ void knob_LED_Init(void)
   
   RCC->APB1ENR |= 1<<4; // TIM6 Clock enable
   TIM6->CNT = 0;
-  TIM6->ARR = mcuClocks.PCLK1_Timer_Frequency / 800000 / 2 - 1;  // 800KHz
   TIM6->PSC = 1 - 1;
   TIM6->SR = (uint16_t)~(1<<0);
   
@@ -59,27 +58,30 @@ void WS2812_Send_DAT(uint32_t ws2812_dat)
 {
   uint16_t led_num;
   int8_t bit;
-  uint16_t code_0_tim_h_cnt = TIM6->ARR * (0.4/1.25);  // Code 0, High level hold time, 0.4us / 1.25us
-  uint16_t code_1_tim_h_cnt = TIM6->ARR - code_0_tim_h_cnt;
+  uint16_t cycle = mcuClocks.PCLK1_Timer_Frequency / 800000 / 2 - 1;   // WS2812 need 800KHz (1.25us)
+  uint16_t code_0_tim_h_cnt = cycle * (0.4/1.25);  // Code 0, High level hold time, 0.4us / 1.25us
+  uint16_t code_1_tim_h_cnt = cycle - code_0_tim_h_cnt;
 
+  __disable_irq();  // Disable interrupt, avoid disturbing the timing of WS2812
+  TIM6->ARR = cycle;
   TIM6->CR1 |= 0x01;
   for (led_num=0; led_num < NEOPIXEL_PIXELS; led_num++)
   {
     for (bit = 23; bit >= 0; bit--)
     {
-      TIM6->CNT=0;
-      GPIO_SetLevel(LED_COLOR_PIN,1);
+      TIM6->CNT = 0;
+      WS2812_FAST_WRITE_HIGH(); // WS2812 required very high speed, so "GPIO_SetLevel(LED_COLOR_PIN, 1)" not applicable
       if (ws2812_dat & (1 << bit)) {
         while (TIM6->CNT < code_1_tim_h_cnt);
       } else {
         while (TIM6->CNT < code_0_tim_h_cnt);
       }
-
-      GPIO_SetLevel(LED_COLOR_PIN,0);
+      WS2812_FAST_WRITE_LOW();
       while (!TIM6->SR);
       TIM6->SR = 0;
     }
   }
   TIM6->CR1 &= ~0x01;
+  __enable_irq(); // Enable interrupt
 }
 #endif
