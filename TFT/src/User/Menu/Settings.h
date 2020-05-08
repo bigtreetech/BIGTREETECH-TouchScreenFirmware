@@ -138,6 +138,7 @@ char     cancel_gcode[MAX_GCODE_LENGTH+1];
 
 typedef struct
 {
+  uint8_t isMarlinFirmware;
   uint8_t EEPROM;
   uint8_t autoReportTemp;
   uint8_t autoLevel;

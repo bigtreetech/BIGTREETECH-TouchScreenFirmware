@@ -305,6 +305,16 @@ void parseACK(void)
         dualstepper[E_STEPPER] = true;
       }
     // Parse M115 capability report
+
+      else if(ack_seen("FIRMWARE_NAME:Marlin"))
+      {
+        infoMachineSettings.isMarlinFirmware = 1;
+      }
+      else if(ack_seen("FIRMWARE_NAME:Smoothieware"))
+      {
+        infoMachineSettings.isMarlinFirmware = 0;
+        setupMachine();
+      }
       else if(ack_seen("Cap:EEPROM:"))
       {
         infoMachineSettings.EEPROM = ack_value();
