@@ -9,19 +9,19 @@
 void PS_ON_Init(void)
 {
   GPIO_InitSet(PS_ON_PIN, MGPIO_MODE_OUT_PP, 0);
-  GPIO_SetLevel(PS_ON_PIN, PS_ON_ACTIVE_HIGH);
+  GPIO_SetLevel(PS_ON_PIN, infoSettings.ps_active_high);
 }
 
 // Power Supply Control turn on, M80
 void PS_ON_On(void)
 {
-  GPIO_SetLevel(PS_ON_PIN, PS_ON_ACTIVE_HIGH);
+  GPIO_SetLevel(PS_ON_PIN, infoSettings.ps_active_high);
 }
 
 // Power Supply Control turn off, M81
 void PS_ON_Off(void)
 {
-  GPIO_SetLevel(PS_ON_PIN, !PS_ON_ACTIVE_HIGH);
+  GPIO_SetLevel(PS_ON_PIN, !infoSettings.ps_active_high);
 }
 #endif
 
@@ -37,7 +37,7 @@ void positionSetUpdateWaiting(bool isWaiting)
 
 void FIL_Runout_Init(void)
 {
-  GPIO_InitSet(FIL_RUNOUT_PIN, FIL_RUNOUT_INVERTING ? MGPIO_MODE_IPU : MGPIO_MODE_IPD, 0);
+  GPIO_InitSet(FIL_RUNOUT_PIN, infoSettings.runout_invert ? MGPIO_MODE_IPU : MGPIO_MODE_IPD, 0);
 }
 
 bool FIL_RunoutPinFilteredLevel(void)
@@ -50,7 +50,7 @@ bool FIL_RunoutPinFilteredLevel(void)
   if (OS_GetTimeMs() > nextTime)
   {
     rst = trueTimes > falseTimes ? true : false;
-    nextTime = OS_GetTimeMs() + FIL_NOISE_THRESHOLD;
+    nextTime = OS_GetTimeMs() + infoSettings.runout_noise_ms ;
     trueTimes = 0;
     falseTimes = 0;
   }
@@ -101,7 +101,7 @@ bool FIL_SmartRunoutDetect(void)
     }
   }
 
-  if (ABS(actualExtrude - lastExtrudePosition) >= FILAMENT_RUNOUT_DISTANCE_MM)
+  if (ABS(actualExtrude - lastExtrudePosition) >= infoSettings.runout_distance)
   {
     lastExtrudePosition = actualExtrude;
     if (isAlive)
@@ -122,7 +122,7 @@ bool FIL_IsRunout(void)
   switch (infoSettings.runout) {
     case FILAMENT_RUNOUT_ON:
       // Detect HIGH/LOW level, Suitable for general mechanical / photoelectric switches
-      return (FIL_RunoutPinFilteredLevel() == FIL_RUNOUT_INVERTING);
+      return (FIL_RunoutPinFilteredLevel() == infoSettings.runout_invert);
 
     case FILAMENT_SMART_RUNOUT_ON:
       return FIL_SmartRunoutDetect();

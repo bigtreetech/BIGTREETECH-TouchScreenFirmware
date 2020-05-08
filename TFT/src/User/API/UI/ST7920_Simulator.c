@@ -53,9 +53,9 @@ void ST7920_DrawByte(u8 data)
   for(; i<8; i++)
   {
     if(data & 0x80)
-      ST7920_DrawPixel(x, y, infoSettings.font_color);
+      ST7920_DrawPixel(x, y, lcd_colors[infoSettings.marlin_mode_font_color]);
     else
-      ST7920_DrawPixel(x, y, infoSettings.bg_color);
+      ST7920_DrawPixel(x, y, lcd_colors[infoSettings.marlin_mode_bg_color]);
     data <<= 1;
     x++;
   }
@@ -134,13 +134,15 @@ void ST7920_ST7920_ParseWCmd(u8 cmd)
 
 void menuST7920(void)
 {
-  GUI_Clear(infoSettings.bg_color);
-  GUI_SetColor(infoSettings.font_color);
-  GUI_SetBkColor(infoSettings.bg_color);
+  GUI_Clear(lcd_colors[infoSettings.marlin_mode_bg_color]);
+  GUI_SetColor(lcd_colors[infoSettings.marlin_mode_font_color]);
+  GUI_SetBkColor(lcd_colors[infoSettings.marlin_mode_bg_color]);
 
-  #if defined(ST7920_BANNER_TEXT)
-    GUI_DispStringInRect(0, 0, LCD_WIDTH, SIMULATOR_YSTART, (u8*)ST7920_BANNER_TEXT);
-  #endif
+  if(infoSettings.marlin_mode_showtitle == 1){
+  STRINGS_STORE tempST;
+  W25Qxx_ReadBuffer((uint8_t *)&tempST,STRINGS_STORE_ADDR,sizeof(STRINGS_STORE));
+  GUI_DispStringInRect(0, 0, LCD_WIDTH, SIMULATOR_YSTART, (u8*)tempST.marlin_title);
+  }
 
   SPI_Slave();
   SPI_Slave_CS_Config();

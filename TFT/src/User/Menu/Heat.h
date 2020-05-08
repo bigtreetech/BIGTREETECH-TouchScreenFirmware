@@ -4,6 +4,7 @@
 #include "stdint.h"
 #include "stdbool.h"
 #include "Configuration.h"
+#include "Settings.h"
 
 #define TEMPERATURE_QUERY_FAST_DURATION 1000  // "M105" query temperature every 1s
 #define TEMPERATURE_QUERY_SLOW_DURATION 3000  // 3s
@@ -18,7 +19,7 @@ typedef enum
 {
   BED = 0,
   NOZZLE0 = 1,
-  HEATER_NUM = TOOL_NUM + NOZZLE0,
+  HEATER_NUM = HEAT_NUM
 }TOOL;
 
 typedef struct
@@ -36,7 +37,6 @@ typedef struct
 }HEATER;
 
 
-extern const uint16_t   heat_max_temp[];
 extern const char* toolID[];
 extern const char* const heatDisplayID[];
 extern const char* heatCmd[];

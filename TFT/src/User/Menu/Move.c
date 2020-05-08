@@ -41,7 +41,7 @@ LABEL_MOVE,
  }
 };
 
-const uint32_t item_move_speed[] = {DEFAULT_SPEED_MOVE, SPEED_MOVE_SLOW, SPEED_MOVE_FAST};
+//const uint32_t item_move_speed[] = {DEFAULT_SPEED_MOVE, SPEED_MOVE_SLOW, SPEED_MOVE_FAST};
 
 #define ITEM_MOVE_LEN_NUM 3
 const ITEM itemMoveLen[ITEM_MOVE_LEN_NUM] = {
@@ -114,7 +114,7 @@ void menuMove(void)
 
   menuDrawPage(&moveItems);
   mustStoreCmd("G91\n");
-  mustStoreCmd("G1 F%d\n",item_move_speed[infoSettings.move_speed]);
+  mustStoreCmd("G1 F%d\n",infoSettings.axis_speed[infoSettings.move_speed]);
 
   mustStoreCmd("M114\n");
   drawXYZ();
@@ -195,15 +195,15 @@ void drawXYZ(void){
   my_sprintf(tempstr, "X:%.1f  ", getAxisLocation(0));
   if (nowAxis == X_AXIS) GUI_SetColor(INFOBOX_ICON_COLOR);
   GUI_DispString(START_X+1*SPACE_X+1*ICON_WIDTH,(ICON_START_Y-BYTE_HEIGHT)/2,(u8 *)tempstr);
-  GUI_SetColor(FONT_COLOR);
+  GUI_SetColor(lcd_colors[infoSettings.font_color]);
   my_sprintf(tempstr, "Y:%.1f  ", getAxisLocation(1));
   if (nowAxis == Y_AXIS) GUI_SetColor(INFOBOX_ICON_COLOR);
   GUI_DispString(START_X+2*SPACE_X+2*ICON_WIDTH,(ICON_START_Y-BYTE_HEIGHT)/2,(u8 *)tempstr);
-  GUI_SetColor(FONT_COLOR);
+  GUI_SetColor(lcd_colors[infoSettings.font_color]);
   my_sprintf(tempstr, "Z:%.1f  ", getAxisLocation(2));
   if (nowAxis == Z_AXIS) GUI_SetColor(INFOBOX_ICON_COLOR);
   GUI_DispString(START_X+3*SPACE_X+3*ICON_WIDTH,(ICON_START_Y-BYTE_HEIGHT)/2,(u8 *)tempstr);
 
-  //GUI_SetBkColor(BACKGROUND_COLOR);
-  GUI_SetColor(FONT_COLOR);
+  //GUI_SetBkColor(lcd_colors[infoSettings.bg_color]);
+  GUI_SetColor(lcd_colors[infoSettings.font_color]);
 }

@@ -76,19 +76,19 @@ LABEL_LEVELING,
 
 void moveToLevelingPoint(u8 point)
 {
-  static const s16 pointPosition[][2] = {
-    {LEVELING_POINT_1_X, LEVELING_POINT_1_Y},
-    {LEVELING_POINT_2_X, LEVELING_POINT_2_Y},
-    {LEVELING_POINT_3_X, LEVELING_POINT_3_Y},
-    {LEVELING_POINT_4_X, LEVELING_POINT_4_Y},
+  s16 pointPosition[4][2] = {
+    {infoSettings.machine_size_min[X_AXIS] + infoSettings.level_edge, infoSettings.machine_size_min[Y_AXIS] + infoSettings.level_edge},
+    {infoSettings.machine_size_max[X_AXIS] - infoSettings.level_edge, infoSettings.machine_size_min[X_AXIS] + infoSettings.level_edge},
+    {infoSettings.machine_size_max[X_AXIS] - infoSettings.level_edge, infoSettings.machine_size_max[Y_AXIS] - infoSettings.level_edge},
+    {infoSettings.machine_size_min[X_AXIS] + infoSettings.level_edge, infoSettings.machine_size_max[Y_AXIS] - infoSettings.level_edge},
   };
   if(coordinateIsKnown() == false)
   {
     storeCmd("G28\n");
   }
-  storeCmd("G0 Z%.3f F%d\n", LEVELING_POINT_MOVE_Z, LEVELING_POINT_Z_FEEDRATE);
-  storeCmd("G0 X%d Y%d F%d\n", pointPosition[point][0], pointPosition[point][1], LEVELING_POINT_XY_FEEDRATE);
-  storeCmd("G0 Z%.3f F%d\n", LEVELING_POINT_Z, LEVELING_POINT_Z_FEEDRATE);
+  storeCmd("G0 Z%.3f F%d\n", infoSettings.level_z_raise, infoSettings.level_feedrate[Z_AXIS]);
+  storeCmd("G0 X%d Y%d F%d\n", pointPosition[point][0], pointPosition[point][1], infoSettings.level_feedrate[X_AXIS]);
+  storeCmd("G0 Z%.3f F%d\n", infoSettings.level_z_pos, infoSettings.level_feedrate[Z_AXIS]);
 }
 
 void menuManualLeveling(void)

@@ -1,19 +1,6 @@
 #include "ScreenSettings.h"
 #include "includes.h"
-
-MENUITEMS screenSettingsItems = {
-// title
-LABEL_SCREEN_SETTINGS,
-// icon                       label
- {{ICON_ROTATE_UI,            LABEL_ROTATE_UI},
-  {ICON_TOUCHSCREEN_ADJUST,   LABEL_TOUCHSCREEN_ADJUST},
-  {ICON_LANGUAGE,             LABEL_LANGUAGE},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACK,                 LABEL_BACK},}
-};
+#include "Colors.h"
 
 #ifdef BUZZER_PIN // Speaker
   #define BUZZER_KEY_INDEX KEY_ICON_3
@@ -37,39 +24,44 @@ LABEL_SCREEN_SETTINGS,
   #endif
   #define LCD12864_FN_INDEX (LCD12864_BG_INDEX+1)
 
-  #define ITEM_COLOR_NUM 9
-  const ITEM itemBGcolor[ITEM_COLOR_NUM] = {
-  // icon                      label
-    {ICON_BKCOLOR,             LABEL_WHITE},
-    {ICON_BKCOLOR,             LABEL_BLACK},
-    {ICON_BKCOLOR,             LABEL_BLUE},
-    {ICON_BKCOLOR,             LABEL_RED},
-    {ICON_BKCOLOR,             LABEL_GREEN},
-    {ICON_BKCOLOR,             LABEL_CYAN},
-    {ICON_BKCOLOR,             LABEL_YELLOW},
-    {ICON_BKCOLOR,             LABEL_BROWN},
-    {ICON_BKCOLOR,             LABEL_GRAY},
-  };
-
-  const ITEM itemFontcolor[ITEM_COLOR_NUM] = {
-  // icon                      label
-    {ICON_FONTCOLOR,           LABEL_WHITE},
-    {ICON_FONTCOLOR,           LABEL_BLACK},
-    {ICON_FONTCOLOR,           LABEL_BLUE},
-    {ICON_FONTCOLOR,           LABEL_RED},
-    {ICON_FONTCOLOR,           LABEL_GREEN},
-    {ICON_FONTCOLOR,           LABEL_CYAN},
-    {ICON_FONTCOLOR,           LABEL_YELLOW},
-    {ICON_FONTCOLOR,           LABEL_BROWN},
-    {ICON_FONTCOLOR,           LABEL_GRAY},
-  };
-  const  u32 item_color[ITEM_COLOR_NUM] = {WHITE, BLACK, BLUE, RED, GREEN, CYAN, YELLOW, BROWN, GRAY};
-  static u8  item_bgcolor_i = 0;
-  static u8  item_fontcolor_i = 0;
 #endif
 
+const LABEL lcd_colors_names[LCD_COLOR_COUNT] =
+{
+  LABEL_WHITE,
+  LABEL_BLACK,
+  LABEL_RED,
+  LABEL_GREEN,
+  LABEL_BLUE,
+  LABEL_CYAN,
+  LABEL_MAGENTA,
+  LABEL_YELLOW,
+  LABEL_ORANGE,
+  LABEL_PURPLE,
+  LABEL_LIME,
+  LABEL_BROWN,
+  LABEL_DARKBLUE,
+  LABEL_DARKGREEN,
+  LABEL_GRAY,
+  LABEL_DARKGRAY
+  };
 void menuScreenSettings(void)
 {
+
+MENUITEMS screenSettingsItems = {
+// title
+LABEL_SCREEN_SETTINGS,
+// icon                       label
+ {{ICON_ROTATE_UI,            LABEL_ROTATE_UI},
+  {ICON_TOUCHSCREEN_ADJUST,   LABEL_TOUCHSCREEN_ADJUST},
+  {ICON_LANGUAGE,             LABEL_LANGUAGE},
+  {ICON_BACKGROUND,           LABEL_BACKGROUND},
+  {ICON_BACKGROUND,           LABEL_BACKGROUND},
+  {ICON_BACKGROUND,           LABEL_BACKGROUND},
+  {ICON_BACKGROUND,           LABEL_BACKGROUND},
+  {ICON_BACK,                 LABEL_BACK},}
+};
+
   KEY_VALUES key_num = KEY_IDLE;
   SETTINGS now = infoSettings;
 
@@ -85,22 +77,14 @@ void menuScreenSettings(void)
   #endif
 
   #ifdef ST7920_SPI
-    for(u8 i=0; i<ITEM_COLOR_NUM; i++) // LCD12864 background color
-    {
-      if(infoSettings.bg_color == item_color[i])
-      {
-        item_bgcolor_i = i;
-        screenSettingsItems.items[KEY_ICON_4] = itemBGcolor[item_bgcolor_i];
-      }
-    }
-    for(u8 i=0; i<ITEM_COLOR_NUM; i++) // LCD12864 font color
-    {
-      if(infoSettings.font_color == item_color[i])
-      {
-        item_fontcolor_i = i;
-        screenSettingsItems.items[KEY_ICON_5] = itemFontcolor[item_fontcolor_i];
-      }
-    }
+    // LCD12864 background color
+    screenSettingsItems.items[KEY_ICON_4].icon = ICON_BKCOLOR;
+    screenSettingsItems.items[KEY_ICON_4].label = lcd_color_names[infoSettings.marlin_mode_bg_color];
+
+    // LCD12864 font color
+    screenSettingsItems.items[KEY_ICON_5].icon = ICON_FONTCOLOR;
+    screenSettingsItems.items[KEY_ICON_5].label = lcd_color_names[infoSettings.marlin_mode_font_color];
+
   #endif
 
   menuDrawPage(&screenSettingsItems);
@@ -138,17 +122,15 @@ void menuScreenSettings(void)
 
       #ifdef ST7920_SPI
       case LCD12864_BG_INDEX:
-        item_bgcolor_i = (item_bgcolor_i + 1) % ITEM_COLOR_NUM;
-        screenSettingsItems.items[key_num] = itemBGcolor[item_bgcolor_i];
+        infoSettings.marlin_mode_bg_color = (infoSettings.marlin_mode_bg_color + 1) % LCD_COLOR_COUNT;
+        screenSettingsItems.items[key_num].label = lcd_color_names[infoSettings.marlin_mode_bg_color];
         menuDrawItem(&screenSettingsItems.items[key_num], key_num);
-        infoSettings.bg_color = item_color[item_bgcolor_i];
         break;
 
       case LCD12864_FN_INDEX:
-        item_fontcolor_i = (item_fontcolor_i + 1) % ITEM_COLOR_NUM;
-        screenSettingsItems.items[key_num] = itemFontcolor[item_fontcolor_i];
+        infoSettings.marlin_mode_font_color = (infoSettings.marlin_mode_font_color + 1) % LCD_COLOR_COUNT;
+        screenSettingsItems.items[key_num].label = lcd_color_names[infoSettings.marlin_mode_font_color];
         menuDrawItem(&screenSettingsItems.items[key_num], key_num);
-        infoSettings.font_color = item_color[item_fontcolor_i];
         break;
       #endif
 

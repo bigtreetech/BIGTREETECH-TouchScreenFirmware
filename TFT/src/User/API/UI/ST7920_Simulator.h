@@ -6,11 +6,11 @@
 
 // User-defined colors for 12864 mode from Configuration.h
 #ifndef ST7920_BKCOLOR
-  #define ST7920_BKCOLOR (BLACK)
+  #define ST7920_BKCOLOR LCD_BLACK
 #endif
 
 #ifndef ST7920_FNCOLOR
-  #define ST7920_FNCOLOR (GREEN)
+  #define ST7920_FNCOLOR LCD_GREEN
 #endif
 
 #define ST7920_XSTART    (0x80)

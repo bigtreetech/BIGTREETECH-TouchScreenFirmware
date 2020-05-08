@@ -28,5 +28,6 @@ typedef struct
 
 void getCharacterInfo(const uint8_t *ch, CHAR_INFO *pInfo);
 uint16_t GUI_StrPixelWidth(const uint8_t *const str);
+uint16_t getUTF8Length(const uint8_t *const str);
 
 #endif

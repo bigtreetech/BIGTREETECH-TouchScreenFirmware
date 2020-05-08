@@ -1,8 +1,21 @@
 #include "Settings.h"
 #include "includes.h"
 
+
 SETTINGS infoSettings;
 MACHINESETTINGS infoMachineSettings;
+
+const u16 default_max_temp[]      = HEAT_MAX_TEMP;
+const u16 default_max_fanPWM[]    = FAN_MAX_PWM;
+const u16 default_size_min[]      = {X_MIN_POS,Y_MIN_POS,Z_MIN_POS};
+const u16 default_size_max[]      = {X_MAX_POS,Y_MAX_POS,Z_MAX_POS};
+const u16 default_move_speed[]    = {SPEED_MOVE_SLOW, DEFAULT_SPEED_MOVE, SPEED_MOVE_FAST};
+const u16 default_ext_speed[]     = {EXTRUDE_SLOW_SPEED, EXTRUDE_NORMAL_SPEED, EXTRUDE_FAST_SPEED};
+const u16 default_level_speed[]   = {LEVELING_POINT_XY_FEEDRATE,LEVELING_POINT_XY_FEEDRATE,LEVELING_POINT_Z_FEEDRATE};
+const u16 default_pause_speed[]   = {NOZZLE_PAUSE_XY_FEEDRATE, NOZZLE_PAUSE_XY_FEEDRATE, NOZZLE_PAUSE_Z_FEEDRATE, NOZZLE_PAUSE_E_FEEDRATE};
+const u16 default_preheat_ext[]   = PREHEAT_HOTEND;
+const u16 default_preheat_bed[]   = PREHEAT_BED;
+const u8 defulat_custom_enabled[] = CUSTOM_GCODE_ENABLED;
 
 // Reset settings data
 void infoSettingsReset(void)
@@ -10,29 +23,114 @@ void infoSettingsReset(void)
   infoSettings.baudrate             = BAUDRATE;
   infoSettings.language             = DEFAULT_LANGUAGE;
   infoSettings.mode                 = DEFAULT_LCD_MODE;
-  infoSettings.runout               = 0;
+  infoSettings.unified_menu         = UNIFIED_MENU;
   infoSettings.rotate_ui            = 0;
-  infoSettings.bg_color             = ST7920_BKCOLOR;
-  infoSettings.font_color           = ST7920_FNCOLOR;
+
+  infoSettings.bg_color             = BACKGROUND_COLOR;
+  infoSettings.font_color           = FONT_COLOR;
+  infoSettings.title_bg_color       = TITLE_BACKGROUND_COLOR;
+  infoSettings.reminder_color       = REMINDER_FONT_COLOR;
+  infoSettings.sd_reminder_color    = VOLUME_REMINDER_FONT_COLOR;
+  infoSettings.status_xyz_bg_color  = STATUS_XYZ_BG_COLOR;
+  infoSettings.list_border_color    = LISTVIEW_BORDER_COLOR;
+  infoSettings.list_button_color    = LISTVIEW_ICON_COLOR;
+
   infoSettings.silent               = 0;
-  infoSettings.auto_off             = 0;
   infoSettings.terminalACK          = 0;
-  infoSettings.invert_axis[X_AXIS]  = 0;
-  infoSettings.invert_axis[Y_AXIS]  = 0;
-  infoSettings.invert_axis[Z_AXIS]  = 0;
-  infoSettings.move_speed           = 0;
+  infoSettings.move_speed           = 1;
   infoSettings.knob_led_color       = (STARTUP_KNOB_LED_COLOR - 1);
   infoSettings.send_start_gcode     = 0;
   infoSettings.send_end_gcode       = 0;
   infoSettings.send_cancel_gcode    = 1;
   infoSettings.persistent_info      = 1;
   infoSettings.file_listmode        = 1;
-  #ifdef LCD_LED_PWM_CHANNEL
-  infoSettings.lcd_brightness       = (DEFAULT_LCD_BRIGHTNESS - 1);
-  infoSettings.lcd_idle_brightness  = (DEFAULT_LCD_IDLE_BRIGHTNESS - 1);
-  infoSettings.lcd_idle_timer       = (DEFAULT_LCD_IDLE_TIMER - 1);
-  #endif
-  infoSettings.marlin_mode_fullscreen = DEFAULT_ST7920_FULLSCREEN_MODE;
+
+  infoSettings.lcd_brightness       = DEFAULT_LCD_BRIGHTNESS;
+  infoSettings.lcd_idle_brightness  = DEFAULT_LCD_IDLE_BRIGHTNESS;
+  infoSettings.lcd_idle_timer       = DEFAULT_LCD_IDLE_TIMER;
+
+  infoSettings.marlin_mode_bg_color       = ST7920_BKCOLOR;
+  infoSettings.marlin_mode_font_color     = ST7920_FNCOLOR;
+  infoSettings.marlin_mode_showtitle      = ST7920_SHOW_BANNER;
+  infoSettings.marlin_mode_fullscreen     = DEFAULT_ST7920_FULLSCREEN_MODE;
+
+  infoSettings.send_start_gcode       = 0;
+  infoSettings.send_end_gcode         = 0;
+  infoSettings.send_cancel_gcode      = 1;
+  infoSettings.auto_off               = 0;
+  infoSettings.ps_active_high         = PS_ON_ACTIVE_HIGH;
+  infoSettings.auto_off_temp          = AUTO_SHUT_DOWN_MAXTEMP;
+
+  infoSettings.runout                 = 0;
+  infoSettings.runout_invert          = FIL_RUNOUT_INVERTING;
+  infoSettings.runout_noise_ms        = FIL_NOISE_THRESHOLD;
+  infoSettings.runout_distance        = FILAMENT_RUNOUT_DISTANCE_MM;
+
+  infoSettings.powerloss_home         = HOME_BEFORE_PLR;
+  infoSettings.powerloss_invert       = PS_ON_ACTIVE_HIGH;
+  infoSettings.powerloss_z_raise      = POWER_LOSS_ZRAISE;
+  infoSettings.btt_ups                = BTT_MINI_UPS;
+
+//machine specific settings
+
+  infoSettings.tool_count             = TOOL_NUM;
+  infoSettings.ext_count              = EXTRUDER_NUM;
+  infoSettings.fan_count              = FAN_NUM;
+  infoSettings.auto_load_leveling     = AUTO_SAVE_LOAD_LEVELING_VALUE;
+  infoSettings.m27_refresh_time       = M27_REFRESH;
+  infoSettings.m27_active             = M27_WATCH_OTHER_SOURCES;
+
+  for(int i = 0; i < HEAT_NUM; i++)
+  {
+    infoSettings.max_temp[i]          = default_max_temp[i];
+  }
+
+  infoSettings.min_ext_temp           = PREVENT_COLD_EXTRUSION_MINTEMP;
+
+  for(int i = 0; i < MAX_TOOL_COUNT ;i++)
+  {
+    infoSettings.fan_max[i]           = default_max_fanPWM[i];
+  }
+
+  infoSettings.fan_percentage         = 1;
+
+  for(int i = 0; i < AXIS_NUM ;i++) //x, y, z
+  {
+    infoSettings.invert_axis[i]       = 0;
+    infoSettings.machine_size_min[i]  = default_size_min[i];
+    infoSettings.machine_size_max[i]  = default_size_max[i];
+    infoSettings.level_feedrate[i]    = default_level_speed[i];
+  }
+
+  for(int i = 0; i < SPEED_COUNT ;i++)
+  {
+    infoSettings.axis_speed[i]        = default_move_speed[i];
+    infoSettings.ext_speed[i]         = default_ext_speed[i];
+  }
+
+  infoSettings.pause_retract_len      = NOZZLE_PAUSE_RETRACT_LENGTH;
+  infoSettings.resume_purge_len       = NOZZLE_RESUME_PURGE_LENGTH;
+
+
+  infoSettings.pause_pos[X_AXIS]      = NOZZLE_PAUSE_X_POSITION;  // X
+  infoSettings.pause_pos[Y_AXIS]      = NOZZLE_PAUSE_X_POSITION;  // Y
+  infoSettings.pause_z_raise          = NOZZLE_PAUSE_Z_RAISE;
+
+  for(int i = 0; i < TOTAL_AXIS ;i++)
+  {
+    infoSettings.pause_feedrate[i]    = default_pause_speed[i]; // X, Y, Z, E
+  }
+
+  infoSettings.level_edge             = LEVELING_EDGE_DISTANCE;
+  infoSettings.level_z_pos            = LEVELING_POINT_Z;
+  infoSettings.level_z_raise          = LEVELING_POINT_MOVE_Z;
+
+  for (int i = 0; i < PREHEAT_COUNT; i++)
+  {
+    infoSettings.preheat_temp[i]      = default_preheat_ext[i];
+    infoSettings.preheat_bed[i]       = default_preheat_bed[i];
+  }
+  resetConfig();
 }
 
 void initMachineSetting(void){
@@ -81,7 +179,7 @@ void menuInfo(void)
   u16 centerY = LCD_HEIGHT/2;
   u16 startX = MIN(HW_X, FW_X);
 
-  GUI_Clear(BACKGROUND_COLOR);
+  GUI_Clear(lcd_colors[infoSettings.bg_color]);
 
   my_sprintf(buf, "SYS:%dMhz", mcuClocks.rccClocks.SYSCLK_Frequency / 1000000);
   GUI_DispString(clocks[0].x, clocks[0].y, (uint8_t *)buf);
@@ -100,7 +198,7 @@ void menuInfo(void)
 
   my_sprintf(buf, "P2Tim:%dMhz", mcuClocks.PCLK2_Timer_Frequency / 1000000);
   GUI_DispString(clocks[5].x, clocks[5].y, (uint8_t *)buf);
-                             
+
   GUI_DispString(startX, centerY - BYTE_HEIGHT, (u8 *)hardware);
   GUI_DispString(startX, centerY, (u8 *)firmware);
   GUI_DispStringInRect(20, LCD_HEIGHT - (BYTE_HEIGHT*2), LCD_WIDTH-20, LCD_HEIGHT, textSelect(LABEL_TOUCH_TO_EXIT));
@@ -114,7 +212,7 @@ void menuInfo(void)
 // Set uart pins to input, free uart
 void menuDisconnect(void)
 {
-  GUI_Clear(BACKGROUND_COLOR);
+  GUI_Clear(lcd_colors[infoSettings.bg_color]);
   GUI_DispStringInRect(20, 0, LCD_WIDTH-20, LCD_HEIGHT, textSelect(LABEL_DISCONNECT_INFO));
   GUI_DispStringInRect(20, LCD_HEIGHT - (BYTE_HEIGHT*2), LCD_WIDTH-20, LCD_HEIGHT, textSelect(LABEL_TOUCH_TO_EXIT));
 
@@ -140,7 +238,6 @@ LABEL_SETTINGS,
   {ICON_BACK,                 LABEL_BACK},}
 };
 
-#define ITEM_BAUDRATE_NUM 9
 const ITEM itemBaudrate[ITEM_BAUDRATE_NUM] = {
 // icon                       label
   {ICON_BAUD_RATE,             {.address = "2400"}},
