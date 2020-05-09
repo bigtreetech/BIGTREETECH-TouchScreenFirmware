@@ -153,7 +153,7 @@
 #define EXTRUDER_NUM 1    // set in 1~6
 #define FAN_NUM      1    // set in 1~6
 
-//                          PLA      PETG      ABS
+//                         PLA      PETG      ABS
 #define PREHEAT_LABELS   {"PLA",   "PETG",   "ABS"}
 #define PREHEAT_BED      {60,      70,       100}
 #define PREHEAT_HOTEND   {200,     250,      230}
