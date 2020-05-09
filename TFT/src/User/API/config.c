@@ -740,7 +740,7 @@ void parseConfigKey(u16 index)
       }
       if (key_seen("T:"))
       { if (inLimit(config_value(), MIN_TOOL_TEMP, MAX_TOOL_TEMP))
-          infoSettings.preheat_bed[val_index] = config_value();
+          infoSettings.preheat_temp[val_index] = config_value();
       }
     }
   break;
