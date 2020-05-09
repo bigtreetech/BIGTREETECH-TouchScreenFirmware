@@ -271,7 +271,7 @@ void toggleTool(void)
 {
   if (OS_GetTimeMs() > nextTime)
   {
-    if (EXTRUDER_NUM > 1)
+    if (TOOL_NUM > 1)
     {
       current_Ext = (TOOL)((current_Ext + 1) % HEATER_NUM);
       if (current_Ext == 0)
