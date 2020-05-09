@@ -31,24 +31,23 @@
 /**
  * Default LCD Brightness and LCD IDLE Brightness
  *
- * Brightness:  0: LCD_5_PERCENT,  1: LCD_10_PERCENT, 2: LCD_20_PERCENT,
- *              3: LCD_30_PERCENT, 4: LCD_40_PERCENT, 5: LCD_50_PERCENT,
- *              6: LCD_60_PERCENT, 7: LCD_70_PERCENT, 8: LCD_80_PERCENT,
- *              9: LCD_90_PERCENT, 10: LCD_100_PERCENT
+ * Brightness:  0: LCD_5_PERCENT,    1: LCD_10_PERCENT,  2: LCD_20_PERCENT,
+ *              3: LCD_30_PERCENT,   4: LCD_40_PERCENT,  5: LCD_50_PERCENT,
+ *              6: LCD_60_PERCENT,   7: LCD_70_PERCENT,  8: LCD_80_PERCENT,
+ *              9: LCD_90_PERCENT,  10: LCD_100_PERCENT
  *
  * Settings for the idle dim timer. The LCD screen will dim to idle brightness,
  * if the display is not touched for the period of the lcd idle timer.
  *
- * Idle Timer:  0: LCD_DIM_OFF,         1: LCD_DIM_5_SECONDS.   2: LCD_DIM_10_SECONDS,
- *              3: LCD_DIM_30_SECONDS,  4: LCD_DIM_60_SECONDS,  5: LCD_DIM_120_SECONDS,
- *              6: LCD_DIM_300_SECONDS, 7: LCD_DIM_CUSTOM_SECONDS
+ * Idle Timer:  0: LCD_DIM_OFF,          1: LCD_DIM_5_SECONDS.      2: LCD_DIM_10_SECONDS,
+ *              3: LCD_DIM_30_SECONDS,   4: LCD_DIM_60_SECONDS,     5: LCD_DIM_120_SECONDS,
+ *              6: LCD_DIM_300_SECONDS,  7: LCD_DIM_CUSTOM_SECONDS
  *
  */
 #define DEFAULT_LCD_BRIGHTNESS      10  // 10: LCD_100_PERCENT - Brightness value from list
 #define DEFAULT_LCD_IDLE_BRIGHTNESS 2   // 2: LCD_10_PERCENT - Brightness value from list
 #define DEFAULT_LCD_IDLE_TIMER      0   // 0: LCD_DIM_OFF
-#define LCD_DIM_CUSTOM_SECONDS      600 // Custom value in seconds. Will be used if
-                                          // LCD_DIM_CUSTOM_SECONDS is set as idle timer.
+#define LCD_DIM_CUSTOM_SECONDS      600 // Custom value in seconds. Will be used if LCD_DIM_CUSTOM_SECONDS is set as idle timer.
 
 //===========================================================================
 //=========================== Marlin Mode Settings ==========================
@@ -59,9 +58,9 @@
  *
  * These colors can be changed in Touch mode, but can also be set here.
  *
- * Options: 0: WHITE,     1: BLACK,      2: RED,    3: GREEN,   4: BLUE,   5: CYAN,
- *          6: MAGENTA,   7: YELLOW,     8: ORANGE, 9: PURPLE, 10: LIME,  11: BROWN,
- *         12: DARKBLUE, 13: DARKGREEN, 14: GRAY, 15: DARKGRAY
+ * Options: 0: WHITE,      1: BLACK,       2: RED,     3: GREEN,     4: BLUE,   5: CYAN,
+ *          6: MAGENTA,    7: YELLOW,      8: ORANGE,  9: PURPLE,   10: LIME,  11: BROWN,
+ *         12: DARKBLUE,  13: DARKGREEN,  14: GRAY,   15: DARKGRAY
  */
 #define ST7920_BKCOLOR 1
 #define ST7920_FNCOLOR 0
@@ -114,7 +113,7 @@
  *
  * Select the language to display on the LCD while in Touch Mode.
  *
- * Options: ARMENIAN, CHINESE, CZECH, DUTCH, ENGLISH, FRENCH, GERMAN, HUNGARY, ITALIAN, JAPANESE, POLISH, PORTUGUESE, RUSSIAN, SLOVAK, SPAIN
+ * Options: ARMENIAN, CHINESE, CZECH, DUTCH, ENGLISH, FRENCH, GERMAN, HUNGARIAN, ITALIAN, JAPANESE, POLISH, PORTUGUESE, RUSSIAN, SLOVAK, SPAIN
  */
 #define DEFAULT_LANGUAGE ENGLISH
 
@@ -137,9 +136,9 @@
 
 /**
  * Default Touch Mode Color Options
- * Options: 0: WHITE,     1: BLACK,      2: RED,    3: GREEN,   4: BLUE,   5: CYAN,
- *          6: MAGENTA,   7: YELLOW,     8: ORANGE, 9: PURPLE, 10: LIME,  11: BROWN,
- *         12: DARKBLUE, 13: DARKGREEN, 14: GRAY, 15: DARKGRAY
+ * Options: 0: WHITE,      1: BLACK,       2: RED,     3: GREEN,     4: BLUE,   5: CYAN,
+ *          6: MAGENTA,    7: YELLOW,      8: ORANGE,  9: PURPLE,   10: LIME,  11: BROWN,
+ *         12: DARKBLUE,  13: DARKGREEN,  14: GRAY,   15: DARKGRAY
  */
 #define TITLE_BACKGROUND_COLOR      1  // Title background color // 0xD928
 #define BACKGROUND_COLOR            1  // Background color // 0x0A29
@@ -154,8 +153,8 @@
 #define EXTRUDER_NUM 1    // set in 1~6
 #define FAN_NUM      1    // set in 1~6
 
-//                       PLA      PETG       ABS
-#define PREHEAT_LABELS    {"PLA",   "PETG",   "ABS"}
+//                          PLA      PETG      ABS
+#define PREHEAT_LABELS   {"PLA",   "PETG",   "ABS"}
 #define PREHEAT_BED      {60,      70,       100}
 #define PREHEAT_HOTEND   {200,     250,      230}
 
