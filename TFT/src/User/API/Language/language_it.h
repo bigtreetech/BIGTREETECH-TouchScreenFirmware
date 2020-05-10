@@ -99,7 +99,7 @@
     #define IT_1_PERCENT            "1%"
     #define IT_5_PERCENT            "5%"
     #define IT_10_PERCENT           "10%"
-    #define IT_PERCENT_VALUE        "%d%"
+    #define IT_PERCENT_VALUE        "%d%%"
     #define IT_READY                "Pronto"
     #define IT_BUSY                 "Processo in carico, attendi..."
     #define IT_UNCONNECTED          "Stampante non connessa"

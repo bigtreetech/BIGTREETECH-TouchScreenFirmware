@@ -99,7 +99,7 @@
     #define FR_1_PERCENT            "1%"
     #define FR_5_PERCENT            "5%"
     #define FR_10_PERCENT           "10%"
-    #define FR_PERCENT_VALUE        "%d%"
+    #define FR_PERCENT_VALUE        "%d%%"
     #define FR_READY                "Prêt"
     #define FR_BUSY                 "Occupée, veuillez patienter..."
     #define FR_UNCONNECTED          "L'imprimante n'est pas reliée !"

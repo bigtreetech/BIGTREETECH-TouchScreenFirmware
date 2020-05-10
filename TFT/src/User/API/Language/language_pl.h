@@ -99,7 +99,7 @@
     #define PL_1_PERCENT            "1%"
     #define PL_5_PERCENT            "5%"
     #define PL_10_PERCENT           "10%"
-    #define PL_PERCENT_VALUE        "%d%"
+    #define PL_PERCENT_VALUE        "%d%%"
     #define PL_READY                "Gotowy"
     #define PL_BUSY                 "Trwa przetwarzanie, proszę czekać..."
     #define PL_UNCONNECTED          "Drukarka nie podłączona!"
