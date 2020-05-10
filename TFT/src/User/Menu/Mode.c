@@ -23,17 +23,12 @@ void Serial_ReSourceInit(void)
 
 void infoMenuSelect(void)
 {
-  #ifdef CLEAN_MODE_SWITCHING_SUPPORT
-    Serial_ReSourceInit();
-  #endif
   infoMenu.cur = 0;
   switch(infoSettings.mode)
   {
     case SERIAL_TSC:
     {
-      #ifndef CLEAN_MODE_SWITCHING_SUPPORT
-        Serial_ReSourceInit();
-      #endif
+      Serial_ReSourceInit();
 
       #ifdef BUZZER_PIN
         Buzzer_Config();
@@ -66,7 +61,10 @@ void infoMenuSelect(void)
     #ifdef ST7920_SPI
 
     case LCD12864:
-
+      if (infoSettings.serial_alwaysOn == 1)
+      {
+        Serial_ReSourceInit();
+      }
       #ifdef BUZZER_PIN
         Buzzer_DeConfig();  // Disable buzzer in LCD12864 Simulations mode.
       #endif
