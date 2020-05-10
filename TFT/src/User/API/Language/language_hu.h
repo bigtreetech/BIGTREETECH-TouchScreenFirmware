@@ -140,7 +140,7 @@
     #define HU_WAIT_TEMP_SHUT_DOWN  "Várja meg a fej visszahűlését.%d℃" // Várjon, amíg a meleg fej a megadott ℃ alá hűl.
     #define HU_FORCE_SHUT_DOWN      "Kényszerítés"
     #define HU_SHUTTING_DOWN        "Leállítás..."
-    #define HU_PARAMETER_SETTING    "Paraméterek"
+    #define HU_PARAMETER_SETTING    "Tényezők"
     #define HU_ON                   "BE"
     #define HU_OFF                  "KI"
     #define HU_SMART                "OKOS"
