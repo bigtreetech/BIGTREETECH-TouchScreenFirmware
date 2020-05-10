@@ -351,7 +351,7 @@ void parseACK(void)
       {
         infoMachineSettings.emergencyParser = ack_value();
       }
-      else if(ack_seen("Cap:SDCARD:"))
+      else if(ack_seen("Cap:SDCARD:" && infoSettings.onboardSD == 0))
       {
         infoMachineSettings.onboard_sd_support = ack_value();
       }

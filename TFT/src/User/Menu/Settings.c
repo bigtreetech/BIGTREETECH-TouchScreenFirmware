@@ -77,6 +77,7 @@ void infoSettingsReset(void)
   infoSettings.ext_count              = EXTRUDER_NUM;
   infoSettings.fan_count              = FAN_NUM;
   infoSettings.auto_load_leveling     = AUTO_SAVE_LOAD_LEVELING_VALUE;
+  infoSettings.onboardSD              = 0;     //0: auto, 1: Enable 2: Disable
   infoSettings.m27_refresh_time       = M27_REFRESH;
   infoSettings.m27_active             = M27_WATCH_OTHER_SOURCES;
 
@@ -170,8 +171,15 @@ void setupMachine(void){
     infoMachineSettings.zProbe                  = 1;
     infoMachineSettings.levelingData            = 1;
     infoMachineSettings.emergencyParser         = 1;
-    infoMachineSettings.onboard_sd_support      = 1;
     infoMachineSettings.autoReportSDStatus      = 0;
+  }
+  if (infoSettings.onboardSD == 1) //enabled
+  {
+    infoMachineSettings.onboard_sd_support = 1;
+  }
+  else if (infoSettings.onboardSD == 2) //disabled
+  {
+    infoMachineSettings.onboard_sd_support = 0;
   }
 }
 
