@@ -265,36 +265,36 @@ void updateFeatureSettings(uint8_t key_val)
       break;
 
     #ifdef LCD_LED_PWM_CHANNEL
-    case SKEY_LCD_BRIGHTNESS:
-    {
-      infoSettings.lcd_brightness = (infoSettings.lcd_brightness + 1) % ITEM_BRIGHTNESS_NUM;
-      char tempstr[8];
-      my_sprintf(tempstr,(char *)textSelect(LABEL_PERCENT_VALUE),LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
-      setDynamicTextValue(key_val,tempstr);
-      Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
+      case SKEY_LCD_BRIGHTNESS:
+      {
+        infoSettings.lcd_brightness = (infoSettings.lcd_brightness + 1) % ITEM_BRIGHTNESS_NUM;
+        char tempstr[8];
+        my_sprintf(tempstr,(char *)textSelect(LABEL_PERCENT_VALUE),LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
+        setDynamicTextValue(key_val,tempstr);
+        Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
 
-      menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
-      break;
-    }
+        menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
+        break;
+      }
 
-    case SKEY_LCD_BRIGTHNESS_DIM:
-    {
-      infoSettings.lcd_idle_brightness = (infoSettings.lcd_idle_brightness + 1) % ITEM_BRIGHTNESS_NUM;
-      char tempstr[8];
-      my_sprintf(tempstr,(char *)textSelect(LABEL_PERCENT_VALUE),LCD_BRIGHTNESS[infoSettings.lcd_idle_brightness]);
-      setDynamicTextValue(key_val,tempstr);
+      case SKEY_LCD_BRIGTHNESS_DIM:
+      {
+        infoSettings.lcd_idle_brightness = (infoSettings.lcd_idle_brightness + 1) % ITEM_BRIGHTNESS_NUM;
+        char tempstr[8];
+        my_sprintf(tempstr,(char *)textSelect(LABEL_PERCENT_VALUE),LCD_BRIGHTNESS[infoSettings.lcd_idle_brightness]);
+        setDynamicTextValue(key_val,tempstr);
 
-      menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
-      break;
-    }
+        menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
+        break;
+      }
 
-    case SKEY_LCD_DIM_IDLE_TIMER:
-      infoSettings.lcd_idle_timer = (infoSettings.lcd_idle_timer + 1) % ITEM_SECONDS_NUM;
-      settingPage[item_index].valueLabel = itemDimTime[infoSettings.lcd_idle_timer];
-      featureSettingsItems.items[key_val] = settingPage[item_index];
+      case SKEY_LCD_DIM_IDLE_TIMER:
+        infoSettings.lcd_idle_timer = (infoSettings.lcd_idle_timer + 1) % ITEM_SECONDS_NUM;
+        settingPage[item_index].valueLabel = itemDimTime[infoSettings.lcd_idle_timer];
+        featureSettingsItems.items[key_val] = settingPage[item_index];
 
-      menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
-      break;
+        menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
+        break;
     #endif //LCD_LED_PWM_CHANNEL
 
     #ifdef ST7920_SPI
@@ -392,7 +392,7 @@ void loadFeatureSettings(){
           featureSettingsItems.items[i] = settingPage[item_index];
           break;
       #endif
-      #ifdef PS_ON_PIN
+      #ifdef LCD_LED_PWM_CHANNEL
       case SKEY_LCD_BRIGHTNESS:
       {
         char tempstr[8];
