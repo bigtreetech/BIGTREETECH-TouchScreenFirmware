@@ -370,7 +370,7 @@ void parseACK(void)
       }
       else if(ack_seen("Probe Offset"))
       {
-        if(ack_seen("Z"))
+        if(ack_seen("Z:"))
         {
           setParameter(P_PROBE_OFFSET,Z_STEPPER, ack_value());
         }
