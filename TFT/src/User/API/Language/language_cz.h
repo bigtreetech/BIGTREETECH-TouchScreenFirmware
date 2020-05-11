@@ -99,7 +99,7 @@
     #define CZ_1_PERCENT            "1%"
     #define CZ_5_PERCENT            "5%"
     #define CZ_10_PERCENT           "10%"
-    #define CZ_PERCENT_VALUE        "%d%"
+    #define CZ_PERCENT_VALUE        "%d%%"
     #define CZ_READY                "Ready"
     #define CZ_BUSY                 "Zpracovávám, čekejte prosím..."
     #define CZ_UNCONNECTED          "Tiskárna není připojena!"

@@ -99,7 +99,7 @@
     #define AM_1_PERCENT            "1%"
     #define AM_5_PERCENT            "5%"
     #define AM_10_PERCENT           "10%"
-    #define AM_PERCENT_VALUE        "%d%"
+    #define AM_PERCENT_VALUE        "%d%%"
     #define AM_READY                "Պատրաստ"
     #define AM_BUSY                 "Ծանրաբեռնված է"
     #define AM_UNCONNECTED          "Տպիչը կցված չէ"

@@ -99,7 +99,7 @@
     #define PT_1_PERCENT            "1%"
     #define PT_5_PERCENT            "5%"
     #define PT_10_PERCENT           "10%"
-    #define PT_PERCENT_VALUE        "%d%"
+    #define PT_PERCENT_VALUE        "%d%%"
     #define PT_READY                "Pronto"
     #define PT_BUSY                 "Em processamento, aguarde..."
     #define PT_UNCONNECTED          "Nenhuma impressora conectada!"

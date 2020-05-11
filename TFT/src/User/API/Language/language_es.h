@@ -99,7 +99,7 @@
     #define ES_1_PERCENT            "1%"
     #define ES_5_PERCENT            "5%"
     #define ES_10_PERCENT           "10%"
-    #define ES_PERCENT_VALUE        "%d%"
+    #define ES_PERCENT_VALUE        "%d%%"
     #define ES_READY                "Preparado"
     #define ES_BUSY                 "Procesamiento ocupado, por favor espere..."
     #define ES_UNCONNECTED          "¡No hay comunicación con impresora!"

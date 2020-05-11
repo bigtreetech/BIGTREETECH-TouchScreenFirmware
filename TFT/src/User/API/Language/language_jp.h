@@ -99,7 +99,7 @@
     #define JP_1_PERCENT            "1%"
     #define JP_5_PERCENT            "5%"
     #define JP_10_PERCENT           "10%"
-    #define JP_PERCENT_VALUE        "%d%"
+    #define JP_PERCENT_VALUE        "%d%%"
     #define JP_READY                "準備中"
     #define JP_BUSY                 "ビジー状態、しばらくお待ちください..."
     #define JP_UNCONNECTED          "プリンターに連続していない!"

@@ -99,7 +99,7 @@
     #define DU_1_PERCENT            "1%"
     #define DU_5_PERCENT            "5%"
     #define DU_10_PERCENT           "10%"
-    #define DU_PERCENT_VALUE        "%d%"
+    #define DU_PERCENT_VALUE        "%d%%"
     #define DU_READY                "Gereed"
     #define DU_BUSY                 "In verwerking ,wacht aub..."
     #define DU_UNCONNECTED          "Geen printer gekoppeld!"

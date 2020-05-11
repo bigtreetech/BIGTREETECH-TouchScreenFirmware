@@ -99,7 +99,7 @@
     #define RU_1_PERCENT              "1%"
     #define RU_5_PERCENT              "5%"
     #define RU_10_PERCENT             "10%"
-    #define RU_PERCENT_VALUE          "%d%"
+    #define RU_PERCENT_VALUE          "%d%%"
     #define RU_READY                  "Готов"
     #define RU_BUSY                   "Занято процессом, подождите..."
     #define RU_UNCONNECTED            "Нет подключения!"

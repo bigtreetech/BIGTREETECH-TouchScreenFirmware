@@ -99,7 +99,7 @@
     #define HU_1_PERCENT            "1%"
     #define HU_5_PERCENT            "5%"
     #define HU_10_PERCENT           "10%"
-    #define HU_PERCENT_VALUE        "%d%"
+    #define HU_PERCENT_VALUE        "%d%%"
     #define HU_READY                "Kész"
     #define HU_BUSY                 "Feldolgozás alatt, kérlek várj..."
     #define HU_UNCONNECTED          "Nincs nyomtató csatlakoztatva!"

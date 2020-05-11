@@ -305,6 +305,16 @@ void parseACK(void)
         dualstepper[E_STEPPER] = true;
       }
     // Parse M115 capability report
+
+      else if(ack_seen("FIRMWARE_NAME:Marlin"))
+      {
+        infoMachineSettings.isMarlinFirmware = 1;
+      }
+      else if(ack_seen("FIRMWARE_NAME:Smoothieware"))
+      {
+        infoMachineSettings.isMarlinFirmware = 0;
+        setupMachine();
+      }
       else if(ack_seen("Cap:EEPROM:"))
       {
         infoMachineSettings.EEPROM = ack_value();
@@ -341,7 +351,7 @@ void parseACK(void)
       {
         infoMachineSettings.emergencyParser = ack_value();
       }
-      else if(ack_seen("Cap:SDCARD:"))
+      else if(ack_seen("Cap:SDCARD:" && infoSettings.onboardSD == 0))
       {
         infoMachineSettings.onboard_sd_support = ack_value();
       }
@@ -360,7 +370,7 @@ void parseACK(void)
       }
       else if(ack_seen("Probe Offset"))
       {
-        if(ack_seen("Z"))
+        if(ack_seen("Z:"))
         {
           setParameter(P_PROBE_OFFSET,Z_STEPPER, ack_value());
         }

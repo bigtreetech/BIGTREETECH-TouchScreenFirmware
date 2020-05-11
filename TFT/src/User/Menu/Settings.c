@@ -77,6 +77,7 @@ void infoSettingsReset(void)
   infoSettings.ext_count              = EXTRUDER_NUM;
   infoSettings.fan_count              = FAN_NUM;
   infoSettings.auto_load_leveling     = AUTO_SAVE_LOAD_LEVELING_VALUE;
+  infoSettings.onboardSD              = 0;     //0: auto, 1: Enable 2: Disable
   infoSettings.m27_refresh_time       = M27_REFRESH;
   infoSettings.m27_active             = M27_WATCH_OTHER_SOURCES;
 
@@ -155,10 +156,31 @@ void setupMachine(void){
       storeCmd("M420 S1\n");
     }
   #endif
-  if (infoMachineSettings.emergencyParser != 1 && wasRestored == true){
-    popupReminder(textSelect(LABEL_WARNING), textSelect(LABEL_EMERGENCYPARSER));
+  if(infoMachineSettings.isMarlinFirmware == 1)
+  {
+    if (infoMachineSettings.emergencyParser != 1 && wasRestored == true){
+      popupReminder(textSelect(LABEL_WARNING), textSelect(LABEL_EMERGENCYPARSER));
+    }
+    printSetUpdateWaiting(M27_WATCH_OTHER_SOURCES);
   }
-  printSetUpdateWaiting(M27_WATCH_OTHER_SOURCES);
+  else //Smoothieware does not report detailed M115 capabilities
+  {
+    infoMachineSettings.EEPROM                  = 1;
+    infoMachineSettings.autoReportTemp          = 0;
+    infoMachineSettings.autoLevel               = 1;
+    infoMachineSettings.zProbe                  = 1;
+    infoMachineSettings.levelingData            = 1;
+    infoMachineSettings.emergencyParser         = 1;
+    infoMachineSettings.autoReportSDStatus      = 0;
+  }
+  if (infoSettings.onboardSD == 1) //enabled
+  {
+    infoMachineSettings.onboard_sd_support = 1;
+  }
+  else if (infoSettings.onboardSD == 2) //disabled
+  {
+    infoMachineSettings.onboard_sd_support = 0;
+  }
 }
 
 // Version infomation

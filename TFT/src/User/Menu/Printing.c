@@ -184,8 +184,7 @@ void menuBeforePrinting(void)
   //load stat/end/cancel gcodes from spi flash
   printcodes = (PRINT_GCODES*)malloc(sizeof(PRINT_GCODES));
   uint8_t *data_p = (uint8_t *)printcodes;
-  W25Qxx_ReadBuffer(data_p,CUSTOM_GCODE_ADDR,sizeof(printcodes));
-
+  W25Qxx_ReadBuffer(data_p,PRINT_GCODES_ADDR,sizeof(printcodes));
 
   long size = 0;
   switch (infoFile.source)
