@@ -1,4 +1,4 @@
-﻿/**
+/**
 * CONFIG Kewords Generation
 * Usage: X_CONFIG(VALUE)
 * 'VALUE' is the keyword name without the 'CONFIG_'

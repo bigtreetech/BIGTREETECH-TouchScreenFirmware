@@ -24,7 +24,6 @@ void infoSettingsReset(void)
   infoSettings.language             = DEFAULT_LANGUAGE;
   infoSettings.mode                 = DEFAULT_LCD_MODE;
   infoSettings.unified_menu         = UNIFIED_MENU;
-  infoSettings.rotate_ui            = 0;
 
   infoSettings.bg_color             = BACKGROUND_COLOR;
   infoSettings.font_color           = FONT_COLOR;
@@ -38,7 +37,7 @@ void infoSettingsReset(void)
   infoSettings.silent               = 0;
   infoSettings.terminalACK          = 0;
   infoSettings.move_speed           = 1;
-  infoSettings.knob_led_color       = (STARTUP_KNOB_LED_COLOR - 1);
+  infoSettings.knob_led_color       = STARTUP_KNOB_LED_COLOR;
   infoSettings.send_start_gcode     = 0;
   infoSettings.send_end_gcode       = 0;
   infoSettings.send_cancel_gcode    = 1;
@@ -155,7 +154,7 @@ void setupMachine(void){
       storeCmd("M420 S1\n");
     }
   #endif
-  if (infoMachineSettings.emergencyParser != 1 && wasRestored == true){
+  if (infoMachineSettings.emergencyParser != 1 && readIsRestored() == true){
     popupReminder(textSelect(LABEL_WARNING), textSelect(LABEL_EMERGENCYPARSER));
   }
   printSetUpdateWaiting(M27_WATCH_OTHER_SOURCES);

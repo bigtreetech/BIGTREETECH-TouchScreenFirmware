@@ -1,4 +1,4 @@
-﻿#include "Colors.h"
+#include "Colors.h"
 
 const u32 lcd_colors[LCD_COLOR_COUNT] = {
                                         WHITE,

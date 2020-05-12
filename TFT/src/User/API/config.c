@@ -1,4 +1,3 @@
-﻿
 #include "config.h"
 
 //#define CONFIG_DEBUG  // To be used only when calling 'getConfigFromFile()' after boot process
@@ -452,7 +451,6 @@ void parseConfigKey(u16 index)
   case C_INDEX_LIST_MODE:
       infoSettings.file_listmode = getOnOff();
     break;
-  break;
 
   //---------------------------------------------------------Marlin Mode Settings (Only for TFT35_V3.0/TFT24_V1.1/TFT28V3.0)
 #ifdef ST7920_SPI

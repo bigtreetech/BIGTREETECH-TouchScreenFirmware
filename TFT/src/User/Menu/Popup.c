@@ -115,7 +115,7 @@ void menuPopupPauseForUser(void)
   }
 }
 
-void popupPauseForUser() {
+void popupPauseForUser(void) {
   #ifdef CLEAN_MODE_SWITCHING_SUPPORT
     if (infoSettings.mode == LCD12864) return;
   #endif

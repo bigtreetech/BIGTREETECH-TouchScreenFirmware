@@ -72,9 +72,13 @@ void Hardware_GenericInit(void)
     USBH_Init(&USB_OTG_Core, USB_OTG_FS_CORE_ID, &USB_Host, &USBH_MSC_cb, &USR_cb);
   #endif
 
-  if(readStoredPara() == false) // Read settings parameter
+  if (readIsTSCExist() == false) // Read settings parameter
   {
     TSC_Calibration();
+    storePara();
+  }
+  else if (readIsRestored())
+  {
     storePara();
   }
   printSetUpdateWaiting(infoSettings.m27_active);
