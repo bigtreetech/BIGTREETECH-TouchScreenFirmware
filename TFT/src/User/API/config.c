@@ -749,11 +749,11 @@ void parseConfigKey(u16 index)
   case C_INDEX_PREHEAT_TEMP_3:
     {
         int val_index = index - C_INDEX_PREHEAT_TEMP_1;
-      if (key_seen("B:"))
+      if (key_seen("B"))
       { if (inLimit(config_value(), MIN_BED_TEMP, MAX_BED_TEMP))
           infoSettings.preheat_bed[val_index] = config_value();
       }
-      if (key_seen("T:"))
+      if (key_seen("T"))
       { if (inLimit(config_value(), MIN_TOOL_TEMP, MAX_TOOL_TEMP))
           infoSettings.preheat_temp[val_index] = config_value();
       }
