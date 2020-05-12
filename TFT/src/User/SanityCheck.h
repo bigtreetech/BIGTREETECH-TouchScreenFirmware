@@ -14,9 +14,9 @@
     #error "the Configuration.h is old. please use the latest Configuration.h file"
 #endif
 
-#ifndef ST7920_SPI
+#ifdef ST7920_SPI
     #ifdef CLEAN_MODE_SWITCHING_SUPPORT
-    #error "CLEAN_MODE_SWITCHING_SUPPORT can only be enabled for TFT controllers which support ST7920 Emulator/Marlin Mode. Disable CLEAN_MODE_SWITCHING_SUPPORT in Configuration.h"
+    #error "CLEAN_MODE_SWITCHING_SUPPORT is now SERIAL_ALWAYS_ON. Please update your configuration.
     #endif
 #endif
 

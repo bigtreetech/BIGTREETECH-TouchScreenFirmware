@@ -122,9 +122,10 @@ void menuMode(void)
 
   GUI_Clear(BACKGROUND_COLOR);
   //RADIO_Create(&modeRadio);
-  #ifndef CLEAN_MODE_SWITCHING_SUPPORT
+  if (infoSettings.serial_alwaysOn != 1)
+  {
     Serial_ReSourceDeInit();
-  #endif
+  }
   resetInfoFile();
   SD_DeInit();
 
@@ -158,9 +159,11 @@ void menuMode(void)
       loopCheckEncoderSteps();
       loopCheckEncoder();
     #endif
-    #ifdef CLEAN_MODE_SWITCHING_SUPPORT
+
+    if (infoSettings.serial_alwaysOn == 1)
+    {
       loopBackEnd();
-    #endif
+    }
 
     if(key_num==MKEY_1)
 		{

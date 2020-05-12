@@ -49,6 +49,7 @@ void infoSettingsReset(void)
   infoSettings.lcd_idle_brightness  = DEFAULT_LCD_IDLE_BRIGHTNESS;
   infoSettings.lcd_idle_timer       = DEFAULT_LCD_IDLE_TIMER;
 
+  infoSettings.serial_alwaysOn            = SERIAL_ALWAYS_ON;
   infoSettings.marlin_mode_bg_color       = ST7920_BKCOLOR;
   infoSettings.marlin_mode_font_color     = ST7920_FNCOLOR;
   infoSettings.marlin_mode_showtitle      = ST7920_SHOW_BANNER;

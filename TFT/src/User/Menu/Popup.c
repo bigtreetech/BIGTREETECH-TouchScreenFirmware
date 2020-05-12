@@ -83,10 +83,10 @@ void menuPopup(void)
   }
 }
 
-void popupReminder(u8* info, u8* context) {
-  #ifdef CLEAN_MODE_SWITCHING_SUPPORT
-    if (infoSettings.mode == LCD12864) return;
-  #endif
+void popupReminder(u8* info, u8* context)
+{
+  if (infoSettings.serial_alwaysOn == 1 && infoSettings.mode == LCD12864) return;
+
   popupDrawPage(&bottomSingleBtn , info, context, textSelect(LABEL_CONFIRM), NULL);
   if(infoMenu.menu[infoMenu.cur] != menuPopup)
   {
@@ -115,10 +115,10 @@ void menuPopupPauseForUser(void)
   }
 }
 
-void popupPauseForUser() {
-  #ifdef CLEAN_MODE_SWITCHING_SUPPORT
-    if (infoSettings.mode == LCD12864) return;
-  #endif
+void popupPauseForUser()
+{
+  if (infoSettings.serial_alwaysOn == 1 && infoSettings.mode == LCD12864) return;
+
   popupDrawPage(&bottomSingleBtn , (u8*)"Printer Paused", (u8*)"OK to continue", textSelect(LABEL_CONFIRM), NULL);
   if(infoMenu.menu[infoMenu.cur] != menuPopupPauseForUser)
   {

@@ -421,11 +421,6 @@ void parseConfigKey(u16 index)
       infoSettings.list_button_color = config_value();
     break;
 
-  case C_INDEX_MODE:
-    if (inLimit(config_value(), 0, MODE_COUNT-1))
-      infoSettings.mode = config_value();
-    break;
-
   case C_INDEX_ROTATE_UI:
       if (infoSettings.rotate_ui != getOnOff())
           scheduleRotate = true;
@@ -455,7 +450,18 @@ void parseConfigKey(u16 index)
   break;
 
   //---------------------------------------------------------Marlin Mode Settings (Only for TFT35_V3.0/TFT24_V1.1/TFT28V3.0)
+
 #ifdef ST7920_SPI
+
+  case C_INDEX_MODE:
+    if (inLimit(config_value(), 0, MODE_COUNT-1))
+      infoSettings.mode = config_value();
+    break;
+
+  case C_INDEX_SERIAL_ON:
+      infoSettings.serial_alwaysOn = getOnOff();
+    break;
+
   case C_INDEX_MARLIN_BG_COLOR:
     if (inLimit(config_value(), 0, LCD_COLOR_COUNT-1))
       infoSettings.marlin_mode_bg_color = config_value();
@@ -481,7 +487,8 @@ void parseConfigKey(u16 index)
     }
     break;
 
-#endif
+#endif //ST7920_SPI
+
   //---------------------------------------------------------Printer / Machine Settings
 
   case C_INDEX_TOOL_COUNT:

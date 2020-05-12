@@ -166,9 +166,10 @@ void menuST7920(void)
 
     loopCheckMode();
 
-    #ifdef CLEAN_MODE_SWITCHING_SUPPORT
+    if (infoSettings.serial_alwaysOn == 1)
+    {
       loopBackEnd();
-    #endif
+    }
   }
   SPI_SlaveDeInit();
 }
