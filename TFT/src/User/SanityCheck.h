@@ -16,7 +16,7 @@
 
 #ifdef ST7920_SPI
     #ifdef CLEAN_MODE_SWITCHING_SUPPORT
-    #error "CLEAN_MODE_SWITCHING_SUPPORT is now SERIAL_ALWAYS_ON. Please update your configuration.
+    #error "CLEAN_MODE_SWITCHING_SUPPORT is now SERIAL_ALWAYS_ON. Please update your configuration."
     #endif
 #endif
 
