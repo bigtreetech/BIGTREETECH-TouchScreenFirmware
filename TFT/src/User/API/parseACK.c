@@ -9,6 +9,7 @@ int MODEselect;
 const char *const ignoreEcho[] = {
   "busy: processing",
   "Now fresh file:",
+  "Now doing file:,"
   "Probe Z Offset:",
   "Flow:",
   "echo:;",
