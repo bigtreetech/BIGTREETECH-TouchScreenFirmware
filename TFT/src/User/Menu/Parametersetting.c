@@ -249,7 +249,7 @@ for (uint8_t i = 0; i < LISTITEM_PER_PAGE; i++)
 
 void menuParameterSettings(void){
     KEY_VALUES key_num = KEY_IDLE;
-    PARAMETERS now = infoParameters;
+    //PARAMETERS now = infoParameters;
     ps_cur_page = 0;
     loadParameterPage();
     menuDrawListPage(&parameterMainItems);
@@ -282,8 +282,9 @@ void menuParameterSettings(void){
             }
             break;
         case KEY_ICON_7:
-            if(memcmp(&now, &infoParameters, sizeof(PARAMETERS)))
-			    {
+            //if(memcmp(&now, &infoParameters, sizeof(PARAMETERS)))
+			if(infoMachineSettings.EEPROM == 1)	
+                {
                     storeCmd("M500\n");
                 }
             infoMenu.cur--;
