@@ -55,9 +55,6 @@ void infoSettingsReset(void)
   infoSettings.marlin_mode_showtitle      = ST7920_SHOW_BANNER;
   infoSettings.marlin_mode_fullscreen     = DEFAULT_ST7920_FULLSCREEN_MODE;
 
-  infoSettings.send_start_gcode       = 0;
-  infoSettings.send_end_gcode         = 0;
-  infoSettings.send_cancel_gcode      = 1;
   infoSettings.auto_off               = 0;
   infoSettings.ps_active_high         = PS_ON_ACTIVE_HIGH;
   infoSettings.auto_off_temp          = AUTO_SHUT_DOWN_MAXTEMP;
