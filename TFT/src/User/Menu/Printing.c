@@ -161,7 +161,7 @@ void printerGotoIdle(void)
     mustStoreCmd("%s S0\n", heatCmd[i]);
   }
   // disable all fan
-  for(u8 i = 0; i < (infoSettings.fan_count+1); i++) {
+  for(u8 i = 0; i < (infoSettings.fan_count); i++) {
     mustStoreCmd("%s S0\n", fanCmd[i]);
   }
   // disable all stepper
@@ -499,7 +499,7 @@ void toggleinfo(void)
 
     if (infoSettings.fan_count > 1)
     {
-      c_fan = (c_fan + 1) % FAN_NUM;
+      c_fan = (c_fan + 1) % infoSettings.fan_count;
       rapid_serial_loop();	 //perform backend printing loop before drawing to avoid printer idling
       reDrawFan(FAN_ICON_POS);
     }
@@ -764,7 +764,7 @@ void menuShutDown(void)
   my_sprintf(tempstr,(char*)textSelect(LABEL_WAIT_TEMP_SHUT_DOWN),infoSettings.auto_off_temp);
   popupDrawPage(bottomDoubleBtn, textSelect(LABEL_SHUT_DOWN), (u8*)tempstr, textSelect(LABEL_FORCE_SHUT_DOWN), textSelect(LABEL_CANCEL));
 
-  for(u8 i = 0; i < FAN_NUM; i++)
+  for(u8 i = 0; i < infoSettings.fan_count; i++)
   {
     mustStoreCmd("%s S255\n", fanCmd[i]);
   }
@@ -781,7 +781,7 @@ void menuShutDown(void)
         break;
     }
     tempIsLower = true;
-    for (TOOL i = NOZZLE0; i < HEATER_NUM; i++)
+    for (TOOL i = NOZZLE0; i < infoSettings.tool_count + 1; i++)
     {
       if(heatGetCurrentTemp(NOZZLE0) >= AUTO_SHUT_DOWN_MAXTEMP)
         tempIsLower = false;
@@ -789,7 +789,7 @@ void menuShutDown(void)
     if(tempIsLower)
     {
       shutdown:
-        for(u8 i = 0; i < FAN_NUM; i++)
+        for(u8 i = 0; i < infoSettings.fan_count; i++)
         {
           mustStoreCmd("%s S0\n", fanCmd[i]);
         }

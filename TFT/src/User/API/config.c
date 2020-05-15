@@ -929,6 +929,10 @@ void parseConfigKey(u16 index)
         infoSettings.send_end_gcode = getOnOff();
     break;
 
+  case C_INDEX_CANCEL_GOCODE_ON:
+        infoSettings.send_cancel_gcode = getOnOff();
+    break;
+
   case C_INDEX_START_GCODE:
     {
       char * pchr;

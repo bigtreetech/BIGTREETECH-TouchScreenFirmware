@@ -271,17 +271,17 @@ void toggleTool(void)
 {
   if (OS_GetTimeMs() > nextTime)
   {
-    if (EXTRUDER_NUM > 1)
+    if (infoSettings.tool_count > 1)
     {
-      current_Ext = (TOOL)((current_Ext + 1) % HEATER_NUM);
+      current_Ext = (TOOL)((current_Ext + 1) % infoSettings.tool_count + 1);
       if (current_Ext == 0)
       {
         current_Ext += 1;
       }
     }
-    if (FAN_NUM > 1)
+    if (infoSettings.fan_count > 1)
     {
-      current_fan = (current_fan + 1) % FAN_NUM;
+      current_fan = (current_fan + 1) % infoSettings.fan_count;
     }
     current_speedID = (current_speedID + 1) % 2;
     nextTime = OS_GetTimeMs() + update_time;

@@ -118,6 +118,7 @@
 //-----------------------------Start, End & Cancel G-codes
 #define CONFIG_START_GCODE_ON   "start_gcode_enabled:"
 #define CONFIG_END_GOCODE_ON    "end_gcode_enabled:"
+#define CONFIG_CANCEL_GOCODE_ON "cancel_gcode_enabled:"
 #define CONFIG_START_GCODE      "start_gcode:"
 #define CONFIG_END_GCODE        "end_gcode:"
 #define CONFIG_CANCEL_GCODE     "cancel_gcode:"

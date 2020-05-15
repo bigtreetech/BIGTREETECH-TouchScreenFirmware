@@ -176,7 +176,7 @@ void parseACK(void)
         if(!heatGetSendWaiting(i)){
           heatSyncTargetTemp(i, ack_second_value()+0.5);
         }
-        for(TOOL i = BED; i < HEATER_NUM; i++)
+        for(TOOL i = BED; i < infoSettings.tool_count + 1; i++)
         {
           if(ack_seen(toolID[i]))
           {

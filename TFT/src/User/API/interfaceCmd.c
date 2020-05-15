@@ -36,7 +36,7 @@ static float cmd_float(void)
 }
 
 //check if 'string' start with 'search'
-bool static  startsWith(TCHAR* search, TCHAR* string) 
+bool static  startsWith(TCHAR* search, TCHAR* string)
 {
     return (strncmp(search, string, strlen(search)) == 0)?true: false;
 }
@@ -189,12 +189,12 @@ void sendQueueCmd(void)
               for (uint i = 0; i < infoFile.f_num; i++) {
                 Serial_Puts(SERIAL_PORT_2,infoFile.file[i]);
                 Serial_Puts(SERIAL_PORT_2,"\n");
-                } 
+                }
               for (uint i = 0; i < infoFile.F_num; i++) {
                 Serial_Puts(SERIAL_PORT_2,"/");
                 Serial_Puts(SERIAL_PORT_2,infoFile.folder[i]);
                 Serial_Puts(SERIAL_PORT_2,"/\n");
-                } 
+                }
             }
             Serial_Puts(SERIAL_PORT_2, "End file list\nok\n");
             infoCmd.count--;
@@ -282,7 +282,7 @@ void sendQueueCmd(void)
                  infoCmd.count--;
                  infoCmd.index_r = (infoCmd.index_r + 1) % CMD_MAX_LIST;
                  return;
-            } 
+            }
           break;
 
         case 28: //M28
@@ -329,11 +329,11 @@ void sendQueueCmd(void)
           if (startsWith("M115 TFT", infoCmd.queue[infoCmd.index_r].gcode)) {
             char buf[50];
             Serial_Puts(SERIAL_PORT_2, "FIRMWARE_NAME: " FIRMWARE_NAME " SOURCE_CODE_URL:https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware\n");
-            my_sprintf(buf, "Cap:TOOL_NUM:%d\n", TOOL_NUM);
+            my_sprintf(buf, "Cap:TOOL_NUM:%d\n", infoSettings.tool_count);
             Serial_Puts(SERIAL_PORT_2, buf);
-            my_sprintf(buf, "Cap:EXTRUDER_NUM:%d\n", EXTRUDER_NUM);
+            my_sprintf(buf, "Cap:EXTRUDER_NUM:%d\n", infoSettings.ext_count);
             Serial_Puts(SERIAL_PORT_2, buf);
-            my_sprintf(buf, "Cap:FAN_NUM:%d\n", FAN_NUM);
+            my_sprintf(buf, "Cap:FAN_NUM:%d\n", infoSettings.fan_count);
             Serial_Puts(SERIAL_PORT_2, buf);
             Serial_Puts(SERIAL_PORT_2, "ok\n");
             infoCmd.count--;
@@ -342,7 +342,7 @@ void sendQueueCmd(void)
           }
           break;
 
-        case 524: //M524 
+        case 524: //M524
           if (isPrinting() && !infoHost.printing){
             abortPrinting();
             Serial_Puts(SERIAL_PORT_2, "ok\n");
@@ -478,7 +478,7 @@ void sendQueueCmd(void)
   }
   else
   {
-      if (!ispolling) { //ignore any query from TFT 
+      if (!ispolling) { //ignore any query from TFT
             infoCmd.count--;
             infoCmd.index_r = (infoCmd.index_r + 1) % CMD_MAX_LIST;
             return;
