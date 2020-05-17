@@ -4,17 +4,19 @@
 char dmaL2Cache[ACK_MAX_SIZE];
 static u16 ack_index=0;
 static u8 ack_cur_src = SERIAL_PORT;
-int MODEselect;
-// Ignore reply "echo:" message (don't display in popup menu)
+
+// Ignore reply messages which starts with following text (don't display in popup menu)
 const char *const ignoreEcho[] = {
   "busy: processing",
   "Now fresh file:",
   "Now doing file:,"
-  "Probe Z Offset:",
+  "Probe Offset",
   "Flow:",
-  "echo:;",
-  "echo:  G",
-  "echo:  M",
+  "echo:;",     //M503
+  "echo:  G",   //M503
+  "echo:  M",   //M503
+  "Cap:",       //M115
+  "Config:",    //M360
 };
 
 bool portSeen[_UART_CNT] = {false, false, false, false, false, false};
@@ -348,10 +350,6 @@ void parseACK(void)
       {
         infoMachineSettings.caseLightsBrightness = ack_value();
       }
-      else if(ack_seen("Cap:EMERGENCY_PARSER:"))
-      {
-        infoMachineSettings.emergencyParser = ack_value();
-      }
       else if(ack_seen("Cap:SDCARD:") && infoSettings.onboardSD == 0)
       {
         infoMachineSettings.onboard_sd_support = ack_value();
@@ -371,7 +369,7 @@ void parseACK(void)
       }
       else if(ack_seen("Probe Offset"))
       {
-        if(ack_seen("Z"))
+        if(ack_seen("Z:"))
         {
           setParameter(P_PROBE_OFFSET,Z_STEPPER, ack_value());
         }

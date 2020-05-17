@@ -156,10 +156,7 @@ void setupMachine(void){
   #endif
   if(infoMachineSettings.isMarlinFirmware == 1)
   {
-    if (infoMachineSettings.emergencyParser != 1 && wasRestored == true){
-      popupReminder(textSelect(LABEL_WARNING), textSelect(LABEL_EMERGENCYPARSER));
-    }
-    printSetUpdateWaiting(M27_WATCH_OTHER_SOURCES);
+    printSetUpdateWaiting(infoSettings.m27_active);
   }
   else //Smoothieware does not report detailed M115 capabilities
   {

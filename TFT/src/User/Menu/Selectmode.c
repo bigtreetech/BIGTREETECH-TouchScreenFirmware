@@ -114,7 +114,6 @@ void menuMode(void)
   #endif
 
   MKEY_VALUES  key_num = MKEY_IDLE;
-  MODEselect = 1;
   bool keyback = false;
 
   int16_t /*nowEncoder =*/ encoderPosition = 0;
@@ -194,7 +193,6 @@ void menuMode(void)
     storePara();
   }
 
-  MODEselect = 0;
   infoMenuSelect();
 }
 
