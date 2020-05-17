@@ -650,6 +650,14 @@ void parseConfigKey(u16 index)
       infoSettings.m27_active = getOnOff();
     break;
 
+  case C_INDEX_LONG_FILENAME:
+    {
+      u8 i = config_value();
+      if (inLimit(i,0,2))
+        infoSettings.longFileName = i;
+      break;
+    }
+
   case C_INDEX_FAN_PERCENT:
       infoSettings.fan_percentage = getOnOff();
     break;

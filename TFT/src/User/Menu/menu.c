@@ -416,7 +416,7 @@ void loopBackEnd(void)
   loopBuzzer();
 #endif
 
-if(infoMachineSettings.onboard_sd_support == 1 && infoMachineSettings.autoReportSDStatus != 1)
+if(infoMachineSettings.onboard_sd_support == ENABLED && infoMachineSettings.autoReportSDStatus == DISABLED)
   {
     loopCheckPrinting(); //Check if there is a SD or USB print running.
   }

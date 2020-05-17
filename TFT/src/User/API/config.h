@@ -50,6 +50,7 @@
 #define CONFIG_ONBOARD_SD           "onboard_sd_support:"
 #define CONFIG_M27_DELAY            "M27_refresh_time:"
 #define CONFIG_M27_KEEP_ON          "M27_always_active:"
+#define CONFIG_LONG_FILENAME        "long_filename_support:"
 #define CONFIG_FAN_PERCENT          "fan_speed_percent:"
 #define CONFIG_PAUSE_RETRACT        "pause_retract:"
 #define CONFIG_PAUSE_POS            "pause_pos:"

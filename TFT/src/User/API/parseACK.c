@@ -208,12 +208,12 @@ void parseACK(void)
         coordinateSetAxisActualSteps(E_AXIS, ack_value());
       }
 
-      else if(ack_seen(bsdnoprintingmagic) && infoMenu.menu[infoMenu.cur] == menuPrinting && infoMachineSettings.onboard_sd_support == 1)
+      else if(ack_seen(bsdnoprintingmagic) && infoMenu.menu[infoMenu.cur] == menuPrinting && infoMachineSettings.onboard_sd_support == ENABLED)
       {
         infoHost.printing = false;
         completePrinting();
       }
-      else if(ack_seen(bsdprintingmagic) && infoMachineSettings.onboard_sd_support == 1)
+      else if(ack_seen(bsdprintingmagic) && infoMachineSettings.onboard_sd_support == ENABLED)
       {
         if(infoMenu.menu[infoMenu.cur] != menuPrinting && !infoHost.printing) {
           infoMenu.menu[++infoMenu.cur] = menuPrinting;
@@ -222,7 +222,7 @@ void parseACK(void)
         // Parsing printing data
         // Example: SD printing byte 123/12345
         char *ptr;
-        u32 position = strtol(strstr(dmaL2Cache, "byte ")+5, &ptr, 10);
+        u32 position = strtol(strstr(dmaL2Cache, "byte ") + 5, &ptr, 10);
         setPrintCur(position);
   //      powerFailedCache(position);
       }
@@ -350,13 +350,17 @@ void parseACK(void)
       {
         infoMachineSettings.caseLightsBrightness = ack_value();
       }
-      else if(ack_seen("Cap:SDCARD:") && infoSettings.onboardSD == 0)
+      else if(ack_seen("Cap:SDCARD:") && infoSettings.onboardSD == AUTO)
       {
         infoMachineSettings.onboard_sd_support = ack_value();
       }
       else if(ack_seen("Cap:AUTOREPORT_SD_STATUS:"))
       {
         infoMachineSettings.autoReportSDStatus = ack_value();
+      }
+      else if(ack_seen("Cap:LONG_FILENAME:") && infoSettings.longFileName == AUTO)
+      {
+        infoMachineSettings.long_filename_support = ack_value();
       }
       else if(ack_seen("Cap:CHAMBER_TEMPERATURE:"))
       {
