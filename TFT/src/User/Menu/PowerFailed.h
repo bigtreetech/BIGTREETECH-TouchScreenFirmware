@@ -17,7 +17,7 @@ typedef struct
   u16   target[MAX_HEATER_COUNT];
   u16   fan[MAX_FAN_COUNT];
   TOOL  nozzle;
-  u32	  offset;
+  u32   offset;
   bool  relative;
   bool  relative_e;
 } BREAK_POINT;

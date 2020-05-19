@@ -6,26 +6,26 @@
 
 void TIM3_Config(void)
 {
-	NVIC_InitTypeDef NVIC_InitStructure;
+  NVIC_InitTypeDef NVIC_InitStructure;
 
-	NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
-	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-	NVIC_Init(&NVIC_InitStructure);
+  NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+  NVIC_Init(&NVIC_InitStructure);
 
-	RCC->APB1ENR |= RCC_APB1Periph_TIM3;
-	TIM3->CR1 &= ~(0x01);
-	TIM3->DIER |= 1<<0;
+  RCC->APB1ENR |= RCC_APB1Periph_TIM3;
+  TIM3->CR1 &= ~(0x01);
+  TIM3->DIER |= 1<<0;
   TIM3->SR = (uint16_t)~(1<<0);
- 	TIM3->ARR = mcuClocks.PCLK1_Timer_Frequency / 1000000 - 1; // 20hz to 1Mhz
+   TIM3->ARR = mcuClocks.PCLK1_Timer_Frequency / 1000000 - 1; // 20hz to 1Mhz
 }
 
 void Buzzer_Config(void)
 {
   GPIO_InitSet(BUZZER_PIN, MGPIO_MODE_OUT_PP, 0);
 
-	TIM3_Config();
+  TIM3_Config();
 }
 
 void Buzzer_DeConfig(void)
@@ -118,8 +118,8 @@ void tone(const uint32_t frequency, const uint32_t duration) {
   toggles = 2 * frequency * duration / 1000;
 
   TIM3->CR1 &= ~(0x01);
-	TIM3->CNT =0;
-	TIM3->PSC = (1000000 / (2 * frequency)) - 1;
+  TIM3->CNT =0;
+  TIM3->PSC = (1000000 / (2 * frequency)) - 1;
   TIM3->CR1 |= 0x01;
 
   NVIC_EnableIRQ(TIM3_IRQn);

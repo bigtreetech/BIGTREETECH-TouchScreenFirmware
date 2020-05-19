@@ -126,7 +126,7 @@ void menuRefreshListPage(void){
       #ifdef RAPID_SERIAL_COMM
         if(isPrinting() == true && infoSettings.serial_alwaysOn != 1)
         {
-          loopBackEnd();	 //perform backend printing loop between drawing icons to avoid printer idling
+          loopBackEnd();   //perform backend printing loop between drawing icons to avoid printer idling
         }
       #endif
     }
@@ -304,7 +304,7 @@ void menuDrawPage(const MENUITEMS *menuItems)
     #ifdef RAPID_SERIAL_COMM
       if(isPrinting() == true && infoSettings.serial_alwaysOn != 1)
       {
-        loopBackEnd();	 //perform backend printing loop between drawing icons to avoid printer idling
+        loopBackEnd();   //perform backend printing loop between drawing icons to avoid printer idling
       }
     #endif
   }
@@ -334,7 +334,7 @@ void menuDrawListPage(const LISTITEMS *listItems)
     #ifdef RAPID_SERIAL_COMM
         if(isPrinting() == true && infoSettings.serial_alwaysOn != 1)
         {
-          loopBackEnd();	 //perform backend printing loop between drawing icons to avoid printer idling
+          loopBackEnd();   //perform backend printing loop between drawing icons to avoid printer idling
         }
     #endif
   }
@@ -410,7 +410,7 @@ void loopBackEnd(void)
 
   parseRcvGcode();                    //Parse the received Gcode from other UART, such as: ESP3D, etc...
 
-  loopCheckHeater();			            //Temperature related settings
+  loopCheckHeater();                  //Temperature related settings
 
 #ifdef BUZZER_PIN
   loopBuzzer();
@@ -446,7 +446,7 @@ void loopFrontEnd(void)
 {
   loopVolumeSource();                 //Check if volume source(SD/U disk) insert
 
-  loopReminderClear();	              //If there is a message in the status bar, timed clear
+  loopReminderClear();                //If there is a message in the status bar, timed clear
 
   loopVolumeReminderClear();
 
