@@ -54,7 +54,7 @@ void powerFailedCache(u32 offset)
   infoBreakPoint.speed = speedGetPercent(0); // Move speed percent
   infoBreakPoint.flow = speedGetPercent(1); // Flow percent
 
-  for(TOOL i = BED; i < infoSettings.tool_count + 1; i++)
+  for(TOOL i = BED; i < HEATER_COUNT; i++)
   {
     infoBreakPoint.target[i] = heatGetTargetTemp(i);
   }
@@ -117,7 +117,7 @@ bool powerOffGetData(void)
   if(f_lseek(&fp, MAX_PATH_LEN)                                 != FR_OK)        return false;
   if(f_read(&fp, &infoBreakPoint,  sizeof(infoBreakPoint), &br) != FR_OK)        return false;
 
-  for(TOOL i = BED; i < infoSettings.tool_count + 1; i++)
+  for(TOOL i = BED; i < HEATER_COUNT; i++)
   {
     if(infoBreakPoint.target[i] != 0)
       mustStoreCacheCmd("%s S%d\n", heatWaitCmd[i], infoBreakPoint.target[i]);

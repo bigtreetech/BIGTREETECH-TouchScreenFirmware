@@ -502,7 +502,7 @@ void parseConfigKey(u16 index)
     break;
 
   case C_INDEX_FAN_COUNT:
-    if (inLimit(config_value(), 1, MAX_TOOL_COUNT))
+    if (inLimit(config_value(), 1, MAX_FAN_COUNT))
       infoSettings.fan_count = config_value();
     break;
 

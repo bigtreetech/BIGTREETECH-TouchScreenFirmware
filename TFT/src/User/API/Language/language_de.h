@@ -170,7 +170,6 @@
     #define DE_RESET_SETTINGS_DONE      "Einstellungen wurden erfolgreich zurückgesetzt. Bitte starten Sie das Gerät neu."
     #define DE_INFO                     "\u0884 Info" //Info Sign
     #define DE_LCD_BRIGHTNESS           "LCD Helligkeit"
-    #define DE_EMERGENCYPARSER          "EMERGENCY_PARSER is disabled in Printer Firmware."
     #define DE_LCD_BRIGHTNESS_DIM       "LCD Abdunkel Helligkeit"
     #define DE_LCD_DIM_IDLE_TIMER       "LCD Timer Abdunkeln"
     #define DE_5_SECONDS                "5 Sek."

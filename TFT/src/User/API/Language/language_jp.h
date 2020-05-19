@@ -170,7 +170,6 @@
     #define JP_RESET_SETTINGS_DONE      "Resetting all settings successfully done. To take full effect, please restart the device."
     #define JP_INFO                     "Info"
     #define JP_LCD_BRIGHTNESS           "LCD Brightness"
-    #define JP_EMERGENCYPARSER          "EMERGENCY_PARSER is disabled in Printer Firmware."
     #define JP_LCD_BRIGHTNESS_DIM       "LCD Brightness dim"
     #define JP_LCD_DIM_IDLE_TIMER       "LCD dim idle timer"
     #define JP_5_SECONDS                "5 Sec."

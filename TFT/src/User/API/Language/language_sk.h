@@ -170,7 +170,6 @@
     #define SK_RESET_SETTINGS_DONE      "Reset všetkých nastavení vykonaný. Pre správne fungovanie, prosím, reštartovať zariadenie."
     #define SK_INFO                     "Info"
     #define SK_LCD_BRIGHTNESS           "JAS LCD"
-    #define SK_EMERGENCYPARSER          "Funkcia EMERGENCY_PARSER je deaktivovaná vo firmware tlačiarne."
     #define SK_LCD_BRIGHTNESS_DIM       "LCD Brightness dim"
     #define SK_LCD_DIM_IDLE_TIMER       "LCD dim idle timer"
     #define SK_5_SECONDS                "5 Sec."

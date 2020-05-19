@@ -170,7 +170,6 @@
     #define RU_RESET_SETTINGS_DONE    "Успешный сброс настроек экрана. Для полного     вступления в силу,      перегрузите устройство."
     #define RU_INFO                   "\u0884 Информация" //Info Sign
     #define RU_LCD_BRIGHTNESS         "Яркость LCD"
-    #define RU_EMERGENCYPARSER        "EMERGENCY_PARSER не разрешен в прошивке принтера."
     #define RU_LCD_BRIGHTNESS_DIM     "Регулировка яркости LCD"
     #define RU_LCD_DIM_IDLE_TIMER     "Время до гашения LCD"
     #define RU_5_SECONDS              "5 сек."

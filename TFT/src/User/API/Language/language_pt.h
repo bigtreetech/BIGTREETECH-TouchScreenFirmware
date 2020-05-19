@@ -170,7 +170,6 @@
     #define PT_RESET_SETTINGS_DONE      "Resetting all settings successfully done. To take full effect, please restart the device."
     #define PT_INFO                     "Info"
     #define PT_LCD_BRIGHTNESS           "LCD Brightness"
-    #define PT_EMERGENCYPARSER          "EMERGENCY_PARSER is disabled in Printer Firmware."
     #define PT_LCD_BRIGHTNESS_DIM       "LCD Brightness dim"
     #define PT_LCD_DIM_IDLE_TIMER       "LCD dim idle timer"
     #define PT_5_SECONDS                "5 Sec."

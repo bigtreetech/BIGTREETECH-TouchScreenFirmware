@@ -170,7 +170,6 @@
     #define DU_RESET_SETTINGS_DONE      "Resetting all settings successfully done. To take full effect, please restart the device."
     #define DU_INFO                     "Info"
     #define DU_LCD_BRIGHTNESS           "LCD Brightness"
-    #define DU_EMERGENCYPARSER          "EMERGENCY_PARSER is disabled in Printer Firmware."
     #define DU_LCD_BRIGHTNESS_DIM       "LCD Brightness dim"
     #define DU_LCD_DIM_IDLE_TIMER       "LCD dim idle timer"
     #define DU_5_SECONDS                "5 Sec."

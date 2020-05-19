@@ -116,7 +116,7 @@ bool readStoredPara(void)
   infoSettings.m27_active           = byteToWord(data + (index += 4), 4);
   infoSettings.longFileName         = byteToWord(data + (index += 4), 4);
 
-  for(int i = 0; i < HEAT_NUM; i++)
+  for(int i = 0; i < MAX_HEATER_COUNT; i++)
   {
     infoSettings.max_temp[i]          = byteToWord(data + (index += 4), 4);
   }
@@ -243,14 +243,14 @@ void storePara(void)
   wordToByte(infoSettings.m27_active,                 data + (index += 4));
   wordToByte(infoSettings.longFileName,               data + (index += 4));
 
-  for(int i = 0; i < HEAT_NUM; i++)
+  for(int i = 0; i < MAX_HEATER_COUNT; i++)
   {
     wordToByte(infoSettings.max_temp[i],              data + (index += 4));
   }
 
   wordToByte(infoSettings.min_ext_temp,               data + (index += 4));
 
-  for(int i = 0; i < MAX_TOOL_COUNT ;i++)
+  for(int i = 0; i < MAX_FAN_COUNT ;i++)
   {
     wordToByte(infoSettings.fan_max[i],               data + (index += 4));
   }

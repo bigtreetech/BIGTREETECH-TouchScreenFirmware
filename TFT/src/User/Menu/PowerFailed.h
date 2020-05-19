@@ -14,8 +14,8 @@ typedef struct
   float axis[TOTAL_AXIS];
   u32   feedrate;
   u16   speed,flow;
-  u16   target[MAX_TOOL_COUNT];
-  u16   fan[MAX_TOOL_COUNT];
+  u16   target[MAX_HEATER_COUNT];
+  u16   fan[MAX_FAN_COUNT];
   TOOL  nozzle;
   u32	  offset;
   bool  relative;

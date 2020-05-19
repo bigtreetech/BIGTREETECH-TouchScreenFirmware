@@ -170,7 +170,6 @@
     #define EN_RESET_SETTINGS_DONE      "Resetting all settings  successfully done. To   take full effect, please restart the device."
     #define EN_INFO                     "\u0884 Info" //Info Sign
     #define EN_LCD_BRIGHTNESS           "LCD Brightness"
-    #define EN_EMERGENCYPARSER          "EMERGENCY_PARSER is disabled in Printer Firmware."
     #define EN_LCD_BRIGHTNESS_DIM       "LCD Brightness dim"
     #define EN_LCD_DIM_IDLE_TIMER       "LCD dim idle timer"
     #define EN_5_SECONDS                "5 Sec."

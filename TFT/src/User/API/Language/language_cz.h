@@ -170,7 +170,6 @@
     #define CZ_RESET_SETTINGS_DONE      "Resetování všech nastavení bylo úspěšně provedeno. Restartujte zařízení."
     #define CZ_INFO                     "Info"
     #define CZ_LCD_BRIGHTNESS           "LCD Jas"
-    #define CZ_EMERGENCYPARSER          "EMERGENCY_PARSER není ve firmwaru tiskárny povolen."
     #define CZ_LCD_BRIGHTNESS_DIM       "LCD snížení jasu"
     #define CZ_LCD_DIM_IDLE_TIMER       "LCD snížení jasu po"
     #define CZ_5_SECONDS                "5 sec."

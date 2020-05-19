@@ -60,11 +60,11 @@
     #error "TOOL_NUM can not be more than 6"
 #endif
 
-#if EXT_NUM > MAX_TOOL_COUNT
-    #error "EXT_NUM can not be more than 6"
+#if EXTRUDER_NUM > MAX_EXT_COUNT
+    #error "EXTRUDER_NUM can not be more than 6"
 #endif
 
-#if FAN_NUM > MAX_TOOL_COUNT
+#if FAN_NUM > MAX_FAN_COUNT
     #error "FAN_NUM can not be more than 6"
 #endif
 
@@ -202,6 +202,4 @@
                               CUSTOM_10_LABEL,CUSTOM_11_LABEL,CUSTOM_12_LABEL,CUSTOM_13_LABEL,CUSTOM_14_LABEL }
 
 
-
-
-#endif
+#endif //_SANITYCHECK_H_

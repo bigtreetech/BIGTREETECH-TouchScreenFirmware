@@ -170,7 +170,6 @@
     #define CN_RESET_SETTINGS_DONE      "重置所有参数成功! 重启设备后生效."
     #define CN_INFO                     "提示"
     #define CN_LCD_BRIGHTNESS           "LCD背光亮度"
-    #define CN_EMERGENCYPARSER          "EMERGENCY_PARSER 在打印机固件中未启用."
     #define CN_LCD_BRIGHTNESS_DIM       "LCD睡眠背光亮度"
     #define CN_LCD_DIM_IDLE_TIMER       "LCD自动睡眠时间"
     #define CN_5_SECONDS                "5秒"

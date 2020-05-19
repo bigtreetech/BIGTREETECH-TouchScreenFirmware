@@ -80,7 +80,7 @@ void infoSettingsReset(void)
   infoSettings.m27_active             = M27_WATCH_OTHER_SOURCES;
   infoSettings.longFileName           = AUTO;     //ENABLED / DISABLED / AUTO
 
-  for(int i = 0; i < HEAT_NUM; i++)
+  for(int i = 0; i < MAX_HEATER_COUNT; i++)
   {
     infoSettings.max_temp[i]          = default_max_temp[i];
   }
