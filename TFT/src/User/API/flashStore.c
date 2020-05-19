@@ -123,7 +123,7 @@ bool readStoredPara(void)
 
   infoSettings.min_ext_temp           = byteToWord(data + (index += 4), 4);
 
-  for(int i = 0; i < MAX_TOOL_COUNT ;i++)
+  for(int i = 0; i < MAX_FAN_COUNT ;i++)
   {
     infoSettings.fan_max[i]           = byteToWord(data + (index += 4), 4);
   }

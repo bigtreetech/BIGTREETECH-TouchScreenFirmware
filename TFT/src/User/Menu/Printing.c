@@ -32,7 +32,7 @@ const GUI_RECT printinfo_val_rect[6] = {
 
 static u32 nextTime = 0;
 static u32 toggle_time = 2000; // 1 seconds is 1000
-TOOL c_Ext = NOZZLE0;
+TOOL c_Tool = NOZZLE0;
 static int c_fan = 0;
 static int c_speedID = 0;
 static int key_pause = 4;
@@ -195,7 +195,7 @@ void menuBeforePrinting(void)
       //  if( powerFailedCreate(infoFile.title)==false)
       //  {
       //
-      //  }	  // FIXME: Powerfail resume is not yet supported for ONBOARD_SD. Need more work.
+      //  }    // FIXME: Powerfail resume is not yet supported for ONBOARD_SD. Need more work.
 
       if(size == 0)
       {
@@ -367,12 +367,12 @@ const GUI_RECT progressRect = {1*SPACE_X_PER_ICON, 0*ICON_HEIGHT+0*SPACE_Y+ICON_
 void reValueNozzle(int icon_pos)
 {
   char tempstr[10];
-  my_sprintf(tempstr, "%d/%d", heatGetCurrentTemp(c_Ext), heatGetTargetTemp(c_Ext));
+  my_sprintf(tempstr, "%d/%d", heatGetCurrentTemp(c_Tool), heatGetTargetTemp(c_Tool));
 
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
   ICON_CustomReadDisplay(printinfo_points[icon_pos].x,printinfo_points[icon_pos].y,PICON_LG_WIDTH,PICON_HEIGHT,ICON_ADDR(ICON_PRINTING_NOZZLE));
-  GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (u8* )heatDisplayID[c_Ext]);
+  GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (u8* )heatDisplayID[c_Tool]);
   GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (u8 *)tempstr);
 
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
@@ -488,25 +488,25 @@ void toggleinfo(void)
   {
     if (infoSettings.tool_count > 1)
     {
-      c_Ext = (TOOL)((c_Ext + 1) % (infoSettings.tool_count+1));
-      if (c_Ext == 0)
+      c_Tool = (TOOL)((c_Tool + 1) % (infoSettings.tool_count+1));
+      if (c_Tool == 0)
       {
-        c_Ext += 1;
+        c_Tool += 1;
       }
-      rapid_serial_loop();	 //perform backend printing loop before drawing to avoid printer idling
+      rapid_serial_loop();   //perform backend printing loop before drawing to avoid printer idling
       reValueNozzle(EXT_ICON_POS);
     }
 
     if (infoSettings.fan_count > 1)
     {
       c_fan = (c_fan + 1) % infoSettings.fan_count;
-      rapid_serial_loop();	 //perform backend printing loop before drawing to avoid printer idling
+      rapid_serial_loop();   //perform backend printing loop before drawing to avoid printer idling
       reDrawFan(FAN_ICON_POS);
     }
 
     c_speedID = (c_speedID + 1) % 2;
     nextTime = OS_GetTimeMs() + toggle_time;
-    rapid_serial_loop();	 //perform backend printing loop before drawing to avoid printer idling
+    rapid_serial_loop();   //perform backend printing loop before drawing to avoid printer idling
     reDrawSpeed(SPD_ICON_POS);
   }
 }
@@ -517,7 +517,7 @@ void toggleinfo(void)
 
 void printingDrawPage(void)
 {
-  //	Scroll_CreatePara(&titleScroll, infoFile.title,&titleRect);  //
+  //  Scroll_CreatePara(&titleScroll, infoFile.title,&titleRect);  //
   if(get_Pre_Icon() == true){
     key_pause = 5;
     //printingItems.items[key_pause - 1] = itemBlank;
@@ -561,11 +561,11 @@ void menuPrinting(void)
 //    Scroll_DispString(&titleScroll, LEFT); //Scroll display file name will take too many CPU cycles
 
     //check nozzle temp change
-      if (nowHeat.T[c_Ext].current != heatGetCurrentTemp(c_Ext) || nowHeat.T[c_Ext].target != heatGetTargetTemp(c_Ext))
+      if (nowHeat.T[c_Tool].current != heatGetCurrentTemp(c_Tool) || nowHeat.T[c_Tool].target != heatGetTargetTemp(c_Tool))
       {
-        nowHeat.T[c_Ext].current = heatGetCurrentTemp(c_Ext);
-        nowHeat.T[c_Ext].target = heatGetTargetTemp(c_Ext);
-        rapid_serial_loop();	 //perform backend printing loop before drawing to avoid printer idling
+        nowHeat.T[c_Tool].current = heatGetCurrentTemp(c_Tool);
+        nowHeat.T[c_Tool].target = heatGetTargetTemp(c_Tool);
+        rapid_serial_loop();   //perform backend printing loop before drawing to avoid printer idling
         reValueNozzle(EXT_ICON_POS);
       }
 
@@ -574,7 +574,7 @@ void menuPrinting(void)
     {
       nowHeat.T[BED].current = heatGetCurrentTemp(BED);
       nowHeat.T[BED].target = heatGetTargetTemp(BED);
-      rapid_serial_loop();	 //perform backend printing loop before drawing to avoid printer idling
+      rapid_serial_loop();   //perform backend printing loop before drawing to avoid printer idling
       reValueBed(BED_ICON_POS);
     }
 
@@ -703,7 +703,7 @@ void completePrinting(void)
     menuDrawItem(&printingItems.items[KEY_ICON_7], KEY_ICON_7);
   if(infoSettings.auto_off) // Auto shut down after printing
   {
-		infoMenu.menu[++infoMenu.cur] = menuShutDown;
+    infoMenu.menu[++infoMenu.cur] = menuShutDown;
   }
 }
 
@@ -760,8 +760,8 @@ void menuShutDown(void)
   bool tempIsLower;
   u16 key_num = IDLE_TOUCH;
   char tempstr[75];
-  my_sprintf(tempstr,(char*)textSelect(LABEL_WAIT_TEMP_SHUT_DOWN),infoSettings.auto_off_temp);
-  popupDrawPage(bottomDoubleBtn, textSelect(LABEL_SHUT_DOWN), (u8*)tempstr, textSelect(LABEL_FORCE_SHUT_DOWN), textSelect(LABEL_CANCEL));
+  my_sprintf(tempstr, (char *)textSelect(LABEL_WAIT_TEMP_SHUT_DOWN), infoSettings.auto_off_temp);
+  popupDrawPage(bottomDoubleBtn, textSelect(LABEL_SHUT_DOWN), (u8 *)tempstr, textSelect(LABEL_FORCE_SHUT_DOWN), textSelect(LABEL_CANCEL));
 
   for(u8 i = 0; i < infoSettings.fan_count; i++)
   {
@@ -782,7 +782,7 @@ void menuShutDown(void)
     tempIsLower = true;
     for (TOOL i = NOZZLE0; i < HEATER_COUNT; i++)
     {
-      if(heatGetCurrentTemp(NOZZLE0) >= AUTO_SHUT_DOWN_MAXTEMP)
+      if(heatGetCurrentTemp(i) >= AUTO_SHUT_DOWN_MAXTEMP)
         tempIsLower = false;
     }
     if(tempIsLower)
@@ -839,7 +839,7 @@ void getGcodeFromFile(void)
         break;
       }
     }
-    else if (sd_count >= CMD_MAX_CHAR - 2) {	}   //when the command length beyond the maximum, ignore the following bytes
+    else if (sd_count >= CMD_MAX_CHAR - 2) {  }   //when the command length beyond the maximum, ignore the following bytes
     else
     {
       if (sd_char == ';')             //';' is comment out flag
@@ -865,7 +865,7 @@ void loopCheckPrinting(void)
   static u32  nextTime=0;
   u32 update_time = infoSettings.m27_refresh_time * 1000;
   do
-  {  /* WAIT FOR M27	*/
+  {  /* WAIT FOR M27  */
     if(update_waiting == true) {nextTime=OS_GetTimeMs()+update_time; break;}
     if(OS_GetTimeMs() < nextTime) break;
 

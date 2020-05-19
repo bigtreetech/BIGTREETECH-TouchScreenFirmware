@@ -122,7 +122,7 @@ void heatClearIsWaiting(void)
 /* Set current heater tool, nozzle or hot bed */
 void heatSetCurrentTool(TOOL tool)
 {
-  if(tool >= infoSettings.tool_count) return;
+  if(tool >= HEATER_COUNT) return;
   heater.tool = tool;
 }
 /* Get current tool, nozzle or hot bed */
@@ -134,7 +134,7 @@ TOOL heatGetCurrentTool(void)
 /* Set current nozzle */
 void heatSetCurrentToolNozzle(TOOL tool)
 {
-  if(tool >= infoSettings.tool_count && tool < NOZZLE0) return;
+  if(tool >= HEATER_COUNT && tool < NOZZLE0) return;
   heater.nozzle = tool;
   heater.tool = tool;
 }
@@ -305,7 +305,7 @@ void updateNextHeatCheckTime(void)
 void loopCheckHeater(void)
 {
   do
-  {  /* Send M105 query temperature continuously	*/
+  {  /* Send M105 query temperature continuously  */
     if(update_waiting == true)                {updateNextHeatCheckTime();break;}
     if(OS_GetTimeMs() < nextHeatCheckTime)     break;
     if(RequestCommandInfoIsRunning())          break; //to avoid colision in Gcode response processing

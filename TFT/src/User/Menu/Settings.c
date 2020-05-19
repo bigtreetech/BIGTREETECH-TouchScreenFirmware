@@ -87,7 +87,7 @@ void infoSettingsReset(void)
 
   infoSettings.min_ext_temp           = PREVENT_COLD_EXTRUSION_MINTEMP;
 
-  for(int i = 0; i < MAX_TOOL_COUNT ;i++)
+  for(int i = 0; i < MAX_FAN_COUNT ;i++)
   {
     infoSettings.fan_max[i]           = default_max_fanPWM[i];
   }
