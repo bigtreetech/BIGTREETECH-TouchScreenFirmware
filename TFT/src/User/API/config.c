@@ -82,7 +82,7 @@ void getConfigFromFile(void)
       configFile.cur++;
 
       //
-      if (cur_char == '\n' || configFile.cur == configFile.size) // start parsing line after new line or at the end of the file.
+      if (cur_char == '\n') // start parsing line after new line.
       {
         comment_mode = false; //for new command
         comment_space = true;
@@ -115,6 +115,9 @@ void getConfigFromFile(void)
             }
             cur_line[count++] = cur_char;
             last_char = cur_char;
+
+            if (configFile.cur == configFile.size)
+              parseConfigLine();                      //start parsing at the end of the file.
           }
         }
       }
