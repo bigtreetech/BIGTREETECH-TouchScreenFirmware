@@ -108,8 +108,8 @@ typedef struct
   uint16_t  min_ext_temp;
   uint8_t   fan_max[MAX_FAN_COUNT];
   uint8_t   fan_percentage;
-  uint16_t  machine_size_min[AXIS_NUM];  // X, Y, Z
-  uint16_t  machine_size_max[AXIS_NUM];  // X, Y, Z
+  int16_t   machine_size_min[AXIS_NUM];  // X, Y, Z
+  int16_t   machine_size_max[AXIS_NUM];  // X, Y, Z
   uint16_t  axis_speed[SPEED_COUNT];
   uint16_t  ext_speed[SPEED_COUNT];
   float     pause_retract_len;

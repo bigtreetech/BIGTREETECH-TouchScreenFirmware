@@ -158,7 +158,7 @@ static char key_seen(const char *keyStr)
 }
 
 // Get the int after config keyword.
-static u32 config_value(void)
+static int config_value(void)
 {
   return (strtol(&cur_line[c_index], NULL, 10));
 }

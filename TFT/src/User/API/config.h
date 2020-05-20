@@ -136,9 +136,9 @@
 #define MAX_RETRACT_LIMIT         20           // retract length over this will not be parsed.
 #define MAX_FAN_SPEED             255          // fan speed (PWM) over this will not be parsed.
 
+#define MIN_SIZE_LIMIT            -1000     // machine size less than this will not be parsed.
 #define NAME_MIN_LENGTH           3         // minimum name length
 #define GCODE_MIN_LENGTH          3         // gcode length less than this will not pe parsed.
-#define MIN_SIZE_LIMIT            0         // machine size less than this will not be parsed.
 #define MIN_POS_LIMIT             0         // position value less than this will not be parsed.
 #define MIN_TOOL_TEMP             20        // extruder temp less than this will not pe parsed.
 #define MIN_BED_TEMP              20        // bed temp less than this will not pe parsed.
