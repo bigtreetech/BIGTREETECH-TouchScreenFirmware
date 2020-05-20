@@ -157,7 +157,7 @@ void printSetUpdateWaiting(bool isWaiting)
 void printerGotoIdle(void)
 {
   // disable all heater
-  for(TOOL i = BED; i < (infoSettings.tool_count+1); i++) {
+  for(TOOL i = BED; i < HEATER_COUNT; i++) {
     mustStoreCmd("%s S0\n", heatCmd[i]);
   }
   // disable all fan
