@@ -38,7 +38,6 @@ static int c_speedID = 0;
 static int key_pause = 4;
 const char* Speed_ID[2] = {"Speed","Flow"};
 
-static PRINT_GCODES * printcodes = NULL;
 
 #define LAYER_TITLE "Layer"
 #define EXT_ICON_POS  0
@@ -144,6 +143,7 @@ u8 getPrintProgress(void)
 {
   return infoPrinting.progress;
 }
+
 u32 getPrintTime(void)
 {
   return infoPrinting.time;
@@ -179,13 +179,31 @@ u8 *getCurGcodeName(char *path)
   return (u8* )(&path[i+1]);
 }
 
+//send print codes [0: start gcode, 1: end gcode 2: cancel gcode]
+void sendPrintCodes(uint8_t index)
+{
+  PRINT_GCODES printcodes;
+  W25Qxx_ReadBuffer((uint8_t*)&printcodes,PRINT_GCODES_ADDR,sizeof(PRINT_GCODES));
+  switch (index)
+  {
+  case 0:
+    mustStoreCmd(printcodes.start_gcode);
+    break;
+  case 1:
+    mustStoreCmd(printcodes.end_gcode);
+    break;
+  case 2:
+    mustStoreCmd(printcodes.cancel_gcode);
+    break;
+
+  default:
+    break;
+  }
+}
+
 void menuBeforePrinting(void)
 {
   //load stat/end/cancel gcodes from spi flash
-  printcodes = (PRINT_GCODES*)malloc(sizeof(PRINT_GCODES));
-  uint8_t *data_p = (uint8_t *)printcodes;
-  W25Qxx_ReadBuffer(data_p,PRINT_GCODES_ADDR,sizeof(printcodes));
-
   long size = 0;
   switch (infoFile.source)
   {
@@ -244,7 +262,7 @@ void menuBeforePrinting(void)
       infoPrinting.size  = f_size(&infoPrinting.file);
       infoPrinting.cur   = infoPrinting.file.fptr;
       if(infoSettings.send_start_gcode == 1 && infoPrinting.cur == 0){ // PLR continue printing, CAN NOT use start gcode
-        mustStoreCmd(printcodes->start_gcode);
+        sendPrintCodes(0);
       }
       break;
   }
@@ -686,9 +704,8 @@ void endPrinting(void)
   powerFailedClose();
   powerFailedDelete();
   if(infoSettings.send_end_gcode == 1){
-    mustStoreCmd(printcodes->end_gcode);
+    sendPrintCodes(1);
   }
-  free(printcodes);
   printerGotoIdle();
 }
 
@@ -719,7 +736,7 @@ void abortPrinting(void)
     case TFT_SD:
       clearCmdQueue();
       if (infoSettings.send_cancel_gcode == 1)
-        mustStoreCmd(printcodes->cancel_gcode);
+        sendPrintCodes(2);
       break;
   }
 

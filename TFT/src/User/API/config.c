@@ -37,6 +37,10 @@ const char *const config_keywords[CONFIG_COUNT] = {
 
 void getConfigFromFile(void)
 {
+  #ifdef CONFIG_DEBUG
+    Serial_ReSourceInit();
+  #endif
+
   configCustomGcodes = (CUSTOM_GCODES*)malloc(sizeof(CUSTOM_GCODES));
   configPrintGcodes = (PRINT_GCODES*)malloc(sizeof(PRINT_GCODES));
   configStringsStore = (STRINGS_STORE*)malloc(sizeof(STRINGS_STORE));
@@ -118,7 +122,7 @@ void getConfigFromFile(void)
     //store custom codes count
     configCustomGcodes->count = customcode_index;
 
-    PRINTDEBUG("\ngcode stored at 1:");
+    PRINTDEBUG("\nCustom gcode stored at 1:");
     PRINTDEBUG(configCustomGcodes->gcode[1]);
     if(scheduleRotate)
     {
@@ -949,6 +953,12 @@ void parseConfigKey(u16 index)
       if (inLimit(len,GCODE_MIN_LENGTH,MAX_GCODE_LENGTH))
       {
         strcpy(configPrintGcodes->start_gcode, pchr);
+      #ifdef CONFIG_DEBUG
+        GUI_DispStringInRect(recterrortxt.x0, recterrortxt.y0 + (BYTE_HEIGHT * 2), recterrortxt.x1, recterrortxt.y1, (u8*)configPrintGcodes->start_gcode);
+        Delay_ms(1000);
+        Delay_ms(1000);
+
+      #endif
       }
 
     }
@@ -961,6 +971,11 @@ void parseConfigKey(u16 index)
       if (inLimit(len,GCODE_MIN_LENGTH,MAX_GCODE_LENGTH))
       {
         strcpy(configPrintGcodes->end_gcode, pchr);
+      #ifdef CONFIG_DEBUG
+        GUI_DispStringInRect(recterrortxt.x0, recterrortxt.y0 + (BYTE_HEIGHT * 2), recterrortxt.x1, recterrortxt.y1, (u8*)configPrintGcodes->end_gcode);
+        Delay_ms(1000);
+        Delay_ms(1000);
+      #endif
       }
 
     }
@@ -973,6 +988,11 @@ void parseConfigKey(u16 index)
       if (inLimit(len,GCODE_MIN_LENGTH,MAX_GCODE_LENGTH))
       {
         strcpy(configPrintGcodes->cancel_gcode, pchr);
+      #ifdef CONFIG_DEBUG
+        GUI_DispStringInRect(recterrortxt.x0, recterrortxt.y0 + (BYTE_HEIGHT * 2), recterrortxt.x1, recterrortxt.y1, (u8*)configPrintGcodes->cancel_gcode);
+        Delay_ms(1000);
+        Delay_ms(1000);
+      #endif
       }
 
     }

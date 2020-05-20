@@ -45,6 +45,8 @@ bool static  startsWith(TCHAR* search, TCHAR* string)
 // If the infoCmd queue is full, reminde in title bar.
 bool storeCmd(const char * format,...)
 {
+  if (strlen(format) == 0) return false;
+
   QUEUE *pQueue = &infoCmd;
 
   if (pQueue->count >= CMD_MAX_LIST)
@@ -69,6 +71,8 @@ bool storeCmd(const char * format,...)
 // If the infoCmd queue is full, reminde in title bar,  waiting for available queue and store the command.
 void mustStoreCmd(const char * format,...)
 {
+  if (strlen(format) == 0) return;
+
   QUEUE *pQueue = &infoCmd;
 
   if(pQueue->count >= CMD_MAX_LIST) reminderMessage(LABEL_BUSY, STATUS_BUSY);
@@ -92,6 +96,7 @@ void mustStoreCmd(const char * format,...)
 // If the infoCmd queue is full, reminde in title bar.
 bool storeCmdFromUART(uint8_t port, const char * gcode)
 {
+  if (strlen(gcode) == 0) return false;
   QUEUE *pQueue = &infoCmd;
 
   if (pQueue->count >= CMD_MAX_LIST)
@@ -186,11 +191,11 @@ void sendQueueCmd(void)
               }
             Serial_Puts(SERIAL_PORT_2, "Begin file list\n");
             if (mountFS() == true && scanPrintFiles() == true){
-              for (uint i = 0; i < infoFile.f_num; i++) {
+              for (UINT i = 0; i < infoFile.f_num; i++) {
                 Serial_Puts(SERIAL_PORT_2,infoFile.file[i]);
                 Serial_Puts(SERIAL_PORT_2,"\n");
                 }
-              for (uint i = 0; i < infoFile.F_num; i++) {
+              for (UINT i = 0; i < infoFile.F_num; i++) {
                 Serial_Puts(SERIAL_PORT_2,"/");
                 Serial_Puts(SERIAL_PORT_2,infoFile.folder[i]);
                 Serial_Puts(SERIAL_PORT_2,"/\n");
