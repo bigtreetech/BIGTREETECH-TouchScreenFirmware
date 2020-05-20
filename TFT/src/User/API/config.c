@@ -1,7 +1,7 @@
 ﻿
 #include "config.h"
 
-#define CONFIG_DEBUG  // To be used only when calling 'getConfigFromFile()' after boot process
+//#define CONFIG_DEBUG  // To be used only when calling 'getConfigFromFile()' after boot process
 #ifdef CONFIG_DEBUG
 #define PRINTDEBUG(x) Serial_Puts(SERIAL_PORT, x);
 #else
