@@ -116,7 +116,7 @@ typedef struct
   float     resume_purge_len;
   float     pause_pos[AXIS_NUM-1];  // X, Y
   float     pause_z_raise;
-  float     pause_feedrate[TOTAL_AXIS]; // X, Y, Z, E
+  uint16_t  pause_feedrate[TOTAL_AXIS]; // X, Y, Z, E
   uint8_t   level_edge;
   float     level_z_pos;
   float     level_z_raise;

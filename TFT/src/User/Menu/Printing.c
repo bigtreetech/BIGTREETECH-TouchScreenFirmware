@@ -336,7 +336,7 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
         if (coordinateIsKnown())
         {
           mustStoreCmd("G1 Z%.3f F%d\n", tmp.axis[Z_AXIS] + infoSettings.pause_z_raise, infoSettings.pause_feedrate[E_AXIS]);
-          mustStoreCmd("G1 X%d Y%d F%d\n", infoSettings.pause_pos[X_AXIS], infoSettings.pause_pos[Y_AXIS], infoSettings.pause_feedrate[X_AXIS]);
+          mustStoreCmd("G1 X%.3f Y%.3f F%d\n", infoSettings.pause_pos[X_AXIS], infoSettings.pause_pos[Y_AXIS], infoSettings.pause_feedrate[X_AXIS]);
         }
 
         if (isCoorRelative == true)     mustStoreCmd("G91\n");
