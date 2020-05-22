@@ -135,8 +135,8 @@ bool powerOffGetData(void)
     int btt_zraise = 0;
     if(infoSettings.btt_ups == 1)
         btt_zraise = infoSettings.powerloss_z_raise;
-    mustStoreCacheCmd("G92 Z%.3f\n", infoBreakPoint.axis[Z_AXIS]+ btt_zraise);
-    mustStoreCacheCmd("G1 Z%.3f\n", infoBreakPoint.axis[Z_AXIS]+infoSettings.powerloss_z_raise);
+    mustStoreCacheCmd("G92 Z%.3f\n", infoBreakPoint.axis[Z_AXIS] + btt_zraise);
+    mustStoreCacheCmd("G1 Z%.3f\n", infoBreakPoint.axis[Z_AXIS] + infoSettings.powerloss_z_raise);
     if (infoSettings.powerloss_home)
     {
       mustStoreCacheCmd("G28\n");
@@ -149,12 +149,12 @@ bool powerOffGetData(void)
 
     mustStoreCacheCmd("M83\n");
     mustStoreCacheCmd("G1 E30 F300\n");
-    mustStoreCacheCmd("G1 E-%d F4800\n", infoSettings.pause_retract_len);
+    mustStoreCacheCmd("G1 E-%.5f F4800\n", infoSettings.pause_retract_len);
     mustStoreCacheCmd("G1 X%.3f Y%.3f Z%.3f F3000\n",
                           infoBreakPoint.axis[X_AXIS],
                           infoBreakPoint.axis[Y_AXIS],
                           infoBreakPoint.axis[Z_AXIS]);
-    mustStoreCacheCmd("G1 E%d F4800\n", infoSettings.resume_purge_len);
+    mustStoreCacheCmd("G1 E%.5f F4800\n", infoSettings.resume_purge_len);
     mustStoreCacheCmd("G92 E%.5f\n",infoBreakPoint.axis[E_AXIS]);
     mustStoreCacheCmd("G1 F%d\n",infoBreakPoint.feedrate);
 

@@ -564,7 +564,7 @@ void sendQueueCmd(void)
             else if (!cmd_seen('\n'))
             {
               char buf[12];
-              sprintf(buf, "S%d\n", heatGetTargetTemp(i));
+              sprintf(buf, "S%u\n", heatGetTargetTemp(i));
               strcat(infoCmd.queue[infoCmd.index_r].gcode,(const char*)buf);
               heatSetSendWaiting(i, false);
             }
@@ -588,7 +588,7 @@ void sendQueueCmd(void)
             else if (!cmd_seen('\n'))
             {
               char buf[12];
-              sprintf(buf, "S%d\n", fanGetSpeed(i));
+              sprintf(buf, "S%u\n", fanGetSpeed(i));
               strcat(infoCmd.queue[infoCmd.index_r].gcode,(const char*)buf);
               fanSetSendWaiting(i, false);
             }
@@ -633,7 +633,7 @@ void sendQueueCmd(void)
             else if (!cmd_seen('\n'))
             {
               char buf[12];
-              sprintf(buf, "S%d\n", heatGetTargetTemp(BED));
+              sprintf(buf, "S%u\n", heatGetTargetTemp(BED));
               strcat(infoCmd.queue[infoCmd.index_r].gcode,(const char*)buf);
               heatSetSendWaiting(BED, false);
             }
@@ -663,7 +663,7 @@ void sendQueueCmd(void)
             else if (!cmd_seen('\n'))
             {
               char buf[12];
-              sprintf(buf, "S%d\n", speedGetPercent(0));
+              sprintf(buf, "S%u\n", speedGetPercent(0));
               strcat(infoCmd.queue[infoCmd.index_r].gcode,(const char*)buf);
               speedSetSendWaiting(0, false);
             }
@@ -681,7 +681,7 @@ void sendQueueCmd(void)
             else if (!cmd_seen('\n'))
             {
               char buf[12];
-              sprintf(buf, "S%d\n", speedGetPercent(1));
+              sprintf(buf, "S%u\n", speedGetPercent(1));
               strcat(infoCmd.queue[infoCmd.index_r].gcode,(const char*)buf);
               speedSetSendWaiting(1, false);
             }

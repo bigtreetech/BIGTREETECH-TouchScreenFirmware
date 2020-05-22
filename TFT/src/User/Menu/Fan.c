@@ -64,7 +64,7 @@ void showFanSpeed(void)
   if(infoSettings.fan_percentage == 1)
     {
       char fan_s[5];
-      sprintf(fan_s, "%3d%%", fs);
+      sprintf(fan_s, "%3u%%", fs);
       GUI_DispString(CENTER_X-BYTE_WIDTH, CENTER_Y, (u8 *)fan_s);
     }
   else
@@ -77,7 +77,7 @@ void fanSpeedReDraw(void)
  if(infoSettings.fan_percentage == 1)
     {
       char fan_s[5] = "";
-      sprintf(fan_s, "%3d%%", (fanSpeed[curIndex]*100)/255);
+      sprintf(fan_s, "%3u%%", (fanSpeed[curIndex]*100)/255);
       GUI_DispString(CENTER_X-BYTE_WIDTH, CENTER_Y, (u8 *)fan_s);
     }
   else
