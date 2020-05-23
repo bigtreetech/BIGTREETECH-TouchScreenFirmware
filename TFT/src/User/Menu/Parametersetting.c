@@ -26,6 +26,7 @@ const uint32_t parameter_names[PARAMETERS_COUNT] = {LABEL_STEPS_SETTING,
 
 int ps_cur_page = 0;
 int cur_parameter = 0;
+bool parametersChanged = false;
 bool dualstepper[TOTAL_AXIS] = {false,false,false,false};
 char *const axisDisplayID[STEPPER_COUNT] = AXIS_DISPLAY_ID;
 const LABEL Accel_disp_ID[3] = {LABEL_PRINT_ACCELERATION,LABEL_RETRACT_ACCELERATION, LABEL_TRAVEL_ACCELERATION};
@@ -114,6 +115,7 @@ void setParameter(PARAMETER_NAME name, int index, float val){
 //show menu for selected parameter type
 void menuShowParameter(void){
     KEY_VALUES key_num = KEY_IDLE;
+    PARAMETERS now = infoParameters;
 
     LISTITEMS parameter_menuitems ={
     // title
@@ -163,6 +165,10 @@ void menuShowParameter(void){
         switch (key_num)
         {
         case KEY_ICON_7:
+            if (memcmp(&now, &infoParameters, sizeof(PARAMETERS)))
+            {
+                parametersChanged = true;
+            }
             infoMenu.cur--;
             break;
 
@@ -249,7 +255,6 @@ for (uint8_t i = 0; i < LISTITEM_PER_PAGE; i++)
 
 void menuParameterSettings(void){
     KEY_VALUES key_num = KEY_IDLE;
-    PARAMETERS now = infoParameters;
     ps_cur_page = 0;
     loadParameterPage();
     menuDrawListPage(&parameterMainItems);
@@ -282,10 +287,11 @@ void menuParameterSettings(void){
             }
             break;
         case KEY_ICON_7:
-            if(memcmp(&now, &infoParameters, sizeof(PARAMETERS)))
-                {
-                    storeCmd("M500\n");
-                }
+            if (parametersChanged)
+            {
+                storeCmd("M500\n");
+                parametersChanged = false;
+            }
             infoMenu.cur--;
             break;
 

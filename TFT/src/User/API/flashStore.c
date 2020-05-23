@@ -2,7 +2,7 @@
 #include "STM32_Flash.h"
 
 #define TSC_SIGN  0x20190827 // DO NOT MODIFY
-#define PARA_SIGN 0x20200430 // (YYYMMDD) If a new setting parameter is added, modify here and initialize the initial value in the "infoSettingsReset()" function
+#define PARA_SIGN 0x20200517 // (YYYMMDD) If a new setting parameter is added, modify here and initialize the initial value in the "infoSettingsReset()" function
 
 extern u32 TSC_Para[7];        //
 extern SETTINGS infoSettings;  //
@@ -82,6 +82,7 @@ bool readStoredPara(void)
   infoSettings.lcd_idle_brightness  = byteToWord(data + (index += 4), 4);
   infoSettings.lcd_idle_timer       = byteToWord(data + (index += 4), 4);
 
+  infoSettings.serial_alwaysOn            = byteToWord(data + (index += 4), 4);
   infoSettings.marlin_mode_bg_color       = byteToWord(data + (index += 4), 4);
   infoSettings.marlin_mode_font_color     = byteToWord(data + (index += 4), 4);
   infoSettings.marlin_mode_showtitle      = byteToWord(data + (index += 4), 4);
@@ -110,17 +111,19 @@ bool readStoredPara(void)
   infoSettings.ext_count            = byteToWord(data + (index += 4), 4);
   infoSettings.fan_count            = byteToWord(data + (index += 4), 4);
   infoSettings.auto_load_leveling   = byteToWord(data + (index += 4), 4);
+  infoSettings.onboardSD            = byteToWord(data + (index += 4), 4);
   infoSettings.m27_refresh_time     = byteToWord(data + (index += 4), 4);
   infoSettings.m27_active           = byteToWord(data + (index += 4), 4);
+  infoSettings.longFileName         = byteToWord(data + (index += 4), 4);
 
-  for(int i = 0; i < HEAT_NUM; i++)
+  for(int i = 0; i < MAX_HEATER_COUNT; i++)
   {
     infoSettings.max_temp[i]          = byteToWord(data + (index += 4), 4);
   }
 
   infoSettings.min_ext_temp           = byteToWord(data + (index += 4), 4);
 
-  for(int i = 0; i < MAX_TOOL_COUNT ;i++)
+  for(int i = 0; i < MAX_FAN_COUNT ;i++)
   {
     infoSettings.fan_max[i]           = byteToWord(data + (index += 4), 4);
   }
@@ -206,6 +209,7 @@ void storePara(void)
   wordToByte(infoSettings.lcd_idle_brightness,        data + (index += 4));
   wordToByte(infoSettings.lcd_idle_timer,             data + (index += 4));
 
+  wordToByte(infoSettings.serial_alwaysOn,            data + (index += 4));
   wordToByte(infoSettings.marlin_mode_bg_color,       data + (index += 4));
   wordToByte(infoSettings.marlin_mode_font_color,     data + (index += 4));
   wordToByte(infoSettings.marlin_mode_showtitle,      data + (index += 4));
@@ -234,17 +238,19 @@ void storePara(void)
   wordToByte(infoSettings.ext_count,                  data + (index += 4));
   wordToByte(infoSettings.fan_count,                  data + (index += 4));
   wordToByte(infoSettings.auto_load_leveling,         data + (index += 4));
+  wordToByte(infoSettings.onboardSD,                  data + (index += 4));
   wordToByte(infoSettings.m27_refresh_time,           data + (index += 4));
   wordToByte(infoSettings.m27_active,                 data + (index += 4));
+  wordToByte(infoSettings.longFileName,               data + (index += 4));
 
-  for(int i = 0; i < HEAT_NUM; i++)
+  for(int i = 0; i < MAX_HEATER_COUNT; i++)
   {
     wordToByte(infoSettings.max_temp[i],              data + (index += 4));
   }
 
   wordToByte(infoSettings.min_ext_temp,               data + (index += 4));
 
-  for(int i = 0; i < MAX_TOOL_COUNT ;i++)
+  for(int i = 0; i < MAX_FAN_COUNT ;i++)
   {
     wordToByte(infoSettings.fan_max[i],               data + (index += 4));
   }

@@ -49,7 +49,7 @@ uint8_t * IconCharSelect(uint8_t sel);
 void setDynamicLabel(uint8_t i,char *label); //set list item title to any text
 char * getDynamicLabel(uint8_t i);           //get the custom text of the list item title
 
-void setDynamicTextValue(uint8_t i, char *label); //set list item value to any text (upto 7 characters)
+void setDynamicTextValue(uint8_t i, char *txt); //set list item value to any text (upto 7 characters)
 char * getDynamicTextValue(uint8_t i);            //get the custom text of the list item value
 
 void setDynamicValue(uint8_t i,float value); //set list item value to any numeric value (upto 7 digits)

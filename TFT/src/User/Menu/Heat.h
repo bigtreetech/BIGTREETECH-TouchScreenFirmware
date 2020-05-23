@@ -19,7 +19,7 @@ typedef enum
 {
   BED = 0,
   NOZZLE0 = 1,
-  HEATER_NUM = HEAT_NUM
+  HEATER_NUM = MAX_HEATER_COUNT
 }TOOL;
 
 typedef struct

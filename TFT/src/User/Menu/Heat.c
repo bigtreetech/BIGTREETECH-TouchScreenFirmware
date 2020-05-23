@@ -229,7 +229,7 @@ void menuHeat(void)
         break;
 
       case KEY_ICON_4:
-        lastHeater.tool = heater.tool = (TOOL)((heater.tool+1) % (infoSettings.tool_count + 1));
+        lastHeater.tool = heater.tool = (TOOL)((heater.tool+1) % (HEATER_COUNT));
         heatItems.items[key_num] = itemTool[heater.tool];
         menuDrawItem(&heatItems.items[key_num], key_num);
         showTemperature();
@@ -305,7 +305,7 @@ void updateNextHeatCheckTime(void)
 void loopCheckHeater(void)
 {
   do
-  {  /* Send M105 query temperature continuously	*/
+  {  /* Send M105 query temperature continuously  */
     if(update_waiting == true)                {updateNextHeatCheckTime();break;}
     if(OS_GetTimeMs() < nextHeatCheckTime)     break;
     if(RequestCommandInfoIsRunning())          break; //to avoid colision in Gcode response processing

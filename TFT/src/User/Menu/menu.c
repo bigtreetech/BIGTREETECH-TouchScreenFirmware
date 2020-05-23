@@ -124,11 +124,9 @@ void menuRefreshListPage(void){
     {
       menuDrawListItem(&curListItems->items[i], i);
       #ifdef RAPID_SERIAL_COMM
-        #ifndef CLEAN_MODE_SWITCHING_SUPPORT
-          if(isPrinting() == true)
-        #endif
+        if(isPrinting() == true && infoSettings.serial_alwaysOn != 1)
         {
-          loopBackEnd();	 //perform backend printing loop between drawing icons to avoid printer idling
+          loopBackEnd();   //perform backend printing loop between drawing icons to avoid printer idling
         }
       #endif
     }
@@ -304,11 +302,9 @@ void menuDrawPage(const MENUITEMS *menuItems)
   {
     menuDrawItem(&menuItems->items[i], i);
     #ifdef RAPID_SERIAL_COMM
-      #ifndef CLEAN_MODE_SWITCHING_SUPPORT
-        if(isPrinting() == true)
-      #endif
+      if(isPrinting() == true && infoSettings.serial_alwaysOn != 1)
       {
-        loopBackEnd();	 //perform backend printing loop between drawing icons to avoid printer idling
+        loopBackEnd();   //perform backend printing loop between drawing icons to avoid printer idling
       }
     #endif
   }
@@ -336,11 +332,9 @@ void menuDrawListPage(const LISTITEMS *listItems)
     if (curListItems->items[i].icon != ICONCHAR_BACKGROUND)
     menuDrawListItem(&curListItems->items[i], i);
     #ifdef RAPID_SERIAL_COMM
-      #ifndef CLEAN_MODE_SWITCHING_SUPPORT
-        if(isPrinting() == true)
-      #endif
+        if(isPrinting() == true && infoSettings.serial_alwaysOn != 1)
         {
-          loopBackEnd();	 //perform backend printing loop between drawing icons to avoid printer idling
+          loopBackEnd();   //perform backend printing loop between drawing icons to avoid printer idling
         }
     #endif
   }
@@ -416,13 +410,13 @@ void loopBackEnd(void)
 
   parseRcvGcode();                    //Parse the received Gcode from other UART, such as: ESP3D, etc...
 
-  loopCheckHeater();			            //Temperature related settings
+  loopCheckHeater();                  //Temperature related settings
 
 #ifdef BUZZER_PIN
   loopBuzzer();
 #endif
 
-if(infoMachineSettings.onboard_sd_support == 1 && infoMachineSettings.autoReportSDStatus != 1)
+if(infoMachineSettings.onboard_sd_support == ENABLED && infoMachineSettings.autoReportSDStatus == DISABLED)
   {
     loopCheckPrinting(); //Check if there is a SD or USB print running.
   }
@@ -452,7 +446,7 @@ void loopFrontEnd(void)
 {
   loopVolumeSource();                 //Check if volume source(SD/U disk) insert
 
-  loopReminderClear();	              //If there is a message in the status bar, timed clear
+  loopReminderClear();                //If there is a message in the status bar, timed clear
 
   loopVolumeReminderClear();
 

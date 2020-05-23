@@ -99,7 +99,7 @@
     #define RU_1_PERCENT              "1%"
     #define RU_5_PERCENT              "5%"
     #define RU_10_PERCENT             "10%"
-    #define RU_PERCENT_VALUE          "%d%"
+    #define RU_PERCENT_VALUE          "%d%%"
     #define RU_READY                  "Готов"
     #define RU_BUSY                   "Занято процессом, подождите..."
     #define RU_UNCONNECTED            "Нет подключения!"
@@ -170,7 +170,6 @@
     #define RU_RESET_SETTINGS_DONE    "Успешный сброс настроек экрана. Для полного     вступления в силу,      перегрузите устройство."
     #define RU_INFO                   "\u0884 Информация" //Info Sign
     #define RU_LCD_BRIGHTNESS         "Яркость LCD"
-    #define RU_EMERGENCYPARSER        "EMERGENCY_PARSER не разрешен в прошивке принтера."
     #define RU_LCD_BRIGHTNESS_DIM     "Регулировка яркости LCD"
     #define RU_LCD_DIM_IDLE_TIMER     "Время до гашения LCD"
     #define RU_5_SECONDS              "5 сек."

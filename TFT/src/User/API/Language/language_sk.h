@@ -99,7 +99,7 @@
     #define SK_1_PERCENT            "1%"
     #define SK_5_PERCENT            "5%"
     #define SK_10_PERCENT           "10%"
-    #define SK_PERCENT_VALUE        "%d%"
+    #define SK_PERCENT_VALUE        "%d%%"
     #define SK_READY                "Pripravená"
     #define SK_BUSY                 "Počkajte prosím..."
     #define SK_UNCONNECTED          "Tlačiareň odpojená!"
