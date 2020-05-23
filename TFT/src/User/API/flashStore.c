@@ -1,12 +1,17 @@
 #include "flashStore.h"
 #include "STM32_Flash.h"
 
-#define TSC_SIGN  0x20190827 // DO NOT MODIFY
-#define PARA_SIGN 0x20200517 // (YYYMMDD) If a new setting parameter is added, modify here and initialize the initial value in the "infoSettingsReset()" function
+#define TSC_SIGN  0x20200512 // DO NOT MODIFY
+#define PARA_SIGN 0x20200513 // (YYYMMDD) If a new setting parameter is added, modify here and initialize the initial value in the "infoSettingsReset()" function
 
 extern u32 TSC_Para[7];        //
 extern SETTINGS infoSettings;  //
-bool wasRestored = false;
+
+enum{
+ PARA_TSC_EXIST = (1 << 0),
+ PARA_WAS_RESTORED = (1<< 1),
+};
+uint8_t paraStatus = 0;
 
 void wordToByte(u32 word, u8 *bytes)  //
 {
@@ -33,25 +38,32 @@ u32 byteToWord(u8 *bytes, u8 len)
 
 // Read settings parameter if exist, or reset settings parameter
 // return value: whether the touch screen calibration parameter exists
-bool readStoredPara(void)
+void readStoredPara(void)
 {
-  bool paraExist = true;
   u8 data[PARA_SIZE];
   u32 index = 0;
   u32 sign = 0;
   STM32_FlashRead(data, PARA_SIZE);
 
   sign = byteToWord(data + (index += 4), 4);
-  if(sign != TSC_SIGN) paraExist = false;    // If the touch screen calibration parameter does not exist
-  for(int i=0; i<sizeof(TSC_Para)/sizeof(TSC_Para[0]); i++)
+  if(sign == TSC_SIGN)
   {
-    TSC_Para[i] = byteToWord(data + (index += 4), 4);
+    paraStatus |= PARA_TSC_EXIST;    // If the touch screen calibration parameter already exists
+    for(int i=0; i<sizeof(TSC_Para)/sizeof(TSC_Para[0]); i++)
+    {
+      TSC_Para[i] = byteToWord(data + (index += 4), 4);
+    }
+    infoSettings.rotate_ui            = byteToWord(data + (index += 4), 4); // rotate_ui and TSC_Para[] are bound together
+  }
+  else
+  {
+    infoSettings.rotate_ui            = DISABLED;
   }
 
   sign = byteToWord(data + (index += 4), 4);
   if(sign != PARA_SIGN) // If the settings parameter is illegal, reset settings parameter
   {
-    wasRestored = true;
+    paraStatus |= PARA_WAS_RESTORED;
     infoSettingsReset();
   }
   else
@@ -60,7 +72,6 @@ bool readStoredPara(void)
   infoSettings.language             = byteToWord(data + (index += 4), 4);
   infoSettings.mode                 = byteToWord(data + (index += 4), 4);
   infoSettings.unified_menu         = byteToWord(data + (index += 4), 4);
-  infoSettings.rotate_ui            = byteToWord(data + (index += 4), 4);
 
   infoSettings.bg_color             = byteToWord(data + (index += 4), 4);
   infoSettings.font_color           = byteToWord(data + (index += 4), 4);
@@ -168,8 +179,6 @@ bool readStoredPara(void)
   }
 
   }
-
-  return paraExist;
 }
 
 void storePara(void)
@@ -182,12 +191,13 @@ void storePara(void)
   {
     wordToByte(TSC_Para[i],                           data + (index += 4));
   }
+  wordToByte(infoSettings.rotate_ui,                  data + (index += 4));
+  
   wordToByte(PARA_SIGN,                               data + (index += 4));
   wordToByte(infoSettings.baudrate,                   data + (index += 4));
   wordToByte(infoSettings.language,                   data + (index += 4));
   wordToByte(infoSettings.mode,                       data + (index += 4));
   wordToByte(infoSettings.unified_menu,               data + (index += 4));
-  wordToByte(infoSettings.rotate_ui,                  data + (index += 4));
 
   wordToByte(infoSettings.bg_color,                   data + (index += 4));
   wordToByte(infoSettings.font_color,                 data + (index += 4));
@@ -294,7 +304,15 @@ void storePara(void)
     wordToByte(infoSettings.preheat_bed[i],           data + (index += 4));
   }
 
-
-
   STM32_FlashWrite(data, PARA_SIZE);
+}
+
+bool readIsTSCExist(void)
+{
+  return ((paraStatus & PARA_TSC_EXIST) != 0);
+}
+
+bool readIsRestored(void)
+{
+  return ((paraStatus & PARA_WAS_RESTORED) != 0);  
 }

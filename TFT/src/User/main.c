@@ -45,14 +45,8 @@ void Hardware_GenericInit(void)
   XPT2046_Init();
   W25Qxx_Init();
   LCD_Init();
-
-  if(readStoredPara() == false) // Read settings parameter
-  {
-    TSC_Calibration();
-    storePara();
-  }
+  readStoredPara(); // Read settings parameter
   LCD_RefreshDirection();  //refresh display direction after reading settings
-
   scanUpdates();           // scan icon, fonts and config files
 
   #ifndef MKS_32_V1_4
@@ -79,9 +73,19 @@ void Hardware_GenericInit(void)
     USBH_Init(&USB_OTG_Core, USB_OTG_FS_CORE_ID, &USB_Host, &USBH_MSC_cb, &USR_cb);
   #endif
 
+  if (readIsTSCExist() == false) // Read settings parameter
+  {
+    TSC_Calibration();
+    storePara();
+  }
+  else if (readIsRestored())
+  {
+    storePara();
+  }
+
   printSetUpdateWaiting(infoSettings.m27_active);
   #ifdef LCD_LED_PWM_CHANNEL
-  Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
+    Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
   #endif
   GUI_RestoreColorDefault();
   infoMenuSelect();

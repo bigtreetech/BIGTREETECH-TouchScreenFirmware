@@ -67,12 +67,12 @@ typedef enum
     SKEY_KNOB,
   #endif
   #ifdef LCD_LED_PWM_CHANNEL
-  SKEY_LCD_BRIGHTNESS,
-  SKEY_LCD_BRIGTHNESS_DIM,
-  SKEY_LCD_DIM_IDLE_TIMER,
+    SKEY_LCD_BRIGHTNESS,
+    SKEY_LCD_BRIGTHNESS_DIM,
+    SKEY_LCD_DIM_IDLE_TIMER,
   #endif
   #ifdef ST7920_SPI
-  SKEY_ST7920_FULLSCREEN,
+    SKEY_ST7920_FULLSCREEN,
   #endif
   SKEY_RESET_SETTINGS, // Keep reset always at the bottom of the settings menu list.
   SKEY_COUNT //keep this always at the end

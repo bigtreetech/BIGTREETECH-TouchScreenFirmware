@@ -15,8 +15,6 @@
   #define ST7920_SPI_NUM          SPI3
 #endif
 
-//#define _SPI_SLAVE_IRQ(n)  n##_IRQHandler
-//#define SPI_SLAVE_IRQ  _SPI_SLAVE_IRQ(W25QXX_SPI_NUM)
 
 SPI_QUEUE SPISlave;
 
@@ -56,7 +54,13 @@ void SPI_Slave(void)
   NVIC_Init(&NVIC_InitStructure);
 
   RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2,ENABLE);
-  SPI_ReEnable(1);
+  SPI_Slave_CS_Config();
+  SPI_ReEnable(0); // spi mode0
+  
+  if((GPIOB->IDR & (1<<12)) != 0)
+  {
+    ST7920_SPI_NUM->CR1 |= (1<<6);
+  }
 }
 
 void SPI_SlaveDeInit(void)
@@ -86,11 +90,11 @@ void SPI_Slave_CS_Config(void)
   EXTI_InitTypeDef EXTI_InitStructure;
   NVIC_InitTypeDef   NVIC_InitStructure;
 
-  /* Connect GPIOA_0 to the interrupt line */
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);//Enable SYSCFG clock
-	SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOB, EXTI_PinSource12);//PB12 is connected to interrupt line 12
+  /* Connect GPIOB12 to the interrupt line */
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);//Enable SYSCFG clock
+  SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOB, EXTI_PinSource12);//PB12 is connected to interrupt line 12
 
-  /*Set interrupt line 0 bit external falling edge interrupt */
+  /*Set interrupt line 12 bit external falling edge interrupt */
   EXTI_InitStructure.EXTI_Line = EXTI_Line12;
   EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
   EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising_Falling;
@@ -116,7 +120,7 @@ void EXTI15_10_IRQHandler(void)
   }
   else
   {
-    RCC->APB1RSTR |= 1<<14;	//Reset SPI1
+    RCC->APB1RSTR |= 1<<14;	// Reset SPI2
     RCC->APB1RSTR &= ~(1<<14);
   }
 /* Clear interrupt status register */

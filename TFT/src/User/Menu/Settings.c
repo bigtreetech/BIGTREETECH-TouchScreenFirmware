@@ -24,7 +24,6 @@ void infoSettingsReset(void)
   infoSettings.language             = DEFAULT_LANGUAGE;
   infoSettings.mode                 = DEFAULT_LCD_MODE;
   infoSettings.unified_menu         = UNIFIED_MENU;
-  infoSettings.rotate_ui            = DISABLED;
 
   infoSettings.bg_color             = BACKGROUND_COLOR;
   infoSettings.font_color           = FONT_COLOR;
@@ -38,7 +37,7 @@ void infoSettingsReset(void)
   infoSettings.silent               = DISABLED;
   infoSettings.terminalACK          = DISABLED;
   infoSettings.move_speed           = ENABLED;
-  infoSettings.knob_led_color       = (STARTUP_KNOB_LED_COLOR - 1);
+  infoSettings.knob_led_color       = STARTUP_KNOB_LED_COLOR;
   infoSettings.send_start_gcode     = DISABLED;
   infoSettings.send_end_gcode       = DISABLED;
   infoSettings.send_cancel_gcode    = ENABLED;

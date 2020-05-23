@@ -115,8 +115,7 @@ void menuPopupPauseForUser(void)
   }
 }
 
-void popupPauseForUser()
-{
+void popupPauseForUser(void) {
   if (infoSettings.serial_alwaysOn == 1 && infoSettings.mode == LCD12864) return;
 
   popupDrawPage(&bottomSingleBtn , (u8*)"Printer Paused", (u8*)"OK to continue", textSelect(LABEL_CONFIRM), NULL);
