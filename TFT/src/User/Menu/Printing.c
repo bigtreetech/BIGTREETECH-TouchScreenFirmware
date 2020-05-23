@@ -739,7 +739,6 @@ void abortPrinting(void)
         sendPrintCodes(2);
       break;
   }
-
   heatClearIsWaiting();
 
   endPrinting();
