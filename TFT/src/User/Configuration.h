@@ -91,7 +91,7 @@
  *
  *  Options:  0: Disabled    1: Enabled
  */
-//#define SERIAL_ALWAYS_ON 0  // Default: 0 (Disabled)
+#define SERIAL_ALWAYS_ON 0  // Default: 0 (Disabled)
 
 //===========================================================================
 //========================== Touch Mode Settings ============================
