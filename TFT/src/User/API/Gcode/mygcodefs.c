@@ -64,22 +64,34 @@ bool scanPrintFilesGcodeFs(void)
       if (infoFile.f_num >= FILE_NUM)
         continue; /* Gcode max number is FILE_NUM*/
 
-      char * Pstr_tmp = strrchr (line ,' ');
-      if (Pstr_tmp != NULL) *Pstr_tmp = 0; //remove file size from line
-      char * longfilemane = request_M33(line);
-      Pstr_tmp = strchr (longfilemane ,'\n');
-      if (Pstr_tmp != NULL) *Pstr_tmp = 0; //remove end of M33 command
-      Pstr_tmp = strrchr (longfilemane ,'/'); //remove folder information
-      if (Pstr_tmp == NULL) Pstr_tmp = longfilemane;
-      else Pstr_tmp++;
-      infoFile.Longfile[infoFile.f_num]= malloc(strlen(Pstr_tmp) + 1);
-      if (infoFile.Longfile[infoFile.f_num] == NULL)
+      if (infoMachineSettings.long_filename_support == ENABLED)
       {
-        clearRequestCommandInfo();
-        break;
+        char *Pstr_tmp = strrchr(line, ' ');
+        if (Pstr_tmp != NULL)
+          *Pstr_tmp = 0;                          //remove file size from line
+
+        char *longfilename = request_M33(line);
+
+        Pstr_tmp = strchr(longfilename, '\n');
+        if (Pstr_tmp != NULL)
+          *Pstr_tmp = 0;                          //remove end of M33 command
+
+        Pstr_tmp = strrchr(longfilename, '/');    //remove folder information
+        if (Pstr_tmp == NULL)
+          Pstr_tmp = longfilename;
+        else
+          Pstr_tmp++;
+
+        infoFile.Longfile[infoFile.f_num] = malloc(strlen(Pstr_tmp) + 1);
+
+        if (infoFile.Longfile[infoFile.f_num] == NULL)
+        {
+          clearRequestCommandInfo();
+          break;
+        }
+        strcpy(infoFile.Longfile[infoFile.f_num], Pstr_tmp);
+        clearRequestCommandInfo(); // for M33
       }
-      strcpy(infoFile.Longfile[infoFile.f_num], Pstr_tmp);
-      clearRequestCommandInfo();  // for M33
 
       char* rest = pline;
       char* file = strtok_r(rest," ",&rest);   //remove file size from pline

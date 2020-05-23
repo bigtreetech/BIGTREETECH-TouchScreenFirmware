@@ -31,24 +31,23 @@
 /**
  * Default LCD Brightness and LCD IDLE Brightness
  *
- * Brightness:  0: LCD_5_PERCENT,  1: LCD_10_PERCENT, 2: LCD_20_PERCENT,
- *              3: LCD_30_PERCENT, 4: LCD_40_PERCENT, 5: LCD_50_PERCENT,
- *              6: LCD_60_PERCENT, 7: LCD_70_PERCENT, 8: LCD_80_PERCENT,
- *              9: LCD_90_PERCENT, 10: LCD_100_PERCENT
+ * Brightness:  0: LCD_5_PERCENT,    1: LCD_10_PERCENT,  2: LCD_20_PERCENT,
+ *              3: LCD_30_PERCENT,   4: LCD_40_PERCENT,  5: LCD_50_PERCENT,
+ *              6: LCD_60_PERCENT,   7: LCD_70_PERCENT,  8: LCD_80_PERCENT,
+ *              9: LCD_90_PERCENT,  10: LCD_100_PERCENT
  *
  * Settings for the idle dim timer. The LCD screen will dim to idle brightness,
  * if the display is not touched for the period of the lcd idle timer.
  *
- * Idle Timer:  0: LCD_DIM_OFF,         1: LCD_DIM_5_SECONDS.   2: LCD_DIM_10_SECONDS,
- *              3: LCD_DIM_30_SECONDS,  4: LCD_DIM_60_SECONDS,  5: LCD_DIM_120_SECONDS,
- *              6: LCD_DIM_300_SECONDS, 7: LCD_DIM_CUSTOM_SECONDS
+ * Idle Timer:  0: LCD_DIM_OFF,          1: LCD_DIM_5_SECONDS.      2: LCD_DIM_10_SECONDS,
+ *              3: LCD_DIM_30_SECONDS,   4: LCD_DIM_60_SECONDS,     5: LCD_DIM_120_SECONDS,
+ *              6: LCD_DIM_300_SECONDS,  7: LCD_DIM_CUSTOM_SECONDS
  *
  */
 #define DEFAULT_LCD_BRIGHTNESS      10  // 10: LCD_100_PERCENT - Brightness value from list
 #define DEFAULT_LCD_IDLE_BRIGHTNESS 2   // 2: LCD_10_PERCENT - Brightness value from list
 #define DEFAULT_LCD_IDLE_TIMER      0   // 0: LCD_DIM_OFF
-#define LCD_DIM_CUSTOM_SECONDS      600 // Custom value in seconds. Will be used if
-                                          // LCD_DIM_CUSTOM_SECONDS is set as idle timer.
+#define LCD_DIM_CUSTOM_SECONDS      600 // Custom value in seconds. Will be used if LCD_DIM_CUSTOM_SECONDS is set as idle timer.
 
 //===========================================================================
 //=========================== Marlin Mode Settings ==========================
@@ -59,9 +58,9 @@
  *
  * These colors can be changed in Touch mode, but can also be set here.
  *
- * Options: 0: WHITE,     1: BLACK,      2: RED,    3: GREEN,   4: BLUE,   5: CYAN,
- *          6: MAGENTA,   7: YELLOW,     8: ORANGE, 9: PURPLE, 10: LIME,  11: BROWN,
- *         12: DARKBLUE, 13: DARKGREEN, 14: GRAY, 15: DARKGRAY
+ * Options: 0: WHITE,      1: BLACK,       2: RED,     3: GREEN,     4: BLUE,   5: CYAN,
+ *          6: MAGENTA,    7: YELLOW,      8: ORANGE,  9: PURPLE,   10: LIME,  11: BROWN,
+ *         12: DARKBLUE,  13: DARKGREEN,  14: GRAY,   15: DARKGRAY
  */
 #define ST7920_BKCOLOR 1
 #define ST7920_FNCOLOR 0
@@ -84,15 +83,15 @@
 #define DEFAULT_ST7920_FULLSCREEN_MODE 0 // 0: Disabled. RECOMMENDED FOR TFT24
 
 /**
- * Clean Mode Switching Support
+ * Keep Serial always On (ONLY SUPPORTED ON TFT24 V1.1, TFT35 V3.0, AND TFT28 V3.0)
  *
  * Keep UART (Serial communication) alive in Marlin Mode
  *
  * Allow seamless OctoPrint UART connection to the TFT's UART/serial expansion port no matter which mode the TFT is in.
  *
- * *** ONLY SUPPORTED ON TFT24 V1.1, TFT35 V3.0, AND TFT28 V3.0 ***
+ *  Options:  0: Disabled    1: Enabled
  */
-//#define CLEAN_MODE_SWITCHING_SUPPORT  // Enable CLEAN MODE SWITCHING SUPPORT
+#define SERIAL_ALWAYS_ON 0  // Default: 0 (Disabled)
 
 //===========================================================================
 //========================== Touch Mode Settings ============================
@@ -114,7 +113,7 @@
  *
  * Select the language to display on the LCD while in Touch Mode.
  *
- * Options: ARMENIAN, CHINESE, CZECH, DUTCH, ENGLISH, FRENCH, GERMAN, HUNGARY, ITALIAN, JAPANESE, POLISH, PORTUGUESE, RUSSIAN, SLOVAK, SPAIN
+ * Options: ARMENIAN, CHINESE, CZECH, DUTCH, ENGLISH, FRENCH, GERMAN, HUNGARIAN, ITALIAN, JAPANESE, POLISH, PORTUGUESE, RUSSIAN, SLOVAK, SPAIN
  */
 #define DEFAULT_LANGUAGE ENGLISH
 
@@ -137,25 +136,25 @@
 
 /**
  * Default Touch Mode Color Options
- * Options: 0: WHITE,     1: BLACK,      2: RED,    3: GREEN,   4: BLUE,   5: CYAN,
- *          6: MAGENTA,   7: YELLOW,     8: ORANGE, 9: PURPLE, 10: LIME,  11: BROWN,
- *         12: DARKBLUE, 13: DARKGREEN, 14: GRAY, 15: DARKGRAY
+ * Options: 0: WHITE,      1: BLACK,       2: RED,     3: GREEN,     4: BLUE,   5: CYAN,
+ *          6: MAGENTA,    7: YELLOW,      8: ORANGE,  9: PURPLE,   10: LIME,  11: BROWN,
+ *         12: DARKBLUE,  13: DARKGREEN,  14: GRAY,   15: DARKGRAY
  */
-#define TITLE_BACKGROUND_COLOR      1  // Title background color // 0xD928
-#define BACKGROUND_COLOR            1  // Background color // 0x0A29
-#define FONT_COLOR                  0  // Font foreground color
-#define REMINDER_FONT_COLOR         2    // Reminder font color, such as: "No print attached", "Busy processing", etc.
-#define VOLUME_REMINDER_FONT_COLOR  5  // Volume reminder font color, such as: "Card inserted", "Card removed"
-#define STATUS_XYZ_BG_COLOR         15 // Backgroud color for X Y Z positon display in Status Screen.
-#define LISTVIEW_BORDER_COLOR       15 //Border color in List view
-#define LISTVIEW_ICON_COLOR         15 //icon color in List view
+#define TITLE_BACKGROUND_COLOR     1  // Title background color // 0xD928
+#define BACKGROUND_COLOR           1  // Background color // 0x0A29
+#define FONT_COLOR                 0  // Font foreground color
+#define REMINDER_FONT_COLOR        2  // Reminder font color, such as: "No print attached", "Busy processing", etc.
+#define VOLUME_REMINDER_FONT_COLOR 5  // Volume reminder font color, such as: "Card inserted", "Card removed"
+#define STATUS_XYZ_BG_COLOR        15 // Backgroud color for X Y Z positon display in Status Screen.
+#define LISTVIEW_BORDER_COLOR      15 // Border color in List view
+#define LISTVIEW_ICON_COLOR        15 // icon color in List view
 
 #define TOOL_NUM     1    // set in 1~6
 #define EXTRUDER_NUM 1    // set in 1~6
 #define FAN_NUM      1    // set in 1~6
 
-//                       PLA      PETG       ABS
-#define PREHEAT_LABELS    {"PLA",   "PETG",   "ABS"}
+//                         PLA      PETG      ABS
+#define PREHEAT_LABELS   {"PLA",   "PETG",   "ABS"}
 #define PREHEAT_BED      {60,      70,       100}
 #define PREHEAT_HOTEND   {200,     250,      230}
 
@@ -177,14 +176,14 @@
 #define AXIS_DISPLAY_ID  {"X",  "Y",  "Z",   "E",  "E2"}
 
 // Default move speed mm/min
-#define DEFAULT_SPEED_MOVE      3000
-#define SPEED_MOVE_SLOW         1000
-#define SPEED_MOVE_FAST         5000
+#define DEFAULT_SPEED_MOVE   3000
+#define SPEED_MOVE_SLOW      1000
+#define SPEED_MOVE_FAST      5000
 
 // Extrude speed mm/min
-#define EXTRUDE_SLOW_SPEED      60
-#define EXTRUDE_NORMAL_SPEED    600
-#define EXTRUDE_FAST_SPEED      1200
+#define EXTRUDE_SLOW_SPEED   60
+#define EXTRUDE_NORMAL_SPEED 600
+#define EXTRUDE_FAST_SPEED   1200
 
 // Size of machine
 #define X_MIN_POS 0
@@ -259,7 +258,7 @@
 #define HOME_BEFORE_PLR false   //to enabled: true | to disabled: false
 
 // Backup power / UPS to move Z axis on power loss
-#define BTT_MINI_UPS     false   //to enabled: true | to disabled: false
+#define BTT_MINI_UPS    false   //to enabled: true | to disabled: false
 
 // (mm) Raise Z axis on resume (on power loss with UPS)
 #define POWER_LOSS_ZRAISE 10
@@ -274,7 +273,7 @@
  */
 #define AUTO_SHUT_DOWN_MAXTEMP 50
 
-#define SHOW_FAN_PERCENTAGE  true// enable to show fan speed as a percentage instead of a value. to enabled: true | to disabled: false
+#define SHOW_FAN_PERCENTAGE true // enable to show fan speed as a percentage instead of a value. to enabled: true | to disabled: false
 
 /**
  * Rapid Serial Communication

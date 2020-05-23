@@ -20,9 +20,9 @@ LABEL_FAN,
 const char* fanID[] = FAN_ID;
 const char* fanCmd[] = FAN_CMD;
 
-static u8   fanSpeed[MAX_TOOL_COUNT] = {0};
+static u8   fanSpeed[MAX_FAN_COUNT] = {0};
 static u8   curIndex = 0;
-static bool send_waiting[MAX_TOOL_COUNT] = {false};
+static bool send_waiting[MAX_FAN_COUNT] = {false};
 
 void fanSetSpeed(u8 i, u8 speed)
 {
@@ -64,7 +64,7 @@ void showFanSpeed(void)
   if(infoSettings.fan_percentage == 1)
     {
       char fan_s[5];
-      sprintf(fan_s, "%3d%%", fs);
+      sprintf(fan_s, "%3u%%", fs);
       GUI_DispString(CENTER_X-BYTE_WIDTH, CENTER_Y, (u8 *)fan_s);
     }
   else
@@ -77,7 +77,7 @@ void fanSpeedReDraw(void)
  if(infoSettings.fan_percentage == 1)
     {
       char fan_s[5] = "";
-      sprintf(fan_s, "%3d%%", (fanSpeed[curIndex]*100)/255);
+      sprintf(fan_s, "%3u%%", (fanSpeed[curIndex]*100)/255);
       GUI_DispString(CENTER_X-BYTE_WIDTH, CENTER_Y, (u8 *)fan_s);
     }
   else

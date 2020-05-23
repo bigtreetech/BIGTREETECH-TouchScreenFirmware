@@ -12,12 +12,12 @@
 #define WORD_UNICODE            0x4B000 // unicode (+0x480000 4.5M)
 #define BYTE_ASCII_ADDR         (WORD_UNICODE+0x480000) // ascii (+0x1000 4K)
 //#define BYTE_RESERVE_ADDR      0x710000
-#define STRINGS_STORE_ADDR      (BYTE_ASCII_ADDR+0x1000)      								//for label strings from config file
-#define STRINGS_STORE_MAX_SIZE	0x5000									      								//label strings max size
+#define STRINGS_STORE_ADDR      (BYTE_ASCII_ADDR+0x1000)                      //for label strings from config file
+#define STRINGS_STORE_MAX_SIZE  0x5000                                        //label strings max size
 #define PRINT_GCODES_ADDR       (STRINGS_STORE_ADDR+STRINGS_STORE_MAX_SIZE)   //for start/end/cancel gcodes from config file
-#define PRINT_GCODES_MAX_SIZE	  0x5000																				//start/end/cancel gcodes  max size
-#define CUSTOM_GCODE_ADDR       (PRINT_GCODES_ADDR+PRINT_GCODES_MAX_SIZE) 		//for custom gcodes from config file
-#define CUSTOM_GCODE_MAX_SIZE		0x5000                        								//custom gocdes max size
+#define PRINT_GCODES_MAX_SIZE    0x5000                                        //start/end/cancel gcodes  max size
+#define CUSTOM_GCODE_ADDR       (PRINT_GCODES_ADDR+PRINT_GCODES_MAX_SIZE)     //for custom gcodes from config file
+#define CUSTOM_GCODE_MAX_SIZE    0x5000                                        //custom gocdes max size
 
 #define ICON_ADDR(num)          ((num)*0x5000+CUSTOM_GCODE_ADDR+CUSTOM_GCODE_MAX_SIZE)
 #define INFOBOX_ADDR            (ICON_ADDR(ICON_PREVIEW) + 0x5000) // total byte size 0xA7F8
@@ -55,11 +55,11 @@ BMP_INVALIDFILE
 
 typedef union
 {
-	u16 color;
-	struct{
-	u16  b:5;
-	u16  g:6;
-	u16  r:5;
+  u16 color;
+  struct{
+  u16  b:5;
+  u16  g:6;
+  u16  r:5;
  }RGB;
 }GUI_COLOR;
 

@@ -45,9 +45,10 @@ void Hardware_GenericInit(void)
   XPT2046_Init();
   W25Qxx_Init();
   LCD_Init();
-  readStoredPara();
+  readStoredPara(); // Read settings parameter
   LCD_RefreshDirection();  //refresh display direction after reading settings
-  scanUpdates();
+  scanUpdates();           // scan icon, fonts and config files
+
   #ifndef MKS_32_V1_4
     //causes hang if we deinit spi1
     SD_DeInit();
@@ -67,7 +68,7 @@ void Hardware_GenericInit(void)
   #ifdef LED_COLOR_PIN
     knob_LED_Init();
   #endif
-  
+
   #ifdef U_DISK_SUPPORT
     USBH_Init(&USB_OTG_Core, USB_OTG_FS_CORE_ID, &USB_Host, &USBH_MSC_cb, &USR_cb);
   #endif
@@ -81,9 +82,10 @@ void Hardware_GenericInit(void)
   {
     storePara();
   }
+
   printSetUpdateWaiting(infoSettings.m27_active);
   #ifdef LCD_LED_PWM_CHANNEL
-  Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
+    Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
   #endif
   GUI_RestoreColorDefault();
   infoMenuSelect();

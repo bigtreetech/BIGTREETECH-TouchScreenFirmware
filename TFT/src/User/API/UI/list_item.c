@@ -7,7 +7,7 @@
 
 char * dynamic_label[LISTITEM_PER_PAGE];
 
-char * dynamic_text_value[LISTITEM_PER_PAGE];
+char dynamic_text_value[LISTITEM_PER_PAGE][10];
 
 float dynamic_value[LISTITEM_PER_PAGE];
 
@@ -252,7 +252,8 @@ char * getDynamicLabel(uint8_t i){
 
 // save dynamic text value (upto 7 characters) ( i : index of the text value position, txt: char * to the text value)
 void setDynamicTextValue(uint8_t i, char *txt){
-  dynamic_text_value[i] = txt;
+  //dynamic_text_value[i] = txt;
+  strcpy(dynamic_text_value[i],txt);
 }
 
 // get dynamic text value ( i : index of the text value position)

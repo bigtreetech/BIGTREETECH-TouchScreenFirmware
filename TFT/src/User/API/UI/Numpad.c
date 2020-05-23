@@ -176,7 +176,7 @@ u32 numPadInt(u32 old_val)
     Draw_keyboard();
     GUI_DispStringInPrect(&arrowRect,(u8 *)">");
     char tempstr[BUFLONG];
-    my_sprintf(tempstr, "%.2f", old_val);
+    my_sprintf(tempstr, "%d", old_val);
     GUI_DispStringInPrect(&oldParameterRect,(u8*)tempstr);
     touchSound = false;
     while (1)
