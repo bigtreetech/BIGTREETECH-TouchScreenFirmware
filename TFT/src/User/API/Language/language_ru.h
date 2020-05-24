@@ -79,9 +79,9 @@
     #define RU_PERCENTAGE_SPEED       "Скорость"
     #define RU_PERCENTAGE_FLOW        "Поток"
     #define RU_VALUE_ZERO             "Обнулить"
-    #define RU_1_DEGREE               "1°C"
-    #define RU_5_DEGREE               "5°C"
-    #define RU_10_DEGREE              "10°C"
+    #define RU_1_DEGREE               "1℃"
+    #define RU_5_DEGREE               "5℃"
+    #define RU_10_DEGREE              "10℃"
     #define RU_X_INC                  "X+"
     #define RU_Y_INC                  "Y+"
     #define RU_Z_INC                  "Z+"
@@ -137,7 +137,7 @@
     #define RU_EMERGENCYSTOP          "Экст.стоп"
     #define RU_MAINMENU               "Меню"
     #define RU_TOUCH_TO_EXIT          "Нажмите для возврата"
-    #define RU_WAIT_TEMP_SHUT_DOWN    "Дождитесь температуры   сопла не ниже чем %d°C" // Wait for the temperature of hotend to be lower than 50°C
+    #define RU_WAIT_TEMP_SHUT_DOWN    "Дождитесь температуры   сопла не ниже чем %d℃" // Wait for the temperature of hotend to be lower than 50℃
     #define RU_FORCE_SHUT_DOWN        "Принудительно выкл"
     #define RU_SHUTTING_DOWN          "Выключаю..."
     #define RU_PARAMETER_SETTING      "Параметры"
