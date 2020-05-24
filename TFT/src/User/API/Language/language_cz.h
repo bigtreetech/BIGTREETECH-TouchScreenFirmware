@@ -129,7 +129,7 @@
     #define CZ_FILAMENT_RUNOUT      "Došel filament!"
     #define CZ_PREHEAT              "Zahřát"
     #define CZ_PREHEAT_BOTH         "Vše"
-    #define CZ_IS_PAUSE             "Během tisku nelze extrudovat, mám pozastavit tisk?"
+    #define CZ_IS_PAUSE             "Během tisku nelze\nextrudovat,\nmám pozastavit tisk?"
     #define CZ_AUTO_SHUT_DOWN       "Automat"
     #define CZ_UNIFIEDMOVE          "Pohyb"
     #define CZ_UNIFIEDHEAT          "Teplota"
@@ -137,7 +137,7 @@
     #define CZ_EMERGENCYSTOP        "!!STOP!!"
     #define CZ_TOUCH_TO_EXIT        "Pro návrat se dotkněte obrazovky..."
     #define CZ_MAINMENU             "Menu"
-    #define CZ_WAIT_TEMP_SHUT_DOWN  "Čekám na zchladnutí extruderu pod %d℃" // Wait for the temperature of hotend to be lower than 50℃
+    #define CZ_WAIT_TEMP_SHUT_DOWN  "Čekám na zchladnutí\nextruderu pod %d℃" // Wait for the temperature of hotend to be lower than 50℃
     #define CZ_FORCE_SHUT_DOWN      "Vynutit"
     #define CZ_SHUTTING_DOWN        "Vypínám se..."
     #define CZ_PARAMETER_SETTING    "Parametr"
@@ -166,8 +166,8 @@
     #define CZ_TRAVEL_ACCELERATION      "Zrychlení při přesunu"
     #define CZ_BUMP_SENSITIVITY         "Citlivost TMC na náraz"
     #define CZ_RESET                    "Reset"
-    #define CZ_RESET_SETTINGS           "Všechna nastavení budou obnovena na výchozí hodnoty. Pokračovat?"
-    #define CZ_RESET_SETTINGS_DONE      "Resetování všech nastavení bylo úspěšně provedeno. Restartujte zařízení."
+    #define CZ_RESET_SETTINGS           "Všechna nastavení budou\nobnovena na výchozí\nhodnoty. Pokračovat?"
+    #define CZ_RESET_SETTINGS_DONE      "Resetování všech nastavení\nbylo úspěšně provedeno.\nRestartujte zařízení."
     #define CZ_INFO                     "Info"
     #define CZ_LCD_BRIGHTNESS           "LCD Jas"
     #define CZ_LCD_BRIGHTNESS_DIM       "LCD snížení jasu"

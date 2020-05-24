@@ -972,7 +972,7 @@ void GUI_DrawWindow(const WINDOW *window, const uint8_t *title, const uint8_t *i
   //    GUI_DispStringInRect(rect.x0, rect.y0, rect.x1, rect.y0+titleHeight,title,0);
   GUI_DispString(sx+radius, sy+8, title);
   GUI_SetColor(window->info.fontColor);
-  GUI_DispStringInRect(sx+lineWidth+BYTE_WIDTH, sy+titleHeight, ex-lineWidth-BYTE_WIDTH, sy+titleHeight+infoHeight, inf);
+  GUI_DispStringInRectEOL(sx+lineWidth+BYTE_WIDTH, sy+titleHeight, ex-lineWidth-BYTE_WIDTH, sy+titleHeight+infoHeight, inf);
 
   GUI_SetBkColor(nowBackColor);
   GUI_SetColor(nowFontColor);

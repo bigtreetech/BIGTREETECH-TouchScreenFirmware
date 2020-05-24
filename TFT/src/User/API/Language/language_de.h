@@ -129,7 +129,7 @@
     #define DE_FILAMENT_RUNOUT      "Filament runout!"
     #define DE_PREHEAT              "Vorheizen"
     #define DE_PREHEAT_BOTH         "Beide"
-    #define DE_IS_PAUSE             "Extrudierung während Druckvorgangs nicht möglich, Druck Pausieren?"
+    #define DE_IS_PAUSE             "Extrudierung während\nDruckvorgangs nicht\nmöglich,\nDruck Pausieren?"
     #define DE_AUTO_SHUT_DOWN       "Automatisch AUS (PS_ON)"
     #define DE_UNIFIEDMOVE          "Bewegung"
     #define DE_UNIFIEDHEAT          "Heiz.Lüft."
@@ -137,7 +137,7 @@
     #define DE_EMERGENCYSTOP        "NOT STOP!"
     #define DE_TOUCH_TO_EXIT        "Zum verlassen, Bildschirm berühren."
     #define DE_MAINMENU             "Menü"
-    #define DE_WAIT_TEMP_SHUT_DOWN  "Warte bis Hotend-Temperatur unter %d℃ fällt." // Wait for the temperature of hotend to be lower than 50℃
+    #define DE_WAIT_TEMP_SHUT_DOWN  "Warte bis Hotend-\nTemperatur unter\n %d℃ fällt." // Wait for the temperature of hotend to be lower than 50℃
     #define DE_FORCE_SHUT_DOWN      "Erzwinge"
     #define DE_SHUTTING_DOWN        "Fahre herunter..."
     #define DE_PARAMETER_SETTING    "Parameter"
@@ -166,8 +166,8 @@
     #define DE_TRAVEL_ACCELERATION      "Travel Acceleration"
     #define DE_BUMP_SENSITIVITY         "TMC bump sensitivity"
     #define DE_RESET                    "Resetten"
-    #define DE_RESET_SETTINGS           "Hiermit werden alle Einstellungen auf Werkseinstellungen zurückgesetzt. Fortfahren?"
-    #define DE_RESET_SETTINGS_DONE      "Einstellungen wurden erfolgreich zurückgesetzt. Bitte starten Sie das Gerät neu."
+    #define DE_RESET_SETTINGS           "Hiermit werden alle\nEinstellungen auf Werkseinstellungen\nzurückgesetzt. Fortfahren?"
+    #define DE_RESET_SETTINGS_DONE      "Einstellungen wurden\nerfolgreich zurückgesetzt.\nBitte starten Sie das Gerät neu."
     #define DE_INFO                     "\u0884 Info" //Info Sign
     #define DE_LCD_BRIGHTNESS           "LCD Helligkeit"
     #define DE_LCD_BRIGHTNESS_DIM       "LCD Abdunkel Helligkeit"

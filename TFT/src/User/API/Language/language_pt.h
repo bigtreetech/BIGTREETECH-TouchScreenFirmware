@@ -129,7 +129,7 @@
     #define PT_FILAMENT_RUNOUT      "Filamento runout!"
     #define PT_PREHEAT              "Aquecer"
     #define PT_PREHEAT_BOTH         "Ambos"
-    #define PT_IS_PAUSE             "Nao e possível a extrusão durante a impressao, pausar a impressao?"
+    #define PT_IS_PAUSE             "Nao e possível a extrusão\ndurante a impressao,\npausar a impressao?"
     #define PT_AUTO_SHUT_DOWN       "Auto Power"
     #define PT_UNIFIEDMOVE          "Movimento"
     #define PT_UNIFIEDHEAT          "Heat/Fan"
@@ -137,7 +137,7 @@
     #define PT_EMERGENCYSTOP        "EMERGENCIA STOP"
     #define PT_TOUCH_TO_EXIT        "Toque em qualquer lugar para sair"
     #define PT_MAINMENU             "Menu"
-    #define PT_WAIT_TEMP_SHUT_DOWN  "Wait for the temperature of hotend to be lower than %d℃" // Wait for the temperature of hotend to be lower than 50℃
+    #define PT_WAIT_TEMP_SHUT_DOWN  "Wait for the hotend\ntemperature to be\nlower than %d ℃" // Wait for the temperature of hotend to be lower than 50℃
     #define PT_FORCE_SHUT_DOWN      "Force"
     #define PT_SHUTTING_DOWN        "Shutting down..."
     #define PT_PARAMETER_SETTING    "Parâmetro"
@@ -166,8 +166,8 @@
     #define PT_TRAVEL_ACCELERATION      "Travel Acceleration"
     #define PT_BUMP_SENSITIVITY         "TMC bump sensitivity"
     #define PT_RESET                    "Reset"
-    #define PT_RESET_SETTINGS           "All settings will be reset to it's default values. Continue?"
-    #define PT_RESET_SETTINGS_DONE      "Resetting all settings successfully done. To take full effect, please restart the device."
+    #define PT_RESET_SETTINGS           "All settings will be\nreset to it's default\nvalues. Continue?"
+    #define PT_RESET_SETTINGS_DONE      "Resetting all settings\nsuccessfully done.\nTo take full effect,\nplease restart the device."
     #define PT_INFO                     "Info"
     #define PT_LCD_BRIGHTNESS           "LCD Brightness"
     #define PT_LCD_BRIGHTNESS_DIM       "LCD Brightness dim"

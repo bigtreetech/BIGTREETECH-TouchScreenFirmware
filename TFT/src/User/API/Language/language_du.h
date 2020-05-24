@@ -129,7 +129,7 @@
     #define DU_FILAMENT_RUNOUT      "filament op!"
     #define DU_PREHEAT              "Voorverwarmen"
     #define DU_PREHEAT_BOTH         "Beide"
-    #define DU_IS_PAUSE             "Kan niet extruderen tijdens printen, Pauzeer printen?"
+    #define DU_IS_PAUSE             "Kan niet extruderen\ntijdens printen,\nPauzeer printen?"
     #define DU_AUTO_SHUT_DOWN       "Auto Power"
     #define DU_UNIFIEDMOVE          "Beweging"
     #define DU_UNIFIEDHEAT          "Verwarm/Ventilator"
@@ -137,7 +137,7 @@
     #define DU_EMERGENCYSTOP        "NOODSTOP"
     #define DU_TOUCH_TO_EXIT        "Aanraken om te verlaten"
     #define DU_MAINMENU             "Menu"
-    #define DU_WAIT_TEMP_SHUT_DOWN  "Wacht tot de temperatuur van de spuitkop lager dan %d℃ is" // Wait for the temperature of hotend to be lower than 50℃
+    #define DU_WAIT_TEMP_SHUT_DOWN  "Wacht tot de temperatuur\nvan de spuitkop\nlager dan %d℃ is" // Wait for the temperature of hotend to be lower than 50℃
     #define DU_FORCE_SHUT_DOWN      "Forceer Afsluiten"
     #define DU_SHUTTING_DOWN        "Afsluiten..."
     #define DU_PARAMETER_SETTING    "Parameter"
@@ -166,8 +166,8 @@
     #define DU_TRAVEL_ACCELERATION      "Travel Acceleration"
     #define DU_BUMP_SENSITIVITY         "TMC bump sensitivity"
     #define DU_RESET                    "Reset"
-    #define DU_RESET_SETTINGS           "All settings will be reset to it's default values. Continue?"
-    #define DU_RESET_SETTINGS_DONE      "Resetting all settings successfully done. To take full effect, please restart the device."
+    #define DU_RESET_SETTINGS           "All settings will be\nreset to it's default\nvalues. Continue?"
+    #define DU_RESET_SETTINGS_DONE      "Resetting all settings\nsuccessfully done.\nTo take full effect,\nplease restart the device."
     #define DU_INFO                     "Info"
     #define DU_LCD_BRIGHTNESS           "LCD Brightness"
     #define DU_LCD_BRIGHTNESS_DIM       "LCD Brightness dim"

@@ -129,7 +129,7 @@
     #define ES_FILAMENT_RUNOUT      "¡Filamento agotado!"
     #define ES_PREHEAT              "Precalentar"
     #define ES_PREHEAT_BOTH         "Ambos"
-    #define ES_IS_PAUSE             "No se puede extruir al imprimir,¿Pausar la impresión?"
+    #define ES_IS_PAUSE             "No se puede extruir\nal imprimir,¿\nPausar la impresión?"
     #define ES_AUTO_SHUT_DOWN       "Apag. aut."
     #define ES_UNIFIEDMOVE          "Movimiento"
     #define ES_UNIFIEDHEAT          "Calor/Ventilador"
@@ -137,7 +137,7 @@
     #define ES_EMERGENCYSTOP        "PARADA EMERGENCIA"
     #define ES_TOUCH_TO_EXIT        "Toca cualquier lugar para salir"
     #define ES_MAINMENU             "Menu"
-    #define ES_WAIT_TEMP_SHUT_DOWN  "Espere a que la temperatura del hotend sea inferior a %d℃" // Wait for the temperature of hotend to be lower than 50℃
+    #define ES_WAIT_TEMP_SHUT_DOWN  "Espere a que la\ntemperatura del hotend\nsea inferior a %d℃" // Wait for the temperature of hotend to be lower than 50℃
     #define ES_FORCE_SHUT_DOWN      "Forzar Apagado"
     #define ES_SHUTTING_DOWN        "Apagando..."
     #define ES_PARAMETER_SETTING    "Parámetro"
@@ -166,8 +166,8 @@
     #define ES_TRAVEL_ACCELERATION      "Travel Acceleration"
     #define ES_BUMP_SENSITIVITY         "TMC bump sensitivity"
     #define ES_RESET                    "Reset"
-    #define ES_RESET_SETTINGS           "All settings will be reset to it's default values. Continue?"
-    #define ES_RESET_SETTINGS_DONE      "Resetting all settings successfully done. To take full effect, please restart the device."
+    #define ES_RESET_SETTINGS           "All settings will be\nreset to it's default\nvalues. Continue?"
+    #define ES_RESET_SETTINGS_DONE      "Resetting all settings\nsuccessfully done.\nTo take full effect,\nplease restart the device."
     #define ES_INFO                     "Info"
     #define ES_LCD_BRIGHTNESS           "LCD Brightness"
     #define ES_LCD_BRIGHTNESS_DIM       "LCD Brightness dim"
