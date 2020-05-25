@@ -558,8 +558,10 @@ void ST7920_ParseRecv(u8 val)
   {
     st7920_reg.ctrl_status = (ST7920_CTRL_STATUS)val;
     rcvIndex = 0;
-    st7920.address_is_y = 1;
-    st7920_reg.cgram = 0;
+    if (st7920_reg.ctrl_status == ST7920_WDATA) {
+      st7920.address_is_y = 1;
+      st7920_reg.cgram = 0;
+    }
   }
   else
   {
