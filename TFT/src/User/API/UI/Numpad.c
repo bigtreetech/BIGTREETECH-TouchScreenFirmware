@@ -215,7 +215,7 @@ u32 numPadInt(u32 old_val)
       case NUM_KEY_OK:
         if (nowIndex > 0)
         {
-          if (nowIndex == 1 &&(ParameterBuf[0] = '.' || ParameterBuf[0] == '-'))
+          if (nowIndex == 1 &&(ParameterBuf[0] == '.' || ParameterBuf[0] == '-'))
             break;
 
         BUZZER_PLAY(sound_ok);
