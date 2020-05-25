@@ -129,7 +129,7 @@
     #define IT_FILAMENT_RUNOUT      "Filamento finito!"
     #define IT_PREHEAT              "Prepara"
     #define IT_PREHEAT_BOTH         "Both"
-    #define IT_IS_PAUSE             "Impossibile estrudere durante la stampa, vuoi sospendere?"
+    #define IT_IS_PAUSE             "Impossibile estrudere\ndurante la stampa,\nvuoi sospendere?"
     #define IT_AUTO_SHUT_DOWN       "Auto Spegnimento"
     #define IT_UNIFIEDMOVE          "Movimento"
     #define IT_UNIFIEDHEAT          "Caldo/Fan"
@@ -137,7 +137,7 @@
     #define IT_EMERGENCYSTOP        "EM. STOP"
     #define IT_TOUCH_TO_EXIT        "Premi ovunque per uscire"
     #define IT_MAINMENU             "Menu"
-    #define IT_WAIT_TEMP_SHUT_DOWN  "Wait for the temperature of hotend to be lower than %d℃" // Wait for the temperature of hotend to be lower than 50℃
+    #define IT_WAIT_TEMP_SHUT_DOWN  "Wait for the hotend\ntemperature to be lower\nthan %d℃" // Wait for the temperature of hotend to be lower than 50℃
     #define IT_FORCE_SHUT_DOWN      "Force"
     #define IT_SHUTTING_DOWN        "Shutting down..."
     #define IT_PARAMETER_SETTING    "Parametri"
@@ -166,8 +166,8 @@
     #define IT_TRAVEL_ACCELERATION      "Travel Acceleration"
     #define IT_BUMP_SENSITIVITY         "TMC bump sensitivity"
     #define IT_RESET                    "Reset"
-    #define IT_RESET_SETTINGS           "All settings will be reset to it's default values. Continue?"
-    #define IT_RESET_SETTINGS_DONE      "Resetting all settings successfully done. To take full effect, please restart the device."
+    #define IT_RESET_SETTINGS           "All settings will be\nreset to it's default\nvalues. Continue?"
+    #define IT_RESET_SETTINGS_DONE      "Resetting all settings\nsuccessfully done.\nTo take full effect,\nplease restart the device."
     #define IT_INFO                     "Info"
     #define IT_LCD_BRIGHTNESS           "LCD Brightness"
     #define IT_LCD_BRIGHTNESS_DIM       "LCD Brightness dim"

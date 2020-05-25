@@ -129,7 +129,7 @@
     #define JP_FILAMENT_RUNOUT      "filament runout!"
     #define JP_PREHEAT              "Preheat"
     #define JP_PREHEAT_BOTH         "Both"
-    #define JP_IS_PAUSE             "Unable to extrude when printing, Pause printing?"
+    #define JP_IS_PAUSE             "Unable to extrude when\nprinting.\nPause printing?"
     #define JP_AUTO_SHUT_DOWN       "Auto Power"
     #define JP_UNIFIEDMOVE          "Movement"
     #define JP_UNIFIEDHEAT          "Heat&Fan"
@@ -137,7 +137,7 @@
     #define JP_EMERGENCYSTOP        "EM. STOP"
     #define JP_TOUCH_TO_EXIT        "Touch anywhere to exit"
     #define JP_MAINMENU             "Menu"
-    #define JP_WAIT_TEMP_SHUT_DOWN  "Wait for the temperature of hotend to be lower than %d℃" // Wait for the temperature of hotend to be lower than 50℃
+    #define JP_WAIT_TEMP_SHUT_DOWN  "Wait for the hotend\ntemperature to be\nlower than %d ℃" // Wait for the temperature of hotend to be lower than 50℃
     #define JP_FORCE_SHUT_DOWN      "Force"
     #define JP_SHUTTING_DOWN        "Shutting down..."
     #define JP_PARAMETER_SETTING    "パラメータ"
@@ -166,8 +166,8 @@
     #define JP_TRAVEL_ACCELERATION      "Travel Acceleration"
     #define JP_BUMP_SENSITIVITY         "TMC bump sensitivity"
     #define JP_RESET                    "Reset"
-    #define JP_RESET_SETTINGS           "All settings will be reset to it's default values. Continue?"
-    #define JP_RESET_SETTINGS_DONE      "Resetting all settings successfully done. To take full effect, please restart the device."
+    #define JP_RESET_SETTINGS           "All settings will be\nreset to it's default\nvalues. Continue?"
+    #define JP_RESET_SETTINGS_DONE      "Resetting all settings\nsuccessfully done.\nTo take full effect,\nplease restart the device."
     #define JP_INFO                     "Info"
     #define JP_LCD_BRIGHTNESS           "LCD Brightness"
     #define JP_LCD_BRIGHTNESS_DIM       "LCD Brightness dim"

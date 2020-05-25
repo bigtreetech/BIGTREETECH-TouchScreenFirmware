@@ -129,7 +129,7 @@
     #define AM_FILAMENT_RUNOUT      "Filament runout!"
     #define AM_PREHEAT              "Preheat"
     #define AM_PREHEAT_BOTH         "Both"
-    #define AM_IS_PAUSE             "Unable to extrude when printing, Pause printing?"
+    #define AM_IS_PAUSE             "Unable to extrude when\nprinting.\nPause printing?"
     #define AM_AUTO_SHUT_DOWN       "Auto Power"
     #define AM_UNIFIEDMOVE          "Movement"
     #define AM_UNIFIEDHEAT          "Heat&Fan"
@@ -137,7 +137,7 @@
     #define AM_EMERGENCYSTOP        "EM. STOP"
     #define AM_TOUCH_TO_EXIT        "Touch anywhere to exit"
     #define AM_MAINMENU             "Menu"
-    #define AM_WAIT_TEMP_SHUT_DOWN  "Wait for the temperature of hotend to be lower than %d℃" // Wait for the temperature of hotend to be lower than 50℃
+    #define AM_WAIT_TEMP_SHUT_DOWN  "Wait for the temperature\nof hotend to be\nlower than %d℃" // Wait for the temperature of hotend to be lower than 50℃
     #define AM_FORCE_SHUT_DOWN      "Force"
     #define AM_SHUTTING_DOWN        "Shutting down..."
     #define AM_PARAMETER_SETTING    "Պարամետր"
@@ -166,8 +166,8 @@
     #define AM_TRAVEL_ACCELERATION      "Travel Acceleration"
     #define AM_BUMP_SENSITIVITY         "TMC bump sensitivity"
     #define AM_RESET                    "Reset"
-    #define AM_RESET_SETTINGS           "All settings will be reset to it's default values. Continue?"
-    #define AM_RESET_SETTINGS_DONE      "Resetting all settings successfully done. To take full effect, please restart the device."
+    #define AM_RESET_SETTINGS           "All settings will be\nreset to it's default\nvalues. Continue?"
+    #define AM_RESET_SETTINGS_DONE      "Resetting all settings\nsuccessfully done.\nTo take full effect,\nplease restart the device."
     #define AM_INFO                     "Info"
     #define AM_LCD_BRIGHTNESS           "LCD Brightness"
     #define AM_LCD_BRIGHTNESS_DIM       "LCD Brightness dim"

@@ -129,7 +129,7 @@
     #define PL_FILAMENT_RUNOUT      "brak filamentu!"
     #define PL_PREHEAT              "Rozgrzew."
     #define PL_PREHEAT_BOTH         "Wszystko"
-    #define PL_IS_PAUSE             "Operacja niedostępna w trakcie drukowania, wstrzymać drukowanie?"
+    #define PL_IS_PAUSE             "Operacja niedostępna\nw trakcie drukowania,\nwstrzymać drukowanie?"
     #define PL_AUTO_SHUT_DOWN       "Auto Wył."
     #define PL_UNIFIEDMOVE          "Ruch"
     #define PL_UNIFIEDHEAT          "Temperatura"
@@ -137,7 +137,7 @@
     #define PL_EMERGENCYSTOP        "ZATRZYMAJ"
     #define PL_TOUCH_TO_EXIT        "Dotkij aby wyjść"
     #define PL_MAINMENU             "Menu"
-    #define PL_WAIT_TEMP_SHUT_DOWN  "Czekam na schłodzenie do %d℃" // Wait for the temperature of hotend to be lower than 50℃
+    #define PL_WAIT_TEMP_SHUT_DOWN  "Czekam na schłodzenie\ndo %d℃" // Wait for the temperature of hotend to be lower than 50℃
     #define PL_FORCE_SHUT_DOWN      "Wymuś"
     #define PL_SHUTTING_DOWN        "Wyłączanie..."
     #define PL_PARAMETER_SETTING    "Parametr"
@@ -166,8 +166,8 @@
     #define PL_TRAVEL_ACCELERATION      "Travel Acceleration"
     #define PL_BUMP_SENSITIVITY         "TMC bump sensitivity"
     #define PL_RESET                    "Reset"
-    #define PL_RESET_SETTINGS           "All settings will be reset to it's default values. Continue?"
-    #define PL_RESET_SETTINGS_DONE      "Resetting all settings successfully done. To take full effect, please restart the device."
+    #define PL_RESET_SETTINGS           "All settings will be\nreset to it's default\nvalues. Continue?"
+    #define PL_RESET_SETTINGS_DONE      "Resetting all settings\nsuccessfully done.\nTo take full effect,\nplease restart the device."
     #define PL_INFO                     "Info"
     #define PL_LCD_BRIGHTNESS           "LCD Brightness"
     #define PL_LCD_BRIGHTNESS_DIM       "LCD Brightness dim"

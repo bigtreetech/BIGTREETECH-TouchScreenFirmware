@@ -129,7 +129,7 @@
     #define FR_FILAMENT_RUNOUT      "Fin de Filament !"
     #define FR_PREHEAT              "Préparer"
     #define FR_PREHEAT_BOTH         "Global"
-    #define FR_IS_PAUSE             "Extrusion impossible quand l’impression est en cours, mettre impression en pause ?"
+    #define FR_IS_PAUSE             "Extrusion impossible quand\nl’impression est en cours,\nmettre impression en pause ?"
     #define FR_AUTO_SHUT_DOWN       "Auto Power"
     #define FR_UNIFIEDMOVE          "Mouvement"
     #define FR_UNIFIEDHEAT          "Chauffer / Ventiler"
@@ -137,7 +137,7 @@
     #define FR_EMERGENCYSTOP        "Arrêt d'urgence"
     #define FR_TOUCH_TO_EXIT        "Toucher n'importe où pour sortir"
     #define FR_MAINMENU             "Menu"
-    #define FR_WAIT_TEMP_SHUT_DOWN  "Veuillez, patientez que la température de la buse soit inférieure à%d℃" // Wait for the temperature of hotend to be lower than 50℃
+    #define FR_WAIT_TEMP_SHUT_DOWN  "Veuillez, patientez que\nla température de la buse\nsoit inférieure à%d℃" // Wait for the temperature of hotend to be lower than 50℃
     #define FR_FORCE_SHUT_DOWN      "Forcer Extinction"
     #define FR_SHUTTING_DOWN        "Extinction en cours..."
     #define FR_PARAMETER_SETTING    "Paramètre"
@@ -166,8 +166,8 @@
     #define FR_TRAVEL_ACCELERATION      "Travel Acceleration"
     #define FR_BUMP_SENSITIVITY         "TMC bump sensitivity"
     #define FR_RESET                    "Reset"
-    #define FR_RESET_SETTINGS           "All settings will be reset to it's default values. Continue?"
-    #define FR_RESET_SETTINGS_DONE      "Resetting all settings successfully done. To take full effect, please restart the device."
+    #define FR_RESET_SETTINGS           "All settings will be\nreset to it's default\nvalues. Continue?"
+    #define FR_RESET_SETTINGS_DONE      "Resetting all settings\nsuccessfully done.\nTo take full effect,\nplease restart the device."
     #define FR_INFO                     "Info"
     #define FR_LCD_BRIGHTNESS           "LCD Brightness"
     #define FR_LCD_BRIGHTNESS_DIM       "LCD Brightness dim"
