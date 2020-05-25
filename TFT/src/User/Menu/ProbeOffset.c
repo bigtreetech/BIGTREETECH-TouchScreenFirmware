@@ -115,6 +115,7 @@ void menuProbeOffset(void)
           {
             storeCmd("M851 Z%.2f\n",probe_offset_value+elementsUnit.ele[elementsUnit.cur]*encoderPosition);																				
             probe_offset_value += elementsUnit.ele[elementsUnit.cur]*encoderPosition;
+            sendEncoder (2); //fix- When the encoder is used in touch mode, the print speed changes
             encoderPosition = 0;
           }
         #endif

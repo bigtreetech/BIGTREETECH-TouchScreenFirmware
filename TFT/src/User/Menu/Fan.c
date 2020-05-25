@@ -186,7 +186,7 @@ void menuFan(void)
                 fanSpeed[curIndex]--;
               }
             }
-
+            sendEncoder (2); //fix- When the encoder is used in touch mode, the print speed changes
             encoderPosition = 0;
           }
         #endif
