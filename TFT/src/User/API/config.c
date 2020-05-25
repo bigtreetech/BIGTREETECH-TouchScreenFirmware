@@ -495,7 +495,11 @@ void parseConfigKey(u16 index)
         strcpy(configStringsStore->marlin_title, pchr);
     }
     break;
-
+      
+  case C_INDEX_MARLIN_FULLSCREEN:
+      infoSettings.marlin_mode_fullscreen = getOnOff();
+    break;
+      
 #endif //ST7920_SPI
 
   //---------------------------------------------------------Printer / Machine Settings
