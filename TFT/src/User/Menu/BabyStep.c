@@ -12,7 +12,7 @@ MENUITEMS babyStepItems = {
   {ICON_INC,                  LABEL_INC},
   {ICON_EEPROM_SAVE,          LABEL_EEPROM_SAVE},
   {ICON_01_MM,                LABEL_01_MM},
-  {ICON_NORMAL_SPEED,         LABEL_VALUE_ZERO},
+  {ICON_RESET_VALUE,          LABEL_RESET},
   {ICON_BACK,                 LABEL_BACK},}
 };
 
@@ -127,7 +127,6 @@ void menuBabyStep(void)
             baby_step_value += elementsUnit.ele[elementsUnit.cur]*encoderPosition;
             encoderPosition = 0;
           }
-          LCD_LoopEncoder();
         #endif
         break;
       }

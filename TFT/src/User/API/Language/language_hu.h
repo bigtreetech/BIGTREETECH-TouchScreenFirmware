@@ -157,6 +157,7 @@
     #define HU_M0_PAUSE             "Szünetelés M0 parancsal"
     #define HU_SEND_START_GCODE     "Kezdő G-Kód Küldése"
     #define HU_SEND_END_GCODE       "Befejező G-Kód Küldése"
+    #define HU_SEND_CANCEL_GCODE    "Cancel Gcode"
     #define HU_PERSISTENT_STATUS_INFO   "Perzisztens állapotinfó"
     #define HU_FILE_LISTMODE            "Fájlnéző lista mód"
     #define HU_CURRENT_SETTING          "Motoráramok Beállítása"

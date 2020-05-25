@@ -66,6 +66,7 @@ typedef enum
   SKEY_SPEED,
   SKEY_STARTGCODE,
   SKEY_ENDGCODE,
+  SKEY_CANCELGCODE,
   SKEY_PERSISTENTINFO,
   SKEY_FILELIST,
   #ifdef LED_COLOR_PIN
@@ -79,8 +80,8 @@ typedef enum
   #ifdef ST7920_SPI
     SKEY_ST7920_FULLSCREEN,
   #endif
-  
-  SKEY_RESET_SETTINGS, // Keep reset always at the bottom of the settings menu list. 
+
+  SKEY_RESET_SETTINGS, // Keep reset always at the bottom of the settings menu list.
   SKEY_COUNT //keep this always at the end
 }SKEY_LIST;
 
@@ -104,6 +105,7 @@ LISTITEM settingPage[SKEY_COUNT] = {
   {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_MOVE_SPEED,               LABEL_NORMAL_SPEED},
   {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_SEND_START_GCODE,         LABEL_BACKGROUND  },
   {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_SEND_END_GCODE,           LABEL_BACKGROUND  },
+  {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_SEND_CANCEL_GCODE,        LABEL_BACKGROUND  },
   {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_PERSISTENT_STATUS_INFO,   LABEL_BACKGROUND  },
   {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_FILE_LISTMODE,            LABEL_BACKGROUND  },
   #ifdef LED_COLOR_PIN
@@ -117,7 +119,7 @@ LISTITEM settingPage[SKEY_COUNT] = {
   #ifdef ST7920_SPI
     {ICONCHAR_BLANK,      LIST_TOGGLE,        LABEL_ST7920_FULLSCREEN,        LABEL_OFF         },
   #endif
-  {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_SETTINGS,                 LABEL_RESET       }   // Keep reset always at the bottom of the settings menu list. 
+  {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_SETTINGS,                 LABEL_RESET       }   // Keep reset always at the bottom of the settings menu list.
 };
 
 void menuResetSettings(void)
@@ -223,6 +225,14 @@ void updateFeatureSettings(uint8_t key_val)
     case SKEY_ENDGCODE:
       infoSettings.send_end_gcode = (infoSettings.send_end_gcode + 1) % TOGGLE_NUM;
       settingPage[item_index].icon = toggleitem[infoSettings.send_end_gcode];
+      featureSettingsItems.items[key_val] = settingPage[item_index];
+
+      menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
+      break;
+
+    case SKEY_CANCELGCODE:
+      infoSettings.send_cancel_gcode = (infoSettings.send_cancel_gcode + 1) % TOGGLE_NUM;
+      settingPage[item_index].icon = toggleitem[infoSettings.send_cancel_gcode];
       featureSettingsItems.items[key_val] = settingPage[item_index];
 
       menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
@@ -358,6 +368,11 @@ void loadFeatureSettings(){
 
       case SKEY_ENDGCODE:
         settingPage[item_index].icon  = toggleitem[infoSettings.send_end_gcode];
+        featureSettingsItems.items[i] = settingPage[item_index];
+        break;
+
+      case SKEY_CANCELGCODE:
+        settingPage[item_index].icon  = toggleitem[infoSettings.send_cancel_gcode];
         featureSettingsItems.items[i] = settingPage[item_index];
         break;
 

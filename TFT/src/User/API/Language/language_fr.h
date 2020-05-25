@@ -157,6 +157,7 @@
     #define FR_M0_PAUSE             "Paused by M0 command"
     #define FR_SEND_START_GCODE     "Start Gcode before print"
     #define FR_SEND_END_GCODE       "End Gcode after print"
+    #define FR_SEND_CANCEL_GCODE    "Cancel Gcode"
     #define FR_PERSISTENT_STATUS_INFO   "Persistent Status Info"
     #define FR_FILE_LISTMODE            "Files viewer List Mode"
     #define FR_CURRENT_SETTING          "Driver Current (mA)"
