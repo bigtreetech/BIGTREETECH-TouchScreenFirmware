@@ -178,10 +178,6 @@ void menuMode(void)
 
     if(keyback)
     {
-      #if LCD_ENCODER_SUPPORT
-        sendEncoder(2);
-        sendEncoder(1);
-			#endif
       while(!XPT2046_Read_Pen()){};
 			break;
     }
