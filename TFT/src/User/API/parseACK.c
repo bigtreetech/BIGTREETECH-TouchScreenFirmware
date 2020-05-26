@@ -180,10 +180,9 @@ void parseACK(void)
       // parse temperature
       if(ack_seen("T:") || ack_seen("T0:"))
       {
-        TOOL i = heatGetCurrentToolNozzle();
-        heatSetCurrentTemp(i, ack_value()+0.5);
-        if(!heatGetSendWaiting(i)){
-          heatSyncTargetTemp(i, ack_second_value()+0.5);
+        heatSetCurrentTemp(NOZZLE0, ack_value()+0.5);
+        if(!heatGetSendWaiting(NOZZLE0)) {
+          heatSyncTargetTemp(NOZZLE0, ack_second_value()+0.5);
         }
         for(TOOL i = BED; i < HEATER_COUNT; i++)
         {
@@ -385,10 +384,6 @@ void parseACK(void)
           setParameter(P_PROBE_OFFSET,Z_STEPPER, ack_value());
         }
       }
-      else if (ack_seen(" F0:"))
-      {
-        fanSetSpeed(0, ack_value());
-      }
     // parse and store feed rate percentage
       else if(ack_seen("FR:"))
       {
@@ -399,6 +394,14 @@ void parseACK(void)
       {
         speedSetPercent(1,ack_value());
       }
+    // parse fan speed
+      else if(ack_seen("M106 P"))
+      {
+        u8 i = ack_value();
+        if (ack_seen("S"))
+          fanSetSpeed(i, ack_value());
+      }
+    // Parse pause message
       else if(ack_seen("paused for user"))
       {
         popupPauseForUser();

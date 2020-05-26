@@ -89,8 +89,8 @@ typedef struct
   uint8_t  select;
 }RADIO;
 
-void RADIO_Create(RADIO *raido);
-void RADIO_Select(RADIO *raido, uint8_t select);
+void RADIO_Create(RADIO *radio);
+void RADIO_Select(RADIO *radio, uint8_t select);
 
 typedef struct
 {
