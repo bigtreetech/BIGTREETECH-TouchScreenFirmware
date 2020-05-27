@@ -55,6 +55,7 @@
     #define FR_TOUCHSCREEN_ADJUST   "Ajuster"
     #define FR_MORE                 "Autres"
     #define FR_SCREEN_INFO          "Info"
+    #define FR_STATUS               "Status"
     #define FR_WHITE                "blanc"
     #define FR_BLACK                "noir"
     #define FR_BLUE                 "bleu"

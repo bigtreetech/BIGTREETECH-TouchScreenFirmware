@@ -55,6 +55,7 @@
     #define ES_TOUCHSCREEN_ADJUST   "Calibrar"
     #define ES_MORE                 "Más"
     #define ES_SCREEN_INFO          "Informar"
+    #define ES_STATUS               "Status"
     #define ES_WHITE                "Blanco"
     #define ES_BLACK                "Negro"
     #define ES_BLUE                 "Azul"

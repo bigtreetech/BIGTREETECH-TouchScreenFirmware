@@ -55,6 +55,7 @@
     #define HU_TOUCHSCREEN_ADJUST   "Igazítás"
     #define HU_MORE                 "Több"
     #define HU_SCREEN_INFO          "Infó"
+    #define HU_STATUS               "Status"
     #define HU_WHITE                "Fehér"
     #define HU_BLACK                "Fekete"
     #define HU_BLUE                 "Kék"

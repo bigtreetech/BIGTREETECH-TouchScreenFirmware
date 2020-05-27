@@ -55,6 +55,7 @@
     #define AM_TOUCHSCREEN_ADJUST   "TSC Adjust"
     #define AM_MORE                 "More"
     #define AM_SCREEN_INFO          "Info"
+    #define AM_STATUS               "Status"
     #define AM_WHITE                "White"
     #define AM_BLACK                "Black"
     #define AM_BLUE                 "Blue"
