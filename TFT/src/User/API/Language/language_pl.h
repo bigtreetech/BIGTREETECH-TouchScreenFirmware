@@ -55,6 +55,7 @@
     #define PL_TOUCHSCREEN_ADJUST   "Kalibracja"
     #define PL_MORE                 "Więcej"
     #define PL_SCREEN_INFO          "Info"
+    #define PL_STATUS               "Status"
     #define PL_WHITE                "Biały"
     #define PL_BLACK                "Czarny"
     #define PL_BLUE                 "Niebieski"

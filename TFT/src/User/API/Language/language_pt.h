@@ -55,6 +55,7 @@
     #define PT_TOUCHSCREEN_ADJUST   "Ajustar"
     #define PT_MORE                 "Mais"
     #define PT_SCREEN_INFO          "Info"
+    #define PT_STATUS               "Status"
     #define PT_WHITE                "Branco"
     #define PT_BLACK                "Preto"
     #define PT_BLUE                 "Azul"

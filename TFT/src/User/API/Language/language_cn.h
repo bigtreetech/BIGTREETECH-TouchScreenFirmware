@@ -55,6 +55,7 @@
     #define CN_TOUCHSCREEN_ADJUST   "触屏校准"
     #define CN_MORE                 "更多"
     #define CN_SCREEN_INFO          "关于"
+    #define CN_STATUS               "状态"
     #define CN_WHITE                "白色"
     #define CN_BLACK                "黑色"
     #define CN_BLUE                 "蓝色"

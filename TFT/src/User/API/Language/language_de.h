@@ -55,6 +55,7 @@
     #define DE_TOUCHSCREEN_ADJUST   "TSC kalib."
     #define DE_MORE                 "Mehr"
     #define DE_SCREEN_INFO          "Info"
+    #define DE_STATUS               "Status"
     #define DE_WHITE                "Weiß"
     #define DE_BLACK                "Schwarz"
     #define DE_BLUE                 "Blau"

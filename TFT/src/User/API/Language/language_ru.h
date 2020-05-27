@@ -55,6 +55,7 @@
     #define RU_TOUCHSCREEN_ADJUST     "Калибровка"
     #define RU_MORE                   "Больше\u089C"  //Curved Right Arrow
     #define RU_SCREEN_INFO            "Инфо"
+    #define RU_STATUS                 "Status"
     #define RU_WHITE                  "Белый"
     #define RU_BLACK                  "Чёрный"
     #define RU_BLUE                   "Синий"
