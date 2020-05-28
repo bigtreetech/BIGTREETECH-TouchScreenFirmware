@@ -55,6 +55,7 @@
     #define JP_TOUCHSCREEN_ADJUST   "校正する"
     #define JP_MORE                 "詳細"
     #define JP_SCREEN_INFO          "ついて"
+    #define JP_STATUS               "Status"
     #define JP_WHITE                "白色"
     #define JP_BLACK                "黒色"
     #define JP_BLUE                 "青色"

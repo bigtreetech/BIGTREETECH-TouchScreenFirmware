@@ -108,6 +108,7 @@ LABEL_SCREEN_SETTINGS,
 
       case KEY_ICON_2:
         infoSettings.language = (infoSettings.language + 1) % LANGUAGE_NUM;
+        statusScreen_setMsg(textSelect(LABEL_STATUS), textSelect(infoHost.connected ? LABEL_READY : LABEL_UNCONNECTED)); // restore msg buffer when language is changed
         menuDrawPage(&screenSettingsItems);
         break;
 

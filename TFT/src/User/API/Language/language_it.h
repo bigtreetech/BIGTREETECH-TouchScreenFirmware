@@ -55,6 +55,7 @@
     #define IT_TOUCHSCREEN_ADJUST   "Calibra"
     #define IT_MORE                 "Altro"
     #define IT_SCREEN_INFO          "Info"
+    #define IT_STATUS               "Status"
     #define IT_WHITE                "Bianco"
     #define IT_BLACK                "Nero"
     #define IT_BLUE                 "Blu"
