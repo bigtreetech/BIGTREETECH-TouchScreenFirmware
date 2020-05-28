@@ -55,7 +55,6 @@
     #define SK_TOUCHSCREEN_ADJUST   "Kalibrácia"
     #define SK_MORE                 "Viacej"
     #define SK_SCREEN_INFO          "Info"
-    #define SK_STATUS               "Status"
     #define SK_WHITE                "Biela"
     #define SK_BLACK                "Čierna"
     #define SK_BLUE                 "Modrá"
