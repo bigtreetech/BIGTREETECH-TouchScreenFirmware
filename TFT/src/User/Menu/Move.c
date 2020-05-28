@@ -166,7 +166,6 @@ void menuMove(void)
             if(encoderPosition)
             {
               storeMoveCmd(nowAxis, encoderPosition > 0 ? 1 : -1);
-              sendEncoder (2); //fix- When the encoder is used in touch mode, the print speed changes
               encoderPosition = 0;
             }
           #endif

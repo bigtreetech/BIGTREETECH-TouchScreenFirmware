@@ -146,7 +146,6 @@ void menuSpeed(void)
                             percentage[item_percentage_i] - item_percent_unit[item_percent_unit_i],
                             999);
             }
-            sendEncoder (2); //fix- When the encoder is used in touch mode, the print speed changes
             encoderPosition = 0;
           }
         #endif

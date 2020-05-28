@@ -121,7 +121,6 @@ void menuBabyStep(void)
           {
             mustStoreCmd("M290 Z%.2f\n",elementsUnit.ele[elementsUnit.cur]*encoderPosition);
             baby_step_value += elementsUnit.ele[elementsUnit.cur]*encoderPosition;
-            sendEncoder (2); //fix- When the encoder is used in touch mode, the print speed changes
             encoderPosition = 0;
           }
         #endif

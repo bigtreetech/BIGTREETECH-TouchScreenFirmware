@@ -268,7 +268,6 @@ void menuHeat(void)
                             heater.T[heater.tool].target - item_degree[item_degree_i],
                             infoSettings.max_temp[heater.tool]);
             }
-            sendEncoder (2); //fix- When the encoder is used in touch mode, the print speed changes
             encoderPosition = 0;
           }
         #endif

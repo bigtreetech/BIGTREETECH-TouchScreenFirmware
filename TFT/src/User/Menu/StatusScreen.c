@@ -347,15 +347,7 @@ void menuStatus(void)
         infoMenu.menu[++infoMenu.cur] = menuPrint;
         break;
 
-      default:
-        #if LCD_ENCODER_SUPPORT
-          if(encoderPosition)
-          {
-            sendEncoder (2); //fix- When the encoder is used in touch mode, the print speed changes
-            encoderPosition = 0;
-          }
-        #endif
-      break;
+      default:break;
     }
     toggleTool();
     loopProcess();
