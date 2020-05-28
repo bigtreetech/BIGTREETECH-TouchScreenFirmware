@@ -116,13 +116,18 @@ void parseACK(void)
 
     if(infoHost.connected == false) //not connected to Marlin
     {
+      // Parse error information even though not connected to printer
+      if(ack_seen(errormagic)) {
+        BUZZER_PLAY(sound_error);
+        ackPopupInfo(errormagic);
+      }
       if(!ack_seen("T:") && !ack_seen("T0:"))  goto parse_end;  //the first response should be such as "T:25/50\n"
-        updateNextHeatCheckTime();
-        infoHost.connected = true;
-        storeCmd("M115\n");
-        storeCmd("M503 S0\n");
-        storeCmd("M92\n"); // Steps/mm of extruder is an important parameter for Smart filament runout
-                           // Avoid can't getting this parameter due to disabled M503 in Marlin
+      updateNextHeatCheckTime();
+      infoHost.connected = true;
+      storeCmd("M115\n");
+      storeCmd("M503 S0\n");
+      storeCmd("M92\n"); // Steps/mm of extruder is an important parameter for Smart filament runout
+                         // Avoid can't getting this parameter due to disabled M503 in Marlin
     }
 
     // Gcode command response

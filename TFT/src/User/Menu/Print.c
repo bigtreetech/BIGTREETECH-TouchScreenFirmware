@@ -391,11 +391,12 @@ LABEL_PRINT,
  {{ICON_ONTFT_SD,            LABEL_TFTSD},
  #ifdef U_DISK_SUPPORT
   {ICON_U_DISK,               LABEL_U_DISK},
-  {ICON_ONBOARD_SD,           LABEL_ONBOARDSD},
+  #define ONBOARD_SD_INDEX 2
  #else
-  {ICON_ONBOARD_SD,           LABEL_ONBOARDSD},
+  #define ONBOARD_SD_INDEX 1
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
  #endif
+  {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
@@ -406,16 +407,10 @@ LABEL_PRINT,
 void menuPrint(void)
 {
   KEY_VALUES  key_num = KEY_IDLE;
-  if(infoMachineSettings.onboard_sd_support == DISABLED){
-    #ifdef U_DISK_SUPPORT
-    sourceSelItems.items[2].icon = ICON_BACKGROUND;
-    sourceSelItems.items[2].label.index = LABEL_BACKGROUND;
-    #else
-    sourceSelItems.items[1].icon = ICON_BACKGROUND;
-    sourceSelItems.items[1].label.index = LABEL_BACKGROUND;
-    #endif
 
-  }
+  sourceSelItems.items[ONBOARD_SD_INDEX].icon = (infoMachineSettings.onboard_sd_support == ENABLED) ? ICON_ONBOARD_SD : ICON_BACKGROUND;
+  sourceSelItems.items[ONBOARD_SD_INDEX].label.index = (infoMachineSettings.onboard_sd_support == ENABLED) ? LABEL_ONBOARDSD : LABEL_BACKGROUND;
+
   menuDrawPage(&sourceSelItems);
   while(infoMenu.menu[infoMenu.cur] == menuPrint)
   {

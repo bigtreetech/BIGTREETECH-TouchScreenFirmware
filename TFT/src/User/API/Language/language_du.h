@@ -55,6 +55,7 @@
     #define DU_TOUCHSCREEN_ADJUST   "TSC Aanpassen"
     #define DU_MORE                 "Meer"
     #define DU_SCREEN_INFO          "Info"
+    #define DU_STATUS               "Status"
     #define DU_WHITE                "Wit"
     #define DU_BLACK                "Zwart"
     #define DU_BLUE                 "Blauw"

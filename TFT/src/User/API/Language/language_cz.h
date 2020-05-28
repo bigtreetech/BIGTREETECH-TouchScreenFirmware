@@ -55,6 +55,7 @@
     #define CZ_TOUCHSCREEN_ADJUST   "Kalibrace"
     #define CZ_MORE                 "Více"
     #define CZ_SCREEN_INFO          "Info"
+    #define CZ_STATUS               "Status"
     #define CZ_WHITE                "Bílá"
     #define CZ_BLACK                "Černá"
     #define CZ_BLUE                 "Modrá"
