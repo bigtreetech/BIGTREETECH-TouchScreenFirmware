@@ -59,7 +59,7 @@ void WS2812_Send_DAT(uint32_t ws2812_dat)
   uint16_t led_num;
   int8_t bit;
   uint16_t cycle = mcuClocks.PCLK1_Timer_Frequency / 800000 / 2 - 1;   // WS2812 need 800KHz (1.25us)
-  uint16_t code_0_tim_h_cnt = cycle * (0.4/1.25);  // Code 0, High level hold time, 0.4us / 1.25us
+  uint16_t code_0_tim_h_cnt = cycle * (0.3.5/1.25);  // Code 0, High level hold time, 0.35us / 1.25us; previous 0.4us was to high for some boards
   uint16_t code_1_tim_h_cnt = cycle - code_0_tim_h_cnt;
 
   __disable_irq();  // Disable interrupt, avoid disturbing the timing of WS2812
