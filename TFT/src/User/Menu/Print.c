@@ -127,17 +127,6 @@ void gocdeIconDraw(void)
   for( ;(i + infoFile.cur_page * NUM_PER_PAGE < infoFile.f_num + infoFile.F_num) && (i < NUM_PER_PAGE) ;i++)  // gcode file
   {
     curItem.icon = ICON_FILE;
-    if (infoFile.source == BOARD_SD) { // on board long file name, M33 is required.
-      menuDrawItem(&curItem, i);
-      if (infoMachineSettings.long_filename_support == ENABLED)
-      {
-        normalNameDisp(&gcodeRect[i], (u8* )infoFile.Longfile[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num]);
-      }
-      else
-      {
-        normalNameDisp(&gcodeRect[i], (u8* )infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num]);
-      }
-    } else {
       // if model preview bmp exists, display bmp directly without writing to flash
       gn = strlen(infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num]) - 6; // -6 means ".gcode"
       gnew = malloc(gn + 10);
@@ -150,7 +139,6 @@ void gocdeIconDraw(void)
       free(gnew);
       // model preview -- end
       normalNameDisp(&gcodeRect[i], (u8* )infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num]);
-    }
   }
 
   //clear blank icons

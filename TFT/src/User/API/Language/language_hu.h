@@ -34,6 +34,7 @@
     #define HU_Z_OFFSET             "Z Eltolás"
     #define HU_PROBE_OFFSET         "Szonda Eltolás"
     #define HU_EEPROM_SAVE          "Mentés"
+    #define HU_APPLY                "Apply"
     #define HU_INC                  "Növel"
     #define HU_DEC                  "Csökkent"
     #define HU_NOZZLE               "Fej"
@@ -167,7 +168,7 @@
     #define HU_TRAVEL_ACCELERATION      "Utazási Gyorsulás"
     #define HU_BUMP_SENSITIVITY         "TMC ütközés érzékenység"
     #define HU_RESET                    "Alap"
-    #define HU_RESET_SETTINGS           "Minden beállítás vissza\nfog állni alapértelmezett\nértékre. Folytatja?"
+    #define HU_RESET_SETTINGS_INFO      "Minden beállítás vissza\nfog állni alapértelmezett\nértékre. Folytatja?"
     #define HU_RESET_SETTINGS_DONE      "A beállítások visszaállítása\nsikeresen megtörtént. Az\nérvénybelépéshez indítsa\nújra az eszközt."
     #define HU_INFO                     "Infó"
     #define HU_LCD_BRIGHTNESS           "LCD Fényerősség"
@@ -181,5 +182,9 @@
     #define HU_300_SECONDS              "5 Perc."
     #define HU_CUSTOM_SECONDS           "Egyedi"
     #define HU_ST7920_FULLSCREEN        "Nagyképernyős Marlin mód"
+    #define HU_SETTING_RESET            "Reset settings"
+    #define HU_SETTING_RESTORE          "Restore settings"
+    #define HU_EEPROM_SAVE_INFO         "Save printer settings\nto EEPROM?"
+    #define HU_EEPROM_RESTORE_INFO       "Reload settings from\nEEPROM?"
 
 #endif

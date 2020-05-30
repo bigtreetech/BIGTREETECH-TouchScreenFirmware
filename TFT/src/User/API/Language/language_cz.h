@@ -34,6 +34,7 @@
     #define CZ_Z_OFFSET             "Z Offset"
     #define CZ_PROBE_OFFSET         "Ofset sondy"
     #define CZ_EEPROM_SAVE          "Uložit"
+    #define CZ_APPLY                "Apply"
     #define CZ_INC                  "Přidat"
     #define CZ_DEC                  "Ubrat"
     #define CZ_NOZZLE               "Tryska"
@@ -167,7 +168,7 @@
     #define CZ_TRAVEL_ACCELERATION      "Zrychlení při přesunu"
     #define CZ_BUMP_SENSITIVITY         "Citlivost TMC na náraz"
     #define CZ_RESET                    "Reset"
-    #define CZ_RESET_SETTINGS           "Všechna nastavení budou\nobnovena na výchozí\nhodnoty. Pokračovat?"
+    #define CZ_RESET_SETTINGS_INFO      "Všechna nastavení budou\nobnovena na výchozí\nhodnoty. Pokračovat?"
     #define CZ_RESET_SETTINGS_DONE      "Resetování všech nastavení\nbylo úspěšně provedeno.\nRestartujte zařízení."
     #define CZ_INFO                     "Info"
     #define CZ_LCD_BRIGHTNESS           "LCD Jas"
@@ -181,5 +182,9 @@
     #define CZ_300_SECONDS              "5 min."
     #define CZ_CUSTOM_SECONDS           "Vlastní"
     #define CZ_ST7920_FULLSCREEN        "Celoobrazovkový režim Marlin"
+    #define CZ_SETTING_RESET            "Reset settings"
+    #define CZ_SETTING_RESTORE          "Restore settings"
+    #define CZ_EEPROM_SAVE_INFO         "Save printer settings\nto EEPROM?"
+    #define CZ_EEPROM_RESTORE_INFO       "Reload settings from\nEEPROM?"
 
 #endif

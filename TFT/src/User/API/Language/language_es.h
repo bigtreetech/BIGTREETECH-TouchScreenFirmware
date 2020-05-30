@@ -34,6 +34,7 @@
     #define ES_Z_OFFSET             "Z Offset"
     #define ES_PROBE_OFFSET         "Sonda Compensar"
     #define ES_EEPROM_SAVE          "Grabar"
+    #define ES_APPLY                "Apply"
     #define ES_INC                  "Aumentar"
     #define ES_DEC                  "Disminur"
     #define ES_NOZZLE               "Punta"
@@ -167,8 +168,8 @@
     #define ES_TRAVEL_ACCELERATION      "Travel Acceleration"
     #define ES_BUMP_SENSITIVITY         "TMC bump sensitivity"
     #define ES_RESET                    "Reset"
-    #define ES_RESET_SETTINGS           "All settings will be\nreset to it's default\nvalues. Continue?"
-    #define ES_RESET_SETTINGS_DONE      "Resetting all settings\nsuccessfully done.\nTo take full effect,\nplease restart the device."
+    #define ES_RESET_SETTINGS_INFO      "Reset all settings to\ndefault values?"
+    #define ES_RESET_SETTINGS_DONE      "Reset all settings\nsuccessful.\nplease restart the device."
     #define ES_INFO                     "Info"
     #define ES_LCD_BRIGHTNESS           "LCD Brightness"
     #define ES_LCD_BRIGHTNESS_DIM       "LCD Brightness dim"
@@ -181,5 +182,9 @@
     #define ES_300_SECONDS              "5 Min."
     #define ES_CUSTOM_SECONDS           "Custom"
     #define ES_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
+    #define ES_SETTING_RESET            "Reset settings"
+    #define ES_SETTING_RESTORE          "Restore settings"
+    #define ES_EEPROM_SAVE_INFO         "Save printer settings\nto EEPROM?"
+    #define ES_EEPROM_RESTORE_INFO       "Reload settings from\nEEPROM?"
 
 #endif

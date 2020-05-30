@@ -34,6 +34,7 @@
     #define PT_Z_OFFSET             "Z Offset"
     #define PT_PROBE_OFFSET         "Probe Offset"
     #define PT_EEPROM_SAVE          "Gravar"
+    #define PT_APPLY                "Apply"
     #define PT_INC                  "Aumentar"
     #define PT_DEC                  "Diminuir"
     #define PT_NOZZLE               "Nozzle"
@@ -167,8 +168,8 @@
     #define PT_TRAVEL_ACCELERATION      "Travel Acceleration"
     #define PT_BUMP_SENSITIVITY         "TMC bump sensitivity"
     #define PT_RESET                    "Reset"
-    #define PT_RESET_SETTINGS           "All settings will be\nreset to it's default\nvalues. Continue?"
-    #define PT_RESET_SETTINGS_DONE      "Resetting all settings\nsuccessfully done.\nTo take full effect,\nplease restart the device."
+    #define PT_RESET_SETTINGS_INFO      "Reset all settings to\ndefault values?"
+    #define PT_RESET_SETTINGS_DONE      "Reset all settings\nsuccessful.\nplease restart the device."
     #define PT_INFO                     "Info"
     #define PT_LCD_BRIGHTNESS           "LCD Brightness"
     #define PT_LCD_BRIGHTNESS_DIM       "LCD Brightness dim"
@@ -181,5 +182,9 @@
     #define PT_300_SECONDS              "5 Min."
     #define PT_CUSTOM_SECONDS           "Custom"
     #define PT_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
+    #define PT_SETTING_RESET            "Reset settings"
+    #define PT_SETTING_RESTORE          "Restore settings"
+    #define PT_EEPROM_SAVE_INFO         "Save printer settings\nto EEPROM?"
+    #define PT_EEPROM_RESTORE_INFO       "Reload settings from\nEEPROM?"
 
 #endif

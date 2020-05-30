@@ -67,9 +67,10 @@ void loaditemsCustomGcode()
 void menuCustom(void)
 {
   //load custom codes
-  customcodes = (CUSTOM_GCODES*)malloc(sizeof(CUSTOM_GCODES));
   gc_cur_page = 0;
-  W25Qxx_ReadBuffer((u8*)customcodes,CUSTOM_GCODE_ADDR,sizeof(CUSTOM_GCODES));
+  CUSTOM_GCODES tempcodes;
+  customcodes = &tempcodes;
+  W25Qxx_ReadBuffer((u8*)&tempcodes,CUSTOM_GCODE_ADDR,sizeof(CUSTOM_GCODES));
   gcode_num = customcodes->count;
 
   gc_page_count = (gcode_num+LISTITEM_PER_PAGE-1)/LISTITEM_PER_PAGE;
@@ -123,7 +124,6 @@ void menuCustom(void)
     }
     loopProcess();
   }
-  free(customcodes);
 }
 
 
@@ -242,4 +242,20 @@ void menuMachineSettings(void)
 
     loopProcess();
   }
+}
+
+void saveEepromSettings(void)
+{
+  if(infoMachineSettings.EEPROM == 1)
+    mustStoreCmd("M500\n");
+}
+void restoreEepromSettings(void)
+{
+  if(infoMachineSettings.EEPROM == 1)
+    mustStoreCmd("M501\nM503 S0\n");
+}
+void resetEepromSettings(void)
+{
+  if(infoMachineSettings.EEPROM == 1)
+    mustStoreCmd("M502\nM500\n");
 }

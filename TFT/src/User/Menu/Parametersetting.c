@@ -40,6 +40,9 @@ const LISTITEM parametertypes[PARAMETERS_COUNT] = {
     {ICONCHAR_SETTING1,     LIST_MOREBUTTON,    LABEL_ACCELERATION,         LABEL_BACKGROUND},
     {ICONCHAR_SETTING1,     LIST_MOREBUTTON,    LABEL_PROBE_OFFSET,         LABEL_BACKGROUND},
     {ICONCHAR_SETTING1,     LIST_MOREBUTTON,    LABEL_BUMP_SENSITIVITY,     LABEL_BACKGROUND},
+    //Keep below items always at the end
+    {ICONCHAR_RESET,        LIST_LABEL,         LABEL_SETTING_RESET,        LABEL_BACKGROUND},
+    {ICONCHAR_UNDO,         LIST_LABEL,         LABEL_SETTING_RESTORE,       LABEL_BACKGROUND},
 };
 
 LISTITEMS parameterMainItems = {
@@ -180,8 +183,15 @@ void menuShowParameter(void){
                 }
              //accept negative values only for probe offset
                 bool negative_val = false;
-                if(cur_parameter == P_PROBE_OFFSET || cur_parameter == P_BUMPSENSITIVITY) negative_val = true;
-                float v = numPadFloat(getParameter(cur_parameter,key_num),negative_val);
+                float v = getParameter(cur_parameter,key_num);
+                if(cur_parameter == P_PROBE_OFFSET || cur_parameter == P_BUMPSENSITIVITY)
+                    negative_val = true;
+
+                if(cur_parameter == P_STEPS_PER_MM || cur_parameter == P_PROBE_OFFSET)
+                    v = numPadFloat(NULL, v, negative_val);                              // parameter is a decimal number
+                else
+                    v = (float)numPadInt(NULL, v, negative_val);                               // parameter is an integer
+
                 if (v != getParameter(cur_parameter,key_num))
                 {
                     storeCmd(parameter_Cmd[cur_parameter][key_num],v);
@@ -220,12 +230,16 @@ void menuShowParameter(void){
 void loadParameterPage(void){
 for (uint8_t i = 0; i < LISTITEM_PER_PAGE; i++)
     {
-        uint8_t item_index = ps_cur_page*LISTITEM_PER_PAGE + i;
-        if(item_index < PARAMETERS_COUNT)
+        uint8_t item_index = ps_cur_page * LISTITEM_PER_PAGE + i;
+        if (item_index < PARAMETERS_COUNT)
         {
-            parameterMainItems.items[i] = parametertypes[item_index];
+            if (infoMachineSettings.EEPROM != 1 && (item_index == P_RESET_SETTINGS || item_index == P_RESTORE_SETTINGS))
+                parameterMainItems.items[i].icon = ICONCHAR_BACKGROUND;
+            else
+                parameterMainItems.items[i] = parametertypes[item_index];
         }
-        else{
+        else
+        {
             parameterMainItems.items[i].icon = ICONCHAR_BACKGROUND;
         }
     }
@@ -251,7 +265,7 @@ for (uint8_t i = 0; i < LISTITEM_PER_PAGE; i++)
       parameterMainItems.items[6].icon = ICONCHAR_PAGEDOWN;
     }
   }
-};
+}
 
 void menuParameterSettings(void){
     KEY_VALUES key_num = KEY_IDLE;
@@ -287,23 +301,33 @@ void menuParameterSettings(void){
             }
             break;
         case KEY_ICON_7:
-            if (parametersChanged)
+            if (parametersChanged && infoMachineSettings.EEPROM == 1)
             {
-                storeCmd("M500\n");
+                showDialog(DIALOG_TYPE_QUESTION, textSelect(parameterMainItems.title.index), textSelect(LABEL_EEPROM_SAVE_INFO), textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL) , saveEepromSettings, NULL, NULL);
                 parametersChanged = false;
             }
             infoMenu.cur--;
             break;
 
         default:
+        {
+            int cp = ps_cur_page * LISTITEM_PER_PAGE + key_num;
+            if (key_num < LISTITEM_PER_PAGE && cp < PARAMETERS_COUNT)
             {
-                int cp = ps_cur_page*LISTITEM_PER_PAGE + key_num;
-                if(key_num < LISTITEM_PER_PAGE && cp < PARAMETERS_COUNT){
-                    cur_parameter = cp;
-                    infoMenu.menu[++infoMenu.cur] = menuShowParameter;  break;
+                if (infoMachineSettings.EEPROM == 1)
+                {
+                    if (cp == P_RESET_SETTINGS)
+                        showDialog(DIALOG_TYPE_ALERT, textSelect(LABEL_SETTING_RESET), textSelect(LABEL_RESET_SETTINGS_INFO), textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL) , resetEepromSettings, NULL, NULL);
+                    else if (cp == P_RESTORE_SETTINGS)
+                        showDialog(DIALOG_TYPE_ALERT, textSelect(LABEL_SETTING_RESTORE), textSelect(LABEL_EEPROM_RESTORE_INFO), textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL) , restoreEepromSettings, NULL, NULL);
+                    break;
                 }
+                cur_parameter = cp;
+                infoMenu.menu[++infoMenu.cur] = menuShowParameter;
+                break;
             }
-            break;
+        }
+        break;
         }
     loopProcess();
     }

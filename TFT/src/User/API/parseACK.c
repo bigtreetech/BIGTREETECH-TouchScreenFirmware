@@ -79,14 +79,17 @@ void ackPopupInfo(const char *info)
 {
   if(infoMenu.menu[infoMenu.cur] == menuParameterSettings) return;
 
+  DIALOG_TYPE d_type = DIALOG_TYPE_ERROR;
+
   if (info == echomagic)
   {
+    d_type = DIALOG_TYPE_INFO;
     statusScreen_setMsg((u8 *)info, (u8 *)dmaL2Cache + ack_index);
   }
   if (infoMenu.menu[infoMenu.cur] == menuTerminal) return;
   if (infoMenu.menu[infoMenu.cur] == menuStatus && info == echomagic) return;
 
-  popupReminder((u8* )info, (u8 *)dmaL2Cache + ack_index);
+  popupReminder(d_type,(u8* )info, (u8 *)dmaL2Cache + ack_index);
 }
 
 bool dmaL1NotEmpty(uint8_t port)
@@ -180,10 +183,9 @@ void parseACK(void)
       // parse temperature
       if(ack_seen("T:") || ack_seen("T0:"))
       {
-        TOOL i = heatGetCurrentToolNozzle();
-        heatSetCurrentTemp(i, ack_value()+0.5);
-        if(!heatGetSendWaiting(i)){
-          heatSyncTargetTemp(i, ack_second_value()+0.5);
+        heatSetCurrentTemp(NOZZLE0, ack_value()+0.5);
+        if(!heatGetSendWaiting(NOZZLE0)) {
+          heatSyncTargetTemp(NOZZLE0, ack_second_value()+0.5);
         }
         for(TOOL i = BED; i < HEATER_COUNT; i++)
         {
@@ -376,7 +378,7 @@ void parseACK(void)
     //parse Repeatability Test
       else if(ack_seen("Mean:"))
       {
-        popupReminder((u8* )"Repeatability Test", (u8 *)dmaL2Cache + ack_index-5);
+        popupReminder(DIALOG_TYPE_INFO, (u8* )"Repeatability Test", (u8 *)dmaL2Cache + ack_index-5);
       }
       else if(ack_seen("Probe Offset"))
       {
@@ -384,10 +386,6 @@ void parseACK(void)
         {
           setParameter(P_PROBE_OFFSET,Z_STEPPER, ack_value());
         }
-      }
-      else if (ack_seen(" F0:"))
-      {
-        fanSetSpeed(0, ack_value());
       }
     // parse and store feed rate percentage
       else if(ack_seen("FR:"))
@@ -399,9 +397,17 @@ void parseACK(void)
       {
         speedSetPercent(1,ack_value());
       }
+      // parse fan speed
+      else if(ack_seen("M106 P"))
+      {
+        u8 i = ack_value();
+        if (ack_seen("S"))
+          fanSetSpeed(i, ack_value());
+      }
+    // Parse pause message
       else if(ack_seen("paused for user"))
       {
-        popupPauseForUser();
+        showDialog(DIALOG_TYPE_QUESTION, (u8*)"Printer is Paused",(u8*)"Paused for user\ncontinue?", textSelect(LABEL_CONFIRM), NULL, breakAndContinue, NULL,NULL);
       }
     //Parse error messages & Echo messages
       else if(ack_seen(errormagic))

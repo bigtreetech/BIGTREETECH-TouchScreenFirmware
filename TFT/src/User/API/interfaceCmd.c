@@ -381,7 +381,7 @@ void sendQueueCmd(void)
           statusScreen_setMsg((u8 *)"M117", (u8 *)&message);
           if (infoMenu.menu[infoMenu.cur] != menuStatus)
           {
-            popupReminder((u8 *)"M117", (u8 *)&message);
+            popupReminder(DIALOG_TYPE_INFO, (u8 *)"M117", (u8 *)&message);
           }
           break;
         }
@@ -613,7 +613,7 @@ void sendQueueCmd(void)
             statusScreen_setMsg((u8 *)"M117", (u8 *)&infoCmd.queue[infoCmd.index_r].gcode[5]);
             if (infoMenu.menu[infoMenu.cur] != menuStatus)
             {
-              popupReminder((u8 *)"M117", (u8 *)&infoCmd.queue[infoCmd.index_r].gcode[5]);
+              popupReminder(DIALOG_TYPE_INFO, (u8 *)"M117", (u8 *)&infoCmd.queue[infoCmd.index_r].gcode[5]);
             }
             break;
 

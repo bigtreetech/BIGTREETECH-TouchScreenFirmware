@@ -34,6 +34,7 @@
     #define SK_Z_OFFSET             "Z Offset"
     #define SK_PROBE_OFFSET         "Probe Offset"
     #define SK_EEPROM_SAVE          "Uložiť"
+    #define SK_APPLY                "Apply"
     #define SK_INC                  "Pridať"
     #define SK_DEC                  "Ubrať"
     #define SK_NOZZLE               "Tryska"
@@ -167,7 +168,7 @@
     #define SK_TRAVEL_ACCELERATION      "Akcelerácia presunu"
     #define SK_BUMP_SENSITIVITY         "TMC bump citlivosť"
     #define SK_RESET                    "Reset"
-    #define SK_RESET_SETTINGS           "Resetovať všetky nastavenia."
+    #define SK_RESET_SETTINGS_INFO      "Resetovať všetky nastavenia."
     #define SK_RESET_SETTINGS_DONE      "Reset všetkých nastavení\nvykonaný. Pre správne\nfungovanie, prosím,\nreštartovať zariadenie."
     #define SK_INFO                     "Info"
     #define SK_LCD_BRIGHTNESS           "Jas LCD"
@@ -181,5 +182,9 @@
     #define SK_300_SECONDS              "5 Min."
     #define SK_CUSTOM_SECONDS           "Custom"
     #define SK_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
+    #define SK_SETTING_RESET            "Reset settings"
+    #define SK_SETTING_RESTORE          "Restore settings"
+    #define SK_EEPROM_SAVE_INFO         "Save printer settings\nto EEPROM?"
+    #define SK_EEPROM_RESTORE_INFO       "Reload settings from\nEEPROM?"
 
 #endif

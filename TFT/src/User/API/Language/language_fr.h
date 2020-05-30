@@ -34,6 +34,7 @@
     #define FR_Z_OFFSET             "Z Offset"
     #define FR_PROBE_OFFSET         "Probe Offset"
     #define FR_EEPROM_SAVE          "Sauver"
+    #define FR_APPLY                "Apply"
     #define FR_INC                  "Plus"
     #define FR_DEC                  "Moins"
     #define FR_NOZZLE               "Buse"
@@ -167,8 +168,8 @@
     #define FR_TRAVEL_ACCELERATION      "Travel Acceleration"
     #define FR_BUMP_SENSITIVITY         "TMC bump sensitivity"
     #define FR_RESET                    "Reset"
-    #define FR_RESET_SETTINGS           "All settings will be\nreset to it's default\nvalues. Continue?"
-    #define FR_RESET_SETTINGS_DONE      "Resetting all settings\nsuccessfully done.\nTo take full effect,\nplease restart the device."
+    #define FR_RESET_SETTINGS_INFO      "Reset all settings to\ndefault values?"
+    #define FR_RESET_SETTINGS_DONE      "Reset all settings\nsuccessful.\nplease restart the device."
     #define FR_INFO                     "Info"
     #define FR_LCD_BRIGHTNESS           "LCD Brightness"
     #define FR_LCD_BRIGHTNESS_DIM       "LCD Brightness dim"
@@ -181,5 +182,9 @@
     #define FR_300_SECONDS              "5 Min."
     #define FR_CUSTOM_SECONDS           "Custom"
     #define FR_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
+    #define FR_SETTING_RESET            "Reset settings"
+    #define FR_SETTING_RESTORE          "Restore settings"
+    #define FR_EEPROM_SAVE_INFO         "Save printer settings\nto EEPROM?"
+    #define FR_EEPROM_RESTORE_INFO       "Reload settings from\nEEPROM?"
 
 #endif

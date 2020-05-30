@@ -331,7 +331,7 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
         //if pause was triggered through M0/M1 then break
       if(is_m0pause == true) {
         setM0Pause(is_m0pause);
-        popupReminder(textSelect(LABEL_PAUSE), textSelect(LABEL_M0_PAUSE));
+        popupReminder(DIALOG_TYPE_ALERT, textSelect(LABEL_PAUSE), textSelect(LABEL_M0_PAUSE));
         break;
         }
 
@@ -357,7 +357,7 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
         if(isM0_Pause() == true)
         {
           setM0Pause(is_m0pause);
-          Serial_Puts(SERIAL_PORT, "M108\n");
+          breakAndContinue();
           break;
         }
         if (isCoorRelative == true)     mustStoreCmd("G90\n");
@@ -423,16 +423,13 @@ void reValueBed(int icon_pos)
 void reDrawFan(int icon_pos)
 {
   char tempstr[10];
-  u8 fs;
   if (infoSettings.fan_percentage == 1)
   {
-    fs = (fanGetSpeed(c_fan) * 100) / 255;
-    my_sprintf(tempstr, "%d%%", fs);
+    my_sprintf(tempstr, "%d%%", fanGetSpeedPercent(c_fan));
   }
   else
   {
-    fs = fanGetSpeed(c_fan);
-    my_sprintf(tempstr, "%d", fs);
+    my_sprintf(tempstr, "%d", fanGetSpeed(c_fan));
   }
 
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
@@ -476,10 +473,6 @@ void reDrawTime(int icon_pos)
   sprintf(tempstr, "%02u:%02u:%02u", hour,min,sec);
   ICON_CustomReadDisplay(printinfo_points[icon_pos].x,printinfo_points[icon_pos].y,PICON_LG_WIDTH,PICON_HEIGHT,ICON_ADDR(ICON_PRINTING_TIMER));
   GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (u8 *)tempstr);
-  //GUI_DispDec(printinfo_val_rect[icon_pos].x0 + 2 * BYTE_WIDTH, TIME_Y, hour, 2, LEFT);
-  //GUI_DispDec(printinfo_val_rect[icon_pos].x0 + 5 * BYTE_WIDTH, TIME_Y, min, 2, LEFT);
-  //GUI_DispDec(printinfo_val_rect[icon_pos].x0 + 8 * BYTE_WIDTH, TIME_Y, sec, 2, LEFT);
-
   GUI_SetNumMode(GUI_NUMMODE_SPACE);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
@@ -730,7 +723,7 @@ void completePrinting(void)
     menuDrawItem(&printingItems.items[KEY_ICON_7], KEY_ICON_7);
   if(infoSettings.auto_off) // Auto shut down after printing
   {
-    infoMenu.menu[++infoMenu.cur] = menuShutDown;
+    startShutdown();
   }
 }
 
@@ -759,7 +752,7 @@ void menuStopPrinting(void)
 {
   u16 key_num = IDLE_TOUCH;
 
-  popupDrawPage(bottomDoubleBtn, textSelect(LABEL_WARNING), textSelect(LABEL_STOP_PRINT), textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL));
+  popupDrawPage(DIALOG_TYPE_ALERT, bottomDoubleBtn, textSelect(LABEL_WARNING), textSelect(LABEL_STOP_PRINT), textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL));
 
   while(infoMenu.menu[infoMenu.cur] == menuStopPrinting)
   {
@@ -781,49 +774,40 @@ void menuStopPrinting(void)
 
 // Shut down menu, when the hotend temperature is higher than "AUTO_SHUT_DOWN_MAXTEMP"
 // wait for cool down, in the meantime, you can shut down by force
-void menuShutDown(void)
+void shutdown(void)
 {
-  bool tempIsLower;
-  u16 key_num = IDLE_TOUCH;
+  for(u8 i = 0; i < infoSettings.fan_count; i++)
+  {
+    mustStoreCmd("%s S0\n", fanCmd[i]);
+  }
+  mustStoreCmd("M81\n");
+  popupReminder(DIALOG_TYPE_INFO, textSelect(LABEL_SHUT_DOWN), textSelect(LABEL_SHUTTING_DOWN));
+}
+
+void shutdownLoop(void)
+{
+  bool tempIsLower = true;
+  for (TOOL i = NOZZLE0; i < HEATER_COUNT; i++)
+  {
+    if (heatGetCurrentTemp(i) >= AUTO_SHUT_DOWN_MAXTEMP)
+      tempIsLower = false;
+  }
+  if (tempIsLower)
+  {
+   shutdown();
+  }
+}
+
+void startShutdown(void)
+{
   char tempstr[75];
   my_sprintf(tempstr, (char *)textSelect(LABEL_WAIT_TEMP_SHUT_DOWN), infoSettings.auto_off_temp);
-  popupDrawPage(bottomDoubleBtn, textSelect(LABEL_SHUT_DOWN), (u8 *)tempstr, textSelect(LABEL_FORCE_SHUT_DOWN), textSelect(LABEL_CANCEL));
 
   for(u8 i = 0; i < infoSettings.fan_count; i++)
   {
     mustStoreCmd("%s S255\n", fanCmd[i]);
   }
-  while (infoMenu.menu[infoMenu.cur] == menuShutDown)
-  {
-    key_num = KEY_GetValue(2, doubleBtnRect);
-    switch(key_num)
-    {
-      case KEY_POPUP_CONFIRM:
-        goto shutdown;
-
-      case KEY_POPUP_CANCEL:
-        infoMenu.cur--;
-        break;
-    }
-    tempIsLower = true;
-    for (TOOL i = NOZZLE0; i < HEATER_COUNT; i++)
-    {
-      if(heatGetCurrentTemp(i) >= AUTO_SHUT_DOWN_MAXTEMP)
-        tempIsLower = false;
-    }
-    if(tempIsLower)
-    {
-      shutdown:
-        for(u8 i = 0; i < infoSettings.fan_count; i++)
-        {
-          mustStoreCmd("%s S0\n", fanCmd[i]);
-        }
-        mustStoreCmd("M81\n");
-        infoMenu.cur--;
-        popupReminder(textSelect(LABEL_SHUT_DOWN), textSelect(LABEL_SHUTTING_DOWN));
-    }
-    loopProcess();
-  }
+  showDialog(DIALOG_TYPE_INFO,textSelect(LABEL_SHUT_DOWN), (u8 *)tempstr,textSelect(LABEL_FORCE_SHUT_DOWN), textSelect(LABEL_CANCEL), shutdown, NULL, shutdownLoop);
 }
 
 // get gcode command from sd card
@@ -884,6 +868,11 @@ void getGcodeFromFile(void)
   {
     completePrinting();
   }
+}
+
+void breakAndContinue(void)
+{
+   Serial_Puts(SERIAL_PORT, "M108\n");
 }
 
 void loopCheckPrinting(void)

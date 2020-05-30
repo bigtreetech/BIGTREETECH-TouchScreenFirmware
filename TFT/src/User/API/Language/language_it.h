@@ -34,6 +34,7 @@
     #define IT_Z_OFFSET             "Z Offset"
     #define IT_PROBE_OFFSET         "Probe Offset"
     #define IT_EEPROM_SAVE          "Salva"
+    #define IT_APPLY                "Apply"
     #define IT_INC                  "Incrementa"
     #define IT_DEC                  "Diminuisci"
     #define IT_NOZZLE               "Nozzle"
@@ -167,8 +168,8 @@
     #define IT_TRAVEL_ACCELERATION      "Travel Acceleration"
     #define IT_BUMP_SENSITIVITY         "TMC bump sensitivity"
     #define IT_RESET                    "Reset"
-    #define IT_RESET_SETTINGS           "All settings will be\nreset to it's default\nvalues. Continue?"
-    #define IT_RESET_SETTINGS_DONE      "Resetting all settings\nsuccessfully done.\nTo take full effect,\nplease restart the device."
+    #define IT_RESET_SETTINGS_INFO      "Reset all settings to\ndefault values?"
+    #define IT_RESET_SETTINGS_DONE      "Reset all settings\nsuccessful.\nplease restart the device."
     #define IT_INFO                     "Info"
     #define IT_LCD_BRIGHTNESS           "LCD Brightness"
     #define IT_LCD_BRIGHTNESS_DIM       "LCD Brightness dim"
@@ -181,5 +182,9 @@
     #define IT_300_SECONDS              "5 Min."
     #define IT_CUSTOM_SECONDS           "Custom"
     #define IT_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
+    #define IT_SETTING_RESET            "Reset settings"
+    #define IT_SETTING_RESTORE          "Restore settings"
+    #define IT_EEPROM_SAVE_INFO         "Save printer settings\nto EEPROM?"
+    #define IT_EEPROM_RESTORE_INFO       "Reload settings from\nEEPROM?"
 
 #endif

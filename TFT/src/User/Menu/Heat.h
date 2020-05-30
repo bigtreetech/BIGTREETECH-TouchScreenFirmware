@@ -22,6 +22,14 @@ typedef enum
   HEATER_NUM = MAX_HEATER_COUNT
 }TOOL;
 
+typedef enum
+{
+  BOTH = 0,
+  BED_PREHEAT = 1,
+  NOZZLE_PREHEAT = 2,
+  PREHEAT_NUM,
+}TOOLPREHEAT;
+
 typedef struct
 {
   int16_t current,
@@ -61,6 +69,7 @@ void heatSetUpdateTime(uint32_t time);
 void heatSetUpdateWaiting(bool isWaiting);
 void heatSetSendWaiting(TOOL tool, bool isWaiting);
 bool heatGetSendWaiting(TOOL tool);
+void showTemperature(TOOL tool);
 void loopCheckHeater(void);
 
 #endif

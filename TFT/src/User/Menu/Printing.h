@@ -48,7 +48,10 @@ void getGcodeFromFile(void);
 void menuBeforePrinting(void);
 void menuPrinting(void);
 void menuStopPrinting(void);
-void menuShutDown(void);
+void shutdown(void);
+void shutdownLoop(void);
+void startShutdown(void);
+void breakAndContinue(void);
 
 void printingDrawPage(void);
 void reDrawProgress(int icon_pos);

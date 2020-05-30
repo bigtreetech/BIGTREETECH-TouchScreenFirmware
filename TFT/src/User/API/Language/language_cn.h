@@ -34,6 +34,7 @@
     #define CN_Z_OFFSET             "Z-偏移量"
     #define CN_PROBE_OFFSET         "探针偏移量"
     #define CN_EEPROM_SAVE          "保存参数"
+    #define CN_APPLY                "Apply"
     #define CN_INC                  "增加"
     #define CN_DEC                  "减少"
     #define CN_NOZZLE               "喷头"
@@ -167,7 +168,7 @@
     #define CN_TRAVEL_ACCELERATION      "空载加速度"
     #define CN_BUMP_SENSITIVITY         "TMC堵转检测灵敏度"
     #define CN_RESET                    "重置"
-    #define CN_RESET_SETTINGS           "所有的设置会被重置为默认值, 是否继续?"
+    #define CN_RESET_SETTINGS_INFO      "所有的设置会被重置为默认值, 是否继续?"
     #define CN_RESET_SETTINGS_DONE      "重置所有参数成功! 重启设备后生效."
     #define CN_INFO                     "提示"
     #define CN_LCD_BRIGHTNESS           "LCD背光亮度"
@@ -181,5 +182,9 @@
     #define CN_300_SECONDS              "5分钟"
     #define CN_CUSTOM_SECONDS           "自定义"
     #define CN_ST7920_FULLSCREEN        "全屏显示Marlin模式"
+    #define CN_SETTING_RESET            "Reset settings"
+    #define CN_SETTING_RESTORE          "Restore settings"
+    #define CN_EEPROM_SAVE_INFO         "Save printer settings\nto EEPROM?"
+    #define CN_EEPROM_RESTORE_INFO       "Reload settings from\nEEPROM?"
 
 #endif

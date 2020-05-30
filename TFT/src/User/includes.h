@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "my_misc.h"
+#include "printf/printf.h"
 
 #include "os_timer.h"
 #include "delay.h"
@@ -62,7 +63,6 @@
 //menu
 #include "menu.h"
 #include "MainPage.h"
-#include "PreheatMenu.h"
 #include "Heat.h"
 #include "Move.h"
 #include "Home.h"

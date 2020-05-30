@@ -34,6 +34,7 @@
     #define AM_Z_OFFSET             "Z Offset"
     #define AM_PROBE_OFFSET         "Probe Offset"
     #define AM_EEPROM_SAVE          "Save"
+    #define AM_APPLY                "Apply"
     #define AM_INC                  "Ավելացնել"
     #define AM_DEC                  "Նվազեցնել"
     #define AM_NOZZLE               "Գլխիկ"
@@ -167,8 +168,8 @@
     #define AM_TRAVEL_ACCELERATION      "Travel Acceleration"
     #define AM_BUMP_SENSITIVITY         "TMC bump sensitivity"
     #define AM_RESET                    "Reset"
-    #define AM_RESET_SETTINGS           "All settings will be\nreset to it's default\nvalues. Continue?"
-    #define AM_RESET_SETTINGS_DONE      "Resetting all settings\nsuccessfully done.\nTo take full effect,\nplease restart the device."
+    #define AM_RESET_SETTINGS_INFO      "Reset all settings to\ndefault values?"
+    #define AM_RESET_SETTINGS_DONE      "Reset all settings\nsuccessful.\nplease restart the device."
     #define AM_INFO                     "Info"
     #define AM_LCD_BRIGHTNESS           "LCD Brightness"
     #define AM_LCD_BRIGHTNESS_DIM       "LCD Brightness dim"
@@ -181,5 +182,9 @@
     #define AM_300_SECONDS              "5 Min."
     #define AM_CUSTOM_SECONDS           "Custom"
     #define AM_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
+    #define AM_SETTING_RESET            "Reset settings"
+    #define AM_SETTING_RESTORE          "Restore settings"
+    #define AM_EEPROM_SAVE_INFO         "Save printer settings\nto EEPROM?"
+    #define AM_EEPROM_RESTORE_INFO       "Reload settings from\nEEPROM?"
 
 #endif

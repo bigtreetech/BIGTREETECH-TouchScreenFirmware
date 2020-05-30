@@ -1,20 +1,6 @@
 #include "Speed.h"
 #include "includes.h"
 
-//1��title(����), ITEM_PER_PAGE��item(ͼ��+��ǩ)
-MENUITEMS percentageItems = {
-//   title
-LABEL_PERCENTAGE_SPEED,
-// icon                       label
- {{ICON_DEC,                  LABEL_DEC},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_INC,                  LABEL_INC},
-  {ICON_MOVE,                 LABEL_PERCENTAGE_SPEED},
-  {ICON_E_5_PERCENT,          LABEL_5_PERCENT},
-  {ICON_NORMAL_SPEED,         LABEL_NORMAL_SPEED},
-  {ICON_BACK,                 LABEL_BACK},}
-};
 
 #define ITEM_PERCENTAGE_NUM 2
 const ITEM itemPercentage[ITEM_PERCENTAGE_NUM] = {
@@ -57,18 +43,36 @@ u16 speedGetPercent(u8 tool)
   return percentage[tool];
 }
 
-void showPercentage(void)
-{
-  GUI_DispDec(CENTER_X - 3*BYTE_WIDTH/2, CENTER_Y, percentage[item_percentage_i], 3, LEFT);
-  GUI_DispString(CENTER_X - 3*BYTE_WIDTH/2 + 3* BYTE_WIDTH , CENTER_Y, (u8*)"%");
-}
 void percentageReDraw(void)
 {
-  GUI_DispDec(CENTER_X - 3*BYTE_WIDTH/2, CENTER_Y, percentage[item_percentage_i], 3, LEFT);
+  GUI_POINT point_of = {CENTER_X - BYTE_WIDTH*2, CENTER_Y - BYTE_HEIGHT/2};
+  char tempstr[20];
+  sprintf(tempstr,"% 4d%%",percentage[item_percentage_i]);
+  GUI_DispString(point_of.x,point_of.y,(u8*)tempstr);
+}
+
+void showPercentage(u8* title)
+{
+  //GUI_DispString(exhibitRect.x0, CENTER_Y - BYTE_HEIGHT/2, title);
+  percentageReDraw();
 }
 
 void menuSpeed(void)
 {
+  MENUITEMS percentageItems = {
+  //   title
+  LABEL_PERCENTAGE_SPEED,
+  // icon                       label
+  {{ICON_DEC,                  LABEL_DEC},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_INC,                  LABEL_INC},
+    {ICON_MOVE,                 LABEL_PERCENTAGE_SPEED},
+    {ICON_E_5_PERCENT,          LABEL_5_PERCENT},
+    {ICON_NORMAL_SPEED,         LABEL_NORMAL_SPEED},
+    {ICON_BACK,                 LABEL_BACK},}
+  };
+
   storeCmd("M220\nM221\n");
   KEY_VALUES  key_num=KEY_IDLE;
   u16         now[ITEM_PERCENTAGE_NUM];
@@ -77,7 +81,7 @@ void menuSpeed(void)
   now[i] = percentage[i];
 
   menuDrawPage(&percentageItems);
-  showPercentage();
+  showPercentage((u8*)textSelect(percentageItems.title.index));
 
   #if LCD_ENCODER_SUPPORT
     encoderPosition = 0;
@@ -114,7 +118,7 @@ void menuSpeed(void)
         menuDrawItem(&percentageItems.items[key_num], key_num);
         percentageItems.title.index = itemPercentageTitle[item_percentage_i];
         menuDrawTitle(textSelect(percentageItems.title.index));
-        showPercentage();
+        showPercentage((u8*)textSelect(percentageItems.title.index));
         break;
 
       case KEY_ICON_5:

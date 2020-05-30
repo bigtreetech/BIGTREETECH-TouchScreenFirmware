@@ -5,5 +5,7 @@
 void menuRGBSettings(void);
 void menuMachineSettings(void);
 void menuCustom(void);
-
+void saveEepromSettings(void);
+void restoreEepromSettings(void);
+void resetEepromSettings(void);
 #endif

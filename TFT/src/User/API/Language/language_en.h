@@ -34,6 +34,7 @@
     #define EN_Z_OFFSET               "Z Offset"
     #define EN_PROBE_OFFSET           "Probe Offset"
     #define EN_EEPROM_SAVE            "Save"
+    #define EN_APPLY                  "Apply"
     #define EN_INC                    "Increase"
     #define EN_DEC                    "Decrease"
     #define EN_NOZZLE                 "Nozzle"
@@ -106,14 +107,14 @@
     #define EN_UNCONNECTED            "No printer attached!"
     #define EN_DISCONNECT_INFO        "Now you can control the printer by your computer!"
     #define EN_LOADING                "Loading..."
-    #define EN_POWER_FAILED           "\u0887 Continue printing?" //Question Sign
+    #define EN_POWER_FAILED           "Continue printing?" //Question Sign
     #define EN_CONTINUE               "Continue"
     #define EN_CANCEL                 "\u088F Cancel" //Cancel Sign
     #define EN_ADJUST_TITLE           "Touch Screen Calibration"
     #define EN_ADJUST_INFO            "Please click on the red dot"
     #define EN_ADJUST_OK              "Adjustment Success"
     #define EN_ADJUST_FAILED          "Adjustment failed, Please Try Again"
-    #define EN_WARNING                "\u0881 Warning" //Exclamation Sign
+    #define EN_WARNING                "Warning" //Exclamation Sign
     #define EN_STOP_PRINT             "Stop printing?"
     #define EN_CONFIRM                "\u088E OK" //Confirm Sign
     #define EN_TFTSD                  "TFT SD"
@@ -167,9 +168,9 @@
     #define EN_TRAVEL_ACCELERATION      "Travel Acceleration"
     #define EN_BUMP_SENSITIVITY         "TMC bump sensitivity"
     #define EN_RESET                    "Reset"
-    #define EN_RESET_SETTINGS           "All settings will be\nreset to it's default\nvalues. Continue?"
-    #define EN_RESET_SETTINGS_DONE      "Resetting all settings\nsuccessfully done.\nTo take full effect,\nplease restart the device."
-    #define EN_INFO                     "\u0884 Info" //Info Sign
+    #define EN_RESET_SETTINGS_INFO      "Reset all settings to\ndefault values?"
+    #define EN_RESET_SETTINGS_DONE      "Reset all settings\nsuccessful.\nplease restart the device."
+    #define EN_INFO                     "Info" //Info Sign
     #define EN_LCD_BRIGHTNESS           "LCD Brightness"
     #define EN_LCD_BRIGHTNESS_DIM       "LCD Brightness dim"
     #define EN_LCD_DIM_IDLE_TIMER       "LCD dim idle timer"
@@ -181,5 +182,9 @@
     #define EN_300_SECONDS              "5 Min."
     #define EN_CUSTOM_SECONDS           "Custom"
     #define EN_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
+    #define EN_SETTING_RESET            "Reset settings"
+    #define EN_SETTING_RESTORE          "Restore settings"
+    #define EN_EEPROM_SAVE_INFO         "Save printer settings\nto EEPROM?"
+    #define EN_EEPROM_RESTORE_INFO       "Reload settings from\nEEPROM?"
 
 #endif

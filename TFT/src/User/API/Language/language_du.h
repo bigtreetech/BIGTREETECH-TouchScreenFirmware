@@ -34,6 +34,7 @@
     #define DU_Z_OFFSET             "Z Offset"
     #define DU_PROBE_OFFSET         "Probe Offset"
     #define DU_EEPROM_SAVE          "Bewaren"
+    #define DU_APPLY                "Apply"
     #define DU_INC                  "Verhogen"
     #define DU_DEC                  "Verlagen"
     #define DU_NOZZLE               "Spuitneus"
@@ -167,8 +168,8 @@
     #define DU_TRAVEL_ACCELERATION      "Travel Acceleration"
     #define DU_BUMP_SENSITIVITY         "TMC bump sensitivity"
     #define DU_RESET                    "Reset"
-    #define DU_RESET_SETTINGS           "All settings will be\nreset to it's default\nvalues. Continue?"
-    #define DU_RESET_SETTINGS_DONE      "Resetting all settings\nsuccessfully done.\nTo take full effect,\nplease restart the device."
+    #define DU_RESET_SETTINGS_INFO      "Reset all settings to\ndefault values?"
+    #define DU_RESET_SETTINGS_DONE      "Reset all settings\nsuccessful.\nplease restart the device."
     #define DU_INFO                     "Info"
     #define DU_LCD_BRIGHTNESS           "LCD Brightness"
     #define DU_LCD_BRIGHTNESS_DIM       "LCD Brightness dim"
@@ -181,5 +182,9 @@
     #define DU_300_SECONDS              "5 Min."
     #define DU_CUSTOM_SECONDS           "Custom"
     #define DU_ST7920_FULLSCREEN        "Marlin mode in fullscreen"
+    #define DU_SETTING_RESET            "Reset settings"
+    #define DU_SETTING_RESTORE          "Restore settings"
+    #define DU_EEPROM_SAVE_INFO         "Save printer settings\nto EEPROM?"
+    #define DU_EEPROM_RESTORE_INFO       "Reload settings from\nEEPROM?"
 
 #endif
