@@ -147,9 +147,12 @@ void printSetUpdateWaiting(bool isWaiting)
 void printerGotoIdle(void)
 {
   // disable all heater
+  #ifndef CNC_MENU
   for(TOOL i = BED; i < HEATER_NUM; i++) {
     mustStoreCmd("%s S0\n", heatCmd[i]);
   }
+  #endif
+
   // disable all fan
   for(u8 i = 0; i < FAN_NUM; i++) {
     mustStoreCmd("%s S0\n", fanCmd[i]);
@@ -485,8 +488,12 @@ void toggleinfo(void)
       rapid_serial_loop();	 //perform backend printing loop before drawing to avoid printer idling
       reDrawFan(FAN_ICON_POS);
     }
+    #ifndef CNC_MENU
+      c_speedID = (c_speedID + 1) % 2;
+    #else
+      c_speedID = 0;
+    #endif
 
-    c_speedID = (c_speedID + 1) % 2;
     nextTime = OS_GetTimeMs() + toggle_time;
     rapid_serial_loop();	 //perform backend printing loop before drawing to avoid printer idling
     reDrawSpeed(SPD_ICON_POS);
@@ -514,11 +521,15 @@ void printingDrawPage(void)
     printingItems.items[key_pause] = itemIsPause[isPause()];
 
   menuDrawPage(&printingItems);
-  reValueNozzle(EXT_ICON_POS);
-  reValueBed(BED_ICON_POS);
+  #ifndef CNC_MENU
+    reValueNozzle(EXT_ICON_POS);
+    reValueBed(BED_ICON_POS);
+  #endif
+
   reDrawFan(FAN_ICON_POS);
   reDrawTime(TIM_ICON_POS);
   reDrawProgress(TIM_ICON_POS);
+  
   reDrawLayer(Z_ICON_POS);
   reDrawSpeed(SPD_ICON_POS);
 }
@@ -541,7 +552,7 @@ void menuPrinting(void)
   while(infoMenu.menu[infoMenu.cur] == menuPrinting)
   {
 //    Scroll_DispString(&titleScroll, LEFT); //Scroll display file name will take too many CPU cycles
-
+#ifndef CNC_MENU
     //check nozzle temp change
       if (nowHeat.T[c_Ext].current != heatGetCurrentTemp(c_Ext) || nowHeat.T[c_Ext].target != heatGetTargetTemp(c_Ext))
       {
@@ -559,7 +570,7 @@ void menuPrinting(void)
       rapid_serial_loop();	 //perform backend printing loop before drawing to avoid printer idling
       reValueBed(BED_ICON_POS);
     }
-
+#endif
     //check Fan speed change
     if (nowFan[c_fan] != fanGetSpeed(c_fan))
     {
@@ -702,7 +713,9 @@ void abortPrinting(void)
   }
 
   heatClearIsWaiting();
-
+  #ifdef CNC_MENU
+    mustStoreCmd("M05\n");
+  #endif 
   mustStoreCmd(CANCEL_PRINT_GCODE);
 
   endPrinting();
