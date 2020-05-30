@@ -117,7 +117,7 @@ float numPadFloat(u8* title, float old_val, bool negative)
         }
         else
         {
-          Buzzer_play(sound_deny);
+          BUZZER_PLAY(sound_deny);
         }
         break;
 
