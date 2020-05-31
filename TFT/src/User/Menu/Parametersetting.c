@@ -300,6 +300,7 @@ void menuParameterSettings(void){
         }
       }
       break;
+
     case KEY_ICON_7:
       if (parametersChanged && infoMachineSettings.EEPROM == 1)
       {
@@ -307,7 +308,10 @@ void menuParameterSettings(void){
                     textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL) , saveEepromSettings, NULL, NULL);
         parametersChanged = false;
       }
-      infoMenu.cur--;
+      else
+      {
+        infoMenu.cur--;
+      }
       break;
 
     default:
