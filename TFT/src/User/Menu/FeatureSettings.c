@@ -204,7 +204,8 @@ void updateFeatureSettings(uint8_t key_val)
     #endif
 
     case SKEY_RESET_SETTINGS:
-      showDialog(DIALOG_TYPE_ALERT, textSelect(LABEL_SETTING_RESET), textSelect(LABEL_RESET_SETTINGS_INFO), textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL) ,resetSettings,NULL,NULL);
+      showDialog(DIALOG_TYPE_ALERT, textSelect(LABEL_SETTING_RESET), textSelect(LABEL_RESET_SETTINGS_INFO),
+                  textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL) ,resetSettings,NULL,NULL);
       break;
 
     #ifdef LCD_LED_PWM_CHANNEL

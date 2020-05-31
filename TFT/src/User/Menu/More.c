@@ -5,7 +5,8 @@ void menuIsPause(void)
 {
   u16 key_num = IDLE_TOUCH;
 
-  popupDrawPage(DIALOG_TYPE_ALERT, bottomDoubleBtn, textSelect(LABEL_WARNING), textSelect(LABEL_IS_PAUSE), textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL));
+  popupDrawPage(DIALOG_TYPE_ALERT, bottomDoubleBtn, textSelect(LABEL_WARNING),
+                  textSelect(LABEL_IS_PAUSE), textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL));
 
   while(infoMenu.menu[infoMenu.cur] == menuIsPause)
   {

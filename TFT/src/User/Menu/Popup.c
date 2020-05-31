@@ -105,7 +105,8 @@ void popupReminder(DIALOG_TYPE type, u8* info, u8* context)
   action_cancel = NULL;
   action_loop = NULL;
   cur_btn_rect = &popupMenuRect;
-  infoMenu.menu[++infoMenu.cur] = menuDialog;
+  if (infoMenu.menu != menuDialog)
+    infoMenu.menu[++infoMenu.cur] = menuDialog;
 }
 
 /** Show save setting dialog
@@ -133,7 +134,7 @@ void showDialog(DIALOG_TYPE type, u8 * title, u8 * msg, u8 *ok_txt, u8* cancel_t
     popupDrawPage(type, &bottomSingleBtn, title, msg, ok_txt, cancel_txt);
     cur_btn_rect = &popupMenuRect;
   }
-
-  infoMenu.menu[++infoMenu.cur] = menuDialog;
+  if (infoMenu.menu != menuDialog)
+    infoMenu.menu[++infoMenu.cur] = menuDialog;
 
 }

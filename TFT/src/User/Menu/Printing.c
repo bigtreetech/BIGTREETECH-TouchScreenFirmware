@@ -752,7 +752,8 @@ void menuStopPrinting(void)
 {
   u16 key_num = IDLE_TOUCH;
 
-  popupDrawPage(DIALOG_TYPE_ALERT, bottomDoubleBtn, textSelect(LABEL_WARNING), textSelect(LABEL_STOP_PRINT), textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL));
+  popupDrawPage(DIALOG_TYPE_ALERT, bottomDoubleBtn, textSelect(LABEL_WARNING),
+                  textSelect(LABEL_STOP_PRINT), textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL));
 
   while(infoMenu.menu[infoMenu.cur] == menuStopPrinting)
   {
@@ -807,7 +808,8 @@ void startShutdown(void)
   {
     mustStoreCmd("%s S255\n", fanCmd[i]);
   }
-  showDialog(DIALOG_TYPE_INFO,textSelect(LABEL_SHUT_DOWN), (u8 *)tempstr,textSelect(LABEL_FORCE_SHUT_DOWN), textSelect(LABEL_CANCEL), shutdown, NULL, shutdownLoop);
+  showDialog(DIALOG_TYPE_INFO,textSelect(LABEL_SHUT_DOWN), (u8 *)tempstr,
+              textSelect(LABEL_FORCE_SHUT_DOWN), textSelect(LABEL_CANCEL), shutdown, NULL, shutdownLoop);
 }
 
 // get gcode command from sd card

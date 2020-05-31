@@ -407,7 +407,8 @@ void parseACK(void)
     // Parse pause message
       else if(ack_seen("paused for user"))
       {
-        showDialog(DIALOG_TYPE_QUESTION, (u8*)"Printer is Paused",(u8*)"Paused for user\ncontinue?", textSelect(LABEL_CONFIRM), NULL, breakAndContinue, NULL,NULL);
+        showDialog(DIALOG_TYPE_QUESTION, (u8*)"Printer is Paused",(u8*)"Paused for user\ncontinue?",
+                    textSelect(LABEL_CONFIRM), NULL, breakAndContinue, NULL,NULL);
       }
     //Parse error messages & Echo messages
       else if(ack_seen(errormagic))

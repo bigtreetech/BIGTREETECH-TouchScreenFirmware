@@ -52,7 +52,8 @@ void menuAutoLeveling(void)
         break;
       case KEY_ICON_7:
         if(leveled == true && infoMachineSettings.EEPROM == 1)
-          showDialog(DIALOG_TYPE_QUESTION, textSelect(autoLevelingItems.title.index), textSelect(LABEL_EEPROM_SAVE_INFO), textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), saveEepromSettings, NULL, NULL);
+          showDialog(DIALOG_TYPE_QUESTION, textSelect(autoLevelingItems.title.index), textSelect(LABEL_EEPROM_SAVE_INFO),
+                      textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), saveEepromSettings, NULL, NULL);
         infoMenu.cur--;
         break;
       default:
