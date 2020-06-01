@@ -13,8 +13,9 @@ typedef struct
   u32     cur; // Gcode has printed file size
   u8      progress;
   bool    printing; // 1 means printing, 0 means idle
-  bool    pause; //1 means paused
-  bool    m0_pause; //pause triggered through M0/M1 gcode
+  bool    pause; // 1 means paused
+  bool    m0_pause; // pause triggered through M0/M1 gcode
+  bool    runout; // 1: runout in printing, 0: idle
 }PRINTING;
 
 void exitPrinting(void);
@@ -34,6 +35,8 @@ void setPrintSize(u32 size);
 void setPrintCur(u32 cur);
 u32 getPrintSize(void);
 u32 getPrintCur(void);
+bool getPrintRunout(void);
+void setPrintRunout(bool runout);
 
 u8   getPrintProgress(void);
 u32  getPrintTime(void);

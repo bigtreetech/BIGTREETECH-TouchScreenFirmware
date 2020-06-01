@@ -17,6 +17,7 @@ const char *const ignoreEcho[] = {
   "echo:  M",   //M503
   "Cap:",       //M115
   "Config:",    //M360
+  "Settings Stored" // M500
 };
 
 bool portSeen[_UART_CNT] = {false, false, false, false, false, false};

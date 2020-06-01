@@ -438,7 +438,7 @@ if(infoMachineSettings.onboard_sd_support == ENABLED && infoMachineSettings.auto
 #endif
 
 #ifdef FIL_RUNOUT_PIN
-  loopFILRunoutDetect();
+  loopBackEndFILRunoutDetect();
 #endif
 }
 
@@ -452,7 +452,11 @@ void loopFrontEnd(void)
 
   loopBusySignClear();                //Busy Indicator clear
 
-  temp_Change();
+  temp_Change();  
+  
+#ifdef FIL_RUNOUT_PIN
+  loopFrontEndFILRunoutDetect();
+#endif
 }
 
 void loopProcess(void)

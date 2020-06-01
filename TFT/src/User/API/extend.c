@@ -132,16 +132,23 @@ bool FIL_IsRunout(void)
   }
 }
 
-void loopFILRunoutDetect(void)
+void loopBackEndFILRunoutDetect(void)
 {
   if (infoSettings.runout == FILAMENT_RUNOUT_OFF)  return; // Filament runout turn off
   if (!FIL_IsRunout()) return; // Filament not runout yet, need constant scanning to filter interference
   if (!isPrinting() || isPause())  return; // No printing or printing paused
 
+  setPrintRunout(true);
+}
+
+void loopFrontEndFILRunoutDetect(void)
+{
+  if (!getPrintRunout()) return;
+
   if (setPrintPause(true,false))
   {
+    setPrintRunout(false);
     popupReminder(textSelect(LABEL_WARNING), textSelect(LABEL_FILAMENT_RUNOUT));
   }
 }
-
 #endif
