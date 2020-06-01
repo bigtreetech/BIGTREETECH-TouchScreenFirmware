@@ -100,7 +100,7 @@ bool isPause(void)
 
 bool isM0_Pause(void)
 {
-return infoPrinting.m0_pause;
+  return infoPrinting.m0_pause;
 }
 
 //
@@ -137,6 +137,16 @@ u32 getPrintCur(void)
 void setPrintCur(u32 cur)
 {
   infoPrinting.cur = cur;
+}
+
+bool getPrintRunout(void)
+{
+  return infoPrinting.runout;
+}
+
+void setPrintRunout(bool runout)
+{
+  infoPrinting.runout = runout;
 }
 
 u8 getPrintProgress(void)
@@ -676,8 +686,8 @@ void menuPrinting(void)
 
       default :break;
     }
-    loopProcess();
     toggleinfo();
+    loopProcess();
   }
 }
 
