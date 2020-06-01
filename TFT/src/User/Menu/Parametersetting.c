@@ -3,7 +3,7 @@
 
 const char *const parameter_Cmd[PARAMETERS_COUNT][STEPPER_COUNT] = {
   {"M92 X%.2f\n",   "M92 Y%.2f\n",  "M92 Z%.2f\n",  "M92 T0 E%.2f\n",  "M92 T1 E%.2f\n"}, //Steps/mm
-  {"M906 X%.0f\n", "M906 Y%.0f\n", "M906 Z%.0f\n", "M906 T0 E%.0f\n", "M906 I1 E%.0f\n"}, //Current
+  {"M906 X%.0f\n", "M906 Y%.0f\n", "M906 Z%.0f\n", "M906 T0 E%.0f\n", "M906 T1 E%.0f\n"}, //Current
   {"M203 X%.0f\n", "M203 Y%.0f\n", "M203 Z%.0f\n", "M203 T0 E%.0f\n", "M203 T1 E%.0f\n"}, //MaxFeedrate
   {"M201 X%.0f\n", "M201 Y%.0f\n", "M201 Z%.0f\n", "M201 T0 E%.0f\n", "M201 T1 E%.0f\n"}, //MaxAcceleration
   {"M204 P%.0f\n", "M204 R%.0f\n", "M204 T%.0f\n", NULL, NULL}, //Acceleration
