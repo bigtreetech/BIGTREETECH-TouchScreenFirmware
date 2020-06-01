@@ -54,12 +54,15 @@ void set_knob_color(int color_index)
   WS2812_Send_DAT(led_color[color_index]);
 }
 
+#define NEOPIXEL_T0H_US 0.35  // Neopixel code 0 high level hold time in us
+#define NEOPIXEL_T1H_US 1.36  // Neopixel code 1 high level hold time in us
+
 void WS2812_Send_DAT(uint32_t ws2812_dat)
 {
   uint16_t led_num;
   int8_t bit;
-  uint16_t cycle = mcuClocks.PCLK1_Timer_Frequency / 800000 / 2 - 1;   // WS2812 need 800KHz (1.25us)
-  uint16_t code_0_tim_h_cnt = cycle * (0.4/1.25);  // Code 0, High level hold time, 0.4us / 1.25us
+  uint16_t cycle = mcuClocks.PCLK1_Timer_Frequency * (0.000001 * (NEOPIXEL_T0H_US + NEOPIXEL_T1H_US)) / 2 - 1;   // Neopixel frequency 
+  uint16_t code_0_tim_h_cnt = cycle * (NEOPIXEL_T0H_US / (NEOPIXEL_T0H_US + NEOPIXEL_T1H_US));  // Code 0, High level hold time,
   uint16_t code_1_tim_h_cnt = cycle - code_0_tim_h_cnt;
 
   __disable_irq();  // Disable interrupt, avoid disturbing the timing of WS2812
