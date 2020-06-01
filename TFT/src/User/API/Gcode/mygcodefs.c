@@ -68,9 +68,13 @@ bool scanPrintFilesGcodeFs(void)
       {
         char *Pstr_tmp = strrchr(line, ' ');
         if (Pstr_tmp != NULL)
-          *Pstr_tmp = 0;                          //remove file size from line
-
-        char *longfilename = request_M33(line);
+          *Pstr_tmp = 0;
+        //remove file size from line
+        char *longfilename;
+        if (strrchr(line, '~') != NULL)                   //check if file name is 8.3 format
+          longfilename = request_M33(line);
+        else
+          longfilename = line;
 
         Pstr_tmp = strchr(longfilename, '\n');
         if (Pstr_tmp != NULL)
