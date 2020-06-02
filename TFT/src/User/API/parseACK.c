@@ -282,9 +282,23 @@ void parseACK(void)
       }
     //parse and store Acceleration values
       else if(ack_seen("M204 P")){
-                          setParameter(P_ACCELERATION, X_STEPPER, ack_value());
-        if(ack_seen("R")) setParameter(P_ACCELERATION, Y_STEPPER, ack_value());
-        if(ack_seen("T")) setParameter(P_ACCELERATION, Z_STEPPER, ack_value());
+                          setParameter(P_ACCELERATION, 0, ack_value());
+        if(ack_seen("R")) setParameter(P_ACCELERATION, 1, ack_value());
+        if(ack_seen("T")) setParameter(P_ACCELERATION, 2, ack_value());
+      }
+    //parse and store FW retraction values
+      else if(ack_seen("M207 S")){
+                          setParameter(P_FWRETRACT, 0, ack_value());
+        if(ack_seen("W")) setParameter(P_FWRETRACT, 1, ack_value());
+        if(ack_seen("F")) setParameter(P_FWRETRACT, 2, ack_value());
+        if(ack_seen("Z")) setParameter(P_FWRETRACT, 3, ack_value());
+      }
+    //parse and store FW recover values
+      else if(ack_seen("M208 S")){
+                          setParameter(P_FWRECOVER, 0, ack_value());
+        if(ack_seen("W")) setParameter(P_FWRECOVER, 1, ack_value());
+        if(ack_seen("F")) setParameter(P_FWRECOVER, 2, ack_value());
+        if(ack_seen("R")) setParameter(P_FWRECOVER, 3, ack_value());
       }
     //parse and store Probe Offset values
       else if(ack_seen("M851 X")){
@@ -292,17 +306,21 @@ void parseACK(void)
         if(ack_seen("Y")) setParameter(P_PROBE_OFFSET, Y_STEPPER, ack_value());
         if(ack_seen("Z")) setParameter(P_PROBE_OFFSET, Z_STEPPER, ack_value());
       }
-    //parse and store TMC Bump sensitivity values
-      else if(ack_seen("M914 X")){
-                          setParameter(P_BUMPSENSITIVITY, X_STEPPER, ack_value());
-        if(ack_seen("Y")) setParameter(P_BUMPSENSITIVITY, Y_STEPPER, ack_value());
-        if(ack_seen("Z")) setParameter(P_BUMPSENSITIVITY, Z_STEPPER, ack_value());
+    //parse and store linear advance values
+      else if(ack_seen("M900 K")){
+                          setParameter(P_LIN_ADV, 0, ack_value());
       }
     //parse and store stepper driver current values
       else if(ack_seen("M906 X")){
                           setParameter(P_CURRENT, X_STEPPER, ack_value());
         if(ack_seen("Y")) setParameter(P_CURRENT, Y_STEPPER, ack_value());
         if(ack_seen("Z")) setParameter(P_CURRENT, Z_STEPPER, ack_value());
+      }
+    //parse and store TMC Bump sensitivity values
+      else if(ack_seen("M914 X")){
+                          setParameter(P_BUMPSENSITIVITY, X_STEPPER, ack_value());
+        if(ack_seen("Y")) setParameter(P_BUMPSENSITIVITY, Y_STEPPER, ack_value());
+        if(ack_seen("Z")) setParameter(P_BUMPSENSITIVITY, Z_STEPPER, ack_value());
       }
       else if(ack_seen("M906 I1")){
         if(ack_seen("X")) dualstepper[X_STEPPER] = true;

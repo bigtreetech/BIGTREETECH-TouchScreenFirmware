@@ -365,6 +365,25 @@ void sendQueueCmd(void)
           if(cmd_seen('E')) setParameter(P_STEPS_PER_MM, E_AXIS, cmd_float());
           break;
 
+        case 106: //M106
+        {
+          u8 i = 0;
+          if(cmd_seen('P')) i = cmd_value();
+          if(cmd_seen('S'))
+          {
+            fanSetSpeed(i, cmd_value());
+          }
+          break;
+        }
+
+        case 107: //M107
+        {
+          u8 i = 0;
+          if(cmd_seen('P')) i = cmd_value();
+          fanSetSpeed(i, 0);
+          break;
+        }
+
         case 117:
         {
           char message[CMD_MAX_CHAR];
@@ -385,23 +404,7 @@ void sendQueueCmd(void)
           }
           break;
         }
-        case 106: //M106
-        {
-          u8 i = 0;
-          if(cmd_seen('P')) i = cmd_value();
-          if(cmd_seen('S'))
-          {
-            fanSetSpeed(i, cmd_value());
-          }
-          break;
-        }
-        case 107: //M107
-        {
-          u8 i = 0;
-          if(cmd_seen('P')) i = cmd_value();
-          fanSetSpeed(i, 0);
-          break;
-        }
+        
         case 201: //M201 Maximum Acceleration (units/s2)
           if(cmd_seen('X')) setParameter(P_MAX_ACCELERATION, X_AXIS, cmd_float());
           if(cmd_seen('Y')) setParameter(P_MAX_ACCELERATION, Y_AXIS, cmd_float());
@@ -418,6 +421,18 @@ void sendQueueCmd(void)
           if(cmd_seen('P')) setParameter(P_ACCELERATION,0,cmd_float());
           if(cmd_seen('R')) setParameter(P_ACCELERATION,1,cmd_float());
           if(cmd_seen('T')) setParameter(P_ACCELERATION,2,cmd_float());
+          break;
+        case 207: //M207 FW Retract
+          if(cmd_seen('F')) setParameter(P_FWRETRACT,0,cmd_float());
+          if(cmd_seen('S')) setParameter(P_FWRETRACT,1,cmd_float());
+          if(cmd_seen('W')) setParameter(P_FWRETRACT,2,cmd_float());
+          if(cmd_seen('Z')) setParameter(P_FWRETRACT,3,cmd_float());
+          break;
+        case 208: //M208 FW Retract recover
+          if(cmd_seen('F')) setParameter(P_FWRECOVER,0,cmd_float());
+          if(cmd_seen('R')) setParameter(P_FWRECOVER,1,cmd_float());
+          if(cmd_seen('S')) setParameter(P_FWRECOVER,2,cmd_float());
+          if(cmd_seen('W')) setParameter(P_FWRECOVER,3,cmd_float());
           break;
         case 220: //M220
           if(cmd_seen('S'))
@@ -451,6 +466,9 @@ void sendQueueCmd(void)
           if(cmd_seen('X')) setParameter(P_PROBE_OFFSET, X_AXIS, cmd_float());
           if(cmd_seen('Y')) setParameter(P_PROBE_OFFSET, Y_AXIS, cmd_float());
           if(cmd_seen('Z')) setParameter(P_PROBE_OFFSET, Z_AXIS, cmd_float());
+          break;
+        case 900: //M900 Linear advance
+          if(cmd_seen('K')) setParameter(P_LIN_ADV, 0, cmd_float());
           break;
         case 906: //M906 Stepper driver current
           if(cmd_seen('X')) setParameter(P_CURRENT, X_AXIS, cmd_value());
@@ -655,6 +673,18 @@ void sendQueueCmd(void)
             if(cmd_seen('R')) setParameter(P_ACCELERATION,1,cmd_float());
             if(cmd_seen('T')) setParameter(P_ACCELERATION,2,cmd_float());
             break;
+          case 207: //M207 FW Retract
+            if(cmd_seen('F')) setParameter(P_FWRETRACT,0,cmd_float());
+            if(cmd_seen('S')) setParameter(P_FWRETRACT,1,cmd_float());
+            if(cmd_seen('W')) setParameter(P_FWRETRACT,2,cmd_float());
+            if(cmd_seen('Z')) setParameter(P_FWRETRACT,3,cmd_float());
+            break;
+          case 208: //M208 FW Retract recover
+            if(cmd_seen('F')) setParameter(P_FWRECOVER,0,cmd_float());
+            if(cmd_seen('R')) setParameter(P_FWRECOVER,1,cmd_float());
+            if(cmd_seen('S')) setParameter(P_FWRECOVER,2,cmd_float());
+            if(cmd_seen('W')) setParameter(P_FWRECOVER,3,cmd_float());
+            break;
           case 220: //M220
             if(cmd_seen('S'))
             {
@@ -667,11 +697,6 @@ void sendQueueCmd(void)
               strcat(infoCmd.queue[infoCmd.index_r].gcode,(const char*)buf);
               speedSetSendWaiting(0, false);
             }
-            break;
-          case 851: //M851 Z probe offset
-            if(cmd_seen('X')) setParameter(P_PROBE_OFFSET, X_AXIS, cmd_float());
-            if(cmd_seen('Y')) setParameter(P_PROBE_OFFSET, Y_AXIS, cmd_float());
-            if(cmd_seen('Z')) setParameter(P_PROBE_OFFSET, Z_AXIS, cmd_float());
             break;
           case 221: //M221
             if(cmd_seen('S'))
@@ -698,7 +723,14 @@ void sendQueueCmd(void)
               }
               break;
           #endif
-
+          case 851: //M851 Z probe offset
+            if(cmd_seen('X')) setParameter(P_PROBE_OFFSET, X_AXIS, cmd_float());
+            if(cmd_seen('Y')) setParameter(P_PROBE_OFFSET, Y_AXIS, cmd_float());
+            if(cmd_seen('Z')) setParameter(P_PROBE_OFFSET, Z_AXIS, cmd_float());
+            break;
+          case 900: //M900 Linear advance
+            if (cmd_seen('K')) setParameter(P_LIN_ADV, 0, cmd_float());
+            break;
           case 906: //M906 Stepper driver current
             if(cmd_seen('X')) setParameter(P_CURRENT, X_AXIS, cmd_value());
             if(cmd_seen('Y')) setParameter(P_CURRENT, Y_AXIS, cmd_value());
