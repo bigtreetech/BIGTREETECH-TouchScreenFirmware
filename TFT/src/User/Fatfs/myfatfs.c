@@ -9,7 +9,7 @@ FATFS fatfs[FF_VOLUMES]; /* FATFS work area*/
  true: mount ok
  false: mount failed
 */
- bool mountSDCard(void)
+bool mountSDCard(void)
 {
   return (f_mount(&fatfs[VOLUMES_SD_CARD], "SD:", 1) == FR_OK);
 }
@@ -17,7 +17,7 @@ FATFS fatfs[FF_VOLUMES]; /* FATFS work area*/
 /*
  mount U disk from Fatfs
 */
- bool mountUDisk(void)
+bool mountUDisk(void)
 {
   return (f_mount(&fatfs[VOLUMES_U_DISK], "U:", 1)== FR_OK);
 }

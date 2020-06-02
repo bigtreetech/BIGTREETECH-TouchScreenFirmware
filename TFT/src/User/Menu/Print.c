@@ -323,7 +323,7 @@ void menuPrintFromSource(void)
             if(infoHost.connected !=true) break;
             if(EnterDir(infoFile.file[key_num + start - infoFile.F_num]) == false) break;
 
-            if (infoFile.source == TFT_SD) {
+            if (infoFile.source != BOARD_SD) {
               //load bmp preview in flash if file exists
               int16_t gn;
               char *gnew;
