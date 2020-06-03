@@ -329,10 +329,12 @@ void menuStatus(void)
     switch (key_num)
     {
       case KEY_ICON_0:
-        infoMenu.menu[++infoMenu.cur] = menuUnifiedHeat;
+        heatSetCurrentTool(NOZZLE0);
+        infoMenu.menu[++infoMenu.cur] = menuHeat;
         break;
       case KEY_ICON_1:
-        infoMenu.menu[++infoMenu.cur] = menuUnifiedHeat;
+        heatSetCurrentTool(BED);
+        infoMenu.menu[++infoMenu.cur] = menuHeat;
         break;
       case KEY_ICON_2:
         infoMenu.menu[++infoMenu.cur] = menuFan;
