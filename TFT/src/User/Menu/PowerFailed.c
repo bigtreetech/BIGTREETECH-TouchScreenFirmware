@@ -24,7 +24,7 @@ bool powerFailedCreate(char *path)
 
   create_ok = false;
 
-  if(infoFile.source != TFT_SD)  return false;//support SD Card only now
+  if(infoFile.source == BOARD_SD)  return false; // on board SD not support now
 
   if(f_open(&fpPowerFailed, powerFailedFileName, FA_OPEN_ALWAYS | FA_WRITE) != FR_OK)  return false;
 
