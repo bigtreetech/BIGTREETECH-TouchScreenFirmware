@@ -131,7 +131,7 @@ void updateIcon(void)
   int notfound = 0;
   char tempstr[50];
   char nowBmp[64];
-  GUI_Clear(lcd_colors[infoSettings.bg_color]);
+  GUI_Clear(infoSettings.bg_color);
   GUI_DispString(5, PADDING, (u8 *)"Updating Logo");
   GUI_ClearPrect(&iconUpdateRect);
   if (bmpDecode(BMP_ROOT_DIR "/Logo.bmp", LOGO_ADDR))
@@ -145,7 +145,7 @@ void updateIcon(void)
     dispIconFail((u8 *)(BMP_ROOT_DIR "/Logo.bmp"));
   }
 
-  GUI_Clear(lcd_colors[infoSettings.bg_color]);
+  GUI_Clear(infoSettings.bg_color);
   GUI_DispString(5, PADDING, (u8 *)"Updating Icons");
 
   for (int i = 0; i < COUNT(iconBmpName); i++)
@@ -230,7 +230,7 @@ void updateFont(char *font, u32 addr)
 
   tempbuf = malloc(W25QXX_SECTOR_SIZE);
   if (tempbuf == NULL)  return;
-  GUI_Clear(lcd_colors[infoSettings.bg_color]);
+  GUI_Clear(infoSettings.bg_color);
   my_sprintf((void *)buffer,"%s Size: %dKB",font, (u32)f_size(&myfp)>>10);
   GUI_DispString(0, 100, (u8*)buffer);
   GUI_DispString(0, 140, (u8*)"Updating:   %");
@@ -272,7 +272,7 @@ void scanRenameUpdate(void) {
 
   if (f_dir_exists(ROOT_DIR)) { // ROOT_DIR exists
     if (f_dir_exists(ROOT_DIR ".CUR")) { // old ROOT_DIR also exists
-      GUI_Clear(lcd_colors[infoSettings.bg_color]);
+      GUI_Clear(infoSettings.bg_color);
       // It will take some time to delete the old ROOT_DIR, so display "Deleting" on the screen to tell user.
       GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, (uint8_t *)"Deleting old ROOT_DIR...");
       f_remove_full_dir(ROOT_DIR ".CUR");

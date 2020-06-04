@@ -12,7 +12,6 @@
     {ICON_SILENT_ON,            LABEL_SILENT_ON},
   };
   const  u8 item_silent[ITEM_SILENT_NUM] = {0, 1};
-  static u8 item_silent_i = 0;
 #endif
 
 
@@ -43,30 +42,38 @@ const LABEL lcd_colors_names[LCD_COLOR_COUNT] =
   LABEL_DARKBLUE,
   LABEL_DARKGREEN,
   LABEL_GRAY,
-  LABEL_DARKGRAY
-  };
+  LABEL_DARKGRAY,
+};
+
 void menuScreenSettings(void)
 {
-
-MENUITEMS screenSettingsItems = {
-// title
-LABEL_SCREEN_SETTINGS,
-// icon                       label
- {{ICON_ROTATE_UI,            LABEL_ROTATE_UI},
-  {ICON_TOUCHSCREEN_ADJUST,   LABEL_TOUCHSCREEN_ADJUST},
-  {ICON_LANGUAGE,             LABEL_LANGUAGE},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACK,                 LABEL_BACK},}
-};
+  MENUITEMS screenSettingsItems = {
+  // title
+  LABEL_SCREEN_SETTINGS,
+  // icon                       label
+   {{ICON_ROTATE_UI,            LABEL_ROTATE_UI},
+    {ICON_TOUCHSCREEN_ADJUST,   LABEL_TOUCHSCREEN_ADJUST},
+    {ICON_LANGUAGE,             LABEL_LANGUAGE},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+  #ifdef ST7920_SPI
+    {ICON_BKCOLOR,           LABEL_BACKGROUND},
+    {ICON_FONTCOLOR,           LABEL_BACKGROUND},
+  #else
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+  #endif
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_BACK,                 LABEL_BACK},}
+  };
+  u8 item_silent_i = 0;
+  u8 item_marlin_bg_color_i = 0;
+  u8 item_marlin_font_color_i = 0;
 
   KEY_VALUES key_num = KEY_IDLE;
   SETTINGS now = infoSettings;
 
   #ifdef BUZZER_PIN
-    for(u8 i=0; i<ITEM_SILENT_NUM; i++)
+    for(u8 i = 0; i < ITEM_SILENT_NUM; i++)
     {
       if(infoSettings.silent == item_silent[i])
       {
@@ -78,12 +85,30 @@ LABEL_SCREEN_SETTINGS,
 
   #ifdef ST7920_SPI
     // LCD12864 background color
-    screenSettingsItems.items[KEY_ICON_4].icon = ICON_BKCOLOR;
-    screenSettingsItems.items[KEY_ICON_4].label = lcd_color_names[infoSettings.marlin_mode_bg_color];
+    bool inArry = false;
+    for(u8 i = 0; i < LCD_COLOR_COUNT; i++)
+    {
+      if(infoSettings.marlin_mode_bg_color == lcd_colors[i])
+      {
+        inArry = true;
+        item_marlin_bg_color_i = i;
+        screenSettingsItems.items[KEY_ICON_4].label = lcd_color_names[item_marlin_bg_color_i];
+      }
+    }
+    if (!inArry) screenSettingsItems.items[KEY_ICON_4].label.index = LABEL_CUSTOM;
 
     // LCD12864 font color
-    screenSettingsItems.items[KEY_ICON_5].icon = ICON_FONTCOLOR;
-    screenSettingsItems.items[KEY_ICON_5].label = lcd_color_names[infoSettings.marlin_mode_font_color];
+    inArry = false;
+    for(u8 i = 0; i < LCD_COLOR_COUNT; i++)
+    {
+      if(infoSettings.marlin_mode_font_color == lcd_colors[i])
+      {
+        inArry = true;
+        item_marlin_font_color_i = i;
+        screenSettingsItems.items[KEY_ICON_5].label = lcd_color_names[item_marlin_font_color_i];
+      }
+    }
+    if (!inArry) screenSettingsItems.items[KEY_ICON_5].label.index = LABEL_CUSTOM;
 
   #endif
 
@@ -123,14 +148,16 @@ LABEL_SCREEN_SETTINGS,
 
       #ifdef ST7920_SPI
       case LCD12864_BG_INDEX:
-        infoSettings.marlin_mode_bg_color = (infoSettings.marlin_mode_bg_color + 1) % LCD_COLOR_COUNT;
-        screenSettingsItems.items[key_num].label = lcd_color_names[infoSettings.marlin_mode_bg_color];
+        item_marlin_bg_color_i = (item_marlin_bg_color_i + 1) % LCD_COLOR_COUNT;
+        infoSettings.marlin_mode_bg_color = lcd_colors[item_marlin_bg_color_i];
+        screenSettingsItems.items[key_num].label = lcd_color_names[item_marlin_bg_color_i];
         menuDrawItem(&screenSettingsItems.items[key_num], key_num);
         break;
 
       case LCD12864_FN_INDEX:
-        infoSettings.marlin_mode_font_color = (infoSettings.marlin_mode_font_color + 1) % LCD_COLOR_COUNT;
-        screenSettingsItems.items[key_num].label = lcd_color_names[infoSettings.marlin_mode_font_color];
+        item_marlin_font_color_i = (item_marlin_font_color_i + 1) % LCD_COLOR_COUNT;
+        infoSettings.marlin_mode_font_color = lcd_colors[item_marlin_font_color_i];;
+        screenSettingsItems.items[key_num].label = lcd_color_names[item_marlin_font_color_i];
         menuDrawItem(&screenSettingsItems.items[key_num], key_num);
         break;
       #endif

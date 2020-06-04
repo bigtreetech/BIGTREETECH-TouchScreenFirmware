@@ -25,14 +25,14 @@ void infoSettingsReset(void)
   infoSettings.mode                 = DEFAULT_LCD_MODE;
   infoSettings.unified_menu         = UNIFIED_MENU;
 
-  infoSettings.bg_color             = BACKGROUND_COLOR;
-  infoSettings.font_color           = FONT_COLOR;
-  infoSettings.title_bg_color       = TITLE_BACKGROUND_COLOR;
-  infoSettings.reminder_color       = REMINDER_FONT_COLOR;
-  infoSettings.sd_reminder_color    = VOLUME_REMINDER_FONT_COLOR;
-  infoSettings.status_xyz_bg_color  = STATUS_XYZ_BG_COLOR;
-  infoSettings.list_border_color    = LISTVIEW_BORDER_COLOR;
-  infoSettings.list_button_color    = LISTVIEW_ICON_COLOR;
+  infoSettings.bg_color             = lcd_colors[BACKGROUND_COLOR];
+  infoSettings.font_color           = lcd_colors[FONT_COLOR];
+  infoSettings.title_bg_color       = lcd_colors[TITLE_BACKGROUND_COLOR];
+  infoSettings.reminder_color       = lcd_colors[REMINDER_FONT_COLOR];
+  infoSettings.sd_reminder_color    = lcd_colors[VOLUME_REMINDER_FONT_COLOR];
+  infoSettings.status_xyz_bg_color  = lcd_colors[STATUS_XYZ_BG_COLOR];
+  infoSettings.list_border_color    = lcd_colors[LISTVIEW_BORDER_COLOR];
+  infoSettings.list_button_color    = lcd_colors[LISTVIEW_ICON_COLOR];
 
   infoSettings.silent               = DISABLED;
   infoSettings.terminalACK          = DISABLED;
@@ -48,11 +48,11 @@ void infoSettingsReset(void)
   infoSettings.lcd_idle_brightness  = DEFAULT_LCD_IDLE_BRIGHTNESS;
   infoSettings.lcd_idle_timer       = DEFAULT_LCD_IDLE_TIMER;
 
-  infoSettings.serial_alwaysOn            = SERIAL_ALWAYS_ON;
-  infoSettings.marlin_mode_bg_color       = ST7920_BKCOLOR;
-  infoSettings.marlin_mode_font_color     = ST7920_FNCOLOR;
-  infoSettings.marlin_mode_showtitle      = ST7920_SHOW_BANNER;
-  infoSettings.marlin_mode_fullscreen     = DEFAULT_ST7920_FULLSCREEN_MODE;
+  infoSettings.serial_alwaysOn        = SERIAL_ALWAYS_ON;
+  infoSettings.marlin_mode_bg_color   = lcd_colors[ST7920_BKCOLOR];
+  infoSettings.marlin_mode_font_color = lcd_colors[ST7920_FNCOLOR];
+  infoSettings.marlin_mode_showtitle  = ST7920_SHOW_BANNER;
+  infoSettings.marlin_mode_fullscreen = DEFAULT_ST7920_FULLSCREEN_MODE;
 
   infoSettings.auto_off               = DISABLED;
   infoSettings.ps_active_high         = PS_ON_ACTIVE_HIGH;
@@ -205,7 +205,7 @@ void menuInfo(void)
   u16 centerY = LCD_HEIGHT/2;
   u16 startX = MIN(HW_X, FW_X);
 
-  GUI_Clear(lcd_colors[infoSettings.bg_color]);
+  GUI_Clear(infoSettings.bg_color);
 
   my_sprintf(buf, "SYS:%dMhz", mcuClocks.rccClocks.SYSCLK_Frequency / 1000000);
   GUI_DispString(clocks[0].x, clocks[0].y, (uint8_t *)buf);
@@ -238,7 +238,7 @@ void menuInfo(void)
 // Set uart pins to input, free uart
 void menuDisconnect(void)
 {
-  GUI_Clear(lcd_colors[infoSettings.bg_color]);
+  GUI_Clear(infoSettings.bg_color);
   GUI_DispStringInRect(20, 0, LCD_WIDTH-20, LCD_HEIGHT, textSelect(LABEL_DISCONNECT_INFO));
   GUI_DispStringInRect(20, LCD_HEIGHT - (BYTE_HEIGHT*2), LCD_WIDTH-20, LCD_HEIGHT, textSelect(LABEL_TOUCH_TO_EXIT));
 
