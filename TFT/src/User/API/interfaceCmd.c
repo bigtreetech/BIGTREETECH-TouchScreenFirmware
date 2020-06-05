@@ -668,6 +668,19 @@ void sendQueueCmd(void)
               speedSetSendWaiting(0, false);
             }
             break;
+
+          #ifdef NOZZLE_PAUSE_M601
+          case 601: //M601 pause print
+            if (isPrinting()) {
+              setPrintPause(true,false);
+              // prevent sending M601 to marlin
+              infoCmd.count--;
+              infoCmd.index_r = (infoCmd.index_r + 1) % CMD_MAX_LIST;
+              return;
+            }
+            break;
+          #endif
+
           case 851: //M851 Z probe offset
             if(cmd_seen('X')) setParameter(P_PROBE_OFFSET, X_AXIS, cmd_float());
             if(cmd_seen('Y')) setParameter(P_PROBE_OFFSET, Y_AXIS, cmd_float());
