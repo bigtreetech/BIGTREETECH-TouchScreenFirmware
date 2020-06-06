@@ -139,7 +139,7 @@
     #define EN_EMERGENCYSTOP          "EM. STOP"
     #define EN_TOUCH_TO_EXIT          "Touch anywhere to exit"
     #define EN_MAINMENU               "Menu"
-    #define EN_WAIT_TEMP_SHUT_DOWN    "Wait for the hotend\ntemperature to be\nlower than %d ℃" // The length of the info line is 24 characters, so the "temperatureof" will automatically be divided into "temperature of..."
+    #define EN_WAIT_TEMP_SHUT_DOWN    "Wait for the hotend\ntemperature to be\nlower than %d ℃"
     #define EN_FORCE_SHUT_DOWN        "Force"
     #define EN_SHUTTING_DOWN          "Shutting down..."
     #define EN_PARAMETER_SETTING      "Parameter Settings"

@@ -188,8 +188,6 @@
     #define AM_SETTING_RESET            "Reset settings"
     #define AM_SETTING_RESTORE          "Restore settings"
     #define AM_EEPROM_SAVE_INFO         "Save printer settings\nto EEPROM?"
-    #define AM_EEPROM_RESTORE_INFO       "Reload settings from\nEEPROM?"
-    #define AM_EEPROM_SAVE_INFO         "Save printer settings\nto EEPROM?"
     #define AM_EEPROM_RESTORE_INFO      "Reload settings from\nEEPROM?"
     #define AM_RETRACT_FEEDRATE         "Retract feedrate"
     #define AM_RETRACT_LENGTH           "Retract length"

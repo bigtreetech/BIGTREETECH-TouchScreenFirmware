@@ -188,8 +188,6 @@
     #define SK_SETTING_RESET            "Reset settings"
     #define SK_SETTING_RESTORE          "Restore settings"
     #define SK_EEPROM_SAVE_INFO         "Save printer settings\nto EEPROM?"
-    #define SK_EEPROM_RESTORE_INFO       "Reload settings from\nEEPROM?"
-    #define SK_EEPROM_SAVE_INFO         "Save printer settings\nto EEPROM?"
     #define SK_EEPROM_RESTORE_INFO      "Reload settings from\nEEPROM?"
     #define SK_RETRACT_FEEDRATE         "Retract feedrate"
     #define SK_RETRACT_LENGTH           "Retract length"

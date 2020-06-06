@@ -188,8 +188,6 @@
     #define JP_SETTING_RESET            "Reset settings"
     #define JP_SETTING_RESTORE          "Restore settings"
     #define JP_EEPROM_SAVE_INFO         "Save printer settings\nto EEPROM?"
-    #define JP_EEPROM_RESTORE_INFO       "Reload settings from\nEEPROM?"
-    #define JP_EEPROM_SAVE_INFO         "Save printer settings\nto EEPROM?"
     #define JP_EEPROM_RESTORE_INFO      "Reload settings from\nEEPROM?"
     #define JP_RETRACT_FEEDRATE         "Retract feedrate"
     #define JP_RETRACT_LENGTH           "Retract length"

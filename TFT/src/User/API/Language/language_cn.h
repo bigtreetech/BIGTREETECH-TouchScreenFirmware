@@ -188,8 +188,6 @@
     #define CN_SETTING_RESET            "Reset settings"
     #define CN_SETTING_RESTORE          "Restore settings"
     #define CN_EEPROM_SAVE_INFO         "Save printer settings\nto EEPROM?"
-    #define CN_EEPROM_RESTORE_INFO       "Reload settings from\nEEPROM?"
-    #define CN_EEPROM_SAVE_INFO         "Save printer settings\nto EEPROM?"
     #define CN_EEPROM_RESTORE_INFO      "Reload settings from\nEEPROM?"
     #define CN_RETRACT_FEEDRATE         "Retract feedrate"
     #define CN_RETRACT_LENGTH           "Retract length"

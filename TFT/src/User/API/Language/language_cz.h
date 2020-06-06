@@ -188,8 +188,6 @@
     #define CZ_SETTING_RESET            "Reset settings"
     #define CZ_SETTING_RESTORE          "Restore settings"
     #define CZ_EEPROM_SAVE_INFO         "Save printer settings\nto EEPROM?"
-    #define CZ_EEPROM_RESTORE_INFO       "Reload settings from\nEEPROM?"
-    #define CZ_EEPROM_SAVE_INFO         "Save printer settings\nto EEPROM?"
     #define CZ_EEPROM_RESTORE_INFO      "Reload settings from\nEEPROM?"
     #define CZ_RETRACT_FEEDRATE         "Retract feedrate"
     #define CZ_RETRACT_LENGTH           "Retract length"

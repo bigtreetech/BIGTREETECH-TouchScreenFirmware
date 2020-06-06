@@ -188,8 +188,6 @@
     #define DU_SETTING_RESET            "Reset settings"
     #define DU_SETTING_RESTORE          "Restore settings"
     #define DU_EEPROM_SAVE_INFO         "Save printer settings\nto EEPROM?"
-    #define DU_EEPROM_RESTORE_INFO       "Reload settings from\nEEPROM?"
-    #define DU_EEPROM_SAVE_INFO         "Save printer settings\nto EEPROM?"
     #define DU_EEPROM_RESTORE_INFO      "Reload settings from\nEEPROM?"
     #define DU_RETRACT_FEEDRATE         "Retract feedrate"
     #define DU_RETRACT_LENGTH           "Retract length"

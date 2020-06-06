@@ -188,8 +188,6 @@
     #define DE_SETTING_RESET            "Reset settings"
     #define DE_SETTING_RESTORE          "Restore settings"
     #define DE_EEPROM_SAVE_INFO         "Save printer settings\nto EEPROM?"
-    #define DE_EEPROM_RESTORE_INFO       "Reload settings from\nEEPROM?"
-    #define DE_EEPROM_SAVE_INFO         "Save printer settings\nto EEPROM?"
     #define DE_EEPROM_RESTORE_INFO      "Reload settings from\nEEPROM?"
     #define DE_RETRACT_FEEDRATE         "Retract feedrate"
     #define DE_RETRACT_LENGTH           "Retract length"

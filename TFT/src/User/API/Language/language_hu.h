@@ -188,8 +188,6 @@
     #define HU_SETTING_RESET            "Reset settings"
     #define HU_SETTING_RESTORE          "Restore settings"
     #define HU_EEPROM_SAVE_INFO         "Save printer settings\nto EEPROM?"
-    #define HU_EEPROM_RESTORE_INFO       "Reload settings from\nEEPROM?"
-    #define HU_EEPROM_SAVE_INFO         "Save printer settings\nto EEPROM?"
     #define HU_EEPROM_RESTORE_INFO      "Reload settings from\nEEPROM?"
     #define HU_RETRACT_FEEDRATE         "Retract feedrate"
     #define HU_RETRACT_LENGTH           "Retract length"
