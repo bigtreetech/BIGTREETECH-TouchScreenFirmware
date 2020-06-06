@@ -39,7 +39,7 @@ void babyStepReset(void)
   babyInitZOffset();
 }
 
-/* Set default offset*/
+/* Set default offset */
 void babySetDefaultOffset(void)
 {
   float last_unit;
@@ -77,13 +77,13 @@ void babyStepReDraw(void)
   GUI_DispStringRight(point_of.x, point_of.y, (u8 *)tempstr);
 }
 
-
 void menuBabyStep(void)
 {
+  // 1 title, ITEM_PER_PAGE items (icon + label)
   MENUITEMS babyStepItems = {
-  //title
-    LABEL_BABYSTEP,
-  //icon                        label
+  // title
+  LABEL_BABYSTEP,
+  // icon                       label
    {{ICON_DEC,                  LABEL_DEC},
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
@@ -112,61 +112,61 @@ void menuBabyStep(void)
 
   while (infoMenu.menu[infoMenu.cur] == menuBabyStep)
   {
-    key_num = menuKeyGetValue();
     float max_unit = babystep_unit[curUnit];
+
+    key_num = menuKeyGetValue();
     switch (key_num)
     {
       // decrease babystep / z-offset
-    case KEY_ICON_0:
-
-      if (baby_step_value > BABYSTEP_MIN_VALUE)
-      {
-        float diff = baby_step_value - BABYSTEP_MIN_VALUE;
-        max_unit = (diff > max_unit) ? max_unit : diff;
-
-        mustStoreCmd("M290 Z-%.2f\n", max_unit);
-        baby_step_value -= max_unit;
-      }
-      break;
-
-    // increase babystep / z-offset
-    case KEY_ICON_3:
-      if (baby_step_value < BABYSTEP_MAX_VALUE)
-      {
-        float diff = BABYSTEP_MAX_VALUE - baby_step_value;
-        max_unit = (diff > max_unit) ? max_unit : diff;
-
-        mustStoreCmd("M290 Z%.2f\n", max_unit);
-        baby_step_value += max_unit;
-      }
-      break;
-
-    // change step unit
-    case KEY_ICON_5:
-      curUnit = (curUnit + 1) % ITEM_BABYSTEP_UNIT_NUM;
-      babyStepItems.items[key_num] = itemBabyStepUnit[curUnit];
-      menuDrawItem(&babyStepItems.items[key_num], key_num);
-      break;
-
-    // reset baby stepping to 0
-    case KEY_ICON_6:
-      babySetDefaultOffset();
-      break;
-
-    case KEY_ICON_7:
-      infoMenu.cur--;
-      break;
-
-    default:
-      #if LCD_ENCODER_SUPPORT
-        if (encoderPosition)
+      case KEY_ICON_0:
+        if (baby_step_value > BABYSTEP_MIN_VALUE)
         {
-          mustStoreCmd("M290 Z%.2f\n", babystep_unit[curUnit] * encoderPosition);
-          baby_step_value += babystep_unit[curUnit] * encoderPosition;
-          encoderPosition = 0;
+          float diff = baby_step_value - BABYSTEP_MIN_VALUE;
+          max_unit = (diff > max_unit) ? max_unit : diff;
+
+          mustStoreCmd("M290 Z-%.2f\n", max_unit);
+          baby_step_value -= max_unit;
         }
-      #endif
-      break;
+        break;
+
+      // increase babystep / z-offset
+      case KEY_ICON_3:
+        if (baby_step_value < BABYSTEP_MAX_VALUE)
+        {
+          float diff = BABYSTEP_MAX_VALUE - baby_step_value;
+          max_unit = (diff > max_unit) ? max_unit : diff;
+
+          mustStoreCmd("M290 Z%.2f\n", max_unit);
+          baby_step_value += max_unit;
+        }
+        break;
+
+      // change step unit
+      case KEY_ICON_5:
+        curUnit = (curUnit + 1) % ITEM_BABYSTEP_UNIT_NUM;
+        babyStepItems.items[key_num] = itemBabyStepUnit[curUnit];
+        menuDrawItem(&babyStepItems.items[key_num], key_num);
+        break;
+
+      // reset babystep to default value
+      case KEY_ICON_6:
+        babySetDefaultOffset();
+        break;
+
+      case KEY_ICON_7:
+        infoMenu.cur--;
+        break;
+
+      default:
+        #if LCD_ENCODER_SUPPORT
+          if (encoderPosition)
+          {
+            mustStoreCmd("M290 Z%.2f\n", babystep_unit[curUnit] * encoderPosition);
+            baby_step_value += babystep_unit[curUnit] * encoderPosition;
+            encoderPosition = 0;
+          }
+        #endif
+        break;
     }
 
     if (now != baby_step_value)
@@ -174,6 +174,7 @@ void menuBabyStep(void)
       now = baby_step_value;
       babyStepReDraw();
     }
+
     loopProcess();
   }
 }

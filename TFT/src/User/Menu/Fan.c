@@ -59,11 +59,11 @@ void fanSpeedReDraw(void)
 
   if(infoSettings.fan_percentage == 1)
   {
-   sprintf(fan_s, "%d%%", (int)((fanSpeed[curIndex]*100)/255));
+    sprintf(fan_s, "%d%%", (int)((fanSpeed[curIndex] * 100) / 255));
   }
   else
   {
-   sprintf(fan_s, "%d", (int)(fanSpeed[curIndex]));
+    sprintf(fan_s, "%d", (int)(fanSpeed[curIndex]));
   }
 
   float size = strlen(fan_s);
@@ -77,18 +77,19 @@ void showFanSpeed(void)
 {
   const GUI_RECT rect = {exhibitRect.x0, CENTER_Y - BYTE_HEIGHT, exhibitRect.x1, CENTER_Y};
   GUI_ClearRect(rect.x0, rect.y0, rect.x1, rect.y1);
-  GUI_DispStringInPrect(&rect, (u8*)fanID[curIndex]);
+  GUI_DispStringInPrect(&rect, (u8 *)fanID[curIndex]);
 
   fanSpeedReDraw();
 }
 
 void menuFan(void)
 {
+  // 1 title, ITEM_PER_PAGE items (icon + label)
   MENUITEMS fanItems = {
-  //   title
+  // title
   LABEL_FAN,
   // icon                       label
-  {{ICON_DEC,                  LABEL_DEC},
+   {{ICON_DEC,                  LABEL_DEC},
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
     {ICON_INC,                  LABEL_INC},
@@ -97,7 +98,6 @@ void menuFan(void)
     {ICON_STOP,                 LABEL_STOP},
     {ICON_BACK,                 LABEL_BACK},}
   };
-
 
   u8 nowIndex = curIndex;
   u8 nowFanSpeed[infoSettings.fan_count];
@@ -210,6 +210,7 @@ void menuFan(void)
       nowIndex = curIndex;
       showFanSpeed();
     }
+
     if(nowFanSpeed[curIndex] != fanSpeed[curIndex])
     {
       nowFanSpeed[curIndex] = fanSpeed[curIndex];
@@ -217,9 +218,10 @@ void menuFan(void)
       if(send_waiting[curIndex] != true)
       {
         send_waiting[curIndex] = true;
-        storeCmd("%s ", fanCmd[curIndex]);
+        storeCmd("%s S%d\n", fanCmd[curIndex],fanSpeed[curIndex]);
       }
     }
+
     loopProcess();
   }
 }
