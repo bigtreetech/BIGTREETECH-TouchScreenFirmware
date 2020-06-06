@@ -164,7 +164,7 @@ void menuSpeed(void)
       if(send_waiting[item_percentage_i] != true)
       {
         send_waiting[item_percentage_i] = true;
-        storeCmd("%s S%d\n",speedCmd[item_percentage_i]);
+        storeCmd("%s S%d\n",speedCmd[item_percentage_i], percentage[item_percentage_i]);
       }
     }
     loopProcess();
