@@ -200,7 +200,7 @@ void parseACK(void)
         avoid_terminal = !infoSettings.terminalACK;
         updateNextHeatCheckTime();
       }
-      else if(ack_seen("X:") && ack_index == 2)
+      else if((ack_seen("X:") && ack_index == 2) || ack_seen("C: X:")) // Smoothieware axis position starts with "C: X:"
       {
         storegantry(0, ack_value());
         if (ack_seen("Y:"))
