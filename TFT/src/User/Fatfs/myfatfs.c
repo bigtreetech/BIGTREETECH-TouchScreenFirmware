@@ -48,6 +48,8 @@ bool scanPrintFilesFatFs(void)
     if ((finfo.fattrib&AM_DIR) == AM_DIR)
     {
       if (infoFile.F_num >= FOLDER_NUM)  continue;
+	  
+      if (strstr(finfo.fname, ".CUR") != NULL)  continue; // ignore TFTxx.CUR folder
 
       infoFile.folder[infoFile.F_num] = malloc(len);
       if (infoFile.folder[infoFile.F_num] == NULL)  break;
