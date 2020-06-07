@@ -23,7 +23,7 @@ const ITEM itemPercentUnit[ITEM_PERCENT_UNIT_NUM] = {
   {ICON_E_10_PERCENT,         LABEL_10_PERCENT},
 };
 const  u8 item_percent_unit[ITEM_PERCENT_UNIT_NUM] = {1, 5, 10};
-static u8 item_percent_unit_i = 1;
+static u8 item_percent_unit_i = 0;
 
 static bool send_waiting[ITEM_PERCENTAGE_NUM];
 
@@ -32,29 +32,22 @@ void speedSetSendWaiting(u8 tool, bool isWaiting)
   send_waiting[tool] = isWaiting;
 }
 
-/* ���õ�ǰ�İٷֱ� */
+
 void speedSetPercent(u8 tool, u16 per)
 {
   percentage[tool]=limitValue(10, per, 999);
 }
-/* ��õ�ǰ�İٷֱ�? */
+
 u16 speedGetPercent(u8 tool)
 {
   return percentage[tool];
 }
 
-void percentageReDraw(void)
+void percentageReDraw(char * title)
 {
-  GUI_POINT point_of = {CENTER_X - BYTE_WIDTH*2, CENTER_Y - BYTE_HEIGHT/2};
-  char tempstr[20];
-  sprintf(tempstr,"% 4d%%",percentage[item_percentage_i]);
-  GUI_DispString(point_of.x,point_of.y,(u8*)tempstr);
-}
-
-void showPercentage(u8* title)
-{
-  //GUI_DispString(exhibitRect.x0, CENTER_Y - BYTE_HEIGHT/2, title);
-  percentageReDraw();
+  char tempstr[25];
+  sprintf(tempstr,"%-7s: % 4d%%", title, percentage[item_percentage_i]);
+  GUI_DispStringInPrect(&exhibitRect,(u8*)tempstr);
 }
 
 void menuSpeed(void)
@@ -73,6 +66,8 @@ void menuSpeed(void)
     {ICON_BACK,                 LABEL_BACK},}
   };
 
+  percentageItems.items[KEY_ICON_5] = itemPercentUnit[item_percent_unit_i];
+
   storeCmd("M220\nM221\n");
   KEY_VALUES  key_num=KEY_IDLE;
   u16         now[ITEM_PERCENTAGE_NUM];
@@ -81,7 +76,7 @@ void menuSpeed(void)
   now[i] = percentage[i];
 
   menuDrawPage(&percentageItems);
-  showPercentage((u8*)textSelect(percentageItems.title.index));
+  percentageReDraw((char*)textSelect(percentageItems.title.index));
 
   #if LCD_ENCODER_SUPPORT
     encoderPosition = 0;
@@ -105,6 +100,7 @@ void menuSpeed(void)
       case KEY_ICON_3:
         if(percentage[item_percentage_i] < 999)
         {
+          storeCmd("%d , %d\n",percentage[item_percentage_i],item_percent_unit[item_percent_unit_i]);
           percentage[item_percentage_i] =
             limitValue( 10,
                         percentage[item_percentage_i] + item_percent_unit[item_percent_unit_i],
@@ -118,7 +114,7 @@ void menuSpeed(void)
         menuDrawItem(&percentageItems.items[key_num], key_num);
         percentageItems.title.index = itemPercentageTitle[item_percentage_i];
         menuDrawTitle(textSelect(percentageItems.title.index));
-        showPercentage((u8*)textSelect(percentageItems.title.index));
+        percentageReDraw((char*)textSelect(percentageItems.title.index));
         break;
 
       case KEY_ICON_5:
@@ -160,7 +156,7 @@ void menuSpeed(void)
     if(now[item_percentage_i] != percentage[item_percentage_i])
     {
       now[item_percentage_i] = percentage[item_percentage_i];
-      percentageReDraw();
+      percentageReDraw((char*)textSelect(percentageItems.title.index));
       if(send_waiting[item_percentage_i] != true)
       {
         send_waiting[item_percentage_i] = true;
