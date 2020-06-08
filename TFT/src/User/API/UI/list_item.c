@@ -396,7 +396,7 @@ void ListItem_Display(const GUI_RECT* rect, uint8_t position, const LISTITEM * c
     {
     case LIST_LABEL:
       if(curitem->icon != ICONCHAR_BLANK) {
-        DrawCharIcon(rect,LEFT_CENTER,curitem->icon, infoSettings.bg_color);
+        DrawCharIcon(rect,LEFT_CENTER,curitem->icon, true, infoSettings.bg_color);
         pos.x += (BYTE_HEIGHT + 1);
        }
       textarea_width = LISTITEM_WIDTH - (pos.x + 1); //width after removing the width for icon
