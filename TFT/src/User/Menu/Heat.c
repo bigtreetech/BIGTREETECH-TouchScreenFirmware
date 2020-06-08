@@ -2,9 +2,32 @@
 #include "includes.h"
 
 #define HEAT_TOGGLE_ICON    0
-#define NOZZLE_ICON         1
-#define BED_ICON            2
+#define DEC_BUTTON          8
+#define NUM_BUTTON          9
+#define INC_BUTTON          10
 #define PREHEAT_TOGGLE_ICON 4
+
+#define ACTION_BAR_LEFT     (ICON_WIDTH+SPACE_X+START_X)
+#define ACTION_BAR_WIDTH    (2*ICON_WIDTH + SPACE_X)
+#define ACTION_BAR_BOTTOM   (ICON_HEIGHT+ICON_START_Y)
+#define ACTION_BAR_TOP      (ACTION_BAR_BOTTOM-SMALLICON_HEIGHT)
+#define ACTION_BUTTON_COUNT 3
+
+const GUI_RECT rect_of_HeatMenu[ITEM_PER_PAGE*2]={
+  //8 icons area
+  {0*ICON_WIDTH+0*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  1*ICON_WIDTH+0*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
+  {0,0,0,0},
+  {0,0,0,0},
+  {3*ICON_WIDTH+3*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  4*ICON_WIDTH+3*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
+  {0*ICON_WIDTH+0*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  1*ICON_WIDTH+0*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
+  {1*ICON_WIDTH+1*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  2*ICON_WIDTH+1*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
+  {2*ICON_WIDTH+2*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  3*ICON_WIDTH+2*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
+  {3*ICON_WIDTH+3*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  4*ICON_WIDTH+3*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
+
+  {ACTION_BAR_LEFT,                                      ACTION_BAR_TOP, ACTION_BAR_LEFT+SMALLICON_WIDTH,                       ACTION_BAR_BOTTOM},
+  {ACTION_BAR_LEFT+(ACTION_BAR_WIDTH-SMALLICON_WIDTH)/2, ACTION_BAR_TOP, ACTION_BAR_LEFT+(ACTION_BAR_WIDTH+SMALLICON_WIDTH)/2,  ACTION_BAR_BOTTOM},
+  {ACTION_BAR_LEFT+ACTION_BAR_WIDTH-SMALLICON_WIDTH,     ACTION_BAR_TOP, ACTION_BAR_LEFT+ACTION_BAR_WIDTH,                      ACTION_BAR_BOTTOM},
+};
 
 //1 title, ITEM_PER_PAGE items (icon + label)
 MENUITEMS heatItems = {
@@ -12,8 +35,8 @@ MENUITEMS heatItems = {
 LABEL_HEAT,
 // icon                       label
  {{ICON_NOZZLE,               LABEL_NOZZLE},
-  {ICON_STATUS_NOZZLE,        LABEL_BACKGROUND},
-  {ICON_STATUS_BED,           LABEL_BACKGROUND},
+  {ICON_BACKGROUND,           LABEL_BACKGROUND},
+  {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_STOP,                 LABEL_STOP},
   {ICON_PREHEAT,              LABEL_PREHEAT},
   {ICON_PREHEAT_BOTH,         LABEL_PREHEAT_BOTH},
@@ -73,11 +96,8 @@ void heatSyncTargetTemp(TOOL tool, u16 temp)
 {
   lastHeater.T[tool].target = heater.T[tool].target = temp;
 
-  if (infoMenu.menu[infoMenu.cur] == menuHeat)
-  {
-    if(tool == BED || tool == heater.nozzle)
+  if (infoMenu.menu[infoMenu.cur] == menuHeat && tool == heater.tool)
       showTemperature(tool);
-  }
 }
 
 /*Get target temperature */
@@ -144,9 +164,6 @@ void heatSetCurrentTool(TOOL tool)
 {
   if(tool >= HEATER_COUNT) return;
   heater.tool = tool;
-  // This is a rough hack with a hardcode to menu item.
-  // I couldn't figure out, how to make it correctly.
-  heatItems.items[KEY_ICON_4] = itemTool[tool];
 }
 /* Get current tool, nozzle or hot bed */
 TOOL heatGetCurrentTool(void)
@@ -192,42 +209,43 @@ bool heatGetSendWaiting(TOOL tool)
   return send_waiting[tool];
 }
 
-//Show/draw temperature in heat menu
-void showTemperature(TOOL tool)
+// get key press index
+KEY_VALUES key_val(void)
 {
-  if(isEditing) return; // prevent displaying temperatures while numpad is open.
-
-  LIVE_INFO lvIcon;
-  lvIcon.enabled[0] = true;
-  lvIcon.enabled[1] = true;
-  lvIcon.enabled[2] = false;
-
-  //Tool ID properties
-  lvIcon.lines[0].h_align = RIGHT;
-  lvIcon.lines[0].v_align = TOP;
-  lvIcon.lines[0].fn_color = LCD_WHITE;
-  lvIcon.lines[0].text_mode = GUI_TEXTMODE_TRANS;
-  lvIcon.lines[0].pos = ss_title_point;
-
-  //Tool temp properties
-  lvIcon.lines[1].h_align = CENTER;
-  lvIcon.lines[1].v_align = CENTER;
-  lvIcon.lines[1].fn_color = LCD_BLACK;
-  lvIcon.lines[1].text_mode = GUI_TEXTMODE_TRANS;
-  lvIcon.lines[1].pos = ss_val_point;
-
-  lvIcon.lines[0].text =  (u8 *)heatDisplayID[tool];
-
-  char tempstr[20];
-  sprintf(tempstr, "%d/%d", heatGetCurrentTemp(tool), heatGetTargetTemp(tool));
-  lvIcon.lines[1].text = (u8 *)tempstr;
-  uint8_t i = (tool == BED) ? 2 : 1;
-  showLiveInfo(i,&lvIcon,&heatItems.items[i]);
-
-  GUI_ClearPrect(&rect_of_key[ITEM_PER_PAGE + i]);
+  return (KEY_VALUES)KEY_GetValue(COUNT(rect_of_HeatMenu), rect_of_HeatMenu);
 }
 
-//Redraw Preheat icon details
+// draw icon press aor action bar and pass
+void IconRedraw(u8 position, u8 ispressed)
+{
+  if (position <= KEY_ICON_7)
+    {
+      itemDrawIconPress(position, ispressed);
+    }
+  else if(position <= INC_BUTTON)
+  {
+    if (!ispressed)
+    {
+    GUI_SetColor(infoSettings.bg_color);
+    }
+    GUI_DrawRect(rect_of_HeatMenu[position].x0-2,rect_of_HeatMenu[position].y0-2,rect_of_HeatMenu[position].x1+2,rect_of_HeatMenu[position].y1+2);
+    GUI_SetColor(infoSettings.font_color);
+  }
+}
+
+// Show/draw temperature in heat menu
+void showTemperature(TOOL tool)
+{
+  char tempstr[40];
+  char val[15];
+  sprintf(val,"%d/%d",heatGetCurrentTemp(tool), heatGetTargetTemp(tool));
+  sprintf(tempstr, "%-3s %7s",heatDisplayID[tool], val);
+  setLargeFont(true);
+  GUI_DispStringInRect(exhibitRect.x0,exhibitRect.y0,exhibitRect.x1,exhibitRect.y0+BYTE_HEIGHT,(u8*)tempstr);
+  setLargeFont(false);
+}
+
+// Redraw Preheat icon details
 void refreshPreheatIcon(int8_t num)
 {
   STRINGS_STORE preheatnames;
@@ -275,9 +293,12 @@ void refreshHeatPage(void)
 {
   heatItems.items[HEAT_TOGGLE_ICON] = itemTool[heater.tool];
   menuDrawPage(&heatItems);
-  showTemperature(heater.nozzle);
-  showTemperature(BED);
+  SMALLICON_ReadDisplay(rect_of_HeatMenu[DEC_BUTTON].x0, rect_of_HeatMenu[DEC_BUTTON].y0, SMALL_ICON_DEC);
+  SMALLICON_ReadDisplay(rect_of_HeatMenu[NUM_BUTTON].x0, rect_of_HeatMenu[NUM_BUTTON].y0, SMALL_ICON_NUMPAD);
+  SMALLICON_ReadDisplay(rect_of_HeatMenu[INC_BUTTON].x0, rect_of_HeatMenu[INC_BUTTON].y0, SMALL_ICON_INC);
+  showTemperature(heater.tool);
   refreshPreheatIcon(preheat_selected);
+  TSC_ReDrawIcon = IconRedraw;
 }
 
 void menuHeat(void)
@@ -296,32 +317,17 @@ void menuHeat(void)
 
   while(infoMenu.menu[infoMenu.cur] == menuHeat)
   {
-    key_num = menuKeyGetValue();
+    key_num = key_val();
     switch(key_num)
     {
       case KEY_ICON_0:
         lastHeater.tool = heater.tool = (TOOL)((heater.tool + 1) % (HEATER_COUNT));
         heatItems.items[key_num] = itemTool[heater.tool];
         menuDrawItem(&heatItems.items[key_num], key_num);
-
         heatSetCurrentToolNozzle(heater.tool);
-        showTemperature(heatGetCurrentToolNozzle());
+        showTemperature(heater.tool);
         break;
 
-      case KEY_ICON_1:
-      case KEY_ICON_2:
-      {
-        isEditing = true;
-        TOOL i = (key_num == NOZZLE_ICON) ? heatGetCurrentToolNozzle() : BED;
-        ICON_CHAR charicon = (key_num == NOZZLE_ICON) ? ICONCHAR_NOZZLE : ICONCHAR_BED;
-        char tempname[20];
-        sprintf(tempname, "%s %s",(char*)IconCharSelect(charicon), heatDisplayID[i]);
-        uint16_t v = numPadInt((u8*)tempname, heater.T[i].target,false);
-        isEditing = false;
-        heatSetTargetTemp(i, v);
-        refreshHeatPage();
-        break;
-      }
       case KEY_ICON_3:
         heater.T[heater.tool].target = 0;
         break;
@@ -354,6 +360,27 @@ void menuHeat(void)
         }
         break;
 
+    case DEC_BUTTON:
+      heater.T[heater.tool].target =
+          limitValue(0, heater.T[heater.tool].target - 1, infoSettings.max_temp[heater.tool]);
+      break;
+
+    case NUM_BUTTON:
+      isEditing = true;
+      ICON_CHAR charicon = (heater.tool == BED) ? ICONCHAR_BED : ICONCHAR_NOZZLE;
+      char tempname[20];
+      sprintf(tempname, "%s %s", (char *)IconCharSelect(charicon), heatDisplayID[heater.tool]);
+      uint16_t v = numPadInt((u8 *)tempname, heater.T[heater.tool].target, false);
+      isEditing = false;
+      heatSetTargetTemp(heater.tool, v);
+      refreshHeatPage();
+      break;
+
+    case INC_BUTTON:
+      heater.T[heater.tool].target =
+          limitValue(0, heater.T[heater.tool].target + 1, infoSettings.max_temp[heater.tool]);
+      break;
+
       case KEY_ICON_7:
         infoMenu.cur--;
         break;
@@ -378,24 +405,10 @@ void menuHeat(void)
         break;
     }
 
-    //update bed temp display
-    if(lastHeater.T[BED].current != heater.T[BED].current || lastHeater.T[BED].target != heater.T[BED].target)
-      {
-        lastHeater.T[BED].current = heater.T[BED].current;
-        showTemperature(BED);
-      }
-
-    //update hotend temp display
-    if(lastHeater.nozzle != heater.nozzle)
+    if(lastHeater.T[heater.tool].current != heater.T[heater.tool].current || lastHeater.T[heater.tool].target != heater.T[heater.tool].target)
     {
-      lastHeater.nozzle = heater.nozzle;
-      showTemperature(heater.nozzle);
-    }
-
-    if(lastHeater.T[heater.nozzle].current != heater.T[heater.nozzle].current || lastHeater.T[heater.nozzle].target != heater.T[heater.nozzle].target)
-    {
-      lastHeater.T[heater.nozzle].current = heater.T[heater.nozzle].current;
-      showTemperature(heater.nozzle);
+      lastHeater.T[heater.tool].current = heater.T[heater.tool].current;
+      showTemperature(heater.tool);
     }
 
     loopProcess();

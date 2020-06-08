@@ -32,7 +32,6 @@ void speedSetSendWaiting(u8 tool, bool isWaiting)
   send_waiting[tool] = isWaiting;
 }
 
-
 void speedSetPercent(u8 tool, u16 per)
 {
   percentage[tool]=limitValue(10, per, 999);
@@ -45,9 +44,12 @@ u16 speedGetPercent(u8 tool)
 
 void percentageReDraw(char * title)
 {
-  char tempstr[25];
-  sprintf(tempstr,"%-7s: % 4d%%", title, percentage[item_percentage_i]);
+  GUI_DispString(exhibitRect.x0, exhibitRect.y0,(u8*)title);
+  char tempstr[10];
+  setLargeFont(true);
+  sprintf(tempstr,"% 4d%%", percentage[item_percentage_i]);
   GUI_DispStringInPrect(&exhibitRect,(u8*)tempstr);
+  setLargeFont(false);
 }
 
 void menuSpeed(void)
@@ -114,6 +116,7 @@ void menuSpeed(void)
         menuDrawItem(&percentageItems.items[key_num], key_num);
         percentageItems.title.index = itemPercentageTitle[item_percentage_i];
         menuDrawTitle(textSelect(percentageItems.title.index));
+        GUI_ClearPrect(&exhibitRect);
         percentageReDraw((char*)textSelect(percentageItems.title.index));
         break;
 

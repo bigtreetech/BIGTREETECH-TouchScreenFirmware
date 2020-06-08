@@ -11,6 +11,13 @@
   #define BYTE_WIDTH  (BYTE_HEIGHT/2)
 #endif
 
+#ifndef LARGE_BYTE_HEIGHT
+  #define LARGE_BYTE_HEIGHT 32
+#endif
+#ifndef LARGE_BYTE_WIDTH
+  #define LARGE_BYTE_WIDTH  18
+#endif
+
 #define ICON_WIDTH   95
 #define ICON_HEIGHT  95
 #define TITLE_END_Y  40
@@ -22,8 +29,8 @@
 #define INFOBOX_WIDTH     215
 #define INFOBOX_HEIGHT    95
 
-#define SMALLICON_WIDTH   24
-#define SMALLICON_HEIGHT  24
+#define SMALLICON_WIDTH   65
+#define SMALLICON_HEIGHT  55
 
 // Status screen menu
 #define SSICON_VAL_Y0             75

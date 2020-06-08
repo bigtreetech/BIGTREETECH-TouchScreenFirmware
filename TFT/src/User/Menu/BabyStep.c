@@ -67,14 +67,15 @@ void babySetDefaultOffset(void)
 
 void babyStepReDraw(void)
 {
-  GUI_POINT point_bs = {exhibitRect.x1, CENTER_Y - BYTE_HEIGHT};
-  GUI_POINT point_of = {exhibitRect.x1, CENTER_Y};
-
+  GUI_POINT point_bs = {exhibitRect.x1, exhibitRect.y0 + BYTE_HEIGHT};
+  GUI_POINT point_of = {exhibitRect.x1, exhibitRect.y0 + BYTE_HEIGHT*2 + LARGE_BYTE_HEIGHT};
+  setLargeFont(true);
   char tempstr[20];
-  sprintf(tempstr, ":% 6.2f", baby_step_value);
+  sprintf(tempstr, "% 6.2f", baby_step_value);
   GUI_DispStringRight(point_bs.x, point_bs.y, (u8 *)tempstr);
-  sprintf(tempstr, ":% 6.2f", orig_z_offset + baby_step_value);
+  sprintf(tempstr, "% 6.2f", orig_z_offset + baby_step_value);
   GUI_DispStringRight(point_of.x, point_of.y, (u8 *)tempstr);
+  setLargeFont(false);
 }
 
 void menuBabyStep(void)
@@ -101,8 +102,8 @@ void menuBabyStep(void)
   babyStepItems.items[KEY_ICON_5] = itemBabyStepUnit[curUnit];
   menuDrawPage(&babyStepItems);
 
-  GUI_DispString(exhibitRect.x0, CENTER_Y - BYTE_HEIGHT, textSelect(LABEL_BABYSTEP));
-  GUI_DispString(exhibitRect.x0, CENTER_Y, textSelect(LABEL_Z_OFFSET));
+  GUI_DispString(exhibitRect.x0, exhibitRect.y0, textSelect(LABEL_BABYSTEP));
+  GUI_DispString(exhibitRect.x0, exhibitRect.y0 + BYTE_HEIGHT + LARGE_BYTE_HEIGHT, textSelect(LABEL_Z_OFFSET));
 
   babyStepReDraw();
 

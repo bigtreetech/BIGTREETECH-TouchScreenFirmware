@@ -42,23 +42,15 @@ static float extrudeCoordinate = 0.0f;
 
 void extrudeCoordinateReDraw(void)
 {
-  const GUI_RECT rect = {exhibitRect.x0, CENTER_Y, exhibitRect.x1, CENTER_Y+BYTE_HEIGHT};
+  setLargeFont(true);
   char buf[36];
-  my_sprintf(buf, "%.2f", extrudeCoordinate);
-  GUI_ClearRect(rect.x0, rect.y0, rect.x1, rect.y1);
-  GUI_DispStringInPrect(&rect, (u8*)buf);
+  sprintf(buf, "%s: % 7.2f",extruderDisplayID[item_extruder_i], extrudeCoordinate);
+  GUI_DispStringInPrect(&exhibitRect, (u8*)buf);
+  setLargeFont(false);
 }
 
 const char* tool_change[] =  TOOL_CHANGE;
 const char* extruderDisplayID[] = EXTRUDER_ID;
-
-void showExtrudeCoordinate(void)
-{
-  const GUI_RECT rect = {exhibitRect.x0, CENTER_Y-BYTE_HEIGHT, exhibitRect.x1, CENTER_Y};
-  GUI_ClearRect(rect.x0, rect.y0, rect.x1, rect.y1);
-  GUI_DispStringInPrect(&rect, (u8*)extruderDisplayID[item_extruder_i]);
-  extrudeCoordinateReDraw();
-}
 
 void menuExtrude(void)
 {
@@ -74,7 +66,7 @@ void menuExtrude(void)
   eRelative = eGetRelative();
 
   menuDrawPage(&extrudeItems);
-  showExtrudeCoordinate();
+  extrudeCoordinateReDraw();
 
   #if LCD_ENCODER_SUPPORT
     encoderPosition = 0;
@@ -95,7 +87,7 @@ void menuExtrude(void)
 
       case KEY_ICON_4:
         item_extruder_i = (item_extruder_i + 1) % infoSettings.ext_count;
-        showExtrudeCoordinate();
+        extrudeCoordinateReDraw();
         break;
 
       case KEY_ICON_5:

@@ -513,7 +513,7 @@ void ListItem_DisplayCustomValue(const GUI_RECT* rect,LABEL value,int i)
   GUI_ClearPrect(&rectVal);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 
-  GUI_SetColor(infoSettings.bg_color);
+  GUI_SetColor(infoSettings.list_border_color);
 
   GUI_DrawPrect(&rectVal);
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);

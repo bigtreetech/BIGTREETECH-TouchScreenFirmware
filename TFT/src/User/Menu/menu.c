@@ -66,6 +66,7 @@ void GUI_RestoreColorDefault(void){
   GUI_SetColor(infoSettings.font_color);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
   GUI_SetNumMode(GUI_NUMMODE_SPACE);
+  setLargeFont(false);
 }
 
 static const MENUITEMS *curMenuItems = NULL;   //current menu
@@ -514,8 +515,8 @@ void loopFrontEnd(void)
 
   loopBusySignClear();                //Busy Indicator clear
 
-  temp_Change();  
-  
+  temp_Change();
+
 #ifdef FIL_RUNOUT_PIN
   loopFrontEndFILRunoutDetect();
 #endif

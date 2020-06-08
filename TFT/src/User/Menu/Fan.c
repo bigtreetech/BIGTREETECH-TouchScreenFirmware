@@ -55,32 +55,20 @@ void fanSetSendWaiting(u8 i, bool isWaiting)
 
 void fanSpeedReDraw(void)
 {
-  char fan_s[5];
-
+  setLargeFont(true);
+  char fan_s[15];
   if(infoSettings.fan_percentage == 1)
   {
-    sprintf(fan_s, "%d%%", (int)((fanSpeed[curIndex] * 100) / 255));
+    sprintf(fan_s, "%s: % 4d%%", fanID[curIndex], fanGetSpeedPercent(curIndex));
   }
   else
   {
-    sprintf(fan_s, "%d", (int)(fanSpeed[curIndex]));
+    sprintf(fan_s, "%s: % 4d", fanID[curIndex], (int)(fanSpeed[curIndex]));
   }
-
-  float size = strlen(fan_s);
-
-  const GUI_RECT rect2 = {exhibitRect.x0, CENTER_Y, exhibitRect.x1, CENTER_Y + BYTE_HEIGHT};
-  GUI_ClearRect(rect2.x0, rect2.y0, rect2.x1, rect2.y1);
-  GUI_DispString(CENTER_X - (int)((BYTE_WIDTH * (size - 1)) / 2), CENTER_Y, (u8 *)fan_s);
+  GUI_DispStringInPrect(&exhibitRect, (u8*)fan_s);
+  setLargeFont(false);
 }
 
-void showFanSpeed(void)
-{
-  const GUI_RECT rect = {exhibitRect.x0, CENTER_Y - BYTE_HEIGHT, exhibitRect.x1, CENTER_Y};
-  GUI_ClearRect(rect.x0, rect.y0, rect.x1, rect.y1);
-  GUI_DispStringInPrect(&rect, (u8 *)fanID[curIndex]);
-
-  fanSpeedReDraw();
-}
 
 void menuFan(void)
 {
@@ -110,7 +98,7 @@ void menuFan(void)
     fanItems.items[KEY_ICON_4] = itemFan[1];
 
   menuDrawPage(&fanItems);
-  showFanSpeed();
+  fanSpeedReDraw();
 
   #if LCD_ENCODER_SUPPORT
     encoderPosition = 0;
@@ -153,7 +141,7 @@ void menuFan(void)
         if (infoSettings.fan_count > 1)
         {
           curIndex = (curIndex + 1) % infoSettings.fan_count;
-          showFanSpeed();
+          fanSpeedReDraw();
         }
         else
         {
@@ -208,7 +196,7 @@ void menuFan(void)
     if(nowIndex != curIndex)
     {
       nowIndex = curIndex;
-      showFanSpeed();
+      fanSpeedReDraw();
     }
 
     if(nowFanSpeed[curIndex] != fanSpeed[curIndex])

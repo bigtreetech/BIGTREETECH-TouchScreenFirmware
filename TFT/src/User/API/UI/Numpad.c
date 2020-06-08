@@ -35,23 +35,33 @@ const GUI_RECT arrowRect        = {LCD_WIDTH/2 - BYTE_WIDTH, 0, LCD_WIDTH/2 + BY
 //get keypress for NumPad
 NUM_KEY_VALUES NumKeyGetValue(void)
 {
-  return (NUM_KEY_VALUES)KEY_GetValue(sizeof(rect_of_numkey)/sizeof(rect_of_numkey[0]), rect_of_numkey);
+  return (NUM_KEY_VALUES)KEY_GetValue(COUNT(rect_of_numkey), rect_of_numkey);
 }
 
+void keyPress(u8 index, u8 ispressed)
+{
+  if (index < KEY_NUM)
+  {
+    if(!ispressed)
+      GUI_SetColor(BLACK);
+    GUI_DrawRect(rect_of_numkey[index].x0+2, rect_of_numkey[index].y0+2, rect_of_numkey[index].x1-2, rect_of_numkey[index].y1-2);
+    GUI_SetColor(infoSettings.font_color);
+  }
+}
 void Draw_keyboard(u8 * title, bool NumberOnly, bool negative)
 {
-    TSC_ReDrawIcon = NULL;
+    TSC_ReDrawIcon = keyPress;
     GUI_ClearRect(0, 0, LCD_WIDTH, rect_of_numkey[0].y0);
     GUI_ClearRect(0, rect_of_numkey[0].y0, LCD_WIDTH, LCD_HEIGHT);
 
-    GUI_SetColor(lcd_colors[infoSettings.list_border_color]);
+    GUI_SetColor(infoSettings.list_border_color);
      //draw button borders
     for (int i = 0;i<3;i++){
       GUI_DrawLine(rect_of_numkey[i].x1,rect_of_numkey[i].y0,rect_of_numkey[12+i].x1,rect_of_numkey[12+i].y1);
       GUI_DrawLine(rect_of_numkey[i*4].x0,rect_of_numkey[i*4].y1,rect_of_numkey[3+i*4].x1,rect_of_numkey[3+i*4].y1);
     }
 
-    GUI_SetColor(lcd_colors[infoSettings.font_color]);
+    GUI_SetColor(infoSettings.font_color);
     // draw value display border line
     GUI_DrawLine(rect_of_numkey[0].x0,rect_of_numkey[0].y0,rect_of_numkey[3].x1,rect_of_numkey[3].y0);
 
@@ -84,7 +94,7 @@ float numPadFloat(u8* title, float old_val, bool negative)
     //bool exit = false;
     NUM_KEY_VALUES key_num = NUM_KEY_IDLE;
     touchSound = false;
-
+    setLargeFont(true);
     u8 nowIndex = 0,lastIndex = 0;
     char ParameterBuf[BUFLONG + 1] = {0};
     u8 prec = (old_val == 0) ? 0 : 2;
@@ -106,6 +116,7 @@ float numPadFloat(u8* title, float old_val, bool negative)
       {
       case NUM_KEY_EXIT:
         BUZZER_PLAY(sound_cancel);
+        setLargeFont(false);
         touchSound = true;
         return old_val;
 
@@ -183,6 +194,7 @@ float numPadFloat(u8* title, float old_val, bool negative)
               break;
             }
           BUZZER_PLAY(sound_ok);
+          setLargeFont(false);
           touchSound = true;
           return strtof(ParameterBuf, NULL);
         }
@@ -194,6 +206,7 @@ float numPadFloat(u8* title, float old_val, bool negative)
       {
         lastIndex = nowIndex;
         GUI_ClearPrect(&newParameterRect);
+        setLargeFont(true);
         GUI_DispStringInPrect(&newParameterRect, (u8 *)ParameterBuf);
       }
       loopBackEnd();
@@ -205,6 +218,7 @@ int32_t numPadInt(u8* title, int32_t old_val, bool negative)
 {
     NUM_KEY_VALUES key_num = NUM_KEY_IDLE;
     touchSound = false;
+    setLargeFont(true);
 
     int32_t val = old_val, lastval = 0;
     uint8_t len = 0;
@@ -224,6 +238,7 @@ int32_t numPadInt(u8* title, int32_t old_val, bool negative)
 
     sprintf(ParameterBuf,"%i",val);
     len = strlen(ParameterBuf);
+    setLargeFont(true);
     GUI_DispStringInPrect(&newParameterRect, (u8 *)ParameterBuf);
 
     while (1)
@@ -233,6 +248,7 @@ int32_t numPadInt(u8* title, int32_t old_val, bool negative)
       {
       case NUM_KEY_EXIT:
         BUZZER_PLAY(sound_cancel);
+        setLargeFont(false);
         touchSound = true;
         return old_val;
         break;
@@ -283,6 +299,7 @@ int32_t numPadInt(u8* title, int32_t old_val, bool negative)
 
       case NUM_KEY_OK:
         BUZZER_PLAY(sound_ok);
+        setLargeFont(false);
         touchSound = true;
         return (val * neg);
 
@@ -297,6 +314,7 @@ int32_t numPadInt(u8* title, int32_t old_val, bool negative)
         char * n = (neg > 0) ? "" : "-";
         GUI_ClearPrect(&newParameterRect);
         sprintf(ParameterBuf, "%s%i", n, val);
+        setLargeFont(true);
         GUI_DispStringInPrect(&newParameterRect, (u8 *)ParameterBuf);
       }
       loopBackEnd();

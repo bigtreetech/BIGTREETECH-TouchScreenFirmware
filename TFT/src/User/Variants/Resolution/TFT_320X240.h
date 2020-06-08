@@ -11,6 +11,13 @@
   #define BYTE_WIDTH  (BYTE_HEIGHT/2)
 #endif
 
+#ifndef LARGE_BYTE_HEIGHT
+  #define LARGE_BYTE_HEIGHT 24
+#endif
+#ifndef LARGE_BYTE_WIDTH
+  #define LARGE_BYTE_WIDTH  (LARGE_BYTE_HEIGHT/2)
+#endif
+
 #define ICON_WIDTH   70
 #define ICON_HEIGHT  70
 #define TITLE_END_Y  30
@@ -22,8 +29,8 @@
 #define INFOBOX_WIDTH     150
 #define INFOBOX_HEIGHT    70
 
-#define SMALLICON_WIDTH   16
-#define SMALLICON_HEIGHT  16
+#define SMALLICON_WIDTH   45
+#define SMALLICON_HEIGHT  40
 
 // Status screen menu
 #define SSICON_VAL_Y0             55
@@ -35,7 +42,6 @@
 #define STATUS_MSG_BODY_YOFFSET   45
 #define STATUS_MSG_BODY_BOTTOM    4
 #define STATUS_TITLE_SHORT        10
-#define SS_ICON_START_Y           30
 #define STATUS_GANTRY_YOFFSET     4
 
 //Heating Menu

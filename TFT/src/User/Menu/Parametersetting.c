@@ -424,7 +424,7 @@ void show_GlobalInfo(void)
 
 void drawGlobalInfo(void){
   char tempstr[10];
-  GUI_SetBkColor(TITLE_BACKGROUND_COLOR);
+  GUI_SetBkColor(infoSettings.title_bg_color);
   GUI_ClearRect(LCD_WIDTH/3, 0, LCD_WIDTH, BYTE_HEIGHT);
 
   //global nozzle
@@ -436,5 +436,5 @@ void drawGlobalInfo(void){
   lcd_frame_display(ICON_BED_X, 0, 2*BYTE_WIDTH, BYTE_HEIGHT, ICON_ADDR(ICON_GLOBAL_BED));
   my_sprintf(tempstr, "%d/%d", heatGetCurrentTemp(BED), heatGetTargetTemp(BED));
   GUI_DispStringInRect(VALUE_BED_X,0,VALUE_BED_X+8*BYTE_WIDTH,BYTE_HEIGHT, (u8 *)tempstr);
-  GUI_SetBkColor(BACKGROUND_COLOR);
+  GUI_SetBkColor(infoSettings.bg_color);
 }

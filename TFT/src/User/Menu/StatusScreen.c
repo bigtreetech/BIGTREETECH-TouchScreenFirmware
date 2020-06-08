@@ -307,7 +307,7 @@ void menuStatus(void)
     switch (key_num)
     {
       case KEY_ICON_0:
-        heatSetCurrentToolNozzle(current_tool);
+        heatSetCurrentTool(current_tool);
         infoMenu.menu[++infoMenu.cur] = menuHeat;
         break;
       case KEY_ICON_1:
