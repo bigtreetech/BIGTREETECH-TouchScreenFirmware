@@ -137,7 +137,7 @@ void drawTemperature(void)
 
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
   GUI_SetColor(GANTRYLBL_COLOR);
-  GUI_SetBkColor(lcd_colors[infoSettings.status_xyz_bg_color]);
+  GUI_SetBkColor(infoSettings.status_xyz_bg_color);
   my_sprintf(tempstr, "   X: %.2f   Y: %.2f   Z: %.2f   ", xaxis, yaxis, zaxis);
   GUI_DispStringInPrect(&RecGantry,(u8 *)tempstr);
 
@@ -305,10 +305,10 @@ void menuStatus(void)
 {
   booted = true;
   KEY_VALUES key_num = KEY_IDLE;
-  GUI_SetBkColor(lcd_colors[infoSettings.bg_color]);
+  GUI_SetBkColor(infoSettings.bg_color);
   //set_status_icon();
   menuDrawPage(&StatusItems);
-  GUI_SetColor(lcd_colors[infoSettings.status_xyz_bg_color]);
+  GUI_SetColor(infoSettings.status_xyz_bg_color);
       //GUI_ClearPrect(&RecGantry);
   GUI_FillPrect(&RecGantry);
   drawTemperature();

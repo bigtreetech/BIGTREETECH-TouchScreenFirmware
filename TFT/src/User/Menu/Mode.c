@@ -33,8 +33,8 @@ void infoMenuSelect(void)
       #ifdef BUZZER_PIN
         Buzzer_Config();
       #endif
-      GUI_SetColor(lcd_colors[infoSettings.font_color]);
-      GUI_SetBkColor(lcd_colors[infoSettings.bg_color]);
+      GUI_SetColor(infoSettings.font_color);
+      GUI_SetBkColor(infoSettings.bg_color);
 
       if(infoSettings.unified_menu == 1) //if Unified menu is selected
         infoMenu.menu[infoMenu.cur] = menuStatus; //status screen as default screen on boot
@@ -75,8 +75,8 @@ void infoMenuSelect(void)
           knob_LED_DeInit();
         #endif
       #endif
-      GUI_SetColor(lcd_colors[infoSettings.marlin_mode_font_color]);
-      GUI_SetBkColor(lcd_colors[infoSettings.marlin_mode_bg_color]);
+      GUI_SetColor(infoSettings.marlin_mode_font_color);
+      GUI_SetBkColor(infoSettings.marlin_mode_bg_color);
       infoMenu.menu[infoMenu.cur] = menuST7920;
       break;
 

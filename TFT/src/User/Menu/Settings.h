@@ -49,14 +49,14 @@ typedef struct
   uint8_t  unified_menu;
   uint8_t  rotate_ui;
 
-  uint8_t  bg_color;
-  uint8_t  font_color;
-  uint8_t  title_bg_color;
-  uint8_t  reminder_color;
-  uint8_t  sd_reminder_color;
-  uint8_t  status_xyz_bg_color;
-  uint8_t  list_border_color;
-  uint8_t  list_button_color;
+  uint16_t bg_color;
+  uint16_t font_color;
+  uint16_t title_bg_color;
+  uint16_t reminder_color;
+  uint16_t sd_reminder_color;
+  uint16_t status_xyz_bg_color;
+  uint16_t list_border_color;
+  uint16_t list_button_color;
 
   uint8_t  silent;
   uint8_t  auto_off;
@@ -72,8 +72,8 @@ typedef struct
   uint8_t  lcd_idle_timer;
 
   uint8_t  serial_alwaysOn;
-  uint8_t  marlin_mode_bg_color;
-  uint8_t  marlin_mode_font_color;
+  uint16_t marlin_mode_bg_color;
+  uint16_t marlin_mode_font_color;
   uint8_t  marlin_mode_showtitle;
   uint8_t  marlin_mode_fullscreen;
 
