@@ -102,7 +102,6 @@ void menuSpeed(void)
       case KEY_ICON_3:
         if(percentage[item_percentage_i] < 999)
         {
-          storeCmd("%d , %d\n",percentage[item_percentage_i],item_percent_unit[item_percent_unit_i]);
           percentage[item_percentage_i] =
             limitValue( 10,
                         percentage[item_percentage_i] + item_percent_unit[item_percent_unit_i],

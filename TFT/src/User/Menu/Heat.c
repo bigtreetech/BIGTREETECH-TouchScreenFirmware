@@ -96,7 +96,7 @@ void heatSyncTargetTemp(TOOL tool, u16 temp)
 {
   lastHeater.T[tool].target = heater.T[tool].target = temp;
 
-  if (infoMenu.menu[infoMenu.cur] == menuHeat && tool == heater.tool)
+  if (TSC_ReDrawIcon == IconRedraw && tool == heater.tool)
       showTemperature(tool);
 }
 
@@ -216,7 +216,7 @@ KEY_VALUES key_val(void)
 }
 
 // draw icon press aor action bar and pass
-void IconRedraw(u8 position, u8 ispressed)
+ IconRedraw(u8 position, u8 ispressed)
 {
   if (position <= KEY_ICON_7)
     {
