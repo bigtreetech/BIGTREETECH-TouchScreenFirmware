@@ -159,11 +159,11 @@ void menuSpeed(void)
     {
       now[item_percentage_i] = percentage[item_percentage_i];
       percentageReDraw((char*)textSelect(percentageItems.title.index));
-      if(send_waiting[item_percentage_i] != true)
-      {
-        send_waiting[item_percentage_i] = true;
-        storeCmd("%s S%d\n",speedCmd[item_percentage_i], percentage[item_percentage_i]);
-      }
+      //if(send_waiting[item_percentage_i] != true)
+      //{
+        //send_waiting[item_percentage_i] = true;
+      storeCmd("%s S%d\n",speedCmd[item_percentage_i], percentage[item_percentage_i]);
+      //}
     }
     loopProcess();
   }
