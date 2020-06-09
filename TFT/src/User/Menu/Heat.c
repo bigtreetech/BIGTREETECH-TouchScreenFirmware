@@ -84,6 +84,31 @@ static u8 preheatTools = 0;
 static u8 preheat_selected = 0;
 static bool isEditing = false;
 
+
+// get key press index
+KEY_VALUES key_val(void)
+{
+  return (KEY_VALUES)KEY_GetValue(COUNT(rect_of_HeatMenu), rect_of_HeatMenu);
+}
+
+// draw icon press aor action bar and pass
+ void IconRedraw(u8 position, u8 ispressed)
+{
+  if (position <= KEY_ICON_7)
+    {
+      itemDrawIconPress(position, ispressed);
+    }
+  else if(position <= INC_BUTTON)
+  {
+    if (!ispressed)
+    {
+    GUI_SetColor(infoSettings.bg_color);
+    }
+    GUI_DrawRect(rect_of_HeatMenu[position].x0-2,rect_of_HeatMenu[position].y0-2,rect_of_HeatMenu[position].x1+2,rect_of_HeatMenu[position].y1+2);
+    GUI_SetColor(infoSettings.font_color);
+  }
+}
+
 /*Set target temperature*/
 void heatSetTargetTemp(TOOL tool, u16 temp)
 {
@@ -207,30 +232,6 @@ void heatSetSendWaiting(TOOL tool, bool isWaiting)
 bool heatGetSendWaiting(TOOL tool)
 {
   return send_waiting[tool];
-}
-
-// get key press index
-KEY_VALUES key_val(void)
-{
-  return (KEY_VALUES)KEY_GetValue(COUNT(rect_of_HeatMenu), rect_of_HeatMenu);
-}
-
-// draw icon press aor action bar and pass
- IconRedraw(u8 position, u8 ispressed)
-{
-  if (position <= KEY_ICON_7)
-    {
-      itemDrawIconPress(position, ispressed);
-    }
-  else if(position <= INC_BUTTON)
-  {
-    if (!ispressed)
-    {
-    GUI_SetColor(infoSettings.bg_color);
-    }
-    GUI_DrawRect(rect_of_HeatMenu[position].x0-2,rect_of_HeatMenu[position].y0-2,rect_of_HeatMenu[position].x1+2,rect_of_HeatMenu[position].y1+2);
-    GUI_SetColor(infoSettings.font_color);
-  }
 }
 
 // Show/draw temperature in heat menu
