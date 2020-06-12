@@ -31,6 +31,16 @@ static FONT_BITMAP font[] = {
     BYTE_WIDTH * 2, // default "word_unicode.fon" dot matrix library font size is 24*24 / 16*16
     0x0,  // the first character in WORD_UNICODE is 0x0000
   },
+  { // Greek and Coptic
+    0x370,
+    0x3FF,
+    BYTE_HEIGHT,
+    BYTE_WIDTH,
+    WORD_UNICODE,
+    BYTE_HEIGHT,
+    BYTE_WIDTH * 2, // default "word_unicode.fon" dot matrix library font size is 24*24 / 16*16
+    0x0,  // the first character in WORD_UNICODE is 0x0000
+  },
   { // Cyrillic(Russia)
     0x400,
     0x451,

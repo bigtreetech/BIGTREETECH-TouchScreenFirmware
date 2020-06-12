@@ -202,6 +202,11 @@
 #define NOZZLE_PAUSE_E_FEEDRATE     6000 // (mm/min) retract & purge feedrate
 #define NOZZLE_PAUSE_XY_FEEDRATE    6000 // (mm/min) X and Y axes feedrate
 #define NOZZLE_PAUSE_Z_FEEDRATE     600  // (mm/min) Z axis feedrate
+/* M601 ; pause print
+ * PrusaSlicer can add this on certain height. Marlin actually does not support this.
+ * Acts here like manual pause
+ */
+//#define NOZZLE_PAUSE_M601
 
 /**
  * Auto Save Load Leveling Data

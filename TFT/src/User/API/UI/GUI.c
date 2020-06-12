@@ -751,28 +751,28 @@ void GUI_DispFloat(int16_t x, int16_t y, float num, uint8_t llen, uint8_t rlen, 
 /****************************************************     Widget    *******************************************************************/
 #define RADIO_SELECTED_COLOR GREEN
 #define RADIO_IDLE_COLOR     WHITE
-void RADIO_Create(RADIO *raido)
+void RADIO_Create(RADIO *radio)
 {
   u16 tmp = GUI_GetColor();
   uint8_t i=0;
-  for(i=0;i<raido->num;i++)
+  for(i=0;i<radio->num;i++)
   {
-    if(i==raido->select)
+    if(i==radio->select)
       GUI_SetColor(RADIO_SELECTED_COLOR);
     else
       GUI_SetColor(RADIO_IDLE_COLOR);
-    GUI_FillCircle(raido->sx+BYTE_HEIGHT/2, i*raido->distance+raido->sy+BYTE_HEIGHT/2, BYTE_HEIGHT/8);
-    GUI_DrawCircle(raido->sx+BYTE_HEIGHT/2, i*raido->distance+raido->sy+BYTE_HEIGHT/2, BYTE_HEIGHT/4);
-    GUI_DispString(raido->sx+BYTE_HEIGHT,   i*raido->distance+raido->sy, raido->context[i]);
+    GUI_FillCircle(radio->sx+BYTE_HEIGHT/2, i*radio->distance+radio->sy+BYTE_HEIGHT/2, BYTE_HEIGHT/8);
+    GUI_DrawCircle(radio->sx+BYTE_HEIGHT/2, i*radio->distance+radio->sy+BYTE_HEIGHT/2, BYTE_HEIGHT/4);
+    GUI_DispString(radio->sx+BYTE_HEIGHT,   i*radio->distance+radio->sy, radio->context[i]);
   }
   GUI_SetColor(tmp);
 }
 
-void RADIO_Select(RADIO *raido, uint8_t select)
+void RADIO_Select(RADIO *radio, uint8_t select)
 {
   u16 tmp = GUI_GetColor();
   uint8_t i=0;
-  if(raido->select==select)
+  if(radio->select==select)
   return;
   for(i=0;i<2;i++)
   {
@@ -782,12 +782,12 @@ void RADIO_Select(RADIO *raido, uint8_t select)
     }
     else
     {
-      raido->select=select;
+      radio->select=select;
       GUI_SetColor(RADIO_SELECTED_COLOR);
     }
-    GUI_FillCircle(raido->sx+BYTE_HEIGHT/2, raido->select*raido->distance+raido->sy+BYTE_HEIGHT/2, BYTE_HEIGHT/8);
-    GUI_DrawCircle(raido->sx+BYTE_HEIGHT/2, raido->select*raido->distance+raido->sy+BYTE_HEIGHT/2, BYTE_HEIGHT/4);
-    GUI_DispString(raido->sx+BYTE_HEIGHT,   raido->select*raido->distance+raido->sy, raido->context[raido->select]);
+    GUI_FillCircle(radio->sx+BYTE_HEIGHT/2, radio->select*radio->distance+radio->sy+BYTE_HEIGHT/2, BYTE_HEIGHT/8);
+    GUI_DrawCircle(radio->sx+BYTE_HEIGHT/2, radio->select*radio->distance+radio->sy+BYTE_HEIGHT/2, BYTE_HEIGHT/4);
+    GUI_DispString(radio->sx+BYTE_HEIGHT,   radio->select*radio->distance+radio->sy, radio->context[radio->select]);
   }
   GUI_SetColor(tmp);
 }
