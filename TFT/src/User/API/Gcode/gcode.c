@@ -31,7 +31,7 @@ void clearRequestCommandInfo(void)
     >>> M21
     SENDING:M21
     echo:SD card ok
-    echo:SD init fail
+    echo:No SD card
 
 */
 bool request_M21(void)
@@ -39,7 +39,7 @@ bool request_M21(void)
   strcpy(requestCommandInfo.command,"M21\n");
   strcpy(requestCommandInfo.startMagic,"SD");
   strcpy(requestCommandInfo.stopMagic,"card ok");
-  strcpy(requestCommandInfo.errorMagic,"init fail");
+  strcpy(requestCommandInfo.errorMagic,"No SD card");
 
   resetRequestCommandInfo();
   mustStoreCmd(requestCommandInfo.command);
