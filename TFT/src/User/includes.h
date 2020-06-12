@@ -56,6 +56,7 @@
 
 #include "extend.h"
 #include "list_item.h"
+#include "list_widget.h"
 #include "Numpad.h"
 #include "SanityCheck.h"
 

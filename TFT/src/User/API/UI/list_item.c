@@ -69,7 +69,7 @@ const uint16_t ICON_COLOR[ICONCHAR_NUM]=
   MAT_ORANGE,    //ICONCHAR_DELETE
   MAT_LOWWHITE,    //ICONCHAR_RADIO_CHECKED
   MAT_LOWWHITE,    //ICONCHAR_RADIO_UNCHECKED
-  MAT_LOWWHITE,    //ICONCHAR_CHECKED
+  MAT_GREEN,    //ICONCHAR_CHECKED
   MAT_LOWWHITE,    //ICONCHAR_UNCHECKED
   MAT_RED,    //ICONCHAR_SOUND_OFF
   MAT_GREEN,    //ICONCHAR_SOUND_ON
@@ -467,7 +467,7 @@ void draw_itemtitle(GUI_POINT pos,LABEL label, uint8_t position, int textarea_wi
     {GUI_DispLenString(pos.x, pos.y, (u8*)getDynamicLabel(position),textarea_width);
     }
     else
-    {GUI_DispLenString(pos.x, pos.y, textSelect(label.index),textarea_width);
+    {GUI_DispLenString(pos.x, pos.y, labelGetAddress(&label), textarea_width);
     }
   }
 }
