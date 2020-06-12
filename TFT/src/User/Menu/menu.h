@@ -104,6 +104,7 @@ void volumeReminderMessage(int16_t inf, SYS_STATUS status);
 void busyIndicator(SYS_STATUS status);
 
 void GUI_RestoreColorDefault(void);
+uint8_t *labelGetAddress(const LABEL *label);
 void menuDrawItem (const ITEM * menuItem, uint8_t positon);
 void menuDrawIconOnly(const ITEM *item, uint8_t positon);
 void menuDrawListItem(const LISTITEM *item, uint8_t positon);
