@@ -24,6 +24,7 @@
     #define FR_POINT_2                "Point 2"
     #define FR_POINT_3                "Point 3"
     #define FR_POINT_4                "Point 4"
+    #define FR_POINT_5                "Point 5"
     #define FR_ABL                    "ABL"
     #define FR_BLTOUCH_TEST           "Test"
     #define FR_BLTOUCH_DEPLOY         "Déployer"

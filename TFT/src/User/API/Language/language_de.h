@@ -24,6 +24,7 @@
     #define DE_POINT_2                "Punkt 2"
     #define DE_POINT_3                "Punkt 3"
     #define DE_POINT_4                "Punkt 4"
+    #define DE_POINT_5                "Punkt 5"
     #define DE_ABL                    "ABL"
     #define DE_BLTOUCH_TEST           "Testen"
     #define DE_BLTOUCH_DEPLOY         "Ausfahren"

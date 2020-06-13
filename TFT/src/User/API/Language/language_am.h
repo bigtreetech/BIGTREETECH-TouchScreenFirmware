@@ -24,6 +24,7 @@
     #define AM_POINT_2                "Point 2"
     #define AM_POINT_3                "Point 3"
     #define AM_POINT_4                "Point 4"
+    #define AM_POINT_5                "Point 5"
     #define AM_ABL                    "ABL"
     #define AM_BLTOUCH_TEST           "Test"
     #define AM_BLTOUCH_DEPLOY         "Deploy"

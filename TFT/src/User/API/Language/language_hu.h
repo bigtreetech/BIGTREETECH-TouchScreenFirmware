@@ -24,6 +24,7 @@
     #define HU_POINT_2                "2. pont"
     #define HU_POINT_3                "3. pont"
     #define HU_POINT_4                "4. pont"
+    #define HU_POINT_5                "5. pont"
     #define HU_ABL                    "ABL"
     #define HU_BLTOUCH_TEST           "Teszt"
     #define HU_BLTOUCH_DEPLOY         "Telepítés"
