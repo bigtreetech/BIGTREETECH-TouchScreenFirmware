@@ -11,12 +11,20 @@
 #endif
 
 #ifndef ROOT_DIR
-  #define ROOT_DIR "MKS"
+  #if defined(MKS_32_V1_4)
+    #define ROOT_DIR "MKS"
+  #elif defined(MKS_28_Clone_V1_0)
+    #define ROOT_DIR ""  
+  #endif
 #endif
 
 // Hardware version config
 #ifndef HARDWARE_VERSION
-  #define HARDWARE_VERSION "TFT32_V4.0"
+  #if defined(MKS_32_V1_4)
+    #define HARDWARE_VERSION "TFT32_V4.0"
+  #elif defined(MKS_28_Clone_V1_0)
+    #define HARDWARE_VERSION "TFT28_V1.0 Artillery"   
+  #endif
 #endif
 
 // LCD interface

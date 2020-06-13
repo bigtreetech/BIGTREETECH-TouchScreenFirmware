@@ -35,7 +35,7 @@
   #include "pin_TFT35_V3_0.h"
 #elif defined(TFT35_E3_V3_0)
   #include "pin_TFT35_E3_V3_0.h"
-#elif defined(MKS_32_V1_4)
+#elif defined(MKS_32_V1_4) || defined(MKS_28_Clone_V1_0)
   #include "pin_MKS_TFT32_V1_4.h"
 #endif
 
