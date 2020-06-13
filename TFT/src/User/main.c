@@ -49,7 +49,7 @@ void Hardware_GenericInit(void)
   LCD_RefreshDirection();  //refresh display direction after reading settings
   scanUpdates();           // scan icon, fonts and config files
 
-  #if defined(MKS_32_V1_4) || defined(MKS_28_Clone_V1_0)
+  #if defined(MKS_32_V1_4)
     //causes hang if we deinit spi1
     SD_DeInit();
   #endif
