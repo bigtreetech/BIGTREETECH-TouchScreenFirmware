@@ -415,7 +415,7 @@ void parseACK(void)
       {
         speedSetPercent(1,ack_value());
       }
-      // parse fan speed
+    // parse fan speed
       else if(ack_seen("M106 P"))
       {
         u8 i = ack_value();

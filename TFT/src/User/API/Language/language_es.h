@@ -1,7 +1,7 @@
 #ifndef _LANGUAGE_ES_H_
 #define _LANGUAGE_ES_H_
 
-    #define FR_LANGUAGE               "Français"
+    #define ES_LANGUAGE               "Español"
     #define ES_HEAT                   "Calentar"
     #define ES_MOVE                   "Mover"
     #define ES_HOME                   "Origen"
@@ -17,7 +17,6 @@
     #define ES_SHUT_DOWN              "Apagar"
     #define ES_RGB_SETTINGS           "Color LED"
     #define ES_RGB_OFF                "Apagar LED"
-    #define ES_GCODE                  "Gcode"
     #define ES_TERMINAL               "Terminal"
     #define ES_CUSTOM                 "Personalizar"
     #define ES_LEVELING               "Nivelar"
@@ -26,7 +25,6 @@
     #define ES_POINT_3                "Punto 3"
     #define ES_POINT_4                "Punto 4"
     #define ES_ABL                    "ABL"
-    #define ES_BLTOUCH                "Bltouch"
     #define ES_BLTOUCH_TEST           "Probar"
     #define ES_BLTOUCH_DEPLOY         "Desplegar"
     #define ES_BLTOUCH_STOW           "Plegar"
@@ -57,6 +55,8 @@
     #define ES_MORE                   "Más"
     #define ES_SCREEN_INFO            "Informar"
     #define ES_STATUS                 "Status"
+    #define ES_SIMULATOR_BG_COLOR     "Marlin simulator background color"
+    #define ES_SIMULATOR_FONT_COLOR   "Marlin simulator font color"
     #define ES_WHITE                  "Blanco"
     #define ES_BLACK                  "Negro"
     #define ES_BLUE                   "Azul"
@@ -76,6 +76,7 @@
     #define ES_DARKGREEN              "DarkGreen"
     #define ES_DARKGRAY               "DarkGray"
     #define ES_DISCONNECT             "Desconectar"
+    #define ES_BAUDRATE               "BaudRate"
     #define ES_PERCENTAGE             "Porcentaje"
     #define ES_BABYSTEP               "BabyStep"
     #define ES_PERCENTAGE_SPEED       "Velocidad"

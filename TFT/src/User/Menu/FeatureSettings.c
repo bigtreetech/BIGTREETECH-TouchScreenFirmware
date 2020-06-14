@@ -385,7 +385,6 @@ void menuFeatureSettings(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
   SETTINGS now = infoSettings;
-  fe_cur_page = 0;
   loadFeatureSettings();
   menuDrawListPage(&featureSettingsItems);
 
@@ -415,6 +414,7 @@ void menuFeatureSettings(void)
       break;
 
     case KEY_ICON_7:
+      fe_cur_page = 0;
       infoMenu.cur--;
       break;
     default:
