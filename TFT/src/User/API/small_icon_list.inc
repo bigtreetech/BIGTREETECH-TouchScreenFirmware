@@ -5,6 +5,6 @@
 *
 * Description: https://en.wikipedia.org/wiki/X_Macro
 */
-X_SMALLICON (INC)
-X_SMALLICON (DEC)
-X_SMALLICON (NUMPAD)
+// X_SMALLICON (INC)
+// X_SMALLICON (DEC)
+// X_SMALLICON (NUMPAD)

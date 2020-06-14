@@ -56,7 +56,7 @@ enum
   #undef  X_SMALLICON
   //add new icons in small_icon_list.inc only
   // Back ground sign
-    SMALL_ICON_BACKGROUNDd
+    SMALL_ICON_BACKGROUND
 };
 
 typedef enum{

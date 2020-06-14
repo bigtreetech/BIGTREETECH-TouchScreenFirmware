@@ -74,16 +74,13 @@ void menuDialog(void)
   while(infoMenu.menu[infoMenu.cur] == menuDialog)
   {
     key_num = KEY_GetValue(buttonNum, cur_btn_rect);
+
     switch(key_num)
     {
       case KEY_POPUP_CONFIRM:
-        if (action_ok != NULL)
-          action_ok();
         infoMenu.cur--;
         break;
       case KEY_POPUP_CANCEL:
-        if (action_cancel != NULL)
-          action_cancel();
         infoMenu.cur--;
         break;
       default:
@@ -93,6 +90,10 @@ void menuDialog(void)
       action_loop();
     loopProcess();
   }
+  if (action_ok != NULL && key_num == KEY_POPUP_CONFIRM)
+    action_ok();
+  else if (action_cancel != NULL && key_num == KEY_POPUP_CANCEL)
+    action_cancel();
 }
 
 void popupReminder(DIALOG_TYPE type, u8* info, u8* context)

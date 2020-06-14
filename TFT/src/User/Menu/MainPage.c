@@ -82,7 +82,7 @@ void classicMenu(void)
     key_num = menuKeyGetValue();
     switch(key_num)
     {
-      case KEY_ICON_0: infoMenu.menu[++infoMenu.cur] = menuHeat;      break;
+      case KEY_ICON_0: infoMenu.menu[++infoMenu.cur] = menuPreheat;   break;
       case KEY_ICON_1: infoMenu.menu[++infoMenu.cur] = menuMove;      break;
       case KEY_ICON_2: infoMenu.menu[++infoMenu.cur] = menuHome;      break;
       case KEY_ICON_3: infoMenu.menu[++infoMenu.cur] = menuPrint;     break;

@@ -167,12 +167,15 @@ typedef struct
 }MACHINESETTINGS;
 
 
-
 extern SETTINGS infoSettings;
 extern MACHINESETTINGS infoMachineSettings;
-extern const u32 item_baudrate[ITEM_BAUDRATE_NUM];
-void setupMachine(void);
+
+void initMachineSetting(void);
 void infoSettingsReset(void);
-void menuSettings(void);
+void setupMachine(void);
+
+
+
+
 
 #endif

@@ -168,7 +168,7 @@ void updateIcon(void)
 
     processIcon(nowBmp, ICON_ADDR(i));
   }
-
+/*
   for (int i = 0; i < COUNT(smallIconBmpName); i++)
   {
     my_sprintf(nowBmp, BMP_ROOT_DIR "/%s_small.bmp", smallIconBmpName[i]);
@@ -177,7 +177,7 @@ void updateIcon(void)
 
     processIcon(nowBmp, SMALL_ICON_ADDR(i));
   }
-
+*/
   if (bmpDecode(BMP_ROOT_DIR "/InfoBox.bmp", INFOBOX_ADDR))
   {
     ICON_CustomReadDisplay(iconUpdateRect.x0, iconUpdateRect.y0, bmp_size.x, bmp_size.y, INFOBOX_ADDR);
