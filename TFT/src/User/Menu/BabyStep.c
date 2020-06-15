@@ -12,7 +12,7 @@ MENUITEMS babyStepItems = {
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_DEC,                  LABEL_DEC},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_01_MM,                LABEL_01_MM},
+  {ICON_001_MM,                LABEL_001_MM},
   {ICON_RESET_VALUE,          LABEL_RESET},
   {ICON_BACK,                 LABEL_BACK},}
 };
