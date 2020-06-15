@@ -7,10 +7,11 @@ const MENUITEMS fanItems = {
 //   title
 LABEL_FAN,
 // icon                       label
- {{ICON_DEC,                  LABEL_DEC},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
+ {
   {ICON_INC,                  LABEL_INC},
+  {ICON_BACKGROUND,           LABEL_BACKGROUND},
+  {ICON_BACKGROUND,           LABEL_BACKGROUND},
+  {ICON_DEC,                  LABEL_DEC},
   {ICON_FAN ,                 LABEL_FAN},
   {ICON_FAN_FULL_SPEED,       LABEL_FAN_FULL_SPEED},
   {ICON_STOP,                 LABEL_STOP},
@@ -104,23 +105,6 @@ void menuFan(void)
     switch(key_num)
     {
       case KEY_ICON_0:
-        if (fanSpeed[curIndex] > 0)
-        {
-          if (infoSettings.fan_percentage ==  1)
-          {
-            if ((fanSpeed[curIndex] - 2) > 0)
-              fanSpeed[curIndex] -= 2; //2.55 is 1 percent, rounding down
-            else
-              fanSpeed[curIndex] = 0;
-          }
-          else
-          {
-            fanSpeed[curIndex]--;
-          }
-        }
-        break;
-
-      case KEY_ICON_3:
         if (fanSpeed[curIndex] < infoSettings.fan_max[curIndex])
         {
           if (infoSettings.fan_percentage ==  1)
@@ -133,6 +117,23 @@ void menuFan(void)
           else
           {
             fanSpeed[curIndex]++;
+          }
+        }
+        break;
+
+      case KEY_ICON_3:
+      if (fanSpeed[curIndex] > 0)
+        {
+          if (infoSettings.fan_percentage ==  1)
+          {
+            if ((fanSpeed[curIndex] - 2) > 0)
+              fanSpeed[curIndex] -= 2; //2.55 is 1 percent, rounding down
+            else
+              fanSpeed[curIndex] = 0;
+          }
+          else
+          {
+            fanSpeed[curIndex]--;
           }
         }
         break;

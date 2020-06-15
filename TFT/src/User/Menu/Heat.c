@@ -6,10 +6,11 @@ MENUITEMS heatItems = {
 // title
 LABEL_HEAT,
 // icon                       label
- {{ICON_DEC,                  LABEL_DEC},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
+ {
   {ICON_INC,                  LABEL_INC},
+  {ICON_BACKGROUND,           LABEL_BACKGROUND},
+  {ICON_BACKGROUND,           LABEL_BACKGROUND},
+  {ICON_DEC,                  LABEL_DEC},
   {ICON_NOZZLE,               LABEL_NOZZLE},
   {ICON_5_DEGREE,             LABEL_5_DEGREE},
   {ICON_STOP,                 LABEL_STOP},
@@ -36,7 +37,7 @@ const ITEM itemDegree[ITEM_DEGREE_NUM] = {
   {ICON_10_DEGREE,            LABEL_10_DEGREE},
 };
 const  u8 item_degree[ITEM_DEGREE_NUM] = {1, 5, 10};
-static u8 item_degree_i = 1;
+static u8 item_degree_i = 2;
 
 const char* toolID[] = HEAT_SIGN_ID;
 const char* const heatDisplayID[] = HEAT_DISPLAY_ID;
@@ -213,21 +214,21 @@ void menuHeat(void)
     switch(key_num)
     {
       case KEY_ICON_0:
-        if(heater.T[heater.tool].target > 0)
-        {
-          heater.T[heater.tool].target =
-            limitValue( 0,
-                        heater.T[heater.tool].target - item_degree[item_degree_i],
-                        infoSettings.max_temp[heater.tool]);
-        }
-        break;
-
-      case KEY_ICON_3:
         if(heater.T[heater.tool].target < infoSettings.max_temp[heater.tool])
         {
           heater.T[heater.tool].target =
             limitValue( 0,
                         heater.T[heater.tool].target + item_degree[item_degree_i],
+                        infoSettings.max_temp[heater.tool]);
+        }
+        break;
+
+      case KEY_ICON_3:
+       if(heater.T[heater.tool].target > 0)
+        {
+          heater.T[heater.tool].target =
+            limitValue( 0,
+                        heater.T[heater.tool].target - item_degree[item_degree_i],
                         infoSettings.max_temp[heater.tool]);
         }
         break;

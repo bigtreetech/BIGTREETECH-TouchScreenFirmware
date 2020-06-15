@@ -6,10 +6,10 @@ MENUITEMS extrudeItems = {
 //   title
 LABEL_EXTRUDE,
 // icon                       label
- {{ICON_UNLOAD,               LABEL_UNLOAD},
+ {{ICON_LOAD,                 LABEL_LOAD},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_LOAD,                 LABEL_LOAD},
+  {ICON_UNLOAD,               LABEL_UNLOAD},
   {ICON_NOZZLE,               LABEL_NOZZLE},
   {ICON_NORMAL_SPEED,         LABEL_NORMAL_SPEED},
   {ICON_E_5_MM,               LABEL_5_MM},
@@ -86,11 +86,11 @@ void menuExtrude(void)
     switch(key_num)
     {
       case KEY_ICON_0:
-        eTemp -= item_len[item_len_i];
+        eTemp += item_len[item_len_i];
         break;
 
       case KEY_ICON_3:
-        eTemp += item_len[item_len_i];
+        eTemp -= item_len[item_len_i];
         break;
 
       case KEY_ICON_4:

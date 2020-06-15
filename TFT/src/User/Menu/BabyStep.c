@@ -6,10 +6,11 @@ MENUITEMS babyStepItems = {
 //title
   LABEL_BABYSTEP,
 //icon                        label
- {{ICON_DEC,                  LABEL_DEC},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
+ {
   {ICON_INC,                  LABEL_INC},
+  {ICON_BACKGROUND,           LABEL_BACKGROUND},
+  {ICON_BACKGROUND,           LABEL_BACKGROUND},
+  {ICON_DEC,                  LABEL_DEC},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_01_MM,                LABEL_01_MM},
   {ICON_RESET_VALUE,          LABEL_RESET},
@@ -90,17 +91,17 @@ void menuBabyStep(void)
     switch(key_num)
     {
       case KEY_ICON_0:
-        if(baby_step_value - elementsUnit.ele[elementsUnit.cur] > BABYSTEP_MIN_VALUE)
-        {
-            mustStoreCmd("M290 Z-%.2f\n",elementsUnit.ele[elementsUnit.cur]);
-            baby_step_value -= elementsUnit.ele[elementsUnit.cur];
-        }
-        break;
-      case KEY_ICON_3:
         if(baby_step_value + elementsUnit.ele[elementsUnit.cur] < BABYSTEP_MAX_VALUE)
         {
             mustStoreCmd("M290 Z%.2f\n",elementsUnit.ele[elementsUnit.cur]);
             baby_step_value += elementsUnit.ele[elementsUnit.cur];
+        }
+        break;
+      case KEY_ICON_3:
+       if(baby_step_value - elementsUnit.ele[elementsUnit.cur] > BABYSTEP_MIN_VALUE)
+        {
+            mustStoreCmd("M290 Z-%.2f\n",elementsUnit.ele[elementsUnit.cur]);
+            baby_step_value -= elementsUnit.ele[elementsUnit.cur];
         }
         break;
       case KEY_ICON_5:
