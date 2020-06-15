@@ -183,5 +183,6 @@
     #define CN_300_SECONDS            "5分钟"
     #define CN_CUSTOM_SECONDS         "自定义"
     #define CN_ST7920_FULLSCREEN      "全屏显示Marlin模式"
+    #define CN_SHOW_STATUS_SPEED_FLOW      "在主页上显示速度和流量"
 
 #endif

@@ -183,5 +183,6 @@
     #define IT_300_SECONDS            "5 Min."
     #define IT_CUSTOM_SECONDS         "Custom"
     #define IT_ST7920_FULLSCREEN      "Marlin mode in fullscreen"
+    #define IT_SHOW_STATUS_SPEED_FLOW      "Mostra nella velocità e nel flusso della pagina principale"
 
 #endif

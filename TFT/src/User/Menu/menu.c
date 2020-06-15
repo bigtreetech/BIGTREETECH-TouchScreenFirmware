@@ -42,6 +42,28 @@ const GUI_RECT rect_of_keyListView[ITEM_PER_PAGE]={
   {2*START_X + LISTITEM_WIDTH,  2*LIST_ICON_HEIGHT+2*LISTICON_SPACE_Y+ICON_START_Y,  2*START_X + LISTITEM_WIDTH + 1*LIST_ICON_WIDTH,  3*LIST_ICON_HEIGHT+2*LISTICON_SPACE_Y+ICON_START_Y},
 };
 
+const GUI_RECT rect_of_key_14[14]={
+  //7 icons area
+  {1,  9, 79,  113 },
+  {81,  9, 159,  113 },
+  {161, 9, 239,  113},
+  {241,  9, 319,  113 },
+
+  {30,  116, 108,  220 },
+  {121,  116, 199,  220 },
+  {212,  116, 290,  220 },
+
+  //7 labels area
+  {1,  89, 79,  105 },
+  {81,  89, 159,  105 },
+  {161, 89, 239,  105},
+  {241,  89, 319,  105 },
+
+  {30,  196, 108,  212 },
+  {121,  196, 199,  212 },
+  {212,  196, 290,  212 },
+};
+
 //Clean up the gaps outside icons
 void menuClearGaps(void)
 {
@@ -68,7 +90,34 @@ void GUI_RestoreColorDefault(void){
   GUI_SetNumMode(GUI_NUMMODE_SPACE);
 }
 
+
+void menuClearGaps14(void)
+{
+  const GUI_RECT gaps[]={
+  {0,   0,    LCD_WIDTH,    9},
+  {0,   0,    1,    LCD_HEIGHT},
+  {319,   0,    LCD_WIDTH,    LCD_HEIGHT},
+
+  {79,   0,    81,    116},
+  {159,   0,    161,    116},
+  {239,   0,    241,    116},
+  {0,   113,    LCD_WIDTH,    116},
+
+  {0,   113,    30,    LCD_HEIGHT},
+  {290,   113,    LCD_WIDTH,    LCD_HEIGHT},
+  {108,   113,    121,    LCD_HEIGHT},
+  {199,   113,    212,    LCD_HEIGHT},
+  {0,   220,   LCD_WIDTH,    LCD_HEIGHT},
+};
+
+  GUI_SetBkColor(infoSettings.title_bg_color);
+  GUI_ClearPrect(gaps);
+  GUI_SetBkColor(infoSettings.bg_color);
+  for(uint8_t i = 1; i < COUNT(gaps); i++)
+    GUI_ClearPrect(gaps + i);
+}
 static const MENUITEMS *curMenuItems = NULL;   //current menu
+static const MENUITEMS14 *curMenuItems14 = NULL;   //current menu
 
 static const LISTITEMS *curListItems = NULL;   //current listmenu
 
@@ -82,7 +131,6 @@ uint8_t *labelGetAddress(const LABEL *label)
   else // Address of string
     return label->address;
 }
-
 void menuDrawItem(const ITEM *item, uint8_t positon)
 {
   uint8_t *content = labelGetAddress(&item->label);
@@ -96,6 +144,37 @@ void menuDrawItem(const ITEM *item, uint8_t positon)
   GUI_ClearPrect(rect);
   if (content)
     GUI_DispStringInPrect(rect, content);
+}
+void menuDrawItem14(const ITEM *item, uint8_t positon)
+{
+  uint8_t *content = labelGetAddress(&item->label);
+  const GUI_RECT *rect = rect_of_key_14 + positon;
+
+  if(item->icon != ICON_BACKGROUND)
+    ICON_ReadDisplay14(rect->x0, rect->y0, item->icon);
+  else
+    GUI_ClearPrect(rect);
+
+  rect = rect_of_key_14 + 7 + positon;
+  if (content){
+    GUI_SetTextMode(GUI_TEXTMODE_TRANS);
+    GUI_DispStringInRect(rect->x0, rect->y0, rect->x1, rect->y1,content);
+    GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
+  }
+
+
+
+
+
+
+}
+void menuDrawIconOnly14(const ITEM *item, uint8_t positon)
+{
+  const GUI_RECT *rect = rect_of_key_14 + positon;
+  if(item->icon != ICON_BACKGROUND)
+    ICON_ReadDisplay14(rect->x0, rect->y0, item->icon);
+  else
+    GUI_ClearPrect(rect);
 }
 
 void menuDrawIconOnly(const ITEM *item, uint8_t positon)
@@ -311,6 +390,28 @@ void menuDrawPage(const MENUITEMS *menuItems)
 }
 
 //Draw the entire interface
+void menuDrawPage14(const MENUITEMS14 *menuItems)
+{
+  u8 i = 0;
+  isListview = false;
+  curMenuItems14 = menuItems;
+  TSC_ReDrawIcon = itemDrawIconPress14;
+
+  GUI_Clear(BLACK);
+  // menuClearGaps14(); //Use this function instead of GUI_Clear to eliminate the splash screen when clearing the screen.
+  menuDrawTitle(labelGetAddress(&menuItems->title));
+  for (i = 0; i < 7; i++)
+  {
+    menuDrawItem14(&menuItems->items[i], i);
+    #ifdef RAPID_SERIAL_COMM
+      if(isPrinting() == true && infoSettings.serial_alwaysOn != 1)
+      {
+        loopBackEnd();   //perform backend printing loop between drawing icons to avoid printer idling
+      }
+    #endif
+  }
+}
+//Draw the entire interface
 void menuDrawListPage(const LISTITEMS *listItems)
 {
   u8 i = 0;
@@ -380,7 +481,56 @@ void itemDrawIconPress(u8 position, u8 is_press)
 
   }
 }
+void itemDrawIconPress14(u8 position, u8 is_press)
+{
 
+  if (position > KEY_ICON_7) return;
+
+  if (isListview == false)
+  {
+    if (curMenuItems14 == NULL) return;
+    if (curMenuItems14->items[position].icon == ICON_BACKGROUND) return;
+
+    const GUI_RECT *rect = rect_of_key_14 + position;
+
+    if (is_press) // Turn green when pressed
+      ICON_PressedDisplay14(rect->x0, rect->y0, curMenuItems14->items[position].icon);
+    else // Redraw normal icon when released
+      ICON_ReadDisplay14(rect->x0, rect->y0, curMenuItems14->items[position].icon);
+  }
+  else
+  { //draw rec over list item if pressed
+    if (curListItems == NULL)
+    return;
+
+    const GUI_RECT *rect = rect_of_keyListView + position;
+
+    if (curListItems->items[position].icon == ICONCHAR_BACKGROUND)
+    {
+    GUI_ClearPrect(rect);
+    return;
+    }
+    if (is_press){
+    ListItem_Display(rect,position,&curListItems->items[position], true);
+    }
+    else{
+    ListItem_Display(rect,position,&curListItems->items[position], false);
+    }
+
+  }
+}
+// Get button value
+KEY_VALUES menuKeyGetValue14(void)
+{
+  if (isListview == false)
+  {
+    return (KEY_VALUES)KEY_GetValue(sizeof(rect_of_key_14) / sizeof(rect_of_key_14[0]), rect_of_key_14); // for normal menu
+  }
+  else
+  {
+    return (KEY_VALUES)KEY_GetValue(sizeof(rect_of_keyListView) / sizeof(rect_of_keyListView[0]), rect_of_keyListView); //for listview
+  }
+}
 // Get button value
 KEY_VALUES menuKeyGetValue(void)
 {
@@ -399,7 +549,10 @@ GUI_POINT getIconStartPoint(int index){
   GUI_POINT p = {rect_of_key[index].x0,rect_of_key[index].y0};
   return p;
 }
-
+GUI_POINT getIconStartPoint14(int index){
+  GUI_POINT p = {rect_of_key_14[index].x0,rect_of_key_14[index].y0};
+  return p;
+}
 void loopBackEnd(void)
 {
   getGcodeFromFile();                 //Get Gcode command from the file to be printed

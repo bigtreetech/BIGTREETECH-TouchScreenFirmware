@@ -48,7 +48,7 @@
 #define DEFAULT_LCD_IDLE_BRIGHTNESS 2   // 2: LCD_10_PERCENT - Brightness value from list
 #define DEFAULT_LCD_IDLE_TIMER      0   // 0: LCD_DIM_OFF
 #define LCD_DIM_CUSTOM_SECONDS      600 // Custom value in seconds. Will be used if LCD_DIM_CUSTOM_SECONDS is set as idle timer.
-
+#define DEFAULT_SHOW_STATUS_SPEED_FLOW 0 // 0: Doesn't Show in StatusScreen Speed and Flow 1: Show in StatusScreen Speed and Flow 
 //===========================================================================
 //=========================== Marlin Mode Settings ==========================
 //===========================================================================

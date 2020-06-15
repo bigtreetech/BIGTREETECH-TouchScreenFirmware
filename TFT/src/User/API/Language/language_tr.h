@@ -183,5 +183,6 @@
     #define TR_300_SECONDS            "5 Dak."
     #define TR_CUSTOM_SECONDS         "Kişisel"
     #define TR_ST7920_FULLSCREEN      "Tam ekran Marlin modu."
+    #define TR_SHOW_STATUS_SPEED_FLOW      "Ana sayfa hızını ve akışını göster"
 
 #endif

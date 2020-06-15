@@ -183,5 +183,6 @@
     #define CZ_300_SECONDS            "5 min."
     #define CZ_CUSTOM_SECONDS         "Vlastní"
     #define CZ_ST7920_FULLSCREEN      "Celoobrazovkový režim Marlin"
+    #define CZ_SHOW_STATUS_SPEED_FLOW      "Zobrazit rychlost a tok hlavní stránky"
 
 #endif

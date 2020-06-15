@@ -45,6 +45,11 @@ void ICON_ReadDisplay(u16 sx,u16 sy, u8 icon)
   lcd_frame_display(sx, sy, ICON_WIDTH, ICON_HEIGHT, ICON_ADDR(icon));
 }
 
+void ICON_ReadDisplay14(u16 sx,u16 sy, u8 icon)
+{
+  lcd_frame_display(sx, sy, 78, 104, ICON_ADDR(icon));
+}
+
 //directly draw BMP file to lcd (pos - GUI_POINT(top left corner of image location on lcd), bmp: path of bmp file)
 bool bmp_DirectDisplay(GUI_POINT pos, char *bmp)
 {
@@ -134,6 +139,34 @@ void ICON_PressedDisplay(u16 sx,u16 sy, u8 icon)
   for(y=sy; y<sy+ICON_WIDTH; y++)
   {
     for(x=sx; x<sx+ICON_HEIGHT; x++)
+    {
+      color  = (W25Qxx_SPI_Read_Write_Byte(W25QXX_DUMMY_BYTE)<<8);
+      color |= W25Qxx_SPI_Read_Write_Byte(W25QXX_DUMMY_BYTE);
+      LCD_WR_16BITS_DATA(color & mode);
+    }
+  }
+  W25Qxx_SPI_CS_Set(1);
+}
+
+void ICON_PressedDisplay14(u16 sx,u16 sy, u8 icon)
+{
+  u16 mode=0x0FF0;
+  u16 x,y;
+  u16 color = 0;
+  u32 address = ICON_ADDR(icon);
+
+  LCD_SetWindow(sx, sy, sx+78-1, sy+104-1);
+  LCD_WR_REG(0x2C);
+
+  W25Qxx_SPI_CS_Set(0);
+  W25Qxx_SPI_Read_Write_Byte(CMD_READ_DATA);
+  W25Qxx_SPI_Read_Write_Byte((address & 0xFF0000) >> 16);
+  W25Qxx_SPI_Read_Write_Byte((address& 0xFF00) >> 8);
+  W25Qxx_SPI_Read_Write_Byte(address & 0xFF);
+
+  for(y=sy; y<sy+78; y++)
+  {
+    for(x=sx; x<sx+104; x++)
     {
       color  = (W25Qxx_SPI_Read_Write_Byte(W25QXX_DUMMY_BYTE)<<8);
       color |= W25Qxx_SPI_Read_Write_Byte(W25QXX_DUMMY_BYTE);

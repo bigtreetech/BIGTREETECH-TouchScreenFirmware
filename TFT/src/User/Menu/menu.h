@@ -47,7 +47,11 @@ typedef struct
   LABEL title;
   ITEM  items[ITEM_PER_PAGE];
 }MENUITEMS;
-
+typedef struct
+{
+  LABEL title;
+  ITEM  items[7];
+}MENUITEMS14;
 
 typedef enum
 {
@@ -91,6 +95,9 @@ typedef struct
 
 extern const GUI_RECT exhibitRect;
 extern const GUI_RECT rect_of_key[ITEM_PER_PAGE*2];
+extern const GUI_RECT rect_of_key_14[7*2];
+
+
 #define CENTER_Y  ((exhibitRect.y1 - exhibitRect.y0)/2 + exhibitRect.y0)
 #define CENTER_X  ((exhibitRect.x1 - exhibitRect.x0 - BYTE_WIDTH)/2 + exhibitRect.x0)
 #define LISTITEM_WIDTH (LCD_WIDTH-(3*START_X)-LIST_ICON_WIDTH)
@@ -106,15 +113,23 @@ void busyIndicator(SYS_STATUS status);
 void GUI_RestoreColorDefault(void);
 uint8_t *labelGetAddress(const LABEL *label);
 void menuDrawItem (const ITEM * menuItem, uint8_t positon);
+void menuDrawItem14 (const ITEM * menuItem, uint8_t positon);
 void menuDrawIconOnly(const ITEM *item, uint8_t positon);
+void menuDrawIconOnly14(const ITEM *item, uint8_t positon);
 void menuDrawListItem(const LISTITEM *item, uint8_t positon);
 void menuRefreshListPage(void);
 void menuDrawTitle(const uint8_t *content); //(const MENUITEMS * menuItems);
 void menuDrawPage (const MENUITEMS * menuItems);
+void menuDrawPage14 (const MENUITEMS14 * menuItems);
 void menuDrawListPage(const LISTITEMS *listItems);
 void itemDrawIconPress(uint8_t positon, uint8_t is_press);
+void itemDrawIconPress14(uint8_t positon, uint8_t is_press);
+
 KEY_VALUES menuKeyGetValue(void);
+KEY_VALUES menuKeyGetValue14(void);
+
 GUI_POINT getIconStartPoint(int index);
+GUI_POINT getIconStartPoint14(int index);
 
 void loopBackEnd(void);
 void loopFrontEnd(void);

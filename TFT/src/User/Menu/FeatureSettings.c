@@ -63,6 +63,8 @@ typedef enum
   SKEY_CANCELGCODE,
   SKEY_PERSISTENTINFO,
   SKEY_FILELIST,
+  SKEY_SHOWSPEEDFLOW,
+
   #ifdef LED_COLOR_PIN
     SKEY_KNOB,
   #endif
@@ -101,6 +103,7 @@ LISTITEM settingPage[SKEY_COUNT] = {
   {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_SEND_CANCEL_GCODE,        LABEL_BACKGROUND  },
   {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_PERSISTENT_STATUS_INFO,   LABEL_BACKGROUND  },
   {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_FILE_LISTMODE,            LABEL_BACKGROUND  },
+  {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_SHOW_STATUS_SPEED_FLOW,            LABEL_BACKGROUND  },
   #ifdef LED_COLOR_PIN
     {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_KNOB_LED,                 LABEL_OFF         },
   #endif
@@ -223,6 +226,13 @@ void updateFeatureSettings(uint8_t key_val)
       menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
       break;
 
+    case SKEY_SHOWSPEEDFLOW:
+      infoSettings.show_status_speed_flow = (infoSettings.show_status_speed_flow + 1) % TOGGLE_NUM;
+      settingPage[item_index].icon = toggleitem[infoSettings.show_status_speed_flow];
+      featureSettingsItems.items[key_val] = settingPage[item_index];
+
+      menuDrawListItem(&featureSettingsItems.items[key_val], key_val);
+      break;
     case SKEY_CANCELGCODE:
       infoSettings.send_cancel_gcode = (infoSettings.send_cancel_gcode + 1) % TOGGLE_NUM;
       settingPage[item_index].icon = toggleitem[infoSettings.send_cancel_gcode];
@@ -366,6 +376,11 @@ void loadFeatureSettings(){
 
       case SKEY_ENDGCODE:
         settingPage[item_index].icon  = toggleitem[infoSettings.send_end_gcode];
+        featureSettingsItems.items[i] = settingPage[item_index];
+        break;
+
+      case SKEY_SHOWSPEEDFLOW:
+        settingPage[item_index].icon  = toggleitem[infoSettings.show_status_speed_flow];
         featureSettingsItems.items[i] = settingPage[item_index];
         break;
 
