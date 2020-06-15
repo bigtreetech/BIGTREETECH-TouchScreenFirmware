@@ -47,6 +47,7 @@ void infoSettingsReset(void)
   infoSettings.lcd_brightness       = DEFAULT_LCD_BRIGHTNESS;
   infoSettings.lcd_idle_brightness  = DEFAULT_LCD_IDLE_BRIGHTNESS;
   infoSettings.lcd_idle_timer       = DEFAULT_LCD_IDLE_TIMER;
+  infoSettings.show_status_speed_flow = DEFAULT_SHOW_STATUS_SPEED_FLOW;
 
   infoSettings.serial_alwaysOn        = SERIAL_ALWAYS_ON;
   infoSettings.marlin_mode_bg_color   = lcd_colors[ST7920_BKCOLOR];
@@ -332,7 +333,7 @@ LABEL_SETTINGS,
   {ICON_SCREEN_INFO,          LABEL_SCREEN_INFO},
   {ICON_DISCONNECT,           LABEL_DISCONNECT},
   {ICON_BAUD_RATE,            LABEL_BAUDRATE},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
+  {ICON_STOP,       LABEL_EMERGENCYSTOP},
   {ICON_BACK,                 LABEL_BACK},}
 };
 
@@ -353,7 +354,9 @@ void menuSettings(void)
       case KEY_ICON_3: infoMenu.menu[++infoMenu.cur] = menuInfo; break;
       case KEY_ICON_4: infoMenu.menu[++infoMenu.cur] = menuDisconnect; break;
       case KEY_ICON_5: infoMenu.menu[++infoMenu.cur] = menuBaudrate; break;
-
+      case KEY_ICON_6: storeCmd("M112\n"); break;     // Emergency Stop : Used for emergency stopping, a reset is required to return to operational mode.
+                                                      // it may need to wait for a space to open up in the command queue.
+                                                      // Enable EMERGENCY_PARSER in Marlin Firmware for an instantaneous M112 command.
       case KEY_ICON_7: infoMenu.cur--; break;
 
       default: break;

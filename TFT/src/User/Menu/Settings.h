@@ -70,6 +70,7 @@ typedef struct
   uint8_t  lcd_brightness;
   uint8_t  lcd_idle_brightness;
   uint8_t  lcd_idle_timer;
+  uint8_t  show_status_speed_flow;
 
   uint8_t  serial_alwaysOn;
   uint16_t marlin_mode_bg_color;
