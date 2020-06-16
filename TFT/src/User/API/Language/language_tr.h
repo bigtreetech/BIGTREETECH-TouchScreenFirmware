@@ -198,5 +198,6 @@
     #define TR_SWAP_RECOVER_FEEDRATE  "Swap recover feedrate"
     #define TR_RECOVER_LENGTH         "Extra recover length"
     #define TR_SWAP_RECOVER_LENGTH    "Extra recover swap length"
+    #define TR_START_PRINT            "Start Printing:\n %s?"
 
 #endif

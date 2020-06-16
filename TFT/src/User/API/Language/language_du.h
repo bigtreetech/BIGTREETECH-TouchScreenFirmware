@@ -198,5 +198,6 @@
     #define DU_SWAP_RECOVER_FEEDRATE  "Swap recover feedrate"
     #define DU_RECOVER_LENGTH         "Extra recover length"
     #define DU_SWAP_RECOVER_LENGTH    "Extra recover swap length"
+    #define DU_START_PRINT            "Start Printing:\n %s?"
 
 #endif

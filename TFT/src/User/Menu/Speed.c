@@ -77,6 +77,8 @@ void menuSpeed(void)
   for(u8 i=0; i<ITEM_PERCENTAGE_NUM; i++)
   now[i] = percentage[i];
 
+  percentageItems.title.index = itemPercentageTitle[item_percentage_i];
+  percentageItems.items[KEY_ICON_4] = itemPercentage[item_percentage_i];
   menuDrawPage(&percentageItems);
   percentageReDraw((char*)textSelect(percentageItems.title.index));
 

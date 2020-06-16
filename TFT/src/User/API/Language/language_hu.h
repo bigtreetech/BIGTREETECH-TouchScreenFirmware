@@ -198,5 +198,6 @@
     #define HU_SWAP_RECOVER_FEEDRATE  "Swap recover feedrate"
     #define HU_RECOVER_LENGTH         "Extra recover length"
     #define HU_SWAP_RECOVER_LENGTH    "Extra recover swap length"
+    #define HU_START_PRINT            "Start Printing:\n %s?"
 
 #endif

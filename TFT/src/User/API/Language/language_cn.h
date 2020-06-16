@@ -198,5 +198,6 @@
     #define CN_SWAP_RECOVER_FEEDRATE  "Swap recover feedrate"
     #define CN_RECOVER_LENGTH         "Extra recover length"
     #define CN_SWAP_RECOVER_LENGTH    "Extra recover swap length"
+    #define CN_START_PRINT              "Start Printing:\n %s?"
 
 #endif

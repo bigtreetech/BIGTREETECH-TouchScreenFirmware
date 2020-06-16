@@ -198,5 +198,6 @@
     #define SK_SWAP_RECOVER_FEEDRATE  "Swap recover feedrate"
     #define SK_RECOVER_LENGTH         "Extra recover length"
     #define SK_SWAP_RECOVER_LENGTH    "Extra recover swap length"
+    #define SK_START_PRINT            "Start Printing:\n %s?"
 
 #endif

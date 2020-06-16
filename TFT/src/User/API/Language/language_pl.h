@@ -198,5 +198,6 @@
     #define PL_SWAP_RECOVER_FEEDRATE  "Swap recover feedrate"
     #define PL_RECOVER_LENGTH         "Extra recover length"
     #define PL_SWAP_RECOVER_LENGTH    "Extra recover swap length"
+    #define PL_START_PRINT            "Start Printing:\n %s?"
 
 #endif

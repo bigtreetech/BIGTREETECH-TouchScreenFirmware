@@ -169,13 +169,13 @@ void gocdeListDraw(void)
   for (; (i + infoFile.cur_page * NUM_PER_PAGE < infoFile.f_num + infoFile.F_num) && (i < NUM_PER_PAGE); i++) // gcode file
   {
     printListItems.items[i].icon = ICONCHAR_FILE;
-    if (infoMachineSettings.long_filename_support == ENABLED)
+    if (infoMachineSettings.long_filename_support == ENABLED && infoFile.source == BOARD_SD)
     {
-      setDynamicLabel(i, (infoFile.source == BOARD_SD) ? infoFile.Longfile[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num] : infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num]);
+      setDynamicLabel(i, infoFile.Longfile[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num]);
     }
     else
     {
-      setDynamicLabel(i, (infoFile.source == BOARD_SD) ? infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num] : infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num]);
+      setDynamicLabel(i, infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num]);
     }
 
     printListItems.items[i].titlelabel.index = LABEL_DYNAMIC;
@@ -216,6 +216,11 @@ void gocdeListDraw(void)
     menuDrawListItem(&printListItems.items[6],6);
 }
 
+
+void startPrint(void)
+{
+  infoMenu.menu[++infoMenu.cur] = menuBeforePrinting;
+}
 
 const int16_t labelVolumeError[] = {LABEL_READ_TFTSD_ERROR, LABEL_READ_U_DISK_ERROR, LABEL_READ_ONBOARDSD_ERROR};
 
@@ -296,7 +301,7 @@ void menuPrintFromSource(void)
         break;
 
       default:
-        if(key_num <= KEY_ICON_4)
+        if(key_num < ITEM_PER_PAGE)
         {
           u16 start = infoFile.cur_page * NUM_PER_PAGE;
           if(key_num + start < infoFile.F_num)						//folder
@@ -310,9 +315,8 @@ void menuPrintFromSource(void)
           {
             if(infoHost.connected !=true) break;
             if(EnterDir(infoFile.file[key_num + start - infoFile.F_num]) == false) break;
-
+            //load bmp preview in flash if file exists
             if (infoFile.source != BOARD_SD) {
-              //load bmp preview in flash if file exists
               int16_t gn;
               char *gnew;
               gn = strlen(infoFile.file[key_num + start - infoFile.F_num]) - 6; // -6 means ".gcode"
@@ -330,9 +334,13 @@ void menuPrintFromSource(void)
                 }
                 free(gnew);
               }
-              //-load bmp preview in flash if file exists - end
             }
-            infoMenu.menu[++infoMenu.cur] = menuBeforePrinting;
+            //-load bmp preview in flash if file exists - end
+            char temp_info[75];
+            sprintf(temp_info, (char *)textSelect(LABEL_START_PRINT), infoFile.file[key_num + start - infoFile.F_num]);
+            //confirm file selction
+            showDialog(DIALOG_TYPE_QUESTION, textSelect(LABEL_PRINT), (u8*)temp_info,
+                        textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), startPrint, resetInfoFile, NULL);
           }
         }
 

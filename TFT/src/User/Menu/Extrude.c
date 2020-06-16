@@ -11,8 +11,8 @@ LABEL_EXTRUDE,
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_LOAD,                 LABEL_LOAD},
   {ICON_NOZZLE,               LABEL_NOZZLE},
-  {ICON_NORMAL_SPEED,         LABEL_NORMAL_SPEED},
   {ICON_E_5_MM,               LABEL_5_MM},
+  {ICON_NORMAL_SPEED,         LABEL_NORMAL_SPEED},
   {ICON_BACK,                 LABEL_BACK},}
 };
 
@@ -91,14 +91,14 @@ void menuExtrude(void)
         break;
 
       case KEY_ICON_5:
-        item_speed_i = (item_speed_i+1) % ITEM_SPEED_NUM;
-        extrudeItems.items[key_num] = itemSpeed[item_speed_i];
+        item_len_i = (item_len_i+1) % ITEM_LEN_NUM;
+        extrudeItems.items[key_num] = itemLen[item_len_i];
         menuDrawItem(&extrudeItems.items[key_num], key_num);
         break;
 
       case KEY_ICON_6:
-        item_len_i = (item_len_i+1) % ITEM_LEN_NUM;
-        extrudeItems.items[key_num] = itemLen[item_len_i];
+        item_speed_i = (item_speed_i+1) % ITEM_SPEED_NUM;
+        extrudeItems.items[key_num] = itemSpeed[item_speed_i];
         menuDrawItem(&extrudeItems.items[key_num], key_num);
         break;
 

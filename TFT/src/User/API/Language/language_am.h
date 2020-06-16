@@ -198,5 +198,6 @@
     #define AM_SWAP_RECOVER_FEEDRATE  "Swap recover feedrate"
     #define AM_RECOVER_LENGTH         "Extra recover length"
     #define AM_SWAP_RECOVER_LENGTH    "Extra recover swap length"
+    #define AM_START_PRINT            "Start Printing:\n %s?"
 
 #endif

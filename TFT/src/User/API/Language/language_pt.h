@@ -198,5 +198,6 @@
     #define PT_SWAP_RECOVER_FEEDRATE  "Swap recover feedrate"
     #define PT_RECOVER_LENGTH         "Extra recover length"
     #define PT_SWAP_RECOVER_LENGTH    "Extra recover swap length"
+    #define PT_START_PRINT            "Start Printing:\n %s?"
 
 #endif

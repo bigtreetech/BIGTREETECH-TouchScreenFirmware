@@ -198,5 +198,6 @@
     #define GR_SWAP_RECOVER_FEEDRATE  "Swap recover feedrate"
     #define GR_RECOVER_LENGTH         "Extra recover length"
     #define GR_SWAP_RECOVER_LENGTH    "Extra recover swap length"
+    #define GR_START_PRINT            "Start Printing:\n %s?"
 
 #endif

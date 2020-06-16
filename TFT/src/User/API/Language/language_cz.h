@@ -198,5 +198,6 @@
     #define CZ_SWAP_RECOVER_FEEDRATE  "Swap recover feedrate"
     #define CZ_RECOVER_LENGTH         "Extra recover length"
     #define CZ_SWAP_RECOVER_LENGTH    "Extra recover swap length"
+    #define CZ_START_PRINT            "Start Printing:\n %s?"
 
 #endif

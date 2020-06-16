@@ -44,7 +44,7 @@ void showTemperature(TOOL tool)
   char tempstr[40];
   char val[15];
   sprintf(val,"%d/%d",heatGetCurrentTemp(tool), heatGetTargetTemp(tool));
-  sprintf(tempstr, "%-3s %7s",heatDisplayID[tool], val);
+  sprintf(tempstr, "%-3s:%7s",heatDisplayID[tool], val);
   setLargeFont(true);
   GUI_DispStringInRect(exhibitRect.x0,exhibitRect.y0,exhibitRect.x1,exhibitRect.y1,(u8*)tempstr);
   setLargeFont(false);
