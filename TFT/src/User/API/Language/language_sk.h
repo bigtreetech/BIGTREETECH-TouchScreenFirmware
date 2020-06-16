@@ -184,5 +184,9 @@
     #define SK_CUSTOM_SECONDS         "Custom"
     #define SK_ST7920_FULLSCREEN      "Marlin mode in fullscreen"
     #define SK_SHOW_STATUS_SPEED_FLOW      "Zobraziť rýchlosť a tok hlavnej stránky"
+    #define SK_PID_AUTOTUNE_PLA     "PID PLA"
+    #define SK_PID_AUTOTUNE_PETG     "PID PTEG"
+    #define SK_PID_AUTOTUNE_ABS      "PID ABS"
+    #define SK_PID_AUTOTUNE_WARNING      "Bude to trvať dlho, počkajte, kým zhasnú svetlá alebo kým teplota v tryske a lôžku nie je teplota miestnosti. Chceš pokračovať?"
 
 #endif

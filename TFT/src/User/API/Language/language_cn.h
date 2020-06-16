@@ -184,5 +184,9 @@
     #define CN_CUSTOM_SECONDS         "自定义"
     #define CN_ST7920_FULLSCREEN      "全屏显示Marlin模式"
     #define CN_SHOW_STATUS_SPEED_FLOW      "在主页上显示速度和流量"
+    #define CN_PID_AUTOTUNE_PLA     "PID PLA"
+    #define CN_PID_AUTOTUNE_PETG     "PID PTEG"
+    #define CN_PID_AUTOTUNE_ABS      "PID ABS"
+    #define CN_PID_AUTOTUNE_WARNING      "这将需要很长时间，请等到灯光熄灭或喷嘴和床温达到室温为止。 你要继续吗"
 
 #endif

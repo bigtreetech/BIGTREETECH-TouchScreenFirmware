@@ -184,5 +184,9 @@
     #define GR_CUSTOM_SECONDS         "Τροποποιημένες ρυθμίσεις"
     #define GR_ST7920_FULLSCREEN      "Λειτουργία Marlin σε πλήρη οθόνη"
     #define GR_SHOW_STATUS_SPEED_FLOW      "Εμφάνιση στην ταχύτητα και τη ροή της κύριας σελίδας"
+    #define GR_PID_AUTOTUNE_PLA     "PID PLA"
+    #define GR_PID_AUTOTUNE_PETG     "PID PTEG"
+    #define GR_PID_AUTOTUNE_ABS      "PID ABS"
+    #define GR_PID_AUTOTUNE_WARNING      "Αυτό θα διαρκέσει πολύ, περιμένετε έως ότου σβήσουν τα φώτα ή η θερμοκρασία του ακροφυσίου και του κρεβατιού είναι η θερμοκρασία δωματίου. Θέλετε να συνεχίσετε;"
 
 #endif

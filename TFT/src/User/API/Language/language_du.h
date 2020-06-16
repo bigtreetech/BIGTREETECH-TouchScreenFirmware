@@ -184,5 +184,9 @@
     #define DU_CUSTOM_SECONDS         "Custom"
     #define DU_ST7920_FULLSCREEN      "Marlin mode in fullscreen"
     #define DU_SHOW_STATUS_SPEED_FLOW      "Toon op de hoofdpagina snelheid en flow"
+    #define DU_PID_AUTOTUNE_PLA     "PID PLA"
+    #define DU_PID_AUTOTUNE_PETG     "PID PTEG"
+    #define DU_PID_AUTOTUNE_ABS      "PID ABS"
+    #define DU_PID_AUTOTUNE_WARNING      "Dit duurt lang, wacht tot de lampjes uitgaan of het mondstuk en de bedtemperatuur de kamertemperatuur zijn. Wil je doorgaan?"
 
 #endif

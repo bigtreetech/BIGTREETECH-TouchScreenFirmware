@@ -184,5 +184,9 @@
     #define HU_CUSTOM_SECONDS         "Egyedi"
     #define HU_ST7920_FULLSCREEN      "Nagyképernyős Marlin mód"
     #define HU_SHOW_STATUS_SPEED_FLOW      "Mutassa a főoldal sebességét és folyamatát"
+    #define HU_PID_AUTOTUNE_PLA     "PID PLA"
+    #define HU_PID_AUTOTUNE_PETG     "PID PTEG"
+    #define HU_PID_AUTOTUNE_ABS      "PID ABS"
+    #define HU_PID_AUTOTUNE_WARNING      "Ez hosszú ideig tart, várjon, amíg a lámpák kialszanak, vagy a fúvóka és az ágy hőmérséklete megegyezik a szobahőmérséklettel. Akarod folytatni?"
 
 #endif

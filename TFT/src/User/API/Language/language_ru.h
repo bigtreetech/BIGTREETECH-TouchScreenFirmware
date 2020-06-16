@@ -184,5 +184,9 @@
     #define RU_CUSTOM_SECONDS         "Своё"
     #define RU_ST7920_FULLSCREEN      "Marlin на весь экран"
     #define RU_SHOW_STATUS_SPEED_FLOW      "Показать на главной странице скорость и расход"
+    #define RU_PID_AUTOTUNE_PLA     "PID PLA"
+    #define RU_PID_AUTOTUNE_PETG     "PID PTEG"
+    #define RU_PID_AUTOTUNE_ABS      "PID ABS"
+    #define RU_PID_AUTOTUNE_WARNING      "Это займет много времени, подождите, пока погаснет свет или температура сопла и слоя не станут комнатной температурой. Вы хотите продолжить?"
 
 #endif

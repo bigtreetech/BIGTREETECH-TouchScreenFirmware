@@ -184,5 +184,9 @@
     #define EN_CUSTOM_SECONDS         "Custom"
     #define EN_ST7920_FULLSCREEN      "Marlin mode in fullscreen"
     #define EN_SHOW_STATUS_SPEED_FLOW      "Show in main page speed and flow"
+    #define EN_PID_AUTOTUNE_PLA     "PID PLA"
+    #define EN_PID_AUTOTUNE_PETG     "PID PTEG"
+    #define EN_PID_AUTOTUNE_ABS      "PID ABS"
+     #define EN_PID_AUTOTUNE_WARNING      "This will take a long time, wait until the lights go out or the nozzle and bed temperature are the room temperature. Do you want to continue?"
 
 #endif

@@ -184,5 +184,9 @@
     #define TR_CUSTOM_SECONDS         "Kişisel"
     #define TR_ST7920_FULLSCREEN      "Tam ekran Marlin modu."
     #define TR_SHOW_STATUS_SPEED_FLOW      "Ana sayfa hızını ve akışını göster"
+    #define TR_PID_AUTOTUNE_PLA     "PID PLA"
+    #define TR_PID_AUTOTUNE_PETG     "PID PTEG"
+    #define TR_PID_AUTOTUNE_ABS      "PID ABS"
+    #define TR_PID_AUTOTUNE_WARNING      "Bu uzun zaman alacaktır, ışıklar sönene veya meme ve yatak sıcaklığı oda sıcaklığı olana kadar bekleyin. Devam etmek istiyor musun?"
 
 #endif

@@ -184,5 +184,9 @@
     #define CZ_CUSTOM_SECONDS         "Vlastní"
     #define CZ_ST7920_FULLSCREEN      "Celoobrazovkový režim Marlin"
     #define CZ_SHOW_STATUS_SPEED_FLOW      "Zobrazit rychlost a tok hlavní stránky"
+    #define CZ_PID_AUTOTUNE_PLA     "PID PLA"
+    #define CZ_PID_AUTOTUNE_PETG     "PID PTEG"
+    #define CZ_PID_AUTOTUNE_ABS      "PID ABS"
+    #define CZ_PID_AUTOTUNE_WARNING      "Bude to trvat dlouho, počkejte, až zhasnou světla nebo dokud nebude teplota trysky a lože pokojovou teplotou. Chceš pokračovat?"
 
 #endif

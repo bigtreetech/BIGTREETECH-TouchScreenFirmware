@@ -184,5 +184,9 @@
     #define ES_CUSTOM_SECONDS         "Custom"
     #define ES_ST7920_FULLSCREEN      "Marlin mode in fullscreen"
     #define ES_SHOW_STATUS_SPEED_FLOW      "Mostrar la velocidad y el flujo en la página principal"
+    #define ES_PID_AUTOTUNE_PLA     "PID PLA"
+    #define ES_PID_AUTOTUNE_PETG     "PID PTEG"
+    #define ES_PID_AUTOTUNE_ABS      "PID ABS"
+    #define ES_PID_AUTOTUNE_WARNING      "Esto llevará mucho tiempo, espere hasta que se apaguen las luces o la temperatura de la boquilla y la cama sea la temperatura ambiente. ¿Quieres continuar?"
 
 #endif

@@ -183,6 +183,12 @@
     #define AM_300_SECONDS            "5 Min."
     #define AM_CUSTOM_SECONDS         "Custom"
     #define AM_ST7920_FULLSCREEN      "Marlin mode in fullscreen"
-    #define AM_SHOW_STATUS_SPEED_FLOW      "Show in main page speed and flow"
+    #define AM_SHOW_STATUS_SPEED_FLOW      "በዋናው ገጽ ፍጥነት እና ፍሰት ላይ አሳይ"
+    #define AM_PID_AUTOTUNE_PLA     "PID PLA"
+    #define AM_PID_AUTOTUNE_PETG     "PID PTEG"
+    #define AM_PID_AUTOTUNE_ABS      "PID ABS"
+    #define AM_PID_AUTOTUNE_WARNING      "ይህ ረጅም ጊዜ ይወስዳል ፣ መብራቶቹ እስኪወጡ ድረስ ይጠብቁ ወይም የመጥፋት እና የአልጋው የሙቀት መጠን የክፍሉ ሙቀት እስከሚሆን ድረስ። ለመቀጠል ይፈልጋሉ?"
+
+
 
 #endif

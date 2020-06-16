@@ -184,5 +184,9 @@
     #define DE_CUSTOM_SECONDS         "Benutz."
     #define DE_ST7920_FULLSCREEN      "Marlin mode in fullscreen"
     #define DE_SHOW_STATUS_SPEED_FLOW      "Geschwindigkeit und Fluss der Hauptseite anzeigen"
+    #define DE_PID_AUTOTUNE_PLA     "PID PLA"
+    #define DE_PID_AUTOTUNE_PETG     "PID PTEG"
+    #define DE_PID_AUTOTUNE_ABS      "PID ABS"
+    #define DE_PID_AUTOTUNE_WARNING      "Dies dauert lange, warten Sie, bis die Lichter ausgehen oder die Düsen- und Betttemperatur der Raumtemperatur entspricht. Möchtest du weiter machen?"
 
 #endif

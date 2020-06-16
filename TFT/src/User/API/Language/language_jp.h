@@ -184,5 +184,9 @@
     #define JP_CUSTOM_SECONDS         "Custom"
     #define JP_ST7920_FULLSCREEN      "Marlin mode in fullscreen"
     #define JP_SHOW_STATUS_SPEED_FLOW      "メインページに表示する速度とフロー"
+    #define JP_PID_AUTOTUNE_PLA     "PID PLA"
+    #define JP_PID_AUTOTUNE_PETG     "PID PTEG"
+    #define JP_PID_AUTOTUNE_ABS      "PID ABS"
+    #define JP_PID_AUTOTUNE_WARNING      "これには長い時間がかかります。ライトが消えるか、ノズルとベッドの温度が室温になるまで待ちます。 続けたいですか？"
 
 #endif

@@ -184,5 +184,9 @@
     #define PL_CUSTOM_SECONDS         "Custom"
     #define PL_ST7920_FULLSCREEN      "Marlin mode in fullscreen"
     #define PL_SHOW_STATUS_SPEED_FLOW      "Pokaż na stronie głównej prędkość i przepływ"
+    #define PL_PID_AUTOTUNE_PLA     "PID PLA"
+    #define PL_PID_AUTOTUNE_PETG     "PID PTEG"
+    #define PL_PID_AUTOTUNE_ABS      "PID ABS"
+    #define PL_PID_AUTOTUNE_WARNING      "Zajmie to dużo czasu, poczekaj, aż zgasną światła lub temperatura dyszy i złoża osiągnie temperaturę pokojową. Czy chcesz kontynuować?"
 
 #endif
