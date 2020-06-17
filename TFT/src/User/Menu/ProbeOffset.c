@@ -19,11 +19,9 @@ static u8 curUnit = 0;
 
 void showProbeOffset(float val)
 {
-  GUI_POINT point_of = {exhibitRect.x1, CENTER_Y - BYTE_HEIGHT / 2};
-
   char tempstr[20];
-  sprintf(tempstr, ":% 7.2f", val);
-  GUI_DispStringRight(point_of.x, point_of.y, (u8 *)tempstr);
+  sprintf(tempstr, "% 7.2f", val);
+  GUI_DispStringInPrect(&exhibitRect, (u8 *)tempstr);
 }
 
 void menuProbeOffset(void)
@@ -49,9 +47,6 @@ void menuProbeOffset(void)
 
   probeOffsetItems.items[KEY_ICON_5] = itemProbeOffsetUnit[curUnit];
   menuDrawPage(&probeOffsetItems);
-
-  GUI_DispString(exhibitRect.x0, CENTER_Y - BYTE_HEIGHT / 2, textSelect(LABEL_Z_OFFSET));
-
   showProbeOffset(now);
 
 #if LCD_ENCODER_SUPPORT

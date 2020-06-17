@@ -79,7 +79,7 @@ void menuPreheat(void)
     }
   };
 
-  if(infoSettings.unified_menu !=1)
+  if(infoSettings.unified_menu != 1)
     {
       preheatItems.items[6].icon = ICON_HEAT;
       preheatItems.items[6].label.index = LABEL_HEAT;
@@ -87,6 +87,8 @@ void menuPreheat(void)
 
   static TOOLPREHEAT nowHeater = BOTH;
   KEY_VALUES  key_num = KEY_IDLE;
+
+  preheatItems.items[key_num] = itemToolPreheat[nowHeater];
 
   menuDrawPage(&preheatItems);
   for (int i = 0; i < PREHEAT_COUNT; i++)
@@ -121,7 +123,7 @@ void menuPreheat(void)
       case KEY_ICON_5:
         nowHeater = (TOOLPREHEAT)((nowHeater+1) % 3);
         preheatItems.items[key_num] = itemToolPreheat[nowHeater];
-        menuDrawItem(&preheatItems.items[key_num], key_num);;
+        menuDrawItem(&preheatItems.items[key_num], key_num);
         break;
 
       case KEY_ICON_6:
