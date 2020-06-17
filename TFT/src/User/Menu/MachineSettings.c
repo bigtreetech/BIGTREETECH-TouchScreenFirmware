@@ -192,17 +192,25 @@ void menuMachineSettings(void)
   // title
   LABEL_MACHINE_SETTINGS,
   // icon                       label
-  {{ICON_CUSTOM,               LABEL_CUSTOM},
-    {ICON_RGB_SETTINGS,         LABEL_RGB_SETTINGS},
+   {{ICON_RGB_SETTINGS,         LABEL_RGB_SETTINGS},
+    {ICON_PARAMETER,            LABEL_PARAMETER_SETTING},
+    {ICON_CUSTOM,               LABEL_CUSTOM},
     {ICON_GCODE,                LABEL_TERMINAL},
     {ICON_SHUT_DOWN,            LABEL_SHUT_DOWN},
-    {ICON_PARAMETER,            LABEL_PARAMETER_SETTING},
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
     {ICON_BACK,                 LABEL_BACK},}
   };
-  KEY_VALUES key_num = KEY_IDLE;
 
+  //prevent some option from showing during print
+  if(isPrinting)
+  {
+    machineSettingsItems.items[2].icon = ICON_BACKGROUND;
+    machineSettingsItems.items[3].icon = ICON_BACKGROUND;
+    machineSettingsItems.items[4].icon = ICON_BACKGROUND;
+  }
+
+  KEY_VALUES key_num = KEY_IDLE;
   menuDrawPage(&machineSettingsItems);
 
   while(infoMenu.menu[infoMenu.cur] == menuMachineSettings)
@@ -212,24 +220,26 @@ void menuMachineSettings(void)
     {
 
       case KEY_ICON_0:
-        infoMenu.menu[++infoMenu.cur] =  menuCustom;
-        break;
-
-      case KEY_ICON_1:
         infoMenu.menu[++infoMenu.cur] = menuRGBSettings;
         break;
 
+      case KEY_ICON_1:
+        infoMenu.menu[++infoMenu.cur] = menuParameterSettings;
+        break;
+
       case KEY_ICON_2:
-        infoMenu.menu[++infoMenu.cur] = menuSendGcode;
+        if(!isPrinting)
+          infoMenu.menu[++infoMenu.cur] =  menuCustom;
         break;
 
       case KEY_ICON_3:
-        storeCmd("M81\n");
+        if(!isPrinting)
+          infoMenu.menu[++infoMenu.cur] = menuSendGcode;
         break;
 
       case KEY_ICON_4:
-        mustStoreCmd("M503 S0\n");
-        infoMenu.menu[++infoMenu.cur] = menuParameterSettings;
+        if(!isPrinting)
+          storeCmd("M81\n");
         break;
 
       case KEY_ICON_7:
