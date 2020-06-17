@@ -203,7 +203,7 @@ void menuMachineSettings(void)
   };
 
   //prevent some option from showing during print
-  if(isPrinting)
+  if(isPrinting())
   {
     machineSettingsItems.items[2].icon = ICON_BACKGROUND;
     machineSettingsItems.items[3].icon = ICON_BACKGROUND;
@@ -228,17 +228,17 @@ void menuMachineSettings(void)
         break;
 
       case KEY_ICON_2:
-        if(!isPrinting)
+        if(!isPrinting())
           infoMenu.menu[++infoMenu.cur] =  menuCustom;
         break;
 
       case KEY_ICON_3:
-        if(!isPrinting)
+        if(!isPrinting())
           infoMenu.menu[++infoMenu.cur] = menuSendGcode;
         break;
 
       case KEY_ICON_4:
-        if(!isPrinting)
+        if(!isPrinting())
           storeCmd("M81\n");
         break;
 
