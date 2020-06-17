@@ -206,8 +206,8 @@ void menuInfo(void)
                              {0 * LCD_WIDTH / 3, 1 * BYTE_HEIGHT},
                              {1 * LCD_WIDTH / 3, 1 * BYTE_HEIGHT},
                              {2 * LCD_WIDTH / 3, 1 * BYTE_HEIGHT},};
-  const char* hardware = "Board   : BIGTREETECH_" HARDWARE_VERSION;
-  const char* firmware = "Firmware: "HARDWARE_VERSION"." STRINGIFY(SOFTWARE_VERSION) " " __DATE__;
+  const char* hardware = "Board   : "HARDWARE_VERSION;
+  const char* firmware = "Firmware: Artillery3D-TFT-Firmware-RAWR." STRINGIFY(SOFTWARE_VERSION) "";
 
   u16 HW_X = (LCD_WIDTH - GUI_StrPixelWidth((u8 *)hardware))/2;
   u16 FW_X = (LCD_WIDTH - GUI_StrPixelWidth((u8 *)firmware))/2;
@@ -341,7 +341,7 @@ LABEL_SETTINGS,
   {ICON_SCREEN_INFO,          LABEL_SCREEN_INFO},
   {ICON_DISCONNECT,           LABEL_DISCONNECT},
   {ICON_BAUD_RATE,            LABEL_BAUDRATE},
-  {ICON_STOP,       LABEL_EMERGENCYSTOP},
+  {ICON_EMERGENCY_STOP,       LABEL_EMERGENCYSTOP},
   {ICON_BACK,                 LABEL_BACK},}
 };
 
