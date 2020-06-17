@@ -14,7 +14,7 @@ LABEL_FAN,
   {ICON_DEC,                  LABEL_DEC},
   {ICON_FAN ,                 LABEL_FAN},
   {ICON_FAN_FULL_SPEED,       LABEL_FAN_FULL_SPEED},
-  {ICON_STOP,                 LABEL_STOP},
+  {ICON_SHUT_DOWN,                 LABEL_SHUT_DOWN},
   {ICON_BACK,                 LABEL_BACK},}
 };
 

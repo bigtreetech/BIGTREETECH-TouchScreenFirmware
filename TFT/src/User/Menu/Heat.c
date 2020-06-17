@@ -13,7 +13,7 @@ LABEL_HEAT,
   {ICON_DEC,                  LABEL_DEC},
   {ICON_NOZZLE,               LABEL_NOZZLE},
   {ICON_10_DEGREE,             LABEL_10_DEGREE},
-  {ICON_STOP,                 LABEL_STOP},
+  {ICON_SHUT_DOWN,                 LABEL_SHUT_DOWN},
   {ICON_BACK,                 LABEL_BACK},}
 };
 

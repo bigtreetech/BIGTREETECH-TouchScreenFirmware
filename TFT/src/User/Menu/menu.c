@@ -19,14 +19,14 @@ const GUI_RECT rect_of_key[ITEM_PER_PAGE*2]={
   {3*ICON_WIDTH+3*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  4*ICON_WIDTH+3*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
 
   //8 labels area
-  {0*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  1*SPACE_X_PER_ICON,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
-  {1*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  2*SPACE_X_PER_ICON,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
-  {2*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  3*SPACE_X_PER_ICON,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
-  {3*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  4*SPACE_X_PER_ICON,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
-  {0*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  1*SPACE_X_PER_ICON,  2*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y},
-  {1*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  2*SPACE_X_PER_ICON,  2*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y},
-  {2*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  3*SPACE_X_PER_ICON,  2*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y},
-  {3*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  4*SPACE_X_PER_ICON,  2*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y},
+  {0*SPACE_X_PER_ICON,  1*(ICON_HEIGHT) - TEXT_DISTANCE+0*SPACE_Y+ICON_START_Y,  1*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
+  {1*SPACE_X_PER_ICON,  1*(ICON_HEIGHT) - TEXT_DISTANCE+0*SPACE_Y+ICON_START_Y,  2*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
+  {2*SPACE_X_PER_ICON,  1*(ICON_HEIGHT) - TEXT_DISTANCE+0*SPACE_Y+ICON_START_Y,  3*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
+  {3*SPACE_X_PER_ICON,  1*(ICON_HEIGHT) - TEXT_DISTANCE+0*SPACE_Y+ICON_START_Y,  4*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
+  {0*SPACE_X_PER_ICON,  2*(ICON_HEIGHT) - TEXT_DISTANCE+1*SPACE_Y+ICON_START_Y,  1*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
+  {1*SPACE_X_PER_ICON,  2*(ICON_HEIGHT) - TEXT_DISTANCE+1*SPACE_Y+ICON_START_Y,  2*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
+  {2*SPACE_X_PER_ICON,  2*(ICON_HEIGHT) - TEXT_DISTANCE+1*SPACE_Y+ICON_START_Y,  3*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
+  {3*SPACE_X_PER_ICON,  2*(ICON_HEIGHT) - TEXT_DISTANCE+1*SPACE_Y+ICON_START_Y,  4*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
 };
 
 const GUI_RECT rect_of_keyListView[ITEM_PER_PAGE]={
@@ -43,38 +43,37 @@ const GUI_RECT rect_of_keyListView[ITEM_PER_PAGE]={
 };
 
 const GUI_RECT rect_of_key_14[14]={
-  //7 icons area
-  {1,  9, 79,  113 },
-  {81,  9, 159,  113 },
-  {161, 9, 239,  113},
-  {241,  9, 319,  113 },
+  {0*ICON_WIDTH+0*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  1*ICON_WIDTH+0*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
+  {1*ICON_WIDTH+1*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  2*ICON_WIDTH+1*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
+  {2*ICON_WIDTH+2*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  3*ICON_WIDTH+2*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
+  {3*ICON_WIDTH+3*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  4*ICON_WIDTH+3*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
 
-  {30,  116, 108,  220 },
-  {121,  116, 199,  220 },
-  {212,  116, 290,  220 },
+  {0*ICON_WIDTH+0*SPACE_X_3+START_X_3,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  1*ICON_WIDTH+0*SPACE_X_3+START_X_3,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
+  {1*ICON_WIDTH+1*SPACE_X_3+START_X_3,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  2*ICON_WIDTH+1*SPACE_X_3+START_X_3,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
+  {2*ICON_WIDTH+2*SPACE_X_3+START_X_3,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  3*ICON_WIDTH+2*SPACE_X_3+START_X_3,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
 
-  //7 labels area
-  {1,  89, 79,  105 },
-  {81,  89, 159,  105 },
-  {161, 89, 239,  105},
-  {241,  89, 319,  105 },
+  {0*SPACE_X_PER_ICON,                   1*(ICON_HEIGHT) - TEXT_DISTANCE+0*SPACE_Y+ICON_START_Y,  1*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
+  {1*SPACE_X_PER_ICON,                   1*(ICON_HEIGHT) - TEXT_DISTANCE+0*SPACE_Y+ICON_START_Y,  2*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
+  {2*SPACE_X_PER_ICON,                   1*(ICON_HEIGHT) - TEXT_DISTANCE+0*SPACE_Y+ICON_START_Y,  3*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
+  {3*SPACE_X_PER_ICON,                   1*(ICON_HEIGHT) - TEXT_DISTANCE+0*SPACE_Y+ICON_START_Y,  4*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
+  {0*ICON_WIDTH+0*SPACE_X_3+START_X_3,  2*(ICON_HEIGHT) - TEXT_DISTANCE+1*SPACE_Y+ICON_START_Y,  1*ICON_WIDTH+0*SPACE_X_3+START_X_3,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
+  {1*ICON_WIDTH+1*SPACE_X_3+START_X_3,  2*(ICON_HEIGHT) - TEXT_DISTANCE+1*SPACE_Y+ICON_START_Y,  2*ICON_WIDTH+1*SPACE_X_3+START_X_3,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
+  {2*ICON_WIDTH+2*SPACE_X_3+START_X_3,  2*(ICON_HEIGHT) - TEXT_DISTANCE+1*SPACE_Y+ICON_START_Y, 3*ICON_WIDTH+2*SPACE_X_3+START_X_3,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
 
-  {30,  196, 108,  212 },
-  {121,  196, 199,  212 },
-  {212,  196, 290,  212 },
 };
 
 //Clean up the gaps outside icons
 void menuClearGaps(void)
 {
   const GUI_RECT gaps[]={
-  {0,                               0,               LCD_WIDTH,                       TITLE_END_Y},
-  {0,                               TITLE_END_Y,     LCD_WIDTH,                       ICON_START_Y},
-  {0,                               ICON_START_Y,    0*ICON_WIDTH+0*SPACE_X+START_X,  LCD_HEIGHT},
-  {1*ICON_WIDTH+0*SPACE_X+START_X,  ICON_START_Y,    1*ICON_WIDTH+1*SPACE_X+START_X,  LCD_HEIGHT},
-  {2*ICON_WIDTH+1*SPACE_X+START_X,  ICON_START_Y,    2*ICON_WIDTH+2*SPACE_X+START_X,  LCD_HEIGHT},
-  {3*ICON_WIDTH+2*SPACE_X+START_X,  ICON_START_Y,    3*ICON_WIDTH+3*SPACE_X+START_X,  LCD_HEIGHT},
-  {4*ICON_WIDTH+3*SPACE_X+START_X,  ICON_START_Y,    LCD_WIDTH,                       LCD_HEIGHT}};
+  {0,                               0,                          LCD_WIDTH,                       TITLE_END_Y},
+  {0,                               TITLE_END_Y,                LCD_WIDTH,                       ICON_START_Y},
+  {0,                               ICON_START_Y+ICON_HEIGHT,   LCD_WIDTH,                       ICON_START_Y+ICON_HEIGHT+SPACE_Y},
+  {0,                               ICON_START_Y,               0*ICON_WIDTH+0*SPACE_X+START_X,  LCD_HEIGHT},
+  {1*ICON_WIDTH+0*SPACE_X+START_X,  ICON_START_Y,               1*ICON_WIDTH+1*SPACE_X+START_X,  LCD_HEIGHT},
+  {2*ICON_WIDTH+1*SPACE_X+START_X,  ICON_START_Y,               2*ICON_WIDTH+2*SPACE_X+START_X,  LCD_HEIGHT},
+  {3*ICON_WIDTH+2*SPACE_X+START_X,  ICON_START_Y,               3*ICON_WIDTH+3*SPACE_X+START_X,  LCD_HEIGHT},
+  {4*ICON_WIDTH+3*SPACE_X+START_X,  ICON_START_Y,               LCD_WIDTH,                       LCD_HEIGHT}};
 
   GUI_SetBkColor(infoSettings.title_bg_color);
   GUI_ClearPrect(gaps);
@@ -141,9 +140,11 @@ void menuDrawItem(const ITEM *item, uint8_t positon)
     GUI_ClearPrect(rect);
 
   rect = rect_of_key + ITEM_PER_PAGE + positon;
-  GUI_ClearPrect(rect);
-  if (content)
+  if (content){
+    GUI_SetTextMode(GUI_TEXTMODE_TRANS);
     GUI_DispStringInPrect(rect, content);
+    GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
+  }
 }
 void menuDrawItem14(const ITEM *item, uint8_t positon)
 {
@@ -158,7 +159,7 @@ void menuDrawItem14(const ITEM *item, uint8_t positon)
   rect = rect_of_key_14 + 7 + positon;
   if (content){
     GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-    GUI_DispStringInRect(rect->x0, rect->y0, rect->x1, rect->y1,content);
+    GUI_DispStringInPrect(rect, content);
     GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
   }
 
@@ -458,7 +459,7 @@ void itemDrawIconPress(u8 position, u8 is_press)
     if (is_press) // Turn green when pressed
       ICON_PressedDisplay(rect->x0, rect->y0, curMenuItems->items[position].icon);
     else // Redraw normal icon when released
-      ICON_ReadDisplay(rect->x0, rect->y0, curMenuItems->items[position].icon);
+      menuDrawItem(&curMenuItems->items[position], position);
   }
   else
   { //draw rec over list item if pressed
@@ -496,7 +497,7 @@ void itemDrawIconPress14(u8 position, u8 is_press)
     if (is_press) // Turn green when pressed
       ICON_PressedDisplay14(rect->x0, rect->y0, curMenuItems14->items[position].icon);
     else // Redraw normal icon when released
-      ICON_ReadDisplay14(rect->x0, rect->y0, curMenuItems14->items[position].icon);
+      menuDrawItem14(&curMenuItems14->items[position], position);
   }
   else
   { //draw rec over list item if pressed

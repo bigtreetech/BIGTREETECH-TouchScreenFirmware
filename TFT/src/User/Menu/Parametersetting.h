@@ -3,11 +3,13 @@
 #include "menu.h"
 #include "coordinate.h"
 
+// #define ICON_NOZZLE_X   2*ICON_WIDTH+ICON_WIDTH/2
 
-#define ICON_NOZZLE_X   2*ICON_WIDTH+ICON_WIDTH/2
+#define ICON_NOZZLE_X   2*68+68/2
 #define VALUE_NOZZLE_X  ICON_NOZZLE_X+BYTE_WIDTH
 
-#define ICON_BED_X      3*ICON_WIDTH+2*BYTE_WIDTH+ICON_WIDTH/2
+// #define ICON_BED_X      3*ICON_WIDTH+2*BYTE_WIDTH+ICON_WIDTH/2
+#define ICON_BED_X      3*68+2*BYTE_WIDTH+68/2
 #define VALUE_BED_X     ICON_BED_X+BYTE_WIDTH
 
 typedef enum

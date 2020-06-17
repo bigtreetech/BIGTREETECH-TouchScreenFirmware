@@ -22,9 +22,11 @@ void drawPreheatNames(void)
   {
     const GUI_RECT *rect;
     rect = rect_of_key + ITEM_PER_PAGE + i;
-    GUI_ClearPrect(rect);
-
+    //GUI_ClearPrect(rect);
+    GUI_SetTextMode(GUI_TEXTMODE_TRANS);
     GUI_DispStringInPrect(rect, (u8*)preheatnames->preheat_name[i]);
+    GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
+
   }
 }
 
