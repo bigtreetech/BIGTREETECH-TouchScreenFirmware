@@ -189,5 +189,7 @@
     #define DE_PID_AUTOTUNE_ABS      "PID ABS"
     #define DE_PID_AUTOTUNE_WARNING      "Dies dauert lange, warten Sie, bis die Lichter ausgehen oder die Düsen- und Betttemperatur der Raumtemperatur entspricht. Möchtest du weiter machen?"
     #define DE_FILAMENT_LOAD_TEMPERATURE      "Bitte warten Sie, bis Sie die minimale Änderungstemperatur erreicht haben, oder stellen Sie eine höhere ein."
-    #define DE_FILAMENT_CHANGE      "Bereit zum Filamentwechsel?"
+    #define DE_FILAMENT_CHANGE_READY      "Bereit zum Filamentwechsel?"
+    #define DE_FILAMENT_CHANGE      "Filamentwechsel"
+
 #endif

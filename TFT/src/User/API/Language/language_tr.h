@@ -189,5 +189,7 @@
     #define TR_PID_AUTOTUNE_ABS      "PID ABS"
     #define TR_PID_AUTOTUNE_WARNING      "Bu uzun zaman alacaktır, ışıklar sönene veya meme ve yatak sıcaklığı oda sıcaklığı olana kadar bekleyin. Devam etmek istiyor musun?"
     #define TR_FILAMENT_LOAD_TEMPERATURE      "Lütfen minimum değişiklik sıcaklığına ulaşıncaya kadar bekleyin veya daha yüksek bir sıcaklık ayarlayın."
-    #define TR_FILAMENT_CHANGE      "Filamenti değiştirmeye hazır mısınız?"
+    #define TR_FILAMENT_CHANGE_READY      "Filamenti değiştirmeye hazır mısınız?"
+    #define TR_FILAMENT_CHANGE      "Filament değişimi"
+
 #endif

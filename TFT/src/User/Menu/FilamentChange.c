@@ -81,7 +81,7 @@ void menuFilamentChange(void)
       {
         u16 key_num = IDLE_TOUCH;
         bool waitConfirmation = true;
-        popupDrawPage(bottomDoubleBtn, textSelect(LABEL_WARNING), textSelect(LABEL_FILAMENT_CHANGE), textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL));
+        popupDrawPage(bottomDoubleBtn, textSelect(LABEL_WARNING), textSelect(LABEL_FILAMENT_CHANGE_READY), textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL));
         while (waitConfirmation)
         {
           key_num = KEY_GetValue(2, doubleBtnRect);
@@ -120,7 +120,7 @@ void menuFilamentChange(void)
       {
         u16 key_num = IDLE_TOUCH;
         bool waitConfirmation = true;
-        popupDrawPage(bottomDoubleBtn, textSelect(LABEL_WARNING), textSelect(LABEL_FILAMENT_CHANGE), textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL));
+        popupDrawPage(bottomDoubleBtn, textSelect(LABEL_WARNING), textSelect(LABEL_FILAMENT_CHANGE_READY), textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL));
         while (waitConfirmation)
         {
           key_num = KEY_GetValue(2, doubleBtnRect);

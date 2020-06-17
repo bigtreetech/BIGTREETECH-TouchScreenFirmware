@@ -189,5 +189,7 @@
     #define CN_PID_AUTOTUNE_ABS      "PID ABS"
     #define CN_PID_AUTOTUNE_WARNING      "这将需要很长时间，请等到灯光熄灭或喷嘴和床温达到室温为止。 你要继续吗"
     #define CN_FILAMENT_LOAD_TEMPERATURE      "请等待，直到达到最低变化温度或将其调整为更高的温度为止。"
-    #define CN_FILAMENT_CHANGE      "准备更换灯丝了吗？"
+    #define CN_FILAMENT_CHANGE_READY      "准备更换灯丝了吗？"
+    #define CN_FILAMENT_CHANGE      "灯丝更换"
+
 #endif

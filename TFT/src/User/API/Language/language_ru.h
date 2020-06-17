@@ -189,5 +189,7 @@
     #define RU_PID_AUTOTUNE_ABS      "PID ABS"
     #define RU_PID_AUTOTUNE_WARNING      "Это займет много времени, подождите, пока погаснет свет или температура сопла и слоя не станут комнатной температурой. Вы хотите продолжить?"
     #define RU_FILAMENT_LOAD_TEMPERATURE      "Пожалуйста, подождите, пока не достигнете минимальной температуры изменения или не отрегулируйте более высокую."
-    #define RU_FILAMENT_CHANGE      "Готовы заменить нить накала?"
+    #define RU_FILAMENT_CHANGE_READY      "Готовы заменить нить накала?"
+    #define RU_FILAMENT_CHANGE      "Изменение нити"
+
 #endif

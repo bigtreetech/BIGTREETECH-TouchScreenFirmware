@@ -189,5 +189,7 @@
     #define GR_PID_AUTOTUNE_ABS      "PID ABS"
     #define GR_PID_AUTOTUNE_WARNING      "Αυτό θα διαρκέσει πολύ, περιμένετε έως ότου σβήσουν τα φώτα ή η θερμοκρασία του ακροφυσίου και του κρεβατιού είναι η θερμοκρασία δωματίου. Θέλετε να συνεχίσετε;"
     #define GR_FILAMENT_LOAD_TEMPERATURE      "Περιμένετε έως ότου φτάσετε στην ελάχιστη θερμοκρασία αλλαγής ή προσαρμόστε μια υψηλότερη."
-    #define GR_FILAMENT_CHANGE      "Είστε έτοιμοι να αλλάξετε το νήμα;"
+    #define GR_FILAMENT_CHANGE_READY      "Είστε έτοιμοι να αλλάξετε το νήμα;"
+    #define GR_FILAMENT_CHANGE      "Αλλαγή νήματος"
+
 #endif
