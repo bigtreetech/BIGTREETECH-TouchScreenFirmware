@@ -57,6 +57,7 @@
 #include "Temperature.h"
 #include "Settings.h"
 #include "Printing.h"
+#include "MachineParameters.h"
 
 #include "extend.h"
 #include "list_item.h"

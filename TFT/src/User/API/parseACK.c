@@ -249,7 +249,7 @@ void parseACK(void)
       }
       else if(ack_seen("M92 T1 E")){
         setParameter(P_STEPS_PER_MM, E2_STEPPER, ack_value());
-        dualstepper[E_STEPPER] = true;
+        setDualStepperStatus(E_STEPPER, true);
       }
     //parse and store Max Feed Rate values
      else if(ack_seen("M203 X")){
@@ -263,7 +263,7 @@ void parseACK(void)
       }
       else if(ack_seen("M203 T1 E")){
         setParameter(P_MAX_FEED_RATE, E2_STEPPER, ack_value());
-        dualstepper[E_STEPPER] = true;
+        setDualStepperStatus(E_STEPPER, true);
       }
     //parse and store Max Acceleration values
       else if(ack_seen("M201 X")){
@@ -278,7 +278,7 @@ void parseACK(void)
       }
       else if(ack_seen("M201 T1 E")){
         setParameter(P_MAX_ACCELERATION, E2_STEPPER, ack_value());
-        dualstepper[E_STEPPER] = true;
+        setDualStepperStatus(E_STEPPER, true);
       }
     //parse and store Acceleration values
       else if(ack_seen("M204 P")){
@@ -323,16 +323,16 @@ void parseACK(void)
         if(ack_seen("Z")) setParameter(P_BUMPSENSITIVITY, Z_STEPPER, ack_value());
       }
       else if(ack_seen("M906 I1")){
-        if(ack_seen("X")) dualstepper[X_STEPPER] = true;
-        if(ack_seen("Y")) dualstepper[Y_STEPPER] = true;
-        if(ack_seen("Z")) dualstepper[Z_STEPPER] = true;
+        if(ack_seen("X")) setDualStepperStatus(X_STEPPER, true);;
+        if(ack_seen("Y")) setDualStepperStatus(Y_STEPPER, true);;
+        if(ack_seen("Z")) setDualStepperStatus(Z_STEPPER, true);;
       }
       else if(ack_seen("M906 T0 E")){
         setParameter(P_CURRENT, E_STEPPER, ack_value());
       }
       else if(ack_seen("M906 T1 E")){
         setParameter(P_CURRENT, E2_STEPPER, ack_value());
-        dualstepper[E_STEPPER] = true;
+        setDualStepperStatus(E_STEPPER, true);;
       }
     // Parse M115 capability report
 

@@ -1,49 +1,11 @@
 #include "Parametersetting.h"
 #include "includes.h"
 
-const u8 parameter_element_count[PARAMETERS_COUNT] = {5, 5, 5, 5, 3, 3, 3, 4, 4, 1};
-
-const char *const parameter_Cmd[PARAMETERS_COUNT][STEPPER_COUNT] = {
-  {"M92 X%.2f\n",   "M92 Y%.2f\n",  "M92 Z%.2f\n",  "M92 T0 E%.2f\n",  "M92 T1 E%.2f\n"}, //Steps/mm
-  {"M906 X%.0f\n", "M906 Y%.0f\n", "M906 Z%.0f\n", "M906 T0 E%.0f\n", "M906 T1 E%.0f\n"}, //Current
-  {"M203 X%.0f\n", "M203 Y%.0f\n", "M203 Z%.0f\n", "M203 T0 E%.0f\n", "M203 T1 E%.0f\n"}, //MaxFeedrate
-  {"M201 X%.0f\n", "M201 Y%.0f\n", "M201 Z%.0f\n", "M201 T0 E%.0f\n", "M201 T1 E%.0f\n"}, //MaxAcceleration
-  {"M204 P%.0f\n", "M204 R%.0f\n", "M204 T%.0f\n",              NULL,              NULL}, //Acceleration
-  {"M851 X%.2f\n", "M851 Y%.2f\n", "M851 Z%.2f\n",              NULL,              NULL}, //Probe offset
-  {"M914 X%.2f\n", "M914 Y%.2f\n", "M914 Z%.2f\n",              NULL,              NULL}, //bump Sensitivity
-  {"M207 S%.0f\n", "M207 W%.2f\n", "M207 F%.2f\n",    "M207 Z%.2f\n",              NULL}, //FW retract
-  {"M208 S%.0f\n", "M208 W%.0f\n", "M208 F%.2f\n",    "M208 R%.2f\n",              NULL}, //FW retract recover
-  {"M900 K%.2f\n",           NULL,            NULL,             NULL,              NULL}  //Linear Advance
-};
-
-const VAL_TYPE parameter_val_type[PARAMETERS_COUNT][STEPPER_COUNT] = {
-  {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_FLOAT,       VAL_TYPE_FLOAT,       VAL_TYPE_FLOAT},  //Steps/mm
-  {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,         VAL_TYPE_INT,         VAL_TYPE_INT},    //Current
-  {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,         VAL_TYPE_INT,         VAL_TYPE_INT},    //MaxFeedrate
-  {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,         VAL_TYPE_INT,         VAL_TYPE_INT},    //MaxAcceleration
-  {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,         VAL_TYPE_INT},                          //Acceleration
-  {VAL_TYPE_NEG_FLOAT,  VAL_TYPE_NEG_FLOAT, VAL_TYPE_NEG_FLOAT},                                          //Probe offset
-  {VAL_TYPE_NEG_INT,    VAL_TYPE_NEG_INT,   VAL_TYPE_NEG_INT},                                            //bump Sensitivity
-  {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_FLOAT,       VAL_TYPE_FLOAT},                        //FW retract
-  {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_NEG_FLOAT,   VAL_TYPE_NEG_FLOAT},                    //FW retract recover
-  {VAL_TYPE_FLOAT}                                                                                        //Linear Advance
-};
-
-//Extra teppers current gcode command
-const char *const dualstepper_current_Cmd[3] = {"M906 I1 X%.1f\n", "M906 I1 Y%.1f\n", "M906 I1 Z%.1f\n"};
-const char *const dualstepper_bump_Cmd[3] = {"M914 I1 X%.1f\n", "M914 I1 Y%.1f\n", "M914 I1 Z%.1f\n"};
-
 static u8 ps_cur_page = 0;
 static u8 cur_parameter = 0;
 static u8 total_pages = 1;
 
 bool parametersChanged = false;
-bool dualstepper[TOTAL_AXIS] = {false,false,false,false};
-char *const axisDisplayID[STEPPER_COUNT] = AXIS_DISPLAY_ID;
-
-const LABEL accel_disp_ID[] = {LABEL_PRINT_ACCELERATION, LABEL_RETRACT_ACCELERATION, LABEL_TRAVEL_ACCELERATION};
-const LABEL retract_disp_ID[] = {LABEL_RETRACT_LENGTH, LABEL_RETRACT_SWAP_LENGTH, LABEL_RETRACT_FEEDRATE, LABEL_RETRACT_Z_LIFT};
-const LABEL recover_disp_ID[] = {LABEL_RECOVER_LENGTH, LABEL_SWAP_RECOVER_LENGTH, LABEL_RECOVER_FEEDRATE, LABEL_SWAP_RECOVER_FEEDRATE};
 
 const LISTITEM parametertypes[P_ITEMSCOUNT] = {
   // icon               ItemType          Item Title              item value text(only for custom value)
@@ -77,77 +39,6 @@ LABEL_PARAMETER_SETTING,
   {ICONCHAR_BACK,         LIST_LABEL,     LABEL_BACKGROUND,     LABEL_BACKGROUND},}
 };
 
-PARAMETERS infoParameters;
-
-float getParameter(PARAMETER_NAME name, int index)
-{
-  if(index >= parameter_element_count[name]) return 0.0f;
-  switch (name)
-  {
-  case P_STEPS_PER_MM:
-    return infoParameters.StepsPerMM[index];
-  case P_CURRENT:
-    return infoParameters.Current[index];
-  case P_MAX_FEED_RATE:
-    return infoParameters.MaxFeedRate[index];
-  case P_MAX_ACCELERATION:
-    return infoParameters.MaxAcceleration[index];
-  case P_ACCELERATION:
-    return infoParameters.Acceleration[index];
-  case P_PROBE_OFFSET:
-    return infoParameters.ProbeOffset[index];
-  case P_BUMPSENSITIVITY:
-    return infoParameters.BumpSensitivity[index];
-  case P_FWRETRACT:
-    return infoParameters.FwRetract[index];
-  case P_FWRECOVER:
-    return infoParameters.FwRecover[index];
-  case P_LIN_ADV:
-    return infoParameters.LinAdvance[index];
-  default:
-    return 0.0f;
-  }
-}
-
-void setParameter(PARAMETER_NAME name, int index, float val){
-  if(index >= parameter_element_count[name]) return;
-    switch (name)
-    {
-    case P_STEPS_PER_MM:
-      infoParameters.StepsPerMM[index] = val;
-      break;
-    case P_CURRENT:
-      infoParameters.Current[index] = val;
-      break;
-    case P_MAX_FEED_RATE:
-      infoParameters.MaxFeedRate[index]  = val;
-      break;
-    case P_MAX_ACCELERATION:
-      infoParameters.MaxAcceleration[index] = val;
-      break;
-    case P_ACCELERATION:
-      infoParameters.Acceleration[index] = val;
-      break;
-    case P_PROBE_OFFSET:
-      infoParameters.ProbeOffset[index] = val;
-      break;
-    case P_BUMPSENSITIVITY:
-      infoParameters.BumpSensitivity[index] = val;
-      break;
-    case P_FWRETRACT:
-      infoParameters.FwRetract[index] = val;
-      break;
-    case P_FWRECOVER:
-      infoParameters.FwRecover[index] = val;
-      break;
-    case P_LIN_ADV:
-      infoParameters.LinAdvance[index] = val;
-      break;
-    default:
-      break;
-    }
-}
-
 //show menu for selected parameter type
 void menuShowParameter(void){
   KEY_VALUES key_num = KEY_IDLE;
@@ -167,7 +58,7 @@ void menuShowParameter(void){
   {ICONCHAR_BACK,             LIST_LABEL,           LABEL_BACKGROUND,   LABEL_BACKGROUND},}
   };
 
-  for (int i = 0; i < parameter_element_count[cur_parameter]; i++) {
+  for (int i = 0; i < getParameterElementCount(cur_parameter); i++) {
     setDynamicLabel(i, axisDisplayID[i]);
     setDynamicValue(i, getParameter(cur_parameter,i));
 
@@ -191,7 +82,7 @@ void menuShowParameter(void){
       break;
 
     default:
-      if (dualstepper[E_STEPPER] == true && i == E2_STEPPER)
+      if (getDualstepperStatus(E_STEPPER) && i == E2_STEPPER)
       {
         parameter_menuitems.items[i].icon = ICONCHAR_EDIT;
       }
@@ -220,27 +111,21 @@ void menuShowParameter(void){
       {
         if (parameter_menuitems.items[key_num].icon == ICONCHAR_BACKGROUND)
           break;
+
+        VAL_TYPE v_type = getParameterValType(cur_parameter, key_num);
         //accept negative values only for probe offset
-        bool negative_val = parameter_val_type[cur_parameter][key_num] % 2;
+        bool negative_val = v_type % 2;
 
         float v = getParameter(cur_parameter, key_num);
 
-        if (parameter_val_type[cur_parameter][key_num] == VAL_TYPE_FLOAT || parameter_val_type[cur_parameter][key_num] == VAL_TYPE_NEG_FLOAT)
+        if (v_type == VAL_TYPE_FLOAT || v_type == VAL_TYPE_NEG_FLOAT)
           v = numPadFloat(NULL, v, negative_val); // parameter is a decimal number
         else
           v = (float)numPadInt(NULL, v, negative_val); // parameter is an integer
 
         if (v != getParameter(cur_parameter, key_num))
         {
-          storeCmd(parameter_Cmd[cur_parameter][key_num], v);
-          //send gcode for dual steppers(x,y & z only) if they exists
-          if (dualstepper[key_num] == true)
-          {
-            if (cur_parameter == P_CURRENT && key_num < (KEY_VALUES)E_STEPPER)
-                storeCmd(dualstepper_current_Cmd[key_num], v);
-            else if (cur_parameter == P_BUMPSENSITIVITY && key_num < (KEY_VALUES)E_STEPPER)
-                storeCmd(dualstepper_bump_Cmd[key_num], v);
-          }
+          sendParameterCmd(cur_parameter,key_num, v);
         }
         setDynamicValue(key_num, v);
         menuDrawListPage(&parameter_menuitems);

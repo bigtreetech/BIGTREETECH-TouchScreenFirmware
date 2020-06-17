@@ -253,19 +253,3 @@ void menuMachineSettings(void)
     loopProcess();
   }
 }
-
-void saveEepromSettings(void)
-{
-  if(infoMachineSettings.EEPROM == 1)
-    mustStoreCmd("M500\n");
-}
-void restoreEepromSettings(void)
-{
-  if(infoMachineSettings.EEPROM == 1)
-    mustStoreCmd("M501\nM503 S0\n");
-}
-void resetEepromSettings(void)
-{
-  if(infoMachineSettings.EEPROM == 1)
-    mustStoreCmd("M502\nM500\n");
-}

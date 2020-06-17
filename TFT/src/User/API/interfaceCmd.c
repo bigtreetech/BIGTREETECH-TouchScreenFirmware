@@ -658,9 +658,9 @@ void sendQueueCmd(void)
           if(cmd_seen('E')) setParameter(P_CURRENT, E_AXIS, cmd_value());
           if(cmd_seen('I'))
           {
-            if(cmd_seen('X')) dualstepper[X_STEPPER] = true;
-            if(cmd_seen('Y')) dualstepper[Y_STEPPER] = true;
-            if(cmd_seen('Z')) dualstepper[Z_STEPPER] = true;
+            if(cmd_seen('X')) setDualStepperStatus(X_STEPPER,true);
+            if(cmd_seen('Y')) setDualStepperStatus(Y_STEPPER,true);
+            if(cmd_seen('Z')) setDualStepperStatus(Z_STEPPER,true);
           }
           if(cmd_seen('T') && cmd_value() == 0)
           {
@@ -669,7 +669,7 @@ void sendQueueCmd(void)
           if(cmd_seen('T') && cmd_value() == 1)
           {
             if(cmd_seen('E')) setParameter(P_CURRENT,E2_STEPPER,cmd_value());
-            dualstepper[E_STEPPER] = true;
+            setDualStepperStatus(Z_STEPPER,true);
           }
         case 914: //parse and store TMC Bump sensitivity values
           if(cmd_seen('X')) setParameter(P_BUMPSENSITIVITY, X_STEPPER, cmd_float());
