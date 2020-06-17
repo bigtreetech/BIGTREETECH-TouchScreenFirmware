@@ -3,7 +3,7 @@
 //ITEM_PER_PAGE items (icon + label)
 const MENUITEMS14 StatusItems = {
     // title
-    LABEL_READY,
+    LABEL_BACKGROUND,
     // icon                       label
     {
         {ICON_STATUS_NOZZLE, LABEL_BACKGROUND},
