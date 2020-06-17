@@ -1,24 +1,21 @@
 <!-- omit in toc -->
 # BigTreeTech Touchscreen Firmware
-![GitHub](https://img.shields.io/github/license/bigtreetech/bigtreetech-TouchScreenFirmware.svg)
-[![GitHub contributors](https://img.shields.io/github/contributors/bigtreetech/bigtreetech-TouchScreenFirmware.svg)](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/graphs/contributors)
-![GitHub Release Date](https://img.shields.io/github/release-date/bigtreetech/bigtreetech-TouchScreenFirmware.svg)
-[![Build Status](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/workflows/Build%20Test/badge.svg?branch=master)](https://github.com/bigtreetech/bigtreetech-TouchScreenFirmware/actions)
+![GitHub](https://img.shields.io/github/license/wgcv/RAWR-TFT-Firmware-Artillery3D)
+![GitHub Release Date](https://img.shields.io/github/release/wgcv/RAWR-TFT-Firmware-Artillery3D)
 
-Firmware for BigTreeTech's dual-mode touchscreen 3D printer controllers
-
-<img width=500 src="https://user-images.githubusercontent.com/13375512/76691608-ae1b8780-6609-11ea-9ee1-421bcf09e538.png">
+The most powerful TFT Firmware for the Artillery X1 and Genius keeping the vanilla essence but with incredible tools.
+<img width=500 src="https://raw.githubusercontent.com/wgcv/RAWR-TFT-Firmware-Artillery3D/docs/img/readme-banner.jpeg">
 
 <!-- omit in toc -->
 ## Table of Contents
-- [Menus and Themes](#menus-and-themes)
-- [Update TFT Firmware](#update-tft-firmware)
-- [Configuration](#configuration)
+- [Screens](#screens)
+- [How to update TFT Firmware](#how-to-update-tft-firmware)
+  - [Configuration](#configuration)
 - [Customization](#customization)
-  - [Bootscreen and Icons](#bootscreen-and-icons)
-  - [Firmware](#firmware)
+  - [Themes](#themes)
+  - [Reset](#reset)
+  - [Deployment](#Deployment)
 - [Troubleshooting](#troubleshooting)
-- [Version History](#version-history)
 
 ## Menus and Themes
 
