@@ -2,7 +2,7 @@
 #include "STM32_Flash.h"
 
 #define TSC_SIGN  0x20200512 // DO NOT MODIFY
-#define PARA_SIGN 0x20200513 // (YYYMMDD) If a new setting parameter is added, modify here and initialize the initial value in the "infoSettingsReset()" function
+#define PARA_SIGN 0x20200616 // (YYYMMDD) If a new setting parameter is added, modify here and initialize the initial value in the "infoSettingsReset()" function
 
 extern u32 TSC_Para[7];        //
 extern SETTINGS infoSettings;  //
@@ -127,6 +127,16 @@ void readStoredPara(void)
   infoSettings.m27_refresh_time     = byteToWord(data + (index += 4), 4);
   infoSettings.m27_active           = byteToWord(data + (index += 4), 4);
   infoSettings.longFileName         = byteToWord(data + (index += 4), 4);
+
+// Filament Load settings
+
+  infoSettings.filament_load_limit_temperature            = byteToWord(data + (index += 4), 4);
+  infoSettings.filament_load_speed                        = byteToWord(data + (index += 4), 4);
+  infoSettings.filament_load_length                       = byteToWord(data + (index += 4), 4);
+  infoSettings.filament_unload_speed                      = byteToWord(data + (index += 4), 4);
+  infoSettings.filament_unload_length                     = byteToWord(data + (index += 4), 4);
+  infoSettings.filament_unload_retract_length             = byteToWord(data + (index += 4), 4);
+  infoSettings.filament_unload_retract_speed              = byteToWord(data + (index += 4), 4);
 
   for(int i = 0; i < MAX_HEATER_COUNT; i++)
   {
@@ -255,6 +265,16 @@ void storePara(void)
   wordToByte(infoSettings.m27_refresh_time,           data + (index += 4));
   wordToByte(infoSettings.m27_active,                 data + (index += 4));
   wordToByte(infoSettings.longFileName,               data + (index += 4));
+
+// Filament Load settings
+
+  wordToByte(infoSettings.filament_load_limit_temperature,                 data + (index += 4));
+  wordToByte(infoSettings.filament_load_speed,                             data + (index += 4));
+  wordToByte(infoSettings.filament_load_length,                            data + (index += 4));
+  wordToByte(infoSettings.filament_unload_speed,                           data + (index += 4));
+  wordToByte(infoSettings.filament_unload_length,                          data + (index += 4));
+  wordToByte(infoSettings.filament_unload_retract_length,                  data + (index += 4));
+  wordToByte(infoSettings.filament_unload_retract_speed,                   data + (index += 4));
 
   for(int i = 0; i < MAX_HEATER_COUNT; i++)
   {

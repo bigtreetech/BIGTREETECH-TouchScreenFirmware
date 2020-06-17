@@ -188,7 +188,8 @@
     #define AM_PID_AUTOTUNE_PETG     "PID PTEG"
     #define AM_PID_AUTOTUNE_ABS      "PID ABS"
     #define AM_PID_AUTOTUNE_WARNING      "ይህ ረጅም ጊዜ ይወስዳል ፣ መብራቶቹ እስኪወጡ ድረስ ይጠብቁ ወይም የመጥፋት እና የአልጋው የሙቀት መጠን የክፍሉ ሙቀት እስከሚሆን ድረስ። ለመቀጠል ይፈልጋሉ?"
-
+    #define AM_FILAMENT_LOAD_TEMPERATURE      "እባክዎን ዝቅተኛውን የሙቀት መጠን እስከሚቀበሉ ድረስ ወይም ከፍ ያለውን ደረጃ እስከሚያስተካክሉ ድረስ ይጠብቁ ፡፡"
+    #define AM_FILAMENT_CHANGE      "መከለያውን ለመለወጥ ዝግጁ ነዎት?"
 
 
 #endif

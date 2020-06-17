@@ -188,5 +188,7 @@
     #define PL_PID_AUTOTUNE_PETG     "PID PTEG"
     #define PL_PID_AUTOTUNE_ABS      "PID ABS"
     #define PL_PID_AUTOTUNE_WARNING      "Zajmie to dużo czasu, poczekaj, aż zgasną światła lub temperatura dyszy i złoża osiągnie temperaturę pokojową. Czy chcesz kontynuować?"
+    #define PL_FILAMENT_LOAD_TEMPERATURE      "Poczekaj, aż osiągniesz minimalną temperaturę zmiany lub ustaw wyższą."
+    #define PL_FILAMENT_CHANGE      "Gotowy na zmianę żarnika?"
 
 #endif

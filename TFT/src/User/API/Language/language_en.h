@@ -187,6 +187,8 @@
     #define EN_PID_AUTOTUNE_PLA     "PID PLA"
     #define EN_PID_AUTOTUNE_PETG     "PID PTEG"
     #define EN_PID_AUTOTUNE_ABS      "PID ABS"
-     #define EN_PID_AUTOTUNE_WARNING      "This will take a long time, wait until the lights go out or the nozzle and bed temperature are the room temperature. Do you want to continue?"
-
+    #define EN_PID_AUTOTUNE_WARNING      "This will take a long time, wait until the lights go out or the nozzle and bed temperature are the room temperature. Do you want to continue?"
+    #define EN_PID_AUTOTUNE_ABS      "PID ABS"
+    #define EN_FILAMENT_LOAD_TEMPERATURE      "Please wait until you reach the minimum change temperature or adjust a higher one."
+    #define EN_FILAMENT_CHANGE      "Ready for change the filament?"
 #endif

@@ -1029,7 +1029,27 @@ case C_INDEX_SHOW_STATUS_SPEED_FLOW:
 
     }
     break;
-
+  case C_INDEX_FILAMENT_LOAD_LIMIT_TEMPERATURE:
+    infoSettings.filament_load_limit_temperature = config_int();
+    break;
+  case C_INDEX_FILAMENT_LOAD_SPEED:
+    infoSettings.filament_load_speed = config_int();
+    break;
+  case C_INDEX_FILAMENT_LOAD_LENGTH:
+    infoSettings.filament_load_length = config_float();
+    break;
+  case C_INDEX_FILAMENT_UNLOAD_SPEED:
+    infoSettings.filament_unload_speed = config_int();
+    break;
+  case C_INDEX_FILAMENT_UNLOAD_LENGTH:
+    infoSettings.filament_unload_length = config_float();
+    break;
+  case C_INDEX_FILAMENT_UNLOAD_RETRACT_LENGTH:
+    infoSettings.filament_unload_retract_length = config_float();
+    break;
+  case C_INDEX_FILAMENT_UNLOAD_RETRACT_SPEED:
+    infoSettings.filament_unload_retract_speed = config_int();
+    break;
   default:
     break;
   }

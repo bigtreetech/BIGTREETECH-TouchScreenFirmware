@@ -14,7 +14,7 @@ MENUITEMS unifiedPageItems = {
     {ICON_HOME_MOVE,  LABEL_UNIFIEDMOVE},
     {ICON_GCODE,      LABEL_TERMINAL},
     {ICON_MANUAL_LEVEL,         LABEL_LEVELING},
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_EXTRUDE,    LABEL_EXTRUDE},
     {ICON_CUSTOM,     LABEL_CUSTOM},
 
     {ICON_BACK,       LABEL_BACK}}
@@ -35,6 +35,8 @@ MENUITEMS unifiedPageItems = {
       case KEY_ICON_2: infoMenu.menu[++infoMenu.cur] = menuUnifiedMove;     break;
       case KEY_ICON_3: infoMenu.menu[++infoMenu.cur] = menuSendGcode;       break;
       case KEY_ICON_4: infoMenu.menu[++infoMenu.cur] = menuManualLeveling;       break;
+      case KEY_ICON_5: infoMenu.menu[++infoMenu.cur] = menuFilamentChange;       break;
+
       case KEY_ICON_6: infoMenu.menu[++infoMenu.cur] = menuCustom; break;
       case KEY_ICON_7: infoMenu.cur--;        break;
       default:break;

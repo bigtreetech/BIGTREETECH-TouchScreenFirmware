@@ -188,5 +188,6 @@
     #define JP_PID_AUTOTUNE_PETG     "PID PTEG"
     #define JP_PID_AUTOTUNE_ABS      "PID ABS"
     #define JP_PID_AUTOTUNE_WARNING      "これには長い時間がかかります。ライトが消えるか、ノズルとベッドの温度が室温になるまで待ちます。 続けたいですか？"
-
+    #define JP_FILAMENT_LOAD_TEMPERATURE      "最低変化温度に達するまで待つか、より高い温度に調整してください。"
+    #define JP_FILAMENT_CHANGE      "フィラメントを交換する準備はできましたか？"
 #endif

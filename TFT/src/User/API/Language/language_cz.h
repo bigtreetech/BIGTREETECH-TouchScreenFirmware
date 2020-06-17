@@ -188,5 +188,6 @@
     #define CZ_PID_AUTOTUNE_PETG     "PID PTEG"
     #define CZ_PID_AUTOTUNE_ABS      "PID ABS"
     #define CZ_PID_AUTOTUNE_WARNING      "Bude to trvat dlouho, počkejte, až zhasnou světla nebo dokud nebude teplota trysky a lože pokojovou teplotou. Chceš pokračovat?"
-
+    #define CZ_FILAMENT_LOAD_TEMPERATURE      "Počkejte, až dosáhnete minimální změny teploty nebo upravte vyšší."
+    #define CZ_FILAMENT_CHANGE      "Jste připraveni na změnu vlákna?"
 #endif

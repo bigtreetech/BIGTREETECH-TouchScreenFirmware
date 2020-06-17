@@ -188,5 +188,6 @@
     #define IT_PID_AUTOTUNE_PETG     "PID PTEG"
     #define IT_PID_AUTOTUNE_ABS      "PID ABS"
     #define IT_PID_AUTOTUNE_WARNING      "Questo richiederà molto tempo, attendere che le luci si spengano o l'ugello e la temperatura del letto siano la temperatura ambiente. Vuoi continuare?"
-
+    #define IT_FILAMENT_LOAD_TEMPERATURE      "Attendere fino a quando non si raggiunge la temperatura minima di variazione o si regola una temperatura più alta."
+    #define IT_FILAMENT_CHANGE      "Pronto per cambiare il filamento?"
 #endif

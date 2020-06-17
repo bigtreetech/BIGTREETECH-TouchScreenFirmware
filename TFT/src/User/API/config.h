@@ -125,6 +125,14 @@
 #define CONFIG_START_GCODE      "start_gcode:"
 #define CONFIG_END_GCODE        "end_gcode:"
 #define CONFIG_CANCEL_GCODE     "cancel_gcode:"
+//------------------------------Filament Change Function
+#define CONFIG_FILAMENT_LOAD_LIMIT_TEMPERATURE        "filament_load_limit_temperature:"
+#define CONFIG_FILAMENT_LOAD_SPEED        "filament_load_speed:"
+#define CONFIG_FILAMENT_LOAD_LENGTH       "filament_load_length:"
+#define CONFIG_FILAMENT_UNLOAD_SPEED      "filament_unload_speed:"
+#define CONFIG_FILAMENT_UNLOAD_LENGTH     "filament_unload_length:"
+#define CONFIG_FILAMENT_UNLOAD_RETRACT_LENGTH    "filament_unload_retract_length:"
+#define CONFIG_FILAMENT_UNLOAD_RETRACT_SPEED     "filament_unload_retract_speed:"
 
 //-----------------------------Limits
 #define MAX_SIZE_LIMIT            2000         // machine size over this will not be parsed.

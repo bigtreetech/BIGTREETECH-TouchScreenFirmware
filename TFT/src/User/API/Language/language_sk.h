@@ -188,5 +188,6 @@
     #define SK_PID_AUTOTUNE_PETG     "PID PTEG"
     #define SK_PID_AUTOTUNE_ABS      "PID ABS"
     #define SK_PID_AUTOTUNE_WARNING      "Bude to trvať dlho, počkajte, kým zhasnú svetlá alebo kým teplota v tryske a lôžku nie je teplota miestnosti. Chceš pokračovať?"
-
+    #define SK_FILAMENT_LOAD_TEMPERATURE      "Počkajte, kým nedosiahnete minimálnu zmenu teploty alebo upravíte vyššiu teplotu."
+    #define SK_FILAMENT_CHANGE      "Ste pripravení na zmenu vlákna?"
 #endif

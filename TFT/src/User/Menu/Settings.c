@@ -79,6 +79,14 @@ void infoSettingsReset(void)
   infoSettings.m27_refresh_time       = M27_REFRESH;
   infoSettings.m27_active             = M27_WATCH_OTHER_SOURCES;
   infoSettings.longFileName           = AUTO;     //ENABLED / DISABLED / AUTO
+  // Filament Load settings
+  infoSettings.filament_load_limit_temperature = DEFAULT_FILAMENT_LOAD_LIMIT_TEMPERATURE;
+  infoSettings.filament_load_speed    = DEFAULT_FILAMENT_LOAD_SPEED;
+  infoSettings.filament_load_length   = DEFAULT_FILAMENT_LOAD_LENGTH;
+  infoSettings.filament_unload_speed  = DEFAULT_FILAMENT_UNLOAD_SPEED;
+  infoSettings.filament_unload_length = DEFAULT_FILAMENT_UNLOAD_LENGTH;
+  infoSettings.filament_unload_retract_length   = DEFAULT_FILAMENT_UNLOAD_RETRACT_LENGTH;
+  infoSettings.filament_unload_retract_speed    = DEFAULT_FILAMENT_UNLOAD_RETRACT_SPEED;
 
   for(int i = 0; i < MAX_HEATER_COUNT; i++)
   {

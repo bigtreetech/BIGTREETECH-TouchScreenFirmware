@@ -345,4 +345,22 @@
 // Cancel G-code - run this G-code after canceling print
 #define PRINT_CANCEL_GCODE "G28 XY R10\n" // Home XY and raise Z 10mm
 
+/* --------------------------------------------------------------------
+   Filament Change Function
+  -------------------------------------------------------------------- */
+// It is the minimum temperature for filament change. It will auto heat up if the current temp doesn't reach the target.
+#define DEFAULT_FILAMENT_LOAD_LIMIT_TEMPERATURE 200 
+// The speed to extrude filament(mm/min)
+#define DEFAULT_FILAMENT_LOAD_SPEED 400 
+// The lenght to extrude filament (mm)
+#define DEFAULT_FILAMENT_LOAD_LENGTH 100.0f
+// The speed to retract filament(mm/min)
+#define DEFAULT_FILAMENT_UNLOAD_SPEED 2000
+// The lenght to retract filament(mm)
+#define DEFAULT_FILAMENT_UNLOAD_LENGTH 100.0f
+// The length of Load filament before unloader filament. 
+#define DEFAULT_FILAMENT_UNLOAD_RETRACT_LENGTH 5.0f
+// The speed of load filament  before unloader filament.
+#define DEFAULT_FILAMENT_UNLOAD_RETRACT_SPEED 500
+
 #endif

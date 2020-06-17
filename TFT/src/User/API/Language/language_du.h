@@ -188,5 +188,6 @@
     #define DU_PID_AUTOTUNE_PETG     "PID PTEG"
     #define DU_PID_AUTOTUNE_ABS      "PID ABS"
     #define DU_PID_AUTOTUNE_WARNING      "Dit duurt lang, wacht tot de lampjes uitgaan of het mondstuk en de bedtemperatuur de kamertemperatuur zijn. Wil je doorgaan?"
-
+    #define DU_FILAMENT_LOAD_TEMPERATURE      "Wacht tot u de minimale veranderingstemperatuur bereikt of pas een hogere temperatuur aan."
+    #define DU_FILAMENT_CHANGE      "Klaar om het filament te veranderen?"
 #endif

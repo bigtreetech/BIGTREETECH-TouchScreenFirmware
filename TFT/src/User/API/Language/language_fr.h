@@ -188,5 +188,6 @@
     #define FR_PID_AUTOTUNE_PETG     "PID PTEG"
     #define FR_PID_AUTOTUNE_ABS      "PID ABS"
     #define FR_PID_AUTOTUNE_WARNING      "Cela prendra beaucoup de temps, attendez que les lumières s'éteignent ou que la température de la buse et du lit soit la température ambiante. Voulez-vous continuer?"
-
+    #define FR_FILAMENT_LOAD_TEMPERATURE      "Veuillez attendre jusqu'à ce que vous atteigniez la température de changement minimum ou ajustez une température plus élevée."
+    #define FR_FILAMENT_CHANGE      "Prêt à changer le filament?"
 #endif

@@ -188,5 +188,6 @@
     #define ES_PID_AUTOTUNE_PETG     "PID PTEG"
     #define ES_PID_AUTOTUNE_ABS      "PID ABS"
     #define ES_PID_AUTOTUNE_WARNING      "Esto llevará mucho tiempo, espere hasta que se apaguen las luces o la temperatura de la boquilla y la cama sea la temperatura ambiente. ¿Quieres continuar?"
-
+    #define ES_FILAMENT_LOAD_TEMPERATURE      "Espere hasta alcanzar la temperatura mínima de cambio o ajuste una más alta."
+    #define ES_FILAMENT_CHANGE      "¿Listo para cambiar el filamento?"
 #endif

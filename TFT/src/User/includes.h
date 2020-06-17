@@ -76,6 +76,8 @@
 #include "Parametersetting.h"
 
 #include "Extrude.h"
+#include "FilamentChange.h"
+
 #include "Fan.h"
 #include "Settings.h"
 #include "ScreenSettings.h"

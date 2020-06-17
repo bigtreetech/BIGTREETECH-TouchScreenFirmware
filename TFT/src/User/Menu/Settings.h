@@ -124,7 +124,13 @@ typedef struct
   uint16_t  level_feedrate[AXIS_NUM];  // X, Y, Z
   uint16_t  preheat_temp[PREHEAT_COUNT];
   uint16_t  preheat_bed[PREHEAT_COUNT];
-
+  uint16_t  filament_load_limit_temperature;
+  int16_t   filament_load_speed;
+  float     filament_load_length;
+  int16_t   filament_unload_speed;
+  float     filament_unload_length;
+  float     filament_unload_retract_length;
+  int16_t   filament_unload_retract_speed;
 }SETTINGS;
 
 typedef struct{
@@ -166,8 +172,6 @@ typedef struct
   uint8_t autoReportSDStatus;
   uint8_t babyStepping;
 }MACHINESETTINGS;
-
-
 
 extern SETTINGS infoSettings;
 extern MACHINESETTINGS infoMachineSettings;

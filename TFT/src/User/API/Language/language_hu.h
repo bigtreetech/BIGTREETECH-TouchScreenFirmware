@@ -188,5 +188,6 @@
     #define HU_PID_AUTOTUNE_PETG     "PID PTEG"
     #define HU_PID_AUTOTUNE_ABS      "PID ABS"
     #define HU_PID_AUTOTUNE_WARNING      "Ez hosszú ideig tart, várjon, amíg a lámpák kialszanak, vagy a fúvóka és az ágy hőmérséklete megegyezik a szobahőmérséklettel. Akarod folytatni?"
-
+    #define HU_FILAMENT_LOAD_TEMPERATURE      "Várjon, amíg eléri a minimális hőmérsékleti változást, vagy állítson be egy magasabb hőmérsékletet."
+    #define HU_FILAMENT_CHANGE      "Készen állsz az izzószál megváltoztatására?"
 #endif
