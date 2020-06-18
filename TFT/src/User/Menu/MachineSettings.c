@@ -203,11 +203,12 @@ void menuMachineSettings(void)
   };
 
   //prevent some option from showing during print
+  const ITEM no_item = {ICON_BACKGROUND, LABEL_BACKGROUND};
   if(isPrinting())
   {
-    machineSettingsItems.items[2].icon = ICON_BACKGROUND;
-    machineSettingsItems.items[3].icon = ICON_BACKGROUND;
-    machineSettingsItems.items[4].icon = ICON_BACKGROUND;
+    machineSettingsItems.items[2] = no_item;
+    machineSettingsItems.items[3] = no_item;
+    machineSettingsItems.items[4] = no_item;
   }
 
   KEY_VALUES key_num = KEY_IDLE;

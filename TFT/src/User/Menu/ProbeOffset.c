@@ -21,7 +21,9 @@ void showProbeOffset(float val)
 {
   char tempstr[20];
   sprintf(tempstr, "% 7.2f", val);
+  setLargeFont(true);
   GUI_DispStringInPrect(&exhibitRect, (u8 *)tempstr);
+  setLargeFont(false);
 }
 
 void menuProbeOffset(void)
