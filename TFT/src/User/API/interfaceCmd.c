@@ -669,7 +669,7 @@ void sendQueueCmd(void)
           if(cmd_seen('T') && cmd_value() == 1)
           {
             if(cmd_seen('E')) setParameter(P_CURRENT,E2_STEPPER,cmd_value());
-            setDualStepperStatus(Z_STEPPER,true);
+            setDualStepperStatus(E_STEPPER,true);
           }
         case 914: //parse and store TMC Bump sensitivity values
           if(cmd_seen('X')) setParameter(P_BUMPSENSITIVITY, X_STEPPER, cmd_float());

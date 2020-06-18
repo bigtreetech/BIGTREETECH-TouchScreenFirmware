@@ -323,16 +323,16 @@ void parseACK(void)
         if(ack_seen("Z")) setParameter(P_BUMPSENSITIVITY, Z_STEPPER, ack_value());
       }
       else if(ack_seen("M906 I1")){
-        if(ack_seen("X")) setDualStepperStatus(X_STEPPER, true);;
-        if(ack_seen("Y")) setDualStepperStatus(Y_STEPPER, true);;
-        if(ack_seen("Z")) setDualStepperStatus(Z_STEPPER, true);;
+        if(ack_seen("X")) setDualStepperStatus(X_STEPPER, true);
+        if(ack_seen("Y")) setDualStepperStatus(Y_STEPPER, true);
+        if(ack_seen("Z")) setDualStepperStatus(Z_STEPPER, true);
       }
       else if(ack_seen("M906 T0 E")){
         setParameter(P_CURRENT, E_STEPPER, ack_value());
       }
       else if(ack_seen("M906 T1 E")){
         setParameter(P_CURRENT, E2_STEPPER, ack_value());
-        setDualStepperStatus(E_STEPPER, true);;
+        setDualStepperStatus(E_STEPPER, true);
       }
     // Parse M115 capability report
 
