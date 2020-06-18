@@ -8,7 +8,7 @@
 /**
  * Default Mode
  *
- * Mode switching is still possible by by holding down the encorder for two seconds.
+ * Mode switching is still possible by holding down the encorder for two seconds.
  *
  * Options:
  * ST7920_SPI // Marlin Mode
