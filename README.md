@@ -1,30 +1,30 @@
 <!-- omit in toc -->
-# BigTreeTech Touchscreen Firmware
+# RAWR TFT Firmware for the Artillery 3D Printer
 ![GitHub](https://img.shields.io/github/license/wgcv/RAWR-TFT-Firmware-Artillery3D)
 ![GitHub Release Date](https://img.shields.io/github/release/wgcv/RAWR-TFT-Firmware-Artillery3D)
-
+<p align="center">
+<img width=1080 src="https://raw.githubusercontent.com/wgcv/RAWR-TFT-Firmware-Artillery3D/docs/img/readme-banner.jpeg" />
 The most powerful TFT Firmware for the Artillery X1 and Genius keeping the vanilla essence but with incredible tools.
-<img width=500 src="https://raw.githubusercontent.com/wgcv/RAWR-TFT-Firmware-Artillery3D/docs/img/readme-banner.jpeg">
-
-<!-- omit in toc -->
+</p>
+ 
+ 
 ## Table of Contents
 - [Screens](#screens)
-- [How to update TFT Firmware](#how-to-update-tft-firmware)
-  - [Configuration](#configuration)
+- [How to update TFT Firmware](#how-to-setup-the-tft-firmware)
 - [Customization](#customization)
+  - [Configuration](#configuration)
   - [Themes](#themes)
   - [Reset](#reset)
-  - [Deployment](#Deployment)
-- [Troubleshooting](#troubleshooting)
+  - [Deployment](#deployment)
 
-## Menus and Themes
+## Screens
 
 | Classic Menu &amp; Icon Theme |  Unified Menu &amp; Material Icon Theme |
 :--------------------------:|:-------------------------:
 ![](https://user-images.githubusercontent.com/54511555/77016371-ad9a2e00-6934-11ea-9e57-23c2ab2cad58.png) | ![](https://user-images.githubusercontent.com/54511555/77016415-d3273780-6934-11ea-8c61-a184fa55b420.png)
 Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update) folder | Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update - Unified Menu Material theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update%20-%20Unified%20Menu%20Material%20theme) folder
 
-## Update TFT Firmware
+## How to setup the tft firmware
 
 TFT firmware updates are comprised of two parts:
 
@@ -44,6 +44,7 @@ Place SD card with `BIGTREE_TFT*_V*.*.*.bin` &amp; `TFT*` folder into the TFT's 
 
 <p align=center> ⚠️ Failing to update your icons &amp; fonts will result in missing icons and/or unreadable text ⚠️ </p>
 
+## Customization
 ## Configuration
 The Firmware can be configured using the **config.ini** file from from one of these folders:
 [`Copy to SD Card root directory to update`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update) or
@@ -59,46 +60,28 @@ To update the Firmware configuration:
 3. Insert the SD card in the TFT's SD card slot and restart the TFT by pressing the reset buttion or disconnecting and connecting the power cable.
 4. The TFT will update and store the configuraiton form **config.ini** file.
 
-## Customization
-
-### Bootscreen and Icons
+### Themes
 See [Customization guides](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/readme/) for detailed  information.
 
-### Firmware
-<details><summary>View full instructions</summary>
+### Reset
+To reset the TFT's touch screen calibration, create a blank file named `reset.txt` and place in root folder of the sd card. Insert the SD card into the TFT's SD card reader and power cycle your printer to start the reset process.
+
+### Deployment
 <ol>
 <li>Setup Visual Studio Code with PlatformIO <a href="https://github.com/bigtreetech/Document/blob/master/How%20to%20install%20VScode+Platformio.md">instructions</a></li>
-<li>Click on the PlatformIO icon (①) and then click on Open Project (②):
+<li>Click on the PlatformIO icon (1) and then click on Open Project (2):
    <img src="https://user-images.githubusercontent.com/25599056/56637513-6b258e00-669e-11e9-9fad-d0571e57499e.png"></li>
-<li>Find the BIGTREETECH  firmware source directory , then click Open:
+<li>Find the firmware source directory , then click Open:
    <img src="https://user-images.githubusercontent.com/25599056/56637532-77115000-669e-11e9-809b-f6bc25412f75.png"></li>
-  <li>After opening the project, edit <a href="platformio.ini"><code>platformio.ini</code></a> and change the <code>default_envs</code> to one that matches your TFT model and version:
-   <pre>;BIGTREE_TFT35_V1_0
-;BIGTREE_TFT35_V1_1
-;BIGTREE_TFT35_V1_2
-;BIGTREE_TFT35_V2_0
-;BIGTREE_TFT35_V3_0
-;BIGTREE_TFT35_E3_V3_0
-;BIGTREE_TFT28_V1_0
-;BIGTREE_TFT28_V3_0
-;BIGTREE_TFT24_V1_1
-;MKS_32_V1_4
-;MKS_32_V1_4_NOBL
-
+  <li>After opening the project, edit <a href="platformio.ini"><code>platformio.ini</code></a> and check the <code>default_envs</code> to one that matches your TFT model and version, for the Artillery is:
+   <pre>
 [platformio]
 src_dir      = TFT
 boards_dir   = buildroot/boards
-default_envs = BIGTREE_TFT35_V3_0</pre></li>
+default_envs = MKS_28_Clone_V1_0
+</pre></li>
   <li>Click the check mark (✓) at the bottom of VSCode or press <code>Ctrl</code>+<code>Alt</code>+<code>B</code> (Windows) / <code>Ctrl</code>+<code>Option</code>+<code>B</code> (macOS) to compile.
 
 <img src="https://user-images.githubusercontent.com/25599056/56637550-809ab800-669e-11e9-99d3-6b502e294688.png"></li>
-<li>A <code>BIGTREE_TFT*_V*.*.*.bin</code> file will be generated in the <em>hidden</em> <code>.pio\build\BIGTREE_TFT*_V*_*</code> folder. Follow the update process outlined in the <a href="#about-tft-firmware">About TFT Firmware</a> section above to update your TFT to the latest version.</li>
-</details>
+<li>A <code>mkstft28.xx.xbin</code> file will be generated in the <em>hidden</em> <code>.pio\build\MKS_28_Clone_V1_0</code> folder. Follow the update process outlined in the <a href="#how-to-setup-the-tft-firmware">How to setup the TFT Firmware</a> section above to update your TFT to the latest version.</li>
 
-## Troubleshooting
-
-To reset the TFT's touch screen calibration, create a blank file named `reset.txt` and place in root folder of the sd card. Insert the SD card into the TFT's SD card reader and power cycle your printer to start the reset process.
-
-## Version History
-
-See [BIGTREETECH-TouchScreenFirmware/releases](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/releases) for a complete version history.
