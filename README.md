@@ -12,7 +12,7 @@ The most powerful TFT Firmware for the Artillery X1 and Genius keeping the vanil
 - [Screens](#screens)
 - [How to update TFT Firmware](#how-to-setup-the-tft-firmware)
 - [Customization](#customization)
-  - [Configuration](#configuration)
+  - [Configuration](#editing-configuration)
   - [Themes](#themes)
   - [Reset](#reset)
   - [Deployment](#deployment)
@@ -26,36 +26,26 @@ The most powerful TFT Firmware for the Artillery X1 and Genius keeping the vanil
 | Printing menu | |
 ![](https://raw.githubusercontent.com/wgcv/RAWR-TFT-Firmware-Artillery3D/docs/img/readme-printing.jpg) <img width=1080/>| <img width=1080/>
 
-## How to setup the tft firmware
+## How to setup the TFT firmware
 
-TFT firmware updates are comprised of two parts:
+1. Download the last realse from https://github.com/wgcv/RAWR-TFT-Firmware-Artillery3D/releases
+2. Unzip the download file.
+3. Copy the files `mkstft28.bin` `config.ini` and the folders `bmp` `font` to the root of a blank SD Card (<8GB and formatted as FAT32).
+4. Insert the SD card in the TFT's SD card slot and restart the TFT by pressing the reset buttion or disconnecting and connecting the power cable.
+5. Wait to update the firmware, configuration, font and icons.
+![image](https://raw.githubusercontent.com/wgcv/RAWR-TFT-Firmware-Artillery3D/docs/img/readme-copysd.jpg)
 
-1. The firmware binary (`BIGTREE_TFT*_V*.*.*.bin`). Example: `BIGTREE_TFT35_V3.0.25.2.bin`:
-     - `BIGTREE_TFT_35`: model
-     - `V3.0`: hardware version
-     - `25.2`: software version
-2. Fonts and Icons (`TFT*` folder):
-   - `TFT*/font`: fonts
-   - `TFT*/bmp`: icons
-
-Copy both the `BIGTREE_TFT*_V*.*.*.bin` and `TFT*` folder to the root of a blank SD card that is <8GB and formatted as FAT32:
-
-![image](https://user-images.githubusercontent.com/13375512/76688998-3e989e80-65ef-11ea-93df-29a8216475a6.png)
-
-Place SD card with `BIGTREE_TFT*_V*.*.*.bin` &amp; `TFT*` folder into the TFT's SD card reader and power cycle your printer to start the update process.
 
 <p align=center> ⚠️ Failing to update your icons &amp; fonts will result in missing icons and/or unreadable text ⚠️ </p>
 
 ## Customization
-## Configuration
-The Firmware can be configured using the **config.ini** file from from one of these folders:
-[`Copy to SD Card root directory to update`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update) or
-[`Copy to SD Card root directory to update - Unified Menu Material theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update%20-%20Unified%20Menu%20Material%20theme)
+### Editing configuration
+The Firmware can be configured using the **config.ini** file.
+- For edit the pre heat values you can check the lines `224` to `231`, the `T` is the extrusor temperature and `B` the bed temperature.
+- For edit the bed size you can edit the line `155` for the x1 the default vaue are `size_max:X300 Y300 Z400` and the genius `size_max:X220 Y220 Z250`
+- For show the flow and speed in the status screen change the line `308` to `show_status_speed_flow:1`
 
-### Editing configuration (config.ini) file
-To edit the **config.ini** file follow the instruction here: [Detailed Instructions here](config_instructions.md)
-
-### Updating Firmware Configuration
+#### Updating Firmware Configuration
 To update the Firmware configuration:
 1. Edit the settings in **config.ini**.
 2. Copy the **config.ini** file to the root of the SD card. (The SD card capacity should be less than or equal to 8GB and formatted as FAT32)
@@ -63,7 +53,7 @@ To update the Firmware configuration:
 4. The TFT will update and store the configuraiton form **config.ini** file.
 
 ### Themes
-See [Customization guides](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/readme/) for detailed  information.
+You can create your own themes changing the BMP images and share the link opening a PR.
 
 ### Reset
 To reset the TFT's touch screen calibration, create a blank file named `reset.txt` and place in root folder of the sd card. Insert the SD card into the TFT's SD card reader and power cycle your printer to start the reset process.
