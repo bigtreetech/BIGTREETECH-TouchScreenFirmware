@@ -207,7 +207,7 @@ void menuInfo(void)
                              {1 * LCD_WIDTH / 3, 1 * BYTE_HEIGHT},
                              {2 * LCD_WIDTH / 3, 1 * BYTE_HEIGHT},};
   const char* hardware = "Board   : "HARDWARE_VERSION;
-  const char* firmware = "Firmware: Artillery3D-TFT-Firmware-RAWR." STRINGIFY(SOFTWARE_VERSION) "";
+  const char* firmware = "Firmware: RAWR Firmware - " STRINGIFY(SOFTWARE_VERSION) "";
 
   u16 HW_X = (LCD_WIDTH - GUI_StrPixelWidth((u8 *)hardware))/2;
   u16 FW_X = (LCD_WIDTH - GUI_StrPixelWidth((u8 *)firmware))/2;
