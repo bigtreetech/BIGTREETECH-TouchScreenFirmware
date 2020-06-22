@@ -58,6 +58,8 @@
 #include "Settings.h"
 #include "Printing.h"
 #include "MachineParameters.h"
+#include "FanControl.h"
+#include "SpeedControl.h"
 
 #include "extend.h"
 #include "list_item.h"

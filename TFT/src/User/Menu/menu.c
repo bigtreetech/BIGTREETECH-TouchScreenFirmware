@@ -473,7 +473,11 @@ void loopBackEnd(void)
 
   parseRcvGcode();                    //Parse the received Gcode from other UART, such as: ESP3D, etc...
 
-  loopCheckHeater();                  //Temperature related settings
+  loopCheckHeater();                  //Temperature monitor
+
+  loopFan();                          //Fan speed monitor
+
+  loopSpeed();                        //Speed & flow monitor
 
 #ifdef BUZZER_PIN
   loopBuzzer();
