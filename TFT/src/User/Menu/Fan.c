@@ -138,7 +138,7 @@ void menuFan(void)
               }
             }
 
-            if (fanSpeed[curIndex] > 0 && encoderPosition < 0) {
+            if (curspeed > 0 && encoderPosition < 0) {
               if (infoSettings.fan_percentage == 1)
               {
                 if (fanGetSpeedPercent(curIndex) % 20 != 0)

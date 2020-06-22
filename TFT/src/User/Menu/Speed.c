@@ -109,15 +109,13 @@ void menuSpeed(void)
         #if LCD_ENCODER_SUPPORT
           if(encoderPosition)
           {
-            if (percentage[item_percentage_i] < SPEED_MAX && encoderPosition > 0)
+            if (now < SPEED_MAX && encoderPosition > 0)
             {
-              if (now < SPEED_MAX)
-                speedSetPercent(item_percentage_i, now + item_percent_unit[item_percent_unit_i]);
+              speedSetPercent(item_percentage_i, now + item_percent_unit[item_percent_unit_i]);
             }
-            if (percentage[item_percentage_i] > SPEED_MIN && encoderPosition < 0)
+            if (now > SPEED_MIN && encoderPosition < 0)
             {
-              if (now > SPEED_MIN)
-                speedSetPercent(item_percentage_i, now - item_percent_unit[item_percent_unit_i]);
+              speedSetPercent(item_percentage_i, now - item_percent_unit[item_percent_unit_i]);
             }
             encoderPosition = 0;
           }
