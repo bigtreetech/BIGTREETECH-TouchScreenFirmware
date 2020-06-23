@@ -31,7 +31,7 @@ LABEL_MORE,
 // icon                       label
  {{ICON_HEAT,                 LABEL_HEAT},
   {ICON_FAN,                  LABEL_FAN},
-  {ICON_EXTRUDE,              LABEL_EXTRUDE},
+  {ICON_FILAMENTCHANGE,       LABEL_FILAMENT_CHANGE},
   {ICON_PERCENTAGE,           LABEL_PERCENTAGE},
   {ICON_BABYSTEP,             LABEL_BABYSTEP},
   {ICON_FEATURE_SETTINGS,     LABEL_FEATURE_SETTINGS},
@@ -61,7 +61,7 @@ void menuMore(void)
         if (isPrinting() && !isPause()) // need paused before extrude
           infoMenu.menu[++infoMenu.cur] = menuIsPause;
         else
-          infoMenu.menu[++infoMenu.cur] = menuExtrude;
+          infoMenu.menu[++infoMenu.cur] = menuFilamentChange;
         break;
 
       case KEY_ICON_3:

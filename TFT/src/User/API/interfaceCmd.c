@@ -356,6 +356,36 @@ void sendQueueCmd(void)
             return;
             }
           break;
+          #ifdef NOZZLE_PAUSE_M600
+          case 600: //M600 pause print
+          if (isPrinting() && !infoHost.printing){
+            Buzzer_play(sound_notify);
+            setPrintPause(true, false);
+            Serial_Puts(SERIAL_PORT_2, "ok\n");
+              popupReminder((u8 *)"M600", textSelect(LABEL_FILAMENT_CHANGE));
+              // prevent sending M600 to marlin
+              infoCmd.count--;
+              infoCmd.index_r = (infoCmd.index_r + 1) % CMD_MAX_LIST;
+              return;
+            }
+            break;
+          #endif
+
+          #ifdef NOZZLE_PAUSE_M601
+          case 601: //M601 pause print
+          if (isPrinting() && !infoHost.printing){
+            Buzzer_play(sound_notify);
+            setPrintPause(true, false);
+            Serial_Puts(SERIAL_PORT_2, "ok\n");
+              popupReminder((u8 *)"M601", textSelect(LABEL_FILAMENT_CHANGE));
+
+              // prevent sending M601 to marlin
+              infoCmd.count--;
+              infoCmd.index_r = (infoCmd.index_r + 1) % CMD_MAX_LIST;
+              return;
+            }
+            break;
+          #endif
 #endif
 
         case 92: //M92 Steps per unit
@@ -668,11 +698,27 @@ void sendQueueCmd(void)
               speedSetSendWaiting(0, false);
             }
             break;
+          #ifdef NOZZLE_PAUSE_M600
+          case 600: //M600 pause print
+            if (isPrinting()) {
+              Buzzer_play(sound_notify);
+              setPrintPause(true,false);
+              popupReminder((u8 *)"M600", textSelect(LABEL_FILAMENT_CHANGE));
+              // prevent sending M600 to marlin
+              infoCmd.count--;
+              infoCmd.index_r = (infoCmd.index_r + 1) % CMD_MAX_LIST;
+              return;
+            }
+            break;
+          #endif
 
           #ifdef NOZZLE_PAUSE_M601
           case 601: //M601 pause print
             if (isPrinting()) {
+              Buzzer_play(sound_notify);
               setPrintPause(true,false);
+              popupReminder((u8 *)"M601", textSelect(LABEL_FILAMENT_CHANGE));
+
               // prevent sending M601 to marlin
               infoCmd.count--;
               infoCmd.index_r = (infoCmd.index_r + 1) % CMD_MAX_LIST;
