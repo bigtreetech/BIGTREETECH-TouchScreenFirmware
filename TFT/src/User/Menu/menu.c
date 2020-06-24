@@ -73,7 +73,10 @@ void menuClearGaps(void)
   {1*ICON_WIDTH+0*SPACE_X+START_X,  ICON_START_Y,               1*ICON_WIDTH+1*SPACE_X+START_X,  LCD_HEIGHT},
   {2*ICON_WIDTH+1*SPACE_X+START_X,  ICON_START_Y,               2*ICON_WIDTH+2*SPACE_X+START_X,  LCD_HEIGHT},
   {3*ICON_WIDTH+2*SPACE_X+START_X,  ICON_START_Y,               3*ICON_WIDTH+3*SPACE_X+START_X,  LCD_HEIGHT},
-  {4*ICON_WIDTH+3*SPACE_X+START_X,  ICON_START_Y,               LCD_WIDTH,                       LCD_HEIGHT}};
+  {4*ICON_WIDTH+3*SPACE_X+START_X,  ICON_START_Y,               LCD_WIDTH,                       LCD_HEIGHT},
+  {0,                               ICON_START_Y+ICON_HEIGHT*2,                LCD_WIDTH,                       LCD_HEIGHT},
+  
+  };
 
   GUI_SetBkColor(infoSettings.title_bg_color);
   GUI_ClearPrect(gaps);
