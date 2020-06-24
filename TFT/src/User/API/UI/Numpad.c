@@ -85,7 +85,7 @@ float numPadFloat(float old_val, bool negative_val)
       switch (key_num)
       {
       case NUM_KEY_EXIT:
-        BUZZER_PLAY(sound_cancel);
+        BUZZER_PLAY(sound_keypress);
         touchSound = true;
         return old_val;
 

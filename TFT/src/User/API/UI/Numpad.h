@@ -7,7 +7,7 @@
 #define SKEYWIDTH       LCD_WIDTH/4
 
 #define KEY_NUM 16
-#define BUFLONG 6
+#define BUFLONG 7
 
 typedef enum
 {
