@@ -85,8 +85,10 @@ To reset the TFT's touch screen calibration, create a blank file named `reset.tx
 <ol>
 <li>Setup Visual Studio Code with PlatformIO <a href="https://github.com/bigtreetech/Document/blob/master/How%20to%20install%20VScode+Platformio.md">instructions</a></li>
 <li>Click on the PlatformIO icon (1) and then click on Open Project (2):
+ 
    <img src="https://user-images.githubusercontent.com/25599056/56637513-6b258e00-669e-11e9-9fad-d0571e57499e.png"></li>
 <li>Find the firmware source directory , then click Open:
+ 
    <img src="https://user-images.githubusercontent.com/25599056/56637532-77115000-669e-11e9-809b-f6bc25412f75.png"></li>
   <li>After opening the project, edit <a href="platformio.ini"><code>platformio.ini</code></a> and check the <code>default_envs</code> to one that matches your TFT model and version, for the Artillery is:
    <pre>
