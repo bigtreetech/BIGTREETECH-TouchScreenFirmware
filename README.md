@@ -23,8 +23,8 @@ The most powerful TFT Firmware for the Artillery X1 and Genius keeping the vanil
 |![](https://raw.githubusercontent.com/wgcv/RAWR-TFT-Firmware-Artillery3D/docs/img/readme-statusscreen1.jpg) | ![](https://raw.githubusercontent.com/wgcv/RAWR-TFT-Firmware-Artillery3D/docs/img/readme-statusscreen2.jpg)
 | Main menu |  Settings menu |
 |![](https://raw.githubusercontent.com/wgcv/RAWR-TFT-Firmware-Artillery3D/docs/img/readme-mainmenu.jpg) | ![](https://raw.githubusercontent.com/wgcv/RAWR-TFT-Firmware-Artillery3D/docs/img/readme-settings.jpg)
-| Printing menu | |
-![](https://raw.githubusercontent.com/wgcv/RAWR-TFT-Firmware-Artillery3D/docs/img/readme-printing.jpg) <img width=1080/>| <img width=1080/>
+| Printing menu | | M600 |
+![](https://raw.githubusercontent.com/wgcv/RAWR-TFT-Firmware-Artillery3D/docs/img/readme-printing.jpg) | ![](https://raw.githubusercontent.com/wgcv/RAWR-TFT-Firmware-Artillery3D/docs/img/readme-M600.jpg)
 
 ## How to setup the TFT firmware
 
