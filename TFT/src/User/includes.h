@@ -77,6 +77,7 @@
 
 #include "Extrude.h"
 #include "FilamentChange.h"
+#include "ExtruderCalibration.h"
 
 #include "Fan.h"
 #include "Settings.h"

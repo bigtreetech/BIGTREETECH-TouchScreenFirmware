@@ -191,5 +191,9 @@
     #define DU_FILAMENT_LOAD_TEMPERATURE      "Wacht tot u de minimale veranderingstemperatuur bereikt of pas een hogere temperatuur aan."
     #define DU_FILAMENT_CHANGE_READY      "Klaar om het filament te veranderen?"
     #define DU_FILAMENT_CHANGE      "Filament-verandering"
+    #define DU_EXTRUDE_READY      "Klaar om te extruderen?"
+    #define DU_EDIT     "Bewerk"
+    #define DU_EXTRUDE_CALIBRATION    "Extruder-kalibratie"
+    #define DU_EXTRUDE_CALIBRATION_INFORMATION    "1) Measure 20cm and Extrude\n2) Measure and calculate\n3) Set the new value\nMore information at:\nwww.wgcv.me/cec"
 
 #endif

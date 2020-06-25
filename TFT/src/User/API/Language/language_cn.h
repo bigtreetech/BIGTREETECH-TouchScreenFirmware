@@ -191,5 +191,9 @@
     #define CN_FILAMENT_LOAD_TEMPERATURE      "请等待，直到达到最低变化温度或将其调整为更高的温度为止。"
     #define CN_FILAMENT_CHANGE_READY      "准备更换灯丝了吗？"
     #define CN_FILAMENT_CHANGE      "灯丝更换"
+    #define CN_EXTRUDE_READY      "准备挤出吗？"
+    #define CN_EDIT     "编辑"
+    #define CN_EXTRUDE_CALIBRATION    "挤出机校准"
+    #define CN_EXTRUDE_CALIBRATION_INFORMATION    "1) Measure 20cm and Extrude\n2) Measure and calculate\n3) Set the new value\nMore information at:\nwww.wgcv.me/cec"
 
 #endif

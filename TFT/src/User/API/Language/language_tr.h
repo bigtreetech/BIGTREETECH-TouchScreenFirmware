@@ -191,5 +191,9 @@
     #define TR_FILAMENT_LOAD_TEMPERATURE      "Lütfen minimum değişiklik sıcaklığına ulaşıncaya kadar bekleyin veya daha yüksek bir sıcaklık ayarlayın."
     #define TR_FILAMENT_CHANGE_READY      "Filamenti değiştirmeye hazır mısınız?"
     #define TR_FILAMENT_CHANGE      "Filament değişimi"
+    #define TR_EXTRUDE_READY      "Ekstrüzyona Hazır mısınız?"
+    #define TR_EDIT     "Düzenle"
+    #define TR_EXTRUDE_CALIBRATION    "Ekstruder Kalibrasyonu"
+    #define TR_EXTRUDE_CALIBRATION_INFORMATION    "1) Measure 20cm and Extrude\n2) Measure and calculate\n3) Set the new value\nMore information at:\nwww.wgcv.me/cec"
 
 #endif

@@ -191,5 +191,9 @@
     #define FR_FILAMENT_LOAD_TEMPERATURE      "Veuillez attendre jusqu'à ce que vous atteigniez la température de changement minimum ou ajustez une température plus élevée."
     #define FR_FILAMENT_CHANGE_READY      "Prêt à changer le filament?"
     #define FR_FILAMENT_CHANGE      "Changement de filament"
+    #define FR_EXTRUDE_READY      "Prêt à extruder?"
+    #define FR_EDIT     "Bewerk"
+    #define FR_EXTRUDE_CALIBRATION    "Étalonnage de l'extrudeuse"
+    #define FR_EXTRUDE_CALIBRATION_INFORMATION    "1) Measure 20cm and Extrude\n2) Measure and calculate\n3) Set the new value\nMore information at:\nwww.wgcv.me/cec"
 
 #endif

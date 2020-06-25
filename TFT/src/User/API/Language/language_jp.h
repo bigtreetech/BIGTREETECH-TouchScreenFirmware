@@ -191,5 +191,9 @@
     #define JP_FILAMENT_LOAD_TEMPERATURE      "最低変化温度に達するまで待つか、より高い温度に調整してください。"
     #define JP_FILAMENT_CHANGE_READY      "フィラメントを交換する準備はできましたか？"
     #define JP_FILAMENT_CHANGE      "フィラメントの変化"
+    #define JP_EXTRUDE_READY      "押し出しますか？"
+    #define JP_EDIT     "編集する"
+    #define JP_EXTRUDE_CALIBRATION    "Calibrazione dell'estrusore"
+    #define JP_EXTRUDE_CALIBRATION_INFORMATION    "1) Measure 20cm and Extrude\n2) Measure and calculate\n3) Set the new value\nMore information at:\nwww.wgcv.me/cec"
 
 #endif

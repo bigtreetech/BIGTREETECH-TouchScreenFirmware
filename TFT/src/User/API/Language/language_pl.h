@@ -191,5 +191,9 @@
     #define PL_FILAMENT_LOAD_TEMPERATURE      "Poczekaj, aż osiągniesz minimalną temperaturę zmiany lub ustaw wyższą."
     #define PL_FILAMENT_CHANGE_READY      "Gotowy na zmianę żarnika?"
     #define PL_FILAMENT_CHANGE      "Zmiana żarnika"
+    #define PL_EXTRUDE_READY      "Gotowy do wyciągnięcia?"
+    #define PL_EDIT     "Edytować"
+    #define PL_EXTRUDE_CALIBRATION    "Kalibracja wytłaczarki"
+    #define PL_EXTRUDE_CALIBRATION_INFORMATION    "1) Measure 20cm and Extrude\n2) Measure and calculate\n3) Set the new value\nMore information at:\nwww.wgcv.me/cec"
 
 #endif

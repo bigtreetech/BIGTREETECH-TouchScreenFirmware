@@ -131,6 +131,8 @@ typedef struct
   float     filament_unload_length;
   float     filament_unload_retract_length;
   int16_t   filament_unload_retract_speed;
+  float     distance_filament_extrude_calibration;
+
 }SETTINGS;
 
 typedef struct{

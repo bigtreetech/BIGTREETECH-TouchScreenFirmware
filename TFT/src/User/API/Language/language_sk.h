@@ -191,5 +191,9 @@
     #define SK_FILAMENT_LOAD_TEMPERATURE      "Počkajte, kým nedosiahnete minimálnu zmenu teploty alebo upravíte vyššiu teplotu."
     #define SK_FILAMENT_CHANGE_READY      "Ste pripravení na zmenu vlákna?"
     #define SK_FILAMENT_CHANGE      "Zmena vlákna"
+    #define SK_EXTRUDE_READY      "Ste pripravení na vytlačenie?"
+    #define SK_EDIT     "editovať"
+    #define SK_EXTRUDE_CALIBRATION    "Kalibrácia extrudéra"
+    #define SK_EXTRUDE_CALIBRATION_INFORMATION    "1) Measure 20cm and Extrude\n2) Measure and calculate\n3) Set the new value\nMore information at:\nwww.wgcv.me/cec"
 
 #endif

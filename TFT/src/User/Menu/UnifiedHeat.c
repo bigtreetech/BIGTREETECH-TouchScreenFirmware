@@ -12,7 +12,7 @@ LABEL_UNIFIEDHEAT,
   {ICON_COOLDOWN,             LABEL_COOLDOWN},
   {ICON_PID,           LABEL_PID_AUTOTUNE_PLA},
   {ICON_PID,           LABEL_PID_AUTOTUNE_ABS},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
+  {ICON_EXTRUDE_CALIBRATION,           LABEL_EXTRUDE_CALIBRATION},
   {ICON_BACK,                 LABEL_BACK},}
 };
 
@@ -40,7 +40,8 @@ void menuUnifiedHeat(void)
       case KEY_ICON_5:
         pidAutotuneABS();
         break;
-
+      case KEY_ICON_6:
+       infoMenu.menu[++infoMenu.cur] = menuExtrudeCalibration;   break;
       case KEY_ICON_7: infoMenu.cur--;      break;
       default:break;
     }

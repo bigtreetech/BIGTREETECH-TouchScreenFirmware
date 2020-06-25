@@ -191,5 +191,9 @@
     #define HU_FILAMENT_LOAD_TEMPERATURE      "Várjon, amíg eléri a minimális hőmérsékleti változást, vagy állítson be egy magasabb hőmérsékletet."
     #define HU_FILAMENT_CHANGE_READY      "Készen állsz az izzószál megváltoztatására?"
     #define HU_FILAMENT_CHANGE      "Filamentcsere"
+    #define HU_EXTRUDE_READY      "Készen áll a kiürítésre?"
+    #define HU_EDIT     "szerkesztése"
+    #define HU_EXTRUDE_CALIBRATION    "Extruder kalibrálása"
+    #define HU_EXTRUDE_CALIBRATION_INFORMATION    "1) Measure 20cm and Extrude\n2) Measure and calculate\n3) Set the new value\nMore information at:\nwww.wgcv.me/cec"
 
 #endif

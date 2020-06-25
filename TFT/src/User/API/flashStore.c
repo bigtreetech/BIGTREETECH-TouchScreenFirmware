@@ -137,6 +137,8 @@ void readStoredPara(void)
   infoSettings.filament_unload_length                     = byteToWord(data + (index += 4), 4);
   infoSettings.filament_unload_retract_length             = byteToWord(data + (index += 4), 4);
   infoSettings.filament_unload_retract_speed              = byteToWord(data + (index += 4), 4);
+// Extrude Calibration settings
+  infoSettings.distance_filament_extrude_calibration                       = byteToWord(data + (index += 4), 4);
 
   for(int i = 0; i < MAX_HEATER_COUNT; i++)
   {
@@ -275,6 +277,8 @@ void storePara(void)
   wordToByte(infoSettings.filament_unload_length,                          data + (index += 4));
   wordToByte(infoSettings.filament_unload_retract_length,                  data + (index += 4));
   wordToByte(infoSettings.filament_unload_retract_speed,                   data + (index += 4));
+// Extrude Calibration settings
+  wordToByte(infoSettings.distance_filament_extrude_calibration,                   data + (index += 4));
 
   for(int i = 0; i < MAX_HEATER_COUNT; i++)
   {

@@ -191,5 +191,9 @@
     #define DE_FILAMENT_LOAD_TEMPERATURE      "Bitte warten Sie, bis Sie die minimale Änderungstemperatur erreicht haben, oder stellen Sie eine höhere ein."
     #define DE_FILAMENT_CHANGE_READY      "Bereit zum Filamentwechsel?"
     #define DE_FILAMENT_CHANGE      "Filamentwechsel"
+    #define DE_EXTRUDE_READY      "Bereit zum Extrudieren?"
+    #define DE_EDIT     "Bearbeiten"
+    #define DE_EXTRUDE_CALIBRATION    "Extruderkalibrierung"
+    #define DE_EXTRUDE_CALIBRATION_INFORMATION    "1) Measure 20cm and Extrude\n2) Measure and calculate\n3) Set the new value\nMore information at:\nwww.wgcv.me/cec"
 
 #endif

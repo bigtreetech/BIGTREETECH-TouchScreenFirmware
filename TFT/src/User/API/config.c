@@ -1050,6 +1050,10 @@ case C_INDEX_SHOW_STATUS_SPEED_FLOW:
   case C_INDEX_FILAMENT_UNLOAD_RETRACT_SPEED:
     infoSettings.filament_unload_retract_speed = config_int();
     break;
+  case C_INDEX_DISTANCE_FILAMENT_EXTRUDE_CALIBRATION:
+    infoSettings.distance_filament_extrude_calibration = config_int();
+    break;
+
   default:
     break;
   }

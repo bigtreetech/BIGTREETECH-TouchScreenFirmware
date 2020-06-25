@@ -87,6 +87,8 @@ void infoSettingsReset(void)
   infoSettings.filament_unload_length = DEFAULT_FILAMENT_UNLOAD_LENGTH;
   infoSettings.filament_unload_retract_length   = DEFAULT_FILAMENT_UNLOAD_RETRACT_LENGTH;
   infoSettings.filament_unload_retract_speed    = DEFAULT_FILAMENT_UNLOAD_RETRACT_SPEED;
+// Extrude Calibration settings
+  infoSettings.distance_filament_extrude_calibration  = DEFAULT_DISTANCE_FILAMENT_EXTRUDE_CALIBRATION;
 
   for(int i = 0; i < MAX_HEATER_COUNT; i++)
   {

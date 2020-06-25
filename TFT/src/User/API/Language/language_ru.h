@@ -191,5 +191,9 @@
     #define RU_FILAMENT_LOAD_TEMPERATURE      "Пожалуйста, подождите, пока не достигнете минимальной температуры изменения или не отрегулируйте более высокую."
     #define RU_FILAMENT_CHANGE_READY      "Готовы заменить нить накала?"
     #define RU_FILAMENT_CHANGE      "Изменение нити"
+    #define RU_EXTRUDE_READY      "Готовы выдавливать?"
+    #define RU_EDIT     "редактировать"
+    #define RU_EXTRUDE_CALIBRATION    "Калибровка экструдера"
+    #define RU_EXTRUDE_CALIBRATION_INFORMATION    "1) Measure 20cm and Extrude\n2) Measure and calculate\n3) Set the new value\nMore information at:\nwww.wgcv.me/cec"
 
 #endif

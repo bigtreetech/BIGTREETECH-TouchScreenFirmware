@@ -191,5 +191,9 @@
     #define GR_FILAMENT_LOAD_TEMPERATURE      "Περιμένετε έως ότου φτάσετε στην ελάχιστη θερμοκρασία αλλαγής ή προσαρμόστε μια υψηλότερη."
     #define GR_FILAMENT_CHANGE_READY      "Είστε έτοιμοι να αλλάξετε το νήμα;"
     #define GR_FILAMENT_CHANGE      "Αλλαγή νήματος"
+    #define GR_EXTRUDE_READY      "Είστε έτοιμοι για εξώθηση;"
+    #define GR_EDIT     "Επεξεργασία"
+    #define GR_EXTRUDE_CALIBRATION    "Βαθμονόμηση εξωθητή"
+    #define GR_EXTRUDE_CALIBRATION_INFORMATION    "1) Measure 20cm and Extrude\n2) Measure and calculate\n3) Set the new value\nMore information at:\nwww.wgcv.me/cec"
 
 #endif

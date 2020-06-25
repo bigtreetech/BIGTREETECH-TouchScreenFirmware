@@ -192,5 +192,9 @@
     #define EN_FILAMENT_LOAD_TEMPERATURE      "Please wait until you reach the minimum change temperature or adjust a higher one."
     #define EN_FILAMENT_CHANGE_READY      "Ready for change the filament?"
     #define EN_FILAMENT_CHANGE      "Filament change"
+    #define EN_EXTRUDE_READY      "Ready to Extrude?"
+    #define EN_EDIT     "Edit"
+    #define EN_EXTRUDE_CALIBRATION    "E. Calibration"
+    #define EN_EXTRUDE_CALIBRATION_INFORMATION    "1) Measure 20cm and Extrude\n2) Measure and calculate\n3) Set the new value\nMore information at:\nwww.wgcv.me/cec"
 
 #endif

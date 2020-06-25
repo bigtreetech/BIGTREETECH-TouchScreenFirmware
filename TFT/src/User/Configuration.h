@@ -364,5 +364,9 @@
 #define DEFAULT_FILAMENT_UNLOAD_RETRACT_LENGTH 5.0f
 // The speed of load filament  before unloader filament.
 #define DEFAULT_FILAMENT_UNLOAD_RETRACT_SPEED 500
+/* --------------------------------------------------------------------
+   Extrude Calibration Function
+  -------------------------------------------------------------------- */
+#define DEFAULT_DISTANCE_FILAMENT_EXTRUDE_CALIBRATION 180.0f
 
 #endif

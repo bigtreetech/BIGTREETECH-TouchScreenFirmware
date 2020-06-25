@@ -42,20 +42,20 @@ SCROLL   gcodeScroll;
 bool icon_pre = false;
 
 const GUI_RECT gcodeRect[NUM_PER_PAGE] = {
-  {BYTE_WIDTH/2+0*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2,
-  1*SPACE_X_PER_ICON-BYTE_WIDTH/2,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
+  {BYTE_WIDTH/2+0*SPACE_X_PER_ICON,  1*(ICON_HEIGHT) - TEXT_DISTANCE+0*SPACE_Y+ICON_START_Y,
+  1*SPACE_X_PER_ICON-BYTE_WIDTH/2,   1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
 
-  {BYTE_WIDTH/2+1*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2,
-  2*SPACE_X_PER_ICON-BYTE_WIDTH/2,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
+  {BYTE_WIDTH/2+1*SPACE_X_PER_ICON,  1*(ICON_HEIGHT) - TEXT_DISTANCE+0*SPACE_Y+ICON_START_Y,
+  2*SPACE_X_PER_ICON-BYTE_WIDTH/2,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
 
-  {BYTE_WIDTH/2+2*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2,
-  3*SPACE_X_PER_ICON-BYTE_WIDTH/2,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
+  {BYTE_WIDTH/2+2*SPACE_X_PER_ICON,  1*(ICON_HEIGHT) - TEXT_DISTANCE+0*SPACE_Y+ICON_START_Y,
+  3*SPACE_X_PER_ICON-BYTE_WIDTH/2,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
 
-  {BYTE_WIDTH/2+3*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2,
-  4*SPACE_X_PER_ICON-BYTE_WIDTH/2,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
+  {BYTE_WIDTH/2+3*SPACE_X_PER_ICON,  1*(ICON_HEIGHT) - TEXT_DISTANCE+0*SPACE_Y+ICON_START_Y,
+  4*SPACE_X_PER_ICON-BYTE_WIDTH/2,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
 
-  {BYTE_WIDTH/2+0*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2,
-  1*SPACE_X_PER_ICON-BYTE_WIDTH/2,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
+  {BYTE_WIDTH/2+0*SPACE_X_PER_ICON,  2*(ICON_HEIGHT) - TEXT_DISTANCE+1*SPACE_Y+ICON_START_Y,
+  1*SPACE_X_PER_ICON-BYTE_WIDTH/2,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
 };
 
 void scrollFileNameCreate(u8 i)
@@ -88,11 +88,12 @@ void scrollFileNameCreate(u8 i)
 void normalNameDisp(const GUI_RECT *rect, u8 *name)
 {
   if(name == NULL) return;
-
-  GUI_ClearPrect(rect);
+  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
   GUI_SetRange(rect->x0, rect->y0, rect->x1, rect->y1);
   GUI_DispStringInPrect(rect, name);
   GUI_CancelRange();
+  GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
+
 }
 
 bool get_Pre_Icon(void)
@@ -108,8 +109,8 @@ void gocdeIconDraw(void)
   char *gnew;
   ITEM curItem = {ICON_BACKGROUND, LABEL_BACKGROUND};
 
-  scrollFileNameCreate(0);
-  Scroll_CreatePara(&titleScroll, (uint8_t* )infoFile.title, &titleRect);
+  //scrollFileNameCreate(0);
+  // Scroll_CreatePara(&titleScroll, (uint8_t* )infoFile.title, &titleRect);
   printIconItems.title.address = (uint8_t* )infoFile.title;
   GUI_SetBkColor(infoSettings.title_bg_color);
   GUI_ClearPrect(&titleRect);
@@ -126,6 +127,7 @@ void gocdeIconDraw(void)
   //draw files
   for( ;(i + infoFile.cur_page * NUM_PER_PAGE < infoFile.f_num + infoFile.F_num) && (i < NUM_PER_PAGE) ;i++)  // gcode file
   {
+
     curItem.icon = ICON_FILE;
     if (infoFile.source == BOARD_SD) { // on board long file name, M33 is required.
       menuDrawItem(&curItem, i);
@@ -143,7 +145,6 @@ void gocdeIconDraw(void)
       gnew = malloc(gn + 10);
       strcpy(gnew, getCurFileSource());
       strncat(gnew, infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num], gn);
-
       if(bmp_DirectDisplay(getIconStartPoint(i),strcat(gnew, "_"STRINGIFY(ICON_WIDTH)".bmp")) != true){
         menuDrawItem(&curItem, i);
       }

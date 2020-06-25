@@ -133,6 +133,9 @@
 #define CONFIG_FILAMENT_UNLOAD_LENGTH     "filament_unload_length:"
 #define CONFIG_FILAMENT_UNLOAD_RETRACT_LENGTH    "filament_unload_retract_length:"
 #define CONFIG_FILAMENT_UNLOAD_RETRACT_SPEED     "filament_unload_retract_speed:"
+//------------------------------Extrude Calibration Function
+
+#define CONFIG_DISTANCE_FILAMENT_EXTRUDE_CALIBRATION       "distnace_filament_extrude_calibration:"
 
 //-----------------------------Limits
 #define MAX_SIZE_LIMIT            2000         // machine size over this will not be parsed.

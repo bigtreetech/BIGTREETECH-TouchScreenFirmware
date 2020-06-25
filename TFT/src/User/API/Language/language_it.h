@@ -191,5 +191,9 @@
     #define IT_FILAMENT_LOAD_TEMPERATURE      "Attendere fino a quando non si raggiunge la temperatura minima di variazione o si regola una temperatura più alta."
     #define IT_FILAMENT_CHANGE_READY      "Pronto per cambiare il filamento?"
     #define IT_FILAMENT_CHANGE      "Cambio del filamento"
+    #define IT_EXTRUDE_READY      "Pronto per l'estrusione?"
+    #define IT_EDIT     "modificare"
+    #define IT_EXTRUDE_CALIBRATION    "Calibrazione dell'estrusore"
+    #define IT_EXTRUDE_CALIBRATION_INFORMATION    "1) Measure 20cm and Extrude\n2) Measure and calculate\n3) Set the new value\nMore information at:\nwww.wgcv.me/cec"
 
 #endif

@@ -191,6 +191,9 @@
     #define AM_FILAMENT_LOAD_TEMPERATURE      "እባክዎን ዝቅተኛውን የሙቀት መጠን እስከሚቀበሉ ድረስ ወይም ከፍ ያለውን ደረጃ እስከሚያስተካክሉ ድረስ ይጠብቁ ፡፡"
     #define AM_FILAMENT_CHANGE_READY      "መከለያውን ለመለወጥ ዝግጁ ነዎት?"
     #define AM_FILAMENT_CHANGE      "የመለዋወጫ ለውጥ"
-
+    #define AM_EXTRUDE_READY      "ለመዘርዘር ዝግጁ ነዎት?"
+    #define AM_EDIT     "ያርትዑ"
+    #define AM_EXTRUDE_CALIBRATION    "የተራቀቀ መለካት"
+    #define AM_EXTRUDE_CALIBRATION_INFORMATION    "1) Measure 20cm and Extrude\n2) Measure and calculate\n3) Set the new value\nMore information at:\nwww.wgcv.me/cec"
 
 #endif
