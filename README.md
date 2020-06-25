@@ -16,7 +16,7 @@ The most powerful TFT Firmware for the Artillery X1 and Genius keeping the vanil
   - [Themes](#themes)
   - [Reset](#reset)
   - [Deployment](#deployment)
-  - [Contribute](#contribute)
+- [Contribute](#contribute)
 
 ## Feature
 - M600 from USB and MicroSD (Pause, Change Filament and Resume, with out changing Marlin)
@@ -38,7 +38,7 @@ The most powerful TFT Firmware for the Artillery X1 and Genius keeping the vanil
 
 🖨 ✅ Working in **Artillery Sidewinder X1** and **Artillery Genius***
 
-👷🏽‍♀️ If you try it in another 3D printer with TFT28, please add it the readme file.
+👷🏽‍♀️ If you try it in another 3D printer with TFT28, please add it to the readme file.
   
 ## Screens
 | Status page with flow and speed |  Status page clasic |
@@ -100,6 +100,6 @@ default_envs = MKS_28_Clone_V1_0
 <img src="https://user-images.githubusercontent.com/25599056/56637550-809ab800-669e-11e9-99d3-6b502e294688.png"></li>
 <li>A <code>mkstft28.xx.xbin</code> file will be generated in the <em>hidden</em> <code>.pio\build\MKS_28_Clone_V1_0</code> folder. Follow the update process outlined in the <a href="#how-to-setup-the-tft-firmware">How to setup the TFT Firmware</a> section above to update your TFT to the latest version.</li>
 
-### Contribute
+## Contribute
 You can report issues, create themes, implement new features with PR or **Sponsor it on [PayPal](https://paypal.me/wgcvl)**. 
 
