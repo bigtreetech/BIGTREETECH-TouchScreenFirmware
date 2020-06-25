@@ -7,8 +7,8 @@
 The most powerful TFT Firmware for the Artillery X1 and Genius keeping the vanilla essence but with incredible tools.
 </p>
  
- 
 ## Table of Contents
+- [Feature](#feature)
 - [Screens](#screens)
 - [How to update TFT Firmware](#how-to-setup-the-tft-firmware)
 - [Customization](#customization)
@@ -16,6 +16,21 @@ The most powerful TFT Firmware for the Artillery X1 and Genius keeping the vanil
   - [Themes](#themes)
   - [Reset](#reset)
   - [Deployment](#deployment)
+  - [Contribute](#contribute)
+
+  
+## Feature
+- M600 (Pause, Change Filament and Resume, with out changing Marlin)
+- Pre-Heat
+- PID for ABS and PLA
+- Extrude Calibration (E Steps)
+- Filament Change
+- Baby Steps
+- Change configuraiton with out rebuilding (config.ini file)
+- Auto Leveling and Manual Leveing (5 Points).
+- Gcode Console
+
+If you want to use M600 with octoprint check [RewriteM600](https://github.com/wgcv/RewriteM600)
 
 ## Screens
 | Status page with flow and speed |  Status page clasic |
@@ -23,8 +38,8 @@ The most powerful TFT Firmware for the Artillery X1 and Genius keeping the vanil
 |![](https://raw.githubusercontent.com/wgcv/RAWR-TFT-Firmware-Artillery3D/docs/img/readme-statusscreen1.jpg) | ![](https://raw.githubusercontent.com/wgcv/RAWR-TFT-Firmware-Artillery3D/docs/img/readme-statusscreen2.jpg)
 | Main menu |  Settings menu |
 |![](https://raw.githubusercontent.com/wgcv/RAWR-TFT-Firmware-Artillery3D/docs/img/readme-mainmenu.jpg) | ![](https://raw.githubusercontent.com/wgcv/RAWR-TFT-Firmware-Artillery3D/docs/img/readme-settings.jpg)
-| Printing menu | | M600 |
-![](https://raw.githubusercontent.com/wgcv/RAWR-TFT-Firmware-Artillery3D/docs/img/readme-printing.jpg) | ![](https://raw.githubusercontent.com/wgcv/RAWR-TFT-Firmware-Artillery3D/docs/img/readme-M600.jpg)
+| Printing menu | M600 |
+![](https://raw.githubusercontent.com/wgcv/RAWR-TFT-Firmware-Artillery3D/docs/img/readme-printing.jpg) <img width=1080/>| ![](https://raw.githubusercontent.com/wgcv/RAWR-TFT-Firmware-Artillery3D/docs/img/readme-M600.jpg)<img width=1080/>
 
 ## How to setup the TFT firmware
 
@@ -76,4 +91,7 @@ default_envs = MKS_28_Clone_V1_0
 
 <img src="https://user-images.githubusercontent.com/25599056/56637550-809ab800-669e-11e9-99d3-6b502e294688.png"></li>
 <li>A <code>mkstft28.xx.xbin</code> file will be generated in the <em>hidden</em> <code>.pio\build\MKS_28_Clone_V1_0</code> folder. Follow the update process outlined in the <a href="#how-to-setup-the-tft-firmware">How to setup the TFT Firmware</a> section above to update your TFT to the latest version.</li>
+
+### Contribute
+You can report issues, create themes, implement new features with PR or Sponsor it [PayPal](https://paypal.me/wgcvl). 
 
