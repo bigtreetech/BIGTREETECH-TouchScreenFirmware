@@ -20,7 +20,7 @@ The most powerful TFT Firmware for the Artillery X1 and Genius keeping the vanil
 
   
 ## Feature
-- M600 (Pause, Change Filament and Resume, with out changing Marlin)
+- M600 from USB and MicroSD (Pause, Change Filament and Resume, with out changing Marlin)
 - Pre-Heat
 - PID for ABS and PLA
 - Extrude Calibration (E Steps)
