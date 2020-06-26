@@ -194,7 +194,6 @@
     #define CZ_EXTRUDE_READY      "Jste připraveni vysunout?"
     #define CZ_EDIT     "Upravit"
     #define CZ_EXTRUDE_CALIBRATION    "Kalibrace extrudéru"
-    #define CZ_EXTRUDE_CALIBRATION_INFORMATION    "1) Measure and mark 20cm before entering the extruder\n2) Extrude\n3) Measure the difference\n4) Calculate and set the new value of steps\nMore information at:\nwww.wgcv.me/cec"
     #define CZ_EXTRUDE_CALIBRATION_INFORMATION    "1) Measure 20cm and Extrude\n2) Measure and calculate\n3) Set the new value\nMore information at:\nwww.wgcv.me/cec"
 
 #endif
