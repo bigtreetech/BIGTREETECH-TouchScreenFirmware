@@ -198,7 +198,7 @@
 #define NOZZLE_RESUME_PURGE_LENGTH  16   // (mm)
 #define NOZZLE_PAUSE_X_POSITION     (X_MIN_POS + 10)  // (mm) Must be an integer
 #define NOZZLE_PAUSE_Y_POSITION     (Y_MIN_POS + 10)  // (mm) Must be an integer
-#define NOZZLE_PAUSE_Z_RAISE        20   // (mm)
+#define NOZZLE_PAUSE_Z_RAISE        100   // (mm)
 #define NOZZLE_PAUSE_E_FEEDRATE     6000 // (mm/min) retract & purge feedrate
 #define NOZZLE_PAUSE_XY_FEEDRATE    6000 // (mm/min) X and Y axes feedrate
 #define NOZZLE_PAUSE_Z_FEEDRATE     600  // (mm/min) Z axis feedrate

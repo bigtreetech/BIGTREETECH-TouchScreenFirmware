@@ -19,7 +19,7 @@ MENUITEMS filamentChangeItems = {
 // The nozzle number
 static u8 item_extruder_i = 0;
 // len of extrusion
-static float extrudeCoordinate = 0.0f;
+ static float extrudeCoordinate = 0.0f;
 
 // wait for update the screen
 static u32 nextTime = 0;
@@ -48,21 +48,25 @@ void menuFilamentChange(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
   float eSaved = 0.0f;
-  float eTemp = 0.0f;
-  //bool  eRelative = false;
-  //u32   feedrate = 0;
+  bool  eRelative = false;
+  u32   feedrate = 0;
 
   while (infoCmd.count != 0)
   {
     loopProcess();
   }
-  extrudeCoordinate = eTemp = eSaved = coordinateGetAxisTarget(E_AXIS);
+  if(isPause()){
+  extrudeCoordinate = eSaved = coordinateGetAxisTarget(E_AXIS);
+  feedrate = coordinateGetFeedRate();
+  eRelative = eGetRelative();
+  }
   menuDrawPage(&filamentChangeItems);
   showFilamentChangeCoordinate();
 
 #if LCD_ENCODER_SUPPORT
   encoderPosition = 0;
 #endif
+  if(eRelative) mustStoreCmd("M82\n"); // Set extruder to absolute
   while (infoMenu.menu[infoMenu.cur] == menuFilamentChange)
   {
     key_num = menuKeyGetValue();
@@ -88,9 +92,15 @@ void menuFilamentChange(void)
           switch (key_num)
           {
           case KEY_POPUP_CONFIRM:
-            if (item_extruder_i != heatGetCurrentToolNozzle() - NOZZLE0)
+            if (item_extruder_i != heatGetCurrentToolNozzle() - NOZZLE0){
               storeCmd("%s\n", filamentChange_tool_change[item_extruder_i]);
-            storeCmd("G91\nG0 E%.5f F%d\nG90\n", infoSettings.filament_load_length, infoSettings.filament_load_speed);
+            }
+            if(isPause()){
+              extrudeCoordinate = infoSettings.filament_load_length;
+              storeCmd("G0 E%.5f F%d\n", extrudeCoordinate, infoSettings.filament_load_speed);
+            }else{
+              storeCmd("G91\nG0 E%.5f F%d\nG90\n", infoSettings.filament_load_length, infoSettings.filament_load_speed);
+            }
             waitConfirmation = false;
             infoMenu.menu[infoMenu.cur]=menuFilamentChange;
             menuDrawPage(&filamentChangeItems);
@@ -127,9 +137,17 @@ void menuFilamentChange(void)
           switch (key_num)
           {
           case KEY_POPUP_CONFIRM:
-            if (item_extruder_i != heatGetCurrentToolNozzle() - NOZZLE0)
+            if (item_extruder_i != heatGetCurrentToolNozzle() - NOZZLE0){
               storeCmd("%s\n", filamentChange_tool_change[item_extruder_i]);
-            storeCmd("G91\nG0 E%.5f F%d\nG0 E%.5f F%d\nG90\n", infoSettings.filament_unload_retract_length, infoSettings.filament_unload_retract_speed, -1 * infoSettings.filament_unload_length, infoSettings.filament_unload_speed);
+            }
+            if(isPause()){
+              extrudeCoordinate =  -1 * infoSettings.filament_unload_length;
+              storeCmd("G0 E%.5f F%d\n",  extrudeCoordinate, infoSettings.filament_unload_speed);
+            }
+            else{
+              storeCmd("G91\nG0 E%.5f F%d\n",infoSettings.filament_unload_retract_length, infoSettings.filament_unload_retract_speed);
+              storeCmd("G0 E%.5f F%d\nG90\n",   -1 * infoSettings.filament_unload_length, infoSettings.filament_unload_speed);
+            }
             waitConfirmation = false;
             infoMenu.menu[infoMenu.cur]=menuFilamentChange;
             menuDrawPage(&filamentChangeItems);
@@ -181,7 +199,12 @@ void menuFilamentChange(void)
           case KEY_POPUP_CONFIRM:
             if (item_extruder_i != heatGetCurrentToolNozzle() - NOZZLE0)
               storeCmd("%s\n", filamentChange_tool_change[item_extruder_i]);
-            storeCmd("G91\nG0 E%.5f F%d\nG90\n", infoSettings.filament_load_speed, infoSettings.filament_load_speed);
+              if(isPause()){
+                extrudeCoordinate =  infoSettings.filament_load_length;
+                storeCmd("G0 E%.5f F%d\n", extrudeCoordinate, infoSettings.filament_load_speed);
+              }else{
+                storeCmd("G91\nG0 E%.5f F%d\nG90\n", infoSettings.filament_load_length, infoSettings.filament_load_speed);
+              }
             waitConfirmation = false;
             infoMenu.menu[infoMenu.cur]=menuFilamentChange;
             menuDrawPage(&filamentChangeItems);
@@ -205,5 +228,9 @@ void menuFilamentChange(void)
     updateTemperature();
     loopProcess();
   }
-
+  if(isPause()){
+  mustStoreCmd("G92 E%.5f\n", eSaved);
+  mustStoreCmd("G0 F%d\n", feedrate);
+  if(eRelative) mustStoreCmd("M83\n"); // Set extruder to relative
+  }
 }

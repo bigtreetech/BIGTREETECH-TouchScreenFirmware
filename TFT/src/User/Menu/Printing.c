@@ -338,11 +338,12 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
         coordinateGetAll(&tmp);
         if (isCoorRelative == true)     mustStoreCmd("G90\n");
         if (isExtrudeRelative == true)  mustStoreCmd("M82\n");
-
+        /*
         if (heatGetCurrentTemp(heatGetCurrentToolNozzle()) > infoSettings.min_ext_temp)
         {
           mustStoreCmd("G1 E%.5f F%d\n", tmp.axis[E_AXIS] - infoSettings.pause_retract_len, infoSettings.pause_feedrate[E_AXIS]);
         }
+        */
         if (coordinateIsKnown())
         {
           mustStoreCmd("G1 Z%.3f F%d\n", tmp.axis[Z_AXIS] + infoSettings.pause_z_raise, infoSettings.pause_feedrate[E_AXIS]);
@@ -368,10 +369,12 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
           mustStoreCmd("G1 X%.3f Y%.3f F%d\n", tmp.axis[X_AXIS], tmp.axis[Y_AXIS], infoSettings.pause_feedrate[X_AXIS]);
           mustStoreCmd("G1 Z%.3f F%d\n", tmp.axis[Z_AXIS], infoSettings.pause_feedrate[Z_AXIS]);
         }
+        /*
         if(heatGetCurrentTemp(heatGetCurrentToolNozzle()) > infoSettings.min_ext_temp)
         {
           mustStoreCmd("G1 E%.5f F%d\n", tmp.axis[E_AXIS] - infoSettings.pause_retract_len + infoSettings.resume_purge_len, infoSettings.pause_feedrate[E_AXIS]);
         }
+        */
         mustStoreCmd("G92 E%.5f\n", tmp.axis[E_AXIS]);
         mustStoreCmd("G1 F%d\n", tmp.feedrate);
 
