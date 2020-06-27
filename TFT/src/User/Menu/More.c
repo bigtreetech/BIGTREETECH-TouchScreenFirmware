@@ -13,7 +13,7 @@ void menuIsPause(void)
     switch(key_num)
     {
       case KEY_POPUP_CONFIRM:
-        if(setPrintPause(true,false))
+        if(setPrintPause(true,false, false))
           infoMenu.menu[infoMenu.cur]=menuExtrude;
         break;
 
@@ -61,7 +61,7 @@ void menuMore(void)
         if (isPrinting() && !isPause()) // need paused before extrude
           infoMenu.menu[++infoMenu.cur] = menuIsPause;
         else
-          infoMenu.menu[++infoMenu.cur] = menuExtrude;
+          infoMenu.menu[++infoMenu.cur] = menuFilamentChange;
         break;
 
       case KEY_ICON_3:

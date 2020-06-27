@@ -198,7 +198,7 @@
 #define NOZZLE_RESUME_PURGE_LENGTH  16   // (mm)
 #define NOZZLE_PAUSE_X_POSITION     (X_MIN_POS + 10)  // (mm) Must be an integer
 #define NOZZLE_PAUSE_Y_POSITION     (Y_MIN_POS + 10)  // (mm) Must be an integer
-#define NOZZLE_PAUSE_Z_RAISE        100   // (mm)
+#define NOZZLE_PAUSE_Z_RAISE        50   // (mm)
 #define NOZZLE_PAUSE_E_FEEDRATE     6000 // (mm/min) retract & purge feedrate
 #define NOZZLE_PAUSE_XY_FEEDRATE    6000 // (mm/min) X and Y axes feedrate
 #define NOZZLE_PAUSE_Z_FEEDRATE     600  // (mm/min) Z axis feedrate
@@ -345,7 +345,7 @@
 #define PRINT_END_GCODE "G90\nG1 E-4\nG92 E0\nM18\n" // Switch to absolute positioning, reduce filament pressure by performing small retract, reset extruder position, disable steppers
 
 // Cancel G-code - run this G-code after canceling print
-#define PRINT_CANCEL_GCODE "G28 XY R10\n" // Home XY and raise Z 10mm
+#define PRINT_CANCEL_GCODE "G28 XY R40\n" // Home XY and raise Z 10mm
 
 /* --------------------------------------------------------------------
    Filament Change Function

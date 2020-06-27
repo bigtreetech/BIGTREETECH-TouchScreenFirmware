@@ -251,7 +251,7 @@ void sendQueueCmd(void)
         case 24: //M24
           if ((infoFile.source == TFT_UDISK) || (infoFile.source == TFT_SD)){
              if (isPause()) {
-              setPrintPause(false, false);
+              setPrintPause(false, false, false);
             } else {
                 Serial_Puts(SERIAL_PORT_2, "ok\n");
                 infoCmd.count--;
@@ -265,7 +265,7 @@ void sendQueueCmd(void)
 
         case 25: //M25
           if (isPrinting() && !infoHost.printing){
-            setPrintPause(true, false);
+            setPrintPause(true, false, false);
             Serial_Puts(SERIAL_PORT_2, "ok\n");
             infoCmd.count--;
             infoCmd.index_r = (infoCmd.index_r + 1) % CMD_MAX_LIST;
@@ -359,13 +359,11 @@ void sendQueueCmd(void)
           #ifdef NOZZLE_PAUSE_M600
           case 600: //M600 pause print
           if (isPrinting() && !infoHost.printing){
-            Buzzer_play(sound_notify);
-            setPrintPause(true, false);
-            Serial_Puts(SERIAL_PORT_2, "ok\n");
-              popupReminder((u8 *)"M600", textSelect(LABEL_FILAMENT_CHANGE));
               // prevent sending M600 to marlin
               infoCmd.count--;
               infoCmd.index_r = (infoCmd.index_r + 1) % CMD_MAX_LIST;
+              setPrintPause(true, false, true);
+              Serial_Puts(SERIAL_PORT_2, "ok\n");
               return;
             }
             break;
@@ -374,14 +372,11 @@ void sendQueueCmd(void)
           #ifdef NOZZLE_PAUSE_M601
           case 601: //M601 pause print
           if (isPrinting() && !infoHost.printing){
-            Buzzer_play(sound_notify);
-            setPrintPause(true, false);
-            Serial_Puts(SERIAL_PORT_2, "ok\n");
-              popupReminder((u8 *)"M601", textSelect(LABEL_FILAMENT_CHANGE));
-
               // prevent sending M601 to marlin
               infoCmd.count--;
               infoCmd.index_r = (infoCmd.index_r + 1) % CMD_MAX_LIST;
+              setPrintPause(true, false, true);
+              Serial_Puts(SERIAL_PORT_2, "ok\n");
               return;
             }
             break;
@@ -527,12 +522,12 @@ void sendQueueCmd(void)
         {
           case 0:
             if (isPrinting()) {
-              setPrintPause(true,true);
+              setPrintPause(true,true, false);
             }
             break;
           case 1:
             if (isPrinting()) {
-              setPrintPause(true,true);
+              setPrintPause(true,true, false);
             }
             break;
           case 18: //M18/M84 disable steppers
@@ -701,12 +696,10 @@ void sendQueueCmd(void)
           #ifdef NOZZLE_PAUSE_M600
           case 600: //M600 pause print
             if (isPrinting()) {
-              Buzzer_play(sound_notify);
-              setPrintPause(true,false);
-              popupReminder((u8 *)"M600", textSelect(LABEL_FILAMENT_CHANGE));
               // prevent sending M600 to marlin
               infoCmd.count--;
               infoCmd.index_r = (infoCmd.index_r + 1) % CMD_MAX_LIST;
+              setPrintPause(true, false, true);
               return;
             }
             break;
@@ -715,13 +708,10 @@ void sendQueueCmd(void)
           #ifdef NOZZLE_PAUSE_M601
           case 601: //M601 pause print
             if (isPrinting()) {
-              Buzzer_play(sound_notify);
-              setPrintPause(true,false);
-              popupReminder((u8 *)"M601", textSelect(LABEL_FILAMENT_CHANGE));
-
               // prevent sending M601 to marlin
               infoCmd.count--;
               infoCmd.index_r = (infoCmd.index_r + 1) % CMD_MAX_LIST;
+              setPrintPause(true, false, true);
               return;
             }
             break;

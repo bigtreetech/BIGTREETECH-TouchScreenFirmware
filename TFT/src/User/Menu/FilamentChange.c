@@ -1,5 +1,6 @@
 #include "FilamentChange.h"
 #include "includes.h"
+#include "Printing.h"
 
 MENUITEMS filamentChangeItems = {
     //   title
@@ -18,8 +19,6 @@ MENUITEMS filamentChangeItems = {
 
 // The nozzle number
 static u8 item_extruder_i = 0;
-// len of extrusion
- static float extrudeCoordinate = 0.0f;
 
 // wait for update the screen
 static u32 nextTime = 0;
@@ -47,18 +46,10 @@ void updateTemperature(void)
 void menuFilamentChange(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
-  float eSaved = 0.0f;
-  bool  eRelative = false;
-  u32   feedrate = 0;
 
   while (infoCmd.count != 0)
   {
     loopProcess();
-  }
-  if(isPause()){
-  extrudeCoordinate = eSaved = coordinateGetAxisTarget(E_AXIS);
-  feedrate = coordinateGetFeedRate();
-  eRelative = eGetRelative();
   }
   menuDrawPage(&filamentChangeItems);
   showFilamentChangeCoordinate();
@@ -66,14 +57,19 @@ void menuFilamentChange(void)
 #if LCD_ENCODER_SUPPORT
   encoderPosition = 0;
 #endif
-  if(eRelative) mustStoreCmd("M82\n"); // Set extruder to absolute
+   if(isPause()){
+    isCoorRelative = coorGetRelative();
+    isExtrudeRelative = eGetRelative();
+  if (isCoorRelative == true)     mustStoreCmd("G90\n");
+  if (isExtrudeRelative == true)  mustStoreCmd("M82\n");
+   }
   while (infoMenu.menu[infoMenu.cur] == menuFilamentChange)
   {
     key_num = menuKeyGetValue();
     switch (key_num)
     {
     case KEY_ICON_0:
-      if (heatGetCurrentTemp(heatGetCurrentToolNozzle()) < infoSettings.filament_load_limit_temperature - 5)
+      if (heatGetCurrentTemp(heatGetCurrentToolNozzle()) < infoSettings.min_ext_temp)
       {
         popupReminder(textSelect(LABEL_INFO), textSelect(LABEL_FILAMENT_LOAD_TEMPERATURE));
         if (heatGetTargetTemp(heatGetCurrentToolNozzle()) < infoSettings.filament_load_limit_temperature)
@@ -96,8 +92,7 @@ void menuFilamentChange(void)
               storeCmd("%s\n", filamentChange_tool_change[item_extruder_i]);
             }
             if(isPause()){
-              extrudeCoordinate = infoSettings.filament_load_length;
-              storeCmd("G0 E%.5f F%d\n", extrudeCoordinate, infoSettings.filament_load_speed);
+              mustStoreCmd("G1 E%.5f F%d\n", (coordinateTmp.axis[E_AXIS] + infoSettings.filament_load_length), infoSettings.filament_load_speed);
             }else{
               storeCmd("G91\nG0 E%.5f F%d\nG90\n", infoSettings.filament_load_length, infoSettings.filament_load_speed);
             }
@@ -118,7 +113,7 @@ void menuFilamentChange(void)
       break;
 
     case KEY_ICON_3:
-      if (heatGetCurrentTemp(heatGetCurrentToolNozzle()) < infoSettings.filament_load_limit_temperature - 5)
+      if (heatGetCurrentTemp(heatGetCurrentToolNozzle()) < infoSettings.min_ext_temp)
       {
         popupReminder(textSelect(LABEL_INFO), textSelect(LABEL_FILAMENT_LOAD_TEMPERATURE));
         if (heatGetTargetTemp(heatGetCurrentToolNozzle()) < infoSettings.filament_load_limit_temperature)
@@ -141,8 +136,7 @@ void menuFilamentChange(void)
               storeCmd("%s\n", filamentChange_tool_change[item_extruder_i]);
             }
             if(isPause()){
-              extrudeCoordinate =  -1 * infoSettings.filament_unload_length;
-              storeCmd("G0 E%.5f F%d\n",  extrudeCoordinate, infoSettings.filament_unload_speed);
+              mustStoreCmd("G1 E%.5f F%d\n", (coordinateTmp.axis[E_AXIS] - infoSettings.filament_unload_length), infoSettings.filament_unload_speed);
             }
             else{
               storeCmd("G91\nG0 E%.5f F%d\n",infoSettings.filament_unload_retract_length, infoSettings.filament_unload_retract_speed);
@@ -200,8 +194,7 @@ void menuFilamentChange(void)
             if (item_extruder_i != heatGetCurrentToolNozzle() - NOZZLE0)
               storeCmd("%s\n", filamentChange_tool_change[item_extruder_i]);
               if(isPause()){
-                extrudeCoordinate =  infoSettings.filament_load_length;
-                storeCmd("G0 E%.5f F%d\n", extrudeCoordinate, infoSettings.filament_load_speed);
+              mustStoreCmd("G1 E%.5f F%d\n", (coordinateTmp.axis[E_AXIS] + infoSettings.filament_load_length), infoSettings.filament_load_speed);
               }else{
                 storeCmd("G91\nG0 E%.5f F%d\nG90\n", infoSettings.filament_load_length, infoSettings.filament_load_speed);
               }
@@ -228,9 +221,10 @@ void menuFilamentChange(void)
     updateTemperature();
     loopProcess();
   }
-  if(isPause()){
-  mustStoreCmd("G92 E%.5f\n", eSaved);
-  mustStoreCmd("G0 F%d\n", feedrate);
-  if(eRelative) mustStoreCmd("M83\n"); // Set extruder to relative
+ if(isPause()){
+  mustStoreCmd("G92 E%.5f\n", coordinateTmp.axis[E_AXIS]);
+  mustStoreCmd("G1 F%d\n", coordinateTmp.feedrate);
+  if (isCoorRelative == true)     mustStoreCmd("G91\n");
+  if (isExtrudeRelative == true)  mustStoreCmd("M83\n");
   }
 }

@@ -82,6 +82,10 @@ const ITEM itemIsPause[2] = {
 #define M27_REFRESH   3
 #endif
 
+COORDINATE coordinateTmp;
+bool isCoorRelative;
+bool isExtrudeRelative;
+
 static PRINTING infoPrinting;
 
 static bool    update_waiting = false;
@@ -295,7 +299,7 @@ void setM0Pause(bool m0_pause){
   infoPrinting.m0_pause = m0_pause;
 }
 
-bool setPrintPause(bool is_pause, bool is_m0pause)
+bool setPrintPause(bool is_pause, bool is_m0pause, bool M600)
 {
   static bool pauseLock = false;
   if(pauseLock)                      return false;
@@ -321,9 +325,8 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
       while (infoCmd.count != 0) {loopProcess();}
       }
 
-      bool isCoorRelative = coorGetRelative();
-      bool isExtrudeRelative = eGetRelative();
-      static COORDINATE tmp;
+      isCoorRelative = coorGetRelative();
+      isExtrudeRelative = eGetRelative();
 
       if(infoPrinting.pause)
       {
@@ -335,19 +338,12 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
         break;
         }
 
-        coordinateGetAll(&tmp);
+        coordinateGetAll(&coordinateTmp);
         if (isCoorRelative == true)     mustStoreCmd("G90\n");
         if (isExtrudeRelative == true)  mustStoreCmd("M82\n");
-        /*
-        if (heatGetCurrentTemp(heatGetCurrentToolNozzle()) > infoSettings.min_ext_temp)
-        {
-          mustStoreCmd("G1 E%.5f F%d\n", tmp.axis[E_AXIS] - infoSettings.pause_retract_len, infoSettings.pause_feedrate[E_AXIS]);
-        }
-        */
         if (coordinateIsKnown())
         {
-          mustStoreCmd("G1 Z%.3f F%d\n", tmp.axis[Z_AXIS] + infoSettings.pause_z_raise, infoSettings.pause_feedrate[E_AXIS]);
-          mustStoreCmd("G1 X%.3f Y%.3f F%d\n", infoSettings.pause_pos[X_AXIS], infoSettings.pause_pos[Y_AXIS], infoSettings.pause_feedrate[X_AXIS]);
+          mustStoreCmd("G1 Z%.3f X%.3f Y%.3f F%d\n", (coordinateTmp.axis[Z_AXIS] + infoSettings.pause_z_raise), infoSettings.pause_pos[X_AXIS], infoSettings.pause_pos[Y_AXIS], infoSettings.pause_feedrate[X_AXIS]);
         }
 
         if (isCoorRelative == true)     mustStoreCmd("G91\n");
@@ -366,17 +362,11 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
 
         if (coordinateIsKnown())
         {
-          mustStoreCmd("G1 X%.3f Y%.3f F%d\n", tmp.axis[X_AXIS], tmp.axis[Y_AXIS], infoSettings.pause_feedrate[X_AXIS]);
-          mustStoreCmd("G1 Z%.3f F%d\n", tmp.axis[Z_AXIS], infoSettings.pause_feedrate[Z_AXIS]);
+          mustStoreCmd("G1 X%.3f Y%.3f F%d\n", coordinateTmp.axis[X_AXIS], coordinateTmp.axis[Y_AXIS], infoSettings.pause_feedrate[X_AXIS]);
+          mustStoreCmd("G1 Z%.3f F%d\n", coordinateTmp.axis[Z_AXIS], infoSettings.pause_feedrate[Z_AXIS]);
         }
-        /*
-        if(heatGetCurrentTemp(heatGetCurrentToolNozzle()) > infoSettings.min_ext_temp)
-        {
-          mustStoreCmd("G1 E%.5f F%d\n", tmp.axis[E_AXIS] - infoSettings.pause_retract_len + infoSettings.resume_purge_len, infoSettings.pause_feedrate[E_AXIS]);
-        }
-        */
-        mustStoreCmd("G92 E%.5f\n", tmp.axis[E_AXIS]);
-        mustStoreCmd("G1 F%d\n", tmp.feedrate);
+        mustStoreCmd("G92 E%.5f\n", coordinateTmp.axis[E_AXIS]);
+        mustStoreCmd("G1 F%d\n", coordinateTmp.feedrate);
 
         if (isCoorRelative == true)     mustStoreCmd("G91\n");
         if (isExtrudeRelative == true)  mustStoreCmd("M83\n");
@@ -385,6 +375,11 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
   }
   resumeToPause(is_pause);
   pauseLock = false;
+  if(M600){
+      Buzzer_play(sound_notify);
+      popupReminder((u8 *)"M600/M601", textSelect(LABEL_FILAMENT_CHANGE));
+  }
+
   return true;
 }
 
@@ -659,13 +654,13 @@ void menuPrinting(void)
     {
       case KEY_ICON_4:
         if(get_Pre_Icon() != true){
-        setPrintPause(!isPause(),false);
+        setPrintPause(!isPause(),false, false);
         }
         break;
 
       case KEY_ICON_5:
         if(get_Pre_Icon() == true){
-        setPrintPause(!isPause(),false);
+        setPrintPause(!isPause(),false, false);
         }
         else{
         infoMenu.menu[++infoMenu.cur] = menuBabyStep;

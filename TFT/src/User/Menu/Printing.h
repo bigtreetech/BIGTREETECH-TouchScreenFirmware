@@ -3,6 +3,7 @@
 #include "variants.h"
 #include "stdbool.h"
 #include "ff.h"
+#include "includes.h"
 
 typedef struct
 {
@@ -24,7 +25,7 @@ void completePrinting(void);
 void abortPrinting(void);
 
 void setM0Pause(bool m0_pause);
-bool setPrintPause(bool is_pause,bool is_m0pause);
+bool setPrintPause(bool is_pause,bool is_m0pause, bool M600);
 
 bool isPrinting(void);
 bool isPause(void);
@@ -58,5 +59,8 @@ void reDrawTime(int icon_pos);
 void reDrawLayer(int icon_pos);
 
 void loopCheckPrinting(void);
+COORDINATE coordinateTmp;
+bool isCoorRelative;
+bool isExtrudeRelative;
 
 #endif
