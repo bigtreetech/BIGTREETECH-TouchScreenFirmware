@@ -36,9 +36,9 @@ static float cmd_float(void)
 }
 
 //check if 'string' start with 'search'
-bool static  startsWith(TCHAR* search, TCHAR* string)
+bool static startsWith(TCHAR *search, TCHAR *string)
 {
-    return (strncmp(search, string, strlen(search)) == 0)?true: false;
+  return (strstr(string, search) - string == cmd_index) ? true : false;
 }
 
 // Store gcode cmd to infoCmd queue, this cmd will be sent by UART in sendQueueCmd(),
@@ -171,7 +171,7 @@ void sendQueueCmd(void)
 
   bool avoid_terminal = false;
   u16  cmd=0;
-
+  cmd_index = 0;
   //check if cmd is from TFT or other host
   bool fromTFT = (infoCmd.queue[infoCmd.index_r].src == SERIAL_PORT);
 
@@ -181,11 +181,17 @@ void sendQueueCmd(void)
     return;
   }
 
-  switch(infoCmd.queue[infoCmd.index_r].gcode[0])
+  // Skip line number from stored gcode for internal parsing purpose
+  if (infoCmd.queue[infoCmd.index_r].gcode[0] == 'N')
+  {
+    cmd_index = strcspn(infoCmd.queue[infoCmd.index_r].gcode, " ") + 1;
+  }
+
+  switch(infoCmd.queue[infoCmd.index_r].gcode[cmd_index])
   {
     // parse M-codes
     case 'M':
-      cmd=strtol(&infoCmd.queue[infoCmd.index_r].gcode[1],NULL,10);
+      cmd = strtol(&infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 1], NULL, 10);
       switch(cmd)
       {
         case 0:
@@ -210,7 +216,7 @@ void sendQueueCmd(void)
             if (startsWith("M20 SD:", infoCmd.queue[infoCmd.index_r].gcode) ||startsWith("M20 U:", infoCmd.queue[infoCmd.index_r].gcode))   {
             if(startsWith("M20 SD:", infoCmd.queue[infoCmd.index_r].gcode)) infoFile.source = TFT_SD;
             else infoFile.source = TFT_UDISK;
-            strncpy(infoFile.title, &infoCmd.queue[infoCmd.index_r].gcode[4], MAX_PATH_LEN);
+            strncpy(infoFile.title, &infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 4], MAX_PATH_LEN);
             // strip out any checksum that might be in the string
             for (int i = 0; i < MAX_PATH_LEN && infoFile.title[i] !=0 ; i++)
               {
@@ -249,7 +255,7 @@ void sendQueueCmd(void)
               else
                 infoFile.source = TFT_UDISK;
               resetInfoFile();
-              strncpy(infoFile.title, &infoCmd.queue[infoCmd.index_r].gcode[4], MAX_PATH_LEN);
+              strncpy(infoFile.title, &infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 4], MAX_PATH_LEN);
               // strip out any checksum that might be in the string
               for (int i = 0; i < MAX_PATH_LEN && infoFile.title[i] !=0 ; i++)
                 {
@@ -365,7 +371,7 @@ void sendQueueCmd(void)
               if(startsWith("M30 SD:", infoCmd.queue[infoCmd.index_r].gcode)) infoFile.source = TFT_SD;
               else infoFile.source = TFT_UDISK;
               TCHAR filepath[MAX_PATH_LEN];
-              strncpy(filepath, &infoCmd.queue[infoCmd.index_r].gcode[4], MAX_PATH_LEN);
+              strncpy(filepath, &infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 4], MAX_PATH_LEN);
               // strip out any checksum that might be in the string
               for (int i = 0; i < MAX_PATH_LEN && filepath[i] !=0 ; i++)
                 {
