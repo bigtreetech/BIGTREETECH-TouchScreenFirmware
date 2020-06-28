@@ -57,9 +57,9 @@ The most powerful TFT Firmware for the Artillery X1 and Genius keeping the vanil
 4. Insert the SD card in the TFT's SD card slot and restart the TFT by pressing the reset button or disconnecting and connecting the power cable.
 5. Wait to update the firmware, configuration, font and icons.
 ![image](https://raw.githubusercontent.com/wgcv/RAWR-TFT-Firmware-Artillery3D/docs/img/readme-copysd.jpg)
+<p align=center>Failing to update your icons &amp; fonts will result in missing icons and/or unreadable text</p>
 
-
-<p align=center> ⚠️ Failing to update your icons &amp; fonts will result in missing icons and/or unreadable text ⚠️ </p>
+⚠️ If you have the error message: "NO PRINTER ATTACHED: go to settings->BaudRate->250000 (Or try it with the baud rate of your marlin normally is 115200 or default artillery firmware 250000)
 
 ## Customization
 ### Editing configuration
