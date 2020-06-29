@@ -312,12 +312,12 @@ void drawGlobalInfo(void){
   GUI_SetBkColor(infoSettings.title_bg_color);
 
   //global nozzle
-  lcd_frame_display(ICON_NOZZLE_X, 0, GLOBALICON_WIDTH, BYTE_HEIGHT, ICON_ADDR(ICON_GLOBAL_NOZZLE));
+  lcd_frame_display(ICON_NOZZLE_X, 0, GLOBALICON_WIDTH, GLOBALICON_HEIGHT, ICON_ADDR(ICON_GLOBAL_NOZZLE));
   sprintf(tempstr, "%3d/%-3d", heatGetCurrentTemp(NOZZLE0), heatGetTargetTemp(NOZZLE0));
   GUI_DispString(VALUE_NOZZLE_X, 0, (u8 *)tempstr);
 
   //global bed
-  lcd_frame_display(ICON_BED_X, 0, GLOBALICON_WIDTH, BYTE_HEIGHT, ICON_ADDR(ICON_GLOBAL_BED));
+  lcd_frame_display(ICON_BED_X, 0, GLOBALICON_WIDTH, GLOBALICON_HEIGHT, ICON_ADDR(ICON_GLOBAL_BED));
   sprintf(tempstr, "%3d/%-3d", heatGetCurrentTemp(BED), heatGetTargetTemp(BED));
   GUI_DispString(VALUE_BED_X, 0, (u8 *)tempstr);
 
