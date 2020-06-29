@@ -16,7 +16,6 @@ LABEL_HEAT,
   {ICON_BACK,                 LABEL_BACK},}
 };
 
-
 const ITEM itemTool[] = {
 // icon                       label
   {ICON_BED,                  LABEL_BED},
@@ -29,24 +28,28 @@ const ITEM itemTool[] = {
 };
 
 #define ITEM_DEGREE_NUM 3
+
 const ITEM itemDegree[ITEM_DEGREE_NUM] = {
 // icon                       label
   {ICON_1_DEGREE,             LABEL_1_DEGREE},
   {ICON_5_DEGREE,             LABEL_5_DEGREE},
   {ICON_10_DEGREE,            LABEL_10_DEGREE},
 };
+
 const  u8 item_degree[ITEM_DEGREE_NUM] = {1, 5, 10};
 static u8 item_degree_i = 1;
 
 // Show/draw temperature in heat menu
 void showTemperature(TOOL tool)
 {
-  char tempstr[40];
-  char val[15];
-  sprintf(val,"%d/%d",heatGetCurrentTemp(tool), heatGetTargetTemp(tool));
-  sprintf(tempstr, "%-3s:%7s",heatDisplayID[tool], val);
+  char tempstr[20];
+
+  sprintf(tempstr, "%-15s", heatDisplayID[tool]);
+  GUI_DispString(exhibitRect.x0, exhibitRect.y0, (u8 *)tempstr);
+
+  sprintf(tempstr, "%4d/%-4d", heatGetCurrentTemp(tool), heatGetTargetTemp(tool));
   setLargeFont(true);
-  GUI_DispStringInRect(exhibitRect.x0,exhibitRect.y0,exhibitRect.x1,exhibitRect.y1,(u8*)tempstr);
+  GUI_DispStringInPrect(&exhibitRect, (u8 *)tempstr);
   setLargeFont(false);
 }
 
@@ -127,5 +130,3 @@ void menuHeat(void)
   if(heatHasWaiting() == false)
     heatSetUpdateTime(TEMPERATURE_QUERY_SLOW_DURATION);
 }
-
-

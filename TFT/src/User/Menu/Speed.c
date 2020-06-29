@@ -7,6 +7,7 @@ const ITEM itemPercentage[SPEED_NUM] = {
   {ICON_MOVE,                 LABEL_PERCENTAGE_SPEED},
   {ICON_EXTRUDE,              LABEL_PERCENTAGE_FLOW},
 };
+
 static int16_t itemPercentageTitle[SPEED_NUM] = {
   LABEL_PERCENTAGE_SPEED,     LABEL_PERCENTAGE_FLOW
 };
@@ -14,22 +15,25 @@ static int16_t itemPercentageTitle[SPEED_NUM] = {
 static u8 item_percentage_i = 0;
 
 #define ITEM_PERCENT_UNIT_NUM 3
+
 const ITEM itemPercentUnit[ITEM_PERCENT_UNIT_NUM] = {
 // icon                       label
   {ICON_E_1_PERCENT,          LABEL_1_PERCENT},
   {ICON_E_5_PERCENT,          LABEL_5_PERCENT},
   {ICON_E_10_PERCENT,         LABEL_10_PERCENT},
 };
+
 const  u8 item_percent_unit[ITEM_PERCENT_UNIT_NUM] = {1, 5, 10};
 static u8 item_percent_unit_i = 0;
 
-
 void percentageReDraw(char * title)
 {
-  GUI_DispString(exhibitRect.x0, exhibitRect.y0,(u8*)title);
-  char tempstr[10];
+  char tempstr[20];
+
+  GUI_DispString(exhibitRect.x0, exhibitRect.y0, (u8 *)title);
+
+  sprintf(tempstr, "  %d%%  ", speedGetPercent(item_percentage_i));
   setLargeFont(true);
-  sprintf(tempstr,"% 4d%%", speedGetPercent(item_percentage_i));
   GUI_DispStringInPrect(&exhibitRect,(u8*)tempstr);
   setLargeFont(false);
 }
@@ -37,7 +41,7 @@ void percentageReDraw(char * title)
 void menuSpeed(void)
 {
   MENUITEMS percentageItems = {
-  //   title
+  // title
   LABEL_PERCENTAGE_SPEED,
   // icon                       label
   {{ICON_DEC,                  LABEL_DEC},

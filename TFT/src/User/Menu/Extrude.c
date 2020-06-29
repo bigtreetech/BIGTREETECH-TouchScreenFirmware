@@ -1,9 +1,9 @@
 #include "Extrude.h"
 #include "includes.h"
 
-//1��title(����), ITEM_PER_PAGE��item(ͼ��+��ǩ)
+// 1 title, ITEM_PER_PAGE items (icon + label)
 MENUITEMS extrudeItems = {
-//   title
+// title
 LABEL_EXTRUDE,
 // icon                       label
  {{ICON_UNLOAD,               LABEL_UNLOAD},
@@ -19,6 +19,7 @@ LABEL_EXTRUDE,
 static u8  item_extruder_i = 0;
 
 #define ITEM_SPEED_NUM 3
+
 const ITEM itemSpeed[ITEM_SPEED_NUM] = {
 // icon                       label
   {ICON_SLOW_SPEED,           LABEL_SLOW_SPEED},
@@ -29,23 +30,32 @@ const ITEM itemSpeed[ITEM_SPEED_NUM] = {
 static u8  item_speed_i = 1;
 
 #define ITEM_LEN_NUM 3
+
 const ITEM itemLen[ITEM_LEN_NUM] = {
 // icon                       label
   {ICON_E_1_MM,               LABEL_1_MM},
   {ICON_E_5_MM,               LABEL_5_MM},
   {ICON_E_10_MM,              LABEL_10_MM},
 };
+
 const  u8 item_len[ITEM_LEN_NUM] = {1, 5, 10};
 static u8 item_len_i = 1;
 
 static float extrudeCoordinate = 0.0f;
 
-void extrudeCoordinateReDraw(void)
+void extrudeCoordinateReDraw(bool skip_header)
 {
+  char tempstr[20];
+
+  if (!skip_header)
+  {
+    sprintf(tempstr, "%-15s", extruderDisplayID[item_extruder_i]);
+    GUI_DispString(exhibitRect.x0, exhibitRect.y0, (u8 *)tempstr);
+  }
+
+  sprintf(tempstr, "  %.2f  ", extrudeCoordinate);
   setLargeFont(true);
-  char buf[36];
-  sprintf(buf, "%s: % 7.2f",extruderDisplayID[item_extruder_i], extrudeCoordinate);
-  GUI_DispStringInPrect(&exhibitRect, (u8*)buf);
+  GUI_DispStringInPrect(&exhibitRect, (u8 *)tempstr);
   setLargeFont(false);
 }
 
@@ -66,7 +76,7 @@ void menuExtrude(void)
   eRelative = eGetRelative();
 
   menuDrawPage(&extrudeItems);
-  extrudeCoordinateReDraw();
+  extrudeCoordinateReDraw(false);
 
   #if LCD_ENCODER_SUPPORT
     encoderPosition = 0;
@@ -87,7 +97,7 @@ void menuExtrude(void)
 
       case KEY_ICON_4:
         item_extruder_i = (item_extruder_i + 1) % infoSettings.ext_count;
-        extrudeCoordinateReDraw();
+        extrudeCoordinateReDraw(false);
         break;
 
       case KEY_ICON_5:
@@ -119,7 +129,7 @@ void menuExtrude(void)
     if(extrudeCoordinate != eTemp)
     {
       extrudeCoordinate = eTemp;
-      extrudeCoordinateReDraw();
+      extrudeCoordinateReDraw(true);
       if(item_extruder_i != heatGetCurrentToolNozzle() - NOZZLE0)
         storeCmd("%s\n", tool_change[item_extruder_i]);
       storeCmd("G0 E%.5f F%d\n", extrudeCoordinate, infoSettings.ext_speed[item_speed_i]);

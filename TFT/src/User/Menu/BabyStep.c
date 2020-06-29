@@ -8,6 +8,7 @@
 #define BABYSTEP_MAX_UNIT      1.0f
 
 #define ITEM_BABYSTEP_UNIT_NUM 3
+
 const ITEM itemBabyStepUnit[ITEM_BABYSTEP_UNIT_NUM] = {
 // icon                       label
   {ICON_001_MM,               LABEL_001_MM},
@@ -65,16 +66,28 @@ void babySetDefaultOffset(void)
   baby_step_value -= (processed_baby_step * neg);
 }
 
-void babyStepReDraw(void)
+void babyStepReDraw(bool skip_header)
 {
+
+  if (!skip_header)
+  {
+    GUI_DispString(exhibitRect.x0, exhibitRect.y0, textSelect(LABEL_BABYSTEP));
+    GUI_DispString(exhibitRect.x0, exhibitRect.y0 + BYTE_HEIGHT + LARGE_BYTE_HEIGHT, textSelect(LABEL_Z_OFFSET));
+  }
+
+  char tempstr[20];
+
   GUI_POINT point_bs = {exhibitRect.x1, exhibitRect.y0 + BYTE_HEIGHT};
   GUI_POINT point_of = {exhibitRect.x1, exhibitRect.y0 + BYTE_HEIGHT*2 + LARGE_BYTE_HEIGHT};
+
   setLargeFont(true);
-  char tempstr[20];
+
   sprintf(tempstr, "% 6.2f", baby_step_value);
   GUI_DispStringRight(point_bs.x, point_bs.y, (u8 *)tempstr);
+
   sprintf(tempstr, "% 6.2f", orig_z_offset + baby_step_value);
   GUI_DispStringRight(point_of.x, point_of.y, (u8 *)tempstr);
+
   setLargeFont(false);
 }
 
@@ -99,13 +112,10 @@ void menuBabyStep(void)
   float now = baby_step_value;
 
   babyInitZOffset();
+
   babyStepItems.items[KEY_ICON_5] = itemBabyStepUnit[curUnit];
   menuDrawPage(&babyStepItems);
-
-  GUI_DispString(exhibitRect.x0, exhibitRect.y0, textSelect(LABEL_BABYSTEP));
-  GUI_DispString(exhibitRect.x0, exhibitRect.y0 + BYTE_HEIGHT + LARGE_BYTE_HEIGHT, textSelect(LABEL_Z_OFFSET));
-
-  babyStepReDraw();
+  babyStepReDraw(false);
 
 #if LCD_ENCODER_SUPPORT
   encoderPosition = 0;
@@ -173,7 +183,7 @@ void menuBabyStep(void)
     if (now != baby_step_value)
     {
       now = baby_step_value;
-      babyStepReDraw();
+      babyStepReDraw(true);
     }
 
     loopProcess();

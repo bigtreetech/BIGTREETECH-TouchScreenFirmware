@@ -6,6 +6,7 @@
 #define PROBE_OFFSET_DEFAULT_VALUE 0.0f
 
 #define ITEM_PROBE_OFFSET_UNIT_NUM 3
+
 const ITEM itemProbeOffsetUnit[ITEM_PROBE_OFFSET_UNIT_NUM] = {
 // icon                       label
   {ICON_001_MM,               LABEL_001_MM},
@@ -20,7 +21,9 @@ static u8 curUnit = 0;
 void showProbeOffset(float val)
 {
   char tempstr[20];
-  sprintf(tempstr, "% 7.2f", val);
+
+  sprintf(tempstr, "  %.2f  ", val);
+
   setLargeFont(true);
   GUI_DispStringInPrect(&exhibitRect, (u8 *)tempstr);
   setLargeFont(false);
@@ -28,7 +31,7 @@ void showProbeOffset(float val)
 
 void menuProbeOffset(void)
 {
-  // 1 title, ITEM_PER_PAGE items (icon + label)
+  // title, ITEM_PER_PAGE items (icon + label)
   MENUITEMS probeOffsetItems = {
   // title
   LABEL_Z_OFFSET,

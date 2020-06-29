@@ -9,19 +9,23 @@ const ITEM itemFan[2] = {
   {ICON_FAN_HALF_SPEED, LABEL_FAN_HALF_SPEED},
   };
 
-void fanSpeedReDraw(void)
+void fanSpeedReDraw(bool skip_header)
 {
-  setLargeFont(true);
-  char fan_s[15];
+  char tempstr[20];
+
+  if (!skip_header)
+  {
+    sprintf(tempstr, "%-15s", fanID[curIndex]);
+    GUI_DispString(exhibitRect.x0, exhibitRect.y0, (u8 *)tempstr);
+  }
+
   if(infoSettings.fan_percentage == 1)
-  {
-    sprintf(fan_s, "%s: % 4d%%", fanID[curIndex], fanGetSpeedPercent(curIndex));
-  }
+    sprintf(tempstr, "  %d%%  ", fanGetSpeedPercent(curIndex));
   else
-  {
-    sprintf(fan_s, "%s: % 4d", fanID[curIndex], (int)fanGetSpeed(curIndex));
-  }
-  GUI_DispStringInPrect(&exhibitRect, (u8*)fan_s);
+    sprintf(tempstr, "  %d  ", (int)fanGetSpeed(curIndex));
+
+  setLargeFont(true);
+  GUI_DispStringInPrect(&exhibitRect, (u8 *)tempstr);
   setLargeFont(false);
 }
 
@@ -51,7 +55,7 @@ void menuFan(void)
     fanItems.items[KEY_ICON_4] = itemFan[1];
 
   menuDrawPage(&fanItems);
-  fanSpeedReDraw();
+  fanSpeedReDraw(false);
 
   #if LCD_ENCODER_SUPPORT
     encoderPosition = 0;
@@ -102,7 +106,7 @@ void menuFan(void)
         if (infoSettings.fan_count > 1)
         {
           curIndex = (curIndex + 1) % infoSettings.fan_count;
-          fanSpeedReDraw();
+          fanSpeedReDraw(false);
         }
         else
         {
@@ -162,7 +166,7 @@ void menuFan(void)
     }
 
     if (fanSpeedChanged(curIndex))
-      fanSpeedReDraw();
+      fanSpeedReDraw(true);
 
     loopProcess();
   }
