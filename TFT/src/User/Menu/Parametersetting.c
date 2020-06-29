@@ -310,16 +310,16 @@ void show_GlobalInfo(void)
 void drawGlobalInfo(void){
   char tempstr[10];
   GUI_SetBkColor(infoSettings.title_bg_color);
-  GUI_ClearRect(LCD_WIDTH/3, 0, LCD_WIDTH, BYTE_HEIGHT);
 
   //global nozzle
-  lcd_frame_display(ICON_NOZZLE_X, 0, 2*BYTE_WIDTH, BYTE_HEIGHT, ICON_ADDR(ICON_GLOBAL_NOZZLE));
-  my_sprintf(tempstr, "%d/%d", heatGetCurrentTemp(NOZZLE0), heatGetTargetTemp(NOZZLE0));
-  GUI_DispStringInRect(VALUE_NOZZLE_X,0,VALUE_NOZZLE_X+8*BYTE_WIDTH,BYTE_HEIGHT, (u8 *)tempstr);
+  lcd_frame_display(ICON_NOZZLE_X, 0, GLOBALICON_WIDTH, BYTE_HEIGHT, ICON_ADDR(ICON_GLOBAL_NOZZLE));
+  sprintf(tempstr, "%3d/%-3d", heatGetCurrentTemp(NOZZLE0), heatGetTargetTemp(NOZZLE0));
+  GUI_DispString(VALUE_NOZZLE_X, 0, (u8 *)tempstr);
 
   //global bed
-  lcd_frame_display(ICON_BED_X, 0, 2*BYTE_WIDTH, BYTE_HEIGHT, ICON_ADDR(ICON_GLOBAL_BED));
-  my_sprintf(tempstr, "%d/%d", heatGetCurrentTemp(BED), heatGetTargetTemp(BED));
-  GUI_DispStringInRect(VALUE_BED_X,0,VALUE_BED_X+8*BYTE_WIDTH,BYTE_HEIGHT, (u8 *)tempstr);
+  lcd_frame_display(ICON_BED_X, 0, GLOBALICON_WIDTH, BYTE_HEIGHT, ICON_ADDR(ICON_GLOBAL_BED));
+  sprintf(tempstr, "%3d/%-3d", heatGetCurrentTemp(BED), heatGetTargetTemp(BED));
+  GUI_DispString(VALUE_BED_X, 0, (u8 *)tempstr);
+
   GUI_SetBkColor(infoSettings.bg_color);
 }
