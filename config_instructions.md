@@ -44,4 +44,4 @@ Before editing config.ini file please read the following points:
 6. Insert the SD card in the TFT's SD card slot and restart the TFT by pressing the reset buttion or disconnecting and connecting the power cable.
 
 
-7. The TFT will update and store the configuraiton form **config.ini** file.
+7. The TFT will update and store the configuration from **config.ini** file.
