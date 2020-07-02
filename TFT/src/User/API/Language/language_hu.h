@@ -1,6 +1,5 @@
 #ifndef _LANGUAGE_HU_H_
 #define _LANGUAGE_HU_H_
-
     #define HU_LANGUAGE               "Magyar"
     #define HU_HEAT                   "Fűtés"
     #define HU_MOVE                   "Mozgás"
@@ -32,6 +31,7 @@
     #define HU_Z_OFFSET               "Z Eltolás"
     #define HU_PROBE_OFFSET           "Szonda Eltolás"
     #define HU_EEPROM_SAVE            "Mentés"
+    #define HU_APPLY                  "Apply"
     #define HU_INC                    "Növel"
     #define HU_DEC                    "Csökkent"
     #define HU_NOZZLE                 "Fej"
@@ -167,8 +167,11 @@
     #define HU_RETRACT_ACCELERATION   "Adagoló Gyorsulása"
     #define HU_TRAVEL_ACCELERATION    "Utazási Gyorsulás"
     #define HU_BUMP_SENSITIVITY       "TMC ütközés érzékenység"
+    #define HU_FWRETRACT              "FW Retraction"
+    #define HU_FWRECOVER              "FW Retraction Recover"
+    #define HU_LIN_ADVANCE            "Linear Advance"
     #define HU_RESET                  "Alap"
-    #define HU_RESET_SETTINGS         "Minden beállítás vissza\nfog állni alapértelmezett\nértékre. Folytatja?"
+    #define HU_RESET_SETTINGS_INFO    "Minden beállítás vissza\nfog állni alapértelmezett\nértékre. Folytatja?"
     #define HU_RESET_SETTINGS_DONE    "A beállítások visszaállítása\nsikeresen megtörtént. Az\nérvénybelépéshez indítsa\nújra az eszközt."
     #define HU_INFO                   "Infó"
     #define HU_LCD_BRIGHTNESS         "LCD Fényerősség"
@@ -182,5 +185,18 @@
     #define HU_300_SECONDS            "5 Perc."
     #define HU_CUSTOM_SECONDS         "Egyedi"
     #define HU_ST7920_FULLSCREEN      "Nagyképernyős Marlin mód"
+    #define HU_SETTING_RESET          "Reset settings"
+    #define HU_SETTING_RESTORE        "Restore settings"
+    #define HU_EEPROM_SAVE_INFO       "Save printer settings\nto EEPROM?"
+    #define HU_EEPROM_RESTORE_INFO    "Reload settings from\nEEPROM?"
+    #define HU_RETRACT_FEEDRATE       "Retract feedrate"
+    #define HU_RETRACT_LENGTH         "Retract length"
+    #define HU_RETRACT_SWAP_LENGTH    "Retract swap length"
+    #define HU_RETRACT_Z_LIFT         "Z lift on retraction"
+    #define HU_RECOVER_FEEDRATE       "Recover feedrate"
+    #define HU_SWAP_RECOVER_FEEDRATE  "Swap recover feedrate"
+    #define HU_RECOVER_LENGTH         "Extra recover length"
+    #define HU_SWAP_RECOVER_LENGTH    "Extra recover swap length"
+    #define HU_START_PRINT            "Start Printing:\n %s?"
 
 #endif

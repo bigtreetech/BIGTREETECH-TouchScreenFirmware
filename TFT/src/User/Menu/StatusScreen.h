@@ -13,8 +13,10 @@
 #define INFOMSG_BKCOLOR     WHITE
 #define INFOMSG_COLOR       BLACK
 
+extern const GUI_POINT ss_title_point;
+extern const GUI_POINT ss_val_point;
+
 void menuStatus(void);
-//void set_status_icon(void);
 void drawTemperature(void);
 void storegantry(int n, float val);
 void toggleTool(void);

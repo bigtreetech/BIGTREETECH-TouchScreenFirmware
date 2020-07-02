@@ -5,7 +5,7 @@
 #include "coordinate.h"
 #include "Configuration.h"
 
-#define CONFIG_SUPPPORT 200404
+#define CONFIG_SUPPPORT 20200530
 
 #define ITEM_BAUDRATE_NUM     9
 
@@ -16,7 +16,7 @@
 
 #define AXIS_NUM              (TOTAL_AXIS - 1)
 #define SPEED_COUNT           3
-#define PREHEAT_COUNT         3
+#define PREHEAT_COUNT         4
 #define CUSTOM_GCODES_COUNT   15
 #define MAX_STRING_LENGTH     20
 #define MAX_LABEL_LENGTH      7
@@ -167,12 +167,15 @@ typedef struct
 }MACHINESETTINGS;
 
 
-
 extern SETTINGS infoSettings;
 extern MACHINESETTINGS infoMachineSettings;
-extern const u32 item_baudrate[ITEM_BAUDRATE_NUM];
-void setupMachine(void);
+
+void initMachineSetting(void);
 void infoSettingsReset(void);
-void menuSettings(void);
+void setupMachine(void);
+
+
+
+
 
 #endif

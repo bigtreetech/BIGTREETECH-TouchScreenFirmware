@@ -265,9 +265,10 @@ void menuScreenSettings(void)
     {ICON_BACK,                 LABEL_BACK},}
   };
   u8 item_silent_i = 0;
-  u8 item_marlin_bg_color_i = 0;
-  u8 item_marlin_font_color_i = 0;
-
+  #ifdef ST7920_SPI
+    u8 item_marlin_bg_color_i = 0;
+    u8 item_marlin_font_color_i = 0;
+  #endif
   KEY_VALUES key_num = KEY_IDLE;
   SETTINGS now = infoSettings;
 

@@ -1,34 +1,39 @@
 #include "Popup.h"
 #include "includes.h"
 
-
-#define BUTTON_NUM 1
-
 BUTTON bottomSingleBtn = {
   //button location                       color before pressed   color after pressed
-  POPUP_RECT_SINGLE_CONFIRM, NULL, 5, 1, GREEN, BLACK, WHITE,   GREEN, WHITE, BLACK
+  POPUP_RECT_SINGLE_CONFIRM, NULL, 5, 1,  DARKGREEN, DARKGREEN,  MAT_LOWWHITE, DARKGREEN, WHITE, DARKGREEN
 };
 
 BUTTON bottomDoubleBtn[] = {
-  {POPUP_RECT_DOUBLE_CONFIRM, NULL, 5, 1, GREEN, BLACK, WHITE,   GREEN, WHITE, BLACK},
-  {POPUP_RECT_DOUBLE_CANCEL,  NULL, 5, 1, GREEN, BLACK, WHITE,   GREEN, WHITE, BLACK},
+  {POPUP_RECT_DOUBLE_CONFIRM, NULL, 5, 1, DARKGREEN, DARKGREEN,  MAT_LOWWHITE, DARKGREEN, WHITE, DARKGREEN},
+  {POPUP_RECT_DOUBLE_CANCEL,  NULL, 5, 1, MAT_RED,     MAT_RED,  MAT_LOWWHITE,   MAT_RED, WHITE,   MAT_RED},
 };
 
-GUI_RECT doubleBtnRect[] ={POPUP_RECT_DOUBLE_CONFIRM, POPUP_RECT_DOUBLE_CANCEL};
+const GUI_RECT doubleBtnRect[] = {POPUP_RECT_DOUBLE_CONFIRM, POPUP_RECT_DOUBLE_CANCEL};
 
+static const GUI_RECT popupMenuRect = POPUP_RECT_SINGLE_CONFIRM;
 
 WINDOW window = {
-  POPUP_RECT_WINDOW,                      //rectangle position and size of popup window
-  10,                                     //Four-corner arc radius
-  3,                                      //Outer line width
-  0x5D7B,                                 //Outer and title bar background color
-  {MAGENTA, 0x5D7B, POPUP_TITLE_HEIGHT},  //Title bar font color / background color / height
-  {WHITE, BLACK, POPUP_TEXT_HEIGHT},      //Message area font color / background color / height
-  {WHITE, GRAY,  POPUP_BOTTOM_HEIGHT},    //Bottom (font color) / background color / (height)
+  DIALOG_TYPE_INFO,             //default window type
+  POPUP_RECT_WINDOW,            //rectangle position and size of popup window
+  POPUP_TITLE_HEIGHT,                //height of title bar
+  POPUP_BOTTOM_HEIGHT,                //height of action bar
+  2,                            //window border width
+  GRAY,                         //window border color
+  {DARKGRAY, MAT_LOWWHITE},     //Title bar font color / background color
+  {DARKGRAY, MAT_LOWWHITE},     //Message area font color / background color
+  {DARKGRAY, MAT_LOWWHITE},     //actionbar font color / background color
 };
 
 static BUTTON *windowButton =  NULL;
 static u16 buttonNum = 0;
+
+static const GUI_RECT * cur_btn_rect = NULL;
+static void (*action_ok)() = NULL;
+static void (*action_cancel)() = NULL;
+static void (*action_loop)() = NULL;
 
 void windowReDrawButton(u8 positon, u8 pressed)
 {
@@ -41,8 +46,9 @@ void windowReDrawButton(u8 positon, u8 pressed)
 }
 
 
-void popupDrawPage(BUTTON *btn, const u8 *title, const u8 *context, const u8 *yes, const u8 *no)
+void popupDrawPage(DIALOG_TYPE type, BUTTON *btn, const u8 *title, const u8 *context, const u8 *yes, const u8 *no)
 {
+  setMenuType(MENU_TYPE_DIALOG);
   buttonNum = 0;
   windowButton = btn;
   if(yes)
@@ -55,72 +61,80 @@ void popupDrawPage(BUTTON *btn, const u8 *title, const u8 *context, const u8 *ye
   }
 
   TSC_ReDrawIcon = windowReDrawButton;
+  window.type = type;
   GUI_DrawWindow(&window, title, context);
 
   for(u8 i = 0; i < buttonNum; i++)
     GUI_DrawButton(&windowButton[i], 0);
 }
 
-static const GUI_RECT popupMenuRect = POPUP_RECT_SINGLE_CONFIRM;
-
-void menuPopup(void)
+void menuDialog(void)
 {
   u16 key_num = IDLE_TOUCH;
-
-  while(infoMenu.menu[infoMenu.cur] == menuPopup)
+  while(infoMenu.menu[infoMenu.cur] == menuDialog)
   {
-    key_num = KEY_GetValue(BUTTON_NUM, &popupMenuRect);
+    key_num = KEY_GetValue(buttonNum, cur_btn_rect);
+
     switch(key_num)
     {
       case KEY_POPUP_CONFIRM:
         infoMenu.cur--;
         break;
-
-      default:
-        break;
-    }
-    loopProcess();
-  }
-}
-
-void popupReminder(u8* info, u8* context)
-{
-  if (infoSettings.serial_alwaysOn == 1 && infoSettings.mode == LCD12864) return;
-
-  popupDrawPage(&bottomSingleBtn , info, context, textSelect(LABEL_CONFIRM), NULL);
-  if(infoMenu.menu[infoMenu.cur] != menuPopup)
-  {
-    infoMenu.menu[++infoMenu.cur] = menuPopup;
-  }
-}
-
-void menuPopupPauseForUser(void)
-{
-  u16 key_num = IDLE_TOUCH;
-
-  while(infoMenu.menu[infoMenu.cur] == menuPopupPauseForUser)
-  {
-    key_num = KEY_GetValue(BUTTON_NUM, &popupMenuRect);
-    switch(key_num)
-    {
-      case KEY_POPUP_CONFIRM:
+      case KEY_POPUP_CANCEL:
         infoMenu.cur--;
-        Serial_Puts(SERIAL_PORT, "M108\n");
         break;
-
       default:
         break;
     }
+    if (action_loop != NULL)
+      action_loop();
     loopProcess();
   }
+  if (action_ok != NULL && key_num == KEY_POPUP_CONFIRM)
+    action_ok();
+  else if (action_cancel != NULL && key_num == KEY_POPUP_CANCEL)
+    action_cancel();
 }
 
-void popupPauseForUser(void) {
-  if (infoSettings.serial_alwaysOn == 1 && infoSettings.mode == LCD12864) return;
+void popupReminder(DIALOG_TYPE type, u8* info, u8* context)
+{
+  if (infoSettings.mode == LCD12864) return;
 
-  popupDrawPage(&bottomSingleBtn , (u8*)"Printer Paused", (u8*)"OK to continue", textSelect(LABEL_CONFIRM), NULL);
-  if(infoMenu.menu[infoMenu.cur] != menuPopupPauseForUser)
+  popupDrawPage(type, &bottomSingleBtn , info, context, textSelect(LABEL_CONFIRM), NULL);
+
+  action_ok = NULL;
+  action_cancel = NULL;
+  action_loop = NULL;
+  cur_btn_rect = &popupMenuRect;
+  if (infoMenu.menu[infoMenu.cur] != menuDialog)
+    infoMenu.menu[++infoMenu.cur] = menuDialog;
+}
+
+/** Show save setting dialog
+ * @param title - the title to show on window (title of which menu asked fot it?)
+ * @param msg - the msg to to show in msg box
+ * @param title - the title to show on window (title of which menu asked fot it?)
+ * @param msg - the msg to to show in msg box
+ * @param ok_action - pointer to a function to perform if ok is pressed. (pass NULL if no action need to be performed)
+ * @param cancel_action - pointer to a function to perform if Cancel is pressed.(pass NULL if no action need to be performed)
+*/
+void showDialog(DIALOG_TYPE type, u8 * title, u8 * msg, u8 *ok_txt, u8* cancel_txt, void (*ok_action)(), void (*cancel_action)(), void (*loop_action)())
+{
+  if (infoSettings.mode == LCD12864)
+    return;
+  action_ok = ok_action;
+  action_cancel = cancel_action;
+  action_loop = loop_action;
+  if(cancel_txt)
   {
-    infoMenu.menu[++infoMenu.cur] = menuPopupPauseForUser;
+    popupDrawPage(type, bottomDoubleBtn, title, msg, ok_txt, cancel_txt);
+    cur_btn_rect = doubleBtnRect;
   }
+  else
+  {
+    popupDrawPage(type, &bottomSingleBtn, title, msg, ok_txt, cancel_txt);
+    cur_btn_rect = &popupMenuRect;
+  }
+  if (infoMenu.menu[infoMenu.cur] != menuDialog)
+    infoMenu.menu[++infoMenu.cur] = menuDialog;
 }

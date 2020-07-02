@@ -4,6 +4,22 @@
 #include "stdbool.h"
 #include "ff.h"
 
+
+#ifndef M27_WATCH_OTHER_SOURCES
+#define M27_WATCH_OTHER_SOURCES    false
+#endif
+
+#ifndef M27_REFRESH
+#define M27_REFRESH   3
+#endif
+
+#ifdef RAPID_SERIAL_COMM
+#define rapid_serial_loop()  loopBackEnd()
+#else
+#define rapid_serial_loop()
+#endif
+
+
 typedef struct
 {
   FIL     file;
@@ -18,18 +34,24 @@ typedef struct
   bool    runout; // 1: runout in printing, 0: idle
 }PRINTING;
 
+extern PRINTING infoPrinting;
+
+void setPrintfinishAction(void (*_printfinish)());
+bool isPrinting(void);
+bool isPause(void);
+bool isM0_Pause(void);
+void breakAndContinue(void);
+void setPrintingTime(u32 RTtime);
+
 void exitPrinting(void);
 void endPrinting(void);
 void completePrinting(void);
 void abortPrinting(void);
+u8 *getCurGcodeName(char *path);
+void sendPrintCodes(uint8_t index);
 
 void setM0Pause(bool m0_pause);
-bool setPrintPause(bool is_pause,bool is_m0pause);
-
-bool isPrinting(void);
-bool isPause(void);
-bool isM0_Pause(void);
-void setPrintingTime(u32 RTtime);
+bool setPrintPause(bool is_pause, bool is_m0pause);
 
 void setPrintSize(u32 size);
 void setPrintCur(u32 cur);
@@ -45,18 +67,14 @@ void printSetUpdateWaiting(bool isWaiting);
 
 void getGcodeFromFile(void);
 
-void menuBeforePrinting(void);
-void menuPrinting(void);
-void menuStopPrinting(void);
-void menuShutDown(void);
+void shutdown(void);
+void shutdownLoop(void);
+void startShutdown(void);
 
-void printingDrawPage(void);
-void reDrawProgress(int icon_pos);
-void reValueNozzle(int icon_pos);
-void reValueBed(int icon_pos);
-void reDrawTime(int icon_pos);
-void reDrawLayer(int icon_pos);
-
+void printingFinished(void);
 void loopCheckPrinting(void);
+
+
+
 
 #endif

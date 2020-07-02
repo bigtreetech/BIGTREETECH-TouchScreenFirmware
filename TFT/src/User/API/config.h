@@ -63,9 +63,11 @@
 #define CONFIG_PREHEAT_NAME_1       "preheat_name1:"
 #define CONFIG_PREHEAT_NAME_2       "preheat_name2:"
 #define CONFIG_PREHEAT_NAME_3       "preheat_name3:"
+#define CONFIG_PREHEAT_NAME_4       "preheat_name4:"
 #define CONFIG_PREHEAT_TEMP_1       "preheat_temp1:"
 #define CONFIG_PREHEAT_TEMP_2       "preheat_temp2:"
 #define CONFIG_PREHEAT_TEMP_3       "preheat_temp3:"
+#define CONFIG_PREHEAT_TEMP_4       "preheat_temp4:"
 //-----------------------------Power Supply Settings (if connected to TFT Controller)
 #define CONFIG_PS_ON                "ps_on:"
 #define CONFIG_PS_LOGIC             "ps_on_active_high:"
@@ -118,8 +120,8 @@
 #define CONFIG_CUSTOM_GCODE_15  "custom_gcode_15:"
 //-----------------------------Start, End & Cancel G-codes
 #define CONFIG_START_GCODE_ON   "start_gcode_enabled:"
-#define CONFIG_END_GOCODE_ON    "end_gcode_enabled:"
-#define CONFIG_CANCEL_GOCODE_ON "cancel_gcode_enabled:"
+#define CONFIG_END_GCODE_ON    "end_gcode_enabled:"
+#define CONFIG_CANCEL_GCODE_ON "cancel_gcode_enabled:"
 #define CONFIG_START_GCODE      "start_gcode:"
 #define CONFIG_END_GCODE        "end_gcode:"
 #define CONFIG_CANCEL_GCODE     "cancel_gcode:"

@@ -79,14 +79,17 @@ void ackPopupInfo(const char *info)
 {
   if(infoMenu.menu[infoMenu.cur] == menuParameterSettings) return;
 
+  DIALOG_TYPE d_type = DIALOG_TYPE_ERROR;
+
   if (info == echomagic)
   {
+    d_type = DIALOG_TYPE_INFO;
     statusScreen_setMsg((u8 *)info, (u8 *)dmaL2Cache + ack_index);
   }
   if (infoMenu.menu[infoMenu.cur] == menuTerminal) return;
   if (infoMenu.menu[infoMenu.cur] == menuStatus && info == echomagic) return;
 
-  popupReminder((u8* )info, (u8 *)dmaL2Cache + ack_index);
+  popupReminder(d_type,(u8* )info, (u8 *)dmaL2Cache + ack_index);
 }
 
 bool dmaL1NotEmpty(uint8_t port)
@@ -197,7 +200,7 @@ void parseACK(void)
         avoid_terminal = !infoSettings.terminalACK;
         updateNextHeatCheckTime();
       }
-      else if(ack_seen("X:") && ack_index == 2)
+      else if((ack_seen("X:") && ack_index == 2) || ack_seen("C: X:")) // Smoothieware axis position starts with "C: X:"
       {
         storegantry(0, ack_value());
         if (ack_seen("Y:"))
@@ -246,7 +249,7 @@ void parseACK(void)
       }
       else if(ack_seen("M92 T1 E")){
         setParameter(P_STEPS_PER_MM, E2_STEPPER, ack_value());
-        dualstepper[E_STEPPER] = true;
+        setDualStepperStatus(E_STEPPER, true);
       }
     //parse and store Max Feed Rate values
      else if(ack_seen("M203 X")){
@@ -260,7 +263,7 @@ void parseACK(void)
       }
       else if(ack_seen("M203 T1 E")){
         setParameter(P_MAX_FEED_RATE, E2_STEPPER, ack_value());
-        dualstepper[E_STEPPER] = true;
+        setDualStepperStatus(E_STEPPER, true);
       }
     //parse and store Max Acceleration values
       else if(ack_seen("M201 X")){
@@ -275,13 +278,27 @@ void parseACK(void)
       }
       else if(ack_seen("M201 T1 E")){
         setParameter(P_MAX_ACCELERATION, E2_STEPPER, ack_value());
-        dualstepper[E_STEPPER] = true;
+        setDualStepperStatus(E_STEPPER, true);
       }
     //parse and store Acceleration values
       else if(ack_seen("M204 P")){
-                          setParameter(P_ACCELERATION, X_STEPPER, ack_value());
-        if(ack_seen("R")) setParameter(P_ACCELERATION, Y_STEPPER, ack_value());
-        if(ack_seen("T")) setParameter(P_ACCELERATION, Z_STEPPER, ack_value());
+                          setParameter(P_ACCELERATION, 0, ack_value());
+        if(ack_seen("R")) setParameter(P_ACCELERATION, 1, ack_value());
+        if(ack_seen("T")) setParameter(P_ACCELERATION, 2, ack_value());
+      }
+    //parse and store FW retraction values
+      else if(ack_seen("M207 S")){
+                          setParameter(P_FWRETRACT, 0, ack_value());
+        if(ack_seen("W")) setParameter(P_FWRETRACT, 1, ack_value());
+        if(ack_seen("F")) setParameter(P_FWRETRACT, 2, ack_value());
+        if(ack_seen("Z")) setParameter(P_FWRETRACT, 3, ack_value());
+      }
+    //parse and store FW recover values
+      else if(ack_seen("M208 S")){
+                          setParameter(P_FWRECOVER, 0, ack_value());
+        if(ack_seen("W")) setParameter(P_FWRECOVER, 1, ack_value());
+        if(ack_seen("F")) setParameter(P_FWRECOVER, 2, ack_value());
+        if(ack_seen("R")) setParameter(P_FWRECOVER, 3, ack_value());
       }
     //parse and store Probe Offset values
       else if(ack_seen("M851 X")){
@@ -289,11 +306,9 @@ void parseACK(void)
         if(ack_seen("Y")) setParameter(P_PROBE_OFFSET, Y_STEPPER, ack_value());
         if(ack_seen("Z")) setParameter(P_PROBE_OFFSET, Z_STEPPER, ack_value());
       }
-    //parse and store TMC Bump sensitivity values
-      else if(ack_seen("M914 X")){
-                          setParameter(P_BUMPSENSITIVITY, X_STEPPER, ack_value());
-        if(ack_seen("Y")) setParameter(P_BUMPSENSITIVITY, Y_STEPPER, ack_value());
-        if(ack_seen("Z")) setParameter(P_BUMPSENSITIVITY, Z_STEPPER, ack_value());
+    //parse and store linear advance values
+      else if(ack_seen("M900 K")){
+                          setParameter(P_LIN_ADV, 0, ack_value());
       }
     //parse and store stepper driver current values
       else if(ack_seen("M906 X")){
@@ -301,17 +316,23 @@ void parseACK(void)
         if(ack_seen("Y")) setParameter(P_CURRENT, Y_STEPPER, ack_value());
         if(ack_seen("Z")) setParameter(P_CURRENT, Z_STEPPER, ack_value());
       }
+    //parse and store TMC Bump sensitivity values
+      else if(ack_seen("M914 X")){
+                          setParameter(P_BUMPSENSITIVITY, X_STEPPER, ack_value());
+        if(ack_seen("Y")) setParameter(P_BUMPSENSITIVITY, Y_STEPPER, ack_value());
+        if(ack_seen("Z")) setParameter(P_BUMPSENSITIVITY, Z_STEPPER, ack_value());
+      }
       else if(ack_seen("M906 I1")){
-        if(ack_seen("X")) dualstepper[X_STEPPER] = true;
-        if(ack_seen("Y")) dualstepper[Y_STEPPER] = true;
-        if(ack_seen("Z")) dualstepper[Z_STEPPER] = true;
+        if(ack_seen("X")) setDualStepperStatus(X_STEPPER, true);
+        if(ack_seen("Y")) setDualStepperStatus(Y_STEPPER, true);
+        if(ack_seen("Z")) setDualStepperStatus(Z_STEPPER, true);
       }
       else if(ack_seen("M906 T0 E")){
         setParameter(P_CURRENT, E_STEPPER, ack_value());
       }
       else if(ack_seen("M906 T1 E")){
         setParameter(P_CURRENT, E2_STEPPER, ack_value());
-        dualstepper[E_STEPPER] = true;
+        setDualStepperStatus(E_STEPPER, true);
       }
     // Parse M115 capability report
 
@@ -375,7 +396,7 @@ void parseACK(void)
     //parse Repeatability Test
       else if(ack_seen("Mean:"))
       {
-        popupReminder((u8* )"Repeatability Test", (u8 *)dmaL2Cache + ack_index-5);
+        popupReminder(DIALOG_TYPE_INFO, (u8* )"Repeatability Test", (u8 *)dmaL2Cache + ack_index-5);
       }
       else if(ack_seen("Probe Offset"))
       {
@@ -404,7 +425,8 @@ void parseACK(void)
     // Parse pause message
       else if(ack_seen("paused for user"))
       {
-        popupPauseForUser();
+        showDialog(DIALOG_TYPE_QUESTION, (u8*)"Printer is Paused",(u8*)"Paused for user\ncontinue?",
+                    textSelect(LABEL_CONFIRM), NULL, breakAndContinue, NULL,NULL);
       }
     //Parse error messages & Echo messages
       else if(ack_seen(errormagic))

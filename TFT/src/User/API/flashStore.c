@@ -2,7 +2,7 @@
 #include "STM32_Flash.h"
 
 #define TSC_SIGN  0x20200512 // DO NOT MODIFY
-#define PARA_SIGN 0x20200513 // (YYYMMDD) If a new setting parameter is added, modify here and initialize the initial value in the "infoSettingsReset()" function
+#define PARA_SIGN 0x20200520 // (YYYMMDD) If a new setting parameter is added, modify here and initialize the initial value in the "infoSettingsReset()" function
 
 extern u32 TSC_Para[7];        //
 extern SETTINGS infoSettings;  //
@@ -192,7 +192,7 @@ void storePara(void)
     wordToByte(TSC_Para[i],                           data + (index += 4));
   }
   wordToByte(infoSettings.rotate_ui,                  data + (index += 4));
-  
+
   wordToByte(PARA_SIGN,                               data + (index += 4));
   wordToByte(infoSettings.baudrate,                   data + (index += 4));
   wordToByte(infoSettings.language,                   data + (index += 4));
@@ -314,5 +314,5 @@ bool readIsTSCExist(void)
 
 bool readIsRestored(void)
 {
-  return ((paraStatus & PARA_WAS_RESTORED) != 0);  
+  return ((paraStatus & PARA_WAS_RESTORED) != 0);
 }

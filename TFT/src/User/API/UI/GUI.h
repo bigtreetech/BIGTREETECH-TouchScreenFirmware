@@ -9,6 +9,8 @@ enum
   LEFT=0,
   RIGHT,
   CENTER,
+  TOP,
+  BOTTOM,
 };
 
 typedef enum
@@ -69,6 +71,7 @@ CHAR_INFO GUI_DispOne(int16_t sx, int16_t sy, const uint8_t *p);
 void GUI_DispString(int16_t x, int16_t y, const uint8_t *p);
 const uint8_t* GUI_DispLenString(int16_t x, int16_t y, const uint8_t *p, uint16_t pixelWidth);
 void GUI_DispStringRight(int16_t x, int16_t y, const uint8_t *p);
+void GUI_DispStringCenter(int16_t x, int16_t y, const uint8_t *p);
 void GUI_DispStringInRect(int16_t sx, int16_t sy, int16_t ex, int16_t ey, const uint8_t *p);
 void GUI_DispStringInPrect(const GUI_RECT *rect, const uint8_t *p);
 void GUI_DispStringInRectEOL(int16_t sx, int16_t sy, int16_t ex, int16_t ey, const uint8_t *p);
@@ -106,8 +109,18 @@ typedef struct
   uint16_t maxPixelWidth;
   uint8_t  has_disp;
 }SCROLL;
+
 void Scroll_CreatePara(SCROLL * para, uint8_t *pstr, const GUI_RECT *rect);
 void Scroll_DispString(SCROLL * para, uint8_t align);
+
+typedef enum
+{
+  DIALOG_TYPE_INFO,
+  DIALOG_TYPE_ALERT,
+  DIALOG_TYPE_QUESTION,
+  DIALOG_TYPE_ERROR,
+  DIALOG_TYPE_SUCCESS,
+}DIALOG_TYPE;
 
 typedef struct
 {
@@ -115,10 +128,10 @@ typedef struct
   const uint8_t  *context;
   const uint16_t radius;
   const uint16_t lineWidth;
-  const uint16_t lineColor;  //����״̬�µ���ɫ
+  const uint16_t lineColor; //normal button colors
   const uint16_t fontColor;
   const uint16_t backColor;
-  const uint16_t pLineColor; //��ѹ״̬�µ���ɫ
+  const uint16_t pLineColor; //pressed button colors
   const uint16_t pFontColor;
   const uint16_t pBackColor;
 }BUTTON;
@@ -129,18 +142,19 @@ typedef struct
 {
   const uint16_t fontColor;
   const uint16_t backColor;
-  const int16_t  height;
 }WINDOW_ITEM;
 
 typedef struct
 {
+  DIALOG_TYPE    type;
   const GUI_RECT rect;
-  const uint16_t radius;
+  const uint16_t titleHeight;
+  const uint16_t actionBarHeight;
   const uint16_t lineWidth;
   const uint16_t lineColor;
   const WINDOW_ITEM title;
   const WINDOW_ITEM info;
-  const WINDOW_ITEM bottom;
+  const WINDOW_ITEM actionBar;
 }WINDOW;
 
 void GUI_DrawWindow(const WINDOW *window, const uint8_t *title, const uint8_t *inf);

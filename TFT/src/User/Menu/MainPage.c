@@ -52,7 +52,7 @@ void classicMenu(void)
   // title
   LABEL_READY,
   // icon             label
-    {{ICON_HEAT,      LABEL_PREHEAT},
+     {{ICON_HEAT,     LABEL_PREHEAT},
       {ICON_MOVE,     LABEL_MOVE},
       {ICON_HOME,     LABEL_HOME},
       {ICON_PRINT,    LABEL_PRINT},

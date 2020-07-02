@@ -1,6 +1,7 @@
 #include "utf8_decode.h"
 #include "includes.h"
 
+bool largeFont = false;
 
 static FONT_BITMAP font[] = {
   { // Visible ASCII code, from ' ' to '~'
@@ -20,6 +21,16 @@ static FONT_BITMAP font[] = {
     BYTE_WIDTH,
     // the first character code point in this font bitmap file
     0x20, // the first character in BYTE_ASCII_ADDR is 0x20(' ')
+  },
+  { // large ASCII font
+    0x20,
+    0x7E,
+    LARGE_BYTE_HEIGHT,
+    LARGE_BYTE_WIDTH,
+    LARGE_FONT_ADDR,
+    LARGE_BYTE_HEIGHT,
+    LARGE_BYTE_WIDTH,
+    0x20,
   },
   { // Czech(Latin 1 Supplement, Extended-A&B)
     0x80,
@@ -73,6 +84,17 @@ static FONT_BITMAP font[] = {
   },
 };
 
+//set Large font
+void setLargeFont(bool status)
+{
+  largeFont = status;
+}
+
+bool isLargeFont(void)
+{
+  return largeFont;
+}
+
 // decode character encode info (UTF8)
 static void getUTF8EncodeInfo(const uint8_t *ch, CHAR_INFO *pInfo)
 {
@@ -102,6 +124,8 @@ static void getBitMapFontInfo(CHAR_INFO *pInfo)
   {
     if(pInfo->codePoint >= font[i].startCodePoint && pInfo->codePoint <= font[i].endCodePoint)
     {
+      if(i == 0 && largeFont)
+        i++;
       pInfo->pixelWidth = font[i].pixelWidth;
       pInfo->pixelHeight = font[i].pixelHeight;
       pInfo->bitMapAddr = font[i].bitMapStartAddr + (pInfo->codePoint - font[i].bitMapStartCodePoint) * (font[i].bitMapHeight * font[i].bitMapWidth / 8);

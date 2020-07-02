@@ -16,7 +16,6 @@ LABEL_HEAT,
   {ICON_BACK,                 LABEL_BACK},}
 };
 
-
 const ITEM itemTool[] = {
 // icon                       label
   {ICON_BED,                  LABEL_BED},
@@ -29,179 +28,40 @@ const ITEM itemTool[] = {
 };
 
 #define ITEM_DEGREE_NUM 3
+
 const ITEM itemDegree[ITEM_DEGREE_NUM] = {
 // icon                       label
   {ICON_1_DEGREE,             LABEL_1_DEGREE},
   {ICON_5_DEGREE,             LABEL_5_DEGREE},
   {ICON_10_DEGREE,            LABEL_10_DEGREE},
 };
+
 const  u8 item_degree[ITEM_DEGREE_NUM] = {1, 5, 10};
 static u8 item_degree_i = 1;
 
-const char* toolID[] = HEAT_SIGN_ID;
-const char* const heatDisplayID[] = HEAT_DISPLAY_ID;
-const char* heatCmd[] = HEAT_CMD;
-const char* heatWaitCmd[] = HEAT_WAIT_CMD;
-
-static HEATER  heater = {{}, NOZZLE0, NOZZLE0};
-static HEATER  lastHeater = {{}, NOZZLE0, NOZZLE0};
-static u32     update_time = TEMPERATURE_QUERY_SLOW_DURATION;
-static bool    update_waiting = false;
-static bool    send_waiting[HEATER_NUM];
-
-/*Set target temperature*/
-void heatSetTargetTemp(TOOL tool, u16 temp)
+// Show/draw temperature in heat menu
+void showTemperature(TOOL tool)
 {
-  heater.T[tool].target = temp;
-}
-/*Sync target temperature*/
-void heatSyncTargetTemp(TOOL tool, u16 temp)
-{
-  lastHeater.T[tool].target = heater.T[tool].target = temp;
-}
+  char tempstr[20];
 
-/*Get target temperature */
-u16 heatGetTargetTemp(TOOL tool)
-{
-  return heater.T[tool].target;
-}
+  sprintf(tempstr, "%-15s", heatDisplayID[tool]);
+  GUI_DispString(exhibitRect.x0, exhibitRect.y0, (u8 *)tempstr);
 
-/* Set current temperature */
-void heatSetCurrentTemp(TOOL tool, s16 temp)
-{
-  heater.T[tool].current = limitValue(-99, temp, 999);
-}
-
-/* Get current temperature */
-s16 heatGetCurrentTemp(TOOL tool)
-{
-  return heater.T[tool].current;
-}
-
-/* Is heating waiting to heat up */
-bool heatGetIsWaiting(TOOL tool)
-{
-  return (heater.T[tool].waiting != WAIT_NONE);
-}
-
-/* Check all heater if there is a heater waiting to be waited */
-bool heatHasWaiting(void)
-{
-  TOOL i;
-  for(i = BED; i < (infoSettings.tool_count + 1); i++)
-  {
-    if(heater.T[i].waiting != WAIT_NONE)
-      return true;
-  }
-  return false;
-}
-
-/* Set heater waiting status */
-void heatSetIsWaiting(TOOL tool, HEATER_WAIT isWaiting)
-{
-  heater.T[tool].waiting = isWaiting;
-  if(isWaiting != WAIT_NONE) // wait heating now, query more frequently
-  {
-    update_time = TEMPERATURE_QUERY_FAST_DURATION;
-  }
-  else if(heatHasWaiting() == false)
-  {
-    update_time = TEMPERATURE_QUERY_SLOW_DURATION;
-  }
-}
-
-void heatClearIsWaiting(void)
-{
-  for(TOOL i = BED; i < (infoSettings.tool_count + 1); i++)
-  {
-    heater.T[i].waiting = WAIT_NONE;
-  }
-  update_time = TEMPERATURE_QUERY_SLOW_DURATION;
-}
-
-/* Set current heater tool, nozzle or hot bed */
-void heatSetCurrentTool(TOOL tool)
-{
-  if(tool >= (infoSettings.tool_count + 1)) return;
-  heater.tool = tool;
-  // This is a rough hack with a hardcode to menu item.
-  // I couldn't figure out, how to make it correctly.
-  heatItems.items[KEY_ICON_4] = itemTool[tool];
-}
-/* Get current tool, nozzle or hot bed */
-TOOL heatGetCurrentTool(void)
-{
-  return heater.tool;
-}
-
-/* Set current nozzle */
-void heatSetCurrentToolNozzle(TOOL tool)
-{
-  if(tool >= (infoSettings.tool_count + 1) || tool < NOZZLE0) return;
-  heater.nozzle = tool;
-  heater.tool = tool;
-}
-
-/* Get current nozzle*/
-TOOL heatGetCurrentToolNozzle(void)
-{
-  return heater.nozzle;
-}
-
-/* Set temperature update time interval */
-void heatSetUpdateTime(u32 time)
-{
-  update_time=time;
-}
-
-/* Set whether we need to query the current temperature */
-void heatSetUpdateWaiting(bool isWaiting)
-{
-  update_waiting = isWaiting;
-}
-
-/* Set whether the heating command has been sent */
-void heatSetSendWaiting(TOOL tool, bool isWaiting)
-{
-  send_waiting[tool] = isWaiting;
-}
-
-/* Get whether has heating command in Queue */
-bool heatGetSendWaiting(TOOL tool)
-{
-  return send_waiting[tool];
-}
-
-void showTemperature(void)
-{
-
-  const GUI_RECT rect = {exhibitRect.x0, CENTER_Y-BYTE_HEIGHT, exhibitRect.x1, CENTER_Y};
-  GUI_ClearRect(rect.x0, rect.y0, rect.x1, rect.y1);
-  GUI_DispStringInPrect(&rect, (u8*)heatDisplayID[heater.tool]);
-  GUI_DispDec(CENTER_X-BYTE_WIDTH*3, CENTER_Y, heater.T[heater.tool].current, 3, RIGHT);
-  GUI_DispString(CENTER_X, CENTER_Y, (u8*)"/");
-  GUI_DispDec(CENTER_X+BYTE_WIDTH*1, CENTER_Y, heater.T[heater.tool].target, 3, LEFT);
-}
-
-void currentReDraw(void)
-{
-  GUI_DispDec(CENTER_X-BYTE_WIDTH*3, CENTER_Y, heater.T[heater.tool].current, 3, RIGHT);
-}
-
-void targetReDraw(void)
-{
-  GUI_DispDec(CENTER_X+BYTE_WIDTH*1, CENTER_Y, heater.T[heater.tool].target, 3, LEFT);
+  sprintf(tempstr, "%4d/%-4d", heatGetCurrentTemp(tool), heatGetTargetTemp(tool));
+  setLargeFont(true);
+  GUI_DispStringInPrect(&exhibitRect, (u8 *)tempstr);
+  setLargeFont(false);
 }
 
 void menuHeat(void)
 {
   KEY_VALUES  key_num = KEY_IDLE;
 
-  lastHeater = heater;
-  update_time = TEMPERATURE_QUERY_FAST_DURATION;
+  heatSetUpdateTime(TEMPERATURE_QUERY_FAST_DURATION);
 
+  heatItems.items[KEY_ICON_4] = itemTool[heatGetCurrentTool()];
   menuDrawPage(&heatItems);
-  showTemperature();
+  showTemperature(heatGetCurrentTool());
 
   #if LCD_ENCODER_SUPPORT
     encoderPosition = 0;
@@ -210,33 +70,23 @@ void menuHeat(void)
   while(infoMenu.menu[infoMenu.cur] == menuHeat)
   {
     key_num = menuKeyGetValue();
+    int16_t t_temp = heatGetTargetTemp(heatGetCurrentTool());
+    TOOL c_tool = heatGetCurrentTool();
     switch(key_num)
     {
       case KEY_ICON_0:
-        if(heater.T[heater.tool].target > 0)
-        {
-          heater.T[heater.tool].target =
-            limitValue( 0,
-                        heater.T[heater.tool].target - item_degree[item_degree_i],
-                        infoSettings.max_temp[heater.tool]);
-        }
+          heatSetTargetTemp(c_tool, limitValue( 0, t_temp - item_degree[item_degree_i], infoSettings.max_temp[c_tool]));
         break;
 
       case KEY_ICON_3:
-        if(heater.T[heater.tool].target < infoSettings.max_temp[heater.tool])
-        {
-          heater.T[heater.tool].target =
-            limitValue( 0,
-                        heater.T[heater.tool].target + item_degree[item_degree_i],
-                        infoSettings.max_temp[heater.tool]);
-        }
+          heatSetTargetTemp(c_tool, limitValue( 0, t_temp + item_degree[item_degree_i], infoSettings.max_temp[c_tool]));
         break;
 
       case KEY_ICON_4:
-        lastHeater.tool = heater.tool = (TOOL)((heater.tool+1) % (HEATER_COUNT));
-        heatItems.items[key_num] = itemTool[heater.tool];
+        c_tool = (TOOL)(c_tool + 1) % (HEATER_COUNT);
+        heatSetCurrentTool(c_tool);
+        heatItems.items[key_num] = itemTool[c_tool];
         menuDrawItem(&heatItems.items[key_num], key_num);
-        showTemperature();
         break;
 
       case KEY_ICON_5:
@@ -246,7 +96,7 @@ void menuHeat(void)
         break;
 
       case KEY_ICON_6:
-        heater.T[heater.tool].target = 0;
+        heatSetTargetTemp(c_tool, 0);
         break;
 
       case KEY_ICON_7:
@@ -257,95 +107,26 @@ void menuHeat(void)
         #if LCD_ENCODER_SUPPORT
           if(encoderPosition)
           {
-            if(heater.T[heater.tool].target < infoSettings.max_temp[heater.tool] && encoderPosition > 0)
-            {
-              heater.T[heater.tool].target =
-                limitValue( 0,
-                            heater.T[heater.tool].target + item_degree[item_degree_i],
-                            infoSettings.max_temp[heater.tool]);
-            }
-            if(heater.T[heater.tool].target > 0 && encoderPosition < 0)
-            {
-              heater.T[heater.tool].target =
-                limitValue( 0,
-                            heater.T[heater.tool].target - item_degree[item_degree_i],
-                            infoSettings.max_temp[heater.tool]);
-            }
+            if(encoderPosition > 0)
+                heatSetTargetTemp(c_tool, limitValue(0, t_temp + item_degree[item_degree_i], infoSettings.max_temp[c_tool]));
+            if(encoderPosition < 0)
+                heatSetTargetTemp(c_tool, limitValue(0, t_temp - item_degree[item_degree_i], infoSettings.max_temp[c_tool]));
             encoderPosition = 0;
           }
         #endif
         break;
     }
 
-    if(lastHeater.tool != heater.tool)
-    {
-      lastHeater.tool = heater.tool;
-      showTemperature();
-    }
-    if(lastHeater.T[heater.tool].current != heater.T[heater.tool].current)
-    {
-      lastHeater.T[heater.tool].current = heater.T[heater.tool].current;
-      currentReDraw();
-    }
-    if(lastHeater.T[heater.tool].target != heater.T[heater.tool].target)
-    {
-      targetReDraw();
-    }
+    if (heatToolChanged())
+      showTemperature(c_tool);
+
+    if (heatCurrentTempChanged(c_tool) || heatTargetTempChanged(c_tool))
+      showTemperature(c_tool);
 
     loopProcess();
   }
 
+  // Set slow update time if not waiting for target temperature
   if(heatHasWaiting() == false)
-    update_time = TEMPERATURE_QUERY_SLOW_DURATION;
-}
-
-u32 nextHeatCheckTime = 0;
-void updateNextHeatCheckTime(void)
-{
-  nextHeatCheckTime = OS_GetTimeMs() + update_time;
-}
-
-
-void loopCheckHeater(void)
-{
-  do
-  {  /* Send M105 query temperature continuously  */
-    if(update_waiting == true)                {updateNextHeatCheckTime();break;}
-    if(OS_GetTimeMs() < nextHeatCheckTime)     break;
-    if(RequestCommandInfoIsRunning())          break; //to avoid colision in Gcode response processing
-    if(storeCmd("M105\n") == false)            break;
-    updateNextHeatCheckTime();
-    update_waiting = true;
-  }while(0);
-
-  /* Query the heater that needs to wait for the temperature to rise, whether it reaches the set temperature */
-  for(u8 i=0; i< (infoSettings.tool_count + 1); i++)
-  {
-    if (heater.T[i].waiting == WAIT_NONE)                              continue;
-    else if (heater.T[i].waiting == WAIT_HEATING) {
-      if (heater.T[i].current+2 <= heater.T[i].target)                 continue;
-    }
-    else if (heater.T[i].waiting == WAIT_COOLING_HEATING) {
-      if (inRange(heater.T[i].current, heater.T[i].target, 2) != true) continue;
-    }
-
-    heater.T[i].waiting = WAIT_NONE;
-    if (heatHasWaiting())                                              continue;
-
-    if(infoMenu.menu[infoMenu.cur] == menuHeat)                        break;
-    update_time = TEMPERATURE_QUERY_SLOW_DURATION;
-  }
-
-  for(TOOL i = BED; i < (infoSettings.tool_count + 1); i++) // If the target temperature changes, send a Gcode to set the motherboard
-  {
-    if(lastHeater.T[i].target != heater.T[i].target)
-    {
-      lastHeater.T[i].target = heater.T[i].target;
-      if(send_waiting[i] != true)
-      {
-        send_waiting[i] = true;
-        storeCmd("%s ",heatCmd[i]);
-      }
-    }
-  }
+    heatSetUpdateTime(TEMPERATURE_QUERY_SLOW_DURATION);
 }

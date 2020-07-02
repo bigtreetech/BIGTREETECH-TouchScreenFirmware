@@ -17,8 +17,9 @@ LABEL_ABL,
 
 void menuAutoLeveling(void)
 {
-  KEY_VALUES key_num=KEY_IDLE;
+  KEY_VALUES key_num = KEY_IDLE;
   menuDrawPage(&autoLevelingItems);
+  bool leveled = false;
   while(infoMenu.menu[infoMenu.cur] == menuAutoLeveling)
   {
     key_num = menuKeyGetValue();
@@ -27,9 +28,7 @@ void menuAutoLeveling(void)
       case KEY_ICON_0:
         storeCmd("G28\n");
         storeCmd("G29\n");
-        if(infoMachineSettings.EEPROM == 1){
-           storeCmd("M500\n");
-        }
+        leveled = true;
         break;
       case KEY_ICON_1:
         storeCmd("M280 P0 S10\n");
@@ -52,8 +51,18 @@ void menuAutoLeveling(void)
         infoMenu.menu[++infoMenu.cur] = menuBabyStep;
         break;
       case KEY_ICON_7:
-        infoMenu.cur--; break;
-      default:break;
+        if (leveled == true && infoMachineSettings.EEPROM == 1)
+        {
+          showDialog(DIALOG_TYPE_QUESTION, textSelect(autoLevelingItems.title.index), textSelect(LABEL_EEPROM_SAVE_INFO),
+                     textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), saveEepromSettings, NULL, NULL);
+        }
+        else
+        {
+          infoMenu.cur--;
+        }
+        break;
+      default:
+        break;
     }
     loopProcess();
   }
