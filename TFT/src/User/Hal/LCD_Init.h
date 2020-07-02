@@ -52,12 +52,9 @@
   void LCD_Dim_Idle_Timer(void);
   void LCD_LED_PWM_Init(void);
 
-   #define Set_LCD_Brightness(percentage) TIM_PWM_SetDutyCycle(LCD_LED_PWM_CHANNEL, percentage)
+  #define Set_LCD_Brightness(percentage) TIM_PWM_SetDutyCycle(LCD_LED_PWM_CHANNEL, percentage)
 #endif // LCD_LED_PWM_CHANNEL
 
-//TFT35 V1.0 V1.1 RM68042 8bit
-//TFT35 V1.2 ili9488 16bit
-//TFT28 TFT24 ili9341 16bit
 #if LCD_DATA_16BIT == 1
   #define LCD_WR_16BITS_DATA(c) do{ LCD_WR_DATA(c); }while(0)
 #else

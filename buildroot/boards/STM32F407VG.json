@@ -1,0 +1,48 @@
+{
+  "build": {
+    "core": "stm32",
+    "cpu": "cortex-m4",
+    "extra_flags": "-DSTM32F4 -DSTM32F407xx",
+    "f_cpu": "168000000L",
+    "libopencm3": {
+      "ldscript": "stm32f405x6.ld"
+    },
+    "mcu": "stm32f407vgt6",
+    "variant": "DISCO_F407VG"
+  },
+  "debug": {
+    "default_tools": [
+      "cmsis-dap"
+    ],
+    "jlink_device": "STM32F407VG",
+    "onboard_tools": [
+      "cmsis-dap"
+    ],
+    "openocd_board": "stm32f4",
+    "svd_path": "STM32F40x.svd"
+  },
+  "frameworks": [
+    "arduino",
+    "mbed",
+    "cmsis",
+    "spl",
+    "libopencm3",
+    "stm32cube",
+    "zephyr"
+  ],
+  "name": "STM32F407VG (128k RAM. 1024k Flash)",
+  "upload": {
+    "maximum_ram_size": 131072,
+    "maximum_size": 1048576,
+    "protocol": "cmsis-dap",
+    "protocols": [
+      "jlink",
+      "stlink",
+	  "cmsis-dap",
+      "blackmagic",
+      "mbed"
+    ]
+  },
+  "url": "http://www.st.com/web/catalog/tools/FM116/SC959/SS1532/LN1848/PF252419",
+  "vendor": "ST"
+}

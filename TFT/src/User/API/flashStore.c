@@ -4,7 +4,7 @@
 #define TSC_SIGN  0x20200512 // DO NOT MODIFY
 #define PARA_SIGN 0x20200520 // (YYYMMDD) If a new setting parameter is added, modify here and initialize the initial value in the "infoSettingsReset()" function
 
-extern u32 TSC_Para[7];        //
+extern int32_t TSC_Para[7];        //
 extern SETTINGS infoSettings;  //
 
 enum{

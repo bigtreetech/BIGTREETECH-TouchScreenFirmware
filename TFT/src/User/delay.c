@@ -24,16 +24,9 @@ void Delay_us(u32 us)					//Delay is less than 1800 * 1000us
   SysTick->VAL=0x00;						//Clear counter
 }
 
-void Delay_ms(u16 ms)					//Delay is less than 1800ms
+void Delay_ms(u16 ms)
 {
-  u32 temp;
-  SysTick->LOAD=(u32)ms*fac_ms;
-  SysTick->VAL=0x00;
-  SysTick->CTRL=0x01;
-  do
-  {
-    temp=SysTick->CTRL;
-  }while(temp&0x01&&!(temp&(1<<16)));
-  SysTick->CTRL=0x00;
-  SysTick->VAL=0x00;
+  for (u16 i = 0; i < ms; i++) {
+    Delay_us(1000);
+  }
 }

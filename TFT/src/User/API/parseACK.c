@@ -111,11 +111,11 @@ void syncL2CacheFromL1(uint8_t port)
 
 void parseACK(void)
 {
-  bool avoid_terminal = false;
   if(infoHost.rx_ok[SERIAL_PORT] != true) return; //not get response data
 
   while(dmaL1NotEmpty(SERIAL_PORT))
   {
+    bool avoid_terminal = false;
     syncL2CacheFromL1(SERIAL_PORT);
     infoHost.rx_ok[SERIAL_PORT] = false;
 
