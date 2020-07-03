@@ -60,7 +60,7 @@ extern "C" {
  * \param character Character to output
  */
 void _putchar(char character);
-
+#define _putchar(n)
 
 /**
  * Tiny printf implementation

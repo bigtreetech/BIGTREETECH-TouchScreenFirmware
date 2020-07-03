@@ -264,15 +264,12 @@ void menuScreenSettings(void)
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
     {ICON_BACK,                 LABEL_BACK},}
   };
-  u8 item_silent_i = 0;
-  #ifdef ST7920_SPI
-    u8 item_marlin_bg_color_i = 0;
-    u8 item_marlin_font_color_i = 0;
-  #endif
+
   KEY_VALUES key_num = KEY_IDLE;
   SETTINGS now = infoSettings;
 
   #ifdef BUZZER_PIN
+    u8 item_silent_i = 0;
     for(u8 i = 0; i < ITEM_SILENT_NUM; i++)
     {
       if(infoSettings.silent == item_silent[i])
@@ -284,6 +281,8 @@ void menuScreenSettings(void)
   #endif
 
   #ifdef ST7920_SPI
+    u8 item_marlin_bg_color_i = 0;
+    u8 item_marlin_font_color_i = 0;
     // LCD12864 background color
     bool inArry = false;
     for(u8 i = 0; i < LCD_COLOR_COUNT; i++)

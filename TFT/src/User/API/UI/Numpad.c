@@ -251,7 +251,7 @@ int32_t numPadInt(u8* title, int32_t old_val, bool negative)
         setLargeFont(false);
         touchSound = true;
         return old_val;
-        break;
+
       case NUM_KEY_MINUS:
         if (negative)
         {

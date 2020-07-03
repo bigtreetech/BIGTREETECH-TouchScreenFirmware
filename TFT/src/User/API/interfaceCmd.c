@@ -459,25 +459,6 @@ void sendQueueCmd(void)
           if(cmd_seen('E')) setParameter(P_STEPS_PER_MM, E_AXIS, cmd_float());
           break;
 
-        case 104: //M104
-          if (fromTFT)
-          {
-            TOOL i = heatGetCurrentToolNozzle();
-            if(cmd_seen('T')) i = (TOOL)(cmd_value() + NOZZLE0);
-            if(cmd_seen('S'))
-            {
-              heatSyncTargetTemp(i, cmd_value());
-            }
-            else if (!cmd_seen('\n'))
-            {
-              char buf[12];
-              sprintf(buf, "S%u\n", heatGetTargetTemp(i));
-              strcat(infoCmd.queue[infoCmd.index_r].gcode,(const char*)buf);
-              heatSetSendWaiting(i, false);
-            }
-          }
-          break;
-
         case 105: //M105
           if (fromTFT)
           {
@@ -510,7 +491,7 @@ void sendQueueCmd(void)
           {
             TOOL i = heatGetCurrentToolNozzle();
             if(cmd_seen('T')) i = (TOOL)(cmd_value() + NOZZLE0);
-            infoCmd.queue[infoCmd.index_r].gcode[3]='4';
+            infoCmd.queue[infoCmd.index_r].gcode[3]='4';  // Avoid send M109 to Marlin
             if (cmd_seen('R'))
             {
               infoCmd.queue[infoCmd.index_r].gcode[cmd_index-1] = 'S';
@@ -519,6 +500,24 @@ void sendQueueCmd(void)
             else
             {
               heatSetIsWaiting(i, WAIT_HEATING);
+            }
+          }
+        // No break here, The data processing of M109 is the same as that of M104 below
+        case 104: //M104
+          if (fromTFT)
+          {
+            TOOL i = heatGetCurrentToolNozzle();
+            if(cmd_seen('T')) i = (TOOL)(cmd_value() + NOZZLE0);
+            if(cmd_seen('S'))
+            {
+              heatSyncTargetTemp(i, cmd_value());
+            }
+            else if (!cmd_seen('\n'))
+            {
+              char buf[12];
+              sprintf(buf, "S%u\n", heatGetTargetTemp(i));
+              strcat(infoCmd.queue[infoCmd.index_r].gcode,(const char*)buf);
+              heatSetSendWaiting(i, false);
             }
           }
           break;
@@ -554,9 +553,9 @@ void sendQueueCmd(void)
         case 190: //M190
           if (fromTFT)
           {
+            infoCmd.queue[infoCmd.index_r].gcode[2]='4';   // Avoid send M190 to Marlin
             if (cmd_seen('R'))
             {
-              infoCmd.queue[infoCmd.index_r].gcode[2]='4';
               infoCmd.queue[infoCmd.index_r].gcode[cmd_index-1] = 'S';
               heatSetIsWaiting(BED, WAIT_COOLING_HEATING);
             }
@@ -565,7 +564,7 @@ void sendQueueCmd(void)
               heatSetIsWaiting(BED, WAIT_HEATING);
             }
           }
-          break;
+        // No break here, The data processing of M190 is the same as that of M140 below
         case 140: //M140
           if (fromTFT)
           {
