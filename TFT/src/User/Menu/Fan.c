@@ -2,6 +2,7 @@
 #include "includes.h"
 
 static u8   curIndex = 0;
+u8_t i=0;
 
 const ITEM itemFan[2] = {
   //icon                label
