@@ -121,7 +121,7 @@ void menuSimulatorBackGroundColor(void)
   LISTITEM totalItems[LCD_COLOR_COUNT];
   KEY_VALUES key_num = KEY_IDLE;
   SETTINGS now = infoSettings;
-  uint8_t cur_item;
+  uint8_t cur_item = 0;
 
   // fill items
   for(uint8_t i = 0; i < COUNT(totalItems); i++) {
@@ -185,7 +185,7 @@ void menuSimulatorFontColor(void)
   LISTITEM totalItems[LCD_COLOR_COUNT];
   KEY_VALUES key_num = KEY_IDLE;
   SETTINGS now = infoSettings;
-  uint8_t cur_item;
+  uint8_t cur_item = 0;
 
   // fill items
   for(uint8_t i = 0; i < COUNT(totalItems); i++) {
