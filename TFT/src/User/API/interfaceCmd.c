@@ -469,20 +469,24 @@ void sendQueueCmd(void)
 
         case 106: //M106
         {
-          u8 i = 0;
-          if(cmd_seen('P')) i = cmd_value();
-          if(cmd_seen('S'))
-          {
-            fanSetSpeed(i, cmd_value());
+          if(!fromTFT) {
+            u8 i = 0;
+            if(cmd_seen('P')) i = cmd_value();
+            if(cmd_seen('S'))
+            {
+              fanSetSpeed(i, cmd_value());
+            }
           }
           break;
         }
 
         case 107: //M107
         {
-          u8 i = 0;
-          if(cmd_seen('P')) i = cmd_value();
-          fanSetSpeed(i, 0);
+          if(!fromTFT) {
+            u8 i = 0;
+            if(cmd_seen('P')) i = cmd_value();
+            fanSetSpeed(i, 0);
+          }
           break;
         }
 
@@ -611,11 +615,11 @@ void sendQueueCmd(void)
           if(cmd_seen('W')) setParameter(P_FWRECOVER,3,cmd_float());
           break;
         case 220: //M220
-          if(cmd_seen('S'))
+          if(!fromTFT && cmd_seen('S'))
             speedSetPercent(0,cmd_value());
           break;
         case 221: //M221
-          if(cmd_seen('S'))
+          if(!fromTFT && cmd_seen('S'))
             speedSetPercent(1,cmd_value());
           break;
 
