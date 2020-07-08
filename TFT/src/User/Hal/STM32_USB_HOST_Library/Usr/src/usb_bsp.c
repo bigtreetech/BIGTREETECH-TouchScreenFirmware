@@ -165,7 +165,7 @@ void USB_OTG_BSP_Init(USB_OTG_CORE_HANDLE * pdev)
 #endif                          // USB_OTG_HS
 #endif                          // USE_STM322xG_EVAL
 
-  Delay_init();
+  Delay_init(F_CPUM);
 }
 
 /**

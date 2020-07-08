@@ -16,7 +16,7 @@ typedef struct
 }OS_TASK;
 
 
-void OS_TimerInitMs(void);
+void OS_TimerInit(uint16_t psc, uint16_t arr);
 uint32_t OS_GetTimeMs(void);
 
 void OS_TaskInit(OS_TASK *task, uint32_t time_ms, FP_TASK function,void *para);

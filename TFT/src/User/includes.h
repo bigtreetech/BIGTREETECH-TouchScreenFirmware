@@ -111,12 +111,4 @@ typedef struct
 
 extern HOST infoHost;
 
-typedef struct
-{
-  RCC_ClocksTypeDef rccClocks;
-  u32 PCLK1_Timer_Frequency;
-  u32 PCLK2_Timer_Frequency;
-}CLOCKS;
-extern CLOCKS mcuClocks;
-
 #endif
