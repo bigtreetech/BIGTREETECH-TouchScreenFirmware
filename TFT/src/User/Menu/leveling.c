@@ -17,8 +17,9 @@ LABEL_ABL,
 
 void menuAutoLeveling(void)
 {
-  KEY_VALUES key_num=KEY_IDLE;
+  KEY_VALUES key_num = KEY_IDLE;
   menuDrawPage(&autoLevelingItems);
+  bool leveled = false;
   while(infoMenu.menu[infoMenu.cur] == menuAutoLeveling)
   {
     key_num = menuKeyGetValue();
@@ -27,9 +28,7 @@ void menuAutoLeveling(void)
       case KEY_ICON_0:
         storeCmd("G28\n");
         storeCmd("G29\n");
-        if(infoMachineSettings.EEPROM == 1){
-           storeCmd("M500\n");
-        }
+        leveled = true;
         break;
       case KEY_ICON_1:
         storeCmd("M280 P0 S10\n");
@@ -52,8 +51,18 @@ void menuAutoLeveling(void)
         infoMenu.menu[++infoMenu.cur] = menuBabyStep;
         break;
       case KEY_ICON_7:
-        infoMenu.cur--; break;
-      default:break;
+        if (leveled == true && infoMachineSettings.EEPROM == 1)
+        {
+          showDialog(DIALOG_TYPE_QUESTION, textSelect(autoLevelingItems.title.index), textSelect(LABEL_EEPROM_SAVE_INFO),
+                     textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), saveEepromSettings, NULL, NULL);
+        }
+        else
+        {
+          infoMenu.cur--;
+        }
+        break;
+      default:
+        break;
     }
     loopProcess();
   }
@@ -76,19 +85,19 @@ LABEL_LEVELING,
 
 void moveToLevelingPoint(u8 point)
 {
-  static const s16 pointPosition[][2] = {
-    {LEVELING_POINT_1_X, LEVELING_POINT_1_Y},
-    {LEVELING_POINT_2_X, LEVELING_POINT_2_Y},
-    {LEVELING_POINT_3_X, LEVELING_POINT_3_Y},
-    {LEVELING_POINT_4_X, LEVELING_POINT_4_Y},
+  s16 pointPosition[4][2] = {
+    {infoSettings.machine_size_min[X_AXIS] + infoSettings.level_edge, infoSettings.machine_size_min[Y_AXIS] + infoSettings.level_edge},
+    {infoSettings.machine_size_max[X_AXIS] - infoSettings.level_edge, infoSettings.machine_size_min[X_AXIS] + infoSettings.level_edge},
+    {infoSettings.machine_size_max[X_AXIS] - infoSettings.level_edge, infoSettings.machine_size_max[Y_AXIS] - infoSettings.level_edge},
+    {infoSettings.machine_size_min[X_AXIS] + infoSettings.level_edge, infoSettings.machine_size_max[Y_AXIS] - infoSettings.level_edge},
   };
   if(coordinateIsKnown() == false)
   {
     storeCmd("G28\n");
   }
-  storeCmd("G0 Z%.3f F%d\n", LEVELING_POINT_MOVE_Z, LEVELING_POINT_Z_FEEDRATE);
-  storeCmd("G0 X%d Y%d F%d\n", pointPosition[point][0], pointPosition[point][1], LEVELING_POINT_XY_FEEDRATE);
-  storeCmd("G0 Z%.3f F%d\n", LEVELING_POINT_Z, LEVELING_POINT_Z_FEEDRATE);
+  storeCmd("G0 Z%.3f F%d\n", infoSettings.level_z_raise, infoSettings.level_feedrate[Z_AXIS]);
+  storeCmd("G0 X%d Y%d F%d\n", pointPosition[point][0], pointPosition[point][1], infoSettings.level_feedrate[X_AXIS]);
+  storeCmd("G0 Z%.3f F%d\n", infoSettings.level_z_pos, infoSettings.level_feedrate[Z_AXIS]);
 }
 
 void menuManualLeveling(void)

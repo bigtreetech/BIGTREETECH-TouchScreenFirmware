@@ -22,6 +22,7 @@
 // LCD interface
 #ifndef TFTLCD_DRIVER
   #define TFTLCD_DRIVER ILI9488  // Type of LCD driver, now support[RM68042, ILI9488, ILI9341, ST7789, HX8558].
+  #define TFTLCD_DRIVER_SPEED         0x03
   #define TFTLCD_0_DEGREE_REG_VALUE   0X28
   #define TFTLCD_180_DEGREE_REG_VALUE 0XE8
 #endif
@@ -61,7 +62,7 @@
 //#define SD_SDIO_SUPPORT
 #ifdef SD_SPI_SUPPORT
   #define SD_LOW_SPEED  7 // 2^(SPEED+1) = 256 frequency division
-  #define SD_HIGH_SPEED 1 // 2 frequency division
+  #define SD_HIGH_SPEED 0 // 2 frequency division
   #define SD_SPI        _SPI1
   #define SD_CS_PIN     PA4
 #endif
@@ -70,7 +71,7 @@
 #define SD_CD_PIN     PC4
 
 // W25Qxx SPI pins
-#define W25Qxx_SPEED  2 // stm32f103 spi1 max 4 division
+#define W25Qxx_SPEED  0
 #define W25Qxx_SPI    _SPI3
 #define W25Qxx_CS_PIN PB6
 
@@ -86,7 +87,7 @@
 #define LCD_BTN_PIN   PC8
 
 // U disk support
-#define U_DISK_SUPPROT
+#define U_DISK_SUPPORT
 #define USE_USB_OTG_FS
 
 // Extend function(PS_ON, filament_detect)

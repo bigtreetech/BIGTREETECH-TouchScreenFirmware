@@ -1,6 +1,7 @@
 #include "utf8_decode.h"
 #include "includes.h"
 
+bool largeFont = false;
 
 static FONT_BITMAP font[] = {
   { // Visible ASCII code, from ' ' to '~'
@@ -21,9 +22,29 @@ static FONT_BITMAP font[] = {
     // the first character code point in this font bitmap file
     0x20, // the first character in BYTE_ASCII_ADDR is 0x20(' ')
   },
+  { // large ASCII font
+    0x20,
+    0x7E,
+    LARGE_BYTE_HEIGHT,
+    LARGE_BYTE_WIDTH,
+    LARGE_FONT_ADDR,
+    LARGE_BYTE_HEIGHT,
+    LARGE_BYTE_WIDTH,
+    0x20,
+  },
   { // Czech(Latin 1 Supplement, Extended-A&B)
     0x80,
     0x24F,
+    BYTE_HEIGHT,
+    BYTE_WIDTH,
+    WORD_UNICODE,
+    BYTE_HEIGHT,
+    BYTE_WIDTH * 2, // default "word_unicode.fon" dot matrix library font size is 24*24 / 16*16
+    0x0,  // the first character in WORD_UNICODE is 0x0000
+  },
+  { // Greek and Coptic
+    0x370,
+    0x3FF,
     BYTE_HEIGHT,
     BYTE_WIDTH,
     WORD_UNICODE,
@@ -63,6 +84,17 @@ static FONT_BITMAP font[] = {
   },
 };
 
+//set Large font
+void setLargeFont(bool status)
+{
+  largeFont = status;
+}
+
+bool isLargeFont(void)
+{
+  return largeFont;
+}
+
 // decode character encode info (UTF8)
 static void getUTF8EncodeInfo(const uint8_t *ch, CHAR_INFO *pInfo)
 {
@@ -92,6 +124,8 @@ static void getBitMapFontInfo(CHAR_INFO *pInfo)
   {
     if(pInfo->codePoint >= font[i].startCodePoint && pInfo->codePoint <= font[i].endCodePoint)
     {
+      if(i == 0 && largeFont)
+        i++;
       pInfo->pixelWidth = font[i].pixelWidth;
       pInfo->pixelHeight = font[i].pixelHeight;
       pInfo->bitMapAddr = font[i].bitMapStartAddr + (pInfo->codePoint - font[i].bitMapStartCodePoint) * (font[i].bitMapHeight * font[i].bitMapWidth / 8);
@@ -124,6 +158,21 @@ uint16_t GUI_StrPixelWidth(const uint8_t *const str)
     getCharacterInfo(str + i, &info);
     i += info.bytes;
     len += info.pixelWidth;
+  }
+  return len;
+}
+uint16_t getUTF8Length(const uint8_t *const str)
+{
+ uint16_t i = 0, len = 0;
+  CHAR_INFO info;
+
+  if(str == NULL) return 0;
+  while(str[i])
+  {
+    info.bytes = 0;
+    getUTF8EncodeInfo(str + i, &info);
+    i += info.bytes;
+    len ++;
   }
   return len;
 }
