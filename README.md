@@ -103,5 +103,5 @@ default_envs = MKS_28_Clone_V1_0
 <li>A <code>mkstft28.xx.xbin</code> file will be generated in the <em>hidden</em> <code>.pio\build\MKS_28_Clone_V1_0</code> folder. Follow the update process outlined in the <a href="#how-to-setup-the-tft-firmware">How to setup the TFT Firmware</a> section above to update your TFT to the latest version.</li>
 
 ## Contribute
-You can report issues, create themes, implement new features with PR or **Sponsor it on [PayPal](https://paypal.me/wgcvl)**. 
+You can report issues, create themes, implement new features with PR or **Sponsor it on [PayPal](https://paypal.me/wgcv)**. 
 
