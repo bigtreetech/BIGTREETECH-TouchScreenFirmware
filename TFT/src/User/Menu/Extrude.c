@@ -1,9 +1,9 @@
 #include "Extrude.h"
 #include "includes.h"
 
-//1��title(����), ITEM_PER_PAGE��item(ͼ��+��ǩ)
+// 1 title, ITEM_PER_PAGE items (icon + label)
 MENUITEMS extrudeItems = {
-//   title
+// title
 LABEL_EXTRUDE,
 // icon                       label
  {{ICON_UNLOAD,               LABEL_UNLOAD},
@@ -11,14 +11,15 @@ LABEL_EXTRUDE,
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_LOAD,                 LABEL_LOAD},
   {ICON_NOZZLE,               LABEL_NOZZLE},
-  {ICON_NORMAL_SPEED,         LABEL_NORMAL_SPEED},
   {ICON_E_5_MM,               LABEL_5_MM},
+  {ICON_NORMAL_SPEED,         LABEL_NORMAL_SPEED},
   {ICON_BACK,                 LABEL_BACK},}
 };
 
 static u8  item_extruder_i = 0;
 
 #define ITEM_SPEED_NUM 3
+
 const ITEM itemSpeed[ITEM_SPEED_NUM] = {
 // icon                       label
   {ICON_SLOW_SPEED,           LABEL_SLOW_SPEED},
@@ -29,36 +30,37 @@ const ITEM itemSpeed[ITEM_SPEED_NUM] = {
 static u8  item_speed_i = 1;
 
 #define ITEM_LEN_NUM 3
+
 const ITEM itemLen[ITEM_LEN_NUM] = {
 // icon                       label
   {ICON_E_1_MM,               LABEL_1_MM},
   {ICON_E_5_MM,               LABEL_5_MM},
   {ICON_E_10_MM,              LABEL_10_MM},
 };
+
 const  u8 item_len[ITEM_LEN_NUM] = {1, 5, 10};
 static u8 item_len_i = 1;
 
 static float extrudeCoordinate = 0.0f;
 
-void extrudeCoordinateReDraw(void)
+void extrudeCoordinateReDraw(bool skip_header)
 {
-  const GUI_RECT rect = {exhibitRect.x0, CENTER_Y, exhibitRect.x1, CENTER_Y+BYTE_HEIGHT};
-  char buf[36];
-  my_sprintf(buf, "%.2f", extrudeCoordinate);
-  GUI_ClearRect(rect.x0, rect.y0, rect.x1, rect.y1);
-  GUI_DispStringInPrect(&rect, (u8*)buf);
+  char tempstr[20];
+
+  if (!skip_header)
+  {
+    sprintf(tempstr, "%-15s", extruderDisplayID[item_extruder_i]);
+    GUI_DispString(exhibitRect.x0, exhibitRect.y0, (u8 *)tempstr);
+  }
+
+  sprintf(tempstr, "  %.2f  ", extrudeCoordinate);
+  setLargeFont(true);
+  GUI_DispStringInPrect(&exhibitRect, (u8 *)tempstr);
+  setLargeFont(false);
 }
 
 const char* tool_change[] =  TOOL_CHANGE;
 const char* extruderDisplayID[] = EXTRUDER_ID;
-
-void showExtrudeCoordinate(void)
-{
-  const GUI_RECT rect = {exhibitRect.x0, CENTER_Y-BYTE_HEIGHT, exhibitRect.x1, CENTER_Y};
-  GUI_ClearRect(rect.x0, rect.y0, rect.x1, rect.y1);
-  GUI_DispStringInPrect(&rect, (u8*)extruderDisplayID[item_extruder_i]);
-  extrudeCoordinateReDraw();
-}
 
 void menuExtrude(void)
 {
@@ -74,7 +76,7 @@ void menuExtrude(void)
   eRelative = eGetRelative();
 
   menuDrawPage(&extrudeItems);
-  showExtrudeCoordinate();
+  extrudeCoordinateReDraw(false);
 
   #if LCD_ENCODER_SUPPORT
     encoderPosition = 0;
@@ -95,18 +97,18 @@ void menuExtrude(void)
 
       case KEY_ICON_4:
         item_extruder_i = (item_extruder_i + 1) % infoSettings.ext_count;
-        showExtrudeCoordinate();
+        extrudeCoordinateReDraw(false);
         break;
 
       case KEY_ICON_5:
-        item_speed_i = (item_speed_i+1) % ITEM_SPEED_NUM;
-        extrudeItems.items[key_num] = itemSpeed[item_speed_i];
+        item_len_i = (item_len_i+1) % ITEM_LEN_NUM;
+        extrudeItems.items[key_num] = itemLen[item_len_i];
         menuDrawItem(&extrudeItems.items[key_num], key_num);
         break;
 
       case KEY_ICON_6:
-        item_len_i = (item_len_i+1) % ITEM_LEN_NUM;
-        extrudeItems.items[key_num] = itemLen[item_len_i];
+        item_speed_i = (item_speed_i+1) % ITEM_SPEED_NUM;
+        extrudeItems.items[key_num] = itemSpeed[item_speed_i];
         menuDrawItem(&extrudeItems.items[key_num], key_num);
         break;
 
@@ -127,7 +129,7 @@ void menuExtrude(void)
     if(extrudeCoordinate != eTemp)
     {
       extrudeCoordinate = eTemp;
-      extrudeCoordinateReDraw();
+      extrudeCoordinateReDraw(true);
       if(item_extruder_i != heatGetCurrentToolNozzle() - NOZZLE0)
         storeCmd("%s\n", tool_change[item_extruder_i]);
       storeCmd("G0 E%.5f F%d\n", extrudeCoordinate, infoSettings.ext_speed[item_speed_i]);

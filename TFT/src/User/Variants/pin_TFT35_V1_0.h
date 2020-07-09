@@ -22,6 +22,7 @@
 // LCD interface
 #ifndef TFTLCD_DRIVER
   #define TFTLCD_DRIVER RM68042  // Type of LCD driver, now support[RM68042, ILI9488, ILI9341, ST7789, HX8558].
+  #define TFTLCD_DRIVER_SPEED         0x03
   #define TFTLCD_0_DEGREE_REG_VALUE   0X28
   #define TFTLCD_180_DEGREE_REG_VALUE 0X2B
 #endif

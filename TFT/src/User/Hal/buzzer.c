@@ -74,8 +74,8 @@ void Buzzer_play(SOUND sound){
 switch (sound)
 {
 case sound_ok:
-  Buzzer_TurnOn(3800,40);
-  Buzzer_TurnOn(0,20);
+  Buzzer_TurnOn(3500,50);
+  Buzzer_TurnOn(0,40);
   Buzzer_TurnOn(5500,50);
   break;
 case sound_success:
@@ -89,7 +89,7 @@ case sound_success:
 case sound_cancel:
   Buzzer_TurnOn(5500,50);
   Buzzer_TurnOn(0,20);
-  Buzzer_TurnOn(3800,40);
+  Buzzer_TurnOn(3500,40);
   break;
   case sound_notify:
   Buzzer_TurnOn(3090,50);
@@ -103,6 +103,8 @@ case sound_error:
    Buzzer_TurnOn(0,60);
    Buzzer_TurnOn(2200,200);
   break;
+case sound_deny:
+  Buzzer_TurnOn(500,10);
 case sound_keypress:
 default:
   Buzzer_TurnOn(BUZZER_FREQUENCY_HZ,BUZZER_FREQUENCY_DURATION_MS);

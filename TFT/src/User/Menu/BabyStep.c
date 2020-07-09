@@ -1,136 +1,191 @@
 #include "BabyStep.h"
 #include "includes.h"
 
-//1 title, ITEM_PER_PAGE items(icon+label)
-MENUITEMS babyStepItems = {
-//title
-  LABEL_BABYSTEP,
-//icon                        label
- {{ICON_DEC,                  LABEL_DEC},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_INC,                  LABEL_INC},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_01_MM,                LABEL_01_MM},
-  {ICON_RESET_VALUE,          LABEL_RESET},
-  {ICON_BACK,                 LABEL_BACK},}
-};
-
-typedef struct
-{
-  const ITEM *list;
-  const float *ele;
-  uint8_t cur;
-  uint8_t totaled;
-}ELEMENTS;
+#define BABYSTEP_DISPLAY_ID    "BabyStep/Z Offset"
+#define BABYSTEP_MIN_VALUE     -5.0f
+#define BABYSTEP_MAX_VALUE     5.0f
+#define BABYSTEP_DEFAULT_VALUE 0.0f
+#define BABYSTEP_MAX_UNIT      1.0f
 
 #define ITEM_BABYSTEP_UNIT_NUM 3
+
 const ITEM itemBabyStepUnit[ITEM_BABYSTEP_UNIT_NUM] = {
 // icon                       label
   {ICON_001_MM,               LABEL_001_MM},
   {ICON_01_MM,                LABEL_01_MM},
   {ICON_1_MM,                 LABEL_1_MM},
 };
-const float item_babystep_unit[ITEM_BABYSTEP_UNIT_NUM] = {0.01f, 0.1f, 1};
 
-static ELEMENTS elementsUnit;
+const float babystep_unit[ITEM_BABYSTEP_UNIT_NUM] = {0.01f, 0.1f, 1};
 
-static void initElements(u8 position)
+static u8 curUnit = 0;
+
+static float baby_step_value = BABYSTEP_DEFAULT_VALUE;
+float orig_z_offset;
+
+/* Initialize Z offset */
+void babyInitZOffset(void)
 {
-  elementsUnit.totaled = ITEM_BABYSTEP_UNIT_NUM;
-  elementsUnit.list = itemBabyStepUnit;
-  elementsUnit.ele  = item_babystep_unit;
-
-  for(u8 i=0; i<elementsUnit.totaled; i++)
+  float cur_z_offset = getParameter(P_PROBE_OFFSET, Z_STEPPER);
+  if(orig_z_offset + baby_step_value != cur_z_offset)
   {
-    if(memcmp(&elementsUnit.list[i], &babyStepItems.items[position], sizeof(ITEM)) == 0)
-    {
-      elementsUnit.cur = i;
-      break;
-    }
+    orig_z_offset = cur_z_offset - baby_step_value;
   }
 }
 
-static float baby_step_value = 0.0f;
-
+/* Reset to default */
 void babyStepReset(void)
 {
-  baby_step_value = 0.0f;
+  baby_step_value = BABYSTEP_DEFAULT_VALUE;
+  babyInitZOffset();
 }
 
-#define BABYSTEP_MAX_VALUE 5.0f
-#define BABYSTEP_MIN_VALUE -5.0f
-
-void showBabyStep(void)
+/* Set default offset */
+void babySetDefaultOffset(void)
 {
-  GUI_DispFloat(CENTER_X - 5*BYTE_WIDTH/2, CENTER_Y, baby_step_value, 3, 2, RIGHT);
-}
-void babyStepReDraw(void)
-{
-  GUI_DispFloat(CENTER_X - 5*BYTE_WIDTH/2, CENTER_Y, baby_step_value, 3, 2, RIGHT);
+  float last_unit;
+  float processed_baby_step = 0.0f;
+
+  int8_t neg = 1;
+  if (baby_step_value < 0.0f)
+    neg = -1;
+
+  int stepcount = (baby_step_value * neg) / BABYSTEP_MAX_UNIT;
+  for (; stepcount > 0; stepcount--)
+  {
+    mustStoreCmd("M290 Z%.2f\n", -(BABYSTEP_MAX_UNIT * neg));
+    processed_baby_step += BABYSTEP_MAX_UNIT;
+  }
+
+  last_unit = (baby_step_value * neg) - processed_baby_step;
+  if (last_unit > 0.0f)
+  {
+    mustStoreCmd("M290 Z%.2f\n", -(last_unit * neg));
+    processed_baby_step += last_unit;
+  }
+  baby_step_value -= (processed_baby_step * neg);
 }
 
+void babyStepReDraw(bool skip_header)
+{
+
+  if (!skip_header)
+  {
+    GUI_DispString(exhibitRect.x0, exhibitRect.y0, textSelect(LABEL_BABYSTEP));
+    GUI_DispString(exhibitRect.x0, exhibitRect.y0 + BYTE_HEIGHT + LARGE_BYTE_HEIGHT, textSelect(LABEL_Z_OFFSET));
+  }
+
+  char tempstr[20];
+
+  GUI_POINT point_bs = {exhibitRect.x1, exhibitRect.y0 + BYTE_HEIGHT};
+  GUI_POINT point_of = {exhibitRect.x1, exhibitRect.y0 + BYTE_HEIGHT*2 + LARGE_BYTE_HEIGHT};
+
+  setLargeFont(true);
+
+  sprintf(tempstr, "% 6.2f", baby_step_value);
+  GUI_DispStringRight(point_bs.x, point_bs.y, (u8 *)tempstr);
+
+  sprintf(tempstr, "% 6.2f", orig_z_offset + baby_step_value);
+  GUI_DispStringRight(point_of.x, point_of.y, (u8 *)tempstr);
+
+  setLargeFont(false);
+}
 
 void menuBabyStep(void)
 {
+  // 1 title, ITEM_PER_PAGE items (icon + label)
+  MENUITEMS babyStepItems = {
+  // title
+  LABEL_BABYSTEP,
+  // icon                       label
+   {{ICON_DEC,                  LABEL_DEC},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_INC,                  LABEL_INC},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_01_MM,                LABEL_01_MM},
+    {ICON_RESET_VALUE,          LABEL_RESET},
+    {ICON_BACK,                 LABEL_BACK},}
+  };
+
   KEY_VALUES key_num = KEY_IDLE;
   float now = baby_step_value;
 
-  initElements(KEY_ICON_5);
+  babyInitZOffset();
+
+  babyStepItems.items[KEY_ICON_5] = itemBabyStepUnit[curUnit];
   menuDrawPage(&babyStepItems);
-  showBabyStep();
+  babyStepReDraw(false);
 
-  #if LCD_ENCODER_SUPPORT
-    encoderPosition = 0;
-  #endif
+#if LCD_ENCODER_SUPPORT
+  encoderPosition = 0;
+#endif
 
-  while(infoMenu.menu[infoMenu.cur] == menuBabyStep)
+  while (infoMenu.menu[infoMenu.cur] == menuBabyStep)
   {
+    float max_unit = babystep_unit[curUnit];
+
     key_num = menuKeyGetValue();
-    switch(key_num)
+    switch (key_num)
     {
+      // decrease babystep / z-offset
       case KEY_ICON_0:
-        if(baby_step_value - elementsUnit.ele[elementsUnit.cur] > BABYSTEP_MIN_VALUE)
+        if (baby_step_value > BABYSTEP_MIN_VALUE)
         {
-            mustStoreCmd("M290 Z-%.2f\n",elementsUnit.ele[elementsUnit.cur]);
-            baby_step_value -= elementsUnit.ele[elementsUnit.cur];
+          float diff = baby_step_value - BABYSTEP_MIN_VALUE;
+          max_unit = (diff > max_unit) ? max_unit : diff;
+
+          mustStoreCmd("M290 Z-%.2f\n", max_unit);
+          baby_step_value -= max_unit;
         }
         break;
+
+      // increase babystep / z-offset
       case KEY_ICON_3:
-        if(baby_step_value + elementsUnit.ele[elementsUnit.cur] < BABYSTEP_MAX_VALUE)
+        if (baby_step_value < BABYSTEP_MAX_VALUE)
         {
-            mustStoreCmd("M290 Z%.2f\n",elementsUnit.ele[elementsUnit.cur]);
-            baby_step_value += elementsUnit.ele[elementsUnit.cur];
+          float diff = BABYSTEP_MAX_VALUE - baby_step_value;
+          max_unit = (diff > max_unit) ? max_unit : diff;
+
+          mustStoreCmd("M290 Z%.2f\n", max_unit);
+          baby_step_value += max_unit;
         }
         break;
+
+      // change step unit
       case KEY_ICON_5:
-        elementsUnit.cur = (elementsUnit.cur + 1) % elementsUnit.totaled;
-        babyStepItems.items[key_num] = elementsUnit.list[elementsUnit.cur];
+        curUnit = (curUnit + 1) % ITEM_BABYSTEP_UNIT_NUM;
+        babyStepItems.items[key_num] = itemBabyStepUnit[curUnit];
         menuDrawItem(&babyStepItems.items[key_num], key_num);
         break;
+
+      // reset babystep to default value
       case KEY_ICON_6:
-          mustStoreCmd("M290 Z%.2f\n",-baby_step_value);
-          baby_step_value = 0.0f;
+        babySetDefaultOffset();
         break;
+
       case KEY_ICON_7:
         infoMenu.cur--;
         break;
-      default :
+
+      default:
         #if LCD_ENCODER_SUPPORT
-          if(encoderPosition)
+          if (encoderPosition)
           {
-            mustStoreCmd("M290 Z%.2f\n",elementsUnit.ele[elementsUnit.cur]*encoderPosition);
-            baby_step_value += elementsUnit.ele[elementsUnit.cur]*encoderPosition;
+            mustStoreCmd("M290 Z%.2f\n", babystep_unit[curUnit] * encoderPosition);
+            baby_step_value += babystep_unit[curUnit] * encoderPosition;
             encoderPosition = 0;
           }
         #endif
         break;
-      }
-    if(now != baby_step_value)
+    }
+
+    if (now != baby_step_value)
     {
       now = baby_step_value;
-      babyStepReDraw();
+      babyStepReDraw(true);
     }
+
     loopProcess();
   }
 }

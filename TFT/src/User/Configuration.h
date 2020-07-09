@@ -1,6 +1,6 @@
 #ifndef _CONFIGRATION_H_
 #define _CONFIGRATION_H_
-#define CONFIG_VERSION 200404
+#define CONFIG_VERSION 20200530
 //===========================================================================
 //============================= General Settings ============================
 //===========================================================================
@@ -8,7 +8,7 @@
 /**
  * Default Mode
  *
- * Mode switching is still possible by by holding down the encorder for two seconds.
+ * Mode switching is still possible by holding down the encorder for two seconds.
  *
  * Options:
  * ST7920_SPI // Marlin Mode
@@ -145,7 +145,7 @@
 #define FONT_COLOR                 0  // Font foreground color
 #define REMINDER_FONT_COLOR        2  // Reminder font color, such as: "No print attached", "Busy processing", etc.
 #define VOLUME_REMINDER_FONT_COLOR 5  // Volume reminder font color, such as: "Card inserted", "Card removed"
-#define STATUS_XYZ_BG_COLOR        15 // Backgroud color for X Y Z positon display in Status Screen.
+#define STATUS_XYZ_BG_COLOR        15 // Background color for X Y Z position display in Status Screen.
 #define LISTVIEW_BORDER_COLOR      15 // Border color in List view
 #define LISTVIEW_ICON_COLOR        15 // icon color in List view
 
@@ -154,9 +154,9 @@
 #define FAN_NUM      1    // set in 1~6
 
 //                         PLA      PETG      ABS
-#define PREHEAT_LABELS   {"PLA",   "PETG",   "ABS"}
-#define PREHEAT_BED      {60,      70,       100}
-#define PREHEAT_HOTEND   {200,     250,      230}
+#define PREHEAT_LABELS   {"PLA", "PETG", "ABS", "TPU"}
+#define PREHEAT_HOTEND   {200,   250,    230,   230}
+#define PREHEAT_BED      {60,    70,     100,   50}
 
 #define HEAT_MAX_TEMP    {150,    275,       275,       275,       275,       275,       275}    //max temperature can be set
 #define HEAT_SIGN_ID     {"B:",   "T0:",     "T1:",     "T2:",     "T3:",     "T4:",     "T5:"}
@@ -168,8 +168,9 @@
 #define EXTRUDER_ID      {"E0",   "E1",      "E2",      "E3",      "E4",      "E5"}
 
 #define FAN_MAX_PWM      {255,       255,       255,       255,       255,       255}
-#define FAN_ID           {"F0",    "F1",    "F2",    "F3",    "F4",    "F5"}
+#define FAN_DISPLAY_ID   {"F0",    "F1",    "F2",    "F3",    "F4",    "F5"}
 #define FAN_CMD          {"M106 P0", "M106 P1", "M106 P2", "M106 P3", "M106 P4", "M106 P5" };
+#define FAN_SIGN_ID      {"P0", "P1", "P2", "P3", "P4", "P5" };
 
 #define SPEED_ID         {"Sp.", "Fr."}
 
@@ -220,7 +221,7 @@
  * Manual Leveling
  * Move to four corner points to Leveling manually (Point 1, Point 2, Point 3, Point 4)
  */
-#define LEVELING_EDGE_DISTANCE     20    // Inset distance from bed's edge for calulating leveling point location.
+#define LEVELING_EDGE_DISTANCE     20    // Inset distance from bed's edge for calculating leveling point location.
 #define LEVELING_POINT_Z           0.2f  // Z-axis position when nozzle stays for leveling
 #define LEVELING_POINT_MOVE_Z      10.0f // Z-axis position when nozzle move to next point
 #define LEVELING_POINT_XY_FEEDRATE 6000  // (mm/min) X and Y axes move feedrate

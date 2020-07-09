@@ -20,6 +20,7 @@ typedef enum
   sound_ok,
   sound_cancel,
   sound_notify,
+  sound_deny,
   sound_keypress,
 }SOUND;
 

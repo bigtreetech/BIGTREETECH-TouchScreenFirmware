@@ -18,7 +18,7 @@ const GUI_POINT pointProgressText     = {BYTE_WIDTH/2-2, LCD_HEIGHT-(BYTE_HEIGHT
 u16 foundkeys = 0;
 
 CONFIGFILE configFile;
-char cur_line[LINE_MAX_CHAR];
+char * cur_line = NULL;
 int customcode_index = 0;
 int customcode_good[CUSTOM_GCODES_COUNT];
 bool scheduleRotate = false;
@@ -39,6 +39,9 @@ void getConfigFromFile(void)
   #ifdef CONFIG_DEBUG
     Serial_ReSourceInit();
   #endif
+
+  char cur_line_buffer[LINE_MAX_CHAR];
+  cur_line = cur_line_buffer;
 
   configCustomGcodes = (CUSTOM_GCODES*)malloc(sizeof(CUSTOM_GCODES));
   configPrintGcodes = (PRINT_GCODES*)malloc(sizeof(PRINT_GCODES));
@@ -503,11 +506,11 @@ void parseConfigKey(u16 index)
   case C_INDEX_MARLIN_SHOW_TITLE:
       infoSettings.marlin_mode_showtitle = getOnOff();
     break;
-      
+
   case C_INDEX_MARLIN_FULLSCREEN:
       infoSettings.marlin_mode_fullscreen = getOnOff();
     break;
-      
+
   case C_INDEX_MARLIN_TITLE:
     {
       char * pchr;
@@ -518,7 +521,7 @@ void parseConfigKey(u16 index)
         strcpy(configStringsStore->marlin_title, pchr);
     }
     break;
-      
+
 #endif //ST7920_SPI
 
   //---------------------------------------------------------Printer / Machine Settings
@@ -773,6 +776,7 @@ void parseConfigKey(u16 index)
   case C_INDEX_PREHEAT_NAME_1:
   case C_INDEX_PREHEAT_NAME_2:
   case C_INDEX_PREHEAT_NAME_3:
+  case C_INDEX_PREHEAT_NAME_4:
   {
     char pchr[LINE_MAX_CHAR];
     strcpy(pchr, strrchr(cur_line, ':') + 1);
@@ -787,6 +791,7 @@ void parseConfigKey(u16 index)
   case C_INDEX_PREHEAT_TEMP_1:
   case C_INDEX_PREHEAT_TEMP_2:
   case C_INDEX_PREHEAT_TEMP_3:
+  case C_INDEX_PREHEAT_TEMP_4:
     {
         int val_index = index - C_INDEX_PREHEAT_TEMP_1;
       if (key_seen("B"))
@@ -965,11 +970,11 @@ void parseConfigKey(u16 index)
         infoSettings.send_start_gcode = getOnOff();
     break;
 
-  case C_INDEX_END_GOCODE_ON:
+  case C_INDEX_END_GCODE_ON:
         infoSettings.send_end_gcode = getOnOff();
     break;
 
-  case C_INDEX_CANCEL_GOCODE_ON:
+  case C_INDEX_CANCEL_GCODE_ON:
         infoSettings.send_cancel_gcode = getOnOff();
     break;
 

@@ -200,7 +200,7 @@ void sendGcodeTerminalCache(char *stream, TERMINAL_SRC src)
 
 #define CURSOR_START_X 0
 #define CURSOR_END_X   LCD_WIDTH
-#define CURSOR_START_Y (BYTE_HEIGHT*2)
+#define CURSOR_START_Y TITLE_END_Y
 #define CURSOR_END_Y   LCD_HEIGHT
 void menuTerminal(void)
 {

@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "my_misc.h"
+#include "printf/printf.h"
 
 #include "os_timer.h"
 #include "delay.h"
@@ -53,6 +54,12 @@
 #include "flashStore.h"
 #include "parseACK.h"
 #include "Selectmode.h"
+#include "Temperature.h"
+#include "Settings.h"
+#include "Printing.h"
+#include "MachineParameters.h"
+#include "FanControl.h"
+#include "SpeedControl.h"
 
 #include "extend.h"
 #include "list_item.h"
@@ -63,8 +70,8 @@
 //menu
 #include "menu.h"
 #include "MainPage.h"
-#include "PreheatMenu.h"
 #include "Heat.h"
+#include "PreheatMenu.h"
 #include "Move.h"
 #include "Home.h"
 #include "Print.h"
@@ -77,7 +84,8 @@
 
 #include "Extrude.h"
 #include "Fan.h"
-#include "Settings.h"
+#include "SettingsMenu.h"
+#include "PrintingMenu.h"
 #include "ScreenSettings.h"
 #include "MachineSettings.h"
 #include "FeatureSettings.h"

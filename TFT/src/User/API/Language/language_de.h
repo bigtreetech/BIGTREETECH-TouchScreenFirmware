@@ -32,6 +32,7 @@
     #define DE_Z_OFFSET               "Z Offset"
     #define DE_PROBE_OFFSET           "Probe Offset"
     #define DE_EEPROM_SAVE            "Speichern"
+    #define DE_APPLY                  "Apply"
     #define DE_INC                    "Erhöhen"
     #define DE_DEC                    "Verringern"
     #define DE_NOZZLE                 "Düse"
@@ -107,14 +108,14 @@
     #define DE_UNCONNECTED            "Keine Verbindung zum Drucker!"
     #define DE_DISCONNECT_INFO        "Verbindung getrennt!"
     #define DE_LOADING                "Laden..."
-    #define DE_POWER_FAILED           "\u0887 Druck fortsetzen?" //Question Sign
+    #define DE_POWER_FAILED           "Druck fortsetzen?" //Question Sign
     #define DE_CONTINUE               "Fortsetzen"
     #define DE_CANCEL                 "\u088F Abbruch" //Cancel Sign
     #define DE_ADJUST_TITLE           "Touchscreen kalibrieren"
     #define DE_ADJUST_INFO            "Auf den roten Punkt drücken"
     #define DE_ADJUST_OK              "Anpassung erfolgreich"
     #define DE_ADJUST_FAILED          "Anpassung fehlgeschlagen, erneut versuchen"
-    #define DE_WARNING                "\u0881 Warnung" //Exclamation Sign
+    #define DE_WARNING                "Warnung" //Exclamation Sign
     #define DE_STOP_PRINT             "Druck abbrechen?"
     #define DE_CONFIRM                "\u088E OK" //Confirm Sign
     #define DE_TFTSD                  "TFT SD"
@@ -167,8 +168,11 @@
     #define DE_RETRACT_ACCELERATION   "Retract Acceleration"
     #define DE_TRAVEL_ACCELERATION    "Travel Acceleration"
     #define DE_BUMP_SENSITIVITY       "TMC bump sensitivity"
+    #define DE_FWRETRACT              "FW Retraction"
+    #define DE_FWRECOVER              "FW Retraction Recover"
+    #define DE_LIN_ADVANCE            "Linear Advance"
     #define DE_RESET                  "Resetten"
-    #define DE_RESET_SETTINGS         "Hiermit werden alle\nEinstellungen auf Werkseinstellungen\nzurückgesetzt. Fortfahren?"
+    #define DE_RESET_SETTINGS_INFO    "Hiermit werden alle\nEinstellungen auf Werkseinstellungen\nzurückgesetzt. Fortfahren?"
     #define DE_RESET_SETTINGS_DONE    "Einstellungen wurden\nerfolgreich zurückgesetzt.\nBitte starten Sie das Gerät neu."
     #define DE_INFO                   "\u0884 Info" //Info Sign
     #define DE_LCD_BRIGHTNESS         "LCD Helligkeit"
@@ -182,5 +186,18 @@
     #define DE_300_SECONDS            "5 Min."
     #define DE_CUSTOM_SECONDS         "Benutz."
     #define DE_ST7920_FULLSCREEN      "Marlin mode in fullscreen"
+    #define DE_SETTING_RESET          "Reset settings"
+    #define DE_SETTING_RESTORE        "Restore settings"
+    #define DE_EEPROM_SAVE_INFO       "Save printer settings\nto EEPROM?"
+    #define DE_EEPROM_RESTORE_INFO    "Reload settings from\nEEPROM?"
+    #define DE_RETRACT_FEEDRATE       "Retract feedrate"
+    #define DE_RETRACT_LENGTH         "Retract length"
+    #define DE_RETRACT_SWAP_LENGTH    "Retract swap length"
+    #define DE_RETRACT_Z_LIFT         "Z lift on retraction"
+    #define DE_RECOVER_FEEDRATE       "Recover feedrate"
+    #define DE_SWAP_RECOVER_FEEDRATE  "Swap recover feedrate"
+    #define DE_RECOVER_LENGTH         "Extra recover length"
+    #define DE_SWAP_RECOVER_LENGTH    "Extra recover swap length"
+    #define DE_START_PRINT            "Start Printing:\n %s?"
 
 #endif

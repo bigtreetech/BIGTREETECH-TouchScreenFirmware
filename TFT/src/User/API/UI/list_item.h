@@ -41,8 +41,6 @@ typedef enum
 #define MAT_LOWWHITE    0xCE79
 #define MATT_PURPLE     0x9135
 
-//#define LABEL_DYNAMIC 12345 //just random number for reference
-
 
 uint8_t * IconCharSelect(uint8_t sel);
 
@@ -56,7 +54,7 @@ void setDynamicValue(uint8_t i,float value); //set list item value to any numeri
 float getDynamicValue(uint8_t i);            //get the custom numeric value of the list item value
 
 
-void DrawCharIcon(const GUI_RECT * rect,ICON_POS iconalign, uint16_t iconindex, uint16_t btn_color);
+void DrawCharIcon(const GUI_RECT * rect,ICON_POS iconalign, uint16_t iconindex, bool drawBgColor, uint16_t btn_color);
 void ListItem_Display(const GUI_RECT* rect, uint8_t positon, const LISTITEM * curitem, bool pressed);
 void ListMenuSetItem (const LISTITEM * menuItem, uint8_t positon);
 void draw_itemtitle(GUI_POINT pos,LABEL label, uint8_t position, int textarea_width);

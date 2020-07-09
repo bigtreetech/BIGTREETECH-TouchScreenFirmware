@@ -66,13 +66,14 @@ void GUI_RestoreColorDefault(void){
   GUI_SetColor(infoSettings.font_color);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
   GUI_SetNumMode(GUI_NUMMODE_SPACE);
+  setLargeFont(false);
 }
 
 static const MENUITEMS *curMenuItems = NULL;   //current menu
 
 static const LISTITEMS *curListItems = NULL;   //current listmenu
 
-static bool isListview;
+MENU_TYPE menuType = MENU_TYPE_ICON;
 
 uint8_t *labelGetAddress(const LABEL *label)
 {
@@ -131,6 +132,16 @@ void menuRefreshListPage(void){
       #endif
     }
 
+}
+
+void setMenuType(MENU_TYPE type)
+{
+  menuType = type;
+}
+
+MENU_TYPE getMenuType(void)
+{
+  return menuType;
 }
 
 static REMINDER reminder = {{0, 0, LCD_WIDTH, TITLE_END_Y}, 0, STATUS_UNCONNECT, LABEL_UNCONNECTED};
@@ -204,13 +215,13 @@ void loopReminderClear(void)
 
   /* Clear warning message */
   reminder.status = STATUS_IDLE;
-  if (isListview)
+  if (menuType == MENU_TYPE_LISTVIEW)
   {
     if (curListItems == NULL)
     return;
     menuDrawTitle(labelGetAddress(&curListItems->title));
   }
-  else
+  else if(menuType == MENU_TYPE_ICON)
   {
     if (curMenuItems == NULL)
       return;
@@ -232,13 +243,13 @@ void loopVolumeReminderClear(void)
 
   /* Clear warning message */
   volumeReminder.status = STATUS_IDLE;
-  if(isListview)
+  if (menuType == MENU_TYPE_LISTVIEW)
   {
     if(curListItems == NULL)
       return;
     menuDrawTitle(labelGetAddress(&curListItems->title));
   }
-  else
+  else if(menuType == MENU_TYPE_ICON)
   {
   if(curMenuItems == NULL)
     return;
@@ -291,7 +302,7 @@ void menuDrawTitle(const uint8_t *content) //(const MENUITEMS * menuItems)
 void menuDrawPage(const MENUITEMS *menuItems)
 {
   u8 i = 0;
-  isListview = false;
+  menuType = MENU_TYPE_ICON;
   curMenuItems = menuItems;
   TSC_ReDrawIcon = itemDrawIconPress;
 
@@ -314,7 +325,7 @@ void menuDrawPage(const MENUITEMS *menuItems)
 void menuDrawListPage(const LISTITEMS *listItems)
 {
   u8 i = 0;
-  isListview = true;
+  menuType = MENU_TYPE_LISTVIEW;
   curListItems = listItems;
   TSC_ReDrawIcon = itemDrawIconPress;
 
@@ -341,13 +352,64 @@ void menuDrawListPage(const LISTITEMS *listItems)
 //  show_globalinfo();
 }
 
+//Show live info text on icons
+void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, const ITEM * item)
+{
+  if (item != NULL)
+    menuDrawIconOnly(item,index);
+
+  for (uint8_t i = 0; i < LIVEICON_LINES; i++)
+  {
+    if (liveicon->enabled[i] == true)
+    {
+      GUI_SetColor(lcd_colors[liveicon->lines[i].fn_color]);
+      GUI_SetBkColor(lcd_colors[liveicon->lines[i].bk_color]);
+      GUI_SetTextMode(liveicon->lines[i].text_mode);
+
+      GUI_POINT loc;
+      loc.x = liveicon->lines[i].pos.x + rect_of_key[index].x0;
+
+      if (liveicon->lines[i].v_align == BOTTOM)
+      {
+        loc.y = liveicon->lines[i].pos.y + rect_of_key[index].y0 - BYTE_HEIGHT;
+      }
+      else if (liveicon->lines[i].v_align == CENTER)
+      {
+        loc.y = liveicon->lines[i].pos.y + rect_of_key[index].y0 - BYTE_HEIGHT / 2;
+      }
+      else
+      {
+        loc.y = liveicon->lines[i].pos.y + rect_of_key[index].y0;
+      }
+      switch (liveicon->lines[i].h_align)
+      {
+      case LEFT:
+        GUI_DispString(loc.x, loc.y, liveicon->lines[i].text);
+        break;
+
+      case CENTER:
+        GUI_DispStringCenter(loc.x, loc.y, liveicon->lines[i].text);
+        break;
+
+      case RIGHT:
+        GUI_DispStringRight(loc.x, loc.y, liveicon->lines[i].text);
+        break;
+
+      default:
+        break;
+      }
+    }
+  }
+  GUI_RestoreColorDefault();
+} //showLiveInfo
+
 //When there is a button value, the icon changes color and redraws
 void itemDrawIconPress(u8 position, u8 is_press)
 {
 
   if (position > KEY_ICON_7) return;
 
-  if (isListview == false)
+  if (menuType == MENU_TYPE_ICON)
   {
     if (curMenuItems == NULL) return;
     if (curMenuItems->items[position].icon == ICON_BACKGROUND) return;
@@ -359,7 +421,7 @@ void itemDrawIconPress(u8 position, u8 is_press)
     else // Redraw normal icon when released
       ICON_ReadDisplay(rect->x0, rect->y0, curMenuItems->items[position].icon);
   }
-  else
+  else if (menuType == MENU_TYPE_LISTVIEW)
   { //draw rec over list item if pressed
     if (curListItems == NULL)
     return;
@@ -384,14 +446,15 @@ void itemDrawIconPress(u8 position, u8 is_press)
 // Get button value
 KEY_VALUES menuKeyGetValue(void)
 {
-  if (isListview == false)
+  if (menuType == MENU_TYPE_ICON)
   {
     return (KEY_VALUES)KEY_GetValue(sizeof(rect_of_key) / sizeof(rect_of_key[0]), rect_of_key); // for normal menu
   }
-  else
+  else if (menuType == MENU_TYPE_LISTVIEW)
   {
     return (KEY_VALUES)KEY_GetValue(sizeof(rect_of_keyListView) / sizeof(rect_of_keyListView[0]), rect_of_keyListView); //for listview
   }
+  else return KEY_IDLE;
 }
 
 //Get the top left point of the corresponding icon position)
@@ -410,7 +473,11 @@ void loopBackEnd(void)
 
   parseRcvGcode();                    //Parse the received Gcode from other UART, such as: ESP3D, etc...
 
-  loopCheckHeater();                  //Temperature related settings
+  loopCheckHeater();                  //Temperature monitor
+
+  loopFan();                          //Fan speed monitor
+
+  loopSpeed();                        //Speed & flow monitor
 
 #ifdef BUZZER_PIN
   loopBuzzer();
@@ -452,8 +519,8 @@ void loopFrontEnd(void)
 
   loopBusySignClear();                //Busy Indicator clear
 
-  temp_Change();  
-  
+  temp_Change();
+
 #ifdef FIL_RUNOUT_PIN
   loopFrontEndFILRunoutDetect();
 #endif

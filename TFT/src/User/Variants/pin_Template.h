@@ -21,7 +21,8 @@
 
 // LCD interface
 #ifndef TFTLCD_DRIVER
-  #define TFTLCD_DRIVER RM68042  // Type of LCD driver, now support[RM68042, ILI9488, ILI9341, ST7789, HX8558].
+  #define TFTLCD_DRIVER RM68042  // Type of LCD driver, now support[RM68042, ILI9488, ILI9341, ST7789, HX8558, SSD1963].
+  #define TFTLCD_DRIVER_SPEED         0x03
   #define TFTLCD_0_DEGREE_REG_VALUE   0X28
   #define TFTLCD_180_DEGREE_REG_VALUE 0X2B
 #endif
@@ -29,6 +30,19 @@
 #ifndef LCD_DATA_16BIT
   #define LCD_DATA_16BIT 1 // LCD data 16bit or 8bit
 #endif
+
+//#ifndef SSD1963_LCD_PARA  // Only for TFTLCD_DRIVER is SSD1963
+//  #define SSD1963_LCD_PARA
+//  #define SSD_DCLK_FREQUENCY   12 // 12Mhz
+//
+//  #define SSD_HOR_PULSE_WIDTH  1
+//  #define SSD_HOR_BACK_PORCH   43
+//  #define SSD_HOR_FRONT_PORCH  2
+
+//  #define SSD_VER_PULSE_WIDTH  1
+//  #define SSD_VER_BACK_PORCH   12
+//  #define SSD_VER_FRONT_PORCH  1
+//#endif
 
 // Debug disable, free pins for other function
 //#define DISABLE_JTAG  // free JTAG(PB3/PB4) for SPI3

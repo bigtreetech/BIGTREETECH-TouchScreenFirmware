@@ -46,8 +46,8 @@ const uint16_t ICON_COLOR[ICONCHAR_NUM]=
   WHITE,    //ICONCHAR_PLUS_ROUND
   WHITE,    //ICONCHAR_MINUS
   WHITE,    //ICONCHAR_PLUS
-  WHITE,    //ICONCHAR_OK
-  WHITE,    //ICONCHAR_CANCEL
+  MAT_GREEN,    //ICONCHAR_OK
+  MAT_RED,    //ICONCHAR_CANCEL
   MAT_RED,    //ICONCHAR_HALT
   WHITE,    //ICONCHAR_UP_DOWN
   WHITE,    //ICONCHAR_LEFT_RIGHT
@@ -336,12 +336,15 @@ GUI_POINT getTextStartPoint(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey, 
 }
 
 //draw icons in item
-void DrawCharIcon(const GUI_RECT * rect,ICON_POS iconalign, uint16_t iconindex, uint16_t btn_color){
+void DrawCharIcon(const GUI_RECT * rect,ICON_POS iconalign, uint16_t iconindex,bool drawBgColor, uint16_t btn_color){
 
       GUI_POINT icon_p = getTextStartPoint(rect->x0, rect->y0, rect->x1,rect->y1,iconalign,GET_ICONCHAR[iconindex]);
       GUI_SetColor(ICON_COLOR[iconindex]);
-      GUI_SetBkColor(btn_color);
-      GUI_ClearPrect(rect);
+      if(drawBgColor)
+      {
+        GUI_SetBkColor(btn_color);
+        GUI_ClearPrect(rect);
+      }
       GUI_DispString(icon_p.x, icon_p.y, IconCharSelect(iconindex));
       GUI_RestoreColorDefault();
 
@@ -369,9 +372,11 @@ void DrawListItemPress(const GUI_RECT * rect, bool pressed){
 void ListItem_Display(const GUI_RECT* rect, uint8_t position, const LISTITEM * curitem, bool pressed)
 {
   //draw navigation icons
+  if (getMenuType() != MENU_TYPE_LISTVIEW) return;
+
   if(position >= LISTITEM_PER_PAGE){
     if(curitem->icon != ICONCHAR_BACKGROUND){
-      DrawCharIcon(rect,MIDDLE,curitem->icon,infoSettings.list_button_color);
+      DrawCharIcon(rect,MIDDLE,curitem->icon,true,infoSettings.list_button_color);
       if (pressed != false){
         GUI_SetColor(WHITE);
         GUI_DrawPrect(rect);
@@ -391,7 +396,7 @@ void ListItem_Display(const GUI_RECT* rect, uint8_t position, const LISTITEM * c
     {
     case LIST_LABEL:
       if(curitem->icon != ICONCHAR_BLANK) {
-        DrawCharIcon(rect,LEFT_CENTER,curitem->icon, infoSettings.bg_color);
+        DrawCharIcon(rect,LEFT_CENTER,curitem->icon, true, infoSettings.bg_color);
         pos.x += (BYTE_HEIGHT + 1);
        }
       textarea_width = LISTITEM_WIDTH - (pos.x + 1); //width after removing the width for icon
@@ -417,7 +422,7 @@ void ListItem_Display(const GUI_RECT* rect, uint8_t position, const LISTITEM * c
       GUI_ClearPrect(rect);
 
       if(curitem->icon != ICONCHAR_BLANK) {
-        DrawCharIcon(rect,LEFT_CENTER,curitem->icon,infoSettings.bg_color);
+        DrawCharIcon(rect,LEFT_CENTER,curitem->icon, true, infoSettings.bg_color);
         pos.x += (BYTE_HEIGHT + 1);
        }
       textarea_width = LISTITEM_WIDTH - (pos.x + BYTE_HEIGHT + 2);  //width after removing the width for icon
@@ -433,7 +438,7 @@ void ListItem_Display(const GUI_RECT* rect, uint8_t position, const LISTITEM * c
 
     case LIST_CUSTOMVALUE:
       if(curitem->icon != ICONCHAR_BLANK) {
-        DrawCharIcon(rect,LEFT_CENTER,curitem->icon,infoSettings.bg_color);
+        DrawCharIcon(rect,LEFT_CENTER,curitem->icon, true, infoSettings.bg_color);
         pos.x += (BYTE_HEIGHT + 3);
       }
       GUI_ClearRect(pos.x, rect->y0, rect->x1 - BYTE_WIDTH*8 -1, rect->y1);        // clear only text area
@@ -508,7 +513,7 @@ void ListItem_DisplayCustomValue(const GUI_RECT* rect,LABEL value,int i)
   GUI_ClearPrect(&rectVal);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 
-  GUI_SetColor(infoSettings.bg_color);
+  GUI_SetColor(infoSettings.list_border_color);
 
   GUI_DrawPrect(&rectVal);
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
@@ -520,11 +525,11 @@ void ListItem_DisplayCustomValue(const GUI_RECT* rect,LABEL value,int i)
   {
     if (dynamic_value[i] < 1000.0f)
     {
-      my_sprintf(tempstr, "%.2f", dynamic_value[i]);
+      sprintf(tempstr, "%.2f", dynamic_value[i]);
     }
     else
     {
-      my_sprintf(tempstr, "%.1f", dynamic_value[i]);
+      sprintf(tempstr, "%.1f", dynamic_value[i]);
     }
     GUI_DispStringInPrect(&rectVal, (u8 *)tempstr);
   }

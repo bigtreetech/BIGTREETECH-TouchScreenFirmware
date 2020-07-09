@@ -181,7 +181,8 @@ void menuPowerOff(void)
 
   if(mountFS()==true && powerFailedExist())
   {
-    popupDrawPage(bottomDoubleBtn, textSelect(LABEL_POWER_FAILED), (u8* )infoFile.title, textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL));
+    popupDrawPage(DIALOG_TYPE_ERROR, bottomDoubleBtn, textSelect(LABEL_POWER_FAILED), (u8* )infoFile.title,
+                    textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL));
 
     while(infoMenu.menu[infoMenu.cur]==menuPowerOff)
     {

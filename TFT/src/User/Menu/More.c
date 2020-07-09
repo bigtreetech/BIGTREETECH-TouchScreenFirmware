@@ -5,7 +5,8 @@ void menuIsPause(void)
 {
   u16 key_num = IDLE_TOUCH;
 
-  popupDrawPage(bottomDoubleBtn, textSelect(LABEL_WARNING), textSelect(LABEL_IS_PAUSE), textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL));
+  popupDrawPage(DIALOG_TYPE_ALERT, bottomDoubleBtn, textSelect(LABEL_WARNING),
+                  textSelect(LABEL_IS_PAUSE), textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL));
 
   while(infoMenu.menu[infoMenu.cur] == menuIsPause)
   {
@@ -35,7 +36,7 @@ LABEL_MORE,
   {ICON_PERCENTAGE,           LABEL_PERCENTAGE},
   {ICON_BABYSTEP,             LABEL_BABYSTEP},
   {ICON_FEATURE_SETTINGS,     LABEL_FEATURE_SETTINGS},
-  {ICON_RGB_SETTINGS,         LABEL_RGB_SETTINGS},
+  {ICON_MACHINE_SETTINGS,     LABEL_MACHINE_SETTINGS},
   {ICON_BACK,                 LABEL_BACK},}
 };
 
@@ -77,7 +78,7 @@ void menuMore(void)
         break;
 
       case KEY_ICON_6:
-        infoMenu.menu[++infoMenu.cur] = menuRGBSettings;
+        infoMenu.menu[++infoMenu.cur] = menuMachineSettings;
         break;
 
       case KEY_ICON_7:

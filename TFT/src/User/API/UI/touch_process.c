@@ -27,7 +27,7 @@
 #define K TSC_Para[6]
 
 
-u32 TSC_Para[7];//У׼ϵ��
+int32_t TSC_Para[7];
 static volatile bool touchScreenIsPress=false;
 bool touchSound = true;
 
