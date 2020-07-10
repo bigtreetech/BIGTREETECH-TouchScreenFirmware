@@ -105,3 +105,5 @@ default_envs = MKS_28_Clone_V1_0
 ## Contribute
 You can report issues, create themes, implement new features with PR or **Sponsor it on [PayPal](https://paypal.me/wgcv)**. 
 
+### Thanks to:
+- @usua69
