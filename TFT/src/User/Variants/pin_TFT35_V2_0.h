@@ -22,6 +22,7 @@
 // LCD interface
 #ifndef TFTLCD_DRIVER
   #define TFTLCD_DRIVER ILI9488  // Type of LCD driver, now support[RM68042, ILI9488, ILI9341, ST7789, HX8558].
+  #define TFTLCD_DRIVER_SPEED         0x03
   #define TFTLCD_0_DEGREE_REG_VALUE   0X28
   #define TFTLCD_180_DEGREE_REG_VALUE 0XE8
 #endif
@@ -90,7 +91,7 @@
 //#define LCD_BTN_PIN   PB2
 
 // U disk support
-//#define U_DISK_SUPPROT
+//#define U_DISK_SUPPORT
 //#define USE_USB_OTG_FS
 
 // Extend function(PS_ON, filament_detect)

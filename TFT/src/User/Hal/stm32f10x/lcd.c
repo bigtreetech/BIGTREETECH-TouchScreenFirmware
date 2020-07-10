@@ -67,7 +67,7 @@ void LCD_FSMC_Config(void)
 
   writeTiming.FSMC_AddressSetupTime = 0x00;
   writeTiming.FSMC_AddressHoldTime = 0x00;
-  writeTiming.FSMC_DataSetupTime = 0x03;
+  writeTiming.FSMC_DataSetupTime = TFTLCD_DRIVER_SPEED;
   writeTiming.FSMC_BusTurnAroundDuration = 0x00;
   writeTiming.FSMC_CLKDivision = 0x00;
   writeTiming.FSMC_DataLatency = 0x00;

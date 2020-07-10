@@ -1,19 +1,6 @@
 #include "ScreenSettings.h"
 #include "includes.h"
-
-MENUITEMS screenSettingsItems = {
-// title
-LABEL_SCREEN_SETTINGS,
-// icon                       label
- {{ICON_ROTATE_UI,            LABEL_ROTATE_UI},
-  {ICON_TOUCHSCREEN_ADJUST,   LABEL_TOUCHSCREEN_ADJUST},
-  {ICON_LANGUAGE,             LABEL_LANGUAGE},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACK,                 LABEL_BACK},}
-};
+#include "Colors.h"
 
 #ifdef BUZZER_PIN // Speaker
   #define BUZZER_KEY_INDEX KEY_ICON_3
@@ -25,7 +12,6 @@ LABEL_SCREEN_SETTINGS,
     {ICON_SILENT_ON,            LABEL_SILENT_ON},
   };
   const  u8 item_silent[ITEM_SILENT_NUM] = {0, 1};
-  static u8 item_silent_i = 0;
 #endif
 
 
@@ -36,45 +22,255 @@ LABEL_SCREEN_SETTINGS,
     #define LCD12864_BG_INDEX KEY_ICON_3
   #endif
   #define LCD12864_FN_INDEX (LCD12864_BG_INDEX+1)
+#endif
 
-  #define ITEM_COLOR_NUM 9
-  const ITEM itemBGcolor[ITEM_COLOR_NUM] = {
-  // icon                      label
-    {ICON_BKCOLOR,             LABEL_WHITE},
-    {ICON_BKCOLOR,             LABEL_BLACK},
-    {ICON_BKCOLOR,             LABEL_BLUE},
-    {ICON_BKCOLOR,             LABEL_RED},
-    {ICON_BKCOLOR,             LABEL_GREEN},
-    {ICON_BKCOLOR,             LABEL_CYAN},
-    {ICON_BKCOLOR,             LABEL_YELLOW},
-    {ICON_BKCOLOR,             LABEL_BROWN},
-    {ICON_BKCOLOR,             LABEL_GRAY},
-  };
 
-  const ITEM itemFontcolor[ITEM_COLOR_NUM] = {
-  // icon                      label
-    {ICON_FONTCOLOR,           LABEL_WHITE},
-    {ICON_FONTCOLOR,           LABEL_BLACK},
-    {ICON_FONTCOLOR,           LABEL_BLUE},
-    {ICON_FONTCOLOR,           LABEL_RED},
-    {ICON_FONTCOLOR,           LABEL_GREEN},
-    {ICON_FONTCOLOR,           LABEL_CYAN},
-    {ICON_FONTCOLOR,           LABEL_YELLOW},
-    {ICON_FONTCOLOR,           LABEL_BROWN},
-    {ICON_FONTCOLOR,           LABEL_GRAY},
-  };
-  const  u32 item_color[ITEM_COLOR_NUM] = {WHITE, BLACK, BLUE, RED, GREEN, CYAN, YELLOW, BROWN, GRAY};
-  static u8  item_bgcolor_i = 0;
-  static u8  item_fontcolor_i = 0;
+void menuLanguage(void)
+{
+  #define LANGUAGE_PAGE_COUNT  (LANGUAGE_NUM + LISTITEM_PER_PAGE - 1) / LISTITEM_PER_PAGE
+  LABEL title = {LABEL_LANGUAGE};
+  LISTITEM totalItems[LANGUAGE_NUM];
+  KEY_VALUES key_num = KEY_IDLE;
+  SETTINGS now = infoSettings;
+
+  // fill language items
+  uint8_t tmp_language = infoSettings.language;
+  for(uint8_t i = 0; i < COUNT(totalItems); i++) {
+    if (i == tmp_language) {
+      totalItems[i].icon = ICONCHAR_CHECKED;
+    } else {
+      totalItems[i].icon = ICONCHAR_UNCHECKED;
+    }
+    infoSettings.language = i;
+    totalItems[i].itemType = LIST_LABEL;
+    totalItems[i].titlelabel.address = textSelect(LABEL_LANGUAGE);
+  }
+  infoSettings.language = tmp_language;
+
+  listWidgetCreat(title, totalItems, COUNT(totalItems), infoSettings.language / LISTITEM_PER_PAGE);
+
+  while (infoMenu.menu[infoMenu.cur] == menuLanguage)
+  {
+    key_num = menuKeyGetValue();
+    switch (key_num)
+    {
+    case KEY_ICON_5:
+      listWidgetPreviousPage();
+      break;
+
+    case KEY_ICON_6:
+      listWidgetNextPage();
+      break;
+
+    case KEY_ICON_7:
+      infoMenu.cur--;
+      break;
+
+    default:
+      if(key_num < LISTITEM_PER_PAGE){
+        uint16_t cur_item = infoSettings.language;
+        uint16_t tmp_i = listWidgetGetCurPage() * LISTITEM_PER_PAGE + key_num;
+        if (tmp_i != cur_item) { // has changed
+          totalItems[cur_item].icon = ICONCHAR_UNCHECKED;
+          listWidgetRefreshItem(cur_item); // refresh unchecked status
+          cur_item = tmp_i;
+          totalItems[cur_item].icon = ICONCHAR_CHECKED;
+          listWidgetRefreshItem(cur_item); // refresh checked status
+
+          infoSettings.language = cur_item;
+          menuDrawTitle(textSelect(LABEL_LANGUAGE));
+        }
+      }
+      break;
+    }
+
+    loopProcess();
+  }
+
+  if(memcmp(&now, &infoSettings, sizeof(SETTINGS)))
+  {
+    statusScreen_setMsg(textSelect(LABEL_STATUS), textSelect(infoHost.connected ? LABEL_READY : LABEL_UNCONNECTED)); // restore msg buffer when language is changed
+    storePara();
+  }
+}
+
+#ifdef ST7920_SPI
+const LABEL lcd_colors_names[LCD_COLOR_COUNT] =
+{
+  LABEL_WHITE,
+  LABEL_BLACK,
+  LABEL_RED,
+  LABEL_GREEN,
+  LABEL_BLUE,
+  LABEL_CYAN,
+  LABEL_MAGENTA,
+  LABEL_YELLOW,
+  LABEL_ORANGE,
+  LABEL_PURPLE,
+  LABEL_LIME,
+  LABEL_BROWN,
+  LABEL_DARKBLUE,
+  LABEL_DARKGREEN,
+  LABEL_GRAY,
+  LABEL_DARKGRAY,
+};
+
+void menuSimulatorBackGroundColor(void)
+{
+  LABEL title = {LABEL_SIMULATOR_BG_COLOR};
+  LISTITEM totalItems[LCD_COLOR_COUNT];
+  KEY_VALUES key_num = KEY_IDLE;
+  SETTINGS now = infoSettings;
+  uint8_t cur_item = 0;
+
+  // fill items
+  for(uint8_t i = 0; i < COUNT(totalItems); i++) {
+    if (infoSettings.marlin_mode_bg_color == lcd_colors[i]) {
+      totalItems[i].icon = ICONCHAR_CHECKED;
+      cur_item = i;
+    } else {
+      totalItems[i].icon = ICONCHAR_UNCHECKED;
+    }
+    totalItems[i].itemType = LIST_LABEL;
+    totalItems[i].titlelabel = lcd_colors_names[i];
+  }
+
+  listWidgetCreat(title, totalItems, COUNT(totalItems), cur_item/ LISTITEM_PER_PAGE);
+
+  while (infoMenu.menu[infoMenu.cur] == menuSimulatorBackGroundColor)
+  {
+    key_num = menuKeyGetValue();
+    switch (key_num)
+    {
+    case KEY_ICON_5:
+      listWidgetPreviousPage();
+      break;
+
+    case KEY_ICON_6:
+      listWidgetNextPage();
+      break;
+
+    case KEY_ICON_7:
+      infoMenu.cur--;
+      break;
+
+    default:
+      if(key_num < LISTITEM_PER_PAGE){
+        uint16_t tmp_i = listWidgetGetCurPage() * LISTITEM_PER_PAGE + key_num;
+        if (tmp_i != cur_item) { // has changed
+          totalItems[cur_item].icon = ICONCHAR_UNCHECKED;
+          listWidgetRefreshItem(cur_item); // refresh unchecked status
+          cur_item = tmp_i;
+          totalItems[cur_item].icon = ICONCHAR_CHECKED;
+          listWidgetRefreshItem(cur_item); // refresh checked status
+
+          infoSettings.marlin_mode_bg_color = lcd_colors[cur_item];
+        }
+      }
+      break;
+    }
+
+    loopProcess();
+  }
+
+  if(memcmp(&now, &infoSettings, sizeof(SETTINGS)))
+  {
+    storePara();
+  }
+}
+
+void menuSimulatorFontColor(void)
+{
+  LABEL title = {LABEL_SIMULATOR_FONT_COLOR};
+  LISTITEM totalItems[LCD_COLOR_COUNT];
+  KEY_VALUES key_num = KEY_IDLE;
+  SETTINGS now = infoSettings;
+  uint8_t cur_item = 0;
+
+  // fill items
+  for(uint8_t i = 0; i < COUNT(totalItems); i++) {
+    if (infoSettings.marlin_mode_font_color == lcd_colors[i]) {
+      totalItems[i].icon = ICONCHAR_CHECKED;
+      cur_item = i;
+    } else {
+      totalItems[i].icon = ICONCHAR_UNCHECKED;
+    }
+    totalItems[i].itemType = LIST_LABEL;
+    totalItems[i].titlelabel = lcd_colors_names[i];
+  }
+
+  listWidgetCreat(title, totalItems, COUNT(totalItems), cur_item/ LISTITEM_PER_PAGE);
+
+  while (infoMenu.menu[infoMenu.cur] == menuSimulatorFontColor)
+  {
+    key_num = menuKeyGetValue();
+    switch (key_num)
+    {
+    case KEY_ICON_5:
+      listWidgetPreviousPage();
+      break;
+
+    case KEY_ICON_6:
+      listWidgetNextPage();
+      break;
+
+    case KEY_ICON_7:
+      infoMenu.cur--;
+      break;
+
+    default:
+      if(key_num < LISTITEM_PER_PAGE){
+        uint16_t tmp_i = listWidgetGetCurPage() * LISTITEM_PER_PAGE + key_num;
+        if (tmp_i != cur_item) { // has changed
+          totalItems[cur_item].icon = ICONCHAR_UNCHECKED;
+          listWidgetRefreshItem(cur_item); // refresh unchecked status
+          cur_item = tmp_i;
+          totalItems[cur_item].icon = ICONCHAR_CHECKED;
+          listWidgetRefreshItem(cur_item); // refresh checked status
+
+          infoSettings.marlin_mode_font_color = lcd_colors[cur_item];
+        }
+      }
+      break;
+    }
+
+    loopProcess();
+  }
+
+  if(memcmp(&now, &infoSettings, sizeof(SETTINGS)))
+  {
+    storePara();
+  }
+}
 #endif
 
 void menuScreenSettings(void)
 {
+  MENUITEMS screenSettingsItems = {
+  // title
+  LABEL_SCREEN_SETTINGS,
+  // icon                       label
+   {{ICON_ROTATE_UI,            LABEL_ROTATE_UI},
+    {ICON_TOUCHSCREEN_ADJUST,   LABEL_TOUCHSCREEN_ADJUST},
+    {ICON_LANGUAGE,             LABEL_LANGUAGE},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+  #ifdef ST7920_SPI
+    {ICON_BKCOLOR,              LABEL_BACKGROUND},
+    {ICON_FONTCOLOR,            LABEL_BACKGROUND},
+  #else
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+  #endif
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_BACK,                 LABEL_BACK},}
+  };
+
   KEY_VALUES key_num = KEY_IDLE;
   SETTINGS now = infoSettings;
 
   #ifdef BUZZER_PIN
-    for(u8 i=0; i<ITEM_SILENT_NUM; i++)
+    u8 item_silent_i = 0;
+    for(u8 i = 0; i < ITEM_SILENT_NUM; i++)
     {
       if(infoSettings.silent == item_silent[i])
       {
@@ -85,22 +281,34 @@ void menuScreenSettings(void)
   #endif
 
   #ifdef ST7920_SPI
-    for(u8 i=0; i<ITEM_COLOR_NUM; i++) // LCD12864 background color
+    u8 item_marlin_bg_color_i = 0;
+    u8 item_marlin_font_color_i = 0;
+    // LCD12864 background color
+    bool inArry = false;
+    for(u8 i = 0; i < LCD_COLOR_COUNT; i++)
     {
-      if(infoSettings.bg_color == item_color[i])
+      if(infoSettings.marlin_mode_bg_color == lcd_colors[i])
       {
-        item_bgcolor_i = i;
-        screenSettingsItems.items[KEY_ICON_4] = itemBGcolor[item_bgcolor_i];
+        inArry = true;
+        item_marlin_bg_color_i = i;
+        screenSettingsItems.items[KEY_ICON_4].label = lcd_color_names[item_marlin_bg_color_i];
       }
     }
-    for(u8 i=0; i<ITEM_COLOR_NUM; i++) // LCD12864 font color
+    if (!inArry) screenSettingsItems.items[KEY_ICON_4].label.index = LABEL_CUSTOM;
+
+    // LCD12864 font color
+    inArry = false;
+    for(u8 i = 0; i < LCD_COLOR_COUNT; i++)
     {
-      if(infoSettings.font_color == item_color[i])
+      if(infoSettings.marlin_mode_font_color == lcd_colors[i])
       {
-        item_fontcolor_i = i;
-        screenSettingsItems.items[KEY_ICON_5] = itemFontcolor[item_fontcolor_i];
+        inArry = true;
+        item_marlin_font_color_i = i;
+        screenSettingsItems.items[KEY_ICON_5].label = lcd_color_names[item_marlin_font_color_i];
       }
     }
+    if (!inArry) screenSettingsItems.items[KEY_ICON_5].label.index = LABEL_CUSTOM;
+
   #endif
 
   menuDrawPage(&screenSettingsItems);
@@ -123,8 +331,7 @@ void menuScreenSettings(void)
         break;
 
       case KEY_ICON_2:
-        infoSettings.language = (infoSettings.language + 1) % LANGUAGE_NUM;
-        menuDrawPage(&screenSettingsItems);
+        infoMenu.menu[++infoMenu.cur] = menuLanguage;
         break;
 
       #ifdef BUZZER_PIN
@@ -138,17 +345,11 @@ void menuScreenSettings(void)
 
       #ifdef ST7920_SPI
       case LCD12864_BG_INDEX:
-        item_bgcolor_i = (item_bgcolor_i + 1) % ITEM_COLOR_NUM;
-        screenSettingsItems.items[key_num] = itemBGcolor[item_bgcolor_i];
-        menuDrawItem(&screenSettingsItems.items[key_num], key_num);
-        infoSettings.bg_color = item_color[item_bgcolor_i];
+        infoMenu.menu[++infoMenu.cur] = menuSimulatorBackGroundColor;
         break;
 
       case LCD12864_FN_INDEX:
-        item_fontcolor_i = (item_fontcolor_i + 1) % ITEM_COLOR_NUM;
-        screenSettingsItems.items[key_num] = itemFontcolor[item_fontcolor_i];
-        menuDrawItem(&screenSettingsItems.items[key_num], key_num);
-        infoSettings.font_color = item_color[item_fontcolor_i];
+        infoMenu.menu[++infoMenu.cur] = menuSimulatorFontColor;
         break;
       #endif
 

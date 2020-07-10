@@ -2,6 +2,7 @@
 #define _UTF8_DECODE_H_
 
 #include "stdint.h"
+#include "stdbool.h"
 
 typedef struct {
   uint32_t startCodePoint; // start unicode code point for language
@@ -25,8 +26,14 @@ typedef struct
   uint32_t bitMapAddr; // the address of font bitmap in w25qxx
 }CHAR_INFO;
 
+//Enable Large font
+void setLargeFont(bool status);
+
+//get status of large font
+bool isLargeFont(void);
 
 void getCharacterInfo(const uint8_t *ch, CHAR_INFO *pInfo);
 uint16_t GUI_StrPixelWidth(const uint8_t *const str);
+uint16_t getUTF8Length(const uint8_t *const str);
 
 #endif

@@ -27,6 +27,7 @@ void LOGO_ReadDisplay(void);
 void ICON_ReadDisplay(uint16_t sx, uint16_t sy, uint8_t icon);
 bool bmp_DirectDisplay(GUI_POINT pos, char *bmp) ;
 void ICON_CustomReadDisplay(u16 sx,u16 sy,u16 w, u16 h, u32 addr);
+void SMALLICON_ReadDisplay(u16 sx,u16 sy, u8 icon);
 void ICON_PressedDisplay(uint16_t sx, uint16_t sy, uint8_t icon);
 
 #endif

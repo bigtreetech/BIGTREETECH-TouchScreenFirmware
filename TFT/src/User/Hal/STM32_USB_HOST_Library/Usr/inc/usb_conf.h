@@ -145,7 +145,7 @@
 //#define USE_DEVICE_MODE
 //#define USE_OTG_MODE
 
-#ifdef U_DISK_SUPPROT
+#ifdef U_DISK_SUPPORT
   #ifndef USB_OTG_FS_CORE
    #ifndef USB_OTG_HS_CORE
       #error  "USB_OTG_HS_CORE or USB_OTG_FS_CORE should be defined"
