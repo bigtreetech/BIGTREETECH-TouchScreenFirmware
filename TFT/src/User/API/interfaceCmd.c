@@ -459,6 +459,54 @@ void sendQueueCmd(void)
           if(cmd_seen('E')) setParameter(P_STEPS_PER_MM, E_AXIS, cmd_float());
           break;
 
+        case 105: //M105
+          if (fromTFT)
+          {
+            heatSetUpdateWaiting(false);
+            avoid_terminal = !infoSettings.terminalACK;
+          }
+          break;
+
+        case 106: //M106
+        {
+          if(!fromTFT) {
+            u8 i = 0;
+            if(cmd_seen('P')) i = cmd_value();
+            if(cmd_seen('S'))
+            {
+              fanSetSpeed(i, cmd_value());
+            }
+          }
+          break;
+        }
+
+        case 107: //M107
+        {
+          if(!fromTFT) {
+            u8 i = 0;
+            if(cmd_seen('P')) i = cmd_value();
+            fanSetSpeed(i, 0);
+          }
+          break;
+        }
+
+        case 109: //M109
+          if (fromTFT)
+          {
+            TOOL i = heatGetCurrentToolNozzle();
+            if(cmd_seen('T')) i = (TOOL)(cmd_value() + NOZZLE0);
+            infoCmd.queue[infoCmd.index_r].gcode[3]='4';  // Avoid send M109 to Marlin
+            if (cmd_seen('R'))
+            {
+              infoCmd.queue[infoCmd.index_r].gcode[cmd_index-1] = 'S';
+              heatSetIsWaiting(i, WAIT_COOLING_HEATING);
+            }
+            else
+            {
+              heatSetIsWaiting(i, WAIT_HEATING);
+            }
+          }
+        // No break here, The data processing of M109 is the same as that of M104 below
         case 104: //M104
           if (fromTFT)
           {
@@ -474,51 +522,6 @@ void sendQueueCmd(void)
               sprintf(buf, "S%u\n", heatGetTargetTemp(i));
               strcat(infoCmd.queue[infoCmd.index_r].gcode,(const char*)buf);
               heatSetSendWaiting(i, false);
-            }
-          }
-          break;
-
-        case 105: //M105
-          if (fromTFT)
-          {
-            heatSetUpdateWaiting(false);
-            avoid_terminal = !infoSettings.terminalACK;
-          }
-          break;
-
-        case 106: //M106
-        {
-          u8 i = 0;
-          if(cmd_seen('P')) i = cmd_value();
-          if(cmd_seen('S'))
-          {
-            fanSetSpeed(i, cmd_value());
-          }
-          break;
-        }
-
-        case 107: //M107
-        {
-          u8 i = 0;
-          if(cmd_seen('P')) i = cmd_value();
-          fanSetSpeed(i, 0);
-          break;
-        }
-
-        case 109: //M109
-          if (fromTFT)
-          {
-            TOOL i = heatGetCurrentToolNozzle();
-            if(cmd_seen('T')) i = (TOOL)(cmd_value() + NOZZLE0);
-            infoCmd.queue[infoCmd.index_r].gcode[3]='4';
-            if (cmd_seen('R'))
-            {
-              infoCmd.queue[infoCmd.index_r].gcode[cmd_index-1] = 'S';
-              heatSetIsWaiting(i, WAIT_COOLING_HEATING);
-            }
-            else
-            {
-              heatSetIsWaiting(i, WAIT_HEATING);
             }
           }
           break;
@@ -554,9 +557,9 @@ void sendQueueCmd(void)
         case 190: //M190
           if (fromTFT)
           {
+            infoCmd.queue[infoCmd.index_r].gcode[2]='4';   // Avoid send M190 to Marlin
             if (cmd_seen('R'))
             {
-              infoCmd.queue[infoCmd.index_r].gcode[2]='4';
               infoCmd.queue[infoCmd.index_r].gcode[cmd_index-1] = 'S';
               heatSetIsWaiting(BED, WAIT_COOLING_HEATING);
             }
@@ -565,7 +568,7 @@ void sendQueueCmd(void)
               heatSetIsWaiting(BED, WAIT_HEATING);
             }
           }
-          break;
+        // No break here, The data processing of M190 is the same as that of M140 below
         case 140: //M140
           if (fromTFT)
           {
@@ -612,11 +615,11 @@ void sendQueueCmd(void)
           if(cmd_seen('W')) setParameter(P_FWRECOVER,3,cmd_float());
           break;
         case 220: //M220
-          if(cmd_seen('S'))
+          if(!fromTFT && cmd_seen('S'))
             speedSetPercent(0,cmd_value());
           break;
         case 221: //M221
-          if(cmd_seen('S'))
+          if(!fromTFT && cmd_seen('S'))
             speedSetPercent(1,cmd_value());
           break;
 
