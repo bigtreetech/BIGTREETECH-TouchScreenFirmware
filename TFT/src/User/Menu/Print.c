@@ -104,8 +104,6 @@ bool get_Pre_Icon(void)
 void gocdeIconDraw(void)
 {
   u8 i=0;//k = 0;
-  int gn;
-  char *gnew;
   ITEM curItem = {ICON_BACKGROUND, LABEL_BACKGROUND};
 
   scrollFileNameCreate(0);
@@ -126,19 +124,14 @@ void gocdeIconDraw(void)
   //draw files
   for( ;(i + infoFile.cur_page * NUM_PER_PAGE < infoFile.f_num + infoFile.F_num) && (i < NUM_PER_PAGE) ;i++)  // gcode file
   {
-    curItem.icon = ICON_FILE;
-      // if model preview bmp exists, display bmp directly without writing to flash
-      gn = strlen(infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num]) - 6; // -6 means ".gcode"
-      gnew = malloc(gn + 10);
-      strcpy(gnew, getCurFileSource());
-      strncat(gnew, infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num], gn);
-
-      if(bmp_DirectDisplay(getIconStartPoint(i),strcat(gnew, "_"STRINGIFY(ICON_WIDTH)".bmp")) != true){
-        menuDrawItem(&curItem, i);
-      }
-      free(gnew);
-      // model preview -- end
-      normalNameDisp(&gcodeRect[i], (u8* )infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num]);
+    if(EnterDir(infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num]) == false) break;
+    // if model preview bmp exists, display bmp directly without writing to flash
+    if(model_DirectDisplay(getIconStartPoint(i), infoFile.title) != true){
+      curItem.icon = ICON_FILE;
+      menuDrawItem(&curItem, i);
+    }
+    ExitDir();
+    normalNameDisp(&gcodeRect[i], (u8* )infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num]);
   }
 
   //clear blank icons
@@ -315,32 +308,19 @@ void menuPrintFromSource(void)
           {
             if(infoHost.connected !=true) break;
             if(EnterDir(infoFile.file[key_num + start - infoFile.F_num]) == false) break;
-            //load bmp preview in flash if file exists
-            if (infoFile.source != BOARD_SD) {
-              int16_t gn;
-              char *gnew;
-              gn = strlen(infoFile.file[key_num + start - infoFile.F_num]) - 6; // -6 means ".gcode"
-              if(gn < 0) gn = 0; // for extension name ".g", ".gco" file, TODO: improve here in next version
-              gnew = malloc(gn + 10);
-              if (gnew != NULL) {
-                strcpy(gnew, getCurFileSource());
-                strncat(gnew, infoFile.file[key_num + start - infoFile.F_num], gn);
-
-                if(bmpDecode(strcat(gnew, "_"STRINGIFY(ICON_WIDTH)".bmp"),ICON_ADDR(ICON_PREVIEW)) == true){
-                  icon_pre = true;
-                }
-                else{
-                  icon_pre = false;
-                }
-                free(gnew);
-              }
+            //load model preview in flash if icon exists
+            if (infoFile.source != BOARD_SD && model_DecodeToFlash(infoFile.title) == true) {
+              icon_pre = true;
             }
-            //-load bmp preview in flash if file exists - end
+            else{
+              icon_pre = false;
+            }
+
             char temp_info[75];
             sprintf(temp_info, (char *)textSelect(LABEL_START_PRINT), infoFile.file[key_num + start - infoFile.F_num]);
             //confirm file selction
             showDialog(DIALOG_TYPE_QUESTION, textSelect(LABEL_PRINT), (u8*)temp_info,
-                        textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), startPrint, resetInfoFile, NULL);
+                        textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), startPrint, ExitDir, NULL);
           }
         }
 
