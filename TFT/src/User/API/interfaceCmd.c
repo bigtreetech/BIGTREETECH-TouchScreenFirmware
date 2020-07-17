@@ -615,11 +615,11 @@ void sendQueueCmd(void)
           if(cmd_seen('W')) setParameter(P_FWRECOVER,3,cmd_float());
           break;
         case 220: //M220
-          if(!fromTFT && cmd_seen('S'))
+          if(cmd_seen('S'))
             speedSetPercent(0,cmd_value());
           break;
         case 221: //M221
-          if(!fromTFT && cmd_seen('S'))
+          if(cmd_seen('S'))
             speedSetPercent(1,cmd_value());
           break;
 

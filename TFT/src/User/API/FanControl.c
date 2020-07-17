@@ -55,10 +55,12 @@ bool fanSpeedChanged(u8 i)
   if (fanSpeed[i] != lastfanSpeed[i])
   {
     lastfanSpeed[i] = fanSpeed[i];
+    send_waiting[curIndex] = false;
     return true;
   }
   else
   {
+    send_waiting[curIndex] = true;
     return false;
   }
 }
@@ -68,10 +70,10 @@ void loopFan(void)
   if (curfanSpeed[curIndex] != fanSpeed[curIndex])
   {
     curfanSpeed[curIndex] = fanSpeed[curIndex];
-    // if(send_waiting[curIndex] != true)
-    // {
-    //send_waiting[curIndex] = true;
+    if(send_waiting[curIndex] != true)
+    {
+    send_waiting[curIndex] = true;
     storeCmd("%s S%d\n", fanCmd[curIndex], fanSpeed[curIndex]);
-    //}
+    }
   }
 }
