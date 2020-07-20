@@ -46,6 +46,20 @@ void menuFan(void)
     {ICON_BACK,                 LABEL_BACK},}
   };
 
+  MENUITEMS laserItems = {
+  // title
+  LABEL_LASER,
+  // icon                       label
+   {{ICON_DEC,                  LABEL_DEC},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_INC,                  LABEL_INC},
+    {ICON_LASER_2 ,             LABEL_LASER_2},
+    {ICON_LASER_100,            LABEL_LASER_100},
+    {ICON_LASER_OFF,            LABEL_LASER_OFF},
+    {ICON_BACK,                 LABEL_BACK},}
+  };
+
   KEY_VALUES key_num = KEY_IDLE;
   u8 curspeed;
 
@@ -54,7 +68,14 @@ void menuFan(void)
   else
     fanItems.items[KEY_ICON_4] = itemFan[1];
 
-  menuDrawPage(&fanItems);
+  if (infoSettings.laser_mode != 1)
+  {
+    menuDrawPage(&fanItems);
+  }
+  else
+  {
+    menuDrawPage(&laserItems);
+  }
   fanSpeedReDraw(false);
 
   #if LCD_ENCODER_SUPPORT
@@ -103,14 +124,21 @@ void menuFan(void)
         break;
 
       case KEY_ICON_4:
-        if (infoSettings.fan_count > 1)
+        if (infoSettings.laser_mode == 1)
         {
-          curIndex = (curIndex + 1) % infoSettings.fan_count;
-          fanSpeedReDraw(false);
+          fanSetSpeedPercent(curIndex, 2);
         }
         else
         {
-          fanSetSpeed(curIndex, (infoSettings.fan_max[curIndex] + 1) / 2);
+          if (infoSettings.fan_count > 1)
+          {
+            curIndex = (curIndex + 1) % infoSettings.fan_count;
+            fanSpeedReDraw(false);
+          }
+          else
+          {
+            fanSetSpeed(curIndex, (infoSettings.fan_max[curIndex] + 1) / 2);
+          }
         }
         break;
 

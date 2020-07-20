@@ -417,6 +417,10 @@ void parseConfigKey(u16 index)
       infoSettings.cnc_menu = getOnOff();
     break;
 
+  case C_INDEX_LASERMODE:
+      infoSettings.laser_mode = getOnOff();
+    break;
+
   case C_INDEX_UART_BAUDRATE:
     if (inLimit(config_int(),0,ITEM_BAUDRATE_NUM-1))
       infoSettings.baudrate = item_baudrate[config_int()];

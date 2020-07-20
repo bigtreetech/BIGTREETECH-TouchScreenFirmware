@@ -249,9 +249,8 @@
 // Enable CNC Menu mutually exclusive to UNIFIED_MENU
 #define CNC_MENU true
 
-#ifdef CNC_MENU
-  //#define CNC_LASER // Enable Laser Interface instead of Fan Interface
-#endif
+// Enable Laser interface instead of the fan interface (for CNC mode only).
+#define LASER_MODE true
 
 /**
  * SD support

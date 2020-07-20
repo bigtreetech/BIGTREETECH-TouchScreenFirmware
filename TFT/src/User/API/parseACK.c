@@ -421,11 +421,7 @@ void parseACK(void)
         u8 i = ack_value();
         if (ack_seen("S"))
         {
-          #ifdef CNC_LASER
-            laserSetSpeed(i, ack_value());
-          #else
-            fanSetSpeed(i, ack_value());
-          #endif
+          fanSetSpeed(i, ack_value());
         }
       }
     // Parse pause message

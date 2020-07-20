@@ -474,11 +474,7 @@ void sendQueueCmd(void)
             if(cmd_seen('P')) i = cmd_value();
             if(cmd_seen('S'))
             {
-              #ifdef CNC_LASER
-                laserSetSpeed(i, cmd_value());
-              #else
-                fanSetSpeed(i, cmd_value());
-              #endif
+              fanSetSpeed(i, cmd_value());
             }
           }
           break;
