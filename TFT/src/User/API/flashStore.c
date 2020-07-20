@@ -72,6 +72,7 @@ void readStoredPara(void)
   infoSettings.language             = byteToWord(data + (index += 4), 4);
   infoSettings.mode                 = byteToWord(data + (index += 4), 4);
   infoSettings.unified_menu         = byteToWord(data + (index += 4), 4);
+  infoSettings.cnc_menu             = byteToWord(data + (index += 4), 4);
 
   infoSettings.bg_color             = byteToWord(data + (index += 4), 4);
   infoSettings.font_color           = byteToWord(data + (index += 4), 4);
@@ -198,6 +199,7 @@ void storePara(void)
   wordToByte(infoSettings.language,                   data + (index += 4));
   wordToByte(infoSettings.mode,                       data + (index += 4));
   wordToByte(infoSettings.unified_menu,               data + (index += 4));
+  wordToByte(infoSettings.cnc_menu,                   data + (index += 4));
 
   wordToByte(infoSettings.bg_color,                   data + (index += 4));
   wordToByte(infoSettings.font_color,                 data + (index += 4));

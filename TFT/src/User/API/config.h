@@ -10,6 +10,7 @@
 #define CONFIG_FILE_PATH "0:config.ini"
 
 #define CONFIG_UNIFIEDMENU          "unified_menu:"
+#define CONFIG_CNCMENU              "cnc_menu:"
 #define CONFIG_UART_BAUDRATE        "baudrate:"
 #define CONFIG_LANGUAGE             "language:"
 

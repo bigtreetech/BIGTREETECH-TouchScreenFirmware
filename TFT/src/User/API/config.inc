@@ -6,6 +6,7 @@
 * Description: https://en.wikipedia.org/wiki/X_Macro
 */
 X_CONFIG(UNIFIEDMENU)
+X_CONFIG(CNCMENU)
 X_CONFIG(UART_BAUDRATE)
 X_CONFIG(LANGUAGE)
 X_CONFIG(TITLE_BG)

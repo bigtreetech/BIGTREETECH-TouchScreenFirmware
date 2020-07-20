@@ -247,7 +247,7 @@
 #define UNIFIED_MENU true //for unified menu: true | for classic menu: false
 
 // Enable CNC Menu mutually exclusive to UNIFIED_MENU
-#define CNC_MENU
+#define CNC_MENU true
 
 #ifdef CNC_MENU
   //#define CNC_LASER // Enable Laser Interface instead of Fan Interface
