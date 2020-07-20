@@ -200,4 +200,14 @@
     #define HU_SWAP_RECOVER_LENGTH    "Cserehossz javítás"
     #define HU_START_PRINT            "Nyomtatás indítása:\n %s?"
 
+    #define HU_ZERO_X                 "Zero X"
+    #define HU_ZERO_Y                 "Zero Y"
+    #define HU_ZERO_Z                 "Zero Z"
+    #define HU_XY                     "XY"
+    #define HU_SPINDLE                "Spindle"
+    #define HU_CUT                    "Cut"
+    #define HU_LASER                  "Laser"
+    #define HU_LASER_2                "Laser 2%"
+    #define HU_LASER_100              "Laser 100%"
+    #define HU_LASER_OFF              "Laser Off"
 #endif

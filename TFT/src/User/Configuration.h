@@ -246,6 +246,13 @@
 // Move, Home, Extrude, ABL at one Place and bring G-code Menu on Home Menu
 #define UNIFIED_MENU true //for unified menu: true | for classic menu: false
 
+// Enable CNC Menu mutually exclusive to UNIFIED_MENU
+#define CNC_MENU
+
+#ifdef CNC_MENU
+  //#define CNC_LASER // Enable Laser Interface instead of Fan Interface
+#endif
+
 /**
  * SD support
  * Starting from Marlin Bugfix 2.0.x Distribution Date: 2020-04-27 & above, The TFT will auto detect

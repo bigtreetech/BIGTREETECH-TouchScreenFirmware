@@ -300,7 +300,11 @@ void toggleinfo(void)
       reDrawFan(FAN_ICON_POS);
     }
 
-    c_speedID = (c_speedID + 1) % 2;
+    #ifndef CNC_MENU
+      c_speedID = (c_speedID + 1) % 2;
+    #else
+      c_speedID = 0;
+    #endif
     nextTime = OS_GetTimeMs() + toggle_time;
     rapid_serial_loop();   //perform backend printing loop before drawing to avoid printer idling
     reDrawSpeed(SPD_ICON_POS);
@@ -328,8 +332,10 @@ void printingDrawPage(void)
     printingItems.items[key_pause] = itemIsPause[isPause()];
 
   menuDrawPage(&printingItems);
-  reValueNozzle(EXT_ICON_POS);
-  reValueBed(BED_ICON_POS);
+  #ifndef CNC_MENU
+    reValueNozzle(EXT_ICON_POS);
+    reValueBed(BED_ICON_POS);
+  #endif
   reDrawFan(FAN_ICON_POS);
   reDrawTime(TIM_ICON_POS);
   reDrawProgress(TIM_ICON_POS);
@@ -356,6 +362,7 @@ void menuPrinting(void)
   {
 //    Scroll_DispString(&titleScroll, LEFT); //Scroll display file name will take too many CPU cycles
 
+      #ifndef CNC_MENU
     //check nozzle temp change
       if (nowHeat.T[c_Tool].current != heatGetCurrentTemp(c_Tool) || nowHeat.T[c_Tool].target != heatGetTargetTemp(c_Tool))
       {
@@ -364,6 +371,7 @@ void menuPrinting(void)
         rapid_serial_loop();   //perform backend printing loop before drawing to avoid printer idling
         reValueNozzle(EXT_ICON_POS);
       }
+      #endif
 
     //check bed temp change
     if (nowHeat.T[BED].current != heatGetCurrentTemp(BED) || nowHeat.T[BED].target != heatGetTargetTemp(BED))

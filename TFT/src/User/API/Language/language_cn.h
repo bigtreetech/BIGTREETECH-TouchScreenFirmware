@@ -200,4 +200,14 @@
     #define CN_SWAP_RECOVER_LENGTH    "Extra recover swap length"
     #define CN_START_PRINT            "Start Printing:\n %s?"
 
+    #define CN_ZERO_X                 "Zero X"
+    #define CN_ZERO_Y                 "Zero Y"
+    #define CN_ZERO_Z                 "Zero Z"
+    #define CN_XY                     "XY"
+    #define CN_SPINDLE                "Spindle"
+    #define CN_CUT                    "Cut"
+    #define CN_LASER                  "Laser"
+    #define CN_LASER_2                "Laser 2%"
+    #define CN_LASER_100              "Laser 100%"
+    #define CN_LASER_OFF              "Laser Off"
 #endif

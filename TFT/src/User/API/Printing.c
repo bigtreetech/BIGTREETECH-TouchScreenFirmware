@@ -96,10 +96,13 @@ void printSetUpdateWaiting(bool isWaiting)
 void printerGotoIdle(void)
 {
   // disable all heater
+  #ifndef CNC_MENU
   for (TOOL i = BED; i < HEATER_COUNT; i++)
   {
     mustStoreCmd("%s S0\n", heatCmd[i]);
   }
+  #endif
+
   // disable all fan
   for (u8 i = 0; i < (infoSettings.fan_count); i++)
   {
@@ -294,6 +297,11 @@ void abortPrinting(void)
       break;
   }
   heatClearIsWaiting();
+
+  #ifdef CNC_MENU
+    // Always turn off the spindle.
+    mustStoreCmd("M05\n");
+  #endif
 
   endPrinting();
   exitPrinting();

@@ -200,4 +200,14 @@
     #define FR_SWAP_RECOVER_LENGTH    "Extra recover swap length"
     #define FR_START_PRINT            "Start Printing:\n %s?"
 
+    #define FR_ZERO_X                 "Zero X"
+    #define FR_ZERO_Y                 "Zero Y"
+    #define FR_ZERO_Z                 "Zero Z"
+    #define FR_XY                     "XY"
+    #define FR_SPINDLE                "Spindle"
+    #define FR_CUT                    "Cut"
+    #define FR_LASER                  "Laser"
+    #define FR_LASER_2                "Laser 2%"
+    #define FR_LASER_100              "Laser 100%"
+    #define FR_LASER_OFF              "Laser Off"
 #endif

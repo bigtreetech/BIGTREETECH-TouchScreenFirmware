@@ -339,8 +339,13 @@ void menuPrintFromSource(void)
             char temp_info[75];
             sprintf(temp_info, (char *)textSelect(LABEL_START_PRINT), infoFile.file[key_num + start - infoFile.F_num]);
             //confirm file selction
-            showDialog(DIALOG_TYPE_QUESTION, textSelect(LABEL_PRINT), (u8*)temp_info,
-                        textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), startPrint, resetInfoFile, NULL);
+            #ifdef CNC_MENU
+              showDialog(DIALOG_TYPE_QUESTION, textSelect(LABEL_CUT), (u8*)temp_info,
+                          textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), startPrint, resetInfoFile, NULL);
+            #else
+              showDialog(DIALOG_TYPE_QUESTION, textSelect(LABEL_PRINT), (u8*)temp_info,
+                          textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), startPrint, resetInfoFile, NULL);
+            #endif
           }
         }
 
@@ -382,7 +387,11 @@ void menuPrintFromSource(void)
 
 MENUITEMS sourceSelItems = {
 //  title
-LABEL_PRINT,
+#ifdef CNC_MENU
+  LABEL_CUT,
+#else
+  LABEL_PRINT,
+#endif
 // icon                       label
  {{ICON_ONTFT_SD,            LABEL_TFTSD},
  #ifdef U_DISK_SUPPORT

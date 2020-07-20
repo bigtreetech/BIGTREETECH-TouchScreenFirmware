@@ -200,4 +200,14 @@
     #define AM_SWAP_RECOVER_LENGTH    "Extra recover swap length"
     #define AM_START_PRINT            "Start Printing:\n %s?"
 
+    #define AM_ZERO_X                 "Zero X"
+    #define AM_ZERO_Y                 "Zero Y"
+    #define AM_ZERO_Z                 "Zero Z"
+    #define AM_XY                     "XY"
+    #define AM_SPINDLE                "Spindle"
+    #define AM_CUT                    "Cut"
+    #define AM_LASER                  "Laser"
+    #define AM_LASER_2                "Laser 2%"
+    #define AM_LASER_100              "Laser 100%"
+    #define AM_LASER_OFF              "Laser Off"
 #endif

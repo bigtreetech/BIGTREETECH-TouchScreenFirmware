@@ -200,4 +200,14 @@
     #define SL_SWAP_RECOVER_LENGTH    "Extra recover swap length"
     #define SL_START_PRINT            "Start tiska:\n %s?"
 
+    #define SL_ZERO_X                 "Zero X"
+    #define SL_ZERO_Y                 "Zero Y"
+    #define SL_ZERO_Z                 "Zero Z"
+    #define SL_XY                     "XY"
+    #define SL_SPINDLE                "Spindle"
+    #define SL_CUT                    "Cut"
+    #define SL_LASER                  "Laser"
+    #define SL_LASER_2                "Laser 2%"
+    #define SL_LASER_100              "Laser 100%"
+    #define SL_LASER_OFF              "Laser Off"
 #endif

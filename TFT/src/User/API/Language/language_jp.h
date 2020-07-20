@@ -200,4 +200,14 @@
     #define JP_SWAP_RECOVER_LENGTH    "Extra recover swap length"
     #define JP_START_PRINT            "Start Printing:\n %s?"
 
+    #define JP_ZERO_X                 "Zero X"
+    #define JP_ZERO_Y                 "Zero Y"
+    #define JP_ZERO_Z                 "Zero Z"
+    #define JP_XY                     "XY"
+    #define JP_SPINDLE                "Spindle"
+    #define JP_CUT                    "Cut"
+    #define JP_LASER                  "Laser"
+    #define JP_LASER_2                "Laser 2%"
+    #define JP_LASER_100              "Laser 100%"
+    #define JP_LASER_OFF              "Laser Off"
 #endif

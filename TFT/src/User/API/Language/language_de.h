@@ -200,4 +200,14 @@
     #define DE_SWAP_RECOVER_LENGTH    "Extra recover swap length"
     #define DE_START_PRINT            "Start Printing:\n %s?"
 
+    #define DE_ZERO_X                 "Zero X"
+    #define DE_ZERO_Y                 "Zero Y"
+    #define DE_ZERO_Z                 "Zero Z"
+    #define DE_XY                     "XY"
+    #define DE_SPINDLE                "Spindle"
+    #define DE_CUT                    "Cut"
+    #define DE_LASER                  "Laser"
+    #define DE_LASER_2                "Laser 2%"
+    #define DE_LASER_100              "Laser 100%"
+    #define DE_LASER_OFF              "Laser Off"
 #endif

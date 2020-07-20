@@ -200,4 +200,14 @@
     #define PT_SWAP_RECOVER_LENGTH    "Extra recover swap length"
     #define PT_START_PRINT            "Start Printing:\n %s?"
 
+    #define PT_ZERO_X                 "Zero X"
+    #define PT_ZERO_Y                 "Zero Y"
+    #define PT_ZERO_Z                 "Zero Z"
+    #define PT_XY                     "XY"
+    #define PT_SPINDLE                "Spindle"
+    #define PT_CUT                    "Cut"
+    #define PT_LASER                  "Laser"
+    #define PT_LASER_2                "Laser 2%"
+    #define PT_LASER_100              "Laser 100%"
+    #define PT_LASER_OFF              "Laser Off"
 #endif

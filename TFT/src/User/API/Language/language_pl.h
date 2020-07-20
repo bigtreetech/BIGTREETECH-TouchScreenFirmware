@@ -200,4 +200,14 @@
     #define PL_SWAP_RECOVER_LENGTH    "Extra recover swap length"
     #define PL_START_PRINT            "Start Printing:\n %s?"
 
+    #define PL_ZERO_X                 "Zero X"
+    #define PL_ZERO_Y                 "Zero Y"
+    #define PL_ZERO_Z                 "Zero Z"
+    #define PL_XY                     "XY"
+    #define PL_SPINDLE                "Spindle"
+    #define PL_CUT                    "Cut"
+    #define PL_LASER                  "Laser"
+    #define PL_LASER_2                "Laser 2%"
+    #define PL_LASER_100              "Laser 100%"
+    #define PL_LASER_OFF              "Laser Off"
 #endif

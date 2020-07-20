@@ -200,4 +200,14 @@
     #define SK_SWAP_RECOVER_LENGTH    "Extra recover swap length"
     #define SK_START_PRINT            "Start Printing:\n %s?"
 
+    #define SK_ZERO_X                 "Zero X"
+    #define SK_ZERO_Y                 "Zero Y"
+    #define SK_ZERO_Z                 "Zero Z"
+    #define SK_XY                     "XY"
+    #define SK_SPINDLE                "Spindle"
+    #define SK_CUT                    "Cut"
+    #define SK_LASER                  "Laser"
+    #define SK_LASER_2                "Laser 2%"
+    #define SK_LASER_100              "Laser 100%"
+    #define SK_LASER_OFF              "Laser Off"
 #endif

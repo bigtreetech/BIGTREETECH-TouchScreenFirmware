@@ -200,4 +200,14 @@
     #define TR_SWAP_RECOVER_LENGTH    "Extra recover swap length"
     #define TR_START_PRINT            "Start Printing:\n %s?"
 
+    #define TR_ZERO_X                 "Zero X"
+    #define TR_ZERO_Y                 "Zero Y"
+    #define TR_ZERO_Z                 "Zero Z"
+    #define TR_XY                     "XY"
+    #define TR_SPINDLE                "Spindle"
+    #define TR_CUT                    "Cut"
+    #define TR_LASER                  "Laser"
+    #define TR_LASER_2                "Laser 2%"
+    #define TR_LASER_100              "Laser 100%"
+    #define TR_LASER_OFF              "Laser Off"
 #endif

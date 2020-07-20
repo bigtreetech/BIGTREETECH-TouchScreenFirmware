@@ -321,7 +321,11 @@ void menuStatus(void)
         infoMenu.menu[++infoMenu.cur] = menuSpeed;
         break;
       case KEY_ICON_4:
-        infoMenu.menu[++infoMenu.cur] = unifiedMenu;
+        #ifdef CNC_MENU
+          infoMenu.menu[++infoMenu.cur] = cncMenu;
+        #else
+          infoMenu.menu[++infoMenu.cur] = unifiedMenu;
+        #endif
         break;
       case KEY_ICON_7:
         infoMenu.menu[++infoMenu.cur] = menuPrint;
