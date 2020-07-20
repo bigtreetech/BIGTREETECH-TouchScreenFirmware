@@ -300,7 +300,7 @@ void toggleinfo(void)
       reDrawFan(FAN_ICON_POS);
     }
 
-    if (infoSettings.cnc_menu != 1)
+    if (infoSettings.cnc_mode != 1)
     {
       c_speedID = (c_speedID + 1) % 2;
     }
@@ -336,7 +336,7 @@ void printingDrawPage(void)
     printingItems.items[key_pause] = itemIsPause[isPause()];
 
   menuDrawPage(&printingItems);
-  if (infoSettings.cnc_menu != 1)
+  if (infoSettings.cnc_mode != 1)
   {
     reValueNozzle(EXT_ICON_POS);
     reValueBed(BED_ICON_POS);
@@ -367,7 +367,7 @@ void menuPrinting(void)
   {
 //    Scroll_DispString(&titleScroll, LEFT); //Scroll display file name will take too many CPU cycles
 
-    if (infoSettings.cnc_menu != 1)
+    if (infoSettings.cnc_mode != 1)
     {
       //check nozzle temp change
       if (nowHeat.T[c_Tool].current != heatGetCurrentTemp(c_Tool) || nowHeat.T[c_Tool].target != heatGetTargetTemp(c_Tool))

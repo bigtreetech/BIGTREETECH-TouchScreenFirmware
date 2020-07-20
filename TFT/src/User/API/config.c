@@ -413,8 +413,8 @@ void parseConfigKey(u16 index)
       infoSettings.unified_menu = getOnOff();
     break;
 
-  case C_INDEX_CNCMENU:
-      infoSettings.cnc_menu = getOnOff();
+  case C_INDEX_CNCMODE:
+      infoSettings.cnc_mode = getOnOff();
     break;
 
   case C_INDEX_LASERMODE:

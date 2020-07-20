@@ -47,7 +47,7 @@ typedef struct
   uint8_t  language;
   uint8_t  mode;
   uint8_t  unified_menu;
-  uint8_t  cnc_menu;
+  uint8_t  cnc_mode;
   uint8_t  laser_mode;
   uint8_t  rotate_ui;
 

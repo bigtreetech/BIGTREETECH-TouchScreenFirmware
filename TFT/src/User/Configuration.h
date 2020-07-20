@@ -246,8 +246,8 @@
 // Move, Home, Extrude, ABL at one Place and bring G-code Menu on Home Menu
 #define UNIFIED_MENU true //for unified menu: true | for classic menu: false
 
-// Enable CNC Menu mutually exclusive to UNIFIED_MENU
-#define CNC_MENU true
+// Enable CNC mode mutually exclusive to UNIFIED_MENU
+#define CNC_MODE true
 
 // Enable Laser interface instead of the fan interface (for CNC mode only).
 #define LASER_MODE true

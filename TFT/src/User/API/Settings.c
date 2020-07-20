@@ -24,7 +24,7 @@ void infoSettingsReset(void)
   infoSettings.language             = DEFAULT_LANGUAGE;
   infoSettings.mode                 = DEFAULT_LCD_MODE;
   infoSettings.unified_menu         = UNIFIED_MENU;
-  infoSettings.cnc_menu             = CNC_MENU;
+  infoSettings.cnc_mode             = CNC_MODE;
   infoSettings.laser_mode           = LASER_MODE;
 
   infoSettings.bg_color             = lcd_colors[BACKGROUND_COLOR];

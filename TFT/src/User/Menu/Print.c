@@ -339,7 +339,7 @@ void menuPrintFromSource(void)
             char temp_info[75];
             sprintf(temp_info, (char *)textSelect(LABEL_START_PRINT), infoFile.file[key_num + start - infoFile.F_num]);
             //confirm file selection
-            if (infoSettings.cnc_menu != 1)
+            if (infoSettings.cnc_mode != 1)
             {
               showDialog(DIALOG_TYPE_QUESTION, textSelect(LABEL_PRINT), (u8*)temp_info,
                           textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), startPrint, resetInfoFile, NULL);
@@ -415,7 +415,7 @@ void menuPrint(void)
   sourceSelItems.items[ONBOARD_SD_INDEX].icon = (infoMachineSettings.onboard_sd_support == ENABLED) ? ICON_ONBOARD_SD : ICON_BACKGROUND;
   sourceSelItems.items[ONBOARD_SD_INDEX].label.index = (infoMachineSettings.onboard_sd_support == ENABLED) ? LABEL_ONBOARDSD : LABEL_BACKGROUND;
 
-  sourceSelItems.title.index = (infoSettings.cnc_menu == 1) ? LABEL_CUT : LABEL_PRINT;
+  sourceSelItems.title.index = (infoSettings.cnc_mode == 1) ? LABEL_CUT : LABEL_PRINT;
 
   menuDrawPage(&sourceSelItems);
   while(infoMenu.menu[infoMenu.cur] == menuPrint)

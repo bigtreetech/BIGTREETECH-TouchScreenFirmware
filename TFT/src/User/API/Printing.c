@@ -95,7 +95,7 @@ void printSetUpdateWaiting(bool isWaiting)
 
 void printerGotoIdle(void)
 {
-  if (infoSettings.cnc_menu != 1)
+  if (infoSettings.cnc_mode != 1)
   {
     // disable all heater
     for (TOOL i = BED; i < HEATER_COUNT; i++)
@@ -299,7 +299,7 @@ void abortPrinting(void)
   }
   heatClearIsWaiting();
 
-  if (infoSettings.cnc_menu != 1)
+  if (infoSettings.cnc_mode != 1)
   {
     // Always turn off the spindle.
     mustStoreCmd("M05\n");

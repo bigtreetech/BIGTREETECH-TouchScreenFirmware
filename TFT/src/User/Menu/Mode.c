@@ -36,7 +36,7 @@ void infoMenuSelect(void)
       GUI_SetColor(infoSettings.font_color);
       GUI_SetBkColor(infoSettings.bg_color);
 
-      if(infoSettings.cnc_menu == 1)
+      if(infoSettings.cnc_mode == 1)
       {
         infoMenu.menu[infoMenu.cur] = cncMenu;
       }

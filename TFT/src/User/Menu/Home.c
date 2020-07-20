@@ -37,7 +37,7 @@ void menuHome(void)
   while(infoMenu.menu[infoMenu.cur] == menuHome)
   {
     key_num = menuKeyGetValue();
-    if (infoSettings.cnc_menu == 1)
+    if (infoSettings.cnc_mode == 1)
     {
       switch(key_num)
       {
