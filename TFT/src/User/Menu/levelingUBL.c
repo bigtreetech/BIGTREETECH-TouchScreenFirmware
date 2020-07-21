@@ -29,7 +29,6 @@ void menuAutoLevelingUBL(void)
         storeCmd("G28\n");
         storeCmd("G29 P1\n");
         storeCmd("G29 P3\n");
-        storeCmd("G29 A\n");
         storeCmd("M400\n");
         storeCmd("M118 A1 UBL Complete\n");
         break;

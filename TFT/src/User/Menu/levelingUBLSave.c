@@ -2,7 +2,6 @@
 #include "includes.h"
 
 char* slot;
-bool sLeveled = false;
 
 const MENUITEMS UBLSave = {
 // title
@@ -48,17 +47,7 @@ void menuUBLSave(void)
                     textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), saveConfirm, NULL, NULL);
         break;
       case KEY_ICON_7:
-        if (sLeveled == true && infoMachineSettings.EEPROM == 1)
-        {
-          sLeveled = false;
-          showDialog(DIALOG_TYPE_QUESTION, textSelect(LABEL_ABL_SETTINGS_UBL), textSelect(LABEL_EEPROM_SAVE_INFO),
-                     textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), saveEepromSettings, NULL, NULL);
-        }
-        else
-        {
-          infoMenu.cur--;
-          sLeveled = false;
-        }
+        infoMenu.cur--;
         break;
       default:
         break;
@@ -69,7 +58,5 @@ void menuUBLSave(void)
 
 void saveConfirm(void)
 {
-    storeCmd("G29 A\n");  // Ensure UBL is enabled
     storeCmd("G29 S%s\n", slot);
-    sLeveled = true;
 }

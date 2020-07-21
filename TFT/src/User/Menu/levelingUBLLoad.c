@@ -70,6 +70,5 @@ void menuUBLLoad(void)
 void loadConfirm(void)
 {
     storeCmd("G29 L%s\n", slot);
-    storeCmd("G29 A\n");  // Ensure UBL is enabled
     lLeveled = true;
 }
