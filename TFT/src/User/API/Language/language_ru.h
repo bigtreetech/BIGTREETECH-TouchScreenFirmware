@@ -37,6 +37,7 @@
     #define RU_ABL_SLOT1              "Slot 1"
     #define RU_ABL_SLOT2              "Slot 2"
     #define RU_ABL_SLOT3              "Slot 3"
+    #define RU_ABL_SLOT_EEPROM        "Remember slot for next\nreboot? (Save EEPROM)"
     #define RU_ABL_Z                  "Z Fade"
     #define RU_ABL_ENABLE             "ABL on"
     #define RU_ABL_DISABLE            "ABL off"

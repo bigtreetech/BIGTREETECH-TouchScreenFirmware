@@ -37,6 +37,7 @@
     #define GR_ABL_SLOT1              "Slot 1"
     #define GR_ABL_SLOT2              "Slot 2"
     #define GR_ABL_SLOT3              "Slot 3"
+    #define GR_ABL_SLOT_EEPROM        "Remember slot for next\nreboot? (Save EEPROM)"
     #define GR_ABL_Z                  "Z Fade"
     #define GR_ABL_ENABLE             "ABL on"
     #define GR_ABL_DISABLE            "ABL off"

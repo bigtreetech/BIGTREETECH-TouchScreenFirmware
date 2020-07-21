@@ -37,6 +37,7 @@
     #define AM_ABL_SLOT1              "Slot 1"
     #define AM_ABL_SLOT2              "Slot 2"
     #define AM_ABL_SLOT3              "Slot 3"
+    #define AM_ABL_SLOT_EEPROM        "Remember slot for next\nreboot? (Save EEPROM)"
     #define AM_ABL_Z                  "Z Fade"
     #define AM_ABL_ENABLE             "ABL on"
     #define AM_ABL_DISABLE            "ABL off"

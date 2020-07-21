@@ -51,7 +51,7 @@ void menuUBLLoad(void)
         if (lLeveled == true && infoMachineSettings.EEPROM == 1)
         {
           lLeveled = false;
-          showDialog(DIALOG_TYPE_QUESTION, textSelect(LABEL_ABL_SETTINGS_UBL), textSelect(LABEL_EEPROM_SAVE_INFO),
+          showDialog(DIALOG_TYPE_QUESTION, textSelect(LABEL_ABL_SETTINGS_UBL), textSelect(LABEL_ABL_SLOT_EEPROM ),
                      textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), saveEepromSettings, NULL, NULL);
         }
         else

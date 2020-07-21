@@ -37,6 +37,7 @@
     #define JP_ABL_SLOT1              "Slot 1"
     #define JP_ABL_SLOT2              "Slot 2"
     #define JP_ABL_SLOT3              "Slot 3"
+    #define JP_ABL_SLOT_EEPROM        "Remember slot for next\nreboot? (Save EEPROM)"
     #define JP_ABL_Z                  "Z Fade"
     #define JP_ABL_ENABLE             "ABL on"
     #define JP_ABL_DISABLE            "ABL off"

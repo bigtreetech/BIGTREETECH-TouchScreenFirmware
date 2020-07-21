@@ -37,6 +37,7 @@
     #define DU_ABL_SLOT1              "Slot 1"
     #define DU_ABL_SLOT2              "Slot 2"
     #define DU_ABL_SLOT3              "Slot 3"
+    #define DU_ABL_SLOT_EEPROM        "Remember slot for next\nreboot? (Save EEPROM)"
     #define DU_ABL_Z                  "Z Fade"
     #define DU_ABL_ENABLE             "ABL on"
     #define DU_ABL_DISABLE            "ABL off"
