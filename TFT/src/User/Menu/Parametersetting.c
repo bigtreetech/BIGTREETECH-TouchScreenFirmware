@@ -19,7 +19,7 @@ const LISTITEM parametertypes[P_ITEMSCOUNT] = {
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_FWRETRACT,        LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_FWRECOVER,        LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_LIN_ADVANCE,      LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_ABL_FADE_HEIGHT,  LABEL_BACKGROUND},
+  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_ABL,              LABEL_BACKGROUND},
   //Keep below items always at the end
   {ICONCHAR_RESET,      LIST_LABEL,       LABEL_SETTING_RESET,    LABEL_BACKGROUND},
   {ICONCHAR_UNDO,       LIST_LABEL,       LABEL_SETTING_RESTORE,  LABEL_BACKGROUND},
@@ -81,8 +81,9 @@ void menuShowParameter(void){
     case P_LIN_ADV:
       setDynamicLabel(i, "K");
       break;
-    case P_Z_FADE:
-      setDynamicLabel(i, "Z Fade");
+    case P_ABL_STATE:
+      setDynamicLabel(0, "S");
+      setDynamicLabel(1, "Z");
       break;
 
     default:

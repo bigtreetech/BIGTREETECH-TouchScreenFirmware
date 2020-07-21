@@ -3,7 +3,7 @@
 
 const MENUITEMS BLTouchItems = {
 // title
-LABEL_BLTOUCH_SETTINGS,
+LABEL_BLTOUCH,
 // icon                        label
  {{ICON_BLTOUCH_DEPLOY,        LABEL_BLTOUCH_DEPLOY},
   {ICON_BLTOUCH_STOW,          LABEL_BLTOUCH_STOW},

@@ -639,8 +639,11 @@ void sendQueueCmd(void)
         #endif
         
         case 420: //M420
-          if(cmd_seen('S')) infoSettings.autoLevelState = cmd_value();
-          //if(cmd_seen('Z')) infoSettings.autoLevelState = cmd_value();
+          if(cmd_seen('S')) {
+            infoSettings.autoLevelState = cmd_value();
+            setParameter(P_ABL_STATE,0,cmd_value());
+          }
+          if(cmd_seen('Z')) setParameter(P_ABL_STATE,1,cmd_float());
         break;
 
         #ifdef NOZZLE_PAUSE_M601
@@ -722,10 +725,12 @@ void sendQueueCmd(void)
           if(ENABLE_UBL_VALUE > 0) {
             if(cmd_seen('A')) {
               infoSettings.autoLevelState = 1;
+              setParameter(P_ABL_STATE,0,1);
               storeCmd("M117 UBL active\n");
             }
             if(cmd_seen('D')) {
               infoSettings.autoLevelState = 0;
+              setParameter(P_ABL_STATE,0,0);
               storeCmd("M117 UBL inactive\n");
             }
           }
