@@ -60,7 +60,6 @@ void infoMenuSelect(void)
     }
 
     #ifdef ST7920_SPI
-
     case LCD12864:
       if (infoSettings.serial_alwaysOn == 1)
       {
@@ -79,7 +78,28 @@ void infoMenuSelect(void)
       GUI_SetBkColor(infoSettings.marlin_mode_bg_color);
       infoMenu.menu[infoMenu.cur] = menuST7920;
       break;
-
     #endif
+
+    case LCD2004:
+      if (infoSettings.serial_alwaysOn == 1)
+      {
+        Serial_ReSourceInit();
+      }
+      #ifdef BUZZER_PIN
+        Buzzer_DeConfig();  // Disable buzzer in LCD2004 Simulations mode.
+      #endif
+
+      #ifdef LED_COLOR_PIN
+        #ifndef KEEP_KNOB_LED_COLOR_MARLIN_MODE
+          knob_LED_DeInit();
+        #endif
+      #endif
+      GUI_SetColor(infoSettings.marlin_mode_font_color);
+      GUI_SetBkColor(infoSettings.marlin_mode_bg_color);
+      infoMenu.menu[infoMenu.cur] = menuHD44780;
+    break;
+    default:
+    break;
+
   }
 }

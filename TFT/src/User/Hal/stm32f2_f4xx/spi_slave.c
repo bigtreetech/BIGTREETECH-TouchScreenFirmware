@@ -2,6 +2,8 @@
 #include "spi.h"
 #include "GPIO_Init.h"
 #include "stdlib.h"
+#include "Settings.h"
+#include "../HD44780.h"
 
 //TODO:
 //now support SPI2 and PB12 CS only
@@ -15,8 +17,12 @@
   #define ST7920_SPI_NUM          SPI3
 #endif
 
+#ifdef ST7920_SPI
 
 SPI_QUEUE SPISlave;
+extern HD44780_QUEUE HD44780_queue;
+uint8_t data = 0;
+uint8_t highbit = 1, RS = 0;
 
 void SPI_ReEnable(u8 mode)
 {
@@ -87,7 +93,7 @@ void SPI2_IRQHandler(void)
 /*External interruption arrangement*/
 void SPI_Slave_CS_Config(void)
 {
-  EXTI_InitTypeDef EXTI_InitStructure;
+  EXTI_InitTypeDef   EXTI_InitStructure;
   NVIC_InitTypeDef   NVIC_InitStructure;
 
   /* Connect GPIOB12 to the interrupt line */
@@ -101,7 +107,6 @@ void SPI_Slave_CS_Config(void)
   EXTI_InitStructure.EXTI_LineCmd = ENABLE;
   EXTI_Init(&EXTI_InitStructure);
 
-
   NVIC_InitStructure.NVIC_IRQChannel = EXTI15_10_IRQn;			//External interrupt channel where the key is enabled
   NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x00;	//Preemption priority 2?
   NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x01;					//Sub-priority 1
@@ -110,19 +115,56 @@ void SPI_Slave_CS_Config(void)
 }
 
 
-/*External interruption*/
+/*External interruption
+Receive HD44780 data on the EN(PB15) rising edge, or ST7920 adaptive SPI mode
+*PC6 -- D7  4 line mode
+*PC7 -- D6
+*PB14-- D5
+*PB13-- D4
+*/
 void EXTI15_10_IRQHandler(void)
 {
-  if((GPIOB->IDR & (1<<12)) != 0)
+  uint8_t buffer = 0;
+  switch(infoSettings.mode)
   {
-    SPI_ReEnable(!!(GPIOB->IDR & (1<<13))); // Adaptive spi mode0 / mode3
-    ST7920_SPI_NUM->CR1 |= (1<<6);
+    case LCD2004:
+      if((GPIOB->IDR & (1<<15)) != 0){
+        buffer = ((GPIOC->IDR & (1<<6))  >> 3 ) +     //D7
+                 ((GPIOC->IDR & (1<<7))  >> 5 ) +     //D6
+                 ((GPIOB->IDR & (1<<14)) >> 13) +     //D5
+                 ((GPIOB->IDR & (1<<13)) >> 13);      //D4
+        if(highbit){
+          data = buffer << 4;
+          highbit = 0;
+        }
+        else{
+          data |= buffer;
+          highbit = 1;
+          if((GPIOB->IDR & (1<<12)) == 0){              //Command received
+            HD44780_queue.data[HD44780_queue.wIndex] =  0xff;
+            HD44780_queue.wIndex = (HD44780_queue.wIndex + 1) % HD44780_data_MAX;
+          }
+          HD44780_queue.data[HD44780_queue.wIndex] =  data;
+          HD44780_queue.wIndex = (HD44780_queue.wIndex + 1) % HD44780_data_MAX;
+        }
+      }       //Receive HD44780 data
+      EXTI->PR = 1<<15;
+    break;
+    
+    case LCD12864:
+      if((GPIOB->IDR & (1<<12)) != 0)
+      {
+        SPI_ReEnable(!!(GPIOB->IDR & (1<<13))); // Adaptive spi mode0 / mode3
+        ST7920_SPI_NUM->CR1 |= (1<<6);
+      }
+      else
+      {
+        RCC->APB1RSTR |= 1<<14;	// Reset SPI2
+        RCC->APB1RSTR &= ~(1<<14);
+      }
+      EXTI->PR = 1<<12;   //Clear interrupt status register
+    break;
   }
-  else
-  {
-    RCC->APB1RSTR |= 1<<14;	// Reset SPI2
-    RCC->APB1RSTR &= ~(1<<14);
-  }
-/* Clear interrupt status register */
-  EXTI->PR = 1<<12;
 }
+
+#endif

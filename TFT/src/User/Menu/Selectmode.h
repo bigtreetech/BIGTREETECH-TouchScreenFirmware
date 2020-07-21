@@ -6,11 +6,12 @@
 #include "stdbool.h"
 
 #define IDLE_TOUCH	0xFFFF
-#define SELECTMODE 2
+#define SELECTMODE 3
 typedef enum
 {
   MKEY_0 = 0,
   MKEY_1,
+  MKEY_2,
   MKEY_IDLE = IDLE_TOUCH,
 }MKEY_VALUES;
 

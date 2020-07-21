@@ -11,7 +11,8 @@
  * Mode switching is still possible by holding down the encorder for two seconds.
  *
  * Options:
- * ST7920_SPI // Marlin Mode
+ * LCD2004    // Marlin Mode
+ * LCD12864   // Marlin Mode
  * SERIAL_TSC // Touch Mode
  */
 #define DEFAULT_LCD_MODE SERIAL_TSC
@@ -69,11 +70,12 @@
  *  Text displayed at the top of the TFT in Marlin Mode.
  */
 #define ST7920_BANNER_TEXT "LCD12864 Simulator"
-
+#define HD44780_BANNER_TEXT "LCD2004 Simulator"
 /**
  *  show banner text at the top of the TFT in Marlin Mode.
  */
 #define ST7920_SHOW_BANNER true //to enabled: true | to disabled: false
+#define HD44780_SHOW_BANNER true //to enabled: true | to disabled: false
 /**
  * Run Marlin Mode in Fullscreen
  *

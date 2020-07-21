@@ -36,8 +36,8 @@
 typedef enum
 {
   SERIAL_TSC = 0,
-  LCD12864,
   LCD2004,
+  LCD12864,
   MODE_COUNT
 }LCD_MODE;
 

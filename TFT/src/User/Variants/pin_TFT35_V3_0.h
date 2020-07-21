@@ -75,6 +75,16 @@
 #define W25Qxx_SPI    _SPI3
 #define W25Qxx_CS_PIN PB6
 
+//HD44780 
+#ifdef HD44780
+  #define LCD_EN  PB15
+  #define LCD_RS  PB12
+  #define LCD_D4  PB13
+  #define LCD_D5  PB14
+  #define LCD_D6  PC7
+  #define LCD_D7  PC6
+#endif
+
 // ST7920 Simulator SPI pins
 #define ST7920_SPI    _SPI2
 

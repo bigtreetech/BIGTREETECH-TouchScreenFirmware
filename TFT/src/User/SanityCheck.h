@@ -52,6 +52,10 @@
   #error "CANCEL_PRINT_GCODE is now PRINT_CANCEL_GCODE. Please update your Configuration.h file."
 #endif
 
+#ifndef HD44780_BANNER_TEXT
+    #define HD44780_BANNER_TEXT "LCD2004 Simulator"
+#endif
+
 #ifndef ST7920_BANNER_TEXT
     #define ST7920_BANNER_TEXT "LCD12864 Simulator"
 #endif

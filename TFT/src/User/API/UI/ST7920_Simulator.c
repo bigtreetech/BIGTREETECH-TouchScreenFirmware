@@ -314,7 +314,7 @@ ST7920_REG st7920_reg = {
     .ems  = 0x02, // Cursor move to right ,DDRAM address counter (AC) plus 1
     .dc   = 0x00, // Display, cursor and blink are ALL OFF
     .cdsc = 0x00, // No cursor or display shift operation
- },
+  },
   .ei = {
     .vsra = 0x00, // Allow vertical scroll or set CGRAM address
     .rev  = 0x00, // Begin with normal and toggle to reverse
@@ -346,6 +346,8 @@ void ST7920_DrawPixel(int16_t x, int16_t y, bool isForeGround)
 // Display graphic
 void ST7920_DrawGDRAM(uint8_t data)
 {
+  GUI_DispDec(0, 0, data, 3, 0);
+
   if (st7920_reg.fs.g != 1) return; // Graphic display off
   for (uint8_t i = 0; i < 8; i++) {
     if (data & 0x80)
@@ -578,6 +580,7 @@ void ST7920_ParseRecv(u8 val)
     switch (st7920_reg.ctrl_status)
     {
       case ST7920_WCMD:
+
         ST7920_ST7920_ParseWCmd(rcvData);
         break;
 
@@ -600,6 +603,7 @@ void ST7920_ParseRecv(u8 val)
 
 void ST7920_ST7920_ParseWCmd(u8 cmd)
 {
+  GUI_DispDec(128, 0, cmd, 3, 0);
   for (int8_t i = 7; i >= 0; i--) {
     if (cmd & (1 << i)) {
       if (cmdCallBack[i][st7920_reg.fs.re] != NULL) {
