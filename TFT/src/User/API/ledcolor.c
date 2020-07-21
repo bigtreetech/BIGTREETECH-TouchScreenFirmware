@@ -54,24 +54,22 @@ void set_knob_color(int color_index)
   WS2812_Send_DAT(led_color[color_index]);
 }
 
-// total 2.5us, run in 400Khz
-#define NEOPIXEL_T0H_US 0.35  // Neopixel code 0 high level hold time in us
-#define NEOPIXEL_T1H_US 2.15  // Neopixel code 1 high level hold time in us
+// The signal captured by the logic analyzer shows that this configuration cycle is about 1.35us, run in ~800Khz
+#define NEOPIXEL_T0H_US 0.2f  // Neopixel code 0 high level hold time in us
+#define NEOPIXEL_T1H_US 0.8f  // Neopixel code 1 high level hold time in us
 
 void WS2812_Send_DAT(uint32_t ws2812_dat)
 {
-  uint16_t led_num;
-  int8_t bit;
-  uint16_t cycle = mcuClocks.PCLK1_Timer_Frequency * (0.000001 * (NEOPIXEL_T0H_US + NEOPIXEL_T1H_US)) / 2 - 1;   // Neopixel frequency
-  uint16_t code_0_tim_h_cnt = cycle * (NEOPIXEL_T0H_US / (NEOPIXEL_T0H_US + NEOPIXEL_T1H_US));  // Code 0, High level hold time,
+  uint16_t cycle = mcuClocks.PCLK1_Timer_Frequency * 0.000001 * (NEOPIXEL_T0H_US + NEOPIXEL_T1H_US);   // Neopixel frequency
+  uint16_t code_0_tim_h_cnt = cycle * NEOPIXEL_T0H_US / (NEOPIXEL_T0H_US + NEOPIXEL_T1H_US);  // Code 0, High level hold time,
   uint16_t code_1_tim_h_cnt = cycle - code_0_tim_h_cnt;
 
   __disable_irq();  // Disable interrupt, avoid disturbing the timing of WS2812
   TIM6->ARR = cycle;
   TIM6->CR1 |= 0x01;
-  for (led_num=0; led_num < NEOPIXEL_PIXELS; led_num++)
+  for (uint16_t led_num=0; led_num < NEOPIXEL_PIXELS; led_num++)
   {
-    for (bit = 23; bit >= 0; bit--)
+    for (int8_t bit = 23; bit >= 0; bit--)
     {
       TIM6->CNT = 0;
       WS2812_FAST_WRITE_HIGH(); // WS2812 required very high speed, so "GPIO_SetLevel(LED_COLOR_PIN, 1)" not applicable
