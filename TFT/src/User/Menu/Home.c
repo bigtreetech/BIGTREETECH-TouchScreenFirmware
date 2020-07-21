@@ -33,7 +33,15 @@ LABEL_HOME,
 void menuHome(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
-  menuDrawPage(&homeItems);
+  if (infoSettings.cnc_mode == 1)
+  {
+    menuDrawPage(&cncHomeItems);
+  }
+  else
+  {
+    menuDrawPage(&homeItems);
+  }
+
   while(infoMenu.menu[infoMenu.cur] == menuHome)
   {
     key_num = menuKeyGetValue();
