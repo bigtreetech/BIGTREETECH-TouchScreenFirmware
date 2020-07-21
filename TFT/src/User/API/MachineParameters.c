@@ -15,7 +15,8 @@ const char *const parameter_Cmd[PARAMETERS_COUNT][STEPPER_COUNT] = {
   {"M914 X%.2f\n", "M914 Y%.2f\n", "M914 Z%.2f\n",              NULL,              NULL}, //bump Sensitivity
   {"M207 S%.0f\n", "M207 W%.2f\n", "M207 F%.2f\n",    "M207 Z%.2f\n",              NULL}, //FW retract
   {"M208 S%.0f\n", "M208 W%.0f\n", "M208 F%.2f\n",    "M208 R%.2f\n",              NULL}, //FW retract recover
-  {"M900 K%.2f\n",           NULL,            NULL,             NULL,              NULL}  //Linear Advance
+  {"M900 K%.2f\n",           NULL,            NULL,             NULL,              NULL}, //Linear Advance
+  {"M420 Z%.2f\n",           NULL,            NULL,             NULL,              NULL}  //ABL Z Fade
 };
 
 const VAL_TYPE parameter_val_type[PARAMETERS_COUNT][STEPPER_COUNT] = {
@@ -28,7 +29,8 @@ const VAL_TYPE parameter_val_type[PARAMETERS_COUNT][STEPPER_COUNT] = {
   {VAL_TYPE_NEG_INT,    VAL_TYPE_NEG_INT,   VAL_TYPE_NEG_INT},                                            //bump Sensitivity
   {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_FLOAT,       VAL_TYPE_FLOAT},                        //FW retract
   {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_NEG_FLOAT,   VAL_TYPE_NEG_FLOAT},                    //FW retract recover
-  {VAL_TYPE_FLOAT}                                                                                        //Linear Advance
+  {VAL_TYPE_FLOAT},                                                                                       //Linear Advance
+  {VAL_TYPE_FLOAT}                                                                                        //ABL Z Fade
 };
 
 //Extra teppers current gcode command
@@ -72,6 +74,8 @@ float getParameter(PARAMETER_NAME name, u8 index)
     return infoParameters.FwRecover[index];
   case P_LIN_ADV:
     return infoParameters.LinAdvance[index];
+  case P_Z_FADE:
+    return infoParameters.ZFade[index];
   default:
     return 0.0f;
   }
@@ -111,6 +115,9 @@ void setParameter(PARAMETER_NAME name, u8 index, float val)
       break;
     case P_LIN_ADV:
       infoParameters.LinAdvance[index] = val;
+      break;
+    case P_Z_FADE:
+      infoParameters.ZFade[index] = val;
       break;
     default:
       break;

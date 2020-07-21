@@ -637,6 +637,12 @@ void sendQueueCmd(void)
             }
             break;
         #endif
+        
+        case 420: //M420
+          if(cmd_seen('S')) infoSettings.autoLevelState = cmd_value();
+          //if(cmd_seen('Z')) infoSettings.autoLevelState = cmd_value();
+        break;
+
         #ifdef NOZZLE_PAUSE_M601
           case 601: //M601 pause print
             if (isPrinting())
@@ -710,6 +716,19 @@ void sendQueueCmd(void)
         case 28: //G28
           coordinateSetKnown(true);
           babyStepReset();
+          break;
+
+        case 29: //G29
+          if(ENABLE_UBL_VALUE > 0) {
+            if(cmd_seen('A')) {
+              infoSettings.autoLevelState = 1;
+              storeCmd("M117 UBL active\n");
+            }
+            if(cmd_seen('D')) {
+              infoSettings.autoLevelState = 0;
+              storeCmd("M117 UBL inactive\n");
+            }
+          }
           break;
 
         case 90: //G90

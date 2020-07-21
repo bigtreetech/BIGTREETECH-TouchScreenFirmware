@@ -15,6 +15,7 @@ P_BUMPSENSITIVITY,
 P_FWRETRACT,
 P_FWRECOVER,
 P_LIN_ADV,
+P_Z_FADE,
 // Keep below items always at the end
 P_RESET_SETTINGS,
 P_RESTORE_SETTINGS,
@@ -53,6 +54,7 @@ float BumpSensitivity[3];
 float FwRetract[4];
 float FwRecover[4];
 float LinAdvance[1];
+float ZFade[1];
 }PARAMETERS;
 
 extern PARAMETERS infoParameters;

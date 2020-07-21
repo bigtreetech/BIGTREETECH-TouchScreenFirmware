@@ -91,6 +91,10 @@
 #include "FeatureSettings.h"
 #include "SendGcode.h"
 #include "leveling.h"
+#include "levelingUBL.h"
+#include "levelingUBLSave.h"
+#include "levelingUBLLoad.h"
+#include "BLTouch.h"
 #include "ProbeOffset.h"
 #include "PowerFailed.h"
 

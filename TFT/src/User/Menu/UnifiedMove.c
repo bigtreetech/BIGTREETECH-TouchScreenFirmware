@@ -4,7 +4,7 @@
 
 void menuUnifiedMove(void)
 {
-    //1 title, ITEM_PER_PAGE items(icon + label)
+  //1 title, ITEM_PER_PAGE items(icon + label)
   MENUITEMS UnifiedMoveItems = {
   // title
   LABEL_UNIFIEDMOVE,
@@ -24,6 +24,15 @@ void menuUnifiedMove(void)
     UnifiedMoveItems.items[2].label.index = LABEL_ABL;
     UnifiedMoveItems.items[3].icon = ICON_MANUAL_LEVEL;
     UnifiedMoveItems.items[3].label.index = LABEL_LEVELING;
+
+    if(infoSettings.autoLevelState == 1) {
+      UnifiedMoveItems.items[6].icon = ICON_EEPROM_SAVE;
+      UnifiedMoveItems.items[6].label.index = LABEL_ABL_ENABLE;
+    }
+    else {
+      UnifiedMoveItems.items[6].icon = ICON_STOP;
+      UnifiedMoveItems.items[6].label.index = LABEL_ABL_DISABLE;
+    }
   }
   else{
     UnifiedMoveItems.items[2].icon = ICON_MANUAL_LEVEL;
@@ -43,7 +52,12 @@ void menuUnifiedMove(void)
       case KEY_ICON_1: infoMenu.menu[++infoMenu.cur] = menuMove; break;
       case KEY_ICON_2:
                       if(infoMachineSettings.autoLevel == 1){
-                        infoMenu.menu[++infoMenu.cur] = menuAutoLeveling;
+                        if (infoSettings.enable_ubl == 1) {
+                          infoMenu.menu[++infoMenu.cur] = menuAutoLevelingUBL;
+                        }
+                        else {
+                          infoMenu.menu[++infoMenu.cur] = menuAutoLeveling;
+                        }
                       }
                       else{
                         infoMenu.menu[++infoMenu.cur] = menuManualLeveling;
@@ -52,6 +66,16 @@ void menuUnifiedMove(void)
       case KEY_ICON_3:
                       if(infoMachineSettings.autoLevel == 1){
                         infoMenu.menu[++infoMenu.cur] = menuManualLeveling;
+                      }
+                      break;
+      case KEY_ICON_6:
+                      if(infoMachineSettings.autoLevel == 1){
+                        if(infoSettings.autoLevelState == 1){
+                          storeCmd("M420 S0\n");
+                        }
+                        else {
+                          storeCmd("M420 S1\n");
+                        }
                       }
                       break;
       case KEY_ICON_7: infoMenu.cur--; break;

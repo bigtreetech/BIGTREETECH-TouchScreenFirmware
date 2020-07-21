@@ -218,6 +218,18 @@
 #define AUTO_SAVE_LOAD_LEVELING_VALUE true //to enabled: true | to disabled: false
 
 /**
+ * Enable Unified Bed Leveling options.
+ * The menu options will change according to the option set.
+ * 
+ * WARNING - Ensure the correct ABL is chosen, otherwise ABL menu options will behave erratically.
+ *           UBL has extra options that are part of the UBL featureset that Bilinear doesn't have.
+ * 
+ * Options:  0: Disabled    1: Enabled    2: Auto-Detect [default]
+ * 
+ */
+#define ENABLE_UBL_VALUE 2
+
+/**
  * Manual Leveling
  * Move to four corner points to Leveling manually (Point 1, Point 2, Point 3, Point 4)
  */
