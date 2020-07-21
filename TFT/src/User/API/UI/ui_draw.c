@@ -45,62 +45,80 @@ void ICON_ReadDisplay(u16 sx,u16 sy, u8 icon)
   lcd_frame_display(sx, sy, ICON_WIDTH, ICON_HEIGHT, ICON_ADDR(icon));
 }
 
-//directly draw BMP file to lcd (pos - GUI_POINT(top left corner of image location on lcd), bmp: path of bmp file)
-bool bmp_DirectDisplay(GUI_POINT pos, char *bmp)
+uint16_t modelFileReadHalfword(FIL* fp)
 {
-  FIL   bmpFile;
-  char  magic[2];
-  int   w,h,bytePerLine;
-  short bpp;
-  int   offset;
-  u8    lcdcolor[4];
-  UINT  mybr;
+	uint8_t ascii[4];
+  UINT mybr;
+  f_read(fp, ascii, 4 ,&mybr);
+  if (mybr != 4) return 0;
+	return string_2_uint32(ascii, 2);
+}
 
-  GUI_COLOR pix;
+bool model_DirectDisplay(GUI_POINT pos, char *gcode)
+{
+  UINT mybr;
+  FIL  gcodeFile;
 
-  if(f_open(&bmpFile,bmp,FA_OPEN_EXISTING | FA_READ)!=FR_OK)
-    return false;
+  if(f_open(&gcodeFile, gcode, FA_OPEN_EXISTING | FA_READ) != FR_OK) return false;
+  // Move the file cursor to the corresponding resolution area
+  f_lseek(&gcodeFile, MODEL_PREVIEW_OFFSET);
+  // Check whether the icon size matches
+  if (modelFileReadHalfword(&gcodeFile) != ICON_WIDTH || modelFileReadHalfword(&gcodeFile) != ICON_HEIGHT) return false;
+  // Move to next line
+  f_lseek(&gcodeFile, gcodeFile.fptr + 3);
 
-  f_read(&bmpFile, magic, 2 ,&mybr);
-  if (memcmp(magic, "BM", 2)){
-    f_close(&bmpFile);
-    return false;
-  }
-
-  f_lseek(&bmpFile, 10);
-  f_read(&bmpFile, &offset, sizeof(int),&mybr);
-
-  f_lseek(&bmpFile, 18);
-  f_read(&bmpFile, &w, sizeof(int),&mybr);
-  f_read(&bmpFile, &h, sizeof(int),&mybr);
-
-  f_lseek(&bmpFile, 28);
-  f_read(&bmpFile, &bpp, sizeof(short),&mybr);
-  if(bpp<24){
-    f_close(&bmpFile);
-    return false;
-  }
-  bpp >>=3;
-  bytePerLine=w*bpp;
-  if(bytePerLine%4 !=0) //bmp
-    bytePerLine=(bytePerLine/4+1)*4;
-
-  for(int j=0; j<h; j++)
-  {
-    f_lseek(&bmpFile, offset+(h-j-1)*bytePerLine);
-    for(int i=0; i<w; i++)
-    {
-      f_read(&bmpFile,(char *)&lcdcolor,bpp,&mybr);
-
-      pix.RGB.r=lcdcolor[2]>>3;
-      pix.RGB.g=lcdcolor[1]>>2;
-      pix.RGB.b=lcdcolor[0]>>3;
-
-      GUI_DrawPixel((pos.x + i), (pos.y + j), pix.color);
-
+  LCD_SetWindow(pos.x, pos.y, pos.x+ICON_WIDTH-1, pos.y+ICON_HEIGHT-1);
+  LCD_WR_REG(0x2C);
+  for (uint16_t y = 0; y < ICON_HEIGHT; y++) {
+    for (uint16_t x = 0; x < ICON_WIDTH; x++) {
+      LCD_WR_16BITS_DATA(modelFileReadHalfword(&gcodeFile));
     }
+    // Move to next line
+    f_lseek(&gcodeFile, gcodeFile.fptr + 3);
   }
-  f_close(&bmpFile);
+
+  return true;
+}
+
+bool model_DecodeToFlash(char *gcode)
+{
+  uint32_t addr = ICON_ADDR(ICON_PREVIEW);
+  uint16_t bnum;
+  uint8_t buf[256];
+  UINT mybr;
+  FIL  gcodeFile;
+
+  if(f_open(&gcodeFile, gcode, FA_OPEN_EXISTING | FA_READ) != FR_OK) return false;
+  // Move the file cursor to the corresponding resolution area
+  f_lseek(&gcodeFile, MODEL_PREVIEW_OFFSET);
+  // Check whether the icon size matches
+  if (modelFileReadHalfword(&gcodeFile) != ICON_WIDTH || modelFileReadHalfword(&gcodeFile) != ICON_HEIGHT) return false;
+  // Move to next line
+  f_lseek(&gcodeFile, gcodeFile.fptr + 3);
+
+  for(bnum = 0; bnum < (ICON_WIDTH*ICON_HEIGHT*2+W25QXX_SECTOR_SIZE-1)/W25QXX_SECTOR_SIZE; bnum++) {
+    W25Qxx_EraseSector(addr + bnum*W25QXX_SECTOR_SIZE);
+  }
+  bnum=0;
+
+  for (uint16_t y = 0; y < ICON_HEIGHT; y++) {
+    for (uint16_t x = 0; x < ICON_WIDTH; x++) {
+      uint16_t color = modelFileReadHalfword(&gcodeFile);
+      buf[bnum++]=(uint8_t)(color >> 8);
+      buf[bnum++]=(uint8_t)(color & 0xFF);
+
+      if(bnum == 256)
+      {
+        W25Qxx_WritePage(buf,addr,256);
+        addr+=256;
+        bnum=0;
+      }
+    }
+    // Move to next line
+    f_lseek(&gcodeFile, gcodeFile.fptr + 3);
+  }
+  W25Qxx_WritePage(buf, addr, bnum);
+
   return true;
 }
 
