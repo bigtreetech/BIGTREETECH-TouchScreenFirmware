@@ -812,6 +812,17 @@ void parseConfigKey(u16 index)
       }
     }
     break;
+  //---------------------------------------------------------Z min Touch Plate:
+  case C_INDEX_TOUCHPLATE_ON:
+    infoSettings.touchplate_on = getOnOff();
+    break;
+
+  case C_INDEX_TOUCHPLATE_HEIGHT:
+    if (inLimit(config_float(),  MIN_SIZE_LIMIT, MAX_SIZE_LIMIT))
+    {
+      infoSettings.touchplate_height = config_float();
+    }
+    break;
 
   //---------------------------------------------------------Power Supply Settings (if connected to TFT Controller):
 

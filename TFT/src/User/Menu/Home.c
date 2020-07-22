@@ -50,7 +50,13 @@ void menuHome(void)
       switch(key_num)
       {
         case KEY_ICON_0: storeCmd("G28 XY\n");   break;
-        case KEY_ICON_1: storeCmd("G28 Z\n"); break;
+        case KEY_ICON_1:
+          storeCmd("G28 Z\n");
+          if(infoSettings.touchplate_on == 1)
+          {
+            storeCmd("G92 Z%.3f\n", infoSettings.touchplate_height);
+          }
+          break;
         case KEY_ICON_4: storeCmd("G92 X0\n"); break;
         case KEY_ICON_5: storeCmd("G92 Y0\n"); break;
         case KEY_ICON_6: storeCmd("G92 Z0\n"); break;
