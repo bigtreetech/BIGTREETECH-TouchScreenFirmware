@@ -72,6 +72,7 @@ void menuUnifiedMove(void)
                       if(infoMachineSettings.autoLevel == 1){
                         if(infoSettings.autoLevelState == 1){
                           storeCmd("M420 S0\n");
+                          
                         }
                         else {
                           storeCmd("M420 S1\n");

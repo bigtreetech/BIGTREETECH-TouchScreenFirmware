@@ -39,7 +39,7 @@ void menuAutoLevelingUBL(void)
         infoMenu.menu[++infoMenu.cur] = menuUBLLoad;
         break;
       case KEY_ICON_3:
-        
+        infoMenu.menu[++infoMenu.cur] = menuZFade;
       break;
       case KEY_ICON_4:
         storeCmd("M851\n");

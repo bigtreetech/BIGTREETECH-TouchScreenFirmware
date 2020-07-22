@@ -94,6 +94,7 @@
 #include "levelingUBL.h"
 #include "levelingUBLSave.h"
 #include "levelingUBLLoad.h"
+#include "ZFade.h"
 #include "BLTouch.h"
 #include "ProbeOffset.h"
 #include "PowerFailed.h"

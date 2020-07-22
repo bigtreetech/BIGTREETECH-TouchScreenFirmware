@@ -642,6 +642,8 @@ void sendQueueCmd(void)
           if(cmd_seen('S')) {
             infoSettings.autoLevelState = cmd_value();
             setParameter(P_ABL_STATE,0,cmd_value());
+            if(cmd_value()==0) storeCmd("M117 ABL inactive\n");
+            else storeCmd("M117 ABL active\n");
           }
           if(cmd_seen('Z')) setParameter(P_ABL_STATE,1,cmd_float());
         break;
