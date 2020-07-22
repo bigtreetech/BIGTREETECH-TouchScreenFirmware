@@ -5,8 +5,6 @@
 #define Z_FADE_MAX_VALUE     20.0f
 #define Z_FADE_DEFAULT_VALUE 10.0f
 
-//static u8 curUnit = 0;
-
 void showZFade(float val)
 {
   char tempstr[20];
