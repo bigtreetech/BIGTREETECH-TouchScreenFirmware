@@ -74,6 +74,8 @@ void readStoredPara(void)
   infoSettings.unified_menu         = byteToWord(data + (index += 4), 4);
   infoSettings.cnc_mode             = byteToWord(data + (index += 4), 4);
   infoSettings.laser_mode           = byteToWord(data + (index += 4), 4);
+  infoSettings.touchplate_on        = byteToWord(data + (index += 4), 4);
+  infoSettings.touchplate_height    = byteToWord(data + (index += 4), 4);
 
   infoSettings.bg_color             = byteToWord(data + (index += 4), 4);
   infoSettings.font_color           = byteToWord(data + (index += 4), 4);
@@ -202,6 +204,8 @@ void storePara(void)
   wordToByte(infoSettings.unified_menu,               data + (index += 4));
   wordToByte(infoSettings.cnc_mode,                   data + (index += 4));
   wordToByte(infoSettings.laser_mode,                 data + (index += 4));
+  wordToByte(infoSettings.touchplate_on,              data + (index += 4));
+  wordToByte(infoSettings.touchplate_height,          data + (index += 4));
 
   wordToByte(infoSettings.bg_color,                   data + (index += 4));
   wordToByte(infoSettings.font_color,                 data + (index += 4));

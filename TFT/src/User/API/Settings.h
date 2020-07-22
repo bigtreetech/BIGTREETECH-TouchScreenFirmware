@@ -49,6 +49,8 @@ typedef struct
   uint8_t  unified_menu;
   uint8_t  cnc_mode;
   uint8_t  laser_mode;
+  float    touchplate_height;
+  uint8_t  touchplate_on;
   uint8_t  rotate_ui;
 
   uint16_t bg_color;
