@@ -252,8 +252,8 @@
 // Enable Laser interface instead of the fan interface (for CNC mode only).
 #define LASER_MODE true
 
-// Why doen't the config.ini cross a reboot
-#define TOUCHPLATE_OFFSET 0.5
+// Change this if you'd like to have a Z offset after homing Z.
+#define TOUCHPLATE_OFFSET 0.0
 
 /**
  * SD support

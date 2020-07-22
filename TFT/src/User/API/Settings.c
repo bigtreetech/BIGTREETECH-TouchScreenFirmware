@@ -28,7 +28,7 @@ void infoSettingsReset(void)
   infoSettings.laser_mode           = LASER_MODE;
   infoSettings.touchplate_on        = ENABLED;
   infoSettings.touchplate_height    = TOUCHPLATE_OFFSET;
-  
+
   infoSettings.bg_color             = lcd_colors[BACKGROUND_COLOR];
   infoSettings.font_color           = lcd_colors[FONT_COLOR];
   infoSettings.title_bg_color       = lcd_colors[TITLE_BACKGROUND_COLOR];

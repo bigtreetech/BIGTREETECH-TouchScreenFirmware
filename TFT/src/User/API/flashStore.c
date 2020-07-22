@@ -75,7 +75,8 @@ void readStoredPara(void)
   infoSettings.cnc_mode             = byteToWord(data + (index += 4), 4);
   infoSettings.laser_mode           = byteToWord(data + (index += 4), 4);
   infoSettings.touchplate_on        = byteToWord(data + (index += 4), 4);
-  infoSettings.touchplate_height    = byteToWord(data + (index += 4), 4);
+  // This only stores integers, we need to store a floating point value.
+  infoSettings.touchplate_height    = (double)(byteToWord(data + (index += 4), 4)) / 1000.0;
 
   infoSettings.bg_color             = byteToWord(data + (index += 4), 4);
   infoSettings.font_color           = byteToWord(data + (index += 4), 4);
@@ -205,7 +206,8 @@ void storePara(void)
   wordToByte(infoSettings.cnc_mode,                   data + (index += 4));
   wordToByte(infoSettings.laser_mode,                 data + (index += 4));
   wordToByte(infoSettings.touchplate_on,              data + (index += 4));
-  wordToByte(infoSettings.touchplate_height,          data + (index += 4));
+  // This only stores integers, we need to store a floating point value.
+  wordToByte((int)(infoSettings.touchplate_height*1000),   data + (index += 4));
 
   wordToByte(infoSettings.bg_color,                   data + (index += 4));
   wordToByte(infoSettings.font_color,                 data + (index += 4));
