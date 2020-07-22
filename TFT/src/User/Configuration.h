@@ -219,12 +219,12 @@
 
 /**
  * Enable Unified Bed Leveling options.
- * The menu options will change according to the option set.
+ *  Will attempt to auto detect and enable specific UBL options.
  * 
- * WARNING - Ensure the correct ABL is chosen, otherwise ABL menu options will behave erratically.
- *           UBL has extra options that are part of the UBL featureset that Bilinear doesn't have.
+ * WARNING - If you're not sure, leave on auto-detect or disabled.
+ *           UBL has extra options leveling systems might not have.
  * 
- * Options:  0: Disabled    1: Enabled    2: Auto-Detect [default]
+ * Options:  0: Disabled    1: Enabled    2: Auto-detect [default]
  * 
  */
 #define ENABLE_UBL_VALUE 2
