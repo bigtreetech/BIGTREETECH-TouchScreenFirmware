@@ -54,7 +54,7 @@ void menuHome(void)
         case KEY_ICON_1:
         if(infoSettings.touchplate_on == 1)
         {
-          storeCmd("G28 Z\n"); storeCmd("G92 Z%.3f\n", infoSettings.touchplate_height);
+          storeCmd("G28 Z\n"); storeCmd("G92 Z%.3f\n", TOUCHPLATE_OFFSET);
         }
         else
         {

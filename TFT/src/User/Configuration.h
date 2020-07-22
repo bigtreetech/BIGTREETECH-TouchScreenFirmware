@@ -252,6 +252,10 @@
 // Enable Laser interface instead of the fan interface (for CNC mode only).
 #define LASER_MODE true
 
+// Why doen't the config.ini cross a reboot
+#define TOUCHPLATE true
+#define TOUCHPLATE_OFFSET 0.5
+
 /**
  * SD support
  * Starting from Marlin Bugfix 2.0.x Distribution Date: 2020-04-27 & above, The TFT will auto detect

@@ -65,7 +65,7 @@ X_CONFIG(PREHEAT_TEMP_2)
 X_CONFIG(PREHEAT_TEMP_3)
 X_CONFIG(PREHEAT_TEMP_4)
 //-----------------------------Z min Touch Plate
-X_CONFIG(TOUCHPLATE_ON )
+X_CONFIG(TOUCHPLATE_ON)
 X_CONFIG(TOUCHPLATE_HEIGHT)
 //-----------------------------Power Supply Settings (if connected to TFT Controller)
 X_CONFIG(PS_ON)
