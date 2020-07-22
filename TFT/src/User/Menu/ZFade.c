@@ -29,7 +29,7 @@ void menuZFade(void)
     {ICON_INC,                  LABEL_INC},
     {ICON_EEPROM_SAVE,          LABEL_EEPROM_SAVE},
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_RESET_VALUE,          LABEL_RESET},
     {ICON_BACK,                 LABEL_BACK},}
   };
 
@@ -75,17 +75,25 @@ void menuZFade(void)
         }
         break;
 
+      case KEY_ICON_6:
+          storeCmd("M420 Z0\n");
+        break;
+
       case KEY_ICON_7:
         infoMenu.cur--;
         break;
 
       default:
         #if LCD_ENCODER_SUPPORT
-          if (encoderPosition) {
+          if (encoderPosition > 0 && Z_Fade_value < Z_FADE_MAX_VALUE) {
             storeCmd("M420 Z%.2f\n", Z_Fade_value + encoderPosition);
             Z_Fade_value += encoderPosition;
             encoderPosition = 0;
-          }
+          } else if (encoderPosition < 0 && Z_Fade_value > Z_FADE_MIN_VALUE) {
+            storeCmd("M420 Z%.2f\n", Z_Fade_value + encoderPosition);
+            Z_Fade_value += encoderPosition;
+            encoderPosition = 0;
+          } else encoderPosition = 0;
         #endif
         break;
     }
