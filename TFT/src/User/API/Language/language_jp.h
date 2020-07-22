@@ -210,4 +210,6 @@
     #define JP_LASER_2                "Laser 2%"
     #define JP_LASER_100              "Laser 100%"
     #define JP_LASER_OFF              "Laser Off"
+    #define JP_CNC_MODE               "CNC Mode"
+    #define JP_LASER_MODE             "Laser Mode"
 #endif

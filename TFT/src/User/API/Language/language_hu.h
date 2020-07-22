@@ -210,4 +210,6 @@
     #define HU_LASER_2                "Laser 2%"
     #define HU_LASER_100              "Laser 100%"
     #define HU_LASER_OFF              "Laser Off"
+    #define HU_CNC_MODE               "CNC Mode"
+    #define HU_LASER_MODE             "Laser Mode"
 #endif

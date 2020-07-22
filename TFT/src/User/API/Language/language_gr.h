@@ -210,4 +210,6 @@
     #define GR_LASER_2                "Laser 2%"
     #define GR_LASER_100              "Laser 100%"
     #define GR_LASER_OFF              "Laser Off"
+    #define GR_CNC_MODE               "CNC Mode"
+    #define GR_LASER_MODE             "Laser Mode"
 #endif

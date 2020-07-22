@@ -210,4 +210,6 @@
     #define DU_LASER_2                "Laser 2%"
     #define DU_LASER_100              "Laser 100%"
     #define DU_LASER_OFF              "Laser Off"
+    #define DU_CNC_MODE               "CNC Mode"
+    #define DU_LASER_MODE             "Laser Mode"
 #endif

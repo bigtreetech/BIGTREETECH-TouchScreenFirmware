@@ -210,4 +210,6 @@
     #define SL_LASER_2                "Laser 2%"
     #define SL_LASER_100              "Laser 100%"
     #define SL_LASER_OFF              "Laser Off"
+    #define SL_CNC_MODE               "CNC Mode"
+    #define SL_LASER_MODE             "Laser Mode"
 #endif

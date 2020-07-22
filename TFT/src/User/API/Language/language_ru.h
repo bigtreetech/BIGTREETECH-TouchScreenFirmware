@@ -210,4 +210,6 @@
     #define RU_LASER_2                "Laser 2%"
     #define RU_LASER_100              "Laser 100%"
     #define RU_LASER_OFF              "Laser Off"
+    #define RU_CNC_MODE               "CNC Mode"
+    #define RU_LASER_MODE             "Laser Mode"
 #endif

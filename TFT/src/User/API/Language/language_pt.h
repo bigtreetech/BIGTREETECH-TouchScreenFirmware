@@ -210,4 +210,6 @@
     #define PT_LASER_2                "Laser 2%"
     #define PT_LASER_100              "Laser 100%"
     #define PT_LASER_OFF              "Laser Off"
+    #define PT_CNC_MODE               "CNC Mode"
+    #define PT_LASER_MODE             "Laser Mode"
 #endif
