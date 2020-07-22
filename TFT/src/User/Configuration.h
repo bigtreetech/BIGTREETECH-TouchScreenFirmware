@@ -253,7 +253,6 @@
 #define LASER_MODE true
 
 // Why doen't the config.ini cross a reboot
-#define TOUCHPLATE true
 #define TOUCHPLATE_OFFSET 0.5
 
 /**
