@@ -23,6 +23,25 @@
   #define TFTLCD_180_DEGREE_REG_VALUE 0x03
 #endif
 
+// HD44780 Simulator pins
+#define LCD2004_simulator
+#ifdef LCD2004_simulator
+  #define LCD_EN      PB15
+  #define LCD_RS      PB12
+  #define LCD_D4      PB13
+  #define LCD_D5      PB14
+  #define LCD_D6      PC7
+  #define LCD_D7      PC6
+  #define LCD_D4_PIN  GPIO_Pin_13
+  #define LCD_D5_PIN  GPIO_Pin_14
+  #define LCD_D6_PIN  GPIO_Pin_7
+  #define LCD_D7_PIN  GPIO_Pin_6
+  #define LCD_D4_PORT GPIOB
+  #define LCD_D5_PORT GPIOB
+  #define LCD_D6_PORT GPIOC
+  #define LCD_D7_PORT GPIOC
+#endif
+
 #ifndef SSD1963_LCD_PARA
   #define SSD1963_LCD_PARA
   #define SSD_DCLK_FREQUENCY   12 // 12Mhz

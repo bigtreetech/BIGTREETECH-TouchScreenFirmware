@@ -5,7 +5,7 @@
 
 HD44780_QUEUE HD44780_queue;
 
-
+#ifdef LCD2004_simulator
 void HD44780_DeConfig(void)
 {
   NVIC_InitTypeDef   NVIC_InitStructure;
@@ -14,31 +14,31 @@ void HD44780_DeConfig(void)
   NVIC_Init(&NVIC_InitStructure);
   free(HD44780_queue.data);
   HD44780_queue.data = 0;
-  GPIO_InitSet(PC6,  MGPIO_MODE_IPN, 0);
-  GPIO_InitSet(PC7,  MGPIO_MODE_IPN, 0);
-  GPIO_InitSet(PB14, MGPIO_MODE_IPN, 0);
-  GPIO_InitSet(PB13, MGPIO_MODE_IPN, 0);
-  GPIO_InitSet(PB12, MGPIO_MODE_IPN, 0);
+  GPIO_InitSet(LCD_D7, MGPIO_MODE_IPN, 0);
+  GPIO_InitSet(LCD_D6, MGPIO_MODE_IPN, 0);
+  GPIO_InitSet(LCD_D5, MGPIO_MODE_IPN, 0);
+  GPIO_InitSet(LCD_D4, MGPIO_MODE_IPN, 0);
+  GPIO_InitSet(LCD_RS, MGPIO_MODE_IPN, 0);
 }
 
 /**
-*PC6 -- D7  4 line mode
-*PC7 -- D6
-*PB14-- D5
-*PB13-- D4 
-*PB15-- EN
-*PB12-- RS
+* LCD_EN  PB15  4 line mode
+* LCD_RS  PB12 
+* LCD_D4  PB13 
+* LCD_D5  PB14 
+* LCD_D6  PC7 
+* LCD_D7  PC6 
 */
 void HD44780_Config(void)
 {
   HD44780_queue.data = malloc(HD44780_data_MAX);
   while(!HD44780_queue.data); // malloc failed
 
-  GPIO_InitSet(PC6,  MGPIO_MODE_IPD, 0);
-  GPIO_InitSet(PC7,  MGPIO_MODE_IPD, 0);
-  GPIO_InitSet(PB14, MGPIO_MODE_IPD, 0);
-  GPIO_InitSet(PB13, MGPIO_MODE_IPD, 0);
-  GPIO_InitSet(PB12, MGPIO_MODE_IPD, 0);
+  GPIO_InitSet(LCD_D7, MGPIO_MODE_IPD, 0);
+  GPIO_InitSet(LCD_D6, MGPIO_MODE_IPD, 0);
+  GPIO_InitSet(LCD_D5, MGPIO_MODE_IPD, 0);
+  GPIO_InitSet(LCD_D4, MGPIO_MODE_IPD, 0);
+  GPIO_InitSet(LCD_RS, MGPIO_MODE_IPD, 0);
 
   EXTI_InitTypeDef   EXTI_InitStructure;
   NVIC_InitTypeDef   NVIC_InitStructure;
@@ -59,3 +59,4 @@ void HD44780_Config(void)
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;								//Enable external interrupt channel
   NVIC_Init(&NVIC_InitStructure);
 }
+#endif

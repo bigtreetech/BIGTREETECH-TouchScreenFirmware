@@ -22,7 +22,7 @@
 SPI_QUEUE SPISlave;
 extern HD44780_QUEUE HD44780_queue;
 uint8_t data = 0;
-uint8_t highbit = 1, RS = 0;
+uint8_t highbit = 1;
 
 void SPI_ReEnable(u8 mode)
 {
@@ -113,26 +113,29 @@ void SPI_Slave_CS_Config(void)
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;								//Enable external interrupt channel
   NVIC_Init(&NVIC_InitStructure);
 }
-
+#endif
 
 /*External interruption
-Receive HD44780 data on the EN(PB15) rising edge, or ST7920 adaptive SPI mode
-*PC6 -- D7  4 line mode
-*PC7 -- D6
-*PB14-- D5
-*PB13-- D4
+*Receive HD44780 data on the EN rising edge, or ST7920 adaptive SPI mode
+LCD_EN 
+LCD_RS 
+LCD_D4 
+LCD_D5 
+LCD_D6 
+LCD_D7
 */
 void EXTI15_10_IRQHandler(void)
 {
   uint8_t buffer = 0;
   switch(infoSettings.mode)
   {
+    #ifdef LCD2004_simulator
     case LCD2004:
       if((GPIOB->IDR & (1<<15)) != 0){
-        buffer = ((GPIOC->IDR & (1<<6))  >> 3 ) +     //D7
-                 ((GPIOC->IDR & (1<<7))  >> 5 ) +     //D6
-                 ((GPIOB->IDR & (1<<14)) >> 13) +     //D5
-                 ((GPIOB->IDR & (1<<13)) >> 13);      //D4
+        buffer = ((LCD_D7_PORT->IDR & LCD_D7_PIN) >> 3 ) +     //D7
+                 ((LCD_D6_PORT->IDR & LCD_D6_PIN) >> 5 ) +     //D6
+                 ((LCD_D5_PORT->IDR & LCD_D5_PIN) >> 13) +     //D5
+                 ((LCD_D4_PORT->IDR & LCD_D4_PIN) >> 13) ;     //D4
         if(highbit){
           data = buffer << 4;
           highbit = 0;
@@ -150,6 +153,7 @@ void EXTI15_10_IRQHandler(void)
       }       //Receive HD44780 data
       EXTI->PR = 1<<15;
     break;
+    #endif
     
     case LCD12864:
       if((GPIOB->IDR & (1<<12)) != 0)
@@ -167,4 +171,3 @@ void EXTI15_10_IRQHandler(void)
   }
 }
 
-#endif

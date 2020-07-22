@@ -22,7 +22,6 @@ u32 select_mode [SELECTMODE]={
 
 void show_selectICON(void)
 {
-
   for(u8 i=0;i<SELECTMODE;i++)
   {
     lcd_frame_display(rect_of_mode[i].x0, rect_of_mode[i].y0, ICON_WIDTH, ICON_HEIGHT,ICON_ADDR(select_mode[i]));

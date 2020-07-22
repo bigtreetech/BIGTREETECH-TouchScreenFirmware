@@ -5,6 +5,7 @@
 #include "HD44780.h"
 #include "ST7920_Simulator.h"
 
+#ifdef LCD2004_simulator
 uint8_t HD44780_CGRAM[8][8]; // [64*2] = [4 * 16*2*8], means 4 * [16*16] bitmap font,
 
 const uint8_t ascii24x32[] = {
@@ -887,8 +888,8 @@ void HD44780_DrawPixel(int16_t x, int16_t y, bool isForeGround)
 void HD44780_DispDDRAM(uint8_t data)
 {
   uint16_t i  = 0,
-          ex = HD44780.x + 5,  // 5*8 bitmap
-          ey = HD44780.y + 8;
+           ex = HD44780.x + 5,  // 5*8 bitmap
+           ey = HD44780.y + 8;
   if(data < 8){
     HD44780_CGRAM[data][0];
     for(uint8_t y = HD44780.y; y < ey; y++){
@@ -1030,3 +1031,4 @@ void menuHD44780(void)
   }
   HD44780_DeConfig();
 }
+#endif

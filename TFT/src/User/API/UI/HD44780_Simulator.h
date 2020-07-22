@@ -4,6 +4,7 @@
 #include "stdint.h"
 #include "../../Configuration.h"
 
+// #ifdef LCD2004_simulator
 // User-defined colors for 12864 mode from Configuration.h
 #ifndef HD44780_BKCOLOR
   #define HD44780_BKCOLOR LCD_BLACK
@@ -183,7 +184,7 @@ typedef struct {
   HD44780_DATA_TYPE   data_type;
 }HD44780_REG; // Extended Instruction
 
-
 void menuHD44780(void);
 
 #endif
+// #endif
