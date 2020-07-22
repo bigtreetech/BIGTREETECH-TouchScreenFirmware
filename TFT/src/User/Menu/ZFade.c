@@ -5,17 +5,6 @@
 #define Z_FADE_MAX_VALUE     20.0f
 #define Z_FADE_DEFAULT_VALUE 10.0f
 
-//#define ITEM_PROBE_OFFSET_UNIT_NUM 3
-
-//const ITEM itemProbeOffsetUnit[ITEM_PROBE_OFFSET_UNIT_NUM] = {
-// icon                       label
-//  {ICON_001_MM,               LABEL_001_MM},
-//  {ICON_01_MM,                LABEL_01_MM},
-//  {ICON_1_MM,                 LABEL_1_MM},
-//};
-
-//const float probeOffset_unit[ITEM_PROBE_OFFSET_UNIT_NUM] = {0.01f, 0.1f, 1};
-
 //static u8 curUnit = 0;
 
 void showZFade(float val)
@@ -53,9 +42,9 @@ void menuZFade(void)
   menuDrawPage(&ZFadeItems);
   showZFade(now);
 
-//#if LCD_ENCODER_SUPPORT
-//  encoderPosition = 0;
-//#endif
+#if LCD_ENCODER_SUPPORT
+  encoderPosition = 0;
+#endif
 
   while (infoMenu.menu[infoMenu.cur] == menuZFade)
   {
@@ -68,7 +57,6 @@ void menuZFade(void)
       case KEY_ICON_0:
         if (Z_Fade_value > Z_FADE_MIN_VALUE)
         {
-          //setParameter(P_ABL_STATE,1,Z_Fade_value-1);
           storeCmd("M420 Z%.2f\n", Z_Fade_value-1);
         }
         break;
@@ -77,7 +65,6 @@ void menuZFade(void)
       case KEY_ICON_3:
         if (Z_Fade_value < Z_FADE_MAX_VALUE)
         {
-          //setParameter(P_ABL_STATE,1,Z_Fade_value+1);
           storeCmd("M420 Z%.2f\n", Z_Fade_value+1);
         }
         break;
@@ -86,7 +73,6 @@ void menuZFade(void)
       case KEY_ICON_4:
         if (infoMachineSettings.EEPROM == 1)
         {
-          //storeCmd("M500\n");
           SaveEepromPrompt();
         }
         break;
@@ -96,14 +82,13 @@ void menuZFade(void)
         break;
 
       default:
-        //#if LCD_ENCODER_SUPPORT
-        //  if (encoderPosition)
-        //  {
-        //    storeCmd("M851 Z%.2f\n", Z_Fade_value + probeOffset_unit[curUnit] * encoderPosition);
-        //    Z_Fade_value += probeOffset_unit[curUnit] * encoderPosition;
-        //    encoderPosition = 0;
-        //  }
-        //#endif
+        #if LCD_ENCODER_SUPPORT
+          if (encoderPosition) {
+            storeCmd("M420 Z%.2f\n", Z_Fade_value + encoderPosition);
+            Z_Fade_value += encoderPosition;
+            encoderPosition = 0;
+          }
+        #endif
         break;
     }
 
