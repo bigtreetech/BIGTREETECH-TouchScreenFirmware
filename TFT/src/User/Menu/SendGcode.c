@@ -108,6 +108,21 @@ void menuDrawSendGcode(void)
   TSC_ReDrawIcon = sendGcodeReDrawButton;
 }
 
+#define TERMINAL_MAX_CHAR (LCD_WIDTH/BYTE_WIDTH * (LCD_HEIGHT - BYTE_HEIGHT) /BYTE_HEIGHT)
+
+char terminalBuf[TERMINAL_MAX_CHAR];
+void sendGcodeTerminalCache(char *stream, TERMINAL_SRC src)
+{
+  const char* const terminalSign[] = {"Send: ", "Rcv: "};
+  if (infoMenu.menu[infoMenu.cur] != menuSendGcode && infoMenu.menu[infoMenu.cur] != menuTerminal) return;
+  if (strlen(terminalBuf) + strlen(stream) + strlen(terminalSign[src]) >= TERMINAL_MAX_CHAR)
+  {
+    terminalBuf[0] = 0;
+  }
+  strlcat(terminalBuf, terminalSign[src], TERMINAL_MAX_CHAR);
+  strlcat(terminalBuf, stream, TERMINAL_MAX_CHAR);
+}
+
 void menuSendGcode(void)
 {
   GUI_RECT gcodeRect = {rect_of_Gkey[GKEY_BACK].x1+10, rect_of_Gkey[GKEY_BACK].y0, rect_of_Gkey[GKEY_SEND].x0-10, rect_of_Gkey[GKEY_SEND].y1};
@@ -135,6 +150,7 @@ void menuSendGcode(void)
         {
           gcodeBuf[nowIndex++] = '\n'; // End char '\n' for Gcode
           gcodeBuf[nowIndex] = 0;
+          terminalBuf[0] = 0;
           storeCmd(gcodeBuf);
           gcodeBuf[nowIndex = 0] = 0;
         }
@@ -182,21 +198,6 @@ void menuSendGcode(void)
   GUI_RestoreColorDefault();
 }
 
-
-#define TERMINAL_MAX_CHAR (LCD_WIDTH/BYTE_WIDTH * (LCD_HEIGHT - BYTE_HEIGHT) /BYTE_HEIGHT)
-
-char terminalBuf[TERMINAL_MAX_CHAR];
-void sendGcodeTerminalCache(char *stream, TERMINAL_SRC src)
-{
-  const char* const terminalSign[] = {"Send: ", "Rcv: "};
-  if (infoMenu.menu[infoMenu.cur] != menuSendGcode && infoMenu.menu[infoMenu.cur] != menuTerminal) return;
-  if (strlen(terminalBuf) + strlen(stream) + strlen(terminalSign[src]) >= TERMINAL_MAX_CHAR)
-  {
-    terminalBuf[0] = 0;
-  }
-  strlcat(terminalBuf, terminalSign[src], TERMINAL_MAX_CHAR);
-  strlcat(terminalBuf, stream, TERMINAL_MAX_CHAR);
-}
 
 #define CURSOR_START_X 0
 #define CURSOR_END_X   LCD_WIDTH
