@@ -158,7 +158,7 @@
     #define HU_SEND_END_GCODE         "Befejező G-Kód Küldése"
     #define HU_SEND_CANCEL_GCODE      "G-Kód Visszavonás"
     #define HU_PERSISTENT_STATUS_INFO "Perzisztens állapotinfó"
-    #define HU_FILE_LISTMODE          "Fájlnéző lista mód"
+    #define HU_FILE_LISTMODE          "Fájlnéző listamód"
     #define HU_CURRENT_SETTING        "Motoráramok Beállítása"
     #define HU_STEPS_SETTING          "Lépés Beállítás"
     #define HU_MAXFEEDRATE            "Max Előtolási Sebesség"
