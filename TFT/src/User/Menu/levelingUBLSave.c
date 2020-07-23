@@ -7,10 +7,10 @@ const MENUITEMS UBLSave = {
 // title
 LABEL_ABL_SETTINGS_UBL_SAVE,
 // icon                        label
- {{ICON_LEVELING,              LABEL_ABL_SLOT0},
-  {ICON_LEVELING,              LABEL_ABL_SLOT1},
-  {ICON_LEVELING,              LABEL_ABL_SLOT2},
-  {ICON_LEVELING,              LABEL_ABL_SLOT3},
+ {{ICON_S_SAVE,                LABEL_ABL_SLOT0},
+  {ICON_S_SAVE,                LABEL_ABL_SLOT1},
+  {ICON_S_SAVE,                LABEL_ABL_SLOT2},
+  {ICON_S_SAVE,                LABEL_ABL_SLOT3},
   {ICON_BACKGROUND,            LABEL_BACKGROUND},
   {ICON_BACKGROUND,            LABEL_BACKGROUND},
   {ICON_BACKGROUND,            LABEL_BACKGROUND},

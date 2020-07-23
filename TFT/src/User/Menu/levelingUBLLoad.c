@@ -8,10 +8,10 @@ const MENUITEMS UBLLoad = {
 // title
 LABEL_ABL_SETTINGS_UBL_LOAD,
 // icon                        label
- {{ICON_LEVELING,              LABEL_ABL_SLOT0},
-  {ICON_LEVELING,              LABEL_ABL_SLOT1},
-  {ICON_LEVELING,              LABEL_ABL_SLOT2},
-  {ICON_LEVELING,              LABEL_ABL_SLOT3},
+ {{ICON_S_LOAD,                LABEL_ABL_SLOT0},
+  {ICON_S_LOAD,                LABEL_ABL_SLOT1},
+  {ICON_S_LOAD,                LABEL_ABL_SLOT2},
+  {ICON_S_LOAD,                LABEL_ABL_SLOT3},
   {ICON_BACKGROUND,            LABEL_BACKGROUND},
   {ICON_BACKGROUND,            LABEL_BACKGROUND},
   {ICON_BACKGROUND,            LABEL_BACKGROUND},

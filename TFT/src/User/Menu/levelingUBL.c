@@ -6,9 +6,9 @@ const MENUITEMS autoLevelingItemsUBL = {
 LABEL_ABL_SETTINGS_UBL,
 // icon                        label
  {{ICON_LEVELING,              LABEL_ABL_START},
-  {ICON_LEVELING,              LABEL_EEPROM_SAVE},
-  {ICON_LEVELING,              LABEL_LOAD},
-  {ICON_LEVELING,              LABEL_ABL_Z},
+  {ICON_S_SAVE,                LABEL_EEPROM_SAVE},
+  {ICON_S_LOAD,                LABEL_LOAD},
+  {ICON_Z_FADE,                LABEL_ABL_Z},
   {ICON_PROBE_OFFSET,          LABEL_Z_OFFSET},
   {ICON_BABYSTEP,              LABEL_BABYSTEP},
   {ICON_BLTOUCH,               LABEL_BLTOUCH},
@@ -29,7 +29,6 @@ void menuAutoLevelingUBL(void)
         storeCmd("G28\n");
         storeCmd("G29 P1\n");
         storeCmd("G29 P3\n");
-        storeCmd("M400\n");
         storeCmd("M118 A1 UBL Complete\n");
         break;
       case KEY_ICON_1:
