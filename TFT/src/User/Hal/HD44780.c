@@ -1,11 +1,12 @@
 #include "GPIO_Init.h"
-#include "../HD44780.h"
+#include "HD44780.h"
 #include "stdlib.h"
 #include "Settings.h"
 
+#ifdef LCD2004_simulator
+
 HD44780_QUEUE HD44780_queue;
 
-#ifdef LCD2004_simulator
 void HD44780_DeConfig(void)
 {
   NVIC_InitTypeDef   NVIC_InitStructure;
@@ -43,8 +44,14 @@ void HD44780_Config(void)
   EXTI_InitTypeDef   EXTI_InitStructure;
   NVIC_InitTypeDef   NVIC_InitStructure;
   /* Connect GPIOB12 to the interrupt line */
+  #if !defined(TFT24_V1_1) 
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);//Enable SYSCFG clock
   SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOB, EXTI_PinSource15);//PB15 is connected to interrupt line 15
+  #else
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
+  GPIO_EXTILineConfig(GPIO_PortSourceGPIOB, GPIO_PinSource12); 
+  #endif
+
 
   /*Set interrupt line 12 bit external falling edge interrupt */
   EXTI_InitStructure.EXTI_Line = EXTI_Line15;

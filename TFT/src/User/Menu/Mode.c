@@ -79,7 +79,8 @@ void infoMenuSelect(void)
       infoMenu.menu[infoMenu.cur] = menuST7920;
       break;
     #endif
-
+    
+    #ifdef LCD2004_simulator
     case LCD2004:
       if (infoSettings.serial_alwaysOn == 1)
       {
@@ -98,6 +99,8 @@ void infoMenuSelect(void)
       GUI_SetBkColor(infoSettings.marlin_mode_bg_color);
       infoMenu.menu[infoMenu.cur] = menuHD44780;
     break;
+    #endif
+
     default:
     break;
 
