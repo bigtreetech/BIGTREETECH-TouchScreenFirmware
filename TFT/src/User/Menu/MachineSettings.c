@@ -67,7 +67,6 @@ void loaditemsCustomGcode()
 void menuCustom(void)
 {
   //load custom codes
-  gc_cur_page = 0;
   CUSTOM_GCODES tempcodes;
   customcodes = &tempcodes;
   W25Qxx_ReadBuffer((u8*)&tempcodes,CUSTOM_GCODE_ADDR,sizeof(CUSTOM_GCODES));
@@ -117,6 +116,7 @@ void menuCustom(void)
       }
       break;
     case KEY_ICON_7:
+      gc_cur_page = 0;
       infoMenu.cur--;
       break;
     default:
@@ -202,15 +202,6 @@ void menuMachineSettings(void)
     {ICON_BACK,                 LABEL_BACK},}
   };
 
-  //prevent some option from showing during print
-  const ITEM no_item = {ICON_BACKGROUND, LABEL_BACKGROUND};
-  if(isPrinting())
-  {
-    machineSettingsItems.items[2] = no_item;
-    machineSettingsItems.items[3] = no_item;
-    machineSettingsItems.items[4] = no_item;
-  }
-
   KEY_VALUES key_num = KEY_IDLE;
   menuDrawPage(&machineSettingsItems);
 
@@ -219,7 +210,6 @@ void menuMachineSettings(void)
     key_num = menuKeyGetValue();
     switch(key_num)
     {
-
       case KEY_ICON_0:
         infoMenu.menu[++infoMenu.cur] = menuRGBSettings;
         break;
@@ -229,18 +219,15 @@ void menuMachineSettings(void)
         break;
 
       case KEY_ICON_2:
-        if(!isPrinting())
-          infoMenu.menu[++infoMenu.cur] =  menuCustom;
+        infoMenu.menu[++infoMenu.cur] =  menuCustom;
         break;
 
       case KEY_ICON_3:
-        if(!isPrinting())
-          infoMenu.menu[++infoMenu.cur] = menuSendGcode;
+        infoMenu.menu[++infoMenu.cur] = menuSendGcode;
         break;
 
       case KEY_ICON_4:
-        if(!isPrinting())
-          storeCmd("M81\n");
+        storeCmd("M81\n");
         break;
 
       case KEY_ICON_7:
