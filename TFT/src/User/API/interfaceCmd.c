@@ -491,7 +491,7 @@ void sendQueueCmd(void)
           {
             TOOL i = heatGetCurrentToolNozzle();
             if(cmd_seen('T')) i = (TOOL)(cmd_value() + NOZZLE0);
-            infoCmd.queue[infoCmd.index_r].gcode[3]='4';  // Avoid send M109 to Marlin
+            infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 3]='4';  // Avoid send M109 to Marlin
             if (cmd_seen('R'))
             {
               infoCmd.queue[infoCmd.index_r].gcode[cmd_index-1] = 'S';
@@ -553,7 +553,7 @@ void sendQueueCmd(void)
         case 190: //M190
           if (fromTFT)
           {
-            infoCmd.queue[infoCmd.index_r].gcode[2]='4';   // Avoid send M190 to Marlin
+            infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 2]='4';   // Avoid send M190 to Marlin
             if (cmd_seen('R'))
             {
               infoCmd.queue[infoCmd.index_r].gcode[cmd_index-1] = 'S';
@@ -685,8 +685,7 @@ void sendQueueCmd(void)
       break; //end parsing M-codes
 
     case 'G':
-
-      cmd=strtol(&infoCmd.queue[infoCmd.index_r].gcode[1],NULL,10);
+      cmd=strtol(&infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 1],NULL,10);
       switch(cmd)
       {
         case 0: //G0
@@ -744,7 +743,7 @@ void sendQueueCmd(void)
       break; //end parsing G-codes
 
     case 'T':
-      cmd=strtol(&infoCmd.queue[infoCmd.index_r].gcode[1], NULL, 10);
+      cmd=strtol(&infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 1], NULL, 10);
       heatSetCurrentToolNozzle((TOOL)(cmd + NOZZLE0));
       break;
 
