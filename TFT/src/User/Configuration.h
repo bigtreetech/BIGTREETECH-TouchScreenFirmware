@@ -69,11 +69,13 @@
  *  Text displayed at the top of the TFT in Marlin Mode.
  */
 #define ST7920_BANNER_TEXT "LCD12864 Simulator"
+#define HD44780_BANNER_TEXT "LCD2004 Simulator"
 
 /**
  *  show banner text at the top of the TFT in Marlin Mode.
  */
-#define ST7920_SHOW_BANNER true //to enabled: true | to disabled: false
+#define ST7920_SHOW_BANNER  true //to enabled: true | to disabled: false
+#define HD44780_SHOW_BANNER true 
 /**
  * Run Marlin Mode in Fullscreen
  *
