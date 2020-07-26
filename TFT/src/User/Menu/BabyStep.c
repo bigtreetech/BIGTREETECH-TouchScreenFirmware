@@ -1,7 +1,6 @@
 #include "BabyStep.h"
 #include "includes.h"
 
-#define BABYSTEP_DISPLAY_ID    "BabyStep/Z Offset"
 #define BABYSTEP_MIN_VALUE     -5.0f
 #define BABYSTEP_MAX_VALUE     5.0f
 #define BABYSTEP_DEFAULT_VALUE 0.0f
@@ -68,7 +67,6 @@ void babySetDefaultOffset(void)
 
 void babyStepReDraw(bool skip_header)
 {
-
   if (!skip_header)
   {
     GUI_DispString(exhibitRect.x0, exhibitRect.y0, textSelect(LABEL_BABYSTEP));
@@ -161,7 +159,8 @@ void menuBabyStep(void)
 
       // reset babystep to default value
       case KEY_ICON_6:
-        babySetDefaultOffset();
+        if (baby_step_value != BABYSTEP_DEFAULT_VALUE)
+          babySetDefaultOffset();
         break;
 
       case KEY_ICON_7:

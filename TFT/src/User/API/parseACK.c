@@ -12,15 +12,16 @@ const char *const ignoreEcho[] = {
   "Now doing file:,"
   "Probe Offset",
   "Flow:",
-  "echo:;",     //M503
-  "echo:  G",   //M503
-  "echo:  M",   //M503
-  "Cap:",       //M115
-  "Config:",    //M360
-  "Settings Stored", // M500
-  "echo:Fade Height", //M420
-  "echo:Bed Leveling"
-};
+  "echo:;",                  //M503
+  "echo:  G",                //M503
+  "echo:  M",                //M503
+  "Cap:",                    //M115
+  "Config:",                 //M360
+  "Settings Stored",         //M500
+  "echo:Soft endstops:",     //M211
+  "echo:Bed Leveling",       //M420
+  "echo:Fade Height"         //M420
+  };
 
 bool portSeen[_UART_CNT] = {false, false, false, false, false, false};
 
