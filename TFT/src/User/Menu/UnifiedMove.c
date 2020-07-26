@@ -1,6 +1,30 @@
 #include "UnifiedMove.h"
 #include "includes.h"
 
+static u32 nextTime = 0;
+static u32 update_time = 1000; // 1 seconds is 1000
+
+void updateABL(MENUITEMS *menu)
+{
+  if (OS_GetTimeMs() > nextTime)
+  {
+    nextTime = OS_GetTimeMs() + update_time;
+
+    //menuDrawPage(menu);
+    menuDrawItem(&menu->items[6], 6);
+
+    if(infoMachineSettings.autoLevel == 1) {
+      if(infoSettings.autoLevelState == 1) {
+      menu->items[6].icon = ICON_EEPROM_SAVE;
+      menu->items[6].label.index = LABEL_ABL_ENABLE;
+      }
+      else {
+        menu->items[6].icon = ICON_STOP;
+        menu->items[6].label.index = LABEL_ABL_DISABLE;
+      }
+    }
+  }
+}
 
 void menuUnifiedMove(void)
 {
@@ -81,6 +105,7 @@ void menuUnifiedMove(void)
       case KEY_ICON_7: infoMenu.cur--; break;
       default: break;
     }
+    updateABL(&UnifiedMoveItems);
     loopProcess();
   }
 }

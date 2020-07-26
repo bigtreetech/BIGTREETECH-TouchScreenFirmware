@@ -721,6 +721,7 @@ void sendQueueCmd(void)
         case 28: //G28
           coordinateSetKnown(true);
           babyStepReset();
+          storeCmd("M503 S0\n");
           break;
 
         case 29: //G29
