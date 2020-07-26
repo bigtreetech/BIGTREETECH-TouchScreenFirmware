@@ -30,7 +30,8 @@ void probeStartZOffset(void)
     getParameter(P_PROBE_OFFSET, X_STEPPER),
     getParameter(P_PROBE_OFFSET, Y_STEPPER));              // move nozzle to XY probing point
   mustStoreCmd("G90\n");                                   // set absolute position mode
-  mustStoreCmd("G1 Z0\n");                                 // move nozzle to Z0 absolute point
+  mustStoreCmd("G1 Z%.2f F400\n",
+    getParameter(P_PROBE_OFFSET, Z_STEPPER));              // Move nozzle to previously set Z...slowly
   mustStoreCmd("M211 S0\n");                               // disable Software Endstop to move nozzle minus Zero (Z0) if necessary
   mustStoreCmd("G91\n");                                   // set relative position mode
   mustStoreCmd("G1 F%d\n",
