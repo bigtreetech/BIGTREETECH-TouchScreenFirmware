@@ -27,7 +27,7 @@ void menuZFade(void)
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
     {ICON_INC,                  LABEL_INC},
-    {ICON_EEPROM_SAVE,          LABEL_EEPROM_SAVE},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
     {ICON_RESET_VALUE,          LABEL_RESET},
     {ICON_BACK,                 LABEL_BACK},}
@@ -39,6 +39,7 @@ void menuZFade(void)
 
   menuDrawPage(&ZFadeItems);
   showZFade(now);
+  bool changed = false;
 
 #if LCD_ENCODER_SUPPORT
   encoderPosition = 0;
@@ -56,6 +57,7 @@ void menuZFade(void)
         if (Z_Fade_value > Z_FADE_MIN_VALUE)
         {
           storeCmd("M420 Z%.2f\n", Z_Fade_value-1);
+          changed = true;
         }
         break;
 
@@ -64,14 +66,7 @@ void menuZFade(void)
         if (Z_Fade_value < Z_FADE_MAX_VALUE)
         {
           storeCmd("M420 Z%.2f\n", Z_Fade_value+1);
-        }
-        break;
-
-      //save to eeprom
-      case KEY_ICON_4:
-        if (infoMachineSettings.EEPROM == 1)
-        {
-          SaveEepromPrompt();
+          changed = true;
         }
         break;
 
@@ -80,7 +75,15 @@ void menuZFade(void)
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur--;
+        if (changed == true && infoMachineSettings.EEPROM == 1)
+        {
+          showDialog(DIALOG_TYPE_QUESTION, textSelect(ZFadeItems.title.index), textSelect(LABEL_EEPROM_SAVE_INFO),
+                     textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), saveEepromSettings, NULL, NULL);
+        }
+        else
+        {
+          infoMenu.cur--;
+        }
         break;
 
       default:
