@@ -48,6 +48,8 @@
     #define PT_BLTOUCH_REPEAT         "Repetir"
     #define PT_Z_OFFSET               "Z Offset"
     #define PT_PROBE_OFFSET           "Probe Offset"
+    #define PT_NOZZLE_DOWN            "Down"
+    #define PT_NOZZLE_UP              "Up"
     #define PT_EEPROM_SAVE            "Gravar"
     #define PT_APPLY                  "Apply"
     #define PT_INC                    "Aumentar"

@@ -48,6 +48,8 @@
     #define SK_BLTOUCH_REPEAT         "Opakovať"
     #define SK_Z_OFFSET               "Z Offset"
     #define SK_PROBE_OFFSET           "Probe Offset"
+    #define SK_NOZZLE_DOWN            "Down"
+    #define SK_NOZZLE_UP              "Up"
     #define SK_EEPROM_SAVE            "Uložiť"
     #define SK_APPLY                  "Apply"
     #define SK_INC                    "Pridať"

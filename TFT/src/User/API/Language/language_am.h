@@ -48,6 +48,8 @@
     #define AM_BLTOUCH_REPEAT         "Repeat"
     #define AM_Z_OFFSET               "Z Offset"
     #define AM_PROBE_OFFSET           "Probe Offset"
+    #define AM_NOZZLE_DOWN            "Down"
+    #define AM_NOZZLE_UP              "Up"
     #define AM_EEPROM_SAVE            "Save"
     #define AM_APPLY                  "Apply"
     #define AM_INC                    "Ավելացնել"

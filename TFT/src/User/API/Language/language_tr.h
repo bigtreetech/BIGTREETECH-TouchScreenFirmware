@@ -48,6 +48,8 @@
     #define TR_BLTOUCH_REPEAT         "Repeat"
     #define TR_Z_OFFSET               "Z Offset"
     #define TR_PROBE_OFFSET           "Probe Offset"
+    #define TR_NOZZLE_DOWN            "Down"
+    #define TR_NOZZLE_UP              "Up"
     #define TR_EEPROM_SAVE            "Kaydet"
     #define TR_APPLY                  "Apply"
     #define TR_INC                    "Arttır"

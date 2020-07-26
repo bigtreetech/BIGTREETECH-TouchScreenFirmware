@@ -48,6 +48,8 @@
     #define SL_BLTOUCH_REPEAT         "Ponovi"
     #define SL_Z_OFFSET               "Z odmik"
     #define SL_PROBE_OFFSET           "Odmik sonde"
+    #define SL_NOZZLE_DOWN            "Down"
+    #define SL_NOZZLE_UP              "Up"
     #define SL_EEPROM_SAVE            "Shrani"
     #define SL_APPLY                  "Uporabi"
     #define SL_INC                    "Več"

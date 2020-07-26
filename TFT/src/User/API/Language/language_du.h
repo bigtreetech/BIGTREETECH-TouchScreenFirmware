@@ -48,6 +48,8 @@
     #define DU_BLTOUCH_REPEAT         "Herhaal"
     #define DU_Z_OFFSET               "Z Offset"
     #define DU_PROBE_OFFSET           "Probe Offset"
+    #define DU_NOZZLE_DOWN            "Down"
+    #define DU_NOZZLE_UP              "Up"
     #define DU_EEPROM_SAVE            "Bewaren"
     #define DU_APPLY                  "Apply"
     #define DU_INC                    "Verhogen"

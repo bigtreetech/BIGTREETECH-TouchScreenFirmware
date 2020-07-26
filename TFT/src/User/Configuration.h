@@ -222,12 +222,20 @@
  *  Will attempt to auto detect and enable specific UBL options.
  * 
  * WARNING - If you're not sure, leave on auto-detect or disabled.
- *           UBL has extra options leveling systems might not have.
+ *           UBL has extra options other leveling systems might not have.
  * 
  * Options:  0: Disabled    1: Enabled    2: Auto-detect [default]
  * 
  */
 #define ENABLE_UBL_VALUE 2
+
+/**
+ * Enable friendly probe offset language.
+ * 
+ * Decrease/increase and "-" & "+" icons are replaced with down/up and friendly icons
+ * 
+ */
+#define FRIENDLY_PROBE_OFFSET_LANGUAGE
 
 /**
  * Manual Leveling

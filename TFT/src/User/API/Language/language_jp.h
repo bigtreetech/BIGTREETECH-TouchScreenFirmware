@@ -31,6 +31,8 @@
     #define JP_BLTOUCH_REPEAT         "繰り返す"
     #define JP_Z_OFFSET               "Zオフセット"
     #define JP_PROBE_OFFSET           "プローブオフセット"
+    #define JP_NOZZLE_DOWN            "Down"
+    #define JP_NOZZLE_UP              "Up"
     #define JP_EEPROM_SAVE            "保存"
     #define JP_APPLY                  "適用"
     #define JP_ABL_COMPLETE           "Bed Leveling Complete"

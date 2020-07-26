@@ -48,6 +48,8 @@
     #define RU_BLTOUCH_REPEAT         "Точность Z"
     #define RU_Z_OFFSET               "Отступ Z"
     #define RU_PROBE_OFFSET           "Смещение датчика"
+    #define RU_NOZZLE_DOWN            "Down"
+    #define RU_NOZZLE_UP              "Up"
     #define RU_EEPROM_SAVE            "Сохранить"
     #define RU_APPLY                  "Применить"
     #define RU_INC                    "Увеличить"

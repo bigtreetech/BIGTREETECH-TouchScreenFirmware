@@ -48,6 +48,8 @@
     #define FR_BLTOUCH_REPEAT         "Répéter"
     #define FR_Z_OFFSET               "Z Offset"
     #define FR_PROBE_OFFSET           "Probe Offset"
+    #define FR_NOZZLE_DOWN            "Down"
+    #define FR_NOZZLE_UP              "Up"
     #define FR_EEPROM_SAVE            "Sauver"
     #define FR_APPLY                  "Apply"
     #define FR_INC                    "Plus"

@@ -48,6 +48,8 @@
     #define GR_BLTOUCH_REPEAT         "Επανάληψη"
     #define GR_Z_OFFSET               "Αντιστάθμιση Z"
     #define GR_PROBE_OFFSET           "Αντιστάθμιση Καθετήρας"
+    #define GR_NOZZLE_DOWN            "Down"
+    #define GR_NOZZLE_UP              "Up"
     #define GR_EEPROM_SAVE            "Αποθήκευση"
     #define GR_APPLY                  "Apply"
     #define GR_INC                    "Αύξηση"

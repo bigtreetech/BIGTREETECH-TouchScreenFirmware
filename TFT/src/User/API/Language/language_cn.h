@@ -48,6 +48,8 @@
     #define CN_BLTOUCH_REPEAT         "精度测试"
     #define CN_Z_OFFSET               "Z-偏移量"
     #define CN_PROBE_OFFSET           "探针偏移量"
+    #define CN_NOZZLE_DOWN            "Down"
+    #define CN_NOZZLE_UP              "Up"
     #define CN_EEPROM_SAVE            "保存参数"
     #define CN_APPLY                  "Apply"
     #define CN_INC                    "增加"

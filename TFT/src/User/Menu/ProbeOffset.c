@@ -30,8 +30,6 @@ void probeStartZOffset(void)
     getParameter(P_PROBE_OFFSET, X_STEPPER),
     getParameter(P_PROBE_OFFSET, Y_STEPPER));              // move nozzle to XY probing point
   mustStoreCmd("G90\n");                                   // set absolute position mode
-  // mustStoreCmd("G1 Z%.2f F400\n",
-  //   getParameter(P_PROBE_OFFSET, Z_STEPPER));              // Move nozzle to previously set Z...slowly
   mustStoreCmd("G1 Z0 F800\n");                            // move nozzle to Z0 absolute point
   mustStoreCmd("M211 S0\n");                               // disable Software Endstop to move nozzle minus Zero (Z0) if necessary
   mustStoreCmd("G91\n");                                   // set relative position mode
@@ -96,6 +94,13 @@ void menuProbeOffset(void)
     {ICON_RESET_VALUE,          LABEL_RESET},
     {ICON_BACK,                 LABEL_BACK},}
   };
+
+  #ifdef FRIENDLY_PROBE_OFFSET_LANGUAGE
+    probeOffsetItems.items[0].icon = ICON_NOZZLE_DOWN;
+    probeOffsetItems.items[0].label.index = LABEL_NOZZLE_DOWN;
+    probeOffsetItems.items[3].icon = ICON_NOZZLE_UP;
+    probeOffsetItems.items[3].label.index = LABEL_NOZZLE_UP;
+  #endif
 
   KEY_VALUES key_num = KEY_IDLE;
   float orig_probe_offset_value, probe_offset_value;

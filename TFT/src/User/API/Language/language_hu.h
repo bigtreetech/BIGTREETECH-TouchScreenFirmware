@@ -48,6 +48,8 @@
     #define HU_BLTOUCH_REPEAT         "Ismétlés"
     #define HU_Z_OFFSET               "Z Eltolás"
     #define HU_PROBE_OFFSET           "Szonda Eltolás"
+    #define HU_NOZZLE_DOWN            "Down"
+    #define HU_NOZZLE_UP              "Up"
     #define HU_EEPROM_SAVE            "Mentés"
     #define HU_APPLY                  "Apply"
     #define HU_INC                    "Növel"

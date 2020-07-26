@@ -48,6 +48,8 @@
     #define CZ_BLTOUCH_REPEAT         "Přesnost"
     #define CZ_Z_OFFSET               "Z Offset"
     #define CZ_PROBE_OFFSET           "Ofset sondy"
+    #define CZ_NOZZLE_DOWN            "Down"
+    #define CZ_NOZZLE_UP              "Up"
     #define CZ_EEPROM_SAVE            "Uložit"
     #define CZ_APPLY                  "Apply"
     #define CZ_INC                    "Přidat"

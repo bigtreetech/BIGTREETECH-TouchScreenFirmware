@@ -48,6 +48,8 @@
     #define IT_BLTOUCH_REPEAT         "Ripeti"
     #define IT_Z_OFFSET               "Z Offset"
     #define IT_PROBE_OFFSET           "Probe Offset"
+    #define IT_NOZZLE_DOWN            "Down"
+    #define IT_NOZZLE_UP              "Up"
     #define IT_EEPROM_SAVE            "Salva"
     #define IT_APPLY                  "Apply"
     #define IT_INC                    "Incrementa"

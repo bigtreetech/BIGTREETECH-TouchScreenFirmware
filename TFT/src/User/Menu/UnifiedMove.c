@@ -15,11 +15,11 @@ void updateABL(MENUITEMS *menu)
 
     if(infoMachineSettings.autoLevel == 1) {
       if(infoSettings.autoLevelState == 1) {
-      menu->items[6].icon = ICON_EEPROM_SAVE;
+      menu->items[6].icon = ICON_LEVELING_ON;
       menu->items[6].label.index = LABEL_ABL_ENABLE;
       }
       else {
-        menu->items[6].icon = ICON_STOP;
+        menu->items[6].icon = ICON_LEVELING_OFF;
         menu->items[6].label.index = LABEL_ABL_DISABLE;
       }
     }
@@ -50,11 +50,11 @@ void menuUnifiedMove(void)
     UnifiedMoveItems.items[3].label.index = LABEL_LEVELING;
 
     if(infoSettings.autoLevelState == 1) {
-      UnifiedMoveItems.items[6].icon = ICON_EEPROM_SAVE;
+      UnifiedMoveItems.items[6].icon = ICON_LEVELING_ON;
       UnifiedMoveItems.items[6].label.index = LABEL_ABL_ENABLE;
     }
     else {
-      UnifiedMoveItems.items[6].icon = ICON_STOP;
+      UnifiedMoveItems.items[6].icon = ICON_LEVELING_OFF;
       UnifiedMoveItems.items[6].label.index = LABEL_ABL_DISABLE;
     }
   }

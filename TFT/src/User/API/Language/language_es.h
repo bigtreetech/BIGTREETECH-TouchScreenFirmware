@@ -48,6 +48,8 @@
     #define ES_BLTOUCH_REPEAT         "Repetir"
     #define ES_Z_OFFSET               "Z Offset"
     #define ES_PROBE_OFFSET           "Sonda Compensar"
+    #define ES_NOZZLE_DOWN            "Down"
+    #define ES_NOZZLE_UP              "Up"
     #define ES_EEPROM_SAVE            "Grabar"
     #define ES_APPLY                  "Apply"
     #define ES_INC                    "Aumentar"

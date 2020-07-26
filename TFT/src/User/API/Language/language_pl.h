@@ -48,6 +48,8 @@
     #define PL_BLTOUCH_REPEAT         "Powtórz"
     #define PL_Z_OFFSET               "Z Offset"
     #define PL_PROBE_OFFSET           "Przesunięcie"
+    #define PL_NOZZLE_DOWN            "Down"
+    #define PL_NOZZLE_UP              "Up"
     #define PL_EEPROM_SAVE            "Zapisz"
     #define PL_APPLY                  "Apply"
     #define PL_INC                    "Więcej"

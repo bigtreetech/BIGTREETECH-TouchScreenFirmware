@@ -48,6 +48,8 @@
     #define DE_BLTOUCH_REPEAT         "Widerholen"
     #define DE_Z_OFFSET               "Z Offset"
     #define DE_PROBE_OFFSET           "Probe Offset"
+    #define DE_NOZZLE_DOWN            "Down"
+    #define DE_NOZZLE_UP              "Up"
     #define DE_EEPROM_SAVE            "Speichern"
     #define DE_APPLY                  "Apply"
     #define DE_INC                    "Erhöhen"
