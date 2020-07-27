@@ -234,6 +234,7 @@
  * 
  * Decrease/increase and "-" & "+" icons are replaced with down/up and friendly icons
  * 
+ *  Note: comment out to disable feature
  */
 #define FRIENDLY_PROBE_OFFSET_LANGUAGE
 
