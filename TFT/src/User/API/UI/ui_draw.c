@@ -56,7 +56,6 @@ uint16_t modelFileReadHalfword(FIL* fp)
 
 bool model_DirectDisplay(GUI_POINT pos, char *gcode)
 {
-  UINT mybr;
   FIL  gcodeFile;
 
   if(f_open(&gcodeFile, gcode, FA_OPEN_EXISTING | FA_READ) != FR_OK) return false;
@@ -85,7 +84,6 @@ bool model_DecodeToFlash(char *gcode)
   uint32_t addr = ICON_ADDR(ICON_PREVIEW);
   uint16_t bnum;
   uint8_t buf[256];
-  UINT mybr;
   FIL  gcodeFile;
 
   if(f_open(&gcodeFile, gcode, FA_OPEN_EXISTING | FA_READ) != FR_OK) return false;

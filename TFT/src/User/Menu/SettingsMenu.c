@@ -72,7 +72,7 @@ void menuBaudrate(void)
   LISTITEM totalItems[ITEM_BAUDRATE_NUM];
   KEY_VALUES key_num = KEY_IDLE;
   SETTINGS now = infoSettings;
-  uint8_t cur_item;
+  uint8_t cur_item = 0;
 
   // fill baudrate items
   for(uint8_t i = 0; i < COUNT(totalItems); i++) {
