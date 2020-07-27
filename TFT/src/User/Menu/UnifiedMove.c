@@ -76,7 +76,7 @@ void menuUnifiedMove(void)
       case KEY_ICON_1: infoMenu.menu[++infoMenu.cur] = menuMove; break;
       case KEY_ICON_2:
                       if(infoMachineSettings.autoLevel == 1){
-                        if (infoSettings.enable_ubl == 1) {
+                        if (infoMachineSettings.enableubl == 1) {
                           infoMenu.menu[++infoMenu.cur] = menuAutoLevelingUBL;
                         }
                         else {

@@ -74,7 +74,6 @@ void infoSettingsReset(void)
   infoSettings.ext_count              = EXTRUDER_NUM;
   infoSettings.fan_count              = FAN_NUM;
   infoSettings.auto_load_leveling     = AUTO_SAVE_LOAD_LEVELING_VALUE;
-  infoSettings.enable_ubl             = DISABLED;
   infoSettings.onboardSD              = AUTO;     //ENABLED / DISABLED / AUTO
   infoSettings.m27_refresh_time       = M27_REFRESH;
   infoSettings.m27_active             = M27_WATCH_OTHER_SOURCES;
@@ -147,14 +146,14 @@ void initMachineSetting(void){
   infoMachineSettings.promptSupport           = DISABLED;
   infoMachineSettings.onboard_sd_support      = ENABLED;
   infoMachineSettings.autoReportSDStatus      = DISABLED;
-  infoSettings.enable_ubl                     = DISABLED;
+  infoMachineSettings.enableubl               = DISABLED;
 }
 
 void setupMachine(void)
 {
   #ifdef ENABLE_UBL_VALUE
     if (infoMachineSettings.autoLevel == 1 && ENABLE_UBL_VALUE == 1) {
-      infoSettings.enable_ubl = ENABLE;
+      infoMachineSettings.enableubl = ENABLE;
     }
   #endif
   #ifdef AUTO_SAVE_LOAD_LEVELING_VALUE
