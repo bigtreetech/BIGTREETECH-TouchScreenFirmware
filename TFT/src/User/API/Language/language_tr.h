@@ -24,6 +24,7 @@
     #define TR_POINT_2                "2.Nokta"
     #define TR_POINT_3                "3.Nokta"
     #define TR_POINT_4                "4.Nokta"
+    #define TR_POINT_5                "5.Nokta"
     #define TR_ABL                    "ABL"
     #define TR_BLTOUCH_TEST           "Test"
     #define TR_BLTOUCH_DEPLOY         "Deploy"

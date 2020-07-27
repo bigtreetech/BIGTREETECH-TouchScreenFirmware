@@ -24,6 +24,7 @@
     #define SK_POINT_2                "Bod 2"
     #define SK_POINT_3                "Bod 3"
     #define SK_POINT_4                "Bod 4"
+    #define SK_POINT_5                "Bod 5"
     #define SK_ABL                    "ABL"
     #define SK_BLTOUCH_TEST           "Test"
     #define SK_BLTOUCH_DEPLOY         "Vystrčiť"

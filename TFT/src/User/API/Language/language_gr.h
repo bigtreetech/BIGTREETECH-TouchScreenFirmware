@@ -24,6 +24,7 @@
     #define GR_POINT_2                "Σημείο 2"
     #define GR_POINT_3                "Σημείο 3"
     #define GR_POINT_4                "Σημείο 4"
+    #define GR_POINT_5                "Σημείο 5"
     #define GR_ABL                    "ABL"
     #define GR_BLTOUCH_TEST           "Δοκιμή"
     #define GR_BLTOUCH_DEPLOY         "Επέκταση"

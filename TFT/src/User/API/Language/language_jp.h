@@ -24,6 +24,7 @@
     #define JP_POINT_2                "Point 2"
     #define JP_POINT_3                "Point 3"
     #define JP_POINT_4                "Point 4"
+    #define JP_POINT_5                "Point 5"
     #define JP_ABL                    "自動調整"
     #define JP_BLTOUCH_TEST           "Test"
     #define JP_BLTOUCH_DEPLOY         "Deploy"
