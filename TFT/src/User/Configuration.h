@@ -234,9 +234,9 @@
  * 
  * Decrease/increase and "-" & "+" icons are replaced with down/up and friendly icons
  * 
- *  Note: comment out to disable feature
+ * Options:  0: Disabled    1: Enabled
  */
-#define FRIENDLY_PROBE_OFFSET_LANGUAGE
+#define FRIENDLY_PROBE_OFFSET_LANGUAGE 1
 
 /**
  * Manual Leveling

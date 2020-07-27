@@ -95,7 +95,7 @@ void menuProbeOffset(void)
     {ICON_BACK,                 LABEL_BACK},}
   };
 
-  #ifdef FRIENDLY_PROBE_OFFSET_LANGUAGE
+  #ifdef FRIENDLY_PROBE_OFFSET_LANGUAGE = 1
     probeOffsetItems.items[0].icon = ICON_NOZZLE_DOWN;
     probeOffsetItems.items[0].label.index = LABEL_NOZZLE_DOWN;
     probeOffsetItems.items[3].icon = ICON_NOZZLE_UP;
