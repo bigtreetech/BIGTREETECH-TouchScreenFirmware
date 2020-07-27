@@ -345,7 +345,7 @@ void parseACK(void)
       }
     // Parse and store ABL type
       else if(ack_seen("echo:; Unified Bed Leveling")){
-        if(ENABLE_UBL_VALUE==2) infoSettings.enable_ubl = ENABLED;
+        if(ENABLE_UBL_VALUE==2) infoMachineSettings.enableubl = ENABLED;
       }
     // Parse and store ABL on/off state & Z fade value on M503
       else if(ack_seen("M420 S")) {
