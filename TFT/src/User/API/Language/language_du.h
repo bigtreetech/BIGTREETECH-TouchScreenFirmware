@@ -37,6 +37,7 @@
     #define DU_DEC                    "Verlagen"
     #define DU_NOZZLE                 "Spuitneus"
     #define DU_BED                    "Verwarmd bed"
+    #define DU_CHAMBER                "Chamber"
     #define DU_STOP                   "Stop"
     #define DU_BACK                   "Terug"
     #define DU_PAGE_UP                "Blz omhoog"

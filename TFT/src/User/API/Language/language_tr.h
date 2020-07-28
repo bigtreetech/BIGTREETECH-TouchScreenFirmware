@@ -37,6 +37,7 @@
     #define TR_DEC                    "Azalt"
     #define TR_NOZZLE                 "Nozül"
     #define TR_BED                    "Tabla"
+    #define TR_CHAMBER                "Chamber"
     #define TR_STOP                   "Durdur"
     #define TR_BACK                   "Geri"
     #define TR_PAGE_UP                "Yukarı"

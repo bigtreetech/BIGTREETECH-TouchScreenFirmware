@@ -37,6 +37,7 @@
     #define SK_DEC                    "Ubrať"
     #define SK_NOZZLE                 "Tryska"
     #define SK_BED                    "Podložka"
+    #define SK_CHAMBER                "Chamber"
     #define SK_STOP                   "Stop"
     #define SK_BACK                   "Naspäť"
     #define SK_PAGE_UP                "Ďalej"

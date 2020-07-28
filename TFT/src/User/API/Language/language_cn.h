@@ -37,6 +37,7 @@
     #define CN_DEC                    "减少"
     #define CN_NOZZLE                 "喷头"
     #define CN_BED                    "热床"
+    #define CN_CHAMBER                "机箱"
     #define CN_STOP                   "停止"
     #define CN_BACK                   "返回"
     #define CN_PAGE_UP                "上一页"

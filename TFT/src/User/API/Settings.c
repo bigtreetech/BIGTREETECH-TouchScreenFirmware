@@ -70,7 +70,9 @@ void infoSettingsReset(void)
 
 //machine specific settings
 
-  infoSettings.tool_count             = TOOL_NUM;
+  infoSettings.hotend_count           = HOTEND_NUM;
+  infoSettings.bed_en                 = ENABLE;
+  infoSettings.chamber_en             = DISABLE;
   infoSettings.ext_count              = EXTRUDER_NUM;
   infoSettings.fan_count              = FAN_NUM;
   infoSettings.auto_load_leveling     = AUTO_SAVE_LOAD_LEVELING_VALUE;

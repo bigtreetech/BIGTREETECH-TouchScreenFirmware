@@ -37,6 +37,7 @@
     #define SL_DEC                    "Manj"
     #define SL_NOZZLE                 "Šoba"
     #define SL_BED                    "Miza"
+    #define SL_CHAMBER                "Chamber"
     #define SL_STOP                   "Stop"
     #define SL_BACK                   "Nazaj"
     #define SL_PAGE_UP                "Stran gor"

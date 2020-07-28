@@ -89,7 +89,6 @@ void Hardware_GenericInit(void)
   #endif
   GUI_RestoreColorDefault();
   infoMenuSelect();
-
 }
 
 int main(void)

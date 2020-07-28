@@ -56,8 +56,12 @@
     #define ST7920_BANNER_TEXT "LCD12864 Simulator"
 #endif
 
-#if TOOL_NUM > MAX_TOOL_COUNT
-    #error "TOOL_NUM can not be more than 6"
+#ifdef TOOL_NUM
+  #error "TOOL_NUM is now HOTEND_NUM. Please update your Configuration.h file."
+#endif
+
+#if HOTEND_NUM > MAX_HOTEND_COUNT
+    #error "HOTEND_NUM can not be more than 6"
 #endif
 
 #if EXTRUDER_NUM > MAX_EXT_COUNT

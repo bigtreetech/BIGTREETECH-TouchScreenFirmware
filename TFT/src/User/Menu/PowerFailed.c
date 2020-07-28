@@ -54,11 +54,11 @@ void powerFailedCache(u32 offset)
   infoBreakPoint.speed = speedGetPercent(0); // Move speed percent
   infoBreakPoint.flow = speedGetPercent(1); // Flow percent
 
-  for(TOOL i = BED; i < HEATER_COUNT; i++)
+  for(uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
   {
     infoBreakPoint.target[i] = heatGetTargetTemp(i);
   }
-  infoBreakPoint.nozzle = heatGetCurrentToolNozzle();
+  infoBreakPoint.tool = heatGetCurrentTool();
 
   for(u8 i = 0; i < infoSettings.fan_count; i++)
   {
@@ -117,7 +117,7 @@ bool powerOffGetData(void)
   if(f_lseek(&fp, MAX_PATH_LEN)                                 != FR_OK)        return false;
   if(f_read(&fp, &infoBreakPoint,  sizeof(infoBreakPoint), &br) != FR_OK)        return false;
 
-  for(TOOL i = BED; i < HEATER_COUNT; i++)
+  for(uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
   {
     if(infoBreakPoint.target[i] != 0)
       mustStoreCacheCmd("%s S%d\n", heatWaitCmd[i], infoBreakPoint.target[i]);
@@ -129,7 +129,7 @@ bool powerOffGetData(void)
       mustStoreCacheCmd("%s S%d\n", fanCmd[i], infoBreakPoint.fan[i]);
   }
 
-  mustStoreCacheCmd("%s\n", tool_change[infoBreakPoint.nozzle - NOZZLE0]);
+  mustStoreCacheCmd("%s\n", tool_change[infoBreakPoint.tool]);
   if(infoBreakPoint.feedrate != 0)
   {
     int btt_zraise = 0;

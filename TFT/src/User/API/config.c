@@ -526,9 +526,17 @@ void parseConfigKey(u16 index)
 
   //---------------------------------------------------------Printer / Machine Settings
 
-  case C_INDEX_TOOL_COUNT:
-    if (inLimit(config_int(), 1, MAX_TOOL_COUNT))
-      infoSettings.tool_count = config_int();
+  case C_INDEX_HOTEND_COUNT:
+    if (inLimit(config_int(), 1, MAX_HOTEND_COUNT))
+      infoSettings.hotend_count = config_int();
+    break;
+
+  case C_INDEX_BED_EN:
+      infoSettings.bed_en = getOnOff();
+    break;
+
+  case C_INDEX_CHAMBER_EN:
+      infoSettings.chamber_en = getOnOff();
     break;
 
   case C_INDEX_EXT_COUNT:
@@ -546,29 +554,33 @@ void parseConfigKey(u16 index)
     { if (inLimit(config_int(), MIN_BED_TEMP, MAX_BED_TEMP))
         infoSettings.max_temp[BED] = config_int();
     }
+    if (key_seen("CHAMBER:"))
+    { if (inLimit(config_int(), MIN_CHAMBER_TEMP, MAX_CHAMBER_TEMP))
+        infoSettings.max_temp[CHAMBER] = config_int();
+    }
     if (key_seen("T0:"))
     { if (inLimit(config_int(), MIN_TOOL_TEMP, MAX_TOOL_TEMP))
-        infoSettings.max_temp[BED + 1] = config_int();
+        infoSettings.max_temp[NOZZLE0] = config_int();
     }
     if (key_seen("T1:"))
     { if (inLimit(config_int(), MIN_TOOL_TEMP, MAX_TOOL_TEMP))
-        infoSettings.max_temp[BED + 2] = config_int();
+        infoSettings.max_temp[NOZZLE1] = config_int();
     }
     if (key_seen("T2:"))
     { if (inLimit(config_int(), MIN_TOOL_TEMP, MAX_TOOL_TEMP))
-        infoSettings.max_temp[BED + 3] = config_int();
+        infoSettings.max_temp[NOZZLE2] = config_int();
     }
     if (key_seen("T3:"))
     { if (inLimit(config_int(), MIN_TOOL_TEMP, MAX_TOOL_TEMP))
-        infoSettings.max_temp[BED + 4] = config_int();
+        infoSettings.max_temp[NOZZLE3] = config_int();
     }
     if (key_seen("T4:"))
     { if (inLimit(config_int(), MIN_TOOL_TEMP, MAX_TOOL_TEMP))
-        infoSettings.max_temp[BED + 5] = config_int();
+        infoSettings.max_temp[NOZZLE4] = config_int();
     }
     if (key_seen("T5:"))
     { if (inLimit(config_int(), MIN_TOOL_TEMP, MAX_TOOL_TEMP))
-        infoSettings.max_temp[BED + 6] = config_int();
+        infoSettings.max_temp[NOZZLE5] = config_int();
     }
     break;
 

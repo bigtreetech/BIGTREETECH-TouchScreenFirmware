@@ -111,22 +111,30 @@ void syncL2CacheFromL1(uint8_t port)
 
 void parseACK(void)
 {
-  if(infoHost.rx_ok[SERIAL_PORT] != true) return; //not get response data
+  if (infoHost.rx_ok[SERIAL_PORT] != true) return; //not get response data
 
-  while(dmaL1NotEmpty(SERIAL_PORT))
+  while (dmaL1NotEmpty(SERIAL_PORT))
   {
     bool avoid_terminal = false;
     syncL2CacheFromL1(SERIAL_PORT);
     infoHost.rx_ok[SERIAL_PORT] = false;
 
-    if(infoHost.connected == false) //not connected to Marlin
+    if (infoHost.connected == false) //not connected to Marlin
     {
       // Parse error information even though not connected to printer
-      if(ack_seen(errormagic)) {
+      if (ack_seen(errormagic)) {
         BUZZER_PLAY(sound_error);
         ackPopupInfo(errormagic);
       }
-      if(!ack_seen("T:") && !ack_seen("T0:"))  goto parse_end;  //the first response should be such as "T:25/50\n"
+      if (!ack_seen("T:") && !ack_seen("T0:"))  goto parse_end;  //the first response should be such as "T:25/50\n"
+      if (ack_seen(heaterID[BED])) infoSettings.bed_en = ENABLED;
+      if (ack_seen(heaterID[CHAMBER])) infoSettings.chamber_en = ENABLED;
+      uint8_t i;
+      for (i = NOZZLE0; i < MAX_HOTEND_COUNT; i++) {
+        if(!ack_seen(heaterID[i])) break;
+      }
+      infoSettings.hotend_count = i ? i : 1;
+      if (infoSettings.ext_count < infoSettings.hotend_count) infoSettings.ext_count = infoSettings.hotend_count;
       updateNextHeatCheckTime();
       infoHost.connected = true;
       storeCmd("M115\n");
@@ -187,9 +195,10 @@ void parseACK(void)
         if(!heatGetSendWaiting(NOZZLE0)) {
           heatSyncTargetTemp(NOZZLE0, ack_second_value()+0.5f);
         }
-        for(TOOL i = BED; i < HEATER_COUNT; i++)
+        for(uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
         {
-          if(ack_seen(toolID[i]))
+          if(!heaterIsValid(i)) continue;
+          if(ack_seen(heaterID[i]))
           {
             heatSetCurrentTemp(i, ack_value()+0.5f);
             if(!heatGetSendWaiting(i)) {
