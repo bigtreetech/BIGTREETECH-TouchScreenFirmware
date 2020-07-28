@@ -151,10 +151,11 @@ void menuBabyStep(void)
           baby_step_value += max_unit;
         }
         break;
-         case KEY_ICON_4:
+      //save change value  
+      case KEY_ICON_4:
+        mustStoreCmd("M851 Z%.2f\n", (orig_z_offset + baby_step_value)); 
         if (infoMachineSettings.EEPROM == 1)
         {
-          mustStoreCmd("M851 Z%.2f\n", (orig_z_offset + baby_step_value));
           mustStoreCmd("M500\n");
         }
         break;
