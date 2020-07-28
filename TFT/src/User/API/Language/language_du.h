@@ -24,6 +24,7 @@
     #define DU_POINT_2                "Punt 2"
     #define DU_POINT_3                "Punt 3"
     #define DU_POINT_4                "Punt 4"
+    #define DU_POINT_5                "Punt 5"
     #define DU_ABL                    "ABL"
     #define DU_BLTOUCH_TEST           "Test"
     #define DU_BLTOUCH_DEPLOY         "Gebruiken"

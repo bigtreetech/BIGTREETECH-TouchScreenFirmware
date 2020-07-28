@@ -24,6 +24,7 @@
     #define PL_POINT_2                "Punkt 2"
     #define PL_POINT_3                "Punkt 3"
     #define PL_POINT_4                "Punkt 4"
+    #define PL_POINT_5                "Punkt 5"
     #define PL_ABL                    "ABL"
     #define PL_BLTOUCH_TEST           "Test"
     #define PL_BLTOUCH_DEPLOY         "Wysuń"

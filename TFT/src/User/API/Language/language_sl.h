@@ -24,6 +24,7 @@
     #define SL_POINT_2                "Točka 2"
     #define SL_POINT_3                "Točka 3"
     #define SL_POINT_4                "Točka 4"
+    #define SL_POINT_5                "Točka 5"
     #define SL_ABL                    "ABL"
     #define SL_BLTOUCH_TEST           "Test"
     #define SL_BLTOUCH_DEPLOY         "Postavi"

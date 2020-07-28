@@ -24,6 +24,7 @@
     #define ES_POINT_2                "Punto 2"
     #define ES_POINT_3                "Punto 3"
     #define ES_POINT_4                "Punto 4"
+    #define ES_POINT_5                "Punto 5"
     #define ES_ABL                    "ABL"
     #define ES_BLTOUCH_TEST           "Probar"
     #define ES_BLTOUCH_DEPLOY         "Desplegar"
