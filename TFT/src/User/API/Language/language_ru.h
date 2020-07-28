@@ -37,6 +37,7 @@
     #define RU_DEC                    "Уменьшить"
     #define RU_NOZZLE                 "Сопло"
     #define RU_BED                    "Стол"
+    #define RU_CHAMBER                "Chamber"
     #define RU_STOP                   "Стоп"
     #define RU_BACK                   "Назад"
     #define RU_PAGE_UP                "\u0899 Стр." //Left Arrow

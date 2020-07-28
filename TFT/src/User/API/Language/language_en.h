@@ -37,6 +37,7 @@
     #define EN_DEC                    "Decrease"
     #define EN_NOZZLE                 "Nozzle"
     #define EN_BED                    "Hotbed"
+    #define EN_CHAMBER                "Chamber"
     #define EN_STOP                   "Stop"
     #define EN_BACK                   "Back"
     #define EN_PAGE_UP                "Page up"

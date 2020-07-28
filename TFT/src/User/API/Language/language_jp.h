@@ -37,6 +37,7 @@
     #define JP_DEC                    "減る"
     #define JP_NOZZLE                 "ノズル"
     #define JP_BED                    "ベッド"
+    #define JP_CHAMBER                "Chamber"
     #define JP_STOP                   "停止"
     #define JP_BACK                   "戻る"
     #define JP_PAGE_UP                "前ページ"

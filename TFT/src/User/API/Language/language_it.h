@@ -37,6 +37,7 @@
     #define IT_DEC                    "Diminuisci"
     #define IT_NOZZLE                 "Nozzle"
     #define IT_BED                    "Piatto Ris."
+    #define IT_CHAMBER                "Chamber"
     #define IT_STOP                   "Stop"
     #define IT_BACK                   "Indietro"
     #define IT_PAGE_UP                "Pagina Su"

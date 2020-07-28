@@ -37,6 +37,7 @@
     #define HU_DEC                    "Csökkent"
     #define HU_NOZZLE                 "Fej"
     #define HU_BED                    "Ágy"
+    #define HU_CHAMBER                "Chamber"
     #define HU_STOP                   "Állj"
     #define HU_BACK                   "Vissza"
     #define HU_PAGE_UP                "Fel"

@@ -37,6 +37,7 @@
     #define ES_DEC                    "Disminur"
     #define ES_NOZZLE                 "Punta"
     #define ES_BED                    "Cama"
+    #define ES_CHAMBER                "Chamber"
     #define ES_STOP                   "Parar"
     #define ES_BACK                   "Volver"
     #define ES_PAGE_UP                "Retroceder"

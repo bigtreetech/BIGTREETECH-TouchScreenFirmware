@@ -405,7 +405,7 @@ void sendQueueCmd(void)
             {
               char buf[50];
               Serial_Puts(SERIAL_PORT_2, "FIRMWARE_NAME: " FIRMWARE_NAME " SOURCE_CODE_URL:https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware\n");
-              my_sprintf(buf, "Cap:TOOL_NUM:%d\n", infoSettings.tool_count);
+              my_sprintf(buf, "Cap:HOTEND_NUM:%d\n", infoSettings.hotend_count);
               Serial_Puts(SERIAL_PORT_2, buf);
               my_sprintf(buf, "Cap:EXTRUDER_NUM:%d\n", infoSettings.ext_count);
               Serial_Puts(SERIAL_PORT_2, buf);
@@ -489,8 +489,7 @@ void sendQueueCmd(void)
         case 109: //M109
           if (fromTFT)
           {
-            TOOL i = heatGetCurrentToolNozzle();
-            if(cmd_seen('T')) i = (TOOL)(cmd_value() + NOZZLE0);
+            uint8_t i = cmd_seen('T') ? cmd_value() : heatGetCurrentHotend();
             infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 3]='4';  // Avoid send M109 to Marlin
             if (cmd_seen('R'))
             {
@@ -506,8 +505,7 @@ void sendQueueCmd(void)
         case 104: //M104
           if (fromTFT)
           {
-            TOOL i = heatGetCurrentToolNozzle();
-            if(cmd_seen('T')) i = (TOOL)(cmd_value() + NOZZLE0);
+            uint8_t i = cmd_seen('T') ? cmd_value() : heatGetCurrentHotend();
             if(cmd_seen('S'))
             {
               heatSyncTargetTemp(i, cmd_value());
@@ -578,6 +576,38 @@ void sendQueueCmd(void)
               sprintf(buf, "S%u\n", heatGetTargetTemp(BED));
               strcat(infoCmd.queue[infoCmd.index_r].gcode, (const char *)buf);
               heatSetSendWaiting(BED, false);
+            }
+          }
+          break;
+
+        case 191: //M191
+          if (fromTFT)
+          {
+            infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 2]='4';   // Avoid send M191 to Marlin
+            if (cmd_seen('R'))
+            {
+              infoCmd.queue[infoCmd.index_r].gcode[cmd_index-1] = 'S';
+              heatSetIsWaiting(CHAMBER, WAIT_COOLING_HEATING);
+            }
+            else
+            {
+              heatSetIsWaiting(CHAMBER, WAIT_HEATING);
+            }
+          }
+        // No break here, The data processing of M191 is the same as that of M141 below
+        case 141: //M141
+          if (fromTFT)
+          {
+            if (cmd_seen('S'))
+            {
+              heatSyncTargetTemp(CHAMBER, cmd_value());
+            }
+            else if (!cmd_seen('\n'))
+            {
+              char buf[12];
+              sprintf(buf, "S%u\n", heatGetTargetTemp(CHAMBER));
+              strcat(infoCmd.queue[infoCmd.index_r].gcode, (const char *)buf);
+              heatSetSendWaiting(CHAMBER, false);
             }
           }
           break;
@@ -744,7 +774,7 @@ void sendQueueCmd(void)
 
     case 'T':
       cmd=strtol(&infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 1], NULL, 10);
-      heatSetCurrentToolNozzle((TOOL)(cmd + NOZZLE0));
+      heatSetCurrentTool(cmd);
       break;
 
   } // end parsing cmd

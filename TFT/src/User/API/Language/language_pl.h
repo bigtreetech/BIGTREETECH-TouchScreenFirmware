@@ -36,6 +36,7 @@
     #define PL_INC                    "Więcej"
     #define PL_DEC                    "Mniej"
     #define PL_NOZZLE                 "Głowica"
+    #define PL_CHAMBER                "Chamber"
     #define PL_BED                    "Stół"
     #define PL_STOP                   "Stop"
     #define PL_BACK                   "Powrót"

@@ -37,6 +37,7 @@
     #define FR_DEC                    "Moins"
     #define FR_NOZZLE                 "Buse"
     #define FR_BED                    "Plateau"
+    #define FR_CHAMBER                "Chamber"
     #define FR_STOP                   "Stop"
     #define FR_BACK                   "Retour"
     #define FR_PAGE_UP                "Précédent"

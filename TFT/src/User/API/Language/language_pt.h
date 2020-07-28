@@ -37,6 +37,7 @@
     #define PT_DEC                    "Diminuir"
     #define PT_NOZZLE                 "Nozzle"
     #define PT_BED                    "Hotbed"
+    #define PT_CHAMBER                "Chamber"
     #define PT_STOP                   "Parar"
     #define PT_BACK                   "Voltar"
     #define PT_PAGE_UP                "Subir pagina"

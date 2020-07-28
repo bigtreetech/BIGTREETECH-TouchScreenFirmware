@@ -37,6 +37,7 @@
     #define AM_DEC                    "Նվազեցնել"
     #define AM_NOZZLE                 "Գլխիկ"
     #define AM_BED                    "Տախտակ"
+    #define AM_CHAMBER                "Chamber"
     #define AM_STOP                   "Դադարեցնել"
     #define AM_BACK                   "Հետ"
     #define AM_PAGE_UP                "Վերեւ"

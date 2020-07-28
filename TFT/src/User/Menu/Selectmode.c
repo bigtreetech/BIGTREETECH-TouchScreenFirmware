@@ -113,7 +113,7 @@ void menuMode(void)
       };
   #endif
 
-  MKEY_VALUES  key_num = MKEY_IDLE;
+  MKEY_VALUES  key_num;
   bool keyback = false;
 
   int16_t /*nowEncoder =*/ encoderPosition = 0;

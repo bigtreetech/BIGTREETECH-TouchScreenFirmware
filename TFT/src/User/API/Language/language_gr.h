@@ -37,6 +37,7 @@
     #define GR_DEC                    "Μείωση"
     #define GR_NOZZLE                 "Στόμιο"
     #define GR_BED                    "Θερμή Βάση"
+    #define GR_CHAMBER                "Chamber"
     #define GR_STOP                   "Τερμάτιση"
     #define GR_BACK                   "Πίσω"
     #define GR_PAGE_UP                "Σελίδα πάνω"

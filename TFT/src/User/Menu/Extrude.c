@@ -130,7 +130,7 @@ void menuExtrude(void)
     {
       extrudeCoordinate = eTemp;
       extrudeCoordinateReDraw(true);
-      if(item_extruder_i != heatGetCurrentToolNozzle() - NOZZLE0)
+      if(item_extruder_i != heatGetCurrentTool())
         storeCmd("%s\n", tool_change[item_extruder_i]);
       storeCmd("G0 E%.5f F%d\n", extrudeCoordinate, infoSettings.ext_speed[item_speed_i]);
     }

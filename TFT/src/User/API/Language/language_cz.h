@@ -37,6 +37,7 @@
     #define CZ_DEC                    "Ubrat"
     #define CZ_NOZZLE                 "Tryska"
     #define CZ_BED                    "Stolek"
+    #define CZ_CHAMBER                "Chamber"
     #define CZ_STOP                   "Stop"
     #define CZ_BACK                   "Zpět"
     #define CZ_PAGE_UP                "Další"

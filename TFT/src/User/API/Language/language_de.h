@@ -37,6 +37,7 @@
     #define DE_DEC                    "Verringern"
     #define DE_NOZZLE                 "Düse"
     #define DE_BED                    "Heizbett"
+    #define DE_CHAMBER                "Chamber"
     #define DE_STOP                   "Stop"
     #define DE_BACK                   "Zurück"
     #define DE_PAGE_UP                "Seite hoch"

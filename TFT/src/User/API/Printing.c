@@ -93,22 +93,6 @@ void printSetUpdateWaiting(bool isWaiting)
   update_waiting = isWaiting;
 }
 
-void printerGotoIdle(void)
-{
-  // disable all heater
-  for (TOOL i = BED; i < HEATER_COUNT; i++)
-  {
-    mustStoreCmd("%s S0\n", heatCmd[i]);
-  }
-  // disable all fan
-  for (u8 i = 0; i < (infoSettings.fan_count); i++)
-  {
-    mustStoreCmd("%s S0\n", fanCmd[i]);
-  }
-  // disable all stepper
-  mustStoreCmd("M18\n");
-}
-
 //only return gcode file name except path
 //for example:"SD:/test/123.gcode"
 //only return "123.gcode"
@@ -191,7 +175,7 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
         if (isCoorRelative == true)     mustStoreCmd("G90\n");
         if (isExtrudeRelative == true)  mustStoreCmd("M82\n");
 
-        if (heatGetCurrentTemp(heatGetCurrentToolNozzle()) > infoSettings.min_ext_temp)
+        if (heatGetCurrentTemp(heatGetCurrentHotend()) > infoSettings.min_ext_temp)
         {
           mustStoreCmd("G1 E%.5f F%d\n", tmp.axis[E_AXIS] - infoSettings.pause_retract_len, infoSettings.pause_feedrate[E_AXIS]);
         }
@@ -220,7 +204,7 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
           mustStoreCmd("G1 X%.3f Y%.3f F%d\n", tmp.axis[X_AXIS], tmp.axis[Y_AXIS], infoSettings.pause_feedrate[X_AXIS]);
           mustStoreCmd("G1 Z%.3f F%d\n", tmp.axis[Z_AXIS], infoSettings.pause_feedrate[Z_AXIS]);
         }
-        if(heatGetCurrentTemp(heatGetCurrentToolNozzle()) > infoSettings.min_ext_temp)
+        if(heatGetCurrentTemp(heatGetCurrentHotend()) > infoSettings.min_ext_temp)
         {
           mustStoreCmd("G1 E%.5f F%d\n", tmp.axis[E_AXIS] - infoSettings.pause_retract_len + infoSettings.resume_purge_len, infoSettings.pause_feedrate[E_AXIS]);
         }
@@ -262,7 +246,6 @@ void endPrinting(void)
   if(infoSettings.send_end_gcode == 1){
     sendPrintCodes(1);
   }
-  printerGotoIdle();
 }
 
 
@@ -314,7 +297,7 @@ void shutdown(void)
 void shutdownLoop(void)
 {
   bool tempIsLower = true;
-  for (TOOL i = NOZZLE0; i < HEATER_COUNT; i++)
+  for (uint8_t i = NOZZLE0; i < infoSettings.hotend_count; i++)
   {
     if (heatGetCurrentTemp(i) >= AUTO_SHUT_DOWN_MAXTEMP)
       tempIsLower = false;
