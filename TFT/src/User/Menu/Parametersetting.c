@@ -189,7 +189,6 @@ for (uint8_t i = 0; i < LISTITEM_PER_PAGE; i++)
 
 void menuParameterSettings(void){
   KEY_VALUES key_num = KEY_IDLE;
-  ps_cur_page = 0;
 
   if (infoMachineSettings.EEPROM != 1)
     total_pages = (P_RESET_SETTINGS+LISTITEM_PER_PAGE-1)/LISTITEM_PER_PAGE;
@@ -236,6 +235,7 @@ void menuParameterSettings(void){
       }
       else
       {
+        ps_cur_page = 0;
         infoMenu.cur--;
       }
       break;

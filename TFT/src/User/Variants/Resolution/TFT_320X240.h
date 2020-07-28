@@ -71,4 +71,7 @@
 #define POPUP_RECT_DOUBLE_CONFIRM {40,  LCD_HEIGHT- SPACE_Y - 5 - POPUP_BUTTON_HEIGHT, 140, LCD_HEIGHT - SPACE_Y - 5}
 #define POPUP_RECT_DOUBLE_CANCEL  {180, LCD_HEIGHT- SPACE_Y - 5 - POPUP_BUTTON_HEIGHT, 280, LCD_HEIGHT - SPACE_Y - 5}
 
+// The offset of the model preview icon in the gcode file
+#define MODEL_PREVIEW_OFFSET 0x01
+
 #endif
