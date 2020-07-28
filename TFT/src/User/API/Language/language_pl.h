@@ -188,6 +188,7 @@
     #define PL_300_SECONDS            "5 Min."
     #define PL_CUSTOM_SECONDS         "Custom"
     #define PL_ST7920_FULLSCREEN      "Marlin mode in fullscreen"
+    #define PL_PLR_EN                 "Power loss recovery"
     #define PL_SETTING_RESET          "Reset settings"
     #define PL_SETTING_RESTORE        "Restore settings"
     #define PL_EEPROM_SAVE_INFO       "Save printer settings\nto EEPROM?"

@@ -188,6 +188,7 @@
     #define RU_300_SECONDS            "5 мин."
     #define RU_CUSTOM_SECONDS         "Своё"
     #define RU_ST7920_FULLSCREEN      "Marlin на весь экран"
+    #define RU_PLR_EN                 "Power loss recovery"
     #define RU_SETTING_RESET          "Сброс настроек"
     #define RU_SETTING_RESTORE        "Восстановление настроек"
     #define RU_EEPROM_SAVE_INFO       "Сохранить настройки\nпринтера в EEPROM?"

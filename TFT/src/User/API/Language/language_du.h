@@ -188,6 +188,7 @@
     #define DU_300_SECONDS            "5 Min."
     #define DU_CUSTOM_SECONDS         "Custom"
     #define DU_ST7920_FULLSCREEN      "Marlin mode in fullscreen"
+    #define DU_PLR_EN                 "Power loss recovery"
     #define DU_SETTING_RESET          "Reset settings"
     #define DU_SETTING_RESTORE        "Restore settings"
     #define DU_EEPROM_SAVE_INFO       "Save printer settings\nto EEPROM?"

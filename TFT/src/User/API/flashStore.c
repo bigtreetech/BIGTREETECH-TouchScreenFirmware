@@ -111,6 +111,7 @@ void readStoredPara(void)
   infoSettings.runout_noise_ms      = byteToWord(data + (index += 4), 4);
   infoSettings.runout_distance      = byteToWord(data + (index += 4), 4);
 
+  infoSettings.powerloss_en         = byteToWord(data + (index += 4), 4);
   infoSettings.powerloss_home       = byteToWord(data + (index += 4), 4);
   infoSettings.powerloss_invert     = byteToWord(data + (index += 4), 4);
   infoSettings.powerloss_z_raise    = byteToWord(data + (index += 4), 4);
@@ -239,6 +240,7 @@ void storePara(void)
   wordToByte(infoSettings.runout_noise_ms,            data + (index += 4));
   wordToByte(infoSettings.runout_distance,            data + (index += 4));
 
+  wordToByte(infoSettings.powerloss_en,               data + (index += 4));
   wordToByte(infoSettings.powerloss_home,             data + (index += 4));
   wordToByte(infoSettings.powerloss_invert,           data + (index += 4));
   wordToByte(infoSettings.powerloss_z_raise,          data + (index += 4));

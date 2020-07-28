@@ -188,6 +188,7 @@
     #define CN_300_SECONDS            "5分钟"
     #define CN_CUSTOM_SECONDS         "自定义"
     #define CN_ST7920_FULLSCREEN      "全屏显示Marlin模式"
+    #define CN_PLR_EN                 "断电续打"
     #define CN_SETTING_RESET          "重置设置"
     #define CN_SETTING_RESTORE        "保存设置"
     #define CN_EEPROM_SAVE_INFO       "是否保存打印机设置到EEPROM?"

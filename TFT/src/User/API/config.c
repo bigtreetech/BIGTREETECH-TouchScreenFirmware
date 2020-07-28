@@ -845,6 +845,10 @@ void parseConfigKey(u16 index)
 
 #ifdef BTT_MINI_UPS
 
+  case C_INDEX_POWERLOSS_EN:
+      infoSettings.powerloss_en = getOnOff();
+    break;
+
   case C_INDEX_POWERLOSS_HOME:
       infoSettings.powerloss_home = getOnOff();
     break;

@@ -188,6 +188,7 @@
     #define GR_300_SECONDS            "5 Λεπτά"
     #define GR_CUSTOM_SECONDS         "Τροποποιημένες ρυθμίσεις"
     #define GR_ST7920_FULLSCREEN      "Λειτουργία Marlin σε πλήρη οθόνη"
+    #define GR_PLR_EN                 "Power loss recovery"
     #define GR_SETTING_RESET          "Reset settings"
     #define GR_SETTING_RESTORE        "Restore settings"
     #define GR_EEPROM_SAVE_INFO       "Save printer settings\nto EEPROM?"
