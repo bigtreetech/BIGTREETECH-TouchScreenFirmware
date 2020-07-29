@@ -40,8 +40,8 @@ const ITEM itemLen[ITEM_LEN_NUM] = {
   {ICON_E_400_MM,             LABEL_400_MM},
 };
 
-const  u8 item_len[ITEM_LEN_NUM] = {1, 5, 10, 100, 400};
-static u8 item_len_i = 1;
+const  u16 item_len[ITEM_LEN_NUM] = {1, 5, 10, 100, 400};
+static u16 item_len_i = 1;
 
 static float extrudeCoordinate = 0.0f;
 
