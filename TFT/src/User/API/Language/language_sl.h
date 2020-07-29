@@ -101,6 +101,8 @@
     #define SL_1_MM                   "1mm"
     #define SL_5_MM                   "5mm"
     #define SL_10_MM                  "10mm"
+    #define SL_100_MM                 "100mm"
+    #define SL_400_MM                 "400mm"
     #define SL_1_PERCENT              "1%"
     #define SL_5_PERCENT              "5%"
     #define SL_10_PERCENT             "10%"
