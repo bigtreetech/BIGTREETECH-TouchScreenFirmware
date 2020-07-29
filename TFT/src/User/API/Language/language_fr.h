@@ -102,7 +102,7 @@
     #define FR_5_MM                   "5mm"
     #define FR_10_MM                  "10mm"
     #define FR_100_MM                 "100mm"
-    #define FR_400_MM                 "400mm"
+    #define FR_200_MM                 "200mm"
     #define FR_1_PERCENT              "1%"
     #define FR_5_PERCENT              "5%"
     #define FR_10_PERCENT             "10%"

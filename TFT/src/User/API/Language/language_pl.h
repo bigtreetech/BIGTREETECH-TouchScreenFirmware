@@ -102,7 +102,7 @@
     #define PL_5_MM                   "5mm"
     #define PL_10_MM                  "10mm"
     #define PL_100_MM                 "100mm"
-    #define PL_400_MM                 "400mm"
+    #define PL_200_MM                 "200mm"
     #define PL_1_PERCENT              "1%"
     #define PL_5_PERCENT              "5%"
     #define PL_10_PERCENT             "10%"

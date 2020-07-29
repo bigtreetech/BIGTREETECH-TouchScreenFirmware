@@ -102,7 +102,7 @@
     #define DU_5_MM                   "5mm"
     #define DU_10_MM                  "10mm"
     #define DU_100_MM                 "100mm"
-    #define DU_400_MM                 "400mm"
+    #define DU_200_MM                 "200mm"
     #define DU_1_PERCENT              "1%"
     #define DU_5_PERCENT              "5%"
     #define DU_10_PERCENT             "10%"
