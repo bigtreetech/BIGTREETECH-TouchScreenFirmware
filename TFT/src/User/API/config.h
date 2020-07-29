@@ -10,6 +10,8 @@
 #define CONFIG_FILE_PATH "0:config.ini"
 
 #define CONFIG_UNIFIEDMENU          "unified_menu:"
+#define CONFIG_CNCMODE              "cnc_mode:"
+#define CONFIG_LASERMODE            "laser_mode:"
 #define CONFIG_UART_BAUDRATE        "baudrate:"
 #define CONFIG_LANGUAGE             "language:"
 
@@ -68,6 +70,9 @@
 #define CONFIG_PREHEAT_TEMP_2       "preheat_temp2:"
 #define CONFIG_PREHEAT_TEMP_3       "preheat_temp3:"
 #define CONFIG_PREHEAT_TEMP_4       "preheat_temp4:"
+//-----------------------------Z min Touch Plate
+#define CONFIG_TOUCHPLATE_ON        "touchplate_on:"
+#define CONFIG_TOUCHPLATE_HEIGHT    "touchplate_height:"
 //-----------------------------Power Supply Settings (if connected to TFT Controller)
 #define CONFIG_PS_ON                "ps_on:"
 #define CONFIG_PS_LOGIC             "ps_on_active_high:"

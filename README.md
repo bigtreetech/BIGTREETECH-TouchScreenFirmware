@@ -22,6 +22,7 @@ Firmware for BigTreeTech's dual-mode touchscreen 3D printer controllers
   - [Firmware](#firmware)
 - [Troubleshooting](#troubleshooting)
 - [Version History](#version-history)
+- [CNC Targeted Modifications](#CNC-Targeted-Modifications)
 
 ## Menus and Themes
 
@@ -108,3 +109,23 @@ To reset the TFT's touch screen calibration, create a blank file named `reset.tx
 ## Version History
 
 See [BIGTREETECH-TouchScreenFirmware/releases](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/releases) for a complete version history.
+
+## CNC Targeted Modifications
+
+1. Possibility to define CNC_MENU in Configuration.h in order to configure the SW for CNC purposes
+2. Introduced new language and icons tags for CNC specific menu items (no impact on 3D printer tags)
+3. Added some specific bitmaps (from [BlomsD / MPCNC-TFT35-V2.0](https://github.com/BlomsD/MPCNC-TFT35-V2.0))
+4. Introduced a new menu spindle.c in order to add spindle start/stop control
+5. Removed Bed and Extruder Heating menu items from Mainpage.c
+6. Forced configuration in order to remove persistent Bed/Extruder temperature indication on all the pages
+7. Modified the Home menu in order to support G28 XY and G28 Z and Zero axes
+8. Possibility to define CNC_LASER in configuration.h in order to introduce menù for laser management (instead of fan)
+
+See:
+
+1.[TFT35 Home Menu (Home XY)](https://youtu.be/tTO4IgWAW1k)
+
+2.[TFT35 Home Menu (Home Z - Zero 0)](https://youtu.be/vSVPUKN2T6w)
+
+3.[TFT35 Home Spindle (Spindle ON/OFF)](https://youtu.be/DXpbi54GyoA)
+

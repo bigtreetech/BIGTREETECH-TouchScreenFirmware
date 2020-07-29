@@ -485,7 +485,11 @@ void sendQueueCmd(void)
           if(!fromTFT) {
             u8 i = 0;
             if(cmd_seen('P')) i = cmd_value();
-            fanSetSpeed(i, 0);
+            #ifdef CNC_LASER
+              laserSetSpeed(i, 0);
+            #else
+              fanSetSpeed(i, 0);
+            #endif
           }
           break;
         }

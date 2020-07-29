@@ -200,4 +200,16 @@
     #define GR_SWAP_RECOVER_LENGTH    "Extra recover swap length"
     #define GR_START_PRINT            "Start Printing:\n %s?"
 
+    #define GR_ZERO_X                 "Zero X"
+    #define GR_ZERO_Y                 "Zero Y"
+    #define GR_ZERO_Z                 "Zero Z"
+    #define GR_XY                     "XY"
+    #define GR_SPINDLE                "Spindle"
+    #define GR_CUT                    "Cut"
+    #define GR_LASER                  "Laser"
+    #define GR_LASER_2                "Laser 2%"
+    #define GR_LASER_100              "Laser 100%"
+    #define GR_LASER_OFF              "Laser Off"
+    #define GR_CNC_MODE               "CNC Mode"
+    #define GR_LASER_MODE             "Laser Mode"
 #endif

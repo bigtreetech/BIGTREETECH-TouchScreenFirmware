@@ -95,18 +95,22 @@ void printSetUpdateWaiting(bool isWaiting)
 
 void printerGotoIdle(void)
 {
-  // disable all heater
-  for (TOOL i = BED; i < HEATER_COUNT; i++)
+  if (infoSettings.cnc_mode != 1)
   {
-    mustStoreCmd("%s S0\n", heatCmd[i]);
+    // disable all heater
+    for (TOOL i = BED; i < HEATER_COUNT; i++)
+    {
+      mustStoreCmd("%s S0\n", heatCmd[i]);
+    }
   }
+
   // disable all fan
   for (u8 i = 0; i < (infoSettings.fan_count); i++)
   {
     mustStoreCmd("%s S0\n", fanCmd[i]);
   }
   // disable all stepper
-  mustStoreCmd("M18\n");
+  // mustStoreCmd("M18\n");
 }
 
 //only return gcode file name except path
@@ -294,6 +298,12 @@ void abortPrinting(void)
       break;
   }
   heatClearIsWaiting();
+
+  if (infoSettings.cnc_mode != 1)
+  {
+    // Always turn off the spindle.
+    mustStoreCmd("M05\n");
+  }
 
   endPrinting();
   exitPrinting();

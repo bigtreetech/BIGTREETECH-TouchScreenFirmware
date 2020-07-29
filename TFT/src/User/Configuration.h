@@ -246,6 +246,15 @@
 // Move, Home, Extrude, ABL at one Place and bring G-code Menu on Home Menu
 #define UNIFIED_MENU true //for unified menu: true | for classic menu: false
 
+// Enable CNC mode mutually exclusive to UNIFIED_MENU
+#define CNC_MODE true
+
+// Enable Laser interface instead of the fan interface (for CNC mode only).
+#define LASER_MODE true
+
+// Change this if you'd like to have a Z offset after homing Z.
+#define TOUCHPLATE_OFFSET 0.0
+
 /**
  * SD support
  * Starting from Marlin Bugfix 2.0.x Distribution Date: 2020-04-27 & above, The TFT will auto detect

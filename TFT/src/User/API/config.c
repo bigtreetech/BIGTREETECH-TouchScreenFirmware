@@ -413,6 +413,14 @@ void parseConfigKey(u16 index)
       infoSettings.unified_menu = getOnOff();
     break;
 
+  case C_INDEX_CNCMODE:
+      infoSettings.cnc_mode = getOnOff();
+    break;
+
+  case C_INDEX_LASERMODE:
+      infoSettings.laser_mode = getOnOff();
+    break;
+
   case C_INDEX_UART_BAUDRATE:
     if (inLimit(config_int(),0,ITEM_BAUDRATE_NUM-1))
       infoSettings.baudrate = item_baudrate[config_int()];
@@ -802,6 +810,17 @@ void parseConfigKey(u16 index)
       { if (inLimit(config_int(), MIN_TOOL_TEMP, MAX_TOOL_TEMP))
           infoSettings.preheat_temp[val_index] = config_int();
       }
+    }
+    break;
+  //---------------------------------------------------------Z min Touch Plate:
+  case C_INDEX_TOUCHPLATE_ON:
+    infoSettings.touchplate_on = getOnOff();
+    break;
+
+  case C_INDEX_TOUCHPLATE_HEIGHT:
+    if (inLimit(config_float(),  MIN_SIZE_LIMIT, MAX_SIZE_LIMIT))
+    {
+      infoSettings.touchplate_height = config_float();
     }
     break;
 

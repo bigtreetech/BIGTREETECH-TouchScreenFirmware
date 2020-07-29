@@ -200,4 +200,16 @@
     #define ES_SWAP_RECOVER_LENGTH    "Extra recover swap length"
     #define ES_START_PRINT            "Start Printing:\n %s?"
 
+    #define ES_ZERO_X                 "Zero X"
+    #define ES_ZERO_Y                 "Zero Y"
+    #define ES_ZERO_Z                 "Zero Z"
+    #define ES_XY                     "XY"
+    #define ES_SPINDLE                "Spindle"
+    #define ES_CUT                    "Cut"
+    #define ES_LASER                  "Laser"
+    #define ES_LASER_2                "Laser 2%"
+    #define ES_LASER_100              "Laser 100%"
+    #define ES_LASER_OFF              "Laser Off"
+    #define ES_CNC_MODE               "CNC Mode"
+    #define ES_LASER_MODE             "Laser Mode"
 #endif

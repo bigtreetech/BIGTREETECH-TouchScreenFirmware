@@ -200,4 +200,16 @@
     #define IT_SWAP_RECOVER_LENGTH    "Extra recover swap length"
     #define IT_START_PRINT            "Start Printing:\n %s?"
 
+    #define IT_ZERO_X                 "Zero X"
+    #define IT_ZERO_Y                 "Zero Y"
+    #define IT_ZERO_Z                 "Zero Z"
+    #define IT_XY                     "XY"
+    #define IT_SPINDLE                "Spindle"
+    #define IT_CUT                    "Cut"
+    #define IT_LASER                  "Laser"
+    #define IT_LASER_2                "Laser 2%"
+    #define IT_LASER_100              "Laser 100%"
+    #define IT_LASER_OFF              "Laser Off"
+    #define IT_CNC_MODE               "CNC Mode"
+    #define IT_LASER_MODE             "Laser Mode"
 #endif

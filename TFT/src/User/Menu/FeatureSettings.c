@@ -48,6 +48,8 @@ const LABEL itemMoveSpeed[ITEM_SPEED_NUM] = {
 typedef enum
 {
   SKEY_ACK = 0,
+  SKEY_CNC,
+  SKEY_LASER,
   SKEY_INVERT_X,
   SKEY_INVERT_Y,
   SKEY_INVERT_Z,
@@ -86,6 +88,8 @@ int fe_cur_page = 0;
 //
 LISTITEM settingPage[SKEY_COUNT] = {
   {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_TERMINAL_ACK,             LABEL_BACKGROUND  },
+  {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_CNC_MODE,                 LABEL_BACKGROUND  },
+  {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_LASER_MODE,               LABEL_BACKGROUND  },
   {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_INVERT_XAXIS,             LABEL_BACKGROUND  },
   {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_INVERT_YAXIS,             LABEL_BACKGROUND  },
   {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_INVERT_ZAXIS,             LABEL_BACKGROUND  },
@@ -135,6 +139,16 @@ void updateFeatureSettings(uint8_t key_val)
       infoSettings.terminalACK = (infoSettings.terminalACK + 1) % TOGGLE_NUM;
       settingPage[item_index].icon = toggleitem[infoSettings.terminalACK];
       break;
+
+    case SKEY_CNC:
+      infoSettings.cnc_mode = (infoSettings.cnc_mode + 1) % TOGGLE_NUM;
+      settingPage[item_index].icon = toggleitem[infoSettings.cnc_mode];
+     break;
+
+    case SKEY_LASER:
+      infoSettings.laser_mode = (infoSettings.laser_mode + 1) % TOGGLE_NUM;
+      settingPage[item_index].icon = toggleitem[infoSettings.laser_mode];
+     break;
 
     case SKEY_INVERT_X:
       infoSettings.invert_axis[X_AXIS] = (infoSettings.invert_axis[X_AXIS] + 1) % TOGGLE_NUM;
@@ -260,6 +274,14 @@ void loadFeatureSettings(){
       {
       case SKEY_ACK:
         settingPage[item_index].icon = toggleitem[infoSettings.terminalACK];
+        break;
+
+      case SKEY_CNC:
+        settingPage[item_index].icon = toggleitem[infoSettings.cnc_mode];
+        break;
+
+      case SKEY_LASER:
+        settingPage[item_index].icon = toggleitem[infoSettings.laser_mode];
         break;
 
       case SKEY_INVERT_X:

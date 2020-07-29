@@ -420,7 +420,9 @@ void parseACK(void)
       {
         u8 i = ack_value();
         if (ack_seen("S"))
+        {
           fanSetSpeed(i, ack_value());
+        }
       }
     // Parse pause message
       else if(ack_seen("paused for user"))
