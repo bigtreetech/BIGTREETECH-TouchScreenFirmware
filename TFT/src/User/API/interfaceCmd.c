@@ -489,8 +489,8 @@ void sendQueueCmd(void)
         case 109: //M109
           if (fromTFT)
           {
-            uint8_t i = cmd_seen('T') ? cmd_value() : heatGetCurrentHotend();
             infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 3]='4';  // Avoid send M109 to Marlin
+            uint8_t i = cmd_seen('T') ? cmd_value() : heatGetCurrentHotend();
             if (cmd_seen('R'))
             {
               infoCmd.queue[infoCmd.index_r].gcode[cmd_index-1] = 'S';
