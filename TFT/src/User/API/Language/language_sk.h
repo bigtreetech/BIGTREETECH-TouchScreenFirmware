@@ -101,6 +101,8 @@
     #define SK_1_MM                   "1mm"
     #define SK_5_MM                   "5mm"
     #define SK_10_MM                  "10mm"
+    #define SK_100_MM                 "100mm"
+    #define SK_400_MM                 "400mm"
     #define SK_1_PERCENT              "1%"
     #define SK_5_PERCENT              "5%"
     #define SK_10_PERCENT             "10%"
