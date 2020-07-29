@@ -63,6 +63,7 @@ void infoSettingsReset(void)
   infoSettings.runout_noise_ms        = FIL_NOISE_THRESHOLD;
   infoSettings.runout_distance        = FILAMENT_RUNOUT_DISTANCE_MM;
 
+  infoSettings.powerloss_en           = ENABLED;
   infoSettings.powerloss_home         = HOME_BEFORE_PLR;
   infoSettings.powerloss_invert       = PS_ON_ACTIVE_HIGH;
   infoSettings.powerloss_z_raise      = POWER_LOSS_ZRAISE;

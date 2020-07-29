@@ -86,6 +86,7 @@ typedef struct
   uint16_t runout_noise_ms;
   uint8_t  runout_distance;
 
+  uint8_t  powerloss_en;
   uint8_t  powerloss_home;
   uint8_t  powerloss_invert;
   uint8_t  powerloss_z_raise;
