@@ -24,6 +24,7 @@ enum
   HUNGARIAN,
   TURKISH,
   GREEK,
+  SLOVENIAN,
 
   LANGUAGE_NUM,
 };

@@ -11,15 +11,15 @@
 
 typedef struct
 {
-  float axis[TOTAL_AXIS];
-  u32   feedrate;
-  u16   speed,flow;
-  u16   target[MAX_HEATER_COUNT];
-  u16   fan[MAX_FAN_COUNT];
-  TOOL  nozzle;
-  u32   offset;
-  bool  relative;
-  bool  relative_e;
+  float    axis[TOTAL_AXIS];
+  uint32_t feedrate;
+  uint16_t speed,flow;
+  uint16_t target[MAX_HEATER_COUNT];
+  uint16_t fan[MAX_FAN_COUNT];
+  uint8_t  tool;
+  uint32_t offset;
+  bool     relative;
+  bool     relative_e;
 } BREAK_POINT;
 
 

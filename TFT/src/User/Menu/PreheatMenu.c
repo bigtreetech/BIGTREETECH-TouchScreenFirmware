@@ -86,7 +86,7 @@ void menuPreheat(void)
     }
 
   static TOOLPREHEAT nowHeater = BOTH;
-  KEY_VALUES  key_num = KEY_IDLE;
+  KEY_VALUES  key_num;
 
   preheatItems.items[KEY_ICON_5] = itemToolPreheat[nowHeater];
 
@@ -108,13 +108,13 @@ void menuPreheat(void)
         {
           case BOTH:
             heatSetTargetTemp(BED, infoSettings.preheat_bed[key_num]);
-            heatSetTargetTemp(heatGetCurrentToolNozzle(), infoSettings.preheat_temp[key_num]);
+            heatSetTargetTemp(heatGetCurrentHotend(), infoSettings.preheat_temp[key_num]);
             break;
           case BED_PREHEAT:
             heatSetTargetTemp(BED, infoSettings.preheat_bed[key_num]);
             break;
           case NOZZLE0_PREHEAT:
-            heatSetTargetTemp(heatGetCurrentToolNozzle(), infoSettings.preheat_temp[key_num]);
+            heatSetTargetTemp(heatGetCurrentHotend(), infoSettings.preheat_temp[key_num]);
             break;
         }
         refreshPreheatIcon(key_num, key_num, &preheatItems.items[key_num]);
