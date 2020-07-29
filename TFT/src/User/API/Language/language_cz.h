@@ -188,6 +188,7 @@
     #define CZ_300_SECONDS            "5 min."
     #define CZ_CUSTOM_SECONDS         "Vlastní"
     #define CZ_ST7920_FULLSCREEN      "Celoobrazovkový režim Marlin"
+    #define CZ_PLR_EN                 "Power loss recovery"
     #define CZ_SETTING_RESET          "Reset settings"
     #define CZ_SETTING_RESTORE        "Restore settings"
     #define CZ_EEPROM_SAVE_INFO       "Save printer settings\nto EEPROM?"

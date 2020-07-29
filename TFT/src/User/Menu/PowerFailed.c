@@ -23,10 +23,10 @@ bool powerFailedCreate(char *path)
   UINT br;
 
   create_ok = false;
+  if (!infoSettings.powerloss_en) return false; // disable plr
+  if (infoFile.source == BOARD_SD)  return false; // on board SD not support now
 
-  if(infoFile.source == BOARD_SD)  return false; // on board SD not support now
-
-  if(f_open(&fpPowerFailed, powerFailedFileName, FA_OPEN_ALWAYS | FA_WRITE) != FR_OK)  return false;
+  if (f_open(&fpPowerFailed, powerFailedFileName, FA_OPEN_ALWAYS | FA_WRITE) != FR_OK)  return false;
 
   f_write(&fpPowerFailed, path, MAX_PATH_LEN, &br);
   f_write(&fpPowerFailed, &infoBreakPoint, sizeof(BREAK_POINT), &br);
@@ -38,7 +38,7 @@ bool powerFailedCreate(char *path)
 
 void powerFailedCache(u32 offset)
 {
-  UINT        br;
+  UINT br;
 
   if (infoBreakPoint.axis[Z_AXIS] == coordinateGetAxisTarget(Z_AXIS)) return; // Z axis no raise.
   if (create_ok == false )      return;

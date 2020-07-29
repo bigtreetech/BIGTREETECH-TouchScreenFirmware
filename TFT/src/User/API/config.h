@@ -80,6 +80,7 @@
 #define CONFIG_RUNOUT_NOISE         "fil_noise_threshold:"
 #define CONFIG_RUNOUT_DISTANCE      "fil_runout_distance:"
 //-----------------------------Power Loss Recovery & BTT UPS Settings (if connected to TFT Controller)
+#define CONFIG_POWERLOSS_EN         "pl_recovery_en:"
 #define CONFIG_POWERLOSS_HOME       "pl_recovery_home:"
 #define CONFIG_POWERLOSS_ZRAISE     "pl_z_raise:"
 #define CONFIG_BTT_MINIUPS          "btt_mini_ups:"

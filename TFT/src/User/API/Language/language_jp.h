@@ -188,6 +188,7 @@
     #define JP_300_SECONDS            "5 Min."
     #define JP_CUSTOM_SECONDS         "カスタム"
     #define JP_ST7920_FULLSCREEN      "フルスクリーンでマーリンモード"
+    #define JP_PLR_EN                 "Power loss recovery"
     #define JP_SETTING_RESET          "設定をリセットする"
     #define JP_SETTING_RESTORE        "設定を復元する"
     #define JP_EEPROM_SAVE_INFO       "プリンタの設定をEEPROMに保存しますか?"

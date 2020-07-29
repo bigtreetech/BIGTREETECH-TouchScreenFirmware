@@ -188,6 +188,7 @@
     #define TR_300_SECONDS            "5 Dak."
     #define TR_CUSTOM_SECONDS         "Kişisel"
     #define TR_ST7920_FULLSCREEN      "Marlin mode in fullscreen"
+    #define TR_PLR_EN                 "Power loss recovery"
     #define TR_SETTING_RESET          "Reset settings"
     #define TR_SETTING_RESTORE        "Restore settings"
     #define TR_EEPROM_SAVE_INFO       "Save printer settings\nto EEPROM?"
