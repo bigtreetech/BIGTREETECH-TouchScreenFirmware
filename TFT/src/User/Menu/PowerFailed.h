@@ -20,6 +20,7 @@ typedef struct
   uint32_t offset;
   bool     relative;
   bool     relative_e;
+  bool     pause;
 } BREAK_POINT;
 
 
