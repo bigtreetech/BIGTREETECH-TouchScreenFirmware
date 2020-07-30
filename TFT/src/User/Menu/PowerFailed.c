@@ -29,6 +29,8 @@ bool powerFailedCreate(char *path)
   if (f_open(&fpPowerFailed, powerFailedFileName, FA_OPEN_ALWAYS | FA_WRITE) != FR_OK)  return false;
 
   f_write(&fpPowerFailed, path, MAX_PATH_LEN, &br);
+  uint8_t model_icon = getPrintModelIcon();
+  f_write(&fpPowerFailed, &model_icon, 1, &br);
   f_write(&fpPowerFailed, &infoBreakPoint, sizeof(BREAK_POINT), &br);
   f_sync(&fpPowerFailed);
 
@@ -71,7 +73,7 @@ void powerFailedCache(u32 offset)
 
   infoBreakPoint.pause = isPause();
 
-  f_lseek(&fpPowerFailed, MAX_PATH_LEN);
+  f_lseek(&fpPowerFailed, MAX_PATH_LEN + 1); // infoFile.title + infoPrinting.model_icon
   f_write(&fpPowerFailed, &infoBreakPoint, sizeof(BREAK_POINT), &br);
   f_sync(&fpPowerFailed);
 }
@@ -95,9 +97,9 @@ static bool powerFailedExist(void)
 {
   FIL  fp;
   UINT br;
-  if(f_open(&fp, powerFailedFileName, FA_OPEN_EXISTING|FA_READ) != FR_OK)    return false;
-  if(f_read(&fp, infoFile.title,      MAX_PATH_LEN, &br) != FR_OK)           return false;
-  if(f_close(&fp) != FR_OK)                                                  return false;
+  if(f_open(&fp, powerFailedFileName, FA_OPEN_EXISTING|FA_READ) != FR_OK) return false;
+  if(f_read(&fp, infoFile.title, MAX_PATH_LEN, &br) != FR_OK)             return false;
+  if(f_close(&fp) != FR_OK)                                               return false;
 
   create_ok = true;
   return true;
@@ -114,13 +116,16 @@ bool powerFailedlSeek(FIL* fp)
 
 bool powerOffGetData(void)
 {
-  FIL   fp;
-  UINT  br;
+  FIL     fp;
+  UINT    br;
+  uint8_t model_icon;
 
-  if(f_open(&fp, powerFailedFileName, FA_OPEN_EXISTING|FA_READ) != FR_OK)        return false;
-  if(f_lseek(&fp, MAX_PATH_LEN)                                 != FR_OK)        return false;
-  if(f_read(&fp, &infoBreakPoint,  sizeof(infoBreakPoint), &br) != FR_OK)        return false;
+  if(f_open(&fp, powerFailedFileName, FA_OPEN_EXISTING|FA_READ) != FR_OK) return false;
+  if(f_lseek(&fp, MAX_PATH_LEN)                                 != FR_OK) return false;
+  if(f_read(&fp, &model_icon, 1, &br) != FR_OK)                           return false;
+  if(f_read(&fp, &infoBreakPoint,  sizeof(infoBreakPoint), &br) != FR_OK) return false;
 
+  setPrintModelIcon(model_icon);
   for(int8_t i = MAX_HEATER_COUNT - 1; i >= 0; i--)
   {
     if(infoBreakPoint.target[i] != 0)

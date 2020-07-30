@@ -33,7 +33,7 @@ bool isM0_Pause(void)
 }
 
 //
-void setPrintingTime(u32 RTtime)
+void setPrintingTime(uint32_t RTtime)
 {
   if(RTtime%1000 == 0)
   {
@@ -45,25 +45,25 @@ void setPrintingTime(u32 RTtime)
 }
 
 //
-u32 getPrintSize(void)
+uint32_t getPrintSize(void)
 {
   return infoPrinting.size;
 }
 
 //
-void setPrintSize(u32 size)
+void setPrintSize(uint32_t size)
 {
   infoPrinting.size = size;
 }
 
 //
-u32 getPrintCur(void)
+uint32_t getPrintCur(void)
 {
   return infoPrinting.cur;
 }
 
 //
-void setPrintCur(u32 cur)
+void setPrintCur(uint32_t cur)
 {
   infoPrinting.cur = cur;
 }
@@ -78,12 +78,22 @@ void setPrintRunout(bool runout)
   infoPrinting.runout = runout;
 }
 
-u8 getPrintProgress(void)
+void setPrintModelIcon(bool exist)
+{
+  infoPrinting.model_icon = exist;
+}
+
+bool getPrintModelIcon(void)
+{
+  return infoPrinting.model_icon;
+}
+
+uint8_t getPrintProgress(void)
 {
   return infoPrinting.progress;
 }
 
-u32 getPrintTime(void)
+uint32_t getPrintTime(void)
 {
   return infoPrinting.time;
 }
@@ -96,7 +106,7 @@ void printSetUpdateWaiting(bool isWaiting)
 //only return gcode file name except path
 //for example:"SD:/test/123.gcode"
 //only return "123.gcode"
-u8 *getCurGcodeName(char *path)
+uint8_t *getCurGcodeName(char *path)
 {
   int i=strlen(path);
   for(; path[i]!='/'&& i>0; i--)

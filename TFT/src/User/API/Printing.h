@@ -22,16 +22,17 @@
 
 typedef struct
 {
-  FIL     file;
+  FIL file;
 
-  u32     time; // Printed time in sec
-  u32     size; // Gcode file total size
-  u32     cur; // Gcode has printed file size
-  u8      progress;
-  bool    printing; // 1 means printing, 0 means idle
-  bool    pause; // 1 means paused
-  bool    m0_pause; // pause triggered through M0/M1 gcode
-  bool    runout; // 1: runout in printing, 0: idle
+  uint32_t time; // Printed time in sec
+  uint32_t size; // Gcode file total size
+  uint32_t cur;  // Gcode has printed file size
+  uint8_t  progress;
+  bool     printing; // 1 means printing, 0 means idle
+  bool     pause;    // 1 means paused
+  bool     m0_pause; // pause triggered through M0/M1 gcode
+  bool     runout;   // 1: runout in printing, 0: idle
+  bool     model_icon; // 1: model preview icon exist, 0: not exist
 }PRINTING;
 
 extern PRINTING infoPrinting;
@@ -41,27 +42,29 @@ bool isPrinting(void);
 bool isPause(void);
 bool isM0_Pause(void);
 void breakAndContinue(void);
-void setPrintingTime(u32 RTtime);
+void setPrintingTime(uint32_t RTtime);
 
 void exitPrinting(void);
 void endPrinting(void);
 void completePrinting(void);
 void abortPrinting(void);
-u8 *getCurGcodeName(char *path);
+uint8_t *getCurGcodeName(char *path);
 void sendPrintCodes(uint8_t index);
 
 void setM0Pause(bool m0_pause);
 bool setPrintPause(bool is_pause, bool is_m0pause);
 
-void setPrintSize(u32 size);
-void setPrintCur(u32 cur);
-u32 getPrintSize(void);
-u32 getPrintCur(void);
+void setPrintSize(uint32_t size);
+void setPrintCur(uint32_t cur);
+uint32_t getPrintSize(void);
+uint32_t getPrintCur(void);
 bool getPrintRunout(void);
 void setPrintRunout(bool runout);
+void setPrintModelIcon(bool exist);
+bool getPrintModelIcon(void);
 
-u8   getPrintProgress(void);
-u32  getPrintTime(void);
+uint8_t   getPrintProgress(void);
+uint32_t  getPrintTime(void);
 
 void printSetUpdateWaiting(bool isWaiting);
 
