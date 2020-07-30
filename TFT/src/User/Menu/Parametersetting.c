@@ -338,7 +338,7 @@ void drawTemperatureStatus(void){
   }
 
   uint16_t start_y = (TITLE_END_Y - BYTE_HEIGHT) / 2;
-  int16_t x_offset = LCD_WIDTH;
+  int16_t x_offset = LCD_WIDTH - 10;
   GUI_SetBkColor(infoSettings.title_bg_color);
   for(int8_t i = tmpIndex - 1; i >= 0; i--) {
     char tempstr[10];
