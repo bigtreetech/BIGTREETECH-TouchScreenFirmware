@@ -46,8 +46,8 @@ void loopSpeed(void)
       if(send_waiting[i] != true)
       {
         send_waiting[i] = true;
-      char *speedCmd[SPEED_NUM] = {"M220","M221"};
-      storeCmd("%s S%d\n",speedCmd[i], percent[i]);
+        const char *speedCmd[SPEED_NUM] = {"M220","M221"};
+        storeCmd("%s S%d\n",speedCmd[i], percent[i]);
       }
     }
 }
