@@ -88,7 +88,7 @@ void menuCustom(void)
       uint32_t item_index = gc_cur_page * LISTITEM_PER_PAGE + key_num;
       if (item_index < gcode_num)
       {
-        storeCmd(customcodes->gcode[item_index]);
+        mustStoreScript(customcodes->gcode[item_index]);
       }
     }
     switch(key_num)
