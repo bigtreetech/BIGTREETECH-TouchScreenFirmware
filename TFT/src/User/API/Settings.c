@@ -115,7 +115,7 @@ void infoSettingsReset(void)
 
 
   infoSettings.pause_pos[X_AXIS]      = NOZZLE_PAUSE_X_POSITION;  // X
-  infoSettings.pause_pos[Y_AXIS]      = NOZZLE_PAUSE_X_POSITION;  // Y
+  infoSettings.pause_pos[Y_AXIS]      = NOZZLE_PAUSE_Y_POSITION;  // Y
   infoSettings.pause_z_raise          = NOZZLE_PAUSE_Z_RAISE;
 
   for(int i = 0; i < TOTAL_AXIS ;i++)
