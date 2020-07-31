@@ -92,6 +92,35 @@ void mustStoreCmd(const char * format,...)
   pQueue->count++;
 }
 
+// Store Script cmd to infoCmd queue
+// For example: "M502\nM500\n" will be split into two commands "M502\n", "M500\n"
+void mustStoreScript(const char * format,...)
+{
+  if (strlen(format) == 0) return;
+
+  uint16_t i = 0;
+  char script[256];
+  char *p = script;
+  my_va_list ap;
+  my_va_start(ap,format);
+  my_vsprintf(script, format, ap);
+  my_va_end(ap);
+
+  for (;;) {
+    char c = *p++;
+    if (!c) return;
+    char cmd[CMD_MAX_CHAR];
+    if (c != '\n') {
+      cmd[i++] = c;
+    }
+    else {
+      cmd[i] = 0;
+      mustStoreCmd("%s", cmd);
+      i = 0;
+    }
+  }
+}
+
 // Store from UART cmd(such as: ESP3D, OctoPrint, else TouchScreen) to infoCmd queue, this cmd will be sent by UART in sendQueueCmd(),
 // If the infoCmd queue is full, reminde in title bar.
 bool storeCmdFromUART(uint8_t port, const char * gcode)

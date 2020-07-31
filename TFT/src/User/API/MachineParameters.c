@@ -157,10 +157,10 @@ void saveEepromSettings(void)
 void restoreEepromSettings(void)
 {
   if(infoMachineSettings.EEPROM == 1)
-    mustStoreCmd("M501\nM503 S0\n");
+    mustStoreScript("M501\nM503 S0\n");
 }
 void resetEepromSettings(void)
 {
   if(infoMachineSettings.EEPROM == 1)
-    mustStoreCmd("M502\nM500\n");
+    mustStoreScript("M502\nM500\n");
 }
