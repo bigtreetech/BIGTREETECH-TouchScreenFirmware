@@ -122,13 +122,13 @@ void sendPrintCodes(uint8_t index)
   switch (index)
   {
   case 0:
-    mustStoreCmd(printcodes.start_gcode);
+    mustStoreScript(printcodes.start_gcode);
     break;
   case 1:
-    mustStoreCmd(printcodes.end_gcode);
+    mustStoreScript(printcodes.end_gcode);
     break;
   case 2:
-    mustStoreCmd(printcodes.cancel_gcode);
+    mustStoreScript(printcodes.cancel_gcode);
     break;
 
   default:
