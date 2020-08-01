@@ -48,6 +48,16 @@
   #error "AUTO_BED_LEVELING is now auto-configured with 'M115'. Please remove AUTO_BED_LEVELING from your Configuration.h file."
 #endif
 
+#ifdef ENABLE_UBL_VALUE
+  #if ENABLE_UBL_VALUE > 2
+    #error "ENABLE_UBL_VALUE cannot be greater than 2"
+  #endif
+
+  #if ENABLE_UBL_VALUE < 0
+    #error "ENABLE_UBL_VALUE cannot be less than 0"
+  #endif
+#endif
+
 #ifdef CANCEL_PRINT_GCODE
   #error "CANCEL_PRINT_GCODE is now PRINT_CANCEL_GCODE. Please update your Configuration.h file."
 #endif

@@ -15,7 +15,7 @@ const u16 default_level_speed[]   = {LEVELING_POINT_XY_FEEDRATE,LEVELING_POINT_X
 const u16 default_pause_speed[]   = {NOZZLE_PAUSE_XY_FEEDRATE, NOZZLE_PAUSE_XY_FEEDRATE, NOZZLE_PAUSE_Z_FEEDRATE, NOZZLE_PAUSE_E_FEEDRATE};
 const u16 default_preheat_ext[]   = PREHEAT_HOTEND;
 const u16 default_preheat_bed[]   = PREHEAT_BED;
-const u8 defulat_custom_enabled[] = CUSTOM_GCODE_ENABLED;
+const u8 default_custom_enabled[] = CUSTOM_GCODE_ENABLED;
 
 // Reset settings data
 void infoSettingsReset(void)
@@ -149,10 +149,16 @@ void initMachineSetting(void){
   infoMachineSettings.promptSupport           = DISABLED;
   infoMachineSettings.onboard_sd_support      = ENABLED;
   infoMachineSettings.autoReportSDStatus      = DISABLED;
+  infoMachineSettings.enableubl               = DISABLED;
 }
 
 void setupMachine(void)
 {
+  #ifdef ENABLE_UBL_VALUE
+    if (infoMachineSettings.autoLevel == 1 && ENABLE_UBL_VALUE == 1) {
+      infoMachineSettings.enableubl = ENABLE;
+    }
+  #endif
   #ifdef AUTO_SAVE_LOAD_LEVELING_VALUE
     if (infoMachineSettings.autoLevel == 1 && infoMachineSettings.EEPROM == 1 && infoSettings.auto_load_leveling == 1){
       storeCmd("M420 S1\n");
