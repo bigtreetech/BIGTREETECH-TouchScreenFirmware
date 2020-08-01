@@ -15,7 +15,7 @@ const char *const parameter_Cmd[PARAMETERS_COUNT][STEPPER_COUNT] = {
   {"M914 X%.2f\n", "M914 Y%.2f\n", "M914 Z%.2f\n",              NULL,              NULL}, //bump Sensitivity
   {"M207 S%.2f\n", "M207 W%.2f\n", "M207 F%.2f\n",    "M207 Z%.2f\n",              NULL}, //FW retract
   {"M208 S%.2f\n", "M208 W%.2f\n", "M208 F%.2f\n",    "M208 R%.2f\n",              NULL}, //FW retract recover
-  {"M900 K%.2f\n",           NULL,            NULL,             NULL,              NULL}  //Linear Advance
+  {"M900 K%.2f\n",           NULL,            NULL,             NULL,              NULL}, //Linear Advance
   {"M420 S%.2f\n", "M420 Z%.2f\n",            NULL,             NULL,              NULL}  //ABL State + Z Fade
 };
 
@@ -29,7 +29,7 @@ const VAL_TYPE parameter_val_type[PARAMETERS_COUNT][STEPPER_COUNT] = {
   {VAL_TYPE_NEG_INT,    VAL_TYPE_NEG_INT,   VAL_TYPE_NEG_INT},                                            //bump Sensitivity
   {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_INT,         VAL_TYPE_FLOAT},                        //FW retract
   {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_INT,         VAL_TYPE_INT},                          //FW retract recover
-  {VAL_TYPE_FLOAT}                                                                                        //Linear Advance                                                                            //Linear Advance
+  {VAL_TYPE_FLOAT},                                                                                       //Linear Advance                                                                            //Linear Advance
   {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT}                                                                   //ABL State + Z Fade
 };
 
