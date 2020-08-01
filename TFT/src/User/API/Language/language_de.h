@@ -120,6 +120,8 @@
     #define DE_1_MM                   "1mm"
     #define DE_5_MM                   "5mm"
     #define DE_10_MM                  "10mm"
+    #define DE_100_MM                 "100mm"
+    #define DE_200_MM                 "200mm"
     #define DE_1_PERCENT              "1%"
     #define DE_5_PERCENT              "5%"
     #define DE_10_PERCENT             "10%"

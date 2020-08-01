@@ -120,6 +120,8 @@
     #define JP_1_MM                   "1mm"
     #define JP_5_MM                   "5mm"
     #define JP_10_MM                  "10mm"
+    #define JP_100_MM                 "100mm"
+    #define JP_200_MM                 "200mm"
     #define JP_1_PERCENT              "1%"
     #define JP_5_PERCENT              "5%"
     #define JP_10_PERCENT             "10%"

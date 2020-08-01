@@ -120,6 +120,8 @@
     #define ES_1_MM                   "1mm"
     #define ES_5_MM                   "5mm"
     #define ES_10_MM                  "10mm"
+    #define ES_100_MM                 "100mm"
+    #define ES_200_MM                 "200mm"
     #define ES_1_PERCENT              "1%"
     #define ES_5_PERCENT              "5%"
     #define ES_10_PERCENT             "10%"

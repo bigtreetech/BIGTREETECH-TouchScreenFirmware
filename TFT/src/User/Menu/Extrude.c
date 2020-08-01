@@ -29,16 +29,18 @@ const ITEM itemSpeed[ITEM_SPEED_NUM] = {
 
 static u8  item_speed_i = 1;
 
-#define ITEM_LEN_NUM 3
+#define ITEM_LEN_NUM 5
 
 const ITEM itemLen[ITEM_LEN_NUM] = {
 // icon                       label
   {ICON_E_1_MM,               LABEL_1_MM},
   {ICON_E_5_MM,               LABEL_5_MM},
   {ICON_E_10_MM,              LABEL_10_MM},
+  {ICON_E_100_MM,             LABEL_100_MM},
+  {ICON_E_200_MM,             LABEL_200_MM},
 };
 
-const  u8 item_len[ITEM_LEN_NUM] = {1, 5, 10};
+const  u8 item_len[ITEM_LEN_NUM] = {1, 5, 10, 100, 200};
 static u8 item_len_i = 1;
 
 static float extrudeCoordinate = 0.0f;

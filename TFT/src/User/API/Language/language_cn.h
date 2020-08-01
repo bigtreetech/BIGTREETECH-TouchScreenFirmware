@@ -120,6 +120,8 @@
     #define CN_1_MM                   "1mm"
     #define CN_5_MM                   "5mm"
     #define CN_10_MM                  "10mm"
+    #define CN_100_MM                 "100mm"
+    #define CN_200_MM                 "200mm"
     #define CN_1_PERCENT              "1%"
     #define CN_5_PERCENT              "5%"
     #define CN_10_PERCENT             "10%"

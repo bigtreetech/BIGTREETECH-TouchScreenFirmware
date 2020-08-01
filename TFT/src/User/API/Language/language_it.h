@@ -120,6 +120,8 @@
     #define IT_1_MM                   "1mm"
     #define IT_5_MM                   "5mm"
     #define IT_10_MM                  "10mm"
+    #define IT_100_MM                 "100mm"
+    #define IT_200_MM                 "200mm"
     #define IT_1_PERCENT              "1%"
     #define IT_5_PERCENT              "5%"
     #define IT_10_PERCENT             "10%"
