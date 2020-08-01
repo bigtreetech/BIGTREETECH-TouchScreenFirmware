@@ -658,16 +658,16 @@ void sendQueueCmd(void)
           if(cmd_seen('T')) setParameter(P_ACCELERATION,2,cmd_float());
           break;
         case 207: //M207 FW Retract
-          if(cmd_seen('F')) setParameter(P_FWRETRACT,0,cmd_float());
-          if(cmd_seen('S')) setParameter(P_FWRETRACT,1,cmd_float());
-          if(cmd_seen('W')) setParameter(P_FWRETRACT,2,cmd_float());
+          if(cmd_seen('S')) setParameter(P_FWRETRACT,0,cmd_float());
+          if(cmd_seen('W')) setParameter(P_FWRETRACT,1,cmd_float());
+          if(cmd_seen('F')) setParameter(P_FWRETRACT,2,cmd_float());
           if(cmd_seen('Z')) setParameter(P_FWRETRACT,3,cmd_float());
           break;
         case 208: //M208 FW Retract recover
-          if(cmd_seen('F')) setParameter(P_FWRECOVER,0,cmd_float());
-          if(cmd_seen('R')) setParameter(P_FWRECOVER,1,cmd_float());
-          if(cmd_seen('S')) setParameter(P_FWRECOVER,2,cmd_float());
-          if(cmd_seen('W')) setParameter(P_FWRECOVER,3,cmd_float());
+          if(cmd_seen('S')) setParameter(P_FWRECOVER,0,cmd_float());
+          if(cmd_seen('W')) setParameter(P_FWRECOVER,1,cmd_float());
+          if(cmd_seen('F')) setParameter(P_FWRECOVER,2,cmd_float());
+          if(cmd_seen('R')) setParameter(P_FWRECOVER,3,cmd_float());
           break;
         case 220: //M220
           if(cmd_seen('S'))
