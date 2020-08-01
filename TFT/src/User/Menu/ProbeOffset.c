@@ -18,6 +18,55 @@ const float probeOffset_unit[ITEM_PROBE_OFFSET_UNIT_NUM] = {0.01f, 0.1f, 1};
 
 static u8 curUnit = 0;
 
+bool z_offset_started = false;
+
+/* Start Z offset */
+void probeStartZOffset(void)
+{
+  // Z offset gcode sequence start
+  mustStoreCmd("G28\n");                                   // home printer
+  mustStoreCmd("G91\n");                                   // set relative position mode
+  mustStoreCmd("G1 X%.2f Y%.2f\n",
+    getParameter(P_PROBE_OFFSET, X_STEPPER),
+    getParameter(P_PROBE_OFFSET, Y_STEPPER));              // move nozzle to XY probing point
+  mustStoreCmd("G90\n");                                   // set absolute position mode
+  mustStoreCmd("G1 Z0 F800\n");                            // move nozzle to Z0 absolute point
+  mustStoreCmd("M211 S0\n");                               // disable Software Endstop to move nozzle minus Zero (Z0) if necessary
+  mustStoreCmd("G91\n");                                   // set relative position mode
+  mustStoreCmd("G1 F%d\n",
+    infoSettings.axis_speed[infoSettings.move_speed]);     // set feed rate
+}
+
+/* Stop Z offset */
+void probeStopZOffset(void)
+{
+  // Z offset gcode sequence stop
+  mustStoreCmd("G90\n");                                   // set absolute position mode
+  mustStoreCmd("M211 S1\n");                               // enable Software Endstop
+  mustStoreCmd("G28\n");                                   // home printer
+  mustStoreCmd("G91\n");                                   // set relative position mode
+  mustStoreCmd("G1 Z%.2f\n", infoSettings.pause_z_raise ); // raise Z
+  mustStoreCmd("G90\n");                                   // set absolute position mode
+}
+
+void showProbeOffsetStatus(u8 *status)
+{
+  char tempstr[20];
+
+  if (status != NULL)
+  {
+    sprintf(tempstr, "%s  ", status);
+
+    if (!z_offset_started)
+      GUI_SetColor(infoSettings.reminder_color);
+    else
+      GUI_SetColor(infoSettings.sd_reminder_color);
+
+    GUI_DispString(exhibitRect.x0, exhibitRect.y0, (u8 *)tempstr);
+    GUI_SetColor(infoSettings.font_color);
+  }
+}
+
 void showProbeOffset(float val)
 {
   char tempstr[20];
@@ -31,7 +80,7 @@ void showProbeOffset(float val)
 
 void menuProbeOffset(void)
 {
-  // title, ITEM_PER_PAGE items (icon + label)
+  // 1 title, ITEM_PER_PAGE items (icon + label)
   MENUITEMS probeOffsetItems = {
   // title
   LABEL_Z_OFFSET,
@@ -40,18 +89,31 @@ void menuProbeOffset(void)
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
     {ICON_INC,                  LABEL_INC},
-    {ICON_EEPROM_SAVE,          LABEL_EEPROM_SAVE},
+    {ICON_PROBE_OFFSET,         LABEL_OFF},
     {ICON_01_MM,                LABEL_01_MM},
     {ICON_RESET_VALUE,          LABEL_RESET},
     {ICON_BACK,                 LABEL_BACK},}
   };
 
+  #ifdef FRIENDLY_PROBE_OFFSET_LANGUAGE = 1
+    probeOffsetItems.items[0].icon = ICON_NOZZLE_DOWN;
+    probeOffsetItems.items[0].label.index = LABEL_NOZZLE_DOWN;
+    probeOffsetItems.items[3].icon = ICON_NOZZLE_UP;
+    probeOffsetItems.items[3].label.index = LABEL_NOZZLE_UP;
+  #endif
+
   KEY_VALUES key_num = KEY_IDLE;
-  float probe_offset_value;
-  float now = probe_offset_value = getParameter(P_PROBE_OFFSET, Z_STEPPER);
+  float orig_probe_offset_value, probe_offset_value;
+  float now = probe_offset_value = orig_probe_offset_value = getParameter(P_PROBE_OFFSET, Z_STEPPER);
+
+  if (!z_offset_started)
+    probeOffsetItems.items[KEY_ICON_4].label.index = LABEL_OFF;
+  else
+    probeOffsetItems.items[KEY_ICON_4].label.index = LABEL_ON;
 
   probeOffsetItems.items[KEY_ICON_5] = itemProbeOffsetUnit[curUnit];
   menuDrawPage(&probeOffsetItems);
+  showProbeOffsetStatus(textSelect(probeOffsetItems.items[KEY_ICON_4].label.index));
   showProbeOffset(now);
 
 #if LCD_ENCODER_SUPPORT
@@ -66,36 +128,51 @@ void menuProbeOffset(void)
     key_num = menuKeyGetValue();
     switch (key_num)
     {
-      // decrease offset
+      // decrease z-offset
       case KEY_ICON_0:
-        if (probe_offset_value > PROBE_OFFSET_MIN_VALUE)
+        if (probe_offset_value > PROBE_OFFSET_MIN_VALUE && z_offset_started)
         {
           float diff = probe_offset_value - PROBE_OFFSET_MIN_VALUE;
           max_unit = (diff > max_unit) ? max_unit : diff;
 
-          if (storeCmd("M851 Z%.2f\n", probe_offset_value - max_unit))
-            probe_offset_value -= max_unit;
+          mustStoreCmd("M851 Z%.2f\n", probe_offset_value - max_unit);
+          mustStoreCmd("G1 Z%.2f\n", -max_unit);
+
+          probe_offset_value -= max_unit;
         }
         break;
 
-      // increase offset
+      // increase z-offset
       case KEY_ICON_3:
-        if (probe_offset_value < PROBE_OFFSET_MAX_VALUE)
+        if (probe_offset_value < PROBE_OFFSET_MAX_VALUE && z_offset_started)
         {
           float diff = PROBE_OFFSET_MAX_VALUE - probe_offset_value;
           max_unit = (diff > max_unit) ? max_unit : diff;
 
-          if (storeCmd("M851 Z%.2f\n", probe_offset_value + max_unit))
-            probe_offset_value += max_unit;
+          mustStoreCmd("M851 Z%.2f\n", probe_offset_value + max_unit);
+          mustStoreCmd("G1 Z%.2f\n", max_unit);
+
+          probe_offset_value += max_unit;
         }
         break;
 
-      //save to eeprom
       case KEY_ICON_4:
-        if (infoMachineSettings.EEPROM == 1)
+        if (!z_offset_started)
         {
-          storeCmd("M500\n");
+          probeStartZOffset();
+          z_offset_started = true;
+
+          probeOffsetItems.items[key_num].label.index = LABEL_ON;
         }
+        else
+        {
+          probeStopZOffset();
+          z_offset_started = false;
+
+          probeOffsetItems.items[key_num].label.index = LABEL_OFF;
+        }
+        menuDrawItem(&probeOffsetItems.items[key_num], key_num);
+        showProbeOffsetStatus(textSelect(probeOffsetItems.items[key_num].label.index));
         break;
 
       // change step unit
@@ -105,21 +182,42 @@ void menuProbeOffset(void)
         menuDrawItem(&probeOffsetItems.items[key_num], key_num);
         break;
 
-      // reset offset to default value
+      // reset z-offset to default value
       case KEY_ICON_6:
-        if (storeCmd("M851 Z%.2f\n", PROBE_OFFSET_DEFAULT_VALUE))
+        if (probe_offset_value != PROBE_OFFSET_DEFAULT_VALUE && z_offset_started)
+        {
+          mustStoreCmd("M851 Z%.2f\n", PROBE_OFFSET_DEFAULT_VALUE);
+          mustStoreCmd("G1 Z%.2f\n", -probe_offset_value);
+
           probe_offset_value = PROBE_OFFSET_DEFAULT_VALUE;
+        }
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur--;
+        if (probe_offset_value != orig_probe_offset_value && infoMachineSettings.EEPROM == 1)
+        {
+          showDialog(DIALOG_TYPE_QUESTION, textSelect(probeOffsetItems.title.index), textSelect(LABEL_EEPROM_SAVE_INFO),
+                     textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), saveEepromSettings, NULL, NULL);
+        }
+        else
+        {
+          if (z_offset_started)
+          {
+            probeStopZOffset();
+            z_offset_started = false;
+          }
+
+          infoMenu.cur--;
+        }
         break;
 
       default:
         #if LCD_ENCODER_SUPPORT
-          if (encoderPosition)
+          if (encoderPosition && z_offset_started)
           {
-            storeCmd("M851 Z%.2f\n", probe_offset_value + probeOffset_unit[curUnit] * encoderPosition);
+            mustStoreCmd("M851 Z%.2f\n", probe_offset_value + probeOffset_unit[curUnit] * encoderPosition);
+            mustStoreCmd("G1 Z%.2f\n", probeOffset_unit[curUnit] * encoderPosition);
+
             probe_offset_value += probeOffset_unit[curUnit] * encoderPosition;
             encoderPosition = 0;
           }

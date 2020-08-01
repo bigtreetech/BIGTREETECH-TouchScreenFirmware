@@ -39,7 +39,6 @@ SCROLL   titleScroll;
 const GUI_RECT titleRect={10, (TITLE_END_Y - BYTE_HEIGHT) / 2, LCD_WIDTH-10, (TITLE_END_Y - BYTE_HEIGHT) / 2 + BYTE_HEIGHT};
 
 SCROLL   gcodeScroll;
-bool icon_pre = false;
 
 const GUI_RECT gcodeRect[NUM_PER_PAGE] = {
   {BYTE_WIDTH/2+0*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2,
@@ -94,12 +93,6 @@ void normalNameDisp(const GUI_RECT *rect, u8 *name)
   GUI_DispStringInPrect(rect, name);
   GUI_CancelRange();
 }
-
-bool get_Pre_Icon(void)
-{
-  return icon_pre;
-}
-
 
 void gocdeIconDraw(void)
 {
@@ -309,12 +302,7 @@ void menuPrintFromSource(void)
             if(infoHost.connected !=true) break;
             if(EnterDir(infoFile.file[key_num + start - infoFile.F_num]) == false) break;
             //load model preview in flash if icon exists
-            if (infoFile.source != BOARD_SD && model_DecodeToFlash(infoFile.title) == true) {
-              icon_pre = true;
-            }
-            else{
-              icon_pre = false;
-            }
+            setPrintModelIcon(infoFile.source != BOARD_SD && model_DecodeToFlash(infoFile.title));
 
             char temp_info[75];
             sprintf(temp_info, (char *)textSelect(LABEL_START_PRINT), infoFile.file[key_num + start - infoFile.F_num]);
@@ -382,7 +370,7 @@ LABEL_PRINT,
 
 void menuPrint(void)
 {
-  KEY_VALUES  key_num = KEY_IDLE;
+  KEY_VALUES  key_num;
 
   sourceSelItems.items[ONBOARD_SD_INDEX].icon = (infoMachineSettings.onboard_sd_support == ENABLED) ? ICON_ONBOARD_SD : ICON_BACKGROUND;
   sourceSelItems.items[ONBOARD_SD_INDEX].label.index = (infoMachineSettings.onboard_sd_support == ENABLED) ? LABEL_ONBOARDSD : LABEL_BACKGROUND;

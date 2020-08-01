@@ -1,10 +1,8 @@
 #include "FanControl.h"
 #include "includes.h"
 
-
-const char* fanID[] = FAN_DISPLAY_ID;
-const char* fanCmd[] = FAN_CMD;
-const char* fanSignID[] = FAN_SIGN_ID;
+const char* fanID[MAX_FAN_COUNT] = FAN_DISPLAY_ID;
+const char* fanCmd[MAX_FAN_COUNT] = FAN_CMD;
 
 static u8   fanSpeed[MAX_FAN_COUNT] = {0};
 static u8   lastfanSpeed[MAX_FAN_COUNT] = {0};

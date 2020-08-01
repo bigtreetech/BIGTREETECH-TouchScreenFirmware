@@ -2,7 +2,7 @@
 #include "STM32_Flash.h"
 
 #define TSC_SIGN  0x20200512 // DO NOT MODIFY
-#define PARA_SIGN 0x20200520 // (YYYMMDD) If a new setting parameter is added, modify here and initialize the initial value in the "infoSettingsReset()" function
+#define PARA_SIGN 0x20200724 // (YYYMMDD) If a new setting parameter is added, modify here and initialize the initial value in the "infoSettingsReset()" function
 
 extern int32_t TSC_Para[7];        //
 extern SETTINGS infoSettings;  //
@@ -111,6 +111,7 @@ void readStoredPara(void)
   infoSettings.runout_noise_ms      = byteToWord(data + (index += 4), 4);
   infoSettings.runout_distance      = byteToWord(data + (index += 4), 4);
 
+  infoSettings.powerloss_en         = byteToWord(data + (index += 4), 4);
   infoSettings.powerloss_home       = byteToWord(data + (index += 4), 4);
   infoSettings.powerloss_invert     = byteToWord(data + (index += 4), 4);
   infoSettings.powerloss_z_raise    = byteToWord(data + (index += 4), 4);
@@ -118,7 +119,9 @@ void readStoredPara(void)
 
 //machine specific settings
 
-  infoSettings.tool_count           = byteToWord(data + (index += 4), 4);
+  infoSettings.hotend_count         = byteToWord(data + (index += 4), 4);
+  infoSettings.bed_en               = byteToWord(data + (index += 4), 4);
+  infoSettings.chamber_en           = byteToWord(data + (index += 4), 4);
   infoSettings.ext_count            = byteToWord(data + (index += 4), 4);
   infoSettings.fan_count            = byteToWord(data + (index += 4), 4);
   infoSettings.auto_load_leveling   = byteToWord(data + (index += 4), 4);
@@ -237,6 +240,7 @@ void storePara(void)
   wordToByte(infoSettings.runout_noise_ms,            data + (index += 4));
   wordToByte(infoSettings.runout_distance,            data + (index += 4));
 
+  wordToByte(infoSettings.powerloss_en,               data + (index += 4));
   wordToByte(infoSettings.powerloss_home,             data + (index += 4));
   wordToByte(infoSettings.powerloss_invert,           data + (index += 4));
   wordToByte(infoSettings.powerloss_z_raise,          data + (index += 4));
@@ -244,7 +248,9 @@ void storePara(void)
 
   //machine specific settings
 
-  wordToByte(infoSettings.tool_count,                 data + (index += 4));
+  wordToByte(infoSettings.hotend_count,               data + (index += 4));
+  wordToByte(infoSettings.bed_en,                     data + (index += 4));
+  wordToByte(infoSettings.chamber_en,                 data + (index += 4));
   wordToByte(infoSettings.ext_count,                  data + (index += 4));
   wordToByte(infoSettings.fan_count,                  data + (index += 4));
   wordToByte(infoSettings.auto_load_leveling,         data + (index += 4));

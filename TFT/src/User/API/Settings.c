@@ -15,7 +15,7 @@ const u16 default_level_speed[]   = {LEVELING_POINT_XY_FEEDRATE,LEVELING_POINT_X
 const u16 default_pause_speed[]   = {NOZZLE_PAUSE_XY_FEEDRATE, NOZZLE_PAUSE_XY_FEEDRATE, NOZZLE_PAUSE_Z_FEEDRATE, NOZZLE_PAUSE_E_FEEDRATE};
 const u16 default_preheat_ext[]   = PREHEAT_HOTEND;
 const u16 default_preheat_bed[]   = PREHEAT_BED;
-const u8 defulat_custom_enabled[] = CUSTOM_GCODE_ENABLED;
+const u8 default_custom_enabled[] = CUSTOM_GCODE_ENABLED;
 
 // Reset settings data
 void infoSettingsReset(void)
@@ -63,6 +63,7 @@ void infoSettingsReset(void)
   infoSettings.runout_noise_ms        = FIL_NOISE_THRESHOLD;
   infoSettings.runout_distance        = FILAMENT_RUNOUT_DISTANCE_MM;
 
+  infoSettings.powerloss_en           = ENABLED;
   infoSettings.powerloss_home         = HOME_BEFORE_PLR;
   infoSettings.powerloss_invert       = PS_ON_ACTIVE_HIGH;
   infoSettings.powerloss_z_raise      = POWER_LOSS_ZRAISE;
@@ -70,7 +71,9 @@ void infoSettingsReset(void)
 
 //machine specific settings
 
-  infoSettings.tool_count             = TOOL_NUM;
+  infoSettings.hotend_count           = HOTEND_NUM;
+  infoSettings.bed_en                 = ENABLE;
+  infoSettings.chamber_en             = DISABLE;
   infoSettings.ext_count              = EXTRUDER_NUM;
   infoSettings.fan_count              = FAN_NUM;
   infoSettings.auto_load_leveling     = AUTO_SAVE_LOAD_LEVELING_VALUE;
@@ -112,7 +115,7 @@ void infoSettingsReset(void)
 
 
   infoSettings.pause_pos[X_AXIS]      = NOZZLE_PAUSE_X_POSITION;  // X
-  infoSettings.pause_pos[Y_AXIS]      = NOZZLE_PAUSE_X_POSITION;  // Y
+  infoSettings.pause_pos[Y_AXIS]      = NOZZLE_PAUSE_Y_POSITION;  // Y
   infoSettings.pause_z_raise          = NOZZLE_PAUSE_Z_RAISE;
 
   for(int i = 0; i < TOTAL_AXIS ;i++)
@@ -146,10 +149,16 @@ void initMachineSetting(void){
   infoMachineSettings.promptSupport           = DISABLED;
   infoMachineSettings.onboard_sd_support      = ENABLED;
   infoMachineSettings.autoReportSDStatus      = DISABLED;
+  infoMachineSettings.enableubl               = DISABLED;
 }
 
 void setupMachine(void)
 {
+  #ifdef ENABLE_UBL_VALUE
+    if (infoMachineSettings.autoLevel == 1 && ENABLE_UBL_VALUE == 1) {
+      infoMachineSettings.enableubl = ENABLE;
+    }
+  #endif
   #ifdef AUTO_SAVE_LOAD_LEVELING_VALUE
     if (infoMachineSettings.autoLevel == 1 && infoMachineSettings.EEPROM == 1 && infoSettings.auto_load_leveling == 1){
       storeCmd("M420 S1\n");

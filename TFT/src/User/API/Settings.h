@@ -5,13 +5,13 @@
 #include "coordinate.h"
 #include "Configuration.h"
 
-#define CONFIG_SUPPPORT 20200530
+#define CONFIG_SUPPPORT 20200724
 
 #define ITEM_BAUDRATE_NUM     9
 
 #define MAX_EXT_COUNT         6
-#define MAX_TOOL_COUNT        6
-#define MAX_HEATER_COUNT      (MAX_TOOL_COUNT + 1)
+#define MAX_HOTEND_COUNT      6
+#define MAX_HEATER_COUNT      (2 + MAX_HOTEND_COUNT) // chamber + bed + hotend
 #define MAX_FAN_COUNT         6
 
 #define AXIS_NUM              (TOTAL_AXIS - 1)
@@ -30,8 +30,6 @@
 #define DISABLED  0
 #define ENABLED   1
 #define AUTO      2
-
-#define HEATER_COUNT (infoSettings.tool_count + 1)
 
 typedef enum
 {
@@ -88,6 +86,7 @@ typedef struct
   uint16_t runout_noise_ms;
   uint8_t  runout_distance;
 
+  uint8_t  powerloss_en;
   uint8_t  powerloss_home;
   uint8_t  powerloss_invert;
   uint8_t  powerloss_z_raise;
@@ -95,16 +94,18 @@ typedef struct
 
 //machine specific settings
 
-  uint8_t   tool_count;
-  uint8_t   heater_count;
+  uint8_t   hotend_count;
+  uint8_t   bed_en;
+  uint8_t   chamber_en;
   uint8_t   ext_count;
   uint8_t   fan_count;
   uint8_t   auto_load_leveling;
+  uint8_t   autoLevelState;
   uint8_t   onboardSD;
   uint8_t   m27_refresh_time;
   uint8_t   m27_active;
   uint8_t   longFileName;
-  uint16_t  max_temp[MAX_HEATER_COUNT];  //Tool count + bed
+  uint16_t  max_temp[MAX_HEATER_COUNT];  // chamber + bed + hotend
   uint16_t  min_ext_temp;
   uint8_t   fan_max[MAX_FAN_COUNT];
   uint8_t   fan_percentage;
@@ -153,6 +154,7 @@ typedef struct
   uint8_t EEPROM;
   uint8_t autoReportTemp;
   uint8_t autoLevel;
+  uint8_t enableubl;
   uint8_t zProbe;
   uint8_t levelingData;
   uint8_t softwarePower;

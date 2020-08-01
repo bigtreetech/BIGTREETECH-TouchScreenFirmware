@@ -33,7 +33,7 @@ bool isM0_Pause(void)
 }
 
 //
-void setPrintingTime(u32 RTtime)
+void setPrintingTime(uint32_t RTtime)
 {
   if(RTtime%1000 == 0)
   {
@@ -45,25 +45,25 @@ void setPrintingTime(u32 RTtime)
 }
 
 //
-u32 getPrintSize(void)
+uint32_t getPrintSize(void)
 {
   return infoPrinting.size;
 }
 
 //
-void setPrintSize(u32 size)
+void setPrintSize(uint32_t size)
 {
   infoPrinting.size = size;
 }
 
 //
-u32 getPrintCur(void)
+uint32_t getPrintCur(void)
 {
   return infoPrinting.cur;
 }
 
 //
-void setPrintCur(u32 cur)
+void setPrintCur(uint32_t cur)
 {
   infoPrinting.cur = cur;
 }
@@ -78,12 +78,22 @@ void setPrintRunout(bool runout)
   infoPrinting.runout = runout;
 }
 
-u8 getPrintProgress(void)
+void setPrintModelIcon(bool exist)
+{
+  infoPrinting.model_icon = exist;
+}
+
+bool getPrintModelIcon(void)
+{
+  return infoPrinting.model_icon;
+}
+
+uint8_t getPrintProgress(void)
 {
   return infoPrinting.progress;
 }
 
-u32 getPrintTime(void)
+uint32_t getPrintTime(void)
 {
   return infoPrinting.time;
 }
@@ -93,26 +103,10 @@ void printSetUpdateWaiting(bool isWaiting)
   update_waiting = isWaiting;
 }
 
-void printerGotoIdle(void)
-{
-  // disable all heater
-  for (TOOL i = BED; i < HEATER_COUNT; i++)
-  {
-    mustStoreCmd("%s S0\n", heatCmd[i]);
-  }
-  // disable all fan
-  for (u8 i = 0; i < (infoSettings.fan_count); i++)
-  {
-    mustStoreCmd("%s S0\n", fanCmd[i]);
-  }
-  // disable all stepper
-  mustStoreCmd("M18\n");
-}
-
 //only return gcode file name except path
 //for example:"SD:/test/123.gcode"
 //only return "123.gcode"
-u8 *getCurGcodeName(char *path)
+uint8_t *getCurGcodeName(char *path)
 {
   int i=strlen(path);
   for(; path[i]!='/'&& i>0; i--)
@@ -128,13 +122,13 @@ void sendPrintCodes(uint8_t index)
   switch (index)
   {
   case 0:
-    mustStoreCmd(printcodes.start_gcode);
+    mustStoreScript(printcodes.start_gcode);
     break;
   case 1:
-    mustStoreCmd(printcodes.end_gcode);
+    mustStoreScript(printcodes.end_gcode);
     break;
   case 2:
-    mustStoreCmd(printcodes.cancel_gcode);
+    mustStoreScript(printcodes.cancel_gcode);
     break;
 
   default:
@@ -191,7 +185,7 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
         if (isCoorRelative == true)     mustStoreCmd("G90\n");
         if (isExtrudeRelative == true)  mustStoreCmd("M82\n");
 
-        if (heatGetCurrentTemp(heatGetCurrentToolNozzle()) > infoSettings.min_ext_temp)
+        if (heatGetCurrentTemp(heatGetCurrentHotend()) > infoSettings.min_ext_temp)
         {
           mustStoreCmd("G1 E%.5f F%d\n", tmp.axis[E_AXIS] - infoSettings.pause_retract_len, infoSettings.pause_feedrate[E_AXIS]);
         }
@@ -220,7 +214,7 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
           mustStoreCmd("G1 X%.3f Y%.3f F%d\n", tmp.axis[X_AXIS], tmp.axis[Y_AXIS], infoSettings.pause_feedrate[X_AXIS]);
           mustStoreCmd("G1 Z%.3f F%d\n", tmp.axis[Z_AXIS], infoSettings.pause_feedrate[Z_AXIS]);
         }
-        if(heatGetCurrentTemp(heatGetCurrentToolNozzle()) > infoSettings.min_ext_temp)
+        if(heatGetCurrentTemp(heatGetCurrentHotend()) > infoSettings.min_ext_temp)
         {
           mustStoreCmd("G1 E%.5f F%d\n", tmp.axis[E_AXIS] - infoSettings.pause_retract_len + infoSettings.resume_purge_len, infoSettings.pause_feedrate[E_AXIS]);
         }
@@ -262,7 +256,6 @@ void endPrinting(void)
   if(infoSettings.send_end_gcode == 1){
     sendPrintCodes(1);
   }
-  printerGotoIdle();
 }
 
 
@@ -314,7 +307,7 @@ void shutdown(void)
 void shutdownLoop(void)
 {
   bool tempIsLower = true;
-  for (TOOL i = NOZZLE0; i < HEATER_COUNT; i++)
+  for (uint8_t i = NOZZLE0; i < infoSettings.hotend_count; i++)
   {
     if (heatGetCurrentTemp(i) >= AUTO_SHUT_DOWN_MAXTEMP)
       tempIsLower = false;

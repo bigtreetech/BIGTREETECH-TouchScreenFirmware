@@ -5,9 +5,9 @@ const MENUITEMS StatusItems = {
 // title
 LABEL_READY,
 // icon                       label
- {{ICON_STATUS_NOZZLE,         LABEL_BACKGROUND},
-  {ICON_STATUS_BED,            LABEL_BACKGROUND},
-  {ICON_STATUS_FAN,            LABEL_BACKGROUND},
+ {{ICON_STATUS_NOZZLE,        LABEL_BACKGROUND},
+  {ICON_STATUS_BED,           LABEL_BACKGROUND},
+  {ICON_STATUS_FAN,           LABEL_BACKGROUND},
   {ICON_STATUS_SPEED,         LABEL_BACKGROUND},
   {ICON_MAINMENU,             LABEL_MAINMENU},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
@@ -41,7 +41,7 @@ static float yaxis;
 static float zaxis;
 static bool gantryCmdWait = false;
 
-TOOL current_tool = NOZZLE0;
+uint8_t current_tool = NOZZLE0;
 int current_fan = 0;
 int current_speedID = 0;
 const char* SpeedID[2] = SPEED_ID;
@@ -251,10 +251,9 @@ void toggleTool(void)
 {
   if (OS_GetTimeMs() > nextTime)
   {
-    if (infoSettings.tool_count > 1)
+    if (infoSettings.hotend_count > 1)
     {
-      current_tool = (TOOL)((current_tool+1) % HEATER_COUNT);
-      current_tool = (current_tool == 0) ? 1 : current_tool;
+      current_tool = (current_tool+1) % infoSettings.hotend_count;
     }
     if (infoSettings.fan_count > 1)
     {
@@ -307,11 +306,11 @@ void menuStatus(void)
     switch (key_num)
     {
       case KEY_ICON_0:
-        heatSetCurrentTool(current_tool);
+        heatSetCurrentIndex(current_tool);
         infoMenu.menu[++infoMenu.cur] = menuHeat;
         break;
       case KEY_ICON_1:
-        heatSetCurrentTool(BED);
+        heatSetCurrentIndex(BED);
         infoMenu.menu[++infoMenu.cur] = menuHeat;
         break;
       case KEY_ICON_2:

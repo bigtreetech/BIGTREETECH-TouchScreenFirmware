@@ -215,18 +215,7 @@ void loopReminderClear(void)
 
   /* Clear warning message */
   reminder.status = STATUS_IDLE;
-  if (menuType == MENU_TYPE_LISTVIEW)
-  {
-    if (curListItems == NULL)
-    return;
-    menuDrawTitle(labelGetAddress(&curListItems->title));
-  }
-  else if(menuType == MENU_TYPE_ICON)
-  {
-    if (curMenuItems == NULL)
-      return;
-    menuDrawTitle(labelGetAddress(&curMenuItems->title));
-  }
+  menuReDrawCurTitle();
 }
 
 void loopVolumeReminderClear(void)
@@ -243,19 +232,7 @@ void loopVolumeReminderClear(void)
 
   /* Clear warning message */
   volumeReminder.status = STATUS_IDLE;
-  if (menuType == MENU_TYPE_LISTVIEW)
-  {
-    if(curListItems == NULL)
-      return;
-    menuDrawTitle(labelGetAddress(&curListItems->title));
-  }
-  else if(menuType == MENU_TYPE_ICON)
-  {
-  if(curMenuItems == NULL)
-    return;
-  menuDrawTitle(labelGetAddress(&curMenuItems->title));
-  }
-
+  menuReDrawCurTitle();
 }
 
 void loopBusySignClear(void)
@@ -290,12 +267,26 @@ void menuDrawTitle(const uint8_t *content) //(const MENUITEMS * menuItems)
     GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
   }
 
-  show_GlobalInfo();
+  drawTemperatureStatus();
   if(reminder.status == STATUS_IDLE) return;
   GUI_SetColor(infoSettings.reminder_color);
   GUI_SetBkColor(infoSettings.title_bg_color);
   GUI_DispStringInPrect(&reminder.rect, textSelect(reminder.inf));
   GUI_RestoreColorDefault();
+}
+
+void menuReDrawCurTitle(void)
+{
+  if (menuType == MENU_TYPE_LISTVIEW)
+  {
+    if(curListItems == NULL) return;
+    menuDrawTitle(labelGetAddress(&curListItems->title));
+  }
+  else if(menuType == MENU_TYPE_ICON)
+  {
+    if(curMenuItems == NULL) return;
+    menuDrawTitle(labelGetAddress(&curMenuItems->title));
+  }
 }
 
 //Draw the entire interface
@@ -349,7 +340,6 @@ void menuDrawListPage(const LISTITEMS *listItems)
         }
     #endif
   }
-//  show_globalinfo();
 }
 
 //Show live info text on icons
@@ -519,7 +509,7 @@ void loopFrontEnd(void)
 
   loopBusySignClear();                //Busy Indicator clear
 
-  temp_Change();
+  loopTemperatureStatus();
 
 #ifdef FIL_RUNOUT_PIN
   loopFrontEndFILRunoutDetect();

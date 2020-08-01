@@ -74,6 +74,7 @@ typedef enum
   #ifdef ST7920_SPI
     SKEY_ST7920_FULLSCREEN,
   #endif
+  SKEY_PLR_EN,
   SKEY_RESET_SETTINGS, // Keep reset always at the bottom of the settings menu list.
   SKEY_COUNT //keep this always at the end
 }SKEY_LIST;
@@ -85,35 +86,36 @@ int fe_cur_page = 0;
 //set item types
 //
 LISTITEM settingPage[SKEY_COUNT] = {
-  {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_TERMINAL_ACK,             LABEL_BACKGROUND  },
-  {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_INVERT_XAXIS,             LABEL_BACKGROUND  },
-  {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_INVERT_YAXIS,             LABEL_BACKGROUND  },
-  {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_INVERT_ZAXIS,             LABEL_BACKGROUND  },
+  {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_TERMINAL_ACK,             LABEL_BACKGROUND},
+  {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_INVERT_XAXIS,             LABEL_BACKGROUND},
+  {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_INVERT_YAXIS,             LABEL_BACKGROUND},
+  {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_INVERT_ZAXIS,             LABEL_BACKGROUND},
   #ifdef PS_ON_PIN
-    {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,      LABEL_AUTO_SHUT_DOWN,           LABEL_BACKGROUND  },
+    {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,      LABEL_AUTO_SHUT_DOWN,           LABEL_BACKGROUND},
   #endif
   #ifdef FIL_RUNOUT_PIN
-    {ICONCHAR_BLANK,     LIST_CUSTOMVALUE,   LABEL_FILAMENT_SENSOR,          LABEL_OFF         },
+    {ICONCHAR_BLANK,     LIST_CUSTOMVALUE,   LABEL_FILAMENT_SENSOR,          LABEL_OFF},
   #endif
   {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_MOVE_SPEED,               LABEL_NORMAL_SPEED},
-  {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_SEND_START_GCODE,         LABEL_BACKGROUND  },
-  {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_SEND_END_GCODE,           LABEL_BACKGROUND  },
-  {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_SEND_CANCEL_GCODE,        LABEL_BACKGROUND  },
-  {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_PERSISTENT_STATUS_INFO,   LABEL_BACKGROUND  },
-  {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_FILE_LISTMODE,            LABEL_BACKGROUND  },
+  {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_SEND_START_GCODE,         LABEL_BACKGROUND},
+  {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_SEND_END_GCODE,           LABEL_BACKGROUND},
+  {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_SEND_CANCEL_GCODE,        LABEL_BACKGROUND},
+  {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_PERSISTENT_STATUS_INFO,   LABEL_BACKGROUND},
+  {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_FILE_LISTMODE,            LABEL_BACKGROUND},
   #ifdef LED_COLOR_PIN
-    {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_KNOB_LED,                 LABEL_OFF         },
+    {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_KNOB_LED,                 LABEL_OFF},
   #endif
   #ifdef LCD_LED_PWM_CHANNEL
-  {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_LCD_BRIGHTNESS,           LABEL_DYNAMIC },
-  {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_LCD_BRIGHTNESS_DIM,       LABEL_DYNAMIC },
-  {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_LCD_DIM_IDLE_TIMER,       LABEL_DYNAMIC },
+    {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_LCD_BRIGHTNESS,           LABEL_DYNAMIC},
+    {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_LCD_BRIGHTNESS_DIM,       LABEL_DYNAMIC},
+    {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_LCD_DIM_IDLE_TIMER,       LABEL_DYNAMIC},
   #endif
   #ifdef ST7920_SPI
-  {ICONCHAR_BLANK,      LIST_TOGGLE,        LABEL_ST7920_FULLSCREEN,        LABEL_OFF         },
+    {ICONCHAR_BLANK,      LIST_TOGGLE,        LABEL_ST7920_FULLSCREEN,        LABEL_OFF},
   #endif
+  {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_PLR_EN,                   LABEL_BACKGROUND},
   // Keep reset settings always at the bottom of the settings menu list.
-  {ICONCHAR_BLANK,      LIST_MOREBUTTON,    LABEL_SETTING_RESET,            LABEL_BACKGROUND  }
+  {ICONCHAR_BLANK,      LIST_MOREBUTTON,    LABEL_SETTING_RESET,            LABEL_BACKGROUND}
 };
 
 void resetSettings(void)
@@ -241,6 +243,11 @@ void updateFeatureSettings(uint8_t key_val)
       break;
     #endif
 
+    case SKEY_PLR_EN:
+      infoSettings.powerloss_en = (infoSettings.powerloss_en + 1) % TOGGLE_NUM;
+      settingPage[item_index].icon = toggleitem[infoSettings.powerloss_en];
+      break;
+
     default:
       return;
   }
@@ -342,6 +349,11 @@ void loadFeatureSettings(){
           settingPage[item_index].icon = toggleitem[infoSettings.marlin_mode_fullscreen];
           break;
       #endif
+
+      case SKEY_PLR_EN:
+        settingPage[item_index].icon = toggleitem[infoSettings.powerloss_en];
+        break;
+
       default:
         break;
       }
