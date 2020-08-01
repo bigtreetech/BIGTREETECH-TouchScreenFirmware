@@ -310,7 +310,7 @@ void toggleinfo(void)
 void printingDrawPage(void)
 {
   //  Scroll_CreatePara(&titleScroll, infoFile.title,&titleRect);  //
-  if(get_Pre_Icon() == true){
+  if(infoPrinting.model_icon){
     key_pause = 5;
     //printingItems.items[key_pause - 1] = itemBlank;
     printingItems.items[key_pause - 1].icon = ICON_PREVIEW;
@@ -419,19 +419,19 @@ void menuPrinting(void)
     switch(key_num)
     {
       case KEY_ICON_4:
-        if(get_Pre_Icon() != true){
-        setPrintPause(!isPause(),false);
-        resumeToPause(isPause());
+        if (!infoPrinting.model_icon){
+          setPrintPause(!isPause(), false);
+          resumeToPause(isPause());
         }
         break;
 
       case KEY_ICON_5:
-        if(get_Pre_Icon() == true){
-        setPrintPause(!isPause(),false);
-        resumeToPause(isPause());
+        if (infoPrinting.model_icon){
+          setPrintPause(!isPause(), false);
+          resumeToPause(isPause());
         }
         else{
-        infoMenu.menu[++infoMenu.cur] = menuBabyStep;
+          infoMenu.menu[++infoMenu.cur] = menuBabyStep;
         }
         break;
 
@@ -445,7 +445,6 @@ void menuPrinting(void)
         else
         {
           exitPrinting();
-
           infoMenu.cur--;
         }
         break;

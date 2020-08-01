@@ -12,13 +12,16 @@ const char *const ignoreEcho[] = {
   "Now doing file:,"
   "Probe Offset",
   "Flow:",
-  "echo:;",     //M503
-  "echo:  G",   //M503
-  "echo:  M",   //M503
-  "Cap:",       //M115
-  "Config:",    //M360
-  "Settings Stored" // M500
-};
+  "echo:;",                  //M503
+  "echo:  G",                //M503
+  "echo:  M",                //M503
+  "Cap:",                    //M115
+  "Config:",                 //M360
+  "Settings Stored",         //M500
+  "echo:Soft endstops:",     //M211
+  "echo:Bed Leveling",       //M420
+  "echo:Fade Height"         //M420
+  };
 
 bool portSeen[_UART_CNT] = {false, false, false, false, false, false};
 
@@ -92,6 +95,12 @@ void ackPopupInfo(const char *info)
   popupReminder(d_type,(u8* )info, (u8 *)dmaL2Cache + ack_index);
 }
 
+void ackPopupUBL(const char *info)
+{
+  showDialog(DIALOG_TYPE_INFO, textSelect(LABEL_ABL_COMPLETE), textSelect(LABEL_ABL_SMART_FILL),
+              textSelect(LABEL_CONFIRM), NULL, NULL, NULL, NULL);
+}
+
 bool dmaL1NotEmpty(uint8_t port)
 {
   return dmaL1Data[port].rIndex != dmaL1Data[port].wIndex;
@@ -138,7 +147,7 @@ void parseACK(void)
       updateNextHeatCheckTime();
       infoHost.connected = true;
       storeCmd("M115\n");
-      storeCmd("M503 S0\n");
+      storeCmd("M503\n");// Query detailed printer capabilities
       storeCmd("M92\n"); // Steps/mm of extruder is an important parameter for Smart filament runout
                          // Avoid can't getting this parameter due to disabled M503 in Marlin
     }
@@ -343,6 +352,16 @@ void parseACK(void)
         setParameter(P_CURRENT, E2_STEPPER, ack_value());
         setDualStepperStatus(E_STEPPER, true);
       }
+    // Parse and store ABL type
+      else if(ack_seen("echo:; Unified Bed Leveling")){
+        if(ENABLE_UBL_VALUE==2) infoMachineSettings.enableubl = ENABLED;
+      }
+    // Parse and store ABL on/off state & Z fade value on M503
+      else if(ack_seen("M420 S")) {
+        infoSettings.autoLevelState = ack_value();
+        if(ack_seen("S")) setParameter(P_ABL_STATE, 0, ack_value());
+        if(ack_seen("Z")) setParameter(P_ABL_STATE, 1, ack_value());
+      }
     // Parse M115 capability report
 
       else if(ack_seen("FIRMWARE_NAME:Marlin"))
@@ -409,7 +428,7 @@ void parseACK(void)
       }
       else if(ack_seen("Probe Offset"))
       {
-        if(ack_seen("Z:"))
+        if(ack_seen("Z:") || (ack_seen("Z")))
         {
           setParameter(P_PROBE_OFFSET,Z_STEPPER, ack_value());
         }
@@ -456,6 +475,11 @@ void parseACK(void)
         }
         BUZZER_PLAY(sound_notify);
         ackPopupInfo(echomagic);
+      }
+      else if(ack_seen(echoUBL))
+      {
+        BUZZER_PLAY(sound_notify);
+        ackPopupUBL(echoUBL);
       }
     }
 

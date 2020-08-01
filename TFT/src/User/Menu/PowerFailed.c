@@ -29,6 +29,8 @@ bool powerFailedCreate(char *path)
   if (f_open(&fpPowerFailed, powerFailedFileName, FA_OPEN_ALWAYS | FA_WRITE) != FR_OK)  return false;
 
   f_write(&fpPowerFailed, path, MAX_PATH_LEN, &br);
+  uint8_t model_icon = getPrintModelIcon();
+  f_write(&fpPowerFailed, &model_icon, 1, &br);
   f_write(&fpPowerFailed, &infoBreakPoint, sizeof(BREAK_POINT), &br);
   f_sync(&fpPowerFailed);
 
@@ -40,34 +42,38 @@ void powerFailedCache(u32 offset)
 {
   UINT br;
 
-  if (infoBreakPoint.axis[Z_AXIS] == coordinateGetAxisTarget(Z_AXIS)) return; // Z axis no raise.
-  if (create_ok == false )      return;
-  if (isPause() == true)        return;
-  if (infoCacheCmd.count != 0)  return;
+  if (infoBreakPoint.axis[Z_AXIS] == coordinateGetAxisTarget(Z_AXIS)) return; // Z axis no changed.
+  if (create_ok == false) return;
+  if (infoCacheCmd.count != 0) return;
+  if (!isPause())
+  { // not paused, update printing progress status.
+    infoBreakPoint.offset = offset;
+    for (AXIS i = X_AXIS; i < TOTAL_AXIS; i++)
+    {
+      infoBreakPoint.axis[i] = coordinateGetAxisTarget(i);
+    }
+    infoBreakPoint.feedrate = coordinateGetFeedRate();
+    infoBreakPoint.speed = speedGetPercent(0); // Move speed percent
+    infoBreakPoint.flow = speedGetPercent(1); // Flow percent
 
-  infoBreakPoint.offset = offset;
-  for (AXIS i = X_AXIS; i < TOTAL_AXIS; i++)
-  {
-    infoBreakPoint.axis[i] = coordinateGetAxisTarget(i);
+    for(uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
+    {
+      infoBreakPoint.target[i] = heatGetTargetTemp(i);
+    }
+    infoBreakPoint.tool = heatGetCurrentTool();
+
+    for(u8 i = 0; i < infoSettings.fan_count; i++)
+    {
+      infoBreakPoint.fan[i] = fanGetSpeed(i);
+    }
+    infoBreakPoint.relative = coorGetRelative();
+    infoBreakPoint.relative_e = eGetRelative();
   }
-  infoBreakPoint.feedrate = coordinateGetFeedRate();
-  infoBreakPoint.speed = speedGetPercent(0); // Move speed percent
-  infoBreakPoint.flow = speedGetPercent(1); // Flow percent
+  else if (infoBreakPoint.pause) return; // paused and the pause state has been saved
 
-  for(uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
-  {
-    infoBreakPoint.target[i] = heatGetTargetTemp(i);
-  }
-  infoBreakPoint.tool = heatGetCurrentTool();
+  infoBreakPoint.pause = isPause();
 
-  for(u8 i = 0; i < infoSettings.fan_count; i++)
-  {
-   infoBreakPoint.fan[i] = fanGetSpeed(i);
-  }
-  infoBreakPoint.relative = coorGetRelative();
-  infoBreakPoint.relative_e = eGetRelative();
-
-  f_lseek(&fpPowerFailed, MAX_PATH_LEN);
+  f_lseek(&fpPowerFailed, MAX_PATH_LEN + 1); // infoFile.title + infoPrinting.model_icon
   f_write(&fpPowerFailed, &infoBreakPoint, sizeof(BREAK_POINT), &br);
   f_sync(&fpPowerFailed);
 }
@@ -91,9 +97,9 @@ static bool powerFailedExist(void)
 {
   FIL  fp;
   UINT br;
-  if(f_open(&fp, powerFailedFileName, FA_OPEN_EXISTING|FA_READ) != FR_OK)    return false;
-  if(f_read(&fp, infoFile.title,      MAX_PATH_LEN, &br) != FR_OK)           return false;
-  if(f_close(&fp) != FR_OK)                                                  return false;
+  if(f_open(&fp, powerFailedFileName, FA_OPEN_EXISTING|FA_READ) != FR_OK) return false;
+  if(f_read(&fp, infoFile.title, MAX_PATH_LEN, &br) != FR_OK)             return false;
+  if(f_close(&fp) != FR_OK)                                               return false;
 
   create_ok = true;
   return true;
@@ -110,20 +116,23 @@ bool powerFailedlSeek(FIL* fp)
 
 bool powerOffGetData(void)
 {
-  FIL   fp;
-  UINT  br;
+  FIL     fp;
+  UINT    br;
+  uint8_t model_icon;
 
-  if(f_open(&fp, powerFailedFileName, FA_OPEN_EXISTING|FA_READ) != FR_OK)        return false;
-  if(f_lseek(&fp, MAX_PATH_LEN)                                 != FR_OK)        return false;
-  if(f_read(&fp, &infoBreakPoint,  sizeof(infoBreakPoint), &br) != FR_OK)        return false;
+  if(f_open(&fp, powerFailedFileName, FA_OPEN_EXISTING|FA_READ) != FR_OK) return false;
+  if(f_lseek(&fp, MAX_PATH_LEN)                                 != FR_OK) return false;
+  if(f_read(&fp, &model_icon, 1, &br) != FR_OK)                           return false;
+  if(f_read(&fp, &infoBreakPoint,  sizeof(infoBreakPoint), &br) != FR_OK) return false;
 
-  for(uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
+  setPrintModelIcon(model_icon);
+  for(int8_t i = MAX_HEATER_COUNT - 1; i >= 0; i--)
   {
     if(infoBreakPoint.target[i] != 0)
       mustStoreCacheCmd("%s S%d\n", heatWaitCmd[i], infoBreakPoint.target[i]);
   }
 
-  for(u8 i=0; i < infoSettings.fan_count; i++)
+  for(uint8_t i = 0; i < infoSettings.fan_count; i++)
   {
     if(infoBreakPoint.fan[i] != 0)
       mustStoreCacheCmd("%s S%d\n", fanCmd[i], infoBreakPoint.fan[i]);
@@ -132,10 +141,12 @@ bool powerOffGetData(void)
   mustStoreCacheCmd("%s\n", tool_change[infoBreakPoint.tool]);
   if(infoBreakPoint.feedrate != 0)
   {
-    int btt_zraise = 0;
+    uint16_t z_raised = 0;
     if(infoSettings.btt_ups == 1)
-        btt_zraise = infoSettings.powerloss_z_raise;
-    mustStoreCacheCmd("G92 Z%.3f\n", infoBreakPoint.axis[Z_AXIS] + btt_zraise);
+        z_raised += infoSettings.powerloss_z_raise;
+    if(infoBreakPoint.pause)
+        z_raised += infoSettings.pause_z_raise;
+    mustStoreCacheCmd("G92 Z%.3f\n", infoBreakPoint.axis[Z_AXIS] + z_raised);
     mustStoreCacheCmd("G1 Z%.3f\n", infoBreakPoint.axis[Z_AXIS] + infoSettings.powerloss_z_raise);
     if (infoSettings.powerloss_home)
     {
@@ -181,7 +192,7 @@ void menuPowerOff(void)
 
   if(mountFS()==true && powerFailedExist())
   {
-    popupDrawPage(DIALOG_TYPE_ERROR, bottomDoubleBtn, textSelect(LABEL_POWER_FAILED), (u8* )infoFile.title,
+    popupDrawPage(DIALOG_TYPE_QUESTION, bottomDoubleBtn, textSelect(LABEL_POWER_FAILED), (u8* )infoFile.title,
                     textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL));
 
     while(infoMenu.menu[infoMenu.cur]==menuPowerOff)
