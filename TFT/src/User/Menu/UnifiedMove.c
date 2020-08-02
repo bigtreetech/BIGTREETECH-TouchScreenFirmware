@@ -15,7 +15,7 @@ void updateABL(MENUITEMS *menu)
     {
       if (prev_value != infoSettings.autoLevelState)
       {
-        prev_value == infoSettings.autoLevelState;
+        prev_value = infoSettings.autoLevelState;
 
         if (infoSettings.autoLevelState == 1)
         {
