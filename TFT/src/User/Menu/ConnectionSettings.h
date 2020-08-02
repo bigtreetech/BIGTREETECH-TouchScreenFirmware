@@ -1,4 +1,4 @@
- #ifndef _CONNECTION_SETTINGS_H_
+#ifndef _CONNECTION_SETTINGS_H_
 #define _CONNECTION_SETTINGS_H_
 
 void menuConnectionSettings(void);
