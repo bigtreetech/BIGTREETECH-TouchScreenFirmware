@@ -696,7 +696,7 @@ void sendQueueCmd(void)
             }
             break;
         #endif
-        
+
         case 420: //M420
           if(cmd_seen('S')) {
             infoSettings.autoLevelState = cmd_value();

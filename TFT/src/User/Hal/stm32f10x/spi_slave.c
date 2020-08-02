@@ -3,7 +3,7 @@
 #include "GPIO_Init.h"
 #include "stdlib.h"
 
-#ifdef ST7920_SPI
+#if defined(ST7920_SPI) && !defined(MKS_32_V1_4)
 //TODO:
 //now support SPI2 and PB12 CS only
 //more compatibility changes are needed
