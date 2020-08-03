@@ -1,7 +1,7 @@
 #include "levelingUBLLoad.h"
 #include "includes.h"
 
-char* slot;
+static char* slot;
 bool lLeveled = false;
 
 const MENUITEMS UBLLoad = {
