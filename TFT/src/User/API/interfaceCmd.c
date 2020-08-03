@@ -98,22 +98,21 @@ void mustStoreScript(const char * format,...)
 {
   if (strlen(format) == 0) return;
 
-  uint16_t i = 0;
   char script[256];
-  char *p = script;
   my_va_list ap;
   my_va_start(ap,format);
   my_vsprintf(script, format, ap);
   my_va_end(ap);
 
+  char *p = script;
+  uint16_t i = 0;
+  char cmd[CMD_MAX_CHAR];
   for (;;) {
     char c = *p++;
     if (!c) return;
-    char cmd[CMD_MAX_CHAR];
-    if (c != '\n') {
-      cmd[i++] = c;
-    }
-    else {
+    cmd[i++] = c;
+
+    if (c == '\n') {
       cmd[i] = 0;
       mustStoreCmd("%s", cmd);
       i = 0;
