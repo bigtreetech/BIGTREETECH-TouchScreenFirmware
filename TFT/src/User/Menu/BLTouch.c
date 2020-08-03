@@ -9,7 +9,7 @@ LABEL_BLTOUCH,
   {ICON_BLTOUCH_STOW,          LABEL_BLTOUCH_STOW},
   {ICON_BLTOUCH_TEST,          LABEL_BLTOUCH_TEST},
   {ICON_BLTOUCH_REPEAT,        LABEL_BLTOUCH_REPEAT},
-  {ICON_BACKGROUND,            LABEL_BACKGROUND},
+  {ICON_BLTOUCH_RESET,         LABEL_RESET},
   {ICON_BACKGROUND,            LABEL_BACKGROUND},
   {ICON_BACKGROUND,            LABEL_BACKGROUND},
   {ICON_BACK,                  LABEL_BACK},}
@@ -36,6 +36,9 @@ void menuBLTouch(void)
       case KEY_ICON_3:
         storeCmd("G28\n");
         storeCmd("M48\n");
+        break;
+      case KEY_ICON_4:
+        storeCmd("M280 P0 S160\n");
         break;
       case KEY_ICON_7:
         infoMenu.cur--;
