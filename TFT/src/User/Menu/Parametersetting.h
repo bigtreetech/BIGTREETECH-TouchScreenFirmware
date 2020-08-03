@@ -12,6 +12,6 @@ void menuParameterSettings(void);
 #define GLOBALICON_INTERVAL 2
 
 void loopTemperatureStatus(void);
-void drawTemperatureStatus(void);
+int16_t drawTemperatureStatus(void);
 
 #endif

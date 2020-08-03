@@ -1,7 +1,7 @@
 #include "levelingUBLSave.h"
 #include "includes.h"
 
-char* slot;
+static char* slot;
 
 const MENUITEMS UBLSave = {
 // title

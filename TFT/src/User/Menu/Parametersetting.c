@@ -323,8 +323,10 @@ void loopTemperatureStatus(void)
   if (update) menuReDrawCurTitle();
 }
 
-void drawTemperatureStatus(void){
-  if (!temperatureStatusValid()) return;
+int16_t drawTemperatureStatus(void){
+
+  int16_t x_offset = LCD_WIDTH - 10;
+  if (!temperatureStatusValid()) return x_offset;
 
   uint8_t tmpHeater[3]; // chamber, bed, hotend
   uint16_t tmpIcon[3];
@@ -343,16 +345,19 @@ void drawTemperatureStatus(void){
   }
 
   uint16_t start_y = (TITLE_END_Y - BYTE_HEIGHT) / 2;
-  int16_t x_offset = LCD_WIDTH - 10;
   GUI_SetBkColor(infoSettings.title_bg_color);
   for(int8_t i = tmpIndex - 1; i >= 0; i--) {
     char tempstr[10];
+    x_offset -= GLOBALICON_INTERVAL;
+    GUI_ClearRect(x_offset, start_y, x_offset + GLOBALICON_INTERVAL, start_y + GLOBALICON_HEIGHT);
     sprintf(tempstr, "%d/%d", heatGetCurrentTemp(tmpHeater[i]), heatGetTargetTemp(tmpHeater[i]));
     x_offset -= GUI_StrPixelWidth((uint8_t *)tempstr);
     GUI_DispString(x_offset, start_y, (u8 *)tempstr); // value
-    x_offset -= GLOBALICON_WIDTH + GLOBALICON_INTERVAL;
-    lcd_frame_display(x_offset, start_y, GLOBALICON_WIDTH, GLOBALICON_HEIGHT, ICON_ADDR(tmpIcon[i])); // icon
     x_offset -= GLOBALICON_INTERVAL;
+    GUI_ClearRect(x_offset, start_y, x_offset + GLOBALICON_INTERVAL, start_y + GLOBALICON_HEIGHT);
+    x_offset -= GLOBALICON_WIDTH;
+    lcd_frame_display(x_offset, start_y, GLOBALICON_WIDTH, GLOBALICON_HEIGHT, ICON_ADDR(tmpIcon[i])); // icon
   }
   GUI_SetBkColor(infoSettings.bg_color);
+  return x_offset;
 }
