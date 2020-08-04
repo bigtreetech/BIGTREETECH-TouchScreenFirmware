@@ -5,6 +5,7 @@
     #define GR_HEAT                   "Θέρμανση"
     #define GR_MOVE                   "Μετακίνηση"
     #define GR_HOME                   "Αυτο-Κατεύθυνση"
+    #define GR_DISABLE_STEPPERS                   "Steppers"
     #define GR_PRINT                  "Εκτύπωση"
     #define GR_EXTRUDE                "Εκβολή"
     #define GR_FAN                    "Ανεμιστήρας"
