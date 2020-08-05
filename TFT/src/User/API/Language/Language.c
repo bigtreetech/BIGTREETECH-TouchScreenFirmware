@@ -158,7 +158,7 @@ u8 * textSelect(u8 sel)
     case TURKISH:     return (u8 *)tr_pack[sel];
     case GREEK:       return (u8 *)gr_pack[sel];
     case SLOVENIAN:   return (u8 *)sl_pack[sel];
-    case CATALAN:      return (u8 *)ca_pack[sel];
+    case CATALAN:     return (u8 *)ca_pack[sel];
 
     default:        return NULL;
   }
