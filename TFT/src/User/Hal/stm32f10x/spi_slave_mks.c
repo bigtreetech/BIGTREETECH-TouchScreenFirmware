@@ -35,9 +35,9 @@ void SPI_ReEnable(u8 mode)
                       | (7<<3)   // bit3-5   000:fPCLK/2    001:fPCLK/4    010:fPCLK/8     011:fPCLK/16
                                  //          100:fPCLK/32   101:fPCLK/64   110:fPCLK/128   111:fPCLK/256
                       | (0<<2)   // 0:Slave 1:Master
-//                      | (mode<<1)      // CPOL  (mode<<1)
-                      | (0<<1)         // always use 0 instead of "mode"!
-                      | (mode<<0);     // CPHA  (mode<<0)
+                      | (mode<<1)      // CPOL  (mode<<1)
+//                      | (mode<<0);     // CPHA  (mode<<0)
+                      | (1<<0);        // always use 1 instead of "mode"!
 
   ST7920_SPI_NUM->CR2 |= 1<<6; // RX buffer not empty interrupt enable SPI_I2S_IT_RXNE
 }
@@ -60,9 +60,13 @@ void SPI_Slave(void)
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
   NVIC_Init(&NVIC_InitStructure);
 
-  RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI3,ENABLE);
-//  SPI_Slave_CS_Config();                       // not needed, you can leave this line commented out!
-  SPI_ReEnable(1);  // spi mode0
+  RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI3, ENABLE);
+
+#ifndef SPI3_PIN_SMART_USAGE                     // if enabled, it avoids any SPI3 CS pin usage and free the MISO (PB4 pin) for encoder pins
+  SPI_Slave_CS_Config();                         // not needed, you can also comment out this line!
+#endif
+
+  SPI_ReEnable(0);  // spi mode0
 
 //  if((GPIOB->IDR & (1<<12)) != 0)              // always leave this line commented out!
   {
