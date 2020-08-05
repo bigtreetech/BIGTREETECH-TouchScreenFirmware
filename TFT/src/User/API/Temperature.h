@@ -15,12 +15,17 @@ typedef enum {
   WAIT_COOLING_HEATING,
 }HEATER_WAIT;
 
-typedef enum
+enum
 {
-  BED = 0,
-  NOZZLE0 = 1,
-  HEATER_NUM = MAX_HEATER_COUNT
-}TOOL;
+  NOZZLE0 = 0,
+  NOZZLE1,
+  NOZZLE2,
+  NOZZLE3,
+  NOZZLE4,
+  NOZZLE5,
+  BED = MAX_HOTEND_COUNT,
+  CHAMBER,
+};
 
 typedef struct
 {
@@ -31,47 +36,48 @@ typedef struct
 
 typedef struct
 {
-  _HEATER T[HEATER_NUM];
-  TOOL    tool;
-  TOOL    nozzle;
+  union {
+    struct {
+      _HEATER hotend[MAX_HOTEND_COUNT];
+      _HEATER bed;
+      _HEATER chamber;
+    };
+    _HEATER T[MAX_HEATER_COUNT];
+  };
+  uint8_t      toolIndex;  //
 }HEATER;
 
 
-extern const char* toolID[];
+extern const char* heaterID[];
 extern const char* const heatDisplayID[];
 extern const char* heatCmd[];
 extern const char* heatWaitCmd[];
 
 
-void heatSetTargetTemp(TOOL tool, uint16_t temp);
-void heatSyncTargetTemp(TOOL tool, uint16_t temp);
-uint16_t heatGetTargetTemp(TOOL tool);
-void heatSetCurrentTemp(TOOL tool, int16_t temp);
-int16_t heatGetCurrentTemp(TOOL tool);
+void heatSetTargetTemp(uint8_t index, int16_t temp);
+void heatSyncTargetTemp(uint8_t index, int16_t temp);
+uint16_t heatGetTargetTemp(uint8_t index);
+void heatSetCurrentTemp(uint8_t index, int16_t temp);
+int16_t heatGetCurrentTemp(uint8_t index);
 
-void heatSetCurrentTool(TOOL tool);
-TOOL heatGetCurrentTool(void);
-bool heatToolChanged(void);
-void heatSetCurrentToolNozzle(TOOL tool);
-TOOL heatGetCurrentToolNozzle(void);
-bool heatNozzleChanged(void);
+void heatSetCurrentTool(uint8_t tool);
+uint8_t heatGetCurrentTool(void);
+uint8_t heatGetCurrentHotend(void);
+bool heaterIsValid(uint8_t index);
 
-bool heatGetIsWaiting(TOOL tool);
+bool heatGetIsWaiting(uint8_t index);
 bool heatHasWaiting(void);
-void heatSetIsWaiting(TOOL tool,HEATER_WAIT isWaiting);
+void heatSetIsWaiting(uint8_t index,HEATER_WAIT isWaiting);
 void heatClearIsWaiting(void);
 
 void updateNextHeatCheckTime(void);
 void heatSetUpdateTime(uint32_t time);
 void heatSetUpdateWaiting(bool isWaiting);
-void heatSetSendWaiting(TOOL tool, bool isWaiting);
-bool heatGetSendWaiting(TOOL tool);
-bool heatCurrentTempChanged(TOOL tool);
-bool heatTargetTempChanged(TOOL tool);
+void heatSetSendWaiting(uint8_t index, bool isWaiting);
+bool heatGetSendWaiting(uint8_t index);
 
 
 void loopCheckHeater(void);
-
 
 
 #endif

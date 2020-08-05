@@ -5,13 +5,13 @@ const MENUITEMS autoLevelingItems = {
 // title
 LABEL_ABL,
 // icon                        label
- {{ICON_LEVELING,              LABEL_ABL},
-  {ICON_BLTOUCH_DEPLOY,        LABEL_BLTOUCH_DEPLOY},
-  {ICON_BLTOUCH_STOW,          LABEL_BLTOUCH_STOW},
-  {ICON_BLTOUCH_TEST,          LABEL_BLTOUCH_TEST},
-  {ICON_BLTOUCH_REPEAT,        LABEL_BLTOUCH_REPEAT},
+ {{ICON_LEVELING,              LABEL_ABL_START},
+  {ICON_BACKGROUND,            LABEL_BACKGROUND},
+  {ICON_BACKGROUND,            LABEL_BACKGROUND},
+  {ICON_Z_FADE,                LABEL_ABL_Z},
   {ICON_PROBE_OFFSET,          LABEL_Z_OFFSET},
   {ICON_BABYSTEP,              LABEL_BABYSTEP},
+  {ICON_BLTOUCH,               LABEL_BLTOUCH},
   {ICON_BACK,                  LABEL_BACK},}
 };
 
@@ -30,25 +30,18 @@ void menuAutoLeveling(void)
         storeCmd("G29\n");
         leveled = true;
         break;
-      case KEY_ICON_1:
-        storeCmd("M280 P0 S10\n");
-        break;
-      case KEY_ICON_2:
-        storeCmd("M280 P0 S90\n");
-        break;
       case KEY_ICON_3:
-        storeCmd("M280 P0 S120\n");
-        break;
+        infoMenu.menu[++infoMenu.cur] = menuZFade;
+      break;
       case KEY_ICON_4:
-        storeCmd("G28\n");
-        storeCmd("M48\n");
-        break;
-      case KEY_ICON_5:
         storeCmd("M851\n");
         infoMenu.menu[++infoMenu.cur] = menuProbeOffset;
         break;
-      case KEY_ICON_6:
+      case KEY_ICON_5:
         infoMenu.menu[++infoMenu.cur] = menuBabyStep;
+        break;
+      case KEY_ICON_6:
+        infoMenu.menu[++infoMenu.cur] = menuBLTouch;
         break;
       case KEY_ICON_7:
         if (leveled == true && infoMachineSettings.EEPROM == 1)
@@ -77,7 +70,7 @@ LABEL_LEVELING,
   {ICON_POINT_2,               LABEL_POINT_2},
   {ICON_POINT_3,               LABEL_POINT_3},
   {ICON_POINT_4,               LABEL_POINT_4},
-  {ICON_BACKGROUND,            LABEL_BACKGROUND},
+  {ICON_POINT_5,               LABEL_POINT_5},
   {ICON_BACKGROUND,            LABEL_BACKGROUND},
   {ICON_BACKGROUND,            LABEL_BACKGROUND},
   {ICON_BACK,                  LABEL_BACK},}
@@ -85,11 +78,12 @@ LABEL_LEVELING,
 
 void moveToLevelingPoint(u8 point)
 {
-  s16 pointPosition[4][2] = {
+  s16 pointPosition[5][2] = {
     {infoSettings.machine_size_min[X_AXIS] + infoSettings.level_edge, infoSettings.machine_size_min[Y_AXIS] + infoSettings.level_edge},
-    {infoSettings.machine_size_max[X_AXIS] - infoSettings.level_edge, infoSettings.machine_size_min[X_AXIS] + infoSettings.level_edge},
+    {infoSettings.machine_size_max[X_AXIS] - infoSettings.level_edge, infoSettings.machine_size_min[Y_AXIS] + infoSettings.level_edge},
     {infoSettings.machine_size_max[X_AXIS] - infoSettings.level_edge, infoSettings.machine_size_max[Y_AXIS] - infoSettings.level_edge},
     {infoSettings.machine_size_min[X_AXIS] + infoSettings.level_edge, infoSettings.machine_size_max[Y_AXIS] - infoSettings.level_edge},
+    {(infoSettings.machine_size_min[X_AXIS] + infoSettings.machine_size_max[X_AXIS]) / 2, (infoSettings.machine_size_min[Y_AXIS] + infoSettings.machine_size_max[Y_AXIS]) / 2},
   };
   if(coordinateIsKnown() == false)
   {
@@ -113,6 +107,7 @@ void menuManualLeveling(void)
       case KEY_ICON_1: moveToLevelingPoint(1); break;
       case KEY_ICON_2: moveToLevelingPoint(2); break;
       case KEY_ICON_3: moveToLevelingPoint(3); break;
+      case KEY_ICON_4: moveToLevelingPoint(4); break;
       case KEY_ICON_7:
         infoMenu.cur--; break;
       default:break;
