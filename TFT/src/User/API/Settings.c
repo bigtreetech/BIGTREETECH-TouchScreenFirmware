@@ -38,6 +38,7 @@ void infoSettingsReset(void)
   infoSettings.terminalACK          = DISABLED;
   infoSettings.move_speed           = ENABLED;
   infoSettings.knob_led_color       = STARTUP_KNOB_LED_COLOR;
+  infoSettings.knob_led_idle        = ENABLED;
   infoSettings.send_start_gcode     = DISABLED;
   infoSettings.send_end_gcode       = DISABLED;
   infoSettings.send_cancel_gcode    = ENABLED;
