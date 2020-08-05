@@ -3,8 +3,6 @@
 #include "GPIO_Init.h"
 #include "Selectmode.h"
 
-#ifdef ST7920_SPI
-
 bool skipMode = false;
 
 const GUI_RECT rect_of_mode[SELECTMODE]={
@@ -14,25 +12,30 @@ const GUI_RECT rect_of_mode[SELECTMODE]={
 };
 
 u32 select_mode [SELECTMODE]={
+    // ICON_MARLIN,
     ICON_MARLIN,
     ICON_BIGTREETECH,
 };
 
 void show_selectICON(void)
 {
-    for(u8 i=0;i<SELECTMODE;i++)
-    {
-      lcd_frame_display(rect_of_mode[i].x0, rect_of_mode[i].y0, ICON_WIDTH, ICON_HEIGHT,ICON_ADDR(select_mode[i]));
-    }
+  for(u8 i=0;i<SELECTMODE;i++)
+  {
+    lcd_frame_display(rect_of_mode[i].x0, rect_of_mode[i].y0, ICON_WIDTH, ICON_HEIGHT,ICON_ADDR(select_mode[i]));
+  }
 
 	const GUI_RECT mode_title_rect[SELECTMODE] = {
 		{0,        		rect_of_mode[0].y1 + BYTE_HEIGHT/2, 	text_startx,  rect_of_mode[0].y1 + BYTE_HEIGHT/2 + BYTE_HEIGHT},
-		{text_startx, rect_of_mode[0].y1 + BYTE_HEIGHT/2, 	LCD_WIDTH, 		rect_of_mode[0].y1 + BYTE_HEIGHT/2 + BYTE_HEIGHT}
+    {text_startx, rect_of_mode[0].y1 + BYTE_HEIGHT/2, 	LCD_WIDTH, 		rect_of_mode[0].y1 + BYTE_HEIGHT/2 + BYTE_HEIGHT},
 	};
 
 	//GUI_ClearPrect(&mode_title_rect[1]);
 	//GUI_ClearPrect(&mode_title_rect[0]);
-	GUI_DispStringInPrect(&mode_title_rect[0],(uint8_t *)"Marlin Mode");
+  if(infoSettings.marlin_type == 1)
+	  GUI_DispStringInPrect(&mode_title_rect[0],(uint8_t *)"LCD12864 Mode");
+  else
+    GUI_DispStringInPrect(&mode_title_rect[0],(uint8_t *)"LCD2004 Mode");
+
 	GUI_DispStringInPrect(&mode_title_rect[1],(uint8_t *)"Touch Mode");
 }
 
@@ -77,7 +80,6 @@ void selectmode(int8_t  nowMode)
 		GUI_DrawRect(rect_of_mode[1].x0 - border_off, rect_of_mode[1].y0 - border_off,rect_of_mode[1].x1 + border_off, rect_of_mode[1].y1 + border_off);
 		GUI_SetColor(YELLOW);
 		GUI_DrawRect(rect_of_mode[0].x0 - border_off, rect_of_mode[0].y0 - border_off,rect_of_mode[0].x1 + border_off, rect_of_mode[0].y1 + border_off);
-
   }
 }
 
@@ -97,21 +99,12 @@ void loopCheckMode(void)
 
 void menuMode(void)
 {
-  #if defined(ST7920_BANNER_TEXT)
-    RADIO modeRadio = {
-      {(u8*)"Serial Touch Screen", (u8*)ST7920_BANNER_TEXT, (u8*)"LCD2004 Simulator"},
-      SIMULATOR_XSTART, SIMULATOR_YSTART,
-      BYTE_HEIGHT*2, 2,
-      0
-      };
-  #else
-    RADIO modeRadio = {
-      {(u8*)"Serial Touch Screen", (u8*)"12864 Simulator", (u8*)"LCD2004 Simulator"},
-      SIMULATOR_XSTART, SIMULATOR_YSTART,
-      BYTE_HEIGHT*2, 2,
-      0
-      };
-  #endif
+  RADIO modeRadio = {
+    {(u8*)"Serial Touch Screen", (u8*)ST7920_BANNER_TEXT, (u8*)HD44780_BANNER_TEXT},
+    SIMULATOR_XSTART, SIMULATOR_YSTART,
+    BYTE_HEIGHT*2, 2,
+    0
+    };
 
   MKEY_VALUES  key_num;
   bool keyback = false;
@@ -169,11 +162,10 @@ void menuMode(void)
       keyback = true;
       nowMode = SERIAL_TSC;
 		}
-
 		if(key_num==MKEY_0)
 		{
       keyback = true;
-      nowMode = LCD12864;
+      nowMode = Marlin;
 		}
 
     if(keyback)
@@ -196,5 +188,3 @@ void menuMode(void)
   infoMenuSelect();
 }
 
-
-#endif

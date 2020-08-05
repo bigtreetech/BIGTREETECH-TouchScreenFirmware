@@ -320,7 +320,8 @@ void resetConfig(void)
   tempCG.count = n;
 
   //restore strings store
-  strcpy(tempST.marlin_title,ST7920_BANNER_TEXT);
+  strcpy(tempST.lcd12864_title,ST7920_BANNER_TEXT);
+  strcpy(tempST.lcd2004_title,HD44780_BANNER_TEXT);
 
   for (int i = 0; i < PREHEAT_COUNT;i++)
   {
@@ -484,7 +485,7 @@ void parseConfigKey(u16 index)
 
   //---------------------------------------------------------Marlin Mode Settings (Only for TFT35_V3.0/TFT24_V1.1/TFT28V3.0)
 
-#ifdef ST7920_SPI
+#if defined(ST7920_SPI) || defined(LCD2004_simulator)
 
   case C_INDEX_MODE:
     if (inLimit(config_int(), 0, MODE_COUNT-1))
@@ -511,18 +512,34 @@ void parseConfigKey(u16 index)
       infoSettings.marlin_mode_fullscreen = getOnOff();
     break;
 
-  case C_INDEX_MARLIN_TITLE:
+  case C_INDEX_MARLIN_TYPE:
+    if (inLimit(config_int(), 0, MODE_COUNT-1))
+      infoSettings.marlin_type = config_int();
+    break;
+
+  case C_INDEX_LCD12864_TITLE:
     {
       char * pchr;
       pchr = strrchr(cur_line,':') + 1;
       int utf8len = getUTF8Length((u8*)pchr);
       int bytelen = strlen(pchr) + 1;
       if (inLimit(utf8len,NAME_MIN_LENGTH,MAX_STRING_LENGTH) && inLimit(bytelen,NAME_MIN_LENGTH,MAX_GCODE_LENGTH))
-        strcpy(configStringsStore->marlin_title, pchr);
+        strcpy(configStringsStore->lcd12864_title, pchr);
     }
     break;
 
-#endif //ST7920_SPI
+  case C_INDEX_LCD2004_TITLE:
+    {
+      char * pchr;
+      pchr = strrchr(cur_line,':') + 1;
+      int utf8len = getUTF8Length((u8*)pchr);
+      int bytelen = strlen(pchr) + 1;
+      if (inLimit(utf8len,NAME_MIN_LENGTH,MAX_STRING_LENGTH) && inLimit(bytelen,NAME_MIN_LENGTH,MAX_GCODE_LENGTH))
+        strcpy(configStringsStore->lcd2004_title, pchr);
+    }
+    break;
+
+#endif // ST7920_SPI || LCD2004_simulator
 
   //---------------------------------------------------------Printer / Machine Settings
 

@@ -2,7 +2,7 @@
 #include "STM32_Flash.h"
 
 #define TSC_SIGN  0x20200512 // DO NOT MODIFY
-#define PARA_SIGN 0x20200724 // (YYYMMDD) If a new setting parameter is added, modify here and initialize the initial value in the "infoSettingsReset()" function
+#define PARA_SIGN 0x20200804 // (YYYMMDD) If a new setting parameter is added, modify here and initialize the initial value in the "infoSettingsReset()" function
 
 extern int32_t TSC_Para[7];        //
 extern SETTINGS infoSettings;  //
@@ -98,6 +98,7 @@ void readStoredPara(void)
   infoSettings.marlin_mode_font_color     = byteToWord(data + (index += 4), 4);
   infoSettings.marlin_mode_showtitle      = byteToWord(data + (index += 4), 4);
   infoSettings.marlin_mode_fullscreen     = byteToWord(data + (index += 4), 4);
+  infoSettings.marlin_type                = byteToWord(data + (index += 4), 4);
 
   infoSettings.send_start_gcode     = byteToWord(data + (index += 4), 4);
   infoSettings.send_end_gcode       = byteToWord(data + (index += 4), 4);
@@ -227,6 +228,7 @@ void storePara(void)
   wordToByte(infoSettings.marlin_mode_font_color,     data + (index += 4));
   wordToByte(infoSettings.marlin_mode_showtitle,      data + (index += 4));
   wordToByte(infoSettings.marlin_mode_fullscreen,     data + (index += 4));
+  wordToByte(infoSettings.marlin_type,                data + (index += 4));
 
   wordToByte(infoSettings.send_start_gcode,           data + (index += 4));
   wordToByte(infoSettings.send_end_gcode,             data + (index += 4));

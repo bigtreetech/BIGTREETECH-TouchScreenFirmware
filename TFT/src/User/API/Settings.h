@@ -34,10 +34,15 @@
 typedef enum
 {
   SERIAL_TSC = 0,
-  LCD12864,
-  LCD2004,
+  Marlin,
   MODE_COUNT
 }LCD_MODE;
+
+typedef enum
+{
+  LCD2004 = 0,
+  LCD12864
+}LCD_MARLIN_MODE;
 
 typedef struct
 {
@@ -70,6 +75,7 @@ typedef struct
   uint8_t  lcd_idle_timer;
 
   uint8_t  serial_alwaysOn;
+  uint8_t  marlin_type;
   uint16_t marlin_mode_bg_color;
   uint16_t marlin_mode_font_color;
   uint8_t  marlin_mode_showtitle;
@@ -128,7 +134,8 @@ typedef struct
 }SETTINGS;
 
 typedef struct{
-char     marlin_title[MAX_GCODE_LENGTH+1];
+char     lcd12864_title[MAX_GCODE_LENGTH+1];
+char     lcd2004_title[MAX_GCODE_LENGTH+1];
 char     preheat_name[PREHEAT_COUNT][MAX_GCODE_LENGTH+1];
 }STRINGS_STORE;
 
