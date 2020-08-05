@@ -121,16 +121,16 @@ void SPI_Slave_CS_Config(void)
 /*External interruption*/
 void EXTI15_10_IRQHandler(void)
 {
-  switch(infoSettings.mode)
+  switch(infoSettings.marlin_type)
   {
     #ifdef LCD2004_simulator
     case LCD2004:
       if((GPIOB->IDR & (1<<15)) != 0){
         
         uint8_t temp = ((LCD_D7_PORT->IDR & LCD_D7_PIN) >> 3 ) +     //D7
-                         ((LCD_D6_PORT->IDR & LCD_D6_PIN) >> 5 ) +     //D6
-                         ((LCD_D5_PORT->IDR & LCD_D5_PIN) >> 13) +     //D5
-                         ((LCD_D4_PORT->IDR & LCD_D4_PIN) >> 13) ;     //D4
+                       ((LCD_D6_PORT->IDR & LCD_D6_PIN) >> 5 ) +     //D6
+                       ((LCD_D5_PORT->IDR & LCD_D5_PIN) >> 13) +     //D5
+                       ((LCD_D4_PORT->IDR & LCD_D4_PIN) >> 13) ;     //D4
         if(highbit){
           data = temp << 4;
           highbit = 0;
@@ -148,8 +148,8 @@ void EXTI15_10_IRQHandler(void)
       }       //Receive HD44780 data
       EXTI->PR = 1<<15;
     break;
-    #endif
-    #ifdef ST7920_SPI
+      #endif
+
     case LCD12864:
       if((GPIOB->IDR & (1<<12)) != 0)
       {
@@ -163,6 +163,6 @@ void EXTI15_10_IRQHandler(void)
       }
       EXTI->PR = 1<<12;   //Clear interrupt status register
     break;
-    #endif
+
   }
 }

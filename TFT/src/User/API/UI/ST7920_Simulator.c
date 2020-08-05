@@ -4,7 +4,6 @@
 #include "../../Configuration.h"
 
 #ifdef ST7920_SPI
-
 // CGRAM buffer
 uint8_t ST7920_CGRAM[64][2]; // [64*2] = [4 * 16*2*8], means 4 * [16*16] bitmap font,
 
@@ -642,7 +641,7 @@ void menuST7920(void)
   if(infoSettings.marlin_mode_showtitle == 1){
     STRINGS_STORE tempST;
     W25Qxx_ReadBuffer((uint8_t *)&tempST,STRINGS_STORE_ADDR,sizeof(STRINGS_STORE));
-    GUI_DispStringInRect(0, 0, LCD_WIDTH, SIMULATOR_YSTART, (uint8_t *)tempST.marlin_title);
+    GUI_DispStringInRect(0, 0, LCD_WIDTH, SIMULATOR_YSTART, (uint8_t *)tempST.lcd12864_title);
   }
 
   SPI_Slave();
@@ -672,6 +671,5 @@ void menuST7920(void)
   }
   SPI_SlaveDeInit();
 }
-
 
 #endif

@@ -17,9 +17,9 @@
 #define GKEY_HEIGHT ((LCD_HEIGHT - ICON_START_Y)/4)
 
 //select marlin or bigtree
-#define SPACE_SELEX   ((LCD_WIDTH-ICON_WIDTH*3)/6)
+#define SPACE_SELEX   ((LCD_WIDTH-ICON_WIDTH*2)/4)
 #define SPACE_SELEY   ((LCD_HEIGHT-ICON_HEIGHT)/2)
-#define text_startx    (LCD_WIDTH/3)
+#define text_startx    (LCD_WIDTH/2)
 
 void LCD_DMA_Config(void);
 

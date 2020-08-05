@@ -232,7 +232,7 @@ void menuHD44780(void)
   if(infoSettings.marlin_mode_showtitle == 1){
     STRINGS_STORE tempST;
     W25Qxx_ReadBuffer((uint8_t *)&tempST,STRINGS_STORE_ADDR,sizeof(STRINGS_STORE));
-    GUI_DispStringInRect(0, 0, LCD_WIDTH, SIMULATOR_YSTART, (uint8_t *)HD44780_BANNER_TEXT);
+    GUI_DispStringInRect(0, 0, LCD_WIDTH, SIMULATOR_YSTART, (uint8_t *)tempST.lcd2004_title);
   }
   HD44780_Config();
 
@@ -243,7 +243,6 @@ void menuHD44780(void)
       HD44780_ParseRecv(HD44780_queue.data + HD44780_queue.rIndex);
       HD44780_queue.rIndex = (HD44780_queue.rIndex + 1) % HD44780_data_MAX;
     }
-
     #if LCD_ENCODER_SUPPORT
       sendEncoder(LCD_ReadTouch());
 
@@ -251,7 +250,6 @@ void menuHD44780(void)
         sendEncoder(1);
       loopCheckEncoder();
     #endif
-
     loopCheckMode();
 
     if (infoSettings.serial_alwaysOn == 1)

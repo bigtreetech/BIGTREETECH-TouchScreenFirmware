@@ -52,7 +52,6 @@ void HD44780_Config(void)
   GPIO_EXTILineConfig(GPIO_PortSourceGPIOB, GPIO_PinSource12); 
   #endif
 
-
   /*Set interrupt line 12 bit external falling edge interrupt */
   EXTI_InitStructure.EXTI_Line = EXTI_Line15;
   EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;

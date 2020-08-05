@@ -59,9 +59,7 @@ void infoMenuSelect(void)
       break;
     }
 
-    #ifdef ST7920_SPI
-
-    case LCD12864:
+    case Marlin:
       if (infoSettings.serial_alwaysOn == 1)
       {
         Serial_ReSourceInit();
@@ -77,31 +75,14 @@ void infoMenuSelect(void)
       #endif
       GUI_SetColor(infoSettings.marlin_mode_font_color);
       GUI_SetBkColor(infoSettings.marlin_mode_bg_color);
-      infoMenu.menu[infoMenu.cur] = menuST7920;
+
+      #if defined(ST7920_SPI) || defined(LCD2004_simulator)
+      if(infoSettings.marlin_type == 1)
+        infoMenu.menu[infoMenu.cur] = menuST7920;
+      else
+        infoMenu.menu[infoMenu.cur] = menuHD44780;
+      #endif
       break;
-
-    #endif
-
-    #ifdef LCD2004_simulator
-    case LCD2004:
-      if (infoSettings.serial_alwaysOn == 1)
-      {
-        Serial_ReSourceInit();
-      }
-      #ifdef BUZZER_PIN
-        Buzzer_DeConfig();  // Disable buzzer in LCD2004 Simulations mode.
-      #endif
-
-      #ifdef LED_COLOR_PIN
-        #ifndef KEEP_KNOB_LED_COLOR_MARLIN_MODE
-          knob_LED_DeInit();
-        #endif
-      #endif
-      GUI_SetColor(infoSettings.marlin_mode_font_color);
-      GUI_SetBkColor(infoSettings.marlin_mode_bg_color);
-      infoMenu.menu[infoMenu.cur] = menuHD44780;
-    break;
-    #endif
 
   }
 }
