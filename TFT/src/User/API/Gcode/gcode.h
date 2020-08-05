@@ -9,6 +9,7 @@ typedef struct {
     char command[CMD_MAX_CHAR];     // The command sent to printer
     char startMagic[CMD_MAX_CHAR];  // The magic to identify the start
     char stopMagic[CMD_MAX_CHAR];   // The magic to identify the stop
+    char nosdMagic[CMD_MAX_CHAR];  // The magic to identify the no sd card response
     char errorMagic[CMD_MAX_CHAR];  // The magic to identify the error response
     bool inResponse;                // true if between start and stop magic
     bool inWaitResponse;            // true if waiting for start magic
