@@ -81,12 +81,13 @@ void LCD_Dim_Idle_Timer()
     if(lcd_dim.idle_time_counter >= (LCD_DIM_IDLE_TIME[infoSettings.lcd_idle_timer] * 1000))
     {
       Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_idle_brightness]);
+    #ifdef LED_COLOR_PIN
       if(infoSettings.knob_led_idle)
       {
         WS2812_Send_DAT(LED_OFF);
         knob_LED_DeInit();
       }
-
+    #endif
       lcd_dim._last_dim_state = true;
     } else lcd_dim.idle_time_counter++;
 
@@ -95,8 +96,10 @@ void LCD_Dim_Idle_Timer()
       if(lcd_dim._last_dim_state)
       {
         Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
+      #ifdef LED_COLOR_PIN
         if(infoSettings.knob_led_idle)
           knob_LED_Init();
+      #endif
         lcd_dim._last_dim_state = false;
       }
 
