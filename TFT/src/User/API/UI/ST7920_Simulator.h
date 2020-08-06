@@ -4,15 +4,6 @@
 #include "stdint.h"
 #include "../../Configuration.h"
 
-// User-defined colors for 12864 mode from Configuration.h
-#ifndef ST7920_BKCOLOR
-  #define ST7920_BKCOLOR LCD_BLACK
-#endif
-
-#ifndef ST7920_FNCOLOR
-  #define ST7920_FNCOLOR LCD_GREEN
-#endif
-
 #define ST7920_XSTART    (0x80)
 #define ST7920_YSTART    (0x80)
 
@@ -211,10 +202,6 @@ typedef struct {
   ST7920_CTRL_STATUS ctrl_status;
 }ST7920_REG; // Extended Instruction
 
-void ST7920_WriteXY(uint8_t xy);
-void ST7920_ST7920_ParseWCmd(uint8_t cmd);
-void ST7920_ST7920_ParseWData(uint8_t data);
-
-void menuST7920(void);
+void ST7920_ParseRecv(uint8_t val);
 
 #endif

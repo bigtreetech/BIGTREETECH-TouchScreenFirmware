@@ -98,7 +98,7 @@ void menuDialog(void)
 
 void popupReminder(DIALOG_TYPE type, u8* info, u8* context)
 {
-  if (infoSettings.mode == Marlin) return;
+  if (infoSettings.mode == MARLIN) return;
 
   popupDrawPage(type, &bottomSingleBtn , info, context, textSelect(LABEL_CONFIRM), NULL);
 
@@ -120,7 +120,7 @@ void popupReminder(DIALOG_TYPE type, u8* info, u8* context)
 */
 void showDialog(DIALOG_TYPE type, u8 * title, u8 * msg, u8 *ok_txt, u8* cancel_txt, void (*ok_action)(), void (*cancel_action)(), void (*loop_action)())
 {
-  if (infoSettings.mode == Marlin)
+  if (infoSettings.mode == MARLIN)
     return;
   action_ok = ok_action;
   action_cancel = cancel_action;

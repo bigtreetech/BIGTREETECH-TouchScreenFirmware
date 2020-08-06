@@ -59,7 +59,7 @@ void infoMenuSelect(void)
       break;
     }
 
-    case Marlin:
+    case MARLIN:
       if (infoSettings.serial_alwaysOn == 1)
       {
         Serial_ReSourceInit();
@@ -77,10 +77,7 @@ void infoMenuSelect(void)
       GUI_SetBkColor(infoSettings.marlin_mode_bg_color);
 
       #if defined(ST7920_SPI) || defined(LCD2004_simulator)
-      if(infoSettings.marlin_type == 1)
-        infoMenu.menu[infoMenu.cur] = menuST7920;
-      else
-        infoMenu.menu[infoMenu.cur] = menuHD44780;
+        infoMenu.menu[infoMenu.cur] = menuMarlinMode;
       #endif
       break;
 

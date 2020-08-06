@@ -2,8 +2,8 @@
 #include "includes.h"
 
 
-QUEUE infoCmd;       //
-QUEUE infoCacheCmd;  // Only when heatHasWaiting() is false the cmd in this cache will move to infoCmd queue.
+GCODE_QUEUE infoCmd;       //
+GCODE_QUEUE infoCacheCmd;  // Only when heatHasWaiting() is false the cmd in this cache will move to infoCmd queue.
 
 static u8 cmd_index=0;
 
@@ -47,7 +47,7 @@ bool storeCmd(const char * format,...)
 {
   if (strlen(format) == 0) return false;
 
-  QUEUE *pQueue = &infoCmd;
+  GCODE_QUEUE *pQueue = &infoCmd;
 
   if (pQueue->count >= CMD_MAX_LIST)
   {
@@ -73,7 +73,7 @@ void mustStoreCmd(const char * format,...)
 {
   if (strlen(format) == 0) return;
 
-  QUEUE *pQueue = &infoCmd;
+  GCODE_QUEUE *pQueue = &infoCmd;
 
   if(pQueue->count >= CMD_MAX_LIST) reminderMessage(LABEL_BUSY, STATUS_BUSY);
 
@@ -125,7 +125,7 @@ void mustStoreScript(const char * format,...)
 bool storeCmdFromUART(uint8_t port, const char * gcode)
 {
   if (strlen(gcode) == 0) return false;
-  QUEUE *pQueue = &infoCmd;
+  GCODE_QUEUE *pQueue = &infoCmd;
 
   if (pQueue->count >= CMD_MAX_LIST)
   {
@@ -146,7 +146,7 @@ bool storeCmdFromUART(uint8_t port, const char * gcode)
 // this function is only for restore printing status after power failed.
 void mustStoreCacheCmd(const char * format,...)
 {
-  QUEUE *pQueue = &infoCacheCmd;
+  GCODE_QUEUE *pQueue = &infoCacheCmd;
 
   if(pQueue->count == CMD_MAX_LIST) reminderMessage(LABEL_BUSY, STATUS_BUSY);
 
