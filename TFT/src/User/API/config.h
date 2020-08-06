@@ -91,6 +91,7 @@
 //-----------------------------other device specific settings
 #define CONFIG_BUZZER_ON               "buzzer:"
 #define CONFIG_KNOB_COLOR              "knob_led_color:"
+#define CONFIG_KNOB_LED_IDLE           "knob_led_idle:"
 #define CONFIG_BRIGHTNESS              "lcd_brightness:"
 #define CONFIG_BRIGHTNESS_IDLE         "lcd_idle_brightness:"
 #define CONFIG_BRIGHTNESS_IDLE_DELAY   "lcd_idle_delay:"
