@@ -5,8 +5,8 @@ const MENUITEMS autoLevelingItemsUBL = {
 // title
 LABEL_ABL_SETTINGS_UBL,
 // icon                        label
- {{ICON_LEVELING,              LABEL_ABL_START},
-  {ICON_S_SAVE,                LABEL_EEPROM_SAVE},
+ {{ICON_LEVELING,              LABEL_START},
+  {ICON_S_SAVE,                LABEL_SAVE},
   {ICON_S_LOAD,                LABEL_LOAD},
   {ICON_Z_FADE,                LABEL_ABL_Z},
   {ICON_PROBE_OFFSET,          LABEL_Z_OFFSET},

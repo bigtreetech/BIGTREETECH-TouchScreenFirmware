@@ -486,13 +486,18 @@ if(infoMachineSettings.onboard_sd_support == ENABLED && infoMachineSettings.auto
 
 #if LCD_ENCODER_SUPPORT
   loopCheckEncoder();
+#ifdef ST7920_SPI
   if(infoMenu.menu[infoMenu.cur] != menuST7920)
+#endif
+#ifdef LCD2004_simulator
+  if(infoMenu.menu[infoMenu.cur] != menuHD44780)
+#endif
     {
       loopCheckEncoderSteps(); //check change in encoder steps
     }
 #endif
 
-#ifdef ST7920_SPI
+#if defined(ST7920_SPI) || defined(LCD2004_simulator)
   loopCheckMode();
 #endif
 
