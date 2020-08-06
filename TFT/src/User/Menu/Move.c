@@ -72,7 +72,7 @@ void storeMoveCmd(AXIS xyz, int8_t direction) {
 
 void menuMove(void)
 {
-  KEY_VALUES  key_num;
+  KEY_VALUES key_num;
 
   // postion table of key
   uint8_t table[TOTAL_AXIS][2] =
