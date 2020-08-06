@@ -483,6 +483,18 @@ void parseConfigKey(u16 index)
       infoSettings.file_listmode = getOnOff();
     break;
 
+  case C_INDEX_ACK_POPUP_TYPE:
+    {
+      u8 i = config_int();
+      if (inLimit(i,0,2))
+        infoSettings.ack_popup_type = i;
+      break;
+    }
+
+  case C_INDEX_ACK_BUZZER:
+      infoSettings.ack_buzzer = getOnOff();
+    break;
+
   //---------------------------------------------------------Marlin Mode Settings (Only for TFT35_V3.0/TFT24_V1.1/TFT28V3.0)
 
 #if defined(ST7920_SPI) || defined(LCD2004_simulator)

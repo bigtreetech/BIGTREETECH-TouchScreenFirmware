@@ -204,6 +204,7 @@
 #define NOZZLE_PAUSE_E_FEEDRATE     6000 // (mm/min) retract & purge feedrate
 #define NOZZLE_PAUSE_XY_FEEDRATE    6000 // (mm/min) X and Y axes feedrate
 #define NOZZLE_PAUSE_Z_FEEDRATE     600  // (mm/min) Z axis feedrate
+
 /* M601 ; pause print
  * PrusaSlicer can add this on certain height. Marlin actually does not support this.
  * Acts here like manual pause
@@ -248,6 +249,44 @@
 #define LEVELING_POINT_MOVE_Z      10.0f // Z-axis position when nozzle move to next point
 #define LEVELING_POINT_XY_FEEDRATE 6000  // (mm/min) X and Y axes move feedrate
 #define LEVELING_POINT_Z_FEEDRATE  600   // (mm/min) Z axis move feedrate
+
+#define LEVELING_EDGE_DISTANCE_DISPLAY_ID    "X/Y"
+#define LEVELING_EDGE_DISTANCE_MIN_VALUE     10
+#define LEVELING_EDGE_DISTANCE_MAX_VALUE     100
+#define LEVELING_EDGE_DISTANCE_DEFAULT_VALUE LEVELING_EDGE_DISTANCE
+
+/**
+ * Popup
+ */
+#define POPUP_NOTIFICATION_DURATION 1500;                  // expressed in ms. E.g. 1500 corresponds to 1.5 seconds
+
+/**
+ * Z Fade
+ */
+#define Z_FADE_MIN_VALUE     0.0f
+#define Z_FADE_MAX_VALUE     20.0f
+#define Z_FADE_DEFAULT_VALUE 10.0f
+
+/**
+ * Probe Offset
+ */
+#define PROBE_OFFSET_MIN_VALUE     -20.0f
+#define PROBE_OFFSET_MAX_VALUE     20.0f
+#define PROBE_OFFSET_DEFAULT_VALUE 0.0f
+
+/**
+ * Babystep
+ */
+#define BABYSTEP_MIN_VALUE     -5.0f
+#define BABYSTEP_MAX_VALUE     5.0f
+#define BABYSTEP_DEFAULT_VALUE 0.0f
+#define BABYSTEP_MAX_UNIT      1.0f
+
+/**
+ * PID autotune
+ */
+#define PID_CMD             {"M303 U1 C8 E0", "M303 U1 C8 E1", "M303 U1 C8 E2", "M303 U1 C8 E3", "M303 U1 C8 E4", "M303 U1 C8 E5", "M303 U1 C8 E-1", ""};
+#define PID_PROCESS_TIMEOUT 900000                         // expressed in ms. E.g. 900000 corresponds to 15 minutes
 
 // Power Supply
 #define PS_ON_ACTIVE_HIGH    true   // Set 'false' for ATX (1), 'true' for X-Box (2)
