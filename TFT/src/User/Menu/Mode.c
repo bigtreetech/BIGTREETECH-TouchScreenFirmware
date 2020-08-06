@@ -85,7 +85,9 @@ void infoMenuSelect(void)
       #endif
       break;
 #else
+      #if defined(ST7920_SPI)
       infoMenu.menu[infoMenu.cur] = menuST7920;
+      #endif
 #endif
   }
 }
