@@ -49,7 +49,6 @@
     #define CZ_BLTOUCH_REPEAT         "Přesnost"
     #define CZ_Z_OFFSET               "Z Offset"
     #define CZ_PROBE_OFFSET           "Ofset sondy"
-    #define CZ_CONFIRMATION           "Are you sure?"
     #define CZ_DOWN                   "Dolů"
     #define CZ_UP                     "Nahoru"
     #define CZ_SAVE                   "Uložit"
