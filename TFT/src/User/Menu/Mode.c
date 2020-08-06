@@ -76,6 +76,7 @@ void infoMenuSelect(void)
       GUI_SetColor(infoSettings.marlin_mode_font_color);
       GUI_SetBkColor(infoSettings.marlin_mode_bg_color);
 
+#if !defined(MKS_32_V1_4)
       #if defined(ST7920_SPI) || defined(LCD2004_simulator)
       if(infoSettings.marlin_type == 1)
         infoMenu.menu[infoMenu.cur] = menuST7920;
@@ -83,6 +84,8 @@ void infoMenuSelect(void)
         infoMenu.menu[infoMenu.cur] = menuHD44780;
       #endif
       break;
-
+#else
+      infoMenu.menu[infoMenu.cur] = menuST7920;
+#endif
   }
 }

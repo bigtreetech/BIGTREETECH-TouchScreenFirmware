@@ -5,6 +5,8 @@
 #include "Settings.h"
 #include "../HD44780.h"
 
+#if !defined(MKS_32_V1_4)
+
 #ifdef LCD2004_simulator
 extern HD44780_QUEUE HD44780_queue;
 uint8_t data = 0;
@@ -172,3 +174,4 @@ void EXTI15_10_IRQHandler(void)
 
 }
 
+#endif             // endif for MKS_32_V1_4
