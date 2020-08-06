@@ -5,6 +5,7 @@
     #define PL_HEAT                   "Temp."
     #define PL_MOVE                   "Ruch"
     #define PL_HOME                   "Powrót"
+    #define PL_DISABLE_STEPPERS       "Steppers"
     #define PL_PRINT                  "Druk"
     #define PL_EXTRUDE                "Extrude"
     #define PL_FAN                    "Wentylator"

@@ -5,6 +5,7 @@
     #define EN_HEAT                   "Heat"
     #define EN_MOVE                   "Move"
     #define EN_HOME                   "Home"
+    #define EN_DISABLE_STEPPERS       "Steppers"
     #define EN_PRINT                  "Print"
     #define EN_EXTRUDE                "Extrude"
     #define EN_FAN                    "Fan"

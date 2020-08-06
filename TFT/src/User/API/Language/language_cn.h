@@ -5,6 +5,7 @@
     #define CN_HEAT                   "加热"
     #define CN_MOVE                   "移动"
     #define CN_HOME                   "回原点"
+    #define CN_DISABLE_STEPPERS       "解锁电机"
     #define CN_PRINT                  "打印"
     #define CN_EXTRUDE                "挤出"
     #define CN_FAN                    "风扇"

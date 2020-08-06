@@ -5,6 +5,7 @@
     #define HU_HEAT                   "Fűtés"
     #define HU_MOVE                   "Mozgás"
     #define HU_HOME                   "Végállás"
+    #define HU_DISABLE_STEPPERS       "Steppers"
     #define HU_PRINT                  "Nyomtatás"
     #define HU_EXTRUDE                "Adagolás"
     #define HU_FAN                    "Hűtés"

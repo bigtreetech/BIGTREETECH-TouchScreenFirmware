@@ -5,6 +5,7 @@
     #define JP_HEAT                   "あたため"
     #define JP_MOVE                   "移動"
     #define JP_HOME                   "ゼロにする"
+    #define JP_DISABLE_STEPPERS       "Steppers"
     #define JP_PRINT                  "プリント"
     #define JP_EXTRUDE                "押出"
     #define JP_FAN                    "ファン"

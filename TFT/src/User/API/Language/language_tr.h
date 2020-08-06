@@ -5,6 +5,7 @@
     #define TR_HEAT                   "Isıt"
     #define TR_MOVE                   "Hareket"
     #define TR_HOME                   "Sıfırla"
+    #define TR_DISABLE_STEPPERS       "Steppers"
     #define TR_PRINT                  "Yazdır"
     #define TR_EXTRUDE                "Filament"
     #define TR_FAN                    "Fan"

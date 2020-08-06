@@ -5,6 +5,7 @@
     #define FR_HEAT                   "Chauffer"
     #define FR_MOVE                   "Déplacer"
     #define FR_HOME                   "Home"
+    #define FR_DISABLE_STEPPERS       "Moteurs"
     #define FR_PRINT                  "Imprimer"
     #define FR_EXTRUDE                "Extruder"
     #define FR_FAN                    "Ventiler"

@@ -5,6 +5,7 @@
     #define RU_HEAT                   "Нагрев"
     #define RU_MOVE                   "Движение"
     #define RU_HOME                   "Домой"
+    #define RU_DISABLE_STEPPERS       "Steppers"
     #define RU_PRINT                  "Печать"
     #define RU_EXTRUDE                "Экструзия"
     #define RU_FAN                    "Вентилятор"

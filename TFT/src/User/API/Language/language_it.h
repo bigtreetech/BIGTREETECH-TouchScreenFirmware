@@ -5,6 +5,7 @@
     #define IT_HEAT                   "Riscalda"
     #define IT_MOVE                   "Muovi"
     #define IT_HOME                   "Home"
+    #define IT_DISABLE_STEPPERS       "Steppers"
     #define IT_PRINT                  "Stampa"
     #define IT_EXTRUDE                "Estrudi"
     #define IT_FAN                    "Ventola"

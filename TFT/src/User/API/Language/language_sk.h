@@ -5,6 +5,7 @@
     #define SK_HEAT                   "Teplota"
     #define SK_MOVE                   "Posunúť"
     #define SK_HOME                   "Domov"
+    #define SK_DISABLE_STEPPERS       "Steppers"
     #define SK_PRINT                  "Tlačiť"
     #define SK_EXTRUDE                "Extrúder"
     #define SK_FAN                    "Ofuk"

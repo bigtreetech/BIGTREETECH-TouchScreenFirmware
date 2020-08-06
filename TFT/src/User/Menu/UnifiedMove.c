@@ -46,7 +46,7 @@ void menuUnifiedMove(void)
      {ICON_MOVE,                    LABEL_MOVE},
      {ICON_LEVELING,                LABEL_ABL},
      {ICON_MANUAL_LEVEL,            LABEL_LEVELING},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_DISABLE_STEPPERS,        LABEL_DISABLE_STEPPERS},
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BACK,                    LABEL_BACK}}
@@ -118,6 +118,10 @@ void menuUnifiedMove(void)
         {
           infoMenu.menu[++infoMenu.cur] = menuManualLeveling;
         }
+        break;
+
+      case KEY_ICON_4:
+        storeCmd("M84\n");
         break;
 
       case KEY_ICON_6:

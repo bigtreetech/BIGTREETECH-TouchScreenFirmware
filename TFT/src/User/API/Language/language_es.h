@@ -5,6 +5,7 @@
     #define ES_HEAT                   "Calentar"
     #define ES_MOVE                   "Mover"
     #define ES_HOME                   "Origen"
+    #define ES_DISABLE_STEPPERS       "Steppers"
     #define ES_PRINT                  "Imprimir"
     #define ES_EXTRUDE                "Extruir"
     #define ES_FAN                    "Ventilar"

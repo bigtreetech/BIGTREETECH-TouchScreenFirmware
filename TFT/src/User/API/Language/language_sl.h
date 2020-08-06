@@ -5,6 +5,7 @@
     #define SL_HEAT                   "Gretje"
     #define SL_MOVE                   "Pomik"
     #define SL_HOME                   "Domov"
+    #define SL_DISABLE_STEPPERS       "Steppers"
     #define SL_PRINT                  "Tisk"
     #define SL_EXTRUDE                "Filament"
     #define SL_FAN                    "Hlajenje"

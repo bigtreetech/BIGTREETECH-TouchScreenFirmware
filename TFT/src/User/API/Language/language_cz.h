@@ -5,6 +5,7 @@
     #define CZ_HEAT                   "Teplota"
     #define CZ_MOVE                   "Posunout"
     #define CZ_HOME                   "Domů"
+    #define CZ_DISABLE_STEPPERS       "Steppers"
     #define CZ_PRINT                  "Tisknout"
     #define CZ_EXTRUDE                "Filament"
     #define CZ_FAN                    "Ofuk"

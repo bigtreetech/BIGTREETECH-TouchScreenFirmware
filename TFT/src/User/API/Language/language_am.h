@@ -5,6 +5,7 @@
     #define AM_HEAT                   "Ջերմություն"
     #define AM_MOVE                   "Շարժել"
     #define AM_HOME                   "Սկզբնական"
+    #define AM_DISABLE_STEPPERS       "Steppers"
     #define AM_PRINT                  "Տպել"
     #define AM_EXTRUDE                "Հալել"
     #define AM_FAN                    "Հովացնել"
