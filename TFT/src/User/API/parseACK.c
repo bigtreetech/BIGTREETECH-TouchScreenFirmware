@@ -276,25 +276,33 @@ void parseACK(void)
                          // Avoid can't getting this parameter due to disabled M503 in Marlin
     }
 
-    // Gcode command response
-    if(requestCommandInfo.inWaitResponse && ack_seen(requestCommandInfo.startMagic))
+    // Onboard sd Gcode command response
+
+    if(requestCommandInfo.inWaitResponse)
     {
-      requestCommandInfo.inResponse = true;
-      requestCommandInfo.inWaitResponse = false;
+      if (ack_seen(requestCommandInfo.startMagic))
+      {
+        requestCommandInfo.inResponse = true;
+        requestCommandInfo.inWaitResponse = false;
+      }
+      else if (ack_seen(requestCommandInfo.nosdMagic) || ack_seen(requestCommandInfo.errorMagic))
+      { //parse onboard sd error
+        requestCommandInfo.done = true;
+        requestCommandInfo.inResponse = false;
+        requestCommandInfo.inError = true;
+        requestCommandInfo.inWaitResponse = false;
+
+        strcpy(requestCommandInfo.cmd_rev_buf, dmaL2Cache);
+        BUZZER_PLAY(sound_error);
+        goto parse_end;
+      }
     }
     if(requestCommandInfo.inResponse)
     {
       if(strlen(requestCommandInfo.cmd_rev_buf)+strlen(dmaL2Cache) < CMD_MAX_REV)
       {
         strcat(requestCommandInfo.cmd_rev_buf, dmaL2Cache);
-
-        if(ack_seen(requestCommandInfo.errorMagic ))
-        {
-          requestCommandInfo.done = true;
-          requestCommandInfo.inResponse = false;
-          requestCommandInfo.inError = true;
-        }
-        else if(ack_seen(requestCommandInfo.stopMagic ))
+        if (ack_seen(requestCommandInfo.stopMagic))
         {
           requestCommandInfo.done = true;
           requestCommandInfo.inResponse = false;
@@ -304,12 +312,13 @@ void parseACK(void)
       {
         requestCommandInfo.done = true;
         requestCommandInfo.inResponse = false;
+        BUZZER_PLAY(sound_error);
         ackPopupInfo(errormagic);
       }
       infoHost.wait = false;
       goto parse_end;
     }
-    // end
+    // Onboard sd Gcode command response end
 
     if(ack_cmp("ok\n"))
     {
