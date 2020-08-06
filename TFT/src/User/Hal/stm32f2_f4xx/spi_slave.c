@@ -2,7 +2,16 @@
 #include "spi.h"
 #include "GPIO_Init.h"
 #include "stdlib.h"
+#include "Settings.h"
+#include "../HD44780.h"
 
+#ifdef LCD2004_simulator
+extern HD44780_QUEUE HD44780_queue;
+uint8_t data = 0;
+uint8_t highbit = 1;
+#endif
+
+#ifdef ST7920_SPI
 //TODO:
 //now support SPI2 and PB12 CS only
 //more compatibility changes are needed
@@ -14,7 +23,6 @@
 #elif ST7920_SPI == _SPI3
   #define ST7920_SPI_NUM          SPI3
 #endif
-
 
 SPI_QUEUE SPISlave;
 
@@ -108,21 +116,53 @@ void SPI_Slave_CS_Config(void)
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;								//Enable external interrupt channel
   NVIC_Init(&NVIC_InitStructure);
 }
-
+#endif
 
 /*External interruption*/
 void EXTI15_10_IRQHandler(void)
 {
-  if((GPIOB->IDR & (1<<12)) != 0)
+  switch(infoSettings.marlin_type)
   {
-    SPI_ReEnable(!!(GPIOB->IDR & (1<<13))); // Adaptive spi mode0 / mode3
-    ST7920_SPI_NUM->CR1 |= (1<<6);
+    #ifdef LCD2004_simulator
+    case LCD2004:
+      if((GPIOB->IDR & (1<<15)) != 0){
+        
+        uint8_t temp = ((LCD_D7_PORT->IDR & LCD_D7_PIN) >> 3 ) +     //D7
+                       ((LCD_D6_PORT->IDR & LCD_D6_PIN) >> 5 ) +     //D6
+                       ((LCD_D5_PORT->IDR & LCD_D5_PIN) >> 13) +     //D5
+                       ((LCD_D4_PORT->IDR & LCD_D4_PIN) >> 13) ;     //D4
+        if(highbit){
+          data = temp << 4;
+          highbit = 0;
+        }
+        else{
+          data |= temp;
+          highbit = 1;
+          if((GPIOB->IDR & (1<<12)) == 0){              //Command received
+            HD44780_queue.data[HD44780_queue.wIndex] =  0xff;
+            HD44780_queue.wIndex = (HD44780_queue.wIndex + 1) % HD44780_data_MAX;
+          }
+          HD44780_queue.data[HD44780_queue.wIndex] =  data;
+          HD44780_queue.wIndex = (HD44780_queue.wIndex + 1) % HD44780_data_MAX;
+        }
+      }       //Receive HD44780 data
+      EXTI->PR = 1<<15;
+    break;
+      #endif
+
+    case LCD12864:
+      if((GPIOB->IDR & (1<<12)) != 0)
+      {
+        SPI_ReEnable(!!(GPIOB->IDR & (1<<13))); // Adaptive spi mode0 / mode3
+        ST7920_SPI_NUM->CR1 |= (1<<6);
+      }
+      else
+      {
+        RCC->APB1RSTR |= 1<<14;	// Reset SPI2
+        RCC->APB1RSTR &= ~(1<<14);
+      }
+      EXTI->PR = 1<<12;   //Clear interrupt status register
+    break;
+
   }
-  else
-  {
-    RCC->APB1RSTR |= 1<<14;	// Reset SPI2
-    RCC->APB1RSTR &= ~(1<<14);
-  }
-/* Clear interrupt status register */
-  EXTI->PR = 1<<12;
 }
