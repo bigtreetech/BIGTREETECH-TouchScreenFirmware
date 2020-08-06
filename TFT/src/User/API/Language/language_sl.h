@@ -187,6 +187,7 @@
     #define SL_INVERT_ZAXIS           "Invertiraj Z os"
     #define SL_MOVE_SPEED             "Hitr. pomika (X Y Z)"
     #define SL_KNOB_LED               "LED enkoder gumba"
+    #define SL_KNOB_LED_IDLE          "Rotary Knob led idle"
     #define SL_M0_PAUSE               "Pavza (M0 ukaz)"
     #define SL_SEND_START_GCODE       "Zaženi startno G-kodo"
     #define SL_SEND_END_GCODE         "Zaženi končno G-kodo"

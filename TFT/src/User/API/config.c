@@ -932,6 +932,13 @@ void parseConfigKey(u16 index)
     if (inLimit(config_int(), 0, LED_COLOR_NUM-1))
       infoSettings.knob_led_color = config_int();
     break;
+
+#ifdef LCD_LED_PWM_CHANNEL  
+  case C_INDEX_KNOB_LED_IDLE:
+    if (inLimit(config_int(), 0, 1))
+      infoSettings.knob_led_idle = config_int();
+    break;
+#endif //lcd_led_pwm
 #endif
 
 #ifdef LCD_LED_PWM_CHANNEL

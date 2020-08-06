@@ -187,6 +187,7 @@
     #define DE_INVERT_ZAXIS           "Invertiere Z-Achse"
     #define DE_MOVE_SPEED             "Geschwindigkeit (XYZ)"
     #define DE_KNOB_LED               "Drehknopf LED Farbe"
+    #define DE_KNOB_LED_IDLE          "Rotary Knob led idle"
     #define DE_M0_PAUSE               "Pause durch M0 kommando"
     #define DE_SEND_START_GCODE       "Start-Gcode vor Druck"
     #define DE_SEND_END_GCODE         "End-Gcode nach Druck"

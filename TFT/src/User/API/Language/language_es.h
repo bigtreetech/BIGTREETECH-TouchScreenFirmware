@@ -187,6 +187,7 @@
     #define ES_INVERT_ZAXIS           "Invert Z Axis"
     #define ES_MOVE_SPEED             "Move speed(X Y Z)"
     #define ES_KNOB_LED               "Rotary Knob LED"
+    #define ES_KNOB_LED_IDLE          "Rotary Knob led idle"
     #define ES_M0_PAUSE               "Paused by M0 command"
     #define ES_SEND_START_GCODE       "Start Gcode before print"
     #define ES_SEND_END_GCODE         "End Gcode after print"

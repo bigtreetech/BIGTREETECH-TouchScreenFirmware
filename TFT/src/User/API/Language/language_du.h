@@ -187,6 +187,7 @@
     #define DU_INVERT_ZAXIS           "Inverteer Z Axis"
     #define DU_MOVE_SPEED             "Bewegingssnelheid(X Y Z)"
     #define DU_KNOB_LED               "Rotary Knob LED"
+    #define DU_KNOB_LED_IDLE          "Rotary Knob led idle"
     #define DU_M0_PAUSE               "Paused by M0 command"
     #define DU_SEND_START_GCODE       "Start Gcode before print"
     #define DU_SEND_END_GCODE         "End Gcode after print"

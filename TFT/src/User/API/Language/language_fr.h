@@ -187,6 +187,7 @@
     #define FR_INVERT_ZAXIS           "Inverser l'axe Z"
     #define FR_MOVE_SPEED             "Vitesse de déplacement (X Y Z)"
     #define FR_KNOB_LED               "LED du bouton rotatif"
+    #define FR_KNOB_LED_IDLE          "Rotary Knob led idle"
     #define FR_M0_PAUSE               "Suspendu par la commande M0"
     #define FR_SEND_START_GCODE       "Gcode avant l'impression"
     #define FR_SEND_END_GCODE         "Gcode après l'impression"

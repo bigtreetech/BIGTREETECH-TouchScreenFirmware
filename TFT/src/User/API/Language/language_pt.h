@@ -187,6 +187,7 @@
     #define PT_INVERT_ZAXIS           "Invert Z Axis"
     #define PT_MOVE_SPEED             "Move speed(X Y Z)"
     #define PT_KNOB_LED               "Rotary Knob LED"
+    #define PT_KNOB_LED_IDLE          "Rotary Knob led idle"
     #define PT_M0_PAUSE               "Paused by M0 command"
     #define PT_SEND_START_GCODE       "Start Gcode before print"
     #define PT_SEND_END_GCODE         "End Gcode after print"

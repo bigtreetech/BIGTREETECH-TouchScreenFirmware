@@ -187,6 +187,7 @@
     #define RU_INVERT_ZAXIS           "Инверсия оси Z"
     #define RU_MOVE_SPEED             "Скорость (X Y Z)"
     #define RU_KNOB_LED               "Подсветка энкодера"
+    #define RU_KNOB_LED_IDLE          "Rotary Knob led idle"
     #define RU_M0_PAUSE               "Пауза по команде M0"
     #define RU_SEND_START_GCODE       "G-код перед печатью"
     #define RU_SEND_END_GCODE         "G-код после печати"

@@ -187,6 +187,7 @@
     #define AM_INVERT_ZAXIS           "Invert Z Axis"
     #define AM_MOVE_SPEED             "Move speed(X Y Z)"
     #define AM_KNOB_LED               "Rotary Knob LED"
+    #define AM_KNOB_LED_IDLE          "Rotary Knob led idle"
     #define AM_M0_PAUSE               "Paused by M0 command"
     #define AM_SEND_START_GCODE       "Start Gcode before print"
     #define AM_SEND_END_GCODE         "End Gcode after print"

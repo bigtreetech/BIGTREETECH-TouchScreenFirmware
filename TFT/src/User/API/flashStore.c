@@ -86,6 +86,7 @@ void readStoredPara(void)
   infoSettings.terminalACK          = byteToWord(data + (index += 4), 4);
   infoSettings.move_speed           = byteToWord(data + (index += 4), 4);
   infoSettings.knob_led_color       = byteToWord(data + (index += 4), 4);
+  infoSettings.knob_led_idle        = byteToWord(data + (index += 4), 4); 
   infoSettings.persistent_info      = byteToWord(data + (index += 4), 4);
   infoSettings.file_listmode        = byteToWord(data + (index += 4), 4);
   infoSettings.ack_popup_type       = byteToWord(data + (index += 4), 4);
@@ -218,6 +219,7 @@ void storePara(void)
   wordToByte(infoSettings.terminalACK,                data + (index += 4));
   wordToByte(infoSettings.move_speed,                 data + (index += 4));
   wordToByte(infoSettings.knob_led_color,             data + (index += 4));
+  wordToByte(infoSettings.knob_led_idle,              data + (index += 4));
   wordToByte(infoSettings.persistent_info,            data + (index += 4));
   wordToByte(infoSettings.file_listmode,              data + (index += 4));
   wordToByte(infoSettings.ack_popup_type,             data + (index += 4));

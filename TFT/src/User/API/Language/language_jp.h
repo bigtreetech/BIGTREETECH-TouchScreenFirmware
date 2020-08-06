@@ -187,6 +187,7 @@
     #define JP_INVERT_ZAXIS           "Z軸を反転"
     #define JP_MOVE_SPEED             "移動速度(X Y Z)"
     #define JP_KNOB_LED               "回転ノブLED"
+    #define JP_KNOB_LED_IDLE          "Rotary Knob led idle"
     #define JP_M0_PAUSE               "MOコマンドで一時停止"
     #define JP_SEND_START_GCODE       "印刷前にGコードを開始する"
     #define JP_SEND_END_GCODE         "印刷後にGコードを終了する"
