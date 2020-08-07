@@ -34,6 +34,7 @@ static const GUI_RECT * cur_btn_rect = NULL;
 static void (*action_ok)() = NULL;
 static void (*action_cancel)() = NULL;
 static void (*action_loop)() = NULL;
+static bool autoClear = false;
 
 // expiring time for the notification popup type
 static u32 notification_expiring_time;
@@ -76,32 +77,20 @@ void popupDrawPage(DIALOG_TYPE type, BUTTON *btn, const u8 *title, const u8 *con
 
   if (btn != NULL)                     // draw a window with buttons bar
   {
-    GUI_DrawWindow(&window, title, context);
+    GUI_DrawWindow(&window, title, context, true);
 
     for(u8 i = 0; i < buttonNum; i++)
       GUI_DrawButton(&windowButton[i], 0);
   }
   else                                 // draw a window with no buttons bar
   {
-    GUI_DrawNotificationWindow(&window, title, context);
-  }
-}
-
-void menuNotification(void)
-{
-  while (infoMenu.menu[infoMenu.cur] == menuNotification)
-  {
-    if (OS_GetTimeMs() > notification_expiring_time)       // if notification duration is reached
-      infoMenu.cur--;
-
-    loopProcess();
+    GUI_DrawWindow(&window, title, context, false);
   }
 }
 
 void menuDialog(void)
 {
   u16 key_num = IDLE_TOUCH;
-
   while (infoMenu.menu[infoMenu.cur] == menuDialog)
   {
     key_num = KEY_GetValue(buttonNum, cur_btn_rect);
@@ -122,6 +111,12 @@ void menuDialog(void)
     if (action_loop != NULL)
       action_loop();
 
+    //clear notification after a delay if autoclear is set true
+    if(autoClear && OS_GetTimeMs() > notification_expiring_time)
+     {
+       autoClear = false;
+       infoMenu.cur--;
+     }
     loopProcess();
   }
 
@@ -135,39 +130,32 @@ void popupNotification(DIALOG_TYPE type, u8* info, u8* context)
 {
   if (infoSettings.mode == MARLIN)
     return;
-
-  // first, avoid to nest any type of popup types (menuNotification and menuDialog).
-  // Only the first popup message is displayed while the following ones are discarded
-  if (infoMenu.menu[infoMenu.cur] != menuNotification &&
-      infoMenu.menu[infoMenu.cur] != menuDialog)
-  {
-    // second, display the received popup message
-    popupDrawPage(type, NULL , info, context, NULL, NULL);
-
-    // third, set the expiring time for the popup message
-    notification_expiring_time = OS_GetTimeMs() + POPUP_NOTIFICATION_DURATION;
-
-    // forth, display the popup message for the hard coded duration, then reload the previous menu
-    infoMenu.menu[++infoMenu.cur] = menuNotification;
-  }
+  autoClear = true;
+  popupReminder(type, info, context);
 }
 
 void popupReminder(DIALOG_TYPE type, u8* info, u8* context)
 {
   if (infoSettings.mode == MARLIN) return;
 
-  // first, display the last received popup message, overriding previous popup messages, if any
-  popupDrawPage(type, &bottomSingleBtn , info, context, textSelect(LABEL_CONFIRM), NULL);
+  //Display the last received popup message, overriding previous popup messages, if any
+  if(autoClear)
+    popupDrawPage(type, NULL , info, context, NULL, NULL);
+  else
+    popupDrawPage(type, &bottomSingleBtn , info, context, textSelect(LABEL_CONFIRM), NULL);
 
-  // second, set (or update on the fly, if menuDialog is already running to handle a popup message) the handlers used by menuDialog. 
+  //Set the expiring time for the popup message
+  notification_expiring_time = OS_GetTimeMs() + POPUP_NOTIFICATION_DURATION;
+
+  //Set (or update on the fly, if menuDialog is already running to handle a popup message) the handlers used by menuDialog.
   action_ok = NULL;
   action_cancel = NULL;
   action_loop = NULL;
   cur_btn_rect = &popupMenuRect;
 
-  // third, avoid to nest menuDialog popup type (while a menuNotification popup type can be overridden)
+  //Avoid to nest menuDialog popup type (while a menuNotification popup type can be overridden)
   if (infoMenu.menu[infoMenu.cur] != menuDialog)
-  { // forth, handle the user interaction, then reload the previous menu
+  { //Handle the user interaction, then reload the previous menu
     infoMenu.menu[++infoMenu.cur] = menuDialog;
   }
 }
@@ -199,7 +187,7 @@ void showDialog(DIALOG_TYPE type, u8 * title, u8 * msg, u8 *ok_txt, u8* cancel_t
     cur_btn_rect = &popupMenuRect;
   }
 
-  // second, set (or update on the fly, if menuDialog is already running to handle a popup message) the handlers used by menuDialog. 
+  // second, set (or update on the fly, if menuDialog is already running to handle a popup message) the handlers used by menuDialog.
   action_ok = ok_action;
   action_cancel = cancel_action;
   action_loop = loop_action;

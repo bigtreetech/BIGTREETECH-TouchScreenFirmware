@@ -115,7 +115,7 @@ void ackPopupInfo(const char *info)
       infoSettings.ack_popup_type == 0)                                        // ...or if popup for ACK is disabled
     return;
 
-  if (infoSettings.ack_popup_type == 1)                                        // if reminder popup type is set
+  if (infoSettings.ack_popup_type == 1 ||  info == errormagic)                 // if reminder popup type is set
     popupReminder(d_type, (u8 *) info, (u8 *) dmaL2Cache + ack_index);
   else                                                                         // if notification popup type is set
     popupNotification(d_type, (u8 *) info, (u8 *) dmaL2Cache + ack_index);
