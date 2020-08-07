@@ -195,7 +195,7 @@
     #define AM_PERSISTENT_STATUS_INFO "Persistent Status Info"
     #define AM_FILE_LISTMODE          "Files viewer List Mode"
     #define AM_CURRENT_SETTING        "Driver Current (mA)"
-    #define AM_STEPS_SETTING          "Steps per MM"
+    #define AM_STEPS_SETTING          "Steps per mm"
     #define AM_MAXFEEDRATE            "Max Feed Rate"
     #define AM_MAXACCELERATION        "Max Acceleration"
     #define AM_ACCELERATION           "Acceleration"

@@ -195,7 +195,7 @@
     #define PT_PERSISTENT_STATUS_INFO "Persistent Status Info"
     #define PT_FILE_LISTMODE          "Files viewer List Mode"
     #define PT_CURRENT_SETTING        "Driver Current (mA)"
-    #define PT_STEPS_SETTING          "Steps per MM"
+    #define PT_STEPS_SETTING          "Steps per mm"
     #define PT_MAXFEEDRATE            "Max Feed Rate"
     #define PT_MAXACCELERATION        "Max Acceleration"
     #define PT_ACCELERATION           "Acceleration"

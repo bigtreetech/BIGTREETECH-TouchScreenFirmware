@@ -195,7 +195,7 @@
     #define PL_PERSISTENT_STATUS_INFO "Persistent Status Info"
     #define PL_FILE_LISTMODE          "Files viewer List Mode"
     #define PL_CURRENT_SETTING        "Driver Current (mA)"
-    #define PL_STEPS_SETTING          "Steps per MM"
+    #define PL_STEPS_SETTING          "Steps per mm"
     #define PL_MAXFEEDRATE            "Max Feed Rate"
     #define PL_MAXACCELERATION        "Max Acceleration"
     #define PL_ACCELERATION           "Acceleration"

@@ -195,7 +195,7 @@
     #define IT_PERSISTENT_STATUS_INFO "Persistent Status Info"
     #define IT_FILE_LISTMODE          "Files viewer List Mode"
     #define IT_CURRENT_SETTING        "Driver Current (mA)"
-    #define IT_STEPS_SETTING          "Steps per MM"
+    #define IT_STEPS_SETTING          "Steps per mm"
     #define IT_MAXFEEDRATE            "Max Feed Rate"
     #define IT_MAXACCELERATION        "Max Acceleration"
     #define IT_ACCELERATION           "Acceleration"

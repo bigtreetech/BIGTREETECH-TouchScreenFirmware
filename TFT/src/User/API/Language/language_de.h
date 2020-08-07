@@ -195,7 +195,7 @@
     #define DE_PERSISTENT_STATUS_INFO "Speicherungs-status Information"
     #define DE_FILE_LISTMODE          "Datei-Ansicht als Liste"
     #define DE_CURRENT_SETTING        "Driver Current (mA)"
-    #define DE_STEPS_SETTING          "Steps per MM"
+    #define DE_STEPS_SETTING          "Steps per mm"
     #define DE_MAXFEEDRATE            "Max Feed Rate"
     #define DE_MAXACCELERATION        "Max Acceleration"
     #define DE_ACCELERATION           "Acceleration"

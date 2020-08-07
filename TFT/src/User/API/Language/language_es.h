@@ -195,7 +195,7 @@
     #define ES_PERSISTENT_STATUS_INFO "Persistent Status Info"
     #define ES_FILE_LISTMODE          "Files viewer List Mode"
     #define ES_CURRENT_SETTING        "Driver Current (mA)"
-    #define ES_STEPS_SETTING          "Steps per MM"
+    #define ES_STEPS_SETTING          "Steps per mm"
     #define ES_MAXFEEDRATE            "Max Feed Rate"
     #define ES_MAXACCELERATION        "Max Acceleration"
     #define ES_ACCELERATION           "Acceleration"
