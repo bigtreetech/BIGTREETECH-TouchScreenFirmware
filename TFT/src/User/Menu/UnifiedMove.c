@@ -1,7 +1,7 @@
 #include "UnifiedMove.h"
 #include "includes.h"
 
-static uint8_t prev_value = -1;
+static int8_t prev_value = -1;
 static u32 nextTime = 0;
 static u32 update_time = 1000; // 1 seconds is 1000
 
