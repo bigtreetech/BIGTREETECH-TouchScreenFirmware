@@ -4,16 +4,6 @@
 #include "stdint.h"
 #include "../../Configuration.h"
 
-// #ifdef LCD2004_simulator
-// User-defined colors for 12864 mode from Configuration.h
-#ifndef HD44780_BKCOLOR
-  #define HD44780_BKCOLOR LCD_BLACK
-#endif
-
-#ifndef HD44780_FNCOLOR
-  #define HD44780_FNCOLOR LCD_GREEN
-#endif
-
 #define XROWS 20
 #define YROWS 4
 #define FONT_PIXEL  (MIN(LCD_WIDTH/XROWS/BYTE_WIDTH,LCD_HEIGHT/YROWS/BYTE_HEIGHT)) 
@@ -22,7 +12,7 @@
 #define YSTART ((LCD_HEIGHT - FONT_PIXEL*YROWS*BYTE_HEIGHT) / 2)
 #define YOFFSET  (BYTE_HEIGHT*FONT_PIXEL-9*BITMAP_PIXEL)
 
-typedef void (*HD44780_CMD)(uint8_t *);
+typedef void (*HD44780_CMD)(uint8_t);
 
 typedef enum
 {
@@ -177,7 +167,6 @@ typedef struct {
   HD44780_DATA_TYPE   data_type;
 }HD44780_REG; // Extended Instruction
 
-void menuHD44780(void);
+void HD44780_ParseRecv(uint8_t val);
 
 #endif
-// #endif

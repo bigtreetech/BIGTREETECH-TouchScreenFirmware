@@ -36,8 +36,7 @@
 #define CONFIG_MARLIN_FONT_COLOR    "marlin_fn_color:"
 #define CONFIG_MARLIN_SHOW_TITLE    "marlin_show_title:"
 #define CONFIG_MARLIN_TYPE          "marlin_type:"
-#define CONFIG_LCD12864_TITLE       "lcd12864_title:"
-#define CONFIG_LCD2004_TITLE        "lcd2004_title:"
+#define CONFIG_MARLIN_TITLE         "marlin_title:"
 #define CONFIG_MARLIN_FULLSCREEN    "marlin_fullscreen:"
 //-----------------------------Printer / Machine Settings
 #define CONFIG_HOTEND_COUNT         "hotend_count:"

@@ -528,7 +528,7 @@ void ST7920_EI17_SetGRAMAddress(uint8_t cmd)
   st7920_reg.data_type = ST7920_DATA_GDRAM;
 }
 
-const FP_CMD cmdCallBack[8][2] = {
+static const FP_CMD st7920CmdCallBack[8][2] = {
 // Basic Instruction                 Extended Instruction
 { ST7920_BI10_DisplayClear,          ST7920_EI10_StandBy},            // cmd 1 << 0
 { ST7920_BI11_ReturnHome,            ST7920_EI11_ScrollOrRAMAddress}, // cmd 1 << 1
@@ -540,8 +540,42 @@ const FP_CMD cmdCallBack[8][2] = {
 { ST7920_BI17_SetDDRAMAddress,       ST7920_EI17_SetGRAMAddress},     // cmd 1 << 7
 };
 
+void ST7920_ST7920_ParseWCmd(uint8_t cmd)
+{
+  for (int8_t i = 7; i >= 0; i--) {
+    if (cmd & (1 << i)) {
+      if (st7920CmdCallBack[i][st7920_reg.fs.re] != NULL) {
+        (*st7920CmdCallBack[i][st7920_reg.fs.re])(cmd);
+      }
+      break;
+    }
+  }
+}
 
-u8 ST7920_IsCtrlByte(u8 data)
+void ST7920_ST7920_ParseWData(uint8_t data)
+{
+  switch (st7920_reg.data_type) {
+    case ST7920_DATA_DDRAM:
+      if (st7920_reg.cgram == 1) {
+        st7920_reg.cgram = 0;
+        ST7920_DispCGRAM(data);
+      } else if (data == 0x00) {
+        st7920_reg.cgram = 1;
+        return;
+      } else {
+        ST7920_DispHCGROM(data);
+      }
+      break;
+    case ST7920_DATA_CGRAM:
+      ST7920_BI_SetCGRAMData(data);
+      break;
+    case ST7920_DATA_GDRAM:
+      ST7920_DrawGDRAM(data);
+      break;
+  }
+}
+
+uint8_t ST7920_IsCtrlByte(uint8_t data)
 {
   if(data == ST7920_WCMD || data == ST7920_WDATA || data == ST7920_RCMD || data == ST7920_RDATA)
     return true;
@@ -549,10 +583,11 @@ u8 ST7920_IsCtrlByte(u8 data)
     return false;
 }
 
-void ST7920_ParseRecv(u8 val)
+// Parse queue data
+void ST7920_ParseRecv(uint8_t val)
 {
-  static u8 rcvData = 0;
-  static u8 rcvIndex = 0;
+  static uint8_t rcvData = 0;
+  static uint8_t rcvIndex = 0;
   if (ST7920_IsCtrlByte(val))
   {
     st7920_reg.ctrl_status = (ST7920_CTRL_STATUS)val;
@@ -594,82 +629,6 @@ void ST7920_ParseRecv(u8 val)
         break;
     }
   }
-}
-
-
-void ST7920_ST7920_ParseWCmd(u8 cmd)
-{
-  for (int8_t i = 7; i >= 0; i--) {
-    if (cmd & (1 << i)) {
-      if (cmdCallBack[i][st7920_reg.fs.re] != NULL) {
-        (*cmdCallBack[i][st7920_reg.fs.re])(cmd);
-      }
-      break;
-    }
-  }
-}
-
-void ST7920_ST7920_ParseWData(u8 data)
-{
-  switch (st7920_reg.data_type) {
-    case ST7920_DATA_DDRAM:
-      if (st7920_reg.cgram == 1) {
-        st7920_reg.cgram = 0;
-        ST7920_DispCGRAM(data);
-      } else if (data == 0x00) {
-        st7920_reg.cgram = 1;
-        return;
-      } else {
-        ST7920_DispHCGROM(data);
-      }
-      break;
-    case ST7920_DATA_CGRAM:
-      ST7920_BI_SetCGRAMData(data);
-      break;
-    case ST7920_DATA_GDRAM:
-      ST7920_DrawGDRAM(data);
-      break;
-  }
-}
-
-void menuST7920(void)
-{
-  GUI_Clear(infoSettings.marlin_mode_bg_color);
-  GUI_SetColor(infoSettings.marlin_mode_font_color);
-  GUI_SetBkColor(infoSettings.marlin_mode_bg_color);
-
-  if(infoSettings.marlin_mode_showtitle == 1){
-    STRINGS_STORE tempST;
-    W25Qxx_ReadBuffer((uint8_t *)&tempST,STRINGS_STORE_ADDR,sizeof(STRINGS_STORE));
-    GUI_DispStringInRect(0, 0, LCD_WIDTH, SIMULATOR_YSTART, (uint8_t *)tempST.lcd12864_title);
-  }
-
-  SPI_Slave();
-
-  while(infoMenu.menu[infoMenu.cur] == menuST7920)
-  {
-    while(SPISlave.rIndex != SPISlave.wIndex)
-    {
-      ST7920_ParseRecv(SPISlave.data[SPISlave.rIndex]);
-      SPISlave.rIndex = (SPISlave.rIndex + 1) % SPI_SLAVE_MAX;
-    }
-
-    #if LCD_ENCODER_SUPPORT
-      sendEncoder(LCD_ReadTouch());
-
-      if(LCD_BtnTouch(LCD_BUTTON_INTERVALS))
-        sendEncoder(1);
-      loopCheckEncoder();
-    #endif
-
-    loopCheckMode();
-
-    if (infoSettings.serial_alwaysOn == 1)
-    {
-      loopBackEnd();
-    }
-  }
-  SPI_SlaveDeInit();
 }
 
 #endif

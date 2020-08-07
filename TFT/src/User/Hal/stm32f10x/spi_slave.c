@@ -3,17 +3,9 @@
 #include "GPIO_Init.h"
 #include "stdlib.h"
 #include "Settings.h"
-#include "../HD44780.h"
+#include "MarlinMode.h"
 
-#if !defined(MKS_32_V1_4)
-
-#ifdef LCD2004_simulator
-extern HD44780_QUEUE HD44780_queue;
-uint8_t data = 0;
-uint8_t highbit = 1;
-#endif
-
-#ifdef ST7920_SPI
+#if defined(ST7920_SPI) && !defined(MKS_32_V1_4)
 //TODO:
 //now support SPI2 and PB12 CS only
 //more compatibility changes are needed
@@ -23,7 +15,7 @@ uint8_t highbit = 1;
 #elif ST7920_SPI == _SPI2
   #define ST7920_SPI_NUM          SPI2
 #elif ST7920_SPI == _SPI3
-  #define W25QXX_SPI_NUM          SPI3
+  #define ST7920_SPI_NUM          SPI3
 #endif
 
 //#define _SPI_SLAVE_IRQ(n)  n##_IRQHandler
@@ -124,6 +116,7 @@ void SPI_Slave_CS_Config(void)
 }
 #endif
 
+#if (defined(ST7920_SPI) || defined(LCD2004_simulator)) && !defined(MKS_32_V1_4)
 void EXTI15_10_IRQHandler(void)
 {
   switch(infoSettings.marlin_type)
@@ -136,21 +129,13 @@ void EXTI15_10_IRQHandler(void)
                        ((LCD_D6_PORT->IDR & LCD_D6_PIN) >> 5 ) +     //D6
                        ((LCD_D5_PORT->IDR & LCD_D5_PIN) >> 13) +     //D5
                        ((LCD_D4_PORT->IDR & LCD_D4_PIN) >> 13) ;     //D4
-        if(highbit){
-          data = temp << 4;
-          highbit = 0;
+
+        if((GPIOB->IDR & (1<<12)) == 0){ //Command received
+          temp |= 0x80;
         }
-        else{
-          data |= temp;
-          highbit = 1;
-          if((GPIOB->IDR & (1<<12)) == 0){              //Command received
-            HD44780_queue.data[HD44780_queue.wIndex] =  0xff;
-            HD44780_queue.wIndex = (HD44780_queue.wIndex + 1) % HD44780_data_MAX;
-          }
-          HD44780_queue.data[HD44780_queue.wIndex] =  data;
-          HD44780_queue.wIndex = (HD44780_queue.wIndex + 1) % HD44780_data_MAX;
-        }
-      }       //Receive HD44780 data
+        marlinQueue.data[marlinQueue.index_w] = temp; //Receive HD44780 data
+        marlinQueue.index_w = (marlinQueue.index_w + 1) % QUEUE_MAX_BYTE;
+      }
       EXTI->PR = 1<<15;
     break;
     #endif
@@ -171,7 +156,5 @@ void EXTI15_10_IRQHandler(void)
     break;
     #endif
   }
-
 }
-
-#endif             // endif for MKS_32_V1_4
+#endif
