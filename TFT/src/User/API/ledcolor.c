@@ -61,6 +61,7 @@ void WS2812_Send_DAT(uint32_t ws2812_dat)
   uint16_t code_0_tim_h_cnt = cycle * (NEOPIXEL_T0H_US / (NEOPIXEL_T0H_US + NEOPIXEL_T1H_US));  // Code 0, High level hold time,
   uint16_t code_1_tim_h_cnt = cycle - code_0_tim_h_cnt;
 
+  __disable_irq();  // Disable interrupt, avoid disturbing the timing of WS2812
   TIM6->ARR = cycle;
   TIM6->CR1 |= 0x01;
   for (led_num=0; led_num < NEOPIXEL_PIXELS; led_num++)
@@ -68,7 +69,7 @@ void WS2812_Send_DAT(uint32_t ws2812_dat)
     for (bit = 23; bit >= 0; bit--)
     {
       TIM6->CNT = 0;
-      __disable_irq();  // Disable interrupt, avoid disturbing the timing of WS2812
+      
       WS2812_FAST_WRITE_HIGH(); // WS2812 required very high speed, so "GPIO_SetLevel(LED_COLOR_PIN, 1)" not applicable
       if (ws2812_dat & (1 << bit)) {
         while (TIM6->CNT < code_1_tim_h_cnt);
@@ -77,10 +78,11 @@ void WS2812_Send_DAT(uint32_t ws2812_dat)
       }
       WS2812_FAST_WRITE_LOW();
       while (!TIM6->SR);
-      __enable_irq(); // Enable interrupt
       TIM6->SR = 0;
     }
   }
   TIM6->CR1 &= ~0x01;
+  __enable_irq(); // Enable interrupt
+
 }
 #endif
