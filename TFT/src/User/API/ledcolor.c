@@ -69,7 +69,6 @@ void WS2812_Send_DAT(uint32_t ws2812_dat)
     for (bit = 23; bit >= 0; bit--)
     {
       TIM6->CNT = 0;
-      
       WS2812_FAST_WRITE_HIGH(); // WS2812 required very high speed, so "GPIO_SetLevel(LED_COLOR_PIN, 1)" not applicable
       if (ws2812_dat & (1 << bit)) {
         while (TIM6->CNT < code_1_tim_h_cnt);
@@ -83,6 +82,5 @@ void WS2812_Send_DAT(uint32_t ws2812_dat)
   }
   TIM6->CR1 &= ~0x01;
   __enable_irq(); // Enable interrupt
-
 }
 #endif
