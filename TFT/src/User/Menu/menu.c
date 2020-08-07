@@ -485,7 +485,6 @@ if(infoMachineSettings.onboard_sd_support == ENABLED && infoMachineSettings.auto
 #endif
 
 #if LCD_ENCODER_SUPPORT
-  loopCheckEncoder();
   #if defined(ST7920_SPI) || defined(LCD2004_simulator)
     if(infoMenu.menu[infoMenu.cur] != menuMarlinMode)
   #endif
@@ -500,6 +499,10 @@ if(infoMachineSettings.onboard_sd_support == ENABLED && infoMachineSettings.auto
 
 #ifdef FIL_RUNOUT_PIN
   loopBackEndFILRunoutDetect();
+#endif
+
+#ifdef LCD_LED_PWM_CHANNEL
+  loopDimTimer();
 #endif
 }
 

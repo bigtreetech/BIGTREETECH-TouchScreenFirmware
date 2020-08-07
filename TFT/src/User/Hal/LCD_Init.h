@@ -33,9 +33,8 @@
 
   typedef struct
   {
-    uint32_t idle_time_counter;
-    bool idle_timer_reset;
-    bool _last_dim_state;
+    uint32_t idle_ms;
+    bool dimmed;
   } LCD_AUTO_DIM;
   extern LCD_AUTO_DIM lcd_dim;
 
@@ -48,10 +47,8 @@
   extern const  uint32_t LCD_BRIGHTNESS[ITEM_BRIGHTNESS_NUM];
   extern const LABEL itemBrightness[ITEM_BRIGHTNESS_NUM];
 
-  void LCD_Dim_Idle_Timer_init(void);
-  void LCD_Dim_Idle_Timer_Reset(void);
-  void LCD_Dim_Idle_Timer(void);
   void LCD_LED_PWM_Init(void);
+  void loopDimTimer(void);
 
   #define Set_LCD_Brightness(percentage) TIM_PWM_SetDutyCycle(LCD_LED_PWM_CHANNEL, percentage)
 #endif // LCD_LED_PWM_CHANNEL

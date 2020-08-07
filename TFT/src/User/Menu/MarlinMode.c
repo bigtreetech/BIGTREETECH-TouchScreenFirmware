@@ -56,9 +56,12 @@ void menuMarlinMode(void)
 
       if(LCD_BtnTouch(LCD_BUTTON_INTERVALS))
         sendEncoder(1);
-      loopCheckEncoder();
     #endif
     loopCheckMode();
+
+    #ifdef LCD_LED_PWM_CHANNEL
+      loopDimTimer();
+    #endif
 
     if (infoSettings.serial_alwaysOn == 1)
     {
