@@ -5,7 +5,7 @@
 #include "Settings.h"
 #include "MarlinMode.h"
 
-#ifdef ST7920_SPI
+#if defined(ST7920_SPI) && !defined(MKS_32_V1_4)
 //TODO:
 //now support SPI2 and PB12 CS only
 //more compatibility changes are needed
@@ -15,7 +15,7 @@
 #elif ST7920_SPI == _SPI2
   #define ST7920_SPI_NUM          SPI2
 #elif ST7920_SPI == _SPI3
-  #define W25QXX_SPI_NUM          SPI3
+  #define ST7920_SPI_NUM          SPI3
 #endif
 
 //#define _SPI_SLAVE_IRQ(n)  n##_IRQHandler
@@ -116,7 +116,7 @@ void SPI_Slave_CS_Config(void)
 }
 #endif
 
-#if defined(ST7920_SPI) || defined(LCD2004_simulator)
+#if (defined(ST7920_SPI) || defined(LCD2004_simulator)) && !defined(MKS_32_V1_4)
 void EXTI15_10_IRQHandler(void)
 {
   switch(infoSettings.marlin_type)

@@ -312,7 +312,6 @@ void parseACK(void)
       {
         requestCommandInfo.done = true;
         requestCommandInfo.inResponse = false;
-        BUZZER_PLAY(sound_error);
         ackPopupInfo(errormagic);
       }
       infoHost.wait = false;
