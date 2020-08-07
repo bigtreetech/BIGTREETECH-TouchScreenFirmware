@@ -320,8 +320,7 @@ void resetConfig(void)
   tempCG.count = n;
 
   //restore strings store
-  strcpy(tempST.lcd12864_title,ST7920_BANNER_TEXT);
-  strcpy(tempST.lcd2004_title,HD44780_BANNER_TEXT);
+  strcpy(tempST.marlin_title, MARLIN_BANNER_TEXT);
 
   for (int i = 0; i < PREHEAT_COUNT;i++)
   {
@@ -529,25 +528,14 @@ void parseConfigKey(u16 index)
       infoSettings.marlin_type = config_int();
     break;
 
-  case C_INDEX_LCD12864_TITLE:
+  case C_INDEX_MARLIN_TITLE:
     {
       char * pchr;
       pchr = strrchr(cur_line,':') + 1;
       int utf8len = getUTF8Length((u8*)pchr);
       int bytelen = strlen(pchr) + 1;
       if (inLimit(utf8len,NAME_MIN_LENGTH,MAX_STRING_LENGTH) && inLimit(bytelen,NAME_MIN_LENGTH,MAX_GCODE_LENGTH))
-        strcpy(configStringsStore->lcd12864_title, pchr);
-    }
-    break;
-
-  case C_INDEX_LCD2004_TITLE:
-    {
-      char * pchr;
-      pchr = strrchr(cur_line,':') + 1;
-      int utf8len = getUTF8Length((u8*)pchr);
-      int bytelen = strlen(pchr) + 1;
-      if (inLimit(utf8len,NAME_MIN_LENGTH,MAX_STRING_LENGTH) && inLimit(bytelen,NAME_MIN_LENGTH,MAX_GCODE_LENGTH))
-        strcpy(configStringsStore->lcd2004_title, pchr);
+        strcpy(configStringsStore->marlin_title, pchr);
     }
     break;
 

@@ -59,7 +59,7 @@ void infoMenuSelect(void)
       break;
     }
 
-    case Marlin:
+    case MARLIN:
       if (infoSettings.serial_alwaysOn == 1)
       {
         Serial_ReSourceInit();
@@ -73,19 +73,10 @@ void infoMenuSelect(void)
           knob_LED_DeInit();
         #endif
       #endif
-      GUI_SetColor(infoSettings.marlin_mode_font_color);
-      GUI_SetBkColor(infoSettings.marlin_mode_bg_color);
 
-#if !defined(MKS_32_V1_4)
       #if defined(ST7920_SPI) || defined(LCD2004_simulator)
-      if(infoSettings.marlin_type == 1)
-        infoMenu.menu[infoMenu.cur] = menuST7920;
-      else
-        infoMenu.menu[infoMenu.cur] = menuHD44780;
+        infoMenu.menu[infoMenu.cur] = menuMarlinMode;
       #endif
       break;
-#else
-      infoMenu.menu[infoMenu.cur] = menuST7920;
-#endif
   }
 }

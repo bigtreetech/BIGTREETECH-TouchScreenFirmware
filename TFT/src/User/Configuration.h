@@ -62,20 +62,18 @@
  *          6: MAGENTA,    7: YELLOW,      8: ORANGE,  9: PURPLE,   10: LIME,  11: BROWN,
  *         12: DARKBLUE,  13: DARKGREEN,  14: GRAY,   15: DARKGRAY
  */
-#define ST7920_BKCOLOR 1
-#define ST7920_FNCOLOR 0
+#define MARLIN_BKCOLOR 1
+#define MARLIN_FNCOLOR 0
 
 /**
  *  Text displayed at the top of the TFT in Marlin Mode.
  */
-#define ST7920_BANNER_TEXT "LCD12864 Simulator"
-#define HD44780_BANNER_TEXT "LCD2004 Simulator"
+#define MARLIN_BANNER_TEXT "LCD12864 Simulator"
 
 /**
  *  show banner text at the top of the TFT in Marlin Mode.
  */
-#define ST7920_SHOW_BANNER  true //to enabled: true | to disabled: false
-#define HD44780_SHOW_BANNER true 
+#define MARLIN_SHOW_BANNER  true //to enabled: true | to disabled: false
 /**
  * Run Marlin Mode in Fullscreen
  *
