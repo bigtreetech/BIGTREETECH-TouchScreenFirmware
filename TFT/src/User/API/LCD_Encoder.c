@@ -123,16 +123,6 @@ void loopCheckEncoderSteps(void)
   }
 }
 
-void loopCheckEncoder()
-{
-  #ifdef LCD_LED_PWM_CHANNEL
-    // Check for any encoder changes or Check for encoder button press
-    if (encoder_CheckState() || encoder_ReadBtn(LCD_BUTTON_INTERVALS))
-      LCD_Dim_Idle_Timer_Reset(); // Reset LCD dim idle timer if enabled.
-  #endif
-}
-
-
 #if 1
 //Parse the touch to control encoder
  uint8_t LCD_ReadTouch(void)

@@ -141,9 +141,9 @@ void HD44780_DispDDRAM(uint8_t data)
     CHAR_INFO info = {.bytes = 0};
 
     getCharacterInfo(&data, &info);
-    uint8_t x = 0,
-            y = 0,
-            j = 0;
+    uint16_t x = 0,
+             y = 0,
+             j = 0;
     uint16_t bitMapSize = (info.pixelHeight * info.pixelWidth / 8);
     uint8_t  font[BYTE_HEIGHT * BYTE_HEIGHT / 8]; // TODO: match bitMapSize
     uint32_t temp = 0;
