@@ -33,7 +33,8 @@ void menuMarlinMode(void)
     marlinDeInit = SPI_SlaveDeInit;
     marlinParse = ST7920_ParseRecv;
   }
-#elif defined(LCD2004_simulator)
+#endif
+#if defined(LCD2004_simulator)
   if (infoSettings.marlin_type == LCD2004) {
     marlinInit = HD44780_Config;
     marlinDeInit = HD44780_DeConfig;
