@@ -249,6 +249,9 @@ void updateFeatureSettings(uint8_t key_val)
       case SKEY_LCD_BRIGHTNESS:
       {
         infoSettings.lcd_brightness = (infoSettings.lcd_brightness + 1) % ITEM_BRIGHTNESS_NUM;
+        if(infoSettings.lcd_brightness == 0)
+          infoSettings.lcd_brightness = 1; //In Normal it should not be off. Set back to 5%
+        
         char tempstr[8];
         sprintf(tempstr,(char *)textSelect(LABEL_PERCENT_VALUE),LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
         setDynamicTextValue(key_val,tempstr);

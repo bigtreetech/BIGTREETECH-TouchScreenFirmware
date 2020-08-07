@@ -6,6 +6,7 @@
 #include "menu.h"
 
 #ifdef LCD_LED_PWM_CHANNEL
+  #define LCD_0_PERCENT    0
   #define LCD_5_PERCENT    5
   #define LCD_10_PERCENT   10
   #define LCD_20_PERCENT   20
@@ -39,7 +40,7 @@
   extern LCD_AUTO_DIM lcd_dim;
 
   #define ITEM_SECONDS_NUM 8
-  #define ITEM_BRIGHTNESS_NUM 11
+  #define ITEM_BRIGHTNESS_NUM 12
 
   extern const uint32_t LCD_DIM_IDLE_TIME[ITEM_SECONDS_NUM];
   extern const LABEL itemDimTime[ITEM_SECONDS_NUM];
