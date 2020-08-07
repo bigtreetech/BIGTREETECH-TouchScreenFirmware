@@ -33,7 +33,8 @@ void menuMarlinMode(void)
     marlinDeInit = SPI_SlaveDeInit;
     marlinParse = ST7920_ParseRecv;
   }
-#elif defined(LCD2004_simulator)
+#endif
+#if defined(LCD2004_simulator)
   if (infoSettings.marlin_type == LCD2004) {
     marlinInit = HD44780_Config;
     marlinDeInit = HD44780_DeConfig;
@@ -55,9 +56,12 @@ void menuMarlinMode(void)
 
       if(LCD_BtnTouch(LCD_BUTTON_INTERVALS))
         sendEncoder(1);
-      loopCheckEncoder();
     #endif
     loopCheckMode();
+
+    #ifdef LCD_LED_PWM_CHANNEL
+      loopDimTimer();
+    #endif
 
     if (infoSettings.serial_alwaysOn == 1)
     {

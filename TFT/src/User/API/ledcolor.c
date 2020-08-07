@@ -46,12 +46,7 @@ void knob_LED_Init(void)
 
 void knob_LED_DeInit(void)
 {
-  GPIO_InitSet(LED_COLOR_PIN,MGPIO_MODE_IPN,0);
-}
-
-void set_knob_color(int color_index)
-{
-  WS2812_Send_DAT(led_color[color_index]);
+  GPIO_InitSet(LED_COLOR_PIN, MGPIO_MODE_IPN, 0);
 }
 
 // total 2.5us, run in 400Khz
