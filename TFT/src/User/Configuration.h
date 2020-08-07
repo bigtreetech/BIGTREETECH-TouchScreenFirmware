@@ -230,8 +230,8 @@
 #define ENABLE_UBL_VALUE 2
 
 /**
- * Enable friendly probe offset language
- * 
+ * Enable friendly probe offset language.
+ *
  * Decrease/increase and "-" & "+" icons are replaced with down/up and friendly icons
  *
  * Options:  0: Disabled    1: Enabled
@@ -240,11 +240,11 @@
 
 /**
  * Enable quick EEPROM save/load/reset button
- * 
+ *
  * This will enable a handy button in the (settings > machine) menu
- * 
+ *
  * Note: if disabled, EEPROM operations can also be accessed in the (settings > machine > parameters) menu
- * 
+ *
  * Options:  0: Disabled    1: Enabled
  */
 #define QUICK_EEPROM_BUTTON 0
