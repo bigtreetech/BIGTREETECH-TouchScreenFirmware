@@ -191,7 +191,9 @@ ITEM itemMachineSettingsSubmenu[ITEM_MACHINE_SETTINGS_SUBMENU_NUM] = {
   {ICON_EEPROM_RESET,             LABEL_RESET},
 };
 
-static u8 curSubmenu = 0;
+#if QUICK_EEPROM_BUTTON == 1
+  static u8 curSubmenu = 0;
+#endif
 
 void menuMachineSettings(void)
 {
@@ -205,14 +207,19 @@ void menuMachineSettings(void)
      {ICON_CUSTOM,                  LABEL_CUSTOM},
      {ICON_RGB_SETTINGS,            LABEL_RGB_SETTINGS},
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_PAGE_DOWN,               LABEL_NEXT},
-     {ICON_EEPROM_SAVE,             LABEL_SAVE},
+     {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BACK,                    LABEL_BACK},}
   };
 
   KEY_VALUES key_num = KEY_IDLE;
 
-  machineSettingsItems.items[KEY_ICON_6] = itemMachineSettingsSubmenu[curSubmenu];
+  #if QUICK_EEPROM_BUTTON == 1
+    machineSettingsItems.items[5].icon = ICON_PAGE_DOWN;
+    machineSettingsItems.items[5].label.index = LABEL_NEXT;
+
+    machineSettingsItems.items[6] = itemMachineSettingsSubmenu[curSubmenu];
+  #endif
 
   menuDrawPage(&machineSettingsItems);
 
@@ -239,44 +246,48 @@ void menuMachineSettings(void)
 
       // change submenu
       case KEY_ICON_5:
-        curSubmenu = (curSubmenu + 1) % ITEM_MACHINE_SETTINGS_SUBMENU_NUM;
+        #if QUICK_EEPROM_BUTTON == 1
+          curSubmenu = (curSubmenu + 1) % ITEM_MACHINE_SETTINGS_SUBMENU_NUM;
 
-        machineSettingsItems.items[KEY_ICON_6] = itemMachineSettingsSubmenu[curSubmenu];
+          machineSettingsItems.items[KEY_ICON_6] = itemMachineSettingsSubmenu[curSubmenu];
 
-        menuDrawItem(&machineSettingsItems.items[KEY_ICON_6], KEY_ICON_6);
+          menuDrawItem(&machineSettingsItems.items[KEY_ICON_6], KEY_ICON_6);
+        #endif
         break;
 
       // handle submenu
       case KEY_ICON_6:
-        switch (curSubmenu)
-        {
-          // save to EEPROM
-          case 0:
-            if (infoMachineSettings.EEPROM == 1)
-            {
-              showDialog(DIALOG_TYPE_QUESTION, textSelect(machineSettingsItems.title.index), textSelect(LABEL_EEPROM_SAVE_INFO),
-                textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), saveEepromSettings, NULL, NULL);
-            }
-            break;
+        #if QUICK_EEPROM_BUTTON == 1
+          switch (curSubmenu)
+          {
+            // save to EEPROM
+            case 0:
+              if (infoMachineSettings.EEPROM == 1)
+              {
+                showDialog(DIALOG_TYPE_QUESTION, textSelect(machineSettingsItems.title.index), textSelect(LABEL_EEPROM_SAVE_INFO),
+                  textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), saveEepromSettings, NULL, NULL);
+              }
+              break;
 
-          // restore from EEPROM
-          case 1:
-            if (infoMachineSettings.EEPROM == 1)
-            {
-              showDialog(DIALOG_TYPE_QUESTION, textSelect(machineSettingsItems.title.index), textSelect(LABEL_EEPROM_RESTORE_INFO),
-                textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), restoreEepromSettings, NULL, NULL);
-            }
-            break;
+            // restore from EEPROM
+            case 1:
+              if (infoMachineSettings.EEPROM == 1)
+              {
+                showDialog(DIALOG_TYPE_QUESTION, textSelect(machineSettingsItems.title.index), textSelect(LABEL_EEPROM_RESTORE_INFO),
+                  textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), restoreEepromSettings, NULL, NULL);
+              }
+              break;
 
-          // reset EEPROM
-          case 2:
-            if (infoMachineSettings.EEPROM == 1)
-            {
-              showDialog(DIALOG_TYPE_QUESTION, textSelect(machineSettingsItems.title.index), textSelect(LABEL_EEPROM_RESET_INFO),
-                textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), resetEepromSettings, NULL, NULL);
-            }
-            break;
-        }
+            // reset EEPROM
+            case 2:
+              if (infoMachineSettings.EEPROM == 1)
+              {
+                showDialog(DIALOG_TYPE_QUESTION, textSelect(machineSettingsItems.title.index), textSelect(LABEL_EEPROM_RESET_INFO),
+                  textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), resetEepromSettings, NULL, NULL);
+              }
+              break;
+          }
+        #endif
         break;
 
       case KEY_ICON_7:

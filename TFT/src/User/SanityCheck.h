@@ -57,6 +57,35 @@
     #error "ENABLE_UBL_VALUE cannot be less than 0"
   #endif
 #endif
+#ifndef ENABLE_UBL_VALUE
+    #define ENABLE_UBL_VALUE 2
+#endif
+
+#ifdef FRIENDLY_PROBE_OFFSET_LANGUAGE
+  #if FRIENDLY_PROBE_OFFSET_LANGUAGE > 1
+    #error "FRIENDLY_PROBE_OFFSET_LANGUAGE cannot be greater than 1"
+  #endif
+
+  #if FRIENDLY_PROBE_OFFSET_LANGUAGE < 0
+    #error "FRIENDLY_PROBE_OFFSET_LANGUAGE cannot be less than 0"
+  #endif
+#endif
+#ifndef FRIENDLY_PROBE_OFFSET_LANGUAGE
+    #define FRIENDLY_PROBE_OFFSET_LANGUAGE 0
+#endif
+
+#ifdef QUICK_EEPROM_BUTTON
+  #if QUICK_EEPROM_BUTTON > 1
+    #error "QUICK_EEPROM_BUTTON cannot be greater than 1"
+  #endif
+
+  #if QUICK_EEPROM_BUTTON < 0
+    #error "QUICK_EEPROM_BUTTON cannot be less than 0"
+  #endif
+#endif
+#ifndef QUICK_EEPROM_BUTTON
+    #define QUICK_EEPROM_BUTTON 0
+#endif
 
 #ifdef CANCEL_PRINT_GCODE
   #error "CANCEL_PRINT_GCODE is now PRINT_CANCEL_GCODE. Please update your Configuration.h file."
