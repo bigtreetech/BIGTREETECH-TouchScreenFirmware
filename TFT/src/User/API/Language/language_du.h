@@ -207,7 +207,7 @@
     #define DU_FWRECOVER              "FW Retraction Recover"
     #define DU_LIN_ADVANCE            "Linear Advance"
     #define DU_RESET_SETTINGS_INFO    "Reset alle instellingen \naar de standaard waardes?"
-    #define DU_RESET_SETTINGS_DONE    "Reset alle instellingen\nsuccesvol.\nHerstart astublieft het apparaat."
+    #define DU_RESET_SETTINGS_DONE    "Reset van alle instellingen\nis succesvol gelukt.\nHerstart alstublieft het apparaat."
     #define DU_INFO                   "Info"
     #define DU_LCD_BRIGHTNESS         "LCD Brightness"
     #define DU_LCD_BRIGHTNESS_DIM     "LCD Brightness dim"
