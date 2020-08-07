@@ -569,10 +569,10 @@ void sendQueueCmd(void)
               }
             }
             statusScreen_setMsg((u8 *)"M117", (u8 *)&message);
-            if (infoMenu.menu[infoMenu.cur] != menuStatus)
-            {
-              popupReminder(DIALOG_TYPE_INFO, (u8 *)"M117", (u8 *)&message);
-            }
+//            if (infoMenu.menu[infoMenu.cur] != menuStatus)
+//            {
+//              popupReminder(DIALOG_TYPE_INFO, (u8 *)"M117", (u8 *)&message);
+//            }
           }
           break;
 
@@ -695,7 +695,7 @@ void sendQueueCmd(void)
             }
             break;
         #endif
-        
+
         case 420: //M420
           if(cmd_seen('S')) {
             infoSettings.autoLevelState = cmd_value();

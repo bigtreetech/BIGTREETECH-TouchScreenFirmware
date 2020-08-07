@@ -27,6 +27,8 @@
 #define CONFIG_INVERT_AXIS          "invert_axis:"
 #define CONFIG_PERSISTENT_TEMP      "persistent_info:"
 #define CONFIG_LIST_MODE            "files_list_mode:"
+#define CONFIG_ACK_POPUP_TYPE       "ack_popup_type:"
+#define CONFIG_ACK_BUZZER           "ack_buzzer:"
 //-----------------------------Marlin Mode Settings
 #define CONFIG_MODE                 "default_mode:"
 #define CONFIG_SERIAL_ON            "serial_always_on:"
@@ -88,6 +90,7 @@
 //-----------------------------other device specific settings
 #define CONFIG_BUZZER_ON               "buzzer:"
 #define CONFIG_KNOB_COLOR              "knob_led_color:"
+#define CONFIG_KNOB_LED_IDLE           "knob_led_idle:"
 #define CONFIG_BRIGHTNESS              "lcd_brightness:"
 #define CONFIG_BRIGHTNESS_IDLE         "lcd_idle_brightness:"
 #define CONFIG_BRIGHTNESS_IDLE_DELAY   "lcd_idle_delay:"

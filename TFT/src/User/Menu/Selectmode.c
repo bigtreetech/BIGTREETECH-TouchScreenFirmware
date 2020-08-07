@@ -34,7 +34,7 @@ void drawModeIcon(void)
   else
     GUI_DispStringInPrect(&mode_title_rect[0],(uint8_t *)"LCD2004 Mode");
 
-	GUI_DispStringInPrect(&mode_title_rect[1],(uint8_t *)"Touch Mode");
+  GUI_DispStringInPrect(&mode_title_rect[1],(uint8_t *)"Touch Mode");
 }
 
 bool LCD_ReadPen(uint16_t intervals)
@@ -94,7 +94,11 @@ void menuMode(void)
     Serial_ReSourceDeInit();
   }
   resetInfoFile();
-  SD_DeInit();
+
+  #if !defined(MKS_32_V1_4)
+    //causes hang if we deinit spi1
+    SD_DeInit();
+  #endif
 
   GUI_Clear(infoSettings.bg_color);
   drawModeIcon();

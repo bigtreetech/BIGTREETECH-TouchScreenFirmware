@@ -38,11 +38,14 @@ void infoSettingsReset(void)
   infoSettings.terminalACK          = DISABLED;
   infoSettings.move_speed           = ENABLED;
   infoSettings.knob_led_color       = STARTUP_KNOB_LED_COLOR;
+  infoSettings.knob_led_idle        = ENABLED;
   infoSettings.send_start_gcode     = DISABLED;
   infoSettings.send_end_gcode       = DISABLED;
   infoSettings.send_cancel_gcode    = ENABLED;
   infoSettings.persistent_info      = ENABLED;
   infoSettings.file_listmode        = ENABLED;
+  infoSettings.ack_popup_type       = ENABLED;
+  infoSettings.ack_buzzer           = ENABLED;
 
   infoSettings.lcd_brightness       = DEFAULT_LCD_BRIGHTNESS;
   infoSettings.lcd_idle_brightness  = DEFAULT_LCD_IDLE_BRIGHTNESS;

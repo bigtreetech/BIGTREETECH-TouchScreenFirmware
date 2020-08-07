@@ -482,6 +482,18 @@ void parseConfigKey(u16 index)
       infoSettings.file_listmode = getOnOff();
     break;
 
+  case C_INDEX_ACK_POPUP_TYPE:
+    {
+      u8 i = config_int();
+      if (inLimit(i,0,2))
+        infoSettings.ack_popup_type = i;
+      break;
+    }
+
+  case C_INDEX_ACK_BUZZER:
+      infoSettings.ack_buzzer = getOnOff();
+    break;
+
   //---------------------------------------------------------Marlin Mode Settings (Only for TFT35_V3.0/TFT24_V1.1/TFT28V3.0)
 
 #if defined(ST7920_SPI) || defined(LCD2004_simulator)
@@ -908,6 +920,13 @@ void parseConfigKey(u16 index)
     if (inLimit(config_int(), 0, LED_COLOR_NUM-1))
       infoSettings.knob_led_color = config_int();
     break;
+
+#ifdef LCD_LED_PWM_CHANNEL  
+  case C_INDEX_KNOB_LED_IDLE:
+    if (inLimit(config_int(), 0, 1))
+      infoSettings.knob_led_idle = config_int();
+    break;
+#endif //lcd_led_pwm
 #endif
 
 #ifdef LCD_LED_PWM_CHANNEL

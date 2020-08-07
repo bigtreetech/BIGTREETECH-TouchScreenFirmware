@@ -42,6 +42,14 @@ const LABEL itemMoveSpeed[ITEM_SPEED_NUM] = {
                                               LABEL_FAST_SPEED
                                             };
 
+#define ITEM_POPUP_TYPE_NUM 3
+const LABEL itemPopupType[ITEM_POPUP_TYPE_NUM] = {
+  //item value text(only for custom value)
+  LABEL_OFF,
+  LABEL_ON,
+  LABEL_SMART
+};
+
 //
 //add key number index of the items
 //
@@ -63,8 +71,13 @@ typedef enum
   SKEY_CANCELGCODE,
   SKEY_PERSISTENTINFO,
   SKEY_FILELIST,
+  SKEY_ACK_POPUP_TYPE,
+  SKEY_ACK_BUZZER,
   #ifdef LED_COLOR_PIN
     SKEY_KNOB,
+  #ifdef LCD_LED_PWM_CHANNEL
+    SKEY_KNOB_LED_IDLE,
+  #endif
   #endif
   #ifdef LCD_LED_PWM_CHANNEL
     SKEY_LCD_BRIGHTNESS,
@@ -102,8 +115,13 @@ LISTITEM settingPage[SKEY_COUNT] = {
   {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_SEND_CANCEL_GCODE,        LABEL_BACKGROUND},
   {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_PERSISTENT_STATUS_INFO,   LABEL_BACKGROUND},
   {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_FILE_LISTMODE,            LABEL_BACKGROUND},
+  {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_ACK_POPUP_TYPE,           LABEL_OFF},
+  {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_ACK_BUZZER,               LABEL_BACKGROUND},
   #ifdef LED_COLOR_PIN
     {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_KNOB_LED,                 LABEL_OFF},
+  #ifdef LCD_LED_PWM_CHANNEL
+    {ICONCHAR_BLANK,      LIST_TOGGLE,        LABEL_KNOB_LED_IDLE,            LABEL_BACKGROUND},
+  #endif
   #endif
   #ifdef LCD_LED_PWM_CHANNEL
     {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_LCD_BRIGHTNESS,           LABEL_DYNAMIC},
@@ -197,12 +215,29 @@ void updateFeatureSettings(uint8_t key_val)
       settingPage[item_index].icon = toggleitem[infoSettings.file_listmode];
       break;
 
+    case SKEY_ACK_POPUP_TYPE:
+      infoSettings.ack_popup_type = (infoSettings.ack_popup_type + 1) % ITEM_POPUP_TYPE_NUM;
+      settingPage[item_index].valueLabel = itemPopupType[infoSettings.ack_popup_type];
+      break;
+
+    case SKEY_ACK_BUZZER:
+      infoSettings.ack_buzzer = (infoSettings.ack_buzzer + 1) % TOGGLE_NUM;
+      settingPage[item_index].icon = toggleitem[infoSettings.ack_buzzer];
+      break;
+
     #ifdef LED_COLOR_PIN
       case SKEY_KNOB:
         infoSettings.knob_led_color = (infoSettings.knob_led_color + 1 ) % LED_COLOR_NUM;
         settingPage[item_index].valueLabel = itemLedcolor[infoSettings.knob_led_color];
         WS2812_Send_DAT(led_color[infoSettings.knob_led_color]);
         break;
+
+    #ifdef LCD_LED_PWM_CHANNEL
+      case SKEY_KNOB_LED_IDLE:
+        infoSettings.knob_led_idle = (infoSettings.knob_led_idle + 1) % TOGGLE_NUM;
+        settingPage[item_index].icon = toggleitem[infoSettings.knob_led_idle];
+        break;
+    #endif //LCD_LED_PWM_CHANNEL
     #endif
 
     case SKEY_RESET_SETTINGS:
@@ -234,6 +269,7 @@ void updateFeatureSettings(uint8_t key_val)
         infoSettings.lcd_idle_timer = (infoSettings.lcd_idle_timer + 1) % ITEM_SECONDS_NUM;
         settingPage[item_index].valueLabel = itemDimTime[infoSettings.lcd_idle_timer];
         break;
+
     #endif //LCD_LED_PWM_CHANNEL
 
     #ifdef ST7920_SPI
@@ -316,6 +352,15 @@ void loadFeatureSettings(){
       case SKEY_FILELIST:
         settingPage[item_index].icon = toggleitem[infoSettings.file_listmode];
         break;
+
+      case SKEY_ACK_POPUP_TYPE:
+        settingPage[item_index].valueLabel = itemPopupType[infoSettings.ack_popup_type];
+        break;
+
+      case SKEY_ACK_BUZZER:
+        settingPage[item_index].icon = toggleitem[infoSettings.ack_buzzer];
+        break;
+
       case SKEY_RESET_SETTINGS:
         break;
       #ifdef LED_COLOR_PIN
@@ -323,7 +368,12 @@ void loadFeatureSettings(){
           settingPage[item_index].valueLabel = itemLedcolor[infoSettings.knob_led_color];
           featureSettingsItems.items[i] = settingPage[item_index];
           break;
+        #ifdef LCD_LED_PWM_CHANNEL
+        case SKEY_KNOB_LED_IDLE:
+          settingPage[item_index].icon = toggleitem[infoSettings.knob_led_idle];
+          break;
         #endif
+      #endif
       #ifdef LCD_LED_PWM_CHANNEL
         case SKEY_LCD_BRIGHTNESS:
         {
