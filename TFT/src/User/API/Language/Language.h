@@ -25,7 +25,8 @@ enum
   TURKISH,
   GREEK,
   SLOVENIAN,
-
+  CATALAN,
+  
   LANGUAGE_NUM,
 };
 

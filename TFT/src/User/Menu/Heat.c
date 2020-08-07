@@ -18,13 +18,14 @@ LABEL_HEAT,
 
 const ITEM itemTool[] = {
 // icon                       label
+  {ICON_NOZZLE,               LABEL_NOZZLE},
+  {ICON_NOZZLE,               LABEL_NOZZLE},
+  {ICON_NOZZLE,               LABEL_NOZZLE},
+  {ICON_NOZZLE,               LABEL_NOZZLE},
+  {ICON_NOZZLE,               LABEL_NOZZLE},
+  {ICON_NOZZLE,               LABEL_NOZZLE},
   {ICON_BED,                  LABEL_BED},
-  {ICON_NOZZLE,               LABEL_NOZZLE},
-  {ICON_NOZZLE,               LABEL_NOZZLE},
-  {ICON_NOZZLE,               LABEL_NOZZLE},
-  {ICON_NOZZLE,               LABEL_NOZZLE},
-  {ICON_NOZZLE,               LABEL_NOZZLE},
-  {ICON_NOZZLE,               LABEL_NOZZLE},
+  {ICON_CHAMBER,              LABEL_CHAMBER},
 };
 
 #define ITEM_DEGREE_NUM 3
@@ -39,15 +40,21 @@ const ITEM itemDegree[ITEM_DEGREE_NUM] = {
 const  u8 item_degree[ITEM_DEGREE_NUM] = {1, 5, 10};
 static u8 item_degree_i = 1;
 
+static uint8_t c_heater = NOZZLE0;
+
+void heatSetCurrentIndex(uint8_t index)
+{
+  c_heater = index;
+}
 // Show/draw temperature in heat menu
-void showTemperature(TOOL tool)
+void showTemperature(uint8_t index)
 {
   char tempstr[20];
 
-  sprintf(tempstr, "%-15s", heatDisplayID[tool]);
+  sprintf(tempstr, "%-15s", heatDisplayID[index]);
   GUI_DispString(exhibitRect.x0, exhibitRect.y0, (u8 *)tempstr);
 
-  sprintf(tempstr, "%4d/%-4d", heatGetCurrentTemp(tool), heatGetTargetTemp(tool));
+  sprintf(tempstr, "%4d/%-4d", heatGetCurrentTemp(index), heatGetTargetTemp(index));
   setLargeFont(true);
   GUI_DispStringInPrect(&exhibitRect, (u8 *)tempstr);
   setLargeFont(false);
@@ -55,13 +62,14 @@ void showTemperature(TOOL tool)
 
 void menuHeat(void)
 {
-  KEY_VALUES  key_num = KEY_IDLE;
+  int16_t lastCurrent = heatGetCurrentTemp(c_heater);
+  int16_t lastTarget = heatGetTargetTemp(c_heater);
 
   heatSetUpdateTime(TEMPERATURE_QUERY_FAST_DURATION);
 
-  heatItems.items[KEY_ICON_4] = itemTool[heatGetCurrentTool()];
+  heatItems.items[KEY_ICON_4] = itemTool[c_heater];
   menuDrawPage(&heatItems);
-  showTemperature(heatGetCurrentTool());
+  showTemperature(c_heater);
 
   #if LCD_ENCODER_SUPPORT
     encoderPosition = 0;
@@ -69,24 +77,26 @@ void menuHeat(void)
 
   while(infoMenu.menu[infoMenu.cur] == menuHeat)
   {
-    key_num = menuKeyGetValue();
-    int16_t t_temp = heatGetTargetTemp(heatGetCurrentTool());
-    TOOL c_tool = heatGetCurrentTool();
+    KEY_VALUES key_num = menuKeyGetValue();
+    int16_t actCurrent = heatGetCurrentTemp(c_heater);
+    int16_t actTarget = heatGetTargetTemp(c_heater);
     switch(key_num)
     {
       case KEY_ICON_0:
-          heatSetTargetTemp(c_tool, limitValue( 0, t_temp - item_degree[item_degree_i], infoSettings.max_temp[c_tool]));
+          heatSetTargetTemp(c_heater, actTarget - item_degree[item_degree_i]);
         break;
 
       case KEY_ICON_3:
-          heatSetTargetTemp(c_tool, limitValue( 0, t_temp + item_degree[item_degree_i], infoSettings.max_temp[c_tool]));
+          heatSetTargetTemp(c_heater, actTarget + item_degree[item_degree_i]);
         break;
 
       case KEY_ICON_4:
-        c_tool = (TOOL)(c_tool + 1) % (HEATER_COUNT);
-        heatSetCurrentTool(c_tool);
-        heatItems.items[key_num] = itemTool[c_tool];
+        do{
+          c_heater = (c_heater + 1) % MAX_HEATER_COUNT;
+        } while(!heaterIsValid(c_heater));
+        heatItems.items[key_num] = itemTool[c_heater];
         menuDrawItem(&heatItems.items[key_num], key_num);
+        showTemperature(c_heater);
         break;
 
       case KEY_ICON_5:
@@ -96,7 +106,7 @@ void menuHeat(void)
         break;
 
       case KEY_ICON_6:
-        heatSetTargetTemp(c_tool, 0);
+        heatSetTargetTemp(c_heater, 0);
         break;
 
       case KEY_ICON_7:
@@ -108,20 +118,20 @@ void menuHeat(void)
           if(encoderPosition)
           {
             if(encoderPosition > 0)
-                heatSetTargetTemp(c_tool, limitValue(0, t_temp + item_degree[item_degree_i], infoSettings.max_temp[c_tool]));
+                heatSetTargetTemp(c_heater, actTarget + item_degree[item_degree_i]);
             if(encoderPosition < 0)
-                heatSetTargetTemp(c_tool, limitValue(0, t_temp - item_degree[item_degree_i], infoSettings.max_temp[c_tool]));
+                heatSetTargetTemp(c_heater, actTarget - item_degree[item_degree_i]);
             encoderPosition = 0;
           }
         #endif
         break;
     }
 
-    if (heatToolChanged())
-      showTemperature(c_tool);
-
-    if (heatCurrentTempChanged(c_tool) || heatTargetTempChanged(c_tool))
-      showTemperature(c_tool);
+    if (lastCurrent != actCurrent || lastTarget != actTarget) {
+      lastCurrent = actCurrent;
+      lastTarget = actTarget;
+      showTemperature(c_heater);
+    }
 
     loopProcess();
   }

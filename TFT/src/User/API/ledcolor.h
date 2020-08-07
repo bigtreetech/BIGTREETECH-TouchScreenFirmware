@@ -155,6 +155,7 @@
 //preset color list
 #ifdef LED_COLOR_PIN
   #define LED_COLOR_NUM 9
+  #define LED_IDLE 2
 
   extern const LABEL itemLedcolor[LED_COLOR_NUM];
 

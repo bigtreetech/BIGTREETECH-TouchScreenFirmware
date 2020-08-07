@@ -1,6 +1,6 @@
 #ifndef _CONFIGRATION_H_
 #define _CONFIGRATION_H_
-#define CONFIG_VERSION 20200530
+#define CONFIG_VERSION 20200724
 //===========================================================================
 //============================= General Settings ============================
 //===========================================================================
@@ -62,18 +62,18 @@
  *          6: MAGENTA,    7: YELLOW,      8: ORANGE,  9: PURPLE,   10: LIME,  11: BROWN,
  *         12: DARKBLUE,  13: DARKGREEN,  14: GRAY,   15: DARKGRAY
  */
-#define ST7920_BKCOLOR 1
-#define ST7920_FNCOLOR 0
+#define MARLIN_BKCOLOR 1
+#define MARLIN_FNCOLOR 0
 
 /**
  *  Text displayed at the top of the TFT in Marlin Mode.
  */
-#define ST7920_BANNER_TEXT "LCD12864 Simulator"
+#define MARLIN_BANNER_TEXT "LCD12864 Simulator"
 
 /**
  *  show banner text at the top of the TFT in Marlin Mode.
  */
-#define ST7920_SHOW_BANNER true //to enabled: true | to disabled: false
+#define MARLIN_SHOW_BANNER  true //to enabled: true | to disabled: false
 /**
  * Run Marlin Mode in Fullscreen
  *
@@ -113,7 +113,7 @@
  *
  * Select the language to display on the LCD while in Touch Mode.
  *
- * Options: ARMENIAN, CHINESE, CZECH, DUTCH, ENGLISH, FRENCH, GERMAN, HUNGARIAN, ITALIAN, JAPANESE, POLISH, PORTUGUESE, RUSSIAN, SLOVAK, SPAIN
+ * Options: ARMENIAN, CHINESE, CZECH, DUTCH, ENGLISH, FRENCH, GERMAN, HUNGARIAN, ITALIAN, JAPANESE, POLISH, PORTUGUESE, RUSSIAN, SLOVAK, SPAIN, CATALAN
  */
 #define DEFAULT_LANGUAGE ENGLISH
 
@@ -149,7 +149,7 @@
 #define LISTVIEW_BORDER_COLOR      15 // Border color in List view
 #define LISTVIEW_ICON_COLOR        15 // icon color in List view
 
-#define TOOL_NUM     1    // set in 1~6
+#define HOTEND_NUM   1    // set in 1~6
 #define EXTRUDER_NUM 1    // set in 1~6
 #define FAN_NUM      1    // set in 1~6
 
@@ -158,19 +158,18 @@
 #define PREHEAT_HOTEND   {200,   250,    230,   230}
 #define PREHEAT_BED      {60,    70,     100,   50}
 
-#define HEAT_MAX_TEMP    {150,    275,       275,       275,       275,       275,       275}    //max temperature can be set
-#define HEAT_SIGN_ID     {"B:",   "T0:",     "T1:",     "T2:",     "T3:",     "T4:",     "T5:"}
-#define HEAT_DISPLAY_ID  {"Bed",  "T0",      "T1",      "T2",      "T3",      "T4",      "T5"}
-#define HEAT_CMD         {"M140", "M104 T0", "M104 T1", "M104 T2", "M104 T3", "M104 T4", "M104 T5" };
-#define HEAT_WAIT_CMD    {"M190", "M109 T0", "M109 T1", "M109 T2", "M109 T3", "M109 T4", "M109 T5" };
+#define HEAT_MAX_TEMP    {275,       275,       275,       275,       275,       275,       150,    60}   //max temperature can be set
+#define HEAT_SIGN_ID     {"T0:",     "T1:",     "T2:",     "T3:",     "T4:",     "T5:",     "B:",   "C:"}
+#define HEAT_DISPLAY_ID  {"T0",      "T1",      "T2",      "T3",      "T4",      "T5",      "Bed",  "Chamber"}
+#define HEAT_CMD         {"M104 T0", "M104 T1", "M104 T2", "M104 T3", "M104 T4", "M104 T5", "M140", "M141"};
+#define HEAT_WAIT_CMD    {"M109 T0", "M109 T1", "M109 T2", "M109 T3", "M109 T4", "M109 T5", "M190", "M191"};
 
 #define TOOL_CHANGE      {"T0",   "T1",      "T2",      "T3",      "T4",      "T5"}
 #define EXTRUDER_ID      {"E0",   "E1",      "E2",      "E3",      "E4",      "E5"}
 
 #define FAN_MAX_PWM      {255,       255,       255,       255,       255,       255}
-#define FAN_DISPLAY_ID   {"F0",    "F1",    "F2",    "F3",    "F4",    "F5"}
+#define FAN_DISPLAY_ID   {"F0",      "F1",      "F2",      "F3",      "F4",      "F5"}
 #define FAN_CMD          {"M106 P0", "M106 P1", "M106 P2", "M106 P3", "M106 P4", "M106 P5" };
-#define FAN_SIGN_ID      {"P0", "P1", "P2", "P3", "P4", "P5" };
 
 #define SPEED_ID         {"Sp.", "Fr."}
 
@@ -203,6 +202,7 @@
 #define NOZZLE_PAUSE_E_FEEDRATE     6000 // (mm/min) retract & purge feedrate
 #define NOZZLE_PAUSE_XY_FEEDRATE    6000 // (mm/min) X and Y axes feedrate
 #define NOZZLE_PAUSE_Z_FEEDRATE     600  // (mm/min) Z axis feedrate
+
 /* M601 ; pause print
  * PrusaSlicer can add this on certain height. Marlin actually does not support this.
  * Acts here like manual pause
@@ -218,6 +218,27 @@
 #define AUTO_SAVE_LOAD_LEVELING_VALUE true //to enabled: true | to disabled: false
 
 /**
+ * Enable Unified Bed Leveling options.
+ *  Will attempt to auto detect and enable specific UBL options.
+ * 
+ * WARNING - If you're not sure, leave on auto-detect or disabled.
+ *           UBL has extra options other leveling systems might not have.
+ * 
+ * Options:  0: Disabled    1: Enabled    2: Auto-detect [default]
+ * 
+ */
+#define ENABLE_UBL_VALUE 2
+
+/**
+ * Enable friendly probe offset language.
+ * 
+ * Decrease/increase and "-" & "+" icons are replaced with down/up and friendly icons
+ * 
+ * Options:  0: Disabled    1: Enabled
+ */
+#define FRIENDLY_PROBE_OFFSET_LANGUAGE 1
+
+/**
  * Manual Leveling
  * Move to four corner points to Leveling manually (Point 1, Point 2, Point 3, Point 4)
  */
@@ -226,6 +247,44 @@
 #define LEVELING_POINT_MOVE_Z      10.0f // Z-axis position when nozzle move to next point
 #define LEVELING_POINT_XY_FEEDRATE 6000  // (mm/min) X and Y axes move feedrate
 #define LEVELING_POINT_Z_FEEDRATE  600   // (mm/min) Z axis move feedrate
+
+#define LEVELING_EDGE_DISTANCE_DISPLAY_ID    "X/Y"
+#define LEVELING_EDGE_DISTANCE_MIN_VALUE     10
+#define LEVELING_EDGE_DISTANCE_MAX_VALUE     100
+#define LEVELING_EDGE_DISTANCE_DEFAULT_VALUE LEVELING_EDGE_DISTANCE
+
+/**
+ * Popup
+ */
+#define POPUP_NOTIFICATION_DURATION 1500;                  // expressed in ms. E.g. 1500 corresponds to 1.5 seconds
+
+/**
+ * Z Fade
+ */
+#define Z_FADE_MIN_VALUE     0.0f
+#define Z_FADE_MAX_VALUE     20.0f
+#define Z_FADE_DEFAULT_VALUE 10.0f
+
+/**
+ * Probe Offset
+ */
+#define PROBE_OFFSET_MIN_VALUE     -20.0f
+#define PROBE_OFFSET_MAX_VALUE     20.0f
+#define PROBE_OFFSET_DEFAULT_VALUE 0.0f
+
+/**
+ * Babystep
+ */
+#define BABYSTEP_MIN_VALUE     -5.0f
+#define BABYSTEP_MAX_VALUE     5.0f
+#define BABYSTEP_DEFAULT_VALUE 0.0f
+#define BABYSTEP_MAX_UNIT      1.0f
+
+/**
+ * PID autotune
+ */
+#define PID_CMD             {"M303 U1 C8 E0", "M303 U1 C8 E1", "M303 U1 C8 E2", "M303 U1 C8 E3", "M303 U1 C8 E4", "M303 U1 C8 E5", "M303 U1 C8 E-1", ""};
+#define PID_PROCESS_TIMEOUT 900000                         // expressed in ms. E.g. 900000 corresponds to 15 minutes
 
 // Power Supply
 #define PS_ON_ACTIVE_HIGH    true   // Set 'false' for ATX (1), 'true' for X-Box (2)

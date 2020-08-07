@@ -78,6 +78,29 @@
 // ST7920 Simulator SPI pins
 #define ST7920_SPI    _SPI2
 
+// HD44780 Simulator pins
+#define LCD2004_simulator
+#ifdef LCD2004_simulator
+  #define LCD_EN      PB15
+  #define LCD_RS      PB12
+  #define LCD_D4      PB13
+  #define LCD_D5      PB14
+  #define LCD_D6      PB10
+  #define LCD_D7      PB11
+  #define LCD_EN_PIN  GPIO_Pin_15
+  #define LCD_RS_PIN  GPIO_Pin_12
+  #define LCD_D4_PIN  GPIO_Pin_13
+  #define LCD_D5_PIN  GPIO_Pin_14
+  #define LCD_D6_PIN  GPIO_Pin_10
+  #define LCD_D7_PIN  GPIO_Pin_11
+  #define LCD_EN_PORT GPIOB
+  #define LCD_RS_PORT GPIOB
+  #define LCD_D4_PORT GPIOB
+  #define LCD_D5_PORT GPIOB
+  #define LCD_D6_PORT GPIOB
+  #define LCD_D7_PORT GPIOB
+#endif
+
 // Buzzer support
 #define BUZZER_PIN    PA14
 

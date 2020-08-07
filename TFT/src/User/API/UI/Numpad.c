@@ -96,14 +96,14 @@ float numPadFloat(u8* title, float old_val, bool negative)
     touchSound = false;
     setLargeFont(true);
     u8 nowIndex = 0,lastIndex = 0;
-    char ParameterBuf[BUFLONG + 1] = {0};
+    char ParameterBuf[FLOAT_BUFLONG + 1] = {0};
     u8 prec = (old_val == 0) ? 0 : 2;
     sprintf(ParameterBuf,"%.*f", prec, old_val);
     nowIndex = strlen(ParameterBuf);
 
     if (title == NULL)
     {
-      char tempstr[BUFLONG];
+      char tempstr[FLOAT_BUFLONG + 1];
       sprintf(tempstr, "%.*f", prec, old_val);
       title = (u8 *)tempstr;
     }
@@ -142,7 +142,7 @@ float numPadFloat(u8* title, float old_val, bool negative)
       case NUM_KEY_8:
       case NUM_KEY_9:
       case NUM_KEY_0:
-        if (nowIndex < BUFLONG - 1)
+        if (nowIndex < FLOAT_BUFLONG - 1)
         {
           if(ParameterBuf[0] == '0' && nowIndex == 1)
             nowIndex = lastIndex = 0;
@@ -156,7 +156,7 @@ float numPadFloat(u8* title, float old_val, bool negative)
         }
         break;
       case NUM_KEY_DEC:
-        if (!strchr((const char *)ParameterBuf, numPadKeyChar[key_num][0]) && nowIndex < (BUFLONG - 1))
+        if (!strchr((const char *)ParameterBuf, numPadKeyChar[key_num][0]) && nowIndex < (FLOAT_BUFLONG - 1))
         {
           if (nowIndex == 0 || (nowIndex == 1 && strchr((const char *)ParameterBuf, '-'))) // check if no number exits or only minus exists
             ParameterBuf[nowIndex++] = '0';                                                //add zero before decimal sign if it is the first character
@@ -222,7 +222,7 @@ int32_t numPadInt(u8* title, int32_t old_val, bool negative)
 
     int32_t val = old_val, lastval = 0;
     uint8_t len = 0;
-    char ParameterBuf[7];
+    char ParameterBuf[INT_BUFLONG + 1];
     int8_t neg = 1, lastneg = 1;
 
     if (old_val < 0)
@@ -230,7 +230,7 @@ int32_t numPadInt(u8* title, int32_t old_val, bool negative)
     val = old_val * neg;
     if (title == NULL)
     {
-      char tempstr[BUFLONG];
+      char tempstr[INT_BUFLONG + 1];
       sprintf(tempstr, "%i", old_val);
       title = (u8 *)tempstr;
     }
@@ -283,7 +283,7 @@ int32_t numPadInt(u8* title, int32_t old_val, bool negative)
       case NUM_KEY_9:
       case NUM_KEY_0:
         len = strlen(ParameterBuf);
-        if (len < BUFLONG && !(val == 0 && key_num == NUM_KEY_0))
+        if (len < INT_BUFLONG && !(val == 0 && key_num == NUM_KEY_0))
           {
             int num = (numPadKeyChar[key_num][0] - '0');
             if (val < 0)

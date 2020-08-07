@@ -8,5 +8,6 @@
 #include "Temperature.h"
 
 void menuHeat(void);
+void heatSetCurrentIndex(uint8_t index);
 
 #endif

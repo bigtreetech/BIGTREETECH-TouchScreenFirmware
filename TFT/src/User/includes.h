@@ -42,6 +42,7 @@
 
 #include "LCD_Encoder.h"
 #include "ST7920_Simulator.h"
+#include "HD44780_Simulator.h"
 #include "ui_draw.h"
 #include "touch_process.h"
 #include "interfaceCmd.h"
@@ -54,6 +55,7 @@
 #include "flashStore.h"
 #include "parseACK.h"
 #include "Selectmode.h"
+#include "MarlinMode.h"
 #include "Temperature.h"
 #include "Settings.h"
 #include "Printing.h"
@@ -91,6 +93,11 @@
 #include "FeatureSettings.h"
 #include "SendGcode.h"
 #include "leveling.h"
+#include "levelingUBL.h"
+#include "levelingUBLSave.h"
+#include "levelingUBLLoad.h"
+#include "ZFade.h"
+#include "BLTouch.h"
 #include "ProbeOffset.h"
 #include "PowerFailed.h"
 
@@ -100,6 +107,11 @@
 #include "UnifiedMove.h"
 #include "UnifiedHeat.h"
 #include "StatusScreen.h"
+
+#include "LevelingEdgeDistance.h"
+#include "Tuning.h"
+#include "Pid.h"
+#include "ConnectionSettings.h"
 
 #define MAX_MENU_DEPTH 10       // max sub menu depth
 typedef void (*FP_MENU)(void);
