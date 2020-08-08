@@ -12,8 +12,8 @@ const GUI_RECT rect_of_mode[MODE_COUNT]={
 };
 
 const uint8_t icon_mode [MODE_COUNT]={
-    ICON_MARLIN,
-    ICON_BIGTREETECH,
+  ICON_MARLIN,
+  ICON_BIGTREETECH,
 };
 
 void drawModeIcon(void)
@@ -23,14 +23,15 @@ void drawModeIcon(void)
     ICON_ReadDisplay(rect_of_mode[i].x0, rect_of_mode[i].y0, icon_mode[i]);
   }
 
-	const GUI_RECT mode_title_rect[MODE_COUNT] = {
-		{0,        		rect_of_mode[0].y1 + BYTE_HEIGHT/2, 	text_startx,  rect_of_mode[0].y1 + BYTE_HEIGHT/2 + BYTE_HEIGHT},
-    {text_startx, rect_of_mode[0].y1 + BYTE_HEIGHT/2, 	LCD_WIDTH, 		rect_of_mode[0].y1 + BYTE_HEIGHT/2 + BYTE_HEIGHT},
-	};
-	GUI_RestoreColorDefault();
+  const GUI_RECT mode_title_rect[MODE_COUNT] = {
+    {0,           rect_of_mode[0].y1 + BYTE_HEIGHT/2,   text_startx,  rect_of_mode[0].y1 + BYTE_HEIGHT/2 + BYTE_HEIGHT},
+    {text_startx, rect_of_mode[0].y1 + BYTE_HEIGHT/2,   LCD_WIDTH,    rect_of_mode[0].y1 + BYTE_HEIGHT/2 + BYTE_HEIGHT},
+  };
+
+  GUI_RestoreColorDefault();
 
   if(infoSettings.marlin_type == LCD12864)
-	  GUI_DispStringInPrect(&mode_title_rect[0],(uint8_t *)"LCD12864 Mode");
+    GUI_DispStringInPrect(&mode_title_rect[0],(uint8_t *)"LCD12864 Mode");
   else
     GUI_DispStringInPrect(&mode_title_rect[0],(uint8_t *)"LCD2004 Mode");
 
@@ -61,13 +62,14 @@ MKEY_VALUES MKeyGetValue(void)
 
 void drawSelectedMode(int8_t nowMode)
 {
-	const uint8_t border_off = 4;
-  for (uint8_t i = 0; i < MODE_COUNT; i++) {
+  const uint8_t border_off = 4;
+  for (uint8_t i = 0; i < MODE_COUNT; i++)
+  {
     GUI_SetColor(i == nowMode ? infoSettings.marlin_mode_font_color : BACKGROUND_COLOR);
     GUI_DrawRect(rect_of_mode[i].x0 - border_off, rect_of_mode[i].y0 - border_off,
                  rect_of_mode[i].x1 + border_off, rect_of_mode[i].y1 + border_off);
   }
-	GUI_RestoreColorDefault();
+  GUI_RestoreColorDefault();
 }
 
 void loopCheckMode(void)
@@ -76,8 +78,12 @@ void loopCheckMode(void)
 //  IDEALLY I would like to be able to swap even when the TFT is in printing mode
 //  but before I can allow that I need a way to make sure that we swap back into the right mode (and correct screen)
 //  and I really want a reliable way to DETECT that the TFT should be in printing mode even when the print was started externally.
-  if(isPrinting() || skipMode) return;
-  if(infoMenu.menu[infoMenu.cur] == menuMode) return;
+  if(isPrinting() || skipMode)
+    return;
+
+  if(infoMenu.menu[infoMenu.cur] == menuMode)
+    return;
+
 //  #endif
   if(LCD_ReadPen(LCD_CHANGE_MODE_INTERVALS) || encoder_ReadBtn(LCD_CHANGE_MODE_INTERVALS))
   {
@@ -119,10 +125,10 @@ void menuMode(void)
     MKEY_VALUES key_num = MKeyGetValue();
 
     if(key_num == MKEY_0 || key_num == MKEY_1)
-		{
+    {
       nowMode = key_num;
-			break;
-		}
+      break;
+    }
 
     #if LCD_ENCODER_SUPPORT
       if(encoderPosition)

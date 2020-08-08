@@ -154,7 +154,8 @@ void popupNotification(DIALOG_TYPE type, u8* info, u8* context)
 
 void popupReminder(DIALOG_TYPE type, u8* info, u8* context)
 {
-  if (infoSettings.mode == MARLIN) return;
+  if (infoSettings.mode == MARLIN)
+    return;
 
   // first, display the last received popup message, overriding previous popup messages, if any
   popupDrawPage(type, &bottomSingleBtn , info, context, textSelect(LABEL_CONFIRM), NULL);

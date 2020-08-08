@@ -4,19 +4,16 @@
 
 #if defined(ST7920_SPI) || defined(LCD2004_simulator)
 
-CIRCULAR_QUEUE marlinQueue;
-
 typedef void (*CB_INIT)(void);
 typedef void (*CB_PARSE)(uint8_t);
+typedef bool (*CB_DATA)(uint8_t *);
 
 void menuMarlinMode(void)
 {
   CB_INIT  marlinInit = NULL;
   CB_INIT  marlinDeInit = NULL;
   CB_PARSE marlinParse = NULL;
-
-  marlinQueue.data = malloc(QUEUE_MAX_BYTE);
-  while(!marlinQueue.data); // malloc failed
+  CB_DATA  marlinGetData = NULL;
 
   GUI_Clear(infoSettings.marlin_mode_bg_color);
   GUI_SetColor(infoSettings.marlin_mode_font_color);
@@ -32,6 +29,7 @@ void menuMarlinMode(void)
     marlinInit = SPI_Slave;
     marlinDeInit = SPI_SlaveDeInit;
     marlinParse = ST7920_ParseRecv;
+    marlinGetData = SPI_SlaveGetData;
   }
 #endif
 #if defined(LCD2004_simulator)
@@ -39,17 +37,19 @@ void menuMarlinMode(void)
     marlinInit = HD44780_Config;
     marlinDeInit = HD44780_DeConfig;
     marlinParse = HD44780_ParseRecv;
+    marlinGetData = HD44780_getData;
   }
 #endif
+
+  uint8_t data;
 
   marlinInit();
 
   while(infoMenu.menu[infoMenu.cur] == menuMarlinMode)
   {
-    while(marlinQueue.index_r != marlinQueue.index_w)
+    while(marlinGetData(&data))
     {
-      marlinParse(marlinQueue.data[marlinQueue.index_r]);
-      marlinQueue.index_r = (marlinQueue.index_r + 1) % QUEUE_MAX_BYTE;
+      marlinParse(data);
     }
     #if LCD_ENCODER_SUPPORT
       sendEncoder(LCD_ReadTouch());
@@ -70,9 +70,6 @@ void menuMarlinMode(void)
   }
 
   marlinDeInit();
-
-  free(marlinQueue.data);
-  marlinQueue.data = NULL;
 }
 
 #endif
