@@ -133,7 +133,7 @@ void menuDialog(void)
 
 void popupNotification(DIALOG_TYPE type, u8* info, u8* context)
 {
-  if (infoSettings.mode == Marlin)
+  if (infoSettings.mode == MARLIN)
     return;
 
   // first, avoid to nest any type of popup types (menuNotification and menuDialog).
@@ -154,7 +154,7 @@ void popupNotification(DIALOG_TYPE type, u8* info, u8* context)
 
 void popupReminder(DIALOG_TYPE type, u8* info, u8* context)
 {
-  if (infoSettings.mode == Marlin)
+  if (infoSettings.mode == MARLIN)
     return;
 
   // first, display the last received popup message, overriding previous popup messages, if any
@@ -183,7 +183,7 @@ void popupReminder(DIALOG_TYPE type, u8* info, u8* context)
 */
 void showDialog(DIALOG_TYPE type, u8 * title, u8 * msg, u8 *ok_txt, u8* cancel_txt, void (*ok_action)(), void (*cancel_action)(), void (*loop_action)())
 {
-  if (infoSettings.mode == Marlin)
+  if (infoSettings.mode == MARLIN)
     return;
 
   // first, display the last received popup message, overriding previous popup messages, if any

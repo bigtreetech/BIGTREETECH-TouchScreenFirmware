@@ -55,6 +55,7 @@
 #include "flashStore.h"
 #include "parseACK.h"
 #include "Selectmode.h"
+#include "MarlinMode.h"
 #include "Temperature.h"
 #include "Settings.h"
 #include "Printing.h"

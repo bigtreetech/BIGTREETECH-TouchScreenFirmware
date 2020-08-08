@@ -25,7 +25,6 @@ void Hardware_GenericInit(void)
   mcu_GetClocksFreq(&mcuClocks);
   NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
   Delay_init();
-  OS_TimerInitMs();  // System clock timer, cycle 1ms
 
   #ifdef DISABLE_JTAG
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
@@ -42,7 +41,12 @@ void Hardware_GenericInit(void)
     GPIO_PinRemapConfig(GPIO_Remap_USART2, ENABLE);
   #endif
 
+  #ifdef LED_COLOR_PIN
+    knob_LED_Init();
+  #endif
+
   XPT2046_Init();
+  OS_TimerInitMs();  // System clock timer, cycle 1ms, called after knob_LED_init() and XPT2046_Init()
   W25Qxx_Init();
   LCD_Init();
   readStoredPara(); // Read settings parameter
@@ -64,10 +68,6 @@ void Hardware_GenericInit(void)
 
   #ifdef FIL_RUNOUT_PIN
     FIL_Runout_Init();
-  #endif
-
-  #ifdef LED_COLOR_PIN
-    knob_LED_Init();
   #endif
 
   #ifdef U_DISK_SUPPORT

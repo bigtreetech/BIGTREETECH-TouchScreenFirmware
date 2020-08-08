@@ -22,8 +22,9 @@ void LCD_LED_Off()
 }
 
 #ifdef LCD_LED_PWM_CHANNEL
-LCD_AUTO_DIM lcd_dim;
+LCD_AUTO_DIM lcd_dim = {0, 0};
 const uint32_t LCD_BRIGHTNESS[ITEM_BRIGHTNESS_NUM] = {
+  LCD_0_PERCENT,
   LCD_5_PERCENT,
   LCD_10_PERCENT,
   LCD_20_PERCENT,
@@ -60,54 +61,49 @@ const uint32_t LCD_DIM_IDLE_TIME[ITEM_SECONDS_NUM] = {
   LCD_DIM_CUSTOM_SECONDS
 };
 
-void LCD_Dim_Idle_Timer_init()
+void loopDimTimer(void)
 {
-  lcd_dim.idle_time_counter  = 0;
-  lcd_dim._last_dim_state    = false;
-  lcd_dim.idle_timer_reset   = false;
-}
+  if (infoSettings.lcd_idle_timer == LCD_DIM_OFF)
+    return;
 
-void LCD_Dim_Idle_Timer_Reset()
-{
-  if(infoSettings.lcd_idle_timer > LCD_DIM_OFF) {
-    lcd_dim.idle_timer_reset = true;
-  }
-}
-
-void LCD_Dim_Idle_Timer()
-{
-  if(infoSettings.lcd_idle_timer > LCD_DIM_OFF)
-  {
-    if(lcd_dim.idle_time_counter >= (LCD_DIM_IDLE_TIME[infoSettings.lcd_idle_timer] * 1000))
-    {
-      Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_idle_brightness]);
-    #ifdef LED_COLOR_PIN
-      if(infoSettings.knob_led_idle)
-      {
-        WS2812_Send_DAT(LED_OFF);
-        knob_LED_DeInit();
-      }
+  if (isPress()
+    #if LCD_ENCODER_SUPPORT
+      || encoder_CheckState() || encoder_ReadBtn(LCD_BUTTON_INTERVALS)
     #endif
-      lcd_dim._last_dim_state = true;
-    } else lcd_dim.idle_time_counter++;
-
-    if(lcd_dim.idle_timer_reset)
+  )
+  {
+    if (lcd_dim.dimmed)
     {
-      if(lcd_dim._last_dim_state)
-      {
-        Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
+      lcd_dim.dimmed = false;
+      Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
       #ifdef LED_COLOR_PIN
         if(infoSettings.knob_led_idle)
-          knob_LED_Init();
+        {
+          WS2812_Send_DAT(led_color[infoSettings.knob_led_color]);
+        }
       #endif
-        lcd_dim._last_dim_state = false;
-      }
+    }
+    lcd_dim.idle_ms = OS_GetTimeMs();
+  }
+  else
+  {
+    if (OS_GetTimeMs() - lcd_dim.idle_ms < (LCD_DIM_IDLE_TIME[infoSettings.lcd_idle_timer] * 1000))
+      return;
 
-      lcd_dim.idle_timer_reset  = false;
-      lcd_dim.idle_time_counter = 0;
+    if (!lcd_dim.dimmed)
+    {
+      lcd_dim.dimmed = true;
+      Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_idle_brightness]);
+      #ifdef LED_COLOR_PIN
+        if(infoSettings.knob_led_idle)
+        {
+          WS2812_Send_DAT(led_color[LED_OFF]);
+        }
+      #endif
     }
   }
 }
+
 #endif
 
 void LCD_LED_Init(void)
@@ -115,7 +111,6 @@ void LCD_LED_Init(void)
   #ifdef LCD_LED_PWM_CHANNEL
     GPIO_InitSet(LCD_LED_PIN, MGPIO_MODE_AF_PP, LCD_LED_PIN_ALTERNATE);
     TIM_PWM_Init(LCD_LED_PWM_CHANNEL);
-    LCD_Dim_Idle_Timer_init();
   #else
     LCD_LED_Off();
     GPIO_InitSet(LCD_LED_PIN, MGPIO_MODE_OUT_PP, 0);

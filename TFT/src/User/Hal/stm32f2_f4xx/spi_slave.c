@@ -2,16 +2,11 @@
 #include "spi.h"
 #include "GPIO_Init.h"
 #include "stdlib.h"
+#include "variants.h"
 #include "Settings.h"
-#include "../HD44780.h"
+#include "HD44780.h"
 
-#ifdef LCD2004_simulator
-extern HD44780_QUEUE HD44780_queue;
-uint8_t data = 0;
-uint8_t highbit = 1;
-#endif
-
-#ifdef ST7920_SPI
+#if defined(ST7920_SPI)
 //TODO:
 //now support SPI2 and PB12 CS only
 //more compatibility changes are needed
@@ -24,7 +19,18 @@ uint8_t highbit = 1;
   #define ST7920_SPI_NUM          SPI3
 #endif
 
+#define SPI_SLAVE_MAX (1024 * 5)
+
+typedef struct
+{
+  u8  *data;
+  u16 rIndex;
+  u16 wIndex;
+}SPI_QUEUE;
+
 SPI_QUEUE SPISlave;
+
+void SPI_Slave_CS_Config(void);  // forward declaration
 
 void SPI_ReEnable(u8 mode)
 {
@@ -48,10 +54,11 @@ void SPI_ReEnable(u8 mode)
 
 void SPI_Slave(void)
 {
-  NVIC_InitTypeDef   NVIC_InitStructure;
-
   SPISlave.data = malloc(SPI_SLAVE_MAX);
   while(!SPISlave.data); // malloc failed
+
+  NVIC_InitTypeDef NVIC_InitStructure;
+
   SPI_GPIO_Init(ST7920_SPI);
   GPIO_InitSet(PB12, MGPIO_MODE_IPU, 0);  // CS
 
@@ -64,8 +71,8 @@ void SPI_Slave(void)
   RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2,ENABLE);
   SPI_Slave_CS_Config();
   SPI_ReEnable(0); // spi mode0
-  
-  if((GPIOB->IDR & (1<<12)) != 0)
+
+  if ((GPIOB->IDR & (1<<12)) != 0)
   {
     ST7920_SPI_NUM->CR1 |= (1<<6);
   }
@@ -73,7 +80,8 @@ void SPI_Slave(void)
 
 void SPI_SlaveDeInit(void)
 {
-  NVIC_InitTypeDef   NVIC_InitStructure;
+  NVIC_InitTypeDef NVIC_InitStructure;
+
   NVIC_InitStructure.NVIC_IRQChannel = SPI2_IRQn;
   NVIC_InitStructure.NVIC_IRQChannelCmd = DISABLE;
   NVIC_Init(&NVIC_InitStructure);
@@ -82,74 +90,70 @@ void SPI_SlaveDeInit(void)
   NVIC_Init(&NVIC_InitStructure);
 
   SPI_I2S_DeInit(ST7920_SPI_NUM);
+
   free(SPISlave.data);
   SPISlave.data = NULL;
 }
 
 void SPI2_IRQHandler(void)
 {
-  SPISlave.data[SPISlave.wIndex] =  ST7920_SPI_NUM->DR;
+  SPISlave.data[SPISlave.wIndex] = ST7920_SPI_NUM->DR;
   SPISlave.wIndex = (SPISlave.wIndex + 1) % SPI_SLAVE_MAX;
 }
 
-/*External interruption arrangement*/
+bool SPI_SlaveGetData(uint8_t *data)
+{
+  bool dataRead = false;
+
+  if (SPISlave.rIndex != SPISlave.wIndex)
+  {
+    *data = SPISlave.data[SPISlave.rIndex];
+    SPISlave.rIndex = (SPISlave.rIndex + 1) % SPI_SLAVE_MAX;
+
+    dataRead = true;
+  }
+
+  return dataRead;
+}
+
+// External interruption arrangement
 void SPI_Slave_CS_Config(void)
 {
   EXTI_InitTypeDef EXTI_InitStructure;
-  NVIC_InitTypeDef   NVIC_InitStructure;
+  NVIC_InitTypeDef NVIC_InitStructure;
 
-  /* Connect GPIOB12 to the interrupt line */
-  RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);//Enable SYSCFG clock
-  SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOB, EXTI_PinSource12);//PB12 is connected to interrupt line 12
+  // Connect GPIOB12 to the interrupt line
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);         // Enable SYSCFG clock
+  SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOB, EXTI_PinSource12); // PB12 is connected to interrupt line 12
 
-  /*Set interrupt line 12 bit external falling edge interrupt */
+  // Set interrupt line 12 bit external falling edge interrupt
   EXTI_InitStructure.EXTI_Line = EXTI_Line12;
   EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
   EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising_Falling;
   EXTI_InitStructure.EXTI_LineCmd = ENABLE;
   EXTI_Init(&EXTI_InitStructure);
 
-
-  NVIC_InitStructure.NVIC_IRQChannel = EXTI15_10_IRQn;			//External interrupt channel where the key is enabled
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x00;	//Preemption priority 2?
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x01;					//Sub-priority 1
-  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;								//Enable external interrupt channel
+  NVIC_InitStructure.NVIC_IRQChannel = EXTI15_10_IRQn;           // External interrupt channel where the key is enabled
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x00;   // Preemption priority 2?
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x01;          // Sub-priority 1
+  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;                // Enable external interrupt channel
   NVIC_Init(&NVIC_InitStructure);
 }
 #endif
 
-/*External interruption*/
+#if defined(ST7920_SPI) || defined(LCD2004_simulator)
+// External interruption
 void EXTI15_10_IRQHandler(void)
 {
-  switch(infoSettings.marlin_type)
+  switch (infoSettings.marlin_type)
   {
     #ifdef LCD2004_simulator
     case LCD2004:
-      if((GPIOB->IDR & (1<<15)) != 0){
-        
-        uint8_t temp = ((LCD_D7_PORT->IDR & LCD_D7_PIN) >> 3 ) +     //D7
-                       ((LCD_D6_PORT->IDR & LCD_D6_PIN) >> 5 ) +     //D6
-                       ((LCD_D5_PORT->IDR & LCD_D5_PIN) >> 13) +     //D5
-                       ((LCD_D4_PORT->IDR & LCD_D4_PIN) >> 13) ;     //D4
-        if(highbit){
-          data = temp << 4;
-          highbit = 0;
-        }
-        else{
-          data |= temp;
-          highbit = 1;
-          if((GPIOB->IDR & (1<<12)) == 0){              //Command received
-            HD44780_queue.data[HD44780_queue.wIndex] =  0xff;
-            HD44780_queue.wIndex = (HD44780_queue.wIndex + 1) % HD44780_data_MAX;
-          }
-          HD44780_queue.data[HD44780_queue.wIndex] =  data;
-          HD44780_queue.wIndex = (HD44780_queue.wIndex + 1) % HD44780_data_MAX;
-        }
-      }       //Receive HD44780 data
-      EXTI->PR = 1<<15;
-    break;
-      #endif
+      HD44780_writeData();
+      break;
+    #endif
 
+    #ifdef ST7920_SPI
     case LCD12864:
       if((GPIOB->IDR & (1<<12)) != 0)
       {
@@ -158,11 +162,13 @@ void EXTI15_10_IRQHandler(void)
       }
       else
       {
-        RCC->APB1RSTR |= 1<<14;	// Reset SPI2
+        RCC->APB1RSTR |= 1<<14; // Reset SPI2
         RCC->APB1RSTR &= ~(1<<14);
       }
-      EXTI->PR = 1<<12;   //Clear interrupt status register
-    break;
 
+      EXTI->PR = 1<<12; // Clear interrupt status register
+      break;
+    #endif
   }
 }
+#endif

@@ -121,10 +121,10 @@ void ackPopupInfo(const char *info)
     popupNotification(d_type, (u8 *) info, (u8 *) dmaL2Cache + ack_index);
 }
 
-u8 getKnownEchoIndex(_ECHO_MSG_ID msgId)
+int8_t getKnownEchoIndex(_ECHO_MSG_ID msgId)
 {
   bool isFound = false;
-  u8 i;
+  int8_t i;
 
   for (i = 0; i < COUNT(knownEcho); i++)
   {
@@ -145,7 +145,7 @@ u8 getKnownEchoIndex(_ECHO_MSG_ID msgId)
 bool getKnownEchoParam(_ECHO_MSG_ID msgId, _ECHO_POPUP_TYPE *curPopupType, bool *curBuzzerEnabled)
 {
   bool isGet = false;
-  u8 i;
+  int8_t i;
 
   i = getKnownEchoIndex(msgId);
 
@@ -163,7 +163,7 @@ bool getKnownEchoParam(_ECHO_MSG_ID msgId, _ECHO_POPUP_TYPE *curPopupType, bool 
 bool setKnownEchoParam(_ECHO_MSG_ID msgId, _ECHO_POPUP_TYPE newPopupType, bool newBuzzerEnabled)
 {
   bool isSet = false;
-  u8 i;
+  int8_t i;
 
   i = getKnownEchoIndex(msgId);
 
