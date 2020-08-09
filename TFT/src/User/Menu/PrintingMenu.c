@@ -56,8 +56,8 @@ LABEL_BACKGROUND,
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_PAUSE,                LABEL_PAUSE},
   {ICON_BABYSTEP,             LABEL_BABYSTEP},
+  {ICON_PAUSE,                LABEL_PAUSE},
   {ICON_MORE,                 LABEL_MORE},
   {ICON_STOP,                 LABEL_STOP},}
 };
@@ -310,15 +310,14 @@ void toggleinfo(void)
 void printingDrawPage(void)
 {
   //  Scroll_CreatePara(&titleScroll, infoFile.title,&titleRect);  //
+  key_pause = 5;
   if(infoPrinting.model_icon){
-    key_pause = 5;
-    //printingItems.items[key_pause - 1] = itemBlank;
     printingItems.items[key_pause - 1].icon = ICON_PREVIEW;
-    printingItems.items[key_pause - 1].label.index = LABEL_BACKGROUND;
+    printingItems.items[key_pause - 1].label.index = LABEL_BABYSTEP;
   }
   else{
-    key_pause = 4;
-    printingItems.items[key_pause+1] = itemBabyStep;
+    printingItems.items[key_pause - 1].icon = ICON_BABYSTEP;
+    printingItems.items[key_pause - 1].label.index = LABEL_BABYSTEP;
   }
 
     printingItems.items[key_pause] = itemIsPause[isPause()];
@@ -419,20 +418,12 @@ void menuPrinting(void)
     switch(key_num)
     {
       case KEY_ICON_4:
-        if (!infoPrinting.model_icon){
-          setPrintPause(!isPause(), false);
-          resumeToPause(isPause());
-        }
+        infoMenu.menu[++infoMenu.cur] = menuBabyStep;
         break;
 
       case KEY_ICON_5:
-        if (infoPrinting.model_icon){
           setPrintPause(!isPause(), false);
           resumeToPause(isPause());
-        }
-        else{
-          infoMenu.menu[++infoMenu.cur] = menuBabyStep;
-        }
         break;
 
       case KEY_ICON_6:
