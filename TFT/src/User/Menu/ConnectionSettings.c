@@ -9,8 +9,16 @@ void menuDisconnect(void)
   GUI_DispStringInRect(20, LCD_HEIGHT - (BYTE_HEIGHT*2), LCD_WIDTH-20, LCD_HEIGHT, textSelect(LABEL_TOUCH_TO_EXIT));
 
   Serial_ReSourceDeInit();
-  while(!isPress());
-  while(isPress());
+  while(!isPress()) {
+  #ifdef LCD_LED_PWM_CHANNEL
+    loopDimTimer();
+  #endif
+  }
+  while(isPress()) {
+  #ifdef LCD_LED_PWM_CHANNEL
+    loopDimTimer();
+  #endif
+  }
   Serial_ReSourceInit();
 
   infoMenu.cur--;
