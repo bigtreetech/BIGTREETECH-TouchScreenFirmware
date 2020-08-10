@@ -187,7 +187,7 @@
     #define CA_INVERT_ZAXIS           "Invertir eix Z"
     #define CA_MOVE_SPEED             "Velocitat de moviment(X Y Z)"
     #define CA_KNOB_LED               "Perilla rotativa LED"
-    #define CA_KNOB_LED_IDLE          "Rotary Knob led idle"
+    #define CA_KNOB_LED_IDLE          "Rotary Knob LED idle"
     #define CA_M0_PAUSE               "En pausa per l'ordre M0"
     #define CA_SEND_START_GCODE       "Enviar Gcode inicial"
     #define CA_SEND_END_GCODE         "Enviar Gcode final"
