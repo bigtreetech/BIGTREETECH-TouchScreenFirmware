@@ -21,9 +21,6 @@
 //#define _SPI_SLAVE_IRQ(n)  n##_IRQHandler
 //#define SPI_SLAVE_IRQ  _SPI_SLAVE_IRQ(W25QXX_SPI_NUM)
 
-SPI_QUEUE SPISlave;
-
-
 void SPI_ReEnable(u8 mode)
 {
   ST7920_SPI_NUM->CR1 = (0<<15)  // 0:2-line 1: 1-line
@@ -48,8 +45,6 @@ void SPI_Slave(void)
 {
   NVIC_InitTypeDef   NVIC_InitStructure;
 
-  SPISlave.data = malloc(SPI_SLAVE_MAX);
-  while(!SPISlave.data); // malloc failed
   SPI_GPIO_Init(ST7920_SPI);
   GPIO_InitSet(PB12, MGPIO_MODE_IPU, 0);  // CS
 
@@ -82,16 +77,14 @@ void SPI_SlaveDeInit(void)
 
   RCC_APB1PeriphResetCmd(RCC_APB1Periph_SPI2, ENABLE);
   RCC_APB1PeriphResetCmd(RCC_APB1Periph_SPI2, DISABLE);
-  free(SPISlave.data);
-  SPISlave.data = NULL;
 }
 
 
 
 void SPI2_IRQHandler(void)
 {
-  SPISlave.data[SPISlave.wIndex] =  ST7920_SPI_NUM->DR;
-  SPISlave.wIndex = (SPISlave.wIndex + 1) % SPI_SLAVE_MAX;
+  marlinQueue.data[marlinQueue.index_w] =  ST7920_SPI_NUM->DR;
+  marlinQueue.index_w = (marlinQueue.index_w + 1) % QUEUE_MAX_BYTE;
 }
 
 void SPI_Slave_CS_Config(void)
