@@ -75,6 +75,7 @@ void GUI_DispStringCenter(int16_t x, int16_t y, const uint8_t *p);
 void GUI_DispStringInRect(int16_t sx, int16_t sy, int16_t ex, int16_t ey, const uint8_t *p);
 void GUI_DispStringInPrect(const GUI_RECT *rect, const uint8_t *p);
 void GUI_DispStringInRectEOL(int16_t sx, int16_t sy, int16_t ex, int16_t ey, const uint8_t *p);
+void GUI_DispStringInPrectEOL(const GUI_RECT *rect, const uint8_t *p);
 
 void GUI_DispDec(int16_t x, int16_t y,int32_t num, uint8_t len, uint8_t leftOrRight);
 void GUI_DispFloat(int16_t x, int16_t y, float num, uint8_t llen, uint8_t rlen, uint8_t leftOrRight);

@@ -259,7 +259,7 @@ void parseACK(void)
       if (ack_seen(errormagic)) {
         ackPopupInfo(errormagic);
       }
-      if (!ack_seen("T:") && !ack_seen("T0:"))  goto parse_end;  //the first response should be such as "T:25/50\n"
+      if (!ack_seen("ok T:") && !ack_seen("T0:"))  goto parse_end;  //the first response should be such as "T:25/50\n"
       if (ack_seen(heaterID[BED])) infoSettings.bed_en = ENABLED;
       if (ack_seen(heaterID[CHAMBER])) infoSettings.chamber_en = ENABLED;
       uint8_t i;
@@ -270,10 +270,10 @@ void parseACK(void)
       if (infoSettings.ext_count < infoSettings.hotend_count) infoSettings.ext_count = infoSettings.hotend_count;
       updateNextHeatCheckTime();
       infoHost.connected = true;
-      storeCmd("M115\n");
       storeCmd("M503\n");// Query detailed printer capabilities
       storeCmd("M92\n"); // Steps/mm of extruder is an important parameter for Smart filament runout
                          // Avoid can't getting this parameter due to disabled M503 in Marlin
+      storeCmd("M115\n");
     }
 
     // Onboard sd Gcode command response
@@ -330,7 +330,7 @@ void parseACK(void)
         infoHost.wait = false;
       }
       // parse temperature
-      if(ack_seen("T:") || ack_seen("T0:"))
+      if(ack_seen("ok T:") || ack_seen("T0:"))
       {
         heatSetCurrentTemp(NOZZLE0, ack_value()+0.5f);
         if(!heatGetSendWaiting(NOZZLE0)) {
@@ -495,14 +495,35 @@ void parseACK(void)
         if(ack_seen("Z")) setParameter(P_ABL_STATE, 1, ack_value());
       }
     // Parse M115 capability report
-      else if(ack_seen("FIRMWARE_NAME:Marlin"))
+      else if(ack_seen("FIRMWARE_NAME:"))
       {
-        infoMachineSettings.isMarlinFirmware = 1;
-      }
-      else if(ack_seen("FIRMWARE_NAME:Smoothieware"))
-      {
-        infoMachineSettings.isMarlinFirmware = 0;
-        setupMachine();
+        uint8_t *string = (uint8_t *)&dmaL2Cache[ack_index];
+        uint16_t string_start = ack_index;
+        uint16_t string_end = string_start;
+        if (ack_seen("Marlin"))
+        {
+          infoMachineSettings.isMarlinFirmware = 1;
+        }
+        else if(ack_seen("Smoothieware"))
+        {
+          infoMachineSettings.isMarlinFirmware = 0;
+          setupMachine();
+        }
+        if (ack_seen("SOURCE_CODE_URL:"))
+          string_end = ack_index - sizeof("SOURCE_CODE_URL:");
+        infoSetFirmwareName(string, string_end - string_start); // Set firmware name
+
+        if (ack_seen("MACHINE_TYPE:"))
+        {
+          string = (uint8_t *)&dmaL2Cache[ack_index];
+          string_start = ack_index;
+          if (ack_seen("EXTRUDER_COUNT:"))
+          {
+            infoSettings.ext_count = ack_value();
+            string_end = ack_index - sizeof("EXTRUDER_COUNT:");
+          }
+          infoSetMachineType(string, string_end - string_start); // Set firmware name
+        }
       }
       else if(ack_seen("Cap:EEPROM:"))
       {

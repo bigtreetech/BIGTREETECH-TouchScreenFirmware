@@ -636,6 +636,12 @@ void GUI_DispStringInRectEOL(int16_t sx, int16_t sy, int16_t ex, int16_t ey, con
   }
 }
 
+void GUI_DispStringInPrectEOL(const GUI_RECT *rect, const uint8_t *p)
+{
+  GUI_DispStringInRectEOL(rect->x0, rect->y0, rect->x1, rect->y1,p);
+}
+
+
 const uint32_t GUI_Pow10[10] = {
 1 , 10, 100, 1000, 10000,
 100000, 1000000, 10000000, 100000000, 1000000000
