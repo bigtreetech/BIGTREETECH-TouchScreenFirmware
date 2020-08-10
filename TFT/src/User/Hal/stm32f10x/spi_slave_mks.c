@@ -2,6 +2,7 @@
 #include "spi.h"
 #include "GPIO_Init.h"
 #include "stdlib.h"
+#include "MarlinMode.h"
 
 #if defined(ST7920_SPI) && defined(MKS_32_V1_4)
 //TODO:
@@ -18,8 +19,6 @@
 
 //#define _SPI_SLAVE_IRQ(n)  n##_IRQHandler
 //#define SPI_SLAVE_IRQ  _SPI_SLAVE_IRQ(W25QXX_SPI_NUM)
-
-SPI_QUEUE SPISlave;
 
 void SPI_ReEnable(u8 mode)
 {
@@ -45,9 +44,6 @@ void SPI_ReEnable(u8 mode)
 void SPI_Slave(void)
 {
   NVIC_InitTypeDef NVIC_InitStructure;
-
-  SPISlave.data = malloc(SPI_SLAVE_MAX);
-  while(!SPISlave.data);  // malloc failed
 
 #ifndef SPI3_PIN_SMART_USAGE                     // if enabled, it avoids any SPI3 CS pin usage and free the MISO (PB4 pin) for encoder pins
   SPI_GPIO_Init(ST7920_SPI);
@@ -87,14 +83,12 @@ void SPI_SlaveDeInit(void)
 
   RCC_APB1PeriphResetCmd(RCC_APB1Periph_SPI3, ENABLE);
   RCC_APB1PeriphResetCmd(RCC_APB1Periph_SPI3, DISABLE);
-  free(SPISlave.data);
-  SPISlave.data = NULL;
 }
 
 void SPI3_IRQHandler(void)
 {
-  SPISlave.data[SPISlave.wIndex] = ST7920_SPI_NUM->DR;
-  SPISlave.wIndex = (SPISlave.wIndex + 1) % SPI_SLAVE_MAX;
+  marlinQueue.data[marlinQueue.index_w] = ST7920_SPI_NUM->DR;
+  marlinQueue.index_w = (marlinQueue.index_w + 1) % QUEUE_MAX_BYTE;
 }
 
 void SPI_Slave_CS_Config(void)
