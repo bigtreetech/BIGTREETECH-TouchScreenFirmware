@@ -267,7 +267,7 @@ void reDrawProgress(int icon_pos)
 void reDrawLayer(int icon_pos)
 {
   char tempstr[10];
-  my_sprintf(tempstr, "%.2fMM",coordinateGetAxisTarget(Z_AXIS));
+  my_sprintf(tempstr, "%.2fmm",coordinateGetAxisTarget(Z_AXIS));
 
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 

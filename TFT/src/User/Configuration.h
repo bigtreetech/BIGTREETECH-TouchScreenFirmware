@@ -44,8 +44,8 @@
  *              6: LCD_DIM_300_SECONDS,  7: LCD_DIM_CUSTOM_SECONDS
  *
  */
-#define DEFAULT_LCD_BRIGHTNESS      10  // 10: LCD_100_PERCENT - Brightness value from list
-#define DEFAULT_LCD_IDLE_BRIGHTNESS 2   // 2: LCD_10_PERCENT - Brightness value from list
+#define DEFAULT_LCD_BRIGHTNESS      11  // 11: LCD_100_PERCENT - Brightness value from list
+#define DEFAULT_LCD_IDLE_BRIGHTNESS 3   // 3: LCD_10_PERCENT - Brightness value from list
 #define DEFAULT_LCD_IDLE_TIMER      0   // 0: LCD_DIM_OFF
 #define LCD_DIM_CUSTOM_SECONDS      600 // Custom value in seconds. Will be used if LCD_DIM_CUSTOM_SECONDS is set as idle timer.
 
