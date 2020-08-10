@@ -116,8 +116,8 @@ void EXTI15_10_IRQHandler(void)
     case LCD2004:
       if((GPIOB->IDR & (1<<15)) != 0){
 
-        uint8_t temp = ((LCD_D7_PORT->IDR & LCD_D7_PIN) >> 3 ) +     //D7
-                       ((LCD_D6_PORT->IDR & LCD_D6_PIN) >> 5 ) +     //D6
+        uint8_t temp = ((LCD_D7_PORT->IDR & LCD_D7_PIN) >> 8 ) +     //D7
+                       ((LCD_D6_PORT->IDR & LCD_D6_PIN) >> 8 ) +     //D6
                        ((LCD_D5_PORT->IDR & LCD_D5_PIN) >> 13) +     //D5
                        ((LCD_D4_PORT->IDR & LCD_D4_PIN) >> 13) ;     //D4
 
