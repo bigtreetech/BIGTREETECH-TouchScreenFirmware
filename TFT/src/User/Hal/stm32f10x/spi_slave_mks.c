@@ -87,7 +87,7 @@ void SPI_SlaveDeInit(void)
 
 void SPI3_IRQHandler(void)
 {
-  marlinQueue.data[marlinQueue.index_w] =  ST7920_SPI_NUM->DR;
+  marlinQueue.data[marlinQueue.index_w] = ST7920_SPI_NUM->DR;
   marlinQueue.index_w = (marlinQueue.index_w + 1) % QUEUE_MAX_BYTE;
 }
 

@@ -79,11 +79,9 @@ void SPI_SlaveDeInit(void)
   RCC_APB1PeriphResetCmd(RCC_APB1Periph_SPI2, DISABLE);
 }
 
-
-
 void SPI2_IRQHandler(void)
 {
-  marlinQueue.data[marlinQueue.index_w] =  ST7920_SPI_NUM->DR;
+  marlinQueue.data[marlinQueue.index_w] = ST7920_SPI_NUM->DR;
   marlinQueue.index_w = (marlinQueue.index_w + 1) % QUEUE_MAX_BYTE;
 }
 
@@ -117,7 +115,7 @@ void EXTI15_10_IRQHandler(void)
     #ifdef LCD2004_simulator
     case LCD2004:
       if((GPIOB->IDR & (1<<15)) != 0){
-        
+
         uint8_t temp = ((LCD_D7_PORT->IDR & LCD_D7_PIN) >> 3 ) +     //D7
                        ((LCD_D6_PORT->IDR & LCD_D6_PIN) >> 5 ) +     //D6
                        ((LCD_D5_PORT->IDR & LCD_D5_PIN) >> 13) +     //D5
