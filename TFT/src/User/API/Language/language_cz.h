@@ -187,7 +187,7 @@
     #define CZ_INVERT_ZAXIS           "Otočit osu Z"
     #define CZ_MOVE_SPEED             "Rychlost pohybu X Y Z"
     #define CZ_KNOB_LED               "Rotační knoflík LED"
-    #define CZ_KNOB_LED_IDLE          "Rotary Knob led idle"
+    #define CZ_KNOB_LED_IDLE          "Rotary Knob LED idle"
     #define CZ_M0_PAUSE               "Pauza po příkazu M0"
     #define CZ_SEND_START_GCODE       "Spustit Gcode před tiskem"
     #define CZ_SEND_END_GCODE         "Spustit Gcode po tisku"

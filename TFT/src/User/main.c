@@ -41,17 +41,17 @@ void Hardware_GenericInit(void)
     GPIO_PinRemapConfig(GPIO_Remap_USART2, ENABLE);
   #endif
 
-  #ifdef LED_COLOR_PIN
-    knob_LED_Init();
-  #endif
-
   XPT2046_Init();
-  OS_TimerInitMs();  // System clock timer, cycle 1ms, called after knob_LED_init() and XPT2046_Init()
+  OS_TimerInitMs();  // System clock timer, cycle 1ms, called after XPT2046_Init()
   W25Qxx_Init();
   LCD_Init();
   readStoredPara(); // Read settings parameter
   LCD_RefreshDirection();  //refresh display direction after reading settings
   scanUpdates();           // scan icon, fonts and config files
+
+  #ifdef LED_COLOR_PIN
+    knob_LED_Init();
+  #endif
 
   #if !defined(MKS_32_V1_4)
     //causes hang if we deinit spi1

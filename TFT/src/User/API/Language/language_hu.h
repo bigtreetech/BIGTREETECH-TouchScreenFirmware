@@ -187,7 +187,7 @@
     #define HU_INVERT_ZAXIS           "Z megfordítása"
     #define HU_MOVE_SPEED             "Mozg.Sebesség (X-Y-Z)"
     #define HU_KNOB_LED               "Forgatógomb LED"
-    #define HU_KNOB_LED_IDLE          "Rotary Knob led idle"
+    #define HU_KNOB_LED_IDLE          "Rotary Knob LED idle"
     #define HU_M0_PAUSE               "Szünetelés M0 parancsal"
     #define HU_SEND_START_GCODE       "Kezdő G-Kód Küldése"
     #define HU_SEND_END_GCODE         "Befejező G-Kód Küldése"
