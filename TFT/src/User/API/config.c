@@ -548,11 +548,11 @@ void parseConfigKey(u16 index)
       infoSettings.hotend_count = config_int();
     break;
 
-  case C_INDEX_BED_EN:
+  case C_INDEX_HEATED_BED:
       infoSettings.bed_en = getOnOff();
     break;
 
-  case C_INDEX_CHAMBER_EN:
+  case C_INDEX_HEATED_CHAMBER:
       infoSettings.chamber_en = getOnOff();
     break;
 

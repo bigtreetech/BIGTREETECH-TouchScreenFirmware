@@ -7,15 +7,15 @@ void unifiedMenu(void)
   MENUITEMS unifiedPageItems = {
     // title
     LABEL_MAINMENU,
-    // icon                         label
-    {{ICON_HEAT_FAN,                LABEL_UNIFIEDHEAT},
-     {ICON_HOME_MOVE,               LABEL_UNIFIEDMOVE},
-     {ICON_EXTRUDE,                 LABEL_EXTRUDE},
-     {ICON_STOP,                    LABEL_EMERGENCYSTOP},
-     {ICON_SETTINGS,                LABEL_SETTINGS},
-     {ICON_GCODE,                   LABEL_TERMINAL},
-     {ICON_CUSTOM,                  LABEL_CUSTOM},
-     {ICON_BACK,                    LABEL_BACK},}
+    // icon                 label
+    {{ICON_HEAT_FAN,        LABEL_UNIFIEDHEAT},
+     {ICON_HOME_MOVE,       LABEL_UNIFIEDMOVE},
+     {ICON_EXTRUDE,         LABEL_EXTRUDE},
+     {ICON_STOP,            LABEL_EMERGENCYSTOP},
+     {ICON_GCODE,           LABEL_TERMINAL},
+     {ICON_CUSTOM,          LABEL_CUSTOM},
+     {ICON_SETTINGS,        LABEL_SETTINGS},
+     {ICON_BACK,            LABEL_BACK},}
   };
 
   KEY_VALUES key_num = KEY_IDLE;
@@ -47,15 +47,15 @@ void unifiedMenu(void)
         break;
 
       case KEY_ICON_4:
-        infoMenu.menu[++infoMenu.cur] = menuSettings;
-        break;
-
-      case KEY_ICON_5:
         infoMenu.menu[++infoMenu.cur] = menuSendGcode;
         break;
 
-      case KEY_ICON_6:
+      case KEY_ICON_5:
         infoMenu.menu[++infoMenu.cur] = menuCustom;
+        break;
+
+      case KEY_ICON_6:
+        infoMenu.menu[++infoMenu.cur] = menuSettings;
         break;
 
       case KEY_ICON_7:

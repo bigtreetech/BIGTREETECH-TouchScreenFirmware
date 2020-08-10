@@ -355,7 +355,8 @@ void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, const ITEM * item)
     if (liveicon->enabled[i] == true)
     {
       GUI_SetColor(lcd_colors[liveicon->lines[i].fn_color]);
-      GUI_SetBkColor(lcd_colors[liveicon->lines[i].bk_color]);
+      if (liveicon->lines[i].text_mode != GUI_TEXTMODE_TRANS)
+        GUI_SetBkColor(lcd_colors[liveicon->lines[i].bk_color]);
       GUI_SetTextMode(liveicon->lines[i].text_mode);
 
       GUI_POINT loc;

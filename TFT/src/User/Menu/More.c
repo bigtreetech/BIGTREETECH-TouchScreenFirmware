@@ -39,7 +39,7 @@ void menuMore(void)
      {ICON_PERCENTAGE,              LABEL_PERCENTAGE},
      {ICON_FEATURE_SETTINGS,        LABEL_FEATURE_SETTINGS},
      {ICON_MACHINE_SETTINGS,        LABEL_MACHINE_SETTINGS},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_BABYSTEP,                LABEL_BABYSTEP},
      {ICON_BACK,                    LABEL_BACK},}
   };
 
@@ -79,6 +79,10 @@ void menuMore(void)
         infoMenu.menu[++infoMenu.cur] = menuMachineSettings;
         break;
 
+      case KEY_ICON_6:
+        infoMenu.menu[++infoMenu.cur] = menuBabyStep;
+        break;
+        
       case KEY_ICON_7:
         infoMenu.cur--;
         break;

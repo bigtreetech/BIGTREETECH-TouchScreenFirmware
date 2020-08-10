@@ -636,6 +636,12 @@ void GUI_DispStringInRectEOL(int16_t sx, int16_t sy, int16_t ex, int16_t ey, con
   }
 }
 
+void GUI_DispStringInPrectEOL(const GUI_RECT *rect, const uint8_t *p)
+{
+  GUI_DispStringInRectEOL(rect->x0, rect->y0, rect->x1, rect->y1,p);
+}
+
+
 const uint32_t GUI_Pow10[10] = {
 1 , 10, 100, 1000, 10000,
 100000, 1000000, 10000000, 100000000, 1000000000
@@ -934,14 +940,13 @@ void GUI_DrawButton(const BUTTON *button, uint8_t pressed)
 }
 
 
-void GUI_DrawWindow(const WINDOW *window, const uint8_t *title, const uint8_t *inf)
+void GUI_DrawWindow(const WINDOW *window, const uint8_t *title, const uint8_t *inf, bool actionBar)
 {
   GUI_RECT w_rect = window->rect;
 
   u16 title_height = window->titleHeight;
   //u16 action_height = window->actionBarHeight;
   u16 title_txt_y0 = w_rect.y0 + (title_height - BYTE_HEIGHT) / 2;
-
   u16 title_y1 = window->rect.y0 + window->titleHeight;
   u16 action_y0 = window->rect.y1 - window->actionBarHeight;
   u8 margin = BYTE_WIDTH/2;
@@ -954,10 +959,11 @@ void GUI_DrawWindow(const WINDOW *window, const uint8_t *title, const uint8_t *i
   GUI_SetColor(window->info.backColor);
   GUI_FillRect(w_rect.x0, title_y1, w_rect.x1, action_y0);
 
-  //draw action bar backgorund
-  GUI_SetColor(window->actionBar.backColor);
-  GUI_FillRect(w_rect.x0, action_y0, w_rect.x1, w_rect.y1);
-
+  if (actionBar)
+  { //draw action bar backgorund
+    GUI_SetColor(window->actionBar.backColor);
+    GUI_FillRect(w_rect.x0, action_y0, w_rect.x1, w_rect.y1);
+  }
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
   //draw window type icon
@@ -990,10 +996,15 @@ void GUI_DrawWindow(const WINDOW *window, const uint8_t *title, const uint8_t *i
     //draw title accent line
     GUI_DrawRect(w_rect.x0, title_y1 - 1, w_rect.x1, title_y1 + 1);
 
-    //draw actionbar accent line
-    GUI_SetColor(GRAY);
-    GUI_DrawRect(w_rect.x0, action_y0 - 1, w_rect.x1, action_y0 + 1);
-
+    if (actionBar)
+    { //draw actionbar accent line
+      GUI_SetColor(GRAY);
+      GUI_DrawRect(w_rect.x0, action_y0 - 1, w_rect.x1, action_y0 + 1);
+    }
+    else
+    {
+      w_rect.y1 -= window->actionBarHeight;
+    }
     //draw window border
     GUI_SetColor(window->lineColor);
     for (u8 i = 0; i < window->lineWidth; i++)
@@ -1015,73 +1026,3 @@ void GUI_DrawWindow(const WINDOW *window, const uint8_t *title, const uint8_t *i
     GUI_RestoreColorDefault();
 }
 
-void GUI_DrawNotificationWindow(const WINDOW *window, const uint8_t *title, const uint8_t *inf)
-{
-  GUI_RECT w_rect = window->rect;
-
-  w_rect.y1 -= window->actionBarHeight;                    // we don't use action bar so we reduce the windows height
-
-  u16 title_txt_y0 = w_rect.y0 + (window->titleHeight - BYTE_HEIGHT) / 2;
-  u16 title_y1 = window->rect.y0 + window->titleHeight;
-  u8 margin = BYTE_WIDTH/2;
-
-  //draw title background
-  GUI_SetColor(window->title.backColor);
-  GUI_FillRect(w_rect.x0, w_rect.y0, w_rect.x1, title_y1);
-
-  //draw info background
-  GUI_SetColor(window->info.backColor);
-  GUI_FillRect(w_rect.x0, title_y1, w_rect.x1, w_rect.y1);
-
-  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-
-  //draw window type icon
-  u8 * char_icon;
-  switch(window->type)
-  {
-    case DIALOG_TYPE_ALERT:
-      GUI_SetColor(ORANGE);
-      char_icon = IconCharSelect(ICONCHAR_ALERT);
-      break;
-    case DIALOG_TYPE_QUESTION:
-      GUI_SetColor(PURPLE);
-      char_icon = IconCharSelect(ICONCHAR_QUESTION);
-      break;
-    case DIALOG_TYPE_ERROR:
-      GUI_SetColor(RED);
-      char_icon = IconCharSelect(ICONCHAR_ERROR);
-      break;
-    case DIALOG_TYPE_SUCCESS:
-      GUI_SetColor(GREEN);
-      char_icon = IconCharSelect(ICONCHAR_OK);
-      break;
-    case DIALOG_TYPE_INFO:
-    default:
-      GUI_SetColor(BLUE);
-      char_icon = IconCharSelect(ICONCHAR_INFO);
-      break;
-    }
-    GUI_DispString(w_rect.x0 + BYTE_WIDTH, title_txt_y0, char_icon);
-    //draw title accent line
-    GUI_DrawRect(w_rect.x0, title_y1 - 1, w_rect.x1, title_y1 + 1);
-
-    //draw window border
-    GUI_SetColor(window->lineColor);
-    for (u8 i = 0; i < window->lineWidth; i++)
-    {
-      GUI_DrawRect(w_rect.x0 - i, w_rect.y0 - i, w_rect.x1 + i, w_rect.y1 + i);
-    }
-
-    //draw title text
-    GUI_SetColor(window->title.fontColor);
-    GUI_DispString(w_rect.x0 + BYTE_HEIGHT * 2, title_txt_y0, title);
-
-    //draw info text
-    GUI_SetColor(window->info.fontColor);
-    if(GUI_StrPixelWidth(inf) < w_rect.x1 - w_rect.x0)
-      GUI_DispStringInRect(w_rect.x0, title_y1, w_rect.x1, w_rect.y1, inf);
-    else
-      GUI_DispStringInRectEOL(w_rect.x0 + margin, title_y1 + margin, w_rect.x1 - margin, w_rect.y1 - margin, inf);
-
-    GUI_RestoreColorDefault();
-}
