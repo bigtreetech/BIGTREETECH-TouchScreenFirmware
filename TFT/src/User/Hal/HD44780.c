@@ -36,13 +36,13 @@ void HD44780_Config(void)
 
   EXTI_InitTypeDef   EXTI_InitStructure;
   NVIC_InitTypeDef   NVIC_InitStructure;
-  /* Connect GPIOB12 to the interrupt line */
+  /* Connect GPIOB15 to the interrupt line */
   #if !defined(TFT24_V1_1) 
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);//Enable SYSCFG clock
   SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOB, EXTI_PinSource15);//PB15 is connected to interrupt line 15
   #else
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
-  GPIO_EXTILineConfig(GPIO_PortSourceGPIOB, GPIO_PinSource12); 
+  GPIO_EXTILineConfig(GPIO_PortSourceGPIOB, GPIO_PinSource15);
   #endif
 
   /*Set interrupt line 12 bit external falling edge interrupt */

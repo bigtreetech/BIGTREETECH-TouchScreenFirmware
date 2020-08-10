@@ -43,8 +43,8 @@ void menuInfo(void)
   GUI_DispString(startX, centerY, (u8 *)firmware);
   GUI_DispStringInRect(20, LCD_HEIGHT - (BYTE_HEIGHT*2), LCD_WIDTH-20, LCD_HEIGHT, textSelect(LABEL_TOUCH_TO_EXIT));
 
-  while(!isPress()) loopProcess();
-  while(isPress())  loopProcess();
+  while(!isPress()) loopBackEnd();
+  while(isPress())  loopBackEnd();
 
   infoMenu.cur--;
 }

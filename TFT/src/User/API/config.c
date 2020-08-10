@@ -548,11 +548,11 @@ void parseConfigKey(u16 index)
       infoSettings.hotend_count = config_int();
     break;
 
-  case C_INDEX_BED_EN:
+  case C_INDEX_HEATED_BED:
       infoSettings.bed_en = getOnOff();
     break;
 
-  case C_INDEX_CHAMBER_EN:
+  case C_INDEX_HEATED_CHAMBER:
       infoSettings.chamber_en = getOnOff();
     break;
 
@@ -933,6 +933,8 @@ void parseConfigKey(u16 index)
   case C_INDEX_BRIGHTNESS:
     if (inLimit(config_int(), 0, ITEM_BRIGHTNESS_NUM-1))
       infoSettings.lcd_brightness = config_int();
+      if(infoSettings.lcd_brightness == 0)
+        infoSettings.lcd_brightness = 1; //If someone set it to 0 set it to 1
     break;
   case C_INDEX_BRIGHTNESS_IDLE:
     if (inLimit(config_int(), 0, ITEM_BRIGHTNESS_NUM-1))

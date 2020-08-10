@@ -355,7 +355,8 @@ void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, const ITEM * item)
     if (liveicon->enabled[i] == true)
     {
       GUI_SetColor(lcd_colors[liveicon->lines[i].fn_color]);
-      GUI_SetBkColor(lcd_colors[liveicon->lines[i].bk_color]);
+      if (liveicon->lines[i].text_mode != GUI_TEXTMODE_TRANS)
+        GUI_SetBkColor(lcd_colors[liveicon->lines[i].bk_color]);
       GUI_SetTextMode(liveicon->lines[i].text_mode);
 
       GUI_POINT loc;
@@ -485,7 +486,6 @@ if(infoMachineSettings.onboard_sd_support == ENABLED && infoMachineSettings.auto
 #endif
 
 #if LCD_ENCODER_SUPPORT
-  loopCheckEncoder();
   #if defined(ST7920_SPI) || defined(LCD2004_simulator)
     if(infoMenu.menu[infoMenu.cur] != menuMarlinMode)
   #endif
@@ -500,6 +500,10 @@ if(infoMachineSettings.onboard_sd_support == ENABLED && infoMachineSettings.auto
 
 #ifdef FIL_RUNOUT_PIN
   loopBackEndFILRunoutDetect();
+#endif
+
+#ifdef LCD_LED_PWM_CHANNEL
+  loopDimTimer();
 #endif
 }
 

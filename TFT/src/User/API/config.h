@@ -40,8 +40,8 @@
 #define CONFIG_MARLIN_FULLSCREEN    "marlin_fullscreen:"
 //-----------------------------Printer / Machine Settings
 #define CONFIG_HOTEND_COUNT         "hotend_count:"
-#define CONFIG_BED_EN               "bed_en:"
-#define CONFIG_CHAMBER_EN           "chamber_en:"
+#define CONFIG_HEATED_BED           "heated_bed:"
+#define CONFIG_HEATED_CHAMBER       "heated_chamber:"
 #define CONFIG_EXT_COUNT            "ext_count:"
 #define CONFIG_FAN_COUNT            "fan_count:"
 #define CONFIG_MAX_TEMP             "max_temp:"

@@ -157,7 +157,6 @@ typedef struct
   const WINDOW_ITEM actionBar;
 }WINDOW;
 
-void GUI_DrawWindow(const WINDOW *window, const uint8_t *title, const uint8_t *inf);
-void GUI_DrawNotificationWindow(const WINDOW *window, const uint8_t *title, const uint8_t *inf);
+void GUI_DrawWindow(const WINDOW *window, const uint8_t *title, const uint8_t *inf, bool actionBar);
 
 #endif

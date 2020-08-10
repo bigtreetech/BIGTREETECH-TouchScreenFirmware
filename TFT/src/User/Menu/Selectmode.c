@@ -137,7 +137,10 @@ void menuMode(void)
         break;
       }
       loopCheckEncoderSteps();
-      loopCheckEncoder();
+    #endif
+
+    #ifdef LCD_LED_PWM_CHANNEL
+      loopDimTimer();
     #endif
 
     if (infoSettings.serial_alwaysOn == 1)

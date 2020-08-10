@@ -187,7 +187,7 @@
     #define CN_INVERT_ZAXIS           "翻转Z轴"
     #define CN_MOVE_SPEED             "移动速度(X Y Z)"
     #define CN_KNOB_LED               "旋钮LED颜色"
-    #define CN_KNOB_LED_IDLE          "Rotary Knob led idle"
+    #define CN_KNOB_LED_IDLE          "Rotary Knob LED idle"
     #define CN_M0_PAUSE               "M0暂停"
     #define CN_SEND_START_GCODE       "执行打印前起始Gcode"
     #define CN_SEND_END_GCODE         "执行打印后结束Gcode"

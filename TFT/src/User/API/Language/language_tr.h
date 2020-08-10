@@ -187,7 +187,7 @@
     #define TR_INVERT_ZAXIS           "Z Eksenini Tersine Çevir"
     #define TR_MOVE_SPEED             "Hareket Hızı(X Y Z)"
     #define TR_KNOB_LED               "Döner Düğme LED"
-    #define TR_KNOB_LED_IDLE          "Rotary Knob led idle"
+    #define TR_KNOB_LED_IDLE          "Rotary Knob LED idle"
     #define TR_M0_PAUSE               "Paused by M0 command"
     #define TR_SEND_START_GCODE       "Start Gcode before print"
     #define TR_SEND_END_GCODE         "End Gcode after print"

@@ -187,7 +187,7 @@
     #define GR_INVERT_ZAXIS           "Αντιστρέψει Z άξονα"
     #define GR_MOVE_SPEED             "Ταχύτητα κίνησης(X Y Z)"
     #define GR_KNOB_LED               "LED περιστροφικού κουμπιού"
-    #define GR_KNOB_LED_IDLE          "Rotary Knob led idle"
+    #define GR_KNOB_LED_IDLE          "Rotary Knob LED idle"
     #define GR_M0_PAUSE               "Διακόπηκε λόγω M0 εντολής"
     #define GR_SEND_START_GCODE       "Αρχικό Gcode προ εκτύπωσης"
     #define GR_SEND_END_GCODE         "Τερματικό Gcode εφότου εκτύπωσης"
