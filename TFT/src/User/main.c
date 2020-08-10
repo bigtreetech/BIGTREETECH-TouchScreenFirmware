@@ -50,7 +50,7 @@ void Hardware_GenericInit(void)
   scanUpdates();           // scan icon, fonts and config files
 
   #ifdef LED_COLOR_PIN
-    knob_LED_Init(); //Called after Timer init. Because the neopixels need the timer
+    knob_LED_Init();
   #endif
 
   #if !defined(MKS_32_V1_4)
