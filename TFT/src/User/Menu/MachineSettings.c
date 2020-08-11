@@ -1,9 +1,9 @@
 #include "MachineSettings.h"
 
-u8 enabled_gcodes[CUSTOM_GCODES_COUNT];
-u8 gcode_num;
-u8 gc_page_count;
-u8 gc_cur_page = 0;
+uint8_t enabled_gcodes[CUSTOM_GCODES_COUNT];
+uint8_t gcode_num;
+uint8_t gc_page_count;
+uint8_t gc_cur_page = 0;
 
 CUSTOM_GCODES * customcodes = NULL;
 
@@ -191,9 +191,7 @@ ITEM itemMachineSettingsSubmenu[ITEM_MACHINE_SETTINGS_SUBMENU_NUM] = {
   {ICON_EEPROM_RESET,             LABEL_RESET},
 };
 
-#if QUICK_EEPROM_BUTTON == 1
-  static u8 curSubmenu = 0;
-#endif
+static uint8_t curSubmenu = 0;
 
 void menuMachineSettings(void)
 {
