@@ -34,7 +34,7 @@ void menuAutoLeveling(void)
         leveled = true;
         break;
           
-      case 2: ////Display of leveling data
+      case KEY_ICON_2: //Display of leveling data
         if (infoMachineSettings.autoLevel == 1 && infoMachineSettings.EEPROM == 1){
           storeCmd("M420 T0 V1\n");
           infoMenu.menu[++infoMenu.cur] = menuTerminal;
