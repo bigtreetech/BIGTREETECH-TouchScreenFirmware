@@ -249,5 +249,6 @@
     #define GR_PID_START_INFO_3       "DO NOT touch the screen until completed (green LED on)!"
     #define GR_EXTRUDE_100            "Ext. 100mm"
     #define GR_CONNECTION_SETTINGS    "Connection"
+    #define GR_GRID                   "Grid"
 
 #endif

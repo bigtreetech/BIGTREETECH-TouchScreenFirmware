@@ -249,5 +249,6 @@
     #define JP_PID_START_INFO_3       "DO NOT touch the screen until completed (green LED on)!"
     #define JP_EXTRUDE_100            "Ext. 100mm"
     #define JP_CONNECTION_SETTINGS    "Connection"
-
+    #define JP_GRID                   "Grid"
+    
 #endif

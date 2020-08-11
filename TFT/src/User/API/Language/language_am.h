@@ -249,5 +249,6 @@
     #define AM_PID_START_INFO_3       "DO NOT touch the screen until completed (green LED on)!"
     #define AM_EXTRUDE_100            "Ext. 100mm"
     #define AM_CONNECTION_SETTINGS    "Connection"
-
+    #define AM_GRID                   "Grid"
+    
 #endif

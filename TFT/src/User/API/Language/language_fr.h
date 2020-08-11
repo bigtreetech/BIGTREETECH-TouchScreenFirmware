@@ -249,5 +249,6 @@
     #define FR_PID_START_INFO_3       "NE touchez PAS l'écran avant la fin (LED verte allumée) !"
     #define FR_EXTRUDE_100            "Ext. 100mm"
     #define FR_CONNECTION_SETTINGS    "Connexion"
-
+    #define FR_GRID                   "Grid"
+    
 #endif

@@ -249,5 +249,6 @@
     #define RU_PID_START_INFO_3       "Не трогайте экран до\nокончания настройки\n(загориться зелёным LED)!"
     #define RU_EXTRUDE_100            "100mm экст."
     #define RU_CONNECTION_SETTINGS    "Соединение"
+    #define RU_GRID                   "Grid"
 
 #endif

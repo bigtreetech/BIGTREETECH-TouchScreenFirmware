@@ -249,5 +249,6 @@
     #define PT_PID_START_INFO_3       "DO NOT touch the screen until completed (green LED on)!"
     #define PT_EXTRUDE_100            "Ext. 100mm"
     #define PT_CONNECTION_SETTINGS    "Connection"
-
+    #define PT_GRID                   "Grid"
+    
 #endif

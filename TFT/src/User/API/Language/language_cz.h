@@ -249,5 +249,6 @@
     #define CZ_PID_START_INFO_3       "NEDOTÝKEJ se displeje dokud není dokončeno\n (Zelená LED svítí)!"
     #define CZ_EXTRUDE_100            "100mm Vysunutí"
     #define CZ_CONNECTION_SETTINGS    "Připojení"
-
+    #define CZ_GRID                   "Mřížka"
+    
 #endif

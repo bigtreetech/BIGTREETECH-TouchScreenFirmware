@@ -249,5 +249,6 @@
     #define IT_PID_START_INFO_3       "DO NOT touch the screen until completed (green LED on)!"
     #define IT_EXTRUDE_100            "Ext. 100mm"
     #define IT_CONNECTION_SETTINGS    "Connection"
+    #define IT_GRID                   "Grid"
 
 #endif

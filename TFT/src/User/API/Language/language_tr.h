@@ -249,5 +249,6 @@
     #define TR_PID_START_INFO_3       "DO NOT touch the screen until completed (green LED on)!"
     #define TR_EXTRUDE_100            "Ext. 100mm"
     #define TR_CONNECTION_SETTINGS    "Connection"
+    #define TR_GRID                   "Grid"
 
 #endif

@@ -249,5 +249,6 @@
     #define DU_PID_START_INFO_3       "Raak het scherm NIET aan totdat deze klaar is (groene LED aan)!"
     #define DU_EXTRUDE_100            "Ext. 100mm"
     #define DU_CONNECTION_SETTINGS    "Connecties"
-
+    #define DU_GRID                   "Grid"
+    
 #endif

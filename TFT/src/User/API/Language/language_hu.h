@@ -249,5 +249,6 @@
     #define HU_PID_START_INFO_3       "NE ÉRINTSD meg a kijelzőt míg nincs kész! (zöld LED jelzi)!"
     #define HU_EXTRUDE_100            "Kiad 100mm"
     #define HU_CONNECTION_SETTINGS    "Kapcsolat"
+    #define HU_GRID                   "Grid"
 
 #endif

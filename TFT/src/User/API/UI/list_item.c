@@ -114,7 +114,7 @@ const uint16_t ICON_COLOR[ICONCHAR_NUM]=
   WHITE,          //ICONCHAR_TOGGLE_SWITCH
   MAT_GREEN,      //ICONCHAR_TOGGLE_ON
   MAT_RED,        //ICONCHAR_TOGGLE_OFF
-
+  WHITE,    //ICONCHAR_GRID
 
 };
 
@@ -221,6 +221,7 @@ const uint16_t ICON_COLOR[ICONCHAR_NUM]=
 #define CHAR_TOGGLE_SWITCH         "\u08D6"
 #define CHAR_TOGGLE_ON             ""       //only for toggle state detection
 #define CHAR_TOGGLE_OFF            ""       //only for toggle state detection
+#define CHAR_GRID                  "\u08D7"
 
 const char *const GET_ICONCHAR[ICONCHAR_NUM]={
   #define X_CHAR(NAME) CHAR_##NAME ,
