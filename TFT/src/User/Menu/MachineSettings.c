@@ -191,7 +191,9 @@ ITEM itemMachineSettingsSubmenu[ITEM_MACHINE_SETTINGS_SUBMENU_NUM] = {
   {ICON_EEPROM_RESET,             LABEL_RESET},
 };
 
-static u8 curSubmenu = 0;
+#if QUICK_EEPROM_BUTTON == 1
+  static u8 curSubmenu = 0;
+#endif
 
 void menuMachineSettings(void)
 {
