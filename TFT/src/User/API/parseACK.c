@@ -259,7 +259,7 @@ void parseACK(void)
       if (ack_seen(errormagic)) {
         ackPopupInfo(errormagic);
       }
-      if (!ack_seen("ok T:") && !ack_seen("T0:"))  goto parse_end;  //the first response should be such as "T:25/50\n"
+      if (!(ack_seen("@") && ack_seen("T:")) && !ack_seen("T0:"))  goto parse_end;  //the first response should be such as "T:25/50\n"
       if (ack_seen(heaterID[BED])) infoSettings.bed_en = ENABLED;
       if (ack_seen(heaterID[CHAMBER])) infoSettings.chamber_en = ENABLED;
       uint8_t i;
@@ -330,7 +330,7 @@ void parseACK(void)
         infoHost.wait = false;
       }
       // parse temperature
-      if(ack_seen("ok T:") || ack_seen("T0:"))
+      if((ack_seen("@") && ack_seen("T:")) || ack_seen("T0:"))
       {
         heatSetCurrentTemp(NOZZLE0, ack_value()+0.5f);
         if(!heatGetSendWaiting(NOZZLE0)) {
@@ -504,12 +504,14 @@ void parseACK(void)
         {
           infoMachineSettings.isMarlinFirmware = 1;
         }
-        else if(ack_seen("Smoothieware"))
+        else
         {
           infoMachineSettings.isMarlinFirmware = 0;
           setupMachine();
         }
-        if (ack_seen("SOURCE_CODE_URL:"))
+        if (ack_seen("FIRMWARE_URL:")) // For Smoothieware and Repetier
+          string_end = ack_index - sizeof("FIRMWARE_URL:");
+        else if (ack_seen("SOURCE_CODE_URL:")) // For Marlin
           string_end = ack_index - sizeof("SOURCE_CODE_URL:");
         infoSetFirmwareName(string, string_end - string_start); // Set firmware name
 
