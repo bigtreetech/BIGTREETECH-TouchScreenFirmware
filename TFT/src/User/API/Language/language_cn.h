@@ -237,7 +237,7 @@
     #define CN_RECOVER_LENGTH         "额外挤出的长度"
     #define CN_SWAP_RECOVER_LENGTH    "换料时额外挤出的长度"
     #define CN_START_PRINT            "是否开始打印:\n %s?"
-    #define CN_ACK_POPUP_TYPE         "ACK 弹窗类型"
+    #define CN_ACK_NOTIFICATION       "ACK 弹窗类型"
     #define CN_ACK_BUZZER             "ACK 声音"
     #define CN_LEVELING_EDGE_DISTANCE "手动调平边沿距离"
     #define CN_XY_UNLOCK              "解锁XY"

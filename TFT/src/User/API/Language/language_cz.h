@@ -237,7 +237,7 @@
     #define CZ_RECOVER_LENGTH         "Délka obnovení"
     #define CZ_SWAP_RECOVER_LENGTH    "Délka obnovení Swap"
     #define CZ_START_PRINT            "Spustit tisk:\n %s?"
-    #define CZ_ACK_POPUP_TYPE         "Styl oznámení ACK"
+    #define CZ_ACK_NOTIFICATION       "Styl oznámení ACK"
     #define CZ_ACK_BUZZER             "ACK Bzučák"
     #define CZ_LEVELING_EDGE_DISTANCE "Vzdálenost nivelačních bodů\n stolku od kraje"
     #define CZ_XY_UNLOCK              "Uvolnit XY"
