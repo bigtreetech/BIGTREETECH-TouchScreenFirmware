@@ -7,7 +7,7 @@
 #include "ff.h"
 
 #define  LINE_MAX_CHAR 100
-#define CONFIG_FILE_PATH "0:config.ini"
+#define CONFIG_FILE_PATH            "0:config.ini"
 
 #define CONFIG_UNIFIEDMENU          "unified_menu:"
 #define CONFIG_UART_BAUDRATE        "baudrate:"
@@ -27,7 +27,7 @@
 #define CONFIG_INVERT_AXIS          "invert_axis:"
 #define CONFIG_PERSISTENT_TEMP      "persistent_info:"
 #define CONFIG_LIST_MODE            "files_list_mode:"
-#define CONFIG_ACK_POPUP_TYPE       "ack_popup_type:"
+#define CONFIG_ACK_NOTIFICATION     "ack_notification:"
 #define CONFIG_ACK_BUZZER           "ack_buzzer:"
 //-----------------------------Marlin Mode Settings
 #define CONFIG_MODE                 "default_mode:"

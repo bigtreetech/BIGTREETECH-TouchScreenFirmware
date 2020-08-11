@@ -49,9 +49,9 @@ void pidUpdateStatus(bool succeeded)
   {
 #ifdef ENABLE_PID_STATUS_UPDATE_NOTIFICATION
     if (succeeded)
-      popupNotification(DIALOG_TYPE_INFO, textSelect(LABEL_PID_TITLE), textSelect(LABEL_PROCESS_COMPLETED));
+      addToast((char*)textSelect(LABEL_PROCESS_COMPLETED));
     else
-      popupNotification(DIALOG_TYPE_ERROR, textSelect(LABEL_PID_TITLE), textSelect(LABEL_PROCESS_ABORTED));
+      addToast((char*)textSelect(LABEL_PROCESS_ABORTED));
 #endif
   }
   else                                 // if all the PID processes terminated, provide the final dialog
@@ -284,7 +284,7 @@ void menuPid(void)
       case KEY_ICON_6:
         if (pidRunning)
         {
-          popupNotification(DIALOG_TYPE_ERROR, textSelect(pidItems.title.index), textSelect(LABEL_PROCESS_RUNNING));
+          addToast(DIALOG_TYPE_ERROR, (char*)textSelect(LABEL_PROCESS_RUNNING));
         }
         else
         {
@@ -292,7 +292,7 @@ void menuPid(void)
 
           if (pidCounter == 0)         // if no temperature was set to a value > 0
           {
-            popupNotification(DIALOG_TYPE_ERROR, textSelect(pidItems.title.index), textSelect(LABEL_INVALID_VALUE));
+            addToast(DIALOG_TYPE_ERROR, (char*)textSelect(LABEL_INVALID_VALUE));
           }
           else
           {

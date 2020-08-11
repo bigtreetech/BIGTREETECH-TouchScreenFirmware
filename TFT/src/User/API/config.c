@@ -482,11 +482,11 @@ void parseConfigKey(u16 index)
       infoSettings.file_listmode = getOnOff();
     break;
 
-  case C_INDEX_ACK_POPUP_TYPE:
+  case C_INDEX_ACK_NOTIFICATION:
     {
       u8 i = config_int();
       if (inLimit(i,0,2))
-        infoSettings.ack_popup_type = i;
+        infoSettings.ack_notification = i;
       break;
     }
 
@@ -921,7 +921,7 @@ void parseConfigKey(u16 index)
       infoSettings.knob_led_color = config_int();
     break;
 
-#ifdef LCD_LED_PWM_CHANNEL  
+#ifdef LCD_LED_PWM_CHANNEL
   case C_INDEX_KNOB_LED_IDLE:
     if (inLimit(config_int(), 0, 1))
       infoSettings.knob_led_idle = config_int();

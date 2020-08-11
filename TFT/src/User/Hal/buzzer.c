@@ -105,6 +105,10 @@ case sound_error:
   break;
 case sound_deny:
   Buzzer_TurnOn(500,10);
+  case sound_toast:
+  Buzzer_TurnOn(1500,30);
+  Buzzer_TurnOn(2000,30);
+  break;
 case sound_keypress:
 default:
   Buzzer_TurnOn(BUZZER_FREQUENCY_HZ,BUZZER_FREQUENCY_DURATION_MS);

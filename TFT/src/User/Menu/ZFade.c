@@ -33,25 +33,8 @@ void menuZFade(void)
   float Z_Fade_value;
   float now = Z_Fade_value = getParameter(P_ABL_STATE, 1);
 
-  _ECHO_POPUP_TYPE pt1, pt2;
-  bool             be1, be2;
-
-  if (infoMachineSettings.EEPROM == 1)
-  {
-    ZFadeItems.items[KEY_ICON_4].icon = ICON_EEPROM_SAVE;
-    ZFadeItems.items[KEY_ICON_4].label.index = LABEL_SAVE;
-  }
-
   menuDrawPage(&ZFadeItems);
   showZFade(now);
-
-  // temporary disable the following ACK notifications to avoid
-  // these notifications popup every time Z fade value is changed
-  getKnownEchoParam(ECHO_ID_BED_LEVELING, &pt1, &be1);
-  getKnownEchoParam(ECHO_ID_FADE_HEIGHT, &pt2, &be2);
-
-  setKnownEchoParam(ECHO_ID_BED_LEVELING, ECHO_POPUP_NONE, false);
-  setKnownEchoParam(ECHO_ID_FADE_HEIGHT, ECHO_POPUP_NONE, false);
 
 #if LCD_ENCODER_SUPPORT
   encoderPosition = 0;
@@ -129,7 +112,4 @@ void menuZFade(void)
     loopProcess();
   }
 
-  // restore ACK notifications
-  setKnownEchoParam(ECHO_ID_BED_LEVELING, pt1, be1);
-  setKnownEchoParam(ECHO_ID_FADE_HEIGHT, pt2, be2);
 }

@@ -294,6 +294,7 @@ bool temperatureStatusValid(void)
 {
   if (infoSettings.persistent_info != 1) return false;
   if (infoHost.connected == false) return false;
+  if (toastRunning()) return false;
 
   if (infoMenu.menu[infoMenu.cur] == menuPrinting) return false;
   if (infoMenu.menu[infoMenu.cur] == menuStatus) return false;

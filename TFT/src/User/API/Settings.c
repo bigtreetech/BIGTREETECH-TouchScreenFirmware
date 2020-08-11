@@ -44,7 +44,7 @@ void infoSettingsReset(void)
   infoSettings.send_cancel_gcode    = ENABLED;
   infoSettings.persistent_info      = ENABLED;
   infoSettings.file_listmode        = ENABLED;
-  infoSettings.ack_popup_type       = ENABLED;
+  infoSettings.ack_notification     = ACK_NOTIFICATION_STYLE;
   infoSettings.ack_buzzer           = ENABLED;
 
   infoSettings.lcd_brightness       = DEFAULT_LCD_BRIGHTNESS;
