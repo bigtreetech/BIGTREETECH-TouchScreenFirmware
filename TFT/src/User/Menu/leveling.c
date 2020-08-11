@@ -8,7 +8,7 @@ const MENUITEMS autoLevelingItems = {
   // icon                         label
   {{ICON_LEVELING,                LABEL_START},
    {ICON_BACKGROUND,              LABEL_BACKGROUND},
-   {ICON_BACKGROUND,              LABEL_BACKGROUND},
+   {ICON_GRID,                    LABEL_GRID},
    {ICON_Z_FADE,                  LABEL_ABL_Z},
    {ICON_PROBE_OFFSET,            LABEL_Z_OFFSET},
    {ICON_BABYSTEP,                LABEL_BABYSTEP},
@@ -32,6 +32,13 @@ void menuAutoLeveling(void)
         storeCmd("G28\n");
         storeCmd("G29\n");
         leveled = true;
+        break;
+          
+      case 2: ////Display of leveling data
+        if (infoMachineSettings.autoLevel == 1 && infoMachineSettings.EEPROM == 1){
+          storeCmd("M420 T0 V1\n");
+          infoMenu.menu[++infoMenu.cur] = menuTerminal;
+        }  
         break;
 
       case KEY_ICON_3:
