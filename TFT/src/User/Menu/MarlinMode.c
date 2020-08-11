@@ -1,22 +1,21 @@
 #include "MarlinMode.h"
+#include "spi_slave.h"
 #include "HD44780.h"
 #include "includes.h"
 
 #if defined(ST7920_SPI) || defined(LCD2004_simulator)
 
-CIRCULAR_QUEUE marlinQueue;
-
-typedef void (*CB_INIT)(void);
+typedef void (*CB_INIT)(CIRCULAR_QUEUE *);
+typedef void (*CB_DEINIT)(void);
+typedef bool (*CB_DATA)(uint8_t *);
 typedef void (*CB_PARSE)(uint8_t);
 
 void menuMarlinMode(void)
 {
-  CB_INIT  marlinInit = NULL;
-  CB_INIT  marlinDeInit = NULL;
-  CB_PARSE marlinParse = NULL;
-
-  marlinQueue.data = malloc(QUEUE_MAX_BYTE);
-  while(!marlinQueue.data); // malloc failed
+  CB_INIT   marlinInit = NULL;
+  CB_DEINIT marlinDeInit = NULL;
+  CB_DATA   marlinGetData = NULL;
+  CB_PARSE  marlinParse = NULL;
 
   GUI_Clear(infoSettings.marlin_mode_bg_color);
   GUI_SetColor(infoSettings.marlin_mode_font_color);
@@ -31,6 +30,7 @@ void menuMarlinMode(void)
   if (infoSettings.marlin_type == LCD12864) {
     marlinInit = SPI_Slave;
     marlinDeInit = SPI_SlaveDeInit;
+    marlinGetData = SPI_SlaveGetData;
     marlinParse = ST7920_ParseRecv;
   }
 #endif
@@ -38,18 +38,21 @@ void menuMarlinMode(void)
   if (infoSettings.marlin_type == LCD2004) {
     marlinInit = HD44780_Config;
     marlinDeInit = HD44780_DeConfig;
+    marlinGetData = HD44780_getData;
     marlinParse = HD44780_ParseRecv;
   }
 #endif
 
-  marlinInit();
+  CIRCULAR_QUEUE marlinQueue;
+  uint8_t data;
+
+  marlinInit(&marlinQueue);
 
   while(infoMenu.menu[infoMenu.cur] == menuMarlinMode)
   {
-    while(marlinQueue.index_r != marlinQueue.index_w)
+    while(marlinGetData(&data))
     {
-      marlinParse(marlinQueue.data[marlinQueue.index_r]);
-      marlinQueue.index_r = (marlinQueue.index_r + 1) % QUEUE_MAX_BYTE;
+      marlinParse(data);
     }
     #if LCD_ENCODER_SUPPORT
       sendEncoder(LCD_ReadTouch());
@@ -70,9 +73,6 @@ void menuMarlinMode(void)
   }
 
   marlinDeInit();
-
-  free(marlinQueue.data);
-  marlinQueue.data = NULL;
 }
 
 #endif

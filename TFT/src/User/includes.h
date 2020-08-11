@@ -28,6 +28,7 @@
 #include "Serial.h"
 #include "spi.h"
 #include "sw_spi.h"
+#include "CircularQueue.h"
 #include "spi_slave.h"
 #include "timer_pwm.h"
 

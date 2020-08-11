@@ -94,7 +94,7 @@ void menuBabyStep(void)
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_INC,                     LABEL_INC},
-     {ICON_EEPROM_SAVE,             LABEL_SAVE},
+     {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_001_MM,                  LABEL_001_MM},
      {ICON_RESET_VALUE,             LABEL_RESET},
      {ICON_BACK,                    LABEL_BACK},}
@@ -111,6 +111,12 @@ void menuBabyStep(void)
   float now = baby_step_value;
 
   babyInitZOffset();
+
+  if (infoMachineSettings.EEPROM == 1)
+  {
+    babyStepItems.items[KEY_ICON_4].icon = ICON_EEPROM_SAVE;
+    babyStepItems.items[KEY_ICON_4].label.index = LABEL_SAVE;
+  }
 
   babyStepItems.items[KEY_ICON_5] = itemBabyStepUnit[curUnit];
 
