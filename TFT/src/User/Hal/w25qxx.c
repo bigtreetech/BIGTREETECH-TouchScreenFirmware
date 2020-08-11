@@ -5,6 +5,9 @@
 //#define W25Qxx_SPEED   0
 //#define W25Qxx_CS_PIN PA4
 
+const uint8_t cap_ID[14] = {0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x43, 0x4B, 0x00, 0x01};
+const uint32_t flash_size[14] = {KB(64), KB(128), KB(256), KB(512), MB(1), MB(2), MB(4), MB(8), MB(16), MB(32), MB(8), MB(8), KB(256), KB(512)};
+
 //Chip Select
 void W25Qxx_SPI_CS_Set(u8 level)
 {
@@ -19,7 +22,7 @@ uint8_t W25Qxx_SPI_Read_Write_Byte(uint8_t data)
 
 //initialization
 void W25Qxx_Init(void)
-{  
+{
   GPIO_InitSet(W25Qxx_CS_PIN, MGPIO_MODE_OUT_PP, 0);
   SPI_Config(W25Qxx_SPI);
   SPI_Protocol_Init(W25Qxx_SPI, W25Qxx_SPEED);
@@ -175,7 +178,6 @@ uint32_t W25Qxx_ReadID(void)
   Temp = (Temp<<8) | W25Qxx_SPI_Read_Write_Byte(W25QXX_DUMMY_BYTE);
 
   W25Qxx_SPI_CS_Set(1);
-
   return Temp;
 }
 
@@ -219,4 +221,26 @@ void W25Qxx_EraseBulk(void)
   W25Qxx_SPI_CS_Set(1);
 
   W25Qxx_WaitForWriteEnd();
+}
+
+//Read flash Size/Capacity
+uint32_t W25Qxx_ReadCapacity(void)
+{
+  W25Qxx_SPI_CS_Set(0);
+  W25Qxx_SPI_Read_Write_Byte(CMD_READ_ID);
+
+  uint8_t cap;
+  W25Qxx_SPI_Read_Write_Byte(W25QXX_DUMMY_BYTE);
+  W25Qxx_SPI_Read_Write_Byte(W25QXX_DUMMY_BYTE);
+  cap = W25Qxx_SPI_Read_Write_Byte(W25QXX_DUMMY_BYTE);
+
+  W25Qxx_SPI_CS_Set(1);
+  for (uint8_t i = 0; i < sizeof(cap_ID); i++)
+  {
+    if (cap == cap_ID[i])
+    {
+      return flash_size[i];
+    }
+  }
+  return 0;
 }

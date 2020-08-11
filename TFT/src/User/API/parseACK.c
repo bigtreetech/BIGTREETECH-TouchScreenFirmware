@@ -117,7 +117,7 @@ void ackPopupInfo(const char *info)
 }
 
 
-bool setIgnoreEcho(ECHO_ID msgId, bool state)
+void setIgnoreEcho(ECHO_ID msgId, bool state)
 {
   forceIgnore[msgId] = state;
 }

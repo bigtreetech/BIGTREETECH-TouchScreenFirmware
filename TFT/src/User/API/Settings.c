@@ -201,3 +201,10 @@ void setupMachine(void)
   }
   mustStoreCmd("M503 S0\n");
 }
+
+float flashUsedPercentage(void)
+{
+  uint32_t total = W25Qxx_ReadCapacity();
+  float percent = ((float)FLASH_USED * 100) / total;
+  return percent;
+}

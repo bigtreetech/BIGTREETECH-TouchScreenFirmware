@@ -184,7 +184,7 @@ extern MACHINESETTINGS infoMachineSettings;
 void initMachineSetting(void);
 void infoSettingsReset(void);
 void setupMachine(void);
-
+float flashUsedPercentage(void);
 
 
 

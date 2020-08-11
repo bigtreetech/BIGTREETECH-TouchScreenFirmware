@@ -49,7 +49,7 @@ void setCurrentAckSrc(uint8_t src);
 void parseACK(void);
 void parseRcvGcode(void);
 
-bool setIgnoreEcho(ECHO_ID msgId, bool state);
+void setIgnoreEcho(ECHO_ID msgId, bool state);
 
 
 #endif
