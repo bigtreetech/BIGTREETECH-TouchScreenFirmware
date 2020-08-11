@@ -188,6 +188,7 @@ void loopToast(void)
     else if(_toastRunning == true)
     {
     _toastRunning = false;
+    GUI_ClearPrect(&toastIconRect);
     GUI_ClearPrect(&toastRect);
       menuReDrawCurTitle();
     }
