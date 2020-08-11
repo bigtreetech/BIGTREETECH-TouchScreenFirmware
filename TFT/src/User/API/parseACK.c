@@ -450,6 +450,10 @@ void parseACK(void)
         if(ack_seen("F")) setParameter(P_FWRECOVER, 2, ack_value());
         if(ack_seen("R")) setParameter(P_FWRECOVER, 3, ack_value());
       }
+    //parse and store auto FW retract state (M209 - Set Auto Retract)
+      else if(ack_seen("M209 S")){
+                          setParameter(P_AUTO_RETRACT, 0, ack_value());
+      }
     //parse and store Probe Offset values
       else if(ack_seen("M851 X")){
                           setParameter(P_PROBE_OFFSET, X_STEPPER, ack_value());

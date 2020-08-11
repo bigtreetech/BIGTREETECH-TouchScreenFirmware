@@ -218,7 +218,7 @@
 #define AUTO_SAVE_LOAD_LEVELING_VALUE true //to enabled: true | to disabled: false
 
 /**
- * Enable Unified Bed Leveling options.
+ * Enable Unified Bed Leveling options
  *  Will attempt to auto detect and enable specific UBL options.
  *
  * WARNING - If you're not sure, leave on auto-detect or disabled.
@@ -230,13 +230,24 @@
 #define ENABLE_UBL_VALUE 2
 
 /**
- * Enable friendly probe offset language.
- *
+ * Enable friendly probe offset language
+ * 
  * Decrease/increase and "-" & "+" icons are replaced with down/up and friendly icons
  *
  * Options:  0: Disabled    1: Enabled
  */
 #define FRIENDLY_PROBE_OFFSET_LANGUAGE 1
+
+/**
+ * Enable quick EEPROM save/load/reset button
+ * 
+ * This will enable a handy button in the (settings > machine) menu
+ * 
+ * Note: if disabled, EEPROM operations can also be accessed in the (settings > machine > parameters) menu
+ * 
+ * Options:  0: Disabled    1: Enabled
+ */
+#define QUICK_EEPROM_BUTTON 0
 
 /**
  * Manual Leveling
