@@ -15,7 +15,7 @@ void showZFade(float val)
 void menuZFade(void)
 {
   // title, ITEM_PER_PAGE items (icon + label)
-  const MENUITEMS ZFadeItems = {
+  MENUITEMS ZFadeItems = {
   // title
   LABEL_ABL_Z,
   // icon                       label
@@ -23,7 +23,7 @@ void menuZFade(void)
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
     {ICON_INC,                  LABEL_INC},
-    {ICON_EEPROM_SAVE,          LABEL_SAVE},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
     {ICON_RESET_VALUE,          LABEL_RESET},
     {ICON_BACK,                 LABEL_BACK},}
@@ -35,6 +35,12 @@ void menuZFade(void)
 
   _ECHO_POPUP_TYPE pt1, pt2;
   bool             be1, be2;
+
+  if (infoMachineSettings.EEPROM == 1)
+  {
+    ZFadeItems.items[KEY_ICON_4].icon = ICON_EEPROM_SAVE;
+    ZFadeItems.items[KEY_ICON_4].label.index = LABEL_SAVE;
+  }
 
   menuDrawPage(&ZFadeItems);
   showZFade(now);

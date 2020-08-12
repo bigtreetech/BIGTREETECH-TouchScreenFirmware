@@ -41,9 +41,10 @@ void unifiedMenu(void)
         break;
 
       case KEY_ICON_3:
-        storeCmd("M112\n");            // Emergency Stop : Used for emergency stopping, a reset is required to return to operational mode.
-                                       // it may need to wait for a space to open up in the command queue.
-                                       // Enable EMERGENCY_PARSER in Marlin Firmware for an instantaneous M112 command.
+        // Emergency Stop : Used for emergency stopping, a reset is required to return to operational mode.
+        // it may need to wait for a space to open up in the command queue.
+        // Enable EMERGENCY_PARSER in Marlin Firmware for an instantaneous M112 command.
+        Serial_Puts(SERIAL_PORT, "M112\n");
         break;
 
       case KEY_ICON_4:
