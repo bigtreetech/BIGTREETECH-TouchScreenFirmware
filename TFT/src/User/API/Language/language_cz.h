@@ -38,7 +38,7 @@
     #define CZ_ABL_SLOT2              "Slot 2"
     #define CZ_ABL_SLOT3              "Slot 3"
     #define CZ_ABL_SLOT_EEPROM        "Zapamatuj si slot\nrestart? (Uložit EEPROM)"
-    #define CZ_ABL_Z                  "Z slábnutí"
+    #define CZ_ABL_Z                  "Z-Slábnutí"
     #define CZ_ABL_ENABLE             "ABL: on"
     #define CZ_ABL_DISABLE            "ABL: off"
     #define CZ_BLTOUCH                "BLTouch"
