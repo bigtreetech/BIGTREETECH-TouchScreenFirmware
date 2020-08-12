@@ -29,13 +29,16 @@ void infoMenuSelect(void)
     case SERIAL_TSC:
     {
       Serial_ReSourceInit();
-
       #ifdef BUZZER_PIN
         Buzzer_Config();
       #endif
-      GUI_SetColor(infoSettings.font_color);
-      GUI_SetBkColor(infoSettings.bg_color);
 
+      #ifdef LED_COLOR_PIN
+        #ifndef KEEP_KNOB_LED_COLOR_MARLIN_MODE
+          knob_LED_Init():
+        #endif
+      #endif
+      GUI_RestoreColorDefault();
       if(infoSettings.unified_menu == 1) //if Unified menu is selected
         infoMenu.menu[infoMenu.cur] = menuStatus; //status screen as default screen on boot
       else
@@ -59,9 +62,7 @@ void infoMenuSelect(void)
       break;
     }
 
-    #ifdef ST7920_SPI
-
-    case LCD12864:
+    case MARLIN:
       if (infoSettings.serial_alwaysOn == 1)
       {
         Serial_ReSourceInit();
@@ -75,11 +76,10 @@ void infoMenuSelect(void)
           knob_LED_DeInit();
         #endif
       #endif
-      GUI_SetColor(infoSettings.marlin_mode_font_color);
-      GUI_SetBkColor(infoSettings.marlin_mode_bg_color);
-      infoMenu.menu[infoMenu.cur] = menuST7920;
-      break;
 
-    #endif
+      #if defined(ST7920_SPI) || defined(LCD2004_simulator)
+        infoMenu.menu[infoMenu.cur] = menuMarlinMode;
+      #endif
+      break;
   }
 }

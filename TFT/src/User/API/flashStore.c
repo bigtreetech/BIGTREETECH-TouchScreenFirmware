@@ -2,7 +2,7 @@
 #include "STM32_Flash.h"
 
 #define TSC_SIGN  0x20200512 // DO NOT MODIFY
-#define PARA_SIGN 0x20200520 // (YYYMMDD) If a new setting parameter is added, modify here and initialize the initial value in the "infoSettingsReset()" function
+#define PARA_SIGN 0x20200805 // (YYYMMDD) If a new setting parameter is added, modify here and initialize the initial value in the "infoSettingsReset()" function
 
 extern int32_t TSC_Para[7];        //
 extern SETTINGS infoSettings;  //
@@ -86,8 +86,11 @@ void readStoredPara(void)
   infoSettings.terminalACK          = byteToWord(data + (index += 4), 4);
   infoSettings.move_speed           = byteToWord(data + (index += 4), 4);
   infoSettings.knob_led_color       = byteToWord(data + (index += 4), 4);
+  infoSettings.knob_led_idle        = byteToWord(data + (index += 4), 4); 
   infoSettings.persistent_info      = byteToWord(data + (index += 4), 4);
   infoSettings.file_listmode        = byteToWord(data + (index += 4), 4);
+  infoSettings.ack_popup_type       = byteToWord(data + (index += 4), 4);
+  infoSettings.ack_buzzer           = byteToWord(data + (index += 4), 4);
 
   infoSettings.lcd_brightness       = byteToWord(data + (index += 4), 4);
   infoSettings.lcd_idle_brightness  = byteToWord(data + (index += 4), 4);
@@ -98,6 +101,7 @@ void readStoredPara(void)
   infoSettings.marlin_mode_font_color     = byteToWord(data + (index += 4), 4);
   infoSettings.marlin_mode_showtitle      = byteToWord(data + (index += 4), 4);
   infoSettings.marlin_mode_fullscreen     = byteToWord(data + (index += 4), 4);
+  infoSettings.marlin_type                = byteToWord(data + (index += 4), 4);
 
   infoSettings.send_start_gcode     = byteToWord(data + (index += 4), 4);
   infoSettings.send_end_gcode       = byteToWord(data + (index += 4), 4);
@@ -111,6 +115,7 @@ void readStoredPara(void)
   infoSettings.runout_noise_ms      = byteToWord(data + (index += 4), 4);
   infoSettings.runout_distance      = byteToWord(data + (index += 4), 4);
 
+  infoSettings.powerloss_en         = byteToWord(data + (index += 4), 4);
   infoSettings.powerloss_home       = byteToWord(data + (index += 4), 4);
   infoSettings.powerloss_invert     = byteToWord(data + (index += 4), 4);
   infoSettings.powerloss_z_raise    = byteToWord(data + (index += 4), 4);
@@ -118,7 +123,9 @@ void readStoredPara(void)
 
 //machine specific settings
 
-  infoSettings.tool_count           = byteToWord(data + (index += 4), 4);
+  infoSettings.hotend_count         = byteToWord(data + (index += 4), 4);
+  infoSettings.bed_en               = byteToWord(data + (index += 4), 4);
+  infoSettings.chamber_en           = byteToWord(data + (index += 4), 4);
   infoSettings.ext_count            = byteToWord(data + (index += 4), 4);
   infoSettings.fan_count            = byteToWord(data + (index += 4), 4);
   infoSettings.auto_load_leveling   = byteToWord(data + (index += 4), 4);
@@ -212,8 +219,11 @@ void storePara(void)
   wordToByte(infoSettings.terminalACK,                data + (index += 4));
   wordToByte(infoSettings.move_speed,                 data + (index += 4));
   wordToByte(infoSettings.knob_led_color,             data + (index += 4));
+  wordToByte(infoSettings.knob_led_idle,              data + (index += 4));
   wordToByte(infoSettings.persistent_info,            data + (index += 4));
   wordToByte(infoSettings.file_listmode,              data + (index += 4));
+  wordToByte(infoSettings.ack_popup_type,             data + (index += 4));
+  wordToByte(infoSettings.ack_buzzer,                 data + (index += 4));
 
   wordToByte(infoSettings.lcd_brightness,             data + (index += 4));
   wordToByte(infoSettings.lcd_idle_brightness,        data + (index += 4));
@@ -224,6 +234,7 @@ void storePara(void)
   wordToByte(infoSettings.marlin_mode_font_color,     data + (index += 4));
   wordToByte(infoSettings.marlin_mode_showtitle,      data + (index += 4));
   wordToByte(infoSettings.marlin_mode_fullscreen,     data + (index += 4));
+  wordToByte(infoSettings.marlin_type,                data + (index += 4));
 
   wordToByte(infoSettings.send_start_gcode,           data + (index += 4));
   wordToByte(infoSettings.send_end_gcode,             data + (index += 4));
@@ -237,6 +248,7 @@ void storePara(void)
   wordToByte(infoSettings.runout_noise_ms,            data + (index += 4));
   wordToByte(infoSettings.runout_distance,            data + (index += 4));
 
+  wordToByte(infoSettings.powerloss_en,               data + (index += 4));
   wordToByte(infoSettings.powerloss_home,             data + (index += 4));
   wordToByte(infoSettings.powerloss_invert,           data + (index += 4));
   wordToByte(infoSettings.powerloss_z_raise,          data + (index += 4));
@@ -244,7 +256,9 @@ void storePara(void)
 
   //machine specific settings
 
-  wordToByte(infoSettings.tool_count,                 data + (index += 4));
+  wordToByte(infoSettings.hotend_count,               data + (index += 4));
+  wordToByte(infoSettings.bed_en,                     data + (index += 4));
+  wordToByte(infoSettings.chamber_en,                 data + (index += 4));
   wordToByte(infoSettings.ext_count,                  data + (index += 4));
   wordToByte(infoSettings.fan_count,                  data + (index += 4));
   wordToByte(infoSettings.auto_load_leveling,         data + (index += 4));

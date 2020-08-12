@@ -27,16 +27,21 @@
 #define CONFIG_INVERT_AXIS          "invert_axis:"
 #define CONFIG_PERSISTENT_TEMP      "persistent_info:"
 #define CONFIG_LIST_MODE            "files_list_mode:"
-//-----------------------------Marlin Mode Settings (Only for TFT35_V3.0/TFT24_V1.1/TFT28V3.0)
+#define CONFIG_ACK_POPUP_TYPE       "ack_popup_type:"
+#define CONFIG_ACK_BUZZER           "ack_buzzer:"
+//-----------------------------Marlin Mode Settings
 #define CONFIG_MODE                 "default_mode:"
 #define CONFIG_SERIAL_ON            "serial_always_on:"
 #define CONFIG_MARLIN_BG_COLOR      "marlin_bg_color:"
 #define CONFIG_MARLIN_FONT_COLOR    "marlin_fn_color:"
 #define CONFIG_MARLIN_SHOW_TITLE    "marlin_show_title:"
+#define CONFIG_MARLIN_TYPE          "marlin_type:"
 #define CONFIG_MARLIN_TITLE         "marlin_title:"
 #define CONFIG_MARLIN_FULLSCREEN    "marlin_fullscreen:"
 //-----------------------------Printer / Machine Settings
-#define CONFIG_TOOL_COUNT           "hotend_count:"
+#define CONFIG_HOTEND_COUNT         "hotend_count:"
+#define CONFIG_HEATED_BED           "heated_bed:"
+#define CONFIG_HEATED_CHAMBER       "heated_chamber:"
 #define CONFIG_EXT_COUNT            "ext_count:"
 #define CONFIG_FAN_COUNT            "fan_count:"
 #define CONFIG_MAX_TEMP             "max_temp:"
@@ -78,12 +83,14 @@
 #define CONFIG_RUNOUT_NOISE         "fil_noise_threshold:"
 #define CONFIG_RUNOUT_DISTANCE      "fil_runout_distance:"
 //-----------------------------Power Loss Recovery & BTT UPS Settings (if connected to TFT Controller)
+#define CONFIG_POWERLOSS_EN         "pl_recovery_en:"
 #define CONFIG_POWERLOSS_HOME       "pl_recovery_home:"
 #define CONFIG_POWERLOSS_ZRAISE     "pl_z_raise:"
 #define CONFIG_BTT_MINIUPS          "btt_mini_ups:"
 //-----------------------------other device specific settings
 #define CONFIG_BUZZER_ON               "buzzer:"
 #define CONFIG_KNOB_COLOR              "knob_led_color:"
+#define CONFIG_KNOB_LED_IDLE           "knob_led_idle:"
 #define CONFIG_BRIGHTNESS              "lcd_brightness:"
 #define CONFIG_BRIGHTNESS_IDLE         "lcd_idle_brightness:"
 #define CONFIG_BRIGHTNESS_IDLE_DELAY   "lcd_idle_delay:"
@@ -131,6 +138,7 @@
 #define MAX_EXT_SPEED_LIMIT       5000         // Extruder speed over this will not pe parsed.
 #define MAX_TOOL_TEMP             300          // extruder temp over this will not pe parsed.
 #define MAX_BED_TEMP              200          // bed temp over this will not pe parsed.
+#define MAX_CHAMBER_TEMP          100          // bed temp over this will not pe parsed.
 #define MAX_SPEED_LIMIT           12000        // speed over this will not pe parsed.
 #define MAX_RUNOUT_DISTANCE       50           // runout distance over this will not pe parsed.
 #define MAX_DELAY_MS              1800         // time delay (ms) over this will not pe parsed.
@@ -144,6 +152,7 @@
 #define MIN_POS_LIMIT             0         // position value less than this will not be parsed.
 #define MIN_TOOL_TEMP             20        // extruder temp less than this will not pe parsed.
 #define MIN_BED_TEMP              20        // bed temp less than this will not pe parsed.
+#define MIN_CHAMBER_TEMP          20        // chamber temp less than this will not pe parsed.
 #define MIN_RUNOUT_DISTANCE       1         // runout distance less than this will not be parsed.
 #define MIN_DELAY_MS              10        // time delay (ms) less than this will not pe parsed.
 #define MIN_DELAY_SEC             1         // time delay (sec) less than this will not pe parsed.

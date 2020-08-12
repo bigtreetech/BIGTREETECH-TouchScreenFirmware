@@ -123,22 +123,6 @@ void loopCheckEncoderSteps(void)
   }
 }
 
-void loopCheckEncoder()
-{
-  #ifdef LCD_LED_PWM_CHANNEL
-    // Check for any encoder changes or Check for encoder button press
-    if (encoder_CheckState() || encoder_ReadBtn(LCD_BUTTON_INTERVALS))
-      LCD_Dim_Idle_Timer_Reset(); // Reset LCD dim idle timer if enabled.
-  #endif
-
-  if (isPrinting() || skipMode)
-    return;
-
-  if (encoder_ReadBtn(LCD_CHANGE_MODE_INTERVALS))
-    infoMenu.menu[++infoMenu.cur] = menuMode;
-}
-
-
 #if 1
 //Parse the touch to control encoder
  uint8_t LCD_ReadTouch(void)
@@ -199,9 +183,9 @@ void sendEncoder(uint8_t num)
 {
   if(num==1 || num==2 || num ==3)
   {
-  GPIO_InitSet(LCD_BTN_PIN, MGPIO_MODE_OUT_PP, 0);
-  GPIO_InitSet(LCD_ENCA_PIN, MGPIO_MODE_OUT_PP, 0);
-  GPIO_InitSet(LCD_ENCB_PIN, MGPIO_MODE_OUT_PP, 0);
+    GPIO_InitSet(LCD_BTN_PIN, MGPIO_MODE_OUT_PP, 0);
+    GPIO_InitSet(LCD_ENCA_PIN, MGPIO_MODE_OUT_PP, 0);
+    GPIO_InitSet(LCD_ENCB_PIN, MGPIO_MODE_OUT_PP, 0);
   }
   switch(num)
   {

@@ -215,18 +215,7 @@ void loopReminderClear(void)
 
   /* Clear warning message */
   reminder.status = STATUS_IDLE;
-  if (menuType == MENU_TYPE_LISTVIEW)
-  {
-    if (curListItems == NULL)
-    return;
-    menuDrawTitle(labelGetAddress(&curListItems->title));
-  }
-  else if(menuType == MENU_TYPE_ICON)
-  {
-    if (curMenuItems == NULL)
-      return;
-    menuDrawTitle(labelGetAddress(&curMenuItems->title));
-  }
+  menuReDrawCurTitle();
 }
 
 void loopVolumeReminderClear(void)
@@ -243,19 +232,7 @@ void loopVolumeReminderClear(void)
 
   /* Clear warning message */
   volumeReminder.status = STATUS_IDLE;
-  if (menuType == MENU_TYPE_LISTVIEW)
-  {
-    if(curListItems == NULL)
-      return;
-    menuDrawTitle(labelGetAddress(&curListItems->title));
-  }
-  else if(menuType == MENU_TYPE_ICON)
-  {
-  if(curMenuItems == NULL)
-    return;
-  menuDrawTitle(labelGetAddress(&curMenuItems->title));
-  }
-
+  menuReDrawCurTitle();
 }
 
 void loopBusySignClear(void)
@@ -281,21 +258,37 @@ void loopBusySignClear(void)
 void menuDrawTitle(const uint8_t *content) //(const MENUITEMS * menuItems)
 {
   uint16_t start_y = (TITLE_END_Y - BYTE_HEIGHT) / 2;
-  GUI_FillRectColor(10, start_y, LCD_WIDTH-10, start_y+BYTE_HEIGHT, infoSettings.title_bg_color);
-
+  uint16_t start_x = 10;
+  uint16_t end_x = drawTemperatureStatus();
+  GUI_SetBkColor(infoSettings.title_bg_color);
   if (content)
   {
-    GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-    GUI_DispLenString(10, start_y, content, LCD_WIDTH-20);
-    GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
+    GUI_DispLenString(10, start_y, content, LCD_WIDTH - 20);
+    start_x += GUI_StrPixelWidth(content);
+    if (start_x > LCD_WIDTH-20) start_x = LCD_WIDTH - 20;
   }
+  GUI_ClearRect(start_x, start_y, end_x, start_y+BYTE_HEIGHT);
 
-  show_GlobalInfo();
+  GUI_SetBkColor(infoSettings.bg_color);
   if(reminder.status == STATUS_IDLE) return;
   GUI_SetColor(infoSettings.reminder_color);
   GUI_SetBkColor(infoSettings.title_bg_color);
   GUI_DispStringInPrect(&reminder.rect, textSelect(reminder.inf));
   GUI_RestoreColorDefault();
+}
+
+void menuReDrawCurTitle(void)
+{
+  if (menuType == MENU_TYPE_LISTVIEW)
+  {
+    if(curListItems == NULL) return;
+    menuDrawTitle(labelGetAddress(&curListItems->title));
+  }
+  else if(menuType == MENU_TYPE_ICON)
+  {
+    if(curMenuItems == NULL) return;
+    menuDrawTitle(labelGetAddress(&curMenuItems->title));
+  }
 }
 
 //Draw the entire interface
@@ -349,7 +342,6 @@ void menuDrawListPage(const LISTITEMS *listItems)
         }
     #endif
   }
-//  show_globalinfo();
 }
 
 //Show live info text on icons
@@ -363,7 +355,8 @@ void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, const ITEM * item)
     if (liveicon->enabled[i] == true)
     {
       GUI_SetColor(lcd_colors[liveicon->lines[i].fn_color]);
-      GUI_SetBkColor(lcd_colors[liveicon->lines[i].bk_color]);
+      if (liveicon->lines[i].text_mode != GUI_TEXTMODE_TRANS)
+        GUI_SetBkColor(lcd_colors[liveicon->lines[i].bk_color]);
       GUI_SetTextMode(liveicon->lines[i].text_mode);
 
       GUI_POINT loc;
@@ -448,11 +441,11 @@ KEY_VALUES menuKeyGetValue(void)
 {
   if (menuType == MENU_TYPE_ICON)
   {
-    return (KEY_VALUES)KEY_GetValue(sizeof(rect_of_key) / sizeof(rect_of_key[0]), rect_of_key); // for normal menu
+    return (KEY_VALUES)KEY_GetValue(COUNT(rect_of_key), rect_of_key); // for normal menu
   }
   else if (menuType == MENU_TYPE_LISTVIEW)
   {
-    return (KEY_VALUES)KEY_GetValue(sizeof(rect_of_keyListView) / sizeof(rect_of_keyListView[0]), rect_of_keyListView); //for listview
+    return (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keyListView), rect_of_keyListView); //for listview
   }
   else return KEY_IDLE;
 }
@@ -493,19 +486,24 @@ if(infoMachineSettings.onboard_sd_support == ENABLED && infoMachineSettings.auto
 #endif
 
 #if LCD_ENCODER_SUPPORT
-  loopCheckEncoder();
-  if(infoMenu.menu[infoMenu.cur] != menuST7920)
+  #if defined(ST7920_SPI) || defined(LCD2004_simulator)
+    if(infoMenu.menu[infoMenu.cur] != menuMarlinMode)
+  #endif
     {
       loopCheckEncoderSteps(); //check change in encoder steps
     }
 #endif
 
-#ifdef ST7920_SPI
+#if defined(ST7920_SPI) || defined(LCD2004_simulator)
   loopCheckMode();
 #endif
 
 #ifdef FIL_RUNOUT_PIN
   loopBackEndFILRunoutDetect();
+#endif
+
+#ifdef LCD_LED_PWM_CHANNEL
+  loopDimTimer();
 #endif
 }
 
@@ -519,7 +517,7 @@ void loopFrontEnd(void)
 
   loopBusySignClear();                //Busy Indicator clear
 
-  temp_Change();
+  loopTemperatureStatus();
 
 #ifdef FIL_RUNOUT_PIN
   loopFrontEndFILRunoutDetect();

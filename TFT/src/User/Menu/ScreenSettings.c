@@ -89,7 +89,7 @@ void menuLanguage(void)
 
   if(memcmp(&now, &infoSettings, sizeof(SETTINGS)))
   {
-    statusScreen_setMsg(textSelect(LABEL_STATUS), textSelect(infoHost.connected ? LABEL_READY : LABEL_UNCONNECTED)); // restore msg buffer when language is changed
+    statusScreen_setReady(); // restore msg buffer when language is changed
     storePara();
   }
 }

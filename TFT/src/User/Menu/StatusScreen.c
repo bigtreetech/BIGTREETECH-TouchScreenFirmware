@@ -5,9 +5,9 @@ const MENUITEMS StatusItems = {
 // title
 LABEL_READY,
 // icon                       label
- {{ICON_STATUS_NOZZLE,         LABEL_BACKGROUND},
-  {ICON_STATUS_BED,            LABEL_BACKGROUND},
-  {ICON_STATUS_FAN,            LABEL_BACKGROUND},
+ {{ICON_STATUS_NOZZLE,        LABEL_BACKGROUND},
+  {ICON_STATUS_BED,           LABEL_BACKGROUND},
+  {ICON_STATUS_FAN,           LABEL_BACKGROUND},
   {ICON_STATUS_SPEED,         LABEL_BACKGROUND},
   {ICON_MAINMENU,             LABEL_MAINMENU},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
@@ -31,7 +31,7 @@ static u32 nextTime = 0;
 static u32 update_time = 2000; // 1 seconds is 1000
 SCROLL     msgScroll;
 static int lastConnection_status = -1;
-static bool booted = false;
+static bool msgNeedRefresh = false;
 
 static char msgtitle[20];
 static char msgbody[128];
@@ -41,7 +41,7 @@ static float yaxis;
 static float zaxis;
 static bool gantryCmdWait = false;
 
-TOOL current_tool = NOZZLE0;
+uint8_t current_tool = NOZZLE0;
 int current_fan = 0;
 int current_speedID = 0;
 const char* SpeedID[2] = SPEED_ID;
@@ -210,16 +210,26 @@ float getAxisLocation(u8 n){
   }
 }
 
-
 void statusScreen_setMsg(const uint8_t *title, const uint8_t *msg)
 {
   strncpy(msgtitle, (char *)title, sizeof(msgtitle));
   strncpy(msgbody, (char *)msg, sizeof(msgbody));
+  msgNeedRefresh = true;
+}
 
-  if (infoMenu.menu[infoMenu.cur] == menuStatus && booted == true)
-  {
-    drawStatusScreenMsg();
+void statusScreen_setReady(void)
+{
+  strncpy(msgtitle, (char *)textSelect(LABEL_STATUS), sizeof(msgtitle));
+  if(infoHost.connected == false){
+    strncpy(msgbody, (char *)textSelect(LABEL_UNCONNECTED), sizeof(msgbody));
   }
+  else{
+    strncpy(msgbody, (char *)machine_type, sizeof(msgbody));
+    strcat(msgbody, " ");
+    strcat(msgbody, (char *)textSelect(LABEL_READY));
+  }
+
+  msgNeedRefresh = true;
 }
 
 void drawStatusScreenMsg(void)
@@ -238,6 +248,8 @@ void drawStatusScreenMsg(void)
   Scroll_CreatePara(&msgScroll, (u8 *)msgbody, &msgRect);
 
   GUI_RestoreColorDefault();
+
+  msgNeedRefresh = false;
 }
 
 void scrollMsg(void){
@@ -251,10 +263,9 @@ void toggleTool(void)
 {
   if (OS_GetTimeMs() > nextTime)
   {
-    if (infoSettings.tool_count > 1)
+    if (infoSettings.hotend_count > 1)
     {
-      current_tool = (TOOL)((current_tool+1) % HEATER_COUNT);
-      current_tool = (current_tool == 0) ? 1 : current_tool;
+      current_tool = (current_tool+1) % infoSettings.hotend_count;
     }
     if (infoSettings.fan_count > 1)
     {
@@ -283,7 +294,6 @@ void toggleTool(void)
 
 void menuStatus(void)
 {
-  booted = true;
   KEY_VALUES key_num = KEY_IDLE;
   GUI_SetBkColor(infoSettings.bg_color);
   menuDrawPage(&StatusItems);
@@ -294,24 +304,22 @@ void menuStatus(void)
   while (infoMenu.menu[infoMenu.cur] == menuStatus)
   {
     if(infoHost.connected != lastConnection_status){
-      if(infoHost.connected == false){
-        statusScreen_setMsg(textSelect(LABEL_STATUS), textSelect(LABEL_UNCONNECTED));
-      }
-      else{
-        statusScreen_setMsg(textSelect(LABEL_STATUS), textSelect(LABEL_READY));
-      }
+      statusScreen_setReady();
       lastConnection_status = infoHost.connected;
+    }
+    if (msgNeedRefresh) {
+      drawStatusScreenMsg();
     }
     scrollMsg();
     key_num = menuKeyGetValue();
     switch (key_num)
     {
       case KEY_ICON_0:
-        heatSetCurrentTool(current_tool);
+        heatSetCurrentIndex(current_tool);
         infoMenu.menu[++infoMenu.cur] = menuHeat;
         break;
       case KEY_ICON_1:
-        heatSetCurrentTool(BED);
+        heatSetCurrentIndex(BED);
         infoMenu.menu[++infoMenu.cur] = menuHeat;
         break;
       case KEY_ICON_2:

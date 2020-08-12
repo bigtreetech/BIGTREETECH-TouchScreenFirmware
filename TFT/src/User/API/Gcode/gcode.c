@@ -39,7 +39,8 @@ bool request_M21(void)
   strcpy(requestCommandInfo.command,"M21\n");
   strcpy(requestCommandInfo.startMagic,"SD");
   strcpy(requestCommandInfo.stopMagic,"card ok");
-  strcpy(requestCommandInfo.errorMagic,"No SD card");
+  strcpy(requestCommandInfo.nosdMagic,"No SD card");
+  strcpy(requestCommandInfo.errorMagic,"volume.init failed");
 
   resetRequestCommandInfo();
   mustStoreCmd(requestCommandInfo.command);

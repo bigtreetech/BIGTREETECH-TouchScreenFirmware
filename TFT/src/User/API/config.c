@@ -320,7 +320,7 @@ void resetConfig(void)
   tempCG.count = n;
 
   //restore strings store
-  strcpy(tempST.marlin_title,ST7920_BANNER_TEXT);
+  strcpy(tempST.marlin_title, MARLIN_BANNER_TEXT);
 
   for (int i = 0; i < PREHEAT_COUNT;i++)
   {
@@ -482,9 +482,21 @@ void parseConfigKey(u16 index)
       infoSettings.file_listmode = getOnOff();
     break;
 
+  case C_INDEX_ACK_POPUP_TYPE:
+    {
+      u8 i = config_int();
+      if (inLimit(i,0,2))
+        infoSettings.ack_popup_type = i;
+      break;
+    }
+
+  case C_INDEX_ACK_BUZZER:
+      infoSettings.ack_buzzer = getOnOff();
+    break;
+
   //---------------------------------------------------------Marlin Mode Settings (Only for TFT35_V3.0/TFT24_V1.1/TFT28V3.0)
 
-#ifdef ST7920_SPI
+#if defined(ST7920_SPI) || defined(LCD2004_simulator)
 
   case C_INDEX_MODE:
     if (inLimit(config_int(), 0, MODE_COUNT-1))
@@ -511,6 +523,11 @@ void parseConfigKey(u16 index)
       infoSettings.marlin_mode_fullscreen = getOnOff();
     break;
 
+  case C_INDEX_MARLIN_TYPE:
+    if (inLimit(config_int(), 0, MODE_COUNT-1))
+      infoSettings.marlin_type = config_int();
+    break;
+
   case C_INDEX_MARLIN_TITLE:
     {
       char * pchr;
@@ -522,13 +539,21 @@ void parseConfigKey(u16 index)
     }
     break;
 
-#endif //ST7920_SPI
+#endif // ST7920_SPI || LCD2004_simulator
 
   //---------------------------------------------------------Printer / Machine Settings
 
-  case C_INDEX_TOOL_COUNT:
-    if (inLimit(config_int(), 1, MAX_TOOL_COUNT))
-      infoSettings.tool_count = config_int();
+  case C_INDEX_HOTEND_COUNT:
+    if (inLimit(config_int(), 1, MAX_HOTEND_COUNT))
+      infoSettings.hotend_count = config_int();
+    break;
+
+  case C_INDEX_HEATED_BED:
+      infoSettings.bed_en = getOnOff();
+    break;
+
+  case C_INDEX_HEATED_CHAMBER:
+      infoSettings.chamber_en = getOnOff();
     break;
 
   case C_INDEX_EXT_COUNT:
@@ -546,29 +571,33 @@ void parseConfigKey(u16 index)
     { if (inLimit(config_int(), MIN_BED_TEMP, MAX_BED_TEMP))
         infoSettings.max_temp[BED] = config_int();
     }
+    if (key_seen("CHAMBER:"))
+    { if (inLimit(config_int(), MIN_CHAMBER_TEMP, MAX_CHAMBER_TEMP))
+        infoSettings.max_temp[CHAMBER] = config_int();
+    }
     if (key_seen("T0:"))
     { if (inLimit(config_int(), MIN_TOOL_TEMP, MAX_TOOL_TEMP))
-        infoSettings.max_temp[BED + 1] = config_int();
+        infoSettings.max_temp[NOZZLE0] = config_int();
     }
     if (key_seen("T1:"))
     { if (inLimit(config_int(), MIN_TOOL_TEMP, MAX_TOOL_TEMP))
-        infoSettings.max_temp[BED + 2] = config_int();
+        infoSettings.max_temp[NOZZLE1] = config_int();
     }
     if (key_seen("T2:"))
     { if (inLimit(config_int(), MIN_TOOL_TEMP, MAX_TOOL_TEMP))
-        infoSettings.max_temp[BED + 3] = config_int();
+        infoSettings.max_temp[NOZZLE2] = config_int();
     }
     if (key_seen("T3:"))
     { if (inLimit(config_int(), MIN_TOOL_TEMP, MAX_TOOL_TEMP))
-        infoSettings.max_temp[BED + 4] = config_int();
+        infoSettings.max_temp[NOZZLE3] = config_int();
     }
     if (key_seen("T4:"))
     { if (inLimit(config_int(), MIN_TOOL_TEMP, MAX_TOOL_TEMP))
-        infoSettings.max_temp[BED + 5] = config_int();
+        infoSettings.max_temp[NOZZLE4] = config_int();
     }
     if (key_seen("T5:"))
     { if (inLimit(config_int(), MIN_TOOL_TEMP, MAX_TOOL_TEMP))
-        infoSettings.max_temp[BED + 6] = config_int();
+        infoSettings.max_temp[NOZZLE5] = config_int();
     }
     break;
 
@@ -833,6 +862,10 @@ void parseConfigKey(u16 index)
 
 #ifdef BTT_MINI_UPS
 
+  case C_INDEX_POWERLOSS_EN:
+      infoSettings.powerloss_en = getOnOff();
+    break;
+
   case C_INDEX_POWERLOSS_HOME:
       infoSettings.powerloss_home = getOnOff();
     break;
@@ -887,12 +920,21 @@ void parseConfigKey(u16 index)
     if (inLimit(config_int(), 0, LED_COLOR_NUM-1))
       infoSettings.knob_led_color = config_int();
     break;
+
+#ifdef LCD_LED_PWM_CHANNEL  
+  case C_INDEX_KNOB_LED_IDLE:
+    if (inLimit(config_int(), 0, 1))
+      infoSettings.knob_led_idle = config_int();
+    break;
+#endif //lcd_led_pwm
 #endif
 
 #ifdef LCD_LED_PWM_CHANNEL
   case C_INDEX_BRIGHTNESS:
     if (inLimit(config_int(), 0, ITEM_BRIGHTNESS_NUM-1))
       infoSettings.lcd_brightness = config_int();
+      if(infoSettings.lcd_brightness == 0)
+        infoSettings.lcd_brightness = 1; //If someone set it to 0 set it to 1
     break;
   case C_INDEX_BRIGHTNESS_IDLE:
     if (inLimit(config_int(), 0, ITEM_BRIGHTNESS_NUM-1))

@@ -95,4 +95,7 @@
 #define SMALL_ICON_START_ADDR   (INFOBOX_ADDR+0x19000)                // 24*24*2 = 0x480 (+0x1000) per small icon
 #define SMALL_ICON_ADDR(num)    ((num)*0x2000+SMALL_ICON_START_ADDR)
 
+// The offset of the model preview icon in the gcode file
+#define MODEL_PREVIEW_OFFSET 0x15355
+
 #endif
