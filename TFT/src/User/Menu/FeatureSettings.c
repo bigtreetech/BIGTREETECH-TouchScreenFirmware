@@ -72,7 +72,6 @@ typedef enum
   SKEY_PERSISTENTINFO,
   SKEY_FILELIST,
   SKEY_ACK_NOTIFICATION,
-  SKEY_ACK_BUZZER,
   #ifdef LED_COLOR_PIN
     SKEY_KNOB,
   #ifdef LCD_LED_PWM_CHANNEL
@@ -116,7 +115,6 @@ LISTITEM settingPage[SKEY_COUNT] = {
   {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_PERSISTENT_STATUS_INFO,   LABEL_BACKGROUND},
   {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_FILE_LISTMODE,            LABEL_BACKGROUND},
   {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_ACK_NOTIFICATION,         LABEL_DYNAMIC},
-  {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_ACK_BUZZER,               LABEL_BACKGROUND},
   #ifdef LED_COLOR_PIN
     {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_KNOB_LED,                 LABEL_OFF},
   #ifdef LCD_LED_PWM_CHANNEL
@@ -220,11 +218,6 @@ void updateFeatureSettings(uint8_t key_val)
       setDynamicTextValue(key_val, (char*)notificationType[infoSettings.ack_notification]);
       break;
 
-    case SKEY_ACK_BUZZER:
-      infoSettings.ack_buzzer = (infoSettings.ack_buzzer + 1) % TOGGLE_NUM;
-      settingPage[item_index].icon = toggleitem[infoSettings.ack_buzzer];
-      break;
-
     #ifdef LED_COLOR_PIN
       case SKEY_KNOB:
         infoSettings.knob_led_color = (infoSettings.knob_led_color + 1 ) % LED_COLOR_NUM;
@@ -291,7 +284,7 @@ void updateFeatureSettings(uint8_t key_val)
       return;
   }
    featureSettingsItems.items[key_val] = settingPage[item_index];
-}
+} //updateFeatureSettings
 
 //
 //load values on page change and reload
@@ -358,10 +351,6 @@ void loadFeatureSettings(){
 
       case SKEY_ACK_NOTIFICATION:
         setDynamicTextValue(i, (char*)notificationType[infoSettings.ack_notification]);
-        break;
-
-      case SKEY_ACK_BUZZER:
-        settingPage[item_index].icon = toggleitem[infoSettings.ack_buzzer];
         break;
 
       case SKEY_RESET_SETTINGS:
@@ -442,7 +431,7 @@ void loadFeatureSettings(){
   //menuDrawListItem(&featureSettingsItems.items[5],5);
   //menuDrawListItem(&featureSettingsItems.items[6],6);
 
-}
+} //loadFeatureSettings
 
 
 void menuFeatureSettings(void)

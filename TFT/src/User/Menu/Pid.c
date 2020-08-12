@@ -64,7 +64,7 @@ void pidUpdateStatus(bool succeeded)
 
       sprintf(tmpBuf, "%s\n %s", textSelect(LABEL_PROCESS_COMPLETED), textSelect(LABEL_EEPROM_SAVE_INFO));
 
-      BUZZER_PLAY(sound_notify);
+      BUZZER_PLAY(sound_success);
 
       showDialog(DIALOG_TYPE_SUCCESS, textSelect(LABEL_PID_TITLE), (u8*) tmpBuf,
         textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), saveEepromSettings, NULL, NULL);

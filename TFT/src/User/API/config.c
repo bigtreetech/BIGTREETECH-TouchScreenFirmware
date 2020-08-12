@@ -490,10 +490,6 @@ void parseConfigKey(u16 index)
       break;
     }
 
-  case C_INDEX_ACK_BUZZER:
-      infoSettings.ack_buzzer = getOnOff();
-    break;
-
   //---------------------------------------------------------Marlin Mode Settings (Only for TFT35_V3.0/TFT24_V1.1/TFT28V3.0)
 
 #if defined(ST7920_SPI) || defined(LCD2004_simulator)
@@ -904,13 +900,24 @@ void parseConfigKey(u16 index)
 #endif
   //---------------------------------------------------------other device specific settings
 #ifdef BUZZER_PIN
-  case C_INDEX_BUZZER_ON:
+  case C_INDEX_TOUCH_SOUND:
     if (inLimit(config_int(),0,1))
       {
-        if (config_int() == 0)
-          infoSettings.silent = 1;
-        else
-          infoSettings.silent = 0;
+        infoSettings.touchSound = config_int();
+      }
+    break;
+
+  case C_INDEX_TOAST_SOUND:
+    if (inLimit(config_int(),0,1))
+      {
+        infoSettings.toastSound = config_int();
+      }
+    break;
+
+  case C_INDEX_ALERT_SOUND:
+    if (inLimit(config_int(),0,1))
+      {
+        infoSettings.alertSound = config_int();
       }
     break;
 #endif

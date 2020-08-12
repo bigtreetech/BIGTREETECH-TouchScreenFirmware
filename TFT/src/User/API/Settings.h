@@ -61,7 +61,9 @@ typedef struct
   uint16_t list_border_color;
   uint16_t list_button_color;
 
-  uint8_t  silent;
+  uint8_t  touchSound;
+  uint8_t  alertSound;
+  uint8_t  toastSound;
   uint8_t  auto_off;
   uint8_t  terminalACK;
   uint8_t  invert_axis[AXIS_NUM];
@@ -71,7 +73,6 @@ typedef struct
   uint8_t  persistent_info;
   uint8_t  file_listmode;
   uint8_t  ack_notification;
-  uint8_t  ack_buzzer;
 
   uint8_t  lcd_brightness;
   uint8_t  lcd_idle_brightness;

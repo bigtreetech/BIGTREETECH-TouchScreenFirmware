@@ -84,7 +84,10 @@ void readStoredPara(void)
   infoSettings.list_border_color    = byteToWord(data + (index += 4), 4);
   infoSettings.list_button_color    = byteToWord(data + (index += 4), 4);
 
-  infoSettings.silent               = byteToWord(data + (index += 4), 4);
+  infoSettings.touchSound           = byteToWord(data + (index += 4), 4);
+  infoSettings.toastSound           = byteToWord(data + (index += 4), 4);
+  infoSettings.alertSound           = byteToWord(data + (index += 4), 4);
+
   infoSettings.terminalACK          = byteToWord(data + (index += 4), 4);
   infoSettings.move_speed           = byteToWord(data + (index += 4), 4);
   infoSettings.knob_led_color       = byteToWord(data + (index += 4), 4);
@@ -92,7 +95,6 @@ void readStoredPara(void)
   infoSettings.persistent_info      = byteToWord(data + (index += 4), 4);
   infoSettings.file_listmode        = byteToWord(data + (index += 4), 4);
   infoSettings.ack_notification     = byteToWord(data + (index += 4), 4);
-  infoSettings.ack_buzzer           = byteToWord(data + (index += 4), 4);
 
   infoSettings.lcd_brightness       = byteToWord(data + (index += 4), 4);
   infoSettings.lcd_idle_brightness  = byteToWord(data + (index += 4), 4);
@@ -217,7 +219,10 @@ void storePara(void)
   wordToByte(infoSettings.list_border_color,          data + (index += 4));
   wordToByte(infoSettings.list_button_color,          data + (index += 4));
 
-  wordToByte(infoSettings.silent,                     data + (index += 4));
+  wordToByte(infoSettings.touchSound,                 data + (index += 4));
+  wordToByte(infoSettings.toastSound,                 data + (index += 4));
+  wordToByte(infoSettings.alertSound,                 data + (index += 4));
+
   wordToByte(infoSettings.terminalACK,                data + (index += 4));
   wordToByte(infoSettings.move_speed,                 data + (index += 4));
   wordToByte(infoSettings.knob_led_color,             data + (index += 4));
@@ -225,7 +230,6 @@ void storePara(void)
   wordToByte(infoSettings.persistent_info,            data + (index += 4));
   wordToByte(infoSettings.file_listmode,              data + (index += 4));
   wordToByte(infoSettings.ack_notification,           data + (index += 4));
-  wordToByte(infoSettings.ack_buzzer,                 data + (index += 4));
 
   wordToByte(infoSettings.lcd_brightness,             data + (index += 4));
   wordToByte(infoSettings.lcd_idle_brightness,        data + (index += 4));

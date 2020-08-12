@@ -245,7 +245,7 @@
  * Options:  0: Disabled    1: Enabled    2: Auto-detect [default]
  *
  */
-#define ENABLE_UBL_VALUE 2
+#define ENABLE_UBL_VALUE 1
 
 /**
  * Enable friendly probe offset language.
@@ -277,10 +277,10 @@
 #define LEVELING_POINT_XY_FEEDRATE 6000  // (mm/min) X and Y axes move feedrate
 #define LEVELING_POINT_Z_FEEDRATE  600   // (mm/min) Z axis move feedrate
 
-#define LEVELING_EDGE_DISTANCE_DISPLAY_ID    "X/Y"
-#define LEVELING_EDGE_DISTANCE_MIN_VALUE     10
-#define LEVELING_EDGE_DISTANCE_MAX_VALUE     100
-#define LEVELING_EDGE_DISTANCE_DEFAULT_VALUE LEVELING_EDGE_DISTANCE
+#define LEVELING_EDGE_DISTANCE_DISPLAY_ID   "X/Y"
+#define LEVELING_EDGE_DISTANCE_MIN          0
+#define LEVELING_EDGE_DISTANCE_MAX          100
+#define LEVELING_EDGE_DISTANCE_DEFAULT      LEVELING_EDGE_DISTANCE
 
 /**
  * Popup

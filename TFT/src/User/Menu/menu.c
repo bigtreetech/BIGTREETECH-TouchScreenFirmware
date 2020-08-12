@@ -151,7 +151,7 @@ void drawToast(bool redraw)
       cursound = sound_toast;
     }
 
-    if (!redraw && infoSettings.ack_buzzer == 1)
+    if (!redraw)
       BUZZER_PLAY(cursound);
 
     GUI_SetTextMode(GUI_TEXTMODE_TRANS);

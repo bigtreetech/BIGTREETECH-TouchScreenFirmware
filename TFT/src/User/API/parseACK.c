@@ -83,16 +83,14 @@ static float ack_second_value()
 
 void ackPopupInfo(const char *info)
 {
-  // play notification sound if buzzer for ACK is enabled
-  if (infoSettings.ack_buzzer == true)
-  {
-    if (info == errormagic)
-      BUZZER_PLAY(sound_error);
-    else if (info == echomagic && infoSettings.ack_notification == 1)
-      BUZZER_PLAY(sound_notify);
-  }
-
   DIALOG_TYPE d_type = DIALOG_TYPE_ERROR;
+
+  // play notification sound if buzzer for ACK is enabled
+
+  if (info == errormagic)
+    BUZZER_PLAY(sound_error);
+  else if (info == echomagic && infoSettings.ack_notification == 1)
+    BUZZER_PLAY(sound_notify);
 
   // set echo message in status screen
   if (info == echomagic)
@@ -111,7 +109,9 @@ void ackPopupInfo(const char *info)
 
  //show notification based on notificaiton settings
   if (infoSettings.ack_notification == 1 ||  info == errormagic)
+  {
     popupReminder(d_type, (u8 *) info, (u8 *) dmaL2Cache + ack_index);
+  }
   else if(infoSettings.ack_notification == 2)
     addToast(DIALOG_TYPE_INFO, dmaL2Cache); //show toast notificaion if turned on
 }
@@ -148,7 +148,10 @@ bool processKnownEcho(void)
       if (knownEcho[i].notifyType == ECHO_NOTIFY_TOAST)
         addToast(DIALOG_TYPE_INFO, dmaL2Cache);
       else if (knownEcho[i].notifyType == ECHO_NOTIFY_DIALOG)
+      {
+        BUZZER_PLAY(sound_notify);
         popupReminder(DIALOG_TYPE_INFO, (u8 *)echomagic, (u8 *)dmaL2Cache + ack_index);
+      }
       // display the echo message in the status bar
       statusScreen_setMsg((u8 *)echomagic, (u8 *)dmaL2Cache + ack_index);
     }
@@ -545,7 +548,7 @@ void parseACK(void)
                    textSelect(LABEL_CONFIRM), NULL, breakAndContinue, NULL,NULL);
       }
     // Parse UBL Complete message
-      else if(ack_seen("// UBL Complete"))
+      else if(ack_seen("UBL Complete"))
       {
         BUZZER_PLAY(sound_notify);
 
