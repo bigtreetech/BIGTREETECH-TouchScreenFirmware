@@ -711,12 +711,13 @@ void sendQueueCmd(void)
           if(cmd_seen('Z')) setParameter(P_ABL_STATE,1,cmd_float());
         break;
 
-        #ifdef NOZZLE_PAUSE_M601
-          case 601: //M601 pause print
+        #ifdef NOZZLE_PAUSE_M600_M601
+          case 600: //M600/M601 pause print
+          case 601:
             if (isPrinting())
             {
               setPrintPause(true, false);
-              // prevent sending M601 to marlin
+              // prevent sending M600/M601 to marlin
               purgeLastCmd();
               return;
             }
