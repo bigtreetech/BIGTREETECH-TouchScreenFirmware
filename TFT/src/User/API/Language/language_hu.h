@@ -13,7 +13,7 @@
     #define HU_SCREEN_SETTINGS        "Kijelző"
     #define HU_MACHINE_SETTINGS       "Gép"
     #define HU_FEATURE_SETTINGS       "Funkciók"
-    #define HU_SOUND                  "Sound"
+    #define HU_SOUND                  "Hangok"
     #define HU_TOUCH_SOUND            "Érintés hangja"
     #define HU_TOAST_SOUND            "Fűtő értesítések"
     #define HU_ALERT_SOUND            "Felugró riasztások"
