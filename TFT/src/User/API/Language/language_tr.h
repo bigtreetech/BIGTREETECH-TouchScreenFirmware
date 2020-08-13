@@ -64,7 +64,6 @@
     #define TR_PROCESS_RUNNING        "Process already running!"
     #define TR_PROCESS_COMPLETED      "Process completed!"
     #define TR_PROCESS_ABORTED        "Process aborted!"
-    #define TR_APPLY                  "Apply"
     #define TR_INC                    "Arttır"
     #define TR_DEC                    "Azalt"
     #define TR_NOZZLE                 "Nozül"

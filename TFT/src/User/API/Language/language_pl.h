@@ -64,7 +64,6 @@
     #define PL_PROCESS_RUNNING        "Process already running!"
     #define PL_PROCESS_COMPLETED      "Process completed!"
     #define PL_PROCESS_ABORTED        "Process aborted!"
-    #define PL_APPLY                  "Apply"
     #define PL_INC                    "Więcej"
     #define PL_DEC                    "Mniej"
     #define PL_NOZZLE                 "Głowica"

@@ -64,7 +64,6 @@
     #define ES_PROCESS_RUNNING        "Process already running!"
     #define ES_PROCESS_COMPLETED      "Process completed!"
     #define ES_PROCESS_ABORTED        "Process aborted!"
-    #define ES_APPLY                  "Apply"
     #define ES_INC                    "Aumentar"
     #define ES_DEC                    "Disminur"
     #define ES_NOZZLE                 "Punta"

@@ -64,7 +64,6 @@
     #define RU_PROCESS_RUNNING        "Идёт процесс!"
     #define RU_PROCESS_COMPLETED      "Процесс завершён!"
     #define RU_PROCESS_ABORTED        "Процесс прерван!"
-    #define RU_APPLY                  "Применить"
     #define RU_INC                    "Увеличить"
     #define RU_DEC                    "Уменьшить"
     #define RU_NOZZLE                 "Сопло"

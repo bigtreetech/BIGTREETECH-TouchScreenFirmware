@@ -64,7 +64,6 @@
     #define AM_PROCESS_RUNNING        "Process already running!"
     #define AM_PROCESS_COMPLETED      "Process completed!"
     #define AM_PROCESS_ABORTED        "Process aborted!"
-    #define AM_APPLY                  "Apply"
     #define AM_INC                    "Ավելացնել"
     #define AM_DEC                    "Նվազեցնել"
     #define AM_NOZZLE                 "Գլխիկ"

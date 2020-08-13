@@ -64,7 +64,6 @@
     #define JP_PROCESS_RUNNING        "Process already running!"
     #define JP_PROCESS_COMPLETED      "Process completed!"
     #define JP_PROCESS_ABORTED        "Process aborted!"
-    #define JP_APPLY                  "適用"
     #define JP_INC                    "増え"
     #define JP_DEC                    "減る"
     #define JP_NOZZLE                 "ノズル"

@@ -64,7 +64,6 @@
     #define SL_PROCESS_RUNNING        "Process already running!"
     #define SL_PROCESS_COMPLETED      "Process completed!"
     #define SL_PROCESS_ABORTED        "Process aborted!"
-    #define SL_APPLY                  "Uporabi"
     #define SL_INC                    "Več"
     #define SL_DEC                    "Manj"
     #define SL_NOZZLE                 "Šoba"

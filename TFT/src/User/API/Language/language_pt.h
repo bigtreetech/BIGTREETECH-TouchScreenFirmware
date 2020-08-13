@@ -64,7 +64,6 @@
     #define PT_PROCESS_RUNNING        "Process already running!"
     #define PT_PROCESS_COMPLETED      "Process completed!"
     #define PT_PROCESS_ABORTED        "Process aborted!"
-    #define PT_APPLY                  "Apply"
     #define PT_INC                    "Aumentar"
     #define PT_DEC                    "Diminuir"
     #define PT_NOZZLE                 "Nozzle"

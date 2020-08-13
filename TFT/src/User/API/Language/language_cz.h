@@ -64,7 +64,6 @@
     #define CZ_PROCESS_RUNNING        "Probíhá proces!"
     #define CZ_PROCESS_COMPLETED      "Proces dokončen!"
     #define CZ_PROCESS_ABORTED        "Proces přerušen!"
-    #define CZ_APPLY                  "Použít"
     #define CZ_INC                    "Přidat"
     #define CZ_DEC                    "Ubrat"
     #define CZ_NOZZLE                 "Tryska"

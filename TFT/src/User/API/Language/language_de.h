@@ -64,7 +64,6 @@
     #define DE_PROCESS_RUNNING        "Process already running!"
     #define DE_PROCESS_COMPLETED      "Process completed!"
     #define DE_PROCESS_ABORTED        "Process aborted!"
-    #define DE_APPLY                  "Apply"
     #define DE_INC                    "Erhöhen"
     #define DE_DEC                    "Verringern"
     #define DE_NOZZLE                 "Düse"

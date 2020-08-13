@@ -64,7 +64,6 @@
     #define DU_PROCESS_RUNNING        "Process bezig!"
     #define DU_PROCESS_COMPLETED      "Process voltooid!"
     #define DU_PROCESS_ABORTED        "Process geannuleerd!"
-    #define DU_APPLY                  "Pas toe"
     #define DU_INC                    "Verhogen"
     #define DU_DEC                    "Verlagen"
     #define DU_NOZZLE                 "Spuitneus"
