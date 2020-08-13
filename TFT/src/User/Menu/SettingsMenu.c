@@ -101,6 +101,7 @@ void menuInfo(void)
   while(!isPress()) loopBackEnd();
   while(isPress())  loopBackEnd();
 
+  GUI_RestoreColorDefault();
   infoMenu.cur--;
 }
 
