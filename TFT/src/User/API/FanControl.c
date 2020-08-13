@@ -4,74 +4,50 @@
 const char* fanID[MAX_FAN_COUNT] = FAN_DISPLAY_ID;
 const char* fanCmd[MAX_FAN_COUNT] = FAN_CMD;
 
-static u8   fanSpeed[MAX_FAN_COUNT] = {0};
-static u8   lastfanSpeed[MAX_FAN_COUNT] = {0};
-static u8   curfanSpeed[MAX_FAN_COUNT] = {0};
-static u8   curIndex = 0;
-static bool send_waiting[MAX_FAN_COUNT] = {false};
+static uint8_t fanSpeed[MAX_FAN_COUNT] = {0};
+static uint8_t fanSpeedPercent[MAX_FAN_COUNT] = {0};
+static uint8_t lastFanSpeed[MAX_FAN_COUNT] = {0};
+static bool    fan_send_waiting[MAX_FAN_COUNT] = {false};
 
 
-void fanSetSpeed(u8 i, u8 speed)
+void fanSetSpeed(uint8_t i, uint8_t speed)
 {
   fanSpeed[i] = speed;
 }
 
-u8 fanGetSpeed(u8 i)
+uint8_t fanGetSpeed(uint8_t i)
 {
   return fanSpeed[i];
 }
 
-void fanSetSpeedPercent(u8 i, int16_t percent)
+void fanSetSpeedPercent(uint8_t i, int16_t percent)
 {
-  percent = limitValue(0, percent, 100);
-  fanSpeed[i] = (percent * infoSettings.fan_max[i]) / 100;
+  fanSpeedPercent[i] = limitValue(0, percent, 100);
+  fanSpeed[i] = (fanSpeedPercent[i] * infoSettings.fan_max[i]) / 100;
 }
 
-u8 fanGetSpeedPercent(u8 i)
+uint8_t fanGetSpeedPercent(uint8_t i)
 {
-  return ((fanSpeed[i] * 100) / infoSettings.fan_max[i]);
+  return fanSpeedPercent[i];
 }
 
-void fanSetCurIndex(u8 i)
+void fanSetSendWaiting(uint8_t i, bool isWaiting)
 {
-  if(i >= infoSettings.fan_count) return;
-  curIndex = i;
-}
-
-u8 fanGetCurIndex(u8 i)
-{
-  return curIndex;
-}
-
-void fanSetSendWaiting(u8 i, bool isWaiting)
-{
-  send_waiting[i] = isWaiting;
-}
-
-bool fanSpeedChanged(u8 i)
-{
-  if (fanSpeed[i] != lastfanSpeed[i])
-  {
-    lastfanSpeed[i] = fanSpeed[i];
-    send_waiting[curIndex] = false;
-    return true;
-  }
-  else
-  {
-    send_waiting[curIndex] = true;
-    return false;
-  }
+  fan_send_waiting[i] = isWaiting;
 }
 
 void loopFan(void)
 {
-  if (curfanSpeed[curIndex] != fanSpeed[curIndex])
+  for (uint8_t i = 0; i < infoSettings.fan_count; i++)
   {
-    curfanSpeed[curIndex] = fanSpeed[curIndex];
-    if(send_waiting[curIndex] != true)
+    if (lastFanSpeed[i] != fanSpeed[i])
     {
-    send_waiting[curIndex] = true;
-    storeCmd("%s S%d\n", fanCmd[curIndex], fanSpeed[curIndex]);
+      lastFanSpeed[i] = fanSpeed[i];
+      if(fan_send_waiting[i] != true)
+      {
+        fan_send_waiting[i] = true;
+        storeCmd("%s ", fanCmd[i]);
+      }
     }
   }
 }

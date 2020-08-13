@@ -497,20 +497,25 @@ void sendQueueCmd(void)
 
         case 106: //M106
         {
-            u8 i = 0;
-            if(cmd_seen('P')) i = cmd_value();
-            if(cmd_seen('S'))
-            {
-              fanSetSpeed(i, cmd_value());
-            }
+          uint8_t i = cmd_seen('P') ? cmd_value() : 0;
+          if(cmd_seen('S'))
+          {
+            fanSetSpeed(i, cmd_value());
+          }
+          else if (!cmd_seen('\n'))
+          {
+            char buf[12];
+            sprintf(buf, "S%u\n", fanGetSpeed(i));
+            strcat(infoCmd.queue[infoCmd.index_r].gcode,(const char*)buf);
+            fanSetSendWaiting(i, false);
+          }
           break;
         }
 
         case 107: //M107
         {
-            u8 i = 0;
-            if(cmd_seen('P')) i = cmd_value();
-            fanSetSpeed(i, 0);
+          uint8_t i = cmd_seen('P') ? cmd_value() : 0;
+          fanSetSpeed(i, 0);
           break;
         }
 
