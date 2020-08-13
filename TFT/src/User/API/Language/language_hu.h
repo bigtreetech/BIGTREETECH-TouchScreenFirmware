@@ -232,7 +232,7 @@
     #define HU_RETRACT_LENGTH         "Visszahúzás hossz"
     #define HU_RETRACT_SWAP_LENGTH    "Csere hossz vissza."
     #define HU_RETRACT_Z_LIFT         "Z emelése visszahú."
-    #define HU_RETRACT_AUTO           "Automatikus Visszahúzás"
+    #define HU_RETRACT_AUTO           "Automata Visszahúzás"
     #define HU_RECOVER_FEEDRATE       "Előtolás javítás"
     #define HU_SWAP_RECOVER_FEEDRATE  "Csere előtolás jav."
     #define HU_RECOVER_LENGTH         "Hossz javítás"
