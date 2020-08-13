@@ -7,7 +7,7 @@
 #include "ff.h"
 
 #define  LINE_MAX_CHAR 100
-#define CONFIG_FILE_PATH "0:config.ini"
+#define CONFIG_FILE_PATH            "0:config.ini"
 
 #define CONFIG_UNIFIEDMENU          "unified_menu:"
 #define CONFIG_UART_BAUDRATE        "baudrate:"
@@ -27,8 +27,7 @@
 #define CONFIG_INVERT_AXIS          "invert_axis:"
 #define CONFIG_PERSISTENT_TEMP      "persistent_info:"
 #define CONFIG_LIST_MODE            "files_list_mode:"
-#define CONFIG_ACK_POPUP_TYPE       "ack_popup_type:"
-#define CONFIG_ACK_BUZZER           "ack_buzzer:"
+#define CONFIG_ACK_NOTIFICATION     "ack_notification:"
 //-----------------------------Marlin Mode Settings
 #define CONFIG_MODE                 "default_mode:"
 #define CONFIG_SERIAL_ON            "serial_always_on:"
@@ -88,7 +87,9 @@
 #define CONFIG_POWERLOSS_ZRAISE     "pl_z_raise:"
 #define CONFIG_BTT_MINIUPS          "btt_mini_ups:"
 //-----------------------------other device specific settings
-#define CONFIG_BUZZER_ON               "buzzer:"
+#define CONFIG_TOUCH_SOUND             "touch_sound:"
+#define CONFIG_TOAST_SOUND             "toast_sound:"
+#define CONFIG_ALERT_SOUND             "alert_sound:"
 #define CONFIG_KNOB_COLOR              "knob_led_color:"
 #define CONFIG_KNOB_LED_IDLE           "knob_led_idle:"
 #define CONFIG_BRIGHTNESS              "lcd_brightness:"

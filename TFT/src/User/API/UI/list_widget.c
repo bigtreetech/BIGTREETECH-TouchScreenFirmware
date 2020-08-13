@@ -8,13 +8,13 @@ static uint16_t list_max_items;
 static uint8_t list_max_page;
 static uint8_t list_cur_page;
 
-void listWidgetCreat(LABEL title, LISTITEM *items, uint16_t max_items, uint8_t cur_page)
+void listWidgetCreate(LABEL title, LISTITEM *items, uint16_t max_items, uint8_t cur_page)
 {
   listItems.title = title;
   totalItems = items;
   list_max_items = max_items;
   list_max_page = (list_max_items + LISTITEM_PER_PAGE - 1) / LISTITEM_PER_PAGE;
-  
+
   listWidgetSetCurPage(cur_page);
   menuDrawListPage(&listItems);
 }
@@ -75,7 +75,7 @@ void listWidgetRefreshMenu(void)
   menuDrawListPage(&listItems);
 }
 
-// 
+//
 void listWidgetRefreshItem(uint16_t item)
 {
   uint8_t cur_i = item % LISTITEM_PER_PAGE;

@@ -46,8 +46,8 @@ void menuUnifiedMove(void)
      {ICON_MOVE,                    LABEL_MOVE},
      {ICON_LEVELING,                LABEL_ABL},
      {ICON_MANUAL_LEVEL,            LABEL_LEVELING},
+     {ICON_BABYSTEP,                LABEL_BABYSTEP},
      {ICON_DISABLE_STEPPERS,        LABEL_DISABLE_STEPPERS},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BACK,                    LABEL_BACK}}
   };
@@ -98,14 +98,7 @@ void menuUnifiedMove(void)
       case KEY_ICON_2:
         if (infoMachineSettings.autoLevel == 1)
         {
-          if (infoMachineSettings.enableubl == 1)
-          {
-            infoMenu.menu[++infoMenu.cur] = menuAutoLevelingUBL;
-          }
-          else
-          {
-            infoMenu.menu[++infoMenu.cur] = menuAutoLeveling;
-          }
+          infoMenu.menu[++infoMenu.cur] = menuAutoLeveling;
         }
         else
         {
@@ -121,6 +114,10 @@ void menuUnifiedMove(void)
         break;
 
       case KEY_ICON_4:
+        infoMenu.menu[++infoMenu.cur] = menuBabyStep;
+        break;
+
+      case KEY_ICON_5:
         storeCmd("M84\n");
         break;
 

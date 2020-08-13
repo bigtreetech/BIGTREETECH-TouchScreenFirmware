@@ -47,7 +47,7 @@ void menuBaudrate(void)
     totalItems[i].titlelabel.address = (uint8_t *)item_baudrate_str[i];
   }
 
-  listWidgetCreat(title, totalItems, COUNT(totalItems), cur_item / LISTITEM_PER_PAGE);
+  listWidgetCreate(title, totalItems, COUNT(totalItems), cur_item / LISTITEM_PER_PAGE);
 
   while (infoMenu.menu[infoMenu.cur] == menuBaudrate)
   {

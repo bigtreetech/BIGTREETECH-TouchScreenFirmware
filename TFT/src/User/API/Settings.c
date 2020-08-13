@@ -34,7 +34,10 @@ void infoSettingsReset(void)
   infoSettings.list_border_color    = lcd_colors[LISTVIEW_BORDER_COLOR];
   infoSettings.list_button_color    = lcd_colors[LISTVIEW_ICON_COLOR];
 
-  infoSettings.silent               = DISABLED;
+  infoSettings.touchSound           = ENABLED;
+  infoSettings.toastSound           = ENABLED;
+  infoSettings.alertSound           = ENABLED;
+
   infoSettings.terminalACK          = DISABLED;
   infoSettings.move_speed           = ENABLED;
   infoSettings.knob_led_color       = STARTUP_KNOB_LED_COLOR;
@@ -44,8 +47,7 @@ void infoSettingsReset(void)
   infoSettings.send_cancel_gcode    = ENABLED;
   infoSettings.persistent_info      = ENABLED;
   infoSettings.file_listmode        = ENABLED;
-  infoSettings.ack_popup_type       = ENABLED;
-  infoSettings.ack_buzzer           = ENABLED;
+  infoSettings.ack_notification     = ACK_NOTIFICATION_STYLE;
 
   infoSettings.lcd_brightness       = DEFAULT_LCD_BRIGHTNESS;
   infoSettings.lcd_idle_brightness  = DEFAULT_LCD_IDLE_BRIGHTNESS;
@@ -200,4 +202,11 @@ void setupMachine(void)
     infoMachineSettings.long_filename_support = DISABLED;
   }
   mustStoreCmd("M503 S0\n");
+}
+
+float flashUsedPercentage(void)
+{
+  uint32_t total = W25Qxx_ReadCapacity();
+  float percent = ((float)FLASH_USED * 100) / total;
+  return percent;
 }

@@ -1,6 +1,6 @@
 #ifndef _CONFIGRATION_H_
 #define _CONFIGRATION_H_
-#define CONFIG_VERSION 20200724
+#define CONFIG_VERSION 20200810
 //===========================================================================
 //============================= General Settings ============================
 //===========================================================================
@@ -99,7 +99,6 @@
 
 /**
  * This setting determines the communication speed of the printer.
- *
  * 250000 works in most cases, but you might try a lower speed if
  * you commonly experience drop-outs during host printing.
  * You may try up to 1000000 to speed up SD file transfer.
@@ -110,9 +109,7 @@
 
 /**
  * Default Touch Mode Language
- *
  * Select the language to display on the LCD while in Touch Mode.
- *
  * Options: ARMENIAN, CHINESE, CZECH, DUTCH, ENGLISH, FRENCH, GERMAN, HUNGARIAN, ITALIAN, JAPANESE, POLISH, PORTUGUESE, RUSSIAN, SLOVAK, SPAIN, CATALAN
  */
 #define DEFAULT_LANGUAGE ENGLISH
@@ -133,6 +130,27 @@
 #define BUZZER_FREQUENCY_DURATION_MS 20 // Default 20
 #define BUZZER_FREQUENCY_HZ 10000       // Default 10000, 20Hz to 60KHz
 #define BUZZER_STOP_LEVEL false
+
+/**
+ * Toast notification duration (in ms)
+ *  set the duration for displaying toast notification on top of the screen
+ */
+#define TOAST_DURATION 3000
+
+/**
+ * Notification style for ACK messages
+ * Set the notification style to use for displaying the ACK messages which start with 'echo:'
+ *
+ * NOTE: The OFF value is applied to any ACK message type (e.g. even to known echo ACK).
+ *      It means that any kind of ACK message is silently discard
+ *
+ * Options: [OFF: 0, POPUP: 1, TOAST: 2]
+ *  OFF:   No notification. The message is ignored.
+ *  POPUP: Display a popup window for user confirmation.
+ *  TOAST: A Toast notification is displayed for few seconds. No user interaction is needed
+ *
+ */
+#define ACK_NOTIFICATION_STYLE 1
 
 /**
  * Default Touch Mode Color Options
@@ -227,11 +245,11 @@
  * Options:  0: Disabled    1: Enabled    2: Auto-detect [default]
  *
  */
-#define ENABLE_UBL_VALUE 2
+#define ENABLE_UBL_VALUE 1
 
 /**
- * Enable friendly probe offset language
- * 
+ * Enable friendly probe offset language.
+ *
  * Decrease/increase and "-" & "+" icons are replaced with down/up and friendly icons
  *
  * Options:  0: Disabled    1: Enabled
@@ -240,11 +258,11 @@
 
 /**
  * Enable quick EEPROM save/load/reset button
- * 
+ *
  * This will enable a handy button in the (settings > machine) menu
- * 
+ *
  * Note: if disabled, EEPROM operations can also be accessed in the (settings > machine > parameters) menu
- * 
+ *
  * Options:  0: Disabled    1: Enabled
  */
 #define QUICK_EEPROM_BUTTON 0
@@ -259,15 +277,15 @@
 #define LEVELING_POINT_XY_FEEDRATE 6000  // (mm/min) X and Y axes move feedrate
 #define LEVELING_POINT_Z_FEEDRATE  600   // (mm/min) Z axis move feedrate
 
-#define LEVELING_EDGE_DISTANCE_DISPLAY_ID    "X/Y"
-#define LEVELING_EDGE_DISTANCE_MIN_VALUE     10
-#define LEVELING_EDGE_DISTANCE_MAX_VALUE     100
-#define LEVELING_EDGE_DISTANCE_DEFAULT_VALUE LEVELING_EDGE_DISTANCE
+#define LEVELING_EDGE_DISTANCE_DISPLAY_ID   "X/Y"
+#define LEVELING_EDGE_DISTANCE_MIN          0
+#define LEVELING_EDGE_DISTANCE_MAX          100
+#define LEVELING_EDGE_DISTANCE_DEFAULT      LEVELING_EDGE_DISTANCE
 
 /**
  * Popup
  */
-#define POPUP_NOTIFICATION_DURATION 1500;                  // expressed in ms. E.g. 1500 corresponds to 1.5 seconds
+#define POPUP_NOTIFICATION_DURATION 3000;                  // expressed in ms. E.g. 1500 corresponds to 1.5 seconds
 
 /**
  * Z Fade
