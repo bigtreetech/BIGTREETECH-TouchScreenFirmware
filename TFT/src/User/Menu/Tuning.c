@@ -32,8 +32,9 @@ void menuTuning(void)
         break;
 
       case KEY_ICON_1:
-        storeCmd("G90\nG0 F3000 X0 Y0 Z100\n");            // present extruder
-        storeCmd("M83\nG1 F50\nG1 E100\nM82\n");           // extrude
+        infoMenu.menu[++infoMenu.cur] = menuTuneExtruder;
+        //storeCmd("G90\nG0 F3000 X0 Y0 Z100\n");            // present extruder
+        //storeCmd("M83\nG1 F50\nG1 E100\nM82\n");           // extrude
         break;
 
       case KEY_ICON_7:
