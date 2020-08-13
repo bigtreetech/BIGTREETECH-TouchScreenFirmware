@@ -64,7 +64,6 @@
     #define EN_PROCESS_RUNNING        "Process already running!"
     #define EN_PROCESS_COMPLETED      "Process completed!"
     #define EN_PROCESS_ABORTED        "Process aborted!"
-    #define EN_APPLY                  "Apply"
     #define EN_INC                    "Increase"
     #define EN_DEC                    "Decrease"
     #define EN_NOZZLE                 "Nozzle"

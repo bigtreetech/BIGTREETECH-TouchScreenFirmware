@@ -64,7 +64,6 @@
     #define SK_PROCESS_RUNNING        "Process already running!"
     #define SK_PROCESS_COMPLETED      "Process completed!"
     #define SK_PROCESS_ABORTED        "Process aborted!"
-    #define SK_APPLY                  "Apply"
     #define SK_INC                    "Pridať"
     #define SK_DEC                    "Ubrať"
     #define SK_NOZZLE                 "Tryska"

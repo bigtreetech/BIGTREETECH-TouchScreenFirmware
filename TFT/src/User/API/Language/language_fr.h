@@ -64,7 +64,6 @@
     #define FR_PROCESS_RUNNING        "Processus déjà en cours"
     #define FR_PROCESS_COMPLETED      "Processus terminé !"
     #define FR_PROCESS_ABORTED        "Processus annulé !"
-    #define FR_APPLY                  "Appliquer"
     #define FR_INC                    "Plus"
     #define FR_DEC                    "Moins"
     #define FR_NOZZLE                 "Buse"

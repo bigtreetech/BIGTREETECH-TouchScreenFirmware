@@ -64,7 +64,6 @@
     #define HU_PROCESS_RUNNING        "Folyamat fut!"
     #define HU_PROCESS_COMPLETED      "Folyamat befejezve!"
     #define HU_PROCESS_ABORTED        "Folyamat megszakítva!"
-    #define HU_APPLY                  "Alkalmaz"
     #define HU_INC                    "Növel"
     #define HU_DEC                    "Csökkent"
     #define HU_NOZZLE                 "Fej"

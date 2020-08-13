@@ -64,7 +64,6 @@
     #define CA_PROCESS_RUNNING        "Process already running!"
     #define CA_PROCESS_COMPLETED      "Process completed!"
     #define CA_PROCESS_ABORTED        "Process aborted!"
-    #define CA_APPLY                  "Aplicar"
     #define CA_INC                    "Augmentar"
     #define CA_DEC                    "Disminur"
     #define CA_NOZZLE                 "Nozzle"

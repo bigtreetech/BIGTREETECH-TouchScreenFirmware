@@ -64,7 +64,6 @@
     #define IT_PROCESS_RUNNING        "Process already running!"
     #define IT_PROCESS_COMPLETED      "Process completed!"
     #define IT_PROCESS_ABORTED        "Process aborted!"
-    #define IT_APPLY                  "Apply"
     #define IT_INC                    "Incrementa"
     #define IT_DEC                    "Diminuisci"
     #define IT_NOZZLE                 "Nozzle"

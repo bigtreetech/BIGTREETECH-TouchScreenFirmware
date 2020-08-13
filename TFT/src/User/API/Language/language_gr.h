@@ -64,7 +64,6 @@
     #define GR_PROCESS_RUNNING        "Process already running!"
     #define GR_PROCESS_COMPLETED      "Process completed!"
     #define GR_PROCESS_ABORTED        "Process aborted!"
-    #define GR_APPLY                  "Apply"
     #define GR_INC                    "Αύξηση"
     #define GR_DEC                    "Μείωση"
     #define GR_NOZZLE                 "Στόμιο"

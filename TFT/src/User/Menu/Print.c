@@ -409,6 +409,7 @@ void menuPrint(void)
             infoMenu.menu[++infoMenu.cur] = menuPrintFromSource;   //TODO: fix here,  onboard sd card PLR feature
             goto selectEnd;
           }
+          break;
 
       case KEY_ICON_7:
         infoMenu.cur--;
