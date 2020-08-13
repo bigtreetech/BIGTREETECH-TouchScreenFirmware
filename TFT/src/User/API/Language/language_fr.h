@@ -227,7 +227,7 @@
     #define FR_SETTING_RESET          "RAZ des paramètres"
     #define FR_SETTING_RESTORE        "Restaurer les paramètres"
     #define FR_EEPROM_SAVE_INFO       "Enregistrer les paramètres\ndans l'EEPROM ?"
-    #define FR_EEPROM_RESTORE_INFO    "Restaurer les paramètres\nde l'EEPROM?"
+    #define FR_EEPROM_RESTORE_INFO    "Restaurer les paramètres\nde l'EEPROM ?"
     #define FR_EEPROM_RESET_INFO      "Réinitialiser l'EEPROM\naux paramètres d'origine\nde l'imprimante ?"
     #define FR_RETRACT_FEEDRATE       "Vitesse"
     #define FR_RETRACT_LENGTH         "Longueur"
