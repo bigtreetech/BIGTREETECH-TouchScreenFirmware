@@ -265,7 +265,7 @@
  *
  * Options:  0: Disabled    1: Enabled
  */
-#define QUICK_EEPROM_BUTTON 0
+#define QUICK_EEPROM_BUTTON 1
 
 /**
  * Manual Leveling
