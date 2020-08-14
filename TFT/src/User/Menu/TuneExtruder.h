@@ -9,5 +9,6 @@
 #include "Temperature.h"
 
 void menuTuneExtruder(void);
+void menuNewExtruderESteps(void);
 
 #endif
