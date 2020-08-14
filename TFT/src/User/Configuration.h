@@ -317,7 +317,7 @@
 
 // LCD Encoder
 // In case LCD Encoder's sliding buttons (pin LCD_ENCA_PIN and LCD_ENCB_PIN)
-// don't produce any move on menu, try to increase the delay (e.g. 64)
+// don't produce any movement on menu, try to increase the delay (e.g. 64)
 #define LCD_ENCODER_DELAY 8                                // expressed in us. E.g. 8 corresponds to 0,000008 seconds
 
 // Power Supply

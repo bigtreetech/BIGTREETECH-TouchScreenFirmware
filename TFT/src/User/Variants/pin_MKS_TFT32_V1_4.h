@@ -107,8 +107,8 @@
 //     If SPI3_PIN_SMART_USAGE is disabled, the Power Off and Filament Runout features will be no more available in Marlin mode.
 //  3) To reduce the effect of EMI, it is strongly suggested to use single cables (possibly shielded) for all the SPI pins
 //     (SPI3_SCK, SPI3_MOSI_PIN and SPI3_CS_PIN). For the encoder pins, a flat cable can be used.
-//  4) In case LCD Encoder's sliding buttons (pin LCD_ENCA_PIN and LCD_ENCB_PIN) don't produce any move on menu, try to increase the delay
-//     LCD_ENCODER_DELAY in Configuration.h (e.g. 64).
+//  4) In case LCD Encoder's sliding buttons (pin LCD_ENCA_PIN and LCD_ENCB_PIN) don't produce any movement on menu,
+//     try to increase the delay LCD_ENCODER_DELAY in Configuration.h (e.g. 64).
 //
 //
 // ------------------------------------
