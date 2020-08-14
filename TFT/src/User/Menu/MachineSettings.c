@@ -182,19 +182,6 @@ void menuRGBSettings(void)
   }
 }
 
-#define ITEM_MACHINE_SETTINGS_SUBMENU_NUM 3
-
-ITEM itemMachineSettingsSubmenu[ITEM_MACHINE_SETTINGS_SUBMENU_NUM] = {
-  // icon                         label
-  {ICON_EEPROM_SAVE,              LABEL_SAVE},
-  {ICON_EEPROM_RESTORE,           LABEL_RESTORE},
-  {ICON_EEPROM_RESET,             LABEL_RESET},
-};
-
-#if QUICK_EEPROM_BUTTON == 1
-static uint8_t curSubmenu = 0;
-#endif
-
 void menuMachineSettings(void)
 {
   // 1 title, ITEM_PER_PAGE items (icon + label)
@@ -215,6 +202,17 @@ void menuMachineSettings(void)
   KEY_VALUES key_num = KEY_IDLE;
 
 #if QUICK_EEPROM_BUTTON == 1
+  #define ITEM_MACHINE_SETTINGS_SUBMENU_NUM 3
+
+  ITEM itemMachineSettingsSubmenu[ITEM_MACHINE_SETTINGS_SUBMENU_NUM] = {
+    // icon                         label
+    {ICON_EEPROM_SAVE,              LABEL_SAVE},
+    {ICON_EEPROM_RESTORE,           LABEL_RESTORE},
+    {ICON_EEPROM_RESET,             LABEL_RESET},
+  };
+
+  static uint8_t curSubmenu = 0;
+
   if (infoMachineSettings.EEPROM == 1)
   {
     machineSettingsItems.items[KEY_ICON_5].icon = ICON_PAGE_DOWN;
