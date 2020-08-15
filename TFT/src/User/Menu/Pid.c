@@ -250,6 +250,7 @@ void menuPid(void)
     switch (key_num)
     {
       case KEY_ICON_0:
+      {
         if (pidHeater.T[pidHeater.toolIndex].target > 0)
           pidHeater.T[pidHeater.toolIndex].target =
             limitValue(0, pidHeater.T[pidHeater.toolIndex].target - pidDegree[curDegree], infoSettings.max_temp[pidHeater.toolIndex]);
@@ -263,9 +264,10 @@ void menuPid(void)
             limitValue(0, pidHeater.T[pidHeater.toolIndex].target + pidDegree[curDegree], infoSettings.max_temp[pidHeater.toolIndex]);
 
         pidTemperatureReDraw(true);
-        break;
+      }break;
 
       case KEY_ICON_4:
+      {
         do
         {
           pidHeater.toolIndex = (pidHeater.toolIndex + 1) % MAX_HEATER_COUNT;
@@ -284,9 +286,10 @@ void menuPid(void)
         pidItems.items[key_num] = itemPidDegree[curDegree];
 
         menuDrawItem(&pidItems.items[key_num], key_num);
-        break;
+      }break;
 
       case KEY_ICON_6:
+      {
         if (pidRunning)
         {
           addToast(DIALOG_TYPE_ERROR, (char*)textSelect(LABEL_PROCESS_RUNNING));
@@ -305,13 +308,14 @@ void menuPid(void)
               textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), pidStart, NULL, NULL);
           }
         }
-        break;
+      }break;
 
       case KEY_ICON_7:
         infoMenu.cur--;
         break;
 
       default:
+      {
         #if LCD_ENCODER_SUPPORT
           if(encoderPosition)
           {
@@ -329,7 +333,7 @@ void menuPid(void)
             encoderPosition = 0;
           }
         #endif
-        break;
+      }break;
     }
 
     pidCheckTimeout();

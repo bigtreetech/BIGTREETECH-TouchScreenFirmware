@@ -2,6 +2,20 @@
 
 #include "includes.h"
 
+MENUITEMS tuneExtruderItems = {
+  // title
+  LABEL_HEAT,
+  // icon                       label
+  { {ICON_DEC,                  LABEL_DEC},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_INC,                  LABEL_INC},
+    {ICON_NOZZLE,               LABEL_NOZZLE},
+    {ICON_5_DEGREE,             LABEL_5_DEGREE},
+    {ICON_EXTRUDE_100,          LABEL_EXTRUDE_100},
+    {ICON_BACK,                 LABEL_BACK},}
+};
+
 #define TUNE_EXTRUDER_NUM 6
 
 const ITEM tuneExtruderTool[] = {
@@ -42,31 +56,6 @@ void showExtrudeTemperature(uint8_t index)
   setLargeFont(false);
 }
 
-// Esteps part
-static u8 measured_length = 20;
-static u8 old_steps_mm = 0;
-
-void showNewESteps(void)
-{
-  char tempstr[20];
-
-  sprintf(tempstr, "%-15s", measured_length);
-  GUI_DispString(exhibitRect.x0, exhibitRect.y0, (u8 *)tempstr);
-
-  sprintf(tempstr, "%dmm", measured_length);
-  setLargeFont(true);
-  GUI_DispString(exhibitRect.x0, exhibitRect.y0, (u8 *)tempstr);
-  setLargeFont(false);
-}
-
-void updateExtruderESteps(void)
-{
-  infoMenu.menu[++infoMenu.cur] = menuNewExtruderESteps;
-}
-
-// end Esteps part
-
-
 void turnHeaterOff(void)
 {
     heatSetTargetTemp(c_heater, 0);
@@ -78,24 +67,54 @@ void returnToTuning(void)
     infoMenu.cur--;
 }
 
+// Esteps part
+static u8 measured_length = 20;
+static u8 old_esteps = 0;
+static u8 new_esteps = 0;
+
+void showNewESteps(void)
+{
+  char tempstr[20];
+
+  GUI_DispString(exhibitRect.x0, exhibitRect.y0, "Measured length:");
+
+  sprintf(tempstr, "%dmm", measured_length);
+  setLargeFont(true);
+  GUI_DispStringInPrect(&exhibitRect, (u8 *)tempstr);
+  setLargeFont(false);
+
+  sprintf(tempstr, "Old esteps: %d", old_esteps);
+  GUI_DispString(exhibitRect.x0, BYTE_HEIGHT * 5, (u8 *)tempstr);
+  sprintf(tempstr, "New esteps: %d", new_esteps);
+  GUI_DispString(exhibitRect.x0,  BYTE_HEIGHT * 6, (u8 *)tempstr);
+}
+
+
+void updateExtruderESteps(void)
+{
+  heatSetTargetTemp(c_heater, 0);
+  infoMenu.menu[++infoMenu.cur] = menuNewExtruderESteps;
+}
+
+void extrudeFilament()
+{
+  storeCmd("G90\nG0 F3000 X0 Y0\n");            // present extruder
+  storeCmd("M83\nG1 F50\nG1 E100\nM82\n");      // extrude
+  GUI_DispString(exhibitRect.x0, BYTE_HEIGHT * 6, "Extruding 100mm...");
+  Delay_ms(1000);
+  char tmpBuf[120];
+  sprintf(tmpBuf, "Extruding done? measure the length.\n"
+                  "Exactly 20mm? Press '%s'\n"
+                  "Not exactly 20mm? Press '%s'", textSelect(LABEL_READY),textSelect(LABEL_TUNING));
+  showDialog(DIALOG_TYPE_QUESTION, textSelect(tuneExtruderItems.title.index), (u8*) tmpBuf,
+    textSelect(LABEL_READY), textSelect(LABEL_TUNING), turnHeaterOff, updateExtruderESteps, NULL); //LABEL_CONTINUE should be no.
+}
+
+// end Esteps part
 
 
 void menuTuneExtruder(void)
 {
-  MENUITEMS tuneExtruderItems = {
-    // title
-    LABEL_HEAT,
-    // icon                       label
-    { {ICON_DEC,                  LABEL_DEC},
-      {ICON_BACKGROUND,           LABEL_BACKGROUND},
-      {ICON_BACKGROUND,           LABEL_BACKGROUND},
-      {ICON_INC,                  LABEL_INC},
-      {ICON_NOZZLE,               LABEL_NOZZLE},
-      {ICON_5_DEGREE,             LABEL_5_DEGREE},
-      {ICON_EXTRUDE_100,          LABEL_EXTRUDE_100},
-      {ICON_BACK,                 LABEL_BACK},}
-  };
-
   int16_t lastCurrent = heatGetCurrentTemp(c_heater);
   int16_t lastTarget = heatGetTargetTemp(c_heater);
 
@@ -147,24 +166,17 @@ void menuTuneExtruder(void)
         {
             //sprintf(tmpBuf, "%s\n %s", textSelect(LABEL_TIMEOUT_REACHED), textSelect(LABEL_PROCESS_ABORTED));
             sprintf(tmpBuf, "Desired temperature too low!\nMinimum temperature: %d C", infoSettings.min_ext_temp);
-            popupNotification(DIALOG_TYPE_ALERT, textSelect(tuneExtruderItems.title.index), (u8*) tmpBuf); //textSelect(LABEL_INVALID_VALUE));
+            popupReminder(DIALOG_TYPE_ALERT, textSelect(tuneExtruderItems.title.index), (u8*) tmpBuf); //textSelect(LABEL_INVALID_VALUE));
             break;
         }
         if(heatGetCurrentTemp(c_heater) < heatGetTargetTemp(c_heater) - 1)
         {
-            popupNotification(DIALOG_TYPE_ALERT, textSelect(tuneExtruderItems.title.index), "Temperature is not yet at the desired value"); //textSelect(LABEL_INVALID_VALUE));
+            popupReminder(DIALOG_TYPE_ALERT, textSelect(tuneExtruderItems.title.index), "Temperature is not yet at the desired value"); //textSelect(LABEL_INVALID_VALUE));
             break;
         } else {
-            sprintf(tmpBuf, "Mark 120 mm on your fillament\nPress '%s' when ready", LABEL_CONFIRM);
-            showDialog(DIALOG_TYPE_QUESTION, textSelect(tuneExtruderItems.title.index), tmpBuf,
-              textSelect(LABEL_CONFIRM), "", NULL, NULL, NULL);
-            sprintf(tmpBuf, "When extruding is done, press '%s'", LABEL_CONFIRM);
-            showDialog(DIALOG_TYPE_QUESTION, textSelect(tuneExtruderItems.title.index), tmpBuf,
-              textSelect(LABEL_CONFIRM), "", NULL, NULL, NULL);
-            //Turn of the heater. It's not needed anymore
-            heatSetTargetTemp(c_heater, 0);
-            showDialog(DIALOG_TYPE_QUESTION, textSelect(tuneExtruderItems.title.index), "Measure the length to the marked point.\n Is it 20mm?",
-              textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), NULL, updateExtruderESteps, NULL);
+            sprintf(tmpBuf, "Mark 120 mm on your fillament\nPress '%s' when ready", textSelect(LABEL_EXTRUDE));
+            showDialog(DIALOG_TYPE_QUESTION, textSelect(tuneExtruderItems.title.index), (u8*) tmpBuf,
+              textSelect(LABEL_EXTRUDE), textSelect(LABEL_CANCEL), extrudeFilament, NULL, NULL);
         }
       }break;
 
@@ -214,17 +226,18 @@ void menuNewExtruderESteps(void)
   // When pressing save to eeprom the new steps will be saved.
    MENUITEMS newExtruderESteps = {
     // title
-    "What is the distance left?", //LABEL_HEAT,
+    "Adjust E-Steps", //LABEL_HEAT,
     // icon                       label
     { {ICON_DEC,                  LABEL_DEC},
       {ICON_BACKGROUND,           LABEL_BACKGROUND},
       {ICON_BACKGROUND,           LABEL_BACKGROUND},
       {ICON_INC,                  LABEL_INC},
       {ICON_EEPROM_SAVE,          LABEL_EEPROM_SAVE_INFO},
-      {ICON_BACKGROUND,           LABEL_5_DEGREE},
+      {ICON_BACKGROUND,           LABEL_BACKGROUND},
       {ICON_BACKGROUND,           LABEL_BACKGROUND},
       {ICON_BACK,                 LABEL_BACK},}
   };
   menuDrawPage(&newExtruderESteps);
   showNewESteps();
+  while(1);
 }
