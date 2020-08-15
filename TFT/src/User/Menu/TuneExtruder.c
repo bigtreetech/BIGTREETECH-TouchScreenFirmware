@@ -69,13 +69,13 @@ void returnToTuning(void)
 
 // Esteps part
 static float measured_length = 20.0;
-static float old_esteps = 98.2;
-static float new_esteps = 98.2;
+static float old_esteps = 93.0;
+static float new_esteps = 0;
 
 void showNewESteps(void)
 {
   //First we calculate the new E-step value:
-  new_esteps = 100 * old_esteps / measured_length;
+  new_esteps = (100 * old_esteps) / (100 - (measured_length - 20));
 
   char tempstr[20];
 
