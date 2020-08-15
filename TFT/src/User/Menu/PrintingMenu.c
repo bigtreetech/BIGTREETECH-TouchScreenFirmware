@@ -56,8 +56,8 @@ LABEL_BACKGROUND,
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
   {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_PAUSE,                LABEL_PAUSE},
   {ICON_BABYSTEP,             LABEL_BABYSTEP},
+  {ICON_PAUSE,                LABEL_PAUSE},
   {ICON_MORE,                 LABEL_MORE},
   {ICON_STOP,                 LABEL_STOP},}
 };
@@ -150,15 +150,6 @@ void menuBeforePrinting(void)
   printingItems.items[KEY_ICON_7].icon = ICON_STOP;
   printingItems.items[KEY_ICON_7].label.index = LABEL_STOP;
 }
-
-
-void resumeToPause(bool is_pause)
-{
-  if(infoMenu.menu[infoMenu.cur] != menuPrinting) return;
-  printingItems.items[key_pause] = itemIsPause[is_pause];
-  menuDrawItem(&printingItems.items[key_pause],key_pause);
-}
-
 
 const GUI_RECT progressRect = {1*SPACE_X_PER_ICON, 0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y + ICON_HEIGHT/4,
                                3*SPACE_X_PER_ICON, 0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y + ICON_HEIGHT*3/4};
@@ -267,7 +258,7 @@ void reDrawProgress(int icon_pos)
 void reDrawLayer(int icon_pos)
 {
   char tempstr[10];
-  my_sprintf(tempstr, "%.2fMM",coordinateGetAxisTarget(Z_AXIS));
+  my_sprintf(tempstr, "%.2fmm",coordinateGetAxisTarget(Z_AXIS));
 
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
@@ -310,18 +301,16 @@ void toggleinfo(void)
 void printingDrawPage(void)
 {
   //  Scroll_CreatePara(&titleScroll, infoFile.title,&titleRect);  //
-  if(get_Pre_Icon() == true){
-    key_pause = 5;
-    //printingItems.items[key_pause - 1] = itemBlank;
+  key_pause = 5;
+  if(infoPrinting.model_icon){
     printingItems.items[key_pause - 1].icon = ICON_PREVIEW;
-    printingItems.items[key_pause - 1].label.index = LABEL_BACKGROUND;
   }
   else{
-    key_pause = 4;
-    printingItems.items[key_pause+1] = itemBabyStep;
+    printingItems.items[key_pause - 1].icon = ICON_BABYSTEP;
   }
 
-    printingItems.items[key_pause] = itemIsPause[isPause()];
+  printingItems.items[key_pause - 1].label.index = LABEL_BABYSTEP;
+  printingItems.items[key_pause] = itemIsPause[isPause()];
 
   menuDrawPage(&printingItems);
   reValueNozzle(EXT_ICON_POS);
@@ -336,12 +325,12 @@ void printingDrawPage(void)
 
 void menuPrinting(void)
 {
-  KEY_VALUES  key_num;
-  u32         time = 0;
-  HEATER      nowHeat;
-  float       curLayer = 0;
-  u8          nowFan[MAX_FAN_COUNT] = {0};
-  uint16_t    curspeed[2] = {0};
+  uint8_t   nowFan[MAX_FAN_COUNT] = {0};
+  uint16_t  curspeed[2] = {0};
+  uint32_t  time = 0;
+  HEATER    nowHeat;
+  float     curLayer = 0;
+  bool      lastPause = isPause();
   memset(&nowHeat, 0, sizeof(HEATER));
 
   printingDrawPage();
@@ -415,24 +404,23 @@ void menuPrinting(void)
       reDrawSpeed(SPD_ICON_POS);
     }
 
-    key_num = menuKeyGetValue();
+    if (lastPause != isPause()) {
+      lastPause = isPause();
+      printingItems.items[key_pause] = itemIsPause[lastPause];
+      menuDrawItem(&printingItems.items[key_pause],key_pause);
+    }
+
+    toggleinfo();
+
+    KEY_VALUES key_num = menuKeyGetValue();
     switch(key_num)
     {
       case KEY_ICON_4:
-        if(get_Pre_Icon() != true){
-        setPrintPause(!isPause(),false);
-        resumeToPause(isPause());
-        }
+        infoMenu.menu[++infoMenu.cur] = menuBabyStep;
         break;
 
       case KEY_ICON_5:
-        if(get_Pre_Icon() == true){
-        setPrintPause(!isPause(),false);
-        resumeToPause(isPause());
-        }
-        else{
-        infoMenu.menu[++infoMenu.cur] = menuBabyStep;
-        }
+        setPrintPause(!isPause(), false);
         break;
 
       case KEY_ICON_6:
@@ -445,14 +433,12 @@ void menuPrinting(void)
         else
         {
           exitPrinting();
-
           infoMenu.cur--;
         }
         break;
 
       default :break;
     }
-    toggleinfo();
     loopProcess();
   }
 }

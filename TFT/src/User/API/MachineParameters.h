@@ -15,9 +15,12 @@ P_BUMPSENSITIVITY,
 P_FWRETRACT,
 P_FWRECOVER,
 P_LIN_ADV,
+P_ABL_STATE,
+P_AUTO_RETRACT,
 // Keep below items always at the end
-P_RESET_SETTINGS,
+P_SAVE_SETTINGS,
 P_RESTORE_SETTINGS,
+P_RESET_SETTINGS,
 P_ITEMSCOUNT
 }PARAMETER_NAME;
 
@@ -53,6 +56,8 @@ float BumpSensitivity[3];
 float FwRetract[4];
 float FwRecover[4];
 float LinAdvance[1];
+float ABLState[2];
+float AutoRetract[1];
 }PARAMETERS;
 
 extern PARAMETERS infoParameters;
@@ -61,6 +66,7 @@ extern char *const axisDisplayID[STEPPER_COUNT];
 extern const LABEL accel_disp_ID[];
 extern const LABEL retract_disp_ID[];
 extern const LABEL recover_disp_ID[];
+extern const LABEL retract_auto_ID[];
 
 float getParameter(PARAMETER_NAME name, uint8_t index);
 void setParameter(PARAMETER_NAME name, uint8_t index, float val);

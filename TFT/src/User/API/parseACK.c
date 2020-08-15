@@ -5,22 +5,28 @@ char dmaL2Cache[ACK_MAX_SIZE];
 static u16 ack_index=0;
 static u8 ack_cur_src = SERIAL_PORT;
 
-// Ignore reply messages which starts with following text (don't display in popup menu)
-const char *const ignoreEcho[] = {
-  "busy: processing",
-  "Now fresh file:",
-  "Now doing file:,"
-  "Probe Offset",
-  "Flow:",
-  "echo:;",     //M503
-  "echo:  G",   //M503
-  "echo:  M",   //M503
-  "Cap:",       //M115
-  "Config:",    //M360
-  "Settings Stored" // M500
+bool portSeen[_UART_CNT] = {false, false, false, false, false, false};
+
+// notify or ignore messages starting with following text
+const ECHO knownEcho[] = {
+  {ECHO_NOTIFY_NONE, "busy: processing"},
+  {ECHO_NOTIFY_NONE, "Now fresh file:"},
+  {ECHO_NOTIFY_NONE, "Now doing file:"},
+  {ECHO_NOTIFY_NONE, "Probe Offset"},
+  {ECHO_NOTIFY_NONE, "Flow:"},
+  {ECHO_NOTIFY_NONE, "echo:;"},                 //M503
+  {ECHO_NOTIFY_NONE, "echo:  G"},               //M503
+  {ECHO_NOTIFY_NONE, "echo:  M"},               //M503
+  {ECHO_NOTIFY_NONE, "Cap:"},                   //M115
+  {ECHO_NOTIFY_NONE, "Config:"},                //M360
+  {ECHO_NOTIFY_TOAST, "Settings Stored"},       //M500
+  {ECHO_NOTIFY_TOAST, "echo:Soft endstops"},    //M211
+  {ECHO_NOTIFY_TOAST, "echo:Bed"},              //M420
+  {ECHO_NOTIFY_TOAST, "echo:Fade"},             //M420
+  {ECHO_NOTIFY_TOAST, "echo:Active Extruder"},  //Tool Change
 };
 
-bool portSeen[_UART_CNT] = {false, false, false, false, false, false};
+uint8_t forceIgnore[ECHO_ID_COUNT] = {0};
 
 void setCurrentAckSrc(uint8_t src)
 {
@@ -43,6 +49,7 @@ static char ack_seen(const char *str)
   }
   return false;
 }
+
 static char ack_cmp(const char *str)
 {
   u16 i;
@@ -54,7 +61,6 @@ static char ack_cmp(const char *str)
   if(dmaL2Cache[i] != 0) return false;
   return true;
 }
-
 
 static float ack_value()
 {
@@ -77,19 +83,80 @@ static float ack_second_value()
 
 void ackPopupInfo(const char *info)
 {
-  if(infoMenu.menu[infoMenu.cur] == menuParameterSettings) return;
-
   DIALOG_TYPE d_type = DIALOG_TYPE_ERROR;
 
+  // play notification sound if buzzer for ACK is enabled
+
+  if (info == errormagic)
+    BUZZER_PLAY(sound_error);
+  else if (info == echomagic && infoSettings.ack_notification == 1)
+    BUZZER_PLAY(sound_notify);
+
+  // set echo message in status screen
   if (info == echomagic)
   {
+    //ignore all messages if parameter settings is open
+    if (infoMenu.menu[infoMenu.cur] == menuParameterSettings)
+      return;
+
     d_type = DIALOG_TYPE_INFO;
     statusScreen_setMsg((u8 *)info, (u8 *)dmaL2Cache + ack_index);
   }
-  if (infoMenu.menu[infoMenu.cur] == menuTerminal) return;
-  if (infoMenu.menu[infoMenu.cur] == menuStatus && info == echomagic) return;
 
-  popupReminder(d_type,(u8* )info, (u8 *)dmaL2Cache + ack_index);
+  if (infoMenu.menu[infoMenu.cur] == menuTerminal ||
+      (infoMenu.menu[infoMenu.cur] == menuStatus && info == echomagic))
+    return;
+
+ //show notification based on notificaiton settings
+  if (infoSettings.ack_notification == 1 ||  info == errormagic)
+  {
+    popupReminder(d_type, (u8 *) info, (u8 *) dmaL2Cache + ack_index);
+  }
+  else if(infoSettings.ack_notification == 2)
+    addToast(DIALOG_TYPE_INFO, dmaL2Cache); //show toast notificaion if turned on
+}
+
+
+void setIgnoreEcho(ECHO_ID msgId, bool state)
+{
+  forceIgnore[msgId] = state;
+}
+
+bool processKnownEcho(void)
+{
+  bool isKnown = false;
+  u8 i;
+
+  for (i = 0; i < COUNT(knownEcho); i++)
+  {
+    if (strstr(dmaL2Cache, knownEcho[i].msg))
+    {
+      isKnown = true;
+      break;
+    }
+  }
+
+  // display the busy indicator
+  busyIndicator(STATUS_BUSY);
+
+  if (isKnown)
+  {
+    if (knownEcho[i].notifyType == ECHO_NOTIFY_NONE)
+      return isKnown;
+    if (forceIgnore[i] == 0)
+    {
+      if (knownEcho[i].notifyType == ECHO_NOTIFY_TOAST)
+        addToast(DIALOG_TYPE_INFO, dmaL2Cache);
+      else if (knownEcho[i].notifyType == ECHO_NOTIFY_DIALOG)
+      {
+        BUZZER_PLAY(sound_notify);
+        popupReminder(DIALOG_TYPE_INFO, (u8 *)echomagic, (u8 *)dmaL2Cache + ack_index);
+      }
+      // display the echo message in the status bar
+      statusScreen_setMsg((u8 *)echomagic, (u8 *)dmaL2Cache + ack_index);
+    }
+  }
+  return isKnown;
 }
 
 bool dmaL1NotEmpty(uint8_t port)
@@ -123,10 +190,9 @@ void parseACK(void)
     {
       // Parse error information even though not connected to printer
       if (ack_seen(errormagic)) {
-        BUZZER_PLAY(sound_error);
         ackPopupInfo(errormagic);
       }
-      if (!ack_seen("T:") && !ack_seen("T0:"))  goto parse_end;  //the first response should be such as "T:25/50\n"
+      if (!(ack_seen("@") && ack_seen("T:")) && !ack_seen("T0:"))  goto parse_end;  //the first response should be such as "T:25/50\n"
       if (ack_seen(heaterID[BED])) infoSettings.bed_en = ENABLED;
       if (ack_seen(heaterID[CHAMBER])) infoSettings.chamber_en = ENABLED;
       uint8_t i;
@@ -137,31 +203,39 @@ void parseACK(void)
       if (infoSettings.ext_count < infoSettings.hotend_count) infoSettings.ext_count = infoSettings.hotend_count;
       updateNextHeatCheckTime();
       infoHost.connected = true;
-      storeCmd("M115\n");
-      storeCmd("M503 S0\n");
+      storeCmd("M503\n");// Query detailed printer capabilities
       storeCmd("M92\n"); // Steps/mm of extruder is an important parameter for Smart filament runout
                          // Avoid can't getting this parameter due to disabled M503 in Marlin
+      storeCmd("M115\n");
     }
 
-    // Gcode command response
-    if(requestCommandInfo.inWaitResponse && ack_seen(requestCommandInfo.startMagic))
+    // Onboard sd Gcode command response
+
+    if(requestCommandInfo.inWaitResponse)
     {
-      requestCommandInfo.inResponse = true;
-      requestCommandInfo.inWaitResponse = false;
+      if (ack_seen(requestCommandInfo.startMagic))
+      {
+        requestCommandInfo.inResponse = true;
+        requestCommandInfo.inWaitResponse = false;
+      }
+      else if (ack_seen(requestCommandInfo.nosdMagic) || ack_seen(requestCommandInfo.errorMagic))
+      { //parse onboard sd error
+        requestCommandInfo.done = true;
+        requestCommandInfo.inResponse = false;
+        requestCommandInfo.inError = true;
+        requestCommandInfo.inWaitResponse = false;
+
+        strcpy(requestCommandInfo.cmd_rev_buf, dmaL2Cache);
+        BUZZER_PLAY(sound_error);
+        goto parse_end;
+      }
     }
     if(requestCommandInfo.inResponse)
     {
       if(strlen(requestCommandInfo.cmd_rev_buf)+strlen(dmaL2Cache) < CMD_MAX_REV)
       {
         strcat(requestCommandInfo.cmd_rev_buf, dmaL2Cache);
-
-        if(ack_seen(requestCommandInfo.errorMagic ))
-        {
-          requestCommandInfo.done = true;
-          requestCommandInfo.inResponse = false;
-          requestCommandInfo.inError = true;
-        }
-        else if(ack_seen(requestCommandInfo.stopMagic ))
+        if (ack_seen(requestCommandInfo.stopMagic))
         {
           requestCommandInfo.done = true;
           requestCommandInfo.inResponse = false;
@@ -176,7 +250,7 @@ void parseACK(void)
       infoHost.wait = false;
       goto parse_end;
     }
-    // end
+    // Onboard sd Gcode command response end
 
     if(ack_cmp("ok\n"))
     {
@@ -189,7 +263,7 @@ void parseACK(void)
         infoHost.wait = false;
       }
       // parse temperature
-      if(ack_seen("T:") || ack_seen("T0:"))
+      if((ack_seen("@") && ack_seen("T:")) || ack_seen("T0:"))
       {
         heatSetCurrentTemp(NOZZLE0, ack_value()+0.5f);
         if(!heatGetSendWaiting(NOZZLE0)) {
@@ -309,6 +383,10 @@ void parseACK(void)
         if(ack_seen("F")) setParameter(P_FWRECOVER, 2, ack_value());
         if(ack_seen("R")) setParameter(P_FWRECOVER, 3, ack_value());
       }
+    //parse and store auto FW retract state (M209 - Set Auto Retract)
+      else if(ack_seen("M209 S")){
+                          setParameter(P_AUTO_RETRACT, 0, ack_value());
+      }
     //parse and store Probe Offset values
       else if(ack_seen("M851 X")){
                           setParameter(P_PROBE_OFFSET, X_STEPPER, ack_value());
@@ -343,16 +421,48 @@ void parseACK(void)
         setParameter(P_CURRENT, E2_STEPPER, ack_value());
         setDualStepperStatus(E_STEPPER, true);
       }
-    // Parse M115 capability report
-
-      else if(ack_seen("FIRMWARE_NAME:Marlin"))
-      {
-        infoMachineSettings.isMarlinFirmware = 1;
+    // Parse and store ABL type
+      else if(ack_seen("echo:; Unified Bed Leveling")){
+        if(ENABLE_UBL_VALUE==2) infoMachineSettings.enableubl = ENABLED;
       }
-      else if(ack_seen("FIRMWARE_NAME:Smoothieware"))
+    // Parse and store ABL on/off state & Z fade value on M503
+      else if(ack_seen("M420 S")) {
+        infoSettings.autoLevelState = ack_value();
+        if(ack_seen("S")) setParameter(P_ABL_STATE, 0, ack_value());
+        if(ack_seen("Z")) setParameter(P_ABL_STATE, 1, ack_value());
+      }
+    // Parse M115 capability report
+      else if(ack_seen("FIRMWARE_NAME:"))
       {
-        infoMachineSettings.isMarlinFirmware = 0;
-        setupMachine();
+        uint8_t *string = (uint8_t *)&dmaL2Cache[ack_index];
+        uint16_t string_start = ack_index;
+        uint16_t string_end = string_start;
+        if (ack_seen("Marlin"))
+        {
+          infoMachineSettings.isMarlinFirmware = 1;
+        }
+        else
+        {
+          infoMachineSettings.isMarlinFirmware = 0;
+          setupMachine();
+        }
+        if (ack_seen("FIRMWARE_URL:")) // For Smoothieware and Repetier
+          string_end = ack_index - sizeof("FIRMWARE_URL:");
+        else if (ack_seen("SOURCE_CODE_URL:")) // For Marlin
+          string_end = ack_index - sizeof("SOURCE_CODE_URL:");
+        infoSetFirmwareName(string, string_end - string_start); // Set firmware name
+
+        if (ack_seen("MACHINE_TYPE:"))
+        {
+          string = (uint8_t *)&dmaL2Cache[ack_index];
+          string_start = ack_index;
+          if (ack_seen("EXTRUDER_COUNT:"))
+          {
+            infoSettings.ext_count = ack_value();
+            string_end = ack_index - sizeof("EXTRUDER_COUNT:");
+          }
+          infoSetMachineType(string, string_end - string_start); // Set firmware name
+        }
       }
       else if(ack_seen("Cap:EEPROM:"))
       {
@@ -409,7 +519,7 @@ void parseACK(void)
       }
       else if(ack_seen("Probe Offset"))
       {
-        if(ack_seen("Z:"))
+        if(ack_seen("Z:") || (ack_seen("Z")))
         {
           setParameter(P_PROBE_OFFSET,Z_STEPPER, ack_value());
         }
@@ -435,27 +545,38 @@ void parseACK(void)
       else if(ack_seen("paused for user"))
       {
         showDialog(DIALOG_TYPE_QUESTION, (u8*)"Printer is Paused",(u8*)"Paused for user\ncontinue?",
-                    textSelect(LABEL_CONFIRM), NULL, breakAndContinue, NULL,NULL);
+                   textSelect(LABEL_CONFIRM), NULL, breakAndContinue, NULL,NULL);
+      }
+    // Parse UBL Complete message
+      else if(ack_seen("UBL Complete"))
+      {
+        BUZZER_PLAY(sound_notify);
+
+        showDialog(DIALOG_TYPE_INFO, textSelect(LABEL_ABL_COMPLETE), textSelect(LABEL_ABL_SMART_FILL),
+                   textSelect(LABEL_CONFIRM), NULL, NULL, NULL, NULL);
+      }
+    // Parse PID Autotune finished message
+      else if(ack_seen("PID Autotune finished"))
+      {
+        pidUpdateStatus(true);
+      }
+    // Parse PID Autotune failed message
+      else if(ack_seen("PID Autotune failed"))
+      {
+        pidUpdateStatus(false);
       }
     //Parse error messages & Echo messages
       else if(ack_seen(errormagic))
       {
-        BUZZER_PLAY(sound_error);
-
         ackPopupInfo(errormagic);
       }
+    // if no known echo was found and processed, then popup the echo message
       else if(ack_seen(echomagic))
       {
-        for(u8 i = 0; i < COUNT(ignoreEcho); i++)
+        if (!processKnownEcho())
         {
-          if(strstr(dmaL2Cache, ignoreEcho[i]))
-          {
-            busyIndicator(STATUS_BUSY);
-            goto parse_end;
-          }
+          ackPopupInfo(echomagic);
         }
-        BUZZER_PLAY(sound_notify);
-        ackPopupInfo(echomagic);
       }
     }
 

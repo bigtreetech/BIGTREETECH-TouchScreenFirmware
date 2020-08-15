@@ -26,6 +26,5 @@ void loopCheckEncoderSteps(void);
 uint8_t encoder_GetPos(void);
 bool encoder_CheckState(void);
 void sendEncoder(uint8_t num);
-void loopCheckEncoder(void);
 
 #endif

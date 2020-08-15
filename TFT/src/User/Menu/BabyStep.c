@@ -1,24 +1,17 @@
 #include "BabyStep.h"
 #include "includes.h"
 
-#define BABYSTEP_DISPLAY_ID    "BabyStep/Z Offset"
-#define BABYSTEP_MIN_VALUE     -5.0f
-#define BABYSTEP_MAX_VALUE     5.0f
-#define BABYSTEP_DEFAULT_VALUE 0.0f
-#define BABYSTEP_MAX_UNIT      1.0f
-
 #define ITEM_BABYSTEP_UNIT_NUM 3
 
 const ITEM itemBabyStepUnit[ITEM_BABYSTEP_UNIT_NUM] = {
-// icon                       label
-  {ICON_001_MM,               LABEL_001_MM},
-  {ICON_01_MM,                LABEL_01_MM},
-  {ICON_1_MM,                 LABEL_1_MM},
+  // icon                           label
+  {ICON_001_MM,                     LABEL_001_MM},
+  {ICON_01_MM,                      LABEL_01_MM},
+  {ICON_1_MM,                       LABEL_1_MM},
 };
 
 const float babystep_unit[ITEM_BABYSTEP_UNIT_NUM] = {0.01f, 0.1f, 1};
-
-static u8 curUnit = 0;
+static u8   curUnit = 0;
 
 static float baby_step_value = BABYSTEP_DEFAULT_VALUE;
 float orig_z_offset;
@@ -68,7 +61,6 @@ void babySetDefaultOffset(void)
 
 void babyStepReDraw(bool skip_header)
 {
-
   if (!skip_header)
   {
     GUI_DispString(exhibitRect.x0, exhibitRect.y0, textSelect(LABEL_BABYSTEP));
@@ -95,25 +87,39 @@ void menuBabyStep(void)
 {
   // 1 title, ITEM_PER_PAGE items (icon + label)
   MENUITEMS babyStepItems = {
-  // title
-  LABEL_BABYSTEP,
-  // icon                       label
-   {{ICON_DEC,                  LABEL_DEC},
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},
-    {ICON_INC,                  LABEL_INC},
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},
-    {ICON_01_MM,                LABEL_01_MM},
-    {ICON_RESET_VALUE,          LABEL_RESET},
-    {ICON_BACK,                 LABEL_BACK},}
+    // title
+    LABEL_BABYSTEP,
+    // icon                         label
+    {{ICON_DEC,                     LABEL_DEC},
+     {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_INC,                     LABEL_INC},
+     {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_001_MM,                  LABEL_001_MM},
+     {ICON_RESET_VALUE,             LABEL_RESET},
+     {ICON_BACK,                    LABEL_BACK},}
   };
+
+  #if FRIENDLY_PROBE_OFFSET_LANGUAGE == 1
+    babyStepItems.items[0].icon = ICON_NOZZLE_DOWN;
+    babyStepItems.items[0].label.index = LABEL_DOWN;
+    babyStepItems.items[3].icon = ICON_NOZZLE_UP;
+    babyStepItems.items[3].label.index = LABEL_UP;
+  #endif
 
   KEY_VALUES key_num = KEY_IDLE;
   float now = baby_step_value;
 
   babyInitZOffset();
 
+  if (infoMachineSettings.EEPROM == 1)
+  {
+    babyStepItems.items[KEY_ICON_4].icon = ICON_EEPROM_SAVE;
+    babyStepItems.items[KEY_ICON_4].label.index = LABEL_SAVE;
+  }
+
   babyStepItems.items[KEY_ICON_5] = itemBabyStepUnit[curUnit];
+
   menuDrawPage(&babyStepItems);
   babyStepReDraw(false);
 
@@ -136,6 +142,7 @@ void menuBabyStep(void)
           max_unit = (diff > max_unit) ? max_unit : diff;
 
           mustStoreCmd("M290 Z-%.2f\n", max_unit);
+
           baby_step_value -= max_unit;
         }
         break;
@@ -148,20 +155,35 @@ void menuBabyStep(void)
           max_unit = (diff > max_unit) ? max_unit : diff;
 
           mustStoreCmd("M290 Z%.2f\n", max_unit);
+
           baby_step_value += max_unit;
+        }
+        break;
+
+      // save to EEPROM and apply Z offset
+      case KEY_ICON_4:
+        if (infoMachineSettings.EEPROM == 1)
+        {
+          mustStoreCmd("M851 Z%.2f\n", (orig_z_offset + baby_step_value));
+
+          showDialog(DIALOG_TYPE_QUESTION, textSelect(babyStepItems.title.index), textSelect(LABEL_EEPROM_SAVE_INFO),
+            textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), saveEepromSettings, NULL, NULL);
         }
         break;
 
       // change step unit
       case KEY_ICON_5:
         curUnit = (curUnit + 1) % ITEM_BABYSTEP_UNIT_NUM;
+
         babyStepItems.items[key_num] = itemBabyStepUnit[curUnit];
+
         menuDrawItem(&babyStepItems.items[key_num], key_num);
         break;
 
       // reset babystep to default value
       case KEY_ICON_6:
-        babySetDefaultOffset();
+        if (baby_step_value != BABYSTEP_DEFAULT_VALUE)
+          babySetDefaultOffset();
         break;
 
       case KEY_ICON_7:
@@ -173,6 +195,7 @@ void menuBabyStep(void)
           if (encoderPosition)
           {
             mustStoreCmd("M290 Z%.2f\n", babystep_unit[curUnit] * encoderPosition);
+
             baby_step_value += babystep_unit[curUnit] * encoderPosition;
             encoderPosition = 0;
           }

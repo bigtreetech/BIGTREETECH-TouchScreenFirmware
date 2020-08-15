@@ -1,25 +1,48 @@
 #include "SettingsMenu.h"
 #include "includes.h"
 
+static uint8_t firmare_name[64] = "Unknow system"; // Marlin firmware version
+uint8_t machine_type[64] = "3D Printer"; // Marlin machine type
+
+void infoSetFirmwareName(uint8_t *name, uint8_t name_len)
+{
+  if (name_len > sizeof(firmare_name) - 1)
+    name_len = sizeof(firmare_name) - 1;
+  uint8_t i;
+  for (i = 0; i < name_len; i++) {
+    firmare_name[i] = name[i];
+  }
+  firmare_name[i] = 0;
+}
+
+void infoSetMachineType(uint8_t *machine, uint8_t type_len)
+{
+  if (type_len > sizeof(machine_type) - 1)
+    type_len = sizeof(machine_type) - 1;
+  uint8_t i;
+  for (i = 0; i < type_len; i++) {
+    machine_type[i] = machine[i];
+  }
+  machine_type[i] = 0;
+  statusScreen_setReady();
+}
+
 // Version infomation
 void menuInfo(void)
 {
   char buf[128];
-  const GUI_POINT clocks[] = {{0 * LCD_WIDTH / 3, 0 * BYTE_HEIGHT},
-                             {1 * LCD_WIDTH / 3, 0 * BYTE_HEIGHT},
-                             {2 * LCD_WIDTH / 3, 0 * BYTE_HEIGHT},
-                             {0 * LCD_WIDTH / 3, 1 * BYTE_HEIGHT},
-                             {1 * LCD_WIDTH / 3, 1 * BYTE_HEIGHT},
-                             {2 * LCD_WIDTH / 3, 1 * BYTE_HEIGHT},};
-  const char* hardware = "Board   : BIGTREETECH_" HARDWARE_VERSION;
-  const char* firmware = "Firmware: "HARDWARE_VERSION"." STRINGIFY(SOFTWARE_VERSION) " " __DATE__;
-
-  u16 HW_X = (LCD_WIDTH - GUI_StrPixelWidth((u8 *)hardware))/2;
-  u16 FW_X = (LCD_WIDTH - GUI_StrPixelWidth((u8 *)firmware))/2;
-  u16 centerY = LCD_HEIGHT/2;
-  u16 startX = MIN(HW_X, FW_X);
+  const GUI_POINT clocks[] = {
+    {0 * LCD_WIDTH / 3, 0 * BYTE_HEIGHT},
+    {1 * LCD_WIDTH / 3, 0 * BYTE_HEIGHT},
+    {2 * LCD_WIDTH / 3, 0 * BYTE_HEIGHT},
+    {0 * LCD_WIDTH / 3, 1 * BYTE_HEIGHT},
+    {1 * LCD_WIDTH / 3, 1 * BYTE_HEIGHT},
+    {2 * LCD_WIDTH / 3, 1 * BYTE_HEIGHT},};
+  const char* hardware = "BIGTREETECH_" HARDWARE_VERSION;
+  const char* firmware = HARDWARE_VERSION"." STRINGIFY(SOFTWARE_VERSION) " " __DATE__;
 
   GUI_Clear(infoSettings.bg_color);
+  GUI_SetColor(GRAY);
 
   my_sprintf(buf, "SYS:%dMhz", mcuClocks.rccClocks.SYSCLK_Frequency / 1000000);
   GUI_DispString(clocks[0].x, clocks[0].y, (uint8_t *)buf);
@@ -39,118 +62,66 @@ void menuInfo(void)
   my_sprintf(buf, "P2Tim:%dMhz", mcuClocks.PCLK2_Timer_Frequency / 1000000);
   GUI_DispString(clocks[5].x, clocks[5].y, (uint8_t *)buf);
 
-  GUI_DispString(startX, centerY - BYTE_HEIGHT, (u8 *)hardware);
-  GUI_DispString(startX, centerY, (u8 *)firmware);
+  GUI_HLine(0, clocks[5].y + BYTE_HEIGHT, LCD_WIDTH);
+
+  //spi flash info
+  float usedMB = (float)FLASH_USED/1048576;
+  sprintf(buf, "Used %.2f%% (%.2fMB/%uMB)", flashUsedPercentage(), usedMB, (W25Qxx_ReadCapacity()/1048576));
+
+  const uint16_t top_y = (LCD_HEIGHT - (9 * BYTE_HEIGHT)) / 2; // 8 firmware info lines + 1 SPI flash info line
+  const uint16_t start_x = sizeof("Firmware:") * BYTE_WIDTH;
+  const GUI_RECT version[5] = {
+    {start_x, top_y + 0*BYTE_HEIGHT, LCD_WIDTH, top_y + 2*BYTE_HEIGHT},
+    {start_x, top_y + 2*BYTE_HEIGHT, LCD_WIDTH, top_y + 4*BYTE_HEIGHT},
+    {start_x, top_y + 4*BYTE_HEIGHT, LCD_WIDTH, top_y + 6*BYTE_HEIGHT},
+    {start_x, top_y + 6*BYTE_HEIGHT, LCD_WIDTH, top_y + 8*BYTE_HEIGHT},
+    {start_x, top_y + 8*BYTE_HEIGHT, LCD_WIDTH, top_y + 9*BYTE_HEIGHT},
+    };
+  //draw titles
+  GUI_DispString(0, version[0].y0, (uint8_t *)"System  :");
+  GUI_DispString(0, version[1].y0, (uint8_t *)"Machine :");
+  GUI_DispString(0, version[2].y0, (uint8_t *)"Board   :");
+  GUI_DispString(0, version[3].y0, (uint8_t *)"Firmware:");
+  GUI_DispString(0, version[4].y0, (uint8_t *)"SPIFlash:");
+
+  //draw info
+  GUI_SetColor(0xDB40);
+  GUI_DispStringInPrectEOL(&version[0], firmare_name);
+  GUI_DispStringInPrectEOL(&version[1], machine_type);
+  GUI_DispStringInPrectEOL(&version[2], (uint8_t *)hardware);
+  GUI_DispStringInPrectEOL(&version[3], (uint8_t *)firmware);
+  GUI_DispStringInPrectEOL(&version[4], (uint8_t *)buf);
+
+  GUI_SetColor(GRAY);
+
+  GUI_HLine(0, LCD_HEIGHT - (BYTE_HEIGHT*2), LCD_WIDTH);
+
   GUI_DispStringInRect(20, LCD_HEIGHT - (BYTE_HEIGHT*2), LCD_WIDTH-20, LCD_HEIGHT, textSelect(LABEL_TOUCH_TO_EXIT));
 
-  while(!isPress()) loopProcess();
-  while(isPress())  loopProcess();
+  while(!isPress()) loopBackEnd();
+  while(isPress())  loopBackEnd();
 
+  GUI_RestoreColorDefault();
   infoMenu.cur--;
 }
-
-// Set uart pins to input, free uart
-void menuDisconnect(void)
-{
-  GUI_Clear(infoSettings.bg_color);
-  GUI_DispStringInRect(20, 0, LCD_WIDTH-20, LCD_HEIGHT, textSelect(LABEL_DISCONNECT_INFO));
-  GUI_DispStringInRect(20, LCD_HEIGHT - (BYTE_HEIGHT*2), LCD_WIDTH-20, LCD_HEIGHT, textSelect(LABEL_TOUCH_TO_EXIT));
-
-  Serial_ReSourceDeInit();
-  while(!isPress());
-  while(isPress());
-  Serial_ReSourceInit();
-
-  infoMenu.cur--;
-}
-const char* item_baudrate_str[ITEM_BAUDRATE_NUM] = {"2400", "9600", "19200", "38400", "57600", "115200", "250000", "500000", "1000000"};
-const u32   item_baudrate[ITEM_BAUDRATE_NUM] = {2400, 9600, 19200, 38400, 57600, 115200, 250000, 500000, 1000000};
-
-void menuBaudrate(void)
-{
-  LABEL title = {LABEL_BAUDRATE};
-  LISTITEM totalItems[ITEM_BAUDRATE_NUM];
-  KEY_VALUES key_num = KEY_IDLE;
-  SETTINGS now = infoSettings;
-  uint8_t cur_item = 0;
-
-  // fill baudrate items
-  for(uint8_t i = 0; i < COUNT(totalItems); i++) {
-    if (infoSettings.baudrate == item_baudrate[i]) {
-      totalItems[i].icon = ICONCHAR_CHECKED;
-      cur_item = i;
-    } else {
-      totalItems[i].icon = ICONCHAR_UNCHECKED;
-    }
-    totalItems[i].itemType = LIST_LABEL;
-    totalItems[i].titlelabel.address = (uint8_t *)item_baudrate_str[i];
-  }
-
-  listWidgetCreat(title, totalItems, COUNT(totalItems), cur_item / LISTITEM_PER_PAGE);
-
-  while (infoMenu.menu[infoMenu.cur] == menuBaudrate)
-  {
-    key_num = menuKeyGetValue();
-    switch (key_num)
-    {
-    case KEY_ICON_5:
-      listWidgetPreviousPage();
-      break;
-
-    case KEY_ICON_6:
-      listWidgetNextPage();
-      break;
-
-    case KEY_ICON_7:
-      infoMenu.cur--;
-      break;
-
-    default:
-      if(key_num < LISTITEM_PER_PAGE){
-        uint16_t tmp_i = listWidgetGetCurPage() * LISTITEM_PER_PAGE + key_num;
-        if (tmp_i != cur_item) { // has changed
-          totalItems[cur_item].icon = ICONCHAR_UNCHECKED;
-          listWidgetRefreshItem(cur_item); // refresh unchecked status
-          cur_item = tmp_i;
-          totalItems[cur_item].icon = ICONCHAR_CHECKED;
-          listWidgetRefreshItem(cur_item); // refresh checked status
-
-          infoSettings.baudrate = item_baudrate[cur_item];
-          Serial_ReSourceDeInit(); // Serial_Init() will malloc a dynamic memory, so Serial_DeInit() first to free, then malloc again.
-          Serial_ReSourceInit();
-          reminderMessage(LABEL_UNCONNECTED, STATUS_UNCONNECT);
-        }
-      }
-      break;
-    }
-
-    loopProcess();
-  }
-
-  if(memcmp(&now, &infoSettings, sizeof(SETTINGS)))
-  {
-    storePara();
-  }
-}
-
-
-const MENUITEMS settingsItems = {
-// title
-LABEL_SETTINGS,
-// icon                       label
- {{ICON_SCREEN_SETTINGS,      LABEL_SCREEN_SETTINGS},
-  {ICON_MACHINE_SETTINGS,     LABEL_MACHINE_SETTINGS},
-  {ICON_FEATURE_SETTINGS,     LABEL_FEATURE_SETTINGS},
-  {ICON_SCREEN_INFO,          LABEL_SCREEN_INFO},
-  {ICON_DISCONNECT,           LABEL_DISCONNECT},
-  {ICON_BAUD_RATE,            LABEL_BAUDRATE},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACK,                 LABEL_BACK},}
-};
-
 
 void menuSettings(void)
 {
+  // 1 title, ITEM_PER_PAGE items (icon + label)
+  const MENUITEMS settingsItems = {
+    // title
+    LABEL_SETTINGS,
+    // icon                         label
+    {{ICON_SCREEN_SETTINGS,         LABEL_SCREEN_SETTINGS},
+     {ICON_MACHINE_SETTINGS,        LABEL_MACHINE_SETTINGS},
+     {ICON_FEATURE_SETTINGS,        LABEL_FEATURE_SETTINGS},
+     {ICON_SCREEN_INFO,             LABEL_SCREEN_INFO},
+     {ICON_CONNECTION_SETTINGS,     LABEL_CONNECTION_SETTINGS},
+     {ICON_TUNING,                  LABEL_TUNING},
+     {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_BACK,                    LABEL_BACK},}
+  };
+
   KEY_VALUES key_num = KEY_IDLE;
 
   menuDrawPage(&settingsItems);
@@ -160,14 +131,37 @@ void menuSettings(void)
     key_num = menuKeyGetValue();
     switch(key_num)
     {
-      case KEY_ICON_0: infoMenu.menu[++infoMenu.cur] = menuScreenSettings; break;
-      case KEY_ICON_1: infoMenu.menu[++infoMenu.cur] = menuMachineSettings; break;
-      case KEY_ICON_2: infoMenu.menu[++infoMenu.cur] = menuFeatureSettings; break;
-      case KEY_ICON_3: infoMenu.menu[++infoMenu.cur] = menuInfo; break;
-      case KEY_ICON_4: infoMenu.menu[++infoMenu.cur] = menuDisconnect; break;
-      case KEY_ICON_5: infoMenu.menu[++infoMenu.cur] = menuBaudrate; break;
-      case KEY_ICON_7: infoMenu.cur--; break;
-      default: break;
+      case KEY_ICON_0:
+        infoMenu.menu[++infoMenu.cur] = menuScreenSettings;
+        break;
+
+      case KEY_ICON_1:
+        mustStoreCmd("M503 S0\n");
+        infoMenu.menu[++infoMenu.cur] = menuMachineSettings;
+        break;
+
+      case KEY_ICON_2:
+        infoMenu.menu[++infoMenu.cur] = menuFeatureSettings;
+        break;
+
+      case KEY_ICON_3:
+        infoMenu.menu[++infoMenu.cur] = menuInfo;
+        break;
+
+      case KEY_ICON_4:
+        infoMenu.menu[++infoMenu.cur] = menuConnectionSettings;
+        break;
+
+      case KEY_ICON_5:
+        infoMenu.menu[++infoMenu.cur] = menuTuning;
+        break;
+
+      case KEY_ICON_7:
+        infoMenu.cur--;
+        break;
+
+      default:
+        break;
     }
     loopProcess();
   }

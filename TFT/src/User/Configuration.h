@@ -1,6 +1,6 @@
 #ifndef _CONFIGRATION_H_
 #define _CONFIGRATION_H_
-#define CONFIG_VERSION 20200724
+#define CONFIG_VERSION 20200810
 //===========================================================================
 //============================= General Settings ============================
 //===========================================================================
@@ -44,8 +44,8 @@
  *              6: LCD_DIM_300_SECONDS,  7: LCD_DIM_CUSTOM_SECONDS
  *
  */
-#define DEFAULT_LCD_BRIGHTNESS      10  // 10: LCD_100_PERCENT - Brightness value from list
-#define DEFAULT_LCD_IDLE_BRIGHTNESS 2   // 2: LCD_10_PERCENT - Brightness value from list
+#define DEFAULT_LCD_BRIGHTNESS      11  // 11: LCD_100_PERCENT - Brightness value from list
+#define DEFAULT_LCD_IDLE_BRIGHTNESS 3   // 3: LCD_10_PERCENT - Brightness value from list
 #define DEFAULT_LCD_IDLE_TIMER      0   // 0: LCD_DIM_OFF
 #define LCD_DIM_CUSTOM_SECONDS      600 // Custom value in seconds. Will be used if LCD_DIM_CUSTOM_SECONDS is set as idle timer.
 
@@ -62,18 +62,18 @@
  *          6: MAGENTA,    7: YELLOW,      8: ORANGE,  9: PURPLE,   10: LIME,  11: BROWN,
  *         12: DARKBLUE,  13: DARKGREEN,  14: GRAY,   15: DARKGRAY
  */
-#define ST7920_BKCOLOR 1
-#define ST7920_FNCOLOR 0
+#define MARLIN_BKCOLOR 1
+#define MARLIN_FNCOLOR 0
 
 /**
  *  Text displayed at the top of the TFT in Marlin Mode.
  */
-#define ST7920_BANNER_TEXT "LCD12864 Simulator"
+#define MARLIN_BANNER_TEXT "LCD12864 Simulator"
 
 /**
  *  show banner text at the top of the TFT in Marlin Mode.
  */
-#define ST7920_SHOW_BANNER true //to enabled: true | to disabled: false
+#define MARLIN_SHOW_BANNER  true //to enabled: true | to disabled: false
 /**
  * Run Marlin Mode in Fullscreen
  *
@@ -99,7 +99,6 @@
 
 /**
  * This setting determines the communication speed of the printer.
- *
  * 250000 works in most cases, but you might try a lower speed if
  * you commonly experience drop-outs during host printing.
  * You may try up to 1000000 to speed up SD file transfer.
@@ -110,10 +109,8 @@
 
 /**
  * Default Touch Mode Language
- *
  * Select the language to display on the LCD while in Touch Mode.
- *
- * Options: ARMENIAN, CHINESE, CZECH, DUTCH, ENGLISH, FRENCH, GERMAN, HUNGARIAN, ITALIAN, JAPANESE, POLISH, PORTUGUESE, RUSSIAN, SLOVAK, SPAIN
+ * Options: ARMENIAN, CHINESE, CZECH, DUTCH, ENGLISH, FRENCH, GERMAN, HUNGARIAN, ITALIAN, JAPANESE, POLISH, PORTUGUESE, RUSSIAN, SLOVAK, SPAIN, CATALAN
  */
 #define DEFAULT_LANGUAGE ENGLISH
 
@@ -133,6 +130,27 @@
 #define BUZZER_FREQUENCY_DURATION_MS 20 // Default 20
 #define BUZZER_FREQUENCY_HZ 10000       // Default 10000, 20Hz to 60KHz
 #define BUZZER_STOP_LEVEL false
+
+/**
+ * Toast notification duration (in ms)
+ *  set the duration for displaying toast notification on top of the screen
+ */
+#define TOAST_DURATION 3000
+
+/**
+ * Notification style for ACK messages
+ * Set the notification style to use for displaying the ACK messages which start with 'echo:'
+ *
+ * NOTE: The OFF value is applied to any ACK message type (e.g. even to known echo ACK).
+ *      It means that any kind of ACK message is silently discard
+ *
+ * Options: [OFF: 0, POPUP: 1, TOAST: 2]
+ *  OFF:   No notification. The message is ignored.
+ *  POPUP: Display a popup window for user confirmation.
+ *  TOAST: A Toast notification is displayed for few seconds. No user interaction is needed
+ *
+ */
+#define ACK_NOTIFICATION_STYLE 1
 
 /**
  * Default Touch Mode Color Options
@@ -202,11 +220,12 @@
 #define NOZZLE_PAUSE_E_FEEDRATE     6000 // (mm/min) retract & purge feedrate
 #define NOZZLE_PAUSE_XY_FEEDRATE    6000 // (mm/min) X and Y axes feedrate
 #define NOZZLE_PAUSE_Z_FEEDRATE     600  // (mm/min) Z axis feedrate
-/* M601 ; pause print
- * PrusaSlicer can add this on certain height. Marlin actually does not support this.
+
+/* M600, M601 ; pause print
+ * PrusaSlicer can add M601 on certain height.
  * Acts here like manual pause
  */
-//#define NOZZLE_PAUSE_M601
+#define NOZZLE_PAUSE_M600_M601
 
 /**
  * Auto Save Load Leveling Data
@@ -217,6 +236,38 @@
 #define AUTO_SAVE_LOAD_LEVELING_VALUE true //to enabled: true | to disabled: false
 
 /**
+ * Enable Unified Bed Leveling options
+ *  Will attempt to auto detect and enable specific UBL options.
+ *
+ * WARNING - If you're not sure, leave on auto-detect or disabled.
+ *           UBL has extra options other leveling systems might not have.
+ *
+ * Options:  0: Disabled    1: Enabled    2: Auto-detect [default]
+ *
+ */
+#define ENABLE_UBL_VALUE 1
+
+/**
+ * Enable friendly probe offset language.
+ *
+ * Decrease/increase and "-" & "+" icons are replaced with down/up and friendly icons
+ *
+ * Options:  0: Disabled    1: Enabled
+ */
+#define FRIENDLY_PROBE_OFFSET_LANGUAGE 1
+
+/**
+ * Enable quick EEPROM save/load/reset button
+ *
+ * This will enable a handy button in the (settings > machine) menu
+ *
+ * Note: if disabled, EEPROM operations can also be accessed in the (settings > machine > parameters) menu
+ *
+ * Options:  0: Disabled    1: Enabled
+ */
+#define QUICK_EEPROM_BUTTON 0
+
+/**
  * Manual Leveling
  * Move to four corner points to Leveling manually (Point 1, Point 2, Point 3, Point 4)
  */
@@ -225,6 +276,44 @@
 #define LEVELING_POINT_MOVE_Z      10.0f // Z-axis position when nozzle move to next point
 #define LEVELING_POINT_XY_FEEDRATE 6000  // (mm/min) X and Y axes move feedrate
 #define LEVELING_POINT_Z_FEEDRATE  600   // (mm/min) Z axis move feedrate
+
+#define LEVELING_EDGE_DISTANCE_DISPLAY_ID   "X/Y"
+#define LEVELING_EDGE_DISTANCE_MIN          0
+#define LEVELING_EDGE_DISTANCE_MAX          100
+#define LEVELING_EDGE_DISTANCE_DEFAULT      LEVELING_EDGE_DISTANCE
+
+/**
+ * Popup
+ */
+#define POPUP_NOTIFICATION_DURATION 3000;                  // expressed in ms. E.g. 1500 corresponds to 1.5 seconds
+
+/**
+ * Z Fade
+ */
+#define Z_FADE_MIN_VALUE     0.0f
+#define Z_FADE_MAX_VALUE     20.0f
+#define Z_FADE_DEFAULT_VALUE 10.0f
+
+/**
+ * Probe Offset
+ */
+#define PROBE_OFFSET_MIN_VALUE     -20.0f
+#define PROBE_OFFSET_MAX_VALUE     20.0f
+#define PROBE_OFFSET_DEFAULT_VALUE 0.0f
+
+/**
+ * Babystep
+ */
+#define BABYSTEP_MIN_VALUE     -5.0f
+#define BABYSTEP_MAX_VALUE     5.0f
+#define BABYSTEP_DEFAULT_VALUE 0.0f
+#define BABYSTEP_MAX_UNIT      1.0f
+
+/**
+ * PID autotune
+ */
+#define PID_CMD             {"M303 U1 C8 E0", "M303 U1 C8 E1", "M303 U1 C8 E2", "M303 U1 C8 E3", "M303 U1 C8 E4", "M303 U1 C8 E5", "M303 U1 C8 E-1", ""};
+#define PID_PROCESS_TIMEOUT 900000                         // expressed in ms. E.g. 900000 corresponds to 15 minutes
 
 // Power Supply
 #define PS_ON_ACTIVE_HIGH    true   // Set 'false' for ATX (1), 'true' for X-Box (2)

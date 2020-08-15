@@ -3,7 +3,7 @@
 
 PARAMETERS infoParameters;
 
-const u8 parameter_element_count[PARAMETERS_COUNT] = {5, 5, 5, 5, 3, 3, 3, 4, 4, 1};
+const u8 parameter_element_count[PARAMETERS_COUNT] = {5, 5, 5, 5, 3, 3, 3, 4, 4, 1, 2, 1};
 
 const char *const parameter_Cmd[PARAMETERS_COUNT][STEPPER_COUNT] = {
   {"M92 X%.2f\n",   "M92 Y%.2f\n",  "M92 Z%.2f\n",  "M92 T0 E%.2f\n",  "M92 T1 E%.2f\n"}, //Steps/mm
@@ -13,9 +13,11 @@ const char *const parameter_Cmd[PARAMETERS_COUNT][STEPPER_COUNT] = {
   {"M204 P%.0f\n", "M204 R%.0f\n", "M204 T%.0f\n",              NULL,              NULL}, //Acceleration
   {"M851 X%.2f\n", "M851 Y%.2f\n", "M851 Z%.2f\n",              NULL,              NULL}, //Probe offset
   {"M914 X%.2f\n", "M914 Y%.2f\n", "M914 Z%.2f\n",              NULL,              NULL}, //bump Sensitivity
-  {"M207 S%.0f\n", "M207 W%.2f\n", "M207 F%.2f\n",    "M207 Z%.2f\n",              NULL}, //FW retract
-  {"M208 S%.0f\n", "M208 W%.0f\n", "M208 F%.2f\n",    "M208 R%.2f\n",              NULL}, //FW retract recover
-  {"M900 K%.2f\n",           NULL,            NULL,             NULL,              NULL}  //Linear Advance
+  {"M207 S%.2f\n", "M207 W%.2f\n", "M207 F%.2f\n",    "M207 Z%.2f\n",              NULL}, //FW retract
+  {"M208 S%.2f\n", "M208 W%.2f\n", "M208 F%.2f\n",    "M208 R%.2f\n",              NULL}, //FW retract recover
+  {"M900 K%.2f\n",           NULL,            NULL,             NULL,              NULL}, //Linear Advance
+  {"M420 S%.0f\n", "M420 Z%.2f\n",            NULL,             NULL,              NULL}, //ABL State + Z Fade
+  {"M209 S%.0f\nM503 S0\n"}                                                               //Set auto FW retract
 };
 
 const VAL_TYPE parameter_val_type[PARAMETERS_COUNT][STEPPER_COUNT] = {
@@ -26,9 +28,11 @@ const VAL_TYPE parameter_val_type[PARAMETERS_COUNT][STEPPER_COUNT] = {
   {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,         VAL_TYPE_INT},                          //Acceleration
   {VAL_TYPE_NEG_FLOAT,  VAL_TYPE_NEG_FLOAT, VAL_TYPE_NEG_FLOAT},                                          //Probe offset
   {VAL_TYPE_NEG_INT,    VAL_TYPE_NEG_INT,   VAL_TYPE_NEG_INT},                                            //bump Sensitivity
-  {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_FLOAT,       VAL_TYPE_FLOAT},                        //FW retract
-  {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_NEG_FLOAT,   VAL_TYPE_NEG_FLOAT},                    //FW retract recover
-  {VAL_TYPE_FLOAT}                                                                                        //Linear Advance
+  {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_INT,         VAL_TYPE_FLOAT},                        //FW retract
+  {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_INT,         VAL_TYPE_INT},                          //FW retract recover
+  {VAL_TYPE_FLOAT},                                                                                       //Linear Advance                                                                            //Linear Advance
+  {VAL_TYPE_INT,        VAL_TYPE_FLOAT},                                                                  //ABL State + Z Fade
+  {VAL_TYPE_INT}                                                                                          //Set auto FW retract
 };
 
 //Extra teppers current gcode command
@@ -45,6 +49,7 @@ char *const axisDisplayID[STEPPER_COUNT] = AXIS_DISPLAY_ID;
 const LABEL accel_disp_ID[] = {LABEL_PRINT_ACCELERATION, LABEL_RETRACT_ACCELERATION, LABEL_TRAVEL_ACCELERATION};
 const LABEL retract_disp_ID[] = {LABEL_RETRACT_LENGTH, LABEL_RETRACT_SWAP_LENGTH, LABEL_RETRACT_FEEDRATE, LABEL_RETRACT_Z_LIFT};
 const LABEL recover_disp_ID[] = {LABEL_RECOVER_LENGTH, LABEL_SWAP_RECOVER_LENGTH, LABEL_RECOVER_FEEDRATE, LABEL_SWAP_RECOVER_FEEDRATE};
+const LABEL retract_auto_ID[] = {LABEL_RETRACT_AUTO};
 
 
 float getParameter(PARAMETER_NAME name, u8 index)
@@ -72,6 +77,10 @@ float getParameter(PARAMETER_NAME name, u8 index)
     return infoParameters.FwRecover[index];
   case P_LIN_ADV:
     return infoParameters.LinAdvance[index];
+  case P_ABL_STATE:
+    return infoParameters.ABLState[index];
+  case P_AUTO_RETRACT:
+    return infoParameters.AutoRetract[index];
   default:
     return 0.0f;
   }
@@ -111,6 +120,12 @@ void setParameter(PARAMETER_NAME name, u8 index, float val)
       break;
     case P_LIN_ADV:
       infoParameters.LinAdvance[index] = val;
+      break;
+    case P_ABL_STATE:
+      infoParameters.ABLState[index] = val;
+      break;
+    case P_AUTO_RETRACT:
+      infoParameters.AutoRetract[index] = val;
       break;
     default:
       break;
@@ -157,10 +172,10 @@ void saveEepromSettings(void)
 void restoreEepromSettings(void)
 {
   if(infoMachineSettings.EEPROM == 1)
-    mustStoreCmd("M501\nM503 S0\n");
+    mustStoreScript("M501\nM503 S0\n");
 }
 void resetEepromSettings(void)
 {
   if(infoMachineSettings.EEPROM == 1)
-    mustStoreCmd("M502\nM500\n");
+    mustStoreScript("M502\nM500\nM503 S0\n");
 }

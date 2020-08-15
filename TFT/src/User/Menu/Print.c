@@ -39,7 +39,6 @@ SCROLL   titleScroll;
 const GUI_RECT titleRect={10, (TITLE_END_Y - BYTE_HEIGHT) / 2, LCD_WIDTH-10, (TITLE_END_Y - BYTE_HEIGHT) / 2 + BYTE_HEIGHT};
 
 SCROLL   gcodeScroll;
-bool icon_pre = false;
 
 const GUI_RECT gcodeRect[NUM_PER_PAGE] = {
   {BYTE_WIDTH/2+0*SPACE_X_PER_ICON,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2,
@@ -94,12 +93,6 @@ void normalNameDisp(const GUI_RECT *rect, u8 *name)
   GUI_DispStringInPrect(rect, name);
   GUI_CancelRange();
 }
-
-bool get_Pre_Icon(void)
-{
-  return icon_pre;
-}
-
 
 void gocdeIconDraw(void)
 {
@@ -239,7 +232,10 @@ void menuPrintFromSource(void)
   }
   else
   {
-    GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, textSelect(labelVolumeError[infoFile.source]));
+    if(infoFile.source == BOARD_SD)
+      GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, (u8*)requestCommandInfo.cmd_rev_buf);
+    else
+      GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, textSelect(labelVolumeError[infoFile.source]));
     Delay_ms(1000);
     infoMenu.cur--;
   }
@@ -309,14 +305,9 @@ void menuPrintFromSource(void)
             if(infoHost.connected !=true) break;
             if(EnterDir(infoFile.file[key_num + start - infoFile.F_num]) == false) break;
             //load model preview in flash if icon exists
-            if (infoFile.source != BOARD_SD && model_DecodeToFlash(infoFile.title) == true) {
-              icon_pre = true;
-            }
-            else{
-              icon_pre = false;
-            }
+            setPrintModelIcon(infoFile.source != BOARD_SD && model_DecodeToFlash(infoFile.title));
 
-            char temp_info[75];
+            char temp_info[FILE_NUM + 50];
             sprintf(temp_info, (char *)textSelect(LABEL_START_PRINT), infoFile.file[key_num + start - infoFile.F_num]);
             //confirm file selction
             showDialog(DIALOG_TYPE_QUESTION, textSelect(LABEL_PRINT), (u8*)temp_info,
@@ -418,6 +409,7 @@ void menuPrint(void)
             infoMenu.menu[++infoMenu.cur] = menuPrintFromSource;   //TODO: fix here,  onboard sd card PLR feature
             goto selectEnd;
           }
+          break;
 
       case KEY_ICON_7:
         infoMenu.cur--;
