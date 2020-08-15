@@ -482,17 +482,13 @@ void parseConfigKey(u16 index)
       infoSettings.file_listmode = getOnOff();
     break;
 
-  case C_INDEX_ACK_POPUP_TYPE:
+  case C_INDEX_ACK_NOTIFICATION:
     {
       u8 i = config_int();
       if (inLimit(i,0,2))
-        infoSettings.ack_popup_type = i;
+        infoSettings.ack_notification = i;
       break;
     }
-
-  case C_INDEX_ACK_BUZZER:
-      infoSettings.ack_buzzer = getOnOff();
-    break;
 
   //---------------------------------------------------------Marlin Mode Settings (Only for TFT35_V3.0/TFT24_V1.1/TFT28V3.0)
 
@@ -904,13 +900,24 @@ void parseConfigKey(u16 index)
 #endif
   //---------------------------------------------------------other device specific settings
 #ifdef BUZZER_PIN
-  case C_INDEX_BUZZER_ON:
+  case C_INDEX_TOUCH_SOUND:
     if (inLimit(config_int(),0,1))
       {
-        if (config_int() == 0)
-          infoSettings.silent = 1;
-        else
-          infoSettings.silent = 0;
+        infoSettings.touchSound = config_int();
+      }
+    break;
+
+  case C_INDEX_TOAST_SOUND:
+    if (inLimit(config_int(),0,1))
+      {
+        infoSettings.toastSound = config_int();
+      }
+    break;
+
+  case C_INDEX_ALERT_SOUND:
+    if (inLimit(config_int(),0,1))
+      {
+        infoSettings.alertSound = config_int();
       }
     break;
 #endif
@@ -921,7 +928,7 @@ void parseConfigKey(u16 index)
       infoSettings.knob_led_color = config_int();
     break;
 
-#ifdef LCD_LED_PWM_CHANNEL  
+#ifdef LCD_LED_PWM_CHANNEL
   case C_INDEX_KNOB_LED_IDLE:
     if (inLimit(config_int(), 0, 1))
       infoSettings.knob_led_idle = config_int();
@@ -931,10 +938,10 @@ void parseConfigKey(u16 index)
 
 #ifdef LCD_LED_PWM_CHANNEL
   case C_INDEX_BRIGHTNESS:
-    if (inLimit(config_int(), 0, ITEM_BRIGHTNESS_NUM-1))
+    if (inLimit(config_int(), 0, ITEM_BRIGHTNESS_NUM - 1))
       infoSettings.lcd_brightness = config_int();
-      if(infoSettings.lcd_brightness == 0)
-        infoSettings.lcd_brightness = 1; //If someone set it to 0 set it to 1
+    if (infoSettings.lcd_brightness == 0)
+      infoSettings.lcd_brightness = 1; //If someone set it to 0 set it to 1
     break;
   case C_INDEX_BRIGHTNESS_IDLE:
     if (inLimit(config_int(), 0, ITEM_BRIGHTNESS_NUM-1))

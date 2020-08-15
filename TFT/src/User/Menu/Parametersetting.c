@@ -127,9 +127,9 @@ void menuShowParameter(void){
         float v = getParameter(cur_parameter, key_num);
 
         if (v_type == VAL_TYPE_FLOAT || v_type == VAL_TYPE_NEG_FLOAT)
-          v = numPadFloat(NULL, v, negative_val); // parameter is a decimal number
+          v = numPadFloat(NULL, v, v, negative_val); // parameter is a decimal number
         else
-          v = (float)numPadInt(NULL, v, negative_val); // parameter is an integer
+          v = (float)numPadInt(NULL, v, v, negative_val); // parameter is an integer
 
         if (v != getParameter(cur_parameter, key_num))
         {
@@ -294,6 +294,7 @@ bool temperatureStatusValid(void)
 {
   if (infoSettings.persistent_info != 1) return false;
   if (infoHost.connected == false) return false;
+  if (toastRunning()) return false;
 
   if (infoMenu.menu[infoMenu.cur] == menuPrinting) return false;
   if (infoMenu.menu[infoMenu.cur] == menuStatus) return false;
