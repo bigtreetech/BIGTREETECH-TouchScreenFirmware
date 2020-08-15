@@ -36,8 +36,18 @@ void menuAutoLeveling(void)
           
       case KEY_ICON_2: //Display of leveling data
         if (infoMachineSettings.autoLevel == 1 && infoMachineSettings.EEPROM == 1){
-          storeCmd("M420 T0 V1\n");
-          infoMenu.menu[++infoMenu.cur] = menuTerminal;
+          if (infoSettings.terminalACK == 1){  
+            infoSettings.terminalACK = 0;
+            storeCmd("M420 T0 V0\n"); //Protection against displaying the previous session with the old grid
+            storeCmd("M420 T0 V0\n");
+            infoMenu.menu[++infoMenu.cur] = menuTerminal;
+            //infoSettings.terminalACK = 1;
+          }
+          else {
+            storeCmd("M420 T0 V0\n"); //Protection against displaying the previous session with the old grid
+            storeCmd("M420 T0 V0\n");
+            infoMenu.menu[++infoMenu.cur] = menuTerminal;  
+          }
         }  
         break;
 
@@ -77,14 +87,13 @@ void menuAutoLeveling(void)
   }
 }
 
-#define ITEM_MANUAL_LEVELING_SUBMENU_NUM 4
+#define ITEM_MANUAL_LEVELING_SUBMENU_NUM 3
 
 ITEM itemManualLevelingSubmenu[ITEM_MANUAL_LEVELING_SUBMENU_NUM] = {
   // icon                         label
   {ICON_XY_UNLOCK,                LABEL_XY_UNLOCK},
   {ICON_LEVEL_EDGE_DISTANCE,      LABEL_DISTANCE},
   {ICON_BABYSTEP,                 LABEL_BABYSTEP},
-  {ICON_GRID,                     LABEL_GRID},
 };
 
 static u8 curSubmenu = 0;
@@ -184,15 +193,6 @@ void menuManualLeveling(void)
           case 2:
             infoMenu.menu[++infoMenu.cur] = menuBabyStep;
             break;
-
-          //Display of leveling data
-          case 3:
-            if (infoMachineSettings.autoLevel == 1 && infoMachineSettings.EEPROM == 1){
-            storeCmd("M420 T0 V1\n");
-            infoMenu.menu[++infoMenu.cur] = menuTerminal;
-            }  
-            break;
-
         }
         break;
 
