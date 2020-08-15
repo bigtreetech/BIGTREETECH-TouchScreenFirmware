@@ -16,7 +16,7 @@
 
 #define AXIS_NUM              (TOTAL_AXIS - 1)
 #define SPEED_COUNT           3
-#define PREHEAT_COUNT         4
+#define PREHEAT_COUNT         6
 #define CUSTOM_GCODES_COUNT   15
 #define MAX_STRING_LENGTH     20
 #define MAX_LABEL_LENGTH      7

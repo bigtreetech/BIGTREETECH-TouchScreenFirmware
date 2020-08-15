@@ -71,10 +71,10 @@ void menuPreheat(void)
       {ICON_PREHEAT,              LABEL_BACKGROUND},
       {ICON_PREHEAT,              LABEL_BACKGROUND},
       {ICON_PREHEAT,              LABEL_BACKGROUND},
-      {ICON_PREHEAT,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,           LABEL_BACKGROUND},
       {ICON_PREHEAT_BOTH,         LABEL_PREHEAT_BOTH},
-      {ICON_BACKGROUND,           LABEL_BACKGROUND},
+      {ICON_PREHEAT,              LABEL_BACKGROUND},
+      {ICON_PREHEAT,              LABEL_BACKGROUND},
+      {ICON_PREHEAT,              LABEL_BACKGROUND},
       {ICON_BACK,                 LABEL_BACK},
     }
   };
@@ -88,13 +88,17 @@ void menuPreheat(void)
   static TOOLPREHEAT nowHeater = BOTH;
   KEY_VALUES  key_num;
 
-  preheatItems.items[KEY_ICON_5] = itemToolPreheat[nowHeater];
+//  preheatItems.items[KEY_ICON_3] = itemToolPreheat[nowHeater];
 
   menuDrawPage(&preheatItems);
   for (int i = 0; i < PREHEAT_COUNT; i++)
   {
-    refreshPreheatIcon(i, i, &preheatItems.items[i]);
+    if (i < 3)
+      refreshPreheatIcon(i, i, &preheatItems.items[i]);
+    else
+      refreshPreheatIcon(i, i+1, &preheatItems.items[i+1]);
   }
+
   while(infoMenu.menu[infoMenu.cur] == menuPreheat)
   {
     key_num = menuKeyGetValue();
@@ -103,7 +107,6 @@ void menuPreheat(void)
       case KEY_ICON_0:
       case KEY_ICON_1:
       case KEY_ICON_2:
-      case KEY_ICON_3:
         switch(nowHeater)
         {
           case BOTH:
@@ -120,19 +123,39 @@ void menuPreheat(void)
         refreshPreheatIcon(key_num, key_num, &preheatItems.items[key_num]);
         break;
 
+      case KEY_ICON_4:
       case KEY_ICON_5:
+      case KEY_ICON_6:
+        switch(nowHeater)
+        {
+          case BOTH:
+            heatSetTargetTemp(BED, infoSettings.preheat_bed[key_num-1]);
+            heatSetTargetTemp(heatGetCurrentHotend(), infoSettings.preheat_temp[key_num-1]);
+            break;
+          case BED_PREHEAT:
+            heatSetTargetTemp(BED, infoSettings.preheat_bed[key_num-1]);
+            break;
+          case NOZZLE0_PREHEAT:
+            heatSetTargetTemp(heatGetCurrentHotend(), infoSettings.preheat_temp[key_num-1]);
+            break;
+        }
+        refreshPreheatIcon(key_num-1, key_num, &preheatItems.items[key_num]);
+        break;
+      break;
+
+      case KEY_ICON_3:
         nowHeater = (TOOLPREHEAT)((nowHeater+1) % 3);
         preheatItems.items[key_num] = itemToolPreheat[nowHeater];
         menuDrawItem(&preheatItems.items[key_num], key_num);
         break;
 
-      case KEY_ICON_6:
+/*      case KEY_ICON_6:
         if(infoSettings.unified_menu != 1)
          {
            infoMenu.menu[++infoMenu.cur] = menuHeat;
          }
         break;
-
+*/
       case KEY_ICON_7:
         infoMenu.cur--; break;
       default:break;
