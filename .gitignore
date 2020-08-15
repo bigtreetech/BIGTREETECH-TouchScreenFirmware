@@ -120,6 +120,3 @@ cmake-build-*
 .pydevproject
 .settings
 .classpath
-
-.gitignore
-platformio.ini
