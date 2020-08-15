@@ -194,7 +194,7 @@ void menuMachineSettings(void)
      {ICON_RGB_SETTINGS,            LABEL_RGB_SETTINGS},
      {ICON_TUNING,                  LABEL_TUNING},
       #if QUICK_EEPROM_BUTTON == 1
-        {ICON_EEPROM_SAVE,             LABEL_EEPROM_SAVE_INFO},
+        {ICON_EEPROM_SAVE,             LABEL_SAVE},
         {ICON_EEPROM_RESTORE,          LABEL_RESTORE},
         {ICON_EEPROM_RESET,            LABEL_RESET},
       #else
@@ -208,9 +208,11 @@ void menuMachineSettings(void)
 #if QUICK_EEPROM_BUTTON == 1
   if (infoMachineSettings.EEPROM != 1)
   {
+    uint8_t index = KEY_ICON_4;
     for (int i = 0; i < 3;i++)
-    machineSettingsItems.items[KEY_ICON_5].icon = ICON_BACKGROUND;
-    machineSettingsItems.items[KEY_ICON_5].label.index = LABEL_BACKGROUND;
+    index = KEY_ICON_4 + i;
+    machineSettingsItems.items[index].icon = ICON_BACKGROUND;
+    machineSettingsItems.items[index].label.index = LABEL_BACKGROUND;
   }
 #endif
 
