@@ -68,24 +68,27 @@ void returnToTuning(void)
 }
 
 // Esteps part
-static u8 measured_length = 20;
-static u8 old_esteps = 0;
-static u8 new_esteps = 0;
+static float measured_length = 20.0;
+static float old_esteps = 98.2;
+static float new_esteps = 98.2;
 
 void showNewESteps(void)
 {
+  //First we calculate the new E-step value:
+  new_esteps = 100 * old_esteps / measured_length;
+
   char tempstr[20];
 
   GUI_DispString(exhibitRect.x0, exhibitRect.y0, "Measured length:");
 
-  sprintf(tempstr, "%dmm", measured_length);
+  sprintf(tempstr, "%0.1fmm", measured_length);
   setLargeFont(true);
   GUI_DispStringInPrect(&exhibitRect, (u8 *)tempstr);
   setLargeFont(false);
 
-  sprintf(tempstr, "Old esteps: %d", old_esteps);
+  sprintf(tempstr, "Old esteps: %0.1f", old_esteps);
   GUI_DispString(exhibitRect.x0, BYTE_HEIGHT * 5, (u8 *)tempstr);
-  sprintf(tempstr, "New esteps: %d", new_esteps);
+  sprintf(tempstr, "New esteps: %0.1f", new_esteps);
   GUI_DispString(exhibitRect.x0,  BYTE_HEIGHT * 6, (u8 *)tempstr);
 }
 
@@ -103,9 +106,9 @@ void extrudeFilament()
   GUI_DispString(exhibitRect.x0, BYTE_HEIGHT * 6, "Extruding 100mm...");
   Delay_ms(1000);
   char tmpBuf[120];
-  sprintf(tmpBuf, "Extruding done? measure the length.\n"
+  sprintf(tmpBuf, "Extruding done?\nMeasure the length.\n"
                   "Exactly 20mm? Press '%s'\n"
-                  "Not exactly 20mm? Press '%s'", textSelect(LABEL_READY),textSelect(LABEL_TUNING));
+                  "Otherwise press '%s'", textSelect(LABEL_READY),textSelect(LABEL_TUNING));
   showDialog(DIALOG_TYPE_QUESTION, textSelect(tuneExtruderItems.title.index), (u8*) tmpBuf,
     textSelect(LABEL_READY), textSelect(LABEL_TUNING), turnHeaterOff, updateExtruderESteps, NULL); //LABEL_CONTINUE should be no.
 }
@@ -239,5 +242,47 @@ void menuNewExtruderESteps(void)
   };
   menuDrawPage(&newExtruderESteps);
   showNewESteps();
-  while(1);
+
+  #if LCD_ENCODER_SUPPORT
+    encoderPosition = 0;
+  #endif
+
+  while(infoMenu.menu[infoMenu.cur] == menuNewExtruderESteps)
+  {
+    KEY_VALUES key_num = menuKeyGetValue();
+    switch(key_num)
+    {
+      case KEY_ICON_0:
+          measured_length -= 0.1;
+          showNewESteps();
+        break;
+
+      case KEY_ICON_3:
+          measured_length += 0.1;
+          showNewESteps();
+        break;
+
+      case KEY_ICON_7:
+        //Ask for save when not saved
+          infoMenu.cur--;           
+        break;
+
+      default :
+        #if LCD_ENCODER_SUPPORT
+          if(encoderPosition)
+          {
+            if(encoderPosition > 0)
+              measured_length += 0.1;
+
+            if(encoderPosition < 0)
+              measured_length -= 0.1;
+
+            showNewESteps();
+            encoderPosition = 0;
+          }
+        #endif
+        break;
+    }
+    loopProcess();
+  }
 }
