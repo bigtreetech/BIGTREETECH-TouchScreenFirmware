@@ -13,8 +13,8 @@ void menuAutoLeveling(void)
     {ICON_Z_FADE,          LABEL_ABL_Z},
     {ICON_PROBE_OFFSET,    LABEL_Z_OFFSET},
     {ICON_BLTOUCH,         LABEL_BLTOUCH},
-    {ICON_BACKGROUND,      LABEL_BACKGROUND},
-    {ICON_BACK,            LABEL_BACK}}
+    {ICON_GRID,            LABEL_GRID},
+    {ICON_BACK,            LABEL_BACK},}
   };
 
   if (infoMachineSettings.enableubl == 1)
@@ -79,7 +79,24 @@ void menuAutoLeveling(void)
       case KEY_ICON_5:
         infoMenu.menu[++infoMenu.cur] = menuBLTouch;
         break;
-
+		
+      case KEY_ICON_6: //Display of leveling data
+        if (infoMachineSettings.autoLevel == 1 && infoMachineSettings.EEPROM == 1){
+          if (infoSettings.terminalACK == 1){  
+            infoSettings.terminalACK = 0;
+            storeCmd("M420 T0 V0\n"); //Protection against displaying the previous session with the old grid
+            storeCmd("M420 T0 V0\n");
+            infoMenu.menu[++infoMenu.cur] = menuTerminal;
+            //infoSettings.terminalACK = 1;
+          }
+          else {
+            storeCmd("M420 T0 V0\n"); //Protection against displaying the previous session with the old grid
+            storeCmd("M420 T0 V0\n");
+            infoMenu.menu[++infoMenu.cur] = menuTerminal;  
+          }
+        }  
+        break;
+		
       case KEY_ICON_7:
         if (leveled == true && infoMachineSettings.EEPROM == 1)
         {

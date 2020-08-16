@@ -249,5 +249,6 @@
     #define TC_PID_START_INFO_3       "不要操作触控屏直到整定完成!"
     #define TC_EXTRUDE_100            "挤出100mm"
     #define TC_CONNECTION_SETTINGS    "连接"
-
+    #define TC_GRID                   "Grid"
+	
 #endif
