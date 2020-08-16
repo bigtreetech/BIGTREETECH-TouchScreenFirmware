@@ -34,7 +34,7 @@ static int lastConnection_status = -1;
 static bool msgNeedRefresh = false;
 
 static char msgtitle[20];
-static char msgbody[128];
+static char msgbody[MAX_MSG_LENGTH];
 
 static float xaxis;
 static float yaxis;

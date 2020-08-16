@@ -19,6 +19,7 @@
 #include "language_gr.h"
 #include "language_sl.h"
 #include "language_ca.h"
+#include "language_tc.h"
 //
 // Add new Keywords in Language.inc file Only
 //
@@ -136,30 +137,37 @@ const char *const ca_pack[LABEL_NUM] = {
   #undef  X_WORD
 };
 
-u8 * textSelect(u8 sel)
+const char *const tc_pack[LABEL_NUM] = {
+  #define X_WORD(NAME) TC_##NAME ,
+  #include "Language.inc"
+  #undef  X_WORD
+};
+
+uint8_t *textSelect(uint8_t sel)
 {
   switch(infoSettings.language)
   {
-    case ENGLISH:     return (u8 *)en_pack[sel];
-    case CHINESE:     return (u8 *)cn_pack[sel];
-    case RUSSIAN:     return (u8 *)ru_pack[sel];
-    case JAPANESE:    return (u8 *)jp_pack[sel];
-    case ARMENIAN:    return (u8 *)am_pack[sel];
-    case GERMAN:      return (u8 *)de_pack[sel];
-    case CZECH:       return (u8 *)cz_pack[sel];
-    case SPAIN:       return (u8 *)es_pack[sel];
-    case FRENCH:      return (u8 *)fr_pack[sel];
-    case PORTUGUESE:  return (u8 *)pt_pack[sel];
-    case ITALIAN:     return (u8 *)it_pack[sel];
-    case POLISH:      return (u8 *)pl_pack[sel];
-    case SLOVAK:      return (u8 *)sk_pack[sel];
-    case DUTCH:       return (u8 *)du_pack[sel];
-    case HUNGARIAN:   return (u8 *)hu_pack[sel];
-    case TURKISH:     return (u8 *)tr_pack[sel];
-    case GREEK:       return (u8 *)gr_pack[sel];
-    case SLOVENIAN:   return (u8 *)sl_pack[sel];
-    case CATALAN:     return (u8 *)ca_pack[sel];
+    case ENGLISH:       return (uint8_t *)en_pack[sel];
+    case CHINESE:       return (uint8_t *)cn_pack[sel];
+    case RUSSIAN:       return (uint8_t *)ru_pack[sel];
+    case JAPANESE:      return (uint8_t *)jp_pack[sel];
+    case ARMENIAN:      return (uint8_t *)am_pack[sel];
+    case GERMAN:        return (uint8_t *)de_pack[sel];
+    case CZECH:         return (uint8_t *)cz_pack[sel];
+    case SPAIN:         return (uint8_t *)es_pack[sel];
+    case FRENCH:        return (uint8_t *)fr_pack[sel];
+    case PORTUGUESE:    return (uint8_t *)pt_pack[sel];
+    case ITALIAN:       return (uint8_t *)it_pack[sel];
+    case POLISH:        return (uint8_t *)pl_pack[sel];
+    case SLOVAK:        return (uint8_t *)sk_pack[sel];
+    case DUTCH:         return (uint8_t *)du_pack[sel];
+    case HUNGARIAN:     return (uint8_t *)hu_pack[sel];
+    case TURKISH:       return (uint8_t *)tr_pack[sel];
+    case GREEK:         return (uint8_t *)gr_pack[sel];
+    case SLOVENIAN:     return (uint8_t *)sl_pack[sel];
+    case CATALAN:       return (uint8_t *)ca_pack[sel];
+    case TRAD_CHINESE:  return (uint8_t *)tc_pack[sel];
 
-    default:        return NULL;
+    default:            return NULL;
   }
 }

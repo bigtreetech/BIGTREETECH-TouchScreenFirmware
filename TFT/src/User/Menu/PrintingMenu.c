@@ -151,15 +151,6 @@ void menuBeforePrinting(void)
   printingItems.items[KEY_ICON_7].label.index = LABEL_STOP;
 }
 
-
-void resumeToPause(bool is_pause)
-{
-  if(infoMenu.menu[infoMenu.cur] != menuPrinting) return;
-  printingItems.items[key_pause] = itemIsPause[is_pause];
-  menuDrawItem(&printingItems.items[key_pause],key_pause);
-}
-
-
 const GUI_RECT progressRect = {1*SPACE_X_PER_ICON, 0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y + ICON_HEIGHT/4,
                                3*SPACE_X_PER_ICON, 0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y + ICON_HEIGHT*3/4};
 
@@ -313,14 +304,13 @@ void printingDrawPage(void)
   key_pause = 5;
   if(infoPrinting.model_icon){
     printingItems.items[key_pause - 1].icon = ICON_PREVIEW;
-    printingItems.items[key_pause - 1].label.index = LABEL_BABYSTEP;
   }
   else{
     printingItems.items[key_pause - 1].icon = ICON_BABYSTEP;
-    printingItems.items[key_pause - 1].label.index = LABEL_BABYSTEP;
   }
 
-    printingItems.items[key_pause] = itemIsPause[isPause()];
+  printingItems.items[key_pause - 1].label.index = LABEL_BABYSTEP;
+  printingItems.items[key_pause] = itemIsPause[isPause()];
 
   menuDrawPage(&printingItems);
   reValueNozzle(EXT_ICON_POS);
@@ -335,12 +325,12 @@ void printingDrawPage(void)
 
 void menuPrinting(void)
 {
-  KEY_VALUES  key_num;
-  u32         time = 0;
-  HEATER      nowHeat;
-  float       curLayer = 0;
-  u8          nowFan[MAX_FAN_COUNT] = {0};
-  uint16_t    curspeed[2] = {0};
+  uint8_t   nowFan[MAX_FAN_COUNT] = {0};
+  uint16_t  curspeed[2] = {0};
+  uint32_t  time = 0;
+  HEATER    nowHeat;
+  float     curLayer = 0;
+  bool      lastPause = isPause();
   memset(&nowHeat, 0, sizeof(HEATER));
 
   printingDrawPage();
@@ -414,7 +404,15 @@ void menuPrinting(void)
       reDrawSpeed(SPD_ICON_POS);
     }
 
-    key_num = menuKeyGetValue();
+    if (lastPause != isPause()) {
+      lastPause = isPause();
+      printingItems.items[key_pause] = itemIsPause[lastPause];
+      menuDrawItem(&printingItems.items[key_pause],key_pause);
+    }
+
+    toggleinfo();
+
+    KEY_VALUES key_num = menuKeyGetValue();
     switch(key_num)
     {
       case KEY_ICON_4:
@@ -422,8 +420,7 @@ void menuPrinting(void)
         break;
 
       case KEY_ICON_5:
-          setPrintPause(!isPause(), false);
-          resumeToPause(isPause());
+        setPrintPause(!isPause(), false);
         break;
 
       case KEY_ICON_6:
@@ -442,7 +439,6 @@ void menuPrinting(void)
 
       default :break;
     }
-    toggleinfo();
     loopProcess();
   }
 }

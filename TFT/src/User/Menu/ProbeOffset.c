@@ -31,10 +31,8 @@ bool probe_offset_enabled = false;
 void probeNotifyError(void)
 {
   char tmpBuf[120];
-
   sprintf(tmpBuf, "%s %s", textSelect(LABEL_Z_OFFSET), textSelect(LABEL_OFF));
-
-  popupNotification(DIALOG_TYPE_ERROR, textSelect(LABEL_Z_OFFSET), (u8*)tmpBuf);
+  addToast(DIALOG_TYPE_ERROR, tmpBuf);
 }
 
 /* Enable probe offset */

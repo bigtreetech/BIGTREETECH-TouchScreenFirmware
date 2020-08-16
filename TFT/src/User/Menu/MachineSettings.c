@@ -191,7 +191,9 @@ ITEM itemMachineSettingsSubmenu[ITEM_MACHINE_SETTINGS_SUBMENU_NUM] = {
   {ICON_EEPROM_RESET,             LABEL_RESET},
 };
 
+#if QUICK_EEPROM_BUTTON == 1
 static uint8_t curSubmenu = 0;
+#endif
 
 void menuMachineSettings(void)
 {
@@ -212,6 +214,7 @@ void menuMachineSettings(void)
 
   KEY_VALUES key_num = KEY_IDLE;
 
+#if QUICK_EEPROM_BUTTON == 1
   if (infoMachineSettings.EEPROM == 1)
   {
     machineSettingsItems.items[KEY_ICON_5].icon = ICON_PAGE_DOWN;
@@ -219,6 +222,7 @@ void menuMachineSettings(void)
 
     machineSettingsItems.items[KEY_ICON_6] = itemMachineSettingsSubmenu[curSubmenu];
   }
+#endif
 
   menuDrawPage(&machineSettingsItems);
 
@@ -243,6 +247,7 @@ void menuMachineSettings(void)
         infoMenu.menu[++infoMenu.cur] = menuRGBSettings;
         break;
 
+#if QUICK_EEPROM_BUTTON == 1
       // change submenu
       case KEY_ICON_5:
         if (infoMachineSettings.EEPROM == 1)
@@ -284,6 +289,7 @@ void menuMachineSettings(void)
           }
         }
         break;
+#endif
 
       case KEY_ICON_7:
         infoMenu.cur--;
