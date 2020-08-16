@@ -497,20 +497,25 @@ void sendQueueCmd(void)
 
         case 106: //M106
         {
-            u8 i = 0;
-            if(cmd_seen('P')) i = cmd_value();
-            if(cmd_seen('S'))
-            {
-              fanSetSpeed(i, cmd_value());
-            }
+          uint8_t i = cmd_seen('P') ? cmd_value() : 0;
+          if(cmd_seen('S'))
+          {
+            fanSetSpeed(i, cmd_value());
+          }
+          else if (!cmd_seen('\n'))
+          {
+            char buf[12];
+            sprintf(buf, "S%u\n", fanGetSpeed(i));
+            strcat(infoCmd.queue[infoCmd.index_r].gcode,(const char*)buf);
+            fanSetSendWaiting(i, false);
+          }
           break;
         }
 
         case 107: //M107
         {
-            u8 i = 0;
-            if(cmd_seen('P')) i = cmd_value();
-            fanSetSpeed(i, 0);
+          uint8_t i = cmd_seen('P') ? cmd_value() : 0;
+          fanSetSpeed(i, 0);
           break;
         }
 
@@ -706,12 +711,13 @@ void sendQueueCmd(void)
           if(cmd_seen('Z')) setParameter(P_ABL_STATE,1,cmd_float());
         break;
 
-        #ifdef NOZZLE_PAUSE_M601
-          case 601: //M601 pause print
+        #ifdef NOZZLE_PAUSE_M600_M601
+          case 600: //M600/M601 pause print
+          case 601:
             if (isPrinting())
             {
               setPrintPause(true, false);
-              // prevent sending M601 to marlin
+              // prevent sending M600/M601 to marlin
               purgeLastCmd();
               return;
             }

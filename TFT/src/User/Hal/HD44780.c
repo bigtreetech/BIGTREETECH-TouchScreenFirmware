@@ -73,7 +73,7 @@ void HD44780_Config(CIRCULAR_QUEUE *queue)
   NVIC_Init(&NVIC_InitStructure);
 }
 
-bool HD44780_writeData()
+bool HD44780_writeData(void)
 {
   bool dataWritten = false;
 

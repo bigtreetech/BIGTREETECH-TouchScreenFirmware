@@ -34,10 +34,6 @@ static const GUI_RECT * cur_btn_rect = NULL;
 static void (*action_ok)() = NULL;
 static void (*action_cancel)() = NULL;
 static void (*action_loop)() = NULL;
-static bool autoClear = false;
-
-// expiring time for the notification popup type
-static u32 notification_expiring_time;
 
 void windowReDrawButton(u8 positon, u8 pressed)
 {
@@ -111,12 +107,6 @@ void menuDialog(void)
     if (action_loop != NULL)
       action_loop();
 
-    //clear notification after a delay if autoclear is set true
-    if(autoClear && OS_GetTimeMs() > notification_expiring_time)
-     {
-       autoClear = false;
-       infoMenu.cur--;
-     }
     loopProcess();
   }
 
@@ -126,26 +116,12 @@ void menuDialog(void)
     action_cancel();
 }
 
-void popupNotification(DIALOG_TYPE type, u8* info, u8* context)
-{
-  if (infoSettings.mode == MARLIN)
-    return;
-  autoClear = true;
-  popupReminder(type, info, context);
-}
-
 void popupReminder(DIALOG_TYPE type, u8* info, u8* context)
 {
   if (infoSettings.mode == MARLIN) return;
 
   //Display the last received popup message, overriding previous popup messages, if any
-  if(autoClear)
-    popupDrawPage(type, NULL , info, context, NULL, NULL);
-  else
-    popupDrawPage(type, &bottomSingleBtn , info, context, textSelect(LABEL_CONFIRM), NULL);
-
-  //Set the expiring time for the popup message
-  notification_expiring_time = OS_GetTimeMs() + POPUP_NOTIFICATION_DURATION;
+  popupDrawPage(type, &bottomSingleBtn , info, context, textSelect(LABEL_CONFIRM), NULL);
 
   //Set (or update on the fly, if menuDialog is already running to handle a popup message) the handlers used by menuDialog.
   action_ok = NULL;
