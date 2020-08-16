@@ -248,6 +248,17 @@
     #define CN_PID_START_INFO_2       "PID 正在自动整定中!"
     #define CN_PID_START_INFO_3       "不要操作触控屏直到整定完成!"
     #define CN_EXTRUDE_100            "挤出100mm"
+    #define CN_TUNE_EXT_TEMP          "Extruder tuning | Heat"
+    #define CN_TUNE_EXT_TEMPLOW       "Desired temperature too low!\nMinimum temperature: %d C"
+    #define CN_TUNE_EXT_DESIREDVAL    "Temperature is not yet at the desired value"
+    #define CN_TUNE_EXT_MARK120MM     "Mark 120 mm on your fillament\nPress '%s' when ready"
+    #define CN_TUNE_EXT_HEATOFF       "Turn the heater off?"
+    #define CN_TUNE_EXT_ADJ_ESTEPS    "Adjust E-Steps"
+    #define CN_TUNE_EXT_ESTEPS_SAVED  "New E-steps saved!\nDon't forget to save it in EEPROM!"
+    #define CN_TUNE_EXT_MEASURED_MM   "Measured length:"
+    #define CN_TUNE_EXT_OLD_ESTEP     "Old e-steps: %0.2f"
+    #define CN_TUNE_EXT_NEW_ESTEP     "New e-steps: %0.2f"
+    #define CN_TUNE_EXT_EXTRUDING     "Extruding done?\nMeasure the length.\nExactly 20mm? Press '%s'\nOtherwise press '%s'"
     #define CN_CONNECTION_SETTINGS    "连接"
 
 #endif

@@ -4,7 +4,7 @@
 
 MENUITEMS tuneExtruderItems = {
   // title
-  LABEL_HEAT,
+  LABEL_TUNE_EXT_TEMP,
   // icon                       label
   { {ICON_DEC,                  LABEL_DEC},
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
@@ -68,27 +68,25 @@ void returnToTuning(void)
 }
 
 // Esteps part
-static float measured_length = 20.0;
-static float old_esteps = 93.0;
-static float new_esteps = 0;
+PARAMETERS infoParameters;
 
-void showNewESteps(void)
+void showNewESteps(const float measured_length, const float old_esteps, float new_esteps)
 {
   //First we calculate the new E-step value:
   new_esteps = (100 * old_esteps) / (100 - (measured_length - 20));
 
   char tempstr[20];
 
-  GUI_DispString(exhibitRect.x0, exhibitRect.y0, "Measured length:");
+  GUI_DispString(exhibitRect.x0, exhibitRect.y0, textSelect(LABEL_TUNE_EXT_MEASURED_MM));
 
   sprintf(tempstr, "%0.1fmm", measured_length);
   setLargeFont(true);
   GUI_DispStringInPrect(&exhibitRect, (u8 *)tempstr);
   setLargeFont(false);
 
-  sprintf(tempstr, "Old esteps: %0.1f", old_esteps);
+  sprintf(tempstr, (char*)textSelect(LABEL_TUNE_EXT_OLD_ESTEP), old_esteps);
   GUI_DispString(exhibitRect.x0, BYTE_HEIGHT * 5, (u8 *)tempstr);
-  sprintf(tempstr, "New esteps: %0.1f", new_esteps);
+  sprintf(tempstr, (char*)textSelect(LABEL_TUNE_EXT_NEW_ESTEP), new_esteps);
   GUI_DispString(exhibitRect.x0,  BYTE_HEIGHT * 6, (u8 *)tempstr);
 }
 
@@ -101,14 +99,11 @@ void updateExtruderESteps(void)
 
 void extrudeFilament()
 {
+  storeCmd("G28 X Y R20\n");                    // Home extruder
   storeCmd("G90\nG0 F3000 X0 Y0\n");            // present extruder
   storeCmd("M83\nG1 F50\nG1 E100\nM82\n");      // extrude
-  GUI_DispString(exhibitRect.x0, BYTE_HEIGHT * 6, "Extruding 100mm...");
-  Delay_ms(1000);
   char tmpBuf[120];
-  sprintf(tmpBuf, "Extruding done?\nMeasure the length.\n"
-                  "Exactly 20mm? Press '%s'\n"
-                  "Otherwise press '%s'", textSelect(LABEL_READY),textSelect(LABEL_TUNING));
+  sprintf(tmpBuf, (char*)textSelect(LABEL_TUNE_EXT_EXTRUDING), textSelect(LABEL_READY),textSelect(LABEL_TUNING));
   showDialog(DIALOG_TYPE_QUESTION, textSelect(tuneExtruderItems.title.index), (u8*) tmpBuf,
     textSelect(LABEL_READY), textSelect(LABEL_TUNING), turnHeaterOff, updateExtruderESteps, NULL); //LABEL_CONTINUE should be no.
 }
@@ -168,16 +163,16 @@ void menuTuneExtruder(void)
         if(heatGetTargetTemp(c_heater) < infoSettings.min_ext_temp)
         {
             //sprintf(tmpBuf, "%s\n %s", textSelect(LABEL_TIMEOUT_REACHED), textSelect(LABEL_PROCESS_ABORTED));
-            sprintf(tmpBuf, "Desired temperature too low!\nMinimum temperature: %d C", infoSettings.min_ext_temp);
+            sprintf(tmpBuf, (char*)textSelect(LABEL_TUNE_EXT_TEMPLOW), infoSettings.min_ext_temp);
             popupReminder(DIALOG_TYPE_ALERT, textSelect(tuneExtruderItems.title.index), (u8*) tmpBuf); //textSelect(LABEL_INVALID_VALUE));
             break;
         }
         if(heatGetCurrentTemp(c_heater) < heatGetTargetTemp(c_heater) - 1)
         {
-            popupReminder(DIALOG_TYPE_ALERT, textSelect(tuneExtruderItems.title.index), "Temperature is not yet at the desired value"); //textSelect(LABEL_INVALID_VALUE));
+            popupReminder(DIALOG_TYPE_ALERT, textSelect(tuneExtruderItems.title.index), textSelect(LABEL_TUNE_EXT_DESIREDVAL));
             break;
         } else {
-            sprintf(tmpBuf, "Mark 120 mm on your fillament\nPress '%s' when ready", textSelect(LABEL_EXTRUDE));
+            sprintf(tmpBuf, (char*)textSelect(LABEL_TUNE_EXT_MARK120MM), textSelect(LABEL_EXTRUDE));
             showDialog(DIALOG_TYPE_QUESTION, textSelect(tuneExtruderItems.title.index), (u8*) tmpBuf,
               textSelect(LABEL_EXTRUDE), textSelect(LABEL_CANCEL), extrudeFilament, NULL, NULL);
         }
@@ -186,7 +181,7 @@ void menuTuneExtruder(void)
       case KEY_ICON_7:
         if(heatGetTargetTemp(c_heater) > 0)
         {
-            showDialog(DIALOG_TYPE_QUESTION, textSelect(tuneExtruderItems.title.index), "Turn heater off?",
+            showDialog(DIALOG_TYPE_QUESTION, textSelect(tuneExtruderItems.title.index), textSelect(LABEL_TUNE_EXT_HEATOFF),
               textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), turnHeaterOff, returnToTuning, NULL);
         } else {
             infoMenu.cur--;   
@@ -229,20 +224,28 @@ void menuNewExtruderESteps(void)
   // When pressing save to eeprom the new steps will be saved.
    MENUITEMS newExtruderESteps = {
     // title
-    "Adjust E-Steps", //LABEL_HEAT,
+    LABEL_TUNE_EXT_ADJ_ESTEPS,
     // icon                       label
     { {ICON_DEC,                  LABEL_DEC},
       {ICON_BACKGROUND,           LABEL_BACKGROUND},
       {ICON_BACKGROUND,           LABEL_BACKGROUND},
       {ICON_INC,                  LABEL_INC},
-      {ICON_EEPROM_SAVE,          LABEL_EEPROM_SAVE_INFO},
+      {ICON_S_SAVE,               LABEL_SAVE},
       {ICON_BACKGROUND,           LABEL_BACKGROUND},
       {ICON_BACKGROUND,           LABEL_BACKGROUND},
       {ICON_BACK,                 LABEL_BACK},}
   };
-  menuDrawPage(&newExtruderESteps);
-  showNewESteps();
 
+  static float measured_length = 20.0;
+  static float old_esteps = 0; // get the value of the E-steps
+  static float new_esteps = 0;
+
+  mustStoreCmd("M503 S0\n");
+  old_esteps = infoParameters.StepsPerMM[3]; // get the value of the E-steps
+
+  menuDrawPage(&newExtruderESteps);
+  showNewESteps(measured_length, old_esteps, new_esteps);
+  
   #if LCD_ENCODER_SUPPORT
     encoderPosition = 0;
   #endif
@@ -254,13 +257,19 @@ void menuNewExtruderESteps(void)
     {
       case KEY_ICON_0:
           measured_length -= 0.1;
-          showNewESteps();
+          showNewESteps(measured_length, old_esteps, new_esteps);
         break;
 
       case KEY_ICON_3:
           measured_length += 0.1;
-          showNewESteps();
+          showNewESteps(measured_length, old_esteps, new_esteps);
         break;
+
+      case KEY_ICON_4:
+      {
+        storeCmd("M92 T0 E%.2f\n", new_esteps);
+        popupReminder(DIALOG_TYPE_SUCCESS, textSelect(newExtruderESteps.title.index), textSelect(LABEL_TUNE_EXT_ESTEPS_SAVED)); 
+      }break;
 
       case KEY_ICON_7:
         //Ask for save when not saved
@@ -277,7 +286,7 @@ void menuNewExtruderESteps(void)
             if(encoderPosition < 0)
               measured_length -= 0.1;
 
-            showNewESteps();
+            showNewESteps(measured_length, old_esteps, new_esteps);
             encoderPosition = 0;
           }
         #endif

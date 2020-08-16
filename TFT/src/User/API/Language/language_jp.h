@@ -248,6 +248,17 @@
     #define JP_PID_START_INFO_2       "PID autotune in progress!"
     #define JP_PID_START_INFO_3       "Do not touch the screen until completed (green LED ON)!"
     #define JP_EXTRUDE_100            "Ext. 100mm"
+    #define JP_TUNE_EXT_TEMP          "Extruder tuning | Heat"
+    #define JP_TUNE_EXT_TEMPLOW       "Desired temperature too low!\nMinimum temperature: %d C"
+    #define JP_TUNE_EXT_DESIREDVAL    "Temperature is not yet at the desired value"
+    #define JP_TUNE_EXT_MARK120MM     "Mark 120 mm on your fillament\nPress '%s' when ready"
+    #define JP_TUNE_EXT_HEATOFF       "Turn the heater off?"
+    #define JP_TUNE_EXT_ADJ_ESTEPS    "Adjust E-Steps"
+    #define JP_TUNE_EXT_ESTEPS_SAVED  "New E-steps saved!\nDon't forget to save it in EEPROM!"
+    #define JP_TUNE_EXT_MEASURED_MM   "Measured length:"
+    #define JP_TUNE_EXT_OLD_ESTEP     "Old e-steps: %0.2f"
+    #define JP_TUNE_EXT_NEW_ESTEP     "New e-steps: %0.2f"
+    #define JP_TUNE_EXT_EXTRUDING     "Extruding done?\nMeasure the length.\nExactly 20mm? Press '%s'\nOtherwise press '%s'"
     #define JP_CONNECTION_SETTINGS    "Connection"
 
 #endif

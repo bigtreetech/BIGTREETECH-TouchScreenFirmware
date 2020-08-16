@@ -143,30 +143,30 @@ const char *const tc_pack[LABEL_NUM] = {
   #undef  X_WORD
 };
 
-uint8_t *textSelect(uint8_t sel)
+uint16_t *textSelect(uint16_t sel)
 {
   switch(infoSettings.language)
   {
-    case ENGLISH:       return (uint8_t *)en_pack[sel];
-    case CHINESE:       return (uint8_t *)cn_pack[sel];
-    case RUSSIAN:       return (uint8_t *)ru_pack[sel];
-    case JAPANESE:      return (uint8_t *)jp_pack[sel];
-    case ARMENIAN:      return (uint8_t *)am_pack[sel];
-    case GERMAN:        return (uint8_t *)de_pack[sel];
-    case CZECH:         return (uint8_t *)cz_pack[sel];
-    case SPAIN:         return (uint8_t *)es_pack[sel];
-    case FRENCH:        return (uint8_t *)fr_pack[sel];
-    case PORTUGUESE:    return (uint8_t *)pt_pack[sel];
-    case ITALIAN:       return (uint8_t *)it_pack[sel];
-    case POLISH:        return (uint8_t *)pl_pack[sel];
-    case SLOVAK:        return (uint8_t *)sk_pack[sel];
-    case DUTCH:         return (uint8_t *)du_pack[sel];
-    case HUNGARIAN:     return (uint8_t *)hu_pack[sel];
-    case TURKISH:       return (uint8_t *)tr_pack[sel];
-    case GREEK:         return (uint8_t *)gr_pack[sel];
-    case SLOVENIAN:     return (uint8_t *)sl_pack[sel];
-    case CATALAN:       return (uint8_t *)ca_pack[sel];
-    case TRAD_CHINESE:  return (uint8_t *)tc_pack[sel];
+    case ENGLISH:       return (uint16_t *)en_pack[sel];
+    case CHINESE:       return (uint16_t *)cn_pack[sel];
+    case RUSSIAN:       return (uint16_t *)ru_pack[sel];
+    case JAPANESE:      return (uint16_t *)jp_pack[sel];
+    case ARMENIAN:      return (uint16_t *)am_pack[sel];
+    case GERMAN:        return (uint16_t *)de_pack[sel];
+    case CZECH:         return (uint16_t *)cz_pack[sel];
+    case SPAIN:         return (uint16_t *)es_pack[sel];
+    case FRENCH:        return (uint16_t *)fr_pack[sel];
+    case PORTUGUESE:    return (uint16_t *)pt_pack[sel];
+    case ITALIAN:       return (uint16_t *)it_pack[sel];
+    case POLISH:        return (uint16_t *)pl_pack[sel];
+    case SLOVAK:        return (uint16_t *)sk_pack[sel];
+    case DUTCH:         return (uint16_t *)du_pack[sel];
+    case HUNGARIAN:     return (uint16_t *)hu_pack[sel];
+    case TURKISH:       return (uint16_t *)tr_pack[sel];
+    case GREEK:         return (uint16_t *)gr_pack[sel];
+    case SLOVENIAN:     return (uint16_t *)sl_pack[sel];
+    case CATALAN:       return (uint16_t *)ca_pack[sel];
+    case TRAD_CHINESE:  return (uint16_t *)tc_pack[sel];
 
     default:            return NULL;
   }

@@ -248,6 +248,17 @@
     #define DU_PID_START_INFO_2       "PID autotune is bezig!"
     #define DU_PID_START_INFO_3       "Raak het scherm NIET aan totdat deze klaar is (groene LED aan)!"
     #define DU_EXTRUDE_100            "Ext. 100mm"
+    #define DU_TUNE_EXT_TEMP          "Extruder tuning | Heat"
+    #define DU_TUNE_EXT_TEMPLOW       "Desired temperature too low!\nMinimum temperature: %d C"
+    #define DU_TUNE_EXT_DESIREDVAL    "Temperature is not yet at the desired value"
+    #define DU_TUNE_EXT_MARK120MM     "Mark 120 mm on your fillament\nPress '%s' when ready"
+    #define DU_TUNE_EXT_HEATOFF       "Turn the heater off?"
+    #define DU_TUNE_EXT_ADJ_ESTEPS    "Adjust E-Steps"
+    #define DU_TUNE_EXT_ESTEPS_SAVED  "New E-steps saved!\nDon't forget to save it in EEPROM!"
+    #define DU_TUNE_EXT_MEASURED_MM   "Measured length:"
+    #define DU_TUNE_EXT_OLD_ESTEP     "Old e-steps: %0.2f"
+    #define DU_TUNE_EXT_NEW_ESTEP     "New e-steps: %0.2f"
+    #define DU_TUNE_EXT_EXTRUDING     "Extruding done?\nMeasure the length.\nExactly 20mm? Press '%s'\nOtherwise press '%s'"
     #define DU_CONNECTION_SETTINGS    "Connecties"
 
 #endif

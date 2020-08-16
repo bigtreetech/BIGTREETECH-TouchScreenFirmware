@@ -248,6 +248,17 @@
     #define ES_PID_START_INFO_2       "PID autotune in progress!"
     #define ES_PID_START_INFO_3       "Do not touch the screen until completed (green LED ON)!"
     #define ES_EXTRUDE_100            "Ext. 100mm"
+    #define ES_TUNE_EXT_TEMP          "Extruder tuning | Heat"
+    #define ES_TUNE_EXT_TEMPLOW       "Desired temperature too low!\nMinimum temperature: %d C"
+    #define ES_TUNE_EXT_DESIREDVAL    "Temperature is not yet at the desired value"
+    #define ES_TUNE_EXT_MARK120MM     "Mark 120 mm on your fillament\nPress '%s' when ready"
+    #define ES_TUNE_EXT_HEATOFF       "Turn the heater off?"
+    #define ES_TUNE_EXT_ADJ_ESTEPS    "Adjust E-Steps"
+    #define ES_TUNE_EXT_ESTEPS_SAVED  "New E-steps saved!\nDon't forget to save it in EEPROM!"
+    #define ES_TUNE_EXT_MEASURED_MM   "Measured length:"
+    #define ES_TUNE_EXT_OLD_ESTEP     "Old e-steps: %0.2f"
+    #define ES_TUNE_EXT_NEW_ESTEP     "New e-steps: %0.2f"
+    #define ES_TUNE_EXT_EXTRUDING     "Extruding done?\nMeasure the length.\nExactly 20mm? Press '%s'\nOtherwise press '%s'"
     #define ES_CONNECTION_SETTINGS    "Connection"
 
 #endif
