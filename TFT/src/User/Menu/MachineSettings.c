@@ -208,11 +208,11 @@ void menuMachineSettings(void)
 #if QUICK_EEPROM_BUTTON == 1
   if (infoMachineSettings.EEPROM != 1)
   {
-    uint8_t index = KEY_ICON_4;
     for (int i = 0; i < 3;i++)
-    index = KEY_ICON_4 + i;
-    machineSettingsItems.items[index].icon = ICON_BACKGROUND;
-    machineSettingsItems.items[index].label.index = LABEL_BACKGROUND;
+    {
+    machineSettingsItems.items[KEY_ICON_4 + i].icon = ICON_BACKGROUND;
+    machineSettingsItems.items[KEY_ICON_4 + i].label.index = LABEL_BACKGROUND;
+    }
   }
 #endif
 
