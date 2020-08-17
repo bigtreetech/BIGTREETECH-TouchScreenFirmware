@@ -12,7 +12,7 @@ MENUITEMS tuneExtruderItems = {
     {ICON_INC,                  LABEL_INC},
     {ICON_NOZZLE,               LABEL_NOZZLE},
     {ICON_5_DEGREE,             LABEL_5_DEGREE},
-    {ICON_EXTRUDE_100,          LABEL_EXTRUDE_100},
+    {ICON_EXTRUDE_100,          LABEL_TUNE_EXT_EXTRUDE_100},
     {ICON_BACK,                 LABEL_BACK},}
 };
 
