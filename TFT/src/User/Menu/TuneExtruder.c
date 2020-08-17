@@ -70,10 +70,10 @@ void returnToTuning(void)
 // Esteps part
 PARAMETERS infoParameters;
 
-void showNewESteps(const float measured_length, const float old_esteps, float new_esteps)
+void showNewESteps(const float measured_length, const float old_esteps, float * new_esteps)
 {
   //First we calculate the new E-step value:
-  new_esteps = (100 * old_esteps) / (100 - (measured_length - 20));
+  *new_esteps = (100 * old_esteps) / (100 - (measured_length - 20));
 
   char tempstr[20];
 
@@ -86,7 +86,7 @@ void showNewESteps(const float measured_length, const float old_esteps, float ne
 
   sprintf(tempstr, (char*)textSelect(LABEL_TUNE_EXT_OLD_ESTEP), old_esteps);
   GUI_DispString(exhibitRect.x0, BYTE_HEIGHT * 5, (u8 *)tempstr);
-  sprintf(tempstr, (char*)textSelect(LABEL_TUNE_EXT_NEW_ESTEP), new_esteps);
+  sprintf(tempstr, (char*)textSelect(LABEL_TUNE_EXT_NEW_ESTEP), *new_esteps);
   GUI_DispString(exhibitRect.x0,  BYTE_HEIGHT * 6, (u8 *)tempstr);
 }
 
@@ -237,14 +237,14 @@ void menuNewExtruderESteps(void)
   };
 
   static float measured_length = 20.0;
-  static float old_esteps = 0; // get the value of the E-steps
-  static float new_esteps = 0;
+  float old_esteps; // get the value of the E-steps
+  float new_esteps;
 
   mustStoreCmd("M503 S0\n");
   old_esteps = infoParameters.StepsPerMM[3]; // get the value of the E-steps
 
   menuDrawPage(&newExtruderESteps);
-  showNewESteps(measured_length, old_esteps, new_esteps);
+  showNewESteps(measured_length, old_esteps, &new_esteps);
   
   #if LCD_ENCODER_SUPPORT
     encoderPosition = 0;
@@ -257,23 +257,26 @@ void menuNewExtruderESteps(void)
     {
       case KEY_ICON_0:
           measured_length -= 0.1;
-          showNewESteps(measured_length, old_esteps, new_esteps);
+          showNewESteps(measured_length, old_esteps, &new_esteps);
         break;
 
       case KEY_ICON_3:
           measured_length += 0.1;
-          showNewESteps(measured_length, old_esteps, new_esteps);
+          showNewESteps(measured_length, old_esteps, &new_esteps);
         break;
 
       case KEY_ICON_4:
       {
-        storeCmd("M92 T0 E%.2f\n", new_esteps);
-        popupReminder(DIALOG_TYPE_SUCCESS, textSelect(newExtruderESteps.title.index), textSelect(LABEL_TUNE_EXT_ESTEPS_SAVED)); 
+        char tmpBuf[120];
+        storeCmd("M92 T0 E%0.2f\n", new_esteps);
+
+        sprintf(tmpBuf, (char*)textSelect(LABEL_TUNE_EXT_ESTEPS_SAVED), new_esteps);
+        popupReminder(DIALOG_TYPE_SUCCESS, textSelect(newExtruderESteps.title.index), (u8*) tmpBuf); 
       }break;
 
       case KEY_ICON_7:
-        //Ask for save when not saved
-          infoMenu.cur--;           
+        //Ask for save when not saved?
+          infoMenu.cur-=2; //Return to tinung menu. Not temprature
         break;
 
       default :
@@ -286,7 +289,7 @@ void menuNewExtruderESteps(void)
             if(encoderPosition < 0)
               measured_length -= 0.1;
 
-            showNewESteps(measured_length, old_esteps, new_esteps);
+            showNewESteps(measured_length, old_esteps, &new_esteps);
             encoderPosition = 0;
           }
         #endif

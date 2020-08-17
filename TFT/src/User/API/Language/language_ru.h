@@ -254,7 +254,7 @@
     #define RU_TUNE_EXT_MARK120MM     "Mark 120 mm on your fillament\nPress '%s' when ready"
     #define RU_TUNE_EXT_HEATOFF       "Turn the heater off?"
     #define RU_TUNE_EXT_ADJ_ESTEPS    "Adjust E-Steps"
-    #define RU_TUNE_EXT_ESTEPS_SAVED  "New E-steps saved!\nDon't forget to save it in EEPROM!"
+    #define RU_TUNE_EXT_ESTEPS_SAVED  "New E-steps saved!\nDon't forget to\nsave it in EEPROM\nNew value: %0.2f"
     #define RU_TUNE_EXT_MEASURED_MM   "Measured length:"
     #define RU_TUNE_EXT_OLD_ESTEP     "Old e-steps: %0.2f"
     #define RU_TUNE_EXT_NEW_ESTEP     "New e-steps: %0.2f"

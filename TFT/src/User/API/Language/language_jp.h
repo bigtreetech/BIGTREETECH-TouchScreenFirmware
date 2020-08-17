@@ -254,7 +254,7 @@
     #define JP_TUNE_EXT_MARK120MM     "Mark 120 mm on your fillament\nPress '%s' when ready"
     #define JP_TUNE_EXT_HEATOFF       "Turn the heater off?"
     #define JP_TUNE_EXT_ADJ_ESTEPS    "Adjust E-Steps"
-    #define JP_TUNE_EXT_ESTEPS_SAVED  "New E-steps saved!\nDon't forget to save it in EEPROM!"
+    #define JP_TUNE_EXT_ESTEPS_SAVED  "New E-steps saved!\nDon't forget to\nsave it in EEPROM\nNew value: %0.2f"
     #define JP_TUNE_EXT_MEASURED_MM   "Measured length:"
     #define JP_TUNE_EXT_OLD_ESTEP     "Old e-steps: %0.2f"
     #define JP_TUNE_EXT_NEW_ESTEP     "New e-steps: %0.2f"
