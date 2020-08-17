@@ -60,11 +60,11 @@ void popupDrawPage(DIALOG_TYPE type, BUTTON *btn, const u8 *title, const u8 *con
         lcd_dim.dimmed = false;
         Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
       }
+      //Set a new idle_ms time
+      lcd_dim.idle_ms = OS_GetTimeMs();
     }
-    //Set a new idle_ms time
-    lcd_dim.idle_ms = OS_GetTimeMs();
   #endif
-  
+
   setMenuType(MENU_TYPE_DIALOG);
 
   if (btn != NULL)                     // set the following global variables only if buttons must be provided.

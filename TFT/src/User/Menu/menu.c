@@ -102,9 +102,10 @@ void addToast(DIALOG_TYPE style, char * text)
         lcd_dim.dimmed = false;
         Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
       }
+      //Set a new idle_ms time
+      lcd_dim.idle_ms = OS_GetTimeMs();
     }
-    //Set a new idle_ms time
-    lcd_dim.idle_ms = OS_GetTimeMs();
+  
   #endif
 
   TOAST t;
@@ -312,9 +313,9 @@ void volumeReminderMessage(int16_t inf, SYS_STATUS status)
         lcd_dim.dimmed = false;
         Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
       }
+      //Set a new idle_ms time
+      lcd_dim.idle_ms = OS_GetTimeMs();
     }
-    //Set a new idle_ms time
-    lcd_dim.idle_ms = OS_GetTimeMs();
   #endif
 
   if(_toastRunning)
@@ -531,8 +532,7 @@ void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, const ITEM * item)
       {
         loc.y = liveicon->lines[i].pos.y + rect_of_key[index].y0;
       }
-      switch (liveicon->lines[i].h_align)
-      {
+      switch (liveicon->lines[i].h_align)      {
       case LEFT:
         GUI_DispString(loc.x, loc.y, liveicon->lines[i].text);
         break;
