@@ -236,7 +236,6 @@ void menuPid(void)
   pidItems.items[KEY_ICON_4] = itemPidTool[pidHeater.toolIndex];
   pidItems.items[KEY_ICON_5] = itemPidDegree[curDegree];
 
-
   #if LCD_ENCODER_SUPPORT
     encoderPosition = 0;
   #endif
@@ -287,7 +286,6 @@ void menuPid(void)
         break;
 
       case KEY_ICON_6:
-      
         if (pidRunning)
         {
           addToast(DIALOG_TYPE_ERROR, (char*)textSelect(LABEL_PROCESS_RUNNING));
