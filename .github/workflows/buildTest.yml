@@ -15,13 +15,8 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -U platformio
-      - name: Build TFT35 V3
-        run: platformio run --environment BIGTREE_TFT35_V3_0     
-      - name: Build TFT35 V2
-        run: platformio run --environment BIGTREE_TFT35_V2_0
       - name: Build TFT35 V1.2
         run: platformio run --environment BIGTREE_TFT35_V1_2
-<<<<<<< HEAD
       - name: Build TFT35 V2.0
         run: platformio run --environment BIGTREE_TFT35_V2_0
       - name: Build TFT35 V3.0
