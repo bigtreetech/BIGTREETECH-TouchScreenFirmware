@@ -31,10 +31,10 @@
 /**
  * Default LCD Brightness and LCD IDLE Brightness
  *
- * Brightness:  0: LCD_5_PERCENT,    1: LCD_10_PERCENT,  2: LCD_20_PERCENT,
- *              3: LCD_30_PERCENT,   4: LCD_40_PERCENT,  5: LCD_50_PERCENT,
- *              6: LCD_60_PERCENT,   7: LCD_70_PERCENT,  8: LCD_80_PERCENT,
- *              9: LCD_90_PERCENT,  10: LCD_100_PERCENT
+ * Brightness:  0: LCD_0_PERCENT,    1: LCD_5_PERCENT,   2: LCD_10_PERCENT,
+ *              3: LCD_20_PERCENT,   4: LCD_30_PERCENT,  5: LCD_40_PERCENT,
+ *              6: LCD_50_PERCENT,   7: LCD_60_PERCENT,  8: LCD_70_PERCENT,
+ *              9: LCD_80_PERCENT,  10: LCD_90_PERCENT, 11: LCD_100_PERCENT
  *
  * Settings for the idle dim timer. The LCD screen will dim to idle brightness,
  * if the display is not touched for the period of the lcd idle timer.
@@ -171,7 +171,7 @@
 #define EXTRUDER_NUM 1    // set in 1~6
 #define FAN_NUM      1    // set in 1~6
 
-//                         PLA      PETG      ABS
+//                         PLA    PETG    ABS    TPU
 #define PREHEAT_LABELS   {"PLA", "PETG", "ABS", "TPU"}
 #define PREHEAT_HOTEND   {200,   250,    230,   230}
 #define PREHEAT_BED      {60,    70,     100,   50}
