@@ -263,7 +263,7 @@ void menuPid(void)
             limitValue(0, pidHeater.T[pidHeater.toolIndex].target + pidDegree[curDegree], infoSettings.max_temp[pidHeater.toolIndex]);
 
         pidTemperatureReDraw(true);
-      break;
+        break;
 
       case KEY_ICON_4:
         do
@@ -284,7 +284,7 @@ void menuPid(void)
         pidItems.items[key_num] = itemPidDegree[curDegree];
 
         menuDrawItem(&pidItems.items[key_num], key_num);
-      break;
+        break;
 
       case KEY_ICON_6:
       
@@ -306,7 +306,7 @@ void menuPid(void)
               textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), pidStart, NULL, NULL);
           }
         }
-      break;
+        break;
 
       case KEY_ICON_7:
         infoMenu.cur--;
