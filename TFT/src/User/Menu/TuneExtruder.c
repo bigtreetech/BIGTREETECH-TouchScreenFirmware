@@ -236,7 +236,7 @@ void menuNewExtruderESteps(void)
       {ICON_BACK,                 LABEL_BACK},}
   };
 
-  static float measured_length = 20.0;
+  float measured_length = 20.0;
   float old_esteps; // get the value of the E-steps
   float new_esteps;
 
