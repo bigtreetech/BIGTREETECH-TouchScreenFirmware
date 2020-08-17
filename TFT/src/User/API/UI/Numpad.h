@@ -45,14 +45,15 @@ typedef enum
   NUM_KEY_DEC,
   NUM_KEY_0,
   NUM_KEY_MINUS,
-  NUM_KEY_15,
+  NUM_KEY_RESET,
 
   NUM_KEY_IDLE = IDLE_TOUCH,
 }NUM_KEY_VALUES;
 
 
-float numPadFloat(u8* title, float old_val, bool negative);
+float numPadFloat(u8* title, float old_val, float reset_val, bool negative);
 
-int32_t numPadInt(u8* title, int32_t old_val, bool negative);
+int32_t numPadInt(u8* title, int32_t old_val, int32_t reset_val, bool negative);
+
 
 #endif

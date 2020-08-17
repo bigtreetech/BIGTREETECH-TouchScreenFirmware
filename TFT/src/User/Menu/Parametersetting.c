@@ -20,9 +20,11 @@ const LISTITEM parametertypes[P_ITEMSCOUNT] = {
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_FWRECOVER,        LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_LIN_ADVANCE,      LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_ABL,              LABEL_BACKGROUND},
+  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_RETRACT_AUTO,     LABEL_BACKGROUND},
   //Keep below items always at the end
-  {ICONCHAR_RESET,      LIST_LABEL,       LABEL_SETTING_RESET,    LABEL_BACKGROUND},
+  {ICONCHAR_SAVE,       LIST_LABEL,       LABEL_SETTING_SAVE,     LABEL_BACKGROUND},
   {ICONCHAR_UNDO,       LIST_LABEL,       LABEL_SETTING_RESTORE,  LABEL_BACKGROUND},
+  {ICONCHAR_RESET,      LIST_LABEL,       LABEL_SETTING_RESET,    LABEL_BACKGROUND},
 };
 
 LISTITEMS parameterMainItems = {
@@ -85,7 +87,8 @@ void menuShowParameter(void){
       setDynamicLabel(0, "S");
       setDynamicLabel(1, "Z");
       break;
-
+    case P_AUTO_RETRACT:
+      parameter_menuitems.items[i].titlelabel = retract_auto_ID[i];
     default:
       if (getDualstepperStatus(E_STEPPER) && i == E2_STEPPER)
       {
@@ -124,9 +127,9 @@ void menuShowParameter(void){
         float v = getParameter(cur_parameter, key_num);
 
         if (v_type == VAL_TYPE_FLOAT || v_type == VAL_TYPE_NEG_FLOAT)
-          v = numPadFloat(NULL, v, negative_val); // parameter is a decimal number
+          v = numPadFloat(NULL, v, v, negative_val); // parameter is a decimal number
         else
-          v = (float)numPadInt(NULL, v, negative_val); // parameter is an integer
+          v = (float)numPadInt(NULL, v, v, negative_val); // parameter is an integer
 
         if (v != getParameter(cur_parameter, key_num))
         {
@@ -158,7 +161,7 @@ for (uint8_t i = 0; i < LISTITEM_PER_PAGE; i++)
     uint8_t item_index = ps_cur_page * LISTITEM_PER_PAGE + i;
     if (item_index < P_ITEMSCOUNT)
     {
-      if (infoMachineSettings.EEPROM != 1 && (item_index == P_RESET_SETTINGS || item_index == P_RESTORE_SETTINGS))
+      if (infoMachineSettings.EEPROM != 1 && (item_index == P_RESET_SETTINGS || item_index == P_RESTORE_SETTINGS || item_index == P_SAVE_SETTINGS))
         parameterMainItems.items[i].icon = ICONCHAR_BACKGROUND;
       else
         parameterMainItems.items[i] = parametertypes[item_index];
@@ -196,7 +199,7 @@ void menuParameterSettings(void){
   KEY_VALUES key_num = KEY_IDLE;
 
   if (infoMachineSettings.EEPROM != 1)
-    total_pages = (P_RESET_SETTINGS+LISTITEM_PER_PAGE-1)/LISTITEM_PER_PAGE;
+    total_pages = (P_SAVE_SETTINGS+LISTITEM_PER_PAGE-1)/LISTITEM_PER_PAGE;
   else
     total_pages = (P_ITEMSCOUNT+LISTITEM_PER_PAGE-1)/LISTITEM_PER_PAGE;
 
@@ -251,7 +254,14 @@ void menuParameterSettings(void){
 
       if (infoMachineSettings.EEPROM == 1)
       {
-        if (cp == P_RESET_SETTINGS)
+        if (cp == P_SAVE_SETTINGS)
+        {
+          showDialog(DIALOG_TYPE_ALERT, textSelect(parameterMainItems.title.index), textSelect(LABEL_EEPROM_SAVE_INFO),
+                    textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL) , saveEepromSettings, NULL, NULL);
+          parametersChanged = false;
+          break;
+        }
+        else if (cp == P_RESET_SETTINGS)
         {
           showDialog(DIALOG_TYPE_ALERT, textSelect(LABEL_SETTING_RESET), textSelect(LABEL_RESET_SETTINGS_INFO),
                       textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), resetEepromSettings, NULL, NULL);
@@ -267,6 +277,7 @@ void menuParameterSettings(void){
       if (key_num < LISTITEM_PER_PAGE && cp < PARAMETERS_COUNT)
       {
         cur_parameter = cp;
+        mustStoreCmd("M503 S0\n");
         infoMenu.menu[++infoMenu.cur] = menuShowParameter;
         break;
       }
@@ -283,6 +294,7 @@ bool temperatureStatusValid(void)
 {
   if (infoSettings.persistent_info != 1) return false;
   if (infoHost.connected == false) return false;
+  if (toastRunning()) return false;
 
   if (infoMenu.menu[infoMenu.cur] == menuPrinting) return false;
   if (infoMenu.menu[infoMenu.cur] == menuStatus) return false;

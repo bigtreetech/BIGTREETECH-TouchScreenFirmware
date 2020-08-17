@@ -2,10 +2,12 @@
 #include "STM32_Flash.h"
 
 #define TSC_SIGN  0x20200512 // DO NOT MODIFY
-#define PARA_SIGN 0x20200805 // (YYYMMDD) If a new setting parameter is added, modify here and initialize the initial value in the "infoSettingsReset()" function
+#define PARA_SIGN 0x20200810 // (YYYMMDD) If a new setting parameter is added,
+                             // modify here and initialize the initial value
+                             // in the "infoSettingsReset()" function
 
-extern int32_t TSC_Para[7];        //
-extern SETTINGS infoSettings;  //
+extern int32_t TSC_Para[7];
+extern SETTINGS infoSettings;
 
 enum{
  PARA_TSC_EXIST = (1 << 0),
@@ -13,7 +15,7 @@ enum{
 };
 uint8_t paraStatus = 0;
 
-void wordToByte(u32 word, u8 *bytes)  //
+void wordToByte(u32 word, u8 *bytes)
 {
   u8 len = 4;
   u8 i = 0;
@@ -82,15 +84,17 @@ void readStoredPara(void)
   infoSettings.list_border_color    = byteToWord(data + (index += 4), 4);
   infoSettings.list_button_color    = byteToWord(data + (index += 4), 4);
 
-  infoSettings.silent               = byteToWord(data + (index += 4), 4);
+  infoSettings.touchSound           = byteToWord(data + (index += 4), 4);
+  infoSettings.toastSound           = byteToWord(data + (index += 4), 4);
+  infoSettings.alertSound           = byteToWord(data + (index += 4), 4);
+
   infoSettings.terminalACK          = byteToWord(data + (index += 4), 4);
   infoSettings.move_speed           = byteToWord(data + (index += 4), 4);
   infoSettings.knob_led_color       = byteToWord(data + (index += 4), 4);
-  infoSettings.knob_led_idle        = byteToWord(data + (index += 4), 4); 
+  infoSettings.knob_led_idle        = byteToWord(data + (index += 4), 4);
   infoSettings.persistent_info      = byteToWord(data + (index += 4), 4);
   infoSettings.file_listmode        = byteToWord(data + (index += 4), 4);
-  infoSettings.ack_popup_type       = byteToWord(data + (index += 4), 4);
-  infoSettings.ack_buzzer           = byteToWord(data + (index += 4), 4);
+  infoSettings.ack_notification     = byteToWord(data + (index += 4), 4);
 
   infoSettings.lcd_brightness       = byteToWord(data + (index += 4), 4);
   infoSettings.lcd_idle_brightness  = byteToWord(data + (index += 4), 4);
@@ -215,15 +219,17 @@ void storePara(void)
   wordToByte(infoSettings.list_border_color,          data + (index += 4));
   wordToByte(infoSettings.list_button_color,          data + (index += 4));
 
-  wordToByte(infoSettings.silent,                     data + (index += 4));
+  wordToByte(infoSettings.touchSound,                 data + (index += 4));
+  wordToByte(infoSettings.toastSound,                 data + (index += 4));
+  wordToByte(infoSettings.alertSound,                 data + (index += 4));
+
   wordToByte(infoSettings.terminalACK,                data + (index += 4));
   wordToByte(infoSettings.move_speed,                 data + (index += 4));
   wordToByte(infoSettings.knob_led_color,             data + (index += 4));
   wordToByte(infoSettings.knob_led_idle,              data + (index += 4));
   wordToByte(infoSettings.persistent_info,            data + (index += 4));
   wordToByte(infoSettings.file_listmode,              data + (index += 4));
-  wordToByte(infoSettings.ack_popup_type,             data + (index += 4));
-  wordToByte(infoSettings.ack_buzzer,                 data + (index += 4));
+  wordToByte(infoSettings.ack_notification,           data + (index += 4));
 
   wordToByte(infoSettings.lcd_brightness,             data + (index += 4));
   wordToByte(infoSettings.lcd_idle_brightness,        data + (index += 4));

@@ -31,10 +31,10 @@ static u32 nextTime = 0;
 static u32 update_time = 2000; // 1 seconds is 1000
 SCROLL     msgScroll;
 static int lastConnection_status = -1;
-static bool booted = false;
+static bool msgNeedRefresh = false;
 
 static char msgtitle[20];
-static char msgbody[128];
+static char msgbody[MAX_MSG_LENGTH];
 
 static float xaxis;
 static float yaxis;
@@ -210,16 +210,26 @@ float getAxisLocation(u8 n){
   }
 }
 
-
 void statusScreen_setMsg(const uint8_t *title, const uint8_t *msg)
 {
   strncpy(msgtitle, (char *)title, sizeof(msgtitle));
   strncpy(msgbody, (char *)msg, sizeof(msgbody));
+  msgNeedRefresh = true;
+}
 
-  if (infoMenu.menu[infoMenu.cur] == menuStatus && booted == true)
-  {
-    drawStatusScreenMsg();
+void statusScreen_setReady(void)
+{
+  strncpy(msgtitle, (char *)textSelect(LABEL_STATUS), sizeof(msgtitle));
+  if(infoHost.connected == false){
+    strncpy(msgbody, (char *)textSelect(LABEL_UNCONNECTED), sizeof(msgbody));
   }
+  else{
+    strncpy(msgbody, (char *)machine_type, sizeof(msgbody));
+    strcat(msgbody, " ");
+    strcat(msgbody, (char *)textSelect(LABEL_READY));
+  }
+
+  msgNeedRefresh = true;
 }
 
 void drawStatusScreenMsg(void)
@@ -238,6 +248,8 @@ void drawStatusScreenMsg(void)
   Scroll_CreatePara(&msgScroll, (u8 *)msgbody, &msgRect);
 
   GUI_RestoreColorDefault();
+
+  msgNeedRefresh = false;
 }
 
 void scrollMsg(void){
@@ -282,7 +294,6 @@ void toggleTool(void)
 
 void menuStatus(void)
 {
-  booted = true;
   KEY_VALUES key_num = KEY_IDLE;
   GUI_SetBkColor(infoSettings.bg_color);
   menuDrawPage(&StatusItems);
@@ -293,13 +304,11 @@ void menuStatus(void)
   while (infoMenu.menu[infoMenu.cur] == menuStatus)
   {
     if(infoHost.connected != lastConnection_status){
-      if(infoHost.connected == false){
-        statusScreen_setMsg(textSelect(LABEL_STATUS), textSelect(LABEL_UNCONNECTED));
-      }
-      else{
-        statusScreen_setMsg(textSelect(LABEL_STATUS), textSelect(LABEL_READY));
-      }
+      statusScreen_setReady();
       lastConnection_status = infoHost.connected;
+    }
+    if (msgNeedRefresh) {
+      drawStatusScreenMsg();
     }
     scrollMsg();
     key_num = menuKeyGetValue();

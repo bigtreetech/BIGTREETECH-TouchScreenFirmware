@@ -21,7 +21,7 @@ LABEL_FEATURE_SETTINGS,
 //setup item states
 //
 #define TOGGLE_NUM   2
-const uint16_t toggleitem[TOGGLE_NUM] = {ICONCHAR_TOGGLE_OFF,ICONCHAR_TOGGLE_ON};
+const uint16_t toggleitem[TOGGLE_NUM] = {ICONCHAR_TOGGLE_OFF, ICONCHAR_TOGGLE_ON};
 
 #ifdef FIL_RUNOUT_PIN
   #define ITEM_RUNOUT_NUM 3
@@ -42,13 +42,13 @@ const LABEL itemMoveSpeed[ITEM_SPEED_NUM] = {
                                               LABEL_FAST_SPEED
                                             };
 
-#define ITEM_POPUP_TYPE_NUM 3
-const LABEL itemPopupType[ITEM_POPUP_TYPE_NUM] = {
-  //item value text(only for custom value)
-  LABEL_OFF,
-  LABEL_ON,
-  LABEL_SMART
-};
+#define NOTIFICATION_TYPE_NUM 3
+const char *const notificationType[NOTIFICATION_TYPE_NUM] = {
+                                                              //item value text(only for custom value)
+                                                              "OFF",
+                                                              "POPUP",
+                                                              "TOAST"
+                                                            };
 
 //
 //add key number index of the items
@@ -71,8 +71,7 @@ typedef enum
   SKEY_CANCELGCODE,
   SKEY_PERSISTENTINFO,
   SKEY_FILELIST,
-  SKEY_ACK_POPUP_TYPE,
-  SKEY_ACK_BUZZER,
+  SKEY_ACK_NOTIFICATION,
   #ifdef LED_COLOR_PIN
     SKEY_KNOB,
   #ifdef LCD_LED_PWM_CHANNEL
@@ -115,8 +114,7 @@ LISTITEM settingPage[SKEY_COUNT] = {
   {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_SEND_CANCEL_GCODE,        LABEL_BACKGROUND},
   {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_PERSISTENT_STATUS_INFO,   LABEL_BACKGROUND},
   {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_FILE_LISTMODE,            LABEL_BACKGROUND},
-  {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_ACK_POPUP_TYPE,           LABEL_OFF},
-  {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_ACK_BUZZER,               LABEL_BACKGROUND},
+  {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_ACK_NOTIFICATION,         LABEL_DYNAMIC},
   #ifdef LED_COLOR_PIN
     {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_KNOB_LED,                 LABEL_OFF},
   #ifdef LCD_LED_PWM_CHANNEL
@@ -215,14 +213,9 @@ void updateFeatureSettings(uint8_t key_val)
       settingPage[item_index].icon = toggleitem[infoSettings.file_listmode];
       break;
 
-    case SKEY_ACK_POPUP_TYPE:
-      infoSettings.ack_popup_type = (infoSettings.ack_popup_type + 1) % ITEM_POPUP_TYPE_NUM;
-      settingPage[item_index].valueLabel = itemPopupType[infoSettings.ack_popup_type];
-      break;
-
-    case SKEY_ACK_BUZZER:
-      infoSettings.ack_buzzer = (infoSettings.ack_buzzer + 1) % TOGGLE_NUM;
-      settingPage[item_index].icon = toggleitem[infoSettings.ack_buzzer];
+    case SKEY_ACK_NOTIFICATION:
+      infoSettings.ack_notification = (infoSettings.ack_notification + 1) % NOTIFICATION_TYPE_NUM;
+      setDynamicTextValue(key_val, (char*)notificationType[infoSettings.ack_notification]);
       break;
 
     #ifdef LED_COLOR_PIN
@@ -251,7 +244,7 @@ void updateFeatureSettings(uint8_t key_val)
         infoSettings.lcd_brightness = (infoSettings.lcd_brightness + 1) % ITEM_BRIGHTNESS_NUM;
         if(infoSettings.lcd_brightness == 0)
           infoSettings.lcd_brightness = 1; //In Normal it should not be off. Set back to 5%
-        
+
         char tempstr[8];
         sprintf(tempstr,(char *)textSelect(LABEL_PERCENT_VALUE),LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
         setDynamicTextValue(key_val,tempstr);
@@ -291,7 +284,7 @@ void updateFeatureSettings(uint8_t key_val)
       return;
   }
    featureSettingsItems.items[key_val] = settingPage[item_index];
-}
+} //updateFeatureSettings
 
 //
 //load values on page change and reload
@@ -356,12 +349,8 @@ void loadFeatureSettings(){
         settingPage[item_index].icon = toggleitem[infoSettings.file_listmode];
         break;
 
-      case SKEY_ACK_POPUP_TYPE:
-        settingPage[item_index].valueLabel = itemPopupType[infoSettings.ack_popup_type];
-        break;
-
-      case SKEY_ACK_BUZZER:
-        settingPage[item_index].icon = toggleitem[infoSettings.ack_buzzer];
+      case SKEY_ACK_NOTIFICATION:
+        setDynamicTextValue(i, (char*)notificationType[infoSettings.ack_notification]);
         break;
 
       case SKEY_RESET_SETTINGS:
@@ -442,7 +431,7 @@ void loadFeatureSettings(){
   //menuDrawListItem(&featureSettingsItems.items[5],5);
   //menuDrawListItem(&featureSettingsItems.items[6],6);
 
-}
+} //loadFeatureSettings
 
 
 void menuFeatureSettings(void)

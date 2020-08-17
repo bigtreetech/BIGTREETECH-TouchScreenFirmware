@@ -7,7 +7,7 @@
 #include "ff.h"
 
 #define  LINE_MAX_CHAR 100
-#define CONFIG_FILE_PATH "0:config.ini"
+#define CONFIG_FILE_PATH            "0:config.ini"
 
 #define CONFIG_UNIFIEDMENU          "unified_menu:"
 #define CONFIG_UART_BAUDRATE        "baudrate:"
@@ -27,8 +27,7 @@
 #define CONFIG_INVERT_AXIS          "invert_axis:"
 #define CONFIG_PERSISTENT_TEMP      "persistent_info:"
 #define CONFIG_LIST_MODE            "files_list_mode:"
-#define CONFIG_ACK_POPUP_TYPE       "ack_popup_type:"
-#define CONFIG_ACK_BUZZER           "ack_buzzer:"
+#define CONFIG_ACK_NOTIFICATION     "ack_notification:"
 //-----------------------------Marlin Mode Settings
 #define CONFIG_MODE                 "default_mode:"
 #define CONFIG_SERIAL_ON            "serial_always_on:"
@@ -40,8 +39,8 @@
 #define CONFIG_MARLIN_FULLSCREEN    "marlin_fullscreen:"
 //-----------------------------Printer / Machine Settings
 #define CONFIG_HOTEND_COUNT         "hotend_count:"
-#define CONFIG_BED_EN               "bed_en:"
-#define CONFIG_CHAMBER_EN           "chamber_en:"
+#define CONFIG_HEATED_BED           "heated_bed:"
+#define CONFIG_HEATED_CHAMBER       "heated_chamber:"
 #define CONFIG_EXT_COUNT            "ext_count:"
 #define CONFIG_FAN_COUNT            "fan_count:"
 #define CONFIG_MAX_TEMP             "max_temp:"
@@ -88,7 +87,9 @@
 #define CONFIG_POWERLOSS_ZRAISE     "pl_z_raise:"
 #define CONFIG_BTT_MINIUPS          "btt_mini_ups:"
 //-----------------------------other device specific settings
-#define CONFIG_BUZZER_ON               "buzzer:"
+#define CONFIG_TOUCH_SOUND             "touch_sound:"
+#define CONFIG_TOAST_SOUND             "toast_sound:"
+#define CONFIG_ALERT_SOUND             "alert_sound:"
 #define CONFIG_KNOB_COLOR              "knob_led_color:"
 #define CONFIG_KNOB_LED_IDLE           "knob_led_idle:"
 #define CONFIG_BRIGHTNESS              "lcd_brightness:"

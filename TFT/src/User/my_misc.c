@@ -16,6 +16,15 @@ int limitValue(int min, int value, int max)
   return value;
 }
 
+float limitFloat(float min, float value, float max)
+{
+  if(value<min)
+    return min;
+  if(value>max)
+    return max;
+  return value;
+}
+
 long map(long x, long in_min, long in_max, long out_min, long out_max)
 {
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
