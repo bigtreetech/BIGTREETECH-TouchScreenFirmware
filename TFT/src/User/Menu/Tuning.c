@@ -31,7 +31,7 @@ void menuTuning(void)
         break;
 
       case KEY_ICON_1:
-       infoMenu.menu[++infoMenu.cur] = menuTuneExtruder;
+        infoMenu.menu[++infoMenu.cur] = menuTuneExtruder;
         break;
 
       case KEY_ICON_7:
