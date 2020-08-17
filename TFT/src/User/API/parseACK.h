@@ -9,6 +9,8 @@ static const char echomagic[]          = "echo:";
 static const char unknowmagic[]        = "Unknown command:";
 static const char bsdprintingmagic[]   = "SD printing byte";
 static const char bsdnoprintingmagic[] = "Not SD printing";
+static const char prompt_begin[]       = "prompt_begin ";
+
 
 #define ACK_MAX_SIZE 2048
 

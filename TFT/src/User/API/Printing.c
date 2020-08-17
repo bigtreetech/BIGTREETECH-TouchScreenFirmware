@@ -397,6 +397,16 @@ void breakAndContinue(void)
    Serial_Puts(SERIAL_PORT, "M108\n");
 }
 
+void resumeAndPurge(void)
+{
+   Serial_Puts(SERIAL_PORT, "M876 S0\n");
+}
+
+void resumeAndContinue(void)
+{
+   Serial_Puts(SERIAL_PORT, "M876 S1\n");
+}
+
 void loopCheckPrinting(void)
 {
   static u32  nextTime=0;

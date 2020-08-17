@@ -459,7 +459,7 @@ void menuPrinting(void)
 void menuStopPrinting(void)
 {
   u16 key_num = IDLE_TOUCH;
-
+  setPrintPause(!isPause(), false);
   popupDrawPage(DIALOG_TYPE_ALERT, bottomDoubleBtn, textSelect(LABEL_WARNING),
                   textSelect(LABEL_STOP_PRINT), textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL));
 

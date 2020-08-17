@@ -16,6 +16,7 @@ typedef struct
 } ECHO;
 
 ECHO knownEcho[] = {            // notify or discard (don't display in popup menu) reply messages starting with following text
+  {ECHO_ID_BUSY,                 ECHO_POPUP_NONE,              false,    "busy: paused for user"},
   {ECHO_ID_BUSY,                 ECHO_POPUP_NONE,              false,    "busy: processing"},
   {ECHO_ID_FRESH_FILE,           ECHO_POPUP_NONE,              false,    "Now fresh file:"},
   {ECHO_ID_DOING_FILE,           ECHO_POPUP_NONE,              false,    "Now doing file:,"},
@@ -241,6 +242,35 @@ void syncL2CacheFromL1(uint8_t port)
     if (dmaL2Cache[i++] == '\n') break;
   }
   dmaL2Cache[i] = 0; // End character
+}
+
+void hostActionCommands(void)
+{
+  static char msg[20];
+  strcpy((u8*)msg, (u8 *)dmaL2Cache + ack_index);
+  if(ack_seen("Nozzle Parked")){
+    setPrintPause(!isPause(), false);
+    BUZZER_PLAY(sound_notify);
+    showDialog(DIALOG_TYPE_ERROR, (u8*)"Printer is Paused", (u8*)"Waiting for insert filament", (u8*)"Continue", NULL, breakAndContinue, NULL, NULL);
+  }
+  else if(ack_seen("HeaterTimeout")){
+    BUZZER_PLAY(sound_notify);
+    showDialog(DIALOG_TYPE_ERROR, (u8*)"Printer is Paused", (u8*)"Waiting for reheat nozzle!", (u8*)"Reheat", NULL, breakAndContinue, NULL, NULL);
+  }
+  else if(ack_seen("Paused")){
+    BUZZER_PLAY(sound_notify);
+    showDialog(DIALOG_TYPE_ERROR, (u8*)"Resume Option", "Resume Option:", (u8*)"Continue", (u8*)"Purge", resumeAndContinue, resumeAndPurge, NULL);
+  }
+  else if(ack_seen("Resuming SD"));
+  else
+  {
+    BUZZER_PLAY(sound_notify);
+    popupReminder(DIALOG_TYPE_INFO,(u8 *)"Message", (u8 *)msg);
+    if(ack_seen("Resuming"))
+    {
+      setPrintPause(!isPause(), false);
+    }
+  }
 }
 
 void parseACK(void)
@@ -581,12 +611,12 @@ void parseACK(void)
         if (ack_seen("S"))
           fanSetSpeed(i, ack_value());
       }
-    // Parse pause message
-      else if(ack_seen("paused for user"))
-      {
-        showDialog(DIALOG_TYPE_QUESTION, (u8*)"Printer is Paused",(u8*)"Paused for user\ncontinue?",
-                   textSelect(LABEL_CONFIRM), NULL, breakAndContinue, NULL,NULL);
-      }
+    // // Parse pause message
+    //   else if(ack_seen("paused for user"))
+    //   {
+    //     showDialog(DIALOG_TYPE_QUESTION, (u8*)"Printer is Paused",(u8*)"Paused for user\ncontinue?",
+    //                textSelect(LABEL_CONFIRM), NULL, breakAndContinue, NULL,NULL);
+    //   }
     // Parse UBL Complete message
       else if(ack_seen("// UBL Complete"))
       {
@@ -616,6 +646,10 @@ void parseACK(void)
         {
           ackPopupInfo(echomagic);
         }
+      }
+      else if(ack_seen(prompt_begin))
+      {
+        hostActionCommands();
       }
     }
 

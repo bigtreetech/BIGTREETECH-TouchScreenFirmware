@@ -42,6 +42,8 @@ bool isPrinting(void);
 bool isPause(void);
 bool isM0_Pause(void);
 void breakAndContinue(void);
+void resumeAndPurge(void);
+void resumeAndContinue(void);
 void setPrintingTime(uint32_t RTtime);
 
 void exitPrinting(void);
