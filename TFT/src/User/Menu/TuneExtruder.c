@@ -272,7 +272,7 @@ void menuNewExtruderESteps(void)
         storeCmd("M92 T0 E%0.2f\n", new_esteps);
 
         sprintf(tmpBuf, (char*)textSelect(LABEL_TUNE_EXT_ESTEPS_SAVED), new_esteps);
-        GUI_DispStringInRectEOL(exhibitRect.x0,  BYTE_HEIGHT * 8, exhibitRect.x1 + 30, LCD_HEIGHT, (u8*) tmpBuf);
+        GUI_DispStringInRectEOL(exhibitRect.x0,  BYTE_HEIGHT * 8, exhibitRect.x1 + 20, LCD_HEIGHT, (u8*) tmpBuf);
         BUZZER_PLAY(sound_success);
         hidetext_ms = OS_GetTimeMs() + TUNE_EXT_HIDE_SAVEDMSG;
       }break;
@@ -300,7 +300,7 @@ void menuNewExtruderESteps(void)
     }
     if(hidetext_ms > 0 && OS_GetTimeMs() > hidetext_ms)
     {
-      GUI_ClearRect(exhibitRect.x0, BYTE_HEIGHT * 8, exhibitRect.x1 + 30, BYTE_HEIGHT * (8 + 5));
+      GUI_ClearRect(exhibitRect.x0, BYTE_HEIGHT * 8, exhibitRect.x1 + 20, BYTE_HEIGHT * (8 + 5));
       hidetext_ms = 0;
     }
     loopProcess();
