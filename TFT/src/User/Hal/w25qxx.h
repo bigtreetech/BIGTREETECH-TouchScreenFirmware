@@ -19,6 +19,8 @@
 #define W25QXX_DUMMY_BYTE  0xFF
 #define W25QXX_SPI_PAGESIZE 0x100
 
+#define KB(x)  (x * 1024l)
+#define MB(x)  (x * 1024l * 1024l)
 
 uint8_t W25Qxx_SPI_Read_Write_Byte(uint8_t data);
 void W25Qxx_SPI_CS_Set(u8 level);
@@ -33,6 +35,6 @@ void W25Qxx_EraseSector(uint32_t SectorAddr);
 void W25Qxx_EraseBlock(uint32_t BlockAddr);
 void W25Qxx_EraseBulk(void);
 uint32_t W25Qxx_ReadID(void);
-
+uint32_t W25Qxx_ReadCapacity(void);
 
 #endif

@@ -12,9 +12,6 @@ uint8_t fanGetSpeed(uint8_t i);
 void    fanSetSpeedPercent(uint8_t i, int16_t percent);
 uint8_t fanGetSpeedPercent(uint8_t i);
 void    fanSetSendWaiting(uint8_t i, bool isWaiting);
-uint8_t fanGetCurIndex(uint8_t i);
-void    fanSetCurIndex(uint8_t i);
-bool    fanSpeedChanged(uint8_t i);
 
 void    loopFan(void);
 

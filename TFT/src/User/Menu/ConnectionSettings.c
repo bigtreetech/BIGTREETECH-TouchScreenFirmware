@@ -47,7 +47,7 @@ void menuBaudrate(void)
     totalItems[i].titlelabel.address = (uint8_t *)item_baudrate_str[i];
   }
 
-  listWidgetCreat(title, totalItems, COUNT(totalItems), cur_item / LISTITEM_PER_PAGE);
+  listWidgetCreate(title, totalItems, COUNT(totalItems), cur_item / LISTITEM_PER_PAGE);
 
   while (infoMenu.menu[infoMenu.cur] == menuBaudrate)
   {
@@ -128,9 +128,12 @@ void menuConnectionSettings(void)
         infoMenu.menu[++infoMenu.cur] = menuDisconnect;
         break;
 
-      case KEY_ICON_2:                 // Emergency Stop : Used for emergency stopping, a reset is required to return to operational mode.
-        storeCmd("M112\n");            // it may need to wait for a space to open up in the command queue.
-        break;                         // Enable EMERGENCY_PARSER in Marlin Firmware for an instantaneous M112 command.
+      case KEY_ICON_2:
+        // Emergency Stop : Used for emergency stopping, a reset is required to return to operational mode.
+        // it may need to wait for a space to open up in the command queue.
+        // Enable EMERGENCY_PARSER in Marlin Firmware for an instantaneous M112 command.
+        Serial_Puts(SERIAL_PORT, "M112\n");
+        break;
 
       case KEY_ICON_3:
         storeCmd("M81\n");

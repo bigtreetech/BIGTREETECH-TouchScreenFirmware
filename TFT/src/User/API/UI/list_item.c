@@ -63,7 +63,7 @@ const uint16_t ICON_COLOR[ICONCHAR_NUM]=
   WHITE,    //ICONCHAR_EXPAND
   WHITE,    //ICONCHAR_MOVE
   WHITE,    //ICONCHAR_ROTATE
-  WHITE,    //ICONCHAR_RESET
+  MAT_BLUE,    //ICONCHAR_RESET
   WHITE,    //ICONCHAR_EDIT
   WHITE,    //ICONCHAR_SAVE
   MAT_ORANGE,    //ICONCHAR_DELETE
@@ -425,7 +425,7 @@ void ListItem_Display(const GUI_RECT* rect, uint8_t position, const LISTITEM * c
         DrawCharIcon(rect,LEFT_CENTER,curitem->icon, true, infoSettings.bg_color);
         pos.x += (BYTE_HEIGHT + 1);
        }
-      textarea_width = LISTITEM_WIDTH - (pos.x + BYTE_HEIGHT + 2);  //width after removing the width for icon
+      textarea_width = LISTITEM_WIDTH - (pos.x + BYTE_HEIGHT + 2); //width after removing the width for icon
       draw_itemtitle(pos,curitem->titlelabel,position,textarea_width);
 
       pos = getTextStartPoint(rect->x0, rect->y0, rect->x1,rect->y1,RIGHT_CENTER,GET_ICONCHAR[ICONCHAR_DETAIL2]);
@@ -441,7 +441,7 @@ void ListItem_Display(const GUI_RECT* rect, uint8_t position, const LISTITEM * c
         DrawCharIcon(rect,LEFT_CENTER,curitem->icon, true, infoSettings.bg_color);
         pos.x += (BYTE_HEIGHT + 3);
       }
-      GUI_ClearRect(pos.x, rect->y0, rect->x1 - BYTE_WIDTH*8 -1, rect->y1);        // clear only text area
+      GUI_ClearRect(pos.x, rect->y0, rect->x1 - BYTE_WIDTH*8 -1, rect->y1); // clear only text area
       textarea_width = LISTITEM_WIDTH - (pos.x + 1); //width after removing the width for icon
       draw_itemtitle(pos,curitem->titlelabel,position,textarea_width);
 
