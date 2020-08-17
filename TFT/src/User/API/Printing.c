@@ -276,6 +276,10 @@ void abortPrinting(void)
   switch (infoFile.source)
   {
     case BOARD_SD:
+      if(infoPrinting.pause)  //Avoid not being able to exit printing when printing again
+      {
+        request_M24(0);
+      }
       request_M524();
       break;
 
