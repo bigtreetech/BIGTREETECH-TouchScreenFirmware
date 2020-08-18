@@ -259,7 +259,6 @@
     #define JP_TUNE_EXT_MEASURED_MM   "Measured length:"
     #define JP_TUNE_EXT_OLD_ESTEP     "Old e-steps: %0.2f"
     #define JP_TUNE_EXT_NEW_ESTEP     "New e-steps: %0.2f"
-    #define JP_TUNE_EXT_EXTRUDING     "Extruding done?\nMeasure the length.\nExactly 20mm? Press '%s'\nOtherwise press '%s'"
     #define JP_CONNECTION_SETTINGS    "Connection"
 
 #endif

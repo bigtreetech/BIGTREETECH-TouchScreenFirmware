@@ -259,7 +259,6 @@
     #define FR_TUNE_EXT_MEASURED_MM   "Measured length:"
     #define FR_TUNE_EXT_OLD_ESTEP     "Old e-steps: %0.2f"
     #define FR_TUNE_EXT_NEW_ESTEP     "New e-steps: %0.2f"
-    #define FR_TUNE_EXT_EXTRUDING     "Extruding done?\nMeasure the length.\nExactly 20mm? Press '%s'\nOtherwise press '%s'"
     #define FR_CONNECTION_SETTINGS    "Connexion"
 
 #endif

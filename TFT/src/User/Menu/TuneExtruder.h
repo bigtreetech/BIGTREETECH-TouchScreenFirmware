@@ -8,8 +8,6 @@
 #include "Settings.h"
 #include "Temperature.h"
 
-void updateExtruderESteps(void);
-
 void menuTuneExtruder(void);
 void menuNewExtruderESteps(void);
 

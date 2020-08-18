@@ -259,7 +259,6 @@
     #define SK_TUNE_EXT_MEASURED_MM   "Measured length:"
     #define SK_TUNE_EXT_OLD_ESTEP     "Old e-steps: %0.2f"
     #define SK_TUNE_EXT_NEW_ESTEP     "New e-steps: %0.2f"
-    #define SK_TUNE_EXT_EXTRUDING     "Extruding done?\nMeasure the length.\nExactly 20mm? Press '%s'\nOtherwise press '%s'"
     #define SK_CONNECTION_SETTINGS    "Connection"
 
 #endif

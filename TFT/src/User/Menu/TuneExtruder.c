@@ -90,22 +90,13 @@ void showNewESteps(const float measured_length, const float old_esteps, float * 
   GUI_DispString(exhibitRect.x0,  BYTE_HEIGHT * 6, (u8 *)tempstr);
 }
 
-
-void updateExtruderESteps(void)
-{
-  heatSetTargetTemp(c_heater, 0);
-  infoMenu.menu[++infoMenu.cur] = menuNewExtruderESteps;
-}
-
 void extrudeFilament()
 {
   storeCmd("G28 X Y R20\n");                    // Home extruder
   storeCmd("G90\nG0 F3000 X0 Y0\n");            // present extruder
   storeCmd("M83\nG1 F50\nG1 E100\nM82\n");      // extrude
-  char tmpBuf[120];
-  sprintf(tmpBuf, (char*)textSelect(LABEL_TUNE_EXT_EXTRUDING), textSelect(LABEL_READY),textSelect(LABEL_TUNING));
-  showDialog(DIALOG_TYPE_QUESTION, textSelect(tuneExtruderItems.title.index), (u8*) tmpBuf,
-    textSelect(LABEL_READY), textSelect(LABEL_TUNING), turnHeaterOff, updateExtruderESteps, NULL); //LABEL_CONTINUE should be no.
+  heatSetTargetTemp(c_heater, 0);
+  infoMenu.menu[++infoMenu.cur] = menuNewExtruderESteps;
 }
 
 // end Esteps part
