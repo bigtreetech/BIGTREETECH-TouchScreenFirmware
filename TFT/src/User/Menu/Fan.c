@@ -85,7 +85,7 @@ void menuFan(void)
       if (actFan < infoSettings.fan_max[curIndex])
       {
         if (infoSettings.fan_percentage == 1)
-          fanSetSpeedPercent(curIndex, ++actFanPercent); //adding 2 to current speed % increases speed % by 1.
+          fanSetSpeedPercent(curIndex, ++actFanPercent);
         else
           fanSetSpeed(curIndex, ++actFan);
       }
