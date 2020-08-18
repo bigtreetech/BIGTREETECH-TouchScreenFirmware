@@ -90,6 +90,7 @@
 //  1) MKS Gen L V1.0
 //  2) SKR V1.3
 //
+//
 // ------------------------------------
 // MKS TFT HW changes:
 // ------------------------------------
@@ -101,8 +102,13 @@
 // NOTES:
 //  1) Wiring PB3 pin to a free pin header on the TFT board requires good soldering skill.
 //     If you don't have good soldering skill, DO NOT try to make any change. Otherwise, you will probably damage the TFT board.
-//  2) Marlin mode requires to use also pin PB0 and PB1. These pins are normally used for the Power Off and Filament Runout features.
-//     Eanbling Marlin mode means that the Power Off and Filament Runout features will be not available.
+//  2) By default, SPI3_PIN_SMART_USAGE is enabled. When enabled, pin PB0 and PB1 are not needed for Marlin mode.
+//     These pins are normally used for the Power Off and Filament Runout features, so they will continue be available in Marlin mode.
+//     If SPI3_PIN_SMART_USAGE is disabled, the Power Off and Filament Runout features will be no more available in Marlin mode.
+//  3) To reduce the effect of EMI, it is strongly suggested to use single cables (possibly shielded) for all the SPI pins
+//     (SPI3_SCK, SPI3_MOSI_PIN and SPI3_CS_PIN). For the encoder pins, a flat cable can be used.
+//  4) In case LCD Encoder's sliding buttons (pin LCD_ENCA_PIN and LCD_ENCB_PIN) don't produce any movement on menu,
+//     try to increase the delay LCD_ENCODER_DELAY in Configuration.h (e.g. 64).
 //
 //
 // ------------------------------------
@@ -140,7 +146,7 @@
 //
 // #define REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
 //
-// #define ENCODER_PULSES_PER_STEP 3
+// #define ENCODER_PULSES_PER_STEP 4
 //
 //
 // ------------------------------------
@@ -151,7 +157,7 @@
 //
 // #define CR10_STOCKDISPLAY
 //
-// #define ENCODER_PULSES_PER_STEP 3
+// #define ENCODER_PULSES_PER_STEP 4
 //
 //
 // In the pins_BTT_SKR_V1_3.h file define pins as reported below:

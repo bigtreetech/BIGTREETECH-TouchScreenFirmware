@@ -66,19 +66,19 @@
 #define MARLIN_FNCOLOR 0
 
 /**
- *  Text displayed at the top of the TFT in Marlin Mode.
+ * Text displayed at the top of the TFT in Marlin Mode.
  */
 #define MARLIN_BANNER_TEXT "LCD12864 Simulator"
 
 /**
- *  show banner text at the top of the TFT in Marlin Mode.
+ * show banner text at the top of the TFT in Marlin Mode.
  */
 #define MARLIN_SHOW_BANNER  true //to enabled: true | to disabled: false
 /**
  * Run Marlin Mode in Fullscreen
  *
- *  Options:  0: Disabled. RECOMMENDED FOR TFT24
- *            1: Enabled Marlin Fullscreen mode.
+ * Options:  0: Disabled. RECOMMENDED FOR TFT24
+ *           1: Enabled Marlin Fullscreen mode.
  */
 #define DEFAULT_ST7920_FULLSCREEN_MODE 0 // 0: Disabled. RECOMMENDED FOR TFT24
 
@@ -89,7 +89,7 @@
  *
  * Allow seamless OctoPrint UART connection to the TFT's UART/serial expansion port no matter which mode the TFT is in.
  *
- *  Options:  0: Disabled    1: Enabled
+ * Options:  0: Disabled    1: Enabled
  */
 #define SERIAL_ALWAYS_ON 0  // Default: 0 (Disabled)
 
@@ -115,7 +115,7 @@
 #define DEFAULT_LANGUAGE ENGLISH
 
 /**
- *  Show bootscreen when starting up
+ * Show bootscreen when starting up
  */
 #define SHOW_BTT_BOOTSCREEN
 
@@ -133,7 +133,7 @@
 
 /**
  * Toast notification duration (in ms)
- *  set the duration for displaying toast notification on top of the screen
+ * Set the duration for displaying toast notification on top of the screen
  */
 #define TOAST_DURATION 3000
 
@@ -237,7 +237,7 @@
 
 /**
  * Enable Unified Bed Leveling options
- *  Will attempt to auto detect and enable specific UBL options.
+ * Will attempt to auto detect and enable specific UBL options.
  *
  * WARNING - If you're not sure, leave on auto-detect or disabled.
  *           UBL has extra options other leveling systems might not have.
@@ -265,7 +265,7 @@
  *
  * Options:  0: Disabled    1: Enabled
  */
-#define QUICK_EEPROM_BUTTON 0
+#define QUICK_EEPROM_BUTTON 1
 
 /**
  * Manual Leveling
@@ -314,6 +314,11 @@
  */
 #define PID_CMD             {"M303 U1 C8 E0", "M303 U1 C8 E1", "M303 U1 C8 E2", "M303 U1 C8 E3", "M303 U1 C8 E4", "M303 U1 C8 E5", "M303 U1 C8 E-1", ""};
 #define PID_PROCESS_TIMEOUT 900000                         // expressed in ms. E.g. 900000 corresponds to 15 minutes
+
+// LCD Encoder
+// In case LCD Encoder's sliding buttons (pin LCD_ENCA_PIN and LCD_ENCB_PIN)
+// don't produce any movement on menu, try to increase the delay (e.g. 64)
+#define LCD_ENCODER_DELAY 8                                // expressed in us. E.g. 8 corresponds to 0,000008 seconds
 
 // Power Supply
 #define PS_ON_ACTIVE_HIGH    true   // Set 'false' for ATX (1), 'true' for X-Box (2)
