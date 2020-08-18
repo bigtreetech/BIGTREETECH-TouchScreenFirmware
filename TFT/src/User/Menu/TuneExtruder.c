@@ -72,10 +72,10 @@ PARAMETERS infoParameters;
 
 void showNewESteps(const float measured_length, const float old_esteps, float * new_esteps)
 {
+  char tempstr[20];
+  
   //First we calculate the new E-step value:
   *new_esteps = (100 * old_esteps) / (100 - (measured_length - 20));
-
-  char tempstr[20];
 
   GUI_DispString(exhibitRect.x0, exhibitRect.y0, textSelect(LABEL_TUNE_EXT_MEASURED));
 
@@ -98,9 +98,7 @@ void extrudeFilament()
   heatSetTargetTemp(c_heater, 0);
   infoMenu.menu[++infoMenu.cur] = menuNewExtruderESteps;
 }
-
 // end Esteps part
-
 
 void menuTuneExtruder(void)
 {
@@ -153,9 +151,8 @@ void menuTuneExtruder(void)
         char tmpBuf[120];
         if(heatGetTargetTemp(c_heater) < infoSettings.min_ext_temp)
         {
-            //sprintf(tmpBuf, "%s\n %s", textSelect(LABEL_TIMEOUT_REACHED), textSelect(LABEL_PROCESS_ABORTED));
             sprintf(tmpBuf, (char*)textSelect(LABEL_TUNE_EXT_TEMPLOW), infoSettings.min_ext_temp);
-            popupReminder(DIALOG_TYPE_ALERT, textSelect(tuneExtruderItems.title.index), (u8*) tmpBuf); //textSelect(LABEL_INVALID_VALUE));
+            popupReminder(DIALOG_TYPE_ALERT, textSelect(tuneExtruderItems.title.index), (u8*) tmpBuf);
             break;
         }
         if(heatGetCurrentTemp(c_heater) < heatGetTargetTemp(c_heater) - 1)
@@ -269,8 +266,7 @@ void menuNewExtruderESteps(void)
       }break;
 
       case KEY_ICON_7:
-        //Ask for save when not saved?
-          infoMenu.cur-=2; //Return to tinung menu. Not temprature
+        infoMenu.cur-=2; //Return to tinung menu. Not temprature
         break;
 
       default :
