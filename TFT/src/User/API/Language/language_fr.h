@@ -256,7 +256,7 @@
     #define FR_TUNE_EXT_HEATOFF       "Turn the heater off?"
     #define FR_TUNE_EXT_ADJ_ESTEPS    "Adjust E-Steps"
     #define FR_TUNE_EXT_ESTEPS_SAVED  "New E-steps saved!\nDon't forget to\nsave it in EEPROM\nNew value: %0.2f"
-    #define FR_TUNE_EXT_MEASURED_MM   "Measured length:"
+    #define FR_TUNE_EXT_MEASURED      "Length remaining:"
     #define FR_TUNE_EXT_OLD_ESTEP     "Old e-steps: %0.2f"
     #define FR_TUNE_EXT_NEW_ESTEP     "New e-steps: %0.2f"
     #define FR_CONNECTION_SETTINGS    "Connexion"

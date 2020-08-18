@@ -256,7 +256,7 @@
     #define DU_TUNE_EXT_HEATOFF       "Turn the heater off?"
     #define DU_TUNE_EXT_ADJ_ESTEPS    "Adjust E-Steps"
     #define DU_TUNE_EXT_ESTEPS_SAVED  "New E-steps saved!\nDon't forget to\nsave it in EEPROM\nNew value: %0.2f"
-    #define DU_TUNE_EXT_MEASURED_MM   "Measured length:"
+    #define DU_TUNE_EXT_MEASURED      "Length remaining:"
     #define DU_TUNE_EXT_OLD_ESTEP     "Old e-steps: %0.2f"
     #define DU_TUNE_EXT_NEW_ESTEP     "New e-steps: %0.2f"
     #define DU_CONNECTION_SETTINGS    "Connecties"

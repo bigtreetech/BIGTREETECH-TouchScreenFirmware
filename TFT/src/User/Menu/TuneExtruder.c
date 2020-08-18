@@ -77,7 +77,7 @@ void showNewESteps(const float measured_length, const float old_esteps, float * 
 
   char tempstr[20];
 
-  GUI_DispString(exhibitRect.x0, exhibitRect.y0, textSelect(LABEL_TUNE_EXT_MEASURED_MM));
+  GUI_DispString(exhibitRect.x0, exhibitRect.y0, textSelect(LABEL_TUNE_EXT_MEASURED));
 
   sprintf(tempstr, "%0.1fmm", measured_length);
   setLargeFont(true);

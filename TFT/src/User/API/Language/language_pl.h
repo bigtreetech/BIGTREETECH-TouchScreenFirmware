@@ -256,7 +256,7 @@
     #define PL_TUNE_EXT_HEATOFF       "Turn the heater off?"
     #define PL_TUNE_EXT_ADJ_ESTEPS    "Adjust E-Steps"
     #define PL_TUNE_EXT_ESTEPS_SAVED  "New E-steps saved!\nDon't forget to\nsave it in EEPROM\nNew value: %0.2f"
-    #define PL_TUNE_EXT_MEASURED_MM   "Measured length:"
+    #define PL_TUNE_EXT_MEASURED      "Length remaining:"
     #define PL_TUNE_EXT_OLD_ESTEP     "Old e-steps: %0.2f"
     #define PL_TUNE_EXT_NEW_ESTEP     "New e-steps: %0.2f"
     #define PL_CONNECTION_SETTINGS    "Connection"
