@@ -252,7 +252,7 @@
     #define PL_TUNE_EXT_TEMP          "Extruder tuning | Heat"
     #define PL_TUNE_EXT_TEMPLOW       "Desired temperature too low!\nMinimum temperature: %d C"
     #define PL_TUNE_EXT_DESIREDVAL    "Temperature is not yet at the desired value"
-    #define PL_TUNE_EXT_MARK120MM     "Mark 120 mm on your fillament\nPress '%s' when ready"
+    #define PL_TUNE_EXT_MARK120MM     "Mark 120 mm on your fillament\nPress '%s' when ready\nMeasure remaining length\nafter extruding"
     #define PL_TUNE_EXT_HEATOFF       "Turn the heater off?"
     #define PL_TUNE_EXT_ADJ_ESTEPS    "Adjust E-Steps"
     #define PL_TUNE_EXT_ESTEPS_SAVED  "New E-steps saved!\nDon't forget to\nsave it in EEPROM\nNew value: %0.2f"
