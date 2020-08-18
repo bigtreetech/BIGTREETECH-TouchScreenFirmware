@@ -802,6 +802,8 @@ void parseConfigKey(u16 index)
   case C_INDEX_PREHEAT_NAME_2:
   case C_INDEX_PREHEAT_NAME_3:
   case C_INDEX_PREHEAT_NAME_4:
+  case C_INDEX_PREHEAT_NAME_5:
+  case C_INDEX_PREHEAT_NAME_6:
   {
     char pchr[LINE_MAX_CHAR];
     strcpy(pchr, strrchr(cur_line, ':') + 1);
@@ -817,6 +819,8 @@ void parseConfigKey(u16 index)
   case C_INDEX_PREHEAT_TEMP_2:
   case C_INDEX_PREHEAT_TEMP_3:
   case C_INDEX_PREHEAT_TEMP_4:
+  case C_INDEX_PREHEAT_TEMP_5:
+  case C_INDEX_PREHEAT_TEMP_6:
     {
         int val_index = index - C_INDEX_PREHEAT_TEMP_1;
       if (key_seen("B"))
