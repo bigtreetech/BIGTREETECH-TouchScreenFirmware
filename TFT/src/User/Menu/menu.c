@@ -532,7 +532,8 @@ void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, const ITEM * item)
       {
         loc.y = liveicon->lines[i].pos.y + rect_of_key[index].y0;
       }
-      switch (liveicon->lines[i].h_align)      {
+      switch (liveicon->lines[i].h_align)
+      {
       case LEFT:
         GUI_DispString(loc.x, loc.y, liveicon->lines[i].text);
         break;
