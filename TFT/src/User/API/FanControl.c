@@ -13,6 +13,7 @@ static bool    fan_send_waiting[MAX_FAN_COUNT] = {false};
 void fanSetSpeed(uint8_t i, uint8_t speed)
 {
   fanSpeed[i] = speed;
+  fanSpeedPercent[i] = (fanSpeed[i] * 100) / infoSettings.fan_max[i];
 }
 
 uint8_t fanGetSpeed(uint8_t i)

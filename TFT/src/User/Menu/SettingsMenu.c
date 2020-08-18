@@ -117,7 +117,7 @@ void menuSettings(void)
      {ICON_FEATURE_SETTINGS,        LABEL_FEATURE_SETTINGS},
      {ICON_SCREEN_INFO,             LABEL_SCREEN_INFO},
      {ICON_CONNECTION_SETTINGS,     LABEL_CONNECTION_SETTINGS},
-     {ICON_TUNING,                  LABEL_TUNING},
+     {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BACK,                    LABEL_BACK},}
   };
@@ -150,10 +150,6 @@ void menuSettings(void)
 
       case KEY_ICON_4:
         infoMenu.menu[++infoMenu.cur] = menuConnectionSettings;
-        break;
-
-      case KEY_ICON_5:
-        infoMenu.menu[++infoMenu.cur] = menuTuning;
         break;
 
       case KEY_ICON_7:
