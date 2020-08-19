@@ -218,7 +218,9 @@ void parseACK(void)
         requestCommandInfo.inResponse = true;
         requestCommandInfo.inWaitResponse = false;
       }
-      else if (ack_seen(requestCommandInfo.nosdMagic) || ack_seen(requestCommandInfo.errorMagic))
+      else if ((requestCommandInfo.error_num > 0 && ack_seen(requestCommandInfo.errorMagic[0]))
+            || (requestCommandInfo.error_num > 1 && ack_seen(requestCommandInfo.errorMagic[1]))
+            || (requestCommandInfo.error_num > 2 && ack_seen(requestCommandInfo.errorMagic[2])))
       { //parse onboard sd error
         requestCommandInfo.done = true;
         requestCommandInfo.inResponse = false;
@@ -300,7 +302,7 @@ void parseACK(void)
         coordinateSetAxisActualSteps(E_AXIS, ack_value());
       }
 
-      else if(ack_seen(bsdnoprintingmagic) && infoMenu.menu[infoMenu.cur] == menuPrinting && infoMachineSettings.onboard_sd_support == ENABLED)
+      else if(ack_seen(bsdnoprintingmagic) && infoMachineSettings.onboard_sd_support == ENABLED)
       {
         infoHost.printing = false;
         completePrinting();
@@ -309,7 +311,7 @@ void parseACK(void)
       {
         if(infoMenu.menu[infoMenu.cur] != menuPrinting && !infoHost.printing) {
           infoMenu.menu[++infoMenu.cur] = menuPrinting;
-          infoHost.printing=true;
+          infoHost.printing = true;
         }
         // Parsing printing data
         // Example: SD printing byte 123/12345

@@ -72,6 +72,8 @@ const ITEM itemIsPause[2] = {
 
 void completePrinting(void)
 {
+  infoPrinting.printing = false;
+  infoPrinting.cur = infoPrinting.size; // for onboard sd printing
   printingItems.items[KEY_ICON_7].icon = ICON_BACK;
   printingItems.items[KEY_ICON_7].label.index = LABEL_BACK;
   if (infoMenu.menu[infoMenu.cur] == menuPrinting)
@@ -118,7 +120,7 @@ void menuBeforePrinting(void)
         request_M27(0);
       }
 
-      infoHost.printing=true; // Global lock info on printer is busy in printing.
+      infoHost.printing = true; // Global lock info on printer is busy in printing.
 
       break;
 
