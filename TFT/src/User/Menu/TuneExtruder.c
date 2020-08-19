@@ -16,18 +16,6 @@ MENUITEMS tuneExtruderItems = {
     {ICON_BACK,                 LABEL_BACK},}
 };
 
-#define TUNE_EXTRUDER_NUM 6
-
-const ITEM tuneExtruderTool[] = {
-// icon                       label
-  {ICON_NOZZLE,               LABEL_NOZZLE},
-  {ICON_NOZZLE,               LABEL_NOZZLE},
-  {ICON_NOZZLE,               LABEL_NOZZLE},
-  {ICON_NOZZLE,               LABEL_NOZZLE},
-  {ICON_NOZZLE,               LABEL_NOZZLE},
-  {ICON_NOZZLE,               LABEL_NOZZLE},
-};
-
 #define EXTRUDE_DEGREE_NUM 3
 
 const ITEM extruderDegree[EXTRUDE_DEGREE_NUM] = {
@@ -67,9 +55,6 @@ void returnToTuning(void)
     infoMenu.cur--;
 }
 
-// Esteps part
-PARAMETERS infoParameters;
-
 void showNewESteps(const float measured_length, const float old_esteps, float * new_esteps)
 {
   char tempstr[20];
@@ -92,10 +77,9 @@ void showNewESteps(const float measured_length, const float old_esteps, float * 
 
 void extrudeFilament()
 {
-  storeCmd("G28 X Y R20\n");                    // Home extruder
-  storeCmd("G90\nG0 F3000 X0 Y0\n");            // present extruder
-  storeCmd("M83\nG1 F50\nG1 E100\nM82\n");      // extrude
-  heatSetTargetTemp(c_heater, 0);
+  storeCmd("G28 X Y R20\n");                   // Home extruder
+  mustStoreScript("G90\nG0 F3000 X0 Y0\n");    // present extruder
+  mustStoreScript("M83\nG1 F50 E100\nM82\n");  // extrude
   infoMenu.menu[++infoMenu.cur] = menuNewExtruderESteps;
 }
 // end Esteps part
@@ -108,7 +92,6 @@ void menuTuneExtruder(void)
 
   heatSetUpdateTime(TEMPERATURE_QUERY_FAST_DURATION);
 
-  tuneExtruderItems.items[KEY_ICON_4] = tuneExtruderTool[c_heater];
   menuDrawPage(&tuneExtruderItems);
   showExtrudeTemperature(c_heater);
 
@@ -135,8 +118,6 @@ void menuTuneExtruder(void)
         do{
           c_heater = (c_heater + 1) % MAX_HOTEND_COUNT;
         } while(!heaterIsValid(c_heater));
-        tuneExtruderItems.items[key_num] = tuneExtruderTool[c_heater];
-        menuDrawItem(&tuneExtruderItems.items[key_num], key_num);
         showExtrudeTemperature(c_heater);
         break;
 
@@ -230,7 +211,7 @@ void menuNewExtruderESteps(void)
   u32 hidetext_ms = 0;
 
   mustStoreCmd("M503 S0\n");
-  old_esteps = infoParameters.StepsPerMM[3]; // get the value of the E-steps
+  old_esteps = getParameter(P_STEPS_PER_MM, E_AXIS); // get the value of the E-steps
 
   menuDrawPage(&newExtruderESteps);
   showNewESteps(measured_length, old_esteps, &new_esteps);
@@ -266,7 +247,7 @@ void menuNewExtruderESteps(void)
       }break;
 
       case KEY_ICON_7:
-        infoMenu.cur-=2; //Return to tinung menu. Not temprature
+        infoMenu.cur--;
         break;
 
       default :
