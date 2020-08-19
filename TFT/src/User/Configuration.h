@@ -245,7 +245,7 @@
  * Options:  0: Disabled    1: Enabled    2: Auto-detect [default]
  *
  */
-#define ENABLE_UBL_VALUE 1
+#define ENABLE_UBL_VALUE 2
 
 /**
  * Enable friendly probe offset language.
