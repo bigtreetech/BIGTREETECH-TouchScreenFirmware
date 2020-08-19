@@ -7,8 +7,19 @@ static u8 ack_cur_src = SERIAL_PORT;
 
 bool portSeen[_UART_CNT] = {false, false, false, false, false, false};
 
+struct HOST_ACTION
+{
+  char prompt_begin[20];
+  char prompt_button1[20];
+  char prompt_button2[20];
+  bool prompt_show;         //Show popup reminder or not
+  uint8_t button;           //Number of buttons
+} hostAction;
+
 // notify or ignore messages starting with following text
 const ECHO knownEcho[] = {
+  {ECHO_NOTIFY_NONE, "enqueueing \"M117\""},
+  {ECHO_NOTIFY_NONE, "busy: paused for user"},
   {ECHO_NOTIFY_NONE, "busy: processing"},
   {ECHO_NOTIFY_NONE, "Now fresh file:"},
   {ECHO_NOTIFY_NONE, "Now doing file:"},
@@ -178,29 +189,60 @@ void syncL2CacheFromL1(uint8_t port)
 
 void hostActionCommands(void)
 {
-  static char msg[20];
-  strcpy((u8*)msg, (u8 *)dmaL2Cache + ack_index);
-  if(ack_seen("Nozzle Parked")){
-    setPrintPause(!isPause(), false);
-    BUZZER_PLAY(sound_notify);
-    showDialog(DIALOG_TYPE_ERROR, (u8*)"Printer is Paused", (u8*)"Waiting for insert filament", (u8*)"Continue", NULL, breakAndContinue, NULL, NULL);
-  }
-  else if(ack_seen("HeaterTimeout")){
-    BUZZER_PLAY(sound_notify);
-    showDialog(DIALOG_TYPE_ERROR, (u8*)"Printer is Paused", (u8*)"Waiting for reheat nozzle!", (u8*)"Reheat", NULL, breakAndContinue, NULL, NULL);
-  }
-  else if(ack_seen("Paused")){
-    BUZZER_PLAY(sound_notify);
-    showDialog(DIALOG_TYPE_ERROR, (u8*)"Resume Option", "Resume Option:", (u8*)"Continue", (u8*)"Purge", resumeAndContinue, resumeAndPurge, NULL);
-  }
-  else if(ack_seen("Resuming SD"));
-  else
+  char *find = strchr(dmaL2Cache + ack_index, '\n'); 
+  *find = '\0';
+  if(ack_seen("prompt_begin "))
   {
-    BUZZER_PLAY(sound_notify);
-    popupReminder(DIALOG_TYPE_INFO,(u8 *)"Message", (u8 *)msg);
-    if(ack_seen("Resuming"))
+    hostAction.button = 0;
+    hostAction.prompt_show = 1;
+    strcpy(hostAction.prompt_begin, dmaL2Cache + ack_index);
+    if(ack_seen("Resuming SD"))
+    {
+      hostAction.prompt_show = 0;
+    }
+    else if(ack_seen("Resuming"))
+    {
+      setPrintPause(!isPause(), false); 
+      hostAction.prompt_show = 0;
+    }
+    else if(ack_seen("Reheating"))
+    {
+      hostAction.prompt_show = 0;
+    }
+    else if(ack_seen("Nozzle Parked"))
     {
       setPrintPause(!isPause(), false);
+    }
+  }
+  else if(ack_seen("prompt_button "))
+  {
+    hostAction.button++;
+    if(hostAction.button == 1)
+    {
+      strcpy(hostAction.prompt_button1, dmaL2Cache + ack_index);
+    }
+    else
+    {
+      strcpy(hostAction.prompt_button2, dmaL2Cache + ack_index);
+    }
+  }
+
+  if(ack_seen("prompt_show") && hostAction.prompt_show)
+  {
+    switch(hostAction.button)
+    {
+      case 0:
+        BUZZER_PLAY(sound_notify);
+        popupReminder(DIALOG_TYPE_INFO,(u8 *)"Message", (u8 *)hostAction.prompt_begin);
+        break;
+      case 1:
+        BUZZER_PLAY(sound_notify);
+        showDialog(DIALOG_TYPE_ERROR, (u8*)"Action command", (u8 *)hostAction.prompt_begin, (u8 *)hostAction.prompt_button1, NULL, breakAndContinue, NULL, NULL);
+        break;
+      case 2:
+        BUZZER_PLAY(sound_notify);
+        showDialog(DIALOG_TYPE_ERROR, (u8*)"Action command", (u8 *)hostAction.prompt_begin, (u8 *)hostAction.prompt_button1, (u8 *)hostAction.prompt_button2, resumeAndPurge, resumeAndContinue, NULL);
+        break;
     }
   }
 }
@@ -607,7 +649,7 @@ void parseACK(void)
           ackPopupInfo(echomagic);
         }
       }
-      else if(ack_seen(prompt_begin))
+      else if(ack_seen(action))
       {
         hostActionCommands();
       }

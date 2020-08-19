@@ -574,6 +574,7 @@ void sendQueueCmd(void)
                 break;
               }
             }
+
             statusScreen_setMsg((u8 *)"M117", (u8 *)&message);
 //            if (infoMenu.menu[infoMenu.cur] != menuStatus)
 //            {
