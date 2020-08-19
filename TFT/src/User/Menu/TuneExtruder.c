@@ -239,6 +239,8 @@ void menuNewExtruderESteps(void)
       {
         char tmpBuf[120];
         storeCmd("M92 T0 E%0.2f\n", new_esteps);
+        if(infoMachineSettings.EEPROM == 1)
+        mustStoreCmd("M500\n");
 
         sprintf(tmpBuf, (char*)textSelect(LABEL_TUNE_EXT_ESTEPS_SAVED), new_esteps);
         GUI_DispStringInRectEOL(exhibitRect.x0,  BYTE_HEIGHT * 8, exhibitRect.x1 + 20, LCD_HEIGHT, (u8*) tmpBuf);
