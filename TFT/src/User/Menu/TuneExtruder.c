@@ -77,10 +77,9 @@ void showNewESteps(const float measured_length, const float old_esteps, float * 
 
 void extrudeFilament()
 {
-  storeCmd("G28 X Y R20\n");                    // Home extruder
-  storeCmd("G90\nG0 F3000 X0 Y0\n");            // present extruder
-  storeCmd("M83\nG1 F50\nG1 E100\nM82\n");      // extrude
-  heatSetTargetTemp(c_heater, 0);
+  storeCmd("G28 X Y R20\n");                   // Home extruder
+  mustStoreScript("G90\nG0 F3000 X0 Y0\n");    // present extruder
+  mustStoreScript("M83\nG1 F50 E100\nM82\n");  // extrude
   infoMenu.menu[++infoMenu.cur] = menuNewExtruderESteps;
 }
 // end Esteps part
@@ -248,7 +247,7 @@ void menuNewExtruderESteps(void)
       }break;
 
       case KEY_ICON_7:
-        infoMenu.cur-=2; //Return to tinung menu. Not temprature
+        infoMenu.cur--;
         break;
 
       default :
