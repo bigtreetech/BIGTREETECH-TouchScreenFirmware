@@ -247,7 +247,7 @@
     #define CZ_PID_START_INFO         "PID autokalibrace bude spuštěna.\n Bude to cvíli trvat. Pokračovat?"
     #define CZ_PID_START_INFO_2       "PID autokalibrace probíhá!"
     #define CZ_PID_START_INFO_3       "NEDOTÝKEJ se displeje dokud není dokončeno\n (Zelená LED svítí)!"
-    #define CZ_TUNE_EXTRUDER          "Kalibrace kroku extruderu"
+    #define CZ_TUNE_EXTRUDER          "E-Krok"
     #define CZ_TUNE_EXT_EXTRUDE_100   "100mm Vysunutí"
     #define CZ_TUNE_EXT_TEMP          "Kalibrace extruderu | Ohřev"
     #define CZ_TUNE_EXT_TEMPLOW       "Požadovaná teplota je příliš nízká!\nMinimální teplota: %d C"
