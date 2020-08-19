@@ -44,6 +44,6 @@ enum {
   LABEL_CUSTOM_VALUE,
 };
 
-uint8_t * textSelect(uint8_t sel);
+uint8_t * textSelect(uint16_t sel);
 
 #endif

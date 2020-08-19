@@ -9,7 +9,7 @@ void menuTuning(void)
     LABEL_TUNING,
     // icon                         label
     {{ICON_PID,                     LABEL_PID},
-     {ICON_EXTRUDE_100,             LABEL_EXTRUDE_100},
+     {ICON_EXTRUDE_100,             LABEL_TUNE_EXTRUDER},
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
@@ -21,7 +21,6 @@ void menuTuning(void)
   KEY_VALUES key_num = KEY_IDLE;
 
   menuDrawPage(&TuningItems);
-
   while (infoMenu.menu[infoMenu.cur] == menuTuning)
   {
     key_num = menuKeyGetValue();
@@ -32,8 +31,7 @@ void menuTuning(void)
         break;
 
       case KEY_ICON_1:
-        storeCmd("G90\nG0 F3000 X0 Y0 Z100\n");            // present extruder
-        storeCmd("M83\nG1 F50\nG1 E100\nM82\n");           // extrude
+        infoMenu.menu[++infoMenu.cur] = menuTuneExtruder;
         break;
 
       case KEY_ICON_7:

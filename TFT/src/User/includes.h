@@ -108,6 +108,7 @@
 
 #include "Tuning.h"
 #include "Pid.h"
+#include "TuneExtruder.h"
 #include "ConnectionSettings.h"
 
 #define MAX_MENU_DEPTH 10       // max sub menu depth

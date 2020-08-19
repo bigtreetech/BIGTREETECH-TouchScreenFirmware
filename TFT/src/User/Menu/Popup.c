@@ -51,6 +51,20 @@ void windowReDrawButton(u8 positon, u8 pressed)
 
 void popupDrawPage(DIALOG_TYPE type, BUTTON *btn, const u8 *title, const u8 *context, const u8 *yes, const u8 *no)
 {
+  #ifdef LCD_LED_PWM_CHANNEL
+    if (infoSettings.lcd_idle_timer != LCD_DIM_OFF)
+    {
+      //The LCD dim function is activated. First check if it's dimmed
+      if (lcd_dim.dimmed)
+      {
+        lcd_dim.dimmed = false;
+        Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
+      }
+      //Set a new idle_ms time
+      lcd_dim.idle_ms = OS_GetTimeMs();
+    }
+  #endif
+
   setMenuType(MENU_TYPE_DIALOG);
 
   if (btn != NULL)                     // set the following global variables only if buttons must be provided.

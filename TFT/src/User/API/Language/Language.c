@@ -143,7 +143,7 @@ const char *const tc_pack[LABEL_NUM] = {
   #undef  X_WORD
 };
 
-uint8_t *textSelect(uint8_t sel)
+uint8_t *textSelect(uint16_t sel)
 {
   switch(infoSettings.language)
   {
