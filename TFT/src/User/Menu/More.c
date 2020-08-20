@@ -39,7 +39,7 @@ void menuMore(void)
      {ICON_PERCENTAGE,              LABEL_PERCENTAGE},
      {ICON_FEATURE_SETTINGS,        LABEL_FEATURE_SETTINGS},
      {ICON_MACHINE_SETTINGS,        LABEL_MACHINE_SETTINGS},
-     {ICON_BABYSTEP,                LABEL_BABYSTEP},
+     {ICON_GCODE,                   LABEL_TERMINAL},
      {ICON_BACK,                    LABEL_BACK},}
   };
 
@@ -80,7 +80,7 @@ void menuMore(void)
         break;
 
       case KEY_ICON_6:
-        infoMenu.menu[++infoMenu.cur] = menuBabyStep;
+        infoMenu.menu[++infoMenu.cur] = menuSendGcode;
         break;
         
       case KEY_ICON_7:

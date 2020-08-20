@@ -118,7 +118,7 @@ void menuBeforePrinting(void)
         request_M27(0);
       }
 
-      infoHost.printing=true; // Global lock info on printer is busy in printing.
+      infoHost.printing = true; // Global lock info on printer is busy in printing.
 
       break;
 

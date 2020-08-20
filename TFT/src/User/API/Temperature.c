@@ -147,7 +147,7 @@ void loopCheckHeater(void)
   {  // Send M105 query temperature continuously
     if(heat_update_waiting == true) {updateNextHeatCheckTime();break;}
     if(OS_GetTimeMs() < nextHeatCheckTime)     break;
-    if(RequestCommandInfoIsRunning())          break; //to avoid colision in Gcode response processing
+    if(requestCommandInfoIsRunning())          break; //to avoid colision in Gcode response processing
     if(storeCmd("M105\n") == false)            break;
     updateNextHeatCheckTime();
     heat_update_waiting = true;
