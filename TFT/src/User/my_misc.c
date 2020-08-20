@@ -1,28 +1,10 @@
 #include "my_misc.h"
 
-int inRange(int cur, int tag , int range)
+uint8_t inRange(int cur, int tag , int range)
 {
-  if((cur<=tag+range)&&(cur>=tag-range))
+  if ((cur <= tag + range) && (cur >= tag - range))
     return 1;
   return 0;
-}
-
-int limitValue(int min, int value, int max)
-{
-  if(value<min)
-    return min;
-  if(value>max)
-    return max;
-  return value;
-}
-
-float limitFloat(float min, float value, float max)
-{
-  if(value<min)
-    return min;
-  if(value>max)
-    return max;
-  return value;
 }
 
 long map(long x, long in_min, long in_max, long out_min, long out_max)

@@ -21,7 +21,7 @@ uint8_t fanGetSpeed(uint8_t i)
 
 void fanSetSpeedPercent(uint8_t i, uint8_t percent)
 {
-  percent = limitValue(0, percent, 100);
+  percent = NOBEYOND(0, percent, 100);
   fanSpeed[i] = (percent * infoSettings.fan_max[i]) / 100;
 }
 
