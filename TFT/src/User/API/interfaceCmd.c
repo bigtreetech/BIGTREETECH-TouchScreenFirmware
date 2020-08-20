@@ -41,6 +41,16 @@ bool static startsWith(TCHAR *search, TCHAR *string)
   return (strstr(string, search) - string == cmd_index) ? true : false;
 }
 
+// Common store cmd
+void commonStoreCmd(GCODE_QUEUE *pQueue, const char* format, va_list va)
+{
+  vsnprintf(pQueue->queue[pQueue->index_w].gcode, CMD_MAX_CHAR, format, va);
+
+  pQueue->queue[pQueue->index_w].src = SERIAL_PORT;
+  pQueue->index_w = (pQueue->index_w + 1) % CMD_MAX_LIST;
+  pQueue->count++;
+}
+
 // Store gcode cmd to infoCmd queue, this cmd will be sent by UART in sendQueueCmd(),
 // If the infoCmd queue is full, reminde in title bar.
 bool storeCmd(const char * format,...)
@@ -55,14 +65,10 @@ bool storeCmd(const char * format,...)
     return false;
   }
 
-  my_va_list ap;
-  my_va_start(ap,format);
-  my_vsprintf(pQueue->queue[pQueue->index_w].gcode, format, ap);
-  my_va_end(ap);
-  pQueue->queue[pQueue->index_w].src = SERIAL_PORT;
-
-  pQueue->index_w = (pQueue->index_w + 1) % CMD_MAX_LIST;
-  pQueue->count++;
+  va_list va;
+  va_start(va, format);
+  commonStoreCmd(pQueue, format, va);
+  va_end(va);
 
   return true;
 }
@@ -82,14 +88,10 @@ void mustStoreCmd(const char * format,...)
     loopProcess();
   }
 
-  my_va_list ap;
-  my_va_start(ap,format);
-  my_vsprintf(pQueue->queue[pQueue->index_w].gcode, format, ap);
-  my_va_end(ap);
-  pQueue->queue[pQueue->index_w].src = SERIAL_PORT;
-
-  pQueue->index_w = (pQueue->index_w + 1) % CMD_MAX_LIST;
-  pQueue->count++;
+  va_list va;
+  va_start(va, format);
+  commonStoreCmd(pQueue, format, va);
+  va_end(va);
 }
 
 // Store Script cmd to infoCmd queue
@@ -99,10 +101,10 @@ void mustStoreScript(const char * format,...)
   if (strlen(format) == 0) return;
 
   char script[256];
-  my_va_list ap;
-  my_va_start(ap,format);
-  my_vsprintf(script, format, ap);
-  my_va_end(ap);
+  va_list va;
+  va_start(va, format);
+  vsnprintf(script, 256, format, va);
+  va_end(va);
 
   char *p = script;
   uint16_t i = 0;
@@ -133,7 +135,7 @@ bool storeCmdFromUART(uint8_t port, const char * gcode)
     return false;
   }
 
-  strcpy(pQueue->queue[pQueue->index_w].gcode, gcode);
+  strncpy(pQueue->queue[pQueue->index_w].gcode, gcode, CMD_MAX_CHAR);
 
   pQueue->queue[pQueue->index_w].src = port;
   pQueue->index_w = (pQueue->index_w + 1) % CMD_MAX_LIST;
@@ -155,13 +157,10 @@ void mustStoreCacheCmd(const char * format,...)
     loopProcess();
   }
 
-  my_va_list ap;
-  my_va_start(ap,format);
-  my_vsprintf(pQueue->queue[pQueue->index_w].gcode, format, ap);
-  my_va_end(ap);
-
-  pQueue->index_w = (pQueue->index_w + 1) % CMD_MAX_LIST;
-  pQueue->count++;
+  va_list va;
+  va_start(va, format);
+  commonStoreCmd(pQueue, format, va);
+  va_end(va);
 }
 
 // Move gcode cmd from infoCacheCmd to infoCmd queue.
@@ -300,7 +299,7 @@ void sendQueueCmd(void)
               if (mountFS() && (f_open(&tmp, infoFile.title, FA_OPEN_EXISTING | FA_READ) == FR_OK) )
               {
                 char buf[10];
-                my_sprintf(buf, "%d", f_size(&tmp));
+                sprintf(buf, "%d", f_size(&tmp));
                 Serial_Puts(SERIAL_PORT_2, "File opened: ");
                 Serial_Puts(SERIAL_PORT_2, infoFile.title);
                 Serial_Puts(SERIAL_PORT_2, " Size: ");
@@ -365,7 +364,7 @@ void sendQueueCmd(void)
                 Serial_Puts(SERIAL_PORT_2, ".\n");
               }
                 char buf[55];
-                my_sprintf(buf, "%s printing byte %d/%d\n",(infoFile.source==TFT_SD)?"TFT SD":"TFT USB", getPrintCur(),getPrintSize());
+                sprintf(buf, "%s printing byte %d/%d\n",(infoFile.source==TFT_SD)?"TFT SD":"TFT USB", getPrintCur(),getPrintSize());
                 Serial_Puts(SERIAL_PORT_2, buf);
                 Serial_Puts(SERIAL_PORT_2, "ok\n");
                 purgeLastCmd();
@@ -433,11 +432,11 @@ void sendQueueCmd(void)
             {
               char buf[50];
               Serial_Puts(SERIAL_PORT_2, "FIRMWARE_NAME: " FIRMWARE_NAME " SOURCE_CODE_URL:https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware\n");
-              my_sprintf(buf, "Cap:HOTEND_NUM:%d\n", infoSettings.hotend_count);
+              sprintf(buf, "Cap:HOTEND_NUM:%d\n", infoSettings.hotend_count);
               Serial_Puts(SERIAL_PORT_2, buf);
-              my_sprintf(buf, "Cap:EXTRUDER_NUM:%d\n", infoSettings.ext_count);
+              sprintf(buf, "Cap:EXTRUDER_NUM:%d\n", infoSettings.ext_count);
               Serial_Puts(SERIAL_PORT_2, buf);
-              my_sprintf(buf, "Cap:FAN_NUM:%d\n", infoSettings.fan_count);
+              sprintf(buf, "Cap:FAN_NUM:%d\n", infoSettings.fan_count);
               Serial_Puts(SERIAL_PORT_2, buf);
               Serial_Puts(SERIAL_PORT_2, "ok\n");
               purgeLastCmd();

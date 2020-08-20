@@ -94,6 +94,8 @@ int sprintf_(char* buffer, const char* format, ...);
 #define vsprintf vsprintf_
 int vsprintf_(char *buffer, const char *format, va_list va);
 
+#define vsnprintf vsnprintf_
+int vsnprintf_(char* buffer, size_t count, const char* format, va_list va);
 
 /**
  * Tiny snprintf/vsnprintf implementation

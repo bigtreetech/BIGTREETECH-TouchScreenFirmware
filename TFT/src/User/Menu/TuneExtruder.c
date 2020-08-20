@@ -205,7 +205,7 @@ void menuNewExtruderESteps(void)
       {ICON_BACK,                 LABEL_BACK},}
   };
 
-  float measured_length = 20.0;
+  float measured_length = 20.0f;
   float old_esteps; // get the value of the E-steps
   float new_esteps;
   u32 hidetext_ms = 0;
@@ -226,12 +226,12 @@ void menuNewExtruderESteps(void)
     switch(key_num)
     {
       case KEY_ICON_0:
-          measured_length -= 0.1;
+          measured_length -= 0.1f;
           showNewESteps(measured_length, old_esteps, &new_esteps);
         break;
 
       case KEY_ICON_3:
-          measured_length += 0.1;
+          measured_length += 0.1f;
           showNewESteps(measured_length, old_esteps, &new_esteps);
         break;
 
