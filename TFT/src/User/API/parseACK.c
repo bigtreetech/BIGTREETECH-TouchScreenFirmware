@@ -301,13 +301,12 @@ void parseACK(void)
       {
         coordinateSetAxisActualSteps(E_AXIS, ack_value());
       }
-
-      else if(ack_seen(bsdnoprintingmagic) && infoMachineSettings.onboard_sd_support == ENABLED)
+      else if(infoMachineSettings.onboard_sd_support == ENABLED && ack_seen(bsdnoprintingmagic))
       {
         infoHost.printing = false;
         completePrinting();
       }
-      else if(ack_seen(bsdprintingmagic) && infoMachineSettings.onboard_sd_support == ENABLED)
+      else if(infoMachineSettings.onboard_sd_support == ENABLED && ack_seen(bsdprintingmagic))
       {
         if(infoMenu.menu[infoMenu.cur] != menuPrinting && !infoHost.printing) {
           infoMenu.menu[++infoMenu.cur] = menuPrinting;
@@ -319,6 +318,11 @@ void parseACK(void)
         u32 position = strtol(strstr(dmaL2Cache, "byte ") + 5, &ptr, 10);
         setPrintCur(position);
   //      powerFailedCache(position);
+      }
+      else if(infoMachineSettings.onboard_sd_support == ENABLED && ack_seen("Done printing file"))
+      {
+        infoPrinting.printing = false;
+        infoPrinting.cur = infoPrinting.size; // for onboard sd printing
       }
 
     //parse and store stepper steps/mm values

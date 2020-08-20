@@ -72,8 +72,6 @@ const ITEM itemIsPause[2] = {
 
 void completePrinting(void)
 {
-  infoPrinting.printing = false;
-  infoPrinting.cur = infoPrinting.size; // for onboard sd printing
   printingItems.items[KEY_ICON_7].icon = ICON_BACK;
   printingItems.items[KEY_ICON_7].label.index = LABEL_BACK;
   if (infoMenu.menu[infoMenu.cur] == menuPrinting)
