@@ -21,7 +21,6 @@ typedef struct
   uint8_t count;   // Count of commands in the queue
 }GCODE_QUEUE;
 
-extern uint8_t toolNum;
 extern GCODE_QUEUE infoCmd;
 extern GCODE_QUEUE infoCacheCmd;
 

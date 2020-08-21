@@ -5,7 +5,6 @@
 GCODE_QUEUE infoCmd;       //
 GCODE_QUEUE infoCacheCmd;  // Only when heatHasWaiting() is false the cmd in this cache will move to infoCmd queue.
 
-uint8_t toolNum = 0;
 static u8 cmd_index=0;
 
 static bool ispolling = true;
@@ -837,7 +836,6 @@ void sendQueueCmd(void)
     case 'T':
       cmd=strtol(&infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 1], NULL, 10);
       heatSetCurrentTool(cmd);
-      toolNum = cmd;
       break;
 
   } // end parsing cmd

@@ -39,19 +39,19 @@ void FIL_Runout_Init(void)
 {
   GPIO_InitSet(FIL_RUNOUT_PIN, infoSettings.runout_invert ? MGPIO_MODE_IPU : MGPIO_MODE_IPD, 0);
   #ifdef FIL_RUNOUT_PIN_1
-  GPIO_InitSet(FIL_RUNOUT_PIN_1, infoSettings.runout_invert ? MGPIO_MODE_IPU : MGPIO_MODE_IPD, 0);
+    GPIO_InitSet(FIL_RUNOUT_PIN_1, infoSettings.runout_invert ? MGPIO_MODE_IPU : MGPIO_MODE_IPD, 0);
   #endif
   #ifdef FIL_RUNOUT_PIN_2
-  GPIO_InitSet(FIL_RUNOUT_PIN_2, infoSettings.runout_invert ? MGPIO_MODE_IPU : MGPIO_MODE_IPD, 0);
+    GPIO_InitSet(FIL_RUNOUT_PIN_2, infoSettings.runout_invert ? MGPIO_MODE_IPU : MGPIO_MODE_IPD, 0);
   #endif
   #ifdef FIL_RUNOUT_PIN_3
-  GPIO_InitSet(FIL_RUNOUT_PIN_3, infoSettings.runout_invert ? MGPIO_MODE_IPU : MGPIO_MODE_IPD, 0);
+    GPIO_InitSet(FIL_RUNOUT_PIN_3, infoSettings.runout_invert ? MGPIO_MODE_IPU : MGPIO_MODE_IPD, 0);
   #endif
   #ifdef FIL_RUNOUT_PIN_4
-  GPIO_InitSet(FIL_RUNOUT_PIN_4, infoSettings.runout_invert ? MGPIO_MODE_IPU : MGPIO_MODE_IPD, 0);
+    GPIO_InitSet(FIL_RUNOUT_PIN_4, infoSettings.runout_invert ? MGPIO_MODE_IPU : MGPIO_MODE_IPD, 0);
   #endif
   #ifdef FIL_RUNOUT_PIN_5
-  GPIO_InitSet(FIL_RUNOUT_PIN_5, infoSettings.runout_invert ? MGPIO_MODE_IPU : MGPIO_MODE_IPD, 0);
+    GPIO_InitSet(FIL_RUNOUT_PIN_5, infoSettings.runout_invert ? MGPIO_MODE_IPU : MGPIO_MODE_IPD, 0);
   #endif
 }
 
@@ -61,7 +61,7 @@ bool FIL_RunoutPinFilteredLevel(void)
   static u32 nextTime = 0;
   static u32 trueTimes = 0;
   static u32 falseTimes = 0;
-  static bool filRunout = 0;
+
   if (OS_GetTimeMs() > nextTime)
   {
     rst = trueTimes > falseTimes ? true : false;
@@ -71,35 +71,37 @@ bool FIL_RunoutPinFilteredLevel(void)
   }
   else
   {
+    bool filRunout;
+    uint8_t toolNum = heatGetCurrentTool();
     switch(toolNum)
     {
       case 0:
         filRunout = GPIO_GetLevel(FIL_RUNOUT_PIN);
         break;
       #ifdef FIL_RUNOUT_PIN_1
-      case 1:
-        filRunout = GPIO_GetLevel(FIL_RUNOUT_PIN_1);
-        break;
+        case 1:
+          filRunout = GPIO_GetLevel(FIL_RUNOUT_PIN_1);
+          break;
       #endif
       #ifdef FIL_RUNOUT_PIN_2
-      case 2:
-        filRunout = GPIO_GetLevel(FIL_RUNOUT_PIN_2);
-        break;
+        case 2:
+          filRunout = GPIO_GetLevel(FIL_RUNOUT_PIN_2);
+          break;
       #endif
       #ifdef FIL_RUNOUT_PIN_3
-      case 3:
-        filRunout = GPIO_GetLevel(FIL_RUNOUT_PIN_3);
-        break;
+        case 3:
+          filRunout = GPIO_GetLevel(FIL_RUNOUT_PIN_3);
+          break;
       #endif
       #ifdef FIL_RUNOUT_PIN_4
-      case 4:
-        filRunout = GPIO_GetLevel(FIL_RUNOUT_PIN_4);
-        break;
+        case 4:
+          filRunout = GPIO_GetLevel(FIL_RUNOUT_PIN_4);
+          break;
       #endif
       #ifdef FIL_RUNOUT_PIN_5
-      case 5:
-        filRunout = GPIO_GetLevel(FIL_RUNOUT_PIN_5);
-        break;
+        case 5:
+          filRunout = GPIO_GetLevel(FIL_RUNOUT_PIN_5);
+          break;
       #endif
     }
     if (filRunout)
