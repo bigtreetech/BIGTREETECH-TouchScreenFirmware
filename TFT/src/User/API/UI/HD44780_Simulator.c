@@ -144,15 +144,15 @@ void HD44780_DispDDRAM(uint8_t data)
     uint16_t x = 0,
              y = 0,
              j = 0;
-    uint16_t bitMapSize = (info.pixelHeight * info.pixelWidth / 8);
-    uint8_t  font[BYTE_HEIGHT * BYTE_HEIGHT / 8]; // TODO: match bitMapSize
+    uint16_t bitMapSize = (BYTE_HEIGHT * BYTE_WIDTH / 8);
+    uint8_t  font[BYTE_HEIGHT * BYTE_WIDTH / 8];
     uint32_t temp = 0;
 
     W25Qxx_ReadBuffer(font, info.bitMapAddr, bitMapSize);
 
     for(x = HD44780.x * BYTE_WIDTH; x < ex; x++)
     {
-      for(j=0; j < (info.pixelHeight + 8-1)/8; j++)
+      for(j=0; j < (BYTE_HEIGHT + 8-1)/8; j++)
       {
         temp <<= 8;
         temp |= font[i++];
@@ -160,7 +160,7 @@ void HD44780_DispDDRAM(uint8_t data)
 
       for(y = HD44780.y * BYTE_HEIGHT; y < ey ;y++)
       {
-        HD44780_DrawPixel(x, y, temp & (1<<(info.pixelHeight-1)), 1);
+        HD44780_DrawPixel(x, y, temp & (1<<(BYTE_HEIGHT-1)), 1);
         temp <<= 1;
       }
     }

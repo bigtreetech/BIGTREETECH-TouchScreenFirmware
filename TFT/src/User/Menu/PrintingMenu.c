@@ -371,10 +371,10 @@ void menuPrinting(void)
     if( infoPrinting.size != 0)
     {
       //check print time change
-      if(time!=infoPrinting.time || infoPrinting.progress!=NOBEYOND(0,(uint64_t)infoPrinting.cur*100/infoPrinting.size,100))
+      if(time != infoPrinting.time || infoPrinting.progress != MIN((uint64_t)infoPrinting.cur*100/infoPrinting.size, 100))
       {
-        time=infoPrinting.time;
-        infoPrinting.progress=NOBEYOND(0,(uint64_t)infoPrinting.cur*100/infoPrinting.size,100);
+        time = infoPrinting.time;
+        infoPrinting.progress = MIN((uint64_t)infoPrinting.cur*100/infoPrinting.size, 100);
         rapid_serial_loop();  //perform backend printing loop before drawing to avoid printer idling
         reDrawTime(TIM_ICON_POS);
         reDrawProgress(TIM_ICON_POS);
