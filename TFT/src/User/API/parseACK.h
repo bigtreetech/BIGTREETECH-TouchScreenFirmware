@@ -6,11 +6,6 @@
 
 static const char errormagic[]         = "Error:";
 static const char echomagic[]          = "echo:";
-static const char unknowmagic[]        = "Unknown command:";
-static const char bsdprintingmagic[]   = "SD printing byte";
-static const char bsdnoprintingmagic[] = "Not SD printing";
-static const char action[]       = "//action:";
-
 
 #define ACK_MAX_SIZE 2048
 

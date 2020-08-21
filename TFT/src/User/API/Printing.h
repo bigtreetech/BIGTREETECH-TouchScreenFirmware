@@ -37,7 +37,6 @@ typedef struct
 
 extern PRINTING infoPrinting;
 
-void setPrintfinishAction(void (*_printfinish)());
 bool isPrinting(void);
 bool isPause(void);
 bool isM0_Pause(void);

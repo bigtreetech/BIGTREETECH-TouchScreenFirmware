@@ -372,28 +372,42 @@ void parseACK(void)
       {
         coordinateSetAxisActualSteps(E_AXIS, ack_value());
       }
-      else if(infoMachineSettings.onboard_sd_support == ENABLED && ack_seen(bsdnoprintingmagic))
+      else if(infoMachineSettings.onboard_sd_support == ENABLED && ack_seen("File opened: "))
+      {
+        // File opened: 1A29A~1.GCO Size: 6974
+        uint16_t start_index = ack_index;
+        uint16_t end_index = ack_seen("Size: ") ? (ack_index - sizeof("Size: ")) : start_index;
+        infoFile.source = BOARD_SD;
+        strcpy(infoFile.title, getCurFileSource());
+        strcat(infoFile.title,"/");
+        uint16_t path_len = MIN(end_index - start_index, MAX_PATH_LEN - strlen(getCurFileSource()) - 1);
+        strncat(infoFile.title, dmaL2Cache + start_index, path_len);
+        infoFile.title[path_len + strlen(getCurFileSource()) + 1] = 0;
+
+        infoPrinting.pause = false;
+        infoHost.printing = true;
+        infoPrinting.time = 0;
+        infoPrinting.cur = 0;
+        infoPrinting.size = ack_value();
+      }
+      else if(infoMachineSettings.onboard_sd_support == ENABLED && ack_seen("Not SD printing"))
       {
         infoHost.printing = false;
-        completePrinting();
+        if (infoPrinting.printing)
+          infoPrinting.pause = true;
       }
-      else if(infoMachineSettings.onboard_sd_support == ENABLED && ack_seen(bsdprintingmagic))
+      else if(infoMachineSettings.onboard_sd_support == ENABLED && ack_seen("SD printing byte"))
       {
-        if(infoMenu.menu[infoMenu.cur] != menuPrinting && !infoHost.printing) {
-          infoMenu.menu[++infoMenu.cur] = menuPrinting;
-          infoHost.printing = true;
-        }
+        infoPrinting.pause = false;
         // Parsing printing data
         // Example: SD printing byte 123/12345
-        char *ptr;
-        u32 position = strtol(strstr(dmaL2Cache, "byte ") + 5, &ptr, 10);
-        setPrintCur(position);
+        infoPrinting.cur = ack_value();
   //      powerFailedCache(position);
       }
       else if(infoMachineSettings.onboard_sd_support == ENABLED && ack_seen("Done printing file"))
       {
         infoPrinting.printing = false;
-        infoPrinting.cur = infoPrinting.size; // for onboard sd printing
+        infoPrinting.cur = infoPrinting.size;
       }
 
     //parse and store stepper steps/mm values
@@ -618,12 +632,12 @@ void parseACK(void)
         if (ack_seen("S"))
           fanSetSpeed(i, ack_value());
       }
-    // // Parse pause message
-    //   else if(ack_seen("paused for user"))
-    //   {
-    //     showDialog(DIALOG_TYPE_QUESTION, (u8*)"Printer is Paused",(u8*)"Paused for user\ncontinue?",
-    //                textSelect(LABEL_CONFIRM), NULL, breakAndContinue, NULL,NULL);
-    //   }
+   // Parse pause message
+     else if(ack_seen("paused for user"))
+     {
+       showDialog(DIALOG_TYPE_QUESTION, (u8*)"Printer is Paused",(u8*)"Paused for user\ncontinue?",
+                  textSelect(LABEL_CONFIRM), NULL, breakAndContinue, NULL,NULL);
+     }
     // Parse UBL Complete message
       else if(ack_seen("UBL Complete"))
       {
@@ -642,6 +656,11 @@ void parseACK(void)
       {
         pidUpdateStatus(false);
       }
+    // Parse "HOST_ACTION_COMMANDS"
+      else if(ack_seen("//action:"))
+      {
+        hostActionCommands();
+      }
     //Parse error messages & Echo messages
       else if(ack_seen(errormagic))
       {
@@ -654,10 +673,6 @@ void parseACK(void)
         {
           ackPopupInfo(echomagic);
         }
-      }
-      else if(ack_seen(action))
-      {
-        hostActionCommands();
       }
     }
 
