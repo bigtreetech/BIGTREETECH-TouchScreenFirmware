@@ -632,12 +632,12 @@ void parseACK(void)
         if (ack_seen("S"))
           fanSetSpeed(i, ack_value());
       }
-   // Parse pause message
-     else if(ack_seen("paused for user"))
-     {
-       showDialog(DIALOG_TYPE_QUESTION, (u8*)"Printer is Paused",(u8*)"Paused for user\ncontinue?",
-                  textSelect(LABEL_CONFIRM), NULL, breakAndContinue, NULL,NULL);
-     }
+    // Parse pause message
+      else if(ack_seen("paused for user"))
+      {
+        showDialog(DIALOG_TYPE_QUESTION, (u8*)"Printer is Paused",(u8*)"Paused for user\ncontinue?",
+                   textSelect(LABEL_CONFIRM), NULL, breakAndContinue, NULL,NULL);
+      }
     // Parse UBL Complete message
       else if(ack_seen("UBL Complete"))
       {
