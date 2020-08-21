@@ -90,7 +90,6 @@ void menuBeforePrinting(void)
       //    {
       //      request_M24(infoBreakPoint.offset);
       //    }
-      printSetUpdateWaiting(false);
 
       if (infoMachineSettings.autoReportSDStatus ==1){
         request_M27(infoSettings.m27_refresh_time*1000);                //Check if there is a SD or USB print running.
