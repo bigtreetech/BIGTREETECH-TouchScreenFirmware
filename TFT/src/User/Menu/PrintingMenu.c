@@ -118,7 +118,7 @@ void menuBeforePrinting(void)
         request_M27(0);
       }
 
-      infoHost.printing=true; // Global lock info on printer is busy in printing.
+      infoHost.printing = true; // Global lock info on printer is busy in printing.
 
       break;
 
@@ -161,7 +161,7 @@ const GUI_RECT progressRect = {1*SPACE_X_PER_ICON, 0*ICON_HEIGHT+0*SPACE_Y+ICON_
 void reValueNozzle(int icon_pos)
 {
   char tempstr[10];
-  my_sprintf(tempstr, "%d/%d", heatGetCurrentTemp(c_Tool), heatGetTargetTemp(c_Tool));
+  sprintf(tempstr, "%d/%d", heatGetCurrentTemp(c_Tool), heatGetTargetTemp(c_Tool));
 
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
@@ -175,7 +175,7 @@ void reValueNozzle(int icon_pos)
 void reValueBed(int icon_pos)
 {
   char tempstr[10];
-  my_sprintf(tempstr, "%d/%d", heatGetCurrentTemp(BED), heatGetTargetTemp(BED));
+  sprintf(tempstr, "%d/%d", heatGetCurrentTemp(BED), heatGetTargetTemp(BED));
 
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
@@ -191,11 +191,11 @@ void reDrawFan(int icon_pos)
   char tempstr[10];
   if (infoSettings.fan_percentage == 1)
   {
-    my_sprintf(tempstr, "%d%%", fanGetSpeedPercent(c_fan));
+    sprintf(tempstr, "%d%%", fanGetSpeedPercent(c_fan));
   }
   else
   {
-    my_sprintf(tempstr, "%d", fanGetSpeed(c_fan));
+    sprintf(tempstr, "%d", fanGetSpeed(c_fan));
   }
 
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
@@ -213,7 +213,7 @@ void reDrawSpeed(int icon_pos)
   char tempstr[10];
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
-  my_sprintf(tempstr, "%d%%", speedGetPercent(c_speedID) );
+  sprintf(tempstr, "%d%%", speedGetPercent(c_speedID) );
 
   if(c_speedID == 0){
   ICON_CustomReadDisplay(printinfo_points[icon_pos].x,printinfo_points[icon_pos].y,PICON_SM_WIDTH,PICON_HEIGHT,ICON_ADDR(ICON_PRINTING_SPEED));
@@ -246,7 +246,7 @@ void reDrawTime(int icon_pos)
 void reDrawProgress(int icon_pos)
 {
   char buf[6];
-  my_sprintf(buf, "%d%%", infoPrinting.progress);
+  sprintf(buf, "%d%%", infoPrinting.progress);
 
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
@@ -258,7 +258,7 @@ void reDrawProgress(int icon_pos)
 void reDrawLayer(int icon_pos)
 {
   char tempstr[10];
-  my_sprintf(tempstr, "%.2fmm",coordinateGetAxisTarget(Z_AXIS));
+  sprintf(tempstr, "%.2fmm",coordinateGetAxisTarget(Z_AXIS));
 
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
@@ -371,10 +371,10 @@ void menuPrinting(void)
     if( infoPrinting.size != 0)
     {
       //check print time change
-      if(time!=infoPrinting.time || infoPrinting.progress!=limitValue(0,(uint64_t)infoPrinting.cur*100/infoPrinting.size,100))
+      if(time != infoPrinting.time || infoPrinting.progress != MIN((uint64_t)infoPrinting.cur*100/infoPrinting.size, 100))
       {
-        time=infoPrinting.time;
-        infoPrinting.progress=limitValue(0,(uint64_t)infoPrinting.cur*100/infoPrinting.size,100);
+        time = infoPrinting.time;
+        infoPrinting.progress = MIN((uint64_t)infoPrinting.cur*100/infoPrinting.size, 100);
         rapid_serial_loop();  //perform backend printing loop before drawing to avoid printer idling
         reDrawTime(TIM_ICON_POS);
         reDrawProgress(TIM_ICON_POS);

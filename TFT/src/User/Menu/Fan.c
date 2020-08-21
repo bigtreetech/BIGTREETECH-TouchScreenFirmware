@@ -65,94 +65,92 @@ void menuFan(void)
     KEY_VALUES key_num = menuKeyGetValue();
     uint8_t actFan = fanGetSpeed(curIndex);
     uint8_t actFanPercent = fanGetSpeedPercent(curIndex);
-    switch(key_num)
+    switch (key_num)
     {
-      case KEY_ICON_0:
-        if (actFan > 0)
+    case KEY_ICON_0:
+      if (actFan > 0)
+      {
+        if (infoSettings.fan_percentage == 1)
         {
-          if (infoSettings.fan_percentage == 1)
-          {
-            fanSetSpeedPercent(curIndex, --actFanPercent);
-          }
-          else
-          {
-            fanSetSpeed(curIndex, --actFan);
-          }
-        }
-        break;
-
-      case KEY_ICON_3:
-        if (actFan < infoSettings.fan_max[curIndex])
-        {
-          if (infoSettings.fan_percentage ==  1)
-          {
-            fanSetSpeedPercent(curIndex, ++actFanPercent); //adding 2 to current speed % increases speed % by 1.
-          }
-          else
-          {
-            fanSetSpeed(curIndex, ++actFan);
-          }
-        }
-        break;
-
-      case KEY_ICON_4:
-        if (infoSettings.fan_count > 1)
-        {
-          curIndex = (curIndex + 1) % infoSettings.fan_count;
-          fanSpeedReDraw(false);
+          fanSetSpeedPercent(curIndex, --actFanPercent);
         }
         else
         {
-          fanSetSpeedPercent(curIndex, 50);
+          fanSetSpeed(curIndex, --actFan);
         }
-        break;
+      }
+      break;
 
-      case KEY_ICON_5:
-        fanSetSpeed(curIndex, infoSettings.fan_max[curIndex]);
-        break;
+    case KEY_ICON_3:
+      if (actFan < infoSettings.fan_max[curIndex])
+      {
+        if (infoSettings.fan_percentage == 1)
+          fanSetSpeedPercent(curIndex, ++actFanPercent);
+        else
+          fanSetSpeed(curIndex, ++actFan);
+      }
+      break;
 
-      case KEY_ICON_6:
-        fanSetSpeed(curIndex, 0);
-        break;
+    case KEY_ICON_4:
+      if (infoSettings.fan_count > 1)
+      {
+        curIndex = (curIndex + 1) % infoSettings.fan_count;
+        fanSpeedReDraw(false);
+      }
+      else
+      {
+        actFan = 50;
+        fanSetSpeedPercent(curIndex, actFan);
+      }
+      break;
 
-      case KEY_ICON_7:
-        infoMenu.cur--;
-        break;
+    case KEY_ICON_5:
+      fanSetSpeed(curIndex, infoSettings.fan_max[curIndex]);
+      break;
 
-      default:
-        #if LCD_ENCODER_SUPPORT
-          if(encoderPosition)
+    case KEY_ICON_6:
+      fanSetSpeed(curIndex, 0);
+      break;
+
+    case KEY_ICON_7:
+      infoMenu.cur--;
+      break;
+
+    default:
+      #if LCD_ENCODER_SUPPORT
+        if(encoderPosition)
+        {
+          if (actFan < infoSettings.fan_max[curIndex] && encoderPosition > 0)
           {
-            if (actFan < infoSettings.fan_max[curIndex] && encoderPosition > 0)
+            if (infoSettings.fan_percentage ==  1)
             {
-              if (infoSettings.fan_percentage ==  1)
-              {
-                fanSetSpeedPercent(curIndex, ++actFanPercent);
-              }
-              else
-              {
-                fanSetSpeed(curIndex, ++actFan);
-              }
+              fanSetSpeedPercent(curIndex, ++actFanPercent);
             }
-
-            if (actFan > 0 && encoderPosition < 0) {
-              if (infoSettings.fan_percentage == 1)
-              {
-                fanSetSpeedPercent(curIndex, --actFanPercent);
-              }
-              else
-              {
-                fanSetSpeed(curIndex, --actFan);
-              }
+            else
+            {
+              fanSetSpeed(curIndex, ++actFan);
             }
-            encoderPosition = 0;
           }
-        #endif
-        break;
+
+          if (actFan > 0 && encoderPosition < 0) {
+            if (infoSettings.fan_percentage == 1)
+            {
+              fanSetSpeedPercent(curIndex, --actFanPercent);
+            }
+            else
+            {
+              fanSetSpeed(curIndex, --actFan);
+            }
+          }
+          encoderPosition = 0;
+        }
+      #endif
+      break;
     }
 
-    if (lastFan != actFan) {
-      lastFan = actFan;
+    if (lastFan != fanGetSpeed(curIndex))
+    {
+      lastFan = fanGetSpeed(curIndex);
       fanSpeedReDraw(true);
     }
 

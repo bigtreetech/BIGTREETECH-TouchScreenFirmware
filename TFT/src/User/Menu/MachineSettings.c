@@ -132,7 +132,7 @@ void menuRGBSettings(void)
   // title
   LABEL_RGB_SETTINGS,
   // icon                       label
-  {{ICON_RGB_RED,              LABEL_RED},
+   {{ICON_RGB_RED,              LABEL_RED},
     {ICON_RGB_GREEN,            LABEL_GREEN},
     {ICON_RGB_BLUE,             LABEL_BLUE},
     {ICON_RGB_WHITE,            LABEL_WHITE},
@@ -182,19 +182,6 @@ void menuRGBSettings(void)
   }
 }
 
-#define ITEM_MACHINE_SETTINGS_SUBMENU_NUM 3
-
-ITEM itemMachineSettingsSubmenu[ITEM_MACHINE_SETTINGS_SUBMENU_NUM] = {
-  // icon                         label
-  {ICON_EEPROM_SAVE,              LABEL_SAVE},
-  {ICON_EEPROM_RESTORE,           LABEL_RESTORE},
-  {ICON_EEPROM_RESET,             LABEL_RESET},
-};
-
-#if QUICK_EEPROM_BUTTON == 1
-static uint8_t curSubmenu = 0;
-#endif
-
 void menuMachineSettings(void)
 {
   // 1 title, ITEM_PER_PAGE items (icon + label)
@@ -203,26 +190,33 @@ void menuMachineSettings(void)
     LABEL_MACHINE_SETTINGS,
     // icon                         label
     {{ICON_PARAMETER,               LABEL_PARAMETER_SETTING},
-     {ICON_GCODE,                   LABEL_TERMINAL},
      {ICON_CUSTOM,                  LABEL_CUSTOM},
      {ICON_RGB_SETTINGS,            LABEL_RGB_SETTINGS},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACK,                    LABEL_BACK},}
+     {ICON_TUNING,                  LABEL_TUNING},
+      #if QUICK_EEPROM_BUTTON == 1
+        {ICON_EEPROM_SAVE,             LABEL_SAVE},
+        {ICON_EEPROM_RESTORE,          LABEL_RESTORE},
+        {ICON_EEPROM_RESET,            LABEL_RESET},
+      #else
+        {ICON_BACKGROUND,           LABEL_BACKGROUND},
+        {ICON_BACKGROUND,           LABEL_BACKGROUND},
+        {ICON_BACKGROUND,           LABEL_BACKGROUND},
+      #endif
+     {ICON_BACK,                    LABEL_BACK}}
   };
 
-  KEY_VALUES key_num = KEY_IDLE;
-
 #if QUICK_EEPROM_BUTTON == 1
-  if (infoMachineSettings.EEPROM == 1)
+  if (infoMachineSettings.EEPROM != 1)
   {
-    machineSettingsItems.items[KEY_ICON_5].icon = ICON_PAGE_DOWN;
-    machineSettingsItems.items[KEY_ICON_5].label.index = LABEL_NEXT;
-
-    machineSettingsItems.items[KEY_ICON_6] = itemMachineSettingsSubmenu[curSubmenu];
+    for (int i = 0; i < 3;i++)
+    {
+    machineSettingsItems.items[KEY_ICON_4 + i].icon = ICON_BACKGROUND;
+    machineSettingsItems.items[KEY_ICON_4 + i].label.index = LABEL_BACKGROUND;
+    }
   }
 #endif
+
+  KEY_VALUES key_num = KEY_IDLE;
 
   menuDrawPage(&machineSettingsItems);
 
@@ -236,61 +230,39 @@ void menuMachineSettings(void)
         break;
 
       case KEY_ICON_1:
-        infoMenu.menu[++infoMenu.cur] = menuSendGcode;
-        break;
-
-      case KEY_ICON_2:
         infoMenu.menu[++infoMenu.cur] = menuCustom;
         break;
 
-      case KEY_ICON_3:
+      case KEY_ICON_2:
         infoMenu.menu[++infoMenu.cur] = menuRGBSettings;
         break;
 
-#if QUICK_EEPROM_BUTTON == 1
-      // change submenu
+      case KEY_ICON_3:
+        infoMenu.menu[++infoMenu.cur] = menuTuning;
+        break;
+
+    #if QUICK_EEPROM_BUTTON == 1
+      case KEY_ICON_4:
+        // save to EEPROM
+        if (infoMachineSettings.EEPROM == 1)
+          showDialog(DIALOG_TYPE_QUESTION, textSelect(machineSettingsItems.title.index), textSelect(LABEL_EEPROM_SAVE_INFO),
+                     textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), saveEepromSettings, NULL, NULL);
+        break;
+
       case KEY_ICON_5:
+        // restore from EEPROM
         if (infoMachineSettings.EEPROM == 1)
-        {
-          curSubmenu = (curSubmenu + 1) % ITEM_MACHINE_SETTINGS_SUBMENU_NUM;
-
-          machineSettingsItems.items[KEY_ICON_6] = itemMachineSettingsSubmenu[curSubmenu];
-
-          menuDrawItem(&machineSettingsItems.items[KEY_ICON_6], KEY_ICON_6);
-        }
+          showDialog(DIALOG_TYPE_QUESTION, textSelect(machineSettingsItems.title.index), textSelect(LABEL_EEPROM_RESTORE_INFO),
+                   textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), restoreEepromSettings, NULL, NULL);
         break;
 
-      // handle submenu
       case KEY_ICON_6:
+        // reset EEPROM
         if (infoMachineSettings.EEPROM == 1)
-        {
-          switch (curSubmenu)
-          {
-            // save to EEPROM
-            case 0:
-              showDialog(DIALOG_TYPE_QUESTION, textSelect(machineSettingsItems.title.index), textSelect(LABEL_EEPROM_SAVE_INFO),
-                textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), saveEepromSettings, NULL, NULL);
-              break;
-
-            // restore from EEPROM
-            case 1:
-              showDialog(DIALOG_TYPE_QUESTION, textSelect(machineSettingsItems.title.index), textSelect(LABEL_EEPROM_RESTORE_INFO),
-                textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), restoreEepromSettings, NULL, NULL);
-              break;
-
-            // reset EEPROM
-            case 2:
-              showDialog(DIALOG_TYPE_QUESTION, textSelect(machineSettingsItems.title.index), textSelect(LABEL_EEPROM_RESET_INFO),
-                textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), resetEepromSettings, NULL, NULL);
-              break;
-
-            default:
-              break;
-          }
-        }
+          showDialog(DIALOG_TYPE_QUESTION, textSelect(machineSettingsItems.title.index), textSelect(LABEL_EEPROM_RESET_INFO),
+                   textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), resetEepromSettings, NULL, NULL);
         break;
-#endif
-
+    #endif
       case KEY_ICON_7:
         infoMenu.cur--;
         break;

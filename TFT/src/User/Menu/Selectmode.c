@@ -133,7 +133,7 @@ void menuMode(void)
     #if LCD_ENCODER_SUPPORT
       if(encoderPosition)
       {
-        nowMode = limitValue(0, nowMode + encoderPosition, MODE_COUNT - 1);
+        nowMode = NOBEYOND(0, nowMode + encoderPosition, MODE_COUNT - 1);
         drawSelectedMode(nowMode);
         encoderPosition = 0;
       }

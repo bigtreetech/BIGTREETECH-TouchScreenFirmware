@@ -66,7 +66,7 @@ void menuAutoLeveling(void)
           char tempstr[30];
           sprintf(tempstr, "%Min:%d | Max:%d", Z_FADE_MIN_VALUE, Z_FADE_MAX_VALUE);
           float val = numPadFloat((u8 *)tempstr, getParameter(P_ABL_STATE, 1), 0.0f, false);
-          storeCmd("M420 Z%.2f\n", limitFloat(Z_FADE_MIN_VALUE, val, Z_FADE_MAX_VALUE));
+          storeCmd("M420 Z%.2f\n", NOBEYOND(Z_FADE_MIN_VALUE, val, Z_FADE_MAX_VALUE));
           menuDrawPage(&autoLevelingItems);
         }
         break;
@@ -170,7 +170,7 @@ void menuManualLeveling(void)
           char tempstr[30];
           sprintf(tempstr, "%Min:%d | Max:%d", LEVELING_EDGE_DISTANCE_MIN, LEVELING_EDGE_DISTANCE_MAX);
           int val = numPadInt((u8 *)tempstr, infoSettings.level_edge, LEVELING_EDGE_DISTANCE_DEFAULT, false);
-          infoSettings.level_edge = limitValue(LEVELING_EDGE_DISTANCE_MIN, val, LEVELING_EDGE_DISTANCE_MAX);
+          infoSettings.level_edge = NOBEYOND(LEVELING_EDGE_DISTANCE_MIN, val, LEVELING_EDGE_DISTANCE_MAX);
           menuDrawPage(&manualLevelingItems);
         }
         break;

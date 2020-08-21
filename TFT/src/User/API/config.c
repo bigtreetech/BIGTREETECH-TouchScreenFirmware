@@ -349,7 +349,7 @@ void drawProgressPage(void)
 
 void drawProgress(void){
   char tempstr[50];
-  my_sprintf(tempstr,"Total keywords found: %d",foundkeys);
+  sprintf(tempstr,"Total keywords found: %d",foundkeys);
   GUI_DispString(pointProgressText.x,pointProgressText.y,(u8*)tempstr);
   u16 p = map(configFile.cur,0,configFile.size, rectProgressframe.x0,rectProgressframe.x1);
   GUI_FillRect(rectProgressframe.x0,rectProgressframe.y0,p,rectProgressframe.y1);
@@ -380,13 +380,13 @@ void showError(CONFIG_STATS stat)
   case CSTAT_FILE_NOTOPEN:
     GUI_SetColor(RED);
     ttl = "Error:";
-    my_sprintf(tempstr, "Unable to open %s", CONFIG_FILE_PATH);
+    sprintf(tempstr, "Unable to open %s", CONFIG_FILE_PATH);
     txt = tempstr;
     break;
   case CSTAT_STORAGE_LOW:
     GUI_SetColor(RED);
     ttl = "Write Error:";
-    my_sprintf(tempstr, "Config size is larger than allocated size", CONFIG_FILE_PATH);
+    sprintf(tempstr, "Config size is larger than allocated size", CONFIG_FILE_PATH);
     txt = tempstr;
     break;
   case CSTAT_FILE_INVALID:
@@ -802,6 +802,8 @@ void parseConfigKey(u16 index)
   case C_INDEX_PREHEAT_NAME_2:
   case C_INDEX_PREHEAT_NAME_3:
   case C_INDEX_PREHEAT_NAME_4:
+  case C_INDEX_PREHEAT_NAME_5:
+  case C_INDEX_PREHEAT_NAME_6:
   {
     char pchr[LINE_MAX_CHAR];
     strcpy(pchr, strrchr(cur_line, ':') + 1);
@@ -817,6 +819,8 @@ void parseConfigKey(u16 index)
   case C_INDEX_PREHEAT_TEMP_2:
   case C_INDEX_PREHEAT_TEMP_3:
   case C_INDEX_PREHEAT_TEMP_4:
+  case C_INDEX_PREHEAT_TEMP_5:
+  case C_INDEX_PREHEAT_TEMP_6:
     {
         int val_index = index - C_INDEX_PREHEAT_TEMP_1;
       if (key_seen("B"))

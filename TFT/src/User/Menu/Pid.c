@@ -236,6 +236,10 @@ void menuPid(void)
   pidItems.items[KEY_ICON_4] = itemPidTool[pidHeater.toolIndex];
   pidItems.items[KEY_ICON_5] = itemPidDegree[curDegree];
 
+  #if LCD_ENCODER_SUPPORT
+    encoderPosition = 0;
+  #endif
+
   menuDrawPage(&pidItems);
   pidTemperatureReDraw(false);
 
@@ -247,7 +251,7 @@ void menuPid(void)
       case KEY_ICON_0:
         if (pidHeater.T[pidHeater.toolIndex].target > 0)
           pidHeater.T[pidHeater.toolIndex].target =
-            limitValue(0, pidHeater.T[pidHeater.toolIndex].target - pidDegree[curDegree], infoSettings.max_temp[pidHeater.toolIndex]);
+            NOBEYOND(0, pidHeater.T[pidHeater.toolIndex].target - pidDegree[curDegree], infoSettings.max_temp[pidHeater.toolIndex]);
 
         pidTemperatureReDraw(true);
         break;
@@ -255,7 +259,7 @@ void menuPid(void)
       case KEY_ICON_3:
         if (pidHeater.T[pidHeater.toolIndex].target < infoSettings.max_temp[pidHeater.toolIndex])
           pidHeater.T[pidHeater.toolIndex].target =
-            limitValue(0, pidHeater.T[pidHeater.toolIndex].target + pidDegree[curDegree], infoSettings.max_temp[pidHeater.toolIndex]);
+            NOBEYOND(0, pidHeater.T[pidHeater.toolIndex].target + pidDegree[curDegree], infoSettings.max_temp[pidHeater.toolIndex]);
 
         pidTemperatureReDraw(true);
         break;
@@ -307,7 +311,25 @@ void menuPid(void)
         break;
 
       default:
-        break;
+      {
+        #if LCD_ENCODER_SUPPORT
+          if(encoderPosition)
+          {
+            if(encoderPosition > 0)
+              if (pidHeater.T[pidHeater.toolIndex].target < infoSettings.max_temp[pidHeater.toolIndex])
+                pidHeater.T[pidHeater.toolIndex].target =
+                  NOBEYOND(0, pidHeater.T[pidHeater.toolIndex].target + pidDegree[curDegree], infoSettings.max_temp[pidHeater.toolIndex]);
+
+            if(encoderPosition < 0)
+              if (pidHeater.T[pidHeater.toolIndex].target > 0)
+                pidHeater.T[pidHeater.toolIndex].target =
+                  NOBEYOND(0, pidHeater.T[pidHeater.toolIndex].target - pidDegree[curDegree], infoSettings.max_temp[pidHeater.toolIndex]);
+
+            pidTemperatureReDraw(true);
+            encoderPosition = 0;
+          }
+        #endif
+      }break;
     }
 
     pidCheckTimeout();

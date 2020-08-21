@@ -93,6 +93,21 @@ bool _toastRunning = false;
 //Add new message to toast notification queue
 void addToast(DIALOG_TYPE style, char * text)
 {
+  #ifdef LCD_LED_PWM_CHANNEL
+    if (infoSettings.lcd_idle_timer != LCD_DIM_OFF)
+    {
+      //The LCD dim function is activated. First check if it's dimmed
+      if (lcd_dim.dimmed)
+      {
+        lcd_dim.dimmed = false;
+        Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
+      }
+      //Set a new idle_ms time
+      lcd_dim.idle_ms = OS_GetTimeMs();
+    }
+  
+  #endif
+
   TOAST t;
   strncpy(t.text, text, TOAST_MSG_LENGTH);
   t.text[TOAST_MSG_LENGTH - 1] = 0; //ensure string ends with null terminator
@@ -289,6 +304,20 @@ void reminderMessage(int16_t inf, SYS_STATUS status)
 
 void volumeReminderMessage(int16_t inf, SYS_STATUS status)
 {
+  #ifdef LCD_LED_PWM_CHANNEL
+    if (infoSettings.lcd_idle_timer != LCD_DIM_OFF)
+    {
+      //The LCD dim function is activated. First check if it's dimmed
+      if (lcd_dim.dimmed)
+      {
+        lcd_dim.dimmed = false;
+        Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
+      }
+      //Set a new idle_ms time
+      lcd_dim.idle_ms = OS_GetTimeMs();
+    }
+  #endif
+
   if(_toastRunning)
     return;
   volumeReminder.inf = inf;
@@ -605,7 +634,7 @@ void loopBackEnd(void)
   loopBuzzer();
 #endif
 
-if(infoMachineSettings.onboard_sd_support == ENABLED && infoMachineSettings.autoReportSDStatus == DISABLED)
+  if(infoMachineSettings.onboard_sd_support == ENABLED && infoMachineSettings.autoReportSDStatus == DISABLED)
   {
     loopCheckPrinting(); //Check if there is a SD or USB print running.
   }

@@ -18,7 +18,7 @@ uint32_t nextHeatCheckTime = 0;
 //Set target temperature
 void heatSetTargetTemp(uint8_t index, int16_t temp)
 {
-  heater.T[index].target = limitValue(0, temp, infoSettings.max_temp[index]);
+  heater.T[index].target = NOBEYOND(0, temp, infoSettings.max_temp[index]);
 }
 //Sync target temperature
 void heatSyncTargetTemp(uint8_t index, int16_t temp)
@@ -35,7 +35,7 @@ u16 heatGetTargetTemp(uint8_t index)
 // Set current temperature
 void heatSetCurrentTemp(uint8_t index, int16_t temp)
 {
-  heater.T[index].current = limitValue(-99, temp, 999);
+  heater.T[index].current = NOBEYOND(-99, temp, 999);
 }
 
 // Get current temperature
@@ -147,7 +147,7 @@ void loopCheckHeater(void)
   {  // Send M105 query temperature continuously
     if(heat_update_waiting == true) {updateNextHeatCheckTime();break;}
     if(OS_GetTimeMs() < nextHeatCheckTime)     break;
-    if(RequestCommandInfoIsRunning())          break; //to avoid colision in Gcode response processing
+    if(requestCommandInfoIsRunning())          break; //to avoid colision in Gcode response processing
     if(storeCmd("M105\n") == false)            break;
     updateNextHeatCheckTime();
     heat_update_waiting = true;

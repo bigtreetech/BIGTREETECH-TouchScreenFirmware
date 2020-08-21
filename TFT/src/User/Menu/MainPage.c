@@ -77,12 +77,12 @@ void classicMenu(void)
     // title
     LABEL_READY,
     // icon                         label
-    {{ICON_HEAT,                    LABEL_PREHEAT},
+    {{ICON_HEAT_FAN,                LABEL_UNIFIEDHEAT},
      {ICON_MOVE,                    LABEL_MOVE},
      {ICON_HOME,                    LABEL_HOME},
      {ICON_PRINT,                   LABEL_PRINT},
      {ICON_EXTRUDE,                 LABEL_EXTRUDE},
-     {ICON_FAN,                     LABEL_FAN},
+     {ICON_GCODE,                   LABEL_TERMINAL},
      {ICON_SETTINGS,                LABEL_SETTINGS},
      {ICON_LEVELING,                LABEL_LEVELING},}
   };
@@ -109,7 +109,7 @@ void classicMenu(void)
     switch(key_num)
     {
       case KEY_ICON_0:
-        infoMenu.menu[++infoMenu.cur] = menuPreheat;
+        infoMenu.menu[++infoMenu.cur] = menuUnifiedHeat;
         break;
 
       case KEY_ICON_1:
@@ -129,7 +129,7 @@ void classicMenu(void)
         break;
 
       case KEY_ICON_5:
-        infoMenu.menu[++infoMenu.cur] = menuFan;
+        infoMenu.menu[++infoMenu.cur] = menuSendGcode;
         break;
 
       case KEY_ICON_6:
