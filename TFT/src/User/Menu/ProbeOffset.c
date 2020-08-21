@@ -120,8 +120,8 @@ void menuProbeOffset(void)
   #endif
 
   KEY_VALUES key_num = KEY_IDLE;
-  float orig_z_offset_value, z_offset_value;
-  float now = z_offset_value = orig_z_offset_value = getParameter(P_PROBE_OFFSET, Z_STEPPER);
+  float z_offset_value;
+  float now = z_offset_value = getParameter(P_PROBE_OFFSET, Z_STEPPER);
 
   if (!probe_offset_enabled)
     probeOffsetItems.items[KEY_ICON_4].label.index = LABEL_OFF;
