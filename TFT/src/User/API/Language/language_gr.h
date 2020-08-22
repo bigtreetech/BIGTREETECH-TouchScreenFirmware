@@ -225,6 +225,7 @@
     #define GR_SETTING_SAVE           "Save settings"
     #define GR_SETTING_RESET          "Reset default settings"
     #define GR_SETTING_RESTORE        "Restore settings"
+    #define GR_EEPROM_SETTINGS        "EEPROM"
     #define GR_EEPROM_SAVE_INFO       "Save printer settings\nto EEPROM?"
     #define GR_EEPROM_RESTORE_INFO    "Reload settings from\nEEPROM?"
     #define GR_EEPROM_RESET_INFO      "Reset EEPROM to stock printer settings?"

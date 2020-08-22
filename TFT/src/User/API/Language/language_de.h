@@ -225,6 +225,7 @@
     #define DE_SETTING_SAVE           "Save settings"
     #define DE_SETTING_RESET          "Reset default settings"
     #define DE_SETTING_RESTORE        "Restore settings"
+    #define DE_EEPROM_SETTINGS        "EEPROM"
     #define DE_EEPROM_SAVE_INFO       "Save printer settings\nto EEPROM?"
     #define DE_EEPROM_RESTORE_INFO    "Reload settings from\nEEPROM?"
     #define DE_EEPROM_RESET_INFO      "Reset EEPROM to stock printer settings?"

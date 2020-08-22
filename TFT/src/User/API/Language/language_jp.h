@@ -225,6 +225,7 @@
     #define JP_SETTING_SAVE           "Save settings"
     #define JP_SETTING_RESET          "設定をリセットする"
     #define JP_SETTING_RESTORE        "設定を復元する"
+    #define JP_EEPROM_SETTINGS        "EEPROM"
     #define JP_EEPROM_SAVE_INFO       "プリンタの設定をEEPROMに保存しますか?"
     #define JP_EEPROM_RESTORE_INFO    "EEPROMから設定を再読み込み?"
     #define JP_EEPROM_RESET_INFO      "Reset EEPROM to stock printer settings?"

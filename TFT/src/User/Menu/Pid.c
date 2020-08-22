@@ -48,10 +48,24 @@ void pidUpdateStatus(bool succeeded)
   if (pidCounter > 0)                  // if all the PID processes were still not terminated, simply provide a notification
   {
 #ifdef ENABLE_PID_STATUS_UPDATE_NOTIFICATION
+    char tmpBuf[120];
+
     if (succeeded)
-      addToast((char*)textSelect(LABEL_PROCESS_COMPLETED));
+    {
+      sprintf(tmpBuf, "%s %s", textSelect(LABEL_PID_TITLE), textSelect(LABEL_PROCESS_COMPLETED));
+
+      BUZZER_PLAY(sound_notify);
+
+      addToast(DIALOG_TYPE_INFO, tmpBuf);
+    }
     else
-      addToast((char*)textSelect(LABEL_PROCESS_ABORTED));
+    {
+      sprintf(tmpBuf, "%s %s", textSelect(LABEL_PID_TITLE), textSelect(LABEL_PROCESS_ABORTED));
+
+      BUZZER_PLAY(sound_error);
+
+      addToast(DIALOG_TYPE_ERROR, tmpBuf);
+    }
 #endif
   }
   else                                 // if all the PID processes terminated, provide the final dialog
@@ -311,7 +325,6 @@ void menuPid(void)
         break;
 
       default:
-      {
         #if LCD_ENCODER_SUPPORT
           if(encoderPosition)
           {
@@ -329,7 +342,7 @@ void menuPid(void)
             encoderPosition = 0;
           }
         #endif
-      }break;
+        break;
     }
 
     pidCheckTimeout();

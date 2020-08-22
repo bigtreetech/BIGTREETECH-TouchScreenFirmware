@@ -225,6 +225,7 @@
     #define SK_SETTING_SAVE           "Save settings"
     #define SK_SETTING_RESET          "Reset default settings"
     #define SK_SETTING_RESTORE        "Restore settings"
+    #define SK_EEPROM_SETTINGS        "EEPROM"
     #define SK_EEPROM_SAVE_INFO       "Save printer settings\nto EEPROM?"
     #define SK_EEPROM_RESTORE_INFO    "Reload settings from\nEEPROM?"
     #define SK_EEPROM_RESET_INFO      "Reset EEPROM to stock printer settings?"

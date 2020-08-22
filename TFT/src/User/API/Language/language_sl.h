@@ -225,6 +225,7 @@
     #define SL_SETTING_SAVE           "Save settings"
     #define SL_SETTING_RESET          "Reset nastavitev"
     #define SL_SETTING_RESTORE        "Obnovi nastavitve"
+    #define SL_EEPROM_SETTINGS        "EEPROM"
     #define SL_EEPROM_SAVE_INFO       "Shrani nastavitve tiskalnika\nv EEPROM?"
     #define SL_EEPROM_RESTORE_INFO    "Naloži nastavitve iz\nEEPROM-a?"
     #define SL_EEPROM_RESET_INFO      "Reset EEPROM to stock printer settings?"
