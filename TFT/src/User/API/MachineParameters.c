@@ -3,7 +3,7 @@
 
 PARAMETERS infoParameters;
 
-const u8 parameter_element_count[PARAMETERS_COUNT] = {5, 5, 5, 5, 3, 3, 3, 4, 4, 1, 2, 1};
+const u8 parameter_element_count[PARAMETERS_COUNT] = {5, 5, 5, 5, 3, 3, 3, 4, 4, 2, 2, 1};
 
 const char *const parameter_Cmd[PARAMETERS_COUNT][STEPPER_COUNT] = {
   {"M92 X%.2f\n",   "M92 Y%.2f\n",  "M92 Z%.2f\n",  "M92 T0 E%.2f\n",  "M92 T1 E%.2f\n"}, //Steps/mm
@@ -15,7 +15,7 @@ const char *const parameter_Cmd[PARAMETERS_COUNT][STEPPER_COUNT] = {
   {"M914 X%.2f\n", "M914 Y%.2f\n", "M914 Z%.2f\n",              NULL,              NULL}, //bump Sensitivity
   {"M207 S%.2f\n", "M207 W%.2f\n", "M207 F%.2f\n",    "M207 Z%.2f\n",              NULL}, //FW retract
   {"M208 S%.2f\n", "M208 W%.2f\n", "M208 F%.2f\n",    "M208 R%.2f\n",              NULL}, //FW retract recover
-  {"M900 K%.2f\n",           NULL,            NULL,             NULL,              NULL}, //Linear Advance
+  {"M900 T0 K%.2f\n", "M900 T1 K%.2f\n",      NULL,             NULL,              NULL}, //Linear Advance
   {"M420 S%.0f\n", "M420 Z%.2f\n",            NULL,             NULL,              NULL}, //ABL State + Z Fade
   {"M209 S%.0f\nM503 S0\n"}                                                               //Set auto FW retract
 };
@@ -30,7 +30,7 @@ const VAL_TYPE parameter_val_type[PARAMETERS_COUNT][STEPPER_COUNT] = {
   {VAL_TYPE_NEG_INT,    VAL_TYPE_NEG_INT,   VAL_TYPE_NEG_INT},                                            //bump Sensitivity
   {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_INT,         VAL_TYPE_FLOAT},                        //FW retract
   {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_INT,         VAL_TYPE_INT},                          //FW retract recover
-  {VAL_TYPE_FLOAT},                                                                                       //Linear Advance                                                                            //Linear Advance
+  {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT},                                                                  //Linear Advance                                                                            //Linear Advance
   {VAL_TYPE_INT,        VAL_TYPE_FLOAT},                                                                  //ABL State + Z Fade
   {VAL_TYPE_INT}                                                                                          //Set auto FW retract
 };

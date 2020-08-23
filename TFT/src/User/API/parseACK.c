@@ -403,6 +403,12 @@ void parseACK(void)
       else if(ack_seen("M900 K")){
                           setParameter(P_LIN_ADV, 0, ack_value());
       }
+      else if(ack_seen("M900 T0 K")){
+                          setParameter(P_LIN_ADV, 0, ack_value());
+      }
+      else if(ack_seen("M900 T1 K")){
+                          setParameter(P_LIN_ADV, 1, ack_value());
+      }
     //parse and store stepper driver current values
       else if(ack_seen("M906 X")){
                           setParameter(P_CURRENT, X_STEPPER, ack_value());

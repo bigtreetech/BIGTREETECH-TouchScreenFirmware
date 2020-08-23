@@ -55,7 +55,7 @@ float ProbeOffset[3];
 float BumpSensitivity[3];
 float FwRetract[4];
 float FwRecover[4];
-float LinAdvance[1];
+float LinAdvance[2];
 float ABLState[2];
 float AutoRetract[1];
 }PARAMETERS;

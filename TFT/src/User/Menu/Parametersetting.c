@@ -81,7 +81,8 @@ void menuShowParameter(void){
       parameter_menuitems.items[i].titlelabel = recover_disp_ID[i];
       break;
     case P_LIN_ADV:
-      setDynamicLabel(i, "K");
+      setDynamicLabel(0, "K-E1");
+      setDynamicLabel(1, "K-E2");
       break;
     case P_ABL_STATE:
       setDynamicLabel(0, "S");
