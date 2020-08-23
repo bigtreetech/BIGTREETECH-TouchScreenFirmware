@@ -110,7 +110,7 @@ MENUITEMS manualLevelingItems = {
    {ICON_POINT_4,                 LABEL_POINT_4},
    {ICON_POINT_5,                 LABEL_POINT_5},
    {ICON_LEVEL_EDGE_DISTANCE,     LABEL_DISTANCE},
-   {ICON_XY_UNLOCK,               LABEL_XY_UNLOCK},
+   {ICON_DISABLE_STEPPERS,        LABEL_XY_UNLOCK},
    {ICON_BACK,                    LABEL_BACK},}
 };
 

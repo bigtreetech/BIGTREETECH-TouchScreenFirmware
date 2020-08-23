@@ -5,7 +5,7 @@
     #define DE_HEAT                   "Heizen"
     #define DE_MOVE                   "Bewegen"
     #define DE_HOME                   "Home XYZ"
-    #define DE_DISABLE_STEPPERS       "Steppers"
+    #define DE_DISABLE_STEPPERS       "Disarm All"
     #define DE_PRINT                  "Drucken"
     #define DE_EXTRUDE                "Extruder"
     #define DE_FAN                    "Lüfter"
