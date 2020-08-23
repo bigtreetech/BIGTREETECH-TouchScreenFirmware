@@ -61,14 +61,12 @@ LABEL_BACKGROUND,
   {ICON_MORE,                 LABEL_MORE},
   {ICON_STOP,                 LABEL_STOP},}
 };
-const ITEM itemBlank      = {ICON_BACKGROUND, LABEL_BACKGROUND};
-const ITEM itemBabyStep   = {ICON_BABYSTEP, LABEL_BABYSTEP};
+
 const ITEM itemIsPause[2] = {
 // icon                       label
   {ICON_PAUSE,                LABEL_PAUSE},
   {ICON_RESUME,               LABEL_RESUME},
 };
-
 
 void completePrinting(void)
 {
@@ -207,7 +205,6 @@ void reDrawFan(int icon_pos)
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
 
-
 void reDrawSpeed(int icon_pos)
 {
   char tempstr[10];
@@ -294,10 +291,6 @@ void toggleinfo(void)
   }
 }
 
-//extern SCROLL   titleScroll;
-//extern GUI_RECT titleRect;
-
-
 void printingDrawPage(void)
 {
   //  Scroll_CreatePara(&titleScroll, infoFile.title,&titleRect);  //
@@ -321,7 +314,6 @@ void printingDrawPage(void)
   reDrawLayer(Z_ICON_POS);
   reDrawSpeed(SPD_ICON_POS);
 }
-
 
 void menuPrinting(void)
 {
