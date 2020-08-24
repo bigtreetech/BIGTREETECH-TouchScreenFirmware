@@ -15,7 +15,7 @@ const char *const parameter_Cmd[PARAMETERS_COUNT][STEPPER_COUNT] = {
   {"M914 X%.2f\n", "M914 Y%.2f\n", "M914 Z%.2f\n",              NULL,              NULL}, //bump Sensitivity
   {"M207 S%.2f\n", "M207 W%.2f\n", "M207 F%.2f\n",    "M207 Z%.2f\n",              NULL}, //FW retract
   {"M208 S%.2f\n", "M208 W%.2f\n", "M208 F%.2f\n",    "M208 R%.2f\n",              NULL}, //FW retract recover
-  {"M900 T0 K%.2f\n", "M900 T1 K%.2f\n",      NULL,             NULL,              NULL}, //Linear Advance
+  {"M900 T0 K%.2f\n", "M900 T1 K%.2f\nM503 S0\n", NULL,         NULL,              NULL}, //Linear Advance
   {"M420 S%.0f\n", "M420 Z%.2f\n",            NULL,             NULL,              NULL}, //ABL State + Z Fade
   {"M209 S%.0f\nM503 S0\n"}                                                               //Set auto FW retract
 };
