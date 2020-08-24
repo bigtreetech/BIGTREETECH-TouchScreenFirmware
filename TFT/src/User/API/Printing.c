@@ -411,6 +411,7 @@ void loopCheckPrinting(void)
       infoMenu.menu[++infoMenu.cur] = menuPrinting;
   }
 
+  if (infoFile.source != BOARD_SD) return;
   if (infoMachineSettings.autoReportSDStatus == ENABLED) return;
   if (!infoSettings.m27_active && !infoPrinting.printing) return;
 
