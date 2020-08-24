@@ -179,7 +179,7 @@ void pidStart(void)
   pidUpdateCounter();                                                          // update the number of set temperatures (number of PID processes to execute)
   pidTimeout = OS_GetTimeMs() + PID_PROCESS_TIMEOUT;                           // set timeout for overall PID process
 
-  mustStoreCmd("M42 P4 S0\nM42 P5 S255\nM42 P6 S0\n");                         // set LED light to RED
+  mustStoreCmd("M150 R255 U0 B0\n");                                           // set LED light to RED
   mustStoreCmd("M106 S255\n");                                                 // set fan speed to max
   mustStoreCmd("G4 S1\n");                                                     // wait 1 sec
 
@@ -193,7 +193,7 @@ void pidStart(void)
   }
 
   mustStoreCmd("M107\n");                                                      // stop fan
-  mustStoreCmd("M42 P4 S255\nM42 P5 S0\nM42 P6 S0\n");                         // set LED light to GREEN
+  mustStoreCmd("M150 R0 U255 B0\n");                                           // set LED light to GREEN
 
   infoMenu.menu[++infoMenu.cur] = menuPidWait;
 }
