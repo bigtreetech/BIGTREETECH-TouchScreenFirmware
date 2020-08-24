@@ -396,7 +396,7 @@ void parseACK(void)
         if (infoPrinting.printing)
           infoPrinting.pause = true;
       }
-      else if(infoMachineSettings.onboard_sd_support == ENABLED && infoFile.source == BOARD_SD  && ack_seen("SD printing byte"))
+      else if(infoMachineSettings.onboard_sd_support == ENABLED && infoFile.source == BOARD_SD && ack_seen("SD printing byte"))
       {
         infoPrinting.pause = false;
         // Parsing printing data
@@ -404,7 +404,7 @@ void parseACK(void)
         infoPrinting.cur = ack_value();
   //      powerFailedCache(position);
       }
-      else if(infoMachineSettings.onboard_sd_support == ENABLED && infoFile.source == BOARD_SD  && ack_seen("Done printing file"))
+      else if(infoMachineSettings.onboard_sd_support == ENABLED && infoFile.source == BOARD_SD && ack_seen("Done printing file"))
       {
         infoPrinting.printing = false;
         infoPrinting.cur = infoPrinting.size;
