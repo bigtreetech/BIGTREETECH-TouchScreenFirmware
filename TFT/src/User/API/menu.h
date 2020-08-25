@@ -83,7 +83,7 @@ typedef struct
 {
   GUI_RECT rect;
   uint32_t time;
-  uint8_t  status;
+  uint8_t status;
   int16_t inf;
 }REMINDER;
 
@@ -128,14 +128,6 @@ typedef struct
  LIVE_DATA lines[LIVEICON_LINES];
 }LIVE_INFO;
 
-typedef struct
-{
-  DIALOG_TYPE style;
-  uint8_t     isNew;
-  char        text[TOAST_MSG_LENGTH];
-}TOAST;
-
-
 void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, const ITEM * item);
 
 extern const GUI_RECT exhibitRect;
@@ -143,9 +135,6 @@ extern const GUI_RECT rect_of_key[ITEM_PER_PAGE*2];
 
 void setMenuType(MENU_TYPE type);
 MENU_TYPE getMenuType(void);
-
-void addToast(DIALOG_TYPE style, char * text);
-bool toastRunning(void);
 
 void reminderSetUnConnected(void);
 void reminderMessage(int16_t inf, SYS_STATUS status);
