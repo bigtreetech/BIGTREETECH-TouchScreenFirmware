@@ -17,6 +17,7 @@ P_FWRECOVER,
 P_LIN_ADV,
 P_ABL_STATE,
 P_AUTO_RETRACT,
+P_OFFSET_TOOL,
 // Keep below items always at the end
 P_SAVE_SETTINGS,
 P_RESTORE_SETTINGS,
@@ -58,6 +59,7 @@ float FwRecover[4];
 float LinAdvance[2];
 float ABLState[2];
 float AutoRetract[1];
+float OffsetTool[3];
 }PARAMETERS;
 
 extern PARAMETERS infoParameters;

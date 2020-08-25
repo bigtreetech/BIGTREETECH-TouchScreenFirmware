@@ -260,5 +260,6 @@
     #define TR_TUNE_EXT_OLD_ESTEP     "Old e-steps: %0.2f"
     #define TR_TUNE_EXT_NEW_ESTEP     "New e-steps: %0.2f"
     #define TR_CONNECTION_SETTINGS    "Connection"
+    #define TR_OFFSET_TOOL            "Offset 2nd Nozzle"
 
 #endif

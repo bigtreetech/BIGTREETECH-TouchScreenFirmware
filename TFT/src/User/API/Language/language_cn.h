@@ -260,5 +260,6 @@
     #define CN_TUNE_EXT_OLD_ESTEP     "旧的E-Steps: %0.2f"
     #define CN_TUNE_EXT_NEW_ESTEP     "新的E-Steps: %0.2f"
     #define CN_CONNECTION_SETTINGS    "连接"
+    #define CN_OFFSET_TOOL            "Offset 2nd Nozzle"
 
 #endif

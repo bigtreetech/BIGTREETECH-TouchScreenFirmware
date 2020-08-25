@@ -21,6 +21,7 @@ const LISTITEM parametertypes[P_ITEMSCOUNT] = {
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_LIN_ADVANCE,      LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_ABL,              LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_RETRACT_AUTO,     LABEL_BACKGROUND},
+  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_OFFSET_TOOL,      LABEL_BACKGROUND},
   //Keep below items always at the end
   {ICONCHAR_SAVE,       LIST_LABEL,       LABEL_SETTING_SAVE,     LABEL_BACKGROUND},
   {ICONCHAR_UNDO,       LIST_LABEL,       LABEL_SETTING_RESTORE,  LABEL_BACKGROUND},
@@ -90,6 +91,11 @@ void menuShowParameter(void){
       break;
     case P_AUTO_RETRACT:
       parameter_menuitems.items[i].titlelabel = retract_auto_ID[i];
+      break;
+    case P_OFFSET_TOOL:
+      setDynamicLabel(0, "X");
+      setDynamicLabel(1, "Y");
+      setDynamicLabel(2, "Z");
     default:
       if (getDualstepperStatus(E_STEPPER) && i == E2_STEPPER)
       {

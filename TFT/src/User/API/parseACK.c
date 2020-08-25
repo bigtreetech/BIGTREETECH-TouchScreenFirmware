@@ -393,6 +393,12 @@ void parseACK(void)
       else if(ack_seen("M209 S")){
                           setParameter(P_AUTO_RETRACT, 0, ack_value());
       }
+    //parse and store Offset 2nd Nozzle
+      else if(ack_seen("M218 T1 X")){
+                          setParameter(P_OFFSET_TOOL, 0, ack_value());
+        if(ack_seen("Y")) setParameter(P_OFFSET_TOOL, 1, ack_value());
+        if(ack_seen("Z")) setParameter(P_OFFSET_TOOL, 2, ack_value());
+      }
     //parse and store Probe Offset values
       else if(ack_seen("M851 X")){
                           setParameter(P_PROBE_OFFSET, X_STEPPER, ack_value());
