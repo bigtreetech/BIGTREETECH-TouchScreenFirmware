@@ -17,13 +17,6 @@
 #define LISTITEM_HEIGHT   ((LCD_HEIGHT-ICON_START_Y-START_X)/5)
 #define LISTICON_SPACE_Y  ((LCD_HEIGHT-ICON_START_Y-START_X-(3*LIST_ICON_HEIGHT))/ 2)
 
-#define TOAST_MSG_COUNT       3
-#define TOAST_X_PAD           START_X
-#define TOAST_Y_PAD           3
-
-#define TOAST_MSG_LENGTH      35
-#define TOAST_DISPLAY_LENGTH  TOAST_MSG_LENGTH
-
 typedef enum
 {
   KEY_ICON_0 = 0,

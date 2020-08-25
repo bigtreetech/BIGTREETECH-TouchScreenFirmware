@@ -8,9 +8,7 @@ const GUI_RECT toastIconRect = {START_X, TOAST_Y_PAD, START_X + TITLE_END_Y - (T
 //toast notification variables
 static TOAST toastlist[TOAST_MSG_COUNT];
 
-//char toastMsg[TOAST_MSG_COUNT][TOAST_MSG_LENGTH];
-//bool toastNew[TOAST_MSG_COUNT]; //store status on messages (new or old)
-static uint8_t nextToastIndex = 0;   //next index to store new message
+static uint8_t nextToastIndex = 0;   //next index to store new toast
 static uint8_t curToastDisplay = 0;  // current toast notification being displayed
 static uint32_t nextToastTime = 0;   //time to change to next notification
 
@@ -31,7 +29,7 @@ void addToast(DIALOG_TYPE style, char * text)
       //Set a new idle_ms time
       lcd_dim.idle_ms = OS_GetTimeMs();
     }
-  
+
   #endif
 
   TOAST t;
