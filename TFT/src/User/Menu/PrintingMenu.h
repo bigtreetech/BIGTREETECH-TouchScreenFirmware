@@ -6,6 +6,5 @@
 
 void menuBeforePrinting(void);
 void menuPrinting(void);
-void menuStopPrinting(void);
 
 #endif

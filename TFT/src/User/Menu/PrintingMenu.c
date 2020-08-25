@@ -287,6 +287,12 @@ void printingDrawPage(void)
 }
 
 
+void stopConfirm(void)
+{
+  abortPrinting();
+  infoMenu.cur--;
+}
+
 void menuPrinting(void)
 {
   //1title, ITEM_PER_PAGE item(icon + label)
@@ -418,7 +424,11 @@ void menuPrinting(void)
 
       case KEY_ICON_7:
         if(isPrinting())
-          infoMenu.menu[++infoMenu.cur] = menuStopPrinting;
+        {
+          showDialog(DIALOG_TYPE_ALERT, textSelect(LABEL_WARNING), textSelect(LABEL_STOP_PRINT),
+                       textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL),
+                       stopConfirm, NULL, NULL);
+        }
         else
         {
           exitPrinting();
@@ -427,31 +437,6 @@ void menuPrinting(void)
         break;
 
       default :break;
-    }
-    loopProcess();
-  }
-}
-
-void menuStopPrinting(void)
-{
-  u16 key_num = IDLE_TOUCH;
-
-  popupDrawPage(DIALOG_TYPE_ALERT, bottomDoubleBtn, textSelect(LABEL_WARNING),
-                  textSelect(LABEL_STOP_PRINT), textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL));
-
-  while(infoMenu.menu[infoMenu.cur] == menuStopPrinting)
-  {
-    key_num = KEY_GetValue(2, doubleBtnRect);
-    switch(key_num)
-    {
-      case KEY_POPUP_CONFIRM:
-        abortPrinting();
-        infoMenu.cur-=2;
-        break;
-
-      case KEY_POPUP_CANCEL:
-        infoMenu.cur--;
-        break;
     }
     loopProcess();
   }

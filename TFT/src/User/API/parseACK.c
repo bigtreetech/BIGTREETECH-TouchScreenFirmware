@@ -587,6 +587,10 @@ void parseACK(void)
       {
         infoMachineSettings.caseLightsBrightness = ack_value();
       }
+      else if(ack_seen("Cap:PROMPT_SUPPORT:"))
+      {
+        infoMachineSettings.promptSupport = ack_value();
+      }
       else if(ack_seen("Cap:SDCARD:") && infoSettings.onboardSD == AUTO)
       {
         infoMachineSettings.onboard_sd_support = ack_value();
@@ -633,7 +637,7 @@ void parseACK(void)
           fanSetSpeed(i, ack_value());
       }
     // Parse pause message
-      else if(ack_seen("paused for user"))
+      else if(!infoMachineSettings.promptSupport && ack_seen("paused for user"))
       {
         showDialog(DIALOG_TYPE_QUESTION, (u8*)"Printer is Paused",(u8*)"Paused for user\ncontinue?",
                    textSelect(LABEL_CONFIRM), NULL, breakAndContinue, NULL,NULL);

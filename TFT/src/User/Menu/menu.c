@@ -682,6 +682,8 @@ void loopFrontEnd(void)
 #ifdef FIL_RUNOUT_PIN
   loopFrontEndFILRunoutDetect();
 #endif
+
+  loopPopup();
 }
 
 void loopProcess(void)
