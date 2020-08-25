@@ -12,7 +12,7 @@ const char *const parameter_Cmd[PARAMETERS_COUNT][STEPPER_COUNT] = {
   {"M201 X%.0f\n",  "M201 Y%.0f\n", "M201 Z%.0f\n", "M201 T0 E%.0f\n", "M201 T1 E%.0f\nM503 S0\n"}, //MaxAcceleration
   {"M204 P%.0f\n",  "M204 R%.0f\n", "M204 T%.0f\n",              NULL,                       NULL}, //Acceleration
   {"M851 X%.2f\n",  "M851 Y%.2f\n", "M851 Z%.2f\n",              NULL,                       NULL}, //Probe offset
-  {"M914 X%.2f\n",  "M914 Y%.2f\n", "M914 Z%.2f\n",              NULL,                       NULL}, //bump Sensitivity
+  {"M914 X%.0f\n",  "M914 Y%.0f\n", "M914 Z%.0f\n",              NULL,                       NULL}, //bump Sensitivity
   {"M207 S%.2f\n",  "M207 W%.2f\n", "M207 F%.2f\n",    "M207 Z%.2f\n",                       NULL}, //FW retract
   {"M208 S%.2f\n",  "M208 W%.2f\n", "M208 F%.2f\n",    "M208 R%.2f\n",                       NULL}, //FW retract recover
   {"M209 S%.0f\nM503 S0\n", NULL,             NULL,               NULL,                      NULL}, //Set auto FW retract
@@ -39,8 +39,8 @@ const VAL_TYPE parameter_val_type[PARAMETERS_COUNT][STEPPER_COUNT] = {
 
 //Extra teppers current gcode command
 const char *const dualStepperParameter_cmd[2][AXIS_NUM] = {
-  {"M906 I1 X%.1f\n", "M906 I1 Y%.1f\n", "M906 I1 Z%.1f\n"},  //Current
-  {"M914 I1 X%.1f\n", "M914 I1 Y%.1f\n", "M914 I1 Z%.1f\n"}   //bump Sensitivity
+  {"M906 I1 X%.0f\n", "M906 I1 Y%.0f\n", "M906 I1 Z%.0f\n"},  //Current
+  {"M914 I1 X%.0f\n", "M914 I1 Y%.0f\n", "M914 I1 Z%.0f\n"}   //bump Sensitivity
 };
 
 
