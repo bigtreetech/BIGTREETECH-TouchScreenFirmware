@@ -89,8 +89,8 @@ void menuShowParameter(void){
       setDynamicLabel(1, "K-E2");
       break;
     case P_ABL_STATE:
-      setDynamicLabel(0, "S");
-      setDynamicLabel(1, "Z");
+      setDynamicLabel(0, "S 1=ON 0=OFF");
+      setDynamicLabel(1, "Z fade");
       break;
     case P_OFFSET_TOOL:
       setDynamicLabel(0, "X");
