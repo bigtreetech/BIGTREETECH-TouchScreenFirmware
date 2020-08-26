@@ -5,7 +5,7 @@
     #define PL_HEAT                   "Temp."
     #define PL_MOVE                   "Ruch"
     #define PL_HOME                   "Powrót"
-    #define PL_DISABLE_STEPPERS       "Steppers"
+    #define PL_DISABLE_STEPPERS       "Disarm All"
     #define PL_PRINT                  "Druk"
     #define PL_EXTRUDE                "Extrude"
     #define PL_FAN                    "Wentylator"
@@ -261,5 +261,6 @@
     #define PL_TUNE_EXT_OLD_ESTEP     "Old e-steps: %0.2f"
     #define PL_TUNE_EXT_NEW_ESTEP     "New e-steps: %0.2f"
     #define PL_CONNECTION_SETTINGS    "Connection"
+    #define PL_OFFSET_TOOL            "Offset 2nd Nozzle"
 
 #endif

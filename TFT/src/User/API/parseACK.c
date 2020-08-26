@@ -358,15 +358,16 @@ void parseACK(void)
       }
       else if((ack_seen("X:") && ack_index == 2) || ack_seen("C: X:")) // Smoothieware axis position starts with "C: X:"
       {
-        storegantry(0, ack_value());
+        coordinateSetAxisActual(X_AXIS, ack_value());
         if (ack_seen("Y:"))
         {
-          storegantry(1, ack_value());
+          coordinateSetAxisActual(Y_AXIS, ack_value());
           if (ack_seen("Z:"))
           {
-            storegantry(2, ack_value());
+            coordinateSetAxisActual(Z_AXIS, ack_value());
           }
         }
+        coordinateQuerySetWait(false);
       }
       else if(ack_seen("Count E:")) // Parse actual extruder position, response of "M114 E\n", required "M114_DETAIL" in Marlin
       {
@@ -478,6 +479,12 @@ void parseACK(void)
       else if(ack_seen("M209 S")){
                           setParameter(P_AUTO_RETRACT, 0, ack_value());
       }
+    //parse and store Offset 2nd Nozzle
+      else if(ack_seen("M218 T1 X")){
+                          setParameter(P_OFFSET_TOOL, 0, ack_value());
+        if(ack_seen("Y")) setParameter(P_OFFSET_TOOL, 1, ack_value());
+        if(ack_seen("Z")) setParameter(P_OFFSET_TOOL, 2, ack_value());
+      }
     //parse and store Probe Offset values
       else if(ack_seen("M851 X")){
                           setParameter(P_PROBE_OFFSET, X_STEPPER, ack_value());
@@ -487,6 +494,12 @@ void parseACK(void)
     //parse and store linear advance values
       else if(ack_seen("M900 K")){
                           setParameter(P_LIN_ADV, 0, ack_value());
+      }
+      else if(ack_seen("M900 T0 K")){
+                          setParameter(P_LIN_ADV, 0, ack_value());
+      }
+      else if(ack_seen("M900 T1 K")){
+                          setParameter(P_LIN_ADV, 1, ack_value());
       }
     //parse and store stepper driver current values
       else if(ack_seen("M906 X")){
@@ -623,11 +636,13 @@ void parseACK(void)
       else if(ack_seen("FR:"))
       {
         speedSetPercent(0,ack_value());
+        speedQuerySetWait(false);
       }
     // parse and store flow rate percentage
       else if(ack_seen("Flow: "))
       {
         speedSetPercent(1,ack_value());
+        speedQuerySetWait(false);
       }
     // parse fan speed
       else if(ack_seen("M106 P"))

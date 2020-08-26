@@ -5,7 +5,7 @@
     #define SK_HEAT                   "Teplota"
     #define SK_MOVE                   "Posunúť"
     #define SK_HOME                   "Domov"
-    #define SK_DISABLE_STEPPERS       "Steppers"
+    #define SK_DISABLE_STEPPERS       "Disarm All"
     #define SK_PRINT                  "Tlačiť"
     #define SK_EXTRUDE                "Extrúder"
     #define SK_FAN                    "Ofuk"
@@ -261,5 +261,6 @@
     #define SK_TUNE_EXT_OLD_ESTEP     "Old e-steps: %0.2f"
     #define SK_TUNE_EXT_NEW_ESTEP     "New e-steps: %0.2f"
     #define SK_CONNECTION_SETTINGS    "Connection"
+    #define SK_OFFSET_TOOL            "Offset 2nd Nozzle"
 
 #endif

@@ -46,13 +46,12 @@ const char* Speed_ID[2] = {"Speed","Flow"};
 #define Z_ICON_POS    4
 #define SPD_ICON_POS  5
 
-const ITEM itemBlank      = {ICON_BACKGROUND, LABEL_BACKGROUND};
-const ITEM itemBabyStep   = {ICON_BABYSTEP, LABEL_BABYSTEP};
 const ITEM itemIsPause[2] = {
 // icon                       label
   {ICON_PAUSE,                LABEL_PAUSE},
   {ICON_RESUME,               LABEL_RESUME},
 };
+
 const ITEM itemIsPrinting[2] = {
 // icon                       label
   {ICON_BACK,                 LABEL_BACK},
@@ -183,7 +182,6 @@ void reDrawFan(int icon_pos)
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
 
-
 void reDrawSpeed(int icon_pos)
 {
   char tempstr[10];
@@ -269,10 +267,6 @@ void toggleinfo(void)
     reDrawSpeed(SPD_ICON_POS);
   }
 }
-
-//extern SCROLL   titleScroll;
-//extern GUI_RECT titleRect;
-
 
 void printingDrawPage(void)
 {

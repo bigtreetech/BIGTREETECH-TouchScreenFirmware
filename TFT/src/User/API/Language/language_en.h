@@ -5,7 +5,7 @@
     #define EN_HEAT                   "Heat"
     #define EN_MOVE                   "Move"
     #define EN_HOME                   "Home"
-    #define EN_DISABLE_STEPPERS       "Steppers"
+    #define EN_DISABLE_STEPPERS       "Disarm All"
     #define EN_PRINT                  "Print"
     #define EN_EXTRUDE                "Extrude"
     #define EN_FAN                    "Fan"
@@ -241,7 +241,7 @@
     #define EN_START_PRINT            "Start Printing:\n %s?"
     #define EN_ACK_NOTIFICATION       "ACK notification style"
     #define EN_LEVELING_EDGE_DISTANCE "Bed edge distance"
-    #define EN_XY_UNLOCK              "Unlock XY"
+    #define EN_XY_UNLOCK              "Disarm XY"
     #define EN_TUNING                 "Tuning"
     #define EN_PID                    "PID"
     #define EN_PID_TITLE              "PID autotune"
@@ -261,5 +261,6 @@
     #define EN_TUNE_EXT_OLD_ESTEP     "Old e-steps: %0.2f"
     #define EN_TUNE_EXT_NEW_ESTEP     "New e-steps: %0.2f"
     #define EN_CONNECTION_SETTINGS    "Connection"
+    #define EN_OFFSET_TOOL            "Offset 2nd Nozzle"
 
 #endif

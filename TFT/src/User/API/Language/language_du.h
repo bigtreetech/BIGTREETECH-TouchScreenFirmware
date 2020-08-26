@@ -5,7 +5,7 @@
     #define DU_HEAT                   "Verwarm"
     #define DU_MOVE                   "Verplaats"
     #define DU_HOME                   "Thuis"
-    #define DU_DISABLE_STEPPERS       "Steppers"
+    #define DU_DISABLE_STEPPERS       "Disarm All"
     #define DU_PRINT                  "Print"
     #define DU_EXTRUDE                "Extrudeer"
     #define DU_FAN                    "Ventilator"
@@ -261,5 +261,6 @@
     #define DU_TUNE_EXT_OLD_ESTEP     "Old e-steps: %0.2f"
     #define DU_TUNE_EXT_NEW_ESTEP     "New e-steps: %0.2f"
     #define DU_CONNECTION_SETTINGS    "Connecties"
+    #define DU_OFFSET_TOOL            "Offset 2nd Nozzle"
 
 #endif

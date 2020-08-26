@@ -5,7 +5,7 @@
     #define PT_HEAT                   "Aquecer"
     #define PT_MOVE                   "Mover"
     #define PT_HOME                   "Inicio"
-    #define PT_DISABLE_STEPPERS       "Steppers"
+    #define PT_DISABLE_STEPPERS       "Disarm All"
     #define PT_PRINT                  "Imprimir"
     #define PT_EXTRUDE                "Extrudir"
     #define PT_FAN                    "Ventoinha"
@@ -261,5 +261,6 @@
     #define PT_TUNE_EXT_OLD_ESTEP     "Old e-steps: %0.2f"
     #define PT_TUNE_EXT_NEW_ESTEP     "New e-steps: %0.2f"
     #define PT_CONNECTION_SETTINGS    "Connection"
+    #define PT_OFFSET_TOOL            "Offset 2nd Nozzle"
 
 #endif

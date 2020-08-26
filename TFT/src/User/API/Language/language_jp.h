@@ -5,7 +5,7 @@
     #define JP_HEAT                   "あたため"
     #define JP_MOVE                   "移動"
     #define JP_HOME                   "ゼロにする"
-    #define JP_DISABLE_STEPPERS       "Steppers"
+    #define JP_DISABLE_STEPPERS       "Disarm All"
     #define JP_PRINT                  "プリント"
     #define JP_EXTRUDE                "押出"
     #define JP_FAN                    "ファン"
@@ -241,7 +241,7 @@
     #define JP_START_PRINT            "印刷を開始する:\n %s?"
     #define JP_ACK_NOTIFICATION       "ACK notification style"
     #define JP_LEVELING_EDGE_DISTANCE "Bed edge distance"
-    #define JP_XY_UNLOCK              "Unlock XY"
+    #define JP_XY_UNLOCK              "Disarm XY"
     #define JP_TUNING                 "Tuning"
     #define JP_PID                    "PID"
     #define JP_PID_TITLE              "PID autotune"
@@ -261,5 +261,6 @@
     #define JP_TUNE_EXT_OLD_ESTEP     "Old e-steps: %0.2f"
     #define JP_TUNE_EXT_NEW_ESTEP     "New e-steps: %0.2f"
     #define JP_CONNECTION_SETTINGS    "Connection"
+    #define JP_OFFSET_TOOL            "Offset 2nd Nozzle"
 
 #endif
