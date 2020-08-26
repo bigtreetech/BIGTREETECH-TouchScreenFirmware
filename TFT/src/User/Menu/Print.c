@@ -404,7 +404,7 @@ void menuPrint(void)
       #endif
           if(infoMachineSettings.onboard_sd_support == ENABLED)
           {
-            list_mode = true; //force list mode in Onboard sd casd
+            list_mode = true; //force list mode in Onboard sd card
             infoFile.source = BOARD_SD;
             infoMenu.menu[++infoMenu.cur] = menuPrintFromSource;   //TODO: fix here,  onboard sd card PLR feature
             goto selectEnd;
