@@ -18,7 +18,7 @@ struct HOST_ACTION
 
 // notify or ignore messages starting with following text
 const ECHO knownEcho[] = {
-  {ECHO_NOTIFY_NONE, "enqueueing \"M117\""},
+//  {ECHO_NOTIFY_NONE, "enqueueing \"M117\""},
   {ECHO_NOTIFY_NONE, "busy: paused for user"},
   {ECHO_NOTIFY_NONE, "busy: processing"},
   {ECHO_NOTIFY_NONE, "Now fresh file:"},
@@ -202,7 +202,7 @@ void hostActionCommands(void)
     }
     else if(ack_seen("Resuming"))
     {
-      setPrintPause(!isPause(), false); 
+      infoPrinting.pause = false;
       hostAction.prompt_show = 0;
     }
     else if(ack_seen("Reheating"))
@@ -211,7 +211,7 @@ void hostActionCommands(void)
     }
     else if(ack_seen("Nozzle Parked"))
     {
-      setPrintPause(!isPause(), false);
+      infoPrinting.pause = true;
     }
   }
   else if(ack_seen("prompt_button "))
