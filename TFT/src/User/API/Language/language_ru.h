@@ -261,6 +261,6 @@
     #define RU_TUNE_EXT_OLD_ESTEP     "Старые E-шаги: %0.2f"
     #define RU_TUNE_EXT_NEW_ESTEP     "Новые E-шаги: %0.2f"
     #define RU_CONNECTION_SETTINGS    "Соединение"
-    #define RU_OFFSET_TOOL            "Offset 2nd Nozzle"
+    #define RU_OFFSET_TOOL            "Смещение 2-го сопла"
 
 #endif
