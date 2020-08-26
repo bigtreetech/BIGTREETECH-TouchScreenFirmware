@@ -5,7 +5,7 @@
 
 const char axis_id[TOTAL_AXIS]={'X','Y','Z','E'};
 
-COORDINATE targetPosition={{0.0f,0.0f,0.0f,0.0f},3000};
+static COORDINATE targetPosition={{0.0f,0.0f,0.0f,0.0f},3000};
 
 //
 static bool relative_mode = false;

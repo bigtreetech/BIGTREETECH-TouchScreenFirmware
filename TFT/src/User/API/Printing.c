@@ -4,16 +4,7 @@
 
 PRINTING infoPrinting;
 
-static void (*action_printfinish)() = NULL;
-
 static bool update_waiting = false;
-
-
-//
-void setPrintfinishAction(void (*_printfinish)())
-{
-  action_printfinish = _printfinish;
-}
 
 //
 bool isPrinting(void)
@@ -140,7 +131,6 @@ void setM0Pause(bool m0_pause){
   infoPrinting.m0_pause = m0_pause;
 }
 
-
 bool setPrintPause(bool is_pause, bool is_m0pause)
 {
   static bool pauseLock = false;
@@ -242,7 +232,6 @@ void endPrinting(void)
   switch (infoFile.source)
   {
     case BOARD_SD:
-      printSetUpdateWaiting(infoSettings.m27_active);
       break;
 
     case TFT_UDISK:
@@ -263,8 +252,6 @@ void printingFinished(void)
 {
   BUZZER_PLAY(sound_success);
   endPrinting();
-  if(action_printfinish != NULL)
-    action_printfinish();
   if(infoSettings.auto_off) // Auto shut down after printing
   {
     startShutdown();
@@ -276,6 +263,7 @@ void abortPrinting(void)
   switch (infoFile.source)
   {
     case BOARD_SD:
+      infoHost.printing = false;
       request_M524();
       break;
 
@@ -397,18 +385,46 @@ void breakAndContinue(void)
    Serial_Puts(SERIAL_PORT, "M108\n");
 }
 
+void resumeAndPurge(void)
+{
+   Serial_Puts(SERIAL_PORT, "M876 S0\n");
+}
+
+void resumeAndContinue(void)
+{
+   Serial_Puts(SERIAL_PORT, "M876 S1\n");
+}
+
+bool hasPrintingMenu(void)
+{
+  for (uint8_t i = 0; i <= infoMenu.cur; i++) {
+    if (infoMenu.menu[i] == menuPrinting) return true;
+  }
+  return false;
+}
+
 void loopCheckPrinting(void)
 {
-  static u32  nextTime=0;
-  u32 update_time = infoSettings.m27_refresh_time * 1000;
+  if (infoHost.printing && !infoPrinting.printing) {
+    infoPrinting.printing = true;
+    if (!hasPrintingMenu())
+      infoMenu.menu[++infoMenu.cur] = menuPrinting;
+  }
+
+  if (infoFile.source != BOARD_SD) return;
+  if (infoMachineSettings.autoReportSDStatus == ENABLED) return;
+  if (!infoSettings.m27_active && !infoPrinting.printing) return;
+
+  static uint32_t  nextTime=0;
+  uint32_t update_time = infoSettings.m27_refresh_time * 1000;
   do
   {  /* WAIT FOR M27  */
-    if(update_waiting == true) {nextTime=OS_GetTimeMs()+update_time; break;}
+    if(update_waiting == true) {nextTime = OS_GetTimeMs() + update_time; break;}
     if(OS_GetTimeMs() < nextTime) break;
 
-    if(storeCmd("M27\n")==false) break;
+    if(storeCmd("M27\n") == false) break;
 
-    nextTime=OS_GetTimeMs()+update_time;
-    update_waiting=true;
+    nextTime = OS_GetTimeMs() + update_time;
+    update_waiting = true;
   }while(0);
 }

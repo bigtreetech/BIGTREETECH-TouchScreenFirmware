@@ -634,7 +634,7 @@ void loopBackEnd(void)
   loopBuzzer();
 #endif
 
-  if(infoMachineSettings.onboard_sd_support == ENABLED && infoMachineSettings.autoReportSDStatus == DISABLED)
+  if(infoMachineSettings.onboard_sd_support == ENABLED)
   {
     loopCheckPrinting(); //Check if there is a SD or USB print running.
   }
@@ -682,6 +682,8 @@ void loopFrontEnd(void)
 #ifdef FIL_RUNOUT_PIN
   loopFrontEndFILRunoutDetect();
 #endif
+
+  loopPopup();
 }
 
 void loopProcess(void)
