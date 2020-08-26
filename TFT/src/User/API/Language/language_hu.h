@@ -225,6 +225,7 @@
     #define HU_SETTING_SAVE           "Beállítások mentése"
     #define HU_SETTING_RESET          "Beállítás visszaállítása"
     #define HU_SETTING_RESTORE        "Beállítások újratöltése"
+    #define HU_EEPROM_SETTINGS        "EEPROM"
     #define HU_EEPROM_SAVE_INFO       "Menti a megváltozott\nbeállításokat az EEPROM-ba?"
     #define HU_EEPROM_RESTORE_INFO    "Betöltöd a beállításokat az\nEEPROM-ból?"
     #define HU_EEPROM_RESET_INFO      "Visszaállítod az EEPROM-ot a\ngyári beállításokra?"

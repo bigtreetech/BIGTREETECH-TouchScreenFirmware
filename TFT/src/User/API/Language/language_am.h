@@ -225,6 +225,7 @@
     #define AM_SETTING_SAVE           "Save settings"
     #define AM_SETTING_RESET          "Reset default settings"
     #define AM_SETTING_RESTORE        "load settings"
+    #define AM_EEPROM_SETTINGS        "EEPROM"
     #define AM_EEPROM_SAVE_INFO       "Save printer settings\nto EEPROM?"
     #define AM_EEPROM_RESTORE_INFO    "Reload settings from\nEEPROM?"
     #define AM_EEPROM_RESET_INFO      "Reset EEPROM to stock printer settings?"

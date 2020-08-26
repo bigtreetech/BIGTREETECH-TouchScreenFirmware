@@ -573,10 +573,10 @@ void sendQueueCmd(void)
               }
             }
             statusScreen_setMsg((u8 *)"M117", (u8 *)&message);
-//            if (infoMenu.menu[infoMenu.cur] != menuStatus)
-//            {
-//              popupReminder(DIALOG_TYPE_INFO, (u8 *)"M117", (u8 *)&message);
-//            }
+            if (infoMenu.menu[infoMenu.cur] != menuStatus)
+            {
+              addToast(DIALOG_TYPE_INFO, message);
+            }
           }
           break;
 

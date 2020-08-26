@@ -225,6 +225,7 @@
     #define CA_SETTING_SAVE           "Save settings"
     #define CA_SETTING_RESET          "Restableix la configuració"
     #define CA_SETTING_RESTORE        "Restaura la configuració"
+    #define CA_EEPROM_SETTINGS        "EEPROM"
     #define CA_EEPROM_SAVE_INFO       "Desa la configuració de la impressora\na la EEPROM?"
     #define CA_EEPROM_RESTORE_INFO    "Carregar la configuració de\nEEPROM?"
     #define CA_EEPROM_RESET_INFO      "Reset EEPROM to stock printer settings?"

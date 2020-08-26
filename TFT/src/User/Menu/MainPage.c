@@ -7,15 +7,15 @@ void unifiedMenu(void)
   MENUITEMS unifiedPageItems = {
     // title
     LABEL_MAINMENU,
-    // icon                 label
-    {{ICON_HEAT_FAN,        LABEL_UNIFIEDHEAT},
-     {ICON_HOME_MOVE,       LABEL_UNIFIEDMOVE},
-     {ICON_EXTRUDE,         LABEL_EXTRUDE},
-     {ICON_STOP,            LABEL_EMERGENCYSTOP},
-     {ICON_GCODE,           LABEL_TERMINAL},
-     {ICON_CUSTOM,          LABEL_CUSTOM},
-     {ICON_SETTINGS,        LABEL_SETTINGS},
-     {ICON_BACK,            LABEL_BACK},}
+    // icon                         label
+    {{ICON_HEAT_FAN,                LABEL_UNIFIEDHEAT},
+     {ICON_HOME_MOVE,               LABEL_UNIFIEDMOVE},
+     {ICON_EXTRUDE,                 LABEL_EXTRUDE},
+     {ICON_STOP,                    LABEL_EMERGENCYSTOP},
+     {ICON_GCODE,                   LABEL_TERMINAL},
+     {ICON_CUSTOM,                  LABEL_CUSTOM},
+     {ICON_SETTINGS,                LABEL_SETTINGS},
+     {ICON_BACK,                    LABEL_BACK},}
   };
 
   KEY_VALUES key_num = KEY_IDLE;

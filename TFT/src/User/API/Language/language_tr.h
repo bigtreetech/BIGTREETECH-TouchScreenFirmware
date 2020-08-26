@@ -225,6 +225,7 @@
     #define TR_SETTING_SAVE           "Save settings"
     #define TR_SETTING_RESET          "Reset default settings"
     #define TR_SETTING_RESTORE        "Restore settings"
+    #define TR_EEPROM_SETTINGS        "EEPROM"
     #define TR_EEPROM_SAVE_INFO       "Save printer settings\nto EEPROM?"
     #define TR_EEPROM_RESTORE_INFO    "Reload settings from\nEEPROM?"
     #define TR_EEPROM_RESET_INFO      "Reset EEPROM to stock printer settings?"
