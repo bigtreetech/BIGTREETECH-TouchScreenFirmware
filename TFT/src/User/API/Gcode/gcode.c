@@ -166,7 +166,10 @@ long request_M23(char *filename)
   {
     loopProcess();
   }
-  if (requestCommandInfo.inError) return 0;
+  if (requestCommandInfo.inError) {
+    clearRequestCommandInfo();
+    return 0;
+  }
   // Find file size and report its.
   char *ptr;
   long size = strtol(strstr(requestCommandInfo.cmd_rev_buf,"Size:")+5, &ptr, 10);

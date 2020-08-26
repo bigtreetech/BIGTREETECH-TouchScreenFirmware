@@ -170,11 +170,7 @@ void setupMachine(void)
       storeCmd("M420 S1\n");
     }
   #endif
-  if(infoMachineSettings.isMarlinFirmware == 1)
-  {
-    printSetUpdateWaiting(infoSettings.m27_active);
-  }
-  else //Smoothieware does not report detailed M115 capabilities
+  if(infoMachineSettings.isMarlinFirmware != 1) //Smoothieware does not report detailed M115 capabilities
   {
     infoMachineSettings.EEPROM                  = ENABLED;
     infoMachineSettings.autoReportTemp          = DISABLED;
