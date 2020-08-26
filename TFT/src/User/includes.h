@@ -70,6 +70,7 @@
 #include "list_widget.h"
 #include "Popup.h"
 #include "Numpad.h"
+#include "Notification.h"
 #include "SanityCheck.h"
 
 //menu

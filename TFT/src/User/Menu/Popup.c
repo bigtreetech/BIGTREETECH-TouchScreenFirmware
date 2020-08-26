@@ -171,20 +171,8 @@ void loopPopup(void)
     return;
 
   popup_redraw = false;
-
-  #ifdef LCD_LED_PWM_CHANNEL
-    if (infoSettings.lcd_idle_timer != LCD_DIM_OFF)
-    {
-      //The LCD dim function is activated. First check if it's dimmed
-      if (lcd_dim.dimmed)
-      {
-        lcd_dim.dimmed = false;
-        Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
-      }
-      //Set a new idle_ms time
-      lcd_dim.idle_ms = OS_GetTimeMs();
-    }
-  #endif
+  
+  wakeLCD();
 
   //display the last received popup message, overriding previous popup messages, if any
   if (popup_cancel[0])

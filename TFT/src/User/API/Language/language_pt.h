@@ -5,7 +5,7 @@
     #define PT_HEAT                   "Aquecer"
     #define PT_MOVE                   "Mover"
     #define PT_HOME                   "Inicio"
-    #define PT_DISABLE_STEPPERS       "Steppers"
+    #define PT_DISABLE_STEPPERS       "Disarm All"
     #define PT_PRINT                  "Imprimir"
     #define PT_EXTRUDE                "Extrudir"
     #define PT_FAN                    "Ventoinha"

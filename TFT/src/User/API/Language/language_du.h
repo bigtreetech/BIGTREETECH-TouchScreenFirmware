@@ -5,7 +5,7 @@
     #define DU_HEAT                   "Verwarm"
     #define DU_MOVE                   "Verplaats"
     #define DU_HOME                   "Thuis"
-    #define DU_DISABLE_STEPPERS       "Steppers"
+    #define DU_DISABLE_STEPPERS       "Disarm All"
     #define DU_PRINT                  "Print"
     #define DU_EXTRUDE                "Extrudeer"
     #define DU_FAN                    "Ventilator"

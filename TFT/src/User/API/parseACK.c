@@ -358,15 +358,16 @@ void parseACK(void)
       }
       else if((ack_seen("X:") && ack_index == 2) || ack_seen("C: X:")) // Smoothieware axis position starts with "C: X:"
       {
-        storegantry(0, ack_value());
+        coordinateSetAxisActual(X_AXIS, ack_value());
         if (ack_seen("Y:"))
         {
-          storegantry(1, ack_value());
+          coordinateSetAxisActual(Y_AXIS, ack_value());
           if (ack_seen("Z:"))
           {
-            storegantry(2, ack_value());
+            coordinateSetAxisActual(Z_AXIS, ack_value());
           }
         }
+        coordinateQuerySetWait(false);
       }
       else if(ack_seen("Count E:")) // Parse actual extruder position, response of "M114 E\n", required "M114_DETAIL" in Marlin
       {
@@ -623,11 +624,13 @@ void parseACK(void)
       else if(ack_seen("FR:"))
       {
         speedSetPercent(0,ack_value());
+        speedQuerySetWait(false);
       }
     // parse and store flow rate percentage
       else if(ack_seen("Flow: "))
       {
         speedSetPercent(1,ack_value());
+        speedQuerySetWait(false);
       }
     // parse fan speed
       else if(ack_seen("M106 P"))

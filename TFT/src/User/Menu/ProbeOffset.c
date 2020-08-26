@@ -20,7 +20,7 @@ ITEM itemProbeOffsetSubmenu[ITEM_PROBE_OFFSET_SUBMENU_NUM] = {
   {ICON_01_MM,                      LABEL_01_MM},
   {ICON_RESET_VALUE,                LABEL_RESET},
   {ICON_EEPROM_SAVE,                LABEL_SAVE},
-  {ICON_XY_UNLOCK,                  LABEL_XY_UNLOCK},
+  {ICON_DISABLE_STEPPERS,           LABEL_XY_UNLOCK},
 };
 
 static u8 curSubmenu = 0;

@@ -71,7 +71,7 @@ bool FIL_RunoutPinFilteredLevel(void)
   }
   else
   {
-    bool filRunout;
+    bool filRunout = 0;
     uint8_t toolNum = heatGetCurrentTool();
     switch(toolNum)
     {
