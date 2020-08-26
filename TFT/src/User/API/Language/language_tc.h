@@ -260,5 +260,6 @@
     #define TC_TUNE_EXT_OLD_ESTEP     "Old e-steps: %0.2f"
     #define TC_TUNE_EXT_NEW_ESTEP     "New e-steps: %0.2f"
     #define TC_CONNECTION_SETTINGS    "连接"
+    #define TC_OFFSET_TOOL            "Offset 2nd Nozzle"
 
 #endif

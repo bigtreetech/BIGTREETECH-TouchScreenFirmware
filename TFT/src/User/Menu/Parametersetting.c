@@ -18,9 +18,10 @@ const LISTITEM parametertypes[P_ITEMSCOUNT] = {
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_BUMP_SENSITIVITY, LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_FWRETRACT,        LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_FWRECOVER,        LABEL_BACKGROUND},
+  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_RETRACT_AUTO,     LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_LIN_ADVANCE,      LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_ABL,              LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_RETRACT_AUTO,     LABEL_BACKGROUND},
+  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_OFFSET_TOOL,      LABEL_BACKGROUND},
   //Keep below items always at the end
   {ICONCHAR_SAVE,       LIST_LABEL,       LABEL_SETTING_SAVE,     LABEL_BACKGROUND},
   {ICONCHAR_UNDO,       LIST_LABEL,       LABEL_SETTING_RESTORE,  LABEL_BACKGROUND},
@@ -80,15 +81,21 @@ void menuShowParameter(void){
     case P_FWRECOVER:
       parameter_menuitems.items[i].titlelabel = recover_disp_ID[i];
       break;
-    case P_LIN_ADV:
-      setDynamicLabel(i, "K");
-      break;
-    case P_ABL_STATE:
-      setDynamicLabel(0, "S");
-      setDynamicLabel(1, "Z");
-      break;
     case P_AUTO_RETRACT:
       parameter_menuitems.items[i].titlelabel = retract_auto_ID[i];
+      break;
+    case P_LIN_ADV:
+      setDynamicLabel(0, "K-E");
+      setDynamicLabel(1, "K-E2");
+      break;
+    case P_ABL_STATE:
+      setDynamicLabel(0, "S 1=ON 0=OFF");
+      setDynamicLabel(1, "Z fade");
+      break;
+    case P_OFFSET_TOOL:
+      setDynamicLabel(0, "X");
+      setDynamicLabel(1, "Y");
+      setDynamicLabel(2, "Z");
     default:
       if (getDualstepperStatus(E_STEPPER) && i == E2_STEPPER)
       {

@@ -260,5 +260,6 @@
     #define JP_TUNE_EXT_OLD_ESTEP     "Old e-steps: %0.2f"
     #define JP_TUNE_EXT_NEW_ESTEP     "New e-steps: %0.2f"
     #define JP_CONNECTION_SETTINGS    "Connection"
+    #define JP_OFFSET_TOOL            "Offset 2nd Nozzle"
 
 #endif

@@ -260,5 +260,6 @@
     #define PL_TUNE_EXT_OLD_ESTEP     "Old e-steps: %0.2f"
     #define PL_TUNE_EXT_NEW_ESTEP     "New e-steps: %0.2f"
     #define PL_CONNECTION_SETTINGS    "Connection"
+    #define PL_OFFSET_TOOL            "Offset 2nd Nozzle"
 
 #endif

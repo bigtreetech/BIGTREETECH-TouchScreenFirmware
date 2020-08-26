@@ -260,5 +260,6 @@
     #define DU_TUNE_EXT_OLD_ESTEP     "Old e-steps: %0.2f"
     #define DU_TUNE_EXT_NEW_ESTEP     "New e-steps: %0.2f"
     #define DU_CONNECTION_SETTINGS    "Connecties"
+    #define DU_OFFSET_TOOL            "Offset 2nd Nozzle"
 
 #endif

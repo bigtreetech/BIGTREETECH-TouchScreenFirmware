@@ -260,5 +260,6 @@
     #define CZ_TUNE_EXT_OLD_ESTEP     "Původní E-kroky: %0.2f"
     #define CZ_TUNE_EXT_NEW_ESTEP     "Nový E-kroky: %0.2f"
     #define CZ_CONNECTION_SETTINGS    "Připojení"
+    #define CZ_OFFSET_TOOL            "Offset 2.trysky"
 
 #endif
