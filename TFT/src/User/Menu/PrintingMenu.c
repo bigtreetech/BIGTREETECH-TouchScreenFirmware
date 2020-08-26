@@ -46,21 +46,6 @@ const char* Speed_ID[2] = {"Speed","Flow"};
 #define Z_ICON_POS    4
 #define SPD_ICON_POS  5
 
-//1title, ITEM_PER_PAGE item(icon + label)
-MENUITEMS printingItems = {
-//  title
-LABEL_BACKGROUND,
-// icon                       label
- {{ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BABYSTEP,             LABEL_BABYSTEP},
-  {ICON_PAUSE,                LABEL_PAUSE},
-  {ICON_MORE,                 LABEL_MORE},
-  {ICON_STOP,                 LABEL_STOP},}
-};
-
 const ITEM itemIsPause[2] = {
 // icon                       label
   {ICON_PAUSE,                LABEL_PAUSE},
