@@ -262,5 +262,6 @@
     #define RU_TUNE_EXT_NEW_ESTEP     "Новые E-шаги: %0.2f"
     #define RU_CONNECTION_SETTINGS    "Соединение"
     #define RU_OFFSET_TOOL            "Offset 2nd Nozzle"
+    #define RU_HYBRID_TRESHOLD        "TMC Hyb. Treschold"
 
 #endif
