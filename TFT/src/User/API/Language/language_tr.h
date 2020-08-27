@@ -5,7 +5,7 @@
     #define TR_HEAT                   "Isıt"
     #define TR_MOVE                   "Hareket"
     #define TR_HOME                   "Sıfırla"
-    #define TR_DISABLE_STEPPERS       "Steppers"
+    #define TR_DISABLE_STEPPERS       "Disarm All"
     #define TR_PRINT                  "Yazdır"
     #define TR_EXTRUDE                "Filament"
     #define TR_FAN                    "Fan"
@@ -225,6 +225,7 @@
     #define TR_SETTING_SAVE           "Save settings"
     #define TR_SETTING_RESET          "Reset default settings"
     #define TR_SETTING_RESTORE        "Restore settings"
+    #define TR_EEPROM_SETTINGS        "EEPROM"
     #define TR_EEPROM_SAVE_INFO       "Save printer settings\nto EEPROM?"
     #define TR_EEPROM_RESTORE_INFO    "Reload settings from\nEEPROM?"
     #define TR_EEPROM_RESET_INFO      "Reset EEPROM to stock printer settings?"
@@ -240,7 +241,7 @@
     #define TR_START_PRINT            "Start Printing:\n %s?"
     #define TR_ACK_NOTIFICATION       "ACK notification style"
     #define TR_LEVELING_EDGE_DISTANCE "Bed edge distance"
-    #define TR_XY_UNLOCK              "Unlock XY"
+    #define TR_XY_UNLOCK              "Disarm XY"
     #define TR_TUNING                 "Tuning"
     #define TR_PID                    "PID"
     #define TR_PID_TITLE              "PID autotune"
@@ -260,5 +261,6 @@
     #define TR_TUNE_EXT_OLD_ESTEP     "Old e-steps: %0.2f"
     #define TR_TUNE_EXT_NEW_ESTEP     "New e-steps: %0.2f"
     #define TR_CONNECTION_SETTINGS    "Connection"
+    #define TR_OFFSET_TOOL            "Offset 2nd Nozzle"
 
 #endif

@@ -5,7 +5,7 @@
     #define SK_HEAT                   "Teplota"
     #define SK_MOVE                   "Posunúť"
     #define SK_HOME                   "Domov"
-    #define SK_DISABLE_STEPPERS       "Steppers"
+    #define SK_DISABLE_STEPPERS       "Disarm All"
     #define SK_PRINT                  "Tlačiť"
     #define SK_EXTRUDE                "Extrúder"
     #define SK_FAN                    "Ofuk"
@@ -225,6 +225,7 @@
     #define SK_SETTING_SAVE           "Save settings"
     #define SK_SETTING_RESET          "Reset default settings"
     #define SK_SETTING_RESTORE        "Restore settings"
+    #define SK_EEPROM_SETTINGS        "EEPROM"
     #define SK_EEPROM_SAVE_INFO       "Save printer settings\nto EEPROM?"
     #define SK_EEPROM_RESTORE_INFO    "Reload settings from\nEEPROM?"
     #define SK_EEPROM_RESET_INFO      "Reset EEPROM to stock printer settings?"
@@ -260,5 +261,6 @@
     #define SK_TUNE_EXT_OLD_ESTEP     "Old e-steps: %0.2f"
     #define SK_TUNE_EXT_NEW_ESTEP     "New e-steps: %0.2f"
     #define SK_CONNECTION_SETTINGS    "Connection"
+    #define SK_OFFSET_TOOL            "Offset 2nd Nozzle"
 
 #endif

@@ -5,7 +5,7 @@
     #define AM_HEAT                   "Ջերմություն"
     #define AM_MOVE                   "Շարժել"
     #define AM_HOME                   "Սկզբնական"
-    #define AM_DISABLE_STEPPERS       "Steppers"
+    #define AM_DISABLE_STEPPERS       "Disarm All"
     #define AM_PRINT                  "Տպել"
     #define AM_EXTRUDE                "Հալել"
     #define AM_FAN                    "Հովացնել"
@@ -225,6 +225,7 @@
     #define AM_SETTING_SAVE           "Save settings"
     #define AM_SETTING_RESET          "Reset default settings"
     #define AM_SETTING_RESTORE        "load settings"
+    #define AM_EEPROM_SETTINGS        "EEPROM"
     #define AM_EEPROM_SAVE_INFO       "Save printer settings\nto EEPROM?"
     #define AM_EEPROM_RESTORE_INFO    "Reload settings from\nEEPROM?"
     #define AM_EEPROM_RESET_INFO      "Reset EEPROM to stock printer settings?"
@@ -240,7 +241,7 @@
     #define AM_START_PRINT            "Start Printing:\n %s?"
     #define AM_ACK_NOTIFICATION       "ACK notification style"
     #define AM_LEVELING_EDGE_DISTANCE "Bed edge distance"
-    #define AM_XY_UNLOCK              "Unlock XY"
+    #define AM_XY_UNLOCK              "Disarm XY"
     #define AM_TUNING                 "Tuning"
     #define AM_PID                    "PID"
     #define AM_PID_TITLE              "PID autotune"
@@ -260,5 +261,6 @@
     #define AM_TUNE_EXT_OLD_ESTEP     "Old e-steps: %0.2f"
     #define AM_TUNE_EXT_NEW_ESTEP     "New e-steps: %0.2f"
     #define AM_CONNECTION_SETTINGS    "Connection"
-
+    #define AM_OFFSET_TOOL            "Offset 2nd Nozzle"
+    
 #endif

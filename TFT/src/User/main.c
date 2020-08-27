@@ -84,7 +84,6 @@ void Hardware_GenericInit(void)
     storePara();
   }
 
-  printSetUpdateWaiting(infoSettings.m27_active);
   #ifdef LCD_LED_PWM_CHANNEL
     Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
   #endif

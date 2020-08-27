@@ -5,7 +5,7 @@
     #define GR_HEAT                   "Θέρμανση"
     #define GR_MOVE                   "Μετακίνηση"
     #define GR_HOME                   "Αυτο-Κατεύθυνση"
-    #define GR_DISABLE_STEPPERS                   "Steppers"
+    #define GR_DISABLE_STEPPERS       "Disarm All"
     #define GR_PRINT                  "Εκτύπωση"
     #define GR_EXTRUDE                "Εκβολή"
     #define GR_FAN                    "Ανεμιστήρας"
@@ -225,6 +225,7 @@
     #define GR_SETTING_SAVE           "Save settings"
     #define GR_SETTING_RESET          "Reset default settings"
     #define GR_SETTING_RESTORE        "Restore settings"
+    #define GR_EEPROM_SETTINGS        "EEPROM"
     #define GR_EEPROM_SAVE_INFO       "Save printer settings\nto EEPROM?"
     #define GR_EEPROM_RESTORE_INFO    "Reload settings from\nEEPROM?"
     #define GR_EEPROM_RESET_INFO      "Reset EEPROM to stock printer settings?"
@@ -240,7 +241,7 @@
     #define GR_START_PRINT            "Start Printing:\n %s?"
     #define GR_ACK_NOTIFICATION       "ACK notification style"
     #define GR_LEVELING_EDGE_DISTANCE "Bed edge distance"
-    #define GR_XY_UNLOCK              "Unlock XY"
+    #define GR_XY_UNLOCK              "Disarm XY"
     #define GR_TUNING                 "Tuning"
     #define GR_PID                    "PID"
     #define GR_PID_TITLE              "PID autotune"
@@ -260,5 +261,6 @@
     #define GR_TUNE_EXT_OLD_ESTEP     "Old e-steps: %0.2f"
     #define GR_TUNE_EXT_NEW_ESTEP     "New e-steps: %0.2f"
     #define GR_CONNECTION_SETTINGS    "Connection"
+    #define GR_OFFSET_TOOL            "Offset 2nd Nozzle"
 
 #endif

@@ -114,8 +114,15 @@
   #define PS_ON_PIN      PC12 // The string on TFT35 V3.0 board(PA12) is wrong, PC12 is the correct IO
 #endif
 #ifndef FIL_RUNOUT_PIN
-  #define FIL_RUNOUT_PIN PA15
+  #define FIL_RUNOUT_PIN PA15     //Extruder T0
 #endif
+
+// #define FIL_RUNOUT_PIN_1 PC12     //Extruder T1  Attention: Is the same pin as PS_ON.
+// #define FIL_RUNOUT_PIN_2 PB10     //Extruder T2             Is the same pin as USART3 TX.
+// #define FIL_RUNOUT_PIN_3 PB11     //Extruder T3             Is the same pin as USART3 RX.
+// #define FIL_RUNOUT_PIN_4 PA0      //Extruder T4             Is the same pin as USART4 TX.
+// #define FIL_RUNOUT_PIN_5 PA1      //Extruder T5             Is the same pin as USART4 RX.
+
 
 //#define LED_COLOR_PIN PC7
 
