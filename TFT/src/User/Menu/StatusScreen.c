@@ -59,7 +59,7 @@ const GUI_RECT RecGantry = {START_X,                        1*ICON_HEIGHT+0*SPAC
 void drawTemperature(void)
 {
   //icons and their values are updated one by one to reduce flicker/clipping
-  char tempstr[20];
+  char tempstr[45];
 
   LIVE_INFO lvIcon;
   lvIcon.enabled[0] = true;
