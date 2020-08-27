@@ -88,8 +88,8 @@ float getParameter(PARAMETER_NAME name, u8 index)
     return infoParameters.ABLState[index];
   case P_OFFSET_TOOL:
     return infoParameters.OffsetTool[index];
-  case P_HYBRID_TRESHOLD:
-    return infoParameters.HybridTreshold[index];  
+  case P_HYBRID_THRESHOLD:
+    return infoParameters.HybridThreshold[index];  
   default:
     return 0.0f;
   }
@@ -139,8 +139,8 @@ void setParameter(PARAMETER_NAME name, u8 index, float val)
     case P_OFFSET_TOOL:
       infoParameters.OffsetTool[index] = val;
       break;
-    case P_HYBRID_TRESHOLD:
-      infoParameters.HybridTreshold[index] = val;
+    case P_HYBRID_THRESHOLD:
+      infoParameters.HybridThreshold[index] = val;
       break;
     default:
       break;
@@ -176,7 +176,7 @@ void sendParameterCmd(PARAMETER_NAME para, u8 stepper_index, float Value)
         storeCmd(dualStepperParameter_cmd[0][stepper_index], Value);
       if(para == P_BUMPSENSITIVITY)
         storeCmd(dualStepperParameter_cmd[1][stepper_index], Value);
-      if(para == P_HYBRID_TRESHOLD)  
+      if(para == P_HYBRID_THRESHOLD)  
         storeCmd(dualStepperParameter_cmd[2][stepper_index], Value);
     }
 }

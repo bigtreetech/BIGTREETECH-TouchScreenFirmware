@@ -757,10 +757,10 @@ void sendQueueCmd(void)
           if(cmd_seen('Z')) setParameter(P_BUMPSENSITIVITY, Z_STEPPER, cmd_float());
           break;
         case 913: //M913 Hybrid Threshold Speed
-          if(cmd_seen('X')) setParameter(P_HYBRID_TRESHOLD, X_STEPPER, cmd_value());
-          if(cmd_seen('Y')) setParameter(P_HYBRID_TRESHOLD, Y_STEPPER, cmd_value());
-          if(cmd_seen('Z')) setParameter(P_HYBRID_TRESHOLD, Z_STEPPER, cmd_value());
-          if(cmd_seen('E')) setParameter(P_HYBRID_TRESHOLD, E_STEPPER, cmd_value());
+          if(cmd_seen('X')) setParameter(P_HYBRID_THRESHOLD, X_STEPPER, cmd_value());
+          if(cmd_seen('Y')) setParameter(P_HYBRID_THRESHOLD, Y_STEPPER, cmd_value());
+          if(cmd_seen('Z')) setParameter(P_HYBRID_THRESHOLD, Z_STEPPER, cmd_value());
+          if(cmd_seen('E')) setParameter(P_HYBRID_THRESHOLD, E_STEPPER, cmd_value());
           break;  
       }
       break; //end parsing M-codes

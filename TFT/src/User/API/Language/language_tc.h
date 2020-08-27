@@ -262,6 +262,6 @@
     #define TC_TUNE_EXT_NEW_ESTEP     "New e-steps: %0.2f"
     #define TC_CONNECTION_SETTINGS    "连接"
     #define TC_OFFSET_TOOL            "Offset 2nd Nozzle"
-    #define TC_HYBRID_TRESHOLD        "TMC Hyb. Treschold"
+    #define TC_HYBRID_THRESHOLD       "TMC HybridThreshold"
 
 #endif

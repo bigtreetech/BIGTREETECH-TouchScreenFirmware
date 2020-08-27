@@ -527,16 +527,16 @@ void parseACK(void)
       }
     // parse and store TMC Hybrid Threshold Speed  
       else if(ack_seen("M913 X")){
-                          setParameter(P_HYBRID_TRESHOLD, X_STEPPER, ack_value());
-        if(ack_seen("Y")) setParameter(P_HYBRID_TRESHOLD, Y_STEPPER, ack_value());
-        if(ack_seen("Z")) setParameter(P_HYBRID_TRESHOLD, Z_STEPPER, ack_value());
-        if(ack_seen("E")) setParameter(P_HYBRID_TRESHOLD, E_STEPPER, ack_value());
+                          setParameter(P_HYBRID_THRESHOLD, X_STEPPER, ack_value());
+        if(ack_seen("Y")) setParameter(P_HYBRID_THRESHOLD, Y_STEPPER, ack_value());
+        if(ack_seen("Z")) setParameter(P_HYBRID_THRESHOLD, Z_STEPPER, ack_value());
+        if(ack_seen("E")) setParameter(P_HYBRID_THRESHOLD, E_STEPPER, ack_value());
       }
       else if(ack_seen("M913 T0 E")){
-                          setParameter(P_HYBRID_TRESHOLD, E_STEPPER, ack_value());
+                          setParameter(P_HYBRID_THRESHOLD, E_STEPPER, ack_value());
       }
       else if(ack_seen("M913 T1 E")){
-                          setParameter(P_HYBRID_TRESHOLD, E2_STEPPER, ack_value());
+                          setParameter(P_HYBRID_THRESHOLD, E2_STEPPER, ack_value());
                           setDualStepperStatus(E_STEPPER, true);
       }  
     // Parse and store ABL type
