@@ -35,7 +35,6 @@ static uint32_t toggle_time = 2000; // 1 seconds is 1000
 static uint8_t c_Tool = NOZZLE0;
 static int c_fan = 0;
 static int c_speedID = 0;
-static int key_pause = 4;
 const char* Speed_ID[2] = {"Speed","Flow"};
 
 
@@ -47,36 +46,17 @@ const char* Speed_ID[2] = {"Speed","Flow"};
 #define Z_ICON_POS    4
 #define SPD_ICON_POS  5
 
-//1title, ITEM_PER_PAGE item(icon + label)
-MENUITEMS printingItems = {
-//  title
-LABEL_BACKGROUND,
-// icon                       label
- {{ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BABYSTEP,             LABEL_BABYSTEP},
-  {ICON_PAUSE,                LABEL_PAUSE},
-  {ICON_MORE,                 LABEL_MORE},
-  {ICON_STOP,                 LABEL_STOP},}
-};
-const ITEM itemBlank      = {ICON_BACKGROUND, LABEL_BACKGROUND};
-const ITEM itemBabyStep   = {ICON_BABYSTEP, LABEL_BABYSTEP};
 const ITEM itemIsPause[2] = {
 // icon                       label
   {ICON_PAUSE,                LABEL_PAUSE},
   {ICON_RESUME,               LABEL_RESUME},
 };
 
-
-void completePrinting(void)
-{
-  printingItems.items[KEY_ICON_7].icon = ICON_BACK;
-  printingItems.items[KEY_ICON_7].label.index = LABEL_BACK;
-  if (infoMenu.menu[infoMenu.cur] == menuPrinting)
-    menuDrawItem(&printingItems.items[KEY_ICON_7], KEY_ICON_7);
-}
+const ITEM itemIsPrinting[2] = {
+// icon                       label
+  {ICON_BACK,                 LABEL_BACK},
+  {ICON_STOP,                 LABEL_STOP},
+};
 
 void menuBeforePrinting(void)
 {
@@ -109,7 +89,6 @@ void menuBeforePrinting(void)
       //    {
       //      request_M24(infoBreakPoint.offset);
       //    }
-      printSetUpdateWaiting(true);
 
       if (infoMachineSettings.autoReportSDStatus ==1){
         request_M27(infoSettings.m27_refresh_time*1000);                //Check if there is a SD or USB print running.
@@ -144,11 +123,7 @@ void menuBeforePrinting(void)
       break;
   }
   infoPrinting.printing = true;
-  setPrintfinishAction(completePrinting);
   infoMenu.menu[infoMenu.cur] = menuPrinting;
-  printingItems.title.address = getCurGcodeName(infoFile.title);
-  printingItems.items[KEY_ICON_7].icon = ICON_STOP;
-  printingItems.items[KEY_ICON_7].label.index = LABEL_STOP;
 }
 
 const GUI_RECT progressRect = {1*SPACE_X_PER_ICON, 0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y + ICON_HEIGHT/4,
@@ -206,7 +181,6 @@ void reDrawFan(int icon_pos)
 
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
-
 
 void reDrawSpeed(int icon_pos)
 {
@@ -294,25 +268,9 @@ void toggleinfo(void)
   }
 }
 
-//extern SCROLL   titleScroll;
-//extern GUI_RECT titleRect;
-
-
 void printingDrawPage(void)
 {
   //  Scroll_CreatePara(&titleScroll, infoFile.title,&titleRect);  //
-  key_pause = 5;
-  if(infoPrinting.model_icon){
-    printingItems.items[key_pause - 1].icon = ICON_PREVIEW;
-  }
-  else{
-    printingItems.items[key_pause - 1].icon = ICON_BABYSTEP;
-  }
-
-  printingItems.items[key_pause - 1].label.index = LABEL_BABYSTEP;
-  printingItems.items[key_pause] = itemIsPause[isPause()];
-
-  menuDrawPage(&printingItems);
   reValueNozzle(EXT_ICON_POS);
   reValueBed(BED_ICON_POS);
   reDrawFan(FAN_ICON_POS);
@@ -323,18 +281,43 @@ void printingDrawPage(void)
 }
 
 
+void stopConfirm(void)
+{
+  abortPrinting();
+  infoMenu.cur--;
+}
+
 void menuPrinting(void)
 {
+  //1title, ITEM_PER_PAGE item(icon + label)
+  MENUITEMS printingItems = {
+  //  title
+  LABEL_BACKGROUND,
+  // icon                       label
+   {{ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_BABYSTEP,             LABEL_BABYSTEP},
+    {ICON_PAUSE,                LABEL_PAUSE},
+    {ICON_MORE,                 LABEL_MORE},
+    {ICON_STOP,                 LABEL_STOP},}
+  };
   uint8_t   nowFan[MAX_FAN_COUNT] = {0};
   uint16_t  curspeed[2] = {0};
   uint32_t  time = 0;
   HEATER    nowHeat;
   float     curLayer = 0;
   bool      lastPause = isPause();
+  bool      lastPrinting = isPrinting();
   memset(&nowHeat, 0, sizeof(HEATER));
 
+  printingItems.title.address = getCurGcodeName(infoFile.title);
+  printingItems.items[KEY_ICON_4].icon = (infoFile.source != BOARD_SD && infoPrinting.model_icon) ? ICON_PREVIEW : ICON_BABYSTEP;
+  printingItems.items[KEY_ICON_5] = itemIsPause[isPause()];
+  printingItems.items[KEY_ICON_7] = itemIsPrinting[lastPrinting];
+  menuDrawPage(&printingItems);
   printingDrawPage();
-  printingItems.items[key_pause] = itemIsPause[infoPrinting.pause];
 
 
   while(infoMenu.menu[infoMenu.cur] == menuPrinting)
@@ -406,8 +389,14 @@ void menuPrinting(void)
 
     if (lastPause != isPause()) {
       lastPause = isPause();
-      printingItems.items[key_pause] = itemIsPause[lastPause];
-      menuDrawItem(&printingItems.items[key_pause],key_pause);
+      printingItems.items[KEY_ICON_5] = itemIsPause[lastPause];
+      menuDrawItem(&printingItems.items[KEY_ICON_5], KEY_ICON_5);
+    }
+
+    if (lastPrinting != isPrinting()) {
+      lastPrinting = isPrinting();
+      printingItems.items[KEY_ICON_7] = itemIsPrinting[lastPrinting];
+      menuDrawItem(&printingItems.items[KEY_ICON_7], KEY_ICON_7);
     }
 
     toggleinfo();
@@ -429,7 +418,11 @@ void menuPrinting(void)
 
       case KEY_ICON_7:
         if(isPrinting())
-          infoMenu.menu[++infoMenu.cur] = menuStopPrinting;
+        {
+          showDialog(DIALOG_TYPE_ALERT, textSelect(LABEL_WARNING), textSelect(LABEL_STOP_PRINT),
+                       textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL),
+                       stopConfirm, NULL, NULL);
+        }
         else
         {
           exitPrinting();
@@ -438,31 +431,6 @@ void menuPrinting(void)
         break;
 
       default :break;
-    }
-    loopProcess();
-  }
-}
-
-void menuStopPrinting(void)
-{
-  u16 key_num = IDLE_TOUCH;
-
-  popupDrawPage(DIALOG_TYPE_ALERT, bottomDoubleBtn, textSelect(LABEL_WARNING),
-                  textSelect(LABEL_STOP_PRINT), textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL));
-
-  while(infoMenu.menu[infoMenu.cur] == menuStopPrinting)
-  {
-    key_num = KEY_GetValue(2, doubleBtnRect);
-    switch(key_num)
-    {
-      case KEY_POPUP_CONFIRM:
-        abortPrinting();
-        infoMenu.cur-=2;
-        break;
-
-      case KEY_POPUP_CANCEL:
-        infoMenu.cur--;
-        break;
     }
     loopProcess();
   }

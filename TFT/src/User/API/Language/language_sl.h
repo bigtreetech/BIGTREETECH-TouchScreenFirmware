@@ -5,7 +5,7 @@
     #define SL_HEAT                   "Gretje"
     #define SL_MOVE                   "Pomik"
     #define SL_HOME                   "Domov"
-    #define SL_DISABLE_STEPPERS       "Steppers"
+    #define SL_DISABLE_STEPPERS       "Disarm All"
     #define SL_PRINT                  "Tisk"
     #define SL_EXTRUDE                "Filament"
     #define SL_FAN                    "Hlajenje"
@@ -225,6 +225,7 @@
     #define SL_SETTING_SAVE           "Save settings"
     #define SL_SETTING_RESET          "Reset nastavitev"
     #define SL_SETTING_RESTORE        "Obnovi nastavitve"
+    #define SL_EEPROM_SETTINGS        "EEPROM"
     #define SL_EEPROM_SAVE_INFO       "Shrani nastavitve tiskalnika\nv EEPROM?"
     #define SL_EEPROM_RESTORE_INFO    "Naloži nastavitve iz\nEEPROM-a?"
     #define SL_EEPROM_RESET_INFO      "Reset EEPROM to stock printer settings?"
@@ -240,7 +241,7 @@
     #define SL_START_PRINT            "Start tiska:\n %s?"
     #define SL_ACK_NOTIFICATION       "ACK notification style"
     #define SL_LEVELING_EDGE_DISTANCE "Bed edge distance"
-    #define SL_XY_UNLOCK              "Unlock XY"
+    #define SL_XY_UNLOCK              "Disarm XY"
     #define SL_TUNING                 "Tuning"
     #define SL_PID                    "PID"
     #define SL_PID_TITLE              "PID autotune"
@@ -260,5 +261,6 @@
     #define SL_TUNE_EXT_OLD_ESTEP     "Old e-steps: %0.2f"
     #define SL_TUNE_EXT_NEW_ESTEP     "New e-steps: %0.2f"
     #define SL_CONNECTION_SETTINGS    "Connection"
+    #define SL_OFFSET_TOOL            "Offset 2nd Nozzle"
 
 #endif

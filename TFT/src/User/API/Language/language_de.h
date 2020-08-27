@@ -5,7 +5,7 @@
     #define DE_HEAT                   "Heizen"
     #define DE_MOVE                   "Bewegen"
     #define DE_HOME                   "Home XYZ"
-    #define DE_DISABLE_STEPPERS       "Steppers"
+    #define DE_DISABLE_STEPPERS       "Disarm All"
     #define DE_PRINT                  "Drucken"
     #define DE_EXTRUDE                "Extruder"
     #define DE_FAN                    "Lüfter"
@@ -225,6 +225,7 @@
     #define DE_SETTING_SAVE           "Save settings"
     #define DE_SETTING_RESET          "Reset default settings"
     #define DE_SETTING_RESTORE        "Restore settings"
+    #define DE_EEPROM_SETTINGS        "EEPROM"
     #define DE_EEPROM_SAVE_INFO       "Save printer settings\nto EEPROM?"
     #define DE_EEPROM_RESTORE_INFO    "Reload settings from\nEEPROM?"
     #define DE_EEPROM_RESET_INFO      "Reset EEPROM to stock printer settings?"
@@ -260,5 +261,6 @@
     #define DE_TUNE_EXT_OLD_ESTEP     "Old e-steps: %0.2f"
     #define DE_TUNE_EXT_NEW_ESTEP     "New e-steps: %0.2f"
     #define DE_CONNECTION_SETTINGS    "Connection"
+    #define DE_OFFSET_TOOL            "Offset 2nd Nozzle"
 
 #endif

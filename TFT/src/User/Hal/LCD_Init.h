@@ -49,8 +49,13 @@
 
   void LCD_LED_PWM_Init(void);
   void loopDimTimer(void);
+  void _wakeLCD(void);
 
   #define Set_LCD_Brightness(percentage) TIM_PWM_SetDutyCycle(LCD_LED_PWM_CHANNEL, percentage)
+  #define wakeLCD() _wakeLCD()
+#else
+  #define wakeLCD()
+
 #endif // LCD_LED_PWM_CHANNEL
 
 #if LCD_DATA_16BIT == 1

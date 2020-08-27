@@ -7,8 +7,19 @@ static u8 ack_cur_src = SERIAL_PORT;
 
 bool portSeen[_UART_CNT] = {false, false, false, false, false, false};
 
+struct HOST_ACTION
+{
+  char prompt_begin[20];
+  char prompt_button1[20];
+  char prompt_button2[20];
+  bool prompt_show;         //Show popup reminder or not
+  uint8_t button;           //Number of buttons
+} hostAction;
+
 // notify or ignore messages starting with following text
 const ECHO knownEcho[] = {
+//  {ECHO_NOTIFY_NONE, "enqueueing \"M117\""},
+  {ECHO_NOTIFY_NONE, "busy: paused for user"},
   {ECHO_NOTIFY_NONE, "busy: processing"},
   {ECHO_NOTIFY_NONE, "Now fresh file:"},
   {ECHO_NOTIFY_NONE, "Now doing file:"},
@@ -176,6 +187,66 @@ void syncL2CacheFromL1(uint8_t port)
   dmaL2Cache[i] = 0; // End character
 }
 
+void hostActionCommands(void)
+{
+  char *find = strchr(dmaL2Cache + ack_index, '\n'); 
+  *find = '\0';
+  if(ack_seen("prompt_begin "))
+  {
+    hostAction.button = 0;
+    hostAction.prompt_show = 1;
+    strcpy(hostAction.prompt_begin, dmaL2Cache + ack_index);
+    if(ack_seen("Resuming SD"))
+    {
+      hostAction.prompt_show = 0;
+    }
+    else if(ack_seen("Resuming"))
+    {
+      infoPrinting.pause = false;
+      hostAction.prompt_show = 0;
+    }
+    else if(ack_seen("Reheating"))
+    {
+      hostAction.prompt_show = 0;
+    }
+    else if(ack_seen("Nozzle Parked"))
+    {
+      infoPrinting.pause = true;
+    }
+  }
+  else if(ack_seen("prompt_button "))
+  {
+    hostAction.button++;
+    if(hostAction.button == 1)
+    {
+      strcpy(hostAction.prompt_button1, dmaL2Cache + ack_index);
+    }
+    else
+    {
+      strcpy(hostAction.prompt_button2, dmaL2Cache + ack_index);
+    }
+  }
+
+  if(ack_seen("prompt_show") && hostAction.prompt_show)
+  {
+    switch(hostAction.button)
+    {
+      case 0:
+        BUZZER_PLAY(sound_notify);
+        popupReminder(DIALOG_TYPE_INFO,(u8 *)"Message", (u8 *)hostAction.prompt_begin);
+        break;
+      case 1:
+        BUZZER_PLAY(sound_notify);
+        showDialog(DIALOG_TYPE_ERROR, (u8*)"Action command", (u8 *)hostAction.prompt_begin, (u8 *)hostAction.prompt_button1, NULL, breakAndContinue, NULL, NULL);
+        break;
+      case 2:
+        BUZZER_PLAY(sound_notify);
+        showDialog(DIALOG_TYPE_ERROR, (u8*)"Action command", (u8 *)hostAction.prompt_begin, (u8 *)hostAction.prompt_button1, (u8 *)hostAction.prompt_button2, resumeAndPurge, resumeAndContinue, NULL);
+        break;
+    }
+  }
+}
+
 void parseACK(void)
 {
   if (infoHost.rx_ok[SERIAL_PORT] != true) return; //not get response data
@@ -287,42 +358,57 @@ void parseACK(void)
       }
       else if((ack_seen("X:") && ack_index == 2) || ack_seen("C: X:")) // Smoothieware axis position starts with "C: X:"
       {
-        storegantry(0, ack_value());
+        coordinateSetAxisActual(X_AXIS, ack_value());
         if (ack_seen("Y:"))
         {
-          storegantry(1, ack_value());
+          coordinateSetAxisActual(Y_AXIS, ack_value());
           if (ack_seen("Z:"))
           {
-            storegantry(2, ack_value());
+            coordinateSetAxisActual(Z_AXIS, ack_value());
           }
         }
+        coordinateQuerySetWait(false);
       }
       else if(ack_seen("Count E:")) // Parse actual extruder position, response of "M114 E\n", required "M114_DETAIL" in Marlin
       {
         coordinateSetAxisActualSteps(E_AXIS, ack_value());
       }
-      else if(infoMachineSettings.onboard_sd_support == ENABLED && ack_seen(bsdnoprintingmagic))
+      else if(infoMachineSettings.onboard_sd_support == ENABLED && ack_seen("File opened: "))
+      {
+        // File opened: 1A29A~1.GCO Size: 6974
+        uint16_t start_index = ack_index;
+        uint16_t end_index = ack_seen("Size: ") ? (ack_index - sizeof("Size: ")) : start_index;
+        infoFile.source = BOARD_SD;
+        strcpy(infoFile.title, getCurFileSource());
+        strcat(infoFile.title,"/");
+        uint16_t path_len = MIN(end_index - start_index, MAX_PATH_LEN - strlen(getCurFileSource()) - 1);
+        strncat(infoFile.title, dmaL2Cache + start_index, path_len);
+        infoFile.title[path_len + strlen(getCurFileSource()) + 1] = 0;
+
+        infoPrinting.pause = false;
+        infoHost.printing = true;
+        infoPrinting.time = 0;
+        infoPrinting.cur = 0;
+        infoPrinting.size = ack_value();
+      }
+      else if(infoMachineSettings.onboard_sd_support == ENABLED && infoFile.source == BOARD_SD && ack_seen("Not SD printing"))
       {
         infoHost.printing = false;
-        completePrinting();
+        if (infoPrinting.printing)
+          infoPrinting.pause = true;
       }
-      else if(infoMachineSettings.onboard_sd_support == ENABLED && ack_seen(bsdprintingmagic))
+      else if(infoMachineSettings.onboard_sd_support == ENABLED && infoFile.source == BOARD_SD && ack_seen("SD printing byte"))
       {
-        if(infoMenu.menu[infoMenu.cur] != menuPrinting && !infoHost.printing) {
-          infoMenu.menu[++infoMenu.cur] = menuPrinting;
-          infoHost.printing = true;
-        }
+        infoPrinting.pause = false;
         // Parsing printing data
         // Example: SD printing byte 123/12345
-        char *ptr;
-        u32 position = strtol(strstr(dmaL2Cache, "byte ") + 5, &ptr, 10);
-        setPrintCur(position);
+        infoPrinting.cur = ack_value();
   //      powerFailedCache(position);
       }
-      else if(infoMachineSettings.onboard_sd_support == ENABLED && ack_seen("Done printing file"))
+      else if(infoMachineSettings.onboard_sd_support == ENABLED && infoFile.source == BOARD_SD && ack_seen("Done printing file"))
       {
         infoPrinting.printing = false;
-        infoPrinting.cur = infoPrinting.size; // for onboard sd printing
+        infoPrinting.cur = infoPrinting.size;
       }
 
     //parse and store stepper steps/mm values
@@ -393,6 +479,12 @@ void parseACK(void)
       else if(ack_seen("M209 S")){
                           setParameter(P_AUTO_RETRACT, 0, ack_value());
       }
+    //parse and store Offset 2nd Nozzle
+      else if(ack_seen("M218 T1 X")){
+                          setParameter(P_OFFSET_TOOL, 0, ack_value());
+        if(ack_seen("Y")) setParameter(P_OFFSET_TOOL, 1, ack_value());
+        if(ack_seen("Z")) setParameter(P_OFFSET_TOOL, 2, ack_value());
+      }
     //parse and store Probe Offset values
       else if(ack_seen("M851 X")){
                           setParameter(P_PROBE_OFFSET, X_STEPPER, ack_value());
@@ -402,6 +494,12 @@ void parseACK(void)
     //parse and store linear advance values
       else if(ack_seen("M900 K")){
                           setParameter(P_LIN_ADV, 0, ack_value());
+      }
+      else if(ack_seen("M900 T0 K")){
+                          setParameter(P_LIN_ADV, 0, ack_value());
+      }
+      else if(ack_seen("M900 T1 K")){
+                          setParameter(P_LIN_ADV, 1, ack_value());
       }
     //parse and store stepper driver current values
       else if(ack_seen("M906 X")){
@@ -502,6 +600,10 @@ void parseACK(void)
       {
         infoMachineSettings.caseLightsBrightness = ack_value();
       }
+      else if(ack_seen("Cap:PROMPT_SUPPORT:"))
+      {
+        infoMachineSettings.promptSupport = ack_value();
+      }
       else if(ack_seen("Cap:SDCARD:") && infoSettings.onboardSD == AUTO)
       {
         infoMachineSettings.onboard_sd_support = ack_value();
@@ -534,11 +636,13 @@ void parseACK(void)
       else if(ack_seen("FR:"))
       {
         speedSetPercent(0,ack_value());
+        speedQuerySetWait(false);
       }
     // parse and store flow rate percentage
       else if(ack_seen("Flow: "))
       {
         speedSetPercent(1,ack_value());
+        speedQuerySetWait(false);
       }
     // parse fan speed
       else if(ack_seen("M106 P"))
@@ -548,7 +652,7 @@ void parseACK(void)
           fanSetSpeed(i, ack_value());
       }
     // Parse pause message
-      else if(ack_seen("paused for user"))
+      else if(!infoMachineSettings.promptSupport && ack_seen("paused for user"))
       {
         showDialog(DIALOG_TYPE_QUESTION, (u8*)"Printer is Paused",(u8*)"Paused for user\ncontinue?",
                    textSelect(LABEL_CONFIRM), NULL, breakAndContinue, NULL,NULL);
@@ -570,6 +674,11 @@ void parseACK(void)
       else if(ack_seen("PID Autotune failed"))
       {
         pidUpdateStatus(false);
+      }
+    // Parse "HOST_ACTION_COMMANDS"
+      else if(ack_seen("//action:"))
+      {
+        hostActionCommands();
       }
     //Parse error messages & Echo messages
       else if(ack_seen(errormagic))

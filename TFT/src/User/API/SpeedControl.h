@@ -9,11 +9,12 @@
 #include "stdint.h"
 #include "stdbool.h"
 
-void      speedSetSendWaiting(uint8_t tool, bool isWaiting);
-void      speedSetPercent(uint8_t tool, uint16_t per);
-uint16_t  speedGetPercent(uint8_t tool);
-bool      SpeedChanged(uint8_t i);
-void      loopSpeed(void);
-
+void speedSetSendWaiting(uint8_t tool, bool isWaiting);
+void speedQuerySetWait(bool wait);
+void speedSetPercent(uint8_t tool, uint16_t per);
+uint16_t speedGetPercent(uint8_t tool);
+bool SpeedChanged(uint8_t i);
+void loopSpeed(void);
+void speedQuery(void);
 
 #endif

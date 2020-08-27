@@ -104,6 +104,21 @@ void loopDimTimer(void)
   }
 }
 
+void _wakeLCD(void)
+{
+  if (infoSettings.lcd_idle_timer != LCD_DIM_OFF)
+  {
+    //The LCD dim function is activated. First check if it's dimmed
+    if (lcd_dim.dimmed)
+    {
+      lcd_dim.dimmed = false;
+      Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
+    }
+    //Set a new idle_ms time
+    lcd_dim.idle_ms = OS_GetTimeMs();
+  }
+}
+
 #endif
 
 void LCD_LED_Init(void)
