@@ -4,9 +4,9 @@
 
 //const GUI_RECT RecXYZ = {START_X + 1*ICON_WIDTH,        STATUS_GANTRY_YOFFSET,
 //                         4*ICON_WIDTH+3*SPACE_X+START_X,ICON_START_Y-STATUS_GANTRY_YOFFSET};
-#define X_MOVE_GCODE "G1 X%.2f\n"
-#define Y_MOVE_GCODE "G1 Y%.2f\n"
-#define Z_MOVE_GCODE "G1 Z%.2f\n"
+#define X_MOVE_GCODE "G1 X%.2f F%d\n"
+#define Y_MOVE_GCODE "G1 Y%.2f F%d\n"
+#define Z_MOVE_GCODE "G1 Z%.2f F%d\n"
 
 
 //1 title, ITEM_PER_PAGE item
@@ -60,7 +60,7 @@ AXIS nowAxis = X_AXIS;
 void storeMoveCmd(AXIS xyz, int8_t direction) {
   const char *xyzMoveCmd[] = {X_MOVE_GCODE, Y_MOVE_GCODE, Z_MOVE_GCODE};
   // if invert is true, 'direction' multiplied by -1
-  storeCmd(xyzMoveCmd[xyz], (infoSettings.invert_axis[xyz] ? -direction : direction) * item_move_len[item_move_len_i]);
+  storeCmd(xyzMoveCmd[xyz], (infoSettings.invert_axis[xyz] ? -direction : direction) * item_move_len[item_move_len_i], infoSettings.axis_speed[infoSettings.move_speed]);
   // update now axis be selected
   nowAxis = xyz;
 }
@@ -112,7 +112,6 @@ void menuMove(void)
 
   menuDrawPage(&moveItems);
   mustStoreCmd("G91\n");
-  mustStoreCmd("G1 F%d\n",infoSettings.axis_speed[infoSettings.move_speed]);
 
   mustStoreCmd("M114\n");
   drawXYZ();
@@ -198,7 +197,7 @@ void drawXYZ(void){
   GUI_SetColor(infoSettings.font_color);
 
   if (nowAxis == Z_AXIS) GUI_SetColor(INFOBOX_ICON_COLOR);
-  sprintf(tempstr, "Z:%.2f  ", coordinateGetAxisActual(Y_AXIS));
+  sprintf(tempstr, "Z:%.2f  ", coordinateGetAxisActual(Z_AXIS));
   GUI_DispString(START_X + 3 * SPACE_X + 3 * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (u8 *)tempstr);
 
   GUI_SetColor(infoSettings.font_color);
