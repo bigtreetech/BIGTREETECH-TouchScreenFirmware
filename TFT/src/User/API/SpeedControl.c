@@ -1,9 +1,9 @@
 #include "SpeedControl.h"
 #include "includes.h"
 
-static u16 percent[SPEED_NUM]     = {100,   100};     //Speed  Flow
-static u16 lastPercent[SPEED_NUM] = {100,   100}; //Speed  Flow
-static u16 curPercent[SPEED_NUM]  = {100,   100};  //Speed  Flow
+static uint16_t percent[SPEED_NUM]     = {100,   100};  //Speed  Flow
+static uint16_t lastPercent[SPEED_NUM] = {100,   100};  //Speed  Flow
+static uint16_t curPercent[SPEED_NUM]  = {100,   100};  //Speed  Flow
 
 static bool send_waiting[SPEED_NUM];
 static bool queryWait = false;
