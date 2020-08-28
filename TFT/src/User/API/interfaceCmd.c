@@ -479,7 +479,7 @@ void sendQueueCmd(void)
           eSetRelative(true);
           break;
 
-        case 92: //M92 Steps per 
+        case 92: //M92 Steps per unit
           if(cmd_seen('X')) setParameter(P_STEPS_PER_MM, X_AXIS, cmd_float());
           if(cmd_seen('Y')) setParameter(P_STEPS_PER_MM, Y_AXIS, cmd_float());
           if(cmd_seen('Z')) setParameter(P_STEPS_PER_MM, Z_AXIS, cmd_float());
