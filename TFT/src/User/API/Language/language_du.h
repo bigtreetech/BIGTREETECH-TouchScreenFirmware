@@ -203,6 +203,7 @@
     #define DU_PRINT_ACCELERATION     "Afdruk Acceleratie"
     #define DU_RETRACT_ACCELERATION   "Retract Acceleratie"
     #define DU_TRAVEL_ACCELERATION    "Travel Acceleratie"
+    #define DU_JERK                   "Jerk"
     #define DU_BUMP_SENSITIVITY       "TMC bump sensitiviteit"
     #define DU_FWRETRACT              "FW Retraction"
     #define DU_FWRECOVER              "FW Retraction Recover"

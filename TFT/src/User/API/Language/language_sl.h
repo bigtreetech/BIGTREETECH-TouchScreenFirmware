@@ -203,6 +203,7 @@
     #define SL_PRINT_ACCELERATION     "Pospešek tiska"
     #define SL_RETRACT_ACCELERATION   "Pospešek privleka fil."
     #define SL_TRAVEL_ACCELERATION    "Pospešek pomika"
+    #define SL_JERK                   "Jerk"
     #define SL_BUMP_SENSITIVITY       "TMC občutljivost trka"
     #define SL_FWRETRACT              "FW Retraction"
     #define SL_FWRECOVER              "FW Retraction Recover"

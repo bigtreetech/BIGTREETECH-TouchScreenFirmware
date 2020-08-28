@@ -203,6 +203,7 @@
     #define DE_PRINT_ACCELERATION     "Print Acceleration"
     #define DE_RETRACT_ACCELERATION   "Retract Acceleration"
     #define DE_TRAVEL_ACCELERATION    "Travel Acceleration"
+    #define DE_JERK                   "Jerk"
     #define DE_BUMP_SENSITIVITY       "TMC bump sensitivity"
     #define DE_FWRETRACT              "FW Retraction"
     #define DE_FWRECOVER              "FW Retraction Recover"
