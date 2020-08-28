@@ -184,8 +184,16 @@
 #define TOOL_CHANGE      {"T0",   "T1",      "T2",      "T3",      "T4",      "T5"}
 #define EXTRUDER_ID      {"E0",   "E1",      "E2",      "E3",      "E4",      "E5"}
 
-#define FAN_MAX_PWM      {255,       255,       255,       255,       255,       255}
-#define FAN_DISPLAY_ID   {"F0",      "F1",      "F2",      "F3",      "F4",      "F5"}
+#define FAN_TYPE_F        0  // Default cooling fan
+#define FAN_TYPE_CTRL_S   1  // Controller FAN on Stepper/Bed On  (Check - Marlin M710)
+#define FAN_TYPE_CTRL_I   2  // Controller FAN on Idle            (Check - Marlin M710)
+#define FAN_TYPE_UNKNOWN  8  // Unknown / Not defined!
+
+#define FAN_MAX_PWM      {        255,             255,             255,             255,             255,             255,              255,             255 };
+#define FAN_DISPLAY_ID   {       "F0",            "F1",            "F2",            "F3",            "F4",            "F5",            "CtL",           "CtI" };
+#define FAN_CMD          {  "M106 P0",       "M106 P1",       "M106 P2",       "M106 P3",       "M106 P4",       "M106 P5",           "M710",          "M710" };
+#define FAN_TYPE         { FAN_TYPE_F,      FAN_TYPE_F,      FAN_TYPE_F,      FAN_TYPE_F,      FAN_TYPE_F,      FAN_TYPE_F,  FAN_TYPE_CTRL_S, FAN_TYPE_CTRL_I };
+
 #define FAN_CMD          {"M106 P0", "M106 P1", "M106 P2", "M106 P3", "M106 P4", "M106 P5" };
 
 #define SPEED_ID         {"Sp.", "Fr."}

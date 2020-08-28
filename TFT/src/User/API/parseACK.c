@@ -648,8 +648,24 @@ void parseACK(void)
       else if(ack_seen("M106 P"))
       {
         u8 i = ack_value();
-        if (ack_seen("S"))
+        if (ack_seen("S")) {
           fanSetSpeed(i, ack_value());
+        }
+      }
+    // parse controller fan
+      else if(ack_seen("M710"))
+      {
+        u8 i = 0;
+        if (ack_seen("S")) {
+          i = fanGetTypID(0,FAN_TYPE_CTRL_S); 
+          fanSetSpeed(i, ack_value());
+          fanSpeedQuerySetWait(false);
+        }
+        if (ack_seen("I")) {
+          i = fanGetTypID(0,FAN_TYPE_CTRL_I); 
+          fanSetSpeed(i, ack_value());
+          fanSpeedQuerySetWait(false);
+        }
       }
     // Parse pause message
       else if(!infoMachineSettings.promptSupport && ack_seen("paused for user"))

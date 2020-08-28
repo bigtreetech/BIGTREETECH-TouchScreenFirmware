@@ -183,8 +183,10 @@ void toggleTool(void)
     nextTime = OS_GetTimeMs() + update_time;
     drawTemperature();
 
+    // gcode querys must be call after drawTemperatur
     coordinateQuery();
     speedQuery();
+    if (infoSettings.fan_count > 1) fanSpeedQuery();
   }
 }
 

@@ -12,7 +12,7 @@
 #define MAX_EXT_COUNT         6
 #define MAX_HOTEND_COUNT      6
 #define MAX_HEATER_COUNT      (2 + MAX_HOTEND_COUNT) // chamber + bed + hotend
-#define MAX_FAN_COUNT         6
+#define MAX_FAN_COUNT         8
 
 #define AXIS_NUM              (TOTAL_AXIS - 1)
 #define SPEED_COUNT           3

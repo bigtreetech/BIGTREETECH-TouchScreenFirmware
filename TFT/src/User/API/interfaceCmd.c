@@ -497,16 +497,15 @@ void sendQueueCmd(void)
         case 106: //M106
         {
           uint8_t i = cmd_seen('P') ? cmd_value() : 0;
-          if(cmd_seen('S'))
-          {
+          if(cmd_seen('S') && fanIsType(i, FAN_TYPE_F) ) {
             fanSetSpeed(i, cmd_value());
+            fanSetSendWaiting(i, false);
           }
           else if (!cmd_seen('\n'))
           {
             char buf[12];
             sprintf(buf, "S%u\n", fanGetSpeed(i));
             strcat(infoCmd.queue[infoCmd.index_r].gcode,(const char*)buf);
-            fanSetSendWaiting(i, false);
           }
           break;
         }
@@ -514,7 +513,23 @@ void sendQueueCmd(void)
         case 107: //M107
         {
           uint8_t i = cmd_seen('P') ? cmd_value() : 0;
-          fanSetSpeed(i, 0);
+          if (fanIsType(i, FAN_TYPE_F)) fanSetSpeed(i, 0);
+          break;
+        }
+        
+        case 710: //M710 Controller Fan
+        {
+          u8 i = 0;
+          if(cmd_seen('S')) { 
+            i = fanGetTypID(i,FAN_TYPE_CTRL_S); 
+            fanSetSpeed(i, cmd_value());
+            fanSetSendWaiting(i, false);
+          }
+          if(cmd_seen('I')) { 
+            i = fanGetTypID(i=0,FAN_TYPE_CTRL_I); 
+            fanSetSpeed(i, cmd_value());
+            fanSetSendWaiting(i, false);
+          }
           break;
         }
 
