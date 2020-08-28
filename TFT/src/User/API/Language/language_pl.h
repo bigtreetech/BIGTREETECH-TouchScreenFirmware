@@ -203,6 +203,7 @@
     #define PL_PRINT_ACCELERATION     "Print Acceleration"
     #define PL_RETRACT_ACCELERATION   "Retract Acceleration"
     #define PL_TRAVEL_ACCELERATION    "Travel Acceleration"
+    #define PL_JERK                   "Jerk"
     #define PL_BUMP_SENSITIVITY       "TMC bump sensitivity"
     #define PL_FWRETRACT              "FW Retraction"
     #define PL_FWRECOVER              "FW Retraction Recover"

@@ -14,6 +14,7 @@ const LISTITEM parametertypes[P_ITEMSCOUNT] = {
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_MAXFEEDRATE,      LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_MAXACCELERATION,  LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_ACCELERATION,     LABEL_BACKGROUND},
+  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_JERK,             LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_PROBE_OFFSET,     LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_BUMP_SENSITIVITY, LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_FWRETRACT,        LABEL_BACKGROUND},
@@ -74,6 +75,12 @@ void menuShowParameter(void){
     {
     case P_ACCELERATION:
       parameter_menuitems.items[i].titlelabel = accel_disp_ID[i];
+      break;
+    case P_JERK:
+      setDynamicLabel(0, "X");
+      setDynamicLabel(1, "Y");
+      setDynamicLabel(2, "Z");
+      setDynamicLabel(3, "E");
       break;
     case P_FWRETRACT:
       parameter_menuitems.items[i].titlelabel = retract_disp_ID[i];
