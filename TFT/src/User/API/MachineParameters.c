@@ -11,7 +11,7 @@ const char *const parameter_Cmd[PARAMETERS_COUNT][STEPPER_COUNT] = {
   {"M203 X%.0f\n",  "M203 Y%.0f\n", "M203 Z%.0f\n", "M203 T0 E%.0f\n", "M203 T1 E%.0f\nM503 S0\n"}, //MaxFeedrate
   {"M201 X%.0f\n",  "M201 Y%.0f\n", "M201 Z%.0f\n", "M201 T0 E%.0f\n", "M201 T1 E%.0f\nM503 S0\n"}, //MaxAcceleration
   {"M204 P%.0f\n",  "M204 R%.0f\n", "M204 T%.0f\n",              NULL,                       NULL}, //Acceleration
-  {"M205 X%.2f\n",  "M205 Y%.2f\n", "M205 Z%.2f\n", "M205 E%.2f\n",                          NULL}, //Jerk
+  {"M205 X%.0f\n",  "M205 Y%.0f\n", "M205 Z%.2f\n", "M205 E%.2f\n",                          NULL}, //Jerk
   {"M851 X%.2f\n",  "M851 Y%.2f\n", "M851 Z%.2f\n",              NULL,                       NULL}, //Probe offset
   {"M914 X%.0f\n",  "M914 Y%.0f\n", "M914 Z%.0f\n",              NULL,                       NULL}, //bump Sensitivity
   {"M207 S%.2f\n",  "M207 W%.2f\n", "M207 F%.2f\n",    "M207 Z%.2f\n",                       NULL}, //FW retract
@@ -28,7 +28,7 @@ const VAL_TYPE parameter_val_type[PARAMETERS_COUNT][STEPPER_COUNT] = {
   {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,         VAL_TYPE_INT,         VAL_TYPE_INT},    //MaxFeedrate
   {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,         VAL_TYPE_INT,         VAL_TYPE_INT},    //MaxAcceleration
   {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,         VAL_TYPE_INT},                          //Acceleration
-  {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_FLOAT,       VAL_TYPE_FLOAT},                        //Jerk
+  {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_FLOAT,       VAL_TYPE_FLOAT},                        //Jerk
   {VAL_TYPE_NEG_FLOAT,  VAL_TYPE_NEG_FLOAT, VAL_TYPE_NEG_FLOAT},                                          //Probe offset
   {VAL_TYPE_NEG_INT,    VAL_TYPE_NEG_INT,   VAL_TYPE_NEG_INT},                                            //bump Sensitivity
   {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_INT,         VAL_TYPE_FLOAT},                        //FW retract
