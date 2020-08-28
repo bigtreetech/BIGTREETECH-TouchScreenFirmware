@@ -479,7 +479,7 @@ void sendQueueCmd(void)
           eSetRelative(true);
           break;
 
-        case 92: //M92 Steps per unit
+        case 92: //M92 Steps per 
           if(cmd_seen('X')) setParameter(P_STEPS_PER_MM, X_AXIS, cmd_float());
           if(cmd_seen('Y')) setParameter(P_STEPS_PER_MM, Y_AXIS, cmd_float());
           if(cmd_seen('Z')) setParameter(P_STEPS_PER_MM, Z_AXIS, cmd_float());
@@ -659,6 +659,12 @@ void sendQueueCmd(void)
           if(cmd_seen('P')) setParameter(P_ACCELERATION,0,cmd_float());
           if(cmd_seen('R')) setParameter(P_ACCELERATION,1,cmd_float());
           if(cmd_seen('T')) setParameter(P_ACCELERATION,2,cmd_float());
+          break;
+        case 205: //M205 - Set Advanced Settings
+          if(cmd_seen('X')) setParameter(P_JERK, X_AXIS, cmd_float());
+          if(cmd_seen('Y')) setParameter(P_JERK, Y_AXIS, cmd_float());
+          if(cmd_seen('Z')) setParameter(P_JERK, Z_AXIS, cmd_float());
+          if(cmd_seen('E')) setParameter(P_JERK, E_AXIS, cmd_float());
           break;
         case 207: //M207 FW Retract
           if(cmd_seen('S')) setParameter(P_FWRETRACT,0,cmd_float());

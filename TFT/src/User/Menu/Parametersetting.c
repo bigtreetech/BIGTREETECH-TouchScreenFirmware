@@ -77,10 +77,10 @@ void menuShowParameter(void){
       parameter_menuitems.items[i].titlelabel = accel_disp_ID[i];
       break;
     case P_JERK:
-      setDynamicLabel(0, "X");
-      setDynamicLabel(1, "Y");
-      setDynamicLabel(2, "Z");
-      setDynamicLabel(3, "E");
+      setDynamicLabel(X_AXIS, "X");
+      setDynamicLabel(Y_AXIS, "Y");
+      setDynamicLabel(Z_AXIS, "Z");
+      setDynamicLabel(E_AXIS, "E");
       break;
     case P_FWRETRACT:
       parameter_menuitems.items[i].titlelabel = retract_disp_ID[i];
