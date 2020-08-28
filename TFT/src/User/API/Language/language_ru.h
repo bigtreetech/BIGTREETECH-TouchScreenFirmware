@@ -225,6 +225,7 @@
     #define RU_SETTING_SAVE           "Сохранить настройки"
     #define RU_SETTING_RESET          "Сброс настроек"
     #define RU_SETTING_RESTORE        "Восстановление настроек"
+    #define RU_EEPROM_SETTINGS        "EEPROM"
     #define RU_EEPROM_SAVE_INFO       "Сохранить настройки\nпринтера в EEPROM?"
     #define RU_EEPROM_RESTORE_INFO    "Загрузить настройки\nиз EEPROM?"
     #define RU_EEPROM_RESET_INFO      "Сбрость EEPROM настройки\nпринтера на начальные?"
@@ -260,5 +261,6 @@
     #define RU_TUNE_EXT_OLD_ESTEP     "Старые E-шаги: %0.2f"
     #define RU_TUNE_EXT_NEW_ESTEP     "Новые E-шаги: %0.2f"
     #define RU_CONNECTION_SETTINGS    "Соединение"
+    #define RU_OFFSET_TOOL            "Смещение 2-го сопла"
 
 #endif

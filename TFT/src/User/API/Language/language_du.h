@@ -5,7 +5,7 @@
     #define DU_HEAT                   "Verwarm"
     #define DU_MOVE                   "Verplaats"
     #define DU_HOME                   "Thuis"
-    #define DU_DISABLE_STEPPERS       "Steppers"
+    #define DU_DISABLE_STEPPERS       "Disarm All"
     #define DU_PRINT                  "Print"
     #define DU_EXTRUDE                "Extrudeer"
     #define DU_FAN                    "Ventilator"
@@ -225,6 +225,7 @@
     #define DU_SETTING_SAVE           "Save settings"
     #define DU_SETTING_RESET          "Reset instellingen"
     #define DU_SETTING_RESTORE        "Herstel instellingen"
+    #define DU_EEPROM_SETTINGS        "EEPROM"
     #define DU_EEPROM_SAVE_INFO       "Sla printer instellingen\nop naar EEPROM?"
     #define DU_EEPROM_RESTORE_INFO    "Herlaad instellingen van \nde EEPROM?"
     #define DU_EEPROM_RESET_INFO      "Reset EEPROM naar de standaard printer instellingen?"
@@ -260,5 +261,6 @@
     #define DU_TUNE_EXT_OLD_ESTEP     "Old e-steps: %0.2f"
     #define DU_TUNE_EXT_NEW_ESTEP     "New e-steps: %0.2f"
     #define DU_CONNECTION_SETTINGS    "Connecties"
+    #define DU_OFFSET_TOOL            "Offset 2nd Nozzle"
 
 #endif

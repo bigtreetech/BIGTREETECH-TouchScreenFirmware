@@ -193,6 +193,7 @@ void sendEncoder(uint8_t num)
       break;
     case 1:
       GPIO_SetLevel(LCD_BTN_PIN, 0);
+      Delay_us(LCD_ENCODER_DELAY);
       GPIO_SetLevel(LCD_BTN_PIN, 1);
       break;
     case 2:

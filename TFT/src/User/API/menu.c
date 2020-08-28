@@ -1,6 +1,8 @@
 #include "menu.h"
 #include "includes.h"
 #include "list_item.h"
+#include "Notification.h"
+
 
 // exhibitRect is 2 ICON Space in the Upper Row and 2 Center Coloum.
 const GUI_RECT exhibitRect = {
@@ -42,9 +44,6 @@ const GUI_RECT rect_of_keyListView[ITEM_PER_PAGE]={
   {2*START_X + LISTITEM_WIDTH,  2*LIST_ICON_HEIGHT+2*LISTICON_SPACE_Y+ICON_START_Y,  2*START_X + LISTITEM_WIDTH + 1*LIST_ICON_WIDTH,  3*LIST_ICON_HEIGHT+2*LISTICON_SPACE_Y+ICON_START_Y},
 };
 
-//area for toast notification
-const GUI_RECT toastRect = {START_X + TITLE_END_Y - (TOAST_Y_PAD * 2), TOAST_Y_PAD, LCD_WIDTH - START_X, TITLE_END_Y - TOAST_Y_PAD};
-const GUI_RECT toastIconRect = {START_X, TOAST_Y_PAD, START_X + TITLE_END_Y - (TOAST_Y_PAD * 2), TITLE_END_Y - TOAST_Y_PAD};
 
 //Clean up the gaps outside icons
 void menuClearGaps(void)
@@ -79,136 +78,6 @@ static const LISTITEMS *curListItems = NULL;   //current listmenu
 
 static MENU_TYPE menuType = MENU_TYPE_ICON;
 
-//toast notification variables
-static TOAST toastlist[TOAST_MSG_COUNT];
-
-//char toastMsg[TOAST_MSG_COUNT][TOAST_MSG_LENGTH];
-//bool toastNew[TOAST_MSG_COUNT]; //store status on messages (new or old)
-static uint8_t nextToastIndex = 0;   //next index to store new message
-static uint8_t curToastDisplay = 0;  // current toast notification being displayed
-static uint32_t nextToastTime = 0;   //time to change to next notification
-
-bool _toastRunning = false;
-
-//Add new message to toast notification queue
-void addToast(DIALOG_TYPE style, char * text)
-{
-  #ifdef LCD_LED_PWM_CHANNEL
-    if (infoSettings.lcd_idle_timer != LCD_DIM_OFF)
-    {
-      //The LCD dim function is activated. First check if it's dimmed
-      if (lcd_dim.dimmed)
-      {
-        lcd_dim.dimmed = false;
-        Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
-      }
-      //Set a new idle_ms time
-      lcd_dim.idle_ms = OS_GetTimeMs();
-    }
-  
-  #endif
-
-  TOAST t;
-  strncpy(t.text, text, TOAST_MSG_LENGTH);
-  t.text[TOAST_MSG_LENGTH - 1] = 0; //ensure string ends with null terminator
-  t.isNew = true;
-  toastlist[nextToastIndex] = t;
-  nextToastIndex = (nextToastIndex + 1) % TOAST_MSG_COUNT;
-}
-
-//check if notification is currently displayed
-bool toastRunning(void)
-{
-  return _toastRunning;
-}
-
-//check if any new notification is available
-bool toastAvailable(void)
-{
-  for (int i = 0; i < TOAST_MSG_COUNT; i++)
-  {
-      if(toastlist[i].isNew == true)
-       return true;
-  }
-  return false;
-}
-
-//show next notification
-void drawToast(bool redraw)
-{
-  if(!redraw)
-    curToastDisplay = (curToastDisplay + 1) % TOAST_MSG_COUNT;
-
-  if(toastlist[curToastDisplay].isNew == true || redraw)
-  {
-    //Set toast notification running status
-    _toastRunning = true;
-
-    // Draw icon
-    uint8_t *icon;
-    uint8_t cursound;
-    if (toastlist[curToastDisplay].style == DIALOG_TYPE_ERROR)
-    {
-      GUI_SetColor(MAT_RED);
-      icon = IconCharSelect(ICONCHAR_ERROR);
-      cursound = sound_error;
-    }
-    else if (toastlist[curToastDisplay].style == DIALOG_TYPE_SUCCESS)
-    {
-      GUI_SetColor(MAT_GREEN);
-      icon = IconCharSelect(ICONCHAR_OK_ROUND);
-      cursound = sound_success;
-    }
-    else
-    {
-      GUI_SetColor(MAT_BLUE);
-      icon = IconCharSelect(ICONCHAR_INFO);
-      cursound = sound_toast;
-    }
-
-    if (!redraw)
-      BUZZER_PLAY(cursound);
-
-    GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-    GUI_FillPrect(&toastIconRect);
-    GUI_SetColor(WHITE);
-    GUI_DispStringInPrect(&toastIconRect, icon);
-
-    //draw text
-    GUI_SetColor(MAT_LOWWHITE);
-    GUI_FillPrect(&toastRect);
-    GUI_SetColor(DARKGRAY);
-    GUI_DispStringInPrect(&toastRect, (u8 *)toastlist[curToastDisplay].text);
-
-    //set current toast notification as old/completed
-    toastlist[curToastDisplay].isNew = false;
-
-    //set new timer if notification is new
-    if(!redraw)
-      nextToastTime = OS_GetTimeMs() + TOAST_DURATION;
-
-    GUI_RestoreColorDefault();
-  }
-}
-
-//check and control toast notification display
-void loopToast(void)
-{
-  if (OS_GetTimeMs() > nextToastTime)
-  {
-    if (toastAvailable())
-    {
-      drawToast(false);
-    }
-    else if(_toastRunning == true)
-    {
-    _toastRunning = false;
-    GUI_ClearPrect(&toastIconRect);
-    GUI_ClearPrect(&toastRect);
-      menuReDrawCurTitle();
-    }
-  }
-}
 
 uint8_t *labelGetAddress(const LABEL *label)
 {
@@ -291,7 +160,7 @@ void reminderSetUnConnected(void)
 
 void reminderMessage(int16_t inf, SYS_STATUS status)
 {
-  if(_toastRunning)
+  if(toastRunning())
     return;
   reminder.inf = inf;
   GUI_SetColor(infoSettings.reminder_color);
@@ -304,21 +173,9 @@ void reminderMessage(int16_t inf, SYS_STATUS status)
 
 void volumeReminderMessage(int16_t inf, SYS_STATUS status)
 {
-  #ifdef LCD_LED_PWM_CHANNEL
-    if (infoSettings.lcd_idle_timer != LCD_DIM_OFF)
-    {
-      //The LCD dim function is activated. First check if it's dimmed
-      if (lcd_dim.dimmed)
-      {
-        lcd_dim.dimmed = false;
-        Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
-      }
-      //Set a new idle_ms time
-      lcd_dim.idle_ms = OS_GetTimeMs();
-    }
-  #endif
+  wakeLCD();
 
-  if(_toastRunning)
+  if(toastRunning())
     return;
   volumeReminder.inf = inf;
   GUI_SetColor(infoSettings.sd_reminder_color);
@@ -410,7 +267,7 @@ void loopBusySignClear(void)
 
 void menuDrawTitle(const uint8_t *content) //(const MENUITEMS * menuItems)
 {
-  if (_toastRunning)
+  if (toastRunning())
   {
     drawToast(true);
     return;
@@ -634,7 +491,7 @@ void loopBackEnd(void)
   loopBuzzer();
 #endif
 
-  if(infoMachineSettings.onboard_sd_support == ENABLED && infoMachineSettings.autoReportSDStatus == DISABLED)
+  if(infoMachineSettings.onboard_sd_support == ENABLED)
   {
     loopCheckPrinting(); //Check if there is a SD or USB print running.
   }
@@ -682,6 +539,8 @@ void loopFrontEnd(void)
 #ifdef FIL_RUNOUT_PIN
   loopFrontEndFILRunoutDetect();
 #endif
+
+  loopPopup();
 }
 
 void loopProcess(void)

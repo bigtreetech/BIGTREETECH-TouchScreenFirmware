@@ -64,7 +64,7 @@ void menuAutoLeveling(void)
       case KEY_ICON_3:
         {
           char tempstr[30];
-          sprintf(tempstr, "%Min:%d | Max:%d", Z_FADE_MIN_VALUE, Z_FADE_MAX_VALUE);
+          sprintf(tempstr, "%Min:%.2f | Max:%.2f", Z_FADE_MIN_VALUE, Z_FADE_MAX_VALUE);
           float val = numPadFloat((u8 *)tempstr, getParameter(P_ABL_STATE, 1), 0.0f, false);
           storeCmd("M420 Z%.2f\n", NOBEYOND(Z_FADE_MIN_VALUE, val, Z_FADE_MAX_VALUE));
           menuDrawPage(&autoLevelingItems);
@@ -110,7 +110,7 @@ MENUITEMS manualLevelingItems = {
    {ICON_POINT_4,                 LABEL_POINT_4},
    {ICON_POINT_5,                 LABEL_POINT_5},
    {ICON_LEVEL_EDGE_DISTANCE,     LABEL_DISTANCE},
-   {ICON_XY_UNLOCK,               LABEL_XY_UNLOCK},
+   {ICON_DISABLE_STEPPERS,        LABEL_XY_UNLOCK},
    {ICON_BACK,                    LABEL_BACK},}
 };
 
