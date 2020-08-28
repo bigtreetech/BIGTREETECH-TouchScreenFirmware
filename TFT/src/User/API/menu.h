@@ -111,7 +111,6 @@ typedef struct
   uint8_t         h_align; //left, right or center of pos point
   uint8_t         v_align; //left, right or center of pos point
   uint16_t        fn_color;
-  uint16_t        bk_color;
   GUI_TEXT_MODE   text_mode;
 }LIVE_DATA;
 
