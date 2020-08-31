@@ -175,9 +175,9 @@ void toggleTool(void)
     {
       current_tool = (current_tool+1) % infoSettings.hotend_count;
     }
-    if (infoSettings.fan_count > 1)
+    if ((infoSettings.fan_count + infoSettings.fan_ctrl_count) > 1)
     {
-      current_fan = (current_fan + 1) % infoSettings.fan_count;
+      current_fan = (current_fan + 1) % (infoSettings.fan_count + infoSettings.fan_ctrl_count);
     }
     current_speedID = (current_speedID + 1) % 2;
     nextTime = OS_GetTimeMs() + update_time;
@@ -186,7 +186,7 @@ void toggleTool(void)
     // gcode querys must be call after drawTemperatur
     coordinateQuery();
     speedQuery();
-    if (infoSettings.fan_count > 1) fanSpeedQuery();
+    fanSpeedQuery();
   }
 }
 
