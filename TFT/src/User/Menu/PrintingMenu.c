@@ -265,6 +265,7 @@ void toggleinfo(void)
     nextTime = OS_GetTimeMs() + toggle_time;
     rapid_serial_loop();   //perform backend printing loop before drawing to avoid printer idling
     reDrawSpeed(SPD_ICON_POS);
+    speedQuery();
   }
 }
 
