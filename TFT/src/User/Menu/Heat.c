@@ -106,7 +106,7 @@ void menuHeat(void)
 
 			menuDrawPage(&heatItems);
 			showTemperature(c_heater);
-			}
+		}
 		break;
 
       case KEY_ICON_3:
