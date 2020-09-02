@@ -1,6 +1,7 @@
 #include "Heat.h"
 #include "includes.h"
 #include "Numpad.h"
+#include "Settings.h"
 
 //1 title, ITEM_PER_PAGE items (icon + label)
 MENUITEMS heatItems = {
@@ -81,7 +82,7 @@ void menuHeat(void)
     KEY_VALUES key_num = menuKeyGetValue();
     int16_t actCurrent = heatGetCurrentTemp(c_heater);
     int16_t actTarget = heatGetTargetTemp(c_heater);
-	int32_t val = heatGetTargetTemp(c_heater);
+	
     switch(key_num)
     {
       case KEY_ICON_0:
@@ -90,23 +91,22 @@ void menuHeat(void)
 
 	  case KEY_ICON_1:
 	  case KEY_ICON_2:
-	    // Get the touch of the user from either icon 1 or 2 which is under the temperature
-	  	val = numPadInt((u8*)LABEL_HEAT, actTarget,0, false);
-		// If inputed temp is greater that the max tool temp
-		if (val > MAX_TOOL_TEMP)
-		{
-			// Set the tool temp to max
-			val = MAX_TOOL_TEMP;
-		}
+	    {
+			int32_t val = heatGetTargetTemp(c_heater);
+			// Get the touch of the user from either icon 1 or 2 which is under the temperature			
+			char tempstr[30];
+			sprintf(tempstr, "Min:0 | Max:%i", infoSettings.max_temp[c_heater] );
+			val = numPadInt((u8 *)tempstr, actTarget,0, false);
+			val = NOBEYOND(0,val,infoSettings.max_temp[c_heater]);
+			// If value is different than target change it.
+			if (val != actTarget)
+			{
+				heatSetTargetTemp(c_heater, val);
+			}
 
-		// If value is different than target change it.
-		if (val != actTarget)
-		{
-			heatSetTargetTemp(c_heater, val);
-		}
-
-		menuDrawPage(&heatItems);
-		showTemperature(c_heater);
+			menuDrawPage(&heatItems);
+			showTemperature(c_heater);
+			}
 		break;
 
       case KEY_ICON_3:
