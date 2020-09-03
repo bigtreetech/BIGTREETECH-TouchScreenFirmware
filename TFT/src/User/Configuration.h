@@ -1,5 +1,5 @@
-#ifndef _CONFIGRATION_H_
-#define _CONFIGRATION_H_
+#ifndef _CONFIGURATION_H_
+#define _CONFIGURATION_H_
 #define CONFIG_VERSION 20200810
 //===========================================================================
 //============================= General Settings ============================
