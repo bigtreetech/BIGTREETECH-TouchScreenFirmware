@@ -1,8 +1,11 @@
 #ifndef _TOUCH_PROCESS_H_
 #define _TOUCH_PROCESS_H_
 
-#include "includes.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
 
+#include "includes.h"
 
 #define CMD_RDX 0xD0
 #define CMD_RDY 0x90
@@ -29,5 +32,9 @@ void loopTouchScreen(void);
 
 extern void (*TSC_ReDrawIcon)(u8 positon, u8 is_press);
 extern void TS_Get_Coordinates(u16 *x, u16 *y);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

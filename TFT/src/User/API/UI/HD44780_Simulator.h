@@ -1,7 +1,11 @@
 #ifndef _HD44780_SIMULATOR_H_
 #define _HD44780_SIMULATOR_H_
 
-#include "stdint.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <stdint.h>
 #include "../../Configuration.h"
 
 #define XROWS 20
@@ -168,5 +172,9 @@ typedef struct {
 }HD44780_REG; // Extended Instruction
 
 void HD44780_ParseRecv(uint8_t val);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

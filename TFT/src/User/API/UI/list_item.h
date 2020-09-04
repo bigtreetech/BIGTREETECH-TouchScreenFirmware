@@ -3,8 +3,12 @@
 #ifndef _LIST_ITEM_H_
 #define _LIST_ITEM_H_
 
-#include "stdint.h"
-#include "stdbool.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <stdint.h>
+#include <stdbool.h>
 #include "GUI.h"
 #include "menu.h"
 
@@ -61,4 +65,9 @@ void draw_itemtitle(GUI_POINT pos,LABEL label, uint8_t position, int textarea_wi
 void ListItem_DisplayToggle(uint16_t sx, uint16_t sy, uint8_t iconchar_state);
 void ListItem_DisplayCustomValue(const GUI_RECT* rect,LABEL value,int i);
 GUI_POINT getTextStartPoint(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey, ICON_POS pos, const char * textchar);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif

@@ -1,5 +1,9 @@
 #include "FanControl.h"
 
+char*   fanID[MAX_FAN_COUNT];
+char*   fanCmd[MAX_FAN_COUNT];
+uint8_t fanType[MAX_FAN_COUNT];
+
 static uint8_t fanSpeed[MAX_FAN_COUNT] = {0};
 static uint8_t lastFanSpeed[MAX_FAN_COUNT] = {0};
 

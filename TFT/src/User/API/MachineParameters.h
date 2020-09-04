@@ -1,5 +1,10 @@
 #ifndef _MACHINEPARAMETERS_H_
 #define _MACHINEPARAMETERS_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "menu.h"
 #include "coordinate.h"
 
@@ -100,5 +105,9 @@ void restoreEepromSettings(void);
 
 //reset settings and eeprom to default values
 void resetEepromSettings(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

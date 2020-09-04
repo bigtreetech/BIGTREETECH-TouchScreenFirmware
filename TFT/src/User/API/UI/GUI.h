@@ -1,7 +1,11 @@
 #ifndef _GUI_H_
 #define _GUI_H_
 
-#include "stdint.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <stdint.h>
 #include "utf8_decode.h"
 
 enum
@@ -159,5 +163,9 @@ typedef struct
 }WINDOW;
 
 void GUI_DrawWindow(const WINDOW *window, const uint8_t *title, const uint8_t *inf, bool actionBar);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
