@@ -203,6 +203,7 @@
     #define TR_PRINT_ACCELERATION     "Baskı İvmelenmesi"
     #define TR_RETRACT_ACCELERATION   "Geriçekme İvmelenmesi"
     #define TR_TRAVEL_ACCELERATION    "Gezinti İvmelenmesi"
+    #define TR_JERK                   "Jerk"
     #define TR_BUMP_SENSITIVITY       "TMC çarpma hassasiyeti"
     #define TR_FWRETRACT              "FW Retraction"
     #define TR_FWRECOVER              "FW Retraction Recover"

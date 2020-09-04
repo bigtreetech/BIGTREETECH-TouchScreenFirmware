@@ -203,6 +203,7 @@
     #define RU_PRINT_ACCELERATION     "Печати"
     #define RU_RETRACT_ACCELERATION   "Ретракта"
     #define RU_TRAVEL_ACCELERATION    "Перемещения"
+    #define RU_JERK                   "Jerk"
     #define RU_BUMP_SENSITIVITY       "TMC чувствительность удара"
     #define RU_FWRETRACT              "M207 ретракт"
     #define RU_FWRECOVER              "M208 восстановление ретракта"

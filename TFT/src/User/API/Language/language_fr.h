@@ -203,6 +203,7 @@
     #define FR_PRINT_ACCELERATION     "Impression"
     #define FR_RETRACT_ACCELERATION   "Rétraction"
     #define FR_TRAVEL_ACCELERATION    "Déplacements"
+    #define FR_JERK                   "Jerk"
     #define FR_BUMP_SENSITIVITY       "Sensibilité TMC"
     #define FR_FWRETRACT              "Rétraction FW"
     #define FR_FWRECOVER              "Récupération FW"

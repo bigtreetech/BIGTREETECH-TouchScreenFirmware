@@ -203,6 +203,7 @@
     #define TC_PRINT_ACCELERATION     "列印加速度"
     #define TC_RETRACT_ACCELERATION   "回抽加速度"
     #define TC_TRAVEL_ACCELERATION    "空跑加速度"
+    #define TC_JERK                   "Jerk"
     #define TC_BUMP_SENSITIVITY       "堵料檢測靈敏度"
     #define TC_FWRETRACT              "FW Retraction"
     #define TC_FWRECOVER              "FW Retraction Recover"

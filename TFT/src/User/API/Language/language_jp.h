@@ -203,6 +203,7 @@
     #define JP_PRINT_ACCELERATION     "印刷加速度"
     #define JP_RETRACT_ACCELERATION   "引き戻し加速度"
     #define JP_TRAVEL_ACCELERATION    "空振り加速度"
+    #define JP_JERK                   "Jerk"
     #define JP_BUMP_SENSITIVITY       "TMC バンプ感度"
     #define JP_FWRETRACT              "FW Retraction"
     #define JP_FWRECOVER              "FW Retraction Recover"

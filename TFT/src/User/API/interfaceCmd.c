@@ -675,21 +675,27 @@ void sendQueueCmd(void)
           if(cmd_seen('E')) setParameter(P_MAX_FEED_RATE, E_AXIS, cmd_float());
           break;
         case 204: //M204 Acceleration (units/s2)
-          if(cmd_seen('P')) setParameter(P_ACCELERATION,0,cmd_float());
-          if(cmd_seen('R')) setParameter(P_ACCELERATION,1,cmd_float());
-          if(cmd_seen('T')) setParameter(P_ACCELERATION,2,cmd_float());
+          if(cmd_seen('P')) setParameter(P_ACCELERATION, 0, cmd_float());
+          if(cmd_seen('R')) setParameter(P_ACCELERATION, 1, cmd_float());
+          if(cmd_seen('T')) setParameter(P_ACCELERATION, 2, cmd_float());
+          break;
+        case 205: //M205 - Set Advanced Settings
+          if(cmd_seen('X')) setParameter(P_JERK, X_AXIS, cmd_float());
+          if(cmd_seen('Y')) setParameter(P_JERK, Y_AXIS, cmd_float());
+          if(cmd_seen('Z')) setParameter(P_JERK, Z_AXIS, cmd_float());
+          if(cmd_seen('E')) setParameter(P_JERK, E_AXIS, cmd_float());
           break;
         case 207: //M207 FW Retract
-          if(cmd_seen('S')) setParameter(P_FWRETRACT,0,cmd_float());
-          if(cmd_seen('W')) setParameter(P_FWRETRACT,1,cmd_float());
-          if(cmd_seen('F')) setParameter(P_FWRETRACT,2,cmd_float());
-          if(cmd_seen('Z')) setParameter(P_FWRETRACT,3,cmd_float());
+          if(cmd_seen('S')) setParameter(P_FWRETRACT, 0, cmd_float());
+          if(cmd_seen('W')) setParameter(P_FWRETRACT, 1, cmd_float());
+          if(cmd_seen('F')) setParameter(P_FWRETRACT, 2, cmd_float());
+          if(cmd_seen('Z')) setParameter(P_FWRETRACT, 3, cmd_float());
           break;
         case 208: //M208 FW Retract recover
-          if(cmd_seen('S')) setParameter(P_FWRECOVER,0,cmd_float());
-          if(cmd_seen('W')) setParameter(P_FWRECOVER,1,cmd_float());
-          if(cmd_seen('F')) setParameter(P_FWRECOVER,2,cmd_float());
-          if(cmd_seen('R')) setParameter(P_FWRECOVER,3,cmd_float());
+          if(cmd_seen('S')) setParameter(P_FWRECOVER, 0, cmd_float());
+          if(cmd_seen('W')) setParameter(P_FWRECOVER, 1, cmd_float());
+          if(cmd_seen('F')) setParameter(P_FWRECOVER, 2, cmd_float());
+          if(cmd_seen('R')) setParameter(P_FWRECOVER, 3, cmd_float());
           break;
         case 220: //M220
           if(cmd_seen('S'))

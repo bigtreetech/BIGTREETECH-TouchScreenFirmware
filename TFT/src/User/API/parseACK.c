@@ -461,6 +461,13 @@ void parseACK(void)
         if(ack_seen("R")) setParameter(P_ACCELERATION, 1, ack_value());
         if(ack_seen("T")) setParameter(P_ACCELERATION, 2, ack_value());
       }
+    //parse and store jerk values
+      else if(ack_seen("M205")){
+        if(ack_seen("X")) setParameter(P_JERK, X_STEPPER, ack_value());
+        if(ack_seen("Y")) setParameter(P_JERK, Y_STEPPER, ack_value());
+        if(ack_seen("Z")) setParameter(P_JERK, Z_STEPPER, ack_value());
+        if(ack_seen("E")) setParameter(P_JERK, E_STEPPER, ack_value());
+      }
     //parse and store FW retraction values
       else if(ack_seen("M207 S")){
                           setParameter(P_FWRETRACT, 0, ack_value());

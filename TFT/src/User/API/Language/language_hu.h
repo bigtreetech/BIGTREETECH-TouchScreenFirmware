@@ -203,6 +203,7 @@
     #define HU_PRINT_ACCELERATION     "Nyomtatás Gyorsulás"
     #define HU_RETRACT_ACCELERATION   "Adagoló Gyorsulása"
     #define HU_TRAVEL_ACCELERATION    "Utazási Gyorsulás"
+    #define HU_JERK                   "Jerk"
     #define HU_BUMP_SENSITIVITY       "TMC ütközés érzékenység"
     #define HU_FWRETRACT              "FW Visszahúzás"
     #define HU_FWRECOVER              "FW Visszahúzás helyreáll."

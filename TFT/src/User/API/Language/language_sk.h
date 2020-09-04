@@ -203,6 +203,7 @@
     #define SK_PRINT_ACCELERATION     "Akcelerácia pri tlači"
     #define SK_RETRACT_ACCELERATION   "Akcelerácia retrakcie"
     #define SK_TRAVEL_ACCELERATION    "Akcelerácia presunu"
+    #define SK_JERK                   "Jerk"
     #define SK_BUMP_SENSITIVITY       "TMC bump citlivosť"
     #define SK_FWRETRACT              "FW Retraction"
     #define SK_FWRECOVER              "FW Retraction Recover"

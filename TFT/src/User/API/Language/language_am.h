@@ -203,6 +203,7 @@
     #define AM_PRINT_ACCELERATION     "Print Acceleration"
     #define AM_RETRACT_ACCELERATION   "Retract Acceleration"
     #define AM_TRAVEL_ACCELERATION    "Travel Acceleration"
+    #define AM_JERK                   "Jerk"
     #define AM_BUMP_SENSITIVITY       "TMC bump sensitivity"
     #define AM_FWRETRACT              "FW Retraction"
     #define AM_FWRECOVER              "FW Retraction Recover"
