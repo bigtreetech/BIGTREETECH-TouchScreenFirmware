@@ -48,7 +48,7 @@ void menuFan(void)
 
   uint8_t lastFan = fanGetSpeed(curIndex);
 
-  if (infoSettings.fan_count > 1)
+  if ((infoSettings.fan_count + infoSettings.fan_ctrl_count) > 1)
     fanItems.items[KEY_ICON_4] = itemFan[0];
   else
     fanItems.items[KEY_ICON_4] = itemFan[1];
@@ -92,9 +92,9 @@ void menuFan(void)
       break;
 
     case KEY_ICON_4:
-      if (infoSettings.fan_count > 1)
+      if ((infoSettings.fan_count + infoSettings.fan_ctrl_count) > 1)
       {
-        curIndex = (curIndex + 1) % infoSettings.fan_count;
+        curIndex = (curIndex + 1) % (infoSettings.fan_count + infoSettings.fan_ctrl_count);
         fanSpeedReDraw(false);
       }
       else

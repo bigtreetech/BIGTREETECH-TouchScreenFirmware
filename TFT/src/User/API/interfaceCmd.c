@@ -35,11 +35,13 @@ static float cmd_float(void)
   return (strtod(&infoCmd.queue[infoCmd.index_r].gcode[cmd_index], NULL));
 }
 
+#if defined(SERIAL_PORT_2) || defined(BUZZER_PIN)
 //check if 'string' start with 'search'
 bool static startsWith(TCHAR *search, TCHAR *string)
 {
   return (strstr(string, search) - string == cmd_index) ? true : false;
 }
+#endif
 
 // Common store cmd
 void commonStoreCmd(GCODE_QUEUE *pQueue, const char* format, va_list va)
@@ -438,6 +440,8 @@ void sendQueueCmd(void)
               Serial_Puts(SERIAL_PORT_2, buf);
               sprintf(buf, "Cap:FAN_NUM:%d\n", infoSettings.fan_count);
               Serial_Puts(SERIAL_PORT_2, buf);
+              sprintf(buf, "Cap:FAN_CTRL_NUM:%d\n", infoSettings.fan_ctrl_count);
+              Serial_Puts(SERIAL_PORT_2, buf);
               Serial_Puts(SERIAL_PORT_2, "ok\n");
               purgeLastCmd();
               return;
@@ -497,16 +501,15 @@ void sendQueueCmd(void)
         case 106: //M106
         {
           uint8_t i = cmd_seen('P') ? cmd_value() : 0;
-          if(cmd_seen('S'))
-          {
+          if(cmd_seen('S') && fanIsType(i, FAN_TYPE_F) ) {
             fanSetSpeed(i, cmd_value());
+            fanSetSendWaiting(i, false);
           }
           else if (!cmd_seen('\n'))
           {
             char buf[12];
             sprintf(buf, "S%u\n", fanGetSpeed(i));
             strcat(infoCmd.queue[infoCmd.index_r].gcode,(const char*)buf);
-            fanSetSendWaiting(i, false);
           }
           break;
         }
@@ -514,7 +517,23 @@ void sendQueueCmd(void)
         case 107: //M107
         {
           uint8_t i = cmd_seen('P') ? cmd_value() : 0;
-          fanSetSpeed(i, 0);
+          if (fanIsType(i, FAN_TYPE_F)) fanSetSpeed(i, 0);
+          break;
+        }
+        
+        case 710: //M710 Controller Fan
+        {
+          u8 i = 0;
+          if(cmd_seen('S')) { 
+            i = fanGetTypID(i,FAN_TYPE_CTRL_S); 
+            fanSetSpeed(i, cmd_value());
+            fanSetSendWaiting(i, false);
+          }
+          if(cmd_seen('I')) { 
+            i = fanGetTypID(i=0,FAN_TYPE_CTRL_I); 
+            fanSetSpeed(i, cmd_value());
+            fanSetSendWaiting(i, false);
+          }
           break;
         }
 
