@@ -1,6 +1,10 @@
 #ifndef _POPUP_H_
 #define _POPUP_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "GUI.h"
 #include "variants.h"
 
@@ -17,5 +21,9 @@ void popupDrawPage(DIALOG_TYPE type, BUTTON *btn, const uint8_t *title, const ui
 void popupReminder(DIALOG_TYPE type, u8* title, u8* msg);
 void showDialog(DIALOG_TYPE type, u8 * title, u8 * msg, u8 *ok_txt, u8* cancel_txt, void (*ok_action)(), void (*cancel_action)(), void (*loop_action)());
 void loopPopup(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

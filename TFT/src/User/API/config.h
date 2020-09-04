@@ -1,8 +1,12 @@
 #ifndef _CONFIG_H_
 #define _CONFIG_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <stdbool.h>
 #include "variants.h"
-#include "stdbool.h"
 #include "includes.h"
 #include "ff.h"
 
@@ -205,4 +209,9 @@ enum
 
   CONFIG_COUNT,
 };
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif

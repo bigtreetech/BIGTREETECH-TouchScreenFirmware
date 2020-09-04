@@ -1,7 +1,11 @@
 #ifndef _SETTINGS_H_
 #define _SETTINGS_H_
 
-#include "stdint.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <stdint.h>
 #include "coordinate.h"
 #include "Configuration.h"
 
@@ -189,7 +193,8 @@ void infoSettingsReset(void);
 void setupMachine(void);
 float flashUsedPercentage(void);
 
-
-
+#ifdef __cplusplus
+}
+#endif
 
 #endif

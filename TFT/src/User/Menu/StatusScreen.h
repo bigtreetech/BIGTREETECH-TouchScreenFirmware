@@ -1,5 +1,10 @@
 #ifndef _STATUSSCREEN_H_
 #define _STATUSSCREEN_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "includes.h"
 
 //Colors for drawing the icons
@@ -28,5 +33,9 @@ void drawStatusScreenMsg(void);
 float getAxisLocation(uint8_t n);
 void gantry_dec(int n, float val);
 void gantry_inc(int n, float val);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

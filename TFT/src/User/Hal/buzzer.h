@@ -1,7 +1,11 @@
 #ifndef _BUZZER_H_
 #define _BUZZER_H_
 
-#include "stdint.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <stdint.h>
 
 #define BUZZER_CACHE_SIZE 5
 typedef struct
@@ -36,6 +40,10 @@ void loopBuzzer(void);
 #define BUZZER_PLAY(x) Buzzer_play(x)
 #else
 #define BUZZER_PLAY(x)
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #endif
