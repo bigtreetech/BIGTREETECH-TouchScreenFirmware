@@ -18,6 +18,7 @@ P_AUTO_RETRACT,
 P_LIN_ADV,
 P_ABL_STATE,
 P_OFFSET_TOOL,
+P_HYBRID_THRESHOLD,
 // Keep below items always at the end
 P_SAVE_SETTINGS,
 P_RESTORE_SETTINGS,
@@ -60,6 +61,7 @@ float AutoRetract[1];
 float LinAdvance[2];
 float ABLState[2];
 float OffsetTool[3];
+float HybridThreshold[STEPPER_COUNT];
 }PARAMETERS;
 
 extern PARAMETERS infoParameters;

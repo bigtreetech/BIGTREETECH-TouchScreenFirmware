@@ -262,5 +262,6 @@
     #define CA_TUNE_EXT_NEW_ESTEP     "New e-steps: %0.2f"
     #define CA_CONNECTION_SETTINGS    "Connection"
     #define CA_OFFSET_TOOL            "Offset 2nd Nozzle"
-
+    #define CA_HYBRID_THRESHOLD       "TMC HybridThreshold"
+    
 #endif

@@ -262,5 +262,6 @@
     #define CN_TUNE_EXT_NEW_ESTEP     "新的E-Steps: %0.2f"
     #define CN_CONNECTION_SETTINGS    "连接"
     #define CN_OFFSET_TOOL            "Offset 2nd Nozzle"
+    #define CN_HYBRID_THRESHOLD       "TMC HybridThreshold"
 
 #endif

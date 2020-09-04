@@ -262,5 +262,6 @@
     #define IT_TUNE_EXT_NEW_ESTEP     "New e-steps: %0.2f"
     #define IT_CONNECTION_SETTINGS    "Connection"
     #define IT_OFFSET_TOOL            "Offset 2nd Nozzle"
+    #define IT_HYBRID_THRESHOLD       "TMC HybridThreshold"
 
 #endif

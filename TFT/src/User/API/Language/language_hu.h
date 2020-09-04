@@ -261,6 +261,8 @@
     #define HU_TUNE_EXT_OLD_ESTEP     "Régi e-lépés: %0.2f"
     #define HU_TUNE_EXT_NEW_ESTEP     "Új e-lépés: %0.2f"
     #define HU_CONNECTION_SETTINGS    "Kapcsolat"
+    #define HU_OFFSET_TOOL            "Offset 2nd Nozzle"
     #define HU_OFFSET_TOOL            "Második fej eltolása"
+    #define HU_HYBRID_THRESHOLD       "TMC HybridThreshold"
 
 #endif

@@ -507,12 +507,6 @@ void parseACK(void)
         if(ack_seen("Y")) setParameter(P_CURRENT, Y_STEPPER, ack_value());
         if(ack_seen("Z")) setParameter(P_CURRENT, Z_STEPPER, ack_value());
       }
-    //parse and store TMC Bump sensitivity values
-      else if(ack_seen("M914 X")){
-                          setParameter(P_BUMPSENSITIVITY, X_STEPPER, ack_value());
-        if(ack_seen("Y")) setParameter(P_BUMPSENSITIVITY, Y_STEPPER, ack_value());
-        if(ack_seen("Z")) setParameter(P_BUMPSENSITIVITY, Z_STEPPER, ack_value());
-      }
       else if(ack_seen("M906 I1")){
         if(ack_seen("X")) setDualStepperStatus(X_STEPPER, true);
         if(ack_seen("Y")) setDualStepperStatus(Y_STEPPER, true);
@@ -525,6 +519,26 @@ void parseACK(void)
         setParameter(P_CURRENT, E2_STEPPER, ack_value());
         setDualStepperStatus(E_STEPPER, true);
       }
+      //parse and store TMC Bump sensitivity values
+      else if(ack_seen("M914 X")){
+                          setParameter(P_BUMPSENSITIVITY, X_STEPPER, ack_value());
+        if(ack_seen("Y")) setParameter(P_BUMPSENSITIVITY, Y_STEPPER, ack_value());
+        if(ack_seen("Z")) setParameter(P_BUMPSENSITIVITY, Z_STEPPER, ack_value());
+      }
+    // parse and store TMC Hybrid Threshold Speed  
+      else if(ack_seen("M913 X")){
+                          setParameter(P_HYBRID_THRESHOLD, X_STEPPER, ack_value());
+        if(ack_seen("Y")) setParameter(P_HYBRID_THRESHOLD, Y_STEPPER, ack_value());
+        if(ack_seen("Z")) setParameter(P_HYBRID_THRESHOLD, Z_STEPPER, ack_value());
+        if(ack_seen("E")) setParameter(P_HYBRID_THRESHOLD, E_STEPPER, ack_value());
+      }
+      else if(ack_seen("M913 T0 E")){
+                          setParameter(P_HYBRID_THRESHOLD, E_STEPPER, ack_value());
+      }
+      else if(ack_seen("M913 T1 E")){
+                          setParameter(P_HYBRID_THRESHOLD, E2_STEPPER, ack_value());
+                          setDualStepperStatus(E_STEPPER, true);
+      }  
     // Parse and store ABL type
       else if(ack_seen("echo:; Unified Bed Leveling")){
         if(ENABLE_UBL_VALUE==2) infoMachineSettings.enableubl = ENABLED;
