@@ -134,8 +134,10 @@ bool powerOffGetData(void)
 
   for(uint8_t i = 0; i < infoSettings.fan_count; i++)
   {
-    if(infoBreakPoint.fan[i] != 0)
+    if(infoBreakPoint.fan[i] != 0 && fanIsType(i,FAN_TYPE_F)) 
+    {
       mustStoreCacheCmd("%s S%d\n", fanCmd[i], infoBreakPoint.fan[i]);
+    }
   }
 
   mustStoreCacheCmd("%s\n", tool_change[infoBreakPoint.tool]);

@@ -12,7 +12,8 @@
 #define MAX_EXT_COUNT         6
 #define MAX_HOTEND_COUNT      6
 #define MAX_HEATER_COUNT      (2 + MAX_HOTEND_COUNT) // chamber + bed + hotend
-#define MAX_FAN_COUNT         6
+#define MAX_FAN_CTRL_COUNT    2
+#define MAX_FAN_COUNT         (6 + MAX_FAN_CTRL_COUNT)
 
 #define AXIS_NUM              (TOTAL_AXIS - 1)
 #define SPEED_COUNT           3
@@ -109,6 +110,7 @@ typedef struct
   uint8_t   chamber_en;
   uint8_t   ext_count;
   uint8_t   fan_count;
+  uint8_t   fan_ctrl_count;
   uint8_t   auto_load_leveling;
   uint8_t   autoLevelState;
   uint8_t   onboardSD;
