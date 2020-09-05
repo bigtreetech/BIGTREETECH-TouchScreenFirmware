@@ -45,10 +45,7 @@ const char* SpeedID[2] = SPEED_ID;
 const GUI_POINT ss_title_point = {ICON_WIDTH - BYTE_WIDTH/2, SSICON_NAME_Y0};
 const GUI_POINT ss_val_point   = {ICON_WIDTH/2, SSICON_VAL_Y0};
 
-//info rectangle
-const GUI_RECT RectInfo = {START_X + 1 * ICON_WIDTH + 1 * SPACE_X,  ICON_START_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y,
-                           START_X + 3 * ICON_WIDTH + 2 * SPACE_X,  ICON_START_Y +  2 * ICON_HEIGHT + 1 * SPACE_Y};
-
+//info box msg area
 const  GUI_RECT msgRect ={START_X + 1 * ICON_WIDTH + 1 * SPACE_X + 2,   ICON_START_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + STATUS_MSG_BODY_YOFFSET,
                           START_X + 3 * ICON_WIDTH + 2 * SPACE_X - 2,   ICON_START_Y +  2 * ICON_HEIGHT + 1 * SPACE_Y - STATUS_MSG_BODY_BOTTOM};
 
@@ -145,11 +142,11 @@ void drawStatusScreenMsg(void)
 {
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
-  ICON_CustomReadDisplay(RectInfo.x0,RectInfo.y0,INFOBOX_WIDTH,INFOBOX_HEIGHT,INFOBOX_ADDR);
+  ICON_CustomReadDisplay(rect_of_key[17].x0, rect_of_key[17].y0, INFOBOX_WIDTH, INFOBOX_HEIGHT, INFOBOX_ADDR);
   GUI_SetColor(INFOMSG_BKCOLOR);
-  GUI_DispString(RectInfo.x0 + STATUS_MSG_ICON_XOFFSET, RectInfo.y0 + STATUS_MSG_ICON_YOFFSET,IconCharSelect(ICONCHAR_INFO));
+  GUI_DispString(rect_of_key[17].x0 + STATUS_MSG_ICON_XOFFSET, rect_of_key[17].y0 + STATUS_MSG_ICON_YOFFSET, IconCharSelect(ICONCHAR_INFO));
 
-  GUI_DispString(RectInfo.x0 + BYTE_HEIGHT+ STATUS_MSG_TITLE_XOFFSET,RectInfo.y0 + STATUS_MSG_ICON_YOFFSET,(u8*)msgtitle);
+  GUI_DispString(rect_of_key[17].x0 + BYTE_HEIGHT + STATUS_MSG_TITLE_XOFFSET, rect_of_key[17].y0 + STATUS_MSG_ICON_YOFFSET, (u8 *)msgtitle);
   GUI_SetBkColor(INFOMSG_BKCOLOR);
   GUI_FillPrect(&msgRect);
 
@@ -232,6 +229,8 @@ void menuStatus(void)
       case KEY_ICON_7:
         infoMenu.menu[++infoMenu.cur] = menuPrint;
         break;
+      case KEY_INFOBOX:
+        infoMenu.menu[++infoMenu.cur] = menuNotification;
 
       default:break;
     }

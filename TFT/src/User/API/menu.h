@@ -40,6 +40,7 @@ typedef enum
   KEY_LABEL_6,
   KEY_LABEL_7,
   KEY_TITLEBAR,
+  KEY_INFOBOX,
   KEY_IDLE = IDLE_TOUCH,
 }KEY_VALUES;
 
@@ -129,7 +130,7 @@ typedef struct
 void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, const ITEM * item);
 
 extern const GUI_RECT exhibitRect;
-extern const GUI_RECT rect_of_key[ITEM_PER_PAGE*2 + 1];
+extern const GUI_RECT rect_of_key[ITEM_PER_PAGE*2 + 1 + 1]; // 8 items + title bar + infobox
 extern const GUI_RECT rect_of_titleBar[1];
 
 void setMenuType(MENU_TYPE type);
