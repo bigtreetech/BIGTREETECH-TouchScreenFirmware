@@ -57,6 +57,7 @@
     #define DE_RESTORE                "Restore"
     #define DE_RESET                  "Resetten"
     #define DE_DEFAULT                "Default"
+    #define DE_CLEAR                  "Clear"
     #define DE_NEXT                   "Next"
     #define DE_DISTANCE               "Distance"
     #define DE_INVALID_VALUE          "Invalid value(s)"
@@ -264,5 +265,6 @@
     #define DE_CONNECTION_SETTINGS    "Connection"
     #define DE_OFFSET_TOOL            "Offset 2nd Nozzle"
     #define DE_HYBRID_THRESHOLD       "TMC HybridThreshold"
+    #define DE_NOTIFICATIONS          "Notifications"
 
 #endif

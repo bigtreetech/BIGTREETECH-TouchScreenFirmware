@@ -316,6 +316,7 @@ bool temperatureStatusValid(void)
   if (infoMenu.menu[infoMenu.cur] == menuStatus) return false;
   if (infoMenu.menu[infoMenu.cur] == menuMove) return false;
   if (infoMenu.menu[infoMenu.cur] == menuInfo) return false;
+  if (infoMenu.menu[infoMenu.cur] == menuNotification) return false;
 
   return true;
 }

@@ -4,12 +4,12 @@
 #include "Notification.h"
 
 
-// exhibitRect is 2 ICON Space in the Upper Row and 2 Center Coloum.
+// exhibitRect is 2 ICON Space in the Upper Row and 2 Center column.
 const GUI_RECT exhibitRect = {
    1*ICON_WIDTH+1*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  3*ICON_WIDTH+2*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y
 };
 
-const GUI_RECT rect_of_key[ITEM_PER_PAGE*2]={
+const GUI_RECT rect_of_key[ITEM_PER_PAGE*2 + 1]={
   //8 icons area
   {0*ICON_WIDTH+0*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  1*ICON_WIDTH+0*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
   {1*ICON_WIDTH+1*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  2*ICON_WIDTH+1*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
@@ -29,9 +29,10 @@ const GUI_RECT rect_of_key[ITEM_PER_PAGE*2]={
   {1*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  2*SPACE_X_PER_ICON,  2*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y},
   {2*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  3*SPACE_X_PER_ICON,  2*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y},
   {3*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  4*SPACE_X_PER_ICON,  2*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y},
+  {0 ,0 ,LCD_WIDTH, ICON_START_Y}
 };
 
-const GUI_RECT rect_of_keyListView[ITEM_PER_PAGE]={
+const GUI_RECT rect_of_keyListView[ITEM_PER_PAGE + 1]={
   //8 icons area
   {START_X,  0*LISTITEM_HEIGHT+ICON_START_Y,    LISTITEM_WIDTH+START_X,  1*LISTITEM_HEIGHT+ICON_START_Y},
   {START_X,  1*LISTITEM_HEIGHT+ICON_START_Y,    LISTITEM_WIDTH+START_X,  2*LISTITEM_HEIGHT+ICON_START_Y},
@@ -42,8 +43,13 @@ const GUI_RECT rect_of_keyListView[ITEM_PER_PAGE]={
   {2*START_X + LISTITEM_WIDTH,  0*LIST_ICON_HEIGHT+0*LISTICON_SPACE_Y+ICON_START_Y,  2*START_X + LISTITEM_WIDTH + 1*LIST_ICON_WIDTH,  1*LIST_ICON_HEIGHT+0*LISTICON_SPACE_Y+ICON_START_Y},
   {2*START_X + LISTITEM_WIDTH,  1*LIST_ICON_HEIGHT+1*LISTICON_SPACE_Y+ICON_START_Y,  2*START_X + LISTITEM_WIDTH + 1*LIST_ICON_WIDTH,  2*LIST_ICON_HEIGHT+1*LISTICON_SPACE_Y+ICON_START_Y},
   {2*START_X + LISTITEM_WIDTH,  2*LIST_ICON_HEIGHT+2*LISTICON_SPACE_Y+ICON_START_Y,  2*START_X + LISTITEM_WIDTH + 1*LIST_ICON_WIDTH,  3*LIST_ICON_HEIGHT+2*LISTICON_SPACE_Y+ICON_START_Y},
+  {0 ,0 ,LCD_WIDTH, ICON_START_Y}
 };
 
+// titlebar touch area
+const GUI_RECT rect_of_titleBar[] = {
+  {0 ,0 ,LCD_WIDTH, ICON_START_Y}
+};
 
 //Clean up the gaps outside icons
 void menuClearGaps(void)
@@ -78,6 +84,16 @@ static const LISTITEMS *curListItems = NULL;   //current listmenu
 
 static MENU_TYPE menuType = MENU_TYPE_ICON;
 
+MENUITEMS *getCurMenuItems(void)
+{
+return (MENUITEMS *)curMenuItems;
+}
+
+LISTITEMS *getCurListItems(void)
+{
+return (LISTITEMS *)curListItems;
+
+}
 
 uint8_t *labelGetAddress(const LABEL *label)
 {
@@ -124,6 +140,7 @@ void menuDrawIconOnly(const ITEM *item, uint8_t positon)
     ListItem_Display(rect, position, item, false);
   }
 }
+
 void menuRefreshListPage(void){
  for (uint8_t i = 0; i < ITEM_PER_PAGE; i++)
     {
@@ -265,6 +282,20 @@ void loopBusySignClear(void)
   GUI_SetColor(infoSettings.font_color);
 }
 
+void notificationDot(void)
+{
+  if(hasNotification())
+    {
+      GUI_SetColor(infoSettings.font_color);
+    }
+  else
+    {
+      GUI_SetColor(infoSettings.title_bg_color);
+    }
+    GUI_FillCircle(3, 3, 3);
+    GUI_RestoreColorDefault();
+}
+
 void menuDrawTitle(const uint8_t *content) //(const MENUITEMS * menuItems)
 {
   if (toastRunning())
@@ -278,12 +309,13 @@ void menuDrawTitle(const uint8_t *content) //(const MENUITEMS * menuItems)
   GUI_SetBkColor(infoSettings.title_bg_color);
   if (content)
   {
-    GUI_DispLenString(10, start_y, content, LCD_WIDTH - 20);
+    GUI_DispLenString(10, start_y, content, LCD_WIDTH - 20, true);
     start_x += GUI_StrPixelWidth(content);
     if (start_x > LCD_WIDTH-20) start_x = LCD_WIDTH - 20;
   }
   GUI_ClearRect(start_x, start_y, end_x, start_y+BYTE_HEIGHT);
 
+  notificationDot();
   GUI_SetBkColor(infoSettings.bg_color);
   if(reminder.status == STATUS_IDLE) return;
   GUI_SetColor(infoSettings.reminder_color);
@@ -374,7 +406,7 @@ void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, const ITEM * item)
 
       if (liveicon->lines[i].text_mode != GUI_TEXTMODE_TRANS && sizeof(lcd_colors) > liveicon->lines[i].bk_color)
         GUI_SetBkColor(lcd_colors[liveicon->lines[i].bk_color]);
-        
+
       GUI_SetTextMode(liveicon->lines[i].text_mode);
 
       GUI_POINT loc;
@@ -457,15 +489,28 @@ void itemDrawIconPress(u8 position, u8 is_press)
 // Get button value
 KEY_VALUES menuKeyGetValue(void)
 {
+  KEY_VALUES tempkey = KEY_IDLE;
   if (menuType == MENU_TYPE_ICON)
   {
-    return (KEY_VALUES)KEY_GetValue(COUNT(rect_of_key), rect_of_key); // for normal menu
+    tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_key), rect_of_key); // for normal menu
   }
   else if (menuType == MENU_TYPE_LISTVIEW)
   {
-    return (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keyListView), rect_of_keyListView); //for listview
+    tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keyListView), rect_of_keyListView); //for listview
   }
-  else return KEY_IDLE;
+  // else
+  // {
+  //   return KEY_IDLE;
+  // }
+  if (tempkey == KEY_TITLEBAR)
+  {
+    titleBarPress();
+    return KEY_IDLE;
+  }
+  else
+  {
+    return tempkey;
+  }
 }
 
 //Get the top left point of the corresponding icon position)
@@ -523,7 +568,7 @@ void loopBackEnd(void)
 #ifdef LCD_LED_PWM_CHANNEL
   loopDimTimer();
 #endif
-}
+} //loopBackEnd
 
 void loopFrontEnd(void)
 {

@@ -86,6 +86,7 @@
 #include "BabyStep.h"
 #include "ledcolor.h"
 #include "Parametersetting.h"
+#include "NotificationMenu.h"
 
 #include "Extrude.h"
 #include "Fan.h"

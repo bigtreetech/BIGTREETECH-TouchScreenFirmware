@@ -57,6 +57,7 @@
     #define PT_RESTORE                "Restore"
     #define PT_RESET                  "Reset"
     #define PT_DEFAULT                "Default"
+    #define PT_CLEAR                  "Clear"
     #define PT_NEXT                   "Next"
     #define PT_DISTANCE               "Distance"
     #define PT_INVALID_VALUE          "Invalid value(s)"
@@ -264,5 +265,6 @@
     #define PT_CONNECTION_SETTINGS    "Connection"
     #define PT_OFFSET_TOOL            "Offset 2nd Nozzle"
     #define PT_HYBRID_THRESHOLD       "TMC HybridThreshold"
+    #define PT_NOTIFICATIONS          "Notifications"
 
 #endif

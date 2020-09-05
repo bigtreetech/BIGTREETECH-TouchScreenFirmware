@@ -375,14 +375,20 @@ void ListItem_Display(const GUI_RECT* rect, uint8_t position, const LISTITEM * c
   if (getMenuType() != MENU_TYPE_LISTVIEW) return;
 
   if(position >= LISTITEM_PER_PAGE){
-    if(curitem->icon != ICONCHAR_BACKGROUND){
+    if(curitem->icon != ICONCHAR_BACKGROUND && curitem->icon != ICONCHAR_BLANK)
+    {
       DrawCharIcon(rect,MIDDLE,curitem->icon,true,infoSettings.list_button_color);
       if (pressed != false){
         GUI_SetColor(WHITE);
         GUI_DrawPrect(rect);
       }
     }
-    else{
+    else if(curitem->icon == ICONCHAR_BLANK && curitem->titlelabel.index != LABEL_BACKGROUND)
+    {
+      GUI_DispStringInPrect(rect, textSelect(curitem->titlelabel.index));
+    }
+    else
+    {
       GUI_ClearPrect(rect);
     }
       GUI_RestoreColorDefault();
@@ -469,10 +475,10 @@ void draw_itemtitle(GUI_POINT pos,LABEL label, uint8_t position, int textarea_wi
   {
     int textarea_width = LISTITEM_WIDTH - (pos.x + 1); //width after removing the width for icon
     if (label.index == LABEL_DYNAMIC)
-    {GUI_DispLenString(pos.x, pos.y, (u8*)getDynamicLabel(position),textarea_width);
+    {GUI_DispLenString(pos.x, pos.y, (u8*)getDynamicLabel(position),textarea_width, true);
     }
     else
-    {GUI_DispLenString(pos.x, pos.y, labelGetAddress(&label), textarea_width);
+    {GUI_DispLenString(pos.x, pos.y, labelGetAddress(&label), textarea_width, true);
     }
   }
 }

@@ -57,6 +57,7 @@
     #define CZ_RESTORE                "Obnovit"
     #define CZ_RESET                  "Reset"
     #define CZ_DEFAULT                "Výchozí"
+    #define CZ_CLEAR                  "Clear"
     #define CZ_NEXT                   "Další"
     #define CZ_DISTANCE               "Vzdálenost"
     #define CZ_INVALID_VALUE          "Neplatná hodnota/y!"
@@ -264,5 +265,6 @@
     #define CZ_CONNECTION_SETTINGS    "Připojení"
     #define CZ_OFFSET_TOOL            "Offset 2.trysky"
     #define CZ_HYBRID_THRESHOLD       "TMC Hybridní práh"
-    
+    #define CZ_NOTIFICATIONS          "Notifications"
+
 #endif

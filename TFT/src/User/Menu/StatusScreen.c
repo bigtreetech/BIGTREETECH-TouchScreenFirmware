@@ -64,6 +64,7 @@ void drawTemperature(void)
   LIVE_INFO lvIcon;
   lvIcon.enabled[0] = true;
   lvIcon.enabled[1] = true;
+  lvIcon.enabled[2] = false;
 
   lvIcon.lines[0].h_align = RIGHT;
   lvIcon.lines[0].v_align = TOP;
@@ -78,16 +79,16 @@ void drawTemperature(void)
   lvIcon.lines[1].pos = ss_val_point;
 
   //TOOL / EXT
-  lvIcon.lines[0].text =  (u8 *)heatDisplayID[current_tool];
+  lvIcon.lines[0].text = (u8 *)heatDisplayID[current_tool];
   sprintf(tempstr, "%d/%d", heatGetCurrentTemp(current_tool), heatGetTargetTemp(current_tool));
   lvIcon.lines[1].text = (u8 *)tempstr;
-  showLiveInfo(0,&lvIcon,&StatusItems.items[0]);
+  showLiveInfo(0, &lvIcon, &StatusItems.items[0]);
 
   //BED
-  lvIcon.lines[0].text =  (u8 *)heatDisplayID[BED];
+  lvIcon.lines[0].text = (u8 *)heatDisplayID[BED];
   sprintf(tempstr, "%d/%d", heatGetCurrentTemp(BED), heatGetTargetTemp(BED));
   lvIcon.lines[1].text = (u8 *)tempstr;
-  showLiveInfo(1,&lvIcon,&StatusItems.items[1]);
+  showLiveInfo(1, &lvIcon, &StatusItems.items[1]);
 
   //FAN
   lvIcon.lines[0].text = (u8 *)fanID[current_fan];
@@ -101,14 +102,13 @@ void drawTemperature(void)
     sprintf(tempstr, "%d", fanGetSpeed(current_fan));
   }
   lvIcon.lines[1].text = (u8 *)tempstr;
-  showLiveInfo(2,&lvIcon,&StatusItems.items[2]);
+  showLiveInfo(2, &lvIcon, &StatusItems.items[2]);
 
   //SPEED / flow
-  lvIcon.lines[0].text =  (u8 *)SpeedID[current_speedID];
+  lvIcon.lines[0].text = (u8 *)SpeedID[current_speedID];
   sprintf(tempstr, "%d%%", speedGetPercent(current_speedID));
   lvIcon.lines[1].text = (u8 *)tempstr;
-  showLiveInfo(3,&lvIcon,&SpeedItems[current_speedID]);
-
+  showLiveInfo(3, &lvIcon, &SpeedItems[current_speedID]);
 
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
   GUI_SetColor(GANTRYLBL_COLOR);

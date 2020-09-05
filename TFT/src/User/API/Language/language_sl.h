@@ -57,6 +57,7 @@
     #define SL_RESTORE                "Restore"
     #define SL_RESET                  "Reset"
     #define SL_DEFAULT                "Default"
+    #define SL_CLEAR                  "Clear"
     #define SL_NEXT                   "Next"
     #define SL_DISTANCE               "Distance"
     #define SL_INVALID_VALUE          "Invalid value(s)"
@@ -264,5 +265,6 @@
     #define SL_CONNECTION_SETTINGS    "Connection"
     #define SL_OFFSET_TOOL            "Offset 2nd Nozzle"
     #define SL_HYBRID_THRESHOLD       "TMC HybridThreshold"
+    #define SL_NOTIFICATIONS          "Notifications"
 
 #endif

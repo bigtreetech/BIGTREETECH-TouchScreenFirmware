@@ -94,10 +94,13 @@ static float ack_second_value()
 
 void ackPopupInfo(const char *info)
 {
-  DIALOG_TYPE d_type = DIALOG_TYPE_ERROR;
+
+  bool show_dialog = true;
+  if (infoMenu.menu[infoMenu.cur] == menuTerminal ||
+      (infoMenu.menu[infoMenu.cur] == menuStatus && info == echomagic))
+    show_dialog = false;
 
   // play notification sound if buzzer for ACK is enabled
-
   if (info == errormagic)
     BUZZER_PLAY(sound_error);
   else if (info == echomagic && infoSettings.ack_notification == 1)
@@ -110,21 +113,20 @@ void ackPopupInfo(const char *info)
     if (infoMenu.menu[infoMenu.cur] == menuParameterSettings)
       return;
 
-    d_type = DIALOG_TYPE_INFO;
-    statusScreen_setMsg((u8 *)info, (u8 *)dmaL2Cache + ack_index);
+    //show notification based on notificaiton settings
+    if (infoSettings.ack_notification == 1)
+    {
+      addNotification(DIALOG_TYPE_INFO, (char *)info, (char *)dmaL2Cache + ack_index, show_dialog);
+    }
+    else if (infoSettings.ack_notification == 2)
+    {
+      addToast(DIALOG_TYPE_INFO, dmaL2Cache); //show toast notificaion if turned on
+    }
   }
-
-  if (infoMenu.menu[infoMenu.cur] == menuTerminal ||
-      (infoMenu.menu[infoMenu.cur] == menuStatus && info == echomagic))
-    return;
-
- //show notification based on notificaiton settings
-  if (infoSettings.ack_notification == 1 ||  info == errormagic)
+  else
   {
-    popupReminder(d_type, (u8 *) info, (u8 *) dmaL2Cache + ack_index);
+    addNotification(DIALOG_TYPE_ERROR, (char *)info, (char *)dmaL2Cache + ack_index, show_dialog);
   }
-  else if(infoSettings.ack_notification == 2)
-    addToast(DIALOG_TYPE_INFO, dmaL2Cache); //show toast notificaion if turned on
 }
 
 
@@ -161,10 +163,8 @@ bool processKnownEcho(void)
       else if (knownEcho[i].notifyType == ECHO_NOTIFY_DIALOG)
       {
         BUZZER_PLAY(sound_notify);
-        popupReminder(DIALOG_TYPE_INFO, (u8 *)echomagic, (u8 *)dmaL2Cache + ack_index);
+        addNotification(DIALOG_TYPE_INFO, (char*)echomagic, (char*)dmaL2Cache + ack_index, true);
       }
-      // display the echo message in the status bar
-      statusScreen_setMsg((u8 *)echomagic, (u8 *)dmaL2Cache + ack_index);
     }
   }
   return isKnown;
@@ -189,7 +189,7 @@ void syncL2CacheFromL1(uint8_t port)
 
 void hostActionCommands(void)
 {
-  char *find = strchr(dmaL2Cache + ack_index, '\n'); 
+  char *find = strchr(dmaL2Cache + ack_index, '\n');
   *find = '\0';
   if(ack_seen("prompt_begin "))
   {
