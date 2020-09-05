@@ -130,7 +130,8 @@ typedef struct
 void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, const ITEM * item);
 
 extern const GUI_RECT exhibitRect;
-extern const GUI_RECT rect_of_key[ITEM_PER_PAGE*2 + 1 + 1]; // 8 items + title bar + infobox
+extern const GUI_RECT rect_of_key[ITEM_PER_PAGE*2 + 1]; // 8 items + title bar
+extern const GUI_RECT rect_of_keySS[ITEM_PER_PAGE*2 + 1 + 1]; // 8 items + title bar + infobox
 extern const GUI_RECT rect_of_titleBar[1];
 
 void setMenuType(MENU_TYPE type);

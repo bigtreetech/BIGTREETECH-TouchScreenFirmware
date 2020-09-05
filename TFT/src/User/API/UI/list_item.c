@@ -375,17 +375,23 @@ void ListItem_Display(const GUI_RECT* rect, uint8_t position, const LISTITEM * c
   if (getMenuType() != MENU_TYPE_LISTVIEW) return;
 
   if(position >= LISTITEM_PER_PAGE){
-    if(curitem->icon != ICONCHAR_BACKGROUND && curitem->icon != ICONCHAR_BLANK)
+    if(curitem->icon != ICONCHAR_BACKGROUND)
     {
-      DrawCharIcon(rect,MIDDLE,curitem->icon,true,infoSettings.list_button_color);
-      if (pressed != false){
+      if (curitem->icon != ICONCHAR_BLANK)
+      {
+        DrawCharIcon(rect, MIDDLE, curitem->icon, true, infoSettings.list_button_color);
+      }
+      else if (curitem->icon == ICONCHAR_BLANK && curitem->titlelabel.index != LABEL_BACKGROUND)
+      {
+        GUI_SetBkColor(infoSettings.list_button_color);
+        GUI_ClearPrect(rect);
+        GUI_DispStringInPrect(rect, textSelect(curitem->titlelabel.index));
+      }
+      if (pressed != false)
+      {
         GUI_SetColor(WHITE);
         GUI_DrawPrect(rect);
       }
-    }
-    else if(curitem->icon == ICONCHAR_BLANK && curitem->titlelabel.index != LABEL_BACKGROUND)
-    {
-      GUI_DispStringInPrect(rect, textSelect(curitem->titlelabel.index));
     }
     else
     {
