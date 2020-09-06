@@ -261,6 +261,7 @@ void toggleinfo(void)
       reDrawFan(FAN_ICON_POS);
     }
 
+    storeCmd("M220\nM221\n");
     c_speedID = (c_speedID + 1) % 2;
     nextTime = OS_GetTimeMs() + toggle_time;
     rapid_serial_loop();   //perform backend printing loop before drawing to avoid printer idling
