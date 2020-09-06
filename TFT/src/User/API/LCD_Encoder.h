@@ -21,7 +21,9 @@ extern "C" {
 extern int16_t encoderPosition;
 
 void HW_EncoderInit(void);
-bool encoder_ReadBtn(uint16_t intervals);
+#if LCD_ENCODER_SUPPORT
+  bool encoder_ReadBtn(uint16_t intervals);
+#endif
 bool LCD_ReadPen(uint16_t intervals);
 bool LCD_BtnTouch(uint16_t intervals);
 uint8_t LCD_ReadTouch(void);
