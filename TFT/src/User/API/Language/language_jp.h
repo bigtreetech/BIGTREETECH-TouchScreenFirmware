@@ -203,6 +203,7 @@
     #define JP_PRINT_ACCELERATION     "印刷加速度"
     #define JP_RETRACT_ACCELERATION   "引き戻し加速度"
     #define JP_TRAVEL_ACCELERATION    "空振り加速度"
+    #define JP_JERK                   "Jerk"
     #define JP_BUMP_SENSITIVITY       "TMC バンプ感度"
     #define JP_FWRETRACT              "FW Retraction"
     #define JP_FWRECOVER              "FW Retraction Recover"
@@ -262,5 +263,6 @@
     #define JP_TUNE_EXT_NEW_ESTEP     "New e-steps: %0.2f"
     #define JP_CONNECTION_SETTINGS    "Connection"
     #define JP_OFFSET_TOOL            "Offset 2nd Nozzle"
+    #define JP_HYBRID_THRESHOLD       "TMC HybridThreshold"
 
 #endif

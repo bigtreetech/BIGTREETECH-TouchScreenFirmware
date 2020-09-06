@@ -203,6 +203,7 @@
     #define EN_PRINT_ACCELERATION     "Print Acceleration"
     #define EN_RETRACT_ACCELERATION   "Retract Acceleration"
     #define EN_TRAVEL_ACCELERATION    "Travel Acceleration"
+    #define EN_JERK                   "Jerk"
     #define EN_BUMP_SENSITIVITY       "TMC bump sensitivity"
     #define EN_FWRETRACT              "FW Retraction"
     #define EN_FWRECOVER              "FW Retraction Recover"
@@ -262,5 +263,6 @@
     #define EN_TUNE_EXT_NEW_ESTEP     "New e-steps: %0.2f"
     #define EN_CONNECTION_SETTINGS    "Connection"
     #define EN_OFFSET_TOOL            "Offset 2nd Nozzle"
+    #define EN_HYBRID_THRESHOLD       "TMC HybridThreshold"
 
 #endif

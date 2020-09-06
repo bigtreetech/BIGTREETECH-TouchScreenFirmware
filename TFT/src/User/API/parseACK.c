@@ -461,6 +461,13 @@ void parseACK(void)
         if(ack_seen("R")) setParameter(P_ACCELERATION, 1, ack_value());
         if(ack_seen("T")) setParameter(P_ACCELERATION, 2, ack_value());
       }
+    //parse and store jerk values
+      else if(ack_seen("M205")){
+        if(ack_seen("X")) setParameter(P_JERK, X_STEPPER, ack_value());
+        if(ack_seen("Y")) setParameter(P_JERK, Y_STEPPER, ack_value());
+        if(ack_seen("Z")) setParameter(P_JERK, Z_STEPPER, ack_value());
+        if(ack_seen("E")) setParameter(P_JERK, E_STEPPER, ack_value());
+      }
     //parse and store FW retraction values
       else if(ack_seen("M207 S")){
                           setParameter(P_FWRETRACT, 0, ack_value());
@@ -507,12 +514,6 @@ void parseACK(void)
         if(ack_seen("Y")) setParameter(P_CURRENT, Y_STEPPER, ack_value());
         if(ack_seen("Z")) setParameter(P_CURRENT, Z_STEPPER, ack_value());
       }
-    //parse and store TMC Bump sensitivity values
-      else if(ack_seen("M914 X")){
-                          setParameter(P_BUMPSENSITIVITY, X_STEPPER, ack_value());
-        if(ack_seen("Y")) setParameter(P_BUMPSENSITIVITY, Y_STEPPER, ack_value());
-        if(ack_seen("Z")) setParameter(P_BUMPSENSITIVITY, Z_STEPPER, ack_value());
-      }
       else if(ack_seen("M906 I1")){
         if(ack_seen("X")) setDualStepperStatus(X_STEPPER, true);
         if(ack_seen("Y")) setDualStepperStatus(Y_STEPPER, true);
@@ -525,6 +526,26 @@ void parseACK(void)
         setParameter(P_CURRENT, E2_STEPPER, ack_value());
         setDualStepperStatus(E_STEPPER, true);
       }
+      //parse and store TMC Bump sensitivity values
+      else if(ack_seen("M914 X")){
+                          setParameter(P_BUMPSENSITIVITY, X_STEPPER, ack_value());
+        if(ack_seen("Y")) setParameter(P_BUMPSENSITIVITY, Y_STEPPER, ack_value());
+        if(ack_seen("Z")) setParameter(P_BUMPSENSITIVITY, Z_STEPPER, ack_value());
+      }
+    // parse and store TMC Hybrid Threshold Speed  
+      else if(ack_seen("M913 X")){
+                          setParameter(P_HYBRID_THRESHOLD, X_STEPPER, ack_value());
+        if(ack_seen("Y")) setParameter(P_HYBRID_THRESHOLD, Y_STEPPER, ack_value());
+        if(ack_seen("Z")) setParameter(P_HYBRID_THRESHOLD, Z_STEPPER, ack_value());
+        if(ack_seen("E")) setParameter(P_HYBRID_THRESHOLD, E_STEPPER, ack_value());
+      }
+      else if(ack_seen("M913 T0 E")){
+                          setParameter(P_HYBRID_THRESHOLD, E_STEPPER, ack_value());
+      }
+      else if(ack_seen("M913 T1 E")){
+                          setParameter(P_HYBRID_THRESHOLD, E2_STEPPER, ack_value());
+                          setDualStepperStatus(E_STEPPER, true);
+      }  
     // Parse and store ABL type
       else if(ack_seen("echo:; Unified Bed Leveling")){
         if(ENABLE_UBL_VALUE==2) infoMachineSettings.enableubl = ENABLED;
@@ -648,8 +669,24 @@ void parseACK(void)
       else if(ack_seen("M106 P"))
       {
         u8 i = ack_value();
-        if (ack_seen("S"))
+        if (ack_seen("S")) {
           fanSetSpeed(i, ack_value());
+        }
+      }
+    // parse controller fan
+      else if(ack_seen("M710"))
+      {
+        u8 i = 0;
+        if (ack_seen("S")) {
+          i = fanGetTypID(0,FAN_TYPE_CTRL_S); 
+          fanSetSpeed(i, ack_value());
+          fanSpeedQuerySetWait(false);
+        }
+        if (ack_seen("I")) {
+          i = fanGetTypID(0,FAN_TYPE_CTRL_I); 
+          fanSetSpeed(i, ack_value());
+          fanSpeedQuerySetWait(false);
+        }
       }
     // Parse pause message
       else if(!infoMachineSettings.promptSupport && ack_seen("paused for user"))

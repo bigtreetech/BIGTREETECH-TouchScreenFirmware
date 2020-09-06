@@ -203,6 +203,7 @@
     #define TC_PRINT_ACCELERATION     "列印加速度"
     #define TC_RETRACT_ACCELERATION   "回抽加速度"
     #define TC_TRAVEL_ACCELERATION    "空跑加速度"
+    #define TC_JERK                   "Jerk"
     #define TC_BUMP_SENSITIVITY       "堵料檢測靈敏度"
     #define TC_FWRETRACT              "FW Retraction"
     #define TC_FWRECOVER              "FW Retraction Recover"
@@ -262,5 +263,6 @@
     #define TC_TUNE_EXT_NEW_ESTEP     "New e-steps: %0.2f"
     #define TC_CONNECTION_SETTINGS    "连接"
     #define TC_OFFSET_TOOL            "Offset 2nd Nozzle"
+    #define TC_HYBRID_THRESHOLD       "TMC HybridThreshold"
 
 #endif

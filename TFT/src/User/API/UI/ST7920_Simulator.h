@@ -1,7 +1,11 @@
 #ifndef _ST7920_SIMULATOR_H_
 #define _ST7920_SIMULATOR_H_
 
-#include "stdint.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <stdint.h>
 #include "../../Configuration.h"
 
 #define ST7920_XSTART    (0x80)
@@ -203,5 +207,9 @@ typedef struct {
 }ST7920_REG; // Extended Instruction
 
 void ST7920_ParseRecv(uint8_t val);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

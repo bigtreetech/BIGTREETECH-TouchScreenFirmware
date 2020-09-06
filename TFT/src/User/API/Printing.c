@@ -286,7 +286,7 @@ void shutdown(void)
 {
   for(u8 i = 0; i < infoSettings.fan_count; i++)
   {
-    mustStoreCmd("%s S0\n", fanCmd[i]);
+    if(fanIsType(i, FAN_TYPE_F)) mustStoreCmd("%s S0\n", fanCmd[i]);
   }
   mustStoreCmd("M81\n");
   popupReminder(DIALOG_TYPE_INFO, textSelect(LABEL_SHUT_DOWN), textSelect(LABEL_SHUTTING_DOWN));
@@ -313,7 +313,7 @@ void startShutdown(void)
 
   for(u8 i = 0; i < infoSettings.fan_count; i++)
   {
-    mustStoreCmd("%s S255\n", fanCmd[i]);
+    if(fanIsType(i,FAN_TYPE_F)) mustStoreCmd("%s S255\n", fanCmd[i]);
   }
   showDialog(DIALOG_TYPE_INFO,textSelect(LABEL_SHUT_DOWN), (u8 *)tempstr,
               textSelect(LABEL_FORCE_SHUT_DOWN), textSelect(LABEL_CANCEL), shutdown, NULL, shutdownLoop);

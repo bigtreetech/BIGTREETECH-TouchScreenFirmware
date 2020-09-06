@@ -1,6 +1,10 @@
 #ifndef _SEND_GCODE_H_
 #define _SEND_GCODE_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "menu.h"
 
 typedef enum
@@ -44,5 +48,9 @@ typedef enum
 void menuSendGcode(void);
 void menuTerminal(void);
 void sendGcodeTerminalCache(char *stream, TERMINAL_SRC src);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

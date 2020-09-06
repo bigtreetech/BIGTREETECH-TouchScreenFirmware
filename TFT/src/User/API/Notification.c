@@ -76,7 +76,7 @@ void drawToast(bool redraw)
       cursound = sound_toast;
     }
 
-    if (!redraw)
+    if ( cursound >= 0 && !redraw)
       BUZZER_PLAY(cursound);
 
     GUI_SetTextMode(GUI_TEXTMODE_TRANS);

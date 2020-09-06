@@ -203,6 +203,7 @@
     #define RU_PRINT_ACCELERATION     "Печати"
     #define RU_RETRACT_ACCELERATION   "Ретракта"
     #define RU_TRAVEL_ACCELERATION    "Перемещения"
+    #define RU_JERK                   "Jerk"
     #define RU_BUMP_SENSITIVITY       "TMC чувствительность удара"
     #define RU_FWRETRACT              "M207 ретракт"
     #define RU_FWRECOVER              "M208 восстановление ретракта"
@@ -223,8 +224,8 @@
     #define RU_ST7920_FULLSCREEN      "Marlin на весь экран"
     #define RU_PLR_EN                 "Работа после потери питания"
     #define RU_SETTING_SAVE           "Сохранить настройки"
-    #define RU_SETTING_RESET          "Сброс настроек"
-    #define RU_SETTING_RESTORE        "Восстановление настроек"
+    #define RU_SETTING_RESET          "Сбросить настройки"
+    #define RU_SETTING_RESTORE        "Восстановить настройки"
     #define RU_EEPROM_SETTINGS        "EEPROM"
     #define RU_EEPROM_SAVE_INFO       "Сохранить настройки\nпринтера в EEPROM?"
     #define RU_EEPROM_RESTORE_INFO    "Загрузить настройки\nиз EEPROM?"
@@ -261,6 +262,7 @@
     #define RU_TUNE_EXT_OLD_ESTEP     "Старые E-шаги: %0.2f"
     #define RU_TUNE_EXT_NEW_ESTEP     "Новые E-шаги: %0.2f"
     #define RU_CONNECTION_SETTINGS    "Соединение"
-    #define RU_OFFSET_TOOL            "Смещение 2-го сопла"
+    #define RU_OFFSET_TOOL            "Offset 2nd Nozzle"
+    #define RU_HYBRID_THRESHOLD       "TMC HybridThreshold"
 
 #endif

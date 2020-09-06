@@ -1,5 +1,5 @@
-#ifndef _CONFIGRATION_H_
-#define _CONFIGRATION_H_
+#ifndef _CONFIGURATION_H_
+#define _CONFIGURATION_H_
 #define CONFIG_VERSION 20200810
 //===========================================================================
 //============================= General Settings ============================
@@ -170,6 +170,7 @@
 #define HOTEND_NUM   1    // set in 1~6
 #define EXTRUDER_NUM 1    // set in 1~6
 #define FAN_NUM      1    // set in 1~6
+#define FAN_CTRL_NUM 0    // set in 1~2
 
 #define PREHEAT_LABELS   {"PLA", "PETG", "ABS", "WOOD", "TPU", "NYLON"}
 #define PREHEAT_HOTEND   {200,   240,    230,   170,    220,   250}
@@ -184,9 +185,19 @@
 #define TOOL_CHANGE      {"T0",   "T1",      "T2",      "T3",      "T4",      "T5"}
 #define EXTRUDER_ID      {"E0",   "E1",      "E2",      "E3",      "E4",      "E5"}
 
-#define FAN_MAX_PWM      {255,       255,       255,       255,       255,       255}
-#define FAN_DISPLAY_ID   {"F0",      "F1",      "F2",      "F3",      "F4",      "F5"}
-#define FAN_CMD          {"M106 P0", "M106 P1", "M106 P2", "M106 P3", "M106 P4", "M106 P5" };
+/**
+ * Fan control
+ * 
+ * Fan type Options: 
+ *               0: FAN_TYPE_F       - default cooling fan speed (Check Marlin GCode M106)
+ *               1: FAN_TYPE_CTRL_S  - Controller fan speed for stepper or hot bed ON (Check Marlin GCode M710)
+ *               2: FAN_TYPE_CTRL_I  - Controller fan idle speed  (Check Marlin gcode - M710)
+ *               8: FAN_TYPE_UNKNOWN - Unknown / Not defined
+ */
+#define FAN_MAX_PWM      {       255,       255,       255,       255,       255,       255,       255,       255 };
+#define FAN_DISPLAY_ID   {      "F0",      "F1",      "F2",      "F3",      "F4",      "F5",     "CtL",     "CtI" };
+#define FAN_CMD          { "M106 P0", "M106 P1", "M106 P2", "M106 P3", "M106 P4", "M106 P5",    "M710",    "M710" };
+#define FAN_TYPE         {         0,         0,         0,         0,         0,         0,         1,         2 };
 
 #define SPEED_ID         {"Sp.", "Fr."}
 

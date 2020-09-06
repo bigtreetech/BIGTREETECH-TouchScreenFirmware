@@ -1,6 +1,10 @@
 #ifndef _W25QXX_H_
 #define _W25QXX_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "spi.h"
 #include "GPIO_Init.h"
 
@@ -36,5 +40,9 @@ void W25Qxx_EraseBlock(uint32_t BlockAddr);
 void W25Qxx_EraseBulk(void);
 uint32_t W25Qxx_ReadID(void);
 uint32_t W25Qxx_ReadCapacity(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

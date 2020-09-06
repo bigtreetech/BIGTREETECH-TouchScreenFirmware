@@ -562,6 +562,11 @@ void parseConfigKey(u16 index)
       infoSettings.fan_count = config_int();
     break;
 
+  case C_INDEX_FAN_CTRL_COUNT:
+    if (inLimit(config_int(), 2, MAX_FAN_CTRL_COUNT))
+      infoSettings.fan_ctrl_count = config_int();
+    break;
+
   case C_INDEX_MAX_TEMP:
     if (key_seen("BED:"))
     { if (inLimit(config_int(), MIN_BED_TEMP, MAX_BED_TEMP))
@@ -626,6 +631,14 @@ void parseConfigKey(u16 index)
     if (key_seen("F5:"))
     { if (inLimit(config_int(), MIN_FAN_SPEED, MAX_FAN_SPEED))
         infoSettings.fan_max[5] = config_int();
+    }
+    if (key_seen("CtL:"))
+    { if (inLimit(config_int(), MIN_FAN_SPEED, MAX_FAN_SPEED))
+        infoSettings.fan_max[6] = config_int();
+    }
+    if (key_seen("CtI:"))
+    { if (inLimit(config_int(), MIN_FAN_SPEED, MAX_FAN_SPEED))
+        infoSettings.fan_max[7] = config_int();
     }
     break;
 
