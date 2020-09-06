@@ -1,8 +1,12 @@
 #ifndef _MENU_H_
 #define _MENU_H_
 
-#include "stdint.h"
-#include "stdbool.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <stdint.h>
+#include <stdbool.h>
 #include "GUI.h"
 
 #define IDLE_TOUCH	0xFFFF
@@ -152,5 +156,9 @@ GUI_POINT getIconStartPoint(int index);
 void loopBackEnd(void);
 void loopFrontEnd(void);
 void loopProcess (void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

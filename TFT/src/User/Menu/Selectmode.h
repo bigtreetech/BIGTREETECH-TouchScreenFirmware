@@ -1,9 +1,13 @@
 #ifndef _SELECTMODE_H_
 #define _SELECTMODE_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <stdint.h>
+#include <stdbool.h>
 #include "GUI.h"
-#include "stdint.h"
-#include "stdbool.h"
 
 #define IDLE_TOUCH	0xFFFF
 typedef enum
@@ -18,5 +22,9 @@ extern bool skipMode;
 MKEY_VALUES MKeyGetValue(void);
 void menuMode(void);
 void loopCheckMode(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

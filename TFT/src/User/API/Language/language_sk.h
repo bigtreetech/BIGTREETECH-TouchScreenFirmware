@@ -203,6 +203,7 @@
     #define SK_PRINT_ACCELERATION     "Akcelerácia pri tlači"
     #define SK_RETRACT_ACCELERATION   "Akcelerácia retrakcie"
     #define SK_TRAVEL_ACCELERATION    "Akcelerácia presunu"
+    #define SK_JERK                   "Jerk"
     #define SK_BUMP_SENSITIVITY       "TMC bump citlivosť"
     #define SK_FWRETRACT              "FW Retraction"
     #define SK_FWRECOVER              "FW Retraction Recover"
@@ -262,5 +263,6 @@
     #define SK_TUNE_EXT_NEW_ESTEP     "New e-steps: %0.2f"
     #define SK_CONNECTION_SETTINGS    "Connection"
     #define SK_OFFSET_TOOL            "Offset 2nd Nozzle"
+    #define SK_HYBRID_THRESHOLD       "TMC HybridThreshold"
 
 #endif

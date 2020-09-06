@@ -1,9 +1,12 @@
 #ifndef _LANGUAGE_H_
 #define _LANGUAGE_H_
 
-#include "stdbool.h"
-#include "variants.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
 
+#include <stdbool.h>
+#include "variants.h"
 
 enum
 {
@@ -45,5 +48,9 @@ enum {
 };
 
 uint8_t * textSelect(uint16_t sel);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

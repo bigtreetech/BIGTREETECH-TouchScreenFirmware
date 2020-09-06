@@ -9,7 +9,7 @@ void menuTuning(void)
     LABEL_TUNING,
     // icon                         label
     {{ICON_PID,                     LABEL_PID},
-     {ICON_EXTRUDE_100,             LABEL_TUNE_EXTRUDER},
+     {ICON_TUNE_EXTRUDER,           LABEL_TUNE_EXTRUDER},
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BACKGROUND,              LABEL_BACKGROUND},

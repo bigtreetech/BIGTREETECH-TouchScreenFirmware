@@ -1,6 +1,9 @@
 #ifndef _LCD_INIT_H_
 #define _LCD_INIT_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "variants.h"
 #include "menu.h"
@@ -66,4 +69,9 @@
 
 void LCD_RefreshDirection(void);
 void LCD_Init(void);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif
