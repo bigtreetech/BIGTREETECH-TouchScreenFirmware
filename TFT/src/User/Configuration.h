@@ -1,5 +1,5 @@
-#ifndef _CONFIGURATION_H_
-#define _CONFIGURATION_H_
+#ifndef _CONFIGRATION_H_
+#define _CONFIGRATION_H_
 #define CONFIG_VERSION 20200810
 //===========================================================================
 //============================= General Settings ============================
@@ -25,7 +25,7 @@
  *
  * Default value is: 1 for LED_OFF
 */
-#define STARTUP_KNOB_LED_COLOR 0         // LED_OFF
+#define STARTUP_KNOB_LED_COLOR 6         // LED_OFF
 #define KEEP_KNOB_LED_COLOR_MARLIN_MODE  // Keeps the LED state in Marlin Mode
 
 /**
@@ -45,7 +45,7 @@
  *
  */
 #define DEFAULT_LCD_BRIGHTNESS      11  // 11: LCD_100_PERCENT - Brightness value from list
-#define DEFAULT_LCD_IDLE_BRIGHTNESS 3   // 3: LCD_10_PERCENT - Brightness value from list
+#define DEFAULT_LCD_IDLE_BRIGHTNESS 6   // 3: LCD_10_PERCENT - Brightness value from list
 #define DEFAULT_LCD_IDLE_TIMER      0   // 0: LCD_DIM_OFF
 #define LCD_DIM_CUSTOM_SECONDS      600 // Custom value in seconds. Will be used if LCD_DIM_CUSTOM_SECONDS is set as idle timer.
 
@@ -62,13 +62,13 @@
  *          6: MAGENTA,    7: YELLOW,      8: ORANGE,  9: PURPLE,   10: LIME,  11: BROWN,
  *         12: DARKBLUE,  13: DARKGREEN,  14: GRAY,   15: DARKGRAY
  */
-#define MARLIN_BKCOLOR 1
+#define MARLIN_BKCOLOR 4
 #define MARLIN_FNCOLOR 0
 
 /**
  * Text displayed at the top of the TFT in Marlin Mode.
  */
-#define MARLIN_BANNER_TEXT "LCD12864 Simulator"
+#define MARLIN_BANNER_TEXT "DREW"
 
 /**
  * show banner text at the top of the TFT in Marlin Mode.
@@ -80,7 +80,7 @@
  * Options:  0: Disabled. RECOMMENDED FOR TFT24
  *           1: Enabled Marlin Fullscreen mode.
  */
-#define DEFAULT_ST7920_FULLSCREEN_MODE 0 // 0: Disabled. RECOMMENDED FOR TFT24
+#define DEFAULT_ST7920_FULLSCREEN_MODE 1 // 0: Disabled. RECOMMENDED FOR TFT24
 
 /**
  * Keep Serial always On (ONLY SUPPORTED ON TFT24 V1.1, TFT35 V3.0, AND TFT28 V3.0)
@@ -91,7 +91,7 @@
  *
  * Options:  0: Disabled    1: Enabled
  */
-#define SERIAL_ALWAYS_ON 0  // Default: 0 (Disabled)
+#define SERIAL_ALWAYS_ON 1  // Default: 0 (Disabled)
 
 //===========================================================================
 //========================== Touch Mode Settings ============================
@@ -161,20 +161,19 @@
 #define TITLE_BACKGROUND_COLOR     1  // Title background color // 0xD928
 #define BACKGROUND_COLOR           1  // Background color // 0x0A29
 #define FONT_COLOR                 0  // Font foreground color
-#define REMINDER_FONT_COLOR        2  // Reminder font color, such as: "No print attached", "Busy processing", etc.
-#define VOLUME_REMINDER_FONT_COLOR 5  // Volume reminder font color, such as: "Card inserted", "Card removed"
-#define STATUS_XYZ_BG_COLOR        15 // Background color for X Y Z position display in Status Screen.
-#define LISTVIEW_BORDER_COLOR      15 // Border color in List view
-#define LISTVIEW_ICON_COLOR        15 // icon color in List view
+#define REMINDER_FONT_COLOR        0  // Reminder font color, such as: "No print attached", "Busy processing", etc.
+#define VOLUME_REMINDER_FONT_COLOR 0  // Volume reminder font color, such as: "Card inserted", "Card removed"
+#define STATUS_XYZ_BG_COLOR        1  // Background color for X Y Z position display in Status Screen.
+#define LISTVIEW_BORDER_COLOR      1  // Border color in List view
+#define LISTVIEW_ICON_COLOR        1  // icon color in List view
 
 #define HOTEND_NUM   1    // set in 1~6
 #define EXTRUDER_NUM 1    // set in 1~6
 #define FAN_NUM      1    // set in 1~6
-#define FAN_CTRL_NUM 0    // set in 1~2
 
 #define PREHEAT_LABELS   {"PLA", "PETG", "ABS", "WOOD", "TPU", "NYLON"}
-#define PREHEAT_HOTEND   {200,   240,    230,   170,    220,   250}
-#define PREHEAT_BED      {60,    70,     90,    50,     50,    90}
+#define PREHEAT_HOTEND   {220,   230,    240,   210,    210,   250}
+#define PREHEAT_BED      {60,    85,     100,    60,     70,    60}
 
 #define HEAT_MAX_TEMP    {275,       275,       275,       275,       275,       275,       150,    60}   //max temperature can be set
 #define HEAT_SIGN_ID     {"T0:",     "T1:",     "T2:",     "T3:",     "T4:",     "T5:",     "B:",   "C:"}
@@ -185,19 +184,9 @@
 #define TOOL_CHANGE      {"T0",   "T1",      "T2",      "T3",      "T4",      "T5"}
 #define EXTRUDER_ID      {"E0",   "E1",      "E2",      "E3",      "E4",      "E5"}
 
-/**
- * Fan control
- * 
- * Fan type Options: 
- *               0: FAN_TYPE_F       - default cooling fan speed (Check Marlin GCode M106)
- *               1: FAN_TYPE_CTRL_S  - Controller fan speed for stepper or hot bed ON (Check Marlin GCode M710)
- *               2: FAN_TYPE_CTRL_I  - Controller fan idle speed  (Check Marlin gcode - M710)
- *               8: FAN_TYPE_UNKNOWN - Unknown / Not defined
- */
-#define FAN_MAX_PWM      {       255,       255,       255,       255,       255,       255,       255,       255 };
-#define FAN_DISPLAY_ID   {      "F0",      "F1",      "F2",      "F3",      "F4",      "F5",     "CtL",     "CtI" };
-#define FAN_CMD          { "M106 P0", "M106 P1", "M106 P2", "M106 P3", "M106 P4", "M106 P5",    "M710",    "M710" };
-#define FAN_TYPE         {         0,         0,         0,         0,         0,         0,         1,         2 };
+#define FAN_MAX_PWM      {255,       255,       255,       255,       255,       255}
+#define FAN_DISPLAY_ID   {"F0",      "F1",      "F2",      "F3",      "F4",      "F5"}
+#define FAN_CMD          {"M106 P0", "M106 P1", "M106 P2", "M106 P3", "M106 P4", "M106 P5" };
 
 #define SPEED_ID         {"Sp.", "Fr."}
 
@@ -217,9 +206,9 @@
 #define X_MIN_POS 0
 #define Y_MIN_POS 0
 #define Z_MIN_POS 0
-#define X_MAX_POS 235
-#define Y_MAX_POS 235
-#define Z_MAX_POS 250
+#define X_MAX_POS 204
+#define Y_MAX_POS 212
+#define Z_MAX_POS 140
 
 // Specify a pause position as { X, Y, Z_raise }
 #define NOZZLE_PAUSE_RETRACT_LENGTH 15   // (mm)
@@ -235,7 +224,7 @@
  * PrusaSlicer can add M601 on certain height.
  * Acts here like manual pause
  */
-#define NOZZLE_PAUSE_M600_M601
+//#define NOZZLE_PAUSE_M600_M601
 
 /**
  * Auto Save Load Leveling Data
@@ -373,7 +362,7 @@
 #define POWER_LOSS_ZRAISE 10
 
 // Prevent extrusion if the temperature is below set temperature
-#define PREVENT_COLD_EXTRUSION_MINTEMP 170
+#define PREVENT_COLD_EXTRUSION_MINTEMP 180
 
 /**
  * Maximum hotend temperature of automatic shut down after printing.
