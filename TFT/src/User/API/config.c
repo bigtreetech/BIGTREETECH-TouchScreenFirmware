@@ -563,7 +563,7 @@ void parseConfigKey(u16 index)
     break;
 
   case C_INDEX_FAN_CTRL_COUNT:
-    if (inLimit(config_int(), 2, MAX_FAN_CTRL_COUNT))
+    if (inLimit(config_int(), 0, MAX_FAN_CTRL_COUNT))
       infoSettings.fan_ctrl_count = config_int();
     break;
 
