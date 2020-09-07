@@ -1,6 +1,8 @@
 #include "menu.h"
 #include "includes.h"
 #include "list_item.h"
+#include "Notification.h"
+
 
 // exhibitRect is 2 ICON Space in the Upper Row and 2 Center Coloum.
 const GUI_RECT exhibitRect = {
@@ -42,6 +44,7 @@ const GUI_RECT rect_of_keyListView[ITEM_PER_PAGE]={
   {2*START_X + LISTITEM_WIDTH,  2*LIST_ICON_HEIGHT+2*LISTICON_SPACE_Y+ICON_START_Y,  2*START_X + LISTITEM_WIDTH + 1*LIST_ICON_WIDTH,  3*LIST_ICON_HEIGHT+2*LISTICON_SPACE_Y+ICON_START_Y},
 };
 
+
 //Clean up the gaps outside icons
 void menuClearGaps(void)
 {
@@ -73,7 +76,8 @@ static const MENUITEMS *curMenuItems = NULL;   //current menu
 
 static const LISTITEMS *curListItems = NULL;   //current listmenu
 
-MENU_TYPE menuType = MENU_TYPE_ICON;
+static MENU_TYPE menuType = MENU_TYPE_ICON;
+
 
 uint8_t *labelGetAddress(const LABEL *label)
 {
@@ -156,6 +160,8 @@ void reminderSetUnConnected(void)
 
 void reminderMessage(int16_t inf, SYS_STATUS status)
 {
+  if(toastRunning())
+    return;
   reminder.inf = inf;
   GUI_SetColor(infoSettings.reminder_color);
   GUI_SetBkColor(infoSettings.title_bg_color);
@@ -167,6 +173,10 @@ void reminderMessage(int16_t inf, SYS_STATUS status)
 
 void volumeReminderMessage(int16_t inf, SYS_STATUS status)
 {
+  wakeLCD();
+
+  if(toastRunning())
+    return;
   volumeReminder.inf = inf;
   GUI_SetColor(infoSettings.sd_reminder_color);
   GUI_SetBkColor(infoSettings.title_bg_color);
@@ -257,6 +267,11 @@ void loopBusySignClear(void)
 
 void menuDrawTitle(const uint8_t *content) //(const MENUITEMS * menuItems)
 {
+  if (toastRunning())
+  {
+    drawToast(true);
+    return;
+  }
   uint16_t start_y = (TITLE_END_Y - BYTE_HEIGHT) / 2;
   uint16_t start_x = 10;
   uint16_t end_x = drawTemperatureStatus();
@@ -354,9 +369,12 @@ void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, const ITEM * item)
   {
     if (liveicon->enabled[i] == true)
     {
-      GUI_SetColor(lcd_colors[liveicon->lines[i].fn_color]);
-      if (liveicon->lines[i].text_mode != GUI_TEXTMODE_TRANS)
+      if (sizeof(lcd_colors) > liveicon->lines[i].fn_color)
+        GUI_SetColor(lcd_colors[liveicon->lines[i].fn_color]);
+
+      if (liveicon->lines[i].text_mode != GUI_TEXTMODE_TRANS && sizeof(lcd_colors) > liveicon->lines[i].bk_color)
         GUI_SetBkColor(lcd_colors[liveicon->lines[i].bk_color]);
+        
       GUI_SetTextMode(liveicon->lines[i].text_mode);
 
       GUI_POINT loc;
@@ -476,7 +494,7 @@ void loopBackEnd(void)
   loopBuzzer();
 #endif
 
-if(infoMachineSettings.onboard_sd_support == ENABLED && infoMachineSettings.autoReportSDStatus == DISABLED)
+  if(infoMachineSettings.onboard_sd_support == ENABLED)
   {
     loopCheckPrinting(); //Check if there is a SD or USB print running.
   }
@@ -511,6 +529,8 @@ void loopFrontEnd(void)
 {
   loopVolumeSource();                 //Check if volume source(SD/U disk) insert
 
+  loopToast();
+
   loopReminderClear();                //If there is a message in the status bar, timed clear
 
   loopVolumeReminderClear();
@@ -522,6 +542,8 @@ void loopFrontEnd(void)
 #ifdef FIL_RUNOUT_PIN
   loopFrontEndFILRunoutDetect();
 #endif
+
+  loopPopup();
 }
 
 void loopProcess(void)

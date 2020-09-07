@@ -134,7 +134,7 @@ void processIcon(char * path, u32 flashAddr)
       dispIconFail((u8 *)path);
     }
     // Display icon update progress
-    my_sprintf(tempstr, "Updated: %d | Not Updated: %d", found, notfound);
+    sprintf(tempstr, "Updated: %d | Not Updated: %d", found, notfound);
     GUI_DispString(statUpdateRect.x0, statUpdateRect.y0, (u8 *)tempstr);
 }
 
@@ -162,7 +162,7 @@ void updateIcon(void)
 
   for (int i = 0; i < COUNT(iconBmpName); i++)
   {
-    my_sprintf(nowBmp, BMP_ROOT_DIR "/%s.bmp", iconBmpName[i]);
+    sprintf(nowBmp, BMP_ROOT_DIR "/%s.bmp", iconBmpName[i]);
     GUI_ClearPrect(&labelUpdateRect);
     GUI_DispString(labelUpdateRect.x0, labelUpdateRect.y0, (u8 *)nowBmp);
 
@@ -171,7 +171,7 @@ void updateIcon(void)
 /*
   for (int i = 0; i < COUNT(smallIconBmpName); i++)
   {
-    my_sprintf(nowBmp, BMP_ROOT_DIR "/%s_small.bmp", smallIconBmpName[i]);
+    sprintf(nowBmp, BMP_ROOT_DIR "/%s_small.bmp", smallIconBmpName[i]);
     GUI_ClearPrect(&labelUpdateRect);
     GUI_DispString(labelUpdateRect.x0, labelUpdateRect.y0, (u8 *)nowBmp);
 
@@ -210,7 +210,7 @@ void dispIconFail(u8 *lbl)
     break;
   }
   char error_txt[30];
-  my_sprintf(error_txt, "Error: %s", stat_txt);
+  sprintf(error_txt, "Error: %s", stat_txt);
   GUI_DispString(labelFailedRect.x0, labelFailedRect.y0 + BYTE_HEIGHT + 2, (u8*)error_txt);
   GUI_RestoreColorDefault();
   Delay_ms(1000); // give some time to the user to read failed icon name.
@@ -230,7 +230,7 @@ void updateFont(char *font, u32 addr)
   tempbuf = malloc(W25QXX_SECTOR_SIZE);
   if (tempbuf == NULL)  return;
   GUI_Clear(infoSettings.bg_color);
-  my_sprintf((void *)buffer,"%s Size: %dKB",font, (u32)f_size(&myfp)>>10);
+  sprintf((void *)buffer,"%s Size: %dKB",font, (u32)f_size(&myfp)>>10);
   GUI_DispString(0, 100, (u8*)buffer);
   GUI_DispString(0, 140, (u8*)"Updating:   %");
 

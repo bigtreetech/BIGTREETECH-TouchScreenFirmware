@@ -26,7 +26,7 @@ const char *const numPadKeyChar[KEY_NUM] = {
   "1","2","3","\u0894",
   "4","5","6","\u0899",
   "7","8","9","\u0895",
-  ".","0","-",""
+  ".","0","-","\u08A5"
 };
 const GUI_RECT oldParameterRect = {0,                        0, LCD_WIDTH/2 - BYTE_WIDTH,  ICON_START_Y+0*SKEYHEIGHT};
 const GUI_RECT newParameterRect = {LCD_WIDTH/2 + BYTE_WIDTH, 0,                LCD_WIDTH,  ICON_START_Y+0*SKEYHEIGHT};
@@ -48,6 +48,7 @@ void keyPress(u8 index, u8 ispressed)
     GUI_SetColor(infoSettings.font_color);
   }
 }
+
 void Draw_keyboard(u8 * title, bool NumberOnly, bool negative)
 {
     TSC_ReDrawIcon = keyPress;
@@ -68,7 +69,7 @@ void Draw_keyboard(u8 * title, bool NumberOnly, bool negative)
     GUI_SetTextMode(GUI_TEXTMODE_TRANS);
     for(uint8_t i=0 ;i<KEY_NUM ;i++)
     {
-      if( !(i == NUM_KEY_DEC || i == NUM_KEY_MINUS || i == NUM_KEY_OK || i == NUM_KEY_DEL || i == NUM_KEY_EXIT) )
+      if( !(i == NUM_KEY_DEC || i == NUM_KEY_MINUS || i == NUM_KEY_OK || i == NUM_KEY_DEL || i == NUM_KEY_EXIT || i == NUM_KEY_RESET) )
         GUI_DispStringInPrect(&rect_of_numkey[i],(u8*)numPadKeyChar[i]);
     }
 
@@ -80,6 +81,7 @@ void Draw_keyboard(u8 * title, bool NumberOnly, bool negative)
     DrawCharIcon(&rect_of_numkey[NUM_KEY_OK], MIDDLE, ICONCHAR_OK, false, 0);
     DrawCharIcon(&rect_of_numkey[NUM_KEY_DEL], MIDDLE, ICONCHAR_POINT_LEFT, false, 0);
     DrawCharIcon(&rect_of_numkey[NUM_KEY_EXIT], MIDDLE, ICONCHAR_CANCEL, false, 0);
+    DrawCharIcon(&rect_of_numkey[NUM_KEY_RESET], MIDDLE, ICONCHAR_RESET, false, 0);
 
     GUI_DispStringInPrect(&arrowRect,(u8 *)"\u089A");
     GUI_DispStringInPrect(&oldParameterRect, title);
@@ -89,13 +91,13 @@ void Draw_keyboard(u8 * title, bool NumberOnly, bool negative)
 
 
 //Numpad for decimal numbers
-float numPadFloat(u8* title, float old_val, bool negative)
+float numPadFloat(u8* title, float old_val, float reset_val, bool negative)
 {
     //bool exit = false;
     NUM_KEY_VALUES key_num = NUM_KEY_IDLE;
     touchSound = false;
     setLargeFont(true);
-    u8 nowIndex = 0,lastIndex = 0;
+    u8 nowIndex = 0, lastIndex = 0;
     char ParameterBuf[FLOAT_BUFLONG + 1] = {0};
     u8 prec = (old_val == 0) ? 0 : 2;
     sprintf(ParameterBuf,"%.*f", prec, old_val);
@@ -130,6 +132,12 @@ float numPadFloat(u8* title, float old_val, bool negative)
         {
           BUZZER_PLAY(sound_deny);
         }
+        break;
+
+      case NUM_KEY_RESET:
+        sprintf(ParameterBuf,"%.*f", prec, old_val);
+        nowIndex = strlen(ParameterBuf);
+        lastIndex = nowIndex + 1;
         break;
 
       case NUM_KEY_1:
@@ -214,7 +222,7 @@ float numPadFloat(u8* title, float old_val, bool negative)
 }
 
 //Numpad for integer numbers
-int32_t numPadInt(u8* title, int32_t old_val, bool negative)
+int32_t numPadInt(u8* title, int32_t old_val, int32_t reset_val, bool negative)
 {
     NUM_KEY_VALUES key_num = NUM_KEY_IDLE;
     touchSound = false;
@@ -271,7 +279,11 @@ int32_t numPadInt(u8* title, int32_t old_val, bool negative)
           BUZZER_PLAY(sound_deny);
         }
         break;
-
+      case NUM_KEY_RESET:
+          neg = (reset_val >= 0) ? 1: -1;
+          val = reset_val * neg;
+          BUZZER_PLAY(sound_keypress);
+      break;
       case NUM_KEY_1:
       case NUM_KEY_2:
       case NUM_KEY_3:

@@ -1,6 +1,10 @@
 #ifndef _LCD_ENCODER_H_
 #define _LCD_ENCODER_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "stdbool.h"
 #include "stdint.h"
 #define ENCODER_PULSES_PER_STEP   4
@@ -16,7 +20,6 @@
 
 extern int16_t encoderPosition;
 
-
 void HW_EncoderInit(void);
 bool encoder_ReadBtn(uint16_t intervals);
 bool LCD_ReadPen(uint16_t intervals);
@@ -26,5 +29,9 @@ void loopCheckEncoderSteps(void);
 uint8_t encoder_GetPos(void);
 bool encoder_CheckState(void);
 void sendEncoder(uint8_t num);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

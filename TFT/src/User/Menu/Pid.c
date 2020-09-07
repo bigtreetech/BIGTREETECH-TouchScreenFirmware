@@ -48,10 +48,24 @@ void pidUpdateStatus(bool succeeded)
   if (pidCounter > 0)                  // if all the PID processes were still not terminated, simply provide a notification
   {
 #ifdef ENABLE_PID_STATUS_UPDATE_NOTIFICATION
+    char tmpBuf[120];
+
     if (succeeded)
-      popupNotification(DIALOG_TYPE_INFO, textSelect(LABEL_PID_TITLE), textSelect(LABEL_PROCESS_COMPLETED));
+    {
+      sprintf(tmpBuf, "%s %s", textSelect(LABEL_PID_TITLE), textSelect(LABEL_PROCESS_COMPLETED));
+
+      BUZZER_PLAY(sound_notify);
+
+      addToast(DIALOG_TYPE_INFO, tmpBuf);
+    }
     else
-      popupNotification(DIALOG_TYPE_ERROR, textSelect(LABEL_PID_TITLE), textSelect(LABEL_PROCESS_ABORTED));
+    {
+      sprintf(tmpBuf, "%s %s", textSelect(LABEL_PID_TITLE), textSelect(LABEL_PROCESS_ABORTED));
+
+      BUZZER_PLAY(sound_error);
+
+      addToast(DIALOG_TYPE_ERROR, tmpBuf);
+    }
 #endif
   }
   else                                 // if all the PID processes terminated, provide the final dialog
@@ -64,7 +78,7 @@ void pidUpdateStatus(bool succeeded)
 
       sprintf(tmpBuf, "%s\n %s", textSelect(LABEL_PROCESS_COMPLETED), textSelect(LABEL_EEPROM_SAVE_INFO));
 
-      BUZZER_PLAY(sound_notify);
+      BUZZER_PLAY(sound_success);
 
       showDialog(DIALOG_TYPE_SUCCESS, textSelect(LABEL_PID_TITLE), (u8*) tmpBuf,
         textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), saveEepromSettings, NULL, NULL);
@@ -165,7 +179,7 @@ void pidStart(void)
   pidUpdateCounter();                                                          // update the number of set temperatures (number of PID processes to execute)
   pidTimeout = OS_GetTimeMs() + PID_PROCESS_TIMEOUT;                           // set timeout for overall PID process
 
-  mustStoreCmd("M42 P4 S0\nM42 P5 S255\nM42 P6 S0\n");                         // set LED light to RED
+  mustStoreCmd("M150 R255 U0 B0\n");                                           // set LED light to RED
   mustStoreCmd("M106 S255\n");                                                 // set fan speed to max
   mustStoreCmd("G4 S1\n");                                                     // wait 1 sec
 
@@ -179,7 +193,7 @@ void pidStart(void)
   }
 
   mustStoreCmd("M107\n");                                                      // stop fan
-  mustStoreCmd("M42 P4 S255\nM42 P5 S0\nM42 P6 S0\n");                         // set LED light to GREEN
+  mustStoreCmd("M150 R0 U255 B0\n");                                           // set LED light to GREEN
 
   infoMenu.menu[++infoMenu.cur] = menuPidWait;
 }
@@ -236,6 +250,10 @@ void menuPid(void)
   pidItems.items[KEY_ICON_4] = itemPidTool[pidHeater.toolIndex];
   pidItems.items[KEY_ICON_5] = itemPidDegree[curDegree];
 
+  #if LCD_ENCODER_SUPPORT
+    encoderPosition = 0;
+  #endif
+
   menuDrawPage(&pidItems);
   pidTemperatureReDraw(false);
 
@@ -247,7 +265,7 @@ void menuPid(void)
       case KEY_ICON_0:
         if (pidHeater.T[pidHeater.toolIndex].target > 0)
           pidHeater.T[pidHeater.toolIndex].target =
-            limitValue(0, pidHeater.T[pidHeater.toolIndex].target - pidDegree[curDegree], infoSettings.max_temp[pidHeater.toolIndex]);
+            NOBEYOND(0, pidHeater.T[pidHeater.toolIndex].target - pidDegree[curDegree], infoSettings.max_temp[pidHeater.toolIndex]);
 
         pidTemperatureReDraw(true);
         break;
@@ -255,7 +273,7 @@ void menuPid(void)
       case KEY_ICON_3:
         if (pidHeater.T[pidHeater.toolIndex].target < infoSettings.max_temp[pidHeater.toolIndex])
           pidHeater.T[pidHeater.toolIndex].target =
-            limitValue(0, pidHeater.T[pidHeater.toolIndex].target + pidDegree[curDegree], infoSettings.max_temp[pidHeater.toolIndex]);
+            NOBEYOND(0, pidHeater.T[pidHeater.toolIndex].target + pidDegree[curDegree], infoSettings.max_temp[pidHeater.toolIndex]);
 
         pidTemperatureReDraw(true);
         break;
@@ -284,7 +302,7 @@ void menuPid(void)
       case KEY_ICON_6:
         if (pidRunning)
         {
-          popupNotification(DIALOG_TYPE_ERROR, textSelect(pidItems.title.index), textSelect(LABEL_PROCESS_RUNNING));
+          addToast(DIALOG_TYPE_ERROR, (char*)textSelect(LABEL_PROCESS_RUNNING));
         }
         else
         {
@@ -292,7 +310,7 @@ void menuPid(void)
 
           if (pidCounter == 0)         // if no temperature was set to a value > 0
           {
-            popupNotification(DIALOG_TYPE_ERROR, textSelect(pidItems.title.index), textSelect(LABEL_INVALID_VALUE));
+            addToast(DIALOG_TYPE_ERROR, (char*)textSelect(LABEL_INVALID_VALUE));
           }
           else
           {
@@ -307,6 +325,23 @@ void menuPid(void)
         break;
 
       default:
+        #if LCD_ENCODER_SUPPORT
+          if(encoderPosition)
+          {
+            if(encoderPosition > 0)
+              if (pidHeater.T[pidHeater.toolIndex].target < infoSettings.max_temp[pidHeater.toolIndex])
+                pidHeater.T[pidHeater.toolIndex].target =
+                  NOBEYOND(0, pidHeater.T[pidHeater.toolIndex].target + pidDegree[curDegree], infoSettings.max_temp[pidHeater.toolIndex]);
+
+            if(encoderPosition < 0)
+              if (pidHeater.T[pidHeater.toolIndex].target > 0)
+                pidHeater.T[pidHeater.toolIndex].target =
+                  NOBEYOND(0, pidHeater.T[pidHeater.toolIndex].target - pidDegree[curDegree], infoSettings.max_temp[pidHeater.toolIndex]);
+
+            pidTemperatureReDraw(true);
+            encoderPosition = 0;
+          }
+        #endif
         break;
     }
 

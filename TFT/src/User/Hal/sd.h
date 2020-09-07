@@ -1,6 +1,10 @@
 #ifndef _SD_H_
 #define _SD_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "spi.h"
 
 // SDCard type definition
@@ -56,5 +60,9 @@ u8 SD_Get_Ack(u8 Response);					       	//Get the answer
 u32 SD_Get_Sector_Count(void);   					//Number of sectors read
 u8 SD_GetCID(u8 *cid_data);                         //Read SD card CID
 u8 SD_GetCSD(u8 *csd_data);                         //Read SD card CSD
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

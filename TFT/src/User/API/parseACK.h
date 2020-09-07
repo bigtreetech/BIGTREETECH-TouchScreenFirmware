@@ -1,23 +1,24 @@
 #ifndef _PARSEACK_H_
 #define _PARSEACK_H_
 
-#include "stdint.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <stdint.h>
 #include "Configuration.h"
 
 static const char errormagic[]         = "Error:";
 static const char echomagic[]          = "echo:";
-static const char unknowmagic[]        = "Unknown command:";
-static const char bsdprintingmagic[]   = "SD printing byte";
-static const char bsdnoprintingmagic[] = "Not SD printing";
 
 #define ACK_MAX_SIZE 2048
 
-typedef enum                           // popup message types available to display an echo message
+typedef enum                      // popup message types available to display an echo message
 {
-  ECHO_POPUP_NONE = 0,                 // no popup. The echo message is silently discarded
-  ECHO_POPUP_REMINDER,                 // reminder popup. A reminder popup is displayed. A user interaction is needed
-  ECHO_POPUP_NOTIFICATION,             // notification popup. A notification popup is displayed for few seconds. No user interaction is needed
-} _ECHO_POPUP_TYPE;
+  ECHO_NOTIFY_NONE = 0,            // ignore the echo message
+  ECHO_NOTIFY_TOAST,               // Show a non invasive toast on the title bar for a preset duration.
+  ECHO_NOTIFY_DIALOG,              // Show a window to notify the user and alow interaction.
+} ECHO_NOTIFY_TYPE;
 
 typedef enum                           // append at the end of this list the id of any new echo message for
 {                                      // which a specific popup message type must be used to notify the user
@@ -35,35 +36,25 @@ typedef enum                           // append at the end of this list the id 
   ECHO_ID_SOFT_ENDSTOP,
   ECHO_ID_BED_LEVELING,
   ECHO_ID_FADE_HEIGHT,
-} _ECHO_MSG_ID;
+  ECHO_ID_TOOL_CHANGE,
+  ECHO_ID_COUNT,
+} ECHO_ID;
 
-/*
-  It retrives the current attribute values for the specified msgId
-
-  input:   msgId
-  
-  ouput:   curPopupType
-           curBuzzerEnabled
-
-  returns: true, if msgId is found and its attribute values are retrieved in curPopupType and curBuzzerEnabled
-           false, otherwise
-*/
-bool getKnownEchoParam(_ECHO_MSG_ID msgId, _ECHO_POPUP_TYPE *curPopupType, bool *curBuzzerEnabled);
-
-/*
-  It sets the new attribute values for the specified msgId
-
-  input:   msgId
-           newPopupType
-           newBuzzerEnabled
-
-  returns: true, if msgId is found and its attribute values are set with newPopupType and newBuzzerEnabled
-           false, otherwise
-*/
-bool setKnownEchoParam(_ECHO_MSG_ID msgId, _ECHO_POPUP_TYPE newPopupType, bool newBuzzerEnabled);
+typedef struct
+{
+  ECHO_NOTIFY_TYPE  notifyType;
+  const char *const msg;
+} ECHO;
 
 void setCurrentAckSrc(uint8_t src);
 void parseACK(void);
 void parseRcvGcode(void);
+
+void setIgnoreEcho(ECHO_ID msgId, bool state);
+
+#ifdef __cplusplus
+}
+#endif
+
 
 #endif

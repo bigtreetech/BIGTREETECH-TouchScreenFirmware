@@ -34,12 +34,7 @@ static int lastConnection_status = -1;
 static bool msgNeedRefresh = false;
 
 static char msgtitle[20];
-static char msgbody[128];
-
-static float xaxis;
-static float yaxis;
-static float zaxis;
-static bool gantryCmdWait = false;
+static char msgbody[MAX_MSG_LENGTH];
 
 uint8_t current_tool = NOZZLE0;
 int current_fan = 0;
@@ -64,7 +59,7 @@ const GUI_RECT RecGantry = {START_X,                        1*ICON_HEIGHT+0*SPAC
 void drawTemperature(void)
 {
   //icons and their values are updated one by one to reduce flicker/clipping
-  char tempstr[100];
+  char tempstr[45];
 
   LIVE_INFO lvIcon;
   lvIcon.enabled[0] = true;
@@ -118,96 +113,10 @@ void drawTemperature(void)
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
   GUI_SetColor(GANTRYLBL_COLOR);
   GUI_SetBkColor(infoSettings.status_xyz_bg_color);
-  sprintf(tempstr, "   X: %.2f   Y: %.2f   Z: %.2f   ", xaxis, yaxis, zaxis);
+  sprintf(tempstr, "   X: %.2f   Y: %.2f   Z: %.2f   ", coordinateGetAxisActual(X_AXIS), coordinateGetAxisActual(Y_AXIS), coordinateGetAxisActual(Z_AXIS));
   GUI_DispStringInPrect(&RecGantry,(u8 *)tempstr);
 
   GUI_RestoreColorDefault();
-}
-
-void storegantry(int n, float val){
-    //float* px = &val;
-  switch (n)
-  {
-  case 0:
-    xaxis = val;
-    break;
-  case 1:
-    yaxis = val;
-    break;
-  case 2:
-    zaxis = val;
-    break;
-  default:
-    break;
-  }
-  gantryCmdWait = false;
-}
-
-void gantry_inc(int n, float val){
-    //float* px = &val;
-  switch (n)
-  {
-  case 0:
-    xaxis += val;
-    if ( xaxis > infoSettings.machine_size_max[X_AXIS]){
-      xaxis = infoSettings.machine_size_max[X_AXIS];
-    }
-    break;
-  case 1:
-    yaxis += val;
-    if ( yaxis > infoSettings.machine_size_max[Y_AXIS]){
-      yaxis = infoSettings.machine_size_max[Y_AXIS];
-    }
-    break;
-  case 2:
-    zaxis += val;
-    if ( zaxis > infoSettings.machine_size_max[Z_AXIS]){
-      zaxis = infoSettings.machine_size_max[Z_AXIS];
-    }
-    break;
-  default:
-    break;
-  }
-}
-void gantry_dec(int n, float val){
-    //float* px = &val;
-  switch (n)
-  {
-  case 0:
-    xaxis -= val;
-    if ( xaxis < infoSettings.machine_size_min[X_AXIS]){
-      xaxis = infoSettings.machine_size_min[X_AXIS];
-    }
-    break;
-  case 1:
-    yaxis -= val;
-    if ( yaxis < infoSettings.machine_size_min[Y_AXIS]){
-      yaxis = infoSettings.machine_size_min[Y_AXIS];
-    }
-    break;
-  case 2:
-    zaxis -= val;
-    if ( zaxis < infoSettings.machine_size_min[Z_AXIS]){
-      zaxis = infoSettings.machine_size_min[Z_AXIS];
-    }
-    break;
-  default:
-    break;
-  }
-}
-
-float getAxisLocation(u8 n){
-  switch (n)
-  {
-  case 0:
-    return xaxis;
-  case 1:
-    return yaxis;
-  case 2:
-    return zaxis;
-  default:
-    return xaxis;
-  }
 }
 
 void statusScreen_setMsg(const uint8_t *title, const uint8_t *msg)
@@ -234,7 +143,6 @@ void statusScreen_setReady(void)
 
 void drawStatusScreenMsg(void)
 {
-//GUI_ClearRect(RectInfo.x0,RectInfo.y0,RectInfo.x1,RectInfo.y1);
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
   ICON_CustomReadDisplay(RectInfo.x0,RectInfo.y0,INFOBOX_WIDTH,INFOBOX_HEIGHT,INFOBOX_ADDR);
@@ -267,28 +175,18 @@ void toggleTool(void)
     {
       current_tool = (current_tool+1) % infoSettings.hotend_count;
     }
-    if (infoSettings.fan_count > 1)
+    if ((infoSettings.fan_count + infoSettings.fan_ctrl_count) > 1)
     {
-      current_fan = (current_fan + 1) % infoSettings.fan_count;
+      current_fan = (current_fan + 1) % (infoSettings.fan_count + infoSettings.fan_ctrl_count);
     }
     current_speedID = (current_speedID + 1) % 2;
     nextTime = OS_GetTimeMs() + update_time;
     drawTemperature();
 
-    if (infoHost.connected == true)
-    {
-      if (gantryCmdWait != true)
-      {
-        gantryCmdWait = true;
-        storeCmd("M114\n");
-        storeCmd("M220\n");
-        storeCmd("M221\n");
-      }
-    }
-    else
-    {
-      gantryCmdWait = false;
-    }
+    // gcode querys must be call after drawTemperatur
+    coordinateQuery();
+    speedQuery();
+    fanSpeedQuery();
   }
 }
 

@@ -1,11 +1,26 @@
 #ifndef _MENU_H_
 #define _MENU_H_
 
-#include "stdint.h"
-#include "stdbool.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <stdint.h>
+#include <stdbool.h>
 #include "GUI.h"
 
 #define IDLE_TOUCH	0xFFFF
+
+#define ITEM_PER_PAGE       8
+#define LISTITEM_PER_PAGE   5
+#define LIVEICON_LINES      3
+
+#define CENTER_Y          ((exhibitRect.y1 - exhibitRect.y0)/2 + exhibitRect.y0)
+#define CENTER_X          ((exhibitRect.x1 - exhibitRect.x0 - BYTE_WIDTH)/2 + exhibitRect.x0)
+#define LISTITEM_WIDTH    (LCD_WIDTH-(3*START_X)-LIST_ICON_WIDTH)
+#define LISTITEM_HEIGHT   ((LCD_HEIGHT-ICON_START_Y-START_X)/5)
+#define LISTICON_SPACE_Y  ((LCD_HEIGHT-ICON_START_Y-START_X-(3*LIST_ICON_HEIGHT))/ 2)
+
 typedef enum
 {
   KEY_ICON_0 = 0,
@@ -33,10 +48,6 @@ typedef enum
   MENU_TYPE_LISTVIEW,
   MENU_TYPE_DIALOG
 } MENU_TYPE;
-
-#define ITEM_PER_PAGE       8
-#define LISTITEM_PER_PAGE   5
-#define LIVEICON_LINES      3
 
 typedef union
 {
@@ -69,7 +80,7 @@ typedef struct
 {
   GUI_RECT rect;
   uint32_t time;
-  uint8_t  status;
+  uint8_t status;
   int16_t inf;
 }REMINDER;
 
@@ -114,16 +125,10 @@ typedef struct
  LIVE_DATA lines[LIVEICON_LINES];
 }LIVE_INFO;
 
-
 void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, const ITEM * item);
 
 extern const GUI_RECT exhibitRect;
 extern const GUI_RECT rect_of_key[ITEM_PER_PAGE*2];
-#define CENTER_Y  ((exhibitRect.y1 - exhibitRect.y0)/2 + exhibitRect.y0)
-#define CENTER_X  ((exhibitRect.x1 - exhibitRect.x0 - BYTE_WIDTH)/2 + exhibitRect.x0)
-#define LISTITEM_WIDTH (LCD_WIDTH-(3*START_X)-LIST_ICON_WIDTH)
-#define LISTITEM_HEIGHT ((LCD_HEIGHT-ICON_START_Y-START_X)/5)
-#define LISTICON_SPACE_Y ((LCD_HEIGHT-ICON_START_Y-START_X-(3*LIST_ICON_HEIGHT))/ 2)
 
 void setMenuType(MENU_TYPE type);
 MENU_TYPE getMenuType(void);
@@ -151,5 +156,9 @@ GUI_POINT getIconStartPoint(int index);
 void loopBackEnd(void);
 void loopFrontEnd(void);
 void loopProcess (void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

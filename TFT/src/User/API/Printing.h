@@ -1,7 +1,12 @@
 #ifndef _PRINTING_H_
 #define _PRINTING_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <stdbool.h>
 #include "variants.h"
-#include "stdbool.h"
 #include "ff.h"
 
 
@@ -37,11 +42,12 @@ typedef struct
 
 extern PRINTING infoPrinting;
 
-void setPrintfinishAction(void (*_printfinish)());
 bool isPrinting(void);
 bool isPause(void);
 bool isM0_Pause(void);
 void breakAndContinue(void);
+void resumeAndPurge(void);
+void resumeAndContinue(void);
 void setPrintingTime(uint32_t RTtime);
 
 void exitPrinting(void);
@@ -77,7 +83,8 @@ void startShutdown(void);
 void printingFinished(void);
 void loopCheckPrinting(void);
 
-
-
+#ifdef __cplusplus
+}
+#endif
 
 #endif

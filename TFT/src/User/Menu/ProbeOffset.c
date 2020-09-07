@@ -20,7 +20,7 @@ ITEM itemProbeOffsetSubmenu[ITEM_PROBE_OFFSET_SUBMENU_NUM] = {
   {ICON_01_MM,                      LABEL_01_MM},
   {ICON_RESET_VALUE,                LABEL_RESET},
   {ICON_EEPROM_SAVE,                LABEL_SAVE},
-  {ICON_XY_UNLOCK,                  LABEL_XY_UNLOCK},
+  {ICON_DISABLE_STEPPERS,           LABEL_XY_UNLOCK},
 };
 
 static u8 curSubmenu = 0;
@@ -31,10 +31,8 @@ bool probe_offset_enabled = false;
 void probeNotifyError(void)
 {
   char tmpBuf[120];
-
   sprintf(tmpBuf, "%s %s", textSelect(LABEL_Z_OFFSET), textSelect(LABEL_OFF));
-
-  popupNotification(DIALOG_TYPE_ERROR, textSelect(LABEL_Z_OFFSET), (u8*)tmpBuf);
+  addToast(DIALOG_TYPE_ERROR, tmpBuf);
 }
 
 /* Enable probe offset */
@@ -122,8 +120,8 @@ void menuProbeOffset(void)
   #endif
 
   KEY_VALUES key_num = KEY_IDLE;
-  float orig_z_offset_value, z_offset_value;
-  float now = z_offset_value = orig_z_offset_value = getParameter(P_PROBE_OFFSET, Z_STEPPER);
+  float z_offset_value;
+  float now = z_offset_value = getParameter(P_PROBE_OFFSET, Z_STEPPER);
 
   if (!probe_offset_enabled)
     probeOffsetItems.items[KEY_ICON_4].label.index = LABEL_OFF;

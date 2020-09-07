@@ -1,13 +1,17 @@
 #ifndef _CONFIG_H_
 #define _CONFIG_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <stdbool.h>
 #include "variants.h"
-#include "stdbool.h"
 #include "includes.h"
 #include "ff.h"
 
 #define  LINE_MAX_CHAR 100
-#define CONFIG_FILE_PATH "0:config.ini"
+#define CONFIG_FILE_PATH            "0:config.ini"
 
 #define CONFIG_UNIFIEDMENU          "unified_menu:"
 #define CONFIG_UART_BAUDRATE        "baudrate:"
@@ -27,8 +31,7 @@
 #define CONFIG_INVERT_AXIS          "invert_axis:"
 #define CONFIG_PERSISTENT_TEMP      "persistent_info:"
 #define CONFIG_LIST_MODE            "files_list_mode:"
-#define CONFIG_ACK_POPUP_TYPE       "ack_popup_type:"
-#define CONFIG_ACK_BUZZER           "ack_buzzer:"
+#define CONFIG_ACK_NOTIFICATION     "ack_notification:"
 //-----------------------------Marlin Mode Settings
 #define CONFIG_MODE                 "default_mode:"
 #define CONFIG_SERIAL_ON            "serial_always_on:"
@@ -44,6 +47,7 @@
 #define CONFIG_HEATED_CHAMBER       "heated_chamber:"
 #define CONFIG_EXT_COUNT            "ext_count:"
 #define CONFIG_FAN_COUNT            "fan_count:"
+#define CONFIG_FAN_CTRL_COUNT       "fan_ctrl_count:"
 #define CONFIG_MAX_TEMP             "max_temp:"
 #define CONFIG_MIN_TEMP             "min_temp:"
 #define CONFIG_FAN_MAX              "fan_max:"
@@ -69,10 +73,14 @@
 #define CONFIG_PREHEAT_NAME_2       "preheat_name2:"
 #define CONFIG_PREHEAT_NAME_3       "preheat_name3:"
 #define CONFIG_PREHEAT_NAME_4       "preheat_name4:"
+#define CONFIG_PREHEAT_NAME_5       "preheat_name5:"
+#define CONFIG_PREHEAT_NAME_6       "preheat_name6:"
 #define CONFIG_PREHEAT_TEMP_1       "preheat_temp1:"
 #define CONFIG_PREHEAT_TEMP_2       "preheat_temp2:"
 #define CONFIG_PREHEAT_TEMP_3       "preheat_temp3:"
 #define CONFIG_PREHEAT_TEMP_4       "preheat_temp4:"
+#define CONFIG_PREHEAT_TEMP_5       "preheat_temp5:"
+#define CONFIG_PREHEAT_TEMP_6       "preheat_temp6:"
 //-----------------------------Power Supply Settings (if connected to TFT Controller)
 #define CONFIG_PS_ON                "ps_on:"
 #define CONFIG_PS_LOGIC             "ps_on_active_high:"
@@ -88,7 +96,9 @@
 #define CONFIG_POWERLOSS_ZRAISE     "pl_z_raise:"
 #define CONFIG_BTT_MINIUPS          "btt_mini_ups:"
 //-----------------------------other device specific settings
-#define CONFIG_BUZZER_ON               "buzzer:"
+#define CONFIG_TOUCH_SOUND             "touch_sound:"
+#define CONFIG_TOAST_SOUND             "toast_sound:"
+#define CONFIG_ALERT_SOUND             "alert_sound:"
 #define CONFIG_KNOB_COLOR              "knob_led_color:"
 #define CONFIG_KNOB_LED_IDLE           "knob_led_idle:"
 #define CONFIG_BRIGHTNESS              "lcd_brightness:"
@@ -199,4 +209,9 @@ enum
 
   CONFIG_COUNT,
 };
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif

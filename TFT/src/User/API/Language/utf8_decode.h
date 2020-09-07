@@ -1,8 +1,12 @@
 #ifndef _UTF8_DECODE_H_
 #define _UTF8_DECODE_H_
 
-#include "stdint.h"
-#include "stdbool.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <stdint.h>
+#include <stdbool.h>
 
 typedef struct {
   uint32_t startCodePoint; // start unicode code point for language
@@ -35,5 +39,9 @@ bool isLargeFont(void);
 void getCharacterInfo(const uint8_t *ch, CHAR_INFO *pInfo);
 uint16_t GUI_StrPixelWidth(const uint8_t *const str);
 uint16_t getUTF8Length(const uint8_t *const str);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

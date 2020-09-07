@@ -1,22 +1,27 @@
 #ifndef _SETTINGS_H_
 #define _SETTINGS_H_
 
-#include "stdint.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <stdint.h>
 #include "coordinate.h"
 #include "Configuration.h"
 
-#define CONFIG_SUPPPORT 20200724
+#define CONFIG_SUPPPORT 20200810
 
 #define ITEM_BAUDRATE_NUM     9
 
 #define MAX_EXT_COUNT         6
 #define MAX_HOTEND_COUNT      6
 #define MAX_HEATER_COUNT      (2 + MAX_HOTEND_COUNT) // chamber + bed + hotend
-#define MAX_FAN_COUNT         6
+#define MAX_FAN_CTRL_COUNT    2
+#define MAX_FAN_COUNT         (6 + MAX_FAN_CTRL_COUNT)
 
 #define AXIS_NUM              (TOTAL_AXIS - 1)
 #define SPEED_COUNT           3
-#define PREHEAT_COUNT         4
+#define PREHEAT_COUNT         6
 #define CUSTOM_GCODES_COUNT   15
 #define MAX_STRING_LENGTH     20
 #define MAX_LABEL_LENGTH      7
@@ -61,7 +66,9 @@ typedef struct
   uint16_t list_border_color;
   uint16_t list_button_color;
 
-  uint8_t  silent;
+  uint8_t  touchSound;
+  uint8_t  alertSound;
+  uint8_t  toastSound;
   uint8_t  auto_off;
   uint8_t  terminalACK;
   uint8_t  invert_axis[AXIS_NUM];
@@ -70,8 +77,7 @@ typedef struct
   uint8_t  knob_led_idle;
   uint8_t  persistent_info;
   uint8_t  file_listmode;
-  uint8_t  ack_popup_type;
-  uint8_t  ack_buzzer;
+  uint8_t  ack_notification;
 
   uint8_t  lcd_brightness;
   uint8_t  lcd_idle_brightness;
@@ -108,6 +114,7 @@ typedef struct
   uint8_t   chamber_en;
   uint8_t   ext_count;
   uint8_t   fan_count;
+  uint8_t   fan_ctrl_count;
   uint8_t   auto_load_leveling;
   uint8_t   autoLevelState;
   uint8_t   onboardSD;
@@ -184,9 +191,10 @@ extern MACHINESETTINGS infoMachineSettings;
 void initMachineSetting(void);
 void infoSettingsReset(void);
 void setupMachine(void);
+float flashUsedPercentage(void);
 
-
-
-
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -1,9 +1,12 @@
 #ifndef _LANGUAGE_H_
 #define _LANGUAGE_H_
 
-#include "stdbool.h"
-#include "variants.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
 
+#include <stdbool.h>
+#include "variants.h"
 
 enum
 {
@@ -26,6 +29,7 @@ enum
   GREEK,
   SLOVENIAN,
   CATALAN,
+  TRAD_CHINESE,
   
   LANGUAGE_NUM,
 };
@@ -43,6 +47,10 @@ enum {
   LABEL_CUSTOM_VALUE,
 };
 
-u8 * textSelect(u8 sel);
+uint8_t * textSelect(uint16_t sel);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

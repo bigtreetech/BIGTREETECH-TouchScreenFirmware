@@ -77,23 +77,19 @@
  * The starting address of each file must be 4K(0x1000) aligned in order to avoid erasing the data of the previous file
  */
 #define W25QXX_SECTOR_SIZE (0x1000) // 4096byte = 4K
-// Address in SPI Flash W25Qxx                                        /** Memory occupied **/
-#define LOGO_ADDR               0x0                                   // 800*480*2 = 0xBB800(+0xBC000) bytes
-#define WORD_UNICODE            0xBC000                               // 24*24/8 * 65536(unicode) = 0x480000 bytes(4.5M)
-#define BYTE_ASCII_ADDR         (WORD_UNICODE+0x480000)               // 24*12/8 * 95(visible ascii) = 0x0D5C (+0x1000 4K)
-#define LARGE_FONT_ADDR         (BYTE_ASCII_ADDR+0x1000)
-//#define BYTE_RESERVE_ADDR      0x710000
-#define STRINGS_STORE_ADDR      (LARGE_FONT_ADDR+0x3000)                      //for label strings from config file
-#define STRINGS_STORE_MAX_SIZE  0x5000                                        //label strings max size
-#define PRINT_GCODES_ADDR       (STRINGS_STORE_ADDR+STRINGS_STORE_MAX_SIZE)   //for start/end/cancel gcodes from config file
-#define PRINT_GCODES_MAX_SIZE    0x5000                                       //start/end/cancel gcodes  max size
-#define CUSTOM_GCODE_ADDR       (PRINT_GCODES_ADDR+PRINT_GCODES_MAX_SIZE)     //for custom gcodes from config file
-#define CUSTOM_GCODE_MAX_SIZE    0x5000                                       //custom gocdes max size
 
-#define ICON_ADDR(num)          ((num)*0xB000+CUSTOM_GCODE_ADDR+CUSTOM_GCODE_MAX_SIZE)  // 160*140*2 = 0xAF00 (+0xB000) per button icon
-#define INFOBOX_ADDR            (ICON_ADDR(ICON_PREVIEW) + 0xB000)    // 360*140*2 = 0x189C0 (+0x19000)
-#define SMALL_ICON_START_ADDR   (INFOBOX_ADDR+0x19000)                // 24*24*2 = 0x480 (+0x1000) per small icon
-#define SMALL_ICON_ADDR(num)    ((num)*0x2000+SMALL_ICON_START_ADDR)
+#ifndef LOGO_MAX_SIZE
+  #define LOGO_MAX_SIZE            0xBC000    // 800*480*2 = 0xBB800(+0xBC000) bytes
+  #define WORD_UNICODE_SIZE       0x480000    // 24*24/8 * 65536(unicode) = 0x480000 bytes(4.5M)
+  #define BYTE_ASCII_SIZE           0x1000    // 24*12/8 * 95(visible ascii) = 0x0D5C (+0x1000 4K)
+  #define LARGE_FONT_SIZE           0x3000
+  #define ICON_MAX_SIZE             0xB000    // 160*140*2 = 0xAF00 (+0xB000) per button icon
+  #define STRINGS_STORE_MAX_SIZE    0x5000    // label strings max size
+  #define PRINT_GCODES_MAX_SIZE     0x5000    // start/end/cancel gcodes  max size
+  #define CUSTOM_GCODE_MAX_SIZE     0x5000    // custom gocdes max size
+  #define INFOBOX_MAX_SIZE         0x19000    // 360*140*2 = 0x189C0 (+0x19000)
+  #define SMALL_ICON_MAX_SIZE       0x2000    // 24*24*2 = 0x480 (+0x1000) per small icon
+#endif
 
 // The offset of the model preview icon in the gcode file
 #define MODEL_PREVIEW_OFFSET 0x15355
