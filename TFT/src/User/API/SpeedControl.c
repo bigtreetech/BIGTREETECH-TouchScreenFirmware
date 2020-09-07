@@ -60,7 +60,7 @@ void loopSpeed(void)
 
 void speedQuery(void)
 {
-  if (infoHost.connected == true && infoHost.wait == false)
+  if (infoHost.connected == true)
   {
     if (!queryWait)
     {
