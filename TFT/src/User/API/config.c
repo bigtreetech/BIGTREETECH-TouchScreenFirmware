@@ -17,7 +17,7 @@ const GUI_POINT pointProgressText     = {BYTE_WIDTH/2-2, LCD_HEIGHT-(BYTE_HEIGHT
 
 u16 foundkeys = 0;
 
-CONFIGFILE configFile;
+CONFIGFILE * CurConfigFile;
 char * cur_line = NULL;
 int customcode_index = 0;
 int customcode_good[CUSTOM_GCODES_COUNT];
@@ -42,7 +42,8 @@ void getConfigFromFile(void)
 
   char cur_line_buffer[LINE_MAX_CHAR];
   cur_line = cur_line_buffer;
-
+  CONFIGFILE configFile;
+  CurConfigFile = &configFile;
   configCustomGcodes = (CUSTOM_GCODES*)malloc(sizeof(CUSTOM_GCODES));
   configPrintGcodes = (PRINT_GCODES*)malloc(sizeof(PRINT_GCODES));
   configStringsStore = (STRINGS_STORE*)malloc(sizeof(STRINGS_STORE));
@@ -351,7 +352,7 @@ void drawProgress(void){
   char tempstr[50];
   sprintf(tempstr,"Total keywords found: %d",foundkeys);
   GUI_DispString(pointProgressText.x,pointProgressText.y,(u8*)tempstr);
-  u16 p = map(configFile.cur,0,configFile.size, rectProgressframe.x0,rectProgressframe.x1);
+  u16 p = map(CurConfigFile->cur,0,CurConfigFile->size, rectProgressframe.x0,rectProgressframe.x1);
   GUI_FillRect(rectProgressframe.x0,rectProgressframe.y0,p,rectProgressframe.y1);
 }
 
