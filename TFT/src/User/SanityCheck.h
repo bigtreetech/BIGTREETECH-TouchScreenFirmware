@@ -36,7 +36,7 @@
 
 #else
 
-    #define STARTUP_KNOB_LED_COLOR 0
+    #define STARTUP_KNOB_LED_COLOR 6
 
 #endif
 
