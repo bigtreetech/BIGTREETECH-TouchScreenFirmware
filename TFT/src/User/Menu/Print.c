@@ -148,7 +148,7 @@ void gocdeListDraw(void)
   for (i = 0; (i + infoFile.cur_page * NUM_PER_PAGE < infoFile.F_num) && (i < NUM_PER_PAGE); i++) // folder
   {
     printListItems.items[i].icon = ICONCHAR_FOLDER;
-    setDynamicLabel(i, infoFile.folder[i + infoFile.cur_page * NUM_PER_PAGE]);
+    printListItems.items[i].titlelabel.address = infoFile.folder[i + infoFile.cur_page * NUM_PER_PAGE];
     printListItems.items[i].titlelabel.index = LABEL_DYNAMIC;
     menuDrawListItem(&printListItems.items[i], i);
   }
@@ -157,16 +157,14 @@ void gocdeListDraw(void)
     printListItems.items[i].icon = ICONCHAR_FILE;
     if (infoMachineSettings.long_filename_support == ENABLED && infoFile.source == BOARD_SD)
     {
-      setDynamicLabel(i, infoFile.Longfile[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num]);
+      printListItems.items[i].titlelabel.address = infoFile.Longfile[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num];
     }
     else
     {
-      setDynamicLabel(i, infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num]);
+      printListItems.items[i].titlelabel.address = infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num];
     }
-
     printListItems.items[i].titlelabel.index = LABEL_DYNAMIC;
     menuDrawListItem(&printListItems.items[i], i);
-
   }
 
   for (; (i < NUM_PER_PAGE); i++) //background

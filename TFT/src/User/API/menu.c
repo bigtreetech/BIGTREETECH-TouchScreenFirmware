@@ -9,7 +9,7 @@ const GUI_RECT exhibitRect = {
    1*ICON_WIDTH+1*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  3*ICON_WIDTH+2*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y
 };
 
-const GUI_RECT rect_of_key[ITEM_PER_PAGE*2 + 1]={
+const GUI_RECT rect_of_key[MENU_RECT_COUNT]={
   //8 icons area
   {0*ICON_WIDTH+0*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  1*ICON_WIDTH+0*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
   {1*ICON_WIDTH+1*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  2*ICON_WIDTH+1*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
@@ -34,7 +34,35 @@ const GUI_RECT rect_of_key[ITEM_PER_PAGE*2 + 1]={
   {0 ,0 ,LCD_WIDTH, ICON_START_Y},
 };
 
-const GUI_RECT rect_of_keySS[ITEM_PER_PAGE*2 + 1 + 1]={
+const GUI_RECT rect_of_keySS[SS_RECT_COUNT] = {
+#ifdef TFT70_V3_0
+  //5 status icons area
+  {0*SSICON_WIDTH+0*SS_SPACE_X+START_X,  0*SSICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  1*SSICON_WIDTH+0*SS_SPACE_X+START_X,  1*SSICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
+  {1*SSICON_WIDTH+1*SS_SPACE_X+START_X,  0*SSICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  2*SSICON_WIDTH+1*SS_SPACE_X+START_X,  1*SSICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
+  {2*SSICON_WIDTH+2*SS_SPACE_X+START_X,  0*SSICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  3*SSICON_WIDTH+2*SS_SPACE_X+START_X,  1*SSICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
+  {3*SSICON_WIDTH+3*SS_SPACE_X+START_X,  0*SSICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  4*SSICON_WIDTH+3*SS_SPACE_X+START_X,  1*SSICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
+  {4*SSICON_WIDTH+4*SS_SPACE_X+START_X,  0*SSICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  5*SSICON_WIDTH+4*SS_SPACE_X+START_X,  1*SSICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
+  //2nd icon row area
+  {0*ICON_WIDTH+0*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  1*ICON_WIDTH+0*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
+  {0,0,0,0},
+  {3*ICON_WIDTH+3*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  4*ICON_WIDTH+3*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
+
+  //8 labels area
+  {0,0,0,0},
+  {0,0,0,0},
+  {0,0,0,0},
+  {0,0,0,0},
+  {0,0,0,0},
+  {0*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  1*SPACE_X_PER_ICON,  2*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y},
+  {1*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  3*SPACE_X_PER_ICON,  2*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y},
+  {3*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  4*SPACE_X_PER_ICON,  2*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y},
+
+  //title bar area
+  {0 ,0 ,LCD_WIDTH, ICON_START_Y},
+
+  //infobox area
+  {1*ICON_WIDTH+1*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  3*ICON_WIDTH+2*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y}
+#else
   //8 icons area
   {0*ICON_WIDTH+0*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  1*ICON_WIDTH+0*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
   {1*ICON_WIDTH+1*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  2*ICON_WIDTH+1*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
@@ -61,6 +89,7 @@ const GUI_RECT rect_of_keySS[ITEM_PER_PAGE*2 + 1 + 1]={
   //infobox area
   {1*ICON_WIDTH+1*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  3*ICON_WIDTH+2*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y}
 
+#endif
 };
 
 const GUI_RECT rect_of_keyListView[ITEM_PER_PAGE + 1]={
@@ -85,16 +114,72 @@ const GUI_RECT rect_of_titleBar[] = {
 };
 
 //Clean up the gaps outside icons
+#ifdef TFT70_V3_0
+
+void menuClearGaps(void)
+{
+  const GUI_RECT gapsMenu[]={
+  {0,                  0,                  LCD_WIDTH,          TITLE_END_Y},
+  {0,                  TITLE_END_Y,        LCD_WIDTH,          rect_of_key[0].y0},
+  {0,                  rect_of_key[0].y0,  rect_of_key[0].x0,  LCD_HEIGHT},
+  {rect_of_key[0].x1,  rect_of_key[0].y0,  rect_of_key[1].x0,  LCD_HEIGHT},
+  {rect_of_key[1].x1,  rect_of_key[0].y0,  rect_of_key[2].x0,  LCD_HEIGHT},
+  {rect_of_key[2].x1,  rect_of_key[0].y0,  rect_of_key[3].x0,  LCD_HEIGHT},
+  {rect_of_key[3].x1,  rect_of_key[0].y0,  LCD_WIDTH,          LCD_HEIGHT}};
+
+  const GUI_RECT gapsSS[]={
+  {0,                   0,                    LCD_WIDTH,            TITLE_END_Y},
+  {0,                   TITLE_END_Y,          LCD_WIDTH,            rect_of_keySS[0].y0},
+  {0,                   rect_of_keySS[0].y0,  rect_of_keySS[0].x0,  LCD_HEIGHT},
+  {rect_of_keySS[4].y0, rect_of_keySS[0].y0,  LCD_WIDTH,            LCD_HEIGHT},
+  //1ST ROW
+  {rect_of_keySS[0].x1,  rect_of_keySS[0].y0,  rect_of_keySS[1].x0,  rect_of_keySS[0].y1},
+  {rect_of_keySS[1].x1,  rect_of_keySS[0].y0,  rect_of_keySS[2].x0,  rect_of_keySS[0].y1},
+  {rect_of_keySS[2].x1,  rect_of_keySS[0].y0,  rect_of_keySS[3].x0,  rect_of_keySS[0].y1},
+  {rect_of_keySS[3].x1,  rect_of_keySS[0].y0,  rect_of_keySS[4].x0,  rect_of_keySS[0].y1},
+  //gantry rect
+  {rect_of_keySS[0].x0,  rect_of_keySS[0].y1,  rect_of_keySS[7].x0,  rect_of_keySS[7].y0},
+  //2ND ROW
+  {rect_of_keySS[5].x1,  rect_of_keySS[5].y0,  rect_of_keySS[17].x0,  rect_of_keySS[5].y1},
+  {rect_of_keySS[17].x1,  rect_of_keySS[5].y0,  rect_of_keySS[7].x0,  rect_of_keySS[5].y1}};
+
+  GUI_SetBkColor(infoSettings.title_bg_color);
+
+  if (infoMenu.menu[infoMenu.cur] == menuStatus)
+    GUI_ClearPrect(gapsMenu);
+  else
+    GUI_ClearPrect(gapsSS);
+
+  GUI_SetBkColor(infoSettings.bg_color);
+
+  if (infoMenu.menu[infoMenu.cur] == menuStatus)
+  {
+    for (uint8_t i = 1; i < COUNT(gapsSS); i++)
+    {
+      GUI_ClearPrect(gapsSS + i);
+    }
+  }
+  else
+  {
+    for (uint8_t i = 1; i < COUNT(gapsMenu); i++)
+    {
+      GUI_ClearPrect(gapsMenu + i);
+    }
+  }
+}
+
+#else
+
 void menuClearGaps(void)
 {
   const GUI_RECT gaps[]={
-  {0,                               0,               LCD_WIDTH,                       TITLE_END_Y},
-  {0,                               TITLE_END_Y,     LCD_WIDTH,                       ICON_START_Y},
-  {0,                               ICON_START_Y,    0*ICON_WIDTH+0*SPACE_X+START_X,  LCD_HEIGHT},
-  {1*ICON_WIDTH+0*SPACE_X+START_X,  ICON_START_Y,    1*ICON_WIDTH+1*SPACE_X+START_X,  LCD_HEIGHT},
-  {2*ICON_WIDTH+1*SPACE_X+START_X,  ICON_START_Y,    2*ICON_WIDTH+2*SPACE_X+START_X,  LCD_HEIGHT},
-  {3*ICON_WIDTH+2*SPACE_X+START_X,  ICON_START_Y,    3*ICON_WIDTH+3*SPACE_X+START_X,  LCD_HEIGHT},
-  {4*ICON_WIDTH+3*SPACE_X+START_X,  ICON_START_Y,    LCD_WIDTH,                       LCD_HEIGHT}};
+  {0,                  0,                  LCD_WIDTH,          TITLE_END_Y},
+  {0,                  TITLE_END_Y,        LCD_WIDTH,          rect_of_key[0].y0},
+  {0,                  rect_of_key[0].y0,  rect_of_key[0].x0,  LCD_HEIGHT},
+  {rect_of_key[0].x1,  rect_of_key[0].y0,  rect_of_key[1].x0,  LCD_HEIGHT},
+  {rect_of_key[1].x1,  rect_of_key[0].y0,  rect_of_key[2].x0,  LCD_HEIGHT},
+  {rect_of_key[2].x1,  rect_of_key[0].y0,  rect_of_key[3].x0,  LCD_HEIGHT},
+  {rect_of_key[3].x1,  rect_of_key[0].y0,  LCD_WIDTH,          LCD_HEIGHT}};
 
   GUI_SetBkColor(infoSettings.title_bg_color);
   GUI_ClearPrect(gaps);
@@ -102,6 +187,7 @@ void menuClearGaps(void)
   for(uint8_t i = 1; i < COUNT(gaps); i++)
     GUI_ClearPrect(gaps + i);
 }
+#endif
 
 void GUI_RestoreColorDefault(void){
   GUI_SetBkColor(infoSettings.bg_color);
@@ -138,24 +224,24 @@ uint8_t *labelGetAddress(const LABEL *label)
     return label->address;
 }
 
-void menuDrawItem(const ITEM *item, uint8_t positon)
+void menuDrawItem(const ITEM *item, uint8_t position)
 {
   uint8_t *content = labelGetAddress(&item->label);
-  const GUI_RECT *rect = curRect + positon;
-  if(item->icon != ICON_BACKGROUND)
+  const GUI_RECT *rect = curRect + position;
+  if (item->icon != ICON_BACKGROUND)
     ICON_ReadDisplay(rect->x0, rect->y0, item->icon);
   else
     GUI_ClearPrect(rect);
 
-  rect = curRect + ITEM_PER_PAGE + positon;
+  rect = curRect + ITEM_PER_PAGE + position;
   GUI_ClearPrect(rect);
   if (content)
     GUI_DispStringInPrect(rect, content);
 }
 
-void menuDrawIconOnly(const ITEM *item, uint8_t positon)
+void menuDrawIconOnly(const ITEM *item, uint8_t position)
 {
-  const GUI_RECT *rect = curRect + positon;
+  const GUI_RECT *rect = curRect + position;
   if(item->icon != ICON_BACKGROUND)
     ICON_ReadDisplay(rect->x0, rect->y0, item->icon);
   else
@@ -460,6 +546,9 @@ void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, const ITEM * item)
       {
         loc.y = liveicon->lines[i].pos.y + curRect[index].y0;
       }
+
+      setLargeFont(liveicon->lines[i].large_font);
+
       switch (liveicon->lines[i].h_align)
       {
       case LEFT:
@@ -493,12 +582,12 @@ void itemDrawIconPress(u8 position, u8 is_press)
     if (curMenuItems == NULL) return;
     if (curMenuItems->items[position].icon == ICON_BACKGROUND) return;
 
-    const GUI_RECT *rect = rect_of_key + position;
+    const GUI_RECT *rect = curRect + position;
 
     if (is_press) // Turn green when pressed
       ICON_PressedDisplay(rect->x0, rect->y0, curMenuItems->items[position].icon);
     else // Redraw normal icon when released
-      ICON_ReadDisplay(rect->x0, rect->y0, curMenuItems->items[position].icon);
+      ICON_ReadDisplay(rect->x0, rect->y0,curMenuItems->items[position].icon);
   }
   else if (menuType == MENU_TYPE_LISTVIEW)
   { //draw rec over list item if pressed

@@ -9,6 +9,9 @@ extern "C" {
 #include "coordinate.h"
 #include "Configuration.h"
 
+// Config version support
+// change if new elements/keywords are added/removed/changed in the configuration.h Format YYYYMMDD
+// this number should match the CONFIG_VERSION in configuration.h
 #define CONFIG_SUPPPORT 20200810
 
 #define ITEM_BAUDRATE_NUM     9

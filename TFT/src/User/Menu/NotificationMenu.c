@@ -23,7 +23,7 @@ void loadNotificationItems(void)
         itemlist->items[i].icon = ICONCHAR_INFO;
         break;
       }
-      setDynamicLabel(i, tempNotify->text);
+      itemlist->items[i].titlelabel.address = tempNotify->text;
       n++;
     }
     else

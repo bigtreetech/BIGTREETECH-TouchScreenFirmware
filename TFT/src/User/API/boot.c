@@ -33,7 +33,8 @@ bool bmpDecode(char *bmp, u32 addr)
 {
   FIL   bmpFile;
   char  magic[2];
-  int   w,h,bytePerLine;
+  u16   w, h;
+  int   bytePerLine;
   short bpp;
   int   offset;
   u8    buf[256];
@@ -81,6 +82,12 @@ bool bmpDecode(char *bmp, u32 addr)
   }
   bnum=0;
 
+  //store size of BMP
+  memcpy(buf, (uint8_t *)&w, sizeof(uint16_t));
+  bnum += sizeof(uint16_t);
+  memcpy(buf + bnum, (uint8_t *)&h, sizeof(uint16_t));
+  bnum += sizeof(uint16_t);
+
   for(int j=0; j<h; j++)
   {
     f_lseek(&bmpFile, offset+(h-j-1)*bytePerLine);
@@ -124,7 +131,7 @@ void processIcon(char * path, u32 flashAddr)
     {
       found++;
       GUI_ClearRect(iconUpdateRect.x0,iconUpdateRect.y0,iconUpdateRect.x0 + last_size.x,iconUpdateRect.y0 + last_size.y);
-      ICON_CustomReadDisplay(iconUpdateRect.x0, iconUpdateRect.y0, bmp_size.x, bmp_size.y, flashAddr);
+      ICON_CustomReadDisplay(iconUpdateRect.x0, iconUpdateRect.y0, flashAddr);
     }
     //display bmp update fail
     else
@@ -180,7 +187,7 @@ void updateIcon(void)
 */
   if (bmpDecode(BMP_ROOT_DIR "/InfoBox.bmp", INFOBOX_ADDR))
   {
-    ICON_CustomReadDisplay(iconUpdateRect.x0, iconUpdateRect.y0, bmp_size.x, bmp_size.y, INFOBOX_ADDR);
+    ICON_CustomReadDisplay(iconUpdateRect.x0, iconUpdateRect.y0, INFOBOX_ADDR);
     found++;
   }
   else
