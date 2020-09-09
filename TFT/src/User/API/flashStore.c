@@ -5,9 +5,7 @@
 #define PARA_SIGN 0x20200831 // (YYYYMMDD) If a new setting parameter is added,
                              // modify here and initialize the initial value
                              // in the "infoSettingsReset()" function
-#define ICON_FLASH_SIGN 0x20200908 //(YYYYMMDD) change if an icon(s) is added or removed
-#define FONT_FLASH_SIGN 0x20200908 //(YYYYMMDD) change if fonts require updating
-#define CONFIG_FLASH_SIGN 0x20200908 //(YYYYMMDD) change if an icon(s) is added or removed
+
 
 extern int32_t TSC_Para[7];
 extern SETTINGS infoSettings;

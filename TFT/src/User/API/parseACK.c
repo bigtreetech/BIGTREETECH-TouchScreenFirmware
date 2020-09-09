@@ -532,7 +532,7 @@ void parseACK(void)
         if(ack_seen("Y")) setParameter(P_BUMPSENSITIVITY, Y_STEPPER, ack_value());
         if(ack_seen("Z")) setParameter(P_BUMPSENSITIVITY, Z_STEPPER, ack_value());
       }
-    // parse and store TMC Hybrid Threshold Speed  
+    // parse and store TMC Hybrid Threshold Speed
       else if(ack_seen("M913 X")){
                           setParameter(P_HYBRID_THRESHOLD, X_STEPPER, ack_value());
         if(ack_seen("Y")) setParameter(P_HYBRID_THRESHOLD, Y_STEPPER, ack_value());
@@ -545,7 +545,7 @@ void parseACK(void)
       else if(ack_seen("M913 T1 E")){
                           setParameter(P_HYBRID_THRESHOLD, E2_STEPPER, ack_value());
                           setDualStepperStatus(E_STEPPER, true);
-      }  
+      }
     // Parse and store ABL type
       else if(ack_seen("echo:; Unified Bed Leveling")){
         if(ENABLE_UBL_VALUE==2) infoMachineSettings.enableubl = ENABLED;
@@ -639,7 +639,21 @@ void parseACK(void)
       }
       else if(ack_seen("Cap:CHAMBER_TEMPERATURE:"))
       {
+        infoSettings.chamber_en = ack_value();
         setupMachine();
+      }
+      else if(ack_seen("work:"))
+      {
+        if(ack_seen("min:")){
+          if(ack_seen("X:")) infoSettings.machine_size_min[X_AXIS] = ack_value();
+          if(ack_seen("Y:")) infoSettings.machine_size_min[Y_AXIS] = ack_value();
+          if(ack_seen("Z:")) infoSettings.machine_size_min[Z_AXIS] = ack_value();
+        }
+        if(ack_seen("max:")){
+          if(ack_seen("X:")) infoSettings.machine_size_min[X_AXIS] = ack_value();
+          if(ack_seen("Y:")) infoSettings.machine_size_min[Y_AXIS] = ack_value();
+          if(ack_seen("Z:")) infoSettings.machine_size_min[Z_AXIS] = ack_value();
+        }
       }
     //parse Repeatability Test
       else if(ack_seen("Mean:"))
@@ -678,12 +692,12 @@ void parseACK(void)
       {
         u8 i = 0;
         if (ack_seen("S")) {
-          i = fanGetTypID(0,FAN_TYPE_CTRL_S); 
+          i = fanGetTypID(0,FAN_TYPE_CTRL_S);
           fanSetSpeed(i, ack_value());
           fanSpeedQuerySetWait(false);
         }
         if (ack_seen("I")) {
-          i = fanGetTypID(0,FAN_TYPE_CTRL_I); 
+          i = fanGetTypID(0,FAN_TYPE_CTRL_I);
           fanSetSpeed(i, ack_value());
           fanSpeedQuerySetWait(false);
         }
