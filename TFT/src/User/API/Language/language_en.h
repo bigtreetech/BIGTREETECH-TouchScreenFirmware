@@ -58,7 +58,6 @@
     #define EN_RESET                  "Reset"
     #define EN_DEFAULT                "Default"
     #define EN_CLEAR                  "Clear"
-    #define EN_CLEAR                  "Clear"
     #define EN_NEXT                   "Next"
     #define EN_DISTANCE               "Distance"
     #define EN_INVALID_VALUE          "Invalid value(s)"
