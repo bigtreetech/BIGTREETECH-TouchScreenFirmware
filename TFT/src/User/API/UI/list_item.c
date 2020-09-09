@@ -5,6 +5,8 @@
 #include "menu.h"
 #include "GUI.h"
 
+char * dynamic_label[LISTITEM_PER_PAGE];
+
 char dynamic_text_value[LISTITEM_PER_PAGE][10];
 
 const uint16_t ICON_COLOR[ICONCHAR_NUM]=
@@ -236,6 +238,15 @@ char * IconChar(uint8_t sel)
   return (char *)GET_ICONCHAR[sel];
 }
 
+void setDynamicLabel(uint8_t i, char *label){
+  dynamic_label[i] = label;
+}
+
+// get dynamic text label ( i : index of the label position)
+char * getDynamicLabel(uint8_t i){
+  return dynamic_label[i];
+}
+
 // save dynamic text value (upto 7 characters) ( i : index of the text value position, txt: char * to the text value)
 void setDynamicTextValue(uint8_t i, char *txt){
   //dynamic_text_value[i] = txt;
@@ -464,7 +475,12 @@ void draw_itemtitle(GUI_POINT pos,LABEL label, uint8_t position, int textarea_wi
   if (label.index != LABEL_BACKGROUND)
   {
     int textarea_width = LISTITEM_WIDTH - (pos.x + 1); //width after removing the width for icon
-    GUI_DispLenString(pos.x, pos.y, labelGetAddress(&label), textarea_width, true);
+    if (label.index == LABEL_DYNAMIC)
+    {GUI_DispLenString(pos.x, pos.y, (u8*)getDynamicLabel(position),textarea_width, true);
+    }
+    else
+    {GUI_DispLenString(pos.x, pos.y, labelGetAddress(&label), textarea_width, true);
+    }
   }
 }
 

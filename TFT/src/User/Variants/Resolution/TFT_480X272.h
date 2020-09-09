@@ -37,7 +37,7 @@
 #define SSICON_WIDTH              ICON_WIDTH
 #define SSICON_HEIGHT             ICON_HEIGHT
 #define SSICON_VAL_Y0             62
-#define SSICON_VAL_COLOR          LCD_WHITE
+#define SSICON_VAL_COLOR          LCD_BLACK
 #define SSICON_NAME_Y0            5
 #define SSICON_NAME_COLOR         LCD_WHITE
 #define STATUS_MSG_ICON_XOFFSET   5
