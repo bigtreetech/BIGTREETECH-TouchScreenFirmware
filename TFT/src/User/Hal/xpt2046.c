@@ -9,27 +9,42 @@ _SW_SPI xpt2046;
 //Chip Select  //Chip Select
 void XPT2046_CS_Set(u8 level)
 {
-  SW_SPI_CS_Set(&xpt2046, level);
+#ifdef HW_SPI_TOUCH
+GPIO_SetLevel(XPT2046_CS, level);
+W25Qxx_SPI_CS_Set(1);
+#else
+SW_SPI_CS_Set(&xpt2046, level);
+#endif
 }
 
 //Read and write functions  //Read and write functions
 u8 XPT2046_ReadWriteByte(u8 TxData)
 {
+  #ifdef HW_SPI_TOUCH
+  return SPI_Read_Write(XPT2046_SPI, TxData);
+  #else
   return SW_SPI_Read_Write(&xpt2046, TxData);
+  #endif
 }
 
 //XPT2046 SPI and pen interrupt initialization  //XPT2046 SPI and pen interrupt initialization
 void XPT2046_Init(void)
 {
   //PA15-TPEN
-  GPIO_InitSet(XPT2046_TPEN, MGPIO_MODE_IPN, 0);
+GPIO_InitSet(XPT2046_TPEN, MGPIO_MODE_IPN, 0);
 
+#ifdef HW_SPI_TOUCH
+
+GPIO_InitSet(XPT2046_CS, MGPIO_MODE_OUT_PP, 0);
+#else
   SW_SPI_Config(&xpt2046, _SPI_MODE3, 8, // 8bit
   XPT2046_CS,     //CS
   XPT2046_SCK,    //SCK
   XPT2046_MISO,   //MISO
   XPT2046_MOSI    //MOSI
   );
+
+  #endif
   XPT2046_CS_Set(1);
 }
 
@@ -55,7 +70,7 @@ u16 XPT2046_Read_AD(u8 CMD)
   return ADNum;
 }
 
-#define READ_TIMES 5  //Read times  //Read times
+#define READ_TIMES 8 //Read times  //Read times
 #define LOST_VAL 1    //Drop value  //Drop value
 u16 XPT2046_Average_AD(u8 CMD)
 {
@@ -83,7 +98,7 @@ u16 XPT2046_Average_AD(u8 CMD)
 }
 
 
-#define ERR_RANGE 50 //Tolerance scope
+#define ERR_RANGE 100 //Tolerance scope
 u16 XPT2046_Repeated_Compare_AD(u8 CMD)
 {
   u16 ad1, ad2;

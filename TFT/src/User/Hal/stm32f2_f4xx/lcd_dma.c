@@ -15,8 +15,13 @@
   #define W25QXX_SPI_DMA_RCC_AHB      RCC_AHB1Periph_DMA2
   #define W25QXX_SPI_DMA_STREAM       DMA2_Stream0
   #define W25QXX_SPI_DMA_CHANNEL      3
+  #ifdef MKS_35_V1_0
+  #define W25QXX_SPI_DMA_READING()    (DMA2->LISR & (1<<5)) == 0
+  #define W25QXX_SPI_DMA_CLEAR_FLAG() DMA2->LIFCR = 0x3F //bit:0-5
+  #else
   #define W25QXX_SPI_DMA_READING()    (DMA1->LISR & (1<<5)) == 0
   #define W25QXX_SPI_DMA_CLEAR_FLAG() DMA1->LIFCR = 0x3F //bit:0-5
+  #endif
 #elif W25Qxx_SPI == _SPI2
   #define W25QXX_SPI_NUM              SPI2
   #define W25QXX_SPI_DMA_RCC_AHB      RCC_AHB1Periph_DMA1

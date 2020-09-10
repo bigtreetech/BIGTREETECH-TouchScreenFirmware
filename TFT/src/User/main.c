@@ -45,6 +45,9 @@ void Hardware_GenericInit(void)
   OS_TimerInitMs();  // System clock timer, cycle 1ms, called after XPT2046_Init()
   W25Qxx_Init();
   LCD_Init();
+ #ifdef I2C_EEPROM
+ i2C_Init_EEPROM();
+ #endif
   readStoredPara(); // Read settings parameter
   LCD_RefreshDirection();  //refresh display direction after reading settings
   scanUpdates();           // scan icon, fonts and config files

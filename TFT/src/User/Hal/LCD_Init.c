@@ -199,7 +199,7 @@ void LCD_init_RGB(void)
   LCD_WR_DATA(0x16);
   LCD_WR_DATA(0x80);
   LCD_WR_REG(0x36);
-  LCD_WR_DATA(0x28);
+  LCD_WR_DATA(0x38);
   LCD_WR_REG(0x3A); //Interface Mode Control
   LCD_WR_DATA(0x55);
   LCD_WR_REG(0XB0);  //Interface Mode Control

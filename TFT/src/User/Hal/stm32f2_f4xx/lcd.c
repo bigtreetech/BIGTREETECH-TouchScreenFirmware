@@ -51,7 +51,11 @@ void LCD_GPIO_Config(void)
   */
   GPIO_InitSet(PD4, MGPIO_MODE_AF_PP, GPIO_AF_FSMC);
   GPIO_InitSet(PD5, MGPIO_MODE_AF_PP, GPIO_AF_FSMC);
+  #ifdef MKS_35_V1_0
+  GPIO_InitSet(PD12, MGPIO_MODE_AF_PP, GPIO_AF_FSMC);
+  #else
   GPIO_InitSet(PE2, MGPIO_MODE_AF_PP, GPIO_AF_FSMC);
+  #endif
   GPIO_InitSet(PD7, MGPIO_MODE_AF_PP, GPIO_AF_FSMC);
 }
 

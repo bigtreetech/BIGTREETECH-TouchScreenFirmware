@@ -4,8 +4,13 @@
 #include "includes.h"
 
 
+#ifdef MKS_35_V1_0
 #define CMD_RDX 0xD0
 #define CMD_RDY 0x90
+#else
+#define CMD_RDX 0x90
+#define CMD_RDY 0xD0
+#endif
 
 enum
 {

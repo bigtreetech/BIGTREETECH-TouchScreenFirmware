@@ -45,7 +45,11 @@ void readStoredPara(void)
   u8 data[PARA_SIZE];
   u32 index = 0;
   u32 sign = 0;
+  #ifdef I2C_EEPROM
+  EEPROM_FlashRead(data, PARA_SIZE);
+  #else
   STM32_FlashRead(data, PARA_SIZE);
+  #endif
 
   sign = byteToWord(data + (index += 4), 4);
   if(sign == TSC_SIGN)
@@ -324,7 +328,12 @@ void storePara(void)
     wordToByte(infoSettings.preheat_bed[i],           data + (index += 4));
   }
 
+  #ifdef I2C_EEPROM
+  EEPROM_FlashWrite(data, PARA_SIZE);
+  #else
   STM32_FlashWrite(data, PARA_SIZE);
+  #endif
+  
 }
 
 bool readIsTSCExist(void)

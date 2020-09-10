@@ -39,8 +39,11 @@ void TS_Get_Coordinates(u16 *x, u16 *y)
   *x = (A*tp_x+B*tp_y+C)/K;
   *y = (D*tp_x+E*tp_y+F)/K;
 }
-
+#ifdef MKS_35_V1_0
+#define TS_ERR_RANGE 130
+#else
 #define TS_ERR_RANGE 10
+#endif
 u8 calibrationEnsure(u16 x,u16 y)
 {
   u32 i;
@@ -62,7 +65,10 @@ u8 calibrationEnsure(u16 x,u16 y)
   //
   lcd_x = (A*tp_x+B*tp_y+C)/K;
   lcd_y = (D*tp_x+E*tp_y+F)/K;
-
+  #ifdef MKS_35_V1_0
+  lcd_x = (LCD_WIDTH - lcd_x);
+  lcd_y = (LCD_HEIGHT - lcd_y);
+  #endif
 
   if(lcd_x < x+TS_ERR_RANGE && lcd_x>x-TS_ERR_RANGE  && lcd_y > y-TS_ERR_RANGE && lcd_y<y+TS_ERR_RANGE)
   {
