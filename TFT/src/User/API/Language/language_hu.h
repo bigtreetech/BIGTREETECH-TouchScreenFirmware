@@ -203,6 +203,7 @@
     #define HU_PRINT_ACCELERATION     "Nyomtatás Gyorsulás"
     #define HU_RETRACT_ACCELERATION   "Adagoló Gyorsulása"
     #define HU_TRAVEL_ACCELERATION    "Utazási Gyorsulás"
+    #define HU_JERK                   "Jerk"
     #define HU_BUMP_SENSITIVITY       "TMC ütközés érzékenység"
     #define HU_FWRETRACT              "FW Visszahúzás"
     #define HU_FWRECOVER              "FW Visszahúzás helyreáll."
@@ -261,6 +262,7 @@
     #define HU_TUNE_EXT_OLD_ESTEP     "Régi e-lépés: %0.2f"
     #define HU_TUNE_EXT_NEW_ESTEP     "Új e-lépés: %0.2f"
     #define HU_CONNECTION_SETTINGS    "Kapcsolat"
-    #define HU_OFFSET_TOOL            "Offset 2nd Nozzle"
+    #define HU_OFFSET_TOOL            "Második fej eltolása"
+    #define HU_HYBRID_THRESHOLD       "TMC HybridThreshold"
 
 #endif

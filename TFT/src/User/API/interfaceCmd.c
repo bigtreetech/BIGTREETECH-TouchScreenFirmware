@@ -35,11 +35,13 @@ static float cmd_float(void)
   return (strtod(&infoCmd.queue[infoCmd.index_r].gcode[cmd_index], NULL));
 }
 
+#if defined(SERIAL_PORT_2) || defined(BUZZER_PIN)
 //check if 'string' start with 'search'
 bool static startsWith(TCHAR *search, TCHAR *string)
 {
   return (strstr(string, search) - string == cmd_index) ? true : false;
 }
+#endif
 
 // Common store cmd
 void commonStoreCmd(GCODE_QUEUE *pQueue, const char* format, va_list va)
@@ -438,6 +440,8 @@ void sendQueueCmd(void)
               Serial_Puts(SERIAL_PORT_2, buf);
               sprintf(buf, "Cap:FAN_NUM:%d\n", infoSettings.fan_count);
               Serial_Puts(SERIAL_PORT_2, buf);
+              sprintf(buf, "Cap:FAN_CTRL_NUM:%d\n", infoSettings.fan_ctrl_count);
+              Serial_Puts(SERIAL_PORT_2, buf);
               Serial_Puts(SERIAL_PORT_2, "ok\n");
               purgeLastCmd();
               return;
@@ -497,16 +501,15 @@ void sendQueueCmd(void)
         case 106: //M106
         {
           uint8_t i = cmd_seen('P') ? cmd_value() : 0;
-          if(cmd_seen('S'))
-          {
+          if(cmd_seen('S') && fanIsType(i, FAN_TYPE_F) ) {
             fanSetSpeed(i, cmd_value());
+            fanSetSendWaiting(i, false);
           }
           else if (!cmd_seen('\n'))
           {
             char buf[12];
             sprintf(buf, "S%u\n", fanGetSpeed(i));
             strcat(infoCmd.queue[infoCmd.index_r].gcode,(const char*)buf);
-            fanSetSendWaiting(i, false);
           }
           break;
         }
@@ -514,7 +517,23 @@ void sendQueueCmd(void)
         case 107: //M107
         {
           uint8_t i = cmd_seen('P') ? cmd_value() : 0;
-          fanSetSpeed(i, 0);
+          if (fanIsType(i, FAN_TYPE_F)) fanSetSpeed(i, 0);
+          break;
+        }
+        
+        case 710: //M710 Controller Fan
+        {
+          u8 i = 0;
+          if(cmd_seen('S')) { 
+            i = fanGetTypID(i,FAN_TYPE_CTRL_S); 
+            fanSetSpeed(i, cmd_value());
+            fanSetSendWaiting(i, false);
+          }
+          if(cmd_seen('I')) { 
+            i = fanGetTypID(i=0,FAN_TYPE_CTRL_I); 
+            fanSetSpeed(i, cmd_value());
+            fanSetSendWaiting(i, false);
+          }
           break;
         }
 
@@ -656,21 +675,27 @@ void sendQueueCmd(void)
           if(cmd_seen('E')) setParameter(P_MAX_FEED_RATE, E_AXIS, cmd_float());
           break;
         case 204: //M204 Acceleration (units/s2)
-          if(cmd_seen('P')) setParameter(P_ACCELERATION,0,cmd_float());
-          if(cmd_seen('R')) setParameter(P_ACCELERATION,1,cmd_float());
-          if(cmd_seen('T')) setParameter(P_ACCELERATION,2,cmd_float());
+          if(cmd_seen('P')) setParameter(P_ACCELERATION, 0, cmd_float());
+          if(cmd_seen('R')) setParameter(P_ACCELERATION, 1, cmd_float());
+          if(cmd_seen('T')) setParameter(P_ACCELERATION, 2, cmd_float());
+          break;
+        case 205: //M205 - Set Advanced Settings
+          if(cmd_seen('X')) setParameter(P_JERK, X_AXIS, cmd_float());
+          if(cmd_seen('Y')) setParameter(P_JERK, Y_AXIS, cmd_float());
+          if(cmd_seen('Z')) setParameter(P_JERK, Z_AXIS, cmd_float());
+          if(cmd_seen('E')) setParameter(P_JERK, E_AXIS, cmd_float());
           break;
         case 207: //M207 FW Retract
-          if(cmd_seen('S')) setParameter(P_FWRETRACT,0,cmd_float());
-          if(cmd_seen('W')) setParameter(P_FWRETRACT,1,cmd_float());
-          if(cmd_seen('F')) setParameter(P_FWRETRACT,2,cmd_float());
-          if(cmd_seen('Z')) setParameter(P_FWRETRACT,3,cmd_float());
+          if(cmd_seen('S')) setParameter(P_FWRETRACT, 0, cmd_float());
+          if(cmd_seen('W')) setParameter(P_FWRETRACT, 1, cmd_float());
+          if(cmd_seen('F')) setParameter(P_FWRETRACT, 2, cmd_float());
+          if(cmd_seen('Z')) setParameter(P_FWRETRACT, 3, cmd_float());
           break;
         case 208: //M208 FW Retract recover
-          if(cmd_seen('S')) setParameter(P_FWRECOVER,0,cmd_float());
-          if(cmd_seen('W')) setParameter(P_FWRECOVER,1,cmd_float());
-          if(cmd_seen('F')) setParameter(P_FWRECOVER,2,cmd_float());
-          if(cmd_seen('R')) setParameter(P_FWRECOVER,3,cmd_float());
+          if(cmd_seen('S')) setParameter(P_FWRECOVER, 0, cmd_float());
+          if(cmd_seen('W')) setParameter(P_FWRECOVER, 1, cmd_float());
+          if(cmd_seen('F')) setParameter(P_FWRECOVER, 2, cmd_float());
+          if(cmd_seen('R')) setParameter(P_FWRECOVER, 3, cmd_float());
           break;
         case 220: //M220
           if(cmd_seen('S'))
@@ -756,6 +781,12 @@ void sendQueueCmd(void)
           if(cmd_seen('Y')) setParameter(P_BUMPSENSITIVITY, Y_STEPPER, cmd_float());
           if(cmd_seen('Z')) setParameter(P_BUMPSENSITIVITY, Z_STEPPER, cmd_float());
           break;
+        case 913: //M913 Hybrid Threshold Speed
+          if(cmd_seen('X')) setParameter(P_HYBRID_THRESHOLD, X_STEPPER, cmd_value());
+          if(cmd_seen('Y')) setParameter(P_HYBRID_THRESHOLD, Y_STEPPER, cmd_value());
+          if(cmd_seen('Z')) setParameter(P_HYBRID_THRESHOLD, Z_STEPPER, cmd_value());
+          if(cmd_seen('E')) setParameter(P_HYBRID_THRESHOLD, E_STEPPER, cmd_value());
+          break;  
       }
       break; //end parsing M-codes
 

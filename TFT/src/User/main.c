@@ -92,6 +92,7 @@ void Hardware_GenericInit(void)
   #endif
   GUI_RestoreColorDefault();
   infoMenuSelect();
+  fanControlInit();
 }
 
 int main(void)

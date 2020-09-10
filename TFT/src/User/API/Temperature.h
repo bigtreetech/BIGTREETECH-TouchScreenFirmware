@@ -1,8 +1,12 @@
 #ifndef _TEMPERATURE_H_
 #define _TEMPERATURE_H_
 
-#include "stdint.h"
-#include "stdbool.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <stdint.h>
+#include <stdbool.h>
 #include "Configuration.h"
 #include "Settings.h"
 
@@ -76,8 +80,10 @@ void heatSetUpdateWaiting(bool isWaiting);
 void heatSetSendWaiting(uint8_t index, bool isWaiting);
 bool heatGetSendWaiting(uint8_t index);
 
-
 void loopCheckHeater(void);
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif

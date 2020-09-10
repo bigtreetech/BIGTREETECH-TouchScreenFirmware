@@ -1,7 +1,12 @@
 #ifndef _PRINTING_H_
 #define _PRINTING_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <stdbool.h>
 #include "variants.h"
-#include "stdbool.h"
 #include "ff.h"
 
 
@@ -78,7 +83,8 @@ void startShutdown(void);
 void printingFinished(void);
 void loopCheckPrinting(void);
 
-
-
+#ifdef __cplusplus
+}
+#endif
 
 #endif

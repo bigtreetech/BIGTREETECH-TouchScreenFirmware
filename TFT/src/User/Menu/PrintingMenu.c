@@ -254,9 +254,9 @@ void toggleinfo(void)
       reValueNozzle(EXT_ICON_POS);
     }
 
-    if (infoSettings.fan_count > 1)
+    if ((infoSettings.fan_count + infoSettings.fan_ctrl_count) > 1)
     {
-      c_fan = (c_fan + 1) % infoSettings.fan_count;
+      c_fan = (c_fan + 1) % (infoSettings.fan_count + infoSettings.fan_ctrl_count);
       rapid_serial_loop();   //perform backend printing loop before drawing to avoid printer idling
       reDrawFan(FAN_ICON_POS);
     }

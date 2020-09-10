@@ -14,6 +14,7 @@ const LISTITEM parametertypes[P_ITEMSCOUNT] = {
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_MAXFEEDRATE,      LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_MAXACCELERATION,  LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_ACCELERATION,     LABEL_BACKGROUND},
+  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_JERK,             LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_PROBE_OFFSET,     LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_BUMP_SENSITIVITY, LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_FWRETRACT,        LABEL_BACKGROUND},
@@ -22,6 +23,7 @@ const LISTITEM parametertypes[P_ITEMSCOUNT] = {
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_LIN_ADVANCE,      LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_ABL,              LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_OFFSET_TOOL,      LABEL_BACKGROUND},
+  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_HYBRID_THRESHOLD, LABEL_BACKGROUND},
   //Keep below items always at the end
   {ICONCHAR_SAVE,       LIST_LABEL,       LABEL_SETTING_SAVE,     LABEL_BACKGROUND},
   {ICONCHAR_UNDO,       LIST_LABEL,       LABEL_SETTING_RESTORE,  LABEL_BACKGROUND},
@@ -75,6 +77,12 @@ void menuShowParameter(void){
     case P_ACCELERATION:
       parameter_menuitems.items[i].titlelabel = accel_disp_ID[i];
       break;
+    case P_JERK:
+      setDynamicLabel(X_AXIS, "X");
+      setDynamicLabel(Y_AXIS, "Y");
+      setDynamicLabel(Z_AXIS, "Z");
+      setDynamicLabel(E_AXIS, "E");
+      break;
     case P_FWRETRACT:
       parameter_menuitems.items[i].titlelabel = retract_disp_ID[i];
       break;
@@ -96,6 +104,7 @@ void menuShowParameter(void){
       setDynamicLabel(0, "X");
       setDynamicLabel(1, "Y");
       setDynamicLabel(2, "Z");
+      break;
     default:
       if (getDualstepperStatus(E_STEPPER) && i == E2_STEPPER)
       {

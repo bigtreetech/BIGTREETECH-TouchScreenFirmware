@@ -1,8 +1,12 @@
 #ifndef _COORDINATE_H_
 #define _COORDINATE_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <stdbool.h>
 #include "variants.h"
-#include "stdbool.h"
 
 
 typedef enum
@@ -39,5 +43,9 @@ void coordinateSetAxisActual(AXIS axis, float position);
 void  coordinateSetAxisActualSteps(AXIS axis, int steps);
 void coordinateQuerySetWait(bool wait);
 void coordinateQuery(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

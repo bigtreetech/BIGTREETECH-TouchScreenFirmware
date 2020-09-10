@@ -1,6 +1,10 @@
 #ifndef _BOOT_H_
 #define _BOOT_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "variants.h"
 #include "stdbool.h"
 #include "config.h"
@@ -91,5 +95,9 @@ typedef union
 void scanUpdates(void);
 void dispIconFail(u8 *lbl);
 bool bmpDecode(char *bmp, u32 addr);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

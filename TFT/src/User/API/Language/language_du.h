@@ -203,6 +203,7 @@
     #define DU_PRINT_ACCELERATION     "Afdruk Acceleratie"
     #define DU_RETRACT_ACCELERATION   "Retract Acceleratie"
     #define DU_TRAVEL_ACCELERATION    "Travel Acceleratie"
+    #define DU_JERK                   "Jerk"
     #define DU_BUMP_SENSITIVITY       "TMC bump sensitiviteit"
     #define DU_FWRETRACT              "FW Retraction"
     #define DU_FWRECOVER              "FW Retraction Recover"
@@ -262,5 +263,6 @@
     #define DU_TUNE_EXT_NEW_ESTEP     "New e-steps: %0.2f"
     #define DU_CONNECTION_SETTINGS    "Connecties"
     #define DU_OFFSET_TOOL            "Offset 2nd Nozzle"
+    #define DU_HYBRID_THRESHOLD       "TMC HybridThreshold"
 
 #endif

@@ -1,7 +1,11 @@
 #ifndef _SETTINGS_H_
 #define _SETTINGS_H_
 
-#include "stdint.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <stdint.h>
 #include "coordinate.h"
 #include "Configuration.h"
 
@@ -12,7 +16,8 @@
 #define MAX_EXT_COUNT         6
 #define MAX_HOTEND_COUNT      6
 #define MAX_HEATER_COUNT      (2 + MAX_HOTEND_COUNT) // chamber + bed + hotend
-#define MAX_FAN_COUNT         6
+#define MAX_FAN_CTRL_COUNT    2
+#define MAX_FAN_COUNT         (6 + MAX_FAN_CTRL_COUNT)
 
 #define AXIS_NUM              (TOTAL_AXIS - 1)
 #define SPEED_COUNT           3
@@ -109,6 +114,7 @@ typedef struct
   uint8_t   chamber_en;
   uint8_t   ext_count;
   uint8_t   fan_count;
+  uint8_t   fan_ctrl_count;
   uint8_t   auto_load_leveling;
   uint8_t   autoLevelState;
   uint8_t   onboardSD;
@@ -187,7 +193,8 @@ void infoSettingsReset(void);
 void setupMachine(void);
 float flashUsedPercentage(void);
 
-
-
+#ifdef __cplusplus
+}
+#endif
 
 #endif
