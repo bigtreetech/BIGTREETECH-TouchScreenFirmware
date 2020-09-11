@@ -34,6 +34,7 @@ void refreshPreheatIcon(int8_t preheatnum, int8_t icon_index, const ITEM * menui
   lvIcon.lines[0].fn_color = LCD_WHITE;
   lvIcon.lines[0].text_mode = GUI_TEXTMODE_TRANS;
   lvIcon.lines[0].pos = preheat_title;
+  lvIcon.lines[0].large_font = false;
 
   //set preheat tool propertites
   lvIcon.lines[1].h_align = RIGHT;
@@ -41,6 +42,7 @@ void refreshPreheatIcon(int8_t preheatnum, int8_t icon_index, const ITEM * menui
   lvIcon.lines[1].fn_color = LCD_WHITE;
   lvIcon.lines[1].text_mode = GUI_TEXTMODE_TRANS;
   lvIcon.lines[1].pos = preheat_val_tool;
+  lvIcon.lines[1].large_font = false;
 
   //set preheat bed properties
   lvIcon.lines[2].h_align = RIGHT;
@@ -48,6 +50,7 @@ void refreshPreheatIcon(int8_t preheatnum, int8_t icon_index, const ITEM * menui
   lvIcon.lines[2].fn_color = LCD_WHITE;
   lvIcon.lines[2].text_mode = GUI_TEXTMODE_TRANS;
   lvIcon.lines[2].pos = preheat_val_bed;
+  lvIcon.lines[2].large_font = false;
 
   lvIcon.lines[0].text = (u8 *)preheatnames.preheat_name[preheatnum];
 
