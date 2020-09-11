@@ -49,7 +49,7 @@
 #define STATUS_GANTRY_YOFFSET     4
 
 #define NAME_LARGE_FONT           false
-#define VAL_LARGE_FONT            true
+#define VAL_LARGE_FONT            false
 
 //Heating Menu
 #define PREHEAT_TITLE_Y   0
