@@ -61,7 +61,7 @@
     #define IT_DISTANCE               "Distanza"
     #define IT_INVALID_VALUE          "Invalid value(s)"
     #define IT_TIMEOUT_REACHED        "Timeout reached!"
-    #define IT_PROCESS_RUNNING        "Processo già avviato!"
+    #define IT_PROCESS_RUNNING        "Processo già in esecuzione!"
     #define IT_PROCESS_COMPLETED      "Processo completato!"
     #define IT_PROCESS_ABORTED        "Process aborted!"
     #define IT_INC                    "Incrementa"
