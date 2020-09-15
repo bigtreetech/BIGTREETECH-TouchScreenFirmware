@@ -262,7 +262,7 @@
     #define FR_TUNE_EXT_OLD_ESTEP     "Ancien : %0.2f"
     #define FR_TUNE_EXT_NEW_ESTEP     "Nouveau : %0.2f"
     #define FR_CONNECTION_SETTINGS    "Connexion"
-    #define FR_OFFSET_TOOL            "Offset 2nd Nozzle"
-    #define FR_HYBRID_THRESHOLD       "TMC HybridThreshold"
+    #define FR_OFFSET_TOOL            "Offset 2ème Buse"
+    #define FR_HYBRID_THRESHOLD       "Seuil Hybride TMC"
 
 #endif
