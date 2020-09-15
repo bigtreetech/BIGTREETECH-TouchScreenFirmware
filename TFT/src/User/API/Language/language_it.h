@@ -246,7 +246,7 @@
     #define IT_TUNING                 "Tuning"
     #define IT_PID                    "PID"
     #define IT_PID_TITLE              "PID autotune"
-    #define IT_PID_START_INFO         "PID autotune potrebbe richiedere\nun po' di tempo.\nContinuare?"
+    #define IT_PID_START_INFO         "PID autotune potrebbe\nrichiedere un po' di tempo.\nContinuare?"
     #define IT_PID_START_INFO_2       "PID autotune in avanzamento!"
     #define IT_PID_START_INFO_3       "Non toccare lo schermo prima del completamento (LED verde Acceso)!"
     #define IT_TUNE_EXTRUDER          "step E"
