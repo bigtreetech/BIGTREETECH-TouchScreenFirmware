@@ -317,13 +317,13 @@ while(1);
 }
 */
 
-void EEPROM_FlashRead(u8 *data, u32 len)
+void EEPROM_FlashRead(u8 *data, u16 len)
 {
-	EEPROM_ReadBuffer(data,0,len);
+	EEPROM_ReadBuffer(data,0,(u16)len);
 }
-void  EEPROM_FlashWrite(u8 *data, u32 len)
+void  EEPROM_FlashWrite(u8 *data, u16 len)
 {
-AT24CXX_WriteData(0x0,data,len);
+	EEPROM_WriteData(0x0,data,(u16)len);
 }
 
 
@@ -365,7 +365,7 @@ u8 EEPROM_PageWrite(uint16_t MemAddress, uint8_t* pBuffer, uint32_t BufferSize)
 
 
 
-u8 AT24CXX_WriteData(uint16_t MemAddress, uint8_t* pBuffer, uint32_t BufferSize)
+u8 EEPROM_WriteData(uint16_t MemAddress, uint8_t* pBuffer, uint32_t BufferSize)
 {
 	uint8_t NumOfPage = 0, NumOfSingle = 0, Addr = 0, count = 0;
 	u8 err = EEPROM_OK;

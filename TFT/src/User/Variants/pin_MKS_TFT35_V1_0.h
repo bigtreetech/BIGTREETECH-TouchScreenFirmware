@@ -153,7 +153,7 @@ PD3-SD_CD
 //#define USE_ULPI_PHY 
 //#define USE_EMBEDDED_PHY
 //Some boards have I2C AT24Cxx for storing parameters , better for protecting flash from curruption
-#define I2C_EEPROM
+//#define I2C_EEPROM
 #define I2C_PORT I2C1
 #define EEPROM_SDA  PB7 
 #define EEPROM_SCL  PB6

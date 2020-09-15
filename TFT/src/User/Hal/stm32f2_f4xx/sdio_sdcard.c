@@ -306,7 +306,7 @@
 /** 
   * @brief  SDIO Static flags, TimeOut, FIFO Address  
   */
-#define NULL 0
+//#define NULL 0
 #define SDIO_STATIC_FLAGS               ((uint32_t)0x000005FF)
 #define SDIO_CMD0TIMEOUT                ((uint32_t)0x00010000)
 
