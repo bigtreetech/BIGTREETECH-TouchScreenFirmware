@@ -2,9 +2,10 @@
 #include "STM32_Flash.h"
 
 #define TSC_SIGN  0x20200512 // DO NOT MODIFY
-#define PARA_SIGN 0x20200831 // (YYYMMDD) If a new setting parameter is added,
+#define PARA_SIGN 0x20200831 // (YYYYMMDD) If a new setting parameter is added,
                              // modify here and initialize the initial value
                              // in the "infoSettingsReset()" function
+
 
 extern int32_t TSC_Para[7];
 extern SETTINGS infoSettings;

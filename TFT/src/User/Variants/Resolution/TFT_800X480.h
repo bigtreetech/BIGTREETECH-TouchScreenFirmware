@@ -33,16 +33,28 @@
 #define SMALLICON_HEIGHT  24
 
 // Status screen menu
-#define SSICON_VAL_Y0             105
-#define SSICON_NAME_Y0            10
+#define SSICON_COUNT              5
+#define SSICON_WIDTH              130
+#define SSICON_HEIGHT             160
+//#define SS_SPACE_X              ((LCD_WIDTH - SSICON_WIDTH*5) - ((LCD_WIDTH - ICON_WIDTH*4)/4)*3.5)
+#define SS_SPACE_X                (((LCD_WIDTH - (SSICON_WIDTH * SSICON_COUNT + (LCD_WIDTH - ICON_WIDTH*4)/4)) / (SSICON_COUNT-1))+0.5)
+#define SSICON_VAL_Y0             38
+#define SSICON_VAL_COLOR          LCD_WHITE
+#define SSICON_VAL2_Y0            70
+#define SSICON_VAL2_COLOR         LCD_ORANGE
+#define SSICON_NAME_Y0            110
+#define SSICON_NAME_COLOR         LCD_WHITE
 #define STATUS_MSG_ICON_XOFFSET   5
 #define STATUS_MSG_ICON_YOFFSET   5
 #define STATUS_MSG_TITLE_XOFFSET  5
 #define STATUS_MSG_BODY_XOFFSET   2
-#define STATUS_MSG_BODY_YOFFSET   95
-#define STATUS_MSG_BODY_BOTTOM    9
-#define STATUS_TITLE_SHORT        20
+#define STATUS_MSG_BODY_YOFFSET   75
+#define STATUS_MSG_BODY_BOTTOM    29
 #define STATUS_GANTRY_YOFFSET     6
+
+#define NAME_LARGE_FONT           false
+#define VAL_LARGE_FONT            true
+#define VAL2_LARGE_FONT           false
 
 //Heating Menu
 #define PREHEAT_TITLE_Y   6
@@ -83,10 +95,11 @@
   #define WORD_UNICODE_SIZE       0x480000    // 24*24/8 * 65536(unicode) = 0x480000 bytes(4.5M)
   #define BYTE_ASCII_SIZE           0x1000    // 24*12/8 * 95(visible ascii) = 0x0D5C (+0x1000 4K)
   #define LARGE_FONT_SIZE           0x3000
-  #define ICON_MAX_SIZE             0xB000    // 160*140*2 = 0xAF00 (+0xB000) per button icon
+  #define FLASH_SIGN_SIZE           0x1000    // store status of last font/icon/config update
   #define STRINGS_STORE_MAX_SIZE    0x5000    // label strings max size
   #define PRINT_GCODES_MAX_SIZE     0x5000    // start/end/cancel gcodes  max size
   #define CUSTOM_GCODE_MAX_SIZE     0x5000    // custom gocdes max size
+  #define ICON_MAX_SIZE             0xB000    // 160*140*2 = 0xAF00 (+0xB000) per button icon
   #define INFOBOX_MAX_SIZE         0x19000    // 360*140*2 = 0x189C0 (+0x19000)
   #define SMALL_ICON_MAX_SIZE       0x2000    // 24*24*2 = 0x480 (+0x1000) per small icon
 #endif

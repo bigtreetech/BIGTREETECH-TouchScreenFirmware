@@ -10,6 +10,8 @@ extern "C" {
 #include "includes.h"
 #include "ff.h"
 
+//after changing/adding/removing a keyword, change the CONFIG_FLASH_SIGN in Settings.h
+
 #define  LINE_MAX_CHAR 100
 #define CONFIG_FILE_PATH            "0:config.ini"
 
@@ -190,7 +192,7 @@ typedef enum
 }CONFIG_STATS;
 
 
-void getConfigFromFile(void);
+bool getConfigFromFile(void);
 void parseConfigLine(void);
 void parseConfigKey(u16 index);
 void writeConfig(uint8_t* dataBytes, uint16_t numBytes, uint32_t addr, uint32_t maxSize);
