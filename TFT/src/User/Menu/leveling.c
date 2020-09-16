@@ -1,6 +1,8 @@
 #include "leveling.h"
 #include "includes.h"
 
+bool heat = false;
+
 void menuAutoLeveling(void)
 {
   MENUITEMS autoLevelingItems = {
@@ -13,7 +15,7 @@ void menuAutoLeveling(void)
     {ICON_Z_FADE,          LABEL_ABL_Z},
     {ICON_PROBE_OFFSET,    LABEL_Z_OFFSET},
     {ICON_BLTOUCH,         LABEL_BLTOUCH},
-    {ICON_BACKGROUND,      LABEL_BACKGROUND},
+    {ICON_HEAT,            LABEL_PREHEAT},
     {ICON_BACK,            LABEL_BACK}}
   };
 
@@ -80,7 +82,20 @@ void menuAutoLeveling(void)
         infoMenu.menu[++infoMenu.cur] = menuBLTouch;
         break;
 
+      case KEY_ICON_6:
+        infoMenu.menu[++infoMenu.cur] = menuPreheat;
+        heat = true;
+        break;  
+
       case KEY_ICON_7:
+      if (heat == true)
+        {
+          for(uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
+          {
+            heatSetTargetTemp(i, 0);
+          }
+          heat = false;
+        }  
         if (leveled == true && infoMachineSettings.EEPROM == 1)
         {
           showDialog(DIALOG_TYPE_QUESTION, textSelect(autoLevelingItems.title.index), textSelect(LABEL_EEPROM_SAVE_INFO),
