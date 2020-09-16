@@ -57,6 +57,7 @@
     #define RU_RESTORE                "Вернуть"
     #define RU_RESET                  "Сброс"
     #define RU_DEFAULT                "По умолчанию"
+    #define RU_CLEAR                  "Clear"
     #define RU_NEXT                   "Следующий"
     #define RU_DISTANCE               "Отступы"
     #define RU_INVALID_VALUE          "Остутствуют правильные значения!"
@@ -262,7 +263,8 @@
     #define RU_TUNE_EXT_OLD_ESTEP     "Старые E-шаги: %0.2f"
     #define RU_TUNE_EXT_NEW_ESTEP     "Новые E-шаги: %0.2f"
     #define RU_CONNECTION_SETTINGS    "Соединение"
-    #define RU_OFFSET_TOOL            "Offset 2nd Nozzle"
-    #define RU_HYBRID_THRESHOLD       "TMC HybridThreshold"
+    #define RU_OFFSET_TOOL            "Смещение 2-го сопла"
+    #define RU_HYBRID_THRESHOLD       "TMC гибридный порог"
+    #define RU_NOTIFICATIONS          "Notifications"
 
 #endif

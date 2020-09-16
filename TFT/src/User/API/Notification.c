@@ -1,5 +1,6 @@
 #include "Notification.h"
 #include "includes.h"
+#include "my_misc.h"
 
 //area for toast notification
 const GUI_RECT toastRect = {START_X + TITLE_END_Y - (TOAST_Y_PAD * 2), TOAST_Y_PAD, LCD_WIDTH - START_X, TITLE_END_Y - TOAST_Y_PAD};
@@ -11,6 +12,10 @@ static TOAST toastlist[TOAST_MSG_COUNT];
 static uint8_t nextToastIndex = 0;   //next index to store new toast
 static uint8_t curToastDisplay = 0;  // current toast notification being displayed
 static uint32_t nextToastTime = 0;   //time to change to next notification
+
+static NOTIFICATION msglist[MAX_MSG_COUNT];
+static uint8_t nextMsgIndex = 0;   //next index to store new message
+static void (*notificationHandler)() = NULL;
 
 bool _toastRunning = false;
 
@@ -118,4 +123,92 @@ void loopToast(void)
       menuReDrawCurTitle();
     }
   }
+}
+
+//Add new message to notification queue
+void addNotification(DIALOG_TYPE style, char *title, char *text, bool ShowDialog)
+{
+  wakeLCD();
+
+  if (nextMsgIndex > MAX_MSG_COUNT - 1)
+  {
+    //remove oldest message and move all messages up one step
+    for (int i = 0; i < MAX_MSG_COUNT - 1; i++)
+    {
+      memcpy(&msglist[i], &msglist[i + 1], sizeof(NOTIFICATION));
+    }
+    nextMsgIndex = MAX_MSG_COUNT - 1;
+  }
+
+  //store message
+  msglist[nextMsgIndex].style  = style;
+  strncpy(msglist[nextMsgIndex].text, text, MAX_MSG_LENGTH);
+  msglist[nextMsgIndex].text[MAX_MSG_LENGTH - 1] = 0; //ensure string ends with null terminator
+  strncpy(msglist[nextMsgIndex].title, title, MAX_MSG_TITLE_LENGTH);
+  msglist[nextMsgIndex].title[MAX_MSG_TITLE_LENGTH - 1] = 0; //ensure string ends with null terminator
+
+  if (ShowDialog && infoMenu.menu[infoMenu.cur] != menuNotification)
+    popupReminder(style, (u8 *)title, (u8 *)msglist[nextMsgIndex].text);
+
+  if (nextMsgIndex < MAX_MSG_COUNT) nextMsgIndex += 1;//(nextMsgIndex + 1) % MAX_MSG_COUNT;
+
+  if (notificationHandler != NULL)
+    notificationHandler();
+
+  notificationDot();
+
+  statusScreen_setMsg((u8 *)title, (u8 *)text);
+}
+
+//Replay a notification
+void replayNotification(uint8_t index)
+{
+  if (index < nextMsgIndex)
+    popupReminder(msglist[index].style, (u8 *)msglist[index].title, (u8 *)msglist[index].text);
+}
+
+//Retrive a stored notification
+NOTIFICATION *getNotification(uint8_t index)
+{
+  if (strlen(msglist[index].title) > 0 && strlen(msglist[index].text) > 0)
+    return &msglist[index];
+  else
+    return NULL;
+}
+
+bool hasNotification(void)
+{
+  if (nextMsgIndex == 0)
+   return false;
+  else
+    return true;
+}
+
+void clearNotification(void)
+{
+  nextMsgIndex = 0;
+  for (int i = 0; i < MAX_MSG_COUNT; i++)
+  {
+    msglist[i].text[0] = 0;
+    msglist[i].title[0] = 0;
+  }
+  notificationDot();
+  statusScreen_setReady();
+}
+
+//check if pressed on titlebar area
+void titleBarPress(void)
+{
+  if (getMenuType() == MENU_TYPE_ICON || getMenuType() == MENU_TYPE_LISTVIEW)
+  {
+    if (infoMenu.menu[infoMenu.cur] != menuNotification)
+    {
+      infoMenu.menu[++infoMenu.cur] = menuNotification;
+    }
+  }
+}
+
+void setNotificationHandler(void (*handler)())
+{
+  notificationHandler = handler;
 }

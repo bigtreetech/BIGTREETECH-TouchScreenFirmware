@@ -556,16 +556,22 @@ void GUI_DispString(int16_t x, int16_t y, const uint8_t *p)
   }
 }
 
-const uint8_t* GUI_DispLenString(int16_t x, int16_t y, const uint8_t *p, uint16_t pixelWidth)
+const uint8_t* GUI_DispLenString(int16_t x, int16_t y, const uint8_t *p, uint16_t pixelWidth, bool truncate)
 {
   CHAR_INFO info;
   uint16_t curPixelWidth = 0;
   if(p == NULL) return NULL;
 
+  if(truncate) pixelWidth -= BYTE_HEIGHT;
+
   while(curPixelWidth < pixelWidth && *p)
   {
     getCharacterInfo(p, &info);
-    if(curPixelWidth + info.pixelWidth > pixelWidth) return p;
+    if(curPixelWidth + info.pixelWidth > pixelWidth)
+    {
+      if(truncate) GUI_DispOne(x, y, (u8*)"…");
+      return p;
+    }
     GUI_DispOne(x, y, p);
     x += info.pixelWidth;
     curPixelWidth += info.pixelWidth;
@@ -603,7 +609,7 @@ void GUI_DispStringInRect(int16_t sx, int16_t sy, int16_t ex, int16_t ey, const 
   uint8_t i=0;
   for(i=0; i<nline; i++)
   {
-    p = GUI_DispLenString(x, y, p, width);
+    p = GUI_DispLenString(x, y, p, width, false);
     y += BYTE_HEIGHT;
   }
 }
@@ -837,7 +843,7 @@ void Scroll_DispString(SCROLL * para, uint8_t align)
           para->off_head = 0;
         }
 
-        GUI_DispLenString(para->rect->x0 - para->off_head, para->rect->y0, &para->text[para->curByte], para->maxPixelWidth + info.pixelWidth);
+        GUI_DispLenString(para->rect->x0 - para->off_head, para->rect->y0, &para->text[para->curByte], para->maxPixelWidth + info.pixelWidth, false);
 
         para->curPixelWidth--;
         if(para->curPixelWidth < para->maxPixelWidth)
@@ -852,7 +858,7 @@ void Scroll_DispString(SCROLL * para, uint8_t align)
       if(para->curPixelWidth + 2*BYTE_WIDTH < para->maxPixelWidth)
       {
         para->off_tail++;
-        GUI_DispLenString(para->rect->x1-para->off_tail, para->rect->y0, para->text, para->off_tail);
+        GUI_DispLenString(para->rect->x1-para->off_tail, para->rect->y0, para->text, para->off_tail, false);
         if(para->off_tail + para->rect->x0 >= para->rect->x1)
         {
           para->off_head=0;

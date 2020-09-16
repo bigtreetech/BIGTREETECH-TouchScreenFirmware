@@ -177,7 +177,7 @@ u8 isPress(void)
 }
 
 
-void (*TSC_ReDrawIcon)(u8 positon, u8 is_press) = NULL;
+void (*TSC_ReDrawIcon)(u8 position, u8 is_press) = NULL;
 
 u16 KEY_GetValue(u8 total_rect,const GUI_RECT* menuRect)
 {

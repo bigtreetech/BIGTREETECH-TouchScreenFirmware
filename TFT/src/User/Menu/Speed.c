@@ -26,6 +26,11 @@ const ITEM itemPercentUnit[ITEM_PERCENT_UNIT_NUM] = {
 const  u8 item_percent_unit[ITEM_PERCENT_UNIT_NUM] = {1, 5, 10};
 static u8 item_percent_unit_i = 0;
 
+void setSpeedItemIndex(uint8_t index)
+{
+  item_percentage_i = index;
+}
+
 void percentageReDraw(char * title)
 {
   char tempstr[20];

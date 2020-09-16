@@ -57,6 +57,7 @@
     #define DU_RESTORE                "Herstellen"
     #define DU_RESET                  "Reset"
     #define DU_DEFAULT                "Standaard"
+    #define DU_CLEAR                  "Clear"
     #define DU_NEXT                   "Volgende"
     #define DU_DISTANCE               "Afstand"
     #define DU_INVALID_VALUE          "Geen correcte waarde/s voorzien!"
@@ -264,5 +265,6 @@
     #define DU_CONNECTION_SETTINGS    "Connecties"
     #define DU_OFFSET_TOOL            "Offset 2nd Nozzle"
     #define DU_HYBRID_THRESHOLD       "TMC HybridThreshold"
+    #define DU_NOTIFICATIONS          "Notifications"
 
 #endif

@@ -57,6 +57,7 @@
     #define SK_RESTORE                "Restore"
     #define SK_RESET                  "Reset"
     #define SK_DEFAULT                "Default"
+    #define SK_CLEAR                  "Clear"
     #define SK_NEXT                   "Next"
     #define SK_DISTANCE               "Distance"
     #define SK_INVALID_VALUE          "Invalid value(s)"
@@ -264,5 +265,6 @@
     #define SK_CONNECTION_SETTINGS    "Connection"
     #define SK_OFFSET_TOOL            "Offset 2nd Nozzle"
     #define SK_HYBRID_THRESHOLD       "TMC HybridThreshold"
+    #define SK_NOTIFICATIONS          "Notifications"
 
 #endif

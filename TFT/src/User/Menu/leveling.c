@@ -99,20 +99,6 @@ void menuAutoLeveling(void)
   }
 }
 
-// 1 title, ITEM_PER_PAGE items (icon + label)
-MENUITEMS manualLevelingItems = {
-  // title
-  LABEL_LEVELING,
-  // icon                         label
-  {{ICON_POINT_1,                 LABEL_POINT_1},
-   {ICON_POINT_2,                 LABEL_POINT_2},
-   {ICON_POINT_3,                 LABEL_POINT_3},
-   {ICON_POINT_4,                 LABEL_POINT_4},
-   {ICON_POINT_5,                 LABEL_POINT_5},
-   {ICON_LEVEL_EDGE_DISTANCE,     LABEL_DISTANCE},
-   {ICON_DISABLE_STEPPERS,        LABEL_XY_UNLOCK},
-   {ICON_BACK,                    LABEL_BACK},}
-};
 
 void moveToLevelingPoint(u8 point)
 {
@@ -138,6 +124,20 @@ void menuManualLeveling(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
 
+  MENUITEMS manualLevelingItems = {
+    // title
+    LABEL_LEVELING,
+    // icon                         label
+    {{ICON_POINT_1,                 LABEL_POINT_1},
+    {ICON_POINT_2,                 LABEL_POINT_2},
+    {ICON_POINT_3,                 LABEL_POINT_3},
+    {ICON_POINT_4,                 LABEL_POINT_4},
+    {ICON_POINT_5,                 LABEL_POINT_5},
+    {ICON_LEVEL_EDGE_DISTANCE,     LABEL_DISTANCE},
+    {ICON_DISABLE_STEPPERS,        LABEL_XY_UNLOCK},
+    {ICON_BACK,                    LABEL_BACK},}
+  };
+  
   menuDrawPage(&manualLevelingItems);
 
   while(infoMenu.menu[infoMenu.cur] == menuManualLeveling)

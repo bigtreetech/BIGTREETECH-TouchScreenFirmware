@@ -33,16 +33,23 @@
 #define SMALLICON_HEIGHT  55
 
 // Status screen menu
+#define SSICON_COUNT              4
+#define SSICON_WIDTH              ICON_WIDTH
+#define SSICON_HEIGHT             ICON_HEIGHT
 #define SSICON_VAL_Y0             75
+#define SSICON_VAL_COLOR          LCD_BLACK
 #define SSICON_NAME_Y0            7
+#define SSICON_NAME_COLOR         LCD_WHITE
 #define STATUS_MSG_ICON_XOFFSET   5
 #define STATUS_MSG_ICON_YOFFSET   5
 #define STATUS_MSG_TITLE_XOFFSET  5
 #define STATUS_MSG_BODY_XOFFSET   0
 #define STATUS_MSG_BODY_YOFFSET   59
 #define STATUS_MSG_BODY_BOTTOM    6
-#define STATUS_TITLE_SHORT        20
 #define STATUS_GANTRY_YOFFSET     6
+
+#define NAME_LARGE_FONT           false
+#define VAL_LARGE_FONT            false
 
 //Heating Menu
 #define PREHEAT_TITLE_Y   4

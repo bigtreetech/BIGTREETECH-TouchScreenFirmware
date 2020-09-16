@@ -57,6 +57,7 @@
     #define HU_RESTORE                "Betöltés"
     #define HU_RESET                  "Újratölt"
     #define HU_DEFAULT                "Alapért."
+    #define HU_CLEAR                  "Clear"
     #define HU_NEXT                   "Tovább"
     #define HU_DISTANCE               "Távolság"
     #define HU_INVALID_VALUE          "Nincs érvényes érték/s megadva"
@@ -175,7 +176,7 @@
     #define HU_EMERGENCYSTOP          "VészSTOP"
     #define HU_TOUCH_TO_EXIT          "Érintsd meg a kilépéshez."
     #define HU_MAINMENU               "Főmenü"
-    #define HU_WAIT_TEMP_SHUT_DOWN    "Várd meg a fej\nvisszahűlését.%d℃" // Várj, amíg a meleg fej a megadott ℃ alá hűl.
+    #define HU_WAIT_TEMP_SHUT_DOWN    "Várd meg a fej\nvisszahűlését.%d℃" // Várj, míg a fej a megadott ℃ alá hűl.
     #define HU_FORCE_SHUT_DOWN        "Kényszerítés"
     #define HU_SHUTTING_DOWN          "Leállítás..."
     #define HU_PARAMETER_SETTING      "Tényezők"
@@ -263,6 +264,7 @@
     #define HU_TUNE_EXT_NEW_ESTEP     "Új e-lépés: %0.2f"
     #define HU_CONNECTION_SETTINGS    "Kapcsolat"
     #define HU_OFFSET_TOOL            "Második fej eltolása"
-    #define HU_HYBRID_THRESHOLD       "TMC HybridThreshold"
+    #define HU_HYBRID_THRESHOLD       "TMC Hibrid Küszöbérték"
+    #define HU_NOTIFICATIONS          "Notifications"
 
 #endif
