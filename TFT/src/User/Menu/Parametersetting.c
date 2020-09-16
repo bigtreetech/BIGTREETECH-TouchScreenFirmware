@@ -49,6 +49,7 @@ LABEL_PARAMETER_SETTING,
 void menuShowParameter(void){
   KEY_VALUES key_num = KEY_IDLE;
   PARAMETERS now = infoParameters;
+  float oldval[LISTITEM_PER_PAGE];
 
   LISTITEMS parameter_menuitems ={
   // title
@@ -65,7 +66,7 @@ void menuShowParameter(void){
   };
 
   for (int i = 0; i < getParameterElementCount(cur_parameter); i++) {
-    setDynamicLabel(i, axisDisplayID[i]);
+    parameter_menuitems.items[i].titlelabel.address = axisDisplayID[i];
     setDynamicValue(i, getParameter(cur_parameter,i));
 
     if (i < E2_STEPPER)
@@ -78,10 +79,10 @@ void menuShowParameter(void){
       parameter_menuitems.items[i].titlelabel = accel_disp_ID[i];
       break;
     case P_JERK:
-      setDynamicLabel(X_AXIS, "X");
-      setDynamicLabel(Y_AXIS, "Y");
-      setDynamicLabel(Z_AXIS, "Z");
-      setDynamicLabel(E_AXIS, "E");
+      parameter_menuitems.items[X_AXIS].titlelabel.address = "X";
+      parameter_menuitems.items[Y_AXIS].titlelabel.address = "Y";
+      parameter_menuitems.items[Z_AXIS].titlelabel.address = "Z";
+      parameter_menuitems.items[E_AXIS].titlelabel.address = "E";
       break;
     case P_FWRETRACT:
       parameter_menuitems.items[i].titlelabel = retract_disp_ID[i];
@@ -93,17 +94,17 @@ void menuShowParameter(void){
       parameter_menuitems.items[i].titlelabel = retract_auto_ID[i];
       break;
     case P_LIN_ADV:
-      setDynamicLabel(0, "K-E");
-      setDynamicLabel(1, "K-E2");
+      parameter_menuitems.items[0].titlelabel.address = "K-E";
+      parameter_menuitems.items[1].titlelabel.address = "K-E2";
       break;
     case P_ABL_STATE:
-      setDynamicLabel(0, "S 1=ON 0=OFF");
-      setDynamicLabel(1, "Z fade");
+      parameter_menuitems.items[0].titlelabel.address = "S 1=ON 0=OFF";
+      parameter_menuitems.items[1].titlelabel.address = "Z fade";
       break;
     case P_OFFSET_TOOL:
-      setDynamicLabel(0, "X");
-      setDynamicLabel(1, "Y");
-      setDynamicLabel(2, "Z");
+      parameter_menuitems.items[X_AXIS].titlelabel.address = "X";
+      parameter_menuitems.items[Y_AXIS].titlelabel.address = "Y";
+      parameter_menuitems.items[Z_AXIS].titlelabel.address = "Z";
       break;
     default:
       if (getDualstepperStatus(E_STEPPER) && i == E2_STEPPER)
@@ -159,8 +160,9 @@ void menuShowParameter(void){
 
     for (int i = 0; i < STEPPER_COUNT; i++)
     {
-      if (getDynamicValue(i) != getParameter(cur_parameter, i))
+      if (oldval[i] != getParameter(cur_parameter, i))
       {
+        oldval[i] = getParameter(cur_parameter, i);
         setDynamicValue(i, getParameter(cur_parameter, i));
         menuDrawListItem(&parameter_menuitems.items[i], i);
       }
@@ -316,6 +318,7 @@ bool temperatureStatusValid(void)
   if (infoMenu.menu[infoMenu.cur] == menuStatus) return false;
   if (infoMenu.menu[infoMenu.cur] == menuMove) return false;
   if (infoMenu.menu[infoMenu.cur] == menuInfo) return false;
+  if (infoMenu.menu[infoMenu.cur] == menuNotification) return false;
 
   return true;
 }
@@ -384,7 +387,7 @@ int16_t drawTemperatureStatus(void){
     x_offset -= GLOBALICON_INTERVAL;
     GUI_ClearRect(x_offset, start_y, x_offset + GLOBALICON_INTERVAL, start_y + GLOBALICON_HEIGHT);
     x_offset -= GLOBALICON_WIDTH;
-    lcd_frame_display(x_offset, start_y, GLOBALICON_WIDTH, GLOBALICON_HEIGHT, ICON_ADDR(tmpIcon[i])); // icon
+    ICON_ReadDisplay(x_offset, start_y, tmpIcon[i]); // icon
   }
   GUI_SetBkColor(infoSettings.bg_color);
   return x_offset;

@@ -57,6 +57,7 @@
     #define GR_RESTORE                "Restore"
     #define GR_RESET                  "Επαναφορά"
     #define GR_DEFAULT                "Default"
+    #define GR_CLEAR                  "Clear"
     #define GR_NEXT                   "Next"
     #define GR_DISTANCE               "Distance"
     #define GR_INVALID_VALUE          "Invalid value(s)"
@@ -264,5 +265,6 @@
     #define GR_CONNECTION_SETTINGS    "Connection"
     #define GR_OFFSET_TOOL            "Offset 2nd Nozzle"
     #define GR_HYBRID_THRESHOLD       "TMC HybridThreshold"
+    #define GR_NOTIFICATIONS          "Notifications"
 
 #endif

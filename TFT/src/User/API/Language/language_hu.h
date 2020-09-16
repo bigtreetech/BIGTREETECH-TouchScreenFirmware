@@ -57,6 +57,7 @@
     #define HU_RESTORE                "Betöltés"
     #define HU_RESET                  "Újratölt"
     #define HU_DEFAULT                "Alapért."
+    #define HU_CLEAR                  "Clear"
     #define HU_NEXT                   "Tovább"
     #define HU_DISTANCE               "Távolság"
     #define HU_INVALID_VALUE          "Nincs érvényes érték/s megadva"
@@ -264,5 +265,6 @@
     #define HU_CONNECTION_SETTINGS    "Kapcsolat"
     #define HU_OFFSET_TOOL            "Második fej eltolása"
     #define HU_HYBRID_THRESHOLD       "TMC Hibrid Küszöbérték"
+    #define HU_NOTIFICATIONS          "Notifications"
 
 #endif

@@ -94,10 +94,13 @@ static float ack_second_value()
 
 void ackPopupInfo(const char *info)
 {
-  DIALOG_TYPE d_type = DIALOG_TYPE_ERROR;
+
+  bool show_dialog = true;
+  if (infoMenu.menu[infoMenu.cur] == menuTerminal ||
+      (infoMenu.menu[infoMenu.cur] == menuStatus && info == echomagic))
+    show_dialog = false;
 
   // play notification sound if buzzer for ACK is enabled
-
   if (info == errormagic)
     BUZZER_PLAY(sound_error);
   else if (info == echomagic && infoSettings.ack_notification == 1)
@@ -110,21 +113,20 @@ void ackPopupInfo(const char *info)
     if (infoMenu.menu[infoMenu.cur] == menuParameterSettings)
       return;
 
-    d_type = DIALOG_TYPE_INFO;
-    statusScreen_setMsg((u8 *)info, (u8 *)dmaL2Cache + ack_index);
+    //show notification based on notificaiton settings
+    if (infoSettings.ack_notification == 1)
+    {
+      addNotification(DIALOG_TYPE_INFO, (char *)info, (char *)dmaL2Cache + ack_index, show_dialog);
+    }
+    else if (infoSettings.ack_notification == 2)
+    {
+      addToast(DIALOG_TYPE_INFO, dmaL2Cache); //show toast notificaion if turned on
+    }
   }
-
-  if (infoMenu.menu[infoMenu.cur] == menuTerminal ||
-      (infoMenu.menu[infoMenu.cur] == menuStatus && info == echomagic))
-    return;
-
- //show notification based on notificaiton settings
-  if (infoSettings.ack_notification == 1 ||  info == errormagic)
+  else
   {
-    popupReminder(d_type, (u8 *) info, (u8 *) dmaL2Cache + ack_index);
+    addNotification(DIALOG_TYPE_ERROR, (char *)info, (char *)dmaL2Cache + ack_index, show_dialog);
   }
-  else if(infoSettings.ack_notification == 2)
-    addToast(DIALOG_TYPE_INFO, dmaL2Cache); //show toast notificaion if turned on
 }
 
 
@@ -161,10 +163,8 @@ bool processKnownEcho(void)
       else if (knownEcho[i].notifyType == ECHO_NOTIFY_DIALOG)
       {
         BUZZER_PLAY(sound_notify);
-        popupReminder(DIALOG_TYPE_INFO, (u8 *)echomagic, (u8 *)dmaL2Cache + ack_index);
+        addNotification(DIALOG_TYPE_INFO, (char*)echomagic, (char*)dmaL2Cache + ack_index, true);
       }
-      // display the echo message in the status bar
-      statusScreen_setMsg((u8 *)echomagic, (u8 *)dmaL2Cache + ack_index);
     }
   }
   return isKnown;
@@ -189,7 +189,7 @@ void syncL2CacheFromL1(uint8_t port)
 
 void hostActionCommands(void)
 {
-  char *find = strchr(dmaL2Cache + ack_index, '\n'); 
+  char *find = strchr(dmaL2Cache + ack_index, '\n');
   *find = '\0';
   if(ack_seen("prompt_begin "))
   {
@@ -532,7 +532,7 @@ void parseACK(void)
         if(ack_seen("Y")) setParameter(P_BUMPSENSITIVITY, Y_STEPPER, ack_value());
         if(ack_seen("Z")) setParameter(P_BUMPSENSITIVITY, Z_STEPPER, ack_value());
       }
-    // parse and store TMC Hybrid Threshold Speed  
+    // parse and store TMC Hybrid Threshold Speed
       else if(ack_seen("M913 X")){
                           setParameter(P_HYBRID_THRESHOLD, X_STEPPER, ack_value());
         if(ack_seen("Y")) setParameter(P_HYBRID_THRESHOLD, Y_STEPPER, ack_value());
@@ -545,7 +545,7 @@ void parseACK(void)
       else if(ack_seen("M913 T1 E")){
                           setParameter(P_HYBRID_THRESHOLD, E2_STEPPER, ack_value());
                           setDualStepperStatus(E_STEPPER, true);
-      }  
+      }
     // Parse and store ABL type
       else if(ack_seen("echo:; Unified Bed Leveling")){
         if(ENABLE_UBL_VALUE==2) infoMachineSettings.enableubl = ENABLED;
@@ -639,7 +639,21 @@ void parseACK(void)
       }
       else if(ack_seen("Cap:CHAMBER_TEMPERATURE:"))
       {
+        infoSettings.chamber_en = ack_value();
         setupMachine();
+      }
+      else if(ack_seen("work:"))
+      {
+        if(ack_seen("min:")){
+          if(ack_seen("X:")) infoSettings.machine_size_min[X_AXIS] = ack_value();
+          if(ack_seen("Y:")) infoSettings.machine_size_min[Y_AXIS] = ack_value();
+          if(ack_seen("Z:")) infoSettings.machine_size_min[Z_AXIS] = ack_value();
+        }
+        if(ack_seen("max:")){
+          if(ack_seen("X:")) infoSettings.machine_size_min[X_AXIS] = ack_value();
+          if(ack_seen("Y:")) infoSettings.machine_size_min[Y_AXIS] = ack_value();
+          if(ack_seen("Z:")) infoSettings.machine_size_min[Z_AXIS] = ack_value();
+        }
       }
     //parse Repeatability Test
       else if(ack_seen("Mean:"))
@@ -678,12 +692,12 @@ void parseACK(void)
       {
         u8 i = 0;
         if (ack_seen("S")) {
-          i = fanGetTypID(0,FAN_TYPE_CTRL_S); 
+          i = fanGetTypID(0,FAN_TYPE_CTRL_S);
           fanSetSpeed(i, ack_value());
           fanSpeedQuerySetWait(false);
         }
         if (ack_seen("I")) {
-          i = fanGetTypID(0,FAN_TYPE_CTRL_I); 
+          i = fanGetTypID(0,FAN_TYPE_CTRL_I);
           fanSetSpeed(i, ack_value());
           fanSpeedQuerySetWait(false);
         }

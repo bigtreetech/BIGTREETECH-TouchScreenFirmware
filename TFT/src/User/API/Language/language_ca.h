@@ -57,6 +57,7 @@
     #define CA_RESTORE                "Restore"
     #define CA_RESET                  "Reset"
     #define CA_DEFAULT                "Default"
+    #define CA_CLEAR                  "Clear"
     #define CA_NEXT                   "Next"
     #define CA_DISTANCE               "Distance"
     #define CA_INVALID_VALUE          "Invalid value(s)"
@@ -264,5 +265,6 @@
     #define CA_CONNECTION_SETTINGS    "Connection"
     #define CA_OFFSET_TOOL            "Offset 2nd Nozzle"
     #define CA_HYBRID_THRESHOLD       "TMC HybridThreshold"
-    
+    #define CA_NOTIFICATIONS          "Notifications"
+
 #endif

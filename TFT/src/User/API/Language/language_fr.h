@@ -57,6 +57,7 @@
     #define FR_RESTORE                "Restaurer"
     #define FR_RESET                  "Reset"
     #define FR_DEFAULT                "Défaut"
+    #define FR_CLEAR                  "Clear"
     #define FR_NEXT                   "Suivant"
     #define FR_DISTANCE               "Distance"
     #define FR_INVALID_VALUE          "Aucune valeur valide fournie !"
@@ -264,5 +265,6 @@
     #define FR_CONNECTION_SETTINGS    "Connexion"
     #define FR_OFFSET_TOOL            "Offset 2ème Buse"
     #define FR_HYBRID_THRESHOLD       "Seuil Hybride TMC"
+    #define FR_NOTIFICATIONS          "Notifications"
 
 #endif

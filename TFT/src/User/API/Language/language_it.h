@@ -57,6 +57,7 @@
     #define IT_RESTORE                "Ripristina"
     #define IT_RESET                  "Reset"
     #define IT_DEFAULT                "Default"
+    #define IT_CLEAR                  "Clear"
     #define IT_NEXT                   "Avanti"
     #define IT_DISTANCE               "Distanza"
     #define IT_INVALID_VALUE          "Invalid value(s)"
@@ -264,5 +265,6 @@
     #define IT_CONNECTION_SETTINGS    "Connessione"
     #define IT_OFFSET_TOOL            "Offset 2nd Nozzle"
     #define IT_HYBRID_THRESHOLD       "TMC HybridThreshold"
+    #define IT_NOTIFICATIONS          "Notifications"
 
 #endif

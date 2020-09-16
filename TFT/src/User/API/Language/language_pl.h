@@ -57,6 +57,7 @@
     #define PL_RESTORE                "Restore"
     #define PL_RESET                  "Reset"
     #define PL_DEFAULT                "Default"
+    #define PL_CLEAR                  "Clear"
     #define PL_NEXT                   "Next"
     #define PL_DISTANCE               "Distance"
     #define PL_INVALID_VALUE          "Invalid value(s)"
@@ -264,5 +265,6 @@
     #define PL_CONNECTION_SETTINGS    "Connection"
     #define PL_OFFSET_TOOL            "Offset 2nd Nozzle"
     #define PL_HYBRID_THRESHOLD       "TMC HybridThreshold"
+    #define PL_NOTIFICATIONS          "Notifications"
 
 #endif
