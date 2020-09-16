@@ -264,7 +264,7 @@
     #define RU_TUNE_EXT_NEW_ESTEP     "Новые E-шаги: %0.2f"
     #define RU_CONNECTION_SETTINGS    "Соединение"
     #define RU_OFFSET_TOOL            "Смещение 2-го сопла"
-    #define RU_HYBRID_THRESHOLD       "TMC HybridThreshold"
+    #define RU_HYBRID_THRESHOLD       "TMC гибридный порог"
     #define RU_NOTIFICATIONS          "Notifications"
 
 #endif
