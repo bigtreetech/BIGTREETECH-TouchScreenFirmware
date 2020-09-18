@@ -57,6 +57,7 @@
     #define JP_RESTORE                "Restore"
     #define JP_RESET                  "リセット"
     #define JP_DEFAULT                "Default"
+    #define JP_CLEAR                  "Clear"
     #define JP_NEXT                   "Next"
     #define JP_DISTANCE               "Distance"
     #define JP_INVALID_VALUE          "Invalid value(s)"
@@ -264,5 +265,6 @@
     #define JP_CONNECTION_SETTINGS    "Connection"
     #define JP_OFFSET_TOOL            "Offset 2nd Nozzle"
     #define JP_HYBRID_THRESHOLD       "TMC HybridThreshold"
+    #define JP_NOTIFICATIONS          "Notifications"
 
 #endif

@@ -57,6 +57,7 @@
     #define TR_RESTORE                "Restore"
     #define TR_RESET                  "Sıfırla"
     #define TR_DEFAULT                "Default"
+    #define TR_CLEAR                  "Clear"
     #define TR_NEXT                   "Next"
     #define TR_DISTANCE               "Distance"
     #define TR_INVALID_VALUE          "Invalid value(s)"
@@ -264,5 +265,6 @@
     #define TR_CONNECTION_SETTINGS    "Connection"
     #define TR_OFFSET_TOOL            "Offset 2nd Nozzle"
     #define TR_HYBRID_THRESHOLD       "TMC HybridThreshold"
+    #define TR_NOTIFICATIONS          "Notifications"
 
 #endif

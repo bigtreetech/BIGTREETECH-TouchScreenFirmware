@@ -57,6 +57,7 @@
     #define EN_RESTORE                "Restore"
     #define EN_RESET                  "Reset"
     #define EN_DEFAULT                "Default"
+    #define EN_CLEAR                  "Clear"
     #define EN_NEXT                   "Next"
     #define EN_DISTANCE               "Distance"
     #define EN_INVALID_VALUE          "Invalid value(s)"
@@ -264,5 +265,6 @@
     #define EN_CONNECTION_SETTINGS    "Connection"
     #define EN_OFFSET_TOOL            "Offset 2nd Nozzle"
     #define EN_HYBRID_THRESHOLD       "TMC HybridThreshold"
+    #define EN_NOTIFICATIONS          "Notifications"
 
 #endif
