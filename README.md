@@ -71,7 +71,7 @@ To update the Firmware configuration:
 3. Insert the SD card in the TFT's SD card slot and restart the TFT by pressing the reset buttion or disconnecting and connecting the power cable.
 4. The TFT will update and store the configuration form **config.ini** file.
 
-The config.ini can be edited using a simple text editor and uploaded again (without the need to upload the firmware or the TFT folder ) as long as the firmware is the same version number.
+The config.ini can be edited using a simple text editor (make sure to use UTF encoding) and uploaded again - without the need to upload the firmware or the TFT folder - as long as the firmware is the same version number.
 
 ## Customization
 
