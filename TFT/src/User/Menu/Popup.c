@@ -43,9 +43,9 @@ static uint8_t popup_ok[24];
 static uint8_t popup_cancel[24];
 static DIALOG_TYPE popup_type;
 
-void windowReDrawButton(u8 positon, u8 pressed)
+void windowReDrawButton(u8 position, u8 pressed)
 {
-  if (positon >= buttonNum)
+  if (position >= buttonNum)
     return;
   if (pressed >= 2)
     return;
@@ -54,7 +54,7 @@ void windowReDrawButton(u8 positon, u8 pressed)
   if (windowButton->context == NULL)
     return;
 
-  GUI_DrawButton(windowButton + positon, pressed);
+  GUI_DrawButton(windowButton + position, pressed);
 }
 
 void popupDrawPage(DIALOG_TYPE type, BUTTON *btn, const uint8_t *title, const uint8_t *context, const uint8_t *yes, const uint8_t *no)
@@ -178,13 +178,11 @@ void loopPopup(void)
   if (popup_cancel[0])
   {
     popupDrawPage(popup_type, bottomDoubleBtn, popup_title, popup_msg, popup_ok, popup_cancel);
-
     cur_btn_rect = doubleBtnRect;
   }
   else
   {
     popupDrawPage(popup_type, &bottomSingleBtn, popup_title, popup_msg, popup_ok, NULL);
-
     cur_btn_rect = &singleBtnRect;
   }
   //avoid to nest menuDialog popup type (while a menuNotification popup type can be overridden)

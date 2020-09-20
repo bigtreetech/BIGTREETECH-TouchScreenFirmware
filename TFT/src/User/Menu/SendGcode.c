@@ -67,16 +67,16 @@ GKEY_VALUES GKeyGetValue(void)
   return (GKEY_VALUES)KEY_GetValue(sizeof(rect_of_Gkey)/sizeof(rect_of_Gkey[0]), rect_of_Gkey);
 }
 
-void sendGcodeReDrawButton(u8 positon, u8 pressed)
+void sendGcodeReDrawButton(u8 position, u8 pressed)
 {
-  if(positon > GKEY_SEND) return;
+  if(position > GKEY_SEND) return;
   if(pressed)
   {
     GUI_SetColor(WHITE);
     GUI_SetBkColor(BLACK);
   }
-  GUI_ClearPrect(rect_of_Gkey+positon);
-  GUI_DispStringInPrect(rect_of_Gkey + positon, (u8 *)softKeyValue[softKeyType][positon]);
+  GUI_ClearPrect(rect_of_Gkey+position);
+  GUI_DispStringInPrect(rect_of_Gkey + position, (u8 *)softKeyValue[softKeyType][position]);
   if(pressed)
   {
     GUI_SetColor(BLACK);

@@ -8,6 +8,7 @@ extern "C" {
 #include <stdint.h>
 #include <stdbool.h>
 
+void setSpeedItemIndex(uint8_t index);
 void menuSpeed(void);
 
 #ifdef __cplusplus

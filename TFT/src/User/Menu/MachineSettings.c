@@ -33,7 +33,7 @@ void loaditemsCustomGcode()
     if (item_index < gcode_num){
       customItems.items[i].icon = ICONCHAR_CODE;
       customItems.items[i].titlelabel.index = LABEL_DYNAMIC;
-      setDynamicLabel(i,customcodes->name[item_index]);
+      customItems.items[i].titlelabel.address = customcodes->name[item_index];
     }
     else{
       customItems.items[i].icon = ICONCHAR_BACKGROUND;

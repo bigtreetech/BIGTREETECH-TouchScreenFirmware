@@ -30,7 +30,7 @@ u16  KNOB_GetRV(GUI_RECT *knob);
 
 void loopTouchScreen(void);
 
-extern void (*TSC_ReDrawIcon)(u8 positon, u8 is_press);
+extern void (*TSC_ReDrawIcon)(u8 position, u8 is_press);
 extern void TS_Get_Coordinates(u16 *x, u16 *y);
 
 #ifdef __cplusplus

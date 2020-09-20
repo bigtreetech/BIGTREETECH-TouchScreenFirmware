@@ -17,7 +17,7 @@ const GUI_POINT pointProgressText     = {BYTE_WIDTH/2-2, LCD_HEIGHT-(BYTE_HEIGHT
 
 u16 foundkeys = 0;
 
-CONFIGFILE configFile;
+CONFIGFILE * CurConfigFile;
 char * cur_line = NULL;
 int customcode_index = 0;
 int customcode_good[CUSTOM_GCODES_COUNT];
@@ -34,7 +34,7 @@ const char *const config_keywords[CONFIG_COUNT] = {
 };
 
 
-void getConfigFromFile(void)
+bool getConfigFromFile(void)
 {
   #ifdef CONFIG_DEBUG
     Serial_ReSourceInit();
@@ -42,7 +42,8 @@ void getConfigFromFile(void)
 
   char cur_line_buffer[LINE_MAX_CHAR];
   cur_line = cur_line_buffer;
-
+  CONFIGFILE configFile;
+  CurConfigFile = &configFile;
   configCustomGcodes = (CUSTOM_GCODES*)malloc(sizeof(CUSTOM_GCODES));
   configPrintGcodes = (PRINT_GCODES*)malloc(sizeof(PRINT_GCODES));
   configStringsStore = (STRINGS_STORE*)malloc(sizeof(STRINGS_STORE));
@@ -54,7 +55,7 @@ void getConfigFromFile(void)
   u8 count = 0;
   UINT br = 0;
   if (f_file_exists(CONFIG_FILE_PATH) == false)
-    return;
+    return false;
 
   drawProgressPage();
 
@@ -62,7 +63,7 @@ void getConfigFromFile(void)
   {
     PRINTDEBUG("parse error\n");
     showError(CSTAT_FILE_NOTOPEN);
-    return;
+    return false;
   }
   else
   {
@@ -72,16 +73,19 @@ void getConfigFromFile(void)
     {
       showError(CSTAT_FILE_INVALID);
       f_close(&configFile.file);
-      return;
+      return false;
     }
+
+    configFile.cur = 0;
     for (; configFile.cur < configFile.size;)
     {
       if (f_read(&configFile.file, &cur_char, 1, &br) != FR_OK)
       {
         PRINTDEBUG("read error\n");
-        return;
+        return false;
       }
       configFile.cur++;
+      PRINTDEBUG("Line ++\n");
 
       if (cur_char == '\n')             // start parsing line after new line.
       {
@@ -122,6 +126,7 @@ void getConfigFromFile(void)
             {
               cur_line[count++] = '\0';
               cur_line[count] = 0;        //terminate string
+              PRINTDEBUG("line read\n");
               parseConfigLine();          //start parsing at the end of the file.
             }
           }
@@ -146,7 +151,8 @@ void getConfigFromFile(void)
 
     f_close(&configFile.file);
     configFile.cur = 0;
-    configFile.size  = 0;
+    configFile.size = 0;
+    return true;
   }
 }
 
@@ -351,7 +357,7 @@ void drawProgress(void){
   char tempstr[50];
   sprintf(tempstr,"Total keywords found: %d",foundkeys);
   GUI_DispString(pointProgressText.x,pointProgressText.y,(u8*)tempstr);
-  u16 p = map(configFile.cur,0,configFile.size, rectProgressframe.x0,rectProgressframe.x1);
+  u16 p = map(CurConfigFile->cur,0,CurConfigFile->size, rectProgressframe.x0,rectProgressframe.x1);
   GUI_FillRect(rectProgressframe.x0,rectProgressframe.y0,p,rectProgressframe.y1);
 }
 
@@ -563,7 +569,7 @@ void parseConfigKey(u16 index)
     break;
 
   case C_INDEX_FAN_CTRL_COUNT:
-    if (inLimit(config_int(), 2, MAX_FAN_CTRL_COUNT))
+    if (inLimit(config_int(), 0, MAX_FAN_CTRL_COUNT))
       infoSettings.fan_ctrl_count = config_int();
     break;
 

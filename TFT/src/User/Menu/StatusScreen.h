@@ -18,8 +18,6 @@ extern "C" {
 #define INFOMSG_BKCOLOR     WHITE
 #define INFOMSG_COLOR       BLACK
 
-#define MAX_MSG_LENGTH 75
-
 extern const GUI_POINT ss_title_point;
 extern const GUI_POINT ss_val_point;
 

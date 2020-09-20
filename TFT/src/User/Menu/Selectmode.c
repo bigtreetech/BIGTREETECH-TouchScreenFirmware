@@ -85,7 +85,12 @@ void loopCheckMode(void)
     return;
 
 //  #endif
-  if(LCD_ReadPen(LCD_CHANGE_MODE_INTERVALS) || encoder_ReadBtn(LCD_CHANGE_MODE_INTERVALS))
+  if(LCD_ReadPen(LCD_CHANGE_MODE_INTERVALS) 
+#if LCD_ENCODER_SUPPORT 
+      || encoder_ReadBtn(LCD_CHANGE_MODE_INTERVALS)
+#endif
+    )
+
   {
     infoMenu.menu[++infoMenu.cur] = menuMode;
   }

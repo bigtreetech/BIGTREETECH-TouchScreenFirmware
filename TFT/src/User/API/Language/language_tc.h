@@ -57,6 +57,7 @@
     #define TC_RESTORE                "恢復"
     #define TC_RESET                  "重設"
     #define TC_DEFAULT                "默認"
+    #define TC_CLEAR                  "Clear"
     #define TC_NEXT                   "下一個"
     #define TC_DISTANCE               "距離"
     #define TC_INVALID_VALUE          "沒有有效的條件!"
@@ -264,5 +265,6 @@
     #define TC_CONNECTION_SETTINGS    "连接"
     #define TC_OFFSET_TOOL            "Offset 2nd Nozzle"
     #define TC_HYBRID_THRESHOLD       "TMC HybridThreshold"
+    #define TC_NOTIFICATIONS          "Notifications"
 
 #endif
