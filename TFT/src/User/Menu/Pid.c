@@ -74,14 +74,21 @@ void pidUpdateStatus(bool succeeded)
 
     if (pidSucceeded)                  // if all the PID processes successfully terminated, allow to save to EEPROM
     {
-      char tmpBuf[120];
-
-      sprintf(tmpBuf, "%s\n %s", textSelect(LABEL_PROCESS_COMPLETED), textSelect(LABEL_EEPROM_SAVE_INFO));
-
       BUZZER_PLAY(sound_success);
 
-      showDialog(DIALOG_TYPE_SUCCESS, textSelect(LABEL_PID_TITLE), (u8*) tmpBuf,
-        textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), saveEepromSettings, NULL, NULL);
+      if (infoMachineSettings.EEPROM == 1)
+      {
+        char tmpBuf[120];
+
+        sprintf(tmpBuf, "%s\n %s", textSelect(LABEL_PROCESS_COMPLETED), textSelect(LABEL_EEPROM_SAVE_INFO));
+
+        showDialog(DIALOG_TYPE_SUCCESS, textSelect(LABEL_PID_TITLE), (u8*) tmpBuf,
+          textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), saveEepromSettings, NULL, NULL);
+      }
+      else
+      {
+        popupReminder(DIALOG_TYPE_SUCCESS, textSelect(LABEL_PID_TITLE), textSelect(LABEL_PROCESS_COMPLETED));
+      }
     }
     else                               // if at least a PID process failed, provide an error dialog
     {
