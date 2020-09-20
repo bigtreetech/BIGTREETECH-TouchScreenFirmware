@@ -151,8 +151,8 @@ void menuABL(void)
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_PROBE_OFFSET,            LABEL_Z_OFFSET},
      {ICON_BLTOUCH,                 LABEL_BLTOUCH},
+     {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BACK,                    LABEL_BACK}}
   };
@@ -218,11 +218,6 @@ void menuABL(void)
         break;
 
       case KEY_ICON_4:
-        storeCmd("M851\n");
-        infoMenu.menu[++infoMenu.cur] = menuProbeOffset;
-        break;
-
-      case KEY_ICON_5:
         infoMenu.menu[++infoMenu.cur] = menuBLTouch;
         break;
 

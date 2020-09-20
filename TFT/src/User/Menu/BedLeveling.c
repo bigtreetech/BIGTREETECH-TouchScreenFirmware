@@ -19,16 +19,16 @@ void blUpdateState(MENUITEMS *menu)
 
         if (infoSettings.autoLevelState == 1)
         {
-          menu->items[5].icon = ICON_LEVELING_ON;
-          menu->items[5].label.index = LABEL_BL_ENABLE;
+          menu->items[6].icon = ICON_LEVELING_ON;
+          menu->items[6].label.index = LABEL_BL_ENABLE;
         }
         else
         {
-          menu->items[5].icon = ICON_LEVELING_OFF;
-          menu->items[5].label.index = LABEL_BL_DISABLE;
+          menu->items[6].icon = ICON_LEVELING_OFF;
+          menu->items[6].label.index = LABEL_BL_DISABLE;
         }
 
-        menuDrawItem(&menu->items[5], 5);
+        menuDrawItem(&menu->items[6], 6);
       }
     }
   }
@@ -44,8 +44,8 @@ void menuBedLeveling(void)
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_PROBE_OFFSET,            LABEL_Z_OFFSET},
      {ICON_Z_FADE,                  LABEL_ABL_Z},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BACK,                    LABEL_BACK},}
   };
@@ -75,13 +75,13 @@ void menuBedLeveling(void)
 
   if (infoSettings.autoLevelState == 1)
   {
-    bedLevelingItems.items[5].icon = ICON_LEVELING_ON;
-    bedLevelingItems.items[5].label.index = LABEL_BL_ENABLE;
+    bedLevelingItems.items[6].icon = ICON_LEVELING_ON;
+    bedLevelingItems.items[6].label.index = LABEL_BL_ENABLE;
   }
   else
   {
-    bedLevelingItems.items[5].icon = ICON_LEVELING_OFF;
-    bedLevelingItems.items[5].label.index = LABEL_BL_DISABLE;
+    bedLevelingItems.items[6].icon = ICON_LEVELING_OFF;
+    bedLevelingItems.items[6].label.index = LABEL_BL_DISABLE;
   }
 
   menuDrawPage(&bedLevelingItems);
@@ -113,6 +113,11 @@ void menuBedLeveling(void)
         break;
 
       case KEY_ICON_4:
+        storeCmd("M851\n");
+        infoMenu.menu[++infoMenu.cur] = menuProbeOffset;
+        break;
+
+      case KEY_ICON_5:
         {
           char tempstr[30];
 
@@ -125,7 +130,7 @@ void menuBedLeveling(void)
         }
         break;
 
-      case KEY_ICON_5:
+      case KEY_ICON_6:
         if (infoSettings.autoLevelState == 1)
         {
           storeCmd("M420 S0\n");
