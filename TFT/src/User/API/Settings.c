@@ -82,6 +82,7 @@ void infoSettingsReset(void)
   infoSettings.chamber_en             = DISABLE;
   infoSettings.ext_count              = EXTRUDER_NUM;
   infoSettings.fan_count              = FAN_NUM;
+  infoSettings.fan_ctrl_count         = FAN_CTRL_NUM;
   infoSettings.auto_load_leveling     = AUTO_SAVE_LOAD_LEVELING_VALUE;
   infoSettings.onboardSD              = AUTO;     //ENABLED / DISABLED / AUTO
   infoSettings.m27_refresh_time       = M27_REFRESH;
@@ -170,11 +171,7 @@ void setupMachine(void)
       storeCmd("M420 S1\n");
     }
   #endif
-  if(infoMachineSettings.isMarlinFirmware == 1)
-  {
-    printSetUpdateWaiting(infoSettings.m27_active);
-  }
-  else //Smoothieware does not report detailed M115 capabilities
+  if(infoMachineSettings.isMarlinFirmware != 1) //Smoothieware does not report detailed M115 capabilities
   {
     infoMachineSettings.EEPROM                  = ENABLED;
     infoMachineSettings.autoReportTemp          = DISABLED;
@@ -210,3 +207,70 @@ float flashUsedPercentage(void)
   float percent = ((float)FLASH_USED * 100) / total;
   return percent;
 }
+
+// check font/icon/config signature in SPI flash for update
+void checkflashSign(void)
+{
+  uint32_t flash_sign[sign_count] = {FONT_CHECK_SIGN, CONFIG_CHECK_SIGN, LANGUAGE_CHECK_SIGN, ICON_CHECK_SIGN};
+  uint32_t cur_flash_sign[sign_count];
+  uint32_t addr = FLASH_SIGN_ADDR;
+  uint32_t len = sizeof(flash_sign);
+
+  W25Qxx_ReadBuffer((uint8_t*)&cur_flash_sign, addr, len);
+
+  cur_flash_sign[lang_sign] = flash_sign[lang_sign]; // ignore language signature not implemented yet
+
+  int status = memcmp(flash_sign, cur_flash_sign, len);
+  if (status != 0)
+  {
+    int ypos = BYTE_HEIGHT + 5;
+    GUI_Clear(BLACK);
+    GUI_DispString(5, 5, (uint8_t *)"Found outdated data:");
+    ypos += BYTE_HEIGHT;
+    if (cur_flash_sign[font_sign] == flash_sign[font_sign])
+    {
+      GUI_DispString(10, ypos, (uint8_t *)"Fonts: OK");
+    }
+    else
+    {
+      GUI_DispString(10, ypos, (uint8_t *)"Fonts: Update required");
+      ypos += BYTE_HEIGHT;
+    }
+    if (cur_flash_sign[config_sign] == flash_sign[config_sign])
+    {
+      GUI_DispString(10, ypos, (uint8_t *)"Config: OK");
+    }
+    else
+    {
+      GUI_DispString(10, ypos, (uint8_t *)"Config: Update required");
+      ypos += BYTE_HEIGHT;
+    }
+    /*
+    if (cur_flash_sign[lang_sign] == flash_sign[lang_sign])
+    {
+      GUI_DispString(10, ypos, (uint8_t *)"Language: OK");
+    }
+    else
+    {
+      GUI_DispString(10, ypos, (uint8_t *)"Language: Update required");
+      ypos += BYTE_HEIGHT;
+    }
+    */
+    if (cur_flash_sign[icon_sign] == flash_sign[icon_sign])
+    {
+      GUI_DispString(10, ypos, (uint8_t *)"Icons: OK");
+    }
+    else
+    {
+      GUI_DispString(10, ypos, (uint8_t *)"Icons: Update required");
+    }
+GUI_DispStringInRectEOL(10, ypos + 10, LCD_WIDTH, LCD_HEIGHT, (uint8_t *)"Insert the SD card with the required\n"
+                                                                         "files and press the reset button\nto update.");
+while (1)
+  ;
+  }
+
+
+}
+
+

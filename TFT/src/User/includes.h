@@ -70,6 +70,7 @@
 #include "list_widget.h"
 #include "Popup.h"
 #include "Numpad.h"
+#include "Notification.h"
 #include "SanityCheck.h"
 
 //menu
@@ -85,6 +86,7 @@
 #include "BabyStep.h"
 #include "ledcolor.h"
 #include "Parametersetting.h"
+#include "NotificationMenu.h"
 
 #include "Extrude.h"
 #include "Fan.h"
@@ -108,6 +110,7 @@
 
 #include "Tuning.h"
 #include "Pid.h"
+#include "TuneExtruder.h"
 #include "ConnectionSettings.h"
 
 #define MAX_MENU_DEPTH 10       // max sub menu depth

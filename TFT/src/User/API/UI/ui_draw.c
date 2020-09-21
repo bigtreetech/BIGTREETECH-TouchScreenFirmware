@@ -35,14 +35,28 @@ void lcd_frame_display(u16 sx,u16 sy,u16 w,u16 h, u32 addr)
 }
 #endif
 
+uint32_t getBMPsize(uint8_t * w, uint8_t * h, uint32_t address)
+{
+  uint16_t len = sizeof(uint16_t);
+  W25Qxx_ReadBuffer(w, address, len);
+  address +=len;
+  W25Qxx_ReadBuffer(h, address, len);
+  address +=len;
+  return address;
+}
+
 void LOGO_ReadDisplay(void)
 {
-  lcd_frame_display(0, 0, LCD_WIDTH, LCD_HEIGHT, LOGO_ADDR);
+  uint16_t w, h;
+  uint32_t addr = getBMPsize((u8 *)&w, (u8 *)&h, LOGO_ADDR);
+  lcd_frame_display(0, 0, w, h, addr);
 }
 
 void ICON_ReadDisplay(u16 sx,u16 sy, u8 icon)
 {
-  lcd_frame_display(sx, sy, ICON_WIDTH, ICON_HEIGHT, ICON_ADDR(icon));
+  uint16_t w, h;
+  uint32_t addr = getBMPsize((u8 *)&w, (u8 *)&h, ICON_ADDR(icon));
+  lcd_frame_display(sx, sy, w, h, addr);
 }
 
 uint16_t modelFileReadHalfword(FIL* fp)
@@ -83,6 +97,9 @@ bool model_DecodeToFlash(char *gcode)
 {
   uint32_t addr = ICON_ADDR(ICON_PREVIEW);
   uint16_t bnum;
+  uint16_t w = ICON_WIDTH;
+  uint16_t h = ICON_HEIGHT;
+
   uint8_t buf[256];
   FIL  gcodeFile;
 
@@ -90,17 +107,22 @@ bool model_DecodeToFlash(char *gcode)
   // Move the file cursor to the corresponding resolution area
   f_lseek(&gcodeFile, MODEL_PREVIEW_OFFSET);
   // Check whether the icon size matches
-  if (modelFileReadHalfword(&gcodeFile) != ICON_WIDTH || modelFileReadHalfword(&gcodeFile) != ICON_HEIGHT) return false;
+  if (modelFileReadHalfword(&gcodeFile) != w || modelFileReadHalfword(&gcodeFile) != h) return false;
   // Move to next line
   f_lseek(&gcodeFile, gcodeFile.fptr + 3);
 
-  for(bnum = 0; bnum < (ICON_WIDTH*ICON_HEIGHT*2+W25QXX_SECTOR_SIZE-1)/W25QXX_SECTOR_SIZE; bnum++) {
+  for(bnum = 0; bnum < (w*h*2+W25QXX_SECTOR_SIZE-1)/W25QXX_SECTOR_SIZE; bnum++) {
     W25Qxx_EraseSector(addr + bnum*W25QXX_SECTOR_SIZE);
   }
   bnum=0;
 
-  for (uint16_t y = 0; y < ICON_HEIGHT; y++) {
-    for (uint16_t x = 0; x < ICON_WIDTH; x++) {
+  memcpy(buf, (uint8_t *)&w, sizeof(uint16_t));
+  bnum += sizeof(uint16_t);
+  memcpy(buf + bnum, (uint8_t *)&h, sizeof(uint16_t));
+  bnum += sizeof(uint16_t);
+
+  for (uint16_t y = 0; y < h; y++) {
+    for (uint16_t x = 0; x < w; x++) {
       uint16_t color = modelFileReadHalfword(&gcodeFile);
       buf[bnum++]=(uint8_t)(color >> 8);
       buf[bnum++]=(uint8_t)(color & 0xFF);
@@ -121,9 +143,11 @@ bool model_DecodeToFlash(char *gcode)
 }
 
 //draw icon with different length and width (sx & sy cordinates for top left of icon, w width, h height, addr flash byte address)
-void ICON_CustomReadDisplay(u16 sx,u16 sy,u16 w, u16 h, u32 addr)
+void ICON_CustomReadDisplay(u16 sx,u16 sy, u32 address)
 {
-  lcd_frame_display(sx, sy, w, h, addr);
+  uint16_t w,h;
+  address = getBMPsize((u8 *)&w, (u8 *)&h, address);
+  lcd_frame_display(sx, sy, w, h, address);
 }
 
 void SMALLICON_ReadDisplay(u16 sx,u16 sy, u8 icon)
@@ -135,10 +159,11 @@ void ICON_PressedDisplay(u16 sx,u16 sy, u8 icon)
 {
   u16 mode=0x0FF0;
   u16 x,y;
+  uint16_t w,h;
   u16 color = 0;
-  u32 address = ICON_ADDR(icon);
+  u32 address = getBMPsize((u8 *)&w, (u8 *)&h, ICON_ADDR(icon));
 
-  LCD_SetWindow(sx, sy, sx+ICON_WIDTH-1, sy+ICON_HEIGHT-1);
+  LCD_SetWindow(sx, sy, sx+w-1, sy+h-1);
   LCD_WR_REG(0x2C);
 
   W25Qxx_SPI_CS_Set(0);
@@ -147,9 +172,9 @@ void ICON_PressedDisplay(u16 sx,u16 sy, u8 icon)
   W25Qxx_SPI_Read_Write_Byte((address& 0xFF00) >> 8);
   W25Qxx_SPI_Read_Write_Byte(address & 0xFF);
 
-  for(y=sy; y<sy+ICON_WIDTH; y++)
+  for(y=sy; y<sy+w; y++)
   {
-    for(x=sx; x<sx+ICON_HEIGHT; x++)
+    for(x=sx; x<sx+h; x++)
     {
       color  = (W25Qxx_SPI_Read_Write_Byte(W25QXX_DUMMY_BYTE)<<8);
       color |= W25Qxx_SPI_Read_Write_Byte(W25QXX_DUMMY_BYTE);

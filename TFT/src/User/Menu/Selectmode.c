@@ -85,7 +85,12 @@ void loopCheckMode(void)
     return;
 
 //  #endif
-  if(LCD_ReadPen(LCD_CHANGE_MODE_INTERVALS) || encoder_ReadBtn(LCD_CHANGE_MODE_INTERVALS))
+  if(LCD_ReadPen(LCD_CHANGE_MODE_INTERVALS) 
+#if LCD_ENCODER_SUPPORT 
+      || encoder_ReadBtn(LCD_CHANGE_MODE_INTERVALS)
+#endif
+    )
+
   {
     infoMenu.menu[++infoMenu.cur] = menuMode;
   }
@@ -133,7 +138,7 @@ void menuMode(void)
     #if LCD_ENCODER_SUPPORT
       if(encoderPosition)
       {
-        nowMode = limitValue(0, nowMode + encoderPosition, MODE_COUNT - 1);
+        nowMode = NOBEYOND(0, nowMode + encoderPosition, MODE_COUNT - 1);
         drawSelectedMode(nowMode);
         encoderPosition = 0;
       }

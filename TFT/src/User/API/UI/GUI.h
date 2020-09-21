@@ -1,7 +1,11 @@
 #ifndef _GUI_H_
 #define _GUI_H_
 
-#include "stdint.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <stdint.h>
 #include "utf8_decode.h"
 
 enum
@@ -69,7 +73,7 @@ void GUI_CancelRange(void);
 void GUI_DrawPixel(int16_t x, int16_t y, uint16_t color);
 CHAR_INFO GUI_DispOne(int16_t sx, int16_t sy, const uint8_t *p);
 void GUI_DispString(int16_t x, int16_t y, const uint8_t *p);
-const uint8_t* GUI_DispLenString(int16_t x, int16_t y, const uint8_t *p, uint16_t pixelWidth);
+const uint8_t* GUI_DispLenString(int16_t x, int16_t y, const uint8_t *p, uint16_t pixelWidth, bool truncate);
 void GUI_DispStringRight(int16_t x, int16_t y, const uint8_t *p);
 void GUI_DispStringCenter(int16_t x, int16_t y, const uint8_t *p);
 void GUI_DispStringInRect(int16_t sx, int16_t sy, int16_t ex, int16_t ey, const uint8_t *p);
@@ -159,5 +163,9 @@ typedef struct
 }WINDOW;
 
 void GUI_DrawWindow(const WINDOW *window, const uint8_t *title, const uint8_t *inf, bool actionBar);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

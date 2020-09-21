@@ -1,5 +1,10 @@
 #ifndef _MACHINEPARAMETERS_H_
 #define _MACHINEPARAMETERS_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "menu.h"
 #include "coordinate.h"
 
@@ -10,13 +15,16 @@ P_CURRENT,
 P_MAX_FEED_RATE,
 P_MAX_ACCELERATION,
 P_ACCELERATION,
+P_JERK,
 P_PROBE_OFFSET,
 P_BUMPSENSITIVITY,
 P_FWRETRACT,
 P_FWRECOVER,
+P_AUTO_RETRACT,
 P_LIN_ADV,
 P_ABL_STATE,
-P_AUTO_RETRACT,
+P_OFFSET_TOOL,
+P_HYBRID_THRESHOLD,
 // Keep below items always at the end
 P_SAVE_SETTINGS,
 P_RESTORE_SETTINGS,
@@ -51,13 +59,16 @@ float Current[STEPPER_COUNT];
 float MaxFeedRate[STEPPER_COUNT];
 float MaxAcceleration[STEPPER_COUNT];
 float Acceleration[3];
+float Jerk[4];
 float ProbeOffset[3];
 float BumpSensitivity[3];
 float FwRetract[4];
 float FwRecover[4];
-float LinAdvance[1];
-float ABLState[2];
 float AutoRetract[1];
+float LinAdvance[2];
+float ABLState[2];
+float OffsetTool[3];
+float HybridThreshold[STEPPER_COUNT];
 }PARAMETERS;
 
 extern PARAMETERS infoParameters;
@@ -94,5 +105,9 @@ void restoreEepromSettings(void);
 
 //reset settings and eeprom to default values
 void resetEepromSettings(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

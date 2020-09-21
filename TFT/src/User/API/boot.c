@@ -33,7 +33,8 @@ bool bmpDecode(char *bmp, u32 addr)
 {
   FIL   bmpFile;
   char  magic[2];
-  int   w,h,bytePerLine;
+  u16   w, h;
+  int   bytePerLine;
   short bpp;
   int   offset;
   u8    buf[256];
@@ -81,6 +82,12 @@ bool bmpDecode(char *bmp, u32 addr)
   }
   bnum=0;
 
+  //store size of BMP
+  memcpy(buf, (uint8_t *)&w, sizeof(uint16_t));
+  bnum += sizeof(uint16_t);
+  memcpy(buf + bnum, (uint8_t *)&h, sizeof(uint16_t));
+  bnum += sizeof(uint16_t);
+
   for(int j=0; j<h; j++)
   {
     f_lseek(&bmpFile, offset+(h-j-1)*bytePerLine);
@@ -124,7 +131,7 @@ void processIcon(char * path, u32 flashAddr)
     {
       found++;
       GUI_ClearRect(iconUpdateRect.x0,iconUpdateRect.y0,iconUpdateRect.x0 + last_size.x,iconUpdateRect.y0 + last_size.y);
-      ICON_CustomReadDisplay(iconUpdateRect.x0, iconUpdateRect.y0, bmp_size.x, bmp_size.y, flashAddr);
+      ICON_CustomReadDisplay(iconUpdateRect.x0, iconUpdateRect.y0, flashAddr);
     }
     //display bmp update fail
     else
@@ -134,11 +141,11 @@ void processIcon(char * path, u32 flashAddr)
       dispIconFail((u8 *)path);
     }
     // Display icon update progress
-    my_sprintf(tempstr, "Updated: %d | Not Updated: %d", found, notfound);
+    sprintf(tempstr, "Updated: %d | Not Updated: %d", found, notfound);
     GUI_DispString(statUpdateRect.x0, statUpdateRect.y0, (u8 *)tempstr);
 }
 
-void updateIcon(void)
+bool updateIcon(void)
 {
   static u16 found = 0;
   static u16 notfound = 0;
@@ -162,7 +169,7 @@ void updateIcon(void)
 
   for (int i = 0; i < COUNT(iconBmpName); i++)
   {
-    my_sprintf(nowBmp, BMP_ROOT_DIR "/%s.bmp", iconBmpName[i]);
+    sprintf(nowBmp, BMP_ROOT_DIR "/%s.bmp", iconBmpName[i]);
     GUI_ClearPrect(&labelUpdateRect);
     GUI_DispString(labelUpdateRect.x0, labelUpdateRect.y0, (u8 *)nowBmp);
 
@@ -171,7 +178,7 @@ void updateIcon(void)
 /*
   for (int i = 0; i < COUNT(smallIconBmpName); i++)
   {
-    my_sprintf(nowBmp, BMP_ROOT_DIR "/%s_small.bmp", smallIconBmpName[i]);
+    sprintf(nowBmp, BMP_ROOT_DIR "/%s_small.bmp", smallIconBmpName[i]);
     GUI_ClearPrect(&labelUpdateRect);
     GUI_DispString(labelUpdateRect.x0, labelUpdateRect.y0, (u8 *)nowBmp);
 
@@ -180,7 +187,7 @@ void updateIcon(void)
 */
   if (bmpDecode(BMP_ROOT_DIR "/InfoBox.bmp", INFOBOX_ADDR))
   {
-    ICON_CustomReadDisplay(iconUpdateRect.x0, iconUpdateRect.y0, bmp_size.x, bmp_size.y, INFOBOX_ADDR);
+    ICON_CustomReadDisplay(iconUpdateRect.x0, iconUpdateRect.y0, INFOBOX_ADDR);
     found++;
   }
   else
@@ -188,6 +195,10 @@ void updateIcon(void)
     notfound++;
     dispIconFail((u8 *)(BMP_ROOT_DIR "/InfoBox.bmp"));
   }
+  if(notfound == 0)
+    return true;
+  else
+    return false;
 }
 
 void dispIconFail(u8 *lbl)
@@ -210,13 +221,13 @@ void dispIconFail(u8 *lbl)
     break;
   }
   char error_txt[30];
-  my_sprintf(error_txt, "Error: %s", stat_txt);
+  sprintf(error_txt, "Error: %s", stat_txt);
   GUI_DispString(labelFailedRect.x0, labelFailedRect.y0 + BYTE_HEIGHT + 2, (u8*)error_txt);
   GUI_RestoreColorDefault();
   Delay_ms(1000); // give some time to the user to read failed icon name.
 }
 
-void updateFont(char *font, u32 addr)
+bool updateFont(char *font, u32 addr)
 {
   u8   progress = 0;
   UINT rnum = 0;
@@ -225,12 +236,14 @@ void updateFont(char *font, u32 addr)
   FIL  myfp;
   u8*  tempbuf = NULL;
 
-  if (f_open(&myfp, font, FA_OPEN_EXISTING|FA_READ) != FR_OK)  return;
+  if (f_open(&myfp, font, FA_OPEN_EXISTING|FA_READ) != FR_OK)
+    return false;
 
   tempbuf = malloc(W25QXX_SECTOR_SIZE);
-  if (tempbuf == NULL)  return;
+  if (tempbuf == NULL)
+    return false;
   GUI_Clear(infoSettings.bg_color);
-  my_sprintf((void *)buffer,"%s Size: %dKB",font, (u32)f_size(&myfp)>>10);
+  sprintf((void *)buffer,"%s Size: %dKB",font, (u32)f_size(&myfp)>>10);
   GUI_DispString(0, 100, (u8*)buffer);
   GUI_DispString(0, 140, (u8*)"Updating:   %");
 
@@ -251,6 +264,7 @@ void updateFont(char *font, u32 addr)
 
   f_close(&myfp);
   free(tempbuf);
+  return true;
 }
 
 void scanResetDir(void) {
@@ -295,17 +309,30 @@ void scanRenameUpdate(void) {
 
 void scanUpdates(void)
 {
+  //bool flashUpdate[sign_count] = {true, true, true, true};
+  uint32_t cur_flash_sign[sign_count];
+  W25Qxx_ReadBuffer((uint8_t*)&cur_flash_sign, FLASH_SIGN_ADDR, sizeof(cur_flash_sign));
+
   if(mountSDCard()) {
-    if (f_dir_exists(FONT_ROOT_DIR)) {
-      updateFont(FONT_ROOT_DIR"/byte_ascii.fon", BYTE_ASCII_ADDR);
-      updateFont(FONT_ROOT_DIR"/word_unicode.fon", WORD_UNICODE);
-      updateFont(FONT_ROOT_DIR"/large_byte_ascii.fon", LARGE_FONT_ADDR);
+    if (f_dir_exists(FONT_ROOT_DIR))
+    {
+      if (updateFont(FONT_ROOT_DIR "/byte_ascii.fon", BYTE_ASCII_ADDR) &&
+          updateFont(FONT_ROOT_DIR "/word_unicode.fon", WORD_UNICODE) &&
+          updateFont(FONT_ROOT_DIR "/large_byte_ascii.fon", LARGE_FONT_ADDR))
+        cur_flash_sign[font_sign] = FONT_CHECK_SIGN;
     }
     if (f_dir_exists(BMP_ROOT_DIR)) {
-      updateIcon();
+      if (updateIcon())
+        cur_flash_sign[icon_sign] = ICON_CHECK_SIGN;
     }
-    getConfigFromFile();
+    if (getConfigFromFile())
+      cur_flash_sign[config_sign] = CONFIG_CHECK_SIGN;
     scanRenameUpdate();
     scanResetDir();
+
+  W25Qxx_EraseSector(FLASH_SIGN_ADDR);
+  Delay_ms(100); //give time for spi flash to settle
+  W25Qxx_WriteBuffer((uint8_t*)&cur_flash_sign, FLASH_SIGN_ADDR,sizeof(cur_flash_sign));
+
   }
 }

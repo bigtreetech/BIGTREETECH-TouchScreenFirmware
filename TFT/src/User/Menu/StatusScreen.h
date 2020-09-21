@@ -1,5 +1,10 @@
 #ifndef _STATUSSCREEN_H_
 #define _STATUSSCREEN_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "includes.h"
 
 //Colors for drawing the icons
@@ -12,8 +17,6 @@
 #define INFOBOX_ICON_COLOR  0x03BF
 #define INFOMSG_BKCOLOR     WHITE
 #define INFOMSG_COLOR       BLACK
-
-#define MAX_MSG_LENGTH 75
 
 extern const GUI_POINT ss_title_point;
 extern const GUI_POINT ss_val_point;
@@ -28,5 +31,9 @@ void drawStatusScreenMsg(void);
 float getAxisLocation(uint8_t n);
 void gantry_dec(int n, float val);
 void gantry_inc(int n, float val);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

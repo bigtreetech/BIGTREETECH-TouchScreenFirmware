@@ -1,21 +1,6 @@
 #include "Heat.h"
 #include "includes.h"
 
-//1 title, ITEM_PER_PAGE items (icon + label)
-MENUITEMS heatItems = {
-// title
-LABEL_HEAT,
-// icon                       label
- {{ICON_DEC,                  LABEL_DEC},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_INC,                  LABEL_INC},
-  {ICON_NOZZLE,               LABEL_NOZZLE},
-  {ICON_5_DEGREE,             LABEL_5_DEGREE},
-  {ICON_STOP,                 LABEL_STOP},
-  {ICON_BACK,                 LABEL_BACK},}
-};
-
 const ITEM itemTool[] = {
 // icon                       label
   {ICON_NOZZLE,               LABEL_NOZZLE},
@@ -65,6 +50,20 @@ void menuHeat(void)
   int16_t lastCurrent = heatGetCurrentTemp(c_heater);
   int16_t lastTarget = heatGetTargetTemp(c_heater);
 
+  MENUITEMS heatItems = {
+  // title
+  LABEL_HEAT,
+  // icon                       label
+  {{ICON_DEC,                  LABEL_DEC},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_INC,                  LABEL_INC},
+    {ICON_NOZZLE,               LABEL_NOZZLE},
+    {ICON_5_DEGREE,             LABEL_5_DEGREE},
+    {ICON_STOP,                 LABEL_STOP},
+    {ICON_BACK,                 LABEL_BACK},}
+  };
+  
   heatSetUpdateTime(TEMPERATURE_QUERY_FAST_DURATION);
 
   heatItems.items[KEY_ICON_4] = itemTool[c_heater];

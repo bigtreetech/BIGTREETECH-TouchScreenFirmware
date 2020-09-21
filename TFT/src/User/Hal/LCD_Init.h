@@ -1,6 +1,9 @@
 #ifndef _LCD_INIT_H_
 #define _LCD_INIT_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "variants.h"
 #include "menu.h"
@@ -49,8 +52,13 @@
 
   void LCD_LED_PWM_Init(void);
   void loopDimTimer(void);
+  void _wakeLCD(void);
 
   #define Set_LCD_Brightness(percentage) TIM_PWM_SetDutyCycle(LCD_LED_PWM_CHANNEL, percentage)
+  #define wakeLCD() _wakeLCD()
+#else
+  #define wakeLCD()
+
 #endif // LCD_LED_PWM_CHANNEL
 
 #if LCD_DATA_16BIT == 1
@@ -61,4 +69,9 @@
 
 void LCD_RefreshDirection(void);
 void LCD_Init(void);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif

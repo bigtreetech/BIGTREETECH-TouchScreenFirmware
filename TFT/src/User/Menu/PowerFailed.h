@@ -1,6 +1,10 @@
 #ifndef _POWERFAILED_H_
 #define _POWERFAILED_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "variants.h"
 #include "Heat.h"
 #include "coordinate.h"
@@ -33,5 +37,9 @@ void powerFailedClose(void);
 void powerFailedDelete(void);
 
 bool powerFailedlSeek(FIL* fp);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
