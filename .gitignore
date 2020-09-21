@@ -120,3 +120,4 @@ cmake-build-*
 .pydevproject
 .settings
 .classpath
+TFT/src/Libraries/Startup/stm32f40_41x/startup_stm32f407xx.old
