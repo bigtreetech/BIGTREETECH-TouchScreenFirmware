@@ -13,7 +13,7 @@ const ITEM itemMblUnit[ITEM_MBL_UNIT_NUM] = {
 const float mblUnit[ITEM_MBL_UNIT_NUM] = {0.01f, 0.1f, 1};
 static u8   curUnit = 0;
 
-static float offset = BABYSTEP_DEFAULT_VALUE;
+static float babystep;
 
 u8 mblPoint = 0;
 bool mblRunning = false;
@@ -69,43 +69,14 @@ void mblStart(void)
 /* Stop MBL */
 void mblStop(void)
 {
-  if (mblRunning)
-  {
-    mblRunning = false;
+  mblRunning = false;
 
-    BUZZER_PLAY(sound_error);
+  BUZZER_PLAY(sound_error);
 
-    popupReminder(DIALOG_TYPE_ERROR, textSelect(LABEL_MBL_SETTINGS), textSelect(LABEL_PROCESS_ABORTED));
-  }
+  popupReminder(DIALOG_TYPE_ERROR, textSelect(LABEL_MBL_SETTINGS), textSelect(LABEL_PROCESS_ABORTED));
 }
 
-/* Set default offset */
-void mblSetDefaultOffset(void)
-{
-  float last_unit;
-  float processed_offset = 0.0f;
-
-  int8_t neg = 1;
-  if (offset < 0.0f)
-    neg = -1;
-
-  int stepcount = (offset * neg) / BABYSTEP_MAX_UNIT;
-  for (; stepcount > 0; stepcount--)
-  {
-    mustStoreCmd("M290 Z%.2f\n", -(BABYSTEP_MAX_UNIT * neg));
-    processed_offset += BABYSTEP_MAX_UNIT;
-  }
-
-  last_unit = (offset * neg) - processed_offset;
-  if (last_unit > 0.0f)
-  {
-    mustStoreCmd("M290 Z%.2f\n", -(last_unit * neg));
-    processed_offset += last_unit;
-  }
-  offset -= (processed_offset * neg);
-}
-
-void mblDrawHeader(u8 *point)
+void mblShowHeader(u8 *point)
 {
   char tempstr[20];
 
@@ -126,11 +97,11 @@ void mblDrawHeader(u8 *point)
   GUI_SetColor(infoSettings.font_color);
 }
 
-void mblDrawValue()
+void mblShowValue(float val)
 {
   char tempstr[20];
 
-  sprintf(tempstr, "  %.2f  ", offset);
+  sprintf(tempstr, "  %.2f  ", val);
 
   setLargeFont(true);
   GUI_DispStringInPrect(&exhibitRect, (u8 *)tempstr);
@@ -162,13 +133,14 @@ void menuMBL(void)
   #endif
 
   KEY_VALUES key_num = KEY_IDLE;
-  float now = offset;
+  float now = babystep = babystepGetValue();
+  float unit;
 
   mblItems.items[KEY_ICON_5] = itemMblUnit[curUnit];
 
   menuDrawPage(&mblItems);
-  mblDrawHeader(NULL);
-  mblDrawValue();
+  mblShowHeader(NULL);
+  mblShowValue(now);
 
 #if LCD_ENCODER_SUPPORT
   encoderPosition = 0;
@@ -176,39 +148,25 @@ void menuMBL(void)
 
   while (infoMenu.menu[infoMenu.cur] == menuMBL)
   {
-    float max_unit = mblUnit[curUnit];
+    unit = mblUnit[curUnit];
 
     key_num = menuKeyGetValue();
     switch (key_num)
     {
-      // decrease offset
+      // decrease babystep
       case KEY_ICON_0:
         if (!mblRunning)
           mblNotifyError();
-        else if (offset > BABYSTEP_MIN_VALUE)
-        {
-          float diff = offset - BABYSTEP_MIN_VALUE;
-          max_unit = (diff > max_unit) ? max_unit : diff;
-
-          mustStoreCmd("M290 Z-%.2f\n", max_unit);
-
-          offset -= max_unit;
-        }
+        else
+          babystep = babystepDecreaseValue(unit);
         break;
 
-      // increase offset
+      // increase babystep
       case KEY_ICON_3:
         if (!mblRunning)
           mblNotifyError();
-        else if (offset < BABYSTEP_MAX_VALUE)
-        {
-          float diff = BABYSTEP_MAX_VALUE - offset;
-          max_unit = (diff > max_unit) ? max_unit : diff;
-
-          mustStoreCmd("M290 Z%.2f\n", max_unit);
-
-          offset += max_unit;
-        }
+        else
+          babystep = babystepIncreaseValue(unit);
         break;
 
       // start MBL or probe the next mesh point
@@ -223,21 +181,20 @@ void menuMBL(void)
           menuDrawItem(&mblItems.items[key_num], key_num);
 
           ++mblPoint;
-          mblDrawHeader(&mblPoint);
+          mblShowHeader(&mblPoint);
         }
         else
         {
           storeCmd("G29 S2\n");                            // to save the Z value and move to the next point
 
           ++mblPoint;
-          mblDrawHeader(&mblPoint);
+          mblShowHeader(&mblPoint);
 
-          if (offset != BABYSTEP_DEFAULT_VALUE)
-            mblSetDefaultOffset();
+          babystep = babystepResetValue();                 // always reset babystep to default value
         }
         break;
 
-      // change step unit
+      // change unit
       case KEY_ICON_5:
         curUnit = (curUnit + 1) % ITEM_MBL_UNIT_NUM;
 
@@ -246,20 +203,21 @@ void menuMBL(void)
         menuDrawItem(&mblItems.items[key_num], key_num);
         break;
 
-      // reset offset to default value
+      // reset babystep to default value
       case KEY_ICON_6:
         if (!mblRunning)
           mblNotifyError();
         else
-        {
-          if (offset != BABYSTEP_DEFAULT_VALUE)
-            mblSetDefaultOffset();
-        }
+          babystep = babystepResetValue();
         break;
 
       case KEY_ICON_7:
         if (mblRunning)
+        {
           mblStop();
+
+          babystep = babystepResetValue();                 // always reset offset to default value
+        }
 
         infoMenu.cur--;
         break;
@@ -271,11 +229,7 @@ void menuMBL(void)
             if (!mblRunning)
               mblNotifyError();
             else
-            {
-              mustStoreCmd("M290 Z%.2f\n", mblUnit[curUnit] * encoderPosition);
-
-              offset += mblUnit[curUnit] * encoderPosition;
-            }
+              babystep = babystepUpdateValueByEncoder(unit);
 
             encoderPosition = 0;
           }
@@ -283,10 +237,10 @@ void menuMBL(void)
         break;
     }
 
-    if (now != offset)
+    if (now != babystep)
     {
-      now = offset;
-      mblDrawValue();
+      now = babystep;
+      mblShowValue(now);
     }
 
     loopProcess();

@@ -63,6 +63,8 @@
 #include "MachineParameters.h"
 #include "FanControl.h"
 #include "SpeedControl.h"
+#include "BabystepControl.h"
+#include "ProbeOffsetControl.h"
 
 #include "extend.h"
 #include "menu.h"
@@ -83,11 +85,11 @@
 #include "Printing.h"
 #include "More.h"
 #include "Speed.h"
-#include "BabyStep.h"
 #include "ledcolor.h"
 #include "Parametersetting.h"
 #include "NotificationMenu.h"
 
+#include "Babystep.h"
 #include "Extrude.h"
 #include "Fan.h"
 #include "SettingsMenu.h"
