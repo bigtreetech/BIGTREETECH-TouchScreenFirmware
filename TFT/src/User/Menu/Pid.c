@@ -82,7 +82,7 @@ void pidUpdateStatus(bool succeeded)
 
         sprintf(tmpBuf, "%s\n %s", textSelect(LABEL_PROCESS_COMPLETED), textSelect(LABEL_EEPROM_SAVE_INFO));
 
-        showDialog(DIALOG_TYPE_SUCCESS, textSelect(LABEL_PID_TITLE), (u8*) tmpBuf,
+        showDialog(DIALOG_TYPE_SUCCESS, textSelect(LABEL_PID_TITLE), (u8 *) tmpBuf,
           textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), saveEepromSettings, NULL, NULL);
       }
       else
@@ -116,7 +116,7 @@ void pidCheckTimeout()
 
       BUZZER_PLAY(sound_error);
 
-      popupReminder(DIALOG_TYPE_ERROR, textSelect(LABEL_PID_TITLE), (u8*) tmpBuf);
+      popupReminder(DIALOG_TYPE_ERROR, textSelect(LABEL_PID_TITLE), (u8 *) tmpBuf);
     }
   }
 }
@@ -213,14 +213,14 @@ void pidTemperatureReDraw(bool skip_header)
   {
     sprintf(tempstr, "%s    ", pidDisplayID[pidHeater.toolIndex]);
 
-    GUI_DispString(exhibitRect.x0, exhibitRect.y0, (u8 *)tempstr);
+    GUI_DispString(exhibitRect.x0, exhibitRect.y0, (u8 *) tempstr);
   }
 
   sprintf(tempstr, "  %d  ", pidHeater.T[pidHeater.toolIndex].target);
 
   setLargeFont(true);
 
-  GUI_DispStringInPrect(&exhibitRect, (u8 *)tempstr);
+  GUI_DispStringInPrect(&exhibitRect, (u8 *) tempstr);
 
   setLargeFont(false);
 }
@@ -309,7 +309,7 @@ void menuPid(void)
       case KEY_ICON_6:
         if (pidRunning)
         {
-          addToast(DIALOG_TYPE_ERROR, (char*)textSelect(LABEL_PROCESS_RUNNING));
+          addToast(DIALOG_TYPE_ERROR, (char *) textSelect(LABEL_PROCESS_RUNNING));
         }
         else
         {
@@ -317,7 +317,7 @@ void menuPid(void)
 
           if (pidCounter == 0)         // if no temperature was set to a value > 0
           {
-            addToast(DIALOG_TYPE_ERROR, (char*)textSelect(LABEL_INVALID_VALUE));
+            addToast(DIALOG_TYPE_ERROR, (char *) textSelect(LABEL_INVALID_VALUE));
           }
           else
           {

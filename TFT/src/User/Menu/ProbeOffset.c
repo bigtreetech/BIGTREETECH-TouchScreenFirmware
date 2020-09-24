@@ -35,7 +35,7 @@ void probeNotifyError(void)
   addToast(DIALOG_TYPE_ERROR, tmpBuf);
 }
 
-void probeShowStatus(u8 *status)
+void probeDrawStatus(u8 *status)
 {
   char tempstr[20];
 
@@ -48,19 +48,19 @@ void probeShowStatus(u8 *status)
     else
       GUI_SetColor(infoSettings.sd_reminder_color);
 
-    GUI_DispString(exhibitRect.x0, exhibitRect.y0, (u8 *)tempstr);
+    GUI_DispString(exhibitRect.x0, exhibitRect.y0, (u8 *) tempstr);
     GUI_SetColor(infoSettings.font_color);
   }
 }
 
-void probeShowValue(float val)
+void probeDrawValue(float val)
 {
   char tempstr[20];
 
   sprintf(tempstr, "  %.2f  ", val);
 
   setLargeFont(true);
-  GUI_DispStringInPrect(&exhibitRect, (u8 *)tempstr);
+  GUI_DispStringInPrect(&exhibitRect, (u8 *) tempstr);
   setLargeFont(false);
 }
 
@@ -101,8 +101,8 @@ void menuProbeOffset(void)
   probeOffsetItems.items[KEY_ICON_6] = itemProbeOffsetSubmenu[curSubmenu];
 
   menuDrawPage(&probeOffsetItems);
-  probeShowStatus(textSelect(probeOffsetItems.items[KEY_ICON_4].label.index));
-  probeShowValue(now);
+  probeDrawStatus(textSelect(probeOffsetItems.items[KEY_ICON_4].label.index));
+  probeDrawValue(now);
 
 #if LCD_ENCODER_SUPPORT
   encoderPosition = 0;
@@ -149,7 +149,7 @@ void menuProbeOffset(void)
         }
 
         menuDrawItem(&probeOffsetItems.items[key_num], key_num);
-        probeShowStatus(textSelect(probeOffsetItems.items[key_num].label.index));
+        probeDrawStatus(textSelect(probeOffsetItems.items[key_num].label.index));
         break;
 
       // change submenu
@@ -230,7 +230,7 @@ void menuProbeOffset(void)
     if (now != z_offset)
     {
       now = z_offset;
-      probeShowValue(now);
+      probeDrawValue(now);
 
       // babystep is reset every time Z offset changes otherwise the set babystep value will not be aligned with the new Z offset
       babyReset();

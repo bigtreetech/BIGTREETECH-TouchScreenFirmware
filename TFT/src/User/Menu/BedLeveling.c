@@ -51,6 +51,7 @@ void menuBedLeveling(void)
   };
 
   KEY_VALUES key_num = KEY_IDLE;
+  void (*menuBL)(void) = menuABL;
 
   switch (infoMachineSettings.blType)
   {
@@ -67,6 +68,8 @@ void menuBedLeveling(void)
     case BL_MBL:
       bedLevelingItems.title.index = LABEL_MBL_SETTINGS;
       bedLevelingItems.items[0].label.index = LABEL_MBL;
+
+      menuBL = menuMBL;
       break;
 
     default:
@@ -92,24 +95,7 @@ void menuBedLeveling(void)
     switch (key_num)
     {
       case KEY_ICON_0:
-        switch (infoMachineSettings.blType)
-        {
-          case BL_BBL:
-            infoMenu.menu[++infoMenu.cur] = menuABL;
-            break;
-
-          case BL_UBL:
-            infoMenu.menu[++infoMenu.cur] = menuABL;
-            break;
-
-          case BL_MBL:
-            infoMenu.menu[++infoMenu.cur] = menuMBL;
-            break;
-
-          default:
-            infoMenu.menu[++infoMenu.cur] = menuABL;
-            break;
-        }
+        infoMenu.menu[++infoMenu.cur] = menuBL;
         break;
 
       case KEY_ICON_4:
@@ -122,7 +108,7 @@ void menuBedLeveling(void)
           char tempstr[30];
 
           sprintf(tempstr, "%Min:%.2f | Max:%.2f", Z_FADE_MIN_VALUE, Z_FADE_MAX_VALUE);
-          float val = numPadFloat((u8 *)tempstr, getParameter(P_ABL_STATE, 1), 0.0f, false);
+          float val = numPadFloat((u8 *) tempstr, getParameter(P_ABL_STATE, 1), 0.0f, false);
 
           storeCmd("M420 Z%.2f\n", NOBEYOND(Z_FADE_MIN_VALUE, val, Z_FADE_MAX_VALUE));
 

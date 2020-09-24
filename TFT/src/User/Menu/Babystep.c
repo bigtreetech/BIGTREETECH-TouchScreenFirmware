@@ -51,10 +51,10 @@ void babyReDraw(bool skip_header)
   setLargeFont(true);
 
   sprintf(tempstr, "% 6.2f", babystep);
-  GUI_DispStringRight(point_bs.x, point_bs.y, (u8 *)tempstr);
+  GUI_DispStringRight(point_bs.x, point_bs.y, (u8 *) tempstr);
 
   sprintf(tempstr, "% 6.2f", orig_z_offset + babystep);
-  GUI_DispStringRight(point_of.x, point_of.y, (u8 *)tempstr);
+  GUI_DispStringRight(point_of.x, point_of.y, (u8 *) tempstr);
 
   setLargeFont(false);
 }
