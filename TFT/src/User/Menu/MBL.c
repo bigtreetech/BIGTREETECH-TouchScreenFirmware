@@ -76,7 +76,7 @@ void mblStop(void)
   popupReminder(DIALOG_TYPE_ERROR, textSelect(LABEL_MBL_SETTINGS), textSelect(LABEL_PROCESS_ABORTED));
 }
 
-void mblShowHeader(u8 *point)
+void mblDrawHeader(u8 *point)
 {
   char tempstr[20];
 
@@ -97,7 +97,7 @@ void mblShowHeader(u8 *point)
   GUI_SetColor(infoSettings.font_color);
 }
 
-void mblShowValue(float val)
+void mblDrawValue(float val)
 {
   char tempstr[20];
 
@@ -139,8 +139,8 @@ void menuMBL(void)
   mblItems.items[KEY_ICON_5] = itemMblUnit[curUnit];
 
   menuDrawPage(&mblItems);
-  mblShowHeader(NULL);
-  mblShowValue(now);
+  mblDrawHeader(NULL);
+  mblDrawValue(now);
 
 #if LCD_ENCODER_SUPPORT
   encoderPosition = 0;
@@ -181,14 +181,14 @@ void menuMBL(void)
           menuDrawItem(&mblItems.items[key_num], key_num);
 
           ++mblPoint;
-          mblShowHeader(&mblPoint);
+          mblDrawHeader(&mblPoint);
         }
         else
         {
           storeCmd("G29 S2\n");                            // to save the Z value and move to the next point
 
           ++mblPoint;
-          mblShowHeader(&mblPoint);
+          mblDrawHeader(&mblPoint);
 
           babystep = babystepResetValue();                 // always reset babystep to default value
         }
@@ -240,7 +240,7 @@ void menuMBL(void)
     if (now != babystep)
     {
       now = babystep;
-      mblShowValue(now);
+      mblDrawValue(now);
     }
 
     loopProcess();
