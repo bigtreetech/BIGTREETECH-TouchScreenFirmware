@@ -52,6 +52,22 @@ Place SD card with the `BIGTREE_TFT*_V*.*.*.bin`, the`TFT*` folder and the confi
 
 <p align=center> ⚠️ Failing to update your icons &amp; fonts will result in missing icons and/or unreadable text ⚠️ </p>
 
+## Update Prozess shown on TFT Screen
+
+A successful update looks like this on the screen:
+
+<img src="https://user-images.githubusercontent.com/54359396/94314921-dd7c5b00-ff81-11ea-98de-d5ff0c1a2209.JPG" alt="firmware" style="zoom:25%;" />
+
+<img src="https://user-images.githubusercontent.com/54359396/94314662-431c1780-ff81-11ea-8c97-b75df006c2bf.JPG" alt="Font" style="zoom:25%;" />
+
+
+
+<img src="https://user-images.githubusercontent.com/54359396/94314915-da816a80-ff81-11ea-96e7-0375964ca7d6.JPG" alt="BMPs" style="zoom:25%;" />
+
+<img src="https://user-images.githubusercontent.com/54359396/94314927-dfdeb500-ff81-11ea-9a2a-154e4b2e4df4.JPG" alt="config ini" style="zoom:25%;" />
+
+
+
 ## Configuration
 
 The Firmware can be configured using the **config.ini** file from from one of these folders:
