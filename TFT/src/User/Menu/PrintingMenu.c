@@ -406,7 +406,7 @@ void menuPrinting(void)
     switch(key_num)
     {
       case KEY_ICON_4:
-        infoMenu.menu[++infoMenu.cur] = menuBabyStep;
+        infoMenu.menu[++infoMenu.cur] = menuBabystep;
         break;
 
       case KEY_ICON_5:

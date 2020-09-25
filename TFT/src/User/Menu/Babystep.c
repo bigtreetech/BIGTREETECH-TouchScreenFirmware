@@ -1,4 +1,4 @@
-#include "BabyStep.h"
+#include "Babystep.h"
 #include "includes.h"
 
 #define ITEM_BABYSTEP_UNIT_NUM 3
@@ -13,53 +13,29 @@ const ITEM itemBabyStepUnit[ITEM_BABYSTEP_UNIT_NUM] = {
 const float babystep_unit[ITEM_BABYSTEP_UNIT_NUM] = {0.01f, 0.1f, 1};
 static u8   curUnit = 0;
 
-static float baby_step_value = BABYSTEP_DEFAULT_VALUE;
-float orig_z_offset;
+static float babystep;
+static float orig_z_offset;
 
 /* Initialize Z offset */
 void babyInitZOffset(void)
 {
-  float cur_z_offset = getParameter(P_PROBE_OFFSET, Z_STEPPER);
-  if(orig_z_offset + baby_step_value != cur_z_offset)
+  float cur_z_offset = probeOffsetGetValue();
+
+  if (orig_z_offset + babystep != cur_z_offset)
   {
-    orig_z_offset = cur_z_offset - baby_step_value;
+    orig_z_offset = cur_z_offset - babystep;
   }
 }
 
 /* Reset to default */
-void babyStepReset(void)
+void babyReset(void)
 {
-  baby_step_value = BABYSTEP_DEFAULT_VALUE;
+  babystepReset();
+
   babyInitZOffset();
 }
 
-/* Set default offset */
-void babySetDefaultOffset(void)
-{
-  float last_unit;
-  float processed_baby_step = 0.0f;
-
-  int8_t neg = 1;
-  if (baby_step_value < 0.0f)
-    neg = -1;
-
-  int stepcount = (baby_step_value * neg) / BABYSTEP_MAX_UNIT;
-  for (; stepcount > 0; stepcount--)
-  {
-    mustStoreCmd("M290 Z%.2f\n", -(BABYSTEP_MAX_UNIT * neg));
-    processed_baby_step += BABYSTEP_MAX_UNIT;
-  }
-
-  last_unit = (baby_step_value * neg) - processed_baby_step;
-  if (last_unit > 0.0f)
-  {
-    mustStoreCmd("M290 Z%.2f\n", -(last_unit * neg));
-    processed_baby_step += last_unit;
-  }
-  baby_step_value -= (processed_baby_step * neg);
-}
-
-void babyStepReDraw(bool skip_header)
+void babyReDraw(bool skip_header)
 {
   if (!skip_header)
   {
@@ -74,16 +50,16 @@ void babyStepReDraw(bool skip_header)
 
   setLargeFont(true);
 
-  sprintf(tempstr, "% 6.2f", baby_step_value);
-  GUI_DispStringRight(point_bs.x, point_bs.y, (u8 *)tempstr);
+  sprintf(tempstr, "% 6.2f", babystep);
+  GUI_DispStringRight(point_bs.x, point_bs.y, (u8 *) tempstr);
 
-  sprintf(tempstr, "% 6.2f", orig_z_offset + baby_step_value);
-  GUI_DispStringRight(point_of.x, point_of.y, (u8 *)tempstr);
+  sprintf(tempstr, "% 6.2f", orig_z_offset + babystep);
+  GUI_DispStringRight(point_of.x, point_of.y, (u8 *) tempstr);
 
   setLargeFont(false);
 }
 
-void menuBabyStep(void)
+void menuBabystep(void)
 {
   // 1 title, ITEM_PER_PAGE items (icon + label)
   MENUITEMS babyStepItems = {
@@ -108,7 +84,8 @@ void menuBabyStep(void)
   #endif
 
   KEY_VALUES key_num = KEY_IDLE;
-  float now = baby_step_value;
+  float now = babystep = babystepGetValue();
+  float unit;
 
   babyInitZOffset();
 
@@ -121,50 +98,34 @@ void menuBabyStep(void)
   babyStepItems.items[KEY_ICON_5] = itemBabyStepUnit[curUnit];
 
   menuDrawPage(&babyStepItems);
-  babyStepReDraw(false);
+  babyReDraw(false);
 
 #if LCD_ENCODER_SUPPORT
   encoderPosition = 0;
 #endif
 
-  while (infoMenu.menu[infoMenu.cur] == menuBabyStep)
+  while (infoMenu.menu[infoMenu.cur] == menuBabystep)
   {
-    float max_unit = babystep_unit[curUnit];
+    unit = babystep_unit[curUnit];
 
     key_num = menuKeyGetValue();
     switch (key_num)
     {
-      // decrease babystep / z-offset
+      // decrease babystep / Z offset
       case KEY_ICON_0:
-        if (baby_step_value > BABYSTEP_MIN_VALUE)
-        {
-          float diff = baby_step_value - BABYSTEP_MIN_VALUE;
-          max_unit = (diff > max_unit) ? max_unit : diff;
-
-          mustStoreCmd("M290 Z-%.2f\n", max_unit);
-
-          baby_step_value -= max_unit;
-        }
+        babystep = babystepDecreaseValue(unit);
         break;
 
-      // increase babystep / z-offset
+      // increase babystep / Z offset
       case KEY_ICON_3:
-        if (baby_step_value < BABYSTEP_MAX_VALUE)
-        {
-          float diff = BABYSTEP_MAX_VALUE - baby_step_value;
-          max_unit = (diff > max_unit) ? max_unit : diff;
-
-          mustStoreCmd("M290 Z%.2f\n", max_unit);
-
-          baby_step_value += max_unit;
-        }
+        babystep = babystepIncreaseValue(unit);
         break;
 
       // save to EEPROM and apply Z offset
       case KEY_ICON_4:
         if (infoMachineSettings.EEPROM == 1)
         {
-          mustStoreCmd("M851 Z%.2f\n", (orig_z_offset + baby_step_value));
+          probeOffsetSetValue(orig_z_offset + babystep);   // apply Z offset
 
           showDialog(DIALOG_TYPE_QUESTION, textSelect(babyStepItems.title.index), textSelect(LABEL_EEPROM_SAVE_INFO),
             textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), saveEepromSettings, NULL, NULL);
@@ -182,8 +143,7 @@ void menuBabyStep(void)
 
       // reset babystep to default value
       case KEY_ICON_6:
-        if (baby_step_value != BABYSTEP_DEFAULT_VALUE)
-          babySetDefaultOffset();
+        babystep = babystepResetValue();
         break;
 
       case KEY_ICON_7:
@@ -194,19 +154,18 @@ void menuBabyStep(void)
         #if LCD_ENCODER_SUPPORT
           if (encoderPosition)
           {
-            mustStoreCmd("M290 Z%.2f\n", babystep_unit[curUnit] * encoderPosition);
+            babystep = babystepUpdateValueByEncoder(unit);
 
-            baby_step_value += babystep_unit[curUnit] * encoderPosition;
             encoderPosition = 0;
           }
         #endif
         break;
     }
 
-    if (now != baby_step_value)
+    if (now != babystep)
     {
-      now = baby_step_value;
-      babyStepReDraw(true);
+      now = babystep;
+      babyReDraw(true);
     }
 
     loopProcess();

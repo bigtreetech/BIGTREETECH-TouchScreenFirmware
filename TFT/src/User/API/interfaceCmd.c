@@ -814,18 +814,21 @@ void sendQueueCmd(void)
 
         case 28: //G28
           coordinateSetKnown(true);
-          babyStepReset();
+          babyReset();
           storeCmd("M503 S0\n");
           break;
 
         case 29: //G29
-          if(ENABLE_UBL_VALUE > 0) {
-            if(cmd_seen('A')) {
+          if(ENABLE_BL_VALUE > 0)                          // if not Disabled
+          {
+            if(cmd_seen('A'))
+            {
               infoSettings.autoLevelState = 1;
               setParameter(P_ABL_STATE,0,1);
               storeCmd("M117 UBL active\n");
             }
-            if(cmd_seen('D')) {
+            if(cmd_seen('D'))
+            {
               infoSettings.autoLevelState = 0;
               setParameter(P_ABL_STATE,0,0);
               storeCmd("M117 UBL inactive\n");

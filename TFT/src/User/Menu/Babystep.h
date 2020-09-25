@@ -5,9 +5,9 @@
 extern "C" {
 #endif
 
-void babyStepReset(void);
+void babyReset(void);
 
-void menuBabyStep(void);
+void menuBabystep(void);
 
 #ifdef __cplusplus
 }
