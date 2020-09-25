@@ -26,10 +26,10 @@ Firmware for BigTreeTech's dual-mode touchscreen 3D printer controllers
 
 ## Menus and Themes
 
-|                                                              |                Classic Menu &amp; Icon Theme                 | Unified Menu &amp; Material Icon Theme |      |
-| :----------------------------------------------------------: | :----------------------------------------------------------: | -------------------------------------- | ---- |
-| ![](https://user-images.githubusercontent.com/54511555/77016371-ad9a2e00-6934-11ea-9e57-23c2ab2cad58.png) | ![](https://user-images.githubusercontent.com/54511555/77016415-d3273780-6934-11ea-8c61-a184fa55b420.png) |                                        |      |
-| Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update) folder | Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update - Unified Menu Material theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update%20-%20Unified%20Menu%20Material%20theme) folder |                                        |      |
+|                Classic Menu &amp; Icon Theme                 |            Unified Menu &amp; Material Icon Theme            |      |      |
+| :----------------------------------------------------------: | :----------------------------------------------------------: | ---- | ---- |
+| ![](https://user-images.githubusercontent.com/54511555/77016371-ad9a2e00-6934-11ea-9e57-23c2ab2cad58.png) | ![](https://user-images.githubusercontent.com/54511555/77016415-d3273780-6934-11ea-8c61-a184fa55b420.png) |      |      |
+| Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update) folder | Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update - Unified Menu Material theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update%20-%20Unified%20Menu%20Material%20theme) folder |      |      |
 
 ## Update TFT Firmware
 
@@ -56,17 +56,7 @@ Place SD card with the `BIGTREE_TFT*_V*.*.*.bin`, the`TFT*` folder and the confi
 
 A successful update looks like this on the screen:
 
-<img src="https://user-images.githubusercontent.com/54359396/94314921-dd7c5b00-ff81-11ea-98de-d5ff0c1a2209.JPG" alt="firmware" style="zoom:25%;" />
-
-<img src="https://user-images.githubusercontent.com/54359396/94314662-431c1780-ff81-11ea-8c97-b75df006c2bf.JPG" alt="Font" style="zoom:25%;" />
-
-
-
-<img src="https://user-images.githubusercontent.com/54359396/94314915-da816a80-ff81-11ea-96e7-0375964ca7d6.JPG" alt="BMPs" style="zoom:25%;" />
-
-<img src="https://user-images.githubusercontent.com/54359396/94314927-dfdeb500-ff81-11ea-9a2a-154e4b2e4df4.JPG" alt="config ini" style="zoom:25%;" />
-
-
+![Screenshot 2020-09-25 at 23 36 25](https://user-images.githubusercontent.com/54359396/94318053-f2f48380-ff87-11ea-9e70-ebd84a3cedb0.png)
 
 ## Configuration
 
