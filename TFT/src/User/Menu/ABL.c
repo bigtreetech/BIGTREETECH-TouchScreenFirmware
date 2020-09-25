@@ -4,6 +4,7 @@
 static uint8_t slot;
 static bool _isSaving = true;
 static bool slotSaved = false;
+bool heat = false;
 
 void ablUpdateStatus(bool succeeded)
 {
@@ -153,7 +154,7 @@ void menuABL(void)
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BLTOUCH,                 LABEL_BLTOUCH},
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_HEAT,                    LABEL_PREHEAT},
      {ICON_BACK,                    LABEL_BACK}}
   };
 
@@ -221,7 +222,20 @@ void menuABL(void)
         infoMenu.menu[++infoMenu.cur] = menuBLTouch;
         break;
 
+      case KEY_ICON_6:
+        infoMenu.menu[++infoMenu.cur] = menuPreheat;
+        heat = true;
+        break;    
+
       case KEY_ICON_7:
+       if (heat == true)
+        {
+          for(uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
+          {
+            heatSetTargetTemp(i, 0);
+          }
+          heat = false;
+        }  
         infoMenu.cur--;
         break;
 
