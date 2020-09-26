@@ -272,5 +272,5 @@
     #define FR_OFFSET_TOOL            "Offset 2ème Buse"
     #define FR_HYBRID_THRESHOLD       "Seuil Hybride TMC"
     #define FR_NOTIFICATIONS          "Notifications"
-    
+
 #endif
