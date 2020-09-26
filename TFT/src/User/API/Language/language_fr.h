@@ -28,7 +28,7 @@
     #define FR_POINT_3                "Point 3"
     #define FR_POINT_4                "Point 4"
     #define FR_POINT_5                "Point 5"
-    #define FR_BED_LEVELING           "Bed Level"
+    #define FR_BED_LEVELING           "ABL"
     #define FR_BL_COMPLETE            "Nivellement terminé"
     #define FR_BL_SMART_FILL          "Les points de sonde manquants\nont été intelligemment remplis.\n \nNote : n'oubliez pas de sauvegarder !"
     #define FR_BL_ENABLE              "BL On"
@@ -37,8 +37,8 @@
     #define FR_BBL                    "BBL"
     #define FR_UBL                    "UBL"
     #define FR_MBL                    "MBL"
-    #define FR_MBL_SETTINGS           "Mesh Bed Leveling"
-    #define FR_ABL_SETTINGS           "Auto Bed Leveling"
+    #define FR_MBL_SETTINGS           "Nivellement Mesh"
+    #define FR_ABL_SETTINGS           "Nivellement Automatique"
     #define FR_ABL_SETTINGS_BBL       "Nivellement bilinéaire"
     #define FR_ABL_SETTINGS_UBL       "Nivellement unifié"
     #define FR_ABL_SETTINGS_UBL_SAVE  "Enregistrer dans l'emplacement"
@@ -63,7 +63,7 @@
     #define FR_RESTORE                "Restaurer"
     #define FR_RESET                  "Reset"
     #define FR_DEFAULT                "Défaut"
-    #define FR_CLEAR                  "Clear"
+    #define FR_CLEAR                  "Effacer"
     #define FR_NEXT                   "Suivant"
     #define FR_DISTANCE               "Distance"
     #define FR_INVALID_VALUE          "Aucune valeur valide fournie !"
@@ -272,5 +272,5 @@
     #define FR_OFFSET_TOOL            "Offset 2ème Buse"
     #define FR_HYBRID_THRESHOLD       "Seuil Hybride TMC"
     #define FR_NOTIFICATIONS          "Notifications"
-
+    
 #endif
