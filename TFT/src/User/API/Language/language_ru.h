@@ -63,7 +63,7 @@
     #define RU_RESTORE                "Вернуть"
     #define RU_RESET                  "Сброс"
     #define RU_DEFAULT                "По умолчанию"
-    #define RU_CLEAR                  "Clear"
+    #define RU_CLEAR                  "Очистить"
     #define RU_NEXT                   "Следующий"
     #define RU_DISTANCE               "Отступы"
     #define RU_INVALID_VALUE          "Остутствуют правильные значения!"
@@ -210,7 +210,7 @@
     #define RU_PRINT_ACCELERATION     "Печати"
     #define RU_RETRACT_ACCELERATION   "Ретракта"
     #define RU_TRAVEL_ACCELERATION    "Перемещения"
-    #define RU_JERK                   "Jerk"
+    #define RU_JERK                   "Рывок"
     #define RU_BUMP_SENSITIVITY       "TMC чувствительность удара"
     #define RU_FWRETRACT              "M207 ретракт"
     #define RU_FWRECOVER              "M208 восстановление ретракта"
@@ -271,6 +271,6 @@
     #define RU_CONNECTION_SETTINGS    "Соединение"
     #define RU_OFFSET_TOOL            "Смещение 2-го сопла"
     #define RU_HYBRID_THRESHOLD       "TMC гибридный порог"
-    #define RU_NOTIFICATIONS          "Notifications"
+    #define RU_NOTIFICATIONS          "Уведомления"
 
 #endif
