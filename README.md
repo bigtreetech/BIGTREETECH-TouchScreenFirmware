@@ -1,5 +1,7 @@
 <!-- omit in toc -->
+
 # BigTreeTech Touchscreen Firmware
+
 ![GitHub](https://img.shields.io/github/license/bigtreetech/bigtreetech-TouchScreenFirmware.svg)
 [![GitHub contributors](https://img.shields.io/github/contributors/bigtreetech/bigtreetech-TouchScreenFirmware.svg)](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/graphs/contributors)
 ![GitHub Release Date](https://img.shields.io/github/release-date/bigtreetech/bigtreetech-TouchScreenFirmware.svg)
@@ -10,7 +12,9 @@ Firmware for BigTreeTech's dual-mode touchscreen 3D printer controllers
 <img width=500 src="https://user-images.githubusercontent.com/13375512/76691608-ae1b8780-6609-11ea-9ee1-421bcf09e538.png">
 
 <!-- omit in toc -->
+
 ## Table of Contents
+
 - [Menus and Themes](#menus-and-themes)
 - [Update TFT Firmware](#update-tft-firmware)
 - [Configuration](#configuration)
@@ -22,52 +26,67 @@ Firmware for BigTreeTech's dual-mode touchscreen 3D printer controllers
 
 ## Menus and Themes
 
-| Classic Menu &amp; Icon Theme |  Unified Menu &amp; Material Icon Theme |
-:--------------------------:|:-------------------------:
-![](https://user-images.githubusercontent.com/54511555/77016371-ad9a2e00-6934-11ea-9e57-23c2ab2cad58.png) | ![](https://user-images.githubusercontent.com/54511555/77016415-d3273780-6934-11ea-8c61-a184fa55b420.png)
-Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update) folder | Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update - Unified Menu Material theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update%20-%20Unified%20Menu%20Material%20theme) folder
+|                Classic Menu &amp; Icon Theme                 |            Unified Menu &amp; Material Icon Theme            |      |      |
+| :----------------------------------------------------------: | :----------------------------------------------------------: | ---- | ---- |
+| ![](https://user-images.githubusercontent.com/54511555/77016371-ad9a2e00-6934-11ea-9e57-23c2ab2cad58.png) | ![](https://user-images.githubusercontent.com/54511555/77016415-d3273780-6934-11ea-8c61-a184fa55b420.png) |      |      |
+| Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update) folder | Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update - Unified Menu Material theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update%20-%20Unified%20Menu%20Material%20theme) folder |      |      |
 
 ## Update TFT Firmware
 
-TFT firmware updates are comprised of two parts:
+TFT firmware updates are comprised of three parts:
 
-1. The firmware binary (`BIGTREE_TFT*_V*.*.*.bin`). Example: `BIGTREE_TFT35_V3.0.25.2.bin`:
-     - `BIGTREE_TFT_35`: model
-     - `V3.0`: hardware version
-     - `25.2`: software version
+1. The firmware binary (`BIGTREE_TFT*_V*.*.*.bin`). Example: `BIGTREE_TFT35_V3.0.26.1.bin`:
+   - `BIGTREE_TFT_35`: model
+   - `V3.0`: hardware version
+   - `26.1`: software version
 2. Fonts and Icons (`TFT*` folder):
    - `TFT*/font`: fonts
    - `TFT*/bmp`: icons
+3. The config.ini file
 
-Copy both the `BIGTREE_TFT*_V*.*.*.bin` and `TFT*` folder to the root of a blank SD card that is <8GB and formatted as FAT32:
+Copy  the `BIGTREE_TFT*_V*.*.*.bin,the `TFT*` folder and the config.ini to the root of a blank SD card that is <8GB and formatted as FAT32:
 
-![image](https://user-images.githubusercontent.com/13375512/76688998-3e989e80-65ef-11ea-93df-29a8216475a6.png)
+![Untitled](https://user-images.githubusercontent.com/54359396/93636859-e9ea3c00-f9f4-11ea-9a7a-b2208fd51c9b.png)
 
-Place SD card with `BIGTREE_TFT*_V*.*.*.bin` &amp; `TFT*` folder into the TFT's SD card reader and power cycle your printer to start the update process.
+Place SD card with the `BIGTREE_TFT*_V*.*.*.bin`, the`TFT*` folder and the config.ini into the TFT's SD card reader and power cycle your printer to start the update process.
 
 <p align=center> ⚠️ Failing to update your icons &amp; fonts will result in missing icons and/or unreadable text ⚠️ </p>
 
+## Update Prozess shown on TFT Screen
+
+A successful update looks like this on the screen:
+
+![Screenshot 2020-09-25 at 23 36 25](https://user-images.githubusercontent.com/54359396/94318053-f2f48380-ff87-11ea-9e70-ebd84a3cedb0.png)
+
 ## Configuration
+
 The Firmware can be configured using the **config.ini** file from from one of these folders:
 [`Copy to SD Card root directory to update`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update) or
 [`Copy to SD Card root directory to update - Unified Menu Material theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update%20-%20Unified%20Menu%20Material%20theme)
 
 ### Editing configuration (config.ini) file
+
 To edit the **config.ini** file follow the instruction here: [Detailed Instructions here](config_instructions.md)
 
 ### Updating Firmware Configuration
+
 To update the Firmware configuration:
+
 1. Edit the settings in **config.ini**.
 2. Copy the **config.ini** file to the root of the SD card. (The SD card capacity should be less than or equal to 8GB and formatted as FAT32)
 3. Insert the SD card in the TFT's SD card slot and restart the TFT by pressing the reset buttion or disconnecting and connecting the power cable.
-4. The TFT will update and store the configuraiton form **config.ini** file.
+4. The TFT will update and store the configuration form **config.ini** file.
+
+The config.ini can be edited using a simple text editor (make sure to use UTF encoding) and uploaded again - without the need to upload the firmware or the TFT folder - as long as the firmware is the same version number.
 
 ## Customization
 
 ### Bootscreen and Icons
+
 See [Customization guides](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/readme/) for detailed  information.
 
 ### Firmware
+
 <details><summary>View full instructions</summary>
 <ol>
 <li>Setup Visual Studio Code with PlatformIO <a href="https://github.com/bigtreetech/Document/blob/master/How%20to%20install%20VScode+Platformio.md">instructions</a></li>
@@ -87,6 +106,7 @@ See [Customization guides](https://github.com/bigtreetech/BIGTREETECH-TouchScree
 ;BIGTREE_TFT24_V1_1
 ;MKS_32_V1_4
 ;MKS_32_V1_4_NOBL
+
 
 [platformio]
 src_dir      = TFT

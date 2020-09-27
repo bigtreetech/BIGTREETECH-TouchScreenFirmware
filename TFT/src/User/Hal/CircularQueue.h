@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include "includes.h"
+#include <stdint.h>
 
 #define CIRCULAR_QUEUE_SIZE (1024 * 5)
 
