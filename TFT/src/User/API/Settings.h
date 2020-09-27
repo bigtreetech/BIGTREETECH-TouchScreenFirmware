@@ -186,6 +186,17 @@ char     end_gcode[MAX_GCODE_LENGTH+1];
 char     cancel_gcode[MAX_GCODE_LENGTH+1];
 }PRINT_GCODES;
 
+/**
+ * Bed Leveling type
+ */
+typedef enum
+{
+  BL_UNKNOWN = 0,                     // Unknown BL
+  BL_ABL,                             // Generic Auto Bed Leveling (ABL)
+  BL_BBL,                             // Bilinear Bed Leveling (BBL)
+  BL_UBL,                             // Unified Bed Leveling (UBL)
+  BL_MBL,                             // Mesh Bed Leveling (MBL)
+}BL_TYPE;
 
 typedef struct
 {
@@ -193,7 +204,7 @@ typedef struct
   uint8_t EEPROM;
   uint8_t autoReportTemp;
   uint8_t autoLevel;
-  uint8_t enableubl;
+  uint8_t blType;
   uint8_t zProbe;
   uint8_t levelingData;
   uint8_t softwarePower;

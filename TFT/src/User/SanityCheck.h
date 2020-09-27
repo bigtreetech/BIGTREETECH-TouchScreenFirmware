@@ -60,17 +60,17 @@
   #error "AUTO_BED_LEVELING is now auto-configured with 'M115'. Please remove AUTO_BED_LEVELING from your Configuration.h file."
 #endif
 
-#ifdef ENABLE_UBL_VALUE
-  #if ENABLE_UBL_VALUE > 2
-    #error "ENABLE_UBL_VALUE cannot be greater than 2"
+#ifdef ENABLE_BL_VALUE
+  #if ENABLE_BL_VALUE > 5
+    #error "ENABLE_BL_VALUE cannot be greater than 5"
   #endif
 
-  #if ENABLE_UBL_VALUE < 0
-    #error "ENABLE_UBL_VALUE cannot be less than 0"
+  #if ENABLE_BL_VALUE < 0
+    #error "ENABLE_BL_VALUE cannot be less than 0"
   #endif
 #endif
-#ifndef ENABLE_UBL_VALUE
-    #define ENABLE_UBL_VALUE 2
+#ifndef ENABLE_BL_VALUE
+    #define ENABLE_BL_VALUE 1
 #endif
 
 #ifdef FRIENDLY_PROBE_OFFSET_LANGUAGE

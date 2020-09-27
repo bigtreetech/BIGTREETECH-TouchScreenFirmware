@@ -83,7 +83,7 @@ void infoSettingsReset(void)
   infoSettings.ext_count              = EXTRUDER_NUM;
   infoSettings.fan_count              = FAN_NUM;
   infoSettings.fan_ctrl_count         = FAN_CTRL_NUM;
-  infoSettings.auto_load_leveling     = AUTO_SAVE_LOAD_LEVELING_VALUE;
+  infoSettings.auto_load_leveling     = AUTO_SAVE_LOAD_BL_VALUE;
   infoSettings.onboardSD              = AUTO;     //ENABLED / DISABLED / AUTO
   infoSettings.m27_refresh_time       = M27_REFRESH;
   infoSettings.m27_active             = M27_WATCH_OTHER_SOURCES;
@@ -156,22 +156,39 @@ void initMachineSetting(void){
   infoMachineSettings.promptSupport           = DISABLED;
   infoMachineSettings.onboard_sd_support      = ENABLED;
   infoMachineSettings.autoReportSDStatus      = DISABLED;
-  infoMachineSettings.enableubl               = DISABLED;
+  infoMachineSettings.blType                  = BL_UNKNOWN;
 }
 
 void setupMachine(void)
 {
-  #ifdef ENABLE_UBL_VALUE
-    if (infoMachineSettings.autoLevel == 1 && ENABLE_UBL_VALUE == 1) {
-      infoMachineSettings.enableubl = ENABLE;
-    }
-  #endif
-  #ifdef AUTO_SAVE_LOAD_LEVELING_VALUE
-    if (infoMachineSettings.autoLevel == 1 && infoMachineSettings.EEPROM == 1 && infoSettings.auto_load_leveling == 1){
-      storeCmd("M420 S1\n");
-    }
-  #endif
-  if(infoMachineSettings.isMarlinFirmware != 1) //Smoothieware does not report detailed M115 capabilities
+  switch (ENABLE_BL_VALUE)
+  {
+    case 2:
+      infoMachineSettings.blType = BL_ABL;
+      break;
+
+    case 3:
+      infoMachineSettings.blType = BL_BBL;
+      break;
+
+    case 4:
+      infoMachineSettings.blType = BL_UBL;
+      break;
+
+    case 5:
+      infoMachineSettings.blType = BL_MBL;
+      break;
+
+    default:
+      break;
+  }
+
+  if (infoMachineSettings.blType != BL_UNKNOWN && infoMachineSettings.EEPROM == 1 && infoSettings.auto_load_leveling == 1)
+  {
+    storeCmd("M420 S1\n");
+  }
+
+  if (infoMachineSettings.isMarlinFirmware != 1) // Smoothieware does not report detailed M115 capabilities
   {
     infoMachineSettings.EEPROM                  = ENABLED;
     infoMachineSettings.autoReportTemp          = DISABLED;
