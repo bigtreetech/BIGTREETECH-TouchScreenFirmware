@@ -1,5 +1,5 @@
-#ifndef _PID_H_
-#define _PID_H_
+#ifndef _ABL_H_
+#define _ABL_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -7,9 +7,9 @@ extern "C" {
 
 #include <stdbool.h>
 
-void pidUpdateStatus(bool succeeded);
+void ablUpdateStatus(bool succeeded);
 
-void menuPid(void);
+void menuABL(void);
 
 #ifdef __cplusplus
 }

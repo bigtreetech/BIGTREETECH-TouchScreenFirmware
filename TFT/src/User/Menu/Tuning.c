@@ -21,6 +21,7 @@ void menuTuning(void)
   KEY_VALUES key_num = KEY_IDLE;
 
   menuDrawPage(&TuningItems);
+
   while (infoMenu.menu[infoMenu.cur] == menuTuning)
   {
     key_num = menuKeyGetValue();
