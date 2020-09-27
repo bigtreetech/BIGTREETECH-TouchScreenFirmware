@@ -266,5 +266,5 @@
     #define IT_OFFSET_TOOL            "Offset 2nd Ugello"
     #define IT_HYBRID_THRESHOLD       "TMC Soglia Modo Ibrido"
     #define IT_NOTIFICATIONS          "Notifiche"
-
+    
 #endif
