@@ -33,7 +33,7 @@ Firmware for BigTreeTech's dual-mode touchscreen 3D printer controllers
 
 ## Update TFT Firmware
 
-TFT firmware updates are comprised of three parts:
+TFT firmware updates are comprised of three elements:
 
 1. The firmware binary (`BIGTREE_TFT*_V*.*.*.bin`). Example: `BIGTREE_TFT35_V3.0.26.1.bin`:
    - `BIGTREE_TFT_35`: model
