@@ -219,7 +219,7 @@ void menuNewExtruderESteps(void)
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_INC,                     LABEL_INC},
-     {ICON_S_SAVE,                  LABEL_SAVE},
+     {ICON_EEPROM_SAVE,             LABEL_SAVE},
      {ICON_E_1_MM,                  LABEL_1_MM},
      {ICON_RESET_VALUE,             LABEL_RESET},
      {ICON_BACK,                    LABEL_BACK},}

@@ -275,10 +275,13 @@ void parseACK(void)
       if (infoSettings.ext_count < infoSettings.hotend_count) infoSettings.ext_count = infoSettings.hotend_count;
       updateNextHeatCheckTime();
       infoHost.connected = true;
-      storeCmd("M503\n");// Query detailed printer capabilities
-      storeCmd("M92\n"); // Steps/mm of extruder is an important parameter for Smart filament runout
-                         // Avoid can't getting this parameter due to disabled M503 in Marlin
-      storeCmd("M115\n");
+      if(infoMachineSettings.isMarlinFirmware == -1) // if never connected to the printer since boot
+      {
+        storeCmd("M503\n");// Query detailed printer capabilities
+        storeCmd("M92\n"); // Steps/mm of extruder is an important parameter for Smart filament runout
+                          // Avoid can't getting this parameter due to disabled M503 in Marlin
+        storeCmd("M115\n");
+      }
     }
 
     // Onboard sd Gcode command response

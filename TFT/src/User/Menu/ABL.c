@@ -73,10 +73,10 @@ void menuUBLSaveLoad(void)
     // title
     LABEL_ABL_SETTINGS_UBL_SAVE,
     // icon                         label
-    {{ICON_S_SAVE,                  LABEL_ABL_SLOT0},
-     {ICON_S_SAVE,                  LABEL_ABL_SLOT1},
-     {ICON_S_SAVE,                  LABEL_ABL_SLOT2},
-     {ICON_S_SAVE,                  LABEL_ABL_SLOT3},
+    {{ICON_EEPROM_SAVE,             LABEL_ABL_SLOT0},
+     {ICON_EEPROM_SAVE,             LABEL_ABL_SLOT1},
+     {ICON_EEPROM_SAVE,             LABEL_ABL_SLOT2},
+     {ICON_EEPROM_SAVE,             LABEL_ABL_SLOT3},
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
@@ -90,7 +90,7 @@ void menuUBLSaveLoad(void)
     UBLSaveLoadItems.title.index = LABEL_ABL_SETTINGS_UBL_LOAD;
     for (int i = 0; i < 4; i++)
     {
-      UBLSaveLoadItems.items[i].icon = ICON_S_LOAD;
+      UBLSaveLoadItems.items[i].icon = ICON_EEPROM_RESTORE;
     }
   }
 
@@ -167,9 +167,9 @@ void menuABL(void)
 
     case BL_UBL:
       autoLevelingItems.title.index = LABEL_ABL_SETTINGS_UBL;
-      autoLevelingItems.items[1].icon = ICON_S_SAVE;
+      autoLevelingItems.items[1].icon = ICON_EEPROM_SAVE;
       autoLevelingItems.items[1].label.index = LABEL_SAVE;
-      autoLevelingItems.items[2].icon = ICON_S_LOAD;
+      autoLevelingItems.items[2].icon = ICON_EEPROM_RESTORE;
       autoLevelingItems.items[2].label.index = LABEL_LOAD;
       break;
 

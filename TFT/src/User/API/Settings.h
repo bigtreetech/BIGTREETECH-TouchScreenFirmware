@@ -27,7 +27,7 @@ enum
 #define FONT_FLASH_SIGN       20200908 //(YYYYMMDD) change if fonts require updating
 #define CONFIG_FLASH_SIGN     20200908 //(YYYYMMDD) change if any keyword(s) in config.ini is added or removed
 #define LANGUAGE_FLASH_SIGN   20200908 //(YYYYMMDD) change if any keyword(s) in language pack is added or removed
-#define ICON_FLASH_SIGN       20200908 //(YYYYMMDD) change if any icon(s) is added or removed
+#define ICON_FLASH_SIGN       20200920 //(YYYYMMDD) change if any icon(s) is added or removed
 
 #define FONT_CHECK_SIGN       (FONT_FLASH_SIGN + WORD_UNICODE)
 #define CONFIG_CHECK_SIGN     (CONFIG_FLASH_SIGN + STRINGS_STORE_ADDR)
@@ -200,7 +200,7 @@ typedef enum
 
 typedef struct
 {
-  uint8_t isMarlinFirmware;
+  int8_t isMarlinFirmware;
   uint8_t EEPROM;
   uint8_t autoReportTemp;
   uint8_t autoLevel;
