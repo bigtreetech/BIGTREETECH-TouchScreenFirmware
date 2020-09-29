@@ -14,7 +14,7 @@
 
 uint8_t buffing[EEPROM_PAGESIZE+2]={0};
 
-u8 AT24CXX_WriteData(uint16_t MemAddress, uint8_t* pBuffer, uint32_t BufferSize);
+//u8 AT24CXX_WriteData(uint16_t MemAddress, uint8_t* pBuffer, uint32_t BufferSize);
 
 void I2C1_init(uint32_t I2C_baudrate)
 {

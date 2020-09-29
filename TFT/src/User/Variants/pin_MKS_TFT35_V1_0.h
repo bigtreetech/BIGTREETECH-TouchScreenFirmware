@@ -144,7 +144,7 @@ PD3-SD_CD
 // LCD Encoder support
 #define LCD_ENCA_PIN  PB0
 #define LCD_ENCB_PIN  PB1
-#define LCD_BTN_PIN   PB4
+#define LCD_BTN_PIN   PB5
 
 // U disk support
 #define U_DISK_SUPPORT
