@@ -238,24 +238,26 @@
 #define NOZZLE_PAUSE_M600_M601
 
 /**
- * Auto Save Load Leveling Data
- * The TFT will auto detect if Auto Bed Level is available.
+ * Auto save/load Bed Leveling data
+ * The TFT will auto detect if BL data are available.
  * Enable this will send "M500" after "G29" to store leveling value
  * and send "M420 S1" to enable leveling state after startup
+ *
+ * Options:  0: Disabled    1: Enabled
  */
-#define AUTO_SAVE_LOAD_LEVELING_VALUE true //to enabled: true | to disabled: false
+#define AUTO_SAVE_LOAD_BL_VALUE 1
 
 /**
- * Enable Unified Bed Leveling options
- * Will attempt to auto detect and enable specific UBL options.
+ * Enable Bed Leveling options
+ * Will attempt to auto detect and/or enable specific BL options.
  *
  * WARNING - If you're not sure, leave on auto-detect or disabled.
  *           UBL has extra options other leveling systems might not have.
  *
- * Options:  0: Disabled    1: Enabled    2: Auto-detect [default]
+ * Options:  0: Disabled    1: Auto-detect [default]    2: ABL    3: BBL    4: UBL    5: MBL
  *
  */
-#define ENABLE_UBL_VALUE 2
+#define ENABLE_BL_VALUE 1
 
 /**
  * Enable friendly probe offset language.

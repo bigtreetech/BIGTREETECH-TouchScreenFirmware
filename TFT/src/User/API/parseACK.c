@@ -35,6 +35,7 @@ const ECHO knownEcho[] = {
   {ECHO_NOTIFY_TOAST, "echo:Bed"},              //M420
   {ECHO_NOTIFY_TOAST, "echo:Fade"},             //M420
   {ECHO_NOTIFY_TOAST, "echo:Active Extruder"},  //Tool Change
+  {ECHO_NOTIFY_NONE, "Unknown command: \"M150"}, //M150
 };
 
 uint8_t forceIgnore[ECHO_ID_COUNT] = {0};
@@ -233,15 +234,15 @@ void hostActionCommands(void)
     {
       case 0:
         BUZZER_PLAY(sound_notify);
-        popupReminder(DIALOG_TYPE_INFO,(u8 *)"Message", (u8 *)hostAction.prompt_begin);
+        popupReminder(DIALOG_TYPE_ALERT,(u8 *)"Message", (u8 *)hostAction.prompt_begin);
         break;
       case 1:
         BUZZER_PLAY(sound_notify);
-        showDialog(DIALOG_TYPE_ERROR, (u8*)"Action command", (u8 *)hostAction.prompt_begin, (u8 *)hostAction.prompt_button1, NULL, breakAndContinue, NULL, NULL);
+        showDialog(DIALOG_TYPE_ALERT, (u8*)"Action command", (u8 *)hostAction.prompt_begin, (u8 *)hostAction.prompt_button1, NULL, breakAndContinue, NULL, NULL);
         break;
       case 2:
         BUZZER_PLAY(sound_notify);
-        showDialog(DIALOG_TYPE_ERROR, (u8*)"Action command", (u8 *)hostAction.prompt_begin, (u8 *)hostAction.prompt_button1, (u8 *)hostAction.prompt_button2, resumeAndPurge, resumeAndContinue, NULL);
+        showDialog(DIALOG_TYPE_ALERT, (u8*)"Action command", (u8 *)hostAction.prompt_begin, (u8 *)hostAction.prompt_button1, (u8 *)hostAction.prompt_button2, resumeAndPurge, resumeAndContinue, NULL);
         break;
     }
   }
@@ -547,8 +548,17 @@ void parseACK(void)
                           setDualStepperStatus(E_STEPPER, true);
       }
     // Parse and store ABL type
+      else if(ack_seen("echo:; Auto Bed Leveling")){
+        if(ENABLE_BL_VALUE==1)                             // if Auto-detect
+          infoMachineSettings.blType = BL_ABL;
+      }
       else if(ack_seen("echo:; Unified Bed Leveling")){
-        if(ENABLE_UBL_VALUE==2) infoMachineSettings.enableubl = ENABLED;
+        if(ENABLE_BL_VALUE==1)                             // if Auto-detect
+          infoMachineSettings.blType = BL_UBL;
+      }
+      else if(ack_seen("echo:; Mesh Bed Leveling")){
+        if(ENABLE_BL_VALUE==1)                             // if Auto-detect
+          infoMachineSettings.blType = BL_MBL;
       }
     // Parse and store ABL on/off state & Z fade value on M503
       else if(ack_seen("M420 S")) {
@@ -708,13 +718,25 @@ void parseACK(void)
         showDialog(DIALOG_TYPE_QUESTION, (u8*)"Printer is Paused",(u8*)"Paused for user\ncontinue?",
                    textSelect(LABEL_CONFIRM), NULL, breakAndContinue, NULL,NULL);
       }
+    // Parse ABL Complete message
+      else if(ack_seen("ABL Complete"))
+      {
+        ablUpdateStatus(true);
+      }
+    // Parse BBL Complete message
+      else if(ack_seen("BBL Complete"))
+      {
+        ablUpdateStatus(true);
+      }
     // Parse UBL Complete message
       else if(ack_seen("UBL Complete"))
       {
-        BUZZER_PLAY(sound_notify);
-
-        showDialog(DIALOG_TYPE_INFO, textSelect(LABEL_ABL_COMPLETE), textSelect(LABEL_ABL_SMART_FILL),
-                   textSelect(LABEL_CONFIRM), NULL, NULL, NULL, NULL);
+        ablUpdateStatus(true);
+      }
+    // Parse MBL Complete message
+      else if(ack_seen("Mesh probing done"))
+      {
+        mblUpdateStatus(true);
       }
     // Parse PID Autotune finished message
       else if(ack_seen("PID Autotune finished"))
