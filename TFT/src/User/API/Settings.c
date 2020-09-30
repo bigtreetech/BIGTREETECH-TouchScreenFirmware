@@ -243,47 +243,33 @@ void checkflashSign(void)
     int ypos = BYTE_HEIGHT + 5;
     GUI_Clear(BLACK);
     GUI_DispString(5, 5, (uint8_t *)"Found outdated data:");
+
     ypos += BYTE_HEIGHT;
     if (cur_flash_sign[font_sign] == flash_sign[font_sign])
-    {
       GUI_DispString(10, ypos, (uint8_t *)"Fonts: OK");
-    }
     else
-    {
       GUI_DispString(10, ypos, (uint8_t *)"Fonts: Update required");
-      ypos += BYTE_HEIGHT;
-    }
+
+    ypos += BYTE_HEIGHT;
     if (cur_flash_sign[config_sign] == flash_sign[config_sign])
-    {
       GUI_DispString(10, ypos, (uint8_t *)"Config: OK");
-      ypos += BYTE_HEIGHT;
-    }
     else
-    {
       GUI_DispString(10, ypos, (uint8_t *)"Config: Update required");
-      ypos += BYTE_HEIGHT;
-    }
     /*
+    ypos += BYTE_HEIGHT;
     if (cur_flash_sign[lang_sign] == flash_sign[lang_sign])
-    {
       GUI_DispString(10, ypos, (uint8_t *)"Language: OK");
-    }
     else
-    {
       GUI_DispString(10, ypos, (uint8_t *)"Language: Update required");
-      ypos += BYTE_HEIGHT;
-    }
     */
+
+    ypos += BYTE_HEIGHT;
     if (cur_flash_sign[icon_sign] == flash_sign[icon_sign])
-    {
       GUI_DispString(10, ypos, (uint8_t *)"Icons: OK");
-      ypos += BYTE_HEIGHT;
-    }
     else
-    {
       GUI_DispString(10, ypos, (uint8_t *)"Icons: Update required");
-      ypos += BYTE_HEIGHT;
-    }
+
+    ypos += BYTE_HEIGHT;
     GUI_DispStringInRectEOL(10, ypos + 10, LCD_WIDTH, LCD_HEIGHT, (uint8_t *)"Insert the SD card with the required\n"
                                                                              "files and press the reset button\nto update.");
     while (1);
