@@ -25,7 +25,7 @@ ITEM itemProbeOffsetSubmenu[ITEM_PROBE_OFFSET_SUBMENU_NUM] = {
 
 static u8 curSubmenu = 0;
 
-bool probe_offset_enabled = false;
+static float z_offset;
 
 /* Show an eror message notification */
 void probeNotifyError(void)
@@ -35,38 +35,7 @@ void probeNotifyError(void)
   addToast(DIALOG_TYPE_ERROR, tmpBuf);
 }
 
-/* Enable probe offset */
-void probeEnableOffset(void)
-{
-  probe_offset_enabled = true;
-
-  // Z offset gcode sequence start
-  mustStoreCmd("M211 S0\n");                               // disable Software Endstop to move nozzle minus Zero (Z0) if necessary
-  mustStoreCmd("G28\n");                                   // home printer
-  mustStoreCmd("G91\n");                                   // set relative position mode
-  mustStoreCmd("G1 X%.2f Y%.2f\n",
-    getParameter(P_PROBE_OFFSET, X_STEPPER),
-    getParameter(P_PROBE_OFFSET, Y_STEPPER));              // move nozzle to XY probing point
-  mustStoreCmd("G90\n");                                   // set absolute position mode
-  mustStoreCmd("G1 Z0 F%d\n",                              // move nozzle to Z0 absolute point and set feedrate
-    infoSettings.axis_speed[infoSettings.move_speed]);
-  mustStoreCmd("G91\n");                                   // set relative position mode
-}
-
-/* Disable probe offset */
-void probeDisableOffset(void)
-{
-  probe_offset_enabled = false;
-
-  // Z offset gcode sequence stop
-  mustStoreCmd("G28\n");                                   // home printer
-  mustStoreCmd("G91\n");                                   // set relative position mode
-  mustStoreCmd("G1 Z%.2f\n", infoSettings.pause_z_raise ); // raise Z
-  mustStoreCmd("G90\n");                                   // set absolute position mode
-  mustStoreCmd("M211 S1\n");                               // enable Software Endstop
-}
-
-void showProbeOffsetStatus(u8 *status)
+void probeDrawStatus(u8 *status)
 {
   char tempstr[20];
 
@@ -74,24 +43,24 @@ void showProbeOffsetStatus(u8 *status)
   {
     sprintf(tempstr, "%s  ", status);
 
-    if (!probe_offset_enabled)
+    if (!probeOffsetGetStatus())
       GUI_SetColor(infoSettings.reminder_color);
     else
       GUI_SetColor(infoSettings.sd_reminder_color);
 
-    GUI_DispString(exhibitRect.x0, exhibitRect.y0, (u8 *)tempstr);
+    GUI_DispString(exhibitRect.x0, exhibitRect.y0, (u8 *) tempstr);
     GUI_SetColor(infoSettings.font_color);
   }
 }
 
-void showProbeOffset(float val)
+void probeDrawValue(float val)
 {
   char tempstr[20];
 
   sprintf(tempstr, "  %.2f  ", val);
 
   setLargeFont(true);
-  GUI_DispStringInPrect(&exhibitRect, (u8 *)tempstr);
+  GUI_DispStringInPrect(&exhibitRect, (u8 *) tempstr);
   setLargeFont(false);
 }
 
@@ -120,10 +89,10 @@ void menuProbeOffset(void)
   #endif
 
   KEY_VALUES key_num = KEY_IDLE;
-  float z_offset_value;
-  float now = z_offset_value = getParameter(P_PROBE_OFFSET, Z_STEPPER);
+  float now = z_offset = probeOffsetGetValue();
+  float unit;
 
-  if (!probe_offset_enabled)
+  if (!probeOffsetGetStatus())
     probeOffsetItems.items[KEY_ICON_4].label.index = LABEL_OFF;
   else
     probeOffsetItems.items[KEY_ICON_4].label.index = LABEL_ON;
@@ -132,8 +101,8 @@ void menuProbeOffset(void)
   probeOffsetItems.items[KEY_ICON_6] = itemProbeOffsetSubmenu[curSubmenu];
 
   menuDrawPage(&probeOffsetItems);
-  showProbeOffsetStatus(textSelect(probeOffsetItems.items[KEY_ICON_4].label.index));
-  showProbeOffset(now);
+  probeDrawStatus(textSelect(probeOffsetItems.items[KEY_ICON_4].label.index));
+  probeDrawValue(now);
 
 #if LCD_ENCODER_SUPPORT
   encoderPosition = 0;
@@ -141,61 +110,46 @@ void menuProbeOffset(void)
 
   while (infoMenu.menu[infoMenu.cur] == menuProbeOffset)
   {
-    z_offset_value = getParameter(P_PROBE_OFFSET, Z_STEPPER);
-    float max_unit = probeOffset_unit[curUnit];
+    unit = probeOffset_unit[curUnit];
+
+    z_offset = probeOffsetGetValue();                      // always load the current Z offset
 
     key_num = menuKeyGetValue();
     switch (key_num)
     {
-      // decrease offset
+      // decrease Z offset
       case KEY_ICON_0:
-        if (!probe_offset_enabled)
+        if (!probeOffsetGetStatus())
           probeNotifyError();
-        else if (z_offset_value > PROBE_OFFSET_MIN_VALUE)
-        {
-          float diff = z_offset_value - PROBE_OFFSET_MIN_VALUE;
-          max_unit = (diff > max_unit) ? max_unit : diff;
-
-          mustStoreCmd("M851 Z%.2f\n", z_offset_value - max_unit);
-          mustStoreCmd("G1 Z%.2f\n", -max_unit);
-
-          z_offset_value -= max_unit;
-        }
+        else
+          z_offset = probeOffsetDecreaseValue(unit);
         break;
 
-      // increase offset
+      // increase Z offset
       case KEY_ICON_3:
-        if (!probe_offset_enabled)
+        if (!probeOffsetGetStatus())
           probeNotifyError();
-        else if (z_offset_value < PROBE_OFFSET_MAX_VALUE)
-        {
-          float diff = PROBE_OFFSET_MAX_VALUE - z_offset_value;
-          max_unit = (diff > max_unit) ? max_unit : diff;
-
-          mustStoreCmd("M851 Z%.2f\n", z_offset_value + max_unit);
-          mustStoreCmd("G1 Z%.2f\n", max_unit);
-
-          z_offset_value += max_unit;
-        }
+        else
+          z_offset = probeOffsetIncreaseValue(unit);
         break;
 
-      // enable/disable offset change
+      // enable/disable Z offset change
       case KEY_ICON_4:
-        if (!probe_offset_enabled)
+        if (!probeOffsetGetStatus())
         {
-          probeEnableOffset();
+          probeOffsetEnable();
 
           probeOffsetItems.items[key_num].label.index = LABEL_ON;
         }
         else
         {
-          probeDisableOffset();
+          probeOffsetDisable();
 
           probeOffsetItems.items[key_num].label.index = LABEL_OFF;
         }
 
         menuDrawItem(&probeOffsetItems.items[key_num], key_num);
-        showProbeOffsetStatus(textSelect(probeOffsetItems.items[key_num].label.index));
+        probeDrawStatus(textSelect(probeOffsetItems.items[key_num].label.index));
         break;
 
       // change submenu
@@ -211,7 +165,7 @@ void menuProbeOffset(void)
       case KEY_ICON_6:
         switch (curSubmenu)
         {
-          // change step unit
+          // change unit
           case 0:
             curUnit = (curUnit + 1) % ITEM_PROBE_OFFSET_UNIT_NUM;
 
@@ -221,20 +175,12 @@ void menuProbeOffset(void)
             menuDrawItem(&probeOffsetItems.items[key_num], key_num);
             break;
 
-          // reset offset to default value
+          // reset Z offset to default value
           case 1:
-            if (!probe_offset_enabled)
+            if (!probeOffsetGetStatus())
               probeNotifyError();
             else
-            {
-              if (z_offset_value != PROBE_OFFSET_DEFAULT_VALUE)
-              {
-                mustStoreCmd("M851 Z%.2f\n", PROBE_OFFSET_DEFAULT_VALUE);
-                mustStoreCmd("G1 Z%.2f\n", -z_offset_value);
-
-                z_offset_value = PROBE_OFFSET_DEFAULT_VALUE;
-              }
-            }
+              z_offset = probeOffsetResetValue();
             break;
 
           // save to EEPROM
@@ -248,7 +194,7 @@ void menuProbeOffset(void)
 
           // unlock XY axis
           case 3:
-            if (!probe_offset_enabled)
+            if (!probeOffsetGetStatus())
               probeNotifyError();
             else
               storeCmd("M84 X Y E\n");
@@ -260,8 +206,8 @@ void menuProbeOffset(void)
         break;
 
       case KEY_ICON_7:
-        if (probe_offset_enabled)
-          probeDisableOffset();
+        if (probeOffsetGetStatus())
+          probeOffsetDisable();
 
         infoMenu.cur--;
         break;
@@ -270,15 +216,10 @@ void menuProbeOffset(void)
         #if LCD_ENCODER_SUPPORT
           if (encoderPosition)
           {
-            if (!probe_offset_enabled)
+            if (!probeOffsetGetStatus())
               probeNotifyError();
             else
-            {
-              mustStoreCmd("M851 Z%.2f\n", z_offset_value + probeOffset_unit[curUnit] * encoderPosition);
-              mustStoreCmd("G1 Z%.2f\n", probeOffset_unit[curUnit] * encoderPosition);
-
-              z_offset_value += probeOffset_unit[curUnit] * encoderPosition;
-            }
+              z_offset = probeOffsetUpdateValueByEncoder(unit);
 
             encoderPosition = 0;
           }
@@ -286,13 +227,13 @@ void menuProbeOffset(void)
         break;
     }
 
-    if (now != z_offset_value)
+    if (now != z_offset)
     {
-      now = z_offset_value;
-      showProbeOffset(now);
+      now = z_offset;
+      probeDrawValue(now);
 
-      // baby step is reset every time z-offset changes otherwise the set babystep value will not be aligned with the new z-offset
-      babyStepReset();
+      // babystep is reset every time Z offset changes otherwise the set babystep value will not be aligned with the new Z offset
+      babyReset();
     }
 
     loopProcess();
