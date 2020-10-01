@@ -48,12 +48,13 @@ TFT firmware updates are comprised of three elements:
 Copy  the `BIGTREE_TFT*_V*.*.*.bin,the `TFT*` folder and the config.ini to the root of a blank SD card that is <8GB and formatted as FAT32:
 
 
-![Copy](https://user-images.githubusercontent.com/54359396/94350045-a920a180-004a-11eb-8418-2cea080d2b23.png)
+![Copy](https://user-images.githubusercontent.com/54359396/94800953-a1178780-03e5-11eb-9d2f-6a8ea908297b.png)
 
 
 Place SD card with the `BIGTREE_TFT*_V*.*.*.bin`, the`TFT*` folder and the config.ini into the TFT's SD card reader and power cycle your printer to start the update process.
 
 <p align=center> ⚠️ Failing to update your icons &amp; fonts will result in missing icons and/or unreadable text ⚠️ </p>
+
 
 
 ## Update Process shown on TFT Screen
@@ -69,12 +70,6 @@ A successful update looks like this on the screen:
 <p align=center> ⚠️ Errors during the update can not be ignored and must be solved before using the TFT ⚠️ </p>
 
 After the update is done and the files are renamed, it is possible to reuse them again. To do so, change the name of the element(s) to the pre-update name and start the update process again.
-=======
-## Update Prozess shown on TFT Screen
-
-A successful update looks like this on the screen:
-
-![Screenshot 2020-09-25 at 23 36 25](https://user-images.githubusercontent.com/54359396/94318053-f2f48380-ff87-11ea-9e70-ebd84a3cedb0.png)
 
 
 ## Configuration
