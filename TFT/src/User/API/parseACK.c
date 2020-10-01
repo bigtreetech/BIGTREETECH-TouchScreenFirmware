@@ -550,18 +550,18 @@ void parseACK(void)
                           setParameter(P_HYBRID_THRESHOLD, E2_STEPPER, ack_value());
                           setDualStepperStatus(E_STEPPER, true);
       }
-    // Parse and store ABL type
-      else if(ack_seen("echo:; Auto Bed Leveling")){
-        if(ENABLE_BL_VALUE==1)                             // if Auto-detect
-          infoMachineSettings.blType = BL_ABL;
+    // Parse and store ABL type if auto-detect is enabled
+      else if (ack_seen("Auto Bed Leveling") && ENABLE_BL_VALUE == 1)
+      {
+        infoMachineSettings.blType = BL_ABL;
       }
-      else if(ack_seen("echo:; Unified Bed Leveling")){
-        if(ENABLE_BL_VALUE==1)                             // if Auto-detect
-          infoMachineSettings.blType = BL_UBL;
+      else if (ack_seen("Unified Bed Leveling") && ENABLE_BL_VALUE == 1)
+      {
+        infoMachineSettings.blType = BL_UBL;
       }
-      else if(ack_seen("echo:; Mesh Bed Leveling")){
-        if(ENABLE_BL_VALUE==1)                             // if Auto-detect
-          infoMachineSettings.blType = BL_MBL;
+      else if (ack_seen("Mesh Bed Leveling") && ENABLE_BL_VALUE == 1)
+      {
+        infoMachineSettings.blType = BL_MBL;
       }
     // Parse and store ABL on/off state & Z fade value on M503
       else if(ack_seen("M420 S")) {
