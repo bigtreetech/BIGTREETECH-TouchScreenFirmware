@@ -134,7 +134,7 @@ bool powerOffGetData(void)
 
   for(uint8_t i = 0; i < infoSettings.fan_count; i++)
   {
-    if(infoBreakPoint.fan[i] != 0 && fanIsType(i,FAN_TYPE_F)) 
+    if(infoBreakPoint.fan[i] != 0 && fanIsType(i,FAN_TYPE_F))
     {
       mustStoreCacheCmd("%s S%d\n", fanCmd[i], infoBreakPoint.fan[i]);
     }
@@ -190,7 +190,8 @@ void menuPowerOff(void)
   u16 key_num = IDLE_TOUCH;
   clearPowerFailed();
   GUI_Clear(infoSettings.bg_color);
-  GUI_DispString((LCD_WIDTH - GUI_StrPixelWidth(textSelect(LABEL_LOADING)))/2, LCD_HEIGHT/2 - BYTE_HEIGHT, textSelect(LABEL_LOADING));
+
+  GUI_DispString((LCD_WIDTH - GUI_StrPixelWidth(LABEL_LOADING))/2, LCD_HEIGHT/2 - BYTE_HEIGHT, LABEL_LOADING);
 
   if(mountFS()==true && powerFailedExist())
   {

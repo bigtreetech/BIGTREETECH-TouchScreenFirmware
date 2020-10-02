@@ -327,6 +327,8 @@ void scanUpdates(void)
     }
     if (getConfigFromFile())
       cur_flash_sign[config_sign] = CONFIG_CHECK_SIGN;
+    if (getLangFromFile())
+      cur_flash_sign[lang_sign] = LANGUAGE_CHECK_SIGN;
     scanRenameUpdate();
     scanResetDir();
 

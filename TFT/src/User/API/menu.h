@@ -55,9 +55,12 @@ typedef enum
 
 typedef union
 {
-  uint32_t index;    // language index, address = textSelect(index);
+  int32_t index;    // language index, address = textSelect(index);
   void *address;
 }LABEL;
+
+//always initialize label to default values
+#define init_label(X) LABEL X = {.index = LABEL_BACKGROUND, .address = NULL}
 
 typedef struct
 {

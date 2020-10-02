@@ -380,7 +380,7 @@ void ListItem_Display(const GUI_RECT* rect, uint8_t position, const LISTITEM * c
       {
         GUI_SetBkColor(infoSettings.list_button_color);
         GUI_ClearPrect(rect);
-        GUI_DispStringInPrect(rect, textSelect(curitem->titlelabel.index));
+        GUI_DispStringInPrect(rect, curitem->titlelabel.index);
       }
       if (pressed != false)
       {
@@ -532,7 +532,7 @@ void ListItem_DisplayCustomValue(const GUI_RECT* rect,LABEL value,int i)
   }
   else //show regular text labels
   {
-    GUI_DispStringInPrect(&rectVal, textSelect(value.index));
+    GUI_DispStringInPrect(&rectVal, (int32_t)value.index);
   }
 
   GUI_RestoreColorDefault();

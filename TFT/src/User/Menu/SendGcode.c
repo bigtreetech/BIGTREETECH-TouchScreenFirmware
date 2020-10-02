@@ -202,6 +202,7 @@ void sendGcodeTerminalCache(char *stream, TERMINAL_SRC src)
 #define CURSOR_END_X   LCD_WIDTH
 #define CURSOR_START_Y TITLE_END_Y
 #define CURSOR_END_Y   LCD_HEIGHT
+
 void menuTerminal(void)
 {
   const GUI_RECT terminalRect = {0, 0, LCD_WIDTH, LCD_HEIGHT};

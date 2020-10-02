@@ -112,7 +112,7 @@
  * Select the language to display on the LCD while in Touch Mode.
  * Options: ARMENIAN, CHINESE, CZECH, DUTCH, ENGLISH, FRENCH, GERMAN, HUNGARIAN, ITALIAN, JAPANESE, POLISH, PORTUGUESE, RUSSIAN, SLOVAK, SPAIN, CATALAN
  */
-#define DEFAULT_LANGUAGE ENGLISH
+#define DEFAULT_LANGUAGE LANG_DEFAULT
 
 /**
  * Show bootscreen when starting up
@@ -187,8 +187,8 @@
 
 /**
  * Fan control
- * 
- * Fan type Options: 
+ *
+ * Fan type Options:
  *               0: FAN_TYPE_F       - default cooling fan speed (Check Marlin GCode M106)
  *               1: FAN_TYPE_CTRL_S  - Controller fan speed for stepper or hot bed ON (Check Marlin GCode M710)
  *               2: FAN_TYPE_CTRL_I  - Controller fan idle speed  (Check Marlin gcode - M710)

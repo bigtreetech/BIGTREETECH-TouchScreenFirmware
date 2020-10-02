@@ -238,11 +238,13 @@ void hostActionCommands(void)
         break;
       case 1:
         BUZZER_PLAY(sound_notify);
-        showDialog(DIALOG_TYPE_ALERT, (u8*)"Action command", (u8 *)hostAction.prompt_begin, (u8 *)hostAction.prompt_button1, NULL, breakAndContinue, NULL, NULL);
+        setDialogText((u8*)"Action command", (u8 *)hostAction.prompt_begin, (u8 *)hostAction.prompt_button1, LABEL_BACKGROUND);
+        showDialog(DIALOG_TYPE_ALERT,  breakAndContinue, NULL, NULL);
         break;
       case 2:
         BUZZER_PLAY(sound_notify);
-        showDialog(DIALOG_TYPE_ALERT, (u8*)"Action command", (u8 *)hostAction.prompt_begin, (u8 *)hostAction.prompt_button1, (u8 *)hostAction.prompt_button2, resumeAndPurge, resumeAndContinue, NULL);
+        setDialogText((u8*)"Action command", (u8 *)hostAction.prompt_begin, (u8 *)hostAction.prompt_button1, (u8 *)hostAction.prompt_button2);
+        showDialog(DIALOG_TYPE_ALERT, resumeAndPurge, resumeAndContinue, NULL);
         break;
     }
   }
@@ -718,8 +720,8 @@ void parseACK(void)
     // Parse pause message
       else if(!infoMachineSettings.promptSupport && ack_seen("paused for user"))
       {
-        showDialog(DIALOG_TYPE_QUESTION, (u8*)"Printer is Paused",(u8*)"Paused for user\ncontinue?",
-                   textSelect(LABEL_CONFIRM), NULL, breakAndContinue, NULL,NULL);
+        setDialogText((u8*)"Printer is Paused",(u8*)"Paused for user\ncontinue?", LABEL_CONFIRM, LABEL_BACKGROUND);
+        showDialog(DIALOG_TYPE_QUESTION, breakAndContinue, NULL,NULL);
       }
     // Parse ABL Complete message
       else if(ack_seen("ABL Complete"))

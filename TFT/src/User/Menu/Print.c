@@ -308,8 +308,8 @@ void menuPrintFromSource(void)
             char temp_info[FILE_NUM + 50];
             sprintf(temp_info, (char *)textSelect(LABEL_START_PRINT), infoFile.file[key_num + start - infoFile.F_num]);
             //confirm file selction
-            showDialog(DIALOG_TYPE_QUESTION, textSelect(LABEL_PRINT), (u8*)temp_info,
-                        textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), startPrint, ExitDir, NULL);
+            setDialogText( LABEL_PRINT, (u8*)temp_info, LABEL_CONFIRM, LABEL_CANCEL);
+            showDialog(DIALOG_TYPE_QUESTION, startPrint, ExitDir, NULL);
           }
         }
 

@@ -302,7 +302,7 @@ void reminderMessage(int16_t inf, SYS_STATUS status)
   reminder.inf = inf;
   GUI_SetColor(infoSettings.reminder_color);
   GUI_SetBkColor(infoSettings.title_bg_color);
-  GUI_DispStringInPrect(&reminder.rect, textSelect(reminder.inf));
+  GUI_DispStringInPrect(&reminder.rect, (int32_t)reminder.inf);
   GUI_RestoreColorDefault();
   reminder.status = status;
   reminder.time = OS_GetTimeMs() + 2000; // 2 seconds
@@ -317,7 +317,7 @@ void volumeReminderMessage(int16_t inf, SYS_STATUS status)
   volumeReminder.inf = inf;
   GUI_SetColor(infoSettings.sd_reminder_color);
   GUI_SetBkColor(infoSettings.title_bg_color);
-  GUI_DispStringInPrect(&volumeReminder.rect, textSelect(volumeReminder.inf));
+  GUI_DispStringInPrect(&volumeReminder.rect, volumeReminder.inf);
   volumeReminder.status = status;
   volumeReminder.time = OS_GetTimeMs() + 2000;
   GUI_RestoreColorDefault();
@@ -440,7 +440,7 @@ void menuDrawTitle(const uint8_t *content) //(const MENUITEMS * menuItems)
   if(reminder.status == STATUS_IDLE) return;
   GUI_SetColor(infoSettings.reminder_color);
   GUI_SetBkColor(infoSettings.title_bg_color);
-  GUI_DispStringInPrect(&reminder.rect, textSelect(reminder.inf));
+  GUI_DispStringInPrect(&reminder.rect, reminder.inf);
   GUI_RestoreColorDefault();
 }
 
@@ -449,6 +449,7 @@ void menuReDrawCurTitle(void)
   if (menuType == MENU_TYPE_LISTVIEW)
   {
     if(curListItems == NULL) return;
+    if(curListItems->title.index < LABEL_BACKGROUND)
     menuDrawTitle(labelGetAddress(&curListItems->title));
   }
   else if(menuType == MENU_TYPE_ICON)

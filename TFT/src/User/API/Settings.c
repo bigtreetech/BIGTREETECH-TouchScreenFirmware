@@ -235,7 +235,7 @@ void checkflashSign(void)
 
   W25Qxx_ReadBuffer((uint8_t*)&cur_flash_sign, addr, len);
 
-  cur_flash_sign[lang_sign] = flash_sign[lang_sign]; // ignore language signature not implemented yet
+  //cur_flash_sign[lang_sign] = flash_sign[lang_sign]; // ignore language signature not implemented yet
 
   int status = memcmp(flash_sign, cur_flash_sign, len);
   if (status != 0)
@@ -255,13 +255,12 @@ void checkflashSign(void)
       GUI_DispString(10, ypos, (uint8_t *)"Config: OK");
     else
       GUI_DispString(10, ypos, (uint8_t *)"Config: Update required");
-    /*
+
     ypos += BYTE_HEIGHT;
     if (cur_flash_sign[lang_sign] == flash_sign[lang_sign])
       GUI_DispString(10, ypos, (uint8_t *)"Language: OK");
     else
       GUI_DispString(10, ypos, (uint8_t *)"Language: Update required");
-    */
 
     ypos += BYTE_HEIGHT;
     if (cur_flash_sign[icon_sign] == flash_sign[icon_sign])
@@ -272,6 +271,11 @@ void checkflashSign(void)
     ypos += BYTE_HEIGHT;
     GUI_DispStringInRectEOL(10, ypos + 10, LCD_WIDTH, LCD_HEIGHT, (uint8_t *)"Insert the SD card with the required\n"
                                                                              "files and press the reset button\nto update.");
+    ypos += BYTE_HEIGHT;
+      GUI_DispString(10, ypos, (uint8_t *)lang_key_list[1]);
+    ypos += BYTE_HEIGHT;
+      GUI_DispString(10, ypos, (uint8_t *)lang_key_list[2]);
+
     while (1);
   }
 

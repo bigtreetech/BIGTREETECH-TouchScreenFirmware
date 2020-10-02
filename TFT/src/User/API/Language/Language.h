@@ -8,33 +8,17 @@ extern "C" {
 #include <stdbool.h>
 #include "variants.h"
 
+#define MAX_LANG_LABEL_LENGTH W25QXX_SPI_PAGESIZE
+
+
 enum
 {
-  ENGLISH = 0,
-  CHINESE,
-  RUSSIAN,
-  JAPANESE,
-  ARMENIAN,
-  GERMAN,
-  CZECH,
-  SPAIN,
-  FRENCH,
-  PORTUGUESE,
-  ITALIAN,
-  POLISH,
-  SLOVAK,
-  DUTCH,
-  HUNGARIAN,
-  TURKISH,
-  GREEK,
-  SLOVENIAN,
-  CATALAN,
-  TRAD_CHINESE,
-  
+  LANG_DEFAULT = 0,
+  LANG_FLASH,
   LANGUAGE_NUM,
 };
 
-enum {
+enum LABEL_INDEX{
 #define X_WORD(NAME) LABEL_##NAME ,
 #include "Language.inc"
 #undef  X_WORD
@@ -47,7 +31,19 @@ enum {
   LABEL_CUSTOM_VALUE,
 };
 
+extern const char *const lang_key_list[LABEL_NUM];
+
+//use only once in any function call. Calling multiple times will overwrite previous text.
 uint8_t * textSelect(uint16_t sel);
+
+//get the address of the label in SPI flash
+uint32_t getLabelFlashAddr(uint16_t index);
+
+//load selected label text into buffer form spi flash
+bool loadLabelText(uint8_t * buf, uint16_t index);
+
+//initialize and preload label text
+#define labelChar(x, i)  char x[MAX_LANG_LABEL_LENGTH]; loadLabelText((u8*)&x, i);
 
 #ifdef __cplusplus
 }

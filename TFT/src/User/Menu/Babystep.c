@@ -39,7 +39,7 @@ void babyReDraw(bool skip_header)
 {
   if (!skip_header)
   {
-    GUI_DispString(exhibitRect.x0, exhibitRect.y0, textSelect(LABEL_BABYSTEP));
+    GUI_DispString(exhibitRect.x0, exhibitRect.y0, LABEL_BABYSTEP);
     GUI_DispString(exhibitRect.x0, exhibitRect.y0 + BYTE_HEIGHT + LARGE_BYTE_HEIGHT, textSelect(LABEL_Z_OFFSET));
   }
 
@@ -126,9 +126,8 @@ void menuBabystep(void)
         if (infoMachineSettings.EEPROM == 1)
         {
           probeOffsetSetValue(orig_z_offset + babystep);   // apply Z offset
-
-          showDialog(DIALOG_TYPE_QUESTION, textSelect(babyStepItems.title.index), textSelect(LABEL_EEPROM_SAVE_INFO),
-            textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), saveEepromSettings, NULL, NULL);
+          setDialogText(babyStepItems.title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
+          showDialog(DIALOG_TYPE_QUESTION, saveEepromSettings, NULL, NULL);
         }
         break;
 
