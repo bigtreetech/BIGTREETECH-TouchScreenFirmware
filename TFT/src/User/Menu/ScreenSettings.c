@@ -16,76 +16,6 @@
   #define LCD12864_FN_INDEX (LCD12864_BG_INDEX+1)
 #endif
 
-
-void menuLanguage(void)
-{
-  #define LANGUAGE_PAGE_COUNT  (LANGUAGE_NUM + LISTITEM_PER_PAGE - 1) / LISTITEM_PER_PAGE
-  LABEL title = {LABEL_LANGUAGE};
-  LISTITEM totalItems[LANGUAGE_NUM];
-  KEY_VALUES key_num = KEY_IDLE;
-  SETTINGS now = infoSettings;
-
-  // fill language items
-  uint8_t tmp_language = infoSettings.language;
-  for(uint8_t i = 0; i < COUNT(totalItems); i++) {
-    if (i == tmp_language) {
-      totalItems[i].icon = ICONCHAR_CHECKED;
-    } else {
-      totalItems[i].icon = ICONCHAR_UNCHECKED;
-    }
-    infoSettings.language = i;
-    totalItems[i].itemType = LIST_LABEL;
-    totalItems[i].titlelabel.address = textSelect(LABEL_LANGUAGE);
-  }
-  infoSettings.language = tmp_language;
-
-  listWidgetCreate(title, totalItems, COUNT(totalItems), infoSettings.language / LISTITEM_PER_PAGE);
-
-  while (infoMenu.menu[infoMenu.cur] == menuLanguage)
-  {
-    key_num = menuKeyGetValue();
-    switch (key_num)
-    {
-    case KEY_ICON_5:
-      listWidgetPreviousPage();
-      break;
-
-    case KEY_ICON_6:
-      listWidgetNextPage();
-      break;
-
-    case KEY_ICON_7:
-      infoMenu.cur--;
-      break;
-
-    default:
-      if(key_num < LISTITEM_PER_PAGE){
-        uint16_t cur_item = infoSettings.language;
-        uint16_t tmp_i = listWidgetGetCurPage() * LISTITEM_PER_PAGE + key_num;
-        if (tmp_i != cur_item) { // has changed
-          totalItems[cur_item].icon = ICONCHAR_UNCHECKED;
-          listWidgetRefreshItem(cur_item); // refresh unchecked status
-          cur_item = tmp_i;
-          totalItems[cur_item].icon = ICONCHAR_CHECKED;
-          listWidgetRefreshItem(cur_item); // refresh checked status
-
-          infoSettings.language = cur_item;
-          menuDrawTitle(textSelect(LABEL_LANGUAGE));
-        }
-      }
-      break;
-    }
-
-    loopProcess();
-  }
-
-  if(memcmp(&now, &infoSettings, sizeof(SETTINGS)))
-  {
-    statusScreen_setReady(); // restore msg buffer when language is changed
-    storePara();
-  }
-}
-
 #ifdef ST7920_SPI
 const LABEL lcd_colors_names[LCD_COLOR_COUNT] =
 {
@@ -313,7 +243,7 @@ void menuScreenSettings(void)
   // icon                       label
    {{ICON_ROTATE_UI,            LABEL_ROTATE_UI},
     {ICON_TOUCHSCREEN_ADJUST,   LABEL_TOUCHSCREEN_ADJUST},
-    {ICON_LANGUAGE,             LABEL_LANGUAGE},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
@@ -374,10 +304,6 @@ void menuScreenSettings(void)
       case KEY_ICON_1:
         TSC_Calibration();
         menuDrawPage(&screenSettingsItems);
-        break;
-
-      case KEY_ICON_2:
-        infoMenu.menu[++infoMenu.cur] = menuLanguage;
         break;
 
       #ifdef BUZZER_PIN

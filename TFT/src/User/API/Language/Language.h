@@ -4,9 +4,9 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 #include <stdbool.h>
 #include "variants.h"
+#include "SetLanguage.h"
 
 enum
 {

@@ -1,6 +1,15 @@
 #ifndef _CONFIGURATION_H_
 #define _CONFIGURATION_H_
 #define CONFIG_VERSION 20200810
+
+/**
+ * Default Touch Mode Language
+ do not change it is set in SetLanguage.h
+ */
+#define DEFAULT_LANGUAGE
+
+#include "SetLanguage.h"
+
 //===========================================================================
 //============================= General Settings ============================
 //===========================================================================
@@ -106,13 +115,6 @@
  * :[2400, 9600, 19200, 38400, 57600, 115200, 250000, 500000, 1000000]
  */
 #define BAUDRATE 115200
-
-/**
- * Default Touch Mode Language
- * Select the language to display on the LCD while in Touch Mode.
- * Options: ARMENIAN, CHINESE, CZECH, DUTCH, ENGLISH, FRENCH, GERMAN, HUNGARIAN, ITALIAN, JAPANESE, POLISH, PORTUGUESE, RUSSIAN, SLOVAK, SPAIN, CATALAN
- */
-#define DEFAULT_LANGUAGE ENGLISH
 
 /**
  * Show bootscreen when starting up
