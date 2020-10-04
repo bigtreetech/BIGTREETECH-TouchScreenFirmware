@@ -45,6 +45,9 @@ uint32_t getLabelFlashAddr(uint16_t index)
 bool loadLabelText(uint8_t* buf, uint16_t index)
 {
   if(index >= LABEL_BACKGROUND) return false;
-  W25Qxx_ReadBuffer(buf, getLabelFlashAddr(index), MAX_LANG_LABEL_LENGTH);
+  if(infoSettings.language == LANG_FLASH)
+    W25Qxx_ReadBuffer(buf, getLabelFlashAddr(index), MAX_LANG_LABEL_LENGTH);
+  else
+    strcpy((char*)buf, (char*)textSelect(index));
   return true;
 }

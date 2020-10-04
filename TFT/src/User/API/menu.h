@@ -88,7 +88,7 @@ typedef struct
   GUI_RECT rect;
   uint32_t time;
   uint8_t status;
-  int16_t inf;
+  uint16_t inf;
 }REMINDER;
 
 typedef enum

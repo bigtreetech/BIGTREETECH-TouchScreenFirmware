@@ -302,7 +302,7 @@ void reminderMessage(int16_t inf, SYS_STATUS status)
   reminder.inf = inf;
   GUI_SetColor(infoSettings.reminder_color);
   GUI_SetBkColor(infoSettings.title_bg_color);
-  GUI_DispStringInPrect(&reminder.rect, (int32_t)reminder.inf);
+  GUI_DispStringInPrect(&reminder.rect, reminder.inf);
   GUI_RestoreColorDefault();
   reminder.status = status;
   reminder.time = OS_GetTimeMs() + 2000; // 2 seconds

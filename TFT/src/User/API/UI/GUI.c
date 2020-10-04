@@ -767,7 +767,7 @@ void GUI_DispFloat(int16_t x, int16_t y, float num, uint8_t llen, uint8_t rlen, 
 
 void _GUI_DispLabel(int16_t x, int16_t y, uint16_t index)
 {
-  char tempstr[MAX_LANG_LABEL_LENGTH];
+  uint8_t tempstr[MAX_LANG_LABEL_LENGTH];
   if (loadLabelText((uint8_t*)&tempstr, index) == false) return;
   Serial_Puts(SERIAL_PORT, (char*)tempstr);
   _GUI_DispString(x, y, tempstr);
