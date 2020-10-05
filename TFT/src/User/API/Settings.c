@@ -33,6 +33,8 @@ void infoSettingsReset(void)
   infoSettings.status_xyz_bg_color  = lcd_colors[STATUS_XYZ_BG_COLOR];
   infoSettings.list_border_color    = lcd_colors[LISTVIEW_BORDER_COLOR];
   infoSettings.list_button_color    = lcd_colors[LISTVIEW_ICON_COLOR];
+  infoSettings.mesh_min_color       = lcd_colors[MESH_MIN_COLOR];
+  infoSettings.mesh_max_color       = lcd_colors[MESH_MAX_COLOR];
 
   infoSettings.touchSound           = ENABLED;
   infoSettings.toastSound           = ENABLED;
@@ -157,6 +159,7 @@ void initMachineSetting(void){
   infoMachineSettings.onboard_sd_support      = ENABLED;
   infoMachineSettings.autoReportSDStatus      = DISABLED;
   infoMachineSettings.blType                  = BL_UNKNOWN;
+  infoMachineSettings.softwareEndstops        = ENABLED;
 }
 
 void setupMachine(void)

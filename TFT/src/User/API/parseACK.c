@@ -31,7 +31,6 @@ const ECHO knownEcho[] = {
   {ECHO_NOTIFY_NONE, "Cap:"},                   //M115
   {ECHO_NOTIFY_NONE, "Config:"},                //M360
   {ECHO_NOTIFY_TOAST, "Settings Stored"},       //M500
-  {ECHO_NOTIFY_TOAST, "echo:Soft endstops"},    //M211
   {ECHO_NOTIFY_TOAST, "echo:Bed"},              //M420
   {ECHO_NOTIFY_TOAST, "echo:Fade"},             //M420
   {ECHO_NOTIFY_TOAST, "echo:Active Extruder"},  //Tool Change
@@ -95,7 +94,6 @@ static float ack_second_value()
 
 void ackPopupInfo(const char *info)
 {
-
   bool show_dialog = true;
   if (infoMenu.menu[infoMenu.cur] == menuTerminal ||
       (infoMenu.menu[infoMenu.cur] == menuStatus && info == echomagic))
@@ -129,7 +127,6 @@ void ackPopupInfo(const char *info)
     addNotification(DIALOG_TYPE_ERROR, (char *)info, (char *)dmaL2Cache + ack_index, show_dialog);
   }
 }
-
 
 void setIgnoreEcho(ECHO_ID msgId, bool state)
 {
@@ -279,6 +276,7 @@ void parseACK(void)
       storeCmd("M92\n"); // Steps/mm of extruder is an important parameter for Smart filament runout
                          // Avoid can't getting this parameter due to disabled M503 in Marlin
       storeCmd("M115\n");
+      storeCmd("M211\n");    // retrieve the software endstops status
     }
 
     // Onboard sd Gcode command response
@@ -486,6 +484,18 @@ void parseACK(void)
     //parse and store auto FW retract state (M209 - Set Auto Retract)
       else if(ack_seen("M209 S")){
                           setParameter(P_AUTO_RETRACT, 0, ack_value());
+      }
+    //parse and store the software endstops status
+      else if(ack_seen("Soft endstops")){
+        uint8_t curValue = infoMachineSettings.softwareEndstops;
+
+        if (ack_seen("ON"))
+          infoMachineSettings.softwareEndstops = ENABLED;
+        else
+          infoMachineSettings.softwareEndstops = DISABLED;
+
+        if (curValue != infoMachineSettings.softwareEndstops)        // send a notification only if status is changed
+          addToast(DIALOG_TYPE_INFO, dmaL2Cache);
       }
     //parse and store Offset 2nd Nozzle
       else if(ack_seen("M218 T1 X")){
@@ -737,6 +747,20 @@ void parseACK(void)
       else if(ack_seen("Mesh probing done"))
       {
         mblUpdateStatus(true);
+      }
+    // Parse Mesh data
+      else if(meshIsWaitingFirstData() && (
+        ack_seen("Mesh Bed Level data:") ||                // MBL
+        ack_seen("Bed Topography Report for CSV:") ||      // UBL
+        ack_seen("Bilinear Leveling Grid:") ||             // ABL Bilinear
+        ack_seen("Bed Level Correction Matrix:") ||        // ABL Linear or 3-Point
+        ack_seen("Invalid mesh")))                         // error echo
+      {
+        meshUpdateData(dmaL2Cache);                        // start data updating
+      }
+      else if(meshIsWaitingData())
+      {
+        meshUpdateData(dmaL2Cache);                        // continue data updating
       }
     // Parse PID Autotune finished message
       else if(ack_seen("PID Autotune finished"))

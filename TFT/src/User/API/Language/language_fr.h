@@ -272,5 +272,7 @@
     #define FR_OFFSET_TOOL            "Offset 2ème Buse"
     #define FR_HYBRID_THRESHOLD       "Seuil Hybride TMC"
     #define FR_NOTIFICATIONS          "Notifications"
+    #define FR_MESH_EDITOR            "Mesh edit"
+    #define FR_MESH_TUNER             "Mesh Tuner"
 
 #endif

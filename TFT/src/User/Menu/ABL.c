@@ -1,36 +1,36 @@
 #include "ABL.h"
 #include "includes.h"
 
-static uint8_t slot;
-static bool _isSaving = true;
-static bool slotSaved = false;
+static uint8_t ublSlot;
+static bool ublIsSaving = true;
+static bool ublSlotSaved = false;
 
+/* called by parseAck() to notify ABL process status */
 void ablUpdateStatus(bool succeeded)
 {
   char tmpTitle[120], tmpBuf[120];
-  bool savingEnabled = false;
+  bool savingEnabled = true;
 
   switch (infoMachineSettings.blType)
   {
     case BL_BBL:
       sprintf(tmpTitle, "%s", textSelect(LABEL_ABL_SETTINGS_BBL));
       sprintf(tmpBuf, "%s", textSelect(LABEL_BL_COMPLETE));
-      savingEnabled = true;
       break;
 
     case BL_UBL:
       sprintf(tmpTitle, "%s", textSelect(LABEL_ABL_SETTINGS_UBL));
       sprintf(tmpBuf, "%s\n %s", textSelect(LABEL_BL_COMPLETE), textSelect(LABEL_BL_SMART_FILL));
+      savingEnabled = false;
       break;
 
     default:
       sprintf(tmpTitle, "%s", textSelect(LABEL_ABL_SETTINGS));
       sprintf(tmpBuf, "%s", textSelect(LABEL_BL_COMPLETE));
-      savingEnabled = true;
       break;
   }
 
-  if (succeeded)                       // if bed leveling process successfully terminated, allow to save to EEPROM
+  if (succeeded)                                           // if bed leveling process successfully terminated, allow to save to EEPROM
   {
     BUZZER_PLAY(sound_success);
 
@@ -38,32 +38,32 @@ void ablUpdateStatus(bool succeeded)
     {
       sprintf(tmpBuf, "%s\n %s", tmpBuf, textSelect(LABEL_EEPROM_SAVE_INFO));
 
-      showDialog(DIALOG_TYPE_SUCCESS, (u8*) tmpTitle, (u8*) tmpBuf,
+      showDialog(DIALOG_TYPE_SUCCESS, (u8 *) tmpTitle, (u8 *) tmpBuf,
         textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), saveEepromSettings, NULL, NULL);
     }
     else
     {
-      popupReminder(DIALOG_TYPE_SUCCESS, (u8*) tmpTitle, (u8*) tmpBuf);
+      popupReminder(DIALOG_TYPE_SUCCESS, (u8 *) tmpTitle, (u8 *) tmpBuf);
     }
   }
-  else                                 // if if bed leveling process failed, provide an error dialog
+  else                                                     // if bed leveling process failed, provide an error dialog
   {
     BUZZER_PLAY(sound_error);
 
-    popupReminder(DIALOG_TYPE_ERROR, (u8*) tmpTitle, textSelect(LABEL_PROCESS_ABORTED));
+    popupReminder(DIALOG_TYPE_ERROR, (u8 *) tmpTitle, textSelect(LABEL_PROCESS_ABORTED));
   }
 }
 
 void ublSaveloadConfirm(void)
 {
-  if (!_isSaving)
+  if (!ublIsSaving)
   {
-    storeCmd("G29 L%d\n", slot);
+    storeCmd("G29 L%d\n", ublSlot);
   }
   else
   {
-    storeCmd("G29 S%d\n", slot);
-    slotSaved = true;
+    storeCmd("G29 S%d\n", ublSlot);
+    ublSlotSaved = true;
   }
 }
 
@@ -85,7 +85,7 @@ void menuUBLSaveLoad(void)
 
   KEY_VALUES key_num = KEY_IDLE;
 
-  if (!_isSaving)
+  if (!ublIsSaving)
   {
     UBLSaveLoadItems.title.index = LABEL_ABL_SETTINGS_UBL_LOAD;
     for (int i = 0; i < 4; i++)
@@ -105,23 +105,23 @@ void menuUBLSaveLoad(void)
       case KEY_ICON_1:
       case KEY_ICON_2:
       case KEY_ICON_3:
-        slot = key_num;
+        ublSlot = key_num;
 
         showDialog(DIALOG_TYPE_QUESTION, textSelect(UBLSaveLoadItems.title.index), textSelect(LABEL_CONFIRMATION),
           textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), ublSaveloadConfirm, NULL, NULL);
         break;
 
       case KEY_ICON_7:
-        if (slotSaved == true && infoMachineSettings.EEPROM == 1)
+        if (ublSlotSaved == true && infoMachineSettings.EEPROM == 1)
         {
-          slotSaved = false;
+          ublSlotSaved = false;
 
           showDialog(DIALOG_TYPE_QUESTION, textSelect(LABEL_ABL_SETTINGS_UBL), textSelect(LABEL_ABL_SLOT_EEPROM ),
             textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), saveEepromSettings, NULL, NULL);
         }
         else
         {
-          slotSaved = false;
+          ublSlotSaved = false;
 
           infoMenu.cur--;
         }
@@ -135,9 +135,15 @@ void menuUBLSaveLoad(void)
   }
 }
 
-void ublSaveLoad(bool isSaving)
+void menuUBLSave(void)
 {
-  _isSaving = isSaving;
+  ublIsSaving = true;
+  infoMenu.menu[++infoMenu.cur] = menuUBLSaveLoad;
+}
+
+void menuUBLLoad(void)
+{
+  ublIsSaving = false;
   infoMenu.menu[++infoMenu.cur] = menuUBLSaveLoad;
 }
 
@@ -209,12 +215,12 @@ void menuABL(void)
 
       case KEY_ICON_1:
         if (infoMachineSettings.blType == BL_UBL)
-          ublSaveLoad(true);
+          menuUBLSave();
         break;
 
       case KEY_ICON_2:
         if (infoMachineSettings.blType == BL_UBL)
-          ublSaveLoad(false);
+          menuUBLLoad();
         break;
 
       case KEY_ICON_4:

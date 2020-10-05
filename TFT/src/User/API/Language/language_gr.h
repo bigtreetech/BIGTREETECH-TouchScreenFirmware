@@ -272,5 +272,7 @@
     #define GR_OFFSET_TOOL            "Offset 2nd Nozzle"
     #define GR_HYBRID_THRESHOLD       "TMC HybridThreshold"
     #define GR_NOTIFICATIONS          "Notifications"
+    #define GR_MESH_EDITOR            "Mesh edit"
+    #define GR_MESH_TUNER             "Mesh Tuner"
 
 #endif

@@ -272,5 +272,7 @@
     #define CA_OFFSET_TOOL            "Offset 2nd Nozzle"
     #define CA_HYBRID_THRESHOLD       "TMC HybridThreshold"
     #define CA_NOTIFICATIONS          "Notifications"
+    #define CA_MESH_EDITOR            "Mesh edit"
+    #define CA_MESH_TUNER             "Mesh Tuner"
 
 #endif

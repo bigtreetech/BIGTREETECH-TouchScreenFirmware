@@ -5,6 +5,8 @@
 extern "C" {
 #endif
 
+#include <stdint.h>
+
 /* Reset only babystep value to default value */
 float babystepReset(void);
 
@@ -21,7 +23,7 @@ float babystepDecreaseValue(float unit);
 float babystepIncreaseValue(float unit);
 
 // Update babystep value by encoder
-float babystepUpdateValueByEncoder(float unit);
+float babystepUpdateValueByEncoder(float unit, int8_t direction);
 
 #ifdef __cplusplus
 }

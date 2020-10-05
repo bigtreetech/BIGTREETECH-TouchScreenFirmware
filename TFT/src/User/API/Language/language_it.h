@@ -272,5 +272,7 @@
     #define IT_OFFSET_TOOL            "Offset 2nd Nozzle"
     #define IT_HYBRID_THRESHOLD       "TMC HybridThreshold"
     #define IT_NOTIFICATIONS          "Notifications"
+    #define IT_MESH_EDITOR            "Mesh edit"
+    #define IT_MESH_TUNER             "Mesh Tuner"
 
 #endif

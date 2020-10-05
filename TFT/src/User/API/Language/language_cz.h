@@ -272,5 +272,7 @@
     #define CZ_OFFSET_TOOL            "Offset 2.trysky"
     #define CZ_HYBRID_THRESHOLD       "TMC Hybridní práh"
     #define CZ_NOTIFICATIONS          "Notifications"
+    #define CZ_MESH_EDITOR            "Mesh edit"
+    #define CZ_MESH_TUNER             "Mesh Tuner"
 
 #endif

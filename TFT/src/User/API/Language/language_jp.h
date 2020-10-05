@@ -272,5 +272,7 @@
     #define JP_OFFSET_TOOL            "Offset 2nd Nozzle"
     #define JP_HYBRID_THRESHOLD       "TMC HybridThreshold"
     #define JP_NOTIFICATIONS          "Notifications"
+    #define JP_MESH_EDITOR            "Mesh edit"
+    #define JP_MESH_TUNER             "Mesh Tuner"
 
 #endif

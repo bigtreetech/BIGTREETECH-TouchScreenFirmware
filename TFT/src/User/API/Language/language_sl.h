@@ -272,5 +272,7 @@
     #define SL_OFFSET_TOOL            "Offset 2nd Nozzle"
     #define SL_HYBRID_THRESHOLD       "TMC HybridThreshold"
     #define SL_NOTIFICATIONS          "Notifications"
+    #define SL_MESH_EDITOR            "Mesh edit"
+    #define SL_MESH_TUNER             "Mesh Tuner"
 
 #endif

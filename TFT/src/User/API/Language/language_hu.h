@@ -272,5 +272,7 @@
     #define HU_OFFSET_TOOL            "Második fej eltolása"
     #define HU_HYBRID_THRESHOLD       "TMC Hibrid Küszöbérték"
     #define HU_NOTIFICATIONS          "Értesítések"
+    #define HU_MESH_EDITOR            "Mesh edit"
+    #define HU_MESH_TUNER             "Mesh Tuner"
 
 #endif

@@ -272,5 +272,7 @@
     #define RU_OFFSET_TOOL            "Смещение 2-го сопла"
     #define RU_HYBRID_THRESHOLD       "TMC гибридный порог"
     #define RU_NOTIFICATIONS          "Уведомления"
+    #define RU_MESH_EDITOR            "Mesh edit"
+    #define RU_MESH_TUNER             "Mesh Tuner"
 
 #endif

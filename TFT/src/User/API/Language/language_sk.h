@@ -272,5 +272,7 @@
     #define SK_OFFSET_TOOL            "Offset 2nd Nozzle"
     #define SK_HYBRID_THRESHOLD       "TMC HybridThreshold"
     #define SK_NOTIFICATIONS          "Notifications"
+    #define SK_MESH_EDITOR            "Mesh edit"
+    #define SK_MESH_TUNER             "Mesh Tuner"
 
 #endif

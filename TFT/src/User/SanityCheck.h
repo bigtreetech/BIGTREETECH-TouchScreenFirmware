@@ -99,6 +99,45 @@
     #define QUICK_EEPROM_BUTTON 0
 #endif
 
+#ifdef MESH_GRID_MAX_POINTS_X
+  #if MESH_GRID_MAX_POINTS_X > 15
+    #error "MESH_GRID_MAX_POINTS_X cannot be greater than 15"
+  #endif
+
+  #if MESH_GRID_MAX_POINTS_X < 1
+    #error "MESH_GRID_MAX_POINTS_X cannot be less than 1"
+  #endif
+#endif
+#ifndef MESH_GRID_MAX_POINTS_X
+    #define MESH_GRID_MAX_POINTS_X 10
+#endif
+
+#ifdef MESH_GRID_MAX_POINTS_Y
+  #if MESH_GRID_MAX_POINTS_Y > 15
+    #error "MESH_GRID_MAX_POINTS_Y cannot be greater than 15"
+  #endif
+
+  #if MESH_GRID_MAX_POINTS_Y < 1
+    #error "MESH_GRID_MAX_POINTS_Y cannot be less than 1"
+  #endif
+#endif
+#ifndef MESH_GRID_MAX_POINTS_Y
+    #define MESH_GRID_MAX_POINTS_Y 10
+#endif
+
+#ifdef MESH_LEFT_KEYBOARD
+  #if MESH_LEFT_KEYBOARD > 1
+    #error "MESH_LEFT_KEYBOARD cannot be greater than 1"
+  #endif
+
+  #if MESH_LEFT_KEYBOARD < 0
+    #error "MESH_LEFT_KEYBOARD cannot be less than 0"
+  #endif
+#endif
+#ifndef MESH_LEFT_KEYBOARD
+    #define MESH_LEFT_KEYBOARD 1
+#endif
+
 #ifdef CANCEL_PRINT_GCODE
   #error "CANCEL_PRINT_GCODE is now PRINT_CANCEL_GCODE. Please update your Configuration.h file."
 #endif
