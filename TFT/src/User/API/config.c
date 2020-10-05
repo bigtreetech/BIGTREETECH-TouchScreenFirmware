@@ -7,7 +7,6 @@
 #define PRINTDEBUG(x)
 #endif
 
-
 const GUI_POINT pointConfigTitle     = {2,2};
 const GUI_RECT  rectTitleline         = {0,               BYTE_HEIGHT+4,      LCD_WIDTH,                BYTE_HEIGHT+6};
 const GUI_RECT  recterror             = {BYTE_WIDTH/2-2,  BYTE_HEIGHT*2+2,    LCD_WIDTH-BYTE_WIDTH/2+2, LCD_HEIGHT-(BYTE_HEIGHT*4)-4};
@@ -78,25 +77,24 @@ bool getConfigFromFile(void)
 
 bool getLangFromFile(void)
 {
+  bool success = false;
   if (f_file_exists(LANG_FILE_PATH) == false)
     return false;
   foundkeys = 0;
-
-  char cur_line_buffer[MAX_LANG_LABEL_LENGTH];
+  char cur_line_buffer[MAX_LANG_LABEL_LENGTH + 100];
   cur_line = cur_line_buffer;
 
   drawProgressPage((u8*)"Updating Language...");
 
-  int sectorCount = LANGUAGE_SIZE / W25QXX_SECTOR_SIZE;
   //erase part of flash to be rewritten
-  for (int i = 0; i < sectorCount; i++)
+  for (int i = 0; i < (LANGUAGE_SIZE / W25QXX_SECTOR_SIZE);i++)
   {
     W25Qxx_EraseSector(LANGUAGE_ADDR + (i * W25QXX_SECTOR_SIZE));
   }
-  if (readConfigFile(LANG_FILE_PATH, parseLangLine, MAX_LANG_LABEL_LENGTH))
-    return true;
-  else
-    return false;
+  success = readConfigFile(LANG_FILE_PATH, parseLangLine, MAX_LANG_LABEL_LENGTH + 100);
+  if (foundkeys != LABEL_NUM)
+    success = false;
+  return success;
 }
 
 bool readConfigFile(const char * path, void (*lineParser)(), uint16_t maxLineLen)
@@ -302,26 +300,23 @@ void parseConfigLine(void)
 //parse keywords from line read from language file
 void parseLangLine(void)
 {
-  for (u16 i = 0; i < LABEL_NUM; i++)
+  for (int i = 0; i < LABEL_NUM; i++)
   {
     if (key_seen(lang_key_list[i]))
     {
       PRINTDEBUG("\n");
       PRINTDEBUG((char *)lang_key_list[i]);
-      char pchr[MAX_LANG_LABEL_LENGTH];
-      strncpy(pchr, strrchr(cur_line, ':') + 1, MAX_LANG_LABEL_LENGTH);
-      int bytelen = strlen(pchr) + 1;
       uint32_t key_addr = LANGUAGE_ADDR + (MAX_LANG_LABEL_LENGTH * i);
+      u8 * pchr = (u8*)strchr(cur_line, ':') + 1;
+      int bytelen = strlen((char*)pchr);
 
       if (inLimit(bytelen, 1, MAX_LANG_LABEL_LENGTH))
       {
-        W25Qxx_WritePage((u8 *)&pchr, key_addr, MAX_LANG_LABEL_LENGTH);
-        GUI_ClearPrect(&recterrortxt);
-        GUI_DispString(recterrortxt.x0, recterrortxt.y0, (u8*)pchr);
-        char g[MAX_LANG_LABEL_LENGTH];
-        W25Qxx_ReadBuffer((u8*)&g,key_addr,MAX_LANG_LABEL_LENGTH);
-        GUI_DispStringInRect(recterrortxt.x0, recterrortxt.y0 + (BYTE_HEIGHT * 2), recterrortxt.x1, recterrortxt.y1, (u8*)g);
-        Delay_ms(1000);
+        W25Qxx_WritePage(pchr, key_addr, MAX_LANG_LABEL_LENGTH);
+        char check[MAX_LANG_LABEL_LENGTH];
+        W25Qxx_ReadBuffer((u8 *)&check, key_addr, MAX_LANG_LABEL_LENGTH);
+        if (strcmp(strchr(cur_line, ':') + 1, check) != 0)
+          showError(CSTAT_SPI_WRITE_FAIL);
       }
       else
       {

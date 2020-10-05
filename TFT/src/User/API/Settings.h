@@ -227,6 +227,7 @@ void infoSettingsReset(void);
 void setupMachine(void);
 float flashUsedPercentage(void);
 void checkflashSign(void);
+bool getFlashSignStatus(int index);
 
 #ifdef __cplusplus
 }

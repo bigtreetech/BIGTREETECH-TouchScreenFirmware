@@ -228,42 +228,42 @@ float flashUsedPercentage(void)
 // check font/icon/config signature in SPI flash for update
 void checkflashSign(void)
 {
-  uint32_t flash_sign[sign_count] = {FONT_CHECK_SIGN, CONFIG_CHECK_SIGN, LANGUAGE_CHECK_SIGN, ICON_CHECK_SIGN};
-  uint32_t cur_flash_sign[sign_count];
-  uint32_t addr = FLASH_SIGN_ADDR;
-  uint32_t len = sizeof(flash_sign);
-
-  W25Qxx_ReadBuffer((uint8_t*)&cur_flash_sign, addr, len);
-
   //cur_flash_sign[lang_sign] = flash_sign[lang_sign]; // ignore language signature not implemented yet
 
-  int status = memcmp(flash_sign, cur_flash_sign, len);
-  if (status != 0)
+  bool statusfont = getFlashSignStatus(font_sign);
+  bool statusconfig = getFlashSignStatus(config_sign);
+  bool statuslang = getFlashSignStatus(lang_sign);
+  bool statusicon = getFlashSignStatus(icon_sign);
+
+  if (!statuslang)
+    infoSettings.language = LANG_DEFAULT;
+
+  if (!statusfont || !statusicon || !statusconfig)
   {
     int ypos = BYTE_HEIGHT + 5;
     GUI_Clear(BLACK);
     GUI_DispString(5, 5, (uint8_t *)"Found outdated data:");
 
     ypos += BYTE_HEIGHT;
-    if (cur_flash_sign[font_sign] == flash_sign[font_sign])
+    if (!statusfont)
       GUI_DispString(10, ypos, (uint8_t *)"Fonts: OK");
     else
       GUI_DispString(10, ypos, (uint8_t *)"Fonts: Update required");
 
     ypos += BYTE_HEIGHT;
-    if (cur_flash_sign[config_sign] == flash_sign[config_sign])
+    if (!statusconfig)
       GUI_DispString(10, ypos, (uint8_t *)"Config: OK");
     else
       GUI_DispString(10, ypos, (uint8_t *)"Config: Update required");
 
     ypos += BYTE_HEIGHT;
-    if (cur_flash_sign[lang_sign] == flash_sign[lang_sign])
+    if (!statuslang)
       GUI_DispString(10, ypos, (uint8_t *)"Language: OK");
     else
-      GUI_DispString(10, ypos, (uint8_t *)"Language: Update required");
+      GUI_DispString(10, ypos, (uint8_t *)"Language: Update required(Optional)");
 
     ypos += BYTE_HEIGHT;
-    if (cur_flash_sign[icon_sign] == flash_sign[icon_sign])
+    if (!statusicon)
       GUI_DispString(10, ypos, (uint8_t *)"Icons: OK");
     else
       GUI_DispString(10, ypos, (uint8_t *)"Icons: Update required");
@@ -282,4 +282,13 @@ void checkflashSign(void)
 
 }
 
+bool getFlashSignStatus(int index)
+{
+  uint32_t flash_sign[sign_count] = {FONT_CHECK_SIGN, CONFIG_CHECK_SIGN, LANGUAGE_CHECK_SIGN, ICON_CHECK_SIGN};
+  uint32_t cur_flash_sign[sign_count];
+  uint32_t addr = FLASH_SIGN_ADDR;
+  uint32_t len = sizeof(flash_sign);
 
+  W25Qxx_ReadBuffer((uint8_t*)&cur_flash_sign, addr, len);
+  return (flash_sign[index] == cur_flash_sign[index]);
+}

@@ -18,7 +18,7 @@ enum
   LANGUAGE_NUM,
 };
 
-enum LABEL_INDEX{
+enum {
 #define X_WORD(NAME) LABEL_##NAME ,
 #include "Language.inc"
 #undef  X_WORD

@@ -493,17 +493,17 @@ void ListItem_DisplayToggle(uint16_t sx, uint16_t sy, uint8_t iconchar_state)
   //GUI_ClearPrect(&rect_item);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
   GUI_SetColor(infoSettings.list_border_color);
-  GUI_DispString(sx, sy, (uint8_t*)GET_ICONCHAR[ICONCHAR_TOGGLE_BODY]);
+  _GUI_DispString(sx, sy, (uint8_t*)GET_ICONCHAR[ICONCHAR_TOGGLE_BODY]);
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
   GUI_SetColor(ICON_COLOR[iconchar_state]);
   if (iconchar_state == ICONCHAR_TOGGLE_OFF)
   {
-    GUI_DispString(sx, sy, IconCharSelect(ICONCHAR_TOGGLE_SWITCH));
+    _GUI_DispString(sx, sy, IconCharSelect(ICONCHAR_TOGGLE_SWITCH));
   }
   else
   {
-    GUI_DispString(sx+BYTE_HEIGHT, sy, IconCharSelect(ICONCHAR_TOGGLE_SWITCH));
+    _GUI_DispString(sx+BYTE_HEIGHT, sy, IconCharSelect(ICONCHAR_TOGGLE_SWITCH));
   }
 
   GUI_RestoreColorDefault();

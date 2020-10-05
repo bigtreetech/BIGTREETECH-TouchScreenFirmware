@@ -6,7 +6,7 @@
 //
 // Add new Keywords in Language.inc file Only
 //
-char tempLabelString[MAX_LANG_LABEL_LENGTH];
+u8 tempLabelString[MAX_LANG_LABEL_LENGTH];
 
 const char *const en_pack[LABEL_NUM] = {
   #define X_WORD(NAME) EN_##NAME ,
@@ -29,8 +29,8 @@ uint8_t *textSelect(uint16_t sel)
     case LANG_DEFAULT:
       return (uint8_t *)en_pack[sel];
     case LANG_FLASH:
-      loadLabelText((u8*)&tempLabelString, sel);
-      return (u8*)&tempLabelString;
+      loadLabelText(tempLabelString, sel);
+      return tempLabelString;
     default:
       return NULL;
   }
