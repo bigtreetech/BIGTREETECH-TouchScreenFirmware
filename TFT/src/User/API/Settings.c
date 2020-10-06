@@ -245,25 +245,25 @@ void checkflashSign(void)
     GUI_DispString(5, 5, (uint8_t *)"Found outdated data:");
 
     ypos += BYTE_HEIGHT;
-    if (!statusfont)
+    if (statusfont)
       GUI_DispString(10, ypos, (uint8_t *)"Fonts: OK");
     else
       GUI_DispString(10, ypos, (uint8_t *)"Fonts: Update required");
 
     ypos += BYTE_HEIGHT;
-    if (!statusconfig)
+    if (statusconfig)
       GUI_DispString(10, ypos, (uint8_t *)"Config: OK");
     else
       GUI_DispString(10, ypos, (uint8_t *)"Config: Update required");
 
     ypos += BYTE_HEIGHT;
-    if (!statuslang)
+    if (statuslang)
       GUI_DispString(10, ypos, (uint8_t *)"Language: OK");
     else
       GUI_DispString(10, ypos, (uint8_t *)"Language: Update required(Optional)");
 
     ypos += BYTE_HEIGHT;
-    if (!statusicon)
+    if (statusicon)
       GUI_DispString(10, ypos, (uint8_t *)"Icons: OK");
     else
       GUI_DispString(10, ypos, (uint8_t *)"Icons: Update required");

@@ -316,7 +316,7 @@ void scanRenameUpdate(void) {
 
 void saveflashSign(u8* buf, uint32_t size)
 {
-W25Qxx_EraseSector(FLASH_SIGN_ADDR);
+  W25Qxx_EraseSector(FLASH_SIGN_ADDR);
   Delay_ms(100); //give time for spi flash to settle
   W25Qxx_WriteBuffer(buf, FLASH_SIGN_ADDR, size);
 }
