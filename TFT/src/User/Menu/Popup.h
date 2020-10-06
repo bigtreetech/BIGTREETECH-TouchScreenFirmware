@@ -39,14 +39,14 @@ void _setDialogCancelTextLabel(int16_t index);
 #define setDialogCancelText(x)  _Generic(((x+0)), const u8*: _setDialogCancelTextStr, u8*: _setDialogCancelTextStr, default: _setDialogCancelTextLabel)(x)
 
 //set text from LABEL index or pointer (uint8_t*)
-#define setDialogText(title, msg, oktext, canceltext) setDialogTitle(title); setDialogMsg(msg); setDialogOkText(oktext); setDialogCancelText(canceltext);
+#define setDialogText(title, msg, oktext, canceltext) {setDialogTitle(title); setDialogMsg(msg); setDialogOkText(oktext); setDialogCancelText(canceltext);}
 
 void popupDrawPage(DIALOG_TYPE type, BUTTON *btn, const uint8_t *title, const uint8_t *context, const uint8_t *yes, const uint8_t *no);
 //void popupReminder(DIALOG_TYPE type, u8* title, u8* msg);
 void showDialog(DIALOG_TYPE type, void (*ok_action)(), void (*cancel_action)(), void (*loop_action)());
 void loopPopup(void);
 
-#define popupReminder(_type, _title, _msg) setDialogText(_title, _msg, LABEL_CONFIRM, LABEL_BACKGROUND); showDialog(_type, NULL, NULL, NULL);
+#define popupReminder(_type, _title, _msg) {setDialogText(_title, _msg, LABEL_CONFIRM, LABEL_BACKGROUND); showDialog(_type, NULL, NULL, NULL);}
 
 #ifdef __cplusplus
 }

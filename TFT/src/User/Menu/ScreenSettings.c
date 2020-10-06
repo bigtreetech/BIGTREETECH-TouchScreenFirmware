@@ -380,7 +380,7 @@ void menuScreenSettings(void)
         if (getFlashSignStatus(lang_sign))
           infoMenu.menu[++infoMenu.cur] = menuLanguage;
         else
-          popupReminder(DIALOG_TYPE_ALERT,(u8*)"Language Not available", (u8*)"To change Language first flash a Language pack ini file.")
+          popupReminder(DIALOG_TYPE_ALERT,(u8*)"Language not available", (u8*)"To change Language first flash a Language pack ini file.");
         break;
 
       #ifdef BUZZER_PIN

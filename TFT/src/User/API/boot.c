@@ -311,14 +311,7 @@ void scanRenameUpdate(void) {
     }
     f_rename(CONFIG_FILE_PATH, CONFIG_FILE_PATH ".CUR");
   }
-  if (f_file_exists(LANG_FILE_PATH))
-  { // language exists
-    if (f_file_exists(LANG_FILE_PATH ".CUR"))
-    { // old language also exists
-      f_unlink(LANG_FILE_PATH ".CUR");
-    }
-    f_rename(LANG_FILE_PATH, LANG_FILE_PATH ".CUR");
-  }
+
 }
 
 void saveflashSign(u8* buf, uint32_t size)

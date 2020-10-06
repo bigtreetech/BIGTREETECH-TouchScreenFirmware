@@ -78,22 +78,43 @@ bool getConfigFromFile(void)
 bool getLangFromFile(void)
 {
   bool success = false;
-  if (f_file_exists(LANG_FILE_PATH) == false)
-    return false;
   foundkeys = 0;
+  DIR d;
+  FILINFO f;
+  FRESULT r =  f_findfirst(&d,&f,"0:","language_*.ini");
+  f_closedir(&d);
+  if (r != FR_OK)
+   return false;
+
+  char langpath[256];
+  sprintf(langpath, "0:%s", f.fname);
+
   char cur_line_buffer[MAX_LANG_LABEL_LENGTH + 100];
   cur_line = cur_line_buffer;
 
-  drawProgressPage((u8*)"Updating Language...");
+  drawProgressPage((u8*)f.fname);
 
   //erase part of flash to be rewritten
   for (int i = 0; i < (LANGUAGE_SIZE / W25QXX_SECTOR_SIZE);i++)
   {
     W25Qxx_EraseSector(LANGUAGE_ADDR + (i * W25QXX_SECTOR_SIZE));
   }
-  success = readConfigFile(LANG_FILE_PATH, parseLangLine, MAX_LANG_LABEL_LENGTH + 100);
+  success = readConfigFile(langpath, parseLangLine, MAX_LANG_LABEL_LENGTH + 100);
   if (foundkeys != LABEL_NUM)
     success = false;
+  else
+  { //rename file if update was successful
+    if (!f_file_exists(ADMIN_MODE_FILE) && f_file_exists(langpath))
+    { // language exists
+      char newlangpath[256];
+      sprintf(newlangpath, "0:%s.CUR", f.fname);
+      if (f_file_exists(newlangpath))
+      { // old language also exists
+        f_unlink(newlangpath);
+      }
+      f_rename(langpath, newlangpath);
+    }
+  }
   return success;
 }
 

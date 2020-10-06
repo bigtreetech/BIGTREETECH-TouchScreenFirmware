@@ -157,28 +157,28 @@ void _setDialogCancelTextStr(uint8_t * str)
 
 void _setDialogTitleLabel(int16_t index)
 {
-  uint8_t tempstr[MAX_LANG_LABEL_LENGTH];
+  uint8_t tempstr[MAX_LANG_LABEL_LENGTH] = {0};
   loadLabelText(tempstr, index);
   popup_strcpy(popup_title, tempstr, sizeof(popup_title));
 }
 
 void _setDialogMsgLabel(int16_t index)
 {
-  uint8_t tempstr[MAX_LANG_LABEL_LENGTH];
+  uint8_t tempstr[MAX_LANG_LABEL_LENGTH] = {0};
   loadLabelText(tempstr, index);
   popup_strcpy(popup_msg, tempstr, sizeof(popup_msg));
 }
 
 void _setDialogOkTextLabel(int16_t index)
 {
-  uint8_t tempstr[MAX_LANG_LABEL_LENGTH];
+  uint8_t tempstr[MAX_LANG_LABEL_LENGTH] = {0};
   loadLabelText(tempstr, index);
   popup_strcpy(popup_ok, tempstr, sizeof(popup_ok));
 }
 
 void _setDialogCancelTextLabel(int16_t index)
 {
-  uint8_t tempstr[MAX_LANG_LABEL_LENGTH];
+  uint8_t tempstr[MAX_LANG_LABEL_LENGTH] = {0};
   loadLabelText(tempstr, index);
   popup_strcpy(popup_cancel, tempstr, sizeof(popup_cancel));
 }
