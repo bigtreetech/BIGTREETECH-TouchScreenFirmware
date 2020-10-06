@@ -271,11 +271,6 @@ void checkflashSign(void)
     ypos += BYTE_HEIGHT;
     GUI_DispStringInRectEOL(10, ypos + 10, LCD_WIDTH, LCD_HEIGHT, (uint8_t *)"Insert the SD card with the required\n"
                                                                              "files and press the reset button\nto update.");
-    ypos += BYTE_HEIGHT;
-      GUI_DispString(10, ypos, (uint8_t *)lang_key_list[1]);
-    ypos += BYTE_HEIGHT;
-      GUI_DispString(10, ypos, (uint8_t *)lang_key_list[2]);
-
     while (1);
   }
 

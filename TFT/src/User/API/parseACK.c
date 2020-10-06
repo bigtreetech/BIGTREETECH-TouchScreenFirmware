@@ -577,15 +577,13 @@ void parseACK(void)
         uint8_t *string = (uint8_t *)&dmaL2Cache[ack_index];
         uint16_t string_start = ack_index;
         uint16_t string_end = string_start;
+        
         if (ack_seen("Marlin"))
-        {
           infoMachineSettings.isMarlinFirmware = 1;
-        }
         else
-        {
           infoMachineSettings.isMarlinFirmware = 0;
-          setupMachine();
-        }
+        setupMachine();
+        
         if (ack_seen("FIRMWARE_URL:")) // For Smoothieware and Repetier
           string_end = ack_index - sizeof("FIRMWARE_URL:");
         else if (ack_seen("SOURCE_CODE_URL:")) // For Marlin
