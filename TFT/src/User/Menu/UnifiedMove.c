@@ -19,7 +19,6 @@ void menuUnifiedMove(void)
   };
 
   KEY_VALUES key_num = KEY_IDLE;
-  bool blAvailable = false;
 
   if (infoMachineSettings.autoLevel != 0)
   {
