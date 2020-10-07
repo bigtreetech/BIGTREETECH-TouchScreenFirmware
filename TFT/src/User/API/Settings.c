@@ -146,6 +146,7 @@ void infoSettingsReset(void)
 
 void initMachineSetting(void){
   // some settings are assumes as active unless reported disabled by marlin
+  infoMachineSettings.isMarlinFirmware        = -1;
   infoMachineSettings.EEPROM                  = ENABLED;
   infoMachineSettings.autoReportTemp          = DISABLED;
   infoMachineSettings.autoLevel               = ENABLED;
@@ -158,6 +159,8 @@ void initMachineSetting(void){
   infoMachineSettings.promptSupport           = DISABLED;
   infoMachineSettings.onboard_sd_support      = ENABLED;
   infoMachineSettings.autoReportSDStatus      = DISABLED;
+  infoMachineSettings.long_filename_support   = DISABLED;
+  infoMachineSettings.babyStepping            = ENABLED;
   infoMachineSettings.blType                  = BL_UNKNOWN;
   infoMachineSettings.softwareEndstops        = ENABLED;
 }

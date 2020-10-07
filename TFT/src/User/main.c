@@ -85,6 +85,8 @@ void Hardware_GenericInit(void)
     storePara();
   }
 
+  initMachineSetting();      // init to default values. It must be called before infoMenuSelect()
+
   #ifdef LCD_LED_PWM_CHANNEL
     Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
   #endif

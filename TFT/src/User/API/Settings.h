@@ -206,7 +206,6 @@ typedef struct
   uint8_t EEPROM;
   uint8_t autoReportTemp;
   uint8_t autoLevel;
-  uint8_t blType;
   uint8_t zProbe;
   uint8_t levelingData;
   uint8_t softwarePower;
@@ -215,9 +214,10 @@ typedef struct
   uint8_t emergencyParser;
   uint8_t promptSupport;
   uint8_t onboard_sd_support;
-  uint8_t long_filename_support;
   uint8_t autoReportSDStatus;
+  uint8_t long_filename_support;
   uint8_t babyStepping;
+  uint8_t blType;
   uint8_t softwareEndstops;
 }MACHINESETTINGS;
 

@@ -201,6 +201,8 @@ static const MENUITEMS *curMenuItems = NULL;   //current menu
 
 static const LISTITEMS *curListItems = NULL;   //current listmenu
 
+static const void (* curMenuCustom)(void) = NULL; //current custom menu
+
 static MENU_TYPE menuType = MENU_TYPE_ICON;
 
 static const GUI_RECT *curRect = NULL; //current menu layout grid
@@ -285,6 +287,18 @@ MENU_TYPE getMenuType(void)
   return menuType;
 }
 
+void setMenuTypeCustom(void (* redrawCallback)(void))
+{
+  menuType = MENU_TYPE_CUSTOM;
+  curMenuCustom = redrawCallback;
+}
+
+void menuRedrawCustom()
+{
+  if (menuType == MENU_TYPE_CUSTOM && curMenuCustom != NULL)
+    curMenuCustom();
+}
+
 static REMINDER reminder = {{0, 0, LCD_WIDTH, TITLE_END_Y}, 0, STATUS_UNCONNECT, LABEL_UNCONNECTED};
 static REMINDER volumeReminder = {{0, 0, LCD_WIDTH, TITLE_END_Y}, 0, STATUS_IDLE, LABEL_BACKGROUND};
 static REMINDER busySign = {{LCD_WIDTH - 5, 0, LCD_WIDTH, 5}, 0, STATUS_BUSY, LABEL_BUSY};
@@ -362,7 +376,11 @@ void loopReminderClear(void)
 
   /* Clear warning message */
   reminder.status = STATUS_IDLE;
-  menuReDrawCurTitle();
+
+  if (menuType == MENU_TYPE_CUSTOM)
+    menuRedrawCustom();
+  else
+    menuReDrawCurTitle();
 }
 
 void loopVolumeReminderClear(void)
@@ -379,7 +397,11 @@ void loopVolumeReminderClear(void)
 
   /* Clear warning message */
   volumeReminder.status = STATUS_IDLE;
-  menuReDrawCurTitle();
+
+  if (menuType == MENU_TYPE_CUSTOM)
+    menuRedrawCustom();
+  else
+    menuReDrawCurTitle();
 }
 
 void loopBusySignClear(void)
@@ -397,9 +419,15 @@ void loopBusySignClear(void)
 
   /* End Busy display sing */
   busySign.status = STATUS_IDLE;
-  GUI_SetColor(infoSettings.title_bg_color);
-  GUI_FillCircle(busySign.rect.x0, (busySign.rect.y1 - busySign.rect.y0) / 2, (busySign.rect.x1-busySign.rect.x0)/2);
-  GUI_SetColor(infoSettings.font_color);
+
+  if (menuType == MENU_TYPE_CUSTOM)
+    menuRedrawCustom();
+  else
+  {
+    GUI_SetColor(infoSettings.title_bg_color);
+    GUI_FillCircle(busySign.rect.x0, (busySign.rect.y1 - busySign.rect.y0) / 2, (busySign.rect.x1-busySign.rect.x0)/2);
+    GUI_SetColor(infoSettings.font_color);
+  }
 }
 
 void notificationDot(void)

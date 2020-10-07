@@ -833,6 +833,8 @@ void menuMeshEditor(void)
   forceHoming = true;
   forceExit = false;
 
+  setMenuTypeCustom(&meshDrawMenu);
+
   meshDrawMenu();
 
 #if LCD_ENCODER_SUPPORT
@@ -944,8 +946,7 @@ void menuMeshEditor(void)
     }
 
     loopBackEnd();
-    loopPopup();
-//    loopProcess();
+    loopProcess();
   }
 
   if (forceExit)
@@ -953,5 +954,7 @@ void menuMeshEditor(void)
     meshSave(true);                                        // check for changes and ask to save on eeprom
 
     meshDeallocData();                                     // deallocate mesh data
+
+    setMenuTypeCustom(NULL);
   }
 }

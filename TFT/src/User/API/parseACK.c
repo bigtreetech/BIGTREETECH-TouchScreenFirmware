@@ -558,15 +558,15 @@ void parseACK(void)
                           setDualStepperStatus(E_STEPPER, true);
       }
     // Parse and store ABL type
-      else if(ack_seen("echo:; Auto Bed Leveling")){
+      else if(ack_seen("Auto Bed Leveling")){
         if(ENABLE_BL_VALUE==1)                             // if Auto-detect
           infoMachineSettings.blType = BL_ABL;
       }
-      else if(ack_seen("echo:; Unified Bed Leveling")){
+      else if(ack_seen("Unified Bed Leveling")){
         if(ENABLE_BL_VALUE==1)                             // if Auto-detect
           infoMachineSettings.blType = BL_UBL;
       }
-      else if(ack_seen("echo:; Mesh Bed Leveling")){
+      else if(ack_seen("Mesh Bed Leveling")){
         if(ENABLE_BL_VALUE==1)                             // if Auto-detect
           infoMachineSettings.blType = BL_MBL;
       }
@@ -582,15 +582,13 @@ void parseACK(void)
         uint8_t *string = (uint8_t *)&dmaL2Cache[ack_index];
         uint16_t string_start = ack_index;
         uint16_t string_end = string_start;
+
         if (ack_seen("Marlin"))
-        {
           infoMachineSettings.isMarlinFirmware = 1;
-        }
         else
-        {
           infoMachineSettings.isMarlinFirmware = 0;
-          setupMachine();
-        }
+        setupMachine();
+
         if (ack_seen("FIRMWARE_URL:")) // For Smoothieware and Repetier
           string_end = ack_index - sizeof("FIRMWARE_URL:");
         else if (ack_seen("SOURCE_CODE_URL:")) // For Marlin
@@ -641,6 +639,10 @@ void parseACK(void)
       {
         infoMachineSettings.caseLightsBrightness = ack_value();
       }
+      else if(ack_seen("Cap:EMERGENCY_PARSER:"))
+      {
+        infoMachineSettings.emergencyParser = ack_value();
+      }
       else if(ack_seen("Cap:PROMPT_SUPPORT:"))
       {
         infoMachineSettings.promptSupport = ack_value();
@@ -656,6 +658,10 @@ void parseACK(void)
       else if(ack_seen("Cap:LONG_FILENAME:") && infoSettings.longFileName == AUTO)
       {
         infoMachineSettings.long_filename_support = ack_value();
+      }
+      else if(ack_seen("Cap:BABYSTEPPING:"))
+      {
+        infoMachineSettings.babyStepping = ack_value();
       }
       else if(ack_seen("Cap:CHAMBER_TEMPERATURE:"))
       {
