@@ -89,6 +89,9 @@ bool getLangFromFile(void)
   char langpath[256];
   sprintf(langpath, "0:%s", f.fname);
 
+  if(!f_file_exists(langpath))
+    return false;
+
   char cur_line_buffer[MAX_LANG_LABEL_LENGTH + 100];
   cur_line = cur_line_buffer;
 

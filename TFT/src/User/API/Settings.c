@@ -147,7 +147,7 @@ void initMachineSetting(void){
   infoMachineSettings.isMarlinFirmware        = -1; // set fimware type to -1 to avoid repeated ABL gcode on mode change
   infoMachineSettings.EEPROM                  = ENABLED;
   infoMachineSettings.autoReportTemp          = DISABLED;
-  infoMachineSettings.autoLevel               = ENABLED;
+  infoMachineSettings.autoLevel               = DISABLED;
   infoMachineSettings.zProbe                  = ENABLED;
   infoMachineSettings.levelingData            = ENABLED;
   infoMachineSettings.softwarePower           = DISABLED;
