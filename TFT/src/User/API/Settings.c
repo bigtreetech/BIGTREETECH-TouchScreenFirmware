@@ -144,6 +144,7 @@ void infoSettingsReset(void)
 
 void initMachineSetting(void){
   // some settings are assumes as active unless reported disabled by marlin
+  infoMachineSettings.isMarlinFirmware        = -1; // set fimware type to -1 to avoid repeated ABL gcode on mode change
   infoMachineSettings.EEPROM                  = ENABLED;
   infoMachineSettings.autoReportTemp          = DISABLED;
   infoMachineSettings.autoLevel               = ENABLED;

@@ -344,7 +344,7 @@ void scanUpdates(void)
       cur_flash_sign[lang_sign] = LANGUAGE_CHECK_SIGN;
     scanRenameUpdate();
     scanResetDir();
-    saveflashSign((uint8_t*)&cur_flash_sign, sizeof(cur_flash_sign));
+    saveflashSign((uint8_t*)cur_flash_sign, sizeof(cur_flash_sign));
 
   }
 }

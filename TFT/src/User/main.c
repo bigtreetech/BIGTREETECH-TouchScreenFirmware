@@ -42,14 +42,14 @@ void Hardware_GenericInit(void)
   #endif
 
   XPT2046_Init();
-  OS_TimerInitMs();  // System clock timer, cycle 1ms, called after XPT2046_Init()
+  OS_TimerInitMs();         // System clock timer, cycle 1ms, called after XPT2046_Init()
   W25Qxx_Init();
   LCD_Init();
-  readStoredPara(); // Read settings parameter
-  LCD_RefreshDirection();  //refresh display direction after reading settings
-  scanUpdates();           // scan icon, fonts and config files
-  checkflashSign();       // check font/icon/config signature in SPI flash for update
-  infoMachineSettings.isMarlinFirmware = -1; // set fimware type to -1 to avoid repeated ABL gcode on mode change
+  readStoredPara();         // Read settings parameter
+  LCD_RefreshDirection();   // refresh display direction after reading settings
+  scanUpdates();            // scan icon, fonts and config files
+  checkflashSign();         // check font/icon/config signature in SPI flash for update
+  initMachineSetting();     // load default machine settings
 
   #ifdef LED_COLOR_PIN
     knob_LED_Init();

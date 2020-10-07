@@ -215,7 +215,7 @@ void menuPrintFromSource(void)
   u8 update=0;
 
   GUI_Clear(infoSettings.bg_color);
-  GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, textSelect(LABEL_LOADING));
+  GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, LABEL_LOADING);
 
   if (mountFS() == true && scanPrintFiles() == true)
   {
