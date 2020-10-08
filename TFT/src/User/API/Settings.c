@@ -147,7 +147,7 @@ void initMachineSetting(void){
   infoMachineSettings.isMarlinFirmware        = -1; // set fimware type to -1 to avoid repeated ABL gcode on mode change
   infoMachineSettings.EEPROM                  = ENABLED;
   infoMachineSettings.autoReportTemp          = DISABLED;
-  infoMachineSettings.autoLevel               = DISABLED;
+  infoMachineSettings.leveling                = BL_DISABLED;
   infoMachineSettings.zProbe                  = ENABLED;
   infoMachineSettings.levelingData            = ENABLED;
   infoMachineSettings.softwarePower           = DISABLED;
@@ -157,7 +157,6 @@ void initMachineSetting(void){
   infoMachineSettings.promptSupport           = DISABLED;
   infoMachineSettings.onboard_sd_support      = ENABLED;
   infoMachineSettings.autoReportSDStatus      = DISABLED;
-  infoMachineSettings.blType                  = BL_UNKNOWN;
 }
 
 void setupMachine(void)
@@ -165,26 +164,26 @@ void setupMachine(void)
   switch (ENABLE_BL_VALUE)
   {
     case 2:
-      infoMachineSettings.blType = BL_ABL;
+      infoMachineSettings.leveling = BL_ABL;
       break;
 
     case 3:
-      infoMachineSettings.blType = BL_BBL;
+      infoMachineSettings.leveling = BL_BBL;
       break;
 
     case 4:
-      infoMachineSettings.blType = BL_UBL;
+      infoMachineSettings.leveling = BL_UBL;
       break;
 
     case 5:
-      infoMachineSettings.blType = BL_MBL;
+      infoMachineSettings.leveling = BL_MBL;
       break;
 
     default:
       break;
   }
 
-  if (infoMachineSettings.blType != BL_UNKNOWN && infoMachineSettings.EEPROM == 1 && infoSettings.auto_load_leveling == 1)
+  if (infoMachineSettings.leveling != BL_DISABLED && infoMachineSettings.EEPROM == 1 && infoSettings.auto_load_leveling == 1)
   {
     storeCmd("M420 S1\n");
   }
@@ -193,7 +192,7 @@ void setupMachine(void)
   {
     infoMachineSettings.EEPROM                  = ENABLED;
     infoMachineSettings.autoReportTemp          = DISABLED;
-    infoMachineSettings.autoLevel               = ENABLED;
+    infoMachineSettings.leveling               = ENABLED;
     infoMachineSettings.zProbe                  = ENABLED;
     infoMachineSettings.levelingData            = ENABLED;
     infoMachineSettings.emergencyParser         = ENABLED;

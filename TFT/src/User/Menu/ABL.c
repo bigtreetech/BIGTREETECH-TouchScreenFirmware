@@ -13,7 +13,7 @@ void ablUpdateStatus(bool succeeded)
   labelTitle.index = LABEL_ABL_SETTINGS;
   labelChar(tempmsg, LABEL_BL_COMPLETE);
 
-  switch (infoMachineSettings.blType)
+  switch (infoMachineSettings.leveling)
   {
     case BL_BBL:
     {
@@ -158,7 +158,7 @@ void menuABL(void)
 
   KEY_VALUES key_num = KEY_IDLE;
 
-  switch (infoMachineSettings.blType)
+  switch (infoMachineSettings.leveling)
   {
     case BL_BBL:
       autoLevelingItems.title.index = LABEL_ABL_SETTINGS_BBL;
@@ -186,7 +186,7 @@ void menuABL(void)
       case KEY_ICON_0:
         storeCmd("G28\n");
 
-        switch (infoMachineSettings.blType)
+        switch (infoMachineSettings.leveling)
         {
           case BL_BBL:                                     // if Bilinear Bed Leveling
             storeCmd("G29\n");
@@ -207,12 +207,12 @@ void menuABL(void)
         break;
 
       case KEY_ICON_1:
-        if (infoMachineSettings.blType == BL_UBL)
+        if (infoMachineSettings.leveling == BL_UBL)
           ublSaveLoad(true);
         break;
 
       case KEY_ICON_2:
-        if (infoMachineSettings.blType == BL_UBL)
+        if (infoMachineSettings.leveling == BL_UBL)
           ublSaveLoad(false);
         break;
 

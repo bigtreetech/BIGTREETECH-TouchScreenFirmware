@@ -36,7 +36,7 @@ void menuBedLeveling(void)
   void (*menuBL)(void) = menuABL;
   int8_t levelStateOld = -1;
 
-  switch (infoMachineSettings.blType)
+  switch (infoMachineSettings.leveling)
   {
     case BL_BBL:
       bedLevelingItems.title.index = LABEL_ABL_SETTINGS_BBL;

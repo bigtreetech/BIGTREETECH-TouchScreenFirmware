@@ -191,8 +191,8 @@ char     cancel_gcode[MAX_GCODE_LENGTH+1];
  */
 typedef enum
 {
-  BL_UNKNOWN = 0,                     // Unknown BL
-  BL_ABL,                             // Generic Auto Bed Leveling (ABL)
+  BL_DISABLED = 0,                     //
+  BL_ABL,                             // Auto Bed Leveling (ABL)
   BL_BBL,                             // Bilinear Bed Leveling (BBL)
   BL_UBL,                             // Unified Bed Leveling (UBL)
   BL_MBL,                             // Mesh Bed Leveling (MBL)
@@ -203,8 +203,7 @@ typedef struct
   int8_t isMarlinFirmware;
   uint8_t EEPROM;
   uint8_t autoReportTemp;
-  uint8_t autoLevel;
-  uint8_t blType;
+  BL_TYPE leveling;
   uint8_t zProbe;
   uint8_t levelingData;
   uint8_t softwarePower;

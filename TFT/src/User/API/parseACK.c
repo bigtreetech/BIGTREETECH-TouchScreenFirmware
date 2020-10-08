@@ -555,15 +555,15 @@ void parseACK(void)
     // Parse and store ABL type if auto-detect is enabled
       else if (ack_seen("Auto Bed Leveling") && ENABLE_BL_VALUE == 1)
       {
-        infoMachineSettings.blType = BL_ABL;
+        infoMachineSettings.leveling = BL_ABL;
       }
       else if (ack_seen("Unified Bed Leveling") && ENABLE_BL_VALUE == 1)
       {
-        infoMachineSettings.blType = BL_UBL;
+        infoMachineSettings.leveling = BL_UBL;
       }
       else if (ack_seen("Mesh Bed Leveling") && ENABLE_BL_VALUE == 1)
       {
-        infoMachineSettings.blType = BL_MBL;
+        infoMachineSettings.leveling = BL_MBL;
       }
     // Parse and store ABL on/off state & Z fade value on M503
       else if(ack_seen("M420 S")) {
@@ -577,13 +577,13 @@ void parseACK(void)
         uint8_t *string = (uint8_t *)&dmaL2Cache[ack_index];
         uint16_t string_start = ack_index;
         uint16_t string_end = string_start;
-        
+
         if (ack_seen("Marlin"))
           infoMachineSettings.isMarlinFirmware = 1;
         else
           infoMachineSettings.isMarlinFirmware = 0;
         setupMachine();
-        
+
         if (ack_seen("FIRMWARE_URL:")) // For Smoothieware and Repetier
           string_end = ack_index - sizeof("FIRMWARE_URL:");
         else if (ack_seen("SOURCE_CODE_URL:")) // For Marlin
@@ -612,7 +612,7 @@ void parseACK(void)
       }
       else if(ack_seen("Cap:AUTOLEVEL:"))
       {
-        infoMachineSettings.autoLevel = ack_value();
+        infoMachineSettings.leveling = ack_value();
       }
       else if(ack_seen("Cap:Z_PROBE:"))
       {
