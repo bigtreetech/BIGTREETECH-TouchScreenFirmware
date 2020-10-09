@@ -3,7 +3,7 @@
 
 void blUpdateState(MENUITEMS *menu)
 {
-  if (infoSettings.autoLevelState == 1)
+  if (getParameter(P_ABL_STATE, 0) == ENABLED)
   {
     menu->items[6].icon = ICON_LEVELING_ON;
     menu->items[6].label.index = LABEL_BL_ENABLE;
@@ -59,7 +59,7 @@ void menuBedLeveling(void)
       break;
   }
 
-  if (infoSettings.autoLevelState == 1)
+  if (getParameter(P_ABL_STATE, 0) == ENABLED)
   {
     bedLevelingItems.items[6].icon = ICON_LEVELING_ON;
     bedLevelingItems.items[6].label.index = LABEL_BL_ENABLE;
@@ -98,7 +98,7 @@ void menuBedLeveling(void)
         break;
 
       case KEY_ICON_6:
-        if (infoSettings.autoLevelState == 1)
+        if (getParameter(P_ABL_STATE, 0) == ENABLED)
         {
           storeCmd("M420 S0\n");
         }
@@ -116,9 +116,9 @@ void menuBedLeveling(void)
         break;
     }
 
-    if (levelStateOld != infoSettings.autoLevelState)
+    if (levelStateOld != getParameter(P_ABL_STATE, 0))
     {
-      levelStateOld = infoSettings.autoLevelState;
+      levelStateOld = getParameter(P_ABL_STATE, 0);
       blUpdateState(&bedLevelingItems);
     };
 

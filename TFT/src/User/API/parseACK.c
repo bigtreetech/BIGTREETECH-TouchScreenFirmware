@@ -569,13 +569,12 @@ void parseACK(void)
       else if(ack_seen("echo:Bed Leveling"))
       {
         if (ack_seen("ON"))
-          infoSettings.autoLevelState = ENABLED;
+          setParameter(P_ABL_STATE, 0, ENABLED);
         else
-          infoSettings.autoLevelState = DISABLED;
+          setParameter(P_ABL_STATE, 0, DISABLED);
       }
     // Parse and store ABL on/off state & Z fade value on M503
       else if(ack_seen("M420 S")) {
-        infoSettings.autoLevelState = ack_value();
         if(ack_seen("S")) setParameter(P_ABL_STATE, 0, ack_value());
         if(ack_seen("Z")) setParameter(P_ABL_STATE, 1, ack_value());
       }

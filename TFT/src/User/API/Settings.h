@@ -139,7 +139,6 @@ typedef struct
   uint8_t   fan_count;
   uint8_t   fan_ctrl_count;
   uint8_t   auto_load_leveling;
-  uint8_t   autoLevelState;
   uint8_t   onboardSD;
   uint8_t   m27_refresh_time;
   uint8_t   m27_active;
