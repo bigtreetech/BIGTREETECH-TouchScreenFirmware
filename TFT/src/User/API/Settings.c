@@ -21,7 +21,7 @@ const u8 default_custom_enabled[] = CUSTOM_GCODE_ENABLED;
 void infoSettingsReset(void)
 {
   infoSettings.baudrate             = BAUDRATE;
-  infoSettings.language             = DEFAULT_LANGUAGE;
+  infoSettings.language             = LANG_DEFAULT;
   infoSettings.mode                 = DEFAULT_LCD_MODE;
   infoSettings.unified_menu         = UNIFIED_MENU;
 

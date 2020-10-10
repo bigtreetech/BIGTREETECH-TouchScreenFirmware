@@ -10,6 +10,26 @@ extern "C" {
 
 #define MAX_LANG_LABEL_LENGTH W25QXX_SPI_PAGESIZE
 
+#define ENGLISH       0
+#define CHINESE       1
+#define RUSSIAN       2
+#define JAPANESE      3
+#define ARMENIAN      4
+#define GERMAN        5
+#define CZECH         6
+#define SPANISH       7
+#define FRENCH        8
+#define PORTUGUESE    9
+#define ITALIAN       10
+#define POLISH        11
+#define SLOVAK        12
+#define DUTCH         13
+#define HUNGARIAN     14
+#define TURKISH       15
+#define GREEK         16
+#define SLOVENIAN     17
+#define CATALAN       18
+#define TRAD_CHINESE  19
 
 enum
 {
