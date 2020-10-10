@@ -406,6 +406,8 @@ bool hasPrintingMenu(void)
 
 void loopCheckPrinting(void)
 {
+  if(infoMenu.menu[infoMenu.cur] == menuMarlinMode) return;
+  
   if (infoHost.printing && !infoPrinting.printing) {
     infoPrinting.printing = true;
     if (!hasPrintingMenu())
