@@ -176,10 +176,10 @@ void (*TSC_ReDrawIcon)(u8 position, u8 is_press) = NULL;
 
 u16 KEY_GetValue(u8 total_rect,const GUI_RECT* menuRect)
 {
-  static u16   key_num = IDLE_TOUCH;
-  static bool  firstPress = true;
+  static u16 key_num = IDLE_TOUCH;
+  static bool firstPress = true;
 
-  u16 key_return=IDLE_TOUCH;
+  u16 key_return = IDLE_TOUCH;
 
   if (touchScreenIsPress)
   {

@@ -50,7 +50,9 @@ typedef enum
 {
   MENU_TYPE_ICON,
   MENU_TYPE_LISTVIEW,
-  MENU_TYPE_DIALOG
+  MENU_TYPE_DIALOG,
+  MENU_TYPE_FULLSCREEN,
+  MENU_TYPE_OTHER
 } MENU_TYPE;
 
 typedef union
@@ -154,7 +156,8 @@ MENUITEMS *getCurMenuItems(void);
 LISTITEMS *getCurListItems(void);
 
 void GUI_RestoreColorDefault(void);
-uint8_t *labelGetAddress(const LABEL *label);
+uint8_t *labelGetAddress(const LABEL * label);
+void setMenu(MENU_TYPE menu_type, LABEL * title, uint16_t rectCount, const GUI_RECT * menuRect, void(*action_redraw)(uint8_t position, uint8_t is_press));
 void menuDrawItem (const ITEM * menuItem, uint8_t position);
 void menuDrawIconOnly(const ITEM *item, uint8_t position);
 void menuDrawListItem(const LISTITEM *item, uint8_t position);

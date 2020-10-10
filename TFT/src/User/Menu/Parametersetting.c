@@ -325,6 +325,7 @@ bool temperatureStatusValid(void)
 
 void loopTemperatureStatus(void)
 {
+  if(getMenuType() == MENU_TYPE_FULLSCREEN) return;
   if (!temperatureStatusValid()) return;
 
   uint8_t tmpHeater[3]; // chamber, bed, hotend
