@@ -406,8 +406,10 @@ bool hasPrintingMenu(void)
 
 void loopCheckPrinting(void)
 {
-  if(infoMenu.menu[infoMenu.cur] == menuMarlinMode) return;
-  
+  #if defined(ST7920_SPI) || defined(LCD2004_simulator)
+    if(infoMenu.menu[infoMenu.cur] == menuMarlinMode) return;
+  #endif
+
   if (infoHost.printing && !infoPrinting.printing) {
     infoPrinting.printing = true;
     if (!hasPrintingMenu())
