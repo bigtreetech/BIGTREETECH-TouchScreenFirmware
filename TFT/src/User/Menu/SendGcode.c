@@ -81,7 +81,7 @@ void sendGcodeReDrawButton(u8 position, u8 pressed)
 
 void menuDrawSendGcode(void)
 {
-  setMenu(MENU_TYPE_FULLSCREEN, NULL, COUNT(rect_of_Gkey), &rect_of_Gkey, sendGcodeReDrawButton);
+  setMenu(MENU_TYPE_FULLSCREEN, NULL, COUNT(rect_of_Gkey), rect_of_Gkey, sendGcodeReDrawButton);
 
   GUI_RECT gcodeRect = {rect_of_Gkey[GKEY_BACK].x1+10, rect_of_Gkey[GKEY_BACK].y0, rect_of_Gkey[GKEY_SEND].x0-10, rect_of_Gkey[GKEY_SEND].y1};
 
