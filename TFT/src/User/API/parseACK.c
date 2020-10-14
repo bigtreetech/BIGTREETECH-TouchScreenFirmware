@@ -606,7 +606,7 @@ void parseACK(void)
           string_start = ack_index;
           if (ack_seen("EXTRUDER_COUNT:"))
           {
-            infoSettings.hotend_count = ack_value();             // In marlin the extruder count is the number of nozzles
+            infoSettings.ext_count = ack_value();
             string_end = ack_index - sizeof("EXTRUDER_COUNT:");
           }
           infoSetMachineType(string, string_end - string_start); // Set firmware name
