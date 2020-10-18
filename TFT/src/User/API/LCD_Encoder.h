@@ -24,12 +24,11 @@ void HW_EncoderInit(void);
 
 #if LCD_ENCODER_SUPPORT
   bool encoder_ReadBtn(uint16_t intervals);
+#endif
 
-  #if defined(ST7920_SPI)
-    void HW_EncActiveSignalInit(void);
-    void setEncActiveSignal(uint8_t status);
-  #endif
-
+#if ENC_ACTIVE_SIGNAL
+  void HW_EncActiveSignalInit(void);
+  void setEncActiveSignal(uint8_t status);
 #endif
 
 bool LCD_ReadPen(uint16_t intervals);

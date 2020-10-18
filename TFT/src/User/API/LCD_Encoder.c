@@ -21,7 +21,7 @@ void HW_EncoderInit(void)
   _encLastBtn= encoder_GetPos();
 }
 
-#if defined(ST7920_SPI)
+#if ENC_ACTIVE_SIGNAL
   void HW_EncActiveSignalInit(void)
   {
     GPIO_InitSet(LCD_ENC_EN_PIN, MGPIO_MODE_OUT_PP, 0);

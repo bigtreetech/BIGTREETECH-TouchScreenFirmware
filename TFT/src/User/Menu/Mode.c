@@ -39,7 +39,7 @@ void infoMenuSelect(void)
         #endif
       #endif
 
-      #if defined(ST7920_SPI)
+      #if ENC_ACTIVE_SIGNAL
         setEncActiveSignal(1);
       #endif
       GUI_RestoreColorDefault();
@@ -67,7 +67,7 @@ void infoMenuSelect(void)
     }
 
     case MARLIN:
-      #if defined(ST7920_SPI)
+      #if ENC_ACTIVE_SIGNAL
         setEncActiveSignal(0);
       #endif
       if (infoSettings.serial_alwaysOn == 1)
