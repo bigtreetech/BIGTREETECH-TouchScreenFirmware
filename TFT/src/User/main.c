@@ -62,6 +62,9 @@ void Hardware_GenericInit(void)
 
   #if LCD_ENCODER_SUPPORT
     HW_EncoderInit();
+    #if defined(ST7920_SPI)
+      HW_EncActiveSignalInit();
+    #endif
   #endif
 
   #ifdef PS_ON_PIN
