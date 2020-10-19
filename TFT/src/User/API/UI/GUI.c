@@ -543,7 +543,7 @@ CHAR_INFO GUI_DispOne(int16_t sx, int16_t sy, const uint8_t *p)
   return info;
 }
 
-void GUI_DispString(int16_t x, int16_t y, const uint8_t *p)
+void _GUI_DispString(int16_t x, int16_t y, const uint8_t *p)
 {
   CHAR_INFO info;
   if(p == NULL) return;
@@ -556,7 +556,7 @@ void GUI_DispString(int16_t x, int16_t y, const uint8_t *p)
   }
 }
 
-const uint8_t* GUI_DispLenString(int16_t x, int16_t y, const uint8_t *p, uint16_t pixelWidth, bool truncate)
+const uint8_t* _GUI_DispLenString(int16_t x, int16_t y, const uint8_t *p, uint16_t pixelWidth, bool truncate)
 {
   CHAR_INFO info;
   uint16_t curPixelWidth = 0;
@@ -580,19 +580,19 @@ const uint8_t* GUI_DispLenString(int16_t x, int16_t y, const uint8_t *p, uint16_
   return p;
 }
 
-void GUI_DispStringRight(int16_t x, int16_t y, const uint8_t *p)
+void _GUI_DispStringRight(int16_t x, int16_t y, const uint8_t *p)
 {
   x -= GUI_StrPixelWidth(p);
-  GUI_DispString(x, y, p);
+  _GUI_DispString(x, y, p);
 }
 
-void GUI_DispStringCenter(int16_t x, int16_t y, const uint8_t *p)
+void _GUI_DispStringCenter(int16_t x, int16_t y, const uint8_t *p)
 {
   x -= GUI_StrPixelWidth(p)/2;
-  GUI_DispString(x, y, p);
+  _GUI_DispString(x, y, p);
 }
 
-void GUI_DispStringInRect(int16_t sx, int16_t sy, int16_t ex, int16_t ey, const uint8_t *p)
+void _GUI_DispStringInRect(int16_t sx, int16_t sy, int16_t ex, int16_t ey, const uint8_t *p)
 {
   uint16_t stringlen = GUI_StrPixelWidth(p);
   uint16_t width = ex - sx;
@@ -614,12 +614,12 @@ void GUI_DispStringInRect(int16_t sx, int16_t sy, int16_t ex, int16_t ey, const 
   }
 }
 
-void GUI_DispStringInPrect(const GUI_RECT *rect, const uint8_t *p)
+void _GUI_DispStringInPrect(const GUI_RECT *rect, const uint8_t *p)
 {
-  GUI_DispStringInRect(rect->x0, rect->y0, rect->x1, rect->y1,p);
+  _GUI_DispStringInRect(rect->x0, rect->y0, rect->x1, rect->y1,p);
 }
 
-void GUI_DispStringInRectEOL(int16_t sx, int16_t sy, int16_t ex, int16_t ey, const uint8_t *p)
+void _GUI_DispStringInRectEOL(int16_t sx, int16_t sy, int16_t ex, int16_t ey, const uint8_t *p)
 {
   if (p == NULL || *p == 0) return;
   CHAR_INFO info;
@@ -642,11 +642,10 @@ void GUI_DispStringInRectEOL(int16_t sx, int16_t sy, int16_t ex, int16_t ey, con
   }
 }
 
-void GUI_DispStringInPrectEOL(const GUI_RECT *rect, const uint8_t *p)
+void _GUI_DispStringInPrectEOL(const GUI_RECT *rect, const uint8_t *p)
 {
-  GUI_DispStringInRectEOL(rect->x0, rect->y0, rect->x1, rect->y1,p);
+  _GUI_DispStringInRectEOL(rect->x0, rect->y0, rect->x1, rect->y1, p);
 }
-
 
 const uint32_t GUI_Pow10[10] = {
 1 , 10, 100, 1000, 10000,
@@ -702,7 +701,7 @@ void GUI_DispDec(int16_t x, int16_t y, int32_t num, uint8_t len, uint8_t leftOrR
     decBuf[bufIndex++] = ' ';
   }
   decBuf[bufIndex] = 0;
-  GUI_DispString(x, y, decBuf);
+  _GUI_DispString(x, y, decBuf);
 }
 
 void GUI_DispFloat(int16_t x, int16_t y, float num, uint8_t llen, uint8_t rlen, uint8_t leftOrRight)
@@ -763,7 +762,63 @@ void GUI_DispFloat(int16_t x, int16_t y, float num, uint8_t llen, uint8_t rlen, 
     floatBuf[bufIndex++] = ' ';
   }
   floatBuf[bufIndex] = 0;
-  GUI_DispString(x, y, floatBuf);
+  _GUI_DispString(x, y, floatBuf);
+}
+
+void _GUI_DispLabel(int16_t x, int16_t y, uint16_t index)
+{
+  uint8_t tempstr[MAX_LANG_LABEL_LENGTH];
+  if (loadLabelText((uint8_t*)&tempstr, index) == false) return;
+  _GUI_DispString(x, y, tempstr);
+}
+
+const uint8_t* _GUI_DispLenLabel(int16_t x, int16_t y, uint16_t index, uint16_t pixelWidth, bool truncate)
+{
+  uint8_t tempstr[MAX_LANG_LABEL_LENGTH];
+  if (loadLabelText(tempstr, index) == false) return NULL;
+   return _GUI_DispLenString(x, y, tempstr, pixelWidth, truncate);
+}
+
+void _GUI_DispLabelRight(int16_t x, int16_t y, uint16_t index)
+{
+  uint8_t tempstr[MAX_LANG_LABEL_LENGTH];
+  if (loadLabelText(tempstr, index) == false) return;
+  _GUI_DispStringRight(x, y, tempstr);
+}
+
+void _GUI_DispLabelCenter(int16_t x, int16_t y, uint16_t index)
+{
+  uint8_t tempstr[MAX_LANG_LABEL_LENGTH];
+  if (loadLabelText(tempstr, index) == false) return;
+  _GUI_DispStringCenter(x, y, tempstr);
+}
+
+void _GUI_DispLabelInRect(int16_t sx, int16_t sy, int16_t ex, int16_t ey, uint16_t index)
+{
+  uint8_t tempstr[MAX_LANG_LABEL_LENGTH];
+  if (loadLabelText(tempstr, index) == false) return;
+  _GUI_DispStringInRect(sx, sy, ex, ey, tempstr);
+}
+
+void _GUI_DispLabelInPrect(const GUI_RECT *rect, uint16_t index)
+{
+  uint8_t tempstr[MAX_LANG_LABEL_LENGTH];
+  if (loadLabelText(tempstr, index) == false) return;
+  _GUI_DispStringInPrect(rect, tempstr);
+}
+
+void _GUI_DispLabelInRectEOL(int16_t sx, int16_t sy, int16_t ex, int16_t ey, uint16_t index)
+{
+  uint8_t tempstr[MAX_LANG_LABEL_LENGTH];
+  if (loadLabelText(tempstr, index) == false) return;
+  _GUI_DispStringInRectEOL(sx, sy, ex, ey, tempstr);
+}
+
+void _GUI_DispLabelInPrectEOL(const GUI_RECT *rect, uint16_t index)
+{
+  uint8_t tempstr[MAX_LANG_LABEL_LENGTH];
+  if (loadLabelText(tempstr, index) == false) return;
+  _GUI_DispStringInPrectEOL(rect, tempstr);
 }
 
 /****************************************************     Widget    *******************************************************************/
@@ -810,8 +865,8 @@ void RADIO_Select(RADIO *radio, uint8_t select)
   GUI_SetColor(tmp);
 }
 
-//
-void Scroll_CreatePara(SCROLL * para, uint8_t *pstr, const GUI_RECT *rect)
+
+void Scroll_CreatePara(SCROLL * para,const uint8_t *pstr, const GUI_RECT *rect)
 {
   memset(para,0,sizeof(SCROLL));
   para->text = pstr;

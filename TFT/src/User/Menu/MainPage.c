@@ -20,8 +20,6 @@ void unifiedMenu(void)
 
   KEY_VALUES key_num = KEY_IDLE;
 
-  GUI_SetBkColor(infoSettings.bg_color);
-
   menuDrawPage(&unifiedPageItems);
 
   while (infoMenu.menu[infoMenu.cur] == unifiedMenu)
@@ -90,17 +88,12 @@ void classicMenu(void)
   };
 
   KEY_VALUES key_num = KEY_IDLE;
-  bool blAvailable = false;
 
-  if (infoMachineSettings.blType != BL_UNKNOWN)
+  if (infoMachineSettings.leveling != BL_DISABLED)
   {
-    blAvailable = true;
-
     classicPageItems.items[7].icon = ICON_LEVELING;
     classicPageItems.items[7].label.index = LABEL_BED_LEVELING;
   }
-
-  GUI_SetBkColor(infoSettings.bg_color);
 
   menuDrawPage(&classicPageItems);
 
@@ -138,7 +131,7 @@ void classicMenu(void)
         break;
 
       case KEY_ICON_7:
-        if (blAvailable)
+        if (infoMachineSettings.leveling != BL_DISABLED)
           infoMenu.menu[++infoMenu.cur] = menuBedLeveling;
         else
           infoMenu.menu[++infoMenu.cur] = menuManualLeveling;

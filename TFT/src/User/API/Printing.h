@@ -20,8 +20,10 @@ extern "C" {
 
 #ifdef RAPID_SERIAL_COMM
 #define rapid_serial_loop()  loopBackEnd()
+#define rapid_serial_comm()  if(isPrinting() == true && infoSettings.serial_alwaysOn != 1){loopBackEnd();}
 #else
 #define rapid_serial_loop()
+#define rapid_serial_comm()
 #endif
 
 

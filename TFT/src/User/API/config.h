@@ -14,6 +14,7 @@ extern "C" {
 
 #define  LINE_MAX_CHAR 100
 #define CONFIG_FILE_PATH            "0:config.ini"
+#define LANG_FILE_PATH              "0:language.ini"
 
 #define CONFIG_UNIFIEDMENU          "unified_menu:"
 #define CONFIG_UART_BAUDRATE        "baudrate:"
@@ -193,12 +194,19 @@ typedef enum
 
 
 bool getConfigFromFile(void);
+bool getLangFromFile(void);
+
+bool readConfigFile(const char * path, void (*lineParser)(), uint16_t maxLineLen);
+
 void parseConfigLine(void);
+void parseLangLine(void);
+
 void parseConfigKey(u16 index);
 void writeConfig(uint8_t* dataBytes, uint16_t numBytes, uint32_t addr, uint32_t maxSize);
 void saveConfig(void);
 void resetConfig(void);
-void drawProgressPage(void);
+
+void drawProgressPage(u8 * title);
 void drawProgress(void);
 void showError(CONFIG_STATS stat);
 

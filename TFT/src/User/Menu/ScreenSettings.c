@@ -62,7 +62,7 @@ void menuLanguage(void)
       if(key_num < LISTITEM_PER_PAGE){
         uint16_t cur_item = infoSettings.language;
         uint16_t tmp_i = listWidgetGetCurPage() * LISTITEM_PER_PAGE + key_num;
-        if (tmp_i != cur_item) { // has changed
+        if (tmp_i < LANGUAGE_NUM && tmp_i != cur_item) { // has changed
           totalItems[cur_item].icon = ICONCHAR_UNCHECKED;
           listWidgetRefreshItem(cur_item); // refresh unchecked status
           cur_item = tmp_i;
@@ -149,7 +149,7 @@ void menuSimulatorBackGroundColor(void)
     default:
       if(key_num < LISTITEM_PER_PAGE){
         uint16_t tmp_i = listWidgetGetCurPage() * LISTITEM_PER_PAGE + key_num;
-        if (tmp_i != cur_item) { // has changed
+        if (tmp_i < LCD_COLOR_COUNT && tmp_i != cur_item) { // has changed
           totalItems[cur_item].icon = ICONCHAR_UNCHECKED;
           listWidgetRefreshItem(cur_item); // refresh unchecked status
           cur_item = tmp_i;
@@ -213,7 +213,7 @@ void menuSimulatorFontColor(void)
     default:
       if(key_num < LISTITEM_PER_PAGE){
         uint16_t tmp_i = listWidgetGetCurPage() * LISTITEM_PER_PAGE + key_num;
-        if (tmp_i != cur_item) { // has changed
+        if (tmp_i < LCD_COLOR_COUNT && tmp_i != cur_item) { // has changed
           totalItems[cur_item].icon = ICONCHAR_UNCHECKED;
           listWidgetRefreshItem(cur_item); // refresh unchecked status
           cur_item = tmp_i;
@@ -377,7 +377,10 @@ void menuScreenSettings(void)
         break;
 
       case KEY_ICON_2:
-        infoMenu.menu[++infoMenu.cur] = menuLanguage;
+        if (getFlashSignStatus(lang_sign))
+          infoMenu.menu[++infoMenu.cur] = menuLanguage;
+        else
+          popupReminder(DIALOG_TYPE_ALERT,(u8*)"Language not available", (u8*)"To change Language first flash a Language pack ini file.");
         break;
 
       #ifdef BUZZER_PIN

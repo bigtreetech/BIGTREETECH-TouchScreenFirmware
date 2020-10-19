@@ -32,12 +32,6 @@ const GUI_RECT oldParameterRect = {0,                        0, LCD_WIDTH/2 - BY
 const GUI_RECT newParameterRect = {LCD_WIDTH/2 + BYTE_WIDTH, 0,                LCD_WIDTH,  ICON_START_Y+0*SKEYHEIGHT};
 const GUI_RECT arrowRect        = {LCD_WIDTH/2 - BYTE_WIDTH, 0, LCD_WIDTH/2 + BYTE_WIDTH,  ICON_START_Y+0*SKEYHEIGHT};
 
-//get keypress for NumPad
-NUM_KEY_VALUES NumKeyGetValue(void)
-{
-  return (NUM_KEY_VALUES)KEY_GetValue(COUNT(rect_of_numkey), rect_of_numkey);
-}
-
 void keyPress(u8 index, u8 ispressed)
 {
   if (index < KEY_NUM)
@@ -51,7 +45,6 @@ void keyPress(u8 index, u8 ispressed)
 
 void Draw_keyboard(u8 * title, bool NumberOnly, bool negative)
 {
-    TSC_ReDrawIcon = keyPress;
     GUI_ClearRect(0, 0, LCD_WIDTH, rect_of_numkey[0].y0);
     GUI_ClearRect(0, rect_of_numkey[0].y0, LCD_WIDTH, LCD_HEIGHT);
 
@@ -109,11 +102,12 @@ float numPadFloat(u8* title, float old_val, float reset_val, bool negative)
       sprintf(tempstr, "%.*f", prec, old_val);
       title = (u8 *)tempstr;
     }
+    setMenu(MENU_TYPE_FULLSCREEN, NULL, COUNT(rect_of_numkey), rect_of_numkey, keyPress);
     Draw_keyboard(title, false, negative);
 
     while (1)
     {
-      key_num = NumKeyGetValue();
+      key_num = menuKeyGetValue();
       switch (key_num)
       {
       case NUM_KEY_EXIT:
@@ -242,6 +236,7 @@ int32_t numPadInt(u8* title, int32_t old_val, int32_t reset_val, bool negative)
       sprintf(tempstr, "%i", old_val);
       title = (u8 *)tempstr;
     }
+    setMenu(MENU_TYPE_FULLSCREEN, NULL, COUNT(rect_of_numkey), rect_of_numkey, keyPress);
     Draw_keyboard(title, true, negative);
 
     sprintf(ParameterBuf,"%i",val);
@@ -251,7 +246,7 @@ int32_t numPadInt(u8* title, int32_t old_val, int32_t reset_val, bool negative)
 
     while (1)
     {
-      key_num = NumKeyGetValue();
+      key_num = menuKeyGetValue();
       switch (key_num)
       {
       case NUM_KEY_EXIT:

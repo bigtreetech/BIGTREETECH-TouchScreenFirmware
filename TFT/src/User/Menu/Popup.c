@@ -134,15 +134,60 @@ void popup_strcpy(uint8_t *dst, uint8_t *src, uint16_t size)
     dst[0] = 0;
   }
 }
-/** Show save setting dialog
- * @param title - the title to show on window (title of which menu asked fot it?)
- * @param msg - the msg to to show in msg box
- * @param title - the title to show on window (title of which menu asked fot it?)
- * @param msg - the msg to to show in msg box
+
+void _setDialogTitleStr(uint8_t * str)
+{
+  popup_strcpy(popup_title, str, sizeof(popup_title));
+}
+
+void _setDialogMsgStr(uint8_t * str)
+{
+  popup_strcpy(popup_msg, str, sizeof(popup_msg));
+}
+
+void _setDialogOkTextStr(uint8_t * str)
+{
+  popup_strcpy(popup_ok, str, sizeof(popup_ok));
+}
+
+void _setDialogCancelTextStr(uint8_t * str)
+{
+  popup_strcpy(popup_cancel, str, sizeof(popup_cancel));
+}
+
+void _setDialogTitleLabel(int16_t index)
+{
+  uint8_t tempstr[MAX_LANG_LABEL_LENGTH] = {0};
+  loadLabelText(tempstr, index);
+  popup_strcpy(popup_title, tempstr, sizeof(popup_title));
+}
+
+void _setDialogMsgLabel(int16_t index)
+{
+  uint8_t tempstr[MAX_LANG_LABEL_LENGTH] = {0};
+  loadLabelText(tempstr, index);
+  popup_strcpy(popup_msg, tempstr, sizeof(popup_msg));
+}
+
+void _setDialogOkTextLabel(int16_t index)
+{
+  uint8_t tempstr[MAX_LANG_LABEL_LENGTH] = {0};
+  loadLabelText(tempstr, index);
+  popup_strcpy(popup_ok, tempstr, sizeof(popup_ok));
+}
+
+void _setDialogCancelTextLabel(int16_t index)
+{
+  uint8_t tempstr[MAX_LANG_LABEL_LENGTH] = {0};
+  loadLabelText(tempstr, index);
+  popup_strcpy(popup_cancel, tempstr, sizeof(popup_cancel));
+}
+
+/** Show save setting dialog. Set dialog text before calling showDialog
  * @param ok_action - pointer to a function to perform if ok is pressed. (pass NULL if no action need to be performed)
  * @param cancel_action - pointer to a function to perform if Cancel is pressed.(pass NULL if no action need to be performed)
 */
-void showDialog(DIALOG_TYPE type, u8 * title, u8 * msg, u8 *ok_txt, u8* cancel_txt, void (*ok_action)(), void (*cancel_action)(), void (*loop_action)())
+void showDialog(DIALOG_TYPE type, void (*ok_action)(), void (*cancel_action)(), void (*loop_action)())
 {
   if (infoSettings.mode == MARLIN)
     return;
@@ -150,20 +195,20 @@ void showDialog(DIALOG_TYPE type, u8 * title, u8 * msg, u8 *ok_txt, u8* cancel_t
   popup_redraw = true;
   popup_type = type;
 
-  popup_strcpy(popup_title, title, sizeof(popup_title));
-  popup_strcpy(popup_msg, msg, sizeof(popup_msg));
-  popup_strcpy(popup_ok, ok_txt, sizeof(popup_ok));
-  popup_strcpy(popup_cancel, cancel_txt, sizeof(popup_cancel));
+  // popup_strcpy(popup_title, title, sizeof(popup_title));
+  // popup_strcpy(popup_msg, msg, sizeof(popup_msg));
+  // popup_strcpy(popup_ok, ok_txt, sizeof(popup_ok));
+  // popup_strcpy(popup_cancel, cancel_txt, sizeof(popup_cancel));
 
   action_ok = ok_action;
   action_cancel = cancel_action;
   action_loop = loop_action;
 }
 
-void popupReminder(DIALOG_TYPE type, u8* title, u8* msg)
-{
-  showDialog(type, title, msg, textSelect(LABEL_CONFIRM), NULL, NULL, NULL, NULL);
-}
+// void popupReminder(DIALOG_TYPE type, u8* title, u8* msg)
+// {
+//   showDialog(type, title, msg, textSelect(LABEL_CONFIRM), NULL, NULL, NULL, NULL);
+// }
 
 void loopPopup(void)
 {

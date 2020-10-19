@@ -7,25 +7,30 @@ static bool slotSaved = false;
 
 void ablUpdateStatus(bool succeeded)
 {
-  char tmpTitle[120], tmpBuf[120];
   bool savingEnabled = false;
 
-  switch (infoMachineSettings.blType)
+  init_label(labelTitle);
+  labelTitle.index = LABEL_ABL_SETTINGS;
+  labelChar(tempmsg, LABEL_BL_COMPLETE);
+
+  switch (infoMachineSettings.leveling)
   {
     case BL_BBL:
-      sprintf(tmpTitle, "%s", textSelect(LABEL_ABL_SETTINGS_BBL));
-      sprintf(tmpBuf, "%s", textSelect(LABEL_BL_COMPLETE));
+    {
+      labelTitle.index = LABEL_ABL_SETTINGS_BBL;
+      loadLabelText((u8*)tempmsg, LABEL_BL_COMPLETE);
       savingEnabled = true;
       break;
-
+    }
     case BL_UBL:
-      sprintf(tmpTitle, "%s", textSelect(LABEL_ABL_SETTINGS_UBL));
-      sprintf(tmpBuf, "%s\n %s", textSelect(LABEL_BL_COMPLETE), textSelect(LABEL_BL_SMART_FILL));
+    {
+      labelTitle.index = LABEL_ABL_SETTINGS_UBL;
+      labelChar(temptxt1, LABEL_BL_COMPLETE);
+      labelChar(temptxt2, LABEL_BL_SMART_FILL);
+      sprintf(tempmsg, "%s\n %s", temptxt1, temptxt2);
       break;
-
+    }
     default:
-      sprintf(tmpTitle, "%s", textSelect(LABEL_ABL_SETTINGS));
-      sprintf(tmpBuf, "%s", textSelect(LABEL_BL_COMPLETE));
       savingEnabled = true;
       break;
   }
@@ -33,24 +38,21 @@ void ablUpdateStatus(bool succeeded)
   if (succeeded)                       // if bed leveling process successfully terminated, allow to save to EEPROM
   {
     BUZZER_PLAY(sound_success);
-
     if (savingEnabled && infoMachineSettings.EEPROM == 1)
     {
-      sprintf(tmpBuf, "%s\n %s", tmpBuf, textSelect(LABEL_EEPROM_SAVE_INFO));
-
-      showDialog(DIALOG_TYPE_SUCCESS, (u8*) tmpTitle, (u8*) tmpBuf,
-        textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), saveEepromSettings, NULL, NULL);
+      sprintf(tempmsg, "%s\n %s", tempmsg, textSelect(LABEL_EEPROM_SAVE_INFO));
+      setDialogText(labelTitle.index, (u8 *)tempmsg, LABEL_CONFIRM, LABEL_CANCEL);
+      showDialog(DIALOG_TYPE_SUCCESS, saveEepromSettings, NULL, NULL);
     }
     else
     {
-      popupReminder(DIALOG_TYPE_SUCCESS, (u8*) tmpTitle, (u8*) tmpBuf);
+      popupReminder(DIALOG_TYPE_SUCCESS, labelTitle.index, (u8*)tempmsg);
     }
   }
   else                                 // if if bed leveling process failed, provide an error dialog
   {
     BUZZER_PLAY(sound_error);
-
-    popupReminder(DIALOG_TYPE_ERROR, (u8*) tmpTitle, textSelect(LABEL_PROCESS_ABORTED));
+    popupReminder(DIALOG_TYPE_ERROR, labelTitle.index, LABEL_PROCESS_ABORTED);
   }
 }
 
@@ -73,10 +75,10 @@ void menuUBLSaveLoad(void)
     // title
     LABEL_ABL_SETTINGS_UBL_SAVE,
     // icon                         label
-    {{ICON_S_SAVE,                  LABEL_ABL_SLOT0},
-     {ICON_S_SAVE,                  LABEL_ABL_SLOT1},
-     {ICON_S_SAVE,                  LABEL_ABL_SLOT2},
-     {ICON_S_SAVE,                  LABEL_ABL_SLOT3},
+    {{ICON_EEPROM_SAVE,             LABEL_ABL_SLOT0},
+     {ICON_EEPROM_SAVE,             LABEL_ABL_SLOT1},
+     {ICON_EEPROM_SAVE,             LABEL_ABL_SLOT2},
+     {ICON_EEPROM_SAVE,             LABEL_ABL_SLOT3},
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
@@ -90,7 +92,7 @@ void menuUBLSaveLoad(void)
     UBLSaveLoadItems.title.index = LABEL_ABL_SETTINGS_UBL_LOAD;
     for (int i = 0; i < 4; i++)
     {
-      UBLSaveLoadItems.items[i].icon = ICON_S_LOAD;
+      UBLSaveLoadItems.items[i].icon = ICON_EEPROM_RESTORE;
     }
   }
 
@@ -106,23 +108,20 @@ void menuUBLSaveLoad(void)
       case KEY_ICON_2:
       case KEY_ICON_3:
         slot = key_num;
-
-        showDialog(DIALOG_TYPE_QUESTION, textSelect(UBLSaveLoadItems.title.index), textSelect(LABEL_CONFIRMATION),
-          textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), ublSaveloadConfirm, NULL, NULL);
+        setDialogText(UBLSaveLoadItems.title.index, LABEL_CONFIRMATION, LABEL_CONFIRM, LABEL_CANCEL);
+        showDialog(DIALOG_TYPE_QUESTION, ublSaveloadConfirm, NULL, NULL);
         break;
 
       case KEY_ICON_7:
         if (slotSaved == true && infoMachineSettings.EEPROM == 1)
         {
           slotSaved = false;
-
-          showDialog(DIALOG_TYPE_QUESTION, textSelect(LABEL_ABL_SETTINGS_UBL), textSelect(LABEL_ABL_SLOT_EEPROM ),
-            textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), saveEepromSettings, NULL, NULL);
+          setDialogText(LABEL_ABL_SETTINGS_UBL, LABEL_ABL_SLOT_EEPROM, LABEL_CONFIRM, LABEL_CANCEL);
+          showDialog(DIALOG_TYPE_QUESTION, saveEepromSettings, NULL, NULL);
         }
         else
         {
           slotSaved = false;
-
           infoMenu.cur--;
         }
         break;
@@ -159,7 +158,7 @@ void menuABL(void)
 
   KEY_VALUES key_num = KEY_IDLE;
 
-  switch (infoMachineSettings.blType)
+  switch (infoMachineSettings.leveling)
   {
     case BL_BBL:
       autoLevelingItems.title.index = LABEL_ABL_SETTINGS_BBL;
@@ -167,9 +166,9 @@ void menuABL(void)
 
     case BL_UBL:
       autoLevelingItems.title.index = LABEL_ABL_SETTINGS_UBL;
-      autoLevelingItems.items[1].icon = ICON_S_SAVE;
+      autoLevelingItems.items[1].icon = ICON_EEPROM_SAVE;
       autoLevelingItems.items[1].label.index = LABEL_SAVE;
-      autoLevelingItems.items[2].icon = ICON_S_LOAD;
+      autoLevelingItems.items[2].icon = ICON_EEPROM_RESTORE;
       autoLevelingItems.items[2].label.index = LABEL_LOAD;
       break;
 
@@ -187,7 +186,7 @@ void menuABL(void)
       case KEY_ICON_0:
         storeCmd("G28\n");
 
-        switch (infoMachineSettings.blType)
+        switch (infoMachineSettings.leveling)
         {
           case BL_BBL:                                     // if Bilinear Bed Leveling
             storeCmd("G29\n");
@@ -208,12 +207,12 @@ void menuABL(void)
         break;
 
       case KEY_ICON_1:
-        if (infoMachineSettings.blType == BL_UBL)
+        if (infoMachineSettings.leveling == BL_UBL)
           ublSaveLoad(true);
         break;
 
       case KEY_ICON_2:
-        if (infoMachineSettings.blType == BL_UBL)
+        if (infoMachineSettings.leveling == BL_UBL)
           ublSaveLoad(false);
         break;
 
