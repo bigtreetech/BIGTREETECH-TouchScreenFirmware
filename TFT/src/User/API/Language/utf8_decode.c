@@ -147,7 +147,7 @@ void getCharacterInfo(const uint8_t *ch, CHAR_INFO *pInfo)
 }
 
 // decode UTF-8 char display bit width
-uint16_t GUI_StrPixelWidth(const uint8_t *const str)
+uint16_t GUI_StrPixelWidth_str(const uint8_t * str)
 {
   uint16_t i = 0, len = 0;
   CHAR_INFO info;
@@ -161,6 +161,14 @@ uint16_t GUI_StrPixelWidth(const uint8_t *const str)
   }
   return len;
 }
+// decode UTF-8 char display bit width
+uint16_t GUI_StrPixelWidth_label(int16_t index)
+{
+  uint8_t tempstr[MAX_LANG_LABEL_LENGTH];
+  if (loadLabelText((u8*)tempstr, index) == false) return 0;
+  return GUI_StrPixelWidth_str(tempstr);
+}
+
 uint16_t getUTF8Length(const uint8_t *const str)
 {
  uint16_t i = 0, len = 0;

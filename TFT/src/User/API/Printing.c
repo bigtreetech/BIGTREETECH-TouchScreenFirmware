@@ -167,7 +167,7 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
         //if pause was triggered through M0/M1 then break
       if(is_m0pause == true) {
         setM0Pause(is_m0pause);
-        popupReminder(DIALOG_TYPE_ALERT, textSelect(LABEL_PAUSE), textSelect(LABEL_M0_PAUSE));
+        popupReminder(DIALOG_TYPE_ALERT, LABEL_PAUSE, LABEL_PAUSE);
         break;
         }
 
@@ -181,7 +181,7 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
         }
         if (coordinateIsKnown())
         {
-          mustStoreCmd("G1 Z%.3f F%d\n", tmp.axis[Z_AXIS] + infoSettings.pause_z_raise, infoSettings.pause_feedrate[E_AXIS]);
+          mustStoreCmd("G1 Z%.3f F%d\n", tmp.axis[Z_AXIS] + infoSettings.pause_z_raise, infoSettings.pause_feedrate[Z_AXIS]);
           mustStoreCmd("G1 X%.3f Y%.3f F%d\n", infoSettings.pause_pos[X_AXIS], infoSettings.pause_pos[Y_AXIS], infoSettings.pause_feedrate[X_AXIS]);
         }
 
@@ -289,7 +289,7 @@ void shutdown(void)
     if(fanIsType(i, FAN_TYPE_F)) mustStoreCmd("%s S0\n", fanCmd[i]);
   }
   mustStoreCmd("M81\n");
-  popupReminder(DIALOG_TYPE_INFO, textSelect(LABEL_SHUT_DOWN), textSelect(LABEL_SHUTTING_DOWN));
+  popupReminder(DIALOG_TYPE_INFO, LABEL_SHUT_DOWN, LABEL_SHUTTING_DOWN);
 }
 
 void shutdownLoop(void)
@@ -309,14 +309,15 @@ void shutdownLoop(void)
 void startShutdown(void)
 {
   char tempstr[75];
-  sprintf(tempstr, (char *)textSelect(LABEL_WAIT_TEMP_SHUT_DOWN), infoSettings.auto_off_temp);
+  labelChar(tempbody, LABEL_WAIT_TEMP_SHUT_DOWN);
+  sprintf(tempstr, tempbody, infoSettings.auto_off_temp);
 
   for(u8 i = 0; i < infoSettings.fan_count; i++)
   {
     if(fanIsType(i,FAN_TYPE_F)) mustStoreCmd("%s S255\n", fanCmd[i]);
   }
-  showDialog(DIALOG_TYPE_INFO,textSelect(LABEL_SHUT_DOWN), (u8 *)tempstr,
-              textSelect(LABEL_FORCE_SHUT_DOWN), textSelect(LABEL_CANCEL), shutdown, NULL, shutdownLoop);
+  setDialogText(LABEL_SHUT_DOWN, (u8 *)tempstr, LABEL_FORCE_SHUT_DOWN, LABEL_CANCEL);
+  showDialog(DIALOG_TYPE_INFO, shutdown, NULL, shutdownLoop);
 }
 
 
@@ -405,6 +406,10 @@ bool hasPrintingMenu(void)
 
 void loopCheckPrinting(void)
 {
+  #if defined(ST7920_SPI) || defined(LCD2004_simulator)
+    if(infoMenu.menu[infoMenu.cur] == menuMarlinMode) return;
+  #endif
+
   if (infoHost.printing && !infoPrinting.printing) {
     infoPrinting.printing = true;
     if (!hasPrintingMenu())

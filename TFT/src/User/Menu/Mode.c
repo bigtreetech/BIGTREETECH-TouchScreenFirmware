@@ -38,6 +38,10 @@ void infoMenuSelect(void)
           knob_LED_Init():
         #endif
       #endif
+
+      #if ENC_ACTIVE_SIGNAL
+        setEncActiveSignal(1);
+      #endif
       GUI_RestoreColorDefault();
       if(infoSettings.unified_menu == 1) //if Unified menu is selected
         infoMenu.menu[infoMenu.cur] = menuStatus; //status screen as default screen on boot
@@ -63,6 +67,9 @@ void infoMenuSelect(void)
     }
 
     case MARLIN:
+      #if ENC_ACTIVE_SIGNAL
+        setEncActiveSignal(0);
+      #endif
       if (infoSettings.serial_alwaysOn == 1)
       {
         Serial_ReSourceInit();

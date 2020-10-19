@@ -7,7 +7,6 @@
 #define PRINTDEBUG(x)
 #endif
 
-
 const GUI_POINT pointConfigTitle     = {2,2};
 const GUI_RECT  rectTitleline         = {0,               BYTE_HEIGHT+4,      LCD_WIDTH,                BYTE_HEIGHT+6};
 const GUI_RECT  recterror             = {BYTE_WIDTH/2-2,  BYTE_HEIGHT*2+2,    LCD_WIDTH-BYTE_WIDTH/2+2, LCD_HEIGHT-(BYTE_HEIGHT*4)-4};
@@ -19,6 +18,8 @@ u16 foundkeys = 0;
 
 CONFIGFILE * CurConfigFile;
 char * cur_line = NULL;
+static u16 c_index = 0;
+
 int customcode_index = 0;
 int customcode_good[CUSTOM_GCODES_COUNT];
 bool scheduleRotate = false;
@@ -27,39 +28,119 @@ static CUSTOM_GCODES* configCustomGcodes = NULL;
 PRINT_GCODES* configPrintGcodes  = NULL;
 STRINGS_STORE* configStringsStore = NULL;
 
+
 const char *const config_keywords[CONFIG_COUNT] = {
   #define X_CONFIG(NAME) CONFIG_##NAME ,
   #include "config.inc"
   #undef  X_CONFIG
 };
 
-
 bool getConfigFromFile(void)
+{
+  if (f_file_exists(CONFIG_FILE_PATH) == false)
+    return false;
+  configCustomGcodes = (CUSTOM_GCODES *)malloc(sizeof(CUSTOM_GCODES));
+  configPrintGcodes = (PRINT_GCODES *)malloc(sizeof(PRINT_GCODES));
+  configStringsStore = (STRINGS_STORE *)malloc(sizeof(STRINGS_STORE));
+  customcode_index = 0;
+  foundkeys = 0;
+
+  char cur_line_buffer[LINE_MAX_CHAR];
+  cur_line = cur_line_buffer;
+
+  drawProgressPage((u8*)"Updating Configuration...");
+
+  if (readConfigFile(CONFIG_FILE_PATH, parseConfigLine, LINE_MAX_CHAR))
+  {
+    //store custom codes count
+    configCustomGcodes->count = customcode_index;
+
+    PRINTDEBUG("\nCustom gcode stored at 1:");
+    PRINTDEBUG(configCustomGcodes->gcode[1]);
+    if (scheduleRotate)
+    {
+      LCD_RefreshDirection();
+      TSC_Calibration();
+    }
+    storePara();
+    saveConfig();
+    free(configCustomGcodes);
+    free(configPrintGcodes);
+    free(configStringsStore);
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+bool getLangFromFile(void)
+{
+  bool success = false;
+  foundkeys = 0;
+  DIR d;
+  FILINFO f;
+  FRESULT r =  f_findfirst(&d,&f,"0:","language_*.ini");
+  f_closedir(&d);
+  if (r != FR_OK)
+   return false;
+
+  char langpath[256];
+  sprintf(langpath, "0:%s", f.fname);
+
+  if(!f_file_exists(langpath))
+    return false;
+
+  char cur_line_buffer[MAX_LANG_LABEL_LENGTH + 100];
+  cur_line = cur_line_buffer;
+
+  drawProgressPage((u8*)f.fname);
+
+  //erase part of flash to be rewritten
+  for (int i = 0; i < (LANGUAGE_SIZE / W25QXX_SECTOR_SIZE);i++)
+  {
+    W25Qxx_EraseSector(LANGUAGE_ADDR + (i * W25QXX_SECTOR_SIZE));
+  }
+  success = readConfigFile(langpath, parseLangLine, MAX_LANG_LABEL_LENGTH + 100);
+  if (foundkeys != LABEL_NUM)
+    success = false;
+  else
+  { //rename file if update was successful
+    if (!f_file_exists(ADMIN_MODE_FILE) && f_file_exists(langpath))
+    { // language exists
+      char newlangpath[256];
+      sprintf(newlangpath, "0:%s.CUR", f.fname);
+      if (f_file_exists(newlangpath))
+      { // old language also exists
+        f_unlink(newlangpath);
+      }
+      f_rename(langpath, newlangpath);
+    }
+  }
+  return success;
+}
+
+bool readConfigFile(const char * path, void (*lineParser)(), uint16_t maxLineLen)
 {
   #ifdef CONFIG_DEBUG
     Serial_ReSourceInit();
   #endif
 
-  char cur_line_buffer[LINE_MAX_CHAR];
-  cur_line = cur_line_buffer;
   CONFIGFILE configFile;
   CurConfigFile = &configFile;
-  configCustomGcodes = (CUSTOM_GCODES*)malloc(sizeof(CUSTOM_GCODES));
-  configPrintGcodes = (PRINT_GCODES*)malloc(sizeof(PRINT_GCODES));
-  configStringsStore = (STRINGS_STORE*)malloc(sizeof(STRINGS_STORE));
-  customcode_index = 0;
+
   bool comment_mode = false;
   bool comment_space = true;
   char cur_char;
   char last_char = 0;
   u8 count = 0;
   UINT br = 0;
-  if (f_file_exists(CONFIG_FILE_PATH) == false)
+
+  if (f_file_exists(path) == false)
     return false;
 
-  drawProgressPage();
-
-  if (f_open(&configFile.file, CONFIG_FILE_PATH, FA_OPEN_EXISTING | FA_READ) != FR_OK)
+  if (f_open(&configFile.file, path, FA_OPEN_EXISTING | FA_READ) != FR_OK)
   {
     PRINTDEBUG("parse error\n");
     showError(CSTAT_FILE_NOTOPEN);
@@ -67,7 +148,6 @@ bool getConfigFromFile(void)
   }
   else
   {
-
     configFile.size = f_size(&configFile.file);
     if (configFile.size == 0)
     {
@@ -96,7 +176,7 @@ bool getConfigFromFile(void)
           //cur_line[count++] = '\n';
           cur_line[count++] = '\0';
           cur_line[count] = 0;          //terminate string
-          parseConfigLine();
+          lineParser();
           drawProgress();
 
           PRINTDEBUG("\n");
@@ -104,7 +184,7 @@ bool getConfigFromFile(void)
           count = 0;                    //clear buffer
         }
       }
-      else if (count < LINE_MAX_CHAR - 2)
+      else if (count < maxLineLen - 2)
       {
         if (cur_char == '#')
           comment_mode = true;
@@ -125,29 +205,15 @@ bool getConfigFromFile(void)
             if (configFile.cur == configFile.size)
             {
               cur_line[count++] = '\0';
-              cur_line[count] = 0;        //terminate string
+              cur_line[count] = 0; //terminate string
               PRINTDEBUG("line read\n");
-              parseConfigLine();          //start parsing at the end of the file.
+              lineParser(); //start parsing at the end of the file.
+              drawProgress();
             }
           }
         }
       }
     }
-    //store custom codes count
-    configCustomGcodes->count = customcode_index;
-
-    PRINTDEBUG("\nCustom gcode stored at 1:");
-    PRINTDEBUG(configCustomGcodes->gcode[1]);
-    if(scheduleRotate)
-    {
-      LCD_RefreshDirection();
-      TSC_Calibration();
-    }
-    storePara();
-    saveConfig();
-    free(configCustomGcodes);
-    free(configPrintGcodes);
-    free(configStringsStore);
 
     f_close(&configFile.file);
     configFile.cur = 0;
@@ -155,8 +221,6 @@ bool getConfigFromFile(void)
     return true;
   }
 }
-
-static u16 c_index = 0;
 
 //check if the value is within min and max limits
 bool inLimit(int val, int min, int max)
@@ -172,8 +236,8 @@ bool inLimit(int val, int min, int max)
   }
 }
 
-//check if keyword exits in the buffer line
-static char key_seen(const char *keyStr)
+//check if config keyword exits in the buffer line
+bool key_seen(const char *keyStr)
 {
   u16 i;
   for (c_index = 0; c_index < ACK_MAX_SIZE && cur_line[c_index] != 0; c_index++)
@@ -256,6 +320,39 @@ void parseConfigLine(void)
   }
   showError(CSTAT_UNKNOWN_KEYWORD);
 }
+
+//parse keywords from line read from language file
+void parseLangLine(void)
+{
+  for (int i = 0; i < LABEL_NUM; i++)
+  {
+    if (key_seen(lang_key_list[i]))
+    {
+      PRINTDEBUG("\n");
+      PRINTDEBUG((char *)lang_key_list[i]);
+      uint32_t key_addr = LANGUAGE_ADDR + (MAX_LANG_LABEL_LENGTH * i);
+      u8 * pchr = (u8*)strchr(cur_line, ':') + 1;
+      int bytelen = strlen((char*)pchr);
+
+      if (inLimit(bytelen, 1, MAX_LANG_LABEL_LENGTH))
+      {
+        W25Qxx_WritePage(pchr, key_addr, MAX_LANG_LABEL_LENGTH);
+        char check[MAX_LANG_LABEL_LENGTH];
+        W25Qxx_ReadBuffer((u8 *)&check, key_addr, MAX_LANG_LABEL_LENGTH);
+        if (strcmp(strchr(cur_line, ':') + 1, check) != 0)
+          showError(CSTAT_SPI_WRITE_FAIL);
+      }
+      else
+      {
+        showError(CSTAT_INVALID_VALUE);
+      }
+      foundkeys++;
+      return;
+    }
+  }
+  showError(CSTAT_UNKNOWN_KEYWORD);
+}
+
 
 void saveConfig(void)
 {
@@ -344,11 +441,11 @@ void resetConfig(void)
   writeConfig((uint8_t *)&tempST, sizeof(STRINGS_STORE), STRINGS_STORE_ADDR, STRINGS_STORE_MAX_SIZE);
 }
 
-void drawProgressPage(void)
+void drawProgressPage(u8 * title)
 {
   GUI_Clear(BLACK);
-  GUI_DispString(2,2,(u8*)"Updating Configuration...");
-  GUI_FillRectColor(rectTitleline.x0,rectTitleline.y0,rectTitleline.x1,rectTitleline.y1,BLUE);
+  GUI_DispString(2, 2, title);
+  GUI_FillRectColor(rectTitleline.x0, rectTitleline.y0, rectTitleline.x1, rectTitleline.y1, BLUE);
   //GUI_DrawPrect(&recterror);
   GUI_DrawPrect(&rectProgressframe);
 }

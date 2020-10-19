@@ -276,7 +276,7 @@ bool processKnownDataFormat(char *dataRow)
 
     meshSaveCallbackPtr = saveEepromSettings;
 
-    switch (infoMachineSettings.blType)
+    switch (infoMachineSettings.leveling)
     {
       case BL_BBL:
         sprintf(meshData->saveTitle, "%s", textSelect(LABEL_ABL_SETTINGS_BBL));
@@ -679,8 +679,8 @@ void meshSave(bool saveOnChange)
 
   if (infoMachineSettings.EEPROM == 1)
   {
-    showDialog(DIALOG_TYPE_SUCCESS, (u8 *) meshData->saveTitle, textSelect(LABEL_EEPROM_SAVE_INFO),
-      textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), meshSaveCallback, NULL, NULL);
+    setDialogText((u8 *) meshData->saveTitle, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
+    showDialog(DIALOG_TYPE_QUESTION, meshSaveCallback, NULL, NULL);
   }
 }
 
@@ -803,11 +803,11 @@ void meshUpdateData(char *dataRow)
   {
     meshData->status = ME_DATA_FAILED;
 
-    char tmpBuf[120];
+    labelChar(tempMsg, LABEL_PROCESS_ABORTED);
 
-    sprintf(tmpBuf, "%s\n %s", textSelect(LABEL_PROCESS_ABORTED), dataRow);
+    sprintf(&tempMsg[strlen(tempMsg)], "\n %s", dataRow);
 
-    popupReminder(DIALOG_TYPE_ERROR, textSelect(LABEL_MESH_EDITOR), (u8 *) tmpBuf);
+    popupReminder(DIALOG_TYPE_ERROR, LABEL_MESH_EDITOR, (u8 *) tempMsg);
 
     infoMenu.cur--;                                        // exit from mesh editor menu. it avoids to loop in case of persistent error
 

@@ -3,7 +3,7 @@
 
 static bool curSoftwareEndstops = true;
 static u32 nextTime = 0;
-static u32 updateTime = 500;                               // 1 seconds is 1000
+static u32 updateTime = 200;                               // 1 seconds is 1000
 
 /* Enable probe height
  * Temporary disable software endstops

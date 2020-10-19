@@ -520,17 +520,17 @@ void sendQueueCmd(void)
           if (fanIsType(i, FAN_TYPE_F)) fanSetSpeed(i, 0);
           break;
         }
-        
+
         case 710: //M710 Controller Fan
         {
           u8 i = 0;
-          if(cmd_seen('S')) { 
-            i = fanGetTypID(i,FAN_TYPE_CTRL_S); 
+          if(cmd_seen('S')) {
+            i = fanGetTypID(i,FAN_TYPE_CTRL_S);
             fanSetSpeed(i, cmd_value());
             fanSetSendWaiting(i, false);
           }
-          if(cmd_seen('I')) { 
-            i = fanGetTypID(i=0,FAN_TYPE_CTRL_I); 
+          if(cmd_seen('I')) {
+            i = fanGetTypID(i=0,FAN_TYPE_CTRL_I);
             fanSetSpeed(i, cmd_value());
             fanSetSendWaiting(i, false);
           }
@@ -726,12 +726,8 @@ void sendQueueCmd(void)
         #endif
 
         case 420: //M420
-          if(cmd_seen('S')) {
-            infoSettings.autoLevelState = cmd_value();
-            setParameter(P_ABL_STATE,0,cmd_value());
-            if(cmd_value()==0) storeCmd("M117 ABL inactive\n");
-            else storeCmd("M117 ABL active\n");
-          }
+          //ABL state will be set through parsACK.c after receiving confirmation message from the printer
+          // to prevent wrong state in case of error.
           if(cmd_seen('Z')) setParameter(P_ABL_STATE,1,cmd_float());
         break;
 
@@ -786,7 +782,7 @@ void sendQueueCmd(void)
           if(cmd_seen('Y')) setParameter(P_HYBRID_THRESHOLD, Y_STEPPER, cmd_value());
           if(cmd_seen('Z')) setParameter(P_HYBRID_THRESHOLD, Z_STEPPER, cmd_value());
           if(cmd_seen('E')) setParameter(P_HYBRID_THRESHOLD, E_STEPPER, cmd_value());
-          break;  
+          break;
       }
       break; //end parsing M-codes
 
@@ -819,17 +815,15 @@ void sendQueueCmd(void)
           break;
 
         case 29: //G29
-          if(ENABLE_BL_VALUE > 0)                          // if not Disabled
+          if(ENABLE_BL_VALUE > 0)              // if not Disabled
           {
             if(cmd_seen('A'))
             {
-              infoSettings.autoLevelState = 1;
               setParameter(P_ABL_STATE,0,1);
               storeCmd("M117 UBL active\n");
             }
             if(cmd_seen('D'))
             {
-              infoSettings.autoLevelState = 0;
               setParameter(P_ABL_STATE,0,0);
               storeCmd("M117 UBL inactive\n");
             }

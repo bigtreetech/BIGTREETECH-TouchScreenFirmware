@@ -10,11 +10,11 @@ static u8 curSubmenu = 0;
 /* Show an error notification */
 void probeNotifyError(void)
 {
-  char tmpBuf[120];
+  labelChar(tempMsg, LABEL_Z_OFFSET);
 
-  sprintf(tmpBuf, "%s %s", textSelect(LABEL_Z_OFFSET), textSelect(LABEL_OFF));
+  sprintf(&tempMsg[strlen(tempMsg)], " %s", textSelect(LABEL_OFF));
 
-  addToast(DIALOG_TYPE_ERROR, tmpBuf);
+  addToast(DIALOG_TYPE_ERROR, tempMsg);
 }
 
 void probeDrawStatus(u8 *status)
@@ -185,8 +185,8 @@ void menuProbeOffset(void)
           case 2:
             if (infoMachineSettings.EEPROM == 1)
             {
-              showDialog(DIALOG_TYPE_QUESTION, textSelect(probeOffsetItems.title.index), textSelect(LABEL_EEPROM_SAVE_INFO),
-                textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), saveEepromSettings, NULL, NULL);
+              setDialogText(probeOffsetItems.title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
+              showDialog(DIALOG_TYPE_QUESTION, saveEepromSettings, NULL, NULL);
             }
             break;
 

@@ -28,23 +28,23 @@ void pidUpdateStatus(bool succeeded)
   if (pidCounter > 0)                                      // if all the PID processes were still not terminated, simply provide a notification
   {
 #ifdef ENABLE_PID_STATUS_UPDATE_NOTIFICATION
-    char tmpBuf[120];
+    labelChar(tempMsg, LABEL_PID_TITLE);
 
     if (succeeded)
     {
-      sprintf(tmpBuf, "%s %s", textSelect(LABEL_PID_TITLE), textSelect(LABEL_PROCESS_COMPLETED));
+      sprintf(&tempMsg[strlen(tempMsg)], " %s", textSelect(LABEL_PROCESS_COMPLETED));
 
       BUZZER_PLAY(sound_notify);
 
-      addToast(DIALOG_TYPE_INFO, tmpBuf);
+      addToast(DIALOG_TYPE_INFO, tempMsg);
     }
     else
     {
-      sprintf(tmpBuf, "%s %s", textSelect(LABEL_PID_TITLE), textSelect(LABEL_PROCESS_ABORTED));
+      sprintf(&tempMsg[strlen(tempMsg)], " %s", textSelect(LABEL_PROCESS_ABORTED));
 
       BUZZER_PLAY(sound_error);
 
-      addToast(DIALOG_TYPE_ERROR, tmpBuf);
+      addToast(DIALOG_TYPE_ERROR, tempMsg);
     }
 #endif
   }
@@ -56,25 +56,25 @@ void pidUpdateStatus(bool succeeded)
     {
       BUZZER_PLAY(sound_success);
 
+      labelChar(tempMsg, LABEL_PROCESS_COMPLETED);
+
       if (infoMachineSettings.EEPROM == 1)
       {
-        char tmpBuf[120];
+        sprintf(&tempMsg[strlen(tempMsg)], "\n %s", textSelect(LABEL_EEPROM_SAVE_INFO));
 
-        sprintf(tmpBuf, "%s\n %s", textSelect(LABEL_PROCESS_COMPLETED), textSelect(LABEL_EEPROM_SAVE_INFO));
-
-        showDialog(DIALOG_TYPE_SUCCESS, textSelect(LABEL_PID_TITLE), (u8 *) tmpBuf,
-          textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), saveEepromSettings, NULL, NULL);
+        setDialogText(LABEL_PID_TITLE, (u8 *) tempMsg, LABEL_CONFIRM, LABEL_CANCEL);
+        showDialog(DIALOG_TYPE_SUCCESS, saveEepromSettings, NULL, NULL);
       }
       else
       {
-        popupReminder(DIALOG_TYPE_SUCCESS, textSelect(LABEL_PID_TITLE), textSelect(LABEL_PROCESS_COMPLETED));
+        popupReminder(DIALOG_TYPE_SUCCESS, LABEL_PID_TITLE, (u8 *) tempMsg);
       }
     }
     else                                                   // if at least a PID process failed, provide an error dialog
     {
       BUZZER_PLAY(sound_error);
 
-      popupReminder(DIALOG_TYPE_ERROR, textSelect(LABEL_PID_TITLE), textSelect(LABEL_PROCESS_ABORTED));
+      popupReminder(DIALOG_TYPE_ERROR, LABEL_PID_TITLE, LABEL_PROCESS_ABORTED);
     }
   }
 }
@@ -90,13 +90,13 @@ void pidCheckTimeout(void)
 //      u8 pidCounter = 0;                                 // we voluntary don't reset (commented out the code) also pidCounter and pidSucceeded to let the
 //      pidSucceeded = false;                              // pidUpdateStatus function allow to handle status updates eventually arriving after the timeout
 
-      char tmpBuf[120];
+      labelChar(tempMsg, LABEL_TIMEOUT_REACHED);
 
-      sprintf(tmpBuf, "%s\n %s", textSelect(LABEL_TIMEOUT_REACHED), textSelect(LABEL_PROCESS_ABORTED));
+      sprintf(&tempMsg[strlen(tempMsg)], "\n %s", textSelect(LABEL_PROCESS_ABORTED));
 
       BUZZER_PLAY(sound_error);
 
-      popupReminder(DIALOG_TYPE_ERROR, textSelect(LABEL_PID_TITLE), (u8 *) tmpBuf);
+      popupReminder(DIALOG_TYPE_ERROR, LABEL_PID_TITLE, (u8 *) tempMsg);
     }
   }
 }
@@ -322,8 +322,8 @@ void menuPid(void)
           }
           else
           {
-            showDialog(DIALOG_TYPE_QUESTION, textSelect(pidItems.title.index), textSelect(LABEL_PID_START_INFO),
-              textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), pidStart, NULL, NULL);
+            setDialogText(pidItems.title.index, LABEL_PID_START_INFO, LABEL_CONFIRM, LABEL_CANCEL);
+            showDialog(DIALOG_TYPE_QUESTION, pidStart, NULL, NULL);
           }
         }
         break;

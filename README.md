@@ -33,7 +33,8 @@ Firmware for BigTreeTech's dual-mode touchscreen 3D printer controllers
 
 ## Update TFT Firmware
 
-TFT firmware updates are comprised of three parts:
+
+TFT firmware updates are comprised of three elements:
 
 1. The firmware binary (`BIGTREE_TFT*_V*.*.*.bin`). Example: `BIGTREE_TFT35_V3.0.26.1.bin`:
    - `BIGTREE_TFT_35`: model
@@ -46,17 +47,30 @@ TFT firmware updates are comprised of three parts:
 
 Copy  the `BIGTREE_TFT*_V*.*.*.bin,the `TFT*` folder and the config.ini to the root of a blank SD card that is <8GB and formatted as FAT32:
 
-![Untitled](https://user-images.githubusercontent.com/54359396/93636859-e9ea3c00-f9f4-11ea-9a7a-b2208fd51c9b.png)
+
+![Copy](https://user-images.githubusercontent.com/54359396/94800953-a1178780-03e5-11eb-9d2f-6a8ea908297b.png)
+
 
 Place SD card with the `BIGTREE_TFT*_V*.*.*.bin`, the`TFT*` folder and the config.ini into the TFT's SD card reader and power cycle your printer to start the update process.
 
 <p align=center> ⚠️ Failing to update your icons &amp; fonts will result in missing icons and/or unreadable text ⚠️ </p>
 
-## Update Prozess shown on TFT Screen
+
+
+## Update Process shown on TFT Screen
 
 A successful update looks like this on the screen:
 
-![Screenshot 2020-09-25 at 23 36 25](https://user-images.githubusercontent.com/54359396/94318053-f2f48380-ff87-11ea-9e70-ebd84a3cedb0.png)
+![Screenshot 2020-09-26 at 22 10 04](https://user-images.githubusercontent.com/54359396/94349526-5abcd400-0045-11eb-993a-afc5b241f4d7.png)
+
+... and the name of the elements on the SD card changes to this:
+
+![After Update](https://user-images.githubusercontent.com/54359396/94349755-dc156600-0047-11eb-9b1e-a1334bc5675f.png)
+
+<p align=center> ⚠️ Errors during the update can not be ignored and must be solved before using the TFT ⚠️ </p>
+
+After the update is done and the files are renamed, it is possible to reuse them again. To do so, change the name of the element(s) to the pre-update name and start the update process again.
+
 
 ## Configuration
 

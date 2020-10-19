@@ -1,11 +1,3 @@
-/**
-* Language Kewords Generation
-* Usage: X_WORD(VALUE)
-* 'VALUE' is the keyword name without the 'LABEL_' or
-* languange short code(like 'EN_' or 'CN_') prefix
-*
-* Description: https://en.wikipedia.org/wiki/X_Macro
-*/
 X_WORD (LANGUAGE)
 X_WORD (HEAT)
 X_WORD (MOVE)
