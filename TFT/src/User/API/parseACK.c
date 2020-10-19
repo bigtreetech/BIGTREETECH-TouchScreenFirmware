@@ -238,11 +238,13 @@ void hostActionCommands(void)
         break;
       case 1:
         BUZZER_PLAY(sound_notify);
-        showDialog(DIALOG_TYPE_ALERT, (u8*)"Action command", (u8 *)hostAction.prompt_begin, (u8 *)hostAction.prompt_button1, NULL, breakAndContinue, NULL, NULL);
+        setDialogText((u8*)"Action command", (u8 *)hostAction.prompt_begin, (u8 *)hostAction.prompt_button1, LABEL_BACKGROUND);
+        showDialog(DIALOG_TYPE_ALERT,  breakAndContinue, NULL, NULL);
         break;
       case 2:
         BUZZER_PLAY(sound_notify);
-        showDialog(DIALOG_TYPE_ALERT, (u8*)"Action command", (u8 *)hostAction.prompt_begin, (u8 *)hostAction.prompt_button1, (u8 *)hostAction.prompt_button2, resumeAndPurge, resumeAndContinue, NULL);
+        setDialogText((u8*)"Action command", (u8 *)hostAction.prompt_begin, (u8 *)hostAction.prompt_button1, (u8 *)hostAction.prompt_button2);
+        showDialog(DIALOG_TYPE_ALERT, resumeAndPurge, resumeAndContinue, NULL);
         break;
     }
   }
@@ -275,10 +277,13 @@ void parseACK(void)
       if (infoSettings.ext_count < infoSettings.hotend_count) infoSettings.ext_count = infoSettings.hotend_count;
       updateNextHeatCheckTime();
       infoHost.connected = true;
-      storeCmd("M503\n");// Query detailed printer capabilities
-      storeCmd("M92\n"); // Steps/mm of extruder is an important parameter for Smart filament runout
-                         // Avoid can't getting this parameter due to disabled M503 in Marlin
-      storeCmd("M115\n");
+      if(infoMachineSettings.isMarlinFirmware == -1) // if never connected to the printer since boot
+      {
+        storeCmd("M503\n");// Query detailed printer capabilities
+        storeCmd("M92\n"); // Steps/mm of extruder is an important parameter for Smart filament runout
+                          // Avoid can't getting this parameter due to disabled M503 in Marlin
+        storeCmd("M115\n");
+      }
     }
 
     // Onboard sd Gcode command response
@@ -547,22 +552,29 @@ void parseACK(void)
                           setParameter(P_HYBRID_THRESHOLD, E2_STEPPER, ack_value());
                           setDualStepperStatus(E_STEPPER, true);
       }
-    // Parse and store ABL type
-      else if(ack_seen("echo:; Auto Bed Leveling")){
-        if(ENABLE_BL_VALUE==1)                             // if Auto-detect
-          infoMachineSettings.blType = BL_ABL;
+    // Parse and store ABL type if auto-detect is enabled
+      else if (ack_seen("Auto Bed Leveling") && ENABLE_BL_VALUE == 1)
+      {
+        infoMachineSettings.leveling = BL_ABL;
       }
-      else if(ack_seen("echo:; Unified Bed Leveling")){
-        if(ENABLE_BL_VALUE==1)                             // if Auto-detect
-          infoMachineSettings.blType = BL_UBL;
+      else if (ack_seen("Unified Bed Leveling") && ENABLE_BL_VALUE == 1)
+      {
+        infoMachineSettings.leveling = BL_UBL;
       }
-      else if(ack_seen("echo:; Mesh Bed Leveling")){
-        if(ENABLE_BL_VALUE==1)                             // if Auto-detect
-          infoMachineSettings.blType = BL_MBL;
+      else if (ack_seen("Mesh Bed Leveling") && ENABLE_BL_VALUE == 1)
+      {
+        infoMachineSettings.leveling = BL_MBL;
+      }
+    // Parse ABL state
+      else if(ack_seen("echo:Bed Leveling"))
+      {
+        if (ack_seen("ON"))
+          setParameter(P_ABL_STATE, 0, ENABLED);
+        else
+          setParameter(P_ABL_STATE, 0, DISABLED);
       }
     // Parse and store ABL on/off state & Z fade value on M503
       else if(ack_seen("M420 S")) {
-        infoSettings.autoLevelState = ack_value();
         if(ack_seen("S")) setParameter(P_ABL_STATE, 0, ack_value());
         if(ack_seen("Z")) setParameter(P_ABL_STATE, 1, ack_value());
       }
@@ -572,6 +584,7 @@ void parseACK(void)
         uint8_t *string = (uint8_t *)&dmaL2Cache[ack_index];
         uint16_t string_start = ack_index;
         uint16_t string_end = string_start;
+
         if (ack_seen("Marlin"))
         {
           infoMachineSettings.isMarlinFirmware = 1;
@@ -607,9 +620,9 @@ void parseACK(void)
       {
         infoMachineSettings.autoReportTemp = ack_value();
       }
-      else if(ack_seen("Cap:AUTOLEVEL:"))
+      else if(ack_seen("Cap:AUTOLEVEL:") && infoMachineSettings.leveling == BL_DISABLED)
       {
-        infoMachineSettings.autoLevel = ack_value();
+        infoMachineSettings.leveling = ack_value();
       }
       else if(ack_seen("Cap:Z_PROBE:"))
       {
@@ -715,8 +728,8 @@ void parseACK(void)
     // Parse pause message
       else if(!infoMachineSettings.promptSupport && ack_seen("paused for user"))
       {
-        showDialog(DIALOG_TYPE_QUESTION, (u8*)"Printer is Paused",(u8*)"Paused for user\ncontinue?",
-                   textSelect(LABEL_CONFIRM), NULL, breakAndContinue, NULL,NULL);
+        setDialogText((u8*)"Printer is Paused",(u8*)"Paused for user\ncontinue?", LABEL_CONFIRM, LABEL_BACKGROUND);
+        showDialog(DIALOG_TYPE_QUESTION, breakAndContinue, NULL,NULL);
       }
     // Parse ABL Complete message
       else if(ack_seen("ABL Complete"))

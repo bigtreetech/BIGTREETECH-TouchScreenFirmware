@@ -63,10 +63,11 @@ void menuHeat(void)
     {ICON_STOP,                 LABEL_STOP},
     {ICON_BACK,                 LABEL_BACK},}
   };
-  
+
   heatSetUpdateTime(TEMPERATURE_QUERY_FAST_DURATION);
 
   heatItems.items[KEY_ICON_4] = itemTool[c_heater];
+  heatItems.items[KEY_ICON_5] = itemDegree[item_degree_i];
   menuDrawPage(&heatItems);
   showTemperature(c_heater);
 
