@@ -15,6 +15,7 @@ Firmware for BigTreeTech's dual-mode touchscreen 3D printer controllers
 
 ## Table of Contents
 
+- [Connect the TFT to the Mainboard](#Connect the TFT to the Mainboard)
 - [Menus and Themes](#menus-and-themes)
 - [Update TFT Firmware](#update-tft-firmware)
 - [Configuration](#configuration)
@@ -23,6 +24,14 @@ Firmware for BigTreeTech's dual-mode touchscreen 3D printer controllers
   - [Firmware](#firmware)
 - [Troubleshooting](#troubleshooting)
 - [Version History](#version-history)
+
+## Connect the TFT to the Mainboard
+
+In case your TFT does **not** have an EXP connector at all (TFT28 for example), you can not use the Marlin emulator mode.
+
+In case your mainboard provides **EXP1 and EXP2**, you have to connect 2 ribbon cables connecting EXP1 and EXP2 of the mainboard to EXP1 and EXP2 of the TFT. In the Marlin firmware of your mainboard, make sure that **ONLY** the "REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER" is activated in Configuration.h and that all other controllers (especially the "CR10_STOCKDISPLAY") are **De**activated.
+
+In case you have an **"E3" mainboard** which provides a **single EXP connector**, you have to connect 1 ribbon cable connecting EXP of the mainboard to **EXP3** of the TFT. In the Marlin firmware of your mainboard, make sure that **ONLY** the "CR10_STOCKDISPLAY" is activated in Configuration.h and that all other controllers (especially the "REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER") are **De**activated.
 
 ## Menus and Themes
 
@@ -48,8 +57,11 @@ TFT firmware updates are comprised of three elements:
 Copy  the `BIGTREE_TFT*_V*.*.*.bin,the `TFT*` folder and the config.ini to the root of a blank SD card that is <8GB and formatted as FAT32:
 
 
-![Copy](https://user-images.githubusercontent.com/54359396/94800953-a1178780-03e5-11eb-9d2f-6a8ea908297b.png)
+![Copy](https://user-images.githubusercontent.com/54359396/96474405-0e734700-1233-11eb-9ecb-958a891e58d7.png)
 
+**Optionally**, copy one or several language .ini file(s) from the Language Packs folder onto the SD card. Doing so will allow you to switch between English and the uploaded language(s), using the corresponding Language function of the TFT. We recommend to upload the minimum amount of languages, to keep the memory usage low. The language .ini file can be edited to change the text shown on the TFT.
+
+![Language](https://user-images.githubusercontent.com/54359396/96474507-2b0f7f00-1233-11eb-97d0-578125d2ea5b.png)
 
 Place SD card with the `BIGTREE_TFT*_V*.*.*.bin`, the`TFT*` folder and the config.ini into the TFT's SD card reader and power cycle your printer to start the update process.
 
