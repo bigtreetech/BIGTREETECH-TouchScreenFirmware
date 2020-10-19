@@ -138,20 +138,23 @@ void menuTuneExtruder(void)
 
         if (heatGetTargetTemp(c_heater) < infoSettings.min_ext_temp)
         {
-          sprintf(tmpBuf, (char*)textSelect(LABEL_TUNE_EXT_TEMPLOW), infoSettings.min_ext_temp);
-          popupReminder(DIALOG_TYPE_ALERT, textSelect(tuneExtruderItems.title.index), (u8*) tmpBuf);
+          labelChar(templabel, LABEL_TUNE_EXT_TEMPLOW);
+          sprintf(tmpBuf, templabel, infoSettings.min_ext_temp);
+          popupReminder(DIALOG_TYPE_ALERT, tuneExtruderItems.title.index, (u8*) tmpBuf);
           break;
         }
         if (heatGetCurrentTemp(c_heater) < heatGetTargetTemp(c_heater) - 1)
         {
-          popupReminder(DIALOG_TYPE_ALERT, textSelect(tuneExtruderItems.title.index), textSelect(LABEL_TUNE_EXT_DESIREDVAL));
+          popupReminder(DIALOG_TYPE_ALERT, tuneExtruderItems.title.index, LABEL_TUNE_EXT_DESIREDVAL);
           break;
         }
         else
         {
-          sprintf(tmpBuf, (char*)textSelect(LABEL_TUNE_EXT_MARK120MM), textSelect(LABEL_EXTRUDE));
-          showDialog(DIALOG_TYPE_QUESTION, textSelect(tuneExtruderItems.title.index), (u8*) tmpBuf,
-            textSelect(LABEL_EXTRUDE), textSelect(LABEL_CANCEL), extrudeFilament, NULL, NULL);
+          labelChar(tempmsg1, LABEL_TUNE_EXT_MARK120MM);
+          labelChar(tempmsg2, LABEL_EXTRUDE);
+          sprintf(tmpBuf, tempmsg1, tempmsg2);
+          setDialogText( tuneExtruderItems.title.index, (u8*) tmpBuf, LABEL_EXTRUDE, LABEL_CANCEL);
+          showDialog(DIALOG_TYPE_QUESTION, extrudeFilament, NULL, NULL);
         }
       }
       break;
@@ -159,8 +162,8 @@ void menuTuneExtruder(void)
       case KEY_ICON_7:
         if (heatGetTargetTemp(c_heater) > 0)
         {
-          showDialog(DIALOG_TYPE_QUESTION, textSelect(tuneExtruderItems.title.index), textSelect(LABEL_TUNE_EXT_HEATOFF),
-            textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), turnHeaterOff, returnToTuning, NULL);
+          setDialogText(tuneExtruderItems.title.index, LABEL_TUNE_EXT_HEATOFF, LABEL_CONFIRM, LABEL_CANCEL);
+          showDialog(DIALOG_TYPE_QUESTION, turnHeaterOff, returnToTuning, NULL);
         }
         else
         {
@@ -219,7 +222,7 @@ void menuNewExtruderESteps(void)
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_INC,                     LABEL_INC},
-     {ICON_S_SAVE,                  LABEL_SAVE},
+     {ICON_EEPROM_SAVE,             LABEL_SAVE},
      {ICON_E_1_MM,                  LABEL_1_MM},
      {ICON_RESET_VALUE,             LABEL_RESET},
      {ICON_BACK,                    LABEL_BACK},}
@@ -258,21 +261,17 @@ void menuNewExtruderESteps(void)
 
       case KEY_ICON_4:
       {
-        char tmpBuf[120];
-
         storeCmd("M92 T0 E%0.2f\n", new_esteps);
-
-        sprintf(tmpBuf, (char*)textSelect(LABEL_TUNE_EXT_ESTEPS_SAVED), new_esteps);
-
-        popupReminder(DIALOG_TYPE_QUESTION, textSelect(newExtruderESteps.title.index), (u8*) tmpBuf);
+        char tmpBuf[120];
+        labelChar(tempmsg, LABEL_TUNE_EXT_ESTEPS_SAVED)
+        sprintf(tmpBuf, tempmsg, new_esteps);
+        popupReminder(DIALOG_TYPE_QUESTION, newExtruderESteps.title.index, (u8*) tmpBuf);
       }
       break;
 
       case KEY_ICON_5:
         curLen = (curLen + 1) % ITEM_TUNE_EXTRUDER_LEN_NUM;
-
         newExtruderESteps.items[key_num] = itemTuneExtruderLen[curLen];
-
         menuDrawItem(&newExtruderESteps.items[key_num], key_num);
         break;
 

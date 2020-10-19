@@ -108,11 +108,19 @@
 #define BAUDRATE 115200
 
 /**
- * Default Touch Mode Language
+ * Default Primary Language (for Touch-Mode only)
  * Select the language to display on the LCD while in Touch Mode.
- * Options: ARMENIAN, CHINESE, CZECH, DUTCH, ENGLISH, FRENCH, GERMAN, HUNGARIAN, ITALIAN, JAPANESE, POLISH, PORTUGUESE, RUSSIAN, SLOVAK, SPAIN, CATALAN
+ * Options: ENGLISH, CHINESE, RUSSIAN, JAPANESE, ARMENIAN, GERMAN, CZECH,
+ *          SPANISH, FRENCH, PORTUGUESE, ITALIAN, POLISH, SLOVAK, DUTCH,
+ *          HUNGARIAN, TURKISH, GREEK, SLOVENIAN, CATALAN, TRAD_CHINESE,
  */
 #define DEFAULT_LANGUAGE ENGLISH
+
+/**
+ * To add/flash a second language copy the required "language_xx.ini" file from
+ * "Language Packs" folder to the SD root folder. Then preset the reset button
+ * to load/flash the copied language file.
+*/
 
 /**
  * Show bootscreen when starting up
@@ -187,8 +195,8 @@
 
 /**
  * Fan control
- * 
- * Fan type Options: 
+ *
+ * Fan type Options:
  *               0: FAN_TYPE_F       - default cooling fan speed (Check Marlin GCode M106)
  *               1: FAN_TYPE_CTRL_S  - Controller fan speed for stepper or hot bed ON (Check Marlin GCode M710)
  *               2: FAN_TYPE_CTRL_I  - Controller fan idle speed  (Check Marlin gcode - M710)

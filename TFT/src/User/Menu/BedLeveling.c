@@ -1,37 +1,19 @@
 #include "BedLeveling.h"
 #include "includes.h"
 
-static int8_t prev_value = -1;
-static u32 nextTime = 0;
-static u32 update_time = 1000; // 1 seconds is 1000
-
 void blUpdateState(MENUITEMS *menu)
 {
-  if (OS_GetTimeMs() > nextTime)
+  if (getParameter(P_ABL_STATE, 0) == ENABLED)
   {
-    nextTime = OS_GetTimeMs() + update_time;
-
-    if (infoMachineSettings.blType != BL_UNKNOWN)
-    {
-      if (prev_value != infoSettings.autoLevelState)
-      {
-        prev_value = infoSettings.autoLevelState;
-
-        if (infoSettings.autoLevelState == 1)
-        {
-          menu->items[6].icon = ICON_LEVELING_ON;
-          menu->items[6].label.index = LABEL_BL_ENABLE;
-        }
-        else
-        {
-          menu->items[6].icon = ICON_LEVELING_OFF;
-          menu->items[6].label.index = LABEL_BL_DISABLE;
-        }
-
-        menuDrawItem(&menu->items[6], 6);
-      }
-    }
+    menu->items[6].icon = ICON_LEVELING_ON;
+    menu->items[6].label.index = LABEL_BL_ENABLE;
   }
+  else
+  {
+    menu->items[6].icon = ICON_LEVELING_OFF;
+    menu->items[6].label.index = LABEL_BL_DISABLE;
+  }
+  menuDrawItem(&menu->items[6], 6);
 }
 
 void menuBedLeveling(void)
@@ -52,8 +34,9 @@ void menuBedLeveling(void)
 
   KEY_VALUES key_num = KEY_IDLE;
   void (*menuBL)(void) = menuABL;
+  int8_t levelStateOld = -1;
 
-  switch (infoMachineSettings.blType)
+  switch (infoMachineSettings.leveling)
   {
     case BL_BBL:
       bedLevelingItems.title.index = LABEL_ABL_SETTINGS_BBL;
@@ -76,7 +59,7 @@ void menuBedLeveling(void)
       break;
   }
 
-  if (infoSettings.autoLevelState == 1)
+  if (getParameter(P_ABL_STATE, 0) == ENABLED)
   {
     bedLevelingItems.items[6].icon = ICON_LEVELING_ON;
     bedLevelingItems.items[6].label.index = LABEL_BL_ENABLE;
@@ -106,10 +89,8 @@ void menuBedLeveling(void)
       case KEY_ICON_5:
         {
           char tempstr[30];
-
           sprintf(tempstr, "%Min:%.2f | Max:%.2f", Z_FADE_MIN_VALUE, Z_FADE_MAX_VALUE);
           float val = numPadFloat((u8 *) tempstr, getParameter(P_ABL_STATE, 1), 0.0f, false);
-
           storeCmd("M420 Z%.2f\n", NOBEYOND(Z_FADE_MIN_VALUE, val, Z_FADE_MAX_VALUE));
 
           menuDrawPage(&bedLevelingItems);
@@ -117,7 +98,7 @@ void menuBedLeveling(void)
         break;
 
       case KEY_ICON_6:
-        if (infoSettings.autoLevelState == 1)
+        if (getParameter(P_ABL_STATE, 0) == ENABLED)
         {
           storeCmd("M420 S0\n");
         }
@@ -135,7 +116,11 @@ void menuBedLeveling(void)
         break;
     }
 
-    blUpdateState(&bedLevelingItems);
+    if (levelStateOld != getParameter(P_ABL_STATE, 0))
+    {
+      levelStateOld = getParameter(P_ABL_STATE, 0);
+      blUpdateState(&bedLevelingItems);
+    };
 
     loopProcess();
   }

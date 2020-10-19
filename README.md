@@ -57,11 +57,13 @@ TFT firmware updates are comprised of three elements:
 Copy  the `BIGTREE_TFT*_V*.*.*.bin,the `TFT*` folder and the config.ini to the root of a blank SD card that is <8GB and formatted as FAT32:
 
 
+
 ![Copy](https://user-images.githubusercontent.com/54359396/96474405-0e734700-1233-11eb-9ecb-958a891e58d7.png)
 
 **Optionally**, copy one or several language .ini file(s) from the Language Packs folder onto the SD card. Doing so will allow you to switch between English and the uploaded language(s), using the corresponding Language function of the TFT. We recommend to upload the minimum amount of languages, to keep the memory usage low. The language .ini file can be edited to change the text shown on the TFT.
 
 ![Language](https://user-images.githubusercontent.com/54359396/96474507-2b0f7f00-1233-11eb-97d0-578125d2ea5b.png)
+
 
 Place SD card with the `BIGTREE_TFT*_V*.*.*.bin`, the`TFT*` folder and the config.ini into the TFT's SD card reader and power cycle your printer to start the update process.
 

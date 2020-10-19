@@ -255,8 +255,8 @@ void menuParameterSettings(void){
     case KEY_ICON_7:
       if (parametersChanged && infoMachineSettings.EEPROM == 1)
       {
-        showDialog(DIALOG_TYPE_QUESTION, textSelect(parameterMainItems.title.index), textSelect(LABEL_EEPROM_SAVE_INFO),
-                    textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL) , saveEepromSettings, NULL, NULL);
+        setDialogText(parameterMainItems.title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
+        showDialog(DIALOG_TYPE_QUESTION, saveEepromSettings, NULL, NULL);
         parametersChanged = false;
       }
       else
@@ -274,21 +274,21 @@ void menuParameterSettings(void){
       {
         if (cp == P_SAVE_SETTINGS)
         {
-          showDialog(DIALOG_TYPE_ALERT, textSelect(parameterMainItems.title.index), textSelect(LABEL_EEPROM_SAVE_INFO),
-                    textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL) , saveEepromSettings, NULL, NULL);
+          setDialogText(parameterMainItems.title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
+          showDialog(DIALOG_TYPE_ALERT,  saveEepromSettings, NULL, NULL);
           parametersChanged = false;
           break;
         }
         else if (cp == P_RESET_SETTINGS)
         {
-          showDialog(DIALOG_TYPE_ALERT, textSelect(LABEL_SETTING_RESET), textSelect(LABEL_RESET_SETTINGS_INFO),
-                      textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), resetEepromSettings, NULL, NULL);
+          setDialogText(LABEL_SETTING_RESET, LABEL_RESET_SETTINGS_INFO, LABEL_CONFIRM, LABEL_CANCEL);
+          showDialog(DIALOG_TYPE_ALERT, resetEepromSettings, NULL, NULL);
           break;
         }
         else if (cp == P_RESTORE_SETTINGS)
         {
-          showDialog(DIALOG_TYPE_ALERT, textSelect(LABEL_SETTING_RESTORE), textSelect(LABEL_EEPROM_RESTORE_INFO),
-                      textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), restoreEepromSettings, NULL, NULL);
+          setDialogText(LABEL_SETTING_RESTORE, LABEL_EEPROM_RESTORE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
+          showDialog(DIALOG_TYPE_ALERT, restoreEepromSettings, NULL, NULL);
           break;
         }
       }
@@ -325,6 +325,7 @@ bool temperatureStatusValid(void)
 
 void loopTemperatureStatus(void)
 {
+  if(getMenuType() == MENU_TYPE_FULLSCREEN) return;
   if (!temperatureStatusValid()) return;
 
   uint8_t tmpHeater[3]; // chamber, bed, hotend
@@ -382,7 +383,10 @@ int16_t drawTemperatureStatus(void){
     x_offset -= GLOBALICON_INTERVAL;
     GUI_ClearRect(x_offset, start_y, x_offset + GLOBALICON_INTERVAL, start_y + GLOBALICON_HEIGHT);
     sprintf(tempstr, "%d/%d", heatGetCurrentTemp(tmpHeater[i]), heatGetTargetTemp(tmpHeater[i]));
+
     x_offset -= GUI_StrPixelWidth((uint8_t *)tempstr);
+    GUI_StrPixelWidth(LABEL_10_PERCENT);
+
     GUI_DispString(x_offset, start_y, (u8 *)tempstr); // value
     x_offset -= GLOBALICON_INTERVAL;
     GUI_ClearRect(x_offset, start_y, x_offset + GLOBALICON_INTERVAL, start_y + GLOBALICON_HEIGHT);
