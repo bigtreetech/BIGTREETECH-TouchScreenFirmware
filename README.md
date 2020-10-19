@@ -15,7 +15,7 @@ Firmware for BigTreeTech's dual-mode touchscreen 3D printer controllers
 
 ## Table of Contents
 
-- [Connect the TFT to the Mainboard](#Connect the TFT to the Mainboard)
+- [Connect the TFT to the Mainboard](#connect-the-tft-to-the-mainboard)
 - [Menus and Themes](#menus-and-themes)
 - [Update TFT Firmware](#update-tft-firmware)
 - [Configuration](#configuration)
