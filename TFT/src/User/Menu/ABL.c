@@ -1,71 +1,73 @@
 #include "ABL.h"
 #include "includes.h"
 
-static uint8_t slot;
-static bool _isSaving = true;
-static bool slotSaved = false;
+static uint8_t ublSlot;
+static bool ublIsSaving = true;
+static bool ublSlotSaved = false;
 
+/* called by parseAck() to notify ABL process status */
 void ablUpdateStatus(bool succeeded)
 {
-  bool savingEnabled = false;
+  bool savingEnabled = true;
 
-  init_label(labelTitle);
-  labelTitle.index = LABEL_ABL_SETTINGS;
-  labelChar(tempmsg, LABEL_BL_COMPLETE);
+  init_label(tempTitle);
+  tempTitle.index = LABEL_ABL_SETTINGS;
+  labelChar(tempMsg, LABEL_BL_COMPLETE);
 
   switch (infoMachineSettings.leveling)
   {
     case BL_BBL:
     {
-      labelTitle.index = LABEL_ABL_SETTINGS_BBL;
-      loadLabelText((u8*)tempmsg, LABEL_BL_COMPLETE);
-      savingEnabled = true;
+      tempTitle.index = LABEL_ABL_SETTINGS_BBL;
       break;
     }
     case BL_UBL:
     {
-      labelTitle.index = LABEL_ABL_SETTINGS_UBL;
-      labelChar(temptxt1, LABEL_BL_COMPLETE);
-      labelChar(temptxt2, LABEL_BL_SMART_FILL);
-      sprintf(tempmsg, "%s\n %s", temptxt1, temptxt2);
+      tempTitle.index = LABEL_ABL_SETTINGS_UBL;
+
+      sprintf(&tempMsg[strlen(tempMsg)], "\n %s", textSelect(LABEL_BL_SMART_FILL));
+
+      savingEnabled = false;
       break;
     }
     default:
-      savingEnabled = true;
       break;
   }
 
-  if (succeeded)                       // if bed leveling process successfully terminated, allow to save to EEPROM
+  if (succeeded)                                           // if bed leveling process successfully terminated, allow to save to EEPROM
   {
     BUZZER_PLAY(sound_success);
+
     if (savingEnabled && infoMachineSettings.EEPROM == 1)
     {
-      sprintf(tempmsg, "%s\n %s", tempmsg, textSelect(LABEL_EEPROM_SAVE_INFO));
-      setDialogText(labelTitle.index, (u8 *)tempmsg, LABEL_CONFIRM, LABEL_CANCEL);
+      sprintf(&tempMsg[strlen(tempMsg)], "\n %s", textSelect(LABEL_EEPROM_SAVE_INFO));
+
+      setDialogText(tempTitle.index, (u8 *) tempMsg, LABEL_CONFIRM, LABEL_CANCEL);
       showDialog(DIALOG_TYPE_SUCCESS, saveEepromSettings, NULL, NULL);
     }
     else
     {
-      popupReminder(DIALOG_TYPE_SUCCESS, labelTitle.index, (u8*)tempmsg);
+      popupReminder(DIALOG_TYPE_SUCCESS, tempTitle.index, (u8 *) tempMsg);
     }
   }
-  else                                 // if if bed leveling process failed, provide an error dialog
+  else                                                     // if bed leveling process failed, provide an error dialog
   {
     BUZZER_PLAY(sound_error);
-    popupReminder(DIALOG_TYPE_ERROR, labelTitle.index, LABEL_PROCESS_ABORTED);
+
+    popupReminder(DIALOG_TYPE_ERROR, tempTitle.index, LABEL_PROCESS_ABORTED);
   }
 }
 
 void ublSaveloadConfirm(void)
 {
-  if (!_isSaving)
+  if (!ublIsSaving)
   {
-    storeCmd("G29 L%d\n", slot);
+    storeCmd("G29 L%d\n", ublSlot);
   }
   else
   {
-    storeCmd("G29 S%d\n", slot);
-    slotSaved = true;
+    storeCmd("G29 S%d\n", ublSlot);
+    ublSlotSaved = true;
   }
 }
 
@@ -87,7 +89,7 @@ void menuUBLSaveLoad(void)
 
   KEY_VALUES key_num = KEY_IDLE;
 
-  if (!_isSaving)
+  if (!ublIsSaving)
   {
     UBLSaveLoadItems.title.index = LABEL_ABL_SETTINGS_UBL_LOAD;
     for (int i = 0; i < 4; i++)
@@ -107,21 +109,24 @@ void menuUBLSaveLoad(void)
       case KEY_ICON_1:
       case KEY_ICON_2:
       case KEY_ICON_3:
-        slot = key_num;
+        ublSlot = key_num;
+
         setDialogText(UBLSaveLoadItems.title.index, LABEL_CONFIRMATION, LABEL_CONFIRM, LABEL_CANCEL);
         showDialog(DIALOG_TYPE_QUESTION, ublSaveloadConfirm, NULL, NULL);
         break;
 
       case KEY_ICON_7:
-        if (slotSaved == true && infoMachineSettings.EEPROM == 1)
+        if (ublSlotSaved == true && infoMachineSettings.EEPROM == 1)
         {
-          slotSaved = false;
+          ublSlotSaved = false;
+
           setDialogText(LABEL_ABL_SETTINGS_UBL, LABEL_ABL_SLOT_EEPROM, LABEL_CONFIRM, LABEL_CANCEL);
           showDialog(DIALOG_TYPE_QUESTION, saveEepromSettings, NULL, NULL);
         }
         else
         {
-          slotSaved = false;
+          ublSlotSaved = false;
+
           infoMenu.cur--;
         }
         break;
@@ -134,9 +139,15 @@ void menuUBLSaveLoad(void)
   }
 }
 
-void ublSaveLoad(bool isSaving)
+void menuUBLSave(void)
 {
-  _isSaving = isSaving;
+  ublIsSaving = true;
+  infoMenu.menu[++infoMenu.cur] = menuUBLSaveLoad;
+}
+
+void menuUBLLoad(void)
+{
+  ublIsSaving = false;
   infoMenu.menu[++infoMenu.cur] = menuUBLSaveLoad;
 }
 
@@ -208,12 +219,12 @@ void menuABL(void)
 
       case KEY_ICON_1:
         if (infoMachineSettings.leveling == BL_UBL)
-          ublSaveLoad(true);
+          menuUBLSave();
         break;
 
       case KEY_ICON_2:
         if (infoMachineSettings.leveling == BL_UBL)
-          ublSaveLoad(false);
+          menuUBLLoad();
         break;
 
       case KEY_ICON_4:
