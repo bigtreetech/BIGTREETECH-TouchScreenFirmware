@@ -198,12 +198,16 @@ void GUI_RestoreColorDefault(void){
 }
 
 static const MENUITEMS *curMenuItems = NULL;   //current menu
-
 static const LISTITEMS *curListItems = NULL;   //current listmenu
 
 static MENU_TYPE menuType = MENU_TYPE_ICON;
-
+static LABEL * curTitle = NULL;
 static const GUI_RECT *curRect = NULL; //current menu layout grid
+static u16 curRectCount = 0;    //current menu layout rect count
+
+static REMINDER reminder = {{0, 0, LCD_WIDTH, TITLE_END_Y}, 0, STATUS_UNCONNECT, LABEL_UNCONNECTED};
+static REMINDER volumeReminder = {{0, 0, LCD_WIDTH, TITLE_END_Y}, 0, STATUS_IDLE, LABEL_BACKGROUND};
+static REMINDER busySign = {{LCD_WIDTH - 5, 0, LCD_WIDTH, 5}, 0, STATUS_BUSY, LABEL_BUSY};
 
 MENUITEMS *getCurMenuItems(void)
 {
@@ -265,12 +269,7 @@ void menuRefreshListPage(void){
  for (uint8_t i = 0; i < ITEM_PER_PAGE; i++)
     {
       menuDrawListItem(&curListItems->items[i], i);
-      #ifdef RAPID_SERIAL_COMM
-        if(isPrinting() == true && infoSettings.serial_alwaysOn != 1)
-        {
-          loopBackEnd();   //perform backend printing loop between drawing icons to avoid printer idling
-        }
-      #endif
+      rapid_serial_comm()//perform backend printing loop between drawing icons to avoid printer idling
     }
 
 }
@@ -285,9 +284,14 @@ MENU_TYPE getMenuType(void)
   return menuType;
 }
 
-static REMINDER reminder = {{0, 0, LCD_WIDTH, TITLE_END_Y}, 0, STATUS_UNCONNECT, LABEL_UNCONNECTED};
-static REMINDER volumeReminder = {{0, 0, LCD_WIDTH, TITLE_END_Y}, 0, STATUS_IDLE, LABEL_BACKGROUND};
-static REMINDER busySign = {{LCD_WIDTH - 5, 0, LCD_WIDTH, 5}, 0, STATUS_BUSY, LABEL_BUSY};
+void setMenu(MENU_TYPE menu_type, LABEL * title, u16 rectCount, const GUI_RECT * menuRect, void(*action_redraw)(u8 position, u8 is_press))
+{
+  menuType = menu_type;
+  curRect = menuRect;
+  curRectCount = rectCount;
+  curTitle = title;
+  TSC_ReDrawIcon = action_redraw;
+}
 
 void reminderSetUnConnected(void)
 {
@@ -297,12 +301,12 @@ void reminderSetUnConnected(void)
 
 void reminderMessage(int16_t inf, SYS_STATUS status)
 {
-  if(toastRunning())
+  if(toastRunning() || menuType == MENU_TYPE_FULLSCREEN)
     return;
   reminder.inf = inf;
   GUI_SetColor(infoSettings.reminder_color);
   GUI_SetBkColor(infoSettings.title_bg_color);
-  GUI_DispStringInPrect(&reminder.rect, textSelect(reminder.inf));
+  GUI_DispStringInPrect(&reminder.rect, reminder.inf);
   GUI_RestoreColorDefault();
   reminder.status = status;
   reminder.time = OS_GetTimeMs() + 2000; // 2 seconds
@@ -311,13 +315,12 @@ void reminderMessage(int16_t inf, SYS_STATUS status)
 void volumeReminderMessage(int16_t inf, SYS_STATUS status)
 {
   wakeLCD();
-
-  if(toastRunning())
+  if(toastRunning() || menuType == MENU_TYPE_FULLSCREEN)
     return;
   volumeReminder.inf = inf;
   GUI_SetColor(infoSettings.sd_reminder_color);
   GUI_SetBkColor(infoSettings.title_bg_color);
-  GUI_DispStringInPrect(&volumeReminder.rect, textSelect(volumeReminder.inf));
+  GUI_DispStringInPrect(&volumeReminder.rect, volumeReminder.inf);
   volumeReminder.status = status;
   volumeReminder.time = OS_GetTimeMs() + 2000;
   GUI_RestoreColorDefault();
@@ -418,6 +421,7 @@ void notificationDot(void)
 
 void menuDrawTitle(const uint8_t *content) //(const MENUITEMS * menuItems)
 {
+  if(menuType == MENU_TYPE_FULLSCREEN) return;
   if (toastRunning())
   {
     drawToast(true);
@@ -440,7 +444,7 @@ void menuDrawTitle(const uint8_t *content) //(const MENUITEMS * menuItems)
   if(reminder.status == STATUS_IDLE) return;
   GUI_SetColor(infoSettings.reminder_color);
   GUI_SetBkColor(infoSettings.title_bg_color);
-  GUI_DispStringInPrect(&reminder.rect, textSelect(reminder.inf));
+  GUI_DispStringInPrect(&reminder.rect, reminder.inf);
   GUI_RestoreColorDefault();
 }
 
@@ -449,12 +453,17 @@ void menuReDrawCurTitle(void)
   if (menuType == MENU_TYPE_LISTVIEW)
   {
     if(curListItems == NULL) return;
+    if(curListItems->title.index < LABEL_BACKGROUND)
     menuDrawTitle(labelGetAddress(&curListItems->title));
   }
   else if(menuType == MENU_TYPE_ICON)
   {
     if(curMenuItems == NULL) return;
     menuDrawTitle(labelGetAddress(&curMenuItems->title));
+  }
+  else if(menuType == MENU_TYPE_OTHER)
+  {
+    menuDrawTitle(labelGetAddress(curTitle));
   }
 }
 
@@ -474,12 +483,7 @@ void menuDrawPage(const MENUITEMS *menuItems)
   for (i = 0; i < ITEM_PER_PAGE; i++)
   {
     menuDrawItem(&menuItems->items[i], i);
-    #ifdef RAPID_SERIAL_COMM
-      if(isPrinting() == true && infoSettings.serial_alwaysOn != 1)
-      {
-        loopBackEnd();   //perform backend printing loop between drawing icons to avoid printer idling
-      }
-    #endif
+    rapid_serial_comm()//perform backend printing loop between drawing icons to avoid printer idling
   }
 }
 
@@ -503,13 +507,8 @@ void menuDrawListPage(const LISTITEMS *listItems)
   {
     //const GUI_RECT *rect = rect_of_keyListView + i;
     if (curListItems->items[i].icon != ICONCHAR_BACKGROUND)
-    menuDrawListItem(&curListItems->items[i], i);
-    #ifdef RAPID_SERIAL_COMM
-        if(isPrinting() == true && infoSettings.serial_alwaysOn != 1)
-        {
-          loopBackEnd();   //perform backend printing loop between drawing icons to avoid printer idling
-        }
-    #endif
+      menuDrawListItem(&curListItems->items[i], i);
+    rapid_serial_comm()//perform backend printing loop between drawing icons to avoid printer idling
   }
 }
 
@@ -574,7 +573,6 @@ void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, const ITEM * item)
 //When there is a button value, the icon changes color and redraws
 void itemDrawIconPress(u8 position, u8 is_press)
 {
-
   if (position > KEY_ICON_7) return;
 
   if (menuType == MENU_TYPE_ICON)
@@ -607,7 +605,6 @@ void itemDrawIconPress(u8 position, u8 is_press)
     else{
     ListItem_Display(rect,position,&curListItems->items[position], false);
     }
-
   }
 }
 
@@ -624,7 +621,17 @@ KEY_VALUES menuKeyGetValue(void)
   {
     tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keyListView), rect_of_keyListView); //for listview
   }
-
+  else if(menuType == MENU_TYPE_OTHER)
+  {
+    if ((KEY_VALUES)KEY_GetValue(1, rect_of_titleBar) == 0)
+      tempkey = KEY_TITLEBAR;
+    else
+      return(KEY_VALUES)KEY_GetValue(curRectCount, curRect);
+  }
+  else if(menuType == MENU_TYPE_FULLSCREEN)
+  {
+    return tempkey = (KEY_VALUES)KEY_GetValue(curRectCount, curRect);
+  }
   // catch titlebar press to enable it on every menu
   if (tempkey == KEY_TITLEBAR)
   {
@@ -659,39 +666,39 @@ void loopBackEnd(void)
 
   loopSpeed();                        //Speed & flow monitor
 
-#ifdef BUZZER_PIN
-  loopBuzzer();
-#endif
+  #ifdef BUZZER_PIN
+    loopBuzzer();
+  #endif
 
   if(infoMachineSettings.onboard_sd_support == ENABLED)
   {
     loopCheckPrinting(); //Check if there is a SD or USB print running.
   }
 
-#ifdef U_DISK_SUPPORT
-  USBH_Process(&USB_OTG_Core, &USB_Host);
-#endif
-
-#if LCD_ENCODER_SUPPORT
-  #if defined(ST7920_SPI) || defined(LCD2004_simulator)
-    if(infoMenu.menu[infoMenu.cur] != menuMarlinMode)
+  #ifdef U_DISK_SUPPORT
+    USBH_Process(&USB_OTG_Core, &USB_Host);
   #endif
-    {
-      loopCheckEncoderSteps(); //check change in encoder steps
-    }
-#endif
 
-#if defined(ST7920_SPI) || defined(LCD2004_simulator)
-  loopCheckMode();
-#endif
+  #if LCD_ENCODER_SUPPORT
+    #if defined(ST7920_SPI) || defined(LCD2004_simulator)
+      if(infoMenu.menu[infoMenu.cur] != menuMarlinMode)
+    #endif
+      {
+        loopCheckEncoderSteps(); //check change in encoder steps
+      }
+  #endif
 
-#ifdef FIL_RUNOUT_PIN
-  loopBackEndFILRunoutDetect();
-#endif
+  #if defined(ST7920_SPI) || defined(LCD2004_simulator)
+    loopCheckMode();
+  #endif
 
-#ifdef LCD_LED_PWM_CHANNEL
-  loopDimTimer();
-#endif
+  #ifdef FIL_RUNOUT_PIN
+    loopBackEndFILRunoutDetect();
+  #endif
+
+  #ifdef LCD_LED_PWM_CHANNEL
+    loopDimTimer();
+  #endif
 } //loopBackEnd
 
 void loopFrontEnd(void)

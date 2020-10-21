@@ -19,12 +19,9 @@ void menuUnifiedMove(void)
   };
 
   KEY_VALUES key_num = KEY_IDLE;
-  bool blAvailable = false;
 
-  if (infoMachineSettings.blType != BL_UNKNOWN)
+  if (infoMachineSettings.leveling != BL_DISABLED)
   {
-    blAvailable = true;
-
     UnifiedMoveItems.items[3].icon = ICON_LEVELING;
     UnifiedMoveItems.items[3].label.index = LABEL_BED_LEVELING;
   }
@@ -49,7 +46,7 @@ void menuUnifiedMove(void)
         break;
 
       case KEY_ICON_3:
-        if (blAvailable)
+        if (infoMachineSettings.leveling != BL_DISABLED)
           infoMenu.menu[++infoMenu.cur] = menuBedLeveling;
         break;
 
