@@ -179,6 +179,7 @@
 #define EXTRUDER_NUM 1    // set in 1~6
 #define FAN_NUM      1    // set in 1~6
 #define FAN_CTRL_NUM 0    // set in 1~2
+#define MIXING_EXTRUDER 0 // set default 0, for mixing_extruder 1 (this option turns off autodetection of the number of extruders)
 
 #define PREHEAT_LABELS   {"PLA", "PETG", "ABS", "WOOD", "TPU", "NYLON"}
 #define PREHEAT_HOTEND   {200,   240,    230,   170,    220,   250}

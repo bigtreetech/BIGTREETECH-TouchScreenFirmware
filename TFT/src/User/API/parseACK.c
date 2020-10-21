@@ -606,7 +606,10 @@ void parseACK(void)
           string_start = ack_index;
           if (ack_seen("EXTRUDER_COUNT:"))
           {
+            if (MIXING_EXTRUDER == 0)
+            {
             infoSettings.ext_count = ack_value();
+            }
             string_end = ack_index - sizeof("EXTRUDER_COUNT:");
           }
           infoSetMachineType(string, string_end - string_start); // Set firmware name
