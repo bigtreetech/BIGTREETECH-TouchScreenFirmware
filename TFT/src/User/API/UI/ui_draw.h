@@ -30,8 +30,6 @@ extern "C" {
 #define SPACE_SELEY       ((LCD_HEIGHT-ICON_HEIGHT)/2)
 #define text_startx       (LCD_WIDTH/2)
 
-void LCD_DMA_Config(void);
-
 void LOGO_ReadDisplay(void);
 void ICON_ReadDisplay(uint16_t sx, uint16_t sy, uint8_t icon);
 bool model_DirectDisplay(GUI_POINT pos, char *gcode);

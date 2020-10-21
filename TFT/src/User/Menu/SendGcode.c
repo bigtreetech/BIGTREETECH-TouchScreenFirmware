@@ -62,11 +62,6 @@ const char * const softKeyValue[][26] = {
 
 SOFT_KEY_TYPE softKeyType = SOFT_KEY_123;
 
-GKEY_VALUES GKeyGetValue(void)
-{
-  return (GKEY_VALUES)KEY_GetValue(sizeof(rect_of_Gkey)/sizeof(rect_of_Gkey[0]), rect_of_Gkey);
-}
-
 void sendGcodeReDrawButton(u8 position, u8 pressed)
 {
   if(position > GKEY_SEND) return;
@@ -86,6 +81,8 @@ void sendGcodeReDrawButton(u8 position, u8 pressed)
 
 void menuDrawSendGcode(void)
 {
+  setMenu(MENU_TYPE_FULLSCREEN, NULL, COUNT(rect_of_Gkey), rect_of_Gkey, sendGcodeReDrawButton);
+
   GUI_RECT gcodeRect = {rect_of_Gkey[GKEY_BACK].x1+10, rect_of_Gkey[GKEY_BACK].y0, rect_of_Gkey[GKEY_SEND].x0-10, rect_of_Gkey[GKEY_SEND].y1};
 
   GUI_SetBkColor(BLUE);
@@ -105,7 +102,6 @@ void menuDrawSendGcode(void)
     GUI_DispStringInPrect(rect_of_Gkey + i, (u8 *)softKeyValue[softKeyType][i]);
   }
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
-  TSC_ReDrawIcon = sendGcodeReDrawButton;
 }
 
 void menuSendGcode(void)
@@ -119,7 +115,7 @@ void menuSendGcode(void)
   menuDrawSendGcode();
   while(infoMenu.menu[infoMenu.cur] == menuSendGcode)
   {
-    key_num = GKeyGetValue();
+    key_num = menuKeyGetValue();
 
     switch(key_num)
     {
@@ -202,6 +198,7 @@ void sendGcodeTerminalCache(char *stream, TERMINAL_SRC src)
 #define CURSOR_END_X   LCD_WIDTH
 #define CURSOR_START_Y TITLE_END_Y
 #define CURSOR_END_Y   LCD_HEIGHT
+
 void menuTerminal(void)
 {
   const GUI_RECT terminalRect = {0, 0, LCD_WIDTH, LCD_HEIGHT};
