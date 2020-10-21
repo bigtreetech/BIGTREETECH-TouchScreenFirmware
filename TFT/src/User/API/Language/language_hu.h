@@ -211,6 +211,7 @@
     #define STRING_RETRACT_ACCELERATION   "Adagoló Gyorsulása"
     #define STRING_TRAVEL_ACCELERATION    "Utazási Gyorsulás"
     #define STRING_JERK                   "Rántás"
+    #define STRING_JUNCTION_DEVIATION     "Junction Deviation"
     #define STRING_BUMP_SENSITIVITY       "TMC ütközés érzékenység"
     #define STRING_FWRETRACT              "FW Visszahúzás"
     #define STRING_FWRECOVER              "FW Visszahúzás helyreáll."

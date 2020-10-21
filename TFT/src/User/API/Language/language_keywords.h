@@ -218,6 +218,7 @@ extern "C" {
 #define LANG_KEY_RETRACT_ACCELERATION         "label_retract_acceleration:"
 #define LANG_KEY_TRAVEL_ACCELERATION          "label_travel_acceleration:"
 #define LANG_KEY_JERK                         "label_jerk:"
+#define LANG_KEY_JUNCTION_DEVIATION           "label_junction_deviation:"
 #define LANG_KEY_BUMP_SENSITIVITY             "label_bump_sensitivity:"
 #define LANG_KEY_FWRETRACT                    "label_fwretract:"
 #define LANG_KEY_FWRECOVER                    "label_fwrecover:"

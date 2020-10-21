@@ -260,7 +260,9 @@ char * getDynamicTextValue(uint8_t i){
 
 // save dynamic value (upto 7 digits) ( i : index of the value position, value:float value)
 void setDynamicValue(uint8_t i,float value){
-  if (value < 1000.0f)
+  if(value < 1.0f)
+    sprintf(dynamic_text_value[i], "%.3f", value);
+  else if (value < 1000.0f)
     sprintf(dynamic_text_value[i], "%.2f", value);
   else
     sprintf(dynamic_text_value[i], "%.1f", value);
