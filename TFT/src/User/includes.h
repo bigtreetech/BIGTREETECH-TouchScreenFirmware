@@ -65,6 +65,7 @@
 #include "SpeedControl.h"
 #include "BabystepControl.h"
 #include "ProbeOffsetControl.h"
+#include "HomeOffsetControl.h"
 
 #include "extend.h"
 #include "menu.h"
