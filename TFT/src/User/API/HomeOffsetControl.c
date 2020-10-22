@@ -5,7 +5,7 @@ static float z_home_offset_value = HOME_OFFSET_DEFAULT_VALUE;
 
 
 /* Set Z offset value */
-float probeOffsetSetValue(float value)
+float homeOffsetSetValue(float value)
 {
   mustStoreCmd("M206 Z%.2f\n", value);
 
@@ -15,7 +15,7 @@ float probeOffsetSetValue(float value)
 }
 
 /* Get current Z offset value */
-float probeOffsetGetValue(void)
+float homeOffsetGetValue(void)
 {
   z_home_offset_value = getParameter(P_HOME_OFFSET, Z_STEPPER);
 
