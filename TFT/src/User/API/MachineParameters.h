@@ -17,6 +17,7 @@ P_MAX_ACCELERATION,
 P_ACCELERATION,
 P_JERK,
 P_PROBE_OFFSET,
+P_HOME_OFFSET,
 P_BUMPSENSITIVITY,
 P_FWRETRACT,
 P_FWRECOVER,
@@ -61,6 +62,7 @@ float MaxAcceleration[STEPPER_COUNT];
 float Acceleration[3];
 float Jerk[4];
 float ProbeOffset[3];
+float HomeOffset[3];
 float BumpSensitivity[3];
 float FwRetract[4];
 float FwRecover[4];

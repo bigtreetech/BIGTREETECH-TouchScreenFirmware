@@ -1,7 +1,7 @@
 #include "ProbeOffsetControl.h"
 #include "includes.h"
 
-static float z_offset_value = PROBE_OFFSET_DEFAULT_VALUE;
+static float z_probe_offset_value = PROBE_OFFSET_DEFAULT_VALUE;
 static bool probe_offset_enabled = false;
 
 /* Enable probe offset */
@@ -46,69 +46,69 @@ float probeOffsetSetValue(float value)
 {
   mustStoreCmd("M851 Z%.2f\n", value);
 
-  z_offset_value = value;
+  z_probe_offset_value = value;
 
-  return z_offset_value;
+  return z_probe_offset_value;
 }
 
 /* Get current Z offset value */
 float probeOffsetGetValue(void)
 {
-  z_offset_value = getParameter(P_PROBE_OFFSET, Z_STEPPER);
+  z_probe_offset_value = getParameter(P_PROBE_OFFSET, Z_STEPPER);
 
-  return z_offset_value;
+  return z_probe_offset_value;
 }
 
 /* Reset Z offset value to default value */
 float probeOffsetResetValue()
 {
-  if (z_offset_value == PROBE_OFFSET_DEFAULT_VALUE)        // if already default value, nothing to do
-    return z_offset_value;
+  if (z_probe_offset_value == PROBE_OFFSET_DEFAULT_VALUE)        // if already default value, nothing to do
+    return z_probe_offset_value;
 
-  float unit = z_offset_value - PROBE_OFFSET_DEFAULT_VALUE;
+  float unit = z_probe_offset_value - PROBE_OFFSET_DEFAULT_VALUE;
 
   mustStoreCmd("M851 Z%.2f\n", PROBE_OFFSET_DEFAULT_VALUE);// set the Z offset value
   mustStoreCmd("G1 Z%.2f\n", -unit);                       // move the nozzle
 
-  z_offset_value = PROBE_OFFSET_DEFAULT_VALUE;
+  z_probe_offset_value = PROBE_OFFSET_DEFAULT_VALUE;
 
-  return z_offset_value;
+  return z_probe_offset_value;
 }
 
 // Decrease Z offset value
 float probeOffsetDecreaseValue(float unit)
 {
-  if (z_offset_value > PROBE_OFFSET_MIN_VALUE)
+  if (z_probe_offset_value > PROBE_OFFSET_MIN_VALUE)
   {
-    float diff = z_offset_value - PROBE_OFFSET_MIN_VALUE;
+    float diff = z_probe_offset_value - PROBE_OFFSET_MIN_VALUE;
 
     unit = (diff > unit) ? unit : diff;
 
-    mustStoreCmd("M851 Z%.2f\n", z_offset_value - unit);   // set the Z offset value
+    mustStoreCmd("M851 Z%.2f\n", z_probe_offset_value - unit);   // set the Z offset value
     mustStoreCmd("G1 Z%.2f\n", -unit);                     // move the nozzle
 
-    z_offset_value -= unit;
+    z_probe_offset_value -= unit;
   }
 
-  return z_offset_value;
+  return z_probe_offset_value;
 }
 
 // Increase Z offset value
 float probeOffsetIncreaseValue(float unit)
 {
-  if (z_offset_value < PROBE_OFFSET_MAX_VALUE)
+  if (z_probe_offset_value < PROBE_OFFSET_MAX_VALUE)
   {
-    float diff = PROBE_OFFSET_MAX_VALUE - z_offset_value;
+    float diff = PROBE_OFFSET_MAX_VALUE - z_probe_offset_value;
 
     unit = (diff > unit) ? unit : diff;
 
-    mustStoreCmd("M851 Z%.2f\n", z_offset_value + unit);   // set the Z offset value
+    mustStoreCmd("M851 Z%.2f\n", z_probe_offset_value + unit);   // set the Z offset value
     mustStoreCmd("G1 Z%.2f\n", unit);                      // move the nozzle
 
-    z_offset_value += unit;
+    z_probe_offset_value += unit;
   }
 
-  return z_offset_value;
+  return z_probe_offset_value;
 }
 
 // Update Z offset value by encoder
@@ -126,5 +126,5 @@ float probeOffsetUpdateValueByEncoder(float unit)
   }
 #endif
 
-  return z_offset_value;
+  return z_probe_offset_value;
 }

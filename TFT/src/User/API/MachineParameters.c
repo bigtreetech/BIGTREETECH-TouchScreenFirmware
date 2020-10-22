@@ -3,7 +3,7 @@
 
 PARAMETERS infoParameters;
 
-const u8 parameter_element_count[PARAMETERS_COUNT] = {5, 5, 5, 5, 3, 4, 3, 3, 4, 4, 1, 2, 2, 3, 5};
+const u8 parameter_element_count[PARAMETERS_COUNT] = {5, 5, 5, 5, 3, 4, 3, 3, 3, 4, 4, 1, 2, 2, 3, 5};
 
 const char *const parameter_Cmd[PARAMETERS_COUNT][STEPPER_COUNT] = {
   {"M92 X%.2f\n",    "M92 Y%.2f\n", "M92 Z%.2f\n",  "M92 T0 E%.2f\n",  "M92 T1 E%.2f\nM503 S0\n"}, //Steps/mm
@@ -13,6 +13,7 @@ const char *const parameter_Cmd[PARAMETERS_COUNT][STEPPER_COUNT] = {
   {"M204 P%.0f\n",  "M204 R%.0f\n", "M204 T%.0f\n",              NULL,                       NULL}, //Acceleration
   {"M205 X%.0f\n",  "M205 Y%.0f\n", "M205 Z%.2f\n", "M205 E%.2f\n",                          NULL}, //Jerk
   {"M851 X%.2f\n",  "M851 Y%.2f\n", "M851 Z%.2f\n",              NULL,                       NULL}, //Probe offset
+  {"M206 X%.2f\n",  "M206 Y%.2f\n", "M206 Z%.2f\n",              NULL,                       NULL}, //Home offset
   {"M914 X%.0f\n",  "M914 Y%.0f\n", "M914 Z%.0f\n",              NULL,                       NULL}, //bump Sensitivity
   {"M207 S%.2f\n",  "M207 W%.2f\n", "M207 F%.2f\n",    "M207 Z%.2f\n",                       NULL}, //FW retract
   {"M208 S%.2f\n",  "M208 W%.2f\n", "M208 F%.2f\n",    "M208 R%.2f\n",                       NULL}, //FW retract recover
@@ -31,6 +32,7 @@ const VAL_TYPE parameter_val_type[PARAMETERS_COUNT][STEPPER_COUNT] = {
   {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,         VAL_TYPE_INT},                          //Acceleration
   {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_FLOAT,       VAL_TYPE_FLOAT},                        //Jerk
   {VAL_TYPE_NEG_FLOAT,  VAL_TYPE_NEG_FLOAT, VAL_TYPE_NEG_FLOAT},                                          //Probe offset
+  {VAL_TYPE_NEG_FLOAT,  VAL_TYPE_NEG_FLOAT, VAL_TYPE_NEG_FLOAT},                                          //Home offset
   {VAL_TYPE_NEG_INT,    VAL_TYPE_NEG_INT,   VAL_TYPE_NEG_INT},                                            //bump Sensitivity
   {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_INT,         VAL_TYPE_FLOAT},                        //FW retract
   {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_INT,         VAL_TYPE_INT},                          //FW retract recover
@@ -78,6 +80,8 @@ float getParameter(PARAMETER_NAME name, u8 index)
     return infoParameters.Jerk[index];
   case P_PROBE_OFFSET:
     return infoParameters.ProbeOffset[index];
+  case P_HOME_OFFSET:
+    return infoParameters.HomeOffset[index];
   case P_BUMPSENSITIVITY:
     return infoParameters.BumpSensitivity[index];
   case P_FWRETRACT:
@@ -124,6 +128,9 @@ void setParameter(PARAMETER_NAME name, u8 index, float val)
       break;
     case P_PROBE_OFFSET:
       infoParameters.ProbeOffset[index] = val;
+      break;
+    case P_HOME_OFFSET:
+      infoParameters.HomeOffset[index] = val;
       break;
     case P_BUMPSENSITIVITY:
       infoParameters.BumpSensitivity[index] = val;
