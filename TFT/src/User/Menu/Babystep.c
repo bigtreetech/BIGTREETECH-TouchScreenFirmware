@@ -19,7 +19,15 @@ static float orig_z_offset;
 /* Initialize Z offset */
 void babyInitZOffset(void)
 {
-  float cur_z_offset = probeOffsetGetValue();
+  float cur_z_offset;
+  if (infoMachineSettings.zProbe == ENABLED)
+  {
+    cur_z_offset = probeOffsetGetValue();
+  }
+  else
+  {
+    cur_z_offset = homeOffsetGetValue();
+  }
 
   if (orig_z_offset + babystep != cur_z_offset)
   {
@@ -125,7 +133,15 @@ void menuBabystep(void)
       case KEY_ICON_4:
         if (infoMachineSettings.EEPROM == 1)
         {
-          probeOffsetSetValue(orig_z_offset + babystep);   // apply Z offset
+          if (infoMachineSettings.zProbe == ENABLED)
+          {
+            probeOffsetSetValue(orig_z_offset + babystep);   // apply probe Z offset
+          }
+          else
+          {
+            homeOffsetSetValue(orig_z_offset + babystep);   // apply home Z offset
+          }
+          
           setDialogText(babyStepItems.title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
           showDialog(DIALOG_TYPE_QUESTION, saveEepromSettings, NULL, NULL);
         }
