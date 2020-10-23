@@ -5,10 +5,10 @@
 #include "Configuration.h"
 #include "flashStore.h"
 #include "Settings.h"
+
 //
 //check size of settings against max allocated size at compile time
 #define SIZE_CHECK(object) ((void)sizeof(char[1 - 2*!!(object)]))
-
 
 #if CONFIG_VERSION != CONFIG_SUPPPORT
     #error "the Configuration.h is old. please use the latest Configuration.h file"
@@ -27,8 +27,6 @@
       //#warning "DEFAULT_LCD_MODE supports only SERIAL_TSC. Please update/check your configuration."
     #endif
 #endif
-
-
 
 #ifdef LED_COLOR_PIN
     #ifdef STARTUP_KNOB_LED_COLOR
@@ -282,7 +280,6 @@
     #define CUSTOM_14_GCODE ""
 #endif
 
-
 #define CUSTOM_GCODE_ENABLED {ENABLE_CUSTOM0, ENABLE_CUSTOM1, ENABLE_CUSTOM2, ENABLE_CUSTOM3, ENABLE_CUSTOM4,\
                               ENABLE_CUSTOM5, ENABLE_CUSTOM6, ENABLE_CUSTOM7, ENABLE_CUSTOM8, ENABLE_CUSTOM9,\
                               ENABLE_CUSTOM10,ENABLE_CUSTOM11,ENABLE_CUSTOM12,ENABLE_CUSTOM13,ENABLE_CUSTOM14}
@@ -294,6 +291,5 @@
 #define CUSTOM_GCODE_LABELS    {CUSTOM_0_LABEL, CUSTOM_1_LABEL, CUSTOM_2_LABEL, CUSTOM_3_LABEL, CUSTOM_4_LABEL,\
                               CUSTOM_5_LABEL, CUSTOM_6_LABEL, CUSTOM_7_LABEL, CUSTOM_8_LABEL, CUSTOM_9_LABEL,\
                               CUSTOM_10_LABEL,CUSTOM_11_LABEL,CUSTOM_12_LABEL,CUSTOM_13_LABEL,CUSTOM_14_LABEL }
-
 
 #endif //_SANITYCHECK_H_
