@@ -55,6 +55,8 @@ void mblStart(void)
   mblRunning = true;
   mblPoint = 0;
 
+  probeHeightEnable();                                     // temporary disable software endstops
+
   // MBL gcode sequence start
   mustStoreCmd("G29 S1\n");                                // home and move to first point for Z height adjustment
 
@@ -70,6 +72,8 @@ void mblStop(void)
   mustStoreCmd("G29 S5\n");                                // reset and disable mesh
 
   probeHeightStop();                                       // raise nozzle
+
+  probeHeightDisable();                                    // restore original software endstops state
 
   BUZZER_PLAY(sound_error);
 
