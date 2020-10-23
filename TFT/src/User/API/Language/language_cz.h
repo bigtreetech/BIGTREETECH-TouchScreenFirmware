@@ -56,6 +56,7 @@
     #define STRING_BLTOUCH_REPEAT         "Přesnost"
     #define STRING_Z_OFFSET               "Z Offset"
     #define STRING_PROBE_OFFSET           "Offset sondy"
+    #define STRING_HOME_OFFSET            "Home Offset"
     #define STRING_CONFIRMATION           "Jste si jistý?"
     #define STRING_DOWN                   "Dolů"
     #define STRING_UP                     "Nahoru"

@@ -56,6 +56,7 @@
     #define STRING_BLTOUCH_REPEAT         "Ismétlés"
     #define STRING_Z_OFFSET               "Z Eltolás"
     #define STRING_PROBE_OFFSET           "Szonda Eltolás"
+    #define STRING_HOME_OFFSET            "Home Offset"
     #define STRING_CONFIRMATION           "Biztos vagy benne?"
     #define STRING_DOWN                   "Le"
     #define STRING_UP                     "Fel"
