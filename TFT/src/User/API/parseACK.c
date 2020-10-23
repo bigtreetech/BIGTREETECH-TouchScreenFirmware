@@ -474,6 +474,12 @@ void parseACK(void)
         if(ack_seen("Z")) setParameter(P_JERK, Z_STEPPER, ack_value());
         if(ack_seen("E")) setParameter(P_JERK, E_STEPPER, ack_value());
       }
+    //parse and store Home Offset values
+      else if(ack_seen("M206 X")){
+                          setParameter(P_HOME_OFFSET, X_STEPPER, ack_value());
+        if(ack_seen("Y")) setParameter(P_HOME_OFFSET, Y_STEPPER, ack_value());
+        if(ack_seen("Z")) setParameter(P_HOME_OFFSET, Z_STEPPER, ack_value());
+      }
     //parse and store FW retraction values
       else if(ack_seen("M207 S")){
                           setParameter(P_FWRETRACT, 0, ack_value());
