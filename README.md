@@ -91,6 +91,8 @@ In case one or several parts of the update failed, an error will be shown. Follo
 After the update is done and the files are renamed, it is possible to reuse them again. To do so, change the name of the element(s) to the pre-update name and start the update process again.
 
 
+
+
 ## Configuration
 
 The Firmware can be configured using the **config.ini** file from from one of these folders:
