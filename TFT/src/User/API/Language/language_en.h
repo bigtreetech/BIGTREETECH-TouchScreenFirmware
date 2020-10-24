@@ -273,5 +273,6 @@
     #define STRING_OFFSET_TOOL            "Offset 2nd Nozzle"
     #define STRING_HYBRID_THRESHOLD       "TMC HybridThreshold"
     #define STRING_NOTIFICATIONS          "Notifications"
+    #define STRING_CASE_LIGHT             "Case light"
 
 #endif
