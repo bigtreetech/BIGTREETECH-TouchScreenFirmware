@@ -43,6 +43,9 @@ void menuCaseLight(void)
 
   bool currentCaseLightState = caseLightGetState();
   bool previousCaseLightState = currentCaseLightState;
+  uint8_t currentCaseLightBrightness = caseLightGetBrightness();
+  uint8_t previousCaseLightBrightness = currentCaseLightBrightness;
+
   if (currentCaseLightState)
     caseLightItems.items[KEY_ICON_4] = itemCaseLight[1];
   else
@@ -66,15 +69,22 @@ void menuCaseLight(void)
       caseLightBrightnessReDraw();
     }
 
+    currentCaseLightBrightness = caseLightGetBrightness();
+    if (previousCaseLightBrightness != currentCaseLightBrightness)
+    {
+      previousCaseLightBrightness = currentCaseLightBrightness;
+      caseLightBrightnessReDraw();
+    }
+
     switch (key_num)
     {
     case KEY_ICON_0:
-      caseLightChangeBrightness(-10);
+      caseLightChangeBrightnessPrecent(-10);
       caseLightBrightnessReDraw();
       break;
 
     case KEY_ICON_3:
-      caseLightChangeBrightness(10);
+      caseLightChangeBrightnessPrecent(10);
       caseLightBrightnessReDraw();
       break;
 
@@ -89,14 +99,14 @@ void menuCaseLight(void)
       break;
 
     default:
-    #if LCD_ENCODER_SUPPORT
-        if(encoderPosition)
-        {
-          caseLightChangeBrightness(encoderPosition);
-          caseLightBrightnessReDraw();
-          encoderPosition = 0;
-        }
-      #endif
+#if LCD_ENCODER_SUPPORT
+      if (encoderPosition)
+      {
+        caseLightChangeBrightnessPrecent(encoderPosition);
+        caseLightBrightnessReDraw();
+        encoderPosition = 0;
+      }
+#endif
       break;
     }
 
