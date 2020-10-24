@@ -175,10 +175,10 @@ const GUI_RECT meshKeyRect[MESH_KEY_NUM] = {
 };
 
 const char *const meshKeyString[MESH_KEY_NUM] = {
-  "",                                                      // SAVE
+  "\u08A7",                                                // SAVE
   "\u0894",                                                // OK
   "\u08A5",                                                // RESET
-  "",                                                      // HOME
+  "\u08A3",                                                // HOME
   "",                                                      // EDIT
   "\u02C4",                                                // UP
   "\u02C2",                                                // PREV
