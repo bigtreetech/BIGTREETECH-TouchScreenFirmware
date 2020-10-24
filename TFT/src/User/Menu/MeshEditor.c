@@ -180,10 +180,10 @@ const char *const meshKeyString[MESH_KEY_NUM] = {
   "\u08A5",                                                // RESET
   "",                                                      // HOME
   "",                                                      // EDIT
-  "UP",                                                    // UP
-  "<",                                                     // PREV
-  ">",                                                     // NEXT
-  "DOWN",                                                  // DOWN
+  "\u02C4",                                                // UP
+  "\u02C2",                                                // PREV
+  "\u02C3",                                                // NEXT
+  "\u02C5",                                                // DOWN
 };
 
 const GUI_RECT meshAreaRect[MESH_AREA_NUM] = {
