@@ -1,23 +1,22 @@
 #include "HomeOffsetControl.h"
 #include "includes.h"
 
-static float home_offset_z_value = HOME_OFFSET_Z_DEFAULT_VALUE;
-
+static float z_offset = HOME_Z_OFFSET_DEFAULT_VALUE;
 
 /* Set Z offset value */
 float homeOffsetSetValue(float value)
 {
   mustStoreCmd("M206 Z%.2f\n", value);
 
-  home_offset_z_value = value;
+  z_offset = value;
 
-  return home_offset_z_value;
+  return z_offset;
 }
 
 /* Get current Z offset value */
 float homeOffsetGetValue(void)
 {
-  home_offset_z_value = getParameter(P_HOME_OFFSET, Z_STEPPER);
+  z_offset = getParameter(P_HOME_OFFSET, Z_STEPPER);
 
-  return home_offset_z_value;
+  return z_offset;
 }

@@ -325,9 +325,9 @@
 /**
  * Home Offset
  */
-#define HOME_OFFSET_Z_MIN_VALUE     -20.0f
-#define HOME_OFFSET_Z_MAX_VALUE     20.0f
-#define HOME_OFFSET_Z_DEFAULT_VALUE 0.0f
+#define HOME_Z_OFFSET_MIN_VALUE     -20.0f
+#define HOME_Z_OFFSET_MAX_VALUE     20.0f
+#define HOME_Z_OFFSET_DEFAULT_VALUE 0.0f
 
 /**
  * Babystep
