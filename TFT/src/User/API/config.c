@@ -1072,6 +1072,11 @@ void parseConfigKey(u16 index)
       infoSettings.lcd_idle_timer = config_int();
     break;
 #endif
+  case C_INDEX_SEQUENTIAL_MODE:
+    if (inLimit(config_int(), 0, 1))
+      infoSettings.sequential_mode = config_int();
+    break;
+
   //---------------------------------------------------------CustomG-Code Commands upto 15 custom G-code
   case C_INDEX_CUSTOM_LABEL_1:
   case C_INDEX_CUSTOM_LABEL_2:

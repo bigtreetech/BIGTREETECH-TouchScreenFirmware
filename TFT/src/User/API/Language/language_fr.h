@@ -228,6 +228,7 @@
     #define STRING_120_SECONDS            "2 Min."
     #define STRING_300_SECONDS            "5 Min."
     #define STRING_CUSTOM_SECONDS         "Custom"
+    #define STRING_SEQUENTIAL_MODE        "Sequential mode"
     #define STRING_ST7920_FULLSCREEN      "Mode Marlin plein écran"
     #define STRING_PLR_EN                 "Reprise après coupure"
     #define STRING_SETTING_SAVE           "Sauvegarder les paramètres"

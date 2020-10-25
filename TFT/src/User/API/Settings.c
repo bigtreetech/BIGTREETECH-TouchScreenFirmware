@@ -101,6 +101,7 @@ void infoSettingsReset(void)
   infoSettings.lcd_brightness         = DEFAULT_LCD_BRIGHTNESS;
   infoSettings.lcd_idle_brightness    = DEFAULT_LCD_IDLE_BRIGHTNESS;
   infoSettings.lcd_idle_timer         = DEFAULT_LCD_IDLE_TIMER;
+  infoSettings.sequential_mode        = DISABLED;
 
 // Start, End & Cancel G-codes
   infoSettings.send_start_gcode       = DISABLED;

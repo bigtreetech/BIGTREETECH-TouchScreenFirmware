@@ -164,11 +164,13 @@ typedef struct
   uint8_t  lcd_brightness;
   uint8_t  lcd_idle_brightness;
   uint8_t  lcd_idle_timer;
+  uint8_t  sequential_mode;
 
 // Start, End & Cancel G-codes
   uint8_t  send_start_gcode;
   uint8_t  send_end_gcode;
   uint8_t  send_cancel_gcode;
+
 }SETTINGS;
 
 typedef struct

@@ -235,6 +235,7 @@ extern "C" {
 #define LANG_KEY_120_SECONDS                  "label_120_seconds:"
 #define LANG_KEY_300_SECONDS                  "label_300_seconds:"
 #define LANG_KEY_CUSTOM_SECONDS               "label_custom_seconds:"
+#define LANG_KEY_SEQUENTIAL_MODE              "label_sequential_mode:"
 #define LANG_KEY_ST7920_FULLSCREEN            "label_st7920_fullscreen:"
 #define LANG_KEY_PLR_EN                       "label_plr_en:"
 #define LANG_KEY_SETTING_SAVE                 "label_setting_save:"

@@ -63,6 +63,9 @@ const uint32_t LCD_DIM_IDLE_TIME[ITEM_SECONDS_NUM] = {
 
 void loopDimTimer(void)
 {
+
+
+
   if (infoSettings.lcd_idle_timer == LCD_DIM_OFF)
     return;
 
@@ -113,6 +116,12 @@ void _wakeLCD(void)
     {
       lcd_dim.dimmed = false;
       Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
+      #ifdef LED_COLOR_PIN
+        if(infoSettings.knob_led_idle)
+        {
+          WS2812_Send_DAT(led_color[infoSettings.knob_led_color]);
+        }
+      #endif
     }
     //Set a new idle_ms time
     lcd_dim.idle_ms = OS_GetTimeMs();

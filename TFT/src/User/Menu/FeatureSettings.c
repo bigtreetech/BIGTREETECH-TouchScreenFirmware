@@ -83,6 +83,7 @@ typedef enum
     SKEY_LCD_BRIGTHNESS_DIM,
     SKEY_LCD_DIM_IDLE_TIMER,
   #endif
+  SKEY_SEQUENTIAL_MODE,
   #ifdef ST7920_SPI
     SKEY_ST7920_FULLSCREEN,
   #endif
@@ -126,6 +127,7 @@ LISTITEM settingPage[SKEY_COUNT] = {
     {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_LCD_BRIGHTNESS_DIM,       LABEL_DYNAMIC},
     {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_LCD_DIM_IDLE_TIMER,       LABEL_DYNAMIC},
   #endif
+    {ICONCHAR_BLANK,      LIST_TOGGLE,          LABEL_SEQUENTIAL_MODE,          LABEL_BACKGROUND},
   #ifdef ST7920_SPI
     {ICONCHAR_BLANK,      LIST_TOGGLE,        LABEL_ST7920_FULLSCREEN,        LABEL_OFF},
   #endif
@@ -268,11 +270,16 @@ void updateFeatureSettings(uint8_t key_val)
 
     #endif //LCD_LED_PWM_CHANNEL
 
-    #ifdef ST7920_SPI
-    case SKEY_ST7920_FULLSCREEN:
-      infoSettings.marlin_mode_fullscreen = (infoSettings.marlin_mode_fullscreen + 1) % TOGGLE_NUM;
-      settingPage[item_index].icon = toggleitem[infoSettings.marlin_mode_fullscreen];
+    case SKEY_SEQUENTIAL_MODE:
+      infoSettings.sequential_mode = (infoSettings.sequential_mode + 1) % TOGGLE_NUM;
+      settingPage[item_index].icon = toggleitem[infoSettings.sequential_mode];
       break;
+
+    #ifdef ST7920_SPI
+      case SKEY_ST7920_FULLSCREEN:
+        infoSettings.marlin_mode_fullscreen = (infoSettings.marlin_mode_fullscreen + 1) % TOGGLE_NUM;
+        settingPage[item_index].icon = toggleitem[infoSettings.marlin_mode_fullscreen];
+        break;
     #endif
 
     case SKEY_PLR_EN:
@@ -385,6 +392,10 @@ void loadFeatureSettings(){
           settingPage[item_index].valueLabel = itemDimTime[infoSettings.lcd_idle_timer];
           break;
       #endif //PS_ON_PIN
+
+      case SKEY_SEQUENTIAL_MODE:
+        settingPage[item_index].icon = toggleitem[infoSettings.sequential_mode];
+        break;
 
       #ifdef ST7920_SPI
         case SKEY_ST7920_FULLSCREEN:

@@ -228,6 +228,7 @@
     #define STRING_120_SECONDS            "2 min."
     #define STRING_300_SECONDS            "5 min."
     #define STRING_CUSTOM_SECONDS         "Vlastní"
+    #define STRING_SEQUENTIAL_MODE        "Sequential mode"
     #define STRING_ST7920_FULLSCREEN      "Celoobrazovkový režim Marlin"
     #define STRING_PLR_EN                 "Obnova po ztrátě napájení"
     #define STRING_SETTING_SAVE           "Uložení nastavení"

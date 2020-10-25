@@ -228,6 +228,7 @@
     #define STRING_120_SECONDS            "2 Λεπτά"
     #define STRING_300_SECONDS            "5 Λεπτά"
     #define STRING_CUSTOM_SECONDS         "Τροποποιημένες ρυθμίσεις"
+    #define STRING_SEQUENTIAL_MODE        "Sequential mode"
     #define STRING_ST7920_FULLSCREEN      "Λειτουργία Marlin σε πλήρη οθόνη"
     #define STRING_PLR_EN                 "Power loss recovery"
     #define STRING_SETTING_SAVE           "Save settings"
