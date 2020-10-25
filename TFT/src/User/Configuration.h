@@ -460,6 +460,4 @@
 // Cancel G-code - run this G-code after canceling print
 #define PRINT_CANCEL_GCODE "G28 XY R10\n" // Home XY and raise Z 10mm
 
-#define HAS_CASE_LIGHT
-
 #endif
