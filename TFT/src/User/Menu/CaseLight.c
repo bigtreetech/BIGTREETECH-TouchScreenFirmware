@@ -3,8 +3,8 @@
 
 const ITEM itemCaseLight[2] = {
     //icon                label
-    {ICON_RGB_OFF, LABEL_OFF},
-    {ICON_RGB_WHITE, LABEL_ON},
+    {ICON_RGB_OFF,        LABEL_OFF},
+    {ICON_RGB_WHITE,      LABEL_ON},
 };
 
 void caseLightBrightnessReDraw()
@@ -24,16 +24,16 @@ void menuCaseLight(void)
   MENUITEMS caseLightItems = {
       // title
       LABEL_CASE_LIGHT,
-      // icon                         label
       {
-          {ICON_DEC, LABEL_DEC},
-          {ICON_BACKGROUND, LABEL_BACKGROUND},
-          {ICON_BACKGROUND, LABEL_BACKGROUND},
-          {ICON_INC, LABEL_INC},
-          {ICON_RGB_WHITE, LABEL_ON},
-          {ICON_BACKGROUND, LABEL_BACKGROUND},
-          {ICON_BACKGROUND, LABEL_BACKGROUND},
-          {ICON_BACK, LABEL_BACK},
+      //  icon                       label
+          {ICON_DEC,                LABEL_DEC},
+          {ICON_BACKGROUND,         LABEL_BACKGROUND},
+          {ICON_BACKGROUND,         LABEL_BACKGROUND},
+          {ICON_INC,                LABEL_INC},
+          {ICON_RGB_WHITE,          LABEL_ON},
+          {ICON_BACKGROUND,         LABEL_BACKGROUND},
+          {ICON_BACKGROUND,         LABEL_BACKGROUND},
+          {ICON_BACK,               LABEL_BACK},
       }};
 
   KEY_VALUES key_num = KEY_IDLE;
@@ -46,10 +46,13 @@ void menuCaseLight(void)
   uint8_t currentCaseLightBrightness = caseLightGetBrightness();
   uint8_t previousCaseLightBrightness = currentCaseLightBrightness;
 
-  if (currentCaseLightState)
-    caseLightItems.items[KEY_ICON_4] = itemCaseLight[1];
-  else
+#define SET_CASE_LIGHT_ICON()                            \
+  if (currentCaseLightState)                             \
+    caseLightItems.items[KEY_ICON_4] = itemCaseLight[1]; \
+  else                                                   \
     caseLightItems.items[KEY_ICON_4] = itemCaseLight[0];
+
+  SET_CASE_LIGHT_ICON();
   menuDrawPage(&caseLightItems);
   caseLightBrightnessReDraw();
 
@@ -61,10 +64,7 @@ void menuCaseLight(void)
     {
       // Dynamically change the light on/off icon based on the current state
       previousCaseLightState = currentCaseLightState;
-      if (currentCaseLightState)
-        caseLightItems.items[KEY_ICON_4] = itemCaseLight[1];
-      else
-        caseLightItems.items[KEY_ICON_4] = itemCaseLight[0];
+      SET_CASE_LIGHT_ICON();
       menuDrawPage(&caseLightItems);
       caseLightBrightnessReDraw();
     }
