@@ -814,22 +814,23 @@ void sendQueueCmd(void)
           storeCmd("M503 S0\n");
           break;
 
-        case 29: //G29
-          if(ENABLE_BL_VALUE > 0)              // if not Disabled
-          {
-            if(cmd_seen('A'))
+        #if ENABLE_BL_VALUE > 0              // if not Disabled
+          case 29: //G29
             {
-              setParameter(P_ABL_STATE,0,1);
-              storeCmd("M117 UBL active\n");
+              if(cmd_seen('A'))
+              {
+                setParameter(P_ABL_STATE,0,1);
+                storeCmd("M117 UBL active\n");
+              }
+              if(cmd_seen('D'))
+              {
+                setParameter(P_ABL_STATE,0,0);
+                storeCmd("M117 UBL inactive\n");
+              }
             }
-            if(cmd_seen('D'))
-            {
-              setParameter(P_ABL_STATE,0,0);
-              storeCmd("M117 UBL inactive\n");
-            }
-          }
-          break;
-
+            break;
+        #endif
+        
         case 90: //G90
           coorSetRelative(false);
           break;
