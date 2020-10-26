@@ -5,8 +5,6 @@
 extern "C" {
 #endif
 
-#include "includes.h"
-
 void setSequentialModeColor(void);
 
 #ifdef __cplusplus

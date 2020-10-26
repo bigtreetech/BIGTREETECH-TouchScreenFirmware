@@ -952,126 +952,128 @@ void parseConfigKey(u16 index)
 
   //---------------------------------------------------------Power Supply Settings (if connected to TFT Controller):
 
-#ifdef PS_ON_PIN
+  #ifdef PS_ON_PIN
 
-  case C_INDEX_PS_ON:
-    if (config_int() == 1)
-      infoSettings.auto_off = 1;
-    else if(config_int() == 2)
-      infoSettings.auto_off = 2;
-    else
-      infoSettings.auto_off = 0;
-    break;
+    case C_INDEX_PS_ON:
+      if (config_int() == 1)
+        infoSettings.auto_off = 1;
+      else if(config_int() == 2)
+        infoSettings.auto_off = 2;
+      else
+        infoSettings.auto_off = 0;
+      break;
 
-  case C_INDEX_PS_LOGIC:
-      infoSettings.powerloss_invert = getOnOff();
-    break;
+    case C_INDEX_PS_LOGIC:
+        infoSettings.powerloss_invert = getOnOff();
+      break;
 
-  case C_INDEX_SHUTDOWN_TEMP:
-    if (inLimit(config_int(), MIN_BED_TEMP, MAX_BED_TEMP))
-        infoSettings.auto_off_temp = config_int();
-    break;
+    case C_INDEX_SHUTDOWN_TEMP:
+      if (inLimit(config_int(), MIN_BED_TEMP, MAX_BED_TEMP))
+          infoSettings.auto_off_temp = config_int();
+      break;
 
-#endif
+  #endif
 
   //---------------------------------------------------------Power Loss Recovery & BTT UPS Settings (if connected to TFT Controller:
 
-#ifdef BTT_MINI_UPS
+  #ifdef BTT_MINI_UPS
 
-  case C_INDEX_POWERLOSS_EN:
-      infoSettings.powerloss_en = getOnOff();
-    break;
+    case C_INDEX_POWERLOSS_EN:
+        infoSettings.powerloss_en = getOnOff();
+      break;
 
-  case C_INDEX_POWERLOSS_HOME:
-      infoSettings.powerloss_home = getOnOff();
-    break;
+    case C_INDEX_POWERLOSS_HOME:
+        infoSettings.powerloss_home = getOnOff();
+      break;
 
-  case C_INDEX_POWERLOSS_ZRAISE:
-    if (inLimit(config_float(),  MIN_SIZE_LIMIT, MAX_SIZE_LIMIT))
-          infoSettings.powerloss_z_raise = config_float();
-    break;
+    case C_INDEX_POWERLOSS_ZRAISE:
+      if (inLimit(config_float(),  MIN_SIZE_LIMIT, MAX_SIZE_LIMIT))
+            infoSettings.powerloss_z_raise = config_float();
+      break;
 
-  case C_INDEX_BTT_MINIUPS:
-      infoSettings.btt_ups = getOnOff();
-    break;
+    case C_INDEX_BTT_MINIUPS:
+        infoSettings.btt_ups = getOnOff();
+      break;
 
-#endif
+  #endif
 
   //---------------------------------------------------------Filament Runout Settings (if connected to TFT Controller):
 
-#ifdef FIL_RUNOUT_PIN
-  case C_INDEX_RUNOUT:
-      infoSettings.runout = getOnOff();
-    break;
+  #ifdef FIL_RUNOUT_PIN
+    case C_INDEX_RUNOUT:
+        infoSettings.runout = getOnOff();
+      break;
 
-  case C_INDEX_RUNOUT_LOGIC:
-      infoSettings.runout_invert = getOnOff();
-    break;
+    case C_INDEX_RUNOUT_LOGIC:
+        infoSettings.runout_invert = getOnOff();
+      break;
 
-  case C_INDEX_RUNOUT_NOISE:
-    if (inLimit(config_int(), MIN_DELAY_MS, MAX_DELAY_MS))
-          infoSettings.runout_noise_ms = config_int();
-    break;
+    case C_INDEX_RUNOUT_NOISE:
+      if (inLimit(config_int(), MIN_DELAY_MS, MAX_DELAY_MS))
+            infoSettings.runout_noise_ms = config_int();
+      break;
 
-  case C_INDEX_RUNOUT_DISTANCE:
-    if (inLimit(config_int(), MIN_RUNOUT_DISTANCE, MAX_RUNOUT_DISTANCE))
-          infoSettings.runout_distance = config_int();
-    break;
-#endif
+    case C_INDEX_RUNOUT_DISTANCE:
+      if (inLimit(config_int(), MIN_RUNOUT_DISTANCE, MAX_RUNOUT_DISTANCE))
+            infoSettings.runout_distance = config_int();
+      break;
+  #endif
+
   //---------------------------------------------------------other device specific settings
-#ifdef BUZZER_PIN
-  case C_INDEX_TOUCH_SOUND:
-    if (inLimit(config_int(),0,1))
-      {
-        infoSettings.touchSound = config_int();
-      }
-    break;
+  #ifdef BUZZER_PIN
+    case C_INDEX_TOUCH_SOUND:
+      if (inLimit(config_int(),0,1))
+        {
+          infoSettings.touchSound = config_int();
+        }
+      break;
 
-  case C_INDEX_TOAST_SOUND:
-    if (inLimit(config_int(),0,1))
-      {
-        infoSettings.toastSound = config_int();
-      }
-    break;
+    case C_INDEX_TOAST_SOUND:
+      if (inLimit(config_int(),0,1))
+        {
+          infoSettings.toastSound = config_int();
+        }
+      break;
 
-  case C_INDEX_ALERT_SOUND:
-    if (inLimit(config_int(),0,1))
-      {
-        infoSettings.alertSound = config_int();
-      }
-    break;
-#endif
+    case C_INDEX_ALERT_SOUND:
+      if (inLimit(config_int(),0,1))
+        {
+          infoSettings.alertSound = config_int();
+        }
+      break;
+  #endif
 
-#ifdef LED_COLOR_PIN
-  case C_INDEX_KNOB_COLOR:
-    if (inLimit(config_int(), 0, LED_COLOR_NUM-1))
-      infoSettings.knob_led_color = config_int();
-    break;
+  #ifdef LED_COLOR_PIN
+    case C_INDEX_KNOB_COLOR:
+      if (inLimit(config_int(), 0, LED_COLOR_NUM-1))
+        infoSettings.knob_led_color = config_int();
+      break;
 
-#ifdef LCD_LED_PWM_CHANNEL
-  case C_INDEX_KNOB_LED_IDLE:
-    if (inLimit(config_int(), 0, 1))
-      infoSettings.knob_led_idle = config_int();
-    break;
-#endif //lcd_led_pwm
-#endif
+  #ifdef LCD_LED_PWM_CHANNEL
+    case C_INDEX_KNOB_LED_IDLE:
+      if (inLimit(config_int(), 0, 1))
+        infoSettings.knob_led_idle = config_int();
+      break;
+  #endif //lcd_led_pwm
+  #endif
 
-#ifdef LCD_LED_PWM_CHANNEL
-  case C_INDEX_BRIGHTNESS:
-    if (inLimit(config_int(), 0, ITEM_BRIGHTNESS_NUM - 1))
-      infoSettings.lcd_brightness = config_int();
-    if (infoSettings.lcd_brightness == 0)
-      infoSettings.lcd_brightness = 1; //If someone set it to 0 set it to 1
-    break;
-  case C_INDEX_BRIGHTNESS_IDLE:
-    if (inLimit(config_int(), 0, ITEM_BRIGHTNESS_NUM-1))
-      infoSettings.lcd_idle_brightness = config_int();
-    break;
-  case C_INDEX_BRIGHTNESS_IDLE_DELAY:
-    if (inLimit(config_int(), 0, ITEM_SECONDS_NUM-1))
-      infoSettings.lcd_idle_timer = config_int();
-    break;
-#endif
+  #ifdef LCD_LED_PWM_CHANNEL
+    case C_INDEX_BRIGHTNESS:
+      if (inLimit(config_int(), 0, ITEM_BRIGHTNESS_NUM - 1))
+        infoSettings.lcd_brightness = config_int();
+      if (infoSettings.lcd_brightness == 0)
+        infoSettings.lcd_brightness = 1; //If someone set it to 0 set it to 1
+      break;
+    case C_INDEX_BRIGHTNESS_IDLE:
+      if (inLimit(config_int(), 0, ITEM_BRIGHTNESS_NUM-1))
+        infoSettings.lcd_idle_brightness = config_int();
+      break;
+    case C_INDEX_BRIGHTNESS_IDLE_DELAY:
+      if (inLimit(config_int(), 0, ITEM_SECONDS_NUM-1))
+        infoSettings.lcd_idle_timer = config_int();
+      break;
+  #endif
+
   case C_INDEX_SEQUENTIAL_MODE:
     if (inLimit(config_int(), 0, 1))
       infoSettings.sequential_mode = config_int();
