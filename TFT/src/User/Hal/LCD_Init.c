@@ -63,10 +63,6 @@ const uint32_t LCD_DIM_IDLE_TIME[ITEM_SECONDS_NUM] = {
 
 void loopDimTimer(void)
 {
-
-  if(infoSettings.sequential_mode)
-    setSequentialModeColor();
-
   if (infoSettings.lcd_idle_timer == LCD_DIM_OFF)
     return;
 

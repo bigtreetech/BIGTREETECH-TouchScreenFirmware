@@ -699,6 +699,9 @@ void loopBackEnd(void)
   #ifdef LCD_LED_PWM_CHANNEL
     loopDimTimer();
   #endif
+
+  if(infoSettings.sequential_mode)
+    setSequentialModeColor();
 } //loopBackEnd
 
 void loopFrontEnd(void)
