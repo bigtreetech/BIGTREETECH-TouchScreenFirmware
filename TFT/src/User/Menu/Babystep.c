@@ -11,7 +11,7 @@ const ITEM itemBabyStepUnit[ITEM_BABYSTEP_UNIT_NUM] = {
 };
 
 const float babystep_unit[ITEM_BABYSTEP_UNIT_NUM] = {0.01f, 0.1f, 1};
-static u8   curUnit = 0;
+static u8 curUnit = 0;
 
 static float babystep;
 static float orig_z_offset;
