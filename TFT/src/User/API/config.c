@@ -988,7 +988,7 @@ void parseConfigKey(u16 index)
 
     case C_INDEX_POWERLOSS_ZRAISE:
       if (inLimit(config_float(),  MIN_SIZE_LIMIT, MAX_SIZE_LIMIT))
-            infoSettings.powerloss_z_raise = config_float();
+        infoSettings.powerloss_z_raise = config_float();
       break;
 
     case C_INDEX_BTT_MINIUPS:
@@ -1010,7 +1010,7 @@ void parseConfigKey(u16 index)
 
     case C_INDEX_RUNOUT_NOISE:
       if (inLimit(config_int(), MIN_DELAY_MS, MAX_DELAY_MS))
-            infoSettings.runout_noise_ms = config_int();
+        infoSettings.runout_noise_ms = config_int();
       break;
 
     case C_INDEX_RUNOUT_DISTANCE:
@@ -1023,23 +1023,17 @@ void parseConfigKey(u16 index)
   #ifdef BUZZER_PIN
     case C_INDEX_TOUCH_SOUND:
       if (inLimit(config_int(),0,1))
-        {
-          infoSettings.touchSound = config_int();
-        }
+        infoSettings.touchSound = config_int();
       break;
 
     case C_INDEX_TOAST_SOUND:
       if (inLimit(config_int(),0,1))
-        {
-          infoSettings.toastSound = config_int();
-        }
+        infoSettings.toastSound = config_int();
       break;
 
     case C_INDEX_ALERT_SOUND:
       if (inLimit(config_int(),0,1))
-        {
-          infoSettings.alertSound = config_int();
-        }
+        infoSettings.alertSound = config_int();
       break;
   #endif
 
@@ -1049,17 +1043,17 @@ void parseConfigKey(u16 index)
         infoSettings.knob_led_color = config_int();
       break;
 
-  #ifdef LCD_LED_PWM_CHANNEL
-    case C_INDEX_KNOB_LED_IDLE:
-      if (inLimit(config_int(), 0, 1))
-        infoSettings.knob_led_idle = config_int();
-      break;
-  #endif //lcd_led_pwm
+    #ifdef LCD_LED_PWM_CHANNEL
+      case C_INDEX_KNOB_LED_IDLE:
+        if (inLimit(config_int(), 0, 1))
+          infoSettings.knob_led_idle = config_int();
+        break;
+    #endif //lcd_led_pwm
   #endif
 
   #ifdef LCD_LED_PWM_CHANNEL
     case C_INDEX_BRIGHTNESS:
-      if (inLimit(config_int(), 0, ITEM_BRIGHTNESS_NUM - 1))
+      if (inLimit(config_int(), 1, ITEM_BRIGHTNESS_NUM - 1))
         infoSettings.lcd_brightness = config_int();
       if (infoSettings.lcd_brightness == 0)
         infoSettings.lcd_brightness = 1; //If someone set it to 0 set it to 1
@@ -1109,8 +1103,7 @@ void parseConfigKey(u16 index)
       {
         customcode_good[index - C_INDEX_CUSTOM_LABEL_1] = 0;//set name was not ok
       }
-    break;
-    }
+    }break;
   case C_INDEX_CUSTOM_GCODE_1:
   case C_INDEX_CUSTOM_GCODE_2:
   case C_INDEX_CUSTOM_GCODE_3:
@@ -1139,8 +1132,7 @@ void parseConfigKey(u16 index)
         {
           customcode_index--;
         }
-    break;
-    }
+    }break;
   //---------------------------------------------------------Start, End & Cancel G-codes
   case C_INDEX_START_GCODE_ON:
         infoSettings.send_start_gcode = getOnOff();
