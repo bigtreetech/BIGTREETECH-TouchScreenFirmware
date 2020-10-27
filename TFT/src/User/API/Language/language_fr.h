@@ -273,5 +273,6 @@
     #define STRING_OFFSET_TOOL            "Offset 2ème Buse"
     #define STRING_HYBRID_THRESHOLD       "Seuil Hybride TMC"
     #define STRING_NOTIFICATIONS          "Notifications"
+    #define STRING_CASE_LIGHT             "Case light"
 
 #endif

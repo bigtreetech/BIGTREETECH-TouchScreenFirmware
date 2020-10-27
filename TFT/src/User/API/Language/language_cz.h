@@ -273,5 +273,6 @@
     #define STRING_OFFSET_TOOL            "Offset 2.trysky"
     #define STRING_HYBRID_THRESHOLD       "TMC Hybridní práh"
     #define STRING_NOTIFICATIONS          "Notifications"
+    #define STRING_CASE_LIGHT             "Case light"
 
 #endif

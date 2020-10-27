@@ -273,5 +273,6 @@
     #define STRING_OFFSET_TOOL            "Második fej eltolása"
     #define STRING_HYBRID_THRESHOLD       "TMC Hibrid Küszöbérték"
     #define STRING_NOTIFICATIONS          "Értesítések"
+    #define STRING_CASE_LIGHT             "Case light"
 
 #endif
