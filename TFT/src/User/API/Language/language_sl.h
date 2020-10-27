@@ -211,6 +211,7 @@
     #define STRING_RETRACT_ACCELERATION   "Pospešek privleka fil."
     #define STRING_TRAVEL_ACCELERATION    "Pospešek pomika"
     #define STRING_JERK                   "Jerk"
+    #define STRING_JUNCTION_DEVIATION     "Junction Deviation"
     #define STRING_BUMP_SENSITIVITY       "TMC občutljivost trka"
     #define STRING_FWRETRACT              "FW Retraction"
     #define STRING_FWRECOVER              "FW Retraction Recover"

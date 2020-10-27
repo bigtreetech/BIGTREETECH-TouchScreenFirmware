@@ -472,6 +472,7 @@ void parseACK(void)
         if(ack_seen("Y")) setParameter(P_JERK, Y_STEPPER, ack_value());
         if(ack_seen("Z")) setParameter(P_JERK, Z_STEPPER, ack_value());
         if(ack_seen("E")) setParameter(P_JERK, E_STEPPER, ack_value());
+        if(ack_seen("J")) setParameter(P_JUNCTION_DEVIATION, 0, ack_value());
       }
     //parse and store FW retraction values
       else if(ack_seen("M207 S")){

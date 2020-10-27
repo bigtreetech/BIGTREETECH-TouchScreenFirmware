@@ -211,6 +211,7 @@
     #define STRING_RETRACT_ACCELERATION   "Geriçekme İvmelenmesi"
     #define STRING_TRAVEL_ACCELERATION    "Gezinti İvmelenmesi"
     #define STRING_JERK                   "Jerk"
+    #define STRING_JUNCTION_DEVIATION     "Junction Deviation"
     #define STRING_BUMP_SENSITIVITY       "TMC çarpma hassasiyeti"
     #define STRING_FWRETRACT              "FW Retraction"
     #define STRING_FWRECOVER              "FW Retraction Recover"

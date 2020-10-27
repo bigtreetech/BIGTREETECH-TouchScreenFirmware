@@ -684,6 +684,7 @@ void sendQueueCmd(void)
           if(cmd_seen('Y')) setParameter(P_JERK, Y_AXIS, cmd_float());
           if(cmd_seen('Z')) setParameter(P_JERK, Z_AXIS, cmd_float());
           if(cmd_seen('E')) setParameter(P_JERK, E_AXIS, cmd_float());
+          if(cmd_seen('J')) setParameter(P_JUNCTION_DEVIATION, 0, cmd_float());
           break;
         case 207: //M207 FW Retract
           if(cmd_seen('S')) setParameter(P_FWRETRACT, 0, cmd_float());
