@@ -119,7 +119,9 @@ void menuBabystep(void)
       // change unit
       case KEY_ICON_5:
         curUnit = (curUnit + 1) % ITEM_BABYSTEP_UNIT_NUM;
+
         babyStepItems.items[key_num] = itemBabyStepUnit[curUnit];
+
         menuDrawItem(&babyStepItems.items[key_num], key_num);
         break;
 
