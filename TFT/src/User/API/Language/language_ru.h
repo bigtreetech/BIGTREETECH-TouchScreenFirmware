@@ -211,6 +211,7 @@
     #define STRING_RETRACT_ACCELERATION   "Ретракта"
     #define STRING_TRAVEL_ACCELERATION    "Перемещения"
     #define STRING_JERK                   "Рывок"
+    #define STRING_JUNCTION_DEVIATION     "Junction Deviation"
     #define STRING_BUMP_SENSITIVITY       "TMC чувствительность удара"
     #define STRING_FWRETRACT              "M207 ретракт"
     #define STRING_FWRECOVER              "M208 восстановление ретракта"

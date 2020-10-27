@@ -211,6 +211,7 @@
     #define STRING_RETRACT_ACCELERATION   "Rétraction"
     #define STRING_TRAVEL_ACCELERATION    "Déplacements"
     #define STRING_JERK                   "Jerk"
+    #define STRING_JUNCTION_DEVIATION     "Junction Deviation"
     #define STRING_BUMP_SENSITIVITY       "Sensibilité TMC"
     #define STRING_FWRETRACT              "Rétraction FW"
     #define STRING_FWRECOVER              "Récupération FW"

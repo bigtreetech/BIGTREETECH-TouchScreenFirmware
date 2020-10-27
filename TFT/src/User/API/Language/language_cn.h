@@ -211,6 +211,7 @@
     #define STRING_RETRACT_ACCELERATION   "回抽加速度"
     #define STRING_TRAVEL_ACCELERATION    "空载加速度"
     #define STRING_JERK                   "Jerk"
+    #define STRING_JUNCTION_DEVIATION     "Junction Deviation"
     #define STRING_BUMP_SENSITIVITY       "TMC堵转检测灵敏度"
     #define STRING_FWRETRACT              "FW Retraction"
     #define STRING_FWRECOVER              "FW Retraction Recover"

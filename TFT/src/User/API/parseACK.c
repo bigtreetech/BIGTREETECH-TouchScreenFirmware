@@ -471,6 +471,7 @@ void parseACK(void)
         if(ack_seen("Y")) setParameter(P_JERK, Y_STEPPER, ack_value());
         if(ack_seen("Z")) setParameter(P_JERK, Z_STEPPER, ack_value());
         if(ack_seen("E")) setParameter(P_JERK, E_STEPPER, ack_value());
+        if(ack_seen("J")) setParameter(P_JUNCTION_DEVIATION, 0, ack_value());
       }
     //parse and store FW retraction values
       else if(ack_seen("M207 S")){
@@ -564,21 +565,14 @@ void parseACK(void)
                           setDualStepperStatus(E_STEPPER, true);
       }
     // Parse and store ABL type if auto-detect is enabled
+    #if ENABLE_BL_VALUE == 1
       else if (ack_seen("Auto Bed Leveling"))
-      {
-        if (ENABLE_BL_VALUE == 1)
-          infoMachineSettings.leveling = BL_ABL;
-      }
+        infoMachineSettings.leveling = BL_ABL;
       else if (ack_seen("Unified Bed Leveling"))
-      {
-        if (ENABLE_BL_VALUE == 1)
-          infoMachineSettings.leveling = BL_UBL;
-      }
+        infoMachineSettings.leveling = BL_UBL;
       else if (ack_seen("Mesh Bed Leveling"))
-      {
-        if (ENABLE_BL_VALUE == 1)
-          infoMachineSettings.leveling = BL_MBL;
-      }
+        infoMachineSettings.leveling = BL_MBL;
+    #endif
     // Parse ABL state
       else if(ack_seen("echo:Bed Leveling"))
       {
@@ -637,10 +631,9 @@ void parseACK(void)
       {
         infoMachineSettings.autoReportTemp = ack_value();
       }
-      else if(ack_seen("Cap:AUTOLEVEL:"))
+      else if(ack_seen("Cap:AUTOLEVEL:") && infoMachineSettings.leveling == BL_DISABLED)
       {
-        if (infoMachineSettings.leveling == BL_DISABLED)
-          infoMachineSettings.leveling = ack_value();
+        infoMachineSettings.leveling = ack_value();
       }
       else if(ack_seen("Cap:Z_PROBE:"))
       {

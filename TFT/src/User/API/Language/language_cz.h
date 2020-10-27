@@ -211,6 +211,7 @@
     #define STRING_RETRACT_ACCELERATION   "Zrychlení retrakcí"
     #define STRING_TRAVEL_ACCELERATION    "Zrychlení při přesunu"
     #define STRING_JERK                   "Jerk-trhnutí"
+    #define STRING_JUNCTION_DEVIATION     "Junction Deviation"
     #define STRING_BUMP_SENSITIVITY       "Citlivost nárazu TMC"
     #define STRING_FWRETRACT              "FW Zatažení"
     #define STRING_FWRECOVER              "FW Obnovení"

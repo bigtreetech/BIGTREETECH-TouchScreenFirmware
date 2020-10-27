@@ -92,7 +92,7 @@ float numPadFloat(u8* title, float old_val, float reset_val, bool negative)
     setLargeFont(true);
     u8 nowIndex = 0, lastIndex = 0;
     char ParameterBuf[FLOAT_BUFLONG + 1] = {0};
-    u8 prec = (old_val == 0) ? 0 : 2;
+    u8 prec = (old_val == 0) ? 0 : 3;
     sprintf(ParameterBuf,"%.*f", prec, old_val);
     nowIndex = strlen(ParameterBuf);
 

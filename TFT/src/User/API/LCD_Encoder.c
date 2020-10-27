@@ -25,7 +25,7 @@ void HW_EncoderInit(void)
   void HW_EncActiveSignalInit(void)
   {
     GPIO_InitSet(LCD_ENC_EN_PIN, MGPIO_MODE_OUT_PP, 0);
-    setEncActiveSignal(1);
+    setEncActiveSignal(0);
   }
 
   void setEncActiveSignal(uint8_t status)
