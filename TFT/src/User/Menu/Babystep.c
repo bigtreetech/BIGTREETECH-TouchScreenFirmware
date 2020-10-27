@@ -11,7 +11,7 @@ const ITEM itemBabyStepUnit[ITEM_BABYSTEP_UNIT_NUM] = {
 };
 
 const float babystep_unit[ITEM_BABYSTEP_UNIT_NUM] = {0.01f, 0.1f, 1};
-static u8   curUnit = 0;
+static u8 curUnit = 0;
 
 static float babystep;
 static float orig_z_offset;
@@ -19,19 +19,13 @@ static float orig_z_offset;
 /* Initialize Z offset */
 void babyInitZOffset(void)
 {
-  float cur_z_offset = probeOffsetGetValue();
-
-  if (orig_z_offset + babystep != cur_z_offset)
-  {
-    orig_z_offset = cur_z_offset - babystep;
-  }
+  orig_z_offset = probeOffsetGetValue() - babystep;
 }
 
 /* Reset to default */
 void babyReset(void)
 {
   babystepReset();
-
   babyInitZOffset();
 }
 
@@ -134,9 +128,7 @@ void menuBabystep(void)
       // change step unit
       case KEY_ICON_5:
         curUnit = (curUnit + 1) % ITEM_BABYSTEP_UNIT_NUM;
-
         babyStepItems.items[key_num] = itemBabyStepUnit[curUnit];
-
         menuDrawItem(&babyStepItems.items[key_num], key_num);
         break;
 
@@ -154,7 +146,6 @@ void menuBabystep(void)
           if (encoderPosition)
           {
             babystep = babystepUpdateValueByEncoder(unit);
-
             encoderPosition = 0;
           }
         #endif

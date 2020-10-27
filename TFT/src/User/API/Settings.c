@@ -166,27 +166,17 @@ void initMachineSetting(void){
 
 void setupMachine(void)
 {
-  switch (ENABLE_BL_VALUE)
-  {
-    case 2:
-      infoMachineSettings.leveling = BL_ABL;
-      break;
-
-    case 3:
-      infoMachineSettings.leveling = BL_BBL;
-      break;
-
-    case 4:
-      infoMachineSettings.leveling = BL_UBL;
-      break;
-
-    case 5:
-      infoMachineSettings.leveling = BL_MBL;
-      break;
-
-    default:
-      break;
-  }
+  #ifdef ENABLE_BL_VALUE
+    #if ENABLE_BL_VALUE == 2
+        infoMachineSettings.leveling = BL_ABL;
+    #elif ENABLE_BL_VALUE == 3
+        infoMachineSettings.leveling = BL_BBL;
+    #elif ENABLE_BL_VALUE == 4
+        infoMachineSettings.leveling = BL_UBL;
+    #elif ENABLE_BL_VALUE == 5
+        infoMachineSettings.leveling = BL_MBL;
+    #endif
+  #endif
 
   if (infoMachineSettings.leveling != BL_DISABLED && infoMachineSettings.EEPROM == 1 && infoSettings.auto_load_leveling == 1)
   {
