@@ -644,18 +644,18 @@ KEY_VALUES menuKeyGetValue(void)
   KEY_VALUES tempkey = KEY_IDLE;
   if (menuType == MENU_TYPE_ICON)
   {
-	if(infoMenu.menu[infoMenu.cur] == menuStatus)
-	{
-	  tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keySS), rect_of_keySS);
-	}
-	else if((infoMenu.menu[infoMenu.cur] == menuHeat) || (infoMenu.menu[infoMenu.cur] == menuPid) || (infoMenu.menu[infoMenu.cur] == menuTuneExtruder))
-	{
-	  tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keysTM), rect_of_keysTM);
-	}
-	else
-	{
-	  tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_key), rect_of_key);
-	}	 
+    if(infoMenu.menu[infoMenu.cur] == menuStatus)
+    {
+      tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keySS), rect_of_keySS);
+    }
+    else if((infoMenu.menu[infoMenu.cur] == menuHeat) || (infoMenu.menu[infoMenu.cur] == menuPid) || (infoMenu.menu[infoMenu.cur] == menuTuneExtruder) || (infoMenu.menu[infoMenu.cur] == menuFan) || (infoMenu.menu[infoMenu.cur] == menuExtrude))
+    {
+      tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keysTM), rect_of_keysTM);
+    }
+    else
+    {
+      tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_key), rect_of_key);
+    }	 
   }
   else if (menuType == MENU_TYPE_LISTVIEW)
   {

@@ -91,7 +91,11 @@ void menuExtrude(void)
       case KEY_ICON_0:
         eTemp -= item_len[item_len_i];
         break;
-
+      case KEY_INFOBOX:
+      {
+        
+        break;
+      }
       case KEY_ICON_3:
         eTemp += item_len[item_len_i];
         break;
