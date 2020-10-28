@@ -24,6 +24,7 @@ const ITEM itemDegree[ITEM_DEGREE_NUM] = {
   {ICON_10_DEGREE,            LABEL_10_DEGREE},
 };
 
+
 const  u8 item_degree[ITEM_DEGREE_NUM] = {1, 5, 10};
 static u8 item_degree_i = 1;
 
@@ -89,8 +90,7 @@ void menuHeat(void)
           heatSetTargetTemp(c_heater, actTarget - item_degree[item_degree_i]);
         break;
 
-      case KEY_ICON_1:
-      case KEY_ICON_2:
+      case KEY_INFOBOX:
       {
         int32_t val = heatGetTargetTemp(c_heater);
         // Get the touch of the user from either icon 1 or 2 which is under the temperature			

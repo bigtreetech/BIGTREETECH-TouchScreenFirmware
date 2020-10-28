@@ -273,8 +273,7 @@ void menuPid(void)
         pidTemperatureReDraw(true);
         break;
 
-      case KEY_ICON_1:
-      case KEY_ICON_2:
+      case KEY_INFOBOX:
       {
         int32_t val = pidHeater.T[pidHeater.toolIndex].target;
         // Get the touch of the user from either icon 1 or 2 which is under the temperature			

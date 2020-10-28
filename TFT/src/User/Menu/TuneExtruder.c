@@ -112,8 +112,7 @@ void menuTuneExtruder(void)
           heatSetTargetTemp(c_heater, actTarget - extrude_degree[extrude_degree_i]);
         break;
 
-      case KEY_ICON_1:
-      case KEY_ICON_2:
+      case KEY_INFOBOX:
       {
         int32_t val = heatGetTargetTemp(c_heater);
         // Get the touch of the user from either icon 1 or 2 which is under the temperature			
