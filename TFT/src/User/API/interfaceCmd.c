@@ -811,7 +811,7 @@ void sendQueueCmd(void)
 
         case 28: //G28
           coordinateSetKnown(true);
-          babyReset();
+          babystepReset();
           storeCmd("M503 S0\n");
           break;
 
@@ -831,7 +831,7 @@ void sendQueueCmd(void)
             }
             break;
         #endif
-        
+
         case 90: //G90
           coorSetRelative(false);
           break;

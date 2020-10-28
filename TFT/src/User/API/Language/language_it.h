@@ -273,5 +273,7 @@
     #define STRING_OFFSET_TOOL            "Offset 2nd Ugello"
     #define STRING_HYBRID_THRESHOLD       "TMC Soglia Modo Ibrido"
     #define STRING_NOTIFICATIONS          "Notifiche"
+    #define STRING_MESH_EDITOR            "Mesh edit"
+    #define STRING_MESH_TUNER             "Mesh tuner"
 
 #endif

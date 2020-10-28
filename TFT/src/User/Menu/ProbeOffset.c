@@ -2,57 +2,34 @@
 #include "includes.h"
 
 #define ITEM_PROBE_OFFSET_UNIT_NUM 3
-
-const ITEM itemProbeOffsetUnit[ITEM_PROBE_OFFSET_UNIT_NUM] = {
-  // icon                           label
-  {ICON_001_MM,                     LABEL_001_MM},
-  {ICON_01_MM,                      LABEL_01_MM},
-  {ICON_1_MM,                       LABEL_1_MM},
-};
-
-const float probeOffset_unit[ITEM_PROBE_OFFSET_UNIT_NUM] = {0.01f, 0.1f, 1};
-static u8   curUnit = 0;
-
 #define ITEM_PROBE_OFFSET_SUBMENU_NUM 4
 
-ITEM itemProbeOffsetSubmenu[ITEM_PROBE_OFFSET_SUBMENU_NUM] = {
-  // icon                           label
-  {ICON_01_MM,                      LABEL_01_MM},
-  {ICON_RESET_VALUE,                LABEL_RESET},
-  {ICON_EEPROM_SAVE,                LABEL_SAVE},
-  {ICON_DISABLE_STEPPERS,           LABEL_XY_UNLOCK},
-};
-
+static u8 curUnit = 0;
 static u8 curSubmenu = 0;
 
-static float z_offset;
-
-/* Show an eror message notification */
+/* Show an error notification */
 void probeNotifyError(void)
 {
-  char tmpBuf[120];
-  labelChar(templabel1, LABEL_Z_OFFSET);
-  labelChar(templabel2, LABEL_OFF);
-  sprintf(tmpBuf, "%s %s", templabel1, templabel2);
-  addToast(DIALOG_TYPE_ERROR, tmpBuf);
+  labelChar(tempMsg, LABEL_Z_OFFSET);
+
+  sprintf(&tempMsg[strlen(tempMsg)], " %s", textSelect(LABEL_OFF));
+
+  addToast(DIALOG_TYPE_ERROR, tempMsg);
 }
 
 void probeDrawStatus(u8 *status)
 {
   char tempstr[20];
 
-  if (status != NULL)
-  {
-    sprintf(tempstr, "%s  ", status);
+  sprintf(tempstr, "%s  ", status);
 
-    if (!probeOffsetGetStatus())
-      GUI_SetColor(infoSettings.reminder_color);
-    else
-      GUI_SetColor(infoSettings.sd_reminder_color);
+  if (!probeOffsetGetStatus())
+    GUI_SetColor(infoSettings.reminder_color);
+  else
+    GUI_SetColor(infoSettings.sd_reminder_color);
 
-    GUI_DispString(exhibitRect.x0, exhibitRect.y0, (u8 *) tempstr);
-    GUI_SetColor(infoSettings.font_color);
-  }
+  GUI_DispString(exhibitRect.x0, exhibitRect.y0, (u8 *) tempstr);
+  GUI_SetColor(infoSettings.font_color);
 }
 
 void probeDrawValue(float val)
@@ -68,6 +45,23 @@ void probeDrawValue(float val)
 
 void menuProbeOffset(void)
 {
+  const ITEM itemProbeOffsetUnit[ITEM_PROBE_OFFSET_UNIT_NUM] = {
+    // icon                         label
+    {ICON_001_MM,                   LABEL_001_MM},
+    {ICON_01_MM,                    LABEL_01_MM},
+    {ICON_1_MM,                     LABEL_1_MM},
+  };
+
+  const float probeOffset_unit[ITEM_PROBE_OFFSET_UNIT_NUM] = {0.01f, 0.1f, 1};
+
+  ITEM itemProbeOffsetSubmenu[ITEM_PROBE_OFFSET_SUBMENU_NUM] = {
+    // icon                         label
+    {ICON_01_MM,                    LABEL_01_MM},
+    {ICON_RESET_VALUE,              LABEL_RESET},
+    {ICON_EEPROM_SAVE,              LABEL_SAVE},
+    {ICON_DISABLE_STEPPERS,         LABEL_XY_UNLOCK},
+  };
+
   // 1 title, ITEM_PER_PAGE items (icon + label)
   MENUITEMS probeOffsetItems = {
     // title
@@ -91,8 +85,10 @@ void menuProbeOffset(void)
   #endif
 
   KEY_VALUES key_num = KEY_IDLE;
-  float now = z_offset = probeOffsetGetValue();
+  float now, z_offset;
   float unit;
+
+  now = z_offset = probeOffsetGetValue();
 
   if (!probeOffsetGetStatus())
     probeOffsetItems.items[KEY_ICON_4].label.index = LABEL_OFF;
@@ -114,7 +110,7 @@ void menuProbeOffset(void)
   {
     unit = probeOffset_unit[curUnit];
 
-    z_offset = probeOffsetGetValue();                      // always load the current Z offset
+    z_offset = probeOffsetGetValue();                      // always load current Z offset
 
     key_num = menuKeyGetValue();
     switch (key_num)
@@ -221,7 +217,7 @@ void menuProbeOffset(void)
             if (!probeOffsetGetStatus())
               probeNotifyError();
             else
-              z_offset = probeOffsetUpdateValueByEncoder(unit);
+              z_offset = probeOffsetUpdateValueByEncoder(unit, encoderPosition > 0 ? 1 : -1);
 
             encoderPosition = 0;
           }
@@ -234,8 +230,8 @@ void menuProbeOffset(void)
       now = z_offset;
       probeDrawValue(now);
 
-      // babystep is reset every time Z offset changes otherwise the set babystep value will not be aligned with the new Z offset
-      babyReset();
+      // reset babystep every time Z offset is changed otherwise the set babystep value will not be aligned with the new Z offset
+      babystepReset();
     }
 
     loopProcess();

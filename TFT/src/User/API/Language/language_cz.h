@@ -273,5 +273,7 @@
     #define STRING_OFFSET_TOOL            "Offset 2.trysky"
     #define STRING_HYBRID_THRESHOLD       "TMC Hybridní práh"
     #define STRING_NOTIFICATIONS          "Notifications"
+    #define STRING_MESH_EDITOR            "Mesh edit"
+    #define STRING_MESH_TUNER             "Mesh tuner"
 
 #endif
