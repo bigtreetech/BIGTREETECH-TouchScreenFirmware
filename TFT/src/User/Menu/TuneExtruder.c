@@ -115,12 +115,10 @@ void menuTuneExtruder(void)
       case KEY_INFOBOX:
       {
         int32_t val = heatGetTargetTemp(c_heater);
-        // Get the touch of the user from either icon 1 or 2 which is under the temperature			
-        char tempstr[30];
-        sprintf(tempstr, "Min:0 | Max:%i", infoSettings.max_temp[c_heater] );
-        val = numPadInt((u8 *)tempstr, actTarget,0, false);
+        char titlestr[30];
+        sprintf(titlestr, "Min:0 | Max:%i", infoSettings.max_temp[c_heater] );
+        val = numPadInt((u8 *)titlestr, actTarget,0, false);
         val = NOBEYOND(0,val,infoSettings.max_temp[c_heater]);
-        // If value is different than target change it.
         if (val != actTarget)
         {
           heatSetTargetTemp(c_heater, val);

@@ -126,7 +126,10 @@ void menuProbeOffset(void)
         else
           z_offset = probeOffsetDecreaseValue(unit);
         break;
-
+      case KEY_INFOBOX:
+      {
+        break;
+      }
       // increase Z offset
       case KEY_ICON_3:
         if (!probeOffsetGetStatus())

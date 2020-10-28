@@ -648,7 +648,12 @@ KEY_VALUES menuKeyGetValue(void)
     {
       tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keySS), rect_of_keySS);
     }
-    else if((infoMenu.menu[infoMenu.cur] == menuHeat) || (infoMenu.menu[infoMenu.cur] == menuPid) || (infoMenu.menu[infoMenu.cur] == menuTuneExtruder) || (infoMenu.menu[infoMenu.cur] == menuFan) || (infoMenu.menu[infoMenu.cur] == menuExtrude))
+    else if((infoMenu.menu[infoMenu.cur] == menuHeat) || 
+            (infoMenu.menu[infoMenu.cur] == menuPid)  || 
+            (infoMenu.menu[infoMenu.cur] == menuTuneExtruder) || 
+            (infoMenu.menu[infoMenu.cur] == menuFan) || 
+            (infoMenu.menu[infoMenu.cur] == menuExtrude) || 
+            (infoMenu.menu[infoMenu.cur] == menuSpeed))
     {
       tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keysTM), rect_of_keysTM);
     }

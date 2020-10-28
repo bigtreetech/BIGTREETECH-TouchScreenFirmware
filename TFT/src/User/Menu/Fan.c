@@ -82,16 +82,14 @@ void menuFan(void)
       break;
     case KEY_INFOBOX:
     {
-      uint8_t val = actFan;
-      // Get the touch of the user from either icon 1 or 2 which is under the temperature			
-      char tempstr[30];
-      sprintf(tempstr, "Min:0 | Max:100%");
-      val = numPadInt((u8 *)tempstr, actFan,0, false);
+      uint8_t val = actFanPercent;
+      char titlestr[30];
+      sprintf(titlestr, "Min:0 | Max:100");
+      val = numPadInt((u8 *)titlestr, actFanPercent,0, false);
       val = NOBEYOND(0,val,100);
-      // If value is different than target change it.
-      if (val != actFan)
+      if (val != actFanPercent)
       {
-        fanSetSpeed(curIndex,val);         
+        fanSetSpeedPercent(curIndex,val);
       }
       menuDrawPage(&fanItems);
       fanSpeedReDraw(false);

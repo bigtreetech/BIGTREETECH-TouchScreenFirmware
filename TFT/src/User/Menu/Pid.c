@@ -277,9 +277,9 @@ void menuPid(void)
       {
         int32_t val = pidHeater.T[pidHeater.toolIndex].target;
         // Get the touch of the user from either icon 1 or 2 which is under the temperature			
-        char tempstr[30];
-        sprintf(tempstr, "Min:0 | Max:%i", infoSettings.max_temp[pidHeater.toolIndex] );
-        val = numPadInt((u8 *)tempstr, pidHeater.T[pidHeater.toolIndex].target,0, false);
+        char titlestr[30];
+        sprintf(titlestr, "Min:0 | Max:%i", infoSettings.max_temp[pidHeater.toolIndex] );
+        val = numPadInt((u8 *)titlestr, pidHeater.T[pidHeater.toolIndex].target,0, false);
         val = NOBEYOND(0,val,infoSettings.max_temp[pidHeater.toolIndex]);
         // If value is different than target change it.
         if (val != pidHeater.T[pidHeater.toolIndex].target)
