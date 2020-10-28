@@ -67,7 +67,7 @@ void sendGcodeReDrawButton(u8 position, u8 pressed)
   if(position > GKEY_SEND) return;
   if(pressed)
   {
-    GUI_SetColor(WHITE);
+    GUI_SetColor(GRAY); //NCP White
     GUI_SetBkColor(BLACK);
   }
   GUI_ClearPrect(rect_of_Gkey+position);
@@ -75,7 +75,7 @@ void sendGcodeReDrawButton(u8 position, u8 pressed)
   if(pressed)
   {
     GUI_SetColor(BLACK);
-    GUI_SetBkColor(WHITE);
+    GUI_SetBkColor(GRAY); //NCP White
   }
 }
 
@@ -85,13 +85,13 @@ void menuDrawSendGcode(void)
 
   GUI_RECT gcodeRect = {rect_of_Gkey[GKEY_BACK].x1+10, rect_of_Gkey[GKEY_BACK].y0, rect_of_Gkey[GKEY_SEND].x0-10, rect_of_Gkey[GKEY_SEND].y1};
 
-  GUI_SetBkColor(BLUE);
+  GUI_SetBkColor(DARKGRAY); //NCP blue
   GUI_ClearRect(0, 0, LCD_WIDTH, rect_of_Gkey[0].y0);
-  GUI_SetBkColor(WHITE);
+  GUI_SetBkColor(GRAY); //NCP white
   GUI_ClearPrect(&gcodeRect);
   GUI_ClearRect(0, rect_of_Gkey[0].y0, LCD_WIDTH, LCD_HEIGHT);
 
-  GUI_SetColor(YELLOW);
+  GUI_SetColor(ORANGE); //NCP Yellow
   GUI_FillPrect(&rect_of_Gkey[GKEY_BACK]); // Back
   GUI_FillPrect(&rect_of_Gkey[GKEY_SEND]); // Send
   GUI_SetColor(BLACK);
