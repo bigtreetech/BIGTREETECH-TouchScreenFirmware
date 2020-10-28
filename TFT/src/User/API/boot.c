@@ -283,8 +283,10 @@ void scanResetDir(void) {
 void scanRenameUpdate(void) {
   if (f_file_exists(ADMIN_MODE_FILE)) return; // admin mode, need not rename
 
-  if (f_dir_exists(ROOT_DIR)) { // ROOT_DIR exists
-    if (f_dir_exists(ROOT_DIR ".CUR")) { // old ROOT_DIR also exists
+  if (f_dir_exists(ROOT_DIR))
+  { // ROOT_DIR exists
+    if (f_dir_exists(ROOT_DIR ".CUR"))
+    { // old ROOT_DIR also exists
       GUI_Clear(infoSettings.bg_color);
       // It will take some time to delete the old ROOT_DIR, so display "Deleting" on the screen to tell user.
       GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, (uint8_t *)"Deleting old ROOT_DIR...");
@@ -293,20 +295,31 @@ void scanRenameUpdate(void) {
     f_rename(ROOT_DIR, ROOT_DIR ".CUR");
   }
 
-  if (f_file_exists(FIRMWARE_NAME ".bin")) { // firmware exists
-    if (f_file_exists(FIRMWARE_NAME ".CUR")) { // old firmware also exists
+  if (f_file_exists(FIRMWARE_NAME ".bin"))
+  { // firmware exists
+    if (f_file_exists(FIRMWARE_NAME ".CUR"))
+    { // old firmware also exists
       f_unlink(FIRMWARE_NAME ".CUR");
     }
     f_rename(FIRMWARE_NAME ".bin", FIRMWARE_NAME ".CUR");
   }
-  if (f_file_exists(CONFIG_FILE_PATH)) { // config exists
-    if (f_file_exists(CONFIG_FILE_PATH ".CUR")) { // old config also exists
+  if (f_file_exists(CONFIG_FILE_PATH))
+  { // config exists
+    if (f_file_exists(CONFIG_FILE_PATH ".CUR"))
+    { // old config also exists
       f_unlink(CONFIG_FILE_PATH ".CUR");
     }
     f_rename(CONFIG_FILE_PATH, CONFIG_FILE_PATH ".CUR");
   }
+
 }
 
+void saveflashSign(u8* buf, uint32_t size)
+{
+  W25Qxx_EraseSector(FLASH_SIGN_ADDR);
+  Delay_ms(100); //give time for spi flash to settle
+  W25Qxx_WriteBuffer(buf, FLASH_SIGN_ADDR, size);
+}
 void scanUpdates(void)
 {
   //bool flashUpdate[sign_count] = {true, true, true, true};
@@ -327,12 +340,12 @@ void scanUpdates(void)
     }
     if (getConfigFromFile())
       cur_flash_sign[config_sign] = CONFIG_CHECK_SIGN;
+    if (getLangFromFile())
+      cur_flash_sign[lang_sign] = LANGUAGE_CHECK_SIGN;
     scanRenameUpdate();
     scanResetDir();
-
-  W25Qxx_EraseSector(FLASH_SIGN_ADDR);
-  Delay_ms(100); //give time for spi flash to settle
-  W25Qxx_WriteBuffer((uint8_t*)&cur_flash_sign, FLASH_SIGN_ADDR,sizeof(cur_flash_sign));
+    saveflashSign((uint8_t*)cur_flash_sign, sizeof(cur_flash_sign));
 
   }
 }
+

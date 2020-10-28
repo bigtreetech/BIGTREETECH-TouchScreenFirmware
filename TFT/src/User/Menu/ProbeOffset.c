@@ -31,7 +31,9 @@ static float z_offset;
 void probeNotifyError(void)
 {
   char tmpBuf[120];
-  sprintf(tmpBuf, "%s %s", textSelect(LABEL_Z_OFFSET), textSelect(LABEL_OFF));
+  labelChar(templabel1, LABEL_Z_OFFSET);
+  labelChar(templabel2, LABEL_OFF);
+  sprintf(tmpBuf, "%s %s", templabel1, templabel2);
   addToast(DIALOG_TYPE_ERROR, tmpBuf);
 }
 
@@ -187,8 +189,8 @@ void menuProbeOffset(void)
           case 2:
             if (infoMachineSettings.EEPROM == 1)
             {
-              showDialog(DIALOG_TYPE_QUESTION, textSelect(probeOffsetItems.title.index), textSelect(LABEL_EEPROM_SAVE_INFO),
-                textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), saveEepromSettings, NULL, NULL);
+              setDialogText(probeOffsetItems.title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
+              showDialog(DIALOG_TYPE_QUESTION, saveEepromSettings, NULL, NULL);
             }
             break;
 

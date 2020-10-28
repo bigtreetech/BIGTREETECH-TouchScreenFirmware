@@ -42,13 +42,14 @@ void Hardware_GenericInit(void)
   #endif
 
   XPT2046_Init();
-  OS_TimerInitMs();  // System clock timer, cycle 1ms, called after XPT2046_Init()
+  OS_TimerInitMs();         // System clock timer, cycle 1ms, called after XPT2046_Init()
   W25Qxx_Init();
   LCD_Init();
-  readStoredPara(); // Read settings parameter
-  LCD_RefreshDirection();  //refresh display direction after reading settings
-  scanUpdates();           // scan icon, fonts and config files
-  checkflashSign();       // check font/icon/config signature in SPI flash for update
+  readStoredPara();         // Read settings parameter
+  LCD_RefreshDirection();   // refresh display direction after reading settings
+  scanUpdates();            // scan icon, fonts and config files
+  checkflashSign();         // check font/icon/config signature in SPI flash for update
+  initMachineSetting();     // load default machine settings
 
   #ifdef LED_COLOR_PIN
     knob_LED_Init();
@@ -61,6 +62,9 @@ void Hardware_GenericInit(void)
 
   #if LCD_ENCODER_SUPPORT
     HW_EncoderInit();
+  #endif
+  #if ENC_ACTIVE_SIGNAL
+    HW_EncActiveSignalInit();
   #endif
 
   #ifdef PS_ON_PIN

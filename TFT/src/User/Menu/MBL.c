@@ -29,22 +29,22 @@ void mblUpdateStatus(bool succeeded)
     if (infoMachineSettings.EEPROM == 1)
     {
       char tmpBuf[120];
-
-      sprintf(tmpBuf, "%s\n %s", textSelect(LABEL_BL_COMPLETE), textSelect(LABEL_EEPROM_SAVE_INFO));
-
-      showDialog(DIALOG_TYPE_SUCCESS, textSelect(LABEL_MBL_SETTINGS), (u8*) tmpBuf,
-        textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), saveEepromSettings, NULL, NULL);
+      labelChar(tempstr1, LABEL_BL_COMPLETE);
+      labelChar(tempstr2, LABEL_EEPROM_SAVE_INFO);
+      sprintf(tmpBuf, "%s\n %s", tempstr1, tempstr2);
+      setDialogText(LABEL_MBL_SETTINGS, (u8*) tmpBuf, LABEL_CONFIRM, LABEL_CANCEL);
+      showDialog(DIALOG_TYPE_SUCCESS, saveEepromSettings, NULL, NULL);
     }
     else
     {
-      popupReminder(DIALOG_TYPE_SUCCESS, textSelect(LABEL_MBL_SETTINGS), textSelect(LABEL_BL_COMPLETE));
+      popupReminder(DIALOG_TYPE_SUCCESS, LABEL_MBL_SETTINGS, LABEL_BL_COMPLETE);
     }
   }
   else                                 // if if bed leveling process failed, provide an error dialog
   {
     BUZZER_PLAY(sound_error);
 
-    popupReminder(DIALOG_TYPE_ERROR, textSelect(LABEL_MBL_SETTINGS), textSelect(LABEL_PROCESS_ABORTED));
+    popupReminder(DIALOG_TYPE_ERROR, LABEL_MBL_SETTINGS, LABEL_PROCESS_ABORTED);
   }
 }
 
@@ -52,7 +52,9 @@ void mblUpdateStatus(bool succeeded)
 void mblNotifyError(void)
 {
   char tmpBuf[120];
-  sprintf(tmpBuf, "%s %s", textSelect(LABEL_MBL), textSelect(LABEL_OFF));
+  labelChar(tempstr1, LABEL_MBL);
+  labelChar(tempstr2, LABEL_OFF);
+  sprintf(tmpBuf, "%s %s", tempstr1, tempstr2);
   addToast(DIALOG_TYPE_ERROR, tmpBuf);
 }
 
@@ -70,10 +72,8 @@ void mblStart(void)
 void mblStop(void)
 {
   mblRunning = false;
-
   BUZZER_PLAY(sound_error);
-
-  popupReminder(DIALOG_TYPE_ERROR, textSelect(LABEL_MBL_SETTINGS), textSelect(LABEL_PROCESS_ABORTED));
+  popupReminder(DIALOG_TYPE_ERROR, LABEL_MBL_SETTINGS, LABEL_PROCESS_ABORTED);
 }
 
 void mblDrawHeader(u8 *point)
@@ -83,13 +83,12 @@ void mblDrawHeader(u8 *point)
   if (point != NULL)
   {
     sprintf(tempstr, "P%d   ", *point);
-
     GUI_SetColor(infoSettings.sd_reminder_color);
   }
   else
   {
-    sprintf(tempstr, "%s   ", textSelect(LABEL_OFF));
-
+    labelChar(tempstr1, LABEL_OFF);
+    sprintf(tempstr, "%s   ", tempstr1);
     GUI_SetColor(infoSettings.reminder_color);
   }
 

@@ -11,7 +11,7 @@ const ITEM itemBabyStepUnit[ITEM_BABYSTEP_UNIT_NUM] = {
 };
 
 const float babystep_unit[ITEM_BABYSTEP_UNIT_NUM] = {0.01f, 0.1f, 1};
-static u8   curUnit = 0;
+static u8 curUnit = 0;
 
 static float babystep;
 static float orig_z_offset;
@@ -19,19 +19,13 @@ static float orig_z_offset;
 /* Initialize Z offset */
 void babyInitZOffset(void)
 {
-  float cur_z_offset = probeOffsetGetValue();
-
-  if (orig_z_offset + babystep != cur_z_offset)
-  {
-    orig_z_offset = cur_z_offset - babystep;
-  }
+  orig_z_offset = probeOffsetGetValue() - babystep;
 }
 
 /* Reset to default */
 void babyReset(void)
 {
   babystepReset();
-
   babyInitZOffset();
 }
 
@@ -39,8 +33,8 @@ void babyReDraw(bool skip_header)
 {
   if (!skip_header)
   {
-    GUI_DispString(exhibitRect.x0, exhibitRect.y0, textSelect(LABEL_BABYSTEP));
-    GUI_DispString(exhibitRect.x0, exhibitRect.y0 + BYTE_HEIGHT + LARGE_BYTE_HEIGHT, textSelect(LABEL_Z_OFFSET));
+    GUI_DispString(exhibitRect.x0, exhibitRect.y0, LABEL_BABYSTEP);
+    GUI_DispString(exhibitRect.x0, exhibitRect.y0 + BYTE_HEIGHT + LARGE_BYTE_HEIGHT, LABEL_Z_OFFSET);
   }
 
   char tempstr[20];
@@ -51,10 +45,10 @@ void babyReDraw(bool skip_header)
   setLargeFont(true);
 
   sprintf(tempstr, "% 6.2f", babystep);
-  GUI_DispStringRight(point_bs.x, point_bs.y, (u8 *) tempstr);
+  GUI_DispStringRight(point_bs.x, point_bs.y, (u8 *)tempstr);
 
   sprintf(tempstr, "% 6.2f", orig_z_offset + babystep);
-  GUI_DispStringRight(point_of.x, point_of.y, (u8 *) tempstr);
+  GUI_DispStringRight(point_of.x, point_of.y, (u8 *)tempstr);
 
   setLargeFont(false);
 }
@@ -126,18 +120,15 @@ void menuBabystep(void)
         if (infoMachineSettings.EEPROM == 1)
         {
           probeOffsetSetValue(orig_z_offset + babystep);   // apply Z offset
-
-          showDialog(DIALOG_TYPE_QUESTION, textSelect(babyStepItems.title.index), textSelect(LABEL_EEPROM_SAVE_INFO),
-            textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), saveEepromSettings, NULL, NULL);
+          setDialogText(babyStepItems.title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
+          showDialog(DIALOG_TYPE_QUESTION, saveEepromSettings, NULL, NULL);
         }
         break;
 
       // change step unit
       case KEY_ICON_5:
         curUnit = (curUnit + 1) % ITEM_BABYSTEP_UNIT_NUM;
-
         babyStepItems.items[key_num] = itemBabyStepUnit[curUnit];
-
         menuDrawItem(&babyStepItems.items[key_num], key_num);
         break;
 
@@ -155,7 +146,6 @@ void menuBabystep(void)
           if (encoderPosition)
           {
             babystep = babystepUpdateValueByEncoder(unit);
-
             encoderPosition = 0;
           }
         #endif

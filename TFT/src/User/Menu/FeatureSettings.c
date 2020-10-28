@@ -138,7 +138,7 @@ void resetSettings(void)
 {
   infoSettingsReset();
   storePara();
-  popupReminder(DIALOG_TYPE_SUCCESS, textSelect(LABEL_INFO), textSelect(LABEL_RESET_SETTINGS_DONE));
+  popupReminder(DIALOG_TYPE_SUCCESS, LABEL_INFO, LABEL_RESET_SETTINGS_DONE);
 }
 
 //
@@ -234,8 +234,8 @@ void updateFeatureSettings(uint8_t key_val)
     #endif
 
     case SKEY_RESET_SETTINGS:
-      showDialog(DIALOG_TYPE_ALERT, textSelect(LABEL_SETTING_RESET), textSelect(LABEL_RESET_SETTINGS_INFO),
-                  textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL) ,resetSettings,NULL,NULL);
+      setDialogText(LABEL_SETTING_RESET, LABEL_RESET_SETTINGS_INFO, LABEL_CONFIRM, LABEL_CANCEL);
+      showDialog(DIALOG_TYPE_ALERT, resetSettings,NULL,NULL);
       break;
 
     #ifdef LCD_LED_PWM_CHANNEL
@@ -246,8 +246,8 @@ void updateFeatureSettings(uint8_t key_val)
           infoSettings.lcd_brightness = 1; //In Normal it should not be off. Set back to 5%
 
         char tempstr[8];
-        sprintf(tempstr,(char *)textSelect(LABEL_PERCENT_VALUE),LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
-        setDynamicTextValue(key_val,tempstr);
+        sprintf(tempstr, (char *)textSelect(LABEL_PERCENT_VALUE), LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
+        setDynamicTextValue(key_val, tempstr);
         Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
         break;
       }
