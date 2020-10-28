@@ -44,9 +44,8 @@ void menuMore(void)
       case KEY_ICON_2:
         if (isPrinting() && !isPause()) // need paused before extrude
         {
-          showDialog(DIALOG_TYPE_ALERT, textSelect(LABEL_WARNING),
-               textSelect(LABEL_IS_PAUSE), textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL),
-               isPauseConfirm, NULL, NULL);
+          setDialogText(LABEL_WARNING, LABEL_IS_PAUSE, LABEL_CONFIRM, LABEL_CANCEL);
+          showDialog(DIALOG_TYPE_ALERT, isPauseConfirm, NULL, NULL);
         }
         else
           infoMenu.menu[++infoMenu.cur] = menuExtrude;
@@ -67,7 +66,7 @@ void menuMore(void)
       case KEY_ICON_6:
         infoMenu.menu[++infoMenu.cur] = menuSendGcode;
         break;
-        
+
       case KEY_ICON_7:
         infoMenu.cur--;
         break;

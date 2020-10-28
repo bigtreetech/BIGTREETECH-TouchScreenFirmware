@@ -33,7 +33,7 @@ void loaditemsCustomGcode()
     if (item_index < gcode_num){
       customItems.items[i].icon = ICONCHAR_CODE;
       customItems.items[i].titlelabel.index = LABEL_DYNAMIC;
-      setDynamicLabel(i,customcodes->name[item_index]);
+      customItems.items[i].titlelabel.address = customcodes->name[item_index];
     }
     else{
       customItems.items[i].icon = ICONCHAR_BACKGROUND;
@@ -212,22 +212,28 @@ void menuEepromSettings(void)
       case KEY_ICON_0:
         // save to EEPROM
         if (infoMachineSettings.EEPROM == 1)
-          showDialog(DIALOG_TYPE_QUESTION, textSelect(eepromSettingsItems.title.index), textSelect(LABEL_EEPROM_SAVE_INFO),
-            textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), saveEepromSettings, NULL, NULL);
+        {
+          setDialogText(eepromSettingsItems.title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
+          showDialog(DIALOG_TYPE_QUESTION, saveEepromSettings, NULL, NULL);
+        }
         break;
 
       case KEY_ICON_1:
         // restore from EEPROM
         if (infoMachineSettings.EEPROM == 1)
-          showDialog(DIALOG_TYPE_QUESTION, textSelect(eepromSettingsItems.title.index), textSelect(LABEL_EEPROM_RESTORE_INFO),
-            textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), restoreEepromSettings, NULL, NULL);
+        {
+          setDialogText(eepromSettingsItems.title.index, LABEL_EEPROM_RESTORE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
+          showDialog(DIALOG_TYPE_QUESTION, restoreEepromSettings, NULL, NULL);
+        }
         break;
 
       case KEY_ICON_2:
         // reset EEPROM
         if (infoMachineSettings.EEPROM == 1)
-          showDialog(DIALOG_TYPE_QUESTION, textSelect(eepromSettingsItems.title.index), textSelect(LABEL_EEPROM_RESET_INFO),
-            textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), resetEepromSettings, NULL, NULL);
+        {
+          setDialogText(eepromSettingsItems.title.index, LABEL_EEPROM_RESET_INFO, LABEL_CONFIRM, LABEL_CANCEL);
+          showDialog(DIALOG_TYPE_QUESTION, resetEepromSettings, NULL, NULL);
+        }
         break;
 
       case KEY_ICON_7:

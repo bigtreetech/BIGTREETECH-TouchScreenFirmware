@@ -19,14 +19,13 @@ void unifiedMenu(void)
   };
 
   KEY_VALUES key_num = KEY_IDLE;
-  GUI_SetBkColor(infoSettings.bg_color);
 
   menuDrawPage(&unifiedPageItems);
 
-  while(infoMenu.menu[infoMenu.cur] == unifiedMenu)
+  while (infoMenu.menu[infoMenu.cur] == unifiedMenu)
   {
     key_num = menuKeyGetValue();
-    switch(key_num)
+    switch (key_num)
     {
       case KEY_ICON_0:
         infoMenu.menu[++infoMenu.cur] = menuUnifiedHeat;
@@ -66,6 +65,7 @@ void unifiedMenu(void)
       default:
         break;
     }
+
     loopProcess();
   }
 }
@@ -87,26 +87,20 @@ void classicMenu(void)
      {ICON_LEVELING,                LABEL_LEVELING},}
   };
 
-  if (infoMachineSettings.autoLevel == 1)
+  KEY_VALUES key_num = KEY_IDLE;
+
+  if (infoMachineSettings.leveling != BL_DISABLED)
   {
     classicPageItems.items[7].icon = ICON_LEVELING;
-    classicPageItems.items[7].label.index = LABEL_ABL;
+    classicPageItems.items[7].label.index = LABEL_BED_LEVELING;
   }
-  else
-  {
-    classicPageItems.items[7].icon = ICON_MANUAL_LEVEL;
-    classicPageItems.items[7].label.index = LABEL_LEVELING;
-  }
-
-  KEY_VALUES key_num=KEY_IDLE;
-  GUI_SetBkColor(infoSettings.bg_color);
 
   menuDrawPage(&classicPageItems);
 
-  while(infoMenu.menu[infoMenu.cur] == classicMenu)
+  while (infoMenu.menu[infoMenu.cur] == classicMenu)
   {
     key_num = menuKeyGetValue();
-    switch(key_num)
+    switch (key_num)
     {
       case KEY_ICON_0:
         infoMenu.menu[++infoMenu.cur] = menuUnifiedHeat;
@@ -137,19 +131,16 @@ void classicMenu(void)
         break;
 
       case KEY_ICON_7:
-        if(infoMachineSettings.autoLevel == 1)
-        {
-          infoMenu.menu[++infoMenu.cur] = menuAutoLeveling;
-        }
+        if (infoMachineSettings.leveling != BL_DISABLED)
+          infoMenu.menu[++infoMenu.cur] = menuBedLeveling;
         else
-        {
           infoMenu.menu[++infoMenu.cur] = menuManualLeveling;
-        }
         break;
 
       default:
         break;
     }
+
     loopProcess();
   }
 }

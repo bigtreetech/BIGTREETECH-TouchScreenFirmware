@@ -163,10 +163,8 @@ void gocdeListDraw(void)
     {
       setDynamicLabel(i, infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num]);
     }
-
     printListItems.items[i].titlelabel.index = LABEL_DYNAMIC;
     menuDrawListItem(&printListItems.items[i], i);
-
   }
 
   for (; (i < NUM_PER_PAGE); i++) //background
@@ -217,7 +215,7 @@ void menuPrintFromSource(void)
   u8 update=0;
 
   GUI_Clear(infoSettings.bg_color);
-  GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, textSelect(LABEL_LOADING));
+  GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, LABEL_LOADING);
 
   if (mountFS() == true && scanPrintFiles() == true)
   {
@@ -235,7 +233,7 @@ void menuPrintFromSource(void)
     if(infoFile.source == BOARD_SD)
       GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, (u8*)requestCommandInfo.cmd_rev_buf);
     else
-      GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, textSelect(labelVolumeError[infoFile.source]));
+      GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, labelVolumeError[infoFile.source]);
     Delay_ms(1000);
     infoMenu.cur--;
   }
@@ -310,8 +308,8 @@ void menuPrintFromSource(void)
             char temp_info[FILE_NUM + 50];
             sprintf(temp_info, (char *)textSelect(LABEL_START_PRINT), infoFile.file[key_num + start - infoFile.F_num]);
             //confirm file selction
-            showDialog(DIALOG_TYPE_QUESTION, textSelect(LABEL_PRINT), (u8*)temp_info,
-                        textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL), startPrint, ExitDir, NULL);
+            setDialogText( LABEL_PRINT, (u8*)temp_info, LABEL_CONFIRM, LABEL_CANCEL);
+            showDialog(DIALOG_TYPE_QUESTION, startPrint, ExitDir, NULL);
           }
         }
 
@@ -351,29 +349,30 @@ void menuPrintFromSource(void)
   }
 }
 
-MENUITEMS sourceSelItems = {
-//  title
-LABEL_PRINT,
-// icon                       label
- {{ICON_ONTFT_SD,            LABEL_TFTSD},
- #ifdef U_DISK_SUPPORT
-  {ICON_U_DISK,               LABEL_U_DISK},
-  #define ONBOARD_SD_INDEX 2
- #else
-  #define ONBOARD_SD_INDEX 1
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
- #endif
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACK,                 LABEL_BACK}}
-};
 
 void menuPrint(void)
 {
   KEY_VALUES  key_num;
+
+  MENUITEMS sourceSelItems = {
+  //  title
+  LABEL_PRINT,
+  // icon                       label
+  {{ICON_ONTFT_SD,            LABEL_TFTSD},
+  #ifdef U_DISK_SUPPORT
+    {ICON_U_DISK,               LABEL_U_DISK},
+    #define ONBOARD_SD_INDEX 2
+  #else
+    #define ONBOARD_SD_INDEX 1
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+  #endif
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_BACK,                 LABEL_BACK}}
+  };
 
   sourceSelItems.items[ONBOARD_SD_INDEX].icon = (infoMachineSettings.onboard_sd_support == ENABLED) ? ICON_ONBOARD_SD : ICON_BACKGROUND;
   sourceSelItems.items[ONBOARD_SD_INDEX].label.index = (infoMachineSettings.onboard_sd_support == ENABLED) ? LABEL_ONBOARDSD : LABEL_BACKGROUND;

@@ -5,10 +5,10 @@
 #include "Configuration.h"
 #include "flashStore.h"
 #include "Settings.h"
+
 //
 //check size of settings against max allocated size at compile time
 #define SIZE_CHECK(object) ((void)sizeof(char[1 - 2*!!(object)]))
-
 
 #if CONFIG_VERSION != CONFIG_SUPPPORT
     #error "the Configuration.h is old. please use the latest Configuration.h file"
@@ -18,26 +18,36 @@
     #ifdef CLEAN_MODE_SWITCHING_SUPPORT
     #error "CLEAN_MODE_SWITCHING_SUPPORT is now SERIAL_ALWAYS_ON. Please update your configuration."
     #endif
+#else
+    #if defined(_PIN_TFT35_V2_0_H_) || defined(_PIN_TFT35_V1_0_H_)
+      #ifdef DEFAULT_LCD_MODE
+        #undef DEFAULT_LCD_MODE
+      #endif
+      #define DEFAULT_LCD_MODE SERIAL_TSC  // Just set hardcoded here. 
+      //#warning "DEFAULT_LCD_MODE supports only SERIAL_TSC. Please update/check your configuration."
+    #endif
 #endif
 
 #ifdef LED_COLOR_PIN
+    #ifdef STARTUP_KNOB_LED_COLOR
+        #if STARTUP_KNOB_LED_COLOR < 0
+            #error "STARTUP_KNOB_LED_COLOR cannot be less than 1"
+        #endif
 
-  #ifdef STARTUP_KNOB_LED_COLOR
-    #if STARTUP_KNOB_LED_COLOR < 0
-        #error "STARTUP_knob_LED_COLOR cannot be less than 1"
-    #endif
-
-    #if STARTUP_KNOB_LED_COLOR > 8
-        #error "STARTUP_knob_LED_COLOR cannot be greater than 9"
-    #endif
-  #else
+        #if STARTUP_KNOB_LED_COLOR > 8
+            #error "STARTUP_KNOB_LED_COLOR cannot be greater than 9"
+        #endif
+    #else
         #define STARTUP_KNOB_LED_COLOR 0
-  #endif
-
+    #endif
 #else
-
+    #ifdef STARTUP_KNOB_LED_COLOR
+        #if STARTUP_KNOB_LED_COLOR > 0
+            //#warning "STARTUP_KNOB_LED_COLOR is not supported on this target and must be set to 0"
+            #undef STARTUP_KNOB_LED_COLOR
+        #endif
+    #endif
     #define STARTUP_KNOB_LED_COLOR 0
-
 #endif
 
 #ifdef EXTRUDE_STEPS
@@ -48,17 +58,17 @@
   #error "AUTO_BED_LEVELING is now auto-configured with 'M115'. Please remove AUTO_BED_LEVELING from your Configuration.h file."
 #endif
 
-#ifdef ENABLE_UBL_VALUE
-  #if ENABLE_UBL_VALUE > 2
-    #error "ENABLE_UBL_VALUE cannot be greater than 2"
+#ifdef ENABLE_BL_VALUE
+  #if ENABLE_BL_VALUE > 5
+    #error "ENABLE_BL_VALUE cannot be greater than 5"
   #endif
 
-  #if ENABLE_UBL_VALUE < 0
-    #error "ENABLE_UBL_VALUE cannot be less than 0"
+  #if ENABLE_BL_VALUE < 0
+    #error "ENABLE_BL_VALUE cannot be less than 0"
   #endif
 #endif
-#ifndef ENABLE_UBL_VALUE
-    #define ENABLE_UBL_VALUE 2
+#ifndef ENABLE_BL_VALUE
+    #define ENABLE_BL_VALUE 1
 #endif
 
 #ifdef FRIENDLY_PROBE_OFFSET_LANGUAGE
@@ -85,6 +95,45 @@
 #endif
 #ifndef QUICK_EEPROM_BUTTON
     #define QUICK_EEPROM_BUTTON 0
+#endif
+
+#ifdef MESH_GRID_MAX_POINTS_X
+  #if MESH_GRID_MAX_POINTS_X > 15
+    #error "MESH_GRID_MAX_POINTS_X cannot be greater than 15"
+  #endif
+
+  #if MESH_GRID_MAX_POINTS_X < 1
+    #error "MESH_GRID_MAX_POINTS_X cannot be less than 1"
+  #endif
+#endif
+#ifndef MESH_GRID_MAX_POINTS_X
+    #define MESH_GRID_MAX_POINTS_X 10
+#endif
+
+#ifdef MESH_GRID_MAX_POINTS_Y
+  #if MESH_GRID_MAX_POINTS_Y > 15
+    #error "MESH_GRID_MAX_POINTS_Y cannot be greater than 15"
+  #endif
+
+  #if MESH_GRID_MAX_POINTS_Y < 1
+    #error "MESH_GRID_MAX_POINTS_Y cannot be less than 1"
+  #endif
+#endif
+#ifndef MESH_GRID_MAX_POINTS_Y
+    #define MESH_GRID_MAX_POINTS_Y 10
+#endif
+
+#ifdef MESH_LEFT_KEYBOARD
+  #if MESH_LEFT_KEYBOARD > 1
+    #error "MESH_LEFT_KEYBOARD cannot be greater than 1"
+  #endif
+
+  #if MESH_LEFT_KEYBOARD < 0
+    #error "MESH_LEFT_KEYBOARD cannot be less than 0"
+  #endif
+#endif
+#ifndef MESH_LEFT_KEYBOARD
+    #define MESH_LEFT_KEYBOARD 1
 #endif
 
 #ifdef CANCEL_PRINT_GCODE
@@ -231,7 +280,6 @@
     #define CUSTOM_14_GCODE ""
 #endif
 
-
 #define CUSTOM_GCODE_ENABLED {ENABLE_CUSTOM0, ENABLE_CUSTOM1, ENABLE_CUSTOM2, ENABLE_CUSTOM3, ENABLE_CUSTOM4,\
                               ENABLE_CUSTOM5, ENABLE_CUSTOM6, ENABLE_CUSTOM7, ENABLE_CUSTOM8, ENABLE_CUSTOM9,\
                               ENABLE_CUSTOM10,ENABLE_CUSTOM11,ENABLE_CUSTOM12,ENABLE_CUSTOM13,ENABLE_CUSTOM14}
@@ -243,6 +291,5 @@
 #define CUSTOM_GCODE_LABELS    {CUSTOM_0_LABEL, CUSTOM_1_LABEL, CUSTOM_2_LABEL, CUSTOM_3_LABEL, CUSTOM_4_LABEL,\
                               CUSTOM_5_LABEL, CUSTOM_6_LABEL, CUSTOM_7_LABEL, CUSTOM_8_LABEL, CUSTOM_9_LABEL,\
                               CUSTOM_10_LABEL,CUSTOM_11_LABEL,CUSTOM_12_LABEL,CUSTOM_13_LABEL,CUSTOM_14_LABEL }
-
 
 #endif //_SANITYCHECK_H_
