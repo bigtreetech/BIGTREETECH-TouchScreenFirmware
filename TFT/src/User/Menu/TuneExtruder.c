@@ -42,7 +42,7 @@ void showNewESteps(const float measured_length, const float old_esteps, float * 
 
   GUI_DispString(exhibitRect.x0, exhibitRect.y0, textSelect(LABEL_TUNE_EXT_MEASURED));
 
-  sprintf(tempstr, "  %0.1fmm  ", measured_length);
+  sprintf(tempstr, "  %0.2fmm  ", measured_length);
   GUI_DispStringInPrect(&exhibitRect, (u8 *)tempstr);
 
   sprintf(tempstr, (char*)textSelect(LABEL_TUNE_EXT_OLD_ESTEP), old_esteps);
@@ -229,7 +229,8 @@ void menuNewExtruderESteps(void)
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_INC,                     LABEL_INC},
      {ICON_EEPROM_SAVE,             LABEL_SAVE},
-     {ICON_E_1_MM,                  LABEL_1_MM},
+     //{ICON_E_1_MM,                  LABEL_1_MM},
+     {ICON_1_MM,                    LABEL_1_MM},
      {ICON_RESET_VALUE,             LABEL_RESET},
      {ICON_BACK,                    LABEL_BACK},}
   };
@@ -237,7 +238,7 @@ void menuNewExtruderESteps(void)
   KEY_VALUES key_num = KEY_IDLE;
 
   float measured_length;
-  float now = measured_length = 20.0f;
+  float now = measured_length = 20.00f;
   float old_esteps, new_esteps; // get the value of the E-steps
 
   mustStoreCmd("M503 S0\n");
