@@ -2,7 +2,7 @@
 #include "includes.h"
 
 #define EXTRUDE_DEGREE_NUM 3
-#define ITEM_TUNE_EXTRUDER_LEN_NUM 3
+#define ITEM_TUNE_EXTRUDER_LEN_NUM 4
 
 static u8 extrude_degree_i = 1;
 static u8 curLen = 0;
@@ -206,12 +206,16 @@ void menuNewExtruderESteps(void)
 {
   const ITEM itemTuneExtruderLen[ITEM_TUNE_EXTRUDER_LEN_NUM] = {
     // icon                         label
-    {ICON_E_1_MM,                   LABEL_1_MM},
-    {ICON_E_5_MM,                   LABEL_5_MM},
-    {ICON_E_10_MM,                  LABEL_10_MM},
-  };
+    //{ICON_E_1_MM,                   LABEL_1_MM},
+    //{ICON_E_5_MM,                   LABEL_5_MM},
+    //{ICON_E_10_MM,                  LABEL_10_MM},
+    {ICON_001_MM,                     LABEL_001_MM},
+    {ICON_01_MM,                      LABEL_01_MM},
+    {ICON_1_MM,                       LABEL_1_MM},
+    {ICON_10_MM,                      LABEL_10_MM}
+    };
 
-  const float tuneExtruder_len[ITEM_TUNE_EXTRUDER_LEN_NUM] = {1.0f, 5.0f, 10.0f};
+  const float tuneExtruder_len[ITEM_TUNE_EXTRUDER_LEN_NUM] = {0.01f, 0.1f, 1.0f, 10.0f};
 
   // Extruder steps are not correct. Ask user for the amount that's extruded
   // Automaticaly calculate new steps/mm when changing the measured distance
