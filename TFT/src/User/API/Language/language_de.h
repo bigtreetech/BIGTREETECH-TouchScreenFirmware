@@ -272,10 +272,9 @@
     #define STRING_CONNECTION_SETTINGS    "Verbindung"
     #define STRING_OFFSET_TOOL            "Offset 2te Spitze"
     #define STRING_HYBRID_THRESHOLD       "TMC HybridThreshold"
-    #define STRING_NOTIFICATIONS          "Notifications"
-    #define STRING_CASE_LIGHT             "Case light"
     #define STRING_NOTIFICATIONS          "Benachrichtigungen"
     #define STRING_MESH_EDITOR            "Mesh edit"
     #define STRING_MESH_TUNER             "Mesh tuner"
+    #define STRING_CASE_LIGHT             "Case light"
 
 #endif

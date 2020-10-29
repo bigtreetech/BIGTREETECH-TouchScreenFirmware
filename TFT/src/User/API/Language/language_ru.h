@@ -273,8 +273,8 @@
     #define STRING_OFFSET_TOOL            "Смещение 2-го сопла"
     #define STRING_HYBRID_THRESHOLD       "TMC гибридный порог"
     #define STRING_NOTIFICATIONS          "Уведомления"
-    #define STRING_CASE_LIGHT             "Case light"
     #define STRING_MESH_EDITOR            "Mesh edit"
     #define STRING_MESH_TUNER             "Mesh tuner"
+    #define STRING_CASE_LIGHT             "Case light"
 
 #endif
