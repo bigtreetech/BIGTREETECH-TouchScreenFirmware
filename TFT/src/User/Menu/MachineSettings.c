@@ -270,7 +270,7 @@ void menuMachineSettings(void)
      {ICON_BACK,                    LABEL_BACK}}
   };
 
-  const ITEM itemCaseLight = {ICON_RGB_WHITE, LABEL_CASE_LIGHT};
+  const ITEM itemCaseLight = {ICON_CASE_LIGHT, LABEL_CASE_LIGHT};
   if (infoMachineSettings.caseLightsBrightness == ENABLED)
   {
       machineSettingsItems.items[KEY_ICON_6] = itemCaseLight;

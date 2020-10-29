@@ -139,5 +139,6 @@ X_ICON (TUNING)
 X_ICON (PID)
 X_ICON (TUNE_EXTRUDER)
 X_ICON (CONNECTION_SETTINGS)
+X_ICON (CASE_LIGHT)
 
 //after changing/adding/removing an icon, change the ICON_FLASH_SIGN in Settings.h

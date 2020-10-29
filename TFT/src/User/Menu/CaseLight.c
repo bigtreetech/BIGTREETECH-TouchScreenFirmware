@@ -25,7 +25,7 @@ void menuCaseLight(void)
       // title
       LABEL_CASE_LIGHT,
       {
-      //  icon                       label
+      //  icon                      label
           {ICON_DEC,                LABEL_DEC},
           {ICON_BACKGROUND,         LABEL_BACKGROUND},
           {ICON_BACKGROUND,         LABEL_BACKGROUND},
