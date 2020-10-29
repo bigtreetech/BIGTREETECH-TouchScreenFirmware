@@ -274,5 +274,7 @@
     #define STRING_HYBRID_THRESHOLD       "Seuil Hybride TMC"
     #define STRING_NOTIFICATIONS          "Notifications"
     #define STRING_CASE_LIGHT             "Case light"
+    #define STRING_MESH_EDITOR            "Mesh edit"
+    #define STRING_MESH_TUNER             "Mesh tuner"
 
 #endif

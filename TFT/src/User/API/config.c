@@ -558,6 +558,14 @@ void parseConfigKey(u16 index)
     config_set_color(&infoSettings.list_button_color);
     break;
 
+  case C_INDEX_MESH_MIN_COLOR:
+    config_set_color(&infoSettings.mesh_min_color);
+    break;
+
+  case C_INDEX_MESH_MAX_COLOR:
+    config_set_color(&infoSettings.mesh_max_color);
+    break;
+
   case C_INDEX_ROTATE_UI:
       if (infoSettings.rotate_ui != getOnOff())
           scheduleRotate = true;

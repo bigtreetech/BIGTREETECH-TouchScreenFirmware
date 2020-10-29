@@ -52,7 +52,8 @@ typedef enum
   MENU_TYPE_LISTVIEW,
   MENU_TYPE_DIALOG,
   MENU_TYPE_FULLSCREEN,
-  MENU_TYPE_OTHER
+  MENU_TYPE_OTHER,
+  MENU_TYPE_CUSTOM
 } MENU_TYPE;
 
 typedef union
@@ -144,6 +145,9 @@ extern const GUI_RECT rect_of_titleBar[1];
 
 void setMenuType(MENU_TYPE type);
 MENU_TYPE getMenuType(void);
+
+void setMenuTypeCustom(void (* redrawCallback)(void));
+void menuRedrawCustom();
 
 void reminderSetUnConnected(void);
 void reminderMessage(int16_t inf, SYS_STATUS status);

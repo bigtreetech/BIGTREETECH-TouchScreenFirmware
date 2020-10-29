@@ -269,7 +269,7 @@
 #define ENABLE_BL_VALUE 1
 
 /**
- * Enable friendly probe offset language.
+ * Enable friendly probe offset language
  *
  * Decrease/increase and "-" & "+" icons are replaced with down/up and friendly icons
  *
@@ -329,6 +329,34 @@
 #define BABYSTEP_MAX_VALUE     5.0f
 #define BABYSTEP_DEFAULT_VALUE 0.0f
 #define BABYSTEP_MAX_UNIT      1.0f
+
+/**
+ * Mesh Editor settings
+ */
+
+// Set the maximum number of grid points per dimension
+//
+// NOTE: It must be in range 1 - 15
+//
+#define MESH_GRID_MAX_POINTS_X 10
+#define MESH_GRID_MAX_POINTS_Y 10
+
+// Set the color used for drawing the mesh with the minimun and maximum value in the grid
+//
+// Options: 0: WHITE,      1: BLACK,       2: RED,     3: GREEN,     4: BLUE,   5: CYAN,
+//          6: MAGENTA,    7: YELLOW,      8: ORANGE,  9: PURPLE,   10: LIME,  11: BROWN,
+//         12: DARKBLUE,  13: DARKGREEN,  14: GRAY,   15: DARKGRAY
+//
+#define MESH_MIN_COLOR 7
+#define MESH_MAX_COLOR 2
+
+// Enable keyboard drawn on left side
+//
+// If disabled, the keyboard is drawn on right side
+//
+// Options:  0: Disabled    1: Enabled
+//
+#define MESH_LEFT_KEYBOARD 0
 
 /**
  * PID autotune
