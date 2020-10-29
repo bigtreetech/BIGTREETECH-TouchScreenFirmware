@@ -303,6 +303,14 @@ void scanRenameUpdate(void) {
     }
     f_rename(FIRMWARE_NAME ".bin", FIRMWARE_NAME ".CUR");
   }
+
+  if (f_file_exists(FIRMWARE_NAME_SHORT ".NEW")) { // firmware exists
+    if (f_file_exists(FIRMWARE_NAME ".bin")) { // long firmware also exists ? should not be
+      f_unlink(FIRMWARE_NAME ".bin");
+    }
+    f_rename(FIRMWARE_NAME_SHORT ".NEW", FIRMWARE_NAME ".bin");
+  }
+
   if (f_file_exists(CONFIG_FILE_PATH))
   { // config exists
     if (f_file_exists(CONFIG_FILE_PATH ".CUR"))
