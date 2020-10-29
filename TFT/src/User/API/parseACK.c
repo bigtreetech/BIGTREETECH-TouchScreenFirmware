@@ -192,7 +192,7 @@ void hostActionCommands(void)
 {
   char *find = strchr(dmaL2Cache + ack_index, '\n');
   *find = '\0';
-    if(ack_seen("notification "))
+  if(ack_seen("notification "))
   {
     strcpy(hostAction.prompt_begin, dmaL2Cache + ack_index);
     statusScreen_setMsg((u8 *)echomagic, (u8 *)dmaL2Cache + ack_index);
