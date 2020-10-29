@@ -311,7 +311,9 @@ void menuMachineSettings(void)
         break;
 #endif
       case KEY_ICON_6:
-        infoMenu.menu[++infoMenu.cur] = menuCaseLight;
+        if (infoMachineSettings.caseLightsBrightness == ENABLED){
+          infoMenu.menu[++infoMenu.cur] = menuCaseLight;
+        }
         break;
       case KEY_ICON_7:
         infoMenu.cur--;
