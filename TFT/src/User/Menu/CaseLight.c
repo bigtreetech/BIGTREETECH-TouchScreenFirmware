@@ -46,11 +46,7 @@ void menuCaseLight(void)
   uint8_t currentCaseLightBrightness = caseLightGetBrightness();
   uint8_t previousCaseLightBrightness = currentCaseLightBrightness;
 
-#define SET_CASE_LIGHT_ICON()                            \
-  if (currentCaseLightState)                             \
-    caseLightItems.items[KEY_ICON_4] = itemCaseLight[1]; \
-  else                                                   \
-    caseLightItems.items[KEY_ICON_4] = itemCaseLight[0];
+#define SET_CASE_LIGHT_ICON() caseLightItems.items[KEY_ICON_4] = itemCaseLight[currentCaseLightState ? 1 : 0];
 
   SET_CASE_LIGHT_ICON();
   menuDrawPage(&caseLightItems);
