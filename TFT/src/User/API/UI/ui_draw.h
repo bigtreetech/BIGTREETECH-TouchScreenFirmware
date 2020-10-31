@@ -13,8 +13,22 @@
 #define SPACE_Y ((LCD_HEIGHT - ICON_START_Y - ICON_HEIGHT*2)/2)
 
 /*about GCODE KEY*/
-#define GKEY_WIDTH  (LCD_WIDTH/7)
-#define GKEY_HEIGHT ((LCD_HEIGHT - ICON_START_Y)/4)
+#if LCD_WIDTH < 479
+    #define GKEY_COLUMNS 6
+#elif LCD_WIDTH < 799
+    #define GKEY_COLUMNS 7
+#else
+    #define GKEY_COLUMNS 10
+#endif
+
+#if LCD_HEIGHT < 480
+    #define GKEY_ROWS 4
+#else
+    #define GKEY_ROWS 5
+#endif
+
+#define GKEY_WIDTH  (LCD_WIDTH/GKEY_COLUMNS)
+#define GKEY_HEIGHT ((LCD_HEIGHT - ICON_START_Y)/GKEY_ROWS)
 
 //select marlin or bigtree
 #define SPACE_SELEX   ((LCD_WIDTH-ICON_WIDTH*2)/4)
