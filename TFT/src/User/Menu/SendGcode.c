@@ -105,12 +105,14 @@ typedef enum
   GKEY_19,    GKEY_20, GKEY_21, GKEY_22, GKEY_23, GKEY_24, GKEY_25, GKEY_26, GKEY_27, GKEY_28,
   GKEY_29,    GKEY_30, GKEY_31, GKEY_32, GKEY_33, GKEY_34, GKEY_35, GKEY_36, GKEY_37, GKEY_38,
   GKEY_39,    GKEY_40, GKEY_41, GKEY_42, GKEY_43, GKEY_44, GKEY_45, GKEY_46, GKEY_47, GKEY_SPACE,
-  // need to define this, eve if wqe don't use on the TFT70, as it's referenced in the code
+ endif
+  GKEY_BACK,
+  GKEY_SEND,
+#if GKEY_COLUMNS == 10
+  // need to define this, even if we don't use on the TFT70, as it's referenced in the code
   // and it's simpler than selectly changeing the code
   GKEY_ABC_123,
 #endif
-  GKEY_BACK,
-  GKEY_SEND,
   GKEY_IDLE = IDLE_TOUCH,
 } GKEY_VALUES;
 
