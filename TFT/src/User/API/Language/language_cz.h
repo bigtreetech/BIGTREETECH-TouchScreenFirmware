@@ -63,7 +63,7 @@
     #define STRING_RESTORE                "Obnovit"
     #define STRING_RESET                  "Reset"
     #define STRING_DEFAULT                "Výchozí"
-    #define STRING_CLEAR                  "Vyčistit"
+    #define STRING_CLEAR                  "Vymaž"
     #define STRING_NEXT                   "Další"
     #define STRING_DISTANCE               "Vzdálenost"
     #define STRING_INVALID_VALUE          "Neplatná hodnota/y!"
