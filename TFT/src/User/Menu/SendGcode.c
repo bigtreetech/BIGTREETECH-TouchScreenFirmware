@@ -159,6 +159,8 @@ typedef enum
   GKEY_46,
   GKEY_47,
   GKEY_SPACE,
+  // need to define this, eve if wqe don't use on the TFT70
+  GKEY_ABC_123,
 #endif
 #endif
   GKEY_BACK,
