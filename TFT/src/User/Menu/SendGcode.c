@@ -89,79 +89,25 @@ const GUI_RECT rect_of_Gkey[]={
 
 typedef enum
 {
-  GKEY_0 = 0,
-  GKEY_1,
-  GKEY_2,
-  GKEY_3,
-  GKEY_4,
 #if GKEY_COLUMNS == 6
-  GKEY_DEL,
-#endif
-  GKEY_5,
-#if GKEY_COLUMNS == 7
-  GKEY_DEL,
-#endif
-  GKEY_6,
-  GKEY_7,
-  GKEY_8,
-  GKEY_9,
-#if GKEY_COLUMNS == 10
-  GKEY_DEL,
-#endif
-  GKEY_10,
-  GKEY_11,
-  GKEY_12,
-  GKEY_13,
-  GKEY_14,
-  GKEY_15,
-#if GKEY_COLUMNS == 6
-  GKEY_SPACE,
-#endif
-  GKEY_16,
-  GKEY_17,
-  GKEY_18,
-  GKEY_19,
-#if GKEY_COLUMNS == 7
-  GKEY_SPACE,
-#endif
-  GKEY_20,
-#if GKEY_COLUMNS == 6
+  GKEY_0 = 0, GKEY_1,  GKEY_2,  GKEY_3,  GKEY_4,  GKEY_DEL,
+  GKEY_5,     GKEY_6,  GKEY_7,  GKEY_8,  GKEY_9,  GKEY_10,
+  GKEY_11,    GKEY_12, GKEY_13, GKEY_14, GKEY_15, GKEY_SPACE,
+  GKEY_16,    GKEY_17, GKEY_18, GKEY_19, GKEY_20, GKEY_ABC_123,
+#elif GKEY_COLUMNS == 7
+  GKEY_0 = 0, GKEY_1,  GKEY_2,  GKEY_3,  GKEY_4,  GKEY_5,  GKEY_DEL,
+  GKEY_6,     GKEY_7,  GKEY_8,  GKEY_9,  GKEY_10, GKEY_11, GKEY_12,
+  GKEY_13,    GKEY_14, GKEY_15, GKEY_16, GKEY_17, GKEY_18, GKEY_SPACE,
+  GKEY_19,    GKEY_20, GKEY_21, GKEY_22, GKEY_23, GKEY_24, GKEY_ABC_123,
+#else // GKEY_COLUMNS == 10
+  GKEY_0 = 0, GKEY_1,  GKEY_2,  GKEY_3,  GKEY_4,  GKEY_5,  GKEY_6,  GKEY_7,  GKEY_8,  GKEY_DEL,
+  GKEY_9,     GKEY_10, GKEY_11, GKEY_12, GKEY_13, GKEY_14, GKEY_15, GKEY_16, GKEY_17, GKEY_18,
+  GKEY_19,    GKEY_20, GKEY_21, GKEY_22, GKEY_23, GKEY_24, GKEY_25, GKEY_26, GKEY_27, GKEY_28,
+  GKEY_29,    GKEY_30, GKEY_31, GKEY_32, GKEY_33, GKEY_34, GKEY_35, GKEY_36, GKEY_37, GKEY_38,
+  GKEY_39,    GKEY_40, GKEY_41, GKEY_42, GKEY_43, GKEY_44, GKEY_45, GKEY_46, GKEY_47, GKEY_SPACE,
+  // need to define this, eve if wqe don't use on the TFT70, as it's referenced in the code
+  // and it's simpler than selectly changeing the code
   GKEY_ABC_123,
-#else
-  GKEY_21,
-  GKEY_22,
-  GKEY_23,
-  GKEY_24,
-#if GKEY_COLUMNS == 7
-  GKEY_ABC_123,
-#else
-  GKEY_25,
-  GKEY_26,
-  GKEY_27,
-  GKEY_28,
-  GKEY_29,
-  GKEY_30,
-  GKEY_31,
-  GKEY_32,
-  GKEY_33,
-  GKEY_34,
-  GKEY_35,
-  GKEY_36,
-  GKEY_37,
-  GKEY_38,
-  GKEY_39,
-  GKEY_40,
-  GKEY_41,
-  GKEY_42,
-  GKEY_43,
-  GKEY_44,
-  GKEY_45,
-  GKEY_46,
-  GKEY_47,
-  GKEY_SPACE,
-  // need to define this, eve if wqe don't use on the TFT70
-  GKEY_ABC_123,
-#endif
 #endif
   GKEY_BACK,
   GKEY_SEND,
