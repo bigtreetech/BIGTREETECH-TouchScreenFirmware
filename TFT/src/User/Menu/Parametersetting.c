@@ -15,6 +15,7 @@ const LISTITEM parametertypes[P_ITEMSCOUNT] = {
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_MAXACCELERATION,  LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_ACCELERATION,     LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_JERK,             LABEL_BACKGROUND},
+  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_JUNCTION_DEVIATION,LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_PROBE_OFFSET,     LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_BUMP_SENSITIVITY, LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_FWRETRACT,        LABEL_BACKGROUND},
@@ -83,6 +84,9 @@ void menuShowParameter(void){
       parameter_menuitems.items[Y_AXIS].titlelabel.address = "Y";
       parameter_menuitems.items[Z_AXIS].titlelabel.address = "Z";
       parameter_menuitems.items[E_AXIS].titlelabel.address = "E";
+      break;
+    case P_JUNCTION_DEVIATION:
+      parameter_menuitems.items[i].titlelabel = junction_deviation_disp_ID[i];
       break;
     case P_FWRETRACT:
       parameter_menuitems.items[i].titlelabel = retract_disp_ID[i];

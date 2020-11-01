@@ -31,7 +31,6 @@ const ECHO knownEcho[] = {
   {ECHO_NOTIFY_NONE, "Cap:"},                   //M115
   {ECHO_NOTIFY_NONE, "Config:"},                //M360
   {ECHO_NOTIFY_TOAST, "Settings Stored"},       //M500
-  {ECHO_NOTIFY_TOAST, "echo:Soft endstops"},    //M211
   {ECHO_NOTIFY_TOAST, "echo:Bed"},              //M420
   {ECHO_NOTIFY_TOAST, "echo:Fade"},             //M420
   {ECHO_NOTIFY_TOAST, "echo:Active Extruder"},  //Tool Change
@@ -95,7 +94,6 @@ static float ack_second_value()
 
 void ackPopupInfo(const char *info)
 {
-
   bool show_dialog = true;
   if (infoMenu.menu[infoMenu.cur] == menuTerminal ||
       (infoMenu.menu[infoMenu.cur] == menuStatus && info == echomagic))
@@ -129,7 +127,6 @@ void ackPopupInfo(const char *info)
     addNotification(DIALOG_TYPE_ERROR, (char *)info, (char *)dmaL2Cache + ack_index, show_dialog);
   }
 }
-
 
 void setIgnoreEcho(ECHO_ID msgId, bool state)
 {
@@ -192,6 +189,12 @@ void hostActionCommands(void)
 {
   char *find = strchr(dmaL2Cache + ack_index, '\n');
   *find = '\0';
+  if(ack_seen("notification "))
+  {
+    strcpy(hostAction.prompt_begin, dmaL2Cache + ack_index);
+    statusScreen_setMsg((u8 *)echomagic, (u8 *)dmaL2Cache + ack_index);
+  }
+  
   if(ack_seen("prompt_begin "))
   {
     hostAction.button = 0;
@@ -279,10 +282,11 @@ void parseACK(void)
       infoHost.connected = true;
       if(infoMachineSettings.isMarlinFirmware == -1) // if never connected to the printer since boot
       {
-        storeCmd("M503\n");// Query detailed printer capabilities
-        storeCmd("M92\n"); // Steps/mm of extruder is an important parameter for Smart filament runout
-                          // Avoid can't getting this parameter due to disabled M503 in Marlin
+        storeCmd("M503\n");  // Query detailed printer capabilities
+        storeCmd("M92\n");   // Steps/mm of extruder is an important parameter for Smart filament runout
+                             // Avoid can't getting this parameter due to disabled M503 in Marlin
         storeCmd("M115\n");
+        storeCmd("M211\n");  // retrieve the software endstops state
       }
     }
 
@@ -473,6 +477,7 @@ void parseACK(void)
         if(ack_seen("Y")) setParameter(P_JERK, Y_STEPPER, ack_value());
         if(ack_seen("Z")) setParameter(P_JERK, Z_STEPPER, ack_value());
         if(ack_seen("E")) setParameter(P_JERK, E_STEPPER, ack_value());
+        if(ack_seen("J")) setParameter(P_JUNCTION_DEVIATION, 0, ack_value());
       }
     //parse and store FW retraction values
       else if(ack_seen("M207 S")){
@@ -491,6 +496,19 @@ void parseACK(void)
     //parse and store auto FW retract state (M209 - Set Auto Retract)
       else if(ack_seen("M209 S")){
                           setParameter(P_AUTO_RETRACT, 0, ack_value());
+      }
+    //parse and store the software endstops state (M211)
+      else if (ack_seen("Soft endstops"))
+      {
+        uint8_t curValue = infoMachineSettings.softwareEndstops;
+
+        if (ack_seen("ON"))
+          infoMachineSettings.softwareEndstops = ENABLED;
+        else
+          infoMachineSettings.softwareEndstops = DISABLED;
+
+        if (curValue != infoMachineSettings.softwareEndstops)        // send a notification only if status is changed
+          addToast(DIALOG_TYPE_INFO, dmaL2Cache);
       }
     //parse and store Offset 2nd Nozzle
       else if(ack_seen("M218 T1 X")){
@@ -553,18 +571,14 @@ void parseACK(void)
                           setDualStepperStatus(E_STEPPER, true);
       }
     // Parse and store ABL type if auto-detect is enabled
-      else if (ack_seen("Auto Bed Leveling") && ENABLE_BL_VALUE == 1)
-      {
+    #if ENABLE_BL_VALUE == 1
+      else if (ack_seen("Auto Bed Leveling"))
         infoMachineSettings.leveling = BL_ABL;
-      }
-      else if (ack_seen("Unified Bed Leveling") && ENABLE_BL_VALUE == 1)
-      {
+      else if (ack_seen("Unified Bed Leveling"))
         infoMachineSettings.leveling = BL_UBL;
-      }
-      else if (ack_seen("Mesh Bed Leveling") && ENABLE_BL_VALUE == 1)
-      {
+      else if (ack_seen("Mesh Bed Leveling"))
         infoMachineSettings.leveling = BL_MBL;
-      }
+    #endif
     // Parse ABL state
       else if(ack_seen("echo:Bed Leveling"))
       {
@@ -608,7 +622,7 @@ void parseACK(void)
           {
             if (MIXING_EXTRUDER == 0)
             {
-            infoSettings.ext_count = ack_value();
+              infoSettings.ext_count = ack_value();
             }
             string_end = ack_index - sizeof("EXTRUDER_COUNT:");
           }
@@ -647,6 +661,10 @@ void parseACK(void)
       {
         infoMachineSettings.caseLightsBrightness = ack_value();
       }
+      else if(ack_seen("Cap:EMERGENCY_PARSER:"))
+      {
+        infoMachineSettings.emergencyParser = ack_value();
+      }
       else if(ack_seen("Cap:PROMPT_SUPPORT:"))
       {
         infoMachineSettings.promptSupport = ack_value();
@@ -662,6 +680,10 @@ void parseACK(void)
       else if(ack_seen("Cap:LONG_FILENAME:") && infoSettings.longFileName == AUTO)
       {
         infoMachineSettings.long_filename_support = ack_value();
+      }
+      else if(ack_seen("Cap:BABYSTEPPING:"))
+      {
+        infoMachineSettings.babyStepping = ack_value();
       }
       else if(ack_seen("Cap:CHAMBER_TEMPERATURE:"))
       {
@@ -753,6 +775,20 @@ void parseACK(void)
       else if(ack_seen("Mesh probing done"))
       {
         mblUpdateStatus(true);
+      }
+    // Parse Mesh data
+      else if (meshIsWaitingFirstData() && (
+        ack_seen("Mesh Bed Level data:") ||                // MBL
+        ack_seen("Bed Topography Report for CSV:") ||      // UBL
+        ack_seen("Bilinear Leveling Grid:") ||             // ABL Bilinear
+        ack_seen("Bed Level Correction Matrix:") ||        // ABL Linear or 3-Point
+        ack_seen("Invalid mesh")))                         // error echo
+      {
+        meshUpdateData(dmaL2Cache);                        // start data updating
+      }
+      else if (meshIsWaitingData())
+      {
+        meshUpdateData(dmaL2Cache);                        // continue data updating
       }
     // Parse PID Autotune finished message
       else if(ack_seen("PID Autotune finished"))

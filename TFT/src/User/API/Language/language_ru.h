@@ -211,6 +211,7 @@
     #define STRING_RETRACT_ACCELERATION   "Ретракта"
     #define STRING_TRAVEL_ACCELERATION    "Перемещения"
     #define STRING_JERK                   "Рывок"
+    #define STRING_JUNCTION_DEVIATION     "Junction Deviation"
     #define STRING_BUMP_SENSITIVITY       "TMC чувствительность удара"
     #define STRING_FWRETRACT              "M207 ретракт"
     #define STRING_FWRECOVER              "M208 восстановление ретракта"
@@ -273,5 +274,7 @@
     #define STRING_OFFSET_TOOL            "Смещение 2-го сопла"
     #define STRING_HYBRID_THRESHOLD       "TMC гибридный порог"
     #define STRING_NOTIFICATIONS          "Уведомления"
+    #define STRING_MESH_EDITOR            "Mesh edit"
+    #define STRING_MESH_TUNER             "Mesh tuner"
 
 #endif

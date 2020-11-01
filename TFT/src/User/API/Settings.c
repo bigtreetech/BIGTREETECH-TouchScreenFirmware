@@ -32,6 +32,8 @@ void infoSettingsReset(void)
   infoSettings.status_xyz_bg_color    = lcd_colors[STATUS_XYZ_BG_COLOR];
   infoSettings.list_border_color      = lcd_colors[LISTVIEW_BORDER_COLOR];
   infoSettings.list_button_color      = lcd_colors[LISTVIEW_ICON_COLOR];
+  infoSettings.mesh_min_color         = lcd_colors[MESH_MIN_COLOR];
+  infoSettings.mesh_max_color         = lcd_colors[MESH_MAX_COLOR];
 
   infoSettings.terminalACK            = DISABLED;
   infoSettings.persistent_info        = ENABLED;
@@ -163,31 +165,22 @@ void initMachineSetting(void){
   infoMachineSettings.autoReportSDStatus      = DISABLED;
   infoMachineSettings.long_filename_support   = DISABLED;
   infoMachineSettings.babyStepping            = DISABLED;
+  infoMachineSettings.softwareEndstops        = ENABLED;
 }
 
 void setupMachine(void)
 {
-  switch (ENABLE_BL_VALUE)
-  {
-    case 2:
-      infoMachineSettings.leveling = BL_ABL;
-      break;
-
-    case 3:
-      infoMachineSettings.leveling = BL_BBL;
-      break;
-
-    case 4:
-      infoMachineSettings.leveling = BL_UBL;
-      break;
-
-    case 5:
-      infoMachineSettings.leveling = BL_MBL;
-      break;
-
-    default:
-      break;
-  }
+  #ifdef ENABLE_BL_VALUE
+    #if ENABLE_BL_VALUE == 2
+        infoMachineSettings.leveling = BL_ABL;
+    #elif ENABLE_BL_VALUE == 3
+        infoMachineSettings.leveling = BL_BBL;
+    #elif ENABLE_BL_VALUE == 4
+        infoMachineSettings.leveling = BL_UBL;
+    #elif ENABLE_BL_VALUE == 5
+        infoMachineSettings.leveling = BL_MBL;
+    #endif
+  #endif
 
   if (infoMachineSettings.leveling != BL_DISABLED && infoMachineSettings.EEPROM == 1 && infoSettings.auto_load_leveling == 1)
   {

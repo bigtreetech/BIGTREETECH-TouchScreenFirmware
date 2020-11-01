@@ -684,6 +684,7 @@ void sendQueueCmd(void)
           if(cmd_seen('Y')) setParameter(P_JERK, Y_AXIS, cmd_float());
           if(cmd_seen('Z')) setParameter(P_JERK, Z_AXIS, cmd_float());
           if(cmd_seen('E')) setParameter(P_JERK, E_AXIS, cmd_float());
+          if(cmd_seen('J')) setParameter(P_JUNCTION_DEVIATION, 0, cmd_float());
           break;
         case 207: //M207 FW Retract
           if(cmd_seen('S')) setParameter(P_FWRETRACT, 0, cmd_float());
@@ -810,25 +811,26 @@ void sendQueueCmd(void)
 
         case 28: //G28
           coordinateSetKnown(true);
-          babyReset();
+          babystepReset();
           storeCmd("M503 S0\n");
           break;
 
-        case 29: //G29
-          if(ENABLE_BL_VALUE > 0)              // if not Disabled
-          {
-            if(cmd_seen('A'))
+        #if ENABLE_BL_VALUE > 0              // if not Disabled
+          case 29: //G29
             {
-              setParameter(P_ABL_STATE,0,1);
-              storeCmd("M117 UBL active\n");
+              if(cmd_seen('A'))
+              {
+                setParameter(P_ABL_STATE,0,1);
+                storeCmd("M117 UBL active\n");
+              }
+              if(cmd_seen('D'))
+              {
+                setParameter(P_ABL_STATE,0,0);
+                storeCmd("M117 UBL inactive\n");
+              }
             }
-            if(cmd_seen('D'))
-            {
-              setParameter(P_ABL_STATE,0,0);
-              storeCmd("M117 UBL inactive\n");
-            }
-          }
-          break;
+            break;
+        #endif
 
         case 90: //G90
           coorSetRelative(false);

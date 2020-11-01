@@ -2,29 +2,8 @@
 #include "includes.h"
 
 //#define ENABLE_PID_STATUS_UPDATE_NOTIFICATION
-
-const ITEM itemPidTool[] = {
-  // icon                           label
-  {ICON_NOZZLE,                     LABEL_NOZZLE},
-  {ICON_NOZZLE,                     LABEL_NOZZLE},
-  {ICON_NOZZLE,                     LABEL_NOZZLE},
-  {ICON_NOZZLE,                     LABEL_NOZZLE},
-  {ICON_NOZZLE,                     LABEL_NOZZLE},
-  {ICON_NOZZLE,                     LABEL_NOZZLE},
-  {ICON_BED,                        LABEL_BED},
-  {ICON_CHAMBER,                    LABEL_CHAMBER},         // that will never be displayed because no PID is provided for chamber
-};
-
 #define ITEM_PID_DEGREE_NUM 3
 
-const ITEM itemPidDegree[ITEM_PID_DEGREE_NUM] = {
-  // icon                           label
-  {ICON_1_DEGREE,                   LABEL_1_DEGREE},
-  {ICON_5_DEGREE,                   LABEL_5_DEGREE},
-  {ICON_10_DEGREE,                  LABEL_10_DEGREE},
-};
-
-const u8  pidDegree[ITEM_PID_DEGREE_NUM] = {1, 5, 10};
 static u8 curDegree = 1;
 
 const char* const pidDisplayID[] = HEAT_DISPLAY_ID;
@@ -37,91 +16,96 @@ bool pidSucceeded = false;
 bool pidRunning = false;
 bool pidInitialized = false;
 
+/* called by parseAck() to notify PID process status */
 void pidUpdateStatus(bool succeeded)
 {
   if (pidCounter > 0)
     pidCounter--;
 
-  if (!succeeded)                      // if one PID process fails, the overall PID process must be marked as failed so no save to EEPROM will be allowed
+  if (!succeeded)                                          // if one PID process fails, the overall PID process must be marked as failed so no save to EEPROM will be allowed
     pidSucceeded = false;
 
-  if (pidCounter > 0)                  // if all the PID processes were still not terminated, simply provide a notification
+  if (pidCounter > 0)                                      // if all the PID processes were still not terminated, simply provide a notification
   {
 #ifdef ENABLE_PID_STATUS_UPDATE_NOTIFICATION
-    char tmpBuf[120];
+    labelChar(tempMsg, LABEL_PID_TITLE);
 
     if (succeeded)
     {
-      labelChar(temptitle, LABEL_PID_TITLE);
-      labelChar(tempmsg, LABEL_PROCESS_COMPLETED);
-      sprintf(tmpBuf, "%s %s", temptitle, tempmsg);
+      sprintf(&tempMsg[strlen(tempMsg)], " %s", textSelect(LABEL_PROCESS_COMPLETED));
+
       BUZZER_PLAY(sound_notify);
-      addToast(DIALOG_TYPE_INFO, tmpBuf);
+
+      addToast(DIALOG_TYPE_INFO, tempMsg);
     }
     else
     {
-      labelChar(temptitle, LABEL_PID_TITLE);
-      labelChar(tempmsg, LABEL_PROCESS_ABORTED);
-      sprintf(tmpBuf, "%s %s", temptitle, tempmsg);
+      sprintf(&tempMsg[strlen(tempMsg)], " %s", textSelect(LABEL_PROCESS_ABORTED));
+
       BUZZER_PLAY(sound_error);
-      addToast(DIALOG_TYPE_ERROR, tmpBuf);
+
+      addToast(DIALOG_TYPE_ERROR, tempMsg);
     }
 #endif
   }
-  else                                 // if all the PID processes terminated, provide the final dialog
+  else                                                     // if all the PID processes terminated, provide the final dialog
   {
     pidRunning = false;
 
-    if (pidSucceeded)                  // if all the PID processes successfully terminated, allow to save to EEPROM
+    if (pidSucceeded)                                      // if all the PID processes successfully terminated, allow to save to EEPROM
     {
       BUZZER_PLAY(sound_success);
 
+      labelChar(tempMsg, LABEL_PROCESS_COMPLETED);
+
       if (infoMachineSettings.EEPROM == 1)
       {
-        char tmpBuf[120];
-        labelChar(tempstr1, LABEL_PROCESS_COMPLETED);
-        labelChar(tempstr2, LABEL_EEPROM_SAVE_INFO);
-        sprintf(tmpBuf, "%s\n %s", tempstr1, tempstr2);
-        setDialogText(LABEL_PID_TITLE, (u8 *) tmpBuf, LABEL_CONFIRM, LABEL_CANCEL);
+        sprintf(&tempMsg[strlen(tempMsg)], "\n %s", textSelect(LABEL_EEPROM_SAVE_INFO));
+
+        setDialogText(LABEL_PID_TITLE, (u8 *) tempMsg, LABEL_CONFIRM, LABEL_CANCEL);
         showDialog(DIALOG_TYPE_SUCCESS, saveEepromSettings, NULL, NULL);
       }
       else
       {
-        popupReminder(DIALOG_TYPE_SUCCESS, LABEL_PID_TITLE, LABEL_PROCESS_COMPLETED);
+        popupReminder(DIALOG_TYPE_SUCCESS, LABEL_PID_TITLE, (u8 *) tempMsg);
       }
     }
-    else                               // if at least a PID process failed, provide an error dialog
+    else                                                   // if at least a PID process failed, provide an error dialog
     {
       BUZZER_PLAY(sound_error);
+
       popupReminder(DIALOG_TYPE_ERROR, LABEL_PID_TITLE, LABEL_PROCESS_ABORTED);
     }
   }
 }
 
-void pidCheckTimeout()
+void pidCheckTimeout(void)
 {
   if (pidRunning)
   {
     if (OS_GetTimeMs() > pidTimeout)
     {
       pidRunning = false;
-//      u8 pidCounter = 0;             // we voluntary don't reset (commented out the code) also pidCounter and pidSucceeded to let the
-//      pidSucceeded = false;          // pidUpdateStatus function allow to handle status updates eventually arriving after the timeout
-      char tmpBuf[120];
-      labelChar(tempmsg1, LABEL_TIMEOUT_REACHED);
-      labelChar(tempmsg2, LABEL_PROCESS_ABORTED);
-      sprintf(tmpBuf, "%s\n %s", tempmsg1, tempmsg2);
+
+//      u8 pidCounter = 0;                                 // we voluntary don't reset (commented out the code) also pidCounter and pidSucceeded to let the
+//      pidSucceeded = false;                              // pidUpdateStatus function allow to handle status updates eventually arriving after the timeout
+
+      labelChar(tempMsg, LABEL_TIMEOUT_REACHED);
+
+      sprintf(&tempMsg[strlen(tempMsg)], "\n %s", textSelect(LABEL_PROCESS_ABORTED));
+
       BUZZER_PLAY(sound_error);
-      popupReminder(DIALOG_TYPE_ERROR, LABEL_PID_TITLE, (u8 *) tmpBuf);
+
+      popupReminder(DIALOG_TYPE_ERROR, LABEL_PID_TITLE, (u8 *) tempMsg);
     }
   }
 }
 
-void pidUpdateCounter()
+void pidUpdateCounter(void)
 {
   pidCounter = 0;
 
-  for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)                               // hotends + bed + chamber
+  for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)           // hotends + bed + chamber
   {
     if (pidHeater.T[i].target > 0)
       pidCounter++;
@@ -155,12 +139,12 @@ void menuPidWait(void)
 
   while (infoMenu.menu[infoMenu.cur] == menuPidWait)
   {
-    if (!isPressed)                    // if touch screen is not yet pressed
+    if (!isPressed)                                        // if touch screen is not yet pressed
     {
-      if (isPress())                   // if touch screen is now pressed
+      if (isPress())                                       // if touch screen is now pressed
         isPressed = true;
     }
-    else if (!isPress())               // if touch screen is now released
+    else if (!isPress())                                   // if touch screen is now released
     {
       isReleased = true;
     }
@@ -223,6 +207,27 @@ void pidTemperatureReDraw(bool skip_header)
 
 void menuPid(void)
 {
+  const ITEM itemPidTool[] = {
+    // icon                         label
+    {ICON_NOZZLE,                   LABEL_NOZZLE},
+    {ICON_NOZZLE,                   LABEL_NOZZLE},
+    {ICON_NOZZLE,                   LABEL_NOZZLE},
+    {ICON_NOZZLE,                   LABEL_NOZZLE},
+    {ICON_NOZZLE,                   LABEL_NOZZLE},
+    {ICON_NOZZLE,                   LABEL_NOZZLE},
+    {ICON_BED,                      LABEL_BED},
+    {ICON_CHAMBER,                  LABEL_CHAMBER},        // that will never be displayed because no PID is provided for chamber
+  };
+
+  const ITEM itemPidDegree[ITEM_PID_DEGREE_NUM] = {
+    // icon                         label
+    {ICON_1_DEGREE,                 LABEL_1_DEGREE},
+    {ICON_5_DEGREE,                 LABEL_5_DEGREE},
+    {ICON_10_DEGREE,                LABEL_10_DEGREE},
+  };
+
+  const u8 pidDegree[ITEM_PID_DEGREE_NUM] = {1, 5, 10};
+
   // 1 title, ITEM_PER_PAGE items (icon + label)
   MENUITEMS pidItems = {
     // title
@@ -240,8 +245,8 @@ void menuPid(void)
 
   KEY_VALUES key_num = KEY_IDLE;
 
-  if (!pidInitialized)                 // in order to keep the current set values even when reloading the menu
-  {                                    // we initialize the data structure only the first time the menu is loaded
+  if (!pidInitialized)                                     // in order to keep the current set values even when reloading the menu
+  {                                                        // we initialize the data structure only the first time the menu is loaded
     for (uint8_t i = NOZZLE0; i < MAX_HEATER_COUNT; i++)
     {
       pidHeater.T[i].target = 0;
@@ -311,7 +316,7 @@ void menuPid(void)
         {
           pidUpdateCounter();
 
-          if (pidCounter == 0)         // if no temperature was set to a value > 0
+          if (pidCounter == 0)                             // if no temperature was set to a value > 0
           {
             addToast(DIALOG_TYPE_ERROR, (char *) textSelect(LABEL_INVALID_VALUE));
           }
@@ -329,14 +334,14 @@ void menuPid(void)
 
       default:
         #if LCD_ENCODER_SUPPORT
-          if(encoderPosition)
+          if (encoderPosition)
           {
-            if(encoderPosition > 0)
+            if (encoderPosition > 0)
               if (pidHeater.T[pidHeater.toolIndex].target < infoSettings.max_temp[pidHeater.toolIndex])
                 pidHeater.T[pidHeater.toolIndex].target =
                   NOBEYOND(0, pidHeater.T[pidHeater.toolIndex].target + pidDegree[curDegree], infoSettings.max_temp[pidHeater.toolIndex]);
 
-            if(encoderPosition < 0)
+            if (encoderPosition < 0)
               if (pidHeater.T[pidHeater.toolIndex].target > 0)
                 pidHeater.T[pidHeater.toolIndex].target =
                   NOBEYOND(0, pidHeater.T[pidHeater.toolIndex].target - pidDegree[curDegree], infoSettings.max_temp[pidHeater.toolIndex]);

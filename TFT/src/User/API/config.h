@@ -28,6 +28,8 @@ extern "C" {
 #define CONFIG_SS_XYZ_BG_COLOR      "status_xyz_bg_color:"
 #define CONFIG_LIST_BORDER_COLOR    "list_border_color:"
 #define CONFIG_LIST_BUTTON_BG_COLOR "list_button_bg_color:"
+#define CONFIG_MESH_MIN_COLOR       "mesh_min_color:"
+#define CONFIG_MESH_MAX_COLOR       "mesh_max_color:"
 
 #define CONFIG_ROTATE_UI            "rotate_ui:"
 #define CONFIG_TERMINAL_ACK         "terminal_ack:"

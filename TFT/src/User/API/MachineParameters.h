@@ -16,6 +16,7 @@ P_MAX_FEED_RATE,
 P_MAX_ACCELERATION,
 P_ACCELERATION,
 P_JERK,
+P_JUNCTION_DEVIATION,
 P_PROBE_OFFSET,
 P_BUMPSENSITIVITY,
 P_FWRETRACT,
@@ -60,6 +61,7 @@ float MaxFeedRate[STEPPER_COUNT];
 float MaxAcceleration[STEPPER_COUNT];
 float Acceleration[3];
 float Jerk[4];
+float JunctionDeviation[1];
 float ProbeOffset[3];
 float BumpSensitivity[3];
 float FwRetract[4];
@@ -78,6 +80,7 @@ extern const LABEL accel_disp_ID[];
 extern const LABEL retract_disp_ID[];
 extern const LABEL recover_disp_ID[];
 extern const LABEL retract_auto_ID[];
+extern const LABEL junction_deviation_disp_ID[];
 
 float getParameter(PARAMETER_NAME name, uint8_t index);
 void setParameter(PARAMETER_NAME name, uint8_t index, float val);

@@ -87,19 +87,14 @@ float babystepIncreaseValue(float unit)
 }
 
 // Update babystep value by encoder
-float babystepUpdateValueByEncoder(float unit)
+float babystepUpdateValueByEncoder(float unit, int8_t direction)
 {
-#if LCD_ENCODER_SUPPORT
-  if (encoderPosition)
-  {
-    float overall_unit = (encoderPosition < 0.0f) ? (-1 * unit * encoderPosition) : (unit * encoderPosition);          // always positive unit
+  float overall_unit = (direction > 0) ? (direction * unit) : (-direction * unit);       // always positive unit
 
-    if (encoderPosition < 0.0)                             // if negative encoder value, decrease the value. Otherwise increase the value
-      babystepDecreaseValue(overall_unit);
-    else
-      babystepIncreaseValue(overall_unit);
-  }
-#endif
+  if (direction < 0)                                                                     // if negative encoder value, decrease the value. Otherwise increase the value
+    babystepDecreaseValue(overall_unit);
+  else
+    babystepIncreaseValue(overall_unit);
 
   return babystep_value;
 }

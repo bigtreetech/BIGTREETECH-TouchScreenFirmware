@@ -211,6 +211,7 @@
     #define STRING_RETRACT_ACCELERATION   "Zrychlení retrakcí"
     #define STRING_TRAVEL_ACCELERATION    "Zrychlení při přesunu"
     #define STRING_JERK                   "Jerk-trhnutí"
+    #define STRING_JUNCTION_DEVIATION     "Junction Deviation"
     #define STRING_BUMP_SENSITIVITY       "Citlivost nárazu TMC"
     #define STRING_FWRETRACT              "FW Zatažení"
     #define STRING_FWRECOVER              "FW Obnovení"
@@ -273,5 +274,7 @@
     #define STRING_OFFSET_TOOL            "Offset 2.trysky"
     #define STRING_HYBRID_THRESHOLD       "TMC Hybridní práh"
     #define STRING_NOTIFICATIONS          "Notifications"
+    #define STRING_MESH_EDITOR            "Mesh edit"
+    #define STRING_MESH_TUNER             "Mesh tuner"
 
 #endif

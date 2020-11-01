@@ -3,39 +3,9 @@
 
 #define ITEM_BABYSTEP_UNIT_NUM 3
 
-const ITEM itemBabyStepUnit[ITEM_BABYSTEP_UNIT_NUM] = {
-  // icon                           label
-  {ICON_001_MM,                     LABEL_001_MM},
-  {ICON_01_MM,                      LABEL_01_MM},
-  {ICON_1_MM,                       LABEL_1_MM},
-};
+static u8 curUnit = 0;
 
-const float babystep_unit[ITEM_BABYSTEP_UNIT_NUM] = {0.01f, 0.1f, 1};
-static u8   curUnit = 0;
-
-static float babystep;
-static float orig_z_offset;
-
-/* Initialize Z offset */
-void babyInitZOffset(void)
-{
-  float cur_z_offset = probeOffsetGetValue();
-
-  if (orig_z_offset + babystep != cur_z_offset)
-  {
-    orig_z_offset = cur_z_offset - babystep;
-  }
-}
-
-/* Reset to default */
-void babyReset(void)
-{
-  babystepReset();
-
-  babyInitZOffset();
-}
-
-void babyReDraw(bool skip_header)
+void babyReDraw(float babystep, float z_offset, bool skip_header)
 {
   if (!skip_header)
   {
@@ -51,16 +21,25 @@ void babyReDraw(bool skip_header)
   setLargeFont(true);
 
   sprintf(tempstr, "% 6.2f", babystep);
-  GUI_DispStringRight(point_bs.x, point_bs.y, (u8 *)tempstr);
+  GUI_DispStringRight(point_bs.x, point_bs.y, (u8 *) tempstr);
 
-  sprintf(tempstr, "% 6.2f", orig_z_offset + babystep);
-  GUI_DispStringRight(point_of.x, point_of.y, (u8 *)tempstr);
+  sprintf(tempstr, "% 6.2f", z_offset);
+  GUI_DispStringRight(point_of.x, point_of.y, (u8 *) tempstr);
 
   setLargeFont(false);
 }
 
 void menuBabystep(void)
 {
+  const ITEM itemBabyStepUnit[ITEM_BABYSTEP_UNIT_NUM] = {
+    // icon                         label
+    {ICON_001_MM,                   LABEL_001_MM},
+    {ICON_01_MM,                    LABEL_01_MM},
+    {ICON_1_MM,                     LABEL_1_MM},
+  };
+
+  const float babystep_unit[ITEM_BABYSTEP_UNIT_NUM] = {0.01f, 0.1f, 1};
+
   // 1 title, ITEM_PER_PAGE items (icon + label)
   MENUITEMS babyStepItems = {
     // title
@@ -84,10 +63,12 @@ void menuBabystep(void)
   #endif
 
   KEY_VALUES key_num = KEY_IDLE;
-  float now = babystep = babystepGetValue();
+  float now_babystep, babystep;
+  float now_z_offset, z_offset;
   float unit;
 
-  babyInitZOffset();
+  now_babystep = babystep = babystepGetValue();
+  now_z_offset = z_offset = probeOffsetGetValue();
 
   if (infoMachineSettings.EEPROM == 1)
   {
@@ -98,7 +79,7 @@ void menuBabystep(void)
   babyStepItems.items[KEY_ICON_5] = itemBabyStepUnit[curUnit];
 
   menuDrawPage(&babyStepItems);
-  babyReDraw(false);
+  babyReDraw(now_babystep, now_z_offset, false);
 
 #if LCD_ENCODER_SUPPORT
   encoderPosition = 0;
@@ -107,6 +88,9 @@ void menuBabystep(void)
   while (infoMenu.menu[infoMenu.cur] == menuBabystep)
   {
     unit = babystep_unit[curUnit];
+
+    babystep = babystepGetValue();                         // always load current babystep
+    z_offset = probeOffsetGetValue();                      // always load current Z offset
 
     key_num = menuKeyGetValue();
     switch (key_num)
@@ -125,13 +109,14 @@ void menuBabystep(void)
       case KEY_ICON_4:
         if (infoMachineSettings.EEPROM == 1)
         {
-          probeOffsetSetValue(orig_z_offset + babystep);   // apply Z offset
+          probeOffsetSetValue(z_offset);                   // set new Z offset
+
           setDialogText(babyStepItems.title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
           showDialog(DIALOG_TYPE_QUESTION, saveEepromSettings, NULL, NULL);
         }
         break;
 
-      // change step unit
+      // change unit
       case KEY_ICON_5:
         curUnit = (curUnit + 1) % ITEM_BABYSTEP_UNIT_NUM;
 
@@ -153,7 +138,7 @@ void menuBabystep(void)
         #if LCD_ENCODER_SUPPORT
           if (encoderPosition)
           {
-            babystep = babystepUpdateValueByEncoder(unit);
+            babystep = babystepUpdateValueByEncoder(unit, encoderPosition > 0 ? 1 : -1);
 
             encoderPosition = 0;
           }
@@ -161,10 +146,11 @@ void menuBabystep(void)
         break;
     }
 
-    if (now != babystep)
+    if (now_babystep != babystep || now_z_offset != z_offset)
     {
-      now = babystep;
-      babyReDraw(true);
+      now_babystep = babystep;
+      now_z_offset = z_offset;
+      babyReDraw(now_babystep, now_z_offset, true);
     }
 
     loopProcess();
