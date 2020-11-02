@@ -6,8 +6,8 @@
 #define SCROLL_LINE       22
 #define SCROLL_PAGE       1
 
-#define BAR_BK_COLOR     DARKBLUE
-#define BAR_INNER_COLOR  0xFFF0
+#define BAR_BK_COLOR     0x2174
+#define BAR_INNER_COLOR  0xFFF2
 #define BAR_BORDER_COLOR 0x4b0d
 
 typedef struct
@@ -125,7 +125,7 @@ const GUI_RECT gcodeKeyRect[GKEY_KEY_NUM]={
 
 const char * const gcodeKey[][GKEY_KEY_NUM] = {
   {
-    "1", "2", "3", "G", "M", "T",
+    "1", "2", "3", "M", "G", "T",
     "4", "5", "6", "X", "Y", "Z",
     "7", "8", "9", "E", "F", "R",
     ".", "0", "-", ">", "S", "V",
