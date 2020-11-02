@@ -1,173 +1,96 @@
 #include "Language.h"
 #include "includes.h"
+#include "language_keywords.h"
+
+#if DEFAULT_LANGUAGE == ENGLISH
 #include "language_en.h"
+#elif DEFAULT_LANGUAGE == CHINESE
 #include "language_cn.h"
+#elif DEFAULT_LANGUAGE == RUSSIAN
 #include "language_ru.h"
+#elif DEFAULT_LANGUAGE == JAPANESE
 #include "language_jp.h"
+#elif DEFAULT_LANGUAGE == GERMAN
 #include "language_de.h"
+#elif DEFAULT_LANGUAGE == ARMENIAN
 #include "language_am.h"
+#elif DEFAULT_LANGUAGE == CZECH
 #include "language_cz.h"
+#elif DEFAULT_LANGUAGE == SPANISH
 #include "language_es.h"
+#elif DEFAULT_LANGUAGE == FRENCH
 #include "language_fr.h"
+#elif DEFAULT_LANGUAGE == PORTUGUESE
 #include "language_pt.h"
+#elif DEFAULT_LANGUAGE == ITALIAN
 #include "language_it.h"
+#elif DEFAULT_LANGUAGE == POLISH
 #include "language_pl.h"
+#elif DEFAULT_LANGUAGE == SLOVAK
 #include "language_sk.h"
+#elif DEFAULT_LANGUAGE == DUTCH
 #include "language_du.h"
+#elif DEFAULT_LANGUAGE == HUNGARIAN
 #include "language_hu.h"
+#elif DEFAULT_LANGUAGE == TURKISH
 #include "language_tr.h"
+#elif DEFAULT_LANGUAGE == GREEK
 #include "language_gr.h"
+#elif DEFAULT_LANGUAGE == SLOVENIAN
 #include "language_sl.h"
+#elif DEFAULT_LANGUAGE == CATALAN
 #include "language_ca.h"
+#elif DEFAULT_LANGUAGE == TRAD_CHINESE
 #include "language_tc.h"
+#else
+  #error "Error: invalid language defined"
+#endif
 //
 // Add new Keywords in Language.inc file Only
 //
-const char *const en_pack[LABEL_NUM] = {
-  #define X_WORD(NAME) EN_##NAME ,
+u8 tempLabelString[MAX_LANG_LABEL_LENGTH];
+
+const char *const default_pack[LABEL_NUM] = {
+  #define X_WORD(NAME) STRING_##NAME ,
   #include "Language.inc"
   #undef  X_WORD
 };
 
-const char *const cn_pack[LABEL_NUM] = {
-  #define X_WORD(NAME) CN_##NAME ,
+//keyword list for language.ini
+const char *const lang_key_list[LABEL_NUM] =
+{
+  #define X_WORD(NAME) LANG_KEY_##NAME ,
   #include "Language.inc"
   #undef  X_WORD
 };
 
-const char *const ru_pack[LABEL_NUM] = {
-  #define X_WORD(NAME) RU_##NAME ,
-  #include "Language.inc"
-  #undef  X_WORD
-};
-
-const char *const jp_pack[LABEL_NUM] = {
-  #define X_WORD(NAME) JP_##NAME ,
-  #include "Language.inc"
-  #undef  X_WORD
-};
-
-const char *const am_pack[LABEL_NUM] = {
-  #define X_WORD(NAME) AM_##NAME ,
-  #include "Language.inc"
-  #undef  X_WORD
-};
-
-const char *const de_pack[LABEL_NUM] = {
-  #define X_WORD(NAME) DE_##NAME ,
-  #include "Language.inc"
-  #undef  X_WORD
-};
-
-const char *const cz_pack[LABEL_NUM] = {
-  #define X_WORD(NAME) CZ_##NAME ,
-  #include "Language.inc"
-  #undef  X_WORD
-};
-
-const char *const es_pack[LABEL_NUM] = {
-  #define X_WORD(NAME) ES_##NAME ,
-  #include "Language.inc"
-  #undef  X_WORD
-};
-
-const char *const fr_pack[LABEL_NUM] = {
-  #define X_WORD(NAME) FR_##NAME ,
-  #include "Language.inc"
-  #undef  X_WORD
-};
-
-const char *const pt_pack[LABEL_NUM] = {
-  #define X_WORD(NAME) PT_##NAME ,
-  #include "Language.inc"
-  #undef  X_WORD
-};
-
-const char *const it_pack[LABEL_NUM] = {
-  #define X_WORD(NAME) IT_##NAME ,
-  #include "Language.inc"
-  #undef  X_WORD
-};
-
-const char *const pl_pack[LABEL_NUM] = {
-  #define X_WORD(NAME) PL_##NAME ,
-  #include "Language.inc"
-  #undef  X_WORD
-};
-
-const char *const sk_pack[LABEL_NUM] = {
-  #define X_WORD(NAME) SK_##NAME ,
-  #include "Language.inc"
-  #undef  X_WORD
-};
-
-const char *const du_pack[LABEL_NUM] = {
-  #define X_WORD(NAME) DU_##NAME ,
-  #include "Language.inc"
-  #undef  X_WORD
-};
-
-const char *const hu_pack[LABEL_NUM] = {
-  #define X_WORD(NAME) HU_##NAME ,
-  #include "Language.inc"
-  #undef  X_WORD
-};
-
-const char *const tr_pack[LABEL_NUM] = {
-  #define X_WORD(NAME) TR_##NAME ,
-  #include "Language.inc"
-  #undef  X_WORD
-};
-
-const char *const gr_pack[LABEL_NUM] = {
-  #define X_WORD(NAME) GR_##NAME ,
-  #include "Language.inc"
-  #undef  X_WORD
-};
-
-const char *const sl_pack[LABEL_NUM] = {
-  #define X_WORD(NAME) SL_##NAME ,
-  #include "Language.inc"
-  #undef  X_WORD
-};
-
-const char *const ca_pack[LABEL_NUM] = {
-  #define X_WORD(NAME) CA_##NAME ,
-  #include "Language.inc"
-  #undef  X_WORD
-};
-
-const char *const tc_pack[LABEL_NUM] = {
-  #define X_WORD(NAME) TC_##NAME ,
-  #include "Language.inc"
-  #undef  X_WORD
-};
 
 uint8_t *textSelect(uint16_t sel)
 {
   switch(infoSettings.language)
   {
-    case ENGLISH:       return (uint8_t *)en_pack[sel];
-    case CHINESE:       return (uint8_t *)cn_pack[sel];
-    case RUSSIAN:       return (uint8_t *)ru_pack[sel];
-    case JAPANESE:      return (uint8_t *)jp_pack[sel];
-    case ARMENIAN:      return (uint8_t *)am_pack[sel];
-    case GERMAN:        return (uint8_t *)de_pack[sel];
-    case CZECH:         return (uint8_t *)cz_pack[sel];
-    case SPAIN:         return (uint8_t *)es_pack[sel];
-    case FRENCH:        return (uint8_t *)fr_pack[sel];
-    case PORTUGUESE:    return (uint8_t *)pt_pack[sel];
-    case ITALIAN:       return (uint8_t *)it_pack[sel];
-    case POLISH:        return (uint8_t *)pl_pack[sel];
-    case SLOVAK:        return (uint8_t *)sk_pack[sel];
-    case DUTCH:         return (uint8_t *)du_pack[sel];
-    case HUNGARIAN:     return (uint8_t *)hu_pack[sel];
-    case TURKISH:       return (uint8_t *)tr_pack[sel];
-    case GREEK:         return (uint8_t *)gr_pack[sel];
-    case SLOVENIAN:     return (uint8_t *)sl_pack[sel];
-    case CATALAN:       return (uint8_t *)ca_pack[sel];
-    case TRAD_CHINESE:  return (uint8_t *)tc_pack[sel];
-
-    default:            return NULL;
+    case LANG_DEFAULT:
+      return (uint8_t *)default_pack[sel];
+    case LANG_FLASH:
+      loadLabelText(tempLabelString, sel);
+      return tempLabelString;
+    default:
+      return NULL;
   }
+}
+
+uint32_t getLabelFlashAddr(uint16_t index)
+{
+  if (index > LABEL_BACKGROUND) return LANGUAGE_ADDR;
+  return (LANGUAGE_ADDR + (MAX_LANG_LABEL_LENGTH * index));
+}
+
+bool loadLabelText(uint8_t* buf, uint16_t index)
+{
+  if(index >= LABEL_NUM) return false;
+  if(infoSettings.language == LANG_FLASH)
+    W25Qxx_ReadBuffer(buf, getLabelFlashAddr(index), MAX_LANG_LABEL_LENGTH);
+  else
+    memcpy(buf, textSelect(index), sizeof(tempLabelString));
+  return true;
 }

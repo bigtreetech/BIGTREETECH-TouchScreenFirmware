@@ -38,7 +38,7 @@ void menuManualLeveling(void)
   };
 
   KEY_VALUES key_num = KEY_IDLE;
- 
+
   menuDrawPage(&manualLevelingItems);
 
   while (infoMenu.menu[infoMenu.cur] == menuManualLeveling)

@@ -1,11 +1,3 @@
-/**
-* Language Kewords Generation
-* Usage: X_WORD(VALUE)
-* 'VALUE' is the keyword name without the 'LABEL_' or
-* languange short code(like 'EN_' or 'CN_') prefix
-*
-* Description: https://en.wikipedia.org/wiki/X_Macro
-*/
 X_WORD (LANGUAGE)
 X_WORD (HEAT)
 X_WORD (MOVE)
@@ -213,6 +205,7 @@ X_WORD (MAXFEEDRATE)
 X_WORD (MAXACCELERATION)
 X_WORD (ACCELERATION)
 X_WORD (JERK)
+X_WORD (JUNCTION_DEVIATION)
 X_WORD (PRINT_ACCELERATION)
 X_WORD (RETRACT_ACCELERATION)
 X_WORD (TRAVEL_ACCELERATION)
@@ -277,3 +270,5 @@ X_WORD (CONNECTION_SETTINGS)
 X_WORD (OFFSET_TOOL)
 X_WORD (HYBRID_THRESHOLD)
 X_WORD (NOTIFICATIONS)
+X_WORD (MESH_EDITOR)
+X_WORD (MESH_TUNER)

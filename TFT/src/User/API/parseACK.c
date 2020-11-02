@@ -31,7 +31,6 @@ const ECHO knownEcho[] = {
   {ECHO_NOTIFY_NONE, "Cap:"},                   //M115
   {ECHO_NOTIFY_NONE, "Config:"},                //M360
   {ECHO_NOTIFY_TOAST, "Settings Stored"},       //M500
-  {ECHO_NOTIFY_TOAST, "echo:Soft endstops"},    //M211
   {ECHO_NOTIFY_TOAST, "echo:Bed"},              //M420
   {ECHO_NOTIFY_TOAST, "echo:Fade"},             //M420
   {ECHO_NOTIFY_TOAST, "echo:Active Extruder"},  //Tool Change
@@ -95,7 +94,6 @@ static float ack_second_value()
 
 void ackPopupInfo(const char *info)
 {
-
   bool show_dialog = true;
   if (infoMenu.menu[infoMenu.cur] == menuTerminal ||
       (infoMenu.menu[infoMenu.cur] == menuStatus && info == echomagic))
@@ -129,7 +127,6 @@ void ackPopupInfo(const char *info)
     addNotification(DIALOG_TYPE_ERROR, (char *)info, (char *)dmaL2Cache + ack_index, show_dialog);
   }
 }
-
 
 void setIgnoreEcho(ECHO_ID msgId, bool state)
 {
@@ -192,6 +189,12 @@ void hostActionCommands(void)
 {
   char *find = strchr(dmaL2Cache + ack_index, '\n');
   *find = '\0';
+  if(ack_seen("notification "))
+  {
+    strcpy(hostAction.prompt_begin, dmaL2Cache + ack_index);
+    statusScreen_setMsg((u8 *)echomagic, (u8 *)dmaL2Cache + ack_index);
+  }
+  
   if(ack_seen("prompt_begin "))
   {
     hostAction.button = 0;
@@ -238,11 +241,13 @@ void hostActionCommands(void)
         break;
       case 1:
         BUZZER_PLAY(sound_notify);
-        showDialog(DIALOG_TYPE_ALERT, (u8*)"Action command", (u8 *)hostAction.prompt_begin, (u8 *)hostAction.prompt_button1, NULL, breakAndContinue, NULL, NULL);
+        setDialogText((u8*)"Action command", (u8 *)hostAction.prompt_begin, (u8 *)hostAction.prompt_button1, LABEL_BACKGROUND);
+        showDialog(DIALOG_TYPE_ALERT,  breakAndContinue, NULL, NULL);
         break;
       case 2:
         BUZZER_PLAY(sound_notify);
-        showDialog(DIALOG_TYPE_ALERT, (u8*)"Action command", (u8 *)hostAction.prompt_begin, (u8 *)hostAction.prompt_button1, (u8 *)hostAction.prompt_button2, resumeAndPurge, resumeAndContinue, NULL);
+        setDialogText((u8*)"Action command", (u8 *)hostAction.prompt_begin, (u8 *)hostAction.prompt_button1, (u8 *)hostAction.prompt_button2);
+        showDialog(DIALOG_TYPE_ALERT, resumeAndPurge, resumeAndContinue, NULL);
         break;
     }
   }
@@ -275,10 +280,14 @@ void parseACK(void)
       if (infoSettings.ext_count < infoSettings.hotend_count) infoSettings.ext_count = infoSettings.hotend_count;
       updateNextHeatCheckTime();
       infoHost.connected = true;
-      storeCmd("M503\n");// Query detailed printer capabilities
-      storeCmd("M92\n"); // Steps/mm of extruder is an important parameter for Smart filament runout
-                         // Avoid can't getting this parameter due to disabled M503 in Marlin
-      storeCmd("M115\n");
+      if(infoMachineSettings.isMarlinFirmware == -1) // if never connected to the printer since boot
+      {
+        storeCmd("M503\n");  // Query detailed printer capabilities
+        storeCmd("M92\n");   // Steps/mm of extruder is an important parameter for Smart filament runout
+                             // Avoid can't getting this parameter due to disabled M503 in Marlin
+        storeCmd("M115\n");
+        storeCmd("M211\n");  // retrieve the software endstops state
+      }
     }
 
     // Onboard sd Gcode command response
@@ -468,6 +477,7 @@ void parseACK(void)
         if(ack_seen("Y")) setParameter(P_JERK, Y_STEPPER, ack_value());
         if(ack_seen("Z")) setParameter(P_JERK, Z_STEPPER, ack_value());
         if(ack_seen("E")) setParameter(P_JERK, E_STEPPER, ack_value());
+        if(ack_seen("J")) setParameter(P_JUNCTION_DEVIATION, 0, ack_value());
       }
     //parse and store FW retraction values
       else if(ack_seen("M207 S")){
@@ -486,6 +496,19 @@ void parseACK(void)
     //parse and store auto FW retract state (M209 - Set Auto Retract)
       else if(ack_seen("M209 S")){
                           setParameter(P_AUTO_RETRACT, 0, ack_value());
+      }
+    //parse and store the software endstops state (M211)
+      else if (ack_seen("Soft endstops"))
+      {
+        uint8_t curValue = infoMachineSettings.softwareEndstops;
+
+        if (ack_seen("ON"))
+          infoMachineSettings.softwareEndstops = ENABLED;
+        else
+          infoMachineSettings.softwareEndstops = DISABLED;
+
+        if (curValue != infoMachineSettings.softwareEndstops)        // send a notification only if status is changed
+          addToast(DIALOG_TYPE_INFO, dmaL2Cache);
       }
     //parse and store Offset 2nd Nozzle
       else if(ack_seen("M218 T1 X")){
@@ -547,22 +570,25 @@ void parseACK(void)
                           setParameter(P_HYBRID_THRESHOLD, E2_STEPPER, ack_value());
                           setDualStepperStatus(E_STEPPER, true);
       }
-    // Parse and store ABL type
-      else if(ack_seen("echo:; Auto Bed Leveling")){
-        if(ENABLE_BL_VALUE==1)                             // if Auto-detect
-          infoMachineSettings.blType = BL_ABL;
-      }
-      else if(ack_seen("echo:; Unified Bed Leveling")){
-        if(ENABLE_BL_VALUE==1)                             // if Auto-detect
-          infoMachineSettings.blType = BL_UBL;
-      }
-      else if(ack_seen("echo:; Mesh Bed Leveling")){
-        if(ENABLE_BL_VALUE==1)                             // if Auto-detect
-          infoMachineSettings.blType = BL_MBL;
+    // Parse and store ABL type if auto-detect is enabled
+    #if ENABLE_BL_VALUE == 1
+      else if (ack_seen("Auto Bed Leveling"))
+        infoMachineSettings.leveling = BL_ABL;
+      else if (ack_seen("Unified Bed Leveling"))
+        infoMachineSettings.leveling = BL_UBL;
+      else if (ack_seen("Mesh Bed Leveling"))
+        infoMachineSettings.leveling = BL_MBL;
+    #endif
+    // Parse ABL state
+      else if(ack_seen("echo:Bed Leveling"))
+      {
+        if (ack_seen("ON"))
+          setParameter(P_ABL_STATE, 0, ENABLED);
+        else
+          setParameter(P_ABL_STATE, 0, DISABLED);
       }
     // Parse and store ABL on/off state & Z fade value on M503
       else if(ack_seen("M420 S")) {
-        infoSettings.autoLevelState = ack_value();
         if(ack_seen("S")) setParameter(P_ABL_STATE, 0, ack_value());
         if(ack_seen("Z")) setParameter(P_ABL_STATE, 1, ack_value());
       }
@@ -572,6 +598,7 @@ void parseACK(void)
         uint8_t *string = (uint8_t *)&dmaL2Cache[ack_index];
         uint16_t string_start = ack_index;
         uint16_t string_end = string_start;
+
         if (ack_seen("Marlin"))
         {
           infoMachineSettings.isMarlinFirmware = 1;
@@ -593,7 +620,10 @@ void parseACK(void)
           string_start = ack_index;
           if (ack_seen("EXTRUDER_COUNT:"))
           {
-            infoSettings.ext_count = ack_value();
+            if (MIXING_EXTRUDER == 0)
+            {
+              infoSettings.ext_count = ack_value();
+            }
             string_end = ack_index - sizeof("EXTRUDER_COUNT:");
           }
           infoSetMachineType(string, string_end - string_start); // Set firmware name
@@ -607,9 +637,9 @@ void parseACK(void)
       {
         infoMachineSettings.autoReportTemp = ack_value();
       }
-      else if(ack_seen("Cap:AUTOLEVEL:"))
+      else if(ack_seen("Cap:AUTOLEVEL:") && infoMachineSettings.leveling == BL_DISABLED)
       {
-        infoMachineSettings.autoLevel = ack_value();
+        infoMachineSettings.leveling = ack_value();
       }
       else if(ack_seen("Cap:Z_PROBE:"))
       {
@@ -631,6 +661,10 @@ void parseACK(void)
       {
         infoMachineSettings.caseLightsBrightness = ack_value();
       }
+      else if(ack_seen("Cap:EMERGENCY_PARSER:"))
+      {
+        infoMachineSettings.emergencyParser = ack_value();
+      }
       else if(ack_seen("Cap:PROMPT_SUPPORT:"))
       {
         infoMachineSettings.promptSupport = ack_value();
@@ -646,6 +680,10 @@ void parseACK(void)
       else if(ack_seen("Cap:LONG_FILENAME:") && infoSettings.longFileName == AUTO)
       {
         infoMachineSettings.long_filename_support = ack_value();
+      }
+      else if(ack_seen("Cap:BABYSTEPPING:"))
+      {
+        infoMachineSettings.babyStepping = ack_value();
       }
       else if(ack_seen("Cap:CHAMBER_TEMPERATURE:"))
       {
@@ -715,8 +753,8 @@ void parseACK(void)
     // Parse pause message
       else if(!infoMachineSettings.promptSupport && ack_seen("paused for user"))
       {
-        showDialog(DIALOG_TYPE_QUESTION, (u8*)"Printer is Paused",(u8*)"Paused for user\ncontinue?",
-                   textSelect(LABEL_CONFIRM), NULL, breakAndContinue, NULL,NULL);
+        setDialogText((u8*)"Printer is Paused",(u8*)"Paused for user\ncontinue?", LABEL_CONFIRM, LABEL_BACKGROUND);
+        showDialog(DIALOG_TYPE_QUESTION, breakAndContinue, NULL,NULL);
       }
     // Parse ABL Complete message
       else if(ack_seen("ABL Complete"))
@@ -737,6 +775,20 @@ void parseACK(void)
       else if(ack_seen("Mesh probing done"))
       {
         mblUpdateStatus(true);
+      }
+    // Parse Mesh data
+      else if (meshIsWaitingFirstData() && (
+        ack_seen("Mesh Bed Level data:") ||                // MBL
+        ack_seen("Bed Topography Report for CSV:") ||      // UBL
+        ack_seen("Bilinear Leveling Grid:") ||             // ABL Bilinear
+        ack_seen("Bed Level Correction Matrix:") ||        // ABL Linear or 3-Point
+        ack_seen("Invalid mesh")))                         // error echo
+      {
+        meshUpdateData(dmaL2Cache);                        // start data updating
+      }
+      else if (meshIsWaitingData())
+      {
+        meshUpdateData(dmaL2Cache);                        // continue data updating
       }
     // Parse PID Autotune finished message
       else if(ack_seen("PID Autotune finished"))

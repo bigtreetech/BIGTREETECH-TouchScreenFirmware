@@ -50,14 +50,20 @@ typedef enum
 {
   MENU_TYPE_ICON,
   MENU_TYPE_LISTVIEW,
-  MENU_TYPE_DIALOG
+  MENU_TYPE_DIALOG,
+  MENU_TYPE_FULLSCREEN,
+  MENU_TYPE_OTHER,
+  MENU_TYPE_CUSTOM
 } MENU_TYPE;
 
 typedef union
 {
-  uint32_t index;    // language index, address = textSelect(index);
+  int32_t index;    // language index, address = textSelect(index);
   void *address;
 }LABEL;
+
+//always initialize label to default values
+#define init_label(X) LABEL X = {.index = LABEL_BACKGROUND, .address = NULL}
 
 typedef struct
 {
@@ -85,7 +91,7 @@ typedef struct
   GUI_RECT rect;
   uint32_t time;
   uint8_t status;
-  int16_t inf;
+  uint16_t inf;
 }REMINDER;
 
 typedef enum
@@ -140,6 +146,9 @@ extern const GUI_RECT rect_of_titleBar[1];
 void setMenuType(MENU_TYPE type);
 MENU_TYPE getMenuType(void);
 
+void setMenuTypeCustom(void (* redrawCallback)(void));
+void menuRedrawCustom();
+
 void reminderSetUnConnected(void);
 void reminderMessage(int16_t inf, SYS_STATUS status);
 void volumeReminderMessage(int16_t inf, SYS_STATUS status);
@@ -151,7 +160,8 @@ MENUITEMS *getCurMenuItems(void);
 LISTITEMS *getCurListItems(void);
 
 void GUI_RestoreColorDefault(void);
-uint8_t *labelGetAddress(const LABEL *label);
+uint8_t *labelGetAddress(const LABEL * label);
+void setMenu(MENU_TYPE menu_type, LABEL * title, uint16_t rectCount, const GUI_RECT * menuRect, void(*action_redraw)(uint8_t position, uint8_t is_press));
 void menuDrawItem (const ITEM * menuItem, uint8_t position);
 void menuDrawIconOnly(const ITEM *item, uint8_t position);
 void menuDrawListItem(const LISTITEM *item, uint8_t position);

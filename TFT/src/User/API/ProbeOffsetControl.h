@@ -5,7 +5,8 @@
 extern "C" {
 #endif
 
-#include "stdbool.h"
+#include <stdbool.h>
+#include <stdint.h>
 
 /* Enable probe offset */
 void probeOffsetEnable(void);
@@ -23,7 +24,7 @@ float probeOffsetSetValue(float value);
 float probeOffsetGetValue(void);
 
 /* Reset Z offset value to default value */
-float probeOffsetResetValue();
+float probeOffsetResetValue(void);
 
 // Decrease Z offset value
 float probeOffsetDecreaseValue(float unit);
@@ -32,7 +33,7 @@ float probeOffsetDecreaseValue(float unit);
 float probeOffsetIncreaseValue(float unit);
 
 // Update Z offset value by encoder
-float probeOffsetUpdateValueByEncoder(float unit);
+float probeOffsetUpdateValueByEncoder(float unit, int8_t direction);
 
 #ifdef __cplusplus
 }

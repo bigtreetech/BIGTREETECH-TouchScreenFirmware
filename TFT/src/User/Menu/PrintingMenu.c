@@ -420,9 +420,8 @@ void menuPrinting(void)
       case KEY_ICON_7:
         if(isPrinting())
         {
-          showDialog(DIALOG_TYPE_ALERT, textSelect(LABEL_WARNING), textSelect(LABEL_STOP_PRINT),
-                       textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL),
-                       stopConfirm, NULL, NULL);
+          setDialogText(LABEL_WARNING, LABEL_STOP_PRINT, LABEL_CONFIRM, LABEL_CANCEL);
+          showDialog(DIALOG_TYPE_ALERT, stopConfirm, NULL, NULL);
         }
         else
         {
