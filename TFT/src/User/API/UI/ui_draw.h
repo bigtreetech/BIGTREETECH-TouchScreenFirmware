@@ -23,7 +23,7 @@ extern "C" {
 
 /*about GCODE KEY*/
 #define GKEY_WIDTH        (LCD_WIDTH/6)
-#define GKEY_HEIGHT       ((LCD_HEIGHT - ICON_START_Y)/4)
+#define GKEY_HEIGHT       ((LCD_HEIGHT - ICON_START_Y)/5)
 
 //select marlin or bigtree
 #define SPACE_SELEX       ((LCD_WIDTH-ICON_WIDTH*2)/4)
