@@ -1,6 +1,13 @@
 #include "SendGcode.h"
 #include "includes.h"
 
+#define SCROLL_LINE  22
+#define SCROLL_PAGE  1
+char terminalBuf[TERMINAL_MAX_CHAR];
+TERMINAL_PAGE terminal_page = {terminalBuf, 0, 0, 0, 0, 0};
+static uint16_t terminalBufTail = 0;
+uint8_t buf_full = 0;
+
 typedef enum
 {
   SOFT_KEY_123 = 0,
@@ -48,7 +55,7 @@ const char * const softKeyValue[][26] = {
     "1", "2", "3", "M", "G", "Del",
     "4", "5", "6", "X", "Y", "Space",
     "7", "8", "9", "Z", "E", "ABC",
-    ".", "0", "-", "S", "T", " ",
+    ".", "0", "-", "S", "T", ">",
     "Back", "Send",
   },
   {
@@ -175,84 +182,175 @@ void menuSendGcode(void)
 
     loopBackEnd();
   }
+
   GUI_RestoreColorDefault();
 }
 
+void saveGcodeTerminalCache(uint16_t sign_len, char *str)
+{
+  uint16_t len = 0;
+  if((terminalBufTail+sign_len)<TERMINAL_MAX_CHAR)
+  {
+    memcpy(terminalBuf+terminalBufTail, str, sign_len);
+    terminalBufTail += sign_len;
+  }
+  else
+  {
+    len = (terminalBufTail+sign_len) - TERMINAL_MAX_CHAR;
+    memcpy(terminalBuf+terminalBufTail, str, (sign_len-len));
+    terminalBufTail = 0;
+    memcpy(terminalBuf+terminalBufTail, str + (sign_len-len), len);
+    terminalBufTail += len;
+    buf_full = 1;
+    terminal_page.pageHead++;
+  }
+}
 
-#define TERMINAL_MAX_CHAR (LCD_WIDTH/BYTE_WIDTH * (LCD_HEIGHT - BYTE_HEIGHT) /BYTE_HEIGHT)
-
-char terminalBuf[TERMINAL_MAX_CHAR];
 void sendGcodeTerminalCache(char *stream, TERMINAL_SRC src)
 {
+  uint16_t sign_len=0;
+  uint16_t stream_len=0;
   const char* const terminalSign[] = {"Send: ", "Rcv: "};
   if (infoMenu.menu[infoMenu.cur] != menuSendGcode && infoMenu.menu[infoMenu.cur] != menuTerminal) return;
-  if (strlen(terminalBuf) + strlen(stream) + strlen(terminalSign[src]) >= TERMINAL_MAX_CHAR)
-  {
-    terminalBuf[0] = 0;
-  }
-  strlcat(terminalBuf, terminalSign[src], TERMINAL_MAX_CHAR);
-  strlcat(terminalBuf, stream, TERMINAL_MAX_CHAR);
+  sign_len = strlen(terminalSign[src]);
+  saveGcodeTerminalCache(sign_len,(char *)terminalSign[src]);
+  stream_len = strlen(stream);
+  saveGcodeTerminalCache(stream_len,stream);
 }
 
 #define CURSOR_START_X 0
 #define CURSOR_END_X   LCD_WIDTH
-#define CURSOR_START_Y TITLE_END_Y
-#define CURSOR_END_Y   LCD_HEIGHT
+#define CURSOR_START_Y 0
+#define CURSOR_END_Y   (LCD_HEIGHT - TITLE_END_Y)
+
+const GUI_RECT terminalRect[] = {
+  {0, CURSOR_END_Y, LCD_WIDTH / 3, LCD_HEIGHT},
+  {LCD_WIDTH / 3, CURSOR_END_Y,  2 * LCD_WIDTH / 3, LCD_HEIGHT},
+  {2 * LCD_WIDTH / 3, CURSOR_END_Y, LCD_WIDTH, LCD_HEIGHT},
+};
+
+const char *terminalString[] = {"<", ">", "Back"};
+
+void terminalReDrawButton(u8 position, u8 pressed)
+{
+  if(position > COUNT(terminalString)) return;
+  if(pressed)
+  {
+    GUI_SetColor(BLACK);
+    GUI_SetBkColor(WHITE);
+  }
+  else
+  {
+    GUI_SetColor(WHITE);
+    GUI_SetBkColor(BLACK);
+  }
+
+  GUI_ClearPrect(terminalRect + position);
+  GUI_DispStringInPrect(terminalRect + position, (const u8 *)terminalString[position]);
+
+  GUI_SetColor(BLACK);
+  GUI_SetBkColor(GRAY);
+}
 
 void menuTerminal(void)
 {
-  const GUI_RECT terminalRect = {0, 0, LCD_WIDTH, LCD_HEIGHT};
   CHAR_INFO info;
   int16_t cursorX = CURSOR_START_X,
           cursorY = CURSOR_START_Y;
   uint16_t lastTerminalIndex = 0;
-  u16 key_num = IDLE_TOUCH;
+  uint16_t key_num = IDLE_TOUCH;
+  uint8_t pageBufIndex = 0;
 
-  GUI_ClearRect(0, 0, LCD_WIDTH, CURSOR_START_Y);
-  GUI_DispStringInRect(0, 0, LCD_WIDTH, CURSOR_START_Y, textSelect(LABEL_TOUCH_TO_EXIT));
+  GUI_ClearRect(0, CURSOR_END_Y, LCD_WIDTH, LCD_HEIGHT);
+  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
+  for (uint8_t i = 0; i < COUNT(terminalString); i++)
+  {
+    GUI_DispStringInPrect(terminalRect + i, (const u8 *)terminalString[i]);
+  }
+  GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
+
   GUI_SetColor(BLACK);
   GUI_SetBkColor(GRAY);
   GUI_ClearRect(CURSOR_START_X, CURSOR_START_Y, CURSOR_END_X, CURSOR_END_Y);
-  TSC_ReDrawIcon = NULL; // Disable icon redraw callback function
+
+  setMenu(MENU_TYPE_FULLSCREEN, NULL, COUNT(terminalRect), terminalRect, terminalReDrawButton);
 
   while(infoMenu.menu[infoMenu.cur] == menuTerminal)
   {
-    key_num = KEY_GetValue(1, &terminalRect);
-
-    if(key_num != IDLE_TOUCH)
+    key_num = KEY_GetValue(3, terminalRect);
+    switch (key_num)
     {
-      infoMenu.cur--;
+      case GKEY_0:              //page up
+        if(terminal_page.pageIndex < (terminal_page.pageTail - terminal_page.pageHead))
+          terminal_page.pageIndex += SCROLL_PAGE;
+        if((terminal_page.pageTail < terminal_page.pageHead) &&
+          (terminal_page.pageIndex < (terminal_page.pageTail + MAX_BUFF - terminal_page.pageHead)))
+          terminal_page.pageIndex += SCROLL_PAGE;
+        break;
+
+      case GKEY_1:             //page down
+        if(terminal_page.pageIndex > 0)
+          terminal_page.pageIndex -= SCROLL_PAGE;
+        break;
+      case GKEY_2:             //back
+        infoMenu.cur--;
+      default:
+        break;
     }
 
-    while (terminalBuf[lastTerminalIndex])
+    if(terminal_page.oldPageIndex != terminal_page.pageIndex)          //Scroll a certain number of pages from the top of the page buffer
     {
-      getCharacterInfo((u8 *)&terminalBuf[lastTerminalIndex], &info);
+      terminal_page.oldPageIndex = terminal_page.pageIndex;
+      cursorX = CURSOR_START_X;
+      cursorY = CURSOR_START_Y;
+      GUI_ClearRect(CURSOR_START_X, CURSOR_START_Y, CURSOR_END_X-1, CURSOR_END_Y);
+      if(terminal_page.pageTail >= terminal_page.pageIndex) pageBufIndex =  terminal_page.pageTail - terminal_page.pageIndex;
+      else pageBufIndex = terminal_page.pageTail + (MAX_BUFF - terminal_page.pageIndex);
+      lastTerminalIndex = terminal_page.ptr[pageBufIndex] - terminalBuf;
+    }
+    getCharacterInfo((u8 *)&terminalBuf[lastTerminalIndex], &info);
+    while ((terminalBuf[lastTerminalIndex]) && (lastTerminalIndex!=terminalBufTail))
+    {
       if (cursorX + info.pixelWidth > CURSOR_END_X || (terminalBuf[lastTerminalIndex] == '\n' && cursorX != CURSOR_START_X)) // Next Line
       {
         cursorX = CURSOR_START_X;
         cursorY += info.pixelHeight;
-        if (cursorY + info.pixelHeight > CURSOR_END_Y)
-        {
-          lastTerminalIndex = 0;
-          terminalBuf[0] = 0;
-          break;
-        }
       }
       if(terminalBuf[lastTerminalIndex] != '\n')
       {
-        if (cursorY + info.pixelHeight > CURSOR_END_Y) // Clear window
+        if (cursorY + info.pixelHeight > CURSOR_END_Y) // Save the page pointer and scroll to a new screen
         {
+          if(terminal_page.pageIndex != 0) break;
+
+          terminal_page.pageTail++;
+          if(terminal_page.pageTail >= MAX_BUFF) terminal_page.pageTail=0;
+          terminal_page.ptr[terminal_page.pageTail] = &terminalBuf[lastTerminalIndex];           //Save character buffer index to page buffer
+
+          if((buf_full==1)&&(terminal_page.oldPageHead==terminal_page.pageHead)) terminal_page.pageHead++;  //Update the bottom of the page buffer to limit the page range
+          if(terminal_page.pageHead >= MAX_BUFF) terminal_page.pageHead=0;
+          terminal_page.oldPageHead = terminal_page.pageHead;
+
           cursorX = CURSOR_START_X;
           cursorY = CURSOR_START_Y;
           GUI_ClearRect(CURSOR_START_X, CURSOR_START_Y, CURSOR_END_X, CURSOR_END_Y);
         }
+        GUI_SetColor(BLACK);
+        GUI_SetBkColor(GRAY);
         GUI_DispOne(cursorX, cursorY, (u8 *)&terminalBuf[lastTerminalIndex]);
         cursorX += info.pixelWidth;
       }
       lastTerminalIndex += info.bytes;
+      if(lastTerminalIndex>=TERMINAL_MAX_CHAR) lastTerminalIndex=0;
     }
 
     loopBackEnd();
   }
+  buf_full = 0;
+  terminalBufTail = 0;
+  terminalBuf[0] = 0;
+  terminal_page.pageTail = 0;
+  terminal_page.pageHead = 0;
+  terminal_page.pageIndex = 0;
+  terminal_page.oldPageIndex = 0;
   GUI_RestoreColorDefault();
 }
