@@ -262,7 +262,9 @@ extern SD_CardInfo SDCardInfo;//SD card information
 #define SDIO_HIGH_CAPACITY_MMC_CARD                ((u32)0x00000007)
 
 //SDIO related parameter definition
-#define NULL 0
+#ifndef NULL 
+	#define NULL 0
+#endif
 #define SDIO_STATIC_FLAGS               ((u32)0x000005FF)
 #define SDIO_CMD0TIMEOUT                ((u32)0x00010000)
 #define SDIO_DATATIMEOUT                ((u32)0xFFFFFFFF)
