@@ -9,7 +9,7 @@ typedef enum
 {
   TERMINAL_GCODE,
   TERMINAL_ACK,
-}TERMINAL_SRC;
+} TERMINAL_SRC;
 
 void menuSendGcode(void);
 void menuTerminal(void);
