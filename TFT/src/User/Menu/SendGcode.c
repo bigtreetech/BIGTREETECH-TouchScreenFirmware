@@ -125,10 +125,10 @@ const GUI_RECT gcodeKeyRect[GKEY_KEY_NUM]={
 
 const char * const gcodeKey[][GKEY_KEY_NUM] = {
   {
-    "1", "2", "3", "M", "G", "E",
+    "1", "2", "3", "G", "M", "T",
     "4", "5", "6", "X", "Y", "Z",
-    "7", "8", "9", "S", "T", "V",
-    ".", "0", "-", ">", "F", "R",
+    "7", "8", "9", "E", "F", "R",
+    ".", "0", "-", ">", "S", "V",
     "ABC", "Space", "Del", "Back",
     "Send",
   },
