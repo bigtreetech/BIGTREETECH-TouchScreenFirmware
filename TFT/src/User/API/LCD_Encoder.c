@@ -1,6 +1,6 @@
-#include "LCD_Encoder.h"
 #include "GPIO_Init.h"
 #include "includes.h"
+#include "LCD_Encoder.h"
 
 #if LCD_ENCODER_SUPPORT
 
