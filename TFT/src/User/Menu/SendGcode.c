@@ -61,6 +61,10 @@ typedef enum
   SOFT_KEY_ABC,
 } SOFT_KEY_TYPE;
 
+/*about GCODE KEY*/
+#define GKEY_WIDTH  (LCD_WIDTH / 6)
+#define GKEY_HEIGHT ((LCD_HEIGHT - ICON_START_Y) / 5)
+
 #define GCODE_ROW_NUM 1
 #define GCODE_COL_NUM 4
 #define GCODE_HEIGHT  (ICON_START_Y / GCODE_ROW_NUM)
