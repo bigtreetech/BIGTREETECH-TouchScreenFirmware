@@ -169,6 +169,11 @@ void initMachineSetting(void){
 
 void setupMachine(void)
 {
+  // Avoid repeated calls caused by manually sending M115 in terminal menu
+  static bool firstCall = true;
+  if (!firstCall) return;
+  firstCall = false;
+
   #ifdef ENABLE_BL_VALUE
     #if ENABLE_BL_VALUE == 2
         infoMachineSettings.leveling = BL_ABL;
