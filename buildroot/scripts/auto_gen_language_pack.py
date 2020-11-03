@@ -2,7 +2,6 @@
 # Auto generate language_xx.ini files from language keyword header files.
 # ** Author: Gurmeet Athwal https://github.com/guruathwal **
 
-Import("env")
 import os
 import re
 import glob
@@ -30,19 +29,7 @@ setting_path = "/TFT/src/User/API/Settings.h"
 file_count = 0
 key_count = 0
 lang_sign = ""
-label = ""
-repo_path = os.path.dirname(os.path.realpath("__file__"))
-
-# The working dir is change to root firmware directory if the
-# script is executed through platformIO
-# This makes sure correct dir path is selected
-def check_wdir():
-    global repo_path
-    #print(repo_path)
-    isdir = os.path.isdir(repo_path + "/TFT/src/user")
-    while (isdir == False):
-        repo_path = os.path.dirname(repo_path)
-        isdir = os.path.isdir(repo_path + "/TFT/src/user")
+repo_path = ""
 
 def get_langcode(line):
     code = line[-4:-2]
@@ -76,7 +63,7 @@ def get_string(line):
 
 def get_lang_sign():
     global lang_sign
-    set_file = open(os.path.normpath(repo_path + setting_path), 'r', encoding="utf8")
+    set_file = open(repo_path + setting_path, 'r', encoding="utf8")
     lines_list = set_file.readlines()
     for text_line in lines_list:
         text_line = text_line.strip()
@@ -86,11 +73,11 @@ def get_lang_sign():
     #print("lang sign :" + lang_sign)
     set_file.close()
 
-#####
-
-def gen_lang_files(source, target, env):
-    global label, source_file, key_count, file_count
-    check_wdir()
+    #####
+try:
+    print("Generate language_xx.ini files:")
+    repo_path = os.path.realpath("")
+    #print(repo_path)
     get_lang_sign()
 
     for src_file in glob.glob(repo_path + input_path + "/" + source_file):
@@ -126,6 +113,6 @@ def gen_lang_files(source, target, env):
     else:
         print("Total language files processed: " + str(file_count))
 
-env.AddPostAction("buildprog", gen_lang_files)
-
+except:
+    print("Unable to get correct path")
 # %%
