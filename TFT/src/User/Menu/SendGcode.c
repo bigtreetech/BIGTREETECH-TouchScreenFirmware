@@ -132,7 +132,7 @@ const char * const gcodeKey[][GKEY_KEY_NUM] = {
     "1", "2", "3", "M", "G", "T",
     "4", "5", "6", "X", "Y", "Z",
     "7", "8", "9", "E", "F", "R",
-    ".", "0", "-", ">", "S", "V",
+    ".", "0", "-", "~", "S", "V",
     "ABC", "Space", "Del", "Back",
     "Send",
   },
@@ -164,11 +164,11 @@ typedef enum
 #define CURSOR_START_X 0
 #define CURSOR_END_X   LCD_WIDTH
 #define CURSOR_START_Y 0
-#define CURSOR_END_Y   (LCD_HEIGHT - TITLE_END_Y)
+#define CURSOR_END_Y   CTRL_Y0
 
 #define PAGE_ROW_NUM 1
 #define PAGE_COL_NUM 4
-#define PAGE_HEIGHT  TITLE_END_Y
+#define PAGE_HEIGHT  GKEY_HEIGHT
 #define PAGE_WIDTH   (LCD_WIDTH / PAGE_COL_NUM)
 #define PAGE_X0      0
 #define PAGE_Y0      CURSOR_END_Y
