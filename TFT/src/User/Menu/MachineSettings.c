@@ -5,7 +5,7 @@ uint8_t gcode_num;
 uint8_t gc_page_count;
 uint8_t gc_cur_page = 0;
 
-CUSTOM_GCODES * customcodes = NULL;
+CUSTOM_GCODES *customcodes = NULL;
 
 LISTITEMS customItems = {
 // title
@@ -270,6 +270,12 @@ void menuMachineSettings(void)
      {ICON_BACK,                    LABEL_BACK}}
   };
 
+  const ITEM itemCaseLight = {ICON_CASE_LIGHT, LABEL_CASE_LIGHT};
+  if (infoMachineSettings.caseLightsBrightness == ENABLED)
+  {
+      machineSettingsItems.items[KEY_ICON_6] = itemCaseLight;
+  }
+
   KEY_VALUES key_num = KEY_IDLE;
 
   menuDrawPage(&machineSettingsItems);
@@ -304,7 +310,11 @@ void menuMachineSettings(void)
         infoMenu.menu[++infoMenu.cur] = menuEepromSettings;
         break;
 #endif
-
+      case KEY_ICON_6:
+        if (infoMachineSettings.caseLightsBrightness == ENABLED){
+          infoMenu.menu[++infoMenu.cur] = menuCaseLight;
+        }
+        break;
       case KEY_ICON_7:
         infoMenu.cur--;
         break;

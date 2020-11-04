@@ -276,5 +276,6 @@
     #define STRING_NOTIFICATIONS          "Уведомления"
     #define STRING_MESH_EDITOR            "Сетка ред."
     #define STRING_MESH_TUNER             "Сетка настр."
+    #define STRING_CASE_LIGHT             "Case light"
 
 #endif

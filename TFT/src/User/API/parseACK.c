@@ -750,6 +750,17 @@ void parseACK(void)
           fanSpeedQuerySetWait(false);
         }
       }
+      else if(ack_seen("Case light: OFF"))
+      {
+          caseLightSetState(false);
+          caseLightQuerySetWait(false);
+      }
+      else if(ack_seen("Case light: "))
+      {
+          caseLightSetState(true);
+          caseLightSetBrightness(ack_value());
+          caseLightQuerySetWait(false);
+      }
     // Parse pause message
       else if(!infoMachineSettings.promptSupport && ack_seen("paused for user"))
       {

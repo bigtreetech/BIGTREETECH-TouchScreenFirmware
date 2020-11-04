@@ -730,7 +730,15 @@ void loopBackEnd(void)
   #endif
 
   if(infoSettings.sequential_mode)
+  {
     setSequentialModeColor();
+  }
+  
+  if(infoMachineSettings.caseLightsBrightness == ENABLED)
+  {
+    loopCaseLight();
+  }
+  
 } //loopBackEnd
 
 void loopFrontEnd(void)

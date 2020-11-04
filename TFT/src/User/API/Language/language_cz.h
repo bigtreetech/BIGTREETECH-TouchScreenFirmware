@@ -276,5 +276,6 @@
     #define STRING_NOTIFICATIONS          "Oznámení"
     #define STRING_MESH_EDITOR            "Mesh síť"
     #define STRING_MESH_TUNER             "Mesh nastavení"
+    #define STRING_CASE_LIGHT             "Case light"
 
 #endif

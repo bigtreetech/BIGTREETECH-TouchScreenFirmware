@@ -276,5 +276,6 @@
     #define STRING_NOTIFICATIONS          "Benachrichtigungen"
     #define STRING_MESH_EDITOR            "Mesh edit."
     #define STRING_MESH_TUNER             "Mesh anp."
+    #define STRING_CASE_LIGHT             "Case light"
 
 #endif
