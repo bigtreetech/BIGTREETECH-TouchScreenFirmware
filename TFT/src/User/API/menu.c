@@ -728,6 +728,11 @@ void loopBackEnd(void)
   #ifdef LCD_LED_PWM_CHANNEL
     loopDimTimer();
   #endif
+
+  if(infoMachineSettings.caseLightsBrightness == ENABLED)
+  {
+    loopCaseLight();
+  }
 } //loopBackEnd
 
 void loopFrontEnd(void)

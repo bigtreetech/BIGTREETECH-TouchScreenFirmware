@@ -725,7 +725,19 @@ void sendQueueCmd(void)
             }
             break;
         #endif
+        case 355: //M355
+        {
+          if(cmd_seen('S')) {
+            caseLightSetState(cmd_value() > 0);
+            caseLightSendWaiting(false);
+          }
+          if(cmd_seen('P')){
+            caseLightSetBrightness(cmd_value());
+            caseLightSendWaiting(false);
+          }
 
+          break;
+        }
         case 420: //M420
           //ABL state will be set through parsACK.c after receiving confirmation message from the printer
           // to prevent wrong state in case of error.

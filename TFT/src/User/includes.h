@@ -65,6 +65,7 @@
 #include "SpeedControl.h"
 #include "BabystepControl.h"
 #include "ProbeOffsetControl.h"
+#include "CaseLightControl.h"
 #include "ProbeHeightControl.h"
 
 #include "extend.h"
@@ -117,6 +118,7 @@
 #include "Pid.h"
 #include "TuneExtruder.h"
 #include "ConnectionSettings.h"
+#include "CaseLight.h"
 #include "MeshTuner.h"
 #include "MeshEditor.h"
 
