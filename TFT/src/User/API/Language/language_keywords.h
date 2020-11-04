@@ -280,7 +280,9 @@ extern "C" {
 #define LANG_KEY_OFFSET_TOOL                  "label_offset_tool:"
 #define LANG_KEY_HYBRID_THRESHOLD             "label_hybrid_threshold:"
 #define LANG_KEY_NOTIFICATIONS                "label_notifications:"
-
+#define LANG_KEY_MESH_EDITOR                  "label_mesh_editor:"
+#define LANG_KEY_MESH_TUNER                   "label_mesh_tuner:"
+#define LANG_KEY_CASE_LIGHT                   "label_case_light:"
 
 #ifdef __cplusplus
 }

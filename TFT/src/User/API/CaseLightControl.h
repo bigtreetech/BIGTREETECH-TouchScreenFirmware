@@ -1,0 +1,26 @@
+#pragma once
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <stdint.h>
+#include <stdbool.h>
+#include "includes.h"
+
+void caseLightValueQuery(void);
+void caseLightSetState(bool state);
+void caseLightSetBrightness(uint8_t brightness);
+void caseLightQuerySetWait(bool wait);
+uint8_t caseLightGetBrightness(void);
+uint8_t caseLightGetBrightnessPercent(void);
+bool caseLightGetState(void);
+void loopCaseLight(void);
+void caseLightToggleState(void);
+void caseLightSendWaiting(bool isWaiting);
+void caseLightChangeBrightness(int8_t brightness_delta);
+void caseLightChangeBrightnessPrecent(int8_t brightness_delta_percent);
+
+#ifdef __cplusplus
+}
+#endif

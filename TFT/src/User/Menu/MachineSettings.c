@@ -5,7 +5,7 @@ uint8_t gcode_num;
 uint8_t gc_page_count;
 uint8_t gc_cur_page = 0;
 
-CUSTOM_GCODES * customcodes = NULL;
+CUSTOM_GCODES *customcodes = NULL;
 
 LISTITEMS customItems = {
 // title
@@ -209,39 +209,39 @@ void menuEepromSettings(void)
     key_num = menuKeyGetValue();
     switch(key_num)
     {
-    case KEY_ICON_0:
-      // save to EEPROM
-      if (infoMachineSettings.EEPROM == 1)
-      {
-        setDialogText(eepromSettingsItems.title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
-        showDialog(DIALOG_TYPE_QUESTION, saveEepromSettings, NULL, NULL);
-      }
-      break;
+      case KEY_ICON_0:
+        // save to EEPROM
+        if (infoMachineSettings.EEPROM == 1)
+        {
+          setDialogText(eepromSettingsItems.title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
+          showDialog(DIALOG_TYPE_QUESTION, saveEepromSettings, NULL, NULL);
+        }
+        break;
 
-    case KEY_ICON_1:
-      // restore from EEPROM
-      if (infoMachineSettings.EEPROM == 1)
-      {
-        setDialogText(eepromSettingsItems.title.index, LABEL_EEPROM_RESTORE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
-        showDialog(DIALOG_TYPE_QUESTION, restoreEepromSettings, NULL, NULL);
-      }
-      break;
+      case KEY_ICON_1:
+        // restore from EEPROM
+        if (infoMachineSettings.EEPROM == 1)
+        {
+          setDialogText(eepromSettingsItems.title.index, LABEL_EEPROM_RESTORE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
+          showDialog(DIALOG_TYPE_QUESTION, restoreEepromSettings, NULL, NULL);
+        }
+        break;
 
-    case KEY_ICON_2:
-      // reset EEPROM
-      if (infoMachineSettings.EEPROM == 1)
-      {
-        setDialogText(eepromSettingsItems.title.index, LABEL_EEPROM_RESET_INFO, LABEL_CONFIRM, LABEL_CANCEL);
-        showDialog(DIALOG_TYPE_QUESTION, resetEepromSettings, NULL, NULL);
-      }
-      break;
+      case KEY_ICON_2:
+        // reset EEPROM
+        if (infoMachineSettings.EEPROM == 1)
+        {
+          setDialogText(eepromSettingsItems.title.index, LABEL_EEPROM_RESET_INFO, LABEL_CONFIRM, LABEL_CANCEL);
+          showDialog(DIALOG_TYPE_QUESTION, resetEepromSettings, NULL, NULL);
+        }
+        break;
 
-    case KEY_ICON_7:
-      infoMenu.cur--;
-      break;
+      case KEY_ICON_7:
+        infoMenu.cur--;
+        break;
 
-    default:
-      break;
+      default:
+        break;
     }
 
     loopProcess();
@@ -269,6 +269,12 @@ void menuMachineSettings(void)
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BACK,                    LABEL_BACK}}
   };
+
+  const ITEM itemCaseLight = {ICON_CASE_LIGHT, LABEL_CASE_LIGHT};
+  if (infoMachineSettings.caseLightsBrightness == ENABLED)
+  {
+      machineSettingsItems.items[KEY_ICON_6] = itemCaseLight;
+  }
 
   KEY_VALUES key_num = KEY_IDLE;
 
@@ -304,7 +310,11 @@ void menuMachineSettings(void)
         infoMenu.menu[++infoMenu.cur] = menuEepromSettings;
         break;
 #endif
-
+      case KEY_ICON_6:
+        if (infoMachineSettings.caseLightsBrightness == ENABLED){
+          infoMenu.menu[++infoMenu.cur] = menuCaseLight;
+        }
+        break;
       case KEY_ICON_7:
         infoMenu.cur--;
         break;

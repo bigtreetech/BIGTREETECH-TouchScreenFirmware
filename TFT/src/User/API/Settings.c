@@ -32,6 +32,8 @@ void infoSettingsReset(void)
   infoSettings.status_xyz_bg_color    = lcd_colors[STATUS_XYZ_BG_COLOR];
   infoSettings.list_border_color      = lcd_colors[LISTVIEW_BORDER_COLOR];
   infoSettings.list_button_color      = lcd_colors[LISTVIEW_ICON_COLOR];
+  infoSettings.mesh_min_color         = lcd_colors[MESH_MIN_COLOR];
+  infoSettings.mesh_max_color         = lcd_colors[MESH_MAX_COLOR];
 
   infoSettings.terminalACK            = DISABLED;
   infoSettings.persistent_info        = ENABLED;
@@ -162,10 +164,16 @@ void initMachineSetting(void){
   infoMachineSettings.autoReportSDStatus      = DISABLED;
   infoMachineSettings.long_filename_support   = DISABLED;
   infoMachineSettings.babyStepping            = DISABLED;
+  infoMachineSettings.softwareEndstops        = ENABLED;
 }
 
 void setupMachine(void)
 {
+  // Avoid repeated calls caused by manually sending M115 in terminal menu
+  static bool firstCall = true;
+  if (!firstCall) return;
+  firstCall = false;
+
   #ifdef ENABLE_BL_VALUE
     #if ENABLE_BL_VALUE == 2
         infoMachineSettings.leveling = BL_ABL;

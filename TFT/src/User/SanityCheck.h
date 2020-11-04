@@ -5,10 +5,10 @@
 #include "Configuration.h"
 #include "flashStore.h"
 #include "Settings.h"
+
 //
 //check size of settings against max allocated size at compile time
 #define SIZE_CHECK(object) ((void)sizeof(char[1 - 2*!!(object)]))
-
 
 #if CONFIG_VERSION != CONFIG_SUPPPORT
     #error "the Configuration.h is old. please use the latest Configuration.h file"
@@ -27,8 +27,6 @@
       //#warning "DEFAULT_LCD_MODE supports only SERIAL_TSC. Please update/check your configuration."
     #endif
 #endif
-
-
 
 #ifdef LED_COLOR_PIN
     #ifdef STARTUP_KNOB_LED_COLOR
@@ -97,6 +95,45 @@
 #endif
 #ifndef QUICK_EEPROM_BUTTON
     #define QUICK_EEPROM_BUTTON 0
+#endif
+
+#ifdef MESH_GRID_MAX_POINTS_X
+  #if MESH_GRID_MAX_POINTS_X > 15
+    #error "MESH_GRID_MAX_POINTS_X cannot be greater than 15"
+  #endif
+
+  #if MESH_GRID_MAX_POINTS_X < 1
+    #error "MESH_GRID_MAX_POINTS_X cannot be less than 1"
+  #endif
+#endif
+#ifndef MESH_GRID_MAX_POINTS_X
+    #define MESH_GRID_MAX_POINTS_X 10
+#endif
+
+#ifdef MESH_GRID_MAX_POINTS_Y
+  #if MESH_GRID_MAX_POINTS_Y > 15
+    #error "MESH_GRID_MAX_POINTS_Y cannot be greater than 15"
+  #endif
+
+  #if MESH_GRID_MAX_POINTS_Y < 1
+    #error "MESH_GRID_MAX_POINTS_Y cannot be less than 1"
+  #endif
+#endif
+#ifndef MESH_GRID_MAX_POINTS_Y
+    #define MESH_GRID_MAX_POINTS_Y 10
+#endif
+
+#ifdef MESH_LEFT_KEYBOARD
+  #if MESH_LEFT_KEYBOARD > 1
+    #error "MESH_LEFT_KEYBOARD cannot be greater than 1"
+  #endif
+
+  #if MESH_LEFT_KEYBOARD < 0
+    #error "MESH_LEFT_KEYBOARD cannot be less than 0"
+  #endif
+#endif
+#ifndef MESH_LEFT_KEYBOARD
+    #define MESH_LEFT_KEYBOARD 1
 #endif
 
 #ifdef CANCEL_PRINT_GCODE
@@ -243,7 +280,6 @@
     #define CUSTOM_14_GCODE ""
 #endif
 
-
 #define CUSTOM_GCODE_ENABLED {ENABLE_CUSTOM0, ENABLE_CUSTOM1, ENABLE_CUSTOM2, ENABLE_CUSTOM3, ENABLE_CUSTOM4,\
                               ENABLE_CUSTOM5, ENABLE_CUSTOM6, ENABLE_CUSTOM7, ENABLE_CUSTOM8, ENABLE_CUSTOM9,\
                               ENABLE_CUSTOM10,ENABLE_CUSTOM11,ENABLE_CUSTOM12,ENABLE_CUSTOM13,ENABLE_CUSTOM14}
@@ -255,6 +291,5 @@
 #define CUSTOM_GCODE_LABELS    {CUSTOM_0_LABEL, CUSTOM_1_LABEL, CUSTOM_2_LABEL, CUSTOM_3_LABEL, CUSTOM_4_LABEL,\
                               CUSTOM_5_LABEL, CUSTOM_6_LABEL, CUSTOM_7_LABEL, CUSTOM_8_LABEL, CUSTOM_9_LABEL,\
                               CUSTOM_10_LABEL,CUSTOM_11_LABEL,CUSTOM_12_LABEL,CUSTOM_13_LABEL,CUSTOM_14_LABEL }
-
 
 #endif //_SANITYCHECK_H_

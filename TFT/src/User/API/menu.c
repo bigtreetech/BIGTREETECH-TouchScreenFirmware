@@ -228,7 +228,10 @@ void GUI_RestoreColorDefault(void){
 }
 
 static const MENUITEMS *curMenuItems = NULL;   //current menu
+
 static const LISTITEMS *curListItems = NULL;   //current listmenu
+
+static const void (* curMenuCustom)(void) = NULL; //current custom menu
 
 static MENU_TYPE menuType = MENU_TYPE_ICON;
 static LABEL * curTitle = NULL;
@@ -323,6 +326,18 @@ void setMenu(MENU_TYPE menu_type, LABEL * title, u16 rectCount, const GUI_RECT *
   TSC_ReDrawIcon = action_redraw;
 }
 
+void setMenuTypeCustom(void (* redrawCallback)(void))
+{
+  menuType = MENU_TYPE_CUSTOM;
+  curMenuCustom = redrawCallback;
+}
+
+void menuRedrawCustom()
+{
+  if (menuType == MENU_TYPE_CUSTOM && curMenuCustom != NULL)
+    curMenuCustom();
+}
+
 void reminderSetUnConnected(void)
 {
   reminder.status = STATUS_UNCONNECT;
@@ -395,7 +410,11 @@ void loopReminderClear(void)
 
   /* Clear warning message */
   reminder.status = STATUS_IDLE;
-  menuReDrawCurTitle();
+
+  if (menuType == MENU_TYPE_CUSTOM)
+    menuRedrawCustom();
+  else
+    menuReDrawCurTitle();
 }
 
 void loopVolumeReminderClear(void)
@@ -412,7 +431,11 @@ void loopVolumeReminderClear(void)
 
   /* Clear warning message */
   volumeReminder.status = STATUS_IDLE;
-  menuReDrawCurTitle();
+
+  if (menuType == MENU_TYPE_CUSTOM)
+    menuRedrawCustom();
+  else
+    menuReDrawCurTitle();
 }
 
 void loopBusySignClear(void)
@@ -430,9 +453,15 @@ void loopBusySignClear(void)
 
   /* End Busy display sing */
   busySign.status = STATUS_IDLE;
-  GUI_SetColor(infoSettings.title_bg_color);
-  GUI_FillCircle(busySign.rect.x0, (busySign.rect.y1 - busySign.rect.y0) / 2, (busySign.rect.x1-busySign.rect.x0)/2);
-  GUI_SetColor(infoSettings.font_color);
+
+  if (menuType == MENU_TYPE_CUSTOM)
+    menuRedrawCustom();
+  else
+  {
+    GUI_SetColor(infoSettings.title_bg_color);
+    GUI_FillCircle(busySign.rect.x0, (busySign.rect.y1 - busySign.rect.y0) / 2, (busySign.rect.x1-busySign.rect.x0)/2);
+    GUI_SetColor(infoSettings.font_color);
+  }
 }
 
 void notificationDot(void)
@@ -746,6 +775,11 @@ void loopBackEnd(void)
   #ifdef LCD_LED_PWM_CHANNEL
     loopDimTimer();
   #endif
+
+  if(infoMachineSettings.caseLightsBrightness == ENABLED)
+  {
+    loopCaseLight();
+  }
 } //loopBackEnd
 
 void loopFrontEnd(void)
