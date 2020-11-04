@@ -128,6 +128,16 @@ void menuProbeOffset(void)
         break;
       case KEY_INFOBOX:
       {
+        if (!probeOffsetGetStatus())
+        {
+          probeNotifyError();
+        }
+        else
+        {
+          float val = numPadFloat(labelGetAddress(&probeOffsetItems.title),z_offset,0,true);
+          z_offset = probeOffsetSetValue(val);
+          menuDrawPage(&probeOffsetItems);         
+        }
         break;
       }
       // increase Z offset

@@ -10,7 +10,7 @@ const GUI_RECT exhibitRect = {
 };
 
 // MENU FOR A TEMPERATURE DISPLAY SCREEN (TOOL TEMP, PID, ETC...)
-const GUI_RECT rect_of_keysTM[TM_RECT_COUNT]= {
+const GUI_RECT rect_of_keysIN[TM_RECT_COUNT]= {
 //8 icons area
   {0*ICON_WIDTH+0*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  1*ICON_WIDTH+0*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
   {0,0,0,0},
@@ -653,9 +653,11 @@ KEY_VALUES menuKeyGetValue(void)
             (infoMenu.menu[infoMenu.cur] == menuTuneExtruder) || 
             (infoMenu.menu[infoMenu.cur] == menuFan) || 
             (infoMenu.menu[infoMenu.cur] == menuExtrude) || 
-            (infoMenu.menu[infoMenu.cur] == menuSpeed))
+            (infoMenu.menu[infoMenu.cur] == menuSpeed) ||
+			(infoMenu.menu[infoMenu.cur] == menuProbeOffset) ||
+			(infoMenu.menu[infoMenu.cur] == menuMBL))
     {
-      tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keysTM), rect_of_keysTM);
+      tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keysIN), rect_of_keysIN);
     }
     else
     {

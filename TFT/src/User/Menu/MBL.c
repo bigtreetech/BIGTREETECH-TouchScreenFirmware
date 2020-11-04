@@ -160,6 +160,19 @@ void menuMBL(void)
           babystep = babystepDecreaseValue(unit);
         break;
 
+      case KEY_INFOBOX:
+      {
+        if (!mblRunning)
+        {
+          mblNotifyError();
+        }
+        else
+        {
+          float val = numPadFloat(labelGetAddress(LABEL_BABYSTEP), now, 0, true);
+          menuDrawPage(&mblItems);
+        }
+        break;
+      }
       // increase babystep
       case KEY_ICON_3:
         if (!mblRunning)
