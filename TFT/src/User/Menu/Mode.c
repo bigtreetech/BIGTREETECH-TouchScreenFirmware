@@ -40,7 +40,7 @@ void infoMenuSelect(void)
       #endif
 
       #if ENC_ACTIVE_SIGNAL
-        setEncActiveSignal(1);
+        setEncActiveSignal(0);
       #endif
       GUI_RestoreColorDefault();
       if(infoSettings.unified_menu == 1) //if Unified menu is selected
@@ -68,7 +68,7 @@ void infoMenuSelect(void)
 
     case MARLIN:
       #if ENC_ACTIVE_SIGNAL
-        setEncActiveSignal(0);
+        setEncActiveSignal(1);
       #endif
       if (infoSettings.serial_alwaysOn == 1)
       {

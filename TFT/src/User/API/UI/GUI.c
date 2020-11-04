@@ -869,7 +869,7 @@ void RADIO_Select(RADIO *radio, uint8_t select)
 void Scroll_CreatePara(SCROLL * para,const uint8_t *pstr, const GUI_RECT *rect)
 {
   memset(para,0,sizeof(SCROLL));
-  para->text = pstr;
+  para->text = (uint8_t *const)pstr;
   para->maxByte = strlen((char *)pstr);
   para->curPixelWidth = para->totalPixelWidth = GUI_StrPixelWidth(pstr);
   para->maxPixelWidth = rect->x1 - rect->x0;

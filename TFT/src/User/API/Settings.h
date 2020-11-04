@@ -86,6 +86,8 @@ typedef struct
   uint16_t status_xyz_bg_color;
   uint16_t list_border_color;
   uint16_t list_button_color;
+  uint16_t mesh_min_color;
+  uint16_t mesh_max_color;
 
   uint8_t  rotate_ui;
   uint8_t  terminalACK;
@@ -220,6 +222,7 @@ typedef struct
   uint8_t autoReportSDStatus;
   uint8_t long_filename_support;
   uint8_t babyStepping;
+  uint8_t softwareEndstops;
 }MACHINESETTINGS;
 
 
