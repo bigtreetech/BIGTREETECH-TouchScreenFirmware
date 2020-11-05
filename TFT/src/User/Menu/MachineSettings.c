@@ -93,34 +93,37 @@ void menuCustom(void)
     }
     switch(key_num)
     {
-    case KEY_ICON_5:
-      if (gc_page_count > 1)
-      {
-        if (gc_cur_page > 0)
+      case KEY_ICON_5:
+        if (gc_page_count > 1)
         {
-          gc_cur_page--;
-          loaditemsCustomGcode();
-          menuRefreshListPage();
+          if (gc_cur_page > 0)
+          {
+            gc_cur_page--;
+            loaditemsCustomGcode();
+            menuRefreshListPage();
+          }
         }
-      }
-      break;
-    case KEY_ICON_6:
-      if (gc_page_count > 1)
-      {
-        if (gc_cur_page < gc_page_count - 1)
+        break;
+
+      case KEY_ICON_6:
+        if (gc_page_count > 1)
         {
-          gc_cur_page++;
-          loaditemsCustomGcode();
-          menuRefreshListPage();
+          if (gc_cur_page < gc_page_count - 1)
+          {
+            gc_cur_page++;
+            loaditemsCustomGcode();
+            menuRefreshListPage();
+          }
         }
-      }
-      break;
-    case KEY_ICON_7:
-      gc_cur_page = 0;
-      infoMenu.cur--;
-      break;
-    default:
-      break;
+        break;
+
+      case KEY_ICON_7:
+        gc_cur_page = 0;
+        infoMenu.cur--;
+        break;
+
+      default:
+        break;
     }
     loopProcess();
   }
@@ -273,7 +276,7 @@ void menuMachineSettings(void)
   const ITEM itemCaseLight = {ICON_CASE_LIGHT, LABEL_CASE_LIGHT};
   if (infoMachineSettings.caseLightsBrightness == ENABLED)
   {
-      machineSettingsItems.items[KEY_ICON_6] = itemCaseLight;
+    machineSettingsItems.items[KEY_ICON_6] = itemCaseLight;
   }
 
   KEY_VALUES key_num = KEY_IDLE;
@@ -315,6 +318,7 @@ void menuMachineSettings(void)
           infoMenu.menu[++infoMenu.cur] = menuCaseLight;
         }
         break;
+
       case KEY_ICON_7:
         infoMenu.cur--;
         break;
