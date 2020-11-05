@@ -56,6 +56,7 @@
     #define STRING_BLTOUCH_REPEAT         "繰り返す"
     #define STRING_Z_OFFSET               "Zオフセット"
     #define STRING_PROBE_OFFSET           "プローブオフセット"
+    #define STRING_HOME_OFFSET            "Home Offset"
     #define STRING_CONFIRMATION           "Are you sure?"
     #define STRING_DOWN                   "Down"
     #define STRING_UP                     "Up"

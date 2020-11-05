@@ -66,9 +66,22 @@ void menuBabystep(void)
   float now_babystep, babystep;
   float now_z_offset, z_offset;
   float unit;
+  float (* offsetGetValue)(void);                          // get current Z offset
+  float (* offsetSetValue)(float);                         // set current Z offset
+
+  if (infoMachineSettings.zProbe == ENABLED)
+  {
+    offsetGetValue = probeOffsetGetValue;
+    offsetSetValue = probeOffsetSetValue;
+  }
+  else
+  {
+    offsetGetValue = homeOffsetGetValue;
+    offsetSetValue = homeOffsetSetValue;
+  }
 
   now_babystep = babystep = babystepGetValue();
-  now_z_offset = z_offset = probeOffsetGetValue();
+  now_z_offset = z_offset = offsetGetValue();
 
   if (infoMachineSettings.EEPROM == 1)
   {
@@ -90,7 +103,7 @@ void menuBabystep(void)
     unit = babystep_unit[curUnit];
 
     babystep = babystepGetValue();                         // always load current babystep
-    z_offset = probeOffsetGetValue();                      // always load current Z offset
+    z_offset = offsetGetValue();                           // always load current Z offset
 
     key_num = menuKeyGetValue();
     switch (key_num)
@@ -109,7 +122,7 @@ void menuBabystep(void)
       case KEY_ICON_4:
         if (infoMachineSettings.EEPROM == 1)
         {
-          probeOffsetSetValue(z_offset);                   // set new Z offset
+          offsetSetValue(z_offset);                        // set new Z offset
 
           setDialogText(babyStepItems.title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
           showDialog(DIALOG_TYPE_QUESTION, saveEepromSettings, NULL, NULL);

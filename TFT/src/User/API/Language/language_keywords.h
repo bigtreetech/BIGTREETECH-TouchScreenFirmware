@@ -63,6 +63,7 @@ extern "C" {
 #define LANG_KEY_BLTOUCH_REPEAT               "label_bltouch_repeat:"
 #define LANG_KEY_Z_OFFSET                     "label_z_offset:"
 #define LANG_KEY_PROBE_OFFSET                 "label_probe_offset:"
+#define LANG_KEY_HOME_OFFSET                  "label_home_offset:"
 #define LANG_KEY_CONFIRMATION                 "label_confirmation:"
 #define LANG_KEY_DOWN                         "label_down:"
 #define LANG_KEY_UP                           "label_up:"

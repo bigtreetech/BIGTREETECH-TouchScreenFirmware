@@ -56,6 +56,7 @@
     #define STRING_BLTOUCH_REPEAT         "精度测试"
     #define STRING_Z_OFFSET               "Z-偏移量"
     #define STRING_PROBE_OFFSET           "探针偏移量"
+    #define STRING_HOME_OFFSET            "Home Offset"
     #define STRING_CONFIRMATION           "Are you sure?"
     #define STRING_DOWN                   "降低"
     #define STRING_UP                     "抬升"

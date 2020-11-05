@@ -56,6 +56,7 @@
     #define STRING_BLTOUCH_REPEAT         "Repetir"
     #define STRING_Z_OFFSET               "Z Offset"
     #define STRING_PROBE_OFFSET           "Sonda Compensar"
+    #define STRING_HOME_OFFSET            "Home Offset"
     #define STRING_CONFIRMATION           "Estàs segur?"
     #define STRING_DOWN                   "Avall"
     #define STRING_UP                     "Amunt"
