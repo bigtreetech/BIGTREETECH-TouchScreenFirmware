@@ -1,5 +1,4 @@
 #include "sequential_mode.h"
-
 #include "includes.h"
 
 uint8_t prevPixelColor = 0;
@@ -31,13 +30,15 @@ void setSequentialModeColor(void) {
       //Restore colors to default value
       prevPixelColor = 0;
 
-      //Turn of neopixels and set knob led back to default
+      //Turn off neopixels and set knob led back to default
       storeCmd("M150 R0 U0 B0");
       #ifdef LED_COLOR_PIN
-        if(infoSettings.knob_led_idle && lcd_dim.dimmed)
-          WS2812_Send_DAT(LED_OFF);
-        else
-          WS2812_Send_DAT(led_color[infoSettings.knob_led_color]);
+        #ifdef LCD_LED_PWM_CHANNEL
+          if(infoSettings.knob_led_idle && lcd_dim.dimmed)
+            WS2812_Send_DAT(led_color[LED_OFF]);
+          else
+        #endif
+            WS2812_Send_DAT(led_color[infoSettings.knob_led_color]);
       #endif
     }
 
@@ -54,7 +55,7 @@ void setSequentialModeColor(void) {
     if (hotendTargetTemp == 0 && bedTargetTemp == 0)
       return;  //No temperature set "yet". Do nothing.
 
-    long newLedValue = 0;
+    uint8_t newLedValue = 0;
     if (hotendTargetTemp > 0 && bedTargetTemp > 0 &&
         bedCurrentTemp >= bedTargetTemp - 5) {
       //Only use total temperature when hotend and bed heat up at the same time
@@ -91,10 +92,12 @@ void setSequentialModeColor(void) {
       storeCmd("M150 R255 U255 B255");
 
       #ifdef LED_COLOR_PIN
-        if(infoSettings.knob_led_idle && lcd_dim.dimmed)
-          WS2812_Send_DAT(led_color[LED_OFF]);
-        else
-          WS2812_Send_DAT(led_color[infoSettings.knob_led_color]);
+        #ifdef LCD_LED_PWM_CHANNEL
+          if(infoSettings.knob_led_idle && lcd_dim.dimmed)
+            WS2812_Send_DAT(led_color[LED_OFF]);
+          else
+        #endif
+            WS2812_Send_DAT(led_color[infoSettings.knob_led_color]);
       #endif
 
       //Set the flag heating done to true

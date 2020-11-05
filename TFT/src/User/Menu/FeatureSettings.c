@@ -74,9 +74,9 @@ typedef enum
   SKEY_ACK_NOTIFICATION,
   #ifdef LED_COLOR_PIN
     SKEY_KNOB,
-  #ifdef LCD_LED_PWM_CHANNEL
-    SKEY_KNOB_LED_IDLE,
-  #endif
+    #ifdef LCD_LED_PWM_CHANNEL
+      SKEY_KNOB_LED_IDLE,
+    #endif
   #endif
   #ifdef LCD_LED_PWM_CHANNEL
     SKEY_LCD_BRIGHTNESS,
@@ -118,16 +118,16 @@ LISTITEM settingPage[SKEY_COUNT] = {
   {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_ACK_NOTIFICATION,         LABEL_DYNAMIC},
   #ifdef LED_COLOR_PIN
     {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_KNOB_LED,                 LABEL_OFF},
-  #ifdef LCD_LED_PWM_CHANNEL
-    {ICONCHAR_BLANK,      LIST_TOGGLE,        LABEL_KNOB_LED_IDLE,            LABEL_BACKGROUND},
-  #endif
+    #ifdef LCD_LED_PWM_CHANNEL
+      {ICONCHAR_BLANK,      LIST_TOGGLE,        LABEL_KNOB_LED_IDLE,            LABEL_BACKGROUND},
+    #endif
   #endif
   #ifdef LCD_LED_PWM_CHANNEL
     {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_LCD_BRIGHTNESS,           LABEL_DYNAMIC},
     {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_LCD_BRIGHTNESS_DIM,       LABEL_DYNAMIC},
     {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_LCD_DIM_IDLE_TIMER,       LABEL_DYNAMIC},
   #endif
-    {ICONCHAR_BLANK,      LIST_TOGGLE,        LABEL_SEQUENTIAL_MODE,          LABEL_BACKGROUND},
+  {ICONCHAR_BLANK,      LIST_TOGGLE,        LABEL_SEQUENTIAL_MODE,          LABEL_BACKGROUND},
   #ifdef ST7920_SPI
     {ICONCHAR_BLANK,      LIST_TOGGLE,        LABEL_ST7920_FULLSCREEN,        LABEL_OFF},
   #endif
@@ -227,13 +227,13 @@ void updateFeatureSettings(uint8_t key_val)
         WS2812_Send_DAT(led_color[infoSettings.knob_led_color]);
         break;
 
-    #ifdef LCD_LED_PWM_CHANNEL
-      case SKEY_KNOB_LED_IDLE:
-        infoSettings.knob_led_idle = (infoSettings.knob_led_idle + 1) % TOGGLE_NUM;
-        settingPage[item_index].icon = toggleitem[infoSettings.knob_led_idle];
-        break;
-    #endif //LCD_LED_PWM_CHANNEL
-    #endif
+      #ifdef LCD_LED_PWM_CHANNEL
+        case SKEY_KNOB_LED_IDLE:
+          infoSettings.knob_led_idle = (infoSettings.knob_led_idle + 1) % TOGGLE_NUM;
+          settingPage[item_index].icon = toggleitem[infoSettings.knob_led_idle];
+          break;
+      #endif //LCD_LED_PWM_CHANNEL
+    #endif //LED_COLOR_PIN
 
     case SKEY_RESET_SETTINGS:
       setDialogText(LABEL_SETTING_RESET, LABEL_RESET_SETTINGS_INFO, LABEL_CONFIRM, LABEL_CANCEL);
@@ -362,17 +362,20 @@ void loadFeatureSettings(){
 
       case SKEY_RESET_SETTINGS:
         break;
+
       #ifdef LED_COLOR_PIN
         case SKEY_KNOB:
           settingPage[item_index].valueLabel = itemLedcolor[infoSettings.knob_led_color];
           featureSettingsItems.items[i] = settingPage[item_index];
           break;
+
         #ifdef LCD_LED_PWM_CHANNEL
-        case SKEY_KNOB_LED_IDLE:
-          settingPage[item_index].icon = toggleitem[infoSettings.knob_led_idle];
-          break;
+          case SKEY_KNOB_LED_IDLE:
+            settingPage[item_index].icon = toggleitem[infoSettings.knob_led_idle];
+            break;
         #endif
       #endif
+
       #ifdef LCD_LED_PWM_CHANNEL
         case SKEY_LCD_BRIGHTNESS:
         {
@@ -391,7 +394,7 @@ void loadFeatureSettings(){
         case SKEY_LCD_DIM_IDLE_TIMER:
           settingPage[item_index].valueLabel = itemDimTime[infoSettings.lcd_idle_timer];
           break;
-      #endif //PS_ON_PIN
+      #endif //LCD_LED_PWM_CHANNEL
 
       case SKEY_SEQUENTIAL_MODE:
         settingPage[item_index].icon = toggleitem[infoSettings.sequential_mode];
