@@ -56,6 +56,7 @@
     #define STRING_BLTOUCH_REPEAT         "Ponovi"
     #define STRING_Z_OFFSET               "Z odmik"
     #define STRING_PROBE_OFFSET           "Odmik sonde"
+    #define STRING_HOME_OFFSET            "Home Offset"
     #define STRING_CONFIRMATION           "Are you sure?"
     #define STRING_DOWN                   "Down"
     #define STRING_UP                     "Up"

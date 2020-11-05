@@ -323,6 +323,13 @@
 #define PROBE_OFFSET_DEFAULT_VALUE 0.0f
 
 /**
+ * Home Offset
+ */
+#define HOME_Z_OFFSET_MIN_VALUE     -20.0f
+#define HOME_Z_OFFSET_MAX_VALUE     20.0f
+#define HOME_Z_OFFSET_DEFAULT_VALUE 0.0f
+
+/**
  * Babystep
  */
 #define BABYSTEP_MIN_VALUE     -5.0f

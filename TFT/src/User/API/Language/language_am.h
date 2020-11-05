@@ -56,6 +56,7 @@
     #define STRING_BLTOUCH_REPEAT         "Repeat"
     #define STRING_Z_OFFSET               "Z Offset"
     #define STRING_PROBE_OFFSET           "Probe Offset"
+    #define STRING_HOME_OFFSET            "Home Offset"
     #define STRING_CONFIRMATION           "Are you sure?"
     #define STRING_DOWN                   "Down"
     #define STRING_UP                     "Up"

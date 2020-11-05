@@ -67,6 +67,7 @@
 #include "ProbeOffsetControl.h"
 #include "CaseLightControl.h"
 #include "ProbeHeightControl.h"
+#include "HomeOffsetControl.h"
 
 #include "extend.h"
 #include "menu.h"
