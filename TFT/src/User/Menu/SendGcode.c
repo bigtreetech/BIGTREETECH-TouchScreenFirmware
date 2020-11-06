@@ -17,15 +17,23 @@ typedef struct
 } TERMINAL_PAGE;
 
 // colors
+#if TERMINAL_ALTERNATIVE_KEYBOARD_COLOR_LAYOUT == 0
+  #define KEY_FONT_COLOR     infoSettings.font_color
+  #define KEY_BG_COLOR       infoSettings.bg_color
+  #define KEY_BORDER_COLOR   infoSettings.list_border_color
+  #define KEY_BORDER_COLOR_2 DARKGRAY
+#else
+  #define KEY_FONT_COLOR     BLACK
+  #define KEY_BG_COLOR       WHITE
+  #define KEY_BORDER_COLOR   0x2174
+  #define KEY_BORDER_COLOR_2 DARKGRAY
+#endif
+
 #define BAR_FONT_COLOR       WHITE
 #define BAR_BG_COLOR         0x2174
+#define BAR_BORDER_COLOR     0x4b0d
 #define BAR_VALUE_FONT_COLOR BLACK
 #define BAR_VALUE_BG_COLOR   0xFFF2
-#define BAR_BORDER_COLOR     0x4b0d
-
-#define KEY_FONT_COLOR   infoSettings.font_color
-#define KEY_BG_COLOR     infoSettings.bg_color
-#define KEY_BORDER_COLOR infoSettings.list_border_color
 
 #define TERM_FONT_COLOR infoSettings.marlin_mode_font_color
 #define TERM_BG_COLOR   infoSettings.marlin_mode_bg_color
@@ -389,17 +397,17 @@ TERMINAL_PAGE terminal_page = {terminalBuf, 0, 0, 0, 0, 0};
 static uint16_t terminalBufTail = 0;
 uint8_t buf_full = 0;
 
-void sendGcodeReDrawButton(u8 position, u8 pressed)
+void sendGcodeReDrawButton(u8 index, u8 isPressed)
 {
-  if (position > GKEY_SEND)
+  if (index >= GKEY_KEY_NUM)
     return;
 
-  if (pressed)
+  if (isPressed)
   {
 #if GKEY_COL_NUM < LAYOUT_3_COL_NUM
-    if (position < GKEY_ABC_123)
+    if (index < GKEY_ABC_123)
 #else
-    if (position < GKEY_SPACE)
+    if (index < GKEY_SPACE)
 #endif
     {
       GUI_SetColor(KEY_BG_COLOR);
@@ -407,20 +415,20 @@ void sendGcodeReDrawButton(u8 position, u8 pressed)
     }
     else
     {
-      GUI_SetColor(KEY_FONT_COLOR);
-      GUI_SetBkColor(KEY_BG_COLOR);
+      GUI_SetColor(BAR_BG_COLOR);
+      GUI_SetBkColor(BAR_FONT_COLOR);
     }
   }
   else
   {
 #if GKEY_COL_NUM < LAYOUT_3_COL_NUM
-    if (position < GKEY_ABC_123)
+    if (index < GKEY_ABC_123)
 #else
-    if (position < GKEY_SPACE)
+    if (index < GKEY_SPACE)
 #endif
     {
-      GUI_SetColor(BAR_BG_COLOR);
-      GUI_SetBkColor(BAR_FONT_COLOR);
+      GUI_SetColor(KEY_FONT_COLOR);
+      GUI_SetBkColor(KEY_BG_COLOR);
     }
     else
     {
@@ -429,15 +437,15 @@ void sendGcodeReDrawButton(u8 position, u8 pressed)
     }
   }
 
-  if (position != GKEY_SEND)
+  if (index != GKEY_SEND)
     setLargeFont(true);
 
-  GUI_ClearRect(gcodeKeyRect[position].x0 + 2, gcodeKeyRect[position].y0 + 2, gcodeKeyRect[position].x1 - 1, gcodeKeyRect[position].y1 - 1);
+  GUI_ClearRect(gcodeKeyRect[index].x0 + 2, gcodeKeyRect[index].y0 + 2, gcodeKeyRect[index].x1 - 1, gcodeKeyRect[index].y1 - 1);
 
 #if GKEY_COL_NUM < LAYOUT_3_COL_NUM
-  GUI_DispStringInRect(gcodeKeyRect[position].x0 + 2, gcodeKeyRect[position].y0 + 2, gcodeKeyRect[position].x1 - 1, gcodeKeyRect[position].y1 - 1, (u8 *) gcodeKey[gcodeKeyType][position]);
+  GUI_DispStringInRect(gcodeKeyRect[index].x0 + 2, gcodeKeyRect[index].y0 + 2, gcodeKeyRect[index].x1 - 1, gcodeKeyRect[index].y1 - 1, (u8 *) gcodeKey[gcodeKeyType][index]);
 #else
-  GUI_DispStringInRect(gcodeKeyRect[position].x0 + 2, gcodeKeyRect[position].y0 + 2, gcodeKeyRect[position].x1 - 1, gcodeKeyRect[position].y1 - 1, (u8 *) gcodeKey[0][position]);
+  GUI_DispStringInRect(gcodeKeyRect[index].x0 + 2, gcodeKeyRect[index].y0 + 2, gcodeKeyRect[index].x1 - 1, gcodeKeyRect[index].y1 - 1, (u8 *) gcodeKey[0][index]);
 #endif
 
   setLargeFont(false);
@@ -461,14 +469,20 @@ void sendGcodeDrawKeyboard(void)
   // draw vertical button borders
   for (int i = 0; i < (KEY_COL_NUM - 1); i++)
   {
-    GUI_DrawLine(gcodeKeyRect[i].x1, gcodeKeyRect[i].y0, gcodeKeyRect[i + ((KEY_ROW_NUM - 1) * KEY_COL_NUM)].x1, gcodeKeyRect[i + ((KEY_ROW_NUM - 1) * KEY_COL_NUM)].y1);
+    GUI_DrawLine(gcodeKeyRect[i].x1, gcodeKeyRect[i].y0, gcodeKeyRect[i + ((KEY_ROW_NUM - 1) * KEY_COL_NUM)].x1, gcodeKeyRect[i + ((KEY_ROW_NUM - 1) * KEY_COL_NUM)].y1 - 1);
   }
 
   // draw horizontal button borders
   for (int i = 0; i < (KEY_ROW_NUM - 1); i++)
   {
-    GUI_DrawLine(gcodeKeyRect[i * KEY_COL_NUM].x0, gcodeKeyRect[i * KEY_COL_NUM].y1, gcodeKeyRect[(i * KEY_COL_NUM) + (KEY_COL_NUM - 1)].x1, gcodeKeyRect[(i * KEY_COL_NUM) + (KEY_COL_NUM - 1)].y1);
+    GUI_DrawLine(gcodeKeyRect[i * KEY_COL_NUM].x0, gcodeKeyRect[i * KEY_COL_NUM].y1, gcodeKeyRect[(i * KEY_COL_NUM) + (KEY_COL_NUM - 1)].x1 - 1, gcodeKeyRect[(i * KEY_COL_NUM) + (KEY_COL_NUM - 1)].y1);
   }
+
+  GUI_SetColor(KEY_BORDER_COLOR_2);
+
+  // draw shadow border
+  GUI_DrawLine(gcodeAreaRect[1].x0, gcodeAreaRect[1].y0, gcodeAreaRect[1].x1, gcodeAreaRect[1].y0);
+  GUI_DrawLine(gcodeAreaRect[1].x0, gcodeAreaRect[1].y1 - 1, gcodeAreaRect[1].x1, gcodeAreaRect[1].y1 - 1);
 
   for (uint8_t i = 0; i < COUNT(gcodeKey[0]); i++)
   {
@@ -623,12 +637,12 @@ void sendGcodeTerminalCache(char *stream, TERMINAL_SRC src)
   saveGcodeTerminalCache(stream_len, stream);
 }
 
-void terminalReDrawButton(u8 position, u8 pressed)
+void terminalReDrawButton(u8 index, u8 isPressed)
 {
-  if (position > COUNT(terminalKey))
+  if (index >= TERM_KEY_NUM)
     return;
 
-  if (pressed)
+  if (isPressed)
   {
     GUI_SetColor(BAR_BG_COLOR);
     GUI_SetBkColor(BAR_FONT_COLOR);
@@ -641,8 +655,8 @@ void terminalReDrawButton(u8 position, u8 pressed)
 
   setLargeFont(true);
 
-  GUI_ClearRect(terminalKeyRect[position].x0 + 2, terminalKeyRect[position].y0 + 2, terminalKeyRect[position].x1 - 1, terminalKeyRect[position].y1 - 1);
-  GUI_DispStringInRect(terminalKeyRect[position].x0 + 2, terminalKeyRect[position].y0 + 2, terminalKeyRect[position].x1 - 1, terminalKeyRect[position].y1 - 1, (u8 *) terminalKey[position]);
+  GUI_ClearRect(terminalKeyRect[index].x0 + 2, terminalKeyRect[index].y0 + 2, terminalKeyRect[index].x1 - 1, terminalKeyRect[index].y1 - 1);
+  GUI_DispStringInRect(terminalKeyRect[index].x0 + 2, terminalKeyRect[index].y0 + 2, terminalKeyRect[index].x1 - 1, terminalKeyRect[index].y1 - 1, (u8 *) terminalKey[index]);
 
   setLargeFont(false);
 }

@@ -365,6 +365,15 @@
 //
 #define MESH_LEFT_KEYBOARD 0
 
+// Enable alternative keyboard color layout for the Terminal menu
+//
+// If standard, the keyboard is drawn using the standard configurable background and font colors.
+// If alternative, the keyboard is drawn using the alternative embedded colors (white and black colors).
+//
+// Options:  0: standard    1: alternative
+//
+#define TERMINAL_ALTERNATIVE_KEYBOARD_COLOR_LAYOUT 0
+
 /**
  * PID autotune
  */
