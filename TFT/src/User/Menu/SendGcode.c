@@ -6,11 +6,6 @@
 #define SCROLL_LINE       22
 #define SCROLL_PAGE       1
 
-#define BAR_BK_COLOR       0x2174
-#define BAR_INNER_COLOR    0xFFF2
-#define BAR_BORDER_COLOR   0x4b0d
-#define BAR_BORDER_COLOR_2 DARKGRAY
-
 typedef struct
 {
   char *ptr[MAX_BUFF];                                     // Pointer into the terminal page buffer, full Screen is one page
@@ -21,7 +16,21 @@ typedef struct
   uint8_t oldPageIndex;
 } TERMINAL_PAGE;
 
-// about GCODE KEY
+// colors
+#define BAR_FONT_COLOR       WHITE
+#define BAR_BG_COLOR         0x2174
+#define BAR_VALUE_FONT_COLOR BLACK
+#define BAR_VALUE_BG_COLOR   0xFFF2
+#define BAR_BORDER_COLOR     0x4b0d
+
+#define KEY_FONT_COLOR   infoSettings.font_color
+#define KEY_BG_COLOR     infoSettings.bg_color
+#define KEY_BORDER_COLOR infoSettings.list_border_color
+
+#define TERM_FONT_COLOR infoSettings.marlin_mode_font_color
+#define TERM_BG_COLOR   infoSettings.marlin_mode_bg_color
+
+// keyboard layouts
 #define LAYOUT_1_COL_NUM 6
 #define LAYOUT_1_ROW_NUM 6
 
@@ -132,7 +141,7 @@ typedef enum
 #define GCODE_X0      0
 #define GCODE_Y0      0
 
-// keyboard bar sizes
+// keyboard sizes
 #define KEY_ROW_NUM GKEY_ROW_NUM - 2
 #define KEY_COL_NUM GKEY_COL_NUM
 #define KEY_HEIGHT  GKEY_HEIGHT
@@ -162,12 +171,12 @@ typedef enum
 #define CTRL_X0      0
 #define CTRL_Y0      (LCD_HEIGHT - GKEY_HEIGHT)
 
-// gcode value bar rectangles
+// gcode value rectangles
 const GUI_RECT gcodeValueRect = {
   GCODE_X0 + 0 * GCODE_WIDTH + 4, GCODE_Y0 + 0 * GCODE_HEIGHT + 4, GCODE_X0 + 3 * GCODE_WIDTH - 4, GCODE_Y0 + 1 * GCODE_HEIGHT - 4
 };
 
-// keyboard bar rectangles
+// keyboard rectangles
 const GUI_RECT gcodeKeyRect[GKEY_KEY_NUM]={
   // row 1
   {KEY_X0 + 0 * KEY_WIDTH, KEY_Y0 + 0 * KEY_HEIGHT, KEY_X0 + 1 * KEY_WIDTH, KEY_Y0 + 1 * KEY_HEIGHT},
@@ -371,7 +380,7 @@ const char * const terminalKey[TERM_KEY_NUM] = {
 };
 
 const GUI_RECT terminalAreaRect[2] = {
-  {CURSOR_START_X, CURSOR_START_Y, CURSOR_END_X, CURSOR_END_Y},                // cursor area
+  {CURSOR_START_X, CURSOR_START_Y, CURSOR_END_X, CURSOR_END_Y},                // terminal area
   {PAGE_X0, PAGE_Y0, LCD_WIDTH, LCD_HEIGHT},                                   // control area
 };
 
@@ -393,13 +402,13 @@ void sendGcodeReDrawButton(u8 position, u8 pressed)
     if (position < GKEY_SPACE)
 #endif
     {
-      GUI_SetColor(infoSettings.font_color);
-      GUI_SetBkColor(infoSettings.bg_color);
+      GUI_SetColor(KEY_BG_COLOR);
+      GUI_SetBkColor(KEY_FONT_COLOR);
     }
     else
     {
-      GUI_SetColor(infoSettings.bg_color);
-      GUI_SetBkColor(infoSettings.font_color);
+      GUI_SetColor(KEY_FONT_COLOR);
+      GUI_SetBkColor(KEY_BG_COLOR);
     }
   }
   else
@@ -410,13 +419,13 @@ void sendGcodeReDrawButton(u8 position, u8 pressed)
     if (position < GKEY_SPACE)
 #endif
     {
-      GUI_SetColor(infoSettings.bg_color);
-      GUI_SetBkColor(infoSettings.font_color);
+      GUI_SetColor(BAR_BG_COLOR);
+      GUI_SetBkColor(BAR_FONT_COLOR);
     }
     else
     {
-      GUI_SetColor(infoSettings.font_color);
-      GUI_SetBkColor(BAR_BK_COLOR);
+      GUI_SetColor(BAR_FONT_COLOR);
+      GUI_SetBkColor(BAR_BG_COLOR);
     }
   }
 
@@ -436,8 +445,8 @@ void sendGcodeReDrawButton(u8 position, u8 pressed)
 
 void sendGcodeDrawGcode(char *gcode)
 {
-  GUI_SetColor(infoSettings.bg_color);
-  GUI_SetBkColor(BAR_INNER_COLOR);
+  GUI_SetColor(BAR_VALUE_FONT_COLOR);
+  GUI_SetBkColor(BAR_VALUE_BG_COLOR);
 
   GUI_ClearRect(gcodeValueRect.x0 + 1, gcodeValueRect.y0 + 1, gcodeValueRect.x1 - 1, gcodeValueRect.y1 - 1);
 
@@ -447,7 +456,7 @@ void sendGcodeDrawGcode(char *gcode)
 
 void sendGcodeDrawKeyboard(void)
 {
-  GUI_SetColor(BAR_BK_COLOR);
+  GUI_SetColor(KEY_BORDER_COLOR);
 
   // draw vertical button borders
   for (int i = 0; i < (KEY_COL_NUM - 1); i++)
@@ -461,12 +470,6 @@ void sendGcodeDrawKeyboard(void)
     GUI_DrawLine(gcodeKeyRect[i * KEY_COL_NUM].x0, gcodeKeyRect[i * KEY_COL_NUM].y1, gcodeKeyRect[(i * KEY_COL_NUM) + (KEY_COL_NUM - 1)].x1, gcodeKeyRect[(i * KEY_COL_NUM) + (KEY_COL_NUM - 1)].y1);
   }
 
-  GUI_SetColor(BAR_BORDER_COLOR_2);
-
-  // draw shadow border
-  GUI_DrawLine(gcodeAreaRect[1].x0, gcodeAreaRect[1].y0, gcodeAreaRect[1].x1, gcodeAreaRect[1].y0);
-  GUI_DrawLine(gcodeAreaRect[1].x0, gcodeAreaRect[1].y1 - 1, gcodeAreaRect[1].x1, gcodeAreaRect[1].y1 - 1);
-
   for (uint8_t i = 0; i < COUNT(gcodeKey[0]); i++)
   {
     sendGcodeReDrawButton(i, false);
@@ -477,26 +480,29 @@ void sendGcodeDrawMenu(void)
 {
   setMenu(MENU_TYPE_FULLSCREEN, NULL, COUNT(gcodeKeyRect), gcodeKeyRect, sendGcodeReDrawButton);
 
-  GUI_SetBkColor(BAR_BK_COLOR);
+  GUI_SetBkColor(BAR_BG_COLOR);
 
+  // clear bar area
   GUI_ClearRect(gcodeAreaRect[0].x0, gcodeAreaRect[0].y0, gcodeAreaRect[0].x1, gcodeAreaRect[0].y1);
   GUI_ClearRect(gcodeAreaRect[2].x0, gcodeAreaRect[2].y0, gcodeAreaRect[2].x1, gcodeAreaRect[2].y1);
 
-  GUI_SetBkColor(infoSettings.font_color);
+  GUI_SetBkColor(KEY_BG_COLOR);
 
+  // clear keyboard area
   GUI_ClearRect(gcodeAreaRect[1].x0, gcodeAreaRect[1].y0, gcodeAreaRect[1].x1, gcodeAreaRect[1].y1);
 
   GUI_SetColor(BAR_BORDER_COLOR);
 
-  // draw gcode value area borders
+  // draw gcode value area border
   GUI_DrawPrect(&gcodeValueRect);
 
-  // draw shadow border
+  // draw bar area shadow border
   GUI_DrawLine(gcodeAreaRect[0].x0, gcodeAreaRect[0].y1 - 1, gcodeAreaRect[0].x1, gcodeAreaRect[0].y1 - 1);
   GUI_DrawLine(gcodeAreaRect[2].x0, gcodeAreaRect[2].y0, gcodeAreaRect[2].x1, gcodeAreaRect[2].y0);
 
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
+  // draw keyboard and gcode value
   sendGcodeDrawKeyboard();
   sendGcodeDrawGcode(NULL);
 }
@@ -624,13 +630,13 @@ void terminalReDrawButton(u8 position, u8 pressed)
 
   if (pressed)
   {
-    GUI_SetColor(infoSettings.bg_color);
-    GUI_SetBkColor(infoSettings.font_color);
+    GUI_SetColor(BAR_BG_COLOR);
+    GUI_SetBkColor(BAR_FONT_COLOR);
   }
   else
   {
-    GUI_SetColor(infoSettings.font_color);
-    GUI_SetBkColor(BAR_BK_COLOR);
+    GUI_SetColor(BAR_FONT_COLOR);
+    GUI_SetBkColor(BAR_BG_COLOR);
   }
 
   setLargeFont(true);
@@ -643,8 +649,8 @@ void terminalReDrawButton(u8 position, u8 pressed)
 
 void terminalDrawPage(char *pageNum)
 {
-  GUI_SetColor(infoSettings.font_color);
-  GUI_SetBkColor(BAR_BK_COLOR);
+  GUI_SetColor(BAR_FONT_COLOR);
+  GUI_SetBkColor(BAR_BG_COLOR);
 
   setLargeFont(true);
 
@@ -660,20 +666,24 @@ void terminalDrawMenu(void)
 {
   setMenu(MENU_TYPE_FULLSCREEN, NULL, COUNT(terminalKeyRect), terminalKeyRect, terminalReDrawButton);
 
-  GUI_SetBkColor(infoSettings.marlin_mode_bg_color);
+  GUI_SetBkColor(TERM_BG_COLOR);
 
+  // clear terminal area
   GUI_ClearRect(terminalAreaRect[0].x0, terminalAreaRect[0].y0, terminalAreaRect[0].x1, terminalAreaRect[0].y1);
 
-  GUI_SetBkColor(BAR_BK_COLOR);
+  GUI_SetBkColor(BAR_BG_COLOR);
 
+  // clear bar area
   GUI_ClearRect(terminalAreaRect[1].x0, terminalAreaRect[1].y0, terminalAreaRect[1].x1, terminalAreaRect[1].y1);
 
   GUI_SetColor(BAR_BORDER_COLOR);
 
+  // draw bar area shadow border
   GUI_DrawLine(terminalAreaRect[1].x0, terminalAreaRect[1].y0, terminalAreaRect[1].x1, terminalAreaRect[1].y0);
 
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
+  // draw keyboard
   for (uint8_t i = 0; i < COUNT(terminalKey); i++)
   {
     terminalReDrawButton(i, false);
@@ -733,7 +743,7 @@ void menuTerminal(void)
       cursorX = CURSOR_START_X;
       cursorY = CURSOR_START_Y;
 
-      GUI_SetBkColor(infoSettings.marlin_mode_bg_color);
+      GUI_SetBkColor(TERM_BG_COLOR);
 
       GUI_ClearRect(CURSOR_START_X, CURSOR_START_Y, CURSOR_END_X, CURSOR_END_Y);
 
@@ -777,7 +787,7 @@ void menuTerminal(void)
           cursorX = CURSOR_START_X;
           cursorY = CURSOR_START_Y;
 
-          GUI_SetBkColor(infoSettings.marlin_mode_bg_color);
+          GUI_SetBkColor(TERM_BG_COLOR);
 
           GUI_ClearRect(CURSOR_START_X, CURSOR_START_Y, CURSOR_END_X, CURSOR_END_Y);
 
@@ -786,8 +796,8 @@ void menuTerminal(void)
           terminalDrawPage(pageNum);
         }
 
-        GUI_SetColor(infoSettings.marlin_mode_font_color);
-        GUI_SetBkColor(infoSettings.marlin_mode_bg_color);
+        GUI_SetColor(TERM_FONT_COLOR);
+        GUI_SetBkColor(TERM_BG_COLOR);
 
         GUI_DispOne(cursorX, cursorY, (u8 *) &terminalBuf[lastTerminalIndex]);
 
