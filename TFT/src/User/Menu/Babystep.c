@@ -77,7 +77,7 @@ void menuBabystep(void)
 
   KEY_VALUES key_num = KEY_IDLE;
   float now_babystep, babystep, orig_babystep;
-  float now_z_offset, z_offset, orig_z_offset;
+  float now_z_offset, z_offset;
   float unit;
   bool force_z_offset;
   float (* offsetGetValue)(void);                          // get current Z offset
@@ -95,7 +95,7 @@ void menuBabystep(void)
   }
 
   now_babystep = babystep = orig_babystep = babystepGetValue();
-  now_z_offset = z_offset = orig_z_offset = offsetGetValue();
+  now_z_offset = z_offset = offsetGetValue();
   force_z_offset = false;
 
   if (infoMachineSettings.EEPROM == 1)
@@ -118,30 +118,6 @@ void menuBabystep(void)
     unit = babystep_unit[curUnit];
 
     babystep = babystepGetValue();                         // always load current babystep
-    z_offset = offsetGetValue();                           // always load current Z offset
-
-    if (z_offset != orig_z_offset || (orig_babystep - 0.005f <= babystep && babystep <= orig_babystep + 0.005f))
-    {
-      // if current Z offset is changed applying babystep changes (e.g. BABYSTEP_ZPROBE_OFFSET is set in Marlin FW)
-      // or babystep is almost the same as the initial one,
-      // we don't force Z offset change
-      orig_babystep = babystep;
-
-      if (force_z_offset)                                  // redraw in case force_z_offset was previosly set to true
-      {
-        force_z_offset = false;
-
-        babyReDraw(now_babystep, now_z_offset, force_z_offset, true);
-      }
-    }
-    else
-    {
-      // if current Z offset is not changed applying babystep changes (e.g. no BABYSTEP_ZPROBE_OFFSET is set in Marlin FW),
-      // we force Z offset change
-      z_offset += babystep - orig_babystep;
-
-      force_z_offset = true;
-    }
 
     key_num = menuKeyGetValue();
     switch (key_num)
@@ -197,11 +173,31 @@ void menuBabystep(void)
         break;
     }
 
+    z_offset = offsetGetValue();                           // always load current Z offset
+
     if (now_babystep != babystep || now_z_offset != z_offset)
     {
+      if (now_z_offset != z_offset || (orig_babystep - 0.005f <= babystep && babystep <= orig_babystep + 0.005f))
+      {
+        // if current Z offset is changed applying babystep changes (e.g. BABYSTEP_ZPROBE_OFFSET is set in Marlin FW)
+        // or babystep is almost the same as the initial one,
+        // we don't force Z offset change
+        now_z_offset = z_offset;
+        orig_babystep = babystep;
+
+        force_z_offset = false;
+      }
+      else
+      {
+        // if current Z offset is not changed applying babystep changes (e.g. no BABYSTEP_ZPROBE_OFFSET is set in Marlin FW),
+        // we force Z offset change
+        z_offset += babystep - orig_babystep;
+
+        force_z_offset = true;
+      }
+
       now_babystep = babystep;
-      now_z_offset = z_offset;
-      babyReDraw(now_babystep, now_z_offset, force_z_offset, true);
+      babyReDraw(now_babystep, z_offset, force_z_offset, true);
     }
 
     loopProcess();
