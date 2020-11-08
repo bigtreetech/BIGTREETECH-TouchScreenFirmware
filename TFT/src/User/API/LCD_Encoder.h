@@ -1,5 +1,4 @@
-#ifndef _LCD_ENCODER_H_
-#define _LCD_ENCODER_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -41,6 +40,4 @@ void sendEncoder(uint8_t num);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

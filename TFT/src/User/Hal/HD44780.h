@@ -1,5 +1,4 @@
-#ifndef _HD44780_H
-#define _HD44780_H
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -15,6 +14,4 @@ bool HD44780_getData(uint8_t *data);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

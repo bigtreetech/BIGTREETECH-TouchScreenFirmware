@@ -1,5 +1,4 @@
-#ifndef _SPEED_H_
-#define _SPEED_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -13,6 +12,4 @@ void menuSpeed(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

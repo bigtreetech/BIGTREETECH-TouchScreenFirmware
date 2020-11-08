@@ -1,5 +1,4 @@
-#ifndef _LANGUAGE_TR_H_
-#define _LANGUAGE_TR_H_
+#pragma once
 
     #define STRING_LANGUAGE               "Türkçe"
     #define STRING_HEAT                   "Isıt"
@@ -278,5 +277,3 @@
     #define STRING_MESH_EDITOR            "Mesh edit"
     #define STRING_MESH_TUNER             "Mesh tuner"
     #define STRING_CASE_LIGHT             "Case light"
-
-#endif

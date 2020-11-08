@@ -1,5 +1,4 @@
-#ifndef _W25QXX_H_
-#define _W25QXX_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -43,6 +42,4 @@ uint32_t W25Qxx_ReadCapacity(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

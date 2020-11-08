@@ -1,5 +1,4 @@
-#ifndef _MAINPAGE_H_
-#define _MAINPAGE_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -10,6 +9,4 @@ void classicMenu(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

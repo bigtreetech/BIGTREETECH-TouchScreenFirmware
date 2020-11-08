@@ -1,5 +1,4 @@
-#ifndef _MACHINEPARAMETERS_H_
-#define _MACHINEPARAMETERS_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -113,6 +112,4 @@ void resetEepromSettings(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

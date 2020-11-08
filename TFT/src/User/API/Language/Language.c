@@ -29,7 +29,7 @@
 #elif DEFAULT_LANGUAGE == SLOVAK
 #include "language_sk.h"
 #elif DEFAULT_LANGUAGE == DUTCH
-#include "language_du.h"
+#include "language_nl.h"
 #elif DEFAULT_LANGUAGE == HUNGARIAN
 #include "language_hu.h"
 #elif DEFAULT_LANGUAGE == TURKISH

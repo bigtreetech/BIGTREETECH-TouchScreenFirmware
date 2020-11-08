@@ -1,5 +1,4 @@
-#ifndef _MOVE_H_
-#define _MOVE_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -11,6 +10,4 @@ void update_gantry(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

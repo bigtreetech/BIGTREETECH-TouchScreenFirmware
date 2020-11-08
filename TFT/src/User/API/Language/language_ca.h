@@ -1,5 +1,4 @@
-#ifndef _LANGUAGE_CA_H_
-#define _LANGUAGE_CA_H_
+#pragma once
 
     #define STRING_LANGUAGE               "Català"
     #define STRING_HEAT                   "Escalfar"
@@ -279,4 +278,3 @@
     #define STRING_MESH_TUNER             "Mesh tuner"
     #define STRING_CASE_LIGHT             "Case light"
 
-#endif

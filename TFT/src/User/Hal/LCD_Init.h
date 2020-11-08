@@ -1,5 +1,4 @@
-#ifndef _LCD_INIT_H_
-#define _LCD_INIT_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -72,6 +71,4 @@ void LCD_Init(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

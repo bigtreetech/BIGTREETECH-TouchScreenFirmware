@@ -1,5 +1,4 @@
-#ifndef _HOME_H_
-#define _HOME_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -9,6 +8,4 @@ void menuHome(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

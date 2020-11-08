@@ -1,5 +1,4 @@
-#ifndef _SETTINGSMENU_H_
-#define _SETTINGSMENU_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -18,6 +17,4 @@ void infoSetMachineType(uint8_t *machine, uint8_t type_len);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

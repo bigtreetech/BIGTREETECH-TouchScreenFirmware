@@ -1,5 +1,4 @@
-#ifndef _SELECTMODE_H_
-#define _SELECTMODE_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -25,6 +24,4 @@ void loopCheckMode(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

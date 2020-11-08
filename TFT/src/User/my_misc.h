@@ -1,5 +1,4 @@
-#ifndef _MY_MISC_H_
-#define _MY_MISC_H_
+#pragma once
 
 #include "stdint.h"
 
@@ -22,5 +21,3 @@ uint8_t string_2_uint8_t(const uint8_t *string);
 uint8_t *uint8_2_string(uint8_t num, uint8_t *string);
 uint32_t string_2_uint32(const uint8_t *string, const uint8_t bytes_num);
 uint8_t *uint32_2_string(uint32_t num, uint8_t bytes_num, uint8_t *string);
-
-#endif

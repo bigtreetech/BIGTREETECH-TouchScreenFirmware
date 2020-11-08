@@ -1,5 +1,4 @@
-#ifndef _POPUP_H_
-#define _POPUP_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -50,6 +49,4 @@ void loopPopup(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

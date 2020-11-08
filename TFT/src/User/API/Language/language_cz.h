@@ -1,5 +1,4 @@
-#ifndef _LANGUAGE_CZ_H_
-#define _LANGUAGE_CZ_H_
+#pragma once
 
     #define STRING_LANGUAGE               "Čeština"
     #define STRING_HEAT                   "Teplota"
@@ -278,5 +277,3 @@
     #define STRING_MESH_EDITOR            "Mesh síť"
     #define STRING_MESH_TUNER             "Mesh nastavení"
     #define STRING_CASE_LIGHT             "Case light"
-
-#endif

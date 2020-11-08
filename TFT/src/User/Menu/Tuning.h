@@ -1,5 +1,4 @@
-#ifndef _TUNING_H_
-#define _TUNING_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -9,6 +8,4 @@ void menuTuning(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

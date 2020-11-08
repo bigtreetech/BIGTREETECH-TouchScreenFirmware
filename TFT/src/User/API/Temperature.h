@@ -1,5 +1,4 @@
-#ifndef _TEMPERATURE_H_
-#define _TEMPERATURE_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -84,6 +83,4 @@ void loopCheckHeater(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

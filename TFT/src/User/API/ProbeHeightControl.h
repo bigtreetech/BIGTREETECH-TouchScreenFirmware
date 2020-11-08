@@ -1,5 +1,4 @@
-#ifndef _PROBE_HEIGHT_CONTROL_H_
-#define _PROBE_HEIGHT_CONTROL_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -31,6 +30,4 @@ void probeHeightQueryCoord(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

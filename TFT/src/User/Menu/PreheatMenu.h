@@ -1,5 +1,4 @@
-#ifndef _PREHEATMENU_H_
-#define _PREHEATMENU_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -18,6 +17,4 @@ void menuPreheat(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

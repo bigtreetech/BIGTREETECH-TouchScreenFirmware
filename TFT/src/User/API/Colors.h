@@ -1,6 +1,4 @@
-
-#ifndef _COLORS_H_
-#define _COLORS_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -55,6 +53,4 @@ extern const LABEL lcd_color_names[LCD_COLOR_COUNT];
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

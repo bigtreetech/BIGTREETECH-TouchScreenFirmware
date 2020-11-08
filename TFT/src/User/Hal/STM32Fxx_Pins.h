@@ -1,5 +1,4 @@
-#ifndef _STM32FXX_PINS_
-#define _STM32FXX_PINS_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -210,6 +209,4 @@ extern "C" {
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

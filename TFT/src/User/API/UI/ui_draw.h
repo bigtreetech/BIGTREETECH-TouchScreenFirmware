@@ -1,5 +1,4 @@
-#ifndef _UI_DRAW_H_
-#define _UI_DRAW_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -37,6 +36,4 @@ void ICON_PressedDisplay(u16 sx,u16 sy, u8 icon);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

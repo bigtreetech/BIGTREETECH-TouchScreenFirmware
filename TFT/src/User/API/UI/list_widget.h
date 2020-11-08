@@ -1,5 +1,4 @@
-#ifndef _LIST_WIDGET_H_
-#define _LIST_WIDGET_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -18,6 +17,4 @@ uint8_t listWidgetGetCurPage(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

@@ -1,5 +1,4 @@
-#ifndef _BABYSTEP_H_
-#define _BABYSTEP_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -11,6 +10,4 @@ void menuBabystep(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

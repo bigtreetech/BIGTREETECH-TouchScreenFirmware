@@ -1,5 +1,4 @@
-#ifndef _ST7920_SIMULATOR_H_
-#define _ST7920_SIMULATOR_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -210,6 +209,4 @@ void ST7920_ParseRecv(uint8_t val);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

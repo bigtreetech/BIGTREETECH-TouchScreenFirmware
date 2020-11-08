@@ -1,5 +1,4 @@
-#ifndef _ABL_H_
-#define _ABL_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -17,6 +16,4 @@ void menuABL(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

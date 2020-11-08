@@ -1,5 +1,4 @@
-#ifndef _FANCONTROL_H_
-#define _FANCONTROL_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -34,6 +33,4 @@ void    fanSpeedQuerySetWait(bool wait);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

@@ -1,5 +1,4 @@
-#ifndef _TOUCH_PROCESS_H_
-#define _TOUCH_PROCESS_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -35,6 +34,4 @@ extern void TS_Get_Coordinates(u16 *x, u16 *y);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

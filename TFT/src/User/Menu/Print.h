@@ -1,5 +1,4 @@
-#ifndef _PRINT_H_
-#define _PRINT_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -12,6 +11,4 @@ void menuPrint(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

@@ -1,5 +1,4 @@
-#ifndef _INTERFACECMD_H_
-#define _INTERFACECMD_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -41,6 +40,4 @@ void sendQueueCmd(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

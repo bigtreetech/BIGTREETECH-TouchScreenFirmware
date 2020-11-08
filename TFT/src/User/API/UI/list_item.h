@@ -1,7 +1,6 @@
 // *List View Mode ** Author: Gurmeet Athwal https://github.com/guruathwal **
 
-#ifndef _LIST_ITEM_H_
-#define _LIST_ITEM_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -66,6 +65,4 @@ GUI_POINT getTextStartPoint(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey, 
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

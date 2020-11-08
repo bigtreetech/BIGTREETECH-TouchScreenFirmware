@@ -1,5 +1,4 @@
-#ifndef _MESH_EDITOR_H_
-#define _MESH_EDITOR_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -16,6 +15,4 @@ void menuMeshEditor(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

@@ -1,5 +1,4 @@
-#ifndef _STATUSSCREEN_H_
-#define _STATUSSCREEN_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -34,6 +33,4 @@ void gantry_inc(int n, float val);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

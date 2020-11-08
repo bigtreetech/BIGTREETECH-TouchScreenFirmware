@@ -1,5 +1,4 @@
-#ifndef _LEVELING_H_
-#define _LEVELING_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -9,6 +8,4 @@ void menuManualLeveling(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

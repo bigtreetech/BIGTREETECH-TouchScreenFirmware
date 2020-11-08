@@ -1,5 +1,4 @@
-#ifndef _BOOT_H_
-#define _BOOT_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -103,6 +102,4 @@ bool bmpDecode(char *bmp, u32 addr);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

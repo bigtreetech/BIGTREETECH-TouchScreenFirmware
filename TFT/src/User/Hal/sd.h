@@ -1,5 +1,4 @@
-#ifndef _SD_H_
-#define _SD_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -63,6 +62,4 @@ u8 SD_GetCSD(u8 *csd_data);                         //Read SD card CSD
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

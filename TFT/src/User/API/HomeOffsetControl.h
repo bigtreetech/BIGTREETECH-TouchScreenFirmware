@@ -1,5 +1,4 @@
-#ifndef _HOME_OFFSET_CONTROL_H_
-#define _HOME_OFFSET_CONTROL_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -13,6 +12,4 @@ float homeOffsetGetValue(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

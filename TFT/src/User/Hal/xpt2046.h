@@ -1,5 +1,4 @@
-#ifndef _XPT2046_H_
-#define _XPT2046_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -14,6 +13,4 @@ uint16_t XPT2046_Repeated_Compare_AD(u8 CMD);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

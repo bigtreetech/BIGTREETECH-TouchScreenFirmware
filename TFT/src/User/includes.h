@@ -1,5 +1,4 @@
-#ifndef _INCLUDES_H_
-#define _INCLUDES_H_
+#pragma once
 
 #include "variants.h"
 
@@ -155,5 +154,3 @@ typedef struct
   u32 PCLK2_Timer_Frequency;
 }CLOCKS;
 extern CLOCKS mcuClocks;
-
-#endif

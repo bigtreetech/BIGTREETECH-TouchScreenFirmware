@@ -1,5 +1,4 @@
-#ifndef _PRINTING_H_
-#define _PRINTING_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -87,6 +86,4 @@ void loopCheckPrinting(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

@@ -1,5 +1,4 @@
-#ifndef _SANITYCHECK_H_
-#define _SANITYCHECK_H_
+#pragma once
 
 #include "includes.h"
 #include "Configuration.h"
@@ -23,7 +22,7 @@
       #ifdef DEFAULT_LCD_MODE
         #undef DEFAULT_LCD_MODE
       #endif
-      #define DEFAULT_LCD_MODE SERIAL_TSC  // Just set hardcoded here. 
+      #define DEFAULT_LCD_MODE SERIAL_TSC  // Just set hardcoded here.
       //#warning "DEFAULT_LCD_MODE supports only SERIAL_TSC. Please update/check your configuration."
     #endif
 #endif
@@ -291,5 +290,3 @@
 #define CUSTOM_GCODE_LABELS    {CUSTOM_0_LABEL, CUSTOM_1_LABEL, CUSTOM_2_LABEL, CUSTOM_3_LABEL, CUSTOM_4_LABEL,\
                               CUSTOM_5_LABEL, CUSTOM_6_LABEL, CUSTOM_7_LABEL, CUSTOM_8_LABEL, CUSTOM_9_LABEL,\
                               CUSTOM_10_LABEL,CUSTOM_11_LABEL,CUSTOM_12_LABEL,CUSTOM_13_LABEL,CUSTOM_14_LABEL }
-
-#endif //_SANITYCHECK_H_

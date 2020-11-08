@@ -1,5 +1,4 @@
-#ifndef _BLTOUCH_H_
-#define _BLTOUCH_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -9,6 +8,4 @@ void menuBLTouch(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

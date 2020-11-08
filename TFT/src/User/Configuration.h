@@ -1,5 +1,5 @@
-#ifndef _CONFIGURATION_H_
-#define _CONFIGURATION_H_
+#pragma once
+
 #define CONFIG_VERSION 20200810
 //===========================================================================
 //============================= General Settings ============================
@@ -495,4 +495,3 @@
 // Cancel G-code - run this G-code after canceling print
 #define PRINT_CANCEL_GCODE "G28 XY R10\n" // Home XY and raise Z 10mm
 
-#endif

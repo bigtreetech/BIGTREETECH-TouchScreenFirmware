@@ -1,5 +1,4 @@
-#ifndef _GUI_H_
-#define _GUI_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -190,6 +189,4 @@ void GUI_DrawWindow(const WINDOW *window, const uint8_t *title, const uint8_t *i
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

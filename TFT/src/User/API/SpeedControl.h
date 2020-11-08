@@ -1,5 +1,4 @@
-#ifndef _SPEEDCONTROL_H_
-#define _SPEEDCONTROL_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -22,6 +21,4 @@ void speedQuery(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

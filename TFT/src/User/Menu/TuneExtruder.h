@@ -1,5 +1,4 @@
-#ifndef _TUNE_EXTRUDER_H
-#define _TUNE_EXTRUDER_H
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -10,6 +9,4 @@ void menuNewExtruderESteps(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

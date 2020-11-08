@@ -1,5 +1,4 @@
-#ifndef _PARSEACK_H_
-#define _PARSEACK_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -54,7 +53,4 @@ void setIgnoreEcho(ECHO_ID msgId, bool state);
 
 #ifdef __cplusplus
 }
-#endif
-
-
 #endif

@@ -28,9 +28,7 @@
 //        These routines are thread safe and reentrant.
 //
 ///////////////////////////////////////////////////////////////////////////////
-
-#ifndef _PRINTF_H_
-#define _PRINTF_H_
+#pragma once
 
 #include <stdarg.h>
 #include <stddef.h>
@@ -137,6 +135,3 @@ int fctprintf(void (*out)(char character, void* arg), void* arg, const char* for
 #ifdef __cplusplus
 }
 #endif
-
-
-#endif  // _PRINTF_H_

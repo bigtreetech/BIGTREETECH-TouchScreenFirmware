@@ -1,5 +1,4 @@
-#ifndef _FEATURE_SETTINGS_H_
-#define _FEATURE_SETTINGS_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -10,6 +9,4 @@ void resetSettings(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

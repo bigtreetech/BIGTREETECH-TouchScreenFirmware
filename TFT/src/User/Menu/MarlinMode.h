@@ -1,5 +1,4 @@
-#ifndef _MARLIN_MODE_H_
-#define _MARLIN_MODE_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -21,6 +20,4 @@ void menuMarlinMode(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

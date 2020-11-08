@@ -1,5 +1,4 @@
-#ifndef _CIRCULAR_QUEUE_H_
-#define _CIRCULAR_QUEUE_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -19,6 +18,4 @@ typedef struct
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

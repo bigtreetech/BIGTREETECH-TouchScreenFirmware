@@ -1,5 +1,4 @@
-#ifndef _FLASHSTORE_H_
-#define _FLASHSTORE_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -18,6 +17,4 @@ bool readIsRestored(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

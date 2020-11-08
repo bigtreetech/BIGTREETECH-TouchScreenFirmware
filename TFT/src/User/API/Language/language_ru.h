@@ -1,5 +1,4 @@
-#ifndef _LANGUAGE_RU_H_
-#define _LANGUAGE_RU_H_
+#pragma once
 
     #define STRING_LANGUAGE               "Русский"
     #define STRING_HEAT                   "Нагрев"
@@ -278,5 +277,3 @@
     #define STRING_MESH_EDITOR            "Сетка ред."
     #define STRING_MESH_TUNER             "Сетка настр."
     #define STRING_CASE_LIGHT             "Case light"
-
-#endif

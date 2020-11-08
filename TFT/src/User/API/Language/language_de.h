@@ -1,5 +1,4 @@
-#ifndef _LANGUAGE_DE_H_
-#define _LANGUAGE_DE_H_
+#pragma once
 
     #define STRING_LANGUAGE               "Deutsch"
     #define STRING_HEAT                   "heizen"
@@ -278,5 +277,3 @@
     #define STRING_MESH_EDITOR            "Mesh edit."
     #define STRING_MESH_TUNER             "Mesh anp."
     #define STRING_CASE_LIGHT             "Case light"
-
-#endif

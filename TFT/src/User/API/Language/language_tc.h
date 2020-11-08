@@ -1,5 +1,4 @@
-#ifndef _LANGUAGE_TC_H_
-#define _LANGUAGE_TC_H_
+#pragma once
 
     #define STRING_LANGUAGE               "正體中文"
     #define STRING_HEAT                   "加熱"
@@ -278,5 +277,3 @@
     #define STRING_MESH_EDITOR            "Mesh edit"
     #define STRING_MESH_TUNER             "Mesh tuner"
     #define STRING_CASE_LIGHT             "Case light"
-
-#endif

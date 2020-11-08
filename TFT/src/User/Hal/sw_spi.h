@@ -1,5 +1,4 @@
-#ifndef _SW_SPI_H_
-#define _SW_SPI_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -36,6 +35,4 @@ void SW_SPI_CS_Set(_SW_SPI *sw_spi, uint8_t level);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

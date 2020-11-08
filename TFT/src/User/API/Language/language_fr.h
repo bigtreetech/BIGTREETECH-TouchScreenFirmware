@@ -1,5 +1,4 @@
-#ifndef _LANGUAGE_FR_H_
-#define _LANGUAGE_FR_H_
+#pragma once
 
     #define STRING_LANGUAGE               "Français"
     #define STRING_HEAT                   "Chauffer"
@@ -278,5 +277,3 @@
     #define STRING_MESH_EDITOR            "Maillage"
     #define STRING_MESH_TUNER             "Edition du maillage"
     #define STRING_CASE_LIGHT             "Case light"
-
-#endif

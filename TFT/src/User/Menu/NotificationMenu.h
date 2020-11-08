@@ -1,5 +1,4 @@
-#ifndef _NOTIFICAITONMENU_H_
-#define _NOTIFICAITONMENU_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -11,6 +10,4 @@ void menuNotification(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

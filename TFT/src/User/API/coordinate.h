@@ -1,5 +1,4 @@
-#ifndef _COORDINATE_H_
-#define _COORDINATE_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -46,6 +45,4 @@ void coordinateQuery(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

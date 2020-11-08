@@ -1,5 +1,4 @@
-#ifndef _LANGUAGE_H_
-#define _LANGUAGE_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -67,6 +66,4 @@ bool loadLabelText(uint8_t * buf, uint16_t index);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

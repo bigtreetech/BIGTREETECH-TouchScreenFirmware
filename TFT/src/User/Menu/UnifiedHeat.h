@@ -1,5 +1,4 @@
-#ifndef _UNIFIEDHEAT_H_
-#define _UNIFIEDHEAT_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -9,6 +8,4 @@ void menuUnifiedHeat(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

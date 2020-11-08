@@ -1,5 +1,4 @@
-#ifndef _CONNECTION_SETTINGS_H_
-#define _CONNECTION_SETTINGS_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -9,6 +8,4 @@ void menuConnectionSettings(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

@@ -1,9 +1,8 @@
 /*-----------------------------------------------------------------------/
 /  Low level disk interface modlue include file   (C)ChaN, 2019          /
 /-----------------------------------------------------------------------*/
+#pragma once
 
-#ifndef _DISKIO_DEFINED
-#define _DISKIO_DEFINED
 
 #ifdef __cplusplus
 extern "C" {
@@ -78,6 +77,4 @@ DRESULT disk_ioctl (BYTE pdrv, BYTE cmd, void* buff);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

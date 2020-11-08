@@ -1,5 +1,4 @@
-#ifndef _HD44780_SIMULATOR_H_
-#define _HD44780_SIMULATOR_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -10,9 +9,9 @@ extern "C" {
 
 #define XROWS 20
 #define YROWS 4
-#define FONT_PIXEL  (MIN(LCD_WIDTH/XROWS/BYTE_WIDTH,LCD_HEIGHT/YROWS/BYTE_HEIGHT)) 
+#define FONT_PIXEL  (MIN(LCD_WIDTH/XROWS/BYTE_WIDTH,LCD_HEIGHT/YROWS/BYTE_HEIGHT))
 #define BITMAP_PIXEL (MIN(LCD_WIDTH/XROWS/6,LCD_HEIGHT/YROWS/9))
-#define XSTART ((LCD_WIDTH - FONT_PIXEL*XROWS*BYTE_WIDTH) / 2)  
+#define XSTART ((LCD_WIDTH - FONT_PIXEL*XROWS*BYTE_WIDTH) / 2)
 #define YSTART ((LCD_HEIGHT - FONT_PIXEL*YROWS*BYTE_HEIGHT) / 2)
 #define YOFFSET  (BYTE_HEIGHT*FONT_PIXEL-9*BITMAP_PIXEL)
 
@@ -175,6 +174,4 @@ void HD44780_ParseRecv(uint8_t val);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

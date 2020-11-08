@@ -1,5 +1,4 @@
-#ifndef _sequential_mode_H_
-#define _sequential_mode_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -9,6 +8,4 @@ void setSequentialModeColor(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

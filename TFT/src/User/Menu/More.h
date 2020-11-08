@@ -1,5 +1,4 @@
-#ifndef _MORE_H_
-#define _MORE_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -9,6 +8,4 @@ void menuMore(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

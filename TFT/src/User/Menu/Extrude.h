@@ -1,5 +1,4 @@
-#ifndef _EXTRUDE_H_
-#define _EXTRUDE_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -12,6 +11,4 @@ void menuExtrude(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

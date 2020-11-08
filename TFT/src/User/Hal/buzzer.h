@@ -1,5 +1,4 @@
-#ifndef _BUZZER_H_
-#define _BUZZER_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -44,6 +43,4 @@ void loopBuzzer(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

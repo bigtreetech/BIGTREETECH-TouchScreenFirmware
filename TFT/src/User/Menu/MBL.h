@@ -1,5 +1,4 @@
-#ifndef _MBL_H_
-#define _MBL_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -14,6 +13,4 @@ void menuMBL(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

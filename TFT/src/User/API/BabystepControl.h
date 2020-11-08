@@ -1,5 +1,4 @@
-#ifndef _BABYSTEP_CONTROL_H_
-#define _BABYSTEP_CONTROL_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -27,6 +26,4 @@ float babystepUpdateValueByEncoder(float unit, int8_t direction);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

@@ -1,5 +1,4 @@
-#ifndef _HEAT_H_
-#define _HEAT_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -16,6 +15,4 @@ void heatSetCurrentIndex(uint8_t index);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

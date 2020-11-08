@@ -1,5 +1,4 @@
-#ifndef _MODE_H_
-#define _MODE_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -12,6 +11,4 @@ void Serial_ReSourceInit(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

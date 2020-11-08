@@ -1,5 +1,4 @@
-#ifndef _FAN_H_
-#define _FAN_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -9,6 +8,4 @@ void menuFan(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

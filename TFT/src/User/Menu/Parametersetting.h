@@ -1,5 +1,4 @@
-#ifndef _PARAMETERSETTING_H_
-#define _PARAMETERSETTING_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -20,6 +19,4 @@ int16_t drawTemperatureStatus(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

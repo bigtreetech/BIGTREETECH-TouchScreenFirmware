@@ -1,5 +1,4 @@
-#ifndef _UTF8_DECODE_H_
-#define _UTF8_DECODE_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -49,6 +48,4 @@ uint16_t GUI_StrPixelWidth_label(int16_t index);
                               default: GUI_StrPixelWidth_label)(X)
 #ifdef __cplusplus
 }
-#endif
-
 #endif

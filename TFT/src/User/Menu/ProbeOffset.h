@@ -1,5 +1,4 @@
-#ifndef _PROBE_OFFSET_H_
-#define _PROBE_OFFSET_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -9,6 +8,4 @@ void menuProbeOffset(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

@@ -1,5 +1,4 @@
-#ifndef _PID_H_
-#define _PID_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -14,6 +13,4 @@ void menuPid(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

@@ -1,5 +1,4 @@
-#ifndef _UNIFIEDMOVE_H_
-#define _UNIFIEDMOVE_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -9,6 +8,4 @@ void menuUnifiedMove(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

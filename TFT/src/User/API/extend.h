@@ -1,5 +1,4 @@
-#ifndef _EXTEND_H_
-#define _EXTEND_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -24,6 +23,4 @@ void loopFrontEndFILRunoutDetect(void);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

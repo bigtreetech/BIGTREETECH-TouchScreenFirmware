@@ -1,5 +1,4 @@
-#ifndef _POWERFAILED_H_
-#define _POWERFAILED_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -40,6 +39,4 @@ bool powerFailedlSeek(FIL* fp);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

@@ -1,5 +1,4 @@
-#ifndef _SEND_GCODE_H_
-#define _SEND_GCODE_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -17,6 +16,4 @@ void sendGcodeTerminalCache(char *stream, TERMINAL_SRC src);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

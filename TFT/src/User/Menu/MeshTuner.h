@@ -1,5 +1,4 @@
-#ifndef _MESH_TUNER_H_
-#define _MESH_TUNER_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -11,6 +10,4 @@ float menuMeshTuner(uint16_t col, uint16_t row, float value);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

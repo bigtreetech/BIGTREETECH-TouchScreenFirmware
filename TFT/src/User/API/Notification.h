@@ -1,5 +1,4 @@
-#ifndef _NOTIFICATION_H_
-#define _NOTIFICATION_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -46,6 +45,4 @@ void setNotificationHandler(void (*handler)());
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

@@ -17,7 +17,7 @@
 / by use of this software.
 /
 /----------------------------------------------------------------------------*/
-
+#pragma once
 
 #ifndef FF_DEFINED
 #define FF_DEFINED	86606	/* Revision ID */

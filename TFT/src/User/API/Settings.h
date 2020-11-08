@@ -1,5 +1,4 @@
-#ifndef _SETTINGS_H_
-#define _SETTINGS_H_
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -240,6 +239,4 @@ bool getFlashSignStatus(int index);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif
