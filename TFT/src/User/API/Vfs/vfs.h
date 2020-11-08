@@ -1,5 +1,4 @@
-#ifndef _VFS_H_
-#define _VFS_H_
+#pragma once
 
 #include "stdint.h"
 #include "stdbool.h"
@@ -41,5 +40,3 @@ bool IsRootDir(void);
 
 bool isVolumeExist(uint8_t src);
 void loopVolumeSource(void);
-
-#endif
