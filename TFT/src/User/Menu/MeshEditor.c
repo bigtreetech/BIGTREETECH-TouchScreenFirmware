@@ -8,7 +8,7 @@
 
 // colors
 #define VALUE_FONT_COLOR   infoSettings.font_color
-#define VALUE_BG_COLOR     infoSettings.status_xyz_bg_color
+#define VALUE_BG_COLOR     infoSettings.list_button_color
 #define VALUE_BORDER_COLOR 0x4b0d
 
 typedef struct
@@ -630,6 +630,7 @@ void meshKeyPress(u8 index, u8 isPressed)
 
   GUI_DrawRect(meshKeyRect[index].x0 + 2, meshKeyRect[index].y0 + 2, meshKeyRect[index].x1 - 2, meshKeyRect[index].y1 - 2);
 
+  // restore default font color
   GUI_SetColor(infoSettings.font_color);
 }
 

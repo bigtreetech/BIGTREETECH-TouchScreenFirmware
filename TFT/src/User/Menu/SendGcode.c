@@ -17,10 +17,15 @@ typedef struct
 } TERMINAL_PAGE;
 
 // colors
-#if TERMINAL_ALTERNATIVE_KEYBOARD_COLOR_LAYOUT == 0
+#if TERMINAL_KEYBOARD_COLOR_LAYOUT == 0
   #define KEY_FONT_COLOR     infoSettings.font_color
   #define KEY_BG_COLOR       infoSettings.bg_color
   #define KEY_BORDER_COLOR   infoSettings.list_border_color
+  #define KEY_BORDER_COLOR_2 DARKGRAY
+#elif TERMINAL_KEYBOARD_COLOR_LAYOUT == 1
+  #define KEY_FONT_COLOR     infoSettings.font_color
+  #define KEY_BG_COLOR       infoSettings.list_button_color
+  #define KEY_BORDER_COLOR   infoSettings.bg_color
   #define KEY_BORDER_COLOR_2 DARKGRAY
 #else
   #define KEY_FONT_COLOR     BLACK
@@ -306,12 +311,21 @@ const char * const gcodeKey[][GKEY_KEY_NUM] = {
     "7", "8", "9", "E", "F", "R", "Q",
     ".", "0", "-", "~", "I", "J", "P",
 #else
+  #if TERMINAL_KEYBOARD_QWERTY_LAYOUT == 1
+    "\\","|", "!", "\"","$", "%", "&", "/", "=", "?",
+    "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+    "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P",
+    "A", "S", "D", "F", "G", "H", "J", "K", "L", "'",
+    "Z", "X", "C", "V", "B", "N", "M", ",", ".", ";",
+    ":", "_", "@", "#", "~", "-", "+", "*", "(", ")", 
+  #else
     "1", "2", "3", "A", "B", "C", "D", "E", "F", "G",
     "4", "5", "6", "H", "I", "J", "K", "L", "M", "N",
     "7", "8", "9", "O", "P", "Q", "R", "S", "T", "U",
-    ".", "0", "-", "~", "V", "W", "X", "Y", "Z",  "",
+    ".", "0", "-", "~", "V", "W", "X", "Y", "Z", "'",
     "+", "*", "?", "!", "#", "&", "$", ",", ";", ":",
-    "/", "=", "(", ")", "@", "_", "%", "|", "\"","'",
+    "/", "=", "(", ")", "@", "_", "%", "|", "\"","\\",
+  #endif
 #endif
 
 #if GKEY_COL_NUM < LAYOUT_3_COL_NUM
@@ -761,7 +775,7 @@ void menuTerminal(void)
 
       GUI_ClearRect(CURSOR_START_X, CURSOR_START_Y, CURSOR_END_X, CURSOR_END_Y);
 
-      sprintf(pageNum, "%d/%d", ((terminal_page.pageTail - terminal_page.pageHead) - terminal_page.pageIndex) + 1, (terminal_page.pageTail - terminal_page.pageHead) + 1);
+      sprintf(pageNum, "%d/%d", abs(((terminal_page.pageTail - terminal_page.pageHead) - terminal_page.pageIndex) + 1), abs((terminal_page.pageTail - terminal_page.pageHead) + 1));
 
       terminalDrawPage(pageNum);
     }
@@ -805,7 +819,7 @@ void menuTerminal(void)
 
           GUI_ClearRect(CURSOR_START_X, CURSOR_START_Y, CURSOR_END_X, CURSOR_END_Y);
 
-          sprintf(pageNum, "%d/%d", ((terminal_page.pageTail - terminal_page.pageHead) - terminal_page.pageIndex) + 1, (terminal_page.pageTail - terminal_page.pageHead) + 1);
+          sprintf(pageNum, "%d/%d", abs(((terminal_page.pageTail - terminal_page.pageHead) - terminal_page.pageIndex) + 1), abs((terminal_page.pageTail - terminal_page.pageHead) + 1));
 
           terminalDrawPage(pageNum);
         }

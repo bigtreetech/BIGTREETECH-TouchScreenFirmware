@@ -133,7 +133,33 @@
   #endif
 #endif
 #ifndef MESH_LEFT_KEYBOARD
-    #define MESH_LEFT_KEYBOARD 1
+    #define MESH_LEFT_KEYBOARD 0
+#endif
+
+#ifdef TERMINAL_KEYBOARD_COLOR_LAYOUT
+  #if TERMINAL_KEYBOARD_COLOR_LAYOUT > 2
+    #error "TERMINAL_KEYBOARD_COLOR_LAYOUT cannot be greater than 2"
+  #endif
+
+  #if TERMINAL_KEYBOARD_COLOR_LAYOUT < 0
+    #error "TERMINAL_KEYBOARD_COLOR_LAYOUT cannot be less than 0"
+  #endif
+#endif
+#ifndef TERMINAL_KEYBOARD_COLOR_LAYOUT
+    #define TERMINAL_KEYBOARD_COLOR_LAYOUT 0
+#endif
+
+#ifdef TERMINAL_KEYBOARD_QWERTY_LAYOUT
+  #if TERMINAL_KEYBOARD_QWERTY_LAYOUT > 1
+    #error "TERMINAL_KEYBOARD_QWERTY_LAYOUT cannot be greater than 1"
+  #endif
+
+  #if TERMINAL_KEYBOARD_QWERTY_LAYOUT < 0
+    #error "TERMINAL_KEYBOARD_QWERTY_LAYOUT cannot be less than 0"
+  #endif
+#endif
+#ifndef TERMINAL_KEYBOARD_QWERTY_LAYOUT
+    #define TERMINAL_KEYBOARD_QWERTY_LAYOUT 1
 #endif
 
 #ifdef CANCEL_PRINT_GCODE
