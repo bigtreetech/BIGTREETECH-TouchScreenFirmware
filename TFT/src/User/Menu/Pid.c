@@ -170,7 +170,7 @@ void pidStart(void)
   pidUpdateCounter();                                                          // update the number of set temperatures (number of PID processes to execute)
   pidTimeout = OS_GetTimeMs() + PID_PROCESS_TIMEOUT;                           // set timeout for overall PID process
 
-  mustStoreCmd("M150 R255 U0 B0\n");                                           // set LED light to RED
+  mustStoreCmd("M150 R255 U0 B0 P255\n");                                           // set LED light to RED
   #ifdef LED_COLOR_PIN
     #ifdef LCD_LED_PWM_CHANNEL
       WS2812_Send_DAT(LED_RED);                            // Set encoder LED to GREEN
@@ -189,7 +189,7 @@ void pidStart(void)
   }
 
   mustStoreCmd("M107\n");                                                      // stop fan
-  mustStoreCmd("M150 R0 U255 B0\n");                                           // set LED light to GREEN
+  mustStoreCmd("M150 R0 U255 B0 P255\n");                                           // set LED light to GREEN
 
   infoMenu.menu[++infoMenu.cur] = menuPidWait;
 }
