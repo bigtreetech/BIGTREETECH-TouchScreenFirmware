@@ -77,7 +77,7 @@ void menuBabystep(void)
 
   KEY_VALUES key_num = KEY_IDLE;
   float now_babystep, babystep, orig_babystep;
-  float now_z_offset, z_offset;
+  float now_z_offset, z_offset, orig_z_offset;
   float unit;
   bool force_z_offset;
   float (* offsetGetValue)(void);                          // get current Z offset
@@ -95,7 +95,7 @@ void menuBabystep(void)
   }
 
   now_babystep = babystep = orig_babystep = babystepGetValue();
-  now_z_offset = z_offset = offsetGetValue();
+  now_z_offset = z_offset = orig_z_offset = offsetGetValue();
   force_z_offset = false;
 
   if (infoMachineSettings.EEPROM == 1)
@@ -183,11 +183,10 @@ void menuBabystep(void)
         // or babystep is almost the same as the initial one,
         // we don't force Z offset change
         now_z_offset = z_offset;
-        orig_babystep = babystep;
 
         force_z_offset = false;
       }
-      else
+      else if (orig_z_offset == z_offset)
       {
         // if current Z offset is not changed applying babystep changes (e.g. no BABYSTEP_ZPROBE_OFFSET is set in Marlin FW),
         // we force Z offset change
