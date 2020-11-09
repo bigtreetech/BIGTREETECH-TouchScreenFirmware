@@ -7,6 +7,7 @@ bool freshboot = true;
 void Serial_ReSourceDeInit(void)
 {
   if (!serialHasBeenInitialized) return;
+
   serialHasBeenInitialized = false;
   Serial_DeInit();
 }
@@ -14,6 +15,7 @@ void Serial_ReSourceDeInit(void)
 void Serial_ReSourceInit(void)
 {
   if (serialHasBeenInitialized) return;
+
   serialHasBeenInitialized = true;
 
   memset(&infoHost, 0, sizeof(infoHost));
@@ -44,9 +46,13 @@ void infoMenuSelect(void)
       #endif
       GUI_RestoreColorDefault();
       if(infoSettings.unified_menu == 1) //if Unified menu is selected
+      {
         infoMenu.menu[infoMenu.cur] = menuStatus; //status screen as default screen on boot
+      }
       else
+      {
         infoMenu.menu[infoMenu.cur] = classicMenu;   // classic UI
+      }
 
       #ifdef SHOW_BTT_BOOTSCREEN
         if (freshboot)

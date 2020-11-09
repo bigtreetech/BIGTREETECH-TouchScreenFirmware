@@ -12,6 +12,7 @@ void LCD_LED_On()
     GPIO_SetLevel(LCD_LED_PIN, 1);
   #endif
 }
+
 void LCD_LED_Off()
 {
   #ifdef LCD_LED_PWM_CHANNEL
@@ -64,7 +65,9 @@ const uint32_t LCD_DIM_IDLE_TIME[ITEM_SECONDS_NUM] = {
 void loopDimTimer(void)
 {
   if (infoSettings.lcd_idle_timer == LCD_DIM_OFF)
+  {
     return;
+  }
 
   if (isPress()
     #if LCD_ENCODER_SUPPORT
@@ -88,7 +91,9 @@ void loopDimTimer(void)
   else
   {
     if (OS_GetTimeMs() - lcd_dim.idle_ms < (LCD_DIM_IDLE_TIME[infoSettings.lcd_idle_timer] * 1000))
+    {
       return;
+    }
 
     if (!lcd_dim.dimmed)
     {

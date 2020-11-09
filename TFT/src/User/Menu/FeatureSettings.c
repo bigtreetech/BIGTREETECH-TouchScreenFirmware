@@ -245,7 +245,9 @@ void updateFeatureSettings(uint8_t key_val)
       {
         infoSettings.lcd_brightness = (infoSettings.lcd_brightness + 1) % ITEM_BRIGHTNESS_NUM;
         if(infoSettings.lcd_brightness == 0)
+        {
           infoSettings.lcd_brightness = 1; //In Normal it should not be off. Set back to 5%
+        }
 
         char tempstr[8];
         sprintf(tempstr, (char *)textSelect(LABEL_PERCENT_VALUE), LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
@@ -296,7 +298,8 @@ void updateFeatureSettings(uint8_t key_val)
 //
 //load values on page change and reload
 //
-void loadFeatureSettings(){
+void loadFeatureSettings()
+{
   for (uint8_t i = 0; i < LISTITEM_PER_PAGE; i++)
   {
     uint8_t item_index = fe_cur_page * LISTITEM_PER_PAGE + i;
@@ -428,11 +431,13 @@ void loadFeatureSettings(){
   }
   else
   {
-    if(fe_cur_page == 0){
+    if(fe_cur_page == 0)
+    {
       featureSettingsItems.items[5].icon = ICONCHAR_BACKGROUND;
       featureSettingsItems.items[6].icon = ICONCHAR_PAGEDOWN;
     }
-    else if(fe_cur_page == (FE_PAGE_COUNT-1)){
+    else if(fe_cur_page == (FE_PAGE_COUNT-1))
+    {
       featureSettingsItems.items[5].icon = ICONCHAR_PAGEUP;
       featureSettingsItems.items[6].icon = ICONCHAR_BACKGROUND;
     }
@@ -461,8 +466,10 @@ void menuFeatureSettings(void)
     switch (key_num)
     {
     case KEY_ICON_5:
-      if(FE_PAGE_COUNT > 1){
-        if (fe_cur_page > 0){
+      if(FE_PAGE_COUNT > 1)
+      {
+        if (fe_cur_page > 0)
+        {
           fe_cur_page--;
           loadFeatureSettings();
           menuRefreshListPage();
@@ -471,8 +478,10 @@ void menuFeatureSettings(void)
       break;
 
     case KEY_ICON_6:
-      if(FE_PAGE_COUNT > 1){
-        if (fe_cur_page < FE_PAGE_COUNT - 1){
+      if(FE_PAGE_COUNT > 1)
+      {
+        if (fe_cur_page < FE_PAGE_COUNT - 1)
+        {
           fe_cur_page++;
           loadFeatureSettings();
           menuRefreshListPage();
@@ -485,9 +494,10 @@ void menuFeatureSettings(void)
       infoMenu.cur--;
       break;
     default:
-      if(key_num < LISTITEM_PER_PAGE){
-      updateFeatureSettings(key_num);
-      menuDrawListItem(&featureSettingsItems.items[key_num],key_num);
+      if(key_num < LISTITEM_PER_PAGE)
+      {
+        updateFeatureSettings(key_num);
+        menuDrawListItem(&featureSettingsItems.items[key_num],key_num);
       }
       break;
     }

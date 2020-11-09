@@ -127,7 +127,8 @@ void sendPrintCodes(uint8_t index)
   }
 }
 
-void setM0Pause(bool m0_pause){
+void setM0Pause(bool m0_pause)
+{
   infoPrinting.m0_pause = m0_pause;
 }
 
@@ -143,9 +144,12 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
   {
     case BOARD_SD:
       infoPrinting.pause = is_pause;
-      if (is_pause){
+      if (is_pause)
+      {
         request_M25();
-      } else {
+      }
+      else
+      {
         request_M24(0);
       }
       break;
@@ -153,8 +157,11 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
     case TFT_UDISK:
     case TFT_SD:
       infoPrinting.pause = is_pause;
-      if(infoPrinting.pause == true && is_m0pause == false){
-      while (infoCmd.count != 0) {loopProcess();}
+      if(infoPrinting.pause == true && is_m0pause == false)
+      {
+        while (infoCmd.count != 0) {
+          loopProcess();
+        }
       }
 
       bool isCoorRelative = coorGetRelative();
@@ -169,7 +176,7 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
         setM0Pause(is_m0pause);
         popupReminder(DIALOG_TYPE_ALERT, LABEL_PAUSE, LABEL_PAUSE);
         break;
-        }
+      }
 
         coordinateGetAll(&tmp);
         if (isCoorRelative == true)     mustStoreCmd("G90\n");
@@ -242,7 +249,8 @@ void endPrinting(void)
   infoPrinting.printing = infoPrinting.pause = false;
   powerFailedClose();
   powerFailedDelete();
-  if(infoSettings.send_end_gcode == 1){
+  if(infoSettings.send_end_gcode == 1)
+  {
     sendPrintCodes(1);
   }
 }

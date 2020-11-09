@@ -238,38 +238,50 @@ char * IconChar(uint8_t sel)
   return (char *)GET_ICONCHAR[sel];
 }
 
-void setDynamicLabel(uint8_t i, char *label){
+void setDynamicLabel(uint8_t i, char *label)
+{
   dynamic_label[i] = label;
 }
 
 // get dynamic text label ( i : index of the label position)
-char * getDynamicLabel(uint8_t i){
+char * getDynamicLabel(uint8_t i)
+{
   return dynamic_label[i];
 }
 
 // save dynamic text value (upto 7 characters) ( i : index of the text value position, txt: char * to the text value)
-void setDynamicTextValue(uint8_t i, char *txt){
+void setDynamicTextValue(uint8_t i, char *txt)
+{
   //dynamic_text_value[i] = txt;
   strcpy(dynamic_text_value[i],txt);
 }
 
 // get dynamic text value ( i : index of the text value position)
-char * getDynamicTextValue(uint8_t i){
+char * getDynamicTextValue(uint8_t i)
+{
   return dynamic_text_value[i];
 }
 
 // save dynamic value (upto 7 digits) ( i : index of the value position, value:float value)
-void setDynamicValue(uint8_t i,float value){
+void setDynamicValue(uint8_t i,float value)
+{
   if(value < 1.0f)
+  {
     sprintf(dynamic_text_value[i], "%.3f", value);
+  }
   else if (value < 1000.0f)
+  {
     sprintf(dynamic_text_value[i], "%.2f", value);
+  }
   else
+  {
     sprintf(dynamic_text_value[i], "%.1f", value);
+  }
 }
 
 // get the text starting point on screen based on rectangle edges and desired icon position
-GUI_POINT getTextStartPoint(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey, ICON_POS pos, const char * textchar){
+GUI_POINT getTextStartPoint(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey, ICON_POS pos, const char * textchar)
+{
 
   GUI_POINT point_item = {sx, sy};
   uint16_t w = ex- sx;
@@ -333,8 +345,8 @@ GUI_POINT getTextStartPoint(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey, 
 }
 
 //draw icons in item
-void DrawCharIcon(const GUI_RECT * rect,ICON_POS iconalign, uint16_t iconindex,bool drawBgColor, uint16_t btn_color){
-
+void DrawCharIcon(const GUI_RECT * rect,ICON_POS iconalign, uint16_t iconindex,bool drawBgColor, uint16_t btn_color)
+{
       GUI_POINT icon_p = getTextStartPoint(rect->x0, rect->y0, rect->x1,rect->y1,iconalign,GET_ICONCHAR[iconindex]);
       GUI_SetColor(ICON_COLOR[iconindex]);
       if(drawBgColor)
@@ -348,7 +360,8 @@ void DrawCharIcon(const GUI_RECT * rect,ICON_POS iconalign, uint16_t iconindex,b
 }
 
 //draw item pressed feedback
-void DrawListItemPress(const GUI_RECT * rect, bool pressed){
+void DrawListItemPress(const GUI_RECT * rect, bool pressed)
+{
       if (pressed != false)
       {
         GUI_SetColor(WHITE);
@@ -371,7 +384,8 @@ void ListItem_Display(const GUI_RECT* rect, uint8_t position, const LISTITEM * c
   //draw navigation icons
   if (getMenuType() != MENU_TYPE_LISTVIEW) return;
 
-  if(position >= LISTITEM_PER_PAGE){
+  if(position >= LISTITEM_PER_PAGE)
+  {
     if(curitem->icon != ICONCHAR_BACKGROUND)
     {
       if (curitem->icon != ICONCHAR_BLANK)
@@ -397,7 +411,8 @@ void ListItem_Display(const GUI_RECT* rect, uint8_t position, const LISTITEM * c
       GUI_RestoreColorDefault();
   }
   //draw list tiems
-  else if (curitem->icon != ICONCHAR_BACKGROUND){
+  else if (curitem->icon != ICONCHAR_BACKGROUND)
+  {
 
     GUI_POINT pos = getTextStartPoint(rect->x0, rect->y0, rect->x1,rect->y1,LEFT_CENTER,GET_ICONCHAR[curitem->icon]);
     int textarea_width;
@@ -473,15 +488,18 @@ void ListItem_Display(const GUI_RECT* rect, uint8_t position, const LISTITEM * c
 }
 
 //draw title text of list item
-void draw_itemtitle(GUI_POINT pos,LABEL label, uint8_t position, int textarea_width){
+void draw_itemtitle(GUI_POINT pos,LABEL label, uint8_t position, int textarea_width)
+{
   if (label.index != LABEL_BACKGROUND)
   {
     int textarea_width = LISTITEM_WIDTH - (pos.x + 1); //width after removing the width for icon
     if (label.index == LABEL_DYNAMIC)
-    {GUI_DispLenString(pos.x, pos.y, (u8*)getDynamicLabel(position),textarea_width, true);
+    {
+      GUI_DispLenString(pos.x, pos.y, (u8*)getDynamicLabel(position),textarea_width, true);
     }
     else
-    {GUI_DispLenString(pos.x, pos.y, labelGetAddress(&label), textarea_width, true);
+    {
+      GUI_DispLenString(pos.x, pos.y, labelGetAddress(&label), textarea_width, true);
     }
   }
 }

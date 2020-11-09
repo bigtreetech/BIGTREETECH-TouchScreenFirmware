@@ -1,7 +1,7 @@
 #include "sequential_mode.h"
 #include "includes.h"
 
-// Move these into the function as volatile. this way they're only generated when seguentia is activated.
+// Move these into the function as volatile. this way they're only generated when seguential is activated.
 // --> Saving RAM
 uint8_t prevPixelColor = 0;
 uint8_t waitForNext = 0;
@@ -66,6 +66,7 @@ void setSequentialModeColor(void) {
 
       return;
     }
+
     if(finishedPrint)
     {
       // Print is already marked as ready.
@@ -90,6 +91,7 @@ void setSequentialModeColor(void) {
     #ifdef LED_COLOR_PIN
       WS2812_Send_DAT(LED_GREEN);
     #endif
+
     finishedPrint = true;
     return;
 
@@ -126,33 +128,7 @@ void setSequentialModeColor(void) {
     uint16_t hotendCurrentTemp = heatGetCurrentTemp(0);
     uint16_t bedCurrentTemp = heatGetCurrentTemp(BED);
 
-    uint8_t newLedValue = 0;
-    if (hotendTargetTemp > 0 && bedTargetTemp > 0 &&
-        bedCurrentTemp >= bedTargetTemp - 5)
-    {
-      //Only use total temperature when hotend and bed heat up at the same time
-      uint16_t totalTemperature = hotendTargetTemp + bedTargetTemp;
-      newLedValue = map(hotendCurrentTemp + bedCurrentTemp, 0, totalTemperature, 0, 255);
-    }
-    else
-    {
-      if (hotendTargetTemp == 0)
-      {
-        newLedValue = map(bedCurrentTemp, 0, bedTargetTemp, 0, 125);
-      }
-      else
-      {
-        newLedValue = map(hotendCurrentTemp, 0, hotendTargetTemp, 125, 255);
-      }
-    }
-
-    if (!(newLedValue > prevPixelColor))
-    {
-      // Previous led value is the same as the current one.
-      // Rest of the code is not needed to execute.
-      return;
-    }
-
+    //Check if the temperature already reached it's target temperature
     if (hotendTargetTemp > 0 && bedTargetTemp > 0 &&
         hotendCurrentTemp >= hotendTargetTemp - 5 &&
         bedCurrentTemp >= bedTargetTemp - 5)
@@ -178,6 +154,33 @@ void setSequentialModeColor(void) {
 
       //Set the flag heating done to true
       heatingDone = true;
+      return;
+    }
+
+    uint8_t newLedValue = 0;
+    if (hotendTargetTemp > 0 && bedTargetTemp > 0 &&
+        bedCurrentTemp >= bedTargetTemp - 5)
+    {
+      //Only use total temperature when hotend and bed heat up at the same time
+      uint16_t totalTemperature = hotendTargetTemp + bedTargetTemp;
+      newLedValue = map(hotendCurrentTemp + bedCurrentTemp, 0, totalTemperature, 0, 255);
+    }
+    else
+    {
+      if (hotendTargetTemp == 0)
+      {
+        newLedValue = map(bedCurrentTemp, 0, bedTargetTemp, 0, 125);
+      }
+      else
+      {
+        newLedValue = map(hotendCurrentTemp, 0, hotendTargetTemp, 125, 255);
+      }
+    }
+
+    if (!(newLedValue > prevPixelColor))
+    {
+      // Previous led value is the same as the current one.
+      // Rest of the code is not needed to execute.
       return;
     }
 

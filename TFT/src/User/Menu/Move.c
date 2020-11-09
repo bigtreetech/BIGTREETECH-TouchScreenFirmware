@@ -94,19 +94,30 @@ void menuMove(void)
     {{0, 4}, {1, 5}, {2, 6}}
   #endif
     ;
-  if(infoSettings.invert_axis[X_AXIS] != 1){
+  if(infoSettings.invert_axis[X_AXIS] != 1)
+  {
     LOAD_XYZ_LABEL_INDEX(table[X_AXIS][0], INC, table[X_AXIS][1], DEC, X); // table[0] <--> INC(+) table[1] <--> DEC(+) if not inverted
-  } else {
+  }
+  else
+  {
     LOAD_XYZ_LABEL_INDEX(table[X_AXIS][0], DEC, table[X_AXIS][1], INC, X); // table[0] <--> DEC(-) table[1] <--> INC(-) if inverted
   }
-  if(infoSettings.invert_axis[Y_AXIS] != 1){
+
+  if(infoSettings.invert_axis[Y_AXIS] != 1)
+  {
     LOAD_XYZ_LABEL_INDEX(table[Y_AXIS][0], INC, table[Y_AXIS][1], DEC, Y);
-  } else {
+  }
+  else
+  {
     LOAD_XYZ_LABEL_INDEX(table[Y_AXIS][0], DEC, table[Y_AXIS][1], INC, Y);
   }
-  if(infoSettings.invert_axis[Z_AXIS] != 1){
+
+  if(infoSettings.invert_axis[Z_AXIS] != 1)
+  {
     LOAD_XYZ_LABEL_INDEX(table[Z_AXIS][0], INC, table[Z_AXIS][1], DEC, Z);
-  } else {
+  }
+  else
+  {
     LOAD_XYZ_LABEL_INDEX(table[Z_AXIS][0], DEC, table[Z_AXIS][1], INC, Z);
   }
 
@@ -184,7 +195,8 @@ void update_gantry(void)
   }
 }
 
-void drawXYZ(void){
+void drawXYZ(void)
+{
   char tempstr[20];
   if (nowAxis == X_AXIS) GUI_SetColor(INFOBOX_ICON_COLOR);
   sprintf(tempstr, "X:%.2f  ", coordinateGetAxisActual(X_AXIS));

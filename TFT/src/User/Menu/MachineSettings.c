@@ -30,12 +30,14 @@ void loaditemsCustomGcode()
   for (uint32_t i = 0; i < LISTITEM_PER_PAGE; i++)
   {
     uint32_t item_index = gc_cur_page*LISTITEM_PER_PAGE + i;
-    if (item_index < gcode_num){
+    if (item_index < gcode_num)
+    {
       customItems.items[i].icon = ICONCHAR_CODE;
       customItems.items[i].titlelabel.index = LABEL_DYNAMIC;
       customItems.items[i].titlelabel.address = customcodes->name[item_index];
     }
-    else{
+    else
+    {
       customItems.items[i].icon = ICONCHAR_BACKGROUND;
       customItems.items[i].titlelabel.index = LABEL_BACKGROUND;
     }
@@ -48,11 +50,13 @@ void loaditemsCustomGcode()
   }
   else
   {
-    if(gc_cur_page == 0){
+    if(gc_cur_page == 0)
+    {
       customItems.items[5].icon = ICONCHAR_BACKGROUND;
       customItems.items[6].icon = ICONCHAR_PAGEDOWN;
     }
-    else if(gc_cur_page == (gc_page_count-1)){
+    else if(gc_cur_page == (gc_page_count-1))
+    {
       customItems.items[5].icon = ICONCHAR_PAGEUP;
       customItems.items[6].icon = ICONCHAR_BACKGROUND;
     }
@@ -311,7 +315,8 @@ void menuMachineSettings(void)
         break;
 #endif
       case KEY_ICON_6:
-        if (infoMachineSettings.caseLightsBrightness == ENABLED){
+        if (infoMachineSettings.caseLightsBrightness == ENABLED)
+        {
           infoMenu.menu[++infoMenu.cur] = menuCaseLight;
         }
         break;

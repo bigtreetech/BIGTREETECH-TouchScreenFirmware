@@ -152,7 +152,8 @@ USBH_Status USBH_CtlReq     (USB_OTG_CORE_HANDLE *pdev,
   */
 USBH_Status USBH_CtlSendSetup ( USB_OTG_CORE_HANDLE *pdev,
                                 uint8_t *buff,
-                                uint8_t hc_num){
+                                uint8_t hc_num)
+{
   pdev->host.hc[hc_num].ep_is_in = 0;
   pdev->host.hc[hc_num].data_pid = HC_PID_SETUP;
   pdev->host.hc[hc_num].xfer_buff = buff;

@@ -48,7 +48,8 @@ LABEL_PARAMETER_SETTING,
 };
 
 //show menu for selected parameter type
-void menuShowParameter(void){
+void menuShowParameter(void)
+{
   KEY_VALUES key_num = KEY_IDLE;
   PARAMETERS now = infoParameters;
   float oldval[LISTITEM_PER_PAGE];
@@ -140,7 +141,9 @@ void menuShowParameter(void){
       if (key_num < (KEY_VALUES)STEPPER_COUNT)
       {
         if (parameter_menuitems.items[key_num].icon == ICONCHAR_BACKGROUND)
+        {
           break;
+        }
 
         VAL_TYPE v_type = getParameterValType(cur_parameter, key_num);
         //accept negative values only for probe offset
@@ -149,9 +152,13 @@ void menuShowParameter(void){
         float v = getParameter(cur_parameter, key_num);
 
         if (v_type == VAL_TYPE_FLOAT || v_type == VAL_TYPE_NEG_FLOAT)
+        {
           v = numPadFloat(NULL, v, v, negative_val); // parameter is a decimal number
+        }
         else
+        {
           v = (float)numPadInt(NULL, v, v, negative_val); // parameter is an integer
+        }
 
         if (v != getParameter(cur_parameter, key_num))
         {
@@ -178,23 +185,29 @@ void menuShowParameter(void){
 }
 
 //Load main parameter list page
-void loadParameterPage(void){
-for (uint8_t i = 0; i < LISTITEM_PER_PAGE; i++)
+void loadParameterPage(void)
+{
+  for (uint8_t i = 0; i < LISTITEM_PER_PAGE; i++)
   {
     uint8_t item_index = ps_cur_page * LISTITEM_PER_PAGE + i;
     if (item_index < P_ITEMSCOUNT)
     {
       if (infoMachineSettings.EEPROM != 1 && (item_index == P_RESET_SETTINGS || item_index == P_RESTORE_SETTINGS || item_index == P_SAVE_SETTINGS))
+      {
         parameterMainItems.items[i].icon = ICONCHAR_BACKGROUND;
+      }
       else
+      {
         parameterMainItems.items[i] = parametertypes[item_index];
+      }
     }
     else
     {
       parameterMainItems.items[i].icon = ICONCHAR_BACKGROUND;
     }
   }
-// set page up down button according to page count and current page
+
+  // set page up down button according to page count and current page
   if (P_ITEMSCOUNT <= LISTITEM_PER_PAGE)
   {
     parameterMainItems.items[5].icon = ICONCHAR_BACKGROUND;
@@ -202,11 +215,13 @@ for (uint8_t i = 0; i < LISTITEM_PER_PAGE; i++)
   }
   else
   {
-    if(ps_cur_page == 0){
+    if(ps_cur_page == 0)
+    {
       parameterMainItems.items[5].icon = ICONCHAR_BACKGROUND;
       parameterMainItems.items[6].icon = ICONCHAR_PAGEDOWN;
     }
-    else if(ps_cur_page == (total_pages-1)){
+    else if(ps_cur_page == (total_pages-1))
+    {
       parameterMainItems.items[5].icon = ICONCHAR_PAGEUP;
       parameterMainItems.items[6].icon = ICONCHAR_BACKGROUND;
     }
@@ -218,13 +233,18 @@ for (uint8_t i = 0; i < LISTITEM_PER_PAGE; i++)
   }
 }
 
-void menuParameterSettings(void){
+void menuParameterSettings(void)
+{
   KEY_VALUES key_num = KEY_IDLE;
 
   if (infoMachineSettings.EEPROM != 1)
+  {
     total_pages = (P_SAVE_SETTINGS+LISTITEM_PER_PAGE-1)/LISTITEM_PER_PAGE;
+  }
   else
+  {
     total_pages = (P_ITEMSCOUNT+LISTITEM_PER_PAGE-1)/LISTITEM_PER_PAGE;
+  }
 
   loadParameterPage();
   menuDrawListPage(&parameterMainItems);
@@ -360,30 +380,34 @@ void loopTemperatureStatus(void)
   if (update) menuReDrawCurTitle();
 }
 
-int16_t drawTemperatureStatus(void){
-
+int16_t drawTemperatureStatus(void)
+{
   int16_t x_offset = LCD_WIDTH - 10;
   if (!temperatureStatusValid()) return x_offset;
 
   uint8_t tmpHeater[3]; // chamber, bed, hotend
   uint16_t tmpIcon[3];
   uint8_t tmpIndex = 0;
-  if (infoSettings.hotend_count) { // global hotend
+  if (infoSettings.hotend_count) // global hotend
+  {
     tmpIcon[tmpIndex] = ICON_GLOBAL_NOZZLE;
     tmpHeater[tmpIndex++] = heatGetCurrentHotend();
   }
-  if (infoSettings.bed_en) { // global bed
+  if (infoSettings.bed_en) // global bed
+  {
     tmpIcon[tmpIndex] = ICON_GLOBAL_BED;
     tmpHeater[tmpIndex++] = BED;
   }
-  if (infoSettings.chamber_en) { // global chamber
+  if (infoSettings.chamber_en) // global chamber
+  {
     tmpIcon[tmpIndex] = ICON_GLOBAL_CHAMBER;
     tmpHeater[tmpIndex++] = CHAMBER;
   }
 
   uint16_t start_y = (TITLE_END_Y - BYTE_HEIGHT) / 2;
   GUI_SetBkColor(infoSettings.title_bg_color);
-  for(int8_t i = tmpIndex - 1; i >= 0; i--) {
+  for(int8_t i = tmpIndex - 1; i >= 0; i--)
+  {
     char tempstr[10];
     x_offset -= GLOBALICON_INTERVAL;
     GUI_ClearRect(x_offset, start_y, x_offset + GLOBALICON_INTERVAL, start_y + GLOBALICON_HEIGHT);
@@ -398,6 +422,7 @@ int16_t drawTemperatureStatus(void){
     x_offset -= GLOBALICON_WIDTH;
     ICON_ReadDisplay(x_offset, start_y, tmpIcon[i]); // icon
   }
+
   GUI_SetBkColor(infoSettings.bg_color);
   return x_offset;
 }

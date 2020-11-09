@@ -69,7 +69,10 @@ void powerFailedCache(u32 offset)
     infoBreakPoint.relative = coorGetRelative();
     infoBreakPoint.relative_e = eGetRelative();
   }
-  else if (infoBreakPoint.pause) return; // paused and the pause state has been saved
+  else if (infoBreakPoint.pause)
+  {
+    return; // paused and the pause state has been saved
+  }
 
   infoBreakPoint.pause = isPause();
 
@@ -129,7 +132,9 @@ bool powerOffGetData(void)
   for(int8_t i = MAX_HEATER_COUNT - 1; i >= 0; i--)
   {
     if(infoBreakPoint.target[i] != 0)
+    {
       mustStoreCacheCmd("%s S%d\n", heatWaitCmd[i], infoBreakPoint.target[i]);
+    }
   }
 
   for(uint8_t i = 0; i < infoSettings.fan_count; i++)
@@ -145,9 +150,15 @@ bool powerOffGetData(void)
   {
     uint16_t z_raised = 0;
     if(infoSettings.btt_ups == 1)
+    {
         z_raised += infoSettings.powerloss_z_raise;
+    }
+
     if(infoBreakPoint.pause)
+    {
         z_raised += infoSettings.pause_z_raise;
+    }
+
     mustStoreCacheCmd("G92 Z%.3f\n", infoBreakPoint.axis[Z_AXIS] + z_raised);
     mustStoreCacheCmd("G1 Z%.3f\n", infoBreakPoint.axis[Z_AXIS] + infoSettings.powerloss_z_raise);
     if (infoSettings.powerloss_home)

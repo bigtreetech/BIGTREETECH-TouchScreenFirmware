@@ -50,8 +50,8 @@ bool bmpDecode(char *bmp, u32 addr)
     return false;
   }
   f_read(&bmpFile, magic, 2 ,&mybr);
-  if (memcmp(magic, "BM", 2)){
-    f_close(&bmpFile);
+  if (memcmp(magic, "BM", 2))
+{    f_close(&bmpFile);
     bmp_stat = BMP_INVALIDFILE;
     return false;
   }
@@ -66,7 +66,8 @@ bool bmpDecode(char *bmp, u32 addr)
   bmp_size.y = h;
   f_lseek(&bmpFile, 28);
   f_read(&bmpFile, &bpp, sizeof(short),&mybr);
-  if(bpp<24){
+  if(bpp<24)
+  {
     f_close(&bmpFile);
     bmp_stat = BMP_NOT24BIT;
     return false;

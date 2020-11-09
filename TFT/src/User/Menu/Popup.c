@@ -45,14 +45,10 @@ static DIALOG_TYPE popup_type;
 
 void windowReDrawButton(u8 position, u8 pressed)
 {
-  if (position >= buttonNum)
-    return;
-  if (pressed >= 2)
-    return;
-  if (windowButton == NULL)
-    return;
-  if (windowButton->context == NULL)
-    return;
+  if (position >= buttonNum) return;
+  if (pressed >= 2) return;
+  if (windowButton == NULL) return;
+  if (windowButton->context == NULL) return;
 
   GUI_DrawButton(windowButton + position, pressed);
 }
@@ -84,7 +80,9 @@ void popupDrawPage(DIALOG_TYPE type, BUTTON *btn, const uint8_t *title, const ui
     GUI_DrawWindow(&window, title, context, true);
 
     for(u8 i = 0; i < buttonNum; i++)
+    {
       GUI_DrawButton(&windowButton[i], 0);
+    }
   }
   else                                 // draw a window with no buttons bar
   {
@@ -116,7 +114,9 @@ static void menuDialog(void)
     }
 
     if (action_loop != NULL)
+    {
       action_loop();
+    }
 
     loopProcess();
   }
@@ -190,7 +190,9 @@ void _setDialogCancelTextLabel(int16_t index)
 void showDialog(DIALOG_TYPE type, void (*ok_action)(), void (*cancel_action)(), void (*loop_action)())
 {
   if (infoSettings.mode == MARLIN)
+  {
     return;
+  }
 
   popup_redraw = true;
   popup_type = type;
@@ -213,7 +215,9 @@ void showDialog(DIALOG_TYPE type, void (*ok_action)(), void (*cancel_action)(), 
 void loopPopup(void)
 {
   if (popup_redraw == false)
+  {
     return;
+  }
 
   popup_redraw = false;
 

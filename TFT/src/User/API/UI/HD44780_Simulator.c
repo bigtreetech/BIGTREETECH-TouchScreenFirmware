@@ -69,7 +69,7 @@ void HD44780_BI16_SetCGRAMAddress(uint8_t cmd)
 {
   HD44780_reg.bi.cgrama.reg = cmd;
   uint8_t address = HD44780_reg.bi.cgrama.ac;
-  // Set CGRAM address 
+  // Set CGRAM address
   HD44780.y = (address >> 3) & 0x07;
   HD44780.x = 0;
   HD44780_reg.data_type = HD44780_DATA_CGRAM;
@@ -77,22 +77,26 @@ void HD44780_BI16_SetCGRAMAddress(uint8_t cmd)
 //cmd : 1 << 7
 void HD44780_BI17_SetDDRAMAddress(uint8_t cmd)
 {
-  HD44780_reg.bi.ddrama.reg = cmd;            
-  // Set DDRAM address                     
-  // x is 0-20 . y is 0-4                       
-  if(0x80 <= cmd && cmd <= 0x93){                // First line AC range is  80H … 93h
+  HD44780_reg.bi.ddrama.reg = cmd;
+  // Set DDRAM address
+  // x is 0-20 . y is 0-4
+  if(0x80 <= cmd && cmd <= 0x93)                // First line AC range is  80H … 93h
+  {
     HD44780.y = 0;
     HD44780.x = cmd - 0x80;
   }
-  if(0xC0 <= cmd && cmd <= 0xD3){                // Second line AC range is C0H … D3H
+  if(0xC0 <= cmd && cmd <= 0xD3)                // Second line AC range is C0H … D3H
+  {
     HD44780.y = 1;
     HD44780.x = cmd - 0xC0;
   }
-  if(0x94 <= cmd && cmd <= 0xA7){                // Third line AC range is  94H … A7H
+  if(0x94 <= cmd && cmd <= 0xA7)                // Third line AC range is  94H … A7H
+  {
     HD44780.y = 2;
     HD44780.x = cmd - 0x94;
   }
-  if(0xD4 <= cmd && cmd <= 0xE7){                // Fourth line AC range is D4H … E7H
+  if(0xD4 <= cmd && cmd <= 0xE7)                // Fourth line AC range is D4H … E7H
+  {
     HD44780.y = 3;
     HD44780.x = cmd - 0xD4;
   }
@@ -101,19 +105,21 @@ void HD44780_BI17_SetDDRAMAddress(uint8_t cmd)
 
 void HD44780_DrawPixel(int16_t x, int16_t y, bool isForeGround, bool isFont)
 {
-  if(isFont){
-  GUI_FillRectColor(XSTART + FONT_PIXEL * x,
-                    YSTART + FONT_PIXEL * y,
-                    XSTART + FONT_PIXEL * (x+1),
-                    YSTART + FONT_PIXEL * (y+1),
-                    isForeGround ? infoSettings.marlin_mode_font_color : infoSettings.marlin_mode_bg_color);
+  if(isFont)
+  {
+    GUI_FillRectColor(XSTART + FONT_PIXEL * x,
+                      YSTART + FONT_PIXEL * y,
+                      XSTART + FONT_PIXEL * (x+1),
+                      YSTART + FONT_PIXEL * (y+1),
+                      isForeGround ? infoSettings.marlin_mode_font_color : infoSettings.marlin_mode_bg_color);
   }
-  else{
-  GUI_FillRectColor(XSTART + BITMAP_PIXEL * x,
-                    YSTART + YOFFSET + BITMAP_PIXEL * y,
-                    XSTART + BITMAP_PIXEL * (x+1),
-                    YSTART + YOFFSET + BITMAP_PIXEL * (y+1),
-                    isForeGround ? infoSettings.marlin_mode_font_color : infoSettings.marlin_mode_bg_color);
+  else
+  {
+    GUI_FillRectColor(XSTART + BITMAP_PIXEL * x,
+                      YSTART + YOFFSET + BITMAP_PIXEL * y,
+                      XSTART + BITMAP_PIXEL * (x+1),
+                      YSTART + YOFFSET + BITMAP_PIXEL * (y+1),
+                      isForeGround ? infoSettings.marlin_mode_font_color : infoSettings.marlin_mode_bg_color);
   }
 }
 
@@ -121,12 +127,14 @@ void HD44780_DrawPixel(int16_t x, int16_t y, bool isForeGround, bool isFont)
 void HD44780_DispDDRAM(uint8_t data)
 {
   uint16_t i  = 0,
-           ex = 0,  
+           ex = 0,
            ey = 0;
-  if(data < 8){                          // 5*8 bitmap
+  if(data < 8)                          // 5*8 bitmap
+  {
     ex = HD44780.x * 6 + 6;
     ey = HD44780.y * 12 + 8;
-    for(uint16_t y = HD44780.y * 12; y < ey; y++){
+    for(uint16_t y = HD44780.y * 12; y < ey; y++)
+    {
       uint8_t temp = HD44780_CGRAM[data][i++];
       for (uint16_t x = HD44780.x * 6; x < ex; x++) {
         HD44780_DrawPixel(x, y, temp & 0x10, 0);
@@ -135,7 +143,7 @@ void HD44780_DispDDRAM(uint8_t data)
     }
   }
   else{                                   //font
-    if(data < ' ' || data > '~') return;  
+    if(data < ' ' || data > '~') return;
     ex = HD44780.x * BYTE_WIDTH + BYTE_WIDTH-1;
     ey = HD44780.y * BYTE_HEIGHT + BYTE_HEIGHT-1;
     CHAR_INFO info = {.bytes = 0};
@@ -196,7 +204,7 @@ void HD44780_ParseWCmd(uint8_t cmd)
       (*hd44780CmdCallBack[i])(cmd);
       break;
     }
-  } 
+  }
 }
 
 void HD44780_ParseWData(uint8_t data)
@@ -239,7 +247,7 @@ void HD44780_ParseRecv(uint8_t val)
   }
   else
   {
-    HD44780_ParseWData(rcvData);  
+    HD44780_ParseWData(rcvData);
   }
 }
 

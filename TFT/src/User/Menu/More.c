@@ -4,7 +4,9 @@
 void isPauseConfirm(void)
 {
   if(setPrintPause(true,false))
+  {
     infoMenu.menu[infoMenu.cur] = menuExtrude;
+  }
 }
 
 void menuMore(void)

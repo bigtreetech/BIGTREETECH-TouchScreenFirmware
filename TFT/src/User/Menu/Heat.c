@@ -94,6 +94,7 @@ void menuHeat(void)
         do{
           c_heater = (c_heater + 1) % MAX_HEATER_COUNT;
         } while(!heaterIsValid(c_heater));
+
         heatItems.items[key_num] = itemTool[c_heater];
         menuDrawItem(&heatItems.items[key_num], key_num);
         showTemperature(c_heater);
@@ -118,9 +119,13 @@ void menuHeat(void)
           if(encoderPosition)
           {
             if(encoderPosition > 0)
-                heatSetTargetTemp(c_heater, actTarget + item_degree[item_degree_i]);
+            {
+              heatSetTargetTemp(c_heater, actTarget + item_degree[item_degree_i]);
+            }
             if(encoderPosition < 0)
-                heatSetTargetTemp(c_heater, actTarget - item_degree[item_degree_i]);
+            {
+              heatSetTargetTemp(c_heater, actTarget - item_degree[item_degree_i]);
+            }
             encoderPosition = 0;
           }
         #endif
@@ -138,5 +143,7 @@ void menuHeat(void)
 
   // Set slow update time if not waiting for target temperature
   if(heatHasWaiting() == false)
+  {
     heatSetUpdateTime(TEMPERATURE_QUERY_SLOW_DURATION);
+  }
 }

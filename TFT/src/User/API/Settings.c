@@ -148,7 +148,8 @@ void infoSettingsReset(void)
   resetConfig();
 }
 
-void initMachineSetting(void){
+void initMachineSetting(void)
+{
   // some settings are assumes as active unless reported disabled by marlin
   infoMachineSettings.isMarlinFirmware        = -1; // set fimware type to -1 to avoid repeated ABL gcode on mode change
   infoMachineSettings.EEPROM                  = ENABLED;
@@ -202,6 +203,7 @@ void setupMachine(void)
     infoMachineSettings.emergencyParser         = ENABLED;
     infoMachineSettings.autoReportSDStatus      = DISABLED;
   }
+
   if (infoSettings.onboardSD == ENABLED)
   {
     infoMachineSettings.onboard_sd_support = ENABLED;
@@ -210,6 +212,7 @@ void setupMachine(void)
   {
     infoMachineSettings.onboard_sd_support = DISABLED;
   }
+
   if (infoSettings.longFileName == ENABLED)
   {
     infoMachineSettings.long_filename_support = ENABLED;
@@ -239,7 +242,9 @@ void checkflashSign(void)
   bool statusicon = getFlashSignStatus(icon_sign);
 
   if (!statuslang)
+  {
     infoSettings.language = LANG_DEFAULT;
+  }
 
   if (!statusfont || !statusicon || !statusconfig)
   {
@@ -249,27 +254,43 @@ void checkflashSign(void)
 
     ypos += BYTE_HEIGHT;
     if (statusfont)
+    {
       GUI_DispString(10, ypos, (uint8_t *)"Fonts: OK");
+    }
     else
+    {
       GUI_DispString(10, ypos, (uint8_t *)"Fonts: Update required");
+    }
 
     ypos += BYTE_HEIGHT;
     if (statusconfig)
+    {
       GUI_DispString(10, ypos, (uint8_t *)"Config: OK");
+    }
     else
+    {
       GUI_DispString(10, ypos, (uint8_t *)"Config: Update required");
+    }
 
     ypos += BYTE_HEIGHT;
     if (statuslang)
+    {
       GUI_DispString(10, ypos, (uint8_t *)"Language: OK");
+    }
     else
+    {
       GUI_DispString(10, ypos, (uint8_t *)"Language: Update required(Optional)");
+    }
 
     ypos += BYTE_HEIGHT;
     if (statusicon)
+    {
       GUI_DispString(10, ypos, (uint8_t *)"Icons: OK");
+    }
     else
+    {
       GUI_DispString(10, ypos, (uint8_t *)"Icons: Update required");
+    }
 
     ypos += BYTE_HEIGHT;
     GUI_DispStringInRectEOL(10, ypos + 10, LCD_WIDTH, LCD_HEIGHT, (uint8_t *)"Insert the SD card with the required\n"

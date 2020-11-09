@@ -256,7 +256,8 @@ void sendQueueCmd(void)
                 }
               }
             Serial_Puts(SERIAL_PORT_2, "Begin file list\n");
-            if (mountFS() == true && scanPrintFiles() == true){
+            if (mountFS() == true && scanPrintFiles() == true)
+            {
               for (uint16_t i = 0; i < infoFile.f_num; i++) {
                 Serial_Puts(SERIAL_PORT_2,infoFile.file[i]);
                 Serial_Puts(SERIAL_PORT_2,"\n");
@@ -360,17 +361,18 @@ void sendQueueCmd(void)
           {
             if (isPrinting() && !infoHost.printing)
             {
-              if (cmd_seen('C')){
+              if (cmd_seen('C'))
+              {
                 Serial_Puts(SERIAL_PORT_2, "Current file: ");
                 Serial_Puts(SERIAL_PORT_2, infoFile.title);
                 Serial_Puts(SERIAL_PORT_2, ".\n");
               }
-                char buf[55];
-                sprintf(buf, "%s printing byte %d/%d\n",(infoFile.source==TFT_SD)?"TFT SD":"TFT USB", getPrintCur(),getPrintSize());
-                Serial_Puts(SERIAL_PORT_2, buf);
-                Serial_Puts(SERIAL_PORT_2, "ok\n");
-                purgeLastCmd();
-                return;
+              char buf[55];
+              sprintf(buf, "%s printing byte %d/%d\n",(infoFile.source==TFT_SD)?"TFT SD":"TFT USB", getPrintCur(),getPrintSize());
+              Serial_Puts(SERIAL_PORT_2, buf);
+              Serial_Puts(SERIAL_PORT_2, "ok\n");
+              purgeLastCmd();
+              return;
             }
           }
           else
@@ -732,11 +734,13 @@ void sendQueueCmd(void)
         #endif
         case 355: //M355
         {
-          if(cmd_seen('S')) {
+          if(cmd_seen('S'))
+          {
             caseLightSetState(cmd_value() > 0);
             caseLightSendWaiting(false);
           }
-          if(cmd_seen('P')){
+          if(cmd_seen('P'))
+          {
             caseLightSetBrightness(cmd_value());
             caseLightSendWaiting(false);
           }
@@ -889,7 +893,8 @@ void sendQueueCmd(void)
 
   setCurrentAckSrc(infoCmd.queue[infoCmd.index_r].src);
   Serial_Puts(SERIAL_PORT, infoCmd.queue[infoCmd.index_r].gcode);
-  if (avoid_terminal != true){
+  if (avoid_terminal != true)
+  {
     sendGcodeTerminalCache(infoCmd.queue[infoCmd.index_r].gcode, TERMINAL_GCODE);
   }
   purgeLastCmd();

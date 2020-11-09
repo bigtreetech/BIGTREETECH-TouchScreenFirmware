@@ -179,17 +179,25 @@ void menuMBL(void)
       // decrease Z height
       case KEY_ICON_0:
         if (!mblRunning)
+        {
           mblNotifyError();
+        }
         else
+        {
           probeHeightMove(unit, -1);
+        }
         break;
 
       // increase Z height
       case KEY_ICON_3:
         if (!mblRunning)
+        {
           mblNotifyError();
+        }
         else
+        {
           probeHeightMove(unit, 1);
+        }
         break;
 
       // change unit
@@ -204,9 +212,13 @@ void menuMBL(void)
       // reset Z height to 0
       case KEY_ICON_5:
         if (!mblRunning)
+        {
           mblNotifyError();
+        }
         else
+        {
           probeHeightMove(curValue, -1);
+        }
         break;
 
       // start MBL or move to next mesh point
@@ -236,7 +248,9 @@ void menuMBL(void)
 
       case KEY_ICON_7:
         if (mblRunning)
+        {
           mblStop();
+        }
 
         infoMenu.cur--;
         break;
@@ -246,9 +260,13 @@ void menuMBL(void)
           if (encoderPosition)
           {
             if (!mblRunning)
+            {
               mblNotifyError();
+            }
             else
+            {
               probeHeightMove(unit, encoderPosition > 0 ? 1 : -1);
+            }
 
             encoderPosition = 0;
           }

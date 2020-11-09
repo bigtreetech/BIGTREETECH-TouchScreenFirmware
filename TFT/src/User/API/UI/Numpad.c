@@ -50,7 +50,8 @@ void Draw_keyboard(u8 * title, bool NumberOnly, bool negative)
 
     GUI_SetColor(infoSettings.list_border_color);
      //draw button borders
-    for (int i = 0;i<3;i++){
+    for (int i = 0;i<3;i++)
+    {
       GUI_DrawLine(rect_of_numkey[i].x1,rect_of_numkey[i].y0,rect_of_numkey[12+i].x1,rect_of_numkey[12+i].y1);
       GUI_DrawLine(rect_of_numkey[i*4].x0,rect_of_numkey[i*4].y1,rect_of_numkey[3+i*4].x1,rect_of_numkey[3+i*4].y1);
     }
@@ -63,13 +64,19 @@ void Draw_keyboard(u8 * title, bool NumberOnly, bool negative)
     for(uint8_t i=0 ;i<KEY_NUM ;i++)
     {
       if( !(i == NUM_KEY_DEC || i == NUM_KEY_MINUS || i == NUM_KEY_OK || i == NUM_KEY_DEL || i == NUM_KEY_EXIT || i == NUM_KEY_RESET) )
+      {
         GUI_DispStringInPrect(&rect_of_numkey[i],(u8*)numPadKeyChar[i]);
+      }
     }
 
     if(!NumberOnly)
+    {
       GUI_DispStringInPrect(&rect_of_numkey[NUM_KEY_DEC],(u8*)numPadKeyChar[NUM_KEY_DEC]);
+    }
     if(negative)
+    {
       GUI_DispStringInPrect(&rect_of_numkey[NUM_KEY_MINUS],(u8*)numPadKeyChar[NUM_KEY_MINUS]);
+    }
 
     DrawCharIcon(&rect_of_numkey[NUM_KEY_OK], MIDDLE, ICONCHAR_OK, false, 0);
     DrawCharIcon(&rect_of_numkey[NUM_KEY_DEL], MIDDLE, ICONCHAR_POINT_LEFT, false, 0);

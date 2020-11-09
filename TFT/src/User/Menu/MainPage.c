@@ -132,9 +132,13 @@ void classicMenu(void)
 
       case KEY_ICON_7:
         if (infoMachineSettings.leveling != BL_DISABLED)
+        {
           infoMenu.menu[++infoMenu.cur] = menuBedLeveling;
+        }
         else
+        {
           infoMenu.menu[++infoMenu.cur] = menuManualLeveling;
+        }
         break;
 
       default:

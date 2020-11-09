@@ -194,7 +194,7 @@ void hostActionCommands(void)
     strcpy(hostAction.prompt_begin, dmaL2Cache + ack_index);
     statusScreen_setMsg((u8 *)echomagic, (u8 *)dmaL2Cache + ack_index);
   }
-  
+
   if(ack_seen("prompt_begin "))
   {
     hostAction.button = 0;
@@ -429,50 +429,60 @@ void parseACK(void)
         if(ack_seen("Z")) setParameter(P_STEPS_PER_MM, Z_STEPPER, ack_value());
         if(ack_seen("E")) setParameter(P_STEPS_PER_MM, E_STEPPER, ack_value());
       }
-      else if(ack_seen("M92 T0 E")){
+      else if(ack_seen("M92 T0 E"))
+      {
         setParameter(P_STEPS_PER_MM, E_STEPPER, ack_value());
       }
-      else if(ack_seen("M92 T1 E")){
+      else if(ack_seen("M92 T1 E"))
+      {
         setParameter(P_STEPS_PER_MM, E2_STEPPER, ack_value());
         setDualStepperStatus(E_STEPPER, true);
       }
     //parse and store Max Feed Rate values
-     else if(ack_seen("M203 X")){
+     else if(ack_seen("M203 X"))
+     {
                           setParameter(P_MAX_FEED_RATE, X_STEPPER, ack_value());
         if(ack_seen("Y")) setParameter(P_MAX_FEED_RATE, Y_STEPPER, ack_value());
         if(ack_seen("Z")) setParameter(P_MAX_FEED_RATE, Z_STEPPER, ack_value());
         if(ack_seen("E")) setParameter(P_MAX_FEED_RATE, E_STEPPER, ack_value());
       }
-      else if(ack_seen("M203 T0 E")){
+      else if(ack_seen("M203 T0 E"))
+      {
         setParameter(P_MAX_FEED_RATE, E_STEPPER, ack_value());
       }
-      else if(ack_seen("M203 T1 E")){
+      else if(ack_seen("M203 T1 E"))
+      {
         setParameter(P_MAX_FEED_RATE, E2_STEPPER, ack_value());
         setDualStepperStatus(E_STEPPER, true);
       }
     //parse and store Max Acceleration values
-      else if(ack_seen("M201 X")){
+      else if(ack_seen("M201 X"))
+      {
                           setParameter(P_MAX_ACCELERATION, X_STEPPER, ack_value());
         if(ack_seen("Y")) setParameter(P_MAX_ACCELERATION, Y_STEPPER, ack_value());
         if(ack_seen("Z")) setParameter(P_MAX_ACCELERATION, Z_STEPPER, ack_value());
         if(ack_seen("E")) setParameter(P_MAX_ACCELERATION, E_STEPPER, ack_value());
 
       }
-      else if(ack_seen("M201 T0 E")){
+      else if(ack_seen("M201 T0 E"))
+      {
         setParameter(P_MAX_ACCELERATION, E_STEPPER, ack_value());
       }
-      else if(ack_seen("M201 T1 E")){
+      else if(ack_seen("M201 T1 E"))
+      {
         setParameter(P_MAX_ACCELERATION, E2_STEPPER, ack_value());
         setDualStepperStatus(E_STEPPER, true);
       }
     //parse and store Acceleration values
-      else if(ack_seen("M204 P")){
+      else if(ack_seen("M204 P"))
+      {
                           setParameter(P_ACCELERATION, 0, ack_value());
         if(ack_seen("R")) setParameter(P_ACCELERATION, 1, ack_value());
         if(ack_seen("T")) setParameter(P_ACCELERATION, 2, ack_value());
       }
     //parse and store jerk values
-      else if(ack_seen("M205")){
+      else if(ack_seen("M205"))
+      {
         if(ack_seen("X")) setParameter(P_JERK, X_STEPPER, ack_value());
         if(ack_seen("Y")) setParameter(P_JERK, Y_STEPPER, ack_value());
         if(ack_seen("Z")) setParameter(P_JERK, Z_STEPPER, ack_value());
@@ -480,27 +490,31 @@ void parseACK(void)
         if(ack_seen("J")) setParameter(P_JUNCTION_DEVIATION, 0, ack_value());
       }
     //parse and store Home Offset values
-      else if(ack_seen("M206 X")){
+      else if(ack_seen("M206 X"))
+      {
                           setParameter(P_HOME_OFFSET, X_STEPPER, ack_value());
         if(ack_seen("Y")) setParameter(P_HOME_OFFSET, Y_STEPPER, ack_value());
         if(ack_seen("Z")) setParameter(P_HOME_OFFSET, Z_STEPPER, ack_value());
       }
     //parse and store FW retraction values
-      else if(ack_seen("M207 S")){
+      else if(ack_seen("M207 S"))
+      {
                           setParameter(P_FWRETRACT, 0, ack_value());
         if(ack_seen("W")) setParameter(P_FWRETRACT, 1, ack_value());
         if(ack_seen("F")) setParameter(P_FWRETRACT, 2, ack_value());
         if(ack_seen("Z")) setParameter(P_FWRETRACT, 3, ack_value());
       }
     //parse and store FW recover values
-      else if(ack_seen("M208 S")){
+      else if(ack_seen("M208 S"))
+      {
                           setParameter(P_FWRECOVER, 0, ack_value());
         if(ack_seen("W")) setParameter(P_FWRECOVER, 1, ack_value());
         if(ack_seen("F")) setParameter(P_FWRECOVER, 2, ack_value());
         if(ack_seen("R")) setParameter(P_FWRECOVER, 3, ack_value());
       }
     //parse and store auto FW retract state (M209 - Set Auto Retract)
-      else if(ack_seen("M209 S")){
+      else if(ack_seen("M209 S"))
+      {
                           setParameter(P_AUTO_RETRACT, 0, ack_value());
       }
     //parse and store the software endstops state (M211)
@@ -517,62 +531,75 @@ void parseACK(void)
           addToast(DIALOG_TYPE_INFO, dmaL2Cache);
       }
     //parse and store Offset 2nd Nozzle
-      else if(ack_seen("M218 T1 X")){
+      else if(ack_seen("M218 T1 X"))
+      {
                           setParameter(P_OFFSET_TOOL, 0, ack_value());
         if(ack_seen("Y")) setParameter(P_OFFSET_TOOL, 1, ack_value());
         if(ack_seen("Z")) setParameter(P_OFFSET_TOOL, 2, ack_value());
       }
     //parse and store Probe Offset values
-      else if(ack_seen("M851 X")){
+      else if(ack_seen("M851 X"))
+      {
                           setParameter(P_PROBE_OFFSET, X_STEPPER, ack_value());
         if(ack_seen("Y")) setParameter(P_PROBE_OFFSET, Y_STEPPER, ack_value());
         if(ack_seen("Z")) setParameter(P_PROBE_OFFSET, Z_STEPPER, ack_value());
       }
     //parse and store linear advance values
-      else if(ack_seen("M900 K")){
+      else if(ack_seen("M900 K"))
+      {
                           setParameter(P_LIN_ADV, 0, ack_value());
       }
-      else if(ack_seen("M900 T0 K")){
+      else if(ack_seen("M900 T0 K"))
+      {
                           setParameter(P_LIN_ADV, 0, ack_value());
       }
-      else if(ack_seen("M900 T1 K")){
+      else if(ack_seen("M900 T1 K"))
+      {
                           setParameter(P_LIN_ADV, 1, ack_value());
       }
     //parse and store stepper driver current values
-      else if(ack_seen("M906 X")){
+      else if(ack_seen("M906 X"))
+      {
                           setParameter(P_CURRENT, X_STEPPER, ack_value());
         if(ack_seen("Y")) setParameter(P_CURRENT, Y_STEPPER, ack_value());
         if(ack_seen("Z")) setParameter(P_CURRENT, Z_STEPPER, ack_value());
       }
-      else if(ack_seen("M906 I1")){
+      else if(ack_seen("M906 I1"))
+      {
         if(ack_seen("X")) setDualStepperStatus(X_STEPPER, true);
         if(ack_seen("Y")) setDualStepperStatus(Y_STEPPER, true);
         if(ack_seen("Z")) setDualStepperStatus(Z_STEPPER, true);
       }
-      else if(ack_seen("M906 T0 E")){
+      else if(ack_seen("M906 T0 E"))
+      {
         setParameter(P_CURRENT, E_STEPPER, ack_value());
       }
-      else if(ack_seen("M906 T1 E")){
+      else if(ack_seen("M906 T1 E"))
+      {
         setParameter(P_CURRENT, E2_STEPPER, ack_value());
         setDualStepperStatus(E_STEPPER, true);
       }
       //parse and store TMC Bump sensitivity values
-      else if(ack_seen("M914 X")){
+      else if(ack_seen("M914 X"))
+      {
                           setParameter(P_BUMPSENSITIVITY, X_STEPPER, ack_value());
         if(ack_seen("Y")) setParameter(P_BUMPSENSITIVITY, Y_STEPPER, ack_value());
         if(ack_seen("Z")) setParameter(P_BUMPSENSITIVITY, Z_STEPPER, ack_value());
       }
     // parse and store TMC Hybrid Threshold Speed
-      else if(ack_seen("M913 X")){
+      else if(ack_seen("M913 X"))
+      {
                           setParameter(P_HYBRID_THRESHOLD, X_STEPPER, ack_value());
         if(ack_seen("Y")) setParameter(P_HYBRID_THRESHOLD, Y_STEPPER, ack_value());
         if(ack_seen("Z")) setParameter(P_HYBRID_THRESHOLD, Z_STEPPER, ack_value());
         if(ack_seen("E")) setParameter(P_HYBRID_THRESHOLD, E_STEPPER, ack_value());
       }
-      else if(ack_seen("M913 T0 E")){
+      else if(ack_seen("M913 T0 E"))
+      {
                           setParameter(P_HYBRID_THRESHOLD, E_STEPPER, ack_value());
       }
-      else if(ack_seen("M913 T1 E")){
+      else if(ack_seen("M913 T1 E"))
+      {
                           setParameter(P_HYBRID_THRESHOLD, E2_STEPPER, ack_value());
                           setDualStepperStatus(E_STEPPER, true);
       }
@@ -698,12 +725,14 @@ void parseACK(void)
       }
       else if(ack_seen("work:"))
       {
-        if(ack_seen("min:")){
+        if(ack_seen("min:"))
+        {
           if(ack_seen("X:")) infoSettings.machine_size_min[X_AXIS] = ack_value();
           if(ack_seen("Y:")) infoSettings.machine_size_min[Y_AXIS] = ack_value();
           if(ack_seen("Z:")) infoSettings.machine_size_min[Z_AXIS] = ack_value();
         }
-        if(ack_seen("max:")){
+        if(ack_seen("max:"))
+        {
           if(ack_seen("X:")) infoSettings.machine_size_min[X_AXIS] = ack_value();
           if(ack_seen("Y:")) infoSettings.machine_size_min[Y_AXIS] = ack_value();
           if(ack_seen("Z:")) infoSettings.machine_size_min[Z_AXIS] = ack_value();
@@ -855,7 +884,8 @@ void parseACK(void)
       }
     }
 
-    if (avoid_terminal != true){
+    if (avoid_terminal != true)
+    {
       sendGcodeTerminalCache(dmaL2Cache, TERMINAL_ACK);
     }
   }

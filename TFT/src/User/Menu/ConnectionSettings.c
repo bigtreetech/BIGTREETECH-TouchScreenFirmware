@@ -67,7 +67,8 @@ void menuBaudrate(void)
       break;
 
     default:
-      if(key_num < LISTITEM_PER_PAGE){
+      if(key_num < LISTITEM_PER_PAGE)
+      {
         uint16_t tmp_i = listWidgetGetCurPage() * LISTITEM_PER_PAGE + key_num;
         if (tmp_i != cur_item) { // has changed
           totalItems[cur_item].icon = ICONCHAR_UNCHECKED;

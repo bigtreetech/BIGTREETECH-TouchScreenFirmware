@@ -189,7 +189,8 @@ void menuClearGaps(void)
 }
 #endif
 
-void GUI_RestoreColorDefault(void){
+void GUI_RestoreColorDefault(void)
+{
   GUI_SetBkColor(infoSettings.bg_color);
   GUI_SetColor(infoSettings.font_color);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
@@ -268,13 +269,13 @@ void menuDrawIconOnly(const ITEM *item, uint8_t position)
   }
 }
 
-void menuRefreshListPage(void){
- for (uint8_t i = 0; i < ITEM_PER_PAGE; i++)
-    {
-      menuDrawListItem(&curListItems->items[i], i);
-      rapid_serial_comm()//perform backend printing loop between drawing icons to avoid printer idling
-    }
-
+void menuRefreshListPage(void)
+{
+  for (uint8_t i = 0; i < ITEM_PER_PAGE; i++)
+  {
+    menuDrawListItem(&curListItems->items[i], i);
+    rapid_serial_comm()//perform backend printing loop between drawing icons to avoid printer idling
+  }
 }
 
 void setMenuType(MENU_TYPE type)
@@ -628,11 +629,13 @@ void itemDrawIconPress(u8 position, u8 is_press)
     GUI_ClearPrect(rect);
     return;
     }
-    if (is_press){
-    ListItem_Display(rect,position,&curListItems->items[position], true);
+    if (is_press)
+    {
+      ListItem_Display(rect,position,&curListItems->items[position], true);
     }
-    else{
-    ListItem_Display(rect,position,&curListItems->items[position], false);
+    else
+    {
+      ListItem_Display(rect,position,&curListItems->items[position], false);
     }
   }
 }
@@ -674,7 +677,8 @@ KEY_VALUES menuKeyGetValue(void)
 }
 
 //Get the top left point of the corresponding icon position)
-GUI_POINT getIconStartPoint(int index){
+GUI_POINT getIconStartPoint(int index)
+{
   GUI_POINT p = {curRect[index].x0,curRect[index].y0};
   return p;
 }
@@ -733,12 +737,12 @@ void loopBackEnd(void)
   {
     setSequentialModeColor();
   }
-  
+
   if(infoMachineSettings.caseLightsBrightness == ENABLED)
   {
     loopCaseLight();
   }
-  
+
 } //loopBackEnd
 
 void loopFrontEnd(void)

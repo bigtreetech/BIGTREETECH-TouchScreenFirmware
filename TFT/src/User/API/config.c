@@ -300,7 +300,9 @@ static void config_set_color(uint16_t *color_src)
 {
   if (config_is_hex()) {
     *color_src = RGB888_to_RGB565(config_hex());
-  } else if (inLimit(config_int(), 0, LCD_COLOR_COUNT-1)){
+  }
+  else if (inLimit(config_int(), 0, LCD_COLOR_COUNT-1))
+  {
     *color_src = lcd_colors[config_int()];
   }
 }
@@ -308,7 +310,8 @@ static void config_set_color(uint16_t *color_src)
 //check keywords in the config line in buffer
 void parseConfigLine(void)
 {
-  for (u16 i = 0; i < CONFIG_COUNT; i++){
+  for (u16 i = 0; i < CONFIG_COUNT; i++)
+  {
     if (key_seen(config_keywords[i]))
     {
       PRINTDEBUG("\n");
@@ -375,7 +378,8 @@ void saveConfig(void)
   #endif
 }
 
-void writeConfig(uint8_t* dataBytes, uint16_t numBytes, uint32_t addr, uint32_t maxSize){
+void writeConfig(uint8_t* dataBytes, uint16_t numBytes, uint32_t addr, uint32_t maxSize)
+{
   //do not proceed if data size is larger than reserved max size.
   if (numBytes > maxSize)
     {
@@ -386,7 +390,8 @@ void writeConfig(uint8_t* dataBytes, uint16_t numBytes, uint32_t addr, uint32_t 
   int sectorCount =maxSize/W25QXX_SECTOR_SIZE;
 
   //erase part of flash to be rewritten
-  for (int i = 0; i < sectorCount;i++){
+  for (int i = 0; i < sectorCount;i++)
+  {
     W25Qxx_EraseSector(addr+(i*W25QXX_SECTOR_SIZE));
   }
   Delay_ms(100); //give time for spi flash to settle
@@ -414,10 +419,11 @@ void resetConfig(void)
   int n = 0;
   for (int i = 0; i < CUSTOM_GCODES_COUNT;i++)
   {
-    if(cg_enabled[i] == 1){
-    strcpy(tempCG.gcode[n],cg_list[i]);
-    strcpy(tempCG.name[n],cg_names[i]);
-    n++;
+    if(cg_enabled[i] == 1)
+    {
+      strcpy(tempCG.gcode[n],cg_list[i]);
+      strcpy(tempCG.name[n],cg_names[i]);
+      n++;
     }
   }
   tempCG.count = n;
@@ -450,7 +456,8 @@ void drawProgressPage(u8 * title)
   GUI_DrawPrect(&rectProgressframe);
 }
 
-void drawProgress(void){
+void drawProgress(void)
+{
   char tempstr[50];
   sprintf(tempstr,"Total keywords found: %d",foundkeys);
   GUI_DispString(pointProgressText.x,pointProgressText.y,(u8*)tempstr);

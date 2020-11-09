@@ -59,7 +59,8 @@ void menuLanguage(void)
       break;
 
     default:
-      if(key_num < LISTITEM_PER_PAGE){
+      if(key_num < LISTITEM_PER_PAGE)
+      {
         uint16_t cur_item = infoSettings.language;
         uint16_t tmp_i = listWidgetGetCurPage() * LISTITEM_PER_PAGE + key_num;
         if (tmp_i < LANGUAGE_NUM && tmp_i != cur_item) { // has changed
@@ -147,7 +148,8 @@ void menuSimulatorBackGroundColor(void)
       break;
 
     default:
-      if(key_num < LISTITEM_PER_PAGE){
+      if(key_num < LISTITEM_PER_PAGE)
+      {
         uint16_t tmp_i = listWidgetGetCurPage() * LISTITEM_PER_PAGE + key_num;
         if (tmp_i < LCD_COLOR_COUNT && tmp_i != cur_item) { // has changed
           totalItems[cur_item].icon = ICONCHAR_UNCHECKED;
@@ -211,7 +213,8 @@ void menuSimulatorFontColor(void)
       break;
 
     default:
-      if(key_num < LISTITEM_PER_PAGE){
+      if(key_num < LISTITEM_PER_PAGE)
+      {
         uint16_t tmp_i = listWidgetGetCurPage() * LISTITEM_PER_PAGE + key_num;
         if (tmp_i < LCD_COLOR_COUNT && tmp_i != cur_item) { // has changed
           totalItems[cur_item].icon = ICONCHAR_UNCHECKED;
