@@ -6,6 +6,11 @@
                                                            // grid from the "M420 T1 V1" command output provided by the Marlin FW
 #define MESH_LINE_EDGE_DISTANCE 4
 
+// colors
+#define VALUE_FONT_COLOR   infoSettings.font_color
+#define VALUE_BG_COLOR     infoSettings.list_button_color
+#define VALUE_BORDER_COLOR 0x4b0d
+
 typedef struct
 {
   const uint8_t colsToSkip;
@@ -105,16 +110,13 @@ static MESH_DATA *meshData = NULL;
   #define MESH_KEY_Y0  0
 #endif
 
-#define MESH_INFO_NUM 4
-#define MESH_KEY_NUM  9
-#define MESH_AREA_NUM 3
-
 typedef enum
 {
   ME_INFO_MIN = 0,
   ME_INFO_MAX,
   ME_INFO_ORIG,
   ME_INFO_CUR,
+  ME_INFO_NUM,                                             // number of infos
   ME_INFO_IDLE = IDLE_TOUCH,
 } MESH_INFO_VALUES;
 
@@ -129,6 +131,7 @@ typedef enum
   ME_KEY_PREV,
   ME_KEY_NEXT,
   ME_KEY_DOWN,
+  ME_KEY_NUM,                                              // number of keys
   ME_KEY_IDLE = IDLE_TOUCH,
 } MESH_KEY_VALUES;
 
@@ -137,12 +140,13 @@ typedef enum
   ME_AREA_GRID = 0,
   ME_AREA_INFO,
   ME_AREA_KEY,
+  ME_AREA_NUM,                                             // number of areas
   ME_AREA_IDLE = IDLE_TOUCH,
 } MESH_AREA_VALUES;
 
 const GUI_RECT meshGridRect = {MESH_GRID_X0, MESH_GRID_Y0, MESH_GRID_X0 + MESH_GRID_WIDTH, MESH_GRID_Y0 + MESH_GRID_HEIGHT};
 
-const GUI_RECT meshInfoRect[MESH_INFO_NUM] = {
+const GUI_RECT meshInfoRect[ME_INFO_NUM] = {
 #if MESH_LEFT_KEYBOARD == 1
   {MESH_INFO_X0 + 1 * MESH_INFO_WIDTH, MESH_INFO_Y0 + 0 * MESH_INFO_HEIGHT, MESH_INFO_X0 + 2 * MESH_INFO_WIDTH, MESH_INFO_Y0 + 1 * MESH_INFO_HEIGHT},// min value
   {MESH_INFO_X0 + 2 * MESH_INFO_WIDTH, MESH_INFO_Y0 + 0 * MESH_INFO_HEIGHT, MESH_INFO_X0 + 3 * MESH_INFO_WIDTH, MESH_INFO_Y0 + 1 * MESH_INFO_HEIGHT},// max value
@@ -155,7 +159,7 @@ const GUI_RECT meshInfoRect[MESH_INFO_NUM] = {
   {MESH_KEY_X0 + 0 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 2 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 2 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 3 * MESH_KEY_HEIGHT},        // current value
 };
 
-const GUI_RECT meshKeyRect[MESH_KEY_NUM] = {
+const GUI_RECT meshKeyRect[ME_KEY_NUM] = {
 #if MESH_LEFT_KEYBOARD == 1
   {MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 0 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 2 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 1 * MESH_KEY_HEIGHT},        // SAVE
   {MESH_KEY_X0 + 0 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 0 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 1 * MESH_KEY_HEIGHT},        // OK
@@ -167,14 +171,17 @@ const GUI_RECT meshKeyRect[MESH_KEY_NUM] = {
   {MESH_KEY_X0 + 0 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 1 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 2 * MESH_KEY_HEIGHT},        // RESET
   {MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 1 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 2 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 2 * MESH_KEY_HEIGHT},        // HOME
 #endif
+  // current value
   {MESH_KEY_X0 + 0 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 2 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 2 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 3 * MESH_KEY_HEIGHT},        // EDIT
+
+  // arrow keys
   {MESH_KEY_X0 + 0 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 3 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 2 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 4 * MESH_KEY_HEIGHT},        // UP
   {MESH_KEY_X0 + 0 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 4 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 5 * MESH_KEY_HEIGHT},        // PREV
   {MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 4 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 2 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 5 * MESH_KEY_HEIGHT},        // NEXT
   {MESH_KEY_X0 + 0 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 5 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 2 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 6 * MESH_KEY_HEIGHT},        // DOWN
 };
 
-const char *const meshKeyString[MESH_KEY_NUM] = {
+const char *const meshKeyString[ME_KEY_NUM] = {
   "\u08A7",                                                // SAVE
   "\u0894",                                                // OK
   "\u08A5",                                                // RESET
@@ -186,7 +193,7 @@ const char *const meshKeyString[MESH_KEY_NUM] = {
   "\u02C5",                                                // DOWN
 };
 
-const GUI_RECT meshAreaRect[MESH_AREA_NUM] = {
+const GUI_RECT meshAreaRect[ME_AREA_NUM] = {
   {MESH_GRID_X0, MESH_GRID_Y0, MESH_GRID_X0 + MESH_GRID_WIDTH, MESH_GRID_Y0 + MESH_GRID_HEIGHT},             // grid area
   {MESH_INFO_X0, MESH_INFO_Y0, MESH_INFO_X0 + MESH_GRID_WIDTH, MESH_INFO_Y0 + ICON_START_Y},                 // info area
   {MESH_KEY_X0, MESH_KEY_Y0, MESH_KEY_X0 + (LCD_WIDTH - MESH_GRID_WIDTH), MESH_KEY_Y0 + LCD_HEIGHT},         // keyboard area
@@ -498,7 +505,7 @@ uint16_t meshGetRGBColor(float value)
   return (r << 11) | (g << 5) | (b);
 }
 
-void meshDrawGridCell(uint16_t index, uint16_t edgeDistance, bool clearBkGround)
+void meshDrawGridCell(uint16_t index, uint16_t edgeDistance, bool clearBgColor)
 {
   float value = meshGetValue(index);
   uint16_t col = index % meshGetColsNum();
@@ -512,7 +519,7 @@ void meshDrawGridCell(uint16_t index, uint16_t edgeDistance, bool clearBkGround)
   else if (value == meshGetValueMin() || value == meshGetValueMax())
     radius = MIN(cellWidth, cellHeight) / MESH_POINT_MED_RATIO;
 
-  if (clearBkGround)
+  if (clearBgColor)
     GUI_ClearRect(meshGridRect.x0 + col * cellWidth + 1, meshGridRect.y0 + row * cellHeight + 1,
                   meshGridRect.x0 + (col + 1) * cellWidth - 1, meshGridRect.y0 + (row + 1) * cellHeight - 1);
 
@@ -544,13 +551,13 @@ void meshDrawGrid(void)
   }
 }
 
-void meshDrawInfoCell(const GUI_RECT *rect, float *val, bool largeFont, uint16_t color, uint16_t bkColor, uint16_t edgeDistance, bool clearBkGround)
+void meshDrawInfoCell(const GUI_RECT *rect, float *val, bool largeFont, uint16_t color, uint16_t bgColor, uint16_t edgeDistance, bool clearBgColor)
 {
-  uint16_t origBkColor = GUI_GetBkColor();
+  uint16_t origBgColor = GUI_GetBkColor();
 
-  if (val != NULL || clearBkGround)
+  if (val != NULL || clearBgColor)
   {
-    GUI_SetBkColor(bkColor);
+    GUI_SetBkColor(bgColor);
     GUI_ClearRect(rect->x0 + edgeDistance, rect->y0 + edgeDistance, rect->x1 - edgeDistance, rect->y1 - edgeDistance);
   }
 
@@ -570,7 +577,7 @@ void meshDrawInfoCell(const GUI_RECT *rect, float *val, bool largeFont, uint16_t
   }
 
   GUI_SetColor(infoSettings.font_color);
-  GUI_SetBkColor(origBkColor);
+  GUI_SetBkColor(origBgColor);
 }
 
 void meshDrawInfo(float *minVal, float *maxVal, float *origVal, float *curVal)
@@ -582,7 +589,7 @@ void meshDrawInfo(float *minVal, float *maxVal, float *origVal, float *curVal)
     meshDrawInfoCell(&meshInfoRect[ME_INFO_MAX], maxVal, false, meshGetRGBColor(*maxVal), infoSettings.bg_color, 1, false);
 
   meshDrawInfoCell(&meshInfoRect[ME_INFO_ORIG], origVal, false, infoSettings.font_color, infoSettings.bg_color, 1, false);
-  meshDrawInfoCell(&meshInfoRect[ME_INFO_CUR], curVal, true, infoSettings.font_color, infoSettings.status_xyz_bg_color, 2, false);
+  meshDrawInfoCell(&meshInfoRect[ME_INFO_CUR], curVal, true, VALUE_FONT_COLOR, VALUE_BG_COLOR, 2, false);
 }
 
 void meshDrawFullInfo(void)
@@ -603,16 +610,28 @@ MESH_KEY_VALUES meshGetKeyValue(void)
 
 void meshKeyPress(u8 index, u8 isPressed)
 {
-  if (index < MESH_KEY_NUM)
+  if (index >= ME_KEY_NUM)
+    return;
+
+  if (isPressed)
   {
-    if (!isPressed)
+    if (index != ME_KEY_EDIT)
+      GUI_SetColor(infoSettings.list_border_color);
+    else
+      GUI_SetColor(VALUE_FONT_COLOR);
+  }
+  else
+  {
+    if (index != ME_KEY_EDIT)
       GUI_SetColor(infoSettings.bg_color);
     else
-      GUI_SetColor(infoSettings.list_border_color);
-
-    GUI_DrawRect(meshKeyRect[index].x0 + 2, meshKeyRect[index].y0 + 2, meshKeyRect[index].x1 - 2, meshKeyRect[index].y1 - 2);
-    GUI_SetColor(infoSettings.font_color);
+      GUI_SetColor(VALUE_BG_COLOR);
   }
+
+  GUI_DrawRect(meshKeyRect[index].x0 + 2, meshKeyRect[index].y0 + 2, meshKeyRect[index].x1 - 2, meshKeyRect[index].y1 - 2);
+
+  // restore default font color
+  GUI_SetColor(infoSettings.font_color);
 }
 
 void meshDrawKeyboard(void)
@@ -623,7 +642,7 @@ void meshDrawKeyboard(void)
 
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
-  for (uint8_t i = 0; i < MESH_KEY_NUM; i++)
+  for (uint8_t i = 0; i < ME_KEY_NUM; i++)
   {
     if (!(i == ME_KEY_SAVE || i == ME_KEY_OK || i == ME_KEY_RESET || i == ME_KEY_HOME))            // if not a unicode string
       GUI_DispStringInPrect(&meshKeyRect[i], (u8 *) meshKeyString[i]);
@@ -642,24 +661,33 @@ void meshDrawKeyboard(void)
 
 void meshDrawMenu(void)
 {
-  GUI_Clear(infoSettings.bg_color);                                                                // clear screen
+  // clear screen
+  GUI_Clear(infoSettings.bg_color);
 
   GUI_SetColor(infoSettings.list_border_color);
 
-  GUI_DrawPrect(&meshAreaRect[ME_AREA_GRID]);                                                      // draw grid area borders
-  GUI_DrawPrect(&meshAreaRect[ME_AREA_INFO]);                                                      // draw info area borders
-  GUI_DrawPrect(&meshAreaRect[ME_AREA_KEY]);                                                       // draw key borders
+  // draw area borders
+  GUI_DrawPrect(&meshAreaRect[ME_AREA_GRID]);              // draw grid area borders
+  GUI_DrawPrect(&meshAreaRect[ME_AREA_INFO]);              // draw info area borders
+  GUI_DrawPrect(&meshAreaRect[ME_AREA_KEY]);               // draw key borders
 
-  GUI_SetColor(infoSettings.font_color);
+  // draw value area borders (outer)
+  GUI_DrawRect(meshInfoRect[ME_INFO_CUR].x0, meshInfoRect[ME_INFO_CUR].y0,
+               meshInfoRect[ME_INFO_CUR].x1, meshInfoRect[ME_INFO_CUR].y1);
 
+  GUI_SetColor(VALUE_BORDER_COLOR);
+
+  // draw value area borders (inner)
   GUI_DrawRect(meshInfoRect[ME_INFO_CUR].x0 + 1, meshInfoRect[ME_INFO_CUR].y0 + 1,
-               meshInfoRect[ME_INFO_CUR].x1 - 1, meshInfoRect[ME_INFO_CUR].y1 - 1);                // draw value area borders
+               meshInfoRect[ME_INFO_CUR].x1 - 1, meshInfoRect[ME_INFO_CUR].y1 - 1);
 
   GUI_SetColor(infoSettings.font_color);
 
+  // draw grid and keyboard
   meshDrawGrid();
   meshDrawKeyboard();
 
+  // draw values
   if (meshGetStatus())
   {
     float minValue = meshGetValueMin();
