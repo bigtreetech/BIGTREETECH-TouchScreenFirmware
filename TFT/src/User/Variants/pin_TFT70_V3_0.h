@@ -115,9 +115,10 @@
 #define BUZZER_PIN    PD13
 
 // LCD Encoder support
-#define LCD_ENCA_PIN  PA8
-#define LCD_ENCB_PIN  PC9
-#define LCD_BTN_PIN   PC8
+#define LCD_ENCA_PIN    PA8
+#define LCD_ENCB_PIN    PC9
+#define LCD_BTN_PIN     PC8
+#define LCD_ENC_EN_PIN  PC6
 
 // U disk support
 #define U_DISK_SUPPORT

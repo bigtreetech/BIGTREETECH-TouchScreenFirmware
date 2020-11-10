@@ -21,16 +21,10 @@ extern "C" {
 #define SSICON_SECOND ROW
 #endif
 
-/*about GCODE KEY*/
-#define GKEY_WIDTH        (LCD_WIDTH/6)
-#define GKEY_HEIGHT       ((LCD_HEIGHT - ICON_START_Y)/4)
-
 //select marlin or bigtree
 #define SPACE_SELEX       ((LCD_WIDTH-ICON_WIDTH*2)/4)
 #define SPACE_SELEY       ((LCD_HEIGHT-ICON_HEIGHT)/2)
 #define text_startx       (LCD_WIDTH/2)
-
-void LCD_DMA_Config(void);
 
 void LOGO_ReadDisplay(void);
 void ICON_ReadDisplay(uint16_t sx, uint16_t sy, uint8_t icon);

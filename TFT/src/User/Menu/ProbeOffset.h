@@ -1,11 +1,9 @@
-#ifndef _PROBEOFFSET_H_
-#define _PROBEOFFSET_H_
+#ifndef _PROBE_OFFSET_H_
+#define _PROBE_OFFSET_H_
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <stdint.h>
 
 void menuProbeOffset(void);
 

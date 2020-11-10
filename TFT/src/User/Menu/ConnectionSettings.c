@@ -44,7 +44,7 @@ void menuBaudrate(void)
       totalItems[i].icon = ICONCHAR_UNCHECKED;
     }
     totalItems[i].itemType = LIST_LABEL;
-    totalItems[i].titlelabel.address = (uint8_t *)item_baudrate_str[i];
+    totalItems[i].titlelabel.address = (uint8_t *) item_baudrate_str[i];
   }
 
   listWidgetCreate(title, totalItems, COUNT(totalItems), cur_item / LISTITEM_PER_PAGE);

@@ -108,11 +108,19 @@
 #define BAUDRATE 115200
 
 /**
- * Default Touch Mode Language
+ * Default Primary Language (for Touch-Mode only)
  * Select the language to display on the LCD while in Touch Mode.
- * Options: ARMENIAN, CHINESE, CZECH, DUTCH, ENGLISH, FRENCH, GERMAN, HUNGARIAN, ITALIAN, JAPANESE, POLISH, PORTUGUESE, RUSSIAN, SLOVAK, SPAIN, CATALAN
+ * Options: ENGLISH, CHINESE, RUSSIAN, JAPANESE, ARMENIAN, GERMAN, CZECH,
+ *          SPANISH, FRENCH, PORTUGUESE, ITALIAN, POLISH, SLOVAK, DUTCH,
+ *          HUNGARIAN, TURKISH, GREEK, SLOVENIAN, CATALAN, TRAD_CHINESE,
  */
 #define DEFAULT_LANGUAGE ENGLISH
+
+/**
+ * To add/flash a second language copy the required "language_xx.ini" file from
+ * "Language Packs" folder to the SD root folder. Then preset the reset button
+ * to load/flash the copied language file.
+*/
 
 /**
  * Show bootscreen when starting up
@@ -171,6 +179,7 @@
 #define EXTRUDER_NUM 1    // set in 1~6
 #define FAN_NUM      1    // set in 1~6
 #define FAN_CTRL_NUM 0    // set in 1~2
+#define MIXING_EXTRUDER 0 // set default 0, for mixing_extruder 1 (this option turns off autodetection of the number of extruders)
 
 #define PREHEAT_LABELS   {"PLA", "PETG", "ABS", "WOOD", "TPU", "NYLON"}
 #define PREHEAT_HOTEND   {200,   240,    230,   170,    220,   250}
@@ -187,8 +196,8 @@
 
 /**
  * Fan control
- * 
- * Fan type Options: 
+ *
+ * Fan type Options:
  *               0: FAN_TYPE_F       - default cooling fan speed (Check Marlin GCode M106)
  *               1: FAN_TYPE_CTRL_S  - Controller fan speed for stepper or hot bed ON (Check Marlin GCode M710)
  *               2: FAN_TYPE_CTRL_I  - Controller fan idle speed  (Check Marlin gcode - M710)
@@ -238,27 +247,29 @@
 #define NOZZLE_PAUSE_M600_M601
 
 /**
- * Auto Save Load Leveling Data
- * The TFT will auto detect if Auto Bed Level is available.
+ * Auto save/load Bed Leveling data
+ * The TFT will auto detect if BL data are available.
  * Enable this will send "M500" after "G29" to store leveling value
  * and send "M420 S1" to enable leveling state after startup
+ *
+ * Options:  0: Disabled    1: Enabled
  */
-#define AUTO_SAVE_LOAD_LEVELING_VALUE true //to enabled: true | to disabled: false
+#define AUTO_SAVE_LOAD_BL_VALUE 1
 
 /**
- * Enable Unified Bed Leveling options
- * Will attempt to auto detect and enable specific UBL options.
+ * Enable Bed Leveling options
+ * Will attempt to auto detect and/or enable specific BL options.
  *
  * WARNING - If you're not sure, leave on auto-detect or disabled.
  *           UBL has extra options other leveling systems might not have.
  *
- * Options:  0: Disabled    1: Enabled    2: Auto-detect [default]
+ * Options:  0: Disabled    1: Auto-detect [default]    2: ABL    3: BBL    4: UBL    5: MBL
  *
  */
-#define ENABLE_UBL_VALUE 2
+#define ENABLE_BL_VALUE 1
 
 /**
- * Enable friendly probe offset language.
+ * Enable friendly probe offset language
  *
  * Decrease/increase and "-" & "+" icons are replaced with down/up and friendly icons
  *
@@ -312,12 +323,68 @@
 #define PROBE_OFFSET_DEFAULT_VALUE 0.0f
 
 /**
+ * Home Offset
+ */
+#define HOME_Z_OFFSET_MIN_VALUE     -20.0f
+#define HOME_Z_OFFSET_MAX_VALUE     20.0f
+#define HOME_Z_OFFSET_DEFAULT_VALUE 0.0f
+
+/**
  * Babystep
  */
 #define BABYSTEP_MIN_VALUE     -5.0f
 #define BABYSTEP_MAX_VALUE     5.0f
 #define BABYSTEP_DEFAULT_VALUE 0.0f
 #define BABYSTEP_MAX_UNIT      1.0f
+
+/**
+ * Mesh Editor settings
+ */
+
+// Set the maximum number of grid points per dimension
+//
+// NOTE: It must be in range 1 - 15
+//
+#define MESH_GRID_MAX_POINTS_X 10
+#define MESH_GRID_MAX_POINTS_Y 10
+
+// Set the color used for drawing the mesh with the minimun and maximum value in the grid
+//
+// Options: 0: WHITE,      1: BLACK,       2: RED,     3: GREEN,     4: BLUE,   5: CYAN,
+//          6: MAGENTA,    7: YELLOW,      8: ORANGE,  9: PURPLE,   10: LIME,  11: BROWN,
+//         12: DARKBLUE,  13: DARKGREEN,  14: GRAY,   15: DARKGRAY
+//
+#define MESH_MIN_COLOR 7
+#define MESH_MAX_COLOR 2
+
+// Enable keyboard drawn on left side
+//
+// If disabled, the keyboard is drawn on right side
+//
+// Options:  0: Disabled    1: Enabled
+//
+#define MESH_LEFT_KEYBOARD 0
+
+/**
+ * Terminal settings
+ */
+
+// Enable keyboard color layout for the Terminal menu
+//
+// If standard, the keyboard is drawn using the standard configurable background and font colors.
+// If alternative, the keyboard is drawn using the alternative embedded colors (white and black colors).
+//
+// Options:  0: standard 1    1: standard 2    2: alternative
+//
+#define TERMINAL_KEYBOARD_COLOR_LAYOUT 0
+
+// Enable keyboard QWERTY layout for the Terminal menu with at least 10 columns
+//
+// If enabled, the QWERTY keyboard layout is used
+//
+// Options:  0: Disabled    1: Enabled
+//
+#define TERMINAL_KEYBOARD_QWERTY_LAYOUT 1
 
 /**
  * PID autotune

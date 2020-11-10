@@ -260,7 +260,9 @@ char * getDynamicTextValue(uint8_t i){
 
 // save dynamic value (upto 7 digits) ( i : index of the value position, value:float value)
 void setDynamicValue(uint8_t i,float value){
-  if (value < 1000.0f)
+  if(value < 1.0f)
+    sprintf(dynamic_text_value[i], "%.3f", value);
+  else if (value < 1000.0f)
     sprintf(dynamic_text_value[i], "%.2f", value);
   else
     sprintf(dynamic_text_value[i], "%.1f", value);
@@ -380,7 +382,7 @@ void ListItem_Display(const GUI_RECT* rect, uint8_t position, const LISTITEM * c
       {
         GUI_SetBkColor(infoSettings.list_button_color);
         GUI_ClearPrect(rect);
-        GUI_DispStringInPrect(rect, textSelect(curitem->titlelabel.index));
+        GUI_DispStringInPrect(rect, curitem->titlelabel.index);
       }
       if (pressed != false)
       {
@@ -493,17 +495,17 @@ void ListItem_DisplayToggle(uint16_t sx, uint16_t sy, uint8_t iconchar_state)
   //GUI_ClearPrect(&rect_item);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
   GUI_SetColor(infoSettings.list_border_color);
-  GUI_DispString(sx, sy, (uint8_t*)GET_ICONCHAR[ICONCHAR_TOGGLE_BODY]);
+  _GUI_DispString(sx, sy, (uint8_t*)GET_ICONCHAR[ICONCHAR_TOGGLE_BODY]);
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
   GUI_SetColor(ICON_COLOR[iconchar_state]);
   if (iconchar_state == ICONCHAR_TOGGLE_OFF)
   {
-    GUI_DispString(sx, sy, IconCharSelect(ICONCHAR_TOGGLE_SWITCH));
+    _GUI_DispString(sx, sy, IconCharSelect(ICONCHAR_TOGGLE_SWITCH));
   }
   else
   {
-    GUI_DispString(sx+BYTE_HEIGHT, sy, IconCharSelect(ICONCHAR_TOGGLE_SWITCH));
+    _GUI_DispString(sx+BYTE_HEIGHT, sy, IconCharSelect(ICONCHAR_TOGGLE_SWITCH));
   }
 
   GUI_RestoreColorDefault();
@@ -532,7 +534,7 @@ void ListItem_DisplayCustomValue(const GUI_RECT* rect,LABEL value,int i)
   }
   else //show regular text labels
   {
-    GUI_DispStringInPrect(&rectVal, textSelect(value.index));
+    GUI_DispStringInPrect(&rectVal, (int32_t)value.index);
   }
 
   GUI_RestoreColorDefault();
