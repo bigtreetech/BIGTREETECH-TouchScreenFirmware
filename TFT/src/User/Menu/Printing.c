@@ -375,6 +375,14 @@ bool setPrintPause(bool is_pause, bool is_m0pause, bool M600)
   }
   resumeToPause(is_pause);
   pauseLock = false;
+
+  if (M600 && is_pause)
+  {
+      // Disable stepper_motors_timeout.
+      // Otherwise bed or printhead risk to be moved when inserting filament, causing layer shifting when resuming print.
+      mustStoreCmd("M84 S0\n");
+  }
+
   if(M600){
       Buzzer_play(sound_notify);
       popupReminder((u8 *)"M600/M601", textSelect(LABEL_FILAMENT_CHANGE));
