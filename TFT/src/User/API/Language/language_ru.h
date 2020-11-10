@@ -56,6 +56,7 @@
     #define STRING_BLTOUCH_REPEAT         "Точность Z"
     #define STRING_Z_OFFSET               "Отступ Z"
     #define STRING_PROBE_OFFSET           "Смещение датчика"
+    #define STRING_HOME_OFFSET            "Home Offset"
     #define STRING_CONFIRMATION           "Вы уверены?"
     #define STRING_DOWN                   "Вниз"
     #define STRING_UP                     "Вверх"
@@ -275,5 +276,6 @@
     #define STRING_NOTIFICATIONS          "Уведомления"
     #define STRING_MESH_EDITOR            "Сетка ред."
     #define STRING_MESH_TUNER             "Сетка настр."
+    #define STRING_CASE_LIGHT             "Case light"
 
 #endif

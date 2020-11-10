@@ -56,6 +56,7 @@
     #define STRING_BLTOUCH_REPEAT         "widerholen"
     #define STRING_Z_OFFSET               "Delta Z"
     #define STRING_PROBE_OFFSET           "Delta Fühler"
+    #define STRING_HOME_OFFSET            "Home Offset"
     #define STRING_CONFIRMATION           "Sicher?"
     #define STRING_DOWN                   "ab"
     #define STRING_UP                     "auf"
@@ -275,5 +276,6 @@
     #define STRING_NOTIFICATIONS          "Benachrichtigungen"
     #define STRING_MESH_EDITOR            "Mesh edit."
     #define STRING_MESH_TUNER             "Mesh anp."
+    #define STRING_CASE_LIGHT             "Case light"
 
 #endif

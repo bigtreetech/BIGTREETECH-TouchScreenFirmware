@@ -56,6 +56,7 @@
     #define STRING_BLTOUCH_REPEAT         "Επανάληψη"
     #define STRING_Z_OFFSET               "Αντιστάθμιση Z"
     #define STRING_PROBE_OFFSET           "Αντιστάθμιση Καθετήρας"
+    #define STRING_HOME_OFFSET            "Home Offset"
     #define STRING_CONFIRMATION           "Are you sure?"
     #define STRING_DOWN                   "Down"
     #define STRING_UP                     "Up"
@@ -275,5 +276,6 @@
     #define STRING_NOTIFICATIONS          "Notifications"
     #define STRING_MESH_EDITOR            "Mesh edit"
     #define STRING_MESH_TUNER             "Mesh tuner"
+    #define STRING_CASE_LIGHT             "Case light"
 
 #endif

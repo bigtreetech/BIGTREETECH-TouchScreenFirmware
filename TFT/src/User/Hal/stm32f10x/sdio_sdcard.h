@@ -263,7 +263,7 @@ extern SD_CardInfo SDCardInfo;//SD card information
 
 //SDIO related parameter definition
 #ifndef NULL 
-	#define NULL 0
+  #define NULL 0
 #endif
 #define SDIO_STATIC_FLAGS               ((u32)0x000005FF)
 #define SDIO_CMD0TIMEOUT                ((u32)0x00010000)

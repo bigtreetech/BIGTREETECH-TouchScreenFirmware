@@ -686,6 +686,11 @@ void sendQueueCmd(void)
           if(cmd_seen('E')) setParameter(P_JERK, E_AXIS, cmd_float());
           if(cmd_seen('J')) setParameter(P_JUNCTION_DEVIATION, 0, cmd_float());
           break;
+        case 206: //M206 Home offset
+          if(cmd_seen('X')) setParameter(P_HOME_OFFSET, X_AXIS, cmd_float());
+          if(cmd_seen('Y')) setParameter(P_HOME_OFFSET, Y_AXIS, cmd_float());
+          if(cmd_seen('Z')) setParameter(P_HOME_OFFSET, Z_AXIS, cmd_float());
+          break;
         case 207: //M207 FW Retract
           if(cmd_seen('S')) setParameter(P_FWRETRACT, 0, cmd_float());
           if(cmd_seen('W')) setParameter(P_FWRETRACT, 1, cmd_float());
@@ -725,7 +730,19 @@ void sendQueueCmd(void)
             }
             break;
         #endif
+        case 355: //M355
+        {
+          if(cmd_seen('S')) {
+            caseLightSetState(cmd_value() > 0);
+            caseLightSendWaiting(false);
+          }
+          if(cmd_seen('P')){
+            caseLightSetBrightness(cmd_value());
+            caseLightSendWaiting(false);
+          }
 
+          break;
+        }
         case 420: //M420
           //ABL state will be set through parsACK.c after receiving confirmation message from the printer
           // to prevent wrong state in case of error.

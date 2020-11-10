@@ -56,6 +56,7 @@
     #define STRING_BLTOUCH_REPEAT         "Répéter"
     #define STRING_Z_OFFSET               "Z Offset"
     #define STRING_PROBE_OFFSET           "Décalage Palpeur"
+    #define STRING_HOME_OFFSET            "Home Offset"
     #define STRING_CONFIRMATION           "Êtes-vous sûr ?"
     #define STRING_DOWN                   "Descendre"
     #define STRING_UP                     "Monter"
@@ -275,5 +276,6 @@
     #define STRING_NOTIFICATIONS          "Notifications"
     #define STRING_MESH_EDITOR            "Maillage"
     #define STRING_MESH_TUNER             "Edition du maillage"
+    #define STRING_CASE_LIGHT             "Case light"
 
 #endif
