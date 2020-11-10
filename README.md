@@ -33,14 +33,21 @@ In case your mainboard provides **EXP1 and EXP2**, you have to connect 2 ribbon 
 
 In case you have an **"E3" mainboard** which provides a **single EXP connector**, you have to connect 1 ribbon cable connecting EXP of the mainboard to **EXP3** of the TFT. In the Marlin firmware of your mainboard, make sure that **ONLY** the "CR10_STOCKDISPLAY" is activated in Configuration.h and that all other controllers (especially the "REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER") are **De**activated.
 
-## Menus and Themes
+## Menus
 
-|                Classic Menu &amp; Icon Theme                 |            Unified Menu &amp; Material Icon Theme            |      |      |
-| :----------------------------------------------------------: | :----------------------------------------------------------: | ---- | ---- |
-| ![](https://user-images.githubusercontent.com/54511555/77016371-ad9a2e00-6934-11ea-9e57-23c2ab2cad58.png) | ![](https://user-images.githubusercontent.com/54511555/77016415-d3273780-6934-11ea-8c61-a184fa55b420.png) |      |      |
-| Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update) folder | Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update - Unified Menu Material theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update%20-%20Unified%20Menu%20Material%20theme) folder |      |      |
+|                   Classic Menu Main Screen                   |                   Unified Menu Main Screen                   |
+| :----------------------------------------------------------: | :----------------------------------------------------------: |
+| ![Classic](https://user-images.githubusercontent.com/54359396/98740417-4d686880-23ab-11eb-873f-82c7d338a139.png) | ![](https://user-images.githubusercontent.com/54511555/77016415-d3273780-6934-11ea-8c61-a184fa55b420.png) |
+| In config.ini define: General Settings                             UNIFIED MENU / CLASSIC MENU<br/># Select a UI Menu flavour<br/># Options: [Unified Menu: 1, Classic Menu: 0]<br/>**Classic Menu: 0** | In config.ini define: General Settings                                    UNIFIED MENU / CLASSIC MENU<br/># Select a UI Menu flavour<br/># Options: [Unified Menu: 1, Classic Menu: 0]<br/>**Unified Menu: 1** |
 
-## Update TFT Firmware
+## Themes
+
+|                        Unified Theme                         |                         Unified Menu                         |      |
+| :----------------------------------------------------------: | :----------------------------------------------------------: | ---- |
+| ![Classic](https://user-images.githubusercontent.com/54359396/98740417-4d686880-23ab-11eb-873f-82c7d338a139.png) | ![](https://user-images.githubusercontent.com/54511555/77016415-d3273780-6934-11ea-8c61-a184fa55b420.png) |      |
+| Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update) folder | Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update - Unified Menu Material theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update%20-%20Unified%20Menu%20Material%20theme) folder |      |
+
+## Update TFT FirmwareUpdate TFT Firmware
 
 
 TFT firmware updates are comprised of three elements:
