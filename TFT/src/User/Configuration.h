@@ -366,6 +366,27 @@
 #define MESH_LEFT_KEYBOARD 0
 
 /**
+ * Terminal settings
+ */
+
+// Enable keyboard color layout for the Terminal menu
+//
+// If standard, the keyboard is drawn using the standard configurable background and font colors.
+// If alternative, the keyboard is drawn using the alternative embedded colors (white and black colors).
+//
+// Options:  0: standard 1    1: standard 2    2: alternative
+//
+#define TERMINAL_KEYBOARD_COLOR_LAYOUT 0
+
+// Enable keyboard QWERTY layout for the Terminal menu with at least 10 columns
+//
+// If enabled, the QWERTY keyboard layout is used
+//
+// Options:  0: Disabled    1: Enabled
+//
+#define TERMINAL_KEYBOARD_QWERTY_LAYOUT 1
+
+/**
  * PID autotune
  */
 #define PID_CMD             {"M303 U1 C8 E0", "M303 U1 C8 E1", "M303 U1 C8 E2", "M303 U1 C8 E3", "M303 U1 C8 E4", "M303 U1 C8 E5", "M303 U1 C8 E-1", ""};
