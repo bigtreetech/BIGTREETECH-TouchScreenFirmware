@@ -27,25 +27,33 @@ Firmware for BigTreeTech's dual-mode touchscreen 3D printer controllers
 
 ## Connect the TFT to the Mainboard
 
-In case your TFT does **not** have an EXP connector at all (TFT28 for example), you can not use the Marlin emulator mode.
+Do the following, to be able to use the touchmode of your screen. 
 
-In case your mainboard provides **EXP1 and EXP2**, you have to connect 2 ribbon cables connecting EXP1 and EXP2 of the mainboard to EXP1 and EXP2 of the TFT. In the Marlin firmware of your mainboard, make sure that **ONLY** the "REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER" is activated in Configuration.h and that all other controllers (especially the "CR10_STOCKDISPLAY") are **De**activated.
+1. Connect the 5pin serial cable according to the manual of your mainboard.
+2. Define a serial port in Marlin, to activate the port used by the TFT.
+3. Make sure the same BAUDRATE is defined in Marlin and the firmware of your TFT (config.ini)
 
-In case you have an **"E3" mainboard** which provides a **single EXP connector**, you have to connect 1 ribbon cable connecting EXP of the mainboard to **EXP3** of the TFT. In the Marlin firmware of your mainboard, make sure that **ONLY** the "CR10_STOCKDISPLAY" is activated in Configuration.h and that all other controllers (especially the "REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER") are **De**activated.
+Do the following, to be able to use the Marlin emulation mode of your screen. 
+
+A: In case your TFT does **not** have an EXP connector at all (TFT28 v1 for example), you can not use the Marlin emulator mode.
+
+B: In case your mainboard provides **EXP1 and EXP2**, you have to connect 2 ribbon cables connecting EXP1 and EXP2 of the mainboard to EXP1 and EXP2 of the TFT. In the Marlin firmware of your mainboard, make sure that **ONLY** the "REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER" is activated in Configuration.h and that all other controllers (especially the "CR10_STOCKDISPLAY") are **De**activated.
+
+C: In case you have an **"E3" mainboard** which provides a **single EXP connector**, you have to connect 1 ribbon cable connecting EXP of the mainboard to **EXP3** of the TFT. In the Marlin firmware of your mainboard, make sure that **ONLY** the "CR10_STOCKDISPLAY" is activated in Configuration.h and that all other controllers (especially the "REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER") are **De**activated.
 
 ## Menus
 
 |                   Classic Menu Main Screen                   |                   Unified Menu Main Screen                   |
 | :----------------------------------------------------------: | :----------------------------------------------------------: |
-| ![Classic](https://user-images.githubusercontent.com/54359396/98740417-4d686880-23ab-11eb-873f-82c7d338a139.png) | ![](https://user-images.githubusercontent.com/54511555/77016415-d3273780-6934-11ea-8c61-a184fa55b420.png) |
+| ![Classic](https://user-images.githubusercontent.com/54359396/98740417-4d686880-23ab-11eb-873f-82c7d338a139.png) | ![Unified Material Main Screen](https://user-images.githubusercontent.com/54359396/98742038-03cd4d00-23ae-11eb-9552-36dc02fe66f4.png) |
 | In config.ini define: General Settings                             UNIFIED MENU / CLASSIC MENU<br/># Select a UI Menu flavour<br/># Options: [Unified Menu: 1, Classic Menu: 0]<br/>**Classic Menu: 0** | In config.ini define: General Settings                                    UNIFIED MENU / CLASSIC MENU<br/># Select a UI Menu flavour<br/># Options: [Unified Menu: 1, Classic Menu: 0]<br/>**Unified Menu: 1** |
 
 ## Themes
 
-|                        Unified Theme                         |                         Unified Menu                         |      |
-| :----------------------------------------------------------: | :----------------------------------------------------------: | ---- |
-| ![Classic](https://user-images.githubusercontent.com/54359396/98740417-4d686880-23ab-11eb-873f-82c7d338a139.png) | ![](https://user-images.githubusercontent.com/54511555/77016415-d3273780-6934-11ea-8c61-a184fa55b420.png) |      |
-| Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update) folder | Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update - Unified Menu Material theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update%20-%20Unified%20Menu%20Material%20theme) folder |      |
+|                      Unified Menu Theme                      | Hybrid Red Material Theme by **[AntoszHUN](https://github.com/AntoszHUN)** | The Round Miracle Theme by **[Acenotass](https://github.com/Acenotass)** |
+| :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
+| ![Unified Material Main Screen](https://user-images.githubusercontent.com/54359396/98742038-03cd4d00-23ae-11eb-9552-36dc02fe66f4.png) | ![Hybrid Red Menu Material Mainscreen](https://user-images.githubusercontent.com/54359396/98869176-a995c000-2471-11eb-94da-a0bc41abf3e9.png) | ![Round Miracle Mainscreen](https://user-images.githubusercontent.com/54359396/98869113-8b2fc480-2471-11eb-80bc-59d4c7903baa.png) |
+| Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update - Unified Menu Material theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update%20-%20Unified%20Menu%20Material%20theme) folder | Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update - Hybrid Red Material theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update%20-%20Unified%20Menu%20Material%20theme) folder | Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update - The Round Miracle theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update%20-%20Unified%20Menu%20Material%20theme) folder |
 
 ## Update TFT FirmwareUpdate TFT Firmware
 
