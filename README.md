@@ -76,9 +76,9 @@ Copy  the `BIGTREE_TFT*_V*.*.*.bin,the `TFT*` folder and the config.ini to the r
 
 ![Copy](https://user-images.githubusercontent.com/54359396/96474405-0e734700-1233-11eb-9ecb-958a891e58d7.png)
 
-**Optionally**, copy one or several language .ini file(s) from the Language Packs folder onto the SD card. Doing so will allow you to switch between English and the uploaded language(s), using the corresponding Language function of the TFT. We recommend to upload the minimum amount of languages, to keep the memory usage low. The language .ini file can be edited to change the text shown on the TFT.
+**Optionally**, copy one or several language .ini file(s) from Copy to SD Card root directory to update/Language Packs [`Copy to SD Card root directory to update/Language Packs`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/8963aed84c40a3b8daf2768a7feb37aeeab71996/Copy%20to%20SD%20Card%20root%20directory%20to%20update%20) folder onto the SD card. Doing so will allow you to switch between English and the uploaded language(s), using the corresponding Language function of the TFT. We recommend to upload the minimum amount of languages, to keep the memory usage low. The language .ini file can be edited to change the text shown on the TFT.
 
-![Language](https://user-images.githubusercontent.com/54359396/96474507-2b0f7f00-1233-11eb-97d0-578125d2ea5b.png)
+![Copy language](https://user-images.githubusercontent.com/54359396/98911362-c60f1800-24c4-11eb-95e6-e4f4dc64a9fb.png)
 
 
 Place SD card with the `BIGTREE_TFT*_V*.*.*.bin`, the`TFT*` folder and the config.ini into the TFT's SD card reader and reset your TFT (or optionally - power cycle your printer) to start the update process.
