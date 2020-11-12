@@ -46,7 +46,7 @@ C: In case you have an **"E3" mainboard** which provides a **single EXP connecto
 |                   Classic Menu Main Screen                   |                   Unified Menu Main Screen                   |
 | :----------------------------------------------------------: | :----------------------------------------------------------: |
 | ![Classic](https://user-images.githubusercontent.com/54359396/98740417-4d686880-23ab-11eb-873f-82c7d338a139.png) | ![Unified Material Main Screen](https://user-images.githubusercontent.com/54359396/98742038-03cd4d00-23ae-11eb-9552-36dc02fe66f4.png) |
-| In config.ini define: General Settings                                UNIFIED MENU / CLASSIC MENU<br/># Select a UI Menu flavour<br/># Options: [Unified Menu: 1, Classic Menu: 0]<br/>**Classic Menu: 0** | In config.ini define: General Settings                                    UNIFIED MENU / CLASSIC MENU<br/># Select a UI Menu flavour<br/># Options: [Unified Menu: 1, Classic Menu: 0]<br/>**Unified Menu: 1** |
+| In config.ini define: General Settings<br/>UNIFIED MENU / CLASSIC MENU<br/># Select a UI Menu flavour<br/># Options: [Unified Menu: 1, Classic Menu: 0]<br/>**Classic Menu: 0** | In config.ini define: General Settings<br/>UNIFIED MENU / CLASSIC MENU<br/># Select a UI Menu flavour<br/># Options: [Unified Menu: 1, Classic Menu: 0]<br/>**Unified Menu: 1** |
 
 ## Themes
 
@@ -55,7 +55,7 @@ C: In case you have an **"E3" mainboard** which provides a **single EXP connecto
 | ![Unified Material Main Screen](https://user-images.githubusercontent.com/54359396/98742038-03cd4d00-23ae-11eb-9552-36dc02fe66f4.png) | ![Hybrid Red Menu Material Mainscreen](https://user-images.githubusercontent.com/54359396/98869176-a995c000-2471-11eb-94da-a0bc41abf3e9.png) | ![Round Miracle Mainscreen](https://user-images.githubusercontent.com/54359396/98869113-8b2fc480-2471-11eb-80bc-59d4c7903baa.png) |
 | Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update - Unified Menu Material theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update%20-%20Unified%20Menu%20Material%20theme) folder | Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update - Hybrid Red Material theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/5cc30fdc213646f9296f3c1c65b1c6be1b556478/Copy%20to%20SD%20Card%20root%20directory%20to%20update%20-%20Hybrid%20Red%20Menu%20Material%20theme) folder | Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update - The Round Miracle theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/5cc30fdc213646f9296f3c1c65b1c6be1b556478/Copy%20to%20SD%20Card%20root%20directory%20to%20update%20-%20The%20Round%20Miracle) folder |
 
-## Update TFT FirmwareUpdate TFT Firmware
+## Update TFT Firmware
 
 
 TFT firmware updates are comprised of three elements:
