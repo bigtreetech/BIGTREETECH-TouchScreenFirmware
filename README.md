@@ -46,7 +46,7 @@ C: In case you have an **"E3" mainboard** which provides a **single EXP connecto
 |                   Classic Menu Main Screen                   |                   Unified Menu Main Screen                   |
 | :----------------------------------------------------------: | :----------------------------------------------------------: |
 | ![Classic](https://user-images.githubusercontent.com/54359396/98740417-4d686880-23ab-11eb-873f-82c7d338a139.png) | ![Unified Material Main Screen](https://user-images.githubusercontent.com/54359396/98742038-03cd4d00-23ae-11eb-9552-36dc02fe66f4.png) |
-| In config.ini define: General Settings<br/>UNIFIED MENU / CLASSIC MENU<br/># Select a UI Menu flavour<br/># Options: [Unified Menu: 1, Classic Menu: 0]<br/>**Classic Menu: 0** | In config.ini define: General Settings<br/>UNIFIED MENU / CLASSIC MENU<br/># Select a UI Menu flavour<br/># Options: [Unified Menu: 1, Classic Menu: 0]<br/>**Classic Menu: 1** |
+| In config.ini define: General Settings<br/>UNIFIED MENU / CLASSIC MENU<br/># Select a UI Menu flavour<br/># Options: [Unified Menu: 1, Classic Menu: 0]<br/>**unified menu: 0** | In config.ini define: General Settings<br/>UNIFIED MENU / CLASSIC MENU<br/># Select a UI Menu flavour<br/># Options: [Unified Menu: 1, Classic Menu: 0]<br/>**unified menu: 1** |
 
 ## Themes
 
