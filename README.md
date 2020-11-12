@@ -110,9 +110,8 @@ After the update is done and the files are renamed, it is possible to reuse them
 
 ## Configuration
 
-The Firmware can be configured using the **config.ini** file from from one of these folders:
-[`Copy to SD Card root directory to update`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update) or
-[`Copy to SD Card root directory to update - Unified Menu Material theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update%20-%20Unified%20Menu%20Material%20theme)
+The Firmware can be configured using the **config.ini** file from:
+[`Copy to SD Card root directory to update`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update)
 
 ### Editing configuration (config.ini) file
 
