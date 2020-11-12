@@ -27,13 +27,13 @@ Firmware for BigTreeTech's dual-mode touchscreen 3D printer controllers
 
 ## Connect the TFT to the Mainboard
 
-Do the following, to be able to use the touchmode of your screen. 
+**Do the following, to be able to use the touchmode of your screen.** 
 
 1. Connect the 5pin serial cable according to the manual of your mainboard.
 2. Define a serial port in Marlin, to activate the port used by the TFT.
 3. Make sure the same BAUDRATE is defined in Marlin and the firmware of your TFT (config.ini)
 
-Do the following, to be able to use the Marlin emulation mode of your screen. 
+**Do the following, to be able to use the Marlin emulation mode of your screen.** 
 
 A: In case your TFT does **not** have an EXP connector at all (TFT28 v1 for example), you can not use the Marlin emulator mode.
 
