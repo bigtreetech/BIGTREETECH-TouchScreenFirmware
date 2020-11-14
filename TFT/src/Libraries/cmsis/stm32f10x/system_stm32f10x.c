@@ -106,7 +106,7 @@
 #if defined (STM32F10X_LD_VL) || (defined STM32F10X_MD_VL) || (defined STM32F10X_HD_VL)
 /* #define SYSCLK_FREQ_HSE    HSE_VALUE */
  #define SYSCLK_FREQ_24MHz  24000000
-#elif defined (MKS_32_V1_4)
+#elif defined (MKS_32_V1_4) || (defined MKS_28_V1_0)
  #define SYSCLK_FREQ_48MHz  48000000
 #else
 /* #define SYSCLK_FREQ_HSE    HSE_VALUE */
