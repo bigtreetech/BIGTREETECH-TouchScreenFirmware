@@ -45,9 +45,9 @@ bool encoder_ReadBtn(uint16_t intervals)
 {
   static u32 nowTime = 0;
 
-  if(!GPIO_GetLevel(LCD_BTN_PIN))
+  if (!GPIO_GetLevel(LCD_BTN_PIN))
   {
-    if(OS_GetTimeMs() - nowTime > intervals)
+    if (OS_GetTimeMs() - nowTime > intervals)
     {
       return true;
     }
@@ -85,8 +85,8 @@ bool LCD_BtnTouch(uint16_t intervals)
 uint8_t encoder_GetPos(void)
 {
   uint8_t newbutton = 0;
-  if(encoder_ReadStep(LCD_ENCA_PIN)) newbutton |= EN_A;
-  if(encoder_ReadStep(LCD_ENCB_PIN)) newbutton |= EN_B;
+  if (encoder_ReadStep(LCD_ENCA_PIN)) newbutton |= EN_A;
+  if (encoder_ReadStep(LCD_ENCB_PIN)) newbutton |= EN_B;
 
   return newbutton;
 }
@@ -94,7 +94,7 @@ uint8_t encoder_GetPos(void)
 
 bool encoder_CheckState()
 {
- if(encoder_ReadBtn(LCD_BUTTON_INTERVALS) || _encLastBtn != encoder_GetPos())
+ if (encoder_ReadBtn(LCD_BUTTON_INTERVALS) || _encLastBtn != encoder_GetPos())
   {
     _encLastBtn = encoder_GetPos();
     return true;
@@ -145,13 +145,13 @@ void loopCheckEncoderSteps(void)
   static u16 sy;
   static bool MOVE = false;
 
-  if(!XPT2046_Read_Pen() && CTime < OS_GetTimeMs())
+  if (!XPT2046_Read_Pen() && CTime < OS_GetTimeMs())
   {
     TS_Get_Coordinates(&ex, &ey);
     if (!MOVE)
       sy = ey;
 
-    if(ex > LCD_FREE_WIDTH) //stop mode switch if touched in navigation area
+    if (ex > LCD_FREE_WIDTH) //stop mode switch if touched in navigation area
       skipMode = true;
     else
       skipMode = false;
@@ -194,7 +194,7 @@ void loopCheckEncoderSteps(void)
 //Send encoder pulse
 void sendEncoder(uint8_t num)
 {
-  if(num==1 || num==2 || num ==3)
+  if (num==1 || num==2 || num ==3)
   {
     GPIO_InitSet(LCD_BTN_PIN, MGPIO_MODE_OUT_PP, 0);
     GPIO_InitSet(LCD_ENCA_PIN, MGPIO_MODE_OUT_PP, 0);

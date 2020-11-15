@@ -42,7 +42,7 @@ bool toastAvailable(void)
 {
   for (int i = 0; i < TOAST_MSG_COUNT; i++)
   {
-      if(toastlist[i].isNew == true)
+      if (toastlist[i].isNew == true)
        return true;
   }
   return false;
@@ -51,10 +51,10 @@ bool toastAvailable(void)
 //show next notification
 void drawToast(bool redraw)
 {
-  if(!redraw)
+  if (!redraw)
     curToastDisplay = (curToastDisplay + 1) % TOAST_MSG_COUNT;
 
-  if(toastlist[curToastDisplay].isNew == true || redraw)
+  if (toastlist[curToastDisplay].isNew == true || redraw)
   {
     //Set toast notification running status
     _toastRunning = true;
@@ -99,7 +99,7 @@ void drawToast(bool redraw)
     toastlist[curToastDisplay].isNew = false;
 
     //set new timer if notification is new
-    if(!redraw)
+    if (!redraw)
       nextToastTime = OS_GetTimeMs() + TOAST_DURATION;
 
     GUI_RestoreColorDefault();
@@ -109,7 +109,7 @@ void drawToast(bool redraw)
 //check and control toast notification display
 void loopToast(void)
 {
-  if(getMenuType() == MENU_TYPE_FULLSCREEN)
+  if (getMenuType() == MENU_TYPE_FULLSCREEN)
     return;
 
   if (OS_GetTimeMs() > nextToastTime)
@@ -118,7 +118,7 @@ void loopToast(void)
     {
       drawToast(false);
     }
-    else if(_toastRunning == true)
+    else if (_toastRunning == true)
     {
       _toastRunning = false;
 

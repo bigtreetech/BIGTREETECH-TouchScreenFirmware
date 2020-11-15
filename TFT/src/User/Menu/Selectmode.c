@@ -30,7 +30,7 @@ void drawModeIcon(void)
 
   GUI_RestoreColorDefault();
 
-  if(infoSettings.marlin_type == LCD12864)
+  if (infoSettings.marlin_type == LCD12864)
     GUI_DispStringInPrect(&mode_title_rect[0],(uint8_t *)"LCD12864 Mode");
   else
     GUI_DispStringInPrect(&mode_title_rect[0],(uint8_t *)"LCD2004 Mode");
@@ -41,9 +41,9 @@ void drawModeIcon(void)
 bool LCD_ReadPen(uint16_t intervals)
 {
   static u32 TouchTime = 0;
-  if(!XPT2046_Read_Pen())
+  if (!XPT2046_Read_Pen())
   {
-    if(OS_GetTimeMs() - TouchTime > intervals)
+    if (OS_GetTimeMs() - TouchTime > intervals)
     {
       return true;
     }
@@ -78,14 +78,14 @@ void loopCheckMode(void)
 //  IDEALLY I would like to be able to swap even when the TFT is in printing mode
 //  but before I can allow that I need a way to make sure that we swap back into the right mode (and correct screen)
 //  and I really want a reliable way to DETECT that the TFT should be in printing mode even when the print was started externally.
-  if(isPrinting() || skipMode)
+  if (isPrinting() || skipMode)
     return;
 
-  if(infoMenu.menu[infoMenu.cur] == menuMode)
+  if (infoMenu.menu[infoMenu.cur] == menuMode)
     return;
 
 //  #endif
-  if(LCD_ReadPen(LCD_CHANGE_MODE_INTERVALS) 
+  if (LCD_ReadPen(LCD_CHANGE_MODE_INTERVALS) 
 #if LCD_ENCODER_SUPPORT 
       || encoder_ReadBtn(LCD_CHANGE_MODE_INTERVALS)
 #endif
@@ -129,21 +129,21 @@ void menuMode(void)
   {
     MKEY_VALUES key_num = MKeyGetValue();
 
-    if(key_num == MKEY_0 || key_num == MKEY_1)
+    if (key_num == MKEY_0 || key_num == MKEY_1)
     {
       nowMode = key_num;
       break;
     }
 
     #if LCD_ENCODER_SUPPORT
-      if(encoderPosition)
+      if (encoderPosition)
       {
         nowMode = NOBEYOND(0, nowMode + encoderPosition, MODE_COUNT - 1);
         drawSelectedMode(nowMode);
         encoderPosition = 0;
       }
 
-      if(encoder_ReadBtn(LCD_BUTTON_INTERVALS))
+      if (encoder_ReadBtn(LCD_BUTTON_INTERVALS))
       {
         break;
       }
@@ -160,7 +160,7 @@ void menuMode(void)
     }
   }
 
-  if(infoSettings.mode != nowMode)
+  if (infoSettings.mode != nowMode)
   {
     infoSettings.mode = nowMode;
     storePara();

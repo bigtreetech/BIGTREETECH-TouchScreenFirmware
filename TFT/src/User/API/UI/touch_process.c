@@ -64,7 +64,7 @@ u8 calibrationEnsure(u16 x,u16 y)
   lcd_y = (D*tp_x+E*tp_y+F)/K;
 
 
-  if(lcd_x < x+TS_ERR_RANGE && lcd_x>x-TS_ERR_RANGE  && lcd_y > y-TS_ERR_RANGE && lcd_y<y+TS_ERR_RANGE)
+  if (lcd_x < x+TS_ERR_RANGE && lcd_x>x-TS_ERR_RANGE  && lcd_y > y-TS_ERR_RANGE && lcd_y<y+TS_ERR_RANGE)
   {
     GUI_DispStringCenter(LCD_WIDTH/2, LCD_HEIGHT-40, (int32_t)LABEL_ADJUST_OK);
     Delay_ms(1000);
@@ -134,10 +134,10 @@ u16 Key_value(u8 total_rect,const GUI_RECT* menuRect)
   TS_Get_Coordinates(&x,&y);
   for(i=0;i<total_rect;i++)
   {
-    if((x>menuRect[i].x0)&&(x<menuRect[i].x1)&&(y>menuRect[i].y0)&&(y<menuRect[i].y1))
+    if ((x>menuRect[i].x0)&&(x<menuRect[i].x1)&&(y>menuRect[i].y0)&&(y<menuRect[i].y1))
     {
       #ifdef BUZZER_PIN
-        if(touchSound == true) BUZZER_PLAY(sound_keypress);
+        if (touchSound == true) BUZZER_PLAY(sound_keypress);
       #endif
       return i;
     }
@@ -148,9 +148,9 @@ u16 Key_value(u8 total_rect,const GUI_RECT* menuRect)
 void loopTouchScreen(void) // Handle in interrupt
 {
   static u8 touch;
-  if(!XPT2046_Read_Pen())
+  if (!XPT2046_Read_Pen())
   {
-    if(touch >= 20) // 20ms
+    if (touch >= 20) // 20ms
     {
       touchScreenIsPress = true;
     }
@@ -183,11 +183,11 @@ u16 KEY_GetValue(u8 total_rect,const GUI_RECT* menuRect)
 
   if (touchScreenIsPress)
   {
-    if(firstPress)
+    if (firstPress)
     {
       key_num = Key_value(total_rect, menuRect);
       firstPress = false;
-      if(TSC_ReDrawIcon)
+      if (TSC_ReDrawIcon)
         TSC_ReDrawIcon(key_num, 1);
     }
   }
@@ -195,7 +195,7 @@ u16 KEY_GetValue(u8 total_rect,const GUI_RECT* menuRect)
   {
     if (firstPress == false )
     {
-      if(TSC_ReDrawIcon)
+      if (TSC_ReDrawIcon)
         TSC_ReDrawIcon(key_num, 0);
       key_return = key_num;
       key_num = IDLE_TOUCH;
@@ -230,7 +230,7 @@ typedef enum
 
 //  static KEY_STATUS nowStatus = NO_CLICK;    //������ǰ��״̬
 
-//  if(touchScreenIsPress)
+//  if (touchScreenIsPress)
 //  {
 //    switch(nowStatus)
 //    {
@@ -241,7 +241,7 @@ typedef enum
 //        break;
 
 //      case FIRST_CLICK:
-//        if(OS_GetTime()-first_time>KEY_LONG_PRESS_START)
+//        if (OS_GetTime()-first_time>KEY_LONG_PRESS_START)
 //        {
 //          nowStatus  = LONG_PRESS;
 //          first_key |= KEY_LONG_CLICK;
@@ -249,7 +249,7 @@ typedef enum
 //        break;
 
 //      case FIRST_RELEASE:
-//        if(first_key == Key_value(total_rect,menuRect))
+//        if (first_key == Key_value(total_rect,menuRect))
 //        {
 //          nowStatus  = SECOND_CLICK;
 //          first_key |= KEY_DOUBLE_CLICK;
@@ -261,7 +261,7 @@ typedef enum
 //        break;
 
 //      case SECOND_CLICK:
-//        if(OS_GetTime()-first_time>KEY_LONG_PRESS_START)
+//        if (OS_GetTime()-first_time>KEY_LONG_PRESS_START)
 //        {
 //          nowStatus  = LONG_PRESS;
 //          first_key |= KEY_LONG_CLICK;
@@ -269,9 +269,9 @@ typedef enum
 //        break;
 
 //      case LONG_PRESS:
-//        if(OS_GetTime()-first_time>long_press_space)
+//        if (OS_GetTime()-first_time>long_press_space)
 //        {
-//          if(long_press_space>KEY_LONG_PRESS_SPACE_MIN)
+//          if (long_press_space>KEY_LONG_PRESS_SPACE_MIN)
 //            long_press_space--;
 //          first_time=OS_GetTime();
 //          key_return = first_key;
@@ -291,7 +291,7 @@ typedef enum
 //        break;
 
 //      case FIRST_RELEASE:
-//        if(OS_GetTime()-first_time>KEY_DOUOBLE_SPACE)
+//        if (OS_GetTime()-first_time>KEY_DOUOBLE_SPACE)
 //        {
 //        nowStatus  = NO_CLICK;
 //        key_return = first_key;
@@ -323,15 +323,15 @@ u16 KNOB_GetRV(GUI_RECT *knob)
   static u16 oldx=0,oldy=0;
   static u32 mytime;
 
-  if(touchScreenIsPress && OS_GetTimeMs() > mytime)
+  if (touchScreenIsPress && OS_GetTimeMs() > mytime)
   {
     mytime = OS_GetTimeMs() + 10;
     TS_Get_Coordinates(&x,&y);
-    if(x>knob->x0&&x<knob->x1&&y>knob->y0&&y<knob->y1)
+    if (x>knob->x0&&x<knob->x1&&y>knob->y0&&y<knob->y1)
     {
-      if(x>oldx+5)
+      if (x>oldx+5)
       {
-        if(oldy>(knob->y0+knob->y1)/2)
+        if (oldy>(knob->y0+knob->y1)/2)
         {
           key_return=KNOB_DEC;
         }
@@ -340,9 +340,9 @@ u16 KNOB_GetRV(GUI_RECT *knob)
           key_return=KNOB_INC;
         }
       }
-      else if(x<oldx-5)
+      else if (x<oldx-5)
       {
-        if(oldy>(knob->y0+knob->y1)/2)
+        if (oldy>(knob->y0+knob->y1)/2)
         {
           key_return=KNOB_INC;
         }
@@ -351,9 +351,9 @@ u16 KNOB_GetRV(GUI_RECT *knob)
           key_return=KNOB_DEC;
         }
       }
-      if(y>oldy+5)
+      if (y>oldy+5)
       {
-        if(x>(knob->x0+knob->x1)/2)
+        if (x>(knob->x0+knob->x1)/2)
         {
           key_return=KNOB_INC;
         }
@@ -362,9 +362,9 @@ u16 KNOB_GetRV(GUI_RECT *knob)
           key_return=KNOB_DEC;
         }
       }
-      else if(y<oldy-5)
+      else if (y<oldy-5)
       {
-        if(x>(knob->x0+knob->x1)/2)
+        if (x>(knob->x0+knob->x1)/2)
         {
           key_return=KNOB_DEC;
         }
@@ -375,7 +375,7 @@ u16 KNOB_GetRV(GUI_RECT *knob)
       }
     }
   }
-  if(key_return != IDLE_TOUCH)
+  if (key_return != IDLE_TOUCH)
   {
     oldx=x;
     oldy=y;

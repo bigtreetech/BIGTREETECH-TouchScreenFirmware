@@ -67,7 +67,7 @@ void menuBaudrate(void)
       break;
 
     default:
-      if(key_num < LISTITEM_PER_PAGE)
+      if (key_num < LISTITEM_PER_PAGE)
       {
         uint16_t tmp_i = listWidgetGetCurPage() * LISTITEM_PER_PAGE + key_num;
         if (tmp_i != cur_item) { // has changed
@@ -89,7 +89,7 @@ void menuBaudrate(void)
     loopProcess();
   }
 
-  if(memcmp(&now, &infoSettings, sizeof(SETTINGS)))
+  if (memcmp(&now, &infoSettings, sizeof(SETTINGS)))
   {
     storePara();
   }

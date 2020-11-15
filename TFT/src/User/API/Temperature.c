@@ -55,7 +55,7 @@ bool heatHasWaiting(void)
 {
   for(uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
   {
-    if(heater.T[i].waiting != WAIT_NONE)
+    if (heater.T[i].waiting != WAIT_NONE)
       return true;
   }
   return false;
@@ -65,11 +65,11 @@ bool heatHasWaiting(void)
 void heatSetIsWaiting(uint8_t tool, HEATER_WAIT isWaiting)
 {
   heater.T[tool].waiting = isWaiting;
-  if(isWaiting != WAIT_NONE) // wait heating now, query more frequently
+  if (isWaiting != WAIT_NONE) // wait heating now, query more frequently
   {
     heat_update_time = TEMPERATURE_QUERY_FAST_DURATION;
   }
-  else if(heatHasWaiting() == false)
+  else if (heatHasWaiting() == false)
   {
     heat_update_time = TEMPERATURE_QUERY_SLOW_DURATION;
   }
@@ -87,7 +87,7 @@ void heatClearIsWaiting(void)
 // Set current Tool (Extruder)
 void heatSetCurrentTool(uint8_t tool)
 {
-  if(tool >= infoSettings.ext_count) return;
+  if (tool >= infoSettings.ext_count) return;
   heater.toolIndex = tool;
 }
 
@@ -145,10 +145,10 @@ void loopCheckHeater(void)
 {
   do
   {  // Send M105 query temperature continuously
-    if(heat_update_waiting == true) {updateNextHeatCheckTime();break;}
-    if(OS_GetTimeMs() < nextHeatCheckTime)     break;
-    if(requestCommandInfoIsRunning())          break; //to avoid colision in Gcode response processing
-    if(storeCmd("M105\n") == false)            break;
+    if (heat_update_waiting == true) {updateNextHeatCheckTime();break;}
+    if (OS_GetTimeMs() < nextHeatCheckTime)     break;
+    if (requestCommandInfoIsRunning())          break; //to avoid colision in Gcode response processing
+    if (storeCmd("M105\n") == false)            break;
     updateNextHeatCheckTime();
     heat_update_waiting = true;
   }while(0);
@@ -167,16 +167,16 @@ void loopCheckHeater(void)
     heater.T[i].waiting = WAIT_NONE;
     if (heatHasWaiting())                                              continue;
 
-    if(infoMenu.menu[infoMenu.cur] == menuHeat)                        break;
+    if (infoMenu.menu[infoMenu.cur] == menuHeat)                        break;
     heat_update_time = TEMPERATURE_QUERY_SLOW_DURATION;
   }
 
   for(uint8_t i = 0; i < MAX_HEATER_COUNT; i++) // If the target temperature changes, send a Gcode to set the motherboard
   {
-    if(lastTarget[i] != heater.T[i].target)
+    if (lastTarget[i] != heater.T[i].target)
     {
       lastTarget[i] = heater.T[i].target;
-      if(heat_send_waiting[i] != true)
+      if (heat_send_waiting[i] != true)
       {
         heat_send_waiting[i] = true;
         storeCmd("%s ",heatCmd[i]);

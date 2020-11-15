@@ -124,14 +124,14 @@ void Serial_DMAClearFlag(uint8_t port)
 
 void USART_IRQHandler(uint8_t port)
 {
-  if((Serial[port].uart->SR & (1<<4))!=0)
+  if ((Serial[port].uart->SR & (1<<4))!=0)
   {
     Serial[port].uart->SR;
     Serial[port].uart->DR;
 
     dmaL1Data[port].wIndex = DMA_TRANS_LEN - Serial[port].dma_stream->NDTR;
     uint16_t wIndex = (dmaL1Data[port].wIndex == 0) ? DMA_TRANS_LEN : dmaL1Data[port].wIndex;
-    if(dmaL1Data[port].cache[wIndex-1] == '\n')  // Receive completed
+    if (dmaL1Data[port].cache[wIndex-1] == '\n')  // Receive completed
     {
       infoHost.rx_ok[port] = true;
     }

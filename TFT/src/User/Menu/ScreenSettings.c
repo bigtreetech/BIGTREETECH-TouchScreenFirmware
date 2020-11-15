@@ -59,7 +59,7 @@ void menuLanguage(void)
       break;
 
     default:
-      if(key_num < LISTITEM_PER_PAGE)
+      if (key_num < LISTITEM_PER_PAGE)
       {
         uint16_t cur_item = infoSettings.language;
         uint16_t tmp_i = listWidgetGetCurPage() * LISTITEM_PER_PAGE + key_num;
@@ -80,7 +80,7 @@ void menuLanguage(void)
     loopProcess();
   }
 
-  if(memcmp(&now, &infoSettings, sizeof(SETTINGS)))
+  if (memcmp(&now, &infoSettings, sizeof(SETTINGS)))
   {
     statusScreen_setReady(); // restore msg buffer when language is changed
     storePara();
@@ -148,7 +148,7 @@ void menuSimulatorBackGroundColor(void)
       break;
 
     default:
-      if(key_num < LISTITEM_PER_PAGE)
+      if (key_num < LISTITEM_PER_PAGE)
       {
         uint16_t tmp_i = listWidgetGetCurPage() * LISTITEM_PER_PAGE + key_num;
         if (tmp_i < LCD_COLOR_COUNT && tmp_i != cur_item) { // has changed
@@ -167,7 +167,7 @@ void menuSimulatorBackGroundColor(void)
     loopProcess();
   }
 
-  if(memcmp(&now, &infoSettings, sizeof(SETTINGS)))
+  if (memcmp(&now, &infoSettings, sizeof(SETTINGS)))
   {
     storePara();
   }
@@ -213,7 +213,7 @@ void menuSimulatorFontColor(void)
       break;
 
     default:
-      if(key_num < LISTITEM_PER_PAGE)
+      if (key_num < LISTITEM_PER_PAGE)
       {
         uint16_t tmp_i = listWidgetGetCurPage() * LISTITEM_PER_PAGE + key_num;
         if (tmp_i < LCD_COLOR_COUNT && tmp_i != cur_item) { // has changed
@@ -232,7 +232,7 @@ void menuSimulatorFontColor(void)
     loopProcess();
   }
 
-  if(memcmp(&now, &infoSettings, sizeof(SETTINGS)))
+  if (memcmp(&now, &infoSettings, sizeof(SETTINGS)))
   {
     storePara();
   }
@@ -251,7 +251,7 @@ void menuSoundSettings(void)
     {ICONCHAR_TOGGLE_ON, LIST_TOGGLE,  LABEL_TOUCH_SOUND,  LABEL_BACKGROUND},
     {ICONCHAR_TOGGLE_ON, LIST_TOGGLE,  LABEL_ALERT_SOUND,  LABEL_BACKGROUND},
     {ICONCHAR_TOGGLE_ON, LIST_TOGGLE,  LABEL_TOAST_SOUND,  LABEL_BACKGROUND},
-    {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND,   LABEL_BACKGROUND},
+    {ICONCHAR_TOGGLE_ON, LIST_TOGGLE,  LABEL_TOAST_SOUND,  LABEL_BACKGROUND},
     {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND,   LABEL_BACKGROUND},
     {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND,   LABEL_BACKGROUND},
     {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND,   LABEL_BACKGROUND},
@@ -261,6 +261,7 @@ void menuSoundSettings(void)
   sounditems.items[0].icon = (infoSettings.touchSound == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
   sounditems.items[1].icon = (infoSettings.alertSound == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
   sounditems.items[2].icon = (infoSettings.toastSound == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
+  sounditems.items[3].icon = (infoSettings.preheatDoneSound == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
 
   KEY_VALUES key_num = KEY_IDLE;
   SETTINGS now = infoSettings;
@@ -340,7 +341,7 @@ void menuScreenSettings(void)
 
     for(u8 i = 0; i < LCD_COLOR_COUNT; i++)
     {
-      if(infoSettings.marlin_mode_bg_color == lcd_colors[i])
+      if (infoSettings.marlin_mode_bg_color == lcd_colors[i])
       {
         screenSettingsItems.items[LCD12864_BG_INDEX].label = lcd_color_names[i];
       }
@@ -349,7 +350,7 @@ void menuScreenSettings(void)
     // LCD12864 font color
     for(u8 i = 0; i < LCD_COLOR_COUNT; i++)
     {
-      if(infoSettings.marlin_mode_font_color == lcd_colors[i])
+      if (infoSettings.marlin_mode_font_color == lcd_colors[i])
       {
         screenSettingsItems.items[LCD12864_FN_INDEX].label = lcd_color_names[i];
       }
@@ -412,7 +413,7 @@ void menuScreenSettings(void)
     loopProcess();
   }
 
-  if(memcmp(&now, &infoSettings, sizeof(SETTINGS)))
+  if (memcmp(&now, &infoSettings, sizeof(SETTINGS)))
   {
     storePara();
   }

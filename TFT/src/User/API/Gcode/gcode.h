@@ -1,5 +1,5 @@
-#ifndef _GCODE_H_
-#define _GCODE_H_
+#pragma once
+
 #include "stdbool.h"
 #include "interfaceCmd.h"
 
@@ -33,4 +33,3 @@ bool request_M524(void);
 bool request_M24(int pos);
 long request_M23(char *filename);
 
-#endif

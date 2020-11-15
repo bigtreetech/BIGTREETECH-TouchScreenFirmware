@@ -114,13 +114,13 @@ bool Get_NewestGcode(const TCHAR* path)
   len=strlen(path);
   while (f_readdir(&dirs, &finfo) == FR_OK)
   {
-    if(finfo.fname[0]==0)                           break;
-    if((finfo.fattrib&AM_HID) != 0)                 continue;
+    if (finfo.fname[0]==0)                           break;
+    if ((finfo.fattrib&AM_HID) != 0)                 continue;
 
-    if((finfo.fattrib&AM_DIR) == AM_DIR)
+    if ((finfo.fattrib&AM_DIR) == AM_DIR)
     {
       char  *nextdirpath = malloc(len+strlen(finfo.fname)+2);
-      if(nextdirpath==NULL)                         break;
+      if (nextdirpath==NULL)                         break;
 
       strcpy(nextdirpath, path);
       strcat(nextdirpath,"/");
@@ -132,13 +132,13 @@ bool Get_NewestGcode(const TCHAR* path)
     }
     else
     {
-      if(strstr(finfo.fname,".gcode")==NULL)        continue;
-      if(((finfo.fdate <<16)|finfo.ftime) < date)   continue;
+      if (strstr(finfo.fname,".gcode")==NULL)        continue;
+      if (((finfo.fdate <<16)|finfo.ftime) < date)   continue;
 
       date=(finfo.fdate <<16)|finfo.ftime;
       resetInfoFile();
 
-      if(len+strlen(finfo.fname)+2>MAX_PATH_LEN)    break;
+      if (len+strlen(finfo.fname)+2>MAX_PATH_LEN)    break;
 
       strcpy(infoFile.title,path);
       strcat(infoFile.title,"/");

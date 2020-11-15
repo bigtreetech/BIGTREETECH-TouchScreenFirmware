@@ -406,7 +406,7 @@ static uint32_t USB_OTG_USBH_handle_port_ISR (USB_OTG_CORE_HANDLE *pdev)
           USB_OTG_WRITE_REG32(&pdev->regs.HREGS->HFIR, 6000 );
           if (hcfg.b.fslspclksel != HCFG_6_MHZ)
           {
-            if(pdev->cfg.phy_itface  == USB_OTG_EMBEDDED_PHY)
+            if (pdev->cfg.phy_itface  == USB_OTG_EMBEDDED_PHY)
             {
               USB_OTG_InitFSLSPClkSel(pdev , HCFG_6_MHZ);
             }
@@ -549,7 +549,7 @@ uint32_t USB_OTG_USBH_handle_hc_n_Out_ISR (USB_OTG_CORE_HANDLE *pdev , uint32_t 
   {
     MASK_HOST_INT_CHH (num);
 
-    if(pdev->host.HC_Status[num] == HC_XFRC)
+    if (pdev->host.HC_Status[num] == HC_XFRC)
     {
       pdev->host.URB_State[num] = URB_DONE;
 
@@ -558,23 +558,23 @@ uint32_t USB_OTG_USBH_handle_hc_n_Out_ISR (USB_OTG_CORE_HANDLE *pdev , uint32_t 
         pdev->host.hc[num].toggle_out ^= 1;
       }
     }
-    else if(pdev->host.HC_Status[num] == HC_NAK)
+    else if (pdev->host.HC_Status[num] == HC_NAK)
     {
       pdev->host.URB_State[num] = URB_NOTREADY;
     }
-    else if(pdev->host.HC_Status[num] == HC_NYET)
+    else if (pdev->host.HC_Status[num] == HC_NYET)
     {
-      if(pdev->host.hc[num].do_ping == 1)
+      if (pdev->host.hc[num].do_ping == 1)
       {
         USB_OTG_HC_DoPing(pdev, num);
       }
       pdev->host.URB_State[num] = URB_NOTREADY;
     }
-    else if(pdev->host.HC_Status[num] == HC_STALL)
+    else if (pdev->host.HC_Status[num] == HC_STALL)
     {
       pdev->host.URB_State[num] = URB_STALL;
     }
-    else if(pdev->host.HC_Status[num] == HC_XACTERR)
+    else if (pdev->host.HC_Status[num] == HC_XACTERR)
     {
       {
         pdev->host.URB_State[num] = URB_ERROR;
@@ -669,7 +669,7 @@ uint32_t USB_OTG_USBH_handle_hc_n_In_ISR (USB_OTG_CORE_HANDLE *pdev , uint32_t n
       pdev->host.hc[num].toggle_in ^= 1;
 
     }
-    else if(hcchar.b.eptype == EP_TYPE_INTR)
+    else if (hcchar.b.eptype == EP_TYPE_INTR)
     {
       hcchar.b.oddfrm  = 1;
       USB_OTG_WRITE_REG32(&pdev->regs.HC_REGS[num]->HCCHAR, hcchar.d32);
@@ -680,7 +680,7 @@ uint32_t USB_OTG_USBH_handle_hc_n_In_ISR (USB_OTG_CORE_HANDLE *pdev , uint32_t n
   {
     MASK_HOST_INT_CHH (num);
 
-    if(pdev->host.HC_Status[num] == HC_XFRC)
+    if (pdev->host.HC_Status[num] == HC_XFRC)
     {
       pdev->host.URB_State[num] = URB_DONE;
     }
@@ -690,14 +690,14 @@ uint32_t USB_OTG_USBH_handle_hc_n_In_ISR (USB_OTG_CORE_HANDLE *pdev , uint32_t n
       pdev->host.URB_State[num] = URB_STALL;
     }
 
-    else if((pdev->host.HC_Status[num] == HC_XACTERR) ||
+    else if ((pdev->host.HC_Status[num] == HC_XACTERR) ||
             (pdev->host.HC_Status[num] == HC_DATATGLERR))
     {
       pdev->host.ErrCnt[num] = 0;
       pdev->host.URB_State[num] = URB_ERROR;
 
     }
-    else if(hcchar.b.eptype == EP_TYPE_INTR)
+    else if (hcchar.b.eptype == EP_TYPE_INTR)
     {
       pdev->host.hc[num].toggle_in ^= 1;
     }
@@ -714,7 +714,7 @@ uint32_t USB_OTG_USBH_handle_hc_n_In_ISR (USB_OTG_CORE_HANDLE *pdev , uint32_t n
   }
   else if (hcint.b.nak)
   {
-    if(hcchar.b.eptype == EP_TYPE_INTR)
+    if (hcchar.b.eptype == EP_TYPE_INTR)
     {
       UNMASK_HOST_INT_CHH (num);
       if (pdev->cfg.dma_enable == 0)
@@ -785,7 +785,7 @@ static uint32_t USB_OTG_USBH_handle_rx_qlvl_ISR (USB_OTG_CORE_HANDLE *pdev)
       pdev->host.XferCnt[channelnum]  = count;
 
       hctsiz.d32 = USB_OTG_READ_REG32(&pdev->regs.HC_REGS[channelnum]->HCTSIZ);
-      if(hctsiz.b.pktcnt > 0)
+      if (hctsiz.b.pktcnt > 0)
       {
         /* re-activate the channel when more packets are expected */
         hcchar.b.chen = 1;

@@ -265,7 +265,7 @@ char * getDynamicTextValue(uint8_t i)
 // save dynamic value (upto 7 digits) ( i : index of the value position, value:float value)
 void setDynamicValue(uint8_t i,float value)
 {
-  if(value < 1.0f)
+  if (value < 1.0f)
   {
     sprintf(dynamic_text_value[i], "%.3f", value);
   }
@@ -349,7 +349,7 @@ void DrawCharIcon(const GUI_RECT * rect,ICON_POS iconalign, uint16_t iconindex,b
 {
       GUI_POINT icon_p = getTextStartPoint(rect->x0, rect->y0, rect->x1,rect->y1,iconalign,GET_ICONCHAR[iconindex]);
       GUI_SetColor(ICON_COLOR[iconindex]);
-      if(drawBgColor)
+      if (drawBgColor)
       {
         GUI_SetBkColor(btn_color);
         GUI_ClearPrect(rect);
@@ -384,9 +384,9 @@ void ListItem_Display(const GUI_RECT* rect, uint8_t position, const LISTITEM * c
   //draw navigation icons
   if (getMenuType() != MENU_TYPE_LISTVIEW) return;
 
-  if(position >= LISTITEM_PER_PAGE)
+  if (position >= LISTITEM_PER_PAGE)
   {
-    if(curitem->icon != ICONCHAR_BACKGROUND)
+    if (curitem->icon != ICONCHAR_BACKGROUND)
     {
       if (curitem->icon != ICONCHAR_BLANK)
       {
@@ -419,7 +419,7 @@ void ListItem_Display(const GUI_RECT* rect, uint8_t position, const LISTITEM * c
     switch (curitem->itemType)
     {
     case LIST_LABEL:
-      if(curitem->icon != ICONCHAR_BLANK) {
+      if (curitem->icon != ICONCHAR_BLANK) {
         DrawCharIcon(rect,LEFT_CENTER,curitem->icon, true, infoSettings.bg_color);
         pos.x += (BYTE_HEIGHT + 1);
        }
@@ -445,7 +445,7 @@ void ListItem_Display(const GUI_RECT* rect, uint8_t position, const LISTITEM * c
     case LIST_MOREBUTTON:
       GUI_ClearPrect(rect);
 
-      if(curitem->icon != ICONCHAR_BLANK) {
+      if (curitem->icon != ICONCHAR_BLANK) {
         DrawCharIcon(rect,LEFT_CENTER,curitem->icon, true, infoSettings.bg_color);
         pos.x += (BYTE_HEIGHT + 1);
        }
@@ -461,7 +461,7 @@ void ListItem_Display(const GUI_RECT* rect, uint8_t position, const LISTITEM * c
       break;
 
     case LIST_CUSTOMVALUE:
-      if(curitem->icon != ICONCHAR_BLANK) {
+      if (curitem->icon != ICONCHAR_BLANK) {
         DrawCharIcon(rect,LEFT_CENTER,curitem->icon, true, infoSettings.bg_color);
         pos.x += (BYTE_HEIGHT + 3);
       }

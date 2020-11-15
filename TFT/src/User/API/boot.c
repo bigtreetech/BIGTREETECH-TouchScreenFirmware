@@ -44,7 +44,7 @@ bool bmpDecode(char *bmp, u32 addr)
 
   GUI_COLOR pix;
 
-  if(f_open(&bmpFile,bmp,FA_OPEN_EXISTING | FA_READ)!=FR_OK)
+  if (f_open(&bmpFile,bmp,FA_OPEN_EXISTING | FA_READ)!=FR_OK)
   {
     bmp_stat = BMP_NOTFOUND;
     return false;
@@ -66,7 +66,7 @@ bool bmpDecode(char *bmp, u32 addr)
   bmp_size.y = h;
   f_lseek(&bmpFile, 28);
   f_read(&bmpFile, &bpp, sizeof(short),&mybr);
-  if(bpp<24)
+  if (bpp<24)
   {
     f_close(&bmpFile);
     bmp_stat = BMP_NOT24BIT;
@@ -74,7 +74,7 @@ bool bmpDecode(char *bmp, u32 addr)
   }
   bpp >>=3;
   bytePerLine=w*bpp;
-  if(bytePerLine%4 !=0) //bmp
+  if (bytePerLine%4 !=0) //bmp
     bytePerLine=(bytePerLine/4+1)*4;
 
   for(bnum=0; bnum<(w*h*2+W25QXX_SECTOR_SIZE-1)/W25QXX_SECTOR_SIZE; bnum++)
@@ -105,7 +105,7 @@ bool bmpDecode(char *bmp, u32 addr)
       buf[bnum++]=(u8)(pix.color>>8);
       buf[bnum++]=(u8)(pix.color&0xFF);
 
-      if(bnum == 256)
+      if (bnum == 256)
       {
         W25Qxx_WritePage(buf,addr,256);
         addr+=256;
@@ -196,7 +196,7 @@ bool updateIcon(void)
     notfound++;
     dispIconFail((u8 *)(BMP_ROOT_DIR "/InfoBox.bmp"));
   }
-  if(notfound == 0)
+  if (notfound == 0)
     return true;
   else
     return false;
@@ -255,12 +255,12 @@ bool updateFont(char *font, u32 addr)
     W25Qxx_EraseSector(addr + offset);
     W25Qxx_WriteBuffer(tempbuf, addr + offset, W25QXX_SECTOR_SIZE);
     offset += rnum;
-    if(progress != offset * 100 / f_size(&myfp))
+    if (progress != offset * 100 / f_size(&myfp))
     {
       progress = offset * 100 / f_size(&myfp);
       GUI_DispDec(0 + BYTE_WIDTH*9, 140, progress, 3, RIGHT);
     }
-    if(rnum !=W25QXX_SECTOR_SIZE)break;
+    if (rnum !=W25QXX_SECTOR_SIZE)break;
   }
 
   f_close(&myfp);
@@ -335,7 +335,7 @@ void scanUpdates(void)
   uint32_t cur_flash_sign[sign_count];
   W25Qxx_ReadBuffer((uint8_t*)&cur_flash_sign, FLASH_SIGN_ADDR, sizeof(cur_flash_sign));
 
-  if(mountSDCard()) {
+  if (mountSDCard()) {
     if (f_dir_exists(FONT_ROOT_DIR))
     {
       if (updateFont(FONT_ROOT_DIR "/byte_ascii.fon", BYTE_ASCII_ADDR) &&

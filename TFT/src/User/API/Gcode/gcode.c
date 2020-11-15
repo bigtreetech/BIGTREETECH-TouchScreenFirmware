@@ -182,7 +182,7 @@ long request_M23(char *filename)
  **/
 bool request_M24(int pos)
 {
-  if(pos == 0)
+  if (pos == 0)
   {
     mustStoreCmd("M24\n");
   }

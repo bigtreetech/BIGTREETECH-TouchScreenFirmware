@@ -84,12 +84,12 @@ void menuSpeed(void)
     switch(key_num)
     {
       case KEY_ICON_0:
-        if(now > SPEED_MIN)
+        if (now > SPEED_MIN)
           speedSetPercent(item_percentage_i, now - item_percent_unit[item_percent_unit_i]);
         break;
 
       case KEY_ICON_3:
-        if(now < SPEED_MAX)
+        if (now < SPEED_MAX)
           speedSetPercent(item_percentage_i, now + item_percent_unit[item_percent_unit_i]);
         break;
 
@@ -116,7 +116,7 @@ void menuSpeed(void)
         break;
       default:
         #if LCD_ENCODER_SUPPORT
-          if(encoderPosition)
+          if (encoderPosition)
           {
             if (now < SPEED_MAX && encoderPosition > 0)
             {

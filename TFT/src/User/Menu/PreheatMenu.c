@@ -1,6 +1,9 @@
 #include "PreheatMenu.h"
 #include "includes.h"
 
+//Set this for preheatnotification to 1
+#define preheatNotification 1
+
 const GUI_POINT preheat_title = {ICON_WIDTH/2, PREHEAT_TITLE_Y };
 const GUI_POINT preheat_val_tool = {ICON_WIDTH - BYTE_WIDTH/2, PREHEAT_TOOL_Y};
 const GUI_POINT preheat_val_bed = {ICON_WIDTH - BYTE_WIDTH/2, PREHEAT_BED_Y};

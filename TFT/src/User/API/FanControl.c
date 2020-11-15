@@ -13,7 +13,7 @@ static bool fanQueryEnable = false;
 
 uint8_t fanGetTypID(uint8_t startIndex, uint8_t type) {
   for(uint8_t i = startIndex; i < MAX_FAN_COUNT; i++) {
-    if(fanType[i] == type) return i;
+    if (fanType[i] == type) return i;
   }
   return FAN_TYPE_UNKNOWN;
 }
@@ -26,11 +26,11 @@ void fanBuildList(void)
 
   for (uint8_t i = 0, j=0; i < MAX_FAN_COUNT; i++,j++)
   {
-    if( infoSettings.fan_count == i ) {
-      if( infoSettings.fan_ctrl_count > 0 ) i= (MAX_FAN_COUNT - MAX_FAN_CTRL_COUNT);
+    if ( infoSettings.fan_count == i ) {
+      if ( infoSettings.fan_ctrl_count > 0 ) i= (MAX_FAN_COUNT - MAX_FAN_CTRL_COUNT);
       else i= MAX_FAN_COUNT;
     }
-    if(i < MAX_FAN_COUNT) {
+    if (i < MAX_FAN_COUNT) {
       memcpy(fanID+j, fanIDTemp+i, sizeof(fanIDTemp[i]));
       memcpy(fanCmd+j, fanCmdTemp+i, sizeof(fanCmdTemp[i]));
       memcpy(fanType+j, fanTypeTemp+i, sizeof(fanTypeTemp[i]));
@@ -90,10 +90,10 @@ void loopFan(void)
     if (lastFanSpeed[i] != fanSpeed[i])
     {
       lastFanSpeed[i] = fanSpeed[i];
-      if(fan_send_waiting[i] == false)
+      if (fan_send_waiting[i] == false)
       {
         fan_send_waiting[i] = true;
-        if(fanIsType(i,FAN_TYPE_F) || fanIsType(i,FAN_TYPE_CTRL_S)) {
+        if (fanIsType(i,FAN_TYPE_F) || fanIsType(i,FAN_TYPE_CTRL_S)) {
           storeCmd("%s S%d\n", fanCmd[i],fanSpeed[i]);
         } 
         else if (fanIsType(i,FAN_TYPE_CTRL_I)) {
@@ -106,7 +106,7 @@ void loopFan(void)
 
 void fanSpeedQuery(void)
 {
-  if( fanQueryEnable && infoHost.connected && 
+  if ( fanQueryEnable && infoHost.connected && 
       !infoHost.wait && !fanQueryWait )
   { 
     storeCmd("M710\n");

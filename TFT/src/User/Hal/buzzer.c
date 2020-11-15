@@ -76,15 +76,13 @@ void Buzzer_play(SOUND sound)
   switch (sound)
   {
   case sound_ok:
-    if (infoSettings.alertSound != 1)
-      break;
+    if (infoSettings.alertSound != 1) break;
     Buzzer_TurnOn(3500, 50);
     Buzzer_TurnOn(0, 40);
     Buzzer_TurnOn(5500, 50);
     break;
   case sound_success:
-    if (infoSettings.alertSound != 1)
-      break;
+    if (infoSettings.alertSound != 1) break;
     Buzzer_TurnOn(3500, 50);
     Buzzer_TurnOn(0, 50);
     Buzzer_TurnOn(3500, 50);
@@ -92,15 +90,13 @@ void Buzzer_play(SOUND sound)
     Buzzer_TurnOn(3500, 50);
     break;
   case sound_cancel:
-    if (infoSettings.alertSound != 1)
-      break;
+    if (infoSettings.alertSound != 1) break;
     Buzzer_TurnOn(5500, 50);
     Buzzer_TurnOn(0, 20);
     Buzzer_TurnOn(3500, 40);
     break;
   case sound_notify:
-    if (infoSettings.alertSound != 1)
-      break;
+    if (infoSettings.alertSound != 1) break;
     Buzzer_TurnOn(3090, 50);
     Buzzer_TurnOn(0, 50);
     Buzzer_TurnOn(4190, 50);
@@ -113,19 +109,23 @@ void Buzzer_play(SOUND sound)
     Buzzer_TurnOn(2200, 200);
     break;
   case sound_deny:
-    if (infoSettings.alertSound != 1)
-      break;
+    if (infoSettings.alertSound != 1) break;
     Buzzer_TurnOn(500, 10);
   case sound_toast:
-    if (infoSettings.toastSound != 1)
-      break;
+    if (infoSettings.toastSound != 1) break;
     Buzzer_TurnOn(1500, 30);
     Buzzer_TurnOn(2000, 30);
     break;
+  case sound_preheatDone:
+    if (infoSettings.preheatDoneSound != 1) break;
+    buzzer_TurnOn(2000,250);
+    buzzer_TurnOn(0, 50);
+    buzzer_TurnOn(1500, 100);
+    buzzer_TurnOn(4000, 2500);
+    break;
   case sound_keypress:
   default:
-    if (infoSettings.touchSound != 1)
-      break;
+    if (infoSettings.touchSound != 1) break;
     Buzzer_TurnOn(BUZZER_FREQUENCY_HZ, BUZZER_FREQUENCY_DURATION_MS);
     break;
   }
@@ -151,7 +151,7 @@ void TIM3_IRQHandler(void) {
   if ((TIM3->SR & 0x01) != 0) {   // update interrupt flag
     TIM3->SR = (uint16_t)~(1<<0); // clear interrupt flag
     if (toggles != 0) {
-      if(toggles > 0) toggles--;
+      if (toggles > 0) toggles--;
        GPIO_ToggleLevel(BUZZER_PIN);
     } else {
       TIM3->CR1 &= ~(0x01); // stop timer

@@ -33,7 +33,7 @@ void TIM7_IRQHandler(void)
 
     loopTouchScreen();
 
-    if(os_counter == (uint32_t)(~0)) {
+    if (os_counter == (uint32_t)(~0)) {
       os_counter = 0;
     }
   }
@@ -59,9 +59,9 @@ void OS_TaskInit(OS_TASK *task, uint32_t time_ms, FP_TASK function, void *para)
 */
 void OS_TaskLoop(OS_TASK *task_t)
 {
-  if(task_t->is_exist == 0)   return;
-  if(OS_GetTimeMs() < task_t->next_time)  return;
-  if(task_t->is_repeat == 0)
+  if (task_t->is_exist == 0)   return;
+  if (OS_GetTimeMs() < task_t->next_time)  return;
+  if (task_t->is_repeat == 0)
   {
     task_t->is_exist = 0;
   }
@@ -79,7 +79,7 @@ void OS_TaskEnable(OS_TASK *task_t, uint8_t is_exec,uint8_t is_repeat)
   task_t->is_exist =1;
   task_t->is_repeat = is_repeat;
   task_t->next_time = OS_GetTimeMs() + task_t->time_ms;
-  if(is_exec)
+  if (is_exec)
     (*task_t->task)(task_t->para);
 }
 

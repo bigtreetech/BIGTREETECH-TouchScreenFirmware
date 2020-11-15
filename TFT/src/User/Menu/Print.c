@@ -61,16 +61,16 @@ void scrollFileNameCreate(u8 i)
 {
   u8 num=infoFile.cur_page * NUM_PER_PAGE + i;
 
-  if(infoFile.F_num + infoFile.f_num==0)
+  if (infoFile.F_num + infoFile.f_num==0)
   {
     memset(&gcodeScroll,0,sizeof(SCROLL));
     return;
   }
-  if(num<infoFile.F_num)
+  if (num<infoFile.F_num)
   {
     Scroll_CreatePara(&gcodeScroll, (u8* )infoFile.folder[num],&gcodeRect[i]);
   }
-  else if(num<infoFile.F_num+infoFile.f_num)
+  else if (num<infoFile.F_num+infoFile.f_num)
   {
     if (infoMachineSettings.long_filename_support == ENABLED)
     {
@@ -86,7 +86,7 @@ void scrollFileNameCreate(u8 i)
 
 void normalNameDisp(const GUI_RECT *rect, u8 *name)
 {
-  if(name == NULL) return;
+  if (name == NULL) return;
 
   GUI_ClearPrect(rect);
   GUI_SetRange(rect->x0, rect->y0, rect->x1, rect->y1);
@@ -117,9 +117,9 @@ void gocdeIconDraw(void)
   //draw files
   for( ;(i + infoFile.cur_page * NUM_PER_PAGE < infoFile.f_num + infoFile.F_num) && (i < NUM_PER_PAGE) ;i++)  // gcode file
   {
-    if(EnterDir(infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num]) == false) break;
+    if (EnterDir(infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num]) == false) break;
     // if model preview bmp exists, display bmp directly without writing to flash
-    if(model_DirectDisplay(getIconStartPoint(i), infoFile.title) != true)
+    if (model_DirectDisplay(getIconStartPoint(i), infoFile.title) != true)
     {
       curItem.icon = ICON_FILE;
       menuDrawItem(&curItem, i);
@@ -183,12 +183,12 @@ void gocdeListDraw(void)
     }
     else
     {
-      if(infoFile.cur_page == 0)
+      if (infoFile.cur_page == 0)
       {
         printListItems.items[5].icon = ICONCHAR_BACKGROUND;
         printListItems.items[6].icon = ICONCHAR_PAGEDOWN;
       }
-      else if(infoFile.cur_page == (t_pagenum-1))
+      else if (infoFile.cur_page == (t_pagenum-1))
       {
         printListItems.items[5].icon = ICONCHAR_PAGEUP;
         printListItems.items[6].icon = ICONCHAR_BACKGROUND;
@@ -222,7 +222,7 @@ void menuPrintFromSource(void)
 
   if (mountFS() == true && scanPrintFiles() == true)
   {
-    if(list_mode != true)
+    if (list_mode != true)
     {
       menuDrawPage(&printIconItems);
       gocdeIconDraw();
@@ -235,7 +235,7 @@ void menuPrintFromSource(void)
   }
   else
   {
-    if(infoFile.source == BOARD_SD)
+    if (infoFile.source == BOARD_SD)
     {
       GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, (u8*)requestCommandInfo.cmd_rev_buf);
     }
@@ -253,7 +253,7 @@ void menuPrintFromSource(void)
     Scroll_DispString(&titleScroll, LEFT);    //
     GUI_SetBkColor(infoSettings.bg_color);
 
-    if(list_mode != true)
+    if (list_mode != true)
     {
       Scroll_DispString(&gcodeScroll, CENTER); //
     }
@@ -263,7 +263,7 @@ void menuPrintFromSource(void)
     switch(key_num)
     {
     case KEY_ICON_5:
-      if(infoFile.cur_page > 0)
+      if (infoFile.cur_page > 0)
       {
         infoFile.cur_page--;
         update=1;
@@ -271,7 +271,7 @@ void menuPrintFromSource(void)
       break;
 
     case KEY_ICON_6:
-      if(infoFile.cur_page+1 < (infoFile.F_num+infoFile.f_num+(NUM_PER_PAGE-1))/NUM_PER_PAGE)
+      if (infoFile.cur_page+1 < (infoFile.F_num+infoFile.f_num+(NUM_PER_PAGE-1))/NUM_PER_PAGE)
       {
         infoFile.cur_page++;
         update=1;
@@ -280,7 +280,7 @@ void menuPrintFromSource(void)
 
     case KEY_ICON_7:
       infoFile.cur_page = 0;
-      if(IsRootDir() == true)
+      if (IsRootDir() == true)
       {
         clearInfoFile();
         infoMenu.cur--;
@@ -298,20 +298,20 @@ void menuPrintFromSource(void)
       break;
 
     default:
-      if(key_num < ITEM_PER_PAGE)
+      if (key_num < ITEM_PER_PAGE)
       {
         u16 start = infoFile.cur_page * NUM_PER_PAGE;
-        if(key_num + start < infoFile.F_num)						//folder
+        if (key_num + start < infoFile.F_num)						//folder
         {
-          if(EnterDir(infoFile.folder[key_num + start]) == false)  break;
+          if (EnterDir(infoFile.folder[key_num + start]) == false)  break;
           scanPrintFiles();
           update=1;
           infoFile.cur_page=0;
         }
-        else if(key_num+start < infoFile.F_num+infoFile.f_num)	//gcode
+        else if (key_num+start < infoFile.F_num+infoFile.f_num)	//gcode
         {
-          if(infoHost.connected !=true) break;
-          if(EnterDir(infoFile.file[key_num + start - infoFile.F_num]) == false) break;
+          if (infoHost.connected !=true) break;
+          if (EnterDir(infoFile.file[key_num + start - infoFile.F_num]) == false) break;
           //load model preview in flash if icon exists
           setPrintModelIcon(infoFile.source != BOARD_SD && model_DecodeToFlash(infoFile.title));
 
@@ -322,11 +322,11 @@ void menuPrintFromSource(void)
           showDialog(DIALOG_TYPE_QUESTION, startPrint, ExitDir, NULL);
         }
       }
-      else if(key_num >=KEY_LABEL_0 && key_num <= KEY_LABEL_4)
+      else if (key_num >=KEY_LABEL_0 && key_num <= KEY_LABEL_4)
       {
-        if(list_mode != true)
+        if (list_mode != true)
         {
-          if(key_num - KEY_LABEL_0 + infoFile.cur_page * NUM_PER_PAGE < infoFile.F_num + infoFile.f_num)
+          if (key_num - KEY_LABEL_0 + infoFile.cur_page * NUM_PER_PAGE < infoFile.F_num + infoFile.f_num)
           {
             normalNameDisp(gcodeScroll.rect, gcodeScroll.text);
             scrollFileNameCreate(key_num - KEY_LABEL_0);
@@ -336,11 +336,11 @@ void menuPrintFromSource(void)
       break;
     }
 
-    if(update)
+    if (update)
     {
       update=0;
 
-      if(list_mode != true)
+      if (list_mode != true)
       {
         gocdeIconDraw();
       }
@@ -351,7 +351,7 @@ void menuPrintFromSource(void)
     }
 
     #ifdef SD_CD_PIN
-    if(isVolumeExist(infoFile.source) != true)
+    if (isVolumeExist(infoFile.source) != true)
     {
       resetInfoFile();
       infoMenu.cur--;
@@ -413,7 +413,7 @@ void menuPrint(void)
         #else
           case KEY_ICON_1:
         #endif
-          if(infoMachineSettings.onboard_sd_support == ENABLED)
+          if (infoMachineSettings.onboard_sd_support == ENABLED)
           {
             list_mode = true; //force list mode in Onboard sd card
             infoFile.source = BOARD_SD;

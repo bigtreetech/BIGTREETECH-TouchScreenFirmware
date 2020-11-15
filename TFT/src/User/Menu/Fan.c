@@ -19,7 +19,7 @@ void fanSpeedReDraw(bool skip_header)
     GUI_DispString(exhibitRect.x0, exhibitRect.y0, (u8 *)tempstr);
   }
 
-  if(infoSettings.fan_percentage == 1)
+  if (infoSettings.fan_percentage == 1)
     sprintf(tempstr, "  %d%%  ", fanGetSpeedPercent(curIndex));
   else
     sprintf(tempstr, "  %d  ", (int)fanGetSpeed(curIndex));
@@ -118,7 +118,7 @@ void menuFan(void)
 
     default:
       #if LCD_ENCODER_SUPPORT
-        if(encoderPosition)
+        if (encoderPosition)
         {
           if (actFan < infoSettings.fan_max[curIndex] && encoderPosition > 0)
           {

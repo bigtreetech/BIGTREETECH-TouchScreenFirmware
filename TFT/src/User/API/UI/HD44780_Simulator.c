@@ -80,22 +80,22 @@ void HD44780_BI17_SetDDRAMAddress(uint8_t cmd)
   HD44780_reg.bi.ddrama.reg = cmd;
   // Set DDRAM address
   // x is 0-20 . y is 0-4
-  if(0x80 <= cmd && cmd <= 0x93)                // First line AC range is  80H … 93h
+  if (0x80 <= cmd && cmd <= 0x93)                // First line AC range is  80H … 93h
   {
     HD44780.y = 0;
     HD44780.x = cmd - 0x80;
   }
-  if(0xC0 <= cmd && cmd <= 0xD3)                // Second line AC range is C0H … D3H
+  if (0xC0 <= cmd && cmd <= 0xD3)                // Second line AC range is C0H … D3H
   {
     HD44780.y = 1;
     HD44780.x = cmd - 0xC0;
   }
-  if(0x94 <= cmd && cmd <= 0xA7)                // Third line AC range is  94H … A7H
+  if (0x94 <= cmd && cmd <= 0xA7)                // Third line AC range is  94H … A7H
   {
     HD44780.y = 2;
     HD44780.x = cmd - 0x94;
   }
-  if(0xD4 <= cmd && cmd <= 0xE7)                // Fourth line AC range is D4H … E7H
+  if (0xD4 <= cmd && cmd <= 0xE7)                // Fourth line AC range is D4H … E7H
   {
     HD44780.y = 3;
     HD44780.x = cmd - 0xD4;
@@ -105,7 +105,7 @@ void HD44780_BI17_SetDDRAMAddress(uint8_t cmd)
 
 void HD44780_DrawPixel(int16_t x, int16_t y, bool isForeGround, bool isFont)
 {
-  if(isFont)
+  if (isFont)
   {
     GUI_FillRectColor(XSTART + FONT_PIXEL * x,
                       YSTART + FONT_PIXEL * y,
@@ -129,7 +129,7 @@ void HD44780_DispDDRAM(uint8_t data)
   uint16_t i  = 0,
            ex = 0,
            ey = 0;
-  if(data < 8)                          // 5*8 bitmap
+  if (data < 8)                          // 5*8 bitmap
   {
     ex = HD44780.x * 6 + 6;
     ey = HD44780.y * 12 + 8;
@@ -143,7 +143,7 @@ void HD44780_DispDDRAM(uint8_t data)
     }
   }
   else{                                   //font
-    if(data < ' ' || data > '~') return;
+    if (data < ' ' || data > '~') return;
     ex = HD44780.x * BYTE_WIDTH + BYTE_WIDTH-1;
     ey = HD44780.y * BYTE_HEIGHT + BYTE_HEIGHT-1;
     CHAR_INFO info = {.bytes = 0};

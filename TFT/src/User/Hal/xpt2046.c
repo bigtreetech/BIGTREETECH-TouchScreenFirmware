@@ -68,7 +68,7 @@ u16 XPT2046_Average_AD(u8 CMD)
   {
     for(j=i+1; j<READ_TIMES; j++)
     {
-      if(buf[i] > buf[j]) //Ascending
+      if (buf[i] > buf[j]) //Ascending
       {
         temp = buf[i];
         buf[i] = buf[j];
@@ -90,7 +90,7 @@ u16 XPT2046_Repeated_Compare_AD(u8 CMD)
   ad1 = XPT2046_Average_AD(CMD);
   ad2 = XPT2046_Average_AD(CMD);
 
-  if((ad2 <= ad1 && ad1 < ad2 + ERR_RANGE)
+  if ((ad2 <= ad1 && ad1 < ad2 + ERR_RANGE)
   || (ad1 <= ad2 && ad2 < ad1 + ERR_RANGE)) //The error before and after is less than ERR_RANGE  //Two errors before and after ERR_RANGE
   {
     return (ad1+ad2)/2;

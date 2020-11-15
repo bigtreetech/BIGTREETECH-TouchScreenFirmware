@@ -72,7 +72,7 @@ bool model_DirectDisplay(GUI_POINT pos, char *gcode)
 {
   FIL  gcodeFile;
 
-  if(f_open(&gcodeFile, gcode, FA_OPEN_EXISTING | FA_READ) != FR_OK) return false;
+  if (f_open(&gcodeFile, gcode, FA_OPEN_EXISTING | FA_READ) != FR_OK) return false;
   // Move the file cursor to the corresponding resolution area
   f_lseek(&gcodeFile, MODEL_PREVIEW_OFFSET);
   // Check whether the icon size matches
@@ -103,7 +103,7 @@ bool model_DecodeToFlash(char *gcode)
   uint8_t buf[256];
   FIL  gcodeFile;
 
-  if(f_open(&gcodeFile, gcode, FA_OPEN_EXISTING | FA_READ) != FR_OK) return false;
+  if (f_open(&gcodeFile, gcode, FA_OPEN_EXISTING | FA_READ) != FR_OK) return false;
   // Move the file cursor to the corresponding resolution area
   f_lseek(&gcodeFile, MODEL_PREVIEW_OFFSET);
   // Check whether the icon size matches
@@ -127,7 +127,7 @@ bool model_DecodeToFlash(char *gcode)
       buf[bnum++]=(uint8_t)(color >> 8);
       buf[bnum++]=(uint8_t)(color & 0xFF);
 
-      if(bnum == 256)
+      if (bnum == 256)
       {
         W25Qxx_WritePage(buf,addr,256);
         addr+=256;

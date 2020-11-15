@@ -46,10 +46,10 @@ bool SpeedChanged(u8 i)
 void loopSpeed(void)
 {
   for(u8 i = 0; i < SPEED_NUM;i++)
-    if(curPercent[i] != percent[i])
+    if (curPercent[i] != percent[i])
     {
       curPercent[i] = percent[i];
-      if(send_waiting[i] != true)
+      if (send_waiting[i] != true)
       {
         send_waiting[i] = true;
         const char *speedCmd[SPEED_NUM] = {"M220","M221"};

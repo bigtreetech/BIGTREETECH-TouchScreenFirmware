@@ -3,7 +3,7 @@
 
 void isPauseConfirm(void)
 {
-  if(setPrintPause(true,false))
+  if (setPrintPause(true,false))
   {
     infoMenu.menu[infoMenu.cur] = menuExtrude;
   }

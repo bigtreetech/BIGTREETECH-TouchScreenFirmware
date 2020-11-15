@@ -215,12 +215,12 @@ void loadParameterPage(void)
   }
   else
   {
-    if(ps_cur_page == 0)
+    if (ps_cur_page == 0)
     {
       parameterMainItems.items[5].icon = ICONCHAR_BACKGROUND;
       parameterMainItems.items[6].icon = ICONCHAR_PAGEDOWN;
     }
-    else if(ps_cur_page == (total_pages-1))
+    else if (ps_cur_page == (total_pages-1))
     {
       parameterMainItems.items[5].icon = ICONCHAR_PAGEUP;
       parameterMainItems.items[6].icon = ICONCHAR_BACKGROUND;
@@ -254,7 +254,7 @@ void menuParameterSettings(void)
     switch (key_num)
     {
     case KEY_ICON_5:
-      if(total_pages > 1)
+      if (total_pages > 1)
       {
         if (ps_cur_page > 0)
         {
@@ -266,7 +266,7 @@ void menuParameterSettings(void)
       break;
 
     case KEY_ICON_6:
-      if(total_pages > 1)
+      if (total_pages > 1)
       {
         if (ps_cur_page < total_pages - 1)
         {
@@ -350,7 +350,7 @@ bool temperatureStatusValid(void)
 
 void loopTemperatureStatus(void)
 {
-  if(getMenuType() == MENU_TYPE_FULLSCREEN) return;
+  if (getMenuType() == MENU_TYPE_FULLSCREEN) return;
   if (!temperatureStatusValid()) return;
 
   uint8_t tmpHeater[3]; // chamber, bed, hotend

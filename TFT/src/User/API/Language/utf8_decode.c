@@ -122,9 +122,9 @@ static void getBitMapFontInfo(CHAR_INFO *pInfo)
   uint8_t i;
   for (i = 0; i < COUNT(font); i++)
   {
-    if(pInfo->codePoint >= font[i].startCodePoint && pInfo->codePoint <= font[i].endCodePoint)
+    if (pInfo->codePoint >= font[i].startCodePoint && pInfo->codePoint <= font[i].endCodePoint)
     {
-      if(i == 0 && largeFont)
+      if (i == 0 && largeFont)
         i++;
       pInfo->pixelWidth = font[i].pixelWidth;
       pInfo->pixelHeight = font[i].pixelHeight;
@@ -139,7 +139,7 @@ void getCharacterInfo(const uint8_t *ch, CHAR_INFO *pInfo)
 {
   pInfo->bytes = 0;
 
-  if(ch == NULL || *ch == 0) return;
+  if (ch == NULL || *ch == 0) return;
 
   getUTF8EncodeInfo(ch, pInfo);
 
@@ -152,7 +152,7 @@ uint16_t GUI_StrPixelWidth_str(const uint8_t * str)
   uint16_t i = 0, len = 0;
   CHAR_INFO info;
 
-  if(str == NULL) return 0;
+  if (str == NULL) return 0;
   while(str[i])
   {
     getCharacterInfo(str + i, &info);
@@ -174,7 +174,7 @@ uint16_t getUTF8Length(const uint8_t *const str)
  uint16_t i = 0, len = 0;
   CHAR_INFO info;
 
-  if(str == NULL) return 0;
+  if (str == NULL) return 0;
   while(str[i])
   {
     info.bytes = 0;

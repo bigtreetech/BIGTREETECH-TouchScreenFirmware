@@ -189,7 +189,7 @@ void statusScreen_setMsg(const uint8_t *title, const uint8_t *msg)
 void statusScreen_setReady(void)
 {
   strncpy(msgtitle, (char *)textSelect(LABEL_STATUS), sizeof(msgtitle));
-  if(infoHost.connected == false)
+  if (infoHost.connected == false)
   {
     strncpy(msgbody, (char *)textSelect(LABEL_UNCONNECTED), sizeof(msgbody));
   }
@@ -264,7 +264,7 @@ void menuStatus(void)
   drawStatusScreenMsg();
   while (infoMenu.menu[infoMenu.cur] == menuStatus)
   {
-    if(infoHost.connected != lastConnection_status)
+    if (infoHost.connected != lastConnection_status)
     {
       statusScreen_setReady();
       lastConnection_status = infoHost.connected;

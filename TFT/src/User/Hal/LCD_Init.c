@@ -80,7 +80,7 @@ void loopDimTimer(void)
       lcd_dim.dimmed = false;
       Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
       #ifdef LED_COLOR_PIN
-        if(infoSettings.knob_led_idle)
+        if (infoSettings.knob_led_idle)
         {
           WS2812_Send_DAT(led_color[infoSettings.knob_led_color]);
         }
@@ -100,7 +100,7 @@ void loopDimTimer(void)
       lcd_dim.dimmed = true;
       Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_idle_brightness]);
       #ifdef LED_COLOR_PIN
-        if(infoSettings.knob_led_idle)
+        if (infoSettings.knob_led_idle)
         {
           WS2812_Send_DAT(led_color[LED_OFF]);
         }
@@ -119,7 +119,7 @@ void _wakeLCD(void)
       lcd_dim.dimmed = false;
       Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
       #ifdef LED_COLOR_PIN
-        if(infoSettings.knob_led_idle)
+        if (infoSettings.knob_led_idle)
         {
           WS2812_Send_DAT(led_color[infoSettings.knob_led_color]);
         }

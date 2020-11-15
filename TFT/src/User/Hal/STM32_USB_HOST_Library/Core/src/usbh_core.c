@@ -258,7 +258,7 @@ void USBH_Process(USB_OTG_CORE_HANDLE *pdev , USBH_HOST *phost)
   /* check for Host port events */
   if (((HCD_IsDeviceConnected(pdev) == 0)|| (HCD_IsPortEnabled(pdev) == 0))&& (phost->gState != HOST_IDLE))
   {
-    if(phost->gState != HOST_DEV_DISCONNECTED)
+    if (phost->gState != HOST_DEV_DISCONNECTED)
     {
       phost->gState = HOST_DEV_DISCONNECTED;
     }
@@ -347,7 +347,7 @@ void USBH_Process(USB_OTG_CORE_HANDLE *pdev , USBH_HOST *phost)
     /*The function should return user response true to move to class state */
     if ( phost->usr_cb->UserInput() == USBH_USR_RESP_OK)
     {
-      if((phost->class_cb->Init(pdev, phost))\
+      if ((phost->class_cb->Init(pdev, phost))\
         == USBH_OK)
       {
         phost->gState  = HOST_CLASS_REQUEST;
@@ -359,7 +359,7 @@ void USBH_Process(USB_OTG_CORE_HANDLE *pdev , USBH_HOST *phost)
     /* process class standard control requests state machine */
     status = phost->class_cb->Requests(pdev, phost);
 
-     if(status == USBH_OK)
+     if (status == USBH_OK)
      {
        phost->gState  = HOST_CLASS;
      }
@@ -455,7 +455,7 @@ void USBH_ErrorHandle(USBH_HOST *phost, USBH_Status errType)
     phost->gState = HOST_ERROR_STATE;
   }
   /* USB host restart requested from application layer */
-  else if(errType == USBH_APPLY_DEINIT)
+  else if (errType == USBH_APPLY_DEINIT)
   {
     phost->gState = HOST_ERROR_STATE;
     /* user callback for initialization */
@@ -689,7 +689,7 @@ USBH_Status USBH_HandleControl (USB_OTG_CORE_HANDLE *pdev, USBH_HOST *phost)
 
     URB_Status = HCD_GetURB_State(pdev , phost->Control.hc_num_out);
     /* case SETUP packet sent successfully */
-    if(URB_Status == URB_DONE)
+    if (URB_Status == URB_DONE)
     {
       direction = (phost->Control.setup.b.bmRequestType & USB_REQ_DIR_MASK);
 
@@ -728,7 +728,7 @@ USBH_Status USBH_HandleControl (USB_OTG_CORE_HANDLE *pdev, USBH_HOST *phost)
       /* Set the delay timer to enable timeout for data stage completion */
       phost->Control.timer = HCD_GetCurrentFrame(pdev);
     }
-    else if(URB_Status == URB_ERROR)
+    else if (URB_Status == URB_ERROR)
     {
       phost->Control.state = CTRL_ERROR;
       phost->Control.status = CTRL_XACTERR;
@@ -840,12 +840,12 @@ USBH_Status USBH_HandleControl (USB_OTG_CORE_HANDLE *pdev, USBH_HOST *phost)
       phost->Control.state = CTRL_ERROR;
     }
 
-    else if((HCD_GetCurrentFrame(pdev)\
+    else if ((HCD_GetCurrentFrame(pdev)\
       - phost->Control.timer) > timeout)
     {
       phost->Control.state = CTRL_ERROR;
     }
-     else if(URB_Status == URB_STALL)
+     else if (URB_Status == URB_STALL)
     {
       /* Control transfers completed, Exit the State Machine */
       phost->gState =   phost->gStateBkp;

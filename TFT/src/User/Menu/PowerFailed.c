@@ -83,14 +83,14 @@ void powerFailedCache(u32 offset)
 
 void powerFailedClose(void)
 {
-  if(create_ok==false)   return;
+  if (create_ok==false)   return;
 
   f_close(&fpPowerFailed);
 }
 
 void  powerFailedDelete(void)
 {
-  if(create_ok==false)   return;
+  if (create_ok==false)   return;
 
   f_unlink(powerFailedFileName);
   clearPowerFailed();
@@ -100,9 +100,9 @@ static bool powerFailedExist(void)
 {
   FIL  fp;
   UINT br;
-  if(f_open(&fp, powerFailedFileName, FA_OPEN_EXISTING|FA_READ) != FR_OK) return false;
-  if(f_read(&fp, infoFile.title, MAX_PATH_LEN, &br) != FR_OK)             return false;
-  if(f_close(&fp) != FR_OK)                                               return false;
+  if (f_open(&fp, powerFailedFileName, FA_OPEN_EXISTING|FA_READ) != FR_OK) return false;
+  if (f_read(&fp, infoFile.title, MAX_PATH_LEN, &br) != FR_OK)             return false;
+  if (f_close(&fp) != FR_OK)                                               return false;
 
   create_ok = true;
   return true;
@@ -111,7 +111,7 @@ static bool powerFailedExist(void)
 
 bool powerFailedlSeek(FIL* fp)
 {
-  if(f_lseek(fp,infoBreakPoint.offset) != FR_OK)  return false;
+  if (f_lseek(fp,infoBreakPoint.offset) != FR_OK)  return false;
 
   return true;
 }
@@ -123,15 +123,15 @@ bool powerOffGetData(void)
   UINT    br;
   uint8_t model_icon;
 
-  if(f_open(&fp, powerFailedFileName, FA_OPEN_EXISTING|FA_READ) != FR_OK) return false;
-  if(f_lseek(&fp, MAX_PATH_LEN)                                 != FR_OK) return false;
-  if(f_read(&fp, &model_icon, 1, &br) != FR_OK)                           return false;
-  if(f_read(&fp, &infoBreakPoint,  sizeof(infoBreakPoint), &br) != FR_OK) return false;
+  if (f_open(&fp, powerFailedFileName, FA_OPEN_EXISTING|FA_READ) != FR_OK) return false;
+  if (f_lseek(&fp, MAX_PATH_LEN)                                 != FR_OK) return false;
+  if (f_read(&fp, &model_icon, 1, &br) != FR_OK)                           return false;
+  if (f_read(&fp, &infoBreakPoint,  sizeof(infoBreakPoint), &br) != FR_OK) return false;
 
   setPrintModelIcon(model_icon);
   for(int8_t i = MAX_HEATER_COUNT - 1; i >= 0; i--)
   {
-    if(infoBreakPoint.target[i] != 0)
+    if (infoBreakPoint.target[i] != 0)
     {
       mustStoreCacheCmd("%s S%d\n", heatWaitCmd[i], infoBreakPoint.target[i]);
     }
@@ -139,22 +139,22 @@ bool powerOffGetData(void)
 
   for(uint8_t i = 0; i < infoSettings.fan_count; i++)
   {
-    if(infoBreakPoint.fan[i] != 0 && fanIsType(i,FAN_TYPE_F))
+    if (infoBreakPoint.fan[i] != 0 && fanIsType(i,FAN_TYPE_F))
     {
       mustStoreCacheCmd("%s S%d\n", fanCmd[i], infoBreakPoint.fan[i]);
     }
   }
 
   mustStoreCacheCmd("%s\n", tool_change[infoBreakPoint.tool]);
-  if(infoBreakPoint.feedrate != 0)
+  if (infoBreakPoint.feedrate != 0)
   {
     uint16_t z_raised = 0;
-    if(infoSettings.btt_ups == 1)
+    if (infoSettings.btt_ups == 1)
     {
         z_raised += infoSettings.powerloss_z_raise;
     }
 
-    if(infoBreakPoint.pause)
+    if (infoBreakPoint.pause)
     {
         z_raised += infoSettings.pause_z_raise;
     }
@@ -182,11 +182,11 @@ bool powerOffGetData(void)
     mustStoreCacheCmd("G92 E%.5f\n",infoBreakPoint.axis[E_AXIS]);
     mustStoreCacheCmd("G1 F%d\n",infoBreakPoint.feedrate);
 
-    if(infoBreakPoint.relative_e == false)
+    if (infoBreakPoint.relative_e == false)
     {
       mustStoreCacheCmd("M82\n");
     }
-    if(infoBreakPoint.relative == true)
+    if (infoBreakPoint.relative == true)
     {
       mustStoreCacheCmd("G91\n");
     }
@@ -204,7 +204,7 @@ void menuPowerOff(void)
 
   GUI_DispString((LCD_WIDTH - GUI_StrPixelWidth(LABEL_LOADING))/2, LCD_HEIGHT/2 - BYTE_HEIGHT, LABEL_LOADING);
 
-  if(mountFS()==true && powerFailedExist())
+  if (mountFS()==true && powerFailedExist())
   {
     popupDrawPage(DIALOG_TYPE_QUESTION, bottomDoubleBtn, textSelect(LABEL_POWER_FAILED), (u8* )infoFile.title,
                     textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL));
@@ -229,7 +229,7 @@ void menuPowerOff(void)
       }
 
       #ifdef SD_CD_PIN
-      if(isVolumeExist(infoFile.source) != true)
+      if (isVolumeExist(infoFile.source) != true)
       {
         resetInfoFile();
         clearPowerFailed();

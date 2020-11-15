@@ -87,7 +87,7 @@ void SD_Cancel_CS(void)
 u8 SD_Select(void)
 {
   SD_SPI_CS_Set(0);
-  if(SD_Wait_Ready()==0)return 0;//Waiting for success
+  if (SD_Wait_Ready()==0) return 0;//Waiting for success
   SD_Cancel_CS();
   return 1;//Wait for failure
 }
@@ -102,7 +102,7 @@ u8 SD_Wait_Ready(void)
   u32 t=0;
   do
   {
-    if(SD_SPI_Read_Write_Byte(0XFF)==0XFF)return 0;//OK
+    if (SD_SPI_Read_Write_Byte(0XFF)==0XFF) return 0;//OK
     t++;
   }while(t<0XFFFFFF);//wait
   return 1;
@@ -135,7 +135,7 @@ u8 SD_Get_Ack(u8 Response)
 ****************************************************************************************/
 u8 SD_RecvData(u8*buf,u16 len)
 {
-  if(SD_Get_Ack(0xFE))return 1;//Wait for SD card to send back data start token 0xFE
+  if (SD_Get_Ack(0xFE)) return 1;//Wait for SD card to send back data start token 0xFE
   while(len--)//Start receiving data
   {
     *buf=SD_SPI_Read_Write_Byte(0xFF);
@@ -158,16 +158,16 @@ u8 SD_RecvData(u8*buf,u16 len)
 u8 SD_Send_Data(u8*buf,u8 cmd)
 {
   u16 t;
-  if(SD_Wait_Ready())  return 1;  //Waiting for preparation to fail
+  if (SD_Wait_Ready())  return 1;  //Waiting for preparation to fail
   SD_SPI_Read_Write_Byte(cmd);
-  if(cmd!=0XFD)//Not an end instruction
+  if (cmd!=0XFD)//Not an end instruction
   {
     for(t=0;t<512;t++)SD_SPI_Read_Write_Byte(buf[t]);
 
     SD_SPI_Read_Write_Byte(0xFF); //Ignore crc
     SD_SPI_Read_Write_Byte(0xFF);
     t = SD_SPI_Read_Write_Byte(0xFF); //Receive response
-    if((t&0x1F) != 0x05)return 2;   //Response error
+    if ((t&0x1F) != 0x05) return 2;   //Response error
   }
   return 0;//Write success
 }
@@ -186,7 +186,7 @@ u8 SD_SendCmd(u8 cmd, u32 arg, u8 crc)
   u8 r1;
   u8 Retry=0;
   SD_Cancel_CS();              //Cancel last selection
-  if(SD_Select())  return 0XFF;//Chip Select Failure
+  if (SD_Select())  return 0XFF;//Chip Select Failure
   //send
   SD_SPI_Read_Write_Byte(cmd | 0x40);//Write commands separately
   SD_SPI_Read_Write_Byte(arg >> 24);
@@ -194,7 +194,7 @@ u8 SD_SendCmd(u8 cmd, u32 arg, u8 crc)
   SD_SPI_Read_Write_Byte(arg >> 8);
   SD_SPI_Read_Write_Byte(arg);
   SD_SPI_Read_Write_Byte(crc);
-  if(cmd==CMD12)  SD_SPI_Read_Write_Byte(0xff);//Skip a stuff byte when stop reading
+  if (cmd==CMD12)  SD_SPI_Read_Write_Byte(0xff);//Skip a stuff byte when stop reading
   //Waiting for a response, or exiting after a timeout
   Retry=0X1F;
   do
@@ -217,12 +217,12 @@ u8 SD_GetCID(u8 *cid_data)
   u8 r1;
   //Send CMD10 command, read CID
   r1=SD_SendCmd(CMD10,0,0x01);
-  if(r1==0x00)
+  if (r1==0x00)
   {
     r1=SD_RecvData(cid_data,16);//Receive 16 bytes of data
   }
   SD_Cancel_CS();//Cancel film selection
-  if(r1)  return 1;
+  if (r1)  return 1;
   else    return 0;
 }
 
@@ -237,12 +237,12 @@ u8 SD_GetCSD(u8 *csd_data)
 {
   u8 r1;
   r1=SD_SendCmd(CMD9,0,0x01);    //Send CMD9 command, read CSD
-  if(r1==0)
+  if (r1==0)
   {
     r1=SD_RecvData(csd_data, 16);//Receive 16 bytes of data
   }
   SD_Cancel_CS();//Cancel film selection
-  if(r1)  return 1;
+  if (r1)  return 1;
   else    return 0;
 }
 
@@ -259,8 +259,8 @@ u32 SD_Get_Sector_Count(void)
   u32 Capacity;
   u8 n;
   u16 csize;
-  if(SD_GetCSD(csd) != 0) return 0;	//Get CSD information, if an error occurs during the period, return 0
-  if((csd[0]&0xC0) == 0x40)	        //V2.00 card, if it is SDHC card, calculate it as follows
+  if (SD_GetCSD(csd) != 0) return 0;	//Get CSD information, if an error occurs during the period, return 0
+  if ((csd[0]&0xC0) == 0x40)	        //V2.00 card, if it is SDHC card, calculate it as follows
   {
     csize = csd[9] + ((u16)csd[8] << 8) + 1;
     Capacity = (u32)csize << 10;//Get the number of sectors
@@ -296,12 +296,12 @@ u8 SD_Init(void)
     r1 = SD_SendCmd(CMD0,0,0x95);//Enter IDLE state
   }while((r1!=0X01) && retry--);
   SD_Type=0;   // No card by default
-  if(r1==0X01)
+  if (r1==0X01)
   {
-    if(SD_SendCmd(CMD8,0x1AA,0x87)==1)  //SD V2.0
+    if (SD_SendCmd(CMD8,0x1AA,0x87)==1)  //SD V2.0
     {
       for(i=0;i<4;i++)buf[i]=SD_SPI_Read_Write_Byte(0XFF);	//Get trailing return value of R7 resp
-      if(buf[2]==0X01&&buf[3]==0XAA)    //Does the card support 2.7 ~ 3.6V
+      if (buf[2]==0X01&&buf[3]==0XAA)    //Does the card support 2.7 ~ 3.6V
       {
         retry = 0XFFFE;
         do
@@ -309,10 +309,10 @@ u8 SD_Init(void)
           SD_SendCmd(CMD55,0,0X01);	    //Send CMD55
           r1 = SD_SendCmd(CMD41,0x40000000,0X01);//Send CMD41
         }while(r1 && retry--);
-        if(retry&&SD_SendCmd(CMD58,0,0X01) == 0)//Identification of SD2.0 card version started
+        if (retry&&SD_SendCmd(CMD58,0,0X01) == 0)//Identification of SD2.0 card version started
         {
           for(i=0;i<4;i++)buf[i]=SD_SPI_Read_Write_Byte(0XFF);//Get OCR value
-          if(buf[0]&0x40)SD_Type=SD_TYPE_V2HC;    //Check CCS
+          if (buf[0]&0x40)SD_Type=SD_TYPE_V2HC;    //Check CCS
           else SD_Type=SD_TYPE_V2;
         }
       }
@@ -321,7 +321,7 @@ u8 SD_Init(void)
     {
       SD_SendCmd(CMD55,0,0X01);		//Send CMD55
       r1 = SD_SendCmd(CMD41,0,0X01);	//Send CMD41
-      if(r1 <= 1)
+      if (r1 <= 1)
       {
         SD_Type = SD_TYPE_V1;
         retry = 0XFFFE;
@@ -340,14 +340,14 @@ u8 SD_Init(void)
           r1 = SD_SendCmd(CMD1,0,0X01);//Send CMD1
         }while(r1 && retry--);
       }
-      if(retry==0 || SD_SendCmd(CMD16,512,0X01)!=0)
+      if (retry==0 || SD_SendCmd(CMD16,512,0X01)!=0)
         SD_Type = SD_TYPE_ERR;//Wrong card
     }
   }
   SD_Cancel_CS();    //Cancel film selection
   SD_SetHighSpeed();
-  if(SD_Type) return 0;
-  else if(r1) return r1;
+  if (SD_Type) return 0;
+  else if (r1) return r1;
   return 0xaa;//��������
 }
 
@@ -362,11 +362,11 @@ u8 SD_Init(void)
 u8 SD_ReadDisk(u8*buf,u32 sector,u8 cnt) 	//Read SD card, fatfs / usb calls x
 {
   u8 r1;
-  if(SD_Type != SD_TYPE_V2HC) sector <<= 9;//Translate to byte address
-  if(cnt == 1)
+  if (SD_Type != SD_TYPE_V2HC) sector <<= 9;//Translate to byte address
+  if (cnt == 1)
   {
     r1 = SD_SendCmd(CMD17, sector, 0X01);//Read command
-    if(r1 == 0)												//Instruction sent successfully
+    if (r1 == 0)												//Instruction sent successfully
     {
       r1 = SD_RecvData(buf,512);			//Receive 512 bytes
     }
@@ -394,23 +394,23 @@ u8 SD_ReadDisk(u8*buf,u32 sector,u8 cnt) 	//Read SD card, fatfs / usb calls x
 u8 SD_WriteDisk(u8*buf,u32 sector,u8 cnt)	//Write SD card, fatfs / usb call
 {
   u8 r1;
-  if(SD_Type!=SD_TYPE_V2HC) sector *= 512;//Translate to byte address
-  if(cnt == 1)
+  if (SD_Type!=SD_TYPE_V2HC) sector *= 512;//Translate to byte address
+  if (cnt == 1)
   {
     r1 = SD_SendCmd(CMD24, sector, 0X01);//Read command
-    if(r1 == 0)//Instruction sent successfully
+    if (r1 == 0)//Instruction sent successfully
     {
       r1 = SD_Send_Data(buf, 0xFE);//Write 512 bytes
     }
   }else
   {
-    if(SD_Type != SD_TYPE_MMC)
+    if (SD_Type != SD_TYPE_MMC)
     {
       SD_SendCmd(CMD55, 0, 0X01);
       SD_SendCmd(CMD23, cnt, 0X01);//Send instruction
     }
     r1 = SD_SendCmd(CMD25, sector, 0X01);//Continuous read command
-    if(r1 == 0)
+    if (r1 == 0)
     {
       do
       {

@@ -87,8 +87,8 @@ uint32_t getLabelFlashAddr(uint16_t index)
 
 bool loadLabelText(uint8_t* buf, uint16_t index)
 {
-  if(index >= LABEL_NUM) return false;
-  if(infoSettings.language == LANG_FLASH)
+  if (index >= LABEL_NUM) return false;
+  if (infoSettings.language == LANG_FLASH)
     W25Qxx_ReadBuffer(buf, getLabelFlashAddr(index), MAX_LANG_LABEL_LENGTH);
   else
     memcpy(buf, textSelect(index), sizeof(tempLabelString));

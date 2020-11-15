@@ -49,7 +49,7 @@ void readStoredPara(void)
   STM32_FlashRead(data, PARA_SIZE);
 
   sign = byteToWord(data + (index += 4), 4);
-  if(sign == TSC_SIGN)
+  if (sign == TSC_SIGN)
   {
     paraStatus |= PARA_TSC_EXIST;    // If the touch screen calibration parameter already exists
     for(int i=0; i<sizeof(TSC_Para)/sizeof(TSC_Para[0]); i++)
@@ -64,7 +64,7 @@ void readStoredPara(void)
   }
 
   sign = byteToWord(data + (index += 4), 4);
-  if(sign != PARA_SIGN) // If the settings parameter is illegal, reset settings parameter
+  if (sign != PARA_SIGN) // If the settings parameter is illegal, reset settings parameter
   {
     paraStatus |= PARA_WAS_RESTORED;
     infoSettingsReset();

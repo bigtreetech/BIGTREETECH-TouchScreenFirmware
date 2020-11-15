@@ -128,7 +128,7 @@ uint8_t USBH_MSC_TestUnitReady (USB_OTG_CORE_HANDLE *pdev)
   uint8_t index;
   USBH_MSC_Status_TypeDef status = USBH_MSC_BUSY;
 
-  if(HCD_IsDeviceConnected(pdev))
+  if (HCD_IsDeviceConnected(pdev))
   {
     switch(USBH_MSC_BOTXferParam.CmdStateMachine)
     {
@@ -158,7 +158,7 @@ uint8_t USBH_MSC_TestUnitReady (USB_OTG_CORE_HANDLE *pdev)
       break;
 
     case CMD_WAIT_STATUS:
-      if(USBH_MSC_BOTXferParam.BOTXferStatus == USBH_MSC_OK)
+      if (USBH_MSC_BOTXferParam.BOTXferStatus == USBH_MSC_OK)
       {
         /* Commands successfully sent and Response Received  */
         USBH_MSC_BOTXferParam.CmdStateMachine = CMD_SEND_STATE;
@@ -200,7 +200,7 @@ uint8_t USBH_MSC_ReadCapacity10(USB_OTG_CORE_HANDLE *pdev)
   uint8_t index;
   USBH_MSC_Status_TypeDef status = USBH_MSC_BUSY;
 
-  if(HCD_IsDeviceConnected(pdev))
+  if (HCD_IsDeviceConnected(pdev))
   {
     switch(USBH_MSC_BOTXferParam.CmdStateMachine)
     {
@@ -231,7 +231,7 @@ uint8_t USBH_MSC_ReadCapacity10(USB_OTG_CORE_HANDLE *pdev)
       break;
 
     case CMD_WAIT_STATUS:
-      if(USBH_MSC_BOTXferParam.BOTXferStatus == USBH_MSC_OK)
+      if (USBH_MSC_BOTXferParam.BOTXferStatus == USBH_MSC_OK)
       {
         /*assign the capacity*/
         (((uint8_t*)&USBH_MSC_Param.MSCapacity )[3]) = USBH_DataInBuffer[0];
@@ -286,7 +286,7 @@ uint8_t USBH_MSC_ModeSense6(USB_OTG_CORE_HANDLE *pdev)
   uint8_t index;
   USBH_MSC_Status_TypeDef status = USBH_MSC_BUSY;
 
-  if(HCD_IsDeviceConnected(pdev))
+  if (HCD_IsDeviceConnected(pdev))
   {
     switch(USBH_MSC_BOTXferParam.CmdStateMachine)
     {
@@ -322,7 +322,7 @@ uint8_t USBH_MSC_ModeSense6(USB_OTG_CORE_HANDLE *pdev)
       break;
 
     case CMD_WAIT_STATUS:
-      if(USBH_MSC_BOTXferParam.BOTXferStatus == USBH_MSC_OK)
+      if (USBH_MSC_BOTXferParam.BOTXferStatus == USBH_MSC_OK)
       {
         /* Assign the Write Protect status */
         /* If WriteProtect = 0, Writing is allowed
@@ -380,7 +380,7 @@ uint8_t USBH_MSC_RequestSense(USB_OTG_CORE_HANDLE *pdev)
   uint8_t index;
 
 
-  if(HCD_IsDeviceConnected(pdev))
+  if (HCD_IsDeviceConnected(pdev))
   {
     switch(USBH_MSC_BOTXferParam.CmdStateMachine)
     {
@@ -418,7 +418,7 @@ uint8_t USBH_MSC_RequestSense(USB_OTG_CORE_HANDLE *pdev)
 
     case CMD_WAIT_STATUS:
 
-      if(USBH_MSC_BOTXferParam.BOTXferStatus == USBH_MSC_OK)
+      if (USBH_MSC_BOTXferParam.BOTXferStatus == USBH_MSC_OK)
       {
         /* Get Sense data*/
         (((uint8_t*)&USBH_MSC_Param.MSSenseKey )[3]) = USBH_DataInBuffer[0];
@@ -477,7 +477,7 @@ uint8_t USBH_MSC_Write10(USB_OTG_CORE_HANDLE *pdev,
   USBH_MSC_Status_TypeDef status = USBH_MSC_BUSY;
   uint16_t nbOfPages;
 
-  if(HCD_IsDeviceConnected(pdev))
+  if (HCD_IsDeviceConnected(pdev))
   {
     switch(USBH_MSC_BOTXferParam.CmdStateMachine)
     {
@@ -520,7 +520,7 @@ uint8_t USBH_MSC_Write10(USB_OTG_CORE_HANDLE *pdev,
       break;
 
     case CMD_WAIT_STATUS:
-      if(USBH_MSC_BOTXferParam.BOTXferStatus == USBH_MSC_OK)
+      if (USBH_MSC_BOTXferParam.BOTXferStatus == USBH_MSC_OK)
       {
         /* Commands successfully sent and Response Received  */
         USBH_MSC_BOTXferParam.CmdStateMachine = CMD_SEND_STATE;
@@ -566,7 +566,7 @@ uint8_t USBH_MSC_Read10(USB_OTG_CORE_HANDLE *pdev,
   uint16_t nbOfPages;
   status = USBH_MSC_BUSY;
 
-  if(HCD_IsDeviceConnected(pdev))
+  if (HCD_IsDeviceConnected(pdev))
   {
     switch(USBH_MSC_BOTXferParam.CmdStateMachine)
     {
@@ -613,7 +613,7 @@ uint8_t USBH_MSC_Read10(USB_OTG_CORE_HANDLE *pdev,
 
     case CMD_WAIT_STATUS:
 
-      if((USBH_MSC_BOTXferParam.BOTXferStatus == USBH_MSC_OK) && \
+      if ((USBH_MSC_BOTXferParam.BOTXferStatus == USBH_MSC_OK) && \
         (HCD_IsDeviceConnected(pdev)))
       {
         /* Commands successfully sent and Response Received  */

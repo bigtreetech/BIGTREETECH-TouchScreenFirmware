@@ -322,7 +322,7 @@ void ST7920_ST7920_ParseWData(uint8_t data)
 
 uint8_t ST7920_IsCtrlByte(uint8_t data)
 {
-  if(data == ST7920_WCMD || data == ST7920_WDATA || data == ST7920_RCMD || data == ST7920_RDATA)
+  if (data == ST7920_WCMD || data == ST7920_WDATA || data == ST7920_RCMD || data == ST7920_RDATA)
     return true;
   else
     return false;

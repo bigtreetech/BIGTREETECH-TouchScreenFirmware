@@ -36,7 +36,7 @@ void keyPress(u8 index, u8 ispressed)
 {
   if (index < KEY_NUM)
   {
-    if(!ispressed)
+    if (!ispressed)
       GUI_SetColor(BLACK);
     GUI_DrawRect(rect_of_numkey[index].x0+2, rect_of_numkey[index].y0+2, rect_of_numkey[index].x1-2, rect_of_numkey[index].y1-2);
     GUI_SetColor(infoSettings.font_color);
@@ -63,17 +63,17 @@ void Draw_keyboard(u8 * title, bool NumberOnly, bool negative)
     GUI_SetTextMode(GUI_TEXTMODE_TRANS);
     for(uint8_t i=0 ;i<KEY_NUM ;i++)
     {
-      if( !(i == NUM_KEY_DEC || i == NUM_KEY_MINUS || i == NUM_KEY_OK || i == NUM_KEY_DEL || i == NUM_KEY_EXIT || i == NUM_KEY_RESET) )
+      if ( !(i == NUM_KEY_DEC || i == NUM_KEY_MINUS || i == NUM_KEY_OK || i == NUM_KEY_DEL || i == NUM_KEY_EXIT || i == NUM_KEY_RESET) )
       {
         GUI_DispStringInPrect(&rect_of_numkey[i],(u8*)numPadKeyChar[i]);
       }
     }
 
-    if(!NumberOnly)
+    if (!NumberOnly)
     {
       GUI_DispStringInPrect(&rect_of_numkey[NUM_KEY_DEC],(u8*)numPadKeyChar[NUM_KEY_DEC]);
     }
-    if(negative)
+    if (negative)
     {
       GUI_DispStringInPrect(&rect_of_numkey[NUM_KEY_MINUS],(u8*)numPadKeyChar[NUM_KEY_MINUS]);
     }
@@ -153,7 +153,7 @@ float numPadFloat(u8* title, float old_val, float reset_val, bool negative)
       case NUM_KEY_0:
         if (nowIndex < FLOAT_BUFLONG - 1)
         {
-          if(ParameterBuf[0] == '0' && nowIndex == 1)
+          if (ParameterBuf[0] == '0' && nowIndex == 1)
             nowIndex = lastIndex = 0;
           ParameterBuf[nowIndex++] = numPadKeyChar[key_num][0];
           ParameterBuf[nowIndex] = 0;

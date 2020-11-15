@@ -50,12 +50,12 @@ void loaditemsCustomGcode()
   }
   else
   {
-    if(gc_cur_page == 0)
+    if (gc_cur_page == 0)
     {
       customItems.items[5].icon = ICONCHAR_BACKGROUND;
       customItems.items[6].icon = ICONCHAR_PAGEDOWN;
     }
-    else if(gc_cur_page == (gc_page_count-1))
+    else if (gc_cur_page == (gc_page_count-1))
     {
       customItems.items[5].icon = ICONCHAR_PAGEUP;
       customItems.items[6].icon = ICONCHAR_BACKGROUND;

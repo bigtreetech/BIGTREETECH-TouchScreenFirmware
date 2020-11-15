@@ -281,7 +281,7 @@ USBH_Status USBH_BulkReceiveData( USB_OTG_CORE_HANDLE *pdev,
   pdev->host.hc[hc_num].xfer_len = length;
 
 
-  if( pdev->host.hc[hc_num].toggle_in == 0)
+  if ( pdev->host.hc[hc_num].toggle_in == 0)
   {
     pdev->host.hc[hc_num].data_pid = HC_PID_DATA0;
   }
@@ -316,7 +316,7 @@ USBH_Status USBH_InterruptReceiveData( USB_OTG_CORE_HANDLE *pdev,
 
 
 
-  if(pdev->host.hc[hc_num].toggle_in == 0)
+  if (pdev->host.hc[hc_num].toggle_in == 0)
   {
     pdev->host.hc[hc_num].data_pid = HC_PID_DATA0;
   }
@@ -352,7 +352,7 @@ USBH_Status USBH_InterruptSendData( USB_OTG_CORE_HANDLE *pdev,
   pdev->host.hc[hc_num].xfer_buff = buff;
   pdev->host.hc[hc_num].xfer_len = length;
 
-  if(pdev->host.hc[hc_num].toggle_in == 0)
+  if (pdev->host.hc[hc_num].toggle_in == 0)
   {
     pdev->host.hc[hc_num].data_pid = HC_PID_DATA0;
   }

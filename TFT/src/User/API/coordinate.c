@@ -52,7 +52,7 @@ void coordinateSetAxisTarget(AXIS axis,float position)
           ? relative_e || relative_mode
           : relative_mode;
 
-  if(r==false)
+  if (r==false)
   {
     targetPosition.axis[axis] = position;
   }

@@ -167,10 +167,10 @@ static USBH_Status USBH_MSC_InterfaceInit ( USB_OTG_CORE_HANDLE *pdev,
 {
   USBH_HOST *pphost = phost;
 
-  if((pphost->device_prop.Itf_Desc[0].bInterfaceClass == MSC_CLASS) && \
+  if ((pphost->device_prop.Itf_Desc[0].bInterfaceClass == MSC_CLASS) && \
      (pphost->device_prop.Itf_Desc[0].bInterfaceProtocol == MSC_PROTOCOL))
   {
-    if(pphost->device_prop.Ep_Desc[0][0].bEndpointAddress & 0x80)
+    if (pphost->device_prop.Ep_Desc[0][0].bEndpointAddress & 0x80)
     {
       MSC_Machine.MSBulkInEp = (pphost->device_prop.Ep_Desc[0][0].bEndpointAddress);
       MSC_Machine.MSBulkInEpSize  = pphost->device_prop.Ep_Desc[0][0].wMaxPacketSize;
@@ -181,7 +181,7 @@ static USBH_Status USBH_MSC_InterfaceInit ( USB_OTG_CORE_HANDLE *pdev,
       MSC_Machine.MSBulkOutEpSize  = pphost->device_prop.Ep_Desc[0] [0].wMaxPacketSize;
     }
 
-    if(pphost->device_prop.Ep_Desc[0][1].bEndpointAddress & 0x80)
+    if (pphost->device_prop.Ep_Desc[0][1].bEndpointAddress & 0x80)
     {
       MSC_Machine.MSBulkInEp = (pphost->device_prop.Ep_Desc[0][1].bEndpointAddress);
       MSC_Machine.MSBulkInEpSize  = pphost->device_prop.Ep_Desc[0][1].wMaxPacketSize;
@@ -330,7 +330,7 @@ static USBH_Status USBH_MSC_Handle(USB_OTG_CORE_HANDLE *pdev ,
 
   static uint8_t maxLunExceed = FALSE;
 
-  if(HCD_IsDeviceConnected(pdev))
+  if (HCD_IsDeviceConnected(pdev))
   {
     switch(USBH_MSC_BOTXferParam.MSCState)
     {
@@ -344,12 +344,12 @@ static USBH_Status USBH_MSC_Handle(USB_OTG_CORE_HANDLE *pdev ,
       /* Issue GetMaxLUN request */
       status = USBH_MSC_GETMaxLUN(pdev, phost);
 
-      if(status == USBH_OK )
+      if (status == USBH_OK )
       {
         MSC_Machine.maxLun = *(MSC_Machine.buff) ;
 
         /* If device has more that one logical unit then it is not supported */
-        if((MSC_Machine.maxLun > 0) && (maxLunExceed == FALSE))
+        if ((MSC_Machine.maxLun > 0) && (maxLunExceed == FALSE))
         {
           maxLunExceed = TRUE;
           pphost->usr_cb->DeviceNotSupported();
@@ -360,7 +360,7 @@ static USBH_Status USBH_MSC_Handle(USB_OTG_CORE_HANDLE *pdev ,
         USBH_MSC_BOTXferParam.MSCState = USBH_MSC_TEST_UNIT_READY;
       }
 
-      if(status == USBH_NOT_SUPPORTED )
+      if (status == USBH_NOT_SUPPORTED )
       {
                /* If the Command has failed, then we need to move to Next State, after
         STALL condition is cleared by Control-Transfer */
@@ -376,7 +376,7 @@ static USBH_Status USBH_MSC_Handle(USB_OTG_CORE_HANDLE *pdev ,
                                phost,
                                0x00,
                                pphost->Control.hc_num_out);
-      if(status == USBH_OK )
+      if (status == USBH_OK )
       {
         /* If GetMaxLun Request not support, assume Single LUN configuration */
         MSC_Machine.maxLun = 0;
@@ -389,7 +389,7 @@ static USBH_Status USBH_MSC_Handle(USB_OTG_CORE_HANDLE *pdev ,
          /* Issue SCSI command TestUnitReady */
          mscStatus = USBH_MSC_TestUnitReady(pdev);
 
-         if(mscStatus == USBH_MSC_OK )
+         if (mscStatus == USBH_MSC_OK )
          {
            USBH_MSC_BOTXferParam.MSCState = USBH_MSC_READ_CAPACITY10;
 MSCErrorCount = 0;
@@ -404,7 +404,7 @@ MSCErrorCount = 0;
     case USBH_MSC_READ_CAPACITY10:
       /* Issue READ_CAPACITY10 SCSI command */
       mscStatus = USBH_MSC_ReadCapacity10(pdev);
-      if(mscStatus == USBH_MSC_OK )
+      if (mscStatus == USBH_MSC_OK )
       {
         USBH_MSC_BOTXferParam.MSCState = USBH_MSC_MODE_SENSE6;
         MSCErrorCount = 0;
@@ -419,7 +419,7 @@ MSCErrorCount = 0;
     case USBH_MSC_MODE_SENSE6:
       /* Issue ModeSense6 SCSI command for detecting if device is write-protected */
       mscStatus = USBH_MSC_ModeSense6(pdev);
-      if(mscStatus == USBH_MSC_OK )
+      if (mscStatus == USBH_MSC_OK )
       {
         USBH_MSC_BOTXferParam.MSCState = USBH_MSC_DEFAULT_APPLI_STATE;
         MSCErrorCount = 0;
@@ -439,7 +439,7 @@ MSCErrorCount = 0;
     case USBH_MSC_DEFAULT_APPLI_STATE:
       /* Process Application callback for MSC */
       appliStatus = pphost->usr_cb->UserApplication();
-      if(appliStatus == 0)
+      if (appliStatus == 0)
       {
         USBH_MSC_BOTXferParam.MSCState = USBH_MSC_DEFAULT_APPLI_STATE;
       }
@@ -459,7 +459,7 @@ MSCErrorCount = 0;
     case USBH_MSC_REQUEST_SENSE:
       /* Issue RequestSense SCSI command for retrieving error code */
       mscStatus = USBH_MSC_RequestSense(pdev);
-      if(mscStatus == USBH_MSC_OK )
+      if (mscStatus == USBH_MSC_OK )
       {
         USBH_MSC_BOTXferParam.MSCState = USBH_MSC_BOTXferParam.MSCStateBkp;
         status = USBH_OK;
@@ -510,10 +510,10 @@ static USBH_Status USBH_MSC_GETMaxLUN(USB_OTG_CORE_HANDLE *pdev , USBH_HOST *pho
 
 void USBH_MSC_ErrorHandle(uint8_t status)
 {
-    if(status == USBH_MSC_FAIL)
+    if (status == USBH_MSC_FAIL)
     {
       MSCErrorCount++;
-      if(MSCErrorCount < USBH_MSC_ERROR_RETRY_LIMIT)
+      if (MSCErrorCount < USBH_MSC_ERROR_RETRY_LIMIT)
       { /* Try MSC level error recovery, Issue the request Sense to get
         Drive error reason  */
         USBH_MSC_BOTXferParam.MSCState = USBH_MSC_REQUEST_SENSE;
@@ -525,12 +525,12 @@ void USBH_MSC_ErrorHandle(uint8_t status)
         USBH_MSC_BOTXferParam.MSCState = USBH_MSC_UNRECOVERED_STATE;
       }
     }
-    else if(status == USBH_MSC_PHASE_ERROR)
+    else if (status == USBH_MSC_PHASE_ERROR)
     {
       /* Phase error, Go to Unrecovered state */
       USBH_MSC_BOTXferParam.MSCState = USBH_MSC_UNRECOVERED_STATE;
     }
-    else if(status == USBH_MSC_BUSY)
+    else if (status == USBH_MSC_BUSY)
     {
       /*No change in state*/
     }

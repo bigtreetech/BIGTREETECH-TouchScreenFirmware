@@ -160,6 +160,7 @@ typedef struct
   uint8_t  touchSound;
   uint8_t  toastSound;
   uint8_t  alertSound;
+  uint8_t  preheatDoneSound;
   uint8_t  knob_led_color;
   uint8_t  knob_led_idle;
   uint8_t  lcd_brightness;

@@ -89,7 +89,7 @@ bool getLangFromFile(void)
   char langpath[256];
   sprintf(langpath, "0:%s", f.fname);
 
-  if(!f_file_exists(langpath))
+  if (!f_file_exists(langpath))
     return false;
 
   char cur_line_buffer[MAX_LANG_LABEL_LENGTH + 100];
@@ -419,7 +419,7 @@ void resetConfig(void)
   int n = 0;
   for (int i = 0; i < CUSTOM_GCODES_COUNT;i++)
   {
-    if(cg_enabled[i] == 1)
+    if (cg_enabled[i] == 1)
     {
       strcpy(tempCG.gcode[n],cg_list[i]);
       strcpy(tempCG.name[n],cg_names[i]);
@@ -972,7 +972,7 @@ void parseConfigKey(u16 index)
     case C_INDEX_PS_ON:
       if (config_int() == 1)
         infoSettings.auto_off = 1;
-      else if(config_int() == 2)
+      else if (config_int() == 2)
         infoSettings.auto_off = 2;
       else
         infoSettings.auto_off = 0;

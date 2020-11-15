@@ -116,13 +116,13 @@ void menuHeat(void)
 
       default :
         #if LCD_ENCODER_SUPPORT
-          if(encoderPosition)
+          if (encoderPosition)
           {
-            if(encoderPosition > 0)
+            if (encoderPosition > 0)
             {
               heatSetTargetTemp(c_heater, actTarget + item_degree[item_degree_i]);
             }
-            if(encoderPosition < 0)
+            if (encoderPosition < 0)
             {
               heatSetTargetTemp(c_heater, actTarget - item_degree[item_degree_i]);
             }
@@ -142,7 +142,7 @@ void menuHeat(void)
   }
 
   // Set slow update time if not waiting for target temperature
-  if(heatHasWaiting() == false)
+  if (heatHasWaiting() == false)
   {
     heatSetUpdateTime(TEMPERATURE_QUERY_SLOW_DURATION);
   }

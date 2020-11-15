@@ -65,7 +65,7 @@ const LABEL junction_deviation_disp_ID[] = {LABEL_JUNCTION_DEVIATION};
 
 float getParameter(PARAMETER_NAME name, u8 index)
 {
-  if(index >= parameter_element_count[name]) return 0.0f;
+  if (index >= parameter_element_count[name]) return 0.0f;
   switch (name)
   {
   case P_STEPS_PER_MM:
@@ -109,7 +109,7 @@ float getParameter(PARAMETER_NAME name, u8 index)
 
 void setParameter(PARAMETER_NAME name, u8 index, float val)
 {
-  if(index >= parameter_element_count[name]) return;
+  if (index >= parameter_element_count[name]) return;
     switch (name)
     {
     case P_STEPS_PER_MM:
@@ -193,27 +193,27 @@ void sendParameterCmd(PARAMETER_NAME para, u8 stepper_index, float Value)
   storeCmd(parameter_Cmd[para][stepper_index], Value);
   if (dualstepper[stepper_index] && stepper_index < AXIS_NUM)
     {
-      if(para == P_CURRENT)
+      if (para == P_CURRENT)
         storeCmd(dualStepperParameter_cmd[0][stepper_index], Value);
-      if(para == P_BUMPSENSITIVITY)
+      if (para == P_BUMPSENSITIVITY)
         storeCmd(dualStepperParameter_cmd[1][stepper_index], Value);
-      if(para == P_HYBRID_THRESHOLD)
+      if (para == P_HYBRID_THRESHOLD)
         storeCmd(dualStepperParameter_cmd[2][stepper_index], Value);
     }
 }
 
 void saveEepromSettings(void)
 {
-  if(infoMachineSettings.EEPROM == 1)
+  if (infoMachineSettings.EEPROM == 1)
     mustStoreCmd("M500\n");
 }
 void restoreEepromSettings(void)
 {
-  if(infoMachineSettings.EEPROM == 1)
+  if (infoMachineSettings.EEPROM == 1)
     mustStoreScript("M501\nM503 S0\n");
 }
 void resetEepromSettings(void)
 {
-  if(infoMachineSettings.EEPROM == 1)
+  if (infoMachineSettings.EEPROM == 1)
     mustStoreScript("M502\nM500\nM503 S0\n");
 }

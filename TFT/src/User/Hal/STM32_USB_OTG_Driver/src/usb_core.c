@@ -369,7 +369,7 @@ USB_OTG_STS USB_OTG_CoreInit(USB_OTG_CORE_HANDLE *pdev)
     /* Reset after a PHY select  */
     USB_OTG_CoreReset(pdev);
 
-    if(pdev->cfg.dma_enable == 1)
+    if (pdev->cfg.dma_enable == 1)
     {
 
       ahbcfg.b.hburstlen = 5; /* 64 x 32-bits*/
@@ -404,7 +404,7 @@ USB_OTG_STS USB_OTG_CoreInit(USB_OTG_CORE_HANDLE *pdev)
 
 #if defined (STM32F446xx) || defined (STM32F469_479xx)
 #else
-    if(pdev->cfg.Sof_output)
+    if (pdev->cfg.Sof_output)
     {
       gccfg.b.sofouten = 1;
     }
@@ -414,7 +414,7 @@ USB_OTG_STS USB_OTG_CoreInit(USB_OTG_CORE_HANDLE *pdev)
     USB_OTG_BSP_mDelay(20);
   }
   /* case the HS core is working in FS mode */
-  if(pdev->cfg.dma_enable == 1)
+  if (pdev->cfg.dma_enable == 1)
   {
 
     ahbcfg.d32 = USB_OTG_READ_REG32(&pdev->regs.GREGS->GAHBCFG);
@@ -686,7 +686,7 @@ USB_OTG_STS USB_OTG_CoreInitHost(USB_OTG_CORE_HANDLE *pdev)
   /* Configure data FIFO sizes */
   /* Rx FIFO */
 #ifdef USB_OTG_FS_CORE
-  if(pdev->cfg.coreID == USB_OTG_FS_CORE_ID)
+  if (pdev->cfg.coreID == USB_OTG_FS_CORE_ID)
   {
     /* set Rx FIFO size */
     USB_OTG_WRITE_REG32(&pdev->regs.GREGS->GRXFSIZ, RX_FIFO_FS_SIZE);
@@ -1065,7 +1065,7 @@ USB_OTG_STS USB_OTG_HC_StartXfer(USB_OTG_CORE_HANDLE *pdev , uint8_t hc_num)
 
   if (pdev->cfg.dma_enable == 0) /* Slave mode */
   {
-    if((pdev->host.hc[hc_num].ep_is_in == 0) &&
+    if ((pdev->host.hc[hc_num].ep_is_in == 0) &&
        (pdev->host.hc[hc_num].xfer_len > 0))
     {
       switch(pdev->host.hc[hc_num].ep_type)
@@ -1078,7 +1078,7 @@ USB_OTG_STS USB_OTG_HC_StartXfer(USB_OTG_CORE_HANDLE *pdev , uint8_t hc_num)
         len_words = (pdev->host.hc[hc_num].xfer_len + 3) / 4;
 
         /* check if there is enough space in FIFO space */
-        if(len_words > hnptxsts.b.nptxfspcavail)
+        if (len_words > hnptxsts.b.nptxfspcavail)
         {
           /* need to process data in nptxfempty interrupt */
           intmsk.b.nptxfempty = 1;
@@ -1092,7 +1092,7 @@ USB_OTG_STS USB_OTG_HC_StartXfer(USB_OTG_CORE_HANDLE *pdev , uint8_t hc_num)
         hptxsts.d32 = USB_OTG_READ_REG32(&pdev->regs.HREGS->HPTXSTS);
         len_words = (pdev->host.hc[hc_num].xfer_len + 3) / 4;
         /* check if there is enough space in FIFO space */
-        if(len_words > hptxsts.b.ptxfspcavail) /* split the transfer */
+        if (len_words > hptxsts.b.ptxfspcavail) /* split the transfer */
         {
           /* need to process data in ptxfempty interrupt */
           intmsk.b.ptxfempty = 1;
@@ -1258,7 +1258,7 @@ USB_OTG_STS USB_OTG_CoreInitDev (USB_OTG_CORE_HANDLE *pdev)
   USB_OTG_WRITE_REG32( &pdev->regs.DREGS->DCFG, dcfg.d32 );
 
 #ifdef USB_OTG_FS_CORE
-  if(pdev->cfg.coreID == USB_OTG_FS_CORE_ID  )
+  if (pdev->cfg.coreID == USB_OTG_FS_CORE_ID  )
   {
 
     /* Set Full speed phy */
@@ -1292,12 +1292,12 @@ USB_OTG_STS USB_OTG_CoreInitDev (USB_OTG_CORE_HANDLE *pdev)
   }
 #endif
 #ifdef USB_OTG_HS_CORE
-  if(pdev->cfg.coreID == USB_OTG_HS_CORE_ID  )
+  if (pdev->cfg.coreID == USB_OTG_HS_CORE_ID  )
   {
 
     /* Set High speed phy */
 
-    if(pdev->cfg.phy_itface  == USB_OTG_ULPI_PHY)
+    if (pdev->cfg.phy_itface  == USB_OTG_ULPI_PHY)
     {
       USB_OTG_InitDevSpeed (pdev , USB_OTG_SPEED_PARAM_HIGH);
     }
@@ -1564,7 +1564,7 @@ USB_OTG_STS USB_OTG_EPActivate(USB_OTG_CORE_HANDLE *pdev , USB_OTG_EP *ep)
   }
   /* Enable the Interrupt for this EP */
 #ifdef USB_OTG_HS_DEDICATED_EP1_ENABLED
-  if((ep->num == 1)&&(pdev->cfg.coreID == USB_OTG_HS_CORE_ID))
+  if ((ep->num == 1)&&(pdev->cfg.coreID == USB_OTG_HS_CORE_ID))
   {
     USB_OTG_MODIFY_REG32(&pdev->regs.DREGS->DEACHMSK, 0, daintmsk.d32);
   }
@@ -2013,9 +2013,9 @@ void USB_OTG_ActiveRemoteWakeup(USB_OTG_CORE_HANDLE *pdev)
   if (pdev->dev.DevRemoteWakeup)
   {
     dsts.d32 = USB_OTG_READ_REG32(&pdev->regs.DREGS->DSTS);
-    if(dsts.b.suspsts == 1)
+    if (dsts.b.suspsts == 1)
     {
-      if(pdev->cfg.low_power)
+      if (pdev->cfg.low_power)
       {
         /* un-gate USB Core clock */
         power.d32 = USB_OTG_READ_REG32(pdev->regs.PCGCCTL);
@@ -2041,7 +2041,7 @@ void USB_OTG_ActiveRemoteWakeup(USB_OTG_CORE_HANDLE *pdev)
 */
 void USB_OTG_UngateClock(USB_OTG_CORE_HANDLE *pdev)
 {
-  if(pdev->cfg.low_power)
+  if (pdev->cfg.low_power)
   {
 
     USB_OTG_DSTS_TypeDef     dsts;
@@ -2049,7 +2049,7 @@ void USB_OTG_UngateClock(USB_OTG_CORE_HANDLE *pdev)
 
     dsts.d32 = USB_OTG_READ_REG32(&pdev->regs.DREGS->DSTS);
 
-    if(dsts.b.suspsts == 1)
+    if (dsts.b.suspsts == 1)
     {
       /* un-gate USB Core clock */
       power.d32 = USB_OTG_READ_REG32(pdev->regs.PCGCCTL);

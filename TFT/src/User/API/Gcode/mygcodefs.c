@@ -43,7 +43,7 @@ bool scanPrintFilesGcodeFs(void)
   clearRequestCommandInfo();
   char s[3];
 
-  if(strstr(data, "\r\n")) //for smoothieware
+  if (strstr(data, "\r\n")) //for smoothieware
     strcpy(s, "\r\n");
   else //for Marlin
     strcpy(s, "\n");
@@ -115,14 +115,14 @@ bool scanPrintFilesGcodeFs(void)
       bool found = false;
       for(int i=0; i < infoFile.F_num; i++)
       {
-        if(strcmp(folder, infoFile.folder[i]) == 0)
+        if (strcmp(folder, infoFile.folder[i]) == 0)
         {
           found = true;
           break;
         }
       }
 
-      if(!found)
+      if (!found)
       {
         uint16_t len = strlen(folder) + 1;
         infoFile.folder[infoFile.F_num] = malloc(len);

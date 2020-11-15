@@ -120,7 +120,7 @@ USBH_Status USBH_Get_DevDesc(USB_OTG_CORE_HANDLE *pdev,
 
   USBH_Status status;
 
-  if((status = USBH_GetDescriptor(pdev,
+  if ((status = USBH_GetDescriptor(pdev,
                                   phost,
                                   USB_REQ_RECIPIENT_DEVICE | USB_REQ_TYPE_STANDARD,
                                   USB_DESC_DEVICE,
@@ -153,7 +153,7 @@ USBH_Status USBH_Get_CfgDesc(USB_OTG_CORE_HANDLE *pdev,
   USBH_Status status, result;
   uint16_t index = 0;
 
-  if((status = USBH_GetDescriptor(pdev,
+  if ((status = USBH_GetDescriptor(pdev,
                                   phost,
                                   USB_REQ_RECIPIENT_DEVICE | USB_REQ_TYPE_STANDARD,
                                   USB_DESC_CONFIGURATION,
@@ -198,7 +198,7 @@ USBH_Status USBH_Get_StringDesc(USB_OTG_CORE_HANDLE *pdev,
 {
   USBH_Status status;
 
-  if((status = USBH_GetDescriptor(pdev,
+  if ((status = USBH_GetDescriptor(pdev,
                                   phost,
                                   USB_REQ_RECIPIENT_DEVICE | USB_REQ_TYPE_STANDARD,
                                   USB_DESC_STRING | string_index,
@@ -481,13 +481,13 @@ USBH_Status USBH_ParseCfgDesc (USBH_CfgDesc_TypeDef* cfg_desc,
         {
           if_ix             = *(((uint8_t *)pdesc ) + 2);
           pif               = &itf_desc[if_ix];
-          if((*((uint8_t *)pdesc + 3)) < 3)
+          if ((*((uint8_t *)pdesc + 3)) < 3)
           {
             USBH_ParseInterfaceDesc (&temp_pif, (uint8_t *)pdesc);
             ep_ix = 0;
 
             /* Parse Ep descriptors relative to the current interface */
-            if(temp_pif.bNumEndpoints <= USBH_MAX_NUM_ENDPOINTS)
+            if (temp_pif.bNumEndpoints <= USBH_MAX_NUM_ENDPOINTS)
             {
               while (ep_ix < temp_pif.bNumEndpoints)
               {
@@ -495,14 +495,14 @@ USBH_Status USBH_ParseCfgDesc (USBH_CfgDesc_TypeDef* cfg_desc,
                 if (pdesc->bDescriptorType   == USB_DESC_TYPE_ENDPOINT)
                 {
                   pep               = &ep_desc[if_ix][ep_ix];
-                  if(prev_itf != if_ix)
+                  if (prev_itf != if_ix)
                   {
                     prev_itf = if_ix;
                     USBH_ParseInterfaceDesc (pif, (uint8_t *)&temp_pif);
                   }
                   else
                   {
-                    if(prev_ep_size > LE16((uint8_t *)pdesc + 4))
+                    if (prev_ep_size > LE16((uint8_t *)pdesc + 4))
                     {
                       break;
                     }
