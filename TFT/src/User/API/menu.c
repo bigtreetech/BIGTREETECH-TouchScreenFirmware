@@ -640,27 +640,30 @@ void showLiveInfo(uint8_t index, const LIVE_INFO *liveicon, const ITEM *item)
 //When there is a button value, the icon changes color and redraws
 void itemDrawIconPress(u8 position, u8 is_press)
 {
-  if (position > KEY_ICON_7)
-    return;
+  if (position > KEY_ICON_7) return;
 
   if (menuType == MENU_TYPE_ICON)
   {
-    if (curMenuItems == NULL)
-      return;
+    if (curMenuItems == NULL) return;
     if (curMenuItems->items[position].icon == ICON_BACKGROUND)
+    {
       return;
+    }
 
     const GUI_RECT *rect = curRect + position;
 
     if (is_press) // Turn green when pressed
+    {
       ICON_PressedDisplay(rect->x0, rect->y0, curMenuItems->items[position].icon);
+    }
     else // Redraw normal icon when released
+    {
       ICON_ReadDisplay(rect->x0, rect->y0, curMenuItems->items[position].icon);
+    }
   }
   else if (menuType == MENU_TYPE_LISTVIEW)
   { //draw rec over list item if pressed
-    if (curListItems == NULL)
-      return;
+    if (curListItems == NULL) return;
 
     const GUI_RECT *rect = rect_of_keyListView + position;
 
@@ -790,7 +793,7 @@ void loopBackEnd(void)
             heatGetCurrentTemp(BED) >= heatGetTargetTemp(BED))
     {
       // Preheat finished. Sound the notification
-      Buzzer_play(sound_preheatDone);
+      BUZZER_PLAY(sound_preheatDone);
       preheatNotification = false;
     }
     else if (infoMenu.menu[infoMenu.cur] == menuPreheat &&

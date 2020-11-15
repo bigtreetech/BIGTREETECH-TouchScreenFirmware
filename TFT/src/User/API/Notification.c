@@ -43,7 +43,9 @@ bool toastAvailable(void)
   for (int i = 0; i < TOAST_MSG_COUNT; i++)
   {
       if (toastlist[i].isNew == true)
+      {
        return true;
+      }
   }
   return false;
 }
@@ -82,7 +84,9 @@ void drawToast(bool redraw)
     }
 
     if ( cursound >= 0 && !redraw)
+    {
       BUZZER_PLAY(cursound);
+    }
 
     GUI_SetTextMode(GUI_TEXTMODE_TRANS);
     GUI_FillPrect(&toastIconRect);
