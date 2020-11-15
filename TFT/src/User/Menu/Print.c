@@ -406,7 +406,7 @@ void menuPrint(void)
             list_mode = true; //force list mode in Onboard sd card
             infoFile.source = BOARD_SD;
             infoMenu.menu[++infoMenu.cur] = menuPrintFromSource;   //TODO: fix here,  onboard sd card PLR feature
-            storeCmd("M155 S1\n");
+            storeCmd("M155 S3\n");
             goto selectEnd;
           }
           break;
