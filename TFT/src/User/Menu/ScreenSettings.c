@@ -258,9 +258,9 @@ void menuSoundSettings(void)
     {ICONCHAR_BACK,       LIST_LABEL,  LABEL_BACKGROUND,   LABEL_BACKGROUND},}
   };
 
-  sounditems.items[0].icon = (infoSettings.touchSound == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
-  sounditems.items[1].icon = (infoSettings.alertSound == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
-  sounditems.items[2].icon = (infoSettings.toastSound == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
+  sounditems.items[0].icon = (infoSettings.touchSound == 1) ?       ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
+  sounditems.items[1].icon = (infoSettings.alertSound == 1) ?       ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
+  sounditems.items[2].icon = (infoSettings.toastSound == 1) ?       ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
   sounditems.items[3].icon = (infoSettings.preheatDoneSound == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
 
   KEY_VALUES key_num = KEY_IDLE;
@@ -288,6 +288,12 @@ void menuSoundSettings(void)
     case KEY_ICON_2:
       infoSettings.toastSound = (infoSettings.toastSound + 1) % 2;
       sounditems.items[key_num].icon = (infoSettings.toastSound == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
+      menuDrawListItem(&sounditems.items[key_num], key_num);
+      break;
+
+    case KEY_ICON_3:
+      infoSettings.preheatDoneSound =  (infoSettings.preheatDoneSound + 1) % 2;
+      sounditems.items[key_num].icon = (infoSettings.preheatDoneSound == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
       menuDrawListItem(&sounditems.items[key_num], key_num);
       break;
 

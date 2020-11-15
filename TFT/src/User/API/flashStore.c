@@ -90,6 +90,7 @@ void readStoredPara(void)
   infoSettings.touchSound           = byteToWord(data + (index += 4), 4);
   infoSettings.toastSound           = byteToWord(data + (index += 4), 4);
   infoSettings.alertSound           = byteToWord(data + (index += 4), 4);
+  infoSettings.preheatDoneSound     = byteToWord(data + (index += 4), 4);
 
   infoSettings.terminalACK          = byteToWord(data + (index += 4), 4);
   infoSettings.move_speed           = byteToWord(data + (index += 4), 4);
@@ -230,6 +231,7 @@ void storePara(void)
   wordToByte(infoSettings.touchSound,                 data + (index += 4));
   wordToByte(infoSettings.toastSound,                 data + (index += 4));
   wordToByte(infoSettings.alertSound,                 data + (index += 4));
+  wordToByte(infoSettings.preheatDoneSound,           data + (index += 4));
 
   wordToByte(infoSettings.terminalACK,                data + (index += 4));
   wordToByte(infoSettings.move_speed,                 data + (index += 4));

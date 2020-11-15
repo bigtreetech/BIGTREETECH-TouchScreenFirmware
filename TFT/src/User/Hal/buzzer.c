@@ -118,10 +118,10 @@ void Buzzer_play(SOUND sound)
     break;
   case sound_preheatDone:
     if (infoSettings.preheatDoneSound != 1) break;
-    buzzer_TurnOn(2000,250);
-    buzzer_TurnOn(0, 50);
-    buzzer_TurnOn(1500, 100);
-    buzzer_TurnOn(4000, 2500);
+    Buzzer_TurnOn(2000,250);
+    Buzzer_TurnOn(0, 50);
+    Buzzer_TurnOn(1500, 100);
+    Buzzer_TurnOn(4000, 2500);
     break;
   case sound_keypress:
   default:

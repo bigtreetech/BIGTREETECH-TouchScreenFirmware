@@ -737,17 +737,37 @@ void loopBackEnd(void)
   loopDimTimer();
 #endif
 
-  if (infoSettings.sequential_mode)
-  {
-    setSequentialModeColor();
-  }
+if (infoSettings.sequential_mode)
+{
+  setSequentialModeColor();
+}
 
-#if preheatNotification
-  volatile preheatNotification;
-  if (infoMenu.menu[infoMenu.cur] == menuPreheat &&)
+if (infoSettings.preheatDoneSound)
+{
+  volatile bool preheatNotification;
+  if (preheatNotification && heatGetTargetTemp(heatGetCurrentHotend()) == 0 && heatGetTargetTemp(BED))
   {
+    //No target set. No notification needed
+    preheatNotification = false;
   }
-#endif
+  else if (preheatNotification &&
+           heatGetCurrentTemp(heatGetCurrentHotend()) >= heatGetTargetTemp(heatGetCurrentHotend()) &&
+           heatGetCurrentTemp(BED) >= heatGetTargetTemp(BED))
+  {
+    // Preheat finished. Sound the notification
+    Buzzer_play(sound_preheatDone);
+    preheatNotification = false;
+  }
+  else if (infoMenu.menu[infoMenu.cur] == menuPreheat &&
+           (heatGetCurrentTemp(heatGetCurrentHotend()) < heatGetTargetTemp(heatGetCurrentHotend()) - 10 || 
+            heatGetCurrentTemp(BED) < heatGetTargetTemp(BED) - 10
+           ) && !preheatNotification)
+  {
+    //Set preheatnotification to true when the current temp is smalles then the target - 10C
+    // From now on it doesn't matter in which menu you are.
+    preheatNotification = true;
+  }
+}
 
   if (infoMachineSettings.caseLightsBrightness == ENABLED)
   {
