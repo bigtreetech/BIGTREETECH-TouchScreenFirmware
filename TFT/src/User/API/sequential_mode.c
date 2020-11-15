@@ -9,9 +9,9 @@ uint8_t waitForNext = 0;
 bool heatingDone = false;
 bool finishedPrint = false;
 #ifdef LED_COLOR_PIN
-#ifdef LCD_LED_PWM_CHANNEL
-bool idle_ledmode_previous = false;
-#endif
+  #ifdef LCD_LED_PWM_CHANNEL
+    bool idle_ledmode_previous = false;
+  #endif
 #endif
 uint16_t coldTemperature = 0;
 
@@ -71,16 +71,16 @@ void setSequentialModeColor(void)
 
     if (infoMenu.menu[infoMenu.cur] != menuPrinting)
     {
-#ifdef LED_COLOR_PIN
-#ifdef LCD_LED_PWM_CHANNEL
-      //Make sure that the knob_led_idle is back in business
-      if (idle_ledmode_previous)
-      {
-        idle_ledmode_previous = false;
-        infoSettings.knob_led_idle = 1;
-      }
-#endif
-#endif
+      #ifdef LED_COLOR_PIN
+        #ifdef LCD_LED_PWM_CHANNEL
+          //Make sure that the knob_led_idle is back in business
+          if (idle_ledmode_previous)
+          {
+            idle_ledmode_previous = false;
+            infoSettings.knob_led_idle = 1;
+          }
+        #endif
+      #endif
 
       //Restore colors to default value
       prevPixelColor = 0;
@@ -106,23 +106,23 @@ void setSequentialModeColor(void)
       return;
     }
 
-#ifdef LED_COLOR_PIN
-#ifdef LCD_LED_PWM_CHANNEL
-    // set the knob_led_idle temperorly to OFF
-    if (infoSettings.knob_led_idle && !idle_ledmode_previous)
-    {
-      idle_ledmode_previous = true;
-      infoSettings.knob_led_idle = 0; //Temperory turn off led idle
-    }
-#endif
-#endif
+    #ifdef LED_COLOR_PIN
+      #ifdef LCD_LED_PWM_CHANNEL
+      // set the knob_led_idle temperorly to OFF
+      if (infoSettings.knob_led_idle && !idle_ledmode_previous)
+      {
+        idle_ledmode_previous = true;
+        infoSettings.knob_led_idle = 0; //Temperory turn off led idle
+      }
+      #endif
+    #endif
 
     //Set neopixel and ledknob to green
     storeCmd("M150 R0 U255 B0 P255\n");
 
-#ifdef LED_COLOR_PIN
-    WS2812_Send_DAT(LED_GREEN);
-#endif
+    #ifdef LED_COLOR_PIN
+      WS2812_Send_DAT(LED_GREEN);
+    #endif
 
     finishedPrint = true;
     return;
@@ -144,16 +144,16 @@ void setSequentialModeColor(void)
       return; //No temperature set "yet". Do nothing.
     }
 
-#ifdef LED_COLOR_PIN
-#ifdef LCD_LED_PWM_CHANNEL
-    // set the knob_led_idle temperorly to OFF
-    if (infoSettings.knob_led_idle && !idle_ledmode_previous)
-    {
-      idle_ledmode_previous = true;
-      infoSettings.knob_led_idle = 0; //Temperory turn off led idle
-    }
-#endif
-#endif
+    #ifdef LED_COLOR_PIN
+      #ifdef LCD_LED_PWM_CHANNEL
+        // set the knob_led_idle temperorly to OFF
+        if (infoSettings.knob_led_idle && !idle_ledmode_previous)
+        {
+          idle_ledmode_previous = true;
+          infoSettings.knob_led_idle = 0; //Temperory turn off led idle
+        }
+      #endif
+    #endif
 
     //Store current temperature values to reduce cycle time
     uint16_t hotendCurrentTemp = heatGetCurrentTemp(0);
@@ -167,17 +167,17 @@ void setSequentialModeColor(void)
       //Bed and hotend are on temperature. Set neopixel to white
       storeCmd("M150 R255 U255 B255 P255\n");
 
-//Restore the encoder to the previous state
-#ifdef LED_COLOR_PIN
-#ifdef LCD_LED_PWM_CHANNEL
-      //Set the knob_led_idle on again
-      if (idle_ledmode_previous)
-      {
-        idle_ledmode_previous = false;
-        infoSettings.knob_led_idle = 1;
-      }
-#endif
-#endif
+      //Restore the encoder to the previous state
+      #ifdef LED_COLOR_PIN
+        #ifdef LCD_LED_PWM_CHANNEL
+          //Set the knob_led_idle on again
+          if (idle_ledmode_previous)
+          {
+            idle_ledmode_previous = false;
+            infoSettings.knob_led_idle = 1;
+          }
+        #endif
+      #endif
 
       //set the screen to the max brightness
       //The encoder knob will get it's default color.
@@ -218,20 +218,20 @@ void setSequentialModeColor(void)
     // Set the neopixel color
     storeCmd("M150 R%i U0 B%i P255\n", newLedValue, 255 - newLedValue);
 
-#ifdef LED_COLOR_PIN
-    uint32_t newPixelColor = 0;
-    newPixelColor |= (uint32_t)(newLedValue) << 8;
-    newPixelColor |= (uint32_t)(255 - newLedValue);
+    #ifdef LED_COLOR_PIN
+      uint32_t newPixelColor = 0;
+      newPixelColor |= (uint32_t)(newLedValue) << 8;
+      newPixelColor |= (uint32_t)(255 - newLedValue);
 
-    //WEG
-    //char tempstr[60];
-    //sprintf(tempstr, "NEW %i | R:%i B:%i | LV: %i", newPixelColor, colorRed, colorBlue, newLedValue);
-    //GUI_DispString(100, 0, (u8 *)tempstr);
-    //END WEG
+      //WEG
+      //char tempstr[60];
+      //sprintf(tempstr, "NEW %i | R:%i B:%i | LV: %i", newPixelColor, colorRed, colorBlue, newLedValue);
+      //GUI_DispString(100, 0, (u8 *)tempstr);
+      //END WEG
 
-    //Color the Knob led when available
-    WS2812_Send_DAT(newPixelColor);
-#endif
+      //Color the Knob led when available
+      WS2812_Send_DAT(newPixelColor);
+    #endif
 
     prevPixelColor = newLedValue;
     return;

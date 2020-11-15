@@ -1,3 +1,6 @@
+### Please read the styleguide before posting!
+ ----> See styleguide.md in the root of this project
+
 ### Requirements
 
 * Filling out this template is required. Pull Requests without a clear description may be closed at the maintainers' discretion.
