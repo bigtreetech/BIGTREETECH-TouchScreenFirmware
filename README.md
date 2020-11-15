@@ -58,7 +58,7 @@ C: In case you have an **"E3" mainboard** which provides a **single EXP connecto
 ## Update TFT Firmware
 
 
-TFT firmware updates are comprised of three elements:
+TFT firmware updates are comprised of up to four elements:
 
 1. The firmware binary (`BIGTREE_TFT*_V*.*.*.bin`). Example: `BIGTREE_TFT35_V3.0.26.1.bin`:
    - `BIGTREE_TFT_35`: model
@@ -68,7 +68,7 @@ TFT firmware updates are comprised of three elements:
    - `TFT*/font`: fonts
    - `TFT*/bmp`: icons
 3. The config.ini file
-4. Optionally a language file
+4. **Optionally** a language file
 
 Copy  the `BIGTREE_TFT*_V*.*.*.bin,the `TFT*` folder and the config.ini to the root of a blank SD card that is <8GB and formatted as FAT32:
 
@@ -105,6 +105,8 @@ In case one or several parts of the update failed, an error will be shown. Follo
 
 After the update is done and the files are renamed, it is possible to reuse them again. To do so, change the name of the element(s) to the pre-update name and start the update process again.
 
+Remove the SD card from the TFT and restart the printer.
+
 
 
 
@@ -123,10 +125,11 @@ To update the Firmware configuration:
 
 1. Edit the settings in **config.ini**.
 2. Copy the **config.ini** file to the root of the SD card. (The SD card capacity should be less than or equal to 8GB and formatted as FAT32)
-3. Insert the SD card in the TFT's SD card slot and restart the TFT by pressing the reset buttion or disconnecting and connecting the power cable.
-4. The TFT will update and store the configuration form **config.ini** file.
+3. Insert the SD card into the TFT's SD card slot and restart the printer or press the reset buttion of the TFT.
+4. The TFT will update and store the configuration from **config.ini** file.
+5. Make sure to remove the SD card from the TFT and restart the printer.
 
-The config.ini can be edited using a simple text editor (make sure to use UTF encoding) and uploaded again - without the need to upload the firmware or the TFT folder - as long as the firmware is the same version number.
+The config.ini can be edited using a simple text editor (make sure to use UTF encoding) and uploaded again - without the need to upload the firmware or the TFT folder - as long as the firmware and the config.ini have the same version number.
 
 ## Customization
 
@@ -155,6 +158,7 @@ See [Customization guides](https://github.com/bigtreetech/BIGTREETECH-TouchScree
 ;BIGTREE_TFT24_V1_1
 ;MKS_32_V1_4
 ;MKS_32_V1_4_NOBL
+
 
 
 [platformio]
