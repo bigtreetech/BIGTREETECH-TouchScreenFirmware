@@ -23,6 +23,7 @@ extern "C" {
 #define LANG_KEY_TOUCH_SOUND                  "label_touch_sound:"
 #define LANG_KEY_TOAST_SOUND                  "label_toast_sound:"
 #define LANG_KEY_ALERT_SOUND                  "label_alert_sound:"
+#define LANG_KEY_PREHEATDONE_SOUND            "label_preheatdone_sound:"
 #define LANG_KEY_SHUT_DOWN                    "label_shut_down:"
 #define LANG_KEY_RGB_SETTINGS                 "label_rgb_settings:"
 #define LANG_KEY_RGB_OFF                      "label_rgb_off:"
