@@ -91,11 +91,14 @@ void setSequentialModeColor(void)
       //Turn off neopixels and set knob led back to default
       storeCmd("M150 R0 U0 B0 P0\n");
 
-      //set the screen to the max brightness
-      //The encoder knob will get it's default color.
-      lcd_dim.dimmed = true; //Force dimmed mode
-      wakeLCD();
-
+      #ifdef LED_COLOR_PIN
+        #ifdef LCD_LED_PWM_CHANNEL
+          //set the screen to the max brightness
+          //The encoder knob will get it's default color.
+          lcd_dim.dimmed = true; //Force dimmed mode
+          wakeLCD();
+        #endif
+      #endif
       return;
     }
 
