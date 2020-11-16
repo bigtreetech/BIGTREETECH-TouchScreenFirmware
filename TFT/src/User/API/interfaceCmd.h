@@ -23,6 +23,7 @@ typedef struct
   uint8_t index_r; // Ring buffer read position
   uint8_t index_w; // Ring buffer write position
   uint8_t count;   // Count of commands in the queue
+  uint32_t line;   // Gcode valid line number
 }GCODE_QUEUE;
 
 extern GCODE_QUEUE infoCmd;

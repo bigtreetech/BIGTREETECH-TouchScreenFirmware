@@ -213,7 +213,7 @@ void menuPrintFromSource(void)
   KEY_VALUES key_num = KEY_IDLE;
 
   u8 update=0;
-
+  storeCmd("M110 N0\n");    //Clear line number
   GUI_Clear(infoSettings.bg_color);
   GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, LABEL_LOADING);
 

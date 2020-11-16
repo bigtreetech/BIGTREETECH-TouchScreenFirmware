@@ -201,6 +201,7 @@ void sendQueueCmd(void)
   bool avoid_terminal = false;
   u16  cmd=0;
   cmd_index = 0;
+  static int8_t checking_flag = -1;
   //check if cmd is from TFT or other host
   bool fromTFT = (infoCmd.queue[infoCmd.index_r].src == SERIAL_PORT);
 
@@ -571,6 +572,19 @@ void sendQueueCmd(void)
           }
           break;
 
+#ifdef GCODE_CHECKING
+        case 110:  //M110  Set Line Number  "M110 N<line>"
+          {
+            uint32_t line;
+            if(cmd_seen('N'))
+            {
+              line = cmd_value();
+              infoCmd.line = line;
+              checking_flag = 0;
+            }
+          }
+          break;
+#endif
         case 114: //M114
           #ifdef FIL_RUNOUT_PIN
           if (fromTFT)
@@ -888,6 +902,30 @@ void sendQueueCmd(void)
   } // end parsing cmd
 
   setCurrentAckSrc(infoCmd.queue[infoCmd.index_r].src);
+#ifdef GCODE_CHECKING
+  if(checking_flag==1)
+  {
+    uint8_t index=0;
+    uint8_t cs = 0;
+    uint8_t num=0;
+    char line_str[CMD_MAX_CHAR]={0};
+
+    infoCmd.line++;
+    sprintf(line_str, "N%u ", infoCmd.line);
+    strcat(line_str, infoCmd.queue[infoCmd.index_r].gcode);
+
+    while(line_str[index] != '\n') index++;
+
+    num = index;
+    for(; index; )
+      cs = cs ^ line_str[--index];
+    cs &= 0xff;
+    sprintf(line_str+num, "*%d\n", cs);
+    strcpy(infoCmd.queue[infoCmd.index_r].gcode, line_str);
+  }
+  if(checking_flag==0)
+    checking_flag = 1;
+#endif //GCODE_CHECKING
   Serial_Puts(SERIAL_PORT, infoCmd.queue[infoCmd.index_r].gcode);
   if (avoid_terminal != true){
     sendGcodeTerminalCache(infoCmd.queue[infoCmd.index_r].gcode, TERMINAL_GCODE);

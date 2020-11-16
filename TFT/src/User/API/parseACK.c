@@ -280,6 +280,7 @@ void parseACK(void)
       if (infoSettings.ext_count < infoSettings.hotend_count) infoSettings.ext_count = infoSettings.hotend_count;
       updateNextHeatCheckTime();
       infoHost.connected = true;
+      storeCmd("M110 N0\n");   //Clear line number
       if(infoMachineSettings.isMarlinFirmware == -1) // if never connected to the printer since boot
       {
         storeCmd("M503\n");  // Query detailed printer capabilities
@@ -334,6 +335,23 @@ void parseACK(void)
       goto parse_end;
     }
     // Onboard sd Gcode command response end
+
+  #ifdef GCODE_CHECKING
+    if(ack_seen("Resend: "))   //checking error
+    {
+      static uint8_t old_line=0;
+      static char *str;                            //Save needs to rewrite string
+      uint8_t line = atoi(dmaL2Cache+ack_index);   //Get checking error line number  e.g. Resend: 25
+      if(old_line != line)
+      {
+        old_line = line;
+        str = infoCmd.queue[infoCmd.index_r-1].gcode;
+      }
+      Serial_Puts(SERIAL_PORT, str);
+      infoHost.wait = true;
+      return;
+    }
+  #endif //GCODE_CHECKING
 
     if(ack_cmp("ok\n"))
     {

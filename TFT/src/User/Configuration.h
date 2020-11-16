@@ -442,6 +442,14 @@
 #define RAPID_SERIAL_COMM
 
 /**
+ * Check gcode line number and checksum.
+ *  e.g. N123 [...G Code in here...] *123
+ * You can open Marlin ADVANCED_OK and check the reception status
+ * https://reprap.org/wiki/G-code#N:_Line_number
+ */
+#define GCODE_CHECKING
+
+/**
  * Custom G-code Commands
  *
  * Support for up to 15 custom G-codes. Uncomment CUSTOM_*_LABEL and CUSTOM_*_GCODE to enable custom G-code.
