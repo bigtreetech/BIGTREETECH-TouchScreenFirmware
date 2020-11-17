@@ -575,8 +575,8 @@ void sendQueueCmd(void)
 #ifdef GCODE_CHECKING
         case 110:  //M110  Set Line Number  "M110 N<line>"
           {
-            uint32_t line;
-            if(cmd_seen('N'))
+            uint32_t line = 0;
+            if (cmd_seen('N'))
             {
               line = cmd_value();
               infoCmd.line = line;
@@ -902,30 +902,39 @@ void sendQueueCmd(void)
   } // end parsing cmd
 
   setCurrentAckSrc(infoCmd.queue[infoCmd.index_r].src);
+
 #ifdef GCODE_CHECKING
-  if(checking_flag==1)
+  if (checking_flag == 1)
   {
-    uint8_t index=0;
+    uint8_t index = 0;
     uint8_t cs = 0;
-    uint8_t num=0;
-    char line_str[CMD_MAX_CHAR]={0};
+    uint8_t num = 0;
+    char line_str[CMD_MAX_CHAR] = {0};
 
     infoCmd.line++;
     sprintf(line_str, "N%u ", infoCmd.line);
     strcat(line_str, infoCmd.queue[infoCmd.index_r].gcode);
 
-    while(line_str[index] != '\n') index++;
+    while (line_str[index] != '\n')
+    {
+      index++;
+    }
 
     num = index;
-    for(; index; )
+    for (; index; )
+    {
       cs = cs ^ line_str[--index];
+    }
     cs &= 0xff;
-    sprintf(line_str+num, "*%d\n", cs);
+    sprintf(line_str + num, "*%d\n", cs);
     strcpy(infoCmd.queue[infoCmd.index_r].gcode, line_str);
   }
-  if(checking_flag==0)
+  if (checking_flag == 0)
+  {
     checking_flag = 1;
+  }
 #endif //GCODE_CHECKING
+
   Serial_Puts(SERIAL_PORT, infoCmd.queue[infoCmd.index_r].gcode);
   if (avoid_terminal != true){
     sendGcodeTerminalCache(infoCmd.queue[infoCmd.index_r].gcode, TERMINAL_GCODE);
