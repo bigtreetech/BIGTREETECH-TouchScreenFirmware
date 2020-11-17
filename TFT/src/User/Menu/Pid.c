@@ -278,6 +278,24 @@ void menuPid(void)
         pidTemperatureReDraw(true);
         break;
 
+      case KEY_INFOBOX:
+      {
+        int32_t val = pidHeater.T[pidHeater.toolIndex].target;
+        // Get the touch of the user from either icon 1 or 2 which is under the temperature			
+        char titlestr[30];
+        sprintf(titlestr, "Min:0 | Max:%i", infoSettings.max_temp[pidHeater.toolIndex] );
+        val = numPadInt((u8 *)titlestr, pidHeater.T[pidHeater.toolIndex].target,0, false);
+        val = NOBEYOND(0,val,infoSettings.max_temp[pidHeater.toolIndex]);
+        // If value is different than target change it.
+        if (val != pidHeater.T[pidHeater.toolIndex].target)
+        {
+          pidHeater.T[pidHeater.toolIndex].target = val;
+        }
+
+        menuDrawPage(&pidItems);
+        pidTemperatureReDraw(true);
+      }
+      break;
       case KEY_ICON_3:
         if (pidHeater.T[pidHeater.toolIndex].target < infoSettings.max_temp[pidHeater.toolIndex])
           pidHeater.T[pidHeater.toolIndex].target =
