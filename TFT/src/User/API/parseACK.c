@@ -335,11 +335,10 @@ void parseACK(void)
       goto parse_end;
     }
     // Onboard sd Gcode command response end
-
+    static uint8_t old_line=0;
   #ifdef GCODE_CHECKING
     if(ack_seen("Resend: "))   //checking error
     {
-      static uint8_t old_line=0;
       static char *str;                            //Save needs to rewrite string
       uint8_t line = atoi(dmaL2Cache+ack_index);   //Get checking error line number  e.g. Resend: 25
       if(old_line != line)
@@ -356,6 +355,7 @@ void parseACK(void)
     if(ack_cmp("ok\n"))
     {
       infoHost.wait = false;
+      old_line = 0;
     }
     else
     {
