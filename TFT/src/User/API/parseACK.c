@@ -642,6 +642,10 @@ void parseACK(void)
       else if(ack_seen("Cap:AUTOREPORT_TEMP:"))
       {
         infoMachineSettings.autoReportTemp = ack_value();
+        if (infoMachineSettings.autoReportTemp)
+        {
+          storeCmd("M155 ");
+        }
       }
       else if(ack_seen("Cap:AUTOLEVEL:") && infoMachineSettings.leveling == BL_DISABLED)
       {

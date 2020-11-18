@@ -67,7 +67,7 @@ void menuHeat(void)
     {ICON_BACK,                 LABEL_BACK},}
   };
 
-  heatSetUpdateTime(TEMPERATURE_QUERY_FAST_DURATION);
+  heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
 
   heatItems.items[KEY_ICON_4] = itemTool[c_heater];
   heatItems.items[KEY_ICON_5] = itemDegree[item_degree_i];
@@ -159,5 +159,5 @@ void menuHeat(void)
 
   // Set slow update time if not waiting for target temperature
   if(heatHasWaiting() == false)
-    heatSetUpdateTime(TEMPERATURE_QUERY_SLOW_DURATION);
+    heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
 }
