@@ -64,7 +64,7 @@
     #define STRING_RESTORE                "Вернуть"
     #define STRING_RESET                  "Сброс"
     #define STRING_DEFAULT                "По умолчанию"
-    #define STRING_CLEAR                  "Очистить"
+    #define STRING_CLEAR                  "Убрать"
     #define STRING_NEXT                   "Следующий"
     #define STRING_DISTANCE               "Отступы"
     #define STRING_INVALID_VALUE          "Остутствуют правильные значения!"
