@@ -42,7 +42,7 @@ void USB_OTG_BSP_Init(USB_OTG_CORE_HANDLE * pdev)
   // EXTI_InitTypeDef EXTI_InitStructure;
 #ifdef STM32F10X_CL
 
-#if defined(MKS_32_V1_4)
+#if defined(MKS_32_V1_4)  || (defined MKS_28_V1_0)
   RCC_OTGFSCLKConfig(RCC_OTGFSCLKSource_PLLVCO_Div2);
 #else
   RCC_OTGFSCLKConfig(RCC_OTGFSCLKSource_PLLVCO_Div3);

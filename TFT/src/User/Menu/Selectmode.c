@@ -106,7 +106,7 @@ void menuMode(void)
   }
   resetInfoFile();
 
-  #if !defined(MKS_32_V1_4)
+  #if !defined(MKS_32_V1_4) && (!defined MKS_28_V1_0)
     //causes hang if we deinit spi1
     SD_DeInit();
   #endif
