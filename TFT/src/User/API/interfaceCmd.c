@@ -201,7 +201,8 @@ void sendQueueCmd(void)
   bool avoid_terminal = false;
   u16  cmd=0;
   cmd_index = 0;
-  static int8_t checking_flag = -1;
+  uint32_t line = 0;
+  static uint8_t M110 = 0;
   //check if cmd is from TFT or other host
   bool fromTFT = (infoCmd.queue[infoCmd.index_r].src == SERIAL_PORT);
 
@@ -574,13 +575,11 @@ void sendQueueCmd(void)
 
 #ifdef GCODE_CHECKING
         case 110:  //M110  Set Line Number  "M110 N<line>"
-          {
-            uint32_t line = 0;
+          {          
             if (cmd_seen('N'))
             {
               line = cmd_value();
-              infoCmd.line = line;
-              checking_flag = 0;
+              M110 = 1;
             }
           }
           break;
@@ -904,13 +903,13 @@ void sendQueueCmd(void)
   setCurrentAckSrc(infoCmd.queue[infoCmd.index_r].src);
 
 #ifdef GCODE_CHECKING
-  if (checking_flag == 1)
+  if (infoHost.connected)
   {
     uint8_t index = 0;
     uint8_t cs = 0;
     uint8_t num = 0;
     char line_str[CMD_MAX_CHAR] = {0};
-
+    
     infoCmd.line++;
     sprintf(line_str, "N%u ", infoCmd.line);
     strcat(line_str, infoCmd.queue[infoCmd.index_r].gcode);
@@ -928,10 +927,12 @@ void sendQueueCmd(void)
     cs &= 0xff;
     sprintf(line_str + num, "*%d\n", cs);
     strcpy(infoCmd.queue[infoCmd.index_r].gcode, line_str);
-  }
-  if (checking_flag == 0)
-  {
-    checking_flag = 1;
+    
+    if(M110)
+    {
+      infoCmd.line = line;
+      M110 = 0;
+    }
   }
 #endif //GCODE_CHECKING
 
