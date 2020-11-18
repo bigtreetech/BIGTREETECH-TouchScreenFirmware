@@ -36,7 +36,7 @@ void Hardware_GenericInit(void)
     GPIO_PinRemapConfig(GPIO_Remap_SWJ_Disable, ENABLE); //disable JTAG & SWD
   #endif
 
-  #if defined(MKS_32_V1_4)
+  #if defined(MKS_32_V1_4) || (defined MKS_28_V1_0)
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
     GPIO_PinRemapConfig(GPIO_Remap_USART2, ENABLE);
   #endif
@@ -49,13 +49,12 @@ void Hardware_GenericInit(void)
   LCD_RefreshDirection();   // refresh display direction after reading settings
   scanUpdates();            // scan icon, fonts and config files
   checkflashSign();         // check font/icon/config signature in SPI flash for update
-  initMachineSetting();     // load default machine settings
 
   #ifdef LED_COLOR_PIN
     knob_LED_Init();
   #endif
 
-  #if !defined(MKS_32_V1_4)
+  #if !defined(MKS_32_V1_4) && (!defined MKS_28_V1_0)
     //causes hang if we deinit spi1
     SD_DeInit();
   #endif

@@ -235,7 +235,17 @@ void sendQueueCmd(void)
           break;
         case 18: //M18/M84 disable steppers
         case 84:
-          coordinateSetKnown(false);
+          if(cmd_seen('S') && !cmd_seen('Y') && !cmd_seen('Z') && !cmd_seen('E'))
+          {
+            // Do not mark coordinate as unknown in this case as this is a M18/M84 S<timeout>
+            // command that doesn't disable the motors right away but will set their idling
+            // timeout.
+          }
+          else
+          {
+            // This is something else than an "M18/M84 S<timeout>", this will disable at least one stepper, set coordinate as unknown
+            coordinateSetKnown(false);
+          }
           break;
 
 #ifdef SERIAL_PORT_2
@@ -495,6 +505,23 @@ void sendQueueCmd(void)
           {
             heatSetUpdateWaiting(false);
             avoid_terminal = !infoSettings.terminalACK;
+          }
+          break;
+
+        case 155: //M155
+          if (fromTFT)
+          {
+            heatSetUpdateWaiting(false);
+            if(cmd_seen('S'))
+            {
+              heatSyncUpdateSeconds(cmd_value());
+            }
+            else if (!cmd_seen('\n'))
+            {
+              char buf[12];
+              sprintf(buf, "S%u\n", heatGetUpdateSeconds());
+              strcat(infoCmd.queue[infoCmd.index_r].gcode, (const char*)buf);
+            }
           }
           break;
 

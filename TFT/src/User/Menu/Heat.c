@@ -1,5 +1,7 @@
 #include "Heat.h"
 #include "includes.h"
+#include "Numpad.h"
+#include "Settings.h"
 
 const ITEM itemTool[] = {
 // icon                       label
@@ -21,6 +23,7 @@ const ITEM itemDegree[ITEM_DEGREE_NUM] = {
   {ICON_5_DEGREE,             LABEL_5_DEGREE},
   {ICON_10_DEGREE,            LABEL_10_DEGREE},
 };
+
 
 const  u8 item_degree[ITEM_DEGREE_NUM] = {1, 5, 10};
 static u8 item_degree_i = 1;
@@ -64,7 +67,7 @@ void menuHeat(void)
     {ICON_BACK,                 LABEL_BACK},}
   };
 
-  heatSetUpdateTime(TEMPERATURE_QUERY_FAST_DURATION);
+  heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
 
   heatItems.items[KEY_ICON_4] = itemTool[c_heater];
   heatItems.items[KEY_ICON_5] = itemDegree[item_degree_i];
@@ -80,11 +83,29 @@ void menuHeat(void)
     KEY_VALUES key_num = menuKeyGetValue();
     int16_t actCurrent = heatGetCurrentTemp(c_heater);
     int16_t actTarget = heatGetTargetTemp(c_heater);
+	
     switch(key_num)
     {
       case KEY_ICON_0:
           heatSetTargetTemp(c_heater, actTarget - item_degree[item_degree_i]);
         break;
+
+      case KEY_INFOBOX:
+      {
+        int32_t val = actTarget;
+        char titlestr[30];
+        sprintf(titlestr, "Min:0 | Max:%i", infoSettings.max_temp[c_heater] );
+        val = numPadInt((u8 *)titlestr, actTarget,0, false);
+        val = NOBEYOND(0,val,infoSettings.max_temp[c_heater]);
+        if (val != actTarget)
+      	{
+          heatSetTargetTemp(c_heater, val);
+        }
+
+        menuDrawPage(&heatItems);
+        showTemperature(c_heater);
+      }
+      break;
 
       case KEY_ICON_3:
           heatSetTargetTemp(c_heater, actTarget + item_degree[item_degree_i]);
@@ -138,5 +159,5 @@ void menuHeat(void)
 
   // Set slow update time if not waiting for target temperature
   if(heatHasWaiting() == false)
-    heatSetUpdateTime(TEMPERATURE_QUERY_SLOW_DURATION);
+    heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
 }
