@@ -93,7 +93,7 @@ void menuTuneExtruder(void)
   int16_t actCurrent;
   int16_t actTarget;
 
-  heatSetUpdateTime(TEMPERATURE_QUERY_FAST_DURATION);
+  heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
 
   menuDrawPage(&tuneExtruderItems);
   showExtrudeTemperature(c_heater);
@@ -216,7 +216,7 @@ void menuTuneExtruder(void)
 
   // Set slow update time if not waiting for target temperature
   if (heatHasWaiting() == false)
-    heatSetUpdateTime(TEMPERATURE_QUERY_SLOW_DURATION);
+    heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
 }
 
 void menuNewExtruderESteps(void)

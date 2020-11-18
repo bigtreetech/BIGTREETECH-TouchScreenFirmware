@@ -76,7 +76,15 @@ bool scanPrintFilesGcodeFs(void)
         else
           longfilename = line;
 
-        Pstr_tmp = strchr(longfilename, '\n');
+        /*
+          When AUTO_REPORT_TEMPERATURES is enabled by M155, The response of M33 may become the following
+            SENDING: M33 /1A29A~1.GCO
+            T:29.43 /0.00 B:27.95 /0.00 @:0 B@:0
+            /1.gcode
+            ok
+          So the longfilename will be parsed "0.00 @:0 B@:0" instead of "1.gcode" if the truncated character is '\n' not string "\nok"
+        */
+        Pstr_tmp = strstr(longfilename, "\nok");
         if (Pstr_tmp != NULL)
           *Pstr_tmp = 0;                          //remove end of M33 command
 

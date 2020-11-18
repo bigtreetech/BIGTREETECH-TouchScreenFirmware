@@ -498,6 +498,23 @@ void sendQueueCmd(void)
           }
           break;
 
+        case 155: //M155
+          if (fromTFT)
+          {
+            heatSetUpdateWaiting(false);
+            if(cmd_seen('S'))
+            {
+              heatSyncUpdateSeconds(cmd_value());
+            }
+            else if (!cmd_seen('\n'))
+            {
+              char buf[12];
+              sprintf(buf, "S%u\n", heatGetUpdateSeconds());
+              strcat(infoCmd.queue[infoCmd.index_r].gcode, (const char*)buf);
+            }
+          }
+          break;
+
         case 106: //M106
         {
           uint8_t i = cmd_seen('P') ? cmd_value() : 0;
