@@ -56,7 +56,7 @@
     #define STRING_BLTOUCH_REPEAT         "Точность Z"
     #define STRING_Z_OFFSET               "Отступ Z"
     #define STRING_PROBE_OFFSET           "Смещение датчика"
-    #define STRING_HOME_OFFSET            "Home Offset"
+    #define STRING_HOME_OFFSET            "Дом - отступы"
     #define STRING_CONFIRMATION           "Вы уверены?"
     #define STRING_DOWN                   "Вниз"
     #define STRING_UP                     "Вверх"
@@ -64,7 +64,7 @@
     #define STRING_RESTORE                "Вернуть"
     #define STRING_RESET                  "Сброс"
     #define STRING_DEFAULT                "По умолчанию"
-    #define STRING_CLEAR                  "Очистить"
+    #define STRING_CLEAR                  "Убрать"
     #define STRING_NEXT                   "Следующий"
     #define STRING_DISTANCE               "Отступы"
     #define STRING_INVALID_VALUE          "Остутствуют правильные значения!"
@@ -276,6 +276,6 @@
     #define STRING_NOTIFICATIONS          "Уведомления"
     #define STRING_MESH_EDITOR            "Сетка ред."
     #define STRING_MESH_TUNER             "Сетка настр."
-    #define STRING_CASE_LIGHT             "Case light"
+    #define STRING_CASE_LIGHT             "Подсветка"
 
 #endif

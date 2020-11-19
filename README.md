@@ -120,6 +120,7 @@ See [Customization guides](https://github.com/bigtreetech/BIGTREETECH-TouchScree
 ;BIGTREE_TFT24_V1_1
 ;MKS_32_V1_4
 ;MKS_32_V1_4_NOBL
+;MKS_28_V1_0
 
 
 [platformio]

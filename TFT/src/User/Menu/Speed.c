@@ -87,7 +87,21 @@ void menuSpeed(void)
         if(now > SPEED_MIN)
           speedSetPercent(item_percentage_i, now - item_percent_unit[item_percent_unit_i]);
         break;
-
+      case KEY_INFOBOX:
+      {
+        u16 val = now;
+        char titlestr[30];
+        sprintf(titlestr, "Min:%i | Max:%i", SPEED_MIN, SPEED_MAX);
+        val = numPadInt((u8 *)titlestr, val,100, false);
+        val = NOBEYOND(SPEED_MIN,val,SPEED_MAX);
+        if (val != now)
+        {
+          speedSetPercent(item_percentage_i, val);
+        }
+        menuDrawPage(&percentageItems);
+        percentageReDraw((char*)textSelect(percentageItems.title.index));
+        break;
+      }
       case KEY_ICON_3:
         if(now < SPEED_MAX)
           speedSetPercent(item_percentage_i, now + item_percent_unit[item_percent_unit_i]);
