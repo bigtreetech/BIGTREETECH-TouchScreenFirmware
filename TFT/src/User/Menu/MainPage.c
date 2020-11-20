@@ -36,7 +36,7 @@ void unifiedMenu(void)
         break;
 
       case KEY_ICON_2:
-        infoMenu.menu[++infoMenu.cur] = menuExtrude;
+        infoMenu.menu[++infoMenu.cur] = menuPreheat;
         break;
 
       case KEY_ICON_3:
