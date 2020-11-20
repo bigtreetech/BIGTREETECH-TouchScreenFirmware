@@ -420,8 +420,9 @@ void loopCheckPrinting(void)
       infoMenu.menu[++infoMenu.cur] = menuPrinting;
   }
     
-  if (!infoPrinting.printing && (infoMenu.menu[infoMenu.cur] == menuPrinting)) 
-    infoMenu.menu[infoMenu.cur] = menuStatus;
+  if (!infoPrinting.printing && (infoMenu.menu[infoMenu.cur] == menuPrinting)) {
+    infoMenu.cur = 0;
+  }
 
   if (infoFile.source != BOARD_SD) return;
   if (infoMachineSettings.autoReportSDStatus == ENABLED) return;
