@@ -11,7 +11,7 @@ typedef struct
 }DMA_CIRCULAR_BUFFER;
 
 #if (defined(TFT28_V3_0) || defined(TFT24_V1_1) || defined (MKS_32_V1_4_NOBL))
-  #define DMA_TRANS_LEN  3072
+  #define DMA_TRANS_LEN  3072 // for lower RAM
 #else
   #define DMA_TRANS_LEN  4096
 #endif

@@ -437,7 +437,7 @@ void parseACK(void)
         setDualStepperStatus(E_STEPPER, true);
       }
     //parse and store Max Feed Rate values
-     else if(ack_seen("M203 X")){
+      else if(ack_seen("M203 X")){
                           setParameter(P_MAX_FEED_RATE, X_STEPPER, ack_value());
         if(ack_seen("Y")) setParameter(P_MAX_FEED_RATE, Y_STEPPER, ack_value());
         if(ack_seen("Z")) setParameter(P_MAX_FEED_RATE, Z_STEPPER, ack_value());
