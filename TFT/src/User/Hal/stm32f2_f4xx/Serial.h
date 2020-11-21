@@ -10,7 +10,7 @@ typedef struct
   uint16_t rIndex;
 }DMA_CIRCULAR_BUFFER;
 
-#define DMA_TRANS_LEN  4096
+#define DMA_TRANS_LEN  ACK_MAX_SIZE
 
 extern DMA_CIRCULAR_BUFFER dmaL1Data[_UART_CNT];
 
