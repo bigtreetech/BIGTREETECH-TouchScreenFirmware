@@ -31,7 +31,9 @@ const GUI_RECT printinfo_val_rect[6] = {
 };
 
 static uint32_t nextTime = 0;
+static uint32_t nextDrawTime = 0;
 static uint32_t toggle_time = 2000; // 1 seconds is 1000
+static uint32_t drawTime = 500; // 1 seconds is 1000
 static uint8_t c_Tool = NOZZLE0;
 static int c_fan = 0;
 static int c_speedID = 0;
@@ -272,13 +274,17 @@ void toggleinfo(void)
 void printingDrawPage(void)
 {
   //  Scroll_CreatePara(&titleScroll, infoFile.title,&titleRect);  //
-  reValueNozzle(EXT_ICON_POS);
-  reValueBed(BED_ICON_POS);
-  reDrawFan(FAN_ICON_POS);
-  reDrawTime(TIM_ICON_POS);
-  reDrawProgress(TIM_ICON_POS);
-  reDrawLayer(Z_ICON_POS);
-  reDrawSpeed(SPD_ICON_POS);
+    reValueNozzle(EXT_ICON_POS);
+    reValueBed(BED_ICON_POS);
+    reDrawFan(FAN_ICON_POS);
+    reDrawTime(TIM_ICON_POS);
+    reDrawProgress(TIM_ICON_POS);
+    reDrawSpeed(SPD_ICON_POS);
+    reDrawLayer(Z_ICON_POS);
+  if (OS_GetTimeMs() > nextDrawTime)
+  {
+    nextDrawTime = OS_GetTimeMs() + drawTime;
+  }
 }
 
 
