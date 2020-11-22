@@ -233,16 +233,20 @@ void reDrawProgress(int icon_pos)
 
 void reDrawLayer(int icon_pos)
 {
-  char tempstr[10];
-  sprintf(tempstr, "%.2fmm",coordinateGetAxisTarget(Z_AXIS));
+  if (OS_GetTimeMs() > nextDrawTime)
+  {
+    char tempstr[10];
+    sprintf(tempstr, "%.2fmm",coordinateGetAxisTarget(Z_AXIS));
 
-  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
+    GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
-  ICON_ReadDisplay(printinfo_points[icon_pos].x,printinfo_points[icon_pos].y,ICON_PRINTING_ZLAYER);
-  GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (u8* )LAYER_TITLE);
-  GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (u8 *)tempstr);
+    ICON_ReadDisplay(printinfo_points[icon_pos].x,printinfo_points[icon_pos].y,ICON_PRINTING_ZLAYER);
+    GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (u8* )LAYER_TITLE);
+    GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (u8 *)tempstr);
 
-  GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
+    GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
+      nextDrawTime = OS_GetTimeMs() + drawTime;
+  }
 }
 
 void toggleinfo(void)
@@ -279,12 +283,8 @@ void printingDrawPage(void)
     reDrawFan(FAN_ICON_POS);
     reDrawTime(TIM_ICON_POS);
     reDrawProgress(TIM_ICON_POS);
-    reDrawSpeed(SPD_ICON_POS);
-  if (OS_GetTimeMs() > nextDrawTime)
-  {
     reDrawLayer(Z_ICON_POS);
-    nextDrawTime = OS_GetTimeMs() + drawTime;
-  }
+    reDrawSpeed(SPD_ICON_POS);
 }
 
 
