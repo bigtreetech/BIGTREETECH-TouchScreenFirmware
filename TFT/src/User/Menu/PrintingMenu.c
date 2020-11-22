@@ -245,7 +245,7 @@ void reDrawLayer(int icon_pos)
     GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (u8 *)tempstr);
 
     GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
-      nextDrawTime = OS_GetTimeMs() + drawTime;
+    nextDrawTime = OS_GetTimeMs() + drawTime;
   }
 }
 
