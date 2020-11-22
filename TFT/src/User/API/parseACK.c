@@ -728,14 +728,14 @@ void parseACK(void)
     // parse and store feed rate percentage
       else if(ack_seen("FR:"))
       {
-        speedACKPercent(0,ack_value());  // by Lori
+        speedACKPercent(0,ack_value());
         speedSetPercent(0,ack_value());
         speedQuerySetWait(false);
       }
     // parse and store flow rate percentage
       else if(ack_seen("Flow: "))
       {
-        speedACKPercent(1,ack_value());  // by Lori
+        speedACKPercent(1,ack_value());
         speedSetPercent(1,ack_value());
         speedQuerySetWait(false);
       }
