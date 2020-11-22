@@ -280,9 +280,9 @@ void printingDrawPage(void)
     reDrawTime(TIM_ICON_POS);
     reDrawProgress(TIM_ICON_POS);
     reDrawSpeed(SPD_ICON_POS);
-    reDrawLayer(Z_ICON_POS);
   if (OS_GetTimeMs() > nextDrawTime)
   {
+    reDrawLayer(Z_ICON_POS);
     nextDrawTime = OS_GetTimeMs() + drawTime;
   }
 }
