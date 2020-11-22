@@ -18,6 +18,11 @@ void speedQuerySetWait(bool wait)
   queryWait = wait;
 }
 
+void speedACKPercent(u8 tool, u16 per)  // by Lori
+{
+  curPercent[tool]= per;
+}
+
 void speedSetPercent(u8 tool, u16 per)
 {
   percent[tool]=NOBEYOND(SPEED_MIN, per, SPEED_MAX);
