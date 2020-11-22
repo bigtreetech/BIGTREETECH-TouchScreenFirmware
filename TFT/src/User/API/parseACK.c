@@ -728,15 +728,13 @@ void parseACK(void)
     // parse and store feed rate percentage
       else if(ack_seen("FR:"))
       {
-        speedACKPercent(0,ack_value());
-        speedSetPercent(0,ack_value());
+        speedSetRcvPercent(0,ack_value());
         speedQuerySetWait(false);
       }
     // parse and store flow rate percentage
       else if(ack_seen("Flow: "))
       {
-        speedACKPercent(1,ack_value());
-        speedSetPercent(1,ack_value());
+        speedSetRcvPercent(1,ack_value());
         speedQuerySetWait(false);
       }
     // parse fan speed
@@ -744,8 +742,7 @@ void parseACK(void)
       {
         u8 i = ack_value();
         if (ack_seen("S")) {
-          fanACKSpeed(i, ack_value());
-          fanSetSpeed(i, ack_value());
+          fanSetRcvSpeed(i, ack_value());
         }
       }
     // parse controller fan
@@ -754,14 +751,12 @@ void parseACK(void)
         u8 i = 0;
         if (ack_seen("S")) {
           i = fanGetTypID(0,FAN_TYPE_CTRL_S);
-          fanACKSpeed(i, ack_value());
-          fanSetSpeed(i, ack_value());
+          fanSetRcvSpeed(i, ack_value());
           fanSpeedQuerySetWait(false);
         }
         if (ack_seen("I")) {
           i = fanGetTypID(0,FAN_TYPE_CTRL_I);
-          fanACKSpeed(i, ack_value());
-          fanSetSpeed(i, ack_value());
+          fanSetRcvSpeed(i, ack_value());
           fanSpeedQuerySetWait(false);
         }
       }

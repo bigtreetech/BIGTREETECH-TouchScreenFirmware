@@ -52,9 +52,9 @@ bool fanIsType(uint8_t i, uint8_t type) {
   return (fanType[i] == type);
 }
 
-void fanACKSpeed(uint8_t i, uint8_t speed)
+void fanSetRcvSpeed(uint8_t i, uint8_t speed)
 {
-  lastFanSpeed[i] = speed;
+  lastFanSpeed[i] = fanSpeed[i] = speed;
 }
 
 void fanSetSpeed(uint8_t i, uint8_t speed)
