@@ -53,6 +53,7 @@ bool fanIsType(uint8_t i, uint8_t type) {
 }
 
 void fanACKSpeed(uint8_t i, uint8_t speed)
+{
   lastFanSpeed[i] = speed;
 }
 
