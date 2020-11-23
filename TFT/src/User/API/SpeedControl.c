@@ -18,17 +18,17 @@ void speedQuerySetWait(bool wait)
   queryWait = wait;
 }
 
-void speedSetRcvPercent(u8 tool, u16 per)
+void speedSetRcvPercent(uint8_t tool, uint16_t per)
 {
   curPercent[tool] = percent[tool] = per;
 }
 
-void speedSetPercent(u8 tool, u16 per)
+void speedSetPercent(uint8_t tool, uint16_t per)
 {
   percent[tool]=NOBEYOND(SPEED_MIN, per, SPEED_MAX);
 }
 
-u16 speedGetPercent(u8 tool)
+uint16_t speedGetPercent(uint8_t tool)
 {
   return percent[tool];
 }

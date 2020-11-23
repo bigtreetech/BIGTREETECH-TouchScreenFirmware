@@ -162,7 +162,7 @@ void menuFan(void)
       break;
     }
 
-    if (lastFan != fanGetSpeed(curIndex))
+    if (FanChanged(curIndex))
     {
       lastFan = fanGetSpeed(curIndex);
       fanSpeedReDraw(true);

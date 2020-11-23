@@ -6,6 +6,7 @@ uint8_t fanType[MAX_FAN_COUNT];
 
 static uint8_t fanSpeed[MAX_FAN_COUNT] = {0};
 static uint8_t lastFanSpeed[MAX_FAN_COUNT] = {0};
+static uint8_t curFanSpeed[MAX_FAN_COUNT] = {0};
 
 static bool fan_send_waiting[MAX_FAN_COUNT] = {false};
 static bool fanQueryWait = false;
@@ -54,7 +55,7 @@ bool fanIsType(uint8_t i, uint8_t type) {
 
 void fanSetRcvSpeed(uint8_t i, uint8_t speed)
 {
-  lastFanSpeed[i] = fanSpeed[i] = speed;
+  curFanSpeed[i] = fanSpeed[i] = speed;
 }
 
 void fanSetSpeed(uint8_t i, uint8_t speed)
@@ -88,13 +89,28 @@ void fanSpeedQuerySetWait(bool wait)
   fanQueryWait = wait;
 }
 
+bool FanChanged(uint8_t i)
+{
+  if (lastFanSpeed[i] != fanSpeed[i])
+  {
+    lastFanSpeed[i] = fanSpeed[i];
+    fan_send_waiting[i] = false;
+    return true;
+  }
+  else
+  {
+    fan_send_waiting[i] = true;
+    return false;
+  }
+}
+
 void loopFan(void)
 {
   for (uint8_t i = 0; i < (infoSettings.fan_count + infoSettings.fan_ctrl_count); i++)
   {
-    if (lastFanSpeed[i] != fanSpeed[i])
+    if (curFanSpeed[i] != fanSpeed[i])
     {
-      lastFanSpeed[i] = fanSpeed[i];
+      curFanSpeed[i] = fanSpeed[i];
       if(fan_send_waiting[i] == false)
       {
         fan_send_waiting[i] = true;
