@@ -37,8 +37,8 @@ static int c_fan = 0;
 static int c_speedID = 0;
 const char* Speed_ID[2] = {"Speed","Flow"};
 
-#define toggle_time = 2000; // 1 seconds is 1000
-#define drawTime = 500; // 1 seconds is 1000
+#define toggle_time 2000; // 1 seconds is 1000
+#define drawTime 500; // 1 seconds is 1000
 
 #define LAYER_TITLE "Layer"
 #define EXT_ICON_POS  0
