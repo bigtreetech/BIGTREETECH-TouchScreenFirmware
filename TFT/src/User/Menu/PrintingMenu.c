@@ -32,13 +32,13 @@ const GUI_RECT printinfo_val_rect[6] = {
 
 static uint32_t nextTime = 0;
 static uint32_t nextDrawTime = 0;
-static uint32_t toggle_time = 2000; // 1 seconds is 1000
-static uint32_t drawTime = 500; // 1 seconds is 1000
 static uint8_t c_Tool = NOZZLE0;
 static int c_fan = 0;
 static int c_speedID = 0;
 const char* Speed_ID[2] = {"Speed","Flow"};
 
+#define toggle_time = 2000; // 1 seconds is 1000
+#define drawTime = 500; // 1 seconds is 1000
 
 #define LAYER_TITLE "Layer"
 #define EXT_ICON_POS  0
