@@ -46,7 +46,6 @@ void menuFan(void)
     {ICON_BACK,                 LABEL_BACK},}
   };
 
-  uint8_t lastFan = fanGetSpeed(curIndex);
 
   if ((infoSettings.fan_count + infoSettings.fan_ctrl_count) > 1)
     fanItems.items[KEY_ICON_4] = itemFan[0];
@@ -164,7 +163,6 @@ void menuFan(void)
 
     if (FanChanged(curIndex))
     {
-      lastFan = fanGetSpeed(curIndex);
       fanSpeedReDraw(true);
     }
 
