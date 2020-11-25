@@ -166,11 +166,11 @@ void reDrawFan(int icon_pos)
   char tempstr[10];
   if (infoSettings.fan_percentage == 1)
   {
-    sprintf(tempstr, "%d%%", fanGetSpeedPercent(c_fan));
+    sprintf(tempstr, "%d%%", fanGetCurPercent(c_fan));
   }
   else
   {
-    sprintf(tempstr, "%d", fanGetSpeed(c_fan));
+    sprintf(tempstr, "%d", fanGetCurSpeed(c_fan));
   }
 
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
@@ -344,9 +344,9 @@ void menuPrinting(void)
     }
 
     //check Fan speed change
-    if (nowFan[c_fan] != fanGetSpeed(c_fan))
+    if (nowFan[c_fan] != fanGetCurSpeed(c_fan))
     {
-      nowFan[c_fan] = fanGetSpeed(c_fan);
+      nowFan[c_fan] = fanGetCurSpeed(c_fan);
       rapid_serial_loop();  //perform backend printing loop before drawing to avoid printer idling
       reDrawFan(FAN_ICON_POS);
     }

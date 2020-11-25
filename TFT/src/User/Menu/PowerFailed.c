@@ -64,7 +64,7 @@ void powerFailedCache(u32 offset)
 
     for(u8 i = 0; i < infoSettings.fan_count; i++)
     {
-      infoBreakPoint.fan[i] = fanGetSpeed(i);
+      infoBreakPoint.fan[i] = fanGetCurSpeed(i);
     }
     infoBreakPoint.relative = coorGetRelative();
     infoBreakPoint.relative_e = eGetRelative();

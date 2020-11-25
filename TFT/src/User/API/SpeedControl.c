@@ -8,6 +8,9 @@ static uint16_t curPercent[SPEED_NUM]  = {100,   100};  //Speed  Flow
 static bool send_waiting[SPEED_NUM];
 static bool queryWait = false;
 
+static uint32_t nextSpeedTime = 0;
+#define nextSpeedWait  500  // 1 second is 1000 
+
 void speedSetSendWaiting(u8 tool, bool isWaiting)
 {
   send_waiting[tool] = isWaiting;
@@ -51,15 +54,16 @@ bool SpeedChanged(u8 i)
 void loopSpeed(void)
 {
   for(u8 i = 0; i < SPEED_NUM;i++)
-    if(curPercent[i] != percent[i])
+    if((curPercent[i] != percent[i]) && (OS_GetTimeMs() > nextSpeedTime))
     {
-      curPercent[i] = percent[i];
-      if(send_waiting[i] != true)
+      if(send_waiting[i] == false)
       {
         send_waiting[i] = true;
         const char *speedCmd[SPEED_NUM] = {"M220","M221"};
-        storeCmd("%s S%d\n",speedCmd[i], percent[i]);
+        send_waiting[i] = storeCmd("%s S%d\n",speedCmd[i], percent[i]);
       }
+    if (send_waiting[i] == true) curPercent[i] = percent[i];
+    nextSpeedTime = OS_GetTimeMs() + nextSpeedWait; // avoid rapid fire, clogging the queue
     }
 }
 
