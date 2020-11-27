@@ -31,12 +31,14 @@ const GUI_RECT printinfo_val_rect[6] = {
 };
 
 static uint32_t nextTime = 0;
-static uint32_t toggle_time = 2000; // 1 seconds is 1000
+static uint32_t nextDrawTime = 0;
 static uint8_t c_Tool = NOZZLE0;
 static int c_fan = 0;
 static int c_speedID = 0;
 const char* Speed_ID[2] = {"Speed","Flow"};
 
+#define toggle_time 2000; // 1 seconds is 1000
+#define drawTime 500; // 1 seconds is 1000
 
 #define LAYER_TITLE "Layer"
 #define EXT_ICON_POS  0
@@ -231,16 +233,20 @@ void reDrawProgress(int icon_pos)
 
 void reDrawLayer(int icon_pos)
 {
-  char tempstr[10];
-  sprintf(tempstr, "%.2fmm",coordinateGetAxisActual(Z_AXIS));
+  if (OS_GetTimeMs() > nextDrawTime)
+  {
+    char tempstr[10];
+    sprintf(tempstr, "%.2fmm",coordinateGetAxisTarget(Z_AXIS));
 
-  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
+    GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
-  ICON_ReadDisplay(printinfo_points[icon_pos].x,printinfo_points[icon_pos].y,ICON_PRINTING_ZLAYER);
-  GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (u8* )LAYER_TITLE);
-  GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (u8 *)tempstr);
+    ICON_ReadDisplay(printinfo_points[icon_pos].x,printinfo_points[icon_pos].y,ICON_PRINTING_ZLAYER);
+    GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (u8* )LAYER_TITLE);
+    GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (u8 *)tempstr);
 
-  GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
+    GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
+    nextDrawTime = OS_GetTimeMs() + drawTime;
+  }
 }
 
 void toggleinfo(void)
@@ -273,13 +279,13 @@ void toggleinfo(void)
 void printingDrawPage(void)
 {
   //  Scroll_CreatePara(&titleScroll, infoFile.title,&titleRect);  //
-  reValueNozzle(EXT_ICON_POS);
-  reValueBed(BED_ICON_POS);
-  reDrawFan(FAN_ICON_POS);
-  reDrawTime(TIM_ICON_POS);
-  reDrawProgress(TIM_ICON_POS);
-  reDrawLayer(Z_ICON_POS);
-  reDrawSpeed(SPD_ICON_POS);
+    reValueNozzle(EXT_ICON_POS);
+    reValueBed(BED_ICON_POS);
+    reDrawFan(FAN_ICON_POS);
+    reDrawTime(TIM_ICON_POS);
+    reDrawProgress(TIM_ICON_POS);
+    reDrawLayer(Z_ICON_POS);
+    reDrawSpeed(SPD_ICON_POS);
 }
 
 
