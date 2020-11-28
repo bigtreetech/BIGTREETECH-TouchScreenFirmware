@@ -14,7 +14,7 @@ void menuUnifiedMove(void)
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BABYSTEP,                LABEL_BABYSTEP},
      {ICON_DISABLE_STEPPERS,        LABEL_DISABLE_STEPPERS},
-     {ICON_EXTRUDE,                 LABEL_EXTRUDE},
+     {ICON_EXTRUDE,                 "Un-/Load"},
      {ICON_BACK,                    LABEL_BACK}}
   };
 
@@ -59,7 +59,7 @@ void menuUnifiedMove(void)
         break;
       		
       case KEY_ICON_6:
-        infoMenu.menu[++infoMenu.cur] = menuExtrude;
+        infoMenu.menu[++infoMenu.cur] = menuLoadUnload;
         break;
 
       case KEY_ICON_7:
