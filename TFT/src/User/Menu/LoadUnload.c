@@ -24,13 +24,13 @@ void menuLoadUnload(void)
   // title
   LABEL_EXTRUDE,
   // icon                       label
-  {{ICON_UNLOAD,               LABEL_UNLOAD},
+  { {ICON_UNLOAD,               LABEL_UNLOAD},
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
     {ICON_LOAD,                 LABEL_LOAD},
     {ICON_NOZZLE,               LABEL_NOZZLE},
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_HEAT,                 LABEL_PREHEAT},
+    {ICON_HEAT,                 LABEL_HEAT},
     {ICON_BACK,                 LABEL_BACK},}
   };
 
@@ -57,6 +57,14 @@ void menuLoadUnload(void)
       case KEY_ICON_4:
         item_extruder_i = (item_extruder_i + 1) % infoSettings.ext_count;
         extruderIdReDraw();
+        break;
+
+      case KEY_ICON_5:
+        infoMenu.menu[++infoMenu.cur] = menuPreheat;
+        break;
+
+      case KEY_ICON_6:
+        infoMenu.menu[++infoMenu.cur] = menuHeat;
         break;
 
       case KEY_ICON_7:
