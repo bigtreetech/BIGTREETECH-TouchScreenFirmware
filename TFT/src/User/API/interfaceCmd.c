@@ -111,12 +111,14 @@ void mustStoreScript(const char * format,...)
   char *p = script;
   uint16_t i = 0;
   char cmd[CMD_MAX_CHAR];
-  for (;;) {
+  for (;;)
+  {
     char c = *p++;
     if (!c) return;
     cmd[i++] = c;
 
-    if (c == '\n') {
+    if (c == '\n')
+    {
       cmd[i] = 0;
       mustStoreCmd("%s", cmd);
       i = 0;
@@ -529,13 +531,13 @@ void sendQueueCmd(void)
         {
           uint8_t i = cmd_seen('P') ? cmd_value() : 0;
           if(cmd_seen('S') && fanIsType(i, FAN_TYPE_F) ) {
-            fanSetSpeed(i, cmd_value());
+            fanSetCurSpeed(i, cmd_value());
             fanSetSendWaiting(i, false);
           }
           else if (!cmd_seen('\n'))
           {
             char buf[12];
-            sprintf(buf, "S%u\n", fanGetSpeed(i));
+            sprintf(buf, "S%u\n", fanGetCurSpeed(i));
             strcat(infoCmd.queue[infoCmd.index_r].gcode,(const char*)buf);
           }
           break;
@@ -544,23 +546,17 @@ void sendQueueCmd(void)
         case 107: //M107
         {
           uint8_t i = cmd_seen('P') ? cmd_value() : 0;
-          if (fanIsType(i, FAN_TYPE_F)) fanSetSpeed(i, 0);
+          if (fanIsType(i, FAN_TYPE_F)) fanSetCurSpeed(i, 0);
           break;
         }
 
         case 710: //M710 Controller Fan
         {
           u8 i = 0;
-          if(cmd_seen('S')) {
-            i = fanGetTypID(i,FAN_TYPE_CTRL_S);
-            fanSetSpeed(i, cmd_value());
-            fanSetSendWaiting(i, false);
-          }
-          if(cmd_seen('I')) {
-            i = fanGetTypID(i=0,FAN_TYPE_CTRL_I);
-            fanSetSpeed(i, cmd_value());
-            fanSetSendWaiting(i, false);
-          }
+          if(cmd_seen('S')) i = fanGetTypID(i,FAN_TYPE_CTRL_S);
+          if(cmd_seen('I')) i = fanGetTypID(i=0,FAN_TYPE_CTRL_I);
+          fanSetCurSpeed(i, cmd_value());
+          fanSetSendWaiting(i, false);
           break;
         }
 
