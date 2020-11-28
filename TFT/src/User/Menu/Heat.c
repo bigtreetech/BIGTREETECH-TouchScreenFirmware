@@ -83,7 +83,7 @@ void menuHeat(void)
     KEY_VALUES key_num = menuKeyGetValue();
     int16_t actCurrent = heatGetCurrentTemp(c_heater);
     int16_t actTarget = heatGetTargetTemp(c_heater);
-	
+
     switch(key_num)
     {
       case KEY_ICON_0:
@@ -108,11 +108,17 @@ void menuHeat(void)
       break;
 
       case KEY_ICON_3:
-          heatSetTargetTemp(c_heater, actTarget + item_degree[item_degree_i]);
+          if (c_heater < MAX_HOTEND_COUNT) 
+            heatSetTargetTemp(c_heater, MAX(140, actTarget + item_degree[item_degree_i]));  // by Lori
+          else if ((c_heater == MAX_HOTEND_COUNT) && infoSettings.bed_en)                   // by Lori
+            heatSetTargetTemp(c_heater, MAX(40, actTarget + item_degree[item_degree_i]));   // by Lori
+          else                                                                              // by Lori
+            heatSetTargetTemp(c_heater, actTarget + item_degree[item_degree_i]);
         break;
 
       case KEY_ICON_4:
-        do{
+        do
+        {
           c_heater = (c_heater + 1) % MAX_HEATER_COUNT;
         } while(!heaterIsValid(c_heater));
         heatItems.items[key_num] = itemTool[c_heater];

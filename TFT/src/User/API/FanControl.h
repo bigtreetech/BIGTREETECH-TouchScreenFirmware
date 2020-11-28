@@ -20,7 +20,8 @@ extern uint8_t fanType[MAX_FAN_COUNT];
 
 bool    fanIsType(uint8_t i, uint8_t type);
 uint8_t fanGetTypID(uint8_t startIndex, uint8_t type);
-void    fanSetRcvSpeed(uint8_t i, uint8_t speed);
+
+void    fanSetRcvSpeed(uint8_t i, uint8_t speed);  // by Lori
 void    fanSetDesiredSpeed(uint8_t i, uint8_t speed);
 uint8_t fanGetDesiredSpeed(uint8_t i);
 void    fanSetDesiredPercent(uint8_t i, uint8_t percent);

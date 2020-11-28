@@ -43,7 +43,9 @@ void USB_OTG_BSP_Init(USB_OTG_CORE_HANDLE * pdev)
 #ifdef STM32F10X_CL
 
 #if defined(MKS_32_V1_4)  || (defined MKS_28_V1_0)
-  RCC_OTGFSCLKConfig(RCC_OTGFSCLKSource_PLLVCO_Div2);
+  #ifdef SYSCLK_FREQ_72MHz RCC_OTGFSCLKConfig(RCC_OTGFSCLKSource_PLLVCO_Div3); // by Lori
+  #else RCC_OTGFSCLKConfig(RCC_OTGFSCLKSource_PLLVCO_Div2);  // by Lori
+  #endif
 #else
   RCC_OTGFSCLKConfig(RCC_OTGFSCLKSource_PLLVCO_Div3);
 #endif

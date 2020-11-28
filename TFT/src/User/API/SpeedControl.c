@@ -21,7 +21,7 @@ void speedQuerySetWait(bool wait)
   queryWait = wait;
 }
 
-void speedSetRcvPercent(uint8_t tool, uint16_t per)
+void speedSetRcvPercent(uint8_t tool, uint16_t per)  // by Lori
 {
   curPercent[tool] = percent[tool] = per;
 }

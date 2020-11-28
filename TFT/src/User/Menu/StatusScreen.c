@@ -205,11 +205,11 @@ void drawStatusScreenMsg(void)
 {
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
-  ICON_CustomReadDisplay(rect_of_keySS[17].x0, rect_of_keySS[17].y0, INFOBOX_ADDR);
+  ICON_CustomReadDisplay(rect_of_keySS[KEY_INFOBOX].x0, rect_of_keySS[KEY_INFOBOX].y0, INFOBOX_ADDR);
   GUI_SetColor(INFOMSG_BKCOLOR);
-  GUI_DispString(rect_of_keySS[17].x0 + STATUS_MSG_ICON_XOFFSET, rect_of_keySS[17].y0 + STATUS_MSG_ICON_YOFFSET, IconCharSelect(ICONCHAR_INFO));
+  GUI_DispString(rect_of_keySS[KEY_INFOBOX].x0 + STATUS_MSG_ICON_XOFFSET, rect_of_keySS[KEY_INFOBOX].y0 + STATUS_MSG_ICON_YOFFSET, IconCharSelect(ICONCHAR_INFO));
 
-  GUI_DispString(rect_of_keySS[17].x0 + BYTE_HEIGHT + STATUS_MSG_TITLE_XOFFSET, rect_of_keySS[17].y0 + STATUS_MSG_ICON_YOFFSET, (u8 *)msgtitle);
+  GUI_DispString(rect_of_keySS[KEY_INFOBOX].x0 + BYTE_HEIGHT + STATUS_MSG_TITLE_XOFFSET, rect_of_keySS[KEY_INFOBOX].y0 + STATUS_MSG_ICON_YOFFSET, (u8 *)msgtitle);
   GUI_SetBkColor(INFOMSG_BKCOLOR);
   GUI_FillPrect(&msgRect);
 
@@ -299,8 +299,15 @@ void menuStatus(void)
       case KEY_ICON_7:
         infoMenu.menu[++infoMenu.cur] = menuPrint;
         break;
+      case KEY_LABEL_0:  // by Lori
+      case KEY_LABEL_1:  // by Lori
+      case KEY_LABEL_2:  // by Lori
+      case KEY_LABEL_3:  // by Lori
+        infoMenu.menu[++infoMenu.cur] = menuUnifiedMove;
+        break;
       case KEY_INFOBOX:
-        infoMenu.menu[++infoMenu.cur] = menuNotification;
+        // infoMenu.menu[++infoMenu.cur] = menuNotification;
+        infoMenu.menu[++infoMenu.cur] = menuSendGcode;  // by Lori
 
       default:break;
     }

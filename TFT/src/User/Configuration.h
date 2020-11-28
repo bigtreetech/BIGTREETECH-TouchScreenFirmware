@@ -105,7 +105,7 @@
  *
  * :[2400, 9600, 19200, 38400, 57600, 115200, 250000, 500000, 1000000]
  */
-#define BAUDRATE 115200
+#define BAUDRATE 250000
 
 /**
  * Default Primary Language (for Touch-Mode only)
@@ -182,7 +182,7 @@
 #define MIXING_EXTRUDER 0 // set default 0, for mixing_extruder 1 (this option turns off autodetection of the number of extruders)
 
 #define PREHEAT_LABELS   {"PLA", "PETG", "ABS", "WOOD", "TPU", "NYLON"}
-#define PREHEAT_HOTEND   {200,   240,    230,   170,    220,   250}
+#define PREHEAT_HOTEND   {210,   235,    230,   170,    220,   250}
 #define PREHEAT_BED      {60,    70,     90,    50,     50,    90}
 
 #define HEAT_MAX_TEMP    {275,       275,       275,       275,       275,       275,       150,    60}   //max temperature can be set
@@ -219,16 +219,16 @@
 
 // Extrude speed mm/min
 #define EXTRUDE_SLOW_SPEED   60
-#define EXTRUDE_NORMAL_SPEED 600
-#define EXTRUDE_FAST_SPEED   1200
+#define EXTRUDE_NORMAL_SPEED 300
+#define EXTRUDE_FAST_SPEED   900
 
 // Size of machine
 #define X_MIN_POS 0
 #define Y_MIN_POS 0
 #define Z_MIN_POS 0
-#define X_MAX_POS 235
-#define Y_MAX_POS 235
-#define Z_MAX_POS 250
+#define X_MAX_POS 310
+#define Y_MAX_POS 310
+#define Z_MAX_POS 390
 
 // Specify a pause position as { X, Y, Z_raise }
 #define NOZZLE_PAUSE_RETRACT_LENGTH 15   // (mm)

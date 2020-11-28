@@ -1,10 +1,12 @@
 #include "SendGcode.h"
 #include "includes.h"
+
 #if (defined(TFT28_V3_0) || defined(TFT24_V1_1) || defined (MKS_32_V1_4_NOBL))
   #define TERMINAL_MAX_CHAR ((LCD_WIDTH / BYTE_WIDTH) * (LCD_HEIGHT / BYTE_HEIGHT) * 6)  // for lower RAM 
 #else
-  #define TERMINAL_MAX_CHAR ((LCD_WIDTH / BYTE_WIDTH) * (LCD_HEIGHT / BYTE_HEIGHT) * 8)
+  #define TERMINAL_MAX_CHAR ((LCD_WIDTH / BYTE_WIDTH) * (LCD_HEIGHT / BYTE_HEIGHT) * 8)  // by Lori
 #endif
+
 #define MAX_BUFF          20
 #define SCROLL_LINE       22
 #define SCROLL_PAGE       1
@@ -538,6 +540,7 @@ void sendGcodeDrawMenu(void)
   sendGcodeDrawGcode(NULL);
 }
 
+
 void menuSendGcode(void)
 {
   GKEY_VALUES key_num = GKEY_IDLE;
@@ -643,7 +646,7 @@ void sendGcodeTerminalCache(char *stream, TERMINAL_SRC src)
 {
   uint16_t sign_len = 0;
   uint16_t stream_len = 0;
-  const char* const terminalSign[] = {"Send: ", "Rcv: "};
+  const char* const terminalSign[] = {"Snd: ", "Rcv: "};
 
   if (infoMenu.menu[infoMenu.cur] != menuSendGcode && infoMenu.menu[infoMenu.cur] != menuTerminal)
     return;
