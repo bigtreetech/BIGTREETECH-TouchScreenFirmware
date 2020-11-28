@@ -93,7 +93,7 @@ void menuBeforePrinting(void)
       //    }
 
       if (infoMachineSettings.autoReportSDStatus ==1){
-        request_M27(infoSettings.m27_refresh_time*1000);                //Check if there is a SD or USB print running.
+        request_M27(infoSettings.m27_refresh_time);                //Check if there is a SD or USB print running.
       }
       else{
         request_M27(0);
@@ -272,19 +272,20 @@ void toggleinfo(void)
     rapid_serial_loop();   //perform backend printing loop before drawing to avoid printer idling
     reDrawSpeed(SPD_ICON_POS);
     speedQuery();
+    coordinateQuery();
   }
 }
 
 void printingDrawPage(void)
 {
   //  Scroll_CreatePara(&titleScroll, infoFile.title,&titleRect);  //
-  reValueNozzle(EXT_ICON_POS);
-  reValueBed(BED_ICON_POS);
-  reDrawFan(FAN_ICON_POS);
-  reDrawTime(TIM_ICON_POS);
-  reDrawProgress(TIM_ICON_POS);
-  reDrawLayer(Z_ICON_POS);
-  reDrawSpeed(SPD_ICON_POS);
+    reValueNozzle(EXT_ICON_POS);
+    reValueBed(BED_ICON_POS);
+    reDrawFan(FAN_ICON_POS);
+    reDrawTime(TIM_ICON_POS);
+    reDrawProgress(TIM_ICON_POS);
+    reDrawLayer(Z_ICON_POS);
+    reDrawSpeed(SPD_ICON_POS);
 }
 
 
@@ -381,8 +382,8 @@ void menuPrinting(void)
     }
 
     //Z_AXIS coordinate
-    if(curLayer != coordinateGetAxisTarget(Z_AXIS)){
-      curLayer = coordinateGetAxisTarget(Z_AXIS);
+    if(curLayer != coordinateGetAxisActual(Z_AXIS)){
+      curLayer = coordinateGetAxisActual(Z_AXIS);
       rapid_serial_loop();  //perform backend printing loop before drawing to avoid printer idling
       reDrawLayer(Z_ICON_POS);
     }

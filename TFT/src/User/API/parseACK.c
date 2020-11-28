@@ -251,6 +251,16 @@ void hostActionCommands(void)
         break;
     }
   }
+  
+  if (ack_seen("paused") || ack_seen("pause"))
+  {
+    infoPrinting.pause = true;
+  } else if (ack_seen("cancel"))   //To be added to Marlin abortprint routine
+	{
+		infoHost.printing = false;
+		infoPrinting.printing = false;
+    infoPrinting.cur = infoPrinting.size;
+	}
 }
 
 void parseACK(void)
@@ -287,6 +297,7 @@ void parseACK(void)
                              // Avoid can't getting this parameter due to disabled M503 in Marlin
         storeCmd("M115\n");
         storeCmd("M211\n");  // retrieve the software endstops state
+        request_M27(infoSettings.m27_refresh_time);
       }
     }
 
@@ -443,7 +454,7 @@ void parseACK(void)
         setDualStepperStatus(E_STEPPER, true);
       }
     //parse and store Max Feed Rate values
-     else if(ack_seen("M203 X")){
+      else if(ack_seen("M203 X")){
                           setParameter(P_MAX_FEED_RATE, X_STEPPER, ack_value());
         if(ack_seen("Y")) setParameter(P_MAX_FEED_RATE, Y_STEPPER, ack_value());
         if(ack_seen("Z")) setParameter(P_MAX_FEED_RATE, Z_STEPPER, ack_value());
@@ -648,6 +659,10 @@ void parseACK(void)
       else if(ack_seen("Cap:AUTOREPORT_TEMP:"))
       {
         infoMachineSettings.autoReportTemp = ack_value();
+        if (infoMachineSettings.autoReportTemp)
+        {
+          storeCmd("M155 ");
+        }
       }
       else if(ack_seen("Cap:AUTOLEVEL:") && infoMachineSettings.leveling == BL_DISABLED)
       {

@@ -1,8 +1,12 @@
 #include "SendGcode.h"
 #include "includes.h"
 
-// #define TERMINAL_MAX_CHAR ((LCD_WIDTH / BYTE_WIDTH) * (LCD_HEIGHT / BYTE_HEIGHT) * 4)
-#define TERMINAL_MAX_CHAR ((LCD_WIDTH / BYTE_WIDTH) * (LCD_HEIGHT / BYTE_HEIGHT) * 8)  // by Lori
+#if (defined(TFT28_V3_0) || defined(TFT24_V1_1) || defined (MKS_32_V1_4_NOBL))
+  #define TERMINAL_MAX_CHAR ((LCD_WIDTH / BYTE_WIDTH) * (LCD_HEIGHT / BYTE_HEIGHT) * 6)  // for lower RAM 
+#else
+  #define TERMINAL_MAX_CHAR ((LCD_WIDTH / BYTE_WIDTH) * (LCD_HEIGHT / BYTE_HEIGHT) * 8)  // by Lori
+#endif
+
 #define MAX_BUFF          20
 #define SCROLL_LINE       22
 #define SCROLL_PAGE       1

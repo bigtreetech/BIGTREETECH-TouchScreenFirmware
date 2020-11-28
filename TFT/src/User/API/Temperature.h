@@ -10,8 +10,8 @@ extern "C" {
 #include "Configuration.h"
 #include "Settings.h"
 
-#define TEMPERATURE_QUERY_FAST_DURATION 1000  // "M105" query temperature every 1s
-#define TEMPERATURE_QUERY_SLOW_DURATION 3000  // 3s
+#define TEMPERATURE_QUERY_FAST_SECONDS 1  // "M105" query temperature every 1s
+#define TEMPERATURE_QUERY_SLOW_SECONDS 3  // 3s
 
 typedef enum {
   WAIT_NONE = 0,
@@ -75,7 +75,9 @@ void heatSetIsWaiting(uint8_t index,HEATER_WAIT isWaiting);
 void heatClearIsWaiting(void);
 
 void updateNextHeatCheckTime(void);
-void heatSetUpdateTime(uint32_t time);
+void heatSetUpdateSeconds(uint8_t seconds);
+uint8_t heatGetUpdateSeconds(void);
+void heatSyncUpdateSeconds(uint8_t seconds);
 void heatSetUpdateWaiting(bool isWaiting);
 void heatSetSendWaiting(uint8_t index, bool isWaiting);
 bool heatGetSendWaiting(uint8_t index);

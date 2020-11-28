@@ -43,3 +43,5 @@ jobs:
         run: platformio run --environment MKS_32_V1_4
       - name: Build MKS TFT32 V1.4 No Bootloader
         run: platformio run --environment MKS_32_V1_4_NOBL
+      - name: Build MKS TFT28 V1.0
+        run: platformio run --environment MKS_28_V1_0
