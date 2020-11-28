@@ -59,10 +59,6 @@ void menuUnifiedMove(void)
         break;
       		
       case KEY_ICON_6:
-        infoMenu.menu[++infoMenu.cur] = menuExtrude;
-        break;
-
-      case KEY_ICON_6:
         // Emergency Stop : Used for emergency stopping, a reset is required to return to operational mode.
         // it may need to wait for a space to open up in the command queue.
         // Enable EMERGENCY_PARSER in Marlin Firmware for an instantaneous M112 command.
