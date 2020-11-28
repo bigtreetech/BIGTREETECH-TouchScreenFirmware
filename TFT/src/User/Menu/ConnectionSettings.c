@@ -104,7 +104,7 @@ void menuConnectionSettings(void)
     {{ICON_BAUD_RATE,               LABEL_BAUDRATE},
      {ICON_DISCONNECT,              LABEL_DISCONNECT},
      {ICON_STOP,                    LABEL_EMERGENCYSTOP},
-     {ICON_SHUT_DOWN,               LABEL_SHUT_DOWN},
+     {ICON_RESET_VALUE,             LABEL_RESET},
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
@@ -136,7 +136,7 @@ void menuConnectionSettings(void)
         break;
 
       case KEY_ICON_3:
-        storeCmd("M81\n");
+        MB_Reset(); // by Lori
         break;
 
       case KEY_ICON_7:

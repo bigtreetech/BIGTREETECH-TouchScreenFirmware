@@ -8,7 +8,7 @@
 // Power Supply Control pins Initialization
 void PS_ON_Init(void)
 {
-  GPIO_InitSet(PS_ON_PIN, MGPIO_MODE_OUT_PP, 0);
+  GPIO_InitSet(PS_ON_PIN, MGPIO_MODE_OUT_OD, 0);  // by Lori
   GPIO_SetLevel(PS_ON_PIN, infoSettings.ps_active_high);
 }
 

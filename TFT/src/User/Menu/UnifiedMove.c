@@ -14,7 +14,7 @@ void menuUnifiedMove(void)
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BABYSTEP,                LABEL_BABYSTEP},
      {ICON_DISABLE_STEPPERS,        LABEL_DISABLE_STEPPERS},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_STOP,                    LABEL_EMERGENCYSTOP},
      {ICON_BACK,                    LABEL_BACK}}
   };
 
@@ -56,6 +56,13 @@ void menuUnifiedMove(void)
 
       case KEY_ICON_5:
         storeCmd("M84\n");
+        break;
+
+      case KEY_ICON_6:
+        // Emergency Stop : Used for emergency stopping, a reset is required to return to operational mode.
+        // it may need to wait for a space to open up in the command queue.
+        // Enable EMERGENCY_PARSER in Marlin Firmware for an instantaneous M112 command.
+        Serial_Puts(SERIAL_PORT, "M112\n");
         break;
 
       case KEY_ICON_7:

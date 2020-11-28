@@ -260,6 +260,7 @@ void printingFinished(void)
 
 void abortPrinting(void)
 {
+  // MB_Reset(); // by Lori
   switch (infoFile.source)
   {
     case BOARD_SD:

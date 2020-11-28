@@ -20,6 +20,17 @@ void mcu_GetClocksFreq(CLOCKS *clk)
   }
 }
 
+void MB_Reset() // by Lori
+{
+  #ifdef PS_ON_PIN
+    PS_ON_Off();
+    Delay_ms(100);
+    PS_ON_On();
+    Serial_ReSourceDeInit();
+    Serial_ReSourceInit();
+  #endif
+}
+
 void Hardware_GenericInit(void)
 {
   mcu_GetClocksFreq(&mcuClocks);
@@ -69,6 +80,7 @@ void Hardware_GenericInit(void)
 
   #ifdef PS_ON_PIN
     PS_ON_Init();
+    MB_Reset(); // by Lori
   #endif
 
   #ifdef FIL_RUNOUT_PIN

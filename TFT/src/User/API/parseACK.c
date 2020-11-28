@@ -37,7 +37,7 @@ const ECHO knownEcho[] = {
   {ECHO_NOTIFY_NONE, "Unknown command: \"M150"}, //M150
 };
 
-uint8_t forceIgnore[ECHO_ID_COUNT] = {0};
+// uint8_t forceIgnore[ECHO_ID_COUNT] = {0};
 
 void setCurrentAckSrc(uint8_t src)
 {
@@ -128,10 +128,10 @@ void ackPopupInfo(const char *info)
   }
 }
 
-void setIgnoreEcho(ECHO_ID msgId, bool state)
-{
-  forceIgnore[msgId] = state;
-}
+// void setIgnoreEcho(ECHO_ID msgId, bool state)
+// {
+//   forceIgnore[msgId] = state;
+// }
 
 bool processKnownEcho(void)
 {
@@ -154,8 +154,8 @@ bool processKnownEcho(void)
   {
     if (knownEcho[i].notifyType == ECHO_NOTIFY_NONE)
       return isKnown;
-    if (forceIgnore[i] == 0)
-    {
+    // if (forceIgnore[i] == 0)
+    // {
       if (knownEcho[i].notifyType == ECHO_NOTIFY_TOAST)
         addToast(DIALOG_TYPE_INFO, dmaL2Cache);
       else if (knownEcho[i].notifyType == ECHO_NOTIFY_DIALOG)
@@ -163,7 +163,7 @@ bool processKnownEcho(void)
         BUZZER_PLAY(sound_notify);
         addNotification(DIALOG_TYPE_INFO, (char*)echomagic, (char*)dmaL2Cache + ack_index, true);
       }
-    }
+    // }
   }
   return isKnown;
 }
@@ -288,6 +288,12 @@ void parseACK(void)
         storeCmd("M115\n");
         storeCmd("M211\n");  // retrieve the software endstops state
       }
+    }
+
+    // filter out irrelevant responses  // by Lori
+    if (ack_seen("wait"))
+    {
+      avoid_terminal = true;
     }
 
     // Onboard sd Gcode command response
@@ -724,13 +730,13 @@ void parseACK(void)
     // parse and store feed rate percentage
       else if(ack_seen("FR:"))
       {
-        speedSetPercent(0,ack_value());
+        speedSetRcvPercent(0,ack_value());  // by Lori
         speedQuerySetWait(false);
       }
     // parse and store flow rate percentage
       else if(ack_seen("Flow: "))
       {
-        speedSetPercent(1,ack_value());
+        speedSetRcvPercent(1,ack_value());  // by Lori
         speedQuerySetWait(false);
       }
     // parse fan speed
@@ -738,7 +744,7 @@ void parseACK(void)
       {
         u8 i = ack_value();
         if (ack_seen("S")) {
-          fanSetSpeed(i, ack_value());
+          fanSetRcvSpeed(i, ack_value());  // by Lori
         }
       }
     // parse controller fan
@@ -747,12 +753,12 @@ void parseACK(void)
         u8 i = 0;
         if (ack_seen("S")) {
           i = fanGetTypID(0,FAN_TYPE_CTRL_S);
-          fanSetSpeed(i, ack_value());
+          fanSetRcvSpeed(i, ack_value());  // by Lori
           fanSpeedQuerySetWait(false);
         }
         if (ack_seen("I")) {
           i = fanGetTypID(0,FAN_TYPE_CTRL_I);
-          fanSetSpeed(i, ack_value());
+          fanSetRcvSpeed(i, ack_value());  // by Lori
           fanSpeedQuerySetWait(false);
         }
       }
@@ -855,7 +861,8 @@ void parseACK(void)
       }
     }
 
-    if (avoid_terminal != true){
+    if (avoid_terminal != true)
+    {
       sendGcodeTerminalCache(dmaL2Cache, TERMINAL_ACK);
     }
   }

@@ -14,6 +14,7 @@ extern "C" {
 #define ITEM_PER_PAGE       8
 #define MENU_RECT_COUNT     (ITEM_PER_PAGE*2 + 1) // 8 items + title bar
 #define SS_RECT_COUNT       (ITEM_PER_PAGE*2 + 1 + 1) // 8 items + title bar + infobox
+#define TM_RECT_COUNT		    (ITEM_PER_PAGE*2 + 1 + 1) // 8 items + title bar + tempbox
 #define LISTITEM_PER_PAGE   5
 #define LIVEICON_LINES      3
 
@@ -43,6 +44,7 @@ typedef enum
   KEY_LABEL_7,
   KEY_TITLEBAR,
   KEY_INFOBOX,
+  KEY_XYZ,
   KEY_IDLE = IDLE_TOUCH,
 }KEY_VALUES;
 

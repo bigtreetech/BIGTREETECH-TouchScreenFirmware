@@ -114,6 +114,23 @@ void menuTuneExtruder(void)
           heatSetTargetTemp(c_heater, actTarget - extrude_degree[extrude_degree_i]);
         break;
 
+      case KEY_INFOBOX:
+      {
+        int32_t val = heatGetTargetTemp(c_heater);
+        char titlestr[30];
+        sprintf(titlestr, "Min:0 | Max:%i", infoSettings.max_temp[c_heater] );
+        val = numPadInt((u8 *)titlestr, actTarget,0, false);
+        val = NOBEYOND(0,val,infoSettings.max_temp[c_heater]);
+        if (val != actTarget)
+        {
+          heatSetTargetTemp(c_heater, val);
+        }
+
+        menuDrawPage(&tuneExtruderItems);
+        showExtrudeTemperature(c_heater);
+      }
+      break;
+
       case KEY_ICON_3:
           heatSetTargetTemp(c_heater, actTarget + extrude_degree[extrude_degree_i]);
         break;
