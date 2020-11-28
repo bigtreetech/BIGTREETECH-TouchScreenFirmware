@@ -117,9 +117,6 @@ void menuPreheat(void)
             heatSetTargetTemp(heatGetCurrentHotend(), infoSettings.preheat_temp[key_num]);
             break;
         }
-        #ifdef LOAD_UNLOAD_M701_M702
-			     infoMenu.menu[++infoMenu.cur] = menuLoadUnload;
-		    #endif
         refreshPreheatIcon(key_num, key_num, &preheatItems.items[key_num]);
         break;
 
