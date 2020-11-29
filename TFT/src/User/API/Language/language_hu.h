@@ -87,7 +87,7 @@
     #define STRING_LOAD                   "Betöltés"
     #define STRING_UNLOAD                 "Kiadás"
     #define STRING_LOAD_UNLOAD            "Betöltés/Kiadás"
-    #define STRING_LOAD_UNLOAD_SHORT      "Kiad/Betölt"
+    #define STRING_LOAD_UNLOAD_SHORT      "Fil. Ki/Be"
     #define STRING_SLOW_SPEED             "Lassú"
     #define STRING_NORMAL_SPEED           "Normál"
     #define STRING_FAST_SPEED             "Gyors"
