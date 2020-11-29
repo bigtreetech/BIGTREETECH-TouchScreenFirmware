@@ -23,7 +23,7 @@ string_header = """#### Language Code:_code_
 
 input_path = "/TFT/src/User/API/Language"
 output_path = "/Copy to SD Card root directory to update/Language Packs"
-output_path2 = "/Copy to SD Card root directory to update - Unified Menu Material theme/Language Packs"
+# output_path2 = "/Copy to SD Card root directory to update - Unified Menu Material theme/Language Packs"
 setting_path = "/TFT/src/User/API/Settings.h"
 
 file_count = 0
@@ -105,7 +105,7 @@ try:
         dest_file.writelines("\n") #add new line at the end of the file
         source_file.close()
         dest_file.close()
-        shutil.copy(dest_filepath(src_file), repo_path + output_path2) #copy file to second folder
+        # shutil.copy(dest_filepath(src_file), repo_path + output_path2) #copy file to second folder
         print("Total keywords found:" + str(key_count) + ", File generated:" + get_filename(dest_filepath(src_file)))
 
     if file_count == 0:

@@ -140,11 +140,11 @@ void drawTemperature(void)
 
   if (infoSettings.fan_percentage == 1)
   {
-    sprintf(tempstr, "%d%%", fanGetSpeedPercent(current_fan));
+    sprintf(tempstr, "%d%%", fanGetCurPercent(current_fan));
   }
   else
   {
-    sprintf(tempstr, "%d", fanGetSpeed(current_fan));
+    sprintf(tempstr, "%d", fanGetCurSpeed(current_fan));
   }
   lvIcon.lines[1].text = (u8 *)tempstr;
   showLiveInfo(2, &lvIcon, &StatusItems.items[2]);

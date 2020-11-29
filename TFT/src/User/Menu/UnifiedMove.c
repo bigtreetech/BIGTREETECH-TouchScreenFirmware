@@ -14,7 +14,7 @@ void menuUnifiedMove(void)
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BABYSTEP,                LABEL_BABYSTEP},
      {ICON_DISABLE_STEPPERS,        LABEL_DISABLE_STEPPERS},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_EXTRUDE,                 LABEL_EXTRUDE},
      {ICON_BACK,                    LABEL_BACK}}
   };
 
@@ -56,6 +56,10 @@ void menuUnifiedMove(void)
 
       case KEY_ICON_5:
         storeCmd("M84\n");
+        break;
+      		
+      case KEY_ICON_6:
+        infoMenu.menu[++infoMenu.cur] = menuExtrude;
         break;
 
       case KEY_ICON_7:
