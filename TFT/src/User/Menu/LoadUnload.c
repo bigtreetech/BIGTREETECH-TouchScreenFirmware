@@ -22,7 +22,7 @@ void menuLoadUnload(void)
   
   MENUITEMS loadUnloadItems = {
   // title
-  LABEL_EXTRUDE,
+  LABEL_LOAD_UNLOAD,
   // icon                       label
   { {ICON_UNLOAD,               LABEL_UNLOAD},
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
@@ -46,12 +46,12 @@ void menuLoadUnload(void)
     {
       case KEY_ICON_0:
         mustStoreCmd("M702 T%d\n",item_extruder_i);
-		infoMenu.cur = 0;
+		    popupReminder(DIALOG_TYPE_INFO, LABEL_BUSY, LABEL_UNLOAD_STARTED);
         break;
 
       case KEY_ICON_3:
         mustStoreCmd("M701 T%d\n",item_extruder_i);
-		infoMenu.cur = 0;
+		    popupReminder(DIALOG_TYPE_INFO, LABEL_BUSY, LABEL_LOAD_STARTED);
         break;
 
       case KEY_ICON_4:
@@ -68,7 +68,7 @@ void menuLoadUnload(void)
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur = 0;
+         infoMenu.cur--;
         break;
 
       default:
