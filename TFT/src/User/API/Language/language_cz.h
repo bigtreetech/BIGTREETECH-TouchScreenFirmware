@@ -86,6 +86,8 @@
     #define STRING_RESUME                 "Obnovit"
     #define STRING_LOAD                   "Zavést"
     #define STRING_UNLOAD                 "Vysunout"
+    #define STRING_LOAD_UNLOAD            "Load/Unload"  // needs translation
+    #define STRING_LOAD_UNLOAD_SHORT      "(Un)Load"  // needs translation
     #define STRING_SLOW_SPEED             "Pomalu"
     #define STRING_NORMAL_SPEED           "Normál"
     #define STRING_FAST_SPEED             "Rychle"

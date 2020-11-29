@@ -86,6 +86,8 @@
     #define STRING_RESUME                 "Resume"
     #define STRING_LOAD                   "Load"
     #define STRING_UNLOAD                 "Unload"
+    #define STRING_LOAD_UNLOAD            "Load/Unload"
+    #define STRING_LOAD_UNLOAD_SHORT      "(Un)Load"
     #define STRING_SLOW_SPEED             "Slow"
     #define STRING_NORMAL_SPEED           "Normal"
     #define STRING_FAST_SPEED             "Fast"

@@ -86,6 +86,8 @@
     #define STRING_RESUME                 "Ξαναρχίσει"
     #define STRING_LOAD                   "Φόρτωση"
     #define STRING_UNLOAD                 "Ξεφόρτωση"
+    #define STRING_LOAD_UNLOAD            "Load/Unload"  // needs translation
+    #define STRING_LOAD_UNLOAD_SHORT      "(Un)Load"  // needs translation
     #define STRING_SLOW_SPEED             "Αργά"
     #define STRING_NORMAL_SPEED           "Κανονικά"
     #define STRING_FAST_SPEED             "Γρήγορα"

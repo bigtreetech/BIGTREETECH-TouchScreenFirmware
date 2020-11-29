@@ -22,7 +22,7 @@ void menuLoadUnload(void)
   
   MENUITEMS loadUnloadItems = {
   // title
-  LABEL_EXTRUDE,
+  LABEL_LOAD_UNLOAD,
   // icon                       label
   { {ICON_UNLOAD,               LABEL_UNLOAD},
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
@@ -68,7 +68,7 @@ void menuLoadUnload(void)
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur = 0;
+         infoMenu.cur--;
         break;
 
       default:

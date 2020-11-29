@@ -86,6 +86,8 @@
     #define STRING_RESUME                 "続ける"
     #define STRING_LOAD                   "増え"
     #define STRING_UNLOAD                 "減る"
+    #define STRING_LOAD_UNLOAD            "Load/Unload"  // needs translation
+    #define STRING_LOAD_UNLOAD_SHORT      "(Un)Load"  // needs translation
     #define STRING_SLOW_SPEED             "ゆっくり"
     #define STRING_NORMAL_SPEED           "正常速度"
     #define STRING_FAST_SPEED             "早め"

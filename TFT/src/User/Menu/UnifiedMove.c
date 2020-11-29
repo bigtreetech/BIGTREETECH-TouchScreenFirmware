@@ -14,7 +14,7 @@ void menuUnifiedMove(void)
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BABYSTEP,                LABEL_BABYSTEP},
      {ICON_DISABLE_STEPPERS,        LABEL_DISABLE_STEPPERS},
-     {ICON_EXTRUDE,                 "Un-/Load"},
+     {ICON_EXTRUDE,                 LABEL_LOAD_UNLOAD_SHORT},
      {ICON_BACK,                    LABEL_BACK}}
   };
 

@@ -86,6 +86,8 @@
     #define STRING_RESUME                 "Nadaljuj"
     #define STRING_LOAD                   "Naloži"
     #define STRING_UNLOAD                 "Izvrzi"
+    #define STRING_LOAD_UNLOAD            "Load/Unload"  // needs translation
+    #define STRING_LOAD_UNLOAD_SHORT      "(Un)Load"  // needs translation
     #define STRING_SLOW_SPEED             "Počasi"
     #define STRING_NORMAL_SPEED           "Normalo"
     #define STRING_FAST_SPEED             "Hitro"

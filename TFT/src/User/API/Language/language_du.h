@@ -86,6 +86,8 @@
     #define STRING_RESUME                 "Hervatten"
     #define STRING_LOAD                   "Laden"
     #define STRING_UNLOAD                 "Lossen"
+    #define STRING_LOAD_UNLOAD            "Load/Unload"  // needs translation
+    #define STRING_LOAD_UNLOAD_SHORT      "(Un)Load"  // needs translation
     #define STRING_SLOW_SPEED             "Traag"
     #define STRING_NORMAL_SPEED           "Normaal"
     #define STRING_FAST_SPEED             "Snel"

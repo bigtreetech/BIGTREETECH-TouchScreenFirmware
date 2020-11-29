@@ -86,6 +86,8 @@
     #define STRING_RESUME                 "Շարունակել"
     #define STRING_LOAD                   "Load"
     #define STRING_UNLOAD                 "Unload"
+    #define STRING_LOAD_UNLOAD            "Load/Unload"  // needs translation
+    #define STRING_LOAD_UNLOAD_SHORT      "(Un)Load"  // needs translation
     #define STRING_SLOW_SPEED             "Դանդաղ"
     #define STRING_NORMAL_SPEED           "Նորմալ"
     #define STRING_FAST_SPEED             "Արագ"
