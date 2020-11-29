@@ -28,7 +28,7 @@ void infoMenuSelect(void)
   {
     case SERIAL_TSC:
     {
-      initMachineSetting();     // load default machine settings
+      //initMachineSetting();     // load default machine settings
       Serial_ReSourceInit();
       #ifdef BUZZER_PIN
         Buzzer_Config();
