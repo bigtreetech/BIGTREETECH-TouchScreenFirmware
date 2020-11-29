@@ -281,5 +281,6 @@
     #define STRING_CASE_LIGHT             "Gépház Világítás"
     #define STRING_LOAD_STARTED           "A betöltési művelet elindult.\nFolyamatban van a fej kívánt\nhőfokának az elérése.\nVárjál!"
     #define STRING_UNLOAD_STARTED         "A kiadási eljárás elindult.\nFolyamatban van a fej kívánt\nhőfokának az elérése.\nVárjál!"
+    #define STRING_HEATERS_ON             "Fűtés(ek) bekapcsolva maradt(ak).\nKikapcsolod az összes fűtést?"  // translation needed
 
 #endif

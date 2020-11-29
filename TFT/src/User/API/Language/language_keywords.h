@@ -288,6 +288,7 @@ extern "C" {
 #define LANG_KEY_CASE_LIGHT                   "label_case_light:"
 #define LANG_KEY_LOAD_STARTED                 "label_load_started:"
 #define LANG_KEY_UNLOAD_STARTED               "label_unload_started:"
+#define LANG_KEY_HEATERS_ON                   "label_heaters_on:"
 
 #ifdef __cplusplus
 }
