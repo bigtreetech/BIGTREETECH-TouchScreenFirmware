@@ -86,6 +86,8 @@
     #define STRING_RESUME                 "Reprendre"
     #define STRING_LOAD                   "Charger"
     #define STRING_UNLOAD                 "Décharger"
+    #define STRING_LOAD_UNLOAD            "Load/Unload"  // needs translation
+    #define STRING_LOAD_UNLOAD_SHORT      "(Un)Load"  // needs translation
     #define STRING_SLOW_SPEED             "Lent"
     #define STRING_NORMAL_SPEED           "Normal"
     #define STRING_FAST_SPEED             "Rapide"
@@ -277,5 +279,8 @@
     #define STRING_MESH_EDITOR            "Maillage"
     #define STRING_MESH_TUNER             "Edition du maillage"
     #define STRING_CASE_LIGHT             "Case light"
+    #define STRING_LOAD_STARTED           "Filament load procedure started.\nWaiting for the hotend to reach\nthe desired temperature.\nPlease stand by."  // translation needed
+    #define STRING_UNLOAD_STARTED         "Filament unload sequence started.\nWaiting for the hotend to reach\nthe desired temperature.\nPlease stand by."  // translation needed
+    #define STRING_HEATERS_ON             "Some heaters are still ON.\nDo you want to stop them?"  // translation needed
 
 #endif

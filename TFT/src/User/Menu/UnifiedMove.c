@@ -14,7 +14,11 @@ void menuUnifiedMove(void)
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BABYSTEP,                LABEL_BABYSTEP},
      {ICON_DISABLE_STEPPERS,        LABEL_DISABLE_STEPPERS},
-     {ICON_STOP,                    LABEL_EMERGENCYSTOP},  // by Lori
+     #ifdef LOAD_UNLOAD_M701_M702
+        {ICON_EXTRUDE,                 LABEL_LOAD_UNLOAD_SHORT},
+     #else
+        {ICON_EXTRUDE,                 LABEL_EXTRUDE},
+     #endif
      {ICON_BACK,                    LABEL_BACK}}
   };
 
@@ -59,11 +63,12 @@ void menuUnifiedMove(void)
         break;
       		
       case KEY_ICON_6:
-        // Emergency Stop : Used for emergency stopping, a reset is required to return to operational mode.
-        // it may need to wait for a space to open up in the command queue.
-        // Enable EMERGENCY_PARSER in Marlin Firmware for an instantaneous M112 command.
-        Serial_Puts(SERIAL_PORT, "M112\n");
-        break;
+      #ifdef LOAD_UNLOAD_M701_M702
+         infoMenu.menu[++infoMenu.cur] = menuLoadUnload;
+      #else
+         infoMenu.menu[++infoMenu.cur] = menuExtrude;
+      #endif
+         break;
 
       case KEY_ICON_7:
         infoMenu.cur--;
