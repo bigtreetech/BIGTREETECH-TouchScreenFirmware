@@ -81,6 +81,7 @@ void menuLoadUnload(void)
           {
             setDialogText(LABEL_WARNING, LABEL_HEATERS_ON, LABEL_CONFIRM, LABEL_CANCEL)
             showDialog(DIALOG_TYPE_QUESTION, coolDown, NULL, NULL );            
+            break;
           }
         }
         infoMenu.cur--;
