@@ -36,11 +36,7 @@ void unifiedMenu(void)
         break;
 
       case KEY_ICON_2:
-        #ifdef LOAD_UNLOAD_M701_M702
-		   infoMenu.menu[++infoMenu.cur] = menuPreheat;
-		#else
-           infoMenu.menu[++infoMenu.cur] = menuExtrude;
-        #endif
+        infoMenu.menu[++infoMenu.cur] = menuExtrude;
         break;
 
       case KEY_ICON_3:

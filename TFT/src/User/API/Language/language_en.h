@@ -86,6 +86,8 @@
     #define STRING_RESUME                 "Resume"
     #define STRING_LOAD                   "Load"
     #define STRING_UNLOAD                 "Unload"
+    #define STRING_LOAD_UNLOAD            "Load/Unload"
+    #define STRING_LOAD_UNLOAD_SHORT      "(Un)Load"
     #define STRING_SLOW_SPEED             "Slow"
     #define STRING_NORMAL_SPEED           "Normal"
     #define STRING_FAST_SPEED             "Fast"
@@ -277,5 +279,8 @@
     #define STRING_MESH_EDITOR            "Mesh edit"
     #define STRING_MESH_TUNER             "Mesh tuner"
     #define STRING_CASE_LIGHT             "Case light"
+    #define STRING_LOAD_STARTED           "Filament load procedure started.\nWaiting for the hotend to reach\nthe desired temperature.\nPlease stand by."
+    #define STRING_UNLOAD_STARTED         "Filament unload sequence started.\nWaiting for the hotend to reach\nthe desired temperature.\nPlease stand by."
+    #define STRING_HEATERS_ON             "Some heaters are still ON.\nDo you want to stop them?"
 
 #endif
