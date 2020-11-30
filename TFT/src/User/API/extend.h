@@ -19,6 +19,7 @@ void PS_ON_On(void);
 void PS_ON_Off(void);
 void positionSetUpdateWaiting(bool isWaiting);
 void FIL_Runout_Init(void);
+void FIL_SFS_SetAlive(bool alive);
 void loopBackEndFILRunoutDetect(void);
 void loopFrontEndFILRunoutDetect(void);
 
