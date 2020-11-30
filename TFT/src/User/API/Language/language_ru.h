@@ -80,8 +80,8 @@
     #define STRING_START                  "Начать"
     #define STRING_STOP                   "Стоп"
     #define STRING_BACK                   "Назад"
-    #define STRING_PAGE_UP                "\u0899 Стр." //Left Arrow
-    #define STRING_PAGE_DOWN              "Стр. \u089A" //Right Arrow
+    #define STRING_PAGE_UP                "<---"
+    #define STRING_PAGE_DOWN              "--->"
     #define STRING_PAUSE                  "Пауза"
     #define STRING_RESUME                 "Продолжить"
     #define STRING_LOAD                   "Загрузка"
