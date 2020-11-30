@@ -86,6 +86,8 @@
     #define STRING_RESUME                 "Sürdür"
     #define STRING_LOAD                   "Yükle"
     #define STRING_UNLOAD                 "Çıkar"
+    #define STRING_LOAD_UNLOAD            "Load/Unload"  // needs translation
+    #define STRING_LOAD_UNLOAD_SHORT      "(Un)Load"  // needs translation
     #define STRING_SLOW_SPEED             "Yavaş"
     #define STRING_NORMAL_SPEED           "Normal"
     #define STRING_FAST_SPEED             "Hızlı"
@@ -277,5 +279,8 @@
     #define STRING_MESH_EDITOR            "Mesh düzenle"
     #define STRING_MESH_TUNER             "Mesh ayarlayıcı"
     #define STRING_CASE_LIGHT             "Aydınlatma"
+    #define STRING_LOAD_STARTED           "Filament load procedure started.\nWaiting for the hotend to reach\nthe desired temperature.\nPlease stand by."  // translation needed
+    #define STRING_UNLOAD_STARTED         "Filament unload sequence started.\nWaiting for the hotend to reach\nthe desired temperature.\nPlease stand by."  // translation needed
+    #define STRING_HEATERS_ON             "Some heaters are still ON.\nDo you want to stop them?"  // translation needed
 
 #endif
