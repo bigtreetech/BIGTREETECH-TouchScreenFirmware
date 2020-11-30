@@ -6,7 +6,10 @@ def make_short_file(source, target, env):
     buildDir = env.subst('$BUILD_DIR')
     build_flags = env.ParseFlags(env['BUILD_FLAGS'])
     flags = {k: v for (k, v) in build_flags.get("CPPDEFINES")}
-    filename = flags.get("HARDWARE") + "." + flags.get("SOFTWARE_VERSION")
+    if flags.get("HARDWARE") == "MKS_28_V1_0":
+        filename = "MKSTFT28"
+    else:
+        filename = flags.get("HARDWARE") + "." + flags.get("SOFTWARE_VERSION")
     filename_short = flags.get("HARDWARE_SHORT") + flags.get("SOFTWARE_VERSION_SHORT")
     # do some actions
     shutil.copyfile(buildDir+"/"+filename+".bin", buildDir+"/"+filename_short+".new")
