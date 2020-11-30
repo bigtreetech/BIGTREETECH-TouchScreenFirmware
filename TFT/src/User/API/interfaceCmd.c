@@ -784,6 +784,14 @@ void sendQueueCmd(void)
             }
             break;
         #endif
+
+        #ifdef LOAD_UNLOAD_M701_M702
+          case 701:  // M701 Load filament
+          case 702:  // M702 Unload filament
+            infoHost.wait = true;
+            break;
+        #endif
+
         case 851: //M851 Z probe offset
           if(cmd_seen('X')) setParameter(P_PROBE_OFFSET, X_AXIS, cmd_float());
           if(cmd_seen('Y')) setParameter(P_PROBE_OFFSET, Y_AXIS, cmd_float());
