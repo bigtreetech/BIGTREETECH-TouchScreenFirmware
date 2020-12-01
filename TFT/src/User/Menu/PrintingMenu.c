@@ -382,8 +382,8 @@ void menuPrinting(void)
     }
 
     //Z_AXIS coordinate
-    if(curLayer != coordinateGetAxisActual(Z_AXIS)){
-      curLayer = coordinateGetAxisActual(Z_AXIS);
+    if(curLayer != coordinateGetAxisTarget(Z_AXIS)){
+      curLayer = coordinateGetAxisTarget(Z_AXIS);
       rapid_serial_loop();  //perform backend printing loop before drawing to avoid printer idling
       reDrawLayer(Z_ICON_POS);
     }
