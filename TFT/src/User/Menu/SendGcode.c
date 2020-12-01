@@ -1,9 +1,14 @@
 #include "SendGcode.h"
 #include "includes.h"
-#if ((defined(MKS_28_V1_0)) || (defined(MKS_32_V1_4) && !defined(MKS_32_V1_4_NOBL)))
+/*#if ((defined(MKS_28_V1_0)) || (defined(MKS_32_V1_4) && !defined(MKS_32_V1_4_NOBL)))
   #define TERMINAL_MAX_CHAR ((LCD_WIDTH / BYTE_WIDTH) * (LCD_HEIGHT / BYTE_HEIGHT) * 8)  // for 64k RAM 
 #else
   #define TERMINAL_MAX_CHAR ((LCD_WIDTH / BYTE_WIDTH) * (LCD_HEIGHT / BYTE_HEIGHT) * 6)  // for 48k RAM
+#endif*/
+#if ((defined(MKS_28_V1_0)) || (defined(MKS_32_V1_4) && !defined(MKS_32_V1_4_NOBL)))
+  #define TERMINAL_MAX_CHAR  5000 // for 64k RAM 
+#else
+  #define TERMINAL_MAX_CHAR  3700 // for 48k RAM
 #endif
 #define MAX_BUFF          20
 #define SCROLL_LINE       22
