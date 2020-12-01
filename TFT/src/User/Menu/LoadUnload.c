@@ -64,6 +64,10 @@ void menuLoadUnload(void)
       popupReminder(DIALOG_TYPE_INFO, LABEL_BUSY, LABEL_UNLOAD_STARTED);
       break;
 
+    case NO_LOAD_UNLOAD: // in case user gets to Load/Unload menu while host is busy
+      popupReminder(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, LABEL_BUSY);
+      break;
+
     default:
       break;
     }
@@ -72,7 +76,8 @@ void menuLoadUnload(void)
   while(infoMenu.menu[infoMenu.cur] == menuLoadUnload)
   {
     key_num = menuKeyGetValue();
-    if ((infoHost.wait == true) && (key_num != KEY_IDLE))
+    if ((infoHost.wait == true) && (key_num != KEY_IDLE))  // if user pokes around while Load/Unload in progress
+    
     {
       showPopup(loadUnload);
     }
@@ -115,8 +120,8 @@ void menuLoadUnload(void)
               break;
             }
           }
-        infoMenu.cur--;
-        break;
+          infoMenu.cur--;
+          break;
 
         default:
           extruderIdReDraw();
@@ -126,4 +131,5 @@ void menuLoadUnload(void)
     }
     loopProcess();
   }
+  loadUnload = NO_LOAD_UNLOAD;
 }
