@@ -14,7 +14,11 @@ void menuUnifiedMove(void)
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BABYSTEP,                LABEL_BABYSTEP},
      {ICON_DISABLE_STEPPERS,        LABEL_DISABLE_STEPPERS},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     #ifdef LOAD_UNLOAD_M701_M702
+        {ICON_EXTRUDE,                 LABEL_LOAD_UNLOAD_SHORT},
+     #else
+        {ICON_EXTRUDE,                 LABEL_EXTRUDE},
+     #endif
      {ICON_BACK,                    LABEL_BACK}}
   };
 
@@ -57,6 +61,14 @@ void menuUnifiedMove(void)
       case KEY_ICON_5:
         storeCmd("M84\n");
         break;
+      		
+      case KEY_ICON_6:
+      #ifdef LOAD_UNLOAD_M701_M702
+         infoMenu.menu[++infoMenu.cur] = menuLoadUnload;
+      #else
+         infoMenu.menu[++infoMenu.cur] = menuExtrude;
+      #endif
+         break;
 
       case KEY_ICON_7:
         infoMenu.cur--;

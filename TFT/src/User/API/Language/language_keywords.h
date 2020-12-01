@@ -93,6 +93,8 @@ extern "C" {
 #define LANG_KEY_RESUME                       "label_resume:"
 #define LANG_KEY_LOAD                         "label_load:"
 #define LANG_KEY_UNLOAD                       "label_unload:"
+#define LANG_KEY_LOAD_UNLOAD                  "label_load_unload:"
+#define LANG_KEY_LOAD_UNLOAD_SHORT            "label_load_unload_short:"
 #define LANG_KEY_SLOW_SPEED                   "label_slow_speed:"
 #define LANG_KEY_NORMAL_SPEED                 "label_normal_speed:"
 #define LANG_KEY_FAST_SPEED                   "label_fast_speed:"
@@ -284,6 +286,9 @@ extern "C" {
 #define LANG_KEY_MESH_EDITOR                  "label_mesh_editor:"
 #define LANG_KEY_MESH_TUNER                   "label_mesh_tuner:"
 #define LANG_KEY_CASE_LIGHT                   "label_case_light:"
+#define LANG_KEY_LOAD_STARTED                 "label_load_started:"
+#define LANG_KEY_UNLOAD_STARTED               "label_unload_started:"
+#define LANG_KEY_HEATERS_ON                   "label_heaters_on:"
 
 #ifdef __cplusplus
 }

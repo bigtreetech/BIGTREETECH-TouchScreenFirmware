@@ -11,7 +11,7 @@ extern "C" {
 static const char errormagic[]         = "Error:";
 static const char echomagic[]          = "echo:";
 
-#define ACK_MAX_SIZE 2048
+#define ACK_MAX_SIZE 512
 
 typedef enum                      // popup message types available to display an echo message
 {

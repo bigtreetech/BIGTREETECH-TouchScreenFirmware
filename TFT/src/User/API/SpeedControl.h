@@ -14,6 +14,7 @@ extern "C" {
 
 void speedSetSendWaiting(uint8_t tool, bool isWaiting);
 void speedQuerySetWait(bool wait);
+void speedSetRcvPercent(uint8_t tool, uint16_t per);
 void speedSetPercent(uint8_t tool, uint16_t per);
 uint16_t speedGetPercent(uint8_t tool);
 bool SpeedChanged(uint8_t i);
