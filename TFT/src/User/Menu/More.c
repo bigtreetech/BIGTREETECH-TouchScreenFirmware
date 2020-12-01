@@ -49,8 +49,8 @@ void menuMore(void)
         }
         else
           #ifdef LOAD_UNLOAD_M701_M702
-			 infoMenu.menu[++infoMenu.cur] = menuPreheat;
-		  #else
+			       infoMenu.menu[++infoMenu.cur] = menuPreheat;
+		      #else
              infoMenu.menu[++infoMenu.cur] = menuExtrude;
           #endif
         break;
