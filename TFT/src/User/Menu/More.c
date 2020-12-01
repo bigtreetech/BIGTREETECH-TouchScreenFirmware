@@ -48,11 +48,7 @@ void menuMore(void)
           showDialog(DIALOG_TYPE_ALERT, isPauseConfirm, NULL, NULL);
         }
         else
-          #ifdef LOAD_UNLOAD_M701_M702
-			 infoMenu.menu[++infoMenu.cur] = menuPreheat;
-		  #else
-             infoMenu.menu[++infoMenu.cur] = menuExtrude;
-          #endif
+          infoMenu.menu[++infoMenu.cur] = menuExtrude;
         break;
 
       case KEY_ICON_3:
