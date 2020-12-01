@@ -80,8 +80,8 @@
     #define STRING_START                 "Почати"
     #define STRING_STOP                  "Стоп"
     #define STRING_BACK                  "Назад"
-    #define STRING_PAGE_UP               "\ u0899 Стор." // Left Arrow
-    #define STRING_PAGE_DOWN             "Стор. \ u089A" // Right Arrow
+    #define STRING_PAGE_UP               "\u0899 Стор." // Left Arrow
+    #define STRING_PAGE_DOWN             "Стор. \u089A" // Right Arrow
     #define STRING_PAUSE                 "Пауза"
     #define STRING_RESUME                "Продовжити"
     #define STRING_LOAD                  "Завантаження"
@@ -95,7 +95,7 @@
     #define STRING_FAN_HALF_SPEED        "50%"
     #define STRING_ROTATE_UI             "Переворот"
     #define STRING_TOUCHSCREEN_ADJUST    "Калібрування"
-    #define STRING_MORE                  "Більше \ u089C" // Curved Right Arrow
+    #define STRING_MORE                  "Більше \u089C" // Curved Right Arrow
     #define STRING_SCREEN_INFO           "Інфо"
     #define STRING_STATUS                "Статус"
     #define STRING_SIMULATOR_BG_COLOR    "Задній фон Marlin режиму"
@@ -155,14 +155,14 @@
     #define STRING_LOADING               "Завантаження ..."
     #define STRING_POWER_FAILED          "Продовжити друк?"
     #define STRING_CONTINUE              "Продовження"
-    #define STRING_CANCEL                "\ u088F Скасування" // Cancel Sign
+    #define STRING_CANCEL                "\u088F Скасування" // Cancel Sign
     #define STRING_ADJUST_TITLE          "Калібрування екрану"
     #define STRING_ADJUST_INFO           "Натисніть на червону крапку"
     #define STRING_ADJUST_OK             "Успішне калібрування"
     #define STRING_ADJUST_FAILED         "Невдала калібрування, спробуйте знову"
     #define STRING_WARNING               "Увага"
     #define STRING_STOP_PRINT            "Зупинити друк?"
-    #define STRING_CONFIRM               "\ u088E OK" // Confirm Sign
+    #define STRING_CONFIRM               "\u088E OK" // Confirm Sign
     #define STRING_TFTSD                 "SD екрану"
     #define STRING_READ_TFTSD_ERROR      "Не можу прочитати SD карти!"
     #define STRING_TFTSD_INSERTED        "SD карта вставлена!"
@@ -221,7 +221,7 @@
     #define STRING_LIN_ADVANCE           "К-фактор"
     #define STRING_RESET_SETTINGS_INFO   "Все налаштування будуть \ nскинуті за замовчуванням. \ nБажаєте продовжити?"
     #define STRING_RESET_SETTINGS_DONE   "Скидання налаштувань \ nекрана. Для повного \ nвступленія в силу, \ nперезапустіть пристрій."
-    #define STRING_INFO                  "\ u0884 Інформація" // Info Sign
+    #define STRING_INFO                  "\u0884 Інформація" // Info Sign
     #define STRING_LCD_BRIGHTNESS        "Яскравість LCD"
     #define STRING_LCD_BRIGHTNESS_DIM    "Регулювання яскравості LCD"
     #define STRING_LCD_DIM_IDLE_TIMER    "Час до гасіння LCD"
