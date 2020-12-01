@@ -5,9 +5,11 @@
 extern "C" {
 #endif
 
-extern const char* extruderDisplay[];
+extern const char* nozzleDisplay[];
 
+void coolDown(void);
 void menuLoadUnload(void);
+
 
 #ifdef __cplusplus
 }
