@@ -30,6 +30,8 @@ extern "C" {
 #define SLOVENIAN     17
 #define CATALAN       18
 #define TRAD_CHINESE  19
+#define UKRAINIAN     20
+
 
 enum
 {
