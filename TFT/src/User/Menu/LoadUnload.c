@@ -7,7 +7,7 @@ void extruderIdReDraw(void)
 {
   char tempstr[20];
 
-  sprintf(tempstr, "%3s", extruderDisplay[item_extruder_i]);
+  sprintf(tempstr, "%15s", extruderDisplay[item_extruder_i]);
 
   setLargeFont(true);
   GUI_DispStringInPrect(&exhibitRect, (u8 *)tempstr);
