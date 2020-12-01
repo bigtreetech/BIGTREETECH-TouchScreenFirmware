@@ -231,9 +231,7 @@ void meshInitData(void)
   meshData->bDelta = (float) (meshData->bEnd) - meshData->bStart;
 
   meshData->status = ME_DATA_IDLE;
-
   meshData->parsedRows = 0;
-
   meshSaveCallbackPtr = NULL;
 }
 
@@ -243,9 +241,7 @@ void meshAllocData(void)
     return;
 
   meshData = (MESH_DATA *) malloc(sizeof(MESH_DATA));
-
   meshInitData();
-
   probeHeightEnable();                                     // temporary disable software endstops
 }
 
@@ -255,9 +251,7 @@ void meshDeallocData(void)
     return;
 
   free(meshData);
-
   meshData = NULL;
-
   probeHeightDisable();                                    // restore original software endstops state
 }
 
@@ -291,7 +285,6 @@ bool processKnownDataFormat(char *dataRow)
 
       case BL_UBL:
         meshSaveCallbackPtr = menuUBLSave;
-
         sprintf(meshData->saveTitle, "%s", textSelect(LABEL_ABL_SETTINGS_UBL));
         break;
 
@@ -320,8 +313,8 @@ bool meshGetStatus(void)
 {
   if (meshData->status != ME_DATA_FULL)
     return false;
-
-  return true;
+  else
+    return true;
 }
 
 uint16_t meshGetSize(void)
@@ -336,16 +329,16 @@ uint16_t meshGetColsNum(void)
 {
   if (!meshGetStatus())
     return 0;
-
-  return meshData->colsNum;
+  else
+    return meshData->colsNum;
 }
 
 uint16_t meshGetRowsNum(void)
 {
   if (!meshGetStatus())
     return 0;
-
-  return meshData->rowsNum;
+  else
+    return meshData->rowsNum;
 }
 
 uint16_t meshGetIndex(void)
@@ -368,12 +361,10 @@ uint16_t meshSetIndex(int32_t index)
   if (meshGetStatus())
   {
     index = NOBEYOND(0, index, meshData->dataSize - 1);
-
     meshData->index = index;
     meshData->col = meshData->index % meshData->colsNum;
     meshData->row = meshData->index / meshData->rowsNum;;
   }
-
   return meshData->index;
 }
 
@@ -382,11 +373,9 @@ uint16_t meshSetIndexByCol(int32_t col)
   if (meshGetStatus())
   {
     col = NOBEYOND(0, col, meshData->colsNum - 1);
-
     meshData->col = col;
     meshData->index = meshData->row * meshData->colsNum + meshData->col;
   }
-
   return meshData->index;
 }
 
@@ -395,11 +384,9 @@ uint16_t meshSetIndexByRow(int32_t row)
   if (meshGetStatus())
   {
     row = NOBEYOND(0, row, meshData->rowsNum - 1);
-
     meshData->row = row;
     meshData->index = meshData->row * meshData->colsNum + meshData->col;
   }
-
   return meshData->index;
 }
 
@@ -429,9 +416,7 @@ float meshGetValue(uint16_t index)
 bool meshSetValue(float value)
 {
   meshData->data[(meshGetValueRow(meshData->index) * meshData->colsNum) + meshData->col] = value;
-
   storeCmd("M421 I%d J%d Z%.3f\n", meshData->col, meshGetJ(), value);
-
   return true;
 }
 
@@ -453,19 +438,16 @@ bool meshUpdateValueMinMax(float value)
   {
     meshData->valueMin = meshData->valueMax = value;
     meshData->initValueMinMax = false;
-
     isValueChanged = true;
   }
   else if (value < meshData->valueMin)
   {
     meshData->valueMin = value;
-
     isValueChanged = true;
   }
   else if (value > meshData->valueMax)
   {
     meshData->valueMax = value;
-
     isValueChanged = true;
   }
 
@@ -477,11 +459,8 @@ bool meshUpdateValueMinMax(float value)
 
 void meshFullUpdateValueMinMax(void)
 {
-  if (!meshGetStatus())
-    return;
-
+  if (!meshGetStatus()) return;
   meshData->initValueMinMax = true;
-
   for (uint16_t i = 0; i < meshData->dataSize; i++)
   {
     meshUpdateValueMinMax(meshData->data[i]);
@@ -495,9 +474,7 @@ uint16_t meshGetRGBColor(float value)
 
   float valueDiff;
   uint16_t r, g, b;
-
   valueDiff = value - meshData->valueMin;
-
   r = meshData->rStart + valueDiff * (meshData->rDelta / meshData->valueDelta);
   g = meshData->gStart + valueDiff * (meshData->gDelta / meshData->valueDelta);
   b = meshData->bStart + valueDiff * (meshData->bDelta / meshData->valueDelta);
@@ -520,30 +497,24 @@ void meshDrawGridCell(uint16_t index, uint16_t edgeDistance, bool clearBgColor)
     radius = MIN(cellWidth, cellHeight) / MESH_POINT_MED_RATIO;
 
   if (clearBgColor)
+  {
     GUI_ClearRect(meshGridRect.x0 + col * cellWidth + 1, meshGridRect.y0 + row * cellHeight + 1,
                   meshGridRect.x0 + (col + 1) * cellWidth - 1, meshGridRect.y0 + (row + 1) * cellHeight - 1);
-
+  }
   GUI_SetColor(infoSettings.list_border_color);
-
   GUI_DrawLine(meshGridRect.x0 + col * cellWidth + edgeDistance, meshGridRect.y0 + row * cellHeight + cellHeight / 2,
                meshGridRect.x0 + (col + 1) * cellWidth - edgeDistance, meshGridRect.y0 + row * cellHeight + cellHeight / 2);
-
   GUI_DrawLine(meshGridRect.x0 + col * cellWidth + cellWidth / 2, meshGridRect.y0 + row * cellHeight + edgeDistance,
                meshGridRect.x0 + col * cellWidth + cellWidth / 2, meshGridRect.y0 + (row + 1) * cellHeight - edgeDistance);
-
   GUI_SetColor(meshGetRGBColor(value));
-
   GUI_FillCircle(meshGridRect.x0 + col * cellWidth + cellWidth / 2, meshGridRect.y0 + row * cellHeight + cellHeight / 2, radius);
-
   GUI_SetColor(infoSettings.font_color);
 }
 
 void meshDrawGrid(void)
 {
   meshFullUpdateValueMinMax();
-
   GUI_ClearRect(meshGridRect.x0 + 1, meshGridRect.y0 + 1, meshGridRect.x1 - 1, meshGridRect.y1 - 1);
-
   uint16_t size = meshGetSize();
   for (uint16_t i = 0; i < size; i++)
   {
@@ -564,15 +535,10 @@ void meshDrawInfoCell(const GUI_RECT *rect, float *val, bool largeFont, uint16_t
   if (val != NULL)
   {
     char tempstr[20];
-
     sprintf(tempstr, "%.3f", *val);
-
-    if (largeFont)
-      setLargeFont(true);
-
     GUI_SetColor(color);
+    setLargeFont(largeFont);
     GUI_DispStringInPrect(rect, (u8 *) tempstr);
-
     setLargeFont(false);
   }
 
@@ -598,14 +564,7 @@ void meshDrawFullInfo(void)
   float maxValue = meshGetValueMax();
   float origValue = meshGetValueOrig(meshGetIndex());
   float curValue = meshGetValue(meshGetIndex());
-
   meshDrawInfo(&minValue, &maxValue, &origValue, &curValue);
-}
-
-// Get keypress for Mesh Editor
-MESH_KEY_VALUES meshGetKeyValue(void)
-{
-  return (MESH_KEY_VALUES) KEY_GetValue(COUNT(meshKeyRect), meshKeyRect);
 }
 
 void meshKeyPress(u8 index, u8 isPressed)
@@ -637,9 +596,7 @@ void meshKeyPress(u8 index, u8 isPressed)
 void meshDrawKeyboard(void)
 {
   TSC_ReDrawIcon = meshKeyPress;
-
   setLargeFont(true);
-
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
   for (uint8_t i = 0; i < ME_KEY_NUM; i++)
@@ -649,13 +606,14 @@ void meshDrawKeyboard(void)
   }
 
   if (infoMachineSettings.EEPROM == 1)
+  {
     DrawCharIcon(&meshKeyRect[ME_KEY_SAVE], MIDDLE, ICONCHAR_SAVE, false, 0);
+  }
   DrawCharIcon(&meshKeyRect[ME_KEY_OK], MIDDLE, ICONCHAR_OK, false, 0);
   DrawCharIcon(&meshKeyRect[ME_KEY_RESET], MIDDLE, ICONCHAR_RESET, false, 0);
   DrawCharIcon(&meshKeyRect[ME_KEY_HOME], MIDDLE, ICONCHAR_MOVE, false, 0);
 
   GUI_RestoreColorDefault();
-
   setLargeFont(false);
 }
 
@@ -675,9 +633,8 @@ void meshDrawMenu(void)
   GUI_DrawRect(meshInfoRect[ME_INFO_CUR].x0, meshInfoRect[ME_INFO_CUR].y0,
                meshInfoRect[ME_INFO_CUR].x1, meshInfoRect[ME_INFO_CUR].y1);
 
-  GUI_SetColor(VALUE_BORDER_COLOR);
-
   // draw value area borders (inner)
+  GUI_SetColor(VALUE_BORDER_COLOR);
   GUI_DrawRect(meshInfoRect[ME_INFO_CUR].x0 + 1, meshInfoRect[ME_INFO_CUR].y0 + 1,
                meshInfoRect[ME_INFO_CUR].x1 - 1, meshInfoRect[ME_INFO_CUR].y1 - 1);
 
@@ -714,11 +671,10 @@ void meshSave(bool saveOnChange)
 
 bool meshIsWaitingFirstData(void)
 {
-  if (meshData == NULL ||
-    meshData->status != ME_DATA_IDLE)                      // if mesh editor is not running or is already handling data
+  if (meshData == NULL || meshData->status != ME_DATA_IDLE)   // if mesh editor is not running or is already handling data
     return false;
-
-  return true;
+  else
+    return true;
 }
 
 bool meshIsWaitingData(void)
@@ -728,8 +684,8 @@ bool meshIsWaitingData(void)
     meshData->status == ME_DATA_FULL ||
     meshData->status == ME_DATA_FAILED)                    // if mesh editor is not running or is not waiting for data
     return false;
-
-  return true;
+  else
+    return true;
 }
 
 uint16_t meshParseDataRow(char *dataRow, float *dataGrid, uint16_t maxCount)
@@ -757,10 +713,8 @@ uint16_t meshParseDataRow(char *dataRow, float *dataGrid, uint16_t maxCount)
         dataGrid[validCount] = value;
         validCount++;
       }
-
       curCount++;
       curPtr = nextPtr;
-
       value = strtod(curPtr, &nextPtr);
     }
     while (nextPtr != curPtr && validCount < maxCount);
@@ -790,19 +744,16 @@ void meshUpdateData(char *dataRow)
     if (meshData->status == ME_DATA_EMPTY)                 // if data grid is empty, parse the data row and set the data grid columns number
     {
       count = meshParseDataRow(dataRow, &(meshData->dataOrig[0]), MESH_GRID_MAX_POINTS_X);
-
       if (count > 0)                                       // if number of columns in the parsed data row is at least 1, set the data grid columns number
       {
         meshData->colsNum = count;
         meshData->rowsNum = 1;
-
         meshData->status = ME_DATA_WAITING;
       }
     }
     else                                                   // if data grid is waiting for the remaining rows, parse the data rows
     {
       count = meshParseDataRow(dataRow, &(meshData->dataOrig[meshData->rowsNum * meshData->colsNum]), meshData->colsNum);
-
       if (count == meshData->colsNum)                      // if number of columns in the parsed data row matches the data grid columns number, update the data grid rows number
       {
         meshData->rowsNum++;
@@ -819,7 +770,6 @@ void meshUpdateData(char *dataRow)
       {
         meshData->dataSize = meshData->rowsNum * meshData->colsNum;
         meshData->status = ME_DATA_FULL;
-
         memcpy(&meshData->data, &meshData->dataOrig, sizeof(meshData->dataOrig));
       }
       else                                                 // if mesh grid is smaller than a 1x1 matrix, data grid is marked as failed
@@ -830,16 +780,11 @@ void meshUpdateData(char *dataRow)
   if (failed)
   {
     meshData->status = ME_DATA_FAILED;
-
     labelChar(tempMsg, LABEL_PROCESS_ABORTED);
-
     sprintf(&tempMsg[strlen(tempMsg)], "\n %s", dataRow);
-
     popupReminder(DIALOG_TYPE_ERROR, LABEL_MESH_EDITOR, (u8 *) tempMsg);
-
-    infoMenu.cur--;                                        // exit from mesh editor menu. it avoids to loop in case of persistent error
-
     meshDeallocData();                                     // deallocate mesh data
+    infoMenu.cur--;                                        // exit from mesh editor menu. it avoids to loop in case of persistent error
   }
 }
 
@@ -849,20 +794,15 @@ void menuMeshEditor(void)
   bool oldStatus, curStatus;
   uint16_t oldIndex, curIndex;
   float origValue, curValue;
-  bool forceHoming;
-  bool forceExit;
-
-  meshAllocData();                                         // allocates and initialize mesh data if not already allocated and initialized
-
-  mustStoreCmd("M420 V1 T1\n");                            // retrieve the mesh data
+  bool forceHoming = true;
+  bool forceExit = false;
 
   oldStatus = curStatus = meshGetStatus();
   oldIndex = curIndex = meshGetIndex();
-  forceHoming = true;
-  forceExit = false;
 
-  setMenuTypeCustom(&meshDrawMenu);
-
+  meshAllocData();                                         // allocates and initialize mesh data if not already allocated and initialized
+  mustStoreCmd("M420 V1 T1\n");                            // retrieve the mesh data
+  setMenu(MENU_TYPE_FULLSCREEN, NULL, COUNT(meshKeyRect), meshKeyRect, meshKeyPress, NULL);
   meshDrawMenu();
 
 #if LCD_ENCODER_SUPPORT
@@ -873,8 +813,7 @@ void menuMeshEditor(void)
   {
     curStatus = meshGetStatus();                           // always load current status
     curIndex = meshGetIndex();                             // always load current index
-
-    key_num = meshGetKeyValue();
+    key_num = menuKeyGetValue();
     switch (key_num)
     {
       case ME_KEY_UP:
@@ -899,13 +838,10 @@ void menuMeshEditor(void)
           if (forceHoming)
           {
             forceHoming = false;
-
             mustStoreCmd("G28\n");                         // only the first time, home the printer
           }
-
           curValue = menuMeshTuner(meshGetCol(), meshGetJ(), meshGetValue(meshGetIndex()));
           meshSetValue(curValue);
-
           meshDrawMenu();
         }
         break;
@@ -916,7 +852,6 @@ void menuMeshEditor(void)
           if (meshGetValue(meshGetIndex()) != meshGetValueOrig(meshGetIndex()))
           {
             curValue = meshSetValue(meshGetValueOrig(meshGetIndex()));
-
             meshDrawGrid();
             meshDrawFullInfo();
           }
@@ -925,7 +860,6 @@ void menuMeshEditor(void)
 
       case ME_KEY_HOME:
         forceHoming = false;
-
         mustStoreCmd("G28\n");                             // force homing (e.g. if steppers are disarmed)
         break;
 
@@ -935,7 +869,6 @@ void menuMeshEditor(void)
 
       case ME_KEY_OK:
         forceExit = true;
-
         infoMenu.cur--;
         break;
 
@@ -944,7 +877,6 @@ void menuMeshEditor(void)
           if (encoderPosition)
           {
             curIndex = meshSetIndex(curIndex + encoderPosition);
-
             encoderPosition = 0;
           }
         #endif
@@ -965,7 +897,6 @@ void menuMeshEditor(void)
 
         origValue = meshGetValueOrig(meshGetIndex());
         curValue = meshGetValue(meshGetIndex());
-
         meshDrawInfo(NULL, NULL, &origValue, &curValue);
       }
 
@@ -973,16 +904,12 @@ void menuMeshEditor(void)
       oldIndex = curIndex;
     }
 
-    loopBackEnd();
     loopProcess();
   }
 
   if (forceExit)
   {
     meshSave(true);                                        // check for changes and ask to save on eeprom
-
     meshDeallocData();                                     // deallocate mesh data
-
-    setMenuTypeCustom(NULL);
   }
 }

@@ -122,14 +122,10 @@ void loopToast(void)
     {
       _toastRunning = false;
 
-      if (getMenuType() == MENU_TYPE_CUSTOM)
-        menuRedrawCustom();
-      else
-      {
-        GUI_ClearPrect(&toastIconRect);
-        GUI_ClearPrect(&toastRect);
-        menuReDrawCurTitle();
-      }
+      GUI_ClearPrect(&toastIconRect);
+      GUI_ClearPrect(&toastRect);
+      menuReDrawCurTitle();
+
     }
   }
 }

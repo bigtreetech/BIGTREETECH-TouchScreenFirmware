@@ -1,7 +1,7 @@
 #include "SendGcode.h"
 #include "includes.h"
 #if (defined(TFT28_V3_0) || defined(TFT24_V1_1) || defined (MKS_32_V1_4_NOBL))
-  #define TERMINAL_MAX_CHAR ((LCD_WIDTH / BYTE_WIDTH) * (LCD_HEIGHT / BYTE_HEIGHT) * 6)  // for lower RAM 
+  #define TERMINAL_MAX_CHAR ((LCD_WIDTH / BYTE_WIDTH) * (LCD_HEIGHT / BYTE_HEIGHT) * 6)  // for lower RAM
 #else
   #define TERMINAL_MAX_CHAR ((LCD_WIDTH / BYTE_WIDTH) * (LCD_HEIGHT / BYTE_HEIGHT) * 8)
 #endif
@@ -59,9 +59,11 @@ typedef struct
 #if LCD_WIDTH < 480                                        // number of columns and rows is based on LCD display resolution
   #define GKEY_COL_NUM LAYOUT_1_COL_NUM
   #define GKEY_ROW_NUM LAYOUT_1_ROW_NUM
+  #define HAS_ABC_KEY
 #elif LCD_WIDTH < 800
   #define GKEY_COL_NUM LAYOUT_2_COL_NUM
   #define GKEY_ROW_NUM LAYOUT_2_ROW_NUM
+  #define HAS_ABC_KEY
 #else
   #define GKEY_COL_NUM LAYOUT_3_COL_NUM
   #define GKEY_ROW_NUM LAYOUT_3_ROW_NUM
@@ -137,7 +139,7 @@ typedef enum
   GKEY_59,
 #endif
 
-#if GKEY_COL_NUM < LAYOUT_3_COL_NUM
+#if defined(HAS_ABC_KEY)
   GKEY_ABC_123,
 #endif
 
@@ -145,7 +147,7 @@ typedef enum
   GKEY_DEL,
   GKEY_BACK,
   GKEY_SEND,
-  GKEY_KEY_NUM,                                            // number of keys
+  GKEY_KEY_NUM, // number of keys
   GKEY_IDLE = IDLE_TOUCH,
 } GKEY_VALUES;
 
@@ -168,7 +170,7 @@ typedef enum
 // control bar sizes
 #define CTRL_ROW_NUM 1
 
-#if GKEY_COL_NUM < LAYOUT_3_COL_NUM
+#if defined(HAS_ABC_KEY)
   typedef enum
   {
     SOFT_KEY_123 = 0,
@@ -176,10 +178,12 @@ typedef enum
   } SOFT_KEY_TYPE;
 
   SOFT_KEY_TYPE gcodeKeyType = SOFT_KEY_123;
-
-  #define CTRL_COL_NUM 4
+  #define GKEY_TYPING_KEYS  GKEY_ABC_123
+  #define CTRL_COL_NUM      4
 #else
-  #define CTRL_COL_NUM 3
+  #define GKEY_TYPING_KEYS  GKEY_SPACE
+  #define CTRL_COL_NUM      3
+
 #endif
 
 #define CTRL_HEIGHT  GKEY_HEIGHT
@@ -320,7 +324,7 @@ const char * const gcodeKey[][GKEY_KEY_NUM] = {
     "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P",
     "A", "S", "D", "F", "G", "H", "J", "K", "L", "'",
     "Z", "X", "C", "V", "B", "N", "M", ",", ".", ";",
-    ":", "_", "@", "#", "~", "-", "+", "*", "(", ")", 
+    ":", "_", "@", "#", "~", "-", "+", "*", "(", ")",
   #else
     "1", "2", "3", "A", "B", "C", "D", "E", "F", "G",
     "4", "5", "6", "H", "I", "J", "K", "L", "M", "N",
@@ -331,7 +335,7 @@ const char * const gcodeKey[][GKEY_KEY_NUM] = {
   #endif
 #endif
 
-#if GKEY_COL_NUM < LAYOUT_3_COL_NUM
+#if defined(HAS_ABC_KEY)
     "ABC",
 #endif
 
@@ -351,7 +355,7 @@ const char * const gcodeKey[][GKEY_KEY_NUM] = {
     "/", "=", "(", ")", "@", "_", "%",
 #endif
 
-#if GKEY_COL_NUM < LAYOUT_3_COL_NUM
+#if defined(HAS_ABC_KEY)
     "123",
 #endif
 
@@ -416,16 +420,11 @@ uint8_t buf_full = 0;
 
 void sendGcodeReDrawButton(u8 index, u8 isPressed)
 {
-  if (index >= GKEY_KEY_NUM)
-    return;
+  if (index >= GKEY_KEY_NUM) return;
 
   if (isPressed)
   {
-#if GKEY_COL_NUM < LAYOUT_3_COL_NUM
-    if (index < GKEY_ABC_123)
-#else
-    if (index < GKEY_SPACE)
-#endif
+    if (index < GKEY_TYPING_KEYS)
     {
       GUI_SetColor(KEY_BG_COLOR);
       GUI_SetBkColor(KEY_FONT_COLOR);
@@ -438,11 +437,7 @@ void sendGcodeReDrawButton(u8 index, u8 isPressed)
   }
   else
   {
-#if GKEY_COL_NUM < LAYOUT_3_COL_NUM
-    if (index < GKEY_ABC_123)
-#else
-    if (index < GKEY_SPACE)
-#endif
+    if (index < GKEY_TYPING_KEYS)
     {
       GUI_SetColor(KEY_FONT_COLOR);
       GUI_SetBkColor(KEY_BG_COLOR);
@@ -459,11 +454,11 @@ void sendGcodeReDrawButton(u8 index, u8 isPressed)
 
   GUI_ClearRect(gcodeKeyRect[index].x0 + 2, gcodeKeyRect[index].y0 + 2, gcodeKeyRect[index].x1 - 1, gcodeKeyRect[index].y1 - 1);
 
-#if GKEY_COL_NUM < LAYOUT_3_COL_NUM
-  GUI_DispStringInRect(gcodeKeyRect[index].x0 + 2, gcodeKeyRect[index].y0 + 2, gcodeKeyRect[index].x1 - 1, gcodeKeyRect[index].y1 - 1, (u8 *) gcodeKey[gcodeKeyType][index]);
-#else
-  GUI_DispStringInRect(gcodeKeyRect[index].x0 + 2, gcodeKeyRect[index].y0 + 2, gcodeKeyRect[index].x1 - 1, gcodeKeyRect[index].y1 - 1, (u8 *) gcodeKey[0][index]);
-#endif
+  #if defined(HAS_ABC_KEY)
+    GUI_DispStringInRect(gcodeKeyRect[index].x0 + 2, gcodeKeyRect[index].y0 + 2, gcodeKeyRect[index].x1 - 1, gcodeKeyRect[index].y1 - 1, (u8 *) gcodeKey[gcodeKeyType][index]);
+  #else
+    GUI_DispStringInRect(gcodeKeyRect[index].x0 + 2, gcodeKeyRect[index].y0 + 2, gcodeKeyRect[index].x1 - 1, gcodeKeyRect[index].y1 - 1, (u8 *) gcodeKey[0][index]);
+  #endif
 
   setLargeFont(false);
 }
@@ -472,7 +467,6 @@ void sendGcodeDrawGcode(char *gcode)
 {
   GUI_SetColor(BAR_VALUE_FONT_COLOR);
   GUI_SetBkColor(BAR_VALUE_BG_COLOR);
-
   GUI_ClearRect(gcodeValueRect.x0 + 1, gcodeValueRect.y0 + 1, gcodeValueRect.x1 - 1, gcodeValueRect.y1 - 1);
 
   if (gcode != NULL)
@@ -481,9 +475,8 @@ void sendGcodeDrawGcode(char *gcode)
 
 void sendGcodeDrawKeyboard(void)
 {
-  GUI_SetColor(KEY_BORDER_COLOR);
-
   // draw vertical button borders
+  GUI_SetColor(KEY_BORDER_COLOR);
   for (int i = 0; i < (KEY_COL_NUM - 1); i++)
   {
     GUI_DrawLine(gcodeKeyRect[i].x1, gcodeKeyRect[i].y0, gcodeKeyRect[i + ((KEY_ROW_NUM - 1) * KEY_COL_NUM)].x1, gcodeKeyRect[i + ((KEY_ROW_NUM - 1) * KEY_COL_NUM)].y1 - 1);
@@ -495,12 +488,10 @@ void sendGcodeDrawKeyboard(void)
     GUI_DrawLine(gcodeKeyRect[i * KEY_COL_NUM].x0, gcodeKeyRect[i * KEY_COL_NUM].y1, gcodeKeyRect[(i * KEY_COL_NUM) + (KEY_COL_NUM - 1)].x1 - 1, gcodeKeyRect[(i * KEY_COL_NUM) + (KEY_COL_NUM - 1)].y1);
   }
 
-  GUI_SetColor(KEY_BORDER_COLOR_2);
-
   // draw shadow border
+  GUI_SetColor(KEY_BORDER_COLOR_2);
   GUI_DrawLine(gcodeAreaRect[1].x0, gcodeAreaRect[1].y0, gcodeAreaRect[1].x1, gcodeAreaRect[1].y0);
   GUI_DrawLine(gcodeAreaRect[1].x0, gcodeAreaRect[1].y1 - 1, gcodeAreaRect[1].x1, gcodeAreaRect[1].y1 - 1);
-
   for (uint8_t i = 0; i < COUNT(gcodeKey[0]); i++)
   {
     sendGcodeReDrawButton(i, false);
@@ -509,18 +500,18 @@ void sendGcodeDrawKeyboard(void)
 
 void sendGcodeDrawMenu(void)
 {
-  setMenu(MENU_TYPE_FULLSCREEN, NULL, COUNT(gcodeKeyRect), gcodeKeyRect, sendGcodeReDrawButton);
+  setMenu(MENU_TYPE_FULLSCREEN, NULL, COUNT(gcodeKeyRect), gcodeKeyRect, sendGcodeReDrawButton, NULL);
 
   GUI_SetBkColor(BAR_BG_COLOR);
 
   // clear bar area
-  GUI_ClearRect(gcodeAreaRect[0].x0, gcodeAreaRect[0].y0, gcodeAreaRect[0].x1, gcodeAreaRect[0].y1);
-  GUI_ClearRect(gcodeAreaRect[2].x0, gcodeAreaRect[2].y0, gcodeAreaRect[2].x1, gcodeAreaRect[2].y1);
+  GUI_ClearPrect(&gcodeAreaRect[0]);
+  GUI_ClearPrect(&gcodeAreaRect[2]);
 
   GUI_SetBkColor(KEY_BG_COLOR);
 
   // clear keyboard area
-  GUI_ClearRect(gcodeAreaRect[1].x0, gcodeAreaRect[1].y0, gcodeAreaRect[1].x1, gcodeAreaRect[1].y1);
+  GUI_ClearPrect(&gcodeAreaRect[1]);
 
   GUI_SetColor(BAR_BORDER_COLOR);
 
@@ -542,8 +533,8 @@ void menuSendGcode(void)
 {
   GKEY_VALUES key_num = GKEY_IDLE;
   char gcodeBuf[CMD_MAX_CHAR] = {0};
-  uint8_t nowIndex = 0,
-          lastIndex = 0;
+  uint8_t nowIndex = 0;
+  uint8_t lastIndex = 0;
 
   sendGcodeDrawMenu();
 
@@ -552,69 +543,65 @@ void menuSendGcode(void)
     key_num = menuKeyGetValue();
     switch (key_num)
     {
-      case GKEY_IDLE:
-        break;
+    case GKEY_IDLE:
+      break;
 
-      case GKEY_BACK:
-        infoMenu.cur--;
-        break;
+    case GKEY_BACK:
+      infoMenu.cur--;
+      break;
 
-      case GKEY_SEND:
-        if (nowIndex)
-        {
-          gcodeBuf[nowIndex++] = '\n';                     // End char '\n' for Gcode
-          gcodeBuf[nowIndex] = 0;
-          storeCmd(gcodeBuf);
-          gcodeBuf[nowIndex = 0] = 0;
-        }
+    case GKEY_SEND:
+      if (nowIndex)
+      {
+        gcodeBuf[nowIndex++] = '\n'; // End char '\n' for Gcode
+        gcodeBuf[nowIndex] = 0;
+        storeCmd(gcodeBuf);
+        gcodeBuf[nowIndex = 0] = 0;
+      }
 
-        infoMenu.menu[++infoMenu.cur] = menuTerminal;
-        break;
+      infoMenu.menu[++infoMenu.cur] = menuTerminal;
+      break;
 
-#if GKEY_COL_NUM < LAYOUT_3_COL_NUM
+    #if defined(HAS_ABC_KEY)
       case GKEY_ABC_123:
         gcodeKeyType = (gcodeKeyType == SOFT_KEY_123) ? SOFT_KEY_ABC : SOFT_KEY_123;
-
         sendGcodeDrawKeyboard();
         break;
-#endif
+    #endif
 
-      case GKEY_DEL:
-        if (nowIndex)
-          gcodeBuf[--nowIndex] = 0;
-        break;
+    case GKEY_DEL:
+      if (nowIndex)
+        gcodeBuf[--nowIndex] = 0;
+      break;
 
-      case GKEY_SPACE:
-        if (nowIndex < CMD_MAX_CHAR - 1)
-        {
-          gcodeBuf[nowIndex++] = ' ';
-          gcodeBuf[nowIndex] = 0;
-        }
-        break;
+    case GKEY_SPACE:
+      if (nowIndex < CMD_MAX_CHAR - 1)
+      {
+        gcodeBuf[nowIndex++] = ' ';
+        gcodeBuf[nowIndex] = 0;
+      }
+      break;
 
-      default:
-        if (nowIndex < CMD_MAX_CHAR - 1)
-        {
-#if GKEY_COL_NUM < LAYOUT_3_COL_NUM
+    default:
+      if (nowIndex < CMD_MAX_CHAR - 1)
+      {
+        #if defined(HAS_ABC_KEY)
           gcodeBuf[nowIndex++] = gcodeKey[gcodeKeyType][key_num][0];
-#else
+        #else
           gcodeBuf[nowIndex++] = gcodeKey[0][key_num][0];
-#endif
-          gcodeBuf[nowIndex] = 0;
-        }
-        break;
+        #endif
+        gcodeBuf[nowIndex] = 0;
+      }
+      break;
     }
 
     if (lastIndex != nowIndex)
     {
       lastIndex = nowIndex;
-
       sendGcodeDrawGcode(gcodeBuf);
     }
-
     loopBackEnd();
   }
-
   GUI_RestoreColorDefault();
 }
 
@@ -671,10 +658,8 @@ void terminalReDrawButton(u8 index, u8 isPressed)
   }
 
   setLargeFont(true);
-
   GUI_ClearRect(terminalKeyRect[index].x0 + 2, terminalKeyRect[index].y0 + 2, terminalKeyRect[index].x1 - 1, terminalKeyRect[index].y1 - 1);
   GUI_DispStringInRect(terminalKeyRect[index].x0 + 2, terminalKeyRect[index].y0 + 2, terminalKeyRect[index].x1 - 1, terminalKeyRect[index].y1 - 1, (u8 *) terminalKey[index]);
-
   setLargeFont(false);
 }
 
@@ -682,9 +667,7 @@ void terminalDrawPage(char *pageNum)
 {
   GUI_SetColor(BAR_FONT_COLOR);
   GUI_SetBkColor(BAR_BG_COLOR);
-
   setLargeFont(true);
-
   GUI_ClearRect(terminalPageRect.x0 + 1, terminalPageRect.y0 + 1, terminalPageRect.x1 - 1, terminalPageRect.y1 - 1);
 
   if (pageNum != NULL)
@@ -695,26 +678,21 @@ void terminalDrawPage(char *pageNum)
 
 void terminalDrawMenu(void)
 {
-  setMenu(MENU_TYPE_FULLSCREEN, NULL, COUNT(terminalKeyRect), terminalKeyRect, terminalReDrawButton);
-
-  GUI_SetBkColor(TERM_BG_COLOR);
+  setMenu(MENU_TYPE_FULLSCREEN, NULL, COUNT(terminalKeyRect), terminalKeyRect, terminalReDrawButton, NULL);
 
   // clear terminal area
-  GUI_ClearRect(terminalAreaRect[0].x0, terminalAreaRect[0].y0, terminalAreaRect[0].x1, terminalAreaRect[0].y1);
-
-  GUI_SetBkColor(BAR_BG_COLOR);
-
+  GUI_SetBkColor(TERM_BG_COLOR);
+  GUI_ClearPrect(&terminalAreaRect[0]);
   // clear bar area
-  GUI_ClearRect(terminalAreaRect[1].x0, terminalAreaRect[1].y0, terminalAreaRect[1].x1, terminalAreaRect[1].y1);
-
-  GUI_SetColor(BAR_BORDER_COLOR);
+  GUI_SetBkColor(BAR_BG_COLOR);
+  GUI_ClearPrect(&terminalAreaRect[1]);
 
   // draw bar area shadow border
-  GUI_DrawLine(terminalAreaRect[1].x0, terminalAreaRect[1].y0, terminalAreaRect[1].x1, terminalAreaRect[1].y0);
-
-  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
+  GUI_SetColor(BAR_BORDER_COLOR);
+  GUI_ClearPrect(&terminalAreaRect[1]);
 
   // draw keyboard
+  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
   for (uint8_t i = 0; i < COUNT(terminalKey); i++)
   {
     terminalReDrawButton(i, false);
@@ -727,8 +705,8 @@ void menuTerminal(void)
   CHAR_INFO info;
   uint16_t lastTerminalIndex = 0;
   uint8_t pageBufIndex = 0;
-  int16_t cursorX = CURSOR_START_X,
-          cursorY = CURSOR_START_Y;
+  int16_t cursorX = CURSOR_START_X;
+  int16_t cursorY = CURSOR_START_Y;
   char pageNum[10];
 
   terminalDrawMenu();
@@ -740,11 +718,14 @@ void menuTerminal(void)
     {
       case TERM_PAGE_UP:                                   // page up
         if (terminal_page.pageIndex < (terminal_page.pageTail - terminal_page.pageHead))
+        {
           terminal_page.pageIndex += SCROLL_PAGE;
-
+        }
         if ((terminal_page.pageTail < terminal_page.pageHead) &&
           (terminal_page.pageIndex < (terminal_page.pageTail + MAX_BUFF - terminal_page.pageHead)))
+        {
           terminal_page.pageIndex += SCROLL_PAGE;
+        }
         break;
 
       case TERM_PAGE_DOWN:                                 // page down
@@ -762,6 +743,8 @@ void menuTerminal(void)
 
     if (terminal_page.oldPageIndex != terminal_page.pageIndex)       // Scroll a certain number of pages from the top of the page buffer
     {
+      cursorX = CURSOR_START_X;
+      cursorY = CURSOR_START_Y;
       terminal_page.oldPageIndex = terminal_page.pageIndex;
 
       if (terminal_page.pageTail >= terminal_page.pageIndex)
@@ -771,15 +754,9 @@ void menuTerminal(void)
 
       lastTerminalIndex = terminal_page.ptr[pageBufIndex] - terminalBuf;
 
-      cursorX = CURSOR_START_X;
-      cursorY = CURSOR_START_Y;
-
       GUI_SetBkColor(TERM_BG_COLOR);
-
       GUI_ClearRect(CURSOR_START_X, CURSOR_START_Y, CURSOR_END_X, CURSOR_END_Y);
-
       sprintf(pageNum, "%d/%d", abs(((terminal_page.pageTail - terminal_page.pageHead) - terminal_page.pageIndex) + 1), abs((terminal_page.pageTail - terminal_page.pageHead) + 1));
-
       terminalDrawPage(pageNum);
     }
 
@@ -799,12 +776,7 @@ void menuTerminal(void)
         {
           if (terminal_page.pageIndex != 0)
             break;
-
-          terminal_page.pageTail++;
-
-          if (terminal_page.pageTail >= MAX_BUFF)
-            terminal_page.pageTail = 0;
-
+          terminal_page.pageTail = (terminal_page.pageTail + 1) % MAX_BUFF;
           terminal_page.ptr[terminal_page.pageTail] = &terminalBuf[lastTerminalIndex];             // Save character buffer index to page buffer
 
           if ((buf_full == 1) && (terminal_page.oldPageHead == terminal_page.pageHead))
@@ -814,24 +786,18 @@ void menuTerminal(void)
             terminal_page.pageHead = 0;
 
           terminal_page.oldPageHead = terminal_page.pageHead;
-
           cursorX = CURSOR_START_X;
           cursorY = CURSOR_START_Y;
 
           GUI_SetBkColor(TERM_BG_COLOR);
-
           GUI_ClearRect(CURSOR_START_X, CURSOR_START_Y, CURSOR_END_X, CURSOR_END_Y);
-
           sprintf(pageNum, "%d/%d", abs(((terminal_page.pageTail - terminal_page.pageHead) - terminal_page.pageIndex) + 1), abs((terminal_page.pageTail - terminal_page.pageHead) + 1));
-
           terminalDrawPage(pageNum);
         }
 
         GUI_SetColor(TERM_FONT_COLOR);
         GUI_SetBkColor(TERM_BG_COLOR);
-
         GUI_DispOne(cursorX, cursorY, (u8 *) &terminalBuf[lastTerminalIndex]);
-
         cursorX += info.pixelWidth;
       }
 
