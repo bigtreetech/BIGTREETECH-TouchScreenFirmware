@@ -91,7 +91,7 @@ void menuBeforePrinting(void)
       //    }
 
       if (infoMachineSettings.autoReportSDStatus ==1){
-        request_M27(infoSettings.m27_refresh_time);                //Check if there is a SD or USB print running.
+        request_M27(infoSettings.m27_refresh_time*1000);                //Check if there is a SD or USB print running.
       }
       else{
         request_M27(0);
@@ -232,7 +232,7 @@ void reDrawProgress(int icon_pos)
 void reDrawLayer(int icon_pos)
 {
   char tempstr[10];
-  sprintf(tempstr, "%.2fmm",coordinateGetAxisActual(Z_AXIS));
+  sprintf(tempstr, "%.2fmm",coordinateGetAxisTarget(Z_AXIS));
 
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
@@ -266,7 +266,6 @@ void toggleinfo(void)
     rapid_serial_loop();   //perform backend printing loop before drawing to avoid printer idling
     reDrawSpeed(SPD_ICON_POS);
     speedQuery();
-	  coordinateQuery();
   }
 }
 
@@ -376,8 +375,8 @@ void menuPrinting(void)
     }
 
     //Z_AXIS coordinate
-    if(curLayer != coordinateGetAxisActual(Z_AXIS)){
-      curLayer = coordinateGetAxisActual(Z_AXIS);
+    if(curLayer != coordinateGetAxisTarget(Z_AXIS)){
+      curLayer = coordinateGetAxisTarget(Z_AXIS);
       rapid_serial_loop();  //perform backend printing loop before drawing to avoid printer idling
       reDrawLayer(Z_ICON_POS);
     }
