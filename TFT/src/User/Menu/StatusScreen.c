@@ -10,7 +10,6 @@
 #define SET_SPEEDMENUINDEX(x)
 #endif
 
-//1 title, ITEM_PER_PAGE items (icon + label)
 const MENUITEMS StatusItems = {
 // title
 LABEL_READY,

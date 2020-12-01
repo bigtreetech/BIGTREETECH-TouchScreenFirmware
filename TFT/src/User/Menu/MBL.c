@@ -3,6 +3,15 @@
 
 #define ITEM_MBL_UNIT_NUM 3
 
+const ITEM itemMblUnit[ITEM_MBL_UNIT_NUM] = {
+  // icon                         label
+  {ICON_001_MM,                   LABEL_001_MM},
+  {ICON_01_MM,                    LABEL_01_MM},
+  {ICON_1_MM,                     LABEL_1_MM},
+};
+
+const float mblUnit[ITEM_MBL_UNIT_NUM] = {0.01f, 0.1f, 1};
+
 static u8 curUnit = 0;
 
 u8 mblPoint = 0;
@@ -114,15 +123,6 @@ void mblDrawValue(float val)
 
 void menuMBL(void)
 {
-  const ITEM itemMblUnit[ITEM_MBL_UNIT_NUM] = {
-    // icon                         label
-    {ICON_001_MM,                   LABEL_001_MM},
-    {ICON_01_MM,                    LABEL_01_MM},
-    {ICON_1_MM,                     LABEL_1_MM},
-  };
-
-  const float mblUnit[ITEM_MBL_UNIT_NUM] = {0.01f, 0.1f, 1};
-
   // 1 title, ITEM_PER_PAGE items (icon + label)
   MENUITEMS mblItems = {
     // title

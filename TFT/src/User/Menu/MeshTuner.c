@@ -3,19 +3,25 @@
 
 #define ITEM_MESH_TUNER_UNIT_NUM 3
 
+const ITEM itemMeshUnit[ITEM_MESH_TUNER_UNIT_NUM] = {
+  // icon                         label
+  {ICON_001_MM,                   LABEL_001_MM},
+  {ICON_01_MM,                    LABEL_01_MM},
+  {ICON_1_MM,                     LABEL_1_MM},
+};
+
+const float meshUnit[ITEM_MESH_TUNER_UNIT_NUM] = {0.01f, 0.1f, 1};
+
 static u8 curUnit = 0;
 
 /* Init mesh point */
 void meshInitPoint(uint16_t col, uint16_t row, float value)
 {
 //  probeHeightEnable();                                     // temporary disable software endstops
-
   probeHeightStop();                                       // raise nozzle
-
   mustStoreCmd("G42 I%d J%d\n", col, row);                 // move nozzle to X and Y coordinates corresponding
                                                            // to the column and row in the bed leveling mesh grid
   probeHeightStart();                                      // lower nozzle to Z0 point
-
   probeHeightMove(value, 1);                               // move nozzle to Z height
 }
 
@@ -23,17 +29,14 @@ void meshInitPoint(uint16_t col, uint16_t row, float value)
 void meshResetPoint(void)
 {
   probeHeightStop();                                       // raise nozzle
-
 //  probeHeightDisable();                                    // restore original software endstops state
 }
 
 void meshDrawHeader(uint16_t col, uint16_t row)
 {
   char tempstr[20];
-
-  sprintf(tempstr, "I: %d  J: %d", col, row);
-
   GUI_SetColor(infoSettings.sd_reminder_color);
+  sprintf(tempstr, "I: %d  J: %d", col, row);
   GUI_DispString(exhibitRect.x0, exhibitRect.y0, (u8 *) tempstr);
   GUI_SetColor(infoSettings.font_color);
 }
@@ -41,9 +44,7 @@ void meshDrawHeader(uint16_t col, uint16_t row)
 void meshDrawValue(float val)
 {
   char tempstr[20];
-
   sprintf(tempstr, "  %.3f  ", val);
-
   setLargeFont(true);
   GUI_DispStringInPrect(&exhibitRect, (u8 *) tempstr);
   setLargeFont(false);
@@ -51,14 +52,6 @@ void meshDrawValue(float val)
 
 float menuMeshTuner(uint16_t col, uint16_t row, float value)
 {
-  const ITEM itemMeshUnit[ITEM_MESH_TUNER_UNIT_NUM] = {
-    // icon                         label
-    {ICON_001_MM,                   LABEL_001_MM},
-    {ICON_01_MM,                    LABEL_01_MM},
-    {ICON_1_MM,                     LABEL_1_MM},
-  };
-
-  const float meshUnit[ITEM_MESH_TUNER_UNIT_NUM] = {0.01f, 0.1f, 1};
 
   // 1 title, ITEM_PER_PAGE items (icon + label)
   MENUITEMS meshItems = {
@@ -87,11 +80,8 @@ float menuMeshTuner(uint16_t col, uint16_t row, float value)
   float unit;
 
   meshInitPoint(col, row, value);                          // initialize mesh point
-
   now = curValue = coordinateGetAxisActual(Z_AXIS);
-
   meshItems.items[KEY_ICON_4] = itemMeshUnit[curUnit];
-
   menuDrawPage(&meshItems);
   meshDrawHeader(col, row);
   meshDrawValue(now);
@@ -122,9 +112,7 @@ float menuMeshTuner(uint16_t col, uint16_t row, float value)
       // change unit
       case KEY_ICON_4:
         curUnit = (curUnit + 1) % ITEM_MESH_TUNER_UNIT_NUM;
-
         meshItems.items[key_num] = itemMeshUnit[curUnit];
-
         menuDrawItem(&meshItems.items[key_num], key_num);
         break;
 
@@ -172,7 +160,6 @@ float menuMeshTuner(uint16_t col, uint16_t row, float value)
     if (infoMenu.menu[infoMenu.cur] != menuMeshEditor)
     {
       infoMenu.menu[infoMenu.cur]();
-
       menuDrawPage(&meshItems);
       meshDrawHeader(col, row);
       meshDrawValue(now);

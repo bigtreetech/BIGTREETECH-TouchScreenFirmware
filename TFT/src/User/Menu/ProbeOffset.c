@@ -4,6 +4,15 @@
 #define ITEM_PROBE_OFFSET_UNIT_NUM 3
 #define ITEM_PROBE_OFFSET_SUBMENU_NUM 4
 
+const ITEM itemProbeOffsetUnit[ITEM_PROBE_OFFSET_UNIT_NUM] = {
+  // icon                         label
+  {ICON_001_MM,                   LABEL_001_MM},
+  {ICON_01_MM,                    LABEL_01_MM},
+  {ICON_1_MM,                     LABEL_1_MM},
+};
+
+const float probeOffsetStep[ITEM_PROBE_OFFSET_UNIT_NUM] = {0.01f, 0.1f, 1};
+
 static u8 curUnit = 0;
 static u8 curSubmenu = 0;
 
@@ -45,15 +54,6 @@ void probeDrawValue(float val)
 
 void menuProbeOffset(void)
 {
-  const ITEM itemProbeOffsetUnit[ITEM_PROBE_OFFSET_UNIT_NUM] = {
-    // icon                         label
-    {ICON_001_MM,                   LABEL_001_MM},
-    {ICON_01_MM,                    LABEL_01_MM},
-    {ICON_1_MM,                     LABEL_1_MM},
-  };
-
-  const float probeOffset_unit[ITEM_PROBE_OFFSET_UNIT_NUM] = {0.01f, 0.1f, 1};
-
   ITEM itemProbeOffsetSubmenu[ITEM_PROBE_OFFSET_SUBMENU_NUM] = {
     // icon                         label
     {ICON_01_MM,                    LABEL_01_MM},
@@ -108,7 +108,7 @@ void menuProbeOffset(void)
 
   while (infoMenu.menu[infoMenu.cur] == menuProbeOffset)
   {
-    unit = probeOffset_unit[curUnit];
+    unit = probeOffsetStep[curUnit];
 
     z_offset = probeOffsetGetValue();                      // always load current Z offset
 
@@ -132,7 +132,7 @@ void menuProbeOffset(void)
         {
           float val = numPadFloat(labelGetAddress(&probeOffsetItems.title),z_offset,0,true);
           z_offset = probeOffsetSetValue(val);
-          menuDrawPage(&probeOffsetItems);         
+          menuDrawPage(&probeOffsetItems);
         }
         break;
       }

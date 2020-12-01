@@ -4,7 +4,16 @@
 #define EXTRUDE_DEGREE_NUM 3
 #define ITEM_TUNE_EXTRUDER_LEN_NUM 3
 
-static u8 extrude_degree_i = 1;
+const ITEM extruderDegree[EXTRUDE_DEGREE_NUM] = {
+// icon                           label
+  {ICON_1_DEGREE,                 LABEL_1_DEGREE},
+  {ICON_5_DEGREE,                 LABEL_5_DEGREE},
+  {ICON_10_DEGREE,                LABEL_10_DEGREE},
+};
+
+const u8 extruderDegreeStep[EXTRUDE_DEGREE_NUM] = {1, 5, 10};
+
+static u8 extruderDegreeStep_index = 1;
 static u8 curLen = 0;
 static uint8_t c_heater = NOZZLE0;
 
@@ -63,15 +72,6 @@ void extrudeFilament(void)
 
 void menuTuneExtruder(void)
 {
-  const ITEM extruderDegree[EXTRUDE_DEGREE_NUM] = {
-  // icon                           label
-    {ICON_1_DEGREE,                 LABEL_1_DEGREE},
-    {ICON_5_DEGREE,                 LABEL_5_DEGREE},
-    {ICON_10_DEGREE,                LABEL_10_DEGREE},
-  };
-
-  const u8 extrude_degree[EXTRUDE_DEGREE_NUM] = {1, 5, 10};
-
   MENUITEMS tuneExtruderItems = {
     // title
     LABEL_TUNE_EXT_TEMP,
@@ -111,7 +111,7 @@ void menuTuneExtruder(void)
     switch (key_num)
     {
       case KEY_ICON_0:
-          heatSetTargetTemp(c_heater, actTarget - extrude_degree[extrude_degree_i]);
+          heatSetTargetTemp(c_heater, actTarget - extruderDegreeStep[extruderDegreeStep_index]);
         break;
 
       case KEY_INFOBOX:
@@ -132,7 +132,7 @@ void menuTuneExtruder(void)
       break;
 
       case KEY_ICON_3:
-          heatSetTargetTemp(c_heater, actTarget + extrude_degree[extrude_degree_i]);
+          heatSetTargetTemp(c_heater, actTarget + extruderDegreeStep[extruderDegreeStep_index]);
         break;
 
       case KEY_ICON_4:
@@ -144,9 +144,9 @@ void menuTuneExtruder(void)
         break;
 
       case KEY_ICON_5:
-        extrude_degree_i = (extrude_degree_i + 1) % EXTRUDE_DEGREE_NUM;
+        extruderDegreeStep_index = (extruderDegreeStep_index + 1) % EXTRUDE_DEGREE_NUM;
 
-        tuneExtruderItems.items[key_num] = extruderDegree[extrude_degree_i];
+        tuneExtruderItems.items[key_num] = extruderDegree[extruderDegreeStep_index];
 
         menuDrawItem(&tuneExtruderItems.items[key_num], key_num);
         break;
@@ -197,7 +197,7 @@ void menuTuneExtruder(void)
         #if LCD_ENCODER_SUPPORT
           if (encoderPosition)
           {
-            heatSetTargetTemp(c_heater, actTarget + extrude_degree[extrude_degree_i] * encoderPosition);
+            heatSetTargetTemp(c_heater, actTarget + extruderDegreeStep[extruderDegreeStep_index] * encoderPosition);
             encoderPosition = 0;
           }
         #endif
