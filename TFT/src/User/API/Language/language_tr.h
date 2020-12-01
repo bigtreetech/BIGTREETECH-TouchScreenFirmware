@@ -145,7 +145,7 @@
     #define STRING_1_PERCENT              "%1"
     #define STRING_5_PERCENT              "%5"
     #define STRING_10_PERCENT             "%10"
-    #define STRING_PERCENT_VALUE          "%%%d"
+    #define STRING_PERCENT_VALUE          "%%d"
     #define STRING_READY                  "Hazır"
     #define STRING_BUSY                   "İşlem devam ediyor, lütfen bekleyiniz..."
     #define STRING_UNCONNECTED            "Yazıcı bağlı değil!"
