@@ -275,7 +275,7 @@ void toggleinfo(void)
     rapid_serial_loop();   //perform backend printing loop before drawing to avoid printer idling
     reDrawSpeed(SPD_ICON_POS);
     speedQuery();
-    coordinateQuery();
+    if (infoFile.source == BOARD_SD) coordinateQuery();
   }
 }
 
