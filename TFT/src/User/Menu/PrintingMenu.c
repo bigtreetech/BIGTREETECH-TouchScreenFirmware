@@ -92,7 +92,8 @@ void menuBeforePrinting(void)
       //      request_M24(infoBreakPoint.offset);
       //    }
 
-      if (infoMachineSettings.autoReportSDStatus ==1){
+      if (infoMachineSettings.autoReportSDStatus ==1)
+      {
         request_M27(infoSettings.m27_refresh_time);                //Check if there is a SD or USB print running.
       }
       else{
@@ -191,11 +192,13 @@ void reDrawSpeed(int icon_pos)
 
   sprintf(tempstr, "%d%%", speedGetPercent(c_speedID) );
 
-  if(c_speedID == 0){
-  ICON_ReadDisplay(printinfo_points[icon_pos].x,printinfo_points[icon_pos].y,ICON_PRINTING_SPEED);
+  if(c_speedID == 0)
+  {
+    ICON_ReadDisplay(printinfo_points[icon_pos].x,printinfo_points[icon_pos].y,ICON_PRINTING_SPEED);
   }
-  else{
-  ICON_ReadDisplay(printinfo_points[icon_pos].x,printinfo_points[icon_pos].y,ICON_PRINTING_FLOW);
+  else
+  {
+    ICON_ReadDisplay(printinfo_points[icon_pos].x,printinfo_points[icon_pos].y,ICON_PRINTING_FLOW);
   }
   GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (u8 *)Speed_ID[c_speedID]);
   GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (u8 *)tempstr);
@@ -236,7 +239,7 @@ void reDrawLayer(int icon_pos)
   if (OS_GetTimeMs() > nextDrawTime)
   {
     char tempstr[10];
-    sprintf(tempstr, "%.2fmm",coordinateGetAxisTarget(Z_AXIS));
+    sprintf(tempstr, "%.2fmm", (infoFile.source == BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS));
 
     GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
@@ -272,7 +275,7 @@ void toggleinfo(void)
     rapid_serial_loop();   //perform backend printing loop before drawing to avoid printer idling
     reDrawSpeed(SPD_ICON_POS);
     speedQuery();
-    coordinateQuery();
+    if (infoFile.source == BOARD_SD) coordinateQuery();
   }
 }
 
@@ -382,26 +385,30 @@ void menuPrinting(void)
     }
 
     //Z_AXIS coordinate
-    if(curLayer != coordinateGetAxisActual(Z_AXIS)){
-      curLayer = coordinateGetAxisActual(Z_AXIS);
+    if(curLayer != (infoFile.source == BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS))
+    {
+      curLayer = (infoFile.source == BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS);
       rapid_serial_loop();  //perform backend printing loop before drawing to avoid printer idling
       reDrawLayer(Z_ICON_POS);
     }
 
     //check change in speed or flow
-    if(curspeed[c_speedID] != speedGetPercent(c_speedID)){
+    if(curspeed[c_speedID] != speedGetPercent(c_speedID))
+    {
       curspeed[c_speedID] = speedGetPercent(c_speedID);
       rapid_serial_loop();  //perform backend printing loop before drawing to avoid printer idling
       reDrawSpeed(SPD_ICON_POS);
     }
 
-    if (lastPause != isPause()) {
+    if (lastPause != isPause())
+    {
       lastPause = isPause();
       printingItems.items[KEY_ICON_5] = itemIsPause[lastPause];
       menuDrawItem(&printingItems.items[KEY_ICON_5], KEY_ICON_5);
     }
 
-    if (lastPrinting != isPrinting()) {
+    if (lastPrinting != isPrinting())
+    {
       lastPrinting = isPrinting();
       printingItems.items[KEY_ICON_7] = itemIsPrinting[lastPrinting];
       menuDrawItem(&printingItems.items[KEY_ICON_7], KEY_ICON_7);
