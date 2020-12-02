@@ -85,8 +85,8 @@ void loopCheckMode(void)
     return;
 
 //  #endif
-  if(LCD_ReadPen(LCD_CHANGE_MODE_INTERVALS) 
-#if LCD_ENCODER_SUPPORT 
+  if(LCD_ReadPen(LCD_CHANGE_MODE_INTERVALS)
+#if LCD_ENCODER_SUPPORT
       || encoder_ReadBtn(LCD_CHANGE_MODE_INTERVALS)
 #endif
     )
@@ -106,7 +106,7 @@ void menuMode(void)
   }
   resetInfoFile();
 
-  #if !defined(MKS_32_V1_4) && (!defined MKS_28_V1_0)
+  #if !defined(MKS_32_V1_4) && !defined (MKS_28_V1_0)
     //causes hang if we deinit spi1
     SD_DeInit();
   #endif
