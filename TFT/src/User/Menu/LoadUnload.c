@@ -1,9 +1,15 @@
 #include "LoadUnload.h"
 #include "includes.h"
 
+#define LOAD 1
+#define UNLOAD 2
+#define NO_LOAD_UNLOAD 0
+
 static u8  ext_i = 0;
 
 const char* nozzleDisplay[] = HEAT_DISPLAY_ID;
+
+uint8_t loadUnload = NO_LOAD_UNLOAD;
 
 void extruderIdReDraw(void)
 {
@@ -46,50 +52,84 @@ void menuLoadUnload(void)
   menuDrawPage(&loadUnloadItems);
   extruderIdReDraw();
 
+  void showPopup (uint8_t unLoad)
+  {
+    switch (unLoad)
+    {
+    case LOAD:
+      popupReminder(DIALOG_TYPE_INFO, LABEL_BUSY, LABEL_LOAD_STARTED);
+      break;
+    
+    case UNLOAD:
+      popupReminder(DIALOG_TYPE_INFO, LABEL_BUSY, LABEL_UNLOAD_STARTED);
+      break;
+
+    case NO_LOAD_UNLOAD: // in case user gets to Load/Unload menu while host is busy
+      popupReminder(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, LABEL_BUSY);
+      break;
+
+    default:
+      break;
+    }
+  }
+
   while(infoMenu.menu[infoMenu.cur] == menuLoadUnload)
   {
     key_num = menuKeyGetValue();
-    switch(key_num)
+    if ((infoHost.wait == true) && (key_num != KEY_IDLE))  // if user pokes around while Load/Unload in progress
+    
     {
-      case KEY_ICON_0:
-        mustStoreCmd("M702 T%d\n",ext_i);
-		    popupReminder(DIALOG_TYPE_INFO, LABEL_BUSY, LABEL_UNLOAD_STARTED);
-        break;
+      showPopup(loadUnload);
+    }
+    else
+    {
+      switch(key_num)
+      {
+        case KEY_ICON_0:
+          mustStoreCmd("M702 T%d\n",ext_i);
+          loadUnload = UNLOAD;
+          showPopup (UNLOAD);
+          break;
 
-      case KEY_ICON_3:
-        mustStoreCmd("M701 T%d\n",ext_i);
-		    popupReminder(DIALOG_TYPE_INFO, LABEL_BUSY, LABEL_LOAD_STARTED);
-        break;
+        case KEY_ICON_3:
+          mustStoreCmd("M701 T%d\n",ext_i);
+          loadUnload = LOAD;
+          showPopup (LOAD);
+          break;
 
-      case KEY_ICON_4:
-        ext_i = (ext_i + 1) % infoSettings.hotend_count;
-        extruderIdReDraw();
-        break;
+        case KEY_ICON_4:
+          ext_i = (ext_i + 1) % infoSettings.hotend_count;
+          extruderIdReDraw();
+          break;
 
-      case KEY_ICON_5:
-        infoMenu.menu[++infoMenu.cur] = menuHeat;
-        break;
+        case KEY_ICON_5:
+          infoMenu.menu[++infoMenu.cur] = menuHeat;
+          break;
 
-      case KEY_ICON_6:
-        coolDown();
-        break;
+        case KEY_ICON_6:
+          coolDown();
+          break;
 
-      case KEY_ICON_7:
-        for (uint8_t i = 0; i < infoSettings.hotend_count; i++)
-        {
-          if (heatGetTargetTemp(i) > 0)
+        case KEY_ICON_7:
+          for (uint8_t i = 0; i < infoSettings.hotend_count; i++)
           {
-            setDialogText(LABEL_WARNING, LABEL_HEATERS_ON, LABEL_CONFIRM, LABEL_CANCEL)
-            showDialog(DIALOG_TYPE_QUESTION, coolDown, NULL, NULL );            
+            if (heatGetTargetTemp(i) > 0)
+            {
+              setDialogText(LABEL_WARNING, LABEL_HEATERS_ON, LABEL_CONFIRM, LABEL_CANCEL)
+              showDialog(DIALOG_TYPE_QUESTION, coolDown, NULL, NULL );            
+              break;
+            }
           }
-        }
-        infoMenu.cur--;
-        break;
+          infoMenu.cur--;
+          break;
 
-      default:
-        extruderIdReDraw();
-        break;
+        default:
+          extruderIdReDraw();
+          break;
+
+      }
     }
     loopProcess();
   }
+  loadUnload = NO_LOAD_UNLOAD;
 }
