@@ -386,6 +386,10 @@ void parseACK(void)
           if (ack_seen("Z:"))
           {
             coordinateSetAxisActual(Z_AXIS, ack_value());
+			if (ack_seen("E:"))
+            {
+              coordinateSetAxisActual(E_AXIS, ack_value());
+			}
           }
         }
         coordinateQuerySetWait(false);

@@ -282,6 +282,7 @@
     #define STRING_LOAD_STARTED           "Filament load in progress.\nNo further actions possible\nuntil it's done.\nPlease stand by."  // translation needed
     #define STRING_UNLOAD_STARTED         "Filament unload in progress.\nNo further actions possible\nuntil it's done.\nPlease stand by."  // translation needed
     #define STRING_HEATERS_ON             "Some heaters are still ON.\nDo you want to stop them?"  // translation needed
-    #define STRING_PRINT_END_MSG          "Baskı tamamlandı.\nBaskı Süresi: %02u:%02u:%02u \nKullanılan Filaman: %u metre"
+    #define STRING_PRINT_TOTAL_TIME       "Baskı tamamlandı.\nBaskı Süresi: %02u:%02u:%02u \n"
+    #define STRING_PRINT_FILAMENT_USED    "Kullanılan Filaman: %u metre"
 
 #endif
