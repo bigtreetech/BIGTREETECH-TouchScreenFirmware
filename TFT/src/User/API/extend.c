@@ -122,7 +122,7 @@ bool FIL_RunoutPinFilteredLevel(void)
 static uint32_t update_time = 2000;
 static uint8_t SFS_IsAlive = false;
 
-void FIL_SFS_SetAlive(bool alive)
+void FIL_SFS_SetAlive(uint8_t alive)
 {
   SFS_IsAlive = alive;
 }

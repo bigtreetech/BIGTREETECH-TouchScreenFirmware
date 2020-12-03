@@ -38,7 +38,7 @@ void  coordinateSetAxisTarget(AXIS axis, float position);
 uint32_t coordinateGetFeedRate(void);
 void  coordinateSetFeedRate(uint32_t feedrate);
 void  coordinateGetAll(COORDINATE *tmp);
-void  coordinateSetExtruderActualSteps(uint32_t steps);
+void  coordinateSetExtruderActualSteps(float steps);
 float coordinateGetExtruderActual(void);
 float coordinateGetAxisActual(AXIS axis);
 void  coordinateSetAxisActual(AXIS axis, float position);

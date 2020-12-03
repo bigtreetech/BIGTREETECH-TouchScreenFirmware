@@ -88,7 +88,7 @@ void coordinateGetAll(COORDINATE *tmp)
   memcpy(tmp, &targetPosition, sizeof(targetPosition));
 }
 
-void coordinateSetExtruderActualSteps(uint32_t steps)
+void coordinateSetExtruderActualSteps(float steps)
 {
   curPosition.axis[E_AXIS] = extruderPostion = steps / getParameter(P_STEPS_PER_MM, E_AXIS);
 }
