@@ -194,7 +194,7 @@ void hostActionCommands(void)
     strcpy(hostAction.prompt_begin, dmaL2Cache + ack_index);
     statusScreen_setMsg((u8 *)echomagic, (u8 *)dmaL2Cache + ack_index);
   }
-  
+
   if(ack_seen("prompt_begin "))
   {
     hostAction.button = 0;
@@ -251,7 +251,7 @@ void hostActionCommands(void)
         break;
     }
   }
-  
+
   if (ack_seen("paused") || ack_seen("pause"))
   {
     infoPrinting.pause = true;
@@ -297,7 +297,10 @@ void parseACK(void)
                              // Avoid can't getting this parameter due to disabled M503 in Marlin
         storeCmd("M115\n");
         storeCmd("M211\n");  // retrieve the software endstops state
-        request_M27(infoSettings.m27_refresh_time);
+        if (infoSettings.m27_active)
+        {
+          request_M27(infoSettings.m27_refresh_time);
+        }
       }
     }
 

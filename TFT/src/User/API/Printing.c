@@ -254,8 +254,8 @@ void endPrinting(void)
   sprintf(tempstr1, (char *)textSelect(LABEL_PRINT_TOTAL_TIME), hour,min,sec);
   if (meter >0 )
   {
-	sprintf(tempstr2,(char *)textSelect(LABEL_PRINT_FILAMENT_USED),meter);
-	strcat(tempstr1,tempstr2);
+    sprintf(tempstr2,(char *)textSelect(LABEL_PRINT_FILAMENT_USED),meter);
+    strcat(tempstr1,tempstr2);
   }
   popupReminder(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, (u8*)tempstr1);
 }
@@ -277,10 +277,10 @@ void abortPrinting(void)
   {
     case BOARD_SD:
       infoHost.printing = false;
-	    breakAndContinue();		//Several M108 is sent to Marlin because consecutive blocking oprations such as heat bed, heat extruder may defer processing of M524
-	    breakAndContinue();
-	    breakAndContinue();
-	    breakAndContinue();
+      breakAndContinue();		//Several M108 is sent to Marlin because consecutive blocking oprations such as heat bed, heat extruder may defer processing of M524
+      breakAndContinue();
+      breakAndContinue();
+      breakAndContinue();
       request_M524();
       break;
 
@@ -432,7 +432,7 @@ void loopCheckPrinting(void)
     if (!hasPrintingMenu())
       infoMenu.menu[++infoMenu.cur] = menuPrinting;
   }
-    
+
   if (!infoPrinting.printing && (infoMenu.menu[infoMenu.cur] == menuPrinting)) {
     infoMenu.cur = 0;
   }
