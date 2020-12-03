@@ -282,5 +282,6 @@
     #define STRING_LOAD_STARTED           "A betöltési művelet folyamatban van,\nnincs lehtőség beavakozásra,\nmíg véget nem ér.\nVárjál!"
     #define STRING_UNLOAD_STARTED         "A kiadási eljárás folyamatban van,\nnincs lehtőség beavakozásra,\nmíg véget nem ér.\nVárjál!"
     #define STRING_HEATERS_ON             "Fűtés(ek) bekapcsolva maradt(ak).\nKikapcsolod az összes fűtést?"  // translation needed
+    #define STRING_PRINT_END_MSG          "Print complete.\nPrint Time: %02u:%02u:%02u \nFilament Used: %u meters"  // translation needed
 
 #endif

@@ -126,6 +126,7 @@ void menuBeforePrinting(void)
       break;
   }
   infoPrinting.printing = true;
+  infoPrinting.time = 0;
   infoMenu.menu[infoMenu.cur] = menuPrinting;
 }
 

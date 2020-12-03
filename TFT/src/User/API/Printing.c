@@ -245,6 +245,13 @@ void endPrinting(void)
   if(infoSettings.send_end_gcode == 1){
     sendPrintCodes(1);
   }
+  char tempstr[140];
+  u8  hour = infoPrinting.time/3600,
+      min = infoPrinting.time%3600/60,
+      sec = infoPrinting.time%60;
+  u8  meter = ((infoFile.source == BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS))/1000;
+  sprintf(tempstr, (char *)textSelect(LABEL_PRINT_END_MSG), hour,min,sec,meter);
+  popupReminder(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, (u8*)tempstr);
 }
 
 

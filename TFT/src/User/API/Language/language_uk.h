@@ -282,5 +282,6 @@
     #define STRING_LOAD_STARTED          "Процедура завантаження \nфіламенту, чекаємо поки хотенд \nдосягне бажаної температури. \nбудьласка зачекайте."
     #define STRING_UNLOAD_STARTED        "Процедура вивавантаження. \nфіламенту, чекаємо поки хотенд \nдосягне бажаної температури. \nбудьласка зачекайте."
     #define STRING_HEATERS_ON            "Деякі обігрівачі\nвсе ще увімкнені. \nВи хочете їх зупинити?" 
+    #define STRING_PRINT_END_MSG          "Print complete.\nPrint Time: %02u:%02u:%02u \nFilament Used: %u meters"  // translation needed
     
 #endif

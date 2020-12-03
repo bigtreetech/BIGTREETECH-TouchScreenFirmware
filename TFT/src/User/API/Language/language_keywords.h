@@ -289,7 +289,7 @@ extern "C" {
 #define LANG_KEY_LOAD_STARTED                 "label_load_started:"
 #define LANG_KEY_UNLOAD_STARTED               "label_unload_started:"
 #define LANG_KEY_HEATERS_ON                   "label_heaters_on:"
-
+#define LANG_KEY_PRINT_END_MSG				  "print_end_msg:"
 #ifdef __cplusplus
 }
 #endif
