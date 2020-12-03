@@ -6,7 +6,7 @@
 #include "Settings.h"
 #include "HD44780.h"
 
-#if !defined(MKS_32_V1_4)
+#if !defined(MKS_32_V1_4) && (!defined MKS_28_V1_0)
 
 #if defined(ST7920_SPI)
 //TODO:
@@ -169,4 +169,4 @@ void EXTI15_10_IRQHandler(void)
 }
 #endif
 
-#endif             // endif for #if defined(MKS_32_V1_4)
+#endif             // endif for #if !defined(MKS_32_V1_4) && (!defined MKS_28_V1_0)

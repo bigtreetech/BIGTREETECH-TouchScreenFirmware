@@ -273,8 +273,8 @@ void updateFeatureSettings(uint8_t key_val)
     #endif //LCD_LED_PWM_CHANNEL
 
     case SKEY_SEQUENTIAL_MODE:
-      infoSettings.sequential_mode = (infoSettings.sequential_mode + 1) % TOGGLE_NUM;
-      settingPage[item_index].icon = toggleitem[infoSettings.sequential_mode];
+      infoSettings.event_led_mode = (infoSettings.event_led_mode + 1) % TOGGLE_NUM;
+      settingPage[item_index].icon = toggleitem[infoSettings.event_led_mode];
       break;
 
     #ifdef ST7920_SPI
@@ -400,7 +400,7 @@ void loadFeatureSettings()
       #endif //LCD_LED_PWM_CHANNEL
 
       case SKEY_SEQUENTIAL_MODE:
-        settingPage[item_index].icon = toggleitem[infoSettings.sequential_mode];
+        settingPage[item_index].icon = toggleitem[infoSettings.event_led_mode];
         break;
 
       #ifdef ST7920_SPI

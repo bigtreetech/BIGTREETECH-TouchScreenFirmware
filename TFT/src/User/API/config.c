@@ -1217,7 +1217,7 @@ void parseConfigKey(u16 index)
   case C_INDEX_SEQUENTIAL_MODE:
     if (inLimit(config_int(), 0, 1))
     {
-      infoSettings.sequential_mode = config_int();
+      infoSettings.event_led_mode = config_int();
     }
     break;
 

@@ -104,7 +104,7 @@ void readStoredPara(void)
   infoSettings.lcd_idle_brightness  = byteToWord(data + (index += 4), 4);
   infoSettings.lcd_idle_timer       = byteToWord(data + (index += 4), 4);
 
-  infoSettings.sequential_mode      = byteToWord(data + (index += 4), 4);
+  infoSettings.event_led_mode      = byteToWord(data + (index += 4), 4);
 
   infoSettings.serial_alwaysOn            = byteToWord(data + (index += 4), 4);
   infoSettings.marlin_mode_bg_color       = byteToWord(data + (index += 4), 4);
@@ -245,7 +245,7 @@ void storePara(void)
   wordToByte(infoSettings.lcd_idle_brightness,        data + (index += 4));
   wordToByte(infoSettings.lcd_idle_timer,             data + (index += 4));
 
-  wordToByte(infoSettings.sequential_mode,            data + (index += 4));
+  wordToByte(infoSettings.event_led_mode,            data + (index += 4));
 
   wordToByte(infoSettings.serial_alwaysOn,            data + (index += 4));
   wordToByte(infoSettings.marlin_mode_bg_color,       data + (index += 4));

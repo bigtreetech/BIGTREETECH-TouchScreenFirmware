@@ -91,7 +91,18 @@ void menuExtrude(void)
       case KEY_ICON_0:
         eTemp -= item_len[item_len_i];
         break;
-
+      case KEY_INFOBOX:
+      {
+        float val = 0;
+        char titlestr[30];
+        sprintf(titlestr, "Min:%i | Max:%i",(item_len[COUNT(item_len)-1]) * -1, item_len[COUNT(item_len)-1]);
+        val = numPadFloat((u8 *)titlestr,0,0,true);
+        eTemp += val;
+        
+        menuDrawPage(&extrudeItems);
+        extrudeCoordinateReDraw(false);
+        break;
+      }
       case KEY_ICON_3:
         eTemp += item_len[item_len_i];
         break;

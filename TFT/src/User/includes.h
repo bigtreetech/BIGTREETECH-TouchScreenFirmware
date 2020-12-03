@@ -93,6 +93,7 @@
 
 #include "Babystep.h"
 #include "Extrude.h"
+#include "LoadUnload.h"
 #include "Fan.h"
 #include "SettingsMenu.h"
 #include "PrintingMenu.h"
@@ -119,7 +120,7 @@
 #include "TuneExtruder.h"
 #include "ConnectionSettings.h"
 
-#include "sequential_mode.h"
+#include "event_led_mode.h"
 
 #include "CaseLight.h"
 

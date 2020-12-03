@@ -93,6 +93,8 @@ extern "C" {
 #define LANG_KEY_RESUME                       "label_resume:"
 #define LANG_KEY_LOAD                         "label_load:"
 #define LANG_KEY_UNLOAD                       "label_unload:"
+#define LANG_KEY_LOAD_UNLOAD                  "label_load_unload:"
+#define LANG_KEY_LOAD_UNLOAD_SHORT            "label_load_unload_short:"
 #define LANG_KEY_SLOW_SPEED                   "label_slow_speed:"
 #define LANG_KEY_NORMAL_SPEED                 "label_normal_speed:"
 #define LANG_KEY_FAST_SPEED                   "label_fast_speed:"
@@ -237,7 +239,7 @@ extern "C" {
 #define LANG_KEY_120_SECONDS                  "label_120_seconds:"
 #define LANG_KEY_300_SECONDS                  "label_300_seconds:"
 #define LANG_KEY_CUSTOM_SECONDS               "label_custom_seconds:"
-#define LANG_KEY_SEQUENTIAL_MODE              "label_sequential_mode:"
+#define LANG_KEY_SEQUENTIAL_MODE              "label_event_led_mode:"
 #define LANG_KEY_ST7920_FULLSCREEN            "label_st7920_fullscreen:"
 #define LANG_KEY_PLR_EN                       "label_plr_en:"
 #define LANG_KEY_SETTING_SAVE                 "label_setting_save:"
@@ -285,6 +287,9 @@ extern "C" {
 #define LANG_KEY_MESH_EDITOR                  "label_mesh_editor:"
 #define LANG_KEY_MESH_TUNER                   "label_mesh_tuner:"
 #define LANG_KEY_CASE_LIGHT                   "label_case_light:"
+#define LANG_KEY_LOAD_STARTED                 "label_load_started:"
+#define LANG_KEY_UNLOAD_STARTED               "label_unload_started:"
+#define LANG_KEY_HEATERS_ON                   "label_heaters_on:"
 
 #ifdef __cplusplus
 }

@@ -272,6 +272,10 @@ void abortPrinting(void)
   {
     case BOARD_SD:
       infoHost.printing = false;
+	    breakAndContinue();		//Several M108 is sent to Marlin because consecutive blocking oprations such as heat bed, heat extruder may defer processing of M524
+	    breakAndContinue();
+	    breakAndContinue();
+	    breakAndContinue();
       request_M524();
       break;
 
@@ -422,6 +426,10 @@ void loopCheckPrinting(void)
     infoPrinting.printing = true;
     if (!hasPrintingMenu())
       infoMenu.menu[++infoMenu.cur] = menuPrinting;
+  }
+    
+  if (!infoPrinting.printing && (infoMenu.menu[infoMenu.cur] == menuPrinting)) {
+    infoMenu.cur = 0;
   }
 
   if (infoFile.source != BOARD_SD) return;

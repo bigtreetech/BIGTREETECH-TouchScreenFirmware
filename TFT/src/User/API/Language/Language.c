@@ -42,6 +42,8 @@
 #include "language_ca.h"
 #elif DEFAULT_LANGUAGE == TRAD_CHINESE
 #include "language_tc.h"
+#elif DEFAULT_LANGUAGE == UKRAINIAN
+#include "language_uk.h"
 #else
   #error "Error: invalid language defined"
 #endif
