@@ -428,7 +428,7 @@ void parseACK(void)
       }
       else if(infoMachineSettings.onboard_sd_support == ENABLED && infoFile.source == BOARD_SD && ack_seen("Done printing file"))
       {
-        printingFinished;
+        printingFinished();
         infoPrinting.cur = infoPrinting.size;
       }
 
