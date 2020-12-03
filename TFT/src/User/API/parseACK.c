@@ -260,6 +260,7 @@ void hostActionCommands(void)
 		infoHost.printing = false;
 		infoPrinting.printing = false;
     infoPrinting.cur = infoPrinting.size;
+    request_M27(0);
 	}
 }
 
@@ -297,10 +298,6 @@ void parseACK(void)
                              // Avoid can't getting this parameter due to disabled M503 in Marlin
         storeCmd("M115\n");
         storeCmd("M211\n");  // retrieve the software endstops state
-        if (infoSettings.m27_active)
-        {
-          request_M27(infoSettings.m27_refresh_time);
-        }
       }
     }
 
@@ -418,6 +415,10 @@ void parseACK(void)
         infoPrinting.time = 0;
         infoPrinting.cur = 0;
         infoPrinting.size = ack_value();
+        if (infoMachineSettings.autoReportSDStatus ==1)
+        {
+          request_M27(infoSettings.m27_refresh_time);                //Check if there is a SD or USB print running.
+        }
       }
       else if(infoMachineSettings.onboard_sd_support == ENABLED && infoFile.source == BOARD_SD && ack_seen("Not SD printing"))
       {

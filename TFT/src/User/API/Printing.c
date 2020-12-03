@@ -240,6 +240,7 @@ void endPrinting(void)
       break;
   }
   infoPrinting.printing = infoPrinting.pause = false;
+  request_M27(0);
   powerFailedClose();
   powerFailedDelete();
   if(infoSettings.send_end_gcode == 1){
@@ -430,10 +431,13 @@ void loopCheckPrinting(void)
   if (infoHost.printing && !infoPrinting.printing) {
     infoPrinting.printing = true;
     if (!hasPrintingMenu())
+    {
       infoMenu.menu[++infoMenu.cur] = menuPrinting;
+    }
   }
 
-  if (!infoPrinting.printing && (infoMenu.menu[infoMenu.cur] == menuPrinting)) {
+  if (!infoPrinting.printing && (infoMenu.menu[infoMenu.cur] == menuPrinting))
+  {
     infoMenu.cur = 0;
   }
 
