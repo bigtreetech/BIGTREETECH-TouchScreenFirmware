@@ -27,11 +27,11 @@ void setSequentialModeColor(void)
   // This means that after 'X' cycles it will be back in this function
   waitForNext = 200;
 
-  //Let's estimate the room temperature
+  // Let's estimate the room temperature
   if (coldTemperature == 0)
   {
     uint16_t hotendCurrentTemp = heatGetCurrentTemp(0);
-    uint16_t bedCurrentTemp = heatGetCurrentTemp(BED);
+    uint16_t bedCurrentTemp    = heatGetCurrentTemp(BED);
     uint8_t divider = 0;
     if (hotendCurrentTemp < MAXCOLD_TEMP)
     {
@@ -58,22 +58,19 @@ void setSequentialModeColor(void)
     // Not printing/
     // Check if the previous color has been set.
     // If not, return to reduce cycletime
-    if (prevPixelColor == 0)
-    {
-      return;
-    }
+    if (prevPixelColor == 0) return;
 
     // There was a previous color.
     // Set every led to the correct color.
 
-    //Reset flag heating done
+    // Reset flag heating done
     heatingDone = false;
 
     if (infoMenu.menu[infoMenu.cur] != menuPrinting)
     {
       #ifdef LED_COLOR_PIN
         #ifdef LCD_LED_PWM_CHANNEL
-          //Make sure that the knob_led_idle is back in business
+          // Make sure that the knob_led_idle is back in business
           if (idle_ledmode_previous)
           {
             idle_ledmode_previous = false;
@@ -82,29 +79,30 @@ void setSequentialModeColor(void)
         #endif
       #endif
 
-      //Restore colors to default value
+      // Restore colors to default value
       prevPixelColor = 0;
 
-      //Reset print fineshed bool
+      // Reset print fineshed bool
       finishedPrint = false;
 
-      //Turn off neopixels and set knob led back to default
+      // Turn off neopixels and set knob led back to default
       storeCmd("M150 R0 U0 B0 P0\n");
 
       #ifdef LED_COLOR_PIN
         #ifdef LCD_LED_PWM_CHANNEL
-          //set the screen to the max brightness
-          //The encoder knob will get it's default color.
-          lcd_dim.dimmed = true; //Force dimmed mode
+          // set the screen to the max brightness
+          // The encoder knob will get it's default color.
+          lcd_dim.dimmed = true; // Force dimmed mode
           wakeLCD();
         #endif
       #endif
       return;
     }
 
+  
     if (finishedPrint)
     {
-      // Print is already marked as ready.
+      // Check if print is already marked as ready.
       // No need to change the LED's  again
       return;
     }
@@ -120,7 +118,7 @@ void setSequentialModeColor(void)
       #endif
     #endif
 
-    //Set neopixel and ledknob to green
+    // Set neopixel and ledknob to green
     storeCmd("M150 R0 U255 B0 P255\n");
 
     #ifdef LED_COLOR_PIN
@@ -135,10 +133,10 @@ void setSequentialModeColor(void)
 
     if (heatingDone)
     {
-      return; //Go back when preheating is finished
+      return; // Go back when preheating is finished
     }
 
-    //Store current target temperature values to reduce cycle time
+    // Store current target temperature values to reduce cycle time
     uint16_t hotendTargetTemp = heatGetTargetTemp(0);
     uint16_t bedTargetTemp = heatGetTargetTemp(BED);
 
@@ -158,22 +156,22 @@ void setSequentialModeColor(void)
       #endif
     #endif
 
-    //Store current temperature values to reduce cycle time
+    // Store current temperature values to reduce cycle time
     uint16_t hotendCurrentTemp = heatGetCurrentTemp(0);
     uint16_t bedCurrentTemp = heatGetCurrentTemp(BED);
 
-    //Check if the temperature already reached it's target temperature
+    // Check if the temperature already reached it's target temperature
     if (hotendTargetTemp > 0 && bedTargetTemp > 0 &&
         hotendCurrentTemp >= hotendTargetTemp - 5 &&
         bedCurrentTemp >= bedTargetTemp - 5)
     {
-      //Bed and hotend are on temperature. Set neopixel to white
+      // Bed and hotend are on temperature. Set neopixel to white
       storeCmd("M150 R255 U255 B255 P255\n");
 
-      //Restore the encoder to the previous state
+      // Restore the encoder to the previous state
       #ifdef LED_COLOR_PIN
         #ifdef LCD_LED_PWM_CHANNEL
-          //Set the knob_led_idle on again
+          // Set the knob_led_idle on again
           if (idle_ledmode_previous)
           {
             idle_ledmode_previous = false;
@@ -182,11 +180,11 @@ void setSequentialModeColor(void)
         #endif
       #endif
 
-      //set the screen to the max brightness
-      //The encoder knob will get it's default color.
+      // set the screen to the max brightness
+      // The encoder knob will get it's default color.
       wakeLCD();
 
-      //Set the flag heating done to true
+      // Set the flag heating done to true
       heatingDone = true;
       return;
     }
@@ -195,7 +193,7 @@ void setSequentialModeColor(void)
     if (hotendTargetTemp > 0 && bedTargetTemp > 0 &&
         bedCurrentTemp >= bedTargetTemp - 5)
     {
-      //Only use total temperature when hotend and bed heat up at the same time
+      // Only use total temperature when hotend and bed heat up at the same time
       uint16_t totalTemperature = hotendTargetTemp + bedTargetTemp;
       newLedValue = map(hotendCurrentTemp + bedCurrentTemp, coldTemperature, totalTemperature, 0, 255);
     }
@@ -232,7 +230,7 @@ void setSequentialModeColor(void)
       //GUI_DispString(100, 0, (u8 *)tempstr);
       //END WEG
 
-      //Color the Knob led when available
+      // Color the Knob led when available
       WS2812_Send_DAT(newPixelColor);
     #endif
 

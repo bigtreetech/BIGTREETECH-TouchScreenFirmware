@@ -590,10 +590,15 @@ void showLiveInfo(uint8_t index, const LIVE_INFO *liveicon, const ITEM *item)
     if (liveicon->enabled[i] == true)
     {
       if (sizeof(lcd_colors) > liveicon->lines[i].fn_color)
+      {
         GUI_SetColor(lcd_colors[liveicon->lines[i].fn_color]);
+      }
 
-      if (liveicon->lines[i].text_mode != GUI_TEXTMODE_TRANS && sizeof(lcd_colors) > liveicon->lines[i].bk_color)
+      if (liveicon->lines[i].text_mode != GUI_TEXTMODE_TRANS &&
+          sizeof(lcd_colors) > liveicon->lines[i].bk_color)
+      {
         GUI_SetBkColor(lcd_colors[liveicon->lines[i].bk_color]);
+      }
 
       GUI_SetTextMode(liveicon->lines[i].text_mode);
 
@@ -698,9 +703,13 @@ KEY_VALUES menuKeyGetValue(void)
   else if (menuType == MENU_TYPE_OTHER)
   {
     if ((KEY_VALUES)KEY_GetValue(1, rect_of_titleBar) == 0)
+    {
       tempkey = KEY_TITLEBAR;
+    }
     else
+    {
       return (KEY_VALUES)KEY_GetValue(curRectCount, curRect);
+    }
   }
   else if (menuType == MENU_TYPE_FULLSCREEN)
   {
@@ -758,9 +767,9 @@ void loopBackEnd(void)
     #if defined(ST7920_SPI) || defined(LCD2004_simulator)
       if (infoMenu.menu[infoMenu.cur] != menuMarlinMode)
     #endif
-      {
-        loopCheckEncoderSteps(); //check change in encoder steps
-      }
+    {
+      loopCheckEncoderSteps(); //check change in encoder steps
+    }
   #endif
 
   #if defined(ST7920_SPI) || defined(LCD2004_simulator)
