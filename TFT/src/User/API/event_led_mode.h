@@ -4,7 +4,7 @@
 extern "C" {
 #endif
 
-void setEventLedModeColor(void);
+void setEventLedModeColor (void);
 
 #ifdef __cplusplus
 }

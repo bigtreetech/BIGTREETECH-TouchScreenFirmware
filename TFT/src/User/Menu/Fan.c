@@ -19,15 +19,14 @@ void fanSpeedReDraw(bool skip_header)
     GUI_DispString(exhibitRect.x0, exhibitRect.y0, (u8 *)tempstr);
   }
 
-<<<<<<< HEAD
-  if (infoSettings.fan_percentage == 1)
-    sprintf(tempstr, "  %d%%  ", fanGetSpeedPercent(curIndex));
-=======
   if(infoSettings.fan_percentage == 1)
+  {
     sprintf(tempstr, "  %d%%  ", fanGetDesiredPercent(curIndex));
->>>>>>> upstream/master
+  }
   else
+  {
     sprintf(tempstr, "  %d  ", (int)fanGetDesiredSpeed(curIndex));
+  }
 
   setLargeFont(true);
   GUI_DispStringInPrect(&exhibitRect, (u8 *)tempstr);

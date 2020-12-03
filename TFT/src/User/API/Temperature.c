@@ -65,12 +65,8 @@ bool heatHasWaiting(void)
 void heatSetIsWaiting(uint8_t tool, HEATER_WAIT isWaiting)
 {
   heater.T[tool].waiting = isWaiting;
-<<<<<<< HEAD
-  if (isWaiting != WAIT_NONE) // wait heating now, query more frequently
-=======
 
-  if(isWaiting != WAIT_NONE) // wait heating now, query more frequently
->>>>>>> upstream/master
+  if (isWaiting != WAIT_NONE) // wait heating now, query more frequently
   {
     heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
   }
@@ -167,26 +163,15 @@ void updateNextHeatCheckTime(void)
 
 void loopCheckHeater(void)
 {
-<<<<<<< HEAD
-  do
-  {  // Send M105 query temperature continuously
-    if (heat_update_waiting == true)
-    {
-      updateNextHeatCheckTime();
-      break;
-    }
-    if (OS_GetTimeMs() < nextHeatCheckTime)     break;
-    if (requestCommandInfoIsRunning())          break; //to avoid colision in Gcode response processing
-    if (storeCmd("M105\n") == false)            break;
-    updateNextHeatCheckTime();
-    heat_update_waiting = true;
-  }while(0);
-=======
   if (!infoMachineSettings.autoReportTemp) // TFT need not M105 to query the temperature, but uses M155 to automatically report if motherboard supports AUTO_REPORT_TEMPERATURESS feature
   {
     do
     {  // Send M105 query temperature continuously
-      if (heat_update_waiting == true) {updateNextHeatCheckTime();break;}
+      if (heat_update_waiting == true)
+      {
+        updateNextHeatCheckTime();
+        break;
+      }
       if (OS_GetTimeMs() < nextHeatCheckTime)     break;
       if (requestCommandInfoIsRunning())          break; // To avoid colision in Gcode response processing
       if (storeCmd("M105\n") == false)            break;
@@ -194,7 +179,6 @@ void loopCheckHeater(void)
       heat_update_waiting = true;
     }while(0);
   }
->>>>>>> upstream/master
 
   // Query the heater that needs to wait for the temperature to rise, whether it reaches the set temperature
   for (uint8_t i=0; i< MAX_HEATER_COUNT; i++)
@@ -211,11 +195,7 @@ void loopCheckHeater(void)
     if (heatHasWaiting())                                              continue;
 
     if (infoMenu.menu[infoMenu.cur] == menuHeat)                        break;
-<<<<<<< HEAD
-    heat_update_time = TEMPERATURE_QUERY_SLOW_DURATION;
-=======
     heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
->>>>>>> upstream/master
   }
 
   for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++) // If the target temperature changes, send a Gcode to set the motherboard

@@ -231,7 +231,7 @@
 #define STRING_120_SECONDS            "2分钟"
 #define STRING_300_SECONDS            "5分钟"
 #define STRING_CUSTOM_SECONDS         "自定义"
-#define STRING_SEQUENTIAL_MODE        "Event led mode"
+#define STRING_EVENT_LED_MODE        "Event led mode"
 #define STRING_ST7920_FULLSCREEN      "全屏显示Marlin模式"
 #define STRING_PLR_EN                 "断电续打"
 #define STRING_SETTING_SAVE           "保存设置"

@@ -163,13 +163,8 @@ void menuHeat(void)
   }
 
   // Set slow update time if not waiting for target temperature
-<<<<<<< HEAD
-  if (heatHasWaiting() == false)
-  {
-    heatSetUpdateTime(TEMPERATURE_QUERY_SLOW_DURATION);
-  }
-=======
   if(heatHasWaiting() == false)
+  {
     heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
->>>>>>> upstream/master
+  }
 }

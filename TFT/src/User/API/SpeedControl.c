@@ -53,24 +53,17 @@ bool SpeedChanged(u8 i)
 
 void loopSpeed(void)
 {
-  for(u8 i = 0; i < SPEED_NUM;i++)
-<<<<<<< HEAD
-    if (curPercent[i] != percent[i])
+  for (u8 i = 0; i < SPEED_NUM;i++)
+    if ((curPercent[i] != percent[i]) && (OS_GetTimeMs() > nextSpeedTime))
     {
-      curPercent[i] = percent[i];
-      if (send_waiting[i] != true)
-=======
-    if((curPercent[i] != percent[i]) && (OS_GetTimeMs() > nextSpeedTime))
-    {
-      if(send_waiting[i] == false)
->>>>>>> upstream/master
+      if (send_waiting[i] == false)
       {
         send_waiting[i] = true;
         const char *speedCmd[SPEED_NUM] = {"M220","M221"};
         send_waiting[i] = storeCmd("%s S%d\n",speedCmd[i], percent[i]);
       }
-    if (send_waiting[i] == true) curPercent[i] = percent[i];
-    nextSpeedTime = OS_GetTimeMs() + nextSpeedWait; // avoid rapid fire, clogging the queue
+      if (send_waiting[i] == true) curPercent[i] = percent[i];
+      nextSpeedTime = OS_GetTimeMs() + nextSpeedWait; // avoid rapid fire, clogging the queue
     }
 }
 

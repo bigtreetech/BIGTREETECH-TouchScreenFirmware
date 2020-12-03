@@ -231,7 +231,7 @@
 #define STRING_120_SECONDS            "2 Min."
 #define STRING_300_SECONDS            "5 Min."
 #define STRING_CUSTOM_SECONDS         "カスタム"
-#define STRING_SEQUENTIAL_MODE        "Event led mode"
+#define STRING_EVENT_LED_MODE        "Event led mode"
 #define STRING_ST7920_FULLSCREEN      "フルスクリーンでマーリンモード"
 #define STRING_PLR_EN                 "Power loss recovery"
 #define STRING_SETTING_SAVE           "Save settings"

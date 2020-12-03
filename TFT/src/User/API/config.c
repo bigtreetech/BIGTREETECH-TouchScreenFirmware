@@ -1214,7 +1214,7 @@ void parseConfigKey(u16 index)
       break;
   #endif
 
-  case C_INDEX_SEQUENTIAL_MODE:
+  case C_INDEX_EVENT_LED_MODE:
     if (inLimit(config_int(), 0, 1))
     {
       infoSettings.event_led_mode = config_int();

@@ -231,7 +231,7 @@
 #define STRING_120_SECONDS            "2 Min."
 #define STRING_300_SECONDS            "5 Min."
 #define STRING_CUSTOM_SECONDS         "Personalitzat"
-#define STRING_SEQUENTIAL_MODE        "Event led mode"
+#define STRING_EVENT_LED_MODE        "Event led mode"
 #define STRING_ST7920_FULLSCREEN      "Mode Marlin a pantalla completa"
 #define STRING_PLR_EN                 "Recuperació de pèrdua d’energia"
 #define STRING_SETTING_SAVE           "Save settings"

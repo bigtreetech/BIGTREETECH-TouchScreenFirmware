@@ -231,7 +231,7 @@
 #define STRING_120_SECONDS            "2 Min."
 #define STRING_300_SECONDS            "5 Min."
 #define STRING_CUSTOM_SECONDS         "Custom"
-#define STRING_SEQUENTIAL_MODE        "Event led mode"
+#define STRING_EVENT_LED_MODE        "Event led mode"
 #define STRING_ST7920_FULLSCREEN      "Marlin mode schermo pieno"
 #define STRING_PLR_EN                 "Recupero mancanza corrente"
 #define STRING_SETTING_SAVE           "Salva le impostazioni"

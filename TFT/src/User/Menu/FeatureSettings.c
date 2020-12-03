@@ -83,7 +83,7 @@ typedef enum
     SKEY_LCD_BRIGTHNESS_DIM,
     SKEY_LCD_DIM_IDLE_TIMER,
   #endif
-  SKEY_SEQUENTIAL_MODE,
+  SKEY_EVENT_LED_MODE,
   #ifdef ST7920_SPI
     SKEY_ST7920_FULLSCREEN,
   #endif
@@ -127,7 +127,7 @@ LISTITEM settingPage[SKEY_COUNT] = {
     {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_LCD_BRIGHTNESS_DIM,       LABEL_DYNAMIC},
     {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_LCD_DIM_IDLE_TIMER,       LABEL_DYNAMIC},
   #endif
-  {ICONCHAR_BLANK,      LIST_TOGGLE,        LABEL_SEQUENTIAL_MODE,          LABEL_BACKGROUND},
+  {ICONCHAR_BLANK,      LIST_TOGGLE,        LABEL_EVENT_LED_MODE,          LABEL_BACKGROUND},
   #ifdef ST7920_SPI
     {ICONCHAR_BLANK,      LIST_TOGGLE,        LABEL_ST7920_FULLSCREEN,        LABEL_OFF},
   #endif
@@ -272,7 +272,7 @@ void updateFeatureSettings(uint8_t key_val)
 
     #endif //LCD_LED_PWM_CHANNEL
 
-    case SKEY_SEQUENTIAL_MODE:
+    case SKEY_EVENT_LED_MODE:
       infoSettings.event_led_mode = (infoSettings.event_led_mode + 1) % TOGGLE_NUM;
       settingPage[item_index].icon = toggleitem[infoSettings.event_led_mode];
       break;
@@ -399,7 +399,7 @@ void loadFeatureSettings()
           break;
       #endif //LCD_LED_PWM_CHANNEL
 
-      case SKEY_SEQUENTIAL_MODE:
+      case SKEY_EVENT_LED_MODE:
         settingPage[item_index].icon = toggleitem[infoSettings.event_led_mode];
         break;
 

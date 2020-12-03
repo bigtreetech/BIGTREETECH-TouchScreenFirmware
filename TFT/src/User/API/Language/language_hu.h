@@ -231,7 +231,7 @@
 #define STRING_120_SECONDS            "2 Perc."
 #define STRING_300_SECONDS            "5 Perc."
 #define STRING_CUSTOM_SECONDS         "Egyedi"
-#define STRING_SEQUENTIAL_MODE        "Event led mode"
+#define STRING_EVENT_LED_MODE        "Event led mode"
 #define STRING_ST7920_FULLSCREEN      "Nagyképernyős Marlin mód"
 #define STRING_PLR_EN                 "Áramkiesés helyreálítása"
 #define STRING_SETTING_SAVE           "Beállítások mentése"

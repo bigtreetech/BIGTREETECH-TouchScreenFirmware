@@ -94,11 +94,7 @@ void menuBeforePrinting(void)
 
       if (infoMachineSettings.autoReportSDStatus ==1)
       {
-<<<<<<< HEAD
-        request_M27(infoSettings.m27_refresh_time*1000);                //Check if there is a SD or USB print running.
-=======
         request_M27(infoSettings.m27_refresh_time);                //Check if there is a SD or USB print running.
->>>>>>> upstream/master
       }
       else
       {
@@ -198,11 +194,7 @@ void reDrawSpeed(int icon_pos)
 
   sprintf(tempstr, "%d%%", speedGetPercent(c_speedID) );
 
-<<<<<<< HEAD
   if (c_speedID == 0)
-=======
-  if(c_speedID == 0)
->>>>>>> upstream/master
   {
     ICON_ReadDisplay(printinfo_points[icon_pos].x,printinfo_points[icon_pos].y,ICON_PRINTING_SPEED);
   }
@@ -395,25 +387,15 @@ void menuPrinting(void)
     }
 
     //Z_AXIS coordinate
-<<<<<<< HEAD
-    if (curLayer != coordinateGetAxisTarget(Z_AXIS))
-    {
-      curLayer = coordinateGetAxisTarget(Z_AXIS);
-=======
-    if(curLayer != (infoFile.source == BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS))
+    if (curLayer != (infoFile.source == BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS))
     {
       curLayer = (infoFile.source == BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS);
->>>>>>> upstream/master
       rapid_serial_loop();  //perform backend printing loop before drawing to avoid printer idling
       reDrawLayer(Z_ICON_POS);
     }
 
     //check change in speed or flow
-<<<<<<< HEAD
     if (curspeed[c_speedID] != speedGetPercent(c_speedID))
-=======
-    if(curspeed[c_speedID] != speedGetPercent(c_speedID))
->>>>>>> upstream/master
     {
       curspeed[c_speedID] = speedGetPercent(c_speedID);
       rapid_serial_loop();  //perform backend printing loop before drawing to avoid printer idling
@@ -464,7 +446,8 @@ void menuPrinting(void)
       }
       break;
 
-    default :break;
+    default :
+      break;
     }
     loopProcess();
   }
