@@ -15,7 +15,8 @@
         ]
       ],
       "mcu": "stm32f107vct6",
-      "variant": "stm32f1"
+      "variant": "stm32f1",
+      "product_line": "STM32F107xC"
     },
     "debug": {
       "jlink_device": "STM32F107VC",

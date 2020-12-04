@@ -1,6 +1,17 @@
 #include "ConnectionSettings.h"
 #include "includes.h"
 
+void MB_Reset() // by Lori
+{
+  #ifdef PS_ON_PIN
+    PS_ON_Off();
+    Delay_ms(100);
+    PS_ON_On();
+    Serial_ReSourceDeInit();
+    Serial_ReSourceInit();
+  #endif
+}
+
 // Set uart pins to input, free uart
 void menuDisconnect(void)
 {

@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 void menuConnectionSettings(void);
+void MB_Reset(); // by Lori
 
 #ifdef __cplusplus
 }
