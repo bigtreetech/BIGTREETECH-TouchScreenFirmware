@@ -20,6 +20,13 @@ static const SERIAL_CFG Serial[_UART_CNT] = {
   //{UART5,  -1, -1}, // UART5 don't support DMA
 };
 
+uint16_t bufferDMA[_UART_CNT];
+
+for(uint8_t i=0; i < _UART_CNT; i++)
+{
+  (i == SERIAL_PORT) ? bufferDMA[i] = RAM_SIZE * 64 : bufferDMA[i] = 512;
+}
+
 void Serial_DMA_Config(uint8_t port)
 {
   const SERIAL_CFG * cfg = &Serial[port];
@@ -31,7 +38,7 @@ void Serial_DMA_Config(uint8_t port)
 
   cfg->dma_chanel->CPAR = (u32)(&cfg->uart->DR);
   cfg->dma_chanel->CMAR = (u32)(dmaL1Data[port].cache);
-  cfg->dma_chanel->CNDTR = DMA_TRANS_LEN;
+  cfg->dma_chanel->CNDTR = bufferDMA[port];
   cfg->dma_chanel->CCR = 0X00000000;
   cfg->dma_chanel->CCR |= 3<<12;   // Channel priority level
   cfg->dma_chanel->CCR |= 1<<7;    // Memory increment mode
@@ -42,7 +49,7 @@ void Serial_DMA_Config(uint8_t port)
 void Serial_Config(uint8_t port, u32 baud)
 {
   dmaL1Data[port].rIndex = dmaL1Data[port].wIndex = 0;
-  dmaL1Data[port].cache = malloc(DMA_TRANS_LEN);
+  dmaL1Data[port].cache = malloc(bufferDMA[port]);
   while(!dmaL1Data[port].cache); // malloc failed
   UART_Config(port, baud, USART_IT_IDLE);  //IDLE interrupt
   Serial_DMA_Config(port);
@@ -97,8 +104,8 @@ void USART_IRQHandler(uint8_t port)
     Serial[port].uart->SR;
     Serial[port].uart->DR;
 
-    dmaL1Data[port].wIndex = DMA_TRANS_LEN - Serial[port].dma_chanel->CNDTR;
-    uint16_t wIndex = (dmaL1Data[port].wIndex == 0) ? DMA_TRANS_LEN : dmaL1Data[port].wIndex;
+    dmaL1Data[port].wIndex = bufferDMA[port] - Serial[port].dma_chanel->CNDTR;
+    uint16_t wIndex = (dmaL1Data[port].wIndex == 0) ? bufferDMA[port] : dmaL1Data[port].wIndex;
     if(dmaL1Data[port].cache[wIndex-1] == '\n')  // Receive completed
     {
       infoHost.rx_ok[port] = true;
