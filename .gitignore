@@ -91,6 +91,9 @@ tags
 *.dSYM/
 *.su
 
+#Binaries
+*.bin
+
 # PlatformIO files/dirs
 .pio*
 .pioenvs
@@ -120,3 +123,4 @@ cmake-build-*
 .pydevproject
 .settings
 .classpath
+.gitignore
