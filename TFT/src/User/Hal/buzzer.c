@@ -42,8 +42,8 @@ void loopBuzzer(void)
 {
   if (!buzzerEndTime)
   {
-    buzzerEndTime = OS_GetTimeMs() + buzzer.duration[buzzer.rIndex];
     if (buzzer.count == 0) return;
+    buzzerEndTime = OS_GetTimeMs() + buzzer.duration[buzzer.rIndex];
     if (buzzer.frequency[buzzer.rIndex] > 0)
     {
       tone(buzzer.frequency[buzzer.rIndex], buzzer.duration[buzzer.rIndex]);
