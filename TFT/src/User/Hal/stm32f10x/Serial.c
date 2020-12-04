@@ -4,6 +4,9 @@
 // dma rx buffer
 DMA_CIRCULAR_BUFFER dmaL1Data[_UART_CNT];
 
+// dma rx buffer size
+uint16_t bufferDMA[_UART_CNT];
+
 // Config for USART Channel
 typedef struct
 {
@@ -19,13 +22,6 @@ static const SERIAL_CFG Serial[_UART_CNT] = {
   {UART4,  RCC_AHBPeriph_DMA2, DMA2_Channel3},
   //{UART5,  -1, -1}, // UART5 don't support DMA
 };
-
-uint16_t bufferDMA[_UART_CNT];
-
-for(uint8_t i=0; i < _UART_CNT; i++)
-{
-  (i == SERIAL_PORT) ? bufferDMA[i] = RAM_SIZE * 64 : bufferDMA[i] = 512;
-}
 
 void Serial_DMA_Config(uint8_t port)
 {
@@ -65,6 +61,11 @@ void Serial_DeConfig(uint8_t port)
 
 void Serial_Init(u32 baud)
 {
+  for(uint8_t i=0; i < _UART_CNT; i++)
+  {
+    if(i == SERIAL_PORT) bufferDMA[i] = RAM_SIZE * 64; else bufferDMA[i] = 512;
+  }
+
   Serial_Config(SERIAL_PORT, baud);
 
   #ifdef SERIAL_PORT_2
