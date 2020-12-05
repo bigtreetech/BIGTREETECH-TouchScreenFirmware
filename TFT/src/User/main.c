@@ -49,6 +49,7 @@ void Hardware_GenericInit(void)
   LCD_RefreshDirection();   // refresh display direction after reading settings
   scanUpdates();            // scan icon, fonts and config files
   checkflashSign();         // check font/icon/config signature in SPI flash for update
+  initMachineSetting();     // load default machine settings
 
   #ifdef LED_COLOR_PIN
     knob_LED_Init();
