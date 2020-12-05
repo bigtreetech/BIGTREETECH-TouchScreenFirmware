@@ -63,7 +63,7 @@ void Serial_Init(u32 baud)
 {
   for(uint8_t i=0; i < _UART_CNT; i++)
   {
-    if(i == SERIAL_PORT) bufferDMA[i] = RAM_SIZE * 64; else bufferDMA[i] = 512;
+    bufferDMA[i] = (i == SERIAL_PORT) ? RAM_SIZE * 64 : 512;
   }
 
   Serial_Config(SERIAL_PORT, baud);
