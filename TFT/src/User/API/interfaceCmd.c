@@ -900,11 +900,13 @@ void sendQueueCmd(void)
             if(cmd_seen(axis_id[i]))
             {
               coordinateSetAxisTarget(i, cmd_float());
-              if (i == E_AXIS)
-              {
-                // Reset SFS status, Avoid false Filament runout caused by G92 resetting E-axis position
-                FIL_SFS_SetAlive(true);
-              }
+              #ifdef FIL_RUNOUT_PIN
+                if (i == E_AXIS)
+                {
+                  // Reset SFS status, Avoid false Filament runout caused by G92 resetting E-axis position
+                  FIL_SFS_SetAlive(true);
+                }
+              #endif
             }
           }
           // Restore mode
