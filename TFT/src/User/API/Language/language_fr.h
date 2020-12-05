@@ -281,6 +281,6 @@
     #define STRING_CASE_LIGHT             "Case light"
     #define STRING_LOAD_STARTED           "Chargement du filament en cours, aucune action possible avant la fin du processus." 
     #define STRING_UNLOAD_STARTED         "Déchargement du filament en cours, aucune action possible avant la fin du processus.."
-    #define STRING_HEATERS_ON             "Certains éléments de chauffe sont encore activés, voulez vous les arreter ? " 
+    #define STRING_HEATERS_ON             "Certains éléments de chauffe sont encore activés, voulez vous les arreter ?" 
 
 #endif
