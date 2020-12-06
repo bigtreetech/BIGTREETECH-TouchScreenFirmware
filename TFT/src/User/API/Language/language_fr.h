@@ -283,6 +283,6 @@
     #define STRING_UNLOAD_STARTED         "Déchargement du filament en cours, aucune action possible avant la fin du processus.."
     #define STRING_HEATERS_ON             "Certains éléments de chauffe sont encore activés, voulez vous les arreter ?" 
     #define STRING_PRINT_TOTAL_TIME       "Print complete.\nPrint Time: %02u:%02u:%02u \n"  // translation needed
-    #define STRING_PRINT_FILAMENT_USED    "Filament Used: %u meters"  // translation needed
+    #define STRING_PRINT_FILAMENT_USED    "Filament Used: %3.2f meters"  // translation needed
 
 #endif

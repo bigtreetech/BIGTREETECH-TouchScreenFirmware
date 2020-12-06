@@ -283,6 +283,6 @@
     #define STRING_UNLOAD_STARTED        "Процедура вивавантаження. \nфіламенту, чекаємо поки хотенд \nдосягне бажаної температури. \nбудь ласка зачекайте."
     #define STRING_HEATERS_ON            "Деякі обігрівачі\nвсе ще увімкнені. \nВи хочете їх зупинити?"
     #define STRING_PRINT_TOTAL_TIME      "Print complete.\nPrint Time: %02u:%02u:%02u \n"  // translation needed
-    #define STRING_PRINT_FILAMENT_USED   "Filament Used: %u meters"  // translation needed
+    #define STRING_PRINT_FILAMENT_USED   "Filament Used: %3.2f meters"  // translation needed
 
 #endif
