@@ -86,8 +86,8 @@
     #define STRING_RESUME                 "Obnovit"
     #define STRING_LOAD                   "Zavést"
     #define STRING_UNLOAD                 "Vysunout"
-    #define STRING_LOAD_UNLOAD            "Load/Unload"  // needs translation
-    #define STRING_LOAD_UNLOAD_SHORT      "(Un)Load"  // needs translation
+    #define STRING_LOAD_UNLOAD            "Vysunout/Zavést"
+    #define STRING_LOAD_UNLOAD_SHORT      "Vysunout"
     #define STRING_SLOW_SPEED             "Pomalu"
     #define STRING_NORMAL_SPEED           "Normál"
     #define STRING_FAST_SPEED             "Rychle"
@@ -279,8 +279,8 @@
     #define STRING_MESH_EDITOR            "Mesh síť"
     #define STRING_MESH_TUNER             "Mesh nastavení"
     #define STRING_CASE_LIGHT             "Osvětlení"
-    #define STRING_LOAD_STARTED           "Probíhá načítání filamentu.\nNení možná další akce,\ndokud to nebude dokončeno.\nProsím čekejte."  // translation needed
-    #define STRING_UNLOAD_STARTED         "Probíhá uvolňování filamentu.\nNení možná další akce,\ndokud to nebude dokončeno.\nProsím čekejte.."  // translation needed
+    #define STRING_LOAD_STARTED           "Probíhá zavádění filamentu.\nNení možná další akce,\ndokud to nebude dokončeno.\nProsím čekejte."  // translation needed
+    #define STRING_UNLOAD_STARTED         "Probíhá vysunování filamentu.\nNení možná další akce,\ndokud to nebude dokončeno.\nProsím čekejte.."  // translation needed
     #define STRING_HEATERS_ON             "Topení jsou stále zapnutá.\nChcete je vypnout?"  // translation needed
 
 #endif
