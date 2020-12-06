@@ -279,8 +279,8 @@
     #define STRING_MESH_EDITOR            "Háló Szerkesztő"
     #define STRING_MESH_TUNER             "Háló Hangoló"
     #define STRING_CASE_LIGHT             "Gépház Világítás"
-    #define STRING_LOAD_STARTED           "A filament betöltése folyamatban van,\naddig nem lehetséges,\ntovábbi művelet.\nKérlek várj!!"
-    #define STRING_UNLOAD_STARTED         "A filament kiadása folyamatban van,\naddig nem lehetséges,\ntovábbi művelet.\nKérlek várj!!"
+    #define STRING_LOAD_STARTED           "A filament betöltése folyamatban van,\nnem lehetséges további művelet,\nmíg véget nem ér.\nKérlek várj!"
+    #define STRING_UNLOAD_STARTED         "A filament kiadása folyamatban van,\nnem lehetséges további művelet,\nmíg véget nem ér.\nKérlek várj!!"
     #define STRING_HEATERS_ON             "Néhány fűtőelem még üzemel.\nKikapcsolod a fűtőelemeket?"
 
 #endif
