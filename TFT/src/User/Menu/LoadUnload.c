@@ -120,6 +120,7 @@ void menuLoadUnload(void)
             }
           }
           infoMenu.cur--;
+          loadUnload = NO_LOAD_UNLOAD;
           break;
 
         default:
@@ -130,5 +131,4 @@ void menuLoadUnload(void)
     }
     loopProcess();
   }
-  loadUnload = NO_LOAD_UNLOAD;
 }
