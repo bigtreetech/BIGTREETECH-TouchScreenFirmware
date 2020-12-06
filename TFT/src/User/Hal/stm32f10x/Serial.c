@@ -1,11 +1,13 @@
 #include "Serial.h"
 #include "includes.h"
 
+#define SERIAL_PORT_QUEUE_SIZE NOBEYOND(512, RAM_SIZE * 64, 4096)
+#define SERIAL_PORT_2_QUEUE_SIZE 512
+#define SERIAL_PORT_3_QUEUE_SIZE 512
+#define SERIAL_PORT_4_QUEUE_SIZE 512
+
 // dma rx buffer
 DMA_CIRCULAR_BUFFER dmaL1Data[_UART_CNT];
-
-// dma rx buffer size
-uint16_t bufferDMA[_UART_CNT];
 
 // Config for USART Channel
 typedef struct
@@ -34,7 +36,7 @@ void Serial_DMA_Config(uint8_t port)
 
   cfg->dma_chanel->CPAR = (u32)(&cfg->uart->DR);
   cfg->dma_chanel->CMAR = (u32)(dmaL1Data[port].cache);
-  cfg->dma_chanel->CNDTR = bufferDMA[port];
+  cfg->dma_chanel->CNDTR = dmaL1Data[port].cacheSize;
   cfg->dma_chanel->CCR = 0X00000000;
   cfg->dma_chanel->CCR |= 3<<12;   // Channel priority level
   cfg->dma_chanel->CCR |= 1<<7;    // Memory increment mode
@@ -45,7 +47,7 @@ void Serial_DMA_Config(uint8_t port)
 void Serial_Config(uint8_t port, u32 baud)
 {
   dmaL1Data[port].rIndex = dmaL1Data[port].wIndex = 0;
-  dmaL1Data[port].cache = malloc(bufferDMA[port]);
+  dmaL1Data[port].cache = malloc(dmaL1Data[port].cacheSize);
   while(!dmaL1Data[port].cache); // malloc failed
   UART_Config(port, baud, USART_IT_IDLE);  //IDLE interrupt
   Serial_DMA_Config(port);
@@ -61,22 +63,18 @@ void Serial_DeConfig(uint8_t port)
 
 void Serial_Init(u32 baud)
 {
-  for(uint8_t i=0; i < _UART_CNT; i++)
-  {
-    if(i == SERIAL_PORT) bufferDMA[i] = RAM_SIZE * 64; else bufferDMA[i] = 512;
-  }
-
+  dmaL1Data[SERIAL_PORT].cacheSize = SERIAL_PORT_QUEUE_SIZE;
   Serial_Config(SERIAL_PORT, baud);
-
   #ifdef SERIAL_PORT_2
+    dmaL1Data[SERIAL_PORT_2].cacheSize = SERIAL_PORT_2_QUEUE_SIZE;
     Serial_Config(SERIAL_PORT_2, baud);
   #endif
-
   #ifdef SERIAL_PORT_3
+    dmaL1Data[SERIAL_PORT_3].cacheSize = SERIAL_PORT_3_QUEUE_SIZE;
     Serial_Config(SERIAL_PORT_3, baud);
   #endif
-
   #ifdef SERIAL_PORT_4
+    dmaL1Data[SERIAL_PORT_4].cacheSize = SERIAL_PORT_4_QUEUE_SIZE;
     Serial_Config(SERIAL_PORT_4, baud);
   #endif
 }
@@ -105,8 +103,8 @@ void USART_IRQHandler(uint8_t port)
     Serial[port].uart->SR;
     Serial[port].uart->DR;
 
-    dmaL1Data[port].wIndex = bufferDMA[port] - Serial[port].dma_chanel->CNDTR;
-    uint16_t wIndex = (dmaL1Data[port].wIndex == 0) ? bufferDMA[port] : dmaL1Data[port].wIndex;
+    dmaL1Data[port].wIndex = dmaL1Data[port].cacheSize - Serial[port].dma_chanel->CNDTR;
+    uint16_t wIndex = (dmaL1Data[port].wIndex == 0) ? dmaL1Data[port].cacheSize : dmaL1Data[port].wIndex;
     if(dmaL1Data[port].cache[wIndex-1] == '\n')  // Receive completed
     {
       infoHost.rx_ok[port] = true;

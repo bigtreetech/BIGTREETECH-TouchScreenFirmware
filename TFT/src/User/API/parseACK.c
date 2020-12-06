@@ -179,7 +179,7 @@ void syncL2CacheFromL1(uint8_t port)
   while (dmaL1NotEmpty(port))
   {
     dmaL2Cache[i] = dmaL1Data[port].cache[dmaL1Data[port].rIndex];
-    dmaL1Data[port].rIndex = (dmaL1Data[port].rIndex + 1) % bufferDMA[port];
+    dmaL1Data[port].rIndex = (dmaL1Data[port].rIndex + 1) % dmaL1Data[port].cacheSize;
     if (dmaL2Cache[i++] == '\n') break;
   }
   dmaL2Cache[i] = 0; // End character
