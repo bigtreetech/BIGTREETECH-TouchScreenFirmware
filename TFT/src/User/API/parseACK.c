@@ -415,7 +415,7 @@ void parseACK(void)
         infoPrinting.time = 0;
         infoPrinting.cur = 0;
         infoPrinting.size = ack_value();
-        if (infoMachineSettings.autoReportSDStatus ==1)
+        if (infoMachineSettings.autoReportSDStatus == 1)
         {
           request_M27(infoSettings.m27_refresh_time);                //Check if there is a SD or USB print running.
         }
@@ -436,6 +436,7 @@ void parseACK(void)
       }
       else if(infoMachineSettings.onboard_sd_support == ENABLED && infoFile.source == BOARD_SD && ack_seen("Done printing file"))
       {
+        infoHost.printing = false;
         printingFinished();
         infoPrinting.cur = infoPrinting.size;
       }

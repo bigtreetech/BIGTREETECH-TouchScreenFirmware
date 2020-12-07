@@ -240,6 +240,7 @@ void endPrinting(void)
       break;
   }
   infoPrinting.printing = infoPrinting.pause = false;
+  infoMenu.cur = 0;
   request_M27(0);
   powerFailedClose();
   powerFailedDelete();
