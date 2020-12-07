@@ -296,7 +296,7 @@ void printingDrawPage(void)
 void stopConfirm(void)
 {
   abortPrinting();
-  infoMenu.cur--;
+  infoMenu.cur = 0;
 }
 
 void menuPrinting(void)
@@ -441,7 +441,7 @@ void menuPrinting(void)
         else
         {
           exitPrinting();
-          infoMenu.cur--;
+          infoMenu.cur = 0;
         }
         break;
 
