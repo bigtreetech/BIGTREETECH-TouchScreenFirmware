@@ -117,44 +117,50 @@ bool FIL_RunoutPinFilteredLevel(void)
 }
 
 
-static u32 update_time = 2000;
 // Use an encoder disc to toggles the runout
-// Suitable for BigTreeTech Smart filament detecter
+// Suitable for BigTreeTech Smart Filament Sensor
+static uint32_t update_time = 2000;
+static uint8_t SFS_IsAlive = false;
+
+void FIL_SFS_SetAlive(uint8_t alive)
+{
+  SFS_IsAlive = alive;
+}
+
 bool FIL_SmartRunoutDetect(void)
 {
   static float lastExtrudePosition = 0.0f;
   static uint8_t lastRunoutPinLevel = 0;
-  static uint8_t isAlive = false;
-  static u32  nextTime=0;
+  static uint32_t nextTime=0;
 
   bool pinLevel = FIL_RunoutPinFilteredLevel();
-  float actualExtrude = coordinateGetAxisActual(E_AXIS);
+  float actualExtrude = coordinateGetExtruderActual();
 
   do
   {  /* Send M114 E query extrude position continuously	*/
-    if(update_waiting == true)        {nextTime=OS_GetTimeMs()+update_time;break;}
-    if(OS_GetTimeMs()<nextTime)       break;
-    if(requestCommandInfoIsRunning()) break; //to avoid colision in Gcode response processing
-    if(storeCmd("M114 E\n")==false)   break;
+    if (update_waiting == true)        {nextTime = OS_GetTimeMs() + update_time; break;}
+    if (OS_GetTimeMs() < nextTime)     break;
+    if (requestCommandInfoIsRunning()) break; //to avoid colision in Gcode response processing
+    if (storeCmd("M114 E\n") == false) break;
 
-    nextTime=OS_GetTimeMs()+update_time;
-    update_waiting=true;
-  }while(0);
+    nextTime = OS_GetTimeMs() + update_time;
+    update_waiting = true;
+  } while(0);
 
-  if (isAlive == false)
+  if (SFS_IsAlive == false)
   {
     if (lastRunoutPinLevel != pinLevel)
     {
-      isAlive = true;
+      SFS_IsAlive = true;
     }
   }
 
   if (ABS(actualExtrude - lastExtrudePosition) >= infoSettings.runout_distance)
   {
     lastExtrudePosition = actualExtrude;
-    if (isAlive)
+    if (SFS_IsAlive)
     {
-      isAlive = false;
+      SFS_IsAlive = false;
       lastRunoutPinLevel =  pinLevel;
     }
     else
