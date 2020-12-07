@@ -97,7 +97,7 @@
     #define STRING_TOUCHSCREEN_ADJUST     "TSC Adjust"
     #define STRING_MORE                   "More"
     #define STRING_SCREEN_INFO            "Info"
-    #define STRING_STATUS                 "Info"
+    #define STRING_STATUS                 "Status"
     #define STRING_SIMULATOR_BG_COLOR     "Marlin simulator background color"
     #define STRING_SIMULATOR_FONT_COLOR   "Marlin simulator font color"
     #define STRING_WHITE                  "White"
@@ -282,5 +282,5 @@
     #define STRING_LOAD_STARTED           "Filament load in progress.\nNo further actions possible\nuntil it's done.\nPlease stand by."
     #define STRING_UNLOAD_STARTED         "Filament unload in progress.\nNo further actions possible\nuntil it's done.\nPlease stand by."
     #define STRING_HEATERS_ON             "Some heaters are still ON.\nDo you want to stop them?"
-
+    #define STRING_PRINT_FINISHED         " \n  Printing\n \n  finished."  // keep it short and in this format!
 #endif
