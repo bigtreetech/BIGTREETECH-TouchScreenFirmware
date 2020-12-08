@@ -66,7 +66,9 @@ float probeOffsetGetValue(void)
 float probeOffsetResetValue(void)
 {
   if (z_offset_value == PROBE_OFFSET_DEFAULT_VALUE)        // if already default value, nothing to do
+  {
     return z_offset_value;
+  }
 
   float unit = z_offset_value - PROBE_OFFSET_DEFAULT_VALUE;
 
@@ -120,9 +122,13 @@ float probeOffsetUpdateValueByEncoder(float unit, int8_t direction)
   float overall_unit = (direction > 0) ? (direction * unit) : (-direction * unit);       // always positive unit
 
   if (direction < 0)                                                                     // if negative encoder value, decrease the value. Otherwise increase the value
+  {
     probeOffsetDecreaseValue(overall_unit);
+  }
   else
+  {
     probeOffsetIncreaseValue(overall_unit);
+  }
 
   return z_offset_value;
 }

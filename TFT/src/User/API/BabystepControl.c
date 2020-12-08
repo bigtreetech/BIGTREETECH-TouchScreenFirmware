@@ -21,7 +21,9 @@ float babystepGetValue(void)
 float babystepResetValue(void)
 {
   if (babystep_value == BABYSTEP_DEFAULT_VALUE)            // if already default value, nothing to do
+  {
     return babystep_value;
+  }
 
   int step_count;
   float last_unit;
@@ -29,7 +31,9 @@ float babystepResetValue(void)
   int8_t neg = 1;
 
   if (babystep_value < 0.0f)
+  {
     neg = -1;
+  }
 
   step_count = (babystep_value * neg) / BABYSTEP_MAX_UNIT;
   for (; step_count > 0; step_count--)
@@ -92,9 +96,13 @@ float babystepUpdateValueByEncoder(float unit, int8_t direction)
   float overall_unit = (direction > 0) ? (direction * unit) : (-direction * unit);       // always positive unit
 
   if (direction < 0)                                                                     // if negative encoder value, decrease the value. Otherwise increase the value
+  {
     babystepDecreaseValue(overall_unit);
+  }
   else
+  {
     babystepIncreaseValue(overall_unit);
+  }
 
   return babystep_value;
 }
