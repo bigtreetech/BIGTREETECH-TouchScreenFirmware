@@ -264,7 +264,7 @@ void abortPrinting(void)
   {
     case BOARD_SD:
       infoHost.printing = false;
-      breakAndContinue();     //Several M108 is sent to Marlin because consecutive blocking oprations such as heat bed, heat extruder may defer processing of M524
+      breakAndContinue(); //Several M108 is sent to Marlin because consecutive blocking oprations such as heat bed, heat extruder may defer processing of M524
       breakAndContinue();
       breakAndContinue();
       breakAndContinue();

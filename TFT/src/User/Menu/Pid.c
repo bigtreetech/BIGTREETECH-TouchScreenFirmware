@@ -20,14 +20,10 @@ bool pidInitialized = false;
 void pidUpdateStatus(bool succeeded)
 {
   if (pidCounter > 0)
-  {
     pidCounter--;
-  }
 
   if (!succeeded)                                          // if one PID process fails, the overall PID process must be marked as failed so no save to EEPROM will be allowed
-  {
     pidSucceeded = false;
-  }
 
   if (pidCounter > 0)                                      // if all the PID processes were still not terminated, simply provide a notification
   {
@@ -112,9 +108,7 @@ void pidUpdateCounter(void)
   for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)           // hotends + bed + chamber
   {
     if (pidHeater.T[i].target > 0)
-    {
       pidCounter++;
-    }
   }
 }
 
@@ -148,9 +142,7 @@ void menuPidWait(void)
     if (!isPressed)                                        // if touch screen is not yet pressed
     {
       if (isPress())                                       // if touch screen is now pressed
-      {
         isPressed = true;
-      }
     }
     else if (!isPress())                                   // if touch screen is now released
     {
@@ -158,9 +150,7 @@ void menuPidWait(void)
     }
 
     if (isReleased)
-    {
       infoMenu.cur--;
-    }
 
     pidCheckTimeout();
 
@@ -282,10 +272,8 @@ void menuPid(void)
     {
       case KEY_ICON_0:
         if (pidHeater.T[pidHeater.toolIndex].target > 0)
-        {
           pidHeater.T[pidHeater.toolIndex].target =
             NOBEYOND(0, pidHeater.T[pidHeater.toolIndex].target - pidDegree[curDegree], infoSettings.max_temp[pidHeater.toolIndex]);
-        }
 
         pidTemperatureReDraw(true);
         break;
@@ -299,9 +287,7 @@ void menuPid(void)
           val = numPadInt((u8 *) titlestr, pidHeater.T[pidHeater.toolIndex].target, 0, false);
           val = NOBEYOND(0, val, infoSettings.max_temp[pidHeater.toolIndex]);
           if (val != pidHeater.T[pidHeater.toolIndex].target)        // if value is different than target change it
-          {
             pidHeater.T[pidHeater.toolIndex].target = val;
-          }
 
           menuDrawPage(&pidItems);
           pidTemperatureReDraw(true);
@@ -310,10 +296,8 @@ void menuPid(void)
 
       case KEY_ICON_3:
         if (pidHeater.T[pidHeater.toolIndex].target < infoSettings.max_temp[pidHeater.toolIndex])
-        {
           pidHeater.T[pidHeater.toolIndex].target =
             NOBEYOND(0, pidHeater.T[pidHeater.toolIndex].target + pidDegree[curDegree], infoSettings.max_temp[pidHeater.toolIndex]);
-        }
 
         pidTemperatureReDraw(true);
         break;
@@ -371,18 +355,14 @@ void menuPid(void)
             if (encoderPosition > 0)
             {
               if (pidHeater.T[pidHeater.toolIndex].target < infoSettings.max_temp[pidHeater.toolIndex])
-              {
                 pidHeater.T[pidHeater.toolIndex].target =
                   NOBEYOND(0, pidHeater.T[pidHeater.toolIndex].target + pidDegree[curDegree], infoSettings.max_temp[pidHeater.toolIndex]);
-              }
             }
             else                                           // if < 0
             {
               if (pidHeater.T[pidHeater.toolIndex].target > 0)
-              {
                 pidHeater.T[pidHeater.toolIndex].target =
                   NOBEYOND(0, pidHeater.T[pidHeater.toolIndex].target - pidDegree[curDegree], infoSettings.max_temp[pidHeater.toolIndex]);
-              }
             }
 
             pidTemperatureReDraw(true);

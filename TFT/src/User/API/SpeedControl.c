@@ -1,9 +1,9 @@
 #include "SpeedControl.h"
 #include "includes.h"
 
-static uint16_t percent[SPEED_NUM]     = {100,   100};  //Speed  Flow
-static uint16_t lastPercent[SPEED_NUM] = {100,   100};  //Speed  Flow
-static uint16_t curPercent[SPEED_NUM]  = {100,   100};  //Speed  Flow
+static uint16_t percent[SPEED_NUM]     = {100, 100};  //Speed  Flow
+static uint16_t lastPercent[SPEED_NUM] = {100, 100};  //Speed  Flow
+static uint16_t curPercent[SPEED_NUM]  = {100, 100};  //Speed  Flow
 
 static bool send_waiting[SPEED_NUM];
 static bool queryWait = false;
@@ -65,9 +65,7 @@ void loopSpeed(void)
         send_waiting[i] = storeCmd("%s S%d\n", speedCmd[i], percent[i]);
       }
       if (send_waiting[i] == true)
-      {
         curPercent[i] = percent[i];
-      }
       nextSpeedTime = OS_GetTimeMs() + NEXT_SPEED_WAIT; // avoid rapid fire, clogging the queue
     }
   }

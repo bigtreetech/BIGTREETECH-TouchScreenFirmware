@@ -84,9 +84,7 @@ void menuSpeed(void)
     {
       case KEY_ICON_0:
         if (now > SPEED_MIN)
-        {
           speedSetPercent(item_percentage_i, now - item_percent_unit[item_percent_unit_i]);
-        }
         break;
 
       case KEY_INFOBOX:
@@ -98,9 +96,7 @@ void menuSpeed(void)
           val = numPadInt((u8 *) titlestr, val, 100, false);
           val = NOBEYOND(SPEED_MIN, val, SPEED_MAX);
           if (val != now)
-          {
             speedSetPercent(item_percentage_i, val);
-          }
 
           menuDrawPage(&percentageItems);
           percentageReDraw((char *) textSelect(percentageItems.title.index));
@@ -109,9 +105,7 @@ void menuSpeed(void)
 
       case KEY_ICON_3:
         if (now < SPEED_MAX)
-        {
           speedSetPercent(item_percentage_i, now + item_percent_unit[item_percent_unit_i]);
-        }
         break;
 
       case KEY_ICON_4:
@@ -143,13 +137,9 @@ void menuSpeed(void)
           if (encoderPosition)
           {
             if (now < SPEED_MAX && encoderPosition > 0)
-            {
               speedSetPercent(item_percentage_i, now + item_percent_unit[item_percent_unit_i]);
-            }
             if (now > SPEED_MIN && encoderPosition < 0)
-            {
               speedSetPercent(item_percentage_i, now - item_percent_unit[item_percent_unit_i]);
-            }
             encoderPosition = 0;
           }
         #endif
@@ -157,9 +147,7 @@ void menuSpeed(void)
     }
 
     if (SpeedChanged(item_percentage_i))
-    {
       percentageReDraw((char *)textSelect(percentageItems.title.index));
-    }
 
     loopProcess();
   }

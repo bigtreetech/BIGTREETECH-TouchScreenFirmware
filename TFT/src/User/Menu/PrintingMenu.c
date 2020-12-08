@@ -93,12 +93,9 @@ void menuBeforePrinting(void)
       //    }
 
       if (infoMachineSettings.autoReportSDStatus == 1)
-      {
         request_M27(infoSettings.m27_refresh_time);                //Check if there is a SD or USB print running.
-      }
-      else{
+      else
         request_M27(0);
-      }
 
       infoHost.printing = true; // Global lock info on printer is busy in printing.
 
@@ -168,13 +165,9 @@ void reDrawFan(int icon_pos)
 {
   char tempstr[10];
   if (infoSettings.fan_percentage == 1)
-  {
     sprintf(tempstr, "%d%%", fanGetCurPercent(c_fan));
-  }
   else
-  {
     sprintf(tempstr, "%d", fanGetCurSpeed(c_fan));
-  }
 
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
@@ -193,13 +186,9 @@ void reDrawSpeed(int icon_pos)
   sprintf(tempstr, "%d%%", speedGetPercent(c_speedID) );
 
   if(c_speedID == 0)
-  {
     ICON_ReadDisplay(printinfo_points[icon_pos].x,printinfo_points[icon_pos].y,ICON_PRINTING_SPEED);
-  }
   else
-  {
     ICON_ReadDisplay(printinfo_points[icon_pos].x,printinfo_points[icon_pos].y,ICON_PRINTING_FLOW);
-  }
   GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (u8 *)Speed_ID[c_speedID]);
   GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (u8 *)tempstr);
 
@@ -275,7 +264,8 @@ void toggleinfo(void)
     rapid_serial_loop();   //perform backend printing loop before drawing to avoid printer idling
     reDrawSpeed(SPD_ICON_POS);
     speedQuery();
-    if (infoFile.source == BOARD_SD) coordinateQuery();
+    if (infoFile.source == BOARD_SD)
+      coordinateQuery();
   }
 }
 

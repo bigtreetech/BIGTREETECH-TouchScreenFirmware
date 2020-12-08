@@ -20,13 +20,9 @@ void fanSpeedReDraw(bool skip_header)
   }
 
   if (infoSettings.fan_percentage == 1)
-  {
     sprintf(tempstr, "  %d%%  ", fanGetDesiredPercent(curIndex));
-  }
   else
-  {
     sprintf(tempstr, "  %d  ", (int)fanGetDesiredSpeed(curIndex));
-  }
 
   setLargeFont(true);
   GUI_DispStringInPrect(&exhibitRect, (u8 *)tempstr);
@@ -53,13 +49,9 @@ void menuFan(void)
   uint8_t lastFan = fanGetCurSpeed(curIndex);
 
   if ((infoSettings.fan_count + infoSettings.fan_ctrl_count) > 1)
-  {
     fanItems.items[KEY_ICON_4] = itemFan[0];
-  }
   else
-  {
     fanItems.items[KEY_ICON_4] = itemFan[1];
-  }
 
   menuDrawPage(&fanItems);
   fanSpeedReDraw(false);
@@ -79,13 +71,9 @@ void menuFan(void)
         if (actFan > 0)
         {
           if (infoSettings.fan_percentage == 1)
-          {
             fanSetDesiredPercent(curIndex, --actFanPercent);
-          }
           else
-          {
             fanSetDesiredSpeed(curIndex, --actFan);
-          }
         }
         break;
 
@@ -98,9 +86,7 @@ void menuFan(void)
           val = numPadInt((u8 *) titlestr, actFanPercent, 0, false);
           val = NOBEYOND(0, val, 100);
           if (val != actFanPercent)
-          {
             fanSetDesiredPercent(curIndex, val);
-          }
 
           menuDrawPage(&fanItems);
           fanSpeedReDraw(false);
@@ -111,13 +97,9 @@ void menuFan(void)
         if (actFan < infoSettings.fan_max[curIndex])
         {
           if (infoSettings.fan_percentage == 1)
-          {
             fanSetDesiredPercent(curIndex, ++actFanPercent);
-          }
           else
-          {
             fanSetDesiredSpeed(curIndex, ++actFan);
-          }
         }
         break;
 
@@ -153,25 +135,17 @@ void menuFan(void)
             if (actFan < infoSettings.fan_max[curIndex] && encoderPosition > 0)
             {
               if (infoSettings.fan_percentage == 1)
-              {
                 fanSetDesiredPercent(curIndex, ++actFanPercent);
-              }
               else
-              {
                 fanSetDesiredSpeed(curIndex, ++actFan);
-              }
             }
 
             if (actFan > 0 && encoderPosition < 0)
             {
               if (infoSettings.fan_percentage == 1)
-              {
                 fanSetDesiredPercent(curIndex, --actFanPercent);
-              }
               else
-              {
                 fanSetDesiredSpeed(curIndex, --actFan);
-              }
             }
             encoderPosition = 0;
           }

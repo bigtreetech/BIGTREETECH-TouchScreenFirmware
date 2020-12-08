@@ -20,7 +20,8 @@ uint8_t fanGetTypID(uint8_t startIndex, uint8_t type)
 {
   for (uint8_t i = startIndex; i < MAX_FAN_COUNT; i++)
   {
-    if (fanType[i] == type) return i;
+    if (fanType[i] == type)
+      return i;
   }
   return FAN_TYPE_UNKNOWN;
 }
@@ -36,13 +37,9 @@ void fanBuildList(void)
     if (infoSettings.fan_count == i)
     {
       if (infoSettings.fan_ctrl_count > 0)
-      {
         i = (MAX_FAN_COUNT - MAX_FAN_CTRL_COUNT);
-      }
       else
-      {
         i= MAX_FAN_COUNT;
-      }
     }
     if (i < MAX_FAN_COUNT)
     {
@@ -145,18 +142,12 @@ void loopFan(void)
       if(fan_send_waiting[i] == false)
       {
         if(fanIsType(i,FAN_TYPE_F) || fanIsType(i,FAN_TYPE_CTRL_S))
-        {
           fan_send_waiting[i] = storeCmd("%s S%d\n", fanCmd[i], desiredFanSpeed[i]);
-        }
         else if (fanIsType(i,FAN_TYPE_CTRL_I))
-        {
           fan_send_waiting[i] = storeCmd("%s I%d\n", fanCmd[i], desiredFanSpeed[i]);
-        }
       }
       if (fan_send_waiting[i] == true)
-      {
         newFanSpeed[i] = desiredFanSpeed[i];
-      }
       nextFanTime = OS_GetTimeMs() + NEXT_FAN_WAIT; // avoid rapid fire, clogging the queue
     }
   }

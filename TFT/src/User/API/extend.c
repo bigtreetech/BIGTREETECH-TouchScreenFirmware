@@ -137,24 +137,18 @@ bool FIL_SmartRunoutDetect(void)
   float actualExtrude = coordinateGetExtruderActual();
 
   do
-  {  /* Send M114 E query extrude position continuously */
+  { /* Send M114 E query extrude position continuously */
     if (update_waiting == true)
     {
       nextTime = OS_GetTimeMs() + update_time;
       break;
     }
     if (OS_GetTimeMs() < nextTime)
-    {
       break;
-    }
-    if (requestCommandInfoIsRunning())
-    {
-      break; //to avoid colision in Gcode response processing
-    }
+    if (requestCommandInfoIsRunning()) //to avoid colision in Gcode response processing
+      break;
     if (storeCmd("M114 E\n") == false)
-    {
       break;
-    }
 
     nextTime = OS_GetTimeMs() + update_time;
     update_waiting = true;
@@ -203,9 +197,12 @@ bool FIL_IsRunout(void)
 
 void loopBackEndFILRunoutDetect(void)
 {
-  if (infoSettings.runout == FILAMENT_RUNOUT_OFF) return; // Filament runout turn off
-  if (!FIL_IsRunout()) return;                            // Filament not runout yet, need constant scanning to filter interference
-  if (!isPrinting() || isPause()) return;                 // No printing or printing paused
+  if (infoSettings.runout == FILAMENT_RUNOUT_OFF)          // Filament runout turn off
+    return;
+  if (!FIL_IsRunout())                                     // Filament not runout yet, need constant scanning to filter interference
+    return;
+  if (!isPrinting() || isPause())                          // No printing or printing paused
+    return;
 
   setPrintRunout(true);
 }

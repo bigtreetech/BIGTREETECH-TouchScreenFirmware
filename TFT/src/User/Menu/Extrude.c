@@ -86,10 +86,9 @@ void menuExtrude(void)
     encoderPosition = 0;
   #endif
 
-  if (eRelative)
-  {
-    mustStoreCmd("M82\n"); // Set extruder to absolute
-  }
+  if (eRelative) // Set extruder to absolute
+    mustStoreCmd("M82\n");
+
   while (infoMenu.menu[infoMenu.cur] == menuExtrude)
   {
     key_num = menuKeyGetValue();
@@ -153,9 +152,7 @@ void menuExtrude(void)
       extrudeCoordinate = eTemp;
       extrudeCoordinateReDraw(true);
       if (item_extruder_i != heatGetCurrentTool())
-      {
         storeCmd("%s\n", tool_change[item_extruder_i]);
-      }
       storeCmd("G0 E%.5f F%d\n", extrudeCoordinate, infoSettings.ext_speed[item_speed_i]);
     }
     loopProcess();
@@ -163,7 +160,5 @@ void menuExtrude(void)
   mustStoreCmd("G92 E%.5f\n",eSaved);
   mustStoreCmd("G0 F%d\n",feedrate);
   if (eRelative)
-  {
     mustStoreCmd("M83\n"); // Set extruder to relative
-  }
 }

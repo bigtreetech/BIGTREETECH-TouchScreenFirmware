@@ -98,9 +98,7 @@ void menuHeat(void)
           val = numPadInt((u8 *) titlestr, actTarget, 0, false);
           val = NOBEYOND(0, val, infoSettings.max_temp[c_heater]);
           if (val != actTarget)
-          {
             heatSetTargetTemp(c_heater, val);
-          }
 
           menuDrawPage(&heatItems);
           showTemperature(c_heater);
@@ -141,9 +139,9 @@ void menuHeat(void)
           if (encoderPosition)
           {
             if (encoderPosition > 0)
-                heatSetTargetTemp(c_heater, actTarget + item_degree[item_degree_i]);
-            if (encoderPosition < 0)
-                heatSetTargetTemp(c_heater, actTarget - item_degree[item_degree_i]);
+              heatSetTargetTemp(c_heater, actTarget + item_degree[item_degree_i]);
+            else // if < 0)
+              heatSetTargetTemp(c_heater, actTarget - item_degree[item_degree_i]);
             encoderPosition = 0;
           }
         #endif
@@ -162,7 +160,5 @@ void menuHeat(void)
 
   // Set slow update time if not waiting for target temperature
   if (heatHasWaiting() == false)
-  {
     heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
-  }
 }
