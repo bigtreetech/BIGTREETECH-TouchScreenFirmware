@@ -1,20 +1,10 @@
 #include "TuneExtruder.h"
 #include "includes.h"
 
-#define EXTRUDE_DEGREE_NUM 3
 #define ITEM_TUNE_EXTRUDER_LEN_NUM 3
 
-const ITEM extruderDegree[EXTRUDE_DEGREE_NUM] = {
-// icon                           label
-  {ICON_1_DEGREE,                 LABEL_1_DEGREE},
-  {ICON_5_DEGREE,                 LABEL_5_DEGREE},
-  {ICON_10_DEGREE,                LABEL_10_DEGREE},
-};
-
-const u8 extruderDegreeStep[EXTRUDE_DEGREE_NUM] = {1, 5, 10};
-
-static u8 extruderDegreeStep_index = 1;
-static u8 curLen = 0;
+static u8 degreeSteps_index = 1;
+static u8 curExtStep_index = 0;
 static uint8_t c_heater = NOZZLE0;
 
 // Show/draw temperature in heat menu
@@ -31,13 +21,13 @@ void showExtrudeTemperature(uint8_t index)
   setLargeFont(false);
 }
 
-void turnHeaterOff(void)
+static inline void turnHeaterOff(void)
 {
     heatSetTargetTemp(c_heater, 0);
     infoMenu.cur--;
 }
 
-void returnToTuning(void)
+static inline void returnToTuning(void)
 {
     infoMenu.cur--;
 }
@@ -61,7 +51,7 @@ void showNewESteps(const float measured_length, const float old_esteps, float * 
   GUI_DispString(exhibitRect.x0,  BYTE_HEIGHT * 6, (u8 *)tempstr);
 }
 
-void extrudeFilament(void)
+static inline void extrudeFilament(void)
 {
   storeCmd("G28\n");                             // Home extruder
   mustStoreScript("G90\nG0 F3000 X0 Y0 Z100\n"); // present extruder
@@ -111,7 +101,7 @@ void menuTuneExtruder(void)
     switch (key_num)
     {
       case KEY_ICON_0:
-          heatSetTargetTemp(c_heater, actTarget - extruderDegreeStep[extruderDegreeStep_index]);
+          heatSetTargetTemp(c_heater, actTarget - degreeSteps[degreeSteps_index]);
         break;
 
       case KEY_INFOBOX:
@@ -121,18 +111,18 @@ void menuTuneExtruder(void)
         sprintf(titlestr, "Min:0 | Max:%i", infoSettings.max_temp[c_heater] );
         val = numPadInt((u8 *)titlestr, actTarget,0, false);
         val = NOBEYOND(0,val,infoSettings.max_temp[c_heater]);
+
         if (val != actTarget)
         {
           heatSetTargetTemp(c_heater, val);
         }
-
         menuDrawPage(&tuneExtruderItems);
         showExtrudeTemperature(c_heater);
       }
       break;
 
       case KEY_ICON_3:
-          heatSetTargetTemp(c_heater, actTarget + extruderDegreeStep[extruderDegreeStep_index]);
+          heatSetTargetTemp(c_heater, actTarget + degreeSteps[degreeSteps_index]);
         break;
 
       case KEY_ICON_4:
@@ -144,10 +134,8 @@ void menuTuneExtruder(void)
         break;
 
       case KEY_ICON_5:
-        extruderDegreeStep_index = (extruderDegreeStep_index + 1) % EXTRUDE_DEGREE_NUM;
-
-        tuneExtruderItems.items[key_num] = extruderDegree[extruderDegreeStep_index];
-
+        degreeSteps_index = (degreeSteps_index + 1) % ITEM_DEGREE_NUM;
+        tuneExtruderItems.items[key_num] = itemDegreeSteps[degreeSteps_index];
         menuDrawItem(&tuneExtruderItems.items[key_num], key_num);
         break;
 
@@ -158,9 +146,7 @@ void menuTuneExtruder(void)
         if (heatGetTargetTemp(c_heater) < infoSettings.min_ext_temp)
         {
           labelChar(tempStr, LABEL_TUNE_EXT_TEMPLOW);
-
           sprintf(tempMsg, tempStr, infoSettings.min_ext_temp);
-
           popupReminder(DIALOG_TYPE_ALERT, tuneExtruderItems.title.index, (u8 *) tempMsg);
           break;
         }
@@ -172,9 +158,7 @@ void menuTuneExtruder(void)
         else
         {
           labelChar(tempStr, LABEL_TUNE_EXT_MARK120MM);
-
           sprintf(tempMsg, tempStr, textSelect(LABEL_EXTRUDE));
-
           setDialogText(tuneExtruderItems.title.index, (u8 *) tempMsg, LABEL_EXTRUDE, LABEL_CANCEL);
           showDialog(DIALOG_TYPE_QUESTION, extrudeFilament, NULL, NULL);
         }
@@ -197,7 +181,7 @@ void menuTuneExtruder(void)
         #if LCD_ENCODER_SUPPORT
           if (encoderPosition)
           {
-            heatSetTargetTemp(c_heater, actTarget + extruderDegreeStep[extruderDegreeStep_index] * encoderPosition);
+            heatSetTargetTemp(c_heater, actTarget + degreeSteps[degreeSteps_index] * encoderPosition);
             encoderPosition = 0;
           }
         #endif
@@ -221,14 +205,6 @@ void menuTuneExtruder(void)
 
 void menuNewExtruderESteps(void)
 {
-  const ITEM itemTuneExtruderLen[ITEM_TUNE_EXTRUDER_LEN_NUM] = {
-    // icon                         label
-    {ICON_E_1_MM,                   LABEL_1_MM},
-    {ICON_E_5_MM,                   LABEL_5_MM},
-    {ICON_E_10_MM,                  LABEL_10_MM},
-  };
-
-  const float tuneExtruder_len[ITEM_TUNE_EXTRUDER_LEN_NUM] = {1.0f, 5.0f, 10.0f};
 
   // Extruder steps are not correct. Ask user for the amount that's extruded
   // Automaticaly calculate new steps/mm when changing the measured distance
@@ -256,7 +232,7 @@ void menuNewExtruderESteps(void)
   mustStoreCmd("M503 S0\n");
   old_esteps = getParameter(P_STEPS_PER_MM, E_AXIS); // get the value of the E-steps
 
-  newExtruderESteps.items[KEY_ICON_5] = itemTuneExtruderLen[curLen];
+  newExtruderESteps.items[KEY_ICON_5] = itemExtLenSteps[curExtStep_index];
 
   menuDrawPage(&newExtruderESteps);
   showNewESteps(measured_length, old_esteps, &new_esteps);
@@ -271,32 +247,26 @@ void menuNewExtruderESteps(void)
     switch (key_num)
     {
       case KEY_ICON_0:
-        measured_length -= tuneExtruder_len[curLen];
+        measured_length -= extlenSteps[curExtStep_index];
         break;
 
       case KEY_ICON_3:
-        measured_length += tuneExtruder_len[curLen];
+        measured_length += extlenSteps[curExtStep_index];
         break;
 
       case KEY_ICON_4:
       {
         storeCmd("M92 T0 E%0.2f\n", new_esteps);
-
         char tempMsg[120];
-
         labelChar(tempStr, LABEL_TUNE_EXT_ESTEPS_SAVED);
-
         sprintf(tempMsg, tempStr, new_esteps);
-
         popupReminder(DIALOG_TYPE_QUESTION, newExtruderESteps.title.index, (u8 *) tempMsg);
       }
       break;
 
       case KEY_ICON_5:
-        curLen = (curLen + 1) % ITEM_TUNE_EXTRUDER_LEN_NUM;
-
-        newExtruderESteps.items[key_num] = itemTuneExtruderLen[curLen];
-
+        curExtStep_index = (curExtStep_index + 1) % ITEM_TUNE_EXTRUDER_LEN_NUM;
+        newExtruderESteps.items[key_num] = itemExtLenSteps[curExtStep_index];
         menuDrawItem(&newExtruderESteps.items[key_num], key_num);
         break;
 
@@ -312,7 +282,7 @@ void menuNewExtruderESteps(void)
         #if LCD_ENCODER_SUPPORT
           if (encoderPosition)
           {
-            measured_length += tuneExtruder_len[curLen] * encoderPosition;
+            measured_length += extlenSteps[curExtStep_index] * encoderPosition;
             encoderPosition = 0;
           }
         #endif

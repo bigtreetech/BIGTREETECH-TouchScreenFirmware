@@ -20,23 +20,19 @@ static u8 curSubmenu = 0;
 void probeNotifyError(void)
 {
   labelChar(tempMsg, LABEL_Z_OFFSET);
-
   sprintf(&tempMsg[strlen(tempMsg)], " %s", textSelect(LABEL_OFF));
-
   addToast(DIALOG_TYPE_ERROR, tempMsg);
 }
 
 void probeDrawStatus(u8 *status)
 {
-  char tempstr[20];
-
-  sprintf(tempstr, "%s  ", status);
-
   if (!probeOffsetGetStatus())
     GUI_SetColor(infoSettings.reminder_color);
   else
     GUI_SetColor(infoSettings.sd_reminder_color);
 
+  char tempstr[20];
+  sprintf(tempstr, "%s  ", status);
   GUI_DispString(exhibitRect.x0, exhibitRect.y0, (u8 *) tempstr);
   GUI_SetColor(infoSettings.font_color);
 }
@@ -44,9 +40,7 @@ void probeDrawStatus(u8 *status)
 void probeDrawValue(float val)
 {
   char tempstr[20];
-
   sprintf(tempstr, "  %.2f  ", val);
-
   setLargeFont(true);
   GUI_DispStringInPrect(&exhibitRect, (u8 *) tempstr);
   setLargeFont(false);
@@ -149,13 +143,11 @@ void menuProbeOffset(void)
         if (!probeOffsetGetStatus())
         {
           probeOffsetEnable();
-
           probeOffsetItems.items[key_num].label.index = LABEL_ON;
         }
         else
         {
           probeOffsetDisable();
-
           probeOffsetItems.items[key_num].label.index = LABEL_OFF;
         }
 
@@ -166,7 +158,6 @@ void menuProbeOffset(void)
       // change submenu
       case KEY_ICON_5:
         curSubmenu = (curSubmenu + 1) % ITEM_PROBE_OFFSET_SUBMENU_NUM;
-
         probeOffsetItems.items[KEY_ICON_6] = itemProbeOffsetSubmenu[curSubmenu];
 
         menuDrawItem(&probeOffsetItems.items[KEY_ICON_6], KEY_ICON_6);
@@ -179,7 +170,6 @@ void menuProbeOffset(void)
           // change unit
           case 0:
             curUnit = (curUnit + 1) % ITEM_PROBE_OFFSET_UNIT_NUM;
-
             itemProbeOffsetSubmenu[curSubmenu] = itemProbeOffsetUnit[curUnit];
             probeOffsetItems.items[key_num] = itemProbeOffsetSubmenu[curSubmenu];
 

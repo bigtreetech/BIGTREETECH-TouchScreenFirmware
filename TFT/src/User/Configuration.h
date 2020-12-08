@@ -299,11 +299,11 @@
  * Manual Leveling
  * Move to four corner points to Leveling manually (Point 1, Point 2, Point 3, Point 4)
  */
-#define LEVELING_EDGE_DISTANCE     20    // Inset distance from bed's edge for calculating leveling point location.
-#define LEVELING_POINT_Z           0.2f  // Z-axis position when nozzle stays for leveling
-#define LEVELING_POINT_MOVE_Z      10.0f // Z-axis position when nozzle move to next point
-#define LEVELING_POINT_XY_FEEDRATE 6000  // (mm/min) X and Y axes move feedrate
-#define LEVELING_POINT_Z_FEEDRATE  600   // (mm/min) Z axis move feedrate
+#define LEVELING_EDGE_DISTANCE        20  // Inset distance from bed's edge for calculating leveling point location.
+#define LEVELING_POINT_Z            0.2f  // Z-axis position when nozzle stays for leveling
+#define LEVELING_POINT_MOVE_Z      10.0f  // Z-axis position when nozzle move to next point
+#define LEVELING_POINT_XY_FEEDRATE  6000  // (mm/min) X and Y axes move feedrate
+#define LEVELING_POINT_Z_FEEDRATE    600  // (mm/min) Z axis move feedrate
 
 #define LEVELING_EDGE_DISTANCE_DISPLAY_ID   "X/Y"
 #define LEVELING_EDGE_DISTANCE_MIN          0
@@ -318,7 +318,7 @@
 /**
  * Z Fade
  */
-#define Z_FADE_MIN_VALUE     0.0f
+#define Z_FADE_MIN_VALUE      0.0f
 #define Z_FADE_MAX_VALUE     20.0f
 #define Z_FADE_DEFAULT_VALUE 10.0f
 
@@ -326,23 +326,23 @@
  * Probe Offset
  */
 #define PROBE_OFFSET_MIN_VALUE     -20.0f
-#define PROBE_OFFSET_MAX_VALUE     20.0f
-#define PROBE_OFFSET_DEFAULT_VALUE 0.0f
+#define PROBE_OFFSET_MAX_VALUE      20.0f
+#define PROBE_OFFSET_DEFAULT_VALUE   0.0f
 
 /**
  * Home Offset
  */
 #define HOME_Z_OFFSET_MIN_VALUE     -20.0f
-#define HOME_Z_OFFSET_MAX_VALUE     20.0f
-#define HOME_Z_OFFSET_DEFAULT_VALUE 0.0f
+#define HOME_Z_OFFSET_MAX_VALUE      20.0f
+#define HOME_Z_OFFSET_DEFAULT_VALUE   0.0f
 
 /**
  * Babystep
  */
 #define BABYSTEP_MIN_VALUE     -5.0f
-#define BABYSTEP_MAX_VALUE     5.0f
-#define BABYSTEP_DEFAULT_VALUE 0.0f
-#define BABYSTEP_MAX_UNIT      1.0f
+#define BABYSTEP_MAX_VALUE      5.0f
+#define BABYSTEP_DEFAULT_VALUE  0.0f
+#define BABYSTEP_MAX_UNIT       1.0f
 
 /**
  * Mesh Editor settings
@@ -419,9 +419,9 @@
 // update the icons from alternate icon folder
 #define ALTERNATIVE_MOVE_MENU
 
-// Enable Unified Move Menu
-// Move, Home, Extrude, ABL at one Place and bring G-code Menu on Home Menu
-#define UNIFIED_MENU true //for unified menu: true | for classic menu: false
+// Enable Status Screen
+// Enable this to show status screen as the default home screen. Disabling it will show a static menu.
+#define ENABLE_STATUS_SCREEN true //to enabled: true | to disabled: false
 
 /**
  * SD support

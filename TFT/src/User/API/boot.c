@@ -267,7 +267,7 @@ bool updateFont(char *font, u32 addr)
   return true;
 }
 
-void scanResetDir(void) {
+static inline void scanResetDir(void) {
   if (f_file_exists(TFT_RESET_FILE)) {
     if (f_file_exists(TFT_RESET_FILE ".DONE")) {
       f_unlink(TFT_RESET_FILE ".DONE");
@@ -280,7 +280,7 @@ void scanResetDir(void) {
   }
 }
 
-void scanRenameUpdate(void) {
+static inline void scanRenameUpdate(void) {
   if (f_file_exists(ADMIN_MODE_FILE)) return; // admin mode, need not rename
 
   if (f_dir_exists(ROOT_DIR))
@@ -322,12 +322,13 @@ void scanRenameUpdate(void) {
 
 }
 
-void saveflashSign(u8* buf, uint32_t size)
+static inline void saveflashSign(u8* buf, uint32_t size)
 {
   W25Qxx_EraseSector(FLASH_SIGN_ADDR);
   Delay_ms(100); //give time for spi flash to settle
   W25Qxx_WriteBuffer(buf, FLASH_SIGN_ADDR, size);
 }
+
 void scanUpdates(void)
 {
   //bool flashUpdate[sign_count] = {true, true, true, true};

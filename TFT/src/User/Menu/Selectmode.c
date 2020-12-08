@@ -55,7 +55,7 @@ bool LCD_ReadPen(uint16_t intervals)
   return false;
 }
 
-MKEY_VALUES MKeyGetValue(void)
+static inline MKEY_VALUES MKeyGetValue(void)
 {
   return (MKEY_VALUES)KEY_GetValue(COUNT(rect_of_mode), rect_of_mode);
 }

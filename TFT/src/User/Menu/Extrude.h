@@ -5,8 +5,8 @@
 extern "C" {
 #endif
 
-extern const char* tool_change[];
-extern const char* extruderDisplayID[];
+extern const char *const tool_change[];
+extern const char *const extruderDisplayID[];
 
 void menuExtrude(void);
 

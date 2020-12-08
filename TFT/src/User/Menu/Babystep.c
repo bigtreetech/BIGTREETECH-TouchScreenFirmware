@@ -3,7 +3,7 @@
 
 #define ITEM_BABYSTEP_UNIT_NUM 3
 
-const ITEM itemBabyStepUnit[ITEM_BABYSTEP_UNIT_NUM] = {
+const ITEM itemBabyStep_steps[ITEM_BABYSTEP_UNIT_NUM] = {
   // icon                         label
   {ICON_001_MM,                   LABEL_001_MM},
   {ICON_01_MM,                    LABEL_01_MM},
@@ -103,7 +103,7 @@ void menuBabystep(void)
     babyStepItems.items[KEY_ICON_4].label.index = LABEL_SAVE;
   }
 
-  babyStepItems.items[KEY_ICON_5] = itemBabyStepUnit[babystep_steps_index];
+  babyStepItems.items[KEY_ICON_5] = itemBabyStep_steps[babystep_steps_index];
 
   menuDrawPage(&babyStepItems);
   babyReDraw(now_babystep, now_z_offset, force_z_offset, false);
@@ -144,7 +144,7 @@ void menuBabystep(void)
       // change unit
       case KEY_ICON_5:
         babystep_steps_index = (babystep_steps_index + 1) % ITEM_BABYSTEP_UNIT_NUM;
-        babyStepItems.items[key_num] = itemBabyStepUnit[babystep_steps_index];
+        babyStepItems.items[key_num] = itemBabyStep_steps[babystep_steps_index];
         menuDrawItem(&babyStepItems.items[key_num], key_num);
         break;
 

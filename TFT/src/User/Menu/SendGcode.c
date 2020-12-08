@@ -631,7 +631,7 @@ void sendGcodeTerminalCache(char *stream, TERMINAL_SRC src)
 {
   uint16_t sign_len = 0;
   uint16_t stream_len = 0;
-  const char* const terminalSign[] = {"Send: ", "Rcv: "};
+  const char *const terminalSign[] = {"Send: ", "Rcv: "};
 
   if (infoMenu.menu[infoMenu.cur] != menuSendGcode && infoMenu.menu[infoMenu.cur] != menuTerminal)
     return;

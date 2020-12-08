@@ -185,6 +185,7 @@ void menuRGBSettings(void)
 }
 
 #if QUICK_EEPROM_BUTTON == 1
+
 void menuEepromSettings(void)
 {
   // 1 title, ITEM_PER_PAGE items (icon + label)
@@ -249,7 +250,7 @@ void menuEepromSettings(void)
     loopProcess();
   }
 }
-#endif
+#endif // QUICK_EEPROM_BUTTON
 
 void menuMachineSettings(void)
 {

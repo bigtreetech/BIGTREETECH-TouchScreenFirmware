@@ -1,21 +1,12 @@
 #include "MeshTuner.h"
 #include "includes.h"
 
-#define ITEM_MESH_TUNER_UNIT_NUM 3
+#define ITEM_MESH_TUNER_STEPS_NUM 3
 
-const ITEM itemMeshUnit[ITEM_MESH_TUNER_UNIT_NUM] = {
-  // icon                         label
-  {ICON_001_MM,                   LABEL_001_MM},
-  {ICON_01_MM,                    LABEL_01_MM},
-  {ICON_1_MM,                     LABEL_1_MM},
-};
-
-const float meshUnit[ITEM_MESH_TUNER_UNIT_NUM] = {0.01f, 0.1f, 1};
-
-static u8 curUnit = 0;
+static u8 curStep_index = 0;
 
 /* Init mesh point */
-void meshInitPoint(uint16_t col, uint16_t row, float value)
+static inline void meshInitPoint(uint16_t col, uint16_t row, float value)
 {
 //  probeHeightEnable();                                     // temporary disable software endstops
   probeHeightStop();                                       // raise nozzle
@@ -26,7 +17,7 @@ void meshInitPoint(uint16_t col, uint16_t row, float value)
 }
 
 /* Reset mesh point */
-void meshResetPoint(void)
+static inline void meshResetPoint(void)
 {
   probeHeightStop();                                       // raise nozzle
 //  probeHeightDisable();                                    // restore original software endstops state
@@ -81,7 +72,7 @@ float menuMeshTuner(uint16_t col, uint16_t row, float value)
 
   meshInitPoint(col, row, value);                          // initialize mesh point
   now = curValue = coordinateGetAxisActual(Z_AXIS);
-  meshItems.items[KEY_ICON_4] = itemMeshUnit[curUnit];
+  meshItems.items[KEY_ICON_4] = itemMoveLen[curStep_index];
   menuDrawPage(&meshItems);
   meshDrawHeader(col, row);
   meshDrawValue(now);
@@ -92,11 +83,10 @@ float menuMeshTuner(uint16_t col, uint16_t row, float value)
 
   while (true)
   {
-    unit = meshUnit[curUnit];
-
+    unit = moveLenSteps[curStep_index];
     curValue = coordinateGetAxisActual(Z_AXIS);
-
     key_num = menuKeyGetValue();
+
     switch (key_num)
     {
       // decrease Z height
@@ -111,8 +101,8 @@ float menuMeshTuner(uint16_t col, uint16_t row, float value)
 
       // change unit
       case KEY_ICON_4:
-        curUnit = (curUnit + 1) % ITEM_MESH_TUNER_UNIT_NUM;
-        meshItems.items[key_num] = itemMeshUnit[curUnit];
+        curStep_index = (curStep_index + 1) % ITEM_MESH_TUNER_STEPS_NUM;
+        meshItems.items[key_num] = itemMoveLen[curStep_index];
         menuDrawItem(&meshItems.items[key_num], key_num);
         break;
 
@@ -140,7 +130,6 @@ float menuMeshTuner(uint16_t col, uint16_t row, float value)
           if (encoderPosition)
           {
             probeHeightMove(unit, encoderPosition > 0 ? 1 : -1);
-
             encoderPosition = 0;
           }
         #endif
@@ -154,7 +143,6 @@ float menuMeshTuner(uint16_t col, uint16_t row, float value)
     }
 
     probeHeightQueryCoord();
-
     loopProcess();
 
     if (infoMenu.menu[infoMenu.cur] != menuMeshEditor)
