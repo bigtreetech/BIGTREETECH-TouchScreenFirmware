@@ -157,7 +157,7 @@ void loopFan(void)
       {
         newFanSpeed[i] = desiredFanSpeed[i];
       }
-      nextSendTime = OS_GetTimeMs() + NEXT_FAN_WAIT; // avoid rapid fire, clogging the queue
+      nextFanTime = OS_GetTimeMs() + NEXT_FAN_WAIT; // avoid rapid fire, clogging the queue
     }
   }
 }
