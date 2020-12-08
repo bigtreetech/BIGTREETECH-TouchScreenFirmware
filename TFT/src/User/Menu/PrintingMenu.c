@@ -127,6 +127,7 @@ void menuBeforePrinting(void)
   }
   infoPrinting.printing = true;
   infoPrinting.time = 0;
+  resetFilamentUsed();
   infoMenu.menu[++infoMenu.cur] = menuPrinting;
 }
 
@@ -277,6 +278,7 @@ void toggleinfo(void)
     reDrawSpeed(SPD_ICON_POS);
     speedQuery();
     if (infoFile.source == BOARD_SD) coordinateQuery();
+    updateFilamentUsed();
   }
 }
 

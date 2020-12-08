@@ -6,6 +6,29 @@ PRINTING infoPrinting;
 
 static bool update_waiting = false;
 
+static float filament_used;
+static float last_E_pos;
+
+void resetFilamentUsed(void)
+{
+  filament_used = 0;
+  last_E_pos = 0;
+}
+
+void updateFilamentUsed(void)
+{
+  float E_pos = ((infoFile.source == BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
+  if (E_pos + 20 < last_E_pos) //Check whether E position reset. If retract more than 20mm, false filament used values would be calculated.
+  {
+    filament_used = filament_used + E_pos;
+    last_E_pos = E_pos;
+  } else if (E_pos > last_E_pos)
+  {
+    filament_used = filament_used + (E_pos - last_E_pos);
+    last_E_pos = E_pos;
+  }
+}
+
 //
 bool isPrinting(void)
 {
@@ -244,20 +267,20 @@ void endPrinting(void)
   request_M27(0);
   powerFailedClose();
   powerFailedDelete();
-  if(infoSettings.send_end_gcode == 1){
+  if(infoSettings.send_end_gcode == 1)
+  {
     sendPrintCodes(1);
   }
   char tempstr1[140];
   char tempstr2[70];
-  u8  hour = infoPrinting.time/3600,
-      min = infoPrinting.time%3600/60,
-      sec = infoPrinting.time%60;
-  float meter = ((infoFile.source == BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS))/1000;
-  sprintf(tempstr1, (char *)textSelect(LABEL_PRINT_TOTAL_TIME), hour,min,sec);
-  if (meter >0 )
+  u8 hour = infoPrinting.time / 3600,
+  u8 min = infoPrinting.time % 3600 / 60,
+  u8 sec = infoPrinting.time % 60;
+  sprintf(tempstr1, (char *)textSelect(LABEL_PRINT_TOTAL_TIME), hour, min, sec);
+  if (filament_used >0 )
   {
-    sprintf(tempstr2,(char *)textSelect(LABEL_PRINT_FILAMENT_USED),meter);
-    strcat(tempstr1,tempstr2);
+    sprintf(tempstr2, (char *)textSelect(LABEL_PRINT_FILAMENT_USED), filament_used / 1000);
+    strcat(tempstr1, tempstr2);
   }
   popupReminder(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, (u8*)tempstr1);
 }
@@ -429,7 +452,8 @@ void loopCheckPrinting(void)
     if(infoMenu.menu[infoMenu.cur] == menuMarlinMode) return;
   #endif
 
-  if (infoHost.printing && !infoPrinting.printing) {
+  if (infoHost.printing && !infoPrinting.printing)
+  {
     infoPrinting.printing = true;
     if (!hasPrintingMenu())
     {
