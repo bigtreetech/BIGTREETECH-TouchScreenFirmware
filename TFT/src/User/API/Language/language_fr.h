@@ -56,7 +56,7 @@
     #define STRING_BLTOUCH_REPEAT         "Répéter"
     #define STRING_Z_OFFSET               "Z Offset"
     #define STRING_PROBE_OFFSET           "Décalage Palpeur"
-    #define STRING_HOME_OFFSET            "Home Offset"
+    #define STRING_HOME_OFFSET            "Décalage Home"
     #define STRING_CONFIRMATION           "Êtes-vous sûr ?"
     #define STRING_DOWN                   "Descendre"
     #define STRING_UP                     "Monter"
@@ -86,8 +86,8 @@
     #define STRING_RESUME                 "Reprendre"
     #define STRING_LOAD                   "Charger"
     #define STRING_UNLOAD                 "Décharger"
-    #define STRING_LOAD_UNLOAD            "Charger / Décharger"  // needs translation
-    #define STRING_LOAD_UNLOAD_SHORT      "Décharger"  // needs translation
+    #define STRING_LOAD_UNLOAD            "Charger/Décharger"
+    #define STRING_LOAD_UNLOAD_SHORT      "(Dé)Charger"
     #define STRING_SLOW_SPEED             "Lent"
     #define STRING_NORMAL_SPEED           "Normal"
     #define STRING_FAST_SPEED             "Rapide"
@@ -278,9 +278,9 @@
     #define STRING_NOTIFICATIONS          "Notifications"
     #define STRING_MESH_EDITOR            "Maillage"
     #define STRING_MESH_TUNER             "Edition du maillage"
-    #define STRING_CASE_LIGHT             "Case light"
-    #define STRING_LOAD_STARTED           "Chargement du filament en cours, aucune action possible avant la fin du processus." 
-    #define STRING_UNLOAD_STARTED         "Déchargement du filament en cours, aucune action possible avant la fin du processus.."
-    #define STRING_HEATERS_ON             "Certains éléments de chauffe sont encore activés, voulez vous les arreter ?" 
+    #define STRING_CASE_LIGHT             "Caisson"
+    #define STRING_LOAD_STARTED           "Chargement du filament en cours.\nAucune action possible avant\nla fin du processus.\nVeuillez patienter."
+    #define STRING_UNLOAD_STARTED         "Déchargement du filament en cours.\nAucune action possible avant\nla fin du processus.\nVeuillez patienter."
+    #define STRING_HEATERS_ON             "Certains éléments sont\ntoujours en chauffe.\nVoulez-vous les arrêter ?"
 
 #endif
