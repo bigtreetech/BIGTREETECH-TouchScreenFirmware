@@ -11,6 +11,7 @@ typedef struct
 }DMA_CIRCULAR_BUFFER;
 
 #define DMA_TRANS_LEN  3072  // for 48k RAM
+
 extern DMA_CIRCULAR_BUFFER dmaL1Data[_UART_CNT];
 
 void Serial_DMAClearFlag(uint8_t port);

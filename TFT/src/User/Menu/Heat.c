@@ -24,7 +24,6 @@ const ITEM itemDegree[ITEM_DEGREE_NUM] = {
   {ICON_10_DEGREE,            LABEL_10_DEGREE},
 };
 
-
 const  u8 item_degree[ITEM_DEGREE_NUM] = {1, 5, 10};
 static u8 item_degree_i = 1;
 
@@ -83,7 +82,7 @@ void menuHeat(void)
     KEY_VALUES key_num = menuKeyGetValue();
     int16_t actCurrent = heatGetCurrentTemp(c_heater);
     int16_t actTarget = heatGetTargetTemp(c_heater);
-	
+
     switch(key_num)
     {
       case KEY_ICON_0:
@@ -91,21 +90,22 @@ void menuHeat(void)
         break;
 
       case KEY_INFOBOX:
-      {
-        int32_t val = actTarget;
-        char titlestr[30];
-        sprintf(titlestr, "Min:0 | Max:%i", infoSettings.max_temp[c_heater] );
-        val = numPadInt((u8 *)titlestr, actTarget,0, false);
-        val = NOBEYOND(0,val,infoSettings.max_temp[c_heater]);
-        if (val != actTarget)
-      	{
-          heatSetTargetTemp(c_heater, val);
-        }
+        {
+          int32_t val = actTarget;
+          char titlestr[30];
 
-        menuDrawPage(&heatItems);
-        showTemperature(c_heater);
-      }
-      break;
+          sprintf(titlestr, "Min:0 | Max:%i", infoSettings.max_temp[c_heater]);
+          val = numPadInt((u8 *) titlestr, actTarget, 0, false);
+          val = NOBEYOND(0, val, infoSettings.max_temp[c_heater]);
+          if (val != actTarget)
+          {
+            heatSetTargetTemp(c_heater, val);
+          }
+
+          menuDrawPage(&heatItems);
+          showTemperature(c_heater);
+        }
+        break;
 
       case KEY_ICON_3:
           heatSetTargetTemp(c_heater, actTarget + item_degree[item_degree_i]);

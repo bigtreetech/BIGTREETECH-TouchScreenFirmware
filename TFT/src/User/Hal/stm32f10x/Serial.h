@@ -15,6 +15,7 @@ typedef struct
 #else
   #define DMA_TRANS_LEN  3072 // for 48k RAM
 #endif
+
 extern DMA_CIRCULAR_BUFFER dmaL1Data[_UART_CNT];
 
 void Serial_Init(u32 baud);

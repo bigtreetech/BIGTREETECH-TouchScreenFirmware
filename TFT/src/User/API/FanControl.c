@@ -13,7 +13,7 @@ static bool fanQueryWait = false;
 static bool fanQueryEnable = false;
 
 static uint32_t nextSendTime = 0;
-#define nextSendWait  500  // 1 second is 1000 
+#define nextSendWait 500  // 1 second is 1000
 
 uint8_t fanGetTypID(uint8_t startIndex, uint8_t type) {
   for(uint8_t i = startIndex; i < MAX_FAN_COUNT; i++) {
@@ -45,10 +45,10 @@ void fanBuildList(void)
 void fanControlInit(void) {
   fanBuildList();
 
-  fanQueryEnable = 
-    ( infoSettings.fan_ctrl_count > 0 && 
-      (fanGetTypID( infoSettings.fan_count -1,FAN_TYPE_CTRL_I ) || 
-       fanGetTypID( infoSettings.fan_count -1,FAN_TYPE_CTRL_S ) ) 
+  fanQueryEnable =
+    ( infoSettings.fan_ctrl_count > 0 &&
+      (fanGetTypID( infoSettings.fan_count -1,FAN_TYPE_CTRL_I ) ||
+       fanGetTypID( infoSettings.fan_count -1,FAN_TYPE_CTRL_S ) )
     );
 }
 
@@ -124,7 +124,6 @@ void fanSpeedQuerySetWait(bool wait)
   fanQueryWait = wait;
 }
 
-
 void loopFan(void)
 {
   for (uint8_t i = 0; i < (infoSettings.fan_count + infoSettings.fan_ctrl_count); i++)
@@ -134,10 +133,10 @@ void loopFan(void)
       if(fan_send_waiting[i] == false)
       {
         if(fanIsType(i,FAN_TYPE_F) || fanIsType(i,FAN_TYPE_CTRL_S)) {
-          fan_send_waiting[i] = storeCmd("%s S%d\n", fanCmd[i],desiredFanSpeed[i]);
-        } 
+          fan_send_waiting[i] = storeCmd("%s S%d\n", fanCmd[i], desiredFanSpeed[i]);
+        }
         else if (fanIsType(i,FAN_TYPE_CTRL_I)) {
-          fan_send_waiting[i] = storeCmd("%s I%d\n", fanCmd[i],desiredFanSpeed[i]);
+          fan_send_waiting[i] = storeCmd("%s I%d\n", fanCmd[i], desiredFanSpeed[i]);
         }
       }
       if (fan_send_waiting[i] == true) newFanSpeed[i] = desiredFanSpeed[i];
@@ -148,9 +147,9 @@ void loopFan(void)
 
 void fanSpeedQuery(void)
 {
-  if( fanQueryEnable && infoHost.connected && 
+  if( fanQueryEnable && infoHost.connected &&
       !infoHost.wait && !fanQueryWait )
-  { 
+  {
     storeCmd("M710\n");
     fanQueryWait = true;
   }

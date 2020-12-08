@@ -9,7 +9,7 @@ static bool send_waiting[SPEED_NUM];
 static bool queryWait = false;
 
 static uint32_t nextSpeedTime = 0;
-#define nextSpeedWait  500  // 1 second is 1000 
+#define nextSpeedWait 500  // 1 second is 1000
 
 void speedSetSendWaiting(u8 tool, bool isWaiting)
 {
@@ -60,10 +60,10 @@ void loopSpeed(void)
       {
         send_waiting[i] = true;
         const char *speedCmd[SPEED_NUM] = {"M220","M221"};
-        send_waiting[i] = storeCmd("%s S%d\n",speedCmd[i], percent[i]);
+        send_waiting[i] = storeCmd("%s S%d\n", speedCmd[i], percent[i]);
       }
-    if (send_waiting[i] == true) curPercent[i] = percent[i];
-    nextSpeedTime = OS_GetTimeMs() + nextSpeedWait; // avoid rapid fire, clogging the queue
+      if (send_waiting[i] == true) curPercent[i] = percent[i];
+      nextSpeedTime = OS_GetTimeMs() + nextSpeedWait; // avoid rapid fire, clogging the queue
     }
 }
 

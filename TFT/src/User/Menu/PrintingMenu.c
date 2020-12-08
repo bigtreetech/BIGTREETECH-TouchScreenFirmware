@@ -92,7 +92,7 @@ void menuBeforePrinting(void)
       //      request_M24(infoBreakPoint.offset);
       //    }
 
-      if (infoMachineSettings.autoReportSDStatus ==1)
+      if (infoMachineSettings.autoReportSDStatus == 1)
       {
         request_M27(infoSettings.m27_refresh_time);                //Check if there is a SD or USB print running.
       }
@@ -282,13 +282,13 @@ void toggleinfo(void)
 void printingDrawPage(void)
 {
   //  Scroll_CreatePara(&titleScroll, infoFile.title,&titleRect);  //
-    reValueNozzle(EXT_ICON_POS);
-    reValueBed(BED_ICON_POS);
-    reDrawFan(FAN_ICON_POS);
-    reDrawTime(TIM_ICON_POS);
-    reDrawProgress(TIM_ICON_POS);
-    reDrawLayer(Z_ICON_POS);
-    reDrawSpeed(SPD_ICON_POS);
+  reValueNozzle(EXT_ICON_POS);
+  reValueBed(BED_ICON_POS);
+  reDrawFan(FAN_ICON_POS);
+  reDrawTime(TIM_ICON_POS);
+  reDrawProgress(TIM_ICON_POS);
+  reDrawLayer(Z_ICON_POS);
+  reDrawSpeed(SPD_ICON_POS);
 }
 
 
