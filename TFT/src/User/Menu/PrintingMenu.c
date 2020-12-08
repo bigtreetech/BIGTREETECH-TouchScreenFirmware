@@ -30,15 +30,15 @@ const GUI_RECT printinfo_val_rect[6] = {
         START_X + PICON_LG_WIDTH*2 + PICON_SPACE_X*2 + PICON_VAL_SM_EX,     ICON_START_Y + PICON_HEIGHT*1 + PICON_SPACE_Y*1 + PICON_VAL_Y + BYTE_HEIGHT},
 };
 
-static uint32_t nextTime = 0;
+static uint32_t nextToggleTime = 0;
 static uint32_t nextDrawTime = 0;
 static uint8_t c_Tool = NOZZLE0;
 static int c_fan = 0;
 static int c_speedID = 0;
 const char* Speed_ID[2] = {"Speed","Flow"};
 
-#define toggle_time 2000; // 1 seconds is 1000
-#define drawTime 500; // 1 seconds is 1000
+#define TOGGLE_TIME 2000; // 1 seconds is 1000
+#define DRAW_TIME 500; // 1 seconds is 1000
 
 #define LAYER_TITLE "Layer"
 #define EXT_ICON_POS  0
@@ -248,13 +248,13 @@ void reDrawLayer(int icon_pos)
     GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (u8 *)tempstr);
 
     GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
-    nextDrawTime = OS_GetTimeMs() + drawTime;
+    nextDrawTime = OS_GetTimeMs() + DRAW_TIME;
   }
 }
 
 void toggleinfo(void)
 {
-  if (OS_GetTimeMs() > nextTime)
+  if (OS_GetTimeMs() > nextToggleTime)
   {
     if (infoSettings.hotend_count > 1)
     {
@@ -271,7 +271,7 @@ void toggleinfo(void)
     }
 
     c_speedID = (c_speedID + 1) % 2;
-    nextTime = OS_GetTimeMs() + toggle_time;
+    nextToggleTime = OS_GetTimeMs() + TOGGLE_TIME;
     rapid_serial_loop();   //perform backend printing loop before drawing to avoid printer idling
     reDrawSpeed(SPD_ICON_POS);
     speedQuery();

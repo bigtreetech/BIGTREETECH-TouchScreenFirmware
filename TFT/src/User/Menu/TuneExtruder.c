@@ -140,7 +140,8 @@ void menuTuneExtruder(void)
         do
         {
           c_heater = (c_heater + 1) % MAX_HOTEND_COUNT;
-        } while(!heaterIsValid(c_heater));
+        }
+        while(!heaterIsValid(c_heater));
 
         showExtrudeTemperature(c_heater);
         break;

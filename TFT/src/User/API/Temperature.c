@@ -186,7 +186,8 @@ void loopCheckHeater(void)
       }
       updateNextHeatCheckTime();
       heat_update_waiting = true;
-    } while(0);
+    }
+    while(0);
   }
 
   // Query the heater that needs to wait for the temperature to rise, whether it reaches the set temperature

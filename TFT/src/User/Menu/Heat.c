@@ -112,9 +112,11 @@ void menuHeat(void)
         break;
 
       case KEY_ICON_4:
-        do{
+        do
+        {
           c_heater = (c_heater + 1) % MAX_HEATER_COUNT;
-        } while(!heaterIsValid(c_heater));
+        }
+        while(!heaterIsValid(c_heater));
         heatItems.items[key_num] = itemTool[c_heater];
         menuDrawItem(&heatItems.items[key_num], key_num);
         showTemperature(c_heater);
