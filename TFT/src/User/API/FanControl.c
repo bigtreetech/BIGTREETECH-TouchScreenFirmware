@@ -4,15 +4,14 @@ char*   fanID[MAX_FAN_COUNT];
 char*   fanCmd[MAX_FAN_COUNT];
 uint8_t fanType[MAX_FAN_COUNT];
 
-static uint8_t desiredFanSpeed[MAX_FAN_COUNT] = {0};  // by Lori
-static uint8_t newFanSpeed[MAX_FAN_COUNT] = {0};  // by Lori
-static uint8_t curFanSpeed[MAX_FAN_COUNT] = {0};  // by Lori
-
+static uint8_t desiredFanSpeed[MAX_FAN_COUNT] = {0};
+static uint8_t newFanSpeed[MAX_FAN_COUNT] = {0};
+static uint8_t curFanSpeed[MAX_FAN_COUNT] = {0};
 static bool fan_send_waiting[MAX_FAN_COUNT] = {false};
 static bool fanQueryWait = false;
 static bool fanQueryEnable = false;
 
-static uint32_t nextSendTime = 0;
+static uint32_t nextFanTime = 0;
 #define nextSendWait  500  // 1 second is 1000 
 
 uint8_t fanGetTypID(uint8_t startIndex, uint8_t type) {
@@ -56,7 +55,7 @@ bool fanIsType(uint8_t i, uint8_t type) {
   return (fanType[i] == type);
 }
 
-void fanSetRcvSpeed(uint8_t i, uint8_t speed)  // by Lori
+void fanSetRcvSpeed(uint8_t i, uint8_t speed)
 {
   curFanSpeed[i] = newFanSpeed[i]= desiredFanSpeed[i] = speed;  // avoid resend received values
 }
@@ -129,7 +128,7 @@ void loopFan(void)
 {
   for (uint8_t i = 0; i < (infoSettings.fan_count + infoSettings.fan_ctrl_count); i++)
   {
-    if ((newFanSpeed[i] != desiredFanSpeed[i]) && (OS_GetTimeMs() > nextSendTime))
+    if ((newFanSpeed[i] != desiredFanSpeed[i]) && (OS_GetTimeMs() > nextFanTime))
     {
       if(fan_send_waiting[i] == false)
       {
@@ -141,7 +140,7 @@ void loopFan(void)
         }
       }
       if (fan_send_waiting[i] == true) newFanSpeed[i] = desiredFanSpeed[i];
-      nextSendTime = OS_GetTimeMs() + nextSendWait; // avoid rapid fire, clogging the queue
+      nextFanTime = OS_GetTimeMs() + nextSendWait; // avoid rapid fire, clogging the queue
     }
   }
 }
