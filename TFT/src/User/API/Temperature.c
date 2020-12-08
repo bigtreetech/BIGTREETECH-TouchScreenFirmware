@@ -78,7 +78,7 @@ void heatSetIsWaiting(uint8_t tool, HEATER_WAIT isWaiting)
 
 void heatClearIsWaiting(void)
 {
-  for(uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
+  for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
   {
     heater.T[i].waiting = WAIT_NONE;
   }

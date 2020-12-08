@@ -86,7 +86,7 @@ void menuHeat(void)
     switch(key_num)
     {
       case KEY_ICON_0:
-          heatSetTargetTemp(c_heater, actTarget - item_degree[item_degree_i]);
+        heatSetTargetTemp(c_heater, actTarget - item_degree[item_degree_i]);
         break;
 
       case KEY_INFOBOX:
