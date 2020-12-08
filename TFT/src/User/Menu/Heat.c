@@ -123,7 +123,7 @@ void menuHeat(void)
         break;
 
       case KEY_ICON_5:
-        item_degree_i = (item_degree_i+1) % ITEM_DEGREE_NUM;
+        item_degree_i = (item_degree_i + 1) % ITEM_DEGREE_NUM;
         heatItems.items[key_num] = itemDegree[item_degree_i];
         menuDrawItem(&heatItems.items[key_num], key_num);
         break;

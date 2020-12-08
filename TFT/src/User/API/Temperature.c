@@ -56,7 +56,9 @@ bool heatHasWaiting(void)
   for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
   {
     if (heater.T[i].waiting != WAIT_NONE)
+    {
       return true;
+    }
   }
   return false;
 }

@@ -59,8 +59,8 @@ void fanControlInit(void)
 
   fanQueryEnable =
     (infoSettings.fan_ctrl_count > 0 &&
-     (fanGetTypID( infoSettings.fan_count -1, FAN_TYPE_CTRL_I ) ||
-      fanGetTypID( infoSettings.fan_count -1, FAN_TYPE_CTRL_S ))
+     (fanGetTypID(infoSettings.fan_count -1, FAN_TYPE_CTRL_I) ||
+      fanGetTypID(infoSettings.fan_count -1, FAN_TYPE_CTRL_S))
     );
 }
 

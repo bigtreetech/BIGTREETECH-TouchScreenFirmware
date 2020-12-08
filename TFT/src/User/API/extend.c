@@ -117,7 +117,6 @@ bool FIL_RunoutPinFilteredLevel(void)
   return rst;
 }
 
-
 // Use an encoder disc to toggles the runout
 // Suitable for BigTreeTech Smart Filament Sensor
 static uint32_t update_time = 2000;

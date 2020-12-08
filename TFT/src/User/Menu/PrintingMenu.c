@@ -302,17 +302,17 @@ void menuPrinting(void)
 {
   //1title, ITEM_PER_PAGE item(icon + label)
   MENUITEMS printingItems = {
-  //  title
-  LABEL_BACKGROUND,
-  // icon                       label
-   {{ICON_BACKGROUND,           LABEL_BACKGROUND},
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},
-    {ICON_BABYSTEP,             LABEL_BABYSTEP},
-    {ICON_PAUSE,                LABEL_PAUSE},
-    {ICON_MORE,                 LABEL_MORE},
-    {ICON_STOP,                 LABEL_STOP},}
+    //  title
+    LABEL_BACKGROUND,
+    // icon                      label
+    {{ICON_BACKGROUND,           LABEL_BACKGROUND},
+     {ICON_BACKGROUND,           LABEL_BACKGROUND},
+     {ICON_BACKGROUND,           LABEL_BACKGROUND},
+     {ICON_BACKGROUND,           LABEL_BACKGROUND},
+     {ICON_BABYSTEP,             LABEL_BABYSTEP},
+     {ICON_PAUSE,                LABEL_PAUSE},
+     {ICON_MORE,                 LABEL_MORE},
+     {ICON_STOP,                 LABEL_STOP},}
   };
   uint8_t   nowFan[MAX_FAN_COUNT] = {0};
   uint16_t  curspeed[2] = {0};
