@@ -392,7 +392,7 @@ void parseACK(void)
       }
       else if(ack_seen("Count E:")) // Parse actual extruder position, response of "M114 E\n", required "M114_DETAIL" in Marlin
       {
-        coordinateSetAxisActualSteps(E_AXIS, ack_value());
+        coordinateSetExtruderActualSteps(ack_value());
       }
       else if(infoMachineSettings.onboard_sd_support == ENABLED && ack_seen("File opened: "))
       {
