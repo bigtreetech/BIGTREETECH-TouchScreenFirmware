@@ -13,7 +13,8 @@ static bool fanQueryWait = false;
 static bool fanQueryEnable = false;
 
 static uint32_t nextSendTime = 0;
-#define nextSendWait 500  // 1 second is 1000
+
+#define NEXT_SEND_WAIT 500  // 1 second is 1000
 
 uint8_t fanGetTypID(uint8_t startIndex, uint8_t type)
 {
@@ -156,7 +157,7 @@ void loopFan(void)
       {
         newFanSpeed[i] = desiredFanSpeed[i];
       }
-      nextSendTime = OS_GetTimeMs() + nextSendWait; // avoid rapid fire, clogging the queue
+      nextSendTime = OS_GetTimeMs() + NEXT_SEND_WAIT; // avoid rapid fire, clogging the queue
     }
   }
 }

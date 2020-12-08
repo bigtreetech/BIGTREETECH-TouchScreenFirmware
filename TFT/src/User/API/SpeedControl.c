@@ -9,7 +9,8 @@ static bool send_waiting[SPEED_NUM];
 static bool queryWait = false;
 
 static uint32_t nextSpeedTime = 0;
-#define nextSpeedWait 500  // 1 second is 1000
+
+#define NEXT_SPEED_WAIT 500  // 1 second is 1000
 
 void speedSetSendWaiting(u8 tool, bool isWaiting)
 {
@@ -67,7 +68,7 @@ void loopSpeed(void)
       {
         curPercent[i] = percent[i];
       }
-      nextSpeedTime = OS_GetTimeMs() + nextSpeedWait; // avoid rapid fire, clogging the queue
+      nextSpeedTime = OS_GetTimeMs() + NEXT_SPEED_WAIT; // avoid rapid fire, clogging the queue
     }
   }
 }
