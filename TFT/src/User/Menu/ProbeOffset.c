@@ -24,9 +24,13 @@ void probeDrawStatus(u8 *status)
   sprintf(tempstr, "%s  ", status);
 
   if (!probeOffsetGetStatus())
+  {
     GUI_SetColor(infoSettings.reminder_color);
+  }
   else
+  {
     GUI_SetColor(infoSettings.sd_reminder_color);
+  }
 
   GUI_DispString(exhibitRect.x0, exhibitRect.y0, (u8 *) tempstr);
   GUI_SetColor(infoSettings.font_color);
@@ -91,9 +95,13 @@ void menuProbeOffset(void)
   now = z_offset = probeOffsetGetValue();
 
   if (!probeOffsetGetStatus())
+  {
     probeOffsetItems.items[KEY_ICON_4].label.index = LABEL_OFF;
+  }
   else
+  {
     probeOffsetItems.items[KEY_ICON_4].label.index = LABEL_ON;
+  }
 
   itemProbeOffsetSubmenu[0] = itemProbeOffsetUnit[curUnit];
   probeOffsetItems.items[KEY_ICON_6] = itemProbeOffsetSubmenu[curSubmenu];
@@ -118,9 +126,13 @@ void menuProbeOffset(void)
       // decrease Z offset
       case KEY_ICON_0:
         if (!probeOffsetGetStatus())
+        {
           probeNotifyError();
+        }
         else
+        {
           z_offset = probeOffsetDecreaseValue(unit);
+        }
         break;
 
       case KEY_INFOBOX:
@@ -142,9 +154,13 @@ void menuProbeOffset(void)
       // increase Z offset
       case KEY_ICON_3:
         if (!probeOffsetGetStatus())
+        {
           probeNotifyError();
+        }
         else
+        {
           z_offset = probeOffsetIncreaseValue(unit);
+        }
         break;
 
       // enable/disable Z offset change
@@ -192,9 +208,13 @@ void menuProbeOffset(void)
           // reset Z offset to default value
           case 1:
             if (!probeOffsetGetStatus())
+            {
               probeNotifyError();
+            }
             else
+            {
               z_offset = probeOffsetResetValue();
+            }
             break;
 
           // save to EEPROM
@@ -209,9 +229,13 @@ void menuProbeOffset(void)
           // unlock XY axis
           case 3:
             if (!probeOffsetGetStatus())
+            {
               probeNotifyError();
+            }
             else
+            {
               storeCmd("M84 X Y E\n");
+            }
             break;
 
           default:
@@ -221,7 +245,9 @@ void menuProbeOffset(void)
 
       case KEY_ICON_7:
         if (probeOffsetGetStatus())
+        {
           probeOffsetDisable();
+        }
 
         infoMenu.cur--;
         break;
@@ -231,9 +257,13 @@ void menuProbeOffset(void)
           if (encoderPosition)
           {
             if (!probeOffsetGetStatus())
+            {
               probeNotifyError();
+            }
             else
+            {
               z_offset = probeOffsetUpdateValueByEncoder(unit, encoderPosition > 0 ? 1 : -1);
+            }
 
             encoderPosition = 0;
           }

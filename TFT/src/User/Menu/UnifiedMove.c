@@ -51,7 +51,9 @@ void menuUnifiedMove(void)
 
       case KEY_ICON_3:
         if (infoMachineSettings.leveling != BL_DISABLED)
+        {
           infoMenu.menu[++infoMenu.cur] = menuBedLeveling;
+        }
         break;
 
       case KEY_ICON_4:
