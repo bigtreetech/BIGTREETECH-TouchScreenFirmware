@@ -86,8 +86,8 @@
     #define STRING_RESUME                 "Obnovit"
     #define STRING_LOAD                   "Zavést"
     #define STRING_UNLOAD                 "Vysunout"
-    #define STRING_LOAD_UNLOAD            "Load/Unload"  // needs translation
-    #define STRING_LOAD_UNLOAD_SHORT      "(Un)Load"  // needs translation
+    #define STRING_LOAD_UNLOAD            "Vysunout/Zavést"
+    #define STRING_LOAD_UNLOAD_SHORT      "Vysunout"
     #define STRING_SLOW_SPEED             "Pomalu"
     #define STRING_NORMAL_SPEED           "Normál"
     #define STRING_FAST_SPEED             "Rychle"
@@ -239,7 +239,7 @@
     #define STRING_SETTING_RESTORE        "Obnovení nastavení"
     #define STRING_EEPROM_SETTINGS        "EEPROM"
     #define STRING_EEPROM_SAVE_INFO       "Uložit nastavení tiskárny\ndo EEPROM?"
-    #define STRING_EEPROM_RESTORE_INFO    "Obnovit nastavení \nz EEPROM?"
+    #define STRING_EEPROM_RESTORE_INFO    "Obnovit nastavení\nz EEPROM?"
     #define STRING_EEPROM_RESET_INFO      "Reset EEPROM na výchozí hodnoty?"
     #define STRING_RETRACT_FEEDRATE       "Rychlost zatažení"
     #define STRING_RETRACT_LENGTH         "Délka zatažení"
@@ -252,23 +252,23 @@
     #define STRING_SWAP_RECOVER_LENGTH    "Délka obnovení Swap"
     #define STRING_START_PRINT            "Spustit tisk:\n %s?"
     #define STRING_ACK_NOTIFICATION       "Styl oznámení ACK"
-    #define STRING_LEVELING_EDGE_DISTANCE "Vzdálenost nivelačních bodů\n stolku od kraje"
+    #define STRING_LEVELING_EDGE_DISTANCE "Vzdálenost nivelačních bodů\nstolku od okraje"
     #define STRING_XY_UNLOCK              "Uvolnit XY"
     #define STRING_TUNING                 "Kalibrace"
     #define STRING_PID                    "PID"
     #define STRING_PID_TITLE              "PID autokalibrace"
-    #define STRING_PID_START_INFO         "PID autokalibrace bude spuštěna.\n Bude to cvíli trvat. Pokračovat?"
+    #define STRING_PID_START_INFO         "PID autokalibrace bude spuštěna.\nBude to chvíli trvat.\nPokračovat?"
     #define STRING_PID_START_INFO_2       "PID autokalibrace probíhá!"
-    #define STRING_PID_START_INFO_3       "NEDOTÝKEJ se displeje dokud není dokončeno\n (Zelená LED svítí)!"
+    #define STRING_PID_START_INFO_3       "NEDOTÝKEJ se displeje dokud není dokončeno\n(Zelená LED svítí)!"
     #define STRING_TUNE_EXTRUDER          "E-Krok"
     #define STRING_TUNE_EXT_EXTRUDE_100   "100mm Vysunutí"
     #define STRING_TUNE_EXT_TEMP          "Kalibrace extruderu, ohřev"
     #define STRING_TUNE_EXT_TEMPLOW       "Požadovaná teplota je příliš nízká!\nMinimální teplota: %d C"
     #define STRING_TUNE_EXT_DESIREDVAL    "Teplota ještě není na požadované hodnotě"
-    #define STRING_TUNE_EXT_MARK120MM     "Označ 120mm on fillamentu\nStlač '%s' pokud jsi připraven.\nZměř zbývající délku\npo vytlačení."
+    #define STRING_TUNE_EXT_MARK120MM     "Označ 120mm na filamentu\nStlač '%s' pokud jsi připraven.\nZměř zbývající délku\npo vytlačení."
     #define STRING_TUNE_EXT_HEATOFF       "Vypnout topení?"
     #define STRING_TUNE_EXT_ADJ_ESTEPS    "Nastavení E-Kroků"
-    #define STRING_TUNE_EXT_ESTEPS_SAVED  "Nové E-kroky uloženy!\nNezapmeň \nuložit do EEPROM.\nNová hodnota: %0.2f"
+    #define STRING_TUNE_EXT_ESTEPS_SAVED  "Nové E-kroky uloženy!\nNezapmeň uložit do EEPROM.\nNová hodnota: %0.2f"
     #define STRING_TUNE_EXT_MEASURED      "Zbývající délka:"
     #define STRING_TUNE_EXT_OLD_ESTEP     "Původní E-kroky: %0.2f"
     #define STRING_TUNE_EXT_NEW_ESTEP     "Nový E-kroky: %0.2f"
@@ -278,9 +278,9 @@
     #define STRING_NOTIFICATIONS          "Oznámení"
     #define STRING_MESH_EDITOR            "Mesh síť"
     #define STRING_MESH_TUNER             "Mesh nastavení"
-    #define STRING_CASE_LIGHT             "Case light"
-    #define STRING_LOAD_STARTED           "Filament load in progress.\nNo further actions possible\nuntil it's done.\nPlease stand by."  // translation needed
-    #define STRING_UNLOAD_STARTED         "Filament unload in progress.\nNo further actions possible\nuntil it's done.\nPlease stand by."  // translation needed
-    #define STRING_HEATERS_ON             "Some heaters are still ON.\nDo you want to stop them?"  // translation needed
+    #define STRING_CASE_LIGHT             "Osvětlení"
+    #define STRING_LOAD_STARTED           "Probíhá zavádění filamentu.\nNení možná další akce,\ndokud to nebude dokončeno.\nProsím čekejte."  // translation needed
+    #define STRING_UNLOAD_STARTED         "Probíhá vysunování filamentu.\nNení možná další akce,\ndokud to nebude dokončeno.\nProsím čekejte.."  // translation needed
+    #define STRING_HEATERS_ON             "Topení jsou stále zapnutá.\nChcete je vypnout?"  // translation needed
 
 #endif
