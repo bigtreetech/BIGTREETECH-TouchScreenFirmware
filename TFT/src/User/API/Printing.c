@@ -12,13 +12,13 @@ static float last_E_pos;
 void resetFilamentUsed(void)
 {
   filament_used = 0;
-  last_E_pos = 0;
+  last_E_pos = ((infoFile.source == BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
 }
 
 void updateFilamentUsed(void)
 {
   float E_pos = ((infoFile.source == BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
-  if (E_pos + 20 < last_E_pos) //Check whether E position reset. If retract more than 20mm, false filament used values would be calculated.
+  if ((E_pos + 20) < last_E_pos) //Check whether E position reset. If retract more than 20mm, false filament used values would be calculated.
   {
     filament_used = filament_used + E_pos;
     last_E_pos = E_pos;
@@ -263,26 +263,30 @@ void endPrinting(void)
       break;
   }
   infoPrinting.printing = infoPrinting.pause = false;
-  infoMenu.cur = 0;
   request_M27(0);
   powerFailedClose();
   powerFailedDelete();
-  if(infoSettings.send_end_gcode == 1)
+  if((infoFile.source != BOARD_SD) && (infoSettings.send_end_gcode == 1))
   {
     sendPrintCodes(1);
   }
-  char tempstr1[140];
-  char tempstr2[70];
-  u8 hour = infoPrinting.time / 3600,
-  u8 min = infoPrinting.time % 3600 / 60,
-  u8 sec = infoPrinting.time % 60;
-  sprintf(tempstr1, (char *)textSelect(LABEL_PRINT_TOTAL_TIME), hour, min, sec);
-  if (filament_used >0 )
+  if (infoSettings.print_summary)
   {
-    sprintf(tempstr2, (char *)textSelect(LABEL_PRINT_FILAMENT_USED), filament_used / 1000);
-    strcat(tempstr1, tempstr2);
+    infoMenu.cur = 0;
+    char tempstr1[140];
+    char tempstr2[70];
+    u8 hour = infoPrinting.time / 3600;
+    u8 min = infoPrinting.time % 3600 / 60;
+    u8 sec = infoPrinting.time % 60;
+    sprintf(tempstr1, (char *)textSelect(LABEL_PRINT_TOTAL_TIME), hour, min, sec);
+    if (filament_used >0 )
+    {
+      sprintf(tempstr2, (char *)textSelect(LABEL_PRINT_FILAMENT_USED), filament_used / 1000);
+      strcat(tempstr1, tempstr2);
+      resetFilamentUsed();
+    }
+    popupReminder(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, (u8*)tempstr1);
   }
-  popupReminder(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, (u8*)tempstr1);
 }
 
 
@@ -461,7 +465,7 @@ void loopCheckPrinting(void)
     }
   }
 
-  if (!infoPrinting.printing && (infoMenu.menu[infoMenu.cur] == menuPrinting))
+  if (!infoPrinting.printing && (infoMenu.menu[infoMenu.cur] == menuPrinting) && infoSettings.print_summary)
   {
     infoMenu.cur = 0;
   }

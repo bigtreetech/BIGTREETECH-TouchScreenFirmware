@@ -284,5 +284,6 @@
     #define STRING_HEATERS_ON             "Some heaters are still ON.\nDo you want to stop them?"
     #define STRING_PRINT_TOTAL_TIME       "Print complete.\nPrint Time: %02u:%02u:%02u \n"
     #define STRING_PRINT_FILAMENT_USED    "Filament Used: %3.2f meters"
+    #define STRING_PRINT_SUMMARY          "Print Summary Popup"
 
 #endif

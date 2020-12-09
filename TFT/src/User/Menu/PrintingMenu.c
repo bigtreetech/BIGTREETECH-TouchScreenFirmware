@@ -127,8 +127,11 @@ void menuBeforePrinting(void)
   }
   infoPrinting.printing = true;
   infoPrinting.time = 0;
-  resetFilamentUsed();
-  infoMenu.menu[++infoMenu.cur] = menuPrinting;
+  if (infoSettings.print_summary)
+  {
+    resetFilamentUsed();
+  }
+  infoMenu.menu[infoMenu.cur] = menuPrinting;
 }
 
 const GUI_RECT progressRect = {1*SPACE_X_PER_ICON, 0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y + ICON_HEIGHT/4,
@@ -278,7 +281,10 @@ void toggleinfo(void)
     reDrawSpeed(SPD_ICON_POS);
     speedQuery();
     if (infoFile.source == BOARD_SD) coordinateQuery();
-    updateFilamentUsed();
+    if (infoSettings.print_summary)
+    {
+      updateFilamentUsed();
+    }
   }
 }
 
@@ -298,6 +304,10 @@ void printingDrawPage(void)
 void stopConfirm(void)
 {
   abortPrinting();
+  if (!infoSettings.print_summary)
+  {
+    --infoMenu.cur;
+  }
 }
 
 void menuPrinting(void)
@@ -442,7 +452,12 @@ void menuPrinting(void)
         else
         {
           exitPrinting();
-          infoMenu.cur = 0;
+          if (infoSettings.print_summary)
+          {
+            infoMenu.cur = 0;
+          } else {
+            --infoMenu.cur;
+          }
         }
         break;
 

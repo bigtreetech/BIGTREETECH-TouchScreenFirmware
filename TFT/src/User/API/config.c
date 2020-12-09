@@ -601,6 +601,10 @@ void parseConfigKey(u16 index)
       break;
     }
 
+  case C_INDEX_PRINT_SUMMARY:
+      infoSettings.print_summary = getOnOff();
+    break;
+
   //---------------------------------------------------------Marlin Mode Settings (Only for TFT35_V3.0/TFT24_V1.1/TFT28V3.0)
 
 #if defined(ST7920_SPI) || defined(LCD2004_simulator)

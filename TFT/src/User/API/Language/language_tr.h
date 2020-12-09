@@ -284,5 +284,6 @@
     #define STRING_HEATERS_ON             "Some heaters are still ON.\nDo you want to stop them?"  // translation needed
     #define STRING_PRINT_TOTAL_TIME       "Baskı tamamlandı.\nBaskı Süresi: %02u:%02u:%02u \n"
     #define STRING_PRINT_FILAMENT_USED    "Kullanılan Filaman: %3.2f metre"
+    #define STRING_PRINT_SUMMARY          "Baskı Özeti"
 
 #endif

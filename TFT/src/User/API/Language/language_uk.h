@@ -284,5 +284,6 @@
     #define STRING_HEATERS_ON            "Деякі обігрівачі\nвсе ще увімкнені. \nВи хочете їх зупинити?"
     #define STRING_PRINT_TOTAL_TIME      "Print complete.\nPrint Time: %02u:%02u:%02u \n"  // translation needed
     #define STRING_PRINT_FILAMENT_USED   "Filament Used: %3.2f meters"  // translation needed
+    #define STRING_PRINT_SUMMARY         "Print Summary Popup"  // translation needed
 
 #endif
