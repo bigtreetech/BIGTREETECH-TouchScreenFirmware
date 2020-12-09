@@ -139,7 +139,7 @@ void tone(const uint16_t frequency, const uint16_t duration)
   if (frequency == 0 || duration == 0) return;
 
   NVIC_DisableIRQ(TIM3_IRQn);
-  toggles = 2 * (frequency * duration / 1000);
+  toggles = 2 * (frequency * duration / 1000);  // must have an even value
 
   TIM3->CR1 &= ~TIM_CR1_CEN;
   TIM3->CNT =0;
