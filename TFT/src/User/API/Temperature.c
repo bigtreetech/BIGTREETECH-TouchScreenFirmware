@@ -126,7 +126,7 @@ void heatSetUpdateSeconds(uint8_t seconds)
   if (infoMachineSettings.autoReportTemp && !heat_update_waiting)
   {
     heat_update_waiting = true;
-    storeCmd("M155\n");
+    storeCmd("M155 ");
   }
 }
 
