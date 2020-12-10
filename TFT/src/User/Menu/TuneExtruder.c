@@ -144,7 +144,6 @@ void menuTuneExtruder(void)
       case KEY_ICON_6:
       {
         char tempMsg[120];
-        char tempMsg[120];
 
         if (heatGetTargetTemp(c_heater) < infoSettings.min_ext_temp)
         {
