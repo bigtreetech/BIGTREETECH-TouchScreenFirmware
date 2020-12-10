@@ -279,23 +279,21 @@ void menuPid(void)
         break;
 
       case KEY_INFOBOX:
-      {
-        int32_t val = pidHeater.T[pidHeater.toolIndex].target;
-        // Get the touch of the user from either icon 1 or 2 which is under the temperature			
-        char titlestr[30];
-        sprintf(titlestr, "Min:0 | Max:%i", infoSettings.max_temp[pidHeater.toolIndex] );
-        val = numPadInt((u8 *)titlestr, pidHeater.T[pidHeater.toolIndex].target,0, false);
-        val = NOBEYOND(0,val,infoSettings.max_temp[pidHeater.toolIndex]);
-        // If value is different than target change it.
-        if (val != pidHeater.T[pidHeater.toolIndex].target)
         {
-          pidHeater.T[pidHeater.toolIndex].target = val;
-        }
+          int32_t val = pidHeater.T[pidHeater.toolIndex].target;
+          char titlestr[30];
 
-        menuDrawPage(&pidItems);
-        pidTemperatureReDraw(true);
-      }
-      break;
+          sprintf(titlestr, "Min:0 | Max:%i", infoSettings.max_temp[pidHeater.toolIndex]);
+          val = numPadInt((u8 *) titlestr, pidHeater.T[pidHeater.toolIndex].target, 0, false);
+          val = NOBEYOND(0, val, infoSettings.max_temp[pidHeater.toolIndex]);
+          if (val != pidHeater.T[pidHeater.toolIndex].target)        // if value is different than target change it
+            pidHeater.T[pidHeater.toolIndex].target = val;
+
+          menuDrawPage(&pidItems);
+          pidTemperatureReDraw(true);
+        }
+        break;
+
       case KEY_ICON_3:
         if (pidHeater.T[pidHeater.toolIndex].target < infoSettings.max_temp[pidHeater.toolIndex])
           pidHeater.T[pidHeater.toolIndex].target =
@@ -355,14 +353,17 @@ void menuPid(void)
           if (encoderPosition)
           {
             if (encoderPosition > 0)
+            {
               if (pidHeater.T[pidHeater.toolIndex].target < infoSettings.max_temp[pidHeater.toolIndex])
                 pidHeater.T[pidHeater.toolIndex].target =
                   NOBEYOND(0, pidHeater.T[pidHeater.toolIndex].target + pidDegree[curDegree], infoSettings.max_temp[pidHeater.toolIndex]);
-
-            if (encoderPosition < 0)
+            }
+            else                                           // if < 0
+            {
               if (pidHeater.T[pidHeater.toolIndex].target > 0)
                 pidHeater.T[pidHeater.toolIndex].target =
                   NOBEYOND(0, pidHeater.T[pidHeater.toolIndex].target - pidDegree[curDegree], infoSettings.max_temp[pidHeater.toolIndex]);
+            }
 
             pidTemperatureReDraw(true);
             encoderPosition = 0;

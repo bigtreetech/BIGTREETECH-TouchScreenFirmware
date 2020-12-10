@@ -63,7 +63,9 @@ const GUI_RECT rect_of_key[MENU_RECT_COUNT]={
 };
 
 const GUI_RECT rect_of_keySS[SS_RECT_COUNT] = {
+
 #ifdef TFT70_V3_0
+
   //5 status icons area
   {0*SSICON_WIDTH+0*SS_SPACE_X+START_X,  0*SSICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  1*SSICON_WIDTH+0*SS_SPACE_X+START_X,  1*SSICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
   {1*SSICON_WIDTH+1*SS_SPACE_X+START_X,  0*SSICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  2*SSICON_WIDTH+1*SS_SPACE_X+START_X,  1*SSICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
@@ -92,6 +94,7 @@ const GUI_RECT rect_of_keySS[SS_RECT_COUNT] = {
   {1*ICON_WIDTH+1*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  3*ICON_WIDTH+2*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y}
 
 #else
+
   //8 icons area
   {0*ICON_WIDTH+0*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  1*ICON_WIDTH+0*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
   {1*ICON_WIDTH+1*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  2*ICON_WIDTH+1*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
@@ -117,7 +120,6 @@ const GUI_RECT rect_of_keySS[SS_RECT_COUNT] = {
 
   //infobox area
   {1*ICON_WIDTH+1*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  3*ICON_WIDTH+2*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
-  
 
 #endif
 };
@@ -673,25 +675,25 @@ KEY_VALUES menuKeyGetValue(void)
   KEY_VALUES tempkey = KEY_IDLE;
   if (menuType == MENU_TYPE_ICON)
   {
-    if(infoMenu.menu[infoMenu.cur] == menuStatus)
+    if (infoMenu.menu[infoMenu.cur] == menuStatus)
     {
       tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keySS), rect_of_keySS);
     }
-    else if((infoMenu.menu[infoMenu.cur] == menuHeat) || 
-            (infoMenu.menu[infoMenu.cur] == menuPid)  || 
-            (infoMenu.menu[infoMenu.cur] == menuTuneExtruder) || 
-            (infoMenu.menu[infoMenu.cur] == menuFan) || 
-            (infoMenu.menu[infoMenu.cur] == menuExtrude) || 
-            (infoMenu.menu[infoMenu.cur] == menuSpeed) ||
-			(infoMenu.menu[infoMenu.cur] == menuProbeOffset) ||
-			(infoMenu.menu[infoMenu.cur] == menuMBL))
+    else if ((infoMenu.menu[infoMenu.cur] == menuHeat) ||
+             (infoMenu.menu[infoMenu.cur] == menuPid) ||
+             (infoMenu.menu[infoMenu.cur] == menuTuneExtruder) ||
+             (infoMenu.menu[infoMenu.cur] == menuFan) ||
+             (infoMenu.menu[infoMenu.cur] == menuExtrude) ||
+             (infoMenu.menu[infoMenu.cur] == menuSpeed) ||
+             (infoMenu.menu[infoMenu.cur] == menuProbeOffset) ||
+             (infoMenu.menu[infoMenu.cur] == menuMBL))
     {
       tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keysIN), rect_of_keysIN);
     }
     else
     {
       tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_key), rect_of_key);
-    }	 
+    }
   }
   else if (menuType == MENU_TYPE_LISTVIEW)
   {

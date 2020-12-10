@@ -179,7 +179,7 @@ void syncL2CacheFromL1(uint8_t port)
   while (dmaL1NotEmpty(port))
   {
     dmaL2Cache[i] = dmaL1Data[port].cache[dmaL1Data[port].rIndex];
-    dmaL1Data[port].rIndex = (dmaL1Data[port].rIndex + 1) % DMA_TRANS_LEN;
+    dmaL1Data[port].rIndex = (dmaL1Data[port].rIndex + 1) % dmaL1Data[port].cacheSize;
     if (dmaL2Cache[i++] == '\n') break;
   }
   dmaL2Cache[i] = 0; // End character
@@ -255,13 +255,18 @@ void hostActionCommands(void)
   if (ack_seen("paused") || ack_seen("pause"))
   {
     infoPrinting.pause = true;
-  } else if (ack_seen("cancel"))   //To be added to Marlin abortprint routine
-	{
-		infoHost.printing = false;
-		infoPrinting.printing = false;
+  }
+  else if (ack_seen("cancel")) //To be added to Marlin abortprint routine
+  {
+    if (infoHost.printing == true)
+    {
+      request_M27(0);
+    }
+    infoHost.printing = false;
+    infoPrinting.printing = false;
     infoPrinting.cur = infoPrinting.size;
-    request_M27(0);
 	}
+
 }
 
 void parseACK(void)

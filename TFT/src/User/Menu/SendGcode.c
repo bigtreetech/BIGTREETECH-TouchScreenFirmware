@@ -1,11 +1,13 @@
 #include "SendGcode.h"
 #include "includes.h"
 
-#if ((defined(MKS_28_V1_0)) || (defined(MKS_32_V1_4) && !defined(MKS_32_V1_4_NOBL)))
-  #define TERMINAL_MAX_CHAR  4800 // for 64k RAM
-#else
-  #define TERMINAL_MAX_CHAR  3600 // for 48k RAM
-#endif
+// #if ((defined(MKS_28_V1_0)) || (defined(MKS_32_V1_4) && !defined(MKS_32_V1_4_NOBL)))
+//   #define TERMINAL_MAX_CHAR  4800 // for 64k RAM
+// #else
+//   #define TERMINAL_MAX_CHAR  3600 // for 48k RAM
+// #endif
+
+#define TERMINAL_MAX_CHAR NOBEYOND(600, RAM_SIZE*75, 4800)
 #define MAX_BUFF          20
 #define SCROLL_LINE       22
 #define SCROLL_PAGE       1
