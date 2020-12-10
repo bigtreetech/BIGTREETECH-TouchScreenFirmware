@@ -60,6 +60,12 @@ const ITEM itemIsPrinting[2] = {
   {ICON_STOP,                 LABEL_STOP},
 };
 
+const ITEM itemNotPrinting[2] = {
+// icon                       label
+  {ICON_BACKGROUND,           LABEL_BACKGROUND},
+  {ICON_MAINMENU,             LABEL_STATUS}
+};
+
 void menuBeforePrinting(void)
 {
   //load stat/end/cancel gcodes from spi flash
@@ -309,8 +315,8 @@ void menuPrinting(void)
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
-    {ICON_BABYSTEP,             LABEL_BABYSTEP},
     {ICON_PAUSE,                LABEL_PAUSE},
+    {ICON_BABYSTEP,             LABEL_BABYSTEP},
     {ICON_MORE,                 LABEL_MORE},
     {ICON_STOP,                 LABEL_STOP},}
   };
@@ -324,8 +330,15 @@ void menuPrinting(void)
   memset(&nowHeat, 0, sizeof(HEATER));
 
   printingItems.title.address = getCurGcodeName(infoFile.title);
-  printingItems.items[KEY_ICON_4].icon = (infoFile.source != BOARD_SD && infoPrinting.model_icon) ? ICON_PREVIEW : ICON_BABYSTEP;
-  printingItems.items[KEY_ICON_5] = itemIsPause[isPause()];
+  if (lastPrinting == false) 
+  {
+    printingItems.items[KEY_ICON_4] = itemNotPrinting[1];
+  }
+  else
+  {
+    printingItems.items[KEY_ICON_4] = itemIsPause[isPause()];
+  }
+  printingItems.items[KEY_ICON_5].icon = (infoFile.source != BOARD_SD && infoPrinting.model_icon) ? ICON_PREVIEW : ICON_BABYSTEP;
   printingItems.items[KEY_ICON_7] = itemIsPrinting[lastPrinting];
   menuDrawPage(&printingItems);
   printingDrawPage();
@@ -403,8 +416,8 @@ void menuPrinting(void)
     if (lastPause != isPause())
     {
       lastPause = isPause();
-      printingItems.items[KEY_ICON_5] = itemIsPause[lastPause];
-      menuDrawItem(&printingItems.items[KEY_ICON_5], KEY_ICON_5);
+      printingItems.items[KEY_ICON_4] = itemIsPause[lastPause];
+      menuDrawItem(&printingItems.items[KEY_ICON_4], KEY_ICON_4);
     }
 
     if (lastPrinting != isPrinting())
@@ -412,6 +425,18 @@ void menuPrinting(void)
       lastPrinting = isPrinting();
       printingItems.items[KEY_ICON_7] = itemIsPrinting[lastPrinting];
       menuDrawItem(&printingItems.items[KEY_ICON_7], KEY_ICON_7);
+      if (lastPrinting == false)  // printing finished
+      {
+        printingItems.items[KEY_ICON_4] = itemNotPrinting[1];
+        menuDrawItem(&printingItems.items[KEY_ICON_4], KEY_ICON_4);
+        printingItems.items[KEY_ICON_5] = itemNotPrinting[0];
+        menuDrawItem(&printingItems.items[KEY_ICON_5], KEY_ICON_5);
+        printingItems.items[KEY_ICON_6] = itemNotPrinting[0];
+        menuDrawItem(&printingItems.items[KEY_ICON_6], KEY_ICON_6);
+        setLargeFont(true);
+        GUI_DispStringInPrectEOL(&rect_of_keySS[17], (uint8_t *) textSelect(LABEL_PRINT_FINISHED));
+        setLargeFont(false);
+      }
     }
 
     toggleinfo();
@@ -420,17 +445,30 @@ void menuPrinting(void)
     switch(key_num)
     {
       case KEY_ICON_4:
-        infoMenu.menu[++infoMenu.cur] = menuBabystep;
+        if(isPrinting())
+        {
+          setPrintPause(!isPause(), false);
+        }
+        else
+        {
+          infoMenu.cur = 0;
+        }
         break;
 
-      case KEY_ICON_5:
-        setPrintPause(!isPause(), false);
-        break;
+        case KEY_ICON_5:
+          if(isPrinting())
+          {
+              infoMenu.menu[++infoMenu.cur] = menuBabystep;
+          }
+          break;
 
-      case KEY_ICON_6:
-        infoMenu.menu[++infoMenu.cur] = menuMore;
-        break;
-
+        case KEY_ICON_6:
+          if(isPrinting())
+          {
+              infoMenu.menu[++infoMenu.cur] = menuMore;
+          }
+          break;
+      
       case KEY_ICON_7:
         if(isPrinting())
         {
