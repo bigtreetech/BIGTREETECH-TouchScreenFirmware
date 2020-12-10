@@ -30,15 +30,15 @@ const GUI_RECT printinfo_val_rect[6] = {
         START_X + PICON_LG_WIDTH*2 + PICON_SPACE_X*2 + PICON_VAL_SM_EX,     ICON_START_Y + PICON_HEIGHT*1 + PICON_SPACE_Y*1 + PICON_VAL_Y + BYTE_HEIGHT},
 };
 
-static uint32_t nextTime = 0;
+static uint32_t nextToggleTime = 0;
 static uint32_t nextDrawTime = 0;
 static uint8_t c_Tool = NOZZLE0;
 static int c_fan = 0;
 static int c_speedID = 0;
 const char* Speed_ID[2] = {"Speed","Flow"};
 
-#define toggle_time 2000; // 1 seconds is 1000
-#define drawTime 500; // 1 seconds is 1000
+#define TOGGLE_TIME 2000; // 1 seconds is 1000
+#define DRAW_TIME 500; // 1 seconds is 1000
 
 #define LAYER_TITLE "Layer"
 #define EXT_ICON_POS  0
@@ -92,13 +92,10 @@ void menuBeforePrinting(void)
       //      request_M24(infoBreakPoint.offset);
       //    }
 
-      if (infoMachineSettings.autoReportSDStatus ==1)
-      {
+      if (infoMachineSettings.autoReportSDStatus == 1)
         request_M27(infoSettings.m27_refresh_time);                //Check if there is a SD or USB print running.
-      }
-      else{
+      else
         request_M27(0);
-      }
 
       infoHost.printing = true; // Global lock info on printer is busy in printing.
 
@@ -168,13 +165,9 @@ void reDrawFan(int icon_pos)
 {
   char tempstr[10];
   if (infoSettings.fan_percentage == 1)
-  {
     sprintf(tempstr, "%d%%", fanGetCurPercent(c_fan));
-  }
   else
-  {
     sprintf(tempstr, "%d", fanGetCurSpeed(c_fan));
-  }
 
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
@@ -193,13 +186,9 @@ void reDrawSpeed(int icon_pos)
   sprintf(tempstr, "%d%%", speedGetPercent(c_speedID) );
 
   if(c_speedID == 0)
-  {
     ICON_ReadDisplay(printinfo_points[icon_pos].x,printinfo_points[icon_pos].y,ICON_PRINTING_SPEED);
-  }
   else
-  {
     ICON_ReadDisplay(printinfo_points[icon_pos].x,printinfo_points[icon_pos].y,ICON_PRINTING_FLOW);
-  }
   GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (u8 *)Speed_ID[c_speedID]);
   GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (u8 *)tempstr);
 
@@ -248,13 +237,13 @@ void reDrawLayer(int icon_pos)
     GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (u8 *)tempstr);
 
     GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
-    nextDrawTime = OS_GetTimeMs() + drawTime;
+    nextDrawTime = OS_GetTimeMs() + DRAW_TIME;
   }
 }
 
 void toggleinfo(void)
 {
-  if (OS_GetTimeMs() > nextTime)
+  if (OS_GetTimeMs() > nextToggleTime)
   {
     if (infoSettings.hotend_count > 1)
     {
@@ -271,24 +260,25 @@ void toggleinfo(void)
     }
 
     c_speedID = (c_speedID + 1) % 2;
-    nextTime = OS_GetTimeMs() + toggle_time;
+    nextToggleTime = OS_GetTimeMs() + TOGGLE_TIME;
     rapid_serial_loop();   //perform backend printing loop before drawing to avoid printer idling
     reDrawSpeed(SPD_ICON_POS);
     speedQuery();
-    if (infoFile.source == BOARD_SD) coordinateQuery();
+    if (infoFile.source == BOARD_SD)
+      coordinateQuery();
   }
 }
 
 void printingDrawPage(void)
 {
   //  Scroll_CreatePara(&titleScroll, infoFile.title,&titleRect);  //
-    reValueNozzle(EXT_ICON_POS);
-    reValueBed(BED_ICON_POS);
-    reDrawFan(FAN_ICON_POS);
-    reDrawTime(TIM_ICON_POS);
-    reDrawProgress(TIM_ICON_POS);
-    reDrawLayer(Z_ICON_POS);
-    reDrawSpeed(SPD_ICON_POS);
+  reValueNozzle(EXT_ICON_POS);
+  reValueBed(BED_ICON_POS);
+  reDrawFan(FAN_ICON_POS);
+  reDrawTime(TIM_ICON_POS);
+  reDrawProgress(TIM_ICON_POS);
+  reDrawLayer(Z_ICON_POS);
+  reDrawSpeed(SPD_ICON_POS);
 }
 
 
@@ -302,17 +292,17 @@ void menuPrinting(void)
 {
   //1title, ITEM_PER_PAGE item(icon + label)
   MENUITEMS printingItems = {
-  //  title
-  LABEL_BACKGROUND,
-  // icon                       label
-   {{ICON_BACKGROUND,           LABEL_BACKGROUND},
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},
-    {ICON_BABYSTEP,             LABEL_BABYSTEP},
-    {ICON_PAUSE,                LABEL_PAUSE},
-    {ICON_MORE,                 LABEL_MORE},
-    {ICON_STOP,                 LABEL_STOP},}
+    //  title
+    LABEL_BACKGROUND,
+    // icon                      label
+    {{ICON_BACKGROUND,           LABEL_BACKGROUND},
+     {ICON_BACKGROUND,           LABEL_BACKGROUND},
+     {ICON_BACKGROUND,           LABEL_BACKGROUND},
+     {ICON_BACKGROUND,           LABEL_BACKGROUND},
+     {ICON_BABYSTEP,             LABEL_BABYSTEP},
+     {ICON_PAUSE,                LABEL_PAUSE},
+     {ICON_MORE,                 LABEL_MORE},
+     {ICON_STOP,                 LABEL_STOP},}
   };
   uint8_t   nowFan[MAX_FAN_COUNT] = {0};
   uint16_t  curspeed[2] = {0};

@@ -194,7 +194,7 @@ void hostActionCommands(void)
     strcpy(hostAction.prompt_begin, dmaL2Cache + ack_index);
     statusScreen_setMsg((u8 *)echomagic, (u8 *)dmaL2Cache + ack_index);
   }
-  
+
   if(ack_seen("prompt_begin "))
   {
     hostAction.button = 0;
@@ -251,16 +251,17 @@ void hostActionCommands(void)
         break;
     }
   }
-  
+
   if (ack_seen("paused") || ack_seen("pause"))
   {
     infoPrinting.pause = true;
-  } else if (ack_seen("cancel"))   //To be added to Marlin abortprint routine
-	{
-		infoHost.printing = false;
-		infoPrinting.printing = false;
+  }
+  else if (ack_seen("cancel")) //To be added to Marlin abortprint routine
+  {
+    infoHost.printing = false;
+    infoPrinting.printing = false;
     infoPrinting.cur = infoPrinting.size;
-	}
+  }
 }
 
 void parseACK(void)
