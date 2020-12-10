@@ -58,20 +58,23 @@ void menuExtrude(void)
   u32   feedrate = 0;
 
   MENUITEMS extrudeItems = {
-  // title
-  LABEL_EXTRUDE,
-  // icon                       label
-  {{ICON_UNLOAD,               LABEL_UNLOAD},
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},
-    {ICON_LOAD,                 LABEL_LOAD},
-    {ICON_NOZZLE,               LABEL_NOZZLE},
-    {ICON_E_5_MM,               LABEL_5_MM},
-    {ICON_NORMAL_SPEED,         LABEL_NORMAL_SPEED},
-    {ICON_BACK,                 LABEL_BACK},}
+    // title
+    LABEL_EXTRUDE,
+    // icon                      label
+    {{ICON_UNLOAD,               LABEL_UNLOAD},
+     {ICON_BACKGROUND,           LABEL_BACKGROUND},
+     {ICON_BACKGROUND,           LABEL_BACKGROUND},
+     {ICON_LOAD,                 LABEL_LOAD},
+     {ICON_NOZZLE,               LABEL_NOZZLE},
+     {ICON_E_5_MM,               LABEL_5_MM},
+     {ICON_NORMAL_SPEED,         LABEL_NORMAL_SPEED},
+     {ICON_BACK,                 LABEL_BACK},}
   };
 
-  while(infoCmd.count != 0) {loopProcess();}
+  while (infoCmd.count != 0)
+  {
+    loopProcess();
+  }
   extrudeCoordinate = eTemp = eSaved = coordinateGetAxisTarget(E_AXIS);
   feedrate = coordinateGetFeedRate();
   eRelative = eGetRelative();
@@ -82,27 +85,33 @@ void menuExtrude(void)
   #if LCD_ENCODER_SUPPORT
     encoderPosition = 0;
   #endif
-  if(eRelative) mustStoreCmd("M82\n"); // Set extruder to absolute
-  while(infoMenu.menu[infoMenu.cur] == menuExtrude)
+
+  if (eRelative) // Set extruder to absolute
+    mustStoreCmd("M82\n");
+
+  while (infoMenu.menu[infoMenu.cur] == menuExtrude)
   {
     key_num = menuKeyGetValue();
-    switch(key_num)
+    switch (key_num)
     {
       case KEY_ICON_0:
         eTemp -= item_len[item_len_i];
         break;
+
       case KEY_INFOBOX:
-      {
-        float val = 0;
-        char titlestr[30];
-        sprintf(titlestr, "Min:%i | Max:%i",(item_len[COUNT(item_len)-1]) * -1, item_len[COUNT(item_len)-1]);
-        val = numPadFloat((u8 *)titlestr,0,0,true);
-        eTemp += val;
-        
-        menuDrawPage(&extrudeItems);
-        extrudeCoordinateReDraw(false);
+        {
+          float val = 0;
+          char titlestr[30];
+
+          sprintf(titlestr, "Min:%i | Max:%i", (item_len[COUNT(item_len) - 1]) * -1, item_len[COUNT(item_len) - 1]);
+          val = numPadFloat((u8 *) titlestr, 0, 0, true);
+          eTemp += val;
+
+          menuDrawPage(&extrudeItems);
+          extrudeCoordinateReDraw(false);
+        }
         break;
-      }
+
       case KEY_ICON_3:
         eTemp += item_len[item_len_i];
         break;
@@ -113,13 +122,13 @@ void menuExtrude(void)
         break;
 
       case KEY_ICON_5:
-        item_len_i = (item_len_i+1) % ITEM_LEN_NUM;
+        item_len_i = (item_len_i + 1) % ITEM_LEN_NUM;
         extrudeItems.items[key_num] = itemLen[item_len_i];
         menuDrawItem(&extrudeItems.items[key_num], key_num);
         break;
 
       case KEY_ICON_6:
-        item_speed_i = (item_speed_i+1) % ITEM_SPEED_NUM;
+        item_speed_i = (item_speed_i + 1) % ITEM_SPEED_NUM;
         extrudeItems.items[key_num] = itemSpeed[item_speed_i];
         menuDrawItem(&extrudeItems.items[key_num], key_num);
         break;
@@ -130,7 +139,7 @@ void menuExtrude(void)
 
       default:
         #if LCD_ENCODER_SUPPORT
-          if(encoderPosition)
+          if (encoderPosition)
           {
             eTemp += item_len[item_len_i]*encoderPosition;
             encoderPosition = 0;
@@ -138,11 +147,11 @@ void menuExtrude(void)
         #endif
         break;
     }
-    if(extrudeCoordinate != eTemp)
+    if (extrudeCoordinate != eTemp)
     {
       extrudeCoordinate = eTemp;
       extrudeCoordinateReDraw(true);
-      if(item_extruder_i != heatGetCurrentTool())
+      if (item_extruder_i != heatGetCurrentTool())
         storeCmd("%s\n", tool_change[item_extruder_i]);
       storeCmd("G0 E%.5f F%d\n", extrudeCoordinate, infoSettings.ext_speed[item_speed_i]);
     }
@@ -150,5 +159,6 @@ void menuExtrude(void)
   }
   mustStoreCmd("G92 E%.5f\n",eSaved);
   mustStoreCmd("G0 F%d\n",feedrate);
-  if(eRelative) mustStoreCmd("M83\n"); // Set extruder to relative
+  if (eRelative)
+    mustStoreCmd("M83\n"); // Set extruder to relative
 }
