@@ -255,6 +255,7 @@ void endPrinting(void)
   switch (infoFile.source)
   {
     case BOARD_SD:
+      request_M27(0);
       break;
 
     case TFT_UDISK:
@@ -263,7 +264,6 @@ void endPrinting(void)
       break;
   }
   infoPrinting.printing = infoPrinting.pause = false;
-  request_M27(0);
   powerFailedClose();
   powerFailedDelete();
   if((infoFile.source != BOARD_SD) && (infoSettings.send_end_gcode == 1))
