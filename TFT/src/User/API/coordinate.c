@@ -54,9 +54,7 @@ void coordinateSetKnown(bool known)
 
 void coordinateSetAxisTarget(AXIS axis,float position)
 {
-  bool r = (axis == E_AXIS)
-          ? relative_e || relative_mode
-          : relative_mode;
+  bool r = (axis == E_AXIS) ? relative_e || relative_mode : relative_mode;
 
   if(r==false)
   {

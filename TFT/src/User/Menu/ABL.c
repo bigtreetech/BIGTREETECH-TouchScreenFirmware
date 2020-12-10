@@ -231,9 +231,9 @@ void menuABL(void)
         break;
 
       case KEY_ICON_7:
-       if (heat == true)
+        if (heat == true)
         {
-          for(uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
+          for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
           {
             heatSetTargetTemp(i, 0);
           }

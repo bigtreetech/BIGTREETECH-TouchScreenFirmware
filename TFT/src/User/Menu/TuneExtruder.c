@@ -23,13 +23,13 @@ void showExtrudeTemperature(uint8_t index)
 
 static inline void turnHeaterOff(void)
 {
-    heatSetTargetTemp(c_heater, 0);
-    infoMenu.cur--;
+  heatSetTargetTemp(c_heater, 0);
+  infoMenu.cur--;
 }
 
 static inline void returnToTuning(void)
 {
-    infoMenu.cur--;
+  infoMenu.cur--;
 }
 
 void showNewESteps(const float measured_length, const float old_esteps, float * new_esteps)
@@ -126,9 +126,11 @@ void menuTuneExtruder(void)
         break;
 
       case KEY_ICON_4:
-        do{
+        do
+        {
           c_heater = (c_heater + 1) % MAX_HOTEND_COUNT;
-        } while(!heaterIsValid(c_heater));
+        }
+        while (!heaterIsValid(c_heater));
 
         showExtrudeTemperature(c_heater);
         break;
@@ -141,6 +143,7 @@ void menuTuneExtruder(void)
 
       case KEY_ICON_6:
       {
+        char tempMsg[120];
         char tempMsg[120];
 
         if (heatGetTargetTemp(c_heater) < infoSettings.min_ext_temp)
@@ -162,8 +165,8 @@ void menuTuneExtruder(void)
           setDialogText(tuneExtruderItems.title.index, (u8 *) tempMsg, LABEL_EXTRUDE, LABEL_CANCEL);
           showDialog(DIALOG_TYPE_QUESTION, extrudeFilament, NULL, NULL);
         }
+        break;
       }
-      break;
 
       case KEY_ICON_7:
         if (heatGetTargetTemp(c_heater) > 0)
@@ -209,7 +212,7 @@ void menuNewExtruderESteps(void)
   // Extruder steps are not correct. Ask user for the amount that's extruded
   // Automaticaly calculate new steps/mm when changing the measured distance
   // When pressing save to eeprom the new steps will be saved.
-   MENUITEMS newExtruderESteps = {
+  MENUITEMS newExtruderESteps = {
     // title
     LABEL_TUNE_EXT_ADJ_ESTEPS,
     // icon                         label

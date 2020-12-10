@@ -31,17 +31,17 @@ void menuHeat(void)
   int16_t lastTarget = heatGetTargetTemp(c_heater);
 
   MENUITEMS heatItems = {
-  // title
-  LABEL_HEAT,
-  // icon                       label
-  {{ICON_DEC,                  LABEL_DEC},
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},
-    {ICON_INC,                  LABEL_INC},
-    {ICON_NOZZLE,               LABEL_NOZZLE},
-    {ICON_5_DEGREE,             LABEL_5_DEGREE},
-    {ICON_STOP,                 LABEL_STOP},
-    {ICON_BACK,                 LABEL_BACK},}
+    // title
+    LABEL_HEAT,
+    // icon                      label
+    {{ICON_DEC,                  LABEL_DEC},
+     {ICON_BACKGROUND,           LABEL_BACKGROUND},
+     {ICON_BACKGROUND,           LABEL_BACKGROUND},
+     {ICON_INC,                  LABEL_INC},
+     {ICON_NOZZLE,               LABEL_NOZZLE},
+     {ICON_5_DEGREE,             LABEL_5_DEGREE},
+     {ICON_STOP,                 LABEL_STOP},
+     {ICON_BACK,                 LABEL_BACK},}
   };
 
   heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
@@ -55,7 +55,7 @@ void menuHeat(void)
     encoderPosition = 0;
   #endif
 
-  while(infoMenu.menu[infoMenu.cur] == menuHeat)
+  while (infoMenu.menu[infoMenu.cur] == menuHeat)
   {
     KEY_VALUES key_num = menuKeyGetValue();
     int16_t actCurrent = heatGetCurrentTemp(c_heater);
@@ -64,33 +64,35 @@ void menuHeat(void)
     switch(key_num)
     {
       case KEY_ICON_0:
-          heatSetTargetTemp(c_heater, actTarget - degreeSteps[degreeSteps_index]);
+        heatSetTargetTemp(c_heater, actTarget - degreeSteps[degreeSteps_index]);
         break;
 
       case KEY_INFOBOX:
       {
         int32_t val = actTarget;
         char titlestr[30];
-        sprintf(titlestr, "Min:0 | Max:%i", infoSettings.max_temp[c_heater] );
-        val = numPadInt((u8 *)titlestr, actTarget,0, false);
-        val = NOBEYOND(0,val,infoSettings.max_temp[c_heater]);
+
+        sprintf(titlestr, "Min:0 | Max:%i", infoSettings.max_temp[c_heater]);
+        val = numPadInt((u8 *)titlestr, actTarget, 0, false);
+        val = NOBEYOND(0, val, infoSettings.max_temp[c_heater]);
         if (val != actTarget)
-      	{
           heatSetTargetTemp(c_heater, val);
-        }
+
         menuDrawPage(&heatItems);
         showTemperature(c_heater);
+        break;
       }
-      break;
 
       case KEY_ICON_3:
           heatSetTargetTemp(c_heater, actTarget + degreeSteps[degreeSteps_index]);
         break;
 
       case KEY_ICON_4:
-        do{
+        do
+        {
           c_heater = (c_heater + 1) % MAX_HEATER_COUNT;
-        } while(!heaterIsValid(c_heater));
+        }
+        while (!heaterIsValid(c_heater));
         heatItems.items[key_num] = itemTool[c_heater];
         menuDrawItem(&heatItems.items[key_num], key_num);
         showTemperature(c_heater);
@@ -112,11 +114,11 @@ void menuHeat(void)
 
       default :
         #if LCD_ENCODER_SUPPORT
-          if(encoderPosition)
+          if (encoderPosition)
           {
             if(encoderPosition > 0)
                 heatSetTargetTemp(c_heater, actTarget + degreeSteps[degreeSteps_index]);
-            if(encoderPosition < 0)
+            else // if < 0)
                 heatSetTargetTemp(c_heater, actTarget - degreeSteps[degreeSteps_index]);
             encoderPosition = 0;
           }
@@ -124,7 +126,8 @@ void menuHeat(void)
         break;
     }
 
-    if (lastCurrent != actCurrent || lastTarget != actTarget) {
+    if (lastCurrent != actCurrent || lastTarget != actTarget)
+    {
       lastCurrent = actCurrent;
       lastTarget = actTarget;
       showTemperature(c_heater);
@@ -134,6 +137,6 @@ void menuHeat(void)
   }
 
   // Set slow update time if not waiting for target temperature
-  if(heatHasWaiting() == false)
+  if (heatHasWaiting() == false)
     heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
 }

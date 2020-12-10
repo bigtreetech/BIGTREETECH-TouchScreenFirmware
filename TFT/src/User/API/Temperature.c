@@ -53,9 +53,9 @@ bool heatGetIsWaiting(uint8_t index)
 // Check all heater if there is a heater waiting to be waited
 bool heatHasWaiting(void)
 {
-  for(uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
+  for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
   {
-    if(heater.T[i].waiting != WAIT_NONE)
+    if (heater.T[i].waiting != WAIT_NONE)
       return true;
   }
   return false;
@@ -66,11 +66,11 @@ void heatSetIsWaiting(uint8_t tool, HEATER_WAIT isWaiting)
 {
   heater.T[tool].waiting = isWaiting;
 
-  if(isWaiting != WAIT_NONE) // wait heating now, query more frequently
+  if (isWaiting != WAIT_NONE) // wait heating now, query more frequently
   {
     heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
   }
-  else if(heatHasWaiting() == false)
+  else if (heatHasWaiting() == false)
   {
     heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
   }
@@ -78,7 +78,7 @@ void heatSetIsWaiting(uint8_t tool, HEATER_WAIT isWaiting)
 
 void heatClearIsWaiting(void)
 {
-  for(uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
+  for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
   {
     heater.T[i].waiting = WAIT_NONE;
   }
@@ -88,7 +88,8 @@ void heatClearIsWaiting(void)
 // Set current Tool (Extruder)
 void heatSetCurrentTool(uint8_t tool)
 {
-  if(tool >= infoSettings.ext_count) return;
+  if (tool >= infoSettings.ext_count)
+    return;
   heater.toolIndex = tool;
 }
 
@@ -107,9 +108,12 @@ uint8_t heatGetCurrentHotend(void)
 // Check whether the index is a valid heater index.
 bool heaterIsValid(uint8_t index)
 {
-  if (index >= infoSettings.hotend_count && index < MAX_HOTEND_COUNT) return false;
-  if (!infoSettings.bed_en && index == BED) return false;
-  if (!infoSettings.chamber_en && index == CHAMBER) return false;
+  if (index >= infoSettings.hotend_count && index < MAX_HOTEND_COUNT)
+    return false;
+  if (!infoSettings.bed_en && index == BED)
+    return false;
+  if (!infoSettings.chamber_en && index == CHAMBER)
+    return false;
   return true;
 }
 
@@ -166,31 +170,46 @@ void loopCheckHeater(void)
   if (!infoMachineSettings.autoReportTemp) // TFT need not M105 to query the temperature, but uses M155 to automatically report if motherboard supports AUTO_REPORT_TEMPERATURESS feature
   {
     do
-    {  // Send M105 query temperature continuously
-      if (heat_update_waiting == true) {updateNextHeatCheckTime();break;}
-      if (OS_GetTimeMs() < nextHeatCheckTime)     break;
-      if (requestCommandInfoIsRunning())          break; // To avoid colision in Gcode response processing
-      if (storeCmd("M105\n") == false)            break;
+    { // Send M105 query temperature continuously
+      if (heat_update_waiting == true)
+      {
+        updateNextHeatCheckTime();
+        break;
+      }
+      if (OS_GetTimeMs() < nextHeatCheckTime)
+        break;
+      if (requestCommandInfoIsRunning()) // To avoid colision in Gcode response processing
+        break;
+      if (storeCmd("M105\n") == false)
+        break;
       updateNextHeatCheckTime();
       heat_update_waiting = true;
-    }while(0);
+    }
+    while(0);
   }
 
   // Query the heater that needs to wait for the temperature to rise, whether it reaches the set temperature
-  for (uint8_t i=0; i< MAX_HEATER_COUNT; i++)
+  for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
   {
-    if (heater.T[i].waiting == WAIT_NONE)                              continue;
-    else if (heater.T[i].waiting == WAIT_HEATING) {
-      if (heater.T[i].current+2 <= heater.T[i].target)                 continue;
+    if (heater.T[i].waiting == WAIT_NONE)
+      continue;
+    else if (heater.T[i].waiting == WAIT_HEATING)
+    {
+      if (heater.T[i].current + 2 <= heater.T[i].target)
+        continue;
     }
-    else if (heater.T[i].waiting == WAIT_COOLING_HEATING) {
-      if (inRange(heater.T[i].current, heater.T[i].target, 2) != true) continue;
+    else if (heater.T[i].waiting == WAIT_COOLING_HEATING)
+    {
+      if (inRange(heater.T[i].current, heater.T[i].target, 2) != true)
+        continue;
     }
 
     heater.T[i].waiting = WAIT_NONE;
-    if (heatHasWaiting())                                              continue;
+    if (heatHasWaiting())
+      continue;
 
-    if (infoMenu.menu[infoMenu.cur] == menuHeat)                        break;
+    if (infoMenu.menu[infoMenu.cur] == menuHeat)
+      break;
     heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
   }
 
@@ -202,7 +221,7 @@ void loopCheckHeater(void)
       if (heat_send_waiting[i] != true)
       {
         heat_send_waiting[i] = true;
-        storeCmd("%s ",heatCmd[i]);
+        storeCmd("%s ", heatCmd[i]);
       }
     }
   }

@@ -245,14 +245,13 @@ void menuPid(void)
         val = NOBEYOND(0,val,infoSettings.max_temp[pidHeater.toolIndex]);
         // If value is different than target change it.
         if (val != pidHeater.T[pidHeater.toolIndex].target)
-        {
           pidHeater.T[pidHeater.toolIndex].target = val;
-        }
 
         menuDrawPage(&pidItems);
         pidTemperatureReDraw(true);
+        break;
       }
-      break;
+
       case KEY_ICON_3:
         if (pidHeater.T[pidHeater.toolIndex].target < infoSettings.max_temp[pidHeater.toolIndex])
         {
@@ -309,15 +308,17 @@ void menuPid(void)
           if (encoderPosition)
           {
             if (encoderPosition > 0)
+            {
               if (pidHeater.T[pidHeater.toolIndex].target < infoSettings.max_temp[pidHeater.toolIndex])
                 pidHeater.T[pidHeater.toolIndex].target =
-                  NOBEYOND(0, pidHeater.T[pidHeater.toolIndex].target + degreeSteps[degreeSteps_index], infoSettings.max_temp[pidHeater.toolIndex]);
-
-            if (encoderPosition < 0)
+                    NOBEYOND(0, pidHeater.T[pidHeater.toolIndex].target + degreeSteps[degreeSteps_index], infoSettings.max_temp[pidHeater.toolIndex]);
+            }
+            else
+            {
               if (pidHeater.T[pidHeater.toolIndex].target > 0)
                 pidHeater.T[pidHeater.toolIndex].target =
-                  NOBEYOND(0, pidHeater.T[pidHeater.toolIndex].target - degreeSteps[degreeSteps_index], infoSettings.max_temp[pidHeater.toolIndex]);
-
+                    NOBEYOND(0, pidHeater.T[pidHeater.toolIndex].target - degreeSteps[degreeSteps_index], infoSettings.max_temp[pidHeater.toolIndex]);
+            }
             pidTemperatureReDraw(true);
             encoderPosition = 0;
           }
