@@ -279,7 +279,7 @@ void endPrinting(void)
     u8 min = infoPrinting.time % 3600 / 60;
     u8 sec = infoPrinting.time % 60;
     sprintf(tempstr1, (char *)textSelect(LABEL_PRINT_TOTAL_TIME), hour, min, sec);
-    if (filament_used >0 )
+    if (filament_used > 0)
     {
       sprintf(tempstr2, (char *)textSelect(LABEL_PRINT_FILAMENT_USED), filament_used / 1000);
       strcat(tempstr1, tempstr2);
