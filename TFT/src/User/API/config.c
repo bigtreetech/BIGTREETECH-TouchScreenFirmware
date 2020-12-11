@@ -270,25 +270,25 @@ int8_t getOnOff(void)
 }
 
 // Get the float after config keyword.
-static float config_float(void)
+static inline float config_float(void)
 {
   return (strtod(&cur_line[c_index], NULL));
 }
 
 //check if value is hex format
-static bool config_is_hex(void)
+static inline bool config_is_hex(void)
 {
   return (strstr(&cur_line[c_index], "0x") != NULL);
 }
 
 // Get the hex after config keyword.
-static uint32_t config_hex(void)
+static inline uint32_t config_hex(void)
 {
   return (strtol(&cur_line[c_index], NULL, 16));
 }
 
 // Get the hex after config keyword.
-static uint16_t RGB888_to_RGB565(uint32_t rgb888)
+static inline uint16_t RGB888_to_RGB565(uint32_t rgb888)
 {
   uint8_t r = ((rgb888 >> 16) & 0xFF) >> 3; // R5
   uint8_t g = ((rgb888 >> 8) & 0xFF) >> 2;  // G6
@@ -296,7 +296,7 @@ static uint16_t RGB888_to_RGB565(uint32_t rgb888)
   return ((r << 11) | (g << 5) | b);
 }
 
-static void config_set_color(uint16_t *color_src)
+static inline void config_set_color(uint16_t *color_src)
 {
   if (config_is_hex()) {
     *color_src = RGB888_to_RGB565(config_hex());
@@ -353,23 +353,18 @@ void parseLangLine(void)
   showError(CSTAT_UNKNOWN_KEYWORD);
 }
 
-
 void saveConfig(void)
 {
   writeConfig((uint8_t *)configCustomGcodes, sizeof(CUSTOM_GCODES), CUSTOM_GCODE_ADDR, CUSTOM_GCODE_MAX_SIZE);
-
   writeConfig((uint8_t *)configPrintGcodes, sizeof(PRINT_GCODES), PRINT_GCODES_ADDR, PRINT_GCODES_MAX_SIZE);
-
   writeConfig((uint8_t *)configStringsStore, sizeof(STRINGS_STORE), STRINGS_STORE_ADDR, STRINGS_STORE_MAX_SIZE);
 
   #ifdef CONFIG_DEBUG
   CUSTOM_GCODES tempgcode;// = NULL;
-
   uint8_t * data_r = (u8 *)&tempgcode;
 
   W25Qxx_ReadBuffer(data_r,CUSTOM_GCODE_ADDR,sizeof(CUSTOM_GCODES));
   PRINTDEBUG("\nread done");
-
   PRINTDEBUG("\nread from flash:");
   PRINTDEBUG(tempgcode.gcode[1]);
   #endif
@@ -400,11 +395,9 @@ void writeConfig(uint8_t* dataBytes, uint16_t numBytes, uint32_t addr, uint32_t 
 //Reset & store config settings
 void resetConfig(void)
 {
-  const uint8_t cg_enabled[MAX_GCODE_LENGTH]     = CUSTOM_GCODE_ENABLED;
   const char cg_list[][MAX_GCODE_LENGTH]         = CUSTOM_GCODE_LIST;
   const char cg_names[][MAX_GCODE_LENGTH]        = CUSTOM_GCODE_LABELS;
   const char cg_preheatnames[][MAX_GCODE_LENGTH] = PREHEAT_LABELS;
-
 
   CUSTOM_GCODES tempCG;
   STRINGS_STORE tempST;
@@ -414,7 +407,7 @@ void resetConfig(void)
   int n = 0;
   for (int i = 0; i < CUSTOM_GCODES_COUNT;i++)
   {
-    if(cg_enabled[i] == 1){
+    if(default_custom_enabled[i] == 1){
     strcpy(tempCG.gcode[n],cg_list[i]);
     strcpy(tempCG.name[n],cg_names[i]);
     n++;
@@ -513,7 +506,7 @@ void parseConfigKey(u16 index)
   switch (index)
   {
   case C_INDEX_UNIFIEDMENU:
-      infoSettings.unified_menu = getOnOff();
+      infoSettings.status_screen = getOnOff();
     break;
 
   case C_INDEX_UART_BAUDRATE:
@@ -600,6 +593,10 @@ void parseConfigKey(u16 index)
         infoSettings.ack_notification = i;
       break;
     }
+
+  case C_INDEX_PRINT_SUMMARY:
+      infoSettings.print_summary = getOnOff();
+    break;
 
   //---------------------------------------------------------Marlin Mode Settings (Only for TFT35_V3.0/TFT24_V1.1/TFT28V3.0)
 

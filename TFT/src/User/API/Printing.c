@@ -6,6 +6,29 @@ PRINTING infoPrinting;
 
 static bool update_waiting = false;
 
+static float filament_used;
+static float last_E_pos;
+
+void resetFilamentUsed(void)
+{
+  filament_used = 0;
+  last_E_pos = ((infoFile.source == BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
+}
+
+void updateFilamentUsed(void)
+{
+  float E_pos = ((infoFile.source == BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
+  if ((E_pos + 20) < last_E_pos) //Check whether E position reset. If retract more than 20mm, false filament used values would be calculated.
+  {
+    filament_used = filament_used + E_pos;
+    last_E_pos = E_pos;
+  } else if (E_pos > last_E_pos)
+  {
+    filament_used = filament_used + (E_pos - last_E_pos);
+    last_E_pos = E_pos;
+  }
+}
+
 //
 bool isPrinting(void)
 {
@@ -127,7 +150,8 @@ void sendPrintCodes(uint8_t index)
   }
 }
 
-void setM0Pause(bool m0_pause){
+static inline void setM0Pause(bool m0_pause)
+{
   infoPrinting.m0_pause = m0_pause;
 }
 
@@ -223,7 +247,7 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
 
 void exitPrinting(void)
 {
-  memset(&infoPrinting,0,sizeof(PRINTING));
+  memset(&infoPrinting, 0, sizeof(PRINTING));
   ExitDir();
 }
 
@@ -232,6 +256,7 @@ void endPrinting(void)
   switch (infoFile.source)
   {
     case BOARD_SD:
+      request_M27(0);
       break;
 
     case TFT_UDISK:
@@ -242,11 +267,28 @@ void endPrinting(void)
   infoPrinting.printing = infoPrinting.pause = false;
   powerFailedClose();
   powerFailedDelete();
-  if(infoSettings.send_end_gcode == 1){
+  if((infoFile.source != BOARD_SD) && (infoSettings.send_end_gcode == 1))
+  {
     sendPrintCodes(1);
   }
+  if (infoSettings.print_summary)
+  {
+    infoMenu.cur = 0;
+    char tempstr1[140];
+    char tempstr2[70];
+    u8 hour = infoPrinting.time / 3600;
+    u8 min = infoPrinting.time % 3600 / 60;
+    u8 sec = infoPrinting.time % 60;
+    sprintf(tempstr1, (char *)textSelect(LABEL_PRINT_TOTAL_TIME), hour, min, sec);
+    if (filament_used > 0)
+    {
+      sprintf(tempstr2, (char *)textSelect(LABEL_PRINT_FILAMENT_USED), filament_used / 1000);
+      strcat(tempstr1, tempstr2);
+      resetFilamentUsed();
+    }
+    popupReminder(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, (u8*)tempstr1);
+  }
 }
-
 
 void printingFinished(void)
 {
@@ -414,13 +456,17 @@ void loopCheckPrinting(void)
     if(infoMenu.menu[infoMenu.cur] == menuMarlinMode) return;
   #endif
 
-  if (infoHost.printing && !infoPrinting.printing) {
+  if (infoHost.printing && !infoPrinting.printing)
+  {
     infoPrinting.printing = true;
     if (!hasPrintingMenu())
+    {
       infoMenu.menu[++infoMenu.cur] = menuPrinting;
+    }
   }
 
-  if (!infoPrinting.printing && (infoMenu.menu[infoMenu.cur] == menuPrinting)) {
+  if (!infoPrinting.printing && (infoMenu.menu[infoMenu.cur] == menuPrinting) && infoSettings.print_summary)
+  {
     infoMenu.cur = 0;
   }
 

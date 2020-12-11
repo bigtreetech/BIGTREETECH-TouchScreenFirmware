@@ -86,8 +86,8 @@
     #define STRING_RESUME                 "Продолжить"
     #define STRING_LOAD                   "Загрузка"
     #define STRING_UNLOAD                 "Выгрузка"
-    #define STRING_LOAD_UNLOAD            "Load/Unload"  // needs translation
-    #define STRING_LOAD_UNLOAD_SHORT      "(Un)Load"  // needs translation
+    #define STRING_LOAD_UNLOAD            "Загрузить/Выгрузить"
+    #define STRING_LOAD_UNLOAD_SHORT      "За/Выгрузка"
     #define STRING_SLOW_SPEED             "Медленно"
     #define STRING_NORMAL_SPEED           "Обычно"
     #define STRING_FAST_SPEED             "Быстро"
@@ -149,7 +149,7 @@
     #define STRING_10_PERCENT             "10%"
     #define STRING_PERCENT_VALUE          "%d%%"
     #define STRING_READY                  "Готов"
-    #define STRING_BUSY                   "Занято процессом, подождите..."
+    #define STRING_BUSY                   "В процессе, ждите..."
     #define STRING_UNCONNECTED            "Нет подключения!"
     #define STRING_DISCONNECT_INFO        "Управление принтером через компьютер"
     #define STRING_LOADING                "Загрузка..."
@@ -279,8 +279,11 @@
     #define STRING_MESH_EDITOR            "Сетка ред."
     #define STRING_MESH_TUNER             "Сетка настр."
     #define STRING_CASE_LIGHT             "Подсветка"
-    #define STRING_LOAD_STARTED           "Filament load in progress.\nNo further actions possible\nuntil it's done.\nPlease stand by."  // translation needed
-    #define STRING_UNLOAD_STARTED         "Filament unload in progress.\nNo further actions possible\nuntil it's done.\nPlease stand by."  // translation needed
-    #define STRING_HEATERS_ON             "Some heaters are still ON.\nDo you want to stop them?"  // translation needed
+    #define STRING_LOAD_STARTED           "Загрузка филамента начата.\nДождитесь пока сопло достигнет\nнеобходимой температуры.\nПожалуйста подождите."
+    #define STRING_UNLOAD_STARTED         "Выгрузка филамента начата.\nДождитесь пока сопло достигнет\nнеобходимой температуры.\nПожалуйста подождите."
+    #define STRING_HEATERS_ON             "Некоторые нагреватели все еще работают.\nХотите прервать нагрев?"
+    #define STRING_PRINT_TOTAL_TIME       "Print complete.\nPrint Time: %02u:%02u:%02u \n"  // translation needed
+    #define STRING_PRINT_FILAMENT_USED    "Filament Used: %3.2f meters"  // translation needed
+    #define STRING_PRINT_SUMMARY          "Print Summary Popup"  // translation needed
 
 #endif

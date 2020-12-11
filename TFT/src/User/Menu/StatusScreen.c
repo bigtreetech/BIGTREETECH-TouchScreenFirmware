@@ -10,7 +10,6 @@
 #define SET_SPEEDMENUINDEX(x)
 #endif
 
-//1 title, ITEM_PER_PAGE items (icon + label)
 const MENUITEMS StatusItems = {
 // title
 LABEL_READY,
@@ -48,7 +47,7 @@ static char msgbody[MAX_MSG_LENGTH];
 uint8_t current_tool = NOZZLE0;
 int current_fan = 0;
 int current_speedID = 0;
-const char* SpeedID[2] = SPEED_ID;
+const char *const SpeedID[2] = SPEED_ID;
 // text position rectangles for Live icons
 //icon 0
 const GUI_POINT ss_title_point = {SSICON_WIDTH - BYTE_WIDTH/2, SSICON_NAME_Y0};
@@ -220,14 +219,14 @@ void drawStatusScreenMsg(void)
   msgNeedRefresh = false;
 }
 
-void scrollMsg(void){
+static inline void scrollMsg(void){
   GUI_SetBkColor(INFOMSG_BKCOLOR);
   GUI_SetColor(INFOMSG_COLOR);
   Scroll_DispString(&msgScroll,CENTER);
   GUI_RestoreColorDefault();
 }
 
-void toggleTool(void)
+static inline void toggleTool(void)
 {
   if (OS_GetTimeMs() > nextTime)
   {
@@ -294,7 +293,7 @@ void menuStatus(void)
           break;
       #endif
       case KEY_MAINMENU:
-        infoMenu.menu[++infoMenu.cur] = unifiedMenu;
+        infoMenu.menu[++infoMenu.cur] = menuMain;
         break;
       case KEY_ICON_7:
         infoMenu.menu[++infoMenu.cur] = menuPrint;

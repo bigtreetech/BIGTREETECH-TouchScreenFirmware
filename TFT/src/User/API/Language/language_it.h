@@ -282,5 +282,8 @@
     #define STRING_LOAD_STARTED           "Carico filamento in corso...\nNon sono possibili altre\nazioni fino al termine.\nAttendere prego."
     #define STRING_UNLOAD_STARTED         "Scarico filamento in corso...\nNon sono possibili altre\nazioni fino al termine.\nAttendere prego."
     #define STRING_HEATERS_ON             "Alcuni riscaldatori sono ancora accesi\nVuoi spegnerli?"
+    #define STRING_PRINT_TOTAL_TIME       "Print complete.\nPrint Time: %02u:%02u:%02u \n"  // translation needed
+    #define STRING_PRINT_FILAMENT_USED    "Filament Used: %3.2f meters"  // translation needed
+    #define STRING_PRINT_SUMMARY          "Print Summary Popup"  // translation needed
 
 #endif

@@ -4,6 +4,15 @@
 #define ITEM_PROBE_OFFSET_UNIT_NUM 3
 #define ITEM_PROBE_OFFSET_SUBMENU_NUM 4
 
+const ITEM itemProbeOffsetUnit[ITEM_PROBE_OFFSET_UNIT_NUM] = {
+  // icon                         label
+  {ICON_001_MM,                   LABEL_001_MM},
+  {ICON_01_MM,                    LABEL_01_MM},
+  {ICON_1_MM,                     LABEL_1_MM},
+};
+
+const float probeOffsetStep[ITEM_PROBE_OFFSET_UNIT_NUM] = {0.01f, 0.1f, 1};
+
 static u8 curUnit = 0;
 static u8 curSubmenu = 0;
 
@@ -11,23 +20,19 @@ static u8 curSubmenu = 0;
 void probeNotifyError(void)
 {
   labelChar(tempMsg, LABEL_Z_OFFSET);
-
   sprintf(&tempMsg[strlen(tempMsg)], " %s", textSelect(LABEL_OFF));
-
   addToast(DIALOG_TYPE_ERROR, tempMsg);
 }
 
 void probeDrawStatus(u8 *status)
 {
-  char tempstr[20];
-
-  sprintf(tempstr, "%s  ", status);
-
   if (!probeOffsetGetStatus())
     GUI_SetColor(infoSettings.reminder_color);
   else
     GUI_SetColor(infoSettings.sd_reminder_color);
 
+  char tempstr[20];
+  sprintf(tempstr, "%s  ", status);
   GUI_DispString(exhibitRect.x0, exhibitRect.y0, (u8 *) tempstr);
   GUI_SetColor(infoSettings.font_color);
 }
@@ -35,9 +40,7 @@ void probeDrawStatus(u8 *status)
 void probeDrawValue(float val)
 {
   char tempstr[20];
-
   sprintf(tempstr, "  %.2f  ", val);
-
   setLargeFont(true);
   GUI_DispStringInPrect(&exhibitRect, (u8 *) tempstr);
   setLargeFont(false);
@@ -45,15 +48,6 @@ void probeDrawValue(float val)
 
 void menuProbeOffset(void)
 {
-  const ITEM itemProbeOffsetUnit[ITEM_PROBE_OFFSET_UNIT_NUM] = {
-    // icon                         label
-    {ICON_001_MM,                   LABEL_001_MM},
-    {ICON_01_MM,                    LABEL_01_MM},
-    {ICON_1_MM,                     LABEL_1_MM},
-  };
-
-  const float probeOffset_unit[ITEM_PROBE_OFFSET_UNIT_NUM] = {0.01f, 0.1f, 1};
-
   ITEM itemProbeOffsetSubmenu[ITEM_PROBE_OFFSET_SUBMENU_NUM] = {
     // icon                         label
     {ICON_01_MM,                    LABEL_01_MM},
@@ -108,7 +102,7 @@ void menuProbeOffset(void)
 
   while (infoMenu.menu[infoMenu.cur] == menuProbeOffset)
   {
-    unit = probeOffset_unit[curUnit];
+    unit = probeOffsetStep[curUnit];
 
     z_offset = probeOffsetGetValue();                      // always load current Z offset
 
@@ -124,20 +118,19 @@ void menuProbeOffset(void)
         break;
 
       case KEY_INFOBOX:
+      {
+        if (!probeOffsetGetStatus())
         {
-          if (!probeOffsetGetStatus())
-          {
-            probeNotifyError();
-          }
-          else
-          {
-            float val = numPadFloat(labelGetAddress(&probeOffsetItems.title), z_offset, 0, true);
-            z_offset = probeOffsetSetValue(val);
-
-            menuDrawPage(&probeOffsetItems);
-          }
+          probeNotifyError();
+        }
+        else
+        {
+          float val = numPadFloat(labelGetAddress(&probeOffsetItems.title), z_offset, 0, true);
+          z_offset = probeOffsetSetValue(val);
+          menuDrawPage(&probeOffsetItems);
         }
         break;
+      }
 
       // increase Z offset
       case KEY_ICON_3:
@@ -152,13 +145,11 @@ void menuProbeOffset(void)
         if (!probeOffsetGetStatus())
         {
           probeOffsetEnable();
-
           probeOffsetItems.items[key_num].label.index = LABEL_ON;
         }
         else
         {
           probeOffsetDisable();
-
           probeOffsetItems.items[key_num].label.index = LABEL_OFF;
         }
 
@@ -169,7 +160,6 @@ void menuProbeOffset(void)
       // change submenu
       case KEY_ICON_5:
         curSubmenu = (curSubmenu + 1) % ITEM_PROBE_OFFSET_SUBMENU_NUM;
-
         probeOffsetItems.items[KEY_ICON_6] = itemProbeOffsetSubmenu[curSubmenu];
 
         menuDrawItem(&probeOffsetItems.items[KEY_ICON_6], KEY_ICON_6);
@@ -182,7 +172,6 @@ void menuProbeOffset(void)
           // change unit
           case 0:
             curUnit = (curUnit + 1) % ITEM_PROBE_OFFSET_UNIT_NUM;
-
             itemProbeOffsetSubmenu[curSubmenu] = itemProbeOffsetUnit[curUnit];
             probeOffsetItems.items[key_num] = itemProbeOffsetSubmenu[curSubmenu];
 

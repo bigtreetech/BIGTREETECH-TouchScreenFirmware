@@ -73,6 +73,7 @@
 #include "menu.h"
 #include "list_item.h"
 #include "list_widget.h"
+#include "common.h"
 #include "Popup.h"
 #include "Numpad.h"
 #include "Notification.h"

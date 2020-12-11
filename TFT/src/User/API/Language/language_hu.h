@@ -282,5 +282,8 @@
     #define STRING_LOAD_STARTED           "A filament betöltése folyamatban van,\nnem lehetséges további művelet,\nmíg véget nem ér.\nKérlek várj!"
     #define STRING_UNLOAD_STARTED         "A filament kiadása folyamatban van,\nnem lehetséges további művelet,\nmíg véget nem ér.\nKérlek várj!"
     #define STRING_HEATERS_ON             "Néhány fűtőelem még üzemel.\nKikapcsolod a fűtőelemeket?"
+    #define STRING_PRINT_TOTAL_TIME       "Print complete.\nPrint Time: %02u:%02u:%02u \n"  // translation needed
+    #define STRING_PRINT_FILAMENT_USED    "Filament Used: %3.2f meters"  // translation needed
+    #define STRING_PRINT_SUMMARY          "Print Summary Popup"  // translation needed
 
 #endif

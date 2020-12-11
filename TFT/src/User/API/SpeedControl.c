@@ -1,6 +1,7 @@
 #include "SpeedControl.h"
 #include "includes.h"
 
+const char *const speedCmd[SPEED_NUM] = {"M220","M221"};
 static uint16_t percent[SPEED_NUM]     = {100, 100};  //Speed  Flow
 static uint16_t lastPercent[SPEED_NUM] = {100, 100};  //Speed  Flow
 static uint16_t curPercent[SPEED_NUM]  = {100, 100};  //Speed  Flow
@@ -61,8 +62,7 @@ void loopSpeed(void)
       if (send_waiting[i] == false)
       {
         send_waiting[i] = true;
-        const char *speedCmd[SPEED_NUM] = {"M220","M221"};
-        send_waiting[i] = storeCmd("%s S%d\n", speedCmd[i], percent[i]);
+        send_waiting[i] = storeCmd("%s S%d\n",speedCmd[i], percent[i]);
       }
       if (send_waiting[i] == true)
         curPercent[i] = percent[i];
@@ -73,12 +73,9 @@ void loopSpeed(void)
 
 void speedQuery(void)
 {
-  if (infoHost.connected == true && infoHost.wait == false)
+  if (infoHost.connected == true && infoHost.wait == false && !queryWait)
   {
-    if (!queryWait)
-    {
-      storeCmd("M220\nM221\n");
-      queryWait = true;
-    }
+    storeCmd("M220\nM221\n");
+    queryWait = true;
   }
 }

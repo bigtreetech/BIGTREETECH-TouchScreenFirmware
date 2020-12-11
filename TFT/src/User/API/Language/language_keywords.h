@@ -289,7 +289,9 @@ extern "C" {
 #define LANG_KEY_LOAD_STARTED                 "label_load_started:"
 #define LANG_KEY_UNLOAD_STARTED               "label_unload_started:"
 #define LANG_KEY_HEATERS_ON                   "label_heaters_on:"
-
+#define LANG_KEY_PRINT_TOTAL_TIME             "print_total_time:"
+#define LANG_KEY_PRINT_FILAMENT_USED          "print_filament_used:"
+#define LANG_KEY_PRINT_SUMMARY                "print_summary:"
 #ifdef __cplusplus
 }
 #endif
