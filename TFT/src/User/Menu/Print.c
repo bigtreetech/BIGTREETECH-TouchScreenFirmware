@@ -305,7 +305,7 @@ void menuPrintFromSource(void)
             setPrintModelIcon(infoFile.source != BOARD_SD && model_DecodeToFlash(infoFile.title));
 
             char temp_info[FILE_NUM + 50];
-            sprintf(temp_info, (char *)textSelect(LABEL_START_PRINT), infoFile.file[key_num + start - infoFile.F_num]);
+            sprintf(temp_info, (char *)textSelect(LABEL_START_PRINT), (u8* )((infoFile.source == BOARD_SD) ? infoFile.Longfile[key_num + start - infoFile.F_num] : infoFile.file[key_num + start - infoFile.F_num]));
             //confirm file selction
             setDialogText( LABEL_PRINT, (u8*)temp_info, LABEL_CONFIRM, LABEL_CANCEL);
             showDialog(DIALOG_TYPE_QUESTION, startPrint, ExitDir, NULL);

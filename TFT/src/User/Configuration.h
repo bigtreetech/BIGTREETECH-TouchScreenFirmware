@@ -247,11 +247,21 @@
  */
 #define NOZZLE_PAUSE_M600_M601
 
-/* M701, M702 ; Marlin filament load unload gcodes support
+/**
+ * M701, M702 ; Marlin filament load unload gcodes support
  * FILAMENT_LOAD_UNLOAD_GCODES option on Marlin configuration_adv.h need to be uncommented
  * Adds a submenu to the movement menu for selecting load and unload actions
  */
 #define LOAD_UNLOAD_M701_M702
+
+/**
+ * Enable print summary popup
+ * This will enable a popup at print end.
+ * The popup shows the approximate print time and approximate filament used.
+ * Displayed values are calculated by approximation and may differ from the actual values.
+ * When enabled also the menu jumps to the status screen after the popup.
+ */
+#define DISPLAY_PRINT_SUMMARY 1 // 0: Disabled 1: Enabled
 
 /**
  * Auto save/load Bed Leveling data

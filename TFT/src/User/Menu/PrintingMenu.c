@@ -123,6 +123,11 @@ void menuBeforePrinting(void)
       break;
   }
   infoPrinting.printing = true;
+  infoPrinting.time = 0;
+  if (infoSettings.print_summary)
+  {
+    resetFilamentUsed();
+  }
   infoMenu.menu[infoMenu.cur] = menuPrinting;
 }
 
@@ -245,8 +250,11 @@ static inline void toggleinfo(void)
     rapid_serial_loop();   //perform backend printing loop before drawing to avoid printer idling
     reDrawSpeed(SPD_ICON_POS);
     speedQuery();
-    if (infoFile.source == BOARD_SD)
-      coordinateQuery();
+    if (infoFile.source == BOARD_SD) coordinateQuery();
+    if (infoSettings.print_summary)
+    {
+      updateFilamentUsed();
+    }
   }
 }
 
@@ -266,7 +274,10 @@ static inline void printingDrawPage(void)
 void stopConfirm(void)
 {
   abortPrinting();
-  infoMenu.cur--;
+  if (!infoSettings.print_summary)
+  {
+    --infoMenu.cur;
+  }
 }
 
 void menuPrinting(void)
@@ -411,7 +422,12 @@ void menuPrinting(void)
         else
         {
           exitPrinting();
-          infoMenu.cur--;
+          if (infoSettings.print_summary)
+          {
+            infoMenu.cur = 0;
+          } else {
+            --infoMenu.cur;
+          }
         }
         break;
 

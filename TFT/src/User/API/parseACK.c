@@ -258,10 +258,15 @@ void hostActionCommands(void)
   }
   else if (ack_seen("cancel")) //To be added to Marlin abortprint routine
   {
+    if (infoHost.printing == true)
+    {
+      request_M27(0);
+    }
     infoHost.printing = false;
     infoPrinting.printing = false;
     infoPrinting.cur = infoPrinting.size;
   }
+
 }
 
 void parseACK(void)
@@ -298,7 +303,6 @@ void parseACK(void)
                              // Avoid can't getting this parameter due to disabled M503 in Marlin
         storeCmd("M115\n");
         storeCmd("M211\n");  // retrieve the software endstops state
-        request_M27(infoSettings.m27_refresh_time);
       }
     }
 
@@ -387,6 +391,10 @@ void parseACK(void)
           if (ack_seen("Z:"))
           {
             coordinateSetAxisActual(Z_AXIS, ack_value());
+            if (ack_seen("E:"))
+            {
+              coordinateSetAxisActual(E_AXIS, ack_value());
+            }
           }
         }
         coordinateQuerySetWait(false);
@@ -409,9 +417,17 @@ void parseACK(void)
 
         infoPrinting.pause = false;
         infoHost.printing = true;
+        if (infoSettings.print_summary)
+        {
+          resetFilamentUsed();
+        }
         infoPrinting.time = 0;
         infoPrinting.cur = 0;
         infoPrinting.size = ack_value();
+        if (infoMachineSettings.autoReportSDStatus == 1)
+        {
+          request_M27(infoSettings.m27_refresh_time);                //Check if there is a SD or USB print running.
+        }
       }
       else if(infoMachineSettings.onboard_sd_support == ENABLED && infoFile.source == BOARD_SD && ack_seen("Not SD printing"))
       {
@@ -429,7 +445,8 @@ void parseACK(void)
       }
       else if(infoMachineSettings.onboard_sd_support == ENABLED && infoFile.source == BOARD_SD && ack_seen("Done printing file"))
       {
-        infoPrinting.printing = false;
+        infoHost.printing = false;
+        printingFinished();
         infoPrinting.cur = infoPrinting.size;
       }
 

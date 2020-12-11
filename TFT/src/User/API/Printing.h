@@ -54,7 +54,7 @@ void setPrintingTime(uint32_t RTtime);
 
 void exitPrinting(void);
 void endPrinting(void);
-void completePrinting(void);
+void printingFinished(void);
 void abortPrinting(void);
 uint8_t *getCurGcodeName(char *path);
 void sendPrintCodes(uint8_t index);
@@ -82,6 +82,9 @@ void shutdownLoop(void);
 void startShutdown(void);
 
 void loopCheckPrinting(void);
+
+void resetFilamentUsed(void);
+void updateFilamentUsed(void);
 
 #ifdef __cplusplus
 }

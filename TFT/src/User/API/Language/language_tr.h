@@ -95,9 +95,9 @@
     #define STRING_FAN_HALF_SPEED         "Yarım"
     #define STRING_ROTATE_UI              "Döndür"
     #define STRING_TOUCHSCREEN_ADJUST     "Kalibre"
-    #define STRING_MORE                   "Daha"
+    #define STRING_MORE                   "Ayar"
     #define STRING_SCREEN_INFO            "Bilgi"
-    #define STRING_STATUS                 "Bilgi"
+    #define STRING_STATUS                 "Durum"
     #define STRING_SIMULATOR_BG_COLOR     "Marlin modu arkaplan renk"
     #define STRING_SIMULATOR_FONT_COLOR   "Marlin modu font renk"
     #define STRING_WHITE                  "Beyaz"
@@ -282,5 +282,8 @@
     #define STRING_LOAD_STARTED           "Filament load in progress.\nNo further actions possible\nuntil it's done.\nPlease stand by."  // translation needed
     #define STRING_UNLOAD_STARTED         "Filament unload in progress.\nNo further actions possible\nuntil it's done.\nPlease stand by."  // translation needed
     #define STRING_HEATERS_ON             "Some heaters are still ON.\nDo you want to stop them?"  // translation needed
+    #define STRING_PRINT_TOTAL_TIME       "Baskı tamamlandı.\nBaskı Süresi: %02u:%02u:%02u \n"
+    #define STRING_PRINT_FILAMENT_USED    "Kullanılan Filaman: %3.2f metre"
+    #define STRING_PRINT_SUMMARY          "Baskı Özeti"
 
 #endif
