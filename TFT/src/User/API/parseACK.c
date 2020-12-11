@@ -265,7 +265,7 @@ void hostActionCommands(void)
     infoHost.printing = false;
     infoPrinting.printing = false;
     infoPrinting.cur = infoPrinting.size;
-	}
+  }
 
 }
 
