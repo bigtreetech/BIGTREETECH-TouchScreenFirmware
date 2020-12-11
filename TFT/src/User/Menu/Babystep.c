@@ -3,7 +3,15 @@
 
 #define ITEM_BABYSTEP_UNIT_NUM 3
 
-static u8 curUnit = 0;
+const ITEM itemBabyStep_steps[ITEM_BABYSTEP_UNIT_NUM] = {
+  // icon                         label
+  {ICON_001_MM,                   LABEL_001_MM},
+  {ICON_01_MM,                    LABEL_01_MM},
+  {ICON_1_MM,                     LABEL_1_MM},
+};
+
+const float babystep_steps[ITEM_BABYSTEP_UNIT_NUM] = {0.01f, 0.1f, 1};
+static u8 babystep_steps_index = 0;
 
 void babyReDraw(float babystep, float z_offset, bool force_z_offset, bool skip_header)
 {
@@ -44,15 +52,6 @@ void babyReDraw(float babystep, float z_offset, bool force_z_offset, bool skip_h
 
 void menuBabystep(void)
 {
-  const ITEM itemBabyStepUnit[ITEM_BABYSTEP_UNIT_NUM] = {
-    // icon                         label
-    {ICON_001_MM,                   LABEL_001_MM},
-    {ICON_01_MM,                    LABEL_01_MM},
-    {ICON_1_MM,                     LABEL_1_MM},
-  };
-
-  const float babystep_unit[ITEM_BABYSTEP_UNIT_NUM] = {0.01f, 0.1f, 1};
-
   // 1 title, ITEM_PER_PAGE items (icon + label)
   MENUITEMS babyStepItems = {
     // title
@@ -104,7 +103,7 @@ void menuBabystep(void)
     babyStepItems.items[KEY_ICON_4].label.index = LABEL_SAVE;
   }
 
-  babyStepItems.items[KEY_ICON_5] = itemBabyStepUnit[curUnit];
+  babyStepItems.items[KEY_ICON_5] = itemBabyStep_steps[babystep_steps_index];
 
   menuDrawPage(&babyStepItems);
   babyReDraw(now_babystep, now_z_offset, force_z_offset, false);
@@ -115,7 +114,7 @@ void menuBabystep(void)
 
   while (infoMenu.menu[infoMenu.cur] == menuBabystep)
   {
-    unit = babystep_unit[curUnit];
+    unit = babystep_steps[babystep_steps_index];
 
     babystep = babystepGetValue();                         // always load current babystep
 
@@ -137,7 +136,6 @@ void menuBabystep(void)
         if (infoMachineSettings.EEPROM == 1)
         {
           offsetSetValue(z_offset);                        // set new Z offset
-
           setDialogText(babyStepItems.title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
           showDialog(DIALOG_TYPE_QUESTION, saveEepromSettings, NULL, NULL);
         }
@@ -145,10 +143,8 @@ void menuBabystep(void)
 
       // change unit
       case KEY_ICON_5:
-        curUnit = (curUnit + 1) % ITEM_BABYSTEP_UNIT_NUM;
-
-        babyStepItems.items[key_num] = itemBabyStepUnit[curUnit];
-
+        babystep_steps_index = (babystep_steps_index + 1) % ITEM_BABYSTEP_UNIT_NUM;
+        babyStepItems.items[key_num] = itemBabyStep_steps[babystep_steps_index];
         menuDrawItem(&babyStepItems.items[key_num], key_num);
         break;
 
@@ -166,7 +162,6 @@ void menuBabystep(void)
           if (encoderPosition)
           {
             babystep = babystepUpdateValueByEncoder(unit, encoderPosition > 0 ? 1 : -1);
-
             encoderPosition = 0;
           }
         #endif

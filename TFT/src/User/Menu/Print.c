@@ -211,7 +211,6 @@ const int16_t labelVolumeError[] = {LABEL_READ_TFTSD_ERROR, LABEL_READ_U_DISK_ER
 void menuPrintFromSource(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
-
   u8 update=0;
 
   GUI_Clear(infoSettings.bg_color);

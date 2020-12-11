@@ -1,7 +1,7 @@
 #include "Fan.h"
 #include "includes.h"
 
-static uint8_t   curIndex = 0;
+static uint8_t curIndex = 0;
 
 const ITEM itemFan[2] = {
   //icon                label

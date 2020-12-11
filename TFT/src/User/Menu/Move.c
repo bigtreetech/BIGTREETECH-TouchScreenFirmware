@@ -8,6 +8,7 @@
 #define Y_MOVE_GCODE "G1 Y%.2f F%d\n"
 #define Z_MOVE_GCODE "G1 Z%.2f F%d\n"
 
+const char *const xyzMoveCmd[] = {X_MOVE_GCODE, Y_MOVE_GCODE, Z_MOVE_GCODE};
 
 //1 title, ITEM_PER_PAGE item
 MENUITEMS moveItems = {
@@ -39,28 +40,16 @@ LABEL_MOVE,
 
 //const uint32_t item_move_speed[] = {DEFAULT_SPEED_MOVE, SPEED_MOVE_SLOW, SPEED_MOVE_FAST};
 
-#define ITEM_MOVE_LEN_NUM 5
-const ITEM itemMoveLen[ITEM_MOVE_LEN_NUM] = {
-// icon                       label
-  {ICON_001_MM,               LABEL_001_MM},
-  {ICON_01_MM,                LABEL_01_MM},
-  {ICON_1_MM,                 LABEL_1_MM},
-  {ICON_10_MM,                LABEL_10_MM},
-  {ICON_100_MM,               LABEL_100_MM},
-};
 
-const  float item_move_len[ITEM_MOVE_LEN_NUM] = {0.01f, 0.1f, 1, 10, 100};
-static u8    item_move_len_i = 1;
-
+static u8 item_moveLen_index = 1;
 static u32 nextTime = 0;
 static u32 update_time = 500; // 1 seconds is 1000
 
 AXIS nowAxis = X_AXIS;
 
 void storeMoveCmd(AXIS xyz, int8_t direction) {
-  const char *xyzMoveCmd[] = {X_MOVE_GCODE, Y_MOVE_GCODE, Z_MOVE_GCODE};
   // if invert is true, 'direction' multiplied by -1
-  storeCmd(xyzMoveCmd[xyz], (infoSettings.invert_axis[xyz] ? -direction : direction) * item_move_len[item_move_len_i], infoSettings.axis_speed[infoSettings.move_speed]);
+  storeCmd(xyzMoveCmd[xyz], (infoSettings.invert_axis[xyz] ? -direction : direction) * moveLenSteps[item_moveLen_index], infoSettings.axis_speed[infoSettings.move_speed]);
   // update now axis be selected
   nowAxis = xyz;
 }
@@ -131,8 +120,8 @@ void menuMove(void)
         case KEY_ICON_2: storeMoveCmd(Z_AXIS, 1); break;  // Z move up if no invert
 
         case KEY_ICON_3:
-              item_move_len_i = (item_move_len_i+1)%ITEM_MOVE_LEN_NUM;
-              moveItems.items[key_num] = itemMoveLen[item_move_len_i];
+              item_moveLen_index = (item_moveLen_index+1)%ITEM_MOVE_LEN_NUM;
+              moveItems.items[key_num] = itemMoveLen[item_moveLen_index];
               menuDrawItem(&moveItems.items[key_num], key_num);
               break;
 
@@ -147,8 +136,8 @@ void menuMove(void)
         case KEY_ICON_2: storeMoveCmd(Z_AXIS, 1); break;  // Z move up if no invert
 
         case KEY_ICON_3:
-              item_move_len_i = (item_move_len_i+1)%ITEM_MOVE_LEN_NUM;
-              moveItems.items[key_num] = itemMoveLen[item_move_len_i];
+              item_moveLen_index = (item_moveLen_index+1)%ITEM_MOVE_LEN_NUM;
+              moveItems.items[key_num] = itemMoveLen[item_moveLen_index];
               menuDrawItem(&moveItems.items[key_num], key_num);
               break;
 

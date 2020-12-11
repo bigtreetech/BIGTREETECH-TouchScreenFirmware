@@ -7,12 +7,15 @@ const ITEM itemCaseLight[2] = {
     {ICON_RGB_WHITE,      LABEL_ON},
 };
 
+static inline void updateCaseLightIcon(MENUITEMS * curmenu, bool state)
+{
+curmenu->items[KEY_ICON_4] = itemCaseLight[state ? 1 : 0];
+}
+
 void caseLightBrightnessReDraw()
 {
   char tempstr[20];
-
   sprintf(tempstr, "  %d%%  ", caseLightGetBrightnessPercent());
-
   setLargeFont(true);
   GUI_DispStringInPrect(&exhibitRect, (u8 *)tempstr);
   setLargeFont(false);
@@ -46,31 +49,13 @@ void menuCaseLight(void)
   uint8_t currentCaseLightBrightness = caseLightGetBrightness();
   uint8_t previousCaseLightBrightness = currentCaseLightBrightness;
 
-#define SET_CASE_LIGHT_ICON() caseLightItems.items[KEY_ICON_4] = itemCaseLight[currentCaseLightState ? 1 : 0];
-
-  SET_CASE_LIGHT_ICON();
+  updateCaseLightIcon(&caseLightItems, currentCaseLightState);
   menuDrawPage(&caseLightItems);
   caseLightBrightnessReDraw();
 
   while (infoMenu.menu[infoMenu.cur] == menuCaseLight)
   {
     key_num = menuKeyGetValue();
-    currentCaseLightState = caseLightGetState();
-    if (previousCaseLightState != currentCaseLightState)
-    {
-      // Dynamically change the light on/off icon based on the current state
-      previousCaseLightState = currentCaseLightState;
-      SET_CASE_LIGHT_ICON();
-      menuDrawPage(&caseLightItems);
-      caseLightBrightnessReDraw();
-    }
-
-    currentCaseLightBrightness = caseLightGetBrightness();
-    if (previousCaseLightBrightness != currentCaseLightBrightness)
-    {
-      previousCaseLightBrightness = currentCaseLightBrightness;
-      caseLightBrightnessReDraw();
-    }
 
     switch (key_num)
     {
@@ -95,15 +80,32 @@ void menuCaseLight(void)
       break;
 
     default:
-#if LCD_ENCODER_SUPPORT
-      if (encoderPosition)
-      {
-        caseLightChangeBrightnessPrecent(encoderPosition);
-        caseLightBrightnessReDraw();
-        encoderPosition = 0;
-      }
-#endif
+      #if LCD_ENCODER_SUPPORT
+        if (encoderPosition)
+        {
+          caseLightChangeBrightnessPrecent(encoderPosition);
+          caseLightBrightnessReDraw();
+          encoderPosition = 0;
+        }
+      #endif
       break;
+    }
+
+    currentCaseLightState = caseLightGetState();
+    if (previousCaseLightState != currentCaseLightState)
+    {
+      // Dynamically change the light on/off icon based on the current state
+      previousCaseLightState = currentCaseLightState;
+      updateCaseLightIcon(&caseLightItems, currentCaseLightState);
+      menuDrawItem(&caseLightItems.items[KEY_ICON_4], KEY_ICON_4);
+      caseLightBrightnessReDraw();
+    }
+
+    currentCaseLightBrightness = caseLightGetBrightness();
+    if (previousCaseLightBrightness != currentCaseLightBrightness)
+    {
+      previousCaseLightBrightness = currentCaseLightBrightness;
+      caseLightBrightnessReDraw();
     }
 
     loopProcess();

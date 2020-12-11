@@ -150,7 +150,8 @@ void sendPrintCodes(uint8_t index)
   }
 }
 
-void setM0Pause(bool m0_pause){
+static inline void setM0Pause(bool m0_pause)
+{
   infoPrinting.m0_pause = m0_pause;
 }
 
@@ -246,7 +247,7 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
 
 void exitPrinting(void)
 {
-  memset(&infoPrinting,0,sizeof(PRINTING));
+  memset(&infoPrinting, 0, sizeof(PRINTING));
   ExitDir();
 }
 
@@ -288,7 +289,6 @@ void endPrinting(void)
     popupReminder(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, (u8*)tempstr1);
   }
 }
-
 
 void printingFinished(void)
 {

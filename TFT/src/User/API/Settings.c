@@ -20,7 +20,7 @@ const u8 default_custom_enabled[] = CUSTOM_GCODE_ENABLED;
 void infoSettingsReset(void)
 {
 // General Settings
-  infoSettings.unified_menu           = UNIFIED_MENU;
+  infoSettings.status_screen           = ENABLE_STATUS_SCREEN;
   infoSettings.baudrate               = BAUDRATE;
   infoSettings.language               = LANG_DEFAULT;
 

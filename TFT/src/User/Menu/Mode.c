@@ -43,10 +43,10 @@ void infoMenuSelect(void)
         setEncActiveSignal(0);
       #endif
       GUI_RestoreColorDefault();
-      if(infoSettings.unified_menu == 1) //if Unified menu is selected
+      if(infoSettings.status_screen == 1) //if Unified menu is selected
         infoMenu.menu[infoMenu.cur] = menuStatus; //status screen as default screen on boot
       else
-        infoMenu.menu[infoMenu.cur] = classicMenu;   // classic UI
+        infoMenu.menu[infoMenu.cur] = menuMain;   // classic UI
 
       #ifdef SHOW_BTT_BOOTSCREEN
         if (freshboot)
