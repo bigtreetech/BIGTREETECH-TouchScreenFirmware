@@ -6,7 +6,6 @@
 #include "GUI.h"
 
 char * dynamic_label[LISTITEM_PER_PAGE];
-
 char dynamic_text_value[LISTITEM_PER_PAGE][10];
 
 const uint16_t ICON_COLOR[ICONCHAR_NUM]=
@@ -274,7 +273,6 @@ GUI_POINT getTextStartPoint(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey, 
   GUI_POINT point_item = {sx, sy};
   uint16_t w = ex- sx;
   uint16_t h = ey- sy;
-
   size_t charIcon_w = strlen(textchar)/3 * BYTE_HEIGHT;
 
   switch (pos)
@@ -333,8 +331,8 @@ GUI_POINT getTextStartPoint(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey, 
 }
 
 //draw icons in item
-void DrawCharIcon(const GUI_RECT * rect,ICON_POS iconalign, uint16_t iconindex,bool drawBgColor, uint16_t btn_color){
-
+void DrawCharIcon(const GUI_RECT * rect,ICON_POS iconalign, uint16_t iconindex,bool drawBgColor, uint16_t btn_color)
+{
       GUI_POINT icon_p = getTextStartPoint(rect->x0, rect->y0, rect->x1,rect->y1,iconalign,GET_ICONCHAR[iconindex]);
       GUI_SetColor(ICON_COLOR[iconindex]);
       if(drawBgColor)
@@ -344,7 +342,6 @@ void DrawCharIcon(const GUI_RECT * rect,ICON_POS iconalign, uint16_t iconindex,b
       }
       GUI_DispString(icon_p.x, icon_p.y, IconCharSelect(iconindex));
       GUI_RestoreColorDefault();
-
 }
 
 //draw item pressed feedback
@@ -358,7 +355,6 @@ void DrawListItemPress(const GUI_RECT * rect, bool pressed){
       {
         GUI_SetColor(infoSettings.bg_color);
         GUI_DrawPrect(rect);
-
         GUI_SetColor(infoSettings.list_border_color);
         GUI_DrawLine(rect->x0, rect->y0-1 , rect->x1-1, rect->y0-1 );
         GUI_DrawLine(rect->x0, rect->y1-1 , rect->x1-1, rect->y1-1 );
@@ -462,7 +458,6 @@ void ListItem_Display(const GUI_RECT* rect, uint8_t position, const LISTITEM * c
     default:
       break;
     }
-
   }
    else
   {
@@ -478,21 +473,15 @@ void draw_itemtitle(GUI_POINT pos,LABEL label, uint8_t position, int textarea_wi
   {
     int textarea_width = LISTITEM_WIDTH - (pos.x + 1); //width after removing the width for icon
     if (label.index == LABEL_DYNAMIC)
-    {GUI_DispLenString(pos.x, pos.y, (u8*)getDynamicLabel(position),textarea_width, true);
-    }
+      GUI_DispLenString(pos.x, pos.y, (u8*)getDynamicLabel(position),textarea_width, true);
     else
-    {GUI_DispLenString(pos.x, pos.y, labelGetAddress(&label), textarea_width, true);
-    }
+      GUI_DispLenString(pos.x, pos.y, labelGetAddress(&label), textarea_width, true);
   }
 }
 
 //display toggle button
 void ListItem_DisplayToggle(uint16_t sx, uint16_t sy, uint8_t iconchar_state)
 {
-  //const GUI_RECT *rect = rect_of_keyListView + position;
-  //GUI_POINT pos = getTextStartPoint(rect_of_keyListView.x0, rect->y0, rect->x1,rect->y1, pos, iconchar);
-
-  //GUI_ClearPrect(&rect_item);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
   GUI_SetColor(infoSettings.list_border_color);
   _GUI_DispString(sx, sy, (uint8_t*)GET_ICONCHAR[ICONCHAR_TOGGLE_BODY]);
@@ -500,13 +489,9 @@ void ListItem_DisplayToggle(uint16_t sx, uint16_t sy, uint8_t iconchar_state)
 
   GUI_SetColor(ICON_COLOR[iconchar_state]);
   if (iconchar_state == ICONCHAR_TOGGLE_OFF)
-  {
     _GUI_DispString(sx, sy, IconCharSelect(ICONCHAR_TOGGLE_SWITCH));
-  }
   else
-  {
     _GUI_DispString(sx+BYTE_HEIGHT, sy, IconCharSelect(ICONCHAR_TOGGLE_SWITCH));
-  }
 
   GUI_RestoreColorDefault();
 
@@ -517,25 +502,19 @@ void ListItem_DisplayCustomValue(const GUI_RECT* rect,LABEL value,int i)
 {
 
   const GUI_RECT rectVal = {rect->x1-BYTE_WIDTH*8 -1,rect->y0+(LISTITEM_HEIGHT-BYTE_HEIGHT)/2,rect->x1-1,rect->y1-(LISTITEM_HEIGHT-BYTE_HEIGHT)/2};
-//GUI_POINT pos = getTextStartPoint(rect_of_keyListView.x0, rect->y0, rect->x1,rect->y1, pos, iconchar);
 
   GUI_ClearPrect(&rectVal);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 
   GUI_SetColor(infoSettings.list_border_color);
-
   GUI_DrawPrect(&rectVal);
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
   GUI_SetColor(MAT_LOWWHITE);
 
   if (value.index == LABEL_CUSTOM_VALUE || value.index == LABEL_DYNAMIC) //show custom text value
-  {
     GUI_DispStringInPrect(&rectVal, (u8 *)getDynamicTextValue(i));
-  }
   else //show regular text labels
-  {
     GUI_DispStringInPrect(&rectVal, (int32_t)value.index);
-  }
 
   GUI_RestoreColorDefault();
 }

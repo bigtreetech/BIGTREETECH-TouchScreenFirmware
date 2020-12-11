@@ -5,8 +5,6 @@
 extern "C" {
 #endif
 
-extern const char* nozzleDisplay[];
-
 void coolDown(void);
 void menuLoadUnload(void);
 

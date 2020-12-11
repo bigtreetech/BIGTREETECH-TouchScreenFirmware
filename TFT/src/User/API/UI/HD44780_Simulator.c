@@ -69,7 +69,7 @@ void HD44780_BI16_SetCGRAMAddress(uint8_t cmd)
 {
   HD44780_reg.bi.cgrama.reg = cmd;
   uint8_t address = HD44780_reg.bi.cgrama.ac;
-  // Set CGRAM address 
+  // Set CGRAM address
   HD44780.y = (address >> 3) & 0x07;
   HD44780.x = 0;
   HD44780_reg.data_type = HD44780_DATA_CGRAM;
@@ -77,9 +77,9 @@ void HD44780_BI16_SetCGRAMAddress(uint8_t cmd)
 //cmd : 1 << 7
 void HD44780_BI17_SetDDRAMAddress(uint8_t cmd)
 {
-  HD44780_reg.bi.ddrama.reg = cmd;            
-  // Set DDRAM address                     
-  // x is 0-20 . y is 0-4                       
+  HD44780_reg.bi.ddrama.reg = cmd;
+  // Set DDRAM address
+  // x is 0-20 . y is 0-4
   if(0x80 <= cmd && cmd <= 0x93){                // First line AC range is  80H … 93h
     HD44780.y = 0;
     HD44780.x = cmd - 0x80;
@@ -121,7 +121,7 @@ void HD44780_DrawPixel(int16_t x, int16_t y, bool isForeGround, bool isFont)
 void HD44780_DispDDRAM(uint8_t data)
 {
   uint16_t i  = 0,
-           ex = 0,  
+           ex = 0,
            ey = 0;
   if(data < 8){                          // 5*8 bitmap
     ex = HD44780.x * 6 + 6;
@@ -135,7 +135,7 @@ void HD44780_DispDDRAM(uint8_t data)
     }
   }
   else{                                   //font
-    if(data < ' ' || data > '~') return;  
+    if(data < ' ' || data > '~') return;
     ex = HD44780.x * BYTE_WIDTH + BYTE_WIDTH-1;
     ey = HD44780.y * BYTE_HEIGHT + BYTE_HEIGHT-1;
     CHAR_INFO info = {.bytes = 0};
@@ -196,7 +196,7 @@ void HD44780_ParseWCmd(uint8_t cmd)
       (*hd44780CmdCallBack[i])(cmd);
       break;
     }
-  } 
+  }
 }
 
 void HD44780_ParseWData(uint8_t data)
@@ -239,7 +239,7 @@ void HD44780_ParseRecv(uint8_t val)
   }
   else
   {
-    HD44780_ParseWData(rcvData);  
+    HD44780_ParseWData(rcvData);
   }
 }
 

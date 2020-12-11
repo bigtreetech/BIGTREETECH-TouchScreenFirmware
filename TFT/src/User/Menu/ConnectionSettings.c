@@ -1,6 +1,20 @@
 #include "ConnectionSettings.h"
 #include "includes.h"
 
+const MENUITEMS connectionSettingsItems = {
+  // title
+  LABEL_CONNECTION_SETTINGS,
+  // icon                         label
+  {{ICON_BAUD_RATE,               LABEL_BAUDRATE},
+    {ICON_DISCONNECT,              LABEL_DISCONNECT},
+    {ICON_STOP,                    LABEL_EMERGENCYSTOP},
+    {ICON_SHUT_DOWN,               LABEL_SHUT_DOWN},
+    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_BACK,                    LABEL_BACK},}
+};
+
 // Set uart pins to input, free uart
 void menuDisconnect(void)
 {
@@ -24,8 +38,8 @@ void menuDisconnect(void)
   infoMenu.cur--;
 }
 
-const char* item_baudrate_str[ITEM_BAUDRATE_NUM] = {"2400", "9600", "19200", "38400", "57600", "115200", "250000", "500000", "1000000"};
-const u32   item_baudrate[ITEM_BAUDRATE_NUM] = {2400, 9600, 19200, 38400, 57600, 115200, 250000, 500000, 1000000};
+const char *const item_baudrate_str[ITEM_BAUDRATE_NUM] = {"2400", "9600", "19200", "38400", "57600", "115200", "250000", "500000", "1000000"};
+const u32 item_baudrate[ITEM_BAUDRATE_NUM] = {2400, 9600, 19200, 38400, 57600, 115200, 250000, 500000, 1000000};
 
 void menuBaudrate(void)
 {
@@ -96,20 +110,6 @@ void menuBaudrate(void)
 
 void menuConnectionSettings(void)
 {
-  // 1 title, ITEM_PER_PAGE items (icon + label)
-  const MENUITEMS connectionSettingsItems = {
-    // title
-    LABEL_CONNECTION_SETTINGS,
-    // icon                         label
-    {{ICON_BAUD_RATE,               LABEL_BAUDRATE},
-     {ICON_DISCONNECT,              LABEL_DISCONNECT},
-     {ICON_STOP,                    LABEL_EMERGENCYSTOP},
-     {ICON_SHUT_DOWN,               LABEL_SHUT_DOWN},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACK,                    LABEL_BACK},}
-  };
 
   KEY_VALUES key_num = KEY_IDLE;
 

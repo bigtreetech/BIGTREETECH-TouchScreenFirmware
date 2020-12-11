@@ -1,10 +1,10 @@
 #include "MainPage.h"
 #include "includes.h"
 
-void unifiedMenu(void)
+void menuMain(void)
 {
   // 1 title, ITEM_PER_PAGE items(icon+label)
-  MENUITEMS unifiedPageItems = {
+  MENUITEMS mainPageItems = {
     // title
     LABEL_MAINMENU,
     // icon                         label
@@ -20,9 +20,15 @@ void unifiedMenu(void)
 
   KEY_VALUES key_num = KEY_IDLE;
 
-  menuDrawPage(&unifiedPageItems);
+  if (infoSettings.status_screen != 1)
+    {
+      mainPageItems.items[7].icon = ICON_PRINT;
+      mainPageItems.items[7].label.index = LABEL_PRINT;
+    }
 
-  while (infoMenu.menu[infoMenu.cur] == unifiedMenu)
+  menuDrawPage(&mainPageItems);
+
+  while (infoMenu.menu[infoMenu.cur] == menuMain)
   {
     key_num = menuKeyGetValue();
     switch (key_num)
@@ -59,82 +65,10 @@ void unifiedMenu(void)
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur--;
-        break;
-
-      default:
-        break;
-    }
-
-    loopProcess();
-  }
-}
-
-void classicMenu(void)
-{
-  // 1 title, ITEM_PER_PAGE items(icon+label)
-  MENUITEMS classicPageItems = {
-    // title
-    LABEL_READY,
-    // icon                         label
-    {{ICON_HEAT_FAN,                LABEL_UNIFIEDHEAT},
-     {ICON_MOVE,                    LABEL_MOVE},
-     {ICON_HOME,                    LABEL_HOME},
-     {ICON_PRINT,                   LABEL_PRINT},
-     {ICON_EXTRUDE,                 LABEL_EXTRUDE},
-     {ICON_GCODE,                   LABEL_TERMINAL},
-     {ICON_SETTINGS,                LABEL_SETTINGS},
-     {ICON_LEVELING,                LABEL_LEVELING},}
-  };
-
-  KEY_VALUES key_num = KEY_IDLE;
-
-  if (infoMachineSettings.leveling != BL_DISABLED)
-  {
-    classicPageItems.items[7].icon = ICON_LEVELING;
-    classicPageItems.items[7].label.index = LABEL_BED_LEVELING;
-  }
-
-  menuDrawPage(&classicPageItems);
-
-  while (infoMenu.menu[infoMenu.cur] == classicMenu)
-  {
-    key_num = menuKeyGetValue();
-    switch (key_num)
-    {
-      case KEY_ICON_0:
-        infoMenu.menu[++infoMenu.cur] = menuUnifiedHeat;
-        break;
-
-      case KEY_ICON_1:
-        infoMenu.menu[++infoMenu.cur] = menuMove;
-        break;
-
-      case KEY_ICON_2:
-        infoMenu.menu[++infoMenu.cur] = menuHome;
-        break;
-
-      case KEY_ICON_3:
-        infoMenu.menu[++infoMenu.cur] = menuPrint;
-        break;
-
-      case KEY_ICON_4:
-        infoMenu.menu[++infoMenu.cur] = menuExtrude;
-        break;
-
-      case KEY_ICON_5:
-        infoMenu.menu[++infoMenu.cur] = menuSendGcode;
-        break;
-
-      case KEY_ICON_6:
-        infoMenu.menu[++infoMenu.cur] = menuSettings;
-        break;
-
-      case KEY_ICON_7:
-        if (infoMachineSettings.leveling != BL_DISABLED)
-          infoMenu.menu[++infoMenu.cur] = menuBedLeveling;
+        if (infoSettings.status_screen != 1)
+          infoMenu.menu[++infoMenu.cur] = menuPrint;
         else
-          infoMenu.menu[++infoMenu.cur] = menuManualLeveling;
+          infoMenu.cur--;
         break;
 
       default:
@@ -144,3 +78,4 @@ void classicMenu(void)
     loopProcess();
   }
 }
+

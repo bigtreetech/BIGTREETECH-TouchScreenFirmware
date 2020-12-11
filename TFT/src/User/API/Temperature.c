@@ -2,10 +2,10 @@
 #include "Temperature.h"
 
 
-const char* heaterID[MAX_HEATER_COUNT]            = HEAT_SIGN_ID;
-const char* const heatDisplayID[MAX_HEATER_COUNT] = HEAT_DISPLAY_ID;
-const char* heatCmd[MAX_HEATER_COUNT]             = HEAT_CMD;
-const char* heatWaitCmd[MAX_HEATER_COUNT]         = HEAT_WAIT_CMD;
+const char *const heaterID[MAX_HEATER_COUNT]      = HEAT_SIGN_ID;
+const char *const heatDisplayID[MAX_HEATER_COUNT] = HEAT_DISPLAY_ID;
+const char *const heatCmd[MAX_HEATER_COUNT]       = HEAT_CMD;
+const char *const heatWaitCmd[MAX_HEATER_COUNT]   = HEAT_WAIT_CMD;
 
 static HEATER  heater = {{}, NOZZLE0};
 static int16_t lastTarget[MAX_HEATER_COUNT] = {0};

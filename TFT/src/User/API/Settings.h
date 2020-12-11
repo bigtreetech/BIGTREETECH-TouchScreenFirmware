@@ -74,7 +74,7 @@ typedef enum
 typedef struct
 {
 // General Settings
-  uint8_t  unified_menu;
+  uint8_t  status_screen;
   uint32_t baudrate;
   uint8_t  language;
 
@@ -228,6 +228,18 @@ typedef struct
 
 extern SETTINGS infoSettings;
 extern MACHINESETTINGS infoMachineSettings;
+
+extern const u16 default_max_temp[];
+extern const u16 default_max_fanPWM[];
+extern const u16 default_size_min[];
+extern const u16 default_size_max[];
+extern const u16 default_move_speed[];
+extern const u16 default_ext_speed[];
+extern const u16 default_level_speed[];
+extern const u16 default_pause_speed[];
+extern const u16 default_preheat_ext[];
+extern const u16 default_preheat_bed[];
+extern const u8 default_custom_enabled[];
 
 void initMachineSetting(void);
 void infoSettingsReset(void);

@@ -1,6 +1,28 @@
 #include "SettingsMenu.h"
 #include "includes.h"
 
+const MENUITEMS settingsItems = {
+  // title
+  LABEL_SETTINGS,
+  // icon                         label
+  {{ICON_SCREEN_SETTINGS,         LABEL_SCREEN_SETTINGS},
+    {ICON_MACHINE_SETTINGS,        LABEL_MACHINE_SETTINGS},
+    {ICON_FEATURE_SETTINGS,        LABEL_FEATURE_SETTINGS},
+    {ICON_SCREEN_INFO,             LABEL_SCREEN_INFO},
+    {ICON_CONNECTION_SETTINGS,     LABEL_CONNECTION_SETTINGS},
+    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_BACK,                    LABEL_BACK},}
+};
+
+const GUI_POINT clocks[] = {
+  {0 * LCD_WIDTH / 3, 0 * BYTE_HEIGHT},
+  {1 * LCD_WIDTH / 3, 0 * BYTE_HEIGHT},
+  {2 * LCD_WIDTH / 3, 0 * BYTE_HEIGHT},
+  {0 * LCD_WIDTH / 3, 1 * BYTE_HEIGHT},
+  {1 * LCD_WIDTH / 3, 1 * BYTE_HEIGHT},
+  {2 * LCD_WIDTH / 3, 1 * BYTE_HEIGHT},};
+
 static uint8_t firmare_name[64] = "Unknow system"; // Marlin firmware version
 uint8_t machine_type[64] = "3D Printer"; // Marlin machine type
 
@@ -31,15 +53,9 @@ void infoSetMachineType(uint8_t *machine, uint8_t type_len)
 void menuInfo(void)
 {
   char buf[128];
-  const GUI_POINT clocks[] = {
-    {0 * LCD_WIDTH / 3, 0 * BYTE_HEIGHT},
-    {1 * LCD_WIDTH / 3, 0 * BYTE_HEIGHT},
-    {2 * LCD_WIDTH / 3, 0 * BYTE_HEIGHT},
-    {0 * LCD_WIDTH / 3, 1 * BYTE_HEIGHT},
-    {1 * LCD_WIDTH / 3, 1 * BYTE_HEIGHT},
-    {2 * LCD_WIDTH / 3, 1 * BYTE_HEIGHT},};
-  const char* hardware = "BIGTREETECH_" HARDWARE_VERSION;
-  const char* firmware = HARDWARE_VERSION"." STRINGIFY(SOFTWARE_VERSION) " " __DATE__;
+
+  const char *const hardware = "BIGTREETECH_" HARDWARE_VERSION;
+  const char *const firmware = HARDWARE_VERSION"." STRINGIFY(SOFTWARE_VERSION) " " __DATE__;
 
   GUI_Clear(infoSettings.bg_color);
   GUI_SetColor(GRAY);
@@ -107,21 +123,6 @@ void menuInfo(void)
 
 void menuSettings(void)
 {
-  // 1 title, ITEM_PER_PAGE items (icon + label)
-  const MENUITEMS settingsItems = {
-    // title
-    LABEL_SETTINGS,
-    // icon                         label
-    {{ICON_SCREEN_SETTINGS,         LABEL_SCREEN_SETTINGS},
-     {ICON_MACHINE_SETTINGS,        LABEL_MACHINE_SETTINGS},
-     {ICON_FEATURE_SETTINGS,        LABEL_FEATURE_SETTINGS},
-     {ICON_SCREEN_INFO,             LABEL_SCREEN_INFO},
-     {ICON_CONNECTION_SETTINGS,     LABEL_CONNECTION_SETTINGS},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACK,                    LABEL_BACK},}
-  };
-
   KEY_VALUES key_num = KEY_IDLE;
 
   menuDrawPage(&settingsItems);

@@ -1,6 +1,20 @@
 #include "Leveling.h"
 #include "includes.h"
 
+const MENUITEMS manualLevelingItems = {
+  // title
+  LABEL_LEVELING,
+  // icon                         label
+  {{ICON_POINT_1,                 LABEL_POINT_1},
+    {ICON_POINT_2,                 LABEL_POINT_2},
+    {ICON_POINT_3,                 LABEL_POINT_3},
+    {ICON_POINT_4,                 LABEL_POINT_4},
+    {ICON_POINT_5,                 LABEL_POINT_5},
+    {ICON_LEVEL_EDGE_DISTANCE,     LABEL_DISTANCE},
+    {ICON_DISABLE_STEPPERS,        LABEL_XY_UNLOCK},
+    {ICON_BACK,                    LABEL_BACK},}
+};
+
 void moveToLevelingPoint(u8 point)
 {
   s16 pointPosition[5][2] = {
@@ -23,20 +37,6 @@ void moveToLevelingPoint(u8 point)
 
 void menuManualLeveling(void)
 {
-  MENUITEMS manualLevelingItems = {
-    // title
-    LABEL_LEVELING,
-    // icon                         label
-    {{ICON_POINT_1,                 LABEL_POINT_1},
-     {ICON_POINT_2,                 LABEL_POINT_2},
-     {ICON_POINT_3,                 LABEL_POINT_3},
-     {ICON_POINT_4,                 LABEL_POINT_4},
-     {ICON_POINT_5,                 LABEL_POINT_5},
-     {ICON_LEVEL_EDGE_DISTANCE,     LABEL_DISTANCE},
-     {ICON_DISABLE_STEPPERS,        LABEL_XY_UNLOCK},
-     {ICON_BACK,                    LABEL_BACK},}
-  };
-
   KEY_VALUES key_num = KEY_IDLE;
 
   menuDrawPage(&manualLevelingItems);
