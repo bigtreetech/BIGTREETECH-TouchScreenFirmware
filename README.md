@@ -58,19 +58,24 @@ C: In case you have an **"E3" mainboard** which provides a **single EXP connecto
 ## Update TFT Firmware
 
 
-TFT firmware updates are comprised of up to four elements:
+The TFT firmware update is done in the five steps described below and includes up to four elements:
 
-1. The firmware binary (`BIGTREE_TFT*_V*.*.*.bin`). Example: `BIGTREE_TFT35_V3.0.26.1.bin`:
-   - `BIGTREE_TFT_35`: model
-   - `V3.0`: hardware version
-   - `26.1`: software version
-2. Fonts and Icons (`TFT*` folder):
-   - `TFT*/font`: fonts
-   - `TFT*/bmp`: icons
-3. The config.ini file
-4. **Optionally** a language file
+**element1:** The firmware binary (`BIGTREE_TFT*_V*.*.*.bin`). Example: `BIGTREE_TFT35_V3.0.26.1.bin`:
 
-Copy  the `BIGTREE_TFT*_V*.*.*.bin,the `TFT*` folder and the config.ini to the root of a blank SD card that is <8GB and formatted as FAT32:
+- `BIGTREE_TFT_35`: model
+- `V3.0`: hardware version
+- `26.1`: software version
+
+**element2:** Fonts and Icons (`TFT*` folder): Example: TFT35, which includes:
+
+- `TFT*/font`: fonts
+- `TFT*/bmp`: icons
+
+**element3:** The config.ini file
+
+**element4:**  Ne or several language file(s) **(optionally)**
+
+**step1:** Copy your self compiled firmware or the BIGTREE_TFT*_V*.*.*.bin, plus the TFT*` folder and the config.ini to the root of a blank SD card that is <8GB and formatted as FAT32:
 
 ![Firmware](https://user-images.githubusercontent.com/54359396/100600549-b6cffd00-3301-11eb-8b57-d56b7a4422f1.jpg)
 
@@ -79,7 +84,8 @@ Copy  the `BIGTREE_TFT*_V*.*.*.bin,the `TFT*` folder and the config.ini to the r
 ![Language Pack](https://user-images.githubusercontent.com/54359396/100600564-b9caed80-3301-11eb-8997-d376f05323f6.jpg)
 
 
-Place SD card with the `BIGTREE_TFT*_V*.*.*.bin`, the`TFT*` folder and the config.ini into the TFT's SD card reader and reset your TFT (or optionally - power cycle your printer) to start the update process.
+
+**step2:** Place SD card with the `BIGTREE_TFT*_V*.*.*.bin`, the`TFT*` folder and the config.ini into the TFT's SD card reader and reset your TFT (or optionally - power cycle your printer) to start the update process.
 
 <p align=center> ⚠️ Failing to update your icons &amp; fonts will result in missing icons and/or unreadable text ⚠️ </p>
 
@@ -103,15 +109,20 @@ In case one or several parts of the update failed, an error will be shown. Follo
 
 After the update is done and the files are renamed, it is possible to reuse them again. To do so, change the name of the element(s) to the pre-update name and start the update process again.
 
-Remove the SD card from the TFT and restart the printer.
+**step3:** Remove the SD card from the TFT and restart the printer.
+
+**step4:** On the TFT click on Menu - Settings - Feature and navigate to the last page. Click on "Reset default settings ..." to refresh the content of the TFT's memory.
+
+**step5:** Restart the printer to finish the installation
 
 
 
 
 ## Configuration
 
-The Firmware can be configured using the **config.ini** file from:
-[`Copy to SD Card root directory to update`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update)
+The Firmware can be modified by changing the **config.ini** file from: [`Copy to SD Card root directory to update`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update) using a simple text editor (make sure to use UTF encoding).
+
+Once saved, the config.ini can be uploaded without the need to upload the firmware or the TFT folder again, as long as the firmware and the config.ini are from the same version.
 
 ### Editing configuration (config.ini) file
 
@@ -122,12 +133,22 @@ To edit the **config.ini** file follow the instruction here: [Detailed Instructi
 To update the Firmware configuration:
 
 1. Edit the settings in **config.ini**.
+
 2. Copy the **config.ini** file to the root of the SD card. (The SD card capacity should be less than or equal to 8GB and formatted as FAT32)
+
 3. Insert the SD card into the TFT's SD card slot and restart the printer or press the reset buttion of the TFT.
+
 4. The TFT will update and store the configuration from **config.ini** file.
+
 5. Make sure to remove the SD card from the TFT and restart the printer.
 
-The config.ini can be edited using a simple text editor (make sure to use UTF encoding) and uploaded again - without the need to upload the firmware or the TFT folder - as long as the firmware and the config.ini have the same version number.
+6. On the TFT click on Menu - Settings - Feature and navigate to the last page. Click on
+
+   "Reset default settings ..."
+
+7. Restart the printer to finish the update of the config.ini
+
+
 
 ## Customization
 
