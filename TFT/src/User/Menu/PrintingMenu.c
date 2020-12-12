@@ -429,7 +429,7 @@ void menuPrinting(void)
           }
           else 
           {
-          --infoMenu.cur;
+            --infoMenu.cur;
           }
         }
         break;
