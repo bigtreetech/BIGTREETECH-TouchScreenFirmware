@@ -28,10 +28,14 @@ void refreshPreheatIcon(int8_t preheatnum, int8_t icon_index, const ITEM * menui
   lvIcon.enabled[1] = true;
   lvIcon.enabled[2] = true;
 
-  //set preheat title properties
+//set preheat title properties
   lvIcon.lines[0].h_align = CENTER;
   lvIcon.lines[0].v_align = TOP;
-  lvIcon.lines[0].fn_color = LCD_WHITE;
+
+//GTL changed to match font color
+  GUI_SetColor(infoSettings.font_color);
+//lvIcon.lines[0].fn_color = LCD_WHITE;
+
   lvIcon.lines[0].text_mode = GUI_TEXTMODE_TRANS;
   lvIcon.lines[0].pos = preheat_title;
   lvIcon.lines[0].large_font = false;
