@@ -44,6 +44,15 @@ int16_t heatGetCurrentTemp(uint8_t index)
   return heater.T[index].current;
 }
 
+// Disable all heater/hotends
+void heatCoolDown(void)
+{
+  for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
+  {
+    heatSetTargetTemp(i, 0);
+  }
+}
+
 // Is heating waiting to heat up
 bool heatGetIsWaiting(uint8_t index)
 {

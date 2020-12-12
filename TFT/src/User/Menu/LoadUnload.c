@@ -31,14 +31,6 @@ void extruderIdReDraw(void)
   setLargeFont(false);
 }
 
-void coolDown(void)
-{
-  for(uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
-  {
-    heatSetTargetTemp(i, 0);
-  }
-}
-
 
 void menuLoadUnload(void)
 {
@@ -81,7 +73,7 @@ void menuLoadUnload(void)
         break;
 
       case KEY_ICON_6:
-        coolDown();
+        heatCoolDown();
         break;
 
       case KEY_ICON_7:
@@ -90,7 +82,7 @@ void menuLoadUnload(void)
           if (heatGetTargetTemp(i) > 0)
           {
             setDialogText(LABEL_WARNING, LABEL_HEATERS_ON, LABEL_CONFIRM, LABEL_CANCEL)
-                showDialog(DIALOG_TYPE_QUESTION, coolDown, NULL, NULL);
+                showDialog(DIALOG_TYPE_QUESTION, heatCoolDown, NULL, NULL);
             break;
           }
         }

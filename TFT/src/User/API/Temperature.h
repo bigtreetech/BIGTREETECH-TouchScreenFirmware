@@ -63,6 +63,7 @@ void heatSyncTargetTemp(uint8_t index, int16_t temp);
 uint16_t heatGetTargetTemp(uint8_t index);
 void heatSetCurrentTemp(uint8_t index, int16_t temp);
 int16_t heatGetCurrentTemp(uint8_t index);
+void heatCoolDown(void);
 
 void heatSetCurrentTool(uint8_t tool);
 uint8_t heatGetCurrentTool(void);

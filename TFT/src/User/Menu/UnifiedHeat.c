@@ -39,10 +39,7 @@ void menuUnifiedHeat(void)
       break;
 
     case KEY_ICON_5:
-      for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
-      {
-        heatSetTargetTemp(i, 0);
-      }
+      heatCoolDown();
       break;
 
     case KEY_ICON_7:

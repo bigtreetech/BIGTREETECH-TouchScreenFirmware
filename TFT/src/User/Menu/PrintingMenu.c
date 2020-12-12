@@ -431,7 +431,8 @@ void menuPrinting(void)
         }
         break;
 
-      default :break;
+      default:
+        break;
     }
     loopProcess();
   }

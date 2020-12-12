@@ -5,7 +5,6 @@
 extern "C" {
 #endif
 
-void coolDown(void);
 void menuLoadUnload(void);
 
 
