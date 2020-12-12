@@ -12,6 +12,7 @@ extern "C" {
 #define ITEM_PERCENT_STEPS_NUM  3
 #define ITEM_EXT_LEN_NUM        5
 #define ITEM_MOVE_LEN_NUM       5
+#define ITEM_MOVE_ESTEP_NUM     4
 
 
 extern const ITEM itemTool[MAX_HEATER_COUNT];
@@ -28,6 +29,9 @@ extern const  float moveLenSteps[ITEM_MOVE_LEN_NUM];
 
 extern const ITEM itemExtLenSteps[ITEM_EXT_LEN_NUM];
 extern const float extlenSteps[ITEM_EXT_LEN_NUM];
+
+extern const ITEM itemExteSteps[ITEM_MOVE_ESTEP_NUM];
+extern const float ExteSteps[ITEM_MOVE_ESTEP_NUM];
 
 #ifdef __cplusplus
 }
