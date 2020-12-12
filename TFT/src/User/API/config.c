@@ -1006,7 +1006,12 @@ void parseConfigKey(u16 index)
 
 #ifdef FIL_RUNOUT_PIN
   case C_INDEX_RUNOUT:
-      infoSettings.runout = getOnOff();
+    if (config_int() == 1)
+      infoSettings.runout = 1;
+    else if(config_int() == 2)
+      infoSettings.runout = 2;
+    else
+      infoSettings.runout = 0;
     break;
 
   case C_INDEX_RUNOUT_LOGIC:
