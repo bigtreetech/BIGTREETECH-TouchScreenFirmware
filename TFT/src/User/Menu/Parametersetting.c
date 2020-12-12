@@ -174,7 +174,6 @@ void menuShowParameter(void){
     }
   loopProcess();
   }
-
 }
 
 //Load main parameter list page
@@ -309,9 +308,7 @@ void menuParameterSettings(void){
     }
   loopProcess();
   }
-
 }
-
 
 bool temperatureStatusValid(void)
 {
@@ -362,7 +359,6 @@ void loopTemperatureStatus(void)
 
 int16_t drawTemperatureStatus(void)
 {
-
   int16_t x_offset = LCD_WIDTH - 10;
   if (!temperatureStatusValid()) return x_offset;
 

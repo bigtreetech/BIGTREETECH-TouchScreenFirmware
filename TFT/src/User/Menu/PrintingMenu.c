@@ -2,12 +2,12 @@
 #include "includes.h"
 
 const GUI_POINT printinfo_points[6] = {
-{START_X + PICON_LG_WIDTH*0 + PICON_SPACE_X*0, ICON_START_Y + PICON_HEIGHT*0 + PICON_SPACE_Y*0},
-{START_X + PICON_LG_WIDTH*1 + PICON_SPACE_X*1, ICON_START_Y + PICON_HEIGHT*0 + PICON_SPACE_Y*0},
-{START_X + PICON_LG_WIDTH*2 + PICON_SPACE_X*2, ICON_START_Y + PICON_HEIGHT*0 + PICON_SPACE_Y*0},
-{START_X + PICON_LG_WIDTH*0 + PICON_SPACE_X*0, ICON_START_Y + PICON_HEIGHT*1 + PICON_SPACE_Y*1},
-{START_X + PICON_LG_WIDTH*1 + PICON_SPACE_X*1, ICON_START_Y + PICON_HEIGHT*1 + PICON_SPACE_Y*1},
-{START_X + PICON_LG_WIDTH*2 + PICON_SPACE_X*2, ICON_START_Y + PICON_HEIGHT*1 + PICON_SPACE_Y*1},
+  {START_X + PICON_LG_WIDTH*0 + PICON_SPACE_X*0, ICON_START_Y + PICON_HEIGHT*0 + PICON_SPACE_Y*0},
+  {START_X + PICON_LG_WIDTH*1 + PICON_SPACE_X*1, ICON_START_Y + PICON_HEIGHT*0 + PICON_SPACE_Y*0},
+  {START_X + PICON_LG_WIDTH*2 + PICON_SPACE_X*2, ICON_START_Y + PICON_HEIGHT*0 + PICON_SPACE_Y*0},
+  {START_X + PICON_LG_WIDTH*0 + PICON_SPACE_X*0, ICON_START_Y + PICON_HEIGHT*1 + PICON_SPACE_Y*1},
+  {START_X + PICON_LG_WIDTH*1 + PICON_SPACE_X*1, ICON_START_Y + PICON_HEIGHT*1 + PICON_SPACE_Y*1},
+  {START_X + PICON_LG_WIDTH*2 + PICON_SPACE_X*2, ICON_START_Y + PICON_HEIGHT*1 + PICON_SPACE_Y*1},
 };
 
 const GUI_RECT printinfo_val_rect[6] = {
@@ -180,7 +180,7 @@ static inline void reDrawSpeed(int icon_pos)
     ICON_ReadDisplay(printinfo_points[icon_pos].x,printinfo_points[icon_pos].y,ICON_PRINTING_FLOW);
 
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-  sprintf(tempstr, "%d%%", speedGetPercent(c_speedID) );
+  sprintf(tempstr, "%d%%", speedGetPercent(c_speedID));
   GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (u8 *)Speed_ID[c_speedID]);
   GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (u8 *)tempstr);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
@@ -284,18 +284,19 @@ void menuPrinting(void)
 {
   //1title, ITEM_PER_PAGE item(icon + label)
   MENUITEMS printingItems = {
-    //  title
+    // title
     LABEL_BACKGROUND,
-    // icon                      label
-    {{ICON_BACKGROUND,           LABEL_BACKGROUND},
-     {ICON_BACKGROUND,           LABEL_BACKGROUND},
-     {ICON_BACKGROUND,           LABEL_BACKGROUND},
-     {ICON_BACKGROUND,           LABEL_BACKGROUND},
-     {ICON_BABYSTEP,             LABEL_BABYSTEP},
-     {ICON_PAUSE,                LABEL_PAUSE},
-     {ICON_MORE,                 LABEL_MORE},
-     {ICON_STOP,                 LABEL_STOP},}
+    // icon                         label
+    {{ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_BABYSTEP,                LABEL_BABYSTEP},
+     {ICON_PAUSE,                   LABEL_PAUSE},
+     {ICON_MORE,                    LABEL_MORE},
+     {ICON_STOP,                    LABEL_STOP},}
   };
+
   uint8_t   nowFan[MAX_FAN_COUNT] = {0};
   uint16_t  curspeed[2] = {0};
   uint32_t  time = 0;
@@ -425,8 +426,10 @@ void menuPrinting(void)
           if (infoSettings.print_summary)
           {
             infoMenu.cur = 0;
-          } else {
-            --infoMenu.cur;
+          }
+          else 
+          {
+          --infoMenu.cur;
           }
         }
         break;

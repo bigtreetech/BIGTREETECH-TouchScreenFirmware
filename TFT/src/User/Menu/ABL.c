@@ -25,7 +25,9 @@ void ablUpdateStatus(bool succeeded)
     case BL_UBL:
     {
       tempTitle.index = LABEL_ABL_SETTINGS_UBL;
+
       sprintf(&tempMsg[strlen(tempMsg)], "\n %s", textSelect(LABEL_BL_SMART_FILL));
+
       savingEnabled = false;
       break;
     }
@@ -40,6 +42,7 @@ void ablUpdateStatus(bool succeeded)
     if (savingEnabled && infoMachineSettings.EEPROM == 1)
     {
       sprintf(&tempMsg[strlen(tempMsg)], "\n %s", textSelect(LABEL_EEPROM_SAVE_INFO));
+
       setDialogText(tempTitle.index, (u8 *) tempMsg, LABEL_CONFIRM, LABEL_CANCEL);
       showDialog(DIALOG_TYPE_SUCCESS, saveEepromSettings, NULL, NULL);
     }
@@ -51,6 +54,7 @@ void ablUpdateStatus(bool succeeded)
   else                                                     // if bed leveling process failed, provide an error dialog
   {
     BUZZER_PLAY(sound_error);
+
     popupReminder(DIALOG_TYPE_ERROR, tempTitle.index, LABEL_PROCESS_ABORTED);
   }
 }
@@ -107,6 +111,7 @@ void menuUBLSaveLoad(void)
       case KEY_ICON_2:
       case KEY_ICON_3:
         ublSlot = key_num;
+
         setDialogText(UBLSaveLoadItems.title.index, LABEL_CONFIRMATION, LABEL_CONFIRM, LABEL_CANCEL);
         showDialog(DIALOG_TYPE_QUESTION, ublSaveloadConfirm, NULL, NULL);
         break;
@@ -115,12 +120,14 @@ void menuUBLSaveLoad(void)
         if (ublSlotSaved == true && infoMachineSettings.EEPROM == 1)
         {
           ublSlotSaved = false;
+
           setDialogText(LABEL_ABL_SETTINGS_UBL, LABEL_ABL_SLOT_EEPROM, LABEL_CONFIRM, LABEL_CANCEL);
           showDialog(DIALOG_TYPE_QUESTION, saveEepromSettings, NULL, NULL);
         }
         else
         {
           ublSlotSaved = false;
+
           infoMenu.cur--;
         }
         break;

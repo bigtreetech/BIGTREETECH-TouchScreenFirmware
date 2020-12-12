@@ -6,13 +6,13 @@ const MENUITEMS connectionSettingsItems = {
   LABEL_CONNECTION_SETTINGS,
   // icon                         label
   {{ICON_BAUD_RATE,               LABEL_BAUDRATE},
-    {ICON_DISCONNECT,              LABEL_DISCONNECT},
-    {ICON_STOP,                    LABEL_EMERGENCYSTOP},
-    {ICON_SHUT_DOWN,               LABEL_SHUT_DOWN},
-    {ICON_BACKGROUND,              LABEL_BACKGROUND},
-    {ICON_BACKGROUND,              LABEL_BACKGROUND},
-    {ICON_BACKGROUND,              LABEL_BACKGROUND},
-    {ICON_BACK,                    LABEL_BACK},}
+   {ICON_DISCONNECT,              LABEL_DISCONNECT},
+   {ICON_STOP,                    LABEL_EMERGENCYSTOP},
+   {ICON_SHUT_DOWN,               LABEL_SHUT_DOWN},
+   {ICON_BACKGROUND,              LABEL_BACKGROUND},
+   {ICON_BACKGROUND,              LABEL_BACKGROUND},
+   {ICON_BACKGROUND,              LABEL_BACKGROUND},
+   {ICON_BACK,                    LABEL_BACK},}
 };
 
 // Set uart pins to input, free uart

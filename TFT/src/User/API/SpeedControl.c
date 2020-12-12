@@ -2,6 +2,7 @@
 #include "includes.h"
 
 const char *const speedCmd[SPEED_NUM] = {"M220","M221"};
+
 static uint16_t percent[SPEED_NUM]     = {100, 100};  //Speed  Flow
 static uint16_t lastPercent[SPEED_NUM] = {100, 100};  //Speed  Flow
 static uint16_t curPercent[SPEED_NUM]  = {100, 100};  //Speed  Flow
@@ -55,14 +56,14 @@ bool SpeedChanged(u8 i)
 
 void loopSpeed(void)
 {
-  for (u8 i = 0; i < SPEED_NUM;i++)
+  for (u8 i = 0; i < SPEED_NUM; i++)
   {
     if ((curPercent[i] != percent[i]) && (OS_GetTimeMs() > nextSpeedTime))
     {
       if (send_waiting[i] == false)
       {
         send_waiting[i] = true;
-        send_waiting[i] = storeCmd("%s S%d\n",speedCmd[i], percent[i]);
+        send_waiting[i] = storeCmd("%s S%d\n", speedCmd[i], percent[i]);
       }
       if (send_waiting[i] == true)
         curPercent[i] = percent[i];
@@ -73,7 +74,7 @@ void loopSpeed(void)
 
 void speedQuery(void)
 {
-  if (infoHost.connected == true && infoHost.wait == false && !queryWait)
+  if (infoHost.connected && !infoHost.wait && !queryWait)
   {
     storeCmd("M220\nM221\n");
     queryWait = true;
