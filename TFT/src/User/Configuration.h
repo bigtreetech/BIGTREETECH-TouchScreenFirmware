@@ -25,7 +25,7 @@
  *
  * Default value is: 1 for LED_OFF
 */
-#define STARTUP_KNOB_LED_COLOR 0         // LED_OFF
+#define STARTUP_KNOB_LED_COLOR 2         // LED_OFF
 #define KEEP_KNOB_LED_COLOR_MARLIN_MODE  // Keeps the LED state in Marlin Mode
 
 /**
@@ -393,7 +393,7 @@
 //
 // Options:  0: standard 1    1: standard 2    2: alternative
 //
-#define TERMINAL_KEYBOARD_COLOR_LAYOUT 0
+#define TERMINAL_KEYBOARD_COLOR_LAYOUT 2
 
 // Enable keyboard QWERTY layout for the Terminal menu with at least 10 columns
 //
@@ -406,7 +406,7 @@
 /**
  * PID autotune
  */
-#define PID_CMD             {"M303 U1 C8 E0", "M303 U1 C8 E1", "M303 U1 C8 E2", "M303 U1 C8 E3", "M303 U1 C8 E4", "M303 U1 C8 E5", "M303 U1 C8 E-1", ""};
+#define PID_CMD             {"M303 U1 C15 E0", "M303 U1 C15 E1", "M303 U1 C15 E2", "M303 U1 C15 E3", "M303 U1 C15 E4", "M303 U1 C15 E5", "M303 U1 C15 E-1", ""};
 #define PID_PROCESS_TIMEOUT 900000                         // expressed in ms. E.g. 900000 corresponds to 15 minutes
 
 // LCD Encoder
