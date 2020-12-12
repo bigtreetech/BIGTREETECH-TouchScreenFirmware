@@ -234,7 +234,7 @@ void menuNewExtruderESteps(void)
   mustStoreCmd("M503 S0\n");
   old_esteps = getParameter(P_STEPS_PER_MM, E_AXIS); // get the value of the E-steps
 
-  newExtruderESteps.items[KEY_ICON_5] = itemExteSteps[curExtStep_index];
+  newExtruderESteps.items[KEY_ICON_5] = itemMoveLen[curExtStep_index];
 
   menuDrawPage(&newExtruderESteps);
   showNewESteps(measured_length, old_esteps, &new_esteps);
@@ -249,11 +249,11 @@ void menuNewExtruderESteps(void)
     switch (key_num)
     {
       case KEY_ICON_0:
-        measured_length -= ExteSteps[curExtStep_index];
+        measured_length -= moveLenSteps[curExtStep_index];
         break;
 
       case KEY_ICON_3:
-        measured_length += ExteSteps[curExtStep_index];
+        measured_length += moveLenSteps[curExtStep_index];
         break;
 
       case KEY_ICON_4:
@@ -268,7 +268,7 @@ void menuNewExtruderESteps(void)
 
       case KEY_ICON_5:
         curExtStep_index = (curExtStep_index + 1) % ITEM_TUNE_EXTRUDER_LEN_NUM;
-        newExtruderESteps.items[key_num] = itemExteSteps[curExtStep_index];
+        newExtruderESteps.items[key_num] = itemMoveLen[curExtStep_index];
         menuDrawItem(&newExtruderESteps.items[key_num], key_num);
         break;
 
@@ -284,7 +284,7 @@ void menuNewExtruderESteps(void)
         #if LCD_ENCODER_SUPPORT
           if (encoderPosition)
           {
-            measured_length += ExteSteps[curExtStep_index] * encoderPosition;
+            measured_length += moveLenSteps[curExtStep_index] * encoderPosition;
             encoderPosition = 0;
           }
         #endif
