@@ -37,7 +37,7 @@ const ITEM SpeedItems[2] = {
 
 static u32 nextTime = 0;
 static u32 update_time = 2000; // 1 seconds is 1000
-SCROLL     msgScroll;
+SCROLL msgScroll;
 static int lastConnection_status = -1;
 static bool msgNeedRefresh = false;
 
