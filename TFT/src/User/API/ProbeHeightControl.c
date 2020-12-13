@@ -26,10 +26,10 @@ void probeHeightDisable(void)
 }
 
 /* Start probe height */
-void probeHeightStart(void)
+void probeHeightStart(float initialHeight)
 {
   mustStoreCmd("G90\n");                                   // set absolute position mode
-  mustStoreCmd("G1 Z0\n");                                 // move nozzle to Z0 absolute point
+  mustStoreCmd("G1 Z%.2f\n", initialHeight);               // move nozzle to provided absolute Z point
 
   mustStoreCmd("G91\n");                                   // set relative position mode
 }
