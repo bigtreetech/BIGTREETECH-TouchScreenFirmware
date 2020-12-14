@@ -3,7 +3,7 @@
 
 #define LOAD 1
 #define UNLOAD 2
-#define NO_LOAD_UNLOAD 0
+#define NONE 0
 
 const MENUITEMS loadUnloadItems = {
 // title
@@ -20,6 +20,7 @@ LABEL_LOAD_UNLOAD,
 };
 
 static u8  curExt_index = 0;
+static u8 lastcmd = NONE;
 
 void extruderIdReDraw(void)
 {
@@ -31,11 +32,9 @@ void extruderIdReDraw(void)
   setLargeFont(false);
 }
 
-
 void menuLoadUnload(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
-
   while(infoCmd.count != 0) {loopProcess();}
 
   menuDrawPage(&loadUnloadItems);
@@ -44,13 +43,26 @@ void menuLoadUnload(void)
   while(infoMenu.menu[infoMenu.cur] == menuLoadUnload)
   {
     key_num = menuKeyGetValue();
+
     if ((infoHost.wait == true) && (key_num != KEY_IDLE))  // if user pokes around while Load/Unload in progress
     {
-      // in case user gets to Load/Unload menu while host is busy
-      popupReminder(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, LABEL_BUSY);
+      if (lastcmd == UNLOAD)
+      { // unloading
+        popupReminder(DIALOG_TYPE_INFO, LABEL_UNLOAD, LABEL_UNLOAD_STARTED);
+      }
+      else if (lastcmd == LOAD)
+      { // loading
+        popupReminder(DIALOG_TYPE_INFO, LABEL_LOAD, LABEL_LOAD_STARTED);
+      }
+      else
+      { // in case user gets to Load/Unload menu while host is busy
+        popupReminder(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, LABEL_BUSY);
+      }
     }
     else
     {
+      lastcmd = NONE;
+
       switch(key_num)
       {
       case KEY_ICON_0: // Unload
@@ -60,24 +72,17 @@ void menuLoadUnload(void)
           char tempMsg[120];
           labelChar(tempStr, LABEL_EXT_TEMPLOW);
           sprintf(tempMsg, tempStr, infoSettings.min_ext_temp);
-          popupReminder(DIALOG_TYPE_ERROR, LABEL_COLD_EXT, (u8*)tempMsg);
+          popupReminder(DIALOG_TYPE_ERROR, LABEL_COLD_EXT, (u8 *)tempMsg);
         }
-        else if (!infoHost.wait)
-        {
-          if (key_num == KEY_ICON_0)
-          { // unload
-            mustStoreCmd("M702 T%d\n", curExt_index);
-            popupReminder(DIALOG_TYPE_INFO, LABEL_UNLOAD, LABEL_UNLOAD_STARTED);
-          }
-          else
-          { // load
-            mustStoreCmd("M701 T%d\n", curExt_index);
-            popupReminder(DIALOG_TYPE_INFO, LABEL_LOAD, LABEL_LOAD_STARTED);
-          }
+        else if (key_num == KEY_ICON_0)
+        { // unload
+          mustStoreCmd("M702 T%d\n", curExt_index);
+          lastcmd = UNLOAD;
         }
         else
-        { //busy message
-          popupReminder(DIALOG_TYPE_ALERT, LABEL_LOAD_UNLOAD, LABEL_BUSY);
+        { // load
+          mustStoreCmd("M701 T%d\n", curExt_index);
+          lastcmd = LOAD;
         }
         break;
 
