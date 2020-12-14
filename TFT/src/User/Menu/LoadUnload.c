@@ -53,14 +53,32 @@ void menuLoadUnload(void)
     {
       switch(key_num)
       {
-      case KEY_ICON_0:
-        mustStoreCmd("M702 T%d\n", curExt_index);
-        popupReminder(DIALOG_TYPE_INFO, LABEL_BUSY, LABEL_UNLOAD_STARTED);
-        break;
-
-      case KEY_ICON_3:
-        mustStoreCmd("M701 T%d\n", curExt_index);
-        popupReminder(DIALOG_TYPE_INFO, LABEL_BUSY, LABEL_LOAD_STARTED);
+      case KEY_ICON_0: // Unload
+      case KEY_ICON_3: // Load
+        if (heatGetCurrentTemp(curExt_index) < infoSettings.min_ext_temp)
+        { // low temperature warning
+          char tempMsg[120];
+          labelChar(tempStr, LABEL_EXT_TEMPLOW);
+          sprintf(tempMsg, tempStr, infoSettings.min_ext_temp);
+          popupReminder(DIALOG_TYPE_ERROR, LABEL_COLD_EXT, (u8*)tempMsg);
+        }
+        else if (!infoHost.wait)
+        {
+          if (key_num == KEY_ICON_0)
+          { // unload
+            mustStoreCmd("M702 T%d\n", curExt_index);
+            popupReminder(DIALOG_TYPE_INFO, LABEL_UNLOAD, LABEL_UNLOAD_STARTED);
+          }
+          else
+          { // load
+            mustStoreCmd("M701 T%d\n", curExt_index);
+            popupReminder(DIALOG_TYPE_INFO, LABEL_LOAD, LABEL_LOAD_STARTED);
+          }
+        }
+        else
+        { //busy message
+          popupReminder(DIALOG_TYPE_ALERT, LABEL_LOAD_UNLOAD, LABEL_BUSY);
+        }
         break;
 
       case KEY_ICON_4:
@@ -81,8 +99,8 @@ void menuLoadUnload(void)
         {
           if (heatGetTargetTemp(i) > 0)
           {
-            setDialogText(LABEL_WARNING, LABEL_HEATERS_ON, LABEL_CONFIRM, LABEL_CANCEL)
-                showDialog(DIALOG_TYPE_QUESTION, heatCoolDown, NULL, NULL);
+            setDialogText(LABEL_WARNING, LABEL_HEATERS_ON, LABEL_CONFIRM, LABEL_CANCEL);
+            showDialog(DIALOG_TYPE_QUESTION, heatCoolDown, NULL, NULL);
             break;
           }
         }

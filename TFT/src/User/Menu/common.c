@@ -1,6 +1,10 @@
 #include "common.h"
 #include "includes.h"
 
+// indexes for status icon toggles
+uint8_t currentTool = NOZZLE0;
+uint8_t currentFan = 0;
+uint8_t currentSpeedID = 0;
 
 //Icons list for tool change
 const ITEM itemTool[MAX_HEATER_COUNT] =

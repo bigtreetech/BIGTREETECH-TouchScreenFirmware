@@ -150,12 +150,10 @@ void menuTuneExtruder(void)
           labelChar(tempStr, LABEL_TUNE_EXT_TEMPLOW);
           sprintf(tempMsg, tempStr, infoSettings.min_ext_temp);
           popupReminder(DIALOG_TYPE_ALERT, tuneExtruderItems.title.index, (u8 *) tempMsg);
-          break;
         }
-        if (heatGetCurrentTemp(c_heater) < heatGetTargetTemp(c_heater) - 1)
+        else if (heatGetCurrentTemp(c_heater) < heatGetTargetTemp(c_heater) - 1)
         {
           popupReminder(DIALOG_TYPE_ALERT, tuneExtruderItems.title.index, LABEL_TUNE_EXT_DESIREDVAL);
-          break;
         }
         else
         {
