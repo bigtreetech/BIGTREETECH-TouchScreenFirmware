@@ -3,8 +3,6 @@
 
 #define iITEM_BS_MOVE_LEN_NUM 3
 
-
-const float moveLenSteps[iITEM_BS_MOVE_LEN_NUM] = {0.01f, 0.1f, 1};
 static u8 moveLenSteps_index = 0;
 
 void babyReDraw(float babystep, float z_offset, bool force_z_offset, bool skip_header)
