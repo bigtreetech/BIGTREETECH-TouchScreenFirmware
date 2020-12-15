@@ -1,7 +1,7 @@
 #include "MBL.h"
 #include "includes.h"
 
-#define PROBE_HEIGHT_INITIAL_HEIGHT 1.0f                   // 1.0 mm
+#define PROBE_HEIGHT_INITIAL_HEIGHT 0.2f                   // 0.2 mm
 
 static u8 curUnit_index = 0;
 
