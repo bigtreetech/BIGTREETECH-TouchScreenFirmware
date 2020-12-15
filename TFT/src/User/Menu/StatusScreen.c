@@ -35,16 +35,10 @@ const ITEM SpeedItems[2] = {
   {ICON_STATUS_FLOW,             LABEL_BACKGROUND},
 };
 
-<<<<<<< HEAD
 static u32 nextToolTime = 0;
 static u32 update_tool_time = 2000; // 1 seconds is 1000
 SCROLL     msgScroll;
-static int lastConnection_status = -1;
-=======
-static u32 nextTime = 0;
-static u32 update_time = 2000; // 1 seconds is 1000
 static int8_t lastConnection_status = -1;
->>>>>>> 487fe10d1c647866829c1d34be2216dde53abf17
 static bool msgNeedRefresh = false;
 
 static char msgtitle[20];
@@ -242,13 +236,8 @@ static inline void toggleTool(void)
     {
       currentFan = (currentFan + 1) % (infoSettings.fan_count + infoSettings.fan_ctrl_count);
     }
-<<<<<<< HEAD
-    current_speedID = (current_speedID + 1) % 2;
-    nextToolTime = OS_GetTimeMs() + update_tool_time;
-=======
     currentSpeedID = (currentSpeedID + 1) % 2;
-    nextTime = OS_GetTimeMs() + update_time;
->>>>>>> 487fe10d1c647866829c1d34be2216dde53abf17
+    nextToolTime = OS_GetTimeMs() + update_tool_time;
     drawTemperature();
 
     // gcode queries must be call after drawTemperature

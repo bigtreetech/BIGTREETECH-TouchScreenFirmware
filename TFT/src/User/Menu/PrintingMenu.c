@@ -36,7 +36,7 @@ static uint32_t nextDrawTime = 0;
 static uint8_t c_Tool = NOZZLE0;
 static int c_fan = 0;
 static int c_speedID = 0;
-const  char* Speed_ID[2] = {"Speed","Flow"};
+const  char *const Speed_ID[2] = {"Speed","Flow"};
 static char filamentInfo[100];
 bool filDataSeen;
 SCROLL infoScroll;
@@ -280,8 +280,8 @@ static inline void toggleinfo(void)
     }
 
 <<<<<<< HEAD
-    c_speedID = (c_speedID + 1) % 2;
-    nextInfoTime = OS_GetTimeMs() + toggle_time;
+    currentSpeedID = (currentSpeedID + 1) % 2;
+    nextToggleTime = OS_GetTimeMs() + TOGGLE_TIME;
     rapid_serial_loop();   //perform backend printing loop before drawing to avoid printer idling
     reDrawSpeed(SPD_ICON_POS);
     speedQuery();

@@ -289,24 +289,18 @@ extern "C" {
 #define LANG_KEY_LOAD_STARTED                 "label_load_started:"
 #define LANG_KEY_UNLOAD_STARTED               "label_unload_started:"
 #define LANG_KEY_HEATERS_ON                   "label_heaters_on:"
-<<<<<<< HEAD
 #define LANG_KEY_PRINT_FINISHED               "print_finished:"
 #define LANG_KEY_MAIN_SCREEN                  "main_screen:"
 #define LANG_KEY_PREVIOUS_PRINT_DATA          "previous_print_data:"
-#define LANG_KEY_FILE_NAME              "LANG_KEY_file_name: "
-#define LANG_KEY_PRINT_TIME             "print_Time:"
-#define LANG_KEY_FILAMENT_LENGTH        "filament_length:"
-#define LANG_KEY_FILAMENT_WEIGHT        "Filament_weight:"
-#define LANG_KEY_FILAMENT_COST          "filament_cost:"
-#define LANG_KEY_NO_FILAMENT_STATISTICS "no_filament_statistics:"
-#define LANG_KEY_CLICK_FOR_MORE         "click_for_more:"  // keeep it with leading spaces
-=======
-#define LANG_KEY_PRINT_SUMMARY_POPUP          "label_print_summary_popup:"
-#define LANG_KEY_PRINT_SUMMARY                "label_print_summary:"
-#define LANG_KEY_PRINT_COMPLETE               "label_print_complete:"
+#define LANG_KEY_FILE_NAME                    "LANG_KEY_file_name: "
+#define LANG_KEY_PRINT_TIME                   "print_Time:"
+#define LANG_KEY_FILAMENT_LENGTH              "filament_length:"
+#define LANG_KEY_FILAMENT_WEIGHT              "Filament_weight:"
+#define LANG_KEY_FILAMENT_COST                "filament_cost:"
+#define LANG_KEY_NO_FILAMENT_STATISTICS       "no_filament_statistics:"
+#define LANG_KEY_CLICK_FOR_MORE               "click_for_more:"  // keeep it with leading spaces
 #define LANG_KEY_EXT_TEMPLOW                  "label_ext_templow:"
 #define LANG_KEY_COLD_EXT                     "label_cold_ext:"
->>>>>>> 487fe10d1c647866829c1d34be2216dde53abf17
 
 #ifdef __cplusplus
 }

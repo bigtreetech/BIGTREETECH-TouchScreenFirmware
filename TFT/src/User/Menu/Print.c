@@ -301,12 +301,8 @@ void menuPrintFromSource(void)
             setPrintModelIcon(infoFile.source != BOARD_SD && model_DecodeToFlash(infoFile.title));
 
             char temp_info[FILE_NUM + 50];
-<<<<<<< HEAD
             sprintf(temp_info, (char *)textSelect(LABEL_START_PRINT), (uint8_t *)((infoFile.source == BOARD_SD) ? 
                 infoFile.Longfile[key_num + start - infoFile.F_num] : infoFile.file[key_num + start - infoFile.F_num]));
-=======
-            sprintf(temp_info, (char *)textSelect(LABEL_START_PRINT), (u8* )((infoFile.source == BOARD_SD) ? infoFile.Longfile[key_num + start - infoFile.F_num] : infoFile.file[key_num + start - infoFile.F_num]));
->>>>>>> 487fe10d1c647866829c1d34be2216dde53abf17
             //confirm file selction
             setDialogText( LABEL_PRINT, (u8*)temp_info, LABEL_CONFIRM, LABEL_CANCEL);
             showDialog(DIALOG_TYPE_QUESTION, startPrint, ExitDir, NULL);
@@ -365,21 +361,12 @@ void menuPrint(void)
     #define ONBOARD_SD_INDEX 1
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
   #endif
-<<<<<<< HEAD
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
     {ICON_SCREEN_INFO,          LABEL_PREVIOUS_PRINT_DATA},
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
     {ICON_BACK,                 LABEL_BACK}}
-=======
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACK,                    LABEL_BACK}}
->>>>>>> 487fe10d1c647866829c1d34be2216dde53abf17
   };
 
   sourceSelItems.items[ONBOARD_SD_INDEX].icon = (infoMachineSettings.onboard_sd_support == ENABLED) ? ICON_ONBOARD_SD : ICON_BACKGROUND;

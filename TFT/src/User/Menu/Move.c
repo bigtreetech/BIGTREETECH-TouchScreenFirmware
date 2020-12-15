@@ -41,14 +41,9 @@ MENUITEMS moveItems = {
 //const uint32_t item_move_speed[] = {DEFAULT_SPEED_MOVE, SPEED_MOVE_SLOW, SPEED_MOVE_FAST};
 
 
-<<<<<<< HEAD
+static u8 item_moveLen_index = 1;
 static u32 nextGantryTime = 0;
 static u32 update_gantry_time = 500; // 1 seconds is 1000
-=======
-static u8 item_moveLen_index = 1;
-static u32 nextTime = 0;
-static u32 update_time = 500; // 1 seconds is 1000
->>>>>>> 487fe10d1c647866829c1d34be2216dde53abf17
 
 AXIS nowAxis = X_AXIS;
 
