@@ -399,8 +399,7 @@ void sendQueueCmd(void)
         case 29: //M29
           if (!fromTFT)
           {
-            storeCmd("M105\nM114\nM220\nM221\n");
-            ispolling = true;
+            ispolling = storeCmd("M105\nM114\nM220\nM221\n");
           }
             break;
 
@@ -841,6 +840,8 @@ void sendQueueCmd(void)
       {
         case 0: //G0
         case 1: //G1
+        case 2: //G2
+        case 3: //G3
         {
           AXIS i;
           for(i=X_AXIS;i<TOTAL_AXIS;i++)

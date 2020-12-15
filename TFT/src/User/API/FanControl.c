@@ -151,7 +151,6 @@ void fanSpeedQuery(void)
   if( fanQueryEnable && infoHost.connected && 
       !infoHost.wait && !fanQueryWait )
   { 
-    storeCmd("M710\n");
-    fanQueryWait = true;
+    fanQueryWait = storeCmd("M710\n");
   }
 }

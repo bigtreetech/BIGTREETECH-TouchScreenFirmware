@@ -290,6 +290,15 @@ extern "C" {
 #define LANG_KEY_UNLOAD_STARTED               "label_unload_started:"
 #define LANG_KEY_HEATERS_ON                   "label_heaters_on:"
 #define LANG_KEY_PRINT_FINISHED               "print_finished:"
+#define LANG_KEY_MAIN_SCREEN                  "main_screen:"
+#define LANG_KEY_PREVIOUS_PRINT_DATA          "previous_print_data:"
+#define LANG_KEY_FILE_NAME              "LANG_KEY_file_name: "
+#define LANG_KEY_PRINT_TIME             "print_Time:"
+#define LANG_KEY_FILAMENT_LENGTH        "filament_length:"
+#define LANG_KEY_FILAMENT_WEIGHT        "Filament_weight:"
+#define LANG_KEY_FILAMENT_COST          "filament_cost:"
+#define LANG_KEY_NO_FILAMENT_STATISTICS "no_filament_statistics:"
+#define LANG_KEY_CLICK_FOR_MORE         "click_for_more:"  // keeep it with leading spaces
 
 #ifdef __cplusplus
 }

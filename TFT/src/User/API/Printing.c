@@ -4,7 +4,24 @@
 
 PRINTING infoPrinting;
 
-static bool update_waiting = false;
+static bool updateM27_waiting = false;
+static float last_E_pos;
+
+void initEpos(void)
+{
+  last_E_pos = ((infoFile.source == BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
+}
+
+void updateFilamentUsed(void)
+{
+  float E_pos = ((infoFile.source == BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
+  if ((E_pos + MAX_RETRACT_LIMIT) < last_E_pos) //Check whether E position reset (G92 E0)
+  {
+    last_E_pos = 0; 
+  }
+  filData.length += (E_pos - last_E_pos) / 1000;
+  last_E_pos = E_pos;
+}
 
 //
 bool isPrinting(void)
@@ -91,7 +108,7 @@ uint32_t getPrintTime(void)
 
 void printSetUpdateWaiting(bool isWaiting)
 {
-  update_waiting = isWaiting;
+  updateM27_waiting = isWaiting;
 }
 
 //only return gcode file name except path
@@ -232,6 +249,7 @@ void endPrinting(void)
   switch (infoFile.source)
   {
     case BOARD_SD:
+      request_M27(0);
       break;
 
     case TFT_UDISK:
@@ -242,7 +260,8 @@ void endPrinting(void)
   infoPrinting.printing = infoPrinting.pause = false;
   powerFailedClose();
   powerFailedDelete();
-  if(infoSettings.send_end_gcode == 1){
+  if(infoSettings.send_end_gcode == 1)
+  {
     sendPrintCodes(1);
   }
 }
@@ -334,7 +353,7 @@ void getGcodeFromFile(void)
   u8      sd_count = 0;
   UINT    br = 0;
 
-  if(isPrinting()==false || infoFile.source == BOARD_SD)  return;
+  if(isPrinting() == false || infoFile.source == BOARD_SD)  return;
 
   powerFailedCache(infoPrinting.file.fptr);
 
@@ -414,7 +433,8 @@ void loopCheckPrinting(void)
     if(infoMenu.menu[infoMenu.cur] == menuMarlinMode) return;
   #endif
 
-  if (infoHost.printing && !infoPrinting.printing) {
+  if (infoHost.printing && !infoPrinting.printing)
+  {
     infoPrinting.printing = true;
     if (!hasPrintingMenu())
       infoMenu.menu[++infoMenu.cur] = menuPrinting;
@@ -424,16 +444,16 @@ void loopCheckPrinting(void)
   if (infoMachineSettings.autoReportSDStatus == ENABLED) return;
   if (!infoSettings.m27_active && !infoPrinting.printing) return;
 
-  static uint32_t  nextTime=0;
-  uint32_t update_time = infoSettings.m27_refresh_time * 1000;
+  static uint32_t  nextCheckPrintTime=0;
+  uint32_t update_M27_time = infoSettings.m27_refresh_time * 1000;
   do
   {  /* WAIT FOR M27  */
-    if(update_waiting == true) {nextTime = OS_GetTimeMs() + update_time; break;}
-    if(OS_GetTimeMs() < nextTime) break;
+    if(updateM27_waiting == true) {nextCheckPrintTime = OS_GetTimeMs() + update_M27_time; break;}
+    if(OS_GetTimeMs() < nextCheckPrintTime) break;
 
     if(storeCmd("M27\n") == false) break;
 
-    nextTime = OS_GetTimeMs() + update_time;
-    update_waiting = true;
+    nextCheckPrintTime = OS_GetTimeMs() + update_M27_time;
+    updateM27_waiting = true;
   }while(0);
 }

@@ -5,20 +5,20 @@ static uint16_t percent[SPEED_NUM]     = {100,   100};  //Speed  Flow
 static uint16_t lastPercent[SPEED_NUM] = {100,   100};  //Speed  Flow
 static uint16_t curPercent[SPEED_NUM]  = {100,   100};  //Speed  Flow
 
-static bool send_waiting[SPEED_NUM];
-static bool queryWait = false;
+static bool sendSpeed_waiting[SPEED_NUM];
+static bool speedQueryWait = false;
 
 static uint32_t nextSpeedTime = 0;
 #define nextSpeedWait  500  // 1 second is 1000 
 
 void speedSetSendWaiting(u8 tool, bool isWaiting)
 {
-  send_waiting[tool] = isWaiting;
+  sendSpeed_waiting[tool] = isWaiting;
 }
 
 void speedQuerySetWait(bool wait)
 {
-  queryWait = wait;
+  speedQueryWait = wait;
 }
 
 void speedSetRcvPercent(uint8_t tool, uint16_t per)
@@ -41,40 +41,42 @@ bool SpeedChanged(u8 i)
   if (lastPercent[i] != percent[i])
   {
     lastPercent[i] = percent[i];
-    send_waiting[i] = false;
+    sendSpeed_waiting[i] = false;
     return true;
   }
   else
   {
-    send_waiting[i] = true;
+    sendSpeed_waiting[i] = true;
     return false;
   }
 }
 
 void loopSpeed(void)
 {
-  for(u8 i = 0; i < SPEED_NUM;i++)
-    if((curPercent[i] != percent[i]) && (OS_GetTimeMs() > nextSpeedTime))
-    {
-      if(send_waiting[i] == false)
+  if (OS_GetTimeMs() > nextSpeedTime)
+  {
+    for(u8 i = 0; i < SPEED_NUM;i++)
+      if((curPercent[i] != percent[i]) )
       {
-        send_waiting[i] = true;
-        const char *speedCmd[SPEED_NUM] = {"M220","M221"};
-        send_waiting[i] = storeCmd("%s S%d\n",speedCmd[i], percent[i]);
+        if(sendSpeed_waiting[i] == false)
+        {
+          sendSpeed_waiting[i] = true;
+          const char *speedCmd[SPEED_NUM] = {"M220","M221"};
+          sendSpeed_waiting[i] = storeCmd("%s S%d\n",speedCmd[i], percent[i]);
+        }
+      if (sendSpeed_waiting[i] == true) curPercent[i] = percent[i];
       }
-    if (send_waiting[i] == true) curPercent[i] = percent[i];
     nextSpeedTime = OS_GetTimeMs() + nextSpeedWait; // avoid rapid fire, clogging the queue
-    }
+  }
 }
 
 void speedQuery(void)
 {
   if (infoHost.connected == true && infoHost.wait == false)
   {
-    if (!queryWait)
+    if (!speedQueryWait)
     {
-      storeCmd("M220\nM221\n");
-      queryWait = true;
+      speedQueryWait = storeCmd("M220\nM221\n");
     }
   }
 }

@@ -14,7 +14,7 @@ static bool relative_e = false;
 // false means current position is unknown
 // false after M18/M84 disable stepper or power up, true after G28
 static bool position_known = false;
-static bool queryWait = false;
+static bool coordinateQueryWait = false;
 
 bool coorGetRelative(void)
 {
@@ -99,17 +99,16 @@ float coordinateGetAxisActual(AXIS axis)
 
 void coordinateQuerySetWait(bool wait)
 {
-  queryWait = wait;
+  coordinateQueryWait = wait;
 }
 
 void coordinateQuery(void)
 {
   if (infoHost.connected == true && infoHost.wait == false)
   {
-    if (!queryWait)
+    if (!coordinateQueryWait)
     {
-      storeCmd("M114\n");
-      queryWait = true;
+      coordinateQueryWait = storeCmd("M114\n");
     }
   }
 }

@@ -201,8 +201,7 @@ void loopCheckHeater(void)
       lastTarget[i] = heater.T[i].target;
       if (heat_send_waiting[i] != true)
       {
-        heat_send_waiting[i] = true;
-        storeCmd("%s ",heatCmd[i]);
+        heat_send_waiting[i] = storeCmd("%s ",heatCmd[i]);
       }
     }
   }

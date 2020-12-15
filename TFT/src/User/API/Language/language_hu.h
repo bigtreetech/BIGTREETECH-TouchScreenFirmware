@@ -282,5 +282,15 @@
     #define STRING_LOAD_STARTED           "A betöltési művelet folyamatban van,\nnincs lehtőség beavakozásra,\nmíg véget nem ér.\nVárjál!"
     #define STRING_UNLOAD_STARTED         "A kiadási eljárás folyamatban van,\nnincs lehtőség beavakozásra,\nmíg véget nem ér.\nVárjál!"
     #define STRING_HEATERS_ON             "Fűtés(ek) bekapcsolva maradt(ak).\nKikapcsolod az összes fűtést?"  // translation needed
+    #define STRING_PRINT_FINISHED         "   Printing\n   finished."  // keep it short and in this format!
+    #define STRING_MAIN_SCREEN            "Main"
+    #define STRING_PREVIOUS_PRINT_DATA    "Brief"
+    #define STRING_FILE_NAME              "File: "
+    #define STRING_PRINT_TIME             "\nPrint Time: "
+    #define STRING_FILAMENT_LENGTH        "\nFilament length: %3.2fm"
+    #define STRING_FILAMENT_WEIGHT        "\nFilament weight: %4.2fg"
+    #define STRING_FILAMENT_COST          "\nFilament cost: %2.2f"
+    #define STRING_NO_FILAMENT_STATISTICS "No filament statistics."
+    #define STRING_CLICK_FOR_MORE         "  Click for more."  // keeep it with leading spaces
 
 #endif

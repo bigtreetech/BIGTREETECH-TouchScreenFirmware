@@ -306,7 +306,8 @@ void menuPrintFromSource(void)
             setPrintModelIcon(infoFile.source != BOARD_SD && model_DecodeToFlash(infoFile.title));
 
             char temp_info[FILE_NUM + 50];
-            sprintf(temp_info, (char *)textSelect(LABEL_START_PRINT), infoFile.file[key_num + start - infoFile.F_num]);
+            sprintf(temp_info, (char *)textSelect(LABEL_START_PRINT), (uint8_t *)((infoFile.source == BOARD_SD) ? 
+                infoFile.Longfile[key_num + start - infoFile.F_num] : infoFile.file[key_num + start - infoFile.F_num]));
             //confirm file selction
             setDialogText( LABEL_PRINT, (u8*)temp_info, LABEL_CONFIRM, LABEL_CANCEL);
             showDialog(DIALOG_TYPE_QUESTION, startPrint, ExitDir, NULL);
@@ -368,7 +369,7 @@ void menuPrint(void)
   #endif
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_SCREEN_INFO,          LABEL_PREVIOUS_PRINT_DATA},
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
     {ICON_BACK,                 LABEL_BACK}}
@@ -410,11 +411,17 @@ void menuPrint(void)
           }
           break;
 
+      case KEY_ICON_4:
+        if (filData.name[0] != '\0')
+          printInfoPopup();
+          break;
+
       case KEY_ICON_7:
         infoMenu.cur--;
         return;
 
-      default: break;
+      default:
+        break;
     }
     loopProcess();
   }

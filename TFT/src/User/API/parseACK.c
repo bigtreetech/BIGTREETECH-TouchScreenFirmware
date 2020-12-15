@@ -257,7 +257,11 @@ void hostActionCommands(void)
     infoPrinting.pause = true;
   } else if (ack_seen("cancel"))   //To be added to Marlin abortprint routine
 	{
-		infoHost.printing = false;
+    if (infoHost.printing == true)
+    {
+      request_M27(0);
+    }
+    infoHost.printing = false;			infoHost.printing = false;
 		infoPrinting.printing = false;
     infoPrinting.cur = infoPrinting.size;
 	}
@@ -324,6 +328,7 @@ void parseACK(void)
         goto parse_end;
       }
     }
+
     if(requestCommandInfo.inResponse)
     {
       if(strlen(requestCommandInfo.cmd_rev_buf)+strlen(dmaL2Cache) < CMD_MAX_REV)
@@ -386,6 +391,10 @@ void parseACK(void)
           if (ack_seen("Z:"))
           {
             coordinateSetAxisActual(Z_AXIS, ack_value());
+            if (ack_seen("E:"))
+            {
+              coordinateSetAxisActual(E_AXIS, ack_value());
+            }
           }
         }
         coordinateQuerySetWait(false);
@@ -428,7 +437,8 @@ void parseACK(void)
       }
       else if(infoMachineSettings.onboard_sd_support == ENABLED && infoFile.source == BOARD_SD && ack_seen("Done printing file"))
       {
-        infoPrinting.printing = false;
+        infoHost.printing = false;
+        printingFinished();
         infoPrinting.cur = infoPrinting.size;
       }
 
@@ -849,6 +859,29 @@ void parseACK(void)
         {
           ackPopupInfo(echomagic);
         }
+      }
+    // parse filament data from gCode (M118)
+      else if (ack_seen("filament_data"))
+      {
+        if (ack_seen("L:"))
+        {
+          while ((dmaL2Cache[ack_index]<'0') || (dmaL2Cache[ack_index]>'9') || dmaL2Cache[ack_index] == "\n")
+            ack_index++;
+          filData.length = ack_value();
+        }
+        else if (ack_seen("W:"))
+        {
+          while ((dmaL2Cache[ack_index]<'0') || (dmaL2Cache[ack_index]>'9') || dmaL2Cache[ack_index] == "\n")
+            ack_index++;
+          filData.weight = ack_value();
+        }
+        else if (ack_seen("C:"))
+        {
+          while ((dmaL2Cache[ack_index]<'0') || (dmaL2Cache[ack_index]>'9') || dmaL2Cache[ack_index] == "\n")
+            ack_index++;
+          filData.cost = ack_value();
+        }
+        filDataSeen = true;
       }
     }
 
