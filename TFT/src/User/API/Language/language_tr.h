@@ -279,11 +279,12 @@
     #define STRING_MESH_EDITOR            "Mesh düzenle"
     #define STRING_MESH_TUNER             "Mesh ayarlayıcı"
     #define STRING_CASE_LIGHT             "Aydınlatma"
-    #define STRING_LOAD_STARTED           "Filament load in progress.\nNo further actions possible\nuntil it's done.\nPlease stand by."  // translation needed
-    #define STRING_UNLOAD_STARTED         "Filament unload in progress.\nNo further actions possible\nuntil it's done.\nPlease stand by."  // translation needed
+    #define STRING_LOAD_STARTED           "Loading filament.\nPlease wait for the process\nto complete."  // translation needed
+    #define STRING_UNLOAD_STARTED         "Unloading filament.\nPlease wait for the process\nto complete."  // translation needed
     #define STRING_HEATERS_ON             "Some heaters are still ON.\nDo you want to stop them?"  // translation needed
-    #define STRING_PRINT_TOTAL_TIME       "Baskı tamamlandı.\nBaskı Süresi: %02u:%02u:%02u \n"
-    #define STRING_PRINT_FILAMENT_USED    "Kullanılan Filaman: %3.2f metre"
-    #define STRING_PRINT_SUMMARY          "Baskı Özeti"
+    #define STRING_PRINT_SUMMARY          "Baskı Süresi: %02u:%02u:%02u\nKullanılan Filaman: %3.2f metre"
+    #define STRING_PRINT_COMPLETE         "Print complete"
+    #define STRING_EXT_TEMPLOW            "Hotend temperature is below\nminimum temperature (%d℃)."
+    #define STRING_COLD_EXT               "Cold extrusion prevented"
 
 #endif

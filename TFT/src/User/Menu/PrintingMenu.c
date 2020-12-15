@@ -32,9 +32,6 @@ const GUI_RECT printinfo_val_rect[6] = {
 
 static uint32_t nextToggleTime = 0;
 static uint32_t nextDrawTime = 0;
-static uint8_t c_Tool = NOZZLE0;
-static int c_fan = 0;
-static int c_speedID = 0;
 const char *const Speed_ID[2] = {"Speed","Flow"};
 
 #define TOGGLE_TIME 2000; // 1 seconds is 1000
@@ -134,11 +131,11 @@ void menuBeforePrinting(void)
 static inline void reValueNozzle(int icon_pos)
 {
   char tempstr[10];
-  sprintf(tempstr, "%d/%d", heatGetCurrentTemp(c_Tool), heatGetTargetTemp(c_Tool));
+  sprintf(tempstr, "%d/%d", heatGetCurrentTemp(currentTool), heatGetTargetTemp(currentTool));
 
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
   ICON_ReadDisplay(printinfo_points[icon_pos].x,printinfo_points[icon_pos].y,ICON_PRINTING_NOZZLE);
-  GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (u8* )heatDisplayID[c_Tool]);
+  GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (u8* )heatDisplayID[currentTool]);
   GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (u8 *)tempstr);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
@@ -159,13 +156,13 @@ static inline void reDrawFan(int icon_pos)
 {
   char tempstr[10];
   if (infoSettings.fan_percentage == 1)
-    sprintf(tempstr, "%d%%", fanGetCurPercent(c_fan));
+    sprintf(tempstr, "%d%%", fanGetCurPercent(currentFan));
   else
-    sprintf(tempstr, "%d", fanGetCurSpeed(c_fan));
+    sprintf(tempstr, "%d", fanGetCurSpeed(currentFan));
 
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
   ICON_ReadDisplay(printinfo_points[icon_pos].x,printinfo_points[icon_pos].y,ICON_PRINTING_FAN);
-  GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (u8*)fanID[c_fan]);
+  GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (u8*)fanID[currentFan]);
   GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (u8 *)tempstr);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
@@ -174,14 +171,14 @@ static inline void reDrawSpeed(int icon_pos)
 {
   char tempstr[10];
 
-  if(c_speedID == 0)
+  if(currentSpeedID == 0)
     ICON_ReadDisplay(printinfo_points[icon_pos].x,printinfo_points[icon_pos].y,ICON_PRINTING_SPEED);
   else
     ICON_ReadDisplay(printinfo_points[icon_pos].x,printinfo_points[icon_pos].y,ICON_PRINTING_FLOW);
 
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-  sprintf(tempstr, "%d%%", speedGetPercent(c_speedID) );
-  GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (u8 *)Speed_ID[c_speedID]);
+  sprintf(tempstr, "%d%%", speedGetPercent(currentSpeedID) );
+  GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (u8 *)Speed_ID[currentSpeedID]);
   GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (u8 *)tempstr);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
@@ -233,19 +230,19 @@ static inline void toggleinfo(void)
   {
     if (infoSettings.hotend_count > 1)
     {
-      c_Tool = (c_Tool + 1) % infoSettings.hotend_count;
+      currentTool = (currentTool + 1) % infoSettings.hotend_count;
       rapid_serial_loop();   //perform backend printing loop before drawing to avoid printer idling
       reValueNozzle(EXT_ICON_POS);
     }
 
     if ((infoSettings.fan_count + infoSettings.fan_ctrl_count) > 1)
     {
-      c_fan = (c_fan + 1) % (infoSettings.fan_count + infoSettings.fan_ctrl_count);
+      currentFan = (currentFan + 1) % (infoSettings.fan_count + infoSettings.fan_ctrl_count);
       rapid_serial_loop();   //perform backend printing loop before drawing to avoid printer idling
       reDrawFan(FAN_ICON_POS);
     }
 
-    c_speedID = (c_speedID + 1) % 2;
+    currentSpeedID = (currentSpeedID + 1) % 2;
     nextToggleTime = OS_GetTimeMs() + TOGGLE_TIME;
     rapid_serial_loop();   //perform backend printing loop before drawing to avoid printer idling
     reDrawSpeed(SPD_ICON_POS);
@@ -318,10 +315,10 @@ void menuPrinting(void)
 //    Scroll_DispString(&titleScroll, LEFT); //Scroll display file name will take too many CPU cycles
 
     //check nozzle temp change
-    if (nowHeat.T[c_Tool].current != heatGetCurrentTemp(c_Tool) || nowHeat.T[c_Tool].target != heatGetTargetTemp(c_Tool))
+    if (nowHeat.T[currentTool].current != heatGetCurrentTemp(currentTool) || nowHeat.T[currentTool].target != heatGetTargetTemp(currentTool))
     {
-      nowHeat.T[c_Tool].current = heatGetCurrentTemp(c_Tool);
-      nowHeat.T[c_Tool].target = heatGetTargetTemp(c_Tool);
+      nowHeat.T[currentTool].current = heatGetCurrentTemp(currentTool);
+      nowHeat.T[currentTool].target = heatGetTargetTemp(currentTool);
       rapid_serial_loop();   //perform backend printing loop before drawing to avoid printer idling
       reValueNozzle(EXT_ICON_POS);
     }
@@ -336,9 +333,9 @@ void menuPrinting(void)
     }
 
     //check Fan speed change
-    if (nowFan[c_fan] != fanGetCurSpeed(c_fan))
+    if (nowFan[currentFan] != fanGetCurSpeed(currentFan))
     {
-      nowFan[c_fan] = fanGetCurSpeed(c_fan);
+      nowFan[currentFan] = fanGetCurSpeed(currentFan);
       rapid_serial_loop();  //perform backend printing loop before drawing to avoid printer idling
       reDrawFan(FAN_ICON_POS);
     }
@@ -375,9 +372,9 @@ void menuPrinting(void)
     }
 
     //check change in speed or flow
-    if(curspeed[c_speedID] != speedGetPercent(c_speedID))
+    if(curspeed[currentSpeedID] != speedGetPercent(currentSpeedID))
     {
-      curspeed[c_speedID] = speedGetPercent(c_speedID);
+      curspeed[currentSpeedID] = speedGetPercent(currentSpeedID);
       rapid_serial_loop();  //perform backend printing loop before drawing to avoid printer idling
       reDrawSpeed(SPD_ICON_POS);
     }
@@ -431,7 +428,8 @@ void menuPrinting(void)
         }
         break;
 
-      default :break;
+      default:
+        break;
     }
     loopProcess();
   }
