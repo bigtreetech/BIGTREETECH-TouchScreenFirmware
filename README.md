@@ -58,7 +58,9 @@ C: In case you have an **"E3" mainboard** which provides a **single EXP connecto
 ## Update TFT Firmware
 
 
-The TFT firmware update is done in the five steps described below and includes up to four elements:
+The TFT firmware update is done in three steps described below and includes up to four elements:
+
+**ELEMENTS:**
 
 **element1:** The firmware binary (`BIGTREE_TFT*_V*.*.*.bin`). Example: `BIGTREE_TFT35_V3.0.26.1.bin`:
 
@@ -73,13 +75,17 @@ The TFT firmware update is done in the five steps described below and includes u
 
 **element3:** The config.ini file
 
-**element4:**  Ne or several language file(s) **(optionally)**
+**element4:**  One or several language file(s) **(optionally)**
+
+
+
+**STEPS:**
 
 **step1:** Copy your self compiled firmware or the BIGTREE_TFT*_V*.*.*.bin, plus the TFT*` folder and the config.ini to the root of a blank SD card that is <8GB and formatted as FAT32:
 
 ![Firmware](https://user-images.githubusercontent.com/54359396/100600549-b6cffd00-3301-11eb-8b57-d56b7a4422f1.jpg)
 
-**Optionally**, copy one or several language .ini file(s) from Copy to SD Card root directory to update/Language Packs [`Copy to SD Card root directory to update/Language Packs`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/8963aed84c40a3b8daf2768a7feb37aeeab71996/Copy%20to%20SD%20Card%20root%20directory%20to%20update%20) folder onto the SD card. Doing so will allow you to switch between English and the uploaded language(s), using the corresponding Language function of the TFT. We recommend to upload the minimum amount of languages, to keep the memory usage low. The language .ini file can be edited to change the text shown on the TFT.
+**Optionally**, copy one or several language.ini file(s) from [`Copy to SD Card root directory to update/Language Packs`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update/Language%20Packs) folder onto the SD card. Doing so will allow you to switch between English and the uploaded language(s), using the corresponding Language function of the TFT. We recommend to upload the minimum amount of languages, to keep the memory usage low. The language.ini file can be edited to change the text shown on the TFT.
 
 ![Language Pack](https://user-images.githubusercontent.com/54359396/100600564-b9caed80-3301-11eb-8997-d376f05323f6.jpg)
 
@@ -109,10 +115,6 @@ In case one or several parts of the update failed, an error will be shown. Follo
 After the update is done and the files are renamed, it is possible to reuse them again. To do so, change the name of the element(s) to the pre-update name and start the update process again.
 
 **step3:** Remove the SD card from the TFT and restart the printer.
-
-**step4:** On the TFT click on Menu - Settings - Feature and navigate to the last page. Click on "Reset default settings ..." to refresh the content of the TFT's memory.
-
-**step5:** Restart the printer to finish the installation
 
 
 
