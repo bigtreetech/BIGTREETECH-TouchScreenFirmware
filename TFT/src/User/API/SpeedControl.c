@@ -60,12 +60,12 @@ void loopSpeed(void)
   {
     if ((curPercent[i] != percent[i]) && (OS_GetTimeMs() > nextSpeedTime))
     {
-      if (send_waiting[i] == false)
+      if (sendSpeed_waiting[i] == false)
       {
-        send_waiting[i] = true;
-        send_waiting[i] = storeCmd("%s S%d\n", speedCmd[i], percent[i]);
+        sendSpeed_waiting[i] = true;
+        sendSpeed_waiting[i] = storeCmd("%s S%d\n", speedCmd[i], percent[i]);
       }
-      if (send_waiting[i] == true)
+      if (sendSpeed_waiting[i] == true)
         curPercent[i] = percent[i];
       nextSpeedTime = OS_GetTimeMs() + NEXT_SPEED_WAIT; // avoid rapid fire, clogging the queue
     }
