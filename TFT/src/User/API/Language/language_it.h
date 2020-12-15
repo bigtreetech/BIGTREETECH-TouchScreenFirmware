@@ -282,6 +282,7 @@
     #define STRING_LOAD_STARTED           "Carico filamento in corso...\nNon sono possibili altre\nazioni fino al termine.\nAttendere prego."
     #define STRING_UNLOAD_STARTED         "Scarico filamento in corso...\nNon sono possibili altre\nazioni fino al termine.\nAttendere prego."
     #define STRING_HEATERS_ON             "Alcuni riscaldatori sono ancora accesi\nVuoi spegnerli?"
+    #define STRING_PRINT_SUMMARY_POPUP    "Sommario"
     #define STRING_PRINT_SUMMARY          "Durata totale: %02u:%02u:%02u\nFilamento usato: %3.2f metri"
     #define STRING_PRINT_COMPLETE         "Stampa completata"
     #define STRING_EXT_TEMPLOW            "Hotend temperature is below\nminimum temperature (%d℃)."

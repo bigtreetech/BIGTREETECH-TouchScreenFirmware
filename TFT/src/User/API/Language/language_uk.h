@@ -282,6 +282,7 @@
     #define STRING_LOAD_STARTED          "Процедура завантаження \nфіламенту, чекаємо поки хотенд \nдосягне бажаної температури. \nБудь ласка, зачекайте."
     #define STRING_UNLOAD_STARTED        "Процедура вивавантаження. \nфіламенту, чекаємо поки хотенд \nдосягне бажаної температури. \nБудь ласка, зачекайте."
     #define STRING_HEATERS_ON            "Деякі обігрівачі\nвсе ще увімкнені. \nВи хочете їх зупинити?"
+    #define STRING_PRINT_SUMMARY_POPUP   "Print Summary Popup"  // translation needed
     #define STRING_PRINT_SUMMARY         "Час друку: %02u:%02u:%02u\nВикористано філаменту: %3.2f метрів"
     #define STRING_PRINT_COMPLETE        "Друк завершено."
     #define STRING_EXT_TEMPLOW           "Hotend temperature is below\nminimum temperature (%d℃)."

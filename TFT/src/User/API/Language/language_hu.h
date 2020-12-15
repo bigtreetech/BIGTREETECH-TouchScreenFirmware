@@ -282,6 +282,7 @@
     #define STRING_LOAD_STARTED           "A filament betöltése folyamatban van,\nnem lehetséges további művelet,\nmíg véget nem ér.\nKérlek várj!"
     #define STRING_UNLOAD_STARTED         "A filament kiadása folyamatban van,\nnem lehetséges további művelet,\nmíg véget nem ér.\nKérlek várj!"
     #define STRING_HEATERS_ON             "Néhány fűtőelem még üzemel.\nKikapcsolod a fűtőelemeket?"
+    #define STRING_PRINT_SUMMARY_POPUP    "Összegzés"
     #define STRING_PRINT_SUMMARY          "Eltelt idő: %02u:%02u:%02u\nFelhasznált anyag: %3.2f méter"
     #define STRING_PRINT_COMPLETE         "Nyomtatás kész."
     #define STRING_EXT_TEMPLOW            "Hotend temperature is below\nminimum temperature (%d℃)."

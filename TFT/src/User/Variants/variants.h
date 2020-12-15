@@ -42,6 +42,8 @@
   #include "pin_TFT70_V3_0.h"
 #elif defined(TFT35_E3_V3_0)
   #include "pin_TFT35_E3_V3_0.h"
+#elif defined(TFT35_B1_V3_0)
+  #include "pin_TFT35_B1_V3_0.h"
 #elif defined(MKS_32_V1_4)
   #include "pin_MKS_TFT32_V1_4.h"
 #elif defined(MKS_28_V1_0)
