@@ -261,19 +261,11 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
   return true;
 }
 
-
-void exitPrinting(void)
-{
-  memset(&infoPrinting, 0, sizeof(PRINTING));
-  ExitDir();
-}
-
 void endPrinting(void)
 {
   switch (infoFile.source)
   {
     case BOARD_SD:
-      request_M27(0);
       break;
 
     case TFT_UDISK:
@@ -284,20 +276,8 @@ void endPrinting(void)
   infoPrinting.printing = infoPrinting.pause = false;
   powerFailedClose();
   powerFailedDelete();
-  if((infoFile.source != BOARD_SD) && (infoSettings.send_end_gcode == 1))
-  {
+  if(infoSettings.send_end_gcode == 1){
     sendPrintCodes(1);
-  }
-  if (infoSettings.print_summary)
-  {
-    infoMenu.cur = 0;
-    char tempstr[140];
-    u8 hour = infoPrinting.time / 3600;
-    u8 min = infoPrinting.time % 3600 / 60;
-    u8 sec = infoPrinting.time % 60;
-    sprintf(tempstr, (char *)textSelect(LABEL_PRINT_SUMMARY), hour, min, sec, filament_used / 1000);
-    resetFilamentUsed();
-    popupReminder(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, (u8 *)tempstr);
   }
 }
 
