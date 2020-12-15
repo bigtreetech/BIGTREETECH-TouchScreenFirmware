@@ -282,6 +282,7 @@
     #define STRING_LOAD_STARTED           "Chargement du filament en cours.\nAucune action possible avant\nla fin du processus.\nVeuillez patienter."
     #define STRING_UNLOAD_STARTED         "Déchargement du filament en cours.\nAucune action possible avant\nla fin du processus.\nVeuillez patienter."
     #define STRING_HEATERS_ON             "Certains éléments sont\ntoujours en chauffe.\nVoulez-vous les arrêter ?"
+    #define STRING_PRINT_SUMMARY_POPUP    "Print Summary Popup"  // translation needed
     #define STRING_PRINT_SUMMARY          "Print Time: %02u:%02u:%02u\nFilament Used: %3.2f meters"
     #define STRING_PRINT_COMPLETE         "Print complete"
     #define STRING_EXT_TEMPLOW            "Hotend temperature is below\nminimum temperature (%d℃)."

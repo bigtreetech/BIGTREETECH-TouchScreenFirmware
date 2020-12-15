@@ -282,6 +282,7 @@
     #define STRING_LOAD_STARTED           "Probíhá zavádění filamentu.\nNení možná další akce,\ndokud to nebude dokončeno.\nProsím čekejte."  // translation needed
     #define STRING_UNLOAD_STARTED         "Probíhá vysunování filamentu.\nNení možná další akce,\ndokud to nebude dokončeno.\nProsím čekejte.."  // translation needed
     #define STRING_HEATERS_ON             "Topení jsou stále zapnutá.\nChcete je vypnout?"  // translation needed
+    #define STRING_PRINT_SUMMARY_POPUP    "Print Summary Popup"  // translation needed
     #define STRING_PRINT_SUMMARY          "Print Time: %02u:%02u:%02u\nFilament Used: %3.2f meters"
     #define STRING_PRINT_COMPLETE         "Print complete"
     #define STRING_EXT_TEMPLOW            "Hotend temperature is below\nminimum temperature (%d℃)."
