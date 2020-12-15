@@ -30,22 +30,13 @@ const GUI_RECT printinfo_val_rect[6] = {
         START_X + PICON_LG_WIDTH*2 + PICON_SPACE_X*2 + PICON_VAL_SM_EX,     ICON_START_Y + PICON_HEIGHT*1 + PICON_SPACE_Y*1 + PICON_VAL_Y + BYTE_HEIGHT},
 };
 
-<<<<<<< HEAD
 static uint32_t nextInfoTime = 0;
 static uint32_t nextDrawTime = 0;
-static uint8_t c_Tool = NOZZLE0;
-static int c_fan = 0;
-static int c_speedID = 0;
 const  char *const Speed_ID[2] = {"Speed","Flow"};
 static char filamentInfo[100];
 bool filDataSeen;
 SCROLL infoScroll;
 FILAMENTDATA filData = {"", 0, 0, 0, 0};
-=======
-static uint32_t nextToggleTime = 0;
-static uint32_t nextDrawTime = 0;
-const char *const Speed_ID[2] = {"Speed","Flow"};
->>>>>>> 487fe10d1c647866829c1d34be2216dde53abf17
 
 #define TOGGLE_TIME 2000; // 1 seconds is 1000
 #define DRAW_TIME 500; // 1 seconds is 1000
@@ -107,10 +98,6 @@ void menuBeforePrinting(void)
       //    }
 
       if (infoMachineSettings.autoReportSDStatus == 1)
-<<<<<<< HEAD
-      {
-=======
->>>>>>> 487fe10d1c647866829c1d34be2216dde53abf17
         request_M27(infoSettings.m27_refresh_time);                //Check if there is a SD or USB print running.
       else
         request_M27(0);
@@ -142,10 +129,6 @@ void menuBeforePrinting(void)
   }
   infoPrinting.printing = true;
   infoPrinting.time = 0;
-  if (infoSettings.print_summary)
-  {
-    resetFilamentUsed();
-  }
   infoMenu.menu[infoMenu.cur] = menuPrinting;
   infoPrinting.time = 0;
   filData = (FILAMENTDATA) {"", 0, 0, 0, 0};
@@ -210,15 +193,9 @@ static inline void reDrawSpeed(int icon_pos)
 
 static inline void reDrawTime(int icon_pos)
 {
-<<<<<<< HEAD
   u8  hour = infoPrinting.time / 3600,
       min = infoPrinting.time % 3600 / 60,
       sec = infoPrinting.time % 60;
-=======
-  u8 hour = infoPrinting.time/3600;
-  u8 min = infoPrinting.time%3600/60;
-  u8 sec = infoPrinting.time%60;
->>>>>>> 487fe10d1c647866829c1d34be2216dde53abf17
 
   GUI_SetNumMode(GUI_NUMMODE_ZERO);
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
@@ -255,15 +232,9 @@ static inline void reDrawLayer(int icon_pos)
   }
 }
 
-<<<<<<< HEAD
-void toggleInfo(void)
+static inline void toggleInfo(void)
 {
   if (OS_GetTimeMs() > nextInfoTime)
-=======
-static inline void toggleinfo(void)
-{
-  if (OS_GetTimeMs() > nextToggleTime)
->>>>>>> 487fe10d1c647866829c1d34be2216dde53abf17
   {
     if (infoSettings.hotend_count > 1)
     {
@@ -278,10 +249,8 @@ static inline void toggleinfo(void)
       rapid_serial_loop();   //perform backend printing loop before drawing to avoid printer idling
       reDrawFan(FAN_ICON_POS);
     }
-
-<<<<<<< HEAD
     currentSpeedID = (currentSpeedID + 1) % 2;
-    nextToggleTime = OS_GetTimeMs() + TOGGLE_TIME;
+    nextInfoTime = OS_GetTimeMs() + TOGGLE_TIME;
     rapid_serial_loop();   //perform backend printing loop before drawing to avoid printer idling
     reDrawSpeed(SPD_ICON_POS);
     speedQuery();
@@ -289,18 +258,6 @@ static inline void toggleinfo(void)
       coordinateQuery();
     if (!filDataSeen && isPrinting())
       updateFilamentUsed();
-=======
-    currentSpeedID = (currentSpeedID + 1) % 2;
-    nextToggleTime = OS_GetTimeMs() + TOGGLE_TIME;
-    rapid_serial_loop();   //perform backend printing loop before drawing to avoid printer idling
-    reDrawSpeed(SPD_ICON_POS);
-    speedQuery();
-    if (infoFile.source == BOARD_SD) coordinateQuery();
-    if (infoSettings.print_summary)
-    {
-      updateFilamentUsed();
-    }
->>>>>>> 487fe10d1c647866829c1d34be2216dde53abf17
   }
 }
 
@@ -424,7 +381,6 @@ void menuPrinting(void)
 {
   //1title, ITEM_PER_PAGE item(icon + label)
   MENUITEMS printingItems = {
-<<<<<<< HEAD
   //  title
   LABEL_BACKGROUND,
   // icon                       label
@@ -436,19 +392,6 @@ void menuPrinting(void)
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
     {ICON_BACKGROUND,           LABEL_BACKGROUND},
     {ICON_BACKGROUND,           LABEL_BACKGROUND}}
-=======
-    // title
-    LABEL_BACKGROUND,
-    // icon                         label
-    {{ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BABYSTEP,                LABEL_BABYSTEP},
-     {ICON_PAUSE,                   LABEL_PAUSE},
-     {ICON_MORE,                    LABEL_MORE},
-     {ICON_STOP,                    LABEL_STOP},}
->>>>>>> 487fe10d1c647866829c1d34be2216dde53abf17
   };
 
   uint8_t   nowFan[MAX_FAN_COUNT] = {0};
@@ -629,13 +572,10 @@ void menuPrinting(void)
         }
         break;
 
-<<<<<<< HEAD
       case KEY_INFOBOX:
         printInfoPopup();
         break;
 
-=======
->>>>>>> 487fe10d1c647866829c1d34be2216dde53abf17
       default:
         break;
     }
