@@ -1,17 +1,9 @@
 #include "Babystep.h"
 #include "includes.h"
 
-#define ITEM_BABYSTEP_UNIT_NUM 3
+#define iITEM_BS_MOVE_LEN_NUM 3
 
-const ITEM itemBabyStep_steps[ITEM_BABYSTEP_UNIT_NUM] = {
-  // icon                         label
-  {ICON_001_MM,                   LABEL_001_MM},
-  {ICON_01_MM,                    LABEL_01_MM},
-  {ICON_1_MM,                     LABEL_1_MM},
-};
-
-const float babystep_steps[ITEM_BABYSTEP_UNIT_NUM] = {0.01f, 0.1f, 1};
-static u8 babystep_steps_index = 0;
+static u8 moveLenSteps_index = 0;
 
 void babyReDraw(float babystep, float z_offset, bool force_z_offset, bool skip_header)
 {
@@ -43,10 +35,7 @@ void babyReDraw(float babystep, float z_offset, bool force_z_offset, bool skip_h
     GUI_SetColor(infoSettings.font_color);
 
   GUI_DispStringRight(point_of.x, point_of.y, (u8 *) tempstr);
-
-  // restore default font color
-  GUI_SetColor(infoSettings.font_color);
-
+  GUI_SetColor(infoSettings.font_color); // restore default font color
   setLargeFont(false);
 }
 
@@ -103,7 +92,7 @@ void menuBabystep(void)
     babyStepItems.items[KEY_ICON_4].label.index = LABEL_SAVE;
   }
 
-  babyStepItems.items[KEY_ICON_5] = itemBabyStep_steps[babystep_steps_index];
+  babyStepItems.items[KEY_ICON_5] = itemMoveLen[moveLenSteps_index];
 
   menuDrawPage(&babyStepItems);
   babyReDraw(now_babystep, now_z_offset, force_z_offset, false);
@@ -114,7 +103,7 @@ void menuBabystep(void)
 
   while (infoMenu.menu[infoMenu.cur] == menuBabystep)
   {
-    unit = babystep_steps[babystep_steps_index];
+    unit = moveLenSteps[moveLenSteps_index];
 
     babystep = babystepGetValue();                         // always load current babystep
 
@@ -143,8 +132,8 @@ void menuBabystep(void)
 
       // change unit
       case KEY_ICON_5:
-        babystep_steps_index = (babystep_steps_index + 1) % ITEM_BABYSTEP_UNIT_NUM;
-        babyStepItems.items[key_num] = itemBabyStep_steps[babystep_steps_index];
+        moveLenSteps_index = (moveLenSteps_index + 1) % iITEM_BS_MOVE_LEN_NUM;
+        babyStepItems.items[key_num] = itemMoveLen[moveLenSteps_index];
         menuDrawItem(&babyStepItems.items[key_num], key_num);
         break;
 
@@ -178,7 +167,6 @@ void menuBabystep(void)
         // or babystep is almost the same as the initial one,
         // we don't force Z offset change
         now_z_offset = z_offset;
-
         force_z_offset = false;
       }
       else if (orig_z_offset == z_offset)
@@ -186,7 +174,6 @@ void menuBabystep(void)
         // if current Z offset is not changed applying babystep changes (e.g. no BABYSTEP_ZPROBE_OFFSET is set in Marlin FW),
         // we force Z offset change
         z_offset += babystep - orig_babystep;
-
         force_z_offset = true;
       }
 

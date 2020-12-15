@@ -4,7 +4,6 @@
 static uint8_t ublSlot;
 static bool ublIsSaving = true;
 static bool ublSlotSaved = false;
-bool heat = false;
 
 /* called by parseAck() to notify ABL process status */
 void ablUpdateStatus(bool succeeded)
@@ -161,6 +160,7 @@ void menuABL(void)
      {ICON_BACK,                    LABEL_BACK}}
   };
 
+  bool heat = false;
   KEY_VALUES key_num = KEY_IDLE;
 
   switch (infoMachineSettings.leveling)
@@ -233,10 +233,7 @@ void menuABL(void)
       case KEY_ICON_7:
         if (heat == true)
         {
-          for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
-          {
-            heatSetTargetTemp(i, 0);
-          }
+          heatCoolDown();
           heat = false;
         }
         infoMenu.cur--;

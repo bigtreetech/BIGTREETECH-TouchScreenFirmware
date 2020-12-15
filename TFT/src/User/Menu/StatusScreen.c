@@ -37,16 +37,13 @@ const ITEM SpeedItems[2] = {
 
 static u32 nextTime = 0;
 static u32 update_time = 2000; // 1 seconds is 1000
-SCROLL     msgScroll;
-static int lastConnection_status = -1;
+static int8_t lastConnection_status = -1;
 static bool msgNeedRefresh = false;
 
 static char msgtitle[20];
 static char msgbody[MAX_MSG_LENGTH];
+SCROLL msgScroll;
 
-uint8_t current_tool = NOZZLE0;
-int current_fan = 0;
-int current_speedID = 0;
 const char *const SpeedID[2] = SPEED_ID;
 // text position rectangles for Live icons
 //icon 0
@@ -102,9 +99,9 @@ void drawTemperature(void)
   char tempstr2[45];
 
   //TOOL / EXT
-    lvIcon.lines[0].text = (u8 *)heatDisplayID[current_tool];
-    sprintf(tempstr, "%d℃", heatGetCurrentTemp(current_tool));
-    sprintf(tempstr2, "%d℃", heatGetTargetTemp(current_tool));
+    lvIcon.lines[0].text = (u8 *)heatDisplayID[currentTool];
+    sprintf(tempstr, "%d℃", heatGetCurrentTemp(currentTool));
+    sprintf(tempstr2, "%d℃", heatGetTargetTemp(currentTool));
     lvIcon.lines[1].text = (u8 *)tempstr;
     lvIcon.lines[2].text = (u8 *)tempstr2;
     showLiveInfo(0, &lvIcon, &StatusItems.items[0]);
@@ -121,8 +118,8 @@ void drawTemperature(void)
 #else
 
   //TOOL / EXT
-  lvIcon.lines[0].text = (u8 *)heatDisplayID[current_tool];
-  sprintf(tempstr, "%d/%d", heatGetCurrentTemp(current_tool), heatGetTargetTemp(current_tool));
+  lvIcon.lines[0].text = (u8 *)heatDisplayID[currentTool];
+  sprintf(tempstr, "%d/%d", heatGetCurrentTemp(currentTool), heatGetTargetTemp(currentTool));
   lvIcon.lines[1].text = (u8 *)tempstr;
   showLiveInfo(0, &lvIcon, &StatusItems.items[0]);
 
@@ -135,15 +132,15 @@ void drawTemperature(void)
 #endif
 
   //FAN
-  lvIcon.lines[0].text = (u8 *)fanID[current_fan];
+  lvIcon.lines[0].text = (u8 *)fanID[currentFan];
 
   if (infoSettings.fan_percentage == 1)
   {
-    sprintf(tempstr, "%d%%", fanGetCurPercent(current_fan));
+    sprintf(tempstr, "%d%%", fanGetCurPercent(currentFan));
   }
   else
   {
-    sprintf(tempstr, "%d", fanGetCurSpeed(current_fan));
+    sprintf(tempstr, "%d", fanGetCurSpeed(currentFan));
   }
   lvIcon.lines[1].text = (u8 *)tempstr;
   showLiveInfo(2, &lvIcon, &StatusItems.items[2]);
@@ -163,10 +160,10 @@ void drawTemperature(void)
 
 #else
   //SPEED / flow
-  lvIcon.lines[0].text = (u8 *)SpeedID[current_speedID];
-  sprintf(tempstr, "%d%%", speedGetPercent(current_speedID));
+  lvIcon.lines[0].text = (u8 *)SpeedID[currentSpeedID];
+  sprintf(tempstr, "%d%%", speedGetPercent(currentSpeedID));
   lvIcon.lines[1].text = (u8 *)tempstr;
-  showLiveInfo(3, &lvIcon, &SpeedItems[current_speedID]);
+  showLiveInfo(3, &lvIcon, &SpeedItems[currentSpeedID]);
 #endif
 
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
@@ -232,13 +229,13 @@ static inline void toggleTool(void)
   {
     if (infoSettings.hotend_count > 1)
     {
-      current_tool = (current_tool+1) % infoSettings.hotend_count;
+      currentTool = (currentTool+1) % infoSettings.hotend_count;
     }
     if ((infoSettings.fan_count + infoSettings.fan_ctrl_count) > 1)
     {
-      current_fan = (current_fan + 1) % (infoSettings.fan_count + infoSettings.fan_ctrl_count);
+      currentFan = (currentFan + 1) % (infoSettings.fan_count + infoSettings.fan_ctrl_count);
     }
-    current_speedID = (current_speedID + 1) % 2;
+    currentSpeedID = (currentSpeedID + 1) % 2;
     nextTime = OS_GetTimeMs() + update_time;
     drawTemperature();
 
@@ -272,7 +269,7 @@ void menuStatus(void)
     switch (key_num)
     {
       case KEY_ICON_0:
-        heatSetCurrentIndex(current_tool);
+        heatSetCurrentIndex(currentTool);
         infoMenu.menu[++infoMenu.cur] = menuHeat;
         break;
       case KEY_ICON_1:

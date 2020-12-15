@@ -13,6 +13,9 @@ extern "C" {
 #define ITEM_EXT_LEN_NUM        5
 #define ITEM_MOVE_LEN_NUM       5
 
+extern uint8_t currentTool;
+extern uint8_t currentFan;
+extern uint8_t currentSpeedID;
 
 extern const ITEM itemTool[MAX_HEATER_COUNT];
 extern const ITEM itemDegreeSteps[ITEM_DEGREE_NUM];
