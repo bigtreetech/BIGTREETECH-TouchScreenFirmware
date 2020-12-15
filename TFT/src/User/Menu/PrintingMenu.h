@@ -11,6 +11,7 @@ extern "C" {
 
 void menuBeforePrinting(void);
 void menuPrinting(void);
+void printInfoPopup(void);
 extern bool filDataSeen;
 
 typedef struct
