@@ -98,19 +98,33 @@ bool isLargeFont(void)
 // decode character encode info (UTF8)
 static void getUTF8EncodeInfo(const uint8_t *ch, CHAR_INFO *pInfo)
 {
-  uint8_t i;
-  uint8_t bytes = 0;
-  uint8_t utfFlg = 0x80;
-
-  while ((ch[0] & utfFlg) == utfFlg)
+  if ((ch[0] & 0x80) == 0) // 0x00 ~ 0x7F
   {
-    utfFlg |= (utfFlg >> 1);
-    bytes++;
+    pInfo->bytes = 1;
+    pInfo->codePoint = (ch[0] & 0x7F);
   }
-  // bytes == 0 means 1 byte, ASCII, 0XXX XXXX
-  pInfo->bytes = bytes ? bytes : 1;
-  pInfo->codePoint = ch[0] & (~utfFlg);
-  for (i = 1; i < bytes; i++)
+  else if ((ch[0] & 0xE0) == 0xC0) // 0x80 ~ 0x7FF
+  {
+    pInfo->bytes = 2;
+    pInfo->codePoint = (ch[0] & 0x1F);
+  }
+  else if ((ch[0] & 0xF0) == 0xE0) // 0x800 ~ 0xFFFF
+  {
+    pInfo->bytes = 3;
+    pInfo->codePoint = (ch[0] & 0x0F);
+  }
+  else if ((ch[0] & 0xF8) == 0xF0) // 0x10000 ~ 0x1FFFFF
+  {
+    pInfo->bytes = 4;
+    pInfo->codePoint = (ch[0] & 0x07);
+  }
+  else // Wrong char return '?' means unkown
+  {
+    pInfo->bytes = 1;
+    pInfo->codePoint = '?';
+  }
+
+  for (uint8_t i = 1; i < pInfo->bytes; i++)
   {
     pInfo->codePoint = (pInfo->codePoint << 6) | (ch[i] & 0x3F);
   }

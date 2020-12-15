@@ -19,15 +19,6 @@ typedef struct
   const char *const echoMsg;
 } MESH_DATA_FORMAT;
 
-const MESH_DATA_FORMAT meshDataFormat[] = {
-  {1, 4, 1, "Mesh Bed Level data:"},                       // MBL
-  {0, 2, 0, "Bed Topography Report for CSV:"},             // UBL
-  {1, 2, 1, "Bilinear Leveling Grid:"},                    // ABL Bilinear
-  {0, 1, 1, "Bed Level Correction Matrix:"},               // ABL Linear or 3-Point
-};
-
-void (*meshSaveCallbackPtr)(void) = NULL;
-
 typedef enum
 {
   ME_DATA_IDLE = 0,
@@ -75,8 +66,6 @@ typedef struct
 
   char saveTitle[120];
 } MESH_DATA;
-
-static MESH_DATA *meshData = NULL;
 
 #define MESH_GRID_HEIGHT     (LCD_HEIGHT - ICON_START_Y)
 #define MESH_GRID_WIDTH      MESH_GRID_HEIGHT
@@ -181,6 +170,12 @@ const GUI_RECT meshKeyRect[ME_KEY_NUM] = {
   {MESH_KEY_X0 + 0 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 5 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 2 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 6 * MESH_KEY_HEIGHT},        // DOWN
 };
 
+const GUI_RECT meshAreaRect[ME_AREA_NUM] = {
+  {MESH_GRID_X0, MESH_GRID_Y0, MESH_GRID_X0 + MESH_GRID_WIDTH, MESH_GRID_Y0 + MESH_GRID_HEIGHT},             // grid area
+  {MESH_INFO_X0, MESH_INFO_Y0, MESH_INFO_X0 + MESH_GRID_WIDTH, MESH_INFO_Y0 + ICON_START_Y},                 // info area
+  {MESH_KEY_X0, MESH_KEY_Y0, MESH_KEY_X0 + (LCD_WIDTH - MESH_GRID_WIDTH), MESH_KEY_Y0 + LCD_HEIGHT},         // keyboard area
+};
+
 const char *const meshKeyString[ME_KEY_NUM] = {
   "\u08A7",                                                // SAVE
   "\u0894",                                                // OK
@@ -193,11 +188,15 @@ const char *const meshKeyString[ME_KEY_NUM] = {
   "\u02C5",                                                // DOWN
 };
 
-const GUI_RECT meshAreaRect[ME_AREA_NUM] = {
-  {MESH_GRID_X0, MESH_GRID_Y0, MESH_GRID_X0 + MESH_GRID_WIDTH, MESH_GRID_Y0 + MESH_GRID_HEIGHT},             // grid area
-  {MESH_INFO_X0, MESH_INFO_Y0, MESH_INFO_X0 + MESH_GRID_WIDTH, MESH_INFO_Y0 + ICON_START_Y},                 // info area
-  {MESH_KEY_X0, MESH_KEY_Y0, MESH_KEY_X0 + (LCD_WIDTH - MESH_GRID_WIDTH), MESH_KEY_Y0 + LCD_HEIGHT},         // keyboard area
+const MESH_DATA_FORMAT meshDataFormat[] = {
+  {1, 4, 1, "Mesh Bed Level data:"},                       // MBL
+  {0, 2, 0, "Bed Topography Report for CSV:"},             // UBL
+  {1, 2, 1, "Bilinear Leveling Grid:"},                    // ABL Bilinear
+  {0, 1, 1, "Bed Level Correction Matrix:"},               // ABL Linear or 3-Point
 };
+
+void (*meshSaveCallbackPtr)(void) = NULL;
+static MESH_DATA *meshData = NULL;
 
 void meshInitData(void)
 {
@@ -237,7 +236,7 @@ void meshInitData(void)
   meshSaveCallbackPtr = NULL;
 }
 
-void meshAllocData(void)
+static inline void meshAllocData(void)
 {
   if (meshData != NULL)                                    // if data already exist (e.g. when the menu is reloaded), continue to use the existing data
     return;
@@ -324,7 +323,7 @@ bool meshGetStatus(void)
   return true;
 }
 
-uint16_t meshGetSize(void)
+static inline uint16_t meshGetSize(void)
 {
   if (!meshGetStatus())
     return 0;
@@ -332,7 +331,7 @@ uint16_t meshGetSize(void)
   return meshData->dataSize;
 }
 
-uint16_t meshGetColsNum(void)
+static inline uint16_t meshGetColsNum(void)
 {
   if (!meshGetStatus())
     return 0;
@@ -340,7 +339,7 @@ uint16_t meshGetColsNum(void)
   return meshData->colsNum;
 }
 
-uint16_t meshGetRowsNum(void)
+static inline uint16_t meshGetRowsNum(void)
 {
   if (!meshGetStatus())
     return 0;
@@ -348,22 +347,22 @@ uint16_t meshGetRowsNum(void)
   return meshData->rowsNum;
 }
 
-uint16_t meshGetIndex(void)
+static inline uint16_t meshGetIndex(void)
 {
   return meshData->index;
 }
 
-uint16_t meshGetCol(void)
+static inline uint16_t meshGetCol(void)
 {
   return meshData->col;
 }
 
-uint16_t meshGetRow(void)
+static inline uint16_t meshGetRow(void)
 {
   return meshData->row;
 }
 
-uint16_t meshSetIndex(int32_t index)
+static inline uint16_t meshSetIndex(int32_t index)
 {
   if (meshGetStatus())
   {
@@ -377,7 +376,7 @@ uint16_t meshSetIndex(int32_t index)
   return meshData->index;
 }
 
-uint16_t meshSetIndexByCol(int32_t col)
+static inline uint16_t meshSetIndexByCol(int32_t col)
 {
   if (meshGetStatus())
   {
@@ -390,7 +389,7 @@ uint16_t meshSetIndexByCol(int32_t col)
   return meshData->index;
 }
 
-uint16_t meshSetIndexByRow(int32_t row)
+static inline uint16_t meshSetIndexByRow(int32_t row)
 {
   if (meshGetStatus())
   {
@@ -403,12 +402,12 @@ uint16_t meshSetIndexByRow(int32_t row)
   return meshData->index;
 }
 
-uint16_t meshGetJ()
+static inline uint16_t meshGetJ(void)
 {
   return (meshData->rowsNum - 1) - meshData->row;
 }
 
-uint16_t meshGetValueRow(uint16_t index)
+static inline uint16_t meshGetValueRow(uint16_t index)
 {
   if (meshData->rowsInverted)
     return (meshData->rowsNum - 1) - (index / meshData->colsNum);
@@ -416,17 +415,17 @@ uint16_t meshGetValueRow(uint16_t index)
     return (index / meshData->colsNum);
 }
 
-float meshGetValueOrig(uint16_t index)
+static inline float meshGetValueOrig(uint16_t index)
 {
   return meshData->dataOrig[(meshGetValueRow(index) * meshData->colsNum) + (index % meshData->colsNum)];
 }
 
-float meshGetValue(uint16_t index)
+static inline float meshGetValue(uint16_t index)
 {
   return meshData->data[(meshGetValueRow(index) * meshData->colsNum) + (index % meshData->colsNum)];
 }
 
-bool meshSetValue(float value)
+static inline bool meshSetValue(float value)
 {
   meshData->data[(meshGetValueRow(meshData->index) * meshData->colsNum) + meshData->col] = value;
 
@@ -435,12 +434,12 @@ bool meshSetValue(float value)
   return true;
 }
 
-float meshGetValueMin(void)
+static inline float meshGetValueMin(void)
 {
   return meshData->valueMin;
 }
 
-float meshGetValueMax(void)
+static inline float meshGetValueMax(void)
 {
   return meshData->valueMax;
 }
@@ -567,12 +566,9 @@ void meshDrawInfoCell(const GUI_RECT *rect, float *val, bool largeFont, uint16_t
 
     sprintf(tempstr, "%.3f", *val);
 
-    if (largeFont)
-      setLargeFont(true);
-
     GUI_SetColor(color);
+    setLargeFont(largeFont);
     GUI_DispStringInPrect(rect, (u8 *) tempstr);
-
     setLargeFont(false);
   }
 
@@ -600,12 +596,6 @@ void meshDrawFullInfo(void)
   float curValue = meshGetValue(meshGetIndex());
 
   meshDrawInfo(&minValue, &maxValue, &origValue, &curValue);
-}
-
-// Get keypress for Mesh Editor
-MESH_KEY_VALUES meshGetKeyValue(void)
-{
-  return (MESH_KEY_VALUES) KEY_GetValue(COUNT(meshKeyRect), meshKeyRect);
 }
 
 void meshKeyPress(u8 index, u8 isPressed)
@@ -650,6 +640,7 @@ void meshDrawKeyboard(void)
 
   if (infoMachineSettings.EEPROM == 1)
     DrawCharIcon(&meshKeyRect[ME_KEY_SAVE], MIDDLE, ICONCHAR_SAVE, false, 0);
+
   DrawCharIcon(&meshKeyRect[ME_KEY_OK], MIDDLE, ICONCHAR_OK, false, 0);
   DrawCharIcon(&meshKeyRect[ME_KEY_RESET], MIDDLE, ICONCHAR_RESET, false, 0);
   DrawCharIcon(&meshKeyRect[ME_KEY_HOME], MIDDLE, ICONCHAR_MOVE, false, 0);
@@ -854,27 +845,26 @@ void menuMeshEditor(void)
 
   meshAllocData();                                         // allocates and initialize mesh data if not already allocated and initialized
 
-  mustStoreCmd("M420 V1 T1\n");                            // retrieve the mesh data
-
-  oldStatus = curStatus = meshGetStatus();
+  oldStatus = curStatus = meshGetStatus();                 // after allocation, we acces data status etc...
   oldIndex = curIndex = meshGetIndex();
   forceHoming = true;
   forceExit = false;
 
-  setMenuTypeCustom(&meshDrawMenu);
+  mustStoreCmd("M420 V1 T1\n");                            // retrieve the mesh data
 
+  setMenu(MENU_TYPE_FULLSCREEN, NULL, COUNT(meshKeyRect), meshKeyRect, meshKeyPress, &meshDrawMenu);
   meshDrawMenu();
 
-#if LCD_ENCODER_SUPPORT
-  encoderPosition = 0;
-#endif
+  #if LCD_ENCODER_SUPPORT
+    encoderPosition = 0;
+  #endif
 
   while (infoMenu.menu[infoMenu.cur] == menuMeshEditor)
   {
     curStatus = meshGetStatus();                           // always load current status
     curIndex = meshGetIndex();                             // always load current index
 
-    key_num = meshGetKeyValue();
+    key_num = menuKeyGetValue();
     switch (key_num)
     {
       case ME_KEY_UP:
@@ -906,6 +896,7 @@ void menuMeshEditor(void)
           curValue = menuMeshTuner(meshGetCol(), meshGetJ(), meshGetValue(meshGetIndex()));
           meshSetValue(curValue);
 
+          setMenu(MENU_TYPE_FULLSCREEN, NULL, COUNT(meshKeyRect), meshKeyRect, meshKeyPress, &meshDrawMenu);
           meshDrawMenu();
         }
         break;
@@ -973,7 +964,6 @@ void menuMeshEditor(void)
       oldIndex = curIndex;
     }
 
-    loopBackEnd();
     loopProcess();
   }
 
@@ -982,7 +972,5 @@ void menuMeshEditor(void)
     meshSave(true);                                        // check for changes and ask to save on eeprom
 
     meshDeallocData();                                     // deallocate mesh data
-
-    setMenuTypeCustom(NULL);
   }
 }

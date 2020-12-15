@@ -86,8 +86,8 @@
     #define STRING_RESUME                 "Продолжить"
     #define STRING_LOAD                   "Загрузка"
     #define STRING_UNLOAD                 "Выгрузка"
-    #define STRING_LOAD_UNLOAD            "Load/Unload"  // needs translation
-    #define STRING_LOAD_UNLOAD_SHORT      "(Un)Load"  // needs translation
+    #define STRING_LOAD_UNLOAD            "Загрузить/Выгрузить"
+    #define STRING_LOAD_UNLOAD_SHORT      "За/Выгрузка"
     #define STRING_SLOW_SPEED             "Медленно"
     #define STRING_NORMAL_SPEED           "Обычно"
     #define STRING_FAST_SPEED             "Быстро"
@@ -149,7 +149,7 @@
     #define STRING_10_PERCENT             "10%"
     #define STRING_PERCENT_VALUE          "%d%%"
     #define STRING_READY                  "Готов"
-    #define STRING_BUSY                   "Занято процессом, подождите..."
+    #define STRING_BUSY                   "В процессе, ждите..."
     #define STRING_UNCONNECTED            "Нет подключения!"
     #define STRING_DISCONNECT_INFO        "Управление принтером через компьютер"
     #define STRING_LOADING                "Загрузка..."
@@ -292,5 +292,7 @@
     #define STRING_FILAMENT_COST          "\nFilament cost: %2.2f"
     #define STRING_NO_FILAMENT_STATISTICS "No filament statistics."
     #define STRING_CLICK_FOR_MORE         "  Click for more."  // keeep it with leading spaces
+    #define STRING_EXT_TEMPLOW            "Hotend temperature is below\nminimum temperature (%d℃)."
+    #define STRING_COLD_EXT               "Cold extrusion prevented"
 
 #endif

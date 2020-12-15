@@ -86,8 +86,8 @@
     #define STRING_RESUME                 "继续"
     #define STRING_LOAD                   "进料"
     #define STRING_UNLOAD                 "退料"
-    #define STRING_LOAD_UNLOAD            "Load/Unload"  // needs translation
-    #define STRING_LOAD_UNLOAD_SHORT      "(Un)Load"  // needs translation
+    #define STRING_LOAD_UNLOAD            "挤出/回抽耗材"  // needs translation
+    #define STRING_LOAD_UNLOAD_SHORT      "进/退料"  // needs translation
     #define STRING_SLOW_SPEED             "慢速"
     #define STRING_NORMAL_SPEED           "常速"
     #define STRING_FAST_SPEED             "快速"
@@ -273,15 +273,15 @@
     #define STRING_TUNE_EXT_OLD_ESTEP     "旧的E-Steps: %0.2f"
     #define STRING_TUNE_EXT_NEW_ESTEP     "新的E-Steps: %0.2f"
     #define STRING_CONNECTION_SETTINGS    "连接"
-    #define STRING_OFFSET_TOOL            "Offset 2nd Nozzle"
-    #define STRING_HYBRID_THRESHOLD       "TMC HybridThreshold"
-    #define STRING_NOTIFICATIONS          "Notifications"
+    #define STRING_OFFSET_TOOL            "第2个喷头的偏移量"
+    #define STRING_HYBRID_THRESHOLD       "TMC混合阈值"
+    #define STRING_NOTIFICATIONS          "通知"
     #define STRING_MESH_EDITOR            "Mesh edit"
     #define STRING_MESH_TUNER             "Mesh tuner"
-    #define STRING_CASE_LIGHT             "Case light"
-    #define STRING_LOAD_STARTED           "Filament load in progress.\nNo further actions possible\nuntil it's done.\nPlease stand by."  // translation needed
-    #define STRING_UNLOAD_STARTED         "Filament unload in progress.\nNo further actions possible\nuntil it's done.\nPlease stand by."  // translation needed
-    #define STRING_HEATERS_ON             "Some heaters are still ON.\nDo you want to stop them?"  // translation needed
+    #define STRING_CASE_LIGHT             "机箱灯光"
+    #define STRING_LOAD_STARTED           "正在挤出耗材, 请等待挤出完成."
+    #define STRING_UNLOAD_STARTED         "正在回抽耗材, 请等待回抽完成."
+    #define STRING_HEATERS_ON             "喷头仍在加热, 是否要停止加热?"
     #define STRING_PRINT_FINISHED         "   Printing\n   finished."  // keep it short and in this format!
     #define STRING_MAIN_SCREEN            "Main"
     #define STRING_PREVIOUS_PRINT_DATA    "Brief"
@@ -292,5 +292,7 @@
     #define STRING_FILAMENT_COST          "\nFilament cost: %2.2f"
     #define STRING_NO_FILAMENT_STATISTICS "No filament statistics."
     #define STRING_CLICK_FOR_MORE         "  Click for more."  // keeep it with leading spaces
+    #define STRING_EXT_TEMPLOW            "喷头温度低于最小挤出问题 (%d℃)."
+    #define STRING_COLD_EXT               "冷挤出保护, 请加热后再操作"
 
 #endif

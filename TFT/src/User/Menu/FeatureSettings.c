@@ -3,18 +3,19 @@
 
 
 LISTITEMS featureSettingsItems = {
-// title
-LABEL_FEATURE_SETTINGS,
-// icon                 ItemType      Item Title        item value text(only for custom value)
-{
-  {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
-  {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
-  {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
-  {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
-  {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
-  {ICONCHAR_PAGEUP,     LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
-  {ICONCHAR_PAGEDOWN,   LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
-  {ICONCHAR_BACK,       LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},}
+  // title
+  LABEL_FEATURE_SETTINGS,
+  // icon                 ItemType     Item Title        item value text(only for custom value)
+  {
+    {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
+    {ICONCHAR_PAGEUP,     LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
+    {ICONCHAR_PAGEDOWN,   LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
+    {ICONCHAR_BACK,       LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
+  }
 };
 
 //
@@ -87,6 +88,7 @@ typedef enum
     SKEY_ST7920_FULLSCREEN,
   #endif
   SKEY_PLR_EN,
+  SKEY_PRINT_SUMMARY,
   SKEY_RESET_SETTINGS, // Keep reset always at the bottom of the settings menu list.
   SKEY_COUNT //keep this always at the end
 }SKEY_LIST;
@@ -130,6 +132,7 @@ LISTITEM settingPage[SKEY_COUNT] = {
     {ICONCHAR_BLANK,      LIST_TOGGLE,        LABEL_ST7920_FULLSCREEN,        LABEL_OFF},
   #endif
   {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_PLR_EN,                   LABEL_BACKGROUND},
+  {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_PRINT_SUMMARY_POPUP,      LABEL_BACKGROUND},
   // Keep reset settings always at the bottom of the settings menu list.
   {ICONCHAR_BLANK,      LIST_MOREBUTTON,    LABEL_SETTING_RESET,            LABEL_BACKGROUND}
 };
@@ -280,6 +283,11 @@ void updateFeatureSettings(uint8_t key_val)
       settingPage[item_index].icon = toggleitem[infoSettings.powerloss_en];
       break;
 
+    case SKEY_PRINT_SUMMARY:
+      infoSettings.print_summary = (infoSettings.print_summary + 1) % TOGGLE_NUM;
+      settingPage[item_index].icon = toggleitem[infoSettings.print_summary];
+      break;
+
     default:
       return;
   }
@@ -394,6 +402,10 @@ void loadFeatureSettings(){
 
       case SKEY_PLR_EN:
         settingPage[item_index].icon = toggleitem[infoSettings.powerloss_en];
+        break;
+
+      case SKEY_PRINT_SUMMARY:
+        settingPage[item_index].icon = toggleitem[infoSettings.print_summary];
         break;
 
       default:

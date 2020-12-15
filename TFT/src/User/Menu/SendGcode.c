@@ -1,11 +1,7 @@
 #include "SendGcode.h"
 #include "includes.h"
 
-#if ((defined(MKS_28_V1_0)) || (defined(MKS_32_V1_4) && !defined(MKS_32_V1_4_NOBL)))
-  #define TERMINAL_MAX_CHAR  4800 // for 64k RAM
-#else
-  #define TERMINAL_MAX_CHAR  3600 // for 48k RAM
-#endif
+#define TERMINAL_MAX_CHAR NOBEYOND(600, RAM_SIZE*75, 4800)
 #define MAX_BUFF          20
 #define SCROLL_LINE       22
 #define SCROLL_PAGE       1
@@ -60,9 +56,11 @@ typedef struct
 #if LCD_WIDTH < 480                                        // number of columns and rows is based on LCD display resolution
   #define GKEY_COL_NUM LAYOUT_1_COL_NUM
   #define GKEY_ROW_NUM LAYOUT_1_ROW_NUM
+  #define HAS_ABC_KEY
 #elif LCD_WIDTH < 800
   #define GKEY_COL_NUM LAYOUT_2_COL_NUM
   #define GKEY_ROW_NUM LAYOUT_2_ROW_NUM
+  #define HAS_ABC_KEY
 #else
   #define GKEY_COL_NUM LAYOUT_3_COL_NUM
   #define GKEY_ROW_NUM LAYOUT_3_ROW_NUM
@@ -138,7 +136,7 @@ typedef enum
   GKEY_59,
 #endif
 
-#if GKEY_COL_NUM < LAYOUT_3_COL_NUM
+#if defined(HAS_ABC_KEY)
   GKEY_ABC_123,
 #endif
 
@@ -169,7 +167,7 @@ typedef enum
 // control bar sizes
 #define CTRL_ROW_NUM 1
 
-#if GKEY_COL_NUM < LAYOUT_3_COL_NUM
+#if defined(HAS_ABC_KEY)
   typedef enum
   {
     SOFT_KEY_123 = 0,
@@ -178,9 +176,11 @@ typedef enum
 
   SOFT_KEY_TYPE gcodeKeyType = SOFT_KEY_123;
 
-  #define CTRL_COL_NUM 4
+  #define GKEY_TYPING_KEYS GKEY_ABC_123
+  #define CTRL_COL_NUM     4
 #else
-  #define CTRL_COL_NUM 3
+  #define GKEY_TYPING_KEYS GKEY_SPACE
+  #define CTRL_COL_NUM     3
 #endif
 
 #define CTRL_HEIGHT  GKEY_HEIGHT
@@ -321,7 +321,7 @@ const char * const gcodeKey[][GKEY_KEY_NUM] = {
     "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P",
     "A", "S", "D", "F", "G", "H", "J", "K", "L", "'",
     "Z", "X", "C", "V", "B", "N", "M", ",", ".", ";",
-    ":", "_", "@", "#", "~", "-", "+", "*", "(", ")", 
+    ":", "_", "@", "#", "~", "-", "+", "*", "(", ")",
   #else
     "1", "2", "3", "A", "B", "C", "D", "E", "F", "G",
     "4", "5", "6", "H", "I", "J", "K", "L", "M", "N",
@@ -332,7 +332,7 @@ const char * const gcodeKey[][GKEY_KEY_NUM] = {
   #endif
 #endif
 
-#if GKEY_COL_NUM < LAYOUT_3_COL_NUM
+#if defined(HAS_ABC_KEY)
     "ABC",
 #endif
 
@@ -352,7 +352,7 @@ const char * const gcodeKey[][GKEY_KEY_NUM] = {
     "/", "=", "(", ")", "@", "_", "%",
 #endif
 
-#if GKEY_COL_NUM < LAYOUT_3_COL_NUM
+#if defined(HAS_ABC_KEY)
     "123",
 #endif
 
@@ -422,11 +422,7 @@ void sendGcodeReDrawButton(u8 index, u8 isPressed)
 
   if (isPressed)
   {
-#if GKEY_COL_NUM < LAYOUT_3_COL_NUM
-    if (index < GKEY_ABC_123)
-#else
-    if (index < GKEY_SPACE)
-#endif
+    if (index < GKEY_TYPING_KEYS)
     {
       GUI_SetColor(KEY_BG_COLOR);
       GUI_SetBkColor(KEY_FONT_COLOR);
@@ -439,11 +435,7 @@ void sendGcodeReDrawButton(u8 index, u8 isPressed)
   }
   else
   {
-#if GKEY_COL_NUM < LAYOUT_3_COL_NUM
-    if (index < GKEY_ABC_123)
-#else
-    if (index < GKEY_SPACE)
-#endif
+    if (index < GKEY_TYPING_KEYS)
     {
       GUI_SetColor(KEY_FONT_COLOR);
       GUI_SetBkColor(KEY_BG_COLOR);
@@ -460,7 +452,7 @@ void sendGcodeReDrawButton(u8 index, u8 isPressed)
 
   GUI_ClearRect(gcodeKeyRect[index].x0 + 2, gcodeKeyRect[index].y0 + 2, gcodeKeyRect[index].x1 - 1, gcodeKeyRect[index].y1 - 1);
 
-#if GKEY_COL_NUM < LAYOUT_3_COL_NUM
+#if defined(HAS_ABC_KEY)
   GUI_DispStringInRect(gcodeKeyRect[index].x0 + 2, gcodeKeyRect[index].y0 + 2, gcodeKeyRect[index].x1 - 1, gcodeKeyRect[index].y1 - 1, (u8 *) gcodeKey[gcodeKeyType][index]);
 #else
   GUI_DispStringInRect(gcodeKeyRect[index].x0 + 2, gcodeKeyRect[index].y0 + 2, gcodeKeyRect[index].x1 - 1, gcodeKeyRect[index].y1 - 1, (u8 *) gcodeKey[0][index]);
@@ -510,18 +502,18 @@ void sendGcodeDrawKeyboard(void)
 
 void sendGcodeDrawMenu(void)
 {
-  setMenu(MENU_TYPE_FULLSCREEN, NULL, COUNT(gcodeKeyRect), gcodeKeyRect, sendGcodeReDrawButton);
+  setMenu(MENU_TYPE_FULLSCREEN, NULL, COUNT(gcodeKeyRect), gcodeKeyRect, sendGcodeReDrawButton, NULL);
 
   GUI_SetBkColor(BAR_BG_COLOR);
 
   // clear bar area
-  GUI_ClearRect(gcodeAreaRect[0].x0, gcodeAreaRect[0].y0, gcodeAreaRect[0].x1, gcodeAreaRect[0].y1);
-  GUI_ClearRect(gcodeAreaRect[2].x0, gcodeAreaRect[2].y0, gcodeAreaRect[2].x1, gcodeAreaRect[2].y1);
+  GUI_ClearPrect(&gcodeAreaRect[0]);
+  GUI_ClearPrect(&gcodeAreaRect[2]);
 
   GUI_SetBkColor(KEY_BG_COLOR);
 
   // clear keyboard area
-  GUI_ClearRect(gcodeAreaRect[1].x0, gcodeAreaRect[1].y0, gcodeAreaRect[1].x1, gcodeAreaRect[1].y1);
+  GUI_ClearPrect(&gcodeAreaRect[1]);
 
   GUI_SetColor(BAR_BORDER_COLOR);
 
@@ -543,8 +535,8 @@ void menuSendGcode(void)
 {
   GKEY_VALUES key_num = GKEY_IDLE;
   char gcodeBuf[CMD_MAX_CHAR] = {0};
-  uint8_t nowIndex = 0,
-          lastIndex = 0;
+  uint8_t nowIndex = 0;
+  uint8_t lastIndex = 0;
 
   sendGcodeDrawMenu();
 
@@ -572,7 +564,7 @@ void menuSendGcode(void)
         infoMenu.menu[++infoMenu.cur] = menuTerminal;
         break;
 
-#if GKEY_COL_NUM < LAYOUT_3_COL_NUM
+#if defined(HAS_ABC_KEY)
       case GKEY_ABC_123:
         gcodeKeyType = (gcodeKeyType == SOFT_KEY_123) ? SOFT_KEY_ABC : SOFT_KEY_123;
 
@@ -596,7 +588,7 @@ void menuSendGcode(void)
       default:
         if (nowIndex < CMD_MAX_CHAR - 1)
         {
-#if GKEY_COL_NUM < LAYOUT_3_COL_NUM
+#if defined(HAS_ABC_KEY)
           gcodeBuf[nowIndex++] = gcodeKey[gcodeKeyType][key_num][0];
 #else
           gcodeBuf[nowIndex++] = gcodeKey[0][key_num][0];
@@ -644,7 +636,7 @@ void sendGcodeTerminalCache(char *stream, TERMINAL_SRC src)
 {
   uint16_t sign_len = 0;
   uint16_t stream_len = 0;
-  const char* const terminalSign[] = {"Send: ", "Rcv: "};
+  const char *const terminalSign[] = {"Send: ", "Rcv: "};
 
   if (infoMenu.menu[infoMenu.cur] != menuSendGcode && infoMenu.menu[infoMenu.cur] != menuTerminal)
     return;
@@ -696,22 +688,22 @@ void terminalDrawPage(char *pageNum)
 
 void terminalDrawMenu(void)
 {
-  setMenu(MENU_TYPE_FULLSCREEN, NULL, COUNT(terminalKeyRect), terminalKeyRect, terminalReDrawButton);
+  setMenu(MENU_TYPE_FULLSCREEN, NULL, COUNT(terminalKeyRect), terminalKeyRect, terminalReDrawButton, NULL);
 
   GUI_SetBkColor(TERM_BG_COLOR);
 
   // clear terminal area
-  GUI_ClearRect(terminalAreaRect[0].x0, terminalAreaRect[0].y0, terminalAreaRect[0].x1, terminalAreaRect[0].y1);
+  GUI_ClearPrect(&terminalAreaRect[0]);
 
   GUI_SetBkColor(BAR_BG_COLOR);
 
   // clear bar area
-  GUI_ClearRect(terminalAreaRect[1].x0, terminalAreaRect[1].y0, terminalAreaRect[1].x1, terminalAreaRect[1].y1);
+  GUI_ClearPrect(&terminalAreaRect[1]);
 
   GUI_SetColor(BAR_BORDER_COLOR);
 
   // draw bar area shadow border
-  GUI_DrawLine(terminalAreaRect[1].x0, terminalAreaRect[1].y0, terminalAreaRect[1].x1, terminalAreaRect[1].y0);
+  GUI_ClearPrect(&terminalAreaRect[1]);
 
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
@@ -728,8 +720,8 @@ void menuTerminal(void)
   CHAR_INFO info;
   uint16_t lastTerminalIndex = 0;
   uint8_t pageBufIndex = 0;
-  int16_t cursorX = CURSOR_START_X,
-          cursorY = CURSOR_START_Y;
+  int16_t cursorX = CURSOR_START_X;
+  int16_t cursorY = CURSOR_START_Y;
   char pageNum[10];
 
   terminalDrawMenu();
@@ -741,11 +733,14 @@ void menuTerminal(void)
     {
       case TERM_PAGE_UP:                                   // page up
         if (terminal_page.pageIndex < (terminal_page.pageTail - terminal_page.pageHead))
+        {
           terminal_page.pageIndex += SCROLL_PAGE;
-
+        }
         if ((terminal_page.pageTail < terminal_page.pageHead) &&
           (terminal_page.pageIndex < (terminal_page.pageTail + MAX_BUFF - terminal_page.pageHead)))
+        {
           terminal_page.pageIndex += SCROLL_PAGE;
+        }
         break;
 
       case TERM_PAGE_DOWN:                                 // page down
@@ -801,11 +796,7 @@ void menuTerminal(void)
           if (terminal_page.pageIndex != 0)
             break;
 
-          terminal_page.pageTail++;
-
-          if (terminal_page.pageTail >= MAX_BUFF)
-            terminal_page.pageTail = 0;
-
+          terminal_page.pageTail = (terminal_page.pageTail + 1) % MAX_BUFF;
           terminal_page.ptr[terminal_page.pageTail] = &terminalBuf[lastTerminalIndex];             // Save character buffer index to page buffer
 
           if ((buf_full == 1) && (terminal_page.oldPageHead == terminal_page.pageHead))

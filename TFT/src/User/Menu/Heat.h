@@ -9,6 +9,7 @@ extern "C" {
 #include <stdbool.h>
 #include "Configuration.h"
 #include "Settings.h"
+#include "menu.h"
 #include "Temperature.h"
 
 void menuHeat(void);

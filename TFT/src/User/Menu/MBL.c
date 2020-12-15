@@ -1,9 +1,9 @@
 #include "MBL.h"
 #include "includes.h"
 
-#define ITEM_MBL_UNIT_NUM 3
+#define PROBE_HEIGHT_INITIAL_HEIGHT 1.0f                   // 1.0 mm
 
-static u8 curUnit = 0;
+static u8 curUnit_index = 0;
 
 u8 mblPoint = 0;
 bool mblRunning = false;
@@ -50,7 +50,7 @@ void mblNotifyError(void)
 }
 
 /* Start MBL */
-void mblStart(void)
+static inline void mblStart(void)
 {
   mblRunning = true;
   mblPoint = 0;
@@ -60,11 +60,11 @@ void mblStart(void)
   // MBL gcode sequence start
   mustStoreCmd("G29 S1\n");                                // home and move to first point for Z height adjustment
 
-  probeHeightStart();                                      // lower nozzle to Z0 point
+  probeHeightStart(PROBE_HEIGHT_INITIAL_HEIGHT);           // lower nozzle to provided absolute Z point
 }
 
 /* Stop MBL */
-void mblStop(void)
+static inline void mblStop(void)
 {
   mblRunning = false;
 
@@ -114,15 +114,6 @@ void mblDrawValue(float val)
 
 void menuMBL(void)
 {
-  const ITEM itemMblUnit[ITEM_MBL_UNIT_NUM] = {
-    // icon                         label
-    {ICON_001_MM,                   LABEL_001_MM},
-    {ICON_01_MM,                    LABEL_01_MM},
-    {ICON_1_MM,                     LABEL_1_MM},
-  };
-
-  const float mblUnit[ITEM_MBL_UNIT_NUM] = {0.01f, 0.1f, 1};
-
   // 1 title, ITEM_PER_PAGE items (icon + label)
   MENUITEMS mblItems = {
     // title
@@ -151,7 +142,7 @@ void menuMBL(void)
 
   now = curValue = coordinateGetAxisActual(Z_AXIS);
 
-  mblItems.items[KEY_ICON_4] = itemMblUnit[curUnit];
+  mblItems.items[KEY_ICON_4] = itemMoveLen[curUnit_index];
 
   if (mblRunning)
   {
@@ -163,13 +154,13 @@ void menuMBL(void)
   mblDrawHeader(!mblRunning ? NULL : &mblPoint);
   mblDrawValue(now);
 
-#if LCD_ENCODER_SUPPORT
-  encoderPosition = 0;
-#endif
+  #if LCD_ENCODER_SUPPORT
+    encoderPosition = 0;
+  #endif
 
   while (infoMenu.menu[infoMenu.cur] == menuMBL)
   {
-    unit = mblUnit[curUnit];
+    unit = moveLenSteps[curUnit_index];
 
     curValue = coordinateGetAxisActual(Z_AXIS);
 
@@ -194,9 +185,9 @@ void menuMBL(void)
 
       // change unit
       case KEY_ICON_4:
-        curUnit = (curUnit + 1) % ITEM_MBL_UNIT_NUM;
+        curUnit_index = (curUnit_index + 1) % ITEM_FINE_MOVE_LEN_NUM;
 
-        mblItems.items[key_num] = itemMblUnit[curUnit];
+        mblItems.items[key_num] = itemMoveLen[curUnit_index];
 
         menuDrawItem(&mblItems.items[key_num], key_num);
         break;
@@ -227,7 +218,7 @@ void menuMBL(void)
         {
           storeCmd("G29 S2\n");                            // save Z height and move to next mesh point
 
-          probeHeightStart();                              // lower nozzle to Z0 point
+          probeHeightStart(PROBE_HEIGHT_INITIAL_HEIGHT);   // lower nozzle to provided absolute Z point
 
           ++mblPoint;
           mblDrawHeader(&mblPoint);

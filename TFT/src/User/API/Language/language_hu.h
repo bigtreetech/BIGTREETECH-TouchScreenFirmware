@@ -185,7 +185,7 @@
     #define STRING_EMERGENCYSTOP          "VészSTOP"
     #define STRING_TOUCH_TO_EXIT          "Érintsd meg a kilépéshez."
     #define STRING_MAINMENU               "Főmenü"
-    #define STRING_WAIT_TEMP_SHUT_DOWN    "Várd meg a fej\nvisszahűlését.%d℃" // Várj, míg a fej a megadott ℃ alá hűl.
+    #define STRING_WAIT_TEMP_SHUT_DOWN    "Várd meg a fej\nvisszahűlését.%d℃"
     #define STRING_FORCE_SHUT_DOWN        "Kényszerítés"
     #define STRING_SHUTTING_DOWN          "Leállítás..."
     #define STRING_PARAMETER_SETTING      "Tényezők"
@@ -292,5 +292,7 @@
     #define STRING_FILAMENT_COST          "\nFilament cost: %2.2f"
     #define STRING_NO_FILAMENT_STATISTICS "No filament statistics."
     #define STRING_CLICK_FOR_MORE         "  Click for more."  // keeep it with leading spaces
+    #define STRING_EXT_TEMPLOW            "Hotend temperature is below\nminimum temperature (%d℃)."
+    #define STRING_COLD_EXT               "Cold extrusion prevented"
 
 #endif

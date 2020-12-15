@@ -1,12 +1,10 @@
 #include "MeshTuner.h"
 #include "includes.h"
 
-#define ITEM_MESH_TUNER_UNIT_NUM 3
-
-static u8 curUnit = 0;
+static u8 curUnit_index = 0;
 
 /* Init mesh point */
-void meshInitPoint(uint16_t col, uint16_t row, float value)
+static inline void meshInitPoint(uint16_t col, uint16_t row, float value)
 {
 //  probeHeightEnable();                                     // temporary disable software endstops
 
@@ -14,13 +12,11 @@ void meshInitPoint(uint16_t col, uint16_t row, float value)
 
   mustStoreCmd("G42 I%d J%d\n", col, row);                 // move nozzle to X and Y coordinates corresponding
                                                            // to the column and row in the bed leveling mesh grid
-  probeHeightStart();                                      // lower nozzle to Z0 point
-
-  probeHeightMove(value, 1);                               // move nozzle to Z height
+  probeHeightStart(value);                                 // lower nozzle to provided absolute Z point
 }
 
 /* Reset mesh point */
-void meshResetPoint(void)
+static inline void meshResetPoint(void)
 {
   probeHeightStop();                                       // raise nozzle
 
@@ -51,14 +47,6 @@ void meshDrawValue(float val)
 
 float menuMeshTuner(uint16_t col, uint16_t row, float value)
 {
-  const ITEM itemMeshUnit[ITEM_MESH_TUNER_UNIT_NUM] = {
-    // icon                         label
-    {ICON_001_MM,                   LABEL_001_MM},
-    {ICON_01_MM,                    LABEL_01_MM},
-    {ICON_1_MM,                     LABEL_1_MM},
-  };
-
-  const float meshUnit[ITEM_MESH_TUNER_UNIT_NUM] = {0.01f, 0.1f, 1};
 
   // 1 title, ITEM_PER_PAGE items (icon + label)
   MENUITEMS meshItems = {
@@ -90,19 +78,19 @@ float menuMeshTuner(uint16_t col, uint16_t row, float value)
 
   now = curValue = coordinateGetAxisActual(Z_AXIS);
 
-  meshItems.items[KEY_ICON_4] = itemMeshUnit[curUnit];
+  meshItems.items[KEY_ICON_4] = itemMoveLen[curUnit_index];
 
   menuDrawPage(&meshItems);
   meshDrawHeader(col, row);
   meshDrawValue(now);
 
-#if LCD_ENCODER_SUPPORT
-  encoderPosition = 0;
-#endif
+  #if LCD_ENCODER_SUPPORT
+    encoderPosition = 0;
+  #endif
 
   while (true)
   {
-    unit = meshUnit[curUnit];
+    unit = moveLenSteps[curUnit_index];
 
     curValue = coordinateGetAxisActual(Z_AXIS);
 
@@ -121,9 +109,9 @@ float menuMeshTuner(uint16_t col, uint16_t row, float value)
 
       // change unit
       case KEY_ICON_4:
-        curUnit = (curUnit + 1) % ITEM_MESH_TUNER_UNIT_NUM;
+        curUnit_index = (curUnit_index + 1) % ITEM_FINE_MOVE_LEN_NUM;
 
-        meshItems.items[key_num] = itemMeshUnit[curUnit];
+        meshItems.items[key_num] = itemMoveLen[curUnit_index];
 
         menuDrawItem(&meshItems.items[key_num], key_num);
         break;

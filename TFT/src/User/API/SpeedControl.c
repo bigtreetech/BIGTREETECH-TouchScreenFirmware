@@ -1,15 +1,18 @@
 #include "SpeedControl.h"
 #include "includes.h"
 
-static uint16_t percent[SPEED_NUM]     = {100,   100};  //Speed  Flow
-static uint16_t lastPercent[SPEED_NUM] = {100,   100};  //Speed  Flow
-static uint16_t curPercent[SPEED_NUM]  = {100,   100};  //Speed  Flow
+const char *const speedCmd[SPEED_NUM] = {"M220","M221"};
+
+static uint16_t percent[SPEED_NUM]     = {100, 100};  //Speed  Flow
+static uint16_t lastPercent[SPEED_NUM] = {100, 100};  //Speed  Flow
+static uint16_t curPercent[SPEED_NUM]  = {100, 100};  //Speed  Flow
 
 static bool sendSpeed_waiting[SPEED_NUM];
 static bool speedQueryWait = false;
 
 static uint32_t nextSpeedTime = 0;
-#define nextSpeedWait  500  // 1 second is 1000 
+
+#define NEXT_SPEED_WAIT 500  // 1 second is 1000
 
 void speedSetSendWaiting(u8 tool, bool isWaiting)
 {
@@ -53,30 +56,26 @@ bool SpeedChanged(u8 i)
 
 void loopSpeed(void)
 {
-  if (OS_GetTimeMs() > nextSpeedTime)
+  for (u8 i = 0; i < SPEED_NUM; i++)
   {
-    for(u8 i = 0; i < SPEED_NUM;i++)
-      if((curPercent[i] != percent[i]) )
+    if ((curPercent[i] != percent[i]) && (OS_GetTimeMs() > nextSpeedTime))
+    {
+      if (send_waiting[i] == false)
       {
-        if(sendSpeed_waiting[i] == false)
-        {
-          sendSpeed_waiting[i] = true;
-          const char *speedCmd[SPEED_NUM] = {"M220","M221"};
-          sendSpeed_waiting[i] = storeCmd("%s S%d\n",speedCmd[i], percent[i]);
-        }
-      if (sendSpeed_waiting[i] == true) curPercent[i] = percent[i];
+        send_waiting[i] = true;
+        send_waiting[i] = storeCmd("%s S%d\n", speedCmd[i], percent[i]);
       }
-    nextSpeedTime = OS_GetTimeMs() + nextSpeedWait; // avoid rapid fire, clogging the queue
+      if (send_waiting[i] == true)
+        curPercent[i] = percent[i];
+      nextSpeedTime = OS_GetTimeMs() + NEXT_SPEED_WAIT; // avoid rapid fire, clogging the queue
+    }
   }
 }
 
 void speedQuery(void)
 {
-  if (infoHost.connected == true && infoHost.wait == false)
+  if (infoHost.connected && !infoHost.wait && !speedQueryWait)
   {
-    if (!speedQueryWait)
-    {
-      speedQueryWait = storeCmd("M220\nM221\n");
-    }
+    speedQueryWait = storeCmd("M220\nM221\n");
   }
 }
