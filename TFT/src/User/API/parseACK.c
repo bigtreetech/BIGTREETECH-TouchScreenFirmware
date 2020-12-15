@@ -179,7 +179,7 @@ void syncL2CacheFromL1(uint8_t port)
   while (dmaL1NotEmpty(port))
   {
     dmaL2Cache[i] = dmaL1Data[port].cache[dmaL1Data[port].rIndex];
-    dmaL1Data[port].rIndex = (dmaL1Data[port].rIndex + 1) % DMA_TRANS_LEN;
+    dmaL1Data[port].rIndex = (dmaL1Data[port].rIndex + 1) % dmaL1Data[port].cacheSize;
     if (dmaL2Cache[i++] == '\n') break;
   }
   dmaL2Cache[i] = 0; // End character
@@ -194,7 +194,7 @@ void hostActionCommands(void)
     strcpy(hostAction.prompt_begin, dmaL2Cache + ack_index);
     statusScreen_setMsg((u8 *)echomagic, (u8 *)dmaL2Cache + ack_index);
   }
-  
+
   if(ack_seen("prompt_begin "))
   {
     hostAction.button = 0;
@@ -251,16 +251,22 @@ void hostActionCommands(void)
         break;
     }
   }
-  
+
   if (ack_seen("paused") || ack_seen("pause"))
   {
     infoPrinting.pause = true;
-  } else if (ack_seen("cancel"))   //To be added to Marlin abortprint routine
-	{
-		infoHost.printing = false;
-		infoPrinting.printing = false;
+  }
+  else if (ack_seen("cancel")) //To be added to Marlin abortprint routine
+  {
+    if (infoHost.printing == true)
+    {
+      request_M27(0);
+    }
+    infoHost.printing = false;
+    infoPrinting.printing = false;
     infoPrinting.cur = infoPrinting.size;
-	}
+  }
+
 }
 
 void parseACK(void)
@@ -297,7 +303,6 @@ void parseACK(void)
                              // Avoid can't getting this parameter due to disabled M503 in Marlin
         storeCmd("M115\n");
         storeCmd("M211\n");  // retrieve the software endstops state
-        request_M27(infoSettings.m27_refresh_time);
       }
     }
 
@@ -386,13 +391,17 @@ void parseACK(void)
           if (ack_seen("Z:"))
           {
             coordinateSetAxisActual(Z_AXIS, ack_value());
+            if (ack_seen("E:"))
+            {
+              coordinateSetAxisActual(E_AXIS, ack_value());
+            }
           }
         }
         coordinateQuerySetWait(false);
       }
       else if(ack_seen("Count E:")) // Parse actual extruder position, response of "M114 E\n", required "M114_DETAIL" in Marlin
       {
-        coordinateSetAxisActualSteps(E_AXIS, ack_value());
+        coordinateSetExtruderActualSteps(ack_value());
       }
       else if(infoMachineSettings.onboard_sd_support == ENABLED && ack_seen("File opened: "))
       {
@@ -408,9 +417,17 @@ void parseACK(void)
 
         infoPrinting.pause = false;
         infoHost.printing = true;
+        if (infoSettings.print_summary)
+        {
+          resetFilamentUsed();
+        }
         infoPrinting.time = 0;
         infoPrinting.cur = 0;
         infoPrinting.size = ack_value();
+        if (infoMachineSettings.autoReportSDStatus == 1)
+        {
+          request_M27(infoSettings.m27_refresh_time);                //Check if there is a SD or USB print running.
+        }
       }
       else if(infoMachineSettings.onboard_sd_support == ENABLED && infoFile.source == BOARD_SD && ack_seen("Not SD printing"))
       {
@@ -428,7 +445,8 @@ void parseACK(void)
       }
       else if(infoMachineSettings.onboard_sd_support == ENABLED && infoFile.source == BOARD_SD && ack_seen("Done printing file"))
       {
-        infoPrinting.printing = false;
+        infoHost.printing = false;
+        printingFinished();
         infoPrinting.cur = infoPrinting.size;
       }
 

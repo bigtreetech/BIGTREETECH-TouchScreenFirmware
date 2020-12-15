@@ -2,12 +2,12 @@
 #include "includes.h"
 
 const GUI_POINT printinfo_points[6] = {
-{START_X + PICON_LG_WIDTH*0 + PICON_SPACE_X*0, ICON_START_Y + PICON_HEIGHT*0 + PICON_SPACE_Y*0},
-{START_X + PICON_LG_WIDTH*1 + PICON_SPACE_X*1, ICON_START_Y + PICON_HEIGHT*0 + PICON_SPACE_Y*0},
-{START_X + PICON_LG_WIDTH*2 + PICON_SPACE_X*2, ICON_START_Y + PICON_HEIGHT*0 + PICON_SPACE_Y*0},
-{START_X + PICON_LG_WIDTH*0 + PICON_SPACE_X*0, ICON_START_Y + PICON_HEIGHT*1 + PICON_SPACE_Y*1},
-{START_X + PICON_LG_WIDTH*1 + PICON_SPACE_X*1, ICON_START_Y + PICON_HEIGHT*1 + PICON_SPACE_Y*1},
-{START_X + PICON_LG_WIDTH*2 + PICON_SPACE_X*2, ICON_START_Y + PICON_HEIGHT*1 + PICON_SPACE_Y*1},
+  {START_X + PICON_LG_WIDTH*0 + PICON_SPACE_X*0, ICON_START_Y + PICON_HEIGHT*0 + PICON_SPACE_Y*0},
+  {START_X + PICON_LG_WIDTH*1 + PICON_SPACE_X*1, ICON_START_Y + PICON_HEIGHT*0 + PICON_SPACE_Y*0},
+  {START_X + PICON_LG_WIDTH*2 + PICON_SPACE_X*2, ICON_START_Y + PICON_HEIGHT*0 + PICON_SPACE_Y*0},
+  {START_X + PICON_LG_WIDTH*0 + PICON_SPACE_X*0, ICON_START_Y + PICON_HEIGHT*1 + PICON_SPACE_Y*1},
+  {START_X + PICON_LG_WIDTH*1 + PICON_SPACE_X*1, ICON_START_Y + PICON_HEIGHT*1 + PICON_SPACE_Y*1},
+  {START_X + PICON_LG_WIDTH*2 + PICON_SPACE_X*2, ICON_START_Y + PICON_HEIGHT*1 + PICON_SPACE_Y*1},
 };
 
 const GUI_RECT printinfo_val_rect[6] = {
@@ -30,15 +30,12 @@ const GUI_RECT printinfo_val_rect[6] = {
         START_X + PICON_LG_WIDTH*2 + PICON_SPACE_X*2 + PICON_VAL_SM_EX,     ICON_START_Y + PICON_HEIGHT*1 + PICON_SPACE_Y*1 + PICON_VAL_Y + BYTE_HEIGHT},
 };
 
-static uint32_t nextTime = 0;
+static uint32_t nextToggleTime = 0;
 static uint32_t nextDrawTime = 0;
-static uint8_t c_Tool = NOZZLE0;
-static int c_fan = 0;
-static int c_speedID = 0;
-const char* Speed_ID[2] = {"Speed","Flow"};
+const char *const Speed_ID[2] = {"Speed","Flow"};
 
-#define toggle_time 2000; // 1 seconds is 1000
-#define drawTime 500; // 1 seconds is 1000
+#define TOGGLE_TIME 2000; // 1 seconds is 1000
+#define DRAW_TIME 500; // 1 seconds is 1000
 
 #define LAYER_TITLE "Layer"
 #define EXT_ICON_POS  0
@@ -92,13 +89,10 @@ void menuBeforePrinting(void)
       //      request_M24(infoBreakPoint.offset);
       //    }
 
-      if (infoMachineSettings.autoReportSDStatus ==1)
-      {
+      if (infoMachineSettings.autoReportSDStatus == 1)
         request_M27(infoSettings.m27_refresh_time);                //Check if there is a SD or USB print running.
-      }
-      else{
+      else
         request_M27(0);
-      }
 
       infoHost.printing = true; // Global lock info on printer is busy in printing.
 
@@ -126,91 +120,74 @@ void menuBeforePrinting(void)
       break;
   }
   infoPrinting.printing = true;
+  infoPrinting.time = 0;
+  if (infoSettings.print_summary)
+  {
+    resetFilamentUsed();
+  }
   infoMenu.menu[infoMenu.cur] = menuPrinting;
 }
 
-const GUI_RECT progressRect = {1*SPACE_X_PER_ICON, 0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y + ICON_HEIGHT/4,
-                               3*SPACE_X_PER_ICON, 0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y + ICON_HEIGHT*3/4};
-
-#define BED_X  (progressRect.x1 - 9 * BYTE_WIDTH)
-#define TEMP_Y (progressRect.y1 + 3)
-#define TIME_Y (TEMP_Y + 1 * BYTE_HEIGHT + 3)
-
-void reValueNozzle(int icon_pos)
+static inline void reValueNozzle(int icon_pos)
 {
   char tempstr[10];
-  sprintf(tempstr, "%d/%d", heatGetCurrentTemp(c_Tool), heatGetTargetTemp(c_Tool));
+  sprintf(tempstr, "%d/%d", heatGetCurrentTemp(currentTool), heatGetTargetTemp(currentTool));
 
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-
   ICON_ReadDisplay(printinfo_points[icon_pos].x,printinfo_points[icon_pos].y,ICON_PRINTING_NOZZLE);
-  GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (u8* )heatDisplayID[c_Tool]);
+  GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (u8* )heatDisplayID[currentTool]);
   GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (u8 *)tempstr);
-
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
 
-void reValueBed(int icon_pos)
+static inline void reValueBed(int icon_pos)
 {
   char tempstr[10];
   sprintf(tempstr, "%d/%d", heatGetCurrentTemp(BED), heatGetTargetTemp(BED));
 
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-
   ICON_ReadDisplay(printinfo_points[icon_pos].x,printinfo_points[icon_pos].y,ICON_PRINTING_BED);
   GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (u8* )heatDisplayID[BED]);
   GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (u8 *)tempstr);
-
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
 
-void reDrawFan(int icon_pos)
+static inline void reDrawFan(int icon_pos)
 {
   char tempstr[10];
   if (infoSettings.fan_percentage == 1)
-  {
-    sprintf(tempstr, "%d%%", fanGetCurPercent(c_fan));
-  }
+    sprintf(tempstr, "%d%%", fanGetCurPercent(currentFan));
   else
-  {
-    sprintf(tempstr, "%d", fanGetCurSpeed(c_fan));
-  }
+    sprintf(tempstr, "%d", fanGetCurSpeed(currentFan));
 
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-
   ICON_ReadDisplay(printinfo_points[icon_pos].x,printinfo_points[icon_pos].y,ICON_PRINTING_FAN);
-  GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (u8*)fanID[c_fan]);
+  GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (u8*)fanID[currentFan]);
   GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (u8 *)tempstr);
-
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
 
-void reDrawSpeed(int icon_pos)
+static inline void reDrawSpeed(int icon_pos)
 {
   char tempstr[10];
-  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
-  sprintf(tempstr, "%d%%", speedGetPercent(c_speedID) );
-
-  if(c_speedID == 0)
-  {
+  if(currentSpeedID == 0)
     ICON_ReadDisplay(printinfo_points[icon_pos].x,printinfo_points[icon_pos].y,ICON_PRINTING_SPEED);
-  }
   else
-  {
     ICON_ReadDisplay(printinfo_points[icon_pos].x,printinfo_points[icon_pos].y,ICON_PRINTING_FLOW);
-  }
-  GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (u8 *)Speed_ID[c_speedID]);
-  GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (u8 *)tempstr);
 
+  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
+  sprintf(tempstr, "%d%%", speedGetPercent(currentSpeedID));
+  GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (u8 *)Speed_ID[currentSpeedID]);
+  GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (u8 *)tempstr);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
 
-void reDrawTime(int icon_pos)
+static inline void reDrawTime(int icon_pos)
 {
-  u8  hour = infoPrinting.time/3600,
-      min = infoPrinting.time%3600/60,
-      sec = infoPrinting.time%60;
+  u8 hour = infoPrinting.time/3600;
+  u8 min = infoPrinting.time%3600/60;
+  u8 sec = infoPrinting.time%60;
 
   GUI_SetNumMode(GUI_NUMMODE_ZERO);
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
@@ -222,19 +199,16 @@ void reDrawTime(int icon_pos)
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
 
-void reDrawProgress(int icon_pos)
+static inline void reDrawProgress(int icon_pos)
 {
   char buf[6];
   sprintf(buf, "%d%%", infoPrinting.progress);
-
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-
   GUI_DispString(printinfo_points[3].x + PICON_TITLE_X, printinfo_points[3].y + PICON_TITLE_Y, (u8 *)buf);
-
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
 
-void reDrawLayer(int icon_pos)
+static inline void reDrawLayer(int icon_pos)
 {
   if (OS_GetTimeMs() > nextDrawTime)
   {
@@ -242,78 +216,84 @@ void reDrawLayer(int icon_pos)
     sprintf(tempstr, "%.2fmm", (infoFile.source == BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS));
 
     GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-
     ICON_ReadDisplay(printinfo_points[icon_pos].x,printinfo_points[icon_pos].y,ICON_PRINTING_ZLAYER);
     GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (u8* )LAYER_TITLE);
     GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (u8 *)tempstr);
-
     GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
-    nextDrawTime = OS_GetTimeMs() + drawTime;
+    nextDrawTime = OS_GetTimeMs() + DRAW_TIME;
   }
 }
 
-void toggleinfo(void)
+static inline void toggleinfo(void)
 {
-  if (OS_GetTimeMs() > nextTime)
+  if (OS_GetTimeMs() > nextToggleTime)
   {
     if (infoSettings.hotend_count > 1)
     {
-      c_Tool = (c_Tool + 1) % infoSettings.hotend_count;
+      currentTool = (currentTool + 1) % infoSettings.hotend_count;
       rapid_serial_loop();   //perform backend printing loop before drawing to avoid printer idling
       reValueNozzle(EXT_ICON_POS);
     }
 
     if ((infoSettings.fan_count + infoSettings.fan_ctrl_count) > 1)
     {
-      c_fan = (c_fan + 1) % (infoSettings.fan_count + infoSettings.fan_ctrl_count);
+      currentFan = (currentFan + 1) % (infoSettings.fan_count + infoSettings.fan_ctrl_count);
       rapid_serial_loop();   //perform backend printing loop before drawing to avoid printer idling
       reDrawFan(FAN_ICON_POS);
     }
 
-    c_speedID = (c_speedID + 1) % 2;
-    nextTime = OS_GetTimeMs() + toggle_time;
+    currentSpeedID = (currentSpeedID + 1) % 2;
+    nextToggleTime = OS_GetTimeMs() + TOGGLE_TIME;
     rapid_serial_loop();   //perform backend printing loop before drawing to avoid printer idling
     reDrawSpeed(SPD_ICON_POS);
     speedQuery();
     if (infoFile.source == BOARD_SD) coordinateQuery();
+    if (infoSettings.print_summary)
+    {
+      updateFilamentUsed();
+    }
   }
 }
 
-void printingDrawPage(void)
+static inline void printingDrawPage(void)
 {
   //  Scroll_CreatePara(&titleScroll, infoFile.title,&titleRect);  //
-    reValueNozzle(EXT_ICON_POS);
-    reValueBed(BED_ICON_POS);
-    reDrawFan(FAN_ICON_POS);
-    reDrawTime(TIM_ICON_POS);
-    reDrawProgress(TIM_ICON_POS);
-    reDrawLayer(Z_ICON_POS);
-    reDrawSpeed(SPD_ICON_POS);
+  reValueNozzle(EXT_ICON_POS);
+  reValueBed(BED_ICON_POS);
+  reDrawFan(FAN_ICON_POS);
+  reDrawTime(TIM_ICON_POS);
+  reDrawProgress(TIM_ICON_POS);
+  reDrawLayer(Z_ICON_POS);
+  reDrawSpeed(SPD_ICON_POS);
 }
 
 
 void stopConfirm(void)
 {
   abortPrinting();
-  infoMenu.cur--;
+  if (!infoSettings.print_summary)
+  {
+    --infoMenu.cur;
+  }
 }
 
 void menuPrinting(void)
 {
   //1title, ITEM_PER_PAGE item(icon + label)
   MENUITEMS printingItems = {
-  //  title
-  LABEL_BACKGROUND,
-  // icon                       label
-   {{ICON_BACKGROUND,           LABEL_BACKGROUND},
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},
-    {ICON_BABYSTEP,             LABEL_BABYSTEP},
-    {ICON_PAUSE,                LABEL_PAUSE},
-    {ICON_MORE,                 LABEL_MORE},
-    {ICON_STOP,                 LABEL_STOP},}
+    // title
+    LABEL_BACKGROUND,
+    // icon                         label
+    {{ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_BABYSTEP,                LABEL_BABYSTEP},
+     {ICON_PAUSE,                   LABEL_PAUSE},
+     {ICON_MORE,                    LABEL_MORE},
+     {ICON_STOP,                    LABEL_STOP},}
   };
+
   uint8_t   nowFan[MAX_FAN_COUNT] = {0};
   uint16_t  curspeed[2] = {0};
   uint32_t  time = 0;
@@ -336,10 +316,10 @@ void menuPrinting(void)
 //    Scroll_DispString(&titleScroll, LEFT); //Scroll display file name will take too many CPU cycles
 
     //check nozzle temp change
-    if (nowHeat.T[c_Tool].current != heatGetCurrentTemp(c_Tool) || nowHeat.T[c_Tool].target != heatGetTargetTemp(c_Tool))
+    if (nowHeat.T[currentTool].current != heatGetCurrentTemp(currentTool) || nowHeat.T[currentTool].target != heatGetTargetTemp(currentTool))
     {
-      nowHeat.T[c_Tool].current = heatGetCurrentTemp(c_Tool);
-      nowHeat.T[c_Tool].target = heatGetTargetTemp(c_Tool);
+      nowHeat.T[currentTool].current = heatGetCurrentTemp(currentTool);
+      nowHeat.T[currentTool].target = heatGetTargetTemp(currentTool);
       rapid_serial_loop();   //perform backend printing loop before drawing to avoid printer idling
       reValueNozzle(EXT_ICON_POS);
     }
@@ -354,9 +334,9 @@ void menuPrinting(void)
     }
 
     //check Fan speed change
-    if (nowFan[c_fan] != fanGetCurSpeed(c_fan))
+    if (nowFan[currentFan] != fanGetCurSpeed(currentFan))
     {
-      nowFan[c_fan] = fanGetCurSpeed(c_fan);
+      nowFan[currentFan] = fanGetCurSpeed(currentFan);
       rapid_serial_loop();  //perform backend printing loop before drawing to avoid printer idling
       reDrawFan(FAN_ICON_POS);
     }
@@ -393,9 +373,9 @@ void menuPrinting(void)
     }
 
     //check change in speed or flow
-    if(curspeed[c_speedID] != speedGetPercent(c_speedID))
+    if(curspeed[currentSpeedID] != speedGetPercent(currentSpeedID))
     {
-      curspeed[c_speedID] = speedGetPercent(c_speedID);
+      curspeed[currentSpeedID] = speedGetPercent(currentSpeedID);
       rapid_serial_loop();  //perform backend printing loop before drawing to avoid printer idling
       reDrawSpeed(SPD_ICON_POS);
     }
@@ -440,11 +420,19 @@ void menuPrinting(void)
         else
         {
           exitPrinting();
-          infoMenu.cur--;
+          if (infoSettings.print_summary)
+          {
+            infoMenu.cur = 0;
+          }
+          else 
+          {
+            --infoMenu.cur;
+          }
         }
         break;
 
-      default :break;
+      default:
+        break;
     }
     loopProcess();
   }

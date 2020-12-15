@@ -158,8 +158,8 @@
     #define STRING_CANCEL                 "\u088F Cancel" //Cancel Sign
     #define STRING_ADJUST_TITLE           "Touch Screen Calibration"
     #define STRING_ADJUST_INFO            "Please click on the red dot"
-    #define STRING_ADJUST_OK              "Adjustment Success"
-    #define STRING_ADJUST_FAILED          "Adjustment failed, Please Try Again"
+    #define STRING_ADJUST_OK              "Adjustment success"
+    #define STRING_ADJUST_FAILED          "Adjustment failed, please try again"
     #define STRING_WARNING                "Warning" //Exclamation Sign
     #define STRING_STOP_PRINT             "Stop printing?"
     #define STRING_CONFIRM                "\u088E OK" //Confirm Sign
@@ -263,7 +263,7 @@
     #define STRING_TUNE_EXTRUDER          "Tune steps"
     #define STRING_TUNE_EXT_EXTRUDE_100   "Ext. 100mm"
     #define STRING_TUNE_EXT_TEMP          "Extruder tuning | Heat"
-    #define STRING_TUNE_EXT_TEMPLOW       "Desired temperature too low!\nMinimum temperature: %d C"
+    #define STRING_TUNE_EXT_TEMPLOW       "Desired temperature too low!\nMinimum temperature: %d℃"
     #define STRING_TUNE_EXT_DESIREDVAL    "Temperature is not yet at the desired value"
     #define STRING_TUNE_EXT_MARK120MM     "Mark 120 mm on your fillament\nPress '%s' when ready\nMeasure remaining length\nafter extruding"
     #define STRING_TUNE_EXT_HEATOFF       "Turn the heater off?"
@@ -279,8 +279,13 @@
     #define STRING_MESH_EDITOR            "Mesh edit"
     #define STRING_MESH_TUNER             "Mesh tuner"
     #define STRING_CASE_LIGHT             "Case light"
-    #define STRING_LOAD_STARTED           "Filament load in progress.\nNo further actions possible\nuntil it's done.\nPlease stand by."
-    #define STRING_UNLOAD_STARTED         "Filament unload in progress.\nNo further actions possible\nuntil it's done.\nPlease stand by."
+    #define STRING_LOAD_STARTED           "Loading filament.\nPlease wait for the process\nto complete."
+    #define STRING_UNLOAD_STARTED         "Unloading filament.\nPlease wait for the process\nto complete."
     #define STRING_HEATERS_ON             "Some heaters are still ON.\nDo you want to stop them?"
+    #define STRING_PRINT_SUMMARY_POPUP    "Print Summary Popup"  // translation needed
+    #define STRING_PRINT_SUMMARY          "Print Time: %02u:%02u:%02u\nFilament Used: %3.2f meters"
+    #define STRING_PRINT_COMPLETE         "Print complete"
+    #define STRING_EXT_TEMPLOW            "Hotend temperature is below\nminimum temperature (%d℃)."
+    #define STRING_COLD_EXT               "Cold extrusion prevented"
 
 #endif

@@ -95,9 +95,9 @@
     #define STRING_FAN_HALF_SPEED         "Yarım"
     #define STRING_ROTATE_UI              "Döndür"
     #define STRING_TOUCHSCREEN_ADJUST     "Kalibre"
-    #define STRING_MORE                   "Daha"
+    #define STRING_MORE                   "Ayar"
     #define STRING_SCREEN_INFO            "Bilgi"
-    #define STRING_STATUS                 "Bilgi"
+    #define STRING_STATUS                 "Durum"
     #define STRING_SIMULATOR_BG_COLOR     "Marlin modu arkaplan renk"
     #define STRING_SIMULATOR_FONT_COLOR   "Marlin modu font renk"
     #define STRING_WHITE                  "Beyaz"
@@ -279,8 +279,13 @@
     #define STRING_MESH_EDITOR            "Mesh düzenle"
     #define STRING_MESH_TUNER             "Mesh ayarlayıcı"
     #define STRING_CASE_LIGHT             "Aydınlatma"
-    #define STRING_LOAD_STARTED           "Filament load in progress.\nNo further actions possible\nuntil it's done.\nPlease stand by."  // translation needed
-    #define STRING_UNLOAD_STARTED         "Filament unload in progress.\nNo further actions possible\nuntil it's done.\nPlease stand by."  // translation needed
+    #define STRING_LOAD_STARTED           "Loading filament.\nPlease wait for the process\nto complete."  // translation needed
+    #define STRING_UNLOAD_STARTED         "Unloading filament.\nPlease wait for the process\nto complete."  // translation needed
     #define STRING_HEATERS_ON             "Some heaters are still ON.\nDo you want to stop them?"  // translation needed
+    #define STRING_PRINT_SUMMARY_POPUP    "Baskı Özeti"
+    #define STRING_PRINT_SUMMARY          "Baskı Süresi: %02u:%02u:%02u\nKullanılan Filaman: %3.2f metre"
+    #define STRING_PRINT_COMPLETE         "Print complete"
+    #define STRING_EXT_TEMPLOW            "Hotend temperature is below\nminimum temperature (%d℃)."
+    #define STRING_COLD_EXT               "Cold extrusion prevented"
 
 #endif

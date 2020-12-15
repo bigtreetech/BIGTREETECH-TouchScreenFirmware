@@ -1,11 +1,10 @@
 #include "ProbeOffset.h"
 #include "includes.h"
 
-#define ITEM_PROBE_OFFSET_UNIT_NUM 3
 #define ITEM_PROBE_OFFSET_SUBMENU_NUM 4
 
-static u8 curUnit = 0;
-static u8 curSubmenu = 0;
+static u8 curUnit_index = 0;
+static u8 curSubmenu_index = 0;
 
 /* Show an error notification */
 void probeNotifyError(void)
@@ -45,15 +44,6 @@ void probeDrawValue(float val)
 
 void menuProbeOffset(void)
 {
-  const ITEM itemProbeOffsetUnit[ITEM_PROBE_OFFSET_UNIT_NUM] = {
-    // icon                         label
-    {ICON_001_MM,                   LABEL_001_MM},
-    {ICON_01_MM,                    LABEL_01_MM},
-    {ICON_1_MM,                     LABEL_1_MM},
-  };
-
-  const float probeOffset_unit[ITEM_PROBE_OFFSET_UNIT_NUM] = {0.01f, 0.1f, 1};
-
   ITEM itemProbeOffsetSubmenu[ITEM_PROBE_OFFSET_SUBMENU_NUM] = {
     // icon                         label
     {ICON_01_MM,                    LABEL_01_MM},
@@ -95,20 +85,20 @@ void menuProbeOffset(void)
   else
     probeOffsetItems.items[KEY_ICON_4].label.index = LABEL_ON;
 
-  itemProbeOffsetSubmenu[0] = itemProbeOffsetUnit[curUnit];
-  probeOffsetItems.items[KEY_ICON_6] = itemProbeOffsetSubmenu[curSubmenu];
+  itemProbeOffsetSubmenu[0] = itemMoveLen[curUnit_index];
+  probeOffsetItems.items[KEY_ICON_6] = itemProbeOffsetSubmenu[curSubmenu_index];
 
   menuDrawPage(&probeOffsetItems);
   probeDrawStatus(textSelect(probeOffsetItems.items[KEY_ICON_4].label.index));
   probeDrawValue(now);
 
-#if LCD_ENCODER_SUPPORT
-  encoderPosition = 0;
-#endif
+  #if LCD_ENCODER_SUPPORT
+    encoderPosition = 0;
+  #endif
 
   while (infoMenu.menu[infoMenu.cur] == menuProbeOffset)
   {
-    unit = probeOffset_unit[curUnit];
+    unit = moveLenSteps[curUnit_index];
 
     z_offset = probeOffsetGetValue();                      // always load current Z offset
 
@@ -122,20 +112,7 @@ void menuProbeOffset(void)
         else
           z_offset = probeOffsetDecreaseValue(unit);
         break;
-      case KEY_INFOBOX:
-      {
-        if (!probeOffsetGetStatus())
-        {
-          probeNotifyError();
-        }
-        else
-        {
-          float val = numPadFloat(labelGetAddress(&probeOffsetItems.title),z_offset,0,true);
-          z_offset = probeOffsetSetValue(val);
-          menuDrawPage(&probeOffsetItems);         
-        }
-        break;
-      }
+
       // increase Z offset
       case KEY_ICON_3:
         if (!probeOffsetGetStatus())
@@ -148,7 +125,7 @@ void menuProbeOffset(void)
       case KEY_ICON_4:
         if (!probeOffsetGetStatus())
         {
-          probeOffsetEnable();
+          probeOffsetEnable(true);
 
           probeOffsetItems.items[key_num].label.index = LABEL_ON;
         }
@@ -165,23 +142,23 @@ void menuProbeOffset(void)
 
       // change submenu
       case KEY_ICON_5:
-        curSubmenu = (curSubmenu + 1) % ITEM_PROBE_OFFSET_SUBMENU_NUM;
+        curSubmenu_index = (curSubmenu_index + 1) % ITEM_PROBE_OFFSET_SUBMENU_NUM;
 
-        probeOffsetItems.items[KEY_ICON_6] = itemProbeOffsetSubmenu[curSubmenu];
+        probeOffsetItems.items[KEY_ICON_6] = itemProbeOffsetSubmenu[curSubmenu_index];
 
         menuDrawItem(&probeOffsetItems.items[KEY_ICON_6], KEY_ICON_6);
         break;
 
       // handle submenu
       case KEY_ICON_6:
-        switch (curSubmenu)
+        switch (curSubmenu_index)
         {
           // change unit
           case 0:
-            curUnit = (curUnit + 1) % ITEM_PROBE_OFFSET_UNIT_NUM;
+            curUnit_index = (curUnit_index + 1) % ITEM_FINE_MOVE_LEN_NUM;
 
-            itemProbeOffsetSubmenu[curSubmenu] = itemProbeOffsetUnit[curUnit];
-            probeOffsetItems.items[key_num] = itemProbeOffsetSubmenu[curSubmenu];
+            itemProbeOffsetSubmenu[curSubmenu_index] = itemMoveLen[curUnit_index];
+            probeOffsetItems.items[key_num] = itemProbeOffsetSubmenu[curSubmenu_index];
 
             menuDrawItem(&probeOffsetItems.items[key_num], key_num);
             break;

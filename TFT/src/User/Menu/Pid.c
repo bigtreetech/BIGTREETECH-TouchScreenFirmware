@@ -2,12 +2,24 @@
 #include "includes.h"
 
 //#define ENABLE_PID_STATUS_UPDATE_NOTIFICATION
-#define ITEM_PID_DEGREE_NUM 3
 
-static u8 curDegree = 1;
+const MENUITEMS pidWaitItems = {
+  // title
+  LABEL_PID_TITLE,
+  // icon                         label
+  {{ICON_BACKGROUND,              LABEL_BACKGROUND},
+   {ICON_BACKGROUND,              LABEL_BACKGROUND},
+   {ICON_BACKGROUND,              LABEL_BACKGROUND},
+   {ICON_BACKGROUND,              LABEL_BACKGROUND},
+   {ICON_BACKGROUND,              LABEL_BACKGROUND},
+   {ICON_BACKGROUND,              LABEL_BACKGROUND},
+   {ICON_BACKGROUND,              LABEL_BACKGROUND},
+   {ICON_BACKGROUND,              LABEL_BACKGROUND},}
+};
 
-const char* const pidDisplayID[] = HEAT_DISPLAY_ID;
-const char*       pidCmd[] = PID_CMD;
+const char *const pidCmd[] = PID_CMD;
+
+static u8 degreeSteps_index = 1;
 
 HEATER pidHeater = {{}, 0};
 u32 pidTimeout = 0;
@@ -79,7 +91,7 @@ void pidUpdateStatus(bool succeeded)
   }
 }
 
-void pidCheckTimeout(void)
+static inline void pidCheckTimeout(void)
 {
   if (pidRunning)
   {
@@ -101,7 +113,7 @@ void pidCheckTimeout(void)
   }
 }
 
-void pidUpdateCounter(void)
+static inline void pidUpdateCounter(void)
 {
   pidCounter = 0;
 
@@ -115,19 +127,6 @@ void pidUpdateCounter(void)
 void menuPidWait(void)
 {
   // 1 title, ITEM_PER_PAGE items (icon + label)
-  const MENUITEMS pidWaitItems = {
-    // title
-    LABEL_PID_TITLE,
-    // icon                         label
-    {{ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},}
-  };
 
   bool isPressed, isReleased;
   isPressed = isReleased = false;
@@ -158,7 +157,7 @@ void menuPidWait(void)
   }
 }
 
-void pidStart(void)
+static inline void pidStart(void)
 {
   pidRunning = true;
   pidSucceeded = true;
@@ -191,7 +190,7 @@ void pidTemperatureReDraw(bool skip_header)
 
   if (!skip_header)
   {
-    sprintf(tempstr, "%s    ", pidDisplayID[pidHeater.toolIndex]);
+    sprintf(tempstr, "%s    ", heatDisplayID[pidHeater.toolIndex]);
 
     GUI_DispString(exhibitRect.x0, exhibitRect.y0, (u8 *) tempstr);
   }
@@ -207,27 +206,6 @@ void pidTemperatureReDraw(bool skip_header)
 
 void menuPid(void)
 {
-  const ITEM itemPidTool[] = {
-    // icon                         label
-    {ICON_NOZZLE,                   LABEL_NOZZLE},
-    {ICON_NOZZLE,                   LABEL_NOZZLE},
-    {ICON_NOZZLE,                   LABEL_NOZZLE},
-    {ICON_NOZZLE,                   LABEL_NOZZLE},
-    {ICON_NOZZLE,                   LABEL_NOZZLE},
-    {ICON_NOZZLE,                   LABEL_NOZZLE},
-    {ICON_BED,                      LABEL_BED},
-    {ICON_CHAMBER,                  LABEL_CHAMBER},        // that will never be displayed because no PID is provided for chamber
-  };
-
-  const ITEM itemPidDegree[ITEM_PID_DEGREE_NUM] = {
-    // icon                         label
-    {ICON_1_DEGREE,                 LABEL_1_DEGREE},
-    {ICON_5_DEGREE,                 LABEL_5_DEGREE},
-    {ICON_10_DEGREE,                LABEL_10_DEGREE},
-  };
-
-  const u8 pidDegree[ITEM_PID_DEGREE_NUM] = {1, 5, 10};
-
   // 1 title, ITEM_PER_PAGE items (icon + label)
   MENUITEMS pidItems = {
     // title
@@ -255,8 +233,8 @@ void menuPid(void)
     pidInitialized = true;
   }
 
-  pidItems.items[KEY_ICON_4] = itemPidTool[pidHeater.toolIndex];
-  pidItems.items[KEY_ICON_5] = itemPidDegree[curDegree];
+  pidItems.items[KEY_ICON_4] = itemTool[pidHeater.toolIndex];
+  pidItems.items[KEY_ICON_5] = itemDegreeSteps[degreeSteps_index];
 
   #if LCD_ENCODER_SUPPORT
     encoderPosition = 0;
@@ -273,33 +251,32 @@ void menuPid(void)
       case KEY_ICON_0:
         if (pidHeater.T[pidHeater.toolIndex].target > 0)
           pidHeater.T[pidHeater.toolIndex].target =
-            NOBEYOND(0, pidHeater.T[pidHeater.toolIndex].target - pidDegree[curDegree], infoSettings.max_temp[pidHeater.toolIndex]);
+            NOBEYOND(0, pidHeater.T[pidHeater.toolIndex].target - degreeSteps[degreeSteps_index], infoSettings.max_temp[pidHeater.toolIndex]);
 
         pidTemperatureReDraw(true);
         break;
 
       case KEY_INFOBOX:
-      {
-        int32_t val = pidHeater.T[pidHeater.toolIndex].target;
-        // Get the touch of the user from either icon 1 or 2 which is under the temperature			
-        char titlestr[30];
-        sprintf(titlestr, "Min:0 | Max:%i", infoSettings.max_temp[pidHeater.toolIndex] );
-        val = numPadInt((u8 *)titlestr, pidHeater.T[pidHeater.toolIndex].target,0, false);
-        val = NOBEYOND(0,val,infoSettings.max_temp[pidHeater.toolIndex]);
-        // If value is different than target change it.
-        if (val != pidHeater.T[pidHeater.toolIndex].target)
         {
-          pidHeater.T[pidHeater.toolIndex].target = val;
-        }
+          int32_t val = pidHeater.T[pidHeater.toolIndex].target;
+          char titlestr[30];
 
-        menuDrawPage(&pidItems);
-        pidTemperatureReDraw(true);
-      }
-      break;
+          sprintf(titlestr, "Min:0 | Max:%i", infoSettings.max_temp[pidHeater.toolIndex]);
+          val = numPadInt((u8 *) titlestr, pidHeater.T[pidHeater.toolIndex].target, 0, false);
+          val = NOBEYOND(0, val, infoSettings.max_temp[pidHeater.toolIndex]);
+
+          if (val != pidHeater.T[pidHeater.toolIndex].target)        // if value is different than target change it
+            pidHeater.T[pidHeater.toolIndex].target = val;
+
+          menuDrawPage(&pidItems);
+          pidTemperatureReDraw(true);
+        }
+        break;
+
       case KEY_ICON_3:
         if (pidHeater.T[pidHeater.toolIndex].target < infoSettings.max_temp[pidHeater.toolIndex])
           pidHeater.T[pidHeater.toolIndex].target =
-            NOBEYOND(0, pidHeater.T[pidHeater.toolIndex].target + pidDegree[curDegree], infoSettings.max_temp[pidHeater.toolIndex]);
+            NOBEYOND(0, pidHeater.T[pidHeater.toolIndex].target + degreeSteps[degreeSteps_index], infoSettings.max_temp[pidHeater.toolIndex]);
 
         pidTemperatureReDraw(true);
         break;
@@ -311,16 +288,16 @@ void menuPid(void)
         }
         while (!heaterIsValid(pidHeater.toolIndex) || pidHeater.toolIndex == CHAMBER);
 
-        pidItems.items[key_num] = itemPidTool[pidHeater.toolIndex];
+        pidItems.items[key_num] = itemTool[pidHeater.toolIndex];
 
         menuDrawItem(&pidItems.items[key_num], key_num);
         pidTemperatureReDraw(false);
         break;
 
       case KEY_ICON_5:
-        curDegree = (curDegree + 1) % ITEM_PID_DEGREE_NUM;
+        degreeSteps_index = (degreeSteps_index + 1) % ITEM_DEGREE_NUM;
 
-        pidItems.items[key_num] = itemPidDegree[curDegree];
+        pidItems.items[key_num] = itemDegreeSteps[degreeSteps_index];
 
         menuDrawItem(&pidItems.items[key_num], key_num);
         break;
@@ -355,14 +332,17 @@ void menuPid(void)
           if (encoderPosition)
           {
             if (encoderPosition > 0)
+            {
               if (pidHeater.T[pidHeater.toolIndex].target < infoSettings.max_temp[pidHeater.toolIndex])
                 pidHeater.T[pidHeater.toolIndex].target =
-                  NOBEYOND(0, pidHeater.T[pidHeater.toolIndex].target + pidDegree[curDegree], infoSettings.max_temp[pidHeater.toolIndex]);
-
-            if (encoderPosition < 0)
+                  NOBEYOND(0, pidHeater.T[pidHeater.toolIndex].target + degreeSteps[degreeSteps_index], infoSettings.max_temp[pidHeater.toolIndex]);
+            }
+            else                                           // if < 0
+            {
               if (pidHeater.T[pidHeater.toolIndex].target > 0)
                 pidHeater.T[pidHeater.toolIndex].target =
-                  NOBEYOND(0, pidHeater.T[pidHeater.toolIndex].target - pidDegree[curDegree], infoSettings.max_temp[pidHeater.toolIndex]);
+                  NOBEYOND(0, pidHeater.T[pidHeater.toolIndex].target - degreeSteps[degreeSteps_index], infoSettings.max_temp[pidHeater.toolIndex]);
+            }
 
             pidTemperatureReDraw(true);
             encoderPosition = 0;

@@ -32,7 +32,7 @@ typedef enum
 
 void Buzzer_Config(void);
 void Buzzer_DeConfig(void);
-void Buzzer_TurnOn(const uint32_t frequency, const uint32_t duration);
+void Buzzer_TurnOn(const uint16_t frequency, const uint16_t duration);
 void Buzzer_play(SOUND sound);
 void loopBuzzer(void);
 

@@ -87,25 +87,6 @@ void menuLanguage(void)
 }
 
 #ifdef ST7920_SPI
-const LABEL lcd_colors_names[LCD_COLOR_COUNT] =
-{
-  LABEL_WHITE,
-  LABEL_BLACK,
-  LABEL_RED,
-  LABEL_GREEN,
-  LABEL_BLUE,
-  LABEL_CYAN,
-  LABEL_MAGENTA,
-  LABEL_YELLOW,
-  LABEL_ORANGE,
-  LABEL_PURPLE,
-  LABEL_LIME,
-  LABEL_BROWN,
-  LABEL_DARKBLUE,
-  LABEL_DARKGREEN,
-  LABEL_GRAY,
-  LABEL_DARKGRAY,
-};
 
 void menuSimulatorBackGroundColor(void)
 {
@@ -124,7 +105,7 @@ void menuSimulatorBackGroundColor(void)
       totalItems[i].icon = ICONCHAR_UNCHECKED;
     }
     totalItems[i].itemType = LIST_LABEL;
-    totalItems[i].titlelabel = lcd_colors_names[i];
+    totalItems[i].titlelabel = lcd_color_names[i];
   }
 
   listWidgetCreate(title, totalItems, COUNT(totalItems), cur_item/ LISTITEM_PER_PAGE);
@@ -188,7 +169,7 @@ void menuSimulatorFontColor(void)
       totalItems[i].icon = ICONCHAR_UNCHECKED;
     }
     totalItems[i].itemType = LIST_LABEL;
-    totalItems[i].titlelabel = lcd_colors_names[i];
+    totalItems[i].titlelabel = lcd_color_names[i];
   }
 
   listWidgetCreate(title, totalItems, COUNT(totalItems), cur_item/ LISTITEM_PER_PAGE);
@@ -234,7 +215,7 @@ void menuSimulatorFontColor(void)
     storePara();
   }
 }
-#endif
+#endif // ST7920_SPI
 
 #ifdef BUZZER_PIN
 
@@ -303,7 +284,7 @@ void menuSoundSettings(void)
   }
 } //menuSoundSettings
 
-#endif
+#endif // BUZZER_PIN
 
 void menuScreenSettings(void)
 {

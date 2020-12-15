@@ -4,7 +4,7 @@
   LISTITEMS printListItems = {
   // title
   LABEL_BACKGROUND,
-  // icon                 ItemType      Item Title        item value text(only for custom value)
+  // icon                 ItemType    Item Title        item value text(only for custom value)
   {
     {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
     {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
@@ -17,19 +17,17 @@
   };
 
   MENUITEMS printIconItems = {
-    //  title
+    // title
     LABEL_BACKGROUND,
-    // icon                       label
-    {
-      {ICON_BACKGROUND,           LABEL_BACKGROUND},
-      {ICON_BACKGROUND,           LABEL_BACKGROUND},
-      {ICON_BACKGROUND,           LABEL_BACKGROUND},
-      {ICON_BACKGROUND,           LABEL_BACKGROUND},
-      {ICON_BACKGROUND,           LABEL_BACKGROUND},
-      {ICON_PAGE_UP,              LABEL_PAGE_UP},
-      {ICON_PAGE_DOWN,            LABEL_PAGE_DOWN},
-      {ICON_BACK,                 LABEL_BACK},
-    }
+    // icon                         label
+    {{ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_PAGE_UP,                 LABEL_PAGE_UP},
+     {ICON_PAGE_DOWN,               LABEL_PAGE_DOWN},
+     {ICON_BACK,                    LABEL_BACK},}
   };
 
 // File list number per page
@@ -82,7 +80,6 @@ void scrollFileNameCreate(u8 i)
     }
   }
 }
-
 
 void normalNameDisp(const GUI_RECT *rect, u8 *name)
 {
@@ -200,7 +197,6 @@ void gocdeListDraw(void)
     menuDrawListItem(&printListItems.items[6],6);
 }
 
-
 void startPrint(void)
 {
   infoMenu.menu[++infoMenu.cur] = menuBeforePrinting;
@@ -211,7 +207,6 @@ const int16_t labelVolumeError[] = {LABEL_READ_TFTSD_ERROR, LABEL_READ_U_DISK_ER
 void menuPrintFromSource(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
-
   u8 update=0;
 
   GUI_Clear(infoSettings.bg_color);
@@ -306,7 +301,7 @@ void menuPrintFromSource(void)
             setPrintModelIcon(infoFile.source != BOARD_SD && model_DecodeToFlash(infoFile.title));
 
             char temp_info[FILE_NUM + 50];
-            sprintf(temp_info, (char *)textSelect(LABEL_START_PRINT), infoFile.file[key_num + start - infoFile.F_num]);
+            sprintf(temp_info, (char *)textSelect(LABEL_START_PRINT), (u8* )((infoFile.source == BOARD_SD) ? infoFile.Longfile[key_num + start - infoFile.F_num] : infoFile.file[key_num + start - infoFile.F_num]));
             //confirm file selction
             setDialogText( LABEL_PRINT, (u8*)temp_info, LABEL_CONFIRM, LABEL_CANCEL);
             showDialog(DIALOG_TYPE_QUESTION, startPrint, ExitDir, NULL);
@@ -349,29 +344,28 @@ void menuPrintFromSource(void)
   }
 }
 
-
 void menuPrint(void)
 {
   KEY_VALUES  key_num;
 
   MENUITEMS sourceSelItems = {
-  //  title
-  LABEL_PRINT,
-  // icon                       label
-  {{ICON_ONTFT_SD,            LABEL_TFTSD},
+    // title
+    LABEL_PRINT,
+    // icon                         label
+    {{ICON_ONTFT_SD,                LABEL_TFTSD},
   #ifdef U_DISK_SUPPORT
-    {ICON_U_DISK,               LABEL_U_DISK},
+     {ICON_U_DISK,                  LABEL_U_DISK},
     #define ONBOARD_SD_INDEX 2
   #else
     #define ONBOARD_SD_INDEX 1
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+     {ICON_BACKGROUND,              LABEL_BACKGROUND},
   #endif
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},
-    {ICON_BACK,                 LABEL_BACK}}
+     {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_BACK,                    LABEL_BACK}}
   };
 
   sourceSelItems.items[ONBOARD_SD_INDEX].icon = (infoMachineSettings.onboard_sd_support == ENABLED) ? ICON_ONBOARD_SD : ICON_BACKGROUND;

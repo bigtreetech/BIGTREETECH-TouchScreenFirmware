@@ -6,15 +6,15 @@ const GUI_POINT preheat_val_tool = {ICON_WIDTH - BYTE_WIDTH/2, PREHEAT_TOOL_Y};
 const GUI_POINT preheat_val_bed = {ICON_WIDTH - BYTE_WIDTH/2, PREHEAT_BED_Y};
 
 const ITEM itemToolPreheat[] = {
-// icon                       label
-  {ICON_PREHEAT_BOTH,         LABEL_PREHEAT_BOTH},
-  {ICON_BED,                  LABEL_BED},
-  {ICON_NOZZLE,               LABEL_NOZZLE},
-  {ICON_NOZZLE,               LABEL_NOZZLE},
-  {ICON_NOZZLE,               LABEL_NOZZLE},
-  {ICON_NOZZLE,               LABEL_NOZZLE},
-  {ICON_NOZZLE,               LABEL_NOZZLE},
-  {ICON_NOZZLE,               LABEL_NOZZLE},
+  // icon                        label
+  {ICON_PREHEAT_BOTH,            LABEL_PREHEAT_BOTH},
+  {ICON_BED,                     LABEL_BED},
+  {ICON_NOZZLE,                  LABEL_NOZZLE},
+  {ICON_NOZZLE,                  LABEL_NOZZLE},
+  {ICON_NOZZLE,                  LABEL_NOZZLE},
+  {ICON_NOZZLE,                  LABEL_NOZZLE},
+  {ICON_NOZZLE,                  LABEL_NOZZLE},
+  {ICON_NOZZLE,                  LABEL_NOZZLE},
 };
 
 // Redraw Preheat icon details
@@ -31,7 +31,7 @@ void refreshPreheatIcon(int8_t preheatnum, int8_t icon_index, const ITEM * menui
   //set preheat title properties
   lvIcon.lines[0].h_align = CENTER;
   lvIcon.lines[0].v_align = TOP;
-  lvIcon.lines[0].fn_color = LCD_WHITE;
+  lvIcon.lines[0].fn_color = WHITE;
   lvIcon.lines[0].text_mode = GUI_TEXTMODE_TRANS;
   lvIcon.lines[0].pos = preheat_title;
   lvIcon.lines[0].large_font = false;
@@ -39,7 +39,7 @@ void refreshPreheatIcon(int8_t preheatnum, int8_t icon_index, const ITEM * menui
   //set preheat tool propertites
   lvIcon.lines[1].h_align = RIGHT;
   lvIcon.lines[1].v_align = CENTER;
-  lvIcon.lines[1].fn_color = LCD_WHITE;
+  lvIcon.lines[1].fn_color = WHITE;
   lvIcon.lines[1].text_mode = GUI_TEXTMODE_TRANS;
   lvIcon.lines[1].pos = preheat_val_tool;
   lvIcon.lines[1].large_font = false;
@@ -47,7 +47,7 @@ void refreshPreheatIcon(int8_t preheatnum, int8_t icon_index, const ITEM * menui
   //set preheat bed properties
   lvIcon.lines[2].h_align = RIGHT;
   lvIcon.lines[2].v_align = CENTER;
-  lvIcon.lines[2].fn_color = LCD_WHITE;
+  lvIcon.lines[2].fn_color = WHITE;
   lvIcon.lines[2].text_mode = GUI_TEXTMODE_TRANS;
   lvIcon.lines[2].pos = preheat_val_bed;
   lvIcon.lines[2].large_font = false;
@@ -67,19 +67,17 @@ void refreshPreheatIcon(int8_t preheatnum, int8_t icon_index, const ITEM * menui
 void menuPreheat(void)
 {
   MENUITEMS preheatItems = {
-  // title
-  LABEL_PREHEAT,
-    // icon                       label
-    {
-      {ICON_PREHEAT,              LABEL_BACKGROUND},
-      {ICON_PREHEAT,              LABEL_BACKGROUND},
-      {ICON_PREHEAT,              LABEL_BACKGROUND},
-      {ICON_PREHEAT,              LABEL_BACKGROUND},
-      {ICON_PREHEAT,              LABEL_BACKGROUND},
-      {ICON_PREHEAT,              LABEL_BACKGROUND},
-      {ICON_PREHEAT_BOTH,         LABEL_PREHEAT_BOTH},
-      {ICON_BACK,                 LABEL_BACK},
-    }
+    // title
+    LABEL_PREHEAT,
+    // icon                         label
+    {{ICON_PREHEAT,                 LABEL_BACKGROUND},
+     {ICON_PREHEAT,                 LABEL_BACKGROUND},
+     {ICON_PREHEAT,                 LABEL_BACKGROUND},
+     {ICON_PREHEAT,                 LABEL_BACKGROUND},
+     {ICON_PREHEAT,                 LABEL_BACKGROUND},
+     {ICON_PREHEAT,                 LABEL_BACKGROUND},
+     {ICON_PREHEAT_BOTH,            LABEL_PREHEAT_BOTH},
+     {ICON_BACK,                    LABEL_BACK},}
   };
 
   static TOOLPREHEAT nowHeater = BOTH;

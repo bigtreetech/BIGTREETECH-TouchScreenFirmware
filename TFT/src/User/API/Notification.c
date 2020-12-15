@@ -42,8 +42,8 @@ bool toastAvailable(void)
 {
   for (int i = 0; i < TOAST_MSG_COUNT; i++)
   {
-      if(toastlist[i].isNew == true)
-       return true;
+    if (toastlist[i].isNew == true)
+      return true;
   }
   return false;
 }
@@ -121,15 +121,9 @@ void loopToast(void)
     else if(_toastRunning == true)
     {
       _toastRunning = false;
-
-      if (getMenuType() == MENU_TYPE_CUSTOM)
-        menuRedrawCustom();
-      else
-      {
-        GUI_ClearPrect(&toastIconRect);
-        GUI_ClearPrect(&toastRect);
-        menuReDrawCurTitle();
-      }
+      GUI_ClearPrect(&toastIconRect);
+      GUI_ClearPrect(&toastRect);
+      menuReDrawCurTitle();
     }
   }
 }

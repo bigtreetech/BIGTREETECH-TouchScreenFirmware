@@ -1,7 +1,7 @@
 #include "BedLeveling.h"
 #include "includes.h"
 
-void blUpdateState(MENUITEMS *menu)
+static inline void blUpdateState(MENUITEMS *menu)
 {
   if (getParameter(P_ABL_STATE, 0) == ENABLED)
   {
@@ -106,13 +106,9 @@ void menuBedLeveling(void)
 
       case KEY_ICON_6:
         if (getParameter(P_ABL_STATE, 0) == ENABLED)
-        {
           storeCmd("M420 S0\n");
-        }
         else
-        {
           storeCmd("M420 S1\n");
-        }
         break;
 
       case KEY_ICON_7:
