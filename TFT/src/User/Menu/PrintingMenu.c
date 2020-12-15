@@ -561,14 +561,7 @@ void menuPrinting(void)
         else
         {
           exitPrinting();
-          if (infoSettings.print_summary)
-          {
-            infoMenu.cur = 0;
-          }
-          else 
-          {
-            --infoMenu.cur;
-          }
+          infoMenu.cur--;
         }
         break;
 

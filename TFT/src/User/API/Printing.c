@@ -258,6 +258,12 @@ void endPrinting(void)
   }
 }
 
+void exitPrinting(void)
+{
+  memset(&infoPrinting,0,sizeof(PRINTING));
+  ExitDir();
+}
+
 void printingFinished(void)
 {
   BUZZER_PLAY(sound_success);
