@@ -101,7 +101,6 @@ void menuMove(void)
 
   menuDrawPage(&moveItems);
   mustStoreCmd("G91\n");
-
   mustStoreCmd("M114\n");
   drawXYZ();
 

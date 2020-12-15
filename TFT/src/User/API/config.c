@@ -1029,24 +1029,15 @@ void parseConfigKey(u16 index)
   //---------------------------------------------------------other device specific settings
 #ifdef BUZZER_PIN
   case C_INDEX_TOUCH_SOUND:
-    if (inLimit(config_int(),0,1))
-      {
-        infoSettings.touchSound = config_int();
-      }
+        infoSettings.touchSound = getOnOff();
     break;
 
   case C_INDEX_TOAST_SOUND:
-    if (inLimit(config_int(),0,1))
-      {
-        infoSettings.toastSound = config_int();
-      }
+        infoSettings.toastSound = getOnOff();
     break;
 
   case C_INDEX_ALERT_SOUND:
-    if (inLimit(config_int(),0,1))
-      {
-        infoSettings.alertSound = config_int();
-      }
+        infoSettings.alertSound = getOnOff();
     break;
 #endif
 

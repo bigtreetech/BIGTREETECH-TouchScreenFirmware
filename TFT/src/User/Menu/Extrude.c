@@ -124,11 +124,22 @@ void menuExtrude(void)
     }
     if (extrudeCoordinate != eTemp)
     {
-      extrudeCoordinate = eTemp;
-      extrudeCoordinateReDraw(true);
-      if(curExtruder_index != heatGetCurrentTool())
+      if (curExtruder_index != heatGetCurrentTool())
         storeCmd("%s\n", tool_change[curExtruder_index]);
-      storeCmd("G0 E%.5f F%d\n", extrudeCoordinate, infoSettings.ext_speed[itemSpeed_index]);
+
+      if (heatGetCurrentTemp(curExtruder_index) < infoSettings.min_ext_temp)
+      {
+        char tempMsg[120];
+        labelChar(tempStr, LABEL_EXT_TEMPLOW);
+        sprintf(tempMsg, tempStr, infoSettings.min_ext_temp);
+        popupReminder(DIALOG_TYPE_ERROR,LABEL_COLD_EXT, (u8*)tempMsg);
+      }
+      else
+      {
+        extrudeCoordinateReDraw(true);
+        extrudeCoordinate = eTemp;
+        storeCmd("G0 E%.5f F%d\n", extrudeCoordinate, infoSettings.ext_speed[itemSpeed_index]);
+      }
     }
     loopProcess();
   }
