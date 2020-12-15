@@ -286,6 +286,6 @@
     #define STRING_PRINT_SUMMARY         "Час друку: %02u:%02u:%02u\nВикористано філаменту: %3.2f метрів"
     #define STRING_PRINT_COMPLETE        "Друк завершено."
     #define STRING_EXT_TEMPLOW           "Температура хотенду нижче\nмінімальної температури (%d℃)."
-    #define STRING_COLD_EXT              "Від холодної екструзії убережено"
+    #define STRING_COLD_EXT              "Убережено від холодної екструзії "
 
 #endif
