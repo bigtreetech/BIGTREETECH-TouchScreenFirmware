@@ -6,20 +6,20 @@
 #define NONE 0
 
 const MENUITEMS loadUnloadItems = {
-// title
-LABEL_LOAD_UNLOAD,
-// icon                       label
-{ {ICON_UNLOAD,               LABEL_UNLOAD},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_LOAD,                 LABEL_LOAD},
-  {ICON_NOZZLE,               LABEL_NOZZLE},
-  {ICON_HEAT,                 LABEL_HEAT},
-  {ICON_COOLDOWN,             LABEL_COOLDOWN},
-  {ICON_BACK,                 LABEL_BACK},}
+  // title
+  LABEL_LOAD_UNLOAD,
+  // icon                         label
+  {{ICON_UNLOAD,                  LABEL_UNLOAD},
+   {ICON_BACKGROUND,              LABEL_BACKGROUND},
+   {ICON_BACKGROUND,              LABEL_BACKGROUND},
+   {ICON_LOAD,                    LABEL_LOAD},
+   {ICON_NOZZLE,                  LABEL_NOZZLE},
+   {ICON_HEAT,                    LABEL_HEAT},
+   {ICON_COOLDOWN,                LABEL_COOLDOWN},
+   {ICON_BACK,                    LABEL_BACK},}
 };
 
-static u8  curExt_index = 0;
+static u8 curExt_index = 0;
 static u8 lastcmd = NONE;
 
 void extruderIdReDraw(void)

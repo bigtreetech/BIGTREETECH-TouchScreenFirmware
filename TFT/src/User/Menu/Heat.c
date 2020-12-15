@@ -16,6 +16,7 @@ void heatSetCurrentIndex(uint8_t index)
 void showTemperature(uint8_t index)
 {
   char tempstr[20];
+
   sprintf(tempstr, "%-15s", heatDisplayID[index]);
   GUI_DispString(exhibitRect.x0, exhibitRect.y0, (u8 *)tempstr);
 
@@ -33,15 +34,15 @@ void menuHeat(void)
   MENUITEMS heatItems = {
     // title
     LABEL_HEAT,
-    // icon                      label
-    {{ICON_DEC,                  LABEL_DEC},
-     {ICON_BACKGROUND,           LABEL_BACKGROUND},
-     {ICON_BACKGROUND,           LABEL_BACKGROUND},
-     {ICON_INC,                  LABEL_INC},
-     {ICON_NOZZLE,               LABEL_NOZZLE},
-     {ICON_5_DEGREE,             LABEL_5_DEGREE},
-     {ICON_STOP,                 LABEL_STOP},
-     {ICON_BACK,                 LABEL_BACK},}
+    // icon                         label
+    {{ICON_DEC,                     LABEL_DEC},
+     {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_INC,                     LABEL_INC},
+     {ICON_NOZZLE,                  LABEL_NOZZLE},
+     {ICON_5_DEGREE,                LABEL_5_DEGREE},
+     {ICON_STOP,                    LABEL_STOP},
+     {ICON_BACK,                    LABEL_BACK},}
   };
 
   heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
@@ -68,23 +69,24 @@ void menuHeat(void)
         break;
 
       case KEY_INFOBOX:
-      {
-        int32_t val = actTarget;
-        char titlestr[30];
+        {
+          int32_t val = actTarget;
+          char titlestr[30];
 
-        sprintf(titlestr, "Min:0 | Max:%i", infoSettings.max_temp[c_heater]);
-        val = numPadInt((u8 *)titlestr, actTarget, 0, false);
-        val = NOBEYOND(0, val, infoSettings.max_temp[c_heater]);
-        if (val != actTarget)
-          heatSetTargetTemp(c_heater, val);
+          sprintf(titlestr, "Min:0 | Max:%i", infoSettings.max_temp[c_heater]);
+          val = numPadInt((u8 *) titlestr, actTarget, 0, false);
+          val = NOBEYOND(0, val, infoSettings.max_temp[c_heater]);
 
-        menuDrawPage(&heatItems);
-        showTemperature(c_heater);
+          if (val != actTarget)
+            heatSetTargetTemp(c_heater, val);
+
+          menuDrawPage(&heatItems);
+          showTemperature(c_heater);
+        }
         break;
-      }
 
       case KEY_ICON_3:
-          heatSetTargetTemp(c_heater, actTarget + degreeSteps[degreeSteps_index]);
+        heatSetTargetTemp(c_heater, actTarget + degreeSteps[degreeSteps_index]);
         break;
 
       case KEY_ICON_4:
@@ -99,7 +101,7 @@ void menuHeat(void)
         break;
 
       case KEY_ICON_5:
-        degreeSteps_index = (degreeSteps_index+1) % ITEM_DEGREE_NUM;
+        degreeSteps_index = (degreeSteps_index + 1) % ITEM_DEGREE_NUM;
         heatItems.items[key_num] = itemDegreeSteps[degreeSteps_index];
         menuDrawItem(&heatItems.items[key_num], key_num);
         break;
@@ -116,10 +118,10 @@ void menuHeat(void)
         #if LCD_ENCODER_SUPPORT
           if (encoderPosition)
           {
-            if(encoderPosition > 0)
-                heatSetTargetTemp(c_heater, actTarget + degreeSteps[degreeSteps_index]);
+            if (encoderPosition > 0)
+              heatSetTargetTemp(c_heater, actTarget + degreeSteps[degreeSteps_index]);
             else // if < 0)
-                heatSetTargetTemp(c_heater, actTarget - degreeSteps[degreeSteps_index]);
+              heatSetTargetTemp(c_heater, actTarget - degreeSteps[degreeSteps_index]);
             encoderPosition = 0;
           }
         #endif

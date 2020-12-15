@@ -5,7 +5,7 @@ static float z_offset_value = PROBE_OFFSET_DEFAULT_VALUE;
 static bool probe_offset_enabled = false;
 
 /* Enable probe offset */
-void probeOffsetEnable(void)
+void probeOffsetEnable(bool skipZOffset)
 {
   probe_offset_enabled = true;
 
@@ -20,9 +20,17 @@ void probeOffsetEnable(void)
   mustStoreCmd("G1 X%.2f Y%.2f F%d\n",
     getParameter(P_PROBE_OFFSET, X_STEPPER),
     getParameter(P_PROBE_OFFSET, Y_STEPPER),
-    infoSettings.axis_speed[infoSettings.move_speed]);     // move nozzle to X and Y probing coordinates and set feedrate
+    infoSettings.axis_speed[infoSettings.move_speed]);     // move nozzle to XY probing coordinates and set feedrate
 
-  probeHeightStart();                                      // lower nozzle to Z0 point
+  if (!skipZOffset)
+  {
+    probeHeightStart(0.0f);                                // lower nozzle to absolute Z0 point
+  }
+  else
+  {
+    probeHeightStart(-probeOffsetGetValue());              // lower nozzle to probing Z0 point
+    probeOffsetSetValue(0.0f);                             // reset Z offset in order probing Z0 matches absolute Z0 point
+  }
 }
 
 /* Disable probe offset */

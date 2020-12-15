@@ -4,9 +4,9 @@
 static uint8_t curIndex = 0;
 
 const ITEM itemFan[2] = {
-  //icon                label
-  {ICON_FAN,            LABEL_FAN},
-  {ICON_FAN_HALF_SPEED, LABEL_FAN_HALF_SPEED},
+  // icon                        label
+  {ICON_FAN,                     LABEL_FAN},
+  {ICON_FAN_HALF_SPEED,          LABEL_FAN_HALF_SPEED},
 };
 
 void fanSpeedReDraw(bool skip_header)
@@ -35,15 +35,15 @@ void menuFan(void)
   MENUITEMS fanItems = {
     // title
     LABEL_FAN,
-    // icon                      label
-    {{ICON_DEC,                  LABEL_DEC},
-     {ICON_BACKGROUND,           LABEL_BACKGROUND},
-     {ICON_BACKGROUND,           LABEL_BACKGROUND},
-     {ICON_INC,                  LABEL_INC},
-     {ICON_FAN ,                 LABEL_FAN},
-     {ICON_FAN_FULL_SPEED,       LABEL_FAN_FULL_SPEED},
-     {ICON_STOP,                 LABEL_STOP},
-     {ICON_BACK,                 LABEL_BACK},}
+    // icon                         label
+    {{ICON_DEC,                     LABEL_DEC},
+     {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_INC,                     LABEL_INC},
+     {ICON_FAN ,                    LABEL_FAN},
+     {ICON_FAN_FULL_SPEED,          LABEL_FAN_FULL_SPEED},
+     {ICON_STOP,                    LABEL_STOP},
+     {ICON_BACK,                    LABEL_BACK},}
   };
 
   uint8_t lastFan = fanGetCurSpeed(curIndex);
@@ -85,6 +85,7 @@ void menuFan(void)
           sprintf(titlestr, "Min:0 | Max:100");
           val = numPadInt((u8 *) titlestr, actFanPercent, 0, false);
           val = NOBEYOND(0, val, 100);
+
           if (val != actFanPercent)
             fanSetDesiredPercent(curIndex, val);
 

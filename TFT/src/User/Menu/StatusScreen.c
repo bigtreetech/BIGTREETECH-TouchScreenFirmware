@@ -11,28 +11,28 @@
 #endif
 
 const MENUITEMS StatusItems = {
-// title
-LABEL_READY,
-// icon                       label
- {{ICON_STATUS_NOZZLE,        LABEL_BACKGROUND},
-  {ICON_STATUS_BED,           LABEL_BACKGROUND},
-  {ICON_STATUS_FAN,           LABEL_BACKGROUND},
-  {ICON_STATUS_SPEED,         LABEL_BACKGROUND},
+  // title
+  LABEL_READY,
+  // icon                         label
+  {{ICON_STATUS_NOZZLE,           LABEL_BACKGROUND},
+   {ICON_STATUS_BED,              LABEL_BACKGROUND},
+   {ICON_STATUS_FAN,              LABEL_BACKGROUND},
+   {ICON_STATUS_SPEED,            LABEL_BACKGROUND},
 #ifdef TFT70_V3_0
-  {ICON_STATUS_FLOW,          LABEL_BACKGROUND},
-  {ICON_MAINMENU,             LABEL_MAINMENU},
+   {ICON_STATUS_FLOW,             LABEL_BACKGROUND},
+   {ICON_MAINMENU,                LABEL_MAINMENU},
 #else
-  {ICON_MAINMENU,             LABEL_MAINMENU},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
+   {ICON_MAINMENU,                LABEL_MAINMENU},
+   {ICON_BACKGROUND,              LABEL_BACKGROUND},
 #endif
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_PRINT,                LABEL_PRINT},}
+   {ICON_BACKGROUND,              LABEL_BACKGROUND},
+   {ICON_PRINT,                   LABEL_PRINT},}
 };
 
 const ITEM SpeedItems[2] = {
-// icon                       label
-  {ICON_STATUS_SPEED,         LABEL_BACKGROUND},
-  {ICON_STATUS_FLOW,          LABEL_BACKGROUND},
+  // icon                        label
+  {ICON_STATUS_SPEED,            LABEL_BACKGROUND},
+  {ICON_STATUS_FLOW,             LABEL_BACKGROUND},
 };
 
 static u32 nextTime = 0;

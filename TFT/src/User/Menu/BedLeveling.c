@@ -93,9 +93,13 @@ void menuBedLeveling(void)
       case KEY_ICON_5:
         {
           char tempstr[30];
+
           sprintf(tempstr, "%Min:%.2f | Max:%.2f", Z_FADE_MIN_VALUE, Z_FADE_MAX_VALUE);
+
           float val = numPadFloat((u8 *) tempstr, getParameter(P_ABL_STATE, 1), 0.0f, false);
+
           storeCmd("M420 Z%.2f\n", NOBEYOND(Z_FADE_MIN_VALUE, val, Z_FADE_MAX_VALUE));
+
           menuDrawPage(&bedLevelingItems);
         }
         break;

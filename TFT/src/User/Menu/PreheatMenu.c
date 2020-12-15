@@ -6,15 +6,15 @@ const GUI_POINT preheat_val_tool = {ICON_WIDTH - BYTE_WIDTH/2, PREHEAT_TOOL_Y};
 const GUI_POINT preheat_val_bed = {ICON_WIDTH - BYTE_WIDTH/2, PREHEAT_BED_Y};
 
 const ITEM itemToolPreheat[] = {
-// icon                       label
-  {ICON_PREHEAT_BOTH,         LABEL_PREHEAT_BOTH},
-  {ICON_BED,                  LABEL_BED},
-  {ICON_NOZZLE,               LABEL_NOZZLE},
-  {ICON_NOZZLE,               LABEL_NOZZLE},
-  {ICON_NOZZLE,               LABEL_NOZZLE},
-  {ICON_NOZZLE,               LABEL_NOZZLE},
-  {ICON_NOZZLE,               LABEL_NOZZLE},
-  {ICON_NOZZLE,               LABEL_NOZZLE},
+  // icon                        label
+  {ICON_PREHEAT_BOTH,            LABEL_PREHEAT_BOTH},
+  {ICON_BED,                     LABEL_BED},
+  {ICON_NOZZLE,                  LABEL_NOZZLE},
+  {ICON_NOZZLE,                  LABEL_NOZZLE},
+  {ICON_NOZZLE,                  LABEL_NOZZLE},
+  {ICON_NOZZLE,                  LABEL_NOZZLE},
+  {ICON_NOZZLE,                  LABEL_NOZZLE},
+  {ICON_NOZZLE,                  LABEL_NOZZLE},
 };
 
 // Redraw Preheat icon details
@@ -67,19 +67,17 @@ void refreshPreheatIcon(int8_t preheatnum, int8_t icon_index, const ITEM * menui
 void menuPreheat(void)
 {
   MENUITEMS preheatItems = {
-  // title
-  LABEL_PREHEAT,
-    // icon                       label
-    {
-      {ICON_PREHEAT,              LABEL_BACKGROUND},
-      {ICON_PREHEAT,              LABEL_BACKGROUND},
-      {ICON_PREHEAT,              LABEL_BACKGROUND},
-      {ICON_PREHEAT,              LABEL_BACKGROUND},
-      {ICON_PREHEAT,              LABEL_BACKGROUND},
-      {ICON_PREHEAT,              LABEL_BACKGROUND},
-      {ICON_PREHEAT_BOTH,         LABEL_PREHEAT_BOTH},
-      {ICON_BACK,                 LABEL_BACK},
-    }
+    // title
+    LABEL_PREHEAT,
+    // icon                         label
+    {{ICON_PREHEAT,                 LABEL_BACKGROUND},
+     {ICON_PREHEAT,                 LABEL_BACKGROUND},
+     {ICON_PREHEAT,                 LABEL_BACKGROUND},
+     {ICON_PREHEAT,                 LABEL_BACKGROUND},
+     {ICON_PREHEAT,                 LABEL_BACKGROUND},
+     {ICON_PREHEAT,                 LABEL_BACKGROUND},
+     {ICON_PREHEAT_BOTH,            LABEL_PREHEAT_BOTH},
+     {ICON_BACK,                    LABEL_BACK},}
   };
 
   static TOOLPREHEAT nowHeater = BOTH;

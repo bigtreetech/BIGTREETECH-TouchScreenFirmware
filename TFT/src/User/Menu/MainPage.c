@@ -21,10 +21,10 @@ void menuMain(void)
   KEY_VALUES key_num = KEY_IDLE;
 
   if (infoSettings.status_screen != 1)
-    {
-      mainPageItems.items[7].icon = ICON_PRINT;
-      mainPageItems.items[7].label.index = LABEL_PRINT;
-    }
+  {
+    mainPageItems.items[7].icon = ICON_PRINT;
+    mainPageItems.items[7].label.index = LABEL_PRINT;
+  }
 
   menuDrawPage(&mainPageItems);
 

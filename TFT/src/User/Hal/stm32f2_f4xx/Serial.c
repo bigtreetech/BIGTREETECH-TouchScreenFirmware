@@ -144,32 +144,32 @@ void USART_IRQHandler(uint8_t port)
 
 void USART1_IRQHandler(void)
 {
-    USART_IRQHandler(_USART1);
+  USART_IRQHandler(_USART1);
 }
 
 void USART2_IRQHandler(void)
 {
-    USART_IRQHandler(_USART2);
+  USART_IRQHandler(_USART2);
 }
 
 void USART3_IRQHandler(void)
 {
-    USART_IRQHandler(_USART3);
+  USART_IRQHandler(_USART3);
 }
 
 void UART4_IRQHandler(void)
 {
-    USART_IRQHandler(_UART4);
+  USART_IRQHandler(_UART4);
 }
 
 void UART5_IRQHandler(void)
 {
-    USART_IRQHandler(_UART5);
+  USART_IRQHandler(_UART5);
 }
 
 void USART6_IRQHandler(void)
 {
-    USART_IRQHandler(_USART6);
+  USART_IRQHandler(_USART6);
 }
 
 void Serial_Puts(uint8_t port, char *s)
@@ -184,7 +184,7 @@ void Serial_Puts(uint8_t port, char *s)
 #include "stdio.h"
 int fputc(int ch, FILE *f)
 {
-	while((Serial[SERIAL_PORT].uart->SR&0X40)==0);
-    Serial[SERIAL_PORT].uart->DR = (u8) ch;
-	return ch;
+  while((Serial[SERIAL_PORT].uart->SR&0X40) == 0);
+  Serial[SERIAL_PORT].uart->DR = (u8) ch;
+  return ch;
 }

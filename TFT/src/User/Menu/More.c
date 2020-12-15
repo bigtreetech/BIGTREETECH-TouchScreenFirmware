@@ -6,13 +6,13 @@ const MENUITEMS moreItems = {
   LABEL_MORE,
   // icon                         label
   {{ICON_HEAT,                    LABEL_HEAT},
-    {ICON_FAN,                     LABEL_FAN},
-    {ICON_EXTRUDE,                 LABEL_EXTRUDE},
-    {ICON_PERCENTAGE,              LABEL_PERCENTAGE},
-    {ICON_FEATURE_SETTINGS,        LABEL_FEATURE_SETTINGS},
-    {ICON_MACHINE_SETTINGS,        LABEL_MACHINE_SETTINGS},
-    {ICON_GCODE,                   LABEL_TERMINAL},
-    {ICON_BACK,                    LABEL_BACK},}
+   {ICON_FAN,                     LABEL_FAN},
+   {ICON_EXTRUDE,                 LABEL_EXTRUDE},
+   {ICON_PERCENTAGE,              LABEL_PERCENTAGE},
+   {ICON_FEATURE_SETTINGS,        LABEL_FEATURE_SETTINGS},
+   {ICON_MACHINE_SETTINGS,        LABEL_MACHINE_SETTINGS},
+   {ICON_GCODE,                   LABEL_TERMINAL},
+   {ICON_BACK,                    LABEL_BACK},}
 };
 
 void isPauseConfirm(void)

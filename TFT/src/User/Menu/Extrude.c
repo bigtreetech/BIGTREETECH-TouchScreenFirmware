@@ -74,18 +74,18 @@ void menuExtrude(void)
         break;
 
       case KEY_INFOBOX:
-      {
-        float val = 0;
-        char titlestr[30];
+        {
+          float val = 0;
+          char titlestr[30];
 
-        sprintf(titlestr, "Min:%i | Max:%i",(extlenSteps[COUNT(extlenSteps)-1]) * -1, extlenSteps[COUNT(extlenSteps)-1]);
-        val = numPadFloat((u8 *)titlestr,0,0,true);
-        eTemp += val;
+          sprintf(titlestr, "Min:%i | Max:%i", (extlenSteps[COUNT(extlenSteps) - 1]) * -1, extlenSteps[COUNT(extlenSteps) - 1]);
+          val = numPadFloat((u8 *) titlestr, 0, 0, true);
+          eTemp += val;
 
-        menuDrawPage(&extrudeItems);
-        extrudeCoordinateReDraw(false);
+          menuDrawPage(&extrudeItems);
+          extrudeCoordinateReDraw(false);
+        }
         break;
-      }
 
       case KEY_ICON_3:
         eTemp += extlenSteps[extlenSteps_index];
@@ -97,13 +97,13 @@ void menuExtrude(void)
         break;
 
       case KEY_ICON_5:
-        extlenSteps_index = (extlenSteps_index+1) % ITEM_EXT_LEN_NUM;
+        extlenSteps_index = (extlenSteps_index + 1) % ITEM_EXT_LEN_NUM;
         extrudeItems.items[key_num] = itemExtLenSteps[extlenSteps_index];
         menuDrawItem(&extrudeItems.items[key_num], key_num);
         break;
 
       case KEY_ICON_6:
-        itemSpeed_index = (itemSpeed_index+1) % ITEM_SPEED_NUM;
+        itemSpeed_index = (itemSpeed_index + 1) % ITEM_SPEED_NUM;
         extrudeItems.items[key_num] = itemSpeed[itemSpeed_index];
         menuDrawItem(&extrudeItems.items[key_num], key_num);
         break;

@@ -7,11 +7,13 @@ uint8_t fanType[MAX_FAN_COUNT];
 static uint8_t desiredFanSpeed[MAX_FAN_COUNT] = {0};
 static uint8_t newFanSpeed[MAX_FAN_COUNT] = {0};
 static uint8_t curFanSpeed[MAX_FAN_COUNT] = {0};
+
 static bool fan_send_waiting[MAX_FAN_COUNT] = {false};
 static bool fanQueryWait = false;
 static bool fanQueryEnable = false;
 
 static uint32_t nextFanTime = 0;
+
 #define NEXT_FAN_WAIT 500  // 1 second is 1000
 
 uint8_t fanGetTypID(uint8_t startIndex, uint8_t type)
@@ -153,8 +155,7 @@ void loopFan(void)
 
 void fanSpeedQuery(void)
 {
-  if (fanQueryEnable && infoHost.connected &&
-      !infoHost.wait && !fanQueryWait)
+  if (infoHost.connected && !infoHost.wait && !fanQueryWait && fanQueryEnable)
   {
     storeCmd("M710\n");
     fanQueryWait = true;

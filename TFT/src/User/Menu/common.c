@@ -51,7 +51,7 @@ const ITEM itemPercent[ITEM_PERCENT_STEPS_NUM] =
 };
 
 // List for percent change steps
-const  u8 percentSteps[ITEM_PERCENT_STEPS_NUM] = {1, 5, 10};
+const u8 percentSteps[ITEM_PERCENT_STEPS_NUM] = {1, 5, 10};
 
 // Icons list for axis length/distance change steps
 const ITEM itemMoveLen[ITEM_MOVE_LEN_NUM] =
@@ -65,7 +65,7 @@ const ITEM itemMoveLen[ITEM_MOVE_LEN_NUM] =
 };
 
 // List for length/distance change steps
-const  float moveLenSteps[ITEM_MOVE_LEN_NUM] = {0.01f, 0.1f, 1, 10, 100};
+const float moveLenSteps[ITEM_MOVE_LEN_NUM] = {0.01f, 0.1f, 1, 10, 100};
 
 // Icons list for Extruder length/distance change steps
 const ITEM itemExtLenSteps[ITEM_EXT_LEN_NUM] =
