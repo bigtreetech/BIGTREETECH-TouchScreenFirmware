@@ -23,29 +23,6 @@ void updateFilamentUsed(void)
   last_E_pos = E_pos;
 }
 
-static float filament_used;
-static float last_E_pos;
-
-void resetFilamentUsed(void)
-{
-  filament_used = 0;
-  last_E_pos = ((infoFile.source == BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
-}
-
-void updateFilamentUsed(void)
-{
-  float E_pos = ((infoFile.source == BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
-  if ((E_pos + 20) < last_E_pos) //Check whether E position reset. If retract more than 20mm, false filament used values would be calculated.
-  {
-    filament_used = filament_used + E_pos;
-    last_E_pos = E_pos;
-  } else if (E_pos > last_E_pos)
-  {
-    filament_used = filament_used + (E_pos - last_E_pos);
-    last_E_pos = E_pos;
-  }
-}
-
 //
 bool isPrinting(void)
 {
