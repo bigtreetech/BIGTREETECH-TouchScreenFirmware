@@ -418,10 +418,6 @@ void parseACK(void)
 
         infoPrinting.pause = false;
         infoHost.printing = true;
-        if (infoSettings.print_summary)
-        {
-          resetFilamentUsed();
-        }
         infoPrinting.time = 0;
         infoPrinting.cur = 0;
         infoPrinting.size = ack_value();
