@@ -88,7 +88,6 @@ typedef enum
     SKEY_ST7920_FULLSCREEN,
   #endif
   SKEY_PLR_EN,
-  SKEY_PRINT_SUMMARY,
   SKEY_RESET_SETTINGS, // Keep reset always at the bottom of the settings menu list.
   SKEY_COUNT //keep this always at the end
 }SKEY_LIST;
@@ -282,11 +281,6 @@ void updateFeatureSettings(uint8_t key_val)
       settingPage[item_index].icon = toggleitem[infoSettings.powerloss_en];
       break;
 
-    case SKEY_PRINT_SUMMARY:
-      infoSettings.print_summary = (infoSettings.print_summary + 1) % TOGGLE_NUM;
-      settingPage[item_index].icon = toggleitem[infoSettings.print_summary];
-      break;
-
     default:
       return;
   }
@@ -401,10 +395,6 @@ void loadFeatureSettings(){
 
       case SKEY_PLR_EN:
         settingPage[item_index].icon = toggleitem[infoSettings.powerloss_en];
-        break;
-
-      case SKEY_PRINT_SUMMARY:
-        settingPage[item_index].icon = toggleitem[infoSettings.print_summary];
         break;
 
       default:

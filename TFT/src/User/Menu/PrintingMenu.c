@@ -300,10 +300,7 @@ void scrollInfo(void)
 void stopConfirm(void)
 {
   abortPrinting();
-  if (!infoSettings.print_summary)
-  {
-    --infoMenu.cur;
-  }
+  infoMenu.cur--;
 }
 
 void printFinished(void)
