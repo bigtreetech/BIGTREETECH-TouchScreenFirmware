@@ -356,22 +356,26 @@ void printInfoPopup(void)
 
   strcpy(showInfo, LABEL_FILE_NAME);
   strcat(showInfo, filData.name);
+  strcat(showInfo, "\n");
   strcat(showInfo, LABEL_PRINT_TIME);
   sprintf(tempstr, "%02u:%02u:%02u", hour, min, sec);
   strcat(showInfo, tempstr);
   if (filData.length > 0)
   {
     sprintf(tempstr, LABEL_FILAMENT_LENGTH, filData.length);
+    strcat(showInfo, "\n");
     strcat(showInfo, tempstr);
   }
   if (filData.weight > 0)
   {
     sprintf(tempstr, LABEL_FILAMENT_WEIGHT, filData.weight);
+    strcat(showInfo, "\n");
     strcat(showInfo, tempstr);
   }
   if (filData.cost > 0)
   {
     sprintf(tempstr, LABEL_FILAMENT_COST, filData.cost);
+    strcat(showInfo, "\n");
     strcat(showInfo, tempstr);
   }
   popupReminder(DIALOG_TYPE_INFO, LABEL_INFO, (uint8_t *) showInfo);

@@ -255,15 +255,6 @@
 #define LOAD_UNLOAD_M701_M702
 
 /**
- * Enable print summary popup
- * This will enable a popup at print end.
- * The popup shows the approximate print time and approximate filament used.
- * Displayed values are calculated by approximation and may differ from the actual values.
- * When enabled also the menu jumps to the status screen after the popup.
- */
-#define DISPLAY_PRINT_SUMMARY 1 // 0: Disabled 1: Enabled
-
-/**
  * Auto save/load Bed Leveling data
  * The TFT will auto detect if BL data are available.
  * Enable this will send "M500" after "G29" to store leveling value
