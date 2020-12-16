@@ -240,7 +240,7 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
 
 void exitPrinting(void)
 {
-  memset(&infoPrinting,0,sizeof(PRINTING));
+  memset(&infoPrinting, 0, sizeof(PRINTING));
   ExitDir();
 }
 
