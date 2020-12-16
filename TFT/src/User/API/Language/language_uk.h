@@ -289,7 +289,7 @@
     #define STRING_PRINT_TIME             "Print Time: "
     #define STRING_FILAMENT_LENGTH        "Filament length: %3.2fm"
     #define STRING_FILAMENT_WEIGHT        "Filament weight: %4.2fg"
-    #define STRING_FILAMENT_COST          "Filament cost: %2.2ffg"
+    #define STRING_FILAMENT_COST          "Filament cost: %2.2f"
     #define STRING_NO_FILAMENT_STATISTICS "No filament statistics."
     #define STRING_CLICK_FOR_MORE         "Click for more." 
     #define STRING_EXT_TEMPLOW           "Hotend temperature is below\nminimum temperature (%d℃)."

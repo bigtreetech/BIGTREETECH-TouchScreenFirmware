@@ -307,7 +307,7 @@ void printFinished(void)
 {
   char tempstr[30];
   strcpy(filamentInfo, "");
-  strcpy(filData.name, getCurGcodeName(infoFile.title));
+  strcpy(filData.name, (char *)getCurGcodeName(infoFile.title));
   filData.time = infoPrinting.time;
 
   if (speedGetPercent(1) != 100)
@@ -319,27 +319,27 @@ void printFinished(void)
 
   if (filData.length != 0)
   {
-    sprintf(tempstr, LABEL_FILAMENT_LENGTH, filData.length);
+    sprintf(tempstr, (char*)textSelect(LABEL_FILAMENT_LENGTH), filData.length);
     strcat(filamentInfo, tempstr);
   }
   if (filData.weight != 0)
   {
-    sprintf(tempstr, LABEL_FILAMENT_WEIGHT, filData.weight);
+    sprintf(tempstr, (char*)textSelect(LABEL_FILAMENT_WEIGHT), filData.weight);
     if (strlen(filamentInfo) > 0) 
       strcat(filamentInfo, ",  ");
     strcat(filamentInfo, tempstr);
   }
   if (filData.cost != 0)
   {
-    sprintf(tempstr, LABEL_FILAMENT_COST, filData.cost);
+    sprintf(tempstr, (char*)textSelect(LABEL_FILAMENT_COST), filData.cost);
     if (strlen (filamentInfo) > 0) 
       strcat(filamentInfo, ",  ");
     strcat(filamentInfo, tempstr);
   }
   if (strlen (filamentInfo) == 0)
-    strcpy(filamentInfo, LABEL_NO_FILAMENT_STATISTICS);
+    strcpy(filamentInfo, (char*)textSelect(LABEL_NO_FILAMENT_STATISTICS));
   
-  strcat(filamentInfo, LABEL_CLICK_FOR_MORE);  
+  strcat(filamentInfo, (char*)textSelect(LABEL_CLICK_FOR_MORE));  
   drawPrintInfo();
 }
 
@@ -351,27 +351,27 @@ void printInfoPopup(void)
   char showInfo[150];
   char tempstr[30];
 
-  strcpy(showInfo, LABEL_FILE_NAME);
+  strcpy(showInfo, (char*)textSelect(LABEL_FILE_NAME));
   strcat(showInfo, filData.name);
   strcat(showInfo, "\n");
-  strcat(showInfo, LABEL_PRINT_TIME);
+  strcat(showInfo, (char*)textSelect(LABEL_PRINT_TIME));
   sprintf(tempstr, "%02u:%02u:%02u", hour, min, sec);
   strcat(showInfo, tempstr);
   if (filData.length > 0)
   {
-    sprintf(tempstr, LABEL_FILAMENT_LENGTH, filData.length);
+    sprintf(tempstr, (char*)textSelect(LABEL_FILAMENT_LENGTH), filData.length);
     strcat(showInfo, "\n");
     strcat(showInfo, tempstr);
   }
   if (filData.weight > 0)
   {
-    sprintf(tempstr, LABEL_FILAMENT_WEIGHT, filData.weight);
+    sprintf(tempstr, (char*)textSelect(LABEL_FILAMENT_WEIGHT), filData.weight);
     strcat(showInfo, "\n");
     strcat(showInfo, tempstr);
   }
   if (filData.cost > 0)
   {
-    sprintf(tempstr, LABEL_FILAMENT_COST, filData.cost);
+    sprintf(tempstr, (char*)textSelect(LABEL_FILAMENT_COST), filData.cost);
     strcat(showInfo, "\n");
     strcat(showInfo, tempstr);
   }
