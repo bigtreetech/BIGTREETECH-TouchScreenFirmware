@@ -6,6 +6,11 @@
 //===========================================================================
 
 /**
+ * To work with RepRapFirmware, Add M575 P1 S2 B115200 to the end of config.g file in sd card
+*/
+#define RepRapFirmware
+
+/**
  * Default Mode
  *
  * Mode switching is still possible by holding down the encorder for two seconds.

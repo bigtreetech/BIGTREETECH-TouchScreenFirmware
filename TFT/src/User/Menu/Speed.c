@@ -49,7 +49,8 @@ void menuSpeed(void)
 
   percentageItems.items[KEY_ICON_5] = itemPercent[percentSteps_index];
 
-  storeCmd("M220\nM221\n");
+  storeCmd("M220\n");
+  storeCmd("M221 D%d\n",heatGetCurrentTool());
   KEY_VALUES key_num;
 
   u16 now = speedGetPercent(itemPercentType_index);

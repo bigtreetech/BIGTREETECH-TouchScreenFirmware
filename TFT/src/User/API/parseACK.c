@@ -296,6 +296,16 @@ void parseACK(void)
       if (infoSettings.ext_count < infoSettings.hotend_count) infoSettings.ext_count = infoSettings.hotend_count;
       updateNextHeatCheckTime();
       infoHost.connected = true;
+    #ifdef RepRapFirmware
+      if (!ack_seen("@"))  //It's RepRapFirmware
+      {
+        infoMachineSettings.isMarlinFirmware = 0;
+        infoMachineSettings.softwareEndstops = ENABLED;
+        infoHost.wait = false;
+        storeCmd("M92\n");
+        storeCmd("M115\n");
+      }
+    #endif
       if(infoMachineSettings.isMarlinFirmware == -1) // if never connected to the printer since boot
       {
         storeCmd("M503\n");  // Query detailed printer capabilities
@@ -451,6 +461,15 @@ void parseACK(void)
       }
 
     //parse and store stepper steps/mm values
+    #ifdef RepRapFirmware
+      else if(ack_seen("Steps"))    // For RepRapFirmware
+      {
+        if(ack_seen("X: ")) setParameter(P_STEPS_PER_MM, X_STEPPER, ack_value());
+        if(ack_seen("Y: ")) setParameter(P_STEPS_PER_MM, Y_STEPPER, ack_value());
+        if(ack_seen("Z: ")) setParameter(P_STEPS_PER_MM, Z_STEPPER, ack_value());
+        if(ack_seen("E: ")) setParameter(P_STEPS_PER_MM, E_STEPPER, ack_value());
+      }
+    #endif
       else if(ack_seen("M92 X"))
       {
                           setParameter(P_STEPS_PER_MM, X_STEPPER, ack_value());
@@ -647,6 +666,10 @@ void parseACK(void)
           string_end = ack_index - sizeof("FIRMWARE_URL:");
         else if (ack_seen("SOURCE_CODE_URL:")) // For Marlin
           string_end = ack_index - sizeof("SOURCE_CODE_URL:");
+      #ifdef RepRapFirmware
+        else if (ack_seen("ELECTRONICS"))  // For RepRapFirmware
+          string_end = ack_index - sizeof("ELECTRONICS");
+      #endif
         infoSetFirmwareName(string, string_end - string_start); // Set firmware name
 
         if (ack_seen("MACHINE_TYPE:"))
@@ -760,12 +783,27 @@ void parseACK(void)
         speedSetRcvPercent(0,ack_value());
         speedQuerySetWait(false);
       }
+    #ifdef RepRapFirmware
+      else if(ack_seen("factor: "))
+      {
+        speedSetRcvPercent(0,ack_value());
+        speedQuerySetWait(false);
+      }
+    #endif
     // parse and store flow rate percentage
       else if(ack_seen("Flow: "))
       {
         speedSetRcvPercent(1,ack_value());
         speedQuerySetWait(false);
       }
+    #ifdef RepRapFirmware
+      else if(ack_seen("extruder"))
+      {
+        ack_index+=4;
+        speedSetRcvPercent(1,ack_value());
+        speedQuerySetWait(false);
+      }
+    #endif
     // parse fan speed
       else if(ack_seen("M106 P"))
       {
