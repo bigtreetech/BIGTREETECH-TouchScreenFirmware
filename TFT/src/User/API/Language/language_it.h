@@ -276,12 +276,12 @@
     #define STRING_OFFSET_TOOL            "Offset secondo hotend"
     #define STRING_HYBRID_THRESHOLD       "Hybrid threshold"
     #define STRING_NOTIFICATIONS          "Notifiche"
-    #define STRING_MESH_EDITOR            "Mesh edit"
-    #define STRING_MESH_TUNER             "Mesh tuner"
-    #define STRING_CASE_LIGHT             "Case light"
-    #define STRING_LOAD_STARTED           "Filament load in progress.\nNo further actions possible\nuntil it's done.\nPlease stand by."  // translation needed
-    #define STRING_UNLOAD_STARTED         "Filament unload in progress.\nNo further actions possible\nuntil it's done.\nPlease stand by."  // translation needed
-    #define STRING_HEATERS_ON             "Some heaters are still ON.\nDo you want to stop them?"  // translation needed
+    #define STRING_MESH_EDITOR            "Mesh"
+    #define STRING_MESH_TUNER             "Correggi mesh"
+    #define STRING_CASE_LIGHT             "Luce"
+    #define STRING_LOAD_STARTED           "Carico filamento in corso...\nNon sono possibili altre\nazioni fino al termine.\nAttendere prego."
+    #define STRING_UNLOAD_STARTED         "Scarico filamento in corso...\nNon sono possibili altre\nazioni fino al termine.\nAttendere prego."
+    #define STRING_HEATERS_ON             "Alcuni riscaldatori sono ancora accesi\nVuoi spegnerli?"
     #define STRING_PRINT_FINISHED         "   Printing\n   finished."  // keep it short and in this format!
     #define STRING_MAIN_SCREEN            "Main"
     #define STRING_PREVIOUS_PRINT_DATA    "Brief"

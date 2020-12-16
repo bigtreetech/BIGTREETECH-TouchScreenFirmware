@@ -279,9 +279,9 @@
     #define STRING_MESH_EDITOR            "Сетка ред."
     #define STRING_MESH_TUNER             "Сетка настр."
     #define STRING_CASE_LIGHT             "Подсветка"
-    #define STRING_LOAD_STARTED           "Filament load in progress.\nNo further actions possible\nuntil it's done.\nPlease stand by."  // translation needed
-    #define STRING_UNLOAD_STARTED         "Filament unload in progress.\nNo further actions possible\nuntil it's done.\nPlease stand by."  // translation needed
-    #define STRING_HEATERS_ON             "Some heaters are still ON.\nDo you want to stop them?"  // translation needed
+    #define STRING_LOAD_STARTED           "Загрузка филамента начата.\nДождитесь пока сопло достигнет\nнеобходимой температуры.\nПожалуйста подождите."
+    #define STRING_UNLOAD_STARTED         "Выгрузка филамента начата.\nДождитесь пока сопло достигнет\nнеобходимой температуры.\nПожалуйста подождите."
+    #define STRING_HEATERS_ON             "Некоторые нагреватели все еще работают.\nХотите прервать нагрев?"
     #define STRING_PRINT_FINISHED         "   Printing\n   finished."  // keep it short and in this format!
     #define STRING_MAIN_SCREEN            "Main"
     #define STRING_PREVIOUS_PRINT_DATA    "Brief"

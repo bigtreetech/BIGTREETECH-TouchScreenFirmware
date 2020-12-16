@@ -517,7 +517,7 @@ void menuPrinting(void)
       menuDrawItem(&printingItems.items[KEY_ICON_5], KEY_ICON_5);
       printingItems.items[KEY_ICON_6] = itemIsPrinting[lastPrinting * 3];
       menuDrawItem(&printingItems.items[KEY_ICON_6], KEY_ICON_6);
-      printingItems.items[KEY_ICON_7] = itemIsPrinting[(int)lastPrinting + 4];
+      printingItems.items[KEY_ICON_7] = itemIsPrinting[lastPrinting + 4];
       menuDrawItem(&printingItems.items[KEY_ICON_7], KEY_ICON_7);
       if (lastPrinting == false)  // printing finished
       {
