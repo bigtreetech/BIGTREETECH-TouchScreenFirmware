@@ -255,15 +255,15 @@ void hostActionCommands(void)
   if (ack_seen("paused") || ack_seen("pause"))
   {
     infoPrinting.pause = true;
-  } 
-  else if (ack_seen("cancel"))   //To be added to Marlin abortprint routine
-	{
+  }
+  else if (ack_seen("cancel"))  //To be added to Marlin abortprint routine
+  {
     if (infoHost.printing == true)
     {
       request_M27(0);
     }
     infoHost.printing = false;
-		infoPrinting.printing = false;
+    infoPrinting.printing = false;
     infoPrinting.cur = infoPrinting.size;
   }
 

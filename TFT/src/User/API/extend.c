@@ -132,7 +132,7 @@ bool FIL_SmartRunoutDetect(void)
 {
   static float lastExtrudePosition = 0.0f;
   static uint8_t lastRunoutPinLevel = 0;
-  static u32  nextRunoutTime=0;
+  static u32  nextRunoutTime = 0;
 
   bool pinLevel = FIL_RunoutPinFilteredLevel();
   float actualExtrude = coordinateGetExtruderActual();
@@ -141,18 +141,18 @@ bool FIL_SmartRunoutDetect(void)
   {  /* Send M114 E query extrude position continuously	*/
     if(update_PosE_waiting == true)
     {
-      nextRunoutTime=OS_GetTimeMs()+update_PosE_time;
+      nextRunoutTime = OS_GetTimeMs() + update_PosE_time;
       break;
     }
-    if(OS_GetTimeMs()<nextRunoutTime)
+    if (OS_GetTimeMs() < nextRunoutTime)
       break;
-    if(requestCommandInfoIsRunning()) //to avoid colision in Gcode response processing
+    if (requestCommandInfoIsRunning()) //to avoid colision in Gcode response processing
       break;
-    if(storeCmd("M114 E\n") == false)
+    if (storeCmd("M114 E\n") == false)
       break;
 
-    nextRunoutTime=OS_GetTimeMs()+update_PosE_time;
-    update_PosE_waiting=true;
+    nextRunoutTime = OS_GetTimeMs() + update_PosE_time;
+    update_PosE_waiting = true;
   }while(0);
 
   if (SFS_IsAlive == false)

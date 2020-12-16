@@ -238,6 +238,12 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
   return true;
 }
 
+void exitPrinting(void)
+{
+  memset(&infoPrinting,0,sizeof(PRINTING));
+  ExitDir();
+}
+
 void endPrinting(void)
 {
   switch (infoFile.source)
@@ -253,15 +259,10 @@ void endPrinting(void)
   infoPrinting.printing = infoPrinting.pause = false;
   powerFailedClose();
   powerFailedDelete();
-  if(infoSettings.send_end_gcode == 1){
+  if(infoSettings.send_end_gcode == 1)
+  {
     sendPrintCodes(1);
   }
-}
-
-void exitPrinting(void)
-{
-  memset(&infoPrinting,0,sizeof(PRINTING));
-  ExitDir();
 }
 
 void printingFinished(void)
@@ -447,11 +448,15 @@ void loopCheckPrinting(void)
   uint32_t update_M27_time = infoSettings.m27_refresh_time * 1000;
   do
   {  /* WAIT FOR M27  */
-    if(updateM27_waiting == true) {nextCheckPrintTime = OS_GetTimeMs() + update_M27_time; break;}
-    if(OS_GetTimeMs() < nextCheckPrintTime) break;
-
-    if(storeCmd("M27\n") == false) break;
-
+    if(updateM27_waiting == true)
+    {
+      nextCheckPrintTime = OS_GetTimeMs() + update_M27_time;
+      break;
+    }
+    if(OS_GetTimeMs() < nextCheckPrintTime)
+      break;
+    if(storeCmd("M27\n") == false)
+      break;
     nextCheckPrintTime = OS_GetTimeMs() + update_M27_time;
     updateM27_waiting = true;
   }while(0);
