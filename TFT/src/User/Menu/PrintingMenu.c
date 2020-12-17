@@ -339,6 +339,7 @@ void printFinished(void)
   if (strlen (filamentInfo) == 0)
     strcpy(filamentInfo, (char*)textSelect(LABEL_NO_FILAMENT_STATISTICS));
   
+  strcat(filamentInfo, "  ");
   strcat(filamentInfo, (char*)textSelect(LABEL_CLICK_FOR_MORE));  
   drawPrintInfo();
 }
