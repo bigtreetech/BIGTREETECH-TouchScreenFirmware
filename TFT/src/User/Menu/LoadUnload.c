@@ -61,8 +61,6 @@ void menuLoadUnload(void)
     }
     else
     {
-      lastcmd = NONE;
-
       switch(key_num)
       {
       case KEY_ICON_0: // Unload
@@ -89,14 +87,17 @@ void menuLoadUnload(void)
       case KEY_ICON_4:
         curExt_index = (curExt_index + 1) % infoSettings.hotend_count;
         extruderIdReDraw();
+        lastcmd = NONE;
         break;
 
       case KEY_ICON_5:
         infoMenu.menu[++infoMenu.cur] = menuHeat;
-        break;
+        lastcmd = NONE;
+      break;
 
       case KEY_ICON_6:
         heatCoolDown();
+        lastcmd = NONE;
         break;
 
       case KEY_ICON_7:
@@ -110,7 +111,8 @@ void menuLoadUnload(void)
           }
         }
         infoMenu.cur--;
-        break;
+        lastcmd = NONE;
+      break;
 
       default:
         extruderIdReDraw();
