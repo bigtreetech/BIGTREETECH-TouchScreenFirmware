@@ -290,9 +290,10 @@
     #define STRING_FILAMENT_LENGTH        "Filament length: %3.2fm"
     #define STRING_FILAMENT_WEIGHT        "Filament weight: %4.2fg"
     #define STRING_FILAMENT_COST          "Filament cost: %2.2f"
-    #define STRING_NO_FILAMENT_STATISTICS "No filament statistics."
-    #define STRING_CLICK_FOR_MORE         "Click for more." 
+    #define STRING_NO_FILAMENT_STATS      "No filament statistics."
+    #define STRING_CLICK_FOR_MORE         "Click for more."
     #define STRING_EXT_TEMPLOW            "喷头温度低于最小挤出问题 (%d℃)."
     #define STRING_COLD_EXT               "冷挤出保护, 请加热后再操作"
+    #define STRING_HEAT_HOTEND            "Heat hotend to %d℃?"
 
 #endif

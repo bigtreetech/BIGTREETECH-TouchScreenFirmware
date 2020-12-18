@@ -448,7 +448,7 @@
 #define POWER_LOSS_ZRAISE 10
 
 // Prevent extrusion if the temperature is below set temperature
-#define PREVENT_COLD_EXTRUSION_MINTEMP 170
+#define PREVENT_COLD_EXTRUSION_MINTEMP 180
 
 /**
  * Maximum hotend temperature of automatic shut down after printing.

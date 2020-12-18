@@ -32,6 +32,11 @@ void extruderIdReDraw(void)
   setLargeFont(false);
 }
 
+void setHotendMinExtTemp(void)  // set the hotend to the minimum extrusion temperature
+{
+  mustStoreCmd("M104 S%d T%d\n", infoSettings.min_ext_temp, curExt_index);
+}
+
 void menuLoadUnload(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
@@ -67,10 +72,15 @@ void menuLoadUnload(void)
       case KEY_ICON_3: // Load
         if (heatGetCurrentTemp(curExt_index) < infoSettings.min_ext_temp)
         { // low temperature warning
-          char tempMsg[120];
+          char tempMsg[400];
           labelChar(tempStr, LABEL_EXT_TEMPLOW);
           sprintf(tempMsg, tempStr, infoSettings.min_ext_temp);
-          popupReminder(DIALOG_TYPE_ERROR, LABEL_COLD_EXT, (u8 *)tempMsg);
+          strcat(tempMsg, "\n");
+          sprintf(tempStr, (char *)textSelect(LABEL_HEAT_HOTEND), infoSettings.min_ext_temp);
+          strcat(tempMsg, tempStr);
+          setDialogText(LABEL_WARNING, (uint8_t *)tempMsg, LABEL_CONFIRM, LABEL_CANCEL);
+          showDialog(DIALOG_TYPE_ERROR, setHotendMinExtTemp, NULL, NULL);
+          // popupReminder(DIALOG_TYPE_ERROR, LABEL_COLD_EXT, (u8 *)tempMsg);
         }
         else if (key_num == KEY_ICON_0)
         { // unload

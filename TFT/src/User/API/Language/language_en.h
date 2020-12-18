@@ -287,12 +287,13 @@
     #define STRING_PREVIOUS_PRINT_DATA    "Brief"
     #define STRING_FILE_NAME              "File: "
     #define STRING_PRINT_TIME             "Print Time: "
-    #define STRING_FILAMENT_LENGTH        "Filament length: %3.2fm"
-    #define STRING_FILAMENT_WEIGHT        "Filament weight: %4.2fg"
-    #define STRING_FILAMENT_COST          "Filament cost: %2.2f"
-    #define STRING_NO_FILAMENT_STATISTICS "No filament statistics."
-    #define STRING_CLICK_FOR_MORE         "Click for more." 
+    #define STRING_FILAMENT_LENGTH        "Filament length: %0.2fm"
+    #define STRING_FILAMENT_WEIGHT        "Filament weight: %0.2fg"
+    #define STRING_FILAMENT_COST          "Filament cost: %0.2f"
+    #define STRING_NO_FILAMENT_STATS      "No filament statistics."
+    #define STRING_CLICK_FOR_MORE         "Click for more."
     #define STRING_EXT_TEMPLOW            "Hotend temperature is below\nminimum temperature (%d℃)."
     #define STRING_COLD_EXT               "Cold extrusion prevented"
+    #define STRING_HEAT_HOTEND            "Heat hotend to %d℃?"
 
 #endif
