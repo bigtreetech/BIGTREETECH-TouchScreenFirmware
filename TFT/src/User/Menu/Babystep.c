@@ -33,7 +33,10 @@ void babyReDraw(float babystep, float z_offset, bool force_z_offset, bool skip_h
     GUI_SetColor(infoSettings.font_color);
 
   GUI_DispStringRight(point_of.x, point_of.y, (u8 *) tempstr);
-  GUI_SetColor(infoSettings.font_color); // restore default font color
+
+  // restore default font color
+  GUI_SetColor(infoSettings.font_color);
+
   setLargeFont(false);
 }
 
@@ -132,7 +135,9 @@ void menuBabystep(void)
       // change unit
       case KEY_ICON_5:
         moveLenSteps_index = (moveLenSteps_index + 1) % ITEM_FINE_MOVE_LEN_NUM;
+
         babyStepItems.items[key_num] = itemMoveLen[moveLenSteps_index];
+
         menuDrawItem(&babyStepItems.items[key_num], key_num);
         break;
 
@@ -167,6 +172,7 @@ void menuBabystep(void)
         // or babystep is almost the same as the initial one,
         // we don't force Z offset change
         now_z_offset = z_offset;
+
         force_z_offset = false;
       }
       else if (orig_z_offset == z_offset)
@@ -174,6 +180,7 @@ void menuBabystep(void)
         // if current Z offset is not changed applying babystep changes (e.g. no BABYSTEP_ZPROBE_OFFSET is set in Marlin FW),
         // we force Z offset change
         z_offset += babystep - orig_babystep;
+
         force_z_offset = true;
       }
 
