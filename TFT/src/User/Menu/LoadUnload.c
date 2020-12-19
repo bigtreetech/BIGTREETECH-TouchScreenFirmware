@@ -72,7 +72,7 @@ void menuLoadUnload(void)
       case KEY_ICON_3: // Load
         if (heatGetCurrentTemp(curExt_index) < infoSettings.min_ext_temp)
         { // low temperature warning
-          char tempMsg[400];
+          char tempMsg[200];
           labelChar(tempStr, LABEL_EXT_TEMPLOW);
           sprintf(tempMsg, tempStr, infoSettings.min_ext_temp);
           strcat(tempMsg, "\n");
