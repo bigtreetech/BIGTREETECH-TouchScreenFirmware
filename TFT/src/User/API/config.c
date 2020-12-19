@@ -588,9 +588,9 @@ void parseConfigKey(u16 index)
 
   case C_INDEX_ACK_NOTIFICATION:
     if (inLimit(config_int(),0,2))
-      {
-        infoSettings.ack_notification = config_int();
-      }
+    {
+      infoSettings.ack_notification = config_int();
+    }
     break;
 
   case C_INDEX_PRINT_SUMMARY:
@@ -815,9 +815,9 @@ void parseConfigKey(u16 index)
 
   case C_INDEX_ONBOARD_SD:
     if (inLimit(config_int(),0,2))
-      {
-        infoSettings.onboardSD = config_int();
-      }
+    {
+      infoSettings.onboardSD = config_int();
+    }
     break;
 
   case C_INDEX_M27_DELAY:
@@ -831,9 +831,9 @@ void parseConfigKey(u16 index)
 
   case C_INDEX_LONG_FILENAME:
     if (inLimit(config_int(),0,2))
-      {
-        infoSettings.longFileName = config_int();
-      }
+    {
+      infoSettings.longFileName = config_int();
+    }
     break;
 
   case C_INDEX_FAN_PERCENT:
@@ -958,9 +958,9 @@ void parseConfigKey(u16 index)
 
   case C_INDEX_PS_ON:
     if (inLimit(config_int(),0,2))
-      {
-        infoSettings.auto_off = config_int();
-      }
+    {
+      infoSettings.auto_off = config_int();
+    }
     break;
 
   case C_INDEX_PS_LOGIC:
@@ -1002,9 +1002,9 @@ void parseConfigKey(u16 index)
 #ifdef FIL_RUNOUT_PIN
   case C_INDEX_RUNOUT:
     if (inLimit(config_int(),0,2))
-      {
-        infoSettings.runout = config_int();
-      }
+    {
+      infoSettings.runout = config_int();
+    }
     break;
 
   case C_INDEX_RUNOUT_LOGIC:
