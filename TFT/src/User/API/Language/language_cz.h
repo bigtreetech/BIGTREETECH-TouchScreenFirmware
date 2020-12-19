@@ -279,13 +279,13 @@
     #define STRING_MESH_EDITOR            "Mesh síť"
     #define STRING_MESH_TUNER             "Mesh nastavení"
     #define STRING_CASE_LIGHT             "Osvětlení"
-    #define STRING_LOAD_STARTED           "Probíhá zavádění filamentu.\nNení možná další akce,\ndokud to nebude dokončeno.\nProsím čekejte."  // translation needed
-    #define STRING_UNLOAD_STARTED         "Probíhá vysunování filamentu.\nNení možná další akce,\ndokud to nebude dokončeno.\nProsím čekejte.."  // translation needed
-    #define STRING_HEATERS_ON             "Topení jsou stále zapnutá.\nChcete je vypnout?"  // translation needed
-    #define STRING_PRINT_SUMMARY_POPUP    "Print Summary Popup"  // translation needed
-    #define STRING_PRINT_SUMMARY          "Print Time: %02u:%02u:%02u\nFilament Used: %3.2f meters"
-    #define STRING_PRINT_COMPLETE         "Print complete"
-    #define STRING_EXT_TEMPLOW            "Hotend temperature is below\nminimum temperature (%d℃)."
-    #define STRING_COLD_EXT               "Cold extrusion prevented"
+    #define STRING_LOAD_STARTED           "Probíhá zavádění filamentu.\nNení možná další akce,\ndokud to nebude dokončeno.\nProsím čekejte." 
+    #define STRING_UNLOAD_STARTED         "Probíhá vysunování filamentu.\nNení možná další akce,\ndokud to nebude dokončeno.\nProsím čekejte.." 
+    #define STRING_HEATERS_ON             "Topení jsou stále zapnutá.\nChcete je vypnout?"
+    #define STRING_PRINT_SUMMARY_POPUP    "Souhrn Tisku" 
+    #define STRING_PRINT_SUMMARY          "Čas tisku: %02u:%02u:%02u\nPoužito filamentu: %3.2f metru"
+    #define STRING_PRINT_COMPLETE         "Tisk dokončen"
+    #define STRING_EXT_TEMPLOW            "Teplota trysky je nižší než\nminimální teplota (%d℃)."
+    #define STRING_COLD_EXT               "Vytlačování za studena je omezeno"
 
 #endif
