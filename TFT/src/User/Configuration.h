@@ -7,8 +7,9 @@
 
 /**
  * To work with RepRapFirmware, Add M575 P1 S2 B115200 to the end of config.g file in sd card
+ * uncomment for RepRapFirmware
 */
-#define RepRapFirmware
+//#define RepRapFirmware
 
 /**
  * Default Mode
