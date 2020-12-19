@@ -476,6 +476,23 @@ void sendQueueCmd(void)
         break;
 #endif
 
+        case 73:
+          if(cmd_seen('P'))
+          {
+            infoPrinting.progress = cmd_float();
+            infoPrinting.slicer_progress = true;
+
+          }
+          if(cmd_seen('R'))
+          {
+            infoPrinting.remaining_time = cmd_float() * 60;
+            infoPrinting.slicer_progress = true;
+
+          }
+          //forwarding it or not?
+          purgeLastCmd();
+          return;
+
         case 80: //M80
           #ifdef PS_ON_PIN
             PS_ON_On();

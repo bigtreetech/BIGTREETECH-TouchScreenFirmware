@@ -54,6 +54,10 @@ void setPrintingTime(uint32_t RTtime)
     if(isPrinting() && !isPause())
     {
       infoPrinting.time++;
+      if (infoPrinting.remaining_time > 0)
+      {
+        infoPrinting.remaining_time--;
+      }
     }
   }
 }

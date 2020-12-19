@@ -121,6 +121,9 @@ void menuBeforePrinting(void)
   }
   infoPrinting.printing = true;
   infoPrinting.time = 0;
+  infoPrinting.remaining_time = 0;
+  infoPrinting.slicer_progress = false;
+
   if (infoSettings.print_summary)
   {
     resetFilamentUsed();
@@ -185,9 +188,20 @@ static inline void reDrawSpeed(int icon_pos)
 
 static inline void reDrawTime(int icon_pos)
 {
-  u8 hour = infoPrinting.time/3600;
-  u8 min = infoPrinting.time%3600/60;
-  u8 sec = infoPrinting.time%60;
+  u8 hour,min,sec;
+
+  if (!infoPrinting.slicer_progress || ( infoPrinting.remaining_time == 0 && infoPrinting.progress < 100 ))
+  {
+    hour = infoPrinting.time/3600;
+    min = infoPrinting.time%3600/60;
+    sec = infoPrinting.time%60;
+  }
+  else
+  {
+      hour = infoPrinting.remaining_time/3600;
+      min = infoPrinting.remaining_time%3600/60;
+      sec = infoPrinting.remaining_time%60;
+  }
 
   GUI_SetNumMode(GUI_NUMMODE_ZERO);
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
@@ -345,11 +359,14 @@ void menuPrinting(void)
     if( infoPrinting.size != 0)
     {
       //check print time change
-      if(time != infoPrinting.time || infoPrinting.progress != MIN((uint64_t)infoPrinting.cur*100/infoPrinting.size, 100))
+      if(time != infoPrinting.time)
       {
+        if (!infoPrinting.slicer_progress)
+        {
+            infoPrinting.progress = MIN((uint64_t)infoPrinting.cur*100/infoPrinting.size, 100);
+        }
         time = infoPrinting.time;
-        infoPrinting.progress = MIN((uint64_t)infoPrinting.cur*100/infoPrinting.size, 100);
-        rapid_serial_loop();  //perform backend printing loop before drawing to avoid printer idling
+        rapid_serial_loop();
         reDrawTime(TIM_ICON_POS);
         reDrawProgress(TIM_ICON_POS);
       }
@@ -424,7 +441,7 @@ void menuPrinting(void)
           {
             infoMenu.cur = 0;
           }
-          else 
+          else
           {
             --infoMenu.cur;
           }

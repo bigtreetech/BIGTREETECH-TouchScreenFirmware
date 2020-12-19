@@ -35,11 +35,15 @@ typedef struct
   uint32_t size; // Gcode file total size
   uint32_t cur;  // Gcode has printed file size
   uint8_t  progress;
+  uint32_t remaining_time; //current remaining time in sec (if set with m73)
+
   bool     printing; // 1 means printing, 0 means idle
   bool     pause;    // 1 means paused
   bool     m0_pause; // pause triggered through M0/M1 gcode
   bool     runout;   // 1: runout in printing, 0: idle
   bool     model_icon; // 1: model preview icon exist, 0: not exist
+  bool     slicer_progress; //0: progress managed by btt, 1: by slicer (autoset if we encounter a M77 command)
+
 }PRINTING;
 
 extern PRINTING infoPrinting;
