@@ -62,8 +62,7 @@ void loopSpeed(void)
     {
       if (sendSpeed_waiting[i] == false)
       {
-        sendSpeed_waiting[i] = true;
-        sendSpeed_waiting[i] = storeCmd("%s S%d\n", speedCmd[i], percent[i]);
+        sendSpeed_waiting[i] = storeCmd("%s S%d D%d\n",speedCmd[i], percent[i], heatGetCurrentTool());
       }
       if (sendSpeed_waiting[i] == true)
         curPercent[i] = percent[i];
@@ -76,6 +75,6 @@ void speedQuery(void)
 {
   if (infoHost.connected && !infoHost.wait && !speedQueryWait)
   {
-    speedQueryWait = storeCmd("M220\nM221\n");
+    speedQueryWait = storeCmd("M220\nM221 D%d\n",heatGetCurrentTool());
   }
 }

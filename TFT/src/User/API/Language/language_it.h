@@ -292,8 +292,8 @@
     #define STRING_FILAMENT_COST          "Filament cost: %1.2f"
     #define STRING_NO_FILAMENT_STATS "No filament statistics."
     #define STRING_CLICK_FOR_MORE         "Click for more."
-    #define STRING_EXT_TEMPLOW            "Hotend temperature is below\nminimum temperature (%d℃)."
-    #define STRING_COLD_EXT               "Cold extrusion prevented"
+    #define STRING_EXT_TEMPLOW            "La temperatura dell'hotend\nè al di sotto della temperatura\nminima (%d℃)."
+    #define STRING_COLD_EXT               "Prevenzione dell'estrusione a freddo"
     #define STRING_HEAT_HOTEND            "Heat hotend to %d℃?"
 
 #endif

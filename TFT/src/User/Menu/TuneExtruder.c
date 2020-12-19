@@ -145,27 +145,31 @@ void menuTuneExtruder(void)
 
       case KEY_ICON_6:
         {
-        char tempMsg[120];
+          char tempMsg[120];
 
-        if (heatGetTargetTemp(c_heater) < infoSettings.min_ext_temp)
-        {
-          labelChar(tempStr, LABEL_TUNE_EXT_TEMPLOW);
-          sprintf(tempMsg, tempStr, infoSettings.min_ext_temp);
-          popupReminder(DIALOG_TYPE_ALERT, tuneExtruderItems.title.index, (u8 *) tempMsg);
-        }
-        else if (heatGetCurrentTemp(c_heater) < heatGetTargetTemp(c_heater) - 1)
-        {
-          popupReminder(DIALOG_TYPE_ALERT, tuneExtruderItems.title.index, LABEL_TUNE_EXT_DESIREDVAL);
-        }
-        else
-        {
-          labelChar(tempStr, LABEL_TUNE_EXT_MARK120MM);
-          sprintf(tempMsg, tempStr, textSelect(LABEL_EXTRUDE));
-          setDialogText(tuneExtruderItems.title.index, (u8 *) tempMsg, LABEL_EXTRUDE, LABEL_CANCEL);
-          showDialog(DIALOG_TYPE_QUESTION, extrudeFilament, NULL, NULL);
+          if (heatGetTargetTemp(c_heater) < infoSettings.min_ext_temp)
+          {
+            labelChar(tempStr, LABEL_TUNE_EXT_TEMPLOW);
+
+            sprintf(tempMsg, tempStr, infoSettings.min_ext_temp);
+
+            popupReminder(DIALOG_TYPE_ALERT, tuneExtruderItems.title.index, (u8 *) tempMsg);
+          }
+          else if (heatGetCurrentTemp(c_heater) < heatGetTargetTemp(c_heater) - 1)
+          {
+            popupReminder(DIALOG_TYPE_ALERT, tuneExtruderItems.title.index, LABEL_TUNE_EXT_DESIREDVAL);
+          }
+          else
+          {
+            labelChar(tempStr, LABEL_TUNE_EXT_MARK120MM);
+
+            sprintf(tempMsg, tempStr, textSelect(LABEL_EXTRUDE));
+
+            setDialogText(tuneExtruderItems.title.index, (u8 *) tempMsg, LABEL_EXTRUDE, LABEL_CANCEL);
+            showDialog(DIALOG_TYPE_QUESTION, extrudeFilament, NULL, NULL);
+          }
         }
         break;
-      }
 
       case KEY_ICON_7:
         if (heatGetTargetTemp(c_heater) > 0)
@@ -259,13 +263,9 @@ void menuNewExtruderESteps(void)
       case KEY_ICON_4:
         {
           storeCmd("M92 T0 E%0.2f\n", new_esteps);
-
           char tempMsg[120];
-
           labelChar(tempStr, LABEL_TUNE_EXT_ESTEPS_SAVED);
-
           sprintf(tempMsg, tempStr, new_esteps);
-
           popupReminder(DIALOG_TYPE_QUESTION, newExtruderESteps.title.index, (u8 *) tempMsg);
         }
         break;
