@@ -17,7 +17,7 @@ extern bool filDataSeen;
 typedef struct
 {
     /* data */
-    char name[13];
+    char name[30];
     uint32_t time;
     float length;
     float weight;

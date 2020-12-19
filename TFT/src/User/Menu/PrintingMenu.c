@@ -33,13 +33,15 @@ const GUI_RECT printinfo_val_rect[6] = {
 static uint32_t nextInfoTime = 0;
 static uint32_t nextDrawTime = 0;
 const  char *const Speed_ID[2] = {"Speed","Flow"};
-static char filamentInfo[100];
+static char filamentInfo[150];
 bool filDataSeen;
 SCROLL infoScroll;
 FILAMENTDATA filData = {"", 0, 0, 0, 0};
 
-#define TOGGLE_TIME 2000; // 1 seconds is 1000
-#define DRAW_TIME 500; // 1 seconds is 1000
+#define TOGGLE_TIME 2000 // 1 seconds is 1000
+#define DRAW_TIME 500 // 1 seconds is 1000
+
+#define MAX_FILE_CHAR 25 // max character length to store 
 
 #define LAYER_TITLE "Layer"
 #define EXT_ICON_POS  0
@@ -307,7 +309,14 @@ void printFinished(void)
 {
   char tempstr[30];
   strcpy(filamentInfo, "");
-  strcpy(filData.name, (char *)getCurGcodeName(infoFile.title));
+
+  if (strlen((char *)getCurGcodeName(infoFile.title)) > MAX_FILE_CHAR)
+  {
+    strncpy(filData.name, (char *)getCurGcodeName(infoFile.title), MAX_FILE_CHAR);
+    strcat(filData.name, "~");
+  } else
+      strcpy(filData.name, (char *)getCurGcodeName(infoFile.title));
+
   filData.time = infoPrinting.time;
 
   if (speedGetPercent(1) != 100)
@@ -316,7 +325,6 @@ void printFinished(void)
     filData.weight = (filData.weight * speedGetPercent(1)) / 100;  // multiply by flow percentage
     filData.cost   = (filData.cost   * speedGetPercent(1)) / 100;  // multiply by flow percentage
   }
-
   if (filData.length != 0)
   {
     sprintf(tempstr, (char*)textSelect(LABEL_FILAMENT_LENGTH), filData.length);
