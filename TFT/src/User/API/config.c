@@ -587,12 +587,11 @@ void parseConfigKey(u16 index)
     break;
 
   case C_INDEX_ACK_NOTIFICATION:
+    if (inLimit(config_int(),0,2))
     {
-      u8 i = config_int();
-      if (inLimit(i,0,2))
-        infoSettings.ack_notification = i;
-      break;
+      infoSettings.ack_notification = config_int();
     }
+    break;
 
   case C_INDEX_PRINT_SUMMARY:
       infoSettings.print_summary = getOnOff();
@@ -815,12 +814,11 @@ void parseConfigKey(u16 index)
     break;
 
   case C_INDEX_ONBOARD_SD:
+    if (inLimit(config_int(),0,2))
     {
-      u8 i = config_int();
-      if (inLimit(i,0,2))
-        infoSettings.onboardSD = i;
-      break;
+      infoSettings.onboardSD = config_int();
     }
+    break;
 
   case C_INDEX_M27_DELAY:
     if (inLimit(config_int(), MIN_DELAY_SEC, MAX_DELAY_SEC))
@@ -832,12 +830,11 @@ void parseConfigKey(u16 index)
     break;
 
   case C_INDEX_LONG_FILENAME:
+    if (inLimit(config_int(),0,2))
     {
-      u8 i = config_int();
-      if (inLimit(i,0,2))
-        infoSettings.longFileName = i;
-      break;
+      infoSettings.longFileName = config_int();
     }
+    break;
 
   case C_INDEX_FAN_PERCENT:
       infoSettings.fan_percentage = getOnOff();
@@ -960,12 +957,11 @@ void parseConfigKey(u16 index)
 #ifdef PS_ON_PIN
 
   case C_INDEX_PS_ON:
+    if (inLimit(config_int(),0,2))
     {
-      u8 i = config_int();
-      if (inLimit(i,0,2))
-        infoSettings.auto_off = i;
-      break;
+      infoSettings.auto_off = config_int();
     }
+    break;
 
   case C_INDEX_PS_LOGIC:
       infoSettings.powerloss_invert = getOnOff();
@@ -1005,12 +1001,11 @@ void parseConfigKey(u16 index)
 
 #ifdef FIL_RUNOUT_PIN
   case C_INDEX_RUNOUT:
+    if (inLimit(config_int(),0,2))
     {
-      u8 i = config_int();
-      if (inLimit(i,0,2))
-        infoSettings.runout = i;
-      break;
+      infoSettings.runout = config_int();
     }
+    break;
 
   case C_INDEX_RUNOUT_LOGIC:
       infoSettings.runout_invert = getOnOff();
