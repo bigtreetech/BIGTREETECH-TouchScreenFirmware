@@ -14,7 +14,7 @@ void probeOffsetEnable(bool skipZOffset)
   // Z offset gcode sequence start
   mustStoreCmd("G28\n");                                   // home printer
 
-  if (infoSettings.xy_offset_probing)                      // if HW allows nozzle to reach XY offset
+  if (infoSettings.xy_offset_probing)                      // if HW allows nozzle to reach XY probing point
   {
     probeHeightStop();                                     // raise nozzle
 
@@ -23,7 +23,7 @@ void probeOffsetEnable(bool skipZOffset)
     mustStoreCmd("G1 X%.2f Y%.2f F%d\n",
       getParameter(P_PROBE_OFFSET, X_STEPPER),
       getParameter(P_PROBE_OFFSET, Y_STEPPER),
-      infoSettings.axis_speed[infoSettings.move_speed]);   // move nozzle to XY probing coordinates and set feedrate
+      infoSettings.axis_speed[infoSettings.move_speed]);   // move nozzle to XY probing point and set feedrate
   }
   else
   {
