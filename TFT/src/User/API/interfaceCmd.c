@@ -9,6 +9,9 @@ static u8 cmd_index=0;
 
 static bool ispolling = true;
 
+extern PRINTING infoPrinting;
+extern MACHINESETTINGS infoMachineSettings;
+
 // Is there a code character in the current gcode command.
 static bool cmd_seen(char code)
 {
@@ -489,10 +492,12 @@ void sendQueueCmd(void)
             infoPrinting.slicer_progress = true;
 
           }
-          //forwarding it or not?
-          purgeLastCmd();
-          return;
-
+          if (!infoMachineSettings.progress)
+          {
+            purgeLastCmd();
+            return;
+          }
+          break;
         case 80: //M80
           #ifdef PS_ON_PIN
             PS_ON_On();

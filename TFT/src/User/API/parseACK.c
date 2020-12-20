@@ -747,6 +747,10 @@ void parseACK(void)
       {
         infoMachineSettings.babyStepping = ack_value();
       }
+      else if(ack_seen("Cap:PROGRESS:"))
+      {
+        infoMachineSettings.progress = ack_value();
+      }
       else if(ack_seen("Cap:CHAMBER_TEMPERATURE:"))
       {
         infoSettings.chamber_en = ack_value();
