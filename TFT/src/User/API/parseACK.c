@@ -780,27 +780,27 @@ void parseACK(void)
     // parse and store feed rate percentage
       else if(ack_seen("FR:"))
       {
-        speedSetRcvPercent(0,ack_value());
+        speedSetCurPercent(0,ack_value());
         speedQuerySetWait(false);
       }
     #ifdef RepRapFirmware
       else if(ack_seen("factor: "))
       {
-        speedSetRcvPercent(0,ack_value());
+        speedSetCurPercent(0,ack_value());
         speedQuerySetWait(false);
       }
     #endif
     // parse and store flow rate percentage
       else if(ack_seen("Flow: "))
       {
-        speedSetRcvPercent(1,ack_value());
+        speedSetCurPercent(1,ack_value());
         speedQuerySetWait(false);
       }
     #ifdef RepRapFirmware
       else if(ack_seen("extruder"))
       {
         ack_index+=4;
-        speedSetRcvPercent(1,ack_value());
+        speedSetCurPercent(1,ack_value());
         speedQuerySetWait(false);
       }
     #endif
@@ -809,7 +809,7 @@ void parseACK(void)
       {
         u8 i = ack_value();
         if (ack_seen("S")) {
-          fanSetRcvSpeed(i, ack_value());
+          fanSetCurSpeed(i, ack_value());
         }
       }
     // parse controller fan
@@ -818,13 +818,13 @@ void parseACK(void)
         u8 i = 0;
         if (ack_seen("S")) {
           i = fanGetTypID(0,FAN_TYPE_CTRL_S);
-          fanSetRcvSpeed(i, ack_value());
-          fanSpeedQuerySetWait(false);
+          fanSetCurSpeed(i, ack_value());
+          fanQuerySetWait(false);
         }
         if (ack_seen("I")) {
           i = fanGetTypID(0,FAN_TYPE_CTRL_I);
-          fanSetRcvSpeed(i, ack_value());
-          fanSpeedQuerySetWait(false);
+          fanSetCurSpeed(i, ack_value());
+          fanQuerySetWait(false);
         }
       }
       else if(ack_seen("Case light: OFF"))

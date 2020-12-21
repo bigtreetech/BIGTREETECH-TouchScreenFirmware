@@ -177,7 +177,7 @@ static inline void reDrawSpeed(int icon_pos)
     ICON_ReadDisplay(printinfo_points[icon_pos].x,printinfo_points[icon_pos].y,ICON_PRINTING_FLOW);
 
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-  sprintf(tempstr, "%d%%", speedGetPercent(currentSpeedID));
+  sprintf(tempstr, "%d%%", speedGetCurPercent(currentSpeedID));
   GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (u8 *)Speed_ID[currentSpeedID]);
   GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (u8 *)tempstr);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
@@ -373,9 +373,9 @@ void menuPrinting(void)
     }
 
     //check change in speed or flow
-    if(curspeed[currentSpeedID] != speedGetPercent(currentSpeedID))
+    if(curspeed[currentSpeedID] != speedGetCurPercent(currentSpeedID))
     {
-      curspeed[currentSpeedID] = speedGetPercent(currentSpeedID);
+      curspeed[currentSpeedID] = speedGetCurPercent(currentSpeedID);
       rapid_serial_loop();  //perform backend printing loop before drawing to avoid printer idling
       reDrawSpeed(SPD_ICON_POS);
     }
