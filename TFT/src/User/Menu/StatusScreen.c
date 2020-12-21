@@ -148,20 +148,20 @@ void drawTemperature(void)
 #ifdef TFT70_V3_0
   //SPEED
   lvIcon.lines[0].text = (u8 *)SpeedID[0];
-  sprintf(tempstr, "%d%%", speedGetPercent(0));
+  sprintf(tempstr, "%d%%", speedGetCurPercent(0));
   lvIcon.lines[1].text = (u8 *)tempstr;
   showLiveInfo(3, &lvIcon, &SpeedItems[0]);
 
   //FLOW
   lvIcon.lines[0].text = (u8 *)SpeedID[1];
-  sprintf(tempstr, "%d%%", speedGetPercent(1));
+  sprintf(tempstr, "%d%%", speedGetCurPercent(1));
   lvIcon.lines[1].text = (u8 *)tempstr;
   showLiveInfo(4, &lvIcon, &SpeedItems[1]);
 
 #else
   //SPEED / flow
   lvIcon.lines[0].text = (u8 *)SpeedID[currentSpeedID];
-  sprintf(tempstr, "%d%%", speedGetPercent(currentSpeedID));
+  sprintf(tempstr, "%d%%", speedGetCurPercent(currentSpeedID));
   lvIcon.lines[1].text = (u8 *)tempstr;
   showLiveInfo(3, &lvIcon, &SpeedItems[currentSpeedID]);
 #endif

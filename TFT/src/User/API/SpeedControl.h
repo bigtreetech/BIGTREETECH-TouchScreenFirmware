@@ -11,12 +11,14 @@ extern "C" {
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "includes.h"
 
 void speedSetSendWaiting(uint8_t tool, bool isWaiting);
 void speedQuerySetWait(bool wait);
-void speedSetRcvPercent(uint8_t tool, uint16_t per);
+void speedSetCurPercent(uint8_t tool, uint16_t per);
 void speedSetPercent(uint8_t tool, uint16_t per);
-uint16_t speedGetPercent(uint8_t tool);
+uint16_t speedGetCurPercent(uint8_t tool);
+uint16_t speedGetSetPercent(uint8_t tool);
 bool SpeedChanged(uint8_t i);
 void loopSpeed(void);
 void speedQuery(void);
