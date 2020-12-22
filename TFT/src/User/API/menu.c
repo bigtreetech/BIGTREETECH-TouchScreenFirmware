@@ -753,6 +753,10 @@ void loopBackEnd(void)
       }
   #endif
 
+  #if defined(SCREEN_SHOT_TO_SD)
+    loopScreenShot();
+  #endif
+
   #if defined(ST7920_SPI) || defined(LCD2004_simulator)
     loopCheckMode();
   #endif

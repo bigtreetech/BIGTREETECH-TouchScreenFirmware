@@ -15,6 +15,7 @@
 #include "delay.h"
 
 #include "boot.h"
+#include "ScreenShot.h"
 
 #include "Colors.h"
 #include "lcd.h"
