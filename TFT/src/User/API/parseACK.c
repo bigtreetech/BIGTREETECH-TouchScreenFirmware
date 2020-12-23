@@ -237,7 +237,9 @@ void hostActionCommands(void)
     {
       case 0:
         BUZZER_PLAY(sound_notify);
-        popupReminder(DIALOG_TYPE_ALERT,(u8 *)"Message", (u8 *)hostAction.prompt_begin);
+        setDialogText((uint8_t *)"Message", (uint8_t *)hostAction.prompt_begin, LABEL_CONFIRM, LABEL_BACKGROUND);
+        showDialog(DIALOG_TYPE_ALERT, setRunoutAlarmFalse, NULL, NULL);
+        // popupReminder(DIALOG_TYPE_ALERT,(u8 *)"Message", (u8 *)hostAction.prompt_begin);
         break;
       case 1:
         BUZZER_PLAY(sound_notify);
@@ -255,6 +257,10 @@ void hostActionCommands(void)
   if (ack_seen("paused") || ack_seen("pause"))
   {
     infoPrinting.pause = true;
+    if (ack_seen ("filament_runout"))
+    {
+      setRunoutAlarmTrue();
+    }
   }
   else if (ack_seen("cancel")) //To be added to Marlin abortprint routine
   {

@@ -209,12 +209,22 @@ void loopBackEndFILRunoutDetect(void)
 
 void loopFrontEndFILRunoutDetect(void)
 {
-  if (!getPrintRunout()) return;
+  static uint32_t nextTime = 0;
+  #define ALARM_REMINDER_TIME 10000
+  if (!getPrintRunout() && !getRunoutAlarm()) return;
 
-  if (setPrintPause(true,false))
+  if (setPrintPause(true,false) && !getRunoutAlarm())
   {
     setPrintRunout(false);
-    popupReminder(DIALOG_TYPE_ERROR, LABEL_WARNING, LABEL_FILAMENT_RUNOUT);
+    setRunoutAlarmTrue();
+    setDialogText(LABEL_WARNING, LABEL_FILAMENT_RUNOUT, LABEL_CONFIRM, LABEL_BACKGROUND);
+    showDialog(DIALOG_TYPE_ALERT, setRunoutAlarmFalse, NULL, NULL);
+  } 
+
+  if ((OS_GetTimeMs() > nextTime) && (getRunoutAlarm() == true))
+  {
+    BUZZER_PLAY(sound_error);
+    nextTime = OS_GetTimeMs() + ALARM_REMINDER_TIME;
   }
 }
 
