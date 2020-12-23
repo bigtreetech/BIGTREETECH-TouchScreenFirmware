@@ -19,17 +19,15 @@ static void resetRequestCommandInfo(
   requestCommandInfo.errorMagic[0] = string_error0;
   requestCommandInfo.errorMagic[1] = string_error1;
   requestCommandInfo.errorMagic[2] = string_error2;
-  if (string_error0) {
+  if (string_error0)
     requestCommandInfo.error_num = 1;
-  }
-  if (string_error1) {
+  if (string_error1)
     requestCommandInfo.error_num = 2;
-  }
-  if (string_error2) {
+  if (string_error2)
     requestCommandInfo.error_num = 3;
-  }
 
-  while(infoCmd.count || infoHost.wait) {
+  while(infoCmd.count || infoHost.wait)
+  {
     loopProcess(); // Wait for the communication to be clean before requestCommand
   }
 
@@ -166,7 +164,8 @@ long request_M23(char *filename)
   {
     loopProcess();
   }
-  if (requestCommandInfo.inError) {
+  if (requestCommandInfo.inError)
+  {
     clearRequestCommandInfo();
     return 0;
   }
@@ -182,11 +181,10 @@ long request_M23(char *filename)
  **/
 bool request_M24(int pos)
 {
-  if(pos == 0){
+  if(pos == 0)
     mustStoreCmd("M24\n");
-  } else {
+  else
     mustStoreCmd("M24 S%d\n", pos);
-  }
   return true;
 }
 

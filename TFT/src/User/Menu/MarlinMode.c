@@ -20,28 +20,31 @@ void menuMarlinMode(void)
   GUI_Clear(infoSettings.marlin_mode_bg_color);
   GUI_SetColor(infoSettings.marlin_mode_font_color);
   GUI_SetBkColor(infoSettings.marlin_mode_bg_color);
-  if(infoSettings.marlin_mode_showtitle == 1){
+  if(infoSettings.marlin_mode_showtitle == 1)
+  {
     STRINGS_STORE tempST;
     W25Qxx_ReadBuffer((uint8_t *)&tempST,STRINGS_STORE_ADDR,sizeof(STRINGS_STORE));
     GUI_DispStringInRect(0, 0, LCD_WIDTH, ST7920_GYSTART_FULLSCREEN, (uint8_t *)tempST.marlin_title);
   }
 
-#if defined(ST7920_SPI)
-  if (infoSettings.marlin_type == LCD12864) {
-    marlinInit = SPI_Slave;
-    marlinDeInit = SPI_SlaveDeInit;
-    marlinGetData = SPI_SlaveGetData;
-    marlinParse = ST7920_ParseRecv;
-  }
-#endif
-#if defined(LCD2004_simulator)
-  if (infoSettings.marlin_type == LCD2004) {
-    marlinInit = HD44780_Config;
-    marlinDeInit = HD44780_DeConfig;
-    marlinGetData = HD44780_getData;
-    marlinParse = HD44780_ParseRecv;
-  }
-#endif
+  #if defined(ST7920_SPI)
+    if (infoSettings.marlin_type == LCD12864)
+    {
+      marlinInit = SPI_Slave;
+      marlinDeInit = SPI_SlaveDeInit;
+      marlinGetData = SPI_SlaveGetData;
+      marlinParse = ST7920_ParseRecv;
+    }
+  #endif
+  #if defined(LCD2004_simulator)
+    if (infoSettings.marlin_type == LCD2004)
+    {
+      marlinInit = HD44780_Config;
+      marlinDeInit = HD44780_DeConfig;
+      marlinGetData = HD44780_getData;
+      marlinParse = HD44780_ParseRecv;
+    }
+  #endif
 
   CIRCULAR_QUEUE marlinQueue;
   uint8_t data;

@@ -9,7 +9,7 @@ static u8 curSubmenu_index = 0;
 /* Show an error notification */
 void probeNotifyError(void)
 {
-  labelChar(tempMsg, LABEL_Z_OFFSET);
+  LABELCHAR(tempMsg, LABEL_Z_OFFSET);
 
   sprintf(&tempMsg[strlen(tempMsg)], " %s", textSelect(LABEL_OFF));
 
@@ -100,7 +100,7 @@ void menuProbeOffset(void)
   {
     unit = moveLenSteps[curUnit_index];
 
-    z_offset = probeOffsetGetValue();                      // always load current Z offset
+    z_offset = probeOffsetGetValue();  // always load current Z offset
 
     key_num = menuKeyGetValue();
     switch (key_num)
@@ -126,13 +126,11 @@ void menuProbeOffset(void)
         if (!probeOffsetGetStatus())
         {
           probeOffsetEnable(true);
-
           probeOffsetItems.items[key_num].label.index = LABEL_ON;
         }
         else
         {
           probeOffsetDisable();
-
           probeOffsetItems.items[key_num].label.index = LABEL_OFF;
         }
 
@@ -143,7 +141,6 @@ void menuProbeOffset(void)
       // change submenu
       case KEY_ICON_5:
         curSubmenu_index = (curSubmenu_index + 1) % ITEM_PROBE_OFFSET_SUBMENU_NUM;
-
         probeOffsetItems.items[KEY_ICON_6] = itemProbeOffsetSubmenu[curSubmenu_index];
 
         menuDrawItem(&probeOffsetItems.items[KEY_ICON_6], KEY_ICON_6);
@@ -156,7 +153,6 @@ void menuProbeOffset(void)
           // change unit
           case 0:
             curUnit_index = (curUnit_index + 1) % ITEM_FINE_MOVE_LEN_NUM;
-
             itemProbeOffsetSubmenu[curSubmenu_index] = itemMoveLen[curUnit_index];
             probeOffsetItems.items[key_num] = itemProbeOffsetSubmenu[curSubmenu_index];
 
@@ -220,7 +216,8 @@ void menuProbeOffset(void)
       now = z_offset;
       probeDrawValue(now);
 
-      // reset babystep every time Z offset is changed otherwise the set babystep value will not be aligned with the new Z offset
+      // reset babystep every time Z offset is changed otherwise the set babystep value
+      // will not be aligned with the new Z offset
       babystepReset();
     }
 

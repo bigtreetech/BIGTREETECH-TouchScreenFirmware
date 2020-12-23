@@ -117,9 +117,9 @@ void menuMode(void)
   TSC_ReDrawIcon = NULL; // Disable icon redraw callback function
 
   #if LCD_ENCODER_SUPPORT
-    while(!XPT2046_Read_Pen() || encoder_ReadBtn(LCD_BUTTON_INTERVALS));      //wait for button release
+    while(!XPT2046_Read_Pen() || encoder_ReadBtn(LCD_BUTTON_INTERVALS));  //wait for button release
   #else
-    while(!XPT2046_Read_Pen());      //wait for touch release
+    while(!XPT2046_Read_Pen());  //wait for touch release
   #endif
 
   #if LCD_ENCODER_SUPPORT

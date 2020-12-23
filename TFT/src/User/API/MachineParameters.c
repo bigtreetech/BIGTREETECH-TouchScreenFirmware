@@ -68,50 +68,51 @@ float getParameter(PARAMETER_NAME name, u8 index)
   if(index >= parameter_element_count[name]) return 0.0f;
   switch (name)
   {
-  case P_STEPS_PER_MM:
-    return infoParameters.StepsPerMM[index];
-  case P_CURRENT:
-    return infoParameters.Current[index];
-  case P_MAX_FEED_RATE:
-    return infoParameters.MaxFeedRate[index];
-  case P_MAX_ACCELERATION:
-    return infoParameters.MaxAcceleration[index];
-  case P_ACCELERATION:
-    return infoParameters.Acceleration[index];
-  case P_JERK:
-    return infoParameters.Jerk[index];
-  case P_JUNCTION_DEVIATION:
-    return infoParameters.JunctionDeviation[index];
-  case P_PROBE_OFFSET:
-    return infoParameters.ProbeOffset[index];
-  case P_HOME_OFFSET:
-    return infoParameters.HomeOffset[index];
-  case P_BUMPSENSITIVITY:
-    return infoParameters.BumpSensitivity[index];
-  case P_FWRETRACT:
-    return infoParameters.FwRetract[index];
-  case P_FWRECOVER:
-    return infoParameters.FwRecover[index];
-  case P_AUTO_RETRACT:
-    return infoParameters.AutoRetract[index];
-  case P_LIN_ADV:
-    return infoParameters.LinAdvance[index];
-  case P_ABL_STATE:
-    return infoParameters.ABLState[index];
-  case P_OFFSET_TOOL:
-    return infoParameters.OffsetTool[index];
-  case P_HYBRID_THRESHOLD:
-    return infoParameters.HybridThreshold[index];
-  default:
-    return 0.0f;
+    case P_STEPS_PER_MM:
+      return infoParameters.StepsPerMM[index];
+    case P_CURRENT:
+      return infoParameters.Current[index];
+    case P_MAX_FEED_RATE:
+      return infoParameters.MaxFeedRate[index];
+    case P_MAX_ACCELERATION:
+      return infoParameters.MaxAcceleration[index];
+    case P_ACCELERATION:
+      return infoParameters.Acceleration[index];
+    case P_JERK:
+      return infoParameters.Jerk[index];
+    case P_JUNCTION_DEVIATION:
+      return infoParameters.JunctionDeviation[index];
+    case P_PROBE_OFFSET:
+      return infoParameters.ProbeOffset[index];
+    case P_HOME_OFFSET:
+      return infoParameters.HomeOffset[index];
+    case P_BUMPSENSITIVITY:
+      return infoParameters.BumpSensitivity[index];
+    case P_FWRETRACT:
+      return infoParameters.FwRetract[index];
+    case P_FWRECOVER:
+      return infoParameters.FwRecover[index];
+    case P_AUTO_RETRACT:
+      return infoParameters.AutoRetract[index];
+    case P_LIN_ADV:
+      return infoParameters.LinAdvance[index];
+    case P_ABL_STATE:
+      return infoParameters.ABLState[index];
+    case P_OFFSET_TOOL:
+      return infoParameters.OffsetTool[index];
+    case P_HYBRID_THRESHOLD:
+      return infoParameters.HybridThreshold[index];
+    default:
+      return 0.0f;
   }
 }
 
 void setParameter(PARAMETER_NAME name, u8 index, float val)
 {
-  if(index >= parameter_element_count[name]) return;
-    switch (name)
-    {
+  if (index >= parameter_element_count[name])
+    return;
+  switch (name)
+  {
     case P_STEPS_PER_MM:
       infoParameters.StepsPerMM[index] = val;
       break;
@@ -119,7 +120,7 @@ void setParameter(PARAMETER_NAME name, u8 index, float val)
       infoParameters.Current[index] = val;
       break;
     case P_MAX_FEED_RATE:
-      infoParameters.MaxFeedRate[index]  = val;
+      infoParameters.MaxFeedRate[index] = val;
       break;
     case P_MAX_ACCELERATION:
       infoParameters.MaxAcceleration[index] = val;
@@ -165,7 +166,7 @@ void setParameter(PARAMETER_NAME name, u8 index, float val)
       break;
     default:
       break;
-    }
+  }
 }
 
 u8 getParameterElementCount(PARAMETER_NAME para)
@@ -192,14 +193,14 @@ void sendParameterCmd(PARAMETER_NAME para, u8 stepper_index, float Value)
 {
   storeCmd(parameter_Cmd[para][stepper_index], Value);
   if (dualstepper[stepper_index] && stepper_index < AXIS_NUM)
-    {
-      if(para == P_CURRENT)
-        storeCmd(dualStepperParameter_cmd[0][stepper_index], Value);
-      if(para == P_BUMPSENSITIVITY)
-        storeCmd(dualStepperParameter_cmd[1][stepper_index], Value);
-      if(para == P_HYBRID_THRESHOLD)
-        storeCmd(dualStepperParameter_cmd[2][stepper_index], Value);
-    }
+  {
+    if (para == P_CURRENT)
+      storeCmd(dualStepperParameter_cmd[0][stepper_index], Value);
+    if (para == P_BUMPSENSITIVITY)
+      storeCmd(dualStepperParameter_cmd[1][stepper_index], Value);
+    if (para == P_HYBRID_THRESHOLD)
+      storeCmd(dualStepperParameter_cmd[2][stepper_index], Value);
+  }
 }
 
 void saveEepromSettings(void)

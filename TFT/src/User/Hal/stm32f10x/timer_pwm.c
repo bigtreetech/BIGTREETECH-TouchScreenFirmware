@@ -23,7 +23,8 @@ void TIM_PWM_SetDutyCycle(uint16_t tim_ch, uint8_t duty)
   uint16_t timerIndex = TIMER_GET_TIM(tim_ch);
   uint16_t channel = TIMER_GET_CH(tim_ch);
   const TIMER* timer = &pwmTimer[timerIndex];
-  switch (channel) {
+  switch (channel)
+  {
     case 0: timer->tim->CCR1 = duty; break;
     case 1: timer->tim->CCR2 = duty; break;
     case 2: timer->tim->CCR3 = duty; break;
@@ -44,7 +45,8 @@ void TIM_PWM_Init(uint16_t tim_ch)
   timer->tim->ARR = 100 - 1;
   timer->tim->PSC = timerTmpClk / (500 * 100) - 1;
 
-  switch (channel) {
+  switch (channel)
+  {
     case 0: timer->tim->CCMR1 |= (6<<4)  | (1<<3);   break; // CH1 PWM1 mode
     case 1: timer->tim->CCMR1 |= (6<<12) | (1<<11);  break; // CH2 PWM1 mode
     case 2: timer->tim->CCMR2 |= (6<<4)  | (1<<3);   break; // CH3 PWM1 mode
@@ -55,7 +57,8 @@ void TIM_PWM_Init(uint16_t tim_ch)
   timer->tim->CR1 = (1 << 7)  // Auto-reload preload enable
                   | (1 << 0); // Enbale timer
 
-  if (timer->tim == TIM1 || timer->tim == TIM8) {// TIM1 & TIM8 advanced timer need config BDTR register for PWM
+  if (timer->tim == TIM1 || timer->tim == TIM8)
+  {// TIM1 & TIM8 advanced timer need config BDTR register for PWM
     timer->tim->BDTR |= 1 << 15; // Main output enable
   }
 }

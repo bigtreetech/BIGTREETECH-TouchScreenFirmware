@@ -70,7 +70,7 @@ void menuLoadUnload(void)
         if (heatGetCurrentTemp(curExt_index) < infoSettings.min_ext_temp)
         { // low temperature warning
           char tempMsg[120];
-          labelChar(tempStr, LABEL_EXT_TEMPLOW);
+          LABELCHAR(tempStr, LABEL_EXT_TEMPLOW);
           sprintf(tempMsg, tempStr, infoSettings.min_ext_temp);
           popupReminder(DIALOG_TYPE_ERROR, LABEL_COLD_EXT, (u8 *)tempMsg);
         }

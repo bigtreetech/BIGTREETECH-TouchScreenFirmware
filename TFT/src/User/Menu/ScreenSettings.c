@@ -27,12 +27,13 @@ void menuLanguage(void)
 
   // fill language items
   uint8_t tmp_language = infoSettings.language;
-  for(uint8_t i = 0; i < COUNT(totalItems); i++) {
-    if (i == tmp_language) {
+  for(uint8_t i = 0; i < COUNT(totalItems); i++)
+  {
+    if (i == tmp_language)
       totalItems[i].icon = ICONCHAR_CHECKED;
-    } else {
+    else
       totalItems[i].icon = ICONCHAR_UNCHECKED;
-    }
+
     infoSettings.language = i;
     totalItems[i].itemType = LIST_LABEL;
     totalItems[i].titlelabel.address = textSelect(LABEL_LANGUAGE);
@@ -59,15 +60,17 @@ void menuLanguage(void)
       break;
 
     default:
-      if(key_num < LISTITEM_PER_PAGE){
+      if(key_num < LISTITEM_PER_PAGE)
+      {
         uint16_t cur_item = infoSettings.language;
         uint16_t tmp_i = listWidgetGetCurPage() * LISTITEM_PER_PAGE + key_num;
-        if (tmp_i < LANGUAGE_NUM && tmp_i != cur_item) { // has changed
+        if (tmp_i < LANGUAGE_NUM && tmp_i != cur_item)  // has changed
+        {
           totalItems[cur_item].icon = ICONCHAR_UNCHECKED;
-          listWidgetRefreshItem(cur_item); // refresh unchecked status
+          listWidgetRefreshItem(cur_item);  // refresh unchecked status
           cur_item = tmp_i;
           totalItems[cur_item].icon = ICONCHAR_CHECKED;
-          listWidgetRefreshItem(cur_item); // refresh checked status
+          listWidgetRefreshItem(cur_item);  // refresh checked status
 
           infoSettings.language = cur_item;
           menuDrawTitle(textSelect(LABEL_LANGUAGE));
@@ -97,11 +100,15 @@ void menuSimulatorBackGroundColor(void)
   uint8_t cur_item = 0;
 
   // fill items
-  for(uint8_t i = 0; i < COUNT(totalItems); i++) {
-    if (infoSettings.marlin_mode_bg_color == lcd_colors[i]) {
+  for (uint8_t i = 0; i < COUNT(totalItems); i++)
+  {
+    if (infoSettings.marlin_mode_bg_color == lcd_colors[i])
+    {
       totalItems[i].icon = ICONCHAR_CHECKED;
       cur_item = i;
-    } else {
+    }
+    else
+    {
       totalItems[i].icon = ICONCHAR_UNCHECKED;
     }
     totalItems[i].itemType = LIST_LABEL;
@@ -128,14 +135,16 @@ void menuSimulatorBackGroundColor(void)
       break;
 
     default:
-      if(key_num < LISTITEM_PER_PAGE){
+      if (key_num < LISTITEM_PER_PAGE)
+      {
         uint16_t tmp_i = listWidgetGetCurPage() * LISTITEM_PER_PAGE + key_num;
-        if (tmp_i < LCD_COLOR_COUNT && tmp_i != cur_item) { // has changed
+        if (tmp_i < LCD_COLOR_COUNT && tmp_i != cur_item) // has changed
+        {
           totalItems[cur_item].icon = ICONCHAR_UNCHECKED;
-          listWidgetRefreshItem(cur_item); // refresh unchecked status
+          listWidgetRefreshItem(cur_item);  // refresh unchecked status
           cur_item = tmp_i;
           totalItems[cur_item].icon = ICONCHAR_CHECKED;
-          listWidgetRefreshItem(cur_item); // refresh checked status
+          listWidgetRefreshItem(cur_item);  // refresh checked status
 
           infoSettings.marlin_mode_bg_color = lcd_colors[cur_item];
         }
@@ -161,11 +170,15 @@ void menuSimulatorFontColor(void)
   uint8_t cur_item = 0;
 
   // fill items
-  for(uint8_t i = 0; i < COUNT(totalItems); i++) {
-    if (infoSettings.marlin_mode_font_color == lcd_colors[i]) {
+  for (uint8_t i = 0; i < COUNT(totalItems); i++)
+  {
+    if (infoSettings.marlin_mode_font_color == lcd_colors[i])
+    {
       totalItems[i].icon = ICONCHAR_CHECKED;
       cur_item = i;
-    } else {
+    }
+    else
+    {
       totalItems[i].icon = ICONCHAR_UNCHECKED;
     }
     totalItems[i].itemType = LIST_LABEL;
@@ -192,9 +205,11 @@ void menuSimulatorFontColor(void)
       break;
 
     default:
-      if(key_num < LISTITEM_PER_PAGE){
+      if (key_num < LISTITEM_PER_PAGE)
+      {
         uint16_t tmp_i = listWidgetGetCurPage() * LISTITEM_PER_PAGE + key_num;
-        if (tmp_i < LCD_COLOR_COUNT && tmp_i != cur_item) { // has changed
+        if (tmp_i < LCD_COLOR_COUNT && tmp_i != cur_item)  // has changed
+        {
           totalItems[cur_item].icon = ICONCHAR_UNCHECKED;
           listWidgetRefreshItem(cur_item); // refresh unchecked status
           cur_item = tmp_i;
