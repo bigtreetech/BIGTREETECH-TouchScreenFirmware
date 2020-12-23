@@ -57,7 +57,8 @@ void menuExtrude(void)
   if (eRelative) // Set extruder to absolute
     mustStoreCmd("M82\n");
 
-  extrudeItems.items[KEY_ICON_6] = itemExtLenSteps[extlenSteps_index];
+  extrudeItems.items[KEY_ICON_5] = itemExtLenSteps[extlenSteps_index];
+  extrudeItems.items[KEY_ICON_6] = itemSpeed[itemSpeed_index];
 
   #if LCD_ENCODER_SUPPORT
     encoderPosition = 0;
