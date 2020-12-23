@@ -239,7 +239,6 @@ void hostActionCommands(void)
         BUZZER_PLAY(sound_notify);
         setDialogText((uint8_t *)"Message", (uint8_t *)hostAction.prompt_begin, LABEL_CONFIRM, LABEL_BACKGROUND);
         showDialog(DIALOG_TYPE_ALERT, setRunoutAlarmFalse, NULL, NULL);
-        // popupReminder(DIALOG_TYPE_ALERT,(u8 *)"Message", (u8 *)hostAction.prompt_begin);
         break;
       case 1:
         BUZZER_PLAY(sound_notify);
