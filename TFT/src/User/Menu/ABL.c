@@ -239,11 +239,11 @@ void menuABL(void)
         for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
         {
           if (heatGetTargetTemp(i) > 0)
-            {
-              setDialogText(LABEL_WARNING, LABEL_HEATERS_ON, LABEL_CONFIRM, LABEL_CANCEL);
-              showDialog(DIALOG_TYPE_QUESTION, heatCoolDown, NULL, NULL);
-              break;
-            }
+          {
+            setDialogText(LABEL_WARNING, LABEL_HEATERS_ON, LABEL_CONFIRM, LABEL_CANCEL);
+            showDialog(DIALOG_TYPE_QUESTION, heatCoolDown, NULL, NULL);
+            break;
+          }
         }
         infoMenu.cur--;
         break;
