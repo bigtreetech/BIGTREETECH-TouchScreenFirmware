@@ -45,7 +45,7 @@ void loopSpeed(void)
         sendSpeed_waiting[i] = storeCmd("%s S%d D%d\n", speedCmd[i], setPercent[i], heatGetCurrentTool());
       }
       if (sendSpeed_waiting[i] == true)
-        curPercent[i] = setPercent[i];
+        lastSetPercent[i] = setPercent[i];
       nextSpeedTime = OS_GetTimeMs() + NEXT_SPEED_WAIT; // avoid rapid fire, clogging the queue
     }
   }
