@@ -174,7 +174,7 @@
     #define STRING_ONBOARDSD              "OnboardSD"
     #define STRING_READ_ONBOARDSD_ERROR   "Read Onboard SD card error!"
     #define STRING_FILAMENT_SENSOR        "Filament sensor"
-    #define STRING_FILAMENT_RUNOUT        "filament runout!"
+    #define STRING_FILAMENT_RUNOUT        "Filament runout!"
     #define STRING_PREHEAT                "Preheat"
     #define STRING_PREHEAT_BOTH           "Both"
     #define STRING_IS_PAUSE               "Unable to extrude when\nprinting.\nPause printing?"

@@ -4,6 +4,8 @@
 
 PRINTING infoPrinting;
 
+bool filamentRunoutAlarm;
+
 static bool updateM27_waiting = false;
 static float last_E_pos;
 
@@ -84,6 +86,21 @@ bool getPrintRunout(void)
 void setPrintRunout(bool runout)
 {
   infoPrinting.runout = runout;
+}
+
+void setRunoutAlarmTrue(void)
+{
+  filamentRunoutAlarm = true;
+}
+
+void setRunoutAlarmFalse(void)
+{
+  filamentRunoutAlarm = false;
+}
+
+bool getRunoutAlarm(void)
+{
+  return filamentRunoutAlarm;
 }
 
 void setPrintModelIcon(bool exist)
@@ -171,8 +188,12 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
     case TFT_UDISK:
     case TFT_SD:
       infoPrinting.pause = is_pause;
-      if(infoPrinting.pause == true && is_m0pause == false){
-      while (infoCmd.count != 0) {loopProcess();}
+      if(infoPrinting.pause == true && is_m0pause == false)
+      {
+        while (infoCmd.count != 0)
+        {
+            loopProcess();
+        }
       }
 
       bool isCoorRelative = coorGetRelative();
@@ -404,17 +425,20 @@ void getGcodeFromFile(void)
 
 void breakAndContinue(void)
 {
-   Serial_Puts(SERIAL_PORT, "M108\n");
+  setRunoutAlarmFalse();
+  Serial_Puts(SERIAL_PORT, "M108\n");
 }
 
 void resumeAndPurge(void)
 {
-   Serial_Puts(SERIAL_PORT, "M876 S0\n");
+  setRunoutAlarmFalse();
+  Serial_Puts(SERIAL_PORT, "M876 S0\n");
 }
 
 void resumeAndContinue(void)
 {
-   Serial_Puts(SERIAL_PORT, "M876 S1\n");
+  setRunoutAlarmFalse();
+  Serial_Puts(SERIAL_PORT, "M876 S1\n");
 }
 
 bool hasPrintingMenu(void)
