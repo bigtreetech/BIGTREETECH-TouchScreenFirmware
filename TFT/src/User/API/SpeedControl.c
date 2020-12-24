@@ -39,8 +39,13 @@ void loopSpeed(void)
   {
     if (lastSetPercent[i] != setPercent[i]  && (OS_GetTimeMs() > nextSpeedTime))
     {
-      if (storeCmd("%s S%d D%d\n",speedCmd[i], setPercent[i], heatGetCurrentTool()))
-        lastSetPercent[i] = setPercent[i];
+      if (send_waiting[i] == false)
+      {
+        send_waiting[i] = true;
+        send_waiting[i] = storeCmd("%s S%d D%d\n", speedCmd[i], percent[i], heatGetCurrentTool());
+      }
+      if (send_waiting[i] == true)
+        curPercent[i] = percent[i];
       nextSpeedTime = OS_GetTimeMs() + NEXT_SPEED_WAIT; // avoid rapid fire, clogging the queue
     }
   }
@@ -55,6 +60,8 @@ void speedQuery(void)
 {
   if (infoHost.connected && !infoHost.wait && !queryWait)
   {
-    queryWait = storeCmd("M220\nM221 D%d\n",heatGetCurrentTool());
+    storeCmd("M220\n");
+    storeCmd("M221 D%d\n", heatGetCurrentTool());
+    queryWait = true;
   }
 }
