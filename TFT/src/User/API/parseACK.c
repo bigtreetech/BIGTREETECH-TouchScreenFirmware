@@ -908,19 +908,19 @@ void parseACK(void)
       {
         if (ack_seen("L:"))
         {
-          while ((dmaL2Cache[ack_index] < '0') || (dmaL2Cache[ack_index] > '9'))
+          while (((dmaL2Cache[ack_index] < '0') || (dmaL2Cache[ack_index] > '9')) && dmaL2Cache[ack_index] != '\n')
             ack_index++;
           filData.length = ack_value();
         }
         else if (ack_seen("W:"))
         {
-          while ((dmaL2Cache[ack_index] < '0') || (dmaL2Cache[ack_index] > '9'))
+          while (((dmaL2Cache[ack_index] < '0') || (dmaL2Cache[ack_index] > '9')) && dmaL2Cache[ack_index] != '\n')
             ack_index++;
           filData.weight = ack_value();
         }
         else if (ack_seen("C:"))
         {
-          while ((dmaL2Cache[ack_index] < '0') || (dmaL2Cache[ack_index] > '9'))
+          while (((dmaL2Cache[ack_index] < '0') || (dmaL2Cache[ack_index] > '9')) && dmaL2Cache[ack_index] != '\n')
             ack_index++;
           filData.cost = ack_value();
         }
