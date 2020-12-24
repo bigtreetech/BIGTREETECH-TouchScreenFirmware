@@ -89,11 +89,10 @@ void menuFan(void)
       case KEY_INFOBOX:
       {
         char titlestr[30];
-        uint8_t val = fanGetCurPercent(curIndex);
         if (infoSettings.fan_percentage == 1)
         {
           strcpy(titlestr, "Min:0 | Max:100");
-          val = numPadInt((u8 *) titlestr, val, 0, false);
+          uint8_t val = numPadInt((u8 *) titlestr, fanGetSetPercent(curIndex), 0, false);
           val = NOBEYOND(0, val, 100);
 
           if (val != fanGetSetPercent(curIndex))
@@ -102,7 +101,7 @@ void menuFan(void)
         else
         {
           sprintf(titlestr, "Min:0 | Max:%d", infoSettings.fan_max[curIndex]);
-          uint8_t val = numPadInt((u8 *) titlestr, val, 0, false);
+          uint8_t val = numPadInt((u8 *) titlestr, fanGetCurSpeed(curIndex), 0, false);
           val = NOBEYOND(0, val,  infoSettings.fan_max[curIndex]);
 
           if (val != fanGetCurSpeed(curIndex))
