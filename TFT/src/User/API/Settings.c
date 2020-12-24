@@ -103,7 +103,6 @@ void infoSettingsReset(void)
   infoSettings.lcd_brightness         = DEFAULT_LCD_BRIGHTNESS;
   infoSettings.lcd_idle_brightness    = DEFAULT_LCD_IDLE_BRIGHTNESS;
   infoSettings.lcd_idle_timer         = DEFAULT_LCD_IDLE_TIMER;
-  infoSettings.print_summary          = DISPLAY_PRINT_SUMMARY;
   infoSettings.xy_offset_probing      = ENABLED;
 
 // Start, End & Cancel G-codes

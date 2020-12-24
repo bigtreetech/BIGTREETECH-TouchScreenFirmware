@@ -67,6 +67,9 @@ uint32_t getPrintSize(void);
 uint32_t getPrintCur(void);
 bool getPrintRunout(void);
 void setPrintRunout(bool runout);
+void setRunoutAlarmFalse(void);
+void setRunoutAlarmTrue(void);
+bool getRunoutAlarm(void);
 void setPrintModelIcon(bool exist);
 bool getPrintModelIcon(void);
 
@@ -83,7 +86,7 @@ void startShutdown(void);
 
 void loopCheckPrinting(void);
 
-void resetFilamentUsed(void);
+void initEpos(void);
 void updateFilamentUsed(void);
 
 #ifdef __cplusplus

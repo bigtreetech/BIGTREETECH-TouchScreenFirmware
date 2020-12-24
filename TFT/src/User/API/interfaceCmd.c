@@ -841,6 +841,8 @@ void sendQueueCmd(void)
       {
         case 0: //G0
         case 1: //G1
+        case 2: //G2
+        case 3: //G3
         {
           AXIS i;
           for(i=X_AXIS;i<TOTAL_AXIS;i++)

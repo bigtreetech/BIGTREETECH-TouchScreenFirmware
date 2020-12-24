@@ -109,7 +109,6 @@ extern "C" {
 #define CONFIG_BRIGHTNESS              "lcd_brightness:"
 #define CONFIG_BRIGHTNESS_IDLE         "lcd_idle_brightness:"
 #define CONFIG_BRIGHTNESS_IDLE_DELAY   "lcd_idle_delay:"
-#define CONFIG_PRINT_SUMMARY           "print_summary:"
 #define CONFIG_XY_OFFSET_PROBING       "xy_offset_probing:"
 //-----------------------------Custom G-Code Commands (up to 15 custom G-code)
 #define CONFIG_CUSTOM_LABEL_1   "custom_label_1:"

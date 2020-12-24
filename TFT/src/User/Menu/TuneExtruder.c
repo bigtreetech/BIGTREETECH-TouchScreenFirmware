@@ -263,13 +263,9 @@ void menuNewExtruderESteps(void)
       case KEY_ICON_4:
         {
           storeCmd("M92 T0 E%0.2f\n", new_esteps);
-
           char tempMsg[120];
-
           labelChar(tempStr, LABEL_TUNE_EXT_ESTEPS_SAVED);
-
           sprintf(tempMsg, tempStr, new_esteps);
-
           popupReminder(DIALOG_TYPE_QUESTION, newExtruderESteps.title.index, (u8 *) tempMsg);
         }
         break;

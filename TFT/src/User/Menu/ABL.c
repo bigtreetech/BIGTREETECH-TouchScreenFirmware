@@ -66,8 +66,7 @@ void ublSaveloadConfirm(void)
   }
   else
   {
-    storeCmd("G29 S%d\n", ublSlot);
-    ublSlotSaved = true;
+    ublSlotSaved = storeCmd("G29 S%d\n", ublSlot);
   }
 }
 

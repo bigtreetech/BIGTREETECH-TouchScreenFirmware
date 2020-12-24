@@ -53,15 +53,13 @@ void loopSpeed(void)
 
 void speedQuerySetWait(bool wait)
 {
-  queryWait = wait;
+  speedQueryWait = wait;
 }
 
 void speedQuery(void)
 {
-  if (infoHost.connected && !infoHost.wait && !queryWait)
+  if (infoHost.connected && !infoHost.wait && !speedQueryWait)
   {
-    storeCmd("M220\n");
-    storeCmd("M221 D%d\n", heatGetCurrentTool());
-    queryWait = true;
+    speedQueryWait = storeCmd("M220\nM221 D%d\n",heatGetCurrentTool());
   }
 }

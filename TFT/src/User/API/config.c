@@ -1112,10 +1112,6 @@ void parseConfigKey(u16 index)
     break;
 #endif
 
-  case C_INDEX_PRINT_SUMMARY:
-    infoSettings.print_summary = getOnOff();
-    break;
-
   case C_INDEX_XY_OFFSET_PROBING:
     infoSettings.xy_offset_probing = getOnOff();
     break;
