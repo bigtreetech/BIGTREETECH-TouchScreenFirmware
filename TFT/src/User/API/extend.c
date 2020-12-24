@@ -153,7 +153,7 @@ bool FIL_SmartRunoutDetect(void)
 
     nextRunoutTime = OS_GetTimeMs() + update_PosE_time;
     update_PosE_waiting = true;
-  }while(0);
+  } while(0);
 
   if (SFS_IsAlive == false)
   {

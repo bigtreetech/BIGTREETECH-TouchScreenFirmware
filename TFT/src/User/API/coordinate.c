@@ -114,7 +114,7 @@ void coordinateQuerySetWait(bool wait)
 void coordinateQuery(void)
 {
   if (infoHost.connected == true && infoHost.wait == false && !coordinateQueryWait)
-    {
-      coordinateQueryWait = storeCmd("M114\n");
-    }
+  {
+    coordinateQueryWait = storeCmd("M114\n");
+  }
 }
