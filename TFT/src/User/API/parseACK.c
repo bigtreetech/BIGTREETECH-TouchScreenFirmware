@@ -301,16 +301,18 @@ void parseACK(void)
       if (infoSettings.ext_count < infoSettings.hotend_count) infoSettings.ext_count = infoSettings.hotend_count;
       updateNextHeatCheckTime();
       infoHost.connected = true;
-    #ifdef RepRapFirmware
-      if (!ack_seen("@"))  //It's RepRapFirmware
-      {
-        infoMachineSettings.isMarlinFirmware = 0;
-        infoMachineSettings.softwareEndstops = ENABLED;
-        infoHost.wait = false;
-        storeCmd("M92\n");
-        storeCmd("M115\n");
-      }
-    #endif
+
+      #ifdef RepRapFirmware
+        if (!ack_seen("@"))  //It's RepRapFirmware
+        {
+          infoMachineSettings.isMarlinFirmware = 0;
+          infoMachineSettings.softwareEndstops = ENABLED;
+          infoHost.wait = false;
+          storeCmd("M92\n");
+          storeCmd("M115\n");
+        }
+      #endif
+
       if(infoMachineSettings.isMarlinFirmware == -1) // if never connected to the printer since boot
       {
         storeCmd("M503\n");  // Query detailed printer capabilities

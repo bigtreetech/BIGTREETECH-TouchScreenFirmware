@@ -75,11 +75,9 @@ void menuExtrude(void)
 
       case KEY_INFOBOX:
         {
-          float val = 0;
           char titlestr[30];
-
           sprintf(titlestr, "Min:%i | Max:%i", (extlenSteps[COUNT(extlenSteps) - 1]) * -1, extlenSteps[COUNT(extlenSteps) - 1]);
-          val = numPadFloat((u8 *) titlestr, 0, 0, true);
+          float val = numPadFloat((u8 *) titlestr, 0, 0, true);
           eTemp += val;
 
           menuDrawPage(&extrudeItems);
@@ -116,7 +114,7 @@ void menuExtrude(void)
         #if LCD_ENCODER_SUPPORT
           if (encoderPosition)
           {
-            eTemp += extlenSteps[extlenSteps_index]*encoderPosition;
+            eTemp += extlenSteps[extlenSteps_index] * encoderPosition;
             encoderPosition = 0;
           }
         #endif
@@ -132,7 +130,7 @@ void menuExtrude(void)
         char tempMsg[120];
         LABELCHAR(tempStr, LABEL_EXT_TEMPLOW);
         sprintf(tempMsg, tempStr, infoSettings.min_ext_temp);
-        popupReminder(DIALOG_TYPE_ERROR,LABEL_COLD_EXT, (u8*)tempMsg);
+        popupReminder(DIALOG_TYPE_ERROR, LABEL_COLD_EXT, (u8 *)tempMsg);
       }
       else
       {
@@ -143,8 +141,8 @@ void menuExtrude(void)
     }
     loopProcess();
   }
-  mustStoreCmd("G92 E%.5f\n",eSaved);
-  mustStoreCmd("G0 F%d\n",feedrate);
+  mustStoreCmd("G92 E%.5f\n", eSaved);
+  mustStoreCmd("G0 F%d\n", feedrate);
   if (eRelative)
-    mustStoreCmd("M83\n"); // Set extruder to relative
+    mustStoreCmd("M83\n");  // Set extruder to relative
 }

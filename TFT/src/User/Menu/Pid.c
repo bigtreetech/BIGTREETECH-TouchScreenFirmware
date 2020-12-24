@@ -126,10 +126,8 @@ static inline void pidUpdateCounter(void)
 
 void menuPidWait(void)
 {
-  // 1 title, ITEM_PER_PAGE items (icon + label)
-
-  bool isPressed, isReleased;
-  isPressed = isReleased = false;
+  bool isPressed = false;
+  bool isReleased = false;
 
   menuDrawPage(&pidWaitItems);
 
