@@ -709,10 +709,10 @@ void parseACK(void)
           string_end = ack_index - sizeof("FIRMWARE_URL:");
         else if (ack_seen("SOURCE_CODE_URL:")) // For Marlin
           string_end = ack_index - sizeof("SOURCE_CODE_URL:");
-      #ifdef RepRapFirmware
-        else if (ack_seen("ELECTRONICS"))  // For RepRapFirmware
-          string_end = ack_index - sizeof("ELECTRONICS");
-      #endif
+        #ifdef RepRapFirmware
+          else if (ack_seen("ELECTRONICS"))  // For RepRapFirmware
+            string_end = ack_index - sizeof("ELECTRONICS");
+        #endif
         infoSetFirmwareName(string, string_end - string_start); // Set firmware name
 
         if (ack_seen("MACHINE_TYPE:"))
