@@ -2,7 +2,7 @@
 #include "includes.h"
 
 static bool curSoftwareEndstops = true;
-static u32 nextTime = 0;
+static u32 nextProbeTime = 0;
 static u32 updateTime = 200;                               // 1 seconds is 1000
 
 /* Enable probe height
@@ -69,9 +69,9 @@ void probeHeightMove(float unit, int8_t direction)
 /* Query for new coordinates */
 void probeHeightQueryCoord(void)
 {
-  if (OS_GetTimeMs() > nextTime)
+  if (OS_GetTimeMs() > nextProbeTime)
   {
     coordinateQuery();
-    nextTime = OS_GetTimeMs() + updateTime;
+    nextProbeTime = OS_GetTimeMs() + updateTime;
   }
 }

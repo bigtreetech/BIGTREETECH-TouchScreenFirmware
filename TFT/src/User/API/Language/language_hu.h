@@ -282,10 +282,18 @@
     #define STRING_LOAD_STARTED           "A filament betöltése folyamatban van,\nnem lehetséges további művelet,\nmíg véget nem ér.\nKérlek várj!"
     #define STRING_UNLOAD_STARTED         "A filament kiadása folyamatban van,\nnem lehetséges további művelet,\nmíg véget nem ér.\nKérlek várj!"
     #define STRING_HEATERS_ON             "Néhány fűtőelem még üzemel.\nKikapcsolod a fűtőelemeket?"
-    #define STRING_PRINT_SUMMARY_POPUP    "Összegzés"
-    #define STRING_PRINT_SUMMARY          "Eltelt idő: %02u:%02u:%02u\nFelhasznált anyag: %3.2f méter"
-    #define STRING_PRINT_COMPLETE         "Nyomtatás kész."
+    #define STRING_PRINT_FINISHED         "   Printing\n   finished."  // keep it short and in this format!
+    #define STRING_MAIN_SCREEN            "Main"
+    #define STRING_PREVIOUS_PRINT_DATA    "Összegzés"
+    #define STRING_FILE_NAME              "File: "
+    #define STRING_PRINT_TIME             "Print Time: "
+    #define STRING_FILAMENT_LENGTH        "Filament length: %1.2fm"
+    #define STRING_FILAMENT_WEIGHT        "Filament weight: %1.2fg"
+    #define STRING_FILAMENT_COST          "Filament cost: %1.2f"
+    #define STRING_NO_FILAMENT_STATS "No filament statistics."
+    #define STRING_CLICK_FOR_MORE         "Click for more."
     #define STRING_EXT_TEMPLOW            "Hotend temperature is below\nminimum temperature (%d℃)."
     #define STRING_COLD_EXT               "Cold extrusion prevented"
+    #define STRING_HEAT_HOTEND            "Heat hotend to %d℃?"
 
 #endif

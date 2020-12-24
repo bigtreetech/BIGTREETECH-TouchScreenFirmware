@@ -7,7 +7,8 @@ static uint16_t setPercent[SPEED_NUM]     = {100, 100};  //Speed  Flow
 static uint16_t lastSetPercent[SPEED_NUM] = {100, 100};  //Speed  Flow
 static uint16_t curPercent[SPEED_NUM]  = {100, 100};  //Speed  Flow
 
-static bool queryWait = false;
+static bool sendSpeed_waiting[SPEED_NUM];
+static bool speedQueryWait = false;
 
 static uint32_t nextSpeedTime = 0;
 
@@ -39,13 +40,12 @@ void loopSpeed(void)
   {
     if (lastSetPercent[i] != setPercent[i]  && (OS_GetTimeMs() > nextSpeedTime))
     {
-      if (send_waiting[i] == false)
+      if (sendSpeed_waiting[i] == false)
       {
-        send_waiting[i] = true;
-        send_waiting[i] = storeCmd("%s S%d D%d\n", speedCmd[i], percent[i], heatGetCurrentTool());
+        sendSpeed_waiting[i] = storeCmd("%s S%d D%d\n",speedCmd[i], setPercent[i], heatGetCurrentTool());
       }
-      if (send_waiting[i] == true)
-        curPercent[i] = percent[i];
+      if (sendSpeed_waiting[i] == true)
+        curPercent[i] = setPercent[i];
       nextSpeedTime = OS_GetTimeMs() + NEXT_SPEED_WAIT; // avoid rapid fire, clogging the queue
     }
   }
@@ -53,15 +53,13 @@ void loopSpeed(void)
 
 void speedQuerySetWait(bool wait)
 {
-  queryWait = wait;
+  speedQueryWait = wait;
 }
 
 void speedQuery(void)
 {
-  if (infoHost.connected && !infoHost.wait && !queryWait)
+  if (infoHost.connected && !infoHost.wait && !speedQueryWait)
   {
-    storeCmd("M220\n");
-    storeCmd("M221 D%d\n", heatGetCurrentTool());
-    queryWait = true;
+    speedQueryWait = storeCmd("M220\nM221 D%d\n",heatGetCurrentTool());
   }
 }

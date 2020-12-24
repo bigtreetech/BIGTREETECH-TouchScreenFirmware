@@ -256,7 +256,7 @@ void hostActionCommands(void)
   {
     infoPrinting.pause = true;
   }
-  else if (ack_seen("cancel")) //To be added to Marlin abortprint routine
+  else if (ack_seen("cancel"))  //To be added to Marlin abortprint routine
   {
     if (infoHost.printing == true)
     {
@@ -339,6 +339,7 @@ void parseACK(void)
         goto parse_end;
       }
     }
+
     if(requestCommandInfo.inResponse)
     {
       if(strlen(requestCommandInfo.cmd_rev_buf)+strlen(dmaL2Cache) < CMD_MAX_REV)
@@ -427,10 +428,6 @@ void parseACK(void)
 
         infoPrinting.pause = false;
         infoHost.printing = true;
-        if (infoSettings.print_summary)
-        {
-          resetFilamentUsed();
-        }
         infoPrinting.time = 0;
         infoPrinting.cur = 0;
         infoPrinting.size = ack_value();
@@ -905,6 +902,29 @@ void parseACK(void)
         {
           ackPopupInfo(echomagic);
         }
+      }
+    // parse filament data from gCode (M118)
+      else if (ack_seen("filament_data"))
+      {
+        if (ack_seen("L:"))
+        {
+          while (((dmaL2Cache[ack_index] < '0') || (dmaL2Cache[ack_index] > '9')) && dmaL2Cache[ack_index] != '\n')
+            ack_index++;
+          filData.length = ack_value();
+        }
+        else if (ack_seen("W:"))
+        {
+          while (((dmaL2Cache[ack_index] < '0') || (dmaL2Cache[ack_index] > '9')) && dmaL2Cache[ack_index] != '\n')
+            ack_index++;
+          filData.weight = ack_value();
+        }
+        else if (ack_seen("C:"))
+        {
+          while (((dmaL2Cache[ack_index] < '0') || (dmaL2Cache[ack_index] > '9')) && dmaL2Cache[ack_index] != '\n')
+            ack_index++;
+          filData.cost = ack_value();
+        }
+        filDataSeen = true;
       }
     }
 
