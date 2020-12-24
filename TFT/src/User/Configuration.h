@@ -7,8 +7,9 @@
 
 /**
  * To work with RepRapFirmware, Add M575 P1 S2 B115200 to the end of config.g file in sd card
+ * uncomment for RepRapFirmware
 */
-#define RepRapFirmware
+//#define RepRapFirmware
 
 /**
  * Default Mode
@@ -536,6 +537,6 @@
 #define PRINT_END_GCODE "G90\nG1 E-4\nG92 E0\nM18\n" // Switch to absolute positioning, reduce filament pressure by performing small retract, reset extruder position, disable steppers
 
 // Cancel G-code - run this G-code after canceling print
-#define PRINT_CANCEL_GCODE "G28 XY R10\n" // Home XY and raise Z 10mm
+#define PRINT_CANCEL_GCODE "M104 S0\nM140 S0\nG28 XY R10\nM107\nM18\n" // Home XY and raise Z 10mm
 
 #endif
