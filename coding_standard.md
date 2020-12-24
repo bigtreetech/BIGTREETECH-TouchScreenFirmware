@@ -28,8 +28,8 @@
 - Examples:
 ```C
 variableFirst
-second_variable
-variableThird_name
+secondVariable
+variableThirdName
 ```
 
 ### File Names:
