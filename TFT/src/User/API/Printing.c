@@ -191,9 +191,9 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
       if(infoPrinting.pause == true && is_m0pause == false)
       {
         while (infoCmd.count != 0)
-          {
-             loopProcess();
-          }
+        {
+            loopProcess();
+        }
       }
 
       bool isCoorRelative = coorGetRelative();
