@@ -147,8 +147,7 @@ void heatSetUpdateSeconds(uint8_t seconds)
   heat_update_seconds = seconds;
   if (infoMachineSettings.autoReportTemp && !heat_update_waiting)
   {
-    heat_update_waiting = true;
-    storeCmd("M155 ");
+    heat_update_waiting = storeCmd("M155 ");
   }
 }
 
@@ -246,8 +245,7 @@ void loopCheckHeater(void)
       lastTarget[i] = heater.T[i].target;
       if (heat_send_waiting[i] != true)
       {
-        heat_send_waiting[i] = true;
-        storeCmd("%s ", heatCmd[i]);
+        heat_send_waiting[i] = storeCmd("%s ",heatCmd[i]);
       }
     }
   }

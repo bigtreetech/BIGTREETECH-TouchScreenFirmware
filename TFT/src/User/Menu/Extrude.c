@@ -54,15 +54,18 @@ void menuExtrude(void)
   feedrate = coordinateGetFeedRate();
   eRelative = eGetRelative();
 
-  menuDrawPage(&extrudeItems);
-  extrudeCoordinateReDraw(false);
+  if (eRelative) // Set extruder to absolute
+    mustStoreCmd("M82\n");
+
+  extrudeItems.items[KEY_ICON_5] = itemExtLenSteps[extlenSteps_index];
+  extrudeItems.items[KEY_ICON_6] = itemSpeed[itemSpeed_index];
 
   #if LCD_ENCODER_SUPPORT
     encoderPosition = 0;
   #endif
 
-  if (eRelative) // Set extruder to absolute
-    mustStoreCmd("M82\n");
+  menuDrawPage(&extrudeItems);
+  extrudeCoordinateReDraw(false);
 
   while (infoMenu.menu[infoMenu.cur] == menuExtrude)
   {

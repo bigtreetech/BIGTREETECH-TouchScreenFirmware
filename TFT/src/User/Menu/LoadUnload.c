@@ -32,6 +32,11 @@ void extruderIdReDraw(void)
   setLargeFont(false);
 }
 
+void setHotendMinExtTemp(void)  // set the hotend to the minimum extrusion temperature
+{
+  mustStoreCmd("M104 S%d T%d\n", infoSettings.min_ext_temp, curExt_index);
+}
+
 void menuLoadUnload(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
@@ -61,8 +66,6 @@ void menuLoadUnload(void)
     }
     else
     {
-      lastcmd = NONE;
-
       switch(key_num)
       {
       case KEY_ICON_0: // Unload
@@ -72,7 +75,12 @@ void menuLoadUnload(void)
           char tempMsg[120];
           LABELCHAR(tempStr, LABEL_EXT_TEMPLOW);
           sprintf(tempMsg, tempStr, infoSettings.min_ext_temp);
-          popupReminder(DIALOG_TYPE_ERROR, LABEL_COLD_EXT, (u8 *)tempMsg);
+          strcat(tempMsg, "\n");
+          sprintf(tempStr, (char *)textSelect(LABEL_HEAT_HOTEND), infoSettings.min_ext_temp);
+          strcat(tempMsg, tempStr);
+          setDialogText(LABEL_WARNING, (uint8_t *)tempMsg, LABEL_CONFIRM, LABEL_CANCEL);
+          showDialog(DIALOG_TYPE_ERROR, setHotendMinExtTemp, NULL, NULL);
+          // popupReminder(DIALOG_TYPE_ERROR, LABEL_COLD_EXT, (u8 *)tempMsg);
         }
         else if (key_num == KEY_ICON_0)
         { // unload
@@ -89,14 +97,17 @@ void menuLoadUnload(void)
       case KEY_ICON_4:
         curExt_index = (curExt_index + 1) % infoSettings.hotend_count;
         extruderIdReDraw();
+        lastcmd = NONE;
         break;
 
       case KEY_ICON_5:
         infoMenu.menu[++infoMenu.cur] = menuHeat;
-        break;
+        lastcmd = NONE;
+      break;
 
       case KEY_ICON_6:
         heatCoolDown();
+        lastcmd = NONE;
         break;
 
       case KEY_ICON_7:
@@ -110,7 +121,8 @@ void menuLoadUnload(void)
           }
         }
         infoMenu.cur--;
-        break;
+        lastcmd = NONE;
+      break;
 
       default:
         extruderIdReDraw();

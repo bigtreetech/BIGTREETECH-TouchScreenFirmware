@@ -2,7 +2,7 @@
 #include "includes.h"
 
 static bool curSoftwareEndstops = true;
-static u32 nextTime = 0;
+static u32 nextProbeTime = 0;
 static u32 updateTime = 200;  // 1 seconds is 1000
 
 /* Enable probe height
@@ -14,7 +14,8 @@ void probeHeightEnable(void)
 
   if (curSoftwareEndstops)      // if software endstops is enabled, disable it temporary
     mustStoreCmd("M211 S0\n");  // disable software endstops to move nozzle minus Zero (Z0) if necessary
-  #ifdef RepRapFirmware
+
+  #ifdef  RepRapFirmware
     if (infoMachineSettings.isMarlinFirmware == 0)
     {
       mustStoreCmd("M564 S0 H0\n");
@@ -29,8 +30,9 @@ void probeHeightDisable(void)
 {
   if (curSoftwareEndstops)      // if software endstops was originally enabled, enable it again
     mustStoreCmd("M211 S1\n");  // enable software endstops
+
   #ifdef RepRapFirmware
-    if(infoMachineSettings.isMarlinFirmware == 0)
+    if (infoMachineSettings.isMarlinFirmware == 0)
     {
       mustStoreCmd("M564 S1 H1\n");
     }
@@ -65,9 +67,9 @@ void probeHeightMove(float unit, int8_t direction)
 /* Query for new coordinates */
 void probeHeightQueryCoord(void)
 {
-  if (OS_GetTimeMs() > nextTime)
+  if (OS_GetTimeMs() > nextProbeTime)
   {
     coordinateQuery();
-    nextTime = OS_GetTimeMs() + updateTime;
+    nextProbeTime = OS_GetTimeMs() + updateTime;
   }
 }

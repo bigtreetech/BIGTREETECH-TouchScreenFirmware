@@ -375,12 +375,12 @@ void menuPrint(void)
     #define ONBOARD_SD_INDEX 1
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
   #endif
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACK,                    LABEL_BACK}}
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_SCREEN_INFO,          LABEL_PREVIOUS_PRINT_DATA},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_BACK,                 LABEL_BACK}}
   };
 
   sourceSelItems.items[ONBOARD_SD_INDEX].icon = (infoMachineSettings.onboard_sd_support == ENABLED) ? ICON_ONBOARD_SD : ICON_BACKGROUND;
@@ -399,31 +399,37 @@ void menuPrint(void)
         infoMenu.menu[++infoMenu.cur] = menuPowerOff;
         goto selectEnd;
 
-      #ifdef U_DISK_SUPPORT
-          case KEY_ICON_1:
-            list_mode = infoSettings.file_listmode; //follow list mode setting in usb disk
-            infoFile.source = TFT_UDISK;
-            infoMenu.menu[++infoMenu.cur] = menuPrintFromSource;
-            infoMenu.menu[++infoMenu.cur] = menuPowerOff;
-            goto selectEnd;
-          case KEY_ICON_2:
-      #else
-          case KEY_ICON_1:
-      #endif
-          if(infoMachineSettings.onboard_sd_support == ENABLED)
-          {
-            list_mode = true; //force list mode in Onboard sd card
-            infoFile.source = BOARD_SD;
-            infoMenu.menu[++infoMenu.cur] = menuPrintFromSource;   //TODO: fix here,  onboard sd card PLR feature
-            goto selectEnd;
-          }
-          break;
+    #ifdef U_DISK_SUPPORT
+      case KEY_ICON_1:
+        list_mode = infoSettings.file_listmode; //follow list mode setting in usb disk
+        infoFile.source = TFT_UDISK;
+        infoMenu.menu[++infoMenu.cur] = menuPrintFromSource;
+        infoMenu.menu[++infoMenu.cur] = menuPowerOff;
+        goto selectEnd;
+      case KEY_ICON_2:
+    #else
+      case KEY_ICON_1:
+    #endif
+        if(infoMachineSettings.onboard_sd_support == ENABLED)
+        {
+          list_mode = true; //force list mode in Onboard sd card
+          infoFile.source = BOARD_SD;
+          infoMenu.menu[++infoMenu.cur] = menuPrintFromSource;   //TODO: fix here,  onboard sd card PLR feature
+          goto selectEnd;
+        }
+        break;
+
+      case KEY_ICON_4:
+        if (filData.name[0] != '\0')
+          printInfoPopup();
+        break;
 
       case KEY_ICON_7:
         infoMenu.cur--;
         return;
 
-      default: break;
+      default:
+        break;
     }
     loopProcess();
   }

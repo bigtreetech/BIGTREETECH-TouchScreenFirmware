@@ -1,6 +1,6 @@
 #ifndef _CONFIGURATION_H_
 #define _CONFIGURATION_H_
-#define CONFIG_VERSION 20200810
+#define CONFIG_VERSION 20201218
 //===========================================================================
 //============================= General Settings ============================
 //===========================================================================
@@ -261,15 +261,6 @@
 #define LOAD_UNLOAD_M701_M702
 
 /**
- * Enable print summary popup
- * This will enable a popup at print end.
- * The popup shows the approximate print time and approximate filament used.
- * Displayed values are calculated by approximation and may differ from the actual values.
- * When enabled also the menu jumps to the status screen after the popup.
- */
-#define DISPLAY_PRINT_SUMMARY 1 // 0: Disabled 1: Enabled
-
-/**
  * Auto save/load Bed Leveling data
  * The TFT will auto detect if BL data are available.
  * Enable this will send "M500" after "G29" to store leveling value
@@ -463,7 +454,7 @@
 #define POWER_LOSS_ZRAISE 10
 
 // Prevent extrusion if the temperature is below set temperature
-#define PREVENT_COLD_EXTRUSION_MINTEMP 170
+#define PREVENT_COLD_EXTRUSION_MINTEMP 180
 
 /**
  * Maximum hotend temperature of automatic shut down after printing.

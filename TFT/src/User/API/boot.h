@@ -16,11 +16,11 @@ extern "C" {
   #define WORD_UNICODE_SIZE       0x480000
   #define BYTE_ASCII_SIZE           0x1000
   #define LARGE_FONT_SIZE           0x3000
-  #define FLASH_SIGN_SIZE           0x1000  //store status of last font/icon/config update
-  #define LANGUAGE_SIZE            0x12000  //Language pack size
-  #define STRINGS_STORE_MAX_SIZE    0x5000  //label strings max size
-  #define PRINT_GCODES_MAX_SIZE     0x5000  //start/end/cancel gcodes  max size
-  #define CUSTOM_GCODE_MAX_SIZE     0x5000  //custom gocdes max size
+  #define FLASH_SIGN_SIZE           0x1000    //store status of last font/icon/config update
+  #define LANGUAGE_SIZE            0x14000    //Language pack size
+  #define STRINGS_STORE_MAX_SIZE    0x5000    //label strings max size
+  #define PRINT_GCODES_MAX_SIZE     0x5000    //start/end/cancel gcodes  max size
+  #define CUSTOM_GCODE_MAX_SIZE     0x5000    //custom gocdes max size
   #define ICON_MAX_SIZE             0x5000
   #define INFOBOX_MAX_SIZE          0xB000
   #define SMALL_ICON_MAX_SIZE       0x2000

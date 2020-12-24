@@ -394,7 +394,6 @@ void saveConfig(void)
 
 void writeConfig(uint8_t * dataBytes, uint16_t numBytes, uint32_t addr, uint32_t maxSize)
 {
-  int sectorCount = maxSize / W25QXX_SECTOR_SIZE;
   //do not proceed if data size is larger than reserved max size.
   if (numBytes > maxSize)
   {
@@ -402,6 +401,8 @@ void writeConfig(uint8_t * dataBytes, uint16_t numBytes, uint32_t addr, uint32_t
     showError(CSTAT_STORAGE_LOW);
     return;
   }
+  int sectorCount = maxSize / W25QXX_SECTOR_SIZE;
+
   //erase part of flash to be rewritten
   for (int i = 0; i < sectorCount; i++)
   {
@@ -425,13 +426,13 @@ void resetConfig(void)
 
   //restore custom gcode presets
   int n = 0;
-  for (int i = 0; i < CUSTOM_GCODES_COUNT;i++)
+  for (int i = 0; i < CUSTOM_GCODES_COUNT; i++)
   {
     if(default_custom_enabled[i] == 1)
     {
-    strcpy(tempCG.gcode[n],cg_list[i]);
-    strcpy(tempCG.name[n],cg_names[i]);
-    n++;
+      strcpy(tempCG.gcode[n],cg_list[i]);
+      strcpy(tempCG.name[n],cg_names[i]);
+      n++;
     }
   }
   tempCG.count = n;
@@ -528,7 +529,7 @@ void parseConfigKey(u16 index)
   switch (index)
   {
     case C_INDEX_UNIFIEDMENU:
-        infoSettings.status_screen = getOnOff();
+      infoSettings.status_screen = getOnOff();
       break;
 
     case C_INDEX_UART_BAUDRATE:
@@ -588,7 +589,7 @@ void parseConfigKey(u16 index)
       break;
 
     case C_INDEX_TERMINAL_ACK:
-        infoSettings.terminalACK = getOnOff();
+      infoSettings.terminalACK = getOnOff();
       break;
 
     case C_INDEX_INVERT_AXIS:
@@ -598,19 +599,15 @@ void parseConfigKey(u16 index)
       break;
 
     case C_INDEX_PERSISTENT_TEMP:
-        infoSettings.persistent_info = getOnOff();
+      infoSettings.persistent_info = getOnOff();
       break;
 
     case C_INDEX_LIST_MODE:
-        infoSettings.file_listmode = getOnOff();
+      infoSettings.file_listmode = getOnOff();
       break;
 
     case C_INDEX_ACK_NOTIFICATION:
       SET_VALID_INT_VALUE(infoSettings.ack_notification, 0, 2);
-      break;
-
-    case C_INDEX_PRINT_SUMMARY:
-      infoSettings.print_summary = getOnOff();
       break;
 
     //----------------------------Marlin Mode Settings (Only for TFT35_V3.0/TFT24_V1.1/TFT28V3.0)
@@ -642,7 +639,7 @@ void parseConfigKey(u16 index)
         break;
 
       case C_INDEX_MARLIN_TYPE:
-      SET_VALID_INT_VALUE(infoSettings.marlin_type, 0, MODE_COUNT-1);
+        SET_VALID_INT_VALUE(infoSettings.marlin_type, 0, MODE_COUNT-1);
         break;
 
       case C_INDEX_MARLIN_TITLE:
@@ -1003,16 +1000,15 @@ void parseConfigKey(u16 index)
       char * pchr;
       pchr = strrchr(cur_line,':') + 1;
       int len = strlen(pchr);
-      if (inLimit(len,GCODE_MIN_LENGTH,MAX_GCODE_LENGTH))
+      if (inLimit(len, GCODE_MIN_LENGTH, MAX_GCODE_LENGTH))
       {
         strcpy(configPrintGcodes->start_gcode, pchr);
-      #ifdef CONFIG_DEBUG
-        GUI_DispStringInRect(recterrortxt.x0, recterrortxt.y0 + (BYTE_HEIGHT * 2), recterrortxt.x1, recterrortxt.y1,
-                             (u8 *)configPrintGcodes->start_gcode);
-        Delay_ms(1000);
-        Delay_ms(1000);
-
-      #endif
+        #ifdef CONFIG_DEBUG
+          GUI_DispStringInRect(recterrortxt.x0, recterrortxt.y0 + (BYTE_HEIGHT * 2), recterrortxt.x1, recterrortxt.y1,
+                              (u8 *)configPrintGcodes->start_gcode);
+          Delay_ms(1000);
+          Delay_ms(1000);
+        #endif
       }
       break;
     }

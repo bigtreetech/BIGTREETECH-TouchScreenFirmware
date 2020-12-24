@@ -279,13 +279,21 @@
     #define STRING_MESH_EDITOR            "Mesh síť"
     #define STRING_MESH_TUNER             "Mesh nastavení"
     #define STRING_CASE_LIGHT             "Osvětlení"
-    #define STRING_LOAD_STARTED           "Probíhá zavádění filamentu.\nNení možná další akce,\ndokud to nebude dokončeno.\nProsím čekejte." 
-    #define STRING_UNLOAD_STARTED         "Probíhá vysunování filamentu.\nNení možná další akce,\ndokud to nebude dokončeno.\nProsím čekejte.." 
-    #define STRING_HEATERS_ON             "Topení jsou stále zapnutá.\nChcete je vypnout?"
-    #define STRING_PRINT_SUMMARY_POPUP    "Okno souhrn tisku" 
-    #define STRING_PRINT_SUMMARY          "Čas tisku: %02u:%02u:%02u\nPoužito filamentu: %3.2f metru"
-    #define STRING_PRINT_COMPLETE         "Tisk dokončen"
-    #define STRING_EXT_TEMPLOW            "Teplota trysky je nižší než\nminimální teplota (%d℃)."
-    #define STRING_COLD_EXT               "Vytlačování za studena je omezeno"
+    #define STRING_LOAD_STARTED           "Probíhá zavádění filamentu.\nNení možná další akce,\ndokud to nebude dokončeno.\nProsím čekejte."  // translation needed
+    #define STRING_UNLOAD_STARTED         "Probíhá vysunování filamentu.\nNení možná další akce,\ndokud to nebude dokončeno.\nProsím čekejte.."  // translation needed
+    #define STRING_HEATERS_ON             "Topení jsou stále zapnutá.\nChcete je vypnout?"  // translation needed
+    #define STRING_PRINT_FINISHED         "   Printing\n   finished."  // keep it short and in this format!
+    #define STRING_MAIN_SCREEN            "Main"
+    #define STRING_PREVIOUS_PRINT_DATA    "Brief"
+    #define STRING_FILE_NAME              "File: "
+    #define STRING_PRINT_TIME             "Print Time: "
+    #define STRING_FILAMENT_LENGTH        "Filament length: %1.2fm"
+    #define STRING_FILAMENT_WEIGHT        "Filament weight: %1.2fg"
+    #define STRING_FILAMENT_COST          "Filament cost: %1.2f"
+    #define STRING_NO_FILAMENT_STATS      "No filament statistics."
+    #define STRING_CLICK_FOR_MORE         "Click for more."
+    #define STRING_EXT_TEMPLOW            "Hotend temperature is below\nminimum temperature (%d℃)."
+    #define STRING_COLD_EXT               "Cold extrusion prevented"
+    #define STRING_HEAT_HOTEND            "Heat hotend to %d℃?"
 
 #endif

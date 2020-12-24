@@ -544,7 +544,6 @@ void sendQueueCmd(void)
           if(cmd_seen('S') && fanIsType(i, FAN_TYPE_F) )
           {
             fanSetCurSpeed(i, cmd_value());
-            fanSetSendWaiting(i, false);
           }
           else if (!cmd_seen('\n'))
           {
@@ -568,7 +567,6 @@ void sendQueueCmd(void)
           if(cmd_seen('S')) i = fanGetTypID(i,FAN_TYPE_CTRL_S);
           if(cmd_seen('I')) i = fanGetTypID(i=0,FAN_TYPE_CTRL_I);
           fanSetCurSpeed(i, cmd_value());
-          fanSetSendWaiting(i, false);
           break;
         }
 
@@ -740,11 +738,11 @@ void sendQueueCmd(void)
           break;
         case 220: //M220
           if(cmd_seen('S'))
-            speedSetPercent(0,cmd_value());
+            speedSetCurPercent(0,cmd_value());
           break;
         case 221: //M221
           if(cmd_seen('S'))
-            speedSetPercent(1,cmd_value());
+            speedSetCurPercent(1,cmd_value());
           break;
 
         #ifdef BUZZER_PIN
@@ -855,6 +853,8 @@ void sendQueueCmd(void)
       {
         case 0: //G0
         case 1: //G1
+        case 2: //G2
+        case 3: //G3
         {
           AXIS i;
           for(i=X_AXIS;i<TOTAL_AXIS;i++)
