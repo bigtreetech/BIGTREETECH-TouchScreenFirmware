@@ -5,7 +5,7 @@
 
 bool skipMode = false;
 
-const GUI_RECT rect_of_mode[MODE_COUNT]={
+const GUI_RECT rect_of_mode[MODE_COUNT] = {
   //2 select icon
   {1*SPACE_SELEX+0*ICON_WIDTH, SPACE_SELEY, 1*SPACE_SELEX+1*ICON_WIDTH, SPACE_SELEY+ICON_HEIGHT},
   {3*SPACE_SELEX+1*ICON_WIDTH, SPACE_SELEY, 3*SPACE_SELEX+2*ICON_WIDTH, SPACE_SELEY+ICON_HEIGHT},
@@ -55,7 +55,7 @@ bool LCD_ReadPen(uint16_t intervals)
   return false;
 }
 
-MKEY_VALUES MKeyGetValue(void)
+static inline MKEY_VALUES MKeyGetValue(void)
 {
   return (MKEY_VALUES)KEY_GetValue(COUNT(rect_of_mode), rect_of_mode);
 }
@@ -85,8 +85,8 @@ void loopCheckMode(void)
     return;
 
 //  #endif
-  if(LCD_ReadPen(LCD_CHANGE_MODE_INTERVALS) 
-#if LCD_ENCODER_SUPPORT 
+  if(LCD_ReadPen(LCD_CHANGE_MODE_INTERVALS)
+#if LCD_ENCODER_SUPPORT
       || encoder_ReadBtn(LCD_CHANGE_MODE_INTERVALS)
 #endif
     )
@@ -106,7 +106,7 @@ void menuMode(void)
   }
   resetInfoFile();
 
-  #if !defined(MKS_32_V1_4) && (!defined MKS_28_V1_0)
+  #if !defined(MKS_32_V1_4) && !defined (MKS_28_V1_0)
     //causes hang if we deinit spi1
     SD_DeInit();
   #endif

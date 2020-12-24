@@ -5,8 +5,7 @@
 extern "C" {
 #endif
 
-void unifiedMenu(void);
-void classicMenu(void);
+void menuMain(void);
 
 #ifdef __cplusplus
 }

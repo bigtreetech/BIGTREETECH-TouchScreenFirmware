@@ -24,7 +24,6 @@ void TIM3_Config(void)
 void Buzzer_Config(void)
 {
   GPIO_InitSet(BUZZER_PIN, MGPIO_MODE_OUT_PP, 0);
-
   TIM3_Config();
 }
 

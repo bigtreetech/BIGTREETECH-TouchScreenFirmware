@@ -14,8 +14,7 @@ void caseLightValueQuery(void)
   if (infoMachineSettings.caseLightsBrightness == ENABLED && infoHost.connected &&
       !infoHost.wait && !lightQueryWait)
   {
-    storeCmd("M355\n");
-    lightQueryWait = true;
+    lightQueryWait = storeCmd("M355\n");
   }
 }
 
@@ -78,8 +77,7 @@ void loopCaseLight(void)
     lastCaseLightState = caseLightState;
     if (caseLight_send_waiting == false)
     {
-      caseLight_send_waiting = true;
-      storeCmd("M355 S%d P%d\n", caseLightState ? 1 : 0, caseLightBrightness);
+      caseLight_send_waiting = storeCmd("M355 S%d P%d\n", caseLightState ? 1 : 0, caseLightBrightness);
     }
   }
 }

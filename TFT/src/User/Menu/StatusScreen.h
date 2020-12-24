@@ -20,11 +20,11 @@ extern "C" {
 
 extern const GUI_POINT ss_title_point;
 extern const GUI_POINT ss_val_point;
+extern const GUI_RECT msgRect;
 
 void menuStatus(void);
 void drawTemperature(void);
 void storegantry(int n, float val);
-void toggleTool(void);
 void statusScreen_setMsg(const uint8_t *title,const uint8_t *msg);
 void statusScreen_setReady(void);
 void drawStatusScreenMsg(void);

@@ -21,11 +21,11 @@ enum
 // Config version support
 // change if new elements/keywords are added/removed/changed in the configuration.h Format YYYYMMDD
 // this number should match the CONFIG_VERSION in configuration.h
-#define CONFIG_SUPPPORT 20200810
+#define CONFIG_SUPPPORT 20201218
 
 #define FONT_FLASH_SIGN       20200908 //(YYYYMMDD) change if fonts require updating
-#define CONFIG_FLASH_SIGN     20200908 //(YYYYMMDD) change if any keyword(s) in config.ini is added or removed
-#define LANGUAGE_FLASH_SIGN   20201007 //(YYYYMMDD) change if any keyword(s) in language pack is added or removed
+#define CONFIG_FLASH_SIGN     20201221 //(YYYYMMDD) change if any keyword(s) in config.ini is added or removed
+#define LANGUAGE_FLASH_SIGN   20201218 //(YYYYMMDD) change if any keyword(s) in language pack is added or removed
 #define ICON_FLASH_SIGN       20201028 //(YYYYMMDD) change if any icon(s) is added or removed
 
 #define FONT_CHECK_SIGN       (FONT_FLASH_SIGN + WORD_UNICODE)
@@ -74,7 +74,7 @@ typedef enum
 typedef struct
 {
 // General Settings
-  uint8_t  unified_menu;
+  uint8_t  status_screen;
   uint32_t baudrate;
   uint8_t  language;
 
@@ -166,6 +166,7 @@ typedef struct
   uint8_t  lcd_brightness;
   uint8_t  lcd_idle_brightness;
   uint8_t  lcd_idle_timer;
+  uint8_t  xy_offset_probing;
 
 // Start, End & Cancel G-codes
   uint8_t  send_start_gcode;
@@ -228,6 +229,18 @@ typedef struct
 
 extern SETTINGS infoSettings;
 extern MACHINESETTINGS infoMachineSettings;
+
+extern const u16 default_max_temp[];
+extern const u16 default_max_fanPWM[];
+extern const u16 default_size_min[];
+extern const u16 default_size_max[];
+extern const u16 default_move_speed[];
+extern const u16 default_ext_speed[];
+extern const u16 default_level_speed[];
+extern const u16 default_pause_speed[];
+extern const u16 default_preheat_ext[];
+extern const u16 default_preheat_bed[];
+extern const u8 default_custom_enabled[];
 
 void initMachineSetting(void);
 void infoSettingsReset(void);

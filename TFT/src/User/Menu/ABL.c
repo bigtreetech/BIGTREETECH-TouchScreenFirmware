@@ -4,7 +4,6 @@
 static uint8_t ublSlot;
 static bool ublIsSaving = true;
 static bool ublSlotSaved = false;
-bool heat = false;
 
 /* called by parseAck() to notify ABL process status */
 void ablUpdateStatus(bool succeeded)
@@ -67,8 +66,7 @@ void ublSaveloadConfirm(void)
   }
   else
   {
-    storeCmd("G29 S%d\n", ublSlot);
-    ublSlotSaved = true;
+    ublSlotSaved = storeCmd("G29 S%d\n", ublSlot);
   }
 }
 
@@ -234,18 +232,18 @@ void menuABL(void)
 
       case KEY_ICON_6:
         infoMenu.menu[++infoMenu.cur] = menuPreheat;
-        heat = true;
-        break;    
+        break;
 
       case KEY_ICON_7:
-       if (heat == true)
+        for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
         {
-          for(uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
+          if (heatGetTargetTemp(i) > 0)
           {
-            heatSetTargetTemp(i, 0);
+            setDialogText(LABEL_WARNING, LABEL_HEATERS_ON, LABEL_CONFIRM, LABEL_CANCEL);
+            showDialog(DIALOG_TYPE_QUESTION, heatCoolDown, NULL, NULL);
+            break;
           }
-          heat = false;
-        }  
+        }
         infoMenu.cur--;
         break;
 

@@ -86,8 +86,8 @@
     #define STRING_RESUME                 "Продолжить"
     #define STRING_LOAD                   "Загрузка"
     #define STRING_UNLOAD                 "Выгрузка"
-    #define STRING_LOAD_UNLOAD            "Load/Unload"  // needs translation
-    #define STRING_LOAD_UNLOAD_SHORT      "(Un)Load"  // needs translation
+    #define STRING_LOAD_UNLOAD            "Загрузить/Выгрузить"
+    #define STRING_LOAD_UNLOAD_SHORT      "За/Выгрузка"
     #define STRING_SLOW_SPEED             "Медленно"
     #define STRING_NORMAL_SPEED           "Обычно"
     #define STRING_FAST_SPEED             "Быстро"
@@ -95,7 +95,7 @@
     #define STRING_FAN_HALF_SPEED         "50%"
     #define STRING_ROTATE_UI              "Переворот"
     #define STRING_TOUCHSCREEN_ADJUST     "Калибровка"
-    #define STRING_MORE                   "Больше\u089C"  //Curved Right Arrow
+    #define STRING_MORE                   "Больше"
     #define STRING_SCREEN_INFO            "Инфо"
     #define STRING_STATUS                 "Статус"
     #define STRING_SIMULATOR_BG_COLOR     "Задний фон Marlin режима"
@@ -149,20 +149,20 @@
     #define STRING_10_PERCENT             "10%"
     #define STRING_PERCENT_VALUE          "%d%%"
     #define STRING_READY                  "Готов"
-    #define STRING_BUSY                   "Занято процессом, подождите..."
+    #define STRING_BUSY                   "В процессе, ждите..."
     #define STRING_UNCONNECTED            "Нет подключения!"
     #define STRING_DISCONNECT_INFO        "Управление принтером через компьютер"
     #define STRING_LOADING                "Загрузка..."
     #define STRING_POWER_FAILED           "Продолжить печать?"
     #define STRING_CONTINUE               "Продолжение"
-    #define STRING_CANCEL                 "\u088F Отмена" //Cancel Sign
+    #define STRING_CANCEL                 "Отмена"
     #define STRING_ADJUST_TITLE           "Калибровка экрана"
     #define STRING_ADJUST_INFO            "Нажмите на красную точку"
     #define STRING_ADJUST_OK              "Успешная калибровка"
     #define STRING_ADJUST_FAILED          "Неудачная калибровка, попробуйте снова"
     #define STRING_WARNING                "Внимание"
     #define STRING_STOP_PRINT             "Остановить печать?"
-    #define STRING_CONFIRM                "\u088E OK" //Confirm Sign
+    #define STRING_CONFIRM                "OK"
     #define STRING_TFTSD                  "SD экрана"
     #define STRING_READ_TFTSD_ERROR       "Ошибка чтения SD карты!"
     #define STRING_TFTSD_INSERTED         "SD карта вставлена!"
@@ -185,7 +185,7 @@
     #define STRING_EMERGENCYSTOP          "Экст.стоп"
     #define STRING_TOUCH_TO_EXIT          "Нажмите для возврата"
     #define STRING_MAINMENU               "Меню"
-    #define STRING_WAIT_TEMP_SHUT_DOWN    "Дождитесь температуры\nсопла не ниже чем %d℃" // Wait for the temperature of hotend to be lower than 50℃
+    #define STRING_WAIT_TEMP_SHUT_DOWN    "Дождитесь температуры\nсопла не ниже чем %d℃"
     #define STRING_FORCE_SHUT_DOWN        "Принудительно выкл"
     #define STRING_SHUTTING_DOWN          "Выключаю..."
     #define STRING_PARAMETER_SETTING      "Параметры"
@@ -221,7 +221,7 @@
     #define STRING_LIN_ADVANCE            "К-фактор"
     #define STRING_RESET_SETTINGS_INFO    "Все настройки будут\nсброшены по умолчанию.\nПродолжить?"
     #define STRING_RESET_SETTINGS_DONE    "Успешный сброс настроек\nэкрана. Для полного\nвступления в силу,\nперегрузите устройство."
-    #define STRING_INFO                   "\u0884 Информация" //Info Sign
+    #define STRING_INFO                   "Информация"
     #define STRING_LCD_BRIGHTNESS         "Яркость LCD"
     #define STRING_LCD_BRIGHTNESS_DIM     "Регулировка яркости LCD"
     #define STRING_LCD_DIM_IDLE_TIMER     "Время до гашения LCD"
@@ -265,7 +265,7 @@
     #define STRING_TUNE_EXT_TEMP          "Настройка экструдера/Нагрев"
     #define STRING_TUNE_EXT_TEMPLOW       "Требуемая температура\nслишком низкая!\nМинимальная температура: %d℃"
     #define STRING_TUNE_EXT_DESIREDVAL    "Температура еще не достигла требуемого значения"
-    #define STRING_TUNE_EXT_MARK120MM     "Отметьте 120 мм на филаменте\nНажмите '%s' по говности\nИзмерьте полученную длину/nпосле экструдирования"
+    #define STRING_TUNE_EXT_MARK120MM     "Отметьте 120 мм на прутке\nНажмите '%s' по говности\nИзмерьте полученную длину/nпосле экструдирования"
     #define STRING_TUNE_EXT_HEATOFF       "Отключить нагрев?"
     #define STRING_TUNE_EXT_ADJ_ESTEPS    "Подстройка E-шагов"
     #define STRING_TUNE_EXT_ESTEPS_SAVED  "E-шаги установлены!\nНе забудьте сохранить\nих в EEPROM\nНовое значение: %0.2f"
@@ -279,8 +279,21 @@
     #define STRING_MESH_EDITOR            "Сетка ред."
     #define STRING_MESH_TUNER             "Сетка настр."
     #define STRING_CASE_LIGHT             "Подсветка"
-    #define STRING_LOAD_STARTED           "Filament load in progress.\nNo further actions possible\nuntil it's done.\nPlease stand by."  // translation needed
-    #define STRING_UNLOAD_STARTED         "Filament unload in progress.\nNo further actions possible\nuntil it's done.\nPlease stand by."  // translation needed
-    #define STRING_HEATERS_ON             "Some heaters are still ON.\nDo you want to stop them?"  // translation needed
+    #define STRING_LOAD_STARTED           "Загрузка прутка начата.\nДождитесь пока сопло достигнет\nнеобходимой температуры.\nПожалуйста подождите."
+    #define STRING_UNLOAD_STARTED         "Выгрузка прутка начата.\nДождитесь пока сопло достигнет\nнеобходимой температуры.\nПожалуйста подождите."
+    #define STRING_HEATERS_ON             "Некоторые нагреватели все еще работают.\nХотите прервать нагрев?"
+    #define STRING_PRINT_FINISHED         "   Printing\n   finished."  // keep it short and in this format!
+    #define STRING_MAIN_SCREEN            "Main"
+    #define STRING_PREVIOUS_PRINT_DATA    "Brief"
+    #define STRING_FILE_NAME              "File: "
+    #define STRING_PRINT_TIME             "Print Time: "
+    #define STRING_FILAMENT_LENGTH        "Filament length: %1.2fm"
+    #define STRING_FILAMENT_WEIGHT        "Filament weight: %1.2fg"
+    #define STRING_FILAMENT_COST          "Filament cost: %1.2f"
+    #define STRING_NO_FILAMENT_STATS      "No filament statistics."
+    #define STRING_CLICK_FOR_MORE         "Click for more."
+    #define STRING_EXT_TEMPLOW            "Температура сопла ниже\nминимальной (%d℃)."
+    #define STRING_COLD_EXT               "Экструзия холодным\nсоплом запрещена"
+    #define STRING_HEAT_HOTEND            "Heat hotend to %d℃?"
 
 #endif

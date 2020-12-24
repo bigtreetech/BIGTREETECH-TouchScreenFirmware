@@ -279,8 +279,21 @@
     #define STRING_MESH_EDITOR            "Mesh edit"
     #define STRING_MESH_TUNER             "Mesh tuner"
     #define STRING_CASE_LIGHT             "Case light"
-    #define STRING_LOAD_STARTED           "Filament load in progress.\nNo further actions possible\nuntil it's done.\nPlease stand by."  // translation needed
-    #define STRING_UNLOAD_STARTED         "Filament unload in progress.\nNo further actions possible\nuntil it's done.\nPlease stand by."  // translation needed
+    #define STRING_LOAD_STARTED           "Loading filament.\nPlease wait for the process\nto complete."  // translation needed
+    #define STRING_UNLOAD_STARTED         "Unloading filament.\nPlease wait for the process\nto complete."  // translation needed
     #define STRING_HEATERS_ON             "Some heaters are still ON.\nDo you want to stop them?"  // translation needed
+    #define STRING_PRINT_FINISHED         "   Printing\n   finished."  // keep it short and in this format!
+    #define STRING_MAIN_SCREEN            "Main"
+    #define STRING_PREVIOUS_PRINT_DATA    "Brief"
+    #define STRING_FILE_NAME              "File: "
+    #define STRING_PRINT_TIME             "Print Time: "
+    #define STRING_FILAMENT_LENGTH        "Filament length: %1.2fm"
+    #define STRING_FILAMENT_WEIGHT        "Filament weight: %1.2fg"
+    #define STRING_FILAMENT_COST          "Filament cost: %1.2f"
+    #define STRING_NO_FILAMENT_STATS "No filament statistics."
+    #define STRING_CLICK_FOR_MORE         "Click for more."
+    #define STRING_EXT_TEMPLOW            "Hotend temperature is below\nminimum temperature (%d℃)."
+    #define STRING_COLD_EXT               "Cold extrusion prevented"
+    #define STRING_HEAT_HOTEND            "Heat hotend to %d℃?"
 
 #endif

@@ -18,7 +18,7 @@ void probeHeightEnable(void);
 void probeHeightDisable(void);
 
 /* Start probe height */
-void probeHeightStart(void);
+void probeHeightStart(float initialHeight);
 
 /* Stop probe height */
 void probeHeightStop(void);
