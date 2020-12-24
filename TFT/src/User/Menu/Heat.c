@@ -87,11 +87,11 @@ void menuHeat(void)
 
       case KEY_ICON_3:
           if (c_heater < MAX_HOTEND_COUNT) 
-            heatSetTargetTemp(c_heater, MAX(140, actTarget + item_degree[item_degree_i]));  // by Lori
+            heatSetTargetTemp(c_heater, MAX(140, actTarget + degreeSteps[degreeSteps_index]));  // by Lori
           else if ((c_heater == MAX_HOTEND_COUNT) && infoSettings.bed_en)                   // by Lori
-            heatSetTargetTemp(c_heater, MAX(40, actTarget + item_degree[item_degree_i]));   // by Lori
+            heatSetTargetTemp(c_heater, MAX(40, actTarget + degreeSteps[degreeSteps_index]));   // by Lori
           else                                                                              // by Lori
-            heatSetTargetTemp(c_heater, actTarget + item_degree[item_degree_i]);
+            heatSetTargetTemp(c_heater, actTarget + degreeSteps[degreeSteps_index]);
         break;
 
       case KEY_ICON_4:
