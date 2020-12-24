@@ -144,22 +144,20 @@ void menuShowParameter(void)
           if (parameter_menuitems.items[key_num].icon == ICONCHAR_BACKGROUND)
             break;
 
-          VAL_TYPE v_type = getParameterValType(cur_parameter, key_num);
-          //accept negative values only for probe offset
-          bool negative_val = v_type % 2;
+          VAL_TYPE val_type = getParameterValType(cur_parameter, key_num);
+          bool negative_val = val_type % 2; //accept negative values only for probe offset
+          float val = getParameter(cur_parameter, key_num);
 
-          float v = getParameter(cur_parameter, key_num);
-
-          if (v_type == VAL_TYPE_FLOAT || v_type == VAL_TYPE_NEG_FLOAT)
-            v = numPadFloat(NULL, v, v, negative_val);  // parameter is a decimal number
+          if (val_type == VAL_TYPE_FLOAT || val_type == VAL_TYPE_NEG_FLOAT)
+            val = numPadFloat(NULL, val, val, negative_val);  // parameter is a decimal number
           else
-            v = (float)numPadInt(NULL, v, v, negative_val);  // parameter is an integer
+            val = (float)numPadInt(NULL, val, val, negative_val);  // parameter is an integer
 
-          if (v != getParameter(cur_parameter, key_num))
+          if (val != getParameter(cur_parameter, key_num))
           {
-            sendParameterCmd(cur_parameter, key_num, v);
+            sendParameterCmd(cur_parameter, key_num, val);
           }
-          setDynamicValue(key_num, v);
+          setDynamicValue(key_num, val);
           menuDrawListPage(&parameter_menuitems);
         }
         break;

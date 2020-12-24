@@ -79,11 +79,10 @@ void menuSpeed(void)
 
       case KEY_INFOBOX:
         {
-          u16 val = now;
           char titlestr[30];
-
           sprintf(titlestr, "Min:%i | Max:%i", SPEED_MIN, SPEED_MAX);
-          val = numPadInt((u8 *) titlestr, val, 100, false);
+
+          u16 val = numPadInt((u8 *) titlestr, now, 100, false);
           val = NOBEYOND(SPEED_MIN, val, SPEED_MAX);
 
           if (val != now)

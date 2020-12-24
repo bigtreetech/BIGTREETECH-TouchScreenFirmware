@@ -259,11 +259,10 @@ void menuPid(void)
 
       case KEY_INFOBOX:
       {
-        int32_t val = pidHeater.T[pidHeater.toolIndex].target;
         char titlestr[30];
-
         sprintf(titlestr, "Min:0 | Max:%i", infoSettings.max_temp[pidHeater.toolIndex]);
-        val = numPadInt((u8 *) titlestr, pidHeater.T[pidHeater.toolIndex].target, 0, false);
+        
+        int32_t val = numPadInt((u8 *) titlestr, pidHeater.T[pidHeater.toolIndex].target, 0, false);
         val = NOBEYOND(0, val, infoSettings.max_temp[pidHeater.toolIndex]);
 
         if (val != pidHeater.T[pidHeater.toolIndex].target)  // if value is different than target change it
