@@ -42,7 +42,7 @@ void loopSpeed(void)
     {
       if (sendSpeed_waiting[i] == false)
       {
-        sendSpeed_waiting[i] = storeCmd("%s S%d D%d\n",speedCmd[i], setPercent[i], heatGetCurrentTool());
+        sendSpeed_waiting[i] = storeCmd("%s S%d D%d\n", speedCmd[i], setPercent[i], heatGetCurrentTool());
       }
       if (sendSpeed_waiting[i] == true)
         lastSetPercent[i] = setPercent[i];
