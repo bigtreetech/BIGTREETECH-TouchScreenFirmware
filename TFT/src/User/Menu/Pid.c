@@ -191,16 +191,12 @@ void pidTemperatureReDraw(bool skip_header)
   if (!skip_header)
   {
     sprintf(tempstr, "%s    ", heatDisplayID[pidHeater.toolIndex]);
-
     GUI_DispString(exhibitRect.x0, exhibitRect.y0, (u8 *) tempstr);
   }
 
   sprintf(tempstr, "  %d  ", pidHeater.T[pidHeater.toolIndex].target);
-
   setLargeFont(true);
-
   GUI_DispStringInPrect(&exhibitRect, (u8 *) tempstr);
-
   setLargeFont(false);
 }
 
@@ -261,7 +257,7 @@ void menuPid(void)
       {
         char titlestr[30];
         sprintf(titlestr, "Min:0 | Max:%i", infoSettings.max_temp[pidHeater.toolIndex]);
-        
+
         int32_t val = numPadInt((u8 *) titlestr, pidHeater.T[pidHeater.toolIndex].target, 0, false);
         val = NOBEYOND(0, val, infoSettings.max_temp[pidHeater.toolIndex]);
 
@@ -283,12 +279,12 @@ void menuPid(void)
         break;
 
       case KEY_ICON_4:
-        pidItems.items[key_num] = itemTool[pidHeater.toolIndex];
-
         do
         {
           pidHeater.toolIndex = (pidHeater.toolIndex + 1) % MAX_HEATER_COUNT;
         } while (!heaterIsValid(pidHeater.toolIndex) || pidHeater.toolIndex == CHAMBER);
+
+        pidItems.items[key_num] = itemTool[pidHeater.toolIndex];
 
         menuDrawItem(&pidItems.items[key_num], key_num);
         pidTemperatureReDraw(false);
