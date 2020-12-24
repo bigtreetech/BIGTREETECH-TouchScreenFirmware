@@ -58,8 +58,6 @@ bool screenShotBMP(char *bmp)
   FIL   bmpFile;
   UINT  mybw;
 
-  GUI_COLOR pix;
-
   if(f_open(&bmpFile, bmp, FA_CREATE_NEW | FA_WRITE) != FR_OK)
   {
     return false;  // Create failed, filename maybe existed.
@@ -68,15 +66,12 @@ bool screenShotBMP(char *bmp)
   f_write(&bmpFile, &bmp_file, sizeof(BMP_FILEHEADER), &mybw);
   f_write(&bmpFile, &bmp_info, sizeof(BMP_INFOHEADER), &mybw);
 
-  LCD_SetWindow(0, 0, LCD_WIDTH - 1, LCD_HEIGHT - 1);
-  LCD_WR_REG(0X2E); // Read data
-  for(uint16_t j = 0; j < LCD_HEIGHT; j++)
+  for(uint16_t y = 0; y < LCD_HEIGHT; y++)
   {
-    f_lseek(&bmpFile, bmp_file.bfoffBits + (LCD_HEIGHT - j - 1) * (bmp_info.biWidth * bmp_info.biBitCount / 8));
-    for(uint16_t i = 0; i < LCD_WIDTH; i++)
+    f_lseek(&bmpFile, bmp_file.bfoffBits + (LCD_HEIGHT - y - 1) * (bmp_info.biWidth * bmp_info.biBitCount / 8));
+    for(uint16_t x = 0; x < LCD_WIDTH; x++)
     {
-      pix.color = LCD_RD_DATA();
-      uint32_t c = (pix.RGB.r << 19) | (pix.RGB.g << 10) | (pix.RGB.b << 3);
+      uint32_t c = LCD_ReadPixel_24Bit(x, y);
       f_write(&bmpFile, (char *)&c, 3, &mybw);
     }
   }
@@ -89,18 +84,34 @@ bool screenShotBMP(char *bmp)
 void loopScreenShot(void)
 {
   /*
+  * For "LCD_ENCODER_SUPPORT" TFTLCD
   * Pressed touch screen triggered ScreenShot in Marlin mode
   * Pressed encoder button triggered ScreenShot in other menu
+  *
+  * For no encoder TFTLCD
+  * Long pressed touch screen triggered ScreenShot
   */
-  bool (*screenShotGetAction)(uint16_t ) = (infoMenu.menu[infoMenu.cur] == menuMarlinMode) ? LCD_ReadPen : encoder_ReadBtn;
+  #if LCD_ENCODER_SUPPORT
+    bool (*screenShotTriggered)(uint16_t ) = (infoMenu.menu[infoMenu.cur] == menuMarlinMode) ? LCD_ReadPen : encoder_ReadBtn;
+    #define SCREEN_SHOT_TRIGGERED() screenShotTriggered(LCD_BUTTON_INTERVALS)
+  #else
+    #define SCREEN_SHOT_TRIGGERED() LCD_ReadPen(LCD_CHANGE_MODE_INTERVALS)
+  #endif
 
-  if (screenShotGetAction(LCD_BUTTON_INTERVALS))
+  if (SCREEN_SHOT_TRIGGERED())
   {    
     if(!mountSDCard())
       return;
 
-    char screenShotFileName[FF_LFN_BUF] = "ScreenShot/";
+    char screenShotFileName[FF_LFN_BUF] = "ScreenShot";
 
+    if (!f_dir_exists(screenShotFileName))
+    {
+      f_mkdir(screenShotFileName);
+    }
+    strcat(screenShotFileName, "/");
+
+    uint16_t i = strlen(screenShotFileName);
     switch (getMenuType())
     {
     case MENU_TYPE_ICON:
@@ -116,6 +127,14 @@ void loopScreenShot(void)
       break;
     }
 
+    for (uint16_t j = strlen(screenShotFileName); j >= i; j--)
+    {
+      if (screenShotFileName[j] == '/')
+      {
+        screenShotFileName[j] = '_';
+      }
+    }
+
     uint8_t index = 0;
     char fileName[FF_LFN_BUF];
     do {
@@ -123,7 +142,7 @@ void loopScreenShot(void)
       index++;
     } while (!screenShotBMP(fileName) && index < 10);
 
-    strcat(fileName, (index < 10) ? " ScreenShot ok!" : " ScreenShot failed!");
+    strcat(fileName, (index < 10) ? " ok!" : " failed!");
 
     addToast(DIALOG_TYPE_ALERT, fileName);
   }

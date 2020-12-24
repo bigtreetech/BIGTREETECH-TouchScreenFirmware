@@ -223,6 +223,20 @@ void LCD_init_RGB(void)
   LCD_WR_REG(0x29);
 }
 
+uint32_t LCD_ReadPixel_24Bit(int16_t x, int16_t y)
+{
+  LCD_SetWindow(x, y, x, y);
+  LCD_WR_REG(0X2E);
+  Delay_us(1);
+  LCD_RD_DATA(); // Dummy read
+
+  uint16_t rg, br;
+  rg = LCD_RD_DATA(); // First pixel R:8bit-G:8bit
+  br = LCD_RD_DATA(); // First pixel B:8bit - Second pixel R:8bit
+
+  return ((rg) << 8) | ((br & 0xFF00) >> 8); // RG-B
+}
+
 #elif LCD_DRIVER_IS(ILI9341)
 // ILI9341
 void LCD_init_RGB(void)
@@ -338,9 +352,23 @@ void LCD_init_RGB(void)
   LCD_WR_DATA(0x00);
   LCD_WR_DATA(0xef);
 
-  LCD_WR_REG(0x11); //Exit Sleep
+  LCD_WR_REG(0x11); // Exit Sleep
   Delay_ms(120);
-  LCD_WR_REG(0x29); //display on
+  LCD_WR_REG(0x29); // Display on
+}
+
+uint32_t LCD_ReadPixel_24Bit(int16_t x, int16_t y)
+{
+  LCD_SetWindow(x, y, x, y);
+  LCD_WR_REG(0X2E);
+  Delay_us(1);
+  LCD_RD_DATA(); // Dummy read
+
+  uint16_t rg, br;
+  rg = LCD_RD_DATA(); // First pixel R:8bit-G:8bit
+  br = LCD_RD_DATA(); // First pixel B:8bit - Second pixel R:8bit
+
+  return ((rg) << 8) | ((br & 0xFF00) >> 8); // RG-B
 }
 
 #elif LCD_DRIVER_IS(ST7789)
@@ -582,11 +610,22 @@ void LCD_init_RGB(void)
   LCD_WR_DATA(0x00);
 }
 
+uint32_t LCD_ReadPixel_24Bit(int16_t x, int16_t y)
+{
+  LCD_SetWindow(x, y, x, y);
+  LCD_WR_REG(0X2E);
+  Delay_us(1);
+
+  GUI_COLOR pix;
+  pix.color = LCD_RD_DATA();
+  return (pix.RGB.r << 19) | (pix.RGB.g << 10) | (pix.RGB.b << 3);
+}
+
 #endif
 
-u16 LCD_ReadID(void)
+uint16_t LCD_ReadID(void)
 {
-  u16 id = 0;
+  uint16_t id = 0;
   LCD_WR_REG(0XD3);
   id = LCD_RD_DATA();	//dummy read
   id = LCD_RD_DATA();

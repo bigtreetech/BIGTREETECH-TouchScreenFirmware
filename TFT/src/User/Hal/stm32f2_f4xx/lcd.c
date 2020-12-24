@@ -3,10 +3,10 @@
 #include "GPIO_Init.h"
 
 #ifdef STM32_HAS_FSMC
-u16 LCD_RD_DATA(void)
+uint16_t LCD_RD_DATA(void)
 {
-  vu16 ram;
-  ram=LCD->LCD_RAM;
+  volatile uint16_t ram;
+  ram = LCD->LCD_RAM;
   return ram;
 }
 

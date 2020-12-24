@@ -67,6 +67,7 @@ extern "C" {
   #define LCD_WR_16BITS_DATA(c) do{ LCD_WR_DATA(((c)>>8)&0xFF); LCD_WR_DATA((c)&0xFF); }while(0)
 #endif
 
+uint32_t LCD_ReadPixel_24Bit(int16_t x, int16_t y);
 void LCD_RefreshDirection(void);
 void LCD_Init(void);
 
