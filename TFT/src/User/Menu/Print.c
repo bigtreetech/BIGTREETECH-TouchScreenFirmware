@@ -385,30 +385,30 @@ void menuPrint(void)
         infoMenu.menu[++infoMenu.cur] = menuPowerOff;
         goto selectEnd;
 
-      #ifdef U_DISK_SUPPORT
-          case KEY_ICON_1:
-            list_mode = infoSettings.file_listmode; //follow list mode setting in usb disk
-            infoFile.source = TFT_UDISK;
-            infoMenu.menu[++infoMenu.cur] = menuPrintFromSource;
-            infoMenu.menu[++infoMenu.cur] = menuPowerOff;
-            goto selectEnd;
-          case KEY_ICON_2:
-      #else
-          case KEY_ICON_1:
-      #endif
-          if(infoMachineSettings.onboard_sd_support == ENABLED)
-          {
-            list_mode = true; //force list mode in Onboard sd card
-            infoFile.source = BOARD_SD;
-            infoMenu.menu[++infoMenu.cur] = menuPrintFromSource;   //TODO: fix here,  onboard sd card PLR feature
-            goto selectEnd;
-          }
-          break;
+    #ifdef U_DISK_SUPPORT
+      case KEY_ICON_1:
+        list_mode = infoSettings.file_listmode; //follow list mode setting in usb disk
+        infoFile.source = TFT_UDISK;
+        infoMenu.menu[++infoMenu.cur] = menuPrintFromSource;
+        infoMenu.menu[++infoMenu.cur] = menuPowerOff;
+        goto selectEnd;
+      case KEY_ICON_2:
+    #else
+      case KEY_ICON_1:
+    #endif
+        if(infoMachineSettings.onboard_sd_support == ENABLED)
+        {
+          list_mode = true; //force list mode in Onboard sd card
+          infoFile.source = BOARD_SD;
+          infoMenu.menu[++infoMenu.cur] = menuPrintFromSource;   //TODO: fix here,  onboard sd card PLR feature
+          goto selectEnd;
+        }
+        break;
 
       case KEY_ICON_4:
         if (filData.name[0] != '\0')
           printInfoPopup();
-          break;
+        break;
 
       case KEY_ICON_7:
         infoMenu.cur--;
