@@ -272,7 +272,9 @@ void menuNewExtruderESteps(void)
 
       case KEY_ICON_5:
         curExtStep_index = (curExtStep_index + 1) % ITEM_TUNE_EXTRUDER_LEN_NUM;
+
         newExtruderESteps.items[key_num] = itemMoveLen[curExtStep_index];
+
         menuDrawItem(&newExtruderESteps.items[key_num], key_num);
         break;
 

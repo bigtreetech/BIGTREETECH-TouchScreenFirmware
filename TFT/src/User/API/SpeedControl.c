@@ -3,8 +3,8 @@
 
 const char *const speedCmd[SPEED_NUM] = {"M220","M221"};
 
-static uint16_t percent[SPEED_NUM]     = {100, 100};  //Speed  Flow
-static uint16_t lastPercent[SPEED_NUM] = {100, 100};  //Speed  Flow
+static uint16_t setPercent[SPEED_NUM]     = {100, 100};  //Speed  Flow
+static uint16_t lastSetPercent[SPEED_NUM] = {100, 100};  //Speed  Flow
 static uint16_t curPercent[SPEED_NUM]  = {100, 100};  //Speed  Flow
 
 static bool sendSpeed_waiting[SPEED_NUM];
@@ -14,51 +14,31 @@ static uint32_t nextSpeedTime = 0;
 
 #define NEXT_SPEED_WAIT 500  // 1 second is 1000
 
-void speedSetSendWaiting(u8 tool, bool isWaiting)
+void speedSetCurPercent(uint8_t tool, uint16_t per)
 {
-  sendSpeed_waiting[tool] = isWaiting;
+  curPercent[tool] = per;
 }
 
-void speedQuerySetWait(bool wait)
+uint16_t speedGetCurPercent(uint8_t tool)
 {
-  speedQueryWait = wait;
-}
-
-void speedSetRcvPercent(uint8_t tool, uint16_t per)
-{
-  curPercent[tool] = percent[tool] = per;
+  return curPercent[tool];
 }
 
 void speedSetPercent(uint8_t tool, uint16_t per)
 {
-  percent[tool]=NOBEYOND(SPEED_MIN, per, SPEED_MAX);
+  setPercent[tool]=NOBEYOND(SPEED_MIN, per, SPEED_MAX);
 }
 
-uint16_t speedGetPercent(uint8_t tool)
+uint16_t speedGetSetPercent(uint8_t tool)
 {
-  return percent[tool];
-}
-
-bool SpeedChanged(u8 i)
-{
-  if (lastPercent[i] != percent[i])
-  {
-    lastPercent[i] = percent[i];
-    sendSpeed_waiting[i] = false;
-    return true;
-  }
-  else
-  {
-    sendSpeed_waiting[i] = true;
-    return false;
-  }
+  return setPercent[tool];
 }
 
 void loopSpeed(void)
 {
   for (u8 i = 0; i < SPEED_NUM; i++)
   {
-    if ((curPercent[i] != percent[i]) && (OS_GetTimeMs() > nextSpeedTime))
+    if (lastSetPercent[i] != setPercent[i]  && (OS_GetTimeMs() > nextSpeedTime))
     {
       if (sendSpeed_waiting[i] == false)
       {
@@ -69,6 +49,11 @@ void loopSpeed(void)
       nextSpeedTime = OS_GetTimeMs() + NEXT_SPEED_WAIT; // avoid rapid fire, clogging the queue
     }
   }
+}
+
+void speedQuerySetWait(bool wait)
+{
+  speedQueryWait = wait;
 }
 
 void speedQuery(void)

@@ -2,7 +2,7 @@
 #include "STM32_Flash.h"
 
 #define TSC_SIGN  0x20200512 // DO NOT MODIFY
-#define PARA_SIGN 0x20201218 // (YYYYMMDD) If a new setting parameter is added,
+#define PARA_SIGN 0x20201221 // (YYYYMMDD) If a new setting parameter is added,
                              // modify here and initialize the initial value
                              // in the "infoSettingsReset()" function
 
@@ -102,6 +102,8 @@ void readStoredPara(void)
   infoSettings.lcd_brightness       = byteToWord(data + (index += 4), 4);
   infoSettings.lcd_idle_brightness  = byteToWord(data + (index += 4), 4);
   infoSettings.lcd_idle_timer       = byteToWord(data + (index += 4), 4);
+
+  infoSettings.xy_offset_probing    = byteToWord(data + (index += 4), 4);
 
   infoSettings.serial_alwaysOn            = byteToWord(data + (index += 4), 4);
   infoSettings.marlin_mode_bg_color       = byteToWord(data + (index += 4), 4);
@@ -240,6 +242,8 @@ void storePara(void)
   wordToByte(infoSettings.lcd_brightness,             data + (index += 4));
   wordToByte(infoSettings.lcd_idle_brightness,        data + (index += 4));
   wordToByte(infoSettings.lcd_idle_timer,             data + (index += 4));
+
+  wordToByte(infoSettings.xy_offset_probing,          data + (index += 4));
 
   wordToByte(infoSettings.serial_alwaysOn,            data + (index += 4));
   wordToByte(infoSettings.marlin_mode_bg_color,       data + (index += 4));
