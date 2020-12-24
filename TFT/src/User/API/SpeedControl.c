@@ -10,7 +10,7 @@ static uint16_t lastSetPercent[SPEED_NUM] = {100, 100};  //Speed  Flow
 static uint16_t curPercent[SPEED_NUM]  = {100, 100};  //Speed  Flow
 
 static bool sendSpeed_waiting[SPEED_NUM];
-static bool queryWait = false;
+static bool speedQueryWait = false;
 
 static bool speedQueryWait = false;
 static uint32_t nextSpeedTime = 0;
