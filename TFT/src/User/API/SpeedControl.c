@@ -45,6 +45,7 @@ void loopSpeed(void)
   }
 }
 
+
 void speedQuerySetWait(bool wait)
 {
   speedQueryWait = wait;
