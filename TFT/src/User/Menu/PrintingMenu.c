@@ -319,11 +319,11 @@ void printFinished(void)
 
   filData.time = infoPrinting.time;
 
-  if (speedGetPercent(1) != 100)
+  if (speedGetCurPercent(1) != 100)
   {
-    filData.length = (filData.length * speedGetPercent(1)) / 100;  // multiply by flow percentage
-    filData.weight = (filData.weight * speedGetPercent(1)) / 100;  // multiply by flow percentage
-    filData.cost   = (filData.cost   * speedGetPercent(1)) / 100;  // multiply by flow percentage
+    filData.length = (filData.length * speedGetCurPercent(1)) / 100;  // multiply by flow percentage
+    filData.weight = (filData.weight * speedGetCurPercent(1)) / 100;  // multiply by flow percentage
+    filData.cost   = (filData.cost   * speedGetCurPercent(1)) / 100;  // multiply by flow percentage
   }
   if (filData.length != 0)
   {
