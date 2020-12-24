@@ -53,8 +53,8 @@ void powerFailedCache(u32 offset)
       infoBreakPoint.axis[i] = coordinateGetAxisTarget(i);
     }
     infoBreakPoint.feedrate = coordinateGetFeedRate();
-    infoBreakPoint.speed = speedGetPercent(0); // Move speed percent
-    infoBreakPoint.flow = speedGetPercent(1); // Flow percent
+    infoBreakPoint.speed = speedGetCurPercent(0); // Move speed percent
+    infoBreakPoint.flow = speedGetCurPercent(1); // Flow percent
 
     for(uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
     {

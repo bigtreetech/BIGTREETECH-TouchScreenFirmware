@@ -167,7 +167,6 @@ void menuABL(void)
      {ICON_BACK,                    LABEL_BACK}}
   };
 
-  bool heat = false;
   KEY_VALUES key_num = KEY_IDLE;
 
   switch (infoMachineSettings.leveling)
@@ -234,14 +233,17 @@ void menuABL(void)
 
       case KEY_ICON_6:
         infoMenu.menu[++infoMenu.cur] = menuPreheat;
-        heat = true;
         break;
 
       case KEY_ICON_7:
-        if (heat == true)
+        for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
         {
-          heatCoolDown();
-          heat = false;
+          if (heatGetTargetTemp(i) > 0)
+          {
+            setDialogText(LABEL_WARNING, LABEL_HEATERS_ON, LABEL_CONFIRM, LABEL_CANCEL);
+            showDialog(DIALOG_TYPE_QUESTION, heatCoolDown, NULL, NULL);
+            break;
+          }
         }
         infoMenu.cur--;
         break;

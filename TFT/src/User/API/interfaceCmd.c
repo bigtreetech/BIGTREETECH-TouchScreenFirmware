@@ -400,7 +400,7 @@ void sendQueueCmd(void)
           if (!fromTFT)
           {
             mustStoreScript("M105\nM114\nM220\n");
-            storeCmd("M221 D%d\n",heatGetCurrentTool());
+            storeCmd("M221 D%d\n", heatGetCurrentTool());
             ispolling = true;
           }
             break;
@@ -474,7 +474,7 @@ void sendQueueCmd(void)
         case 27: //M27
             printSetUpdateWaiting(false);
         break;
-#endif
+#endif  // SERIAL_PORT_2
 
         case 80: //M80
           #ifdef PS_ON_PIN
@@ -531,9 +531,9 @@ void sendQueueCmd(void)
         case 106: //M106
         {
           uint8_t i = cmd_seen('P') ? cmd_value() : 0;
-          if(cmd_seen('S') && fanIsType(i, FAN_TYPE_F) ) {
+          if(cmd_seen('S') && fanIsType(i, FAN_TYPE_F) )
+          {
             fanSetCurSpeed(i, cmd_value());
-            fanSetSendWaiting(i, false);
           }
           else if (!cmd_seen('\n'))
           {
@@ -557,7 +557,6 @@ void sendQueueCmd(void)
           if(cmd_seen('S')) i = fanGetTypID(i,FAN_TYPE_CTRL_S);
           if(cmd_seen('I')) i = fanGetTypID(i=0,FAN_TYPE_CTRL_I);
           fanSetCurSpeed(i, cmd_value());
-          fanSetSendWaiting(i, false);
           break;
         }
 
@@ -729,11 +728,11 @@ void sendQueueCmd(void)
           break;
         case 220: //M220
           if(cmd_seen('S'))
-            speedSetPercent(0,cmd_value());
+            speedSetCurPercent(0,cmd_value());
           break;
         case 221: //M221
           if(cmd_seen('S'))
-            speedSetPercent(1,cmd_value());
+            speedSetCurPercent(1,cmd_value());
           break;
 
         #ifdef BUZZER_PIN

@@ -186,7 +186,7 @@
     #define STRING_TOUCH_TO_EXIT          "Érintsd meg a kilépéshez."
     #define STRING_MAINMENU               "Főmenü"
     #define STRING_WAIT_TEMP_SHUT_DOWN    "Várd meg a fej\nvisszahűlését.%d℃"
-    #define STRING_FORCE_SHUT_DOWN        "Kényszerítés"
+    #define STRING_FORCE_SHUT_DOWN        "Kényszerít"
     #define STRING_SHUTTING_DOWN          "Leállítás..."
     #define STRING_PARAMETER_SETTING      "Tényezők"
     #define STRING_ON                     "BE"
