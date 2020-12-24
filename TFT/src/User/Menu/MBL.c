@@ -13,6 +13,10 @@ void mblUpdateStatus(bool succeeded)
 {
   mblRunning = false;
 
+  probeHeightStop();                                       // raise nozzle
+
+  probeHeightDisable();                                    // restore original software endstops state
+
   if (succeeded)                                           // if bed leveling process successfully terminated, allow to save to EEPROM
   {
     BUZZER_PLAY(sound_success);

@@ -282,10 +282,18 @@
     #define STRING_LOAD_STARTED           "Загрузка прутка начата.\nДождитесь пока сопло достигнет\nнеобходимой температуры.\nПожалуйста подождите."
     #define STRING_UNLOAD_STARTED         "Выгрузка прутка начата.\nДождитесь пока сопло достигнет\nнеобходимой температуры.\nПожалуйста подождите."
     #define STRING_HEATERS_ON             "Некоторые нагреватели все еще работают.\nХотите прервать нагрев?"
-    #define STRING_PRINT_SUMMARY_POPUP    "Конец печати - диалог"
-    #define STRING_PRINT_SUMMARY          "Время печати: %02u:%02u:%02u\nПотрачено прутка: %3.2f метров"
-    #define STRING_PRINT_COMPLETE         "Печать окончена"
+    #define STRING_PRINT_FINISHED         "   Printing\n   finished."  // keep it short and in this format!
+    #define STRING_MAIN_SCREEN            "Main"
+    #define STRING_PREVIOUS_PRINT_DATA    "Brief"
+    #define STRING_FILE_NAME              "File: "
+    #define STRING_PRINT_TIME             "Print Time: "
+    #define STRING_FILAMENT_LENGTH        "Filament length: %1.2fm"
+    #define STRING_FILAMENT_WEIGHT        "Filament weight: %1.2fg"
+    #define STRING_FILAMENT_COST          "Filament cost: %1.2f"
+    #define STRING_NO_FILAMENT_STATS      "No filament statistics."
+    #define STRING_CLICK_FOR_MORE         "Click for more."
     #define STRING_EXT_TEMPLOW            "Температура сопла ниже\nминимальной (%d℃)."
     #define STRING_COLD_EXT               "Экструзия холодным\nсоплом запрещена"
+    #define STRING_HEAT_HOTEND            "Heat hotend to %d℃?"
 
 #endif

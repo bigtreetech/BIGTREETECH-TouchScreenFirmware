@@ -20,6 +20,7 @@ extern "C" {
 
 extern const GUI_POINT ss_title_point;
 extern const GUI_POINT ss_val_point;
+extern const GUI_RECT msgRect;
 
 void menuStatus(void);
 void drawTemperature(void);

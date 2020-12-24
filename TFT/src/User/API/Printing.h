@@ -86,7 +86,7 @@ void startShutdown(void);
 
 void loopCheckPrinting(void);
 
-void resetFilamentUsed(void);
+void initEpos(void);
 void updateFilamentUsed(void);
 
 #ifdef __cplusplus
