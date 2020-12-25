@@ -23,12 +23,14 @@ void menuDisconnect(void)
   GUI_DispStringInRect(20, LCD_HEIGHT - (BYTE_HEIGHT*2), LCD_WIDTH-20, LCD_HEIGHT, textSelect(LABEL_TOUCH_TO_EXIT));
 
   Serial_ReSourceDeInit();
-  while(!isPress()) {
+  while(!isPress())
+  {
   #ifdef LCD_LED_PWM_CHANNEL
     loopDimTimer();
   #endif
   }
-  while(isPress()) {
+  while(isPress())
+  {
   #ifdef LCD_LED_PWM_CHANNEL
     loopDimTimer();
   #endif
@@ -38,7 +40,8 @@ void menuDisconnect(void)
   infoMenu.cur--;
 }
 
-const char *const item_baudrate_str[ITEM_BAUDRATE_NUM] = {"2400", "9600", "19200", "38400", "57600", "115200", "250000", "500000", "1000000"};
+const char * const item_baudrate_str[ITEM_BAUDRATE_NUM] = {"2400",   "9600",   "19200",  "38400",  "57600",
+                                                           "115200", "250000", "500000", "1000000"};
 const u32 item_baudrate[ITEM_BAUDRATE_NUM] = {2400, 9600, 19200, 38400, 57600, 115200, 250000, 500000, 1000000};
 
 void menuBaudrate(void)
@@ -50,8 +53,10 @@ void menuBaudrate(void)
   uint8_t cur_item = 0;
 
   // fill baudrate items
-  for(uint8_t i = 0; i < COUNT(totalItems); i++) {
-    if (infoSettings.baudrate == item_baudrate[i]) {
+  for(uint8_t i = 0; i < COUNT(totalItems); i++)
+  {
+    if (infoSettings.baudrate == item_baudrate[i])
+    {
       totalItems[i].icon = ICONCHAR_CHECKED;
       cur_item = i;
     } else {
@@ -68,35 +73,37 @@ void menuBaudrate(void)
     key_num = menuKeyGetValue();
     switch (key_num)
     {
-    case KEY_ICON_5:
-      listWidgetPreviousPage();
-      break;
+      case KEY_ICON_5:
+        listWidgetPreviousPage();
+        break;
 
-    case KEY_ICON_6:
-      listWidgetNextPage();
-      break;
+      case KEY_ICON_6:
+        listWidgetNextPage();
+        break;
 
-    case KEY_ICON_7:
-      infoMenu.cur--;
-      break;
+      case KEY_ICON_7:
+        infoMenu.cur--;
+        break;
 
-    default:
-      if(key_num < LISTITEM_PER_PAGE){
-        uint16_t tmp_i = listWidgetGetCurPage() * LISTITEM_PER_PAGE + key_num;
-        if (tmp_i != cur_item) { // has changed
-          totalItems[cur_item].icon = ICONCHAR_UNCHECKED;
-          listWidgetRefreshItem(cur_item); // refresh unchecked status
-          cur_item = tmp_i;
-          totalItems[cur_item].icon = ICONCHAR_CHECKED;
-          listWidgetRefreshItem(cur_item); // refresh checked status
+      default:
+        if(key_num < LISTITEM_PER_PAGE)
+        {
+          uint16_t tmp_i = listWidgetGetCurPage() * LISTITEM_PER_PAGE + key_num;
+          if (tmp_i != cur_item)
+          { // has changed
+            totalItems[cur_item].icon = ICONCHAR_UNCHECKED;
+            listWidgetRefreshItem(cur_item); // refresh unchecked status
+            cur_item = tmp_i;
+            totalItems[cur_item].icon = ICONCHAR_CHECKED;
+            listWidgetRefreshItem(cur_item); // refresh checked status
 
-          infoSettings.baudrate = item_baudrate[cur_item];
-          Serial_ReSourceDeInit(); // Serial_Init() will malloc a dynamic memory, so Serial_DeInit() first to free, then malloc again.
-          Serial_ReSourceInit();
-          reminderMessage(LABEL_UNCONNECTED, STATUS_UNCONNECT);
+            infoSettings.baudrate = item_baudrate[cur_item];
+            Serial_ReSourceDeInit(); // Serial_Init() will malloc a dynamic memory, so Serial_DeInit() first to free, then malloc again.
+            Serial_ReSourceInit();
+            reminderMessage(LABEL_UNCONNECTED, STATUS_UNCONNECT);
+          }
         }
-      }
-      break;
+        break;
     }
 
     loopProcess();

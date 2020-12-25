@@ -34,13 +34,13 @@ void pidUpdateStatus(bool succeeded)
   if (pidCounter > 0)
     pidCounter--;
 
-  if (!succeeded)                                          // if one PID process fails, the overall PID process must be marked as failed so no save to EEPROM will be allowed
+  if (!succeeded)  // if one PID process fails, the overall PID process must be marked as failed so no save to EEPROM will be allowed
     pidSucceeded = false;
 
-  if (pidCounter > 0)                                      // if all the PID processes were still not terminated, simply provide a notification
+  if (pidCounter > 0)  // if all the PID processes were still not terminated, simply provide a notification
   {
 #ifdef ENABLE_PID_STATUS_UPDATE_NOTIFICATION
-    labelChar(tempMsg, LABEL_PID_TITLE);
+    LABELCHAR(tempMsg, LABEL_PID_TITLE);
 
     if (succeeded)
     {
@@ -60,15 +60,15 @@ void pidUpdateStatus(bool succeeded)
     }
 #endif
   }
-  else                                                     // if all the PID processes terminated, provide the final dialog
+  else  // if all the PID processes terminated, provide the final dialog
   {
     pidRunning = false;
 
-    if (pidSucceeded)                                      // if all the PID processes successfully terminated, allow to save to EEPROM
+    if (pidSucceeded)  // if all the PID processes successfully terminated, allow to save to EEPROM
     {
       BUZZER_PLAY(sound_success);
 
-      labelChar(tempMsg, LABEL_PROCESS_COMPLETED);
+      LABELCHAR(tempMsg, LABEL_PROCESS_COMPLETED);
 
       if (infoMachineSettings.EEPROM == 1)
       {
@@ -82,7 +82,7 @@ void pidUpdateStatus(bool succeeded)
         popupReminder(DIALOG_TYPE_SUCCESS, LABEL_PID_TITLE, (u8 *) tempMsg);
       }
     }
-    else                                                   // if at least a PID process failed, provide an error dialog
+    else  // if at least a PID process failed, provide an error dialog
     {
       BUZZER_PLAY(sound_error);
 
@@ -99,10 +99,10 @@ static inline void pidCheckTimeout(void)
     {
       pidRunning = false;
 
-//      u8 pidCounter = 0;                                 // we voluntary don't reset (commented out the code) also pidCounter and pidSucceeded to let the
-//      pidSucceeded = false;                              // pidUpdateStatus function allow to handle status updates eventually arriving after the timeout
+//      u8 pidCounter = 0;  // we voluntary don't reset (commented out the code) also pidCounter and pidSucceeded to let the
+//      pidSucceeded = false;  // pidUpdateStatus function allow to handle status updates eventually arriving after the timeout
 
-      labelChar(tempMsg, LABEL_TIMEOUT_REACHED);
+      LABELCHAR(tempMsg, LABEL_TIMEOUT_REACHED);
 
       sprintf(&tempMsg[strlen(tempMsg)], "\n %s", textSelect(LABEL_PROCESS_ABORTED));
 
@@ -117,7 +117,7 @@ static inline void pidUpdateCounter(void)
 {
   pidCounter = 0;
 
-  for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)           // hotends + bed + chamber
+  for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)  // hotends + bed + chamber
   {
     if (pidHeater.T[i].target > 0)
       pidCounter++;
@@ -126,10 +126,8 @@ static inline void pidUpdateCounter(void)
 
 void menuPidWait(void)
 {
-  // 1 title, ITEM_PER_PAGE items (icon + label)
-
-  bool isPressed, isReleased;
-  isPressed = isReleased = false;
+  bool isPressed = false;
+  bool isReleased = false;
 
   menuDrawPage(&pidWaitItems);
 
@@ -138,12 +136,12 @@ void menuPidWait(void)
 
   while (infoMenu.menu[infoMenu.cur] == menuPidWait)
   {
-    if (!isPressed)                                        // if touch screen is not yet pressed
+    if (!isPressed)  // if touch screen is not yet pressed
     {
-      if (isPress())                                       // if touch screen is now pressed
+      if (isPress())  // if touch screen is now pressed
         isPressed = true;
     }
-    else if (!isPress())                                   // if touch screen is now released
+    else if (!isPress())  // if touch screen is now released
     {
       isReleased = true;
     }
@@ -162,24 +160,24 @@ static inline void pidStart(void)
   pidRunning = true;
   pidSucceeded = true;
 
-  pidUpdateCounter();                                                          // update the number of set temperatures (number of PID processes to execute)
-  pidTimeout = OS_GetTimeMs() + PID_PROCESS_TIMEOUT;                           // set timeout for overall PID process
+  pidUpdateCounter();  // update the number of set temperatures (number of PID processes to execute)
+  pidTimeout = OS_GetTimeMs() + PID_PROCESS_TIMEOUT;  // set timeout for overall PID process
 
-  mustStoreCmd("M150 R255 U0 B0\n");                                           // set LED light to RED
-  mustStoreCmd("M106 S255\n");                                                 // set fan speed to max
-  mustStoreCmd("G4 S1\n");                                                     // wait 1 sec
+  mustStoreCmd("M150 R255 U0 B0\n");  // set LED light to RED
+  mustStoreCmd("M106 S255\n");        // set fan speed to max
+  mustStoreCmd("G4 S1\n");            // wait 1 sec
 
-  for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)                               // hotends + bed + chamber
+  for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)  // hotends + bed + chamber
   {
     if (pidHeater.T[i].target > 0)
     {
-      mustStoreCmd("%s S%d\n", pidCmd[i], (int) pidHeater.T[i].target);        // start PID autotune
-      mustStoreCmd("G4 S1\n");                                                 // wait 1 sec
+      mustStoreCmd("%s S%d\n", pidCmd[i], (int)pidHeater.T[i].target);  // start PID autotune
+      mustStoreCmd("G4 S1\n");                                          // wait 1 sec
     }
   }
 
-  mustStoreCmd("M107\n");                                                      // stop fan
-  mustStoreCmd("M150 R0 U255 B0\n");                                           // set LED light to GREEN
+  mustStoreCmd("M107\n");             // stop fan
+  mustStoreCmd("M150 R0 U255 B0\n");  // set LED light to GREEN
 
   infoMenu.menu[++infoMenu.cur] = menuPidWait;
 }
@@ -191,16 +189,12 @@ void pidTemperatureReDraw(bool skip_header)
   if (!skip_header)
   {
     sprintf(tempstr, "%s    ", heatDisplayID[pidHeater.toolIndex]);
-
     GUI_DispString(exhibitRect.x0, exhibitRect.y0, (u8 *) tempstr);
   }
 
   sprintf(tempstr, "  %d  ", pidHeater.T[pidHeater.toolIndex].target);
-
   setLargeFont(true);
-
   GUI_DispStringInPrect(&exhibitRect, (u8 *) tempstr);
-
   setLargeFont(false);
 }
 
@@ -223,8 +217,8 @@ void menuPid(void)
 
   KEY_VALUES key_num = KEY_IDLE;
 
-  if (!pidInitialized)                                     // in order to keep the current set values even when reloading the menu
-  {                                                        // we initialize the data structure only the first time the menu is loaded
+  if (!pidInitialized)  // in order to keep the current set values even when reloading the menu
+  {                     // we initialize the data structure only the first time the menu is loaded
     for (uint8_t i = NOZZLE0; i < MAX_HEATER_COUNT; i++)
     {
       pidHeater.T[i].target = 0;
@@ -251,32 +245,33 @@ void menuPid(void)
       case KEY_ICON_0:
         if (pidHeater.T[pidHeater.toolIndex].target > 0)
           pidHeater.T[pidHeater.toolIndex].target =
-            NOBEYOND(0, pidHeater.T[pidHeater.toolIndex].target - degreeSteps[degreeSteps_index], infoSettings.max_temp[pidHeater.toolIndex]);
+              NOBEYOND(0, pidHeater.T[pidHeater.toolIndex].target - degreeSteps[degreeSteps_index],
+                       infoSettings.max_temp[pidHeater.toolIndex]);
 
         pidTemperatureReDraw(true);
         break;
 
       case KEY_INFOBOX:
-        {
-          int32_t val = pidHeater.T[pidHeater.toolIndex].target;
-          char titlestr[30];
+      {
+        char titlestr[30];
+        sprintf(titlestr, "Min:0 | Max:%i", infoSettings.max_temp[pidHeater.toolIndex]);
 
-          sprintf(titlestr, "Min:0 | Max:%i", infoSettings.max_temp[pidHeater.toolIndex]);
-          val = numPadInt((u8 *) titlestr, pidHeater.T[pidHeater.toolIndex].target, 0, false);
-          val = NOBEYOND(0, val, infoSettings.max_temp[pidHeater.toolIndex]);
+        int32_t val = numPadInt((u8 *) titlestr, pidHeater.T[pidHeater.toolIndex].target, 0, false);
+        val = NOBEYOND(0, val, infoSettings.max_temp[pidHeater.toolIndex]);
 
-          if (val != pidHeater.T[pidHeater.toolIndex].target)        // if value is different than target change it
-            pidHeater.T[pidHeater.toolIndex].target = val;
+        if (val != pidHeater.T[pidHeater.toolIndex].target)  // if value is different than target change it
+          pidHeater.T[pidHeater.toolIndex].target = val;
 
-          menuDrawPage(&pidItems);
-          pidTemperatureReDraw(true);
-        }
+        menuDrawPage(&pidItems);
+        pidTemperatureReDraw(true);
         break;
+      }
 
       case KEY_ICON_3:
         if (pidHeater.T[pidHeater.toolIndex].target < infoSettings.max_temp[pidHeater.toolIndex])
           pidHeater.T[pidHeater.toolIndex].target =
-            NOBEYOND(0, pidHeater.T[pidHeater.toolIndex].target + degreeSteps[degreeSteps_index], infoSettings.max_temp[pidHeater.toolIndex]);
+              NOBEYOND(0, pidHeater.T[pidHeater.toolIndex].target + degreeSteps[degreeSteps_index],
+                       infoSettings.max_temp[pidHeater.toolIndex]);
 
         pidTemperatureReDraw(true);
         break;
@@ -285,8 +280,7 @@ void menuPid(void)
         do
         {
           pidHeater.toolIndex = (pidHeater.toolIndex + 1) % MAX_HEATER_COUNT;
-        }
-        while (!heaterIsValid(pidHeater.toolIndex) || pidHeater.toolIndex == CHAMBER);
+        } while (!heaterIsValid(pidHeater.toolIndex) || pidHeater.toolIndex == CHAMBER);
 
         pidItems.items[key_num] = itemTool[pidHeater.toolIndex];
 
@@ -296,7 +290,6 @@ void menuPid(void)
 
       case KEY_ICON_5:
         degreeSteps_index = (degreeSteps_index + 1) % ITEM_DEGREE_NUM;
-
         pidItems.items[key_num] = itemDegreeSteps[degreeSteps_index];
 
         menuDrawItem(&pidItems.items[key_num], key_num);
@@ -335,13 +328,15 @@ void menuPid(void)
             {
               if (pidHeater.T[pidHeater.toolIndex].target < infoSettings.max_temp[pidHeater.toolIndex])
                 pidHeater.T[pidHeater.toolIndex].target =
-                  NOBEYOND(0, pidHeater.T[pidHeater.toolIndex].target + degreeSteps[degreeSteps_index], infoSettings.max_temp[pidHeater.toolIndex]);
+                    NOBEYOND(0, pidHeater.T[pidHeater.toolIndex].target + degreeSteps[degreeSteps_index],
+                             infoSettings.max_temp[pidHeater.toolIndex]);
             }
-            else                                           // if < 0
+            else  // if < 0
             {
               if (pidHeater.T[pidHeater.toolIndex].target > 0)
                 pidHeater.T[pidHeater.toolIndex].target =
-                  NOBEYOND(0, pidHeater.T[pidHeater.toolIndex].target - degreeSteps[degreeSteps_index], infoSettings.max_temp[pidHeater.toolIndex]);
+                    NOBEYOND(0, pidHeater.T[pidHeater.toolIndex].target - degreeSteps[degreeSteps_index],
+                             infoSettings.max_temp[pidHeater.toolIndex]);
             }
 
             pidTemperatureReDraw(true);

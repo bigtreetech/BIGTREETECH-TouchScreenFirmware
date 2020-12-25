@@ -11,14 +11,13 @@ extern "C" {
 
 #define W25QXX_SECTOR_SIZE (0x1000) // 4096-4K
 
-
 #ifndef LOGO_MAX_SIZE
   #define LOGO_MAX_SIZE            0x4B000
   #define WORD_UNICODE_SIZE       0x480000
   #define BYTE_ASCII_SIZE           0x1000
   #define LARGE_FONT_SIZE           0x3000
   #define FLASH_SIGN_SIZE           0x1000    //store status of last font/icon/config update
-  #define LANGUAGE_SIZE            0x14000
+  #define LANGUAGE_SIZE            0x14000    //Language pack size
   #define STRINGS_STORE_MAX_SIZE    0x5000    //label strings max size
   #define PRINT_GCODES_MAX_SIZE     0x5000    //start/end/cancel gcodes  max size
   #define CUSTOM_GCODE_MAX_SIZE     0x5000    //custom gocdes max size
@@ -56,9 +55,9 @@ extern "C" {
 //This List is Auto-Generated. Please add new icons in icon_list.inc only
 enum
 {
-#define X_ICON(NAME) ICON_##NAME ,
-#include "icon_list.inc"
-#undef  X_ICON
+  #define X_ICON(NAME) ICON_##NAME ,
+  #include "icon_list.inc"
+  #undef  X_ICON
 //add new icons in icon_list.inc only
 //  ICON_RESERVE
 
@@ -80,21 +79,23 @@ enum
     SMALL_ICON_BACKGROUND
 };
 
-typedef enum{
-BMP_SUCCESS,
-BMP_NOTFOUND,
-BMP_NOT24BIT,
-BMP_INVALIDFILE
+typedef enum
+{
+  BMP_SUCCESS,
+  BMP_NOTFOUND,
+  BMP_NOT24BIT,
+  BMP_INVALIDFILE
 }BMPUPDATE_STAT;
 
 typedef union
 {
   u16 color;
-  struct{
-  u16  b:5;
-  u16  g:6;
-  u16  r:5;
- }RGB;
+  struct
+  {
+    u16  b:5;
+    u16  g:6;
+    u16  r:5;
+  }RGB;
 }GUI_COLOR;
 
 void scanUpdates(void);

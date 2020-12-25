@@ -69,8 +69,8 @@ void menuBabystep(void)
   float now_z_offset, z_offset, orig_z_offset;
   float unit;
   bool force_z_offset;
-  float (* offsetGetValue)(void);                          // get current Z offset
-  float (* offsetSetValue)(float);                         // set current Z offset
+  float (* offsetGetValue)(void);   // get current Z offset
+  float (* offsetSetValue)(float);  // set current Z offset
 
   if (infoMachineSettings.zProbe == ENABLED)
   {
@@ -106,7 +106,7 @@ void menuBabystep(void)
   {
     unit = moveLenSteps[moveLenSteps_index];
 
-    babystep = babystepGetValue();                         // always load current babystep
+    babystep = babystepGetValue();  // always load current babystep
 
     key_num = menuKeyGetValue();
     switch (key_num)
@@ -125,7 +125,7 @@ void menuBabystep(void)
       case KEY_ICON_4:
         if (infoMachineSettings.EEPROM == 1)
         {
-          offsetSetValue(z_offset);                        // set new Z offset
+          offsetSetValue(z_offset);  // set new Z offset
 
           setDialogText(babyStepItems.title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
           showDialog(DIALOG_TYPE_QUESTION, saveEepromSettings, NULL, NULL);
@@ -162,7 +162,7 @@ void menuBabystep(void)
         break;
     }
 
-    z_offset = offsetGetValue();                           // always load current Z offset
+    z_offset = offsetGetValue();  // always load current Z offset
 
     if (now_babystep != babystep || now_z_offset != z_offset)
     {

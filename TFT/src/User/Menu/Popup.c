@@ -57,12 +57,13 @@ void windowReDrawButton(u8 position, u8 pressed)
   GUI_DrawButton(windowButton + position, pressed);
 }
 
-void popupDrawPage(DIALOG_TYPE type, BUTTON *btn, const uint8_t *title, const uint8_t *context, const uint8_t *yes, const uint8_t *no)
+void popupDrawPage(DIALOG_TYPE type, BUTTON * btn, const uint8_t * title, const uint8_t * context, const uint8_t * yes,
+                   const uint8_t * no)
 {
   setMenuType(MENU_TYPE_DIALOG);
 
-  if (btn != NULL)                     // set the following global variables only if buttons must be provided.
-  {                                    // Otherwise, leave these variables unchanged so current values are maintained
+  if (btn != NULL)  // set the following global variables only if buttons must be provided.
+  {                 // Otherwise, leave these variables unchanged so current values are maintained
     buttonNum = 0;
     windowButton = btn;
 
@@ -79,14 +80,12 @@ void popupDrawPage(DIALOG_TYPE type, BUTTON *btn, const uint8_t *title, const ui
   TSC_ReDrawIcon = windowReDrawButton;
   window.type = type;
 
-  if (btn != NULL)                     // draw a window with buttons bar
+  if (btn != NULL)  // draw a window with buttons bar
   {
     GUI_DrawWindow(&window, title, context, true);
-
-    for(u8 i = 0; i < buttonNum; i++)
-      GUI_DrawButton(&windowButton[i], 0);
+    for (u8 i = 0; i < buttonNum; i++) GUI_DrawButton(&windowButton[i], 0);
   }
-  else                                 // draw a window with no buttons bar
+  else  // draw a window with no buttons bar
   {
     GUI_DrawWindow(&window, title, context, false);
   }

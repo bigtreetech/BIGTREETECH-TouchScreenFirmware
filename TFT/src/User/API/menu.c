@@ -221,7 +221,8 @@ void menuClearGaps(void)
 }
 #endif
 
-void GUI_RestoreColorDefault(void){
+void GUI_RestoreColorDefault(void)
+{
   GUI_SetBkColor(infoSettings.bg_color);
   GUI_SetColor(infoSettings.font_color);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
@@ -304,7 +305,7 @@ void menuRefreshListPage(void)
 {
   for (uint8_t i = 0; i < ITEM_PER_PAGE; i++)
   {
-    rapid_serial_comm() //perform backend printing loop between drawing icons to avoid printer idling
+    RAPID_PRINTING_COMM() //perform backend printing loop between drawing icons to avoid printer idling
     menuDrawListItem(&curListItems->items[i], i);
   }
 }
@@ -534,7 +535,7 @@ void menuDrawPage(const MENUITEMS *menuItems)
   for (i = 0; i < ITEM_PER_PAGE; i++)
   {
     menuDrawItem(&menuItems->items[i], i);
-    rapid_serial_comm()// perform backend printing loop between drawing icons to avoid printer idling
+    RAPID_PRINTING_COMM()// perform backend printing loop between drawing icons to avoid printer idling
   }
 }
 
@@ -560,7 +561,7 @@ void menuDrawListPage(const LISTITEMS *listItems)
     //const GUI_RECT *rect = rect_of_keyListView + i;
     if (curListItems->items[i].icon != ICONCHAR_BACKGROUND)
       menuDrawListItem(&curListItems->items[i], i);
-    rapid_serial_comm()//perform backend printing loop between drawing icons to avoid printer idling
+    RAPID_PRINTING_COMM()//perform backend printing loop between drawing icons to avoid printer idling
   }
 }
 
@@ -647,12 +648,10 @@ void itemDrawIconPress(u8 position, u8 is_press)
     GUI_ClearPrect(rect);
     return;
     }
-    if (is_press){
-    ListItem_Display(rect,position,&curListItems->items[position], true);
-    }
-    else{
-    ListItem_Display(rect,position,&curListItems->items[position], false);
-    }
+    if (is_press)
+      ListItem_Display(rect,position,&curListItems->items[position], true);
+    else
+      ListItem_Display(rect,position,&curListItems->items[position], false);
   }
 }
 
@@ -710,85 +709,89 @@ KEY_VALUES menuKeyGetValue(void)
 }
 
 //Get the top left point of the corresponding icon position)
-GUI_POINT getIconStartPoint(int index){
+GUI_POINT getIconStartPoint(int index)
+{
   GUI_POINT p = {curRect[index].x0,curRect[index].y0};
   return p;
 }
 
 void loopBackEnd(void)
 {
-  getGcodeFromFile();                 //Get Gcode command from the file to be printed
+  // Get Gcode command from the file to be printed
+  getGcodeFromFile();
+  // Parse and send Gcode commands in the queue
+  sendQueueCmd();
+  // Parse the received slave response information
+  parseACK();
+  // Parse the received Gcode from other UART, such as: ESP3D, etc...
+  parseRcvGcode();
+  // Temperature monitor
+  loopCheckHeater();
+  // Fan speed monitor
+  loopFan();
+  // Speed & flow monitor
+  loopSpeed();
 
-  sendQueueCmd();                     //Parse and send Gcode commands in the queue
+#ifdef BUZZER_PIN
+  loopBuzzer();
+#endif
 
-  parseACK();                         //Parse the received slave response information
-
-  parseRcvGcode();                    //Parse the received Gcode from other UART, such as: ESP3D, etc...
-
-  loopCheckHeater();                  //Temperature monitor
-
-  loopFan();                          //Fan speed monitor
-
-  loopSpeed();                        //Speed & flow monitor
-
-  #ifdef BUZZER_PIN
-    loopBuzzer();
-  #endif
-
-  if(infoMachineSettings.onboard_sd_support == ENABLED)
+  if (infoMachineSettings.onboard_sd_support == ENABLED)
   {
-    loopCheckPrinting(); //Check if there is a SD or USB print running.
+    loopCheckPrinting();  //Check if there is a SD or USB print running.
   }
 
-  #ifdef U_DISK_SUPPORT
-    USBH_Process(&USB_OTG_Core, &USB_Host);
-  #endif
+#ifdef U_DISK_SUPPORT
+  USBH_Process(&USB_OTG_Core, &USB_Host);
+#endif
 
-  #if LCD_ENCODER_SUPPORT
-    #if defined(ST7920_SPI) || defined(LCD2004_simulator)
-      if(infoMenu.menu[infoMenu.cur] != menuMarlinMode)
-    #endif
-      {
-        loopCheckEncoderSteps(); //check change in encoder steps
-      }
-  #endif
-
+#if LCD_ENCODER_SUPPORT
   #if defined(ST7920_SPI) || defined(LCD2004_simulator)
-    loopCheckMode();
+  if (infoMenu.menu[infoMenu.cur] != menuMarlinMode)
   #endif
+  {
+    loopCheckEncoderSteps();  //check change in encoder steps
+  }
+#endif
 
-  #ifdef FIL_RUNOUT_PIN
-    loopBackEndFILRunoutDetect();
-  #endif
+#if defined(ST7920_SPI) || defined(LCD2004_simulator)
+  loopCheckMode();
+#endif
 
-  #ifdef LCD_LED_PWM_CHANNEL
-    loopDimTimer();
-  #endif
+#ifdef FIL_RUNOUT_PIN
+  loopBackEndFILRunoutDetect();
+#endif
 
-  if(infoMachineSettings.caseLightsBrightness == ENABLED)
+#ifdef LCD_LED_PWM_CHANNEL
+  loopDimTimer();
+#endif
+
+  if (infoMachineSettings.caseLightsBrightness == ENABLED)
   {
     loopCaseLight();
   }
-} //loopBackEnd
+}  //loopBackEnd
 
 void loopFrontEnd(void)
 {
-  loopVolumeSource();                 //Check if volume source(SD/U disk) insert
-
+  // Check if volume source(SD/U disk) insert
+  loopVolumeSource();
+  // loop to check and run toast messages
   loopToast();
-
-  loopReminderClear();                //If there is a message in the status bar, timed clear
-
+  // If there is a message in the status bar, timed clear
+  loopReminderClear();
   loopVolumeReminderClear();
-
-  loopBusySignClear();                //Busy Indicator clear
-
+  // Busy Indicator clear
+  loopBusySignClear();
+  // Check update temperature status
   loopTemperatureStatus();
 
 #ifdef FIL_RUNOUT_PIN
+  // Loop for filament runout detection
   loopFrontEndFILRunoutDetect();
 #endif
 
+  // loop for popup menu
   loopPopup();
 }
 

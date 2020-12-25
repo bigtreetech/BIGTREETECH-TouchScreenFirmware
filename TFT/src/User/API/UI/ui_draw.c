@@ -82,8 +82,10 @@ bool model_DirectDisplay(GUI_POINT pos, char *gcode)
 
   LCD_SetWindow(pos.x, pos.y, pos.x+ICON_WIDTH-1, pos.y+ICON_HEIGHT-1);
   LCD_WR_REG(0x2C);
-  for (uint16_t y = 0; y < ICON_HEIGHT; y++) {
-    for (uint16_t x = 0; x < ICON_WIDTH; x++) {
+  for (uint16_t y = 0; y < ICON_HEIGHT; y++)
+  {
+    for (uint16_t x = 0; x < ICON_WIDTH; x++)
+    {
       LCD_WR_16BITS_DATA(modelFileReadHalfword(&gcodeFile));
     }
     // Move to next line
@@ -111,7 +113,8 @@ bool model_DecodeToFlash(char *gcode)
   // Move to next line
   f_lseek(&gcodeFile, gcodeFile.fptr + 3);
 
-  for(bnum = 0; bnum < (w*h*2+W25QXX_SECTOR_SIZE-1)/W25QXX_SECTOR_SIZE; bnum++) {
+  for(bnum = 0; bnum < (w*h*2+W25QXX_SECTOR_SIZE-1)/W25QXX_SECTOR_SIZE; bnum++)
+  {
     W25Qxx_EraseSector(addr + bnum*W25QXX_SECTOR_SIZE);
   }
   bnum=0;
@@ -121,8 +124,10 @@ bool model_DecodeToFlash(char *gcode)
   memcpy(buf + bnum, (uint8_t *)&h, sizeof(uint16_t));
   bnum += sizeof(uint16_t);
 
-  for (uint16_t y = 0; y < h; y++) {
-    for (uint16_t x = 0; x < w; x++) {
+  for (uint16_t y = 0; y < h; y++)
+  {
+    for (uint16_t x = 0; x < w; x++)
+    {
       uint16_t color = modelFileReadHalfword(&gcodeFile);
       buf[bnum++]=(uint8_t)(color >> 8);
       buf[bnum++]=(uint8_t)(color & 0xFF);

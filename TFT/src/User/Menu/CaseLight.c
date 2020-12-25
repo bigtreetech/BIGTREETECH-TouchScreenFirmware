@@ -58,36 +58,36 @@ void menuCaseLight(void)
 
     switch (key_num)
     {
-    case KEY_ICON_0:
-      caseLightChangeBrightnessPrecent(-10);
-      caseLightBrightnessReDraw();
-      break;
+      case KEY_ICON_0:
+        caseLightChangeBrightnessPrecent(-10);
+        caseLightBrightnessReDraw();
+        break;
 
-    case KEY_ICON_3:
-      caseLightChangeBrightnessPrecent(10);
-      caseLightBrightnessReDraw();
-      break;
+      case KEY_ICON_3:
+        caseLightChangeBrightnessPrecent(10);
+        caseLightBrightnessReDraw();
+        break;
 
-    case KEY_ICON_4:
-      caseLightToggleState();
-      menuDrawPage(&caseLightItems);
-      caseLightBrightnessReDraw();
-      break;
+      case KEY_ICON_4:
+        caseLightToggleState();
+        menuDrawPage(&caseLightItems);
+        caseLightBrightnessReDraw();
+        break;
 
-    case KEY_ICON_7:
-      infoMenu.cur--;
-      break;
+      case KEY_ICON_7:
+        infoMenu.cur--;
+        break;
 
-    default:
-      #if LCD_ENCODER_SUPPORT
-        if (encoderPosition)
-        {
-          caseLightChangeBrightnessPrecent(encoderPosition);
-          caseLightBrightnessReDraw();
-          encoderPosition = 0;
-        }
-      #endif
-      break;
+      default:
+        #if LCD_ENCODER_SUPPORT
+          if (encoderPosition)
+          {
+            caseLightChangeBrightnessPrecent(encoderPosition);
+            caseLightBrightnessReDraw();
+            encoderPosition = 0;
+          }
+        #endif
+        break;
     }
 
     currentCaseLightState = caseLightGetState();
