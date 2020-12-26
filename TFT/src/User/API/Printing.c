@@ -64,6 +64,23 @@ void setPrintingTime(uint32_t RTtime)
   }
 }
 
+void startNewPrint() {
+  infoPrinting.printing = true;
+  infoPrinting.progress = 0;
+  infoPrinting.progress_source = FILE_PROGRESS;
+  infoPrinting.time = 0;
+
+#ifdef ENABLE_SLICER_REMAINING_TIME
+  infoPrinting.remaining_time = 0;
+#endif
+
+  if (infoSettings.print_summary)
+  {
+    resetFilamentUsed();
+  }
+  infoMenu.menu[infoMenu.cur] = menuPrinting;
+}
+
 #ifdef ENABLE_SLICER_REMAINING_TIME
 void setPrintingRemainingTime(int RTtime) {
   //Cura Slicer put a negative value at the end instead of zero

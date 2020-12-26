@@ -119,20 +119,8 @@ void menuBeforePrinting(void)
       }
       break;
   }
-  infoPrinting.printing = true;
-  infoPrinting.progress_source = FILE_PROGRESS;
-  setPrintingTime(0);
-  setPrintProgress(0,FILE_PROGRESS);
-  #ifdef ENABLE_SLICER_REMAINING_TIME
-  setPrintingRemainingTime(0);
-  #endif
 
-
-  if (infoSettings.print_summary)
-  {
-    resetFilamentUsed();
-  }
-  infoMenu.menu[infoMenu.cur] = menuPrinting;
+  startNewPrint();
 }
 
 static inline void reValueNozzle(int icon_pos)

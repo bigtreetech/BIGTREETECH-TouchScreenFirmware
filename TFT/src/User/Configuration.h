@@ -439,7 +439,7 @@
 #define ENABLE_STATUS_SCREEN true //to enabled: true | to disabled: false
 
 //Enable Slicer Progress
-//Enable this to parse M73 command to set progress
+//Enable this to parse M77 command to set progress
 #define ENABLE_SLICER_PROGRESS
 
 //Enable Slicer Remaining Time

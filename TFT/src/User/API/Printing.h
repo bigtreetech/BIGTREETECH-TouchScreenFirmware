@@ -95,6 +95,7 @@ bool getPrintModelIcon(void);
 void setPrintProgress(uint8_t progress, uint8_t source);
 uint8_t   getPrintProgress(void);
 uint32_t  getPrintTime(void);
+void startNewPrint(void);
 
 void printSetUpdateWaiting(bool isWaiting);
 
