@@ -11,26 +11,25 @@ extern "C" {
 
 
 #ifndef M27_WATCH_OTHER_SOURCES
-#define M27_WATCH_OTHER_SOURCES    false
+  #define M27_WATCH_OTHER_SOURCES    false
 #endif
 
 #ifndef M27_REFRESH
-#define M27_REFRESH   3
+  #define M27_REFRESH   3
 #endif
 
 #ifdef RAPID_SERIAL_COMM
-#define rapid_serial_loop()  loopBackEnd()
-#define rapid_serial_comm()  if(isPrinting() == true && infoSettings.serial_alwaysOn != 1){loopBackEnd();}
+  #define RAPID_SERIAL_LOOP()  loopBackEnd()
+  #define RAPID_PRINTING_COMM()  if(isPrinting() == true && infoSettings.serial_alwaysOn != 1){loopBackEnd();}
 #else
-#define rapid_serial_loop()
-#define rapid_serial_comm()
+  #define RAPID_SERIAL_LOOP()
+  #define RAPID_PRINTING_COMM()
 #endif
 
 
 typedef struct
 {
   FIL file;
-
   uint32_t time; // Printed time in sec
   uint32_t size; // Gcode file total size
   uint32_t cur;  // Gcode has printed file size
@@ -73,8 +72,8 @@ bool getRunoutAlarm(void);
 void setPrintModelIcon(bool exist);
 bool getPrintModelIcon(void);
 
-uint8_t   getPrintProgress(void);
-uint32_t  getPrintTime(void);
+uint8_t getPrintProgress(void);
+uint32_t getPrintTime(void);
 
 void printSetUpdateWaiting(bool isWaiting);
 
