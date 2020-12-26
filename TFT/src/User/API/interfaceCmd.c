@@ -38,7 +38,7 @@ static float cmd_float(void)
   return (strtod(&infoCmd.queue[infoCmd.index_r].gcode[cmd_index], NULL));
 }
 
-#if defined(SERIAL_PORT_2) || defined(BUZZER_PIN)
+#if defined(SERIAL_PORT_2) || defined(BUZZER_PIN) || defined(ENABLE_SLICER_REMAINING_TIME)
 //check if 'string' start with 'search'
 bool static startsWith(TCHAR *search, TCHAR *string)
 {
@@ -479,25 +479,28 @@ void sendQueueCmd(void)
         break;
 #endif
 
+#if defined(ENABLE_SLICER_PROGRESS) || defined(ENABLE_SLICER_REMAINING_TIME)
         case 73:
+#ifdef ENABLE_SLICER_PROGRESS
           if(cmd_seen('P'))
           {
-            infoPrinting.progress = cmd_float();
-            infoPrinting.slicer_progress = true;
-
+            setPrintProgress(cmd_value(),SLICER_PROGRESS);
           }
+#endif
+#ifdef ENABLE_SLICER_REMAINING_TIME
           if(cmd_seen('R'))
           {
-            infoPrinting.remaining_time = cmd_float() * 60;
-            infoPrinting.slicer_progress = true;
-
+            setPrintingRemainingTime(cmd_float() * 60);
           }
+#endif
           if (!infoMachineSettings.progress)
           {
             purgeLastCmd();
             return;
           }
           break;
+#endif
+
         case 80: //M80
           #ifdef PS_ON_PIN
             PS_ON_On();
@@ -625,7 +628,15 @@ void sendQueueCmd(void)
           break;
 
         case 117: //M117
-          {
+#ifdef ENABLE_SLICER_REMAINING_TIME
+            if (startsWith("Time Left",&infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 5])) {
+              int hour,min,sec;
+              sscanf(&infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 14],"%dh%dm%ds",&hour,&min,&sec);
+              setPrintingRemainingTime((hour*3600) + (min*60) + sec);
+            }
+            else
+            {
+#endif
             char message[CMD_MAX_CHAR];
             strncpy(message, &infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 4], CMD_MAX_CHAR);
             // strip out any checksum that might be in the string
@@ -642,7 +653,10 @@ void sendQueueCmd(void)
             {
               addToast(DIALOG_TYPE_INFO, message);
             }
-          }
+
+#ifdef ENABLE_SLICER_REMAINING_TIME
+            }
+#endif
           break;
 
         case 190: //M190

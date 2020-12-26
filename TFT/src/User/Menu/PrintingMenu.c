@@ -120,9 +120,13 @@ void menuBeforePrinting(void)
       break;
   }
   infoPrinting.printing = true;
-  infoPrinting.time = 0;
-  infoPrinting.remaining_time = 0;
-  infoPrinting.slicer_progress = false;
+  infoPrinting.progress_source = FILE_PROGRESS;
+  setPrintingTime(0);
+  setPrintProgress(0,FILE_PROGRESS);
+  #ifdef ENABLE_SLICER_REMAINING_TIME
+  setPrintingRemainingTime(0);
+  #endif
+
 
   if (infoSettings.print_summary)
   {
@@ -190,18 +194,24 @@ static inline void reDrawTime(int icon_pos)
 {
   u8 hour,min,sec;
 
-  if (!infoPrinting.slicer_progress || ( infoPrinting.remaining_time == 0 && infoPrinting.progress < 100 ))
+
+#ifdef ENABLE_SLICER_REMAINING_TIME
+  if ( getPrintingRemainingTime() == 0)
   {
-    hour = infoPrinting.time/3600;
-    min = infoPrinting.time%3600/60;
-    sec = infoPrinting.time%60;
+#endif
+    hour = getPrintTime()/3600;
+    min = getPrintTime()%3600/60;
+    sec = getPrintTime()%60;
+#ifdef ENABLE_SLICER_REMAINING_TIME
   }
   else
   {
-      hour = infoPrinting.remaining_time/3600;
-      min = infoPrinting.remaining_time%3600/60;
-      sec = infoPrinting.remaining_time%60;
+
+      hour = getPrintingRemainingTime()/3600;
+      min = getPrintingRemainingTime()%3600/60;
+      sec = getPrintingRemainingTime()%60;
   }
+#endif
 
   GUI_SetNumMode(GUI_NUMMODE_ZERO);
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
@@ -361,11 +371,8 @@ void menuPrinting(void)
       //check print time change
       if(time != infoPrinting.time)
       {
-        if (!infoPrinting.slicer_progress)
-        {
-            infoPrinting.progress = MIN((uint64_t)infoPrinting.cur*100/infoPrinting.size, 100);
-        }
-        time = infoPrinting.time;
+        setPrintProgress(MIN((uint64_t)infoPrinting.cur*100/infoPrinting.size, 100),FILE_PROGRESS);
+        time = getPrintTime();
         rapid_serial_loop();
         reDrawTime(TIM_ICON_POS);
         reDrawProgress(TIM_ICON_POS);
@@ -373,9 +380,13 @@ void menuPrinting(void)
     }
     else
     {
-      if(infoPrinting.progress != 100)
+      if(getPrintProgress() != 100)
       {
-        infoPrinting.progress = 100;
+        setPrintProgress(100,FORCE_PROGRESS);
+
+#ifdef ENABLE_SLICER_REMAINING_TIME
+        setPrintingRemainingTime(0);
+#endif
         reDrawTime(TIM_ICON_POS);
         reDrawProgress(TIM_ICON_POS);
       }

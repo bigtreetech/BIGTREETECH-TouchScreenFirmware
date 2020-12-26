@@ -62,6 +62,20 @@ void setPrintingTime(uint32_t RTtime)
   }
 }
 
+#ifdef ENABLE_SLICER_REMAINING_TIME
+void setPrintingRemainingTime(int RTtime) {
+  //Cura Slicer put a negative value at the end instead of zero
+  if (RTtime <0 )
+  {
+    RTtime = 0;
+  }
+  infoPrinting.remaining_time = RTtime;
+}
+uint32_t getPrintingRemainingTime() {
+  return infoPrinting.remaining_time;
+}
+#endif
+
 //
 uint32_t getPrintSize(void)
 {
@@ -105,6 +119,15 @@ bool getPrintModelIcon(void)
 {
   return infoPrinting.model_icon;
 }
+
+
+void setPrintProgress(uint8_t progress, uint8_t source) {
+  if(source >= infoPrinting.progress_source) {
+    infoPrinting.progress_source = source;
+    infoPrinting.progress = progress;
+  }
+}
+
 
 uint8_t getPrintProgress(void)
 {

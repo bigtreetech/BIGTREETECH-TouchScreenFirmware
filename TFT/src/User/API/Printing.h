@@ -27,6 +27,15 @@ extern "C" {
 #endif
 
 
+typedef enum {
+  FILE_PROGRESS = 0,
+#ifdef ENABLE_SLICER_PROGRESS
+  SLICER_PROGRESS,
+#endif
+  FORCE_PROGRESS //only used if file is finished and progress are not at 100%
+} PROGRESS_SOURCE; //higher will be the default progress updater
+
+
 typedef struct
 {
   FIL file;
@@ -35,14 +44,17 @@ typedef struct
   uint32_t size; // Gcode file total size
   uint32_t cur;  // Gcode has printed file size
   uint8_t  progress;
-  uint32_t remaining_time; //current remaining time in sec (if set with m73)
+  PROGRESS_SOURCE progress_source;
+
+#ifdef ENABLE_SLICER_REMAINING_TIME
+  uint32_t remaining_time; //current remaining time in sec (if set with M73 or M112)
+#endif
 
   bool     printing; // 1 means printing, 0 means idle
   bool     pause;    // 1 means paused
   bool     m0_pause; // pause triggered through M0/M1 gcode
   bool     runout;   // 1: runout in printing, 0: idle
   bool     model_icon; // 1: model preview icon exist, 0: not exist
-  bool     slicer_progress; //0: progress managed by btt, 1: by slicer (autoset if we encounter a M77 command)
 
 }PRINTING;
 
@@ -54,7 +66,13 @@ bool isM0_Pause(void);
 void breakAndContinue(void);
 void resumeAndPurge(void);
 void resumeAndContinue(void);
+
 void setPrintingTime(uint32_t RTtime);
+
+#ifdef ENABLE_SLICER_REMAINING_TIME
+void setPrintingRemainingTime(int RTtime);
+uint32_t getPrintingRemainingTime();
+#endif
 
 void exitPrinting(void);
 void endPrinting(void);
@@ -74,6 +92,7 @@ void setPrintRunout(bool runout);
 void setPrintModelIcon(bool exist);
 bool getPrintModelIcon(void);
 
+void setPrintProgress(uint8_t progress, uint8_t source);
 uint8_t   getPrintProgress(void);
 uint32_t  getPrintTime(void);
 

@@ -438,6 +438,18 @@
 // Enable this to show status screen as the default home screen. Disabling it will show a static menu.
 #define ENABLE_STATUS_SCREEN true //to enabled: true | to disabled: false
 
+//Enable Slicer Progress
+//Enable this to parse M73 command to set progress
+#define ENABLE_SLICER_PROGRESS
+
+//Enable Slicer Remaining Time
+//Enable this to parse
+//M73 command to set remaining time (PrusaSlicer only)
+//M112 command who start with "Time left" (Cura Slicer)
+#define ENABLE_SLICER_REMAINING_TIME
+
+
+
 /**
  * SD support
  * Starting from Marlin Bugfix 2.0.x Distribution Date: 2020-04-27 & above, The TFT will auto detect
