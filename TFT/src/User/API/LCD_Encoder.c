@@ -113,7 +113,8 @@ void loopCheckEncoderSteps(void)
   #define encrot3 1
 
   // Manage encoder rotation
-  #define ENCODER_SPIN(_E1, _E2) switch (lastEncoderBits) { case _E1: encoderDiff += encoderDirection; break; case _E2: encoderDiff -= encoderDirection; }
+  #define ENCODER_SPIN(_E1, _E2) switch (lastEncoderBits) { case _E1: encoderDiff += encoderDirection; break; \
+                                                            case _E2: encoderDiff -= encoderDirection; }
 
   if (buttons != lastEncoderBits)
   {

@@ -30,6 +30,8 @@
      {ICON_BACK,                    LABEL_BACK},}
   };
 
+const int16_t labelVolumeError[] = {LABEL_READ_TFTSD_ERROR, LABEL_READ_U_DISK_ERROR, LABEL_READ_ONBOARDSD_ERROR};
+
 // File list number per page
 #define NUM_PER_PAGE	5
 static bool list_mode = true;
@@ -72,11 +74,17 @@ void scrollFileNameCreate(u8 i)
   {
     if (infoMachineSettings.long_filename_support == ENABLED)
     {
-      Scroll_CreatePara(&gcodeScroll, (u8* )((infoFile.source == BOARD_SD) ? infoFile.Longfile[num-infoFile.F_num] : infoFile.file[num-infoFile.F_num]), &gcodeRect[i]);
+      Scroll_CreatePara(&gcodeScroll,
+                        (u8 *)((infoFile.source == BOARD_SD) ? infoFile.Longfile[num - infoFile.F_num] :
+                                                               infoFile.file[num - infoFile.F_num]),
+                        &gcodeRect[i]);
     }
     else
     {
-      Scroll_CreatePara(&gcodeScroll, (u8* )((infoFile.source == BOARD_SD) ? infoFile.file[num-infoFile.F_num] : infoFile.file[num-infoFile.F_num]), &gcodeRect[i]);
+      Scroll_CreatePara(&gcodeScroll,
+                        (u8 *)((infoFile.source == BOARD_SD) ? infoFile.file[num - infoFile.F_num] :
+                                                               infoFile.file[num - infoFile.F_num]),
+                        &gcodeRect[i]);
     }
   }
 }
@@ -104,7 +112,7 @@ void gocdeIconDraw(void)
   GUI_SetBkColor(infoSettings.bg_color);
 
   //draw folders
-  for(i=0;(i + infoFile.cur_page * NUM_PER_PAGE < infoFile.F_num) && (i < NUM_PER_PAGE) ; i++)                  // folder
+  for(i=0;(i + infoFile.cur_page * NUM_PER_PAGE < infoFile.F_num) && (i < NUM_PER_PAGE) ; i++)
   {
     curItem.icon = ICON_FOLDER;
     menuDrawItem(&curItem, i);
@@ -112,11 +120,12 @@ void gocdeIconDraw(void)
   }
 
   //draw files
-  for( ;(i + infoFile.cur_page * NUM_PER_PAGE < infoFile.f_num + infoFile.F_num) && (i < NUM_PER_PAGE) ;i++)  // gcode file
+  for( ;(i + infoFile.cur_page * NUM_PER_PAGE < infoFile.f_num + infoFile.F_num) && (i < NUM_PER_PAGE) ;i++)
   {
     if(EnterDir(infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.F_num]) == false) break;
     // if model preview bmp exists, display bmp directly without writing to flash
-    if(model_DirectDisplay(getIconStartPoint(i), infoFile.title) != true){
+    if(model_DirectDisplay(getIconStartPoint(i), infoFile.title) != true)
+    {
       curItem.icon = ICON_FILE;
       menuDrawItem(&curItem, i);
     }
@@ -142,14 +151,16 @@ void gocdeListDraw(void)
   GUI_ClearRect(0, 0, LCD_WIDTH, TITLE_END_Y);
   GUI_SetBkColor(infoSettings.bg_color);
 
-  for (i = 0; (i + infoFile.cur_page * NUM_PER_PAGE < infoFile.F_num) && (i < NUM_PER_PAGE); i++) // folder
+  // folder
+  for (i = 0; (i + infoFile.cur_page * NUM_PER_PAGE < infoFile.F_num) && (i < NUM_PER_PAGE); i++)
   {
     printListItems.items[i].icon = ICONCHAR_FOLDER;
     setDynamicLabel(i, infoFile.folder[i + infoFile.cur_page * NUM_PER_PAGE]);
     printListItems.items[i].titlelabel.index = LABEL_DYNAMIC;
     menuDrawListItem(&printListItems.items[i], i);
   }
-  for (; (i + infoFile.cur_page * NUM_PER_PAGE < infoFile.f_num + infoFile.F_num) && (i < NUM_PER_PAGE); i++) // gcode file
+  // gcode file
+  for (; (i + infoFile.cur_page * NUM_PER_PAGE < infoFile.f_num + infoFile.F_num) && (i < NUM_PER_PAGE); i++)
   {
     printListItems.items[i].icon = ICONCHAR_FILE;
     if (infoMachineSettings.long_filename_support == ENABLED && infoFile.source == BOARD_SD)
@@ -164,45 +175,46 @@ void gocdeListDraw(void)
     menuDrawListItem(&printListItems.items[i], i);
   }
 
-  for (; (i < NUM_PER_PAGE); i++) //background
+  //background
+  for (; (i < NUM_PER_PAGE); i++)
   {
     printListItems.items[i].icon = ICONCHAR_BACKGROUND;
     printListItems.items[i].titlelabel.index = LABEL_BACKGROUND;
     menuDrawListItem(&printListItems.items[i], i);
   }
-    // set page up down button according to page count and current page
-    int t_pagenum = (infoFile.F_num+infoFile.f_num+(LISTITEM_PER_PAGE-1))/LISTITEM_PER_PAGE;
-    if ((infoFile.F_num+infoFile.f_num) <= LISTITEM_PER_PAGE)
+  // set page up down button according to page count and current page
+  int t_pagenum = (infoFile.F_num + infoFile.f_num + (LISTITEM_PER_PAGE - 1)) / LISTITEM_PER_PAGE;
+  if ((infoFile.F_num + infoFile.f_num) <= LISTITEM_PER_PAGE)
+  {
+    printListItems.items[5].icon = ICONCHAR_BACKGROUND;
+    printListItems.items[6].icon = ICONCHAR_BACKGROUND;
+  }
+  else
+  {
+    if (infoFile.cur_page == 0)
     {
       printListItems.items[5].icon = ICONCHAR_BACKGROUND;
+      printListItems.items[6].icon = ICONCHAR_PAGEDOWN;
+    }
+    else if (infoFile.cur_page == (t_pagenum - 1))
+    {
+      printListItems.items[5].icon = ICONCHAR_PAGEUP;
       printListItems.items[6].icon = ICONCHAR_BACKGROUND;
     }
     else
     {
-      if(infoFile.cur_page == 0){
-        printListItems.items[5].icon = ICONCHAR_BACKGROUND;
-        printListItems.items[6].icon = ICONCHAR_PAGEDOWN;
-      }
-      else if(infoFile.cur_page == (t_pagenum-1)){
-        printListItems.items[5].icon = ICONCHAR_PAGEUP;
-        printListItems.items[6].icon = ICONCHAR_BACKGROUND;
-      }
-      else
-      {
-        printListItems.items[5].icon = ICONCHAR_PAGEUP;
-        printListItems.items[6].icon = ICONCHAR_PAGEDOWN;
-      }
+      printListItems.items[5].icon = ICONCHAR_PAGEUP;
+      printListItems.items[6].icon = ICONCHAR_PAGEDOWN;
     }
-    menuDrawListItem(&printListItems.items[5],5);
-    menuDrawListItem(&printListItems.items[6],6);
+  }
+  menuDrawListItem(&printListItems.items[5], 5);
+  menuDrawListItem(&printListItems.items[6], 6);
 }
 
 void startPrint(void)
 {
   infoMenu.menu[++infoMenu.cur] = menuBeforePrinting;
 }
-
-const int16_t labelVolumeError[] = {LABEL_READ_TFTSD_ERROR, LABEL_READ_U_DISK_ERROR, LABEL_READ_ONBOARDSD_ERROR};
 
 void menuPrintFromSource(void)
 {
@@ -214,11 +226,13 @@ void menuPrintFromSource(void)
 
   if (mountFS() == true && scanPrintFiles() == true)
   {
-    if(list_mode != true){
+    if(list_mode != true)
+    {
       menuDrawPage(&printIconItems);
       gocdeIconDraw();
     }
-    else{
+    else
+    {
       menuDrawListPage(&printListItems);
       gocdeListDraw();
     }
@@ -236,12 +250,11 @@ void menuPrintFromSource(void)
   while(infoMenu.menu[infoMenu.cur] == menuPrintFromSource)
   {
     GUI_SetBkColor(infoSettings.title_bg_color);
-    Scroll_DispString(&titleScroll, LEFT);    //
+    Scroll_DispString(&titleScroll, LEFT);
     GUI_SetBkColor(infoSettings.bg_color);
 
-    if(list_mode != true){
-      Scroll_DispString(&gcodeScroll, CENTER); //
-    }
+    if(list_mode != true)
+      Scroll_DispString(&gcodeScroll, CENTER);
 
     key_num = menuKeyGetValue();
 
@@ -295,23 +308,26 @@ void menuPrintFromSource(void)
           }
           else if(key_num+start < infoFile.F_num+infoFile.f_num)	//gcode
           {
-            if(infoHost.connected !=true) break;
-            if(EnterDir(infoFile.file[key_num + start - infoFile.F_num]) == false) break;
+            if (infoHost.connected != true)
+              break;
+            if (EnterDir(infoFile.file[key_num + start - infoFile.F_num]) == false)
+              break;
             //load model preview in flash if icon exists
             setPrintModelIcon(infoFile.source != BOARD_SD && model_DecodeToFlash(infoFile.title));
 
             char temp_info[FILE_NUM + 50];
-            sprintf(temp_info, (char *)textSelect(LABEL_START_PRINT), (uint8_t *)((infoFile.source == BOARD_SD) ? 
-                infoFile.Longfile[key_num + start - infoFile.F_num] : infoFile.file[key_num + start - infoFile.F_num]));
+            sprintf(temp_info, (char *)textSelect(LABEL_START_PRINT),
+                    (u8 *)((infoFile.source == BOARD_SD) ? infoFile.Longfile[key_num + start - infoFile.F_num] :
+                                                           infoFile.file[key_num + start - infoFile.F_num]));
             //confirm file selction
-            setDialogText( LABEL_PRINT, (u8*)temp_info, LABEL_CONFIRM, LABEL_CANCEL);
+            setDialogText(LABEL_PRINT, (u8 *)temp_info, LABEL_CONFIRM, LABEL_CANCEL);
             showDialog(DIALOG_TYPE_QUESTION, startPrint, ExitDir, NULL);
           }
         }
-
         else if(key_num >=KEY_LABEL_0 && key_num <= KEY_LABEL_4)
         {
-          if(list_mode != true){
+          if(list_mode != true)
+          {
             if(key_num - KEY_LABEL_0 + infoFile.cur_page * NUM_PER_PAGE < infoFile.F_num + infoFile.f_num)
             {
               normalNameDisp(gcodeScroll.rect, gcodeScroll.text);
@@ -326,12 +342,10 @@ void menuPrintFromSource(void)
     {
       update=0;
 
-      if(list_mode != true){
+      if(list_mode != true)
         gocdeIconDraw();
-      }
-      else{
+      else
         gocdeListDraw();
-      }
     }
 
     #ifdef SD_CD_PIN

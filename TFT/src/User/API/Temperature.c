@@ -23,6 +23,13 @@ static uint8_t fixHeaterIndex(uint8_t index)
   return index;
 }
 
+static uint8_t fixHeaterIndex(uint8_t index)
+{
+  if (infoSettings.hotend_count == 1)
+    index = (index < MAX_HOTEND_COUNT) ? NOZZLE0 : index;
+  return index;
+}
+
 //Set target temperature
 void heatSetTargetTemp(uint8_t index, int16_t temp)
 {

@@ -38,13 +38,13 @@ void fanBuildList(void)
       if (infoSettings.fan_ctrl_count > 0)
         i = (MAX_FAN_COUNT - MAX_FAN_CTRL_COUNT);
       else
-        i= MAX_FAN_COUNT;
+        i = MAX_FAN_COUNT;
     }
     if (i < MAX_FAN_COUNT)
     {
-      memcpy(fanID+j, fanIDTemp+i, sizeof(fanIDTemp[i]));
-      memcpy(fanCmd+j, fanCmdTemp+i, sizeof(fanCmdTemp[i]));
-      memcpy(fanType+j, fanTypeTemp+i, sizeof(fanTypeTemp[i]));
+      memcpy(fanID + j, fanIDTemp + i, sizeof(fanIDTemp[i]));
+      memcpy(fanCmd + j, fanCmdTemp + i, sizeof(fanCmdTemp[i]));
+      memcpy(fanType + j, fanTypeTemp + i, sizeof(fanTypeTemp[i]));
     }
   }
 }
@@ -53,11 +53,9 @@ void fanControlInit(void)
 {
   fanBuildList();
 
-  fanQueryEnable =
-    (infoSettings.fan_ctrl_count > 0 &&
-     (fanGetTypID(infoSettings.fan_count -1, FAN_TYPE_CTRL_I) ||
-      fanGetTypID(infoSettings.fan_count -1, FAN_TYPE_CTRL_S))
-    );
+  fanQueryEnable = (infoSettings.fan_ctrl_count > 0 &&
+                    (fanGetTypID(infoSettings.fan_count -1, FAN_TYPE_CTRL_I) ||
+                     fanGetTypID(infoSettings.fan_count -1, FAN_TYPE_CTRL_S)));
 }
 
 bool fanIsType(uint8_t i, uint8_t type)

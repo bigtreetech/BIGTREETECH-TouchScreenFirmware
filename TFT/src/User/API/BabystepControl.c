@@ -3,7 +3,7 @@
 
 static float babystep_value = BABYSTEP_DEFAULT_VALUE;
 
-/* Reset only babystep value to default value */
+// Reset only babystep value to default value
 float babystepReset(void)
 {
   babystep_value = BABYSTEP_DEFAULT_VALUE;
@@ -11,16 +11,16 @@ float babystepReset(void)
   return babystep_value;
 }
 
-/* Get current babystep value */
+// Get current babystep value
 float babystepGetValue(void)
 {
   return babystep_value;
 }
 
-/* Reset babystep value to default value */
+// Reset babystep value to default value
 float babystepResetValue(void)
 {
-  if (babystep_value == BABYSTEP_DEFAULT_VALUE)            // if already default value, nothing to do
+  if (babystep_value == BABYSTEP_DEFAULT_VALUE)  // if already default value, nothing to do
     return babystep_value;
 
   int step_count;
@@ -35,7 +35,6 @@ float babystepResetValue(void)
   for (; step_count > 0; step_count--)
   {
     mustStoreCmd("M290 Z%.2f\n", -(BABYSTEP_MAX_UNIT * neg));
-
     processed_baby_step += BABYSTEP_MAX_UNIT;
   }
 
@@ -43,7 +42,6 @@ float babystepResetValue(void)
   if (last_unit > 0.0f)
   {
     mustStoreCmd("M290 Z%.2f\n", -(last_unit * neg));
-
     processed_baby_step += last_unit;
   }
 
@@ -60,9 +58,7 @@ float babystepDecreaseValue(float unit)
     float diff = babystep_value - BABYSTEP_MIN_VALUE;
 
     unit = (diff > unit) ? unit : diff;
-
     mustStoreCmd("M290 Z-%.2f\n", unit);
-
     babystep_value -= unit;
   }
 
@@ -77,9 +73,7 @@ float babystepIncreaseValue(float unit)
     float diff = BABYSTEP_MAX_VALUE - babystep_value;
 
     unit = (diff > unit) ? unit : diff;
-
     mustStoreCmd("M290 Z%.2f\n", unit);
-
     babystep_value += unit;
   }
 
@@ -89,9 +83,9 @@ float babystepIncreaseValue(float unit)
 // Update babystep value by encoder
 float babystepUpdateValueByEncoder(float unit, int8_t direction)
 {
-  float overall_unit = (direction > 0) ? (direction * unit) : (-direction * unit);       // always positive unit
+  float overall_unit = (direction > 0) ? (direction * unit) : (-direction * unit);  // always positive unit
 
-  if (direction < 0)                                                                     // if negative encoder value, decrease the value. Otherwise increase the value
+  if (direction < 0)  // if negative encoder value, decrease the value. Otherwise increase the value
     babystepDecreaseValue(overall_unit);
   else
     babystepIncreaseValue(overall_unit);

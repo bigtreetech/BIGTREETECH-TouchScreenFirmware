@@ -149,18 +149,22 @@ bool Get_NewestGcode(const TCHAR* path)
   return status;
 }
 
-bool f_file_exists(const TCHAR* path) {
+bool f_file_exists(const TCHAR* path)
+{
   FIL tmp;
-  if (f_open(&tmp, path, FA_OPEN_EXISTING) == FR_OK) {
+  if (f_open(&tmp, path, FA_OPEN_EXISTING) == FR_OK)
+  {
     f_close(&tmp);
     return true;
   }
   return false;
 }
 
-bool f_dir_exists(const TCHAR* path) {
+bool f_dir_exists(const TCHAR* path)
+{
   DIR tmp;
-  if (f_opendir(&tmp, path) == FR_OK) {
+  if (f_opendir(&tmp, path) == FR_OK)
+  {
     f_closedir(&tmp);
     return true;
   }
@@ -183,18 +187,21 @@ FRESULT f_remove_node (
   for (i = 0; path[i]; i++); /* Get current path length */
   path[i++] = '/';
 
-  for (;;) {
+  for (;;)
+  {
     fr = f_readdir(&dir, fno);  /* Get a directory item */
     if (fr != FR_OK || !fno->fname[0]) break;   /* End of directory? */
     j = 0;
     do {    /* Make a path name */
-      if (i + j >= sz_buff) { /* Buffer over flow? */
+      if (i + j >= sz_buff)
+      { /* Buffer over flow? */
         fr = FR_DENIED;
         goto end_delete;    /* Fails with 100 when buffer overflow */
       }
       path[i + j] = fno->fname[j];
     } while (fno->fname[j++]);
-    if (fno->fattrib & AM_DIR) {    /* Item is a directory */
+    if (fno->fattrib & AM_DIR)
+    {    /* Item is a directory */
       fr = f_remove_node(path, sz_buff, fno);
     } else {                        /* Item is a file */
       fr = f_unlink(path);
@@ -210,12 +217,14 @@ end_delete:
   return fr;
 }
 
-bool f_remove_full_dir(const TCHAR* path) {
+bool f_remove_full_dir(const TCHAR* path)
+{
   #define BUFFER_SIZE 256
   char dirBuffer[BUFFER_SIZE];
   FILINFO tmpInfo;
   strncpy(dirBuffer, path, BUFFER_SIZE);
-  if (f_remove_node(dirBuffer, BUFFER_SIZE, &tmpInfo) == FR_OK) {
+  if (f_remove_node(dirBuffer, BUFFER_SIZE, &tmpInfo) == FR_OK)
+  {
     return true;
   }
   return false;

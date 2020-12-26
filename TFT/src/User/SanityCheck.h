@@ -6,7 +6,7 @@
 #include "flashStore.h"
 #include "Settings.h"
 
-//
+
 //check size of settings against max allocated size at compile time
 #define SIZE_CHECK(object) ((void)sizeof(char[1 - 2*!!(object)]))
 
@@ -23,7 +23,7 @@
       #ifdef DEFAULT_LCD_MODE
         #undef DEFAULT_LCD_MODE
       #endif
-      #define DEFAULT_LCD_MODE SERIAL_TSC  // Just set hardcoded here. 
+      #define DEFAULT_LCD_MODE SERIAL_TSC  // Just set hardcoded here.
       //#warning "DEFAULT_LCD_MODE supports only SERIAL_TSC. Please update/check your configuration."
     #endif
 #endif
