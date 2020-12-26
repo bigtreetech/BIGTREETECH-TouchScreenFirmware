@@ -6,6 +6,7 @@ void MB_Reset() // by Lori
   #ifdef PS_ON_PIN
     PS_ON_Off();
     Delay_ms(100);
+    infoHost.connected == false;    
     PS_ON_On();
     Serial_ReSourceDeInit();
     Serial_ReSourceInit();
