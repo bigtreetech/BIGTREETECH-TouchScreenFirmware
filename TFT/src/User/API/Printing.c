@@ -54,10 +54,12 @@ void setPrintingTime(uint32_t RTtime)
     if(isPrinting() && !isPause())
     {
       infoPrinting.time++;
+#ifdef ENABLE_SLICER_REMAINING_TIME
       if (infoPrinting.remaining_time > 0)
       {
         infoPrinting.remaining_time--;
       }
+#endif
     }
   }
 }

@@ -635,8 +635,8 @@ void sendQueueCmd(void)
               setPrintingRemainingTime((hour*3600) + (min*60) + sec);
             }
             else
-            {
 #endif
+            {
             char message[CMD_MAX_CHAR];
             strncpy(message, &infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 4], CMD_MAX_CHAR);
             // strip out any checksum that might be in the string
@@ -653,10 +653,7 @@ void sendQueueCmd(void)
             {
               addToast(DIALOG_TYPE_INFO, message);
             }
-
-#ifdef ENABLE_SLICER_REMAINING_TIME
-            }
-#endif
+          }
           break;
 
         case 190: //M190
