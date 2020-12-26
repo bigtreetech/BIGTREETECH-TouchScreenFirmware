@@ -533,7 +533,7 @@ void parseConfigKey(u16 index)
       break;
 
     case C_INDEX_UART_BAUDRATE:
-      SET_VALID_INT_VALUE(infoSettings.baudrate, 0, ITEM_BAUDRATE_NUM - 1);
+      SET_VALID_INT_VALUE(infoSettings.baudrate, 0, ITEM_BAUDRATE_COUNT - 1);
       break;
 
     case C_INDEX_LANGUAGE:

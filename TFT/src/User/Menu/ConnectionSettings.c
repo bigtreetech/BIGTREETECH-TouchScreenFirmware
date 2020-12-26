@@ -40,14 +40,13 @@ void menuDisconnect(void)
   infoMenu.cur--;
 }
 
-const char * const item_baudrate_str[ITEM_BAUDRATE_NUM] = {"2400",   "9600",   "19200",  "38400",  "57600",
-                                                           "115200", "250000", "500000", "1000000"};
-const u32 item_baudrate[ITEM_BAUDRATE_NUM] = {2400, 9600, 19200, 38400, 57600, 115200, 250000, 500000, 1000000};
+const char * const item_baudrate_str[ITEM_BAUDRATE_COUNT] = {"2400",   "9600",   "19200",  "38400",  "57600",
+                                                             "115200", "250000", "500000", "1000000"};
 
 void menuBaudrate(void)
 {
   LABEL title = {LABEL_BAUDRATE};
-  LISTITEM totalItems[ITEM_BAUDRATE_NUM];
+  LISTITEM totalItems[ITEM_BAUDRATE_COUNT];
   KEY_VALUES key_num = KEY_IDLE;
   SETTINGS now = infoSettings;
   uint8_t cur_item = 0;
@@ -55,7 +54,7 @@ void menuBaudrate(void)
   // fill baudrate items
   for(uint8_t i = 0; i < COUNT(totalItems); i++)
   {
-    if (infoSettings.baudrate == item_baudrate[i])
+    if (infoSettings.baudrate == i)
     {
       totalItems[i].icon = ICONCHAR_CHECKED;
       cur_item = i;
@@ -97,7 +96,7 @@ void menuBaudrate(void)
             totalItems[cur_item].icon = ICONCHAR_CHECKED;
             listWidgetRefreshItem(cur_item); // refresh checked status
 
-            infoSettings.baudrate = item_baudrate[cur_item];
+            infoSettings.baudrate = cur_item;
             Serial_ReSourceDeInit(); // Serial_Init() will malloc a dynamic memory, so Serial_DeInit() first to free, then malloc again.
             Serial_ReSourceInit();
             reminderMessage(LABEL_UNCONNECTED, STATUS_UNCONNECT);

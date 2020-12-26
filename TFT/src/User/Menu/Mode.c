@@ -1,25 +1,7 @@
 #include "Mode.h"
 #include "includes.h"
 
-bool serialHasBeenInitialized = false;
 bool freshboot = true;
-
-void Serial_ReSourceDeInit(void)
-{
-  if (!serialHasBeenInitialized) return;
-  serialHasBeenInitialized = false;
-  Serial_DeInit();
-}
-
-void Serial_ReSourceInit(void)
-{
-  if (serialHasBeenInitialized) return;
-  serialHasBeenInitialized = true;
-
-  memset(&infoHost, 0, sizeof(infoHost));
-  reminderSetUnConnected(); // reset connect status
-  Serial_Init(infoSettings.baudrate);
-}
 
 void infoMenuSelect(void)
 {

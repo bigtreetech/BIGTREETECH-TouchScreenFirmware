@@ -33,8 +33,6 @@ enum
 #define LANGUAGE_CHECK_SIGN   (LANGUAGE_FLASH_SIGN + LANGUAGE_ADDR)
 #define ICON_CHECK_SIGN       (ICON_FLASH_SIGN + ICON_ADDR(0))
 
-#define ITEM_BAUDRATE_NUM     9
-
 #define MAX_EXT_COUNT         6
 #define MAX_HOTEND_COUNT      6
 #define MAX_HEATER_COUNT      (2 + MAX_HOTEND_COUNT) // chamber + bed + hotend
