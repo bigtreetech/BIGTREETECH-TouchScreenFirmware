@@ -14,14 +14,7 @@ static bool    heat_update_waiting = false;
 static bool    heat_send_waiting[MAX_HEATER_COUNT];
 
 uint32_t nextHeatCheckTime = 0;
-#define AUTOREPORT_TIMEOUT (nextHeatCheckTime + 3000) // update interval + 3 second grace period
-
-static uint8_t fixHeaterIndex(uint8_t index)
-{
-  if (infoSettings.hotend_count == 1)
-    index = (index < MAX_HOTEND_COUNT) ? NOZZLE0 : index;
-  return index;
-}
+#define AUTOREPORT_TIMEOUT (nextHeatCheckTime + 1000) // update interval + 3 second grace period
 
 static uint8_t fixHeaterIndex(uint8_t index)
 {
