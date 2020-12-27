@@ -18,5 +18,5 @@ void Serial_ReSourceInit(void)
 
   memset(&infoHost, 0, sizeof(infoHost));
   reminderSetUnConnected(); // reset connect status
-  Serial_Init(infoSettings.baudrate);
+  Serial_Init(baudrateList[infoSettings.baudrate]);
 }
