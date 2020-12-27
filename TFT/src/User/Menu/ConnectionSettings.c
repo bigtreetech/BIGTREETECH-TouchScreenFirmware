@@ -25,28 +25,28 @@ void menuDisconnect(void)
   Serial_ReSourceDeInit();
   while(!isPress())
   {
-  #ifdef LCD_LED_PWM_CHANNEL
-    loopDimTimer();
-  #endif
+    #ifdef LCD_LED_PWM_CHANNEL
+      loopDimTimer();
+    #endif
   }
   while(isPress())
   {
-  #ifdef LCD_LED_PWM_CHANNEL
-    loopDimTimer();
-  #endif
+    #ifdef LCD_LED_PWM_CHANNEL
+      loopDimTimer();
+    #endif
   }
   Serial_ReSourceInit();
 
   infoMenu.cur--;
 }
 
-const char * const item_baudrate_str[ITEM_BAUDRATE_COUNT] = {"2400",   "9600",   "19200",  "38400",  "57600",
-                                                             "115200", "250000", "500000", "1000000"};
+const char * const item_baudrate_str[BAUDRATE_COUNT] = {"2400",   "9600",   "19200",  "38400",  "57600",
+                                                        "115200", "250000", "500000", "1000000"};
 
 void menuBaudrate(void)
 {
   LABEL title = {LABEL_BAUDRATE};
-  LISTITEM totalItems[ITEM_BAUDRATE_COUNT];
+  LISTITEM totalItems[BAUDRATE_COUNT];
   KEY_VALUES key_num = KEY_IDLE;
   SETTINGS now = infoSettings;
   uint8_t cur_item = 0;

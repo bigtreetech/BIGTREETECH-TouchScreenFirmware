@@ -7,9 +7,9 @@
 extern "C" {
 #endif
 
-#define ITEM_BAUDRATE_COUNT 9
+#define BAUDRATE_COUNT 9
 
-extern const uint32_t baudrateList[ITEM_BAUDRATE_COUNT];
+extern const uint32_t baudrateList[BAUDRATE_COUNT];
 
 void Serial_ReSourceDeInit(void);
 void Serial_ReSourceInit(void);
