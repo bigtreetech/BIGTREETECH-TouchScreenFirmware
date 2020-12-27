@@ -112,8 +112,6 @@
 #include "ProbeOffset.h"
 #include "PowerFailed.h"
 
-#include "Mode.h"
-
 #include "UnifiedMove.h"
 #include "UnifiedHeat.h"
 #include "StatusScreen.h"

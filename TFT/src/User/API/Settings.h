@@ -66,16 +66,16 @@ typedef enum
 
 typedef enum
 {
-  MARLIN = 0,
-  SERIAL_TSC,
+  MODE_MARLIN = 0,
+  MODE_SERIAL_TSC,
   MODE_COUNT
-}LCD_MODE;
+} LCD_MODE;
 
 typedef enum
 {
   LCD2004 = 0,
   LCD12864
-}LCD_MARLIN_MODE;
+} MARLIN_MODE_TYPE;
 
 typedef struct
 {

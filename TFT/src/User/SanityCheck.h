@@ -23,7 +23,7 @@
       #ifdef DEFAULT_LCD_MODE
         #undef DEFAULT_LCD_MODE
       #endif
-      #define DEFAULT_LCD_MODE SERIAL_TSC  // Just set hardcoded here.
+      #define DEFAULT_LCD_MODE MODE_SERIAL_TSC  // Just set hardcoded here.
       //#warning "DEFAULT_LCD_MODE supports only SERIAL_TSC. Please update/check your configuration."
     #endif
 #endif

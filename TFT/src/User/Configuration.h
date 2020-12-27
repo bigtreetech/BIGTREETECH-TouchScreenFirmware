@@ -17,10 +17,10 @@
  * Mode switching is still possible by holding down the encorder for two seconds.
  *
  * Options:
- * ST7920_SPI // Marlin Mode
- * SERIAL_TSC // Touch Mode
+ * MODE_MARLIN // Marlin Mode
+ * MDOE SERIAL_TSC // Touch Mode
  */
-#define DEFAULT_LCD_MODE SERIAL_TSC
+#define DEFAULT_LCD_MODE MODE_SERIAL_TSC
 
 /**
  * Default Startup Knob LED Color (TFT35 E3)
