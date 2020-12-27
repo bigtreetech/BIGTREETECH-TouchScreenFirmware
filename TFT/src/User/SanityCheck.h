@@ -14,7 +14,7 @@
     #error "the Configuration.h is old. please use the latest Configuration.h file"
 #endif
 
-#if BAUDRATE < 0 || BAUDRATE > BAUDRATE_COUNT
+#if BAUDRATE < 0 || BAUDRATE >= BAUDRATE_COUNT
     #error "invalid Baudrate index. Pleas select a value only from options provided in configuration.h"
 #endif
 
