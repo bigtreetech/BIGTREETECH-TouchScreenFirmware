@@ -14,6 +14,10 @@
     #error "the Configuration.h is old. please use the latest Configuration.h file"
 #endif
 
+#if BAUDRATE < 0 || BAUDRATE > BAUDRATE_COUNT
+    #error "invalid Baudrate index. Pleas select a value only from options provided in configuration.h"
+#endif
+
 #ifdef ST7920_SPI
     #ifdef CLEAN_MODE_SWITCHING_SUPPORT
     #error "CLEAN_MODE_SWITCHING_SUPPORT is now SERIAL_ALWAYS_ON. Please update your configuration."
