@@ -55,7 +55,7 @@ void menuBaudrate(void)
   // fill baudrate items
   for(uint8_t i = 0; i < COUNT(totalItems); i++)
   {
-    if (infoSettings.baudrate == item_baudrate[i])
+    if (infoSettings.baudrate == i)
     {
       totalItems[i].icon = ICONCHAR_CHECKED;
       cur_item = i;
@@ -97,7 +97,7 @@ void menuBaudrate(void)
             totalItems[cur_item].icon = ICONCHAR_CHECKED;
             listWidgetRefreshItem(cur_item); // refresh checked status
 
-            infoSettings.baudrate = item_baudrate[cur_item];
+            infoSettings.baudrate = cur_item;
             Serial_ReSourceDeInit(); // Serial_Init() will malloc a dynamic memory, so Serial_DeInit() first to free, then malloc again.
             Serial_ReSourceInit();
             reminderMessage(LABEL_UNCONNECTED, STATUS_UNCONNECT);
