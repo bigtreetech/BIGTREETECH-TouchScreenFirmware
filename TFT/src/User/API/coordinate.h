@@ -1,8 +1,12 @@
 #ifndef _COORDINATE_H_
 #define _COORDINATE_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <stdbool.h>
 #include "variants.h"
-#include "stdbool.h"
 
 
 typedef enum
@@ -18,7 +22,7 @@ typedef enum
 typedef struct
 {
   float axis[TOTAL_AXIS];
-  u32   feedrate;
+  uint32_t feedrate;
 }COORDINATE;
 
 extern const char axis_id[TOTAL_AXIS];
@@ -31,10 +35,18 @@ bool  coordinateIsKnown(void);
 void  coordinateSetKnown(bool known);
 float coordinateGetAxisTarget(AXIS axis);
 void  coordinateSetAxisTarget(AXIS axis, float position);
-u32   coordinateGetFeedRate(void);
-void  coordinateSetFeedRate(u32 feedrate);
+uint32_t coordinateGetFeedRate(void);
+void  coordinateSetFeedRate(uint32_t feedrate);
 void  coordinateGetAll(COORDINATE *tmp);
+void  coordinateSetExtruderActualSteps(float steps);
+float coordinateGetExtruderActual(void);
 float coordinateGetAxisActual(AXIS axis);
-void  coordinateSetAxisActualSteps(AXIS axis, int steps);
+void  coordinateSetAxisActual(AXIS axis, float position);
+void  coordinateQuerySetWait(bool wait);
+void  coordinateQuery(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

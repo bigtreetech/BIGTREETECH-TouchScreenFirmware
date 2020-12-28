@@ -1,7 +1,11 @@
 #ifndef _BUZZER_H_
 #define _BUZZER_H_
 
-#include "stdint.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <stdint.h>
 
 #define BUZZER_CACHE_SIZE 5
 typedef struct
@@ -21,13 +25,14 @@ typedef enum
   sound_cancel,
   sound_notify,
   sound_deny,
+  sound_toast,
   sound_keypress,
 }SOUND;
 
 
 void Buzzer_Config(void);
 void Buzzer_DeConfig(void);
-void Buzzer_TurnOn(const uint32_t frequency, const uint32_t duration);
+void Buzzer_TurnOn(const uint16_t frequency, const uint16_t duration);
 void Buzzer_play(SOUND sound);
 void loopBuzzer(void);
 
@@ -35,6 +40,10 @@ void loopBuzzer(void);
 #define BUZZER_PLAY(x) Buzzer_play(x)
 #else
 #define BUZZER_PLAY(x)
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #endif

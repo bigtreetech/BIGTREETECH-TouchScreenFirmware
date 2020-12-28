@@ -1,9 +1,13 @@
 #include "Serial.h"
 #include "includes.h"
 
+#define SERIAL_PORT_QUEUE_SIZE NOBEYOND(512, RAM_SIZE * 64, 4096)
+#define SERIAL_PORT_2_QUEUE_SIZE 512
+#define SERIAL_PORT_3_QUEUE_SIZE 512
+#define SERIAL_PORT_4_QUEUE_SIZE 512
+
 // dma rx buffer
 DMA_CIRCULAR_BUFFER dmaL1Data[_UART_CNT];
-
 
 // Config for USART Channel
 //USART1 RX DMA2 Channel4 Steam2/5
@@ -43,7 +47,7 @@ void Serial_DMA_Config(uint8_t port)
 
   cfg->dma_stream->PAR = (u32)(&cfg->uart->DR);
   cfg->dma_stream->M0AR = (u32)(dmaL1Data[port].cache);
-  cfg->dma_stream->NDTR = DMA_TRANS_LEN;
+  cfg->dma_stream->NDTR = dmaL1Data[port].cacheSize;
 
   cfg->dma_stream->CR = cfg->dma_channel << 25;
   cfg->dma_stream->CR |= 3<<16;  // Priority level: Very high
@@ -59,7 +63,7 @@ void Serial_DMA_Config(uint8_t port)
 void Serial_Config(uint8_t port, u32 baud)
 {
   dmaL1Data[port].rIndex = dmaL1Data[port].wIndex = 0;
-  dmaL1Data[port].cache = malloc(DMA_TRANS_LEN);
+  dmaL1Data[port].cache = malloc(dmaL1Data[port].cacheSize);
   while(!dmaL1Data[port].cache); // malloc failed
   UART_Config(port, baud, USART_IT_IDLE);  // IDLE interrupt
   Serial_DMA_Config(port);
@@ -76,17 +80,18 @@ void Serial_DeConfig(uint8_t port)
 
 void Serial_Init(u32 baud)
 {
+  dmaL1Data[SERIAL_PORT].cacheSize = SERIAL_PORT_QUEUE_SIZE;
   Serial_Config(SERIAL_PORT, baud);
-
   #ifdef SERIAL_PORT_2
+    dmaL1Data[SERIAL_PORT_2].cacheSize = SERIAL_PORT_2_QUEUE_SIZE;
     Serial_Config(SERIAL_PORT_2, baud);
   #endif
-
   #ifdef SERIAL_PORT_3
+    dmaL1Data[SERIAL_PORT_3].cacheSize = SERIAL_PORT_3_QUEUE_SIZE;
     Serial_Config(SERIAL_PORT_3, baud);
   #endif
-
   #ifdef SERIAL_PORT_4
+    dmaL1Data[SERIAL_PORT_4].cacheSize = SERIAL_PORT_4_QUEUE_SIZE;
     Serial_Config(SERIAL_PORT_4, baud);
   #endif
 }
@@ -121,7 +126,6 @@ void Serial_DMAClearFlag(uint8_t port)
   }
 }
 
-
 void USART_IRQHandler(uint8_t port)
 {
   if((Serial[port].uart->SR & (1<<4))!=0)
@@ -129,8 +133,8 @@ void USART_IRQHandler(uint8_t port)
     Serial[port].uart->SR;
     Serial[port].uart->DR;
 
-    dmaL1Data[port].wIndex = DMA_TRANS_LEN - Serial[port].dma_stream->NDTR;
-    uint16_t wIndex = (dmaL1Data[port].wIndex == 0) ? DMA_TRANS_LEN : dmaL1Data[port].wIndex;
+    dmaL1Data[port].wIndex = dmaL1Data[port].cacheSize - Serial[port].dma_stream->NDTR;
+    uint16_t wIndex = (dmaL1Data[port].wIndex == 0) ? dmaL1Data[port].cacheSize : dmaL1Data[port].wIndex;
     if(dmaL1Data[port].cache[wIndex-1] == '\n')  // Receive completed
     {
       infoHost.rx_ok[port] = true;
@@ -140,32 +144,32 @@ void USART_IRQHandler(uint8_t port)
 
 void USART1_IRQHandler(void)
 {
-    USART_IRQHandler(_USART1);
+  USART_IRQHandler(_USART1);
 }
 
 void USART2_IRQHandler(void)
 {
-    USART_IRQHandler(_USART2);
+  USART_IRQHandler(_USART2);
 }
 
 void USART3_IRQHandler(void)
 {
-    USART_IRQHandler(_USART3);
+  USART_IRQHandler(_USART3);
 }
 
 void UART4_IRQHandler(void)
 {
-    USART_IRQHandler(_UART4);
+  USART_IRQHandler(_UART4);
 }
 
 void UART5_IRQHandler(void)
 {
-    USART_IRQHandler(_UART5);
+  USART_IRQHandler(_UART5);
 }
 
 void USART6_IRQHandler(void)
 {
-    USART_IRQHandler(_USART6);
+  USART_IRQHandler(_USART6);
 }
 
 void Serial_Puts(uint8_t port, char *s)
@@ -180,7 +184,7 @@ void Serial_Puts(uint8_t port, char *s)
 #include "stdio.h"
 int fputc(int ch, FILE *f)
 {
-	while((Serial[SERIAL_PORT].uart->SR&0X40)==0);
-    Serial[SERIAL_PORT].uart->DR = (u8) ch;
-	return ch;
+  while((Serial[SERIAL_PORT].uart->SR&0X40) == 0);
+  Serial[SERIAL_PORT].uart->DR = (u8) ch;
+  return ch;
 }

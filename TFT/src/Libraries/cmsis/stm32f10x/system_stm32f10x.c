@@ -103,10 +103,10 @@
      If you are using different crystal you have to adapt those functions accordingly.
     */
 
-#if defined (STM32F10X_LD_VL) || (defined STM32F10X_MD_VL) || (defined STM32F10X_HD_VL)
+#if defined (STM32F10X_LD_VL) || defined (STM32F10X_MD_VL) || defined (STM32F10X_HD_VL)
 /* #define SYSCLK_FREQ_HSE    HSE_VALUE */
  #define SYSCLK_FREQ_24MHz  24000000
-#elif defined (MKS_32_V1_4)
+#elif defined (MKS_32_V1_4) || defined (MKS_28_V1_0)
  #define SYSCLK_FREQ_48MHz  48000000
 #else
 /* #define SYSCLK_FREQ_HSE    HSE_VALUE */
@@ -120,7 +120,7 @@
 /*!< Uncomment the following line if you need to use external SRAM mounted
      on STM3210E-EVAL board (STM32 High density and XL-density devices) or on
      STM32100E-EVAL board (STM32 High-density value line devices) as data memory */
-#if defined (STM32F10X_HD) || (defined STM32F10X_XL) || (defined STM32F10X_HD_VL)
+#if defined (STM32F10X_HD) || defined (STM32F10X_XL) || defined (STM32F10X_HD_VL)
 /* #define DATA_IN_ExtSRAM */
 #endif
 
@@ -242,7 +242,7 @@ void SystemInit (void)
 
   /* Reset CFGR2 register */
   RCC->CFGR2 = 0x00000000;
-#elif defined (STM32F10X_LD_VL) || defined (STM32F10X_MD_VL) || (defined STM32F10X_HD_VL)
+#elif defined (STM32F10X_LD_VL) || defined (STM32F10X_MD_VL) || defined (STM32F10X_HD_VL)
   /* Disable all interrupts and clear pending bits  */
   RCC->CIR = 0x009F0000;
 
@@ -253,7 +253,7 @@ void SystemInit (void)
   RCC->CIR = 0x009F0000;
 #endif /* STM32F10X_CL */
 
-#if defined (STM32F10X_HD) || (defined STM32F10X_XL) || (defined STM32F10X_HD_VL)
+#if defined (STM32F10X_HD) || defined (STM32F10X_XL) || defined (STM32F10X_HD_VL)
   #ifdef DATA_IN_ExtSRAM
     SystemInit_ExtMemCtl();
   #endif /* DATA_IN_ExtSRAM */
@@ -313,7 +313,7 @@ void SystemCoreClockUpdate (void)
   uint32_t prediv1source = 0, prediv1factor = 0, prediv2factor = 0, pll2mull = 0;
 #endif /* STM32F10X_CL */
 
-#if defined (STM32F10X_LD_VL) || defined (STM32F10X_MD_VL) || (defined STM32F10X_HD_VL)
+#if defined (STM32F10X_LD_VL) || defined (STM32F10X_MD_VL) || defined (STM32F10X_HD_VL)
   uint32_t prediv1factor = 0;
 #endif /* STM32F10X_LD_VL or STM32F10X_MD_VL or STM32F10X_HD_VL */
 
@@ -344,7 +344,7 @@ void SystemCoreClockUpdate (void)
       }
       else
       {
- #if defined (STM32F10X_LD_VL) || defined (STM32F10X_MD_VL) || (defined STM32F10X_HD_VL)
+ #if defined (STM32F10X_LD_VL) || defined (STM32F10X_MD_VL) || defined (STM32F10X_HD_VL)
        prediv1factor = (RCC->CFGR2 & RCC_CFGR2_PREDIV1) + 1;
        /* HSE oscillator clock selected as PREDIV1 clock entry */
        SystemCoreClock = (HSE_VALUE / prediv1factor) * pllmull;

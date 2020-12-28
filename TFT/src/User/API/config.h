@@ -1,13 +1,20 @@
 #ifndef _CONFIG_H_
 #define _CONFIG_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <stdbool.h>
 #include "variants.h"
-#include "stdbool.h"
 #include "includes.h"
 #include "ff.h"
 
+//after changing/adding/removing a keyword, change the CONFIG_FLASH_SIGN in Settings.h
+
 #define  LINE_MAX_CHAR 100
-#define CONFIG_FILE_PATH "0:config.ini"
+#define CONFIG_FILE_PATH            "0:config.ini"
+#define LANG_FILE_PATH              "0:language.ini"
 
 #define CONFIG_UNIFIEDMENU          "unified_menu:"
 #define CONFIG_UART_BAUDRATE        "baudrate:"
@@ -21,26 +28,31 @@
 #define CONFIG_SS_XYZ_BG_COLOR      "status_xyz_bg_color:"
 #define CONFIG_LIST_BORDER_COLOR    "list_border_color:"
 #define CONFIG_LIST_BUTTON_BG_COLOR "list_button_bg_color:"
+#define CONFIG_MESH_MIN_COLOR       "mesh_min_color:"
+#define CONFIG_MESH_MAX_COLOR       "mesh_max_color:"
 
 #define CONFIG_ROTATE_UI            "rotate_ui:"
 #define CONFIG_TERMINAL_ACK         "terminal_ack:"
 #define CONFIG_INVERT_AXIS          "invert_axis:"
 #define CONFIG_PERSISTENT_TEMP      "persistent_info:"
 #define CONFIG_LIST_MODE            "files_list_mode:"
-//-----------------------------Marlin Mode Settings (Only for TFT35_V3.0/TFT24_V1.1/TFT28V3.0)
+#define CONFIG_ACK_NOTIFICATION     "ack_notification:"
+//-----------------------------Marlin Mode Settings
 #define CONFIG_MODE                 "default_mode:"
 #define CONFIG_SERIAL_ON            "serial_always_on:"
 #define CONFIG_MARLIN_BG_COLOR      "marlin_bg_color:"
 #define CONFIG_MARLIN_FONT_COLOR    "marlin_fn_color:"
 #define CONFIG_MARLIN_SHOW_TITLE    "marlin_show_title:"
+#define CONFIG_MARLIN_TYPE          "marlin_type:"
 #define CONFIG_MARLIN_TITLE         "marlin_title:"
 #define CONFIG_MARLIN_FULLSCREEN    "marlin_fullscreen:"
 //-----------------------------Printer / Machine Settings
 #define CONFIG_HOTEND_COUNT         "hotend_count:"
-#define CONFIG_BED_EN               "bed_en:"
-#define CONFIG_CHAMBER_EN           "chamber_en:"
+#define CONFIG_HEATED_BED           "heated_bed:"
+#define CONFIG_HEATED_CHAMBER       "heated_chamber:"
 #define CONFIG_EXT_COUNT            "ext_count:"
 #define CONFIG_FAN_COUNT            "fan_count:"
+#define CONFIG_FAN_CTRL_COUNT       "fan_ctrl_count:"
 #define CONFIG_MAX_TEMP             "max_temp:"
 #define CONFIG_MIN_TEMP             "min_temp:"
 #define CONFIG_FAN_MAX              "fan_max:"
@@ -66,10 +78,14 @@
 #define CONFIG_PREHEAT_NAME_2       "preheat_name2:"
 #define CONFIG_PREHEAT_NAME_3       "preheat_name3:"
 #define CONFIG_PREHEAT_NAME_4       "preheat_name4:"
+#define CONFIG_PREHEAT_NAME_5       "preheat_name5:"
+#define CONFIG_PREHEAT_NAME_6       "preheat_name6:"
 #define CONFIG_PREHEAT_TEMP_1       "preheat_temp1:"
 #define CONFIG_PREHEAT_TEMP_2       "preheat_temp2:"
 #define CONFIG_PREHEAT_TEMP_3       "preheat_temp3:"
 #define CONFIG_PREHEAT_TEMP_4       "preheat_temp4:"
+#define CONFIG_PREHEAT_TEMP_5       "preheat_temp5:"
+#define CONFIG_PREHEAT_TEMP_6       "preheat_temp6:"
 //-----------------------------Power Supply Settings (if connected to TFT Controller)
 #define CONFIG_PS_ON                "ps_on:"
 #define CONFIG_PS_LOGIC             "ps_on_active_high:"
@@ -85,11 +101,15 @@
 #define CONFIG_POWERLOSS_ZRAISE     "pl_z_raise:"
 #define CONFIG_BTT_MINIUPS          "btt_mini_ups:"
 //-----------------------------other device specific settings
-#define CONFIG_BUZZER_ON               "buzzer:"
+#define CONFIG_TOUCH_SOUND             "touch_sound:"
+#define CONFIG_TOAST_SOUND             "toast_sound:"
+#define CONFIG_ALERT_SOUND             "alert_sound:"
 #define CONFIG_KNOB_COLOR              "knob_led_color:"
+#define CONFIG_KNOB_LED_IDLE           "knob_led_idle:"
 #define CONFIG_BRIGHTNESS              "lcd_brightness:"
 #define CONFIG_BRIGHTNESS_IDLE         "lcd_idle_brightness:"
 #define CONFIG_BRIGHTNESS_IDLE_DELAY   "lcd_idle_delay:"
+#define CONFIG_XY_OFFSET_PROBING       "xy_offset_probing:"
 //-----------------------------Custom G-Code Commands (up to 15 custom G-code)
 #define CONFIG_CUSTOM_LABEL_1   "custom_label_1:"
 #define CONFIG_CUSTOM_LABEL_2   "custom_label_2:"
@@ -176,13 +196,20 @@ typedef enum
 }CONFIG_STATS;
 
 
-void getConfigFromFile(void);
+bool getConfigFromFile(void);
+bool getLangFromFile(void);
+
+bool readConfigFile(const char * path, void (*lineParser)(), uint16_t maxLineLen);
+
 void parseConfigLine(void);
+void parseLangLine(void);
+
 void parseConfigKey(u16 index);
 void writeConfig(uint8_t* dataBytes, uint16_t numBytes, uint32_t addr, uint32_t maxSize);
 void saveConfig(void);
 void resetConfig(void);
-void drawProgressPage(void);
+
+void drawProgressPage(u8 * title);
 void drawProgress(void);
 void showError(CONFIG_STATS stat);
 
@@ -195,4 +222,9 @@ enum
 
   CONFIG_COUNT,
 };
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif

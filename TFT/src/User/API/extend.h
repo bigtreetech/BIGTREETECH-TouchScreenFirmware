@@ -1,7 +1,12 @@
 #ifndef _EXTEND_H_
 #define _EXTEND_H_
 
-#include "stdbool.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <stdbool.h>
+#include "includes.h"
 
 enum
 {
@@ -15,7 +20,12 @@ void PS_ON_On(void);
 void PS_ON_Off(void);
 void positionSetUpdateWaiting(bool isWaiting);
 void FIL_Runout_Init(void);
+void FIL_SFS_SetAlive(uint8_t alive);
 void loopBackEndFILRunoutDetect(void);
 void loopFrontEndFILRunoutDetect(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

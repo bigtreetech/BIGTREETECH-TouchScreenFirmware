@@ -1,19 +1,18 @@
 #include "Home.h"
 #include "includes.h"
 
-//1��title(����), ITEM_PER_PAGE��item(ͼ��+��ǩ)
 const MENUITEMS homeItems = {
-//   title
-LABEL_HOME,
-// icon                       label
- {{ICON_HOME,                 LABEL_HOME},
-  {ICON_X_HOME,               LABEL_X},
-  {ICON_Y_HOME,               LABEL_Y},
-  {ICON_Z_HOME,               LABEL_Z},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACK,                 LABEL_BACK},}
+  // title
+  LABEL_HOME,
+  // icon                         label
+  {{ICON_HOME,                    LABEL_HOME},
+   {ICON_X_HOME,                  LABEL_X},
+   {ICON_Y_HOME,                  LABEL_Y},
+   {ICON_Z_HOME,                  LABEL_Z},
+   {ICON_BACKGROUND,              LABEL_BACKGROUND},
+   {ICON_BACKGROUND,              LABEL_BACKGROUND},
+   {ICON_BACKGROUND,              LABEL_BACKGROUND},
+   {ICON_BACK,                    LABEL_BACK},}
 };
 
 void menuHome(void)
@@ -35,4 +34,3 @@ void menuHome(void)
     loopProcess();
   }
 }
-

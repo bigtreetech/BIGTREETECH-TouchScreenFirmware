@@ -35,23 +35,18 @@ void knob_LED_Init(void)
 {
   GPIO_InitSet(LED_COLOR_PIN, MGPIO_MODE_OUT_PP, 0);
   GPIO_SetLevel(LED_COLOR_PIN, 0);
-  
+
   RCC->APB1ENR |= 1<<4; // TIM6 Clock enable
   TIM6->CNT = 0;
   TIM6->PSC = 1 - 1;
   TIM6->SR = (uint16_t)~(1<<0);
-  
+
   WS2812_Send_DAT(led_color[infoSettings.knob_led_color]); //set last saved color after initialization
 }
 
 void knob_LED_DeInit(void)
 {
-  GPIO_InitSet(LED_COLOR_PIN,MGPIO_MODE_IPN,0);
-}
-
-void set_knob_color(int color_index)
-{
-  WS2812_Send_DAT(led_color[color_index]);
+  GPIO_InitSet(LED_COLOR_PIN, MGPIO_MODE_IPN, 0);
 }
 
 // total 2.5us, run in 400Khz
@@ -75,9 +70,12 @@ void WS2812_Send_DAT(uint32_t ws2812_dat)
     {
       TIM6->CNT = 0;
       WS2812_FAST_WRITE_HIGH(); // WS2812 required very high speed, so "GPIO_SetLevel(LED_COLOR_PIN, 1)" not applicable
-      if (ws2812_dat & (1 << bit)) {
+      if (ws2812_dat & (1 << bit))
+      {
         while (TIM6->CNT < code_1_tim_h_cnt);
-      } else {
+      } 
+      else
+      {
         while (TIM6->CNT < code_0_tim_h_cnt);
       }
       WS2812_FAST_WRITE_LOW();

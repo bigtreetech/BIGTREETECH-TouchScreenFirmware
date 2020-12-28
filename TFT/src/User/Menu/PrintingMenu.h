@@ -1,18 +1,32 @@
 #ifndef _PRINTINGMENU_H_
 #define _PRINTINGMENU_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <stdbool.h>
 #include "variants.h"
-#include "stdbool.h"
 #include "ff.h"
 
 void menuBeforePrinting(void);
 void menuPrinting(void);
-void menuStopPrinting(void);
+void printInfoPopup(void);
+extern bool filDataSeen;
 
-void printingDrawPage(void);
-void reDrawProgress(int icon_pos);
-void reValueNozzle(int icon_pos);
-void reValueBed(int icon_pos);
-void reDrawTime(int icon_pos);
-void reDrawLayer(int icon_pos);
+typedef struct
+{
+    /* data */
+    char name[30];
+    uint32_t time;
+    float length;
+    float weight;
+    float cost;
+}FILAMENTDATA;
+extern FILAMENTDATA filData;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -1,11 +1,15 @@
 #ifndef _LCD_INIT_H_
 #define _LCD_INIT_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "variants.h"
 #include "menu.h"
 
 #ifdef LCD_LED_PWM_CHANNEL
+  #define LCD_0_PERCENT    0
   #define LCD_5_PERCENT    5
   #define LCD_10_PERCENT   10
   #define LCD_20_PERCENT   20
@@ -32,14 +36,13 @@
 
   typedef struct
   {
-    uint32_t idle_time_counter;
-    bool idle_timer_reset;
-    bool _last_dim_state;
+    uint32_t idle_ms;
+    bool dimmed;
   } LCD_AUTO_DIM;
   extern LCD_AUTO_DIM lcd_dim;
 
   #define ITEM_SECONDS_NUM 8
-  #define ITEM_BRIGHTNESS_NUM 11
+  #define ITEM_BRIGHTNESS_NUM 12
 
   extern const uint32_t LCD_DIM_IDLE_TIME[ITEM_SECONDS_NUM];
   extern const LABEL itemDimTime[ITEM_SECONDS_NUM];
@@ -47,12 +50,15 @@
   extern const  uint32_t LCD_BRIGHTNESS[ITEM_BRIGHTNESS_NUM];
   extern const LABEL itemBrightness[ITEM_BRIGHTNESS_NUM];
 
-  void LCD_Dim_Idle_Timer_init(void);
-  void LCD_Dim_Idle_Timer_Reset(void);
-  void LCD_Dim_Idle_Timer(void);
   void LCD_LED_PWM_Init(void);
+  void loopDimTimer(void);
+  void _wakeLCD(void);
 
   #define Set_LCD_Brightness(percentage) TIM_PWM_SetDutyCycle(LCD_LED_PWM_CHANNEL, percentage)
+  #define wakeLCD() _wakeLCD()
+#else
+  #define wakeLCD()
+
 #endif // LCD_LED_PWM_CHANNEL
 
 #if LCD_DATA_16BIT == 1
@@ -63,4 +69,9 @@
 
 void LCD_RefreshDirection(void);
 void LCD_Init(void);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif

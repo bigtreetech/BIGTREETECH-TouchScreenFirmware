@@ -1,6 +1,10 @@
 #ifndef _LEDCOLOR_H_
 #define _LEDCOLOR_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "variants.h"
 #include "menu.h"
 //24bit                           // G  R  B
@@ -155,6 +159,7 @@
 //preset color list
 #ifdef LED_COLOR_PIN
   #define LED_COLOR_NUM 9
+  #define LED_IDLE 2
 
   extern const LABEL itemLedcolor[LED_COLOR_NUM];
 
@@ -163,6 +168,10 @@
   void knob_LED_Init(void);
   void knob_LED_DeInit(void);
   void WS2812_Send_DAT(uint32_t ws2812_dat);
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #endif

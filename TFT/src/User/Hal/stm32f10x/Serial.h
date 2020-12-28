@@ -8,9 +8,8 @@ typedef struct
   char *cache;
   uint16_t wIndex;
   uint16_t rIndex;
+  uint16_t cacheSize;
 }DMA_CIRCULAR_BUFFER;
-
-#define DMA_TRANS_LEN  ACK_MAX_SIZE
 
 extern DMA_CIRCULAR_BUFFER dmaL1Data[_UART_CNT];
 

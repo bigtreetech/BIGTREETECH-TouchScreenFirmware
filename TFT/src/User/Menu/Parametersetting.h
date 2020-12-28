@@ -1,8 +1,12 @@
 #ifndef _PARAMETERSETTING_H_
 #define _PARAMETERSETTING_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "menu.h"
 #include "MachineParameters.h"
-
 
 void menuParameterSettings(void);
 
@@ -12,6 +16,10 @@ void menuParameterSettings(void);
 #define GLOBALICON_INTERVAL 2
 
 void loopTemperatureStatus(void);
-void drawTemperatureStatus(void);
+int16_t drawTemperatureStatus(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

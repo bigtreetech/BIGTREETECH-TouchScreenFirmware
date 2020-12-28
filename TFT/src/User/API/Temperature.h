@@ -1,13 +1,17 @@
 #ifndef _TEMPERATURE_H_
 #define _TEMPERATURE_H_
 
-#include "stdint.h"
-#include "stdbool.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <stdint.h>
+#include <stdbool.h>
 #include "Configuration.h"
 #include "Settings.h"
 
-#define TEMPERATURE_QUERY_FAST_DURATION 1000  // "M105" query temperature every 1s
-#define TEMPERATURE_QUERY_SLOW_DURATION 3000  // 3s
+#define TEMPERATURE_QUERY_FAST_SECONDS 1  // "M105" query temperature every 1s
+#define TEMPERATURE_QUERY_SLOW_SECONDS 3  // 3s
 
 typedef enum {
   WAIT_NONE = 0,
@@ -48,10 +52,10 @@ typedef struct
 }HEATER;
 
 
-extern const char* heaterID[];
-extern const char* const heatDisplayID[];
-extern const char* heatCmd[];
-extern const char* heatWaitCmd[];
+extern const char *const heaterID[];
+extern const char *const heatDisplayID[];
+extern const char *const heatCmd[];
+extern const char *const heatWaitCmd[];
 
 
 void heatSetTargetTemp(uint8_t index, int16_t temp);
@@ -59,6 +63,7 @@ void heatSyncTargetTemp(uint8_t index, int16_t temp);
 uint16_t heatGetTargetTemp(uint8_t index);
 void heatSetCurrentTemp(uint8_t index, int16_t temp);
 int16_t heatGetCurrentTemp(uint8_t index);
+void heatCoolDown(void);
 
 void heatSetCurrentTool(uint8_t tool);
 uint8_t heatGetCurrentTool(void);
@@ -71,13 +76,17 @@ void heatSetIsWaiting(uint8_t index,HEATER_WAIT isWaiting);
 void heatClearIsWaiting(void);
 
 void updateNextHeatCheckTime(void);
-void heatSetUpdateTime(uint32_t time);
+void heatSetUpdateSeconds(uint8_t seconds);
+uint8_t heatGetUpdateSeconds(void);
+void heatSyncUpdateSeconds(uint8_t seconds);
 void heatSetUpdateWaiting(bool isWaiting);
 void heatSetSendWaiting(uint8_t index, bool isWaiting);
 bool heatGetSendWaiting(uint8_t index);
 
-
 void loopCheckHeater(void);
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif

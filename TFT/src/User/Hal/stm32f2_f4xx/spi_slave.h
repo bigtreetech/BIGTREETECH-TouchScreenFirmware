@@ -1,20 +1,11 @@
 #ifndef _SPI_SLAVE_H_
 #define _SPI_SLAVE_H_
 
-#include "variants.h"
+#include "CircularQueue.h"
+#include <stdbool.h>
 
-#define SPI_SLAVE_MAX (1024 * 5)
-
-typedef struct
-{
-  u8  *data;
-  u16 rIndex;
-  u16 wIndex;
-}SPI_QUEUE;
-
-extern SPI_QUEUE SPISlave;
-
-void SPI_Slave(void);
+void SPI_Slave(CIRCULAR_QUEUE *queue);
 void SPI_SlaveDeInit(void);
-void SPI_Slave_CS_Config(void);
+bool SPI_SlaveGetData(uint8_t *data);
+
 #endif

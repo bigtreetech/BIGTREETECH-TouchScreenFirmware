@@ -1,13 +1,13 @@
 #include "Fan.h"
 #include "includes.h"
 
-static u8   curIndex = 0;
+static uint8_t curIndex = 0;
 
 const ITEM itemFan[2] = {
-  //icon                label
-  {ICON_FAN,            LABEL_FAN},
-  {ICON_FAN_HALF_SPEED, LABEL_FAN_HALF_SPEED},
-  };
+  // icon                        label
+  {ICON_FAN,                     LABEL_FAN},
+  {ICON_FAN_HALF_SPEED,          LABEL_FAN_HALF_SPEED},
+};
 
 void fanSpeedReDraw(bool skip_header)
 {
@@ -17,12 +17,21 @@ void fanSpeedReDraw(bool skip_header)
   {
     sprintf(tempstr, "%-15s", fanID[curIndex]);
     GUI_DispString(exhibitRect.x0, exhibitRect.y0, (u8 *)tempstr);
+    setLargeFont(true);
+    if (infoSettings.fan_percentage == 1)
+    {
+      GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1)>>1, exhibitRect.y0, (uint8_t *)"%");
+    }else
+    {
+      GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1)>>1, exhibitRect.y0, (uint8_t *)"RAW");
+    }
+    setLargeFont(false);
   }
 
-  if(infoSettings.fan_percentage == 1)
-    sprintf(tempstr, "  %d%%  ", fanGetSpeedPercent(curIndex));
+  if (infoSettings.fan_percentage == 1)
+    sprintf(tempstr, "  %d/%d  ", fanGetCurPercent(curIndex), fanGetSetPercent(curIndex));
   else
-    sprintf(tempstr, "  %d  ", (int)fanGetSpeed(curIndex));
+    sprintf(tempstr, "  %d/%d  ", (int)fanGetCurSpeed(curIndex), (int)fanGetSetSpeed(curIndex));
 
   setLargeFont(true);
   GUI_DispStringInPrect(&exhibitRect, (u8 *)tempstr);
@@ -33,23 +42,24 @@ void menuFan(void)
 {
   // 1 title, ITEM_PER_PAGE items (icon + label)
   MENUITEMS fanItems = {
-  // title
-  LABEL_FAN,
-  // icon                       label
-   {{ICON_DEC,                  LABEL_DEC},
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},
-    {ICON_INC,                  LABEL_INC},
-    {ICON_FAN ,                 LABEL_FAN},
-    {ICON_FAN_FULL_SPEED,       LABEL_FAN_FULL_SPEED},
-    {ICON_STOP,                 LABEL_STOP},
-    {ICON_BACK,                 LABEL_BACK},}
+    // title
+    LABEL_FAN,
+    // icon                         label
+    {{ICON_DEC,                     LABEL_DEC},
+     {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_INC,                     LABEL_INC},
+     {ICON_FAN ,                    LABEL_FAN},
+     {ICON_FAN_FULL_SPEED,          LABEL_FAN_FULL_SPEED},
+     {ICON_STOP,                    LABEL_STOP},
+     {ICON_BACK,                    LABEL_BACK},}
   };
 
-  KEY_VALUES key_num = KEY_IDLE;
-  u8 curspeed;
+  LASTFAN lastFan;
+  fanSetSpeed(curIndex, fanGetCurSpeed(curIndex));
+  lastFan = (LASTFAN) {fanGetCurSpeed(curIndex), fanGetSetSpeed(curIndex)};
 
-  if (infoSettings.fan_count > 1)
+  if ((infoSettings.fan_count + infoSettings.fan_ctrl_count) > 1)
     fanItems.items[KEY_ICON_4] = itemFan[0];
   else
     fanItems.items[KEY_ICON_4] = itemFan[1];
@@ -61,56 +71,68 @@ void menuFan(void)
     encoderPosition = 0;
   #endif
 
-  while(infoMenu.menu[infoMenu.cur] == menuFan)
+  while (infoMenu.menu[infoMenu.cur] == menuFan)
   {
-    key_num = menuKeyGetValue();
-    curspeed = fanGetSpeed(curIndex);
-    switch(key_num)
+    KEY_VALUES key_num = menuKeyGetValue();
+    switch (key_num)
     {
       case KEY_ICON_0:
-        if (curspeed > 0)
+        if (fanGetSetSpeed(curIndex) > 0)
         {
           if (infoSettings.fan_percentage == 1)
-          {
-            if (fanGetSpeedPercent(curIndex) % 20 != 0)
-            {
-              fanSetSpeedPercent(curIndex, (fanGetSpeedPercent(curIndex))); //rounding current speed % reduces speed % by 1.
-            }
-            else
-            {
-              fanSetSpeedPercent(curIndex, (fanGetSpeedPercent(curIndex) - 1)); //except for multiples of 20 that needs subtracting 1.
-            }
-          }
+            fanSetPercent(curIndex, fanGetSetPercent(curIndex) - 1);
           else
-          {
-            fanSetSpeed(curIndex, --curspeed);
-          }
+            fanSetSpeed(curIndex, fanGetSetSpeed(curIndex) - 1);
         }
         break;
 
-      case KEY_ICON_3:
-        if (curspeed < infoSettings.fan_max[curIndex])
+      case KEY_INFOBOX:
+      {
+        char titlestr[30];
+        if (infoSettings.fan_percentage == 1)
         {
-          if (infoSettings.fan_percentage ==  1)
-          {
-            fanSetSpeedPercent(curIndex, (fanGetSpeedPercent(curIndex) + 2)); //adding 2 to current speed % increases speed % by 1.
-          }
+          strcpy(titlestr, "Min:0 | Max:100");
+          uint8_t val = numPadInt((u8 *) titlestr, fanGetSetPercent(curIndex), 0, false);
+          val = NOBEYOND(0, val, 100);
+
+          if (val != fanGetSetPercent(curIndex))
+            fanSetPercent(curIndex, val);
+        }
+        else
+        {
+          sprintf(titlestr, "Min:0 | Max:%d", infoSettings.fan_max[curIndex]);
+          uint8_t val = numPadInt((u8 *) titlestr, fanGetCurSpeed(curIndex), 0, false);
+          val = NOBEYOND(0, val,  infoSettings.fan_max[curIndex]);
+
+          if (val != fanGetCurSpeed(curIndex))
+            fanSetSpeed(curIndex, val);
+        }
+
+        menuDrawPage(&fanItems);
+        fanSpeedReDraw(true);
+        break;
+      }
+
+      case KEY_ICON_3:
+        if (fanGetSetSpeed(curIndex) < infoSettings.fan_max[curIndex])
+        {
+          if (infoSettings.fan_percentage == 1)
+            fanSetPercent(curIndex, fanGetSetPercent(curIndex) + 1);
           else
-          {
-            fanSetSpeed(curIndex, --curspeed);
-          }
+            fanSetSpeed(curIndex, fanGetSetSpeed(curIndex) + 1);
         }
         break;
 
       case KEY_ICON_4:
-        if (infoSettings.fan_count > 1)
+        if ((infoSettings.fan_count + infoSettings.fan_ctrl_count) > 1)
         {
-          curIndex = (curIndex + 1) % infoSettings.fan_count;
+          curIndex = (curIndex + 1) % (infoSettings.fan_count + infoSettings.fan_ctrl_count);
           fanSpeedReDraw(false);
         }
         else
         {
-          fanSetSpeed(curIndex, (infoSettings.fan_max[curIndex] + 1) / 2);
+          fanSetSpeed(curIndex, infoSettings.fan_max[curIndex] / 2);  // 50%
+          fanSpeedReDraw(true);
         }
         break;
 
@@ -128,36 +150,22 @@ void menuFan(void)
 
       default:
         #if LCD_ENCODER_SUPPORT
-          if(encoderPosition)
+          if (encoderPosition)
           {
-            if (curspeed < infoSettings.fan_max[curIndex] && encoderPosition > 0)
+            if (fanGetSetSpeed(curIndex) < infoSettings.fan_max[curIndex] && encoderPosition > 0)
             {
-              if (infoSettings.fan_percentage ==  1)
-              {
-                fanSetSpeedPercent(curIndex, fanGetSpeedPercent(curIndex) + 2);
-              }
+              if (infoSettings.fan_percentage == 1)
+                fanSetPercent(curIndex, fanGetSetPercent(curIndex) + 1);
               else
-              {
-                fanSetSpeed(curIndex, ++curspeed);
-              }
+                fanSetSpeed(curIndex, fanGetSetSpeed(curIndex) + 1);
             }
 
-            if (curspeed > 0 && encoderPosition < 0) {
+            if (fanGetSetSpeed(curIndex) > 0 && encoderPosition < 0)
+            {
               if (infoSettings.fan_percentage == 1)
-              {
-                if (fanGetSpeedPercent(curIndex) % 20 != 0)
-                {
-                  fanSetSpeedPercent(curIndex, (fanGetSpeedPercent(curIndex))); //rounding current speed % reduces speed % by 1.
-                }
-                else
-                {
-                  fanSetSpeedPercent(curIndex, (fanGetSpeedPercent(curIndex) - 1)); //except for multiples of 20 that needs subtracting 1.
-                }
-              }
+                fanSetPercent(curIndex, fanGetSetPercent(curIndex) - 1);
               else
-              {
-                fanSetSpeed(curIndex, --curspeed);
-              }
+                fanSetSpeed(curIndex, fanGetSetSpeed(curIndex) - 1);
             }
             encoderPosition = 0;
           }
@@ -165,8 +173,11 @@ void menuFan(void)
         break;
     }
 
-    if (fanSpeedChanged(curIndex))
+    if ((lastFan.cur != fanGetCurSpeed(curIndex)) || (lastFan.set != fanGetSetSpeed(curIndex)))
+    {
+      lastFan = (LASTFAN) {fanGetCurSpeed(curIndex), fanGetSetSpeed(curIndex)};
       fanSpeedReDraw(true);
+    }
 
     loopProcess();
   }

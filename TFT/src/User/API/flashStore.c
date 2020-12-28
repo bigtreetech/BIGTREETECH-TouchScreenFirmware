@@ -2,10 +2,13 @@
 #include "STM32_Flash.h"
 
 #define TSC_SIGN  0x20200512 // DO NOT MODIFY
-#define PARA_SIGN 0x20200724 // (YYYMMDD) If a new setting parameter is added, modify here and initialize the initial value in the "infoSettingsReset()" function
+#define PARA_SIGN 0x20201221 // (YYYYMMDD) If a new setting parameter is added,
+                             // modify here and initialize the initial value
+                             // in the "infoSettingsReset()" function
 
-extern int32_t TSC_Para[7];        //
-extern SETTINGS infoSettings;  //
+
+extern int32_t TSC_Para[7];
+extern SETTINGS infoSettings;
 
 enum{
  PARA_TSC_EXIST = (1 << 0),
@@ -13,7 +16,7 @@ enum{
 };
 uint8_t paraStatus = 0;
 
-void wordToByte(u32 word, u8 *bytes)  //
+void wordToByte(u32 word, u8 *bytes)
 {
   u8 len = 4;
   u8 i = 0;
@@ -71,7 +74,7 @@ void readStoredPara(void)
   infoSettings.baudrate             = byteToWord(data + (index += 4), 4);
   infoSettings.language             = byteToWord(data + (index += 4), 4);
   infoSettings.mode                 = byteToWord(data + (index += 4), 4);
-  infoSettings.unified_menu         = byteToWord(data + (index += 4), 4);
+  infoSettings.status_screen        = byteToWord(data + (index += 4), 4);
 
   infoSettings.bg_color             = byteToWord(data + (index += 4), 4);
   infoSettings.font_color           = byteToWord(data + (index += 4), 4);
@@ -81,23 +84,33 @@ void readStoredPara(void)
   infoSettings.status_xyz_bg_color  = byteToWord(data + (index += 4), 4);
   infoSettings.list_border_color    = byteToWord(data + (index += 4), 4);
   infoSettings.list_button_color    = byteToWord(data + (index += 4), 4);
+  infoSettings.mesh_min_color       = byteToWord(data + (index += 4), 4);
+  infoSettings.mesh_max_color       = byteToWord(data + (index += 4), 4);
 
-  infoSettings.silent               = byteToWord(data + (index += 4), 4);
+  infoSettings.touchSound           = byteToWord(data + (index += 4), 4);
+  infoSettings.toastSound           = byteToWord(data + (index += 4), 4);
+  infoSettings.alertSound           = byteToWord(data + (index += 4), 4);
+
   infoSettings.terminalACK          = byteToWord(data + (index += 4), 4);
   infoSettings.move_speed           = byteToWord(data + (index += 4), 4);
   infoSettings.knob_led_color       = byteToWord(data + (index += 4), 4);
+  infoSettings.knob_led_idle        = byteToWord(data + (index += 4), 4);
   infoSettings.persistent_info      = byteToWord(data + (index += 4), 4);
   infoSettings.file_listmode        = byteToWord(data + (index += 4), 4);
+  infoSettings.ack_notification     = byteToWord(data + (index += 4), 4);
 
   infoSettings.lcd_brightness       = byteToWord(data + (index += 4), 4);
   infoSettings.lcd_idle_brightness  = byteToWord(data + (index += 4), 4);
   infoSettings.lcd_idle_timer       = byteToWord(data + (index += 4), 4);
+
+  infoSettings.xy_offset_probing    = byteToWord(data + (index += 4), 4);
 
   infoSettings.serial_alwaysOn            = byteToWord(data + (index += 4), 4);
   infoSettings.marlin_mode_bg_color       = byteToWord(data + (index += 4), 4);
   infoSettings.marlin_mode_font_color     = byteToWord(data + (index += 4), 4);
   infoSettings.marlin_mode_showtitle      = byteToWord(data + (index += 4), 4);
   infoSettings.marlin_mode_fullscreen     = byteToWord(data + (index += 4), 4);
+  infoSettings.marlin_type                = byteToWord(data + (index += 4), 4);
 
   infoSettings.send_start_gcode     = byteToWord(data + (index += 4), 4);
   infoSettings.send_end_gcode       = byteToWord(data + (index += 4), 4);
@@ -124,6 +137,7 @@ void readStoredPara(void)
   infoSettings.chamber_en           = byteToWord(data + (index += 4), 4);
   infoSettings.ext_count            = byteToWord(data + (index += 4), 4);
   infoSettings.fan_count            = byteToWord(data + (index += 4), 4);
+  infoSettings.fan_ctrl_count       = byteToWord(data + (index += 4), 4);
   infoSettings.auto_load_leveling   = byteToWord(data + (index += 4), 4);
   infoSettings.onboardSD            = byteToWord(data + (index += 4), 4);
   infoSettings.m27_refresh_time     = byteToWord(data + (index += 4), 4);
@@ -200,7 +214,7 @@ void storePara(void)
   wordToByte(infoSettings.baudrate,                   data + (index += 4));
   wordToByte(infoSettings.language,                   data + (index += 4));
   wordToByte(infoSettings.mode,                       data + (index += 4));
-  wordToByte(infoSettings.unified_menu,               data + (index += 4));
+  wordToByte(infoSettings.status_screen,              data + (index += 4));
 
   wordToByte(infoSettings.bg_color,                   data + (index += 4));
   wordToByte(infoSettings.font_color,                 data + (index += 4));
@@ -210,23 +224,33 @@ void storePara(void)
   wordToByte(infoSettings.status_xyz_bg_color,        data + (index += 4));
   wordToByte(infoSettings.list_border_color,          data + (index += 4));
   wordToByte(infoSettings.list_button_color,          data + (index += 4));
+  wordToByte(infoSettings.mesh_min_color,             data + (index += 4));
+  wordToByte(infoSettings.mesh_max_color,             data + (index += 4));
 
-  wordToByte(infoSettings.silent,                     data + (index += 4));
+  wordToByte(infoSettings.touchSound,                 data + (index += 4));
+  wordToByte(infoSettings.toastSound,                 data + (index += 4));
+  wordToByte(infoSettings.alertSound,                 data + (index += 4));
+
   wordToByte(infoSettings.terminalACK,                data + (index += 4));
   wordToByte(infoSettings.move_speed,                 data + (index += 4));
   wordToByte(infoSettings.knob_led_color,             data + (index += 4));
+  wordToByte(infoSettings.knob_led_idle,              data + (index += 4));
   wordToByte(infoSettings.persistent_info,            data + (index += 4));
   wordToByte(infoSettings.file_listmode,              data + (index += 4));
+  wordToByte(infoSettings.ack_notification,           data + (index += 4));
 
   wordToByte(infoSettings.lcd_brightness,             data + (index += 4));
   wordToByte(infoSettings.lcd_idle_brightness,        data + (index += 4));
   wordToByte(infoSettings.lcd_idle_timer,             data + (index += 4));
+
+  wordToByte(infoSettings.xy_offset_probing,          data + (index += 4));
 
   wordToByte(infoSettings.serial_alwaysOn,            data + (index += 4));
   wordToByte(infoSettings.marlin_mode_bg_color,       data + (index += 4));
   wordToByte(infoSettings.marlin_mode_font_color,     data + (index += 4));
   wordToByte(infoSettings.marlin_mode_showtitle,      data + (index += 4));
   wordToByte(infoSettings.marlin_mode_fullscreen,     data + (index += 4));
+  wordToByte(infoSettings.marlin_type,                data + (index += 4));
 
   wordToByte(infoSettings.send_start_gcode,           data + (index += 4));
   wordToByte(infoSettings.send_end_gcode,             data + (index += 4));
@@ -253,6 +277,7 @@ void storePara(void)
   wordToByte(infoSettings.chamber_en,                 data + (index += 4));
   wordToByte(infoSettings.ext_count,                  data + (index += 4));
   wordToByte(infoSettings.fan_count,                  data + (index += 4));
+  wordToByte(infoSettings.fan_ctrl_count,             data + (index += 4));
   wordToByte(infoSettings.auto_load_leveling,         data + (index += 4));
   wordToByte(infoSettings.onboardSD,                  data + (index += 4));
   wordToByte(infoSettings.m27_refresh_time,           data + (index += 4));

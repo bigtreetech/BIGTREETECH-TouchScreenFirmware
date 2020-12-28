@@ -1,12 +1,14 @@
 #ifndef _SELECTMODE_H_
 #define _SELECTMODE_H_
 
-#include "GUI.h"
-#include "stdint.h"
-#include "stdbool.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-#define IDLE_TOUCH	0xFFFF
-#define SELECTMODE 2
+#include <stdint.h>
+#include <stdbool.h>
+#include "GUI.h"
+
 typedef enum
 {
   MKEY_0 = 0,
@@ -16,11 +18,11 @@ typedef enum
 
 extern bool skipMode;
 
-//select mode fun
-void show_selectICON(void);
-MKEY_VALUES MKeyGetValue(void);
-void selectmode(int8_t  nowMode);
 void menuMode(void);
 void loopCheckMode(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

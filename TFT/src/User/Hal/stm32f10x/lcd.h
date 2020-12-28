@@ -19,7 +19,7 @@
   #define LCD_WR_DATA(data)  do{ LCD->LCD_RAM = data; }while(0)
 
 #else
-  #if defined(MKS_32_V1_4)
+  #if defined(MKS_32_V1_4) || defined (MKS_28_V1_0)
   /*
   #define LCD_WR PB14
   #define LCD_RS PD13

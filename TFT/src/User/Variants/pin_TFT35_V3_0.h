@@ -78,13 +78,33 @@
 // ST7920 Simulator SPI pins
 #define ST7920_SPI    _SPI2
 
+// HD44780 Simulator pins
+#define LCD2004_simulator
+#ifdef LCD2004_simulator
+  #define LCD_EN      PB15
+  #define LCD_RS      PB12
+  #define LCD_D4      PB13
+  #define LCD_D5      PB14
+  #define LCD_D6      PC7
+  #define LCD_D7      PC6
+  #define LCD_D4_PIN  GPIO_Pin_13
+  #define LCD_D5_PIN  GPIO_Pin_14
+  #define LCD_D6_PIN  GPIO_Pin_7
+  #define LCD_D7_PIN  GPIO_Pin_6
+  #define LCD_D4_PORT GPIOB
+  #define LCD_D5_PORT GPIOB
+  #define LCD_D6_PORT GPIOC
+  #define LCD_D7_PORT GPIOC
+#endif
+
 // Buzzer support
 #define BUZZER_PIN    PD13
 
 // LCD Encoder support
-#define LCD_ENCA_PIN  PA8
-#define LCD_ENCB_PIN  PC9
-#define LCD_BTN_PIN   PC8
+#define LCD_ENCA_PIN    PA8
+#define LCD_ENCB_PIN    PC9
+#define LCD_BTN_PIN     PC8
+#define LCD_ENC_EN_PIN  PC6
 
 // U disk support
 #define U_DISK_SUPPORT
@@ -95,8 +115,15 @@
   #define PS_ON_PIN      PC12 // The string on TFT35 V3.0 board(PA12) is wrong, PC12 is the correct IO
 #endif
 #ifndef FIL_RUNOUT_PIN
-  #define FIL_RUNOUT_PIN PA15
+  #define FIL_RUNOUT_PIN PA15     //Extruder T0
 #endif
+
+// #define FIL_RUNOUT_PIN_1 PC12     //Extruder T1  Attention: Is the same pin as PS_ON.
+// #define FIL_RUNOUT_PIN_2 PB10     //Extruder T2             Is the same pin as USART3 TX.
+// #define FIL_RUNOUT_PIN_3 PB11     //Extruder T3             Is the same pin as USART3 RX.
+// #define FIL_RUNOUT_PIN_4 PA0      //Extruder T4             Is the same pin as USART4 TX.
+// #define FIL_RUNOUT_PIN_5 PA1      //Extruder T5             Is the same pin as USART4 RX.
+
 
 //#define LED_COLOR_PIN PC7
 
