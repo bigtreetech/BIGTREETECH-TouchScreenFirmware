@@ -42,8 +42,8 @@ MENUITEMS moveItems = {
 
 
 static u8 item_moveLen_index = 1;
-static u32 nextTime = 0;
-static u32 update_time = 500; // 1 seconds is 1000
+static u32 nextGantryTime = 0;
+static u32 update_gantry_time = 500; // 1 seconds is 1000
 
 AXIS nowAxis = X_AXIS;
 
@@ -164,11 +164,11 @@ void menuMove(void)
 
 void update_gantry(void)
 {
-  if (OS_GetTimeMs() > nextTime)
+  if (OS_GetTimeMs() > nextGantryTime)
   {
     coordinateQuery();
     drawXYZ();
-    nextTime = OS_GetTimeMs() + update_time;
+    nextGantryTime = OS_GetTimeMs() + update_gantry_time;
   }
 }
 

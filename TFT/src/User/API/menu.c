@@ -662,7 +662,7 @@ KEY_VALUES menuKeyGetValue(void)
   KEY_VALUES tempkey = KEY_IDLE;
   if (menuType == MENU_TYPE_ICON)
   {
-    if (infoMenu.menu[infoMenu.cur] == menuStatus)
+    if((infoMenu.menu[infoMenu.cur] == menuStatus) || ((infoMenu.menu[infoMenu.cur] == menuPrinting) && !isPrinting()))
     {
       tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keySS), rect_of_keySS);
     }

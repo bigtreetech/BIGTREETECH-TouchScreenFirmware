@@ -29,11 +29,11 @@ void PS_ON_Off(void)
 // Filament runout detect
 #ifdef FIL_RUNOUT_PIN
 
-static bool update_waiting = false;
+static bool update_PosE_waiting = false;
 /* Set whether we need to query the current position */
 void positionSetUpdateWaiting(bool isWaiting)
 {
-  update_waiting = isWaiting;
+  update_PosE_waiting = isWaiting;
 }
 
 void FIL_Runout_Init(void)
@@ -59,14 +59,14 @@ void FIL_Runout_Init(void)
 bool FIL_RunoutPinFilteredLevel(void)
 {
   static bool rst = false;
-  static u32 nextTime = 0;
+  static u32 nextRunoutTime = 0;
   static u32 trueTimes = 0;
   static u32 falseTimes = 0;
 
-  if (OS_GetTimeMs() > nextTime)
+  if (OS_GetTimeMs() > nextRunoutTime)
   {
     rst = trueTimes > falseTimes ? true : false;
-    nextTime = OS_GetTimeMs() + infoSettings.runout_noise_ms ;
+    nextRunoutTime = OS_GetTimeMs() + infoSettings.runout_noise_ms ;
     trueTimes = 0;
     falseTimes = 0;
   }
@@ -117,9 +117,10 @@ bool FIL_RunoutPinFilteredLevel(void)
   return rst;
 }
 
+
+static u32 update_PosE_time = 2000;
 // Use an encoder disc to toggles the runout
 // Suitable for BigTreeTech Smart Filament Sensor
-static uint32_t update_time = 2000;
 static uint8_t SFS_IsAlive = false;
 
 void FIL_SFS_SetAlive(uint8_t alive)
@@ -131,29 +132,28 @@ bool FIL_SmartRunoutDetect(void)
 {
   static float lastExtrudePosition = 0.0f;
   static uint8_t lastRunoutPinLevel = 0;
-  static uint32_t nextTime = 0;
+  static u32  nextRunoutTime = 0;
 
   bool pinLevel = FIL_RunoutPinFilteredLevel();
   float actualExtrude = coordinateGetExtruderActual();
 
   do
-  { /* Send M114 E query extrude position continuously */
-    if (update_waiting == true)
+  {  /* Send M114 E query extrude position continuously	*/
+    if(update_PosE_waiting == true)
     {
-      nextTime = OS_GetTimeMs() + update_time;
+      nextRunoutTime = OS_GetTimeMs() + update_PosE_time;
       break;
     }
-    if (OS_GetTimeMs() < nextTime)
+    if (OS_GetTimeMs() < nextRunoutTime)
       break;
     if (requestCommandInfoIsRunning()) //to avoid colision in Gcode response processing
       break;
     if (storeCmd("M114 E\n") == false)
       break;
 
-    nextTime = OS_GetTimeMs() + update_time;
-    update_waiting = true;
-  }
-  while(0);
+    nextRunoutTime = OS_GetTimeMs() + update_PosE_time;
+    update_PosE_waiting = true;
+  } while(0);
 
   if (SFS_IsAlive == false)
   {
@@ -209,12 +209,22 @@ void loopBackEndFILRunoutDetect(void)
 
 void loopFrontEndFILRunoutDetect(void)
 {
-  if (!getPrintRunout()) return;
+  static uint32_t nextTime = 0;
+  #define ALARM_REMINDER_TIME 10000
+  if (!getPrintRunout() && !getRunoutAlarm()) return;
 
-  if (setPrintPause(true,false))
+  if (setPrintPause(true,false) && !getRunoutAlarm())
   {
     setPrintRunout(false);
-    popupReminder(DIALOG_TYPE_ERROR, LABEL_WARNING, LABEL_FILAMENT_RUNOUT);
+    setRunoutAlarmTrue();
+    setDialogText(LABEL_WARNING, LABEL_FILAMENT_RUNOUT, LABEL_CONFIRM, LABEL_BACKGROUND);
+    showDialog(DIALOG_TYPE_ALERT, setRunoutAlarmFalse, NULL, NULL);
+  } 
+
+  if ((OS_GetTimeMs() > nextTime) && (getRunoutAlarm() == true))
+  {
+    BUZZER_PLAY(sound_error);
+    nextTime = OS_GetTimeMs() + ALARM_REMINDER_TIME;
   }
 }
 

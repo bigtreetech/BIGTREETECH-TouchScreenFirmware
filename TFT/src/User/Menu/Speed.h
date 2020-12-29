@@ -10,6 +10,11 @@ extern "C" {
 
 void setSpeedItemIndex(uint8_t index);
 void menuSpeed(void);
+typedef struct
+{
+    uint8_t cur;
+    uint8_t set;
+}LASTSPEED;
 
 #ifdef __cplusplus
 }

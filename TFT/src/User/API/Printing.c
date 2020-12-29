@@ -4,29 +4,25 @@
 
 PRINTING infoPrinting;
 
-static bool update_waiting = false;
+bool filamentRunoutAlarm;
 
-static float filament_used;
+static bool updateM27_waiting = false;
 static float last_E_pos;
 
-void resetFilamentUsed(void)
+void initEpos(void)
 {
-  filament_used = 0;
   last_E_pos = ((infoFile.source == BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
 }
 
 void updateFilamentUsed(void)
 {
   float E_pos = ((infoFile.source == BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
-  if ((E_pos + 20) < last_E_pos) //Check whether E position reset. If retract more than 20mm, false filament used values would be calculated.
+  if ((E_pos + MAX_RETRACT_LIMIT) < last_E_pos) //Check whether E position reset (G92 E0)
   {
-    filament_used = filament_used + E_pos;
-    last_E_pos = E_pos;
-  } else if (E_pos > last_E_pos)
-  {
-    filament_used = filament_used + (E_pos - last_E_pos);
-    last_E_pos = E_pos;
+    last_E_pos = 0; 
   }
+  filData.length += (E_pos - last_E_pos) / 1000;
+  last_E_pos = E_pos;
 }
 
 //
@@ -92,6 +88,21 @@ void setPrintRunout(bool runout)
   infoPrinting.runout = runout;
 }
 
+void setRunoutAlarmTrue(void)
+{
+  filamentRunoutAlarm = true;
+}
+
+void setRunoutAlarmFalse(void)
+{
+  filamentRunoutAlarm = false;
+}
+
+bool getRunoutAlarm(void)
+{
+  return filamentRunoutAlarm;
+}
+
 void setPrintModelIcon(bool exist)
 {
   infoPrinting.model_icon = exist;
@@ -114,7 +125,7 @@ uint32_t getPrintTime(void)
 
 void printSetUpdateWaiting(bool isWaiting)
 {
-  update_waiting = isWaiting;
+  updateM27_waiting = isWaiting;
 }
 
 //only return gcode file name except path
@@ -177,8 +188,12 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
     case TFT_UDISK:
     case TFT_SD:
       infoPrinting.pause = is_pause;
-      if(infoPrinting.pause == true && is_m0pause == false){
-      while (infoCmd.count != 0) {loopProcess();}
+      if(infoPrinting.pause == true && is_m0pause == false)
+      {
+        while (infoCmd.count != 0)
+        {
+            loopProcess();
+        }
       }
 
       bool isCoorRelative = coorGetRelative();
@@ -244,7 +259,6 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
   return true;
 }
 
-
 void exitPrinting(void)
 {
   memset(&infoPrinting, 0, sizeof(PRINTING));
@@ -256,7 +270,6 @@ void endPrinting(void)
   switch (infoFile.source)
   {
     case BOARD_SD:
-      request_M27(0);
       break;
 
     case TFT_UDISK:
@@ -267,20 +280,9 @@ void endPrinting(void)
   infoPrinting.printing = infoPrinting.pause = false;
   powerFailedClose();
   powerFailedDelete();
-  if((infoFile.source != BOARD_SD) && (infoSettings.send_end_gcode == 1))
+  if(infoSettings.send_end_gcode == 1)
   {
     sendPrintCodes(1);
-  }
-  if (infoSettings.print_summary)
-  {
-    infoMenu.cur = 0;
-    char tempstr[140];
-    u8 hour = infoPrinting.time / 3600;
-    u8 min = infoPrinting.time % 3600 / 60;
-    u8 sec = infoPrinting.time % 60;
-    sprintf(tempstr, (char *)textSelect(LABEL_PRINT_SUMMARY), hour, min, sec, filament_used / 1000);
-    resetFilamentUsed();
-    popupReminder(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, (u8 *)tempstr);
   }
 }
 
@@ -370,7 +372,7 @@ void getGcodeFromFile(void)
   u8      sd_count = 0;
   UINT    br = 0;
 
-  if(isPrinting()==false || infoFile.source == BOARD_SD)  return;
+  if(isPrinting() == false || infoFile.source == BOARD_SD)  return;
 
   powerFailedCache(infoPrinting.file.fptr);
 
@@ -423,17 +425,20 @@ void getGcodeFromFile(void)
 
 void breakAndContinue(void)
 {
-   Serial_Puts(SERIAL_PORT, "M108\n");
+  setRunoutAlarmFalse();
+  Serial_Puts(SERIAL_PORT, "M108\n");
 }
 
 void resumeAndPurge(void)
 {
-   Serial_Puts(SERIAL_PORT, "M876 S0\n");
+  setRunoutAlarmFalse();
+  Serial_Puts(SERIAL_PORT, "M876 S0\n");
 }
 
 void resumeAndContinue(void)
 {
-   Serial_Puts(SERIAL_PORT, "M876 S1\n");
+  setRunoutAlarmFalse();
+  Serial_Puts(SERIAL_PORT, "M876 S1\n");
 }
 
 bool hasPrintingMenu(void)
@@ -458,26 +463,25 @@ void loopCheckPrinting(void)
       infoMenu.menu[++infoMenu.cur] = menuPrinting;
     }
   }
-
-  if (!infoPrinting.printing && (infoMenu.menu[infoMenu.cur] == menuPrinting) && infoSettings.print_summary)
-  {
-    infoMenu.cur = 0;
-  }
-
+    
   if (infoFile.source != BOARD_SD) return;
   if (infoMachineSettings.autoReportSDStatus == ENABLED) return;
   if (!infoSettings.m27_active && !infoPrinting.printing) return;
 
-  static uint32_t  nextTime=0;
-  uint32_t update_time = infoSettings.m27_refresh_time * 1000;
+  static uint32_t  nextCheckPrintTime=0;
+  uint32_t update_M27_time = infoSettings.m27_refresh_time * 1000;
   do
   {  /* WAIT FOR M27  */
-    if(update_waiting == true) {nextTime = OS_GetTimeMs() + update_time; break;}
-    if(OS_GetTimeMs() < nextTime) break;
-
-    if(storeCmd("M27\n") == false) break;
-
-    nextTime = OS_GetTimeMs() + update_time;
-    update_waiting = true;
+    if(updateM27_waiting == true)
+    {
+      nextCheckPrintTime = OS_GetTimeMs() + update_M27_time;
+      break;
+    }
+    if(OS_GetTimeMs() < nextCheckPrintTime)
+      break;
+    if(storeCmd("M27\n") == false)
+      break;
+    nextCheckPrintTime = OS_GetTimeMs() + update_M27_time;
+    updateM27_waiting = true;
   }while(0);
 }

@@ -30,12 +30,18 @@ const GUI_RECT printinfo_val_rect[6] = {
         START_X + PICON_LG_WIDTH*2 + PICON_SPACE_X*2 + PICON_VAL_SM_EX,     ICON_START_Y + PICON_HEIGHT*1 + PICON_SPACE_Y*1 + PICON_VAL_Y + BYTE_HEIGHT},
 };
 
-static uint32_t nextToggleTime = 0;
+static uint32_t nextInfoTime = 0;
 static uint32_t nextDrawTime = 0;
-const char *const Speed_ID[2] = {"Speed","Flow"};
+const  char *const Speed_ID[2] = {"Speed","Flow"};
+static char filamentInfo[150];
+bool filDataSeen;
+SCROLL infoScroll;
+FILAMENTDATA filData = {"", 0, 0, 0, 0};
 
-#define TOGGLE_TIME 2000; // 1 seconds is 1000
-#define DRAW_TIME 500; // 1 seconds is 1000
+#define TOGGLE_TIME 2000 // 1 seconds is 1000
+#define DRAW_TIME 500 // 1 seconds is 1000
+
+#define MAX_FILE_CHAR 25 // max character length to store 
 
 #define LAYER_TITLE "Layer"
 #define EXT_ICON_POS  0
@@ -51,8 +57,12 @@ const ITEM itemIsPause[2] = {
   {ICON_RESUME,               LABEL_RESUME},
 };
 
-const ITEM itemIsPrinting[2] = {
+const ITEM itemIsPrinting[6] = {
 // icon                       label
+  {ICON_BACKGROUND,           LABEL_BACKGROUND},
+  {ICON_MAINMENU,             LABEL_MAIN_SCREEN},
+  {ICON_BABYSTEP,             LABEL_BABYSTEP},
+  {ICON_MORE,                 LABEL_MORE},
   {ICON_BACK,                 LABEL_BACK},
   {ICON_STOP,                 LABEL_STOP},
 };
@@ -121,11 +131,11 @@ void menuBeforePrinting(void)
   }
   infoPrinting.printing = true;
   infoPrinting.time = 0;
-  if (infoSettings.print_summary)
-  {
-    resetFilamentUsed();
-  }
   infoMenu.menu[infoMenu.cur] = menuPrinting;
+  infoPrinting.time = 0;
+  filData = (FILAMENTDATA) {"", 0, 0, 0, 0};
+  filDataSeen = false;
+  initEpos();
 }
 
 static inline void reValueNozzle(int icon_pos)
@@ -177,7 +187,7 @@ static inline void reDrawSpeed(int icon_pos)
     ICON_ReadDisplay(printinfo_points[icon_pos].x,printinfo_points[icon_pos].y,ICON_PRINTING_FLOW);
 
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-  sprintf(tempstr, "%d%%", speedGetPercent(currentSpeedID));
+  sprintf(tempstr, "%d%%", speedGetCurPercent(currentSpeedID));
   GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (u8 *)Speed_ID[currentSpeedID]);
   GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (u8 *)tempstr);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
@@ -185,9 +195,9 @@ static inline void reDrawSpeed(int icon_pos)
 
 static inline void reDrawTime(int icon_pos)
 {
-  u8 hour = infoPrinting.time/3600;
-  u8 min = infoPrinting.time%3600/60;
-  u8 sec = infoPrinting.time%60;
+  u8  hour = infoPrinting.time / 3600,
+      min = infoPrinting.time % 3600 / 60,
+      sec = infoPrinting.time % 60;
 
   GUI_SetNumMode(GUI_NUMMODE_ZERO);
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
@@ -224,9 +234,9 @@ static inline void reDrawLayer(int icon_pos)
   }
 }
 
-static inline void toggleinfo(void)
+static inline void toggleInfo(void)
 {
-  if (OS_GetTimeMs() > nextToggleTime)
+  if (OS_GetTimeMs() > nextInfoTime)
   {
     if (infoSettings.hotend_count > 1)
     {
@@ -241,17 +251,15 @@ static inline void toggleinfo(void)
       rapid_serial_loop();   //perform backend printing loop before drawing to avoid printer idling
       reDrawFan(FAN_ICON_POS);
     }
-
     currentSpeedID = (currentSpeedID + 1) % 2;
-    nextToggleTime = OS_GetTimeMs() + TOGGLE_TIME;
+    nextInfoTime = OS_GetTimeMs() + TOGGLE_TIME;
     rapid_serial_loop();   //perform backend printing loop before drawing to avoid printer idling
     reDrawSpeed(SPD_ICON_POS);
     speedQuery();
-    if (infoFile.source == BOARD_SD) coordinateQuery();
-    if (infoSettings.print_summary)
-    {
+    if (infoFile.source == BOARD_SD)
+      coordinateQuery();
+    if (!filDataSeen && isPrinting())
       updateFilamentUsed();
-    }
   }
 }
 
@@ -267,31 +275,133 @@ static inline void printingDrawPage(void)
   reDrawSpeed(SPD_ICON_POS);
 }
 
+void drawPrintInfo(void)
+{
+  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
+
+  ICON_CustomReadDisplay(rect_of_keySS[17].x0, rect_of_keySS[17].y0, INFOBOX_ADDR);
+  GUI_SetColor(INFOMSG_BKCOLOR);
+  GUI_DispString(rect_of_keySS[17].x0 + STATUS_MSG_ICON_XOFFSET, rect_of_keySS[17].y0 + STATUS_MSG_ICON_YOFFSET, IconCharSelect(ICONCHAR_INFO));
+  GUI_DispStringInRectEOL(rect_of_keySS[17].x0 + BYTE_HEIGHT + STATUS_MSG_TITLE_XOFFSET, rect_of_keySS[17].y0 + STATUS_MSG_ICON_YOFFSET, rect_of_keySS[17].x1 - BYTE_HEIGHT + STATUS_MSG_TITLE_XOFFSET, rect_of_keySS[17].y1 - STATUS_MSG_ICON_YOFFSET, (uint8_t *) textSelect(LABEL_PRINT_FINISHED));
+  GUI_SetBkColor(INFOMSG_BKCOLOR);
+  GUI_FillPrect(&msgRect);
+
+  Scroll_CreatePara(&infoScroll, (u8 *)filamentInfo, &msgRect);
+
+  GUI_RestoreColorDefault();
+}
+
+void scrollInfo(void)
+{
+  GUI_SetBkColor(INFOMSG_BKCOLOR);
+  GUI_SetColor(INFOMSG_COLOR);
+  Scroll_DispString(&infoScroll,CENTER);
+  GUI_RestoreColorDefault();
+}
 
 void stopConfirm(void)
 {
   abortPrinting();
-  if (!infoSettings.print_summary)
+  infoMenu.cur--;
+}
+
+void printFinished(void)
+{
+  char tempstr[30];
+  strcpy(filamentInfo, "");
+
+  if (strlen((char *)getCurGcodeName(infoFile.title)) > MAX_FILE_CHAR)
   {
-    --infoMenu.cur;
+    strncpy(filData.name, (char *)getCurGcodeName(infoFile.title), MAX_FILE_CHAR);
+    strcat(filData.name, "~");
+  } else
+      strcpy(filData.name, (char *)getCurGcodeName(infoFile.title));
+
+  filData.time = infoPrinting.time;
+
+  if (speedGetCurPercent(1) != 100)
+  {
+    filData.length = (filData.length * speedGetCurPercent(1)) / 100;  // multiply by flow percentage
+    filData.weight = (filData.weight * speedGetCurPercent(1)) / 100;  // multiply by flow percentage
+    filData.cost   = (filData.cost   * speedGetCurPercent(1)) / 100;  // multiply by flow percentage
   }
+  if (filData.length != 0)
+  {
+    sprintf(tempstr, (char*)textSelect(LABEL_FILAMENT_LENGTH), filData.length);
+    strcat(filamentInfo, tempstr);
+  }
+  if (filData.weight != 0)
+  {
+    sprintf(tempstr, (char*)textSelect(LABEL_FILAMENT_WEIGHT), filData.weight);
+    if (strlen(filamentInfo) > 0) 
+      strcat(filamentInfo, ",  ");
+    strcat(filamentInfo, tempstr);
+  }
+  if (filData.cost != 0)
+  {
+    sprintf(tempstr, (char*)textSelect(LABEL_FILAMENT_COST), filData.cost);
+    if (strlen (filamentInfo) > 0) 
+      strcat(filamentInfo, ",  ");
+    strcat(filamentInfo, tempstr);
+  }
+  if (strlen (filamentInfo) == 0)
+    strcpy(filamentInfo, (char*)textSelect(LABEL_NO_FILAMENT_STATS));
+  
+  strcat(filamentInfo, "  ");
+  strcat(filamentInfo, (char*)textSelect(LABEL_CLICK_FOR_MORE));  
+  drawPrintInfo();
+}
+
+void printInfoPopup(void)
+{
+  uint8_t hour = filData.time / 3600;
+  uint8_t min = filData.time % 3600 / 60;
+  uint8_t sec = filData.time % 60;
+  char showInfo[150];
+  char tempstr[30];
+
+  strcpy(showInfo, (char*)textSelect(LABEL_FILE_NAME));
+  strcat(showInfo, filData.name);
+  strcat(showInfo, "\n");
+  strcat(showInfo, (char*)textSelect(LABEL_PRINT_TIME));
+  sprintf(tempstr, "%02u:%02u:%02u", hour, min, sec);
+  strcat(showInfo, tempstr);
+  if (filData.length > 0)
+  {
+    sprintf(tempstr, (char*)textSelect(LABEL_FILAMENT_LENGTH), filData.length);
+    strcat(showInfo, "\n");
+    strcat(showInfo, tempstr);
+  }
+  if (filData.weight > 0)
+  {
+    sprintf(tempstr, (char*)textSelect(LABEL_FILAMENT_WEIGHT), filData.weight);
+    strcat(showInfo, "\n");
+    strcat(showInfo, tempstr);
+  }
+  if (filData.cost > 0)
+  {
+    sprintf(tempstr, (char*)textSelect(LABEL_FILAMENT_COST), filData.cost);
+    strcat(showInfo, "\n");
+    strcat(showInfo, tempstr);
+  }
+  popupReminder(DIALOG_TYPE_INFO, LABEL_INFO, (uint8_t *) showInfo);
 }
 
 void menuPrinting(void)
 {
   //1title, ITEM_PER_PAGE item(icon + label)
   MENUITEMS printingItems = {
-    // title
-    LABEL_BACKGROUND,
-    // icon                         label
-    {{ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BABYSTEP,                LABEL_BABYSTEP},
-     {ICON_PAUSE,                   LABEL_PAUSE},
-     {ICON_MORE,                    LABEL_MORE},
-     {ICON_STOP,                    LABEL_STOP},}
+  //  title
+  LABEL_BACKGROUND,
+  // icon                       label
+   {{ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND}}
   };
 
   uint8_t   nowFan[MAX_FAN_COUNT] = {0};
@@ -304,11 +414,23 @@ void menuPrinting(void)
   memset(&nowHeat, 0, sizeof(HEATER));
 
   printingItems.title.address = getCurGcodeName(infoFile.title);
-  printingItems.items[KEY_ICON_4].icon = (infoFile.source != BOARD_SD && infoPrinting.model_icon) ? ICON_PREVIEW : ICON_BABYSTEP;
-  printingItems.items[KEY_ICON_5] = itemIsPause[isPause()];
-  printingItems.items[KEY_ICON_7] = itemIsPrinting[lastPrinting];
+  if (lastPrinting == false) 
+  {
+    printingItems.items[KEY_ICON_4] = itemIsPrinting[1];
+    printingItems.items[KEY_ICON_5].icon = itemIsPrinting[0].icon;
+  }
+  else
+  {
+    printingItems.items[KEY_ICON_4] = itemIsPause[isPause()];
+    printingItems.items[KEY_ICON_5].icon = (infoFile.source != BOARD_SD && infoPrinting.model_icon) ? ICON_PREVIEW : ICON_BABYSTEP;
+  }
+  printingItems.items[KEY_ICON_5].label = itemIsPrinting[lastPrinting * 2].label;
+  printingItems.items[KEY_ICON_6] = itemIsPrinting[lastPrinting * 3];
+  printingItems.items[KEY_ICON_7] = itemIsPrinting[lastPrinting + 4];
   menuDrawPage(&printingItems);
   printingDrawPage();
+  if (lastPrinting == false) 
+    drawPrintInfo();
 
 
   while(infoMenu.menu[infoMenu.cur] == menuPrinting)
@@ -373,44 +495,73 @@ void menuPrinting(void)
     }
 
     //check change in speed or flow
-    if(curspeed[currentSpeedID] != speedGetPercent(currentSpeedID))
+    if(curspeed[currentSpeedID] != speedGetCurPercent(currentSpeedID))
     {
-      curspeed[currentSpeedID] = speedGetPercent(currentSpeedID);
+      curspeed[currentSpeedID] = speedGetCurPercent(currentSpeedID);
       rapid_serial_loop();  //perform backend printing loop before drawing to avoid printer idling
       reDrawSpeed(SPD_ICON_POS);
     }
 
+    // check if print is paused
     if (lastPause != isPause())
     {
       lastPause = isPause();
-      printingItems.items[KEY_ICON_5] = itemIsPause[lastPause];
-      menuDrawItem(&printingItems.items[KEY_ICON_5], KEY_ICON_5);
+      printingItems.items[KEY_ICON_4] = itemIsPause[lastPause];
+      menuDrawItem(&printingItems.items[KEY_ICON_4], KEY_ICON_4);
     }
 
+    // check if print is just finished
     if (lastPrinting != isPrinting())
     {
       lastPrinting = isPrinting();
-      printingItems.items[KEY_ICON_7] = itemIsPrinting[lastPrinting];
+      if (lastPrinting == true)  // print is ongoing
+      {
+        printingItems.items[KEY_ICON_4] = itemIsPause[lastPause];
+      }
+      else
+      {
+        printingItems.items[KEY_ICON_4] = itemIsPrinting[1];
+      }
+      menuDrawItem(&printingItems.items[KEY_ICON_4], KEY_ICON_4);
+      printingItems.items[KEY_ICON_5] = itemIsPrinting[lastPrinting * 2];
+      menuDrawItem(&printingItems.items[KEY_ICON_5], KEY_ICON_5);
+      printingItems.items[KEY_ICON_6] = itemIsPrinting[lastPrinting * 3];
+      menuDrawItem(&printingItems.items[KEY_ICON_6], KEY_ICON_6);
+      printingItems.items[KEY_ICON_7] = itemIsPrinting[lastPrinting + 4];
       menuDrawItem(&printingItems.items[KEY_ICON_7], KEY_ICON_7);
+      if (lastPrinting == false)  // printing finished
+      {
+        printFinished();
+      }
     }
 
-    toggleinfo();
+    if (!isPrinting())
+      scrollInfo();
+
+    toggleInfo();
 
     KEY_VALUES key_num = menuKeyGetValue();
     switch(key_num)
     {
       case KEY_ICON_4:
-        infoMenu.menu[++infoMenu.cur] = menuBabystep;
+        if(isPrinting())
+        {
+          setPrintPause(!isPause(), false);
+        }
+        else
+        {
+          infoMenu.cur = 0;
+        }
         break;
 
       case KEY_ICON_5:
-        setPrintPause(!isPause(), false);
+        infoMenu.menu[++infoMenu.cur] = menuBabystep;
         break;
 
       case KEY_ICON_6:
         infoMenu.menu[++infoMenu.cur] = menuMore;
         break;
-
+      
       case KEY_ICON_7:
         if(isPrinting())
         {
@@ -420,15 +571,12 @@ void menuPrinting(void)
         else
         {
           exitPrinting();
-          if (infoSettings.print_summary)
-          {
-            infoMenu.cur = 0;
-          }
-          else 
-          {
-            --infoMenu.cur;
-          }
+          infoMenu.cur--;
         }
+        break;
+
+      case KEY_INFOBOX:
+        printInfoPopup();
         break;
 
       default:
