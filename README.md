@@ -81,7 +81,9 @@ The TFT firmware update is done in three steps described below and includes up t
 
 **STEPS:**
 
-**step1:** Copy your self compiled firmware or the BIGTREE_TFT*_V*.*.*.bin, the TFT*` folder and the config.ini to the root of a blank SD card that is <8GB and formatted as FAT32:
+**step1:** Copy your self compiled firmware or the BIGTREE_TFT*_V*.*.*.bin, plus the TFT*` folder and the config.ini to the root of a blank SD card that is <8GB and formatted as FAT32:
+
+>>>>>>> 089aabc9c27da0d029761aa064daea2b2ede9aaf
 
 ![Firmware](https://user-images.githubusercontent.com/54359396/100600549-b6cffd00-3301-11eb-8b57-d56b7a4422f1.jpg)
 
@@ -179,9 +181,6 @@ See [Customization guides](https://github.com/bigtreetech/BIGTREETECH-TouchScree
 ;MKS_32_V1_4
 ;MKS_32_V1_4_NOBL
 ;MKS_28_V1_0
-
-
-
 
 [platformio]
 src_dir      = TFT
