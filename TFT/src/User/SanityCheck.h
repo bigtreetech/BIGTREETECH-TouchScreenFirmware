@@ -14,6 +14,10 @@
     #error "the Configuration.h is old. please use the latest Configuration.h file"
 #endif
 
+#if BAUDRATE < 0 || BAUDRATE >= BAUDRATE_COUNT
+    #error "invalid Baudrate index. Pleas select a value only from options provided in configuration.h"
+#endif
+
 #ifdef ST7920_SPI
     #ifdef CLEAN_MODE_SWITCHING_SUPPORT
     #error "CLEAN_MODE_SWITCHING_SUPPORT is now SERIAL_ALWAYS_ON. Please update your configuration."
@@ -23,7 +27,7 @@
       #ifdef DEFAULT_LCD_MODE
         #undef DEFAULT_LCD_MODE
       #endif
-      #define DEFAULT_LCD_MODE SERIAL_TSC  // Just set hardcoded here.
+      #define DEFAULT_LCD_MODE MODE_SERIAL_TSC  // Just set hardcoded here.
       //#warning "DEFAULT_LCD_MODE supports only SERIAL_TSC. Please update/check your configuration."
     #endif
 #endif

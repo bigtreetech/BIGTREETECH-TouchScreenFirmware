@@ -17,10 +17,10 @@
  * Mode switching is still possible by holding down the encorder for two seconds.
  *
  * Options:
- * ST7920_SPI // Marlin Mode
- * SERIAL_TSC // Touch Mode
+ * MODE_MARLIN // Marlin Mode
+ * MDOE SERIAL_TSC // Touch Mode
  */
-#define DEFAULT_LCD_MODE SERIAL_TSC
+#define DEFAULT_LCD_MODE MODE_SERIAL_TSC
 
 /**
  * Default Startup Knob LED Color (TFT35 E3)
@@ -109,9 +109,9 @@
  * you commonly experience drop-outs during host printing.
  * You may try up to 1000000 to speed up SD file transfer.
  *
- * :[2400, 9600, 19200, 38400, 57600, 115200, 250000, 500000, 1000000]
+ * :[2400: 0, 9600: 1, 19200: 2, 38400: 3, 57600: 4, 115200: 5, 250000: 6, 500000: 7, 1000000: 8]
  */
-#define BAUDRATE 115200
+#define BAUDRATE 5
 
 /**
  * Default Primary Language (for Touch-Mode only)

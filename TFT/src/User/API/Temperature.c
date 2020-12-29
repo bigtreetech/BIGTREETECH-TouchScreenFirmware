@@ -14,6 +14,7 @@ static bool    heat_update_waiting = false;
 static bool    heat_send_waiting[MAX_HEATER_COUNT];
 
 uint32_t nextHeatCheckTime = 0;
+#define AUTOREPORT_TIMEOUT (nextHeatCheckTime + 3000) // update interval + 3 second grace period
 
 static uint8_t fixHeaterIndex(uint8_t index)
 {
@@ -48,6 +49,9 @@ void heatSetCurrentTemp(uint8_t index, int16_t temp)
 {
   index = fixHeaterIndex(index);
   heater.T[index].current = NOBEYOND(-99, temp, 999);
+
+  if (infoMachineSettings.autoReportTemp)
+    updateNextHeatCheckTime(); // set next timeout for temperature auto-report
 }
 
 // Get current temperature
@@ -209,6 +213,14 @@ void loopCheckHeater(void)
       updateNextHeatCheckTime();
       heat_update_waiting = true;
     } while (0);
+  }
+  else // check temperature auto-report timout and resend M155 command
+  {
+    if (OS_GetTimeMs() > AUTOREPORT_TIMEOUT && !heat_update_waiting)
+    {
+      heat_update_waiting = storeCmd("M155 ");
+      if(heat_update_waiting) updateNextHeatCheckTime();  // set next timeout for temperature auto-report
+    }
   }
 
   // Query the heater that needs to wait for the temperature to rise, whether it reaches the set temperature

@@ -46,6 +46,7 @@
 #include "HD44780_Simulator.h"
 #include "ui_draw.h"
 #include "touch_process.h"
+#include "serialConnection.h"
 #include "interfaceCmd.h"
 #include "coordinate.h"
 #include "ff.h"
@@ -110,8 +111,6 @@
 #include "BLTouch.h"
 #include "ProbeOffset.h"
 #include "PowerFailed.h"
-
-#include "Mode.h"
 
 #include "UnifiedMove.h"
 #include "UnifiedHeat.h"
