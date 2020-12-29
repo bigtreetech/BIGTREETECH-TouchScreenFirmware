@@ -69,21 +69,20 @@ void menuHeat(void)
         break;
 
       case KEY_INFOBOX:
-        {
-          int32_t val = actTarget;
-          char titlestr[30];
+      {
+        char titlestr[30];
+        sprintf(titlestr, "Min:0 | Max:%i", infoSettings.max_temp[c_heater]);
 
-          sprintf(titlestr, "Min:0 | Max:%i", infoSettings.max_temp[c_heater]);
-          val = numPadInt((u8 *) titlestr, actTarget, 0, false);
-          val = NOBEYOND(0, val, infoSettings.max_temp[c_heater]);
+        int16_t val = numPadInt((u8 *) titlestr, actTarget, 0, false);
+        val = NOBEYOND(0, val, infoSettings.max_temp[c_heater]);
 
-          if (val != actTarget)
-            heatSetTargetTemp(c_heater, val);
+        if (val != actTarget)
+          heatSetTargetTemp(c_heater, val);
 
-          menuDrawPage(&heatItems);
-          showTemperature(c_heater);
-        }
+        menuDrawPage(&heatItems);
+        showTemperature(c_heater);
         break;
+      }
 
       case KEY_ICON_3:
         heatSetTargetTemp(c_heater, actTarget + degreeSteps[degreeSteps_index]);
@@ -93,8 +92,8 @@ void menuHeat(void)
         do
         {
           c_heater = (c_heater + 1) % MAX_HEATER_COUNT;
-        }
-        while (!heaterIsValid(c_heater));
+        } while (!heaterIsValid(c_heater));
+
         heatItems.items[key_num] = itemTool[c_heater];
         menuDrawItem(&heatItems.items[key_num], key_num);
         showTemperature(c_heater);

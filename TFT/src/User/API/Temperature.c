@@ -14,33 +14,50 @@ static bool    heat_update_waiting = false;
 static bool    heat_send_waiting[MAX_HEATER_COUNT];
 
 uint32_t nextHeatCheckTime = 0;
+#define AUTOREPORT_TIMEOUT (nextHeatCheckTime + 3000) // update interval + 3 second grace period
+
+static uint8_t fixHeaterIndex(uint8_t index)
+{
+  if (infoSettings.hotend_count == 1)
+    index = (index < MAX_HOTEND_COUNT) ? NOZZLE0 : index;
+  return index;
+}
 
 //Set target temperature
 void heatSetTargetTemp(uint8_t index, int16_t temp)
 {
+  index = fixHeaterIndex(index);
   heater.T[index].target = NOBEYOND(0, temp, infoSettings.max_temp[index]);
 }
+
 //Sync target temperature
 void heatSyncTargetTemp(uint8_t index, int16_t temp)
 {
+  index = fixHeaterIndex(index);
   lastTarget[index] = heater.T[index].target = temp;
 }
 
 //Get target temperature
 u16 heatGetTargetTemp(uint8_t index)
 {
+  index = fixHeaterIndex(index);
   return heater.T[index].target;
 }
 
 // Set current temperature
 void heatSetCurrentTemp(uint8_t index, int16_t temp)
 {
+  index = fixHeaterIndex(index);
   heater.T[index].current = NOBEYOND(-99, temp, 999);
+
+  if (infoMachineSettings.autoReportTemp)
+    updateNextHeatCheckTime(); // set next timeout for temperature auto-report
 }
 
 // Get current temperature
 int16_t heatGetCurrentTemp(uint8_t index)
 {
+  index = fixHeaterIndex(index);
   return heater.T[index].current;
 }
 
@@ -175,10 +192,13 @@ void updateNextHeatCheckTime(void)
 
 void loopCheckHeater(void)
 {
-  if (!infoMachineSettings.autoReportTemp) // TFT need not M105 to query the temperature, but uses M155 to automatically report if motherboard supports AUTO_REPORT_TEMPERATURESS feature
+  // Send M105 to query the temperatures, if motherboard does not supports M155 (AUTO_REPORT_TEMPERATURES) feature
+  // to automatically report the temperatures.
+  if (!infoMachineSettings.autoReportTemp)
   {
     do
-    { // Send M105 query temperature continuously
+    {
+      // Send M105 query temperature continuously
       if (heat_update_waiting == true)
       {
         updateNextHeatCheckTime();
@@ -186,21 +206,30 @@ void loopCheckHeater(void)
       }
       if (OS_GetTimeMs() < nextHeatCheckTime)
         break;
-      if (requestCommandInfoIsRunning()) // To avoid colision in Gcode response processing
+      if (requestCommandInfoIsRunning())  // To avoid colision in Gcode response processing
         break;
       if (storeCmd("M105\n") == false)
         break;
       updateNextHeatCheckTime();
       heat_update_waiting = true;
+    } while (0);
+  }
+  else // check temperature auto-report timout and resend M155 command
+  {
+    if (OS_GetTimeMs() > AUTOREPORT_TIMEOUT && !heat_update_waiting)
+    {
+      heat_update_waiting = storeCmd("M155 ");
+      if(heat_update_waiting) updateNextHeatCheckTime();  // set next timeout for temperature auto-report
     }
-    while(0);
   }
 
   // Query the heater that needs to wait for the temperature to rise, whether it reaches the set temperature
   for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
   {
     if (heater.T[i].waiting == WAIT_NONE)
+    {
       continue;
+    }
     else if (heater.T[i].waiting == WAIT_HEATING)
     {
       if (heater.T[i].current + 2 <= heater.T[i].target)

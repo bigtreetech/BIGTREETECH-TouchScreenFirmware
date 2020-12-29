@@ -1,6 +1,7 @@
-name: Build Test
-on: [pull_request, push]
-
+name: Build Binaries
+on:
+  push:
+    branches: [ master ]
 jobs:
   main:
     name: Main
@@ -47,3 +48,14 @@ jobs:
         run: platformio run --environment MKS_32_V1_4_NOBL
       - name: Build MKS TFT28 V1.0
         run: platformio run --environment MKS_28_V1_0
+      - name: Clean Up Folder
+        run: find "Copy to SD Card root directory to update/" -name '*.bin' -print -delete
+      - name: Copy Files
+        run: find .pio/build/ -name '*.bin' -exec cp -vf '{}' "./Copy to SD Card root directory to update/" ";"
+      - name: Stage Changes
+        run: git config user.email "actions@example.com" && git config user.name "Github Actions" && find "Copy to SD Card root directory to update/" -name '*.bin' -exec git add {} \;
+      - name: Push
+        uses: actions-x/commit@v2
+        with:
+          message: Update prebuilt binaries
+          token: ${{ secrets.MY_SECRET_TOKEN }}

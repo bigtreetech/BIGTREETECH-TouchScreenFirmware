@@ -26,7 +26,7 @@ void percentageReDraw(bool skipHeader)
   {
     GUI_DispString(exhibitRect.x0, exhibitRect.y0, textSelect(itemPercentTypeTitle[item_index]));
   }
-  
+
   setLargeFont(true);
   GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1)>>1, exhibitRect.y0, (uint8_t *)"%");
   sprintf(tempstr, "  %d/%d  ", speedGetCurPercent(item_index), speedGetSetPercent(item_index));
@@ -52,8 +52,7 @@ void menuSpeed(void)
 
   percentageItems.items[KEY_ICON_5] = itemPercent[percentSteps_index];
 
-  storeCmd("M220\n");
-  storeCmd("M221 D%d\n", heatGetCurrentTool());
+  storeCmd("M220\nM221 D%d\n", heatGetCurrentTool());
   KEY_VALUES key_num;
   LASTSPEED lastSpeed;
   speedSetPercent(item_index, speedGetCurPercent(item_index));
@@ -80,11 +79,10 @@ void menuSpeed(void)
 
       case KEY_INFOBOX:
         {
-          u16 val = speedGetCurPercent(item_index);
           char titlestr[30];
-
           sprintf(titlestr, "Min:%i | Max:%i", SPEED_MIN, SPEED_MAX);
-          val = numPadInt((u8 *) titlestr, val, 100, false);
+
+          u16 val = numPadInt((u8 *) titlestr, speedGetCurPercent(item_index), 100, false);
           val = NOBEYOND(SPEED_MIN, val, SPEED_MAX);
 
           if (val != speedGetSetPercent(item_index))

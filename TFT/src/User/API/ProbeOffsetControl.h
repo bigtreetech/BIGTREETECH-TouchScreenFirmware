@@ -8,22 +8,22 @@ extern "C" {
 #include <stdbool.h>
 #include <stdint.h>
 
-/* Enable probe offset */
+// Enable probe offset
 void probeOffsetEnable(bool skipZOffset);
 
-/* Disable probe offset */
+// Disable probe offset
 void probeOffsetDisable(void);
 
-/* Get probe offset status */
+// Get probe offset status
 bool probeOffsetGetStatus(void);
 
-/* Set Z offset value */
+// Set Z offset value
 float probeOffsetSetValue(float value);
 
-/* Get current Z offset value */
+// Get current Z offset value
 float probeOffsetGetValue(void);
 
-/* Reset Z offset value to default value */
+// Reset Z offset value to default value
 float probeOffsetResetValue(void);
 
 // Decrease Z offset value

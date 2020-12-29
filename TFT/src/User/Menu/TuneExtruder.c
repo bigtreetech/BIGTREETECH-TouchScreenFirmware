@@ -106,11 +106,10 @@ void menuTuneExtruder(void)
 
       case KEY_INFOBOX:
         {
-          int32_t val = heatGetTargetTemp(c_heater);
           char titlestr[30];
-
           sprintf(titlestr, "Min:0 | Max:%i", infoSettings.max_temp[c_heater]);
-          val = numPadInt((u8 *) titlestr, actTarget, 0, false);
+
+          int16_t val = numPadInt((u8 *) titlestr, actTarget, 0, false);
           val = NOBEYOND(0, val, infoSettings.max_temp[c_heater]);
 
           if (val != actTarget)
@@ -137,7 +136,6 @@ void menuTuneExtruder(void)
 
       case KEY_ICON_5:
         degreeSteps_index = (degreeSteps_index + 1) % ITEM_DEGREE_NUM;
-
         tuneExtruderItems.items[key_num] = itemDegreeSteps[degreeSteps_index];
 
         menuDrawItem(&tuneExtruderItems.items[key_num], key_num);
@@ -149,10 +147,9 @@ void menuTuneExtruder(void)
 
           if (heatGetTargetTemp(c_heater) < infoSettings.min_ext_temp)
           {
-            labelChar(tempStr, LABEL_TUNE_EXT_TEMPLOW);
+            LABELCHAR(tempStr, LABEL_TUNE_EXT_TEMPLOW);
 
             sprintf(tempMsg, tempStr, infoSettings.min_ext_temp);
-
             popupReminder(DIALOG_TYPE_ALERT, tuneExtruderItems.title.index, (u8 *) tempMsg);
           }
           else if (heatGetCurrentTemp(c_heater) < heatGetTargetTemp(c_heater) - 1)
@@ -161,10 +158,9 @@ void menuTuneExtruder(void)
           }
           else
           {
-            labelChar(tempStr, LABEL_TUNE_EXT_MARK120MM);
+            LABELCHAR(tempStr, LABEL_TUNE_EXT_MARK120MM);
 
             sprintf(tempMsg, tempStr, textSelect(LABEL_EXTRUDE));
-
             setDialogText(tuneExtruderItems.title.index, (u8 *) tempMsg, LABEL_EXTRUDE, LABEL_CANCEL);
             showDialog(DIALOG_TYPE_QUESTION, extrudeFilament, NULL, NULL);
           }
@@ -236,8 +232,8 @@ void menuNewExtruderESteps(void)
   float old_esteps, new_esteps; // get the value of the E-steps
 
   mustStoreCmd("M503 S0\n");
-  old_esteps = getParameter(P_STEPS_PER_MM, E_AXIS); // get the value of the E-steps
 
+  old_esteps = getParameter(P_STEPS_PER_MM, E_AXIS); // get the value of the E-steps
   newExtruderESteps.items[KEY_ICON_5] = itemMoveLen[curExtStep_index];
 
   menuDrawPage(&newExtruderESteps);
@@ -261,18 +257,18 @@ void menuNewExtruderESteps(void)
         break;
 
       case KEY_ICON_4:
-        {
-          storeCmd("M92 T0 E%0.2f\n", new_esteps);
-          char tempMsg[120];
-          labelChar(tempStr, LABEL_TUNE_EXT_ESTEPS_SAVED);
-          sprintf(tempMsg, tempStr, new_esteps);
-          popupReminder(DIALOG_TYPE_QUESTION, newExtruderESteps.title.index, (u8 *) tempMsg);
-        }
+      {
+        LABELCHAR(tempStr, LABEL_TUNE_EXT_ESTEPS_SAVED);
+        char tempMsg[120];
+
+        storeCmd("M92 T0 E%0.2f\n", new_esteps);
+        sprintf(tempMsg, tempStr, new_esteps);
+        popupReminder(DIALOG_TYPE_QUESTION, newExtruderESteps.title.index, (u8 *) tempMsg);
         break;
+      }
 
       case KEY_ICON_5:
         curExtStep_index = (curExtStep_index + 1) % ITEM_TUNE_EXTRUDER_LEN_NUM;
-
         newExtruderESteps.items[key_num] = itemMoveLen[curExtStep_index];
 
         menuDrawItem(&newExtruderESteps.items[key_num], key_num);

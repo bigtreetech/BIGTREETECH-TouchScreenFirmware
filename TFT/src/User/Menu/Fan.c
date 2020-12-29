@@ -23,7 +23,7 @@ void fanSpeedReDraw(bool skip_header)
       GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1)>>1, exhibitRect.y0, (uint8_t *)"%");
     }else
     {
-      GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1)>>1, exhibitRect.y0, (uint8_t *)"RAW");  
+      GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1)>>1, exhibitRect.y0, (uint8_t *)"RAW");
     }
     setLargeFont(false);
   }
@@ -87,33 +87,31 @@ void menuFan(void)
         break;
 
       case KEY_INFOBOX:
+      {
+        char titlestr[30];
+        if (infoSettings.fan_percentage == 1)
         {
-          uint8_t val;
-          char titlestr[30];
+          strcpy(titlestr, "Min:0 | Max:100");
+          uint8_t val = numPadInt((u8 *) titlestr, fanGetSetPercent(curIndex), 0, false);
+          val = NOBEYOND(0, val, 100);
 
-          if (infoSettings.fan_percentage == 1)
-          {
-            strcpy(titlestr, "Min:0 | Max:100");
-            val = numPadInt((u8 *) titlestr, fanGetCurPercent(curIndex), 0, false);
-            val = NOBEYOND(0, val, 100);
-
-            if (val != fanGetSetPercent(curIndex))
-              fanSetPercent(curIndex, val);
-          }
-          else
-          {
-            sprintf(titlestr, "Min:0 | Max:%d", infoSettings.fan_max[curIndex]);
-            val = numPadInt((u8 *) titlestr, fanGetCurSpeed(curIndex), 0, false);
-            val = NOBEYOND(0, val,  infoSettings.fan_max[curIndex]);
-
-            if (val != fanGetCurSpeed(curIndex))
-              fanSetSpeed(curIndex, val);
-          }
-          
-          menuDrawPage(&fanItems);
-          fanSpeedReDraw(true);
+          if (val != fanGetSetPercent(curIndex))
+            fanSetPercent(curIndex, val);
         }
+        else
+        {
+          sprintf(titlestr, "Min:0 | Max:%d", infoSettings.fan_max[curIndex]);
+          uint8_t val = numPadInt((u8 *) titlestr, fanGetCurSpeed(curIndex), 0, false);
+          val = NOBEYOND(0, val,  infoSettings.fan_max[curIndex]);
+
+          if (val != fanGetCurSpeed(curIndex))
+            fanSetSpeed(curIndex, val);
+        }
+
+        menuDrawPage(&fanItems);
+        fanSpeedReDraw(true);
         break;
+      }
 
       case KEY_ICON_3:
         if (fanGetSetSpeed(curIndex) < infoSettings.fan_max[curIndex])

@@ -822,7 +822,7 @@ void meshUpdateData(char *dataRow)
   {
     meshData->status = ME_DATA_FAILED;
 
-    labelChar(tempMsg, LABEL_PROCESS_ABORTED);
+    LABELCHAR(tempMsg, LABEL_PROCESS_ABORTED);
 
     sprintf(&tempMsg[strlen(tempMsg)], "\n %s", dataRow);
 

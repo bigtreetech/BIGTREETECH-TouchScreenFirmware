@@ -47,7 +47,9 @@ void menuMore(void)
           showDialog(DIALOG_TYPE_ALERT, isPauseConfirm, NULL, NULL);
         }
         else
+        {
           infoMenu.menu[++infoMenu.cur] = menuExtrude;
+        }
         break;
 
       case KEY_ICON_3:

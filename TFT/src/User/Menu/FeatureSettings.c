@@ -290,7 +290,8 @@ void updateFeatureSettings(uint8_t key_val)
 //
 //load values on page change and reload
 //
-void loadFeatureSettings(){
+void loadFeatureSettings()
+{
   for (uint8_t i = 0; i < LISTITEM_PER_PAGE; i++)
   {
     uint8_t item_index = fe_cur_page * LISTITEM_PER_PAGE + i;
@@ -298,104 +299,104 @@ void loadFeatureSettings(){
     {
       switch (item_index)
       {
-      case SKEY_ACK:
-        settingPage[item_index].icon = toggleitem[infoSettings.terminalACK];
-        break;
-
-      case SKEY_INVERT_X:
-        settingPage[item_index].icon = toggleitem[infoSettings.invert_axis[X_AXIS]];
-        break;
-
-      case SKEY_INVERT_Y:
-        settingPage[item_index].icon = toggleitem[infoSettings.invert_axis[Y_AXIS]];
-        break;
-
-      case SKEY_INVERT_Z:
-        settingPage[item_index].icon = toggleitem[infoSettings.invert_axis[Z_AXIS]];
-        break;
-
-      #ifdef PS_ON_PIN
-        case SKEY_POWER:
-          settingPage[item_index].icon = toggleitem[infoSettings.auto_off];
+        case SKEY_ACK:
+          settingPage[item_index].icon = toggleitem[infoSettings.terminalACK];
           break;
-      #endif
 
-      #ifdef FIL_RUNOUT_PIN
-        case SKEY_RUNOUT:
-          settingPage[item_index].valueLabel = itemRunout[infoSettings.runout];
+        case SKEY_INVERT_X:
+          settingPage[item_index].icon = toggleitem[infoSettings.invert_axis[X_AXIS]];
           break;
-      #endif
 
-      case SKEY_SPEED:
-        settingPage[item_index].valueLabel = itemMoveSpeed[infoSettings.move_speed];
-        break;
-
-      case SKEY_STARTGCODE:
-        settingPage[item_index].icon = toggleitem[infoSettings.send_start_gcode];
-        break;
-
-      case SKEY_ENDGCODE:
-        settingPage[item_index].icon = toggleitem[infoSettings.send_end_gcode];
-        break;
-
-      case SKEY_CANCELGCODE:
-        settingPage[item_index].icon = toggleitem[infoSettings.send_cancel_gcode];
-        break;
-
-      case SKEY_PERSISTENTINFO:
-        settingPage[item_index].icon = toggleitem[infoSettings.persistent_info];
-        break;
-
-      case SKEY_FILELIST:
-        settingPage[item_index].icon = toggleitem[infoSettings.file_listmode];
-        break;
-
-      case SKEY_ACK_NOTIFICATION:
-        setDynamicTextValue(i, (char*)notificationType[infoSettings.ack_notification]);
-        break;
-
-      case SKEY_RESET_SETTINGS:
-        break;
-      #ifdef LED_COLOR_PIN
-        case SKEY_KNOB:
-          settingPage[item_index].valueLabel = itemLedcolor[infoSettings.knob_led_color];
-          featureSettingsItems.items[i] = settingPage[item_index];
+        case SKEY_INVERT_Y:
+          settingPage[item_index].icon = toggleitem[infoSettings.invert_axis[Y_AXIS]];
           break;
-        #ifdef LCD_LED_PWM_CHANNEL
-        case SKEY_KNOB_LED_IDLE:
-          settingPage[item_index].icon = toggleitem[infoSettings.knob_led_idle];
+
+        case SKEY_INVERT_Z:
+          settingPage[item_index].icon = toggleitem[infoSettings.invert_axis[Z_AXIS]];
           break;
+
+        #ifdef PS_ON_PIN
+          case SKEY_POWER:
+            settingPage[item_index].icon = toggleitem[infoSettings.auto_off];
+            break;
         #endif
-      #endif
-      #ifdef LCD_LED_PWM_CHANNEL
-        case SKEY_LCD_BRIGHTNESS:
-        {
-          char tempstr[8];
-          sprintf(tempstr, (char *)textSelect(LABEL_PERCENT_VALUE), LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
-          setDynamicTextValue(i, tempstr);
-          break;
-        }
-        case SKEY_LCD_BRIGTHNESS_DIM:
-        {
-          char tempstr[8];
-          sprintf(tempstr, (char *)textSelect(LABEL_PERCENT_VALUE), LCD_BRIGHTNESS[infoSettings.lcd_idle_brightness]);
-          setDynamicTextValue(i, tempstr);
-          break;
-        }
-        case SKEY_LCD_DIM_IDLE_TIMER:
-          settingPage[item_index].valueLabel = itemDimTime[infoSettings.lcd_idle_timer];
-          break;
-      #endif //PS_ON_PIN
 
-      #ifdef ST7920_SPI
-        case SKEY_ST7920_FULLSCREEN:
-          settingPage[item_index].icon = toggleitem[infoSettings.marlin_mode_fullscreen];
-          break;
-      #endif
+        #ifdef FIL_RUNOUT_PIN
+          case SKEY_RUNOUT:
+            settingPage[item_index].valueLabel = itemRunout[infoSettings.runout];
+            break;
+        #endif
 
-      case SKEY_PLR_EN:
-        settingPage[item_index].icon = toggleitem[infoSettings.powerloss_en];
-        break;
+        case SKEY_SPEED:
+          settingPage[item_index].valueLabel = itemMoveSpeed[infoSettings.move_speed];
+          break;
+
+        case SKEY_STARTGCODE:
+          settingPage[item_index].icon = toggleitem[infoSettings.send_start_gcode];
+          break;
+
+        case SKEY_ENDGCODE:
+          settingPage[item_index].icon = toggleitem[infoSettings.send_end_gcode];
+          break;
+
+        case SKEY_CANCELGCODE:
+          settingPage[item_index].icon = toggleitem[infoSettings.send_cancel_gcode];
+          break;
+
+        case SKEY_PERSISTENTINFO:
+          settingPage[item_index].icon = toggleitem[infoSettings.persistent_info];
+          break;
+
+        case SKEY_FILELIST:
+          settingPage[item_index].icon = toggleitem[infoSettings.file_listmode];
+          break;
+
+        case SKEY_ACK_NOTIFICATION:
+          setDynamicTextValue(i, (char*)notificationType[infoSettings.ack_notification]);
+          break;
+
+        case SKEY_RESET_SETTINGS:
+          break;
+        #ifdef LED_COLOR_PIN
+          case SKEY_KNOB:
+            settingPage[item_index].valueLabel = itemLedcolor[infoSettings.knob_led_color];
+            featureSettingsItems.items[i] = settingPage[item_index];
+            break;
+          #ifdef LCD_LED_PWM_CHANNEL
+          case SKEY_KNOB_LED_IDLE:
+            settingPage[item_index].icon = toggleitem[infoSettings.knob_led_idle];
+            break;
+          #endif
+        #endif
+        #ifdef LCD_LED_PWM_CHANNEL
+          case SKEY_LCD_BRIGHTNESS:
+          {
+            char tempstr[8];
+            sprintf(tempstr, (char *)textSelect(LABEL_PERCENT_VALUE), LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
+            setDynamicTextValue(i, tempstr);
+            break;
+          }
+          case SKEY_LCD_BRIGTHNESS_DIM:
+          {
+            char tempstr[8];
+            sprintf(tempstr, (char *)textSelect(LABEL_PERCENT_VALUE), LCD_BRIGHTNESS[infoSettings.lcd_idle_brightness]);
+            setDynamicTextValue(i, tempstr);
+            break;
+          }
+          case SKEY_LCD_DIM_IDLE_TIMER:
+            settingPage[item_index].valueLabel = itemDimTime[infoSettings.lcd_idle_timer];
+            break;
+        #endif //PS_ON_PIN
+
+        #ifdef ST7920_SPI
+          case SKEY_ST7920_FULLSCREEN:
+            settingPage[item_index].icon = toggleitem[infoSettings.marlin_mode_fullscreen];
+            break;
+        #endif
+
+        case SKEY_PLR_EN:
+          settingPage[item_index].icon = toggleitem[infoSettings.powerloss_en];
+          break;
 
       default:
         break;
@@ -415,11 +416,13 @@ void loadFeatureSettings(){
   }
   else
   {
-    if(fe_cur_page == 0){
+    if(fe_cur_page == 0)
+    {
       featureSettingsItems.items[5].icon = ICONCHAR_BACKGROUND;
       featureSettingsItems.items[6].icon = ICONCHAR_PAGEDOWN;
     }
-    else if(fe_cur_page == (FE_PAGE_COUNT-1)){
+    else if(fe_cur_page == (FE_PAGE_COUNT-1))
+    {
       featureSettingsItems.items[5].icon = ICONCHAR_PAGEUP;
       featureSettingsItems.items[6].icon = ICONCHAR_BACKGROUND;
     }
@@ -447,36 +450,36 @@ void menuFeatureSettings(void)
     key_num = menuKeyGetValue();
     switch (key_num)
     {
-    case KEY_ICON_5:
-      if(FE_PAGE_COUNT > 1){
-        if (fe_cur_page > 0){
+      case KEY_ICON_5:
+        if(FE_PAGE_COUNT > 1 && fe_cur_page > 0)
+        {
           fe_cur_page--;
           loadFeatureSettings();
           menuRefreshListPage();
         }
-      }
-      break;
+        break;
 
-    case KEY_ICON_6:
-      if(FE_PAGE_COUNT > 1){
-        if (fe_cur_page < FE_PAGE_COUNT - 1){
+      case KEY_ICON_6:
+        if(FE_PAGE_COUNT > 1 && fe_cur_page < FE_PAGE_COUNT - 1)
+        {
           fe_cur_page++;
           loadFeatureSettings();
           menuRefreshListPage();
         }
-      }
-      break;
+        break;
 
-    case KEY_ICON_7:
-      fe_cur_page = 0;
-      infoMenu.cur--;
-      break;
-    default:
-      if(key_num < LISTITEM_PER_PAGE){
-      updateFeatureSettings(key_num);
-      menuDrawListItem(&featureSettingsItems.items[key_num],key_num);
-      }
-      break;
+      case KEY_ICON_7:
+        fe_cur_page = 0;
+        infoMenu.cur--;
+        break;
+
+      default:
+        if(key_num < LISTITEM_PER_PAGE)
+        {
+          updateFeatureSettings(key_num);
+          menuDrawListItem(&featureSettingsItems.items[key_num],key_num);
+        }
+        break;
     }
 
     loopProcess();
