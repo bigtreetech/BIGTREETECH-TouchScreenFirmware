@@ -57,5 +57,5 @@ jobs:
       - name: Push
         uses: actions-x/commit@v2
         with:
-          Message: Update prebuilt binaries
+          message: Update prebuilt binaries
           token: ${{ secrets.MY_SECRET_TOKEN }}
