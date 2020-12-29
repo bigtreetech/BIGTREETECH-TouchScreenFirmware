@@ -43,10 +43,10 @@ C: In case you have an **"E3" mainboard** which provides a **single EXP connecto
 
 ## Menus
 
-|                   Classic Menu Main Screen                   |                   Unified Menu Main Screen                   |
+|              Main Screen Status Screen DISABLED              |              Main Screen Status Screen ENABLED               |
 | :----------------------------------------------------------: | :----------------------------------------------------------: |
-| ![Classic](https://user-images.githubusercontent.com/54359396/98740417-4d686880-23ab-11eb-873f-82c7d338a139.png) | ![Unified Material Main Screen](https://user-images.githubusercontent.com/54359396/98742038-03cd4d00-23ae-11eb-9552-36dc02fe66f4.png) |
-| In config.ini define: General Settings<br/>UNIFIED MENU / CLASSIC MENU<br/># Select a UI Menu flavour<br/># Options: [Unified Menu: 1, Classic Menu: 0]<br/>**unified menu: 0** | In config.ini define: General Settings<br/>UNIFIED MENU / CLASSIC MENU<br/># Select a UI Menu flavour<br/># Options: [Unified Menu: 1, Classic Menu: 0]<br/>**unified menu: 1** |
+| ![status screen 0](https://user-images.githubusercontent.com/54359396/103319145-09035b80-4a31-11eb-91d0-dd761a48b6f5.png) | ![Unified Material Main Screen](https://user-images.githubusercontent.com/54359396/98742038-03cd4d00-23ae-11eb-9552-36dc02fe66f4.png) |
+| In config.ini define: General Settings<br/>Enable Status Screen<br/># Select the Main Screen flavour<br/># Options: [Enable: 1, Disable: 0]<br/>**status_screen: 0** | In config.ini define: General Settings<br/>Enable Status Screen<br/># Select the Main Screen flavour<br/># Options: [Enable: 1, Disable: 0]<br/>**status_screen: 1** |
 
 ## Themes
 
@@ -81,7 +81,7 @@ The TFT firmware update is done in three steps described below and includes up t
 
 **STEPS:**
 
-**step1:** Copy your self compiled firmware or the BIGTREE_TFT*_V*.*.*.bin, plus the TFT*` folder and the config.ini to the root of a blank SD card that is <8GB and formatted as FAT32:
+**step1:** Copy your self compiled firmware or the BIGTREE_TFT*_V*.*.*.bin, the TFT*` folder and the config.ini to the root of a blank SD card that is <8GB and formatted as FAT32:
 
 ![Firmware](https://user-images.githubusercontent.com/54359396/100600549-b6cffd00-3301-11eb-8b57-d56b7a4422f1.jpg)
 
