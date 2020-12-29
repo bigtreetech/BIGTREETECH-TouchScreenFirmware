@@ -474,7 +474,6 @@ void LCD_init_RGB(void)
 
     return ((rg) << 8) | ((br & 0xFF00) >> 8); // RG-B
   }
-  #warning "LCD_ReadPixel_24Bit() hasn't been tested yet"
 #endif
 
 #elif LCD_DRIVER_IS(HX8558)
