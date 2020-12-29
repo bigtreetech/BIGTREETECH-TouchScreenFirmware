@@ -185,6 +185,23 @@ void LCD_init_RGB(void)
   LCD_WR_REG(0X29);
 }
 
+#ifdef SCREEN_SHOT_TO_SD
+  uint32_t LCD_ReadPixel_24Bit(int16_t x, int16_t y)
+  {
+    LCD_SetWindow(x, y, x, y);
+    LCD_WR_REG(0X2E);
+    Delay_us(1);
+    LCD_RD_DATA(); // Dummy read
+
+    uint16_t rg, br;
+    rg = LCD_RD_DATA(); // First pixel R:8bit-G:8bit
+    br = LCD_RD_DATA(); // First pixel B:8bit - Second pixel R:8bit
+
+    return ((rg) << 8) | ((br & 0xFF00) >> 8); // RG-B
+  }
+  #warning "LCD_ReadPixel_24Bit() hasn't been tested yet"
+#endif
+
 #elif LCD_DRIVER_IS(ILI9488)
 // ILI9488
 void LCD_init_RGB(void)
@@ -223,19 +240,21 @@ void LCD_init_RGB(void)
   LCD_WR_REG(0x29);
 }
 
-uint32_t LCD_ReadPixel_24Bit(int16_t x, int16_t y)
-{
-  LCD_SetWindow(x, y, x, y);
-  LCD_WR_REG(0X2E);
-  Delay_us(1);
-  LCD_RD_DATA(); // Dummy read
+#ifdef SCREEN_SHOT_TO_SD
+  uint32_t LCD_ReadPixel_24Bit(int16_t x, int16_t y)
+  {
+    LCD_SetWindow(x, y, x, y);
+    LCD_WR_REG(0X2E);
+    Delay_us(1);
+    LCD_RD_DATA(); // Dummy read
 
-  uint16_t rg, br;
-  rg = LCD_RD_DATA(); // First pixel R:8bit-G:8bit
-  br = LCD_RD_DATA(); // First pixel B:8bit - Second pixel R:8bit
+    uint16_t rg, br;
+    rg = LCD_RD_DATA(); // First pixel R:8bit-G:8bit
+    br = LCD_RD_DATA(); // First pixel B:8bit - Second pixel R:8bit
 
-  return ((rg) << 8) | ((br & 0xFF00) >> 8); // RG-B
-}
+    return ((rg) << 8) | ((br & 0xFF00) >> 8); // RG-B
+  }
+#endif
 
 #elif LCD_DRIVER_IS(ILI9341)
 // ILI9341
@@ -441,6 +460,23 @@ void LCD_init_RGB(void)
 	LCD_WR_REG(0x29);
 }
 
+#ifdef SCREEN_SHOT_TO_SD
+  uint32_t LCD_ReadPixel_24Bit(int16_t x, int16_t y)
+  {
+    LCD_SetWindow(x, y, x, y);
+    LCD_WR_REG(0X2E);
+    Delay_us(1);
+    LCD_RD_DATA(); // Dummy read
+
+    uint16_t rg, br;
+    rg = LCD_RD_DATA(); // First pixel R:8bit-G:8bit
+    br = LCD_RD_DATA(); // First pixel B:8bit - Second pixel R:8bit
+
+    return ((rg) << 8) | ((br & 0xFF00) >> 8); // RG-B
+  }
+  #warning "LCD_ReadPixel_24Bit() hasn't been tested yet"
+#endif
+
 #elif LCD_DRIVER_IS(HX8558)
 // HX8558
 void LCD_init_RGB(void)
@@ -546,6 +582,23 @@ void LCD_init_RGB(void)
   LCD_WR_REG(0x29);
   LCD_WR_REG(0x2C);
 }
+
+#ifdef SCREEN_SHOT_TO_SD
+  uint32_t LCD_ReadPixel_24Bit(int16_t x, int16_t y)
+  {
+    LCD_SetWindow(x, y, x, y);
+    LCD_WR_REG(0X2E);
+    Delay_us(1);
+    LCD_RD_DATA(); // Dummy read
+
+    uint16_t rg, br;
+    rg = LCD_RD_DATA(); // First pixel R:8bit-G:8bit
+    br = LCD_RD_DATA(); // First pixel B:8bit - Second pixel R:8bit
+
+    return ((rg) << 8) | ((br & 0xFF00) >> 8); // RG-B
+  }
+  #warning "LCD_ReadPixel_24Bit() hasn't been tested yet"
+#endif
 
 #elif LCD_DRIVER_IS(SSD1963)
 // SSD1963  resolution max:864*480
