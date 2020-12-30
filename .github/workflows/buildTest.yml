@@ -1,5 +1,16 @@
 name: Build Test
-on: [pull_request, push]
+on:
+  pull_request:
+    paths-ignore:
+    - Bootloader/**
+    - readme/**
+    - '**/*.md'
+
+  push:
+    paths-ignore:
+    - Bootloader/**
+    - readme/**
+    - '**/*.md'
 
 jobs:
   main:
