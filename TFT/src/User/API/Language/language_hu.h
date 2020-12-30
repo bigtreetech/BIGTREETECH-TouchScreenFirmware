@@ -5,7 +5,7 @@
     #define STRING_HEAT                   "Fűtés"
     #define STRING_MOVE                   "Mozgás"
     #define STRING_HOME                   "Végállás"
-    #define STRING_DISABLE_STEPPERS       "Léptetők"
+    #define STRING_DISABLE_STEPPERS       "Mot. Állj"
     #define STRING_PRINT                  "Nyomtatás"
     #define STRING_EXTRUDE                "Adagolás"
     #define STRING_FAN                    "Hűtés"
@@ -87,7 +87,7 @@
     #define STRING_LOAD                   "Betöltés"
     #define STRING_UNLOAD                 "Kiadás"
     #define STRING_LOAD_UNLOAD            "Betöltés/Kiadás"
-    #define STRING_LOAD_UNLOAD_SHORT      "Fil. Ki/Be"
+    #define STRING_LOAD_UNLOAD_SHORT      "Be/Ki"
     #define STRING_SLOW_SPEED             "Lassú"
     #define STRING_NORMAL_SPEED           "Normál"
     #define STRING_FAST_SPEED             "Gyors"
@@ -294,6 +294,6 @@
     #define STRING_CLICK_FOR_MORE         "Katt az Infóért."
     #define STRING_EXT_TEMPLOW            "Fejhőfok alacsonyabb mint a\nminimális hőfok (%d℃)."
     #define STRING_COLD_EXT               "Tiltja a hideg adagolást"
-    #define STRING_HEAT_HOTEND            "Fűtöd a fejet %d℃?"
+    #define STRING_HEAT_HOTEND            "Fűtöd a fejet %d℃-ra?"
 
 #endif
