@@ -90,9 +90,7 @@ void Hardware_GenericInit(void)
   #ifdef LCD_LED_PWM_CHANNEL
     Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
   #endif
-  GUI_RestoreColorDefault();
-  infoMenuSelect();
-  fanControlInit();
+  switchMode();
 }
 
 int main(void)

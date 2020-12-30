@@ -8,7 +8,6 @@ extern "C" {
 #include <stdint.h>
 #include "Settings.h"
 
-extern const u32 item_baudrate[ITEM_BAUDRATE_NUM];
 extern uint8_t machine_type[64];
 
 void menuInfo(void);

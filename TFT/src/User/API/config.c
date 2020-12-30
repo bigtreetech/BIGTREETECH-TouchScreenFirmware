@@ -528,12 +528,12 @@ void parseConfigKey(u16 index)
   //----------------------------general settings
   switch (index)
   {
-    case C_INDEX_UNIFIEDMENU:
+    case C_INDEX_STATUS_SCREEN:
       infoSettings.status_screen = getOnOff();
       break;
 
     case C_INDEX_UART_BAUDRATE:
-      SET_VALID_INT_VALUE(infoSettings.baudrate, 0, ITEM_BAUDRATE_NUM - 1);
+      SET_VALID_INT_VALUE(infoSettings.baudrate, 0, BAUDRATE_COUNT - 1);
       break;
 
     case C_INDEX_LANGUAGE:
@@ -770,10 +770,9 @@ void parseConfigKey(u16 index)
       break;
 
     case C_INDEX_PAUSE_FEEDRATE:
-      if (key_seen("X")) SET_VALID_INT_VALUE(infoSettings.pause_feedrate[0], MIN_SPEED_LIMIT, MAX_SPEED_LIMIT);
-      if (key_seen("Y")) SET_VALID_INT_VALUE(infoSettings.pause_feedrate[1], MIN_SPEED_LIMIT, MAX_SPEED_LIMIT);
-      if (key_seen("Z")) SET_VALID_INT_VALUE(infoSettings.pause_feedrate[2], MIN_SPEED_LIMIT, MAX_SPEED_LIMIT);
-      if (key_seen("E")) SET_VALID_INT_VALUE(infoSettings.pause_feedrate[3], MIN_SPEED_LIMIT, MAX_SPEED_LIMIT);
+      if (key_seen("XY")) SET_VALID_INT_VALUE(infoSettings.pause_feedrate[FEEDRATE_XY], MIN_SPEED_LIMIT, MAX_SPEED_LIMIT);
+      if (key_seen("Z")) SET_VALID_INT_VALUE(infoSettings.pause_feedrate[FEEDRATE_Z], MIN_SPEED_LIMIT, MAX_SPEED_LIMIT);
+      if (key_seen("E")) SET_VALID_INT_VALUE(infoSettings.pause_feedrate[FEEDRATE_E], MIN_SPEED_LIMIT, MAX_SPEED_LIMIT);
       break;
 
     case C_INDEX_LEVEL_EDGE:
@@ -789,9 +788,12 @@ void parseConfigKey(u16 index)
       break;
 
     case C_INDEX_LEVEL_FEEDRATE:
-      if (key_seen("X")) SET_VALID_INT_VALUE(infoSettings.level_feedrate[0], MIN_SPEED_LIMIT, MAX_SPEED_LIMIT);
-      if (key_seen("Y")) SET_VALID_INT_VALUE(infoSettings.level_feedrate[1], MIN_SPEED_LIMIT, MAX_SPEED_LIMIT);
-      if (key_seen("Z")) SET_VALID_INT_VALUE(infoSettings.level_feedrate[2], MIN_SPEED_LIMIT, MAX_SPEED_LIMIT);
+      if (key_seen("XY")) SET_VALID_INT_VALUE(infoSettings.level_feedrate[FEEDRATE_XY], MIN_SPEED_LIMIT, MAX_SPEED_LIMIT);
+      if (key_seen("Z")) SET_VALID_INT_VALUE(infoSettings.level_feedrate[FEEDRATE_Z], MIN_SPEED_LIMIT, MAX_SPEED_LIMIT);
+      break;
+
+    case C_INDEX_XY_OFFSET_PROBING:
+      infoSettings.xy_offset_probing = getOnOff();
       break;
 
     case C_INDEX_PREHEAT_NAME_1:
