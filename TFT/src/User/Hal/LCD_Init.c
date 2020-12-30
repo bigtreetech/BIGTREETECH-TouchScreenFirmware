@@ -586,15 +586,13 @@ void LCD_init_RGB(void)
   uint32_t LCD_ReadPixel_24Bit(int16_t x, int16_t y)
   {
     LCD_SetWindow(x, y, x, y);
-    LCD_WR_REG(0X2E);
+    LCD_WR_REG(0X22);
     Delay_us(1);
     LCD_RD_DATA(); // Dummy read
 
-    uint16_t rg, br;
-    rg = LCD_RD_DATA(); // First pixel R:8bit-G:8bit
-    br = LCD_RD_DATA(); // First pixel B:8bit - Second pixel R:8bit
-
-    return ((rg) << 8) | ((br & 0xFF00) >> 8); // RG-B
+    GUI_COLOR pix;
+    pix.color = LCD_RD_DATA();
+    return (pix.RGB.r << 19) | (pix.RGB.g << 10) | (pix.RGB.b << 3);
   }
   #warning "LCD_ReadPixel_24Bit() hasn't been tested yet"
 #endif
