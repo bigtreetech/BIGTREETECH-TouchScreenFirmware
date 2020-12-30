@@ -4,12 +4,14 @@ on:
     paths-ignore:
     - Bootloader/**
     - readme/**
+    - images/**
     - '**/*.md'
 
   push:
     paths-ignore:
     - Bootloader/**
     - readme/**
+    - images/**
     - '**/*.md'
 
 jobs:

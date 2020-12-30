@@ -3,7 +3,10 @@ on:
   push:
     branches: [ master ]
     paths-ignore:
+    - .devcontainer/**
+    - .github/**
     - Bootloader/**
+    - images/**
     - readme/**
     - '**/*.md'
 
