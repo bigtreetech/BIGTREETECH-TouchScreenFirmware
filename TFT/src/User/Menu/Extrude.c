@@ -80,6 +80,7 @@ void menuExtrude(void)
         {
           char titlestr[30];
           sprintf(titlestr, "Min:%i | Max:%i", (extlenSteps[COUNT(extlenSteps) - 1]) * -1, extlenSteps[COUNT(extlenSteps) - 1]);
+
           float val = numPadFloat((u8 *) titlestr, 0, 0, true);
           eTemp += val;
 
