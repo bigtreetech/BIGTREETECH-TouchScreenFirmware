@@ -23,8 +23,8 @@ void ablUpdateStatus(bool succeeded)
     }
     case BL_UBL:
     {
-      tempTitle.index = LABEL_ABL_SETTINGS_UBL;
       savingEnabled = false;
+      tempTitle.index = LABEL_ABL_SETTINGS_UBL;
 
       sprintf(&tempMsg[strlen(tempMsg)], "\n %s", textSelect(LABEL_BL_SMART_FILL));
       break;

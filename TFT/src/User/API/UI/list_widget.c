@@ -26,7 +26,9 @@ void listWidgetSetCurPage(uint8_t cur_page)
     if (cur_page * LISTITEM_PER_PAGE + i < list_max_items)
     {
       listItems.items[i] = totalItems[cur_page * LISTITEM_PER_PAGE + i];
-    } else {
+    }
+    else
+    {
       listItems.items[i].icon = ICONCHAR_BACKGROUND;
     }
   }
@@ -87,7 +89,9 @@ void listWidgetRefreshItem(uint16_t item)
   if (item < list_max_items)
   {
     listItems.items[cur_i] = totalItems[item];
-  } else {
+  }
+  else 
+  {
     listItems.items[cur_i].icon = ICONCHAR_BACKGROUND;
   }
   menuDrawListItem(&listItems.items[cur_i], cur_i);

@@ -455,10 +455,10 @@ void sendGcodeReDrawButton(u8 index, u8 isPressed)
 
   #if defined(HAS_ABC_KEY)
     GUI_DispStringInRect(gcodeKeyRect[index].x0 + 2, gcodeKeyRect[index].y0 + 2, gcodeKeyRect[index].x1 - 1,
-                        gcodeKeyRect[index].y1 - 1, (u8 *)gcodeKey[gcodeKeyType][index]);
+                         gcodeKeyRect[index].y1 - 1, (u8 *)gcodeKey[gcodeKeyType][index]);
   #else
     GUI_DispStringInRect(gcodeKeyRect[index].x0 + 2, gcodeKeyRect[index].y0 + 2, gcodeKeyRect[index].x1 - 1,
-                        gcodeKeyRect[index].y1 - 1, (u8 *)gcodeKey[0][index]);
+                         gcodeKeyRect[index].y1 - 1, (u8 *)gcodeKey[0][index]);
   #endif
 
   setLargeFont(false);
