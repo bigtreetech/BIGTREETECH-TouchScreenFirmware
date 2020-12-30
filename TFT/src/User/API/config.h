@@ -10,13 +10,13 @@ extern "C" {
 #include "includes.h"
 #include "ff.h"
 
-//after changing/adding/removing a keyword, change the CONFIG_FLASH_SIGN in Settings.h
+//after changing/adding/removing a keyword, change the CONFIG_FLASH_SIGN in Settings.h and PARA_SIGN in flashStore.c
 
 #define  LINE_MAX_CHAR 100
 #define CONFIG_FILE_PATH            "0:config.ini"
 #define LANG_FILE_PATH              "0:language.ini"
 
-#define CONFIG_UNIFIEDMENU          "unified_menu:"
+#define CONFIG_STATUS_SCREEN        "status_screen:"
 #define CONFIG_UART_BAUDRATE        "baudrate:"
 #define CONFIG_LANGUAGE             "language:"
 
@@ -74,6 +74,7 @@ extern "C" {
 #define CONFIG_LEVEL_Z_POS          "level_z_pos:"
 #define CONFIG_LEVEL_Z_RAISE        "level_z_raise:"
 #define CONFIG_LEVEL_FEEDRATE       "level_feedrate:"
+#define CONFIG_XY_OFFSET_PROBING    "xy_offset_probing:"
 #define CONFIG_PREHEAT_NAME_1       "preheat_name1:"
 #define CONFIG_PREHEAT_NAME_2       "preheat_name2:"
 #define CONFIG_PREHEAT_NAME_3       "preheat_name3:"
@@ -109,7 +110,6 @@ extern "C" {
 #define CONFIG_BRIGHTNESS              "lcd_brightness:"
 #define CONFIG_BRIGHTNESS_IDLE         "lcd_idle_brightness:"
 #define CONFIG_BRIGHTNESS_IDLE_DELAY   "lcd_idle_delay:"
-#define CONFIG_XY_OFFSET_PROBING       "xy_offset_probing:"
 //-----------------------------Custom G-Code Commands (up to 15 custom G-code)
 #define CONFIG_CUSTOM_LABEL_1   "custom_label_1:"
 #define CONFIG_CUSTOM_LABEL_2   "custom_label_2:"

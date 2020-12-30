@@ -17,17 +17,17 @@ void probeOffsetEnable(bool skipZOffset)
 
   if (infoSettings.xy_offset_probing)  // if HW allows nozzle to reach XY probing point
   {
-    probeHeightStop();                 // raise nozzle
+    probeHeightStop();  // raise nozzle
 
-    mustStoreCmd("G91\n");             // set relative position mode
+    mustStoreCmd("G91\n");  // set relative position mode
     mustStoreCmd("G1 X%.2f Y%.2f F%d\n",
                  getParameter(P_PROBE_OFFSET, X_STEPPER),
                  getParameter(P_PROBE_OFFSET, Y_STEPPER),
-                 infoSettings.axis_speed[infoSettings.move_speed]);  // move nozzle to XY probing point and set feedrate
+                 infoSettings.level_feedrate[FEEDRATE_XY]);  // move nozzle to XY probing point and set feedrate
   }
   else
   {
-    mustStoreCmd("G1 F%d\n", infoSettings.axis_speed[infoSettings.move_speed]);  // set feedrate
+    mustStoreCmd("G1 F%d\n", infoSettings.level_feedrate[FEEDRATE_XY]);  // set feedrate
   }
 
   if (!skipZOffset)
