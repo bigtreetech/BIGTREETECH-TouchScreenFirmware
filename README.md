@@ -196,6 +196,6 @@ default_envs = BIGTREE_TFT35_V3_0</pre></li>
 
 To reset the TFT's touch screen calibration, create a blank file named `reset.txt` and place in root folder of the sd card. Insert the SD card into the TFT's SD card reader and power cycle your printer to start the reset process.
 
-## Version History
+## Version History t
 
 See [BIGTREETECH-TouchScreenFirmware/releases](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/releases) for a complete version history.
