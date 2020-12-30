@@ -283,7 +283,7 @@
     #define STRING_UNLOAD_STARTED         "A filament kiadása folyamatban van,\nnem lehetséges további művelet,\nmíg véget nem ér.\nKérlek várj!"
     #define STRING_HEATERS_ON             "Néhány fűtőelem még üzemel.\nKikapcsolod a fűtőelemeket?"
     #define STRING_PRINT_FINISHED         "   Nyomtatás\n   elkészült."  // keep it short and in this format!
-    #define STRING_MAIN_SCREEN            "Menü"
+    #define STRING_MAIN_SCREEN            "Főoldal"
     #define STRING_PREVIOUS_PRINT_DATA    "Összegzés"
     #define STRING_FILE_NAME              "Fájl: "
     #define STRING_PRINT_TIME             "Nyomtatási idő: "
