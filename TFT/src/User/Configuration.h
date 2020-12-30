@@ -18,7 +18,7 @@
  *
  * Options:
  * MODE_MARLIN // Marlin Mode
- * MDOE SERIAL_TSC // Touch Mode
+ * MODE_SERIAL_TSC // Touch Mode
  */
 #define DEFAULT_LCD_MODE MODE_SERIAL_TSC
 
