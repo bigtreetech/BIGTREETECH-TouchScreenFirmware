@@ -2,6 +2,11 @@ name: Build Binaries
 on:
   push:
     branches: [ master ]
+    paths-ignore:
+    - Bootloader/**
+    - readme/**
+    - '**/*.md'
+
 jobs:
   main:
     name: Main
