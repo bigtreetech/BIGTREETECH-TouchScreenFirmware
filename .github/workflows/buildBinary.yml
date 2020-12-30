@@ -6,6 +6,7 @@ on:
     - .devcontainer/**
     - .github/**
     - Bootloader/**
+    - Copy to SD Card root directory to update/**
     - images/**
     - readme/**
     - '**/*.md'

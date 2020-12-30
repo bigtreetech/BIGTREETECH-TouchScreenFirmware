@@ -3,15 +3,17 @@ on:
   pull_request:
     paths-ignore:
     - Bootloader/**
-    - readme/**
+    - Copy to SD Card root directory to update/**
     - images/**
+    - readme/**
     - '**/*.md'
 
   push:
     paths-ignore:
     - Bootloader/**
-    - readme/**
+    - Copy to SD Card root directory to update/**
     - images/**
+    - readme/**
     - '**/*.md'
 
 jobs:
