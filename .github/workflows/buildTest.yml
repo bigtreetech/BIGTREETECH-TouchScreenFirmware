@@ -18,7 +18,7 @@ on:
 
 jobs:
   main:
-    name: Main
+    name: Build Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master

@@ -13,7 +13,8 @@ on:
 
 jobs:
   main:
-    name: Main
+    name: Build Binaries
+    if: github.repository == 'bigtreetech/BIGTREETECH-TouchScreenFirmware'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
