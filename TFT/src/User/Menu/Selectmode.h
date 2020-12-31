@@ -17,9 +17,11 @@ typedef enum
 }MKEY_VALUES;
 
 extern bool skipMode;
+extern bool freshBoot;
 
-void menuMode(void);
 void loopCheckMode(void);
+void menuMode(void);
+void switchMode(void);
 
 #ifdef __cplusplus
 }

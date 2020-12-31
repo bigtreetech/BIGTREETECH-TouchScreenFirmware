@@ -14,7 +14,7 @@ static bool    heat_update_waiting = false;
 static bool    heat_send_waiting[MAX_HEATER_COUNT];
 
 uint32_t nextHeatCheckTime = 0;
-#define AUTOREPORT_TIMEOUT (nextHeatCheckTime + 1000) // update interval + 3 second grace period
+#define AUTOREPORT_TIMEOUT (nextHeatCheckTime + 1000) // update interval + 1 second grace period
 
 static uint8_t fixHeaterIndex(uint8_t index)
 {
@@ -219,7 +219,7 @@ void loopCheckHeater(void)
     if (OS_GetTimeMs() > AUTOREPORT_TIMEOUT && !heat_update_waiting)
     {
       heat_update_waiting = storeCmd("M155 ");
-      updateNextHeatCheckTime();  // set next timeout for temperature auto-report
+      if(heat_update_waiting) updateNextHeatCheckTime();  // set next timeout for temperature auto-report
     }
   }
 
