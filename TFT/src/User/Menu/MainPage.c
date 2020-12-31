@@ -10,7 +10,11 @@ void menuMain(void)
     // icon                         label
     {{ICON_HEAT_FAN,                LABEL_UNIFIEDHEAT},
      {ICON_HOME_MOVE,               LABEL_UNIFIEDMOVE},
-     {ICON_EXTRUDE,                 LABEL_EXTRUDE},
+    #ifdef LOAD_UNLOAD_M701_M702
+      {ICON_EXTRUDE,                 LABEL_LOAD_UNLOAD_SHORT},
+    #else
+      {ICON_EXTRUDE,                 LABEL_EXTRUDE},
+    #endif
      {ICON_STOP,                    LABEL_EMERGENCYSTOP},
      {ICON_GCODE,                   LABEL_TERMINAL},
      {ICON_CUSTOM,                  LABEL_CUSTOM},
@@ -42,7 +46,11 @@ void menuMain(void)
         break;
 
       case KEY_ICON_2:
-        infoMenu.menu[++infoMenu.cur] = menuExtrude;
+        #ifdef LOAD_UNLOAD_M701_M702
+          infoMenu.menu[++infoMenu.cur] = menuLoadUnload;
+        #else
+          infoMenu.menu[++infoMenu.cur] = menuExtrude;
+        #endif
         break;
 
       case KEY_ICON_3:
