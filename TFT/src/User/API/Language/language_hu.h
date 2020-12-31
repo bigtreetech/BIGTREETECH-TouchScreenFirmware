@@ -292,7 +292,7 @@
     #define STRING_FILAMENT_COST          "Szál költség: %1.2f"
     #define STRING_NO_FILAMENT_STATS      "Nincs szál statisztika."
     #define STRING_CLICK_FOR_MORE         "Kattints a részletekért."
-    #define STRING_EXT_TEMPLOW            "Fejhőfok alacsonyabb mint a\nminimális hőfok (%d℃)."
+    #define STRING_EXT_TEMPLOW            "Fejhőfok alacsonyabb, mint a\nminimális hőfok (%d℃)."
     #define STRING_COLD_EXT               "Hideg adagolás tiltva"
     #define STRING_HEAT_HOTEND            "Fűtöd a fejet %d℃-ra?"
 
