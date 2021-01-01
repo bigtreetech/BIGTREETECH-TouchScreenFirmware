@@ -1,13 +1,13 @@
 <!-- omit in toc -->
 
-# BigTreeTech Touchscreen Firmware
+# BigTreeTech TFT Touchscreen
 
 ![GitHub](https://img.shields.io/github/license/bigtreetech/bigtreetech-TouchScreenFirmware.svg)
 [![GitHub contributors](https://img.shields.io/github/contributors/bigtreetech/bigtreetech-TouchScreenFirmware.svg)](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/graphs/contributors)
 ![GitHub Release Date](https://img.shields.io/github/release-date/bigtreetech/bigtreetech-TouchScreenFirmware.svg)
 [![Build Status](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/workflows/Build%20Test/badge.svg?branch=master)](https://github.com/bigtreetech/bigtreetech-TouchScreenFirmware/actions)
 
-Firmware for BigTreeTech's dual-mode touchscreen 3D printer controllers
+Important information related to BigTreeTech's TFT touchscreen 3D printer controllers
 
 <img width=500 src="https://user-images.githubusercontent.com/13375512/76691608-ae1b8780-6609-11ea-9ee1-421bcf09e538.png">
 
@@ -16,14 +16,27 @@ Firmware for BigTreeTech's dual-mode touchscreen 3D printer controllers
 ## Table of Contents
 
 - [Connect the TFT to the Mainboard](#connect-the-tft-to-the-mainboard)
+
 - [Menus and Themes](#menus-and-themes)
+
 - [Update TFT Firmware](#update-tft-firmware)
+
 - [Configuration](#configuration)
+
 - [Customization](#customization)
+
   - [Bootscreen and Icons](#bootscreen-and-icons)
   - [Firmware](#firmware)
+
 - [Troubleshooting](#troubleshooting)
+
 - [Version History](#version-history)
+
+- [Appendix](#appendix)
+
+  - [Show more statistics at the end of the print](#show-more-statistics-at-the-end-of-the-print)
+
+  
 
 ## Connect the TFT to the Mainboard
 
@@ -48,12 +61,16 @@ C: In case you have an **"E3" mainboard** which provides a **single EXP connecto
 | ![status screen 0](https://user-images.githubusercontent.com/54359396/103319145-09035b80-4a31-11eb-91d0-dd761a48b6f5.png) | ![Unified Material Main Screen](https://user-images.githubusercontent.com/54359396/98742038-03cd4d00-23ae-11eb-9552-36dc02fe66f4.png) |
 | In config.ini define: General Settings<br/>Enable Status Screen<br/># Select the Main Screen flavour<br/># Options: [Enable: 1, Disable: 0]<br/>**status_screen: 0** | In config.ini define: General Settings<br/>Enable Status Screen<br/># Select the Main Screen flavour<br/># Options: [Enable: 1, Disable: 0]<br/>**status_screen: 1** |
 
+
+
 ## Themes
 
 |                      Unified Menu Theme                      | Hybrid Red Material Theme by **[AntoszHUN](https://github.com/AntoszHUN)** | The Round Miracle Theme by **[Acenotass](https://github.com/Acenotass)** |
 | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
 | ![Unified Material Main Screen](https://user-images.githubusercontent.com/54359396/98742038-03cd4d00-23ae-11eb-9552-36dc02fe66f4.png) | ![Hybrid Red Menu Material Mainscreen](https://user-images.githubusercontent.com/54359396/98869176-a995c000-2471-11eb-94da-a0bc41abf3e9.png) | ![Round Miracle Main Screen](https://user-images.githubusercontent.com/54359396/99251566-d77e5a00-280d-11eb-9c7a-0e7c0111eedd.png) |
 | Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update - Unified Menu Material theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update/THEME_Unified%20Menu%20Material%20theme) folder | Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update - Hybrid Red Material theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update/THEME_Hybrid%20Red%20Menu%20Material%20theme) folder | Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update - The Round Miracle theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update/THEME_The%20Round%20Miracle%20Menu%20Material%20theme) folder |
+
+
 
 ## Update TFT Firmware
 
@@ -82,8 +99,6 @@ The TFT firmware update is done in three steps described below and includes up t
 **STEPS:**
 
 **step1:** Copy your self compiled firmware or the BIGTREE_TFT*_V*.*.*.bin, plus the TFT*` folder and the config.ini to the root of a blank SD card that is <8GB and formatted as FAT32:
-
->>>>>>> 089aabc9c27da0d029761aa064daea2b2ede9aaf
 
 ![Firmware](https://user-images.githubusercontent.com/54359396/100600549-b6cffd00-3301-11eb-8b57-d56b7a4422f1.jpg)
 
@@ -199,3 +214,27 @@ To reset the TFT's touch screen calibration, create a blank file named `reset.tx
 ## Version History
 
 See [BIGTREETECH-TouchScreenFirmware/releases](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/releases) for a complete version history.
+
+## Appendix
+
+### Show more statistics at the end of the print
+
+Statistics as filament length, filament weight and filament cost can be embedded into the gCode. These statistics will be presented after the print is finished in the new infobox area as a scrolling text. You can click that infobox and a popup will present you the printed filename (limited to the first 25 characters), the time needed for the print, the filament length used, the filament weight and its cost.
+
+The statistic data in the gCode must have the following format (a good practice would be to include this at the beginning of the gCode):
+
+M118 P0 filament_data L:{12.3456}m	L: represents the length in meters
+M118 P0 filemant_data W:{1.23456}g	W: represents the weight in grams
+M118 P0 filament_data C:{0.1234}		C: represents the cost without a unit
+
+The values of every filament data can be in a brackets, parentheses, apostrophes, etc. or without them, measurement units can be there or not.
+So M118 P0 filament_data L:(12.3456)m, M118 P0 filament_data L:12.3456meters, M118 P0 filament_data L:[12.3456] and so on are all valid formats.
+
+The inclusion of the filament data into the gCode can be automated. In Cura all you have to do is to insert the following into the Start G-Code:
+M118 P0 filament_data L:{filament_amount}m
+M118 P0 filament_data W:{filament_weight}g
+M118 P0 filament_data C:{filament_cost}
+
+In case the gCode file has been generated using the  [BTT 3D Plug-In Suit](https://github.com/bigtreetech/Bigtree3DPluginSuit), the data is automatically added.
+
+In case filament data is not present in the gCode, the filament length data is calculated during print. Length is calculated regardless of using the TFT USB, TFT SD or the onboard SD. Calculations are done in both absolute or relative extrusion mode. Filament data takes into account the flow rate also but with a caveat. It has to be the same flow rate during the entire time of the printing, because the end result is calculated based on the flow rate at the time the print has finished. If flow rate changes during the print the results will not be accurate anymore.
