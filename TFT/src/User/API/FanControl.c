@@ -87,6 +87,7 @@ uint8_t fanGetSetPercent(uint8_t i)
 void fanSetCurSpeed(uint8_t i, uint8_t speed)
 {
   curFanSpeed[i] = speed;
+  setFanSpeed[i] = speed;
 }
 
 uint8_t fanGetCurSpeed(uint8_t i)
