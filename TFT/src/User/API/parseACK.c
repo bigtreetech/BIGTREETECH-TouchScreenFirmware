@@ -287,45 +287,53 @@ void parseACK(void)
     syncL2CacheFromL1(SERIAL_PORT);
     infoHost.rx_ok[SERIAL_PORT] = false;
 
-    if (infoHost.connected == false) //not connected to Marlin
+    if (infoHost.connected == false) // Not connected to printer
     {
-      // Parse error information even though not connected to printer
-      if (ack_seen(errormagic))
+      // Execute first contact only when TFT is in touch mode
+      if (infoMenu.menu[0] == menuStatus)
       {
-        ackPopupInfo(errormagic);
-      }
-      //the first response should be such as "T:25/50\n"
-      if (!(ack_seen("@") && ack_seen("T:")) && !ack_seen("T0:"))  goto parse_end;
-      if (ack_seen(heaterID[BED])) infoSettings.bed_en = ENABLED;
-      if (ack_seen(heaterID[CHAMBER])) infoSettings.chamber_en = ENABLED;
-      uint8_t i;
-      for (i = NOZZLE0; i < MAX_HOTEND_COUNT; i++)
-      {
-        if(!ack_seen(heaterID[i])) break;
-      }
-      infoSettings.hotend_count = i ? i : 1;
-      if (infoSettings.ext_count < infoSettings.hotend_count) infoSettings.ext_count = infoSettings.hotend_count;
-      updateNextHeatCheckTime();
-      infoHost.connected = true;
+        // Parse error information even though not connected to printer
+        if (ack_seen(errormagic)) ackPopupInfo(errormagic);
 
-      #ifdef RepRapFirmware
-        if (!ack_seen("@"))  //It's RepRapFirmware
+        //the first response should be such as "T:25/50\n"
+        if (!(ack_seen("@") && ack_seen("T:")) && !ack_seen("T0:")) goto parse_end;
+
+        // find hotend count and setup heaters
+        uint8_t i;
+        for (i = NOZZLE0; i < MAX_HOTEND_COUNT; i++)
         {
-          infoMachineSettings.isMarlinFirmware = 0;
-          infoMachineSettings.softwareEndstops = ENABLED;
-          infoHost.wait = false;
-          storeCmd("M92\n");
-          storeCmd("M115\n");
+          if(!ack_seen(heaterID[i])) break;
         }
-      #endif
+        infoSettings.hotend_count = i ? i : 1;
+        if (infoSettings.ext_count < infoSettings.hotend_count) infoSettings.ext_count = infoSettings.hotend_count;
+        if (ack_seen(heaterID[BED])) infoSettings.bed_en = ENABLED;
+        if (ack_seen(heaterID[CHAMBER])) infoSettings.chamber_en = ENABLED;
+        updateNextHeatCheckTime();
 
-      if(infoMachineSettings.isMarlinFirmware == -1) // if never connected to the printer since boot
+        #ifdef RepRapFirmware
+          if (!ack_seen("@"))  //It's RepRapFirmware
+          {
+            infoMachineSettings.isMarlinFirmware = 0;
+            infoMachineSettings.softwareEndstops = ENABLED;
+            infoHost.wait = false;
+            storeCmd("M92\n");
+            storeCmd("M115\n");
+          }
+        #endif
+
+        if(infoMachineSettings.isMarlinFirmware == -1) // if never connected to the printer since boot
+        {
+          storeCmd("M503\n");  // Query detailed printer capabilities
+          storeCmd("M92\n");   // Steps/mm of extruder is an important parameter for Smart filament runout
+                               // Avoid can't getting this parameter due to disabled M503 in Marlin
+          storeCmd("M115\n");
+          storeCmd("M211\n");  // retrieve the software endstops state
+        }
+        infoHost.connected = true;
+      }
+      else
       {
-        storeCmd("M503\n");  // Query detailed printer capabilities
-        storeCmd("M92\n");   // Steps/mm of extruder is an important parameter for Smart filament runout
-                             // Avoid can't getting this parameter due to disabled M503 in Marlin
-        storeCmd("M115\n");
-        storeCmd("M211\n");  // retrieve the software endstops state
+        goto parse_end; // ignore everything if TFT is not in touch mode
       }
     }
 
