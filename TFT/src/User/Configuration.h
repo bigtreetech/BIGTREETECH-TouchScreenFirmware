@@ -6,7 +6,13 @@
 //===========================================================================
 
 /**
- * To work with RepRapFirmware, Add M575 P1 S2 B115200 to the end of config.g file in sd card
+ * Long press touch screen capture the current full screen to SD card
+ * Only for documentation purposes, DON'T enable it when normal printing
+ */
+//#define SCREEN_SHOT_TO_SD
+
+/**
+ * To work with RepRapFirmware, Add M575 P1 S2 B115200 to the end of config.g file in RRF motherboard sd card
  * uncomment for RepRapFirmware
 */
 //#define RepRapFirmware

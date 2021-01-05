@@ -10,6 +10,12 @@
 //check size of settings against max allocated size at compile time
 #define SIZE_CHECK(object) ((void)sizeof(char[1 - 2*!!(object)]))
 
+#if defined(TFT35_V2_0) || defined(TFT35_V3_0) || defined(TFT35_B1_V3_0) || defined(TFT35_E3_V3_0)
+  #ifdef SCREEN_SHOT_TO_SD
+    #error "Hardware error, need to change the TFT Pin39 from GND to 3.3V to use this feature. Otherwise, the color read out is incorrect"
+  #endif
+#endif
+
 #if CONFIG_VERSION != CONFIG_SUPPPORT
     #error "the Configuration.h is old. please use the latest Configuration.h file"
 #endif
