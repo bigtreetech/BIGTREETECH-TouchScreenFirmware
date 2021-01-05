@@ -187,7 +187,7 @@ void menuRGBSettings(void)
   }
 }
 
-#if QUICK_EEPROM_BUTTON == 1
+#ifdef QUICK_EEPROM_BUTTON
 
 void menuEepromSettings(void)
 {
@@ -268,7 +268,7 @@ void menuMachineSettings(void)
      {ICON_CUSTOM,                  LABEL_CUSTOM},
      {ICON_RGB_SETTINGS,            LABEL_RGB_SETTINGS},
      {ICON_TUNING,                  LABEL_TUNING},
-  #if QUICK_EEPROM_BUTTON == 1
+  #ifdef QUICK_EEPROM_BUTTON
      {ICON_EEPROM_SAVE,             LABEL_EEPROM_SETTINGS},
   #else
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
@@ -309,7 +309,7 @@ void menuMachineSettings(void)
       infoMenu.menu[++infoMenu.cur] = menuTuning;
       break;
 
-    #if QUICK_EEPROM_BUTTON == 1
+    #ifdef QUICK_EEPROM_BUTTON
       case KEY_ICON_5:
         infoMenu.menu[++infoMenu.cur] = menuEepromSettings;
         break;
