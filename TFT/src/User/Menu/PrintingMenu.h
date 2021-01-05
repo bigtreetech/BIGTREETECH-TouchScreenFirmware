@@ -16,13 +16,14 @@ extern bool filDataSeen;
 
 typedef struct
 {
-    /* data */
-    char name[30];
-    uint32_t time;
-    float length;
-    float weight;
-    float cost;
-}FILAMENTDATA;
+  /* data */
+  char name[30];
+  uint32_t time;
+  float length;
+  float weight;
+  float cost;
+} FILAMENTDATA;
+
 extern FILAMENTDATA filData;
 
 #ifdef __cplusplus
