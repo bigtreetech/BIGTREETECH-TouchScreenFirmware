@@ -824,7 +824,7 @@ void meshUpdateData(char *dataRow)
 
     LABELCHAR(tempMsg, LABEL_PROCESS_ABORTED);
 
-    sprintf(&tempMsg[strlen(tempMsg)], "\n %s", dataRow);
+    sprintf(tempMsg, "%s\n %s", tempMsg, dataRow);
 
     popupReminder(DIALOG_TYPE_ERROR, LABEL_MESH_EDITOR, (u8 *) tempMsg);
 
