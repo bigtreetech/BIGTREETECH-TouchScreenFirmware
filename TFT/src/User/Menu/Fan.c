@@ -21,7 +21,8 @@ void fanSpeedReDraw(bool skip_header)
     if (infoSettings.fan_percentage == 1)
     {
       GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1)>>1, exhibitRect.y0, (uint8_t *)"%");
-    }else
+    }
+    else
     {
       GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1)>>1, exhibitRect.y0, (uint8_t *)"RAW");
     }

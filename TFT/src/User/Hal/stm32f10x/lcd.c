@@ -2,10 +2,10 @@
 #include "lcd.h"
 
 #ifdef STM32_HAS_FSMC
-u16 LCD_RD_DATA(void)
+uint16_t LCD_RD_DATA(void)
 {
-  vu16 ram;
-  ram=LCD->LCD_RAM;
+  volatile uint16_t ram;
+  ram = LCD->LCD_RAM;
   return ram;
 }
 
@@ -105,7 +105,7 @@ void LCD_HardwareConfig(void)
 }
 
 #else
-void LCD_WR_REG(u16 data)
+void LCD_WR_REG(uint16_t data)
 {
 	LCD_RS_CLR;
  	LCD_CS_CLR;
@@ -115,7 +115,7 @@ void LCD_WR_REG(u16 data)
  	LCD_CS_SET;
 }
 
-void LCD_WR_DATA(u16 data)
+void LCD_WR_DATA(uint16_t data)
 {
 	LCD_RS_SET;
 	LCD_CS_CLR;
@@ -125,43 +125,31 @@ void LCD_WR_DATA(u16 data)
 	LCD_CS_SET;
 }
 
-u16 LCD_RD_DATA(void)
+uint16_t LCD_RD_DATA(void)
 {
   #if defined(MKS_32_V1_4) || defined (MKS_28_V1_0)
-  LCD_RS_SET;
-	LCD_CS_CLR;
-	LCD_RD_CLR;
-  LCD_RD_CLR;
-  uint8_t  hi_bytes = GPIOE->IDR;
-  LCD_RD_SET;
-  LCD_RD_CLR;
-  uint8_t lo_bytes = GPIOE->IDR;
-  LCD_RD_SET;
-	LCD_CS_SET;
-
-  // uint16_t data =(uint16_t)((hi_bytes<<8)+lo_bytes);
-  //vu16 ram = data;
-  //return ram;
-  return (uint16_t)((hi_bytes<<8)+lo_bytes);
+    #define LCD_DATA_PORT GPIOE
   #else
-  vu16 ram;
- 	GPIOC->CRL = 0X88888888; //PB0-7
-	GPIOC->CRH = 0X88888888; //PB8-15
-	GPIOC->ODR = 0X0000;
-
-	LCD_RS_SET;
-	LCD_CS_CLR;
-	LCD_RD_CLR;
-
-	ram = DATAIN();
-	LCD_RD_SET;
-	LCD_CS_SET;
-
-	GPIOC->CRL = 0X33333333; //PC0-7  �������
-	GPIOC->CRH = 0X33333333; //PC8-15 �������
-	GPIOC->ODR = 0XFFFF;    //ȫ�������
-  return ram;
+    #define LCD_DATA_PORT GPIOC
   #endif
+
+  volatile uint16_t ram;
+  LCD_DATA_PORT->CRL = 0X88888888;
+  LCD_DATA_PORT->CRH = 0X88888888;
+  LCD_DATA_PORT->ODR = 0X0000;
+
+  LCD_RS_SET;
+  LCD_CS_CLR;
+  LCD_RD_CLR; // double for delay.
+  LCD_RD_CLR;
+  ram = DATAIN();
+  LCD_RD_SET;
+  LCD_CS_SET;
+
+  LCD_DATA_PORT->CRL = 0X33333333;
+  LCD_DATA_PORT->CRH = 0X33333333;
+  LCD_DATA_PORT->ODR = 0XFFFF;
+  return ram;
 }
 
 void LCD_GPIO_Config(void)
