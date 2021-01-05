@@ -173,7 +173,7 @@
 //
 
 // ST7920 Simulator SPI pins
-//#define ST7920_SPI    _SPI3            // uncomment to enable Marlin mode
+#define ST7920_SPI    _SPI3            // uncomment to enable Marlin mode
 
 // Buzzer support
 #define BUZZER_PIN    PA2
