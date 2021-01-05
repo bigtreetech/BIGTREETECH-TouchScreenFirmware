@@ -78,7 +78,7 @@ void menuNotification(void)
       default:
         break;
     }
-  loopProcess();
+    loopProcess();
   }
   setNotificationHandler(NULL);
 }

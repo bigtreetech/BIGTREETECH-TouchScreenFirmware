@@ -66,6 +66,10 @@ void menuMarlinMode(void)
     #endif
     loopCheckMode();
 
+    #if defined(SCREEN_SHOT_TO_SD)
+      loopScreenShot();
+    #endif
+
     #ifdef LCD_LED_PWM_CHANNEL
       loopDimTimer();
     #endif

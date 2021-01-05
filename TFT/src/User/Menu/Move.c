@@ -97,7 +97,6 @@ void menuMove(void)
   else
     LOAD_XYZ_LABEL_INDEX(table[Z_AXIS][0], DEC, table[Z_AXIS][1], INC, Z);
 
-
   menuDrawPage(&moveItems);
   mustStoreCmd("G91\n");
   mustStoreCmd("M114\n");
@@ -118,10 +117,10 @@ void menuMove(void)
         case KEY_ICON_2: storeMoveCmd(Z_AXIS, 1); break;  // Z move up if no invert
 
         case KEY_ICON_3:
-              item_moveLen_index = (item_moveLen_index + 1) % ITEM_MOVE_LEN_NUM;
-              moveItems.items[key_num] = itemMoveLen[item_moveLen_index];
-              menuDrawItem(&moveItems.items[key_num], key_num);
-              break;
+          item_moveLen_index = (item_moveLen_index + 1) % ITEM_MOVE_LEN_NUM;
+          moveItems.items[key_num] = itemMoveLen[item_moveLen_index];
+          menuDrawItem(&moveItems.items[key_num], key_num);
+          break;
 
         case KEY_ICON_4: storeMoveCmd(X_AXIS, -1); break; // X move decrease if no invert
         case KEY_ICON_5: storeMoveCmd(Y_AXIS, -1); break; // Y move decrease if no invert
@@ -134,10 +133,10 @@ void menuMove(void)
         case KEY_ICON_2: storeMoveCmd(Z_AXIS, 1); break;  // Z move up if no invert
 
         case KEY_ICON_3:
-              item_moveLen_index = (item_moveLen_index + 1) % ITEM_MOVE_LEN_NUM;
-              moveItems.items[key_num] = itemMoveLen[item_moveLen_index];
-              menuDrawItem(&moveItems.items[key_num], key_num);
-              break;
+          item_moveLen_index = (item_moveLen_index + 1) % ITEM_MOVE_LEN_NUM;
+          moveItems.items[key_num] = itemMoveLen[item_moveLen_index];
+          menuDrawItem(&moveItems.items[key_num], key_num);
+          break;
 
         case KEY_ICON_4: storeMoveCmd(X_AXIS, -1); break; // X move decrease if no invert
         case KEY_ICON_5: storeMoveCmd(Y_AXIS, -1); break; // Y move decrease if no invert

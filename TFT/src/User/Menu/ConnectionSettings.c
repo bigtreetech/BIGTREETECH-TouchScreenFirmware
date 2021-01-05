@@ -58,7 +58,9 @@ void menuBaudrate(void)
     {
       totalItems[i].icon = ICONCHAR_CHECKED;
       cur_item = i;
-    } else {
+    }
+    else
+    {
       totalItems[i].icon = ICONCHAR_UNCHECKED;
     }
     totalItems[i].itemType = LIST_LABEL;
