@@ -26,7 +26,7 @@ void ablUpdateStatus(bool succeeded)
       savingEnabled = false;
       tempTitle.index = LABEL_ABL_SETTINGS_UBL;
 
-      sprintf(tempMsg, "%s\n %s", tempMsg, textSelect(LABEL_BL_SMART_FILL));
+      sprintf(&tempMsg[strlen(tempMsg)], "\n %s", textSelect(LABEL_BL_SMART_FILL));
       break;
     }
     default:
@@ -39,7 +39,7 @@ void ablUpdateStatus(bool succeeded)
 
     if (savingEnabled && infoMachineSettings.EEPROM == 1)
     {
-      sprintf(tempMsg, "%s\n %s", tempMsg, textSelect(LABEL_EEPROM_SAVE_INFO));
+      sprintf(&tempMsg[strlen(tempMsg)], "\n %s", textSelect(LABEL_EEPROM_SAVE_INFO));
       setDialogText(tempTitle.index, (u8 *) tempMsg, LABEL_CONFIRM, LABEL_CANCEL);
       showDialog(DIALOG_TYPE_SUCCESS, saveEepromSettings, NULL, NULL);
     }

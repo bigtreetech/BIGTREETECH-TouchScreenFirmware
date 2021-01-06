@@ -815,18 +815,18 @@ void parseACK(void)
       {
         char tmpMsg[100];
         strcpy (tmpMsg, "Mean: ");
-        sprintf (tmpMsg, "%s%0.5f", tmpMsg, ack_value());
+        sprintf (&tmpMsg[strlen(tmpMsg)], "%0.5f", ack_value());
         if (ack_seen("Min: "))
         {
-          sprintf (tmpMsg, "%s\nMin: %0.5f", tmpMsg, ack_value());
+          sprintf (&tmpMsg[strlen(tmpMsg)], "\nMin: %0.5f", ack_value());
         }
         if (ack_seen("Max: "))
         {
-          sprintf (tmpMsg, "%s\nMax: %0.5f", tmpMsg, ack_value());
+          sprintf (&tmpMsg[strlen(tmpMsg)], "\nMax: %0.5f", ack_value());
         }
         if (ack_seen("Range: "))
         {
-          sprintf (tmpMsg, "%s\nRange: %0.5f", tmpMsg, ack_value());
+          sprintf (&tmpMsg[strlen(tmpMsg)], "\nRange: %0.5f", ack_value());
         }
         setDialogText( (u8* )"Repeatability Test", (uint8_t *)tmpMsg, LABEL_CONFIRM, LABEL_BACKGROUND);
         showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
