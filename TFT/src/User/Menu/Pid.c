@@ -44,7 +44,7 @@ void pidUpdateStatus(bool succeeded)
 
     if (succeeded)
     {
-      sprintf(&tempMsg[strlen(tempMsg)], " %s", textSelect(LABEL_PROCESS_COMPLETED));
+      sprintf(tempMsg, "%s %s", tempMsg, textSelect(LABEL_PROCESS_COMPLETED));
 
       BUZZER_PLAY(sound_notify);
 
@@ -52,7 +52,7 @@ void pidUpdateStatus(bool succeeded)
     }
     else
     {
-      sprintf(&tempMsg[strlen(tempMsg)], " %s", textSelect(LABEL_PROCESS_ABORTED));
+      sprintf(tempMsg, "%s %s", tempMsg, textSelect(LABEL_PROCESS_ABORTED));
 
       BUZZER_PLAY(sound_error);
 
@@ -72,7 +72,7 @@ void pidUpdateStatus(bool succeeded)
 
       if (infoMachineSettings.EEPROM == 1)
       {
-        sprintf(&tempMsg[strlen(tempMsg)], "\n %s", textSelect(LABEL_EEPROM_SAVE_INFO));
+        sprintf(tempMsg, "%s\n %s", tempMsg, textSelect(LABEL_EEPROM_SAVE_INFO));
 
         setDialogText(LABEL_PID_TITLE, (u8 *) tempMsg, LABEL_CONFIRM, LABEL_CANCEL);
         showDialog(DIALOG_TYPE_SUCCESS, saveEepromSettings, NULL, NULL);
@@ -104,7 +104,7 @@ static inline void pidCheckTimeout(void)
 
       LABELCHAR(tempMsg, LABEL_TIMEOUT_REACHED);
 
-      sprintf(&tempMsg[strlen(tempMsg)], "\n %s", textSelect(LABEL_PROCESS_ABORTED));
+      sprintf(tempMsg, "%s\n %s", tempMsg, textSelect(LABEL_PROCESS_ABORTED));
 
       BUZZER_PLAY(sound_error);
 

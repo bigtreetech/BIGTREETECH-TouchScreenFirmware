@@ -25,7 +25,7 @@ void mblUpdateStatus(bool succeeded)
 
     if (infoMachineSettings.EEPROM == 1)
     {
-      sprintf(&tempMsg[strlen(tempMsg)], "\n %s", textSelect(LABEL_EEPROM_SAVE_INFO));
+      sprintf(tempMsg, "%s\n %s", tempMsg, textSelect(LABEL_EEPROM_SAVE_INFO));
 
       setDialogText(LABEL_MBL_SETTINGS, (u8 *) tempMsg, LABEL_CONFIRM, LABEL_CANCEL);
       showDialog(DIALOG_TYPE_SUCCESS, saveEepromSettings, NULL, NULL);
@@ -48,7 +48,7 @@ void mblNotifyError(void)
 {
   LABELCHAR(tempMsg, LABEL_MBL);
 
-  sprintf(&tempMsg[strlen(tempMsg)], " %s", textSelect(LABEL_OFF));
+  sprintf(tempMsg, "%s %s", tempMsg, textSelect(LABEL_OFF));
 
   addToast(DIALOG_TYPE_ERROR, tempMsg);
 }

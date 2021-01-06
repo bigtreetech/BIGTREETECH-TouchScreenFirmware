@@ -11,7 +11,7 @@ void probeNotifyError(void)
 {
   LABELCHAR(tempMsg, LABEL_Z_OFFSET);
 
-  sprintf(&tempMsg[strlen(tempMsg)], " %s", textSelect(LABEL_OFF));
+  sprintf(tempMsg, "%s %s", tempMsg, textSelect(LABEL_OFF));
 
   addToast(DIALOG_TYPE_ERROR, tempMsg);
 }
