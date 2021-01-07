@@ -76,12 +76,12 @@ void menuBeforePrinting(void)
     case BOARD_SD: // GCode from file on ONBOARD SD
       size = request_M23(infoFile.title+5);
 
-      //  if( powerFailedCreate(infoFile.title)==false)
+      //  if ( powerFailedCreate(infoFile.title)==false)
       //  {
       //
       //  }    // FIXME: Powerfail resume is not yet supported for ONBOARD_SD. Need more work.
 
-      if(size == 0)
+      if (size == 0)
       {
         ExitDir();
         infoMenu.cur--;
@@ -90,7 +90,7 @@ void menuBeforePrinting(void)
 
       infoPrinting.size  = size;
 
-      //    if(powerFailedExist())
+      //    if (powerFailedExist())
       //    {
       request_M24(0);
       //    }
@@ -109,19 +109,19 @@ void menuBeforePrinting(void)
 
     case TFT_UDISK:
     case TFT_SD: // GCode from file on TFT SD
-      if(f_open(&infoPrinting.file,infoFile.title, FA_OPEN_EXISTING | FA_READ) != FR_OK)
+      if (f_open(&infoPrinting.file,infoFile.title, FA_OPEN_EXISTING | FA_READ) != FR_OK)
       {
         ExitDir();
         infoMenu.cur--;
         return ;
       }
-      if( powerFailedCreate(infoFile.title)==false)
+      if ( powerFailedCreate(infoFile.title)==false)
       {}
       powerFailedlSeek(&infoPrinting.file);
 
       infoPrinting.size  = f_size(&infoPrinting.file);
       infoPrinting.cur   = infoPrinting.file.fptr;
-      if(infoSettings.send_start_gcode == 1 && infoPrinting.cur == 0) // PLR continue printing, CAN NOT use start gcode
+      if (infoSettings.send_start_gcode == 1 && infoPrinting.cur == 0) // PLR continue printing, CAN NOT use start gcode
       {
         sendPrintCodes(0);
       }
@@ -182,7 +182,7 @@ static inline void reDrawSpeed(int icon_pos)
 {
   char tempstr[10];
 
-  if(currentSpeedID == 0)
+  if (currentSpeedID == 0)
     ICON_ReadDisplay(printinfo_points[icon_pos].x,printinfo_points[icon_pos].y,ICON_PRINTING_SPEED);
   else
     ICON_ReadDisplay(printinfo_points[icon_pos].x,printinfo_points[icon_pos].y,ICON_PRINTING_FLOW);
@@ -314,12 +314,12 @@ void printFinished(void)
   char tempstr[30];
   strcpy(filamentInfo, "");
 
-  if (strlen((char *)getCurGcodeName(infoFile.title)) > MAX_FILE_CHAR)
+  if (strlen((char *)getCurGcodeName(infoFile.cur_file)) > MAX_FILE_CHAR)
   {
-    strncpy(filData.name, (char *)getCurGcodeName(infoFile.title), MAX_FILE_CHAR);
+    strncpy(filData.name, (char *)getCurGcodeName(infoFile.cur_file), MAX_FILE_CHAR);
     strcat(filData.name, "~");
   } else
-      strcpy(filData.name, (char *)getCurGcodeName(infoFile.title));
+      strcpy(filData.name, (char *)getCurGcodeName(infoFile.cur_file));
 
   filData.time = infoPrinting.time;
 
@@ -354,6 +354,7 @@ void printFinished(void)
   strcat(filamentInfo, "  ");
   strcat(filamentInfo, (char*)textSelect(LABEL_CLICK_FOR_MORE));
   drawPrintInfo();
+  strcpy(infoFile.cur_file, "");
 }
 
 void printInfoPopup(void)
@@ -417,7 +418,7 @@ void menuPrinting(void)
   bool      lastPrinting = isPrinting();
   memset(&nowHeat, 0, sizeof(HEATER));
 
-  printingItems.title.address = getCurGcodeName(infoFile.title);
+  printingItems.title.address = getCurGcodeName(infoFile.cur_file);
   if (lastPrinting == false)
   {
     printingItems.items[KEY_ICON_4] = itemIsPrinting[1];
@@ -468,7 +469,7 @@ void menuPrinting(void)
     }
 
     //check printing progress
-    if( infoPrinting.size != 0)
+    if ( infoPrinting.size != 0)
     {
       //check print time change
       if (time != infoPrinting.time ||
@@ -483,7 +484,7 @@ void menuPrinting(void)
     }
     else
     {
-      if(infoPrinting.progress != 100)
+      if (infoPrinting.progress != 100)
       {
         infoPrinting.progress = 100;
         reDrawTime(TIM_ICON_POS);
@@ -500,7 +501,7 @@ void menuPrinting(void)
     }
 
     //check change in speed or flow
-    if(curspeed[currentSpeedID] != speedGetCurPercent(currentSpeedID))
+    if (curspeed[currentSpeedID] != speedGetCurPercent(currentSpeedID))
     {
       curspeed[currentSpeedID] = speedGetCurPercent(currentSpeedID);
       RAPID_SERIAL_LOOP();  //perform backend printing loop before drawing to avoid printer idling
@@ -549,7 +550,7 @@ void menuPrinting(void)
     switch(key_num)
     {
       case KEY_ICON_4:
-        if(isPrinting())
+        if (isPrinting())
         {
           setPrintPause(!isPause(), false);
         }
@@ -568,7 +569,7 @@ void menuPrinting(void)
         break;
 
       case KEY_ICON_7:
-        if(isPrinting())
+        if (isPrinting())
         {
           setDialogText(LABEL_WARNING, LABEL_STOP_PRINT, LABEL_CONFIRM, LABEL_CANCEL);
           showDialog(DIALOG_TYPE_ALERT, stopConfirm, NULL, NULL);

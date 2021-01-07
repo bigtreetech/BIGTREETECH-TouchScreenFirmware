@@ -1,7 +1,7 @@
 #include "vfs.h"
 #include "includes.h"
 
-MYFILE infoFile={"?:", {0}, {0}, 0, 0, 0, TFT_SD, {0}};
+MYFILE infoFile={"?:", "", {0}, {0}, 0, 0, 0, TFT_SD, {0}};
 
 bool mountFS(void)
 {
@@ -86,7 +86,7 @@ bool scanPrintFiles(void)
 */
 bool EnterDir(char *nextdir)
 {
-  if(strlen(infoFile.title)+strlen(nextdir)+2>=MAX_PATH_LEN) return 0;
+  if (strlen(infoFile.title)+strlen(nextdir)+2>=MAX_PATH_LEN) return 0;
   strcat(infoFile.title,"/");
   strcat(infoFile.title,nextdir);
   return 1;
@@ -115,7 +115,7 @@ static bool volumeSrcStatus[FF_VOLUMES] = {false, false};
 
 bool isVolumeExist(u8 src)
 {
-  if(src >= FF_VOLUMES) return true;
+  if (src >= FF_VOLUMES) return true;
   return volumeSrcStatus[src];
 }
 
@@ -125,7 +125,7 @@ void loopVolumeSource(void)
 {
   for (u8 i = 0; i < FF_VOLUMES; i++)
   {
-    if(volumeSrcStatus[i] != (*volumeInserted[i])())
+    if (volumeSrcStatus[i] != (*volumeInserted[i])())
     {
       const int16_t labelSDStates[FF_VOLUMES][2] = {{LABEL_TFTSD_REMOVED,  LABEL_TFTSD_INSERTED},
                                                   {LABEL_U_DISK_REMOVED, LABEL_U_DISK_INSERTED}};

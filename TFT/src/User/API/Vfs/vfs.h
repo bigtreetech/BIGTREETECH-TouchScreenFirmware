@@ -18,6 +18,7 @@ typedef enum {
 typedef struct
 {
 	TCHAR title[MAX_PATH_LEN]; // max path depth
+	TCHAR cur_file[MAX_PATH_LEN]; // current file selected for print
 	TCHAR *folder[FOLDER_NUM]; // folder name buffer
 	TCHAR *file[FILE_NUM]; // file name buffer
 	uint16_t F_num; // current folder number
