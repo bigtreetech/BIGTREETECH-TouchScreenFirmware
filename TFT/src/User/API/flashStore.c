@@ -1,5 +1,4 @@
 #include <string.h>
-#include <string.h>
 #include "flashStore.h"
 #include "STM32_Flash.h"
 
