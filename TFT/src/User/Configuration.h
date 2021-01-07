@@ -171,12 +171,17 @@
 //Axes names displayed in Parameter Settings menu
 #define AXIS_DISPLAY_ID  {"X",  "Y",  "Z",   "E",  "E2"} // (X, Y, Z, E, E2)
 
-// Default move speed mm/min
-#define DEFAULT_SPEED_MOVE   3000
-#define SPEED_MOVE_SLOW      1000
-#define SPEED_MOVE_FAST      5000
+// Default X & Y speed (mm/min)
+#define SPEED_XY_SLOW   1000
+#define SPEED_XY_NORMAL 3000
+#define SPEED_XY_FAST   5000
 
-// Extrude speed mm/min
+// Default Z speed (mm/min)
+#define SPEED_Z_SLOW   500
+#define SPEED_Z_NORMAL 1000
+#define SPEED_Z_FAST   2000
+
+// Extrude speed (mm/min)
 #define EXTRUDE_SLOW_SPEED     60
 #define EXTRUDE_NORMAL_SPEED  600
 #define EXTRUDE_FAST_SPEED   1200

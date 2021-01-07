@@ -5,6 +5,7 @@
 uint8_t currentTool = NOZZLE0;
 uint8_t currentFan = 0;
 uint8_t currentSpeedID = 0;
+uint32_t nextUpdateTime = 0;
 
 //Icons list for tool change
 const ITEM itemTool[MAX_HEATER_COUNT] =

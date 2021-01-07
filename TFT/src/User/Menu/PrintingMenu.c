@@ -30,8 +30,7 @@ const GUI_RECT printinfo_val_rect[6] = {
         START_X + PICON_LG_WIDTH*2 + PICON_SPACE_X*2 + PICON_VAL_SM_EX,     ICON_START_Y + PICON_HEIGHT*1 + PICON_SPACE_Y*1 + PICON_VAL_Y + BYTE_HEIGHT},
 };
 
-static uint32_t nextInfoTime = 0;
-static uint32_t nextDrawTime = 0;
+static uint32_t nextLayerDrawTime = 0;
 const  char *const Speed_ID[2] = {"Speed","Flow"};
 static char filamentInfo[150];
 bool filDataSeen;
@@ -39,7 +38,7 @@ SCROLL infoScroll;
 FILAMENTDATA filData = {"", 0, 0, 0, 0};
 
 #define TOGGLE_TIME 2000 // 1 seconds is 1000
-#define DRAW_TIME 500 // 1 seconds is 1000
+#define LAYER_DRAW_TIME 500 // 1 seconds is 1000
 
 #define MAX_FILE_CHAR 25 // max character length to store
 
@@ -222,7 +221,7 @@ static inline void reDrawProgress(int icon_pos)
 
 static inline void reDrawLayer(int icon_pos)
 {
-  if (OS_GetTimeMs() > nextDrawTime)
+  if (OS_GetTimeMs() > nextLayerDrawTime)
   {
     char tempstr[10];
     sprintf(tempstr, "%.2fmm",
@@ -234,13 +233,13 @@ static inline void reDrawLayer(int icon_pos)
                    (u8 *)LAYER_TITLE);
     GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (u8 *)tempstr);
     GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
-    nextDrawTime = OS_GetTimeMs() + DRAW_TIME;
+    nextLayerDrawTime = OS_GetTimeMs() + LAYER_DRAW_TIME;
   }
 }
 
 static inline void toggleInfo(void)
 {
-  if (OS_GetTimeMs() > nextInfoTime)
+  if (OS_GetTimeMs() > nextUpdateTime)
   {
     if (infoSettings.hotend_count > 1)
     {
@@ -256,7 +255,7 @@ static inline void toggleInfo(void)
       reDrawFan(FAN_ICON_POS);
     }
     currentSpeedID = (currentSpeedID + 1) % 2;
-    nextInfoTime = OS_GetTimeMs() + TOGGLE_TIME;
+    nextUpdateTime = OS_GetTimeMs() + TOGGLE_TIME;
     RAPID_SERIAL_LOOP();   //perform backend printing loop before drawing to avoid printer idling
     reDrawSpeed(SPD_ICON_POS);
     speedQuery();
@@ -318,9 +317,11 @@ void printFinished(void)
   {
     strncpy(filData.name, (char *)getCurGcodeName(infoFile.title), MAX_FILE_CHAR);
     strcat(filData.name, "~");
-  } else
-      strcpy(filData.name, (char *)getCurGcodeName(infoFile.title));
-
+  }
+  else
+  {
+    strcpy(filData.name, (char *)getCurGcodeName(infoFile.title));
+  }
   filData.time = infoPrinting.time;
 
   if (speedGetCurPercent(1) != 100)

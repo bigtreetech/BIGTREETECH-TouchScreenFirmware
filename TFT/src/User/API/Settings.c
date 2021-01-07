@@ -1,6 +1,7 @@
 #include "Settings.h"
 #include "includes.h"
 
+
 SETTINGS infoSettings;
 MACHINESETTINGS infoMachineSettings;
 
@@ -8,7 +9,8 @@ const u16 default_max_temp[]      = HEAT_MAX_TEMP;
 const u16 default_max_fanPWM[]    = FAN_MAX_PWM;
 const u16 default_size_min[]      = {X_MIN_POS,Y_MIN_POS,Z_MIN_POS};
 const u16 default_size_max[]      = {X_MAX_POS,Y_MAX_POS,Z_MAX_POS};
-const u16 default_move_speed[]    = {SPEED_MOVE_SLOW, DEFAULT_SPEED_MOVE, SPEED_MOVE_FAST};
+const u16 default_xy_speed[]      = {SPEED_XY_SLOW, SPEED_XY_NORMAL, SPEED_XY_FAST};
+const u16 default_z_speed[]       = {SPEED_Z_SLOW, SPEED_Z_NORMAL, SPEED_Z_FAST};
 const u16 default_ext_speed[]     = {EXTRUDE_SLOW_SPEED, EXTRUDE_NORMAL_SPEED, EXTRUDE_FAST_SPEED};
 const u16 default_level_speed[]   = {LEVELING_POINT_XY_FEEDRATE, LEVELING_POINT_Z_FEEDRATE};
 const u16 default_pause_speed[]   = {NOZZLE_PAUSE_XY_FEEDRATE, NOZZLE_PAUSE_Z_FEEDRATE, NOZZLE_PAUSE_E_FEEDRATE};
@@ -135,7 +137,8 @@ void infoSettingsReset(void)
 
   for (int i = 0; i < SPEED_COUNT; i++)
   {
-    infoSettings.axis_speed[i]        = default_move_speed[i];
+    infoSettings.xy_speed[i]          = default_xy_speed[i];
+    infoSettings.z_speed[i]           = default_z_speed[i];
     infoSettings.ext_speed[i]         = default_ext_speed[i];
   }
 

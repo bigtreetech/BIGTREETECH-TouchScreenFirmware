@@ -7,10 +7,12 @@
 #define X_MOVE_GCODE "G1 X%.2f F%d\n"
 #define Y_MOVE_GCODE "G1 Y%.2f F%d\n"
 #define Z_MOVE_GCODE "G1 Z%.2f F%d\n"
+#define GANTRY_UPDATE_DELAY 500 // 1 seconds is 1000
 
 const char *const xyzMoveCmd[] = {X_MOVE_GCODE, Y_MOVE_GCODE, Z_MOVE_GCODE};
+static u8 item_moveLen_index = 1;
+AXIS nowAxis = X_AXIS;
 
-//1 title, ITEM_PER_PAGE item
 MENUITEMS moveItems = {
   // title
   LABEL_MOVE,
@@ -38,17 +40,11 @@ MENUITEMS moveItems = {
   }
 };
 
-static u8 item_moveLen_index = 1;
-static u32 nextGantryTime = 0;
-static u32 update_gantry_time = 500; // 1 seconds is 1000
-
-AXIS nowAxis = X_AXIS;
-
 void storeMoveCmd(AXIS xyz, int8_t direction)
 {
   // if invert is true, 'direction' multiplied by -1
   storeCmd(xyzMoveCmd[xyz], (infoSettings.invert_axis[xyz] ? -direction : direction) * moveLenSteps[item_moveLen_index],
-           infoSettings.axis_speed[infoSettings.move_speed]);
+           ((xyz != Z_AXIS) ? infoSettings.xy_speed[infoSettings.move_speed] : infoSettings.z_speed[infoSettings.move_speed]));
   // update now axis be selected
   nowAxis = xyz;
 }
@@ -162,11 +158,11 @@ void menuMove(void)
 
 void update_gantry(void)
 {
-  if (OS_GetTimeMs() > nextGantryTime)
+  if (OS_GetTimeMs() > nextUpdateTime)
   {
     coordinateQuery();
     drawXYZ();
-    nextGantryTime = OS_GetTimeMs() + update_gantry_time;
+    nextUpdateTime = OS_GetTimeMs() + GANTRY_UPDATE_DELAY;
   }
 }
 
