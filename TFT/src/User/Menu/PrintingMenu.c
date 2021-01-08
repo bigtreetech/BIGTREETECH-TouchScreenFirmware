@@ -554,17 +554,22 @@ void menuPrinting(void)
     {
       case KEY_ICON_4:
         if(isPrinting())
-        {
           setPrintPause(!isPause(), false);
-        }
-        else
-        {
-          infoMenu.cur = 0;
-        }
+        #ifndef TFT70_V3_0
+          else
+            infoMenu.cur = 0;
+        #endif
         break;
 
       case KEY_ICON_5:
-        infoMenu.menu[++infoMenu.cur] = menuBabystep;
+        #ifdef TFT70_V3_0
+          if(isPrinting())
+            infoMenu.menu[++infoMenu.cur] = menuBabystep;
+          else
+            infoMenu.cur = 0
+        #else
+          infoMenu.menu[++infoMenu.cur] = menuBabystep;
+        #endif
         break;
 
       case KEY_ICON_6:
