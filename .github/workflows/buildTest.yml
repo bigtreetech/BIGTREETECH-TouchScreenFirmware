@@ -1,9 +1,24 @@
 name: Build Test
-on: [pull_request, push]
+on:
+  pull_request:
+    paths-ignore:
+    - Bootloader/**
+    - Copy to SD Card root directory to update/**
+    - images/**
+    - readme/**
+    - '**/*.md'
+
+  push:
+    paths-ignore:
+    - Bootloader/**
+    - Copy to SD Card root directory to update/**
+    - images/**
+    - readme/**
+    - '**/*.md'
 
 jobs:
   main:
-    name: Main
+    name: Build Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master

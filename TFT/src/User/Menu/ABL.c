@@ -202,6 +202,9 @@ void menuABL(void)
 
           case BL_UBL:  // if Unified Bed Leveling
             storeCmd("G29 P1\n");
+            // Run this multiple times since it only fills some missing points, not all.
+            storeCmd("G29 P3\n");
+            storeCmd("G29 P3\n");
             storeCmd("G29 P3\n");
             storeCmd("M118 A1 UBL Complete\n");
             break;
