@@ -314,10 +314,11 @@ void menuPrintFromSource(void)
               break;
             //load model preview in flash if icon exists
             setPrintModelIcon(infoFile.source != BOARD_SD && model_DecodeToFlash(infoFile.title));
-            strcpy(infoFile.cur_file, ((infoMachineSettings.long_filename_support == ENABLED) && (infoFile.source == BOARD_SD)) ? 
-                    infoFile.Longfile[key_num + start - infoFile.F_num] : infoFile.file[key_num + start - infoFile.F_num]);
+            infoFile.cur_index = key_num + start - infoFile.F_num;
+
             char temp_info[FILE_NUM + 50];
-            sprintf(temp_info, (char *)textSelect(LABEL_START_PRINT), (uint8_t *)(infoFile.cur_file));
+            sprintf(temp_info, (char *)textSelect(LABEL_START_PRINT), (uint8_t *)(((infoMachineSettings.long_filename_support == ENABLED) && (infoFile.source == BOARD_SD)) ? 
+                    infoFile.Longfile[infoFile.cur_index] : infoFile.file[infoFile.cur_index]));
             //confirm file selction
             setDialogText(LABEL_PRINT, (u8 *)temp_info, LABEL_CONFIRM, LABEL_CANCEL);
             showDialog(DIALOG_TYPE_QUESTION, startPrint, ExitDir, NULL);

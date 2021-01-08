@@ -438,11 +438,7 @@ void parseACK(void)
         uint16_t path_len = MIN(end_index - start_index, MAX_PATH_LEN - strlen(getCurFileSource()) - 1);
         strncat(infoFile.title, dmaL2Cache + start_index, path_len);
         infoFile.title[path_len + strlen(getCurFileSource()) + 1] = 0;
-        if (strlen(infoFile.cur_file) == 0)
-        {
-          strncpy(infoFile.cur_file, dmaL2Cache + start_index, path_len);
-          infoFile.cur_file[path_len] = 0;
-        } 
+
         infoPrinting.pause = false;
         infoHost.printing = true;
         infoPrinting.time = 0;

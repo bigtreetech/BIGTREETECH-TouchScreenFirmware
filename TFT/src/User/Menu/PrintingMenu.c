@@ -314,12 +314,18 @@ void printFinished(void)
   char tempstr[30];
   strcpy(filamentInfo, "");
 
-  if (strlen((char *)getCurGcodeName(infoFile.cur_file)) > MAX_FILE_CHAR)
+  if (infoFile.cur_index == 65535)
   {
-    strncpy(filData.name, (char *)getCurGcodeName(infoFile.cur_file), MAX_FILE_CHAR);
-    strcat(filData.name, "~");
-  } else
-      strcpy(filData.name, (char *)getCurGcodeName(infoFile.cur_file));
+    strcpy(filData.name, (char *)getCurGcodeName(infoFile.title));
+  }
+  else
+  {
+    strncpy(tempstr, (((infoMachineSettings.long_filename_support == ENABLED) && (infoFile.source == BOARD_SD)) ?
+                                infoFile.Longfile[infoFile.cur_index] : infoFile.file[infoFile.cur_index]), MAX_FILE_CHAR - 1);
+    tempstr[MAX_FILE_CHAR] = 0;
+    strcat(tempstr, "~");
+    strcpy(filData.name, tempstr);
+  }
 
   filData.time = infoPrinting.time;
 
@@ -354,7 +360,7 @@ void printFinished(void)
   strcat(filamentInfo, "  ");
   strcat(filamentInfo, (char*)textSelect(LABEL_CLICK_FOR_MORE));
   drawPrintInfo();
-  strcpy(infoFile.cur_file, "");
+  infoFile.cur_index = 65535;
 }
 
 void printInfoPopup(void)
@@ -418,7 +424,16 @@ void menuPrinting(void)
   bool      lastPrinting = isPrinting();
   memset(&nowHeat, 0, sizeof(HEATER));
 
-  printingItems.title.address = getCurGcodeName(infoFile.cur_file);
+  if (infoFile.cur_index == 65535)
+  {
+    printingItems.title.address = getCurGcodeName(infoFile.title);
+  }
+  else
+  {
+    printingItems.title.address = (uint8_t *)(((infoMachineSettings.long_filename_support == ENABLED) && (infoFile.source == BOARD_SD)) ?
+                                   infoFile.Longfile[infoFile.cur_index] : infoFile.file[infoFile.cur_index]);
+  }
+
   if (lastPrinting == false)
   {
     printingItems.items[KEY_ICON_4] = itemIsPrinting[1];
