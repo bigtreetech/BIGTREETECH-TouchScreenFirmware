@@ -364,7 +364,6 @@ void printFinished(void)
   strcat(filamentInfo, "  ");
   strcat(filamentInfo, (char*)textSelect(LABEL_CLICK_FOR_MORE));
   drawPrintInfo();
-  infoFile.cur_index = 65535;
 }
 
 void printInfoPopup(void)
@@ -575,6 +574,7 @@ void menuPrinting(void)
         }
         else
         {
+          infoFile.cur_index = 65535;
           infoMenu.cur = 0;
         }
         break;
@@ -596,6 +596,7 @@ void menuPrinting(void)
         else
         {
           exitPrinting();
+          infoFile.cur_index = 65535;
           infoMenu.cur--;
         }
         break;
