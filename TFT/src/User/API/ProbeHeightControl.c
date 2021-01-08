@@ -1,6 +1,7 @@
 #include "ProbeHeightControl.h"
 #include "includes.h"
 
+static uint32_t nextQueryTime = 0;
 #define PROBE_UPDATE_DELAY 200  // 1 seconds is 1000
 
 static bool curSoftwareEndstops = true;
@@ -66,9 +67,9 @@ void probeHeightMove(float unit, int8_t direction)
 /* Query for new coordinates */
 void probeHeightQueryCoord(void)
 {
-  if (OS_GetTimeMs() > nextUpdateTime)
+  if (OS_GetTimeMs() > nextQueryTime)
   {
     coordinateQuery();
-    nextUpdateTime = OS_GetTimeMs() + PROBE_UPDATE_DELAY;
+    nextQueryTime = OS_GetTimeMs() + PROBE_UPDATE_DELAY;
   }
 }

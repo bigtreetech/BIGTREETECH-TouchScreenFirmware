@@ -17,7 +17,6 @@ extern "C" {
 extern uint8_t currentTool;
 extern uint8_t currentFan;
 extern uint8_t currentSpeedID;
-extern uint32_t nextUpdateTime;
 
 extern const ITEM itemTool[MAX_HEATER_COUNT];
 extern const ITEM itemDegreeSteps[ITEM_DEGREE_NUM];
@@ -33,6 +32,8 @@ extern const float moveLenSteps[ITEM_MOVE_LEN_NUM];
 
 extern const ITEM itemExtLenSteps[ITEM_EXT_LEN_NUM];
 extern const float extlenSteps[ITEM_EXT_LEN_NUM];
+
+bool nextScreenUpdate(uint32_t duration);
 
 #ifdef __cplusplus
 }

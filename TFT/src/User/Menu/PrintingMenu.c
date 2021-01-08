@@ -239,24 +239,23 @@ static inline void reDrawLayer(int icon_pos)
 
 static inline void toggleInfo(void)
 {
-  if (OS_GetTimeMs() > nextUpdateTime)
+  if (nextScreenUpdate(TOGGLE_TIME))
   {
     if (infoSettings.hotend_count > 1)
     {
       currentTool = (currentTool + 1) % infoSettings.hotend_count;
-      RAPID_SERIAL_LOOP();   //perform backend printing loop before drawing to avoid printer idling
+      RAPID_SERIAL_LOOP();  //perform backend printing loop before drawing to avoid printer idling
       reValueNozzle(EXT_ICON_POS);
     }
 
     if ((infoSettings.fan_count + infoSettings.fan_ctrl_count) > 1)
     {
       currentFan = (currentFan + 1) % (infoSettings.fan_count + infoSettings.fan_ctrl_count);
-      RAPID_SERIAL_LOOP();   //perform backend printing loop before drawing to avoid printer idling
+      RAPID_SERIAL_LOOP();  //perform backend printing loop before drawing to avoid printer idling
       reDrawFan(FAN_ICON_POS);
     }
     currentSpeedID = (currentSpeedID + 1) % 2;
-    nextUpdateTime = OS_GetTimeMs() + TOGGLE_TIME;
-    RAPID_SERIAL_LOOP();   //perform backend printing loop before drawing to avoid printer idling
+    RAPID_SERIAL_LOOP();  //perform backend printing loop before drawing to avoid printer idling
     reDrawSpeed(SPD_ICON_POS);
     speedQuery();
     if (infoFile.source == BOARD_SD)
