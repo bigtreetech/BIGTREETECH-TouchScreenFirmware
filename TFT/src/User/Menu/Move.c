@@ -57,8 +57,6 @@ void storeMoveCmd(AXIS xyz, int8_t direction)
 void menuMove(void)
 {
   KEY_VALUES key_num;
-  COORDINATE lastPos;
-  COORDINATE curPos;
 
   // postion table of key
   uint8_t table[TOTAL_AXIS][2] =
@@ -98,7 +96,6 @@ void menuMove(void)
   menuDrawPage(&moveItems);
   mustStoreCmd("G91\n");
   mustStoreCmd("M114\n");
-  coordinateGetAll(&lastPos);
   drawXYZ();
 
   #if LCD_ENCODER_SUPPORT

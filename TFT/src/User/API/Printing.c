@@ -133,10 +133,11 @@ void printSetUpdateWaiting(bool isWaiting)
 //only return "123.gcode"
 uint8_t *getCurGcodeName(char *path)
 {
-  int i=strlen(path);
-  for(; path[i]!='/'&& i>0; i--)
-  {}
-  return (u8* )(&path[i+1]);
+  char * name = strrchr(path, '/');
+  if (name != NULL)
+    return (u8 *)(name + 1);
+  else
+    return (u8 *)path;
 }
 
 //send print codes [0: start gcode, 1: end gcode 2: cancel gcode]

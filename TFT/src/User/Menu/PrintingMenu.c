@@ -87,7 +87,7 @@ void menuBeforePrinting(void)
         return;
       }
 
-      infoPrinting.size  = size;
+      infoPrinting.size = size;
 
       //    if(powerFailedExist())
       //    {
@@ -118,8 +118,8 @@ void menuBeforePrinting(void)
       {}
       powerFailedlSeek(&infoPrinting.file);
 
-      infoPrinting.size  = f_size(&infoPrinting.file);
-      infoPrinting.cur   = infoPrinting.file.fptr;
+      infoPrinting.size = f_size(&infoPrinting.file);
+      infoPrinting.cur = infoPrinting.file.fptr;
       if(infoSettings.send_start_gcode == 1 && infoPrinting.cur == 0) // PLR continue printing, CAN NOT use start gcode
       {
         sendPrintCodes(0);
@@ -417,7 +417,11 @@ void menuPrinting(void)
   bool      lastPrinting = isPrinting();
   memset(&nowHeat, 0, sizeof(HEATER));
 
-  printingItems.title.address = getCurGcodeName(infoFile.title);
+  if (infoMachineSettings.long_filename_support == ENABLED && infoFile.source == BOARD_SD)
+    printingItems.title.address = getCurGcodeName(infoFile.Longfile[infoFile.fileIndex]);
+  else
+    printingItems.title.address = getCurGcodeName(infoFile.title);
+
   if (lastPrinting == false)
   {
     printingItems.items[KEY_ICON_4] = itemIsPrinting[1];
