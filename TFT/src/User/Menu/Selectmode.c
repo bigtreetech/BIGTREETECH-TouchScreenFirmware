@@ -163,11 +163,9 @@ void menuMode(void)
 // Setup hardware for selected UI mode
 static inline void setupModeHardware(uint8_t mode)
 {
-  // enable serial only in Touchscreen mode or when `serial_alwaysOn` is enabled
+  Serial_ReSourceInit();  // enable serial comm by default
   if (mode == MODE_SERIAL_TSC)
   {
-    Serial_ReSourceInit(); //enable serial comm
-
     #ifdef BUZZER_PIN // enable buzzer in Touchsreen mode
       Buzzer_Config();
     #endif
@@ -178,21 +176,21 @@ static inline void setupModeHardware(uint8_t mode)
       #endif
     #endif
 
-    #if ENC_ACTIVE_SIGNAL // set encoder active signal if marlin mode is active
+    #if ENC_ACTIVE_SIGNAL // set encoder inactive signal if touch mode is active
      setEncActiveSignal(0);
     #endif
   }
   else
   {
-    if (infoSettings.serial_alwaysOn != ENABLED)
+    if (infoSettings.serial_alwaysOn == DISABLED)
       Serial_ReSourceDeInit(); // disable serial comm if `serial_alwaysOn` is disabled
 
-    #ifdef BUZZER_PIN // enable buzzer in Touchsreen mode
+    #ifdef BUZZER_PIN // disable buzzer in marlin mode
       Buzzer_DeConfig();
     #endif
 
-    #if LED_COLOR_PIN // enable knob led only in Touchscreen mode
-      #ifndef KEEP_KNOB_LED_COLOR_MARLIN_MODE
+    #if LED_COLOR_PIN
+      #ifndef KEEP_KNOB_LED_COLOR_MARLIN_MODE  // enable knob led in marlin mode
       knob_LED_DeInit();
       #endif
     #endif
@@ -229,7 +227,7 @@ void switchMode(void)
           u32 startUpTime = OS_GetTimeMs();
           heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
           LOGO_ReadDisplay();
-          updateNextHeatCheckTime();  // send "M105" 1s later not now, because of mega2560 will be hanged when received data at startup
+          updateNextHeatCheckTime();  // send "M105" after a delay, because of mega2560 will be hanged when received data at startup
           while (OS_GetTimeMs() - startUpTime < 3000)  // Display 3s logo
           {
             loopProcess();
@@ -242,6 +240,8 @@ void switchMode(void)
 
     case MODE_MARLIN:
       #if defined(ST7920_SPI) || defined(LCD2004_simulator)
+        if (infoSettings.serial_alwaysOn == ENABLED)
+          updateNextHeatCheckTime();  // send "M105" after a delay, because of mega2560 will be hanged when received data at startup
         infoMenu.menu[infoMenu.cur] = menuMarlinMode;
       #endif
       break;

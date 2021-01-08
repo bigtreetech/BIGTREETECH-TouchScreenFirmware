@@ -31,11 +31,11 @@ float babystepResetValue(void)
   if (babystep_value < 0.0f)
     neg = -1;
 
-  step_count = (babystep_value * neg) / BABYSTEP_MAX_UNIT;
+  step_count = (babystep_value * neg) / BABYSTEP_MAX_STEP;
   for (; step_count > 0; step_count--)
   {
-    mustStoreCmd("M290 Z%.2f\n", -(BABYSTEP_MAX_UNIT * neg));
-    processed_baby_step += BABYSTEP_MAX_UNIT;
+    mustStoreCmd("M290 Z%.2f\n", -(BABYSTEP_MAX_STEP * neg));
+    processed_baby_step += BABYSTEP_MAX_STEP;
   }
 
   last_unit = (babystep_value * neg) - processed_baby_step;
