@@ -40,11 +40,7 @@ void menuExtrude(void)
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_LOAD,                    LABEL_LOAD},
-<<<<<<< HEAD
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-=======
-     {ICON_NOZZLE,                  LABEL_NOZZLE},
->>>>>>> b23821033e26e50bd8afa4f41f8c108c49b9c62f
      {ICON_E_5_MM,                  LABEL_5_MM},
      {ICON_NORMAL_SPEED,            LABEL_NORMAL_SPEED},
      {ICON_BACK,                    LABEL_BACK},}
