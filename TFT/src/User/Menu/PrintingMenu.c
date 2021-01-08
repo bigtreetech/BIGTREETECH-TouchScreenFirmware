@@ -566,7 +566,7 @@ void menuPrinting(void)
           if(isPrinting())
             infoMenu.menu[++infoMenu.cur] = menuBabystep;
           else
-            infoMenu.cur = 0
+            infoMenu.cur = 0;
         #else
           infoMenu.menu[++infoMenu.cur] = menuBabystep;
         #endif
