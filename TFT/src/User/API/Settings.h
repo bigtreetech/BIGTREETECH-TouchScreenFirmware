@@ -28,8 +28,8 @@ typedef enum
 
 // Config version support
 // change if new elements/keywords are added/removed/changed in the configuration.h Format YYYYMMDD
-// this number should match the CONFIG_VERSION in configuration.h
-#define CONFIG_SUPPPORT 20201218
+// this number should match CONFIG_VERSION in configuration.h
+#define CONFIG_SUPPPORT 20210105
 
 #define FONT_FLASH_SIGN       20200908 //(YYYYMMDD) change if fonts require updating
 #define CONFIG_FLASH_SIGN     20201221 //(YYYYMMDD) change if any keyword(s) in config.ini is added or removed
@@ -63,6 +63,8 @@ typedef enum
 #define DISABLED  0
 #define ENABLED   1
 #define AUTO      2
+#define HIGH      1
+#define LOW       0
 
 typedef enum
 {

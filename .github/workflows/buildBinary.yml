@@ -2,9 +2,19 @@ name: Build Binaries
 on:
   push:
     branches: [ master ]
+    paths-ignore:
+    - .devcontainer/**
+    - .github/**
+    - Bootloader/**
+    - Copy to SD Card root directory to update/**
+    - images/**
+    - readme/**
+    - '**/*.md'
+
 jobs:
   main:
-    name: Main
+    name: Build Binaries
+    if: github.repository == 'bigtreetech/BIGTREETECH-TouchScreenFirmware'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -48,14 +58,20 @@ jobs:
         run: platformio run --environment MKS_32_V1_4_NOBL
       - name: Build MKS TFT28 V1.0
         run: platformio run --environment MKS_28_V1_0
-      - name: Clean Up Folder
+      - name: Remove Old Binaries
         run: find "Copy to SD Card root directory to update/" -name '*.bin' -print -delete
-      - name: Copy Files
+      - name: Remove Old Config
+        run: find "Copy to SD Card root directory to update/" -name 'config.ini' -print -delete
+      - name: Copy New Binaries
         run: find .pio/build/ -name '*.bin' -exec cp -vf '{}' "./Copy to SD Card root directory to update/" ";"
-      - name: Stage Changes
-        run: git config user.email "actions@example.com" && git config user.name "Github Actions" && find "Copy to SD Card root directory to update/" -name '*.bin' -exec git add {} \;
+      - name: Copy New Config
+        run: find TFT/src/User/ -name 'config.ini' -exec cp -vf '{}' "./Copy to SD Card root directory to update/" ";"
+      - name: Stage New Binaries
+        run: git config user.email "${GITHUB_ACTOR}@users.noreply.github.com" && git config user.name "${GITHUB_ACTOR}" && find "Copy to SD Card root directory to update/" -name '*.bin' -exec git add {} \;
+      - name: Stage New Config
+        run: git config user.email "${GITHUB_ACTOR}@users.noreply.github.com" && git config user.name "${GITHUB_ACTOR}" && find "Copy to SD Card root directory to update/" -name 'config.ini' -exec git add {} \;
       - name: Push
         uses: actions-x/commit@v2
         with:
-          message: Update prebuilt binaries
+          message: Update prebuilt binaries and config
           token: ${{ secrets.MY_SECRET_TOKEN }}

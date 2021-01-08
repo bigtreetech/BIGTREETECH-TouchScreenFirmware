@@ -157,6 +157,7 @@ void menuShowParameter(void)
           {
             sendParameterCmd(cur_parameter, key_num, val);
           }
+
           setDynamicValue(key_num, val);
           menuDrawListPage(&parameter_menuitems);
         }

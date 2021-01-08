@@ -745,6 +745,10 @@ void loopBackEnd(void)
   USBH_Process(&USB_OTG_Core, &USB_Host);
 #endif
 
+#if defined(SCREEN_SHOT_TO_SD)
+  loopScreenShot();
+#endif
+
 #if LCD_ENCODER_SUPPORT
   #if defined(ST7920_SPI) || defined(LCD2004_simulator)
   if (infoMenu.menu[infoMenu.cur] != menuMarlinMode)

@@ -78,6 +78,7 @@ void menuLoadUnload(void)
           strcat(tempMsg, "\n");
           sprintf(tempStr, (char *)textSelect(LABEL_HEAT_HOTEND), infoSettings.min_ext_temp);
           strcat(tempMsg, tempStr);
+
           setDialogText(LABEL_WARNING, (uint8_t *)tempMsg, LABEL_CONFIRM, LABEL_CANCEL);
           showDialog(DIALOG_TYPE_ERROR, setHotendMinExtTemp, NULL, NULL);
         }
@@ -102,7 +103,7 @@ void menuLoadUnload(void)
       case KEY_ICON_5:
         infoMenu.menu[++infoMenu.cur] = menuHeat;
         lastcmd = NONE;
-      break;
+        break;
 
       case KEY_ICON_6:
         heatCoolDown();
@@ -124,7 +125,7 @@ void menuLoadUnload(void)
         }
         infoMenu.cur--;
         lastcmd = NONE;
-      break;
+        break;
 
       default:
         extruderIdReDraw();

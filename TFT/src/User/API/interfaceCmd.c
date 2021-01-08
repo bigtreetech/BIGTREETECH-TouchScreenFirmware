@@ -83,7 +83,7 @@ void mustStoreCmd(const char * format,...)
 
   GCODE_QUEUE *pQueue = &infoCmd;
 
-  if(pQueue->count >= CMD_MAX_LIST)
+  if (pQueue->count >= CMD_MAX_LIST)
     reminderMessage(LABEL_BUSY, STATUS_BUSY);
 
   while (pQueue->count >= CMD_MAX_LIST)
@@ -385,12 +385,12 @@ void sendQueueCmd(void)
                   Serial_Puts(SERIAL_PORT_2, infoFile.title);
                   Serial_Puts(SERIAL_PORT_2, ".\n");
                 }
-                  char buf[55];
-                  sprintf(buf, "%s printing byte %d/%d\n",(infoFile.source==TFT_SD)?"TFT SD":"TFT USB", getPrintCur(),getPrintSize());
-                  Serial_Puts(SERIAL_PORT_2, buf);
-                  Serial_Puts(SERIAL_PORT_2, "ok\n");
-                  purgeLastCmd();
-                  return;
+                char buf[55];
+                sprintf(buf, "%s printing byte %d/%d\n",(infoFile.source==TFT_SD)?"TFT SD":"TFT USB", getPrintCur(),getPrintSize());
+                Serial_Puts(SERIAL_PORT_2, buf);
+                Serial_Puts(SERIAL_PORT_2, "ok\n");
+                purgeLastCmd();
+                return;
               }
             }
             else
@@ -452,38 +452,38 @@ void sendQueueCmd(void)
 
           case 115: //M115 TFT
             if (!fromTFT && startsWith("M115 TFT", infoCmd.queue[infoCmd.index_r].gcode))
-              {
-                char buf[50];
-                Serial_Puts(SERIAL_PORT_2,
-                            "FIRMWARE_NAME: " FIRMWARE_NAME
-                            " SOURCE_CODE_URL:https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware\n");
-                sprintf(buf, "Cap:HOTEND_NUM:%d\n", infoSettings.hotend_count);
-                Serial_Puts(SERIAL_PORT_2, buf);
-                sprintf(buf, "Cap:EXTRUDER_NUM:%d\n", infoSettings.ext_count);
-                Serial_Puts(SERIAL_PORT_2, buf);
-                sprintf(buf, "Cap:FAN_NUM:%d\n", infoSettings.fan_count);
-                Serial_Puts(SERIAL_PORT_2, buf);
-                sprintf(buf, "Cap:FAN_CTRL_NUM:%d\n", infoSettings.fan_ctrl_count);
-                Serial_Puts(SERIAL_PORT_2, buf);
-                Serial_Puts(SERIAL_PORT_2, "ok\n");
-                purgeLastCmd();
-                return;
-              }
+            {
+              char buf[50];
+              Serial_Puts(SERIAL_PORT_2,
+                          "FIRMWARE_NAME: " FIRMWARE_NAME
+                          " SOURCE_CODE_URL:https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware\n");
+              sprintf(buf, "Cap:HOTEND_NUM:%d\n", infoSettings.hotend_count);
+              Serial_Puts(SERIAL_PORT_2, buf);
+              sprintf(buf, "Cap:EXTRUDER_NUM:%d\n", infoSettings.ext_count);
+              Serial_Puts(SERIAL_PORT_2, buf);
+              sprintf(buf, "Cap:FAN_NUM:%d\n", infoSettings.fan_count);
+              Serial_Puts(SERIAL_PORT_2, buf);
+              sprintf(buf, "Cap:FAN_CTRL_NUM:%d\n", infoSettings.fan_ctrl_count);
+              Serial_Puts(SERIAL_PORT_2, buf);
+              Serial_Puts(SERIAL_PORT_2, "ok\n");
+              purgeLastCmd();
+              return;
+            }
             break;
 
           case 524: //M524
             if (!fromTFT && isPrinting() && !infoHost.printing)
-              {
-                abortPrinting();
-                Serial_Puts(SERIAL_PORT_2, "ok\n");
-                purgeLastCmd();
-                return;
-              }
+            {
+              abortPrinting();
+              Serial_Puts(SERIAL_PORT_2, "ok\n");
+              purgeLastCmd();
+              return;
+            }
             break;
         #else // SERIAL_PORT_2
           case 27: //M27
-              printSetUpdateWaiting(false);
-          break;
+            printSetUpdateWaiting(false);
+            break;
         #endif //SERIAL_PORT_2
 
         case 80: //M80
