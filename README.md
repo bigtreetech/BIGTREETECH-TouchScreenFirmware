@@ -57,7 +57,7 @@ C: In case you have an **"E3" mainboard** which provides a **single EXP connecto
 
 ## Menus
 
-|              Main Screen Status Screen DISABLED              |              Main Screen Status Screen ENABLED               |
+|                    Status Screen DISABLED                    |                    Status Screen ENABLED                     |
 | :----------------------------------------------------------: | :----------------------------------------------------------: |
 | ![status screen 0](https://user-images.githubusercontent.com/54359396/103319145-09035b80-4a31-11eb-91d0-dd761a48b6f5.png) | ![Unified Material Main Screen](https://user-images.githubusercontent.com/54359396/98742038-03cd4d00-23ae-11eb-9552-36dc02fe66f4.png) |
 | In config.ini define: General Settings<br/>Enable Status Screen<br/># Select the Main Screen flavour<br/># Options: [Enable: 1, Disable: 0]<br/>**status_screen: 0** | In config.ini define: General Settings<br/>Enable Status Screen<br/># Select the Main Screen flavour<br/># Options: [Enable: 1, Disable: 0]<br/>**status_screen: 1** |
