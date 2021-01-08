@@ -311,7 +311,7 @@ void stopConfirm(void)
 
 void printFinished(void)
 {
-  char tempstr[30];
+  char tempstr[MAX_FILE_CHAR + 5];
   strcpy(filamentInfo, "");
 
   if (infoFile.cur_index == 65535)
@@ -321,9 +321,13 @@ void printFinished(void)
   else
   {
     strncpy(tempstr, (((infoMachineSettings.long_filename_support == ENABLED) && (infoFile.source == BOARD_SD)) ?
-                                infoFile.Longfile[infoFile.cur_index] : infoFile.file[infoFile.cur_index]), MAX_FILE_CHAR - 1);
-    tempstr[MAX_FILE_CHAR] = 0;
-    strcat(tempstr, "~");
+                                infoFile.Longfile[infoFile.cur_index] : infoFile.file[infoFile.cur_index]), MAX_FILE_CHAR + 1);
+    tempstr[MAX_FILE_CHAR + 1] = '\0';
+    if (strlen(tempstr) >  MAX_FILE_CHAR)
+    {
+      tempstr[MAX_FILE_CHAR-1] = '\0';
+      strcat(tempstr, "~");
+    }
     strcpy(filData.name, tempstr);
   }
 
