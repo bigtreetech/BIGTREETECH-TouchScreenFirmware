@@ -736,6 +736,10 @@ void parseConfigKey(u16 index)
       infoSettings.auto_load_leveling = getOnOff();
       break;
 
+    case C_INDEX_TOUCHMI_SENSOR:
+      infoSettings.touchmi_sensor = getOnOff();
+      break;
+
     case C_INDEX_ONBOARD_SD:
       SET_VALID_INT_VALUE(infoSettings.onboardSD, 0, 2);
       break;

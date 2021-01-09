@@ -302,6 +302,12 @@ extern "C" {
 #define LANG_KEY_EXT_TEMPLOW                  "label_ext_templow:"
 #define LANG_KEY_COLD_EXT                     "label_cold_ext:"
 #define LANG_KEY_HEAT_HOTEND                  "label_heat_hotend:"
+#define LANG_KEY_INIT                         "label_init:"
+#define LANG_KEY_ZOFFSETNEG                   "label_zoffsetneg:" 
+#define LANG_KEY_ZOFFSETPOS                   "label_zoffsetpos:" 
+#define LANG_KEY_TM_SAVE                      "label_tm_save:"
+#define LANG_KEY_TEST                         "label_test:"
+#define LANG_KEY_TOUCHMI                      "label_touchmi:"
 
 #ifdef __cplusplus
 }

@@ -58,7 +58,8 @@ void infoSettingsReset(void)
   infoSettings.fan_ctrl_count         = FAN_CTRL_NUM;
   infoSettings.min_ext_temp           = PREVENT_COLD_EXTRUSION_MINTEMP;
   infoSettings.auto_load_leveling     = AUTO_SAVE_LOAD_BL_VALUE;
-  infoSettings.onboardSD              = AUTO;  //ENABLED / DISABLED / AUTO
+  infoSettings.touchmi_sensor         = TOUCHMI_SENSOR_VALUE;
+  infoSettings.onboardSD              = AUTO;                        //ENABLED / DISABLED / AUTO
   infoSettings.m27_refresh_time       = M27_REFRESH;
   infoSettings.m27_active             = M27_WATCH_OTHER_SOURCES;
   infoSettings.longFileName           = AUTO;  //ENABLED / DISABLED / AUTO

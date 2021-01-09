@@ -290,10 +290,16 @@
     #define STRING_FILAMENT_LENGTH        "Filament length: %1.2fm"
     #define STRING_FILAMENT_WEIGHT        "Filament weight: %1.2fg"
     #define STRING_FILAMENT_COST          "Filament cost: %1.2f"
-    #define STRING_NO_FILAMENT_STATS "No filament statistics."
+    #define STRING_NO_FILAMENT_STATS      "No filament statistics."
     #define STRING_CLICK_FOR_MORE         "Click for more."
     #define STRING_EXT_TEMPLOW            "Hotend temperature is below\nminimum temperature (%d℃)."
     #define STRING_COLD_EXT               "Cold extrusion prevented"
     #define STRING_HEAT_HOTEND            "Heat hotend to %d℃?"
+    #define STRING_INIT                   "Init"
+    #define STRING_ZOFFSETNEG             "Zoffset -" 
+    #define STRING_ZOFFSETPOS             "Zoffset +" 
+    #define STRING_TM_SAVE                "Save"
+    #define STRING_TEST                   "Test"
+    #define STRING_TOUCHMI                "TouchMi"
 
 #endif

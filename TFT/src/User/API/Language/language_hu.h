@@ -295,5 +295,11 @@
     #define STRING_EXT_TEMPLOW            "Fejhőfok alacsonyabb, mint a\nminimális hőfok (%d℃)."
     #define STRING_COLD_EXT               "Hideg adagolás tiltva"
     #define STRING_HEAT_HOTEND            "Fűtöd a fejet %d℃-ra?"
+    #define STRING_INIT                   "Init"
+    #define STRING_ZOFFSETNEG             "Zoffset -" 
+    #define STRING_ZOFFSETPOS             "Zoffset +" 
+    #define STRING_TM_SAVE                "Save"
+    #define STRING_TEST                   "Test"
+    #define STRING_TOUCHMI                "TouchMi"
 
 #endif

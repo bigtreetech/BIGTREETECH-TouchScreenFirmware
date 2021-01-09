@@ -295,5 +295,10 @@
     #define STRING_EXT_TEMPLOW            "La temperatura dell'hotend\nè al di sotto della temperatura\nminima (%d℃)."
     #define STRING_COLD_EXT               "Prevenzione dell'estrusione a freddo"
     #define STRING_HEAT_HOTEND            "Heat hotend to %d℃?"
-
+    #define STRING_INIT                   "Init"
+    #define STRING_ZOFFSETNEG             "Zoffset -" 
+    #define STRING_ZOFFSETPOS             "Zoffset +" 
+    #define STRING_TM_SAVE                "Save"
+    #define STRING_TEST                   "Test"
+    #define STRING_TOUCHMI                "TouchMi"
 #endif
