@@ -32,13 +32,10 @@ const GUI_RECT printinfo_val_rect[6] = {
 
 static uint32_t nextLayerDrawTime = 0;
 const  char *const Speed_ID[2] = {"Speed","Flow"};
-bool filDataSeen;
-FILAMENTDATA filData = {"", 0, 0, 0, 0};
+bool infoPrintSummarySeen;
 
 #define TOGGLE_TIME 2000 // 1 seconds is 1000
 #define LAYER_DRAW_TIME 500 // 1 seconds is 1000
-
-#define MAX_FILE_CHAR 25 // max character length to store
 
 #define LAYER_TITLE "Layer"
 #define EXT_ICON_POS  0
@@ -67,10 +64,13 @@ const ITEM itemIsPrinting[6] = {
 void menuBeforePrinting(void)
 {
   //load stat/end/cancel gcodes from spi flash
-  long size = 0;
+  uint32_t size = 0;
+  initPrintSummary();
+
   switch (infoFile.source)
   {
     case BOARD_SD: // GCode from file on ONBOARD SD
+    case BOARD_SD_REMOTE:
       size = request_M23(infoFile.title+5);
 
       //  if( powerFailedCreate(infoFile.title)==false)
@@ -127,10 +127,6 @@ void menuBeforePrinting(void)
   infoPrinting.printing = true;
   infoPrinting.time = 0;
   infoMenu.menu[infoMenu.cur] = menuPrinting;
-  infoPrinting.time = 0;
-  filData = (FILAMENTDATA) {"", 0, 0, 0, 0};
-  filDataSeen = false;
-  initEpos();
 }
 
 static inline void reValueNozzle(int icon_pos)
@@ -223,7 +219,7 @@ static inline void reDrawLayer(int icon_pos)
   {
     char tempstr[10];
     sprintf(tempstr, "%.2fmm",
-            (infoFile.source == BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS));
+            (infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS));
 
     GUI_SetTextMode(GUI_TEXTMODE_TRANS);
     ICON_ReadDisplay(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, ICON_PRINTING_ZLAYER);
@@ -256,9 +252,9 @@ static inline void toggleInfo(void)
     RAPID_SERIAL_LOOP();  //perform backend printing loop before drawing to avoid printer idling
     reDrawSpeed(SPD_ICON_POS);
     speedQuery();
-    if (infoFile.source == BOARD_SD)
+    if (infoFile.source >= BOARD_SD)
       coordinateQuery();
-    if (!filDataSeen && isPrinting())
+    if (!infoPrintSummarySeen && isPrinting())
       updateFilamentUsed();
   }
 }
@@ -298,61 +294,39 @@ void stopConfirm(void)
   infoMenu.cur--;
 }
 
-void printFinished(void)
-{
-  if (strlen((char *)getCurGcodeName(infoFile.title)) > MAX_FILE_CHAR)
-  {
-    strncpy(filData.name, (char *)getCurGcodeName(infoFile.title), MAX_FILE_CHAR);
-    strcat(filData.name, "~");
-  }
-  else
-  {
-    strcpy(filData.name, (char *)getCurGcodeName(infoFile.title));
-  }
-  filData.time = infoPrinting.time;
-
-  if (speedGetCurPercent(1) != 100)
-  {
-    filData.length = (filData.length * speedGetCurPercent(1)) / 100;  // multiply by flow percentage
-    filData.weight = (filData.weight * speedGetCurPercent(1)) / 100;  // multiply by flow percentage
-    filData.cost   = (filData.cost   * speedGetCurPercent(1)) / 100;  // multiply by flow percentage
-  }
-  drawPrintInfo();
-}
-
 void printInfoPopup(void)
 {
-  uint8_t hour = filData.time / 3600;
-  uint8_t min = filData.time % 3600 / 60;
-  uint8_t sec = filData.time % 60;
+  uint8_t hour = infoPrintSummary.time / 3600;
+  uint8_t min = infoPrintSummary.time % 3600 / 60;
+  uint8_t sec = infoPrintSummary.time % 60;
   char showInfo[150];
   char tempstr[30];
 
-  sprintf(showInfo,(char*)textSelect(LABEL_PRINT_TIME), hour, min, sec);
+  sprintf(showInfo, (char*)textSelect(LABEL_PRINT_TIME), hour, min, sec);
 
-  if (filData.length == 0 && filData.weight == 0 && filData.cost == 0)
+  if (infoPrintSummary.length == 0 && infoPrintSummary.weight == 0 && infoPrintSummary.cost == 0)
   {
     strcat(showInfo, (char *)textSelect(LABEL_NO_FILAMENT_STATS));
   }
   else
   {
-    if (filData.length > 0)
+    if (infoPrintSummary.length > 0)
     {
-      sprintf(tempstr, (char *)textSelect(LABEL_FILAMENT_LENGTH), filData.length);
+      sprintf(tempstr, (char *)textSelect(LABEL_FILAMENT_LENGTH), infoPrintSummary.length);
       strcat(showInfo, tempstr);
     }
-    if (filData.weight > 0)
+    if (infoPrintSummary.weight > 0)
     {
-      sprintf(tempstr, (char *)textSelect(LABEL_FILAMENT_WEIGHT), filData.weight);
+      sprintf(tempstr, (char *)textSelect(LABEL_FILAMENT_WEIGHT), infoPrintSummary.weight);
       strcat(showInfo, tempstr);
     }
-    if (filData.cost > 0)
+    if (infoPrintSummary.cost > 0)
     {
-      sprintf(tempstr, (char *)textSelect(LABEL_FILAMENT_COST), filData.cost);
+      sprintf(tempstr, (char *)textSelect(LABEL_FILAMENT_COST), infoPrintSummary.cost);
       strcat(showInfo, tempstr);
     }
   }
-  popupReminder(DIALOG_TYPE_INFO, (u8 *)getCurGcodeName(infoFile.title), (uint8_t *)showInfo);
+  popupReminder(DIALOG_TYPE_INFO, (u8 *)getCurGcodeName(infoPrintSummary.name), (uint8_t *)showInfo);
 }
 
 void menuPrinting(void)
@@ -394,7 +368,8 @@ void menuPrinting(void)
   else
   {
     printingItems.items[KEY_ICON_4] = itemIsPause[isPause()];
-    printingItems.items[KEY_ICON_5].icon = (infoFile.source != BOARD_SD && infoPrinting.model_icon) ? ICON_PREVIEW : ICON_BABYSTEP;
+    printingItems.items[KEY_ICON_5].icon = (infoFile.source < BOARD_SD && infoPrinting.model_icon) ?
+                                            ICON_PREVIEW : ICON_BABYSTEP;
   }
   printingItems.items[KEY_ICON_5].label = itemIsPrinting[lastPrinting * 2].label;
   printingItems.items[KEY_ICON_6] = itemIsPrinting[lastPrinting * 3];
@@ -460,9 +435,9 @@ void menuPrinting(void)
     }
 
     //Z_AXIS coordinate
-    if (curLayer != ((infoFile.source == BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS)))
+    if (curLayer != ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS)))
     {
-      curLayer = (infoFile.source == BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS);
+      curLayer = (infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS);
       RAPID_SERIAL_LOOP();  //perform backend printing loop before drawing to avoid printer idling
       reDrawLayer(Z_ICON_POS);
     }
@@ -504,7 +479,8 @@ void menuPrinting(void)
       menuDrawItem(&printingItems.items[KEY_ICON_7], KEY_ICON_7);
       if (lastPrinting == false)  // printing finished
       {
-        printFinished();
+        preparePrintSummary();
+        drawPrintInfo();
       }
     }
 

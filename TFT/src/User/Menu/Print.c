@@ -239,7 +239,7 @@ void menuPrintFromSource(void)
   }
   else
   {
-    if(infoFile.source == BOARD_SD)
+    if(infoFile.source >= BOARD_SD)
       GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, (u8*)requestCommandInfo.cmd_rev_buf);
     else
       GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, labelVolumeError[infoFile.source]);
@@ -299,14 +299,14 @@ void menuPrintFromSource(void)
         if(key_num < ITEM_PER_PAGE)
         {
           u16 start = infoFile.cur_page * NUM_PER_PAGE;
-          if(key_num + start < infoFile.folderCount)						//folder
+          if(key_num + start < infoFile.folderCount)  //folder
           {
             if(EnterDir(infoFile.folder[key_num + start]) == false)  break;
             scanPrintFiles();
             update=1;
             infoFile.cur_page=0;
           }
-          else if(key_num+start < infoFile.folderCount+infoFile.fileCount)	//gcode
+          else if(key_num+start < infoFile.folderCount+infoFile.fileCount)  //gcode
           {
             if (infoHost.connected != true)
               break;
@@ -314,7 +314,7 @@ void menuPrintFromSource(void)
             if (EnterDir(infoFile.file[infoFile.fileIndex]) == false)
               break;
             //load model preview in flash if icon exists
-            setPrintModelIcon(infoFile.source != BOARD_SD && model_DecodeToFlash(infoFile.title));
+            setPrintModelIcon(infoFile.source < BOARD_SD && model_DecodeToFlash(infoFile.title));
 
             char temp_info[FILE_NUM + 50];
             sprintf(temp_info, (char *)textSelect(LABEL_START_PRINT),
@@ -421,7 +421,7 @@ void menuPrint(void)
         break;
 
       case KEY_ICON_4:
-        if (filData.name[0] != '\0')
+        if (infoPrintSummary.name[0] != '\0')
           printInfoPopup();
         break;
 

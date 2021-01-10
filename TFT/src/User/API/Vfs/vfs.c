@@ -16,8 +16,9 @@ bool mountFS(void)
 
     case BOARD_SD:
       return mountGcodeSDCard();
+    default:
+      return false;
   }
-  return false;
 }
 
 /*
@@ -47,7 +48,10 @@ TCHAR* getCurFileSource(void)
   {
     case TFT_SD:     return "SD:";
     case TFT_UDISK:  return "U:";
-    case BOARD_SD:   return "bSD:";
+
+    case BOARD_SD:
+    case BOARD_SD_REMOTE:
+      return "bSD:";
   }
   return NULL;
 }
@@ -78,8 +82,9 @@ bool scanPrintFiles(void)
 
     case BOARD_SD:
       return scanPrintFilesGcodeFs();
+    default:
+      return false;
   }
-  return false;
 }
 
 /*

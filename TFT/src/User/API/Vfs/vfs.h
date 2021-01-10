@@ -12,7 +12,8 @@
 typedef enum {
     TFT_SD,
     TFT_UDISK,
-    BOARD_SD
+    BOARD_SD,
+    BOARD_SD_REMOTE
 }FS_SOURCE;
 
 typedef struct
