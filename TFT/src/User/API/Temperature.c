@@ -9,7 +9,7 @@ const char *const heatWaitCmd[MAX_HEATER_COUNT]   = HEAT_WAIT_CMD;
 
 static HEATER  heater = {{}, NOZZLE0};
 static int16_t lastTarget[MAX_HEATER_COUNT] = {0};
-static uint8_t heat_update_seconds = 0;
+static uint8_t heat_update_seconds = TEMPERATURE_QUERY_SLOW_SECONDS;
 static bool    heat_update_waiting = false;
 static bool    heat_send_waiting[MAX_HEATER_COUNT];
 

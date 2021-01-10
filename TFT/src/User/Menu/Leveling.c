@@ -73,6 +73,7 @@ void menuManualLeveling(void)
 
           int val = numPadInt((u8 *)tempstr, infoSettings.level_edge, LEVELING_EDGE_DISTANCE_DEFAULT, false);
           infoSettings.level_edge = NOBEYOND(LEVELING_EDGE_DISTANCE_MIN, val, LEVELING_EDGE_DISTANCE_MAX);
+
           menuDrawPage(&manualLevelingItems);
         }
         break;

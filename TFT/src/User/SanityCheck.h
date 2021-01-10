@@ -10,6 +10,12 @@
 //check size of settings against max allocated size at compile time
 #define SIZE_CHECK(object) ((void)sizeof(char[1 - 2*!!(object)]))
 
+#if defined(TFT35_V2_0) || defined(TFT35_V3_0) || defined(TFT35_B1_V3_0) || defined(TFT35_E3_V3_0)
+  #ifdef SCREEN_SHOT_TO_SD
+    #error "Hardware error, need to change the TFT Pin39 from GND to 3.3V to use this feature. Otherwise, the color read out is incorrect"
+  #endif
+#endif
+
 #if CONFIG_VERSION != CONFIG_SUPPPORT
     #error "the Configuration.h is old. please use the latest Configuration.h file"
 #endif
@@ -75,32 +81,6 @@
     #define ENABLE_BL_VALUE 1
 #endif
 
-#ifdef FRIENDLY_PROBE_OFFSET_LANGUAGE
-  #if FRIENDLY_PROBE_OFFSET_LANGUAGE > 1
-    #error "FRIENDLY_PROBE_OFFSET_LANGUAGE cannot be greater than 1"
-  #endif
-
-  #if FRIENDLY_PROBE_OFFSET_LANGUAGE < 0
-    #error "FRIENDLY_PROBE_OFFSET_LANGUAGE cannot be less than 0"
-  #endif
-#endif
-#ifndef FRIENDLY_PROBE_OFFSET_LANGUAGE
-    #define FRIENDLY_PROBE_OFFSET_LANGUAGE 0
-#endif
-
-#ifdef QUICK_EEPROM_BUTTON
-  #if QUICK_EEPROM_BUTTON > 1
-    #error "QUICK_EEPROM_BUTTON cannot be greater than 1"
-  #endif
-
-  #if QUICK_EEPROM_BUTTON < 0
-    #error "QUICK_EEPROM_BUTTON cannot be less than 0"
-  #endif
-#endif
-#ifndef QUICK_EEPROM_BUTTON
-    #define QUICK_EEPROM_BUTTON 0
-#endif
-
 #ifdef MESH_GRID_MAX_POINTS_X
   #if MESH_GRID_MAX_POINTS_X > 15
     #error "MESH_GRID_MAX_POINTS_X cannot be greater than 15"
@@ -127,19 +107,6 @@
     #define MESH_GRID_MAX_POINTS_Y 10
 #endif
 
-#ifdef MESH_LEFT_KEYBOARD
-  #if MESH_LEFT_KEYBOARD > 1
-    #error "MESH_LEFT_KEYBOARD cannot be greater than 1"
-  #endif
-
-  #if MESH_LEFT_KEYBOARD < 0
-    #error "MESH_LEFT_KEYBOARD cannot be less than 0"
-  #endif
-#endif
-#ifndef MESH_LEFT_KEYBOARD
-    #define MESH_LEFT_KEYBOARD 0
-#endif
-
 #ifdef TERMINAL_KEYBOARD_COLOR_LAYOUT
   #if TERMINAL_KEYBOARD_COLOR_LAYOUT > 2
     #error "TERMINAL_KEYBOARD_COLOR_LAYOUT cannot be greater than 2"
@@ -151,19 +118,6 @@
 #endif
 #ifndef TERMINAL_KEYBOARD_COLOR_LAYOUT
     #define TERMINAL_KEYBOARD_COLOR_LAYOUT 0
-#endif
-
-#ifdef TERMINAL_KEYBOARD_QWERTY_LAYOUT
-  #if TERMINAL_KEYBOARD_QWERTY_LAYOUT > 1
-    #error "TERMINAL_KEYBOARD_QWERTY_LAYOUT cannot be greater than 1"
-  #endif
-
-  #if TERMINAL_KEYBOARD_QWERTY_LAYOUT < 0
-    #error "TERMINAL_KEYBOARD_QWERTY_LAYOUT cannot be less than 0"
-  #endif
-#endif
-#ifndef TERMINAL_KEYBOARD_QWERTY_LAYOUT
-    #define TERMINAL_KEYBOARD_QWERTY_LAYOUT 1
 #endif
 
 #ifdef CANCEL_PRINT_GCODE
