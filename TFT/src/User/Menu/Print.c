@@ -436,6 +436,9 @@ void menuPrint(void)
   }
 
 selectEnd:
-  resetInfoFile();
-  powerFailedSetDriverSource(getCurFileSource());
+if(!infoHost.printing) // prevent reset if printing from other source
+ {
+    resetInfoFile();
+    powerFailedSetDriverSource(getCurFileSource());
+ }
 }
