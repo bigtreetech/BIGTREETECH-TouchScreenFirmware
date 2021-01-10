@@ -28,6 +28,7 @@
 #include "delay.h"
 #include "variants.h"
 
+
 #ifdef U_DISK_SUPPORT
 /**
   * @brief  USB_OTG_BSP_Init
@@ -42,14 +43,18 @@ void USB_OTG_BSP_Init(USB_OTG_CORE_HANDLE * pdev)
   // EXTI_InitTypeDef EXTI_InitStructure;
 #ifdef STM32F10X_CL
 
+/*
 #if defined(MKS_32_V1_4) || defined (MKS_28_V1_0)
   #ifdef SYSCLK_FREQ_72MHz
     RCC_OTGFSCLKConfig(RCC_OTGFSCLKSource_PLLVCO_Div3); // by Lori
-    #else RCC_OTGFSCLKConfig(RCC_OTGFSCLKSource_PLLVCO_Div2);  // by Lori
+  #else
+    RCC_OTGFSCLKConfig(RCC_OTGFSCLKSource_PLLVCO_Div2);  // by Lori
   #endif
 #else
+*/
   RCC_OTGFSCLKConfig(RCC_OTGFSCLKSource_PLLVCO_Div3);
-#endif
+// #endif
+
   RCC_AHBPeriphClockCmd(RCC_AHBPeriph_OTG_FS, ENABLE);
 
 #else                           // USE_STM322xG_EVAL
