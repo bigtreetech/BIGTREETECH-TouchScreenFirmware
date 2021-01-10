@@ -169,9 +169,6 @@ void menuRGBSettings(void)
       break;
 
     case KEY_ICON_3: //White
-    if (infoSettings.touchmi_sensor != 0)
-      storeCmd("M150 R0 U255 B0 P255\n");
-      else
       storeCmd("M150 R255 U255 B255 P255\n");
       break;
 
