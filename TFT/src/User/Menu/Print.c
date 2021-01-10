@@ -420,7 +420,7 @@ void menuPrint(void)
         break;
 
       case KEY_ICON_4:
-        if (filData.name[0] != '\0')
+        if (filData.name[0] > 31) // ASCII 0-31 are escape characters
           printInfoPopup();
         break;
 

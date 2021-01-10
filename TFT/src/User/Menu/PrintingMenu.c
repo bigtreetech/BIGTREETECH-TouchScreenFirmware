@@ -36,7 +36,7 @@ const  char *const Speed_ID[2] = {"Speed","Flow"};
 static char filamentInfo[150];
 bool filDataSeen;
 SCROLL infoScroll;
-FILAMENTDATA filData = {"???", 0, 0, 0, 0};
+FILAMENTDATA filData = {"\a", 0, 0, 0, 0};
 
 #define TOGGLE_TIME 2000 // 1 seconds is 1000
 #define DRAW_TIME 500 // 1 seconds is 1000
