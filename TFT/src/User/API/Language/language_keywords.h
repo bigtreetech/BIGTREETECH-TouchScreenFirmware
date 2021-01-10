@@ -292,7 +292,6 @@ extern "C" {
 #define LANG_KEY_PRINT_FINISHED               "label_print_finished:"
 #define LANG_KEY_MAIN_SCREEN                  "label_main_screen:"
 #define LANG_KEY_PREVIOUS_PRINT_DATA          "label_previous_print_data:"
-#define LANG_KEY_FILE_NAME                    "label_file_name:"
 #define LANG_KEY_PRINT_TIME                   "label_print_time:"
 #define LANG_KEY_FILAMENT_LENGTH              "label_filament_length:"
 #define LANG_KEY_FILAMENT_WEIGHT              "label_filament_weight:"

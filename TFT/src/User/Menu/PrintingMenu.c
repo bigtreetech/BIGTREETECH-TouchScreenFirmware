@@ -32,9 +32,7 @@ const GUI_RECT printinfo_val_rect[6] = {
 
 static uint32_t nextLayerDrawTime = 0;
 const  char *const Speed_ID[2] = {"Speed","Flow"};
-static char filamentInfo[150];
 bool filDataSeen;
-SCROLL infoScroll;
 FILAMENTDATA filData = {"", 0, 0, 0, 0};
 
 #define TOGGLE_TIME 2000 // 1 seconds is 1000
@@ -283,21 +281,14 @@ void drawPrintInfo(void)
 
   ICON_CustomReadDisplay(rect_of_keySS[17].x0, rect_of_keySS[17].y0, INFOBOX_ADDR);
   GUI_SetColor(INFOMSG_BKCOLOR);
-  GUI_DispString(rect_of_keySS[17].x0 + STATUS_MSG_ICON_XOFFSET, rect_of_keySS[17].y0 + STATUS_MSG_ICON_YOFFSET, IconCharSelect(ICONCHAR_INFO));
-  GUI_DispStringInRectEOL(rect_of_keySS[17].x0 + BYTE_HEIGHT + STATUS_MSG_TITLE_XOFFSET, rect_of_keySS[17].y0 + STATUS_MSG_ICON_YOFFSET, rect_of_keySS[17].x1 - BYTE_HEIGHT + STATUS_MSG_TITLE_XOFFSET, rect_of_keySS[17].y1 - STATUS_MSG_ICON_YOFFSET, (uint8_t *) textSelect(LABEL_PRINT_FINISHED));
-  GUI_SetBkColor(INFOMSG_BKCOLOR);
-  GUI_FillPrect(&msgRect);
-
-  Scroll_CreatePara(&infoScroll, (u8 *)filamentInfo, &msgRect);
-
-  GUI_RestoreColorDefault();
-}
-
-void scrollInfo(void)
-{
-  GUI_SetBkColor(INFOMSG_BKCOLOR);
+  GUI_DispString(rect_of_keySS[17].x0 + STATUS_MSG_ICON_XOFFSET, rect_of_keySS[17].y0 + STATUS_MSG_ICON_YOFFSET,
+                 IconCharSelect(ICONCHAR_INFO));
+  GUI_DispString(rect_of_keySS[17].x0 + BYTE_HEIGHT + STATUS_MSG_TITLE_XOFFSET,
+                 rect_of_keySS[17].y0 + STATUS_MSG_ICON_YOFFSET,
+                 LABEL_PRINT_FINISHED);
   GUI_SetColor(INFOMSG_COLOR);
-  Scroll_DispString(&infoScroll,CENTER);
+  GUI_SetBkColor(INFOMSG_BKCOLOR);
+  GUI_DispStringInPrect(&msgRect,LABEL_CLICK_FOR_MORE);
   GUI_RestoreColorDefault();
 }
 
@@ -309,9 +300,6 @@ void stopConfirm(void)
 
 void printFinished(void)
 {
-  char tempstr[30];
-  strcpy(filamentInfo, "");
-
   if (strlen((char *)getCurGcodeName(infoFile.title)) > MAX_FILE_CHAR)
   {
     strncpy(filData.name, (char *)getCurGcodeName(infoFile.title), MAX_FILE_CHAR);
@@ -329,30 +317,6 @@ void printFinished(void)
     filData.weight = (filData.weight * speedGetCurPercent(1)) / 100;  // multiply by flow percentage
     filData.cost   = (filData.cost   * speedGetCurPercent(1)) / 100;  // multiply by flow percentage
   }
-  if (filData.length != 0)
-  {
-    sprintf(tempstr, (char*)textSelect(LABEL_FILAMENT_LENGTH), filData.length);
-    strcat(filamentInfo, tempstr);
-  }
-  if (filData.weight != 0)
-  {
-    sprintf(tempstr, (char*)textSelect(LABEL_FILAMENT_WEIGHT), filData.weight);
-    if (strlen(filamentInfo) > 0)
-      strcat(filamentInfo, ",  ");
-    strcat(filamentInfo, tempstr);
-  }
-  if (filData.cost != 0)
-  {
-    sprintf(tempstr, (char*)textSelect(LABEL_FILAMENT_COST), filData.cost);
-    if (strlen (filamentInfo) > 0)
-      strcat(filamentInfo, ",  ");
-    strcat(filamentInfo, tempstr);
-  }
-  if (strlen (filamentInfo) == 0)
-    strcpy(filamentInfo, (char*)textSelect(LABEL_NO_FILAMENT_STATS));
-
-  strcat(filamentInfo, "  ");
-  strcat(filamentInfo, (char*)textSelect(LABEL_CLICK_FOR_MORE));
   drawPrintInfo();
 }
 
@@ -364,31 +328,32 @@ void printInfoPopup(void)
   char showInfo[150];
   char tempstr[30];
 
-  strcpy(showInfo, (char*)textSelect(LABEL_FILE_NAME));
-  strcat(showInfo, filData.name);
-  strcat(showInfo, "\n");
-  strcat(showInfo, (char*)textSelect(LABEL_PRINT_TIME));
-  sprintf(tempstr, "%02u:%02u:%02u", hour, min, sec);
-  strcat(showInfo, tempstr);
-  if (filData.length > 0)
+  sprintf(showInfo,(char*)textSelect(LABEL_PRINT_TIME), hour, min, sec);
+
+  if (filData.length == 0 && filData.weight == 0 && filData.cost == 0)
   {
-    sprintf(tempstr, (char*)textSelect(LABEL_FILAMENT_LENGTH), filData.length);
-    strcat(showInfo, "\n");
-    strcat(showInfo, tempstr);
+    strcat(showInfo, (char *)textSelect(LABEL_NO_FILAMENT_STATS));
   }
-  if (filData.weight > 0)
+  else
   {
-    sprintf(tempstr, (char*)textSelect(LABEL_FILAMENT_WEIGHT), filData.weight);
-    strcat(showInfo, "\n");
-    strcat(showInfo, tempstr);
+    if (filData.length > 0)
+    {
+      sprintf(tempstr, (char *)textSelect(LABEL_FILAMENT_LENGTH), filData.length);
+      strcat(showInfo, tempstr);
+    }
+    if (filData.weight > 0)
+    {
+      sprintf(tempstr, (char *)textSelect(LABEL_FILAMENT_WEIGHT), filData.weight);
+      strcat(showInfo, tempstr);
+    }
+    if (filData.cost > 0)
+    {
+      Buzzer_play(sound_error);
+      sprintf(tempstr, (char *)textSelect(LABEL_FILAMENT_COST), filData.cost);
+      strcat(showInfo, tempstr);
+    }
   }
-  if (filData.cost > 0)
-  {
-    sprintf(tempstr, (char*)textSelect(LABEL_FILAMENT_COST), filData.cost);
-    strcat(showInfo, "\n");
-    strcat(showInfo, tempstr);
-  }
-  popupReminder(DIALOG_TYPE_INFO, LABEL_INFO, (uint8_t *) showInfo);
+  popupReminder(DIALOG_TYPE_INFO, (u8 *)getCurGcodeName(infoFile.title), (uint8_t *)showInfo);
 }
 
 void menuPrinting(void)
@@ -543,9 +508,6 @@ void menuPrinting(void)
         printFinished();
       }
     }
-
-    if (!isPrinting())
-      scrollInfo();
 
     toggleInfo();
 
