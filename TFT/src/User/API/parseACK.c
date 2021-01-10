@@ -448,6 +448,16 @@ void parseACK(void)
         {
           request_M27(infoSettings.m27_refresh_time);  //Check if there is a SD or USB print running.
         }
+        if (strlen(filData.name) > 0)  // file is not printed from TFT 
+        {
+          infoFile.cur_index = 65535;
+          printDataInit();
+          if (infoMenu.menu[infoMenu.cur] == menuPrinting)
+          {
+            menuDrawTitle(getCurGcodeName(infoFile.title));
+            GUI_ClearPrect(&rect_of_keySS[17]);
+          }
+        }
       }
       else if (infoMachineSettings.onboard_sd_support == ENABLED &&
                infoFile.source == BOARD_SD &&

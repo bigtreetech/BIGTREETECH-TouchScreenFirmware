@@ -36,7 +36,7 @@ const  char *const Speed_ID[2] = {"Speed","Flow"};
 static char filamentInfo[150];
 bool filDataSeen;
 SCROLL infoScroll;
-FILAMENTDATA filData = {"", 0, 0, 0, 0};
+FILAMENTDATA filData = {"???", 0, 0, 0, 0};
 
 #define TOGGLE_TIME 2000 // 1 seconds is 1000
 #define DRAW_TIME 500 // 1 seconds is 1000
@@ -67,10 +67,21 @@ const ITEM itemIsPrinting[6] = {
   {ICON_STOP,                 LABEL_STOP},
 };
 
+void printDataInit(void)
+{
+  filData = (FILAMENTDATA) {"", 0, 0, 0, 0};
+  filDataSeen = false;
+  infoPrinting.time = 0;
+  initEpos();
+}
+
 void menuBeforePrinting(void)
 {
   //load stat/end/cancel gcodes from spi flash
   long size = 0;
+
+  printDataInit();
+
   switch (infoFile.source)
   {
     case BOARD_SD: // GCode from file on ONBOARD SD
@@ -128,12 +139,7 @@ void menuBeforePrinting(void)
       break;
   }
   infoPrinting.printing = true;
-  infoPrinting.time = 0;
   infoMenu.menu[infoMenu.cur] = menuPrinting;
-  infoPrinting.time = 0;
-  filData = (FILAMENTDATA) {"", 0, 0, 0, 0};
-  filDataSeen = false;
-  initEpos();
 }
 
 static inline void reValueNozzle(int icon_pos)
@@ -574,7 +580,6 @@ void menuPrinting(void)
         }
         else
         {
-          infoFile.cur_index = 65535;
           infoMenu.cur = 0;
         }
         break;
@@ -596,7 +601,6 @@ void menuPrinting(void)
         else
         {
           exitPrinting();
-          infoFile.cur_index = 65535;
           infoMenu.cur--;
         }
         break;
