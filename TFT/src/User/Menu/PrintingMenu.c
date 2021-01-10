@@ -348,7 +348,6 @@ void printInfoPopup(void)
     }
     if (filData.cost > 0)
     {
-      Buzzer_play(sound_error);
       sprintf(tempstr, (char *)textSelect(LABEL_FILAMENT_COST), filData.cost);
       strcat(showInfo, tempstr);
     }
