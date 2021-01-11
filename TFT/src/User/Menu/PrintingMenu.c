@@ -32,7 +32,7 @@ const GUI_RECT printinfo_val_rect[6] = {
 
 static uint32_t nextLayerDrawTime = 0;
 const  char *const Speed_ID[2] = {"Speed","Flow"};
-bool infoPrintSummarySeen;
+bool hasFilamentLength;
 
 #define TOGGLE_TIME 2000 // 1 seconds is 1000
 #define LAYER_DRAW_TIME 500 // 1 seconds is 1000
@@ -65,7 +65,6 @@ void menuBeforePrinting(void)
 {
   //load stat/end/cancel gcodes from spi flash
   uint32_t size = 0;
-  initPrintSummary();
 
   switch (infoFile.source)
   {
@@ -126,6 +125,7 @@ void menuBeforePrinting(void)
   }
   infoPrinting.printing = true;
   infoPrinting.time = 0;
+  initPrintSummary();
   infoMenu.menu[infoMenu.cur] = menuPrinting;
 }
 
@@ -254,7 +254,7 @@ static inline void toggleInfo(void)
     speedQuery();
     if (infoFile.source >= BOARD_SD)
       coordinateQuery();
-    if (!infoPrintSummarySeen && isPrinting())
+    if (!hasFilamentLength && isPrinting())
       updateFilamentUsed();
   }
 }

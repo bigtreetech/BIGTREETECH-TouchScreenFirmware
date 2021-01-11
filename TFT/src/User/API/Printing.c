@@ -143,20 +143,16 @@ void initPrintSummary(void)
 {
   last_E_pos = ((infoFile.source == BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
   infoPrintSummary = (PRINTSUMMARY){"", 0, 0, 0, 0};
-  infoPrintSummarySeen = false;
+  hasFilamentLength = false;
 }
 
 void preparePrintSummary(void)
 {
   if (infoMachineSettings.long_filename_support == ENABLED && infoFile.source == BOARD_SD)
-   strncpy(infoPrintSummary.name, infoFile.Longfile[infoFile.fileIndex], SUMMARY_NAME_LEN);
+   sprintf(infoPrintSummary.name,"%." STRINGIFY(SUMMARY_NAME_LEN) "s", infoFile.Longfile[infoFile.fileIndex]);
   else
-    strncpy(infoPrintSummary.name, infoFile.title, SUMMARY_NAME_LEN);
-  if (infoPrintSummary.name[SUMMARY_NAME_LEN] != 0)
-  {
-    infoPrintSummary.name[SUMMARY_NAME_LEN] = '…';
-    infoPrintSummary.name[SUMMARY_NAME_LEN+1] = '\0';
-  }
+   sprintf(infoPrintSummary.name,"%." STRINGIFY(SUMMARY_NAME_LEN) "s", infoFile.title);
+
   infoPrintSummary.time = infoPrinting.time;
 
   if (speedGetCurPercent(1) != 100)

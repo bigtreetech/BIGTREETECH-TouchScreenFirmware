@@ -421,7 +421,7 @@ void menuPrint(void)
         break;
 
       case KEY_ICON_4:
-        if (infoPrintSummary.name[0] != '\0')
+        if (strlen(infoPrintSummary.name) != 0)
           printInfoPopup();
         break;
 

@@ -978,6 +978,7 @@ void parseACK(void)
           while (((dmaL2Cache[ack_index] < '0') || (dmaL2Cache[ack_index] > '9')) && dmaL2Cache[ack_index] != '\n')
             ack_index++;
           infoPrintSummary.length = ack_value();
+          hasFilamentLength = true;
         }
         else if (ack_seen("W:"))
         {
@@ -991,7 +992,6 @@ void parseACK(void)
             ack_index++;
           infoPrintSummary.cost = ack_value();
         }
-        infoPrintSummarySeen = true;
       }
     }
 
