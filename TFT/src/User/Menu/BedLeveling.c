@@ -71,7 +71,7 @@ void menuBedLeveling(void)
   }
   
   if (infoSettings.z_steppers_alignment)
- {
+  {
     bedLevelingItems.items[2].icon = ICON_Z_ALIGN;
     bedLevelingItems.items[2].label.index = LABEL_Z_ALIGN;
   }
@@ -92,9 +92,9 @@ void menuBedLeveling(void)
         break;
         
       case KEY_ICON_2:
-       if (infoSettings.z_steppers_alignment)
-            storeCmd("G34\n");
-       break;
+        if (infoSettings.z_steppers_alignment)
+          storeCmd("G34\n");
+        break;
 
       case KEY_ICON_4:
         storeCmd("M851\n");
