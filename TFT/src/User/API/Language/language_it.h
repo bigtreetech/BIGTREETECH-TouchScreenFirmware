@@ -282,7 +282,7 @@
     #define STRING_LOAD_STARTED           "Carico filamento in corso...\nNon sono possibili altre\nazioni fino al termine.\nAttendere prego."
     #define STRING_UNLOAD_STARTED         "Scarico filamento in corso...\nNon sono possibili altre\nazioni fino al termine.\nAttendere prego."
     #define STRING_HEATERS_ON             "Alcuni riscaldatori sono ancora accesi\nVuoi spegnerli?"
-    #define STRING_PRINT_FINISHED         "Stampa finita"
+    #define STRING_PRINT_FINISHED         "Stampa ultimata"
     #define STRING_MAIN_SCREEN            "Principale"
     #define STRING_PREVIOUS_PRINT_DATA    "Ultima stampa"
     #define STRING_PRINT_TIME             "Durata stampa: %02u:%02u:%02u\n"
