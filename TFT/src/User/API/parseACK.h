@@ -7,11 +7,13 @@ extern "C" {
 
 #include <stdint.h>
 #include "Configuration.h"
+#include "includes.h"
 
 static const char errormagic[]         = "Error:";
 static const char echomagic[]          = "echo:";
 
-#define ACK_MAX_SIZE 512  // by Lori
+
+#define ACK_MAX_SIZE 512
 
 typedef enum                      // popup message types available to display an echo message
 {

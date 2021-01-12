@@ -35,15 +35,15 @@ void menuExtrude(void)
   MENUITEMS extrudeItems = {
     // title
     LABEL_EXTRUDE,
-    // icon                      label
-    {{ICON_UNLOAD,               LABEL_UNLOAD},
-     {ICON_BACKGROUND,           LABEL_BACKGROUND},
-     {ICON_BACKGROUND,           LABEL_BACKGROUND},
-     {ICON_LOAD,                 LABEL_LOAD},
-     {ICON_BACKGROUND,           LABEL_BACKGROUND},
-     {ICON_E_5_MM,               LABEL_5_MM},
-     {ICON_NORMAL_SPEED,         LABEL_NORMAL_SPEED},
-     {ICON_BACK,                 LABEL_BACK},}
+    // icon                         label
+    {{ICON_UNLOAD,                  LABEL_UNLOAD},
+     {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_LOAD,                    LABEL_LOAD},
+     {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_E_5_MM,                  LABEL_5_MM},
+     {ICON_NORMAL_SPEED,            LABEL_NORMAL_SPEED},
+     {ICON_BACK,                    LABEL_BACK},}
   };
 
   extrudeItems.items[KEY_ICON_4].icon = (infoSettings.ext_count > 1) ? ICON_NOZZLE : ICON_HEAT;
