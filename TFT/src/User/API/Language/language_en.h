@@ -177,7 +177,7 @@
     #define STRING_FILAMENT_RUNOUT        "Filament runout!"
     #define STRING_PREHEAT                "Preheat"
     #define STRING_PREHEAT_BOTH           "Both"
-    #define STRING_IS_PAUSE               "Unable to extrude when\nprinting.\nPause printing?"
+    #define STRING_IS_PAUSE               "Action not allowed while printing.\n \nPause printing?"
     #define STRING_AUTO_SHUT_DOWN         "Auto Power"
     #define STRING_UNIFIEDMOVE            "Movement"
     #define STRING_UNIFIEDHEAT            "Heat/Fan"
@@ -295,5 +295,6 @@
     #define STRING_EXT_TEMPLOW            "Hotend temperature is below\nminimum temperature (%d℃)."
     #define STRING_COLD_EXT               "Cold extrusion prevented"
     #define STRING_HEAT_HOTEND            "Heat hotend to %d℃?"
+    #define STRING_Z_ALIGN                "Z Align"
 
 #endif

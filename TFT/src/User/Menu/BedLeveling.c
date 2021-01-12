@@ -23,7 +23,7 @@ void menuBedLeveling(void)
     LABEL_ABL_SETTINGS,
     // icon                         label
     {{ICON_LEVELING,                LABEL_ABL},
-     {ICON_LEVELING,                LABEL_MESH_EDITOR},
+     {ICON_MESH_EDITOR,             LABEL_MESH_EDITOR},
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_PROBE_OFFSET,            LABEL_Z_OFFSET},
@@ -69,6 +69,12 @@ void menuBedLeveling(void)
     bedLevelingItems.items[6].icon = ICON_LEVELING_OFF;
     bedLevelingItems.items[6].label.index = LABEL_BL_DISABLE;
   }
+  
+  if (infoSettings.z_steppers_alignment)
+  {
+    bedLevelingItems.items[2].icon = ICON_Z_ALIGN;
+    bedLevelingItems.items[2].label.index = LABEL_Z_ALIGN;
+  }
 
   menuDrawPage(&bedLevelingItems);
 
@@ -83,6 +89,11 @@ void menuBedLeveling(void)
 
       case KEY_ICON_1:
         infoMenu.menu[++infoMenu.cur] = menuMeshEditor;
+        break;
+        
+      case KEY_ICON_2:
+        if (infoSettings.z_steppers_alignment)
+          storeCmd("G34\n");
         break;
 
       case KEY_ICON_4:

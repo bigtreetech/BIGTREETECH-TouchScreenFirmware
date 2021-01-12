@@ -1,13 +1,13 @@
 <!-- omit in toc -->
 
-# BigTreeTech Touchscreen Firmware
+# BigTreeTech TFT Touchscreen
 
 ![GitHub](https://img.shields.io/github/license/bigtreetech/bigtreetech-TouchScreenFirmware.svg)
 [![GitHub contributors](https://img.shields.io/github/contributors/bigtreetech/bigtreetech-TouchScreenFirmware.svg)](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/graphs/contributors)
 ![GitHub Release Date](https://img.shields.io/github/release-date/bigtreetech/bigtreetech-TouchScreenFirmware.svg)
 [![Build Status](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/workflows/Build%20Test/badge.svg?branch=master)](https://github.com/bigtreetech/bigtreetech-TouchScreenFirmware/actions)
 
-Firmware for BigTreeTech's dual-mode touchscreen 3D printer controllers
+Important information related to BigTreeTech's TFT touchscreen 3D printer controllers
 
 <img width=500 src="https://user-images.githubusercontent.com/13375512/76691608-ae1b8780-6609-11ea-9ee1-421bcf09e538.png">
 
@@ -16,14 +16,28 @@ Firmware for BigTreeTech's dual-mode touchscreen 3D printer controllers
 ## Table of Contents
 
 - [Connect the TFT to the Mainboard](#connect-the-tft-to-the-mainboard)
+
 - [Menus and Themes](#menus-and-themes)
+
 - [Update TFT Firmware](#update-tft-firmware)
+
 - [Configuration](#configuration)
+
 - [Customization](#customization)
+
   - [Bootscreen and Icons](#bootscreen-and-icons)
   - [Firmware](#firmware)
+
 - [Troubleshooting](#troubleshooting)
+
 - [Version History](#version-history)
+
+- [Appendix](#appendix)
+
+  - [Setup of BTT TFT35 E3 V3.0 with MKS SGEN_L Mainboards](#Setup-of-BTT-TFT35-E3-V3.0-with-MKS-SGEN-L-Mainboards)
+  - [Show more statistics at the end of the print](#show-more-statistics-at-the-end-of-the-print)
+
+  
 
 ## Connect the TFT to the Mainboard
 
@@ -43,10 +57,12 @@ C: In case you have an **"E3" mainboard** which provides a **single EXP connecto
 
 ## Menus
 
-|                   Classic Menu Main Screen                   |                   Unified Menu Main Screen                   |
+|                    Status Screen DISABLED                    |                    Status Screen ENABLED                     |
 | :----------------------------------------------------------: | :----------------------------------------------------------: |
-| ![Classic](https://user-images.githubusercontent.com/54359396/98740417-4d686880-23ab-11eb-873f-82c7d338a139.png) | ![Unified Material Main Screen](https://user-images.githubusercontent.com/54359396/98742038-03cd4d00-23ae-11eb-9552-36dc02fe66f4.png) |
-| In config.ini define: General Settings<br/>UNIFIED MENU / CLASSIC MENU<br/># Select a UI Menu flavour<br/># Options: [Unified Menu: 1, Classic Menu: 0]<br/>**unified menu: 0** | In config.ini define: General Settings<br/>UNIFIED MENU / CLASSIC MENU<br/># Select a UI Menu flavour<br/># Options: [Unified Menu: 1, Classic Menu: 0]<br/>**unified menu: 1** |
+| ![status screen 0](https://user-images.githubusercontent.com/54359396/103319145-09035b80-4a31-11eb-91d0-dd761a48b6f5.png) | ![Unified Material Main Screen](https://user-images.githubusercontent.com/54359396/98742038-03cd4d00-23ae-11eb-9552-36dc02fe66f4.png) |
+| In config.ini define: General Settings<br/>Enable Status Screen<br/># Select the Main Screen flavour<br/># Options: [Enable: 1, Disable: 0]<br/>**status_screen: 0** | In config.ini define: General Settings<br/>Enable Status Screen<br/># Select the Main Screen flavour<br/># Options: [Enable: 1, Disable: 0]<br/>**status_screen: 1** |
+
+
 
 ## Themes
 
@@ -54,6 +70,8 @@ C: In case you have an **"E3" mainboard** which provides a **single EXP connecto
 | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
 | ![Unified Material Main Screen](https://user-images.githubusercontent.com/54359396/98742038-03cd4d00-23ae-11eb-9552-36dc02fe66f4.png) | ![Hybrid Red Menu Material Mainscreen](https://user-images.githubusercontent.com/54359396/98869176-a995c000-2471-11eb-94da-a0bc41abf3e9.png) | ![Round Miracle Main Screen](https://user-images.githubusercontent.com/54359396/99251566-d77e5a00-280d-11eb-9c7a-0e7c0111eedd.png) |
 | Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update - Unified Menu Material theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update/THEME_Unified%20Menu%20Material%20theme) folder | Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update - Hybrid Red Material theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update/THEME_Hybrid%20Red%20Menu%20Material%20theme) folder | Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update - The Round Miracle theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update/THEME_The%20Round%20Miracle%20Menu%20Material%20theme) folder |
+
+
 
 ## Update TFT Firmware
 
@@ -181,7 +199,6 @@ See [Customization guides](https://github.com/bigtreetech/BIGTREETECH-TouchScree
 ;MKS_28_V1_0
 
 
-
 [platformio]
 src_dir      = TFT
 boards_dir   = buildroot/boards
@@ -199,3 +216,53 @@ To reset the TFT's touch screen calibration, create a blank file named `reset.tx
 ## Version History
 
 See [BIGTREETECH-TouchScreenFirmware/releases](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/releases) for a complete version history.
+
+## Appendix
+
+### Setup of BTT TFT35 E3 V3.0 with MKS SGEN_L Mainboards
+
+The following mainboards are covered by this document.
+
+MKS GEN_L v1.0, MKS SGEN (LPC1769), MKS SGEN_L v1.0 (LPC1768) and MKS SGEN_L v2.0 (LPC1769)
+
+**Connections**
+
+The TFT35 E3 V3.0 has 3 cables to connect to the mainboard. Two 10 pin ribbon cables and one 5 pin serial cable. The 2 ribbon cables connect to the EXP1 and the EXP2 connections on both the TFT35 E3 V3.0 and the MKS mainboards.
+
+The RS232 cable is connected to the RS232 connection on the touchscreen, with the other end connecting to the AUX1 connection on the mainboard. The RS232 cable has 5 wires. One end has a single 5 wire connector that goes to the RS232 connector on the touchscreen, and the other end has two connectors, one has 4 wires, and the second one has one wire. That single wire is for the Reset and is not used on these MKS mainboards. The 4-pin connector plugs into the AUX1 connection. It must connect to the top row of pins when looking at the socket with the notch facing away from the mainboard and must be also plugged in with the 5v+ wire connected to the first pin in the upper left corner of the socket. The RESET wire is not connected to anything.
+
+![Serial](https://user-images.githubusercontent.com/54359396/103489161-acc68000-4e12-11eb-8ee8-cb6376f3589a.png)
+
+NOTE: On the MKS mainboards there is an issue that involves at least the MKS GEN_L, MKS SGEN, and MKS SGEN_L models. The EXP1 and EXP2 connections have the socket shell installed wrong way around. The notch that indexes the cable should be facing towards the mainboard. If you get a blank screen on the TFT35 E3 V3.0 touchscreen after connecting the two EXP cables and turning the printer on, turn printer off and disconnect the 10 pin cables from either the touch screen or the mainboard and using small diagonal cutters trim the tab down to be as close to flush as you can get on both cables (and only on one end) and plug them back in with the trimmed tab now facing the mainboard.
+
+![EXP](https://user-images.githubusercontent.com/54359396/103489164-b2bc6100-4e12-11eb-9210-685e8735e040.png)
+
+The second workaround for this issue is to carefully pry the two shells surrounding the pins on the mainboard upwards until they clear the pins. Do NOT use a metal tool for this, use a sturdy plastic or whalebone prying tool. Turn the shell 180 degrees and align the pins with the holes in the shells and push the shells back on with your thumb. Do not push the shell back on with something that could cause damage if it were to slip. Once the shells are installed you can use the stock (unaltered) cables as they are.
+
+**Firmware**
+
+Edit the configuration.h file and enable the line that says: #define REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER Rebuild and deploy the Marlin firmware to your 3D Printer.
+
+
+
+### Show more statistics at the end of the print
+
+Statistics as filament length, filament weight and filament cost can be embedded into the gCode. These statistics will be presented after the print is finished in the new infobox area as a scrolling text. You can click that infobox and a popup will present you the printed filename (limited to the first 25 characters), the time needed for the print, the filament length used, the filament weight and its cost.
+
+The statistic data in the gCode must have the following format (a good practice would be to include this at the beginning of the gCode):
+
+M118 P0 filament_data L:{12.3456}m	L: represents the length in meters
+M118 P0 filemant_data W:{1.23456}g	W: represents the weight in grams
+M118 P0 filament_data C:{0.1234}		C: represents the cost without a unit
+
+The values of every filament data can be in a brackets, parentheses, apostrophes, etc. or without them, measurement units can be there or not.
+So M118 P0 filament_data L:(12.3456)m, M118 P0 filament_data L:12.3456meters, M118 P0 filament_data L:[12.3456] and so on are all valid formats.
+
+The inclusion of the filament data into the gCode can be automated. In Cura all you have to do is to insert the following into the Start G-Code:
+M118 P0 filament_data L:{filament_amount}m
+M118 P0 filament_data W:{filament_weight}g
+M118 P0 filament_data C:{filament_cost}
+
+In case the gCode file has been generated using the  [BTT 3D Plug-In Suit](https://github.com/bigtreetech/Bigtree3DPluginSuit), the data is automatically added.
+
+In case filament data is not present in the gCode, the filament length data is calculated during print. Length is calculated regardless of using the TFT USB, TFT SD or the onboard SD. Calculations are done in both absolute or relative extrusion mode. Filament data takes into account the flow rate also but with a caveat. It has to be the same flow rate during the entire time of the printing, because the end result is calculated based on the flow rate at the time the print has finished. If flow rate changes during the print the results will not be accurate anymore.

@@ -48,23 +48,23 @@ FILAMENTDATA filData = {"", 0, 0, 0, 0};
 #define BED_ICON_POS 1
 #define FAN_ICON_POS 2
 #define TIM_ICON_POS 3
-#define Z_ICON_POS 4
+#define Z_ICON_POS   4
 #define SPD_ICON_POS 5
 
 const ITEM itemIsPause[2] = {
-    // icon                       label
-    {ICON_PAUSE, LABEL_PAUSE},
-    {ICON_RESUME, LABEL_RESUME},
+  // icon       label
+  {ICON_PAUSE,  LABEL_PAUSE},
+  {ICON_RESUME, LABEL_RESUME},
 };
 
 const ITEM itemIsPrinting[6] = {
-    // icon                       label
-    {ICON_BACKGROUND, LABEL_BACKGROUND},
-    {ICON_MAINMENU, LABEL_MAIN_SCREEN},
-    {ICON_BABYSTEP, LABEL_BABYSTEP},
-    {ICON_MORE, LABEL_MORE},
-    {ICON_BACK, LABEL_BACK},
-    {ICON_STOP, LABEL_STOP},
+  // icon           label
+  {ICON_BACKGROUND, LABEL_BACKGROUND},
+  {ICON_MAINMENU,   LABEL_MAIN_SCREEN},
+  {ICON_BABYSTEP,   LABEL_BABYSTEP},
+  {ICON_MORE,       LABEL_MORE},
+  {ICON_BACK,       LABEL_BACK},
+  {ICON_STOP,       LABEL_STOP},
 };
 
 void menuBeforePrinting(void)
@@ -73,28 +73,28 @@ void menuBeforePrinting(void)
   long size = 0;
   switch (infoFile.source)
   {
-  case BOARD_SD: // GCode from file on ONBOARD SD
-#ifdef RepRapFirmware
-    /*in RepRapFirmware, M23 not return the size of the file. So we send M36, to get file information*/
-    size = request_M36(infoFile.title + 5);
-    request_M23(infoFile.title + 5);
-#else
-    size = request_M23(infoFile.title + 5);
-#endif
+    case BOARD_SD: // GCode from file on ONBOARD SD
+  #ifdef RepRapFirmware
+      /*in RepRapFirmware, M23 not return the size of the file. So we send M36, to get file information*/
+      size = request_M36(infoFile.title + 5);
+      request_M23(infoFile.title + 5);
+  #else
+      size = request_M23(infoFile.title + 5);
+  #endif
 
-    //  if( powerFailedCreate(infoFile.title)==false)
-    //  {
-    //
-    //  }    // FIXME: Powerfail resume is not yet supported for ONBOARD_SD. Need more work.
+      //  if( powerFailedCreate(infoFile.title)==false)
+      //  {
+      //
+      //  }    // FIXME: Powerfail resume is not yet supported for ONBOARD_SD. Need more work.
 
-    if (size == 0)
-    {
-      ExitDir();
-      infoMenu.cur--;
-      return;
-    }
+      if (size == 0)
+      {
+        ExitDir();
+        infoMenu.cur--;
+        return;
+      }
 
-    infoPrinting.size = size;
+      infoPrinting.size = size;
 
     //    if(powerFailedExist())
     //    {
@@ -105,34 +105,34 @@ void menuBeforePrinting(void)
     //      request_M24(infoBreakPoint.offset);
     //    }
 
-    if (infoMachineSettings.autoReportSDStatus == 1)
-      request_M27(infoSettings.m27_refresh_time); //Check if there is a SD or USB print running.
-    else
-      request_M27(0);
+      if (infoMachineSettings.autoReportSDStatus == 1)
+        request_M27(infoSettings.m27_refresh_time); //Check if there is a SD or USB print running.
+      else
+        request_M27(0);
 
     infoHost.printing = true; // Global lock info on printer is busy in printing.
     break;
 
-  case TFT_UDISK:
-  case TFT_SD: // GCode from file on TFT SD
-    if (f_open(&infoPrinting.file, infoFile.title, FA_OPEN_EXISTING | FA_READ) != FR_OK)
-    {
-      ExitDir();
-      infoMenu.cur--;
-      return;
-    }
-    if (powerFailedCreate(infoFile.title) == false)
-    {
-    }
-    powerFailedlSeek(&infoPrinting.file);
+    case TFT_UDISK:
+    case TFT_SD: // GCode from file on TFT SD
+      if (f_open(&infoPrinting.file, infoFile.title, FA_OPEN_EXISTING | FA_READ) != FR_OK)
+      {
+        ExitDir();
+        infoMenu.cur--;
+        return;
+      }
+      if (powerFailedCreate(infoFile.title) == false)
+      {
+      }
+      powerFailedlSeek(&infoPrinting.file);
 
-    infoPrinting.size = f_size(&infoPrinting.file);
-    infoPrinting.cur = infoPrinting.file.fptr;
-    if (infoSettings.send_start_gcode == 1 && infoPrinting.cur == 0) // PLR continue printing, CAN NOT use start gcode
-    {
-      sendPrintCodes(0);
-    }
-    break;
+      infoPrinting.size = f_size(&infoPrinting.file);
+      infoPrinting.cur = infoPrinting.file.fptr;
+      if (infoSettings.send_start_gcode == 1 && infoPrinting.cur == 0) // PLR continue printing, CAN NOT use start gcode
+      {
+        sendPrintCodes(0);
+      }
+      break;
   }
   infoPrinting.printing = true;
   infoPrinting.time = 0;
@@ -403,17 +403,17 @@ void menuPrinting(void)
 {
   //1title, ITEM_PER_PAGE item(icon + label)
   MENUITEMS printingItems = {
-      //  title
-      LABEL_BACKGROUND,
-      // icon                       label
-      {{ICON_BACKGROUND, LABEL_BACKGROUND},
-       {ICON_BACKGROUND, LABEL_BACKGROUND},
-       {ICON_BACKGROUND, LABEL_BACKGROUND},
-       {ICON_BACKGROUND, LABEL_BACKGROUND},
-       {ICON_BACKGROUND, LABEL_BACKGROUND},
-       {ICON_BACKGROUND, LABEL_BACKGROUND},
-       {ICON_BACKGROUND, LABEL_BACKGROUND},
-       {ICON_BACKGROUND, LABEL_BACKGROUND}}};
+    //  title
+    LABEL_BACKGROUND,
+    // icon                       label
+    {{ICON_BACKGROUND, LABEL_BACKGROUND},
+      {ICON_BACKGROUND, LABEL_BACKGROUND},
+      {ICON_BACKGROUND, LABEL_BACKGROUND},
+      {ICON_BACKGROUND, LABEL_BACKGROUND},
+      {ICON_BACKGROUND, LABEL_BACKGROUND},
+      {ICON_BACKGROUND, LABEL_BACKGROUND},
+      {ICON_BACKGROUND, LABEL_BACKGROUND},
+      {ICON_BACKGROUND, LABEL_BACKGROUND}}};
 
   uint8_t nowFan[MAX_FAN_COUNT] = {0};
   uint16_t curspeed[2] = {0};
@@ -555,44 +555,44 @@ void menuPrinting(void)
     KEY_VALUES key_num = menuKeyGetValue();
     switch (key_num)
     {
-    case KEY_ICON_4:
-      if (isPrinting())
-      {
-        setPrintPause(!isPause(), false);
-      }
-      else
-      {
-        infoMenu.cur = 0;
-      }
-      break;
+      case KEY_ICON_4:
+        if (isPrinting())
+        {
+          setPrintPause(!isPause(), false);
+        }
+        else
+        {
+          infoMenu.cur = 0;
+        }
+        break;
 
-    case KEY_ICON_5:
-      infoMenu.menu[++infoMenu.cur] = menuBabystep;
-      break;
+      case KEY_ICON_5:
+        infoMenu.menu[++infoMenu.cur] = menuBabystep;
+        break;
 
-    case KEY_ICON_6:
-      infoMenu.menu[++infoMenu.cur] = menuMore;
-      break;
+      case KEY_ICON_6:
+        infoMenu.menu[++infoMenu.cur] = menuMore;
+        break;
 
-    case KEY_ICON_7:
-      if (isPrinting())
-      {
-        setDialogText(LABEL_WARNING, LABEL_STOP_PRINT, LABEL_CONFIRM, LABEL_CANCEL);
-        showDialog(DIALOG_TYPE_ALERT, stopConfirm, NULL, NULL);
-      }
-      else
-      {
-        exitPrinting();
-        infoMenu.cur--;
-      }
-      break;
+      case KEY_ICON_7:
+        if (isPrinting())
+        {
+          setDialogText(LABEL_WARNING, LABEL_STOP_PRINT, LABEL_CONFIRM, LABEL_CANCEL);
+          showDialog(DIALOG_TYPE_ALERT, stopConfirm, NULL, NULL);
+        }
+        else
+        {
+          exitPrinting();
+          infoMenu.cur--;
+        }
+        break;
 
-    case KEY_INFOBOX:
-      printInfoPopup();
-      break;
+      case KEY_INFOBOX:
+        printInfoPopup();
+        break;
 
-    default:
-      break;
+      default:
+        break;
     }
     loopProcess();
   }

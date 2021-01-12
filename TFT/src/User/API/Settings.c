@@ -104,6 +104,7 @@ void infoSettingsReset(void)
   infoSettings.lcd_idle_brightness    = DEFAULT_LCD_IDLE_BRIGHTNESS;
   infoSettings.lcd_idle_timer         = DEFAULT_LCD_IDLE_TIMER;
   infoSettings.xy_offset_probing      = ENABLED;
+  infoSettings.z_steppers_alignment   = DISABLED;
 
 // Start, End & Cancel G-codes
   infoSettings.send_start_gcode       = DISABLED;
