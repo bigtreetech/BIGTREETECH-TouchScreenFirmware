@@ -295,5 +295,6 @@
     #define STRING_EXT_TEMPLOW            "Температура сопла ниже\nминимальной (%d℃)."
     #define STRING_COLD_EXT               "Экструзия холодным\nсоплом запрещена"
     #define STRING_HEAT_HOTEND            "Heat hotend to %d℃?"
+    #define STRING_Z_ALIGN                "Z Align"
 
 #endif
