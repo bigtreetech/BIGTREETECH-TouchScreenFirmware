@@ -8,26 +8,26 @@ bool mountFS(void)
   //  resetInfoFile();   //needn't this
   switch (infoFile.source)
   {
-  case TFT_SD:
-    return mountSDCard();
+    case TFT_SD:
+      return mountSDCard();
 
-  case TFT_UDISK:
-    return mountUDisk();
+    case TFT_UDISK:
+      return mountUDisk();
 
-  case BOARD_SD:
-#ifdef RepRapFirmware
-    /* no mount while printing */
-    if (infoHost.printing)
-    {
-      return true;
-    }
-    else
-    {
+    case BOARD_SD:
+  #ifdef RepRapFirmware
+      /* no mount while printing */
+      if (infoHost.printing)
+      {
+        return true;
+      }
+      else
+      {
+        return mountGcodeSDCard();
+      }
+  #else
       return mountGcodeSDCard();
-    }
-#else
-    return mountGcodeSDCard();
-#endif
+  #endif
   }
   return false;
 }
@@ -57,12 +57,12 @@ TCHAR *getCurFileSource(void)
 {
   switch (infoFile.source)
   {
-  case TFT_SD:
-    return "SD:";
-  case TFT_UDISK:
-    return "U:";
-  case BOARD_SD:
-    return "bSD:";
+    case TFT_SD:
+      return "SD:";
+    case TFT_UDISK:
+      return "U:";
+    case BOARD_SD:
+      return "bSD:";
   }
   return NULL;
 }
@@ -87,12 +87,12 @@ bool scanPrintFiles(void)
   clearInfoFile();
   switch (infoFile.source)
   {
-  case TFT_SD:
-  case TFT_UDISK:
-    return scanPrintFilesFatFs();
+    case TFT_SD:
+    case TFT_UDISK:
+      return scanPrintFilesFatFs();
 
-  case BOARD_SD:
-    return scanPrintFilesGcodeFs();
+    case BOARD_SD:
+      return scanPrintFilesGcodeFs();
   }
   return false;
 }

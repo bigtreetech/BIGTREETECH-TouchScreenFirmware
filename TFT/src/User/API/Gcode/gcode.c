@@ -4,11 +4,11 @@
 REQUEST_COMMAND_INFO requestCommandInfo = {0};
 
 static void resetRequestCommandInfo(
-    const char *string_start,  // The magic to identify the start
-    const char *string_stop,   // The magic to identify the stop
-    const char *string_error0, // The first magic to identify the error response
-    const char *string_error1, // The second error magic
-    const char *string_error2  // The third error magic
+  const char *string_start,  // The magic to identify the start
+  const char *string_stop,   // The magic to identify the stop
+  const char *string_error0, // The first magic to identify the error response
+  const char *string_error1, // The second error magic
+  const char *string_error2  // The third error magic
 )
 {
   requestCommandInfo.cmd_rev_buf = malloc(CMD_MAX_REV);
@@ -61,14 +61,14 @@ bool request_M21(void)
 {
   resetRequestCommandInfo(
 #ifdef RepRapFirmware
-      "SDHC card ", // The magic to identify the start
+    "SDHC card ", // The magic to identify the start
 #else
-      "SD card ", // The magic to identify the start
+    "SD card ", // The magic to identify the start
 #endif
-      "ok",                // The magic to identify the stop
-      "No SD card",        // The first magic to identify the error response
-      "SD init fail",      // The second error magic
-      "volume.init failed" // The third error magic
+    "ok",                // The magic to identify the stop
+    "No SD card",        // The first magic to identify the error response
+    "SD init fail",      // The second error magic
+    "volume.init failed" // The third error magic
   );
   mustStoreCmd("M21\n");
 
@@ -85,11 +85,11 @@ bool request_M21(void)
 char *request_M20(void)
 {
   resetRequestCommandInfo(
-      "Begin file list", // The magic to identify the start
-      "End file list",   // The magic to identify the stop
-      "Error",           // The first magic to identify the error response
-      NULL,              // The second error magic
-      NULL               // The third error magic
+    "Begin file list", // The magic to identify the start
+    "End file list",   // The magic to identify the stop
+    "Error",           // The first magic to identify the error response
+    NULL,              // The second error magic
+    NULL               // The third error magic
   );
   mustStoreCmd("M20\n");
 
@@ -111,11 +111,11 @@ char *request_M20(void)
 char *request_M33(char *filename)
 {
   resetRequestCommandInfo(
-      "/",                  // The magic to identify the start
-      "ok",                 // The magic to identify the stop
-      "Cannot open subdir", // The first magic to identify the error response
-      NULL,                 // The second error magic
-      NULL                  // The third error magic
+    "/",                  // The magic to identify the start
+    "ok",                 // The magic to identify the stop
+    "Cannot open subdir", // The first magic to identify the error response
+    NULL,                 // The second error magic
+    NULL                  // The third error magic
   );
   mustStoreCmd("M33 %s\n", filename);
 
@@ -140,11 +140,11 @@ char *request_M33(char *filename)
 long request_M23(char *filename)
 {
   resetRequestCommandInfo(
-      "File opened",   // The magic to identify the start
-      "File selected", // The magic to identify the stop
-      "open failed",   // The first magic to identify the error response
-      NULL,            // The second error magic
-      NULL             // The third error magic
+    "File opened",   // The magic to identify the start
+    "File selected", // The magic to identify the stop
+    "open failed",   // The first magic to identify the error response
+    NULL,            // The second error magic
+    NULL             // The third error magic
   );
   mustStoreCmd("M23 %s\n", filename);
 
@@ -213,11 +213,11 @@ bool request_M27(int seconds)
 long request_M36(char *filename)
 {
   resetRequestCommandInfo(
-      "{\"err\"", // The magic to identify the start
-      "}",        // The magic to identify the stop
-      "Error:",   // The first magic to identify the error response
-      NULL,       // The second error magic
-      NULL        // The third error magic
+    "{\"err\"", // The magic to identify the start
+    "}",        // The magic to identify the stop
+    "Error:",   // The first magic to identify the error response
+    NULL,       // The second error magic
+    NULL        // The third error magic
   );
   mustStoreCmd("M36 %s\n", filename);
   // Wait for response
