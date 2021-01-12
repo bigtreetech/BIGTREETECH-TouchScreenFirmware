@@ -25,6 +25,7 @@ extern BUTTON bottomDoubleBtn[];
 
 void _setDialogTitleStr(uint8_t * str);
 void _setDialogMsgStr(uint8_t * str);
+uint8_t *getDialogMsgStr(void);
 void _setDialogOkTextStr(uint8_t * str);
 void _setDialogCancelTextStr(uint8_t * str);
 

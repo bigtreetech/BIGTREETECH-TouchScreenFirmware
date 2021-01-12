@@ -144,6 +144,11 @@ void _setDialogMsgStr(uint8_t * str)
   popup_strcpy(popup_msg, str, sizeof(popup_msg));
 }
 
+uint8_t *getDialogMsgStr()
+{
+  return (uint8_t *)popup_msg;
+}
+
 void _setDialogOkTextStr(uint8_t * str)
 {
   popup_strcpy(popup_ok, str, sizeof(popup_ok));
