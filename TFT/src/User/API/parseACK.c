@@ -824,7 +824,35 @@ void parseACK(void)
     //parse Repeatability Test
       else if (ack_seen("Mean:"))
       {
-        popupReminder(DIALOG_TYPE_INFO, (u8* )"Repeatability Test", (u8 *)dmaL2Cache + ack_index-5);
+        char tmpMsg[100];
+        strcpy (tmpMsg, "Mean: ");
+        sprintf (&tmpMsg[strlen(tmpMsg)], "%0.5f", ack_value());
+        if (ack_seen("Min: "))
+        {
+          sprintf (&tmpMsg[strlen(tmpMsg)], "\nMin: %0.5f", ack_value());
+        }
+        if (ack_seen("Max: "))
+        {
+          sprintf (&tmpMsg[strlen(tmpMsg)], "\nMax: %0.5f", ack_value());
+        }
+        if (ack_seen("Range: "))
+        {
+          sprintf (&tmpMsg[strlen(tmpMsg)], "\nRange: %0.5f", ack_value());
+        }
+        setDialogText( (u8* )"Repeatability Test", (uint8_t *)tmpMsg, LABEL_CONFIRM, LABEL_BACKGROUND);
+        showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
+      }
+      else if (ack_seen("Standard Deviation: "))
+      {
+        char tmpMsg[100];
+        strncpy(tmpMsg, (char *)getDialogMsgStr(), 6);
+        tmpMsg[6] = '\0';
+        if (strcmp(tmpMsg, "Mean: ") == 0)
+        {
+          sprintf(tmpMsg, "%s\nStandard Deviation: %0.5f", (char *)getDialogMsgStr(), ack_value());
+          setDialogText( (u8* )"Repeatability Test", (uint8_t *)tmpMsg, LABEL_CONFIRM, LABEL_BACKGROUND);
+          showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
+        }
       }
       else if (ack_seen("Probe Offset"))
       {

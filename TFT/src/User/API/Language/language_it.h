@@ -282,7 +282,7 @@
     #define STRING_LOAD_STARTED           "Carico filamento in corso...\nNon sono possibili altre\nazioni fino al termine.\nAttendere prego."
     #define STRING_UNLOAD_STARTED         "Scarico filamento in corso...\nNon sono possibili altre\nazioni fino al termine.\nAttendere prego."
     #define STRING_HEATERS_ON             "Alcuni riscaldatori sono ancora accesi\nVuoi spegnerli?"
-    #define STRING_PRINT_FINISHED         "   Stampa\n   finita."  // keep it short and in this format!
+    #define STRING_PRINT_FINISHED         "   Stampa\n   ultimata."  // keep it short and in this format!
     #define STRING_MAIN_SCREEN            "Principale"
     #define STRING_PREVIOUS_PRINT_DATA    "Ultima stampa"
     #define STRING_FILE_NAME              "File: "
@@ -295,5 +295,6 @@
     #define STRING_EXT_TEMPLOW            "La temperatura dell'hotend\nè al di sotto della temperatura\nminima (%d℃)."
     #define STRING_COLD_EXT               "Prevenzione dell'estrusione a freddo"
     #define STRING_HEAT_HOTEND            "Heat hotend to %d℃?"
+    #define STRING_Z_ALIGN                "Z Align"
 
 #endif
