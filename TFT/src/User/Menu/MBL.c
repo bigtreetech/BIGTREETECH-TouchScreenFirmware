@@ -133,7 +133,7 @@ void menuMBL(void)
      {ICON_BACK,                    LABEL_BACK},}
   };
 
-  #if FRIENDLY_PROBE_OFFSET_LANGUAGE == 1
+  #ifdef FRIENDLY_PROBE_OFFSET_LANGUAGE
     mblItems.items[0].icon = ICON_NOZZLE_DOWN;
     mblItems.items[0].label.index = LABEL_DOWN;
     mblItems.items[3].icon = ICON_NOZZLE_UP;

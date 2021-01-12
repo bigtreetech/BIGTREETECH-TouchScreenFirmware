@@ -19,7 +19,7 @@ typedef enum
   #undef  X_CHAR
   //keep below items always at the end
   ICONCHAR_NUM,
- ICONCHAR_BACKGROUND
+  ICONCHAR_BACKGROUND
 } ICON_CHAR;
 
 typedef enum

@@ -62,7 +62,7 @@ void infoSettingsReset(void)
   infoSettings.m27_refresh_time       = M27_REFRESH;
   infoSettings.m27_active             = M27_WATCH_OTHER_SOURCES;
   infoSettings.longFileName           = AUTO;  //ENABLED / DISABLED / AUTO
-  infoSettings.fan_percentage         = ENABLED;
+  infoSettings.fan_percentage         = SHOW_FAN_PERCENTAGE;
 
   infoSettings.pause_retract_len      = NOZZLE_PAUSE_RETRACT_LENGTH;
   infoSettings.resume_purge_len       = NOZZLE_RESUME_PURGE_LENGTH;

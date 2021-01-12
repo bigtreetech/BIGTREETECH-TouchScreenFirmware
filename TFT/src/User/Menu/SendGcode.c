@@ -315,7 +315,7 @@ const char * const gcodeKey[][GKEY_KEY_NUM] = {
     "7", "8", "9", "E", "F", "R", "Q",
     ".", "0", "-", "~", "I", "J", "P",
 #else
-  #if TERMINAL_KEYBOARD_QWERTY_LAYOUT == 1
+  #ifdef TERMINAL_KEYBOARD_QWERTY_LAYOUT
     "\\","|", "!", "\"","$", "%", "&", "/", "=", "?",
     "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
     "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P",
@@ -455,10 +455,10 @@ void sendGcodeReDrawButton(u8 index, u8 isPressed)
 
   #if defined(HAS_ABC_KEY)
     GUI_DispStringInRect(gcodeKeyRect[index].x0 + 2, gcodeKeyRect[index].y0 + 2, gcodeKeyRect[index].x1 - 1,
-                        gcodeKeyRect[index].y1 - 1, (u8 *)gcodeKey[gcodeKeyType][index]);
+                         gcodeKeyRect[index].y1 - 1, (u8 *)gcodeKey[gcodeKeyType][index]);
   #else
     GUI_DispStringInRect(gcodeKeyRect[index].x0 + 2, gcodeKeyRect[index].y0 + 2, gcodeKeyRect[index].x1 - 1,
-                        gcodeKeyRect[index].y1 - 1, (u8 *)gcodeKey[0][index]);
+                         gcodeKeyRect[index].y1 - 1, (u8 *)gcodeKey[0][index]);
   #endif
 
   setLargeFont(false);
