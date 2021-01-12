@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 void menuLoadUnload(void);
+void setHotendMinExtTemp(void);
 
 
 #ifdef __cplusplus
