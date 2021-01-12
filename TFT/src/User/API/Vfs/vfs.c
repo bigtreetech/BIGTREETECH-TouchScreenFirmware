@@ -8,11 +8,11 @@ bool mountFS(void)
   //  resetInfoFile();   //needn't this
   switch (infoFile.source)
   {
-  case TFT_SD:
-    return mountSDCard();
+    case TFT_SD:
+      return mountSDCard();
 
-  case TFT_UDISK:
-    return mountUDisk();
+    case TFT_UDISK:
+      return mountUDisk();
 
     case BOARD_SD:
   #ifdef RepRapFirmware
@@ -87,12 +87,12 @@ bool scanPrintFiles(void)
   clearInfoFile();
   switch (infoFile.source)
   {
-  case TFT_SD:
-  case TFT_UDISK:
-    return scanPrintFilesFatFs();
+    case TFT_SD:
+    case TFT_UDISK:
+      return scanPrintFilesFatFs();
 
-  case BOARD_SD:
-    return scanPrintFilesGcodeFs();
+    case BOARD_SD:
+      return scanPrintFilesGcodeFs();
   }
   return false;
 }
