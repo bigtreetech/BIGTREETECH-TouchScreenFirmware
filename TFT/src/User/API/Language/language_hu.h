@@ -177,7 +177,7 @@
     #define STRING_FILAMENT_RUNOUT        "Filament kifutás!"
     #define STRING_PREHEAT                "Előfűtés"
     #define STRING_PREHEAT_BOTH           "Mindkettő"
-    #define STRING_IS_PAUSE               "Nem sikerült az adagolás\na nyomtatás alatt.\nSzünetelteted a nyomtatást?"
+    #define STRING_IS_PAUSE               "A művelet tiltva van\na nyomtatás alatt.\nSzünetelteted a nyomtatást?"
     #define STRING_AUTO_SHUT_DOWN         "Automata kikapcsolás"
     #define STRING_UNIFIEDMOVE            "Mozgás"
     #define STRING_UNIFIEDHEAT            "Fűt/Hűt"
@@ -295,5 +295,6 @@
     #define STRING_EXT_TEMPLOW            "Fejhőfok alacsonyabb, mint a\nminimális hőfok (%d℃)."
     #define STRING_COLD_EXT               "Hideg adagolás tiltva"
     #define STRING_HEAT_HOTEND            "Fűtöd a fejet %d℃-ra?"
+    #define STRING_Z_ALIGN                "Z Align"
 
 #endif

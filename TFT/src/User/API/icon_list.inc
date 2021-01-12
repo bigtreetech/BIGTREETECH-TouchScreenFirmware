@@ -141,5 +141,7 @@ X_ICON (PID)
 X_ICON (TUNE_EXTRUDER)
 X_ICON (CONNECTION_SETTINGS)
 X_ICON (CASE_LIGHT)
+X_ICON (Z_ALIGN)
+X_ICON (MESH_EDITOR)
 
 //after changing/adding/removing an icon, change the ICON_FLASH_SIGN in Settings.h
