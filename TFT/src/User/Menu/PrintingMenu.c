@@ -116,23 +116,23 @@ void menuBeforePrinting(void)
     case TFT_UDISK:
     case TFT_SD: // GCode from file on TFT SD
       if (f_open(&infoPrinting.file, infoFile.title, FA_OPEN_EXISTING | FA_READ) != FR_OK)
-    {
-      ExitDir();
-      infoMenu.cur--;
-      return;
-    }
-    if (powerFailedCreate(infoFile.title) == false)
-    {
-    }
-    powerFailedlSeek(&infoPrinting.file);
+      {
+        ExitDir();
+        infoMenu.cur--;
+        return;
+      }
+      if (powerFailedCreate(infoFile.title) == false)
+      {
+      }
+      powerFailedlSeek(&infoPrinting.file);
 
-    infoPrinting.size = f_size(&infoPrinting.file);
-    infoPrinting.cur = infoPrinting.file.fptr;
-    if (infoSettings.send_start_gcode == 1 && infoPrinting.cur == 0) // PLR continue printing, CAN NOT use start gcode
-    {
-      sendPrintCodes(0);
-    }
-    break;
+      infoPrinting.size = f_size(&infoPrinting.file);
+      infoPrinting.cur = infoPrinting.file.fptr;
+      if (infoSettings.send_start_gcode == 1 && infoPrinting.cur == 0) // PLR continue printing, CAN NOT use start gcode
+      {
+        sendPrintCodes(0);
+      }
+      break;
   }
   infoPrinting.printing = true;
   infoPrinting.time = 0;
