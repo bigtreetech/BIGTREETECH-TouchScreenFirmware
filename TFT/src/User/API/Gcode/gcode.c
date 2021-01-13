@@ -4,11 +4,11 @@
 REQUEST_COMMAND_INFO requestCommandInfo = {0};
 
 static void resetRequestCommandInfo(
-    const char *string_start,  // The magic to identify the start
-    const char *string_stop,   // The magic to identify the stop
-    const char *string_error0, // The first magic to identify the error response
-    const char *string_error1, // The second error magic
-    const char *string_error2  // The third error magic
+  const char *string_start,  // The magic to identify the start
+  const char *string_stop,   // The magic to identify the stop
+  const char *string_error0, // The first magic to identify the error response
+  const char *string_error1, // The second error magic
+  const char *string_error2  // The third error magic
 )
 {
   requestCommandInfo.cmd_rev_buf = malloc(CMD_MAX_REV);
