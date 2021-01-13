@@ -33,7 +33,7 @@ bool request_M27(int seconds);
 bool request_M524(void);
 bool request_M24(int pos);
 long request_M23(char *filename);
-#ifdef RepRapFirmware
+//ifdef RepRapFirmware
 long request_M36(char *filename);
-#endif
+//endif
 #endif
