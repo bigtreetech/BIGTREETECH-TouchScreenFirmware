@@ -59,17 +59,23 @@ void clearRequestCommandInfo(void)
 */
 bool request_M21(void)
 {
-  resetRequestCommandInfo(
-#ifdef RepRapFirmware
-    "SDHC card ", // The magic to identify the start
-#else
-    "SD card ", // The magic to identify the start
-#endif
-    "ok",                // The magic to identify the stop
-    "No SD card",        // The first magic to identify the error response
-    "SD init fail",      // The second error magic
-    "volume.init failed" // The third error magic
-  );
+  if (infoMachineSettings.firmwareType == FW_REPRAPFW){
+    resetRequestCommandInfo(
+      "SDHC card ",        // The magic to identify the start
+      "ok",                // The magic to identify the stop
+      "No SD card",        // The first magic to identify the error response
+      "SD init fail",      // The second error magic
+      "volume.init failed" // The third error magic
+    );
+  } else {
+    resetRequestCommandInfo(
+      "SD card ",          // The magic to identify the start
+      "ok",                // The magic to identify the stop
+      "No SD card",        // The first magic to identify the error response
+      "SD init fail",      // The second error magic
+      "volume.init failed" // The third error magic
+    );
+  }
   mustStoreCmd("M21\n");
 
   // Wait for response
@@ -204,7 +210,7 @@ bool request_M27(int seconds)
   mustStoreCmd("M27 S%d\n", seconds);
   return true;
 }
-#ifdef RepRapFirmware
+//ifdef RepRapFirmware
 /**
  * Return file information in RepRapFirmware
  * SENDING:M36 3DBenchy.gcode
@@ -238,4 +244,4 @@ long request_M36(char *filename)
   return size;
 }
 
-#endif
+//endif

@@ -307,24 +307,24 @@ void parseACK(void)
       if (ack_seen(heaterID[CHAMBER])) infoSettings.chamber_en = ENABLED;
       updateNextHeatCheckTime();
 
-      #ifdef RepRapFirmware
-        if (!ack_seen("@"))  //It's RepRapFirmware
-        {
-          infoMachineSettings.isMarlinFirmware = 0;
-          infoMachineSettings.softwareEndstops = ENABLED;
-          infoHost.wait = false;
-          storeCmd("M92\n");
-          storeCmd("M115\n");
-        }
-      #endif
-
-      if (infoMachineSettings.isMarlinFirmware == -1) // if never connected to the printer since boot
+      //ifdef RepRapFirmware
+      if (!ack_seen("@"))  //It's RepRapFirmware
       {
-        storeCmd("M503\n");  // Query detailed printer capabilities
-        storeCmd("M92\n");   // Steps/mm of extruder is an important parameter for Smart filament runout
-                              // Avoid can't getting this parameter due to disabled M503 in Marlin
+        infoMachineSettings.firmwareType = FW_REPRAPFW;
+        infoMachineSettings.softwareEndstops = ENABLED;
+        infoHost.wait = false;
+        storeCmd("M92\n");
         storeCmd("M115\n");
-        storeCmd("M211\n");  // retrieve the software endstops state
+      }
+      //endif
+
+      if (infoMachineSettings.firmwareType == FW_NOT_DETECTED) // if never connected to the printer since boot
+      {
+        storeCmd("M503\n"); // Query detailed printer capabilities
+        storeCmd("M92\n");  // Steps/mm of extruder is an important parameter for Smart filament runout
+                            // Avoid can't getting this parameter due to disabled M503 in Marlin
+        storeCmd("M115\n");
+        storeCmd("M211\n"); // retrieve the software endstops state
       }
       infoHost.connected = true;
     }
@@ -477,15 +477,15 @@ void parseACK(void)
       }
 
     //parse and store stepper steps/mm values
-    #ifdef RepRapFirmware
-      else if (ack_seen("Steps"))    // For RepRapFirmware
+    //ifdef RepRapFirmware
+      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && (ack_seen("Steps"))) // For RepRapFirmware
       {
         if (ack_seen("X: ")) setParameter(P_STEPS_PER_MM, X_STEPPER, ack_value());
         if (ack_seen("Y: ")) setParameter(P_STEPS_PER_MM, Y_STEPPER, ack_value());
         if (ack_seen("Z: ")) setParameter(P_STEPS_PER_MM, Z_STEPPER, ack_value());
         if (ack_seen("E: ")) setParameter(P_STEPS_PER_MM, E_STEPPER, ack_value());
       }
-    #endif
+//endif
       else if (ack_seen("M92 X"))
       {
                           setParameter(P_STEPS_PER_MM, X_STEPPER, ack_value());
@@ -698,21 +698,26 @@ void parseACK(void)
 
         if (ack_seen("Marlin"))
         {
-          infoMachineSettings.isMarlinFirmware = 1;
+          infoMachineSettings.firmwareType = FW_MARLIN;
+        }
+        else if (ack_seen("RepRapFirmware"))
+        {
+          infoMachineSettings.firmwareType = FW_REPRAPFW;
+          setupMachine();
         }
         else
         {
-          infoMachineSettings.isMarlinFirmware = 0;
+          infoMachineSettings.firmwareType = FW_UNKNOWN;
           setupMachine();
         }
         if (ack_seen("FIRMWARE_URL:")) // For Smoothieware and Repetier
           string_end = ack_index - sizeof("FIRMWARE_URL:");
         else if (ack_seen("SOURCE_CODE_URL:")) // For Marlin
           string_end = ack_index - sizeof("SOURCE_CODE_URL:");
-        #ifdef RepRapFirmware
-          else if (ack_seen("ELECTRONICS"))  // For RepRapFirmware
-            string_end = ack_index - sizeof("ELECTRONICS");
-        #endif
+        //ifdef RepRapFirmware
+        else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && ack_seen("ELECTRONICS")) // For RepRapFirmware
+          string_end = ack_index - sizeof("ELECTRONICS");
+        //endif
         infoSetFirmwareName(string, string_end - string_start); // Set firmware name
 
         if (ack_seen("MACHINE_TYPE:"))
@@ -856,27 +861,27 @@ void parseACK(void)
         speedSetCurPercent(0,ack_value());
         speedQuerySetWait(false);
       }
-    #ifdef RepRapFirmware
-      else if (ack_seen("factor: "))
+    //ifdef RepRapFirmware
+      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && ack_seen("factor: "))
       {
         speedSetCurPercent(0,ack_value());
         speedQuerySetWait(false);
       }
-    #endif
+    //endif
     // parse and store flow rate percentage
       else if (ack_seen("Flow: "))
       {
         speedSetCurPercent(1,ack_value());
         speedQuerySetWait(false);
       }
-    #ifdef RepRapFirmware
-      else if (ack_seen("extruder"))
+    //ifdef RepRapFirmware
+      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && ack_seen("extruder"))
       {
         ack_index+=4;
         speedSetCurPercent(1,ack_value());
         speedQuerySetWait(false);
       }
-    #endif
+    //endif
     // parse fan speed
       else if (ack_seen("M106 P"))
       {

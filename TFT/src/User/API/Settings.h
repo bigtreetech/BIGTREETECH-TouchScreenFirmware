@@ -215,9 +215,20 @@ typedef enum
   BL_MBL,  // Mesh Bed Leveling (MBL)
 } BL_TYPE;
 
+/**
+ * Firmware type
+ */
+typedef enum{
+  FW_NOT_DETECTED,
+  FW_UNKNOWN,
+  FW_MARLIN,
+  FW_REPRAPFW,
+  FW_KLIPPER,
+} FW_TYPE;
+
 typedef struct
 {
-  int8_t isMarlinFirmware;
+  FW_TYPE firmwareType;
   uint8_t EEPROM;
   uint8_t autoReportTemp;
   BL_TYPE leveling;

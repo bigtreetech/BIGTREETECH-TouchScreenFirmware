@@ -156,7 +156,7 @@ void infoSettingsReset(void)
 void initMachineSetting(void)
 {
   // some settings are assumes as active unless reported disabled by marlin
-  infoMachineSettings.isMarlinFirmware        = -1; // set fimware type to -1 to avoid repeated ABL gcode on mode change
+  infoMachineSettings.firmwareType            = FW_NOT_DETECTED; // set fimware type to not_detected to avoid repeated ABL gcode on mode change
   infoMachineSettings.EEPROM                  = ENABLED;
   infoMachineSettings.autoReportTemp          = DISABLED;
   infoMachineSettings.leveling                = BL_DISABLED;
@@ -200,7 +200,7 @@ void setupMachine(void)
     storeCmd("M420 S1\n");
   }
 
-  if (infoMachineSettings.isMarlinFirmware != 1) // Smoothieware does not report detailed M115 capabilities
+  if (infoMachineSettings.firmwareType != FW_MARLIN) // Smoothieware does not report detailed M115 capabilities
   {
     infoMachineSettings.EEPROM                  = ENABLED;
     infoMachineSettings.autoReportTemp          = DISABLED;
