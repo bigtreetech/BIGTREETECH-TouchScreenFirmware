@@ -1,7 +1,7 @@
 #include "includes.h"
 #include "coordinate.h"
 
-const MENUITEMS autoLevelingItems = {
+const MENUITEMS touchmiItems = {
 // title
 LABEL_TOUCHMI,
 // icon                         label
@@ -18,7 +18,7 @@ LABEL_TOUCHMI,
 void menuTouchMi(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
-  menuDrawPage(&autoLevelingItems);
+  menuDrawPage(&touchmiItems);
   while(infoMenu.menu[infoMenu.cur] == menuTouchMi)
   {
     key_num = menuKeyGetValue();
