@@ -75,7 +75,7 @@ void menuBeforePrinting(void)
   {
     case BOARD_SD: // GCode from file on ONBOARD SD
   //ifdef RepRapFirmware
-      if ((infoMachineSettings.firmwareType == FW_REPREPFW)) {
+      if ((infoMachineSettings.firmwareType == FW_REPRAPFW)) {
         /*in RepRapFirmware, M23 not return the size of the file. So we send M36, to get file information*/
         size = request_M36(infoFile.title + 5);
         request_M23(infoFile.title + 5);

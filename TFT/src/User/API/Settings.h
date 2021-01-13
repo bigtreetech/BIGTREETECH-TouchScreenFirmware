@@ -220,9 +220,9 @@ typedef enum
  */
 typedef enum{
   FW_NOT_DETECTED,
-  FW_UNGNOWN,
+  FW_UNKNOWN,
   FW_MARLIN,
-  FW_REPREPFW,
+  FW_REPRAPFW,
   FW_KLIPPER,
 } FW_TYPE;
 
