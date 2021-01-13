@@ -59,13 +59,23 @@ void clearRequestCommandInfo(void)
 */
 bool request_M21(void)
 {
-  resetRequestCommandInfo(
-    ((infoMachineSettings.firmwareType == FW_REPRAPFW) ? "SDHC card " : "SD card "), // The magic to identify the start
-    "ok",                // The magic to identify the stop
-    "No SD card",        // The first magic to identify the error response
-    "SD init fail",      // The second error magic
-    "volume.init failed" // The third error magic
-  );
+  if (infoMachineSettings.firmwareType == FW_REPRAPFW){
+    resetRequestCommandInfo(
+      "SDHC card ",        // The magic to identify the start
+      "ok",                // The magic to identify the stop
+      "No SD card",        // The first magic to identify the error response
+      "SD init fail",      // The second error magic
+      "volume.init failed" // The third error magic
+    );
+  } else {
+    resetRequestCommandInfo(
+      "SD card ",          // The magic to identify the start
+      "ok",                // The magic to identify the stop
+      "No SD card",        // The first magic to identify the error response
+      "SD init fail",      // The second error magic
+      "volume.init failed" // The third error magic
+    );
+  }
   mustStoreCmd("M21\n");
 
   // Wait for response
