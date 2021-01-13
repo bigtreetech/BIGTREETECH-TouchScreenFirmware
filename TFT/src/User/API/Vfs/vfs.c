@@ -16,13 +16,10 @@ bool mountFS(void)
 
     case BOARD_SD:
   //ifdef RepRapFirmware
-      if (infoMachineSettings.firmwareType == FW_REPREPFW)
+      if (infoMachineSettings.firmwareType == FW_REPRAPFW && infoHost.printing)
       {
         /* no mount while printing */
-        if (infoHost.printing)
-          return true;
-        else
-          return mountGcodeSDCard();
+        return true;
       }
       else
         return mountGcodeSDCard();
