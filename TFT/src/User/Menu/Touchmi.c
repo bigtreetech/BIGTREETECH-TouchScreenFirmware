@@ -36,14 +36,12 @@ void menuTouchMi(void)
         break;
         
       case KEY_ICON_2:
-        storeCmd("M211 S1\n");
-        storeCmd("G28 X Y\n");
         if (infoMachineSettings.EEPROM == 1)
         {
           setDialogText(touchmiItems.title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
-          showDialog(DIALOG_TYPE_QUESTION, saveEepromSettings, NULL, NULL);
+          showDialog(DIALOG_TYPE_QUESTION, saveEepromTouchmiSettings, NULL, NULL);
         }
-        break;       
+        break;      
 
       case KEY_ICON_3:
         storeCmd("G28\n");
