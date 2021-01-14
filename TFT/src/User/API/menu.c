@@ -715,6 +715,20 @@ GUI_POINT getIconStartPoint(int index)
   return p;
 }
 
+void loopCheckBack(void)
+{
+  char tempMsg[10];
+  if (LCD_ReadPen(LCD_CHANGE_MODE_INTERVALS-500))
+  // if (curMenuItems->items[Key_value(COUNT(curRect), curRect)].label.index == LABEL_BACK)
+  {
+    //  (curMenuItems->items[Key_value(COUNT(curRect), curRect)].label.index == LABEL_BACK)
+    infoMenu.cur = 0;
+    sprintf(tempMsg, "%d", COUNT(curRect));
+    popupReminder(DIALOG_TYPE_INFO, LABEL_INFO, (uint8_t *) tempMsg);
+    // popupReminder(DIALOG_TYPE_INFO, LABEL_INFO, (uint8_t *) "Test");
+  }
+}
+
 void loopBackEnd(void)
 {
   // Get Gcode command from the file to be printed
@@ -731,7 +745,8 @@ void loopBackEnd(void)
   loopFan();
   // Speed & flow monitor
   loopSpeed();
-
+  // check if Back is pressed and held
+  if (infoMenu.cur != 0) loopCheckBack();
 #ifdef BUZZER_PIN
   loopBuzzer();
 #endif
