@@ -282,19 +282,19 @@
     #define STRING_LOAD_STARTED           "Probíhá zavádění filamentu.\nNení možná další akce,\ndokud to nebude dokončeno.\nProsím čekejte."  // translation needed
     #define STRING_UNLOAD_STARTED         "Probíhá vysunování filamentu.\nNení možná další akce,\ndokud to nebude dokončeno.\nProsím čekejte.."  // translation needed
     #define STRING_HEATERS_ON             "Topení jsou stále zapnutá.\nChcete je vypnout?"  // translation needed
-    #define STRING_PRINT_FINISHED         "   Tisk\n   dokončen."  // keep it short and in this format!
-    #define STRING_MAIN_SCREEN            "Nabídka"
-    #define STRING_PREVIOUS_PRINT_DATA    "Info"
-    #define STRING_FILE_NAME              "Soubor: "
-    #define STRING_PRINT_TIME             "Čas tisku: "
-    #define STRING_FILAMENT_LENGTH        "Délka filamentu: %1.2fm"
-    #define STRING_FILAMENT_WEIGHT        "Váha  filamentu: %1.2fg"
-    #define STRING_FILAMENT_COST          "Cena  filamentu: %1.2f"
-    #define STRING_NO_FILAMENT_STATS      "Statistika není k dispozici."
-    #define STRING_CLICK_FOR_MORE         "Klikni pro více informací."
-    #define STRING_EXT_TEMPLOW            "Teplota hotendu je pod\nminimální teplotou (%d℃)."
-    #define STRING_COLD_EXT               "Studená extruze je zakázána"
-    #define STRING_HEAT_HOTEND            "Zahřát hotend na %d℃?"
+    #define STRING_PRINT_FINISHED         "   Printing\n   finished."  // keep it short and in this format!
+    #define STRING_MAIN_SCREEN            "Main"
+    #define STRING_PREVIOUS_PRINT_DATA    "Brief"
+    #define STRING_FILE_NAME              "File: "
+    #define STRING_PRINT_TIME             "Print Time: "
+    #define STRING_FILAMENT_LENGTH        "Filament length: %1.2fm"
+    #define STRING_FILAMENT_WEIGHT        "Filament weight: %1.2fg"
+    #define STRING_FILAMENT_COST          "Filament cost: %1.2f"
+    #define STRING_NO_FILAMENT_STATS      "No filament statistics."
+    #define STRING_CLICK_FOR_MORE         "Click for more."
+    #define STRING_EXT_TEMPLOW            "Hotend temperature is below\nminimum temperature (%d℃)."
+    #define STRING_COLD_EXT               "Cold extrusion prevented"
+    #define STRING_HEAT_HOTEND            "Heat hotend to %d℃?"
     #define STRING_Z_ALIGN                "Z Align"
 
 #endif
