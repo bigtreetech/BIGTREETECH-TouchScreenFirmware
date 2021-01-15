@@ -63,7 +63,7 @@ float menuMeshTuner(uint16_t col, uint16_t row, float value)
      {ICON_STOP,                    LABEL_CANCEL},}
   };
 
-  #ifdef FRIENDLY_PROBE_OFFSET_LANGUAGE
+  #ifdef FRIENDLY_Z_OFFSET_LANGUAGE
     meshItems.items[0].icon = ICON_NOZZLE_DOWN;
     meshItems.items[0].label.index = LABEL_DOWN;
     meshItems.items[3].icon = ICON_NOZZLE_UP;
