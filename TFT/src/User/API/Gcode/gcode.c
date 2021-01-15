@@ -59,21 +59,21 @@ void clearRequestCommandInfo(void)
 */
 bool request_M21(void)
 {
- const char * sdString = (infoMachineSettings.firmwareType == FW_REPRAPFW) ? "SDHC card " : "SD card ";
+  const char * sdString = (infoMachineSettings.firmwareType == FW_REPRAPFW) ? "SDHC card " : "SD card ";
 
- resetRequestCommandInfo(sdString,             // The magic to identify the start
-                         "ok",                 // The magic to identify the stop
-                         "No SD card",         // The first magic to identify the error response
-                         "SD init fail",       // The second error magic
-                         "volume.init failed"  // The third error magic
- );
- mustStoreCmd("M21\n");
+  resetRequestCommandInfo(sdString,               // The magic to identify the start
+                          "ok",                   // The magic to identify the stop
+                          "No SD card",           // The first magic to identify the error response
+                          "SD init fail",         // The second error magic
+                          "volume.init failed");  // The third error magic
 
- // Wait for response
- while (!requestCommandInfo.done) { loopProcess(); }
- clearRequestCommandInfo();
- // Check reponse
- return !requestCommandInfo.inError;
+  mustStoreCmd("M21\n");
+
+  // Wait for response
+  while (!requestCommandInfo.done) { loopProcess(); }
+  clearRequestCommandInfo();
+  // Check reponse
+  return !requestCommandInfo.inError;
 }
 
 char *request_M20(void)
@@ -143,6 +143,7 @@ long request_M23_M36(char *filename)
                             "open failed",    // The first magic to identify the error response
                             NULL,             // The second error magic
                             NULL);            // The third error magic
+
     mustStoreCmd("M23 %s\n", filename);
   }
   else // reprap firmware
@@ -152,6 +153,7 @@ long request_M23_M36(char *filename)
                             "Error:",    // The first magic to identify the error response
                             NULL,        // The second error magic
                             NULL);       // The third error magic
+
     mustStoreCmd("M36 %s\n", filename);
     offset = 6;
   }
@@ -211,6 +213,3 @@ bool request_M27(int seconds)
   mustStoreCmd("M27 S%d\n", seconds);
   return true;
 }
-
-
-

@@ -1,7 +1,7 @@
 #include "ProbeOffsetControl.h"
 #include "includes.h"
 
-static float z_offset_value = PROBE_OFFSET_DEFAULT_VALUE;
+static float z_offset_value = PROBE_Z_OFFSET_DEFAULT_VALUE;
 static bool probe_offset_enabled = false;
 
 // Enable probe offset
@@ -75,12 +75,12 @@ float probeOffsetGetValue(void)
 // Reset Z offset value to default value
 float probeOffsetResetValue(void)
 {
-  if (z_offset_value == PROBE_OFFSET_DEFAULT_VALUE)  // if already default value, nothing to do
+  if (z_offset_value == PROBE_Z_OFFSET_DEFAULT_VALUE)  // if already default value, nothing to do
     return z_offset_value;
 
-  float unit = z_offset_value - PROBE_OFFSET_DEFAULT_VALUE;
+  float unit = z_offset_value - PROBE_Z_OFFSET_DEFAULT_VALUE;
 
-  z_offset_value = PROBE_OFFSET_DEFAULT_VALUE;
+  z_offset_value = PROBE_Z_OFFSET_DEFAULT_VALUE;
   mustStoreCmd("M851 Z%.2f\n", z_offset_value);  // set Z offset value
   mustStoreCmd("G1 Z%.2f\n", -unit);             // move nozzle
   return z_offset_value;
@@ -89,9 +89,9 @@ float probeOffsetResetValue(void)
 // Decrease Z offset value
 float probeOffsetDecreaseValue(float unit)
 {
-  if (z_offset_value > PROBE_OFFSET_MIN_VALUE)
+  if (z_offset_value > PROBE_Z_OFFSET_MIN_VALUE)
   {
-    float diff = z_offset_value - PROBE_OFFSET_MIN_VALUE;
+    float diff = z_offset_value - PROBE_Z_OFFSET_MIN_VALUE;
 
     unit = (diff > unit) ? unit : diff;
     z_offset_value -= unit;
@@ -105,9 +105,9 @@ float probeOffsetDecreaseValue(float unit)
 // Increase Z offset value
 float probeOffsetIncreaseValue(float unit)
 {
-  if (z_offset_value < PROBE_OFFSET_MAX_VALUE)
+  if (z_offset_value < PROBE_Z_OFFSET_MAX_VALUE)
   {
-    float diff = PROBE_OFFSET_MAX_VALUE - z_offset_value;
+    float diff = PROBE_Z_OFFSET_MAX_VALUE - z_offset_value;
 
     unit = (diff > unit) ? unit : diff;
     z_offset_value += unit;

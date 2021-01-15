@@ -1,11 +1,11 @@
-#ifndef _PROBE_OFFSET_H_
-#define _PROBE_OFFSET_H_
+#ifndef _Z_OFFSET_H_
+#define _Z_OFFSET_H_
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void menuProbeOffset(void);
+void menuZOffset(void);
 
 #ifdef __cplusplus
 }

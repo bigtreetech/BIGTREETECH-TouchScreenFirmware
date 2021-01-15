@@ -806,10 +806,10 @@ void parseConfigKey(u16 index)
     case C_INDEX_XY_OFFSET_PROBING:
       infoSettings.xy_offset_probing = getOnOff();
       break;
-      
+
    case C_INDEX_Z_STEPPERS_ALIGNMENT:
       infoSettings.z_steppers_alignment = getOnOff();
-      break;   
+      break;
 
     case C_INDEX_PREHEAT_NAME_1:
     case C_INDEX_PREHEAT_NAME_2:

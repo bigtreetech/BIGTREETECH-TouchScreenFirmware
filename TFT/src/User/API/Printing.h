@@ -9,7 +9,6 @@ extern "C" {
 #include "variants.h"
 #include "ff.h"
 
-
 #ifndef M27_WATCH_OTHER_SOURCES
   #define M27_WATCH_OTHER_SOURCES    false
 #endif
@@ -41,7 +40,7 @@ typedef struct
   bool     m0_pause; // pause triggered through M0/M1 gcode
   bool     runout;   // 1: runout in printing, 0: idle
   bool     model_icon; // 1: model preview icon exist, 0: not exist
-}PRINTING;
+} PRINTING;
 
 typedef struct
 {
@@ -99,7 +98,6 @@ void resumeAndPurge(void);
 void resumeAndContinue(void);
 
 void loopCheckPrinting(void);
-
 
 #ifdef __cplusplus
 }
