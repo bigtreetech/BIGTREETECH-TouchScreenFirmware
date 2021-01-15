@@ -1,7 +1,7 @@
 #include "SendGcode.h"
 #include "includes.h"
 
-#define TERMINAL_MAX_CHAR NOBEYOND(600, RAM_SIZE*75, 4800)
+#define TERMINAL_MAX_CHAR NOBEYOND(600, RAM_SIZE*50, 4800)
 #define MAX_BUFF          20
 #define SCROLL_LINE       22
 #define SCROLL_PAGE       1

@@ -273,12 +273,12 @@ void sendQueueCmd(void)
                 Serial_Puts(SERIAL_PORT_2, "Begin file list\n");
                 if (mountFS() == true && scanPrintFiles() == true)
                 {
-                  for (uint16_t i = 0; i < infoFile.f_num; i++)
+                  for (uint16_t i = 0; i < infoFile.fileCount; i++)
                   {
                     Serial_Puts(SERIAL_PORT_2, infoFile.file[i]);
                     Serial_Puts(SERIAL_PORT_2, "\n");
                   }
-                  for (uint16_t i = 0; i < infoFile.F_num; i++)
+                  for (uint16_t i = 0; i < infoFile.folderCount; i++)
                   {
                     Serial_Puts(SERIAL_PORT_2, "/");
                     Serial_Puts(SERIAL_PORT_2, infoFile.folder[i]);
