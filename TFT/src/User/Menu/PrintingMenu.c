@@ -51,14 +51,11 @@ const ITEM itemIsPause[2] = {
   {ICON_RESUME, LABEL_RESUME},
 };
 
-const ITEM itemIsPrinting[6] = {
+const ITEM itemIsPrinting[3] = {
   // icon           label
   {ICON_BACKGROUND, LABEL_BACKGROUND},
   {ICON_MAINMENU,   LABEL_MAIN_SCREEN},
-  {ICON_BABYSTEP,   LABEL_BABYSTEP},
-  {ICON_MORE,       LABEL_MORE},
   {ICON_BACK,       LABEL_BACK},
-  {ICON_STOP,       LABEL_STOP},
 };
 
 void menuBeforePrinting(void)
@@ -271,6 +268,7 @@ static inline void printingDrawPage(void)
   reDrawFan(FAN_ICON_POS);
   reDrawTime(TIM_ICON_POS);
   reDrawProgress(TIM_ICON_POS);
+  nextLayerDrawTime = 0; // Draw layer now
   reDrawLayer(Z_ICON_POS);
   reDrawSpeed(SPD_ICON_POS);
 }
@@ -345,9 +343,9 @@ void menuPrinting(void)
       {ICON_BACKGROUND, LABEL_BACKGROUND},
       {ICON_BACKGROUND, LABEL_BACKGROUND},
       {ICON_BACKGROUND, LABEL_BACKGROUND},
-      {ICON_BACKGROUND, LABEL_BACKGROUND},
-      {ICON_BACKGROUND, LABEL_BACKGROUND},
-      {ICON_BACKGROUND, LABEL_BACKGROUND}}};
+      {ICON_BACKGROUND, LABEL_BABYSTEP},
+      {ICON_MORE,       LABEL_MORE},
+      {ICON_STOP,       LABEL_STOP}}};
 
   uint8_t nowFan[MAX_FAN_COUNT] = {0};
   uint16_t curspeed[2] = {0};
@@ -365,18 +363,17 @@ void menuPrinting(void)
 
   if (lastPrinting == false)
   {
-    printingItems.items[KEY_ICON_4] = itemIsPrinting[1];
-    printingItems.items[KEY_ICON_5].icon = itemIsPrinting[0].icon;
+    printingItems.items[KEY_ICON_4] = itemIsPrinting[1]; // MainScreen
+    printingItems.items[KEY_ICON_5] = itemIsPrinting[0]; // BackGround
+    printingItems.items[KEY_ICON_6] = itemIsPrinting[0]; // BackGround
+    printingItems.items[KEY_ICON_7] = itemIsPrinting[2]; // Back
   }
   else
   {
-    printingItems.items[KEY_ICON_4] = itemIsPause[isPause()];
+    printingItems.items[KEY_ICON_4] = itemIsPause[lastPause];
     printingItems.items[KEY_ICON_5].icon = (infoFile.source < BOARD_SD && infoPrinting.model_icon) ?
                                             ICON_PREVIEW : ICON_BABYSTEP;
   }
-  printingItems.items[KEY_ICON_5].label = itemIsPrinting[lastPrinting * 2].label;
-  printingItems.items[KEY_ICON_6] = itemIsPrinting[lastPrinting * 3];
-  printingItems.items[KEY_ICON_7] = itemIsPrinting[lastPrinting + 4];
   menuDrawPage(&printingItems);
   printingDrawPage();
   if (lastPrinting == false)
@@ -467,21 +464,18 @@ void menuPrinting(void)
       lastPrinting = isPrinting();
       if (lastPrinting == true) // print is ongoing
       {
-        printingItems.items[KEY_ICON_4] = itemIsPause[lastPause];
+        return; // It will restart this interface if directly return this function without modify the value of infoMenu
       }
-      else
+      else // printing finished
       {
-        printingItems.items[KEY_ICON_4] = itemIsPrinting[1];
-      }
-      menuDrawItem(&printingItems.items[KEY_ICON_4], KEY_ICON_4);
-      printingItems.items[KEY_ICON_5] = itemIsPrinting[lastPrinting * 2];
-      menuDrawItem(&printingItems.items[KEY_ICON_5], KEY_ICON_5);
-      printingItems.items[KEY_ICON_6] = itemIsPrinting[lastPrinting * 3];
-      menuDrawItem(&printingItems.items[KEY_ICON_6], KEY_ICON_6);
-      printingItems.items[KEY_ICON_7] = itemIsPrinting[lastPrinting + 4];
-      menuDrawItem(&printingItems.items[KEY_ICON_7], KEY_ICON_7);
-      if (lastPrinting == false) // printing finished
-      {
+        printingItems.items[KEY_ICON_4] = itemIsPrinting[1]; // MainScreen
+        printingItems.items[KEY_ICON_5] = itemIsPrinting[0]; // BackGround
+        printingItems.items[KEY_ICON_6] = itemIsPrinting[0]; // BackGround
+        printingItems.items[KEY_ICON_7] = itemIsPrinting[2]; // Back
+        menuDrawItem(&printingItems.items[KEY_ICON_4], KEY_ICON_4);
+        menuDrawItem(&printingItems.items[KEY_ICON_5], KEY_ICON_5);
+        menuDrawItem(&printingItems.items[KEY_ICON_6], KEY_ICON_6);
+        menuDrawItem(&printingItems.items[KEY_ICON_7], KEY_ICON_7);
         preparePrintSummary();
         drawPrintInfo();
       }
