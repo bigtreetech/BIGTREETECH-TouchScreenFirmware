@@ -1,7 +1,7 @@
 #include "vfs.h"
 #include "includes.h"
 
-MYFILE infoFile={"?:", {0}, {0}, 0, 0, 0, 0, TFT_SD, {0}};
+MYFILE infoFile = {"?:", {0}, {0}, 0, 0, 0, 65535, TFT_SD, {0}};
 
 bool mountFS(void)
 {
@@ -15,7 +15,6 @@ bool mountFS(void)
       return mountUDisk();
 
     case BOARD_SD:
-  //ifdef RepRapFirmware
       if (infoMachineSettings.firmwareType == FW_REPRAPFW && infoHost.printing)
       {
         /* no mount while printing */
@@ -23,8 +22,9 @@ bool mountFS(void)
       }
       else
         return mountGcodeSDCard();
-  //else
-  //endif
+
+    default:
+      return false;
   }
 }
 

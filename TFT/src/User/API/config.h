@@ -62,6 +62,7 @@ extern "C" {
 #define CONFIG_Z_SPEED              "z_speed:"
 #define CONFIG_EXT_SPEED            "ext_speed:"
 #define CONFIG_AUTO_LEVEL           "auto_load_leveling:"
+#define CONFIG_TOUCHMI_SENSOR       "touchmi_sensor:"
 #define CONFIG_ONBOARD_SD           "onboard_sd_support:"
 #define CONFIG_M27_DELAY            "M27_refresh_time:"
 #define CONFIG_M27_KEEP_ON          "M27_always_active:"

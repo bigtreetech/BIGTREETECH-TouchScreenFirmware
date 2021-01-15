@@ -295,5 +295,7 @@
     #define STRING_COLD_EXT               "Hideg adagolás tiltva"
     #define STRING_HEAT_HOTEND            "Fűtöd a fejet %d℃-ra?"
     #define STRING_Z_ALIGN                "Z Align"
+    #define STRING_INIT                   "Init"
+    #define STRING_TOUCHMI                "TouchMi"
 
 #endif

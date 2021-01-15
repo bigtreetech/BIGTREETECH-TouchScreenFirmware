@@ -68,6 +68,8 @@ void menuBeforePrinting(void)
 
   switch (infoFile.source)
   {
+    case BOARD_SD_REMOTE:
+      break;
     case BOARD_SD: // GCode from file on ONBOARD SD
   //ifdef RepRapFirmware
       if ((infoMachineSettings.firmwareType == FW_REPRAPFW)) {
@@ -80,7 +82,7 @@ void menuBeforePrinting(void)
       }
   //endif
 
-      //  if( powerFailedCreate(infoFile.title)==false)
+      //  if ( powerFailedCreate(infoFile.title)==false)
       //  {
       //
       //  }    // FIXME: Powerfail resume is not yet supported for ONBOARD_SD. Need more work.
@@ -94,21 +96,21 @@ void menuBeforePrinting(void)
 
       infoPrinting.size = size;
 
-    //    if(powerFailedExist())
-    //    {
-    request_M24(0);
-    //    }
-    //    else
-    //    {
-    //      request_M24(infoBreakPoint.offset);
-    //    }
+      //    if (powerFailedExist())
+      //    {
+      request_M24(0);
+      //    }
+      //    else
+      //    {
+      //      request_M24(infoBreakPoint.offset);
+      //    }
 
       if (infoMachineSettings.autoReportSDStatus == 1)
         request_M27(infoSettings.m27_refresh_time); //Check if there is a SD or USB print running.
       else
         request_M27(0);
 
-    infoHost.printing = true; // Global lock info on printer is busy in printing.
+      infoHost.printing = true; // Global lock info on printer is busy in printing.
     break;
 
     case TFT_UDISK:
