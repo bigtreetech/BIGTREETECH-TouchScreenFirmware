@@ -68,6 +68,8 @@ void menuBeforePrinting(void)
 
   switch (infoFile.source)
   {
+    case BOARD_SD_REMOTE:
+      break;
     case BOARD_SD: // GCode from file on ONBOARD SD
       size = request_M23_M36(infoFile.title + 5);
       //  if( powerFailedCreate(infoFile.title)==false)

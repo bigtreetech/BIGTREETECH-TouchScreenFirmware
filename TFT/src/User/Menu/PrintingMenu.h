@@ -12,8 +12,8 @@ extern "C" {
 void menuBeforePrinting(void);
 void menuPrinting(void);
 void printInfoPopup(void);
-extern bool hasFilamentLength;
 
+extern bool hasFilamentLength;
 
 #ifdef __cplusplus
 }
