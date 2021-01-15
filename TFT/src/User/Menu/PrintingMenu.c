@@ -36,7 +36,7 @@ const char *const Speed_ID[2] = {"Speed", "Flow"};
 static char filamentInfo[150];
 bool filDataSeen;
 SCROLL infoScroll;
-FILAMENTDATA filData = {"", 0, 0, 0, 0};
+FILAMENTDATA filData = {"\a", 0, 0, 0, 0};
 
 #define TOGGLE_TIME 2000 // 1 seconds is 1000
 #define DRAW_TIME 500    // 1 seconds is 1000
@@ -67,10 +67,21 @@ const ITEM itemIsPrinting[6] = {
   {ICON_STOP,       LABEL_STOP},
 };
 
+void printDataInit(void)
+{
+  filData = (FILAMENTDATA) {"", 0, 0, 0, 0};
+  filDataSeen = false;
+  infoPrinting.time = 0;
+  initEpos();
+}
+
 void menuBeforePrinting(void)
 {
   //load stat/end/cancel gcodes from spi flash
   long size = 0;
+
+  printDataInit();
+
   switch (infoFile.source)
   {
     case BOARD_SD: // GCode from file on ONBOARD SD
@@ -85,7 +96,7 @@ void menuBeforePrinting(void)
       }
   //endif
 
-      //  if( powerFailedCreate(infoFile.title)==false)
+      //  if ( powerFailedCreate(infoFile.title)==false)
       //  {
       //
       //  }    // FIXME: Powerfail resume is not yet supported for ONBOARD_SD. Need more work.
@@ -99,14 +110,14 @@ void menuBeforePrinting(void)
 
       infoPrinting.size = size;
 
-    //    if(powerFailedExist())
-    //    {
-    request_M24(0);
-    //    }
-    //    else
-    //    {
-    //      request_M24(infoBreakPoint.offset);
-    //    }
+      //    if (powerFailedExist())
+      //    {
+      request_M24(0);
+      //    }
+      //    else
+      //    {
+      //      request_M24(infoBreakPoint.offset);
+      //    }
 
       if (infoMachineSettings.autoReportSDStatus == 1)
         request_M27(infoSettings.m27_refresh_time); //Check if there is a SD or USB print running.
@@ -138,12 +149,7 @@ void menuBeforePrinting(void)
       break;
   }
   infoPrinting.printing = true;
-  infoPrinting.time = 0;
   infoMenu.menu[infoMenu.cur] = menuPrinting;
-  infoPrinting.time = 0;
-  filData = (FILAMENTDATA){"", 0, 0, 0, 0};
-  filDataSeen = false;
-  initEpos();
 }
 
 static inline void reValueNozzle(int icon_pos)
@@ -321,16 +327,25 @@ void stopConfirm(void)
 
 void printFinished(void)
 {
-  char tempstr[30];
+  char tempstr[MAX_FILE_CHAR + 5];
   strcpy(filamentInfo, "");
 
-  if (strlen((char *)getCurGcodeName(infoFile.title)) > MAX_FILE_CHAR)
+  if (infoFile.cur_index == 65535)
   {
-    strncpy(filData.name, (char *)getCurGcodeName(infoFile.title), MAX_FILE_CHAR);
-    strcat(filData.name, "~");
+    strcpy(filData.name, (char *)getCurGcodeName(infoFile.title));
   }
   else
-    strcpy(filData.name, (char *)getCurGcodeName(infoFile.title));
+  {
+    strncpy(tempstr, (((infoMachineSettings.long_filename_support == ENABLED) && (infoFile.source == BOARD_SD)) ?
+                                infoFile.Longfile[infoFile.cur_index] : infoFile.file[infoFile.cur_index]), MAX_FILE_CHAR + 1);
+    tempstr[MAX_FILE_CHAR + 1] = '\0';
+    if (strlen(tempstr) >  MAX_FILE_CHAR)
+    {
+      tempstr[MAX_FILE_CHAR-1] = '\0';
+      strcat(tempstr, "~");
+    }
+    strcpy(filData.name, tempstr);
+  }
 
   filData.time = infoPrinting.time;
 
@@ -427,7 +442,16 @@ void menuPrinting(void)
   bool lastPrinting = isPrinting();
   memset(&nowHeat, 0, sizeof(HEATER));
 
-  printingItems.title.address = getCurGcodeName(infoFile.title);
+  if (infoFile.cur_index == 65535)
+  {
+    printingItems.title.address = getCurGcodeName(infoFile.title);
+  }
+  else
+  {
+    printingItems.title.address = (uint8_t *)(((infoMachineSettings.long_filename_support == ENABLED) && (infoFile.source == BOARD_SD)) ?
+                                   infoFile.Longfile[infoFile.cur_index] : infoFile.file[infoFile.cur_index]);
+  }
+
   if (lastPrinting == false)
   {
     printingItems.items[KEY_ICON_4] = itemIsPrinting[1];
