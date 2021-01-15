@@ -69,7 +69,7 @@ void menuBedLeveling(void)
     bedLevelingItems.items[6].icon = ICON_LEVELING_OFF;
     bedLevelingItems.items[6].label.index = LABEL_BL_DISABLE;
   }
-  
+
   if (infoSettings.z_steppers_alignment)
   {
     bedLevelingItems.items[2].icon = ICON_Z_ALIGN;
@@ -90,15 +90,15 @@ void menuBedLeveling(void)
       case KEY_ICON_1:
         infoMenu.menu[++infoMenu.cur] = menuMeshEditor;
         break;
-        
+
       case KEY_ICON_2:
         if (infoSettings.z_steppers_alignment)
           storeCmd("G34\n");
         break;
 
       case KEY_ICON_4:
-        storeCmd("M851\n");
-        infoMenu.menu[++infoMenu.cur] = menuProbeOffset;
+        storeCmd("M503\n");
+        infoMenu.menu[++infoMenu.cur] = menuZOffset;
         break;
 
       case KEY_ICON_5:

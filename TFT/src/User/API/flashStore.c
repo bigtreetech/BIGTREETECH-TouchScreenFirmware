@@ -3,7 +3,7 @@
 #include "STM32_Flash.h"
 
 #define TSC_SIGN  0x20200512 // DO NOT MODIFY
-#define PARA_SIGN 0x20201228 // (YYYYMMDD) If a new setting parameter is added,
+#define PARA_SIGN 0x20210721 // (YYYYMMDD) If a new setting parameter is added,
                              // modify here and initialize the initial value
                              // in the "infoSettingsReset()" function
 enum
@@ -14,6 +14,7 @@ enum
 
 extern int32_t TSC_Para[7];
 extern SETTINGS infoSettings;
+
 uint8_t paraStatus = 0;
 
 void wordToByte(u32 word, u8 *bytes)
