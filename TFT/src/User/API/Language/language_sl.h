@@ -50,10 +50,10 @@
     #define STRING_ABL_SLOT_EEPROM        "Remember slot for next\nreboot? (Save EEPROM)"
     #define STRING_ABL_Z                  "Z Fade"
     #define STRING_BLTOUCH                "BLTouch"
-    #define STRING_BLTOUCH_TEST           "Test"
-    #define STRING_BLTOUCH_DEPLOY         "Postavi"
-    #define STRING_BLTOUCH_STOW           "Skrij"
-    #define STRING_BLTOUCH_REPEAT         "Ponovi"
+    #define STRING_TEST                   "Test"
+    #define STRING_DEPLOY                 "Postavi"
+    #define STRING_STOW                   "Skrij"
+    #define STRING_REPEAT                 "Ponovi"
     #define STRING_Z_OFFSET               "Z odmik"
     #define STRING_PROBE_OFFSET           "Odmik sonde"
     #define STRING_HOME_OFFSET            "Home Offset"
@@ -297,5 +297,5 @@
     #define STRING_Z_ALIGN                "Z Align"
     #define STRING_INIT                   "Init"
     #define STRING_TOUCHMI                "TouchMi"
-    
+
 #endif

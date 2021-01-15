@@ -50,10 +50,10 @@
     #define STRING_ABL_SLOT_EEPROM        "Remember slot for next\nreboot? (Save EEPROM)"
     #define STRING_ABL_Z                  "Z Fade"
     #define STRING_BLTOUCH                "BLTouch"
-    #define STRING_BLTOUCH_TEST           "テスト"
-    #define STRING_BLTOUCH_DEPLOY         "展開"
-    #define STRING_BLTOUCH_STOW           "収納"
-    #define STRING_BLTOUCH_REPEAT         "繰り返す"
+    #define STRING_TEST                   "テスト"
+    #define STRING_DEPLOY                 "展開"
+    #define STRING_STOW                   "収納"
+    #define STRING_REPEAT                 "繰り返す"
     #define STRING_Z_OFFSET               "Zオフセット"
     #define STRING_PROBE_OFFSET           "プローブオフセット"
     #define STRING_HOME_OFFSET            "Home Offset"
@@ -297,5 +297,5 @@
     #define STRING_Z_ALIGN                "Z Align"
     #define STRING_INIT                   "Init"
     #define STRING_TOUCHMI                "TouchMi"
-    
+
 #endif
