@@ -1075,7 +1075,8 @@ void GUI_DrawWindow(const WINDOW *window, const uint8_t *title, const uint8_t *i
 
     //draw title text
     GUI_SetColor(window->title.fontColor);
-    GUI_DispString(w_rect.x0 + BYTE_HEIGHT * 2, title_txt_y0, title);
+    GUI_DispLenString(w_rect.x0 + BYTE_HEIGHT * 2, title_txt_y0, title,
+                      window->rect.x1 - (w_rect.x0 + BYTE_HEIGHT * 2), true);
 
     //draw info text
     GUI_SetColor(window->info.fontColor);

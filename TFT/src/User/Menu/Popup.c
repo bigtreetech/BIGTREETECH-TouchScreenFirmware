@@ -199,20 +199,11 @@ void showDialog(DIALOG_TYPE type, void (*ok_action)(), void (*cancel_action)(), 
   popup_redraw = true;
   popup_type = type;
 
-  // popup_strcpy(popup_title, title, sizeof(popup_title));
-  // popup_strcpy(popup_msg, msg, sizeof(popup_msg));
-  // popup_strcpy(popup_ok, ok_txt, sizeof(popup_ok));
-  // popup_strcpy(popup_cancel, cancel_txt, sizeof(popup_cancel));
-
   action_ok = ok_action;
   action_cancel = cancel_action;
   action_loop = loop_action;
 }
 
-// void popupReminder(DIALOG_TYPE type, u8* title, u8* msg)
-// {
-//   showDialog(type, title, msg, textSelect(LABEL_CONFIRM), NULL, NULL, NULL, NULL);
-// }
 
 void loopPopup(void)
 {
