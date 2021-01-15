@@ -219,12 +219,13 @@ typedef enum
 /**
  * Firmware type
  */
-typedef enum{
+typedef enum
+{
   FW_NOT_DETECTED,
-  FW_UNKNOWN,
   FW_MARLIN,
   FW_REPRAPFW,
   FW_KLIPPER,
+  FW_UNKNOWN,
 } FW_TYPE;
 
 typedef struct

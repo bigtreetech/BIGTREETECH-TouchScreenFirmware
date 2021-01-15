@@ -494,21 +494,20 @@ void parseACK(void)
       }
 
     //parse and store stepper steps/mm values
-    //ifdef RepRapFirmware
-      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && (ack_seen("Steps"))) // For RepRapFirmware
-      {
-        if (ack_seen("X: ")) setParameter(P_STEPS_PER_MM, X_STEPPER, ack_value());
-        if (ack_seen("Y: ")) setParameter(P_STEPS_PER_MM, Y_STEPPER, ack_value());
-        if (ack_seen("Z: ")) setParameter(P_STEPS_PER_MM, Z_STEPPER, ack_value());
-        if (ack_seen("E: ")) setParameter(P_STEPS_PER_MM, E_STEPPER, ack_value());
-      }
-//endif
       else if (ack_seen("M92 X"))
       {
                           setParameter(P_STEPS_PER_MM, X_STEPPER, ack_value());
         if (ack_seen("Y")) setParameter(P_STEPS_PER_MM, Y_STEPPER, ack_value());
         if (ack_seen("Z")) setParameter(P_STEPS_PER_MM, Z_STEPPER, ack_value());
         if (ack_seen("E")) setParameter(P_STEPS_PER_MM, E_STEPPER, ack_value());
+      }
+    //parse and store stepper steps/mm values incase of RepRapFirmware
+      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && (ack_seen("Steps")))
+      {
+        if (ack_seen("X: ")) setParameter(P_STEPS_PER_MM, X_STEPPER, ack_value());
+        if (ack_seen("Y: ")) setParameter(P_STEPS_PER_MM, Y_STEPPER, ack_value());
+        if (ack_seen("Z: ")) setParameter(P_STEPS_PER_MM, Z_STEPPER, ack_value());
+        if (ack_seen("E: ")) setParameter(P_STEPS_PER_MM, E_STEPPER, ack_value());
       }
       else if (ack_seen("M92 T0 E"))
       {
@@ -727,14 +726,13 @@ void parseACK(void)
           infoMachineSettings.firmwareType = FW_UNKNOWN;
           setupMachine();
         }
-        if (ack_seen("FIRMWARE_URL:")) // For Smoothieware and Repetier
+        if (ack_seen("FIRMWARE_URL:")) // For Smoothieware
           string_end = ack_index - sizeof("FIRMWARE_URL:");
         else if (ack_seen("SOURCE_CODE_URL:")) // For Marlin
           string_end = ack_index - sizeof("SOURCE_CODE_URL:");
-        //ifdef RepRapFirmware
         else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && ack_seen("ELECTRONICS")) // For RepRapFirmware
           string_end = ack_index - sizeof("ELECTRONICS");
-        //endif
+
         infoSetFirmwareName(string, string_end - string_start); // Set firmware name
 
         if (ack_seen("MACHINE_TYPE:"))
@@ -872,33 +870,26 @@ void parseACK(void)
           setParameter(P_PROBE_OFFSET,Z_STEPPER, ack_value());
         }
       }
-    // parse and store feed rate percentage
-      else if (ack_seen("FR:"))
+      // parse and store feed rate percentage
+      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW && ack_seen("factor: ")) ||
+               ack_seen("FR:"))
       {
         speedSetCurPercent(0,ack_value());
         speedQuerySetWait(false);
       }
-    //ifdef RepRapFirmware
-      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && ack_seen("factor: "))
-      {
-        speedSetCurPercent(0,ack_value());
-        speedQuerySetWait(false);
-      }
-    //endif
     // parse and store flow rate percentage
       else if (ack_seen("Flow: "))
       {
         speedSetCurPercent(1,ack_value());
         speedQuerySetWait(false);
       }
-    //ifdef RepRapFirmware
+    // parse and store flow rate percentage incase of RepRapFirmware
       else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && ack_seen("extruder"))
       {
         ack_index+=4;
         speedSetCurPercent(1,ack_value());
         speedQuerySetWait(false);
       }
-    //endif
     // parse fan speed
       else if (ack_seen("M106 P"))
       {

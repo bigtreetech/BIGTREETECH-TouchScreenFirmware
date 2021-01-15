@@ -13,15 +13,13 @@ void probeHeightEnable(void)
 {
   curSoftwareEndstops = infoMachineSettings.softwareEndstops;
 
-  if (curSoftwareEndstops)      // if software endstops is enabled, disable it temporary
-    mustStoreCmd("M211 S0\n");  // disable software endstops to move nozzle minus Zero (Z0) if necessary
-
-//  ifdef  RepRapFirmware
-  if (infoMachineSettings.firmwareType == FW_REPRAPFW)
+  if (curSoftwareEndstops)  // if software endstops is enabled, disable it temporary
   {
-    mustStoreCmd("M564 S0 H0\n");
+    if (infoMachineSettings.firmwareType == FW_REPRAPFW)
+      mustStoreCmd("M564 S0 H0\n");
+    else
+      mustStoreCmd("M211 S0\n");
   }
-//  endif
 }
 
 /* Disable probe height
@@ -29,15 +27,13 @@ void probeHeightEnable(void)
  */
 void probeHeightDisable(void)
 {
-  if (curSoftwareEndstops)      // if software endstops was originally enabled, enable it again
-    mustStoreCmd("M211 S1\n");  // enable software endstops
-
-  //ifdef RepRapFirmware
-  if (infoMachineSettings.firmwareType == FW_REPRAPFW)
+  if (curSoftwareEndstops)  // if software endstops was originally enabled, enable it again
   {
-    mustStoreCmd("M564 S1 H1\n");
+    if (infoMachineSettings.firmwareType == FW_REPRAPFW)
+      mustStoreCmd("M564 S1 H1\n");
+    else
+      mustStoreCmd("M211 S1\n");
   }
-  //endif
 }
 
 /* Start probe height */

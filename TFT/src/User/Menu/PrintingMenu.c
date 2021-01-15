@@ -69,17 +69,7 @@ void menuBeforePrinting(void)
   switch (infoFile.source)
   {
     case BOARD_SD: // GCode from file on ONBOARD SD
-  //ifdef RepRapFirmware
-      if ((infoMachineSettings.firmwareType == FW_REPRAPFW)) {
-        /*in RepRapFirmware, M23 not return the size of the file. So we send M36, to get file information*/
-        size = request_M36(infoFile.title + 5);
-        request_M23(infoFile.title + 5);
-      } else {
-  //else
-        size = request_M23(infoFile.title + 5);
-      }
-  //endif
-
+      size = request_M23_M36(infoFile.title + 5);
       //  if( powerFailedCreate(infoFile.title)==false)
       //  {
       //
@@ -94,25 +84,25 @@ void menuBeforePrinting(void)
 
       infoPrinting.size = size;
 
-    //    if(powerFailedExist())
-    //    {
-    request_M24(0);
-    //    }
-    //    else
-    //    {
-    //      request_M24(infoBreakPoint.offset);
-    //    }
+      //    if(powerFailedExist())
+      //    {
+      request_M24(0);
+      //    }
+      //    else
+      //    {
+      //      request_M24(infoBreakPoint.offset);
+      //    }
 
       if (infoMachineSettings.autoReportSDStatus == 1)
-        request_M27(infoSettings.m27_refresh_time); //Check if there is a SD or USB print running.
+        request_M27(infoSettings.m27_refresh_time);  //Check if there is a SD or USB print running.
       else
         request_M27(0);
 
-    infoHost.printing = true; // Global lock info on printer is busy in printing.
-    break;
+      infoHost.printing = true;  // Global lock info on printer is busy in printing.
+      break;
 
     case TFT_UDISK:
-    case TFT_SD: // GCode from file on TFT SD
+    case TFT_SD:  // GCode from file on TFT SD
       if (f_open(&infoPrinting.file, infoFile.title, FA_OPEN_EXISTING | FA_READ) != FR_OK)
       {
         ExitDir();
@@ -120,17 +110,20 @@ void menuBeforePrinting(void)
         return;
       }
       if (powerFailedCreate(infoFile.title) == false)
-      {
-      }
+      {}
       powerFailedlSeek(&infoPrinting.file);
 
       infoPrinting.size = f_size(&infoPrinting.file);
       infoPrinting.cur = infoPrinting.file.fptr;
-      if (infoSettings.send_start_gcode == 1 && infoPrinting.cur == 0) // PLR continue printing, CAN NOT use start gcode
+      if (infoSettings.send_start_gcode == 1 && infoPrinting.cur == 0)  // PLR continue printing, CAN NOT use start gcode
       {
         sendPrintCodes(0);
       }
       break;
+    default:
+      ExitDir();
+      infoMenu.cur--;
+      return;
   }
   infoPrinting.printing = true;
   infoPrinting.time = 0;
