@@ -59,44 +59,31 @@ void clearRequestCommandInfo(void)
 */
 bool request_M21(void)
 {
-  if (infoMachineSettings.firmwareType == FW_REPRAPFW){
-    resetRequestCommandInfo(
-      "SDHC card ",        // The magic to identify the start
-      "ok",                // The magic to identify the stop
-      "No SD card",        // The first magic to identify the error response
-      "SD init fail",      // The second error magic
-      "volume.init failed" // The third error magic
-    );
-  } else {
-    resetRequestCommandInfo(
-      "SD card ",          // The magic to identify the start
-      "ok",                // The magic to identify the stop
-      "No SD card",        // The first magic to identify the error response
-      "SD init fail",      // The second error magic
-      "volume.init failed" // The third error magic
-    );
-  }
-  mustStoreCmd("M21\n");
+ const char * sdString = (infoMachineSettings.firmwareType == FW_REPRAPFW) ? "SDHC card " : "SD card ";
 
-  // Wait for response
-  while (!requestCommandInfo.done)
-  {
-    loopProcess();
-  }
-  clearRequestCommandInfo();
-  // Check reponse
-  return !requestCommandInfo.inError;
+ resetRequestCommandInfo(sdString,             // The magic to identify the start
+                         "ok",                 // The magic to identify the stop
+                         "No SD card",         // The first magic to identify the error response
+                         "SD init fail",       // The second error magic
+                         "volume.init failed"  // The third error magic
+ );
+ mustStoreCmd("M21\n");
+
+ // Wait for response
+ while (!requestCommandInfo.done) { loopProcess(); }
+ clearRequestCommandInfo();
+ // Check reponse
+ return !requestCommandInfo.inError;
 }
 
 char *request_M20(void)
 {
-  resetRequestCommandInfo(
-    "Begin file list", // The magic to identify the start
-    "End file list",   // The magic to identify the stop
-    "Error",           // The first magic to identify the error response
-    NULL,              // The second error magic
-    NULL               // The third error magic
-  );
+  resetRequestCommandInfo("Begin file list",  // The magic to identify the start
+                          "End file list",    // The magic to identify the stop
+                          "Error",            // The first magic to identify the error response
+                          NULL,               // The second error magic
+                          NULL);              // The third error magic
+
   mustStoreCmd("M20\n");
 
   // Wait for response
@@ -116,13 +103,12 @@ char *request_M20(void)
 */
 char *request_M33(char *filename)
 {
-  resetRequestCommandInfo(
-    "/",                  // The magic to identify the start
-    "ok",                 // The magic to identify the stop
-    "Cannot open subdir", // The first magic to identify the error response
-    NULL,                 // The second error magic
-    NULL                  // The third error magic
-  );
+  resetRequestCommandInfo("/",                   // The magic to identify the start
+                          "ok",                  // The magic to identify the stop
+                          "Cannot open subdir",  // The first magic to identify the error response
+                          NULL,                  // The second error magic
+                          NULL);                 // The third error magic
+
   mustStoreCmd("M33 %s\n", filename);
 
   // Wait for response
@@ -142,31 +128,46 @@ char *request_M33(char *filename)
  * echo:Now fresh file: YEST~1/TEST2/PI3MK2~5.GCO
  * File opened: PI3MK2~5.GCO Size: 11081207
  * File selected
+ *
+ * file information in RepRapFirmware
+ * SENDING:M36 3DBenchy.gcode
+ * echo: {"err":0,"size":2758088,"lastModified":"2020-10-20T17:12:18","height":49.00,"firstLayerHeight":0.20,"layerHeight":0.20,"printTime":6173,"filament":[4065.3],"generatedBy":"SuperSlicer 2.2.53 on 2020-10-20 at 15:12:18 UTC"}
  **/
-long request_M23(char *filename)
+long request_M23_M36(char *filename)
 {
-  resetRequestCommandInfo(
-    "File opened",   // The magic to identify the start
-    "File selected", // The magic to identify the stop
-    "open failed",   // The first magic to identify the error response
-    NULL,            // The second error magic
-    NULL             // The third error magic
-  );
-  mustStoreCmd("M23 %s\n", filename);
+  uint8_t offset = 5;
+  if (infoMachineSettings.firmwareType != FW_REPRAPFW) // all other firmwares except reprap firmware
+  {
+    resetRequestCommandInfo("File opened",    // The magic to identify the start
+                            "File selected",  // The magic to identify the stop
+                            "open failed",    // The first magic to identify the error response
+                            NULL,             // The second error magic
+                            NULL);            // The third error magic
+    mustStoreCmd("M23 %s\n", filename);
+  }
+  else // reprap firmware
+  {
+    resetRequestCommandInfo("{\"err\"",  // The magic to identify the start
+                            "}",         // The magic to identify the stop
+                            "Error:",    // The first magic to identify the error response
+                            NULL,        // The second error magic
+                            NULL);       // The third error magic
+    mustStoreCmd("M36 %s\n", filename);
+    offset = 6;
+  }
 
   // Wait for response
-  while (!requestCommandInfo.done)
-  {
-    loopProcess();
-  }
+  while (!requestCommandInfo.done) loopProcess();
   if (requestCommandInfo.inError)
   {
     clearRequestCommandInfo();
     return 0;
   }
+  if (infoMachineSettings.firmwareType == FW_REPRAPFW)
+    mustStoreCmd("M23 %s\n", filename); //send M23 for reprap firmware
   // Find file size and report its.
   char *ptr;
-  long size = strtol(strstr(requestCommandInfo.cmd_rev_buf, "Size:") + 5, &ptr, 10);
+  long size = strtol(strstr(requestCommandInfo.cmd_rev_buf, "Size:") + offset, &ptr, 10);
   clearRequestCommandInfo();
   return size;
 }
@@ -210,38 +211,6 @@ bool request_M27(int seconds)
   mustStoreCmd("M27 S%d\n", seconds);
   return true;
 }
-//ifdef RepRapFirmware
-/**
- * Return file information in RepRapFirmware
- * SENDING:M36 3DBenchy.gcode
- * echo: {"err":0,"size":2758088,"lastModified":"2020-10-20T17:12:18","height":49.00,"firstLayerHeight":0.20,"layerHeight":0.20,"printTime":6173,"filament":[4065.3],"generatedBy":"SuperSlicer 2.2.53 on 2020-10-20 at 15:12:18 UTC"}
- **/
-long request_M36(char *filename)
-{
-  resetRequestCommandInfo(
-    "{\"err\"", // The magic to identify the start
-    "}",        // The magic to identify the stop
-    "Error:",   // The first magic to identify the error response
-    NULL,       // The second error magic
-    NULL        // The third error magic
-  );
-  mustStoreCmd("M36 %s\n", filename);
-  // Wait for response
-  while (!requestCommandInfo.done)
-  {
-    loopProcess();
-  }
-  if (requestCommandInfo.inError)
-  {
-    clearRequestCommandInfo();
-    return 0;
-  }
-  // Find file size and report its.
-  char *ptr;
-  long size = strtol(strstr(requestCommandInfo.cmd_rev_buf, "size\":") + 6, &ptr, 10);
-  storeCmd("M117 %d\n", size);
-  clearRequestCommandInfo();
-  return size;
-}
 
-//endif
+
+

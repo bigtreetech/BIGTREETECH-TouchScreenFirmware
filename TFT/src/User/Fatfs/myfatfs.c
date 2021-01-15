@@ -42,42 +42,42 @@ bool scanPrintFilesFatFs(void)
   {
     if (f_readdir(&dir,&finfo) !=FR_OK || finfo.fname[0] == 0)  break;
     if ((finfo.fattrib&AM_HID) != 0)  continue;
-    if (infoFile.f_num >= FILE_NUM && infoFile.F_num >= FOLDER_NUM)  break;
+    if (infoFile.fileCount >= FILE_NUM && infoFile.folderCount >= FOLDER_NUM)  break;
 
     len = strlen(finfo.fname) + 1;
     if ((finfo.fattrib&AM_DIR) == AM_DIR)
     {
-      if (infoFile.F_num >= FOLDER_NUM)  continue;
+      if (infoFile.folderCount >= FOLDER_NUM)  continue;
 
-      infoFile.folder[infoFile.F_num] = malloc(len);
-      if (infoFile.folder[infoFile.F_num] == NULL)  break;
-      memcpy(infoFile.folder[infoFile.F_num++], finfo.fname, len);
+      infoFile.folder[infoFile.folderCount] = malloc(len);
+      if (infoFile.folder[infoFile.folderCount] == NULL)  break;
+      memcpy(infoFile.folder[infoFile.folderCount++], finfo.fname, len);
     }
     else
     {
-      if (infoFile.f_num >= FILE_NUM)  continue;
+      if (infoFile.fileCount >= FILE_NUM)  continue;
 
       if (strstr(finfo.fname, ".g") == NULL)  continue; // support "*.g","*.gco" and "*.gcode"
 
-      infoFile.file[infoFile.f_num] = malloc(len);
-      if (infoFile.file[infoFile.f_num] == NULL)  break;
-      memcpy(infoFile.file[infoFile.f_num++], finfo.fname, len);
+      infoFile.file[infoFile.fileCount] = malloc(len);
+      if (infoFile.file[infoFile.fileCount] == NULL)  break;
+      memcpy(infoFile.file[infoFile.fileCount++], finfo.fname, len);
     }
   }
 
   f_closedir(&dir);
 
-  for(i=0; i < infoFile.F_num/2; i++)
+  for(i=0; i < infoFile.folderCount/2; i++)
   {
     char *temp = infoFile.folder[i];
-    infoFile.folder[i] = infoFile.folder[infoFile.F_num - i - 1];
-    infoFile.folder[infoFile.F_num - i - 1] = temp;
+    infoFile.folder[i] = infoFile.folder[infoFile.folderCount - i - 1];
+    infoFile.folder[infoFile.folderCount - i - 1] = temp;
   }
-  for(i=0; i < infoFile.f_num/2; i++)
+  for(i=0; i < infoFile.fileCount/2; i++)
   {
     char *temp = infoFile.file[i];
-    infoFile.file[i] = infoFile.file[infoFile.f_num - i - 1];
-    infoFile.file[infoFile.f_num - i - 1] = temp;
+    infoFile.file[i] = infoFile.file[infoFile.fileCount - i - 1];
+    infoFile.file[infoFile.fileCount - i - 1] = temp;
   }
   return true;
 }

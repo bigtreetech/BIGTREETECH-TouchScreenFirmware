@@ -57,10 +57,10 @@ extern "C" {
 #define LANG_KEY_ABL_SLOT_EEPROM              "label_abl_slot_eeprom:"
 #define LANG_KEY_ABL_Z                        "label_abl_z:"
 #define LANG_KEY_BLTOUCH                      "label_bltouch:"
-#define LANG_KEY_BLTOUCH_TEST                 "label_bltouch_test:"
-#define LANG_KEY_BLTOUCH_DEPLOY               "label_bltouch_deploy:"
-#define LANG_KEY_BLTOUCH_STOW                 "label_bltouch_stow:"
-#define LANG_KEY_BLTOUCH_REPEAT               "label_bltouch_repeat:"
+#define LANG_KEY_TEST                         "label_test:"
+#define LANG_KEY_DEPLOY                       "label_deploy:"
+#define LANG_KEY_STOW                         "label_stow:"
+#define LANG_KEY_REPEAT                       "label_repeat:"
 #define LANG_KEY_Z_OFFSET                     "label_z_offset:"
 #define LANG_KEY_PROBE_OFFSET                 "label_probe_offset:"
 #define LANG_KEY_HOME_OFFSET                  "label_home_offset:"
@@ -292,7 +292,6 @@ extern "C" {
 #define LANG_KEY_PRINT_FINISHED               "label_print_finished:"
 #define LANG_KEY_MAIN_SCREEN                  "label_main_screen:"
 #define LANG_KEY_PREVIOUS_PRINT_DATA          "label_previous_print_data:"
-#define LANG_KEY_FILE_NAME                    "label_file_name:"
 #define LANG_KEY_PRINT_TIME                   "label_print_time:"
 #define LANG_KEY_FILAMENT_LENGTH              "label_filament_length:"
 #define LANG_KEY_FILAMENT_WEIGHT              "label_filament_weight:"
@@ -303,6 +302,8 @@ extern "C" {
 #define LANG_KEY_COLD_EXT                     "label_cold_ext:"
 #define LANG_KEY_HEAT_HOTEND                  "label_heat_hotend:"
 #define LANG_KEY_Z_ALIGN                      "label_z_align:"
+#define LANG_KEY_INIT                         "label_init:"
+#define LANG_KEY_TOUCHMI                      "label_touchmi:"
 
 #ifdef __cplusplus
 }
