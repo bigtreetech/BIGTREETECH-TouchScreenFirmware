@@ -1,4 +1,6 @@
 #include "my_misc.h"
+#include <stddef.h>
+#include <stdint.h>
 
 uint8_t inRange(int cur, int tag , int range)
 {
@@ -72,4 +74,53 @@ uint8_t *uint32_2_string(uint32_t num, uint8_t bytes_num, uint8_t *string)
 		uint8_2_string(_8bits, string + 2*i);
 	}
 	return string;
+}
+
+// convert string to double (without exponential support)
+double stringToDouble(char * str, char ** endptr)
+{
+	char * p = str;
+  double val = 0.0;
+  int8_t sign = 1;
+  uint32_t prec = 0;
+
+  while (*p == ' ') { p++; }  // remove trailing whitespaces
+
+  if (*p == '-')
+  {
+    sign = -1;  // set negative sign
+    p++;
+  }
+  else if (*p == '+')
+  {
+    p++; //skip positive sign
+  }
+
+  while (*p)
+  {
+    if (*p == '.' && prec == 0)  // increase precision first time and skip to next character
+    {
+      prec = 10;
+      p++;
+      continue;
+    }
+
+    if (*p < 48 || *p > 57)
+      break;  // end on finding non-digit character
+
+    if (prec == 0)  // read value before decimal point
+    {
+      val = val * 10 + *p - 48;
+    }
+    else  // read value after decimal point
+    {
+      val = val + (*p - 48) / (double)prec;
+      prec = prec * 10;
+    }
+    p++;
+  }
+  if (endptr != NULL)
+    *endptr = p;  // asign pointer to remaining string
+
+  return val * sign;
 }

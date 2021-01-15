@@ -114,7 +114,7 @@ const uint16_t ICON_COLOR[ICONCHAR_NUM]=
 
 };
 
-#define CHAR_BLANK                 ""
+#define CHAR_BLANK                 '\0'
 #define CHAR_NOZZLE                "\u085F"
 #define CHAR_BED                   "\u0860"
 #define CHAR_FAN                   "\u0861"
