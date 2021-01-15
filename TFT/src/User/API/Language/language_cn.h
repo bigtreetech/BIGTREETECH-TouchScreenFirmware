@@ -296,5 +296,7 @@
     #define STRING_COLD_EXT               "冷挤出保护, 请加热后再操作"
     #define STRING_HEAT_HOTEND            "加热喷头到%d℃?"
     #define STRING_Z_ALIGN                "Z Align"
+    #define STRING_INIT                   "Init"
+    #define STRING_TOUCHMI                "TouchMi"
 
 #endif

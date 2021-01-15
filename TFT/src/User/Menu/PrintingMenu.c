@@ -85,13 +85,16 @@ void menuBeforePrinting(void)
   switch (infoFile.source)
   {
     case BOARD_SD: // GCode from file on ONBOARD SD
-  #ifdef RepRapFirmware
-      /*in RepRapFirmware, M23 not return the size of the file. So we send M36, to get file information*/
-      size = request_M36(infoFile.title + 5);
-      request_M23(infoFile.title + 5);
-  #else
-      size = request_M23(infoFile.title + 5);
-  #endif
+  //ifdef RepRapFirmware
+      if ((infoMachineSettings.firmwareType == FW_REPRAPFW)) {
+        /*in RepRapFirmware, M23 not return the size of the file. So we send M36, to get file information*/
+        size = request_M36(infoFile.title + 5);
+        request_M23(infoFile.title + 5);
+      } else {
+  //else
+        size = request_M23(infoFile.title + 5);
+      }
+  //endif
 
       //  if ( powerFailedCreate(infoFile.title)==false)
       //  {
@@ -121,8 +124,8 @@ void menuBeforePrinting(void)
       else
         request_M27(0);
 
-      infoHost.printing = true; // Global lock info on printer is busy in printing.
-      break;
+    infoHost.printing = true; // Global lock info on printer is busy in printing.
+    break;
 
     case TFT_UDISK:
     case TFT_SD: // GCode from file on TFT SD

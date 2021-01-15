@@ -58,7 +58,8 @@ void infoSettingsReset(void)
   infoSettings.fan_ctrl_count         = FAN_CTRL_NUM;
   infoSettings.min_ext_temp           = PREVENT_COLD_EXTRUSION_MINTEMP;
   infoSettings.auto_load_leveling     = AUTO_SAVE_LOAD_BL_VALUE;
-  infoSettings.onboardSD              = AUTO;  //ENABLED / DISABLED / AUTO
+  infoSettings.touchmi_sensor         = TOUCHMI_SENSOR_VALUE;
+  infoSettings.onboardSD              = AUTO;                        //ENABLED / DISABLED / AUTO
   infoSettings.m27_refresh_time       = M27_REFRESH;
   infoSettings.m27_active             = M27_WATCH_OTHER_SOURCES;
   infoSettings.longFileName           = AUTO;  //ENABLED / DISABLED / AUTO
@@ -156,7 +157,7 @@ void infoSettingsReset(void)
 void initMachineSetting(void)
 {
   // some settings are assumes as active unless reported disabled by marlin
-  infoMachineSettings.isMarlinFirmware        = -1; // set fimware type to -1 to avoid repeated ABL gcode on mode change
+  infoMachineSettings.firmwareType            = FW_NOT_DETECTED; // set fimware type to not_detected to avoid repeated ABL gcode on mode change
   infoMachineSettings.EEPROM                  = ENABLED;
   infoMachineSettings.autoReportTemp          = DISABLED;
   infoMachineSettings.leveling                = BL_DISABLED;
@@ -200,7 +201,7 @@ void setupMachine(void)
     storeCmd("M420 S1\n");
   }
 
-  if (infoMachineSettings.isMarlinFirmware != 1) // Smoothieware does not report detailed M115 capabilities
+  if (infoMachineSettings.firmwareType != FW_MARLIN) // Smoothieware does not report detailed M115 capabilities
   {
     infoMachineSettings.EEPROM                  = ENABLED;
     infoMachineSettings.autoReportTemp          = DISABLED;
