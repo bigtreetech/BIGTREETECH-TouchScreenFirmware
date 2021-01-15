@@ -296,6 +296,8 @@
     #define STRING_COLD_EXT               "Cold extrusion prevented"
     #define STRING_HEAT_HOTEND            "Heat hotend to %d℃?"
     #define STRING_Z_ALIGN                "Z Align"
+    #define STRING_INIT                   "Init"
+    #define STRING_TOUCHMI                "TouchMi"
 
 
 #endif

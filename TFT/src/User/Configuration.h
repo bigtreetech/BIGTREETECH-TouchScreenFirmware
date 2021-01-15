@@ -257,6 +257,17 @@
  */
 #define ENABLE_BL_VALUE 1 // Default: 1
 
+/** TouchMI settings (on ABL menu)
+ * 
+ * Enable this option for settings TouchMI sensor on ABL Menu.
+ * 
+ * ( Init, Zoffset, Save, test)
+ * 
+ * Options: [enable:1, disable:0]
+ * 
+ */
+#define TOUCHMI_SENSOR_VALUE 0 // Default: 0
+
 // Mesh Leveling Max Grid points
 // Set the maximum number of grid points per dimension
 #define MESH_GRID_MAX_POINTS_X 10 // (Minimum 1, Maximum 15)

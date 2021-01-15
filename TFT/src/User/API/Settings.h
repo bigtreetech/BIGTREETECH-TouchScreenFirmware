@@ -33,7 +33,7 @@ typedef enum
 
 #define FONT_FLASH_SIGN       20200908 //(YYYYMMDD) change if fonts require updating
 #define CONFIG_FLASH_SIGN     20210105 //(YYYYMMDD) change if any keyword(s) in config.ini is added or removed
-#define LANGUAGE_FLASH_SIGN   20210105 //(YYYYMMDD) change if any keyword(s) in language pack is added or removed
+#define LANGUAGE_FLASH_SIGN   20210113 //(YYYYMMDD) change if any keyword(s) in language pack is added or removed
 #define ICON_FLASH_SIGN       20210105 //(YYYYMMDD) change if any icon(s) is added or removed
 
 #define FONT_CHECK_SIGN       (FONT_FLASH_SIGN + WORD_UNICODE)
@@ -128,6 +128,7 @@ typedef struct
   uint16_t axis_speed[SPEED_COUNT];
   uint16_t ext_speed[SPEED_COUNT];
   uint8_t  auto_load_leveling;
+  uint8_t  touchmi_sensor;
   uint8_t  onboardSD;
   uint8_t  m27_refresh_time;
   uint8_t  m27_active;

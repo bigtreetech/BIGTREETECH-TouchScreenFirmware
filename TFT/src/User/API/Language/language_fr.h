@@ -296,5 +296,7 @@
     #define STRING_COLD_EXT               "Extrusion à froid empêchée"
     #define STRING_HEAT_HOTEND            "Chauffer la buse à %d℃ ?"
     #define STRING_Z_ALIGN                "Z Align"
+    #define STRING_INIT                   "Init"
+    #define STRING_TOUCHMI                "TouchMi"
 
 #endif

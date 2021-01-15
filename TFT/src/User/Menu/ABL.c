@@ -165,6 +165,12 @@ void menuABL(void)
 
   KEY_VALUES key_num = KEY_IDLE;
 
+  if (infoSettings.touchmi_sensor != 0)
+  {
+    autoLevelingItems.items[4].icon = ICON_NOZZLE;
+    autoLevelingItems.items[4].label.index = LABEL_TOUCHMI;
+  }
+
   switch (infoMachineSettings.leveling)
   {
     case BL_BBL:
@@ -227,7 +233,10 @@ void menuABL(void)
         break;
 
       case KEY_ICON_4:
-        infoMenu.menu[++infoMenu.cur] = menuBLTouch;
+        if (infoSettings.touchmi_sensor != 0)
+          infoMenu.menu[++infoMenu.cur] = menuTouchMi;
+          else
+          infoMenu.menu[++infoMenu.cur] = menuBLTouch;
         break;
 
       case KEY_ICON_6:

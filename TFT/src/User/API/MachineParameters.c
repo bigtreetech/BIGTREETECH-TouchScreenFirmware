@@ -218,3 +218,10 @@ void resetEepromSettings(void)
   if(infoMachineSettings.EEPROM == 1)
     mustStoreScript("M502\nM500\nM503 S0\n");
 }
+void saveEepromTouchmiSettings(void)
+{
+  if(infoMachineSettings.EEPROM == 1)
+    mustStoreCmd("M211 S1\n");
+     mustStoreCmd("G28 X Y\n");
+      mustStoreCmd("M500\n");
+}
