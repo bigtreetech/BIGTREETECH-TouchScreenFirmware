@@ -5,6 +5,9 @@
 extern "C" {
 #endif
 
+#include <stdbool.h>
+
+void zOffsetSetMenu(bool probeOffset);
 void menuZOffset(void);
 
 #ifdef __cplusplus

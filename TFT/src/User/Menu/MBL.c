@@ -28,7 +28,9 @@ static inline void mblStop(void)
 {
   mblRunning = false;
 
-  probeHeightStop();                                       // raise nozzle
+  if (infoMachineSettings.zProbe == ENABLED)
+    probeHeightStop();                                     // raise nozzle
+
   probeHeightAbsolute();                                   // set absolute position mode
 
   probeHeightDisable();                                    // restore original software endstops state

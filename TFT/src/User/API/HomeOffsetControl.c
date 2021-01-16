@@ -61,7 +61,7 @@ float homeOffsetResetValue(void)
 
   z_offset_value = HOME_Z_OFFSET_DEFAULT_VALUE;
   mustStoreCmd("M206 Z%.2f\n", z_offset_value);  // set Z offset value
-  mustStoreCmd("G1 Z%.2f\n", -unit);             // move nozzle
+  mustStoreCmd("G1 Z%.2f\n", unit);              // move nozzle
   return z_offset_value;
 }
 

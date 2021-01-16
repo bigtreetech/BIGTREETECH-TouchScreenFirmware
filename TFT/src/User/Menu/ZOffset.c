@@ -3,13 +3,17 @@
 
 #define ITEM_Z_OFFSET_SUBMENU_NUM 4
 
+static bool probeOffsetMenu = false;
 static u8 curUnit_index = 0;
 static u8 curSubmenu_index = 0;
 
 /* Show an error notification */
 void zOffsetNotifyError(void)
 {
-  LABELCHAR(tempMsg, LABEL_Z_OFFSET);
+  LABELCHAR(tempMsg, LABEL_PROBE_OFFSET)
+
+  if (!probeOffsetMenu)
+    sprintf(tempMsg, "%s", textSelect(LABEL_HOME_OFFSET));
 
   sprintf(&tempMsg[strlen(tempMsg)], " %s", textSelect(LABEL_OFF));
 
@@ -40,6 +44,11 @@ void zOffsetDrawValue(float val)
   setLargeFont(true);
   GUI_DispStringInPrect(&exhibitRect, (u8 *) tempstr);
   setLargeFont(false);
+}
+
+void zOffsetSetMenu(bool probeOffset)
+{
+  probeOffsetMenu = probeOffset;
 }
 
 void menuZOffset(void)
@@ -86,8 +95,8 @@ void menuZOffset(void)
   float (* offsetGetValue)(void);                       // get current Z offset
   float (* offsetUpdateValueByEncoder)(float, int8_t);  // update current Z offset by encoder
 
-  if (infoMachineSettings.zProbe == ENABLED)
-  {
+  if (probeOffsetMenu)
+  { // use Probe Offset menu
     zOffsetItems.title.index = LABEL_PROBE_OFFSET;
     offsetGetStatus = probeOffsetGetStatus;
     offsetEnable = probeOffsetEnable;
@@ -99,7 +108,7 @@ void menuZOffset(void)
     offsetUpdateValueByEncoder = probeOffsetUpdateValueByEncoder;
   }
   else
-  {
+  { // use Home Offset menu
     zOffsetItems.title.index = LABEL_HOME_OFFSET;
     offsetGetStatus = homeOffsetGetStatus;
     offsetEnable = homeOffsetEnable;
