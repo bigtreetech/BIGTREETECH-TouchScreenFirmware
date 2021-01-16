@@ -63,6 +63,8 @@ void menuBeforePrinting(void)
   //load stat/end/cancel gcodes from spi flash
   uint32_t size = 0;
 
+  infoFile.printFromTFT = true;
+
   switch (infoFile.source)
   {
     case BOARD_SD: // GCode from file on ONBOARD SD
@@ -75,6 +77,7 @@ void menuBeforePrinting(void)
       if (size == 0)
       {
         ExitDir();
+        infoFile.printFromTFT = false;
         infoMenu.cur--;
         return;
       }
@@ -103,6 +106,7 @@ void menuBeforePrinting(void)
       if (f_open(&infoPrinting.file, infoFile.title, FA_OPEN_EXISTING | FA_READ) != FR_OK)
       {
         ExitDir();
+        infoFile.printFromTFT = false;
         infoMenu.cur--;
         return;
       }
@@ -360,7 +364,7 @@ void menuPrinting(void)
   if (lastPrinting == true)
   {
     if (infoMachineSettings.long_filename_support == ENABLED && infoFile.source == BOARD_SD)
-      printingItems.title.address = infoFile.Longfile[infoFile.fileIndex];
+      printingItems.title.address = (uint8_t *) infoFile.Longfile[infoFile.fileIndex];
     else
       printingItems.title.address = getCurGcodeName(infoFile.title);
     printingItems.items[KEY_ICON_4] = itemIsPause[lastPause];
@@ -460,7 +464,7 @@ void menuPrinting(void)
       menuDrawItem(&printingItems.items[KEY_ICON_4], KEY_ICON_4);
     }
 
-    // check if print is just finished
+    // check if print just started or just finished
     if (lastPrinting != isPrinting())
     {
       lastPrinting = isPrinting();
@@ -468,7 +472,7 @@ void menuPrinting(void)
       {
         return; // It will restart this interface if directly return this function without modify the value of infoMenu
       }
-      else // printing finished
+      else // print finished
       {
         printingItems.items[KEY_ICON_4] = itemIsPrinting[1]; // MainScreen
         printingItems.items[KEY_ICON_5] = itemIsPrinting[0]; // BackGround
@@ -480,7 +484,7 @@ void menuPrinting(void)
         menuDrawItem(&printingItems.items[KEY_ICON_7], KEY_ICON_7);
         preparePrintSummary();
         drawPrintInfo();
-        infoFile.fileIndex = 65535; // flag: no file selected for onboard SD printing
+        infoFile.printFromTFT = false;
       }
     }
 
