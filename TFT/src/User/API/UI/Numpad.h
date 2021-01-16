@@ -12,7 +12,7 @@ extern "C" {
 #define SKEYWIDTH       LCD_WIDTH/4
 
 #define KEY_NUM 16
-#define FLOAT_BUFLONG 7
+#define FLOAT_BUFLONG 9
 #define INT_BUFLONG 6
 
 typedef enum

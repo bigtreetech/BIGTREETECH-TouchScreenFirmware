@@ -26,6 +26,8 @@ extern "C" {
   #define RAPID_PRINTING_COMM()
 #endif
 
+#define SUMMARY_NAME_MAX 30 // max character length for name char array
+#define SUMMARY_NAME_LEN 25 // max character length to copy from name buffer
 
 typedef struct
 {
@@ -41,52 +43,63 @@ typedef struct
   bool     model_icon; // 1: model preview icon exist, 0: not exist
 }PRINTING;
 
+typedef struct
+{
+  /* data */
+  char name[SUMMARY_NAME_LEN + 1];
+  uint32_t time;
+  float length;
+  float weight;
+  float cost;
+} PRINTSUMMARY;
+
 extern PRINTING infoPrinting;
+extern PRINTSUMMARY infoPrintSummary;
 
 bool isPrinting(void);
 bool isPause(void);
 bool isM0_Pause(void);
-void breakAndContinue(void);
-void resumeAndPurge(void);
-void resumeAndContinue(void);
 void setPrintingTime(uint32_t RTtime);
-
-void exitPrinting(void);
-void endPrinting(void);
-void printingFinished(void);
-void abortPrinting(void);
-uint8_t *getCurGcodeName(char *path);
-void sendPrintCodes(uint8_t index);
-
-bool setPrintPause(bool is_pause, bool is_m0pause);
-
 void setPrintSize(uint32_t size);
-void setPrintCur(uint32_t cur);
 uint32_t getPrintSize(void);
 uint32_t getPrintCur(void);
 bool getPrintRunout(void);
 void setPrintRunout(bool runout);
-void setRunoutAlarmFalse(void);
+void setPrintCur(uint32_t cur);
+
 void setRunoutAlarmTrue(void);
+void setRunoutAlarmFalse(void);
 bool getRunoutAlarm(void);
+
 void setPrintModelIcon(bool exist);
 bool getPrintModelIcon(void);
 
 uint8_t getPrintProgress(void);
 uint32_t getPrintTime(void);
-
 void printSetUpdateWaiting(bool isWaiting);
+uint8_t *getCurGcodeName(char *path);
+void sendPrintCodes(uint8_t index);
 
-void getGcodeFromFile(void);
+void initPrintSummary(void);
+void updateFilamentUsed(void);
+void preparePrintSummary(void);
 
+bool setPrintPause(bool is_pause, bool is_m0pause);
+void exitPrinting(void);
+void endPrinting(void);
+void abortPrinting(void);
+void printingFinished(void);
 void shutdown(void);
 void shutdownLoop(void);
 void startShutdown(void);
 
+void getGcodeFromFile(void);
+void breakAndContinue(void);
+void resumeAndPurge(void);
+void resumeAndContinue(void);
+
 void loopCheckPrinting(void);
 
-void initEpos(void);
-void updateFilamentUsed(void);
 
 #ifdef __cplusplus
 }

@@ -24,7 +24,7 @@ bool powerFailedCreate(char *path)
 
   create_ok = false;
   if (!infoSettings.powerloss_en) return false; // disable plr
-  if (infoFile.source == BOARD_SD)  return false; // on board SD not support now
+  if (infoFile.source >= BOARD_SD)  return false; // on board SD not support now
 
   if (f_open(&fpPowerFailed, powerFailedFileName, FA_OPEN_ALWAYS | FA_WRITE) != FR_OK)  return false;
 

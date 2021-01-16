@@ -61,7 +61,7 @@ bool scanPrintFilesGcodeFs(void)
     if (strchr(pline, '/') == NULL)
     {
       // FILE
-      if (infoFile.f_num >= FILE_NUM)
+      if (infoFile.fileCount >= FILE_NUM)
         continue; /* Gcode max number is FILE_NUM*/
 
       if (infoMachineSettings.long_filename_support == ENABLED)
@@ -71,7 +71,7 @@ bool scanPrintFilesGcodeFs(void)
           *Pstr_tmp = 0;
         //remove file size from line
         char *longfilename;
-        if (strrchr(line, '~') != NULL)                   //check if file name is 8.3 format
+        if (strrchr(line, '~') != NULL)  //check if file name is 8.3 format
           longfilename = request_M33(line);
         else
           longfilename = line;
@@ -86,42 +86,42 @@ bool scanPrintFilesGcodeFs(void)
         */
         Pstr_tmp = strstr(longfilename, "\nok");
         if (Pstr_tmp != NULL)
-          *Pstr_tmp = 0;                          //remove end of M33 command
+          *Pstr_tmp = 0;  //remove end of M33 command
 
-        Pstr_tmp = strrchr(longfilename, '/');    //remove folder information
+        Pstr_tmp = strrchr(longfilename, '/');  //remove folder information
         if (Pstr_tmp == NULL)
           Pstr_tmp = longfilename;
         else
           Pstr_tmp++;
 
-        infoFile.Longfile[infoFile.f_num] = malloc(strlen(Pstr_tmp) + 1);
+        infoFile.Longfile[infoFile.fileCount] = malloc(strlen(Pstr_tmp) + 1);
 
-        if (infoFile.Longfile[infoFile.f_num] == NULL)
+        if (infoFile.Longfile[infoFile.fileCount] == NULL)
         {
           clearRequestCommandInfo();
           break;
         }
-        strcpy(infoFile.Longfile[infoFile.f_num], Pstr_tmp);
+        strcpy(infoFile.Longfile[infoFile.fileCount], Pstr_tmp);
         clearRequestCommandInfo(); // for M33
       }
 
       char* rest = pline;
       char* file = strtok_r(rest," ",&rest);   //remove file size from pline
-      infoFile.file[infoFile.f_num] = malloc(strlen(file) + 1);
-      if (infoFile.file[infoFile.f_num] == NULL) break;
-      strcpy(infoFile.file[infoFile.f_num++], file);
+      infoFile.file[infoFile.fileCount] = malloc(strlen(file) + 1);
+      if (infoFile.file[infoFile.fileCount] == NULL) break;
+      strcpy(infoFile.file[infoFile.fileCount++], file);
     }
     else
     {
       // DIRECTORY
-      if (infoFile.F_num >= FOLDER_NUM)
+      if (infoFile.folderCount >= FOLDER_NUM)
         continue; /* floder max number is FOLDER_NUM */
 
       char* rest = pline;
       char* folder = strtok_r(rest,"/",&rest);
 
       bool found = false;
-      for(int i=0; i < infoFile.F_num; i++)
+      for(int i=0; i < infoFile.folderCount; i++)
       {
         if(strcmp(folder, infoFile.folder[i]) == 0)
         {
@@ -133,10 +133,10 @@ bool scanPrintFilesGcodeFs(void)
       if(!found)
       {
         uint16_t len = strlen(folder) + 1;
-        infoFile.folder[infoFile.F_num] = malloc(len);
-        if (infoFile.folder[infoFile.F_num] == NULL)
+        infoFile.folder[infoFile.folderCount] = malloc(len);
+        if (infoFile.folder[infoFile.folderCount] == NULL)
           break;
-        strcpy(infoFile.folder[infoFile.F_num++], folder);
+        strcpy(infoFile.folder[infoFile.folderCount++], folder);
 
       }
     }

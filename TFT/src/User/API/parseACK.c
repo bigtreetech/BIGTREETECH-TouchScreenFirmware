@@ -286,7 +286,24 @@ void parseACK(void)
     bool avoid_terminal = false;
     syncL2CacheFromL1(SERIAL_PORT);
     infoHost.rx_ok[SERIAL_PORT] = false;
-
+    // if(ack_seen("lcd"))
+    // {
+    //   uint16_t c = 64, b = 64,s = 64,d = 64;
+    //   if(ack_seen("cn"))
+    //     c = ack_value();
+    //   if(ack_seen("bt"))
+    //     b = ack_value();
+    //   if(ack_seen("st"))
+    //     s = ack_value();
+    //   if(ack_seen("de"))
+    //     d = ack_value();
+    //   storeCmd("rcvd C%i,B%i,S%i,S%i\n",c,b,s,d);
+    //   LCD_WR_REG(0xBC);
+    //   LCD_WR_DATA(c);// A[7:0] : Set the contrast value
+    //   LCD_WR_DATA(b);// B[7:0] : Set the brightness value
+    //   LCD_WR_DATA(s);// C[7:0] : Set the saturation value
+    //   LCD_WR_DATA(d);// D[0] : 0 Disable the postprocessor, 1 Enable the postprocessor
+    // }
     if (infoHost.connected == false) // Not connected to printer
     {
       // Parse error information even though not connected to printer
@@ -432,25 +449,25 @@ void parseACK(void)
         // File opened: 1A29A~1.GCO Size: 6974
         uint16_t start_index = ack_index;
         uint16_t end_index = ack_seen("Size: ") ? (ack_index - sizeof("Size: ")) : start_index;
-        infoFile.source = BOARD_SD;
-        strcpy(infoFile.title, getCurFileSource());
-        strcat(infoFile.title, "/");
         uint16_t path_len = MIN(end_index - start_index, MAX_PATH_LEN - strlen(getCurFileSource()) - 1);
+        sprintf(infoFile.title,"%s/",getCurFileSource());
         strncat(infoFile.title, dmaL2Cache + start_index, path_len);
         infoFile.title[path_len + strlen(getCurFileSource()) + 1] = 0;
+        infoFile.source = BOARD_SD_REMOTE;
 
         infoPrinting.pause = false;
         infoHost.printing = true;
         infoPrinting.time = 0;
         infoPrinting.cur = 0;
         infoPrinting.size = ack_value();
+        initPrintSummary();
         if (infoMachineSettings.autoReportSDStatus == 1)
         {
           request_M27(infoSettings.m27_refresh_time);  //Check if there is a SD or USB print running.
         }
       }
       else if (infoMachineSettings.onboard_sd_support == ENABLED &&
-               infoFile.source == BOARD_SD &&
+               infoFile.source >= BOARD_SD &&
                ack_seen("Not SD printing"))
       {
         infoHost.printing = false;
@@ -458,7 +475,7 @@ void parseACK(void)
           infoPrinting.pause = true;
       }
       else if (infoMachineSettings.onboard_sd_support == ENABLED &&
-               infoFile.source == BOARD_SD &&
+               infoFile.source >= BOARD_SD &&
                ack_seen("SD printing byte"))
       {
         infoPrinting.pause = false;
@@ -468,7 +485,7 @@ void parseACK(void)
         // powerFailedCache(position);
       }
       else if (infoMachineSettings.onboard_sd_support == ENABLED &&
-               infoFile.source == BOARD_SD &&
+               infoFile.source >= BOARD_SD &&
                ack_seen("Done printing file"))
       {
         infoHost.printing = false;
@@ -477,21 +494,20 @@ void parseACK(void)
       }
 
     //parse and store stepper steps/mm values
-    //ifdef RepRapFirmware
-      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && (ack_seen("Steps"))) // For RepRapFirmware
-      {
-        if (ack_seen("X: ")) setParameter(P_STEPS_PER_MM, X_STEPPER, ack_value());
-        if (ack_seen("Y: ")) setParameter(P_STEPS_PER_MM, Y_STEPPER, ack_value());
-        if (ack_seen("Z: ")) setParameter(P_STEPS_PER_MM, Z_STEPPER, ack_value());
-        if (ack_seen("E: ")) setParameter(P_STEPS_PER_MM, E_STEPPER, ack_value());
-      }
-//endif
       else if (ack_seen("M92 X"))
       {
                           setParameter(P_STEPS_PER_MM, X_STEPPER, ack_value());
         if (ack_seen("Y")) setParameter(P_STEPS_PER_MM, Y_STEPPER, ack_value());
         if (ack_seen("Z")) setParameter(P_STEPS_PER_MM, Z_STEPPER, ack_value());
         if (ack_seen("E")) setParameter(P_STEPS_PER_MM, E_STEPPER, ack_value());
+      }
+    //parse and store stepper steps/mm values incase of RepRapFirmware
+      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && (ack_seen("Steps")))
+      {
+        if (ack_seen("X: ")) setParameter(P_STEPS_PER_MM, X_STEPPER, ack_value());
+        if (ack_seen("Y: ")) setParameter(P_STEPS_PER_MM, Y_STEPPER, ack_value());
+        if (ack_seen("Z: ")) setParameter(P_STEPS_PER_MM, Z_STEPPER, ack_value());
+        if (ack_seen("E: ")) setParameter(P_STEPS_PER_MM, E_STEPPER, ack_value());
       }
       else if (ack_seen("M92 T0 E"))
       {
@@ -710,14 +726,13 @@ void parseACK(void)
           infoMachineSettings.firmwareType = FW_UNKNOWN;
           setupMachine();
         }
-        if (ack_seen("FIRMWARE_URL:")) // For Smoothieware and Repetier
+        if (ack_seen("FIRMWARE_URL:")) // For Smoothieware
           string_end = ack_index - sizeof("FIRMWARE_URL:");
         else if (ack_seen("SOURCE_CODE_URL:")) // For Marlin
           string_end = ack_index - sizeof("SOURCE_CODE_URL:");
-        //ifdef RepRapFirmware
         else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && ack_seen("ELECTRONICS")) // For RepRapFirmware
           string_end = ack_index - sizeof("ELECTRONICS");
-        //endif
+
         infoSetFirmwareName(string, string_end - string_start); // Set firmware name
 
         if (ack_seen("MACHINE_TYPE:"))
@@ -855,33 +870,26 @@ void parseACK(void)
           setParameter(P_PROBE_OFFSET,Z_STEPPER, ack_value());
         }
       }
-    // parse and store feed rate percentage
-      else if (ack_seen("FR:"))
+      // parse and store feed rate percentage
+      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW && ack_seen("factor: ")) ||
+               ack_seen("FR:"))
       {
         speedSetCurPercent(0,ack_value());
         speedQuerySetWait(false);
       }
-    //ifdef RepRapFirmware
-      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && ack_seen("factor: "))
-      {
-        speedSetCurPercent(0,ack_value());
-        speedQuerySetWait(false);
-      }
-    //endif
     // parse and store flow rate percentage
       else if (ack_seen("Flow: "))
       {
         speedSetCurPercent(1,ack_value());
         speedQuerySetWait(false);
       }
-    //ifdef RepRapFirmware
+    // parse and store flow rate percentage incase of RepRapFirmware
       else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && ack_seen("extruder"))
       {
         ack_index+=4;
         speedSetCurPercent(1,ack_value());
         speedQuerySetWait(false);
       }
-    //endif
     // parse fan speed
       else if (ack_seen("M106 P"))
       {
@@ -993,21 +1001,21 @@ void parseACK(void)
         {
           while (((dmaL2Cache[ack_index] < '0') || (dmaL2Cache[ack_index] > '9')) && dmaL2Cache[ack_index] != '\n')
             ack_index++;
-          filData.length = ack_value();
+          infoPrintSummary.length = ack_value();
+          hasFilamentLength = true;
         }
         else if (ack_seen("W:"))
         {
           while (((dmaL2Cache[ack_index] < '0') || (dmaL2Cache[ack_index] > '9')) && dmaL2Cache[ack_index] != '\n')
             ack_index++;
-          filData.weight = ack_value();
+          infoPrintSummary.weight = ack_value();
         }
         else if (ack_seen("C:"))
         {
           while (((dmaL2Cache[ack_index] < '0') || (dmaL2Cache[ack_index] > '9')) && dmaL2Cache[ack_index] != '\n')
             ack_index++;
-          filData.cost = ack_value();
+          infoPrintSummary.cost = ack_value();
         }
-        filDataSeen = true;
       }
     }
 
