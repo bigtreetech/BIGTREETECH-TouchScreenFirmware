@@ -450,9 +450,9 @@ void parseACK(void)
         uint16_t start_index = ack_index;
         uint16_t end_index = ack_seen("Size: ") ? (ack_index - sizeof("Size: ")) : start_index;
         uint16_t path_len = MIN(end_index - start_index, MAX_PATH_LEN - strlen(getCurFileSource()) - 1);
-        sprintf(infoFile.title,"%s/",getCurFileSource());
+        sprintf(infoFile.title,"%s/", getCurFileSource());
         strncat(infoFile.title, dmaL2Cache + start_index, path_len);
-        infoFile.title[path_len + strlen(getCurFileSource()) + 1] = 0;
+        infoFile.title[path_len + strlen(getCurFileSource()) + 1] = '\0';
 
         infoPrinting.pause = false;
         infoHost.printing = true;
@@ -460,15 +460,11 @@ void parseACK(void)
         infoPrinting.cur = 0;
         infoPrinting.size = ack_value();
         
-        if (infoFile.fileIndex == 65535)  // onboard SD print started from remote
+        if (infoFile.printFromTFT == false)  // onboard SD print started from remote
         {
           infoFile.source = BOARD_SD_REMOTE;
           initPrintSummary();
           infoMenu.cur = 0;  // take care if popup active or user in other menu than home          
-        }
-        else
-        {
-          infoFile.source = BOARD_SD;
         }
         
         if (infoMachineSettings.autoReportSDStatus == 1)

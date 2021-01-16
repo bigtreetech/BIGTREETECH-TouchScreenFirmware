@@ -141,7 +141,7 @@ void sendPrintCodes(uint8_t index)
 
 void initPrintSummary(void)
 {
-  last_E_pos = ((infoFile.source == BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
+  last_E_pos = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
   infoPrintSummary = (PRINTSUMMARY){.name[0] = '\0', 0, 0, 0, 0};
   hasFilamentData = false;
 }
@@ -165,7 +165,7 @@ void preparePrintSummary(void)
 
 void updateFilamentUsed(void)
 {
-  float E_pos = ((infoFile.source == BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
+  float E_pos = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
   if ((E_pos + MAX_RETRACT_LIMIT) < last_E_pos) //Check whether E position reset (G92 E0)
   {
     last_E_pos = 0;
@@ -390,7 +390,7 @@ void getGcodeFromFile(void)
   u8      sd_count = 0;
   UINT    br = 0;
 
-  if (isPrinting() == false || infoFile.source == BOARD_SD)  return;
+  if (isPrinting() == false || infoFile.source >= BOARD_SD)  return;
 
   powerFailedCache(infoPrinting.file.fptr);
 
