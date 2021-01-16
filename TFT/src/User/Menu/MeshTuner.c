@@ -8,17 +8,20 @@ static inline void meshInitPoint(uint16_t col, uint16_t row, float value)
 {
 //  probeHeightEnable();                                     // temporary disable software endstops
 
+  // Z offset gcode sequence start
   probeHeightStop();                                       // raise nozzle
-
   mustStoreCmd("G42 I%d J%d\n", col, row);                 // move nozzle to X and Y coordinates corresponding
                                                            // to the column and row in the bed leveling mesh grid
   probeHeightStart(value);                                 // lower nozzle to provided absolute Z point
+  probeHeightRelative();                                   // set relative position mode
 }
 
 /* Reset mesh point */
 static inline void meshResetPoint(void)
 {
+  // Z offset gcode sequence stop
   probeHeightStop();                                       // raise nozzle
+  probeHeightAbsolute();                                   // set absolute position mode
 
 //  probeHeightDisable();                                    // restore original software endstops state
 }

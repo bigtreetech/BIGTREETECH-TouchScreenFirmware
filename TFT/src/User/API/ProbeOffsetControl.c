@@ -38,6 +38,8 @@ void probeOffsetEnable(bool skipZOffset)
     probeHeightStart(-probeOffsetGetValue());  // lower nozzle to probing Z0 point
     probeOffsetSetValue(0.0f);                 // reset Z offset in order probing Z0 matches absolute Z0 point
   }
+
+  probeHeightRelative();  // set relative position mode
 }
 
 // Disable probe offset
@@ -48,7 +50,9 @@ void probeOffsetDisable(void)
   // Z offset gcode sequence stop
   mustStoreCmd("G28\n");  // home printer
   probeHeightStop();      // raise nozzle
-  probeHeightDisable();   // restore original software endstops state
+  probeHeightAbsolute();  // set absolute position mode
+
+  probeHeightDisable();  // restore original software endstops state
 }
 
 // Get probe offset status

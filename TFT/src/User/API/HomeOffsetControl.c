@@ -13,10 +13,9 @@ void homeOffsetEnable(bool skipZOffset)
 
   // Z offset gcode sequence start
   mustStoreCmd("G28\n");  // home printer
-
   mustStoreCmd("G1 F%d\n", infoSettings.level_feedrate[FEEDRATE_XY]);  // set feedrate
-
   probeHeightStart(0.0f);  // lower nozzle to absolute Z0 point
+  probeHeightRelative();   // set relative position mode
 }
 
 // Disable home offset
@@ -26,7 +25,9 @@ void homeOffsetDisable(void)
 
   // Z offset gcode sequence stop
   mustStoreCmd("G28\n");  // home printer
-  probeHeightDisable();   // restore original software endstops state
+  probeHeightAbsolute();  // set absolute position mode
+
+  probeHeightDisable();  // restore original software endstops state
 }
 
 // Get home offset status

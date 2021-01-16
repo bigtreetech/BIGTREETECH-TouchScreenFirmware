@@ -52,6 +52,18 @@ void probeHeightStop(void)
   mustStoreCmd("G90\n");  // set absolute position mode
 }
 
+/* Set probe height to relative position mode */
+void probeHeightRelative(void)
+{
+  mustStoreCmd("G91\n");                      // set relative position mode
+}
+
+/* Set probe height to absolute position mode */
+void probeHeightAbsolute(void)
+{
+  mustStoreCmd("G90\n");                      // set absolute position mode
+}
+
 /* Change probe height */
 void probeHeightMove(float unit, int8_t direction)
 {
