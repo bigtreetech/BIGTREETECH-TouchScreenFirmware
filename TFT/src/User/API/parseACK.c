@@ -464,7 +464,8 @@ void parseACK(void)
         {
           infoFile.source = BOARD_SD_REMOTE;
           initPrintSummary();
-          infoMenu.cur = 0;  // take care if popup active or user in other menu than home          
+          infoMenu.cur = 1;  // take care if popup active or user in other menu than print
+          infoMenu.menu[infoMenu.cur] = menuPrinting;
         }
         
         if (infoMachineSettings.autoReportSDStatus == 1)
