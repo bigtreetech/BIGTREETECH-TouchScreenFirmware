@@ -7,10 +7,12 @@
 #define X_MOVE_GCODE "G1 X%.2f F%d\n"
 #define Y_MOVE_GCODE "G1 Y%.2f F%d\n"
 #define Z_MOVE_GCODE "G1 Z%.2f F%d\n"
+#define GANTRY_UPDATE_DELAY 500 // 1 seconds is 1000
 
 const char *const xyzMoveCmd[] = {X_MOVE_GCODE, Y_MOVE_GCODE, Z_MOVE_GCODE};
+static u8 item_moveLen_index = 1;
+AXIS nowAxis = X_AXIS;
 
-//1 title, ITEM_PER_PAGE item
 MENUITEMS moveItems = {
   // title
   LABEL_MOVE,
@@ -38,17 +40,11 @@ MENUITEMS moveItems = {
   }
 };
 
-static u8 item_moveLen_index = 1;
-static u32 nextGantryTime = 0;
-static u32 update_gantry_time = 500; // 1 seconds is 1000
-
-AXIS nowAxis = X_AXIS;
-
 void storeMoveCmd(AXIS xyz, int8_t direction)
 {
   // if invert is true, 'direction' multiplied by -1
   storeCmd(xyzMoveCmd[xyz], (infoSettings.invert_axis[xyz] ? -direction : direction) * moveLenSteps[item_moveLen_index],
-           infoSettings.axis_speed[infoSettings.move_speed]);
+           ((xyz != Z_AXIS) ? infoSettings.xy_speed[infoSettings.move_speed] : infoSettings.z_speed[infoSettings.move_speed]));
   // update now axis be selected
   nowAxis = xyz;
 }
@@ -162,28 +158,24 @@ void menuMove(void)
 
 void update_gantry(void)
 {
-  if (OS_GetTimeMs() > nextGantryTime)
+  if (nextScreenUpdate(GANTRY_UPDATE_DELAY))
   {
     coordinateQuery();
     drawXYZ();
-    nextGantryTime = OS_GetTimeMs() + update_gantry_time;
   }
 }
 
 void drawXYZ(void)
 {
   char tempstr[20];
-  if (nowAxis == X_AXIS) GUI_SetColor(INFOBOX_ICON_COLOR);
+  GUI_SetColor(INFOBOX_ICON_COLOR);
+
   sprintf(tempstr, "X:%.2f  ", coordinateGetAxisActual(X_AXIS));
   GUI_DispString(START_X + 1 * SPACE_X + 1 * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (u8 *)tempstr);
-  GUI_SetColor(infoSettings.font_color);
 
-  if (nowAxis == Y_AXIS) GUI_SetColor(INFOBOX_ICON_COLOR);
   sprintf(tempstr, "Y:%.2f  ", coordinateGetAxisActual(Y_AXIS));
   GUI_DispString(START_X + 2 * SPACE_X + 2 * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (u8 *)tempstr);
-  GUI_SetColor(infoSettings.font_color);
 
-  if (nowAxis == Z_AXIS) GUI_SetColor(INFOBOX_ICON_COLOR);
   sprintf(tempstr, "Z:%.2f  ", coordinateGetAxisActual(Z_AXIS));
   GUI_DispString(START_X + 3 * SPACE_X + 3 * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (u8 *)tempstr);
 

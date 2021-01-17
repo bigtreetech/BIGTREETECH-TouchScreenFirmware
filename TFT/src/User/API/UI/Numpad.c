@@ -199,7 +199,7 @@ float numPadFloat(u8* title, float old_val, float reset_val, bool negative)
           BUZZER_PLAY(sound_ok);
           setLargeFont(false);
           touchSound = true;
-          return strtof(ParameterBuf, NULL);
+          return strtod(ParameterBuf, NULL);
         }
       default:
         break;

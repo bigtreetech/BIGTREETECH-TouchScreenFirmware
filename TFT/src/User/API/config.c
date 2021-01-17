@@ -720,10 +720,16 @@ void parseConfigKey(u16 index)
       if (key_seen("Z")) SET_VALID_INT_VALUE(infoSettings.machine_size_max[Z_AXIS], MIN_SIZE_LIMIT, MAX_SIZE_LIMIT);
       break;
 
-    case C_INDEX_MOVE_SPEED:
-      if (key_seen("S")) SET_VALID_INT_VALUE(infoSettings.axis_speed[0], MIN_SPEED_LIMIT, MAX_SPEED_LIMIT);
-      if (key_seen("N")) SET_VALID_INT_VALUE(infoSettings.axis_speed[1], MIN_SPEED_LIMIT, MAX_SPEED_LIMIT);
-      if (key_seen("F")) SET_VALID_INT_VALUE(infoSettings.axis_speed[2], MIN_SPEED_LIMIT, MAX_SPEED_LIMIT);
+    case C_INDEX_XY_SPEED:
+      if (key_seen("S")) SET_VALID_INT_VALUE(infoSettings.xy_speed[0], MIN_SPEED_LIMIT, MAX_SPEED_LIMIT);
+      if (key_seen("N")) SET_VALID_INT_VALUE(infoSettings.xy_speed[1], MIN_SPEED_LIMIT, MAX_SPEED_LIMIT);
+      if (key_seen("F")) SET_VALID_INT_VALUE(infoSettings.xy_speed[2], MIN_SPEED_LIMIT, MAX_SPEED_LIMIT);
+      break;
+
+    case C_INDEX_Z_SPEED:
+      if (key_seen("S")) SET_VALID_INT_VALUE(infoSettings.z_speed[0], MIN_SPEED_LIMIT, MAX_SPEED_LIMIT);
+      if (key_seen("N")) SET_VALID_INT_VALUE(infoSettings.z_speed[1], MIN_SPEED_LIMIT, MAX_SPEED_LIMIT);
+      if (key_seen("F")) SET_VALID_INT_VALUE(infoSettings.z_speed[2], MIN_SPEED_LIMIT, MAX_SPEED_LIMIT);
       break;
 
     case C_INDEX_EXT_SPEED:
@@ -734,6 +740,10 @@ void parseConfigKey(u16 index)
 
     case C_INDEX_AUTO_LEVEL:
       infoSettings.auto_load_leveling = getOnOff();
+      break;
+
+    case C_INDEX_TOUCHMI_SENSOR:
+      infoSettings.touchmi_sensor = getOnOff();
       break;
 
     case C_INDEX_ONBOARD_SD:

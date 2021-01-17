@@ -13,7 +13,6 @@ void probeOffsetEnable(bool skipZOffset)
 
   // Z offset gcode sequence start
   mustStoreCmd("G28\n");  // home printer
-  probeHeightStop();      // raise nozzle
 
   if (infoSettings.xy_offset_probing)  // if HW allows nozzle to reach XY probing point
   {
