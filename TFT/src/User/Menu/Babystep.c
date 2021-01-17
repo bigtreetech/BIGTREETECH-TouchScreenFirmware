@@ -125,7 +125,7 @@ void menuBabystep(void)
       case KEY_ICON_4:
         if (infoMachineSettings.EEPROM == 1)
         {
-          offsetSetValue(new_z_offset);  // set new Z offset. Required if current Z offset is not changed applying babystep changes (e.g. no BABYSTEP_ZPROBE_OFFSET is set in Marlin FW)
+          orig_z_offset = offsetSetValue(new_z_offset);  // set new Z offset. Required if current Z offset is not changed applying babystep changes (e.g. no BABYSTEP_ZPROBE_OFFSET is set in Marlin FW)
 
           setDialogText(babyStepItems.title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
           showDialog(DIALOG_TYPE_QUESTION, saveEepromSettings, NULL, NULL);
@@ -144,7 +144,11 @@ void menuBabystep(void)
       // reset babystep to default value
       case KEY_ICON_6:
         orig_babystep = babystepResetValue();
-        orig_z_offset = offsetSetValue(new_z_offset - babystep);  // set new Z offset. Required if current Z offset is not changed applying babystep changes (e.g. no BABYSTEP_ZPROBE_OFFSET is set in Marlin FW)
+
+        if (infoMachineSettings.zProbe == ENABLED)
+          orig_z_offset = offsetSetValue(new_z_offset - babystep);  // set new Z offset. Required if current Z offset is not changed applying babystep changes (e.g. no BABYSTEP_ZPROBE_OFFSET is set in Marlin FW)
+        else
+          orig_z_offset = offsetSetValue(new_z_offset + babystep);  // set new Z offset. Required if current Z offset is not changed applying babystep changes (e.g. no BABYSTEP_ZPROBE_OFFSET is set in Marlin FW)        
         break;
 
       case KEY_ICON_7:
@@ -176,11 +180,14 @@ void menuBabystep(void)
 
         force_z_offset = false;
       }
-      else if (orig_z_offset == z_offset)
+      else if (orig_z_offset - 0.005f <= z_offset && z_offset <= orig_z_offset + 0.005f)
       {
         // if current Z offset is not changed applying babystep changes (e.g. no BABYSTEP_ZPROBE_OFFSET is set in Marlin FW),
         // we force Z offset change
-        new_z_offset = z_offset + babystep - orig_babystep;
+        if (infoMachineSettings.zProbe == ENABLED)
+          new_z_offset = z_offset + babystep - orig_babystep;
+        else
+          new_z_offset = z_offset - (babystep - orig_babystep);
 
         force_z_offset = true;
       }

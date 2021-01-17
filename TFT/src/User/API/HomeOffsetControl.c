@@ -40,6 +40,7 @@ bool homeOffsetGetStatus(void)
 float homeOffsetSetValue(float value)
 {
   mustStoreCmd("M206 Z%.2f\n", value);
+  mustStoreCmd("M206\n");  // needed by homeOffsetResetValue() to retrieve the new value
   z_offset_value = value;
   return z_offset_value;
 }

@@ -65,6 +65,7 @@ bool probeOffsetGetStatus(void)
 float probeOffsetSetValue(float value)
 {
   mustStoreCmd("M851 Z%.2f\n", value);
+  mustStoreCmd("M851\n");  // needed by probeOffsetGetValue() to retrieve the new value
   z_offset_value = value;
   return z_offset_value;
 }
