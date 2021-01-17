@@ -282,7 +282,7 @@
     #define STRING_LOAD_STARTED           "正在挤出耗材, 请等待挤出完成."
     #define STRING_UNLOAD_STARTED         "正在回抽耗材, 请等待回抽完成."
     #define STRING_HEATERS_ON             "喷头仍在加热, 是否要停止加热?"
-    #define STRING_PRINT_FINISHED         "   打印\n   完成"
+    #define STRING_PRINT_FINISHED         "  打印 完成"
     #define STRING_MAIN_SCREEN            "主界面"
     #define STRING_PREVIOUS_PRINT_DATA    "打印统计"
     #define STRING_PRINT_TIME             "打印耗时: %02u:%02u:%02u"
