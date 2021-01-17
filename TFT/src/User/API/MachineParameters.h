@@ -31,7 +31,8 @@ typedef enum
   P_SAVE_SETTINGS,
   P_RESTORE_SETTINGS,
   P_RESET_SETTINGS,
-  P_ITEMSCOUNT
+  P_ITEMSCOUNT,
+  P_MBL_Z_OFFSET
 }PARAMETER_NAME;
 
 #define PARAMETERS_COUNT P_RESET_SETTINGS
@@ -73,6 +74,7 @@ typedef struct
   float ABLState[2];
   float OffsetTool[3];
   float HybridThreshold[STEPPER_COUNT];
+  float MblZOffset[1];
 } PARAMETERS;
 
 extern PARAMETERS infoParameters;

@@ -861,11 +861,20 @@ void parseACK(void)
           showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
         }
       }
+    // Parse and store Probe Z offset value
       else if (ack_seen("Probe Offset"))
       {
         if (ack_seen("Z:") || (ack_seen("Z")))
         {
-          setParameter(P_PROBE_OFFSET,Z_STEPPER, ack_value());
+          setParameter(P_PROBE_OFFSET, Z_STEPPER, ack_value());
+        }
+      }
+    // Parse and store MBL Z offset value
+      else if (ack_seen("G29 S4"))
+      {
+        if (ack_seen("Z:") || (ack_seen("Z")))
+        {
+          setParameter(P_MBL_Z_OFFSET, 0, ack_value());
         }
       }
     // parse and store feed rate percentage
