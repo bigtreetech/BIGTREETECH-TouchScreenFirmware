@@ -371,7 +371,7 @@ void menuPrinting(void)
     printingItems.items[KEY_ICON_5].icon = (infoFile.source < BOARD_SD && infoPrinting.model_icon) ?
                                             ICON_PREVIEW : ICON_BABYSTEP;
   }
-  else
+  else // returned to this menu after a print was done (ex: after a popup)
   {
     printingItems.title.address = (uint8_t *)infoPrintSummary.name;
     printingItems.items[KEY_ICON_4] = itemIsPrinting[1]; // MainScreen
@@ -498,7 +498,10 @@ void menuPrinting(void)
           setPrintPause(!isPause(), false);
         #ifndef TFT70_V3_0
           else
+          {
+            exitPrinting();
             infoMenu.cur = 0;
+          }
         #endif
         break;
 
@@ -507,7 +510,10 @@ void menuPrinting(void)
           if(isPrinting())
             infoMenu.menu[++infoMenu.cur] = menuBabystep;
           else
+          {
+            exitPrinting();
             infoMenu.cur = 0;
+          }
         #else
           infoMenu.menu[++infoMenu.cur] = menuBabystep;
         #endif

@@ -72,10 +72,11 @@ infoFile
 void resetInfoFile(void)
 {
   FS_SOURCE source = infoFile.source;
+  bool printFromTFT = infoFile.printFromTFT;
   clearInfoFile();
   memset(&infoFile, 0, sizeof(infoFile));
   infoFile.source = source;
-
+  infoFile.printFromTFT = printFromTFT;
   strcpy(infoFile.title, getCurFileSource());
 }
 
