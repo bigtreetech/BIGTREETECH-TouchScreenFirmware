@@ -720,10 +720,12 @@ void loopCheckBack(void)
   static bool longPress = false;
   static bool firstCheck = false;
   static bool backHeld = false;
+
   if (isPrinting())
     return;
   if (!isPress())
   {
+    backHeld = false;
     longPress = false;
     return;
   }
@@ -731,12 +733,12 @@ void loopCheckBack(void)
     return;
   if ((infoMenu.cur == 0) || (infoMenu.menu[infoMenu.cur] == menuMode))
     return;
-  if (backHeld == true)  // prevent mode selection if Back button is held
+  if (backHeld == true)  // prevent mode selection or screenshot if Back button is held
   {
     backHeld = LCD_ReadPen(0);
     return;
   }
-  if (longPress == false)
+  if (longPress == false)  // check if TSC is pressed and held
   {
     if (LCD_ReadPen(LONG_TOUCH))
     {
@@ -744,7 +746,7 @@ void loopCheckBack(void)
       firstCheck = true;
     }
   }
-  if (firstCheck == true)
+  if (firstCheck == true)  // do things only once if TSC is pressed and held
   {
     touchSound = false;
     KEY_VALUES tempKey = KEY_IDLE;
@@ -759,7 +761,7 @@ void loopCheckBack(void)
     touchSound = true;
     if (tempKey != KEY_IDLE)
     {
-      if (curMenuItems->items[tempKey].label.index == LABEL_BACK)
+      if (curMenuItems->items[tempKey].label.index == LABEL_BACK)  // check if Back button is held
       {
         BUZZER_PLAY(sound_ok);
         backHeld = true;
