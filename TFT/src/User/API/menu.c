@@ -527,7 +527,7 @@ void menuDrawPage(const MENUITEMS *menuItems)
   TSC_ReDrawIcon = itemDrawIconPress;
   curMenuRedrawHandle = NULL;
 
-  curRect = (infoMenu.menu[infoMenu.cur] == menuStatus) ? rect_of_keySS : rect_of_key;
+  curRect = ((infoMenu.menu[infoMenu.cur] == menuStatus) || ((infoMenu.menu[infoMenu.cur] == menuPrinting) && !isPrinting())) ? rect_of_keySS : rect_of_key;
 
   //GUI_Clear(BLACK);
   menuClearGaps(); // Use this function instead of GUI_Clear to eliminate the splash screen when clearing the screen.
@@ -717,15 +717,55 @@ GUI_POINT getIconStartPoint(int index)
 
 void loopCheckBack(void)
 {
-  char tempMsg[10];
-  if (LCD_ReadPen(LCD_CHANGE_MODE_INTERVALS-500))
-  // if (curMenuItems->items[Key_value(COUNT(curRect), curRect)].label.index == LABEL_BACK)
+  static bool longPress = false;
+  static bool firstCheck = false;
+  static bool backHeld = false;
+  if (isPrinting())
+    return;
+  if (!isPress())
   {
-    //  (curMenuItems->items[Key_value(COUNT(curRect), curRect)].label.index == LABEL_BACK)
-    infoMenu.cur = 0;
-    sprintf(tempMsg, "%d", COUNT(curRect));
-    popupReminder(DIALOG_TYPE_INFO, LABEL_INFO, (uint8_t *) tempMsg);
-    // popupReminder(DIALOG_TYPE_INFO, LABEL_INFO, (uint8_t *) "Test");
+    longPress = false;
+    return;
+  }
+  if (menuType != MENU_TYPE_ICON)
+    return;
+  if (infoMenu.menu[infoMenu.cur] == menuStatus && infoMenu.menu[infoMenu.cur] == menuMode)
+    return;
+  if (backHeld == true)  // prevent mode selection if Back button is held
+  {
+    backHeld = LCD_ReadPen(0);
+    return;
+  }
+  if (longPress == false)
+    if (LCD_ReadPen(LONG_TOUCH))
+    {
+      longPress = true;
+      firstCheck = true;
+    }
+  if (firstCheck == true)
+  {
+    touchSound = false;
+    KEY_VALUES tempKey = KEY_IDLE;
+    if ((infoMenu.menu[infoMenu.cur] == menuPrinting) && !isPrinting())
+    {
+      tempKey = Key_value(COUNT(rect_of_keySS), rect_of_keySS);
+    }
+    else
+    {
+      tempKey = Key_value(COUNT(rect_of_key), rect_of_key);
+    }
+    touchSound = true;
+    if (tempKey != KEY_IDLE)
+    {
+      if (curMenuItems->items[tempKey].label.index == LABEL_BACK)
+      {
+        BUZZER_PLAY(sound_ok);
+        backHeld = true;
+        infoMenu.menu[1] = infoMenu.menu[infoMenu.cur];
+        infoMenu.cur = 1;
+      }
+    }
+    firstCheck = false;
   }
 }
 
