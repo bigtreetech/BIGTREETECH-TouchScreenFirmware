@@ -1,7 +1,7 @@
 #include "vfs.h"
 #include "includes.h"
 
-MYFILE infoFile = {"?:", {0}, {0}, 0, 0, 0, TFT_SD, {0}};
+MYFILE infoFile = {"?:", {0}, {0}, 0, 0, 0, 65535, TFT_SD, {0}};
 
 bool mountFS(void)
 {
@@ -15,18 +15,14 @@ bool mountFS(void)
       return mountUDisk();
 
     case BOARD_SD:
-  //ifdef RepRapFirmware
-      if (infoMachineSettings.firmwareType == FW_REPRAPFW && infoHost.printing)
-      {
-        /* no mount while printing */
-        return true;
-      }
+      if (infoHost.printing)
+        return true ; // no mount while printing
       else
         return mountGcodeSDCard();
-  //else
-  //endif
+
+    default:
+      return false;
   }
-  return false;
 }
 
 /*
@@ -34,20 +30,20 @@ bool mountFS(void)
 void clearInfoFile(void)
 {
   uint8_t i = 0;
-  for (i = 0; i < infoFile.F_num; i++)
+  for (i = 0; i < infoFile.folderCount; i++)
   {
     free(infoFile.folder[i]);
     infoFile.folder[i] = 0;
   }
-  for (i = 0; i < infoFile.f_num; i++)
+  for (i = 0; i < infoFile.fileCount; i++)
   {
     free(infoFile.file[i]);
     infoFile.file[i] = 0;
     free(infoFile.Longfile[i]);
     infoFile.Longfile[i] = 0;
   }
-  infoFile.F_num = 0;
-  infoFile.f_num = 0;
+  infoFile.folderCount = 0;
+  infoFile.fileCount = 0;
 }
 
 TCHAR *getCurFileSource(void)
@@ -56,9 +52,12 @@ TCHAR *getCurFileSource(void)
   {
     case TFT_SD:
       return "SD:";
+
     case TFT_UDISK:
       return "U:";
+
     case BOARD_SD:
+    case BOARD_SD_REMOTE:
       return "bSD:";
   }
   return NULL;
@@ -90,8 +89,9 @@ bool scanPrintFiles(void)
 
     case BOARD_SD:
       return scanPrintFilesGcodeFs();
+    default:
+      return false;
   }
-  return false;
 }
 
 /*

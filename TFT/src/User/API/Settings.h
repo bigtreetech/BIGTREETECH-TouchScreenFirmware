@@ -32,8 +32,8 @@ typedef enum
 #define CONFIG_SUPPPORT 20210105
 
 #define FONT_FLASH_SIGN       20200908 //(YYYYMMDD) change if fonts require updating
-#define CONFIG_FLASH_SIGN     20210105 //(YYYYMMDD) change if any keyword(s) in config.ini is added or removed
-#define LANGUAGE_FLASH_SIGN   20210105 //(YYYYMMDD) change if any keyword(s) in language pack is added or removed
+#define CONFIG_FLASH_SIGN     20210107 //(YYYYMMDD) change if any keyword(s) in config.ini is added or removed
+#define LANGUAGE_FLASH_SIGN   20210121 //(YYYYMMDD) change if any keyword(s) in language pack is added or removed
 #define ICON_FLASH_SIGN       20210105 //(YYYYMMDD) change if any icon(s) is added or removed
 
 #define FONT_CHECK_SIGN       (FONT_FLASH_SIGN + WORD_UNICODE)
@@ -125,9 +125,11 @@ typedef struct
   uint8_t  fan_max[MAX_FAN_COUNT];
   int16_t  machine_size_min[AXIS_NUM];  // X, Y, Z
   int16_t  machine_size_max[AXIS_NUM];  // X, Y, Z
-  uint16_t axis_speed[SPEED_COUNT];
+  uint16_t xy_speed[SPEED_COUNT];
+  uint16_t z_speed[SPEED_COUNT];
   uint16_t ext_speed[SPEED_COUNT];
   uint8_t  auto_load_leveling;
+  uint8_t  touchmi_sensor;
   uint8_t  onboardSD;
   uint8_t  m27_refresh_time;
   uint8_t  m27_active;
@@ -218,12 +220,13 @@ typedef enum
 /**
  * Firmware type
  */
-typedef enum{
+typedef enum
+{
   FW_NOT_DETECTED,
-  FW_UNKNOWN,
   FW_MARLIN,
   FW_REPRAPFW,
   FW_KLIPPER,
+  FW_UNKNOWN,
 } FW_TYPE;
 
 typedef struct

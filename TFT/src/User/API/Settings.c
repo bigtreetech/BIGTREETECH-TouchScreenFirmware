@@ -1,6 +1,7 @@
 #include "Settings.h"
 #include "includes.h"
 
+
 SETTINGS infoSettings;
 MACHINESETTINGS infoMachineSettings;
 
@@ -8,7 +9,8 @@ const u16 default_max_temp[]      = HEAT_MAX_TEMP;
 const u16 default_max_fanPWM[]    = FAN_MAX_PWM;
 const u16 default_size_min[]      = {X_MIN_POS,Y_MIN_POS,Z_MIN_POS};
 const u16 default_size_max[]      = {X_MAX_POS,Y_MAX_POS,Z_MAX_POS};
-const u16 default_move_speed[]    = {SPEED_MOVE_SLOW, DEFAULT_SPEED_MOVE, SPEED_MOVE_FAST};
+const u16 default_xy_speed[]      = {SPEED_XY_SLOW, SPEED_XY_NORMAL, SPEED_XY_FAST};
+const u16 default_z_speed[]       = {SPEED_Z_SLOW, SPEED_Z_NORMAL, SPEED_Z_FAST};
 const u16 default_ext_speed[]     = {EXTRUDE_SLOW_SPEED, EXTRUDE_NORMAL_SPEED, EXTRUDE_FAST_SPEED};
 const u16 default_level_speed[]   = {LEVELING_POINT_XY_FEEDRATE, LEVELING_POINT_Z_FEEDRATE};
 const u16 default_pause_speed[]   = {NOZZLE_PAUSE_XY_FEEDRATE, NOZZLE_PAUSE_Z_FEEDRATE, NOZZLE_PAUSE_E_FEEDRATE};
@@ -35,6 +37,7 @@ void infoSettingsReset(void)
   infoSettings.mesh_min_color         = lcd_colors[MESH_MIN_COLOR];
   infoSettings.mesh_max_color         = lcd_colors[MESH_MAX_COLOR];
 
+  infoSettings.rotate_ui              = DISABLED;
   infoSettings.terminalACK            = DISABLED;
   infoSettings.persistent_info        = ENABLED;
   infoSettings.file_listmode          = ENABLED;
@@ -58,7 +61,8 @@ void infoSettingsReset(void)
   infoSettings.fan_ctrl_count         = FAN_CTRL_NUM;
   infoSettings.min_ext_temp           = PREVENT_COLD_EXTRUSION_MINTEMP;
   infoSettings.auto_load_leveling     = AUTO_SAVE_LOAD_BL_VALUE;
-  infoSettings.onboardSD              = AUTO;  //ENABLED / DISABLED / AUTO
+  infoSettings.touchmi_sensor         = TOUCHMI_SENSOR_VALUE;
+  infoSettings.onboardSD              = AUTO;                        //ENABLED / DISABLED / AUTO
   infoSettings.m27_refresh_time       = M27_REFRESH;
   infoSettings.m27_active             = M27_WATCH_OTHER_SOURCES;
   infoSettings.longFileName           = AUTO;  //ENABLED / DISABLED / AUTO
@@ -136,7 +140,8 @@ void infoSettingsReset(void)
 
   for (int i = 0; i < SPEED_COUNT; i++)
   {
-    infoSettings.axis_speed[i]        = default_move_speed[i];
+    infoSettings.xy_speed[i]          = default_xy_speed[i];
+    infoSettings.z_speed[i]           = default_z_speed[i];
     infoSettings.ext_speed[i]         = default_ext_speed[i];
   }
 
