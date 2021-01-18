@@ -729,7 +729,7 @@ void loopCheckBack(void)
   }
   if (menuType != MENU_TYPE_ICON)
     return;
-  if (infoMenu.menu[infoMenu.cur] == menuStatus && infoMenu.menu[infoMenu.cur] == menuMode)
+  if ((infoMenu.cur == 0) || (infoMenu.menu[infoMenu.cur] == menuMode))
     return;
   if (backHeld == true)  // prevent mode selection if Back button is held
   {
@@ -737,16 +737,18 @@ void loopCheckBack(void)
     return;
   }
   if (longPress == false)
+  {
     if (LCD_ReadPen(LONG_TOUCH))
     {
       longPress = true;
       firstCheck = true;
     }
+  }
   if (firstCheck == true)
   {
     touchSound = false;
     KEY_VALUES tempKey = KEY_IDLE;
-    if ((infoMenu.menu[infoMenu.cur] == menuPrinting) && !isPrinting())
+    if (infoMenu.menu[infoMenu.cur] == menuPrinting)
     {
       tempKey = Key_value(COUNT(rect_of_keySS), rect_of_keySS);
     }
@@ -786,7 +788,7 @@ void loopBackEnd(void)
   // Speed & flow monitor
   loopSpeed();
   // check if Back is pressed and held
-  if (infoMenu.cur != 0) loopCheckBack();
+  loopCheckBack();
 #ifdef BUZZER_PIN
   loopBuzzer();
 #endif
