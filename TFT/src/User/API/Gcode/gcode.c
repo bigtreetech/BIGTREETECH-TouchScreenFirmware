@@ -218,9 +218,9 @@ bool request_M27(int seconds)
 /**
  * Stop or Unconditional stop in reprap firmware
  **/
-bool request_M1(void)
+bool request_M0(void)
 {
-  mustStoreCmd("M1 \n");
+  mustStoreCmd("M0 \n");
   return true;
 }
 
