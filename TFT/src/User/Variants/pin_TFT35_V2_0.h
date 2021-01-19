@@ -80,15 +80,15 @@
 #define W25Qxx_CS_PIN PA4
 
 // ST7920 Simulator SPI pins
-//#define ST7920_SPI    _SPI2
+#define ST7920_SPI    _SPI2
 
 // Buzzer support
 #define BUZZER_PIN    PB2
 
 // LCD Encoder support
-//#define LCD_ENCA_PIN  PB0
-//#define LCD_ENCB_PIN  PB1
-//#define LCD_BTN_PIN   PB2
+#define LCD_ENCA_PIN  PA0
+#define LCD_ENCB_PIN  PA1
+#define LCD_BTN_PIN   PE6
 
 // U disk support
 //#define U_DISK_SUPPORT

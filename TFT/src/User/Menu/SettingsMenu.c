@@ -86,14 +86,14 @@ void menuInfo(void)
   float usedMB = (float)FLASH_USED/1048576;
   sprintf(buf, "Used %.2f%% (%.2fMB/%uMB)", flashUsedPercentage(), usedMB, (W25Qxx_ReadCapacity()/1048576));
 
-  const uint16_t top_y = (LCD_HEIGHT - (9 * BYTE_HEIGHT)) / 2; // 8 firmware info lines + 1 SPI flash info line
-  const uint16_t start_x = sizeof("Firmware:") * BYTE_WIDTH;
+  const uint16_t top_y = (LCD_HEIGHT - (7 * BYTE_HEIGHT)) / 2; // 8 firmware info lines + 1 SPI flash info line
+  const uint16_t start_x = strlen("Firmware:") * BYTE_WIDTH;
   const GUI_RECT version[5] = {
     {start_x, top_y + 0*BYTE_HEIGHT, LCD_WIDTH, top_y + 2*BYTE_HEIGHT},
     {start_x, top_y + 2*BYTE_HEIGHT, LCD_WIDTH, top_y + 4*BYTE_HEIGHT},
     {start_x, top_y + 4*BYTE_HEIGHT, LCD_WIDTH, top_y + 6*BYTE_HEIGHT},
-    {start_x, top_y + 6*BYTE_HEIGHT, LCD_WIDTH, top_y + 8*BYTE_HEIGHT},
-    {start_x, top_y + 8*BYTE_HEIGHT, LCD_WIDTH, top_y + 9*BYTE_HEIGHT},
+    {start_x, top_y + 5*BYTE_HEIGHT, LCD_WIDTH, top_y + 8*BYTE_HEIGHT},
+    {start_x, top_y + 6*BYTE_HEIGHT, LCD_WIDTH, top_y + 9*BYTE_HEIGHT},
     };
   //draw titles
   GUI_DispString(0, version[0].y0, (uint8_t *)"System  :");

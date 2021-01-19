@@ -111,9 +111,6 @@ void restoreEepromSettings(void);
 //reset settings and eeprom to default values
 void resetEepromSettings(void);
 
-//Save TouchMI Zoffset
-void saveEepromTouchmiSettings(void);
-
 #ifdef __cplusplus
 }
 #endif

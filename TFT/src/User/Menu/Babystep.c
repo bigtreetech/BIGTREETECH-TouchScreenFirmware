@@ -125,8 +125,8 @@ void menuBabystep(void)
       case KEY_ICON_4:
         if (infoMachineSettings.EEPROM == 1)
         {
-          offsetSetValue(z_offset);  // set new Z offset
-
+          offsetSetValue(now_z_offset);  // set new Z offset
+           babystep = orig_babystep = babystepResetValue();
           setDialogText(babyStepItems.title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
           showDialog(DIALOG_TYPE_QUESTION, saveEepromSettings, NULL, NULL);
         }
@@ -166,12 +166,12 @@ void menuBabystep(void)
 
     if (now_babystep != babystep || now_z_offset != z_offset)
     {
-      if (now_z_offset != z_offset || (orig_babystep - 0.005f <= babystep && babystep <= orig_babystep + 0.005f))
+      if (orig_z_offset != z_offset || (orig_babystep - 0.005f <= babystep && babystep <= orig_babystep + 0.005f))
       {
         // if current Z offset is changed applying babystep changes (e.g. BABYSTEP_ZPROBE_OFFSET is set in Marlin FW)
         // or babystep is almost the same as the initial one,
         // we don't force Z offset change
-        now_z_offset = z_offset;
+        orig_z_offset = now_z_offset = z_offset;
 
         force_z_offset = false;
       }
@@ -179,13 +179,13 @@ void menuBabystep(void)
       {
         // if current Z offset is not changed applying babystep changes (e.g. no BABYSTEP_ZPROBE_OFFSET is set in Marlin FW),
         // we force Z offset change
-        z_offset += babystep - orig_babystep;
+        now_z_offset = z_offset - babystep + orig_babystep;
 
         force_z_offset = true;
       }
 
       now_babystep = babystep;
-      babyReDraw(now_babystep, z_offset, force_z_offset, true);
+      babyReDraw(now_babystep, now_z_offset, force_z_offset, true);
     }
 
     loopProcess();
