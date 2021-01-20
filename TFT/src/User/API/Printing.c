@@ -55,7 +55,7 @@ void setPrintingTime(uint32_t RTtime)
     {
       infoPrinting.time++;
 #ifdef ENABLE_SLICER_REMAINING_TIME
-      if (infoPrinting.remaining_time > 0)
+      if (infoPrinting.remaining_time > 0  && !heatHasWaiting())
       {
         infoPrinting.remaining_time--;
       }
