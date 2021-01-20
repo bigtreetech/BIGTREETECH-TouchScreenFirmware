@@ -12,20 +12,8 @@ extern "C" {
 void menuBeforePrinting(void);
 void menuPrinting(void);
 void printInfoPopup(void);
-void printDataInit(void);
-extern bool filDataSeen;
 
-typedef struct
-{
-  /* data */
-  char name[30];
-  uint32_t time;
-  float length;
-  float weight;
-  float cost;
-} FILAMENTDATA;
-
-extern FILAMENTDATA filData;
+extern bool hasFilamentLength;
 
 #ifdef __cplusplus
 }
