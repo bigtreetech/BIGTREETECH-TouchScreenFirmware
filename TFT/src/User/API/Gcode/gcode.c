@@ -136,6 +136,7 @@ char *request_M33(char *filename)
 long request_M23_M36(char *filename)
 {
   uint8_t offset = 5;
+  const char *sizeTag;
   if (infoMachineSettings.firmwareType != FW_REPRAPFW) // all other firmwares except reprap firmware
   {
     resetRequestCommandInfo("File opened",    // The magic to identify the start
@@ -145,6 +146,7 @@ long request_M23_M36(char *filename)
                             NULL);            // The third error magic
 
     mustStoreCmd("M23 %s\n", filename);
+    sizeTag = "Size:";
   }
   else // reprap firmware
   {
@@ -156,6 +158,7 @@ long request_M23_M36(char *filename)
 
     mustStoreCmd("M36 %s\n", filename);
     offset = 6;
+    sizeTag = "size\":"; // reprap firmware reports size JSON 
   }
 
   // Wait for response
@@ -169,7 +172,7 @@ long request_M23_M36(char *filename)
     mustStoreCmd("M23 %s\n", filename); //send M23 for reprap firmware
   // Find file size and report its.
   char *ptr;
-  long size = strtol(strstr(requestCommandInfo.cmd_rev_buf, "Size:") + offset, &ptr, 10);
+  long size = strtol(strstr(requestCommandInfo.cmd_rev_buf, sizeTag) + offset, &ptr, 10);
   clearRequestCommandInfo();
   return size;
 }
@@ -211,5 +214,14 @@ bool request_M25(void)
 bool request_M27(int seconds)
 {
   mustStoreCmd("M27 S%d\n", seconds);
+  return true;
+}
+
+/**
+ * Stop or Unconditional stop in reprap firmware
+ **/
+bool request_M0(void)
+{
+  mustStoreCmd("M0 \n");
   return true;
 }
