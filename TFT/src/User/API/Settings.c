@@ -1,7 +1,6 @@
 #include "Settings.h"
 #include "includes.h"
 
-
 SETTINGS infoSettings;
 MACHINESETTINGS infoMachineSettings;
 

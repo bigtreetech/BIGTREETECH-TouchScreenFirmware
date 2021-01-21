@@ -9,12 +9,13 @@
 #define FILE_NUM     255
 #define MAX_PATH_LEN 1024
 
-typedef enum {
-    TFT_SD,
-    TFT_UDISK,
-    BOARD_SD,
-    BOARD_SD_REMOTE
-}FS_SOURCE;
+typedef enum
+{
+  TFT_SD,
+  TFT_UDISK,
+  BOARD_SD,
+  BOARD_SD_REMOTE
+} FS_SOURCE;
 
 typedef struct
 {
@@ -25,11 +26,12 @@ typedef struct
   uint16_t fileCount;          // current gcode file count
   uint16_t cur_page;           // current display page index (5 files per page)
   uint16_t fileIndex;          // selected file index
+  bool printFromTFT;           // flag: print started from TFT
   FS_SOURCE source;            // The source of the file. TFT SD or ONBOARD SD.
   TCHAR * Longfile[FILE_NUM];  // Long file name buffer from ONBOARD SD only
-}MYFILE;
+} MYFILE;
 
-extern MYFILE  infoFile;
+extern MYFILE infoFile;
 
 bool mountFS(void);
 bool scanPrintFiles(void);

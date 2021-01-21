@@ -8,17 +8,24 @@ static inline void meshInitPoint(uint16_t col, uint16_t row, float value)
 {
 //  probeHeightEnable();                                     // temporary disable software endstops
 
-  probeHeightStop();                                       // raise nozzle
+  // Z offset gcode sequence start
+  if (infoMachineSettings.zProbe == ENABLED)
+    probeHeightStop();                                     // raise nozzle
 
   mustStoreCmd("G42 I%d J%d\n", col, row);                 // move nozzle to X and Y coordinates corresponding
                                                            // to the column and row in the bed leveling mesh grid
   probeHeightStart(value);                                 // lower nozzle to provided absolute Z point
+  probeHeightRelative();                                   // set relative position mode
 }
 
 /* Reset mesh point */
 static inline void meshResetPoint(void)
 {
-  probeHeightStop();                                       // raise nozzle
+  // Z offset gcode sequence stop
+  if (infoMachineSettings.zProbe == ENABLED)
+    probeHeightStop();                                     // raise nozzle
+
+  probeHeightAbsolute();                                   // set absolute position mode
 
 //  probeHeightDisable();                                    // restore original software endstops state
 }
@@ -63,7 +70,7 @@ float menuMeshTuner(uint16_t col, uint16_t row, float value)
      {ICON_STOP,                    LABEL_CANCEL},}
   };
 
-  #ifdef FRIENDLY_PROBE_OFFSET_LANGUAGE
+  #ifdef FRIENDLY_Z_OFFSET_LANGUAGE
     meshItems.items[0].icon = ICON_NOZZLE_DOWN;
     meshItems.items[0].label.index = LABEL_DOWN;
     meshItems.items[3].icon = ICON_NOZZLE_UP;

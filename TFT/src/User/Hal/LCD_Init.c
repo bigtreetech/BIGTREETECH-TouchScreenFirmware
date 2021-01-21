@@ -394,70 +394,70 @@ uint32_t LCD_ReadPixel_24Bit(int16_t x, int16_t y)
 // ST7789
 void LCD_init_RGB(void)
 {
- 	LCD_WR_REG(0x11);
-	Delay_ms(120); //Delay 120ms
-	//------------------------------display and color format setting--------------------------------//
-	LCD_WR_REG(0x36);
-	LCD_WR_DATA(0x68);
-	LCD_WR_REG(0x3a);
-	LCD_WR_DATA(0x05);
-	//--------------------------------ST7789V Frame rate setting----------------------------------//
-	LCD_WR_REG(0xb2);
-	LCD_WR_DATA(0x0c);
-	LCD_WR_DATA(0x0c);
-	LCD_WR_DATA(0x00);
-	LCD_WR_DATA(0x33);
-	LCD_WR_DATA(0x33);
-	LCD_WR_REG(0xb7);
-	LCD_WR_DATA(0x35);
-	//---------------------------------ST7789V Power setting--------------------------------------//
-	LCD_WR_REG(0xbb);
-	LCD_WR_DATA(0x28);
-	LCD_WR_REG(0xc0);
-	LCD_WR_DATA(0x2c);
-	LCD_WR_REG(0xc2);
-	LCD_WR_DATA(0x01);
-	LCD_WR_REG(0xc3);
-	LCD_WR_DATA(0x0b);
-	LCD_WR_REG(0xc4);
-	LCD_WR_DATA(0x20);
-	LCD_WR_REG(0xc6);
-	LCD_WR_DATA(0x0f);
-	LCD_WR_REG(0xd0);
-	LCD_WR_DATA(0xa4);
-	LCD_WR_DATA(0xa1);
-	//--------------------------------ST7789V gamma setting---------------------------------------//
-	LCD_WR_REG(0xe0);
-	LCD_WR_DATA(0xd0);
-	LCD_WR_DATA(0x01);
-	LCD_WR_DATA(0x08);
-	LCD_WR_DATA(0x0f);
-	LCD_WR_DATA(0x11);
-	LCD_WR_DATA(0x2a);
-	LCD_WR_DATA(0x36);
-	LCD_WR_DATA(0x55);
-	LCD_WR_DATA(0x44);
-	LCD_WR_DATA(0x3a);
-	LCD_WR_DATA(0x0b);
-	LCD_WR_DATA(0x06);
-	LCD_WR_DATA(0x11);
-	LCD_WR_DATA(0x20);
-	LCD_WR_REG(0xe1);
-	LCD_WR_DATA(0xd0);
-	LCD_WR_DATA(0x02);
-	LCD_WR_DATA(0x07);
-	LCD_WR_DATA(0x0a);
-	LCD_WR_DATA(0x0b);
-	LCD_WR_DATA(0x18);
-	LCD_WR_DATA(0x34);
-	LCD_WR_DATA(0x43);
-	LCD_WR_DATA(0x4a);
-	LCD_WR_DATA(0x2b);
-	LCD_WR_DATA(0x1b);
-	LCD_WR_DATA(0x1c);
-	LCD_WR_DATA(0x22);
-	LCD_WR_DATA(0x1f);
-	LCD_WR_REG(0x29);
+  LCD_WR_REG(0x11);
+  Delay_ms(120); //Delay 120ms
+  //------------------------------display and color format setting--------------------------------//
+  LCD_WR_REG(0x36);
+  LCD_WR_DATA(0x68);
+  LCD_WR_REG(0x3a);
+  LCD_WR_DATA(0x05);
+  //--------------------------------ST7789V Frame rate setting----------------------------------//
+  LCD_WR_REG(0xb2);
+  LCD_WR_DATA(0x0c);
+  LCD_WR_DATA(0x0c);
+  LCD_WR_DATA(0x00);
+  LCD_WR_DATA(0x33);
+  LCD_WR_DATA(0x33);
+  LCD_WR_REG(0xb7);
+  LCD_WR_DATA(0x35);
+  //---------------------------------ST7789V Power setting--------------------------------------//
+  LCD_WR_REG(0xbb);
+  LCD_WR_DATA(0x28);
+  LCD_WR_REG(0xc0);
+  LCD_WR_DATA(0x2c);
+  LCD_WR_REG(0xc2);
+  LCD_WR_DATA(0x01);
+  LCD_WR_REG(0xc3);
+  LCD_WR_DATA(0x0b);
+  LCD_WR_REG(0xc4);
+  LCD_WR_DATA(0x20);
+  LCD_WR_REG(0xc6);
+  LCD_WR_DATA(0x0f);
+  LCD_WR_REG(0xd0);
+  LCD_WR_DATA(0xa4);
+  LCD_WR_DATA(0xa1);
+  //--------------------------------ST7789V gamma setting---------------------------------------//
+  LCD_WR_REG(0xe0);
+  LCD_WR_DATA(0xd0);
+  LCD_WR_DATA(0x01);
+  LCD_WR_DATA(0x08);
+  LCD_WR_DATA(0x0f);
+  LCD_WR_DATA(0x11);
+  LCD_WR_DATA(0x2a);
+  LCD_WR_DATA(0x36);
+  LCD_WR_DATA(0x55);
+  LCD_WR_DATA(0x44);
+  LCD_WR_DATA(0x3a);
+  LCD_WR_DATA(0x0b);
+  LCD_WR_DATA(0x06);
+  LCD_WR_DATA(0x11);
+  LCD_WR_DATA(0x20);
+  LCD_WR_REG(0xe1);
+  LCD_WR_DATA(0xd0);
+  LCD_WR_DATA(0x02);
+  LCD_WR_DATA(0x07);
+  LCD_WR_DATA(0x0a);
+  LCD_WR_DATA(0x0b);
+  LCD_WR_DATA(0x18);
+  LCD_WR_DATA(0x34);
+  LCD_WR_DATA(0x43);
+  LCD_WR_DATA(0x4a);
+  LCD_WR_DATA(0x2b);
+  LCD_WR_DATA(0x1b);
+  LCD_WR_DATA(0x1c);
+  LCD_WR_DATA(0x22);
+  LCD_WR_DATA(0x1f);
+  LCD_WR_REG(0x29);
 }
 
 #ifdef SCREEN_SHOT_TO_SD
@@ -677,7 +677,7 @@ uint16_t LCD_ReadID(void)
 {
   uint16_t id = 0;
   LCD_WR_REG(0XD3);
-  id = LCD_RD_DATA();	//dummy read
+  id = LCD_RD_DATA();  //dummy read
   id = LCD_RD_DATA();
   id = LCD_RD_DATA();
   id <<= 8;
