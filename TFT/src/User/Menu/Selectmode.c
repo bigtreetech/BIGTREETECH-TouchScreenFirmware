@@ -44,8 +44,9 @@ bool LCD_ReadPen(uint16_t intervals)
   static u32 TouchTime = 0;
   if(!XPT2046_Read_Pen())
   {
-    if(OS_GetTimeMs() - TouchTime > intervals)
+    if(OS_GetTimeMs() - TouchTime >= intervals)
     {
+      TouchTime = OS_GetTimeMs();
       return true;
     }
   }
