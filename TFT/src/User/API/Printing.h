@@ -26,8 +26,8 @@ extern "C" {
   #define RAPID_PRINTING_COMM()
 #endif
 
-#define SUMMARY_NAME_MAX 30 // max character length for name char array
-#define SUMMARY_NAME_LEN 25 // max character length to copy from name buffer
+
+#define SUMMARY_NAME_LEN 26 // max character length to copy from name buffer
 
 typedef struct
 {

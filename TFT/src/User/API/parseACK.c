@@ -450,17 +450,24 @@ void parseACK(void)
         uint16_t start_index = ack_index;
         uint16_t end_index = ack_seen("Size: ") ? (ack_index - sizeof("Size: ")) : start_index;
         uint16_t path_len = MIN(end_index - start_index, MAX_PATH_LEN - strlen(getCurFileSource()) - 1);
-        sprintf(infoFile.title,"%s/",getCurFileSource());
+        sprintf(infoFile.title,"%s/", getCurFileSource());
         strncat(infoFile.title, dmaL2Cache + start_index, path_len);
-        infoFile.title[path_len + strlen(getCurFileSource()) + 1] = 0;
-        infoFile.source = BOARD_SD_REMOTE;
+        infoFile.title[path_len + strlen(getCurFileSource()) + 1] = '\0';
 
         infoPrinting.pause = false;
         infoHost.printing = true;
         infoPrinting.time = 0;
         infoPrinting.cur = 0;
         infoPrinting.size = ack_value();
-        initPrintSummary();
+        
+        if (infoFile.printFromTFT == false)  // onboard SD print started from remote
+        {
+          infoFile.source = BOARD_SD_REMOTE;
+          initPrintSummary();
+          infoMenu.cur = 1;  // take care if popup active or user in other menu than print
+          infoMenu.menu[infoMenu.cur] = menuPrinting;
+        }
+        
         if (infoMachineSettings.autoReportSDStatus == 1)
         {
           request_M27(infoSettings.m27_refresh_time);  //Check if there is a SD or USB print running.
@@ -1002,7 +1009,6 @@ void parseACK(void)
           while (((dmaL2Cache[ack_index] < '0') || (dmaL2Cache[ack_index] > '9')) && dmaL2Cache[ack_index] != '\n')
             ack_index++;
           infoPrintSummary.length = ack_value();
-          hasFilamentLength = true;
         }
         else if (ack_seen("W:"))
         {
@@ -1016,6 +1022,7 @@ void parseACK(void)
             ack_index++;
           infoPrintSummary.cost = ack_value();
         }
+        hasFilamentData = true;
       }
     }
 

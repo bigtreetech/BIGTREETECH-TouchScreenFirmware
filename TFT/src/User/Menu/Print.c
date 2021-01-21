@@ -239,7 +239,7 @@ void menuPrintFromSource(void)
   }
   else
   {
-    if (infoFile.source >= BOARD_SD)
+    if (infoFile.source == BOARD_SD)
       GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, (u8*)requestCommandInfo.cmd_rev_buf);
     else
       GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, labelVolumeError[infoFile.source]);
@@ -315,7 +315,6 @@ void menuPrintFromSource(void)
               break;
             //load model preview in flash if icon exists
             setPrintModelIcon(infoFile.source < BOARD_SD && model_DecodeToFlash(infoFile.title));
-            infoFile.fileIndex = key_num + start - infoFile.folderCount;
 
             char temp_info[FILE_NUM + 50];
             sprintf(temp_info, (char *)textSelect(LABEL_START_PRINT),
