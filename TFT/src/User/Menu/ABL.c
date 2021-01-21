@@ -235,7 +235,7 @@ void menuABL(void)
       case KEY_ICON_4:
         if (infoSettings.touchmi_sensor != 0)
           infoMenu.menu[++infoMenu.cur] = menuTouchMi;
-          else
+        else
           infoMenu.menu[++infoMenu.cur] = menuBLTouch;
         break;
 

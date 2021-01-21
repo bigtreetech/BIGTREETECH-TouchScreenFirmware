@@ -18,7 +18,7 @@ void probeHeightEnable(void)
     if (infoMachineSettings.firmwareType == FW_REPRAPFW)
       mustStoreCmd("M564 S0 H0\n");
     else
-      mustStoreCmd("M211 S0\n");
+      mustStoreCmd("M211 S0\n");  // disable software endstops to move nozzle minus Zero (Z0) if necessary
   }
 }
 
@@ -32,7 +32,7 @@ void probeHeightDisable(void)
     if (infoMachineSettings.firmwareType == FW_REPRAPFW)
       mustStoreCmd("M564 S1 H1\n");
     else
-      mustStoreCmd("M211 S1\n");
+      mustStoreCmd("M211 S1\n");  // enable software endstops
   }
 }
 
@@ -50,6 +50,18 @@ void probeHeightStop(void)
   mustStoreCmd("G91\n");  // set relative position mode
   mustStoreCmd("G1 Z%.2f F%d\n", infoSettings.level_z_raise, infoSettings.level_feedrate[FEEDRATE_Z]);  // raise Z and set feedrate
   mustStoreCmd("G90\n");  // set absolute position mode
+}
+
+/* Set probe height to relative position mode */
+void probeHeightRelative(void)
+{
+  mustStoreCmd("G91\n");                      // set relative position mode
+}
+
+/* Set probe height to absolute position mode */
+void probeHeightAbsolute(void)
+{
+  mustStoreCmd("G90\n");                      // set absolute position mode
 }
 
 /* Change probe height */

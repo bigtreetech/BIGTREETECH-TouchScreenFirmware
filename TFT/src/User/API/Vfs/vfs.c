@@ -1,11 +1,11 @@
 #include "vfs.h"
 #include "includes.h"
 
-MYFILE infoFile = {"?:", {0}, {0}, 0, 0, 0, 65535, TFT_SD, {0}};
+MYFILE infoFile = {"?:", {0}, {0}, 0, 0, 0, 0, false, TFT_SD, {0}};
 
 bool mountFS(void)
 {
-  //  resetInfoFile();   //needn't this
+  //  resetInfoFile();  //needn't this
   switch (infoFile.source)
   {
     case TFT_SD:
@@ -16,7 +16,7 @@ bool mountFS(void)
 
     case BOARD_SD:
       if (infoHost.printing)
-        return true ; // no mount while printing
+        return true;  // no mount while printing
       else
         return mountGcodeSDCard();
 
@@ -59,6 +59,9 @@ TCHAR *getCurFileSource(void)
     case BOARD_SD:
     case BOARD_SD_REMOTE:
       return "bSD:";
+
+    default:
+      break;  
   }
   return NULL;
 }
@@ -69,10 +72,11 @@ infoFile
 void resetInfoFile(void)
 {
   FS_SOURCE source = infoFile.source;
+  bool printFromTFT = infoFile.printFromTFT;
   clearInfoFile();
   memset(&infoFile, 0, sizeof(infoFile));
   infoFile.source = source;
-
+  infoFile.printFromTFT = printFromTFT;
   strcpy(infoFile.title, getCurFileSource());
 }
 
