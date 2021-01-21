@@ -122,14 +122,6 @@
 //=========================== Machine Settings ==============================
 //===========================================================================
 
-/**
- * RepRapFirmware Compatibility
- * Uncomment for RepRapFirmware.
- * To work with RepRapFirmware, Add M575 P1 S2 B115200 to the end of config.g file in RRF motherboard
- * sd card.
-*/
-//#define RepRapFirmware
-
 #define HOTEND_NUM      1  // set in 1~6
 #define EXTRUDER_NUM    1  // set in 1~6
 #define FAN_NUM         1  // set in 1~6
@@ -225,9 +217,9 @@
 #define Z_FADE_DEFAULT_VALUE 10.0f
 
 // Probe Offset limits
-#define PROBE_OFFSET_MIN_VALUE     -20.0f
-#define PROBE_OFFSET_MAX_VALUE      20.0f
-#define PROBE_OFFSET_DEFAULT_VALUE   0.0f
+#define PROBE_Z_OFFSET_MIN_VALUE     -20.0f
+#define PROBE_Z_OFFSET_MAX_VALUE      20.0f
+#define PROBE_Z_OFFSET_DEFAULT_VALUE   0.0f
 
 // Home Offset limits
 #define HOME_Z_OFFSET_MIN_VALUE     -20.0f
@@ -264,9 +256,7 @@
 
 /** TouchMI settings (on ABL menu)
  * 
- * Enable this option for settings TouchMI sensor on ABL Menu.
- * 
- * ( Init, Zoffset, Save, test)
+ * Enable this option for settings TouchMI sensor on ABL Menu (Init, Z Offset, Save, Test).
  * 
  * Options: [enable:1, disable:0]
  * 
@@ -319,10 +309,10 @@
 #define ALTERNATIVE_MOVE_MENU
 
 /**
- * Friendly probe offset language
+ * Friendly Z offset language
  * Replace decrease/increase and "-" & "+" icons with down/up and friendly icons
  */
-#define FRIENDLY_PROBE_OFFSET_LANGUAGE
+#define FRIENDLY_Z_OFFSET_LANGUAGE
 
 /**
  * Quick EEPROM Menu

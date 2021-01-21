@@ -9,12 +9,13 @@
 #define FILE_NUM     255
 #define MAX_PATH_LEN 1024
 
-typedef enum {
-    TFT_SD,
-    TFT_UDISK,
-    BOARD_SD,
-    BOARD_SD_REMOTE
-}FS_SOURCE;
+typedef enum
+{
+  TFT_SD,
+  TFT_UDISK,
+  BOARD_SD,
+  BOARD_SD_REMOTE
+} FS_SOURCE;
 
 typedef struct
 {
@@ -28,9 +29,9 @@ typedef struct
   bool printFromTFT;           // flag: print started from TFT
   FS_SOURCE source;            // The source of the file. TFT SD or ONBOARD SD.
   TCHAR * Longfile[FILE_NUM];  // Long file name buffer from ONBOARD SD only
-}MYFILE;
+} MYFILE;
 
-extern MYFILE  infoFile;
+extern MYFILE infoFile;
 
 bool mountFS(void);
 bool scanPrintFiles(void);

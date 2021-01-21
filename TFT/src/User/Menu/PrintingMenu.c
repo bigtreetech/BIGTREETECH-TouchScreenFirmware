@@ -46,16 +46,16 @@ bool hasFilamentData;
 #define SPD_ICON_POS 5
 
 const ITEM itemIsPause[2] = {
-  // icon       label
-  {ICON_PAUSE,  LABEL_PAUSE},
-  {ICON_RESUME, LABEL_RESUME},
+  // icon                        label
+  {ICON_PAUSE,                   LABEL_PAUSE},
+  {ICON_RESUME,                  LABEL_RESUME},
 };
 
 const ITEM itemIsPrinting[3] = {
-  // icon           label
-  {ICON_BACKGROUND, LABEL_BACKGROUND},
-  {ICON_MAINMENU,   LABEL_MAIN_SCREEN},
-  {ICON_BACK,       LABEL_BACK},
+  // icon                        label
+  {ICON_BACKGROUND,              LABEL_BACKGROUND},
+  {ICON_MAINMENU,                LABEL_MAIN_SCREEN},
+  {ICON_BACK,                    LABEL_BACK},
 };
 
 void menuBeforePrinting(void)
@@ -84,14 +84,14 @@ void menuBeforePrinting(void)
 
       infoPrinting.size = size;
 
-      //    if(powerFailedExist())
-      //    {
+      //if(powerFailedExist())
+      //{
       request_M24(0);
-      //    }
-      //    else
-      //    {
-      //      request_M24(infoBreakPoint.offset);
-      //    }
+      //}
+      //else
+      //{
+      //request_M24(infoBreakPoint.offset);
+      //}
 
       if (infoMachineSettings.autoReportSDStatus == 1)
         request_M27(infoSettings.m27_refresh_time);  //Check if there is a SD or USB print running.
