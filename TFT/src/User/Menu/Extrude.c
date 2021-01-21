@@ -105,7 +105,7 @@ void menuExtrude(void)
         else
         {
           infoMenu.menu[++infoMenu.cur] = menuHeat;
-        }        
+        }
         break;
 
       case KEY_ICON_5:

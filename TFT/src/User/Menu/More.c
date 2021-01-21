@@ -11,11 +11,11 @@ const MENUITEMS moreItems = {
    {ICON_PERCENTAGE,              LABEL_PERCENTAGE},
    {ICON_FEATURE_SETTINGS,        LABEL_FEATURE_SETTINGS},
    {ICON_MACHINE_SETTINGS,        LABEL_MACHINE_SETTINGS},
-    #ifdef LOAD_UNLOAD_M701_M702
-      {ICON_EXTRUDE,                 LABEL_LOAD_UNLOAD_SHORT},
-    #else
-      {ICON_GCODE,                   LABEL_TERMINAL},
-    #endif
+#ifdef LOAD_UNLOAD_M701_M702
+   {ICON_EXTRUDE,                 LABEL_LOAD_UNLOAD_SHORT},
+#else
+   {ICON_GCODE,                   LABEL_TERMINAL},
+#endif
    {ICON_BACK,                    LABEL_BACK},}
 };
 
