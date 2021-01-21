@@ -282,14 +282,14 @@
     #define STRING_LOAD_STARTED           "Probíhá zavádění filamentu.\nNení možná další akce,\ndokud to nebude dokončeno.\nProsím čekejte."  // translation needed
     #define STRING_UNLOAD_STARTED         "Probíhá vysunování filamentu.\nNení možná další akce,\ndokud to nebude dokončeno.\nProsím čekejte.."  // translation needed
     #define STRING_HEATERS_ON             "Topení jsou stále zapnutá.\nChcete je vypnout?"  // translation needed
-    #define STRING_PRINT_FINISHED         "Print finished"
+    #define STRING_PRINT_FINISHED         "   Print\n   finished"
     #define STRING_MAIN_SCREEN            "Main"
     #define STRING_PREVIOUS_PRINT_DATA    "Brief"
-    #define STRING_PRINT_TIME             "Print Time: %02u:%02u:%02u\n"
-    #define STRING_FILAMENT_LENGTH        "Filament length: %1.2fm\n"
-    #define STRING_FILAMENT_WEIGHT        "Filament weight: %1.2fg\n"
-    #define STRING_FILAMENT_COST          "Filament cost: %1.2f\n"
-    #define STRING_NO_FILAMENT_STATS      "Filament data not available."
+    #define STRING_PRINT_TIME             "Print Time: %02u:%02u:%02u"
+    #define STRING_FILAMENT_LENGTH        "\nFilament length: %1.2fm"
+    #define STRING_FILAMENT_WEIGHT        "\nFilament weight: %1.2fg"
+    #define STRING_FILAMENT_COST          "\nFilament cost: %1.2f"
+    #define STRING_NO_FILAMENT_STATS      "\nFilament data not available."
     #define STRING_CLICK_FOR_MORE         "Click for summary"
     #define STRING_EXT_TEMPLOW            "Hotend temperature is below\nminimum temperature (%d℃)."
     #define STRING_COLD_EXT               "Cold extrusion prevented"
