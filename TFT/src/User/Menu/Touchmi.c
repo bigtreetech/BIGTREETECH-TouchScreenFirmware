@@ -2,23 +2,25 @@
 #include "coordinate.h"
 
 const MENUITEMS touchmiItems = {
-// title
-LABEL_TOUCHMI,
-// icon                         label
- {{ICON_RESET_VALUE,            LABEL_INIT},
-  {ICON_NOZZLE_UP,              LABEL_Z_INC},
-  {ICON_EEPROM_SAVE,            LABEL_SAVE},
-  {ICON_PREHEAT_BOTH,           LABEL_TEST},
-  {ICON_BACKGROUND,             LABEL_BACKGROUND},
-  {ICON_NOZZLE_DOWN,            LABEL_Z_DEC},
-  {ICON_BACKGROUND,          	  LABEL_BACKGROUND},
-  {ICON_BACK,                   LABEL_BACK},}
+  // title
+  LABEL_TOUCHMI,
+  // icon                         label
+  {{ICON_RESET_VALUE,             LABEL_INIT},
+   {ICON_NOZZLE_UP,               LABEL_Z_INC},
+   {ICON_EEPROM_SAVE,             LABEL_SAVE},
+   {ICON_PREHEAT_BOTH,            LABEL_TEST},
+   {ICON_BACKGROUND,              LABEL_BACKGROUND},
+   {ICON_NOZZLE_DOWN,             LABEL_Z_DEC},
+   {ICON_BACKGROUND,          	  LABEL_BACKGROUND},
+   {ICON_BACK,                    LABEL_BACK},}
 };
 
 void menuTouchMi(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
+
   menuDrawPage(&touchmiItems);
+
   while(infoMenu.menu[infoMenu.cur] == menuTouchMi)
   {
     key_num = menuKeyGetValue();

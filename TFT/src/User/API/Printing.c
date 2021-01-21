@@ -2,7 +2,7 @@
 #include "Printing.h"
 
 PRINTING infoPrinting;
-PRINTSUMMARY infoPrintSummary = {"", 0, 0, 0, 0};
+PRINTSUMMARY infoPrintSummary = {.name[0] = '\0', 0, 0, 0, 0};
 
 bool filamentRunoutAlarm;
 
@@ -141,9 +141,9 @@ void sendPrintCodes(uint8_t index)
 
 void initPrintSummary(void)
 {
-  last_E_pos = ((infoFile.source == BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
-  infoPrintSummary = (PRINTSUMMARY){"", 0, 0, 0, 0};
-  hasFilamentLength = false;
+  last_E_pos = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
+  infoPrintSummary = (PRINTSUMMARY){.name[0] = '\0', 0, 0, 0, 0};
+  hasFilamentData = false;
 }
 
 void preparePrintSummary(void)
@@ -151,7 +151,7 @@ void preparePrintSummary(void)
   if (infoMachineSettings.long_filename_support == ENABLED && infoFile.source == BOARD_SD)
    sprintf(infoPrintSummary.name,"%." STRINGIFY(SUMMARY_NAME_LEN) "s", infoFile.Longfile[infoFile.fileIndex]);
   else
-   sprintf(infoPrintSummary.name,"%." STRINGIFY(SUMMARY_NAME_LEN) "s", infoFile.title);
+   sprintf(infoPrintSummary.name,"%." STRINGIFY(SUMMARY_NAME_LEN) "s", getCurGcodeName(infoFile.title));
 
   infoPrintSummary.time = infoPrinting.time;
 
@@ -165,7 +165,7 @@ void preparePrintSummary(void)
 
 void updateFilamentUsed(void)
 {
-  float E_pos = ((infoFile.source == BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
+  float E_pos = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
   if ((E_pos + MAX_RETRACT_LIMIT) < last_E_pos) //Check whether E position reset (G92 E0)
   {
     last_E_pos = 0;
@@ -325,7 +325,11 @@ void abortPrinting(void)
       breakAndContinue();
       breakAndContinue();
       breakAndContinue();
-      request_M524();
+      if (infoMachineSettings.firmwareType == FW_REPRAPFW)
+        request_M0(); // M524 is not supportet in reprap firmware
+      else
+        request_M524();
+
       break;
 
     case TFT_UDISK:
@@ -336,7 +340,7 @@ void abortPrinting(void)
       break;
   }
   heatClearIsWaiting();
-
+  infoFile.printFromTFT = false;
   endPrinting();
   exitPrinting();
 }
@@ -390,7 +394,7 @@ void getGcodeFromFile(void)
   u8      sd_count = 0;
   UINT    br = 0;
 
-  if (isPrinting() == false || infoFile.source == BOARD_SD)  return;
+  if (isPrinting() == false || infoFile.source >= BOARD_SD)  return;
 
   powerFailedCache(infoPrinting.file.fptr);
 

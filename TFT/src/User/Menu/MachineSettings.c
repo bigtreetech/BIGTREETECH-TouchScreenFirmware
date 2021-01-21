@@ -156,32 +156,32 @@ void menuRGBSettings(void)
     key_num = menuKeyGetValue();
     switch(key_num)
     {
-    case KEY_ICON_0: //Red
-      storeCmd("M150 R255 U0 B0 P255\n");
-      break;
+      case KEY_ICON_0: //Red
+        storeCmd("M150 R255 U0 B0 P255\n");
+        break;
 
-    case KEY_ICON_1: //Green
-      storeCmd("M150 R0 U255 B0 P255\n");
-      break;
+      case KEY_ICON_1: //Green
+        storeCmd("M150 R0 U255 B0 P255\n");
+        break;
 
-    case KEY_ICON_2: //Blue
-      storeCmd("M150 R0 U0 B255 P255\n");
-      break;
+      case KEY_ICON_2: //Blue
+        storeCmd("M150 R0 U0 B255 P255\n");
+        break;
 
-    case KEY_ICON_3: //White
-      storeCmd("M150 R255 U255 B255 P255\n");
-      break;
+      case KEY_ICON_3: //White
+        storeCmd("M150 R255 U255 B255 P255\n");
+        break;
 
-    case KEY_ICON_4: //Turn Off
-      storeCmd("M150 R0 U0 B0 P0\n");
-      break;
+      case KEY_ICON_4: //Turn Off
+        storeCmd("M150 R0 U0 B0 P0\n");
+        break;
 
-    case KEY_ICON_7:
-      infoMenu.cur--;
-      break;
+      case KEY_ICON_7:
+        infoMenu.cur--;
+        break;
 
-    default:
-      break;
+      default:
+        break;
     }
     loopProcess();
   }
@@ -215,39 +215,39 @@ void menuEepromSettings(void)
     key_num = menuKeyGetValue();
     switch(key_num)
     {
-    case KEY_ICON_0:
-      // save to EEPROM
-      if (infoMachineSettings.EEPROM == 1)
-      {
-        setDialogText(eepromSettingsItems.title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
-        showDialog(DIALOG_TYPE_QUESTION, saveEepromSettings, NULL, NULL);
-      }
-      break;
+      case KEY_ICON_0:
+        // save to EEPROM
+        if (infoMachineSettings.EEPROM == 1)
+        {
+          setDialogText(eepromSettingsItems.title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
+          showDialog(DIALOG_TYPE_QUESTION, saveEepromSettings, NULL, NULL);
+        }
+        break;
 
-    case KEY_ICON_1:
-      // restore from EEPROM
-      if (infoMachineSettings.EEPROM == 1)
-      {
-        setDialogText(eepromSettingsItems.title.index, LABEL_EEPROM_RESTORE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
-        showDialog(DIALOG_TYPE_QUESTION, restoreEepromSettings, NULL, NULL);
-      }
-      break;
+      case KEY_ICON_1:
+        // restore from EEPROM
+        if (infoMachineSettings.EEPROM == 1)
+        {
+          setDialogText(eepromSettingsItems.title.index, LABEL_EEPROM_RESTORE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
+          showDialog(DIALOG_TYPE_QUESTION, restoreEepromSettings, NULL, NULL);
+        }
+        break;
 
-    case KEY_ICON_2:
-      // reset EEPROM
-      if (infoMachineSettings.EEPROM == 1)
-      {
-        setDialogText(eepromSettingsItems.title.index, LABEL_EEPROM_RESET_INFO, LABEL_CONFIRM, LABEL_CANCEL);
-        showDialog(DIALOG_TYPE_QUESTION, resetEepromSettings, NULL, NULL);
-      }
-      break;
+      case KEY_ICON_2:
+        // reset EEPROM
+        if (infoMachineSettings.EEPROM == 1)
+        {
+          setDialogText(eepromSettingsItems.title.index, LABEL_EEPROM_RESET_INFO, LABEL_CONFIRM, LABEL_CANCEL);
+          showDialog(DIALOG_TYPE_QUESTION, resetEepromSettings, NULL, NULL);
+        }
+        break;
 
-    case KEY_ICON_7:
-      infoMenu.cur--;
-      break;
+      case KEY_ICON_7:
+        infoMenu.cur--;
+        break;
 
-    default:
-      break;
+      default:
+        break;
     }
 
     loopProcess();
@@ -314,6 +314,7 @@ void menuMachineSettings(void)
         infoMenu.menu[++infoMenu.cur] = menuEepromSettings;
         break;
     #endif
+
     case KEY_ICON_6:
       if (infoMachineSettings.caseLightsBrightness == ENABLED)
         infoMenu.menu[++infoMenu.cur] = menuCaseLight;
