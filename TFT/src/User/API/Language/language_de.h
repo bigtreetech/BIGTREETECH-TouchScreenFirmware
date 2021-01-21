@@ -50,11 +50,12 @@
     #define STRING_ABL_SLOT_EEPROM        "Slot für den nächsten\nNeustart merken?(Im EEPROM speichern)"
     #define STRING_ABL_Z                  "Z Fade"
     #define STRING_BLTOUCH                "BLTouch"
-    #define STRING_BLTOUCH_TEST           "testen"
-    #define STRING_BLTOUCH_DEPLOY         "ausfahren"
-    #define STRING_BLTOUCH_STOW           "einziehen"
-    #define STRING_BLTOUCH_REPEAT         "widerholen"
-    #define STRING_Z_OFFSET               "Delta Z"
+    #define STRING_TEST                   "testen"
+    #define STRING_DEPLOY                 "ausfahren"
+    #define STRING_STOW                   "einziehen"
+    #define STRING_REPEAT                 "widerholen"
+    #define STRING_P_OFFSET               "Delta P"
+    #define STRING_H_OFFSET               "Delta H"
     #define STRING_PROBE_OFFSET           "Delta Fühler"
     #define STRING_HOME_OFFSET            "Home Offset"
     #define STRING_CONFIRMATION           "Sicher?"
@@ -282,20 +283,21 @@
     #define STRING_LOAD_STARTED           "Loading filament.\nPlease wait for the process\nto complete."  // translation needed
     #define STRING_UNLOAD_STARTED         "Unloading filament.\nPlease wait for the process\nto complete."  // translation needed
     #define STRING_HEATERS_ON             "Some heaters are still ON.\nDo you want to stop them?"  // translation needed
-    #define STRING_PRINT_FINISHED         "   Printing\n   finished."  // keep it short and in this format!
+    #define STRING_PRINT_FINISHED         "   Print\n   finished"
     #define STRING_MAIN_SCREEN            "Main"
     #define STRING_PREVIOUS_PRINT_DATA    "Brief"
-    #define STRING_FILE_NAME              "File: "
-    #define STRING_PRINT_TIME             "Print Time: "
-    #define STRING_FILAMENT_LENGTH        "Filament length: %1.2fm"
-    #define STRING_FILAMENT_WEIGHT        "Filament weight: %1.2fg"
-    #define STRING_FILAMENT_COST          "Filament cost: %1.2f"
-    #define STRING_NO_FILAMENT_STATS      "No filament statistics."
-    #define STRING_CLICK_FOR_MORE         "Click for more."
+    #define STRING_PRINT_TIME             "Print Time: %02u:%02u:%02u"
+    #define STRING_FILAMENT_LENGTH        "\nFilament length: %1.2fm"
+    #define STRING_FILAMENT_WEIGHT        "\nFilament weight: %1.2fg"
+    #define STRING_FILAMENT_COST          "\nFilament cost: %1.2f"
+    #define STRING_NO_FILAMENT_STATS      "\nFilament data not available."
+    #define STRING_CLICK_FOR_MORE         "Click for summary"
     #define STRING_EXT_TEMPLOW            "Hotend temperature is below\nminimum temperature (%d℃)."
     #define STRING_COLD_EXT               "Cold extrusion prevented"
     #define STRING_HEAT_HOTEND            "Heat hotend to %d℃?"
     #define STRING_Z_ALIGN                "Z Align"
+    #define STRING_INIT                   "Init"
+    #define STRING_TOUCHMI                "TouchMi"
 
 
 #endif

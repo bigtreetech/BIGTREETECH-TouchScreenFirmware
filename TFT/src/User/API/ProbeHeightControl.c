@@ -1,9 +1,10 @@
 #include "ProbeHeightControl.h"
 #include "includes.h"
 
+static uint32_t nextQueryTime = 0;
+#define PROBE_UPDATE_DELAY 200  // 1 seconds is 1000
+
 static bool curSoftwareEndstops = true;
-static u32 nextProbeTime = 0;
-static u32 updateTime = 200;  // 1 seconds is 1000
 
 /* Enable probe height
  * Temporary disable software endstops
@@ -12,15 +13,13 @@ void probeHeightEnable(void)
 {
   curSoftwareEndstops = infoMachineSettings.softwareEndstops;
 
-  if (curSoftwareEndstops)      // if software endstops is enabled, disable it temporary
-    mustStoreCmd("M211 S0\n");  // disable software endstops to move nozzle minus Zero (Z0) if necessary
-
-//  ifdef  RepRapFirmware
-  if (infoMachineSettings.firmwareType == FW_REPRAPFW)
+  if (curSoftwareEndstops)  // if software endstops is enabled, disable it temporary
   {
-    mustStoreCmd("M564 S0 H0\n");
+    if (infoMachineSettings.firmwareType == FW_REPRAPFW)
+      mustStoreCmd("M564 S0 H0\n");
+    else
+      mustStoreCmd("M211 S0\n");  // disable software endstops to move nozzle minus Zero (Z0) if necessary
   }
-//  endif
 }
 
 /* Disable probe height
@@ -28,15 +27,13 @@ void probeHeightEnable(void)
  */
 void probeHeightDisable(void)
 {
-  if (curSoftwareEndstops)      // if software endstops was originally enabled, enable it again
-    mustStoreCmd("M211 S1\n");  // enable software endstops
-
-  //ifdef RepRapFirmware
-  if (infoMachineSettings.firmwareType == FW_REPRAPFW)
+  if (curSoftwareEndstops)  // if software endstops was originally enabled, enable it again
   {
-    mustStoreCmd("M564 S1 H1\n");
+    if (infoMachineSettings.firmwareType == FW_REPRAPFW)
+      mustStoreCmd("M564 S1 H1\n");
+    else
+      mustStoreCmd("M211 S1\n");  // enable software endstops
   }
-  //endif
 }
 
 /* Start probe height */
@@ -55,6 +52,18 @@ void probeHeightStop(void)
   mustStoreCmd("G90\n");  // set absolute position mode
 }
 
+/* Set probe height to relative position mode */
+void probeHeightRelative(void)
+{
+  mustStoreCmd("G91\n");                      // set relative position mode
+}
+
+/* Set probe height to absolute position mode */
+void probeHeightAbsolute(void)
+{
+  mustStoreCmd("G90\n");                      // set absolute position mode
+}
+
 /* Change probe height */
 void probeHeightMove(float unit, int8_t direction)
 {
@@ -66,9 +75,9 @@ void probeHeightMove(float unit, int8_t direction)
 /* Query for new coordinates */
 void probeHeightQueryCoord(void)
 {
-  if (OS_GetTimeMs() > nextProbeTime)
+  if (OS_GetTimeMs() > nextQueryTime)
   {
     coordinateQuery();
-    nextProbeTime = OS_GetTimeMs() + updateTime;
+    nextQueryTime = OS_GetTimeMs() + PROBE_UPDATE_DELAY;
   }
 }

@@ -1,11 +1,11 @@
-#ifndef _PROBE_OFFSET_H_
-#define _PROBE_OFFSET_H_
+#ifndef _TOUCHMI_H_
+#define _TOUCHMI_H_
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void menuProbeOffset(void);
+void menuTouchMi(void);
 
 #ifdef __cplusplus
 }

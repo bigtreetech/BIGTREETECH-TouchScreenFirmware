@@ -23,6 +23,7 @@ const char *const parameter_Cmd[PARAMETERS_COUNT][STEPPER_COUNT] = {
   {"M420 S%.0f\n", "M420 Z%.2f\n",            NULL,              NULL,                       NULL}, //ABL State + Z Fade
   {"M218 T1 X%.2f\nM503 S0\n", "M218 T1 Y%.2f\nM503 S0\n", "M218 T1 Z%.2f\nM503 S0\n", NULL, NULL}, //Offset Tools
   {"M913 X%.0f\n",  "M913 Y%.0f\n", "M913 Z%.0f\n",    "M913 E%.0f\n", "M913 T1 E%.0f\nM503 S0\n"}, //TMC Hybrid Threshold Speed
+  {"G29 S4 Z%.2f\n",          NULL,           NULL,              NULL,                       NULL}, //MBL Z offset
 };
 
 const VAL_TYPE parameter_val_type[PARAMETERS_COUNT][STEPPER_COUNT] = {
@@ -43,6 +44,7 @@ const VAL_TYPE parameter_val_type[PARAMETERS_COUNT][STEPPER_COUNT] = {
   {VAL_TYPE_INT,        VAL_TYPE_FLOAT},                                                                  //ABL State + Z Fade
   {VAL_TYPE_NEG_FLOAT,  VAL_TYPE_NEG_FLOAT, VAL_TYPE_NEG_FLOAT},                                          //Offset Tools
   {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,         VAL_TYPE_INT,         VAL_TYPE_INT},    //TMC Hybrid Threshold Speed
+  {VAL_TYPE_NEG_FLOAT},                                                                                   //MBL Z offset
 };
 
 //Extra teppers current gcode command
@@ -102,6 +104,8 @@ float getParameter(PARAMETER_NAME name, u8 index)
       return infoParameters.OffsetTool[index];
     case P_HYBRID_THRESHOLD:
       return infoParameters.HybridThreshold[index];
+    case P_MBL_Z_OFFSET:
+      return infoParameters.MblZOffset[index];
     default:
       return 0.0f;
   }
@@ -164,6 +168,9 @@ void setParameter(PARAMETER_NAME name, u8 index, float val)
     case P_HYBRID_THRESHOLD:
       infoParameters.HybridThreshold[index] = val;
       break;
+    case P_MBL_Z_OFFSET:
+      infoParameters.MblZOffset[index] = val;
+      break;
     default:
       break;
   }
@@ -208,11 +215,13 @@ void saveEepromSettings(void)
   if(infoMachineSettings.EEPROM == 1)
     mustStoreCmd("M500\n");
 }
+
 void restoreEepromSettings(void)
 {
   if(infoMachineSettings.EEPROM == 1)
     mustStoreScript("M501\nM503 S0\n");
 }
+
 void resetEepromSettings(void)
 {
   if(infoMachineSettings.EEPROM == 1)

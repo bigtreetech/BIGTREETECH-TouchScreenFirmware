@@ -8,14 +8,51 @@ static u8 curUnit_index = 0;
 u8 mblPoint = 0;
 bool mblRunning = false;
 
-/* called by parseAck() to notify MBL process status */
-void mblUpdateStatus(bool succeeded)
+/* Start MBL */
+static inline void mblStart(void)
+{
+  mblRunning = true;
+  mblPoint = 0;
+
+  probeHeightEnable();                                     // temporary disable software endstops
+
+  // MBL gcode sequence start
+  mustStoreCmd("G29 S1\n");                                // home and move to first point for Z height adjustment
+
+  probeHeightStart(PROBE_HEIGHT_INITIAL_HEIGHT);           // lower nozzle to provided absolute Z point
+  probeHeightRelative();                                   // set relative position mode
+}
+
+/* Stop MBL */
+static inline void mblStop(void)
 {
   mblRunning = false;
 
-  probeHeightStop();                                       // raise nozzle
+  if (infoMachineSettings.zProbe == ENABLED)
+    probeHeightStop();                                     // raise nozzle
+
+  probeHeightAbsolute();                                   // set absolute position mode
 
   probeHeightDisable();                                    // restore original software endstops state
+}
+
+/* Abort MBL */
+static inline void mblAbort(void)
+{
+  // MBL gcode sequence stop
+  mustStoreCmd("G29 S5\n");                                // reset and disable mesh
+
+  mblStop();
+
+  BUZZER_PLAY(sound_error);
+
+  popupReminder(DIALOG_TYPE_ERROR, LABEL_MBL_SETTINGS, LABEL_PROCESS_ABORTED);
+}
+
+/* called by parseAck() to notify MBL process status */
+void mblUpdateStatus(bool succeeded)
+{
+  mblStop();
 
   if (succeeded)                                           // if bed leveling process successfully terminated, allow to save to EEPROM
   {
@@ -51,37 +88,6 @@ void mblNotifyError(void)
   sprintf(&tempMsg[strlen(tempMsg)], " %s", textSelect(LABEL_OFF));
 
   addToast(DIALOG_TYPE_ERROR, tempMsg);
-}
-
-/* Start MBL */
-static inline void mblStart(void)
-{
-  mblRunning = true;
-  mblPoint = 0;
-
-  probeHeightEnable();                                     // temporary disable software endstops
-
-  // MBL gcode sequence start
-  mustStoreCmd("G29 S1\n");                                // home and move to first point for Z height adjustment
-
-  probeHeightStart(PROBE_HEIGHT_INITIAL_HEIGHT);           // lower nozzle to provided absolute Z point
-}
-
-/* Stop MBL */
-static inline void mblStop(void)
-{
-  mblRunning = false;
-
-  // MBL gcode sequence stop
-  mustStoreCmd("G29 S5\n");                                // reset and disable mesh
-
-  probeHeightStop();                                       // raise nozzle
-
-  probeHeightDisable();                                    // restore original software endstops state
-
-  BUZZER_PLAY(sound_error);
-
-  popupReminder(DIALOG_TYPE_ERROR, LABEL_MBL_SETTINGS, LABEL_PROCESS_ABORTED);
 }
 
 void mblDrawHeader(u8 *point)
@@ -133,7 +139,7 @@ void menuMBL(void)
      {ICON_BACK,                    LABEL_BACK},}
   };
 
-  #ifdef FRIENDLY_PROBE_OFFSET_LANGUAGE
+  #ifdef FRIENDLY_Z_OFFSET_LANGUAGE
     mblItems.items[0].icon = ICON_NOZZLE_DOWN;
     mblItems.items[0].label.index = LABEL_DOWN;
     mblItems.items[3].icon = ICON_NOZZLE_UP;
@@ -231,7 +237,7 @@ void menuMBL(void)
 
       case KEY_ICON_7:
         if (mblRunning)
-          mblStop();
+          mblAbort();
 
         infoMenu.cur--;
         break;

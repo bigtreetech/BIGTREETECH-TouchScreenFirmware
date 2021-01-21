@@ -110,7 +110,8 @@
 #include "MBL.h"
 #include "ABL.h"
 #include "BLTouch.h"
-#include "ProbeOffset.h"
+#include "Touchmi.h"
+#include "ZOffset.h"
 #include "PowerFailed.h"
 
 #include "UnifiedMove.h"
