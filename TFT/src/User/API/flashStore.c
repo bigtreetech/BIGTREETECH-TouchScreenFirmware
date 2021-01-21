@@ -3,7 +3,7 @@
 #include "STM32_Flash.h"
 
 #define TSC_SIGN  0x20200512 // DO NOT MODIFY
-#define PARA_SIGN 0x20210721 // (YYYYMMDD) If a new setting parameter is added,
+#define PARA_SIGN 0x20210120 // (YYYYMMDD) If a new setting parameter is added,
                              // modify here and initialize the initial value
                              // in the "infoSettingsReset()" function
 enum
@@ -62,7 +62,7 @@ void readStoredPara(void)
   sign = byteToWord(data + (index += 4), 4);
   if (sign != PARA_SIGN)  // If the settings parameter is illegal, reset settings parameter
   {
-    paraStatus |= PARA_WAS_RESTORED;
+    paraStatus = PARA_WAS_RESTORED;
     infoSettingsReset();
   }
   else
