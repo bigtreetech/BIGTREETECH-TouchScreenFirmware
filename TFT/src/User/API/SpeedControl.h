@@ -13,6 +13,7 @@ extern "C" {
 #include <stdbool.h>
 #include "includes.h"
 
+void resetSpeedFlow(void);
 void speedSetSendWaiting(uint8_t tool, bool isWaiting);
 void speedQuerySetWait(bool wait);
 void speedSetCurPercent(uint8_t tool, uint16_t per);

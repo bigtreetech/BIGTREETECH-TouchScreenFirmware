@@ -13,6 +13,22 @@ static uint32_t nextSpeedTime = 0;
 
 #define NEXT_SPEED_WAIT 500  // 1 second is 1000
 
+void resetSpeedFlow(void)
+{
+  uint8_t i;
+  uint8_t j;
+  for (i = 0; i < SPEED_NUM; i++)
+  {
+    setPercent[i] = 100;
+    lastSetPercent[i] = 100;
+    curPercent[i] = 100;
+    for (j = 1; j <= infoSettings.ext_count; j++)
+    {
+      mustStoreCmd("%s S%d D%d\n",speedCmd[i], 100, j);
+    }
+  }
+}
+
 void speedSetCurPercent(uint8_t tool, uint16_t per)
 {
   curPercent[tool] = per;
