@@ -59,21 +59,21 @@ void clearRequestCommandInfo(void)
 */
 bool request_M21(void)
 {
- const char * sdString = (infoMachineSettings.firmwareType == FW_REPRAPFW) ? "SDHC card " : "SD card ";
+  const char * sdString = (infoMachineSettings.firmwareType == FW_REPRAPFW) ? "SDHC card " : "SD card ";
 
- resetRequestCommandInfo(sdString,             // The magic to identify the start
-                         "ok",                 // The magic to identify the stop
-                         "No SD card",         // The first magic to identify the error response
-                         "SD init fail",       // The second error magic
-                         "volume.init failed"  // The third error magic
- );
- mustStoreCmd("M21\n");
+  resetRequestCommandInfo(sdString,               // The magic to identify the start
+                          "ok",                   // The magic to identify the stop
+                          "No SD card",           // The first magic to identify the error response
+                          "SD init fail",         // The second error magic
+                          "volume.init failed");  // The third error magic
 
- // Wait for response
- while (!requestCommandInfo.done) { loopProcess(); }
- clearRequestCommandInfo();
- // Check reponse
- return !requestCommandInfo.inError;
+  mustStoreCmd("M21\n");
+
+  // Wait for response
+  while (!requestCommandInfo.done) { loopProcess(); }
+  clearRequestCommandInfo();
+  // Check reponse
+  return !requestCommandInfo.inError;
 }
 
 char *request_M20(void)
@@ -136,6 +136,7 @@ char *request_M33(char *filename)
 long request_M23_M36(char *filename)
 {
   uint8_t offset = 5;
+  const char *sizeTag;
   if (infoMachineSettings.firmwareType != FW_REPRAPFW) // all other firmwares except reprap firmware
   {
     resetRequestCommandInfo("File opened",    // The magic to identify the start
@@ -143,7 +144,9 @@ long request_M23_M36(char *filename)
                             "open failed",    // The first magic to identify the error response
                             NULL,             // The second error magic
                             NULL);            // The third error magic
+
     mustStoreCmd("M23 %s\n", filename);
+    sizeTag = "Size:";
   }
   else // reprap firmware
   {
@@ -152,8 +155,10 @@ long request_M23_M36(char *filename)
                             "Error:",    // The first magic to identify the error response
                             NULL,        // The second error magic
                             NULL);       // The third error magic
+
     mustStoreCmd("M36 %s\n", filename);
     offset = 6;
+    sizeTag = "size\":"; // reprap firmware reports size JSON 
   }
 
   // Wait for response
@@ -167,7 +172,7 @@ long request_M23_M36(char *filename)
     mustStoreCmd("M23 %s\n", filename); //send M23 for reprap firmware
   // Find file size and report its.
   char *ptr;
-  long size = strtol(strstr(requestCommandInfo.cmd_rev_buf, "Size:") + offset, &ptr, 10);
+  long size = strtol(strstr(requestCommandInfo.cmd_rev_buf, sizeTag) + offset, &ptr, 10);
   clearRequestCommandInfo();
   return size;
 }
@@ -212,5 +217,11 @@ bool request_M27(int seconds)
   return true;
 }
 
-
-
+/**
+ * Stop or Unconditional stop in reprap firmware
+ **/
+bool request_M0(void)
+{
+  mustStoreCmd("M0 \n");
+  return true;
+}

@@ -324,7 +324,6 @@ void parseACK(void)
       if (ack_seen(heaterID[CHAMBER])) infoSettings.chamber_en = ENABLED;
       updateNextHeatCheckTime();
 
-      //ifdef RepRapFirmware
       if (!ack_seen("@"))  //It's RepRapFirmware
       {
         infoMachineSettings.firmwareType = FW_REPRAPFW;
@@ -333,7 +332,6 @@ void parseACK(void)
         storeCmd("M92\n");
         storeCmd("M115\n");
       }
-      //endif
 
       if (infoMachineSettings.firmwareType == FW_NOT_DETECTED) // if never connected to the printer since boot
       {
@@ -503,7 +501,7 @@ void parseACK(void)
     //parse and store stepper steps/mm values
       else if (ack_seen("M92 X"))
       {
-                          setParameter(P_STEPS_PER_MM, X_STEPPER, ack_value());
+                           setParameter(P_STEPS_PER_MM, X_STEPPER, ack_value());
         if (ack_seen("Y")) setParameter(P_STEPS_PER_MM, Y_STEPPER, ack_value());
         if (ack_seen("Z")) setParameter(P_STEPS_PER_MM, Z_STEPPER, ack_value());
         if (ack_seen("E")) setParameter(P_STEPS_PER_MM, E_STEPPER, ack_value());
@@ -528,7 +526,7 @@ void parseACK(void)
     //parse and store Max Feed Rate values
       else if (ack_seen("M203 X"))
       {
-                          setParameter(P_MAX_FEED_RATE, X_STEPPER, ack_value());
+                           setParameter(P_MAX_FEED_RATE, X_STEPPER, ack_value());
         if (ack_seen("Y")) setParameter(P_MAX_FEED_RATE, Y_STEPPER, ack_value());
         if (ack_seen("Z")) setParameter(P_MAX_FEED_RATE, Z_STEPPER, ack_value());
         if (ack_seen("E")) setParameter(P_MAX_FEED_RATE, E_STEPPER, ack_value());
@@ -545,7 +543,7 @@ void parseACK(void)
     //parse and store Max Acceleration values
       else if (ack_seen("M201 X"))
       {
-                          setParameter(P_MAX_ACCELERATION, X_STEPPER, ack_value());
+                           setParameter(P_MAX_ACCELERATION, X_STEPPER, ack_value());
         if (ack_seen("Y")) setParameter(P_MAX_ACCELERATION, Y_STEPPER, ack_value());
         if (ack_seen("Z")) setParameter(P_MAX_ACCELERATION, Z_STEPPER, ack_value());
         if (ack_seen("E")) setParameter(P_MAX_ACCELERATION, E_STEPPER, ack_value());
@@ -562,7 +560,7 @@ void parseACK(void)
     //parse and store Acceleration values
       else if (ack_seen("M204 P"))
       {
-                          setParameter(P_ACCELERATION, 0, ack_value());
+                           setParameter(P_ACCELERATION, 0, ack_value());
         if (ack_seen("R")) setParameter(P_ACCELERATION, 1, ack_value());
         if (ack_seen("T")) setParameter(P_ACCELERATION, 2, ack_value());
       }
@@ -578,14 +576,14 @@ void parseACK(void)
     //parse and store Home Offset values
       else if (ack_seen("M206 X"))
       {
-                          setParameter(P_HOME_OFFSET, X_STEPPER, ack_value());
+                           setParameter(P_HOME_OFFSET, X_STEPPER, ack_value());
         if (ack_seen("Y")) setParameter(P_HOME_OFFSET, Y_STEPPER, ack_value());
         if (ack_seen("Z")) setParameter(P_HOME_OFFSET, Z_STEPPER, ack_value());
       }
     //parse and store FW retraction values
       else if (ack_seen("M207 S"))
       {
-                          setParameter(P_FWRETRACT, 0, ack_value());
+                           setParameter(P_FWRETRACT, 0, ack_value());
         if (ack_seen("W")) setParameter(P_FWRETRACT, 1, ack_value());
         if (ack_seen("F")) setParameter(P_FWRETRACT, 2, ack_value());
         if (ack_seen("Z")) setParameter(P_FWRETRACT, 3, ack_value());
@@ -593,7 +591,7 @@ void parseACK(void)
     //parse and store FW recover values
       else if (ack_seen("M208 S"))
       {
-                          setParameter(P_FWRECOVER, 0, ack_value());
+                           setParameter(P_FWRECOVER, 0, ack_value());
         if (ack_seen("W")) setParameter(P_FWRECOVER, 1, ack_value());
         if (ack_seen("F")) setParameter(P_FWRECOVER, 2, ack_value());
         if (ack_seen("R")) setParameter(P_FWRECOVER, 3, ack_value());
@@ -619,14 +617,14 @@ void parseACK(void)
     //parse and store Offset 2nd Nozzle
       else if (ack_seen("M218 T1 X"))
       {
-                          setParameter(P_OFFSET_TOOL, 0, ack_value());
+                           setParameter(P_OFFSET_TOOL, 0, ack_value());
         if (ack_seen("Y")) setParameter(P_OFFSET_TOOL, 1, ack_value());
         if (ack_seen("Z")) setParameter(P_OFFSET_TOOL, 2, ack_value());
       }
     //parse and store Probe Offset values
       else if (ack_seen("M851 X"))
       {
-                          setParameter(P_PROBE_OFFSET, X_STEPPER, ack_value());
+                           setParameter(P_PROBE_OFFSET, X_STEPPER, ack_value());
         if (ack_seen("Y")) setParameter(P_PROBE_OFFSET, Y_STEPPER, ack_value());
         if (ack_seen("Z")) setParameter(P_PROBE_OFFSET, Z_STEPPER, ack_value());
       }
@@ -646,7 +644,7 @@ void parseACK(void)
       //parse and store stepper driver current values
       else if (ack_seen("M906 X"))
       {
-                          setParameter(P_CURRENT, X_STEPPER, ack_value());
+                           setParameter(P_CURRENT, X_STEPPER, ack_value());
         if (ack_seen("Y")) setParameter(P_CURRENT, Y_STEPPER, ack_value());
         if (ack_seen("Z")) setParameter(P_CURRENT, Z_STEPPER, ack_value());
       }
@@ -668,14 +666,14 @@ void parseACK(void)
       //parse and store TMC Bump sensitivity values
       else if (ack_seen("M914 X"))
       {
-                          setParameter(P_BUMPSENSITIVITY, X_STEPPER, ack_value());
+                           setParameter(P_BUMPSENSITIVITY, X_STEPPER, ack_value());
         if (ack_seen("Y")) setParameter(P_BUMPSENSITIVITY, Y_STEPPER, ack_value());
         if (ack_seen("Z")) setParameter(P_BUMPSENSITIVITY, Z_STEPPER, ack_value());
       }
     // parse and store TMC Hybrid Threshold Speed
       else if (ack_seen("M913 X"))
       {
-                          setParameter(P_HYBRID_THRESHOLD, X_STEPPER, ack_value());
+                           setParameter(P_HYBRID_THRESHOLD, X_STEPPER, ack_value());
         if (ack_seen("Y")) setParameter(P_HYBRID_THRESHOLD, Y_STEPPER, ack_value());
         if (ack_seen("Z")) setParameter(P_HYBRID_THRESHOLD, Z_STEPPER, ack_value());
         if (ack_seen("E")) setParameter(P_HYBRID_THRESHOLD, E_STEPPER, ack_value());
@@ -870,14 +868,23 @@ void parseACK(void)
           showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
         }
       }
+    // Parse and store Probe Z offset value
       else if (ack_seen("Probe Offset"))
       {
         if (ack_seen("Z:") || (ack_seen("Z")))
         {
-          setParameter(P_PROBE_OFFSET,Z_STEPPER, ack_value());
+          setParameter(P_PROBE_OFFSET, Z_STEPPER, ack_value());
         }
       }
-      // parse and store feed rate percentage
+    // Parse and store MBL Z offset value
+      else if (ack_seen("G29 S4"))
+      {
+        if (ack_seen("Z:") || (ack_seen("Z")))
+        {
+          setParameter(P_MBL_Z_OFFSET, 0, ack_value());
+        }
+      }
+    // parse and store feed rate percentage
       else if ((infoMachineSettings.firmwareType == FW_REPRAPFW && ack_seen("factor: ")) ||
                ack_seen("FR:"))
       {

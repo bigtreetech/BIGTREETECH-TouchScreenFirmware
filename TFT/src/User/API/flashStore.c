@@ -14,6 +14,7 @@ enum
 
 extern int32_t TSC_Para[7];
 extern SETTINGS infoSettings;
+
 uint8_t paraStatus = 0;
 
 void wordToByte(u32 word, u8 *bytes)
