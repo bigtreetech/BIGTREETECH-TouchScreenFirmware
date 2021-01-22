@@ -419,10 +419,21 @@
  */
 #define TERMINAL_KEYBOARD_COLOR_LAYOUT 0  // Default: 0
 
-// QWERTY keyboard layout
-// Enable QWERTY keyboard layout in Terminal menu (Only for TFT70 V3.0)
-#define TERMINAL_KEYBOARD_QWERTY_LAYOUT
+//
+// QWERTY/QWRRTZ keyboard layout
+// 
 
+/**
+ * keyboard layout for Terminal Keyboard
+ * 
+ * Options:  [0: Default, 1: Querty, 2: Quertz, 4: Azerty]
+ * Default: The keyboard has an alphabetically order
+ * Querty: The typically keyboard Layout for english (Only for TFT70 V3.0)
+ * Quertz: The typically keyboard Layout for german (Only for TFT70 V3.0)
+ * Azerty: The typically keyboard Layout for french (Only for TFT70 V3.0)
+ * 
+ */
+#define TERMINAL_KEYBOARD_LAYOUT 1  // Default: 0
 
 //===========================================================================
 //=========================== Other Settings ================================
