@@ -325,7 +325,11 @@ void abortPrinting(void)
       breakAndContinue();
       breakAndContinue();
       breakAndContinue();
-      request_M524();
+      if (infoMachineSettings.firmwareType == FW_REPRAPFW)
+        request_M0(); // M524 is not supportet in reprap firmware
+      else
+        request_M524();
+
       break;
 
     case TFT_UDISK:

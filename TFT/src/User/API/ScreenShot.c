@@ -6,28 +6,28 @@
 /* BMP file header 14byte */
 typedef struct __attribute__((__packed__))
 {
-	uint16_t bfType;           /* Must be "BM" (0x4D42), means .BMP file*/
-	uint32_t bfSize;           /* Bmp file sizes (byte) */
-	uint16_t bfReserved1;       /* Reserved 0, must be 0 */
-	uint16_t bfReserved2;       /* Reserved 1, must be 0 */
-	uint32_t bfoffBits;        /* The offset of the color pixel value (byte) */
+  uint16_t bfType;           // Must be "BM" (0x4D42), means .BMP file
+  uint32_t bfSize;           // Bmp file sizes (byte)
+  uint16_t bfReserved1;      // Reserved 0, must be 0
+  uint16_t bfReserved2;      // Reserved 1, must be 0
+  uint32_t bfoffBits;        // The offset of the color pixel value (byte)
 } BMP_FILEHEADER;
 
 /* BMP info header 40byte */
 typedef struct __attribute__((__packed__))
 {
-	uint32_t biSize;           /* Size of BMP_INFOHEADER */
-	uint32_t biWidth;          /* Bmp file width (pixel) */
-	uint32_t biHeight;         /* Bmp file height (pixel) */
-	uint16_t biPlanes;         /* Must be 1 */
-	uint16_t biBitCount;       /* Bit depth, 1/4/8/16/24/32... */
-	uint32_t biCompress;       /* Compression algorithm, 0 = Uncompressed */
-	uint32_t biSizeImage;      /* Image size(byte), can set to 0 when bmp Uncompressed */
-	uint32_t biXPelsPerMeter;  /* Horizontal resolution(pixels/meter) */
-	uint32_t biYPelsPerMeter;  /* Vertical resolution(pixels/meter) */
-	uint32_t biClrUsed;        /* Image used color number */
-	uint32_t biClrImportant;   /* Important color number */
-}BMP_INFOHEADER;  
+  uint32_t biSize;           // Size of BMP_INFOHEADER
+  uint32_t biWidth;          // Bmp file width (pixel)
+  uint32_t biHeight;         // Bmp file height (pixel)
+  uint16_t biPlanes;         // Must be 1
+  uint16_t biBitCount;       // Bit depth, 1/4/8/16/24/32...
+  uint32_t biCompress;       // Compression algorithm, 0 = Uncompressed
+  uint32_t biSizeImage;      // Image size(byte), can set to 0 when bmp Uncompressed
+  uint32_t biXPelsPerMeter;  // Horizontal resolution(pixels/meter)
+  uint32_t biYPelsPerMeter;  // Vertical resolution(pixels/meter)
+  uint32_t biClrUsed;        // Image used color number
+  uint32_t biClrImportant;   // Important color number
+} BMP_INFOHEADER;
 
 #define ALIGNMENT_4BYTE(n) (((n + 3) >> 2) << 2) //
 
@@ -39,7 +39,7 @@ bool screenShotBMP(char *bmp)
     .bfReserved1 = 0,
     .bfReserved2 = 0,
     .bfoffBits = sizeof(BMP_FILEHEADER) + sizeof(BMP_INFOHEADER),
-    };
+  };
 
   BMP_INFOHEADER bmp_info = {
     .biSize =  sizeof(BMP_INFOHEADER), // 40byte
@@ -53,12 +53,12 @@ bool screenShotBMP(char *bmp)
     .biYPelsPerMeter = 0x1EC2,
     .biClrUsed = 0,
     .biClrImportant = 0,
-    };
+  };
 
   FIL   bmpFile;
   UINT  mybw;
 
-  if(f_open(&bmpFile, bmp, FA_CREATE_NEW | FA_WRITE) != FR_OK)
+  if (f_open(&bmpFile, bmp, FA_CREATE_NEW | FA_WRITE) != FR_OK)
   {
     return false;  // Create failed, filename maybe existed.
   }
@@ -66,10 +66,10 @@ bool screenShotBMP(char *bmp)
   f_write(&bmpFile, &bmp_file, sizeof(BMP_FILEHEADER), &mybw);
   f_write(&bmpFile, &bmp_info, sizeof(BMP_INFOHEADER), &mybw);
 
-  for(uint16_t y = 0; y < LCD_HEIGHT; y++)
+  for (uint16_t y = 0; y < LCD_HEIGHT; y++)
   {
     f_lseek(&bmpFile, bmp_file.bfoffBits + (LCD_HEIGHT - y - 1) * (bmp_info.biWidth * bmp_info.biBitCount / 8));
-    for(uint16_t x = 0; x < LCD_WIDTH; x++)
+    for (uint16_t x = 0; x < LCD_WIDTH; x++)
     {
       uint32_t c = LCD_ReadPixel_24Bit(x, y);
       f_write(&bmpFile, (char *)&c, 3, &mybw);
@@ -99,8 +99,8 @@ void loopScreenShot(void)
   #endif
 
   if (SCREEN_SHOT_TRIGGERED())
-  {    
-    if(!mountSDCard())
+  {
+    if (!mountSDCard())
       return;
 
     char screenShotFileName[FF_LFN_BUF] = "ScreenShot";
@@ -114,17 +114,17 @@ void loopScreenShot(void)
     uint16_t i = strlen(screenShotFileName);
     switch (getMenuType())
     {
-    case MENU_TYPE_ICON:
-      strcat(screenShotFileName, (char *)labelGetAddress(&getCurMenuItems()->title));
-      break;
+      case MENU_TYPE_ICON:
+        strcat(screenShotFileName, (char *)labelGetAddress(&getCurMenuItems()->title));
+        break;
 
-    case MENU_TYPE_LISTVIEW:
-      strcat(screenShotFileName, (char *)labelGetAddress(&getCurListItems()->title));
-      break;
+      case MENU_TYPE_LISTVIEW:
+        strcat(screenShotFileName, (char *)labelGetAddress(&getCurListItems()->title));
+        break;
 
-    default:
-      strcat(screenShotFileName, "other");
-      break;
+      default:
+        strcat(screenShotFileName, "other");
+        break;
     }
 
     for (uint16_t j = strlen(screenShotFileName); j >= i; j--)
