@@ -82,10 +82,6 @@ bool scanPrintFilesFatFs(void)
   return true;
 }
 
-
-
-
-
 /*
 * /
 void GUI_DispDate(uint16_t date, uint16_t time)
@@ -97,7 +93,6 @@ void GUI_DispDate(uint16_t date, uint16_t time)
   i+=16;
 }
 */
-
 
 /*
 */

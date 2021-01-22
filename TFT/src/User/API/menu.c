@@ -671,7 +671,7 @@ KEY_VALUES menuKeyGetValue(void)
              (infoMenu.menu[infoMenu.cur] == menuFan) ||
              (infoMenu.menu[infoMenu.cur] == menuExtrude) ||
              (infoMenu.menu[infoMenu.cur] == menuSpeed) ||
-             (infoMenu.menu[infoMenu.cur] == menuProbeOffset) ||
+             (infoMenu.menu[infoMenu.cur] == menuZOffset) ||
              (infoMenu.menu[infoMenu.cur] == menuMBL))
     {
       tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keysIN), rect_of_keysIN);

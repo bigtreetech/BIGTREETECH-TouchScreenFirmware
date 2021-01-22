@@ -370,7 +370,7 @@ static inline uint16_t meshSetIndex(int32_t index)
 
     meshData->index = index;
     meshData->col = meshData->index % meshData->colsNum;
-    meshData->row = meshData->index / meshData->rowsNum;;
+    meshData->row = meshData->index / meshData->colsNum;
   }
 
   return meshData->index;

@@ -5,7 +5,7 @@ MYFILE infoFile = {"?:", {0}, {0}, 0, 0, 0, 0, false, TFT_SD, {0}};
 
 bool mountFS(void)
 {
-  //  resetInfoFile();   //needn't this
+  //  resetInfoFile();  //needn't this
   switch (infoFile.source)
   {
     case TFT_SD:
@@ -16,7 +16,7 @@ bool mountFS(void)
 
     case BOARD_SD:
       if (infoHost.printing)
-        return true ; // no mount while printing
+        return true;  // no mount while printing
       else
         return mountGcodeSDCard();
 
