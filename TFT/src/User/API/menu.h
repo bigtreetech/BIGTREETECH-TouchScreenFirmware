@@ -10,7 +10,6 @@ extern "C" {
 #include "GUI.h"
 
 #define IDLE_TOUCH 0xFFFF
-#define LONG_TOUCH (LCD_CHANGE_MODE_INTERVALS / 3)
 
 #define ITEM_PER_PAGE       8
 #define MENU_RECT_COUNT     (ITEM_PER_PAGE*2 + 1) // 8 items + title bar

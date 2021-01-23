@@ -14,6 +14,15 @@
  */
 //#define SCREEN_SHOT_TO_SD
 
+/**
+ * Smart Home
+ *
+ * If enabled, long press "Back" button triggers Home screen
+ * It doesn't interfere with the "Screenshot" and "Marlin/Touch Mode" other than if
+ * enabled, long press "Back" will not trigger "Screenshot" or "Marlin/Touch Mode"
+ */
+#define SMART_HOME
+
 // Enable Status Screen
 // Enable this to show status screen as the default home screen. Disabling it will show a static menu.
 #define ENABLE_STATUS_SCREEN true // To enabled: true | To disabled: false (Default: 1)
