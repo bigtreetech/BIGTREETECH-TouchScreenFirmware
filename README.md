@@ -80,16 +80,17 @@ The TFT firmware update is done in three steps described below and includes up t
 
 **ELEMENTS:**
 
-**element1:** The firmware binary (`BIGTREE_TFT*_V*.*.*.bin`). Example: `BIGTREE_TFT35_V3.0.26.1.bin`:
+**element2:** Fonts and Icons (in the `TFT*` or `MKS` folder):
 
-- `BIGTREE_TFT_35`: model
-- `V3.0`: hardware version
-- `26.1`: software version
-
-**element2:** Fonts and Icons (`TFT*` folder): Example: TFT35, which includes:
-
+For BTT TFTs the ROOT folder for fonts and icons is TFT*, where * is the size of the TFT (example: TFT24, TFT35, TFT50, etc).
+Fonts and icons folder structure:
 - `TFT*/font`: fonts
 - `TFT*/bmp`: icons
+
+For MKS TFTs the ROOT folder for fonts and icons is "MKS".
+Fonts and icons folder structure:
+- `MKS/font`: fonts
+- `MKS/bmp`: icons
 
 **element3:** The config.ini file
 
@@ -241,7 +242,7 @@ The second workaround for this issue is to carefully pry the two shells surround
 
 **Firmware**
 
-Edit the configuration.h file and enable the line that says: #define REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER Rebuild and deploy the Marlin firmware to your 3D Printer.
+Edit the configuration.h file and enable the line that says: `#define REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER`. Rebuild and deploy the Marlin firmware to your 3D Printer.
 
 
 
