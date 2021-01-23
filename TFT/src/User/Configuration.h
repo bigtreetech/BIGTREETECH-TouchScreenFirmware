@@ -255,11 +255,11 @@
 #define ENABLE_BL_VALUE 1 // Default: 1
 
 /** TouchMI settings (on ABL menu)
- * 
+ *
  * Enable this option for settings TouchMI sensor on ABL Menu (Init, Z Offset, Save, Test).
- * 
+ *
  * Options: [enable:1, disable:0]
- * 
+ *
  */
 #define TOUCHMI_SENSOR_VALUE 0 // Default: 0
 
@@ -420,18 +420,18 @@
 #define TERMINAL_KEYBOARD_COLOR_LAYOUT 0  // Default: 0
 
 //
-// QWERTY/QWRRTZ keyboard layout
-// 
+// QWERTY/QWERTZ keyboard layout
+//
 
 /**
  * keyboard layout for Terminal Keyboard
- * 
- * Options:  [0: Default, 1: Querty, 2: Quertz, 4: Azerty]
+ *
+ * Options:  [0: Default, 1: Qwerty, 2: Qwertz, 4: Azerty]
  * Default: The keyboard has an alphabetically order
- * Querty: The typically keyboard Layout for english (Only for TFT70 V3.0)
- * Quertz: The typically keyboard Layout for german (Only for TFT70 V3.0)
+ * Qwerty: The typically keyboard Layout for english (Only for TFT70 V3.0)
+ * Qwertz: The typically keyboard Layout for german (Only for TFT70 V3.0)
  * Azerty: The typically keyboard Layout for french (Only for TFT70 V3.0)
- * 
+ *
  */
 #define TERMINAL_KEYBOARD_LAYOUT 1  // Default: 0
 
