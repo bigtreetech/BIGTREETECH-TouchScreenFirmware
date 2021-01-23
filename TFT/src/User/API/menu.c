@@ -715,63 +715,66 @@ GUI_POINT getIconStartPoint(int index)
   return p;
 }
 
-void loopCheckBack(void)
-{
-  static bool longPress = false;
-  static bool firstCheck = false;
-  static bool backHeld = false;
+#ifdef SMART_HOME
+  #define LONG_TOUCH (LCD_CHANGE_MODE_INTERVALS / 3)
+  void loopCheckBack(void)
+  {
+    static bool longPress = false;
+    static bool firstCheck = false;
+    static bool backHeld = false;
 
-  if (isPrinting())
-    return;
-  if (!isPress())
-  {
-    backHeld = false;
-    longPress = false;
-    return;
-  }
-  if (menuType != MENU_TYPE_ICON)
-    return;
-  if ((infoMenu.cur == 0) || (infoMenu.menu[infoMenu.cur] == menuMode))
-    return;
-  if (backHeld == true)  // prevent mode selection or screenshot if Back button is held
-  {
-    backHeld = LCD_ReadPen(0);
-    return;
-  }
-  if (longPress == false)  // check if TSC is pressed and held
-  {
-    if (LCD_ReadPen(LONG_TOUCH))
+    if (isPrinting())
+      return;
+    if (!isPress())
     {
-      longPress = true;
-      firstCheck = true;
+      backHeld = false;
+      longPress = false;
+      return;
     }
-  }
-  if (firstCheck == true)  // do things only once if TSC is pressed and held
-  {
-    touchSound = false;
-    KEY_VALUES tempKey = KEY_IDLE;
-    if (infoMenu.menu[infoMenu.cur] == menuPrinting)
+    if (menuType != MENU_TYPE_ICON)
+      return;
+    if ((infoMenu.cur == 0) || (infoMenu.menu[infoMenu.cur] == menuMode))
+      return;
+    if (backHeld == true)  // prevent mode selection or screenshot if Back button is held
     {
-      tempKey = Key_value(COUNT(rect_of_keySS), rect_of_keySS);
+      backHeld = LCD_ReadPen(0);
+      return;
     }
-    else
+    if (longPress == false)  // check if TSC is pressed and held
     {
-      tempKey = Key_value(COUNT(rect_of_key), rect_of_key);
-    }
-    touchSound = true;
-    if (tempKey != KEY_IDLE)
-    {
-      if (curMenuItems->items[tempKey].label.index == LABEL_BACK)  // check if Back button is held
+      if (LCD_ReadPen(LONG_TOUCH))
       {
-        BUZZER_PLAY(sound_ok);
-        backHeld = true;
-        infoMenu.menu[1] = infoMenu.menu[infoMenu.cur];
-        infoMenu.cur = 1;
+        longPress = true;
+        firstCheck = true;
       }
     }
-    firstCheck = false;
+    if (firstCheck == true)  // do things only once if TSC is pressed and held
+    {
+      touchSound = false;
+      KEY_VALUES tempKey = KEY_IDLE;
+      if (infoMenu.menu[infoMenu.cur] == menuPrinting)
+      {
+        tempKey = Key_value(COUNT(rect_of_keySS), rect_of_keySS);
+      }
+      else
+      {
+        tempKey = Key_value(COUNT(rect_of_key), rect_of_key);
+      }
+      touchSound = true;
+      if (tempKey != KEY_IDLE)
+      {
+        if (curMenuItems->items[tempKey].label.index == LABEL_BACK)  // check if Back button is held
+        {
+          BUZZER_PLAY(sound_ok);
+          backHeld = true;
+          infoMenu.menu[1] = infoMenu.menu[infoMenu.cur];
+          infoMenu.cur = 1;
+        }
+      }
+      firstCheck = false;
+    }
   }
-}
+#endif //SMART_HOME
 
 void loopBackEnd(void)
 {
@@ -789,9 +792,12 @@ void loopBackEnd(void)
   loopFan();
   // Speed & flow monitor
   loopSpeed();
+#ifdef SMART_HOME
   // check if Back is pressed and held
   loopCheckBack();
+#endif
 #ifdef BUZZER_PIN
+  // Buzzer handling
   loopBuzzer();
 #endif
 
