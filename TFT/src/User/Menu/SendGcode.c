@@ -66,6 +66,10 @@ typedef struct
   #define GKEY_ROW_NUM LAYOUT_3_ROW_NUM
 #endif
 
+#define LAYOUT_QWERTY 1
+#define LAYOUT_QWERTZ 2
+#define LAYOUT_AZERTY 3
+
 #define GKEY_WIDTH  (LCD_WIDTH / GKEY_COL_NUM)
 #define GKEY_HEIGHT (LCD_HEIGHT / GKEY_ROW_NUM)
 
@@ -315,13 +319,27 @@ const char * const gcodeKey[][GKEY_KEY_NUM] = {
     "7", "8", "9", "E", "F", "R", "Q",
     ".", "0", "-", "~", "I", "J", "P",
 #else
-  #ifdef TERMINAL_KEYBOARD_QWERTY_LAYOUT
+  #if TERMINAL_KEYBOARD_LAYOUT == LAYOUT_QWERTY
     "\\","|", "!", "\"","$", "%", "&", "/", "=", "?",
     "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
     "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P",
     "A", "S", "D", "F", "G", "H", "J", "K", "L", "'",
     "Z", "X", "C", "V", "B", "N", "M", ",", ".", ";",
     ":", "_", "@", "#", "~", "-", "+", "*", "(", ")",
+  #elif TERMINAL_KEYBOARD_LAYOUT == LAYOUT_QWERTZ
+    "!", "\"", "$", "%", "&", "/", "(", ")", "=", "?",
+    "1", "2", "3", "4", "5", "6", "7", "8", "9", "0",
+    "Q", "W", "E", "R", "T", "Z", "U", "I", "O", "P",
+    "A", "S", "D", "F", "G", "H", "J", "K", "L", "@",
+    "Y", "X", "C", "V", "B", "N", "M", ",", ".", "-",
+    "|", ";", ":", "_", "#", "~", "+", "*", "'", "\\",
+  #elif TERMINAL_KEYBOARD_LAYOUT == LAYOUT_AZERTY
+    "#", "@", "~", "&", "(", ")", "_", "'", "\"", "%",
+    "1", "2", "3", "4", "5", "6", "7", "8", "9", "0",
+    "A", "Z", "E", "R", "T", "Y", "U", "I", "O", "P",
+    "Q", "S", "D", "F", "G", "H", "J", "K", "L", "M",
+    "W", "X", "C", "V", "B", "N", ".", ",", ":", ";",
+    "-", "+", "*", "\\", "|", "/", "?","!", "$", "=",
   #else
     "1", "2", "3", "A", "B", "C", "D", "E", "F", "G",
     "4", "5", "6", "H", "I", "J", "K", "L", "M", "N",
