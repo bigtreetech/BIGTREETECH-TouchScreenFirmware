@@ -19,6 +19,12 @@ typedef enum {
   WAIT_COOLING_HEATING,
 }HEATER_WAIT;
 
+typedef enum {
+  SETTLED = 0,
+  HEATING,
+  COOLING,
+}HEATER_STATUS;
+
 enum
 {
   NOZZLE0 = 0,
@@ -36,6 +42,7 @@ typedef struct
   int16_t current,
           target;
   HEATER_WAIT waiting;
+  HEATER_STATUS status;
 }_HEATER;
 
 typedef struct
@@ -74,6 +81,8 @@ bool heatGetIsWaiting(uint8_t index);
 bool heatHasWaiting(void);
 void heatSetIsWaiting(uint8_t index,HEATER_WAIT isWaiting);
 void heatClearIsWaiting(void);
+
+void heatSetStatus(uint8_t index, HEATER_STATUS heatStatus);
 
 void updateNextHeatCheckTime(void);
 void heatSetUpdateSeconds(uint8_t seconds);
