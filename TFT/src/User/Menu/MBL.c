@@ -3,9 +3,8 @@
 
 #define PROBE_HEIGHT_INITIAL_HEIGHT 0.2f                   // 0.2 mm
 
-static u8 curUnit_index = 0;
-
-u8 mblPoint = 0;
+static uint8_t curUnit_index = 0;
+uint8_t mblPoint = 0;
 bool mblRunning = false;
 
 /* Start MBL */

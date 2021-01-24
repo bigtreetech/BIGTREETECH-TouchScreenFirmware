@@ -3,7 +3,6 @@
 #include "list_item.h"
 #include "Notification.h"
 
-
 // exhibitRect is 2 ICON Space in the Upper Row and 2 Center column.
 const GUI_RECT exhibitRect = {
    1*ICON_WIDTH+1*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  3*ICON_WIDTH+2*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y
@@ -231,7 +230,6 @@ void GUI_RestoreColorDefault(void)
 }
 
 static const MENUITEMS *curMenuItems = NULL;   //current menu
-
 static const LISTITEMS *curListItems = NULL;   //current listmenu
 
 static const void (* curMenuRedrawHandle)(void) = NULL; //current custom menu

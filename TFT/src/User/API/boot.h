@@ -99,8 +99,8 @@ typedef union
 }GUI_COLOR;
 
 void scanUpdates(void);
-void dispIconFail(u8 *lbl);
-bool bmpDecode(char *bmp, u32 addr);
+void dispIconFail(u8 *lbl, BMPUPDATE_STAT bmpState);
+BMPUPDATE_STAT bmpDecode(char *bmp, u32 addr);
 
 #ifdef __cplusplus
 }
