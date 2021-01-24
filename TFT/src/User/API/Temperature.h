@@ -82,8 +82,6 @@ bool heatHasWaiting(void);
 void heatSetIsWaiting(uint8_t index,HEATER_WAIT isWaiting);
 void heatClearIsWaiting(void);
 
-void heatSetStatus(uint8_t index, HEATER_STATUS heatStatus);
-
 void updateNextHeatCheckTime(void);
 void heatSetUpdateSeconds(uint8_t seconds);
 uint8_t heatGetUpdateSeconds(void);
