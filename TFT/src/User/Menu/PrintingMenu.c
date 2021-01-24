@@ -491,6 +491,7 @@ void menuPrinting(void)
         preparePrintSummary();
         drawPrintInfo();
         infoFile.printFromTFT = false;
+        resetSpeedFlow();
       }
     }
 
