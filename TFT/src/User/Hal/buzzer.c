@@ -125,7 +125,7 @@ void Buzzer_play(SOUND sound)
     Buzzer_TurnOn(2000, 30);
     break;
   case sound_heated:
-    if (infoSettings.alertSound != 1)
+    if (infoSettings.heaterSound != 1)
       break;
     Buzzer_TurnOn(3136, 50);
     Buzzer_TurnOn(0, 100);
@@ -134,7 +134,7 @@ void Buzzer_play(SOUND sound)
     Buzzer_TurnOn(3951, 50);
     break;
   case sound_cooled:
-    if (infoSettings.alertSound != 1)
+    if (infoSettings.heaterSound != 1)
       break;
     Buzzer_TurnOn(3951, 50);
     Buzzer_TurnOn(0, 100);

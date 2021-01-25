@@ -17,6 +17,7 @@
     #define STRING_TOUCH_SOUND            "Dokunma Sesi"
     #define STRING_TOAST_SOUND            "Ara Bildirimler"
     #define STRING_ALERT_SOUND            "Uyarılar ve Sesler"
+    #define STRING_HEATER_SOUND           "Heater notification"
     #define STRING_SHUT_DOWN              "Kapat"
     #define STRING_RGB_SETTINGS           "LED Rengi"
     #define STRING_RGB_OFF                "LED'i Kapat"

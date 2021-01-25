@@ -17,6 +17,7 @@
     #define STRING_TOUCH_SOUND            "Eingabe"
     #define STRING_TOAST_SOUND            "Toasts"
     #define STRING_ALERT_SOUND            "Popups & Alarme"
+    #define STRING_HEATER_SOUND           "Heater notification"
     #define STRING_SHUT_DOWN              "Auschalten (PS_ON)"
     #define STRING_RGB_SETTINGS           "LED Farbe"
     #define STRING_RGB_OFF                "LED aus"

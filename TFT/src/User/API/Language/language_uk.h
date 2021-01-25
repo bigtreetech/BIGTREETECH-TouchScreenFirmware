@@ -17,6 +17,7 @@
     #define STRING_TOUCH_SOUND            "Звуки натискань"
     #define STRING_TOAST_SOUND            "Звуки інфострічки"
     #define STRING_ALERT_SOUND            "Попередження"
+    #define STRING_HEATER_SOUND           "Heater notification"
     #define STRING_SHUT_DOWN              "Вимкнути"
     #define STRING_RGB_SETTINGS           "Колір LED"
     #define STRING_RGB_OFF                "LED вимкн."
