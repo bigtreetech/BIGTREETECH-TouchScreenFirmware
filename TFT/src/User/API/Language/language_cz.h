@@ -17,6 +17,7 @@
     #define STRING_TOUCH_SOUND            "Zvuk při dotyku"
     #define STRING_TOAST_SOUND            "Zvuk vytápění"
     #define STRING_ALERT_SOUND            "Upozornění, popup okno"
+    #define STRING_HEATER_SOUND           "Heater notification"
     #define STRING_SHUT_DOWN              "Vypnout"
     #define STRING_RGB_SETTINGS           "Barva LED"
     #define STRING_RGB_OFF                "LED vyp."

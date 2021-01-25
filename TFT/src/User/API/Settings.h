@@ -32,8 +32,8 @@ typedef enum
 #define CONFIG_SUPPPORT 20210105
 
 #define FONT_FLASH_SIGN       20200908 //(YYYYMMDD) change if fonts require updating
-#define CONFIG_FLASH_SIGN     20210107 //(YYYYMMDD) change if any keyword(s) in config.ini is added or removed
-#define LANGUAGE_FLASH_SIGN   20210121 //(YYYYMMDD) change if any keyword(s) in language pack is added or removed
+#define CONFIG_FLASH_SIGN     20210125 //(YYYYMMDD) change if any keyword(s) in config.ini is added or removed
+#define LANGUAGE_FLASH_SIGN   20210125 //(YYYYMMDD) change if any keyword(s) in language pack is added or removed
 #define ICON_FLASH_SIGN       20210105 //(YYYYMMDD) change if any icon(s) is added or removed
 
 #define FONT_CHECK_SIGN       (FONT_FLASH_SIGN + WORD_UNICODE)
@@ -171,6 +171,7 @@ typedef struct
   uint8_t  touchSound;
   uint8_t  toastSound;
   uint8_t  alertSound;
+  uint8_t  heaterSound;
   uint8_t  knob_led_color;
   uint8_t  knob_led_idle;
   uint8_t  lcd_brightness;

@@ -17,6 +17,7 @@
     #define STRING_TOUCH_SOUND            "Touch sounds"
     #define STRING_TOAST_SOUND            "Toast Notifications"
     #define STRING_ALERT_SOUND            "Popups and Alerts"
+    #define STRING_HEATER_SOUND           "Heater notification"
     #define STRING_SHUT_DOWN              "Apagar"
     #define STRING_RGB_SETTINGS           "Color LED"
     #define STRING_RGB_OFF                "Apagar LED"

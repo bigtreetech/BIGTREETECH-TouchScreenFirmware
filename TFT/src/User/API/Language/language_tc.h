@@ -17,6 +17,7 @@
     #define STRING_TOUCH_SOUND            "按鈕聲音"
     #define STRING_TOAST_SOUND            "Toast 提示聲音"
     #define STRING_ALERT_SOUND            "彈窗和提示聲音"
+    #define STRING_HEATER_SOUND           "Heater notification"
     #define STRING_SHUT_DOWN              "關閉電源"
     #define STRING_RGB_SETTINGS           "燈光顏色"
     #define STRING_RGB_OFF                "關閉燈光"
