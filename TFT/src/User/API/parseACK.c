@@ -876,13 +876,10 @@ void parseACK(void)
           setParameter(P_PROBE_OFFSET, Z_STEPPER, ack_value());
         }
       }
-    // Parse and store MBL Z offset value
-      else if (ack_seen("G29 S4"))
+    // Parse and store MBL Z offset value (from M503 (G29 S4 Zxx) or M420 V1 T1)
+      else if (ack_seen("G29 S4 Z") || ack_seen("mesh. Z offset:"))
       {
-        if (ack_seen("Z:") || (ack_seen("Z")))
-        {
-          setParameter(P_MBL_Z_OFFSET, 0, ack_value());
-        }
+        setParameter(P_MBL_OFFSET, 0, ack_value());
       }
     // parse and store feed rate percentage
       else if ((infoMachineSettings.firmwareType == FW_REPRAPFW && ack_seen("factor: ")) ||

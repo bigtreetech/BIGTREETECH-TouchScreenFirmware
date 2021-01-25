@@ -258,7 +258,7 @@
  *
  * Enable this option for settings TouchMI sensor on ABL Menu (Init, Z Offset, Save, Test).
  *
- * Options: [enable:1, disable:0]
+ * Options: [enable: 1, disable: 0]
  *
  */
 #define TOUCHMI_SENSOR_VALUE 0 // Default: 0

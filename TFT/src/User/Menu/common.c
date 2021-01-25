@@ -82,6 +82,39 @@ const ITEM itemExtLenSteps[ITEM_EXT_LEN_NUM] =
 // List for extruder length/distance change steps
 const float extlenSteps[ITEM_EXT_LEN_NUM] = {1.0f, 5.0f, 10.0f, 100.0f, 200.0f};
 
+const uint16_t iconToggle[ITEM_TOGGLE_NUM] =
+{
+  ICONCHAR_TOGGLE_OFF,
+  ICONCHAR_TOGGLE_ON
+};
+
+const LABEL itemToggle[ITEM_TOGGLE_NUM] =
+{
+  LABEL_OFF,
+  LABEL_ON
+};
+
+const LABEL itemToggleAuto[ITEM_TOGGLE_AUTO_NUM] =
+{
+  LABEL_OFF,
+  LABEL_ON,
+  LABEL_AUTO
+};
+
+const LABEL itemToggleSmart[ITEM_TOGGLE_SMART_NUM] =
+{
+  LABEL_OFF,
+  LABEL_ON,
+  LABEL_SMART
+};
+
+const LABEL itemMoveSpeed[ITEM_SPEED_NUM] =
+{
+  LABEL_SLOW_SPEED,
+  LABEL_NORMAL_SPEED,
+  LABEL_FAST_SPEED
+};
+
 // Check time elapsed against the time specified in milliseconds for displaying/updating info on screen
 // Use this for timed screen updates in menu loops only
 bool nextScreenUpdate(uint32_t duration)

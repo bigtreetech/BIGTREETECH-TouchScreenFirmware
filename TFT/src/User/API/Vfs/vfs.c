@@ -61,7 +61,7 @@ TCHAR *getCurFileSource(void)
       return "bSD:";
 
     default:
-      break;  
+      break;
   }
   return NULL;
 }
