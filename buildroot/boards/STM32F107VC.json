@@ -14,7 +14,8 @@
         "0x0004"
       ]
     ],
-    "mcu": "stm32f107vct6"
+    "mcu": "stm32f107vct6",
+    "product_line": "STM32F107xC"
   },
   "debug": {
     "jlink_device": "STM32F107VC",

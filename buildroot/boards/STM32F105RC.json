@@ -14,7 +14,8 @@
         "0x0004"
       ]
     ],
-    "mcu": "stm32f105rct6"
+    "mcu": "stm32f105rct6",
+    "product_line": "STM32F105xC"
   },
   "debug": {
     "jlink_device": "STM32F105RC",
