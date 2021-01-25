@@ -401,7 +401,7 @@ void updateFeatureSettings(uint8_t key_val)
         break;
       }
 
-      case SKEY_LCD_IDLE_DEALY:
+      case SKEY_LCD_IDLE_DELAY:
         infoSettings.lcd_idle_timer = (infoSettings.lcd_idle_timer + 1) % ITEM_SECONDS_NUM;
         settingPage[item_index].valueLabel = itemDimTime[infoSettings.lcd_idle_timer];
         break;
