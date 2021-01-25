@@ -15,7 +15,7 @@
       ]
     ],
     "mcu": "stm32f103vct6",
-    "variant": "stm32f1"
+    "product_line": "STM32F103xC"
   },
   "debug": {
     "jlink_device": "STM32F103VC",
@@ -25,6 +25,7 @@
   "frameworks": [
     "arduino",
     "libopencm3",
+    "cmsis",
     "stm32cube"
   ],
   "name": "STM32F103VC (48k RAM. 256k Flash)",
@@ -38,13 +39,12 @@
       "jlink",
       "stlink",
       "blackmagic",
-      "serial",
-      "dfu"
+      "serial"
     ],
     "require_upload_port": true,
     "use_1200bps_touch": false,
     "wait_for_upload_port": false
   },
-  "url": "http://www.st.com/content/st_com/en/products/microcontrollers/stm32-32-bit-arm-cortex-mcus/stm32f1-series/stm32f103/stm32f103ve.html",
+  "url": "https://www.st.com/en/microcontrollers-microprocessors/stm32f103.html",
   "vendor": "Generic"
 }

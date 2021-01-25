@@ -14,8 +14,7 @@
         "0x0004"
       ]
     ],
-    "mcu": "stm32f105rct6",
-    "variant": "stm32f1"
+    "mcu": "stm32f105rct6"
   },
   "debug": {
     "jlink_device": "STM32F105RC",
@@ -25,12 +24,13 @@
   "frameworks": [
     "arduino",
     "libopencm3",
+    "cmsis",
     "stm32cube"
   ],
-  "name": "STM32F105RC (48k RAM. 256k Flash)",
+  "name": "STM32F105RC (64k RAM. 256k Flash)",
   "upload": {
     "disable_flushing": false,
-    "maximum_ram_size": 49152,
+    "maximum_ram_size": 65536,
     "maximum_size": 262144,
     "protocol": "cmsis-dap",
     "protocols": [
@@ -38,13 +38,13 @@
       "jlink",
       "stlink",
       "blackmagic",
-      "serial",
-      "dfu"
+      "serial"
     ],
+    "offset_address": "0x8006000",
     "require_upload_port": true,
     "use_1200bps_touch": false,
     "wait_for_upload_port": false
   },
-  "url": "http://www.st.com/content/st_com/en/products/microcontrollers/stm32-32-bit-arm-cortex-mcus/stm32f1-series/stm32f103/stm32f103ve.html",
+  "url": "https://www.st.com/en/microcontrollers-microprocessors/stm32f105-107.html",
   "vendor": "Generic"
 }
