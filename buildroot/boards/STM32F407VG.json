@@ -39,7 +39,7 @@
     "protocols": [
       "jlink",
       "stlink",
-	    "cmsis-dap",
+      "cmsis-dap",
       "blackmagic",
       "mbed"
     ]
