@@ -13,20 +13,20 @@ typedef enum
   P_HOME_OFFSET = 0,
   P_PROBE_OFFSET,
   P_MBL_OFFSET,
-  P_OFFSET_TOOL,
   P_ABL_STATE,
   P_STEPS_PER_MM,
-  P_CURRENT,
   P_MAX_FEED_RATE,
   P_MAX_ACCELERATION,
   P_ACCELERATION,
   P_JERK,
   P_JUNCTION_DEVIATION,
-  P_BUMPSENSITIVITY,
   P_FWRETRACT,
   P_FWRECOVER,
   P_AUTO_RETRACT,
+  P_OFFSET_TOOL,
   P_LIN_ADV,
+  P_CURRENT,
+  P_BUMPSENSITIVITY,
   P_HYBRID_THRESHOLD,
   // Keep below items always at the end
   P_SAVE_SETTINGS,
@@ -60,20 +60,20 @@ typedef struct
   float HomeOffset[3];
   float ProbeOffset[3];
   float MblOffset[1];
-  float OffsetTool[3];
   float ABLState[2];
   float StepsPerMM[STEPPER_COUNT];
-  float Current[STEPPER_COUNT];
   float MaxFeedRate[STEPPER_COUNT];
   float MaxAcceleration[STEPPER_COUNT];
   float Acceleration[3];
   float Jerk[4];
   float JunctionDeviation[1];
-  float BumpSensitivity[3];
   float FwRetract[4];
   float FwRecover[4];
   float AutoRetract[1];
+  float OffsetTool[3];
   float LinAdvance[2];
+  float Current[STEPPER_COUNT];
+  float BumpSensitivity[3];
   float HybridThreshold[STEPPER_COUNT];
 } PARAMETERS;
 
