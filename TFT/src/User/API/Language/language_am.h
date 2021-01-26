@@ -18,8 +18,6 @@
     #define STRING_MARLIN_SHOW_TITLE      "Marlin Mode Title Support"
     #define STRING_MARLIN_FULLSCREEN      "Marlin mode in fullscreen"
     #define STRING_MARLIN_TYPE            "Marlin Mode Type"
-    #define STRING_HEATED_BED             "Heated Bed Support"
-    #define STRING_HEATED_CHAMBER         "Heated Chamber Support"
     #define STRING_MOVE_SPEED             "Move speed(X Y Z)"
     #define STRING_AUTO_LOAD_LEVELING     "Auto Save Load Leveling"
     #define STRING_TOUCHMI_SENSOR         "TouchMI"
@@ -49,8 +47,6 @@
     #define STRING_CANCEL_GCODE_ENABLED   "Cancel Gcode"
 
     // Machine Parameter Settings
-    #define STRING_HOME_OFFSET            "Home Offset"
-    #define STRING_PROBE_OFFSET           "Probe Offset"
     #define STRING_MBL_OFFSET             "MBL Offset"
     #define STRING_STEPS_SETTING          "Steps per mm"
     #define STRING_MAXFEEDRATE            "Max Feed Rate"
@@ -58,10 +54,12 @@
     #define STRING_ACCELERATION           "Acceleration"
     #define STRING_JERK                   "Jerk"
     #define STRING_JUNCTION_DEVIATION     "Junction Deviation"
+    #define STRING_HOME_OFFSET            "Home Offset"
     #define STRING_FWRETRACT              "FW Retraction"
     #define STRING_FWRECOVER              "FW Retraction Recover"
     #define STRING_RETRACT_AUTO           "Auto Firmware Retract"
     #define STRING_OFFSET_TOOL            "Offset 2nd Nozzle"
+    #define STRING_PROBE_OFFSET           "Probe Offset"
     #define STRING_LIN_ADVANCE            "Linear Advance"
     #define STRING_CURRENT_SETTING        "Driver Current (mA)"
     #define STRING_BUMP_SENSITIVITY       "TMC bump sensitivity"
@@ -77,15 +75,6 @@
     #define STRING_SWAP_RECOVER_LENGTH    "Extra recover swap length"
     #define STRING_RECOVER_FEEDRATE       "Recover feedrate"
     #define STRING_SWAP_RECOVER_FEEDRATE  "Swap recover feedrate"
-
-    // Standard Parameter Values
-    #define STRING_ON                     "ON"
-    #define STRING_OFF                    "OFF"
-    #define STRING_AUTO                   "AUTO"
-    #define STRING_SMART                  "SMART"
-    #define STRING_SLOW_SPEED             "Դանդաղ"
-    #define STRING_NORMAL_SPEED           "Նորմալ"
-    #define STRING_FAST_SPEED             "Արագ"
 
     // Save / Load
     #define STRING_SAVE                   "Save"
@@ -195,6 +184,14 @@
     #define STRING_BBL                    "BBL"
     #define STRING_UBL                    "UBL"
     #define STRING_MBL                    "MBL"
+
+    #define STRING_ON                     "ON"
+    #define STRING_OFF                    "OFF"
+    #define STRING_AUTO                   "AUTO"
+    #define STRING_SMART                  "SMART"
+    #define STRING_SLOW_SPEED             "Դանդաղ"
+    #define STRING_NORMAL_SPEED           "Նորմալ"
+    #define STRING_FAST_SPEED             "Արագ"
 
     #define STRING_1_DEGREE               "1℃"
     #define STRING_5_DEGREE               "5℃"

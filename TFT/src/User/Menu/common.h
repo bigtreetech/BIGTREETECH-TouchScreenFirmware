@@ -16,9 +16,6 @@ extern "C" {
 
 // standard parameter values
 #define ITEM_TOGGLE_NUM         2
-#define ITEM_TOGGLE_AUTO_NUM    3
-#define ITEM_TOGGLE_SMART_NUM   3
-#define ITEM_SPEED_NUM          3
 
 extern uint8_t currentTool;
 extern uint8_t currentFan;
@@ -40,11 +37,7 @@ extern const ITEM itemExtLenSteps[ITEM_EXT_LEN_NUM];
 extern const float extlenSteps[ITEM_EXT_LEN_NUM];
 
 // standard parameter values
-extern const uint16_t iconToggle[ITEM_TOGGLE_NUM];
 extern const LABEL itemToggle[ITEM_TOGGLE_NUM];
-extern const LABEL itemToggleAuto[ITEM_TOGGLE_AUTO_NUM];
-extern const LABEL itemToggleSmart[ITEM_TOGGLE_SMART_NUM];
-extern const LABEL itemMoveSpeed[ITEM_SPEED_NUM];
 
 bool nextScreenUpdate(uint32_t duration);
 

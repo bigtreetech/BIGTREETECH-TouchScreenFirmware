@@ -18,8 +18,6 @@
     #define STRING_MARLIN_SHOW_TITLE      "Marlin Mode Title Support"
     #define STRING_MARLIN_FULLSCREEN      "Marlin на весь экран"
     #define STRING_MARLIN_TYPE            "Marlin Mode Type"
-    #define STRING_HEATED_BED             "Heated Bed Support"
-    #define STRING_HEATED_CHAMBER         "Heated Chamber Support"
     #define STRING_MOVE_SPEED             "Скорость (X Y Z)"
     #define STRING_AUTO_LOAD_LEVELING     "Auto Save Load Leveling"
     #define STRING_TOUCHMI_SENSOR         "TouchMI"
@@ -49,8 +47,6 @@
     #define STRING_CANCEL_GCODE_ENABLED   "G-код отмены печати"
 
     // Machine Parameter Settings
-    #define STRING_HOME_OFFSET            "Дом - отступы"
-    #define STRING_PROBE_OFFSET           "Смещение датчика"
     #define STRING_MBL_OFFSET             "MBL Offset"
     #define STRING_STEPS_SETTING          "Настройка шагов на мм"
     #define STRING_MAXFEEDRATE            "MAX скорость подачи"
@@ -58,10 +54,12 @@
     #define STRING_ACCELERATION           "Ускорение"
     #define STRING_JERK                   "Рывок"
     #define STRING_JUNCTION_DEVIATION     "Отклонение узла"
+    #define STRING_HOME_OFFSET            "Дом - отступы"
     #define STRING_FWRETRACT              "M207 ретракт"
     #define STRING_FWRECOVER              "M208 восстановление ретракта"
     #define STRING_RETRACT_AUTO           "Авто FW ретракт"
     #define STRING_OFFSET_TOOL            "Смещение 2-го сопла"
+    #define STRING_PROBE_OFFSET           "Смещение датчика"
     #define STRING_LIN_ADVANCE            "К-фактор"
     #define STRING_CURRENT_SETTING        "Настройка TMC драйверов"
     #define STRING_BUMP_SENSITIVITY       "TMC чувствительность удара"
@@ -77,15 +75,6 @@
     #define STRING_SWAP_RECOVER_LENGTH    "Длина при смене сопла"
     #define STRING_RECOVER_FEEDRATE       "Скорость"
     #define STRING_SWAP_RECOVER_FEEDRATE  "Скорость при смене сопла"
-
-    // Standard Parameter Values
-    #define STRING_ON                     "Вкл"
-    #define STRING_OFF                    "Выкл"
-    #define STRING_AUTO                   "AUTO"
-    #define STRING_SMART                  "Умный"
-    #define STRING_SLOW_SPEED             "Медленно"
-    #define STRING_NORMAL_SPEED           "Обычно"
-    #define STRING_FAST_SPEED             "Быстро"
 
     // Save / Load
     #define STRING_SAVE                   "Сохранить"
@@ -195,6 +184,14 @@
     #define STRING_BBL                    "BBL"
     #define STRING_UBL                    "UBL"
     #define STRING_MBL                    "MBL"
+
+    #define STRING_ON                     "Вкл"
+    #define STRING_OFF                    "Выкл"
+    #define STRING_AUTO                   "AUTO"
+    #define STRING_SMART                  "Умный"
+    #define STRING_SLOW_SPEED             "Медленно"
+    #define STRING_NORMAL_SPEED           "Обычно"
+    #define STRING_FAST_SPEED             "Быстро"
 
     #define STRING_1_DEGREE               "1℃"
     #define STRING_5_DEGREE               "5℃"

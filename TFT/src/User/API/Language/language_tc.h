@@ -18,8 +18,6 @@
     #define STRING_MARLIN_SHOW_TITLE      "Marlin Mode Title Support"
     #define STRING_MARLIN_FULLSCREEN      "全螢幕Marlin模式"
     #define STRING_MARLIN_TYPE            "Marlin Mode Type"
-    #define STRING_HEATED_BED             "Heated Bed Support"
-    #define STRING_HEATED_CHAMBER         "Heated Chamber Support"
     #define STRING_MOVE_SPEED             "移動速度(X Y Z)"
     #define STRING_AUTO_LOAD_LEVELING     "Auto Save Load Leveling"
     #define STRING_TOUCHMI_SENSOR         "TouchMI"
@@ -49,8 +47,6 @@
     #define STRING_CANCEL_GCODE_ENABLED   "中斷執行G-code"
 
     // Machine Parameter Settings
-    #define STRING_HOME_OFFSET            "Home Offset"
-    #define STRING_PROBE_OFFSET           "探針偏移"
     #define STRING_MBL_OFFSET             "MBL Offset"
     #define STRING_STEPS_SETTING          "電機每毫米步數Steps/mm"
     #define STRING_MAXFEEDRATE            "最大移動速度"
@@ -58,10 +54,12 @@
     #define STRING_ACCELERATION           "加速度"
     #define STRING_JERK                   "Jerk"
     #define STRING_JUNCTION_DEVIATION     "Junction Deviation"
+    #define STRING_HOME_OFFSET            "Home Offset"
     #define STRING_FWRETRACT              "FW Retraction"
     #define STRING_FWRECOVER              "FW Retraction Recover"
     #define STRING_RETRACT_AUTO           "FW自动回抽"
     #define STRING_OFFSET_TOOL            "Offset 2nd Nozzle"
+    #define STRING_PROBE_OFFSET           "探針偏移"
     #define STRING_LIN_ADVANCE            "Linear Advance"
     #define STRING_CURRENT_SETTING        "驅動晶片電流設定 (mA)"
     #define STRING_BUMP_SENSITIVITY       "堵料檢測靈敏度"
@@ -77,15 +75,6 @@
     #define STRING_SWAP_RECOVER_LENGTH    "换料时额外挤出的长度"
     #define STRING_RECOVER_FEEDRATE       "FW挤出速度"
     #define STRING_SWAP_RECOVER_FEEDRATE  "换料时挤出的速度"
-
-    // Standard Parameter Values
-    #define STRING_ON                     "開啟"
-    #define STRING_OFF                    "關閉"
-    #define STRING_AUTO                   "AUTO"
-    #define STRING_SMART                  "自動"
-    #define STRING_SLOW_SPEED             "慢速"
-    #define STRING_NORMAL_SPEED           "常速"
-    #define STRING_FAST_SPEED             "快速"
 
     // Save / Load
     #define STRING_SAVE                   "儲存設定"
@@ -195,6 +184,14 @@
     #define STRING_BBL                    "BBL"
     #define STRING_UBL                    "UBL"
     #define STRING_MBL                    "MBL"
+
+    #define STRING_ON                     "開啟"
+    #define STRING_OFF                    "關閉"
+    #define STRING_AUTO                   "AUTO"
+    #define STRING_SMART                  "自動"
+    #define STRING_SLOW_SPEED             "慢速"
+    #define STRING_NORMAL_SPEED           "常速"
+    #define STRING_FAST_SPEED             "快速"
 
     #define STRING_1_DEGREE               "1℃"
     #define STRING_5_DEGREE               "5℃"

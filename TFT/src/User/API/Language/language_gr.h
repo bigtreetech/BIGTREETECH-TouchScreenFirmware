@@ -18,8 +18,6 @@
     #define STRING_MARLIN_SHOW_TITLE      "Marlin Mode Title Support"
     #define STRING_MARLIN_FULLSCREEN      "Λειτουργία Marlin σε πλήρη οθόνη"
     #define STRING_MARLIN_TYPE            "Marlin Mode Type"
-    #define STRING_HEATED_BED             "Heated Bed Support"
-    #define STRING_HEATED_CHAMBER         "Heated Chamber Support"
     #define STRING_MOVE_SPEED             "Ταχύτητα κίνησης(X Y Z)"
     #define STRING_AUTO_LOAD_LEVELING     "Auto Save Load Leveling"
     #define STRING_TOUCHMI_SENSOR         "TouchMI"
@@ -49,8 +47,6 @@
     #define STRING_CANCEL_GCODE_ENABLED   "Ματαίωση Gcode"
 
     // Machine Parameter Settings
-    #define STRING_HOME_OFFSET            "Home Offset"
-    #define STRING_PROBE_OFFSET           "Αντιστάθμιση Καθετήρας"
     #define STRING_MBL_OFFSET             "MBL Offset"
     #define STRING_STEPS_SETTING          "Βήματα ανά χιλ"
     #define STRING_MAXFEEDRATE            "Μέγιστο ποσοστό τροφοδοσίας"
@@ -58,10 +54,12 @@
     #define STRING_ACCELERATION           "Eπιτάχυνση"
     #define STRING_JERK                   "Jerk"
     #define STRING_JUNCTION_DEVIATION     "Junction Deviation"
+    #define STRING_HOME_OFFSET            "Home Offset"
     #define STRING_FWRETRACT              "FW Retraction"
     #define STRING_FWRECOVER              "FW Retraction Recover"
     #define STRING_RETRACT_AUTO           "Auto Firmware Retract"
     #define STRING_OFFSET_TOOL            "Offset 2nd Nozzle"
+    #define STRING_PROBE_OFFSET           "Αντιστάθμιση Καθετήρας"
     #define STRING_LIN_ADVANCE            "Linear Advance"
     #define STRING_CURRENT_SETTING        "Ένταση η. ρεύ. οδηγού(mA)"
     #define STRING_BUMP_SENSITIVITY       "TMC ευαισθησία χτυπήματος"
@@ -77,15 +75,6 @@
     #define STRING_SWAP_RECOVER_LENGTH    "Extra recover swap length"
     #define STRING_RECOVER_FEEDRATE       "Recover feedrate"
     #define STRING_SWAP_RECOVER_FEEDRATE  "Swap recover feedrate"
-
-    // Standard Parameter Values
-    #define STRING_ON                     "Ενεργό"
-    #define STRING_OFF                    "Σβηστό"
-    #define STRING_AUTO                   "AUTO"
-    #define STRING_SMART                  "ΈΞΥΠΝΟ"
-    #define STRING_SLOW_SPEED             "Αργά"
-    #define STRING_NORMAL_SPEED           "Κανονικά"
-    #define STRING_FAST_SPEED             "Γρήγορα"
 
     // Save / Load
     #define STRING_SAVE                   "Αποθήκευση"
@@ -195,6 +184,14 @@
     #define STRING_BBL                    "BBL"
     #define STRING_UBL                    "UBL"
     #define STRING_MBL                    "MBL"
+
+    #define STRING_ON                     "Ενεργό"
+    #define STRING_OFF                    "Σβηστό"
+    #define STRING_AUTO                   "AUTO"
+    #define STRING_SMART                  "ΈΞΥΠΝΟ"
+    #define STRING_SLOW_SPEED             "Αργά"
+    #define STRING_NORMAL_SPEED           "Κανονικά"
+    #define STRING_FAST_SPEED             "Γρήγορα"
 
     #define STRING_1_DEGREE               "1℃"
     #define STRING_5_DEGREE               "5℃"

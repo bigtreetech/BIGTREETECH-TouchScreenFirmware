@@ -20,6 +20,37 @@ LISTITEMS featureSettingsItems = {
 //
 //parameter values
 //
+
+const uint16_t iconToggle[ITEM_TOGGLE_NUM] =
+{
+  ICONCHAR_TOGGLE_OFF,
+  ICONCHAR_TOGGLE_ON
+};
+
+#define ITEM_TOGGLE_AUTO_NUM 3
+const LABEL itemToggleAuto[ITEM_TOGGLE_AUTO_NUM] =
+{
+  LABEL_OFF,
+  LABEL_ON,
+  LABEL_AUTO
+};
+
+#define ITEM_TOGGLE_SMART_NUM 3
+const LABEL itemToggleSmart[ITEM_TOGGLE_SMART_NUM] =
+{
+  LABEL_OFF,
+  LABEL_ON,
+  LABEL_SMART
+};
+
+#define ITEM_SPEED_NUM 3
+const LABEL itemMoveSpeed[ITEM_SPEED_NUM] =
+{
+  LABEL_SLOW_SPEED,
+  LABEL_NORMAL_SPEED,
+  LABEL_FAST_SPEED
+};
+
 #define ITEM_DEFAULT_MODE_NUM 2
 const char *const itemDefaultMode[ITEM_DEFAULT_MODE_NUM] =
 {
@@ -67,8 +98,6 @@ typedef enum
     SKEY_MARLIN_TYPE,
   #endif
 
-  SKEY_HEATED_BED,
-  SKEY_HEATED_CHAMBER,
   SKEY_SPEED,
   SKEY_AUTO_LOAD_LEVELING,
   SKEY_TOUCHMI_SENSOR,
@@ -138,8 +167,6 @@ LISTITEM settingPage[SKEY_COUNT] = {
     {ICONCHAR_BLANK,       LIST_CUSTOMVALUE,   LABEL_MARLIN_TYPE,             LABEL_DYNAMIC},
   #endif
 
-  {ICONCHAR_TOGGLE_ON,   LIST_TOGGLE,        LABEL_HEATED_BED,              LABEL_BACKGROUND},
-  {ICONCHAR_TOGGLE_ON,   LIST_TOGGLE,        LABEL_HEATED_CHAMBER,          LABEL_BACKGROUND},
   {ICONCHAR_BLANK,       LIST_CUSTOMVALUE,   LABEL_MOVE_SPEED,              LABEL_NORMAL_SPEED},
   {ICONCHAR_TOGGLE_ON,   LIST_TOGGLE,        LABEL_AUTO_LOAD_LEVELING,      LABEL_BACKGROUND},
   {ICONCHAR_TOGGLE_ON,   LIST_TOGGLE,        LABEL_TOUCHMI_SENSOR,          LABEL_BACKGROUND},
@@ -267,16 +294,6 @@ void updateFeatureSettings(uint8_t key_val)
         setDynamicTextValue(key_val, (char *)itemMarlinType[infoSettings.marlin_type]);
         break;
     #endif
-
-    case SKEY_HEATED_BED:
-      infoSettings.bed_en = (infoSettings.bed_en + 1) % ITEM_TOGGLE_NUM;
-      settingPage[item_index].icon = iconToggle[infoSettings.bed_en];
-      break;
-
-    case SKEY_HEATED_CHAMBER:
-      infoSettings.chamber_en = (infoSettings.chamber_en + 1) % ITEM_TOGGLE_NUM;
-      settingPage[item_index].icon = iconToggle[infoSettings.chamber_en];
-      break;
 
     case SKEY_SPEED:
       infoSettings.move_speed = (infoSettings.move_speed + 1) % ITEM_SPEED_NUM;
@@ -500,14 +517,6 @@ void loadFeatureSettings()
             setDynamicTextValue(i, (char *)itemMarlinType[infoSettings.marlin_type]);
             break;
         #endif
-
-        case SKEY_HEATED_BED:
-          settingPage[item_index].icon = iconToggle[infoSettings.bed_en];
-          break;
-
-        case SKEY_HEATED_CHAMBER:
-          settingPage[item_index].icon = iconToggle[infoSettings.chamber_en];
-          break;
 
         case SKEY_SPEED:
           settingPage[item_index].valueLabel = itemMoveSpeed[infoSettings.move_speed];

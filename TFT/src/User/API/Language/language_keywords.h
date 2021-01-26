@@ -25,8 +25,6 @@ extern "C" {
 #define LANG_KEY_MARLIN_SHOW_TITLE            "label_marlin_show_title:"
 #define LANG_KEY_MARLIN_FULLSCREEN            "label_marlin_fullscreen:"
 #define LANG_KEY_MARLIN_TYPE                  "label_marlin_type:"
-#define LANG_KEY_HEATED_BED                   "label_heated_bed:"
-#define LANG_KEY_HEATED_CHAMBER               "label_heated_chamber:"
 #define LANG_KEY_MOVE_SPEED                   "label_move_speed:"
 #define LANG_KEY_AUTO_LOAD_LEVELING           "label_auto_load_leveling:"
 #define LANG_KEY_TOUCHMI_SENSOR               "label_touchmi_sensor:"
@@ -56,8 +54,6 @@ extern "C" {
 #define LANG_KEY_CANCEL_GCODE_ENABLED         "label_cancel_gcode_enabled:"
 
 // Machine Parameter Settings
-#define LANG_KEY_HOME_OFFSET                  "label_home_offset:"
-#define LANG_KEY_PROBE_OFFSET                 "label_probe_offset:"
 #define LANG_KEY_MBL_OFFSET                   "label_mbl_offset:"
 #define LANG_KEY_STEPS_SETTING                "label_steps_setting:"
 #define LANG_KEY_MAXFEEDRATE                  "label_maxfeedrate:"
@@ -65,10 +61,12 @@ extern "C" {
 #define LANG_KEY_ACCELERATION                 "label_acceleration:"
 #define LANG_KEY_JERK                         "label_jerk:"
 #define LANG_KEY_JUNCTION_DEVIATION           "label_junction_deviation:"
+#define LANG_KEY_HOME_OFFSET                  "label_home_offset:"
 #define LANG_KEY_FWRETRACT                    "label_fwretract:"
 #define LANG_KEY_FWRECOVER                    "label_fwrecover:"
 #define LANG_KEY_RETRACT_AUTO                 "label_retract_auto:"
 #define LANG_KEY_OFFSET_TOOL                  "label_offset_tool:"
+#define LANG_KEY_PROBE_OFFSET                 "label_probe_offset:"
 #define LANG_KEY_LIN_ADVANCE                  "label_lin_advance:"
 #define LANG_KEY_CURRENT_SETTING              "label_current_setting:"
 #define LANG_KEY_BUMP_SENSITIVITY             "label_bump_sensitivity:"
@@ -84,15 +82,6 @@ extern "C" {
 #define LANG_KEY_SWAP_RECOVER_LENGTH          "label_swap_recover_length:"
 #define LANG_KEY_RECOVER_FEEDRATE             "label_recover_feedrate:"
 #define LANG_KEY_SWAP_RECOVER_FEEDRATE        "label_swap_recover_feedrate:"
-
-// Standard Parameter Values
-#define LANG_KEY_ON                           "label_on:"
-#define LANG_KEY_OFF                          "label_off:"
-#define LANG_KEY_AUTO                         "label_auto:"
-#define LANG_KEY_SMART                        "label_smart:"
-#define LANG_KEY_SLOW_SPEED                   "label_slow_speed:"
-#define LANG_KEY_NORMAL_SPEED                 "label_normal_speed:"
-#define LANG_KEY_FAST_SPEED                   "label_fast_speed:"
 
 // Save / Load
 #define LANG_KEY_SAVE                         "label_save:"
@@ -202,6 +191,14 @@ extern "C" {
 #define LANG_KEY_BBL                          "label_bbl:"
 #define LANG_KEY_UBL                          "label_ubl:"
 #define LANG_KEY_MBL                          "label_mbl:"
+
+#define LANG_KEY_ON                           "label_on:"
+#define LANG_KEY_OFF                          "label_off:"
+#define LANG_KEY_AUTO                         "label_auto:"
+#define LANG_KEY_SMART                        "label_smart:"
+#define LANG_KEY_SLOW_SPEED                   "label_slow_speed:"
+#define LANG_KEY_NORMAL_SPEED                 "label_normal_speed:"
+#define LANG_KEY_FAST_SPEED                   "label_fast_speed:"
 
 #define LANG_KEY_1_DEGREE                     "label_1_degree:"
 #define LANG_KEY_5_DEGREE                     "label_5_degree:"

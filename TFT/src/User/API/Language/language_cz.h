@@ -18,8 +18,6 @@
     #define STRING_MARLIN_SHOW_TITLE      "Marlin Mode Title Support"
     #define STRING_MARLIN_FULLSCREEN      "Celoobrazovkový režim Marlin"
     #define STRING_MARLIN_TYPE            "Marlin Mode Type"
-    #define STRING_HEATED_BED             "Heated Bed Support"
-    #define STRING_HEATED_CHAMBER         "Heated Chamber Support"
     #define STRING_MOVE_SPEED             "Rychlost pohybu X Y Z"
     #define STRING_AUTO_LOAD_LEVELING     "Auto Save Load Leveling"
     #define STRING_TOUCHMI_SENSOR         "TouchMI"
@@ -49,8 +47,6 @@
     #define STRING_CANCEL_GCODE_ENABLED   "Spustit Gcode po stornu"
 
     // Machine Parameter Settings
-    #define STRING_HOME_OFFSET            "Home Offset"
-    #define STRING_PROBE_OFFSET           "Offset sondy"
     #define STRING_MBL_OFFSET             "MBL Offset"
     #define STRING_STEPS_SETTING          "Kroků/mm"
     #define STRING_MAXFEEDRATE            "Max rychlost"
@@ -58,10 +54,12 @@
     #define STRING_ACCELERATION           "Zrychlení"
     #define STRING_JERK                   "Jerk-trhnutí"
     #define STRING_JUNCTION_DEVIATION     "Junction Deviation"
+    #define STRING_HOME_OFFSET            "Home Offset"
     #define STRING_FWRETRACT              "FW Zatažení"
     #define STRING_FWRECOVER              "FW Obnovení"
     #define STRING_RETRACT_AUTO           "Auto Firmware Retract"
     #define STRING_OFFSET_TOOL            "Offset 2.trysky"
+    #define STRING_PROBE_OFFSET           "Offset sondy"
     #define STRING_LIN_ADVANCE            "Linear Advance"
     #define STRING_CURRENT_SETTING        "Proud motorů (mA)"
     #define STRING_BUMP_SENSITIVITY       "Citlivost nárazu TMC"
@@ -77,15 +75,6 @@
     #define STRING_SWAP_RECOVER_LENGTH    "Délka obnovení Swap"
     #define STRING_RECOVER_FEEDRATE       "Rychlost obnovení"
     #define STRING_SWAP_RECOVER_FEEDRATE  "Rychlost obnovení Swap"
-
-    // Standard Parameter Values
-    #define STRING_ON                     "ON"
-    #define STRING_OFF                    "OFF"
-    #define STRING_AUTO                   "AUTO"
-    #define STRING_SMART                  "SMART"
-    #define STRING_SLOW_SPEED             "Pomalu"
-    #define STRING_NORMAL_SPEED           "Normál"
-    #define STRING_FAST_SPEED             "Rychle"
 
     // Save / Load
     #define STRING_SAVE                   "Uložit"
@@ -195,6 +184,14 @@
     #define STRING_BBL                    "BBL"
     #define STRING_UBL                    "UBL"
     #define STRING_MBL                    "MBL"
+
+    #define STRING_ON                     "ON"
+    #define STRING_OFF                    "OFF"
+    #define STRING_AUTO                   "AUTO"
+    #define STRING_SMART                  "SMART"
+    #define STRING_SLOW_SPEED             "Pomalu"
+    #define STRING_NORMAL_SPEED           "Normál"
+    #define STRING_FAST_SPEED             "Rychle"
 
     #define STRING_1_DEGREE               "1℃"
     #define STRING_5_DEGREE               "5℃"

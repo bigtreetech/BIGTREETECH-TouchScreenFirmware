@@ -18,8 +18,6 @@
     #define STRING_MARLIN_SHOW_TITLE      "Marlin Mode Title Support"
     #define STRING_MARLIN_FULLSCREEN      "Nagyképernyős Marlin mód"
     #define STRING_MARLIN_TYPE            "Marlin Mode Type"
-    #define STRING_HEATED_BED             "Heated Bed Support"
-    #define STRING_HEATED_CHAMBER         "Heated Chamber Support"
     #define STRING_MOVE_SPEED             "Mozg.Sebesség (X-Y-Z)"
     #define STRING_AUTO_LOAD_LEVELING     "Auto Save Load Leveling"
     #define STRING_TOUCHMI_SENSOR         "TouchMI"
@@ -49,8 +47,6 @@
     #define STRING_CANCEL_GCODE_ENABLED   "Leállító G-Kód"
 
     // Machine Parameter Settings
-    #define STRING_HOME_OFFSET            "Kezdőpont Eltolás"
-    #define STRING_PROBE_OFFSET           "Szonda Eltolás"
     #define STRING_MBL_OFFSET             "MBL Offset"
     #define STRING_STEPS_SETTING          "Lépés Beállítás"
     #define STRING_MAXFEEDRATE            "Max Előtolási Sebesség"
@@ -58,10 +54,12 @@
     #define STRING_ACCELERATION           "Gyorsulás"
     #define STRING_JERK                   "Rántás"
     #define STRING_JUNCTION_DEVIATION     "Keresztezés Eltérés"
+    #define STRING_HOME_OFFSET            "Kezdőpont Eltolás"
     #define STRING_FWRETRACT              "FW Visszahúzás"
     #define STRING_FWRECOVER              "FW Visszahúzás helyreáll."
     #define STRING_RETRACT_AUTO           "Automata Visszahúzás"
     #define STRING_OFFSET_TOOL            "Második fej eltolása"
+    #define STRING_PROBE_OFFSET           "Szonda Eltolás"
     #define STRING_LIN_ADVANCE            "Lineáris Haladás"
     #define STRING_CURRENT_SETTING        "Motoráramok Beállítása"
     #define STRING_BUMP_SENSITIVITY       "TMC ütközés érzékenység"
@@ -77,15 +75,6 @@
     #define STRING_SWAP_RECOVER_LENGTH    "Cserehossz javítás"
     #define STRING_RECOVER_FEEDRATE       "Előtolás javítás"
     #define STRING_SWAP_RECOVER_FEEDRATE  "Csere előtolás jav."
-
-    // Standard Parameter Values
-    #define STRING_ON                     "BE"
-    #define STRING_OFF                    "KI"
-    #define STRING_AUTO                   "AUTO"
-    #define STRING_SMART                  "OKOS"
-    #define STRING_SLOW_SPEED             "Lassú"
-    #define STRING_NORMAL_SPEED           "Normál"
-    #define STRING_FAST_SPEED             "Gyors"
 
     // Save / Load
     #define STRING_SAVE                   "Mentés"
@@ -195,6 +184,14 @@
     #define STRING_BBL                    "BBL"
     #define STRING_UBL                    "UBL"
     #define STRING_MBL                    "MBL"
+
+    #define STRING_ON                     "BE"
+    #define STRING_OFF                    "KI"
+    #define STRING_AUTO                   "AUTO"
+    #define STRING_SMART                  "OKOS"
+    #define STRING_SLOW_SPEED             "Lassú"
+    #define STRING_NORMAL_SPEED           "Normál"
+    #define STRING_FAST_SPEED             "Gyors"
 
     #define STRING_1_DEGREE               "1℃"
     #define STRING_5_DEGREE               "5℃"

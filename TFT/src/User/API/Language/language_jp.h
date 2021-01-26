@@ -18,8 +18,6 @@
     #define STRING_MARLIN_SHOW_TITLE      "Marlin Mode Title Support"
     #define STRING_MARLIN_FULLSCREEN      "フルスクリーンでマーリンモード"
     #define STRING_MARLIN_TYPE            "Marlin Mode Type"
-    #define STRING_HEATED_BED             "Heated Bed Support"
-    #define STRING_HEATED_CHAMBER         "Heated Chamber Support"
     #define STRING_MOVE_SPEED             "移動速度(X Y Z)"
     #define STRING_AUTO_LOAD_LEVELING     "Auto Save Load Leveling"
     #define STRING_TOUCHMI_SENSOR         "TouchMI"
@@ -49,8 +47,6 @@
     #define STRING_CANCEL_GCODE_ENABLED   "Gコードをキャンセルする"
 
     // Machine Parameter Settings
-    #define STRING_HOME_OFFSET            "Home Offset"
-    #define STRING_PROBE_OFFSET           "プローブオフセット"
     #define STRING_MBL_OFFSET             "MBL Offset"
     #define STRING_STEPS_SETTING          "MMあたりのステップ"
     #define STRING_MAXFEEDRATE            "マックスフィード率"
@@ -58,10 +54,12 @@
     #define STRING_ACCELERATION           "加速度"
     #define STRING_JERK                   "Jerk"
     #define STRING_JUNCTION_DEVIATION     "Junction Deviation"
+    #define STRING_HOME_OFFSET            "Home Offset"
     #define STRING_FWRETRACT              "FW Retraction"
     #define STRING_FWRECOVER              "FW Retraction Recover"
     #define STRING_RETRACT_AUTO           "Auto Firmware Retract"
     #define STRING_OFFSET_TOOL            "Offset 2nd Nozzle"
+    #define STRING_PROBE_OFFSET           "プローブオフセット"
     #define STRING_LIN_ADVANCE            "Linear Advance"
     #define STRING_CURRENT_SETTING        "ドライバー電流 (mA)"
     #define STRING_BUMP_SENSITIVITY       "TMC バンプ感度"
@@ -77,15 +75,6 @@
     #define STRING_SWAP_RECOVER_LENGTH    "交換時の余分な押し出し長さ"
     #define STRING_RECOVER_FEEDRATE       "押出速度"
     #define STRING_SWAP_RECOVER_FEEDRATE  "交換時の押出速度"
-
-    // Standard Parameter Values
-    #define STRING_ON                     "ON"
-    #define STRING_OFF                    "OFF"
-    #define STRING_AUTO                   "AUTO"
-    #define STRING_SMART                  "スマート"
-    #define STRING_SLOW_SPEED             "ゆっくり"
-    #define STRING_NORMAL_SPEED           "正常速度"
-    #define STRING_FAST_SPEED             "早め"
 
     // Save / Load
     #define STRING_SAVE                   "保存"
@@ -195,6 +184,14 @@
     #define STRING_BBL                    "BBL"
     #define STRING_UBL                    "UBL"
     #define STRING_MBL                    "MBL"
+
+    #define STRING_ON                     "ON"
+    #define STRING_OFF                    "OFF"
+    #define STRING_AUTO                   "AUTO"
+    #define STRING_SMART                  "スマート"
+    #define STRING_SLOW_SPEED             "ゆっくり"
+    #define STRING_NORMAL_SPEED           "正常速度"
+    #define STRING_FAST_SPEED             "早め"
 
     #define STRING_1_DEGREE               "1℃"
     #define STRING_5_DEGREE               "5℃"

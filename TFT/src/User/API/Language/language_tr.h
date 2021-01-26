@@ -18,8 +18,6 @@
     #define STRING_MARLIN_SHOW_TITLE      "Marlin Mode Title Support"
     #define STRING_MARLIN_FULLSCREEN      "Tam ekran Marlin modu"
     #define STRING_MARLIN_TYPE            "Marlin Mode Type"
-    #define STRING_HEATED_BED             "Heated Bed Support"
-    #define STRING_HEATED_CHAMBER         "Heated Chamber Support"
     #define STRING_MOVE_SPEED             "Hareket Hızı(X Y Z)"
     #define STRING_AUTO_LOAD_LEVELING     "Auto Save Load Leveling"
     #define STRING_TOUCHMI_SENSOR         "TouchMI"
@@ -49,8 +47,6 @@
     #define STRING_CANCEL_GCODE_ENABLED   "İptal gcodeu kullan"
 
     // Machine Parameter Settings
-    #define STRING_HOME_OFFSET            "Home Offset"
-    #define STRING_PROBE_OFFSET           "Probe Offset"
     #define STRING_MBL_OFFSET             "MBL Offset"
     #define STRING_STEPS_SETTING          "mm/adım"
     #define STRING_MAXFEEDRATE            "Maks. İlerleme Hızı"
@@ -58,10 +54,12 @@
     #define STRING_ACCELERATION           "İvmelenme"
     #define STRING_JERK                   "Jerk"
     #define STRING_JUNCTION_DEVIATION     "Junction Deviation"
+    #define STRING_HOME_OFFSET            "Home Offset"
     #define STRING_FWRETRACT              "Yazılım Geriçekmesi"
     #define STRING_FWRECOVER              "Yazılım Geriitmesi"
     #define STRING_RETRACT_AUTO           "Oto. yazılım geriçekmesi"
     #define STRING_OFFSET_TOOL            "2. Nozül Mesafesi"
+    #define STRING_PROBE_OFFSET           "Probe Offset"
     #define STRING_LIN_ADVANCE            "Linear Advance"
     #define STRING_CURRENT_SETTING        "Sürücü Akımı (mA)"
     #define STRING_BUMP_SENSITIVITY       "TMC Çarpma Hassasiyeti"
@@ -77,15 +75,6 @@
     #define STRING_SWAP_RECOVER_LENGTH    "Ekstra geriitme değişim mesafesi"
     #define STRING_RECOVER_FEEDRATE       "Geriitme hızı"
     #define STRING_SWAP_RECOVER_FEEDRATE  "Geriitme değişim hızı"
-
-    // Standard Parameter Values
-    #define STRING_ON                     "Açık"
-    #define STRING_OFF                    "Kapalı"
-    #define STRING_AUTO                   "AUTO"
-    #define STRING_SMART                  "AKILLI"
-    #define STRING_SLOW_SPEED             "Yavaş"
-    #define STRING_NORMAL_SPEED           "Normal"
-    #define STRING_FAST_SPEED             "Hızlı"
 
     // Save / Load
     #define STRING_SAVE                   "Kaydet"
@@ -195,6 +184,14 @@
     #define STRING_BBL                    "BBL"
     #define STRING_UBL                    "UBL"
     #define STRING_MBL                    "MBL"
+
+    #define STRING_ON                     "Açık"
+    #define STRING_OFF                    "Kapalı"
+    #define STRING_AUTO                   "AUTO"
+    #define STRING_SMART                  "AKILLI"
+    #define STRING_SLOW_SPEED             "Yavaş"
+    #define STRING_NORMAL_SPEED           "Normal"
+    #define STRING_FAST_SPEED             "Hızlı"
 
     #define STRING_1_DEGREE               "1°C"
     #define STRING_5_DEGREE               "5°C"
