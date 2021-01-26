@@ -47,7 +47,6 @@
     #define STRING_CANCEL_GCODE_ENABLED   "Gcode bei Abbruch"
 
     // Machine Parameter Settings
-    #define STRING_MBL_OFFSET             "MBL Offset"
     #define STRING_STEPS_SETTING          "Steps pro mm"
     #define STRING_MAXFEEDRATE            "max. Geschwindigkeit"
     #define STRING_MAXACCELERATION        "max. Beschleunigung"
@@ -75,6 +74,7 @@
     #define STRING_SWAP_RECOVER_LENGTH    "zus. Länge Rückeinschub (Wechsel)"
     #define STRING_RECOVER_FEEDRATE       "Geschw. Rückeinschub"
     #define STRING_SWAP_RECOVER_FEEDRATE  "Geschw. Rückeinschub (Wechsel)"
+    #define STRING_MBL_OFFSET             "MBL Offset"
 
     // Save / Load
     #define STRING_SAVE                   "Apeichern"

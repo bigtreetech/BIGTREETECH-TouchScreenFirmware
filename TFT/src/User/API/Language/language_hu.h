@@ -47,7 +47,6 @@
     #define STRING_CANCEL_GCODE_ENABLED   "Leállító G-Kód"
 
     // Machine Parameter Settings
-    #define STRING_MBL_OFFSET             "MBL Offset"
     #define STRING_STEPS_SETTING          "Lépés Beállítás"
     #define STRING_MAXFEEDRATE            "Max Előtolási Sebesség"
     #define STRING_MAXACCELERATION        "Max Gyorsulás"
@@ -75,6 +74,7 @@
     #define STRING_SWAP_RECOVER_LENGTH    "Cserehossz javítás"
     #define STRING_RECOVER_FEEDRATE       "Előtolás javítás"
     #define STRING_SWAP_RECOVER_FEEDRATE  "Csere előtolás jav."
+    #define STRING_MBL_OFFSET             "MBL Offset"
 
     // Save / Load
     #define STRING_SAVE                   "Mentés"

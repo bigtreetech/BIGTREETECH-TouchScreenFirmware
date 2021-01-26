@@ -47,7 +47,6 @@
     #define STRING_CANCEL_GCODE_ENABLED   "G-код скасувати друк"
 
     // Machine Parameter Settings
-    #define STRING_MBL_OFFSET             "MBL Offset"
     #define STRING_STEPS_SETTING          "Налаштування кроків на мм"
     #define STRING_MAXFEEDRATE            "MAX швидкість подачі"
     #define STRING_MAXACCELERATION        "MAX прискорення"
@@ -75,6 +74,7 @@
     #define STRING_SWAP_RECOVER_LENGTH    "Довжина при зміні сопла"
     #define STRING_RECOVER_FEEDRATE       "Швидкість подачі"
     #define STRING_SWAP_RECOVER_FEEDRATE  "Швидкість подачі при зміні сопла"
+    #define STRING_MBL_OFFSET             "MBL Offset"
 
     // Save / Load
     #define STRING_SAVE                   "Зберегти"

@@ -47,7 +47,6 @@
     #define STRING_CANCEL_GCODE_ENABLED   "İptal gcodeu kullan"
 
     // Machine Parameter Settings
-    #define STRING_MBL_OFFSET             "MBL Offset"
     #define STRING_STEPS_SETTING          "mm/adım"
     #define STRING_MAXFEEDRATE            "Maks. İlerleme Hızı"
     #define STRING_MAXACCELERATION        "Maks. İvmelenme"
@@ -75,6 +74,7 @@
     #define STRING_SWAP_RECOVER_LENGTH    "Ekstra geriitme değişim mesafesi"
     #define STRING_RECOVER_FEEDRATE       "Geriitme hızı"
     #define STRING_SWAP_RECOVER_FEEDRATE  "Geriitme değişim hızı"
+    #define STRING_MBL_OFFSET             "MBL Offset"
 
     // Save / Load
     #define STRING_SAVE                   "Kaydet"

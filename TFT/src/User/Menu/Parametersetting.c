@@ -9,24 +9,24 @@ bool parametersChanged = false;
 
 const LISTITEM parametertypes[P_ITEMSCOUNT] = {
   // icon               ItemType           Item Title                  item value text(only for custom value)
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_HOME_OFFSET,          LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_PROBE_OFFSET,         LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_MBL_OFFSET,           LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_ABL,                  LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_STEPS_SETTING,        LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_MAXFEEDRATE,          LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_MAXACCELERATION,      LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_ACCELERATION,         LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_JERK,                 LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_JUNCTION_DEVIATION,   LABEL_BACKGROUND},
+  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_HOME_OFFSET,          LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_FWRETRACT,            LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_FWRECOVER,            LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_RETRACT_AUTO,         LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_OFFSET_TOOL,          LABEL_BACKGROUND},
+  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_ABL,                  LABEL_BACKGROUND},
+  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_PROBE_OFFSET,         LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_LIN_ADVANCE,          LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_CURRENT_SETTING,      LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_BUMP_SENSITIVITY,     LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_HYBRID_THRESHOLD,     LABEL_BACKGROUND},
+  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_MBL_OFFSET,           LABEL_BACKGROUND},
   //Keep below items always at the end
   {ICONCHAR_SAVE,       LIST_LABEL,        LABEL_SETTINGS_SAVE,        LABEL_BACKGROUND},
   {ICONCHAR_UNDO,       LIST_LABEL,        LABEL_SETTINGS_RESTORE,     LABEL_BACKGROUND},
@@ -83,15 +83,6 @@ void menuShowParameter(void)
     //load parameter specific labels
     switch (cur_parameter)
     {
-      case P_MBL_OFFSET:
-        parameter_menuitems.items[i].titlelabel.address = "Z";
-        break;
-
-      case P_ABL_STATE:
-        parameter_menuitems.items[0].titlelabel.address = "S 1=ON 0=OFF";
-        parameter_menuitems.items[1].titlelabel.address = "Z fade";
-        break;
-
       case P_ACCELERATION:
         parameter_menuitems.items[i].titlelabel = accel_disp_ID[i];
         break;
@@ -125,9 +116,18 @@ void menuShowParameter(void)
         parameter_menuitems.items[Z_AXIS].titlelabel.address = "Z";
         break;
 
+      case P_ABL_STATE:
+        parameter_menuitems.items[0].titlelabel.address = "S 1=ON 0=OFF";
+        parameter_menuitems.items[1].titlelabel.address = "Z fade";
+        break;
+
       case P_LIN_ADV:
         parameter_menuitems.items[0].titlelabel.address = "K-E";
         parameter_menuitems.items[1].titlelabel.address = "K-E2";
+        break;
+
+      case P_MBL_OFFSET:
+        parameter_menuitems.items[i].titlelabel.address = "Z";
         break;
 
       default:

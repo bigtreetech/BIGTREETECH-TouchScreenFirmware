@@ -47,7 +47,6 @@
     #define STRING_CANCEL_GCODE_ENABLED   "Gコードをキャンセルする"
 
     // Machine Parameter Settings
-    #define STRING_MBL_OFFSET             "MBL Offset"
     #define STRING_STEPS_SETTING          "MMあたりのステップ"
     #define STRING_MAXFEEDRATE            "マックスフィード率"
     #define STRING_MAXACCELERATION        "最大加速度"
@@ -75,6 +74,7 @@
     #define STRING_SWAP_RECOVER_LENGTH    "交換時の余分な押し出し長さ"
     #define STRING_RECOVER_FEEDRATE       "押出速度"
     #define STRING_SWAP_RECOVER_FEEDRATE  "交換時の押出速度"
+    #define STRING_MBL_OFFSET             "MBL Offset"
 
     // Save / Load
     #define STRING_SAVE                   "保存"

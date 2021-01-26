@@ -54,7 +54,6 @@ extern "C" {
 #define LANG_KEY_CANCEL_GCODE_ENABLED         "label_cancel_gcode_enabled:"
 
 // Machine Parameter Settings
-#define LANG_KEY_MBL_OFFSET                   "label_mbl_offset:"
 #define LANG_KEY_STEPS_SETTING                "label_steps_setting:"
 #define LANG_KEY_MAXFEEDRATE                  "label_maxfeedrate:"
 #define LANG_KEY_MAXACCELERATION              "label_maxacceleration:"
@@ -82,6 +81,7 @@ extern "C" {
 #define LANG_KEY_SWAP_RECOVER_LENGTH          "label_swap_recover_length:"
 #define LANG_KEY_RECOVER_FEEDRATE             "label_recover_feedrate:"
 #define LANG_KEY_SWAP_RECOVER_FEEDRATE        "label_swap_recover_feedrate:"
+#define LANG_KEY_MBL_OFFSET                   "label_mbl_offset:"
 
 // Save / Load
 #define LANG_KEY_SAVE                         "label_save:"

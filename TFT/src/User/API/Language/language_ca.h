@@ -47,7 +47,6 @@
     #define STRING_CANCEL_GCODE_ENABLED   "Cancel · lar Gcode"
 
     // Machine Parameter Settings
-    #define STRING_MBL_OFFSET             "MBL Offset"
     #define STRING_STEPS_SETTING          "Passos per MM"
     #define STRING_MAXFEEDRATE            "Max Feed Rate"
     #define STRING_MAXACCELERATION        "Max Acceleració"
@@ -75,6 +74,7 @@
     #define STRING_SWAP_RECOVER_LENGTH    "Distancia recuperació intercanvi extra"
     #define STRING_RECOVER_FEEDRATE       "Velocitat recuperació"
     #define STRING_SWAP_RECOVER_FEEDRATE  "Velocitat recuperació intercanvi"
+    #define STRING_MBL_OFFSET             "MBL Offset"
 
     // Save / Load
     #define STRING_SAVE                   "Gravar"

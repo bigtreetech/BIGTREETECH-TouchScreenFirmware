@@ -47,7 +47,6 @@
     #define STRING_CANCEL_GCODE_ENABLED   "Spustit Gcode po stornu"
 
     // Machine Parameter Settings
-    #define STRING_MBL_OFFSET             "MBL Offset"
     #define STRING_STEPS_SETTING          "Kroků/mm"
     #define STRING_MAXFEEDRATE            "Max rychlost"
     #define STRING_MAXACCELERATION        "Max zrychlení"
@@ -75,6 +74,7 @@
     #define STRING_SWAP_RECOVER_LENGTH    "Délka obnovení Swap"
     #define STRING_RECOVER_FEEDRATE       "Rychlost obnovení"
     #define STRING_SWAP_RECOVER_FEEDRATE  "Rychlost obnovení Swap"
+    #define STRING_MBL_OFFSET             "MBL Offset"
 
     // Save / Load
     #define STRING_SAVE                   "Uložit"

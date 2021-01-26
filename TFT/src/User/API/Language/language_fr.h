@@ -47,7 +47,6 @@
     #define STRING_CANCEL_GCODE_ENABLED   "Gcode d'annulation"
 
     // Machine Parameter Settings
-    #define STRING_MBL_OFFSET             "MBL Offset"
     #define STRING_STEPS_SETTING          "Steps par mm"
     #define STRING_MAXFEEDRATE            "Vitesses maximales"
     #define STRING_MAXACCELERATION        "Accélérations maximales"
@@ -75,6 +74,7 @@
     #define STRING_SWAP_RECOVER_LENGTH    "Longueur de swap"
     #define STRING_RECOVER_FEEDRATE       "Vitesse"
     #define STRING_SWAP_RECOVER_FEEDRATE  "Vitesse de swap"
+    #define STRING_MBL_OFFSET             "MBL Offset"
 
     // Save / Load
     #define STRING_SAVE                   "Sauver"

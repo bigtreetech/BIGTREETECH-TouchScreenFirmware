@@ -47,7 +47,6 @@
     #define STRING_CANCEL_GCODE_ENABLED   "Script canc. stampa"
 
     // Machine Parameter Settings
-    #define STRING_MBL_OFFSET             "MBL Offset"
     #define STRING_STEPS_SETTING          "Step per mm"
     #define STRING_MAXFEEDRATE            "Feedrate massimo"
     #define STRING_MAXACCELERATION        "Accelerazione massima"
@@ -75,6 +74,7 @@
     #define STRING_SWAP_RECOVER_LENGTH    "Lung. di recupero scambio extra"
     #define STRING_RECOVER_FEEDRATE       "Feedrate recupero"
     #define STRING_SWAP_RECOVER_FEEDRATE  "Rec.feedrate di scambio"
+    #define STRING_MBL_OFFSET             "MBL Offset"
 
     // Save / Load
     #define STRING_SAVE                   "Salva"

@@ -47,7 +47,6 @@
     #define STRING_CANCEL_GCODE_ENABLED   "中断打印Gcode"
 
     // Machine Parameter Settings
-    #define STRING_MBL_OFFSET             "MBL Offset"
     #define STRING_STEPS_SETTING          "电机每毫米脉冲数(Steps/mm)"
     #define STRING_MAXFEEDRATE            "最大移动速度"
     #define STRING_MAXACCELERATION        "最大加速度"
@@ -75,6 +74,7 @@
     #define STRING_SWAP_RECOVER_LENGTH    "换料时额外挤出的长度"
     #define STRING_RECOVER_FEEDRATE       "FW挤出速度"
     #define STRING_SWAP_RECOVER_FEEDRATE  "换料时挤出的速度"
+    #define STRING_MBL_OFFSET             "MBL Offset"
 
     // Save / Load
     #define STRING_SAVE                   "保存参数"
