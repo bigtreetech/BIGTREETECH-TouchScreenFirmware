@@ -80,6 +80,15 @@ The TFT firmware update is done in three steps described below and includes up t
 
 **ELEMENTS:**
 
+**element1:** The firmware binary (`BIGTREE_TFT*_V*.*.*.bin`). Example: `BIGTREE_TFT35_V3.0.26.1.bin`:
+
+- `BIGTREE_TFT_35`: model
+- `V3.0`: hardware version
+- `26.1`: software version
+
+For the MKS TFT28 the binary file is `MKSTFT28.bin`.
+
+
 **element2:** Fonts and Icons (in the `TFT*` or `MKS` folder):
 
 For BTT TFTs the ROOT folder for fonts and icons is TFT*, where * is the size of the TFT (example: TFT24, TFT35, TFT50, etc).
