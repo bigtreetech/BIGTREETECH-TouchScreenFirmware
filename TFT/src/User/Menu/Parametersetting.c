@@ -366,13 +366,23 @@ int16_t drawTemperatureStatus(void)
   int16_t x_offset = LCD_WIDTH - 10;
   if (!temperatureStatusValid()) return x_offset;
 
-  uint8_t tmpHeater[3]; // chamber, bed, hotend
+  uint8_t tmpHeater[3]; // chamber, bed, 1-2hotend
   uint16_t tmpIcon[3];
   uint8_t tmpIndex = 0;
   if (infoSettings.hotend_count)
   { // global hotend
-    tmpIcon[tmpIndex] = ICON_GLOBAL_NOZZLE;
-    tmpHeater[tmpIndex++] = heatGetCurrentHotend();
+    if (infoSettings.hotend_count == 2 && !infoSettings.chamber_en )  // dual hotend
+    {
+      tmpIcon[tmpIndex] = ICON_GLOBAL_NOZZLE;
+      tmpHeater[tmpIndex++] = NOZZLE0;
+      tmpIcon[tmpIndex] = ICON_GLOBAL_NOZZLE;
+      tmpHeater[tmpIndex++] = NOZZLE1;
+    }
+    else // singl or mixing hotend
+    {
+      tmpIcon[tmpIndex] = ICON_GLOBAL_NOZZLE;
+      tmpHeater[tmpIndex++] = heatGetCurrentHotend();
+    }
   }
   if (infoSettings.bed_en)
   { // global bed
