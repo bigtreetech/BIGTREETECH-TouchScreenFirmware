@@ -229,15 +229,10 @@ void switchMode(void)
           LOGO_ReadDisplay();
           updateNextHeatCheckTime();  // send "M105" after a delay, because of mega2560 will be hanged when received data at startup
           #ifdef BTT_BOOTSCREEN_TIME
-          while (OS_GetTimeMs() - startUpTime < BTT_BOOTSCREEN_TIME)  // Display logo BTT_BOOTSCREEN_TIME ms
-          {
-            loopProcess();
-          }
-          #else
-          while (OS_GetTimeMs() - startUpTime < 3000)  // Display 3s logo
-          {
-            loopProcess();
-          }
+            while (OS_GetTimeMs() - startUpTime < BTT_BOOTSCREEN_TIME)  // Display logo BTT_BOOTSCREEN_TIME ms
+            {
+              loopProcess();
+            }
           #endif
           heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
           freshBoot = false;
