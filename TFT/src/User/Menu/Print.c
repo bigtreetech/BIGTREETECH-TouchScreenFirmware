@@ -190,14 +190,6 @@ void menuPrintFromSource(void)
   GUI_Clear(infoSettings.bg_color);
   GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, LABEL_LOADING);
 
-  #ifdef SD_CD_PIN
-    if (isVolumeExist(infoFile.source) != true)
-    {
-      resetInfoFile();
-      infoMenu.cur--;
-    }
-  #endif
-
   if (mountFS() == true && scanPrintFiles() == true)
   {
     if (list_mode != true)
@@ -309,6 +301,13 @@ void menuPrintFromSource(void)
       else
         gocdeListDraw();
     }
+    #ifdef SD_CD_PIN
+      if (isVolumeExist(infoFile.source) != true)
+      {
+        resetInfoFile();
+        infoMenu.cur--;
+      }
+    #endif
     loopProcess();
   }
 }
