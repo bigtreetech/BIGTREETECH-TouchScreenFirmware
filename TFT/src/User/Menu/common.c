@@ -82,6 +82,7 @@ const ITEM itemExtLenSteps[ITEM_EXT_LEN_NUM] =
 // List for extruder length/distance change steps
 const float extlenSteps[ITEM_EXT_LEN_NUM] = {1.0f, 5.0f, 10.0f, 100.0f, 200.0f};
 
+// Labels list for ON/OFF settings
 const LABEL itemToggle[ITEM_TOGGLE_NUM] =
 {
   LABEL_OFF,

@@ -43,14 +43,6 @@ const LABEL itemToggleSmart[ITEM_TOGGLE_SMART_NUM] =
   LABEL_SMART
 };
 
-#define ITEM_SPEED_NUM 3
-const LABEL itemMoveSpeed[ITEM_SPEED_NUM] =
-{
-  LABEL_SLOW,
-  LABEL_NORMAL,
-  LABEL_FAST
-};
-
 #define ITEM_DEFAULT_MODE_NUM 2
 const char *const itemDefaultMode[ITEM_DEFAULT_MODE_NUM] =
 {
@@ -297,7 +289,7 @@ void updateFeatureSettings(uint8_t key_val)
 
     case SKEY_SPEED:
       infoSettings.move_speed = (infoSettings.move_speed + 1) % ITEM_SPEED_NUM;
-      settingPage[item_index].valueLabel = itemMoveSpeed[infoSettings.move_speed];
+      settingPage[item_index].valueLabel = itemSpeed[infoSettings.move_speed].label;
       break;
 
     case SKEY_AUTO_LOAD_LEVELING:
@@ -519,7 +511,7 @@ void loadFeatureSettings()
         #endif
 
         case SKEY_SPEED:
-          settingPage[item_index].valueLabel = itemMoveSpeed[infoSettings.move_speed];
+          settingPage[item_index].valueLabel = itemSpeed[infoSettings.move_speed].label;
           break;
 
         case SKEY_AUTO_LOAD_LEVELING:

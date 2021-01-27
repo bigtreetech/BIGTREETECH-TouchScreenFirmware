@@ -13,8 +13,6 @@ extern "C" {
 #define ITEM_MOVE_LEN_NUM       5
 #define ITEM_FINE_MOVE_LEN_NUM  3
 #define ITEM_EXT_LEN_NUM        5
-
-// standard parameter values
 #define ITEM_TOGGLE_NUM         2
 
 extern uint8_t currentTool;
@@ -36,7 +34,6 @@ extern const float moveLenSteps[ITEM_MOVE_LEN_NUM];
 extern const ITEM itemExtLenSteps[ITEM_EXT_LEN_NUM];
 extern const float extlenSteps[ITEM_EXT_LEN_NUM];
 
-// standard parameter values
 extern const LABEL itemToggle[ITEM_TOGGLE_NUM];
 
 bool nextScreenUpdate(uint32_t duration);
