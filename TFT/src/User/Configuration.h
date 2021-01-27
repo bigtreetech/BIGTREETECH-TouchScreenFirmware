@@ -1,6 +1,6 @@
 #ifndef _CONFIGURATION_H_
 #define _CONFIGURATION_H_
-#define CONFIG_VERSION 20210105
+#define CONFIG_VERSION 20210124
 
 //===========================================================================
 //============================= General Settings ============================
@@ -303,8 +303,11 @@
 // Show bootscreen when starting up
 #define SHOW_BTT_BOOTSCREEN
 
-// Enable alternative Move Menu Buttons Layout matching the direction of actual printer axis
-// Update the icons from alternate icon folder.
+// Bootscreen logo time in ms
+#define BTT_BOOTSCREEN_TIME 3000
+
+// Enable alternative Move Menu Buttons Layout matching the direction of actual printer axis.
+// update the icons from alternate icon folder
 #define ALTERNATIVE_MOVE_MENU
 
 /**
