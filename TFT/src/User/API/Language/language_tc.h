@@ -102,8 +102,18 @@
     #define STRING_DEC                    "減少"
     #define STRING_LOAD                   "進料"
     #define STRING_UNLOAD                 "退料"
+    #define STRING_ON                     "開啟"
+    #define STRING_OFF                    "關閉"
+    #define STRING_AUTO                   "AUTO"
+    #define STRING_SMART                  "自動"
+    #define STRING_SLOW                   "慢速"
+    #define STRING_NORMAL                 "常速"
+    #define STRING_FAST                   "快速"
+    #define STRING_ZERO                   "歸零"
+    #define STRING_HALF                   "半速"
+    #define STRING_FULL                   "全速"
+    #define STRING_CUSTOM                 "自定義"
     #define STRING_CLEAR                  "Clear"
-    #define STRING_VALUE_ZERO             "歸零"
     #define STRING_DEFAULT                "默認"
 
     // Action Buttons
@@ -117,6 +127,7 @@
     #define STRING_FORCE_SHUT_DOWN        "強制關機"
     #define STRING_EMERGENCYSTOP          "立刻停止"
     #define STRING_PREHEAT                "預熱"
+    #define STRING_PREHEAT_BOTH           "全部"
     #define STRING_COOLDOWN               "冷卻"
 
     // Dialog Buttons
@@ -172,27 +183,16 @@
     #define STRING_STOW                   "探針收回"
     #define STRING_REPEAT                 "精度測試"
 
-    // Values
+    // Printer Tools
     #define STRING_NOZZLE                 "噴頭"
     #define STRING_BED                    "熱床"
     #define STRING_CHAMBER                "機殼"
+    #define STRING_FAN                    "風扇"
 
     #define STRING_BLTOUCH                "BLTouch "
     #define STRING_TOUCHMI                "TouchMi"
 
-    #define STRING_ABL                    "自動調平"
-    #define STRING_BBL                    "BBL"
-    #define STRING_UBL                    "UBL"
-    #define STRING_MBL                    "MBL"
-
-    #define STRING_ON                     "開啟"
-    #define STRING_OFF                    "關閉"
-    #define STRING_AUTO                   "AUTO"
-    #define STRING_SMART                  "自動"
-    #define STRING_SLOW_SPEED             "慢速"
-    #define STRING_NORMAL_SPEED           "常速"
-    #define STRING_FAST_SPEED             "快速"
-
+    // Values
     #define STRING_1_DEGREE               "1℃"
     #define STRING_5_DEGREE               "5℃"
     #define STRING_10_DEGREE              "10℃"
@@ -209,8 +209,6 @@
     #define STRING_5_PERCENT              "5%"
     #define STRING_10_PERCENT             "10%"
     #define STRING_PERCENT_VALUE          "%d%%"
-    #define STRING_PERCENTAGE_SPEED       "速度百分比"
-    #define STRING_PERCENTAGE_FLOW        "流量百分比"
 
     #define STRING_5_SECONDS              "5秒."
     #define STRING_10_SECONDS             "10秒."
@@ -218,7 +216,6 @@
     #define STRING_60_SECONDS             "1分鐘"
     #define STRING_120_SECONDS            "2分鐘"
     #define STRING_300_SECONDS            "5分鐘"
-    #define STRING_CUSTOM_SECONDS         "自訂"
 
     // Colors
     #define STRING_WHITE                  "白"
@@ -246,7 +243,6 @@
     #define STRING_HOME                   "回原點"
     #define STRING_PRINT                  "列印"
     #define STRING_EXTRUDE                "擠出"
-    #define STRING_FAN                    "風扇"
     #define STRING_SETTINGS               "設定"
     #define STRING_SCREEN_SETTINGS        "螢幕設定"
     #define STRING_MACHINE_SETTINGS       "機器設定"
@@ -255,7 +251,6 @@
     #define STRING_RGB_SETTINGS           "燈光顏色"
     #define STRING_RGB_OFF                "關閉燈光"
     #define STRING_TERMINAL               "終端"
-    #define STRING_CUSTOM                 "自定義"
     #define STRING_LEVELING               "調平"
     #define STRING_POINT_1                "第一點"
     #define STRING_POINT_2                "第二點"
@@ -267,6 +262,10 @@
     #define STRING_BL_SMART_FILL          "部分點未探測，已被自動填充，需要手動保存!"
     #define STRING_BL_ENABLE              "BL:已開啟"
     #define STRING_BL_DISABLE             "BL:已關閉"
+    #define STRING_ABL                    "自動調平"
+    #define STRING_BBL                    "BBL"
+    #define STRING_UBL                    "UBL"
+    #define STRING_MBL                    "MBL"
     #define STRING_MBL_SETTINGS           "Mesh Bed Leveling"
     #define STRING_ABL_SETTINGS           "Auto Bed Leveling"
     #define STRING_ABL_SETTINGS_BBL       "Bilinear Bed Leveling"
@@ -284,14 +283,14 @@
     #define STRING_DISTANCE               "距離"
     #define STRING_LOAD_UNLOAD            "Load/Unload"  // needs translation
     #define STRING_LOAD_UNLOAD_SHORT      "(Un)Load"  // needs translation
-    #define STRING_FAN_FULL_SPEED         "全速"
-    #define STRING_FAN_HALF_SPEED         "半速"
     #define STRING_TOUCHSCREEN_ADJUST     "觸控校正"
     #define STRING_MORE                   "更多"
     #define STRING_SCREEN_INFO            "關於"
     #define STRING_SIMULATOR_BG_COLOR     "Marlin模式背景顏色"
     #define STRING_SIMULATOR_FONT_COLOR   "Marlin模式字體顏色"
     #define STRING_PERCENTAGE             "百分比"
+    #define STRING_PERCENTAGE_SPEED       "速度百分比"
+    #define STRING_PERCENTAGE_FLOW        "流量百分比"
     #define STRING_BABYSTEP               "Z軸微調"
     #define STRING_X_INC                  "X+"
     #define STRING_Y_INC                  "Y+"
@@ -306,7 +305,6 @@
     #define STRING_ADJUST_INFO            "點擊紅點"
     #define STRING_ADJUST_OK              "校正成功"
     #define STRING_ADJUST_FAILED          "校正失敗"
-    #define STRING_PREHEAT_BOTH           "全部"
     #define STRING_UNIFIEDMOVE            "運動"
     #define STRING_UNIFIEDHEAT            "溫度"
     #define STRING_TOUCH_TO_EXIT          "觸控任意位置退出頁面"
@@ -350,7 +348,6 @@
     #define STRING_NO_FILAMENT_STATS      "\nFilament data not available."
     #define STRING_CLICK_FOR_MORE         "Click for summary"
     #define STRING_EXT_TEMPLOW            "Hotend temperature is below\nminimum temperature (%d℃)."
-    #define STRING_COLD_EXT               "Cold extrusion prevented"
     #define STRING_HEAT_HOTEND            "Heat hotend to %d℃?"
     #define STRING_Z_ALIGN                "Z Align"
 

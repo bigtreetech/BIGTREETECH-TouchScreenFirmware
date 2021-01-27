@@ -102,8 +102,18 @@
     #define STRING_DEC                    "Зменшити"
     #define STRING_LOAD                   "Завантаження"
     #define STRING_UNLOAD                 "Вивантаження"
+    #define STRING_ON                     "Увімкнути"
+    #define STRING_OFF                    "Вимкн"
+    #define STRING_AUTO                   "AUTO"
+    #define STRING_SMART                  "Розумний"
+    #define STRING_SLOW                   "Повільно"
+    #define STRING_NORMAL                 "Звичайно"
+    #define STRING_FAST                   "Швидко"
+    #define STRING_ZERO                   "Обнулити"
+    #define STRING_HALF                   "50%"
+    #define STRING_FULL                   "100%"
+    #define STRING_CUSTOM                 "Своє меню"
     #define STRING_CLEAR                  "Прибрати"
-    #define STRING_VALUE_ZERO             "Обнулити"
     #define STRING_DEFAULT                "За замовчуванням"
 
     // Action Buttons
@@ -117,6 +127,7 @@
     #define STRING_FORCE_SHUT_DOWN        "Примусово вимк"
     #define STRING_EMERGENCYSTOP          "Екст. стоп"
     #define STRING_PREHEAT                "Прогрівання"
+    #define STRING_PREHEAT_BOTH           "Обидва"
     #define STRING_COOLDOWN               "Охолодити"
 
     // Dialog Buttons
@@ -172,27 +183,16 @@
     #define STRING_STOW                   "BLT вгору"
     #define STRING_REPEAT                 "Точність Z"
 
-    // Values
+    // Printer Tools
     #define STRING_NOZZLE                 "Сопло"
     #define STRING_BED                    "Стіл"
     #define STRING_CHAMBER                "Камера"
+    #define STRING_FAN                    "Вентилятор"
 
     #define STRING_BLTOUCH                "BLTouch"
     #define STRING_TOUCHMI                "TouchMi"
 
-    #define STRING_ABL                    "ABL"
-    #define STRING_BBL                    "BBL"
-    #define STRING_UBL                    "UBL"
-    #define STRING_MBL                    "MBL"
-
-    #define STRING_ON                     "Увімкнути"
-    #define STRING_OFF                    "Вимкн"
-    #define STRING_AUTO                   "AUTO"
-    #define STRING_SMART                  "Розумний"
-    #define STRING_SLOW_SPEED             "Повільно"
-    #define STRING_NORMAL_SPEED           "Звичайно"
-    #define STRING_FAST_SPEED             "Швидко"
-
+    // Values
     #define STRING_1_DEGREE               "1℃"
     #define STRING_5_DEGREE               "5℃"
     #define STRING_10_DEGREE              "10℃"
@@ -209,8 +209,6 @@
     #define STRING_5_PERCENT              "5%"
     #define STRING_10_PERCENT             "10%"
     #define STRING_PERCENT_VALUE          "%d%%"
-    #define STRING_PERCENTAGE_SPEED       "Швидкість"
-    #define STRING_PERCENTAGE_FLOW        "Потік"
 
     #define STRING_5_SECONDS              "5 сек."
     #define STRING_10_SECONDS             "10 сек."
@@ -218,7 +216,6 @@
     #define STRING_60_SECONDS             "1 хв."
     #define STRING_120_SECONDS            "2 хв."
     #define STRING_300_SECONDS            "5 хв."
-    #define STRING_CUSTOM_SECONDS         "Своє"
 
     // Colors
     #define STRING_WHITE                  "Білий"
@@ -246,7 +243,6 @@
     #define STRING_HOME                   "Додому"
     #define STRING_PRINT                  "Друк"
     #define STRING_EXTRUDE                "Екструзія"
-    #define STRING_FAN                    "Вентилятор"
     #define STRING_SETTINGS               "Налаштування"
     #define STRING_SCREEN_SETTINGS        "Екран"
     #define STRING_MACHINE_SETTINGS       "Принтер"
@@ -255,7 +251,6 @@
     #define STRING_RGB_SETTINGS           "Колір LED"
     #define STRING_RGB_OFF                "LED вимкн."
     #define STRING_TERMINAL               "Термінал"
-    #define STRING_CUSTOM                 "Своє меню"
     #define STRING_LEVELING               "Стіл вруч."
     #define STRING_POINT_1                "Точка 1"
     #define STRING_POINT_2                "Точка 2"
@@ -267,6 +262,10 @@
     #define STRING_BL_SMART_FILL          "Відсутні точки \nзаміру були автоматично \nзаповнені. \nНатисніть зберегти!"
     #define STRING_BL_ENABLE              "BL: увімкн."
     #define STRING_BL_DISABLE             "BL: вимкн."
+    #define STRING_ABL                    "ABL"
+    #define STRING_BBL                    "BBL"
+    #define STRING_UBL                    "UBL"
+    #define STRING_MBL                    "MBL"
     #define STRING_MBL_SETTINGS           "Вирівнювання по сітці"
     #define STRING_ABL_SETTINGS           "Автовирівнювання"
     #define STRING_ABL_SETTINGS_BBL       "Білінійне калібрування"
@@ -284,14 +283,14 @@
     #define STRING_DISTANCE               "Відступи"
     #define STRING_LOAD_UNLOAD            "Завантаження/Вивантаження"
     #define STRING_LOAD_UNLOAD_SHORT      "(За/ви)вантаж."
-    #define STRING_FAN_FULL_SPEED         "100%"
-    #define STRING_FAN_HALF_SPEED         "50%"
     #define STRING_TOUCHSCREEN_ADJUST     "Калібрування сенсору"
     #define STRING_MORE                   "Більше \u089C" // Curved Right Arrow
     #define STRING_SCREEN_INFO            "Інформація"
     #define STRING_SIMULATOR_BG_COLOR     "Колір фону Marlin симулятору"
     #define STRING_SIMULATOR_FONT_COLOR   "Колір шрифту Marlin симулятору"
     #define STRING_PERCENTAGE             "підстроювання"
+    #define STRING_PERCENTAGE_SPEED       "Швидкість"
+    #define STRING_PERCENTAGE_FLOW        "Потік"
     #define STRING_BABYSTEP               "Мікрокрок Z"
     #define STRING_X_INC                  "X+"
     #define STRING_Y_INC                  "Y+"
@@ -306,7 +305,6 @@
     #define STRING_ADJUST_INFO            "Натисніть на червону крапку"
     #define STRING_ADJUST_OK              "Успішне калібрування"
     #define STRING_ADJUST_FAILED          "Невдале калібрування, спробуйте знову"
-    #define STRING_PREHEAT_BOTH           "Обидва"
     #define STRING_UNIFIEDMOVE            "Рух"
     #define STRING_UNIFIEDHEAT            "Нагрівання"
     #define STRING_TOUCH_TO_EXIT          "Натисніть, щоб повернутися"
@@ -350,7 +348,6 @@
     #define STRING_NO_FILAMENT_STATS      "\nFilament data not available."
     #define STRING_CLICK_FOR_MORE         "Click for summary"
     #define STRING_EXT_TEMPLOW            "Температура хотенду нижче\nмінімальної температури (%d℃)."
-    #define STRING_COLD_EXT               "Убережено від холодної екструзії."
     #define STRING_HEAT_HOTEND            "Heat hotend to %d℃?"
     #define STRING_Z_ALIGN                "Z Align"
 

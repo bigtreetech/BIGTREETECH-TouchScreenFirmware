@@ -102,8 +102,18 @@
     #define STRING_DEC                    "Уменьшить"
     #define STRING_LOAD                   "Загрузка"
     #define STRING_UNLOAD                 "Выгрузка"
+    #define STRING_ON                     "Вкл"
+    #define STRING_OFF                    "Выкл"
+    #define STRING_AUTO                   "AUTO"
+    #define STRING_SMART                  "Умный"
+    #define STRING_SLOW                   "Медленно"
+    #define STRING_NORMAL                 "Обычно"
+    #define STRING_FAST                   "Быстро"
+    #define STRING_ZERO                   "Обнулить"
+    #define STRING_HALF                   "50%"
+    #define STRING_FULL                   "Максимум"
+    #define STRING_CUSTOM                 "Своё меню"
     #define STRING_CLEAR                  "Убрать"
-    #define STRING_VALUE_ZERO             "Обнулить"
     #define STRING_DEFAULT                "По умолчанию"
 
     // Action Buttons
@@ -117,6 +127,7 @@
     #define STRING_FORCE_SHUT_DOWN        "Принудительно выкл"
     #define STRING_EMERGENCYSTOP          "Экст.стоп"
     #define STRING_PREHEAT                "Преднагрев"
+    #define STRING_PREHEAT_BOTH           "Оба"
     #define STRING_COOLDOWN               "Охладить"
 
     // Dialog Buttons
@@ -172,27 +183,16 @@
     #define STRING_STOW                   "BLT вверх"
     #define STRING_REPEAT                 "Точность Z"
 
-    // Values
+    // Printer Tools
     #define STRING_NOZZLE                 "Сопло"
     #define STRING_BED                    "Стол"
     #define STRING_CHAMBER                "Камера"
+    #define STRING_FAN                    "Вентилятор"
 
     #define STRING_BLTOUCH                "BLTouch"
     #define STRING_TOUCHMI                "TouchMi"
 
-    #define STRING_ABL                    "ABL"
-    #define STRING_BBL                    "BBL"
-    #define STRING_UBL                    "UBL"
-    #define STRING_MBL                    "MBL"
-
-    #define STRING_ON                     "Вкл"
-    #define STRING_OFF                    "Выкл"
-    #define STRING_AUTO                   "AUTO"
-    #define STRING_SMART                  "Умный"
-    #define STRING_SLOW_SPEED             "Медленно"
-    #define STRING_NORMAL_SPEED           "Обычно"
-    #define STRING_FAST_SPEED             "Быстро"
-
+    // Values
     #define STRING_1_DEGREE               "1℃"
     #define STRING_5_DEGREE               "5℃"
     #define STRING_10_DEGREE              "10℃"
@@ -209,8 +209,6 @@
     #define STRING_5_PERCENT              "5%"
     #define STRING_10_PERCENT             "10%"
     #define STRING_PERCENT_VALUE          "%d%%"
-    #define STRING_PERCENTAGE_SPEED       "Скорость"
-    #define STRING_PERCENTAGE_FLOW        "Поток"
 
     #define STRING_5_SECONDS              "5 сек."
     #define STRING_10_SECONDS             "10 сек."
@@ -218,7 +216,6 @@
     #define STRING_60_SECONDS             "1 мин."
     #define STRING_120_SECONDS            "2 мин."
     #define STRING_300_SECONDS            "5 мин."
-    #define STRING_CUSTOM_SECONDS         "Своё"
 
     // Colors
     #define STRING_WHITE                  "Белый"
@@ -246,7 +243,6 @@
     #define STRING_HOME                   "Домой"
     #define STRING_PRINT                  "Печать"
     #define STRING_EXTRUDE                "Экструзия"
-    #define STRING_FAN                    "Вентилятор"
     #define STRING_SETTINGS               "Настройки"
     #define STRING_SCREEN_SETTINGS        "Экран"
     #define STRING_MACHINE_SETTINGS       "Принтер"
@@ -255,7 +251,6 @@
     #define STRING_RGB_SETTINGS           "Цвет LED"
     #define STRING_RGB_OFF                "LED выкл"
     #define STRING_TERMINAL               "Терминал"
-    #define STRING_CUSTOM                 "Своё меню"
     #define STRING_LEVELING               "Стол вруч."
     #define STRING_POINT_1                "Точка 1"
     #define STRING_POINT_2                "Точка 2"
@@ -267,6 +262,10 @@
     #define STRING_BL_SMART_FILL          "Отсутствующие точки\nзамера были атоматически\nзаполнены.\nЗапомните для сохраниения!"
     #define STRING_BL_ENABLE              "BL: вкл"
     #define STRING_BL_DISABLE             "BL: выкл"
+    #define STRING_ABL                    "ABL"
+    #define STRING_BBL                    "BBL"
+    #define STRING_UBL                    "UBL"
+    #define STRING_MBL                    "MBL"
     #define STRING_MBL_SETTINGS           "Равнение по сетке"
     #define STRING_ABL_SETTINGS           "Автовыравнивание"
     #define STRING_ABL_SETTINGS_BBL       "Билинейная калибровка"
@@ -284,14 +283,14 @@
     #define STRING_DISTANCE               "Отступы"
     #define STRING_LOAD_UNLOAD            "Загрузить/Выгрузить"
     #define STRING_LOAD_UNLOAD_SHORT      "За/Выгрузка"
-    #define STRING_FAN_FULL_SPEED         "Максимум"
-    #define STRING_FAN_HALF_SPEED         "50%"
     #define STRING_TOUCHSCREEN_ADJUST     "Калибровка"
     #define STRING_MORE                   "Больше"
     #define STRING_SCREEN_INFO            "Инфо"
     #define STRING_SIMULATOR_BG_COLOR     "Задний фон Marlin режима"
     #define STRING_SIMULATOR_FONT_COLOR   "Передний фон Marlin режима"
     #define STRING_PERCENTAGE             "Подстройки"
+    #define STRING_PERCENTAGE_SPEED       "Скорость"
+    #define STRING_PERCENTAGE_FLOW        "Поток"
     #define STRING_BABYSTEP               "Микрошаг Z"
     #define STRING_X_INC                  "X+"
     #define STRING_Y_INC                  "Y+"
@@ -306,7 +305,6 @@
     #define STRING_ADJUST_INFO            "Нажмите на красную точку"
     #define STRING_ADJUST_OK              "Успешная калибровка"
     #define STRING_ADJUST_FAILED          "Неудачная калибровка, попробуйте снова"
-    #define STRING_PREHEAT_BOTH           "Оба"
     #define STRING_UNIFIEDMOVE            "Движение"
     #define STRING_UNIFIEDHEAT            "Нагрев"
     #define STRING_TOUCH_TO_EXIT          "Нажмите для возврата"
@@ -350,7 +348,6 @@
     #define STRING_NO_FILAMENT_STATS      "\nFilament data not available."
     #define STRING_CLICK_FOR_MORE         "Click for summary"
     #define STRING_EXT_TEMPLOW            "Температура сопла ниже\nминимальной (%d℃)."
-    #define STRING_COLD_EXT               "Экструзия холодным\nсоплом запрещена"
     #define STRING_HEAT_HOTEND            "Heat hotend to %d℃?"
     #define STRING_Z_ALIGN                "Z Align"
 

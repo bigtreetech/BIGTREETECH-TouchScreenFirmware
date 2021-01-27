@@ -109,8 +109,18 @@ extern "C" {
 #define LANG_KEY_DEC                          "label_dec:"
 #define LANG_KEY_LOAD                         "label_load:"
 #define LANG_KEY_UNLOAD                       "label_unload:"
+#define LANG_KEY_ON                           "label_on:"
+#define LANG_KEY_OFF                          "label_off:"
+#define LANG_KEY_AUTO                         "label_auto:"
+#define LANG_KEY_SMART                        "label_smart:"
+#define LANG_KEY_SLOW                         "label_slow:"
+#define LANG_KEY_NORMAL                       "label_normal:"
+#define LANG_KEY_FAST                         "label_fast:"
+#define LANG_KEY_ZERO                         "label_zero:"
+#define LANG_KEY_HALF                         "label_half:"
+#define LANG_KEY_FULL                         "label_full:"
+#define LANG_KEY_CUSTOM                       "label_custom:"
 #define LANG_KEY_CLEAR                        "label_clear:"
-#define LANG_KEY_VALUE_ZERO                   "label_value_zero:"
 #define LANG_KEY_DEFAULT                      "label_default:"
 
 // Action Buttons
@@ -124,6 +134,7 @@ extern "C" {
 #define LANG_KEY_FORCE_SHUT_DOWN              "label_force_shut_down:"
 #define LANG_KEY_EMERGENCYSTOP                "label_emergencystop:"
 #define LANG_KEY_PREHEAT                      "label_preheat:"
+#define LANG_KEY_PREHEAT_BOTH                 "label_preheat_both:"
 #define LANG_KEY_COOLDOWN                     "label_cooldown:"
 
 // Dialog Buttons
@@ -179,27 +190,16 @@ extern "C" {
 #define LANG_KEY_STOW                         "label_stow:"
 #define LANG_KEY_REPEAT                       "label_repeat:"
 
-// Values
+// Printer Tools
 #define LANG_KEY_NOZZLE                       "label_nozzle:"
 #define LANG_KEY_BED                          "label_bed:"
 #define LANG_KEY_CHAMBER                      "label_chamber:"
+#define LANG_KEY_FAN                          "label_fan:"
 
 #define LANG_KEY_BLTOUCH                      "label_bltouch:"
 #define LANG_KEY_TOUCHMI                      "label_touchmi:"
 
-#define LANG_KEY_ABL                          "label_abl:"
-#define LANG_KEY_BBL                          "label_bbl:"
-#define LANG_KEY_UBL                          "label_ubl:"
-#define LANG_KEY_MBL                          "label_mbl:"
-
-#define LANG_KEY_ON                           "label_on:"
-#define LANG_KEY_OFF                          "label_off:"
-#define LANG_KEY_AUTO                         "label_auto:"
-#define LANG_KEY_SMART                        "label_smart:"
-#define LANG_KEY_SLOW_SPEED                   "label_slow_speed:"
-#define LANG_KEY_NORMAL_SPEED                 "label_normal_speed:"
-#define LANG_KEY_FAST_SPEED                   "label_fast_speed:"
-
+// Values
 #define LANG_KEY_1_DEGREE                     "label_1_degree:"
 #define LANG_KEY_5_DEGREE                     "label_5_degree:"
 #define LANG_KEY_10_DEGREE                    "label_10_degree:"
@@ -216,8 +216,6 @@ extern "C" {
 #define LANG_KEY_5_PERCENT                    "label_5_percent:"
 #define LANG_KEY_10_PERCENT                   "label_10_percent:"
 #define LANG_KEY_PERCENT_VALUE                "label_percent_value:"
-#define LANG_KEY_PERCENTAGE_SPEED             "label_percentage_speed:"
-#define LANG_KEY_PERCENTAGE_FLOW              "label_percentage_flow:"
 
 #define LANG_KEY_5_SECONDS                    "label_5_seconds:"
 #define LANG_KEY_10_SECONDS                   "label_10_seconds:"
@@ -225,7 +223,6 @@ extern "C" {
 #define LANG_KEY_60_SECONDS                   "label_60_seconds:"
 #define LANG_KEY_120_SECONDS                  "label_120_seconds:"
 #define LANG_KEY_300_SECONDS                  "label_300_seconds:"
-#define LANG_KEY_CUSTOM_SECONDS               "label_custom_seconds:"
 
 // Colors
 #define LANG_KEY_WHITE                        "label_white:"
@@ -253,7 +250,6 @@ extern "C" {
 #define LANG_KEY_HOME                         "label_home:"
 #define LANG_KEY_PRINT                        "label_print:"
 #define LANG_KEY_EXTRUDE                      "label_extrude:"
-#define LANG_KEY_FAN                          "label_fan:"
 #define LANG_KEY_SETTINGS                     "label_settings:"
 #define LANG_KEY_SCREEN_SETTINGS              "label_screen_settings:"
 #define LANG_KEY_MACHINE_SETTINGS             "label_machine_settings:"
@@ -262,7 +258,6 @@ extern "C" {
 #define LANG_KEY_RGB_SETTINGS                 "label_rgb_settings:"
 #define LANG_KEY_RGB_OFF                      "label_rgb_off:"
 #define LANG_KEY_TERMINAL                     "label_terminal:"
-#define LANG_KEY_CUSTOM                       "label_custom:"
 #define LANG_KEY_LEVELING                     "label_leveling:"
 #define LANG_KEY_POINT_1                      "label_point_1:"
 #define LANG_KEY_POINT_2                      "label_point_2:"
@@ -274,6 +269,10 @@ extern "C" {
 #define LANG_KEY_BL_SMART_FILL                "label_bl_smart_fill:"
 #define LANG_KEY_BL_ENABLE                    "label_bl_enable:"
 #define LANG_KEY_BL_DISABLE                   "label_bl_disable:"
+#define LANG_KEY_ABL                          "label_abl:"
+#define LANG_KEY_BBL                          "label_bbl:"
+#define LANG_KEY_UBL                          "label_ubl:"
+#define LANG_KEY_MBL                          "label_mbl:"
 #define LANG_KEY_MBL_SETTINGS                 "label_mbl_settings:"
 #define LANG_KEY_ABL_SETTINGS                 "label_abl_settings:"
 #define LANG_KEY_ABL_SETTINGS_BBL             "label_abl_settings_bbl:"
@@ -291,14 +290,14 @@ extern "C" {
 #define LANG_KEY_DISTANCE                     "label_distance:"
 #define LANG_KEY_LOAD_UNLOAD                  "label_load_unload:"
 #define LANG_KEY_LOAD_UNLOAD_SHORT            "label_load_unload_short:"
-#define LANG_KEY_FAN_FULL_SPEED               "label_fan_full_speed:"
-#define LANG_KEY_FAN_HALF_SPEED               "label_fan_half_speed:"
 #define LANG_KEY_TOUCHSCREEN_ADJUST           "label_touchscreen_adjust:"
 #define LANG_KEY_MORE                         "label_more:"
 #define LANG_KEY_SCREEN_INFO                  "label_screen_info:"
 #define LANG_KEY_SIMULATOR_BG_COLOR           "label_simulator_bg_color:"
 #define LANG_KEY_SIMULATOR_FONT_COLOR         "label_simulator_font_color:"
 #define LANG_KEY_PERCENTAGE                   "label_percentage:"
+#define LANG_KEY_PERCENTAGE_SPEED             "label_percentage_speed:"
+#define LANG_KEY_PERCENTAGE_FLOW              "label_percentage_flow:"
 #define LANG_KEY_BABYSTEP                     "label_babystep:"
 #define LANG_KEY_X_INC                        "label_x_inc:"
 #define LANG_KEY_Y_INC                        "label_y_inc:"
@@ -313,7 +312,6 @@ extern "C" {
 #define LANG_KEY_ADJUST_INFO                  "label_adjust_info:"
 #define LANG_KEY_ADJUST_OK                    "label_adjust_ok:"
 #define LANG_KEY_ADJUST_FAILED                "label_adjust_failed:"
-#define LANG_KEY_PREHEAT_BOTH                 "label_preheat_both:"
 #define LANG_KEY_UNIFIEDMOVE                  "label_unifiedmove:"
 #define LANG_KEY_UNIFIEDHEAT                  "label_unifiedheat:"
 #define LANG_KEY_TOUCH_TO_EXIT                "label_touch_to_exit:"
@@ -357,7 +355,6 @@ extern "C" {
 #define LANG_KEY_NO_FILAMENT_STATS            "label_no_filament_stats:"
 #define LANG_KEY_CLICK_FOR_MORE               "label_click_for_more:"
 #define LANG_KEY_EXT_TEMPLOW                  "label_ext_templow:"
-#define LANG_KEY_COLD_EXT                     "label_cold_ext:"
 #define LANG_KEY_HEAT_HOTEND                  "label_heat_hotend:"
 #define LANG_KEY_Z_ALIGN                      "label_z_align:"
 

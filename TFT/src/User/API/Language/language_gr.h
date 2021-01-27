@@ -102,8 +102,18 @@
     #define STRING_DEC                    "Μείωση"
     #define STRING_LOAD                   "Φόρτωση"
     #define STRING_UNLOAD                 "Ξεφόρτωση"
+    #define STRING_ON                     "Ενεργό"
+    #define STRING_OFF                    "Σβηστό"
+    #define STRING_AUTO                   "AUTO"
+    #define STRING_SMART                  "ΈΞΥΠΝΟ"
+    #define STRING_SLOW                   "Αργά"
+    #define STRING_NORMAL                 "Κανονικά"
+    #define STRING_FAST                   "Γρήγορα"
+    #define STRING_ZERO                   "Μηδέν"
+    #define STRING_HALF                   "Μισή ταχύτητα"
+    #define STRING_FULL                   "Ολοταχώς"
+    #define STRING_CUSTOM                 "Τροποποιημένο"
     #define STRING_CLEAR                  "Clear"
-    #define STRING_VALUE_ZERO             "Μηδέν"
     #define STRING_DEFAULT                "Default"
 
     // Action Buttons
@@ -117,6 +127,7 @@
     #define STRING_FORCE_SHUT_DOWN        "Αναγκαστική απενεργοποίηση"
     #define STRING_EMERGENCYSTOP          "Σταμάτημα έκτακτης ανάγκης"
     #define STRING_PREHEAT                "Προθέρμανση"
+    #define STRING_PREHEAT_BOTH           "Και τα δυο"
     #define STRING_COOLDOWN               "Κρυώσει"
 
     // Dialog Buttons
@@ -172,27 +183,16 @@
     #define STRING_STOW                   "Aπόσυρση"
     #define STRING_REPEAT                 "Επανάληψη"
 
-    // Values
+    // Printer Tools
     #define STRING_NOZZLE                 "Στόμιο"
     #define STRING_BED                    "Θερμή Βάση"
     #define STRING_CHAMBER                "Chamber"
+    #define STRING_FAN                    "Ανεμιστήρας"
 
     #define STRING_BLTOUCH                "BLTouch"
     #define STRING_TOUCHMI                "TouchMi"
 
-    #define STRING_ABL                    "ABL"
-    #define STRING_BBL                    "BBL"
-    #define STRING_UBL                    "UBL"
-    #define STRING_MBL                    "MBL"
-
-    #define STRING_ON                     "Ενεργό"
-    #define STRING_OFF                    "Σβηστό"
-    #define STRING_AUTO                   "AUTO"
-    #define STRING_SMART                  "ΈΞΥΠΝΟ"
-    #define STRING_SLOW_SPEED             "Αργά"
-    #define STRING_NORMAL_SPEED           "Κανονικά"
-    #define STRING_FAST_SPEED             "Γρήγορα"
-
+    // Values
     #define STRING_1_DEGREE               "1℃"
     #define STRING_5_DEGREE               "5℃"
     #define STRING_10_DEGREE              "10℃"
@@ -209,8 +209,6 @@
     #define STRING_5_PERCENT              "5%"
     #define STRING_10_PERCENT             "10%"
     #define STRING_PERCENT_VALUE          "%d%%"
-    #define STRING_PERCENTAGE_SPEED       "Ταχύτητα"
-    #define STRING_PERCENTAGE_FLOW        "Ροή"
 
     #define STRING_5_SECONDS              "5 Δευτ."
     #define STRING_10_SECONDS             "10 Δευτ."
@@ -218,7 +216,6 @@
     #define STRING_60_SECONDS             "1 Λεπτό"
     #define STRING_120_SECONDS            "2 Λεπτά"
     #define STRING_300_SECONDS            "5 Λεπτά"
-    #define STRING_CUSTOM_SECONDS         "Τροποποιημένες ρυθμίσεις"
 
     // Colors
     #define STRING_WHITE                  "Άσπρο"
@@ -246,7 +243,6 @@
     #define STRING_HOME                   "Αυτο-Κατεύθυνση"
     #define STRING_PRINT                  "Εκτύπωση"
     #define STRING_EXTRUDE                "Εκβολή"
-    #define STRING_FAN                    "Ανεμιστήρας"
     #define STRING_SETTINGS               "Ρυθμίσεις"
     #define STRING_SCREEN_SETTINGS        "Οθόνη"
     #define STRING_MACHINE_SETTINGS       "Μηχανήματος"
@@ -255,7 +251,6 @@
     #define STRING_RGB_SETTINGS           "Χρώμα LED"
     #define STRING_RGB_OFF                "Απενεργοποίηση LED"
     #define STRING_TERMINAL               "Τερματικό"
-    #define STRING_CUSTOM                 "Τροποποιημένο"
     #define STRING_LEVELING               "Ισοπέδωση"
     #define STRING_POINT_1                "Σημείο 1"
     #define STRING_POINT_2                "Σημείο 2"
@@ -267,6 +262,10 @@
     #define STRING_BL_SMART_FILL          "Missing probe points\nhave been smart filled.\n \nNote: remember to save!"
     #define STRING_BL_ENABLE              "BL: on"
     #define STRING_BL_DISABLE             "BL: off"
+    #define STRING_ABL                    "ABL"
+    #define STRING_BBL                    "BBL"
+    #define STRING_UBL                    "UBL"
+    #define STRING_MBL                    "MBL"
     #define STRING_MBL_SETTINGS           "Mesh Bed Leveling"
     #define STRING_ABL_SETTINGS           "Auto Bed Leveling"
     #define STRING_ABL_SETTINGS_BBL       "Bilinear Bed Leveling"
@@ -284,14 +283,14 @@
     #define STRING_DISTANCE               "Distance"
     #define STRING_LOAD_UNLOAD            "Load/Unload"  // needs translation
     #define STRING_LOAD_UNLOAD_SHORT      "(Un)Load"  // needs translation
-    #define STRING_FAN_FULL_SPEED         "Ολοταχώς"
-    #define STRING_FAN_HALF_SPEED         "Μισή ταχύτητα"
     #define STRING_TOUCHSCREEN_ADJUST     "Προσαρμογή TOUCH"
     #define STRING_MORE                   "Περισσότερα"
     #define STRING_SCREEN_INFO            "Πληροφορίες"
     #define STRING_SIMULATOR_BG_COLOR     "Marlin simulator background color"
     #define STRING_SIMULATOR_FONT_COLOR   "Marlin simulator font color"
     #define STRING_PERCENTAGE             "Ποσοστό"
+    #define STRING_PERCENTAGE_SPEED       "Ταχύτητα"
+    #define STRING_PERCENTAGE_FLOW        "Ροή"
     #define STRING_BABYSTEP               "Μικροβήμα"
     #define STRING_X_INC                  "X+"
     #define STRING_Y_INC                  "Y+"
@@ -306,7 +305,6 @@
     #define STRING_ADJUST_INFO            "Κάντε κλικ στην κόκκινη κουκκίδα"
     #define STRING_ADJUST_OK              "Επιτυχία προσαρμογής"
     #define STRING_ADJUST_FAILED          "Η προσαρμογή απέτυχε. Δοκιμάστε ξανά"
-    #define STRING_PREHEAT_BOTH           "Και τα δυο"
     #define STRING_UNIFIEDMOVE            "Κίνηση"
     #define STRING_UNIFIEDHEAT            "Θέρμανση/Ανεμιστήρας"
     #define STRING_TOUCH_TO_EXIT          "Αγγίξτε οπουδήποτε για έξοδο"
@@ -350,7 +348,6 @@
     #define STRING_NO_FILAMENT_STATS      "\nFilament data not available."
     #define STRING_CLICK_FOR_MORE         "Click for summary"
     #define STRING_EXT_TEMPLOW            "Hotend temperature is below\nminimum temperature (%d℃)."
-    #define STRING_COLD_EXT               "Cold extrusion prevented"
     #define STRING_HEAT_HOTEND            "Heat hotend to %d℃?"
     #define STRING_Z_ALIGN                "Z Align"
 

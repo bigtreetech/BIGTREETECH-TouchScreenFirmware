@@ -102,8 +102,18 @@
     #define STRING_DEC                    "Azalt"
     #define STRING_LOAD                   "Yükle"
     #define STRING_UNLOAD                 "Çıkar"
+    #define STRING_ON                     "Açık"
+    #define STRING_OFF                    "Kapalı"
+    #define STRING_AUTO                   "AUTO"
+    #define STRING_SMART                  "AKILLI"
+    #define STRING_SLOW                   "Yavaş"
+    #define STRING_NORMAL                 "Normal"
+    #define STRING_FAST                   "Hızlı"
+    #define STRING_ZERO                   "Sıfır"
+    #define STRING_HALF                   "Yarım"
+    #define STRING_FULL                   "Tam"
+    #define STRING_CUSTOM                 "Diğer"
     #define STRING_CLEAR                  "Temizle"
-    #define STRING_VALUE_ZERO             "Sıfır"
     #define STRING_DEFAULT                "Varsayılan"
 
     // Action Buttons
@@ -117,6 +127,7 @@
     #define STRING_FORCE_SHUT_DOWN        "Zorla Kapat"
     #define STRING_EMERGENCYSTOP          "AcilDurdur"
     #define STRING_PREHEAT                "Ön Isıtma"
+    #define STRING_PREHEAT_BOTH           "Birlikte"
     #define STRING_COOLDOWN               "Soğutma"
 
     // Dialog Buttons
@@ -172,27 +183,16 @@
     #define STRING_STOW                   "Kapat"
     #define STRING_REPEAT                 "Tekrarla"
 
-    // Values
+    // Printer Tools
     #define STRING_NOZZLE                 "Nozül"
     #define STRING_BED                    "Tabla"
     #define STRING_CHAMBER                "Kabin"
+    #define STRING_FAN                    "Fan"
 
     #define STRING_BLTOUCH                "BLTouch"
     #define STRING_TOUCHMI                "TouchMi"
 
-    #define STRING_ABL                    "ABL"
-    #define STRING_BBL                    "BBL"
-    #define STRING_UBL                    "UBL"
-    #define STRING_MBL                    "MBL"
-
-    #define STRING_ON                     "Açık"
-    #define STRING_OFF                    "Kapalı"
-    #define STRING_AUTO                   "AUTO"
-    #define STRING_SMART                  "AKILLI"
-    #define STRING_SLOW_SPEED             "Yavaş"
-    #define STRING_NORMAL_SPEED           "Normal"
-    #define STRING_FAST_SPEED             "Hızlı"
-
+    // Values
     #define STRING_1_DEGREE               "1°C"
     #define STRING_5_DEGREE               "5°C"
     #define STRING_10_DEGREE              "10°C"
@@ -209,8 +209,6 @@
     #define STRING_5_PERCENT              "%5"
     #define STRING_10_PERCENT             "%10"
     #define STRING_PERCENT_VALUE          "%%%d"
-    #define STRING_PERCENTAGE_SPEED       "Hız"
-    #define STRING_PERCENTAGE_FLOW        "Akış"
 
     #define STRING_5_SECONDS              "5 Sn."
     #define STRING_10_SECONDS             "10 Sn."
@@ -218,7 +216,6 @@
     #define STRING_60_SECONDS             "1 Dak."
     #define STRING_120_SECONDS            "2 Dak."
     #define STRING_300_SECONDS            "5 Dak."
-    #define STRING_CUSTOM_SECONDS         "Özel"
 
     // Colors
     #define STRING_WHITE                  "Beyaz"
@@ -246,7 +243,6 @@
     #define STRING_HOME                   "Sıfırla"
     #define STRING_PRINT                  "Yazdır"
     #define STRING_EXTRUDE                "Filament"
-    #define STRING_FAN                    "Fan"
     #define STRING_SETTINGS               "Ayarlar"
     #define STRING_SCREEN_SETTINGS        "Ekran"
     #define STRING_MACHINE_SETTINGS       "Makine"
@@ -255,7 +251,6 @@
     #define STRING_RGB_SETTINGS           "LED Rengi"
     #define STRING_RGB_OFF                "LED'i Kapat"
     #define STRING_TERMINAL               "Terminal"
-    #define STRING_CUSTOM                 "Diğer"
     #define STRING_LEVELING               "Seviyele"
     #define STRING_POINT_1                "1.Nokta"
     #define STRING_POINT_2                "2.Nokta"
@@ -267,6 +262,10 @@
     #define STRING_BL_SMART_FILL          "Eksik algılama noktaları\noluşturuldu.\nNot: Kaydetmeyi unutmayın!"
     #define STRING_BL_ENABLE              "BL: açık"
     #define STRING_BL_DISABLE             "BL: kapalı"
+    #define STRING_ABL                    "ABL"
+    #define STRING_BBL                    "BBL"
+    #define STRING_UBL                    "UBL"
+    #define STRING_MBL                    "MBL"
     #define STRING_MBL_SETTINGS           "Mesh Bed Leveling"
     #define STRING_ABL_SETTINGS           "Auto Bed Leveling"
     #define STRING_ABL_SETTINGS_BBL       "Bilinear Bed Leveling"
@@ -284,14 +283,14 @@
     #define STRING_DISTANCE               "Mesafe"
     #define STRING_LOAD_UNLOAD            "Load/Unload"  // needs translation
     #define STRING_LOAD_UNLOAD_SHORT      "(Un)Load"  // needs translation
-    #define STRING_FAN_FULL_SPEED         "Tam"
-    #define STRING_FAN_HALF_SPEED         "Yarım"
     #define STRING_TOUCHSCREEN_ADJUST     "Kalibre"
     #define STRING_MORE                   "Ayar"
     #define STRING_SCREEN_INFO            "Bilgi"
     #define STRING_SIMULATOR_BG_COLOR     "Marlin modu arkaplan renk"
     #define STRING_SIMULATOR_FONT_COLOR   "Marlin modu font renk"
     #define STRING_PERCENTAGE             "Yüzde"
+    #define STRING_PERCENTAGE_SPEED       "Hız"
+    #define STRING_PERCENTAGE_FLOW        "Akış"
     #define STRING_BABYSTEP               "MiniAdım"
     #define STRING_X_INC                  "X+"
     #define STRING_Y_INC                  "Y+"
@@ -306,7 +305,6 @@
     #define STRING_ADJUST_INFO            "Lütfen kırmızı noktaya\ntıklayın"
     #define STRING_ADJUST_OK              "Kalibrasyon başarılı."
     #define STRING_ADJUST_FAILED          "Kalibrasyon başarısız,\nlütfen tekrar deneyiniz."
-    #define STRING_PREHEAT_BOTH           "Birlikte"
     #define STRING_UNIFIEDMOVE            "Hareket"
     #define STRING_UNIFIEDHEAT            "Isıtma/Fan"
     #define STRING_TOUCH_TO_EXIT          "Çıkmak için herhangi bir yere dokunun"
@@ -350,7 +348,6 @@
     #define STRING_NO_FILAMENT_STATS      "\nFilament data not available."
     #define STRING_CLICK_FOR_MORE         "Click for summary"
     #define STRING_EXT_TEMPLOW            "Hotend temperature is below\nminimum temperature (%d℃)."
-    #define STRING_COLD_EXT               "Cold extrusion prevented"
     #define STRING_HEAT_HOTEND            "Heat hotend to %d℃?"
     #define STRING_Z_ALIGN                "Z Align"
 

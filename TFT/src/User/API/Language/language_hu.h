@@ -102,8 +102,18 @@
     #define STRING_DEC                    "Csökkent"
     #define STRING_LOAD                   "Betöltés"
     #define STRING_UNLOAD                 "Kiadás"
+    #define STRING_ON                     "BE"
+    #define STRING_OFF                    "KI"
+    #define STRING_AUTO                   "AUTO"
+    #define STRING_SMART                  "OKOS"
+    #define STRING_SLOW                   "Lassú"
+    #define STRING_NORMAL                 "Normál"
+    #define STRING_FAST                   "Gyors"
+    #define STRING_ZERO                   "Nulla"
+    #define STRING_HALF                   "Fél"
+    #define STRING_FULL                   "Teljes"
+    #define STRING_CUSTOM                 "Egyedi"
     #define STRING_CLEAR                  "Tiszta"
-    #define STRING_VALUE_ZERO             "Nulla"
     #define STRING_DEFAULT                "Alapért."
 
     // Action Buttons
@@ -117,6 +127,7 @@
     #define STRING_FORCE_SHUT_DOWN        "Kényszerít"
     #define STRING_EMERGENCYSTOP          "VészSTOP"
     #define STRING_PREHEAT                "Előfűtés"
+    #define STRING_PREHEAT_BOTH           "Mindkettő"
     #define STRING_COOLDOWN               "Lehűtés"
 
     // Dialog Buttons
@@ -172,27 +183,16 @@
     #define STRING_STOW                   "Elhelyezés"
     #define STRING_REPEAT                 "Ismétlés"
 
-    // Values
+    // Printer Tools
     #define STRING_NOZZLE                 "Fej"
     #define STRING_BED                    "Ágy"
     #define STRING_CHAMBER                "Kamra"
+    #define STRING_FAN                    "Hűtés"
 
     #define STRING_BLTOUCH                "BLTouch"
     #define STRING_TOUCHMI                "TouchMi"
 
-    #define STRING_ABL                    "ABL"
-    #define STRING_BBL                    "BBL"
-    #define STRING_UBL                    "UBL"
-    #define STRING_MBL                    "MBL"
-
-    #define STRING_ON                     "BE"
-    #define STRING_OFF                    "KI"
-    #define STRING_AUTO                   "AUTO"
-    #define STRING_SMART                  "OKOS"
-    #define STRING_SLOW_SPEED             "Lassú"
-    #define STRING_NORMAL_SPEED           "Normál"
-    #define STRING_FAST_SPEED             "Gyors"
-
+    // Values
     #define STRING_1_DEGREE               "1℃"
     #define STRING_5_DEGREE               "5℃"
     #define STRING_10_DEGREE              "10℃"
@@ -209,8 +209,6 @@
     #define STRING_5_PERCENT              "5%"
     #define STRING_10_PERCENT             "10%"
     #define STRING_PERCENT_VALUE          "%d%%"
-    #define STRING_PERCENTAGE_SPEED       "Sebesség"
-    #define STRING_PERCENTAGE_FLOW        "Folyás"
 
     #define STRING_5_SECONDS              "5 Mp."
     #define STRING_10_SECONDS             "10 Mp."
@@ -218,7 +216,6 @@
     #define STRING_60_SECONDS             "1 Perc."
     #define STRING_120_SECONDS            "2 Perc."
     #define STRING_300_SECONDS            "5 Perc."
-    #define STRING_CUSTOM_SECONDS         "Egyedi"
 
     // Colors
     #define STRING_WHITE                  "Fehér"
@@ -246,7 +243,6 @@
     #define STRING_HOME                   "Végállás"
     #define STRING_PRINT                  "Nyomtatás"
     #define STRING_EXTRUDE                "Adagolás"
-    #define STRING_FAN                    "Hűtés"
     #define STRING_SETTINGS               "Opciók"
     #define STRING_SCREEN_SETTINGS        "Kijelző"
     #define STRING_MACHINE_SETTINGS       "Gép"
@@ -255,7 +251,6 @@
     #define STRING_RGB_SETTINGS           "LED Szín"
     #define STRING_RGB_OFF                "LED KI"
     #define STRING_TERMINAL               "Terminál"
-    #define STRING_CUSTOM                 "Egyedi"
     #define STRING_LEVELING               "Szintezés"
     #define STRING_POINT_1                "1. pont"
     #define STRING_POINT_2                "2. pont"
@@ -267,6 +262,10 @@
     #define STRING_BL_SMART_FILL          "A hiányzó szonda pontok\nkitöltésre kerültek.\nMegjegyzés: Mentsd el!"
     #define STRING_BL_ENABLE              "BL: be"
     #define STRING_BL_DISABLE             "BL: ki"
+    #define STRING_ABL                    "ABL"
+    #define STRING_BBL                    "BBL"
+    #define STRING_UBL                    "UBL"
+    #define STRING_MBL                    "MBL"
     #define STRING_MBL_SETTINGS           "Kézi Rács Szintezés"
     #define STRING_ABL_SETTINGS           "Automata Szintezés"
     #define STRING_ABL_SETTINGS_BBL       "Bilineáris Szintezés"
@@ -284,14 +283,14 @@
     #define STRING_DISTANCE               "Távolság"
     #define STRING_LOAD_UNLOAD            "Betöltés/Kiadás"
     #define STRING_LOAD_UNLOAD_SHORT      "Be/Ki"
-    #define STRING_FAN_FULL_SPEED         "Teljes"
-    #define STRING_FAN_HALF_SPEED         "Fél"
     #define STRING_TOUCHSCREEN_ADJUST     "Igazítás"
     #define STRING_MORE                   "Több"
     #define STRING_SCREEN_INFO            "Infó"
     #define STRING_SIMULATOR_BG_COLOR     "Marlin mód háttérszín"
     #define STRING_SIMULATOR_FONT_COLOR   "Marlin mód betűszín"
     #define STRING_PERCENTAGE             "Százalék"
+    #define STRING_PERCENTAGE_SPEED       "Sebesség"
+    #define STRING_PERCENTAGE_FLOW        "Folyás"
     #define STRING_BABYSTEP               "Mikrolépés"
     #define STRING_X_INC                  "X+"
     #define STRING_Y_INC                  "Y+"
@@ -306,7 +305,6 @@
     #define STRING_ADJUST_INFO            "Kattints a piros pontra."
     #define STRING_ADJUST_OK              "Kalibrálás sikeres."
     #define STRING_ADJUST_FAILED          "A kalibrálás sikertelen, próbáld újra"
-    #define STRING_PREHEAT_BOTH           "Mindkettő"
     #define STRING_UNIFIEDMOVE            "Mozgás"
     #define STRING_UNIFIEDHEAT            "Fűt/Hűt"
     #define STRING_TOUCH_TO_EXIT          "Érintsd meg a kilépéshez."
@@ -350,7 +348,6 @@
     #define STRING_NO_FILAMENT_STATS      "\nNincs szál statisztika."
     #define STRING_CLICK_FOR_MORE         "Kattints az összegzéshez"
     #define STRING_EXT_TEMPLOW            "Fejhőfok alacsonyabb, mint a\nminimális hőfok (%d℃)."
-    #define STRING_COLD_EXT               "Hideg adagolás tiltva"
     #define STRING_HEAT_HOTEND            "Fűtöd a fejet %d℃-ra?"
     #define STRING_Z_ALIGN                "Z Igazítás"
 

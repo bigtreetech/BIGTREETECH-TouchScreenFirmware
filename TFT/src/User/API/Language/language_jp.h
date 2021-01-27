@@ -102,8 +102,18 @@
     #define STRING_DEC                    "減る"
     #define STRING_LOAD                   "増え"
     #define STRING_UNLOAD                 "減る"
+    #define STRING_ON                     "ON"
+    #define STRING_OFF                    "OFF"
+    #define STRING_AUTO                   "AUTO"
+    #define STRING_SMART                  "スマート"
+    #define STRING_SLOW                   "ゆっくり"
+    #define STRING_NORMAL                 "正常速度"
+    #define STRING_FAST                   "早め"
+    #define STRING_ZERO                   "ゼロ"
+    #define STRING_HALF                   "50%速さ"
+    #define STRING_FULL                   "全速"
+    #define STRING_CUSTOM                 "カスタム"
     #define STRING_CLEAR                  "Clear"
-    #define STRING_VALUE_ZERO             "ゼロ"
     #define STRING_DEFAULT                "Default"
 
     // Action Buttons
@@ -117,6 +127,7 @@
     #define STRING_FORCE_SHUT_DOWN        "フォース"
     #define STRING_EMERGENCYSTOP          "EM.停止"
     #define STRING_PREHEAT                "予熱する"
+    #define STRING_PREHEAT_BOTH           "両方"
     #define STRING_COOLDOWN               "クールダウン"
 
     // Dialog Buttons
@@ -172,27 +183,16 @@
     #define STRING_STOW                   "収納"
     #define STRING_REPEAT                 "繰り返す"
 
-    // Values
+    // Printer Tools
     #define STRING_NOZZLE                 "ノズル"
     #define STRING_BED                    "ベッド"
     #define STRING_CHAMBER                "Chamber"
+    #define STRING_FAN                    "ファン"
 
     #define STRING_BLTOUCH                "BLTouch"
     #define STRING_TOUCHMI                "TouchMi"
 
-    #define STRING_ABL                    "自動調整"
-    #define STRING_BBL                    "BBL"
-    #define STRING_UBL                    "UBL"
-    #define STRING_MBL                    "MBL"
-
-    #define STRING_ON                     "ON"
-    #define STRING_OFF                    "OFF"
-    #define STRING_AUTO                   "AUTO"
-    #define STRING_SMART                  "スマート"
-    #define STRING_SLOW_SPEED             "ゆっくり"
-    #define STRING_NORMAL_SPEED           "正常速度"
-    #define STRING_FAST_SPEED             "早め"
-
+    // Values
     #define STRING_1_DEGREE               "1℃"
     #define STRING_5_DEGREE               "5℃"
     #define STRING_10_DEGREE              "10℃"
@@ -209,8 +209,6 @@
     #define STRING_5_PERCENT              "5%"
     #define STRING_10_PERCENT             "10%"
     #define STRING_PERCENT_VALUE          "%d%%"
-    #define STRING_PERCENTAGE_SPEED       "スビード"
-    #define STRING_PERCENTAGE_FLOW        "押出"
 
     #define STRING_5_SECONDS              "5 Sec."
     #define STRING_10_SECONDS             "10 Sec."
@@ -218,7 +216,6 @@
     #define STRING_60_SECONDS             "1 Min."
     #define STRING_120_SECONDS            "2 Min."
     #define STRING_300_SECONDS            "5 Min."
-    #define STRING_CUSTOM_SECONDS         "カスタム"
 
     // Colors
     #define STRING_WHITE                  "白色"
@@ -246,7 +243,6 @@
     #define STRING_HOME                   "ゼロにする"
     #define STRING_PRINT                  "プリント"
     #define STRING_EXTRUDE                "押出"
-    #define STRING_FAN                    "ファン"
     #define STRING_SETTINGS               "設定"
     #define STRING_SCREEN_SETTINGS        "画面"
     #define STRING_MACHINE_SETTINGS       "マシン"
@@ -255,7 +251,6 @@
     #define STRING_RGB_SETTINGS           "LED カラー"
     #define STRING_RGB_OFF                "LED オフ"
     #define STRING_TERMINAL               "端末"
-    #define STRING_CUSTOM                 "カスタム"
     #define STRING_LEVELING               "レベリング"
     #define STRING_POINT_1                "ポイント1"
     #define STRING_POINT_2                "ポイント2"
@@ -267,6 +262,10 @@
     #define STRING_BL_SMART_FILL          "Missing probe points\nhave been smart filled.\n \nNote: remember to save!"
     #define STRING_BL_ENABLE              "BL: on"
     #define STRING_BL_DISABLE             "BL: off"
+    #define STRING_ABL                    "自動調整"
+    #define STRING_BBL                    "BBL"
+    #define STRING_UBL                    "UBL"
+    #define STRING_MBL                    "MBL"
     #define STRING_MBL_SETTINGS           "Mesh Bed Leveling"
     #define STRING_ABL_SETTINGS           "Auto Bed Leveling"
     #define STRING_ABL_SETTINGS_BBL       "Bilinear Bed Leveling"
@@ -284,14 +283,14 @@
     #define STRING_DISTANCE               "Distance"
     #define STRING_LOAD_UNLOAD            "Load/Unload"  // needs translation
     #define STRING_LOAD_UNLOAD_SHORT      "(Un)Load"  // needs translation
-    #define STRING_FAN_FULL_SPEED         "全速"
-    #define STRING_FAN_HALF_SPEED         "50%速さ"
     #define STRING_TOUCHSCREEN_ADJUST     "校正する"
     #define STRING_MORE                   "詳細"
     #define STRING_SCREEN_INFO            "ついて"
     #define STRING_SIMULATOR_BG_COLOR     "Marlin シミュレータの背景色"
     #define STRING_SIMULATOR_FONT_COLOR   "Marlinシミュレータフォントの色"
     #define STRING_PERCENTAGE             "パーセント"
+    #define STRING_PERCENTAGE_SPEED       "スビード"
+    #define STRING_PERCENTAGE_FLOW        "押出"
     #define STRING_BABYSTEP               "ベビーステップ"
     #define STRING_X_INC                  "X+"
     #define STRING_Y_INC                  "Y+"
@@ -306,7 +305,6 @@
     #define STRING_ADJUST_INFO            "赤星をタッチ"
     #define STRING_ADJUST_OK              "校正が成功しました"
     #define STRING_ADJUST_FAILED          "校正が失敗しました、も一度お試して下さい"
-    #define STRING_PREHEAT_BOTH           "両方"
     #define STRING_UNIFIEDMOVE            "移動"
     #define STRING_UNIFIEDHEAT            "ヒート&ファン"
     #define STRING_TOUCH_TO_EXIT          "クリックして終了します"
@@ -350,7 +348,6 @@
     #define STRING_NO_FILAMENT_STATS      "\nFilament data not available."
     #define STRING_CLICK_FOR_MORE         "Click for summary"
     #define STRING_EXT_TEMPLOW            "Hotend temperature is below\nminimum temperature (%d℃)."
-    #define STRING_COLD_EXT               "Cold extrusion prevented"
     #define STRING_HEAT_HOTEND            "Heat hotend to %d℃?"
     #define STRING_Z_ALIGN                "Z Align"
 

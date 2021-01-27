@@ -102,8 +102,18 @@
     #define STRING_DEC                    "Ubrat"
     #define STRING_LOAD                   "Zavést"
     #define STRING_UNLOAD                 "Vysunout"
+    #define STRING_ON                     "ON"
+    #define STRING_OFF                    "OFF"
+    #define STRING_AUTO                   "AUTO"
+    #define STRING_SMART                  "SMART"
+    #define STRING_SLOW                   "Pomalu"
+    #define STRING_NORMAL                 "Normál"
+    #define STRING_FAST                   "Rychle"
+    #define STRING_ZERO                   "Vynulovat"
+    #define STRING_HALF                   "Poloviční"
+    #define STRING_FULL                   "Plný"
+    #define STRING_CUSTOM                 "Vlastní"
     #define STRING_CLEAR                  "Vymaž"
-    #define STRING_VALUE_ZERO             "Vynulovat"
     #define STRING_DEFAULT                "Výchozí"
 
     // Action Buttons
@@ -117,6 +127,7 @@
     #define STRING_FORCE_SHUT_DOWN        "Vynutit"
     #define STRING_EMERGENCYSTOP          "!!STOP!!"
     #define STRING_PREHEAT                "Zahřát"
+    #define STRING_PREHEAT_BOTH           "Vše"
     #define STRING_COOLDOWN               "Zchladit"
 
     // Dialog Buttons
@@ -172,27 +183,16 @@
     #define STRING_STOW                   "Zasunout"
     #define STRING_REPEAT                 "Přesnost"
 
-    // Values
+    // Printer Tools
     #define STRING_NOZZLE                 "Tryska"
     #define STRING_BED                    "Stolek"
     #define STRING_CHAMBER                "Komora"
+    #define STRING_FAN                    "Ofuk"
 
     #define STRING_BLTOUCH                "BLTouch"
     #define STRING_TOUCHMI                "TouchMi"
 
-    #define STRING_ABL                    "Vyrovnat"
-    #define STRING_BBL                    "BBL"
-    #define STRING_UBL                    "UBL"
-    #define STRING_MBL                    "MBL"
-
-    #define STRING_ON                     "ON"
-    #define STRING_OFF                    "OFF"
-    #define STRING_AUTO                   "AUTO"
-    #define STRING_SMART                  "SMART"
-    #define STRING_SLOW_SPEED             "Pomalu"
-    #define STRING_NORMAL_SPEED           "Normál"
-    #define STRING_FAST_SPEED             "Rychle"
-
+    // Values
     #define STRING_1_DEGREE               "1℃"
     #define STRING_5_DEGREE               "5℃"
     #define STRING_10_DEGREE              "10℃"
@@ -209,8 +209,6 @@
     #define STRING_5_PERCENT              "5%"
     #define STRING_10_PERCENT             "10%"
     #define STRING_PERCENT_VALUE          "%d%%"
-    #define STRING_PERCENTAGE_SPEED       "Rychlost"
-    #define STRING_PERCENTAGE_FLOW        "Průtok"
 
     #define STRING_5_SECONDS              "5 sec."
     #define STRING_10_SECONDS             "10 sec."
@@ -218,7 +216,6 @@
     #define STRING_60_SECONDS             "1 min."
     #define STRING_120_SECONDS            "2 min."
     #define STRING_300_SECONDS            "5 min."
-    #define STRING_CUSTOM_SECONDS         "Vlastní"
 
     // Colors
     #define STRING_WHITE                  "Bílá"
@@ -246,7 +243,6 @@
     #define STRING_HOME                   "Domů"
     #define STRING_PRINT                  "Tisknout"
     #define STRING_EXTRUDE                "Filament"
-    #define STRING_FAN                    "Ofuk"
     #define STRING_SETTINGS               "Nastavení"
     #define STRING_SCREEN_SETTINGS        "Displej"
     #define STRING_MACHINE_SETTINGS       "Tiskárna"
@@ -255,7 +251,6 @@
     #define STRING_RGB_SETTINGS           "Barva LED"
     #define STRING_RGB_OFF                "LED vyp."
     #define STRING_TERMINAL               "Terminál"
-    #define STRING_CUSTOM                 "Vlastní"
     #define STRING_LEVELING               "Srovnat"
     #define STRING_POINT_1                "Bod 1"
     #define STRING_POINT_2                "Bod 2"
@@ -267,6 +262,10 @@
     #define STRING_BL_SMART_FILL          "Chybějící body sondy\nbyly vyplněny inteligentně.\n \nPozn: Nezapomeň uložit!"
     #define STRING_BL_ENABLE              "BL: on"
     #define STRING_BL_DISABLE             "BL: off"
+    #define STRING_ABL                    "Vyrovnat"
+    #define STRING_BBL                    "BBL"
+    #define STRING_UBL                    "UBL"
+    #define STRING_MBL                    "MBL"
     #define STRING_MBL_SETTINGS           "Ruční vyrovnání"
     #define STRING_ABL_SETTINGS           "Auto vyrovnání"
     #define STRING_ABL_SETTINGS_BBL       "Bilineární vyrovnání"
@@ -284,14 +283,14 @@
     #define STRING_DISTANCE               "Vzdálenost"
     #define STRING_LOAD_UNLOAD            "Vysunout/Zavést"
     #define STRING_LOAD_UNLOAD_SHORT      "Vysunout"
-    #define STRING_FAN_FULL_SPEED         "Plný"
-    #define STRING_FAN_HALF_SPEED         "Poloviční"
     #define STRING_TOUCHSCREEN_ADJUST     "Kalibrovat"
     #define STRING_MORE                   "Více"
     #define STRING_SCREEN_INFO            "Info"
     #define STRING_SIMULATOR_BG_COLOR     "Marlin - Barva pozadí"
     #define STRING_SIMULATOR_FONT_COLOR   "Marlin - Barva písma"
     #define STRING_PERCENTAGE             "Procenta"
+    #define STRING_PERCENTAGE_SPEED       "Rychlost"
+    #define STRING_PERCENTAGE_FLOW        "Průtok"
     #define STRING_BABYSTEP               "BabyStep"
     #define STRING_X_INC                  "X+"
     #define STRING_Y_INC                  "Y+"
@@ -306,7 +305,6 @@
     #define STRING_ADJUST_INFO            "Dotkněte se postupně všech bodů"
     #define STRING_ADJUST_OK              "Kalibrace úspěšná"
     #define STRING_ADJUST_FAILED          "Kalibrace selhala, zopakujte znovu"
-    #define STRING_PREHEAT_BOTH           "Vše"
     #define STRING_UNIFIEDMOVE            "Pohyb"
     #define STRING_UNIFIEDHEAT            "Teplota"
     #define STRING_TOUCH_TO_EXIT          "Pro návrat se dotkněte obrazovky..."
@@ -350,7 +348,6 @@
     #define STRING_NO_FILAMENT_STATS      "\nStatistika není k dispozici."
     #define STRING_CLICK_FOR_MORE         "Klikni pro více informací."
     #define STRING_EXT_TEMPLOW            "Teplota hotendu je pod\nminimální teplotou (%d℃)."
-    #define STRING_COLD_EXT               "Studená extruze je zakázána"
     #define STRING_HEAT_HOTEND            "Zahřát hotend na %d℃?"
     #define STRING_Z_ALIGN                "Z Align"
 

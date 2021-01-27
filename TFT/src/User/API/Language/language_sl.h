@@ -102,8 +102,18 @@
     #define STRING_DEC                    "Manj"
     #define STRING_LOAD                   "Naloži"
     #define STRING_UNLOAD                 "Izvrzi"
+    #define STRING_ON                     "ON"
+    #define STRING_OFF                    "OFF"
+    #define STRING_AUTO                   "AUTO"
+    #define STRING_SMART                  "SMART"
+    #define STRING_SLOW                   "Počasi"
+    #define STRING_NORMAL                 "Normalo"
+    #define STRING_FAST                   "Hitro"
+    #define STRING_ZERO                   "Nič"
+    #define STRING_HALF                   "50% moč"
+    #define STRING_FULL                   "100% moč"
+    #define STRING_CUSTOM                 "Po meri"
     #define STRING_CLEAR                  "Clear"
-    #define STRING_VALUE_ZERO             "Nič"
     #define STRING_DEFAULT                "Default"
 
     // Action Buttons
@@ -117,6 +127,7 @@
     #define STRING_FORCE_SHUT_DOWN        "Prisilni izklop"
     #define STRING_EMERGENCYSTOP          "EM. STOP"
     #define STRING_PREHEAT                "Predgretje"
+    #define STRING_PREHEAT_BOTH           "Oboje"
     #define STRING_COOLDOWN               "Ohlajanje"
 
     // Dialog Buttons
@@ -172,27 +183,16 @@
     #define STRING_STOW                   "Skrij"
     #define STRING_REPEAT                 "Ponovi"
 
-    // Values
+    // Printer Tools
     #define STRING_NOZZLE                 "Šoba"
     #define STRING_BED                    "Miza"
     #define STRING_CHAMBER                "Chamber"
+    #define STRING_FAN                    "Hlajenje"
 
     #define STRING_BLTOUCH                "BLTouch"
     #define STRING_TOUCHMI                "TouchMi"
 
-    #define STRING_ABL                    "ABL"
-    #define STRING_BBL                    "BBL"
-    #define STRING_UBL                    "UBL"
-    #define STRING_MBL                    "MBL"
-
-    #define STRING_ON                     "ON"
-    #define STRING_OFF                    "OFF"
-    #define STRING_AUTO                   "AUTO"
-    #define STRING_SMART                  "SMART"
-    #define STRING_SLOW_SPEED             "Počasi"
-    #define STRING_NORMAL_SPEED           "Normalo"
-    #define STRING_FAST_SPEED             "Hitro"
-
+    // Values
     #define STRING_1_DEGREE               "1℃"
     #define STRING_5_DEGREE               "5℃"
     #define STRING_10_DEGREE              "10℃"
@@ -209,8 +209,6 @@
     #define STRING_5_PERCENT              "5%"
     #define STRING_10_PERCENT             "10%"
     #define STRING_PERCENT_VALUE          "%d%%"
-    #define STRING_PERCENTAGE_SPEED       "Hitrost"
-    #define STRING_PERCENTAGE_FLOW        "Pretok"
 
     #define STRING_5_SECONDS              "5 sek."
     #define STRING_10_SECONDS             "10 sek."
@@ -218,7 +216,6 @@
     #define STRING_60_SECONDS             "1 min."
     #define STRING_120_SECONDS            "2 min."
     #define STRING_300_SECONDS            "5 min."
-    #define STRING_CUSTOM_SECONDS         "Po meri"
 
     // Colors
     #define STRING_WHITE                  "Belo"
@@ -246,7 +243,6 @@
     #define STRING_HOME                   "Domov"
     #define STRING_PRINT                  "Tisk"
     #define STRING_EXTRUDE                "Filament"
-    #define STRING_FAN                    "Hlajenje"
     #define STRING_SETTINGS               "Nastavitve"
     #define STRING_SCREEN_SETTINGS        "Zaslon"
     #define STRING_MACHINE_SETTINGS       "Naprava"
@@ -255,7 +251,6 @@
     #define STRING_RGB_SETTINGS           "Barva LED"
     #define STRING_RGB_OFF                "LED Off"
     #define STRING_TERMINAL               "Terminal"
-    #define STRING_CUSTOM                 "Po meri"
     #define STRING_LEVELING               "Niveliraj"
     #define STRING_POINT_1                "Točka 1"
     #define STRING_POINT_2                "Točka 2"
@@ -267,6 +262,10 @@
     #define STRING_BL_SMART_FILL          "Missing probe points\nhave been smart filled.\n \nNote: remember to save!"
     #define STRING_BL_ENABLE              "BL: on"
     #define STRING_BL_DISABLE             "BL: off"
+    #define STRING_ABL                    "ABL"
+    #define STRING_BBL                    "BBL"
+    #define STRING_UBL                    "UBL"
+    #define STRING_MBL                    "MBL"
     #define STRING_MBL_SETTINGS           "Mesh Bed Leveling"
     #define STRING_ABL_SETTINGS           "Auto Bed Leveling"
     #define STRING_ABL_SETTINGS_BBL       "Bilinear Bed Leveling"
@@ -284,14 +283,14 @@
     #define STRING_DISTANCE               "Distance"
     #define STRING_LOAD_UNLOAD            "Load/Unload"  // needs translation
     #define STRING_LOAD_UNLOAD_SHORT      "(Un)Load"  // needs translation
-    #define STRING_FAN_FULL_SPEED         "100% moč"
-    #define STRING_FAN_HALF_SPEED         "50% moč"
     #define STRING_TOUCHSCREEN_ADJUST     "Umeri"
     #define STRING_MORE                   "Več"
     #define STRING_SCREEN_INFO            "Info"
     #define STRING_SIMULATOR_BG_COLOR     "Barva ozadja Marlin simulatorja"
     #define STRING_SIMULATOR_FONT_COLOR   "Barva pisave Marlin simulatorja"
     #define STRING_PERCENTAGE             "Procent"
+    #define STRING_PERCENTAGE_SPEED       "Hitrost"
+    #define STRING_PERCENTAGE_FLOW        "Pretok"
     #define STRING_BABYSTEP               "BabyStep"
     #define STRING_X_INC                  "X+"
     #define STRING_Y_INC                  "Y+"
@@ -306,7 +305,6 @@
     #define STRING_ADJUST_INFO            "Pritisni na rdečo piko"
     #define STRING_ADJUST_OK              "Nastavitev uspešna"
     #define STRING_ADJUST_FAILED          "Nastavitev neuspešna, prosim poskusi ponovno"
-    #define STRING_PREHEAT_BOTH           "Oboje"
     #define STRING_UNIFIEDMOVE            "Vodenje"
     #define STRING_UNIFIEDHEAT            "Gretje"
     #define STRING_TOUCH_TO_EXIT          "Klikni kjerkoli za izhod"
@@ -350,7 +348,6 @@
     #define STRING_NO_FILAMENT_STATS      "\nFilament data not available."
     #define STRING_CLICK_FOR_MORE         "Click for summary"
     #define STRING_EXT_TEMPLOW            "Hotend temperature is below\nminimum temperature (%d℃)."
-    #define STRING_COLD_EXT               "Cold extrusion prevented"
     #define STRING_HEAT_HOTEND            "Heat hotend to %d℃?"
     #define STRING_Z_ALIGN                "Z Align"
 

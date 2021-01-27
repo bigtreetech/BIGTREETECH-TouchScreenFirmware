@@ -37,9 +37,9 @@ const u8 degreeSteps[ITEM_DEGREE_NUM] = {1, 5, 10};
 const ITEM itemSpeed[ITEM_SPEED_NUM] =
 {
 // icon                       label
-  {ICON_SLOW_SPEED,           LABEL_SLOW_SPEED},
-  {ICON_NORMAL_SPEED,         LABEL_NORMAL_SPEED},
-  {ICON_FAST_SPEED,           LABEL_FAST_SPEED},
+  {ICON_SLOW_SPEED,           LABEL_SLOW},
+  {ICON_NORMAL_SPEED,         LABEL_NORMAL},
+  {ICON_FAST_SPEED,           LABEL_FAST},
 };
 
 // Icons list for percent change steps

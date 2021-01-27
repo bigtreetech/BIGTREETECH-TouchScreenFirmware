@@ -102,8 +102,18 @@
     #define STRING_DEC                    "Disminur"
     #define STRING_LOAD                   "Cargar"
     #define STRING_UNLOAD                 "Descargar"
+    #define STRING_ON                     "ON"
+    #define STRING_OFF                    "OFF"
+    #define STRING_AUTO                   "AUTO"
+    #define STRING_SMART                  "SMART"
+    #define STRING_SLOW                   "Despacio"
+    #define STRING_NORMAL                 "Normal"
+    #define STRING_FAST                   "Rápido"
+    #define STRING_ZERO                   "Cero"
+    #define STRING_HALF                   "Mitad"
+    #define STRING_FULL                   "Todo"
+    #define STRING_CUSTOM                 "Personalizar"
     #define STRING_CLEAR                  "Clear"
-    #define STRING_VALUE_ZERO             "Cero"
     #define STRING_DEFAULT                "Default"
 
     // Action Buttons
@@ -117,6 +127,7 @@
     #define STRING_FORCE_SHUT_DOWN        "Forzar Apagado"
     #define STRING_EMERGENCYSTOP          "PARADA EMERGENCIA"
     #define STRING_PREHEAT                "Precalentar"
+    #define STRING_PREHEAT_BOTH           "Ambos"
     #define STRING_COOLDOWN               "Enfriarse"
 
     // Dialog Buttons
@@ -172,27 +183,16 @@
     #define STRING_STOW                   "Plegar"
     #define STRING_REPEAT                 "Repetir"
 
-    // Values
+    // Printer Tools
     #define STRING_NOZZLE                 "Punta"
     #define STRING_BED                    "Cama"
     #define STRING_CHAMBER                "Chamber"
+    #define STRING_FAN                    "Ventilar"
 
     #define STRING_BLTOUCH                "BLTouch"
     #define STRING_TOUCHMI                "TouchMi"
 
-    #define STRING_ABL                    "ABL"
-    #define STRING_BBL                    "BBL"
-    #define STRING_UBL                    "UBL"
-    #define STRING_MBL                    "MBL"
-
-    #define STRING_ON                     "ON"
-    #define STRING_OFF                    "OFF"
-    #define STRING_AUTO                   "AUTO"
-    #define STRING_SMART                  "SMART"
-    #define STRING_SLOW_SPEED             "Despacio"
-    #define STRING_NORMAL_SPEED           "Normal"
-    #define STRING_FAST_SPEED             "Rápido"
-
+    // Values
     #define STRING_1_DEGREE               "1℃"
     #define STRING_5_DEGREE               "5℃"
     #define STRING_10_DEGREE              "10℃"
@@ -209,8 +209,6 @@
     #define STRING_5_PERCENT              "5%"
     #define STRING_10_PERCENT             "10%"
     #define STRING_PERCENT_VALUE          "%d%%"
-    #define STRING_PERCENTAGE_SPEED       "Velocidad"
-    #define STRING_PERCENTAGE_FLOW        "Flujo"
 
     #define STRING_5_SECONDS              "5 Sec."
     #define STRING_10_SECONDS             "10 Sec."
@@ -218,7 +216,6 @@
     #define STRING_60_SECONDS             "1 Min."
     #define STRING_120_SECONDS            "2 Min."
     #define STRING_300_SECONDS            "5 Min."
-    #define STRING_CUSTOM_SECONDS         "Custom"
 
     // Colors
     #define STRING_WHITE                  "Blanco"
@@ -246,7 +243,6 @@
     #define STRING_HOME                   "Origen"
     #define STRING_PRINT                  "Imprimir"
     #define STRING_EXTRUDE                "Extruir"
-    #define STRING_FAN                    "Ventilar"
     #define STRING_SETTINGS               "Configurar"
     #define STRING_SCREEN_SETTINGS        "Pantalla"
     #define STRING_MACHINE_SETTINGS       "Máquina"
@@ -255,7 +251,6 @@
     #define STRING_RGB_SETTINGS           "Color LED"
     #define STRING_RGB_OFF                "Apagar LED"
     #define STRING_TERMINAL               "Terminal"
-    #define STRING_CUSTOM                 "Personalizar"
     #define STRING_LEVELING               "Nivelar"
     #define STRING_POINT_1                "Punto 1"
     #define STRING_POINT_2                "Punto 2"
@@ -267,6 +262,10 @@
     #define STRING_BL_SMART_FILL          "Missing probe points\nhave been smart filled.\n \nNote: remember to save!"
     #define STRING_BL_ENABLE              "BL: on"
     #define STRING_BL_DISABLE             "BL: off"
+    #define STRING_ABL                    "ABL"
+    #define STRING_BBL                    "BBL"
+    #define STRING_UBL                    "UBL"
+    #define STRING_MBL                    "MBL"
     #define STRING_MBL_SETTINGS           "Mesh Bed Leveling"
     #define STRING_ABL_SETTINGS           "Auto Bed Leveling"
     #define STRING_ABL_SETTINGS_BBL       "Bilinear Bed Leveling"
@@ -284,14 +283,14 @@
     #define STRING_DISTANCE               "Distance"
     #define STRING_LOAD_UNLOAD            "Load/Unload"  // needs translation
     #define STRING_LOAD_UNLOAD_SHORT      "(Un)Load"  // needs translation
-    #define STRING_FAN_FULL_SPEED         "Todo"
-    #define STRING_FAN_HALF_SPEED         "Mitad"
     #define STRING_TOUCHSCREEN_ADJUST     "Calibrar"
     #define STRING_MORE                   "Más"
     #define STRING_SCREEN_INFO            "Informar"
     #define STRING_SIMULATOR_BG_COLOR     "Marlin simulator background color"
     #define STRING_SIMULATOR_FONT_COLOR   "Marlin simulator font color"
     #define STRING_PERCENTAGE             "Porcentaje"
+    #define STRING_PERCENTAGE_SPEED       "Velocidad"
+    #define STRING_PERCENTAGE_FLOW        "Flujo"
     #define STRING_BABYSTEP               "BabyStep"
     #define STRING_X_INC                  "+X"
     #define STRING_Y_INC                  "+Y"
@@ -306,7 +305,6 @@
     #define STRING_ADJUST_INFO            "Por favor haga clic en el punto rojo"
     #define STRING_ADJUST_OK              "Ajuste correcto"
     #define STRING_ADJUST_FAILED          "Ajuste fallido, por favor intentelo de nuevo"
-    #define STRING_PREHEAT_BOTH           "Ambos"
     #define STRING_UNIFIEDMOVE            "Movimiento"
     #define STRING_UNIFIEDHEAT            "Calor/Ventilador"
     #define STRING_TOUCH_TO_EXIT          "Toca cualquier lugar para salir"
@@ -350,7 +348,6 @@
     #define STRING_NO_FILAMENT_STATS      "\nFilament data not available."
     #define STRING_CLICK_FOR_MORE         "Click for summary"
     #define STRING_EXT_TEMPLOW            "Hotend temperature is below\nminimum temperature (%d℃)."
-    #define STRING_COLD_EXT               "Cold extrusion prevented"
     #define STRING_HEAT_HOTEND            "Heat hotend to %d℃?"
     #define STRING_Z_ALIGN                "Z Align"
 
