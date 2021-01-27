@@ -393,7 +393,7 @@ int16_t drawTemperatureStatus(void)
 
   if (!temperatureStatusValid()) return x_offset;
 
-  uint8_t tmpHeater[3]; // chamber, bed, hotend
+  uint8_t tmpHeater[3]; // chamber, bed, 1-2hotend
   uint16_t tmpIcon[3];
   uint8_t tmpIndex = 0;
 
