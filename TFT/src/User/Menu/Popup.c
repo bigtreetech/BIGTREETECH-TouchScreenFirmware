@@ -1,6 +1,10 @@
 #include "Popup.h"
 #include "includes.h"
 
+#define X_MAX_CHAR      (LCD_WIDTH / BYTE_WIDTH)
+#define MAX_MSG_LINES   4
+#define POPUP_MAX_CHAR  (X_MAX_CHAR * MAX_MSG_LINES)
+
 static BUTTON bottomSingleBtn = {
   //button location                       color before pressed   color after pressed
   POPUP_RECT_SINGLE_CONFIRM, NULL, 5, 1,  DARKGREEN, DARKGREEN,  MAT_LOWWHITE, DARKGREEN, WHITE, DARKGREEN
@@ -35,10 +39,8 @@ static void (*action_cancel)() = NULL;
 static void (*action_loop)() = NULL;
 
 static bool popup_redraw = false;
-#define X_MAX_CHAR (LCD_WIDTH / BYTE_WIDTH)
-#define FULL_SCREEN_MAX_CHAR (LCD_WIDTH / BYTE_WIDTH * LCD_HEIGHT /BYTE_HEIGHT)
 static uint8_t popup_title[X_MAX_CHAR];
-static uint8_t popup_msg[FULL_SCREEN_MAX_CHAR];
+static uint8_t popup_msg[POPUP_MAX_CHAR];
 static uint8_t popup_ok[24];
 static uint8_t popup_cancel[24];
 static DIALOG_TYPE popup_type;

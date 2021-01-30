@@ -84,7 +84,7 @@ double stringToDouble(char * str, char ** endptr)
   int8_t sign = 1;
   uint32_t prec = 0;
 
-  while (*p == ' ') { p++; }  // remove trailing whitespaces
+  while (*p == 32 || *p == 9) { p++; }  // remove trailing whitespaces
 
   if (*p == '-')
   {
