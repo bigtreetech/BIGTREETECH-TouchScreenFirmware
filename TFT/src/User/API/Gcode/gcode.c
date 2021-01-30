@@ -214,7 +214,7 @@ bool request_M27(int seconds)
  **/
 bool request_M125(void)
 {
-  mustStoreCmd("M125 P\n");
+  mustStoreCmd("M125 P1\n");
   return true;
 }
 
