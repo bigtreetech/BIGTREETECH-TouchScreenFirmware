@@ -193,7 +193,7 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
     case BOARD_SD_REMOTE:
       infoPrinting.pause = is_pause;
       if (is_pause)
-        request_M25();
+        request_M125();
       else
         request_M24(0);
       break;

@@ -197,14 +197,6 @@ bool request_M524(void)
   mustStoreCmd("M524\n");
   return true;
 }
-/**
- * Pause print
- **/
-bool request_M25(void)
-{
-  mustStoreCmd("M25\n");
-  return true;
-}
 
 /**
  * Print status ( start auto report)
@@ -214,6 +206,15 @@ bool request_M25(void)
 bool request_M27(int seconds)
 {
   mustStoreCmd("M27 S%d\n", seconds);
+  return true;
+}
+
+/**
+ * Park Head / Pause Print
+ **/
+bool request_M125(void)
+{
+  mustStoreCmd("M125 P\n");
   return true;
 }
 
