@@ -527,7 +527,7 @@ void parseConfigKey(u16 index)
 {
   switch (index)
   {
-    //----------------------------general settings
+    //----------------------------General Settings
 
     case C_INDEX_STATUS_SCREEN:
       infoSettings.status_screen = getOnOff();
@@ -611,12 +611,12 @@ void parseConfigKey(u16 index)
       SET_VALID_INT_VALUE(infoSettings.ack_notification, 0, 2);
       break;
 
-    //----------------------------Marlin Mode Settings (Only for TFT35_V3.0/TFT24_V1.1/TFT28V3.0)
+    //----------------------------Marlin Mode Settings (only for TFT24_V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70_V3.0)
 
     #if defined(ST7920_SPI) || defined(LCD2004_simulator)
 
       case C_INDEX_MODE:
-        SET_VALID_INT_VALUE(infoSettings.mode, 0, MODE_COUNT-1);
+        SET_VALID_INT_VALUE(infoSettings.mode, 0, MODE_COUNT - 1);
         break;
 
       case C_INDEX_SERIAL_ON:
@@ -640,7 +640,7 @@ void parseConfigKey(u16 index)
         break;
 
       case C_INDEX_MARLIN_TYPE:
-        SET_VALID_INT_VALUE(infoSettings.marlin_type, 0, MODE_COUNT-1);
+        SET_VALID_INT_VALUE(infoSettings.marlin_type, 0, MODE_COUNT - 1);
         break;
 
       case C_INDEX_MARLIN_TITLE:
@@ -840,7 +840,7 @@ void parseConfigKey(u16 index)
       break;
     }
 
-    //----------------------------Power Supply Settings (if connected to TFT Controller):
+    //----------------------------Power Supply Settings (if connected to TFT controller)
 
     #ifdef PS_ON_PIN
       case C_INDEX_PS_ON:
@@ -856,7 +856,28 @@ void parseConfigKey(u16 index)
         break;
     #endif
 
-    //----------------------------Power Loss Recovery & BTT UPS Settings (if connected to TFT Controller:
+    //----------------------------Filament Runout Settings (if connected to TFT controller)
+
+    #ifdef FIL_RUNOUT_PIN
+      case C_INDEX_RUNOUT:
+        if (inLimit(config_int(), 0, 2))
+          infoSettings.runout = config_int();
+        break;
+
+      case C_INDEX_RUNOUT_LOGIC:
+        infoSettings.runout_invert = getOnOff();
+        break;
+
+      case C_INDEX_RUNOUT_NOISE:
+        SET_VALID_INT_VALUE(infoSettings.runout_noise_ms, MIN_DELAY_MS, MAX_DELAY_MS);
+        break;
+
+      case C_INDEX_RUNOUT_DISTANCE:
+        SET_VALID_INT_VALUE(infoSettings.runout_distance, MIN_RUNOUT_DISTANCE, MAX_RUNOUT_DISTANCE);
+        break;
+    #endif
+
+    //----------------------------Power Loss Recovery & BTT UPS Settings (if connected to TFT controller)
 
     #ifdef BTT_MINI_UPS
       case C_INDEX_POWERLOSS_EN:
@@ -876,28 +897,8 @@ void parseConfigKey(u16 index)
         break;
     #endif
 
-    //----------------------------Filament Runout Settings (if connected to TFT Controller):
+    //----------------------------Other Device-Specific Settings
 
-    #ifdef FIL_RUNOUT_PIN
-      case C_INDEX_RUNOUT:
-        if (inLimit(config_int(),0,2))
-          infoSettings.runout = config_int();
-        break;
-
-      case C_INDEX_RUNOUT_LOGIC:
-        infoSettings.runout_invert = getOnOff();
-        break;
-
-      case C_INDEX_RUNOUT_NOISE:
-        SET_VALID_INT_VALUE(infoSettings.runout_noise_ms, MIN_DELAY_MS, MAX_DELAY_MS);
-        break;
-
-      case C_INDEX_RUNOUT_DISTANCE:
-        SET_VALID_INT_VALUE(infoSettings.runout_distance, MIN_RUNOUT_DISTANCE, MAX_RUNOUT_DISTANCE);
-        break;
-    #endif
-
-    //----------------------------other device specific settings
     #ifdef BUZZER_PIN
       case C_INDEX_TOUCH_SOUND:
         infoSettings.touchSound = getOnOff();
@@ -914,7 +915,7 @@ void parseConfigKey(u16 index)
 
     #ifdef LED_COLOR_PIN
       case C_INDEX_KNOB_COLOR:
-        SET_VALID_INT_VALUE(infoSettings.knob_led_color, 0, LED_COLOR_NUM-1);
+        SET_VALID_INT_VALUE(infoSettings.knob_led_color, 0, LED_COLOR_NUM - 1);
         break;
 
       #ifdef LCD_LED_PWM_CHANNEL
@@ -940,7 +941,7 @@ void parseConfigKey(u16 index)
         break;
     #endif
 
-    //----------------------------CustomG-Code Commands upto 15 custom G-code
+    //----------------------------Custom Gcode Commands
 
     case C_INDEX_CUSTOM_LABEL_1:
     case C_INDEX_CUSTOM_LABEL_2:
@@ -965,11 +966,11 @@ void parseConfigKey(u16 index)
       if (inLimit(utf8len,NAME_MIN_LENGTH,MAX_GCODE_NAME_LENGTH) && inLimit(bytelen,NAME_MIN_LENGTH,MAX_GCODE_LENGTH))
       {
         strcpy(configCustomGcodes->name[customcode_index++], pchr);
-        customcode_good[index - C_INDEX_CUSTOM_LABEL_1] = 1; //set name was found ok
+        customcode_good[index - C_INDEX_CUSTOM_LABEL_1] = 1;  //set name was found ok
       }
       else
       {
-        customcode_good[index - C_INDEX_CUSTOM_LABEL_1] = 0;//set name was not ok
+        customcode_good[index - C_INDEX_CUSTOM_LABEL_1] = 0;  //set name was not ok
       }
       break;
     }
@@ -989,19 +990,19 @@ void parseConfigKey(u16 index)
     case C_INDEX_CUSTOM_GCODE_14:
     case C_INDEX_CUSTOM_GCODE_15:
     {
-      int fileindex = index - C_INDEX_CUSTOM_GCODE_1; //actual gcode index in config file
+      int fileindex = index - C_INDEX_CUSTOM_GCODE_1;  //actual gcode index in config file
       char pchr[LINE_MAX_CHAR];
       strcpy(pchr,strrchr(cur_line,':') + 1);
       int len = strlen(pchr) + 1;
       //check if gcode length is ok and the name was ok
       if (inLimit(len,GCODE_MIN_LENGTH,MAX_GCODE_LENGTH) && (customcode_good[fileindex] == 1))
-          strcpy(configCustomGcodes->gcode[customcode_index-1], pchr);
-      else if (customcode_good[fileindex] == 1) //if name was ok but gcode is not ok then reduce count
+          strcpy(configCustomGcodes->gcode[customcode_index - 1], pchr);
+      else if (customcode_good[fileindex] == 1)  //if name was ok but gcode is not ok then reduce count
           customcode_index--;
       break;
     }
 
-    //----------------------------Start, End & Cancel G-codes
+    //----------------------------Start, End & Cancel Gcode Commands
 
     case C_INDEX_START_GCODE_ON:
       infoSettings.send_start_gcode = getOnOff();

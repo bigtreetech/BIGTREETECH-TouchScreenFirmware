@@ -8,43 +8,45 @@ static u8 total_pages = 1;
 bool parametersChanged = false;
 
 const LISTITEM parametertypes[P_ITEMSCOUNT] = {
-  // icon               ItemType          Item Title              item value text(only for custom value)
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_STEPS_SETTING,    LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_CURRENT_SETTING,  LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_MAXFEEDRATE,      LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_MAXACCELERATION,  LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_ACCELERATION,     LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_JERK,             LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_JUNCTION_DEVIATION,LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_PROBE_OFFSET,     LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_HOME_OFFSET,      LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_BUMP_SENSITIVITY, LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_FWRETRACT,        LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_FWRECOVER,        LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_RETRACT_AUTO,     LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_LIN_ADVANCE,      LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_ABL,              LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_OFFSET_TOOL,      LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,  LABEL_HYBRID_THRESHOLD, LABEL_BACKGROUND},
+  // icon               ItemType           Item Title                  item value text(only for custom value)
+  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_STEPS_SETTING,        LABEL_BACKGROUND},
+  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_MAXFEEDRATE,          LABEL_BACKGROUND},
+  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_MAXACCELERATION,      LABEL_BACKGROUND},
+  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_ACCELERATION,         LABEL_BACKGROUND},
+  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_JERK,                 LABEL_BACKGROUND},
+  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_JUNCTION_DEVIATION,   LABEL_BACKGROUND},
+  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_HOME_OFFSET,          LABEL_BACKGROUND},
+  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_FWRETRACT,            LABEL_BACKGROUND},
+  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_FWRECOVER,            LABEL_BACKGROUND},
+  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_RETRACT_AUTO,         LABEL_BACKGROUND},
+  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_OFFSET_TOOL,          LABEL_BACKGROUND},
+  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_ABL,                  LABEL_BACKGROUND},
+  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_PROBE_OFFSET,         LABEL_BACKGROUND},
+  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_LIN_ADVANCE,          LABEL_BACKGROUND},
+  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_CURRENT_SETTING,      LABEL_BACKGROUND},
+  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_BUMP_SENSITIVITY,     LABEL_BACKGROUND},
+  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_HYBRID_THRESHOLD,     LABEL_BACKGROUND},
+  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_MBL_OFFSET,           LABEL_BACKGROUND},
   //Keep below items always at the end
-  {ICONCHAR_SAVE,       LIST_LABEL,       LABEL_SETTING_SAVE,     LABEL_BACKGROUND},
-  {ICONCHAR_UNDO,       LIST_LABEL,       LABEL_SETTING_RESTORE,  LABEL_BACKGROUND},
-  {ICONCHAR_RESET,      LIST_LABEL,       LABEL_SETTING_RESET,    LABEL_BACKGROUND},
+  {ICONCHAR_SAVE,       LIST_LABEL,        LABEL_SETTINGS_SAVE,        LABEL_BACKGROUND},
+  {ICONCHAR_UNDO,       LIST_LABEL,        LABEL_SETTINGS_RESTORE,     LABEL_BACKGROUND},
+  {ICONCHAR_RESET,      LIST_LABEL,        LABEL_SETTINGS_RESET,       LABEL_BACKGROUND},
 };
 
 LISTITEMS parameterMainItems = {
-// title
-LABEL_PARAMETER_SETTING,
-// icon           ItemType     Item Title        item value text(only for custom value)
-{
-  {ICONCHAR_BACKGROUND,   LIST_LABEL,     LABEL_BACKGROUND,     LABEL_BACKGROUND},
-  {ICONCHAR_BACKGROUND,   LIST_LABEL,     LABEL_BACKGROUND,     LABEL_BACKGROUND},
-  {ICONCHAR_BACKGROUND,   LIST_LABEL,     LABEL_BACKGROUND,     LABEL_BACKGROUND},
-  {ICONCHAR_BACKGROUND,   LIST_LABEL,     LABEL_BACKGROUND,     LABEL_BACKGROUND},
-  {ICONCHAR_BACKGROUND,   LIST_LABEL,     LABEL_BACKGROUND,     LABEL_BACKGROUND},
-  {ICONCHAR_BACKGROUND,   LIST_LABEL,     LABEL_BACKGROUND,     LABEL_BACKGROUND},
-  {ICONCHAR_BACKGROUND,   LIST_LABEL,     LABEL_BACKGROUND,     LABEL_BACKGROUND},
-  {ICONCHAR_BACK,         LIST_LABEL,     LABEL_BACKGROUND,     LABEL_BACKGROUND},}
+  // title
+  LABEL_PARAMETER_SETTING,
+  // icon                   ItemType      Item Title          item value text(only for custom value)
+  {
+    {ICONCHAR_BACKGROUND,   LIST_LABEL,   LABEL_BACKGROUND,   LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND,   LIST_LABEL,   LABEL_BACKGROUND,   LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND,   LIST_LABEL,   LABEL_BACKGROUND,   LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND,   LIST_LABEL,   LABEL_BACKGROUND,   LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND,   LIST_LABEL,   LABEL_BACKGROUND,   LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND,   LIST_LABEL,   LABEL_BACKGROUND,   LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND,   LIST_LABEL,   LABEL_BACKGROUND,   LABEL_BACKGROUND},
+    {ICONCHAR_BACK,         LIST_LABEL,   LABEL_BACKGROUND,   LABEL_BACKGROUND},
+  }
 };
 
 //show menu for selected parameter type
@@ -54,24 +56,26 @@ void menuShowParameter(void)
   PARAMETERS now = infoParameters;
   float oldval[LISTITEM_PER_PAGE];
 
-  LISTITEMS parameter_menuitems ={
-  // title
-  parametertypes[cur_parameter].titlelabel,
-  // icon           ItemType        Item Title      item value text(only for custom value)
-  {{ICONCHAR_BACKGROUND,      LIST_CUSTOMVALUE,     LABEL_DYNAMIC,      LABEL_CUSTOM_VALUE},
-  {ICONCHAR_BACKGROUND,       LIST_CUSTOMVALUE,     LABEL_DYNAMIC,      LABEL_CUSTOM_VALUE},
-  {ICONCHAR_BACKGROUND,       LIST_CUSTOMVALUE,     LABEL_DYNAMIC,      LABEL_CUSTOM_VALUE},
-  {ICONCHAR_BACKGROUND,       LIST_CUSTOMVALUE,     LABEL_DYNAMIC,      LABEL_CUSTOM_VALUE},
-  {ICONCHAR_BACKGROUND,       LIST_CUSTOMVALUE,     LABEL_DYNAMIC,      LABEL_CUSTOM_VALUE},
-  {ICONCHAR_BACKGROUND,       LIST_LABEL,           LABEL_BACKGROUND,   LABEL_BACKGROUND},
-  {ICONCHAR_BACKGROUND,       LIST_LABEL,           LABEL_BACKGROUND,   LABEL_BACKGROUND},
-  {ICONCHAR_BACK,             LIST_LABEL,           LABEL_BACKGROUND,   LABEL_BACKGROUND},}
+  LISTITEMS parameter_menuitems = {
+    // title
+    parametertypes[cur_parameter].titlelabel,
+    // icon                   ItemType            Item Title          item value text(only for custom value)
+    {
+      {ICONCHAR_BACKGROUND,   LIST_CUSTOMVALUE,   LABEL_DYNAMIC,      LABEL_CUSTOM_VALUE},
+      {ICONCHAR_BACKGROUND,   LIST_CUSTOMVALUE,   LABEL_DYNAMIC,      LABEL_CUSTOM_VALUE},
+      {ICONCHAR_BACKGROUND,   LIST_CUSTOMVALUE,   LABEL_DYNAMIC,      LABEL_CUSTOM_VALUE},
+      {ICONCHAR_BACKGROUND,   LIST_CUSTOMVALUE,   LABEL_DYNAMIC,      LABEL_CUSTOM_VALUE},
+      {ICONCHAR_BACKGROUND,   LIST_CUSTOMVALUE,   LABEL_DYNAMIC,      LABEL_CUSTOM_VALUE},
+      {ICONCHAR_BACKGROUND,   LIST_LABEL,         LABEL_BACKGROUND,   LABEL_BACKGROUND},
+      {ICONCHAR_BACKGROUND,   LIST_LABEL,         LABEL_BACKGROUND,   LABEL_BACKGROUND},
+      {ICONCHAR_BACK,         LIST_LABEL,         LABEL_BACKGROUND,   LABEL_BACKGROUND},
+    }
   };
 
   for (int i = 0; i < getParameterElementCount(cur_parameter); i++)
   {
     parameter_menuitems.items[i].titlelabel.address = axisDisplayID[i];
-    setDynamicValue(i, getParameter(cur_parameter,i));
+    setDynamicValue(i, getParameter(cur_parameter, i));
 
     if (i < E2_STEPPER)
       parameter_menuitems.items[i].icon = ICONCHAR_EDIT;
@@ -82,37 +86,50 @@ void menuShowParameter(void)
       case P_ACCELERATION:
         parameter_menuitems.items[i].titlelabel = accel_disp_ID[i];
         break;
+
       case P_JERK:
         parameter_menuitems.items[X_AXIS].titlelabel.address = "X";
         parameter_menuitems.items[Y_AXIS].titlelabel.address = "Y";
         parameter_menuitems.items[Z_AXIS].titlelabel.address = "Z";
         parameter_menuitems.items[E_AXIS].titlelabel.address = "E";
         break;
+
       case P_JUNCTION_DEVIATION:
         parameter_menuitems.items[i].titlelabel = junction_deviation_disp_ID[i];
         break;
+
       case P_FWRETRACT:
         parameter_menuitems.items[i].titlelabel = retract_disp_ID[i];
         break;
+
       case P_FWRECOVER:
         parameter_menuitems.items[i].titlelabel = recover_disp_ID[i];
         break;
+
       case P_AUTO_RETRACT:
         parameter_menuitems.items[i].titlelabel = retract_auto_ID[i];
         break;
-      case P_LIN_ADV:
-        parameter_menuitems.items[0].titlelabel.address = "K-E";
-        parameter_menuitems.items[1].titlelabel.address = "K-E2";
-        break;
-      case P_ABL_STATE:
-        parameter_menuitems.items[0].titlelabel.address = "S 1=ON 0=OFF";
-        parameter_menuitems.items[1].titlelabel.address = "Z fade";
-        break;
+
       case P_OFFSET_TOOL:
         parameter_menuitems.items[X_AXIS].titlelabel.address = "X";
         parameter_menuitems.items[Y_AXIS].titlelabel.address = "Y";
         parameter_menuitems.items[Z_AXIS].titlelabel.address = "Z";
         break;
+
+      case P_ABL_STATE:
+        parameter_menuitems.items[0].titlelabel.address = "S 1=ON 0=OFF";
+        parameter_menuitems.items[1].titlelabel.address = "Z fade";
+        break;
+
+      case P_LIN_ADV:
+        parameter_menuitems.items[0].titlelabel.address = "K-E";
+        parameter_menuitems.items[1].titlelabel.address = "K-E2";
+        break;
+
+      case P_MBL_OFFSET:
+        parameter_menuitems.items[i].titlelabel.address = "Z";
+        break;
+
       default:
         if (getDualstepperStatus(E_STEPPER) && i == E2_STEPPER)
         {
@@ -173,16 +190,18 @@ void menuShowParameter(void)
         menuDrawListItem(&parameter_menuitems.items[i], i);
       }
     }
-  loopProcess();
+
+    loopProcess();
   }
 }
 
 //Load main parameter list page
 void loadParameterPage(void)
 {
-for (uint8_t i = 0; i < LISTITEM_PER_PAGE; i++)
+  for (uint8_t i = 0; i < LISTITEM_PER_PAGE; i++)
   {
     uint8_t item_index = ps_cur_page * LISTITEM_PER_PAGE + i;
+
     if (item_index < P_ITEMSCOUNT)
     {
       if (infoMachineSettings.EEPROM != 1 &&
@@ -198,7 +217,8 @@ for (uint8_t i = 0; i < LISTITEM_PER_PAGE; i++)
       parameterMainItems.items[i].icon = ICONCHAR_BACKGROUND;
     }
   }
-// set page up down button according to page count and current page
+
+  // set page up down button according to page count and current page
   if (P_ITEMSCOUNT <= LISTITEM_PER_PAGE)
   {
     parameterMainItems.items[5].icon = ICONCHAR_BACKGROUND;
@@ -206,12 +226,12 @@ for (uint8_t i = 0; i < LISTITEM_PER_PAGE; i++)
   }
   else
   {
-    if(ps_cur_page == 0)
+    if (ps_cur_page == 0)
     {
       parameterMainItems.items[5].icon = ICONCHAR_BACKGROUND;
       parameterMainItems.items[6].icon = ICONCHAR_PAGEDOWN;
     }
-    else if(ps_cur_page == (total_pages-1))
+    else if (ps_cur_page == (total_pages - 1))
     {
       parameterMainItems.items[5].icon = ICONCHAR_PAGEUP;
       parameterMainItems.items[6].icon = ICONCHAR_BACKGROUND;
@@ -229,12 +249,13 @@ void menuParameterSettings(void)
   KEY_VALUES key_num = KEY_IDLE;
 
   if (infoMachineSettings.EEPROM != 1)
-    total_pages = (P_SAVE_SETTINGS+LISTITEM_PER_PAGE-1)/LISTITEM_PER_PAGE;
+    total_pages = (P_SAVE_SETTINGS+LISTITEM_PER_PAGE - 1) / LISTITEM_PER_PAGE;
   else
-    total_pages = (P_ITEMSCOUNT+LISTITEM_PER_PAGE-1)/LISTITEM_PER_PAGE;
+    total_pages = (P_ITEMSCOUNT+LISTITEM_PER_PAGE - 1) / LISTITEM_PER_PAGE;
 
   loadParameterPage();
   menuDrawListPage(&parameterMainItems);
+
   while (infoMenu.menu[infoMenu.cur] == menuParameterSettings)
   {
     key_num = menuKeyGetValue();
@@ -287,17 +308,18 @@ void menuParameterSettings(void)
           }
           else if (cp == P_RESET_SETTINGS)
           {
-            setDialogText(LABEL_SETTING_RESET, LABEL_RESET_SETTINGS_INFO, LABEL_CONFIRM, LABEL_CANCEL);
+            setDialogText(LABEL_SETTINGS_RESET, LABEL_SETTINGS_RESET_INFO, LABEL_CONFIRM, LABEL_CANCEL);
             showDialog(DIALOG_TYPE_ALERT, resetEepromSettings, NULL, NULL);
             break;
           }
           else if (cp == P_RESTORE_SETTINGS)
           {
-            setDialogText(LABEL_SETTING_RESTORE, LABEL_EEPROM_RESTORE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
+            setDialogText(LABEL_SETTINGS_RESTORE, LABEL_EEPROM_RESTORE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
             showDialog(DIALOG_TYPE_ALERT, restoreEepromSettings, NULL, NULL);
             break;
           }
         }
+
         if (key_num < LISTITEM_PER_PAGE && cp < PARAMETERS_COUNT)
         {
           cur_parameter = cp;
@@ -308,7 +330,8 @@ void menuParameterSettings(void)
       }
       break;
     }
-  loopProcess();
+
+    loopProcess();
   }
 }
 
@@ -329,7 +352,7 @@ bool temperatureStatusValid(void)
 
 void loopTemperatureStatus(void)
 {
-  if(getMenuType() == MENU_TYPE_FULLSCREEN) return;
+  if (getMenuType() == MENU_TYPE_FULLSCREEN) return;
   if (!temperatureStatusValid()) return;
 
   uint8_t tmpHeater[3]; // chamber, bed, hotend
@@ -347,10 +370,12 @@ void loopTemperatureStatus(void)
   bool update = false;
   static int16_t lastCurrent[3];
   static int16_t lastTarget[3];
+
   for (int8_t i = tmpIndex - 1; i >= 0; i--)
   {
     int16_t actCurrent = heatGetCurrentTemp(tmpHeater[i]);
     int16_t actTarget = heatGetTargetTemp(tmpHeater[i]);
+
     if (lastCurrent[i] != actCurrent || lastTarget[i] != actTarget)
     {
       lastCurrent[i] = actCurrent;
@@ -358,17 +383,20 @@ void loopTemperatureStatus(void)
       update = true;
     }
   }
+
   if (update) menuReDrawCurTitle();
 }
 
 int16_t drawTemperatureStatus(void)
 {
   int16_t x_offset = LCD_WIDTH - 10;
+
   if (!temperatureStatusValid()) return x_offset;
 
   uint8_t tmpHeater[3]; // chamber, bed, 1-2hotend
   uint16_t tmpIcon[3];
   uint8_t tmpIndex = 0;
+
   if (infoSettings.hotend_count)
   { // global hotend
     if (infoSettings.hotend_count == 2 && !infoSettings.chamber_en )  // dual hotend
@@ -389,6 +417,7 @@ int16_t drawTemperatureStatus(void)
     tmpIcon[tmpIndex] = ICON_GLOBAL_BED;
     tmpHeater[tmpIndex++] = BED;
   }
+
   if (infoSettings.chamber_en)
   { // global chamber
     tmpIcon[tmpIndex] = ICON_GLOBAL_CHAMBER;
@@ -397,7 +426,8 @@ int16_t drawTemperatureStatus(void)
 
   uint16_t start_y = (TITLE_END_Y - BYTE_HEIGHT) / 2;
   GUI_SetBkColor(infoSettings.title_bg_color);
-  for(int8_t i = tmpIndex - 1; i >= 0; i--)
+
+  for (int8_t i = tmpIndex - 1; i >= 0; i--)
   {
     char tempstr[10];
     x_offset -= GLOBALICON_INTERVAL;
@@ -413,6 +443,7 @@ int16_t drawTemperatureStatus(void)
     x_offset -= GLOBALICON_WIDTH;
     ICON_ReadDisplay(x_offset, start_y, tmpIcon[i]); // icon
   }
+
   GUI_SetBkColor(infoSettings.bg_color);
   return x_offset;
 }

@@ -390,6 +390,7 @@ typedef enum
 {
   TERM_PAGE_UP = 0,
   TERM_PAGE_DOWN,
+  TERM_TOGGLE_ACK,
   TERM_BACK,
   TERM_KEY_NUM,  // number of keys
   TERM_IDLE = IDLE_TOUCH,
@@ -401,7 +402,7 @@ typedef enum
 #define CURSOR_END_Y   CTRL_Y0
 
 #define PAGE_ROW_NUM 1
-#define PAGE_COL_NUM 4
+#define PAGE_COL_NUM 5
 #define PAGE_HEIGHT  GKEY_HEIGHT
 #define PAGE_WIDTH   (LCD_WIDTH / PAGE_COL_NUM)
 #define PAGE_X0      0
@@ -415,11 +416,13 @@ const GUI_RECT terminalKeyRect[TERM_KEY_NUM] = {
   {PAGE_X0 + 1 * PAGE_WIDTH, PAGE_Y0 + 0 * PAGE_HEIGHT, PAGE_X0 + 2 * PAGE_WIDTH, PAGE_Y0 + 1 * PAGE_HEIGHT},
   {PAGE_X0 + 2 * PAGE_WIDTH, PAGE_Y0 + 0 * PAGE_HEIGHT, PAGE_X0 + 3 * PAGE_WIDTH, PAGE_Y0 + 1 * PAGE_HEIGHT},
   {PAGE_X0 + 3 * PAGE_WIDTH, PAGE_Y0 + 0 * PAGE_HEIGHT, PAGE_X0 + 4 * PAGE_WIDTH, PAGE_Y0 + 1 * PAGE_HEIGHT},
+  {PAGE_X0 + 4 * PAGE_WIDTH, PAGE_Y0 + 0 * PAGE_HEIGHT, PAGE_X0 + 5 * PAGE_WIDTH, PAGE_Y0 + 1 * PAGE_HEIGHT},
 };
 
-const char * const terminalKey[TERM_KEY_NUM] = {
+const char * terminalKey[TERM_KEY_NUM] = {
   "<",
   ">",
+  "ON",
   "Back"
 };
 
@@ -729,6 +732,9 @@ void terminalDrawMenu(void)
 
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
+  // init toggle ack value
+  terminalKey[TERM_TOGGLE_ACK] = (const char *) textSelect(itemToggle[infoSettings.terminalACK].index);
+
   // draw keyboard
   for (uint8_t i = 0; i < COUNT(terminalKey); i++)
   {
@@ -768,6 +774,12 @@ void menuTerminal(void)
       case TERM_PAGE_DOWN:  // page down
         if (terminal_page.pageIndex > 0)
           terminal_page.pageIndex -= SCROLL_PAGE;
+        break;
+
+      case TERM_TOGGLE_ACK:  // toggle ack in terminal
+        infoSettings.terminalACK = (infoSettings.terminalACK + 1) % ITEM_TOGGLE_NUM;
+        terminalKey[TERM_TOGGLE_ACK] = (const char *) textSelect(itemToggle[infoSettings.terminalACK].index);
+        terminalReDrawButton(TERM_TOGGLE_ACK, false);
         break;
 
       case TERM_BACK:  // back
