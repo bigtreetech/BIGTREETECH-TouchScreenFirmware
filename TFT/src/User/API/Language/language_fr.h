@@ -37,6 +37,7 @@
     #define STRING_TOUCH_SOUND            "Son des touches"
     #define STRING_TOAST_SOUND            "Notifications"
     #define STRING_ALERT_SOUND            "Popups et alertes"
+    #define STRING_HEATER_SOUND           "Notification de chauffe"
     #define STRING_KNOB_LED_COLOR         "LED du bouton rotatif"
     #define STRING_KNOB_LED_IDLE          "Veille du bouton rotatif"
     #define STRING_LCD_BRIGHTNESS         "Luminosité LCD"
