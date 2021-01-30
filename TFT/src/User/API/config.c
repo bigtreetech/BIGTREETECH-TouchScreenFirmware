@@ -911,6 +911,10 @@ void parseConfigKey(u16 index)
       case C_INDEX_ALERT_SOUND:
         infoSettings.alertSound = getOnOff();
         break;
+
+      case C_INDEX_HEATER_SOUND:
+        infoSettings.heaterSound = getOnOff();
+        break;
     #endif
 
     #ifdef LED_COLOR_PIN

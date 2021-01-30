@@ -37,6 +37,7 @@
     #define STRING_TOUCH_SOUND            "Érintés hangja"
     #define STRING_TOAST_SOUND            "Fűtő értesítések"
     #define STRING_ALERT_SOUND            "Felugró riasztások"
+    #define STRING_HEATER_SOUND           "Heater notification"
     #define STRING_KNOB_LED_COLOR         "Forgatógomb LED"
     #define STRING_KNOB_LED_IDLE          "Forgatógomb tétlen"
     #define STRING_LCD_BRIGHTNESS         "LCD Fényerősség"

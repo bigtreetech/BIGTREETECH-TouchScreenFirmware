@@ -37,6 +37,7 @@
     #define STRING_TOUCH_SOUND            "Dokunma Sesi"
     #define STRING_TOAST_SOUND            "Ara Bildirimler"
     #define STRING_ALERT_SOUND            "Uyarılar ve Sesler"
+    #define STRING_HEATER_SOUND           "Heater notification"
     #define STRING_KNOB_LED_COLOR         "Döner Düğme LED"
     #define STRING_KNOB_LED_IDLE          "Rotary Knob LED idle"
     #define STRING_LCD_BRIGHTNESS         "Parlaklık"

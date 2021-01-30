@@ -37,6 +37,7 @@
     #define STRING_TOUCH_SOUND            "Звуки натискань"
     #define STRING_TOAST_SOUND            "Звуки інфострічки"
     #define STRING_ALERT_SOUND            "Попередження"
+    #define STRING_HEATER_SOUND           "Heater notification"
     #define STRING_KNOB_LED_COLOR         "Підсвічування енкодера"
     #define STRING_KNOB_LED_IDLE          "Простій підсвічування енкодера"
     #define STRING_LCD_BRIGHTNESS         "Яскравість LCD"

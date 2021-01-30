@@ -37,6 +37,7 @@
     #define STRING_TOUCH_SOUND            "按鈕聲音"
     #define STRING_TOAST_SOUND            "Toast 提示聲音"
     #define STRING_ALERT_SOUND            "彈窗和提示聲音"
+    #define STRING_HEATER_SOUND           "Heater notification"
     #define STRING_KNOB_LED_COLOR         "旋鈕LED顏色"
     #define STRING_KNOB_LED_IDLE          "旋鈕LED自動睡眠"
     #define STRING_LCD_BRIGHTNESS         "螢幕亮度"

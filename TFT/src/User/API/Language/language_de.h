@@ -37,6 +37,7 @@
     #define STRING_TOUCH_SOUND            "Eingabe"
     #define STRING_TOAST_SOUND            "Toasts"
     #define STRING_ALERT_SOUND            "Popups & Alarme"
+    #define STRING_HEATER_SOUND           "Heater notification"
     #define STRING_KNOB_LED_COLOR         "Drehknopf LED Farbe"
     #define STRING_KNOB_LED_IDLE          "Drehknopf LED idle Farbe"
     #define STRING_LCD_BRIGHTNESS         "LCD Helligkeit"

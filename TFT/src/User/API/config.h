@@ -109,6 +109,7 @@ extern "C" {
 #define CONFIG_TOUCH_SOUND            "touch_sound:"
 #define CONFIG_TOAST_SOUND            "toast_sound:"
 #define CONFIG_ALERT_SOUND            "alert_sound:"
+#define CONFIG_HEATER_SOUND           "heater_sound:"
 #define CONFIG_KNOB_COLOR             "knob_led_color:"
 #define CONFIG_KNOB_LED_IDLE          "knob_led_idle:"
 #define CONFIG_BRIGHTNESS             "lcd_brightness:"

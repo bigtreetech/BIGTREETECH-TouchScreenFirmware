@@ -242,9 +242,9 @@ void menuSoundSettings(void)
   // icon                 ItemType      Item Title        item value text(only for custom value)
   {
     {ICONCHAR_TOGGLE_ON, LIST_TOGGLE,  LABEL_TOUCH_SOUND,  LABEL_BACKGROUND},
-    {ICONCHAR_TOGGLE_ON, LIST_TOGGLE,  LABEL_ALERT_SOUND,  LABEL_BACKGROUND},
     {ICONCHAR_TOGGLE_ON, LIST_TOGGLE,  LABEL_TOAST_SOUND,  LABEL_BACKGROUND},
-    {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND,   LABEL_BACKGROUND},
+    {ICONCHAR_TOGGLE_ON, LIST_TOGGLE,  LABEL_ALERT_SOUND,  LABEL_BACKGROUND},
+    {ICONCHAR_TOGGLE_ON, LIST_TOGGLE,  LABEL_HEATER_SOUND,  LABEL_BACKGROUND},
     {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND,   LABEL_BACKGROUND},
     {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND,   LABEL_BACKGROUND},
     {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND,   LABEL_BACKGROUND},
@@ -252,8 +252,9 @@ void menuSoundSettings(void)
   };
 
   sounditems.items[0].icon = (infoSettings.touchSound == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
-  sounditems.items[1].icon = (infoSettings.alertSound == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
   sounditems.items[2].icon = (infoSettings.toastSound == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
+  sounditems.items[1].icon = (infoSettings.alertSound == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
+  sounditems.items[3].icon = (infoSettings.heaterSound == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
 
   KEY_VALUES key_num = KEY_IDLE;
   SETTINGS now = infoSettings;
@@ -272,14 +273,20 @@ void menuSoundSettings(void)
       break;
 
     case KEY_ICON_1:
+      infoSettings.toastSound = (infoSettings.toastSound + 1) % 2;
+      sounditems.items[key_num].icon = (infoSettings.toastSound == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
+      menuDrawListItem(&sounditems.items[key_num], key_num);
+      break;
+
+    case KEY_ICON_2:
       infoSettings.alertSound = (infoSettings.alertSound + 1) % 2;
       sounditems.items[key_num].icon = (infoSettings.alertSound == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
       menuDrawListItem(&sounditems.items[key_num], key_num);
       break;
 
-    case KEY_ICON_2:
-      infoSettings.toastSound = (infoSettings.toastSound + 1) % 2;
-      sounditems.items[key_num].icon = (infoSettings.toastSound == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
+    case KEY_ICON_3:
+      infoSettings.heaterSound = (infoSettings.heaterSound + 1) % 2;
+      sounditems.items[key_num].icon = (infoSettings.heaterSound == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
       menuDrawListItem(&sounditems.items[key_num], key_num);
       break;
 

@@ -37,6 +37,7 @@
     #define STRING_TOUCH_SOUND            "Suono al tocco"
     #define STRING_TOAST_SOUND            "Notifiche toast"
     #define STRING_ALERT_SOUND            "Popup e avvisi"
+    #define STRING_HEATER_SOUND           "Heater notification"
     #define STRING_KNOB_LED_COLOR         "LED manopola "
     #define STRING_KNOB_LED_IDLE          "LED manopola spento"
     #define STRING_LCD_BRIGHTNESS         "Luminosità schermo"

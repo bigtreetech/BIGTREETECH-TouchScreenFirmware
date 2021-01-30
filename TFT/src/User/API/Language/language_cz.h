@@ -37,6 +37,7 @@
     #define STRING_TOUCH_SOUND            "Zvuk při dotyku"
     #define STRING_TOAST_SOUND            "Zvuk vytápění"
     #define STRING_ALERT_SOUND            "Upozornění, popup okno"
+    #define STRING_HEATER_SOUND           "Heater notification"
     #define STRING_KNOB_LED_COLOR         "Rotační knob LED"
     #define STRING_KNOB_LED_IDLE          "Rotační knob LED idle"
     #define STRING_LCD_BRIGHTNESS         "LCD Jas"

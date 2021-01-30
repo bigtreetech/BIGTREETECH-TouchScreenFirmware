@@ -44,6 +44,7 @@ extern "C" {
 #define LANG_KEY_TOUCH_SOUND                  "label_touch_sound:"
 #define LANG_KEY_TOAST_SOUND                  "label_toast_sound:"
 #define LANG_KEY_ALERT_SOUND                  "label_alert_sound:"
+#define LANG_KEY_HEATER_SOUND                 "label_heater_sound:"
 #define LANG_KEY_KNOB_LED_COLOR               "label_knob_led_color:"
 #define LANG_KEY_KNOB_LED_IDLE                "label_knob_led_idle:"
 #define LANG_KEY_LCD_BRIGHTNESS               "label_lcd_brightness:"
