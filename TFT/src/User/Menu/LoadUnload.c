@@ -49,7 +49,8 @@ void menuLoadUnload(void)
   {
     key_num = menuKeyGetValue();
 
-    if ((infoHost.wait == true) && (key_num != KEY_IDLE))  // if user pokes around while Load/Unload in progress
+    if (infoHost.wait == true && key_num != KEY_IDLE &&
+        key_num != KEY_ICON_7)  // show reminder for process running if presses any button other than bacnk button
     {
       if (lastcmd == UNLOAD)
       { // unloading

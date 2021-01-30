@@ -26,6 +26,7 @@ extern bool touchSound;
 void TSC_Calibration(void);
 u8   isPress(void);
 u16  KEY_GetValue(u8 total_rect,const GUI_RECT* menuRect);
+u16  Key_value(u8 total_rect,const GUI_RECT* menuRect);
 u16  KNOB_GetRV(GUI_RECT *knob);
 
 void loopTouchScreen(void);

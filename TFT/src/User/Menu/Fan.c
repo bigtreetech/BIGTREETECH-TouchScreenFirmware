@@ -4,9 +4,9 @@
 static uint8_t curIndex = 0;
 
 const ITEM itemFan[2] = {
-  // icon                        label
-  {ICON_FAN,                     LABEL_FAN},
-  {ICON_FAN_HALF_SPEED,          LABEL_HALF},
+  // icon                label
+  {ICON_FAN,             LABEL_FAN},
+  {ICON_FAN_HALF_SPEED,  LABEL_FAN_HALF_SPEED},
 };
 
 void fanSpeedReDraw(bool skip_header)
