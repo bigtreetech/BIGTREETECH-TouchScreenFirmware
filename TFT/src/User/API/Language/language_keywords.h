@@ -138,9 +138,9 @@ extern "C" {
 #define LANG_KEY_COOLDOWN                     "label_cooldown:"
 
 // Dialog Buttons
-#define LANG_KEY_CONFIRM                      "label_confirm" //Confirm Sign
-#define LANG_KEY_CANCEL                       "label_cancel" //Cancel Sign
-#define LANG_KEY_WARNING                      "label_warning" //Exclamation Sign
+#define LANG_KEY_CONFIRM                      "label_confirm:" //Confirm Sign
+#define LANG_KEY_CANCEL                       "label_cancel:" //Cancel Sign
+#define LANG_KEY_WARNING                      "label_warning:" //Exclamation Sign
 #define LANG_KEY_CONTINUE                     "label_continue:"
 #define LANG_KEY_CONFIRMATION                 "label_confirmation:"
 
@@ -152,13 +152,13 @@ extern "C" {
 #define LANG_KEY_UNCONNECTED                  "label_unconnected:"
 
 // Process Info
-#define LANG_KEY_INFO                         "label_info" //Info Sign
+#define LANG_KEY_INFO                         "label_info:" //Info Sign
 #define LANG_KEY_INVALID_VALUE                "label_invalid_value:"
 #define LANG_KEY_TIMEOUT_REACHED              "label_timeout_reached:"
 #define LANG_KEY_DISCONNECT_INFO              "label_disconnect_info:"
 #define LANG_KEY_SHUTTING_DOWN                "label_shutting_down:"
 #define LANG_KEY_WAIT_TEMP_SHUT_DOWN          "label_wait_temp_shut_down:"
-#define LANG_KEY_POWER_FAILED                 "label_power_failed" //Question Sign
+#define LANG_KEY_POWER_FAILED                 "label_power_failed:" //Question Sign
 #define LANG_KEY_PROCESS_RUNNING              "label_process_running:"
 #define LANG_KEY_PROCESS_COMPLETED            "label_process_completed:"
 #define LANG_KEY_PROCESS_ABORTED              "label_process_aborted:"
