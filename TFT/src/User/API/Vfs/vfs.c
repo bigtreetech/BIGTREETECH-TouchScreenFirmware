@@ -25,8 +25,7 @@ bool mountFS(void)
   }
 }
 
-/*
-*/
+// clear and free memory from file list
 void clearInfoFile(void)
 {
   uint8_t i = 0;
@@ -61,27 +60,22 @@ TCHAR *getCurFileSource(void)
       return "bSD:";
 
     default:
-      break;  
+      break;
   }
   return NULL;
 }
 
-/*
-infoFile
-*/
+// reset file list
 void resetInfoFile(void)
 {
   FS_SOURCE source = infoFile.source;
-  bool printFromTFT = infoFile.printFromTFT;
   clearInfoFile();
   memset(&infoFile, 0, sizeof(infoFile));
   infoFile.source = source;
-  infoFile.printFromTFT = printFromTFT;
   strcpy(infoFile.title, getCurFileSource());
 }
 
-/*
-*/
+// scan files in source
 bool scanPrintFiles(void)
 {
   clearInfoFile();
@@ -98,8 +92,7 @@ bool scanPrintFiles(void)
   }
 }
 
-/*
-*/
+// check and open folder
 bool EnterDir(char *nextdir)
 {
   if (strlen(infoFile.title) + strlen(nextdir) + 2 >= MAX_PATH_LEN)
@@ -109,8 +102,7 @@ bool EnterDir(char *nextdir)
   return 1;
 }
 
-/*
-*/
+// close folder
 void ExitDir(void)
 {
   int i = strlen(infoFile.title);
@@ -120,8 +112,7 @@ void ExitDir(void)
   infoFile.title[i] = 0;
 }
 
-/*
-*/
+// check if current folder is root
 bool IsRootDir(void)
 {
   return !strchr(infoFile.title, '/');

@@ -437,9 +437,9 @@ void parseACK(void)
         }
         coordinateQuerySetWait(false);
       }
+    // Parse actual extruder position, response of "M114 E\n", required "M114_DETAIL" in Marlin
       else if (ack_seen("Count E:"))
       {
-        // Parse actual extruder position, response of "M114 E\n", required "M114_DETAIL" in Marlin
         coordinateSetExtruderActualSteps(ack_value());
       }
       else if (infoMachineSettings.onboard_sd_support == ENABLED && ack_seen("File opened: "))
@@ -457,15 +457,12 @@ void parseACK(void)
         infoPrinting.time = 0;
         infoPrinting.cur = 0;
         infoPrinting.size = ack_value();
-        
-        if (infoFile.printFromTFT == false)  // onboard SD print started from remote
-        {
-          infoFile.source = BOARD_SD_REMOTE;
-          initPrintSummary();
-          infoMenu.cur = 1;  // take care if popup active or user in other menu than print
-          infoMenu.menu[infoMenu.cur] = menuPrinting;
-        }
-        
+
+        infoFile.source = BOARD_SD_REMOTE;
+        initPrintSummary();
+        infoMenu.cur = 1;  // take care if popup active or user in other menu than print
+        infoMenu.menu[infoMenu.cur] = menuPrinting;
+
         if (infoMachineSettings.autoReportSDStatus == 1)
         {
           request_M27(infoSettings.m27_refresh_time);  //Check if there is a SD or USB print running.
