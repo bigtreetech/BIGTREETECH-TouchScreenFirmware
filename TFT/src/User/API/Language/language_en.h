@@ -162,7 +162,7 @@
     #define STRING_READ_TFTSD_ERROR       "Read TFT SD card error!"
     #define STRING_TFTSD_INSERTED         "Card inserted!"
     #define STRING_TFTSD_REMOVED          "Card removed!"
-    #define STRING_U_DISK                 "U Disk"
+    #define STRING_U_DISK                 "TFT USB"
     #define STRING_READ_U_DISK_ERROR      "Read TFT USB error!"
     #define STRING_U_DISK_INSERTED        "TFT USB inserted!"
     #define STRING_U_DISK_REMOVED         "TFT USB removed!"
