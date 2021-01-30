@@ -33,4 +33,5 @@ bool request_M27(int seconds);
 bool request_M524(void);
 bool request_M24(int pos);
 long request_M23_M36(char *filename);
+bool request_M0(void);
 #endif
