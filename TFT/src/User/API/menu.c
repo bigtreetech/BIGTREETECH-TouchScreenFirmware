@@ -3,7 +3,6 @@
 #include "list_item.h"
 #include "Notification.h"
 
-
 // exhibitRect is 2 ICON Space in the Upper Row and 2 Center column.
 const GUI_RECT exhibitRect = {
    1*ICON_WIDTH+1*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  3*ICON_WIDTH+2*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y
@@ -231,7 +230,6 @@ void GUI_RestoreColorDefault(void)
 }
 
 static const MENUITEMS *curMenuItems = NULL;   //current menu
-
 static const LISTITEMS *curListItems = NULL;   //current listmenu
 
 static const void (* curMenuRedrawHandle)(void) = NULL; //current custom menu
@@ -527,7 +525,7 @@ void menuDrawPage(const MENUITEMS *menuItems)
   TSC_ReDrawIcon = itemDrawIconPress;
   curMenuRedrawHandle = NULL;
 
-  curRect = (infoMenu.menu[infoMenu.cur] == menuStatus) ? rect_of_keySS : rect_of_key;
+  curRect = ((infoMenu.menu[infoMenu.cur] == menuStatus) || ((infoMenu.menu[infoMenu.cur] == menuPrinting) && !isPrinting())) ? rect_of_keySS : rect_of_key;
 
   //GUI_Clear(BLACK);
   menuClearGaps(); // Use this function instead of GUI_Clear to eliminate the splash screen when clearing the screen.
@@ -715,6 +713,67 @@ GUI_POINT getIconStartPoint(int index)
   return p;
 }
 
+#ifdef SMART_HOME
+  #define LONG_TOUCH (LCD_CHANGE_MODE_INTERVALS / 3)
+  void loopCheckBack(void)
+  {
+    static bool longPress = false;
+    static bool firstCheck = false;
+    static bool backHeld = false;
+
+    if (isPrinting())
+      return;
+    if (!isPress())
+    {
+      backHeld = false;
+      longPress = false;
+      return;
+    }
+    if (menuType != MENU_TYPE_ICON)
+      return;
+    if ((infoMenu.cur == 0) || (infoMenu.menu[infoMenu.cur] == menuMode))
+      return;
+    if (backHeld == true)  // prevent mode selection or screenshot if Back button is held
+    {
+      backHeld = LCD_ReadPen(0);
+      return;
+    }
+    if (longPress == false)  // check if TSC is pressed and held
+    {
+      if (LCD_ReadPen(LONG_TOUCH))
+      {
+        longPress = true;
+        firstCheck = true;
+      }
+    }
+    if (firstCheck == true)  // do things only once if TSC is pressed and held
+    {
+      touchSound = false;
+      KEY_VALUES tempKey = KEY_IDLE;
+      if (infoMenu.menu[infoMenu.cur] == menuPrinting)
+      {
+        tempKey = Key_value(COUNT(rect_of_keySS), rect_of_keySS);
+      }
+      else
+      {
+        tempKey = Key_value(COUNT(rect_of_key), rect_of_key);
+      }
+      touchSound = true;
+      if (tempKey != KEY_IDLE)
+      {
+        if (curMenuItems->items[tempKey].label.index == LABEL_BACK)  // check if Back button is held
+        {
+          BUZZER_PLAY(sound_ok);
+          backHeld = true;
+          infoMenu.menu[1] = infoMenu.menu[infoMenu.cur];
+          infoMenu.cur = 1;
+        }
+      }
+      firstCheck = false;
+    }
+  }
+#endif //SMART_HOME
+
 void loopBackEnd(void)
 {
   // Get Gcode command from the file to be printed
@@ -731,8 +790,12 @@ void loopBackEnd(void)
   loopFan();
   // Speed & flow monitor
   loopSpeed();
-
+#ifdef SMART_HOME
+  // check if Back is pressed and held
+  loopCheckBack();
+#endif
 #ifdef BUZZER_PIN
+  // Buzzer handling
   loopBuzzer();
 #endif
 

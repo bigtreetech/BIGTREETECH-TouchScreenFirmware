@@ -46,14 +46,14 @@ void babyReDraw(float babystep, float z_offset, bool force_z_offset, bool skip_h
 float babyMblOffsetSetValue(float value)
 {
   mustStoreCmd("G29 S4 Z%.2f\n", value);
-  mustStoreCmd("M503\n");  // needed by babyMblOffsetGetValue() to retrieve the new value
+  mustStoreCmd("M420 V1 T1\n");  // needed by babyMblOffsetGetValue() to retrieve the new value
   return value;
 }
 
 // Get current Z offset value for MBL bl type
 float babyMblOffsetGetValue(void)
 {
-  return getParameter(P_MBL_Z_OFFSET, 0);
+  return getParameter(P_MBL_OFFSET, 0);
 }
 
 void menuBabystep(void)
