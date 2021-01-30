@@ -341,7 +341,6 @@ void abortPrinting(void)
       break;
   }
   heatClearIsWaiting();
-  infoFile.printFromTFT = false;
   endPrinting();
   exitPrinting();
 }

@@ -2,11 +2,9 @@
 #include "includes.h"
 
 
-GCODE_QUEUE infoCmd;       //
+GCODE_QUEUE infoCmd;
 GCODE_QUEUE infoCacheCmd;  // Only when heatHasWaiting() is false the cmd in this cache will move to infoCmd queue.
-
-static u8 cmd_index=0;
-
+static u8 cmd_index = 0;
 static bool ispolling = true;
 
 // Is there a code character in the current gcode command.
