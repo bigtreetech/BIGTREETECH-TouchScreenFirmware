@@ -122,10 +122,7 @@ void menuZOffset(void)
 
   now = z_offset = offsetGetValue();
 
-  if (!offsetGetStatus())
-    zOffsetItems.items[KEY_ICON_4].label.index = LABEL_OFF;
-  else
-    zOffsetItems.items[KEY_ICON_4].label.index = LABEL_ON;
+  zOffsetItems.items[KEY_ICON_4].label = itemToggle[offsetGetStatus()];
 
   itemZOffsetSubmenu[0] = itemMoveLen[curUnit_index];
   zOffsetItems.items[KEY_ICON_6] = itemZOffsetSubmenu[curSubmenu_index];
@@ -166,15 +163,11 @@ void menuZOffset(void)
       // enable/disable Z offset change
       case KEY_ICON_4:
         if (!offsetGetStatus())
-        {
           offsetEnable(true);
-          zOffsetItems.items[key_num].label.index = LABEL_ON;
-        }
         else
-        {
           offsetDisable();
-          zOffsetItems.items[key_num].label.index = LABEL_OFF;
-        }
+
+        zOffsetItems.items[key_num].label = itemToggle[offsetGetStatus()];
 
         menuDrawItem(&zOffsetItems.items[key_num], key_num);
         zOffsetDrawStatus(offsetGetStatus(), textSelect(zOffsetItems.items[key_num].label.index));

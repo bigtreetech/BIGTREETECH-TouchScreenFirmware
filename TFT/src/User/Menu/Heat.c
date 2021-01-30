@@ -3,8 +3,7 @@
 #include "Numpad.h"
 #include "Settings.h"
 
-static u8 degreeSteps_index = 1;
-
+static uint8_t degreeSteps_index = 1;
 static uint8_t c_heater = NOZZLE0;
 
 void heatSetCurrentIndex(uint8_t index)

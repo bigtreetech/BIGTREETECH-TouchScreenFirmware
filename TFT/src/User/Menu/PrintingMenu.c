@@ -31,7 +31,7 @@ const GUI_RECT printinfo_val_rect[6] = {
 };
 
 static uint32_t nextLayerDrawTime = 0;
-const  char *const Speed_ID[2] = {"Speed","Flow"};
+const  char *const Speed_ID[2] = {"Speed", "Flow"};
 bool hasFilamentData;
 
 #define TOGGLE_TIME 2000 // 1 seconds is 1000
@@ -46,16 +46,16 @@ bool hasFilamentData;
 #define SPD_ICON_POS 5
 
 const ITEM itemIsPause[2] = {
-  // icon                        label
-  {ICON_PAUSE,                   LABEL_PAUSE},
-  {ICON_RESUME,                  LABEL_RESUME},
+  // icon        label
+  {ICON_PAUSE,   LABEL_PAUSE},
+  {ICON_RESUME,  LABEL_RESUME},
 };
 
 const ITEM itemIsPrinting[3] = {
   // icon                        label
-  {ICON_BACKGROUND,              LABEL_BACKGROUND},
-  {ICON_MAINMENU,                LABEL_MAIN_SCREEN},
-  {ICON_BACK,                    LABEL_BACK},
+  {ICON_BACKGROUND, LABEL_BACKGROUND},
+  {ICON_MAINMENU,   LABEL_MAIN_SCREEN},
+  {ICON_BACK,       LABEL_BACK},
 };
 
 const ITEM itemNotPrinting[2] = {
@@ -69,8 +69,6 @@ void menuBeforePrinting(void)
   //load stat/end/cancel gcodes from spi flash
   uint32_t size = 0;
 
-  infoFile.printFromTFT = true;
-
   switch (infoFile.source)
   {
     case BOARD_SD: // GCode from file on ONBOARD SD
@@ -83,7 +81,6 @@ void menuBeforePrinting(void)
       if (size == 0)
       {
         ExitDir();
-        infoFile.printFromTFT = false;
         infoMenu.cur--;
         return;
       }
@@ -112,7 +109,6 @@ void menuBeforePrinting(void)
       if (f_open(&infoPrinting.file, infoFile.title, FA_OPEN_EXISTING | FA_READ) != FR_OK)
       {
         ExitDir();
-        infoFile.printFromTFT = false;
         infoMenu.cur--;
         return;
       }
@@ -270,7 +266,6 @@ static inline void toggleInfo(void)
 
 static inline void printingDrawPage(void)
 {
-  //  Scroll_CreatePara(&titleScroll, infoFile.title,&titleRect);
   reValueNozzle(EXT_ICON_POS);
   reValueBed(BED_ICON_POS);
   reDrawFan(FAN_ICON_POS);
@@ -385,7 +380,7 @@ void menuPrinting(void)
     printingItems.items[KEY_ICON_6] = itemIsPrinting[0]; // BackGround
     printingItems.items[KEY_ICON_7] = itemIsPrinting[2]; // Back
   }
-  
+
   menuDrawPage(&printingItems);
   printingDrawPage();
   if (lastPrinting == false)
@@ -490,7 +485,6 @@ void menuPrinting(void)
         menuDrawItem(&printingItems.items[KEY_ICON_7], KEY_ICON_7);
         preparePrintSummary();
         drawPrintInfo();
-        infoFile.printFromTFT = false;
         resetSpeedFlow();
       }
     }
