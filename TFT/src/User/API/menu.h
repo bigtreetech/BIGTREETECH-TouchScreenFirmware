@@ -116,19 +116,19 @@ typedef struct
 {
   LABEL title;
   //uint16_t titleIconChar;
-  LISTITEM  items[ITEM_PER_PAGE];
+  LISTITEM items[ITEM_PER_PAGE];
 }LISTITEMS;
 
 typedef struct
 {
-  uint8_t *       text;
-  GUI_POINT       pos; // relative to icon top left corner
-  uint8_t         h_align; //left, right or center of pos point
-  uint8_t         v_align; //left, right or center of pos point
-  uint16_t        fn_color;
-  uint16_t        bk_color;
-  GUI_TEXT_MODE   text_mode;
-  bool            large_font;
+  uint8_t *     text;
+  GUI_POINT     pos; // relative to icon top left corner
+  uint8_t       h_align; //left, right or center of pos point
+  uint8_t       v_align; //left, right or center of pos point
+  uint16_t      fn_color;
+  uint16_t      bk_color;
+  GUI_TEXT_MODE text_mode;
+  bool          large_font;
 }LIVE_DATA;
 
  typedef struct

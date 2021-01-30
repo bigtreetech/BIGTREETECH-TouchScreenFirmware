@@ -28,6 +28,18 @@ void heatSetTargetTemp(uint8_t index, int16_t temp)
 {
   index = fixHeaterIndex(index);
   heater.T[index].target = NOBEYOND(0, temp, infoSettings.max_temp[index]);
+  if (heater.T[index].target + 2> heater.T[index].current)
+  {
+    heater.T[index].status = HEATING;
+  }
+  if (heater.T[index].target < heater.T[index].current + 2)
+  {
+    heater.T[index].status = COOLING;
+  }
+  if (inRange(heater.T[index].current, heater.T[index].target, 2) == true)
+  {
+    heater.T[index].status = SETTLED;
+  }
 }
 
 //Sync target temperature
@@ -248,6 +260,32 @@ void loopCheckHeater(void)
     if (infoMenu.menu[infoMenu.cur] == menuHeat)
       break;
     heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
+  }
+
+// Query heaters if they reached the target temperature (only if not prining)
+  for (uint8_t i = 0; (i < MAX_HEATER_COUNT) && (!isPrinting()); i++)
+  {
+    if (heater.T[i].status == SETTLED)
+    {
+      continue;
+    }
+    if (inRange(heater.T[i].current, heater.T[i].target, 2) != true)
+    {
+      continue;
+    }
+
+    switch (heater.T[i].status)
+    {
+      case HEATING:
+        BUZZER_PLAY(sound_heated);
+        break;
+      case COOLING:
+        BUZZER_PLAY(sound_cooled);
+        break;
+      default:
+        break;
+    }
+    heater.T[i].status = SETTLED;
   }
 
   for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++) // If the target temperature changes, send a Gcode to set the motherboard
