@@ -199,6 +199,15 @@ bool request_M524(void)
 }
 
 /**
+ * Pause print
+ **/
+bool request_M25(void)
+{
+  mustStoreCmd("M25\n");
+  return true;
+}
+
+/**
  * Print status ( start auto report)
  * ->  SD printing byte 123/12345
  * ->  Not SD printing

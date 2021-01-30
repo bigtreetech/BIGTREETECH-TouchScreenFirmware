@@ -359,6 +359,19 @@ void sendQueueCmd(void)
             }
             break;
 
+          case 25: //M25
+            if (!fromTFT)
+            {
+              if (isPrinting() && !infoHost.printing)
+              {
+                setPrintPause(true, false);
+                Serial_Puts(SERIAL_PORT_2, "ok\n");
+                purgeLastCmd();
+                return;
+              }
+            }
+            break;
+
           case 27: //M27
             if (!fromTFT)
             {
