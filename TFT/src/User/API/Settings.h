@@ -32,9 +32,9 @@ typedef enum
 #define CONFIG_SUPPPORT 20210124
 
 #define FONT_FLASH_SIGN       20200908 //(YYYYMMDD) change if fonts require updating
-#define CONFIG_FLASH_SIGN     20210107 //(YYYYMMDD) change if any keyword(s) in config.ini is added or removed
-#define LANGUAGE_FLASH_SIGN   20210121 //(YYYYMMDD) change if any keyword(s) in language pack is added or removed
-#define ICON_FLASH_SIGN       20210105 //(YYYYMMDD) change if any icon(s) is added or removed
+#define CONFIG_FLASH_SIGN     20210130 //(YYYYMMDD) change if any keyword(s) in config.ini is added or removed
+#define LANGUAGE_FLASH_SIGN   20210130 //(YYYYMMDD) change if any keyword(s) in language pack is added or removed
+#define ICON_FLASH_SIGN       20210130 //(YYYYMMDD) change if any icon(s) is added or removed
 
 #define FONT_CHECK_SIGN       (FONT_FLASH_SIGN + WORD_UNICODE)
 #define CONFIG_CHECK_SIGN     (CONFIG_FLASH_SIGN + STRINGS_STORE_ADDR)
@@ -81,7 +81,7 @@ typedef enum
 
 typedef struct
 {
-// General Settings
+  // General Settings
   uint8_t status_screen;
   uint8_t baudrate;
   uint8_t language;
@@ -113,7 +113,7 @@ typedef struct
   uint8_t  marlin_mode_fullscreen;
   uint8_t  marlin_type;
 
-// Printer / Machine Settings
+  // Printer / Machine Settings
   uint8_t  hotend_count;
   uint8_t  bed_en;
   uint8_t  chamber_en;
@@ -149,28 +149,29 @@ typedef struct
 
   uint8_t  move_speed;  // index on infoSettings.axis_speed, infoSettings.ext_speed
 
-// Power Supply Settings
+  // Power Supply Settings
   uint8_t  auto_off;
   uint8_t  ps_active_high;
   uint8_t  auto_off_temp;
 
-// Filament Runout Settings
+  // Filament Runout Settings
   uint8_t  runout;
   uint8_t  runout_invert;
   uint16_t runout_noise_ms;
   uint8_t  runout_distance;
 
-// Power Loss Recovery & BTT UPS Settings
+  // Power Loss Recovery & BTT UPS Settings
   uint8_t  powerloss_en;
   uint8_t  powerloss_home;
   uint8_t  powerloss_invert;
   uint8_t  powerloss_z_raise;
   uint8_t  btt_ups;
 
-// Other device-specific settings
+  // Other Device-Specific Settings
   uint8_t  touchSound;
   uint8_t  toastSound;
   uint8_t  alertSound;
+  uint8_t  heaterSound;
   uint8_t  knob_led_color;
   uint8_t  knob_led_idle;
   uint8_t  lcd_brightness;
@@ -179,7 +180,7 @@ typedef struct
   uint8_t  xy_offset_probing;
   uint8_t  z_steppers_alignment;
 
-// Start, End & Cancel G-codes
+  // Start, End & Cancel Gcode Commands
   uint8_t  send_start_gcode;
   uint8_t  send_end_gcode;
   uint8_t  send_cancel_gcode;

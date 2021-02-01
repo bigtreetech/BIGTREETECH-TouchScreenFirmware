@@ -8,15 +8,23 @@
 
 /**
  * Screenshot for documentation
- *
  * Long press touch screen capture the current full screen to SD card
- * Only for documentation purposes, DON'T enable it when normal printing
+ * Only for documentation purposes, DON'T enable it when normal printing.
  */
 //#define SCREEN_SHOT_TO_SD
 
+/**
+ * Smart Home
+ *
+ * If enabled, long press "Back" button triggers Home screen
+ * It doesn't interfere with the "Screenshot" and "Marlin/Touch Mode" other than if
+ * enabled, long press "Back" will not trigger "Screenshot" or "Marlin/Touch Mode"
+ */
+#define SMART_HOME
+
 // Enable Status Screen
 // Enable this to show status screen as the default home screen. Disabling it will show a static menu.
-#define ENABLE_STATUS_SCREEN true // To enabled: true | To disabled: false (Default: 1)
+#define ENABLE_STATUS_SCREEN true  // To enabled: true | To disabled: false (Default: 1)
 
 /**
  * This setting determines the communication speed of the printer.
@@ -26,29 +34,28 @@
  *
  * Options: [2400: 0, 9600: 1, 19200: 2, 38400: 3, 57600: 4, 115200: 5, 250000: 6, 500000: 7, 1000000: 8]
  */
-#define BAUDRATE 5 // Default: 5
+#define BAUDRATE 5  // Default: 5
 
 /**
  * Default Primary Language (for Touch-Mode only)
  * Select the language to display on the LCD while in Touch Mode.
  *
- * To add/flash a second language copy the required "language_xx.ini" file from
- * "Language Packs" folder to the SD root folder. Then preset the reset button
- * to load/flash the copied language file.
+ * NOTE: To add/flash a second language copy the required "language_xx.ini" file from
+ *       "Language Packs" folder to the SD root folder. Then preset the reset button
+ *       to load/flash the copied language file.
  *
- * Options: ENGLISH, CHINESE, RUSSIAN, JAPANESE, ARMENIAN, GERMAN, CZECH,
- *          SPANISH, FRENCH, PORTUGUESE, ITALIAN, POLISH, SLOVAK, DUTCH,
- *          HUNGARIAN, TURKISH, GREEK, SLOVENIAN, CATALAN, TRAD_CHINESE,
- *          UKRAINIAN
+ * Options: ENGLISH,    CHINESE,  RUSSIAN,     JAPANESE,   ARMENIAN,  GERMAN,        CZECH,
+ *          SPANISH,    FRENCH,   PORTUGUESE,  ITALIAN,    POLISH,    SLOVAK,        DUTCH,
+ *          HUNGARIAN,  TURKISH,  GREEK,       SLOVENIAN,  CATALAN,   TRAD_CHINESE,  UKRAINIAN
  */
-#define DEFAULT_LANGUAGE ENGLISH // Default: ENGLISH
+#define DEFAULT_LANGUAGE ENGLISH  // Default: ENGLISH
 
 /**
  * Default Touch Mode Color Options
  *
- * Options: 0: WHITE,      1: BLACK,       2: RED,     3: GREEN,     4: BLUE,   5: CYAN,
- *          6: MAGENTA,    7: YELLOW,      8: ORANGE,  9: PURPLE,   10: LIME,  11: BROWN,
- *         12: DARKBLUE,  13: DARKGREEN,  14: GRAY,   15: DARKGRAY
+ * Options:  0: WHITE,      1: BLACK,       2: RED,      3: GREEN,     4: BLUE,   5: CYAN,
+ *           6: MAGENTA,    7: YELLOW,      8: ORANGE,   9: PURPLE,   10: LIME,  11: BROWN,
+ *          12: DARKBLUE,  13: DARKGREEN,  14: GRAY,    15: DARKGRAY
  */
 #define TITLE_BACKGROUND_COLOR      1  // Title background color (Default: 1)
 #define BACKGROUND_COLOR            1  // Background color (Default: 1)
@@ -60,9 +67,9 @@
 #define LISTVIEW_ICON_COLOR        15  // icon color in List view (Default: 15)
 
 // Mesh Leveling Display Colors
-// Set the colors used for drawing the mesh with the minimun and maximum value in the grid
-#define MESH_MIN_COLOR 7 // Default: 7
-#define MESH_MAX_COLOR 2 // Default: 2
+// Set the colors used for drawing the mesh with the minimun and maximum value in the grid.
+#define MESH_MIN_COLOR 7  // Default: 7
+#define MESH_MAX_COLOR 2  // Default: 2
 
 //===========================================================================
 //=========================== Marlin Mode Settings ==========================
@@ -70,51 +77,52 @@
 
 /**
  * Default UI Mode
- *
  * Mode switching is still possible by holding down the encorder for two seconds.
+ *
  * Options: MODE_MARLIN (Marlin Mode)
  *          MODE_SERIAL_TSC (Touch Mode)
  */
-#define DEFAULT_LCD_MODE MODE_SERIAL_TSC // Default: MODE_SERIAL_TSC
+#define DEFAULT_LCD_MODE MODE_SERIAL_TSC  // Default: MODE_SERIAL_TSC
 
 /**
  * Default Marlin Mode Background & Font Color Options
  * These colors can be changed in Touch mode, but can also be set here.
  *
- * Options: 0: WHITE,      1: BLACK,       2: RED,     3: GREEN,     4: BLUE,   5: CYAN,
- *          6: MAGENTA,    7: YELLOW,      8: ORANGE,  9: PURPLE,   10: LIME,  11: BROWN,
- *         12: DARKBLUE,  13: DARKGREEN,  14: GRAY,   15: DARKGRAY
+ * Options:  0: WHITE,      1: BLACK,       2: RED,      3: GREEN,     4: BLUE,   5: CYAN,
+ *           6: MAGENTA,    7: YELLOW,      8: ORANGE,   9: PURPLE,   10: LIME,  11: BROWN,
+ *          12: DARKBLUE,  13: DARKGREEN,  14: GRAY,    15: DARKGRAY
  */
-#define MARLIN_BKCOLOR 1 // Default: 1
-#define MARLIN_FNCOLOR 0 // Default: 0
+#define MARLIN_BKCOLOR 1  // Default: 1
+#define MARLIN_FNCOLOR 0  // Default: 0
 
-// Text displayed at the top of the TFT in Marlin Mode.
+// Text displayed at the top of the TFT in Marlin Mode
 #define MARLIN_BANNER_TEXT "LCD12864 Emulator"  // Default: "LCD12864 Emulator"
 
-// show banner text at the top of the TFT in Marlin Mode.
-#define MARLIN_SHOW_BANNER true // To enabled: true | To disabled: false (Default: true)
+// Show banner text at the top of the TFT in Marlin Mode
+#define MARLIN_SHOW_BANNER true  // To enabled: true | To disabled: false (Default: true)
 
 /**
  * Run Marlin Mode in Fullscreen
- * Options:  0: Disabled (RECOMMENDED FOR TFT24)
- *           1: Enabled
+
+ * Options: 0: Disabled (RECOMMENDED FOR TFT24)
+ *          1: Enabled
  */
-#define DEFAULT_ST7920_FULLSCREEN_MODE 0 // Default: 0
+#define DEFAULT_ST7920_FULLSCREEN_MODE 0  // Default: 0
 
 /**
  * Keep Serial always On (ONLY SUPPORTED ON TFT24 V1.1, TFT35 V3.0, AND TFT28 V3.0)
- * Keep UART (Serial communication) alive in Marlin Mode
+ * Keep UART (Serial communication) alive in Marlin Mode.
  * Allow seamless OctoPrint UART connection to the TFT's UART/serial expansion port no matter which
  * mode the TFT is in.
  *
- * Options:  0: Disabled    1: Enabled
+ * Options: [0: Disabled, 1: Enabled]
  */
 #define SERIAL_ALWAYS_ON 0  // Default: 0
 
 /**
  * LCD/Touch Encoder
  * In case LCD/Touch Encoder's sliding buttons (pin LCD_ENCA_PIN and LCD_ENCB_PIN)
- * don't produce any movement on menu, try to increase the delay (e.g. 64)
+ * don't produce any movement on menu, try to increase the delay (e.g. 64).
  */
 #define LCD_ENCODER_DELAY 8  // (MicroSeconds) 1 MicroSeconds = 0.000001 Seconds (Default: 8)
 
@@ -158,10 +166,10 @@
 #define FAN_TYPE         {         0,         0,         0,         0,         0,         0,         1,         2 };
 
 // Speed/flow rate names displayed in status screen
-#define SPEED_ID {"Sp.", "Fr."} // (speed, flow rate)
+#define SPEED_ID {"Sp.", "Fr."}  // (speed, flow rate)
 
-//Axes names displayed in Parameter Settings menu
-#define AXIS_DISPLAY_ID  {"X",  "Y",  "Z",   "E",  "E2"} // (X, Y, Z, E, E2)
+// Axes names displayed in Parameter Settings menu
+#define AXIS_DISPLAY_ID  {"X",  "Y",  "Z",   "E",  "E2"}  // (X, Y, Z, E, E2)
 
 // Default X & Y speed (mm/min)
 #define SPEED_XY_SLOW   1000
@@ -198,9 +206,9 @@
 
 /**
  * Manual Leveling
- * Move to four corner points to Leveling manually (Point 1, Point 2, Point 3, Point 4)
+ * Move to four corner points to Leveling manually (Point 1, Point 2, Point 3, Point 4).
  */
-#define LEVELING_EDGE_DISTANCE        20  // Inset distance from bed's edge for calculating leveling point location.
+#define LEVELING_EDGE_DISTANCE        20  // Inset distance from bed's edge for calculating leveling point location
 #define LEVELING_POINT_Z            0.2f  // Z-axis position when nozzle stays for leveling
 #define LEVELING_POINT_MOVE_Z      10.0f  // Z-axis position when nozzle move to next point
 #define LEVELING_POINT_XY_FEEDRATE  6000  // (mm/min) X and Y axes move feedrate
@@ -234,8 +242,8 @@
 
 /**
  * SD support
- * Starting from Marlin Bugfix 2.0.x Distribution Date: 2020-04-27 & above, The TFT will auto detect
- * On-Board SD Card and auto-configure M27 AutoReport with M115 command
+ * Starting from Marlin Bugfix 2.0.x Distribution Date: 2020-04-27 & above, the TFT will auto detect
+ * On-Board SD Card and auto-configure M27 AutoReport with M115 command.
  * Set the time interval to poll SD Printing status if Marlin reports M27 AutoReport as disabled.
  */
 #define M27_REFRESH             3     // Time in sec for M27 command
@@ -247,52 +255,52 @@
  * The TFT will attempt to auto detect Bed Leveing type with marlin firmware.
  * Set to 1 to enable auto-detect (Marlin only) or choose one of the options below if auto-detect
  * does not work.
- * WARNING - If you're not sure, leave on auto-detect or disabled.
- *           UBL has extra options other leveling systems might not have.
+ *
+ * WARNING: If you're not sure, leave on auto-detect or disabled.
+ *          UBL has extra options other leveling systems might not have.
  *
  * Options: [0: Disabled, 1: Auto-detect, 2: ABL, 3: BBL, 4: UBL, 5: MBL]
  */
-#define ENABLE_BL_VALUE 1 // Default: 1
+#define ENABLE_BL_VALUE 1  // Default: 1
 
-/** TouchMI settings (on ABL menu)
- *
+/**
+ * TouchMI settings (on ABL menu)
  * Enable this option for settings TouchMI sensor on ABL Menu (Init, Z Offset, Save, Test).
  *
- * Options: [enable:1, disable:0]
- *
+ * Options: [0: Disabled, 1: Enabled]
  */
-#define TOUCHMI_SENSOR_VALUE 0 // Default: 0
+#define TOUCHMI_SENSOR_VALUE 0  // Default: 0
 
 // Mesh Leveling Max Grid points
-// Set the maximum number of grid points per dimension
-#define MESH_GRID_MAX_POINTS_X 10 // (Minimum 1, Maximum 15)
-#define MESH_GRID_MAX_POINTS_Y 10 // (Minimum 1, Maximum 15)
+// Set the maximum number of grid points per dimension.
+#define MESH_GRID_MAX_POINTS_X 10  // (Minimum 1, Maximum 15)
+#define MESH_GRID_MAX_POINTS_Y 10  // (Minimum 1, Maximum 15)
 
 /**
  * Auto save/load Bed Leveling data
  * The TFT will auto detect if BL data are available.
  * Enable this will send "M500" after "G29" to store leveling value
- * and send "M420 S1" to enable leveling state after startup
+ * and send "M420 S1" to enable leveling state after startup.
  *
- * Options:  0: Disabled    1: Enabled
+ * Options: [0: Disabled, 1: Enabled]
  */
-#define AUTO_SAVE_LOAD_BL_VALUE 1 // Default: 1
+#define AUTO_SAVE_LOAD_BL_VALUE 1  // Default: 1
 
 // PID autotune
 #define PID_CMD {"M303 U1 C8 E0", "M303 U1 C8 E1", "M303 U1 C8 E2", "M303 U1 C8 E3", "M303 U1 C8 E4", "M303 U1 C8 E5", "M303 U1 C8 E-1", ""};
-#define PID_PROCESS_TIMEOUT (15 * 60000) // (MilliSeconds, 1 minute = 60000 MilliSeconds)
+#define PID_PROCESS_TIMEOUT (15 * 60000)  // (MilliSeconds, 1 minute = 60000 MilliSeconds)
 
 /**
  * M600, M601 ; pause print
  * PrusaSlicer can add M601 on certain height.
- * Acts here like manual pause
+ * Acts here like manual pause.
  */
 #define NOZZLE_PAUSE_M600_M601
 
 /**
  * M701, M702 ; Marlin filament load unload gcodes support
- * FILAMENT_LOAD_UNLOAD_GCODES option on Marlin configuration_adv.h need to be uncommented
- * Adds a submenu to the movement menu for selecting load and unload actions
+ * FILAMENT_LOAD_UNLOAD_GCODES option on Marlin configuration_adv.h need to be uncommented.
+ * Adds a submenu to the movement menu for selecting load and unload actions.
  */
 #define LOAD_UNLOAD_M701_M702
 
@@ -307,31 +315,32 @@
 // Bootscreen logo time in ms
 #define BTT_BOOTSCREEN_TIME 3000
 
-// Enable alternative Move Menu Buttons Layout matching the direction of actual printer axis.
-// update the icons from alternate icon folder
+// Enable alternative Move Menu Buttons Layout matching the direction of actual printer axis
+// Update the icons from alternate icon folder.
 #define ALTERNATIVE_MOVE_MENU
 
 /**
  * Friendly Z offset language
- * Replace decrease/increase and "-" & "+" icons with down/up and friendly icons
+ * Replace decrease/increase and "-" & "+" icons with down/up and friendly icons.
  */
 #define FRIENDLY_Z_OFFSET_LANGUAGE
 
 /**
  * Quick EEPROM Menu
- * Enable EEPROM menu (save/load/reset buttons) in Settings > Machine Menu
- * Note: if disabled, EEPROM operations can also be accessed in the (settings > machine > parameters) menu
+ * Enable EEPROM menu (save/load/reset buttons) in Settings > Machine Menu.
+
+ * NOTE: If disabled, EEPROM operations can also be accessed in the (settings > machine > parameters) menu.
  */
 #define QUICK_EEPROM_BUTTON
 
 /**
  * Startup Knob LED Color (TFT28 V3.0, TFT35 E3.0, TFT43 V3.0, TFT50 V3.0 & TFT70 V3.0)
  *
- * Options:  0: LED_OFF,     1: LED_WHITE,   2: LED_RED,
- *           3: LED_ORANGE,  4: LED_YELLOW,  5: LED_GREEN,
- *           6: LED_BLUE,    7: LED_INDIGO,  8: LED_VIOLET
+ * Options: 0: LED_OFF,     1: LED_WHITE,   2: LED_RED,
+ *          3: LED_ORANGE,  4: LED_YELLOW,  5: LED_GREEN,
+ *          6: LED_BLUE,    7: LED_INDIGO,  8: LED_VIOLET
 */
-#define STARTUP_KNOB_LED_COLOR 1 // Default: 1
+#define STARTUP_KNOB_LED_COLOR 1  // Default: 1
 
 // Keep the LED state in Marlin Mode
 #define KEEP_KNOB_LED_COLOR_MARLIN_MODE
@@ -339,10 +348,10 @@
 /**
  * LCD Brightness and LCD IDLE Brightness (TFT28 V3.0, TFT35 E3.0, TFT43 V3.0, TFT50 V3.0 & TFT70 V3.0)
  *
- * Options:  0: OFF,          1:  5 Percent,  2: 10 Percent,
- *           3: 20 Percent,   4: 30 Percent,  5: 40 Percent,
- *           6: 50 Percent,   7: 60 Percent,  8: 70 Percent,
- *           9: 80 Percent,  10: 90 Percent, 11: 100 Percent
+ * Options: 0: OFF,          1:  5 Percent,   2: 10 Percent,
+ *          3: 20 Percent,   4: 30 Percent,   5: 40 Percent,
+ *          6: 50 Percent,   7: 60 Percent,   8: 70 Percent,
+ *          9: 80 Percent,  10: 90 Percent,  11: 100 Percent
  */
 #define DEFAULT_LCD_BRIGHTNESS       11  // Default: 11
 #define DEFAULT_LCD_IDLE_BRIGHTNESS   3  // Default: 3
@@ -352,9 +361,9 @@
  * The LCD screen will dim to idle brightness,
  * if the display is not touched for the period of the lcd idle timer.
  *
- * Options:  0: OFF,          1: 5 Seconds,      2: 10 Seconds,
- *           3: 30 Seconds,   4: 60 Seconds,     5: 120 Seconds,
- *           6: 300 Seconds,  7: CUSTOM Seconds
+ * Options: 0: OFF,          1: 5 Seconds,      2: 10 Seconds,
+ *          3: 30 Seconds,   4: 60 Seconds,     5: 120 Seconds,
+ *          6: 300 Seconds,  7: CUSTOM Seconds
  */
 #define DEFAULT_LCD_IDLE_TIMER  0  // Default: 0
 #define LCD_DIM_CUSTOM_SECONDS (10 * 60)  // Custom value in seconds. This will be used if DEFAULT_LCD_IDLE_TIMER
@@ -366,39 +375,41 @@
  * Set these to 0 to disable audio feedback in the LCD menus.
  * Only valid for SERIAL_TSC LCD MODE and if BUZZER_PIN is set or available.
  *
- * Note: Test audio output with the G-Code:
- * M300 S<frequency Hz> P<duration MilliSeconds>
+ * NOTE: Test audio output with the G-Code:
+ *       M300 S<frequency Hz> P<duration MilliSeconds>
  */
 #define BUZZER_FREQUENCY_DURATION_MS     20  // (MilliSeconds) Default: 20
 #define BUZZER_FREQUENCY_HZ           10000  // (Hz) Default: 10000 (20Hz to 60000Hz)
 
-// Buzzer pin state when buzzer is idle or no sound is playing.
-// Option: [HIGH, LOW]
-#define BUZZER_STOP_LEVEL LOW // Default: LOW
+/**
+ * Buzzer pin state when buzzer is idle or no sound is playing
+ *
+ * Options: [HIGH, LOW]
+ */
+#define BUZZER_STOP_LEVEL LOW  // Default: LOW
 
 /**
  * Toast notification duration (in MilliSeconds)
- * Set the duration for displaying toast notification on top of the screen
+ * Set the duration for displaying toast notification on top of the screen.
  */
-#define TOAST_DURATION (3 * 1000) // (MilliSeconds)  1000 MilliSeconds = 1 Second
+#define TOAST_DURATION (3 * 1000)  // (MilliSeconds)  1000 MilliSeconds = 1 Second
 
 /**
  * Notification style for ACK messages
- * Set the notification style to use for displaying the ACK messages which start with 'echo:'
+ * Set the notification style to use for displaying the ACK messages which start with 'echo:'.
  *
  * NOTE: The OFF value is applied to any ACK message type (e.g. even to known echo ACK).
- *  It means that any kind of ACK message is silently discard
+ *       It means that any kind of ACK message is silently discard.
  *
  * Options: [0: OFF, 1: POPUP, 2: TOAST]
  *  OFF:   No notification. The message is ignored.
  *  POPUP: Display a popup window for user confirmation.
- *  TOAST: A Toast notification is displayed for few seconds. No user interaction is needed
- *
+ *  TOAST: A Toast notification is displayed for few seconds. No user interaction is needed.
  */
-#define ACK_NOTIFICATION_STYLE 1 // Default: 1
+#define ACK_NOTIFICATION_STYLE 1  // Default: 1
 
-// Fan speed as a percentage instead of PWM value.
-#define SHOW_FAN_PERCENTAGE true // To enabled: true | To disabled: false (Default: true)
+// Fan speed as a percentage instead of PWM value
+#define SHOW_FAN_PERCENTAGE true  // To enabled: true | To disabled: false (Default: true)
 
 /**
  * Mesh Editor Keyboard on left side
@@ -412,41 +423,37 @@
 //
 
 /**
- * color scheme for the Terminal Keyboard
+ * Color scheme for the Terminal Keyboard
  *
- * Options:  [0: Default, 1: Invert, 2: High-Contrast]
- *
- * Default: The keyboard follows system background and border colors.
- * Invert: The keyboard is drawn with background swapped with border colors.
- * High-Contrast: Use white and black colors for high contrast.
+ * Options: [0: Default, 1: Invert, 2: High-Contrast]
+ *  Default: The keyboard follows system background and border colors.
+ *  Invert: The keyboard is drawn with background swapped with border colors.
+ *  High-Contrast: Use white and black colors for high contrast.
  */
 #define TERMINAL_KEYBOARD_COLOR_LAYOUT 0  // Default: 0
 
-//
-// QWERTY/QWERTZ keyboard layout
-//
-
 /**
- * keyboard layout for Terminal Keyboard
+ * QWERTY/QWERTZ keyboard layout
+ * Keyboard layout for Terminal Keyboard (Only for TFT70 V3.0).
  *
- * Options:  [0: Default, 1: Qwerty, 2: Qwertz, 4: Azerty]
- * Default: The keyboard has an alphabetically order
- * Qwerty: The typically keyboard Layout for english (Only for TFT70 V3.0)
- * Qwertz: The typically keyboard Layout for german (Only for TFT70 V3.0)
- * Azerty: The typically keyboard Layout for french (Only for TFT70 V3.0)
- *
+ * Options: [0: Default:, 1: qwerty, 2: qwertz, 3: azerty]
+ *  default: The keyboard has an alphabetically order.
+ *  qwerty: The typically keyboard Layout for english.
+ *  qwertz: The typically keyboard Layout for german.
+ *  azerty: The typically keyboard Layout for french.
  */
 #define TERMINAL_KEYBOARD_LAYOUT 1  // Default: 0
+
 
 //===========================================================================
 //=========================== Other Settings ================================
 //===========================================================================
 
 // Power Supply
-#define PS_ON_ACTIVE_HIGH true // Set 'false' for ATX (1), 'true' for X-Box (2)
+#define PS_ON_ACTIVE_HIGH true  // Set 'false' for ATX (1), 'true' for X-Box (2)
 
 /**
- * Maximum hotend temperature for automatic shutdown after printing.
+ * Maximum hotend temperature for automatic shutdown after printing
  * If automatic shutdown(Auto Power) is enabled, the printer will shutdown automatically if the
  * hotend temperature is below this value. If the hotend temperature is higher than this value
  * the fans will be turned on to cool down and it will wait for the hotend temperature to drop below
@@ -455,7 +462,7 @@
 #define AUTO_SHUT_DOWN_MAXTEMP 50
 
 //
-//Filament Runout Settings (if connected to TFT controller)
+// Filament Runout Settings (if connected to TFT controller)
 //
 
 // Filament runout detection
@@ -463,7 +470,7 @@
 #define FIL_NOISE_THRESHOLD  100   // (MilliSeconds) Pause print when filament runout is detected atleast for this duration.
 
 // Smart filament runout detection
-// For use with an encoder disc that toggles runout pin as filament moves
+// For use with an encoder disc that toggles runout pin as filament moves.
 #define FILAMENT_RUNOUT_DISTANCE_MM 7
 
 //
@@ -478,7 +485,7 @@
 #define BTT_MINI_UPS false  // To enabled: true | To disabled: false (Default: false)
 
 // Raise Z axis on resume (on power loss with UPS)
-#define POWER_LOSS_ZRAISE 10 // (mm) Default: 10
+#define POWER_LOSS_ZRAISE 10  // (mm) Default: 10
 
 /**
  * Rapid Serial Communication
@@ -486,7 +493,7 @@
  * Send and parse G-codes more frequently while drawing on screen to prevent printer idling and stuttering due to
  * empty printer buffer.
  *
- * Note: This may slow down graphics while switching menus while printing.
+ * NOTE: This may slow down graphics while switching menus while printing.
 */
 #define RAPID_SERIAL_COMM
 
@@ -495,7 +502,7 @@
  *
  * Support for up to 15 custom G-codes. Uncomment CUSTOM_*_LABEL and CUSTOM_*_GCODE to enable custom G-code.
  * CUSTOM_X_LABEL is the name of the custom button, CUSTOM_X_GCODE is the G-code to be sent by the custom button,
- * this should always end with a New-Line character '\n'
+ * this should always end with a New-Line character '\n'.
  */
 #define CUSTOM_0_LABEL "Disable Steppers"
 #define CUSTOM_0_GCODE "M84\n"
@@ -535,13 +542,13 @@
  * Enable Start & End G-code in SETTINGS -> FEATURE menu.
  */
 // Start G-code - run this G-code before starting print
-#define PRINT_START_GCODE "G28 XY R10\n" // Raise Z 10mm before homing X & Y
+#define PRINT_START_GCODE "G28 XY R10\n"  // Raise Z 10mm before homing X & Y
 
 // End G-code - run this G-code after finishing print
-#define PRINT_END_GCODE "G90\nG1 E-4\nG92 E0\nM18\n" // Switch to absolute positioning, reduce filament pressure by
-                                                     // performing small retract, reset extruder position, disable steppers
+#define PRINT_END_GCODE "G90\nG1 E-4\nG92 E0\nM18\n"  // Switch to absolute positioning, reduce filament pressure by
+                                                      // performing small retract, reset extruder position, disable steppers
 
 // Cancel G-code - run this G-code after canceling print
-#define PRINT_CANCEL_GCODE "M104 S0\nM140 S0\nG28 XY R10\nM107\nM18\n" // Home XY and raise Z 10mm
+#define PRINT_CANCEL_GCODE "M104 S0\nM140 S0\nG28 XY R10\nM107\nM18\n"  // Home XY and raise Z 10mm
 
 #endif

@@ -27,6 +27,8 @@ typedef enum
   sound_deny,
   sound_toast,
   sound_keypress,
+  sound_heated,
+  sound_cooled,
 }SOUND;
 
 
