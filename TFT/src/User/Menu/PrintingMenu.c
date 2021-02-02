@@ -501,6 +501,7 @@ void menuPrinting(void)
           else
           {
             exitPrinting();
+            clearInfoFile();
             infoMenu.cur = 0;
           }
         #endif
@@ -513,6 +514,7 @@ void menuPrinting(void)
           else
           {
             exitPrinting();
+            clearInfoFile();
             infoMenu.cur = 0;
           }
         #else

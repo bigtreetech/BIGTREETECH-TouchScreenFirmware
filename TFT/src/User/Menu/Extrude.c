@@ -24,6 +24,12 @@ void extrudeCoordinateReDraw(bool skip_header)
   setLargeFont(false);
 }
 
+// set the hotend to the minimum extrusion temperature if user selected "OK"
+void extrusionMinTemp_OK(void)
+{
+  heatSetTargetTemp(curExtruder_index, infoSettings.min_ext_temp);
+}
+
 void menuExtrude(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
@@ -160,7 +166,7 @@ void menuExtrude(void)
         sprintf(tempStr, (char *)textSelect(LABEL_HEAT_HOTEND), infoSettings.min_ext_temp);
         strcat(tempMsg, tempStr);
         setDialogText(LABEL_WARNING, (uint8_t *)tempMsg, LABEL_CONFIRM, LABEL_CANCEL);
-        showDialog(DIALOG_TYPE_ERROR, setHotendMinExtTemp, NULL, NULL);
+        showDialog(DIALOG_TYPE_ERROR, extrusionMinTemp_OK, NULL, NULL);
       }
       else
       {
