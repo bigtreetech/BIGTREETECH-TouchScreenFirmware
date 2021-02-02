@@ -1,8 +1,8 @@
 #ifndef _LANGUAGE_HU_H_
 #define _LANGUAGE_HU_H_
 
-    // config.ini Parameter Settings / Feature Settings
-    #define STRING_STATUS_SCREEN          "Enable Status Screen"
+    // config.ini Paraméterbeállítások / Funkcióbeállítások
+    #define STRING_STATUS_SCREEN          "Állapot képernyő aktív"
     #define STRING_BAUDRATE               "Kapcsolat"
     #define STRING_LANGUAGE               "Magyar"
     #define STRING_ROTATE_UI              "Forgatás"
@@ -12,32 +12,32 @@
     #define STRING_INVERT_Z_AXIS          "Z megfordítása"
     #define STRING_PERSISTENT_INFO        "Perzisztens állapotinfó"
     #define STRING_FILE_LIST_MODE         "Fájlnéző listamód"
-    #define STRING_ACK_NOTIFICATION       "ACK egyéb típus"
-    #define STRING_DEFAULT_MODE           "Default Mode"
-    #define STRING_SERIAL_ALWAYS_ON       "Serial Always ON"
-    #define STRING_MARLIN_SHOW_TITLE      "Marlin Mode Title Support"
+    #define STRING_ACK_NOTIFICATION       "ACK Értesítési stílus"
+    #define STRING_DEFAULT_MODE           "Alapértelmezett mód"
+    #define STRING_SERIAL_ALWAYS_ON       "Soros mindig BE"
+    #define STRING_MARLIN_SHOW_TITLE      "Marlin mód cím támogatás"
     #define STRING_MARLIN_FULLSCREEN      "Nagyképernyős Marlin mód"
-    #define STRING_MARLIN_TYPE            "Marlin Mode Type"
-    #define STRING_MOVE_SPEED             "Mozg.Sebesség (X-Y-Z)"
-    #define STRING_AUTO_LOAD_LEVELING     "Auto Save Load Leveling"
+    #define STRING_MARLIN_TYPE            "Marlin mód típusa"
+    #define STRING_MOVE_SPEED             "Mozgási seb. (X-Y-Z)"
+    #define STRING_AUTO_LOAD_LEVELING     "Automentés terhel. szint."
     #define STRING_TOUCHMI_SENSOR         "TouchMI"
-    #define STRING_ONBOARD_SD_SUPPORT     "Onboard SD Card Support"
-    #define STRING_M27_ALWAYS_ACTIVE      "M27 Always Active"
-    #define STRING_LONG_FILENAME_SUPPORT  "Long File Names Support"
-    #define STRING_FAN_SPEED_PERCENT      "Fan Speed As Percentage"
-    #define STRING_XY_OFFSET_PROBING      "XY Offset Probing Support"
-    #define STRING_Z_STEPPERS_ALIGNMENT   "Z Steppers Auto-Alignment"
+    #define STRING_ONBOARD_SD_SUPPORT     "Alaplapi SD támogatás"
+    #define STRING_M27_ALWAYS_ACTIVE      "M27 Mindig aktív"
+    #define STRING_LONG_FILENAME_SUPPORT  "Hosszú fájlnevek tám."
+    #define STRING_FAN_SPEED_PERCENT      "Ventilátor sebesség %-ban"
+    #define STRING_XY_OFFSET_PROBING      "X-Y Végpont tapintás tám."
+    #define STRING_Z_STEPPERS_ALIGNMENT   "Z Motorok automata igazí."
     #define STRING_PS_ON                  "Automata kikapcsolás"
-    #define STRING_PS_ON_ACTIVE_HIGH      "Power Supply Active HIGH"
-    #define STRING_FIL_RUNOUT             "Filament érzékelő"
-    #define STRING_FIL_RUNOUT_INVERTING   "Inverted Filament Runout Logic"
-    #define STRING_PL_RECOVERY_EN         "Áramkiesés helyreálítása"
-    #define STRING_PL_RECOVERY_HOME       "Power Loss Recovery Homing"
-    #define STRING_BTT_MINI_UPS           "BTT UPS Support"
+    #define STRING_PS_ON_ACTIVE_HIGH      "Tápegység aktív MAGAS"
+    #define STRING_FIL_RUNOUT             "Szál érzékelő"
+    #define STRING_FIL_RUNOUT_INVERTING   "Fordított szál kifutás"
+    #define STRING_PL_RECOVERY_EN         "Energiavesztés helyreáll."
+    #define STRING_PL_RECOVERY_HOME       "Áramkimaradás helyreáll."
+    #define STRING_BTT_MINI_UPS           "BTT UPS Támogatás"
     #define STRING_TOUCH_SOUND            "Érintés hangja"
-    #define STRING_TOAST_SOUND            "Fűtő értesítések"
-    #define STRING_ALERT_SOUND            "Felugró riasztások"
-    #define STRING_HEATER_SOUND           "Heater notification"
+    #define STRING_TOAST_SOUND            "Égető értesítések"
+    #define STRING_ALERT_SOUND            "Felugró értesítések"
+    #define STRING_HEATER_SOUND           "Fűtő értesítések"
     #define STRING_KNOB_LED_COLOR         "Forgatógomb LED"
     #define STRING_KNOB_LED_IDLE          "Forgatógomb tétlen"
     #define STRING_LCD_BRIGHTNESS         "LCD Fényerősség"
@@ -47,37 +47,37 @@
     #define STRING_END_GCODE_ENABLED      "Befejező G-Kód"
     #define STRING_CANCEL_GCODE_ENABLED   "Leállító G-Kód"
 
-    // Machine Parameter Settings
-    #define STRING_STEPS_SETTING          "Lépés Beállítás"
-    #define STRING_MAXFEEDRATE            "Max Előtolási Sebesség"
-    #define STRING_MAXACCELERATION        "Max Gyorsulás"
+    // Gépparaméter-beállítások
+    #define STRING_STEPS_SETTING          "Lépés beállítás"
+    #define STRING_MAXFEEDRATE            "Max előtolási sebesség"
+    #define STRING_MAXACCELERATION        "Max gyorsulás"
     #define STRING_ACCELERATION           "Gyorsulás"
     #define STRING_JERK                   "Rántás"
-    #define STRING_JUNCTION_DEVIATION     "Keresztezés Eltérés"
-    #define STRING_HOME_OFFSET            "Kezdőpont Eltolás"
+    #define STRING_JUNCTION_DEVIATION     "Keresztezés eltérés"
+    #define STRING_HOME_OFFSET            "Kezdőpont eltolás"
     #define STRING_FWRETRACT              "FW Visszahúzás"
     #define STRING_FWRECOVER              "FW Visszahúzás helyreáll."
-    #define STRING_RETRACT_AUTO           "Automata Visszahúzás"
+    #define STRING_RETRACT_AUTO           "Automata visszahúz."
     #define STRING_OFFSET_TOOL            "Második fej eltolása"
-    #define STRING_PROBE_OFFSET           "Szonda Eltolás"
-    #define STRING_LIN_ADVANCE            "Lineáris Haladás"
-    #define STRING_CURRENT_SETTING        "Motoráramok Beállítása"
-    #define STRING_BUMP_SENSITIVITY       "TMC ütközés érzékenység"
-    #define STRING_HYBRID_THRESHOLD       "TMC Hibrid Küszöbérték"
-    #define STRING_PRINT_ACCELERATION     "Nyomtatás Gyorsulás"
-    #define STRING_RETRACT_ACCELERATION   "Adagoló Gyorsulása"
-    #define STRING_TRAVEL_ACCELERATION    "Utazási Gyorsulás"
+    #define STRING_PROBE_OFFSET           "Szonda eltolás"
+    #define STRING_LIN_ADVANCE            "Lineáris haladás"
+    #define STRING_CURRENT_SETTING        "Motoráramok beállítása"
+    #define STRING_BUMP_SENSITIVITY       "TMC Ütközés érzékenység"
+    #define STRING_HYBRID_THRESHOLD       "TMC Hibrid küszöbérték"
+    #define STRING_PRINT_ACCELERATION     "Nyomtatás gyorsulás"
+    #define STRING_RETRACT_ACCELERATION   "Adagoló gyorsulása"
+    #define STRING_TRAVEL_ACCELERATION    "Utazási gyorsulás"
     #define STRING_RETRACT_LENGTH         "Visszahúzás hossz"
     #define STRING_RETRACT_SWAP_LENGTH    "Csere hossz vissza."
     #define STRING_RETRACT_FEEDRATE       "Visszahúzás előtol."
-    #define STRING_RETRACT_Z_LIFT         "Z emelése visszahú."
+    #define STRING_RETRACT_Z_LIFT         "Z Emelése visszahú."
     #define STRING_RECOVER_LENGTH         "Hossz javítás"
     #define STRING_SWAP_RECOVER_LENGTH    "Cserehossz javítás"
     #define STRING_RECOVER_FEEDRATE       "Előtolás javítás"
     #define STRING_SWAP_RECOVER_FEEDRATE  "Csere előtolás jav."
-    #define STRING_MBL_OFFSET             "MBL Offset"
+    #define STRING_MBL_OFFSET             "MBL Eltolás"
 
-    // Save / Load
+    // Mentés / Betöltés
     #define STRING_SAVE                   "Mentés"
     #define STRING_RESTORE                "Betöltés"
     #define STRING_RESET                  "Újratölt"
@@ -86,11 +86,11 @@
     #define STRING_EEPROM_RESET_INFO      "Visszaállítod az EEPROM-ot a\ngyári beállításokra?"
     #define STRING_SETTINGS_SAVE          "Beállítások mentése"
     #define STRING_SETTINGS_RESTORE       "Beállítások újratöltése"
-    #define STRING_SETTINGS_RESET         "Beállítás visszaállítása"
+    #define STRING_SETTINGS_RESET         "Beállítások visszaáll."
     #define STRING_SETTINGS_RESET_INFO    "Minden beállítás vissza\nfog állni alapértelmezett\nértékre. Folytatod?"
     #define STRING_SETTINGS_RESET_DONE    "A beállítások visszaállítása\nsikeresen megtörtént.\nAz aktiváláshoz indítsd\nújra az eszközt."
 
-    // Navigation Buttons
+    // Navigációs gombok
     #define STRING_PAGE_UP                "Fel"
     #define STRING_PAGE_DOWN              "Le"
     #define STRING_UP                     "Fel"
@@ -98,7 +98,7 @@
     #define STRING_NEXT                   "Tovább"
     #define STRING_BACK                   "Vissza"
 
-    // Value Buttons
+    // Érték gombok
     #define STRING_INC                    "Növel"
     #define STRING_DEC                    "Csökkent"
     #define STRING_LOAD                   "Betöltés"
@@ -114,10 +114,10 @@
     #define STRING_HALF                   "Fél"
     #define STRING_FULL                   "Teljes"
     #define STRING_CUSTOM                 "Egyedi"
-    #define STRING_CLEAR                  "Tiszta"
+    #define STRING_CLEAR                  "Törlés"
     #define STRING_DEFAULT                "Alapért."
 
-    // Action Buttons
+    // Művelet gombok
     #define STRING_START                  "Kezdés"
     #define STRING_STOP                   "Állj"
     #define STRING_PAUSE                  "Szünet"
@@ -126,26 +126,26 @@
     #define STRING_DISCONNECT             "Leválaszt"
     #define STRING_SHUT_DOWN              "Leállítás"
     #define STRING_FORCE_SHUT_DOWN        "Kényszerít"
-    #define STRING_EMERGENCYSTOP          "VészSTOP"
+    #define STRING_EMERGENCYSTOP          "Vész-STOP"
     #define STRING_PREHEAT                "Előfűtés"
     #define STRING_PREHEAT_BOTH           "Mindkettő"
     #define STRING_COOLDOWN               "Lehűtés"
 
-    // Dialog Buttons
+    // Párbeszédgombok
     #define STRING_CONFIRM                "\u088E Oké"
     #define STRING_CANCEL                 "\u088F Mégse"
     #define STRING_WARNING                "Figyelem!"
     #define STRING_CONTINUE               "Folytatás"
     #define STRING_CONFIRMATION           "Biztos vagy benne?"
 
-    // Process Status
+    // Folyamat állapota
     #define STRING_STATUS                 "Státusz"
     #define STRING_READY                  "Kész"
     #define STRING_BUSY                   "Feldolgozás alatt, kérlek várj..."
     #define STRING_LOADING                "Betöltés..."
     #define STRING_UNCONNECTED            "Nincs nyomtató csatlakoztatva!"
 
-    // Process Info
+    // Folyamat infó
     #define STRING_INFO                   "Infó"
     #define STRING_INVALID_VALUE          "Nincs érvényes érték/s megadva"
     #define STRING_TIMEOUT_REACHED        "Időkorlát elérve!"
@@ -157,7 +157,7 @@
     #define STRING_PROCESS_COMPLETED      "Folyamat befejezve!"
     #define STRING_PROCESS_ABORTED        "Folyamat megszakítva!"
 
-    // TFT SD, U_DISK, Onboard SD, Filament Runout Process Commands / Status / Info
+    // TFT SD, U_DISK, Alaplap SD, Szál Kifutás Folyamatparancsok / Státusz / Infó
     #define STRING_TFTSD                  "TFT-SD"
     #define STRING_READ_TFTSD_ERROR       "TFT-SD olvasási hiba!"
     #define STRING_TFTSD_INSERTED         "SD-Kártya behelyezve!"
@@ -168,9 +168,9 @@
     #define STRING_U_DISK_REMOVED         "USB eltávolítva!"
     #define STRING_ONBOARDSD              "Lap-SD"
     #define STRING_READ_ONBOARDSD_ERROR   "Alaplap-SD olvasási hiba!"
-    #define STRING_FILAMENT_RUNOUT        "Filament kifutás!"
+    #define STRING_FILAMENT_RUNOUT        "Szál kifutás!"
 
-    // Steppers, Print, Probe Process Commands / Status / Info
+    // Léptetők, Nyomtatás, Szonda folyamat parancsai / Státusz / Infó
     #define STRING_DISABLE_STEPPERS       "Mot.tilt"
     #define STRING_XY_UNLOCK              "Felold XY"
 
@@ -184,7 +184,7 @@
     #define STRING_STOW                   "Elhelyezés"
     #define STRING_REPEAT                 "Ismétlés"
 
-    // Printer Tools
+    // Nyomtatóeszközök
     #define STRING_NOZZLE                 "Fej"
     #define STRING_BED                    "Ágy"
     #define STRING_CHAMBER                "Kamra"
@@ -193,7 +193,7 @@
     #define STRING_BLTOUCH                "BLTouch"
     #define STRING_TOUCHMI                "TouchMi"
 
-    // Values
+    // Értékek
     #define STRING_1_DEGREE               "1℃"
     #define STRING_5_DEGREE               "5℃"
     #define STRING_10_DEGREE              "10℃"
@@ -218,7 +218,7 @@
     #define STRING_120_SECONDS            "2 Perc."
     #define STRING_300_SECONDS            "5 Perc."
 
-    // Colors
+    // Színek
     #define STRING_WHITE                  "Fehér"
     #define STRING_BLACK                  "Fekete"
     #define STRING_BLUE                   "Kék"
@@ -238,7 +238,7 @@
     #define STRING_DARKGREEN              "Sötétzöld"
     #define STRING_DARKGRAY               "Sötétszürke"
 
-    // Menus
+    // Menük
     #define STRING_HEAT                   "Fűtés"
     #define STRING_MOVE                   "Mozgás"
     #define STRING_HOME                   "Végállás"
@@ -267,10 +267,10 @@
     #define STRING_BBL                    "BBL"
     #define STRING_UBL                    "UBL"
     #define STRING_MBL                    "MBL"
-    #define STRING_MBL_SETTINGS           "Kézi Rács Szintezés"
-    #define STRING_ABL_SETTINGS           "Automata Szintezés"
-    #define STRING_ABL_SETTINGS_BBL       "Bilineáris Szintezés"
-    #define STRING_ABL_SETTINGS_UBL       "Egységes Szintezés"
+    #define STRING_MBL_SETTINGS           "Kézi rács szintezés"
+    #define STRING_ABL_SETTINGS           "Automata szintezés"
+    #define STRING_ABL_SETTINGS_BBL       "Bilineáris szintezés"
+    #define STRING_ABL_SETTINGS_UBL       "Egységes szintezés"
     #define STRING_ABL_SETTINGS_UBL_SAVE  "Mentés szlotba"
     #define STRING_ABL_SETTINGS_UBL_LOAD  "Betöltés szlotból"
     #define STRING_ABL_SLOT0              "Szlot 0"
@@ -305,7 +305,7 @@
     #define STRING_ADJUST_TITLE           "Érintőképernyő kalibrálása."
     #define STRING_ADJUST_INFO            "Kattints a piros pontra."
     #define STRING_ADJUST_OK              "Kalibrálás sikeres."
-    #define STRING_ADJUST_FAILED          "A kalibrálás sikertelen, próbáld újra"
+    #define STRING_ADJUST_FAILED          "A kalibrálás sikertelen, próbáld újra."
     #define STRING_UNIFIEDMOVE            "Mozgás"
     #define STRING_UNIFIEDHEAT            "Fűt/Hűt"
     #define STRING_TOUCH_TO_EXIT          "Érintsd meg a kilépéshez."
@@ -315,7 +315,7 @@
     #define STRING_LEVELING_EDGE_DISTANCE "Ágy szélének távolsága"
     #define STRING_TUNING                 "Hangolás"
     #define STRING_PID                    "PID"
-    #define STRING_PID_TITLE              "PID Automatikus Hangolás"
+    #define STRING_PID_TITLE              "PID Automatikus hangolás"
     #define STRING_PID_START_INFO         "A PID önhangolása elindul.\nPercekig is eltarthat.\nFolytatod?"
     #define STRING_PID_START_INFO_2       "PID Automatikus hangolása zajlik!"
     #define STRING_PID_START_INFO_3       "NE ÉRINTSD meg a kijelzőt míg nincs kész! (zöld LED jelzi)!"
@@ -328,18 +328,18 @@
     #define STRING_TUNE_EXT_HEATOFF       "Kikapcsolod a fűtést?"
     #define STRING_TUNE_EXT_ADJ_ESTEPS    "Állítható E-lépés"
     #define STRING_TUNE_EXT_ESTEPS_SAVED  "Új E-lépés mentve!\nNe felejtsd el\nmenteni EEPROM-ba.\nÚj érték: %0.2f"
-    #define STRING_TUNE_EXT_MEASURED      "Fennmaradó Hossz:"
+    #define STRING_TUNE_EXT_MEASURED      "Fennmaradó hossz:"
     #define STRING_TUNE_EXT_OLD_ESTEP     "Régi e-lépés: %0.2f"
     #define STRING_TUNE_EXT_NEW_ESTEP     "Új e-lépés: %0.2f"
     #define STRING_CONNECTION_SETTINGS    "Kapcsolat"
     #define STRING_NOTIFICATIONS          "Értesítések"
-    #define STRING_MESH_EDITOR            "Háló Szerkesztő"
-    #define STRING_MESH_TUNER             "Háló Hangoló"
-    #define STRING_CASE_LIGHT             "Gépház Világítás"
-    #define STRING_LOAD_STARTED           "A filament betöltése folyamatban van,\nnem lehetséges további művelet,\nmíg véget nem ér.\nKérlek várj!"
-    #define STRING_UNLOAD_STARTED         "A filament kiadása folyamatban van,\nnem lehetséges további művelet,\nmíg véget nem ér.\nKérlek várj!"
+    #define STRING_MESH_EDITOR            "Háló szerkesztő"
+    #define STRING_MESH_TUNER             "Háló hangoló"
+    #define STRING_CASE_LIGHT             "Gépház világítás"
+    #define STRING_LOAD_STARTED           "A szál betöltése folyamatban van,\nnem lehetséges további művelet,\nmíg véget nem ér.\nKérlek várj!"
+    #define STRING_UNLOAD_STARTED         "A szál kiadása folyamatban van,\nnem lehetséges további művelet,\nmíg véget nem ér.\nKérlek várj!"
     #define STRING_HEATERS_ON             "Néhány fűtőelem még üzemel.\nKikapcsolod a fűtőelemeket?"
-    #define STRING_PRINT_FINISHED         "   Nyomtatás\n   elkészült"
+    #define STRING_PRINT_FINISHED         "   Nyomtatás\n   elkészült!"
     #define STRING_MAIN_SCREEN            "Főoldal"
     #define STRING_PREVIOUS_PRINT_DATA    "Összegzés"
     #define STRING_PRINT_TIME             "Nyomtatási idő: %02u:%02u:%02u"
@@ -347,7 +347,7 @@
     #define STRING_FILAMENT_WEIGHT        "\nSzál súlya: %1.2fg"
     #define STRING_FILAMENT_COST          "\nSzál költség: %1.2f"
     #define STRING_NO_FILAMENT_STATS      "\nNincs szál statisztika."
-    #define STRING_CLICK_FOR_MORE         "Kattints az összegzéshez"
+    #define STRING_CLICK_FOR_MORE         "Kattints az összegzéshez."
     #define STRING_EXT_TEMPLOW            "Fejhőfok alacsonyabb, mint a\nminimális hőfok (%d℃)."
     #define STRING_HEAT_HOTEND            "Fűtöd a fejet %d℃-ra?"
     #define STRING_Z_ALIGN                "Z Igazítás"
