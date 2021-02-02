@@ -518,7 +518,7 @@ void sendQueueCmd(void)
                 return;
               }
             }
-            break;  
+            break;
 
           case 524:  // M524
             if (!fromTFT)
