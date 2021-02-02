@@ -468,7 +468,7 @@ void sendQueueCmd(void)
               return;
             }
             break;
-            
+
           case 125: //M125
             if (!fromTFT)
             {
@@ -480,7 +480,7 @@ void sendQueueCmd(void)
                 return;
               }
             }
-            break;  
+            break;
 
           case 524: //M524
             if (!fromTFT && isPrinting() && !infoHost.printing)
