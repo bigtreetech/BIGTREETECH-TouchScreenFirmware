@@ -193,7 +193,11 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
     case BOARD_SD_REMOTE:
       infoPrinting.pause = is_pause;
       if (is_pause)
+      #ifdef NOZZLE_PAUSE_M600_M601
+        request_M125();
+      #else
         request_M25();
+      #endif   
       else
         request_M24(0);
       break;
@@ -318,7 +322,7 @@ void abortPrinting(void)
   {
     case BOARD_SD:
     case BOARD_SD_REMOTE:
-      infoHost.printing = false;
+      // infoHost.printing = false;  // Not so fast! Let Marlin tell that he's done!
       //Several M108 are sent to Marlin because consecutive blocking operations
       // such as heating bed, extruder may defer processing of M524
       breakAndContinue();
@@ -330,6 +334,13 @@ void abortPrinting(void)
       else
         request_M524();
 
+      setDialogText(LABEL_SCREEN_INFO, LABEL_BUSY, LABEL_BACKGROUND, LABEL_BACKGROUND);
+      showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
+      while (infoHost.printing == true)  // wait for the printer to settle down
+      {
+        loopProcess();
+      }
+      infoMenu.cur--;
       break;
 
     case TFT_UDISK:

@@ -200,14 +200,18 @@ void hostActionCommands(void)
     hostAction.button = 0;
     hostAction.prompt_show = 1;
     strcpy(hostAction.prompt_begin, dmaL2Cache + ack_index);
-    if (ack_seen("Resuming SD"))
+    if (ack_seen("Resuming SD"))  // print fron onboard SD starting
     {
       hostAction.prompt_show = 0;
+      infoHost.printing = true;  // it's set by "File opened" but put here also just to be sure
+      Serial_Puts(SERIAL_PORT, "M876 S0\n");  // auto-respond to a prompt request that is not shown on the TFT
     }
-    else if (ack_seen("Resuming"))
+    else if (ack_seen("Resuming"))  //resuming from an onboard SD pause
     {
       infoPrinting.pause = false;
+      infoHost.printing = true;
       hostAction.prompt_show = 0;
+      Serial_Puts(SERIAL_PORT, "M876 S0\n");  // auto-respond to a prompt request that is not shown on the TFT
     }
     else if (ack_seen("Reheating"))
     {

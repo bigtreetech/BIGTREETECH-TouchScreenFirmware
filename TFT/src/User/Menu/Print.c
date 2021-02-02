@@ -205,7 +205,7 @@ void menuPrintFromSource(void)
   }
   else
   {
-    if (infoFile.source >= BOARD_SD)
+    if (infoFile.source == BOARD_SD)  // error when the filesystem selected from TFT not available
       GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, (uint8_t*)requestCommandInfo.cmd_rev_buf);
     else
       GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, labelVolumeError[infoFile.source]);
