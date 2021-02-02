@@ -1,7 +1,7 @@
 #ifndef _LANGUAGE_HU_H_
 #define _LANGUAGE_HU_H_
 
-    // config.ini Parameter Settings / Feature Settings
+    // config.ini Paraméterbeállítások / Funkcióbeállítások
     #define STRING_STATUS_SCREEN          "Állapot képernyő aktív"
     #define STRING_BAUDRATE               "Kapcsolat"
     #define STRING_LANGUAGE               "Magyar"
@@ -38,7 +38,7 @@
     #define STRING_END_GCODE_ENABLED      "Befejező G-Kód"
     #define STRING_CANCEL_GCODE_ENABLED   "Leállító G-Kód"
 
-    // Machine Parameter Settings
+    // Gépparaméter-beállítások
     #define STRING_STEPS_SETTING          "Lépés beállítás"
     #define STRING_MAXFEEDRATE            "Max előtolási sebesség"
     #define STRING_MAXACCELERATION        "Max gyorsulás"
@@ -70,7 +70,7 @@
     #define STRING_SWAP_RECOVER_FEEDRATE  "Csere előtolás jav."
     #define STRING_MBL_OFFSET             "MBL Eltolás"
 
-    // Save / Load
+    // Mentés / Betöltés
     #define STRING_SAVE                   "Mentés"
     #define STRING_RESTORE                "Visszaállítás"
     #define STRING_RESET                  "Alapállítás"
@@ -91,7 +91,7 @@
     #define STRING_NEXT                   "Tovább"
     #define STRING_BACK                   "Vissza"
 
-    // Value Buttons
+    // Érték gombok
     #define STRING_INC                    "Növel"
     #define STRING_DEC                    "Csökkent"
     #define STRING_LOAD                   "Betöltés"
@@ -110,7 +110,7 @@
     #define STRING_CLEAR                  "Törlés"
     #define STRING_DEFAULT                "Alapért."
 
-    // Action Buttons
+    // Művelet gombok
     #define STRING_START                  "Kezdés"
     #define STRING_STOP                   "Állj"
     #define STRING_PAUSE                  "Szünet"
@@ -124,21 +124,21 @@
     #define STRING_PREHEAT_BOTH           "Mindkettő"
     #define STRING_COOLDOWN               "Hűtés"
 
-    // Dialog Buttons
+    // Párbeszédgombok
     #define STRING_CONFIRM                "\u088E Oké"
     #define STRING_CANCEL                 "\u088F Mégse"
     #define STRING_WARNING                "Figyelem!"
     #define STRING_CONTINUE               "Folytatás"
     #define STRING_CONFIRMATION           "Biztos vagy benne?"
 
-    // Process Status
+    // Folyamat állapota
     #define STRING_STATUS                 "Státusz"
     #define STRING_READY                  "Kész"
     #define STRING_BUSY                   "Feldolgozás alatt, kérlek várj..."
     #define STRING_LOADING                "Betöltés..."
     #define STRING_UNCONNECTED            "Nincs nyomtató csatlakoztatva!"
 
-    // Process Info
+    // Folyamat infó
     #define STRING_INFO                   "Infó"
     #define STRING_INVALID_VALUE          "Nincs érvényes érték megadva"
     #define STRING_TIMEOUT_REACHED        "Időkorlát elérve!"
@@ -150,7 +150,7 @@
     #define STRING_PROCESS_COMPLETED      "Folyamat befejezve!"
     #define STRING_PROCESS_ABORTED        "Folyamat megszakítva!"
 
-    // TFT SD, U_DISK, Onboard SD, Filament Runout Process Commands / Status / Info
+    // TFT SD, U_DISK, Alaplap SD, Szál Kifutás Folyamatparancsok / Státusz / Infó
     #define STRING_TFTSD                  "TFT-SD"
     #define STRING_READ_TFTSD_ERROR       "TFT-SD olvasási hiba!"
     #define STRING_TFTSD_INSERTED         "SD-Kártya behelyezve!"
@@ -163,7 +163,7 @@
     #define STRING_READ_ONBOARDSD_ERROR   "Alaplap-SD olvasási hiba!"
     #define STRING_FILAMENT_RUNOUT        "Szál kifutás!"
 
-    // Steppers, Print, Probe Process Commands / Status / Info
+    // Léptetők, Nyomtatás, Szonda folyamat parancsai / Státusz / Infó
     #define STRING_DISABLE_STEPPERS       "Mot.tilt"
     #define STRING_XY_UNLOCK              "X-Y Felold"
 
@@ -177,7 +177,7 @@
     #define STRING_STOW                   "Elhelyezés"
     #define STRING_REPEAT                 "Ismétlés"
 
-    // Printer Tools
+    // Nyomtatóeszközök
     #define STRING_NOZZLE                 "Fej"
     #define STRING_BED                    "Ágy"
     #define STRING_CHAMBER                "Kamra"
@@ -186,7 +186,7 @@
     #define STRING_BLTOUCH                "BLTouch"
     #define STRING_TOUCHMI                "TouchMi"
 
-    // Values
+    // Értékek
     #define STRING_1_DEGREE               "1℃"
     #define STRING_5_DEGREE               "5℃"
     #define STRING_10_DEGREE              "10℃"
@@ -211,7 +211,7 @@
     #define STRING_120_SECONDS            "2 Perc."
     #define STRING_300_SECONDS            "5 Perc."
 
-    // Colors
+    // Színek
     #define STRING_WHITE                  "Fehér"
     #define STRING_BLACK                  "Fekete"
     #define STRING_BLUE                   "Kék"
@@ -231,7 +231,7 @@
     #define STRING_DARKGREEN              "Sötétzöld"
     #define STRING_DARKGRAY               "Sötétszürke"
 
-    // Menus
+    // Menük
     #define STRING_HEAT                   "Fűtés"
     #define STRING_MOVE                   "Mozgás"
     #define STRING_HOME                   "Végállás"
