@@ -32,7 +32,8 @@ void extruderIdReDraw(void)
   setLargeFont(false);
 }
 
-void setHotendMinExtTemp(void)  // set the hotend to the minimum extrusion temperature
+// set the hotend to the minimum extrusion temperature if user selected "OK"
+void loadMinTemp_OK(void)
 {
   mustStoreCmd("M104 S%d T%d\n", infoSettings.min_ext_temp, curExt_index);
 }
@@ -81,7 +82,7 @@ void menuLoadUnload(void)
           strcat(tempMsg, tempStr);
 
           setDialogText(LABEL_WARNING, (uint8_t *)tempMsg, LABEL_CONFIRM, LABEL_CANCEL);
-          showDialog(DIALOG_TYPE_ERROR, setHotendMinExtTemp, NULL, NULL);
+          showDialog(DIALOG_TYPE_ERROR, loadMinTemp_OK, NULL, NULL);
         }
         else if (key_num == KEY_ICON_0)
         { // unload
