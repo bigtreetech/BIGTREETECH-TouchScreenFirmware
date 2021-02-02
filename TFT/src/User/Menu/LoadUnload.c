@@ -35,7 +35,7 @@ void extruderIdReDraw(void)
 // set the hotend to the minimum extrusion temperature if user selected "OK"
 void loadMinTemp_OK(void)
 {
-  mustStoreCmd("M104 S%d T%d\n", infoSettings.min_ext_temp, curExt_index);
+  heatSetTargetTemp(curExt_index, infoSettings.min_ext_temp);
 }
 
 void menuLoadUnload(void)

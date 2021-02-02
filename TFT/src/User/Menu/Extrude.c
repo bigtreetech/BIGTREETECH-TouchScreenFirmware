@@ -27,7 +27,7 @@ void extrudeCoordinateReDraw(bool skip_header)
 // set the hotend to the minimum extrusion temperature if user selected "OK"
 void extrusionMinTemp_OK(void)
 {
-  mustStoreCmd("M104 S%d T%d\n", infoSettings.min_ext_temp, curExtruder_index);
+  heatSetTargetTemp(curExtruder_index, infoSettings.min_ext_temp);
 }
 
 void menuExtrude(void)
