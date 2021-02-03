@@ -11,7 +11,7 @@
     #define STRING_INVERT_Y_AXIS          "Invertiere Y-Achse"
     #define STRING_INVERT_Z_AXIS          "Invertiere Z-Achse"
     #define STRING_PERSISTENT_INFO        "Speicherungs-Status"
-    #define STRING_FILE_LIST_MODE          "Dateien als Liste"
+    #define STRING_FILE_LIST_MODE         "Dateien als Liste"
     #define STRING_ACK_NOTIFICATION       "ACK - Stil"
     #define STRING_DEFAULT_MODE           "Standard Modus"
     #define STRING_SERIAL_ALWAYS_ON       "Seriell Verbind. immer an"
