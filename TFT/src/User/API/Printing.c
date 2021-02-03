@@ -193,11 +193,7 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
     case BOARD_SD_REMOTE:
       infoPrinting.pause = is_pause;
       if (is_pause)
-      #ifdef NOZZLE_PAUSE_M600_M601
-        request_M125();
-      #else
         request_M25();
-      #endif   
       else
         request_M24(0);
       break;
