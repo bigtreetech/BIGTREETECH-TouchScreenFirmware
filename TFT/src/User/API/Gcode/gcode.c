@@ -203,7 +203,7 @@ bool request_M524(void)
  **/
 bool request_M25(void)
 {
-  mustStoreCmd("M25 P\n");
+  mustStoreCmd("M25 P1\n");
   return true;
 }
 

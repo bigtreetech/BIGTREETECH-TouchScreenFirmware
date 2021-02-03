@@ -205,7 +205,7 @@ void sendQueueCmd(void)
   //check if cmd is from TFT or other host
   bool fromTFT = (infoCmd.queue[infoCmd.index_r].src == SERIAL_PORT);
 
-  if (!ispolling && !fromTFT)
+  if (!ispolling && fromTFT)
   { //ignore any query from TFT
     purgeLastCmd();
     return;
@@ -468,7 +468,7 @@ void sendQueueCmd(void)
               return;
             }
             break;
-            
+
           case 125: //M125
             if (!fromTFT)
             {
@@ -480,7 +480,7 @@ void sendQueueCmd(void)
                 return;
               }
             }
-            break;  
+            break;
 
           case 524: //M524
             if (!fromTFT && isPrinting() && !infoHost.printing)
