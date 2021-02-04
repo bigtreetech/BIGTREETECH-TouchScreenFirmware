@@ -31,7 +31,7 @@
     #define STRING_PS_ON_ACTIVE_HIGH      "Power Supply Active HIGH"
     #define STRING_FIL_RUNOUT             "Filament sensor"
     #define STRING_FIL_RUNOUT_INVERTING   "Inverted Filament Runout Logic"
-    #define STRING_PLRECOVERY_EN          "Power loss recovery"
+    #define STRING_PL_RECOVERY_EN         "Power loss recovery"
     #define STRING_PL_RECOVERY_HOME       "Power Loss Recovery Homing"
     #define STRING_BTT_MINI_UPS           "BTT UPS Support"
     #define STRING_TOUCH_SOUND            "Touch sounds"
