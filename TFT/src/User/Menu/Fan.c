@@ -24,7 +24,7 @@ void fanSpeedReDraw(bool skip_header)
     }
     else
     {
-      GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1)>>1, exhibitRect.y0, (uint8_t *)"RAW");
+      GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1)>>1, exhibitRect.y0, (uint8_t *)"PWM");
     }
     setLargeFont(false);
   }
