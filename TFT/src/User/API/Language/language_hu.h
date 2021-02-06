@@ -64,6 +64,7 @@
     #define STRING_CURRENT_SETTING        "Motoráramok beállítása"
     #define STRING_BUMP_SENSITIVITY       "TMC Ütközés érzékenység"
     #define STRING_HYBRID_THRESHOLD       "TMC Hibrid küszöbérték"
+    #define STRING_STEALTH_CHOP           "TMC StealthChop"
     #define STRING_PRINT_ACCELERATION     "Nyomtatás gyorsulás"
     #define STRING_RETRACT_ACCELERATION   "Adagoló gyorsulása"
     #define STRING_TRAVEL_ACCELERATION    "Utazási gyorsulás"

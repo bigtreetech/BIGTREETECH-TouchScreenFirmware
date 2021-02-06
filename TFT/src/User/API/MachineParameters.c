@@ -3,27 +3,28 @@
 
 PARAMETERS infoParameters;
 
-const u8 parameter_element_count[PARAMETERS_COUNT] = {5, 5, 5, 3, 4, 1, 3, 4, 4, 1, 3, 2, 3, 2, 5, 3, 5, 1};
+const u8 parameter_element_count[PARAMETERS_COUNT] = {5, 5, 5, 3, 4, 1, 3, 4, 4, 1, 3, 2, 3, 2, 5, 3, 5, 5, 1};
 
 const char *const parameter_Cmd[PARAMETERS_COUNT][STEPPER_COUNT] = {
-  {"M92 X%.2f\n",                "M92 Y%.2f\n",                "M92 Z%.2f\n",                "M92 T0 E%.2f\n",    "M92 T1 E%.2f\nM503 S0\n"},   //Steps/mm
-  {"M203 X%.0f\n",               "M203 Y%.0f\n",               "M203 Z%.0f\n",               "M203 T0 E%.0f\n",   "M203 T1 E%.0f\nM503 S0\n"},  //MaxFeedrate
-  {"M201 X%.0f\n",               "M201 Y%.0f\n",               "M201 Z%.0f\n",               "M201 T0 E%.0f\n",   "M201 T1 E%.0f\nM503 S0\n"},  //MaxAcceleration
-  {"M204 P%.0f\n",               "M204 R%.0f\n",               "M204 T%.0f\n",               NULL,                NULL},                        //Acceleration
-  {"M205 X%.0f\n",               "M205 Y%.0f\n",               "M205 Z%.2f\n",               "M205 E%.2f\n",      NULL},                        //Jerk
-  {"M205 J%.3f\n",               NULL,                         NULL,                         NULL,                NULL},                        //Junction Deviation
-  {"M206 X%.2f\n",               "M206 Y%.2f\n",               "M206 Z%.2f\n",               NULL,                NULL},                        //Home offset
-  {"M207 S%.2f\n",               "M207 W%.2f\n",               "M207 F%.2f\n",               "M207 Z%.2f\n",      NULL},                        //FW retract
-  {"M208 S%.2f\n",               "M208 W%.2f\n",               "M208 F%.2f\n",               "M208 R%.2f\n",      NULL},                        //FW retract recover
-  {"M209 S%.0f\nM503 S0\n",      NULL,                         NULL,                         NULL,                NULL},                        //Set auto FW retract
-  {"M218 T1 X%.2f\nM503 S0\n",   "M218 T1 Y%.2f\nM503 S0\n",   "M218 T1 Z%.2f\nM503 S0\n",   NULL,                NULL},                        //Offset Tools
-  {"M420 S%.0f\n",               "M420 Z%.2f\n",               NULL,                         NULL,                NULL},                        //ABL State + Z Fade
-  {"M851 X%.2f\n",               "M851 Y%.2f\n",               "M851 Z%.2f\n",               NULL,                NULL},                        //Probe offset
-  {"M900 T0 K%.2f\n",            "M900 T1 K%.2f\nM503 S0\n",   NULL,                         NULL,                NULL},                        //Linear Advance
-  {"M906 X%.0f\n",               "M906 Y%.0f\n",               "M906 Z%.0f\n",               "M906 T0 E%.0f\n",   "M906 T1 E%.0f\nM503 S0\n"},  //Current
-  {"M914 X%.0f\n",               "M914 Y%.0f\n",               "M914 Z%.0f\n",               NULL,                NULL},                        //bump Sensitivity
-  {"M913 X%.0f\n",               "M913 Y%.0f\n",               "M913 Z%.0f\n",               "M913 E%.0f\n",      "M913 T1 E%.0f\nM503 S0\n"},  //TMC Hybrid Threshold Speed
-  {"G29 S4 Z%.2f\n",             NULL,                         NULL,                         NULL,                NULL},                        //MBL offset
+  {"M92 X%.2f\n",                "M92 Y%.2f\n",                "M92 Z%.2f\n",                "M92 T0 E%.2f\n",              "M92 T1 E%.2f\nM503 S0\n"},   //Steps/mm
+  {"M203 X%.0f\n",               "M203 Y%.0f\n",               "M203 Z%.0f\n",               "M203 T0 E%.0f\n",             "M203 T1 E%.0f\nM503 S0\n"},  //MaxFeedrate
+  {"M201 X%.0f\n",               "M201 Y%.0f\n",               "M201 Z%.0f\n",               "M201 T0 E%.0f\n",             "M201 T1 E%.0f\nM503 S0\n"},  //MaxAcceleration
+  {"M204 P%.0f\n",               "M204 R%.0f\n",               "M204 T%.0f\n",               NULL,                          NULL},                        //Acceleration
+  {"M205 X%.0f\n",               "M205 Y%.0f\n",               "M205 Z%.2f\n",               "M205 E%.2f\n",                NULL},                        //Jerk
+  {"M205 J%.3f\n",               NULL,                         NULL,                         NULL,                          NULL},                        //Junction Deviation
+  {"M206 X%.2f\n",               "M206 Y%.2f\n",               "M206 Z%.2f\n",               NULL,                          NULL},                        //Home offset
+  {"M207 S%.2f\n",               "M207 W%.2f\n",               "M207 F%.2f\n",               "M207 Z%.2f\n",                NULL},                        //FW retract
+  {"M208 S%.2f\n",               "M208 W%.2f\n",               "M208 F%.2f\n",               "M208 R%.2f\n",                NULL},                        //FW retract recover
+  {"M209 S%.0f\nM503 S0\n",      NULL,                         NULL,                         NULL,                          NULL},                        //Set auto FW retract
+  {"M218 T1 X%.2f\nM503 S0\n",   "M218 T1 Y%.2f\nM503 S0\n",   "M218 T1 Z%.2f\nM503 S0\n",   NULL,                          NULL},                        //Offset Tools
+  {"M420 S%.0f\n",               "M420 Z%.2f\n",               NULL,                         NULL,                          NULL},                        //ABL State + Z Fade
+  {"M851 X%.2f\n",               "M851 Y%.2f\n",               "M851 Z%.2f\n",               NULL,                          NULL},                        //Probe offset
+  {"M900 T0 K%.2f\n",            "M900 T1 K%.2f\nM503 S0\n",   NULL,                         NULL,                          NULL},                        //Linear Advance
+  {"M906 X%.0f\n",               "M906 Y%.0f\n",               "M906 Z%.0f\n",               "M906 T0 E%.0f\n",             "M906 T1 E%.0f\nM503 S0\n"},  //Current
+  {"M914 X%.0f\n",               "M914 Y%.0f\n",               "M914 Z%.0f\n",               NULL,                          NULL},                        //bump Sensitivity
+  {"M913 X%.0f\n",               "M913 Y%.0f\n",               "M913 Z%.0f\n",               "M913 E%.0f\n",                "M913 T1 E%.0f\nM503 S0\n"},  //TMC Hybrid Threshold Speed
+  {"M569 S%.0f X\nM503 S0\n",    "M569 S%.0f Y\nM503 S0\n",    "M569 S%.0f Z\nM503 S0\n",    "M569 S%.0f T0 E\nM503 S0\n",  "M569 S%.0f T1 E\nM503 S0\n"},//TMC StealthChop
+  {"G29 S4 Z%.2f\n",             NULL,                         NULL,                         NULL,                          NULL},                        //MBL offset
 };
 
 const VAL_TYPE parameter_val_type[PARAMETERS_COUNT][STEPPER_COUNT] = {
@@ -44,14 +45,16 @@ const VAL_TYPE parameter_val_type[PARAMETERS_COUNT][STEPPER_COUNT] = {
   {VAL_TYPE_INT,          VAL_TYPE_INT,         VAL_TYPE_INT,          VAL_TYPE_INT,      VAL_TYPE_INT},    //Current
   {VAL_TYPE_NEG_INT,      VAL_TYPE_NEG_INT,     VAL_TYPE_NEG_INT},                                          //bump Sensitivity
   {VAL_TYPE_INT,          VAL_TYPE_INT,         VAL_TYPE_INT,          VAL_TYPE_INT,      VAL_TYPE_INT},    //TMC Hybrid Threshold Speed
+  {VAL_TYPE_INT,          VAL_TYPE_INT,         VAL_TYPE_INT,          VAL_TYPE_INT,      VAL_TYPE_INT},    //TMC StealthChop 
   {VAL_TYPE_NEG_FLOAT},                                                                                     //MBL offset
 };
 
 //Extra steppers current gcode command
-const char *const dualStepperParameter_cmd[3][AXIS_NUM] = {
-  {"M906 I1 X%.0f\n", "M906 I1 Y%.0f\n", "M906 I1 Z%.0f\n"},  //Current
-  {"M914 I1 X%.0f\n", "M914 I1 Y%.0f\n", "M914 I1 Z%.0f\n"},  //bump Sensitivity
-  {"M913 I1 X%.0f\n", "M913 I1 Y%.0f\n", "M913 I1 Z%.0f\n"},  //TMC Hybrid Threshold Speed
+const char *const dualStepperParameter_cmd[4][AXIS_NUM] = {
+  {"M906 I1 X%.0f\n",   "M906 I1 Y%.0f\n",   "M906 I1 Z%.0f\n"},   //Current
+  {"M914 I1 X%.0f\n",   "M914 I1 Y%.0f\n",   "M914 I1 Z%.0f\n"},   //bump Sensitivity
+  {"M913 I1 X%.0f\n",   "M913 I1 Y%.0f\n",   "M913 I1 Z%.0f\n"},   //TMC Hybrid Threshold Speed
+  {"M569 S%.0f I1 X\n", "M569 S%.0f I1 Y\n", "M569 S%.0f I1 Z\n"}, //TMC StealthChop 
 };
 
 bool dualstepper[TOTAL_AXIS] = {false, false, false, false};
@@ -120,6 +123,9 @@ float getParameter(PARAMETER_NAME name, u8 index)
 
     case P_HYBRID_THRESHOLD:
       return infoParameters.HybridThreshold[index];
+
+    case P_STEALTH_CHOP:
+      return infoParameters.StealthChop[index]; 
 
     case P_MBL_OFFSET:
       return infoParameters.MblOffset[index];
@@ -204,6 +210,9 @@ void setParameter(PARAMETER_NAME name, u8 index, float val)
       infoParameters.HybridThreshold[index] = val;
       break;
 
+    case P_STEALTH_CHOP:
+      infoParameters.StealthChop[index] = val; 
+
     case P_MBL_OFFSET:
       infoParameters.MblOffset[index] = val;
       break;
@@ -247,6 +256,9 @@ void sendParameterCmd(PARAMETER_NAME para, u8 stepper_index, float Value)
 
     if (para == P_HYBRID_THRESHOLD)
       storeCmd(dualStepperParameter_cmd[2][stepper_index], Value);
+
+    if (para == P_STEALTH_CHOP)
+      storeCmd(dualStepperParameter_cmd[3][stepper_index], Value);
   }
 }
 

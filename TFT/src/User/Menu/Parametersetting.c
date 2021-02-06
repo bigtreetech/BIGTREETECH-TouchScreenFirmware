@@ -26,6 +26,7 @@ const LISTITEM parametertypes[P_ITEMSCOUNT] = {
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_CURRENT_SETTING,      LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_BUMP_SENSITIVITY,     LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_HYBRID_THRESHOLD,     LABEL_BACKGROUND},
+  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_STEALTH_CHOP,         LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_MBL_OFFSET,           LABEL_BACKGROUND},
   //Keep below items always at the end
   {ICONCHAR_SAVE,       LIST_LABEL,        LABEL_SETTINGS_SAVE,        LABEL_BACKGROUND},
@@ -125,6 +126,14 @@ void menuShowParameter(void)
         parameter_menuitems.items[0].titlelabel.address = "K-E";
         parameter_menuitems.items[1].titlelabel.address = "K-E2";
         break;
+
+      case P_STEALTH_CHOP:
+        parameter_menuitems.items[X_STEPPER].titlelabel.address = "X 1=ON 0=OFF";
+        parameter_menuitems.items[Y_STEPPER].titlelabel.address = "Y 1=ON 0=OFF";
+        parameter_menuitems.items[Z_STEPPER].titlelabel.address = "Z 1=ON 0=OFF";
+        parameter_menuitems.items[E_STEPPER].titlelabel.address = "E 1=ON 0=OFF";
+        parameter_menuitems.items[E2_STEPPER].titlelabel.address = "E2 1=ON 0=OFF";
+        break; 
 
       case P_MBL_OFFSET:
         parameter_menuitems.items[i].titlelabel.address = "Z";
