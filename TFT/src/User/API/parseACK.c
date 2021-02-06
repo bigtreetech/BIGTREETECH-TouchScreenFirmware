@@ -702,7 +702,6 @@ void parseACK(void)
     // parse and store TMC Stealth Chop
       else if (ack_seen("M569 S1") && !ack_seen("T") ) 
       {
-        //parametrsStealthChopX = false;
         setParameter(P_STEALTH_CHOP, X_STEPPER, ack_seen("X") ? 1 : 0);
         setParameter(P_STEALTH_CHOP, Y_STEPPER, ack_seen("Y") ? 1 : 0);
         setParameter(P_STEALTH_CHOP, Z_STEPPER, ack_seen("Z") ? 1 : 0);
