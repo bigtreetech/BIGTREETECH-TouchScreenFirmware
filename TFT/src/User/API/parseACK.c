@@ -654,11 +654,11 @@ void parseACK(void)
                            setParameter(P_CURRENT, X_STEPPER, ack_value());
         if (ack_seen("Y")) setParameter(P_CURRENT, Y_STEPPER, ack_value());
         if (ack_seen("Z")) setParameter(P_CURRENT, Z_STEPPER, ack_value());
-         setParameter(P_STEALTH_CHOP, X_STEPPER, 0 );  //Sets 0 if StealthChop is off on all axes and the M569 string does not occur.
-         setParameter(P_STEALTH_CHOP, Y_STEPPER, 0 );  //Sets 0 if StealthChop is off 
-         setParameter(P_STEALTH_CHOP, Z_STEPPER, 0 );  //Sets 0 if StealthChop is off 
-         setParameter(P_STEALTH_CHOP, E_STEPPER, 0 );  //Sets 0 if StealthChop is off 
-         setParameter(P_STEALTH_CHOP, E2_STEPPER, 0 ); //Sets 0 if StealthChop is off 
+        setParameter(P_STEALTH_CHOP, X_STEPPER, 0 );  //Sets 0 if StealthChop is off on all axes and the M569 string does not occur.
+        setParameter(P_STEALTH_CHOP, Y_STEPPER, 0 );  //Sets 0 if StealthChop is off 
+        setParameter(P_STEALTH_CHOP, Z_STEPPER, 0 );  //Sets 0 if StealthChop is off 
+        setParameter(P_STEALTH_CHOP, E_STEPPER, 0 );  //Sets 0 if StealthChop is off 
+        setParameter(P_STEALTH_CHOP, E2_STEPPER, 0 ); //Sets 0 if StealthChop is off 
       }
       else if (ack_seen("M906 I1"))
       {
