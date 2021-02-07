@@ -461,12 +461,14 @@ void breakAndContinue(void)
 void resumeAndPurge(void)
 {
   setRunoutAlarmFalse();
+  clearCmdQueue();
   Serial_Puts(SERIAL_PORT, "M876 S0\n");
 }
 
 void resumeAndContinue(void)
 {
   setRunoutAlarmFalse();
+  clearCmdQueue();
   Serial_Puts(SERIAL_PORT, "M876 S1\n");
 }
 

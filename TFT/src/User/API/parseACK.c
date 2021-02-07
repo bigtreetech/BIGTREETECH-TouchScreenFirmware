@@ -228,6 +228,7 @@ void hostActionCommands(void)
     else if (ack_seen("Reheating"))
     {
       hostAction.prompt_show = 0;
+      Serial_Puts(SERIAL_PORT, "M876 S0\n");  // auto-respond to a prompt request that is not shown on the TFT
     }
     else if (ack_seen("Nozzle Parked"))
     {
