@@ -180,7 +180,7 @@
     #define STRING_M0_PAUSE               "Szünetelés M0 parancsal"
 
     #define STRING_TEST                   "Teszt"
-    #define STRING_DEPLOY                 "Bevettés"
+    #define STRING_DEPLOY                 "Bevetés"
     #define STRING_STOW                   "Elhelyezés"
     #define STRING_REPEAT                 "Ismétlés"
 
