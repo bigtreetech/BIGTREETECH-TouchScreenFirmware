@@ -1,6 +1,6 @@
 #ifndef _CONFIGURATION_H_
 #define _CONFIGURATION_H_
-#define CONFIG_VERSION 20210124
+#define CONFIG_VERSION 20210217
 
 //===========================================================================
 //============================= General Settings ============================
@@ -24,7 +24,7 @@
 
 // Enable Status Screen
 // Enable this to show status screen as the default home screen. Disabling it will show a static menu.
-#define ENABLE_STATUS_SCREEN true  // To enabled: true | To disabled: false (Default: 1)
+#define ENABLE_STATUS_SCREEN true  // To enabled: true | To disabled: false (Default: true)
 
 /**
  * This setting determines the communication speed of the printer.
@@ -103,11 +103,11 @@
 
 /**
  * Run Marlin Mode in Fullscreen
-
+ *
  * Options: 0: Disabled (RECOMMENDED FOR TFT24)
  *          1: Enabled
  */
-#define DEFAULT_ST7920_FULLSCREEN_MODE 0  // Default: 0
+#define MARLIN_MODE_FULLSCREEN 0  // Default: 0
 
 /**
  * Keep Serial always On (ONLY SUPPORTED ON TFT24 V1.1, TFT35 V3.0, AND TFT28 V3.0)

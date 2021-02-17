@@ -89,6 +89,12 @@ const LABEL itemToggle[ITEM_TOGGLE_NUM] =
   LABEL_ON
 };
 
+const uint16_t iconToggle[ITEM_TOGGLE_NUM] =
+{
+  ICONCHAR_TOGGLE_OFF,
+  ICONCHAR_TOGGLE_ON
+};
+
 // Check time elapsed against the time specified in milliseconds for displaying/updating info on screen
 // Use this for timed screen updates in menu loops only
 bool nextScreenUpdate(uint32_t duration)

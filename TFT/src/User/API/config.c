@@ -613,7 +613,7 @@ void parseConfigKey(u16 index)
 
     //----------------------------Marlin Mode Settings (only for TFT24_V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70_V3.0)
 
-    #if defined(ST7920_SPI) || defined(LCD2004_simulator)
+    #ifdef HAS_EMULATOR
 
       case C_INDEX_MODE:
         SET_VALID_INT_VALUE(infoSettings.mode, 0, MODE_COUNT - 1);
@@ -654,7 +654,7 @@ void parseConfigKey(u16 index)
         break;
       }
 
-    #endif // ST7920_SPI || LCD2004_simulator
+    #endif // ST7920_EMULATOR || LCD2004_EMULATOR
 
     //----------------------------Printer / Machine Settings
 

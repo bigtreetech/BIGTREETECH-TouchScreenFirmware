@@ -30,18 +30,13 @@ void drawModeIcon(void)
   };
 
   GUI_RestoreColorDefault();
-
-  if(infoSettings.marlin_type == LCD12864)
-    GUI_DispStringInPrect(&mode_title_rect[0],(uint8_t *)"LCD12864 Mode");
-  else
-    GUI_DispStringInPrect(&mode_title_rect[0],(uint8_t *)"LCD2004 Mode");
-
+  GUI_DispStringInPrect(&mode_title_rect[0],(uint8_t *)"Marlin Mode");
   GUI_DispStringInPrect(&mode_title_rect[1],(uint8_t *)"Touch Mode");
 }
 
 bool LCD_ReadPen(uint16_t intervals)
 {
-  static u32 TouchTime = 0;
+  static uint32_t TouchTime = 0;
   if(!XPT2046_Read_Pen())
   {
     if(OS_GetTimeMs() - TouchTime >= intervals)
@@ -225,7 +220,7 @@ void switchMode(void)
       #ifdef SHOW_BTT_BOOTSCREEN
         if (freshBoot)
         {
-          u32 startUpTime = OS_GetTimeMs();
+          uint32_t startUpTime = OS_GetTimeMs();
           heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
           LOGO_ReadDisplay();
           updateNextHeatCheckTime();  // send "M105" after a delay, because of mega2560 will be hanged when received data at startup
@@ -240,7 +235,7 @@ void switchMode(void)
       break;
 
     case MODE_MARLIN:
-      #if defined(ST7920_SPI) || defined(LCD2004_simulator)
+      #ifdef HAS_EMULATOR
         if (infoSettings.serial_alwaysOn == ENABLED)
           updateNextHeatCheckTime();  // send "M105" after a delay, because of mega2560 will be hanged when received data at startup
         infoMenu.menu[infoMenu.cur] = menuMarlinMode;

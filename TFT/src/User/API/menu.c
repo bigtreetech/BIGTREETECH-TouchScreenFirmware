@@ -813,7 +813,7 @@ void loopBackEnd(void)
 #endif
 
 #if LCD_ENCODER_SUPPORT
-  #if defined(ST7920_SPI) || defined(LCD2004_simulator)
+  #ifdef HAS_EMULATOR
   if (infoMenu.menu[infoMenu.cur] != menuMarlinMode)
   #endif
   {
@@ -821,7 +821,7 @@ void loopBackEnd(void)
   }
 #endif
 
-#if defined(ST7920_SPI) || defined(LCD2004_simulator)
+#ifdef HAS_EMULATOR
   loopCheckMode();
 #endif
 

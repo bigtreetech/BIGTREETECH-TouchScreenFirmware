@@ -24,12 +24,16 @@ void HW_EncoderInit(void)
 #if ENC_ACTIVE_SIGNAL
   void HW_EncActiveSignalInit(void)
   {
+    if(infoSettings.marlin_type != LCD12864)
+      return;
     GPIO_InitSet(LCD_ENC_EN_PIN, MGPIO_MODE_OUT_PP, 0);
     setEncActiveSignal(0);
   }
 
   void setEncActiveSignal(uint8_t status)
   {
+    if(infoSettings.marlin_type != LCD12864)
+      return;
     GPIO_SetLevel(LCD_ENC_EN_PIN, status);
   }
 #endif
