@@ -738,9 +738,9 @@ GUI_POINT getIconStartPoint(int index)
       backHeld = LCD_ReadPen(0);
       return;
     }
-    if (longPress == false)  // check if TSC is pressed and held
+    if (longPress == false)  // check if longpress already handled
     {
-      if (LCD_ReadPen(LONG_TOUCH))
+      if (LCD_ReadPen(LONG_TOUCH))  // check if TSC is pressed and held
       {
         longPress = true;
         firstCheck = true;
@@ -759,16 +759,17 @@ GUI_POINT getIconStartPoint(int index)
         tempKey = Key_value(COUNT(rect_of_key), rect_of_key);
       }
       touchSound = true;
-      if (tempKey != KEY_IDLE)
+
+      if (curMenuItems->items[tempKey].label.index == LABEL_BACK)  // check if Back button is held
       {
-        if (curMenuItems->items[tempKey].label.index == LABEL_BACK)  // check if Back button is held
-        {
-          BUZZER_PLAY(sound_ok);
-          backHeld = true;
-          infoMenu.menu[1] = infoMenu.menu[infoMenu.cur];
-          infoMenu.cur = 1;
-        }
+        BUZZER_PLAY(sound_ok);
+        backHeld = true;
+        infoMenu.menu[1] = infoMenu.menu[infoMenu.cur];
+        infoMenu.cur = 1;
+        if (infoMenu.menu[1] == menuPrinting)
+          clearInfoFile();
       }
+
       firstCheck = false;
     }
   }

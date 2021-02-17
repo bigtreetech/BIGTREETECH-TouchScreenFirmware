@@ -28,9 +28,12 @@ bool requestCommandInfoIsRunning(void);
 bool request_M21(void);
 char *request_M20(void);
 char *request_M33(char *filename);
+long request_M23_M36(char *filename);
+bool request_M24(int pos);
+bool request_M524(void);
 bool request_M25(void);
 bool request_M27(int seconds);
-bool request_M524(void);
-bool request_M24(int pos);
-long request_M23_M36(char *filename);
+bool request_M125(void);
+bool request_M0(void);
+
 #endif
