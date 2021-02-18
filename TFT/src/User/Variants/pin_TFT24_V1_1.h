@@ -104,6 +104,10 @@
   #define LCD_D7_PORT GPIOB
 #endif
 
+#if defined(ST7920_EMULATOR) || defined(LCD2004_EMULATOR)
+  #define HAS_EMULATOR
+#endif
+
 // Buzzer support
 #define BUZZER_PIN    PA14
 
