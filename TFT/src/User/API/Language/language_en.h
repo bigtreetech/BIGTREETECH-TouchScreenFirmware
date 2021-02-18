@@ -32,7 +32,7 @@
     #define STRING_KNOB_LED_IDLE          "Rotary Knob LED idle"
     #define STRING_LCD_BRIGHTNESS         "Brightness"
     #define STRING_LCD_IDLE_BRIGHTNESS    "Idle brightness"
-    #define STRING_LCD_IDLE_DELAY         "idle timeout"
+    #define STRING_LCD_IDLE_DELAY         "Idle timeout"
     #define STRING_START_GCODE_ENABLED    "Start Gcode before print"
     #define STRING_END_GCODE_ENABLED      "End Gcode after print"
     #define STRING_CANCEL_GCODE_ENABLED   "Cancel Gcode"
