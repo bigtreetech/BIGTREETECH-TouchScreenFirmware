@@ -1,7 +1,7 @@
 #include "Babystep.h"
 #include "includes.h"
 
-static uint8_t t8_t moveLenSteps_index = 0;
+static uint8_t moveLenSteps_index = 0;
 
 void babyReDraw(float babystep, float z_offset, bool force_z_offset, bool skip_header)
 {
@@ -25,7 +25,7 @@ void babyReDraw(float babystep, float z_offset, bool force_z_offset, bool skip_h
   setLargeFont(true);
 
   sprintf(tempstr, "% 6.2f", babystep);
-  GUI_DispStringRight(point_bs.x, point_bs.y, (uint8_t t8_t *) tempstr);
+  GUI_DispStringRight(point_bs.x, point_bs.y, (uint8_t*) tempstr);
 
   sprintf(tempstr, "% 6.2f", z_offset);
 
@@ -34,7 +34,7 @@ void babyReDraw(float babystep, float z_offset, bool force_z_offset, bool skip_h
   else
     GUI_SetColor(infoSettings.font_color);
 
-  GUI_DispStringRight(point_of.x, point_of.y, (uint8_t t8_t *) tempstr);
+  GUI_DispStringRight(point_of.x, point_of.y, (uint8_t*) tempstr);
 
   // restore default font color
   GUI_SetColor(infoSettings.font_color);
