@@ -238,84 +238,6 @@ void menuEmulatorFontColor(void)
   }
 }
 
-#endif // ST7920_EMULATOR
-
-#ifdef BUZZER_PIN
-
-void menuSoundSettings(void)
-{
-  LISTITEMS sounditems = {
-  // title
-  LABEL_FEATURE_SETTINGS,
-  // icon                 ItemType      Item Title        item value text(only for custom value)
-  {
-    {ICONCHAR_TOGGLE_ON, LIST_TOGGLE,  LABEL_TOUCH_SOUND,  LABEL_BACKGROUND},
-    {ICONCHAR_TOGGLE_ON, LIST_TOGGLE,  LABEL_TOAST_SOUND,  LABEL_BACKGROUND},
-    {ICONCHAR_TOGGLE_ON, LIST_TOGGLE,  LABEL_ALERT_SOUND,  LABEL_BACKGROUND},
-    {ICONCHAR_TOGGLE_ON, LIST_TOGGLE,  LABEL_HEATER_SOUND, LABEL_BACKGROUND},
-    {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND,   LABEL_BACKGROUND},
-    {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND,   LABEL_BACKGROUND},
-    {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND,   LABEL_BACKGROUND},
-    {ICONCHAR_BACK,       LIST_LABEL,  LABEL_BACKGROUND,   LABEL_BACKGROUND},}
-  };
-
-  sounditems.items[0].icon = (infoSettings.touchSound == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
-  sounditems.items[2].icon = (infoSettings.toastSound == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
-  sounditems.items[1].icon = (infoSettings.alertSound == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
-  sounditems.items[3].icon = (infoSettings.heaterSound == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
-
-  KEY_VALUES key_num = KEY_IDLE;
-  SETTINGS now = infoSettings;
-
-  menuDrawListPage(&sounditems);
-
-  while (infoMenu.menu[infoMenu.cur] == menuSoundSettings)
-  {
-    key_num = menuKeyGetValue();
-    switch (key_num)
-    {
-      case KEY_ICON_0:
-        infoSettings.touchSound = (infoSettings.touchSound + 1) % 2;
-        sounditems.items[key_num].icon = (infoSettings.touchSound == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
-        menuDrawListItem(&sounditems.items[key_num], key_num);
-        break;
-
-      case KEY_ICON_1:
-        infoSettings.toastSound = (infoSettings.toastSound + 1) % 2;
-        sounditems.items[key_num].icon = (infoSettings.toastSound == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
-        menuDrawListItem(&sounditems.items[key_num], key_num);
-        break;
-
-      case KEY_ICON_2:
-        infoSettings.alertSound = (infoSettings.alertSound + 1) % 2;
-        sounditems.items[key_num].icon = (infoSettings.alertSound == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
-        menuDrawListItem(&sounditems.items[key_num], key_num);
-        break;
-
-      case KEY_ICON_3:
-        infoSettings.heaterSound = (infoSettings.heaterSound + 1) % 2;
-        sounditems.items[key_num].icon = (infoSettings.heaterSound == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
-        menuDrawListItem(&sounditems.items[key_num], key_num);
-        break;
-
-      case KEY_ICON_7:
-        infoMenu.cur--;
-        break;
-
-      default:
-        break;
-    }
-    loopProcess();
-  }
-
-  if (memcmp(&now, &infoSettings, sizeof(SETTINGS)))
-  {
-    storePara();
-  }
-} //menuSoundSettings
-
-#endif // BUZZER_PIN
-
 void menuMarlinModeSettings(void)
 {
   LISTITEMS marlinModeitems = {
@@ -397,6 +319,84 @@ void menuMarlinModeSettings(void)
     storePara();
   }
 }
+
+#endif // ST7920_EMULATOR
+
+#ifdef BUZZER_PIN
+
+void menuSoundSettings(void)
+{
+  LISTITEMS sounditems = {
+  // title
+  LABEL_FEATURE_SETTINGS,
+  // icon                 ItemType      Item Title        item value text(only for custom value)
+  {
+    {ICONCHAR_TOGGLE_ON, LIST_TOGGLE,  LABEL_TOUCH_SOUND,  LABEL_BACKGROUND},
+    {ICONCHAR_TOGGLE_ON, LIST_TOGGLE,  LABEL_TOAST_SOUND,  LABEL_BACKGROUND},
+    {ICONCHAR_TOGGLE_ON, LIST_TOGGLE,  LABEL_ALERT_SOUND,  LABEL_BACKGROUND},
+    {ICONCHAR_TOGGLE_ON, LIST_TOGGLE,  LABEL_HEATER_SOUND, LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND,   LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND,   LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND,   LABEL_BACKGROUND},
+    {ICONCHAR_BACK,       LIST_LABEL,  LABEL_BACKGROUND,   LABEL_BACKGROUND},}
+  };
+
+  sounditems.items[0].icon = (infoSettings.touchSound == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
+  sounditems.items[2].icon = (infoSettings.toastSound == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
+  sounditems.items[1].icon = (infoSettings.alertSound == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
+  sounditems.items[3].icon = (infoSettings.heaterSound == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
+
+  KEY_VALUES key_num = KEY_IDLE;
+  SETTINGS now = infoSettings;
+
+  menuDrawListPage(&sounditems);
+
+  while (infoMenu.menu[infoMenu.cur] == menuSoundSettings)
+  {
+    key_num = menuKeyGetValue();
+    switch (key_num)
+    {
+      case KEY_ICON_0:
+        infoSettings.touchSound = (infoSettings.touchSound + 1) % 2;
+        sounditems.items[key_num].icon = (infoSettings.touchSound == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
+        menuDrawListItem(&sounditems.items[key_num], key_num);
+        break;
+
+      case KEY_ICON_1:
+        infoSettings.toastSound = (infoSettings.toastSound + 1) % 2;
+        sounditems.items[key_num].icon = (infoSettings.toastSound == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
+        menuDrawListItem(&sounditems.items[key_num], key_num);
+        break;
+
+      case KEY_ICON_2:
+        infoSettings.alertSound = (infoSettings.alertSound + 1) % 2;
+        sounditems.items[key_num].icon = (infoSettings.alertSound == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
+        menuDrawListItem(&sounditems.items[key_num], key_num);
+        break;
+
+      case KEY_ICON_3:
+        infoSettings.heaterSound = (infoSettings.heaterSound + 1) % 2;
+        sounditems.items[key_num].icon = (infoSettings.heaterSound == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
+        menuDrawListItem(&sounditems.items[key_num], key_num);
+        break;
+
+      case KEY_ICON_7:
+        infoMenu.cur--;
+        break;
+
+      default:
+        break;
+    }
+    loopProcess();
+  }
+
+  if (memcmp(&now, &infoSettings, sizeof(SETTINGS)))
+  {
+    storePara();
+  }
+} //menuSoundSettings
+
+#endif // BUZZER_PIN
 
 #ifdef LCD_LED_PWM_CHANNEL
 
