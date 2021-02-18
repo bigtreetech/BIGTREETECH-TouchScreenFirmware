@@ -253,17 +253,17 @@ typedef struct
 extern SETTINGS infoSettings;
 extern MACHINESETTINGS infoMachineSettings;
 
-extern const u16 default_max_temp[];
-extern const u16 default_max_fanPWM[];
-extern const u16 default_size_min[];
-extern const u16 default_size_max[];
-extern const u16 default_move_speed[];
-extern const u16 default_ext_speed[];
-extern const u16 default_level_speed[];
-extern const u16 default_pause_speed[];
-extern const u16 default_preheat_ext[];
-extern const u16 default_preheat_bed[];
-extern const u8 default_custom_enabled[];
+extern const uint16_t default_max_temp[];
+extern const uint16_t default_max_fanPWM[];
+extern const uint16_t default_size_min[];
+extern const uint16_t default_size_max[];
+extern const uint16_t default_move_speed[];
+extern const uint16_t default_ext_speed[];
+extern const uint16_t default_level_speed[];
+extern const uint16_t default_pause_speed[];
+extern const uint16_t default_preheat_ext[];
+extern const uint16_t default_preheat_bed[];
+extern const uint8_t default_custom_enabled[];
 
 void initMachineSetting(void);
 void infoSettingsReset(void);

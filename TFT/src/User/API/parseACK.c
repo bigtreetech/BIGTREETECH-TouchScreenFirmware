@@ -2,8 +2,8 @@
 #include "parseACK.h"
 
 char dmaL2Cache[ACK_MAX_SIZE];
-static u16 ack_index=0;
-static u8 ack_cur_src = SERIAL_PORT;
+static uint16_t ack_index=0;
+static uint8_t ack_cur_src = SERIAL_PORT;
 
 bool portSeen[_UART_CNT] = {false, false, false, false, false, false};
 
@@ -47,7 +47,7 @@ void setCurrentAckSrc(uint8_t src)
 
 static char ack_seen(const char * str)
 {
-  u16 i;
+  uint16_t i;
   for (ack_index = 0; ack_index < ACK_MAX_SIZE && dmaL2Cache[ack_index] != 0; ack_index++)
   {
     for (i = 0; str[i] != 0 && dmaL2Cache[ack_index + i] != 0 && dmaL2Cache[ack_index + i] == str[i]; i++)
@@ -63,7 +63,7 @@ static char ack_seen(const char * str)
 
 static char ack_cmp(const char *str)
 {
-  u16 i;
+  uint16_t i;
   for(i=0; i<ACK_MAX_SIZE && str[i]!=0 && dmaL2Cache[i]!=0; i++)
   {
     if (str[i] != dmaL2Cache[i])
@@ -136,7 +136,7 @@ void ackPopupInfo(const char *info)
 bool processKnownEcho(void)
 {
   bool isKnown = false;
-  u8 i;
+  uint8_t i;
 
   for (i = 0; i < COUNT(knownEcho); i++)
   {
@@ -192,7 +192,7 @@ void hostActionCommands(void)
   if (ack_seen("notification "))
   {
     strcpy(hostAction.prompt_begin, dmaL2Cache + ack_index);
-    statusScreen_setMsg((u8 *)echomagic, (u8 *)dmaL2Cache + ack_index);
+    statusScreen_setMsg((uint8_t *)echomagic, (uint8_t *)dmaL2Cache + ack_index);
   }
 
   if (ack_seen("prompt_begin "))
@@ -247,14 +247,14 @@ void hostActionCommands(void)
         break;
       case 1:
         BUZZER_PLAY(sound_notify);
-        setDialogText((u8 *)"Action command", (u8 *)hostAction.prompt_begin, (u8 *)hostAction.prompt_button1,
+        setDialogText((uint8_t *)"Action command", (uint8_t *)hostAction.prompt_begin, (uint8_t *)hostAction.prompt_button1,
                       LABEL_BACKGROUND);
         showDialog(DIALOG_TYPE_ALERT, breakAndContinue, NULL, NULL);
         break;
       case 2:
         BUZZER_PLAY(sound_notify);
-        setDialogText((u8 *)"Action command", (u8 *)hostAction.prompt_begin, (u8 *)hostAction.prompt_button1,
-                      (u8 *)hostAction.prompt_button2);
+        setDialogText((uint8_t *)"Action command", (uint8_t *)hostAction.prompt_begin, (uint8_t *)hostAction.prompt_button1,
+                      (uint8_t *)hostAction.prompt_button2);
         showDialog(DIALOG_TYPE_ALERT, resumeAndPurge, resumeAndContinue, NULL);
         break;
     }
@@ -905,7 +905,7 @@ void parseACK(void)
     // parse fan speed
       else if (ack_seen("M106 P"))
       {
-        u8 i = ack_value();
+        uint8_t i = ack_value();
         if (ack_seen("S"))
         {
           fanSetCurSpeed(i, ack_value());
@@ -914,7 +914,7 @@ void parseACK(void)
     // parse controller fan
       else if (ack_seen("M710"))
       {
-        u8 i = 0;
+        uint8_t i = 0;
         if (ack_seen("S"))
         {
           i = fanGetTypID(0,FAN_TYPE_CTRL_S);

@@ -1,9 +1,9 @@
 #include "Parametersetting.h"
 #include "includes.h"
 
-static u8 ps_cur_page = 0;
-static u8 cur_parameter = 0;
-static u8 total_pages = 1;
+static uint8_t ps_cur_page = 0;
+static uint8_t cur_parameter = 0;
+static uint8_t total_pages = 1;
 
 bool parametersChanged = false;
 
@@ -437,7 +437,7 @@ int16_t drawTemperatureStatus(void)
     x_offset -= GUI_StrPixelWidth((uint8_t *)tempstr);
     GUI_StrPixelWidth(LABEL_10_PERCENT);
 
-    GUI_DispString(x_offset, start_y, (u8 *)tempstr); // value
+    GUI_DispString(x_offset, start_y, (uint8_t *)tempstr); // value
     x_offset -= GLOBALICON_INTERVAL;
     GUI_ClearRect(x_offset, start_y, x_offset + GLOBALICON_INTERVAL, start_y + GLOBALICON_HEIGHT);
     x_offset -= GLOBALICON_WIDTH;

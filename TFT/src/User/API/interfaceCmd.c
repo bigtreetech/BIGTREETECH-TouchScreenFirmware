@@ -4,7 +4,7 @@
 
 GCODE_QUEUE infoCmd;
 GCODE_QUEUE infoCacheCmd;  // Only when heatHasWaiting() is false the cmd in this cache will move to infoCmd queue.
-static u8 cmd_index = 0;
+static uint8_t cmd_index = 0;
 static bool ispolling = true;
 
 // Is there a code character in the current gcode command.
@@ -22,7 +22,7 @@ static bool cmd_seen(char code)
 }
 
 // Get the int after 'code', Call after cmd_seen('code').
-static u32 cmd_value(void)
+static uint32_t cmd_value(void)
 {
   return (strtol(&infoCmd.queue[infoCmd.index_r].gcode[cmd_index], NULL, 10));
 }
@@ -200,7 +200,7 @@ void sendQueueCmd(void)
   if(infoCmd.count == 0)       return;
 
   bool avoid_terminal = false;
-  u16  cmd=0;
+  uint16_t  cmd=0;
   cmd_index = 0;
   //check if cmd is from TFT or other host
   bool fromTFT = (infoCmd.queue[infoCmd.index_r].src == SERIAL_PORT);
@@ -574,7 +574,7 @@ void sendQueueCmd(void)
 
         case 710: //M710 Controller Fan
         {
-          u8 i = 0;
+          uint8_t i = 0;
           if(cmd_seen('S')) i = fanGetTypID(i,FAN_TYPE_CTRL_S);
           if(cmd_seen('I')) i = fanGetTypID(i=0,FAN_TYPE_CTRL_I);
           fanSetCurSpeed(i, cmd_value());
@@ -635,7 +635,7 @@ void sendQueueCmd(void)
                 break;
               }
             }
-            statusScreen_setMsg((u8 *)"M117", (u8 *)&message);
+            statusScreen_setMsg((uint8_t *)"M117", (uint8_t *)&message);
             if (infoMenu.menu[infoMenu.cur] != menuStatus)
             {
               addToast(DIALOG_TYPE_INFO, message);

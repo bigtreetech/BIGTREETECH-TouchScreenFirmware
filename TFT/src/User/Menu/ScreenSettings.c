@@ -255,7 +255,7 @@ void menuMarlinModeSettings(void)
     {ICONCHAR_BACK,             LIST_LABEL,       LABEL_BACKGROUND,        LABEL_BACKGROUND},}
   };
 
-  for (u8 i = 0; i < LCD_COLOR_COUNT; i++)
+  for (uint8_t i = 0; i < LCD_COLOR_COUNT; i++)
   {
     if (infoSettings.marlin_mode_font_color == lcd_colors[i])
       marlinModeitems.items[0].valueLabel = lcd_color_names[i];
@@ -544,8 +544,8 @@ void menuScreenSettings(void)
         if (getFlashSignStatus(lang_sign))
           infoMenu.menu[++infoMenu.cur] = menuLanguage;
         else
-          popupReminder(DIALOG_TYPE_ALERT, (u8 *)"Language not available",
-                        (u8 *)"To change Language first flash a Language pack ini file.");
+          popupReminder(DIALOG_TYPE_ALERT, (uint8_t *)"Language not available",
+                        (uint8_t *)"To change Language first flash a Language pack ini file.");
         break;
 
       #ifdef LCD_LED_PWM_CHANNEL

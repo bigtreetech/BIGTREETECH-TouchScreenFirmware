@@ -478,7 +478,7 @@ void draw_itemtitle(GUI_POINT pos, LABEL label, uint8_t position, int textarea_w
   {
     int textarea_width = LISTITEM_WIDTH - (pos.x + 1);  //width after removing the width for icon
     if (label.index == LABEL_DYNAMIC)
-      GUI_DispLenString(pos.x, pos.y, (u8 *)getDynamicLabel(position), textarea_width, true);
+      GUI_DispLenString(pos.x, pos.y, (uint8_t *)getDynamicLabel(position), textarea_width, true);
     else
       GUI_DispLenString(pos.x, pos.y, labelGetAddress(&label), textarea_width, true);
   }
@@ -516,7 +516,7 @@ void ListItem_DisplayCustomValue(const GUI_RECT * rect, LABEL value, int i)
   GUI_SetColor(MAT_LOWWHITE);
 
   if (value.index == LABEL_CUSTOM_VALUE || value.index == LABEL_DYNAMIC)  //show custom text value
-    GUI_DispStringInPrect(&rectVal, (u8 *)getDynamicTextValue(i));
+    GUI_DispStringInPrect(&rectVal, (uint8_t *)getDynamicTextValue(i));
   else  //show regular text labels
     GUI_DispStringInPrect(&rectVal, (int32_t)value.index);
 

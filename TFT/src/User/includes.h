@@ -132,7 +132,7 @@ typedef void (*FP_MENU)(void);
 typedef struct
 {
   FP_MENU menu[MAX_MENU_DEPTH];  // Menu function buffer
-  u8      cur;                   // Current menu index in buffer
+  uint8_t      cur;                   // Current menu index in buffer
 }MENU;
 
 extern MENU infoMenu;
@@ -150,8 +150,8 @@ extern HOST infoHost;
 typedef struct
 {
   RCC_ClocksTypeDef rccClocks;
-  u32 PCLK1_Timer_Frequency;
-  u32 PCLK2_Timer_Frequency;
+  uint32_t PCLK1_Timer_Frequency;
+  uint32_t PCLK2_Timer_Frequency;
 }CLOCKS;
 extern CLOCKS mcuClocks;
 

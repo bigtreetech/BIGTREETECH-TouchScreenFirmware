@@ -17,11 +17,11 @@ void showTemperature(uint8_t index)
   char tempstr[20];
 
   sprintf(tempstr, "%-15s", heatDisplayID[index]);
-  GUI_DispString(exhibitRect.x0, exhibitRect.y0, (u8 *)tempstr);
+  GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *)tempstr);
 
   sprintf(tempstr, "%4d/%-4d", heatGetCurrentTemp(index), heatGetTargetTemp(index));
   setLargeFont(true);
-  GUI_DispStringInPrect(&exhibitRect, (u8 *)tempstr);
+  GUI_DispStringInPrect(&exhibitRect, (uint8_t *)tempstr);
   setLargeFont(false);
 }
 
@@ -72,7 +72,7 @@ void menuHeat(void)
         char titlestr[30];
         sprintf(titlestr, "Min:0 | Max:%i", infoSettings.max_temp[c_heater]);
 
-        int16_t val = numPadInt((u8 *) titlestr, actTarget, 0, false);
+        int16_t val = numPadInt((uint8_t *) titlestr, actTarget, 0, false);
         val = NOBEYOND(0, val, infoSettings.max_temp[c_heater]);
 
         if (val != actTarget)

@@ -436,7 +436,7 @@ TERMINAL_PAGE terminal_page = {terminalBuf, 0, 0, 0, 0, 0};
 static uint16_t terminalBufTail = 0;
 uint8_t buf_full = 0;
 
-void sendGcodeReDrawButton(u8 index, u8 isPressed)
+void sendGcodeReDrawButton(uint8_t index, uint8_t isPressed)
 {
   if (index >= GKEY_KEY_NUM)
     return;
@@ -476,10 +476,10 @@ void sendGcodeReDrawButton(u8 index, u8 isPressed)
 
   #if defined(HAS_ABC_KEY)
     GUI_DispStringInRect(gcodeKeyRect[index].x0 + 2, gcodeKeyRect[index].y0 + 2, gcodeKeyRect[index].x1 - 1,
-                         gcodeKeyRect[index].y1 - 1, (u8 *)gcodeKey[gcodeKeyType][index]);
+                         gcodeKeyRect[index].y1 - 1, (uint8_t *)gcodeKey[gcodeKeyType][index]);
   #else
     GUI_DispStringInRect(gcodeKeyRect[index].x0 + 2, gcodeKeyRect[index].y0 + 2, gcodeKeyRect[index].x1 - 1,
-                         gcodeKeyRect[index].y1 - 1, (u8 *)gcodeKey[0][index]);
+                         gcodeKeyRect[index].y1 - 1, (uint8_t *)gcodeKey[0][index]);
   #endif
 
   setLargeFont(false);
@@ -494,7 +494,7 @@ void sendGcodeDrawGcode(char *gcode)
 
   if (gcode != NULL)
     GUI_DispStringInRect(gcodeValueRect.x0 + 1, gcodeValueRect.y0 + 1, gcodeValueRect.x1 - 1, gcodeValueRect.y1 - 1,
-                         (u8 *)gcode);
+                         (uint8_t *)gcode);
 }
 
 void sendGcodeDrawKeyboard(void)
@@ -670,7 +670,7 @@ void sendGcodeTerminalCache(char *stream, TERMINAL_SRC src)
   saveGcodeTerminalCache(stream_len, stream);
 }
 
-void terminalReDrawButton(u8 index, u8 isPressed)
+void terminalReDrawButton(uint8_t index, uint8_t isPressed)
 {
   if (index >= TERM_KEY_NUM)
     return;
@@ -691,7 +691,7 @@ void terminalReDrawButton(u8 index, u8 isPressed)
   GUI_ClearRect(terminalKeyRect[index].x0 + 2, terminalKeyRect[index].y0 + 2, terminalKeyRect[index].x1 - 1,
                 terminalKeyRect[index].y1 - 1);
   GUI_DispStringInRect(terminalKeyRect[index].x0 + 2, terminalKeyRect[index].y0 + 2, terminalKeyRect[index].x1 - 1,
-                       terminalKeyRect[index].y1 - 1, (u8 *)terminalKey[index]);
+                       terminalKeyRect[index].y1 - 1, (uint8_t *)terminalKey[index]);
 
   setLargeFont(false);
 }
@@ -706,7 +706,7 @@ void terminalDrawPage(char *pageNum)
 
   if (pageNum != NULL)
     GUI_DispStringInRect(terminalPageRect.x0 + 1, terminalPageRect.y0 + 1, terminalPageRect.x1 - 1, terminalPageRect.y1 - 1,
-                         (u8 *)pageNum);
+                         (uint8_t *)pageNum);
 
   setLargeFont(false);
 }
@@ -814,7 +814,7 @@ void menuTerminal(void)
       terminalDrawPage(pageNum);
     }
 
-    getCharacterInfo((u8 *) &terminalBuf[lastTerminalIndex], &info);
+    getCharacterInfo((uint8_t *) &terminalBuf[lastTerminalIndex], &info);
 
     while ((terminalBuf[lastTerminalIndex]) && (lastTerminalIndex != terminalBufTail))
     {
@@ -858,7 +858,7 @@ void menuTerminal(void)
 
         GUI_SetColor(TERM_FONT_COLOR);
         GUI_SetBkColor(TERM_BG_COLOR);
-        GUI_DispOne(cursorX, cursorY, (u8 *) &terminalBuf[lastTerminalIndex]);
+        GUI_DispOne(cursorX, cursorY, (uint8_t *) &terminalBuf[lastTerminalIndex]);
         cursorX += info.pixelWidth;
       }
 

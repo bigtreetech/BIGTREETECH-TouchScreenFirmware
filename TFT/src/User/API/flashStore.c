@@ -17,10 +17,10 @@ extern SETTINGS infoSettings;
 
 uint8_t paraStatus = 0;
 
-void wordToByte(u32 word, u8 *bytes)
+void wordToByte(uint32_t word, uint8_t *bytes)
 {
-  u8 len = 4;
-  u8 i = 0;
+  uint8_t len = 4;
+  uint8_t i = 0;
   for(i = 0; i < len; i++)
   {
     bytes[i] = (word >> 24) & 0xFF;
@@ -28,10 +28,10 @@ void wordToByte(u32 word, u8 *bytes)
   }
 }
 
-u32 byteToWord(u8 *bytes, u8 len)
+uint32_t byteToWord(uint8_t *bytes, uint8_t len)
 {
-  u32 word = 0;
-  u8 i = 0;
+  uint32_t word = 0;
+  uint8_t i = 0;
   for(i = 0; i < len; i++)
   {
     word <<= 8;
@@ -43,9 +43,9 @@ u32 byteToWord(u8 *bytes, u8 len)
 // Read settings parameter if exist, or reset settings parameter
 void readStoredPara(void)
 {
-  u8 data[PARA_SIZE];
-  u32 index = 0;
-  u32 sign = 0;
+  uint8_t data[PARA_SIZE];
+  uint32_t index = 0;
+  uint32_t sign = 0;
 
   STM32_FlashRead(data, PARA_SIZE);
 
@@ -74,8 +74,8 @@ void readStoredPara(void)
 
 void storePara(void)
 {
-  u8 data[PARA_SIZE];
-  u32 index = 0;
+  uint8_t data[PARA_SIZE];
+  uint32_t index = 0;
 
   wordToByte(TSC_SIGN, data + (index += 4));
   for (int i = 0; i < sizeof(TSC_Para) / sizeof(TSC_Para[0]); i++)

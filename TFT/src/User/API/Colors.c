@@ -1,6 +1,6 @@
 #include "Colors.h"
 
-const u16 lcd_colors[LCD_COLOR_COUNT] = {
+const uint16_t lcd_colors[LCD_COLOR_COUNT] = {
                                         WHITE,
                                         BLACK,
                                         RED,

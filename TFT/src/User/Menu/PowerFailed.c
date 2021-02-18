@@ -62,7 +62,7 @@ void powerFailedCache(u32 offset)
     }
     infoBreakPoint.tool = heatGetCurrentTool();
 
-    for(u8 i = 0; i < infoSettings.fan_count; i++)
+    for(uint8_t i = 0; i < infoSettings.fan_count; i++)
     {
       infoBreakPoint.fan[i] = fanGetCurSpeed(i);
     }
@@ -187,7 +187,7 @@ bool powerOffGetData(void)
 
 void menuPowerOff(void)
 {
-  u16 key_num = IDLE_TOUCH;
+  uint16_t key_num = IDLE_TOUCH;
   clearPowerFailed();
   GUI_Clear(infoSettings.bg_color);
 

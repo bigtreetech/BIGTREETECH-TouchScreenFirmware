@@ -25,7 +25,7 @@ const char smallIconBmpName[][32]={
 //add new icons in small_icon_list.inc only
 };
 
-BMPUPDATE_STAT bmpDecode(char *bmp, u32 addr)
+BMPUPDATE_STAT bmpDecode(char *bmp, uint32_t addr)
 {
   FIL bmpFile;
   char magic[2];
@@ -217,11 +217,11 @@ void dispIconFail(uint8_t *lbl, BMPUPDATE_STAT bmpState)
   Delay_ms(1000); // give some time to the user to read failed icon name.
 }
 
-bool updateFont(char *font, u32 addr)
+bool updateFont(char *font, uint32_t addr)
 {
   uint8_t progress = 0;
   UINT rnum = 0;
-  u32 offset = 0;
+  uint32_t offset = 0;
   char buffer[128];
   FIL myfp;
   uint8_t*  tempbuf = NULL;

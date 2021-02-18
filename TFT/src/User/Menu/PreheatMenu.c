@@ -52,14 +52,14 @@ void refreshPreheatIcon(int8_t preheatnum, int8_t icon_index, const ITEM * menui
   lvIcon.lines[2].pos = preheat_val_bed;
   lvIcon.lines[2].large_font = false;
 
-  lvIcon.lines[0].text = (u8 *)preheatnames.preheat_name[preheatnum];
+  lvIcon.lines[0].text = (uint8_t *)preheatnames.preheat_name[preheatnum];
 
   char temptool[5];
   char tempbed[5];
   sprintf(temptool, "%d", infoSettings.preheat_temp[preheatnum]);
   sprintf(tempbed, "%d", infoSettings.preheat_bed[preheatnum]);
-  lvIcon.lines[1].text = (u8 *)temptool;
-  lvIcon.lines[2].text = (u8 *)tempbed;
+  lvIcon.lines[1].text = (uint8_t *)temptool;
+  lvIcon.lines[2].text = (uint8_t *)tempbed;
 
   showLiveInfo(icon_index, &lvIcon, menuitem);
 }

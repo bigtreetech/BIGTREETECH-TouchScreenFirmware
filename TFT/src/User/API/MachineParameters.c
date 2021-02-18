@@ -3,7 +3,7 @@
 
 PARAMETERS infoParameters;
 
-const u8 parameter_element_count[PARAMETERS_COUNT] = {5, 5, 5, 3, 4, 1, 3, 4, 4, 1, 3, 2, 3, 2, 5, 3, 5, 1};
+const uint8_t parameter_element_count[PARAMETERS_COUNT] = {5, 5, 5, 3, 4, 1, 3, 4, 4, 1, 3, 2, 3, 2, 5, 3, 5, 1};
 
 const char * const parameter_Cmd[PARAMETERS_COUNT][STEPPER_COUNT] = {
     {"M92 X%.2f\n",     "M92 Y%.2f\n",      "M92 Z%.2f\n",      "M92 T0 E%.2f\n",  "M92 T1 E%.2f\n"},     //Steps/mm
@@ -64,7 +64,7 @@ const LABEL recover_disp_ID[] = {LABEL_RECOVER_LENGTH, LABEL_SWAP_RECOVER_LENGTH
 const LABEL retract_auto_ID[] = {LABEL_RETRACT_AUTO};
 const LABEL junction_deviation_disp_ID[] = {LABEL_JUNCTION_DEVIATION};
 
-float getParameter(PARAMETER_NAME name, u8 index)
+float getParameter(PARAMETER_NAME name, uint8_t index)
 {
   if (index >= parameter_element_count[name]) return 0.0f;
 
@@ -129,7 +129,7 @@ float getParameter(PARAMETER_NAME name, u8 index)
   }
 }
 
-void setParameter(PARAMETER_NAME name, u8 index, float val)
+void setParameter(PARAMETER_NAME name, uint8_t index, float val)
 {
   if (index >= parameter_element_count[name])
     return;
@@ -213,27 +213,27 @@ void setParameter(PARAMETER_NAME name, u8 index, float val)
   }
 }
 
-u8 getParameterElementCount(PARAMETER_NAME para)
+uint8_t getParameterElementCount(PARAMETER_NAME para)
 {
   return parameter_element_count[para];
 }
 
-VAL_TYPE getParameterValType(PARAMETER_NAME para, u8 index)
+VAL_TYPE getParameterValType(PARAMETER_NAME para, uint8_t index)
 {
   return parameter_val_type[para][index];
 }
 
-void setDualStepperStatus(u8 index, bool status)
+void setDualStepperStatus(uint8_t index, bool status)
 {
   dualstepper[index] = status;
 }
 
-bool getDualstepperStatus(u8 index)
+bool getDualstepperStatus(uint8_t index)
 {
   return dualstepper[index];
 }
 
-void sendParameterCmd(PARAMETER_NAME para, u8 stepper_index, float Value)
+void sendParameterCmd(PARAMETER_NAME para, uint8_t stepper_index, float Value)
 {
   storeCmd(parameter_Cmd[para][stepper_index], Value);
 

@@ -59,9 +59,9 @@ void FIL_Runout_Init(void)
 bool FIL_RunoutPinFilteredLevel(void)
 {
   static bool rst = false;
-  static u32 nextRunoutTime = 0;
-  static u32 trueTimes = 0;
-  static u32 falseTimes = 0;
+  static uint32_t nextRunoutTime = 0;
+  static uint32_t trueTimes = 0;
+  static uint32_t falseTimes = 0;
 
   if (OS_GetTimeMs() > nextRunoutTime)
   {
@@ -118,7 +118,7 @@ bool FIL_RunoutPinFilteredLevel(void)
 }
 
 
-static u32 update_PosE_time = 2000;
+static uint32_t update_PosE_time = 2000;
 // Use an encoder disc to toggles the runout
 // Suitable for BigTreeTech Smart Filament Sensor
 static uint8_t SFS_IsAlive = false;
@@ -132,7 +132,7 @@ bool FIL_SmartRunoutDetect(void)
 {
   static float lastExtrudePosition = 0.0f;
   static uint8_t lastRunoutPinLevel = 0;
-  static u32  nextRunoutTime = 0;
+  static uint32_t  nextRunoutTime = 0;
 
   bool pinLevel = FIL_RunoutPinFilteredLevel();
   float actualExtrude = coordinateGetExtruderActual();
@@ -219,7 +219,7 @@ void loopFrontEndFILRunoutDetect(void)
     setRunoutAlarmTrue();
     setDialogText(LABEL_WARNING, LABEL_FILAMENT_RUNOUT, LABEL_CONFIRM, LABEL_BACKGROUND);
     showDialog(DIALOG_TYPE_ALERT, setRunoutAlarmFalse, NULL, NULL);
-  } 
+  }
 
   if ((OS_GetTimeMs() > nextTime) && (getRunoutAlarm() == true))
   {

@@ -93,7 +93,7 @@ void drawToast(bool redraw)
     GUI_SetColor(MAT_LOWWHITE);
     GUI_FillPrect(&toastRect);
     GUI_SetColor(DARKGRAY);
-    GUI_DispStringInPrect(&toastRect, (u8 *)toastlist[curToastDisplay].text);
+    GUI_DispStringInPrect(&toastRect, (uint8_t *)toastlist[curToastDisplay].text);
 
     //set current toast notification as old/completed
     toastlist[curToastDisplay].isNew = false;
@@ -151,7 +151,7 @@ void addNotification(DIALOG_TYPE style, char *title, char *text, bool ShowDialog
   msglist[nextMsgIndex].title[MAX_MSG_TITLE_LENGTH - 1] = 0; //ensure string ends with null terminator
 
   if (ShowDialog && infoMenu.menu[infoMenu.cur] != menuNotification)
-    popupReminder(style, (u8 *)title, (u8 *)msglist[nextMsgIndex].text);
+    popupReminder(style, (uint8_t *)title, (uint8_t *)msglist[nextMsgIndex].text);
 
   if (nextMsgIndex < MAX_MSG_COUNT) nextMsgIndex += 1;//(nextMsgIndex + 1) % MAX_MSG_COUNT;
 
@@ -160,14 +160,14 @@ void addNotification(DIALOG_TYPE style, char *title, char *text, bool ShowDialog
 
   notificationDot();
 
-  statusScreen_setMsg((u8 *)title, (u8 *)text);
+  statusScreen_setMsg((uint8_t *)title, (uint8_t *)text);
 }
 
 //Replay a notification
 void replayNotification(uint8_t index)
 {
   if (index < nextMsgIndex)
-    popupReminder(msglist[index].style, (u8 *)msglist[index].title, (u8 *)msglist[index].text);
+    popupReminder(msglist[index].style, (uint8_t *)msglist[index].title, (uint8_t *)msglist[index].text);
 }
 
 //Retrive a stored notification

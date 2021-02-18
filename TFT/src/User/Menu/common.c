@@ -31,7 +31,7 @@ const ITEM itemDegreeSteps[ITEM_DEGREE_NUM] =
 };
 
 // List for temperature step change
-const u8 degreeSteps[ITEM_DEGREE_NUM] = {1, 5, 10};
+const uint8_t degreeSteps[ITEM_DEGREE_NUM] = {1, 5, 10};
 
 // Icons list for speed change steps
 const ITEM itemSpeed[ITEM_SPEED_NUM] =
@@ -52,7 +52,7 @@ const ITEM itemPercent[ITEM_PERCENT_STEPS_NUM] =
 };
 
 // List for percent change steps
-const u8 percentSteps[ITEM_PERCENT_STEPS_NUM] = {1, 5, 10};
+const uint8_t percentSteps[ITEM_PERCENT_STEPS_NUM] = {1, 5, 10};
 
 // Icons list for axis length/distance change steps
 const ITEM itemMoveLen[ITEM_MOVE_LEN_NUM] =
