@@ -173,9 +173,13 @@
 //
 
 // ST7920 Emulator SPI pins
-#define ST7920_EMULATOR
+#define ST7920_EMULATOR  // uncomment to enable Marlin mode
 #ifdef ST7920_EMULATOR
-  #define ST7920_SPI _SPI3  // uncomment to enable Marlin mode
+  #define ST7920_SPI _SPI3
+#endif
+
+#if defined(ST7920_EMULATOR) || defined(LCD2004_EMULATOR)
+  #define HAS_EMULATOR
 #endif
 
 // Buzzer support
