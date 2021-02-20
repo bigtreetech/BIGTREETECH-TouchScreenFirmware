@@ -124,8 +124,8 @@
   #error "CANCEL_PRINT_GCODE is now PRINT_CANCEL_GCODE. Please update your Configuration.h file."
 #endif
 
-#ifndef ST7920_BANNER_TEXT
-    #define ST7920_BANNER_TEXT "Marlin Mode"
+#ifndef MARLIN_BANNER_TEXT
+    #define MARLIN_BANNER_TEXT "Marlin Mode"
 #endif
 
 #ifdef TOOL_NUM
