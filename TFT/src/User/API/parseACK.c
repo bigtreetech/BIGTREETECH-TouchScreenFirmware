@@ -500,12 +500,27 @@ void parseACK(void)
       }
 
     // parse and store stepper steps/mm values
-      else if (ack_seen("M92 X"))
+      else if (ack_seen("M92"))
       {
-                           setParameter(P_STEPS_PER_MM, X_STEPPER, ack_value());
-        if (ack_seen("Y")) setParameter(P_STEPS_PER_MM, Y_STEPPER, ack_value());
-        if (ack_seen("Z")) setParameter(P_STEPS_PER_MM, Z_STEPPER, ack_value());
-        if (ack_seen("E")) setParameter(P_STEPS_PER_MM, E_STEPPER, ack_value());
+        if (ack_seen("M92 X"))
+        {
+                             setParameter(P_STEPS_PER_MM, X_STEPPER, ack_value());
+          if (ack_seen("Y")) setParameter(P_STEPS_PER_MM, Y_STEPPER, ack_value());
+          if (ack_seen("Z")) setParameter(P_STEPS_PER_MM, Z_STEPPER, ack_value());
+        }
+        if(ack_seen("T"))
+        {
+          if (ack_seen("T0 E")) setParameter(P_STEPS_PER_MM, E_STEPPER, ack_value());
+          if (ack_seen("T1 E"))
+          {
+            setParameter(P_STEPS_PER_MM, E2_STEPPER, ack_value());
+            setDualStepperStatus(E_AXIS, true);
+          }
+        }
+        else if (ack_seen("E"))
+        {
+          setParameter(P_STEPS_PER_MM, E_STEPPER, ack_value());
+        }
       }
     // parse and store stepper steps/mm values incase of RepRapFirmware
       else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && (ack_seen("Steps")))
@@ -515,48 +530,51 @@ void parseACK(void)
         if (ack_seen("Z: ")) setParameter(P_STEPS_PER_MM, Z_STEPPER, ack_value());
         if (ack_seen("E: ")) setParameter(P_STEPS_PER_MM, E_STEPPER, ack_value());
       }
-      else if (ack_seen("M92 T0 E"))
+    // parse and store Max Acceleration values
+      else if (ack_seen("M201"))
       {
-        setParameter(P_STEPS_PER_MM, E_STEPPER, ack_value());
-      }
-      else if (ack_seen("M92 T1 E"))
-      {
-        setParameter(P_STEPS_PER_MM, E2_STEPPER, ack_value());
-        setDualStepperStatus(E_STEPPER, true);
+        if (ack_seen("M201 X"))
+        {
+                             setParameter(P_MAX_ACCELERATION, X_STEPPER, ack_value());
+          if (ack_seen("Y")) setParameter(P_MAX_ACCELERATION, Y_STEPPER, ack_value());
+          if (ack_seen("Z")) setParameter(P_MAX_ACCELERATION, Z_STEPPER, ack_value());
+        }
+        if(ack_seen("T"))
+        {
+          if (ack_seen("T0 E")) setParameter(P_MAX_ACCELERATION, E_STEPPER, ack_value());
+          if (ack_seen("T1 E"))
+          {
+            setParameter(P_MAX_ACCELERATION, E2_STEPPER, ack_value());
+            setDualStepperStatus(E_AXIS, true);
+          }
+        }
+        else if (ack_seen("E"))
+        {
+          setParameter(P_MAX_ACCELERATION, E_STEPPER, ack_value());
+        }
       }
     // parse and store Max Feed Rate values
-      else if (ack_seen("M203 X"))
+      else if (ack_seen("M203"))
       {
-                           setParameter(P_MAX_FEED_RATE, X_STEPPER, ack_value());
-        if (ack_seen("Y")) setParameter(P_MAX_FEED_RATE, Y_STEPPER, ack_value());
-        if (ack_seen("Z")) setParameter(P_MAX_FEED_RATE, Z_STEPPER, ack_value());
-        if (ack_seen("E")) setParameter(P_MAX_FEED_RATE, E_STEPPER, ack_value());
-      }
-      else if (ack_seen("M203 T0 E"))
-      {
-        setParameter(P_MAX_FEED_RATE, E_STEPPER, ack_value());
-      }
-      else if (ack_seen("M203 T1 E"))
-      {
-        setParameter(P_MAX_FEED_RATE, E2_STEPPER, ack_value());
-        setDualStepperStatus(E_STEPPER, true);
-      }
-    // parse and store Max Acceleration values
-      else if (ack_seen("M201 X"))
-      {
-                           setParameter(P_MAX_ACCELERATION, X_STEPPER, ack_value());
-        if (ack_seen("Y")) setParameter(P_MAX_ACCELERATION, Y_STEPPER, ack_value());
-        if (ack_seen("Z")) setParameter(P_MAX_ACCELERATION, Z_STEPPER, ack_value());
-        if (ack_seen("E")) setParameter(P_MAX_ACCELERATION, E_STEPPER, ack_value());
-      }
-      else if (ack_seen("M201 T0 E"))
-      {
-        setParameter(P_MAX_ACCELERATION, E_STEPPER, ack_value());
-      }
-      else if (ack_seen("M201 T1 E"))
-      {
-        setParameter(P_MAX_ACCELERATION, E2_STEPPER, ack_value());
-        setDualStepperStatus(E_STEPPER, true);
+        if (ack_seen("M203 X"))
+        {
+                             setParameter(P_MAX_FEED_RATE, X_STEPPER, ack_value());
+          if (ack_seen("Y")) setParameter(P_MAX_FEED_RATE, Y_STEPPER, ack_value());
+          if (ack_seen("Z")) setParameter(P_MAX_FEED_RATE, Z_STEPPER, ack_value());
+        }
+        if (ack_seen("T"))
+        {
+          if (ack_seen("T0 E")) setParameter(P_MAX_FEED_RATE, E_STEPPER, ack_value());
+          if (ack_seen("T1 E"))
+          {
+            setParameter(P_MAX_FEED_RATE, E2_STEPPER, ack_value());
+            setDualStepperStatus(E_AXIS, true);
+          }
+        }
+        else if (ack_seen("E"))
+        {
+          setParameter(P_MAX_FEED_RATE, E_STEPPER, ack_value());
+        }
       }
     // parse and store Acceleration values
       else if (ack_seen("M204 P"))
@@ -638,37 +656,67 @@ void parseACK(void)
     // parse and store linear advance values
       else if (ack_seen("M900 K"))
       {
-        setParameter(P_LIN_ADV, 0, ack_value());
-      }
-      else if (ack_seen("M900 T0 K"))
-      {
-        setParameter(P_LIN_ADV, 0, ack_value());
-      }
-      else if (ack_seen("M900 T1 K"))
-      {
-        setParameter(P_LIN_ADV, 1, ack_value());
+        if (ack_seen("T"))
+        {
+          if (ack_seen("T0 K")) setParameter(P_LIN_ADV, 0, ack_value());
+          if (ack_seen("T1 K")) setParameter(P_LIN_ADV, 1, ack_value());
+        }
+        else if (ack_seen("K"))
+        {
+          setParameter(P_LIN_ADV, 0, ack_value());
+        }
       }
     // parse and store stepper driver current values
-      else if (ack_seen("M906 X"))
+      else if (ack_seen("M906"))
       {
-                           setParameter(P_CURRENT, X_STEPPER, ack_value());
-        if (ack_seen("Y")) setParameter(P_CURRENT, Y_STEPPER, ack_value());
-        if (ack_seen("Z")) setParameter(P_CURRENT, Z_STEPPER, ack_value());
+        if(ack_seen("I1"))
+        {
+          if (ack_seen("X")) setDualStepperStatus(X_AXIS, true);
+          if (ack_seen("Y")) setDualStepperStatus(Y_AXIS, true);
+          if (ack_seen("Z")) setDualStepperStatus(Z_AXIS, true);
+        }
+        else
+        {
+          if (ack_seen("X")) setParameter(P_CURRENT, X_STEPPER, ack_value());
+          if (ack_seen("Y")) setParameter(P_CURRENT, Y_STEPPER, ack_value());
+          if (ack_seen("Z")) setParameter(P_CURRENT, Z_STEPPER, ack_value());
+        }
+        if (ack_seen("T"))
+        {
+          if (ack_seen("T0 E")) setParameter(P_CURRENT, E_STEPPER, ack_value());
+          if (ack_seen("T1 E"))
+          {
+            setParameter(P_CURRENT, E2_STEPPER, ack_value());
+            setDualStepperStatus(E_AXIS, true);
+          }
+        }
+        else if (ack_seen("E"))
+        {
+          setParameter(P_CURRENT, E_STEPPER, ack_value());
+        }
       }
-      else if (ack_seen("M906 I1"))
+    // parse and store TMC Hybrid Threshold Speed
+      else if (ack_seen("M913"))
       {
-        if (ack_seen("X")) setDualStepperStatus(X_STEPPER, true);
-        if (ack_seen("Y")) setDualStepperStatus(Y_STEPPER, true);
-        if (ack_seen("Z")) setDualStepperStatus(Z_STEPPER, true);
-      }
-      else if (ack_seen("M906 T0 E"))
-      {
-        setParameter(P_CURRENT, E_STEPPER, ack_value());
-      }
-      else if (ack_seen("M906 T1 E"))
-      {
-        setParameter(P_CURRENT, E2_STEPPER, ack_value());
-        setDualStepperStatus(E_STEPPER, true);
+        if (ack_seen("M913 X"))
+        {
+                             setParameter(P_HYBRID_THRESHOLD, X_STEPPER, ack_value());
+          if (ack_seen("Y")) setParameter(P_HYBRID_THRESHOLD, Y_STEPPER, ack_value());
+          if (ack_seen("Z")) setParameter(P_HYBRID_THRESHOLD, Z_STEPPER, ack_value());
+        }
+        if (ack_seen("T"))
+        {
+          if(ack_seen("T0 E")) setParameter(P_HYBRID_THRESHOLD, E_STEPPER, ack_value());
+          if(ack_seen("T1 E"))
+          {
+            setParameter(P_HYBRID_THRESHOLD, E2_STEPPER, ack_value());
+            setDualStepperStatus(E_AXIS, true);
+          }
+        }
+        else if (ack_seen("E"))
+        {
+          setParameter(P_HYBRID_THRESHOLD, E_STEPPER, ack_value());
+        }
       }
     // parse and store TMC Bump sensitivity values
       else if (ack_seen("M914 X"))
@@ -676,23 +724,6 @@ void parseACK(void)
                            setParameter(P_BUMPSENSITIVITY, X_STEPPER, ack_value());
         if (ack_seen("Y")) setParameter(P_BUMPSENSITIVITY, Y_STEPPER, ack_value());
         if (ack_seen("Z")) setParameter(P_BUMPSENSITIVITY, Z_STEPPER, ack_value());
-      }
-    // parse and store TMC Hybrid Threshold Speed
-      else if (ack_seen("M913 X"))
-      {
-                           setParameter(P_HYBRID_THRESHOLD, X_STEPPER, ack_value());
-        if (ack_seen("Y")) setParameter(P_HYBRID_THRESHOLD, Y_STEPPER, ack_value());
-        if (ack_seen("Z")) setParameter(P_HYBRID_THRESHOLD, Z_STEPPER, ack_value());
-        if (ack_seen("E")) setParameter(P_HYBRID_THRESHOLD, E_STEPPER, ack_value());
-      }
-      else if (ack_seen("M913 T0 E"))
-      {
-        setParameter(P_HYBRID_THRESHOLD, E_STEPPER, ack_value());
-      }
-      else if (ack_seen("M913 T1 E"))
-      {
-        setParameter(P_HYBRID_THRESHOLD, E2_STEPPER, ack_value());
-        setDualStepperStatus(E_STEPPER, true);
       }
     // parse and store ABL type if auto-detect is enabled
     #if ENABLE_BL_VALUE == 1
