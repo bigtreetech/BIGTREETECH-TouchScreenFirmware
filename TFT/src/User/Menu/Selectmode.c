@@ -205,7 +205,6 @@ static inline void setupModeHardware(uint8_t mode)
 // Change UI Mode
 void switchMode(void)
 {
-  //if(freshBoot && infoSettings.mode == MODE_MARLIN) Delay_ms(2000);
   infoMenu.cur = 0;
   setupModeHardware(infoSettings.mode);
 
