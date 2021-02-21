@@ -23,7 +23,7 @@ const char *const parameter_Cmd[PARAMETERS_COUNT][STEPPER_COUNT] = {
   {"M906 X%.0f\n",               "M906 Y%.0f\n",               "M906 Z%.0f\n",               "M906 T0 E%.0f\n",             "M906 T1 E%.0f\nM503 S0\n"},  //Current
   {"M914 X%.0f\n",               "M914 Y%.0f\n",               "M914 Z%.0f\n",               NULL,                          NULL},                        //bump Sensitivity
   {"M913 X%.0f\n",               "M913 Y%.0f\n",               "M913 Z%.0f\n",               "M913 T0 E%.0f\n",             "M913 T1 E%.0f\nM503 S0\n"},  //TMC Hybrid Threshold Speed
-  {"M569 S%.0f X\nM503 S0\n",    "M569 S%.0f Y\nM503 S0\n",    "M569 S%.0f Z\nM503 S0\n",    "M569 S%.0f T0 E\nM503 S0\n",  "M569 S%.0f T1 E\nM503 S0\n"},//TMC StealthChop
+  {"M569 S%.0f X\n",    "M569 S%.0f Y\n",    "M569 S%.0f Z\n",    "M569 S%.0f T0 E\n",  "M569 S%.0f T1 E\n"},//TMC StealthChop
   {"G29 S4 Z%.2f\n",             NULL,                         NULL,                         NULL,                          NULL},                        //MBL offset
 };
 
