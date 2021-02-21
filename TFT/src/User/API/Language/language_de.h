@@ -48,7 +48,7 @@
     #define STRING_FWRETRACT              "FW Rückzug"
     #define STRING_FWRECOVER              "FW Rückeinschub"
     #define STRING_RETRACT_AUTO           "Auto-Rückzug (Firmware)"
-    #define STRING_OFFSET_TOOL            "Abstand 2te Düse"
+    #define STRING_HOTEND_OFFSET          "Abstand 2te Düse"
     #define STRING_PROBE_OFFSET           "Sensor Versatz"
     #define STRING_LIN_ADVANCE            "Linear Advance"
     #define STRING_CURRENT_SETTING        "Treiber Strom (mA)"

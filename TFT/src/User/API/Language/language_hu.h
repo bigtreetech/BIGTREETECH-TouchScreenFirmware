@@ -48,7 +48,7 @@
     #define STRING_FWRETRACT              "FW Visszahúzás"
     #define STRING_FWRECOVER              "FW Visszahúzás helyreáll."
     #define STRING_RETRACT_AUTO           "Automata visszahúz."
-    #define STRING_OFFSET_TOOL            "Második fej eltolása"
+    #define STRING_HOTEND_OFFSET          "Második fej eltolása"
     #define STRING_PROBE_OFFSET           "Szonda eltolás"
     #define STRING_LIN_ADVANCE            "Lineáris haladás"
     #define STRING_CURRENT_SETTING        "Motoráramok beállítása"

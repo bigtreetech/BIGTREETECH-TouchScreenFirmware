@@ -48,7 +48,7 @@
     #define STRING_FWRETRACT              "FW Retraction"
     #define STRING_FWRECOVER              "FW Retraction Recover"
     #define STRING_RETRACT_AUTO           "FW自动回抽"
-    #define STRING_OFFSET_TOOL            "第2个喷头的偏移量"
+    #define STRING_HOTEND_OFFSET          "第2个喷头的偏移量"
     #define STRING_PROBE_OFFSET           "探针偏移量"
     #define STRING_LIN_ADVANCE            "Linear Advance"
     #define STRING_CURRENT_SETTING        "TMC驱动电流设置"

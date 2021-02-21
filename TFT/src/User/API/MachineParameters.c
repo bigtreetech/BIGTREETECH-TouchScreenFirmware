@@ -6,7 +6,7 @@ PARAMETERS infoParameters;
 const uint8_t parameter_element_count[PARAMETERS_COUNT] = {5, 5, 5, 3, 4, 1, 3, 4, 4, 1, 3, 2, 3, 2, 5, 3, 5, 1};
 
 const char * const parameter_Cmd[PARAMETERS_COUNT][STEPPER_COUNT] = {
-    {"M92 X%.2f\n",     "M92 Y%.2f\n",      "M92 Z%.2f\n",      "M92 T0 E%.2f\n",  "M92 T1 E%.2f\n"},     //Steps/mm
+    {"M92 X%.2f\n",     "M92 Y%.2f\n",      "M92 Z%.2f\n",      "M92 T0 E%.2f\n",   "M92 T1 E%.2f\n"},     //Steps/mm
     {"M203 X%.0f\n",    "M203 Y%.0f\n",     "M203 Z%.0f\n",     "M203 T0 E%.0f\n",  "M203 T1 E%.0f\n"},   //MaxFeedrate
     {"M201 X%.0f\n",    "M201 Y%.0f\n",     "M201 Z%.0f\n",     "M201 T0 E%.0f\n",  "M201 T1 E%.0f\n"},   //MaxAcceleration
     {"M204 P%.0f\n",    "M204 R%.0f\n",     "M204 T%.0f\n",     NULL,               NULL},                //Acceleration
@@ -16,7 +16,7 @@ const char * const parameter_Cmd[PARAMETERS_COUNT][STEPPER_COUNT] = {
     {"M207 S%.2f\n",    "M207 W%.2f\n",     "M207 F%.2f\n",     "M207 Z%.2f\n",     NULL},                //FW retract
     {"M208 S%.2f\n",    "M208 W%.2f\n",     "M208 F%.2f\n",     "M208 R%.2f\n",     NULL},                //FW retract recover
     {"M209 S%.0f\n",    NULL,               NULL,               NULL,               NULL},                //Set auto FW retract
-    {"M218 T1 X%.2f",   "M218 T1 Y%.2f\n",  "M218 T1 Z%.2f\n",  NULL,               NULL},                //Offset Tools
+    {"M218 T1 X%.2f",   "M218 T1 Y%.2f\n",  "M218 T1 Z%.2f\n",  NULL,               NULL},                //Hotend Offset
     {"M420 S%.0f\n",    "M420 Z%.2f\n",     NULL,               NULL,               NULL},                //ABL State + Z Fade
     {"M851 X%.2f\n",    "M851 Y%.2f\n",     "M851 Z%.2f\n",     NULL,               NULL},                //Probe offset
     {"M900 T0 K%.2f\n", "M900 T1 K%.2f\n",  NULL,               NULL,               NULL},                //Linear Advance
@@ -37,7 +37,7 @@ const VAL_TYPE parameter_val_type[PARAMETERS_COUNT][STEPPER_COUNT] = {
   {VAL_TYPE_FLOAT,        VAL_TYPE_FLOAT,       VAL_TYPE_INT,          VAL_TYPE_FLOAT},                     //FW retract
   {VAL_TYPE_FLOAT,        VAL_TYPE_FLOAT,       VAL_TYPE_INT,          VAL_TYPE_INT},                       //FW retract recover
   {VAL_TYPE_INT},                                                                                           //Set auto FW retract
-  {VAL_TYPE_NEG_FLOAT,    VAL_TYPE_NEG_FLOAT,   VAL_TYPE_NEG_FLOAT},                                        //Offset Tools
+  {VAL_TYPE_NEG_FLOAT,    VAL_TYPE_NEG_FLOAT,   VAL_TYPE_NEG_FLOAT},                                        //Hotend Offset
   {VAL_TYPE_INT,          VAL_TYPE_FLOAT},                                                                  //ABL State + Z Fade
   {VAL_TYPE_NEG_FLOAT,    VAL_TYPE_NEG_FLOAT,   VAL_TYPE_NEG_FLOAT},                                        //Probe offset
   {VAL_TYPE_FLOAT,        VAL_TYPE_FLOAT},                                                                  //Linear Advance
@@ -100,8 +100,8 @@ float getParameter(PARAMETER_NAME name, uint8_t index)
     case P_AUTO_RETRACT:
       return infoParameters.AutoRetract[index];
 
-    case P_OFFSET_TOOL:
-      return infoParameters.OffsetTool[index];
+    case P_HOTEND_OFFSET:
+      return infoParameters.HotendOffset[index];
 
     case P_ABL_STATE:
       return infoParameters.ABLState[index];
@@ -176,8 +176,8 @@ void setParameter(PARAMETER_NAME name, uint8_t index, float val)
       infoParameters.AutoRetract[index] = val;
       break;
 
-    case P_OFFSET_TOOL:
-      infoParameters.OffsetTool[index] = val;
+    case P_HOTEND_OFFSET:
+      infoParameters.HotendOffset[index] = val;
       break;
 
     case P_ABL_STATE:

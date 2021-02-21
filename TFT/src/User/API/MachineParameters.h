@@ -20,7 +20,7 @@ typedef enum
   P_FWRETRACT,
   P_FWRECOVER,
   P_AUTO_RETRACT,
-  P_OFFSET_TOOL,
+  P_HOTEND_OFFSET,
   P_ABL_STATE,
   P_PROBE_OFFSET,
   P_LIN_ADV,
@@ -67,7 +67,7 @@ typedef struct
   float FwRetract[4];
   float FwRecover[4];
   float AutoRetract[1];
-  float OffsetTool[3];
+  float HotendOffset[3];
   float ABLState[2];
   float ProbeOffset[3];
   float LinAdvance[2];

@@ -48,7 +48,7 @@
     #define STRING_FWRETRACT              "Yazılım Geriçekmesi"
     #define STRING_FWRECOVER              "Yazılım Geriitmesi"
     #define STRING_RETRACT_AUTO           "Oto. yazılım geriçekmesi"
-    #define STRING_OFFSET_TOOL            "2. Nozül Mesafesi"
+    #define STRING_HOTEND_OFFSET          "2. Nozül Mesafesi"
     #define STRING_PROBE_OFFSET           "Prob Offseti"
     #define STRING_LIN_ADVANCE            "Linear Advance"
     #define STRING_CURRENT_SETTING        "Sürücü Akımı (mA)"

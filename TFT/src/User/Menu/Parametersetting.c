@@ -19,7 +19,7 @@ const LISTITEM parametertypes[P_ITEMSCOUNT] = {
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_FWRETRACT,            LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_FWRECOVER,            LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_RETRACT_AUTO,         LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_OFFSET_TOOL,          LABEL_BACKGROUND},
+  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_HOTEND_OFFSET,          LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_ABL,                  LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_PROBE_OFFSET,         LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_LIN_ADVANCE,          LABEL_BACKGROUND},
@@ -110,7 +110,7 @@ void menuShowParameter(void)
         parameter_menuitems.items[i].titlelabel = retract_auto_ID[i];
         break;
 
-      case P_OFFSET_TOOL:
+      case P_HOTEND_OFFSET:
         parameter_menuitems.items[X_AXIS].titlelabel.address = "X";
         parameter_menuitems.items[Y_AXIS].titlelabel.address = "Y";
         parameter_menuitems.items[Z_AXIS].titlelabel.address = "Z";

@@ -55,7 +55,7 @@ extern "C" {
 #define LANG_KEY_FWRETRACT                    "label_fwretract:"
 #define LANG_KEY_FWRECOVER                    "label_fwrecover:"
 #define LANG_KEY_RETRACT_AUTO                 "label_retract_auto:"
-#define LANG_KEY_OFFSET_TOOL                  "label_offset_tool:"
+#define LANG_KEY_HOTEND_OFFSET                "label_hotend_offset:"
 #define LANG_KEY_PROBE_OFFSET                 "label_probe_offset:"
 #define LANG_KEY_LIN_ADVANCE                  "label_lin_advance:"
 #define LANG_KEY_CURRENT_SETTING              "label_current_setting:"

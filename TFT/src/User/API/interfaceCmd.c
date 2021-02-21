@@ -522,7 +522,6 @@ void sendQueueCmd(void)
           if (cmd_seen('X')) setParameter(P_STEPS_PER_MM, X_AXIS, cmd_float());
           if (cmd_seen('Y')) setParameter(P_STEPS_PER_MM, Y_AXIS, cmd_float());
           if (cmd_seen('Z')) setParameter(P_STEPS_PER_MM, Z_AXIS, cmd_float());
-          if (cmd_seen('E')) setParameter(P_STEPS_PER_MM, E_AXIS, cmd_float());
           uint8_t i = 0;
           if (cmd_seen('T'))
             i = cmd_value();
@@ -760,6 +759,10 @@ void sendQueueCmd(void)
           if (cmd_seen('F')) setParameter(P_FWRECOVER, 2, cmd_float());
           if (cmd_seen('R')) setParameter(P_FWRECOVER, 3, cmd_float());
           break;
+        case 218: //M206 Hotend Offset
+          if (cmd_seen('X')) setParameter(P_HOTEND_OFFSET, X_AXIS, cmd_float());
+          if (cmd_seen('Y')) setParameter(P_HOTEND_OFFSET, Y_AXIS, cmd_float());
+          if (cmd_seen('Z')) setParameter(P_HOTEND_OFFSET, Z_AXIS, cmd_float());
         case 220: //M220
           if (cmd_seen('S'))
             speedSetCurPercent(0,cmd_value());

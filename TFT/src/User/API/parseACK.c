@@ -636,9 +636,9 @@ void parseACK(void)
     // parse and store Offset 2nd Nozzle
       else if (ack_seen("M218 T1 X"))
       {
-                           setParameter(P_OFFSET_TOOL, 0, ack_value());
-        if (ack_seen("Y")) setParameter(P_OFFSET_TOOL, 1, ack_value());
-        if (ack_seen("Z")) setParameter(P_OFFSET_TOOL, 2, ack_value());
+                           setParameter(P_HOTEND_OFFSET, 0, ack_value());
+        if (ack_seen("Y")) setParameter(P_HOTEND_OFFSET, 1, ack_value());
+        if (ack_seen("Z")) setParameter(P_HOTEND_OFFSET, 2, ack_value());
       }
     // parse and store ABL on/off state & Z fade value on M503
       else if (ack_seen("M420 S"))

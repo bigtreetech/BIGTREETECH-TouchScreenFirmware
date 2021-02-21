@@ -48,7 +48,7 @@
     #define STRING_FWRETRACT              "Retracció de FW"
     #define STRING_FWRECOVER              "Recuperació de Retracció de FW"
     #define STRING_RETRACT_AUTO           "Auto Firmware Retract"
-    #define STRING_OFFSET_TOOL            "Offset 2nd Nozzle"
+    #define STRING_HOTEND_OFFSET          "Offset 2nd Nozzle"
     #define STRING_PROBE_OFFSET           "Sonda Compensar"
     #define STRING_LIN_ADVANCE            "Avanç Lineal"
     #define STRING_CURRENT_SETTING        "Corrent del Driver (mA)"

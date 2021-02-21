@@ -48,7 +48,7 @@
     #define STRING_FWRETRACT              "M207 ретракт"
     #define STRING_FWRECOVER              "M208 восстановление ретракта"
     #define STRING_RETRACT_AUTO           "Авто FW ретракт"
-    #define STRING_OFFSET_TOOL            "Смещение 2-го сопла"
+    #define STRING_HOTEND_OFFSET          "Смещение 2-го сопла"
     #define STRING_PROBE_OFFSET           "Смещение датчика"
     #define STRING_LIN_ADVANCE            "К-фактор"
     #define STRING_CURRENT_SETTING        "Настройка TMC драйверов"

@@ -48,7 +48,7 @@
     #define STRING_FWRETRACT              "Rétraction firmware"
     #define STRING_FWRECOVER              "Récupération firmware"
     #define STRING_RETRACT_AUTO           "Rétraction firmware auto"
-    #define STRING_OFFSET_TOOL            "Offset 2ème Buse"
+    #define STRING_HOTEND_OFFSET          "Offset 2ème Buse"
     #define STRING_PROBE_OFFSET           "Décalage Palpeur"
     #define STRING_LIN_ADVANCE            "Linear Advance"
     #define STRING_CURRENT_SETTING        "Courant drivers (mA)"

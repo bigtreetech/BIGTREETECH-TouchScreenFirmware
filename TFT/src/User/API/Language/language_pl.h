@@ -48,7 +48,7 @@
     #define STRING_FWRETRACT              "FW Retraction"
     #define STRING_FWRECOVER              "FW Retraction Recover"
     #define STRING_RETRACT_AUTO           "Auto Firmware Retract"
-    #define STRING_OFFSET_TOOL            "Offset 2nd Nozzle"
+    #define STRING_HOTEND_OFFSET          "Offset 2nd Nozzle"
     #define STRING_PROBE_OFFSET           "Przesunięcie"
     #define STRING_LIN_ADVANCE            "Linear Advance"
     #define STRING_CURRENT_SETTING        "Driver Current (mA)"
