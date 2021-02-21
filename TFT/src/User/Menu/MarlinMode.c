@@ -58,13 +58,6 @@ void menuMarlinMode(void)
     while(marlinGetData(&data))
     {
       marlinParse(data);
-      // defer serial disabling on fresh boot to allow mainboard to boot.
-      // disabling serial on boot prevents some mainboard from booting if TFT is booted directly in emulator mode.
-      if(firstInit && infoSettings.serial_alwaysOn == DISABLED)
-      {
-        Serial_ReSourceDeInit();
-        firstInit = false;
-      }
     }
     #if LCD_ENCODER_SUPPORT
       sendEncoder(LCD_ReadTouch());
@@ -82,12 +75,21 @@ void menuMarlinMode(void)
       loopDimTimer();
     #endif
 
-    if (infoSettings.serial_alwaysOn == 1)
+    if (infoSettings.serial_alwaysOn == ENABLED)
     {
       loopBackEnd();
     }
+    else if (firstInit && freshBoot)
+    {
+      // defer serial disabling on fresh boot to allow mainboard to boot.
+      // disabling serial on boot prevents some mainboard from booting if TFT is booted directly in emulator mode.
+      if (OS_GetTimeMs() > 5000)
+      {
+        Serial_ReSourceDeInit();
+        firstInit = false;
+      }
+    }
   }
-
   marlinDeInit();
 }
 

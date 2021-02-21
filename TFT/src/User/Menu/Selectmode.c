@@ -187,7 +187,7 @@ static inline void setupModeHardware(uint8_t mode)
 
     #if LED_COLOR_PIN
       #ifndef KEEP_KNOB_LED_COLOR_MARLIN_MODE  // enable knob led in marlin mode
-      knob_LED_DeInit();
+        knob_LED_DeInit();
       #endif
     #endif
 
