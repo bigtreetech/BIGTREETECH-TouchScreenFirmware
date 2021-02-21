@@ -523,8 +523,7 @@ void sendQueueCmd(void)
           if (cmd_seen('Y')) setParameter(P_STEPS_PER_MM, Y_AXIS, cmd_float());
           if (cmd_seen('Z')) setParameter(P_STEPS_PER_MM, Z_AXIS, cmd_float());
           uint8_t i = 0;
-          if (cmd_seen('T'))
-            i = cmd_value();
+          if (cmd_seen('T')) i = cmd_value();
           if (cmd_seen('E')) setParameter(P_STEPS_PER_MM, E_STEPPER + i, cmd_value());
           break;
         }
