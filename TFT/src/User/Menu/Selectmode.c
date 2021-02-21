@@ -159,9 +159,9 @@ void menuMode(void)
 // Setup hardware for selected UI mode
 static inline void setupModeHardware(uint8_t mode)
 {
-  Serial_ReSourceInit();  // enable serial comm by default
   if (mode == MODE_SERIAL_TSC)
   {
+    Serial_ReSourceInit();  // enable serial comm in TSC mode
     #ifdef BUZZER_PIN // enable buzzer in Touchsreen mode
       Buzzer_Config();
     #endif
@@ -205,6 +205,7 @@ static inline void setupModeHardware(uint8_t mode)
 // Change UI Mode
 void switchMode(void)
 {
+  //if(freshBoot && infoSettings.mode == MODE_MARLIN) Delay_ms(2000);
   infoMenu.cur = 0;
   setupModeHardware(infoSettings.mode);
 
