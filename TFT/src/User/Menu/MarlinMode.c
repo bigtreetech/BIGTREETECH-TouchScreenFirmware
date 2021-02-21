@@ -16,6 +16,7 @@ void menuMarlinMode(void)
   CB_DEINIT marlinDeInit = NULL;
   CB_DATA   marlinGetData = NULL;
   CB_PARSE  marlinParse = NULL;
+  bool firstInit = true;
 
   GUI_Clear(infoSettings.marlin_mode_bg_color);
   GUI_SetColor(infoSettings.marlin_mode_font_color);
@@ -57,6 +58,13 @@ void menuMarlinMode(void)
     while(marlinGetData(&data))
     {
       marlinParse(data);
+      // defer serial disabling on fresh boot to allow mainboard to boot.
+      // disabling serial on boot prevents some mainboard from booting if TFT is booted directly in emulator mode.
+      if(firstInit && infoSettings.serial_alwaysOn == DISABLED)
+      {
+        Serial_ReSourceDeInit();
+        firstInit = false;
+      }
     }
     #if LCD_ENCODER_SUPPORT
       sendEncoder(LCD_ReadTouch());
