@@ -22,7 +22,7 @@ static bool cmd_seen(char code)
 }
 
 // Get the int after 'code', Call after cmd_seen('code').
-static uint32_t cmd_value(void)
+static int32_t cmd_value(void)
 {
   return (strtol(&infoCmd.queue[infoCmd.index_r].gcode[cmd_index], NULL, 10));
 }
@@ -524,7 +524,7 @@ void sendQueueCmd(void)
           if (cmd_seen('Z')) setParameter(P_STEPS_PER_MM, Z_AXIS, cmd_float());
           uint8_t i = 0;
           if (cmd_seen('T')) i = cmd_value();
-          if (cmd_seen('E')) setParameter(P_STEPS_PER_MM, E_STEPPER + i, cmd_value());
+          if (cmd_seen('E')) setParameter(P_STEPS_PER_MM, E_STEPPER + i, cmd_float());
           break;
         }
         case 105: //M105
@@ -726,7 +726,7 @@ void sendQueueCmd(void)
           if (cmd_seen('Z')) setParameter(P_MAX_FEED_RATE, Z_STEPPER, cmd_float());
           uint8_t i = 0;
           if (cmd_seen('T')) i = cmd_value();
-          if (cmd_seen('E')) setParameter(P_MAX_FEED_RATE, E_STEPPER + i, cmd_value());
+          if (cmd_seen('E')) setParameter(P_MAX_FEED_RATE, E_STEPPER + i, cmd_float());
           break;
         }
         case 204: //M204 Acceleration (units/s2)
@@ -758,7 +758,7 @@ void sendQueueCmd(void)
           if (cmd_seen('F')) setParameter(P_FWRECOVER, 2, cmd_float());
           if (cmd_seen('R')) setParameter(P_FWRECOVER, 3, cmd_float());
           break;
-        case 218: //M206 Hotend Offset
+        case 218: //M218 Hotend Offset
           if (cmd_seen('X')) setParameter(P_HOTEND_OFFSET, X_AXIS, cmd_float());
           if (cmd_seen('Y')) setParameter(P_HOTEND_OFFSET, Y_AXIS, cmd_float());
           if (cmd_seen('Z')) setParameter(P_HOTEND_OFFSET, Z_AXIS, cmd_float());
@@ -871,9 +871,9 @@ void sendQueueCmd(void)
           break;
         }
         case 914: //parse and store TMC Bump sensitivity values
-          if (cmd_seen('X')) setParameter(P_BUMPSENSITIVITY, X_STEPPER, cmd_float());
-          if (cmd_seen('Y')) setParameter(P_BUMPSENSITIVITY, Y_STEPPER, cmd_float());
-          if (cmd_seen('Z')) setParameter(P_BUMPSENSITIVITY, Z_STEPPER, cmd_float());
+          if (cmd_seen('X')) setParameter(P_BUMPSENSITIVITY, X_STEPPER, cmd_value());
+          if (cmd_seen('Y')) setParameter(P_BUMPSENSITIVITY, Y_STEPPER, cmd_value());
+          if (cmd_seen('Z')) setParameter(P_BUMPSENSITIVITY, Z_STEPPER, cmd_value());
           break;
       }
       break; //end parsing M-codes
