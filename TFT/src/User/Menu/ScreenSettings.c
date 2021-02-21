@@ -20,8 +20,8 @@ enum
 const char *const labelMarlinType[ITEM_MARLIN_TYPE_NUM] =
 {
   //item value text(only for custom value)
-  "128x64"
-  "20x4",
+  "128x64",
+  "20x4"
 };
 
 void menuLanguage(void)
