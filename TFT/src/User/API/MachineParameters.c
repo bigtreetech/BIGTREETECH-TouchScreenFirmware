@@ -22,7 +22,7 @@ const char * const parameter_Cmd[PARAMETERS_COUNT][STEPPER_COUNT] = {
     {"M900 T0 K%.2f\n", "M900 T1 K%.2f\n",  NULL,               NULL,               NULL},                //Linear Advance
     {"M906 X%.0f\n",    "M906 Y%.0f\n",     "M906 Z%.0f\n",     "M906 T0 E%.0f\n",  "M906 T1 E%.0f\n"},   //Current
     {"M914 X%.0f\n",    "M914 Y%.0f\n",     "M914 Z%.0f\n",     NULL,               NULL},                //bump Sensitivity
-    {"M913 X%.0f\n",    "M913 Y%.0f\n",     "M913 Z%.0f\n",     "M913 E%.0f\n",     "M913 T1 E%.0f\n"},   //TMC Hybrid Threshold Speed
+    {"M913 X%.0f\n",    "M913 Y%.0f\n",     "M913 Z%.0f\n",     "M913 T0 E%.0f\n",  "M913 T1 E%.0f\n"},   //TMC Hybrid Threshold Speed
     {"G29 S4 Z%.2f\n",  NULL,               NULL,               NULL,               NULL},                //MBL offset
 };
 
