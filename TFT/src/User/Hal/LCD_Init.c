@@ -654,6 +654,11 @@ void LCD_init_RGB(void)
   LCD_WR_DATA(0x00);
   LCD_WR_REG(0xF0);  // Set pixel data interface format
   LCD_WR_DATA(0x03); // 16-bit(565 format) data for 16bpp
+  LCD_WR_REG(0xBC);  // postprocessor for contrast/brightness/saturation.
+  LCD_WR_DATA(0x34); //   Contrast value (0-127). Set to 52 to reduce banding/flickering.
+  LCD_WR_DATA(0x77); //   Brightness value (0-127). Set to 119 to reduce banding/flickering.
+  LCD_WR_DATA(0x48); //   Saturation value (0-127).
+  LCD_WR_DATA(0x01); //   Enable/disable the postprocessor for contrast/brightness/saturation (1-0).
   LCD_WR_REG(0x29);  // Set display on
 
   LCD_WR_REG(0x36);  // Set address mode
