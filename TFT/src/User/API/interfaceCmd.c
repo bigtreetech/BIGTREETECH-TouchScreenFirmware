@@ -817,12 +817,14 @@ void sendQueueCmd(void)
         
         case 596: //M596 TMC StealthChop
         {
-          if(cmd_seen('X')) setParameter(P_STEALTH_CHOP, X_STEPPER, cmd_value());
-          if(cmd_seen('Y')) setParameter(P_STEALTH_CHOP, Y_STEPPER, cmd_value());
-          if(cmd_seen('Z')) setParameter(P_STEALTH_CHOP, Z_STEPPER, cmd_value());
+          uint8_t k = 0;
+          if(cmd_seen('S')) k = cmd_value();
+          if(cmd_seen('X')) setParameter(P_STEALTH_CHOP, X_STEPPER, k);
+          if(cmd_seen('Y')) setParameter(P_STEALTH_CHOP, Y_STEPPER, k);
+          if(cmd_seen('Z')) setParameter(P_STEALTH_CHOP, Z_STEPPER, k);
           uint8_t i = 0;
           if(cmd_seen('T')) i = cmd_value();
-          if(cmd_seen('E')) setParameter(P_STEALTH_CHOP, E_STEPPER + i, cmd_value());
+          if(cmd_seen('E')) setParameter(P_STEALTH_CHOP, E_STEPPER + i, k);
           break; 
         }
         case 851: //M851 Z probe offset
