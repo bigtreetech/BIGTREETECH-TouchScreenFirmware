@@ -45,7 +45,7 @@ void setCurrentAckSrc(uint8_t src)
   portSeen[src] = true;
 }
 
-static char ack_seen(const char * str)
+static bool ack_seen(const char * str)
 {
   uint16_t i;
   for (ack_index = 0; ack_index < ACK_MAX_SIZE && dmaL2Cache[ack_index] != 0; ack_index++)
@@ -61,7 +61,7 @@ static char ack_seen(const char * str)
   return false;
 }
 
-static char ack_cmp(const char *str)
+static bool ack_cmp(const char *str)
 {
   uint16_t i;
   for(i=0; i<ACK_MAX_SIZE && str[i]!=0 && dmaL2Cache[i]!=0; i++)
@@ -290,24 +290,6 @@ void parseACK(void)
     bool avoid_terminal = false;
     syncL2CacheFromL1(SERIAL_PORT);
     infoHost.rx_ok[SERIAL_PORT] = false;
-    // if(ack_seen("lcd"))
-    // {
-    //   uint16_t c = 64, b = 64,s = 64,d = 64;
-    //   if(ack_seen("cn"))
-    //     c = ack_value();
-    //   if(ack_seen("bt"))
-    //     b = ack_value();
-    //   if(ack_seen("st"))
-    //     s = ack_value();
-    //   if(ack_seen("de"))
-    //     d = ack_value();
-    //   storeCmd("rcvd C%i,B%i,S%i,S%i\n",c,b,s,d);
-    //   LCD_WR_REG(0xBC);
-    //   LCD_WR_DATA(c);// A[7:0] : Set the contrast value
-    //   LCD_WR_DATA(b);// B[7:0] : Set the brightness value
-    //   LCD_WR_DATA(s);// C[7:0] : Set the saturation value
-    //   LCD_WR_DATA(d);// D[0] : 0 Disable the postprocessor, 1 Enable the postprocessor
-    // }
     if (infoHost.connected == false) // Not connected to printer
     {
       // parse error information even though not connected to printer
@@ -445,6 +427,50 @@ void parseACK(void)
       else if (ack_seen("Count E:"))
       {
         coordinateSetExtruderActualSteps(ack_value());
+      }
+    // parse and store feed rate percentage
+      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW && ack_seen("factor: ")) ||
+               ack_seen("FR:"))
+      {
+        speedSetCurPercent(0,ack_value());
+        speedQuerySetWait(false);
+      }
+    // parse and store flow rate percentage
+      else if (ack_seen("Flow: "))
+      {
+        speedSetCurPercent(1,ack_value());
+        speedQuerySetWait(false);
+      }
+    // parse fan speed
+      else if (ack_seen("M106 P"))
+      {
+        uint8_t i = ack_value();
+        if (ack_seen("S"))
+        {
+          fanSetCurSpeed(i, ack_value());
+        }
+      }
+    // parse controller fan
+      else if (ack_seen("M710"))
+      {
+        uint8_t i = 0;
+        if (ack_seen("S"))
+        {
+          i = fanGetTypID(0,FAN_TYPE_CTRL_S);
+          fanSetCurSpeed(i, ack_value());
+          fanQuerySetWait(false);
+        }
+        if (ack_seen("I"))
+        {
+          i = fanGetTypID(0,FAN_TYPE_CTRL_I);
+          fanSetCurSpeed(i, ack_value());
+          fanQuerySetWait(false);
+        }
+      }
+    // parse "HOST_ACTION_COMMANDS"
+      else if (ack_seen("//action:"))
+      {
+        hostActionCommands();
       }
       else if (infoMachineSettings.onboard_sd_support == ENABLED && ack_seen("File opened: "))
       {
@@ -624,11 +650,7 @@ void parseACK(void)
       else if (ack_seen("Soft endstops"))
       {
         uint8_t curValue = infoMachineSettings.softwareEndstops;
-
-        if (ack_seen("ON"))
-          infoMachineSettings.softwareEndstops = ENABLED;
-        else
-          infoMachineSettings.softwareEndstops = DISABLED;
+        infoMachineSettings.softwareEndstops = ack_seen("ON");
 
         if (curValue != infoMachineSettings.softwareEndstops)  // send a notification only if status is changed
           addToast(DIALOG_TYPE_INFO, dmaL2Cache);
@@ -654,7 +676,7 @@ void parseACK(void)
         if (ack_seen("Z")) setParameter(P_PROBE_OFFSET, Z_STEPPER, ack_value());
       }
     // parse and store linear advance values
-      else if (ack_seen("M900 K"))
+      else if (ack_seen("M900"))
       {
         if (ack_seen("T"))
         {
@@ -913,51 +935,12 @@ void parseACK(void)
       {
         setParameter(P_MBL_OFFSET, 0, ack_value());
       }
-    // parse and store feed rate percentage
-      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW && ack_seen("factor: ")) ||
-               ack_seen("FR:"))
-      {
-        speedSetCurPercent(0,ack_value());
-        speedQuerySetWait(false);
-      }
-    // parse and store flow rate percentage
-      else if (ack_seen("Flow: "))
-      {
-        speedSetCurPercent(1,ack_value());
-        speedQuerySetWait(false);
-      }
     // parse and store flow rate percentage incase of RepRapFirmware
       else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && ack_seen("extruder"))
       {
         ack_index+=4;
         speedSetCurPercent(1,ack_value());
         speedQuerySetWait(false);
-      }
-    // parse fan speed
-      else if (ack_seen("M106 P"))
-      {
-        uint8_t i = ack_value();
-        if (ack_seen("S"))
-        {
-          fanSetCurSpeed(i, ack_value());
-        }
-      }
-    // parse controller fan
-      else if (ack_seen("M710"))
-      {
-        uint8_t i = 0;
-        if (ack_seen("S"))
-        {
-          i = fanGetTypID(0,FAN_TYPE_CTRL_S);
-          fanSetCurSpeed(i, ack_value());
-          fanQuerySetWait(false);
-        }
-        if (ack_seen("I"))
-        {
-          i = fanGetTypID(0,FAN_TYPE_CTRL_I);
-          fanSetCurSpeed(i, ack_value());
-          fanQuerySetWait(false);
-        }
       }
       else if (ack_seen("Case light: OFF"))
       {
@@ -1018,11 +1001,6 @@ void parseACK(void)
       else if (ack_seen("PID Autotune failed"))
       {
         pidUpdateStatus(false);
-      }
-    // parse "HOST_ACTION_COMMANDS"
-      else if (ack_seen("//action:"))
-      {
-        hostActionCommands();
       }
     // parse error messages & Echo messages
       else if (ack_seen(errormagic))
