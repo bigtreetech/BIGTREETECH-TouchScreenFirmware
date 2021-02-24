@@ -92,6 +92,18 @@ static float ack_second_value()
   }
 }
 
+void ack_values_sum(float *data)
+{
+  while (((dmaL2Cache[ack_index] < '0') || (dmaL2Cache[ack_index] > '9')) && dmaL2Cache[ack_index] != '\n')
+    ack_index++;
+  *data += ack_value();
+  while ((((dmaL2Cache[ack_index] >= '0') && (dmaL2Cache[ack_index] <= '9')) || 
+          (dmaL2Cache[ack_index] == '.'))  && (dmaL2Cache[ack_index] != '\n'))
+    ack_index++;
+  if (dmaL2Cache[ack_index] != '\n')
+    ack_values_sum(data);
+}
+
 void ackPopupInfo(const char *info)
 {
   bool show_dialog = true;
@@ -216,6 +228,7 @@ void hostActionCommands(void)
     else if (ack_seen("Reheating"))
     {
       hostAction.prompt_show = 0;
+      Serial_Puts(SERIAL_PORT, "M876 S0\n");  // auto-respond to a prompt request that is not shown on the TFT
     }
     else if (ack_seen("Nozzle Parked"))
     {
@@ -1011,21 +1024,15 @@ void parseACK(void)
       {
         if (ack_seen("L:"))
         {
-          while (((dmaL2Cache[ack_index] < '0') || (dmaL2Cache[ack_index] > '9')) && dmaL2Cache[ack_index] != '\n')
-            ack_index++;
-          infoPrintSummary.length = ack_value();
+          ack_values_sum(&infoPrintSummary.length);
         }
         else if (ack_seen("W:"))
         {
-          while (((dmaL2Cache[ack_index] < '0') || (dmaL2Cache[ack_index] > '9')) && dmaL2Cache[ack_index] != '\n')
-            ack_index++;
-          infoPrintSummary.weight = ack_value();
+          ack_values_sum(&infoPrintSummary.weight);
         }
         else if (ack_seen("C:"))
         {
-          while (((dmaL2Cache[ack_index] < '0') || (dmaL2Cache[ack_index] > '9')) && dmaL2Cache[ack_index] != '\n')
-            ack_index++;
-          infoPrintSummary.cost = ack_value();
+          ack_values_sum(&infoPrintSummary.cost);
         }
         hasFilamentData = true;
       }
