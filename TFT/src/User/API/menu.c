@@ -760,14 +760,17 @@ GUI_POINT getIconStartPoint(int index)
       }
       touchSound = true;
 
-      if (curMenuItems->items[tempKey].label.index == LABEL_BACK)  // check if Back button is held
+      if (tempKey != KEY_IDLE)
       {
-        BUZZER_PLAY(sound_ok);
-        backHeld = true;
-        infoMenu.menu[1] = infoMenu.menu[infoMenu.cur];
-        infoMenu.cur = 1;
-        if (infoMenu.menu[1] == menuPrinting)
-          clearInfoFile();
+        if (curMenuItems->items[tempKey].label.index == LABEL_BACK)  // check if Back button is held
+        {
+          BUZZER_PLAY(sound_ok);
+          backHeld = true;
+          infoMenu.menu[1] = infoMenu.menu[infoMenu.cur];
+          infoMenu.cur = 1;
+          if (infoMenu.menu[1] == menuPrinting)
+            clearInfoFile();
+        }
       }
 
       firstCheck = false;
