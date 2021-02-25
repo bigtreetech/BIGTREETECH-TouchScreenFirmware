@@ -455,18 +455,21 @@ void getGcodeFromFile(void)
 void breakAndContinue(void)
 {
   setRunoutAlarmFalse();
+  clearCmdQueue();
   Serial_Puts(SERIAL_PORT, "M108\n");
 }
 
 void resumeAndPurge(void)
 {
   setRunoutAlarmFalse();
+  clearCmdQueue();
   Serial_Puts(SERIAL_PORT, "M876 S0\n");
 }
 
 void resumeAndContinue(void)
 {
   setRunoutAlarmFalse();
+  clearCmdQueue();
   Serial_Puts(SERIAL_PORT, "M876 S1\n");
 }
 
