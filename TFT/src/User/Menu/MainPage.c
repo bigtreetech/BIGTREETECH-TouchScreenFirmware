@@ -61,7 +61,7 @@ void menuMain(void)
         break;
 
       case KEY_ICON_4:
-        infoMenu.menu[++infoMenu.cur] = menuSendGcode;
+        infoMenu.menu[++infoMenu.cur] = menuTerminal;
         break;
 
       case KEY_ICON_5:
