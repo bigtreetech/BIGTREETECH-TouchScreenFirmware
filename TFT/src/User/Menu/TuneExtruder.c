@@ -45,10 +45,10 @@ void showNewESteps(const float measured_length, const float old_esteps, float * 
   GUI_DispStringInPrect(&exhibitRect, (uint8_t *)tempstr);
 
   sprintf(tempstr, (char*)textSelect(LABEL_TUNE_EXT_OLD_ESTEP), old_esteps);
-  GUI_DispString(exhibitRect.x0, BYTE_HEIGHT * 5, (uint8_t *)tempstr);
+  GUI_DispString(exhibitRect.x0, exhibitRect.y1 - BYTE_HEIGHT, (uint8_t *)tempstr);
 
   sprintf(tempstr, (char*)textSelect(LABEL_TUNE_EXT_NEW_ESTEP), *new_esteps);
-  GUI_DispString(exhibitRect.x0,  BYTE_HEIGHT * 6, (uint8_t *)tempstr);
+  GUI_DispString(exhibitRect.x0,  exhibitRect.y1, (uint8_t *)tempstr);
 }
 
 static inline void extrudeFilament(void)
