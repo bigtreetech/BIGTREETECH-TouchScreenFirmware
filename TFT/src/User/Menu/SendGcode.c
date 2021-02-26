@@ -1,4 +1,4 @@
-#include "Terminal.h"
+#include "SendGcode.h"
 #include "includes.h"
 
 #define TERMINAL_MAX_CHAR (NOBEYOND(600, RAM_SIZE*45, 4800))
