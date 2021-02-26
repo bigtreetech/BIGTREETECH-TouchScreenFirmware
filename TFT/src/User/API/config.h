@@ -184,8 +184,8 @@ extern "C" {
 typedef struct
 {
   FIL file;
-  u32 size;  // total size of config file
-  u32 cur;   // total size of
+  uint32_t size;  // total size of config file
+  uint32_t cur;   // total size of
 } CONFIGFILE;
 
 typedef enum
@@ -207,12 +207,12 @@ bool readConfigFile(const char * path, void (*lineParser)(), uint16_t maxLineLen
 void parseConfigLine(void);
 void parseLangLine(void);
 
-void parseConfigKey(u16 index);
+void parseConfigKey(uint16_t index);
 void writeConfig(uint8_t* dataBytes, uint16_t numBytes, uint32_t addr, uint32_t maxSize);
 void saveConfig(void);
 void resetConfig(void);
 
-void drawProgressPage(u8 * title);
+void drawProgressPage(uint8_t * title);
 void drawProgress(void);
 void showError(CONFIG_STATS stat);
 

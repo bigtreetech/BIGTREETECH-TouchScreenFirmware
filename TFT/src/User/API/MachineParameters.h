@@ -20,7 +20,7 @@ typedef enum
   P_FWRETRACT,
   P_FWRECOVER,
   P_AUTO_RETRACT,
-  P_OFFSET_TOOL,
+  P_HOTEND_OFFSET,
   P_ABL_STATE,
   P_PROBE_OFFSET,
   P_LIN_ADV,
@@ -67,7 +67,7 @@ typedef struct
   float FwRetract[4];
   float FwRecover[4];
   float AutoRetract[1];
-  float OffsetTool[3];
+  float HotendOffset[3];
   float ABLState[2];
   float ProbeOffset[3];
   float LinAdvance[2];
@@ -93,16 +93,16 @@ void setParameter(PARAMETER_NAME name, uint8_t index, float val);
 uint8_t getParameterElementCount(PARAMETER_NAME para);
 
 //Get type of value a parameter element holds
-VAL_TYPE getParameterValType(PARAMETER_NAME para, u8 index);
+VAL_TYPE getParameterValType(PARAMETER_NAME para, uint8_t index);
 
 //set status of dual stepper for an axis
-void setDualStepperStatus(u8 index, bool status);
+void setDualStepperStatus(uint8_t index, bool status);
 
 //get status of dual stepper for an axis
-bool getDualstepperStatus(u8 index);
+bool getDualstepperStatus(uint8_t index);
 
 //send parameter cmd (Parameter value gets updated after the cmd passes through the cmd cache)
-void sendParameterCmd(PARAMETER_NAME para_index, u8 stepper_index, float Value);
+void sendParameterCmd(PARAMETER_NAME para_index, uint8_t stepper_index, float Value);
 
 //Save parameter setting to eeprom
 void saveEepromSettings(void);

@@ -1,7 +1,7 @@
 #include "MeshTuner.h"
 #include "includes.h"
 
-static u8 curUnit_index = 0;
+static uint8_t curUnit_index = 0;
 
 /* Init mesh point */
 static inline void meshInitPoint(uint16_t col, uint16_t row, float value)
@@ -37,7 +37,7 @@ void meshDrawHeader(uint16_t col, uint16_t row)
   sprintf(tempstr, "I: %d  J: %d", col, row);
 
   GUI_SetColor(infoSettings.sd_reminder_color);
-  GUI_DispString(exhibitRect.x0, exhibitRect.y0, (u8 *) tempstr);
+  GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *) tempstr);
   GUI_SetColor(infoSettings.font_color);
 }
 
@@ -48,7 +48,7 @@ void meshDrawValue(float val)
   sprintf(tempstr, "  %.3f  ", val);
 
   setLargeFont(true);
-  GUI_DispStringInPrect(&exhibitRect, (u8 *) tempstr);
+  GUI_DispStringInPrect(&exhibitRect, (uint8_t *) tempstr);
   setLargeFont(false);
 }
 

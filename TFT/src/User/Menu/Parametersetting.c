@@ -1,9 +1,9 @@
 #include "Parametersetting.h"
 #include "includes.h"
 
-static u8 ps_cur_page = 0;
-static u8 cur_parameter = 0;
-static u8 total_pages = 1;
+static uint8_t ps_cur_page = 0;
+static uint8_t cur_parameter = 0;
+static uint8_t total_pages = 1;
 
 bool parametersChanged = false;
 
@@ -19,7 +19,7 @@ const LISTITEM parametertypes[P_ITEMSCOUNT] = {
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_FWRETRACT,            LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_FWRECOVER,            LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_RETRACT_AUTO,         LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_OFFSET_TOOL,          LABEL_BACKGROUND},
+  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_HOTEND_OFFSET,        LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_ABL,                  LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_PROBE_OFFSET,         LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_LIN_ADVANCE,          LABEL_BACKGROUND},
@@ -110,7 +110,7 @@ void menuShowParameter(void)
         parameter_menuitems.items[i].titlelabel = retract_auto_ID[i];
         break;
 
-      case P_OFFSET_TOOL:
+      case P_HOTEND_OFFSET:
         parameter_menuitems.items[X_AXIS].titlelabel.address = "X";
         parameter_menuitems.items[Y_AXIS].titlelabel.address = "Y";
         parameter_menuitems.items[Z_AXIS].titlelabel.address = "Z";
@@ -437,7 +437,7 @@ int16_t drawTemperatureStatus(void)
     x_offset -= GUI_StrPixelWidth((uint8_t *)tempstr);
     GUI_StrPixelWidth(LABEL_10_PERCENT);
 
-    GUI_DispString(x_offset, start_y, (u8 *)tempstr); // value
+    GUI_DispString(x_offset, start_y, (uint8_t *)tempstr); // value
     x_offset -= GLOBALICON_INTERVAL;
     GUI_ClearRect(x_offset, start_y, x_offset + GLOBALICON_INTERVAL, start_y + GLOBALICON_HEIGHT);
     x_offset -= GLOBALICON_WIDTH;

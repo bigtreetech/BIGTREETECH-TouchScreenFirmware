@@ -1,6 +1,6 @@
 #include "includes.h"
 
-static u8 fac_us=0;
+static uint8_t fac_us=0;
 
 void Delay_init(void)
 {
@@ -8,9 +8,9 @@ void Delay_init(void)
   fac_us=mcuClocks.rccClocks.HCLK_Frequency/(8*1000000); // 8 Frequency after frequency division Unit M is 1us times
 }
 
-void Delay_us(u32 us)					//Delay is less than 1800 * 1000us
+void Delay_us(uint32_t us)					//Delay is less than 1800 * 1000us
 {
-  u32 temp;
+  uint32_t temp;
   SysTick->LOAD=us*fac_us;  		//Loading times, 1us fac_us times, us microsecond us * fac_us times
   SysTick->VAL=0x00;						//Clear counter
   SysTick->CTRL=0x01;						//Start countdown
@@ -22,9 +22,9 @@ void Delay_us(u32 us)					//Delay is less than 1800 * 1000us
   SysTick->VAL=0x00;						//Clear counter
 }
 
-void Delay_ms(u16 ms)
+void Delay_ms(uint16_t ms)
 {
-  for (u16 i = 0; i < ms; i++) {
+  for (uint16_t i = 0; i < ms; i++) {
     Delay_us(1000);
   }
 }

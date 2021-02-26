@@ -237,7 +237,7 @@ static const void (* curMenuRedrawHandle)(void) = NULL; //current custom menu
 static MENU_TYPE menuType = MENU_TYPE_ICON;
 static LABEL * curTitle = NULL;
 static const GUI_RECT *curRect = NULL; //current menu layout grid
-static u16 curRectCount = 0;    //current menu layout rect count
+static uint16_t curRectCount = 0;    //current menu layout rect count
 
 static REMINDER reminder = {{0, 0, LCD_WIDTH, TITLE_END_Y}, 0, STATUS_UNCONNECT, LABEL_UNCONNECTED};
 static REMINDER volumeReminder = {{0, 0, LCD_WIDTH, TITLE_END_Y}, 0, STATUS_IDLE, LABEL_BACKGROUND};
@@ -318,7 +318,7 @@ MENU_TYPE getMenuType(void)
   return menuType;
 }
 
-void setMenu(MENU_TYPE menu_type, LABEL * title, u16 rectCount, const GUI_RECT * menuRect, void(*action_redraw)(u8 position, u8 is_press), void (* menu_redraw)(void))
+void setMenu(MENU_TYPE menu_type, LABEL * title, uint16_t rectCount, const GUI_RECT * menuRect, void(*action_redraw)(uint8_t position, uint8_t is_press), void (* menu_redraw)(void))
 {
   menuType = menu_type;
   curRect = menuRect;
@@ -519,7 +519,7 @@ void menuReDrawCurTitle(void)
 //Draw the entire interface
 void menuDrawPage(const MENUITEMS *menuItems)
 {
-  u8 i = 0;
+  uint8_t i = 0;
   menuType = MENU_TYPE_ICON;
   curMenuItems = menuItems;
   TSC_ReDrawIcon = itemDrawIconPress;
@@ -540,7 +540,7 @@ void menuDrawPage(const MENUITEMS *menuItems)
 //Draw the entire interface
 void menuDrawListPage(const LISTITEMS *listItems)
 {
-  u8 i = 0;
+  uint8_t i = 0;
   menuType = MENU_TYPE_LISTVIEW;
   curListItems = listItems;
   TSC_ReDrawIcon = itemDrawIconPress;
@@ -618,7 +618,7 @@ void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, const ITEM * item)
 } //showLiveInfo
 
 //When there is a button value, the icon changes color and redraws
-void itemDrawIconPress(u8 position, u8 is_press)
+void itemDrawIconPress(uint8_t position, uint8_t is_press)
 {
   if (position > KEY_ICON_7) return;
 
@@ -817,7 +817,7 @@ void loopBackEnd(void)
 #endif
 
 #if LCD_ENCODER_SUPPORT
-  #if defined(ST7920_SPI) || defined(LCD2004_simulator)
+  #ifdef HAS_EMULATOR
   if (infoMenu.menu[infoMenu.cur] != menuMarlinMode)
   #endif
   {
@@ -825,7 +825,7 @@ void loopBackEnd(void)
   }
 #endif
 
-#if defined(ST7920_SPI) || defined(LCD2004_simulator)
+#ifdef HAS_EMULATOR
   loopCheckMode();
 #endif
 

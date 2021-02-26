@@ -355,7 +355,7 @@ void abortPrinting(void)
 // wait for cool down, in the meantime, you can shut down by force
 void shutdown(void)
 {
-  for(u8 i = 0; i < infoSettings.fan_count; i++)
+  for(uint8_t i = 0; i < infoSettings.fan_count; i++)
   {
     if (fanIsType(i, FAN_TYPE_F)) mustStoreCmd("%s S0\n", fanCmd[i]);
   }
@@ -383,11 +383,11 @@ void startShutdown(void)
   LABELCHAR(tempbody, LABEL_WAIT_TEMP_SHUT_DOWN);
   sprintf(tempstr, tempbody, infoSettings.auto_off_temp);
 
-  for(u8 i = 0; i < infoSettings.fan_count; i++)
+  for(uint8_t i = 0; i < infoSettings.fan_count; i++)
   {
     if (fanIsType(i,FAN_TYPE_F)) mustStoreCmd("%s S255\n", fanCmd[i]);
   }
-  setDialogText(LABEL_SHUT_DOWN, (u8 *)tempstr, LABEL_FORCE_SHUT_DOWN, LABEL_CANCEL);
+  setDialogText(LABEL_SHUT_DOWN, (uint8_t *)tempstr, LABEL_FORCE_SHUT_DOWN, LABEL_CANCEL);
   showDialog(DIALOG_TYPE_INFO, shutdown, NULL, shutdownLoop);
 }
 
@@ -397,7 +397,7 @@ void getGcodeFromFile(void)
   bool    sd_comment_mode = false;
   bool    sd_comment_space = true;
   char    sd_char;
-  u8      sd_count = 0;
+  uint8_t      sd_count = 0;
   UINT    br = 0;
 
   if (isPrinting() == false || infoFile.source >= BOARD_SD)  return;
@@ -484,7 +484,7 @@ bool hasPrintingMenu(void)
 
 void loopCheckPrinting(void)
 {
-  #if defined(ST7920_SPI) || defined(LCD2004_simulator)
+  #ifdef HAS_EMULATOR
     if (infoMenu.menu[infoMenu.cur] == menuMarlinMode) return;
   #endif
 

@@ -1,9 +1,9 @@
-#include "ST7920_Simulator.h"
+#include "ST7920_Emulator.h"
 #include "includes.h"
 #include "GUI.h"
 #include "../../Configuration.h"
 
-#ifdef ST7920_SPI
+#ifdef ST7920_EMULATOR
 // CGRAM buffer
 uint8_t ST7920_CGRAM[64][2]; // [64*2] = [4 * 16*2*8], means 4 * [16*16] bitmap font,
 

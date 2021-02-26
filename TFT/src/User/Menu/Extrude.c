@@ -1,9 +1,9 @@
 #include "Extrude.h"
 #include "includes.h"
 
-static u8 curExtruder_index = 0;
-static u8 extlenSteps_index = 1;
-static u8 itemSpeed_index = 1;
+static uint8_t curExtruder_index = 0;
+static uint8_t extlenSteps_index = 1;
+static uint8_t itemSpeed_index = 1;
 static float extrudeCoordinate = 0.0f;
 const char *const tool_change[] = TOOL_CHANGE;
 const char *const extruderDisplayID[] = EXTRUDER_ID;
@@ -15,12 +15,12 @@ void extrudeCoordinateReDraw(bool skip_header)
   if (!skip_header)
   {
     sprintf(tempstr, "%-15s", extruderDisplayID[curExtruder_index]);
-    GUI_DispString(exhibitRect.x0, exhibitRect.y0, (u8 *)tempstr);
+    GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *)tempstr);
   }
 
   sprintf(tempstr, "  %.2f  ", extrudeCoordinate);
   setLargeFont(true);
-  GUI_DispStringInPrect(&exhibitRect, (u8 *)tempstr);
+  GUI_DispStringInPrect(&exhibitRect, (uint8_t *)tempstr);
   setLargeFont(false);
 }
 
@@ -90,7 +90,7 @@ void menuExtrude(void)
           char titlestr[30];
           sprintf(titlestr, "Min:%i | Max:%i", (extlenSteps[COUNT(extlenSteps) - 1]) * -1, extlenSteps[COUNT(extlenSteps) - 1]);
 
-          float val = numPadFloat((u8 *) titlestr, 0, 0, true);
+          float val = numPadFloat((uint8_t *) titlestr, 0, 0, true);
           eTemp += val;
 
           menuDrawPage(&extrudeItems);

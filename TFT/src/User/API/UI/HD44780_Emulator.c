@@ -1,10 +1,10 @@
-#include "HD44780_Simulator.h"
+#include "HD44780_Emulator.h"
 #include "includes.h"
 #include "GUI.h"
 #include "../../Configuration.h"
 #include "HD44780.h"
 
-#ifdef LCD2004_simulator
+#ifdef LCD2004_EMULATOR
 uint8_t HD44780_CGRAM[8][8]; // [64*2] = [4 * 16*2*8], means 4 * [16*16] bitmap font,
 
 HD44780_PIXEL HD44780 = {

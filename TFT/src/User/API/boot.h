@@ -89,18 +89,18 @@ typedef enum
 
 typedef union
 {
-  u16 color;
+  uint16_t color;
   struct
   {
-    u16  b:5;
-    u16  g:6;
-    u16  r:5;
+    uint16_t  b:5;
+    uint16_t  g:6;
+    uint16_t  r:5;
   }RGB;
 }GUI_COLOR;
 
 void scanUpdates(void);
-void dispIconFail(u8 *lbl, BMPUPDATE_STAT bmpState);
-BMPUPDATE_STAT bmpDecode(char *bmp, u32 addr);
+void dispIconFail(uint8_t *lbl, BMPUPDATE_STAT bmpState);
+BMPUPDATE_STAT bmpDecode(char *bmp, uint32_t addr);
 
 #ifdef __cplusplus
 }

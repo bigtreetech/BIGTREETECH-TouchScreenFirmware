@@ -19,8 +19,8 @@ const MENUITEMS loadUnloadItems = {
    {ICON_BACK,                    LABEL_BACK},}
 };
 
-static u8 curExt_index = 0;
-static u8 lastcmd = NONE;
+static uint8_t curExt_index = 0;
+static uint8_t lastcmd = NONE;
 
 void extruderIdReDraw(void)
 {
@@ -28,7 +28,7 @@ void extruderIdReDraw(void)
 
   sprintf(tempstr, "%2s: %3d/%-3d", heatDisplayID[curExt_index], heatGetCurrentTemp(curExt_index), heatGetTargetTemp(curExt_index));
   setLargeFont(true);
-  GUI_DispStringInPrect(&exhibitRect, (u8 *)tempstr);
+  GUI_DispStringInPrect(&exhibitRect, (uint8_t *)tempstr);
   setLargeFont(false);
 }
 

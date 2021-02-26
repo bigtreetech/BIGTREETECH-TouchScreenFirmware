@@ -11,8 +11,8 @@ static int16_t itemPercentTypeTitle[SPEED_NUM] = {
   LABEL_PERCENTAGE_SPEED,     LABEL_PERCENTAGE_FLOW
 };
 
-static u8 item_index = 0;
-static u8 percentSteps_index = 0;
+static uint8_t item_index = 0;
+static uint8_t percentSteps_index = 0;
 
 void setSpeedItemIndex(uint8_t index)
 {
@@ -82,7 +82,7 @@ void menuSpeed(void)
           char titlestr[30];
           sprintf(titlestr, "Min:%i | Max:%i", SPEED_MIN, SPEED_MAX);
 
-          u16 val = numPadInt((u8 *) titlestr, speedGetCurPercent(item_index), 100, false);
+          uint16_t val = numPadInt((uint8_t *) titlestr, speedGetCurPercent(item_index), 100, false);
           val = NOBEYOND(SPEED_MIN, val, SPEED_MAX);
 
           if (val != speedGetSetPercent(item_index))
