@@ -20,9 +20,9 @@ const MENUITEMS pidWaitItems = {
 const char *const pidCmd[] = PID_CMD;
 static int16_t pidHeaterTarget[MAX_HEATER_COUNT] = {0};
 static uint8_t curToolIndex = NOZZLE0;
-static u8 degreeSteps_index = 1;
+static uint8_t degreeSteps_index = 1;
 u32 pidTimeout = 0;
-u8 pidCounter = 0;
+uint8_t pidCounter = 0;
 bool pidSucceeded = false;
 bool pidRunning = false;
 bool pidInitialized = false;
@@ -69,12 +69,12 @@ void pidUpdateStatus(bool succeeded)
       {
         sprintf(&tempMsg[strlen(tempMsg)], "\n %s", textSelect(LABEL_EEPROM_SAVE_INFO));
 
-        setDialogText(LABEL_PID_TITLE, (u8 *) tempMsg, LABEL_CONFIRM, LABEL_CANCEL);
+        setDialogText(LABEL_PID_TITLE, (uint8_t *) tempMsg, LABEL_CONFIRM, LABEL_CANCEL);
         showDialog(DIALOG_TYPE_SUCCESS, saveEepromSettings, NULL, NULL);
       }
       else
       {
-        popupReminder(DIALOG_TYPE_SUCCESS, LABEL_PID_TITLE, (u8 *) tempMsg);
+        popupReminder(DIALOG_TYPE_SUCCESS, LABEL_PID_TITLE, (uint8_t *) tempMsg);
       }
     }
     else  // if at least a PID process failed, provide an error dialog
@@ -93,13 +93,13 @@ static inline void pidCheckTimeout(void)
     if (OS_GetTimeMs() > pidTimeout)
     {
       pidRunning = false;
-    //  u8 pidCounter = 0;  // we voluntary don't reset (commented out the code) also pidCounter and pidSucceeded to let the
+    //  uint8_t pidCounter = 0;  // we voluntary don't reset (commented out the code) also pidCounter and pidSucceeded to let the
     //  pidSucceeded = false;  // pidUpdateStatus function allow to handle status updates eventually arriving after the timeout
       LABELCHAR(tempMsg, LABEL_TIMEOUT_REACHED);
 
       sprintf(&tempMsg[strlen(tempMsg)], "\n %s", textSelect(LABEL_PROCESS_ABORTED));
       BUZZER_PLAY(sound_error);
-      popupReminder(DIALOG_TYPE_ERROR, LABEL_PID_TITLE, (u8 *) tempMsg);
+      popupReminder(DIALOG_TYPE_ERROR, LABEL_PID_TITLE, (uint8_t *) tempMsg);
     }
   }
 }
@@ -180,12 +180,12 @@ void pidTemperatureReDraw(bool skip_header)
   if (!skip_header)
   {
     sprintf(tempstr, "%s    ", heatDisplayID[curToolIndex]);
-    GUI_DispString(exhibitRect.x0, exhibitRect.y0, (u8 *) tempstr);
+    GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *) tempstr);
   }
 
   sprintf(tempstr, "  %d  ", pidHeaterTarget[curToolIndex]);
   setLargeFont(true);
-  GUI_DispStringInPrect(&exhibitRect, (u8 *) tempstr);
+  GUI_DispStringInPrect(&exhibitRect, (uint8_t *) tempstr);
   setLargeFont(false);
 }
 
@@ -247,7 +247,7 @@ void menuPid(void)
         char titlestr[30];
         sprintf(titlestr, "Min:0 | Max:%i", infoSettings.max_temp[curToolIndex]);
 
-        int32_t val = numPadInt((u8 *) titlestr, pidHeaterTarget[curToolIndex], 0, false);
+        int32_t val = numPadInt((uint8_t *) titlestr, pidHeaterTarget[curToolIndex], 0, false);
         val = NOBEYOND(0, val, infoSettings.max_temp[curToolIndex]);
 
         if (val != pidHeaterTarget[curToolIndex])  // if value is different than target change it

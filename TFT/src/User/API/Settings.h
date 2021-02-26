@@ -29,12 +29,12 @@ typedef enum
 // Config version support
 // change if new elements/keywords are added/removed/changed in the configuration.h Format YYYYMMDD
 // this number should match CONFIG_VERSION in configuration.h
-#define CONFIG_SUPPPORT 20210124
+#define CONFIG_SUPPPORT 20210217
 
 #define FONT_FLASH_SIGN       20200908 //(YYYYMMDD) change if fonts require updating
-#define CONFIG_FLASH_SIGN     20210130 //(YYYYMMDD) change if any keyword(s) in config.ini is added or removed
-#define LANGUAGE_FLASH_SIGN   20210130 //(YYYYMMDD) change if any keyword(s) in language pack is added or removed
-#define ICON_FLASH_SIGN       20210130 //(YYYYMMDD) change if any icon(s) is added or removed
+#define CONFIG_FLASH_SIGN     20210217 //(YYYYMMDD) change if any keyword(s) in config.ini is added or removed
+#define LANGUAGE_FLASH_SIGN   20210217 //(YYYYMMDD) change if any keyword(s) in language pack is added or removed
+#define ICON_FLASH_SIGN       20210217 //(YYYYMMDD) change if any icon(s) is added or removed
 
 #define FONT_CHECK_SIGN       (FONT_FLASH_SIGN + WORD_UNICODE)
 #define CONFIG_CHECK_SIGN     (CONFIG_FLASH_SIGN + STRINGS_STORE_ADDR)
@@ -75,8 +75,8 @@ typedef enum
 
 typedef enum
 {
-  LCD2004 = 0,
-  LCD12864
+  LCD12864 = 0,
+  LCD2004,
 } MARLIN_MODE_TYPE;
 
 typedef struct
@@ -253,17 +253,17 @@ typedef struct
 extern SETTINGS infoSettings;
 extern MACHINESETTINGS infoMachineSettings;
 
-extern const u16 default_max_temp[];
-extern const u16 default_max_fanPWM[];
-extern const u16 default_size_min[];
-extern const u16 default_size_max[];
-extern const u16 default_move_speed[];
-extern const u16 default_ext_speed[];
-extern const u16 default_level_speed[];
-extern const u16 default_pause_speed[];
-extern const u16 default_preheat_ext[];
-extern const u16 default_preheat_bed[];
-extern const u8 default_custom_enabled[];
+extern const uint16_t default_max_temp[];
+extern const uint16_t default_max_fanPWM[];
+extern const uint16_t default_size_min[];
+extern const uint16_t default_size_max[];
+extern const uint16_t default_move_speed[];
+extern const uint16_t default_ext_speed[];
+extern const uint16_t default_level_speed[];
+extern const uint16_t default_pause_speed[];
+extern const uint16_t default_preheat_ext[];
+extern const uint16_t default_preheat_bed[];
+extern const uint8_t default_custom_enabled[];
 
 void initMachineSetting(void);
 void infoSettingsReset(void);

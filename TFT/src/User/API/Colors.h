@@ -50,7 +50,7 @@ LCD_DARKGRAY,
 LCD_COLOR_COUNT
 }LCD_COLOR;
 
-extern const u16 lcd_colors[LCD_COLOR_COUNT];
+extern const uint16_t lcd_colors[LCD_COLOR_COUNT];
 extern const LABEL lcd_color_names[LCD_COLOR_COUNT];
 
 #ifdef __cplusplus

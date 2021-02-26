@@ -80,7 +80,7 @@
 
 //
 //----------------------------------------------------------------------------
-// How to setup Marlin mode (LCD12864 Simulator) on MKS Gen L V1.0 or SKR V1.3
+// How to setup Marlin mode (LCD12864 Emulator) on MKS Gen L V1.0 or SKR V1.3
 //----------------------------------------------------------------------------
 //
 // In order to use Marlin mode (12864 emulation mode), you need to make changes on both the HW and FW of the MKS TFT board
@@ -172,28 +172,35 @@
 //   #define LCD_PINS_D4             EXPA2_09_PIN  // EXPA1_05_PIN  //CLK
 //
 
-// ST7920 Simulator SPI pins
-#define ST7920_SPI    _SPI3            // uncomment to enable Marlin mode
-
-// Buzzer support
-#define BUZZER_PIN    PA2
-
-// Marlin mode + LCD Encoder support
-#ifdef ST7920_SPI
-  #define SPI3_PIN_SMART_USAGE         // if enabled, it avoids any SPI3 CS pin usage and free the MISO (PB4 pin) for encoder pins
-
-  #define LCD_ENCA_PIN  PA13           // map ENCA pin to JTAG DIO pin
-  #define LCD_ENCB_PIN  PA14           // map ENCB pin to JTAG CLK pin
-
-#ifdef SPI3_PIN_SMART_USAGE
-  #define LCD_BTN_PIN   PB4            // map BTN pin to PB4 pin
-#else
-  #define LCD_BTN_PIN   PB0            // map BTN pin to PB0 pin
-
-  #define SPI3_CS_PIN   PB1            // CS pin used for SPI3 slave mode mapped to PB1 pin
+// ST7920 Emulator SPI pins
+#define ST7920_EMULATOR  // uncomment to enable Marlin mode
+#ifdef ST7920_EMULATOR
+  #define ST7920_SPI _SPI3
 #endif
 
-  #define DISABLE_DEBUG                // free JTAG(PB3/PB4) for SPI3 and free SWDIO PA13 PA14 for encoder pins
+#if defined(ST7920_EMULATOR) || defined(LCD2004_EMULATOR)
+  #define HAS_EMULATOR
+#endif
+
+// Buzzer support
+#define BUZZER_PIN PA2
+
+// Marlin mode + LCD Encoder support
+#ifdef ST7920_EMULATOR
+  #define SPI3_PIN_SMART_USAGE  // if enabled, it avoids any SPI3 CS pin usage and free the MISO (PB4 pin) for encoder pins
+
+  #define LCD_ENCA_PIN PA13  // map ENCA pin to JTAG DIO pin
+  #define LCD_ENCB_PIN PA14  // map ENCB pin to JTAG CLK pin
+
+  #ifdef SPI3_PIN_SMART_USAGE
+    #define LCD_BTN_PIN PB4  // map BTN pin to PB4 pin
+  #else
+    #define LCD_BTN_PIN PB0  // map BTN pin to PB0 pin
+
+    #define SPI3_CS_PIN PB1  // CS pin used for SPI3 slave mode mapped to PB1 pin
+  #endif
+
+  #define DISABLE_DEBUG  // free JTAG(PB3/PB4) for SPI3 and free SWDIO PA13 PA14 for encoder pins
 #endif
 
 // U disk support
@@ -201,7 +208,7 @@
 #define USE_USB_OTG_FS
 
 // Extend function(PS_ON, filament_detect)
-#if !defined(ST7920_SPI) || defined(SPI3_PIN_SMART_USAGE)
+#if !defined(ST7920_EMULATOR) || defined(SPI3_PIN_SMART_USAGE)
   #ifndef PS_ON_PIN
     #define PS_ON_PIN      PB0
   #endif

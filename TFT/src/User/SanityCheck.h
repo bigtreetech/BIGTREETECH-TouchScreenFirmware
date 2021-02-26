@@ -24,7 +24,7 @@
     #error "invalid Baudrate index. Pleas select a value only from options provided in configuration.h"
 #endif
 
-#ifdef ST7920_SPI
+#ifdef ST7920_EMULATOR
     #ifdef CLEAN_MODE_SWITCHING_SUPPORT
     #error "CLEAN_MODE_SWITCHING_SUPPORT is now SERIAL_ALWAYS_ON. Please update your configuration."
     #endif
@@ -124,8 +124,8 @@
   #error "CANCEL_PRINT_GCODE is now PRINT_CANCEL_GCODE. Please update your Configuration.h file."
 #endif
 
-#ifndef ST7920_BANNER_TEXT
-    #define ST7920_BANNER_TEXT "LCD12864 Simulator"
+#ifndef MARLIN_BANNER_TEXT
+    #define MARLIN_BANNER_TEXT "Marlin Mode"
 #endif
 
 #ifdef TOOL_NUM

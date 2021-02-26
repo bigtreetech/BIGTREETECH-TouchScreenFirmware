@@ -4,18 +4,18 @@
 SETTINGS infoSettings;
 MACHINESETTINGS infoMachineSettings;
 
-const u16 default_max_temp[]      = HEAT_MAX_TEMP;
-const u16 default_max_fanPWM[]    = FAN_MAX_PWM;
-const u16 default_size_min[]      = {X_MIN_POS,Y_MIN_POS,Z_MIN_POS};
-const u16 default_size_max[]      = {X_MAX_POS,Y_MAX_POS,Z_MAX_POS};
-const u16 default_xy_speed[]      = {SPEED_XY_SLOW, SPEED_XY_NORMAL, SPEED_XY_FAST};
-const u16 default_z_speed[]       = {SPEED_Z_SLOW, SPEED_Z_NORMAL, SPEED_Z_FAST};
-const u16 default_ext_speed[]     = {EXTRUDE_SLOW_SPEED, EXTRUDE_NORMAL_SPEED, EXTRUDE_FAST_SPEED};
-const u16 default_level_speed[]   = {LEVELING_POINT_XY_FEEDRATE, LEVELING_POINT_Z_FEEDRATE};
-const u16 default_pause_speed[]   = {NOZZLE_PAUSE_XY_FEEDRATE, NOZZLE_PAUSE_Z_FEEDRATE, NOZZLE_PAUSE_E_FEEDRATE};
-const u16 default_preheat_ext[]   = PREHEAT_HOTEND;
-const u16 default_preheat_bed[]   = PREHEAT_BED;
-const u8 default_custom_enabled[] = CUSTOM_GCODE_ENABLED;
+const uint16_t default_max_temp[]      = HEAT_MAX_TEMP;
+const uint16_t default_max_fanPWM[]    = FAN_MAX_PWM;
+const uint16_t default_size_min[]      = {X_MIN_POS,Y_MIN_POS,Z_MIN_POS};
+const uint16_t default_size_max[]      = {X_MAX_POS,Y_MAX_POS,Z_MAX_POS};
+const uint16_t default_xy_speed[]      = {SPEED_XY_SLOW, SPEED_XY_NORMAL, SPEED_XY_FAST};
+const uint16_t default_z_speed[]       = {SPEED_Z_SLOW, SPEED_Z_NORMAL, SPEED_Z_FAST};
+const uint16_t default_ext_speed[]     = {EXTRUDE_SLOW_SPEED, EXTRUDE_NORMAL_SPEED, EXTRUDE_FAST_SPEED};
+const uint16_t default_level_speed[]   = {LEVELING_POINT_XY_FEEDRATE, LEVELING_POINT_Z_FEEDRATE};
+const uint16_t default_pause_speed[]   = {NOZZLE_PAUSE_XY_FEEDRATE, NOZZLE_PAUSE_Z_FEEDRATE, NOZZLE_PAUSE_E_FEEDRATE};
+const uint16_t default_preheat_ext[]   = PREHEAT_HOTEND;
+const uint16_t default_preheat_bed[]   = PREHEAT_BED;
+const uint8_t default_custom_enabled[] = CUSTOM_GCODE_ENABLED;
 
 // Reset settings data
 void infoSettingsReset(void)
@@ -48,7 +48,7 @@ void infoSettingsReset(void)
   infoSettings.marlin_mode_bg_color   = lcd_colors[MARLIN_BKCOLOR];
   infoSettings.marlin_mode_font_color = lcd_colors[MARLIN_FNCOLOR];
   infoSettings.marlin_mode_showtitle  = MARLIN_SHOW_BANNER;
-  infoSettings.marlin_mode_fullscreen = DEFAULT_ST7920_FULLSCREEN_MODE;
+  infoSettings.marlin_mode_fullscreen = MARLIN_MODE_FULLSCREEN;
   infoSettings.marlin_type            = LCD12864;
 
 // Printer / Machine Settings
