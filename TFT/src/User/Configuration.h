@@ -436,13 +436,13 @@
  * QWERTY/QWERTZ keyboard layout
  * Keyboard layout for Terminal Keyboard (Only for TFT70 V3.0).
  *
- * Options: [0: Default:, 1: qwerty, 2: qwertz, 3: azerty]
+ * Options: [0: qwerty, 1: qwertz, 2: azerty]
  *  default: The keyboard has an alphabetically order.
  *  qwerty: The typically keyboard Layout for english.
  *  qwertz: The typically keyboard Layout for german.
  *  azerty: The typically keyboard Layout for french.
  */
-#define TERMINAL_KEYBOARD_LAYOUT 1  // Default: 0
+#define TERMINAL_KEYBOARD_LAYOUT 2  // Default: 0
 
 
 //===========================================================================
