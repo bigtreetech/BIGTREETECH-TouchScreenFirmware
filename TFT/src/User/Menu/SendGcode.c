@@ -77,11 +77,11 @@ typedef enum
 #define LAYOUT_3_COL_COUNT 10
 #define LAYOUT_3_ROW_COUNT  6
 
-#if LCD_WIDTH <= 480  // number of columns and rows is based on LCD display resolution
+#if LCD_WIDTH < 480  // number of columns and rows is based on LCD display resolution
   #define KB_TYPE_STANDARD
   #define KB_COL_COUNT LAYOUT_1_COL_COUNT
   #define KB_ROW_COUNT LAYOUT_1_ROW_COUNT
-#elif LCD_WIDTH <= 800
+#elif LCD_WIDTH < 800
   #define KB_TYPE_EXTENDED
   #define KB_COL_COUNT LAYOUT_2_COL_COUNT
   #define KB_ROW_COUNT LAYOUT_2_ROW_COUNT
@@ -91,9 +91,9 @@ typedef enum
   #define KB_ROW_COUNT LAYOUT_3_ROW_COUNT
 #endif
 
-#define LAYOUT_QWERTY 1
-#define LAYOUT_QWERTZ 2
-#define LAYOUT_AZERTY 3
+#define LAYOUT_QWERTY 0
+#define LAYOUT_QWERTZ 1
+#define LAYOUT_AZERTY 2
 
 #define GRID_ROW_COUNT (1 + KB_ROW_COUNT + 1)         // text box + keyboard rows + control bar
 #define ROW_HEIGHT     (LCD_HEIGHT / GRID_ROW_COUNT)  // button height
