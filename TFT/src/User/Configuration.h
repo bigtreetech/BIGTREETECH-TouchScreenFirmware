@@ -419,18 +419,22 @@
 //#define MESH_LEFT_KEYBOARD
 
 //
-// Terminal settings
+// Terminal Keyboard / Numpad settings
 //
 
+// Terminal Keyboard / Numpad theme
+// Uncomment to enable Material theme for keyboard and Numpad
+//#define KEYBOARD_MATERIAL_THEME // Default: disabled
+
 /**
- * Color scheme for the Terminal Keyboard
+ * Color scheme for the Terminal Keyboard / Numpad
  *
  * Options: [0: Default, 1: Invert, 2: High-Contrast]
  *  Default: The keyboard follows system background and border colors.
  *  Invert: The keyboard is drawn with background swapped with border colors.
  *  High-Contrast: Use white and black colors for high contrast.
  */
-#define TERMINAL_KEYBOARD_COLOR_LAYOUT 0  // Default: 0
+#define KEYBOARD_COLOR_LAYOUT 0  // Default: 0
 
 /**
  * QWERTY/QWERTZ keyboard layout
@@ -442,7 +446,7 @@
  *  qwertz: The typically keyboard Layout for german.
  *  azerty: The typically keyboard Layout for french.
  */
-#define TERMINAL_KEYBOARD_LAYOUT 2  // Default: 0
+#define TERMINAL_KEYBOARD_LAYOUT 0  // Default: 0
 
 
 //===========================================================================

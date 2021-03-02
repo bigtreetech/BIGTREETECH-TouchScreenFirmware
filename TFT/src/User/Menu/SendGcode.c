@@ -40,56 +40,31 @@ typedef enum
   TERM_IDLE = IDLE_TOUCH,
 } TERMINAL_KEY_VALUES;
 
-// colors
-#if TERMINAL_KEYBOARD_COLOR_LAYOUT == 0
-  #define KB_BG_COLOR        0x1904
-  #define KEY_FONT_COLOR     WHITE
-  #define KEY_BG_COLOR       0x2986
+#ifndef KEYBOARD_MATERIAL_THEME
+  #if KEYBOARD_COLOR_LAYOUT == 0
+    #define KEY_FONT_COLOR     infoSettings.font_color
+    #define KEY_BG_COLOR       infoSettings.bg_color
+    #define KEY_BORDER_COLOR   infoSettings.list_border_color
+    #define KEY_BORDER_COLOR_2 DARKGRAY
+  #elif KEYBOARD_COLOR_LAYOUT == 1
+    #define KEY_FONT_COLOR     infoSettings.font_color
+    #define KEY_BG_COLOR       infoSettings.list_border_color
+    #define KEY_BORDER_COLOR   infoSettings.bg_color
+    #define KEY_BORDER_COLOR_2 DARKGRAY
+  #else
+    #define KEY_FONT_COLOR     BLACK
+    #define KEY_BG_COLOR       WHITE
+    #define KEY_BORDER_COLOR   0x2174
+    #define KEY_BORDER_COLOR_2 DARKGRAY
+  #endif
 
-  #define CTRL_FONT_COLOR      WHITE
-  #define CTRL_BG_COLOR        0x2174
-
-  #define BAR_BG_COLOR         KB_BG_COLOR
-  #define BAR_BORDER_COLOR     KEY_BG_COLOR
-  #define BAR_VALUE_FONT_COLOR BLACK
-  #define BAR_VALUE_BG_COLOR   0xD6DA
-
-  #define PAGE_FONT_COLOR      WHITE
-
-#elif TERMINAL_KEYBOARD_COLOR_LAYOUT == 1
-
-  #define KB_BG_COLOR        0xC638
-  #define KEY_FONT_COLOR     DARKGRAY
-  #define KEY_BG_COLOR       0xE73C
-
-  #define CTRL_FONT_COLOR      WHITE
-  #define CTRL_BG_COLOR        0x2174
-
-  #define BAR_BG_COLOR         KB_BG_COLOR
-  #define BAR_BORDER_COLOR     KEY_BG_COLOR
-  #define BAR_VALUE_FONT_COLOR BLACK
-  #define BAR_VALUE_BG_COLOR   KEY_BG_COLOR
-
-  #define PAGE_FONT_COLOR      DARKGRAY
-
-#else
-
-  #define KB_BG_COLOR        BLACK
-  #define KEY_FONT_COLOR     BLACK
-  #define KEY_BG_COLOR       WHITE
-
-  #define CTRL_FONT_COLOR      WHITE
-  #define CTRL_BG_COLOR        0x2174
-  #define BAR_BG_COLOR         KB_BG_COLOR
-  #define BAR_BORDER_COLOR     KEY_BG_COLOR
-  #define BAR_VALUE_FONT_COLOR BLACK
-  #define BAR_VALUE_BG_COLOR   KEY_BG_COLOR
-
-  #define PAGE_FONT_COLOR      WHITE
-
+  #define KB_BG_COLOR          BLACK
+  #define BAR_FONT_COLOR       WHITE
+  #define BAR_BG_COLOR         0x2174
+  #define BAR_BORDER_COLOR     0x4b0d
+  #define TEXTBOX_FONT_COLOR   BLACK
+  #define TEXTBOX_BG_COLOR     0xFFF2
 #endif
-
-#define BTN_ROUND_CORNER  11
 
 #define TERM_FONT_COLOR infoSettings.marlin_mode_font_color
 #define TERM_BG_COLOR   infoSettings.marlin_mode_bg_color
@@ -145,7 +120,7 @@ typedef enum
 
 // for text in terminal
 #define CURSOR_H_OFFSET 2
-#define CURSOR_END_Y    (LCD_HEIGHT - CTRL_HEIGHT)
+#define CURSOR_END_Y    ((KB_START_ROW + KB_ROW_COUNT) * KEY_HEIGHT)
 
 // gcode.command draw area inside textbox
 const GUI_RECT textBoxRect = {             0 + TEXTBOX_INSET, (COMMAND_START_ROW + 0) * CTRL_HEIGHT + TEXTBOX_INSET,
@@ -157,10 +132,10 @@ const GUI_RECT textBoxRect = {             0 + TEXTBOX_INSET, (COMMAND_START_ROW
   {3 * CTRL_WIDTH, COMMAND_START_ROW * CTRL_HEIGHT, 4 * CTRL_WIDTH, (COMMAND_START_ROW + 1) * CTRL_HEIGHT},  // Send (top row)
 
   // row control bar
-  {0 * CTRL_WIDTH, LCD_HEIGHT - CTRL_HEIGHT, 1 * CTRL_WIDTH, LCD_HEIGHT},  // ABC/123
-  {1 * CTRL_WIDTH, LCD_HEIGHT - CTRL_HEIGHT, 2 * CTRL_WIDTH, LCD_HEIGHT},  // Space
-  {2 * CTRL_WIDTH, LCD_HEIGHT - CTRL_HEIGHT, 3 * CTRL_WIDTH, LCD_HEIGHT},  // Del
-  {3 * CTRL_WIDTH, LCD_HEIGHT - CTRL_HEIGHT, 4 * CTRL_WIDTH, LCD_HEIGHT},  // Back
+  {0 * CTRL_WIDTH, (KB_START_ROW + KB_ROW_COUNT) * KEY_HEIGHT, 1 * CTRL_WIDTH, LCD_HEIGHT},  // ABC/123
+  {1 * CTRL_WIDTH, (KB_START_ROW + KB_ROW_COUNT) * KEY_HEIGHT, 2 * CTRL_WIDTH, LCD_HEIGHT},  // Space
+  {2 * CTRL_WIDTH, (KB_START_ROW + KB_ROW_COUNT) * KEY_HEIGHT, 3 * CTRL_WIDTH, LCD_HEIGHT},  // Del
+  {3 * CTRL_WIDTH, (KB_START_ROW + KB_ROW_COUNT) * KEY_HEIGHT, 4 * CTRL_WIDTH, LCD_HEIGHT},  // Back
 
   // row 1
   {0 * KEY_WIDTH, (KB_START_ROW + 0) * KEY_HEIGHT, 1 * KEY_WIDTH, (KB_START_ROW + 1) * KEY_HEIGHT},
@@ -350,45 +325,94 @@ static inline void keyboardDrawButton(uint8_t index, uint8_t isPressed)
   if (index >= COUNT(editorKeyRect))
     return;
 
-  uint16_t bgcolor;
-  uint16_t fontcolor;
+ // Setup colors and button info
+  #ifdef KEYBOARD_MATERIAL_THEME
+    uint16_t fontcolor = KEY_FONT_COLOR;
+    uint16_t bgcolor = KEY_BG_COLOR;
+    GUI_RECT rectBtn = {editorKeyRect[index].x0 + 3, editorKeyRect[index].y0 + 3,
+                        editorKeyRect[index].x1 - 3, editorKeyRect[index].y1 - 3};
 
-  if (index == GKEY_SPACE || index == GKEY_DEL || index > GKEY_BACK)
-  {
-    fontcolor = KEY_FONT_COLOR;
-    bgcolor = KEY_BG_COLOR;
-  }
-  else
-  {
-    fontcolor = CTRL_FONT_COLOR;
-    bgcolor = CTRL_BG_COLOR;
-  }
+    switch (index)
+    {
+      case GKEY_SEND:
+        fontcolor = CTRL_FONT_COLOR;
+        bgcolor = MAT_GREEN;
+        break;
+      case GKEY_BACK:
+        fontcolor = CTRL_FONT_COLOR;
+        bgcolor = MAT_RED;
+        break;
+      case GKEY_ABC_123:
+        fontcolor = CTRL_FONT_COLOR;
+        bgcolor = MAT_SLATE;
+        break;
+      default:
+        break;
+    }
 
-  const GUI_RECT rectBtn = {editorKeyRect[index].x0 + 3, editorKeyRect[index].y0 + 3,
-                            editorKeyRect[index].x1 - 3, editorKeyRect[index].y1 - 3};
-
-  BUTTON btn = {.fontColor = fontcolor,
-               .backColor = bgcolor,
-               .context = (uint8_t *)((numpad) ? gcodeKey123[index] : gcodeKeyABC[index]),
-               .lineColor = bgcolor,
-               .lineWidth = 0,
-               .pBackColor = fontcolor,
-               .pFontColor = bgcolor,
-               .pLineColor = fontcolor,
-               .radius = BTN_ROUND_CORNER,
-               .rect = rectBtn};
+    BUTTON btn = {.fontColor  = fontcolor,
+                  .backColor  = bgcolor,
+                  .context    = (uint8_t *)((numpad) ? gcodeKey123[index] : gcodeKeyABC[index]),
+                  .lineColor  = bgcolor,
+                  .lineWidth  = 0,
+                  .pBackColor = fontcolor,
+                  .pFontColor = bgcolor,
+                  .pLineColor = fontcolor,
+                  .radius     = BTN_ROUND_CORNER,
+                  .rect       = rectBtn};
 
   if (index != GKEY_SEND)
     setLargeFont(true);
+  // draw button
+    GUI_DrawButton(&btn, isPressed);
 
-  GUI_DrawButton(&btn, isPressed);
+  #else //KEYBOARD_MATERIAL_THEME
+
+    if (isPressed)
+    {
+      if (index > GKEY_BACK)
+      {
+        GUI_SetColor(KEY_BG_COLOR);
+        GUI_SetBkColor(KEY_FONT_COLOR);
+      }
+      else
+      {
+        GUI_SetColor(BAR_BG_COLOR);
+        GUI_SetBkColor(BAR_FONT_COLOR);
+      }
+    }
+    else
+    {
+      if (index > GKEY_BACK)
+      {
+        GUI_SetColor(KEY_FONT_COLOR);
+        GUI_SetBkColor(KEY_BG_COLOR);
+      }
+      else
+      {
+        GUI_SetColor(BAR_FONT_COLOR);
+        GUI_SetBkColor(BAR_BG_COLOR);
+      }
+    }
+
+    if (index != GKEY_SEND)
+      setLargeFont(true);
+
+      GUI_ClearRect(editorKeyRect[index].x0 + 1, editorKeyRect[index].y0 + 1, editorKeyRect[index].x1 - 1,
+                    editorKeyRect[index].y1 - 1);
+
+      GUI_DispStringInRect(editorKeyRect[index].x0 + 1, editorKeyRect[index].y0 + 1, editorKeyRect[index].x1 - 1,
+                          editorKeyRect[index].y1 - 1, (uint8_t *)((numpad) ? gcodeKey123[index] : gcodeKeyABC[index]));
+
+  #endif // KEYBOARD_MATERIAL_THEME
+
   setLargeFont(false);
 }
 
 static inline void drawGcodeText(char *gcode)
 {
-  GUI_SetColor(BAR_VALUE_FONT_COLOR);
-  GUI_SetBkColor(BAR_VALUE_BG_COLOR);
+  GUI_SetColor(TEXTBOX_FONT_COLOR);
+  GUI_SetBkColor(TEXTBOX_BG_COLOR);
   GUI_ClearPrect(&textBoxRect);
 
   if (gcode != NULL)
@@ -397,10 +421,25 @@ static inline void drawGcodeText(char *gcode)
 
 static inline void drawKeyboard(void)
 {
-  GUI_SetColor(BAR_BORDER_COLOR);
+  #ifndef KEYBOARD_MATERIAL_THEME
+    GUI_SetColor(KEY_BORDER_COLOR);
 
+    // draw vertical button borders
+    for (int i = 0; i < (KB_COL_COUNT - 1); i++)
+    {
+      GUI_VLine(editorKeyRect[i + GKEY_BACK + 1].x1, editorAreaRect[1].y0, editorAreaRect[1].y1);
+    }
+
+    // draw horizontal button borders
+    for (int i = 0; i < (KB_ROW_COUNT - 1); i++)
+    {
+      GUI_HLine( editorAreaRect[1].x0, editorKeyRect[(i * KB_COL_COUNT)  + GKEY_BACK + 1].y1, editorAreaRect[1].x1);
+    }
+  #endif
+
+  GUI_SetColor(BAR_BORDER_COLOR);
   GUI_HLine( editorAreaRect[0].x0, editorAreaRect[0].y1, editorAreaRect[0].x1);
-  GUI_HLine( editorAreaRect[1].x0, editorAreaRect[1].y1, editorAreaRect[1].x1);
+  GUI_HLine( editorAreaRect[2].x0, editorAreaRect[2].y0, editorAreaRect[1].x1);
 
   for (uint8_t i = 0; i < COUNT(gcodeKeyABC); i++)
   {
@@ -412,13 +451,25 @@ static inline void keyboardDrawMenu(void)
 {
   setMenu(MENU_TYPE_FULLSCREEN, NULL, COUNT(editorKeyRect), editorKeyRect, keyboardDrawButton, NULL);
 
+  // clear keyboard area
+  GUI_SetBkColor(KB_BG_COLOR);
+  GUI_ClearPrect(&editorAreaRect[1]);
+
   // clear bar area
   GUI_SetBkColor(BAR_BG_COLOR);
   GUI_ClearPrect(&editorAreaRect[0]);
   GUI_ClearPrect(&editorAreaRect[2]);
 
-  GUI_SetBkColor(KB_BG_COLOR);
-  GUI_ClearPrect(&editorAreaRect[1]);  // clear keyboard area
+  #ifndef KEYBOARD_MATERIAL_THEME
+    // draw bar area shadow border
+    GUI_SetColor(BAR_BORDER_COLOR);
+
+    // draw gcode value area border
+    GUI_DrawPrect(&textBoxRect);
+
+    GUI_HLine(editorAreaRect[0].x0, editorAreaRect[0].y1, editorAreaRect[0].x1);
+    GUI_HLine(editorAreaRect[2].x0, editorAreaRect[2].y0, editorAreaRect[2].x1);
+  #endif
 
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
   // draw keyboard and gcode value
@@ -535,36 +586,55 @@ static inline void terminalDrawButton(uint8_t index, uint8_t isPressed)
   if (index >= TERM_KEY_COUNT || index == 0)
     return;
 
-  uint16_t bgcolor;
-  uint16_t fontcolor;
   const char * terminalKey[] = { "1/1", "<", ">", (char *)textSelect(itemToggle[infoSettings.terminalACK].index), "Back"};
-  const GUI_RECT rectBtn = {terminalKeyRect[index].x0 + 3, terminalKeyRect[index].y0 + 3,
-                            terminalKeyRect[index].x1 - 3, terminalKeyRect[index].y1 - 3};
 
-  if (index < TERM_BACK)
+  #ifdef KEYBOARD_MATERIAL_THEME
+    uint16_t fontcolor = KEY_FONT_COLOR;
+    uint16_t bgcolor = KEY_BG_COLOR;
+    GUI_RECT rectBtn = {terminalKeyRect[index].x0 + 3, terminalKeyRect[index].y0 + 3,
+                        terminalKeyRect[index].x1 - 3, terminalKeyRect[index].y1 - 3};
+
+    if (index == TERM_BACK)
+    {
+      fontcolor = CTRL_FONT_COLOR;
+      bgcolor = MAT_RED;
+    }
+
+    BUTTON btn = {.fontColor  = fontcolor,
+                  .backColor  = bgcolor,
+                  .context    = (uint8_t *)terminalKey[index],
+                  .lineColor  = bgcolor,
+                  .lineWidth  = 0,
+                  .pBackColor = fontcolor,
+                  .pFontColor = bgcolor,
+                  .pLineColor = fontcolor,
+                  .radius     = BTN_ROUND_CORNER,
+                  .rect       = rectBtn};
+  #else
+
+  if (isPressed)
   {
-    fontcolor = KEY_FONT_COLOR;
-    bgcolor = KEY_BG_COLOR;
+    GUI_SetColor(BAR_BG_COLOR);
+    GUI_SetBkColor(BAR_FONT_COLOR);
   }
   else
   {
-    fontcolor = CTRL_FONT_COLOR;
-    bgcolor = CTRL_BG_COLOR;
+    GUI_SetColor(BAR_FONT_COLOR);
+    GUI_SetBkColor(BAR_BG_COLOR);
   }
-
-  BUTTON btn = {.fontColor = fontcolor,
-               .backColor = bgcolor,
-               .context = (uint8_t *)terminalKey[index],
-               .lineColor = bgcolor,
-               .lineWidth = 0,
-               .pBackColor = fontcolor,
-               .pFontColor = bgcolor,
-               .pLineColor = fontcolor,
-               .radius = BTN_ROUND_CORNER,
-               .rect = rectBtn};
+  #endif //KEYBOARD_MATERIAL_THEME
 
   setLargeFont(true);
-  GUI_DrawButton(&btn, isPressed);
+
+  #ifdef KEYBOARD_MATERIAL_THEME
+    GUI_DrawButton(&btn, isPressed);
+  #else
+  GUI_ClearRect(terminalKeyRect[index].x0 + 1, terminalKeyRect[index].y0 + 1, terminalKeyRect[index].x1 - 1,
+                terminalKeyRect[index].y1 - 1);
+  GUI_DispStringInRect(terminalKeyRect[index].x0 + 1, terminalKeyRect[index].y0 + 1, terminalKeyRect[index].x1 - 1,
+                       terminalKeyRect[index].y1 - 1, (uint8_t *)terminalKey[index]);
+  #endif
+
   setLargeFont(false);
 }
 
@@ -578,7 +648,7 @@ static inline void terminalDrawPageNumber(void)
   sprintf(tempstr, "%d/%d", abs(((terminalData->pageTail - terminalData->pageHead) - terminalData->pageIndex) + 1),
           abs((terminalData->pageTail - terminalData->pageHead) + 1));
 
-  GUI_SetColor(PAGE_FONT_COLOR);
+  GUI_SetColor(BAR_FONT_COLOR);
   setLargeFont(true);
   GUI_DispStringInPrect(&terminalKeyRect[TERM_PAGE_NUMBER], (uint8_t *)tempstr);
   setLargeFont(false);
@@ -746,17 +816,12 @@ void menuTerminalWindow(void)
 
 void menuTerminal(void)
 {
-  TERMINAL_DATA termPage = {{terminalBuf}, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  TERMINAL_DATA termPage = {{terminalBuf}, 0, 0, 0, 0, 0, 0, TERMINAL_MAX_CHAR, MAX_PAGE_COUNT, 0};
 
   if (isPrinting() || infoHost.printing) // display only 1 page if printing
   {
     termPage.buffSize = (LCD_WIDTH / BYTE_WIDTH * LCD_HEIGHT / BYTE_HEIGHT);
     termPage.maxPageCount = 1;
-  }
-  else
-  {
-    termPage.buffSize = TERMINAL_MAX_CHAR;
-    termPage.maxPageCount = MAX_PAGE_COUNT;
   }
 
   char pageBuff[termPage.buffSize];
