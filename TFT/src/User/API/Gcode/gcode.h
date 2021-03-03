@@ -35,5 +35,7 @@ bool request_M25(void);
 bool request_M27(int seconds);
 bool request_M125(void);
 bool request_M0(void);
+bool request_M98(char *filename);
+char *request_M20_macros(char *dir);
 
 #endif
