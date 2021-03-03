@@ -177,9 +177,9 @@ void menuClearGaps(void)
   GUI_SetBkColor(infoSettings.title_bg_color);
 
   if (infoMenu.menu[infoMenu.cur] == menuStatus)
-    GUI_ClearPrect(gapsMenu);
-  else
     GUI_ClearPrect(gapsSS);
+  else
+    GUI_ClearPrect(gapsMenu);
 
   GUI_SetBkColor(infoSettings.bg_color);
 
