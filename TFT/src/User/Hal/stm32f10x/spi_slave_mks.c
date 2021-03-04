@@ -6,7 +6,7 @@
 
 #if defined(MKS_32_V1_4) || defined (MKS_28_V1_0)
 
-#if defined(ST7920_SPI)
+#if defined(ST7920_EMULATOR)
 //TODO:
 //now support SPI3 and PB1 CS only
 //more compatibility changes are needed
@@ -157,6 +157,6 @@ void EXTI1_IRQHandler(void)
 
   EXTI->PR = 1<<1;                                                   // Clear interrupt status register
 }
-#endif             // endif for #if defined(ST7920_SPI)
+#endif             // endif for #if defined(ST7920_EMULATOR)
 
 #endif             // endif for #if defined(MKS_32_V1_4) || defined (MKS_28_V1_0)

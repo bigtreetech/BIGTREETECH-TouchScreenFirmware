@@ -26,7 +26,6 @@ typedef struct
   uint16_t fileCount;          // current gcode file count
   uint16_t cur_page;           // current display page index (5 files per page)
   uint16_t fileIndex;          // selected file index
-  bool printFromTFT;           // flag: print started from TFT
   FS_SOURCE source;            // The source of the file. TFT SD or ONBOARD SD.
   TCHAR * Longfile[FILE_NUM];  // Long file name buffer from ONBOARD SD only
 } MYFILE;

@@ -1,6 +1,10 @@
 #include "Popup.h"
 #include "includes.h"
 
+#define X_MAX_CHAR      (LCD_WIDTH / BYTE_WIDTH)
+#define MAX_MSG_LINES   4
+#define POPUP_MAX_CHAR  (X_MAX_CHAR * MAX_MSG_LINES)
+
 static BUTTON bottomSingleBtn = {
   //button location                       color before pressed   color after pressed
   POPUP_RECT_SINGLE_CONFIRM, NULL, 5, 1,  DARKGREEN, DARKGREEN,  MAT_LOWWHITE, DARKGREEN, WHITE, DARKGREEN
@@ -27,7 +31,7 @@ static WINDOW window = {
 };
 
 static BUTTON *windowButton =  NULL;
-static u16 buttonNum = 0;
+static uint16_t buttonNum = 0;
 
 static const GUI_RECT * cur_btn_rect = NULL;
 static void (*action_ok)() = NULL;
@@ -35,15 +39,13 @@ static void (*action_cancel)() = NULL;
 static void (*action_loop)() = NULL;
 
 static bool popup_redraw = false;
-#define X_MAX_CHAR (LCD_WIDTH / BYTE_WIDTH)
-#define FULL_SCREEN_MAX_CHAR (LCD_WIDTH / BYTE_WIDTH * LCD_HEIGHT /BYTE_HEIGHT)
 static uint8_t popup_title[X_MAX_CHAR];
-static uint8_t popup_msg[FULL_SCREEN_MAX_CHAR];
+static uint8_t popup_msg[POPUP_MAX_CHAR];
 static uint8_t popup_ok[24];
 static uint8_t popup_cancel[24];
 static DIALOG_TYPE popup_type;
 
-void windowReDrawButton(u8 position, u8 pressed)
+void windowReDrawButton(uint8_t position, uint8_t pressed)
 {
   if (position >= buttonNum)
     return;
@@ -83,7 +85,7 @@ void popupDrawPage(DIALOG_TYPE type, BUTTON * btn, const uint8_t * title, const 
   if (btn != NULL)  // draw a window with buttons bar
   {
     GUI_DrawWindow(&window, title, context, true);
-    for (u8 i = 0; i < buttonNum; i++) GUI_DrawButton(&windowButton[i], 0);
+    for (uint8_t i = 0; i < buttonNum; i++) GUI_DrawButton(&windowButton[i], 0);
   }
   else  // draw a window with no buttons bar
   {

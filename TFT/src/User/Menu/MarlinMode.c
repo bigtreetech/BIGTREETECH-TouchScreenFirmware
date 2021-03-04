@@ -3,7 +3,7 @@
 #include "HD44780.h"
 #include "includes.h"
 
-#if defined(ST7920_SPI) || defined(LCD2004_simulator)
+#ifdef HAS_EMULATOR
 
 typedef void (*CB_INIT)(CIRCULAR_QUEUE *);
 typedef void (*CB_DEINIT)(void);
@@ -28,7 +28,7 @@ void menuMarlinMode(void)
     GUI_DispStringInRect(0, 0, LCD_WIDTH, ST7920_GYSTART_FULLSCREEN, (uint8_t *)tempST.marlin_title);
   }
 
-  #if defined(ST7920_SPI)
+  #if defined(ST7920_EMULATOR)
     if (infoSettings.marlin_type == LCD12864)
     {
       marlinInit = SPI_Slave;
@@ -37,7 +37,7 @@ void menuMarlinMode(void)
       marlinParse = ST7920_ParseRecv;
     }
   #endif
-  #if defined(LCD2004_simulator)
+  #if defined(LCD2004_EMULATOR)
     if (infoSettings.marlin_type == LCD2004)
     {
       marlinInit = HD44780_Config;
@@ -74,12 +74,11 @@ void menuMarlinMode(void)
       loopDimTimer();
     #endif
 
-    if (infoSettings.serial_alwaysOn == 1)
+    if (infoSettings.serial_alwaysOn == ENABLED)
     {
       loopBackEnd();
     }
   }
-
   marlinDeInit();
 }
 

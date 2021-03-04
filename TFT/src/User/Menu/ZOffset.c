@@ -4,8 +4,8 @@
 #define ITEM_Z_OFFSET_SUBMENU_NUM 4
 
 static bool probeOffsetMenu = false;
-static u8 curUnit_index = 0;
-static u8 curSubmenu_index = 0;
+static uint8_t curUnit_index = 0;
+static uint8_t curSubmenu_index = 0;
 
 /* Show an error notification */
 void zOffsetNotifyError(void)
@@ -20,7 +20,7 @@ void zOffsetNotifyError(void)
   addToast(DIALOG_TYPE_ERROR, tempMsg);
 }
 
-void zOffsetDrawStatus(bool status, u8 *val)
+void zOffsetDrawStatus(bool status, uint8_t *val)
 {
   char tempstr[20];
 
@@ -31,7 +31,7 @@ void zOffsetDrawStatus(bool status, u8 *val)
   else
     GUI_SetColor(infoSettings.sd_reminder_color);
 
-  GUI_DispString(exhibitRect.x0, exhibitRect.y0, (u8 *) tempstr);
+  GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *) tempstr);
   GUI_SetColor(infoSettings.font_color);
 }
 
@@ -42,7 +42,7 @@ void zOffsetDrawValue(float val)
   sprintf(tempstr, "  %.2f  ", val);
 
   setLargeFont(true);
-  GUI_DispStringInPrect(&exhibitRect, (u8 *) tempstr);
+  GUI_DispStringInPrect(&exhibitRect, (uint8_t *) tempstr);
   setLargeFont(false);
 }
 
@@ -122,10 +122,7 @@ void menuZOffset(void)
 
   now = z_offset = offsetGetValue();
 
-  if (!offsetGetStatus())
-    zOffsetItems.items[KEY_ICON_4].label.index = LABEL_OFF;
-  else
-    zOffsetItems.items[KEY_ICON_4].label.index = LABEL_ON;
+  zOffsetItems.items[KEY_ICON_4].label = itemToggle[offsetGetStatus()];
 
   itemZOffsetSubmenu[0] = itemMoveLen[curUnit_index];
   zOffsetItems.items[KEY_ICON_6] = itemZOffsetSubmenu[curSubmenu_index];
@@ -166,15 +163,11 @@ void menuZOffset(void)
       // enable/disable Z offset change
       case KEY_ICON_4:
         if (!offsetGetStatus())
-        {
           offsetEnable(true);
-          zOffsetItems.items[key_num].label.index = LABEL_ON;
-        }
         else
-        {
           offsetDisable();
-          zOffsetItems.items[key_num].label.index = LABEL_OFF;
-        }
+
+        zOffsetItems.items[key_num].label = itemToggle[offsetGetStatus()];
 
         menuDrawItem(&zOffsetItems.items[key_num], key_num);
         zOffsetDrawStatus(offsetGetStatus(), textSelect(zOffsetItems.items[key_num].label.index));

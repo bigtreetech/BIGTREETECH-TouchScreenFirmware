@@ -14,7 +14,7 @@ void HW_EncoderInit(void)
 {
   uint16_t encPin[]  = {LCD_ENCA_PIN,  LCD_ENCB_PIN,  LCD_BTN_PIN};
 
-  for(u8 i = 0; i < COUNT(encPin); i++)
+  for(uint8_t i = 0; i < COUNT(encPin); i++)
   {
     GPIO_InitSet(encPin[i], MGPIO_MODE_IPU, 0);
   }
@@ -24,12 +24,16 @@ void HW_EncoderInit(void)
 #if ENC_ACTIVE_SIGNAL
   void HW_EncActiveSignalInit(void)
   {
+    if(infoSettings.marlin_type != LCD12864)
+      return;
     GPIO_InitSet(LCD_ENC_EN_PIN, MGPIO_MODE_OUT_PP, 0);
     setEncActiveSignal(0);
   }
 
   void setEncActiveSignal(uint8_t status)
   {
+    if(infoSettings.marlin_type != LCD12864)
+      return;
     GPIO_SetLevel(LCD_ENC_EN_PIN, status);
   }
 #endif
@@ -43,7 +47,7 @@ bool encoder_ReadStep(uint16_t io_pin)
 // read hardware encoder button for select btn press
 bool encoder_ReadBtn(uint16_t intervals)
 {
-  static u32 nowTime = 0;
+  static uint32_t nowTime = 0;
 
   if(!GPIO_GetLevel(LCD_BTN_PIN))
   {
@@ -62,8 +66,8 @@ bool encoder_ReadBtn(uint16_t intervals)
 //check touch to send select button
 bool LCD_BtnTouch(uint16_t intervals)
 {
-  static u32 BtnTime = 0;
-  u16 tx, ty;
+  static uint32_t BtnTime = 0;
+  uint16_t tx, ty;
   if (!XPT2046_Read_Pen())
   {
     TS_Get_Coordinates(&tx, &ty);
@@ -141,9 +145,9 @@ void loopCheckEncoderSteps(void)
 //Parse the touch to control encoder
  uint8_t LCD_ReadTouch(void)
 {
-  u16 ex=0,ey=0;
-  static u32 CTime = 0;
-  static u16 sy;
+  uint16_t ex=0,ey=0;
+  static uint32_t CTime = 0;
+  static uint16_t sy;
   static bool MOVE = false;
 
   if(!XPT2046_Read_Pen() && CTime < OS_GetTimeMs())

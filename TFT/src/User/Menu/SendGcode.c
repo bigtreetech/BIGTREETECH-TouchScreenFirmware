@@ -390,6 +390,7 @@ typedef enum
 {
   TERM_PAGE_UP = 0,
   TERM_PAGE_DOWN,
+  TERM_TOGGLE_ACK,
   TERM_BACK,
   TERM_KEY_NUM,  // number of keys
   TERM_IDLE = IDLE_TOUCH,
@@ -401,7 +402,7 @@ typedef enum
 #define CURSOR_END_Y   CTRL_Y0
 
 #define PAGE_ROW_NUM 1
-#define PAGE_COL_NUM 4
+#define PAGE_COL_NUM 5
 #define PAGE_HEIGHT  GKEY_HEIGHT
 #define PAGE_WIDTH   (LCD_WIDTH / PAGE_COL_NUM)
 #define PAGE_X0      0
@@ -415,11 +416,13 @@ const GUI_RECT terminalKeyRect[TERM_KEY_NUM] = {
   {PAGE_X0 + 1 * PAGE_WIDTH, PAGE_Y0 + 0 * PAGE_HEIGHT, PAGE_X0 + 2 * PAGE_WIDTH, PAGE_Y0 + 1 * PAGE_HEIGHT},
   {PAGE_X0 + 2 * PAGE_WIDTH, PAGE_Y0 + 0 * PAGE_HEIGHT, PAGE_X0 + 3 * PAGE_WIDTH, PAGE_Y0 + 1 * PAGE_HEIGHT},
   {PAGE_X0 + 3 * PAGE_WIDTH, PAGE_Y0 + 0 * PAGE_HEIGHT, PAGE_X0 + 4 * PAGE_WIDTH, PAGE_Y0 + 1 * PAGE_HEIGHT},
+  {PAGE_X0 + 4 * PAGE_WIDTH, PAGE_Y0 + 0 * PAGE_HEIGHT, PAGE_X0 + 5 * PAGE_WIDTH, PAGE_Y0 + 1 * PAGE_HEIGHT},
 };
 
-const char * const terminalKey[TERM_KEY_NUM] = {
+const char * terminalKey[TERM_KEY_NUM] = {
   "<",
   ">",
+  "ON",
   "Back"
 };
 
@@ -433,7 +436,7 @@ TERMINAL_PAGE terminal_page = {terminalBuf, 0, 0, 0, 0, 0};
 static uint16_t terminalBufTail = 0;
 uint8_t buf_full = 0;
 
-void sendGcodeReDrawButton(u8 index, u8 isPressed)
+void sendGcodeReDrawButton(uint8_t index, uint8_t isPressed)
 {
   if (index >= GKEY_KEY_NUM)
     return;
@@ -473,10 +476,10 @@ void sendGcodeReDrawButton(u8 index, u8 isPressed)
 
   #if defined(HAS_ABC_KEY)
     GUI_DispStringInRect(gcodeKeyRect[index].x0 + 2, gcodeKeyRect[index].y0 + 2, gcodeKeyRect[index].x1 - 1,
-                         gcodeKeyRect[index].y1 - 1, (u8 *)gcodeKey[gcodeKeyType][index]);
+                         gcodeKeyRect[index].y1 - 1, (uint8_t *)gcodeKey[gcodeKeyType][index]);
   #else
     GUI_DispStringInRect(gcodeKeyRect[index].x0 + 2, gcodeKeyRect[index].y0 + 2, gcodeKeyRect[index].x1 - 1,
-                         gcodeKeyRect[index].y1 - 1, (u8 *)gcodeKey[0][index]);
+                         gcodeKeyRect[index].y1 - 1, (uint8_t *)gcodeKey[0][index]);
   #endif
 
   setLargeFont(false);
@@ -491,7 +494,7 @@ void sendGcodeDrawGcode(char *gcode)
 
   if (gcode != NULL)
     GUI_DispStringInRect(gcodeValueRect.x0 + 1, gcodeValueRect.y0 + 1, gcodeValueRect.x1 - 1, gcodeValueRect.y1 - 1,
-                         (u8 *)gcode);
+                         (uint8_t *)gcode);
 }
 
 void sendGcodeDrawKeyboard(void)
@@ -667,7 +670,7 @@ void sendGcodeTerminalCache(char *stream, TERMINAL_SRC src)
   saveGcodeTerminalCache(stream_len, stream);
 }
 
-void terminalReDrawButton(u8 index, u8 isPressed)
+void terminalReDrawButton(uint8_t index, uint8_t isPressed)
 {
   if (index >= TERM_KEY_NUM)
     return;
@@ -688,7 +691,7 @@ void terminalReDrawButton(u8 index, u8 isPressed)
   GUI_ClearRect(terminalKeyRect[index].x0 + 2, terminalKeyRect[index].y0 + 2, terminalKeyRect[index].x1 - 1,
                 terminalKeyRect[index].y1 - 1);
   GUI_DispStringInRect(terminalKeyRect[index].x0 + 2, terminalKeyRect[index].y0 + 2, terminalKeyRect[index].x1 - 1,
-                       terminalKeyRect[index].y1 - 1, (u8 *)terminalKey[index]);
+                       terminalKeyRect[index].y1 - 1, (uint8_t *)terminalKey[index]);
 
   setLargeFont(false);
 }
@@ -703,7 +706,7 @@ void terminalDrawPage(char *pageNum)
 
   if (pageNum != NULL)
     GUI_DispStringInRect(terminalPageRect.x0 + 1, terminalPageRect.y0 + 1, terminalPageRect.x1 - 1, terminalPageRect.y1 - 1,
-                         (u8 *)pageNum);
+                         (uint8_t *)pageNum);
 
   setLargeFont(false);
 }
@@ -728,6 +731,9 @@ void terminalDrawMenu(void)
   GUI_ClearPrect(&terminalAreaRect[1]);
 
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
+
+  // init toggle ack value
+  terminalKey[TERM_TOGGLE_ACK] = (const char *) textSelect(itemToggle[infoSettings.terminalACK].index);
 
   // draw keyboard
   for (uint8_t i = 0; i < COUNT(terminalKey); i++)
@@ -770,6 +776,12 @@ void menuTerminal(void)
           terminal_page.pageIndex -= SCROLL_PAGE;
         break;
 
+      case TERM_TOGGLE_ACK:  // toggle ack in terminal
+        infoSettings.terminalACK = (infoSettings.terminalACK + 1) % ITEM_TOGGLE_NUM;
+        terminalKey[TERM_TOGGLE_ACK] = (const char *) textSelect(itemToggle[infoSettings.terminalACK].index);
+        terminalReDrawButton(TERM_TOGGLE_ACK, false);
+        break;
+
       case TERM_BACK:  // back
         infoMenu.cur--;
         break;
@@ -802,7 +814,7 @@ void menuTerminal(void)
       terminalDrawPage(pageNum);
     }
 
-    getCharacterInfo((u8 *) &terminalBuf[lastTerminalIndex], &info);
+    getCharacterInfo((uint8_t *) &terminalBuf[lastTerminalIndex], &info);
 
     while ((terminalBuf[lastTerminalIndex]) && (lastTerminalIndex != terminalBufTail))
     {
@@ -846,7 +858,7 @@ void menuTerminal(void)
 
         GUI_SetColor(TERM_FONT_COLOR);
         GUI_SetBkColor(TERM_BG_COLOR);
-        GUI_DispOne(cursorX, cursorY, (u8 *) &terminalBuf[lastTerminalIndex]);
+        GUI_DispOne(cursorX, cursorY, (uint8_t *) &terminalBuf[lastTerminalIndex]);
         cursorX += info.pixelWidth;
       }
 

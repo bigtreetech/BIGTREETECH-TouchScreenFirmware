@@ -4,7 +4,7 @@
 #include "variants.h"
 #include "Settings.h"
 
-#ifdef LCD2004_simulator
+#ifdef LCD2004_EMULATOR
 
 CIRCULAR_QUEUE *HD44780_queue = NULL;
 

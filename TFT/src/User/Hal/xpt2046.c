@@ -41,9 +41,9 @@ u8 XPT2046_Read_Pen(void)
 /******************************************************************************************************************/
 
 //Read the converted AD value of XPT2046  //Read the converted AD value of XPT2046
-u16 XPT2046_Read_AD(u8 CMD)
+uint16_t XPT2046_Read_AD(u8 CMD)
 {
-  u16 ADNum;
+  uint16_t ADNum;
   XPT2046_CS_Set(0);
 
   XPT2046_ReadWriteByte(CMD);
@@ -57,12 +57,12 @@ u16 XPT2046_Read_AD(u8 CMD)
 
 #define READ_TIMES 5  //Read times  //Read times
 #define LOST_VAL 1    //Drop value  //Drop value
-u16 XPT2046_Average_AD(u8 CMD)
+uint16_t XPT2046_Average_AD(u8 CMD)
 {
-  u16 i, j;
-  u16 buf[READ_TIMES];
-  u16 sum=0;
-  u16 temp;
+  uint16_t i, j;
+  uint16_t buf[READ_TIMES];
+  uint16_t sum=0;
+  uint16_t temp;
   for(i=0; i<READ_TIMES; i++) buf[i] = XPT2046_Read_AD(CMD);
   for(i=0; i<READ_TIMES-1; i++)//Sort  // Sort
   {
@@ -84,9 +84,9 @@ u16 XPT2046_Average_AD(u8 CMD)
 
 
 #define ERR_RANGE 50 //Tolerance scope
-u16 XPT2046_Repeated_Compare_AD(u8 CMD)
+uint16_t XPT2046_Repeated_Compare_AD(u8 CMD)
 {
-  u16 ad1, ad2;
+  uint16_t ad1, ad2;
   ad1 = XPT2046_Average_AD(CMD);
   ad2 = XPT2046_Average_AD(CMD);
 

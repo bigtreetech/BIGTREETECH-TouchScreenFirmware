@@ -30,9 +30,9 @@ void LOGO_ReadDisplay(void);
 void ICON_ReadDisplay(uint16_t sx, uint16_t sy, uint8_t icon);
 bool model_DirectDisplay(GUI_POINT pos, char *gcode);
 bool model_DecodeToFlash(char *gcode);
-void ICON_CustomReadDisplay(u16 sx,u16 sy, u32 address);
-void SMALLICON_ReadDisplay(u16 sx,u16 sy, u8 icon);
-void ICON_PressedDisplay(u16 sx,u16 sy, u8 icon);
+void ICON_CustomReadDisplay(uint16_t sx,uint16_t sy, u32 address);
+void SMALLICON_ReadDisplay(uint16_t sx,uint16_t sy, uint8_t icon);
+void ICON_PressedDisplay(uint16_t sx,uint16_t sy, uint8_t icon);
 
 
 #ifdef __cplusplus

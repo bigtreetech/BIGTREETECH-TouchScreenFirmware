@@ -1,7 +1,7 @@
 #include "Babystep.h"
 #include "includes.h"
 
-static u8 moveLenSteps_index = 0;
+static uint8_t moveLenSteps_index = 0;
 
 void babyReDraw(float babystep, float z_offset, bool force_z_offset, bool skip_header)
 {
@@ -25,7 +25,7 @@ void babyReDraw(float babystep, float z_offset, bool force_z_offset, bool skip_h
   setLargeFont(true);
 
   sprintf(tempstr, "% 6.2f", babystep);
-  GUI_DispStringRight(point_bs.x, point_bs.y, (u8 *) tempstr);
+  GUI_DispStringRight(point_bs.x, point_bs.y, (uint8_t*) tempstr);
 
   sprintf(tempstr, "% 6.2f", z_offset);
 
@@ -34,7 +34,7 @@ void babyReDraw(float babystep, float z_offset, bool force_z_offset, bool skip_h
   else
     GUI_SetColor(infoSettings.font_color);
 
-  GUI_DispStringRight(point_of.x, point_of.y, (u8 *) tempstr);
+  GUI_DispStringRight(point_of.x, point_of.y, (uint8_t*) tempstr);
 
   // restore default font color
   GUI_SetColor(infoSettings.font_color);
@@ -46,14 +46,14 @@ void babyReDraw(float babystep, float z_offset, bool force_z_offset, bool skip_h
 float babyMblOffsetSetValue(float value)
 {
   mustStoreCmd("G29 S4 Z%.2f\n", value);
-  mustStoreCmd("M503\n");  // needed by babyMblOffsetGetValue() to retrieve the new value
+  mustStoreCmd("M420 V1 T1\n");  // needed by babyMblOffsetGetValue() to retrieve the new value
   return value;
 }
 
 // Get current Z offset value for MBL bl type
 float babyMblOffsetGetValue(void)
 {
-  return getParameter(P_MBL_Z_OFFSET, 0);
+  return getParameter(P_MBL_OFFSET, 0);
 }
 
 void menuBabystep(void)
@@ -169,7 +169,7 @@ void menuBabystep(void)
         if (infoMachineSettings.zProbe == ENABLED || infoMachineSettings.leveling == BL_MBL)
           orig_z_offset = offsetSetValue(new_z_offset - babystep);  // set new Z offset. Required if current Z offset is not changed applying babystep changes (e.g. no BABYSTEP_ZPROBE_OFFSET is set in Marlin FW)
         else  // if HomeOffset
-          orig_z_offset = offsetSetValue(new_z_offset + babystep);  // set new Z offset. Required if current Z offset is not changed applying babystep changes (e.g. no BABYSTEP_ZPROBE_OFFSET is set in Marlin FW)        
+          orig_z_offset = offsetSetValue(new_z_offset + babystep);  // set new Z offset. Required if current Z offset is not changed applying babystep changes (e.g. no BABYSTEP_ZPROBE_OFFSET is set in Marlin FW)
         break;
 
       case KEY_ICON_7:

@@ -73,7 +73,7 @@ static FONT_BITMAP font[] = {
     0,
   },
   { // default font
-    0x0,
+    0x9,
     0xFFFF,
     BYTE_HEIGHT,
     BYTE_WIDTH * 2,
@@ -133,8 +133,15 @@ static void getUTF8EncodeInfo(const uint8_t *ch, CHAR_INFO *pInfo)
 // get character font bitmap info
 static void getBitMapFontInfo(CHAR_INFO *pInfo)
 {
-  uint8_t i;
-  for (i = 0; i < COUNT(font); i++)
+  if(pInfo->codePoint < 9)
+  {
+    pInfo->pixelWidth = 0;
+    pInfo->pixelHeight = 0;
+    pInfo->bitMapAddr = 0;
+    return;
+  }
+
+  for (uint8_t i = 0; i < COUNT(font); i++)
   {
     if(pInfo->codePoint >= font[i].startCodePoint && pInfo->codePoint <= font[i].endCodePoint)
     {

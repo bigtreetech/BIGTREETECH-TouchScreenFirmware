@@ -124,6 +124,24 @@ void Buzzer_play(SOUND sound)
     Buzzer_TurnOn(1500, 30);
     Buzzer_TurnOn(2000, 30);
     break;
+  case sound_heated:
+    if (infoSettings.heaterSound != 1)
+      break;
+    Buzzer_TurnOn(3136, 50);
+    Buzzer_TurnOn(0, 50);
+    Buzzer_TurnOn(3951, 50);
+    Buzzer_TurnOn(0, 100);
+    Buzzer_TurnOn(3951, 50);
+    break;
+  case sound_cooled:
+    if (infoSettings.heaterSound != 1)
+      break;
+    Buzzer_TurnOn(3951, 50);
+    Buzzer_TurnOn(0, 50);
+    Buzzer_TurnOn(3136, 50);
+    Buzzer_TurnOn(0, 100);
+    Buzzer_TurnOn(3136, 50);
+    break;
   case sound_keypress:
   default:
     if (infoSettings.touchSound != 1)

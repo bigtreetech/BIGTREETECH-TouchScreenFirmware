@@ -318,7 +318,7 @@ void abortPrinting(void)
   {
     case BOARD_SD:
     case BOARD_SD_REMOTE:
-      infoHost.printing = false;
+      // infoHost.printing = false;  // Not so fast! Let Marlin tell that he's done!
       //Several M108 are sent to Marlin because consecutive blocking operations
       // such as heating bed, extruder may defer processing of M524
       breakAndContinue();
@@ -330,6 +330,13 @@ void abortPrinting(void)
       else
         request_M524();
 
+      setDialogText(LABEL_SCREEN_INFO, LABEL_BUSY, LABEL_BACKGROUND, LABEL_BACKGROUND);
+      showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
+      while (infoHost.printing == true)  // wait for the printer to settle down
+      {
+        loopProcess();
+      }
+      infoMenu.cur--;
       break;
 
     case TFT_UDISK:
@@ -340,7 +347,6 @@ void abortPrinting(void)
       break;
   }
   heatClearIsWaiting();
-  infoFile.printFromTFT = false;
   endPrinting();
   exitPrinting();
 }
@@ -349,7 +355,7 @@ void abortPrinting(void)
 // wait for cool down, in the meantime, you can shut down by force
 void shutdown(void)
 {
-  for(u8 i = 0; i < infoSettings.fan_count; i++)
+  for(uint8_t i = 0; i < infoSettings.fan_count; i++)
   {
     if (fanIsType(i, FAN_TYPE_F)) mustStoreCmd("%s S0\n", fanCmd[i]);
   }
@@ -377,11 +383,11 @@ void startShutdown(void)
   LABELCHAR(tempbody, LABEL_WAIT_TEMP_SHUT_DOWN);
   sprintf(tempstr, tempbody, infoSettings.auto_off_temp);
 
-  for(u8 i = 0; i < infoSettings.fan_count; i++)
+  for(uint8_t i = 0; i < infoSettings.fan_count; i++)
   {
     if (fanIsType(i,FAN_TYPE_F)) mustStoreCmd("%s S255\n", fanCmd[i]);
   }
-  setDialogText(LABEL_SHUT_DOWN, (u8 *)tempstr, LABEL_FORCE_SHUT_DOWN, LABEL_CANCEL);
+  setDialogText(LABEL_SHUT_DOWN, (uint8_t *)tempstr, LABEL_FORCE_SHUT_DOWN, LABEL_CANCEL);
   showDialog(DIALOG_TYPE_INFO, shutdown, NULL, shutdownLoop);
 }
 
@@ -391,7 +397,7 @@ void getGcodeFromFile(void)
   bool    sd_comment_mode = false;
   bool    sd_comment_space = true;
   char    sd_char;
-  u8      sd_count = 0;
+  uint8_t      sd_count = 0;
   UINT    br = 0;
 
   if (isPrinting() == false || infoFile.source >= BOARD_SD)  return;
@@ -449,18 +455,21 @@ void getGcodeFromFile(void)
 void breakAndContinue(void)
 {
   setRunoutAlarmFalse();
+  clearCmdQueue();
   Serial_Puts(SERIAL_PORT, "M108\n");
 }
 
 void resumeAndPurge(void)
 {
   setRunoutAlarmFalse();
+  clearCmdQueue();
   Serial_Puts(SERIAL_PORT, "M876 S0\n");
 }
 
 void resumeAndContinue(void)
 {
   setRunoutAlarmFalse();
+  clearCmdQueue();
   Serial_Puts(SERIAL_PORT, "M876 S1\n");
 }
 
@@ -475,7 +484,7 @@ bool hasPrintingMenu(void)
 
 void loopCheckPrinting(void)
 {
-  #if defined(ST7920_SPI) || defined(LCD2004_simulator)
+  #ifdef HAS_EMULATOR
     if (infoMenu.menu[infoMenu.cur] == menuMarlinMode) return;
   #endif
 

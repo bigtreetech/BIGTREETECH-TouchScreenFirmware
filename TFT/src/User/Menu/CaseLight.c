@@ -17,7 +17,7 @@ void caseLightBrightnessReDraw()
   char tempstr[20];
   sprintf(tempstr, "  %d%%  ", caseLightGetBrightnessPercent());
   setLargeFont(true);
-  GUI_DispStringInPrect(&exhibitRect, (u8 *)tempstr);
+  GUI_DispStringInPrect(&exhibitRect, (uint8_t *)tempstr);
   setLargeFont(false);
 }
 

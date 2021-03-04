@@ -35,7 +35,7 @@ uint16_t speedGetSetPercent(uint8_t tool)
 
 void loopSpeed(void)
 {
-  for (u8 i = 0; i < SPEED_NUM; i++)
+  for (uint8_t i = 0; i < SPEED_NUM; i++)
   {
     if (lastSetPercent[i] != setPercent[i]  && (OS_GetTimeMs() > nextSpeedTime))
     {

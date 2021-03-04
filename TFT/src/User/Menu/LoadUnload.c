@@ -19,8 +19,8 @@ const MENUITEMS loadUnloadItems = {
    {ICON_BACK,                    LABEL_BACK},}
 };
 
-static u8 curExt_index = 0;
-static u8 lastcmd = NONE;
+static uint8_t curExt_index = 0;
+static uint8_t lastcmd = NONE;
 
 void extruderIdReDraw(void)
 {
@@ -28,13 +28,14 @@ void extruderIdReDraw(void)
 
   sprintf(tempstr, "%2s: %3d/%-3d", heatDisplayID[curExt_index], heatGetCurrentTemp(curExt_index), heatGetTargetTemp(curExt_index));
   setLargeFont(true);
-  GUI_DispStringInPrect(&exhibitRect, (u8 *)tempstr);
+  GUI_DispStringInPrect(&exhibitRect, (uint8_t *)tempstr);
   setLargeFont(false);
 }
 
-void setHotendMinExtTemp(void)  // set the hotend to the minimum extrusion temperature
+// set the hotend to the minimum extrusion temperature if user selected "OK"
+void loadMinTemp_OK(void)
 {
-  mustStoreCmd("M104 S%d T%d\n", infoSettings.min_ext_temp, curExt_index);
+  heatSetTargetTemp(curExt_index, infoSettings.min_ext_temp);
 }
 
 void menuLoadUnload(void)
@@ -49,7 +50,8 @@ void menuLoadUnload(void)
   {
     key_num = menuKeyGetValue();
 
-    if ((infoHost.wait == true) && (key_num != KEY_IDLE))  // if user pokes around while Load/Unload in progress
+    if (infoHost.wait == true && key_num != KEY_IDLE &&
+        key_num != KEY_ICON_7)  // show reminder for process running if presses any button other than bacnk button
     {
       if (lastcmd == UNLOAD)
       { // unloading
@@ -80,7 +82,7 @@ void menuLoadUnload(void)
           strcat(tempMsg, tempStr);
 
           setDialogText(LABEL_WARNING, (uint8_t *)tempMsg, LABEL_CONFIRM, LABEL_CANCEL);
-          showDialog(DIALOG_TYPE_ERROR, setHotendMinExtTemp, NULL, NULL);
+          showDialog(DIALOG_TYPE_ERROR, loadMinTemp_OK, NULL, NULL);
         }
         else if (key_num == KEY_ICON_0)
         { // unload

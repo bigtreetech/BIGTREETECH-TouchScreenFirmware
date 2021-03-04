@@ -10,25 +10,25 @@
 #define SET_VALID_INT_VALUE(VARIABLE, MIN, MAX) VARIABLE = valid_intValue(MIN, MAX, VARIABLE)
 #define SET_VALID_FLOAT_VALUE(VARIABLE, MIN, MAX) VARIABLE = valid_floatValue(MIN, MAX, VARIABLE)
 
-const GUI_POINT pointConfigTitle     = {2,2};
-const GUI_RECT  rectTitleline         = {0,               BYTE_HEIGHT+4,      LCD_WIDTH,                BYTE_HEIGHT+6};
-const GUI_RECT  recterror             = {BYTE_WIDTH/2-2,  BYTE_HEIGHT*2+2,    LCD_WIDTH-BYTE_WIDTH/2+2, LCD_HEIGHT-(BYTE_HEIGHT*4)-4};
-const GUI_RECT  recterrortxt          = {BYTE_WIDTH/2,    BYTE_HEIGHT*2+4,    LCD_WIDTH-BYTE_WIDTH/2,   LCD_HEIGHT-(BYTE_HEIGHT*4)-6};
-const GUI_RECT  rectProgressframe     = {BYTE_WIDTH/2-2, LCD_HEIGHT-(BYTE_HEIGHT*2+BYTE_HEIGHT/2), LCD_WIDTH-BYTE_WIDTH/2+2,LCD_HEIGHT-BYTE_HEIGHT/2};
-const GUI_POINT pointProgressText     = {BYTE_WIDTH/2-2, LCD_HEIGHT-(BYTE_HEIGHT*4)};
+const GUI_POINT pointConfigTitle  = {2,2};
+const GUI_RECT  rectTitleline     = {0,               BYTE_HEIGHT+4,      LCD_WIDTH,                BYTE_HEIGHT+6};
+const GUI_RECT  recterror         = {BYTE_WIDTH/2-2,  BYTE_HEIGHT*2+2,    LCD_WIDTH-BYTE_WIDTH/2+2, LCD_HEIGHT-(BYTE_HEIGHT*4)-4};
+const GUI_RECT  recterrortxt      = {BYTE_WIDTH/2,    BYTE_HEIGHT*2+4,    LCD_WIDTH-BYTE_WIDTH/2,   LCD_HEIGHT-(BYTE_HEIGHT*4)-6};
+const GUI_RECT  rectProgressframe = {BYTE_WIDTH/2-2, LCD_HEIGHT-(BYTE_HEIGHT*2+BYTE_HEIGHT/2), LCD_WIDTH-BYTE_WIDTH/2+2,LCD_HEIGHT-BYTE_HEIGHT/2};
+const GUI_POINT pointProgressText = {BYTE_WIDTH/2-2, LCD_HEIGHT-(BYTE_HEIGHT*4)};
 
-u16 foundkeys = 0;
+uint16_t foundkeys = 0;
 
 CONFIGFILE * CurConfigFile;
 char * cur_line = NULL;
-static u16 c_index = 0;
+static uint16_t c_index = 0;
 
-int customcode_index = 0;
-int customcode_good[CUSTOM_GCODES_COUNT];
+uint8_t customcode_index = 0;
+uint8_t customcode_good[CUSTOM_GCODES_COUNT];
 bool scheduleRotate = false;
 
 static CUSTOM_GCODES* configCustomGcodes = NULL;
-PRINT_GCODES* configPrintGcodes  = NULL;
+PRINT_GCODES* configPrintGcodes = NULL;
 STRINGS_STORE* configStringsStore = NULL;
 
 const char * const config_keywords[CONFIG_COUNT] = {
@@ -134,7 +134,7 @@ bool readConfigFile(const char * path, void (*lineParser)(), uint16_t maxLineLen
   bool comment_space = true;
   char cur_char;
   char last_char = 0;
-  u8 count = 0;
+  uint8_t count = 0;
   UINT br = 0;
   CONFIGFILE configFile;
   CurConfigFile = &configFile;
@@ -240,7 +240,7 @@ bool inLimit(int val, int min, int max)
 //check if config keyword exits in the buffer line
 bool key_seen(const char * keyStr)
 {
-  u16 i;
+  uint16_t i;
   for (c_index = 0; c_index < ACK_MAX_SIZE && cur_line[c_index] != 0; c_index++)
   {
     for (i = 0; keyStr[i] != 0 && cur_line[c_index + i] != 0 && cur_line[c_index + i] == keyStr[i]; i++)
@@ -329,7 +329,7 @@ static inline void config_set_color(uint16_t *color_src)
 //check keywords in the config line in buffer
 void parseConfigLine(void)
 {
-  for (u16 i = 0; i < CONFIG_COUNT; i++)
+  for (uint16_t i = 0; i < CONFIG_COUNT; i++)
   {
     if (key_seen(config_keywords[i]))
     {
@@ -353,14 +353,14 @@ void parseLangLine(void)
       PRINTDEBUG("\n");
       PRINTDEBUG((char *)lang_key_list[i]);
       uint32_t key_addr = LANGUAGE_ADDR + (MAX_LANG_LABEL_LENGTH * i);
-      u8 * pchr = (u8 *)strchr(cur_line, ':') + 1;
+      uint8_t * pchr = (uint8_t *)strchr(cur_line, ':') + 1;
       int bytelen = strlen((char *)pchr);
 
       if (inLimit(bytelen, 1, MAX_LANG_LABEL_LENGTH))
       {
         W25Qxx_WritePage(pchr, key_addr, MAX_LANG_LABEL_LENGTH);
         char check[MAX_LANG_LABEL_LENGTH];
-        W25Qxx_ReadBuffer((u8 *)&check, key_addr, MAX_LANG_LABEL_LENGTH);
+        W25Qxx_ReadBuffer((uint8_t *)&check, key_addr, MAX_LANG_LABEL_LENGTH);
         if (strcmp(strchr(cur_line, ':') + 1, check) != 0)
           showError(CSTAT_SPI_WRITE_FAIL);
       }
@@ -383,7 +383,7 @@ void saveConfig(void)
 
   #ifdef CONFIG_DEBUG
     CUSTOM_GCODES tempgcode;  // = NULL;
-    uint8_t * data_r = (u8 *)&tempgcode;
+    uint8_t * data_r = (uint8_t *)&tempgcode;
 
     W25Qxx_ReadBuffer(data_r, CUSTOM_GCODE_ADDR, sizeof(CUSTOM_GCODES));
     PRINTDEBUG("\nread done");
@@ -456,7 +456,7 @@ void resetConfig(void)
   writeConfig((uint8_t *)&tempST, sizeof(STRINGS_STORE), STRINGS_STORE_ADDR, STRINGS_STORE_MAX_SIZE);
 }
 
-void drawProgressPage(u8 * title)
+void drawProgressPage(uint8_t * title)
 {
   GUI_Clear(BLACK);
   GUI_DispString(2, 2, title);
@@ -469,8 +469,8 @@ void drawProgress(void)
 {
   char tempstr[50];
   sprintf(tempstr, "Total keywords found: %d", foundkeys);
-  GUI_DispString(pointProgressText.x, pointProgressText.y, (u8 *)tempstr);
-  u16 p = map(CurConfigFile->cur, 0, CurConfigFile->size, rectProgressframe.x0, rectProgressframe.x1);
+  GUI_DispString(pointProgressText.x, pointProgressText.y, (uint8_t *)tempstr);
+  uint16_t p = map(CurConfigFile->cur, 0, CurConfigFile->size, rectProgressframe.x0, rectProgressframe.x1);
   GUI_FillRect(rectProgressframe.x0, rectProgressframe.y0, p, rectProgressframe.y1);
 }
 
@@ -523,11 +523,11 @@ void showError(CONFIG_STATS stat)
 }
 
 // parse the keyword values in the buffer
-void parseConfigKey(u16 index)
+void parseConfigKey(uint16_t index)
 {
   switch (index)
   {
-    //----------------------------general settings
+    //----------------------------General Settings
 
     case C_INDEX_STATUS_SCREEN:
       infoSettings.status_screen = getOnOff();
@@ -611,12 +611,12 @@ void parseConfigKey(u16 index)
       SET_VALID_INT_VALUE(infoSettings.ack_notification, 0, 2);
       break;
 
-    //----------------------------Marlin Mode Settings (Only for TFT35_V3.0/TFT24_V1.1/TFT28V3.0)
+    //----------------------------Marlin Mode Settings (only for TFT24_V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70_V3.0)
 
-    #if defined(ST7920_SPI) || defined(LCD2004_simulator)
+    #ifdef HAS_EMULATOR
 
       case C_INDEX_MODE:
-        SET_VALID_INT_VALUE(infoSettings.mode, 0, MODE_COUNT-1);
+        SET_VALID_INT_VALUE(infoSettings.mode, 0, MODE_COUNT - 1);
         break;
 
       case C_INDEX_SERIAL_ON:
@@ -640,7 +640,7 @@ void parseConfigKey(u16 index)
         break;
 
       case C_INDEX_MARLIN_TYPE:
-        SET_VALID_INT_VALUE(infoSettings.marlin_type, 0, MODE_COUNT-1);
+        SET_VALID_INT_VALUE(infoSettings.marlin_type, 0, MODE_COUNT - 1);
         break;
 
       case C_INDEX_MARLIN_TITLE:
@@ -654,7 +654,7 @@ void parseConfigKey(u16 index)
         break;
       }
 
-    #endif // ST7920_SPI || LCD2004_simulator
+    #endif // ST7920_EMULATOR || LCD2004_EMULATOR
 
     //----------------------------Printer / Machine Settings
 
@@ -820,7 +820,7 @@ void parseConfigKey(u16 index)
     {
       char pchr[LINE_MAX_CHAR];
       strcpy(pchr, strrchr(cur_line, ':') + 1);
-      int utf8len = getUTF8Length((u8 *)pchr);
+      int utf8len = getUTF8Length((uint8_t *)pchr);
       int bytelen = strlen(pchr) + 1;
       if (inLimit(utf8len, NAME_MIN_LENGTH, MAX_STRING_LENGTH) && inLimit(bytelen, NAME_MIN_LENGTH, MAX_GCODE_LENGTH))
         strcpy(configStringsStore->preheat_name[index - C_INDEX_PREHEAT_NAME_1], pchr);
@@ -840,7 +840,7 @@ void parseConfigKey(u16 index)
       break;
     }
 
-    //----------------------------Power Supply Settings (if connected to TFT Controller):
+    //----------------------------Power Supply Settings (if connected to TFT controller)
 
     #ifdef PS_ON_PIN
       case C_INDEX_PS_ON:
@@ -856,7 +856,28 @@ void parseConfigKey(u16 index)
         break;
     #endif
 
-    //----------------------------Power Loss Recovery & BTT UPS Settings (if connected to TFT Controller:
+    //----------------------------Filament Runout Settings (if connected to TFT controller)
+
+    #ifdef FIL_RUNOUT_PIN
+      case C_INDEX_RUNOUT:
+        if (inLimit(config_int(), 0, 2))
+          infoSettings.runout = config_int();
+        break;
+
+      case C_INDEX_RUNOUT_LOGIC:
+        infoSettings.runout_invert = getOnOff();
+        break;
+
+      case C_INDEX_RUNOUT_NOISE:
+        SET_VALID_INT_VALUE(infoSettings.runout_noise_ms, MIN_DELAY_MS, MAX_DELAY_MS);
+        break;
+
+      case C_INDEX_RUNOUT_DISTANCE:
+        SET_VALID_INT_VALUE(infoSettings.runout_distance, MIN_RUNOUT_DISTANCE, MAX_RUNOUT_DISTANCE);
+        break;
+    #endif
+
+    //----------------------------Power Loss Recovery & BTT UPS Settings (if connected to TFT controller)
 
     #ifdef BTT_MINI_UPS
       case C_INDEX_POWERLOSS_EN:
@@ -876,28 +897,8 @@ void parseConfigKey(u16 index)
         break;
     #endif
 
-    //----------------------------Filament Runout Settings (if connected to TFT Controller):
+    //----------------------------Other Device-Specific Settings
 
-    #ifdef FIL_RUNOUT_PIN
-      case C_INDEX_RUNOUT:
-        if (inLimit(config_int(),0,2))
-          infoSettings.runout = config_int();
-        break;
-
-      case C_INDEX_RUNOUT_LOGIC:
-        infoSettings.runout_invert = getOnOff();
-        break;
-
-      case C_INDEX_RUNOUT_NOISE:
-        SET_VALID_INT_VALUE(infoSettings.runout_noise_ms, MIN_DELAY_MS, MAX_DELAY_MS);
-        break;
-
-      case C_INDEX_RUNOUT_DISTANCE:
-        SET_VALID_INT_VALUE(infoSettings.runout_distance, MIN_RUNOUT_DISTANCE, MAX_RUNOUT_DISTANCE);
-        break;
-    #endif
-
-    //----------------------------other device specific settings
     #ifdef BUZZER_PIN
       case C_INDEX_TOUCH_SOUND:
         infoSettings.touchSound = getOnOff();
@@ -910,11 +911,15 @@ void parseConfigKey(u16 index)
       case C_INDEX_ALERT_SOUND:
         infoSettings.alertSound = getOnOff();
         break;
+
+      case C_INDEX_HEATER_SOUND:
+        infoSettings.heaterSound = getOnOff();
+        break;
     #endif
 
     #ifdef LED_COLOR_PIN
       case C_INDEX_KNOB_COLOR:
-        SET_VALID_INT_VALUE(infoSettings.knob_led_color, 0, LED_COLOR_NUM-1);
+        SET_VALID_INT_VALUE(infoSettings.knob_led_color, 0, LED_COLOR_NUM - 1);
         break;
 
       #ifdef LCD_LED_PWM_CHANNEL
@@ -940,7 +945,7 @@ void parseConfigKey(u16 index)
         break;
     #endif
 
-    //----------------------------CustomG-Code Commands upto 15 custom G-code
+    //----------------------------Custom Gcode Commands
 
     case C_INDEX_CUSTOM_LABEL_1:
     case C_INDEX_CUSTOM_LABEL_2:
@@ -965,11 +970,11 @@ void parseConfigKey(u16 index)
       if (inLimit(utf8len,NAME_MIN_LENGTH,MAX_GCODE_NAME_LENGTH) && inLimit(bytelen,NAME_MIN_LENGTH,MAX_GCODE_LENGTH))
       {
         strcpy(configCustomGcodes->name[customcode_index++], pchr);
-        customcode_good[index - C_INDEX_CUSTOM_LABEL_1] = 1; //set name was found ok
+        customcode_good[index - C_INDEX_CUSTOM_LABEL_1] = 1;  //set name was found ok
       }
       else
       {
-        customcode_good[index - C_INDEX_CUSTOM_LABEL_1] = 0;//set name was not ok
+        customcode_good[index - C_INDEX_CUSTOM_LABEL_1] = 0;  //set name was not ok
       }
       break;
     }
@@ -989,19 +994,19 @@ void parseConfigKey(u16 index)
     case C_INDEX_CUSTOM_GCODE_14:
     case C_INDEX_CUSTOM_GCODE_15:
     {
-      int fileindex = index - C_INDEX_CUSTOM_GCODE_1; //actual gcode index in config file
+      int fileindex = index - C_INDEX_CUSTOM_GCODE_1;  //actual gcode index in config file
       char pchr[LINE_MAX_CHAR];
       strcpy(pchr,strrchr(cur_line,':') + 1);
       int len = strlen(pchr) + 1;
       //check if gcode length is ok and the name was ok
       if (inLimit(len,GCODE_MIN_LENGTH,MAX_GCODE_LENGTH) && (customcode_good[fileindex] == 1))
-          strcpy(configCustomGcodes->gcode[customcode_index-1], pchr);
-      else if (customcode_good[fileindex] == 1) //if name was ok but gcode is not ok then reduce count
+          strcpy(configCustomGcodes->gcode[customcode_index - 1], pchr);
+      else if (customcode_good[fileindex] == 1)  //if name was ok but gcode is not ok then reduce count
           customcode_index--;
       break;
     }
 
-    //----------------------------Start, End & Cancel G-codes
+    //----------------------------Start, End & Cancel Gcode Commands
 
     case C_INDEX_START_GCODE_ON:
       infoSettings.send_start_gcode = getOnOff();
@@ -1025,7 +1030,7 @@ void parseConfigKey(u16 index)
         strcpy(configPrintGcodes->start_gcode, pchr);
         #ifdef CONFIG_DEBUG
           GUI_DispStringInRect(recterrortxt.x0, recterrortxt.y0 + (BYTE_HEIGHT * 2), recterrortxt.x1, recterrortxt.y1,
-                              (u8 *)configPrintGcodes->start_gcode);
+                              (uint8_t *)configPrintGcodes->start_gcode);
           Delay_ms(1000);
           Delay_ms(1000);
         #endif
@@ -1043,7 +1048,7 @@ void parseConfigKey(u16 index)
         strcpy(configPrintGcodes->end_gcode, pchr);
       #ifdef CONFIG_DEBUG
         GUI_DispStringInRect(recterrortxt.x0, recterrortxt.y0 + (BYTE_HEIGHT * 2), recterrortxt.x1, recterrortxt.y1,
-                             (u8 *)configPrintGcodes->end_gcode);
+                             (uint8_t *)configPrintGcodes->end_gcode);
         Delay_ms(1000);
         Delay_ms(1000);
       #endif
@@ -1061,7 +1066,7 @@ void parseConfigKey(u16 index)
         strcpy(configPrintGcodes->cancel_gcode, pchr);
       #ifdef CONFIG_DEBUG
         GUI_DispStringInRect(recterrortxt.x0, recterrortxt.y0 + (BYTE_HEIGHT * 2), recterrortxt.x1, recterrortxt.y1,
-                             (u8 *)configPrintGcodes->cancel_gcode);
+                             (uint8_t *)configPrintGcodes->cancel_gcode);
         Delay_ms(1000);
         Delay_ms(1000);
       #endif
