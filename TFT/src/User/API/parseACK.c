@@ -569,16 +569,6 @@ void parseACK(void)
         if (ack_seen("Z: ")) setParameter(P_STEPS_PER_MM, Z_STEPPER, ack_value());
         if (ack_seen("E: ")) setParameter(P_STEPS_PER_MM, E_STEPPER, ack_value());
       }
-    // RepRapFirmware
-      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && (ack_seen("WiFi module is connected to")))
-      {
-        ackPopupInfo("WIFI");
-      }
-    // RepRapFirmware
-      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && (ack_seen("\"message\":")))
-      {
-        ackPopupInfo("message");
-      }
     // parse and store Max Acceleration values
       else if (ack_seen("M201"))
       {
