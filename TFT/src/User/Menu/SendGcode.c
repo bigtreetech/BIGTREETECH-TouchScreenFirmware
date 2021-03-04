@@ -398,11 +398,11 @@ static inline void keyboardDrawButton(uint8_t index, uint8_t isPressed)
     if (index != GKEY_SEND)
       setLargeFont(true);
 
-      GUI_ClearRect(editorKeyRect[index].x0 + 1, editorKeyRect[index].y0 + 1, editorKeyRect[index].x1 - 1,
-                    editorKeyRect[index].y1 - 1);
+    GUI_ClearRect(editorKeyRect[index].x0 + 1, editorKeyRect[index].y0 + 1, editorKeyRect[index].x1 - 1,
+                  editorKeyRect[index].y1 - 1);
 
-      GUI_DispStringInRect(editorKeyRect[index].x0 + 1, editorKeyRect[index].y0 + 1, editorKeyRect[index].x1 - 1,
-                          editorKeyRect[index].y1 - 1, (uint8_t *)((numpad) ? gcodeKey123[index] : gcodeKeyABC[index]));
+    GUI_DispStringInRect(editorKeyRect[index].x0 + 1, editorKeyRect[index].y0 + 1, editorKeyRect[index].x1 - 1,
+                        editorKeyRect[index].y1 - 1, (uint8_t *)((numpad) ? gcodeKey123[index] : gcodeKeyABC[index]));
 
   #endif // KEYBOARD_MATERIAL_THEME
 
