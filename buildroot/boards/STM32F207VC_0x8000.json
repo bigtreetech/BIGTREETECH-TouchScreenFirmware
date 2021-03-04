@@ -5,7 +5,7 @@
     "extra_flags": "-DSTM32F207xx",
     "f_cpu": "120000000L",
     "mcu": "stm32f207vct6",
-    "product_line": "STM32F207xx"
+    "product_line": "wrongLineForLocal_S"
   },
   "connectivity": [
     "can",
@@ -28,11 +28,11 @@
     "mbed",
     "stm32cube"
   ],
-  "name": "STM32F207VC (96k RAM. 256k Flash)",
+  "name": "STM32F207VC (96k RAM. 256k - 32K Flash)",
   "upload": {
     "offset_address": "0x8008000",
     "maximum_ram_size": 98304,
-    "maximum_size": 262144,
+    "maximum_size": 229376,
     "protocol": "cmsis-dap",
     "protocols": [
       "jlink",

@@ -8,7 +8,7 @@
       "ldscript": "stm32f405x6.ld"
     },
     "mcu": "stm32f407vgt6",
-    "product_line": "STM32F407xx"
+    "product_line": "wrongLineForLocal_S"
   },
   "debug": {
     "default_tools": [
@@ -30,11 +30,11 @@
     "stm32cube",
     "zephyr"
   ],
-  "name": "STM32F407VG (192k RAM. 1024k Flash)",
+  "name": "STM32F407VG (192k RAM. 1024k - 32K Flash)",
   "upload": {
     "offset_address": "0x8008000",
     "maximum_ram_size": 196608,
-    "maximum_size": 1048576,
+    "maximum_size": 1015808,
     "protocol": "cmsis-dap",
     "protocols": [
       "jlink",
