@@ -195,7 +195,7 @@
 #define Z_MAX_POS 250
 
 // Is this a Delta printer
-#define IS_DELTA true
+#define IS_DELTA false
 
 // Pause Settings
 #define NOZZLE_PAUSE_RETRACT_LENGTH               15  // (mm)
