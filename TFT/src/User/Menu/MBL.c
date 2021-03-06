@@ -127,15 +127,17 @@ void menuMBL(void)
   MENUITEMS mblItems = {
     // title
     LABEL_MBL_SETTINGS,
-    // icon                         label
-    {{ICON_DEC,                     LABEL_DEC},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_INC,                     LABEL_INC},
-     {ICON_001_MM,                  LABEL_001_MM},
-     {ICON_RESET_VALUE,             LABEL_RESET},
-     {ICON_RESUME,                  LABEL_START},
-     {ICON_BACK,                    LABEL_BACK},}
+    // icon                          label
+    {
+      {ICON_DEC,                     LABEL_DEC},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_INC,                     LABEL_INC},
+      {ICON_001_MM,                  LABEL_001_MM},
+      {ICON_RESET_VALUE,             LABEL_RESET},
+      {ICON_RESUME,                  LABEL_START},
+      {ICON_BACK,                    LABEL_BACK},
+    }
   };
 
   #ifdef FRIENDLY_Z_OFFSET_LANGUAGE

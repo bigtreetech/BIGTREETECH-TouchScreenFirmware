@@ -19,7 +19,7 @@ const uint8_t icon_mode [MODE_COUNT]={
 
 void drawModeIcon(void)
 {
-  for(uint8_t i = 0;i < MODE_COUNT; i++)
+  for (uint8_t i = 0;i < MODE_COUNT; i++)
   {
     ICON_ReadDisplay(rect_of_mode[i].x0, rect_of_mode[i].y0, icon_mode[i]);
   }
@@ -37,9 +37,9 @@ void drawModeIcon(void)
 bool LCD_ReadPen(uint16_t intervals)
 {
   static uint32_t TouchTime = 0;
-  if(!XPT2046_Read_Pen())
+  if (!XPT2046_Read_Pen())
   {
-    if(OS_GetTimeMs() - TouchTime >= intervals)
+    if (OS_GetTimeMs() - TouchTime >= intervals)
     {
       TouchTime = OS_GetTimeMs();
       return true;
@@ -76,10 +76,10 @@ void loopCheckMode(void)
 //  but before I can allow that I need a way to make sure that we swap back into
 //  the right mode (and correct screen) and I really want a reliable way to DETECT
 //  that the TFT should be in printing mode even when the print was started externally.
-  if(isPrinting() || skipMode)
+  if (isPrinting() || skipMode)
     return;
 
-  if(infoMenu.menu[infoMenu.cur] == menuMode)
+  if (infoMenu.menu[infoMenu.cur] == menuMode)
     return;
 
 //  #endif
@@ -208,11 +208,11 @@ void switchMode(void)
   infoMenu.cur = 0;
   setupModeHardware(infoSettings.mode);
 
-  switch(infoSettings.mode)
+  switch (infoSettings.mode)
   {
     case MODE_SERIAL_TSC:
       GUI_RestoreColorDefault();
-      if(infoSettings.status_screen == 1)  //if Unified menu is selected
+      if (infoSettings.status_screen == 1)  //if Unified menu is selected
         infoMenu.menu[infoMenu.cur] = menuStatus;  //status screen as default screen on boot
       else
         infoMenu.menu[infoMenu.cur] = menuMain;  // classic UI

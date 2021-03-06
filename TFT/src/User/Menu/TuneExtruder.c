@@ -65,15 +65,17 @@ void menuTuneExtruder(void)
   MENUITEMS tuneExtruderItems = {
     // title
     LABEL_TUNE_EXT_TEMP,
-    // icon                         label
-    {{ICON_DEC,                     LABEL_DEC},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_INC,                     LABEL_INC},
-     {ICON_NOZZLE,                  LABEL_NOZZLE},
-     {ICON_5_DEGREE,                LABEL_5_DEGREE},
-     {ICON_LOAD,                    LABEL_TUNE_EXT_EXTRUDE_100},
-     {ICON_BACK,                    LABEL_BACK},}
+    // icon                          label
+    {
+      {ICON_DEC,                     LABEL_DEC},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_INC,                     LABEL_INC},
+      {ICON_NOZZLE,                  LABEL_NOZZLE},
+      {ICON_5_DEGREE,                LABEL_5_DEGREE},
+      {ICON_LOAD,                    LABEL_TUNE_EXT_EXTRUDE_100},
+      {ICON_BACK,                    LABEL_BACK},
+    }
   };
 
   KEY_VALUES key_num = KEY_IDLE;
@@ -214,15 +216,17 @@ void menuNewExtruderESteps(void)
   MENUITEMS newExtruderESteps = {
     // title
     LABEL_TUNE_EXT_ADJ_ESTEPS,
-    // icon                         label
-    {{ICON_DEC,                     LABEL_DEC},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_INC,                     LABEL_INC},
-     {ICON_EEPROM_SAVE,             LABEL_SAVE},
-     {ICON_1_MM,                    LABEL_1_MM},
-     {ICON_RESET_VALUE,             LABEL_RESET},
-     {ICON_BACK,                    LABEL_BACK},}
+    // icon                          label
+    {
+      {ICON_DEC,                     LABEL_DEC},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_INC,                     LABEL_INC},
+      {ICON_EEPROM_SAVE,             LABEL_SAVE},
+      {ICON_1_MM,                    LABEL_1_MM},
+      {ICON_RESET_VALUE,             LABEL_RESET},
+      {ICON_BACK,                    LABEL_BACK},
+    }
   };
 
   KEY_VALUES key_num = KEY_IDLE;

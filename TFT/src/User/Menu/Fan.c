@@ -4,9 +4,9 @@
 static uint8_t curIndex = 0;
 
 const ITEM itemFan[2] = {
-  // icon                label
-  {ICON_FAN,             LABEL_FAN},
-  {ICON_FAN_HALF_SPEED,  LABEL_HALF},
+  // icon                        label
+  {ICON_FAN,                     LABEL_FAN},
+  {ICON_FAN_HALF_SPEED,          LABEL_HALF},
 };
 
 void fanSpeedReDraw(bool skip_header)
@@ -45,15 +45,17 @@ void menuFan(void)
   MENUITEMS fanItems = {
     // title
     LABEL_FAN,
-    // icon                         label
-    {{ICON_DEC,                     LABEL_DEC},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_INC,                     LABEL_INC},
-     {ICON_FAN ,                    LABEL_FAN},
-     {ICON_FAN_FULL_SPEED,          LABEL_FULL},
-     {ICON_STOP,                    LABEL_STOP},
-     {ICON_BACK,                    LABEL_BACK},}
+    // icon                          label
+    {
+      {ICON_DEC,                     LABEL_DEC},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_INC,                     LABEL_INC},
+      {ICON_FAN ,                    LABEL_FAN},
+      {ICON_FAN_FULL_SPEED,          LABEL_FULL},
+      {ICON_STOP,                    LABEL_STOP},
+      {ICON_BACK,                    LABEL_BACK},
+    }
   };
 
   LASTFAN lastFan;

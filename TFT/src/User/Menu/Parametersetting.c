@@ -236,20 +236,20 @@ void loadParameterPage(LISTITEMS * parameterMainItems, uint8_t total_pages)
 void menuParameterSettings(void)
 {
   LISTITEMS parameterMainItems = {
-  // title
-  LABEL_PARAMETER_SETTING,
-  // icon                   ItemType      Item Title          item value text(only for custom value)
-  {
-    {ICONCHAR_BACKGROUND,   LIST_LABEL,   LABEL_BACKGROUND,   LABEL_BACKGROUND},
-    {ICONCHAR_BACKGROUND,   LIST_LABEL,   LABEL_BACKGROUND,   LABEL_BACKGROUND},
-    {ICONCHAR_BACKGROUND,   LIST_LABEL,   LABEL_BACKGROUND,   LABEL_BACKGROUND},
-    {ICONCHAR_BACKGROUND,   LIST_LABEL,   LABEL_BACKGROUND,   LABEL_BACKGROUND},
-    {ICONCHAR_BACKGROUND,   LIST_LABEL,   LABEL_BACKGROUND,   LABEL_BACKGROUND},
-    {ICONCHAR_BACKGROUND,   LIST_LABEL,   LABEL_BACKGROUND,   LABEL_BACKGROUND},
-    {ICONCHAR_BACKGROUND,   LIST_LABEL,   LABEL_BACKGROUND,   LABEL_BACKGROUND},
-    {ICONCHAR_BACK,         LIST_LABEL,   LABEL_BACKGROUND,   LABEL_BACKGROUND},
-  }
-};
+    // title
+    LABEL_PARAMETER_SETTING,
+    // icon                   ItemType      Item Title          item value text(only for custom value)
+    {
+      {ICONCHAR_BACKGROUND,   LIST_LABEL,   LABEL_BACKGROUND,   LABEL_BACKGROUND},
+      {ICONCHAR_BACKGROUND,   LIST_LABEL,   LABEL_BACKGROUND,   LABEL_BACKGROUND},
+      {ICONCHAR_BACKGROUND,   LIST_LABEL,   LABEL_BACKGROUND,   LABEL_BACKGROUND},
+      {ICONCHAR_BACKGROUND,   LIST_LABEL,   LABEL_BACKGROUND,   LABEL_BACKGROUND},
+      {ICONCHAR_BACKGROUND,   LIST_LABEL,   LABEL_BACKGROUND,   LABEL_BACKGROUND},
+      {ICONCHAR_BACKGROUND,   LIST_LABEL,   LABEL_BACKGROUND,   LABEL_BACKGROUND},
+      {ICONCHAR_BACKGROUND,   LIST_LABEL,   LABEL_BACKGROUND,   LABEL_BACKGROUND},
+      {ICONCHAR_BACK,         LIST_LABEL,   LABEL_BACKGROUND,   LABEL_BACKGROUND},
+    }
+  };
 
   KEY_VALUES key_num = KEY_IDLE;
   uint8_t enabledParameterCount = getEnabledParameterCount();
@@ -341,6 +341,7 @@ void menuParameterSettings(void)
           }
         }
     }
+
     loopProcess();
   }
 }
@@ -422,6 +423,7 @@ int16_t drawTemperatureStatus(void)
       tmpHeater[tmpIndex++] = heatGetCurrentHotend();
     }
   }
+
   if (infoSettings.bed_en)
   { // global bed
     tmpIcon[tmpIndex] = ICON_GLOBAL_BED;
@@ -435,11 +437,13 @@ int16_t drawTemperatureStatus(void)
   }
 
   uint16_t start_y = (TITLE_END_Y - BYTE_HEIGHT) / 2;
+
   GUI_SetBkColor(infoSettings.title_bg_color);
 
   for (int8_t i = tmpIndex - 1; i >= 0; i--)
   {
     char tempstr[10];
+
     x_offset -= GLOBALICON_INTERVAL;
     GUI_ClearRect(x_offset, start_y, x_offset + GLOBALICON_INTERVAL, start_y + GLOBALICON_HEIGHT);
     sprintf(tempstr, "%d/%d", heatGetCurrentTemp(tmpHeater[i]), heatGetTargetTemp(tmpHeater[i]));
@@ -455,5 +459,6 @@ int16_t drawTemperatureStatus(void)
   }
 
   GUI_SetBkColor(infoSettings.bg_color);
+
   return x_offset;
 }

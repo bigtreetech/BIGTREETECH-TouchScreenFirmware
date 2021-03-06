@@ -73,15 +73,17 @@ void menuUBLSaveLoad(void)
   MENUITEMS UBLSaveLoadItems = {
     // title
     LABEL_ABL_SETTINGS_UBL_SAVE,
-    // icon                         label
-    {{ICON_EEPROM_SAVE,             LABEL_ABL_SLOT0},
-     {ICON_EEPROM_SAVE,             LABEL_ABL_SLOT1},
-     {ICON_EEPROM_SAVE,             LABEL_ABL_SLOT2},
-     {ICON_EEPROM_SAVE,             LABEL_ABL_SLOT3},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACK,                    LABEL_BACK},}
+    // icon                          label
+    {
+      {ICON_EEPROM_SAVE,             LABEL_ABL_SLOT0},
+      {ICON_EEPROM_SAVE,             LABEL_ABL_SLOT1},
+      {ICON_EEPROM_SAVE,             LABEL_ABL_SLOT2},
+      {ICON_EEPROM_SAVE,             LABEL_ABL_SLOT3},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_BACK,                    LABEL_BACK},
+    }
   };
 
   KEY_VALUES key_num = KEY_IDLE;
@@ -152,15 +154,17 @@ void menuABL(void)
   MENUITEMS autoLevelingItems = {
     // title
     LABEL_ABL_SETTINGS,
-    // icon                         label
-    {{ICON_LEVELING,                LABEL_START},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BLTOUCH,                 LABEL_BLTOUCH},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_HEAT,                    LABEL_PREHEAT},
-     {ICON_BACK,                    LABEL_BACK}}
+    // icon                          label
+    {
+      {ICON_LEVELING,                LABEL_START},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_BLTOUCH,                 LABEL_BLTOUCH},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_HEAT,                    LABEL_PREHEAT},
+      {ICON_BACK,                    LABEL_BACK},
+    }
   };
 
   KEY_VALUES key_num = KEY_IDLE;

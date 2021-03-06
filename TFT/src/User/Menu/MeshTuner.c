@@ -59,15 +59,17 @@ float menuMeshTuner(uint16_t col, uint16_t row, float value)
   MENUITEMS meshItems = {
     // title
     LABEL_MESH_TUNER,
-    // icon                         label
-    {{ICON_DEC,                     LABEL_DEC},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_INC,                     LABEL_INC},
-     {ICON_001_MM,                  LABEL_001_MM},
-     {ICON_RESET_VALUE,             LABEL_RESET},
-     {ICON_APPLY,                   LABEL_CONFIRM},
-     {ICON_STOP,                    LABEL_CANCEL},}
+    // icon                          label
+    {
+      {ICON_DEC,                     LABEL_DEC},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_INC,                     LABEL_INC},
+      {ICON_001_MM,                  LABEL_001_MM},
+      {ICON_RESET_VALUE,             LABEL_RESET},
+      {ICON_APPLY,                   LABEL_CONFIRM},
+      {ICON_STOP,                    LABEL_CANCEL},
+    }
   };
 
   #ifdef FRIENDLY_Z_OFFSET_LANGUAGE

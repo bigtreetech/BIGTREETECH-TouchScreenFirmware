@@ -1,7 +1,6 @@
 #include "Move.h"
 #include "includes.h"
 
-
 //const GUI_RECT RecXYZ = {START_X + 1*ICON_WIDTH,        STATUS_GANTRY_YOFFSET,
 //                         4*ICON_WIDTH+3*SPACE_X+START_X,ICON_START_Y-STATUS_GANTRY_YOFFSET};
 #define X_MOVE_GCODE "G1 X%.2f F%d\n"
@@ -32,27 +31,27 @@ void menuMove(void)
   MENUITEMS moveItems = {
     // title
     LABEL_MOVE,
-    // icon                         label
+    // icon                          label
     {
-    #ifdef ALTERNATIVE_MOVE_MENU
-    {ICON_Z_DEC,                   LABEL_Z_DEC},
-    {ICON_Y_INC,                   LABEL_Y_INC},
-    {ICON_Z_INC,                   LABEL_Z_INC},
-    {ICON_01_MM,                   LABEL_01_MM},
-    {ICON_X_DEC,                   LABEL_X_DEC},
-    {ICON_Y_DEC,                   LABEL_Y_DEC},
-    {ICON_X_INC,                   LABEL_X_INC},
-    {ICON_BACK,                    LABEL_BACK},
-    #else
-    {ICON_X_INC,                   LABEL_X_INC},
-    {ICON_Y_INC,                   LABEL_Y_INC},
-    {ICON_Z_INC,                   LABEL_Z_INC},
-    {ICON_01_MM,                   LABEL_01_MM},
-    {ICON_X_DEC,                   LABEL_X_DEC},
-    {ICON_Y_DEC,                   LABEL_Y_DEC},
-    {ICON_Z_DEC,                   LABEL_Z_DEC},
-    {ICON_BACK,                    LABEL_BACK},
-    #endif
+      #ifdef ALTERNATIVE_MOVE_MENU
+        {ICON_Z_DEC,                   LABEL_Z_DEC},
+        {ICON_Y_INC,                   LABEL_Y_INC},
+        {ICON_Z_INC,                   LABEL_Z_INC},
+        {ICON_01_MM,                   LABEL_01_MM},
+        {ICON_X_DEC,                   LABEL_X_DEC},
+        {ICON_Y_DEC,                   LABEL_Y_DEC},
+        {ICON_X_INC,                   LABEL_X_INC},
+        {ICON_BACK,                    LABEL_BACK},
+      #else
+        {ICON_X_INC,                   LABEL_X_INC},
+        {ICON_Y_INC,                   LABEL_Y_INC},
+        {ICON_Z_INC,                   LABEL_Z_INC},
+        {ICON_01_MM,                   LABEL_01_MM},
+        {ICON_X_DEC,                   LABEL_X_DEC},
+        {ICON_Y_DEC,                   LABEL_Y_DEC},
+        {ICON_Z_DEC,                   LABEL_Z_DEC},
+        {ICON_BACK,                    LABEL_BACK},
+      #endif
     }
   };
 
@@ -78,17 +77,17 @@ void menuMove(void)
     {{0, 4}, {1, 5}, {2, 6}}
   #endif
     ;
-  if(infoSettings.invert_axis[X_AXIS] != 1)
+  if (infoSettings.invert_axis[X_AXIS] != 1)
     LOAD_XYZ_LABEL_INDEX(table[X_AXIS][0], INC, table[X_AXIS][1], DEC, X); // table[0] <--> INC(+) table[1] <--> DEC(+) if not inverted
   else
     LOAD_XYZ_LABEL_INDEX(table[X_AXIS][0], DEC, table[X_AXIS][1], INC, X); // table[0] <--> DEC(-) table[1] <--> INC(-) if inverted
 
-  if(infoSettings.invert_axis[Y_AXIS] != 1)
+  if (infoSettings.invert_axis[Y_AXIS] != 1)
     LOAD_XYZ_LABEL_INDEX(table[Y_AXIS][0], INC, table[Y_AXIS][1], DEC, Y);
   else
     LOAD_XYZ_LABEL_INDEX(table[Y_AXIS][0], DEC, table[Y_AXIS][1], INC, Y);
 
-  if(infoSettings.invert_axis[Z_AXIS] != 1)
+  if (infoSettings.invert_axis[Z_AXIS] != 1)
     LOAD_XYZ_LABEL_INDEX(table[Z_AXIS][0], INC, table[Z_AXIS][1], DEC, Z);
   else
     LOAD_XYZ_LABEL_INDEX(table[Z_AXIS][0], DEC, table[Z_AXIS][1], INC, Z);
@@ -102,10 +101,10 @@ void menuMove(void)
     encoderPosition = 0;
   #endif
 
-  while(infoMenu.menu[infoMenu.cur] == menuMove)
+  while (infoMenu.menu[infoMenu.cur] == menuMove)
   {
     key_num = menuKeyGetValue();
-    switch(key_num)
+    switch (key_num)
     {
       #ifdef ALTERNATIVE_MOVE_MENU
         case KEY_ICON_0: storeMoveCmd(Z_AXIS, -1); break; // Z move down if no invert
@@ -142,7 +141,7 @@ void menuMove(void)
       #endif
         default:
           #if LCD_ENCODER_SUPPORT
-            if(encoderPosition)
+            if (encoderPosition)
             {
               storeMoveCmd(nowAxis, encoderPosition > 0 ? 1 : -1);
               encoderPosition = 0;

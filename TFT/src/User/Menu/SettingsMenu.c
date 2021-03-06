@@ -4,15 +4,17 @@
 const MENUITEMS settingsItems = {
   // title
   LABEL_SETTINGS,
-  // icon                         label
-  {{ICON_SCREEN_SETTINGS,         LABEL_SCREEN_SETTINGS},
-   {ICON_MACHINE_SETTINGS,        LABEL_MACHINE_SETTINGS},
-   {ICON_FEATURE_SETTINGS,        LABEL_FEATURE_SETTINGS},
-   {ICON_SCREEN_INFO,             LABEL_SCREEN_INFO},
-   {ICON_CONNECTION_SETTINGS,     LABEL_CONNECTION_SETTINGS},
-   {ICON_BACKGROUND,              LABEL_BACKGROUND},
-   {ICON_BACKGROUND,              LABEL_BACKGROUND},
-   {ICON_BACK,                    LABEL_BACK},}
+  // icon                          label
+  {
+    {ICON_SCREEN_SETTINGS,         LABEL_SCREEN_SETTINGS},
+    {ICON_MACHINE_SETTINGS,        LABEL_MACHINE_SETTINGS},
+    {ICON_FEATURE_SETTINGS,        LABEL_FEATURE_SETTINGS},
+    {ICON_SCREEN_INFO,             LABEL_SCREEN_INFO},
+    {ICON_CONNECTION_SETTINGS,     LABEL_CONNECTION_SETTINGS},
+    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_BACK,                    LABEL_BACK},
+  }
 };
 
 const GUI_POINT clocks[] = {
@@ -116,8 +118,8 @@ void menuInfo(void)
 
   GUI_DispStringInRect(20, LCD_HEIGHT - (BYTE_HEIGHT*2), LCD_WIDTH-20, LCD_HEIGHT, textSelect(LABEL_TOUCH_TO_EXIT));
 
-  while(!isPress()) loopBackEnd();
-  while(isPress())  loopBackEnd();
+  while (!isPress()) loopBackEnd();
+  while (isPress()) loopBackEnd();
 
   GUI_RestoreColorDefault();
   infoMenu.cur--;
@@ -129,10 +131,10 @@ void menuSettings(void)
 
   menuDrawPage(&settingsItems);
 
-  while(infoMenu.menu[infoMenu.cur] == menuSettings)
+  while (infoMenu.menu[infoMenu.cur] == menuSettings)
   {
     key_num = menuKeyGetValue();
-    switch(key_num)
+    switch (key_num)
     {
       case KEY_ICON_0:
         infoMenu.menu[++infoMenu.cur] = menuScreenSettings;
@@ -162,6 +164,7 @@ void menuSettings(void)
       default:
         break;
     }
+
     loopProcess();
   }
 }

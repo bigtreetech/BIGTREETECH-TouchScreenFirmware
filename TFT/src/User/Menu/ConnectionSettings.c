@@ -4,15 +4,17 @@
 const MENUITEMS connectionSettingsItems = {
   // title
   LABEL_CONNECTION_SETTINGS,
-  // icon                         label
-  {{ICON_BAUD_RATE,               LABEL_BAUDRATE},
-   {ICON_DISCONNECT,              LABEL_DISCONNECT},
-   {ICON_STOP,                    LABEL_EMERGENCYSTOP},
-   {ICON_SHUT_DOWN,               LABEL_SHUT_DOWN},
-   {ICON_BACKGROUND,              LABEL_BACKGROUND},
-   {ICON_BACKGROUND,              LABEL_BACKGROUND},
-   {ICON_BACKGROUND,              LABEL_BACKGROUND},
-   {ICON_BACK,                    LABEL_BACK},}
+  // icon                          label
+  {
+    {ICON_BAUD_RATE,               LABEL_BAUDRATE},
+    {ICON_DISCONNECT,              LABEL_DISCONNECT},
+    {ICON_STOP,                    LABEL_EMERGENCYSTOP},
+    {ICON_SHUT_DOWN,               LABEL_SHUT_DOWN},
+    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_BACK,                    LABEL_BACK},
+  }
 };
 
 // Set uart pins to input, free uart
@@ -23,13 +25,13 @@ void menuDisconnect(void)
   GUI_DispStringInRect(20, LCD_HEIGHT - (BYTE_HEIGHT*2), LCD_WIDTH-20, LCD_HEIGHT, textSelect(LABEL_TOUCH_TO_EXIT));
 
   Serial_ReSourceDeInit();
-  while(!isPress())
+  while (!isPress())
   {
     #ifdef LCD_LED_PWM_CHANNEL
       loopDimTimer();
     #endif
   }
-  while(isPress())
+  while (isPress())
   {
     #ifdef LCD_LED_PWM_CHANNEL
       loopDimTimer();
@@ -154,6 +156,7 @@ void menuConnectionSettings(void)
       default :
         break;
     }
+
     loopProcess();
   }
 }

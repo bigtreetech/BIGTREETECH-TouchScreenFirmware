@@ -54,26 +54,28 @@ void zOffsetSetMenu(bool probeOffset)
 void menuZOffset(void)
 {
   ITEM itemZOffsetSubmenu[ITEM_Z_OFFSET_SUBMENU_NUM] = {
-    // icon                         label
-    {ICON_01_MM,                    LABEL_01_MM},
-    {ICON_RESET_VALUE,              LABEL_RESET},
-    {ICON_EEPROM_SAVE,              LABEL_SAVE},
-    {ICON_DISABLE_STEPPERS,         LABEL_XY_UNLOCK},
+    // icon                        label
+    {ICON_01_MM,                   LABEL_01_MM},
+    {ICON_RESET_VALUE,             LABEL_RESET},
+    {ICON_EEPROM_SAVE,             LABEL_SAVE},
+    {ICON_DISABLE_STEPPERS,        LABEL_XY_UNLOCK},
   };
 
   // 1 title, ITEM_PER_PAGE items (icon + label)
   MENUITEMS zOffsetItems = {
     // title
     LABEL_PROBE_OFFSET,
-    // icon                         label
-    {{ICON_DEC,                     LABEL_DEC},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_INC,                     LABEL_INC},
-     {ICON_PROBE_OFFSET,            LABEL_OFF},
-     {ICON_PAGE_DOWN,               LABEL_NEXT},
-     {ICON_001_MM,                  LABEL_001_MM},
-     {ICON_BACK,                    LABEL_BACK},}
+    // icon                          label
+    {
+      {ICON_DEC,                     LABEL_DEC},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_INC,                     LABEL_INC},
+      {ICON_PROBE_OFFSET,            LABEL_OFF},
+      {ICON_PAGE_DOWN,               LABEL_NEXT},
+      {ICON_001_MM,                  LABEL_001_MM},
+      {ICON_BACK,                    LABEL_BACK},
+    }
   };
 
   #ifdef FRIENDLY_Z_OFFSET_LANGUAGE

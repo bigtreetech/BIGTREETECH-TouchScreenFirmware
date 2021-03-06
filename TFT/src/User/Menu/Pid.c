@@ -6,15 +6,17 @@
 const MENUITEMS pidWaitItems = {
   // title
   LABEL_PID_TITLE,
-  // icon                         label
-  {{ICON_BACKGROUND,              LABEL_BACKGROUND},
-   {ICON_BACKGROUND,              LABEL_BACKGROUND},
-   {ICON_BACKGROUND,              LABEL_BACKGROUND},
-   {ICON_BACKGROUND,              LABEL_BACKGROUND},
-   {ICON_BACKGROUND,              LABEL_BACKGROUND},
-   {ICON_BACKGROUND,              LABEL_BACKGROUND},
-   {ICON_BACKGROUND,              LABEL_BACKGROUND},
-   {ICON_BACKGROUND,              LABEL_BACKGROUND},}
+  // icon                          label
+  {
+    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+  }
 };
 
 const char *const pidCmd[] = PID_CMD;
@@ -38,7 +40,7 @@ void pidUpdateStatus(bool succeeded)
 
   if (pidCounter > 0)  // if all the PID processes were still not terminated, simply provide a notification
   {
-  #ifdef ENABLE_PID_STATUS_UPDATE_NOTIFICATION
+    #ifdef ENABLE_PID_STATUS_UPDATE_NOTIFICATION
       LABELCHAR(tempMsg, LABEL_PID_TITLE);
 
       if (succeeded)
@@ -53,7 +55,7 @@ void pidUpdateStatus(bool succeeded)
         BUZZER_PLAY(sound_error);
         addToast(DIALOG_TYPE_ERROR, tempMsg);
       }
-  #endif
+    #endif
   }
   else  // if all the PID processes terminated, provide the final dialog
   {
@@ -93,8 +95,8 @@ static inline void pidCheckTimeout(void)
     if (OS_GetTimeMs() > pidTimeout)
     {
       pidRunning = false;
-    //  uint8_t pidCounter = 0;  // we voluntary don't reset (commented out the code) also pidCounter and pidSucceeded to let the
-    //  pidSucceeded = false;  // pidUpdateStatus function allow to handle status updates eventually arriving after the timeout
+//      uint8_t pidCounter = 0;  // we voluntary don't reset (commented out the code) also pidCounter and pidSucceeded to let the
+//      pidSucceeded = false;  // pidUpdateStatus function allow to handle status updates eventually arriving after the timeout
       LABELCHAR(tempMsg, LABEL_TIMEOUT_REACHED);
 
       sprintf(&tempMsg[strlen(tempMsg)], "\n %s", textSelect(LABEL_PROCESS_ABORTED));
@@ -195,15 +197,17 @@ void menuPid(void)
   MENUITEMS pidItems = {
     // title
     LABEL_PID_TITLE,
-    // icon                         label
-    {{ICON_DEC,                     LABEL_DEC},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_INC,                     LABEL_INC},
-     {ICON_NOZZLE,                  LABEL_NOZZLE},
-     {ICON_5_DEGREE,                LABEL_5_DEGREE},
-     {ICON_RESUME,                  LABEL_START},
-     {ICON_BACK,                    LABEL_BACK},}
+    // icon                          label
+    {
+      {ICON_DEC,                     LABEL_DEC},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_INC,                     LABEL_INC},
+      {ICON_NOZZLE,                  LABEL_NOZZLE},
+      {ICON_5_DEGREE,                LABEL_5_DEGREE},
+      {ICON_RESUME,                  LABEL_START},
+      {ICON_BACK,                    LABEL_BACK},
+    }
   };
 
   KEY_VALUES key_num = KEY_IDLE;
