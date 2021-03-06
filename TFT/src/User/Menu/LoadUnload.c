@@ -51,7 +51,7 @@ void menuLoadUnload(void)
     key_num = menuKeyGetValue();
 
     if (infoHost.wait == true && key_num != KEY_IDLE &&
-        key_num != KEY_ICON_7)  // show reminder for process running if presses any button other than bacnk button
+        key_num != KEY_ICON_7)  // show reminder for process running if presses any button other than back button
     {
       if (lastcmd == UNLOAD)
       { // unloading

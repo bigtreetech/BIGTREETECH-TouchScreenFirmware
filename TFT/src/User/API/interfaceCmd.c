@@ -973,7 +973,7 @@ void sendQueueCmd(void)
   Serial_Puts(SERIAL_PORT, infoCmd.queue[infoCmd.index_r].gcode);
 
   if (avoid_terminal != true)
-    sendGcodeTerminalCache(infoCmd.queue[infoCmd.index_r].gcode, TERMINAL_GCODE);
+    terminalCache(infoCmd.queue[infoCmd.index_r].gcode, TERMINAL_GCODE);
 
   purgeLastCmd();
 

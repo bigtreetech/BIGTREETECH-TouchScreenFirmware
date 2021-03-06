@@ -29,13 +29,16 @@ typedef enum
   P_HYBRID_THRESHOLD,
   P_MBL_OFFSET,
   // Keep below items always at the end
-  P_SAVE_SETTINGS,
-  P_RESTORE_SETTINGS,
-  P_RESET_SETTINGS,
-  P_ITEMSCOUNT
+  PARAMETERS_COUNT,
 } PARAMETER_NAME;
 
-#define PARAMETERS_COUNT P_RESET_SETTINGS
+typedef enum
+{
+  P_SAVE_SETTINGS = 0,
+  P_RESTORE_SETTINGS,
+  P_RESET_SETTINGS,
+  P_SETTINGS_COUNT,
+} PARAMETER_SETTINGS;
 
 typedef enum
 {
@@ -86,6 +89,19 @@ extern const LABEL retract_disp_ID[];
 extern const LABEL recover_disp_ID[];
 extern const LABEL retract_auto_ID[];
 
+// Set a parameter status to enable or disable.
+void setParameterStatus(PARAMETER_NAME name, bool status);
+
+// Check status of a parameter
+uint8_t getParameterStatus(PARAMETER_NAME name);
+
+// Get total enabled parameters
+uint8_t getEnabledParameterCount(void);
+
+// Get PARAMETER_NAME of selected index out of total enabled parameters
+// If no parameter is enabled, total parameter count is returned
+PARAMETER_NAME getEnabledParameter(uint8_t index);
+
 float getParameter(PARAMETER_NAME name, uint8_t index);
 void setParameter(PARAMETER_NAME name, uint8_t index, float val);
 
@@ -99,7 +115,7 @@ VAL_TYPE getParameterValType(PARAMETER_NAME para, uint8_t index);
 void setDualStepperStatus(uint8_t index, bool status);
 
 //get status of dual stepper for an axis
-bool getDualstepperStatus(uint8_t index);
+bool getDualStepperStatus(uint8_t index);
 
 //send parameter cmd (Parameter value gets updated after the cmd passes through the cmd cache)
 void sendParameterCmd(PARAMETER_NAME para_index, uint8_t stepper_index, float Value);

@@ -88,7 +88,7 @@ void menuExtrude(void)
       case KEY_INFOBOX:
         {
           char titlestr[30];
-          sprintf(titlestr, "Min:%i | Max:%i", (extlenSteps[COUNT(extlenSteps) - 1]) * -1, extlenSteps[COUNT(extlenSteps) - 1]);
+          sprintf(titlestr, "Min:%.0f | Max:%.0f", extlenSteps[COUNT(extlenSteps) - 1] * -1, extlenSteps[COUNT(extlenSteps) - 1]);
 
           float val = numPadFloat((uint8_t *) titlestr, 0, 0, true);
           eTemp += val;
