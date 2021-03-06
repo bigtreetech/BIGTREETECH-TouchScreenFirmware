@@ -21,10 +21,14 @@ void listWidgetCreate(LABEL title, LISTITEM *items, uint16_t max_items, uint8_t 
 
 void listWidgetSetCurPage(uint8_t cur_page)
 {
-  for (uint8_t i = 0; i < LISTITEM_PER_PAGE; i++) {
-    if (cur_page * LISTITEM_PER_PAGE + i < list_max_items) {
+  for (uint8_t i = 0; i < LISTITEM_PER_PAGE; i++)
+  {
+    if (cur_page * LISTITEM_PER_PAGE + i < list_max_items)
+    {
       listItems.items[i] = totalItems[cur_page * LISTITEM_PER_PAGE + i];
-    } else {
+    }
+    else
+    {
       listItems.items[i].icon = ICONCHAR_BACKGROUND;
     }
   }
@@ -82,9 +86,12 @@ void listWidgetRefreshItem(uint16_t item)
   if (item > list_max_items) return; // error index.
   if (item < list_cur_page * LISTITEM_PER_PAGE || item >= (list_cur_page + 1) * LISTITEM_PER_PAGE) return; // not in cur page
 
-  if (item < list_max_items) {
+  if (item < list_max_items)
+  {
     listItems.items[cur_i] = totalItems[item];
-  } else {
+  }
+  else 
+  {
     listItems.items[cur_i].icon = ICONCHAR_BACKGROUND;
   }
   menuDrawListItem(&listItems.items[cur_i], cur_i);

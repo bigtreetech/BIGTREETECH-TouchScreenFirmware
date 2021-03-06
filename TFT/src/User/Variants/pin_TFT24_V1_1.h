@@ -75,12 +75,15 @@
 #define W25Qxx_SPI    _SPI3
 #define W25Qxx_CS_PIN PD2
 
-// ST7920 Simulator SPI pins
-#define ST7920_SPI    _SPI2
+// ST7920 Emulator SPI pins
+#define ST7920_EMULATOR  // uncomment to enable Marlin mode
+#ifdef ST7920_EMULATOR
+  #define ST7920_SPI _SPI2
+#endif
 
-// HD44780 Simulator pins
-#define LCD2004_simulator
-#ifdef LCD2004_simulator
+// HD44780 Emulator pins
+#define LCD2004_EMULATOR
+#ifdef LCD2004_EMULATOR
   #define LCD_EN      PB15
   #define LCD_RS      PB12
   #define LCD_D4      PB13
@@ -99,6 +102,10 @@
   #define LCD_D5_PORT GPIOB
   #define LCD_D6_PORT GPIOB
   #define LCD_D7_PORT GPIOB
+#endif
+
+#if defined(ST7920_EMULATOR) || defined(LCD2004_EMULATOR)
+  #define HAS_EMULATOR
 #endif
 
 // Buzzer support

@@ -83,7 +83,7 @@ typedef struct
 #define MESH_KEY_HEIGHT  (LCD_HEIGHT / MESH_KEY_ROW_NUM)
 #define MESH_KEY_WIDTH   (LCD_WIDTH - MESH_GRID_WIDTH) / MESH_KEY_COL_NUM
 
-#if MESH_LEFT_KEYBOARD == 1
+#ifdef MESH_LEFT_KEYBOARD
   #define MESH_GRID_X0 (LCD_WIDTH - MESH_GRID_WIDTH)
   #define MESH_GRID_Y0 ICON_START_Y
   #define MESH_INFO_X0 (LCD_WIDTH - MESH_GRID_WIDTH)
@@ -136,7 +136,7 @@ typedef enum
 const GUI_RECT meshGridRect = {MESH_GRID_X0, MESH_GRID_Y0, MESH_GRID_X0 + MESH_GRID_WIDTH, MESH_GRID_Y0 + MESH_GRID_HEIGHT};
 
 const GUI_RECT meshInfoRect[ME_INFO_NUM] = {
-#if MESH_LEFT_KEYBOARD == 1
+#ifdef MESH_LEFT_KEYBOARD
   {MESH_INFO_X0 + 1 * MESH_INFO_WIDTH, MESH_INFO_Y0 + 0 * MESH_INFO_HEIGHT, MESH_INFO_X0 + 2 * MESH_INFO_WIDTH, MESH_INFO_Y0 + 1 * MESH_INFO_HEIGHT},// min value
   {MESH_INFO_X0 + 2 * MESH_INFO_WIDTH, MESH_INFO_Y0 + 0 * MESH_INFO_HEIGHT, MESH_INFO_X0 + 3 * MESH_INFO_WIDTH, MESH_INFO_Y0 + 1 * MESH_INFO_HEIGHT},// max value
   {MESH_INFO_X0 + 0 * MESH_INFO_WIDTH, MESH_INFO_Y0 + 0 * MESH_INFO_HEIGHT, MESH_INFO_X0 + 1 * MESH_INFO_WIDTH, MESH_INFO_Y0 + 1 * MESH_INFO_HEIGHT},// original value
@@ -149,7 +149,7 @@ const GUI_RECT meshInfoRect[ME_INFO_NUM] = {
 };
 
 const GUI_RECT meshKeyRect[ME_KEY_NUM] = {
-#if MESH_LEFT_KEYBOARD == 1
+#ifdef MESH_LEFT_KEYBOARD
   {MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 0 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 2 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 1 * MESH_KEY_HEIGHT},        // SAVE
   {MESH_KEY_X0 + 0 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 0 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 1 * MESH_KEY_HEIGHT},        // OK
   {MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 1 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 2 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 2 * MESH_KEY_HEIGHT},        // RESET
@@ -263,7 +263,7 @@ void meshDeallocData(void)
 bool processKnownDataFormat(char *dataRow)
 {
   bool isKnown = false;
-  u8 i;
+  uint8_t i;
 
   for (i = 0; i < COUNT(meshDataFormat); i++)
   {
@@ -370,7 +370,7 @@ static inline uint16_t meshSetIndex(int32_t index)
 
     meshData->index = index;
     meshData->col = meshData->index % meshData->colsNum;
-    meshData->row = meshData->index / meshData->rowsNum;;
+    meshData->row = meshData->index / meshData->colsNum;
   }
 
   return meshData->index;
@@ -568,7 +568,7 @@ void meshDrawInfoCell(const GUI_RECT *rect, float *val, bool largeFont, uint16_t
 
     GUI_SetColor(color);
     setLargeFont(largeFont);
-    GUI_DispStringInPrect(rect, (u8 *) tempstr);
+    GUI_DispStringInPrect(rect, (uint8_t *) tempstr);
     setLargeFont(false);
   }
 
@@ -598,7 +598,7 @@ void meshDrawFullInfo(void)
   meshDrawInfo(&minValue, &maxValue, &origValue, &curValue);
 }
 
-void meshKeyPress(u8 index, u8 isPressed)
+void meshKeyPress(uint8_t index, uint8_t isPressed)
 {
   if (index >= ME_KEY_NUM)
     return;
@@ -635,7 +635,7 @@ void meshDrawKeyboard(void)
   for (uint8_t i = 0; i < ME_KEY_NUM; i++)
   {
     if (!(i == ME_KEY_SAVE || i == ME_KEY_OK || i == ME_KEY_RESET || i == ME_KEY_HOME))            // if not a unicode string
-      GUI_DispStringInPrect(&meshKeyRect[i], (u8 *) meshKeyString[i]);
+      GUI_DispStringInPrect(&meshKeyRect[i], (uint8_t *) meshKeyString[i]);
   }
 
   if (infoMachineSettings.EEPROM == 1)
@@ -698,7 +698,7 @@ void meshSave(bool saveOnChange)
 
   if (infoMachineSettings.EEPROM == 1)
   {
-    setDialogText((u8 *) meshData->saveTitle, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
+    setDialogText((uint8_t *) meshData->saveTitle, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
     showDialog(DIALOG_TYPE_QUESTION, meshSaveCallback, NULL, NULL);
   }
 }
@@ -822,11 +822,11 @@ void meshUpdateData(char *dataRow)
   {
     meshData->status = ME_DATA_FAILED;
 
-    labelChar(tempMsg, LABEL_PROCESS_ABORTED);
+    LABELCHAR(tempMsg, LABEL_PROCESS_ABORTED);
 
     sprintf(&tempMsg[strlen(tempMsg)], "\n %s", dataRow);
 
-    popupReminder(DIALOG_TYPE_ERROR, LABEL_MESH_EDITOR, (u8 *) tempMsg);
+    popupReminder(DIALOG_TYPE_ERROR, LABEL_MESH_EDITOR, (uint8_t *) tempMsg);
 
     infoMenu.cur--;                                        // exit from mesh editor menu. it avoids to loop in case of persistent error
 

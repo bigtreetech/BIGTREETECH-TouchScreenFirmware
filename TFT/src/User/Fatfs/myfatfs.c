@@ -42,49 +42,45 @@ bool scanPrintFilesFatFs(void)
   {
     if (f_readdir(&dir,&finfo) !=FR_OK || finfo.fname[0] == 0)  break;
     if ((finfo.fattrib&AM_HID) != 0)  continue;
-    if (infoFile.f_num >= FILE_NUM && infoFile.F_num >= FOLDER_NUM)  break;
+    if (infoFile.fileCount >= FILE_NUM && infoFile.folderCount >= FOLDER_NUM)  break;
 
     len = strlen(finfo.fname) + 1;
     if ((finfo.fattrib&AM_DIR) == AM_DIR)
     {
-      if (infoFile.F_num >= FOLDER_NUM)  continue;
+      if (infoFile.folderCount >= FOLDER_NUM)  continue;
 
-      infoFile.folder[infoFile.F_num] = malloc(len);
-      if (infoFile.folder[infoFile.F_num] == NULL)  break;
-      memcpy(infoFile.folder[infoFile.F_num++], finfo.fname, len);
+      infoFile.folder[infoFile.folderCount] = malloc(len);
+      if (infoFile.folder[infoFile.folderCount] == NULL)  break;
+      memcpy(infoFile.folder[infoFile.folderCount++], finfo.fname, len);
     }
     else
     {
-      if (infoFile.f_num >= FILE_NUM)  continue;
+      if (infoFile.fileCount >= FILE_NUM)  continue;
 
       if (strstr(finfo.fname, ".g") == NULL)  continue; // support "*.g","*.gco" and "*.gcode"
 
-      infoFile.file[infoFile.f_num] = malloc(len);
-      if (infoFile.file[infoFile.f_num] == NULL)  break;
-      memcpy(infoFile.file[infoFile.f_num++], finfo.fname, len);
+      infoFile.file[infoFile.fileCount] = malloc(len);
+      if (infoFile.file[infoFile.fileCount] == NULL)  break;
+      memcpy(infoFile.file[infoFile.fileCount++], finfo.fname, len);
     }
   }
 
   f_closedir(&dir);
 
-  for(i=0; i < infoFile.F_num/2; i++)
+  for(i=0; i < infoFile.folderCount/2; i++)
   {
     char *temp = infoFile.folder[i];
-    infoFile.folder[i] = infoFile.folder[infoFile.F_num - i - 1];
-    infoFile.folder[infoFile.F_num - i - 1] = temp;
+    infoFile.folder[i] = infoFile.folder[infoFile.folderCount - i - 1];
+    infoFile.folder[infoFile.folderCount - i - 1] = temp;
   }
-  for(i=0; i < infoFile.f_num/2; i++)
+  for(i=0; i < infoFile.fileCount/2; i++)
   {
     char *temp = infoFile.file[i];
-    infoFile.file[i] = infoFile.file[infoFile.f_num - i - 1];
-    infoFile.file[infoFile.f_num - i - 1] = temp;
+    infoFile.file[i] = infoFile.file[infoFile.fileCount - i - 1];
+    infoFile.file[infoFile.fileCount - i - 1] = temp;
   }
   return true;
 }
-
-
-
-
 
 /*
 * /
@@ -97,7 +93,6 @@ void GUI_DispDate(uint16_t date, uint16_t time)
   i+=16;
 }
 */
-
 
 /*
 */
@@ -149,18 +144,22 @@ bool Get_NewestGcode(const TCHAR* path)
   return status;
 }
 
-bool f_file_exists(const TCHAR* path) {
+bool f_file_exists(const TCHAR* path)
+{
   FIL tmp;
-  if (f_open(&tmp, path, FA_OPEN_EXISTING) == FR_OK) {
+  if (f_open(&tmp, path, FA_OPEN_EXISTING) == FR_OK)
+  {
     f_close(&tmp);
     return true;
   }
   return false;
 }
 
-bool f_dir_exists(const TCHAR* path) {
+bool f_dir_exists(const TCHAR* path)
+{
   DIR tmp;
-  if (f_opendir(&tmp, path) == FR_OK) {
+  if (f_opendir(&tmp, path) == FR_OK)
+  {
     f_closedir(&tmp);
     return true;
   }
@@ -183,18 +182,21 @@ FRESULT f_remove_node (
   for (i = 0; path[i]; i++); /* Get current path length */
   path[i++] = '/';
 
-  for (;;) {
+  for (;;)
+  {
     fr = f_readdir(&dir, fno);  /* Get a directory item */
     if (fr != FR_OK || !fno->fname[0]) break;   /* End of directory? */
     j = 0;
     do {    /* Make a path name */
-      if (i + j >= sz_buff) { /* Buffer over flow? */
+      if (i + j >= sz_buff)
+      { /* Buffer over flow? */
         fr = FR_DENIED;
         goto end_delete;    /* Fails with 100 when buffer overflow */
       }
       path[i + j] = fno->fname[j];
     } while (fno->fname[j++]);
-    if (fno->fattrib & AM_DIR) {    /* Item is a directory */
+    if (fno->fattrib & AM_DIR)
+    {    /* Item is a directory */
       fr = f_remove_node(path, sz_buff, fno);
     } else {                        /* Item is a file */
       fr = f_unlink(path);
@@ -210,12 +212,14 @@ end_delete:
   return fr;
 }
 
-bool f_remove_full_dir(const TCHAR* path) {
+bool f_remove_full_dir(const TCHAR* path)
+{
   #define BUFFER_SIZE 256
   char dirBuffer[BUFFER_SIZE];
   FILINFO tmpInfo;
   strncpy(dirBuffer, path, BUFFER_SIZE);
-  if (f_remove_node(dirBuffer, BUFFER_SIZE, &tmpInfo) == FR_OK) {
+  if (f_remove_node(dirBuffer, BUFFER_SIZE, &tmpInfo) == FR_OK)
+  {
     return true;
   }
   return false;

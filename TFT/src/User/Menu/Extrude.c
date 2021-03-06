@@ -1,9 +1,9 @@
 #include "Extrude.h"
 #include "includes.h"
 
-static u8 curExtruder_index = 0;
-static u8 extlenSteps_index = 1;
-static u8 itemSpeed_index = 1;
+static uint8_t curExtruder_index = 0;
+static uint8_t extlenSteps_index = 1;
+static uint8_t itemSpeed_index = 1;
 static float extrudeCoordinate = 0.0f;
 const char *const tool_change[] = TOOL_CHANGE;
 const char *const extruderDisplayID[] = EXTRUDER_ID;
@@ -15,13 +15,19 @@ void extrudeCoordinateReDraw(bool skip_header)
   if (!skip_header)
   {
     sprintf(tempstr, "%-15s", extruderDisplayID[curExtruder_index]);
-    GUI_DispString(exhibitRect.x0, exhibitRect.y0, (u8 *)tempstr);
+    GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *)tempstr);
   }
 
   sprintf(tempstr, "  %.2f  ", extrudeCoordinate);
   setLargeFont(true);
-  GUI_DispStringInPrect(&exhibitRect, (u8 *)tempstr);
+  GUI_DispStringInPrect(&exhibitRect, (uint8_t *)tempstr);
   setLargeFont(false);
+}
+
+// set the hotend to the minimum extrusion temperature if user selected "OK"
+void extrusionMinTemp_OK(void)
+{
+  heatSetTargetTemp(curExtruder_index, infoSettings.min_ext_temp);
 }
 
 void menuExtrude(void)
@@ -35,16 +41,19 @@ void menuExtrude(void)
   MENUITEMS extrudeItems = {
     // title
     LABEL_EXTRUDE,
-    // icon                      label
-    {{ICON_UNLOAD,               LABEL_UNLOAD},
-     {ICON_BACKGROUND,           LABEL_BACKGROUND},
-     {ICON_BACKGROUND,           LABEL_BACKGROUND},
-     {ICON_LOAD,                 LABEL_LOAD},
-     {ICON_NOZZLE,               LABEL_NOZZLE},
-     {ICON_E_5_MM,               LABEL_5_MM},
-     {ICON_NORMAL_SPEED,         LABEL_NORMAL_SPEED},
-     {ICON_BACK,                 LABEL_BACK},}
+    // icon                         label
+    {{ICON_UNLOAD,                  LABEL_UNLOAD},
+     {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_LOAD,                    LABEL_LOAD},
+     {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_E_5_MM,                  LABEL_5_MM},
+     {ICON_NORMAL_SPEED,            LABEL_NORMAL},
+     {ICON_BACK,                    LABEL_BACK},}
   };
+
+  extrudeItems.items[KEY_ICON_4].icon = (infoSettings.ext_count > 1) ? ICON_NOZZLE : ICON_HEAT;
+  extrudeItems.items[KEY_ICON_4].label.index = (infoSettings.ext_count > 1) ? LABEL_NOZZLE : LABEL_HEAT;
 
   while (infoCmd.count != 0)
   {
@@ -54,15 +63,18 @@ void menuExtrude(void)
   feedrate = coordinateGetFeedRate();
   eRelative = eGetRelative();
 
-  menuDrawPage(&extrudeItems);
-  extrudeCoordinateReDraw(false);
+  if (eRelative) // Set extruder to absolute
+    mustStoreCmd("M82\n");
+
+  extrudeItems.items[KEY_ICON_5] = itemExtLenSteps[extlenSteps_index];
+  extrudeItems.items[KEY_ICON_6] = itemSpeed[itemSpeed_index];
 
   #if LCD_ENCODER_SUPPORT
     encoderPosition = 0;
   #endif
 
-  if (eRelative) // Set extruder to absolute
-    mustStoreCmd("M82\n");
+  menuDrawPage(&extrudeItems);
+  extrudeCoordinateReDraw(false);
 
   while (infoMenu.menu[infoMenu.cur] == menuExtrude)
   {
@@ -75,11 +87,10 @@ void menuExtrude(void)
 
       case KEY_INFOBOX:
         {
-          float val = 0;
           char titlestr[30];
+          sprintf(titlestr, "Min:%.0f | Max:%.0f", extlenSteps[COUNT(extlenSteps) - 1] * -1, extlenSteps[COUNT(extlenSteps) - 1]);
 
-          sprintf(titlestr, "Min:%i | Max:%i", (extlenSteps[COUNT(extlenSteps) - 1]) * -1, extlenSteps[COUNT(extlenSteps) - 1]);
-          val = numPadFloat((u8 *) titlestr, 0, 0, true);
+          float val = numPadFloat((uint8_t *) titlestr, 0, 0, true);
           eTemp += val;
 
           menuDrawPage(&extrudeItems);
@@ -92,8 +103,15 @@ void menuExtrude(void)
         break;
 
       case KEY_ICON_4:
-        curExtruder_index = (curExtruder_index + 1) % infoSettings.ext_count;
-        extrudeCoordinateReDraw(false);
+        if (infoSettings.ext_count > 1)
+        {
+          curExtruder_index = (curExtruder_index + 1) % infoSettings.ext_count;
+          extrudeCoordinateReDraw(false);
+        }
+        else
+        {
+          infoMenu.menu[++infoMenu.cur] = menuHeat;
+        }
         break;
 
       case KEY_ICON_5:
@@ -109,6 +127,18 @@ void menuExtrude(void)
         break;
 
       case KEY_ICON_7:
+        if (!isPrinting())
+        {
+          for (uint8_t i = 0; i < infoSettings.hotend_count; i++)
+          {
+            if (heatGetTargetTemp(i) > 0)
+            {
+              setDialogText(LABEL_WARNING, LABEL_HEATERS_ON, LABEL_CONFIRM, LABEL_CANCEL);
+              showDialog(DIALOG_TYPE_QUESTION, heatCoolDown, NULL, NULL);
+              break;
+            }
+          }
+        }
         infoMenu.cur--;
         break;
 
@@ -116,7 +146,7 @@ void menuExtrude(void)
         #if LCD_ENCODER_SUPPORT
           if (encoderPosition)
           {
-            eTemp += extlenSteps[extlenSteps_index]*encoderPosition;
+            eTemp += extlenSteps[extlenSteps_index] * encoderPosition;
             encoderPosition = 0;
           }
         #endif
@@ -128,11 +158,15 @@ void menuExtrude(void)
         storeCmd("%s\n", tool_change[curExtruder_index]);
 
       if (heatGetCurrentTemp(curExtruder_index) < infoSettings.min_ext_temp)
-      {
+      { // low temperature warning
         char tempMsg[120];
-        labelChar(tempStr, LABEL_EXT_TEMPLOW);
+        LABELCHAR(tempStr, LABEL_EXT_TEMPLOW);
         sprintf(tempMsg, tempStr, infoSettings.min_ext_temp);
-        popupReminder(DIALOG_TYPE_ERROR,LABEL_COLD_EXT, (u8*)tempMsg);
+        strcat(tempMsg, "\n");
+        sprintf(tempStr, (char *)textSelect(LABEL_HEAT_HOTEND), infoSettings.min_ext_temp);
+        strcat(tempMsg, tempStr);
+        setDialogText(LABEL_WARNING, (uint8_t *)tempMsg, LABEL_CONFIRM, LABEL_CANCEL);
+        showDialog(DIALOG_TYPE_ERROR, extrusionMinTemp_OK, NULL, NULL);
       }
       else
       {
@@ -143,8 +177,8 @@ void menuExtrude(void)
     }
     loopProcess();
   }
-  mustStoreCmd("G92 E%.5f\n",eSaved);
-  mustStoreCmd("G0 F%d\n",feedrate);
+  mustStoreCmd("G92 E%.5f\n", eSaved);
+  mustStoreCmd("G0 F%d\n", feedrate);
   if (eRelative)
-    mustStoreCmd("M83\n"); // Set extruder to relative
+    mustStoreCmd("M83\n");  // Set extruder to relative
 }

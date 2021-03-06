@@ -1,0 +1,77 @@
+name: Build Binaries
+on:
+  push:
+    branches: [ master ]
+    paths-ignore:
+    - .devcontainer/**
+    - .github/**
+    - Bootloader/**
+    - Copy to SD Card root directory to update/**
+    - images/**
+    - readme/**
+    - '**/*.md'
+
+jobs:
+  main:
+    name: Build Binaries
+    if: github.repository == 'bigtreetech/BIGTREETECH-TouchScreenFirmware'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Setup Python
+        uses: actions/setup-python@master
+        with:
+          python-version: '3.x'
+      - name: Install Platform IO
+        run: |
+          python -m pip install --upgrade pip
+          pip install -U platformio
+      - name: Build TFT35 V1.0
+        run: platformio run --environment BIGTREE_TFT35_V1_0
+      - name: Build TFT35 V1.1
+        run: platformio run --environment BIGTREE_TFT35_V1_1
+      - name: Build TFT35 V1.2
+        run: platformio run --environment BIGTREE_TFT35_V1_2
+      - name: Build TFT35 V2.0
+        run: platformio run --environment BIGTREE_TFT35_V2_0
+      - name: Build TFT35 V3.0
+        run: platformio run --environment BIGTREE_TFT35_V3_0
+      - name: Build TFT35 E3 V3.0
+        run: platformio run --environment BIGTREE_TFT35_E3_V3_0
+      - name: Build TFT35 B1 V3.0
+        run: platformio run --environment BIGTREE_TFT35_B1_V3_0
+      - name: Build TFT43 V3.0
+        run: platformio run --environment BIGTREE_TFT43_V3_0
+      - name: Build TFT50 V3.0
+        run: platformio run --environment BIGTREE_TFT50_V3_0
+      - name: Build TFT70 V3.0
+        run: platformio run --environment BIGTREE_TFT70_V3_0
+      - name: Build TFT28 V1.0
+        run: platformio run --environment BIGTREE_TFT28_V1_0
+      - name: Build TFT28 V3.0
+        run: platformio run --environment BIGTREE_TFT28_V3_0
+      - name: Build TFT24 V1.1
+        run: platformio run --environment BIGTREE_TFT24_V1_1
+      - name: Build MKS TFT32 V1.4
+        run: platformio run --environment MKS_32_V1_4
+      - name: Build MKS TFT32 V1.4 No Bootloader
+        run: platformio run --environment MKS_32_V1_4_NOBL
+      - name: Build MKS TFT28 V1.0
+        run: platformio run --environment MKS_28_V1_0
+      - name: Remove Old Binaries
+        run: find "Copy to SD Card root directory to update/" -name '*.bin' -print -delete
+      - name: Remove Old Config
+        run: find "Copy to SD Card root directory to update/" -name 'config.ini' -print -delete
+      - name: Copy New Binaries
+        run: find .pio/build/ -name '*.bin' -exec cp -vf '{}' "./Copy to SD Card root directory to update/" ";"
+      - name: Copy New Config
+        run: find TFT/src/User/ -name 'config.ini' -exec cp -vf '{}' "./Copy to SD Card root directory to update/" ";"
+      - name: Stage New Binaries
+        run: git config user.email "${GITHUB_ACTOR}@users.noreply.github.com" && git config user.name "${GITHUB_ACTOR}" && find "Copy to SD Card root directory to update/" -name '*.bin' -exec git add {} \;
+      - name: Stage New Config
+        run: git config user.email "${GITHUB_ACTOR}@users.noreply.github.com" && git config user.name "${GITHUB_ACTOR}" && find "Copy to SD Card root directory to update/" -name 'config.ini' -exec git add {} \;
+      - name: Push
+        uses: actions-x/commit@v2
+        with:
+          message: Update prebuilt binaries and config
+          token: ${{ secrets.MY_SECRET_TOKEN }}

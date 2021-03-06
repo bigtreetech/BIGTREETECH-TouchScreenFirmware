@@ -24,7 +24,7 @@ bool powerFailedCreate(char *path)
 
   create_ok = false;
   if (!infoSettings.powerloss_en) return false; // disable plr
-  if (infoFile.source == BOARD_SD)  return false; // on board SD not support now
+  if (infoFile.source >= BOARD_SD)  return false; // on board SD not support now
 
   if (f_open(&fpPowerFailed, powerFailedFileName, FA_OPEN_ALWAYS | FA_WRITE) != FR_OK)  return false;
 
@@ -53,8 +53,8 @@ void powerFailedCache(u32 offset)
       infoBreakPoint.axis[i] = coordinateGetAxisTarget(i);
     }
     infoBreakPoint.feedrate = coordinateGetFeedRate();
-    infoBreakPoint.speed = speedGetPercent(0); // Move speed percent
-    infoBreakPoint.flow = speedGetPercent(1); // Flow percent
+    infoBreakPoint.speed = speedGetCurPercent(0); // Move speed percent
+    infoBreakPoint.flow = speedGetCurPercent(1); // Flow percent
 
     for(uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
     {
@@ -62,7 +62,7 @@ void powerFailedCache(u32 offset)
     }
     infoBreakPoint.tool = heatGetCurrentTool();
 
-    for(u8 i = 0; i < infoSettings.fan_count; i++)
+    for(uint8_t i = 0; i < infoSettings.fan_count; i++)
     {
       infoBreakPoint.fan[i] = fanGetCurSpeed(i);
     }
@@ -187,7 +187,7 @@ bool powerOffGetData(void)
 
 void menuPowerOff(void)
 {
-  u16 key_num = IDLE_TOUCH;
+  uint16_t key_num = IDLE_TOUCH;
   clearPowerFailed();
   GUI_Clear(infoSettings.bg_color);
 

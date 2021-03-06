@@ -31,7 +31,8 @@ void infoSetFirmwareName(uint8_t *name, uint8_t name_len)
   if (name_len > sizeof(firmare_name) - 1)
     name_len = sizeof(firmare_name) - 1;
   uint8_t i;
-  for (i = 0; i < name_len; i++) {
+  for (i = 0; i < name_len; i++)
+  {
     firmare_name[i] = name[i];
   }
   firmare_name[i] = 0;
@@ -42,7 +43,8 @@ void infoSetMachineType(uint8_t *machine, uint8_t type_len)
   if (type_len > sizeof(machine_type) - 1)
     type_len = sizeof(machine_type) - 1;
   uint8_t i;
-  for (i = 0; i < type_len; i++) {
+  for (i = 0; i < type_len; i++)
+  {
     machine_type[i] = machine[i];
   }
   machine_type[i] = 0;
@@ -84,14 +86,14 @@ void menuInfo(void)
   float usedMB = (float)FLASH_USED/1048576;
   sprintf(buf, "Used %.2f%% (%.2fMB/%uMB)", flashUsedPercentage(), usedMB, (W25Qxx_ReadCapacity()/1048576));
 
-  const uint16_t top_y = (LCD_HEIGHT - (9 * BYTE_HEIGHT)) / 2; // 8 firmware info lines + 1 SPI flash info line
-  const uint16_t start_x = sizeof("Firmware:") * BYTE_WIDTH;
+  const uint16_t top_y = (LCD_HEIGHT - (7 * BYTE_HEIGHT)) / 2; // 8 firmware info lines + 1 SPI flash info line
+  const uint16_t start_x = strlen("Firmware:") * BYTE_WIDTH;
   const GUI_RECT version[5] = {
     {start_x, top_y + 0*BYTE_HEIGHT, LCD_WIDTH, top_y + 2*BYTE_HEIGHT},
     {start_x, top_y + 2*BYTE_HEIGHT, LCD_WIDTH, top_y + 4*BYTE_HEIGHT},
     {start_x, top_y + 4*BYTE_HEIGHT, LCD_WIDTH, top_y + 6*BYTE_HEIGHT},
-    {start_x, top_y + 6*BYTE_HEIGHT, LCD_WIDTH, top_y + 8*BYTE_HEIGHT},
-    {start_x, top_y + 8*BYTE_HEIGHT, LCD_WIDTH, top_y + 9*BYTE_HEIGHT},
+    {start_x, top_y + 5*BYTE_HEIGHT, LCD_WIDTH, top_y + 8*BYTE_HEIGHT},
+    {start_x, top_y + 6*BYTE_HEIGHT, LCD_WIDTH, top_y + 9*BYTE_HEIGHT},
     };
   //draw titles
   GUI_DispString(0, version[0].y0, (uint8_t *)"System  :");

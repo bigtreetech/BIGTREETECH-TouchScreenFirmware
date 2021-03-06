@@ -47,7 +47,7 @@ const LABEL itemDimTime[ITEM_SECONDS_NUM] = {
   LABEL_60_SECONDS,
   LABEL_120_SECONDS,
   LABEL_300_SECONDS,
-  LABEL_CUSTOM_SECONDS
+  LABEL_CUSTOM
 };
 
 const uint32_t LCD_DIM_IDLE_TIME[ITEM_SECONDS_NUM] = {
@@ -185,6 +185,23 @@ void LCD_init_RGB(void)
   LCD_WR_REG(0X29);
 }
 
+#ifdef SCREEN_SHOT_TO_SD
+  uint32_t LCD_ReadPixel_24Bit(int16_t x, int16_t y)
+  {
+    LCD_SetWindow(x, y, x, y);
+    LCD_WR_REG(0X2E);
+    Delay_us(1);
+    LCD_RD_DATA(); // Dummy read
+
+    uint16_t rg, br;
+    rg = LCD_RD_DATA(); // First pixel R:8bit-G:8bit
+    br = LCD_RD_DATA(); // First pixel B:8bit - Second pixel R:8bit
+
+    return ((rg) << 8) | ((br & 0xFF00) >> 8); // RG-B
+  }
+  #warning "LCD_ReadPixel_24Bit() hasn't been tested yet"
+#endif
+
 #elif LCD_DRIVER_IS(ILI9488)
 // ILI9488
 void LCD_init_RGB(void)
@@ -222,6 +239,22 @@ void LCD_init_RGB(void)
   Delay_ms(120);
   LCD_WR_REG(0x29);
 }
+
+#ifdef SCREEN_SHOT_TO_SD
+  uint32_t LCD_ReadPixel_24Bit(int16_t x, int16_t y)
+  {
+    LCD_SetWindow(x, y, x, y);
+    LCD_WR_REG(0X2E);
+    Delay_us(1);
+    LCD_RD_DATA(); // Dummy read
+
+    uint16_t rg, br;
+    rg = LCD_RD_DATA(); // First pixel R:8bit-G:8bit
+    br = LCD_RD_DATA(); // First pixel B:8bit - Second pixel R:8bit
+
+    return ((rg) << 8) | ((br & 0xFF00) >> 8); // RG-B
+  }
+#endif
 
 #elif LCD_DRIVER_IS(ILI9341)
 // ILI9341
@@ -338,80 +371,110 @@ void LCD_init_RGB(void)
   LCD_WR_DATA(0x00);
   LCD_WR_DATA(0xef);
 
-  LCD_WR_REG(0x11); //Exit Sleep
+  LCD_WR_REG(0x11); // Exit Sleep
   Delay_ms(120);
-  LCD_WR_REG(0x29); //display on
+  LCD_WR_REG(0x29); // Display on
+}
+
+uint32_t LCD_ReadPixel_24Bit(int16_t x, int16_t y)
+{
+  LCD_SetWindow(x, y, x, y);
+  LCD_WR_REG(0X2E);
+  Delay_us(1);
+  LCD_RD_DATA(); // Dummy read
+
+  uint16_t rg, br;
+  rg = LCD_RD_DATA(); // First pixel R:8bit-G:8bit
+  br = LCD_RD_DATA(); // First pixel B:8bit - Second pixel R:8bit
+
+  return ((rg) << 8) | ((br & 0xFF00) >> 8); // RG-B
 }
 
 #elif LCD_DRIVER_IS(ST7789)
 // ST7789
 void LCD_init_RGB(void)
 {
- 	LCD_WR_REG(0x11);
-	Delay_ms(120); //Delay 120ms
-	//------------------------------display and color format setting--------------------------------//
-	LCD_WR_REG(0x36);
-	LCD_WR_DATA(0x68);
-	LCD_WR_REG(0x3a);
-	LCD_WR_DATA(0x05);
-	//--------------------------------ST7789V Frame rate setting----------------------------------//
-	LCD_WR_REG(0xb2);
-	LCD_WR_DATA(0x0c);
-	LCD_WR_DATA(0x0c);
-	LCD_WR_DATA(0x00);
-	LCD_WR_DATA(0x33);
-	LCD_WR_DATA(0x33);
-	LCD_WR_REG(0xb7);
-	LCD_WR_DATA(0x35);
-	//---------------------------------ST7789V Power setting--------------------------------------//
-	LCD_WR_REG(0xbb);
-	LCD_WR_DATA(0x28);
-	LCD_WR_REG(0xc0);
-	LCD_WR_DATA(0x2c);
-	LCD_WR_REG(0xc2);
-	LCD_WR_DATA(0x01);
-	LCD_WR_REG(0xc3);
-	LCD_WR_DATA(0x0b);
-	LCD_WR_REG(0xc4);
-	LCD_WR_DATA(0x20);
-	LCD_WR_REG(0xc6);
-	LCD_WR_DATA(0x0f);
-	LCD_WR_REG(0xd0);
-	LCD_WR_DATA(0xa4);
-	LCD_WR_DATA(0xa1);
-	//--------------------------------ST7789V gamma setting---------------------------------------//
-	LCD_WR_REG(0xe0);
-	LCD_WR_DATA(0xd0);
-	LCD_WR_DATA(0x01);
-	LCD_WR_DATA(0x08);
-	LCD_WR_DATA(0x0f);
-	LCD_WR_DATA(0x11);
-	LCD_WR_DATA(0x2a);
-	LCD_WR_DATA(0x36);
-	LCD_WR_DATA(0x55);
-	LCD_WR_DATA(0x44);
-	LCD_WR_DATA(0x3a);
-	LCD_WR_DATA(0x0b);
-	LCD_WR_DATA(0x06);
-	LCD_WR_DATA(0x11);
-	LCD_WR_DATA(0x20);
-	LCD_WR_REG(0xe1);
-	LCD_WR_DATA(0xd0);
-	LCD_WR_DATA(0x02);
-	LCD_WR_DATA(0x07);
-	LCD_WR_DATA(0x0a);
-	LCD_WR_DATA(0x0b);
-	LCD_WR_DATA(0x18);
-	LCD_WR_DATA(0x34);
-	LCD_WR_DATA(0x43);
-	LCD_WR_DATA(0x4a);
-	LCD_WR_DATA(0x2b);
-	LCD_WR_DATA(0x1b);
-	LCD_WR_DATA(0x1c);
-	LCD_WR_DATA(0x22);
-	LCD_WR_DATA(0x1f);
-	LCD_WR_REG(0x29);
+  LCD_WR_REG(0x11);
+  Delay_ms(120); //Delay 120ms
+  //------------------------------display and color format setting--------------------------------//
+  LCD_WR_REG(0x36);
+  LCD_WR_DATA(0x68);
+  LCD_WR_REG(0x3a);
+  LCD_WR_DATA(0x05);
+  //--------------------------------ST7789V Frame rate setting----------------------------------//
+  LCD_WR_REG(0xb2);
+  LCD_WR_DATA(0x0c);
+  LCD_WR_DATA(0x0c);
+  LCD_WR_DATA(0x00);
+  LCD_WR_DATA(0x33);
+  LCD_WR_DATA(0x33);
+  LCD_WR_REG(0xb7);
+  LCD_WR_DATA(0x35);
+  //---------------------------------ST7789V Power setting--------------------------------------//
+  LCD_WR_REG(0xbb);
+  LCD_WR_DATA(0x28);
+  LCD_WR_REG(0xc0);
+  LCD_WR_DATA(0x2c);
+  LCD_WR_REG(0xc2);
+  LCD_WR_DATA(0x01);
+  LCD_WR_REG(0xc3);
+  LCD_WR_DATA(0x0b);
+  LCD_WR_REG(0xc4);
+  LCD_WR_DATA(0x20);
+  LCD_WR_REG(0xc6);
+  LCD_WR_DATA(0x0f);
+  LCD_WR_REG(0xd0);
+  LCD_WR_DATA(0xa4);
+  LCD_WR_DATA(0xa1);
+  //--------------------------------ST7789V gamma setting---------------------------------------//
+  LCD_WR_REG(0xe0);
+  LCD_WR_DATA(0xd0);
+  LCD_WR_DATA(0x01);
+  LCD_WR_DATA(0x08);
+  LCD_WR_DATA(0x0f);
+  LCD_WR_DATA(0x11);
+  LCD_WR_DATA(0x2a);
+  LCD_WR_DATA(0x36);
+  LCD_WR_DATA(0x55);
+  LCD_WR_DATA(0x44);
+  LCD_WR_DATA(0x3a);
+  LCD_WR_DATA(0x0b);
+  LCD_WR_DATA(0x06);
+  LCD_WR_DATA(0x11);
+  LCD_WR_DATA(0x20);
+  LCD_WR_REG(0xe1);
+  LCD_WR_DATA(0xd0);
+  LCD_WR_DATA(0x02);
+  LCD_WR_DATA(0x07);
+  LCD_WR_DATA(0x0a);
+  LCD_WR_DATA(0x0b);
+  LCD_WR_DATA(0x18);
+  LCD_WR_DATA(0x34);
+  LCD_WR_DATA(0x43);
+  LCD_WR_DATA(0x4a);
+  LCD_WR_DATA(0x2b);
+  LCD_WR_DATA(0x1b);
+  LCD_WR_DATA(0x1c);
+  LCD_WR_DATA(0x22);
+  LCD_WR_DATA(0x1f);
+  LCD_WR_REG(0x29);
 }
+
+#ifdef SCREEN_SHOT_TO_SD
+  uint32_t LCD_ReadPixel_24Bit(int16_t x, int16_t y)
+  {
+    LCD_SetWindow(x, y, x, y);
+    LCD_WR_REG(0X2E);
+    Delay_us(1);
+    LCD_RD_DATA(); // Dummy read
+
+    uint16_t rg, br;
+    rg = LCD_RD_DATA(); // First pixel R:8bit-G:8bit
+    br = LCD_RD_DATA(); // First pixel B:8bit - Second pixel R:8bit
+
+    return ((rg) << 8) | ((br & 0xFF00) >> 8); // RG-B
+  }
+#endif
 
 #elif LCD_DRIVER_IS(HX8558)
 // HX8558
@@ -519,6 +582,21 @@ void LCD_init_RGB(void)
   LCD_WR_REG(0x2C);
 }
 
+#ifdef SCREEN_SHOT_TO_SD
+  uint32_t LCD_ReadPixel_24Bit(int16_t x, int16_t y)
+  {
+    LCD_SetWindow(x, y, x, y);
+    LCD_WR_REG(0X22);
+    Delay_us(1);
+    LCD_RD_DATA(); // Dummy read
+
+    GUI_COLOR pix;
+    pix.color = LCD_RD_DATA();
+    return (pix.RGB.r << 19) | (pix.RGB.g << 10) | (pix.RGB.b << 3);
+  }
+  #warning "LCD_ReadPixel_24Bit() hasn't been tested yet"
+#endif
+
 #elif LCD_DRIVER_IS(SSD1963)
 // SSD1963  resolution max:864*480
 #define SSD_HOR_RESOLUTION   LCD_WIDTH  // LCD width pixel
@@ -576,19 +654,35 @@ void LCD_init_RGB(void)
   LCD_WR_DATA(0x00);
   LCD_WR_REG(0xF0);  // Set pixel data interface format
   LCD_WR_DATA(0x03); // 16-bit(565 format) data for 16bpp
+  LCD_WR_REG(0xBC);  // postprocessor for contrast/brightness/saturation.
+  LCD_WR_DATA(0x34); //   Contrast value (0-127). Set to 52 to reduce banding/flickering.
+  LCD_WR_DATA(0x77); //   Brightness value (0-127). Set to 119 to reduce banding/flickering.
+  LCD_WR_DATA(0x48); //   Saturation value (0-127).
+  LCD_WR_DATA(0x01); //   Enable/disable the postprocessor for contrast/brightness/saturation (1-0).
   LCD_WR_REG(0x29);  // Set display on
 
   LCD_WR_REG(0x36);  // Set address mode
   LCD_WR_DATA(0x00);
 }
 
+uint32_t LCD_ReadPixel_24Bit(int16_t x, int16_t y)
+{
+  LCD_SetWindow(x, y, x, y);
+  LCD_WR_REG(0X2E);
+  Delay_us(1);
+
+  GUI_COLOR pix;
+  pix.color = LCD_RD_DATA();
+  return (pix.RGB.r << 19) | (pix.RGB.g << 10) | (pix.RGB.b << 3);
+}
+
 #endif
 
-u16 LCD_ReadID(void)
+uint16_t LCD_ReadID(void)
 {
-  u16 id = 0;
+  uint16_t id = 0;
   LCD_WR_REG(0XD3);
-  id = LCD_RD_DATA();	//dummy read
+  id = LCD_RD_DATA();  //dummy read
   id = LCD_RD_DATA();
   id = LCD_RD_DATA();
   id <<= 8;

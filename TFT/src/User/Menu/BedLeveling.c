@@ -5,15 +5,15 @@ static inline void blUpdateState(MENUITEMS *menu)
 {
   if (getParameter(P_ABL_STATE, 0) == ENABLED)
   {
-    menu->items[6].icon = ICON_LEVELING_ON;
-    menu->items[6].label.index = LABEL_BL_ENABLE;
+    menu->items[3].icon = ICON_LEVELING_ON;
+    menu->items[3].label.index = LABEL_BL_ENABLE;
   }
   else
   {
-    menu->items[6].icon = ICON_LEVELING_OFF;
-    menu->items[6].label.index = LABEL_BL_DISABLE;
+    menu->items[3].icon = ICON_LEVELING_OFF;
+    menu->items[3].label.index = LABEL_BL_DISABLE;
   }
-  menuDrawItem(&menu->items[6], 6);
+  menuDrawItem(&menu->items[3], 3);
 }
 
 void menuBedLeveling(void)
@@ -23,11 +23,11 @@ void menuBedLeveling(void)
     LABEL_ABL_SETTINGS,
     // icon                         label
     {{ICON_LEVELING,                LABEL_ABL},
-     {ICON_LEVELING,                LABEL_MESH_EDITOR},
+     {ICON_MESH_EDITOR,             LABEL_MESH_EDITOR},
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_PROBE_OFFSET,            LABEL_Z_OFFSET},
      {ICON_Z_FADE,                  LABEL_ABL_Z},
+     {ICON_PROBE_OFFSET,            LABEL_H_OFFSET},
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BACK,                    LABEL_BACK},}
   };
@@ -59,15 +59,27 @@ void menuBedLeveling(void)
       break;
   }
 
+  if (infoSettings.z_steppers_alignment)
+  {
+    bedLevelingItems.items[2].icon = ICON_Z_ALIGN;
+    bedLevelingItems.items[2].label.index = LABEL_Z_ALIGN;
+  }
+
   if (getParameter(P_ABL_STATE, 0) == ENABLED)
   {
-    bedLevelingItems.items[6].icon = ICON_LEVELING_ON;
-    bedLevelingItems.items[6].label.index = LABEL_BL_ENABLE;
+    bedLevelingItems.items[3].icon = ICON_LEVELING_ON;
+    bedLevelingItems.items[3].label.index = LABEL_BL_ENABLE;
   }
   else
   {
-    bedLevelingItems.items[6].icon = ICON_LEVELING_OFF;
-    bedLevelingItems.items[6].label.index = LABEL_BL_DISABLE;
+    bedLevelingItems.items[3].icon = ICON_LEVELING_OFF;
+    bedLevelingItems.items[3].label.index = LABEL_BL_DISABLE;
+  }
+
+  if (infoMachineSettings.zProbe == ENABLED)
+  {
+    bedLevelingItems.items[6].icon = ICON_PROBE_OFFSET;
+    bedLevelingItems.items[6].label.index = LABEL_P_OFFSET;
   }
 
   menuDrawPage(&bedLevelingItems);
@@ -85,30 +97,43 @@ void menuBedLeveling(void)
         infoMenu.menu[++infoMenu.cur] = menuMeshEditor;
         break;
 
-      case KEY_ICON_4:
-        storeCmd("M851\n");
-        infoMenu.menu[++infoMenu.cur] = menuProbeOffset;
+      case KEY_ICON_2:
+        if (infoSettings.z_steppers_alignment)
+          storeCmd("G34\n");
         break;
 
-      case KEY_ICON_5:
-        {
-          char tempstr[30];
-
-          sprintf(tempstr, "%Min:%.2f | Max:%.2f", Z_FADE_MIN_VALUE, Z_FADE_MAX_VALUE);
-
-          float val = numPadFloat((u8 *) tempstr, getParameter(P_ABL_STATE, 1), 0.0f, false);
-
-          storeCmd("M420 Z%.2f\n", NOBEYOND(Z_FADE_MIN_VALUE, val, Z_FADE_MAX_VALUE));
-
-          menuDrawPage(&bedLevelingItems);
-        }
-        break;
-
-      case KEY_ICON_6:
+      case KEY_ICON_3:
         if (getParameter(P_ABL_STATE, 0) == ENABLED)
           storeCmd("M420 S0\n");
         else
           storeCmd("M420 S1\n");
+        break;
+
+      case KEY_ICON_4:
+      {
+        char tempstr[30];
+        sprintf(tempstr, "%Min:%.2f | Max:%.2f", Z_FADE_MIN_VALUE, Z_FADE_MAX_VALUE);
+
+        float val = numPadFloat((uint8_t *) tempstr, getParameter(P_ABL_STATE, 1), 0.0f, false);
+        storeCmd("M420 Z%.2f\n", NOBEYOND(Z_FADE_MIN_VALUE, val, Z_FADE_MAX_VALUE));
+
+        menuDrawPage(&bedLevelingItems);
+        break;
+      }
+
+      case KEY_ICON_5:
+        storeCmd("M206\n");
+        zOffsetSetMenu(false);  // use Home Offset menu
+        infoMenu.menu[++infoMenu.cur] = menuZOffset;
+        break;
+
+      case KEY_ICON_6:
+        if (infoMachineSettings.zProbe == ENABLED)
+        {
+          storeCmd("M851\n");
+          zOffsetSetMenu(true);  // use Probe Offset menu
+          infoMenu.menu[++infoMenu.cur] = menuZOffset;
+        }
         break;
 
       case KEY_ICON_7:

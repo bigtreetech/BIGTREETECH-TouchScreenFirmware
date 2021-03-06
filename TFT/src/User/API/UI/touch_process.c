@@ -31,20 +31,20 @@ int32_t TSC_Para[7];
 static volatile bool touchScreenIsPress=false;
 bool touchSound = true;
 
-void TS_Get_Coordinates(u16 *x, u16 *y)
+void TS_Get_Coordinates(uint16_t *x, uint16_t *y)
 {
-  u16 tp_x = XPT2046_Repeated_Compare_AD(CMD_RDX);
-  u16 tp_y = XPT2046_Repeated_Compare_AD(CMD_RDY);
+  uint16_t tp_x = XPT2046_Repeated_Compare_AD(CMD_RDX);
+  uint16_t tp_y = XPT2046_Repeated_Compare_AD(CMD_RDY);
 
   *x = (A*tp_x+B*tp_y+C)/K;
   *y = (D*tp_x+E*tp_y+F)/K;
 }
 
 #define TS_ERR_RANGE 10
-u8 calibrationEnsure(u16 x,u16 y)
+uint8_t calibrationEnsure(uint16_t x,uint16_t y)
 {
-  u32 i;
-  u16 tp_x,tp_y;
+  uint32_t i;
+  uint16_t tp_x,tp_y;
   int lcd_x,lcd_y;
   GUI_SetColor(BLACK);
   GUI_FillCircle(x,y,5);
@@ -84,10 +84,10 @@ u8 calibrationEnsure(u16 x,u16 y)
 
 void TSC_Calibration(void)
 {
-  u32 LCD_X[3] = {40, LCD_WIDTH-40, LCD_WIDTH-40};
-  u32 LCD_Y[3] = {40, 40, LCD_HEIGHT-40};
-  u16 TP_X[3],TP_Y[3];
-  u32 tp_num = 0;
+  uint32_t LCD_X[3] = {40, LCD_WIDTH-40, LCD_WIDTH-40};
+  uint32_t LCD_Y[3] = {40, 40, LCD_HEIGHT-40};
+  uint16_t TP_X[3],TP_Y[3];
+  uint32_t tp_num = 0;
   int i;
 
   do
@@ -126,10 +126,10 @@ void TSC_Calibration(void)
 }
 
 
-u16 Key_value(u8 total_rect,const GUI_RECT* menuRect)
+uint16_t Key_value(uint8_t total_rect,const GUI_RECT* menuRect)
 {
-  u8 i=0;
-  u16 x, y;
+  uint8_t i=0;
+  uint16_t x, y;
 
   TS_Get_Coordinates(&x,&y);
   for(i=0;i<total_rect;i++)
@@ -147,7 +147,7 @@ u16 Key_value(u8 total_rect,const GUI_RECT* menuRect)
 
 void loopTouchScreen(void) // Handle in interrupt
 {
-  static u8 touch;
+  static uint8_t touch;
   if(!XPT2046_Read_Pen())
   {
     if(touch >= 20) // 20ms
@@ -166,20 +166,20 @@ void loopTouchScreen(void) // Handle in interrupt
   }
 }
 
-u8 isPress(void)
+uint8_t isPress(void)
 {
   return touchScreenIsPress;
 }
 
 
-void (*TSC_ReDrawIcon)(u8 position, u8 is_press) = NULL;
+void (*TSC_ReDrawIcon)(uint8_t position, uint8_t is_press) = NULL;
 
-u16 KEY_GetValue(u8 total_rect,const GUI_RECT* menuRect)
+uint16_t KEY_GetValue(uint8_t total_rect,const GUI_RECT* menuRect)
 {
-  static u16 key_num = IDLE_TOUCH;
+  static uint16_t key_num = IDLE_TOUCH;
   static bool firstPress = true;
 
-  u16 key_return = IDLE_TOUCH;
+  uint16_t key_return = IDLE_TOUCH;
 
   if (touchScreenIsPress)
   {
@@ -220,13 +220,13 @@ typedef enum
 #define KEY_LONG_PRESS_SPACE_MAX 10     //锟斤拷锟斤拷时 锟筋长锟斤拷梅锟斤拷锟揭伙拷渭锟街?
 #define KEY_LONG_PRESS_SPACE_MIN 2      //����ʱ ��̶�÷���һ�μ�ֵ
 
-//u16 KEY_GetValue(u8 total_rect,const GUI_RECT* menuRect)
+//uint16_t KEY_GetValue(uint8_t total_rect,const GUI_RECT* menuRect)
 //{
-//  u16 key_return=NO_TOUCH;
+//  uint16_t key_return=NO_TOUCH;
 
-//  static u16  first_key  = NO_TOUCH;
-//  static u32  first_time = 0;
-//  static u8   long_press_space = KEY_LONG_PRESS_SPACE_MAX;
+//  static uint16_t  first_key  = NO_TOUCH;
+//  static uint32_t  first_time = 0;
+//  static uint8_t   long_press_space = KEY_LONG_PRESS_SPACE_MAX;
 
 //  static KEY_STATUS nowStatus = NO_CLICK;    //������ǰ��״̬
 
@@ -315,13 +315,13 @@ typedef enum
 //  return key_return;
 //}
 
-u16 KNOB_GetRV(GUI_RECT *knob)
+uint16_t KNOB_GetRV(GUI_RECT *knob)
 {
-  u16 key_return=IDLE_TOUCH;
-  u16 x=0,y=0;
+  uint16_t key_return=IDLE_TOUCH;
+  uint16_t x=0,y=0;
 
-  static u16 oldx=0,oldy=0;
-  static u32 mytime;
+  static uint16_t oldx=0,oldy=0;
+  static uint32_t mytime;
 
   if(touchScreenIsPress && OS_GetTimeMs() > mytime)
   {

@@ -3,51 +3,9 @@
 
 #define PROBE_HEIGHT_INITIAL_HEIGHT 0.2f                   // 0.2 mm
 
-static u8 curUnit_index = 0;
-
-u8 mblPoint = 0;
+static uint8_t curUnit_index = 0;
+uint8_t mblPoint = 0;
 bool mblRunning = false;
-
-/* called by parseAck() to notify MBL process status */
-void mblUpdateStatus(bool succeeded)
-{
-  mblRunning = false;
-
-  if (succeeded)                                           // if bed leveling process successfully terminated, allow to save to EEPROM
-  {
-    BUZZER_PLAY(sound_success);
-
-    labelChar(tempMsg, LABEL_BL_COMPLETE);
-
-    if (infoMachineSettings.EEPROM == 1)
-    {
-      sprintf(&tempMsg[strlen(tempMsg)], "\n %s", textSelect(LABEL_EEPROM_SAVE_INFO));
-
-      setDialogText(LABEL_MBL_SETTINGS, (u8 *) tempMsg, LABEL_CONFIRM, LABEL_CANCEL);
-      showDialog(DIALOG_TYPE_SUCCESS, saveEepromSettings, NULL, NULL);
-    }
-    else
-    {
-      popupReminder(DIALOG_TYPE_SUCCESS, LABEL_MBL_SETTINGS, (u8 *) tempMsg);
-    }
-  }
-  else                                                     // if bed leveling process failed, provide an error dialog
-  {
-    BUZZER_PLAY(sound_error);
-
-    popupReminder(DIALOG_TYPE_ERROR, LABEL_MBL_SETTINGS, LABEL_PROCESS_ABORTED);
-  }
-}
-
-/* Show an error notification */
-void mblNotifyError(void)
-{
-  labelChar(tempMsg, LABEL_MBL);
-
-  sprintf(&tempMsg[strlen(tempMsg)], " %s", textSelect(LABEL_OFF));
-
-  addToast(DIALOG_TYPE_ERROR, tempMsg);
-}
 
 /* Start MBL */
 static inline void mblStart(void)
@@ -61,6 +19,7 @@ static inline void mblStart(void)
   mustStoreCmd("G29 S1\n");                                // home and move to first point for Z height adjustment
 
   probeHeightStart(PROBE_HEIGHT_INITIAL_HEIGHT);           // lower nozzle to provided absolute Z point
+  probeHeightRelative();                                   // set relative position mode
 }
 
 /* Stop MBL */
@@ -68,19 +27,69 @@ static inline void mblStop(void)
 {
   mblRunning = false;
 
+  if (infoMachineSettings.zProbe == ENABLED)
+    probeHeightStop();                                     // raise nozzle
+
+  probeHeightAbsolute();                                   // set absolute position mode
+
+  probeHeightDisable();                                    // restore original software endstops state
+}
+
+/* Abort MBL */
+static inline void mblAbort(void)
+{
   // MBL gcode sequence stop
   mustStoreCmd("G29 S5\n");                                // reset and disable mesh
 
-  probeHeightStop();                                       // raise nozzle
-
-  probeHeightDisable();                                    // restore original software endstops state
+  mblStop();
 
   BUZZER_PLAY(sound_error);
 
   popupReminder(DIALOG_TYPE_ERROR, LABEL_MBL_SETTINGS, LABEL_PROCESS_ABORTED);
 }
 
-void mblDrawHeader(u8 *point)
+/* called by parseAck() to notify MBL process status */
+void mblUpdateStatus(bool succeeded)
+{
+  mblStop();
+
+  if (succeeded)                                           // if bed leveling process successfully terminated, allow to save to EEPROM
+  {
+    BUZZER_PLAY(sound_success);
+
+    LABELCHAR(tempMsg, LABEL_BL_COMPLETE);
+
+    if (infoMachineSettings.EEPROM == 1)
+    {
+      sprintf(&tempMsg[strlen(tempMsg)], "\n %s", textSelect(LABEL_EEPROM_SAVE_INFO));
+
+      setDialogText(LABEL_MBL_SETTINGS, (uint8_t *) tempMsg, LABEL_CONFIRM, LABEL_CANCEL);
+      showDialog(DIALOG_TYPE_SUCCESS, saveEepromSettings, NULL, NULL);
+    }
+    else
+    {
+      popupReminder(DIALOG_TYPE_SUCCESS, LABEL_MBL_SETTINGS, (uint8_t *) tempMsg);
+    }
+  }
+  else                                                     // if bed leveling process failed, provide an error dialog
+  {
+    BUZZER_PLAY(sound_error);
+
+    popupReminder(DIALOG_TYPE_ERROR, LABEL_MBL_SETTINGS, LABEL_PROCESS_ABORTED);
+  }
+}
+
+/* Show an error notification */
+void mblNotifyError(void)
+{
+  LABELCHAR(tempMsg, LABEL_MBL);
+
+  sprintf(&tempMsg[strlen(tempMsg)], " %s", textSelect(LABEL_OFF));
+
+  addToast(DIALOG_TYPE_ERROR, tempMsg);
+}
+
+void mblDrawHeader(uint8_t *point)
 {
   char tempstr[20];
 
@@ -97,7 +106,7 @@ void mblDrawHeader(u8 *point)
     GUI_SetColor(infoSettings.reminder_color);
   }
 
-  GUI_DispString(exhibitRect.x0, exhibitRect.y0, (u8 *) tempstr);
+  GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *) tempstr);
   GUI_SetColor(infoSettings.font_color);
 }
 
@@ -108,7 +117,7 @@ void mblDrawValue(float val)
   sprintf(tempstr, "  %.2f  ", val);
 
   setLargeFont(true);
-  GUI_DispStringInPrect(&exhibitRect, (u8 *) tempstr);
+  GUI_DispStringInPrect(&exhibitRect, (uint8_t *) tempstr);
   setLargeFont(false);
 }
 
@@ -129,7 +138,7 @@ void menuMBL(void)
      {ICON_BACK,                    LABEL_BACK},}
   };
 
-  #if FRIENDLY_PROBE_OFFSET_LANGUAGE == 1
+  #ifdef FRIENDLY_Z_OFFSET_LANGUAGE
     mblItems.items[0].icon = ICON_NOZZLE_DOWN;
     mblItems.items[0].label.index = LABEL_DOWN;
     mblItems.items[3].icon = ICON_NOZZLE_UP;
@@ -227,7 +236,7 @@ void menuMBL(void)
 
       case KEY_ICON_7:
         if (mblRunning)
-          mblStop();
+          mblAbort();
 
         infoMenu.cur--;
         break;

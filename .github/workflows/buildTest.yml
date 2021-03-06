@@ -1,9 +1,24 @@
 name: Build Test
-on: [pull_request, push]
+on:
+  pull_request:
+    paths-ignore:
+    - Bootloader/**
+    - Copy to SD Card root directory to update/**
+    - images/**
+    - readme/**
+    - '**/*.md'
+
+  push:
+    paths-ignore:
+    - Bootloader/**
+    - Copy to SD Card root directory to update/**
+    - images/**
+    - readme/**
+    - '**/*.md'
 
 jobs:
   main:
-    name: Main
+    name: Build Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -27,6 +42,8 @@ jobs:
         run: platformio run --environment BIGTREE_TFT35_V3_0
       - name: Build TFT35 E3 V3.0
         run: platformio run --environment BIGTREE_TFT35_E3_V3_0
+      - name: Build TFT35 B1 V3.0
+        run: platformio run --environment BIGTREE_TFT35_B1_V3_0
       - name: Build TFT43 V3.0
         run: platformio run --environment BIGTREE_TFT43_V3_0
       - name: Build TFT50 V3.0

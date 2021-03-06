@@ -4,17 +4,18 @@
 SETTINGS infoSettings;
 MACHINESETTINGS infoMachineSettings;
 
-const u16 default_max_temp[]      = HEAT_MAX_TEMP;
-const u16 default_max_fanPWM[]    = FAN_MAX_PWM;
-const u16 default_size_min[]      = {X_MIN_POS,Y_MIN_POS,Z_MIN_POS};
-const u16 default_size_max[]      = {X_MAX_POS,Y_MAX_POS,Z_MAX_POS};
-const u16 default_move_speed[]    = {SPEED_MOVE_SLOW, DEFAULT_SPEED_MOVE, SPEED_MOVE_FAST};
-const u16 default_ext_speed[]     = {EXTRUDE_SLOW_SPEED, EXTRUDE_NORMAL_SPEED, EXTRUDE_FAST_SPEED};
-const u16 default_level_speed[]   = {LEVELING_POINT_XY_FEEDRATE,LEVELING_POINT_XY_FEEDRATE,LEVELING_POINT_Z_FEEDRATE};
-const u16 default_pause_speed[]   = {NOZZLE_PAUSE_XY_FEEDRATE, NOZZLE_PAUSE_XY_FEEDRATE, NOZZLE_PAUSE_Z_FEEDRATE, NOZZLE_PAUSE_E_FEEDRATE};
-const u16 default_preheat_ext[]   = PREHEAT_HOTEND;
-const u16 default_preheat_bed[]   = PREHEAT_BED;
-const u8 default_custom_enabled[] = CUSTOM_GCODE_ENABLED;
+const uint16_t default_max_temp[]      = HEAT_MAX_TEMP;
+const uint16_t default_max_fanPWM[]    = FAN_MAX_PWM;
+const uint16_t default_size_min[]      = {X_MIN_POS,Y_MIN_POS,Z_MIN_POS};
+const uint16_t default_size_max[]      = {X_MAX_POS,Y_MAX_POS,Z_MAX_POS};
+const uint16_t default_xy_speed[]      = {SPEED_XY_SLOW, SPEED_XY_NORMAL, SPEED_XY_FAST};
+const uint16_t default_z_speed[]       = {SPEED_Z_SLOW, SPEED_Z_NORMAL, SPEED_Z_FAST};
+const uint16_t default_ext_speed[]     = {EXTRUDE_SLOW_SPEED, EXTRUDE_NORMAL_SPEED, EXTRUDE_FAST_SPEED};
+const uint16_t default_level_speed[]   = {LEVELING_POINT_XY_FEEDRATE, LEVELING_POINT_Z_FEEDRATE};
+const uint16_t default_pause_speed[]   = {NOZZLE_PAUSE_XY_FEEDRATE, NOZZLE_PAUSE_Z_FEEDRATE, NOZZLE_PAUSE_E_FEEDRATE};
+const uint16_t default_preheat_ext[]   = PREHEAT_HOTEND;
+const uint16_t default_preheat_bed[]   = PREHEAT_BED;
+const uint8_t default_custom_enabled[] = CUSTOM_GCODE_ENABLED;
 
 // Reset settings data
 void infoSettingsReset(void)
@@ -35,6 +36,7 @@ void infoSettingsReset(void)
   infoSettings.mesh_min_color         = lcd_colors[MESH_MIN_COLOR];
   infoSettings.mesh_max_color         = lcd_colors[MESH_MAX_COLOR];
 
+  infoSettings.rotate_ui              = DISABLED;
   infoSettings.terminalACK            = DISABLED;
   infoSettings.persistent_info        = ENABLED;
   infoSettings.file_listmode          = ENABLED;
@@ -46,7 +48,7 @@ void infoSettingsReset(void)
   infoSettings.marlin_mode_bg_color   = lcd_colors[MARLIN_BKCOLOR];
   infoSettings.marlin_mode_font_color = lcd_colors[MARLIN_FNCOLOR];
   infoSettings.marlin_mode_showtitle  = MARLIN_SHOW_BANNER;
-  infoSettings.marlin_mode_fullscreen = DEFAULT_ST7920_FULLSCREEN_MODE;
+  infoSettings.marlin_mode_fullscreen = MARLIN_MODE_FULLSCREEN;
   infoSettings.marlin_type            = LCD12864;
 
 // Printer / Machine Settings
@@ -58,23 +60,24 @@ void infoSettingsReset(void)
   infoSettings.fan_ctrl_count         = FAN_CTRL_NUM;
   infoSettings.min_ext_temp           = PREVENT_COLD_EXTRUSION_MINTEMP;
   infoSettings.auto_load_leveling     = AUTO_SAVE_LOAD_BL_VALUE;
+  infoSettings.touchmi_sensor         = TOUCHMI_SENSOR_VALUE;
   infoSettings.onboardSD              = AUTO;                        //ENABLED / DISABLED / AUTO
   infoSettings.m27_refresh_time       = M27_REFRESH;
   infoSettings.m27_active             = M27_WATCH_OTHER_SOURCES;
-  infoSettings.longFileName           = AUTO;                        //ENABLED / DISABLED / AUTO
-  infoSettings.fan_percentage         = ENABLED;
+  infoSettings.longFileName           = AUTO;  //ENABLED / DISABLED / AUTO
+  infoSettings.fan_percentage         = SHOW_FAN_PERCENTAGE;
 
   infoSettings.pause_retract_len      = NOZZLE_PAUSE_RETRACT_LENGTH;
   infoSettings.resume_purge_len       = NOZZLE_RESUME_PURGE_LENGTH;
-  infoSettings.pause_pos[X_AXIS]      = NOZZLE_PAUSE_X_POSITION;     // X
-  infoSettings.pause_pos[Y_AXIS]      = NOZZLE_PAUSE_Y_POSITION;     // Y
+  infoSettings.pause_pos[X_AXIS]      = NOZZLE_PAUSE_X_POSITION;  // X
+  infoSettings.pause_pos[Y_AXIS]      = NOZZLE_PAUSE_Y_POSITION;  // Y
   infoSettings.pause_z_raise          = NOZZLE_PAUSE_Z_RAISE;
 
   infoSettings.level_edge             = LEVELING_EDGE_DISTANCE;
   infoSettings.level_z_pos            = LEVELING_POINT_Z;
   infoSettings.level_z_raise          = LEVELING_POINT_MOVE_Z;
 
-  infoSettings.move_speed             = ENABLED;                     // index on infoSettings.axis_speed, infoSettings.ext_speed
+  infoSettings.move_speed             = 1; // index on infoSettings.axis_speed, infoSettings.ext_speed
 
 // Power Supply Settings
   infoSettings.auto_off               = DISABLED;
@@ -98,12 +101,14 @@ void infoSettingsReset(void)
   infoSettings.touchSound             = ENABLED;
   infoSettings.toastSound             = ENABLED;
   infoSettings.alertSound             = ENABLED;
+  infoSettings.heaterSound            = ENABLED;
   infoSettings.knob_led_color         = STARTUP_KNOB_LED_COLOR;
   infoSettings.knob_led_idle          = ENABLED;
   infoSettings.lcd_brightness         = DEFAULT_LCD_BRIGHTNESS;
   infoSettings.lcd_idle_brightness    = DEFAULT_LCD_IDLE_BRIGHTNESS;
   infoSettings.lcd_idle_timer         = DEFAULT_LCD_IDLE_TIMER;
-  infoSettings.print_summary          = DISPLAY_PRINT_SUMMARY;
+  infoSettings.xy_offset_probing      = ENABLED;
+  infoSettings.z_steppers_alignment   = DISABLED;
 
 // Start, End & Cancel G-codes
   infoSettings.send_start_gcode       = DISABLED;
@@ -111,33 +116,38 @@ void infoSettingsReset(void)
   infoSettings.send_cancel_gcode      = ENABLED;
 
 // All the remaining array initializations
-  for(int i = 0; i < MAX_HEATER_COUNT; i++)
+  for (int i = 0; i < MAX_HEATER_COUNT; i++)
   {
     infoSettings.max_temp[i]          = default_max_temp[i];
   }
 
-  for(int i = 0; i < MAX_FAN_COUNT ;i++)
+  for (int i = 0; i < MAX_FAN_COUNT; i++)
   {
     infoSettings.fan_max[i]           = default_max_fanPWM[i];
   }
 
-  for(int i = 0; i < AXIS_NUM ;i++) //x, y, z
+  for (int i = 0; i < AXIS_NUM; i++) //x, y, z
   {
     infoSettings.invert_axis[i]       = DISABLED;
     infoSettings.machine_size_min[i]  = default_size_min[i];
     infoSettings.machine_size_max[i]  = default_size_max[i];
+  }
+
+  for (int i = 0; i < FEEDRATE_COUNT - 1 ; i++) //xy, z
+  {
     infoSettings.level_feedrate[i]    = default_level_speed[i];
   }
 
-  for(int i = 0; i < SPEED_COUNT ;i++)
+  for (int i = 0; i < SPEED_COUNT; i++)
   {
-    infoSettings.axis_speed[i]        = default_move_speed[i];
+    infoSettings.xy_speed[i]          = default_xy_speed[i];
+    infoSettings.z_speed[i]           = default_z_speed[i];
     infoSettings.ext_speed[i]         = default_ext_speed[i];
   }
 
-  for(int i = 0; i < TOTAL_AXIS ;i++)
+  for (int i = 0; i < FEEDRATE_COUNT; i++)
   {
-    infoSettings.pause_feedrate[i]    = default_pause_speed[i];      // X, Y, Z, E
+    infoSettings.pause_feedrate[i]    = default_pause_speed[i];  // XY, Z, E
   }
 
   for (int i = 0; i < PREHEAT_COUNT; i++)
@@ -148,9 +158,10 @@ void infoSettingsReset(void)
   resetConfig();
 }
 
-void initMachineSetting(void){
+void initMachineSetting(void)
+{
   // some settings are assumes as active unless reported disabled by marlin
-  infoMachineSettings.isMarlinFirmware        = -1; // set fimware type to -1 to avoid repeated ABL gcode on mode change
+  infoMachineSettings.firmwareType            = FW_NOT_DETECTED; // set fimware type to not_detected to avoid repeated ABL gcode on mode change
   infoMachineSettings.EEPROM                  = ENABLED;
   infoMachineSettings.autoReportTemp          = DISABLED;
   infoMachineSettings.leveling                = BL_DISABLED;
@@ -168,6 +179,7 @@ void initMachineSetting(void){
   infoMachineSettings.progress                = DISABLED;
   infoMachineSettings.softwareEndstops        = ENABLED;
 
+  fanControlInit();
 }
 
 void setupMachine(void)
@@ -194,7 +206,7 @@ void setupMachine(void)
     storeCmd("M420 S1\n");
   }
 
-  if (infoMachineSettings.isMarlinFirmware != 1) // Smoothieware does not report detailed M115 capabilities
+  if (infoMachineSettings.firmwareType != FW_MARLIN) // Smoothieware does not report detailed M115 capabilities
   {
     infoMachineSettings.EEPROM                  = ENABLED;
     infoMachineSettings.autoReportTemp          = DISABLED;

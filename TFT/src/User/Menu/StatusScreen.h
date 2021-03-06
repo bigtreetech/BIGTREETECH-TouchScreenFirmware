@@ -8,18 +8,19 @@ extern "C" {
 #include "includes.h"
 
 //Colors for drawing the icons
-#define GANTRYLBL_BKCOLOR   0x2187
+#define GANTRYLBL_BKCOLOR   MAT_DARKSLATE
 #define GANTRYLBL_COLOR     WHITE
 #define HEADING_COLOR       WHITE
 #define VAL_COLOR           BLACK
-#define INFOBOX_BKCOLOR     0x4b0d
-#define INFOBOX_BORDER      0x4b0d
-#define INFOBOX_ICON_COLOR  0x03BF
+#define INFOBOX_BKCOLOR     MAT_SLATE
+#define INFOBOX_BORDER      MAT_SLATE
+#define INFOBOX_ICON_COLOR  MAT_BLUE
 #define INFOMSG_BKCOLOR     WHITE
 #define INFOMSG_COLOR       BLACK
 
 extern const GUI_POINT ss_title_point;
 extern const GUI_POINT ss_val_point;
+extern const GUI_RECT msgRect;
 
 void menuStatus(void);
 void drawTemperature(void);
