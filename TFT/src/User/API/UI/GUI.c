@@ -826,7 +826,7 @@ void _GUI_DispLabelInPrectEOL(const GUI_RECT *rect, uint16_t index)
 #define RADIO_IDLE_COLOR     WHITE
 void RADIO_Create(RADIO *radio)
 {
-  uint16_t tmp = GUI_GetColor();
+  u16 tmp = GUI_GetColor();
   uint8_t i=0;
   for(i=0;i<radio->num;i++)
   {
@@ -843,7 +843,7 @@ void RADIO_Create(RADIO *radio)
 
 void RADIO_Select(RADIO *radio, uint8_t select)
 {
-  uint16_t tmp = GUI_GetColor();
+  u16 tmp = GUI_GetColor();
   uint8_t i=0;
   if(radio->select==select)
   return;
@@ -866,19 +866,14 @@ void RADIO_Select(RADIO *radio, uint8_t select)
 }
 
 
-void Scroll_CreatePara(SCROLL * para, const uint8_t *pstr, const GUI_RECT *prect)
+void Scroll_CreatePara(SCROLL * para,const uint8_t *pstr, const GUI_RECT *rect)
 {
-  CHAR_INFO info;
-  getCharacterInfo(pstr, &info);
   memset(para,0,sizeof(SCROLL));
   para->text = (uint8_t *const)pstr;
   para->maxByte = strlen((char *)pstr);
   para->curPixelWidth = para->totalPixelWidth = GUI_StrPixelWidth(pstr);
-  para->maxPixelWidth = prect->x1 - prect->x0;
-  para->rect.x0 = prect->x0;
-  para->rect.x1 = prect->x1;
-  para->rect.y0 = prect->y0 + (((prect->y1 - prect->y0) - info.pixelHeight) / 2);
-  para->rect.y1 = para->rect.y0 + info.pixelHeight;
+  para->maxPixelWidth = rect->x1 - rect->x0;
+  para->rect = rect;
 }
 
 void Scroll_DispString(SCROLL * para, uint8_t align)
@@ -892,7 +887,7 @@ void Scroll_DispString(SCROLL * para, uint8_t align)
     if(OS_GetTimeMs() > para->time)
     {
       para->time = OS_GetTimeMs() + 50; // 50ms
-      GUI_SetRange(para->rect.x0, para->rect.y0, para->rect.x1, para->rect.y1);
+      GUI_SetRange(para->rect->x0, para->rect->y0, para->rect->x1, para->rect->y1);
       if(para->curByte < para->maxByte)
       {
         getCharacterInfo(&para->text[para->curByte], &info);
@@ -903,14 +898,14 @@ void Scroll_DispString(SCROLL * para, uint8_t align)
           para->off_head = 0;
         }
 
-        GUI_DispLenString(para->rect.x0 - para->off_head, para->rect.y0, &para->text[para->curByte], para->maxPixelWidth + info.pixelWidth, false);
+        GUI_DispLenString(para->rect->x0 - para->off_head, para->rect->y0, &para->text[para->curByte], para->maxPixelWidth + info.pixelWidth, false);
 
         para->curPixelWidth--;
         if(para->curPixelWidth < para->maxPixelWidth)
         {
-          for(i = para->rect.y0; i<para->rect.y1; i++)
+          for(i = para->rect->y0; i<para->rect->y1; i++)
           {
-            GUI_DrawPixel(para->rect.x0 + para->curPixelWidth, i, backGroundColor);
+            GUI_DrawPixel(para->rect->x0 + para->curPixelWidth, i, backGroundColor);
           }
         }
       }
@@ -918,8 +913,8 @@ void Scroll_DispString(SCROLL * para, uint8_t align)
       if(para->curPixelWidth + 2*BYTE_WIDTH < para->maxPixelWidth)
       {
         para->off_tail++;
-        GUI_DispLenString(para->rect.x1-para->off_tail, para->rect.y0, para->text, para->off_tail, false);
-        if(para->off_tail + para->rect.x0 >= para->rect.x1)
+        GUI_DispLenString(para->rect->x1-para->off_tail, para->rect->y0, para->text, para->off_tail, false);
+        if(para->off_tail + para->rect->x0 >= para->rect->x1)
         {
           para->off_head=0;
           para->off_tail=0;
@@ -936,19 +931,19 @@ void Scroll_DispString(SCROLL * para, uint8_t align)
     {
       case LEFT:
       {
-        GUI_DispString(para->rect.x0, para->rect.y0, para->text);
+        GUI_DispString(para->rect->x0, para->rect->y0, para->text);
         break;
       }
       case RIGHT:
       {
-        uint16_t x_offset=(para->rect.x1 - para->totalPixelWidth);
-        GUI_DispString(x_offset, para->rect.y0, para->text);
+        uint16_t x_offset=(para->rect->x1 - para->totalPixelWidth);
+        GUI_DispString(x_offset, para->rect->y0, para->text);
         break;
       }
       case CENTER:
       {
-        uint16_t x_offset=((para->rect.x1 - para->rect.x0 - para->totalPixelWidth) >>1);
-        GUI_DispString(para->rect.x0+x_offset, para->rect.y0, para->text);
+        uint16_t x_offset=((para->rect->x1 - para->rect->x0 - para->totalPixelWidth) >>1);
+        GUI_DispString(para->rect->x0+x_offset, para->rect->y0, para->text);
         break;
       }
     }
@@ -1010,12 +1005,12 @@ void GUI_DrawWindow(const WINDOW *window, const uint8_t *title, const uint8_t *i
 {
   GUI_RECT w_rect = window->rect;
 
-  uint16_t title_height = window->titleHeight;
-  //uint16_t action_height = window->actionBarHeight;
-  uint16_t title_txt_y0 = w_rect.y0 + (title_height - BYTE_HEIGHT) / 2;
-  uint16_t title_y1 = window->rect.y0 + window->titleHeight;
-  uint16_t action_y0 = window->rect.y1 - window->actionBarHeight;
-  uint8_t margin = BYTE_WIDTH/2;
+  u16 title_height = window->titleHeight;
+  //u16 action_height = window->actionBarHeight;
+  u16 title_txt_y0 = w_rect.y0 + (title_height - BYTE_HEIGHT) / 2;
+  u16 title_y1 = window->rect.y0 + window->titleHeight;
+  u16 action_y0 = window->rect.y1 - window->actionBarHeight;
+  u8 margin = BYTE_WIDTH/2;
 
   //draw title background
   GUI_SetColor(window->title.backColor);
@@ -1033,7 +1028,7 @@ void GUI_DrawWindow(const WINDOW *window, const uint8_t *title, const uint8_t *i
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
   //draw window type icon
-  uint8_t * char_icon;
+  u8 * char_icon;
   switch(window->type)
   {
     case DIALOG_TYPE_ALERT:
@@ -1073,7 +1068,7 @@ void GUI_DrawWindow(const WINDOW *window, const uint8_t *title, const uint8_t *i
     }
     //draw window border
     GUI_SetColor(window->lineColor);
-    for (uint8_t i = 0; i < window->lineWidth; i++)
+    for (u8 i = 0; i < window->lineWidth; i++)
     {
       GUI_DrawRect(w_rect.x0 - i, w_rect.y0 - i, w_rect.x1 + i, w_rect.y1 + i);
     }

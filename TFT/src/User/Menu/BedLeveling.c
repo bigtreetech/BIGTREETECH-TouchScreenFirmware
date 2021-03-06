@@ -58,7 +58,6 @@ void menuBedLeveling(void)
     default:
       break;
   }
-
   if (infoSettings.z_steppers_alignment)
   {
     bedLevelingItems.items[2].icon = ICON_Z_ALIGN;
@@ -114,7 +113,7 @@ void menuBedLeveling(void)
         char tempstr[30];
         sprintf(tempstr, "%Min:%.2f | Max:%.2f", Z_FADE_MIN_VALUE, Z_FADE_MAX_VALUE);
 
-        float val = numPadFloat((uint8_t *) tempstr, getParameter(P_ABL_STATE, 1), 0.0f, false);
+        float val = numPadFloat((u8 *) tempstr, getParameter(P_ABL_STATE, 1), 0.0f, false);
         storeCmd("M420 Z%.2f\n", NOBEYOND(Z_FADE_MIN_VALUE, val, Z_FADE_MAX_VALUE));
 
         menuDrawPage(&bedLevelingItems);
@@ -135,6 +134,7 @@ void menuBedLeveling(void)
           infoMenu.menu[++infoMenu.cur] = menuZOffset;
         }
         break;
+
 
       case KEY_ICON_7:
         infoMenu.cur--;

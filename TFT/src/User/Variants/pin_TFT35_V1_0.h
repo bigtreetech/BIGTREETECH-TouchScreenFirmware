@@ -77,11 +77,8 @@
 #define W25Qxx_SPI    _SPI1
 #define W25Qxx_CS_PIN PA4
 
-// ST7920 Emulator SPI pins
-//#define ST7920_EMULATOR  // uncomment to enable Marlin mode
-//#ifdef ST7920_EMULATOR
-//  #define ST7920_SPI _SPI2
-//#endif
+// ST7920 Simulator SPI pins
+//#define ST7920_SPI    _SPI2
 
 // Buzzer support
 //#define BUZZER_PIN    PA14

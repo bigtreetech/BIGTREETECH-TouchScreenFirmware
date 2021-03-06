@@ -40,12 +40,12 @@ void ablUpdateStatus(bool succeeded)
     if (savingEnabled && infoMachineSettings.EEPROM == 1)
     {
       sprintf(&tempMsg[strlen(tempMsg)], "\n %s", textSelect(LABEL_EEPROM_SAVE_INFO));
-      setDialogText(tempTitle.index, (uint8_t *) tempMsg, LABEL_CONFIRM, LABEL_CANCEL);
+      setDialogText(tempTitle.index, (u8 *) tempMsg, LABEL_CONFIRM, LABEL_CANCEL);
       showDialog(DIALOG_TYPE_SUCCESS, saveEepromSettings, NULL, NULL);
     }
     else
     {
-      popupReminder(DIALOG_TYPE_SUCCESS, tempTitle.index, (uint8_t *) tempMsg);
+      popupReminder(DIALOG_TYPE_SUCCESS, tempTitle.index, (u8 *) tempMsg);
     }
   }
   else // if bed leveling process failed, provide an error dialog
@@ -158,7 +158,7 @@ void menuABL(void)
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BLTOUCH,                 LABEL_BLTOUCH},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_TEST_LEVELING,           LABEL_TEST_LEVELING},
      {ICON_HEAT,                    LABEL_PREHEAT},
      {ICON_BACK,                    LABEL_BACK}}
   };
@@ -238,6 +238,10 @@ void menuABL(void)
         else
           infoMenu.menu[++infoMenu.cur] = menuBLTouch;
         break;
+
+      case KEY_ICON_5:
+           storeCmd("G26 R99\n"); 
+      break;
 
       case KEY_ICON_6:
         infoMenu.menu[++infoMenu.cur] = menuPreheat;
