@@ -252,7 +252,8 @@ void setParameter(PARAMETER_NAME name, uint8_t index, float val)
 
     case P_STEALTH_CHOP:
       infoParameters.StealthChop[index] = val; 
-
+      break;
+      
     case P_MBL_OFFSET:
       infoParameters.MblOffset[index] = val;
       break;

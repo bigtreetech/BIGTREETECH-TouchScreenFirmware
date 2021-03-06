@@ -766,20 +766,22 @@ void parseACK(void)
         if (ack_seen("Z")) setParameter(P_BUMPSENSITIVITY, Z_STEPPER, ack_value());
       }
     // parse and store TMC Stealth Chop
-      else if (ack_seen("M569 S1") && !ack_seen("T") ) 
+      else if (ack_seen("M569"))
       {
-        setParameter(P_STEALTH_CHOP, X_STEPPER, ack_seen("X") ? 1 : 0);
-        setParameter(P_STEALTH_CHOP, Y_STEPPER, ack_seen("Y") ? 1 : 0);
-        setParameter(P_STEALTH_CHOP, Z_STEPPER, ack_seen("Z") ? 1 : 0);
-        setParameter(P_STEALTH_CHOP, E_STEPPER, ack_seen("E") ? 1 : 0);
-      }
-      else if (ack_seen("M569 S1 T0"))  
-      {
-        setParameter(P_STEALTH_CHOP, E_STEPPER, 1 );
-      }
-      else if (ack_seen("M569 S1 T1"))  
-      {
-       setParameter(P_STEALTH_CHOP, E2_STEPPER, 1 );
+        if (ack_seen("M569 S1") && !ack_seen("T"))
+        {
+          setParameter(P_STEALTH_CHOP, X_STEPPER, ack_seen("X") ? 1 : 0);
+          setParameter(P_STEALTH_CHOP, Y_STEPPER, ack_seen("Y") ? 1 : 0);
+          setParameter(P_STEALTH_CHOP, Z_STEPPER, ack_seen("Z") ? 1 : 0);
+        }
+        if (ack_seen("S1 T0"))  
+        {
+          setParameter(P_STEALTH_CHOP, E_STEPPER, 1 );
+        }
+        if (ack_seen("S1 T1"))  
+        {
+           setParameter(P_STEALTH_CHOP, E2_STEPPER, 1 );
+        }  
       }  
     // parse and store ABL type if auto-detect is enabled
     #if ENABLE_BL_VALUE == 1
