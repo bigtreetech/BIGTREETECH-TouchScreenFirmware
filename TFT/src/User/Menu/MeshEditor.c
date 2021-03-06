@@ -891,6 +891,12 @@ void menuMeshEditor(void)
             forceHoming = false;
 
             mustStoreCmd("G28\n");                         // only the first time, home the printer
+            if (IS_DELTA)
+            {
+              mustStoreCmd("G91\n");                         // Set Relative Positioning
+              mustStoreCmd("G1 Z-50 F1500\n");               // Drop by 30mm
+              mustStoreCmd("G90\n");                         // Set Absolute Positioing
+            }
           }
 
           curValue = menuMeshTuner(meshGetCol(), meshGetJ(), meshGetValue(meshGetIndex()));
