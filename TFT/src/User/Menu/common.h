@@ -35,7 +35,7 @@ extern const ITEM itemExtLenSteps[ITEM_EXT_LEN_NUM];
 extern const float extlenSteps[ITEM_EXT_LEN_NUM];
 
 extern const LABEL itemToggle[ITEM_TOGGLE_NUM];
-const uint16_t iconToggle[ITEM_TOGGLE_NUM];
+extern const uint16_t iconToggle[ITEM_TOGGLE_NUM];
 
 bool nextScreenUpdate(uint32_t duration);
 

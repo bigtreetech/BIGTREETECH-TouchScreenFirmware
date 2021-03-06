@@ -176,14 +176,14 @@ void menuClearGaps(void)
 
   GUI_SetBkColor(infoSettings.title_bg_color);
 
-  if (infoMenu.menu[infoMenu.cur] == menuStatus)
-    GUI_ClearPrect(gapsMenu);
-  else
+  if (infoMenu.menu[infoMenu.cur] == menuStatus || ((infoMenu.menu[infoMenu.cur] == menuPrinting) && !isPrinting()))
     GUI_ClearPrect(gapsSS);
+  else
+    GUI_ClearPrect(gapsMenu);
 
   GUI_SetBkColor(infoSettings.bg_color);
 
-  if (infoMenu.menu[infoMenu.cur] == menuStatus)
+  if (infoMenu.menu[infoMenu.cur] == menuStatus || ((infoMenu.menu[infoMenu.cur] == menuPrinting) && !isPrinting()))
   {
     for (uint8_t i = 1; i < COUNT(gapsSS); i++)
     {

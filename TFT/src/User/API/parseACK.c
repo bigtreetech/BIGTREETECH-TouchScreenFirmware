@@ -1088,7 +1088,7 @@ void parseACK(void)
 
     if (avoid_terminal != true)
     {
-      sendGcodeTerminalCache(dmaL2Cache, TERMINAL_ACK);
+      terminalCache(dmaL2Cache, TERMINAL_ACK);
     }
   }
 }

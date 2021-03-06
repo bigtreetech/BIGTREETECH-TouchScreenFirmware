@@ -2,8 +2,8 @@ import os
 
 Import("env")
 
-# Relocate firmware from 0x08000000 to 0x08007000
-custom_ld_script = os.path.abspath("buildroot/ldscripts/stm32f107vc_0x7000_iap.ld")
+# Relocate firmware from 0x08000000 to 0x08003000
+custom_ld_script = os.path.abspath("buildroot/ldscripts/stm32f103xC_0x3000_iap.ld")
 
 for i, flag in enumerate(env["LINKFLAGS"]):
     if "-Wl,-T" in flag:

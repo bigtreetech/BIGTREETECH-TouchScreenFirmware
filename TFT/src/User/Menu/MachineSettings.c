@@ -1,85 +1,77 @@
 #include "MachineSettings.h"
 
-uint8_t enabled_gcodes[CUSTOM_GCODES_COUNT];
-uint8_t gcode_num;
-uint8_t gc_page_count;
-uint8_t gc_cur_page = 0;
-
-CUSTOM_GCODES *customcodes = NULL;
-
-LISTITEMS customItems = {
-// title
-LABEL_CUSTOM,
-// icon                 ItemType      Item Title        item value text(only for custom value)
-{
-  {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
-  {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
-  {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
-  {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
-  {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
-  {ICONCHAR_PAGEUP,     LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
-  {ICONCHAR_PAGEDOWN,   LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
-  {ICONCHAR_BACK,       LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},}
-};
-
-//
 //load values on page change and reload
-//
-void loaditemsCustomGcode()
+void loaditemsCustomGcode(LISTITEMS * customItems, CUSTOM_GCODES * customcodes, uint8_t gc_cur_page)
 {
+  uint8_t gc_page_count = (customcodes->count + LISTITEM_PER_PAGE - 1) / LISTITEM_PER_PAGE;
+
   for (uint32_t i = 0; i < LISTITEM_PER_PAGE; i++)
   {
-    uint32_t item_index = gc_cur_page*LISTITEM_PER_PAGE + i;
-    if (item_index < gcode_num)
+    uint32_t item_index = gc_cur_page * LISTITEM_PER_PAGE + i;
+    if (item_index < customcodes->count)
     {
-      customItems.items[i].icon = ICONCHAR_CODE;
-      customItems.items[i].titlelabel.index = LABEL_DYNAMIC;
-      customItems.items[i].titlelabel.address = customcodes->name[item_index];
-    }
-    else{
-      customItems.items[i].icon = ICONCHAR_BACKGROUND;
-      customItems.items[i].titlelabel.index = LABEL_BACKGROUND;
-    }
-  }
-  // set page up down button according to page count and current page
-  if (gcode_num <= LISTITEM_PER_PAGE)
-  {
-    customItems.items[5].icon = ICONCHAR_BACKGROUND;
-    customItems.items[6].icon = ICONCHAR_BACKGROUND;
-  }
-  else
-  {
-    if(gc_cur_page == 0)
-    {
-      customItems.items[5].icon = ICONCHAR_BACKGROUND;
-      customItems.items[6].icon = ICONCHAR_PAGEDOWN;
-    }
-    else if(gc_cur_page == (gc_page_count-1))
-    {
-      customItems.items[5].icon = ICONCHAR_PAGEUP;
-      customItems.items[6].icon = ICONCHAR_BACKGROUND;
+      customItems->items[i].icon = ICONCHAR_CODE;
+      customItems->items[i].titlelabel.index = LABEL_DYNAMIC;
+      customItems->items[i].titlelabel.address = customcodes->name[item_index];
     }
     else
     {
-      customItems.items[5].icon = ICONCHAR_PAGEUP;
-      customItems.items[6].icon = ICONCHAR_PAGEDOWN;
+      customItems->items[i].icon = ICONCHAR_BACKGROUND;
+      customItems->items[i].titlelabel.index = LABEL_BACKGROUND;
+    }
+  }
+  // set page up down button according to page count and current page
+  if (customcodes->count <= LISTITEM_PER_PAGE)
+  {
+    customItems->items[5].icon = ICONCHAR_BACKGROUND;
+    customItems->items[6].icon = ICONCHAR_BACKGROUND;
+  }
+  else
+  {
+    if (gc_cur_page == 0)
+    {
+      customItems->items[5].icon = ICONCHAR_BACKGROUND;
+      customItems->items[6].icon = ICONCHAR_PAGEDOWN;
+    }
+    else if (gc_cur_page == (gc_page_count - 1))
+    {
+      customItems->items[5].icon = ICONCHAR_PAGEUP;
+      customItems->items[6].icon = ICONCHAR_BACKGROUND;
+    }
+    else
+    {
+      customItems->items[5].icon = ICONCHAR_PAGEUP;
+      customItems->items[6].icon = ICONCHAR_PAGEDOWN;
     }
   }
 }
 
 void menuCustom(void)
 {
-  //load custom codes
-  CUSTOM_GCODES tempcodes;
-  customcodes = &tempcodes;
-  W25Qxx_ReadBuffer((u8*)&tempcodes,CUSTOM_GCODE_ADDR,sizeof(CUSTOM_GCODES));
-  gcode_num = customcodes->count;
-
-  gc_page_count = (gcode_num+LISTITEM_PER_PAGE-1)/LISTITEM_PER_PAGE;
+  LISTITEMS customItems = {
+  // title
+  LABEL_CUSTOM,
+  // icon                 ItemType      Item Title        item value text(only for custom value)
+  {
+    {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
+    {ICONCHAR_PAGEUP,     LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
+    {ICONCHAR_PAGEDOWN,   LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
+    {ICONCHAR_BACK,       LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},}
+  };
 
   KEY_VALUES key_num = KEY_IDLE;
+  CUSTOM_GCODES customcodes;
+  //load custom codes
+  W25Qxx_ReadBuffer((u8 *)&customcodes, CUSTOM_GCODE_ADDR, sizeof(CUSTOM_GCODES));
 
-  loaditemsCustomGcode();
+  uint8_t gc_page_count = (customcodes.count + LISTITEM_PER_PAGE - 1) / LISTITEM_PER_PAGE;
+  uint8_t gc_cur_page = 0;
+
+  loaditemsCustomGcode(&customItems, &customcodes, gc_cur_page);
   menuDrawListPage(&customItems);
 
   while(infoMenu.menu[infoMenu.cur] == menuCustom)
@@ -89,10 +81,8 @@ void menuCustom(void)
     if (key_num < LISTITEM_PER_PAGE)
     {
       uint32_t item_index = gc_cur_page * LISTITEM_PER_PAGE + key_num;
-      if (item_index < gcode_num)
-      {
-        mustStoreScript(customcodes->gcode[item_index]);
-      }
+      if (item_index < customcodes.count)
+        mustStoreScript(customcodes.gcode[item_index]);
     }
     switch(key_num)
     {
@@ -102,7 +92,7 @@ void menuCustom(void)
         if (gc_cur_page > 0)
         {
           gc_cur_page--;
-          loaditemsCustomGcode();
+          loaditemsCustomGcode(&customItems, &customcodes, gc_cur_page);
           menuRefreshListPage();
         }
       }
@@ -114,7 +104,7 @@ void menuCustom(void)
         if (gc_cur_page < gc_page_count - 1)
         {
           gc_cur_page++;
-          loaditemsCustomGcode();
+          loaditemsCustomGcode(&customItems, &customcodes, gc_cur_page);
           menuRefreshListPage();
         }
       }
@@ -191,7 +181,6 @@ void menuRGBSettings(void)
 
 void menuEepromSettings(void)
 {
-  // 1 title, ITEM_PER_PAGE items (icon + label)
   MENUITEMS eepromSettingsItems = {
     // title
     LABEL_EEPROM_SETTINGS,
@@ -294,7 +283,7 @@ void menuMachineSettings(void)
       break;
 
     case KEY_ICON_1:
-      infoMenu.menu[++infoMenu.cur] = menuSendGcode;
+      infoMenu.menu[++infoMenu.cur] = menuTerminal;
       break;
 
     case KEY_ICON_2:

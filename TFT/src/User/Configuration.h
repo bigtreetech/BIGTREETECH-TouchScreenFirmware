@@ -419,30 +419,34 @@
 //#define MESH_LEFT_KEYBOARD
 
 //
-// Terminal settings
+// Terminal Keyboard / Numpad settings
 //
 
+// Terminal Keyboard / Numpad theme
+// Uncomment to enable Material theme for keyboard and Numpad
+//#define KEYBOARD_MATERIAL_THEME // Default: disabled
+
 /**
- * Color scheme for the Terminal Keyboard
+ * Color scheme for the Terminal Keyboard / Numpad
  *
  * Options: [0: Default, 1: Invert, 2: High-Contrast]
  *  Default: The keyboard follows system background and border colors.
  *  Invert: The keyboard is drawn with background swapped with border colors.
  *  High-Contrast: Use white and black colors for high contrast.
  */
-#define TERMINAL_KEYBOARD_COLOR_LAYOUT 0  // Default: 0
+#define KEYBOARD_COLOR_LAYOUT 0  // Default: 0
 
 /**
  * QWERTY/QWERTZ keyboard layout
  * Keyboard layout for Terminal Keyboard (Only for TFT70 V3.0).
  *
- * Options: [0: Default:, 1: qwerty, 2: qwertz, 3: azerty]
+ * Options: [0: qwerty, 1: qwertz, 2: azerty]
  *  default: The keyboard has an alphabetically order.
  *  qwerty: The typically keyboard Layout for english.
  *  qwertz: The typically keyboard Layout for german.
  *  azerty: The typically keyboard Layout for french.
  */
-#define TERMINAL_KEYBOARD_LAYOUT 1  // Default: 0
+#define TERMINAL_KEYBOARD_LAYOUT 0  // Default: 0
 
 
 //===========================================================================

@@ -7,7 +7,7 @@ const ITEM itemPercentType[SPEED_NUM] = {
   {ICON_EXTRUDE,                 LABEL_PERCENTAGE_FLOW},
 };
 
-static int16_t itemPercentTypeTitle[SPEED_NUM] = {
+const int16_t itemPercentTypeTitle[SPEED_NUM] = {
   LABEL_PERCENTAGE_SPEED,     LABEL_PERCENTAGE_FLOW
 };
 

@@ -15,7 +15,7 @@
 **
 **  Environment : Atollic TrueSTUDIO(R)
 **
-**  Distribution: The file is distributed ï¿½as is,ï¿½ without any warranty
+**  Distribution: The file is distributed “as is,” without any warranty
 **                of any kind.
 **
 **  (c)Copyright Atollic AB.
@@ -36,13 +36,13 @@ ENTRY(Reset_Handler)
 _estack = 0x2000C000;    /* end of 48K RAM */
 
 /* Generate a link error if heap and stack don't fit into RAM */
-_Min_Heap_Size = 0x2000;      /* required amount of heap  */
-_Min_Stack_Size = 0x2000; /* required amount of stack */
+_Min_Heap_Size = 0x5000;      /* required amount of heap  */
+_Min_Stack_Size = 0x1000; /* required amount of stack */
 
 /* Specify the memory areas */
 MEMORY
 {
-  FLASH (rx)      : ORIGIN = 0x08007000, LENGTH = 256K - 28K
+  FLASH (rx)      : ORIGIN = 0x08003000, LENGTH = 256K - 12K
   RAM (xrw)       : ORIGIN = 0x20000000, LENGTH = 48K
   MEMORY_B1 (rx)  : ORIGIN = 0x60000000, LENGTH = 0K
 }

@@ -86,7 +86,7 @@ void menuMore(void)
             infoMenu.menu[++infoMenu.cur] = menuLoadUnload;
           }
         #else
-          infoMenu.menu[++infoMenu.cur] = menuSendGcode;
+          infoMenu.menu[++infoMenu.cur] = menuTerminal;
         #endif
         break;
 

@@ -13,33 +13,6 @@ const char *const xyzMoveCmd[] = {X_MOVE_GCODE, Y_MOVE_GCODE, Z_MOVE_GCODE};
 static uint8_t item_moveLen_index = 1;
 AXIS nowAxis = X_AXIS;
 
-MENUITEMS moveItems = {
-  // title
-  LABEL_MOVE,
-  // icon                         label
-  {
-  #ifdef ALTERNATIVE_MOVE_MENU
-   {ICON_Z_DEC,                   LABEL_Z_DEC},
-   {ICON_Y_INC,                   LABEL_Y_INC},
-   {ICON_Z_INC,                   LABEL_Z_INC},
-   {ICON_01_MM,                   LABEL_01_MM},
-   {ICON_X_DEC,                   LABEL_X_DEC},
-   {ICON_Y_DEC,                   LABEL_Y_DEC},
-   {ICON_X_INC,                   LABEL_X_INC},
-   {ICON_BACK,                    LABEL_BACK},
-  #else
-   {ICON_X_INC,                   LABEL_X_INC},
-   {ICON_Y_INC,                   LABEL_Y_INC},
-   {ICON_Z_INC,                   LABEL_Z_INC},
-   {ICON_01_MM,                   LABEL_01_MM},
-   {ICON_X_DEC,                   LABEL_X_DEC},
-   {ICON_Y_DEC,                   LABEL_Y_DEC},
-   {ICON_Z_DEC,                   LABEL_Z_DEC},
-   {ICON_BACK,                    LABEL_BACK},
-  #endif
-  }
-};
-
 void storeMoveCmd(AXIS xyz, int8_t direction)
 {
   // if invert is true, 'direction' multiplied by -1
@@ -56,6 +29,33 @@ void storeMoveCmd(AXIS xyz, int8_t direction)
 
 void menuMove(void)
 {
+  MENUITEMS moveItems = {
+    // title
+    LABEL_MOVE,
+    // icon                         label
+    {
+    #ifdef ALTERNATIVE_MOVE_MENU
+    {ICON_Z_DEC,                   LABEL_Z_DEC},
+    {ICON_Y_INC,                   LABEL_Y_INC},
+    {ICON_Z_INC,                   LABEL_Z_INC},
+    {ICON_01_MM,                   LABEL_01_MM},
+    {ICON_X_DEC,                   LABEL_X_DEC},
+    {ICON_Y_DEC,                   LABEL_Y_DEC},
+    {ICON_X_INC,                   LABEL_X_INC},
+    {ICON_BACK,                    LABEL_BACK},
+    #else
+    {ICON_X_INC,                   LABEL_X_INC},
+    {ICON_Y_INC,                   LABEL_Y_INC},
+    {ICON_Z_INC,                   LABEL_Z_INC},
+    {ICON_01_MM,                   LABEL_01_MM},
+    {ICON_X_DEC,                   LABEL_X_DEC},
+    {ICON_Y_DEC,                   LABEL_Y_DEC},
+    {ICON_Z_DEC,                   LABEL_Z_DEC},
+    {ICON_BACK,                    LABEL_BACK},
+    #endif
+    }
+  };
+
   KEY_VALUES key_num;
 
   // postion table of key
