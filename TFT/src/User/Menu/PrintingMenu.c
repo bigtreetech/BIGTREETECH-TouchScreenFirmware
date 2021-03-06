@@ -434,7 +434,7 @@ void menuPrinting(void)
     {
       if (time != infoPrinting.time ||
           getPrintProgress() != MIN((uint64_t)infoPrinting.cur * 100 / infoPrinting.size, 100))
-      {        
+      {
         time = getPrintTime();
         setPrintProgress(MIN((uint64_t)infoPrinting.cur * 100 / infoPrinting.size, 100), FILE_PROGRESS);
         RAPID_SERIAL_LOOP(); //perform backend printing loop before drawing to avoid printer idling
