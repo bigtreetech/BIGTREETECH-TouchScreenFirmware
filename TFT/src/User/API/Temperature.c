@@ -50,7 +50,7 @@ void heatSyncTargetTemp(uint8_t index, int16_t temp)
 }
 
 //Get target temperature
-u16 heatGetTargetTemp(uint8_t index)
+uint16_t heatGetTargetTemp(uint8_t index)
 {
   index = fixHeaterIndex(index);
   return heater.T[index].target;

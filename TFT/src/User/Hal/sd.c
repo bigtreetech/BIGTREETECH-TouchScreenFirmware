@@ -117,7 +117,7 @@ u8 SD_Wait_Ready(void)
 *************************************************************************************/
 u8 SD_Get_Ack(u8 Response)
 {
-  u16 Count=0xFFFF;//Wait times
+  uint16_t Count=0xFFFF;//Wait times
   while ((SD_SPI_Read_Write_Byte(0XFF)!=Response) && Count)  Count--; //Waiting for an accurate response
 
   if (Count==0)
@@ -133,7 +133,7 @@ u8 SD_Get_Ack(u8 Response)
 ** len: Length of data to be read.
 ** Return value: 0, success; others, failure;
 ****************************************************************************************/
-u8 SD_RecvData(u8*buf,u16 len)
+u8 SD_RecvData(u8*buf,uint16_t len)
 {
   if(SD_Get_Ack(0xFE))return 1;//Wait for SD card to send back data start token 0xFE
   while(len--)//Start receiving data
@@ -157,7 +157,7 @@ u8 SD_RecvData(u8*buf,u16 len)
 *************************************************************************************/
 u8 SD_Send_Data(u8*buf,u8 cmd)
 {
-  u16 t;
+  uint16_t t;
   if(SD_Wait_Ready())  return 1;  //Waiting for preparation to fail
   SD_SPI_Read_Write_Byte(cmd);
   if(cmd!=0XFD)//Not an end instruction
@@ -258,7 +258,7 @@ u32 SD_Get_Sector_Count(void)
   u8 csd[16];
   u32 Capacity;
   u8 n;
-  u16 csize;
+  uint16_t csize;
   if(SD_GetCSD(csd) != 0) return 0;	//Get CSD information, if an error occurs during the period, return 0
   if((csd[0]&0xC0) == 0x40)	        //V2.00 card, if it is SDHC card, calculate it as follows
   {
@@ -283,9 +283,9 @@ Initialize SD card
 u8 SD_Init(void)
 {
   u8 r1;      // Store the return value of the SD card
-  u16 retry;  // Used for timeout counting
+  uint16_t retry;  // Used for timeout counting
   u8 buf[4];
-  u16 i;
+  uint16_t i;
 
   SD_SPI_Init();		//Initialize IO
   SD_SetLowSpeed();

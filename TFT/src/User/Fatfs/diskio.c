@@ -50,7 +50,7 @@ DSTATUS disk_initialize (
 	BYTE pdrv				/* Physical drive nmuber to identify the drive */
 )
 {
-  for(u8 i = 0; i < FF_VOLUMES; i++)
+  for(uint8_t i = 0; i < FF_VOLUMES; i++)
   {
     diskStatus[i] = STA_NOINIT;
   }

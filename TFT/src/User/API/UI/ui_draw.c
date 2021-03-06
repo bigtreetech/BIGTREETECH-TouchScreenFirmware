@@ -3,14 +3,14 @@
 
 #ifdef STM32_HAS_FSMC
 
-void lcd_frame_display(u16 sx,u16 sy,u16 w,u16 h, u32 addr);
+void lcd_frame_display(uint16_t sx,uint16_t sy,uint16_t w,uint16_t h, u32 addr);
 
 #else
 
-void lcd_frame_display(u16 sx,u16 sy,u16 w,u16 h, u32 addr)
+void lcd_frame_display(uint16_t sx,uint16_t sy,uint16_t w,uint16_t h, u32 addr)
 {
-  u16 x,y;
-  u16 color = 0;
+  uint16_t x,y;
+  uint16_t color = 0;
   u32 address = addr;
 
   LCD_SetWindow(sx,sy,sx+w-1,sy+h-1);
@@ -48,14 +48,14 @@ uint32_t getBMPsize(uint8_t * w, uint8_t * h, uint32_t address)
 void LOGO_ReadDisplay(void)
 {
   uint16_t w, h;
-  uint32_t addr = getBMPsize((u8 *)&w, (u8 *)&h, LOGO_ADDR);
+  uint32_t addr = getBMPsize((uint8_t *)&w, (uint8_t *)&h, LOGO_ADDR);
   lcd_frame_display(0, 0, w, h, addr);
 }
 
-void ICON_ReadDisplay(u16 sx,u16 sy, u8 icon)
+void ICON_ReadDisplay(uint16_t sx,uint16_t sy, uint8_t icon)
 {
   uint16_t w, h;
-  uint32_t addr = getBMPsize((u8 *)&w, (u8 *)&h, ICON_ADDR(icon));
+  uint32_t addr = getBMPsize((uint8_t *)&w, (uint8_t *)&h, ICON_ADDR(icon));
   lcd_frame_display(sx, sy, w, h, addr);
 }
 
@@ -148,25 +148,25 @@ bool model_DecodeToFlash(char *gcode)
 }
 
 //draw icon with different length and width (sx & sy cordinates for top left of icon, w width, h height, addr flash byte address)
-void ICON_CustomReadDisplay(u16 sx,u16 sy, u32 address)
+void ICON_CustomReadDisplay(uint16_t sx,uint16_t sy, u32 address)
 {
   uint16_t w,h;
-  address = getBMPsize((u8 *)&w, (u8 *)&h, address);
+  address = getBMPsize((uint8_t *)&w, (uint8_t *)&h, address);
   lcd_frame_display(sx, sy, w, h, address);
 }
 
-void SMALLICON_ReadDisplay(u16 sx,u16 sy, u8 icon)
+void SMALLICON_ReadDisplay(uint16_t sx,uint16_t sy, uint8_t icon)
 {
   lcd_frame_display(sx, sy, SMALLICON_WIDTH, SMALLICON_HEIGHT, SMALL_ICON_ADDR(icon));
 }
 
-void ICON_PressedDisplay(u16 sx,u16 sy, u8 icon)
+void ICON_PressedDisplay(uint16_t sx,uint16_t sy, uint8_t icon)
 {
-  u16 mode=0x0FF0;
-  u16 x,y;
+  uint16_t mode=0x0FF0;
+  uint16_t x,y;
   uint16_t w,h;
-  u16 color = 0;
-  u32 address = getBMPsize((u8 *)&w, (u8 *)&h, ICON_ADDR(icon));
+  uint16_t color = 0;
+  u32 address = getBMPsize((uint8_t *)&w, (uint8_t *)&h, ICON_ADDR(icon));
 
   LCD_SetWindow(sx, sy, sx+w-1, sy+h-1);
   LCD_WR_REG(0x2C);

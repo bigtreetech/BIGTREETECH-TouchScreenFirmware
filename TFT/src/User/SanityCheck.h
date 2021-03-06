@@ -24,7 +24,7 @@
     #error "invalid Baudrate index. Pleas select a value only from options provided in configuration.h"
 #endif
 
-#ifdef ST7920_SPI
+#ifdef ST7920_EMULATOR
     #ifdef CLEAN_MODE_SWITCHING_SUPPORT
     #error "CLEAN_MODE_SWITCHING_SUPPORT is now SERIAL_ALWAYS_ON. Please update your configuration."
     #endif
@@ -107,25 +107,28 @@
     #define MESH_GRID_MAX_POINTS_Y 10
 #endif
 
-#ifdef TERMINAL_KEYBOARD_COLOR_LAYOUT
-  #if TERMINAL_KEYBOARD_COLOR_LAYOUT > 2
-    #error "TERMINAL_KEYBOARD_COLOR_LAYOUT cannot be greater than 2"
+#ifdef KEYBOARD_COLOR_LAYOUT
+  #if KEYBOARD_COLOR_LAYOUT > 2
+    #error "KEYBOARD_COLOR_LAYOUT cannot be greater than 2"
   #endif
 
-  #if TERMINAL_KEYBOARD_COLOR_LAYOUT < 0
-    #error "TERMINAL_KEYBOARD_COLOR_LAYOUT cannot be less than 0"
+  #if KEYBOARD_COLOR_LAYOUT < 0
+    #error "KEYBOARD_COLOR_LAYOUT cannot be less than 0"
   #endif
 #endif
-#ifndef TERMINAL_KEYBOARD_COLOR_LAYOUT
-    #define TERMINAL_KEYBOARD_COLOR_LAYOUT 0
+#ifndef KEYBOARD_COLOR_LAYOUT
+    #define KEYBOARD_COLOR_LAYOUT 0
+#endif
+#if KEYBOARD_COLOR_LAYOUT == 2 && defined(KEYBOARD_MATERIAL_THEME)
+   #undef KEYBOARD_MATERIAL_THEME
 #endif
 
 #ifdef CANCEL_PRINT_GCODE
   #error "CANCEL_PRINT_GCODE is now PRINT_CANCEL_GCODE. Please update your Configuration.h file."
 #endif
 
-#ifndef ST7920_BANNER_TEXT
-    #define ST7920_BANNER_TEXT "LCD12864 Simulator"
+#ifndef MARLIN_BANNER_TEXT
+    #define MARLIN_BANNER_TEXT "Marlin Mode"
 #endif
 
 #ifdef TOOL_NUM

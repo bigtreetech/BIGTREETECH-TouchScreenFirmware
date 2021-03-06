@@ -1,34 +1,9 @@
 #include "Print.h"
 #include "includes.h"
 
-  LISTITEMS printListItems = {
-  // title
-  LABEL_BACKGROUND,
-  // icon                 ItemType    Item Title        item value text(only for custom value)
-  {
-    {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
-    {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
-    {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
-    {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
-    {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
-    {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
-    {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
-    {ICONCHAR_BACK,       LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},}
-  };
+MENUITEMS * printIconItems;
+LISTITEMS * printListItems;
 
-  MENUITEMS printIconItems = {
-    // title
-    LABEL_BACKGROUND,
-    // icon              label
-    {{ICON_BACKGROUND,   LABEL_BACKGROUND},
-     {ICON_BACKGROUND,   LABEL_BACKGROUND},
-     {ICON_BACKGROUND,   LABEL_BACKGROUND},
-     {ICON_BACKGROUND,   LABEL_BACKGROUND},
-     {ICON_BACKGROUND,   LABEL_BACKGROUND},
-     {ICON_PAGE_UP,      LABEL_PAGE_UP},
-     {ICON_PAGE_DOWN,    LABEL_PAGE_DOWN},
-     {ICON_BACK,         LABEL_BACK},}
-  };
 
 const int16_t labelVolumeError[] = {LABEL_READ_TFTSD_ERROR, LABEL_READ_U_DISK_ERROR, LABEL_READ_ONBOARDSD_ERROR};
 
@@ -67,11 +42,11 @@ void normalNameDisp(const GUI_RECT *rect, uint8_t *name)
 
 void gocdeIconDraw(void)
 {
-  uint8_t i=0;;
+  uint8_t i = 0;
   ITEM curItem = {ICON_BACKGROUND, LABEL_BACKGROUND};
 
   Scroll_CreatePara(&titleScroll, (uint8_t*)infoFile.title, &titleRect);
-  printIconItems.title.address = (uint8_t*)infoFile.title;
+  printIconItems->title.address = (uint8_t*)infoFile.title;
   GUI_SetBkColor(infoSettings.title_bg_color);
   GUI_ClearPrect(&titleRect);
   GUI_SetBkColor(infoSettings.bg_color);
@@ -112,7 +87,7 @@ void gocdeListDraw(void)
   uint8_t i = 0;
 
   Scroll_CreatePara(&titleScroll, (uint8_t *)infoFile.title, &titleRect);
-  printListItems.title.address = (uint8_t *)infoFile.title;
+  printListItems->title.address = (uint8_t *)infoFile.title;
   GUI_SetBkColor(infoSettings.title_bg_color);
   GUI_ClearRect(0, 0, LCD_WIDTH, TITLE_END_Y);
   GUI_SetBkColor(infoSettings.bg_color);
@@ -120,15 +95,15 @@ void gocdeListDraw(void)
   // folder
   for (i = 0; (i + infoFile.cur_page * NUM_PER_PAGE < infoFile.folderCount) && (i < NUM_PER_PAGE); i++)
   {
-    printListItems.items[i].icon = ICONCHAR_FOLDER;
+     printListItems->items[i].icon = ICONCHAR_FOLDER;
     setDynamicLabel(i, infoFile.folder[i + infoFile.cur_page * NUM_PER_PAGE]);
-    printListItems.items[i].titlelabel.index = LABEL_DYNAMIC;
-    menuDrawListItem(&printListItems.items[i], i);
+     printListItems->items[i].titlelabel.index = LABEL_DYNAMIC;
+    menuDrawListItem(&printListItems->items[i], i);
   }
   // gcode file
   for (; (i + infoFile.cur_page * NUM_PER_PAGE < infoFile.fileCount + infoFile.folderCount) && (i < NUM_PER_PAGE); i++)
   {
-    printListItems.items[i].icon = ICONCHAR_FILE;
+     printListItems->items[i].icon = ICONCHAR_FILE;
     if (infoMachineSettings.long_filename_support == ENABLED && infoFile.source == BOARD_SD)
     {
       setDynamicLabel(i, infoFile.Longfile[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.folderCount]);
@@ -137,44 +112,44 @@ void gocdeListDraw(void)
     {
       setDynamicLabel(i, infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.folderCount]);
     }
-    printListItems.items[i].titlelabel.index = LABEL_DYNAMIC;
-    menuDrawListItem(&printListItems.items[i], i);
+     printListItems->items[i].titlelabel.index = LABEL_DYNAMIC;
+    menuDrawListItem(&printListItems->items[i], i);
   }
 
   //background
   for (; (i < NUM_PER_PAGE); i++)
   {
-    printListItems.items[i].icon = ICONCHAR_BACKGROUND;
-    printListItems.items[i].titlelabel.index = LABEL_BACKGROUND;
-    menuDrawListItem(&printListItems.items[i], i);
+     printListItems->items[i].icon = ICONCHAR_BACKGROUND;
+     printListItems->items[i].titlelabel.index = LABEL_BACKGROUND;
+    menuDrawListItem(& printListItems->items[i], i);
   }
   // set page up down button according to page count and current page
   int t_pagenum = (infoFile.folderCount + infoFile.fileCount + (LISTITEM_PER_PAGE - 1)) / LISTITEM_PER_PAGE;
   if ((infoFile.folderCount + infoFile.fileCount) <= LISTITEM_PER_PAGE)
   {
-    printListItems.items[5].icon = ICONCHAR_BACKGROUND;
-    printListItems.items[6].icon = ICONCHAR_BACKGROUND;
+     printListItems->items[5].icon = ICONCHAR_BACKGROUND;
+     printListItems->items[6].icon = ICONCHAR_BACKGROUND;
   }
   else
   {
     if (infoFile.cur_page == 0)
     {
-      printListItems.items[5].icon = ICONCHAR_BACKGROUND;
-      printListItems.items[6].icon = ICONCHAR_PAGEDOWN;
+       printListItems->items[5].icon = ICONCHAR_BACKGROUND;
+       printListItems->items[6].icon = ICONCHAR_PAGEDOWN;
     }
     else if (infoFile.cur_page == (t_pagenum - 1))
     {
-      printListItems.items[5].icon = ICONCHAR_PAGEUP;
-      printListItems.items[6].icon = ICONCHAR_BACKGROUND;
+       printListItems->items[5].icon = ICONCHAR_PAGEUP;
+       printListItems->items[6].icon = ICONCHAR_BACKGROUND;
     }
     else
     {
-      printListItems.items[5].icon = ICONCHAR_PAGEUP;
-      printListItems.items[6].icon = ICONCHAR_PAGEDOWN;
+       printListItems->items[5].icon = ICONCHAR_PAGEUP;
+       printListItems->items[6].icon = ICONCHAR_PAGEDOWN;
     }
   }
-  menuDrawListItem(&printListItems.items[5], 5);
-  menuDrawListItem(&printListItems.items[6], 6);
+  menuDrawListItem(&printListItems->items[5], 5);
+  menuDrawListItem(&printListItems->items[6], 6);
 }
 
 void startPrint(void)
@@ -184,8 +159,40 @@ void startPrint(void)
 
 void menuPrintFromSource(void)
 {
+  MENUITEMS _printIconItems = {
+  // title
+  LABEL_BACKGROUND,
+  // icon              label
+  {{ICON_BACKGROUND,   LABEL_BACKGROUND},
+   {ICON_BACKGROUND,   LABEL_BACKGROUND},
+   {ICON_BACKGROUND,   LABEL_BACKGROUND},
+   {ICON_BACKGROUND,   LABEL_BACKGROUND},
+   {ICON_BACKGROUND,   LABEL_BACKGROUND},
+   {ICON_PAGE_UP,      LABEL_PAGE_UP},
+   {ICON_PAGE_DOWN,    LABEL_PAGE_DOWN},
+   {ICON_BACK,         LABEL_BACK},}
+  };
+
+  LISTITEMS _printListItems = {
+  // title
+  LABEL_BACKGROUND,
+  // icon                 ItemType    Item Title        item value text(only for custom value)
+  {
+    {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
+    {ICONCHAR_BACK,       LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},}
+  };
+
   KEY_VALUES key_num = KEY_IDLE;
   uint8_t update = 0;
+
+  printIconItems = &_printIconItems;
+  printListItems = &_printListItems;
 
   GUI_Clear(infoSettings.bg_color);
   GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, LABEL_LOADING);
@@ -194,12 +201,12 @@ void menuPrintFromSource(void)
   {
     if (list_mode != true)
     {
-      menuDrawPage(&printIconItems);
+      menuDrawPage(&_printIconItems);
       gocdeIconDraw();
     }
     else
     {
-      menuDrawListPage(&printListItems);
+      menuDrawListPage(&_printListItems);
       gocdeListDraw();
     }
   }
@@ -294,7 +301,7 @@ void menuPrintFromSource(void)
 
     if (update)
     {
-      update=0;
+      update = 0;
 
       if (list_mode != true)
         gocdeIconDraw();

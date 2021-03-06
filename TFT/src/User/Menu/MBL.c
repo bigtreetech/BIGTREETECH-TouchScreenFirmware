@@ -63,12 +63,12 @@ void mblUpdateStatus(bool succeeded)
     {
       sprintf(&tempMsg[strlen(tempMsg)], "\n %s", textSelect(LABEL_EEPROM_SAVE_INFO));
 
-      setDialogText(LABEL_MBL_SETTINGS, (u8 *) tempMsg, LABEL_CONFIRM, LABEL_CANCEL);
+      setDialogText(LABEL_MBL_SETTINGS, (uint8_t *) tempMsg, LABEL_CONFIRM, LABEL_CANCEL);
       showDialog(DIALOG_TYPE_SUCCESS, saveEepromSettings, NULL, NULL);
     }
     else
     {
-      popupReminder(DIALOG_TYPE_SUCCESS, LABEL_MBL_SETTINGS, (u8 *) tempMsg);
+      popupReminder(DIALOG_TYPE_SUCCESS, LABEL_MBL_SETTINGS, (uint8_t *) tempMsg);
     }
   }
   else                                                     // if bed leveling process failed, provide an error dialog
@@ -89,7 +89,7 @@ void mblNotifyError(void)
   addToast(DIALOG_TYPE_ERROR, tempMsg);
 }
 
-void mblDrawHeader(u8 *point)
+void mblDrawHeader(uint8_t *point)
 {
   char tempstr[20];
 
@@ -106,7 +106,7 @@ void mblDrawHeader(u8 *point)
     GUI_SetColor(infoSettings.reminder_color);
   }
 
-  GUI_DispString(exhibitRect.x0, exhibitRect.y0, (u8 *) tempstr);
+  GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *) tempstr);
   GUI_SetColor(infoSettings.font_color);
 }
 
@@ -117,7 +117,7 @@ void mblDrawValue(float val)
   sprintf(tempstr, "  %.2f  ", val);
 
   setLargeFont(true);
-  GUI_DispStringInPrect(&exhibitRect, (u8 *) tempstr);
+  GUI_DispStringInPrect(&exhibitRect, (uint8_t *) tempstr);
   setLargeFont(false);
 }
 

@@ -15,9 +15,9 @@ const MENUITEMS manualLevelingItems = {
    {ICON_BACK,                    LABEL_BACK},}
 };
 
-void moveToLevelingPoint(u8 point)
+void moveToLevelingPoint(uint8_t point)
 {
-  s16 pointPosition[5][2] = {
+  int16_t pointPosition[5][2] = {
     {infoSettings.machine_size_min[X_AXIS] + infoSettings.level_edge, infoSettings.machine_size_min[Y_AXIS] + infoSettings.level_edge},
     {infoSettings.machine_size_max[X_AXIS] - infoSettings.level_edge, infoSettings.machine_size_min[Y_AXIS] + infoSettings.level_edge},
     {infoSettings.machine_size_max[X_AXIS] - infoSettings.level_edge, infoSettings.machine_size_max[Y_AXIS] - infoSettings.level_edge},
@@ -71,7 +71,7 @@ void menuManualLeveling(void)
           char tempstr[30];
           sprintf(tempstr, "%Min:%d | Max:%d", LEVELING_EDGE_DISTANCE_MIN, LEVELING_EDGE_DISTANCE_MAX);
 
-          int val = numPadInt((u8 *)tempstr, infoSettings.level_edge, LEVELING_EDGE_DISTANCE_DEFAULT, false);
+          int val = numPadInt((uint8_t *)tempstr, infoSettings.level_edge, LEVELING_EDGE_DISTANCE_DEFAULT, false);
           infoSettings.level_edge = NOBEYOND(LEVELING_EDGE_DISTANCE_MIN, val, LEVELING_EDGE_DISTANCE_MAX);
 
           menuDrawPage(&manualLevelingItems);

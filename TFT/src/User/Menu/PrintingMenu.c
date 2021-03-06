@@ -136,8 +136,8 @@ static inline void reValueNozzle(int icon_pos)
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
   ICON_ReadDisplay(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, ICON_PRINTING_NOZZLE);
   GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y,
-                 (u8 *)heatDisplayID[currentTool]);
-  GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (u8 *)tempstr);
+                 (uint8_t *)heatDisplayID[currentTool]);
+  GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (uint8_t *)tempstr);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
 
@@ -149,8 +149,8 @@ static inline void reValueBed(int icon_pos)
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
   ICON_ReadDisplay(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, ICON_PRINTING_BED);
   GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y,
-                 (u8 *)heatDisplayID[BED]);
-  GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (u8 *)tempstr);
+                 (uint8_t *)heatDisplayID[BED]);
+  GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (uint8_t *)tempstr);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
 
@@ -165,8 +165,8 @@ static inline void reDrawFan(int icon_pos)
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
   ICON_ReadDisplay(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, ICON_PRINTING_FAN);
   GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y,
-                 (u8 *)fanID[currentFan]);
-  GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (u8 *)tempstr);
+                 (uint8_t *)fanID[currentFan]);
+  GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (uint8_t *)tempstr);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
 
@@ -182,14 +182,14 @@ static inline void reDrawSpeed(int icon_pos)
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
   sprintf(tempstr, "%d%%", speedGetCurPercent(currentSpeedID));
   GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y,
-                 (u8 *)Speed_ID[currentSpeedID]);
-  GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (u8 *)tempstr);
+                 (uint8_t *)Speed_ID[currentSpeedID]);
+  GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (uint8_t *)tempstr);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
 
 static inline void reDrawTime(int icon_pos)
 {
-  u8 hour = infoPrinting.time / 3600,
+  uint8_t hour = infoPrinting.time / 3600,
      min = infoPrinting.time % 3600 / 60,
      sec = infoPrinting.time % 60;
 
@@ -198,7 +198,7 @@ static inline void reDrawTime(int icon_pos)
   char tempstr[10];
   sprintf(tempstr, "%02u:%02u:%02u", hour, min, sec);
   ICON_ReadDisplay(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, ICON_PRINTING_TIMER);
-  GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (u8 *)tempstr);
+  GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (uint8_t *)tempstr);
   GUI_SetNumMode(GUI_NUMMODE_SPACE);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
@@ -208,7 +208,7 @@ static inline void reDrawProgress(int icon_pos)
   char buf[6];
   sprintf(buf, "%d%%", infoPrinting.progress);
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-  GUI_DispString(printinfo_points[3].x + PICON_TITLE_X, printinfo_points[3].y + PICON_TITLE_Y, (u8 *)buf);
+  GUI_DispString(printinfo_points[3].x + PICON_TITLE_X, printinfo_points[3].y + PICON_TITLE_Y, (uint8_t *)buf);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
 
@@ -223,8 +223,8 @@ static inline void reDrawLayer(int icon_pos)
     GUI_SetTextMode(GUI_TEXTMODE_TRANS);
     ICON_ReadDisplay(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, ICON_PRINTING_ZLAYER);
     GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y,
-                   (u8 *)LAYER_TITLE);
-    GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (u8 *)tempstr);
+                   (uint8_t *)LAYER_TITLE);
+    GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (uint8_t *)tempstr);
     GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
     nextLayerDrawTime = OS_GetTimeMs() + LAYER_DRAW_TIME;
   }
@@ -337,7 +337,7 @@ void menuPrinting(void)
     //  title
     LABEL_BACKGROUND,
     // icon                       label
-    {{ICON_BACKGROUND, LABEL_BACKGROUND},
+    {{ICON_BACKGROUND,  LABEL_BACKGROUND},
       {ICON_BACKGROUND, LABEL_BACKGROUND},
       {ICON_BACKGROUND, LABEL_BACKGROUND},
       {ICON_BACKGROUND, LABEL_BACKGROUND},
@@ -369,10 +369,15 @@ void menuPrinting(void)
   else // returned to this menu after a print was done (ex: after a popup)
   {
     printingItems.title.address = (uint8_t *)infoPrintSummary.name;
-    printingItems.items[KEY_ICON_4] = itemIsPrinting[1]; // MainScreen
-    printingItems.items[KEY_ICON_5] = itemIsPrinting[0]; // BackGround
-    printingItems.items[KEY_ICON_6] = itemIsPrinting[0]; // BackGround
-    printingItems.items[KEY_ICON_7] = itemIsPrinting[2]; // Back
+
+    #ifdef TFT70_V3_0
+      printingItems.items[KEY_ICON_5] = itemIsPrinting[1]; // MainScreen
+    #else
+      printingItems.items[KEY_ICON_4] = itemIsPrinting[1]; // MainScreen
+      printingItems.items[KEY_ICON_5] = itemIsPrinting[0]; // BackGround
+    #endif
+      printingItems.items[KEY_ICON_6] = itemIsPrinting[0]; // BackGround
+      printingItems.items[KEY_ICON_7] = itemIsPrinting[2]; // Back
   }
 
   menuDrawPage(&printingItems);
@@ -463,23 +468,11 @@ void menuPrinting(void)
     if (lastPrinting != isPrinting())
     {
       lastPrinting = isPrinting();
-      if (lastPrinting == true) // print is ongoing
+      if (lastPrinting != true) // print finished
       {
-        return; // It will restart this interface if directly return this function without modify the value of infoMenu
-      }
-      else // print finished
-      {
-        printingItems.items[KEY_ICON_4] = itemIsPrinting[1]; // MainScreen
-        printingItems.items[KEY_ICON_5] = itemIsPrinting[0]; // BackGround
-        printingItems.items[KEY_ICON_6] = itemIsPrinting[0]; // BackGround
-        printingItems.items[KEY_ICON_7] = itemIsPrinting[2]; // Back
-        menuDrawItem(&printingItems.items[KEY_ICON_4], KEY_ICON_4);
-        menuDrawItem(&printingItems.items[KEY_ICON_5], KEY_ICON_5);
-        menuDrawItem(&printingItems.items[KEY_ICON_6], KEY_ICON_6);
-        menuDrawItem(&printingItems.items[KEY_ICON_7], KEY_ICON_7);
         preparePrintSummary();
-        drawPrintInfo();
       }
+      return; // It will restart this interface if directly return this function without modify the value of infoMenu
     }
 
     toggleInfo();

@@ -126,7 +126,7 @@ void RADIO_Select(RADIO *radio, uint8_t select);
 
 typedef struct
 {
-  const GUI_RECT *rect;
+  GUI_RECT rect;
   uint8_t  *text;
   uint32_t time;
   int16_t	 off_head;
@@ -139,7 +139,7 @@ typedef struct
   uint8_t  has_disp;
 }SCROLL;
 
-void Scroll_CreatePara(SCROLL * para,const uint8_t *pstr, const GUI_RECT *rect);
+void Scroll_CreatePara(SCROLL * para,const uint8_t *pstr, const GUI_RECT *prect);
 void Scroll_DispString(SCROLL * para, uint8_t align);
 
 typedef enum

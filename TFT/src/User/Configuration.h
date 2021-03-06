@@ -1,6 +1,6 @@
 #ifndef _CONFIGURATION_H_
 #define _CONFIGURATION_H_
-#define CONFIG_VERSION 20210124
+#define CONFIG_VERSION 20210217
 
 //===========================================================================
 //============================= General Settings ============================
@@ -24,7 +24,7 @@
 
 // Enable Status Screen
 // Enable this to show status screen as the default home screen. Disabling it will show a static menu.
-#define ENABLE_STATUS_SCREEN true  // To enabled: true | To disabled: false (Default: 1)
+#define ENABLE_STATUS_SCREEN true  // To enabled: true | To disabled: false (Default: true)
 
 /**
  * This setting determines the communication speed of the printer.
@@ -96,18 +96,18 @@
 #define MARLIN_FNCOLOR 0  // Default: 0
 
 // Text displayed at the top of the TFT in Marlin Mode
-#define MARLIN_BANNER_TEXT "LCD12864 Emulator"  // Default: "LCD12864 Emulator"
+#define MARLIN_BANNER_TEXT "Marlin Mode"  // Default: "Marlin Mode"
 
 // Show banner text at the top of the TFT in Marlin Mode
 #define MARLIN_SHOW_BANNER true  // To enabled: true | To disabled: false (Default: true)
 
 /**
  * Run Marlin Mode in Fullscreen
-
+ *
  * Options: 0: Disabled (RECOMMENDED FOR TFT24)
  *          1: Enabled
  */
-#define DEFAULT_ST7920_FULLSCREEN_MODE 0  // Default: 0
+#define MARLIN_MODE_FULLSCREEN 0  // Default: 0
 
 /**
  * Keep Serial always On (ONLY SUPPORTED ON TFT24 V1.1, TFT35 V3.0, AND TFT28 V3.0)
@@ -419,30 +419,34 @@
 //#define MESH_LEFT_KEYBOARD
 
 //
-// Terminal settings
+// Terminal Keyboard / Numpad settings
 //
 
+// Terminal Keyboard / Numpad theme
+// Uncomment to enable Material theme for keyboard and Numpad
+//#define KEYBOARD_MATERIAL_THEME // Default: disabled
+
 /**
- * Color scheme for the Terminal Keyboard
+ * Color scheme for the Terminal Keyboard / Numpad
  *
  * Options: [0: Default, 1: Invert, 2: High-Contrast]
  *  Default: The keyboard follows system background and border colors.
  *  Invert: The keyboard is drawn with background swapped with border colors.
  *  High-Contrast: Use white and black colors for high contrast.
  */
-#define TERMINAL_KEYBOARD_COLOR_LAYOUT 0  // Default: 0
+#define KEYBOARD_COLOR_LAYOUT 0  // Default: 0
 
 /**
  * QWERTY/QWERTZ keyboard layout
  * Keyboard layout for Terminal Keyboard (Only for TFT70 V3.0).
  *
- * Options: [0: Default:, 1: qwerty, 2: qwertz, 3: azerty]
+ * Options: [0: qwerty, 1: qwertz, 2: azerty]
  *  default: The keyboard has an alphabetically order.
  *  qwerty: The typically keyboard Layout for english.
  *  qwertz: The typically keyboard Layout for german.
  *  azerty: The typically keyboard Layout for french.
  */
-#define TERMINAL_KEYBOARD_LAYOUT 1  // Default: 0
+#define TERMINAL_KEYBOARD_LAYOUT 0  // Default: 0
 
 
 //===========================================================================
