@@ -386,8 +386,7 @@ int32_t numPadInt(u8* title, int32_t old_val, int32_t reset_val, bool negative)
         if (len < INT_BUFLONG && !(val == 0 && key_num == NUM_KEY_0))
           {
             int num = (numPadKeyChar[key_num][0] - '0');
-            num = ABS (num);
-            val = (val * 10) + num;
+            val = (val * 10) + ABS(num);
             BUZZER_PLAY(sound_keypress);
           }
           else
