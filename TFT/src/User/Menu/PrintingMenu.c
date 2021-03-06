@@ -191,8 +191,8 @@ static inline void reDrawSpeed(int icon_pos)
 
 static inline void reDrawTime(int icon_pos)
 {
-  uint8_t hour = infoPrinting.time / 3600,
-  uint8_t min = infoPrinting.time % 3600 / 60,
+  uint8_t hour = infoPrinting.time / 3600;
+  uint8_t min = infoPrinting.time % 3600 / 60;
   uint8_t sec = infoPrinting.time % 60;
 
   GUI_SetNumMode(GUI_NUMMODE_ZERO);
