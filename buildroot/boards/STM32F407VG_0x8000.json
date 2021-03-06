@@ -8,7 +8,7 @@
       "ldscript": "stm32f405x6.ld"
     },
     "mcu": "stm32f407vgt6",
-    "variant": "DISCO_F407VG"
+    "product_line": "wrongLineForLocal_S"
   },
   "debug": {
     "default_tools": [
@@ -30,19 +30,20 @@
     "stm32cube",
     "zephyr"
   ],
-  "name": "STM32F407VG (128k RAM. 1024k Flash)",
+  "name": "STM32F407VG (192k RAM. 1024k - 32K Flash)",
   "upload": {
-    "maximum_ram_size": 131072,
-    "maximum_size": 1048576,
+    "offset_address": "0x8008000",
+    "maximum_ram_size": 196608,
+    "maximum_size": 1015808,
     "protocol": "cmsis-dap",
     "protocols": [
       "jlink",
       "stlink",
-	  "cmsis-dap",
+      "cmsis-dap",
       "blackmagic",
       "mbed"
     ]
   },
-  "url": "http://www.st.com/web/catalog/tools/FM116/SC959/SS1532/LN1848/PF252419",
+  "url": "https://www.st.com/en/microcontrollers-microprocessors/stm32f407-417.html",
   "vendor": "ST"
 }

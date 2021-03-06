@@ -2,7 +2,7 @@
   "build": {
     "core": "stm32",
     "cpu": "cortex-m3",
-    "extra_flags": "-DSTM32F105xC",
+    "extra_flags": "-DSTM32F107xC",
     "f_cpu": "72000000L",
     "hwids": [
       [
@@ -14,37 +14,38 @@
         "0x0004"
       ]
     ],
-    "mcu": "stm32f105rct6",
-    "variant": "stm32f1"
+    "mcu": "stm32f107vct6",
+    "product_line": "wrongLineForLocal_S"
   },
   "debug": {
-    "jlink_device": "STM32F105RC",
+    "jlink_device": "STM32F107VC",
     "openocd_target": "stm32f1x",
-    "svd_path": "STM32F105xx.svd"
+    "svd_path": "STM32F107xx.svd"
   },
   "frameworks": [
     "arduino",
     "libopencm3",
+    "cmsis",
     "stm32cube"
   ],
-  "name": "STM32F105RC (48k RAM. 256k Flash)",
+  "name": "STM32F107VC (64k RAM. 256k - 28K Flash)",
   "upload": {
     "disable_flushing": false,
-    "maximum_ram_size": 49152,
-    "maximum_size": 262144,
+    "offset_address": "0x8007000",
+    "maximum_ram_size": 65536,
+    "maximum_size": 233472,
     "protocol": "cmsis-dap",
     "protocols": [
 	  "cmsis-dap",
       "jlink",
       "stlink",
       "blackmagic",
-      "serial",
-      "dfu"
+      "serial"
     ],
     "require_upload_port": true,
     "use_1200bps_touch": false,
     "wait_for_upload_port": false
   },
-  "url": "http://www.st.com/content/st_com/en/products/microcontrollers/stm32-32-bit-arm-cortex-mcus/stm32f1-series/stm32f103/stm32f103ve.html",
+  "url": "https://www.st.com/en/microcontrollers-microprocessors/stm32f105-107.html",
   "vendor": "Generic"
 }
