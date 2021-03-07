@@ -170,7 +170,7 @@
     #define STRING_M0_PAUSE               "Szünetelés M0 parancsal"
 
     #define STRING_TEST                   "Teszt"
-    #define STRING_DEPLOY                 "Telepítés"
+    #define STRING_DEPLOY                 "Bevetés"
     #define STRING_STOW                   "Elhelyezés"
     #define STRING_REPEAT                 "Ismétlés"
 
@@ -282,7 +282,7 @@
     #define STRING_FONT_COLOR             "Betűszín"
     #define STRING_PERCENTAGE             "Százalék"
     #define STRING_PERCENTAGE_SPEED       "Sebesség"
-    #define STRING_PERCENTAGE_FLOW        "Folyás"
+    #define STRING_PERCENTAGE_FLOW        "Hozam"
     #define STRING_BABYSTEP               "Mikrolépés"
     #define STRING_X_INC                  "X+"
     #define STRING_Y_INC                  "Y+"
