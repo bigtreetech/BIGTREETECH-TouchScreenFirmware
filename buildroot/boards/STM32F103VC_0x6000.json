@@ -15,7 +15,7 @@
       ]
     ],
     "mcu": "stm32f103vct6",
-    "variant": "stm32f1"
+    "product_line": "wrongLineForLocal_S"
   },
   "debug": {
     "jlink_device": "STM32F103VC",
@@ -25,26 +25,27 @@
   "frameworks": [
     "arduino",
     "libopencm3",
+    "cmsis",
     "stm32cube"
   ],
-  "name": "STM32F103VC (48k RAM. 256k Flash)",
+  "name": "STM32F103VC (48k RAM. 256k - 24K Flash)",
   "upload": {
     "disable_flushing": false,
+    "offset_address": "0x8006000",
     "maximum_ram_size": 49152,
-    "maximum_size": 262144,
+    "maximum_size": 237568,
     "protocol": "cmsis-dap",
     "protocols": [
 	  "cmsis-dap",
       "jlink",
       "stlink",
       "blackmagic",
-      "serial",
-      "dfu"
+      "serial"
     ],
     "require_upload_port": true,
     "use_1200bps_touch": false,
     "wait_for_upload_port": false
   },
-  "url": "http://www.st.com/content/st_com/en/products/microcontrollers/stm32-32-bit-arm-cortex-mcus/stm32f1-series/stm32f103/stm32f103ve.html",
+  "url": "https://www.st.com/en/microcontrollers-microprocessors/stm32f103.html",
   "vendor": "Generic"
 }
