@@ -51,6 +51,7 @@
     #define STRING_HOTEND_OFFSET          "Offset 2ème Buse"
     #define STRING_PROBE_OFFSET           "Décalage Palpeur"
     #define STRING_LIN_ADVANCE            "Linear Advance"
+    #define STRING_FILAMENT_SETTING       "Filament Diameter"
     #define STRING_CURRENT_SETTING        "Courant drivers (mA)"
     #define STRING_BUMP_SENSITIVITY       "Sensibilité TMC"
     #define STRING_HYBRID_THRESHOLD       "Seuil Hybride TMC"
