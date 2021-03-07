@@ -503,8 +503,8 @@ void parseACK(void)
 
         infoFile.source = BOARD_SD_REMOTE;
         initPrintSummary();
-        infoMenu.cur = 1;  // take care if popup active or user in other menu than print
-        infoMenu.menu[infoMenu.cur] = menuPrinting;  // switch to printing menu and make it next in line after mainscreen
+        if(infoMenu.menu[infoMenu.cur] == menuDialog)
+          infoMenu.cur--;  // remove popup/dialog window if visible.
 
         if (infoMachineSettings.autoReportSDStatus == 1)
         {
