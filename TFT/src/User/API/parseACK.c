@@ -719,7 +719,7 @@ void parseACK(void)
           if (ack_seen("Y")) setParameter(P_CURRENT, Y_STEPPER, ack_value());
           if (ack_seen("Z")) setParameter(P_CURRENT, Z_STEPPER, ack_value());
           setParameter(P_STEALTH_CHOP, X_STEPPER, 0 );   //Sets 0 if StealthChop is off on all axes and the M569 string does not occur.
-          setParameter(P_STEALTH_CHOP, Y_STEPPER, 0 );   //Sets 0 if StealthChop is off on all axes and the M569 string does not occur. 
+          setParameter(P_STEALTH_CHOP, Y_STEPPER, 0 );   //Sets 0 if StealthChop is off on all axes and the M569 string does not occur.
           setParameter(P_STEALTH_CHOP, Z_STEPPER, 0 );   //Sets 0 if StealthChop is off on all axes and the M569 string does not occur.
           setParameter(P_STEALTH_CHOP, E_STEPPER, 0 );   //Sets 0 if StealthChop is off on all axes and the M569 string does not occur.
           setParameter(P_STEALTH_CHOP, E2_STEPPER, 0 );  //Sets 0 if StealthChop is off on all axes and the M569 string does not occur.
@@ -1019,7 +1019,7 @@ void parseACK(void)
         mblUpdateStatus(true);
       }
       // parse Mesh data
-      else if (meshIsWaitingFirstData() && (ack_seen("Mesh Bed Level data:") ||            // MBL
+/*      else if (meshIsWaitingFirstData() && (ack_seen("Mesh Bed Level data:") ||            // MBL
                                             ack_seen("Bed Topography Report for CSV:") ||  // UBL
                                             ack_seen("Bilinear Leveling Grid:") ||         // ABL Bilinear
                                             ack_seen("Bed Level Correction Matrix:") ||    // ABL Linear or 3-Point
@@ -1030,6 +1030,10 @@ void parseACK(void)
       else if (meshIsWaitingData())
       {
         meshUpdateData(dmaL2Cache);  // continue data updating
+      }*/
+      else if (meshIsWaitingData())
+      {
+        meshUpdateData(dmaL2Cache);  // mesh data updating
       }
       // parse PID Autotune finished message
       else if (ack_seen("PID Autotune finished"))
