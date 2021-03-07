@@ -923,7 +923,13 @@ void menuMeshEditor(void)
       case ME_KEY_HOME:
         forceHoming = false;
 
-        mustStoreCmd("G28\n");                             // force homing (e.g. if steppers are disarmed)
+        mustStoreCmd("G28\n");
+        if (IS_DELTA)
+        {
+          mustStoreCmd("G91\n");                         // Set Relative Positioning
+          mustStoreCmd("G1 Z-50 F1500\n");               // Drop by 30mm
+          mustStoreCmd("G90\n");                         // Set Absolute Positioing
+        }                             // force homing (e.g. if steppers are disarmed)
         break;
 
       case ME_KEY_SAVE:
