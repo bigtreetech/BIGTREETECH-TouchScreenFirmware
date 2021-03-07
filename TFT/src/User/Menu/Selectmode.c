@@ -8,11 +8,11 @@ bool skipMode = false;
 
 const GUI_RECT rect_of_mode[MODE_COUNT] = {
   //2 select icon
-  {1*SPACE_SELEX+0*ICON_WIDTH, SPACE_SELEY, 1*SPACE_SELEX+1*ICON_WIDTH, SPACE_SELEY+ICON_HEIGHT},
-  {3*SPACE_SELEX+1*ICON_WIDTH, SPACE_SELEY, 3*SPACE_SELEX+2*ICON_WIDTH, SPACE_SELEY+ICON_HEIGHT},
+  {1 * SPACE_SELEX + 0 * ICON_WIDTH, SPACE_SELEY, 1 * SPACE_SELEX + 1 * ICON_WIDTH, SPACE_SELEY + ICON_HEIGHT},
+  {3 * SPACE_SELEX + 1 * ICON_WIDTH, SPACE_SELEY, 3 * SPACE_SELEX + 2 * ICON_WIDTH, SPACE_SELEY + ICON_HEIGHT},
 };
 
-const uint8_t icon_mode [MODE_COUNT]={
+const uint8_t icon_mode [MODE_COUNT] = {
   ICON_MARLIN,
   ICON_BIGTREETECH,
 };
@@ -25,8 +25,8 @@ void drawModeIcon(void)
   }
 
   const GUI_RECT mode_title_rect[MODE_COUNT] = {
-    {0,           rect_of_mode[0].y1 + BYTE_HEIGHT/2,   text_startx,  rect_of_mode[0].y1 + BYTE_HEIGHT/2 + BYTE_HEIGHT},
-    {text_startx, rect_of_mode[0].y1 + BYTE_HEIGHT/2,   LCD_WIDTH,    rect_of_mode[0].y1 + BYTE_HEIGHT/2 + BYTE_HEIGHT},
+    {0,           rect_of_mode[0].y1 + BYTE_HEIGHT / 2, text_startx, rect_of_mode[0].y1 + BYTE_HEIGHT / 2 + BYTE_HEIGHT},
+    {text_startx, rect_of_mode[0].y1 + BYTE_HEIGHT / 2, LCD_WIDTH,   rect_of_mode[0].y1 + BYTE_HEIGHT / 2 + BYTE_HEIGHT},
   };
 
   GUI_RestoreColorDefault();
@@ -160,31 +160,31 @@ void menuMode(void)
 static inline void setupModeHardware(uint8_t mode)
 {
   if (infoSettings.serial_alwaysOn == ENABLED)
-    Serial_ReSourceInit(); // disable serial comm if `serial_alwaysOn` is disabled
+    Serial_ReSourceInit();  // disable serial comm if `serial_alwaysOn` is disabled
 
   if (mode == MODE_SERIAL_TSC)
   {
     Serial_ReSourceInit();  // enable serial comm in TSC mode
-    #ifdef BUZZER_PIN // enable buzzer in Touchsreen mode
+    #ifdef BUZZER_PIN  // enable buzzer in Touchsreen mode
       Buzzer_Config();
     #endif
 
-    #if LED_COLOR_PIN // enable knob led only in Touchscreen mode
+    #if LED_COLOR_PIN  // enable knob led only in Touchscreen mode
       #ifndef KEEP_KNOB_LED_COLOR_MARLIN_MODE
       knob_LED_Init();
       #endif
     #endif
 
-    #if ENC_ACTIVE_SIGNAL // set encoder inactive signal if touch mode is active
+    #if ENC_ACTIVE_SIGNAL  // set encoder inactive signal if touch mode is active
      setEncActiveSignal(0);
     #endif
   }
   else
   {
     if (infoSettings.serial_alwaysOn == DISABLED)
-      Serial_ReSourceDeInit(); // disable serial comm if `serial_alwaysOn` is disabled
+      Serial_ReSourceDeInit();  // disable serial comm if `serial_alwaysOn` is disabled
 
-    #ifdef BUZZER_PIN // disable buzzer in marlin mode
+    #ifdef BUZZER_PIN  // disable buzzer in marlin mode
       Buzzer_DeConfig();
     #endif
 
@@ -194,7 +194,7 @@ static inline void setupModeHardware(uint8_t mode)
       #endif
     #endif
 
-    #if ENC_ACTIVE_SIGNAL // set encoder active signal if marlin mode is active
+    #if ENC_ACTIVE_SIGNAL  // set encoder active signal if marlin mode is active
       setEncActiveSignal(1);
     #endif
 

@@ -7,32 +7,30 @@ extern "C" {
 
 #include <stdint.h>
 
-/* Enable probe height
- * Temporary disable software endstops
- */
+// Enable probe height
+// Temporary disable software endstops
 void probeHeightEnable(void);
 
-/* Disable probe height
- * Restore original software endstops state
- */
+// Disable probe height
+// Restore original software endstops state
 void probeHeightDisable(void);
 
-/* Start probe height */
+// Start probe height
 void probeHeightStart(float initialHeight);
 
-/* Stop probe height */
+// Stop probe height
 void probeHeightStop(void);
 
-/* Set probe height to relative position mode */
+// Set probe height to relative position mode
 void probeHeightRelative(void);
 
-/* Set probe height to absolute position mode */
+// Set probe height to absolute position mode
 void probeHeightAbsolute(void);
 
-/* Change probe height */
+// Change probe height
 void probeHeightMove(float unit, int8_t direction);
 
-/* Query for new coordinates */
+// Query for new coordinates
 void probeHeightQueryCoord(void);
 
 #ifdef __cplusplus

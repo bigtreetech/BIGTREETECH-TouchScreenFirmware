@@ -1,9 +1,9 @@
 #include "LoadUnload.h"
 #include "includes.h"
 
-#define LOAD 1
+#define NONE   0
+#define LOAD   1
 #define UNLOAD 2
-#define NONE 0
 
 const MENUITEMS loadUnloadItems = {
   // title
@@ -76,8 +76,8 @@ void menuLoadUnload(void)
     {
       switch (key_num)
       {
-        case KEY_ICON_0: // Unload
-        case KEY_ICON_3: // Load
+        case KEY_ICON_0:  // Unload
+        case KEY_ICON_3:  // Load
           if (heatGetCurrentTemp(curExt_index) < infoSettings.min_ext_temp)
           { // low temperature warning
             char tempMsg[120];

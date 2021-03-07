@@ -3,19 +3,19 @@
 
 static uint8_t curUnit_index = 0;
 
-/* Init mesh point */
+// Init mesh point
 static inline void meshInitPoint(uint16_t col, uint16_t row, float value)
 {
-//  probeHeightEnable();                                     // temporary disable software endstops
+//  probeHeightEnable();  // temporary disable software endstops
 
   // Z offset gcode sequence start
   if (infoMachineSettings.zProbe == ENABLED && !(IS_DELTA))
-    probeHeightStop();                                     // raise nozzle
+    probeHeightStop();  // raise nozzle
 
-  mustStoreCmd("G42 I%d J%d\n", col, row);                 // move nozzle to X and Y coordinates corresponding
-                                                           // to the column and row in the bed leveling mesh grid
-  probeHeightStart(value);                                 // lower nozzle to provided absolute Z point
-  probeHeightRelative();                                   // set relative position mode
+  mustStoreCmd("G42 I%d J%d\n", col, row);  // move nozzle to X and Y coordinates corresponding
+                                            // to the column and row in the bed leveling mesh grid
+  probeHeightStart(value);  // lower nozzle to provided absolute Z point
+  probeHeightRelative();    // set relative position mode
 }
 
 /* Reset mesh point */
@@ -23,11 +23,11 @@ static inline void meshResetPoint(void)
 {
   // Z offset gcode sequence stop
   if (infoMachineSettings.zProbe == ENABLED)
-    probeHeightStop();                                     // raise nozzle
+    probeHeightStop();  // raise nozzle
 
-  probeHeightAbsolute();                                   // set absolute position mode
+  probeHeightAbsolute();  // set absolute position mode
 
-//  probeHeightDisable();                                    // restore original software endstops state
+//  probeHeightDisable();  // restore original software endstops state
 }
 
 void meshDrawHeader(uint16_t col, uint16_t row)
@@ -54,7 +54,6 @@ void meshDrawValue(float val)
 
 float menuMeshTuner(uint16_t col, uint16_t row, float value)
 {
-
   // 1 title, ITEM_PER_PAGE items (icon + label)
   MENUITEMS meshItems = {
     // title
@@ -83,7 +82,7 @@ float menuMeshTuner(uint16_t col, uint16_t row, float value)
   float now, curValue;
   float unit;
 
-  meshInitPoint(col, row, value);                          // initialize mesh point
+  meshInitPoint(col, row, value);  // initialize mesh point
 
   now = curValue = coordinateGetAxisActual(Z_AXIS);
 
@@ -132,16 +131,16 @@ float menuMeshTuner(uint16_t col, uint16_t row, float value)
 
       // return new Z height
       case KEY_ICON_6:
-        meshResetPoint();                                  // reset mesh point
+        meshResetPoint();  // reset mesh point
 
-        return curValue;                                   // return current Z height
+        return curValue;  // return current Z height
         break;
 
       // return original Z height
       case KEY_ICON_7:
-        meshResetPoint();                                  // reset mesh point
+        meshResetPoint();  // reset mesh point
 
-        return value;                                      // return original Z height
+        return value;  // return original Z height
         break;
 
       default:

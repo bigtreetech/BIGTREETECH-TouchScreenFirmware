@@ -3,7 +3,6 @@
 
 void menuUnifiedMove(void)
 {
-  // 1 title, ITEM_PER_PAGE items (icon + label)
   MENUITEMS UnifiedMoveItems = {
     // title
     LABEL_UNIFIEDMOVE,

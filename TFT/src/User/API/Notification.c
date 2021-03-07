@@ -14,7 +14,7 @@ static uint8_t curToastDisplay = 0;  // current toast notification being display
 static uint32_t nextToastTime = 0;   //time to change to next notification
 
 static NOTIFICATION msglist[MAX_MSG_COUNT];
-static uint8_t nextMsgIndex = 0;   //next index to store new message
+static uint8_t nextMsgIndex = 0;  //next index to store new message
 static void (*notificationHandler)() = NULL;
 
 bool _toastRunning = false;
@@ -25,7 +25,7 @@ void addToast(DIALOG_TYPE style, char * text)
   wakeLCD();
   TOAST t;
   strncpy(t.text, text, TOAST_MSG_LENGTH);
-  t.text[TOAST_MSG_LENGTH - 1] = 0; //ensure string ends with null terminator
+  t.text[TOAST_MSG_LENGTH - 1] = 0;  //ensure string ends with null terminator
   t.isNew = true;
   toastlist[nextToastIndex] = t;
   nextToastIndex = (nextToastIndex + 1) % TOAST_MSG_COUNT;
@@ -51,10 +51,10 @@ bool toastAvailable(void)
 //show next notification
 void drawToast(bool redraw)
 {
-  if(!redraw)
+  if (!redraw)
     curToastDisplay = (curToastDisplay + 1) % TOAST_MSG_COUNT;
 
-  if(toastlist[curToastDisplay].isNew == true || redraw)
+  if (toastlist[curToastDisplay].isNew == true || redraw)
   {
     //Set toast notification running status
     _toastRunning = true;
@@ -81,7 +81,7 @@ void drawToast(bool redraw)
       cursound = sound_toast;
     }
 
-    if ( cursound >= 0 && !redraw)
+    if (cursound >= 0 && !redraw)
       BUZZER_PLAY(cursound);
 
     GUI_SetTextMode(GUI_TEXTMODE_TRANS);
@@ -99,7 +99,7 @@ void drawToast(bool redraw)
     toastlist[curToastDisplay].isNew = false;
 
     //set new timer if notification is new
-    if(!redraw)
+    if (!redraw)
       nextToastTime = OS_GetTimeMs() + TOAST_DURATION;
 
     GUI_RestoreColorDefault();
@@ -109,7 +109,7 @@ void drawToast(bool redraw)
 //check and control toast notification display
 void loopToast(void)
 {
-  if(getMenuType() == MENU_TYPE_FULLSCREEN)
+  if (getMenuType() == MENU_TYPE_FULLSCREEN)
     return;
 
   if (OS_GetTimeMs() > nextToastTime)
@@ -118,7 +118,7 @@ void loopToast(void)
     {
       drawToast(false);
     }
-    else if(_toastRunning == true)
+    else if (_toastRunning == true)
     {
       _toastRunning = false;
       GUI_ClearPrect(&toastIconRect);
@@ -146,14 +146,14 @@ void addNotification(DIALOG_TYPE style, char *title, char *text, bool ShowDialog
   //store message
   msglist[nextMsgIndex].style  = style;
   strncpy(msglist[nextMsgIndex].text, text, MAX_MSG_LENGTH);
-  msglist[nextMsgIndex].text[MAX_MSG_LENGTH - 1] = 0; //ensure string ends with null terminator
+  msglist[nextMsgIndex].text[MAX_MSG_LENGTH - 1] = 0;  //ensure string ends with null terminator
   strncpy(msglist[nextMsgIndex].title, title, MAX_MSG_TITLE_LENGTH);
-  msglist[nextMsgIndex].title[MAX_MSG_TITLE_LENGTH - 1] = 0; //ensure string ends with null terminator
+  msglist[nextMsgIndex].title[MAX_MSG_TITLE_LENGTH - 1] = 0;  //ensure string ends with null terminator
 
   if (ShowDialog && infoMenu.menu[infoMenu.cur] != menuNotification)
     popupReminder(style, (uint8_t *)title, (uint8_t *)msglist[nextMsgIndex].text);
 
-  if (nextMsgIndex < MAX_MSG_COUNT) nextMsgIndex += 1;//(nextMsgIndex + 1) % MAX_MSG_COUNT;
+  if (nextMsgIndex < MAX_MSG_COUNT) nextMsgIndex += 1;  //(nextMsgIndex + 1) % MAX_MSG_COUNT;
 
   if (notificationHandler != NULL)
     notificationHandler();

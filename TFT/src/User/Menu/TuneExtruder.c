@@ -36,7 +36,7 @@ void showNewESteps(const float measured_length, const float old_esteps, float * 
 {
   char tempstr[20];
 
-  //First we calculate the new E-step value:
+  // First we calculate the new E-step value:
   *new_esteps = (100 * old_esteps) / (100 - (measured_length - 20));
 
   GUI_DispString(exhibitRect.x0, exhibitRect.y0, textSelect(LABEL_TUNE_EXT_MEASURED));
@@ -53,9 +53,9 @@ void showNewESteps(const float measured_length, const float old_esteps, float * 
 
 static inline void extrudeFilament(void)
 {
-  storeCmd("G28\n");                             // Home extruder
-  mustStoreScript("G90\nG0 F3000 X0 Y0 Z100\n"); // present extruder
-  mustStoreScript("M83\nG1 F50 E100\nM82\n");    // extrude
+  storeCmd("G28\n");                              // Home extruder
+  mustStoreScript("G90\nG0 F3000 X0 Y0 Z100\n");  // present extruder
+  mustStoreScript("M83\nG1 F50 E100\nM82\n");     // extrude
   infoMenu.menu[++infoMenu.cur] = menuNewExtruderESteps;
 }
 // end Esteps part
@@ -233,11 +233,11 @@ void menuNewExtruderESteps(void)
 
   float measured_length;
   float now = measured_length = 20.00f;
-  float old_esteps, new_esteps; // get the value of the E-steps
+  float old_esteps, new_esteps;  // get the value of the E-steps
 
   mustStoreCmd("M503 S0\n");
 
-  old_esteps = getParameter(P_STEPS_PER_MM, E_AXIS); // get the value of the E-steps
+  old_esteps = getParameter(P_STEPS_PER_MM, E_AXIS);  // get the value of the E-steps
   newExtruderESteps.items[KEY_ICON_5] = itemMoveLen[curExtStep_index];
 
   menuDrawPage(&newExtruderESteps);

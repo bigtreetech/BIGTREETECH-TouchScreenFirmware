@@ -7,7 +7,7 @@ static bool probeOffsetMenu = false;
 static uint8_t curUnit_index = 0;
 static uint8_t curSubmenu_index = 0;
 
-/* Show an error notification */
+// Show an error notification
 void zOffsetNotifyError(void)
 {
   LABELCHAR(tempMsg, LABEL_PROBE_OFFSET)

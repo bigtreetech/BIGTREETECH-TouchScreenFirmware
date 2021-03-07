@@ -17,13 +17,13 @@ typedef enum {
   WAIT_NONE = 0,
   WAIT_HEATING,
   WAIT_COOLING_HEATING,
-}HEATER_WAIT;
+} HEATER_WAIT;
 
 typedef enum {
   SETTLED = 0,
   HEATING,
   COOLING,
-}HEATER_STATUS;
+} HEATER_STATUS;
 
 enum
 {
@@ -39,11 +39,11 @@ enum
 
 typedef struct
 {
-  int16_t current,
-          target;
+  int16_t current;
+  int16_t target;
   HEATER_WAIT waiting;
   HEATER_STATUS status;
-}_HEATER;
+} _HEATER;
 
 typedef struct
 {
@@ -55,15 +55,13 @@ typedef struct
     };
     _HEATER T[MAX_HEATER_COUNT];
   };
-  uint8_t      toolIndex;  //
-}HEATER;
-
+  uint8_t toolIndex;
+} HEATER;
 
 extern const char *const heaterID[];
 extern const char *const heatDisplayID[];
 extern const char *const heatCmd[];
 extern const char *const heatWaitCmd[];
-
 
 void heatSetTargetTemp(uint8_t index, int16_t temp);
 void heatSyncTargetTemp(uint8_t index, int16_t temp);

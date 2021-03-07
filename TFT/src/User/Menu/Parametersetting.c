@@ -119,7 +119,7 @@ void menuShowParameter(void)
         parameter_menuitems.items[Z_STEPPER].titlelabel.address = "Z 1=ON 0=OFF";
         parameter_menuitems.items[E_STEPPER].titlelabel.address = "E 1=ON 0=OFF";
         parameter_menuitems.items[E2_STEPPER].titlelabel.address = "E2 1=ON 0=OFF";
-        break; 
+        break;
 
       case P_MBL_OFFSET:
         parameter_menuitems.items[i].titlelabel.address = "Z";
@@ -157,7 +157,7 @@ void menuShowParameter(void)
             break;
 
           VAL_TYPE val_type = getParameterValType(cur_parameter, key_num);
-          bool negative_val = val_type % 2; //accept negative values only for probe offset
+          bool negative_val = val_type % 2;  //accept negative values only for probe offset
           float val = getParameter(cur_parameter, key_num);
 
           if (val_type == VAL_TYPE_FLOAT || val_type == VAL_TYPE_NEG_FLOAT)
@@ -375,7 +375,7 @@ void loopTemperatureStatus(void)
   if (getMenuType() == MENU_TYPE_FULLSCREEN) return;
   if (!temperatureStatusValid()) return;
 
-  uint8_t tmpHeater[3]; // chamber, bed, hotend
+  uint8_t tmpHeater[3];  // chamber, bed, hotend
   uint8_t tmpIndex = 0;
 
   if (infoSettings.hotend_count)  // global hotend
@@ -413,7 +413,7 @@ int16_t drawTemperatureStatus(void)
 
   if (!temperatureStatusValid()) return x_offset;
 
-  uint8_t tmpHeater[3]; // chamber, bed, 1-2hotend
+  uint8_t tmpHeater[3];  // chamber, bed, 1-2hotend
   uint16_t tmpIcon[3];
   uint8_t tmpIndex = 0;
 
@@ -426,7 +426,7 @@ int16_t drawTemperatureStatus(void)
       tmpIcon[tmpIndex] = ICON_GLOBAL_NOZZLE;
       tmpHeater[tmpIndex++] = NOZZLE1;
     }
-    else // singl or mixing hotend
+    else  // singl or mixing hotend
     {
       tmpIcon[tmpIndex] = ICON_GLOBAL_NOZZLE;
       tmpHeater[tmpIndex++] = heatGetCurrentHotend();
@@ -460,11 +460,11 @@ int16_t drawTemperatureStatus(void)
     x_offset -= GUI_StrPixelWidth((uint8_t *)tempstr);
     GUI_StrPixelWidth(LABEL_10_PERCENT);
 
-    GUI_DispString(x_offset, start_y, (uint8_t *)tempstr); // value
+    GUI_DispString(x_offset, start_y, (uint8_t *)tempstr);  // value
     x_offset -= GLOBALICON_INTERVAL;
     GUI_ClearRect(x_offset, start_y, x_offset + GLOBALICON_INTERVAL, start_y + GLOBALICON_HEIGHT);
     x_offset -= GLOBALICON_WIDTH;
-    ICON_ReadDisplay(x_offset, start_y, tmpIcon[i]); // icon
+    ICON_ReadDisplay(x_offset, start_y, tmpIcon[i]);  // icon
   }
 
   GUI_SetBkColor(infoSettings.bg_color);

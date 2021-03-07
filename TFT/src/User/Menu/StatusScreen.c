@@ -1,4 +1,5 @@
 #include "StatusScreen.h"
+
 #ifdef TFT70_V3_0
 #define KEY_SPEEDMENU         KEY_ICON_3
 #define KEY_FLOWMENU          (KEY_SPEEDMENU + 1)
@@ -37,7 +38,7 @@ const ITEM SpeedItems[2] = {
   {ICON_STATUS_FLOW,             LABEL_BACKGROUND},
 };
 
-#define UPDATE_TOOL_TIME 2000 // 1 seconds is 1000
+#define UPDATE_TOOL_TIME 2000  // 1 seconds is 1000
 static int8_t lastConnection_status = -1;
 static bool msgNeedRefresh = false;
 

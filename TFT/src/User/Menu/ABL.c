@@ -5,7 +5,7 @@ static uint8_t ublSlot;
 static bool ublIsSaving = true;
 static bool ublSlotSaved = false;
 
-/* called by parseAck() to notify ABL process status */
+// called by parseAck() to notify ABL process status
 void ablUpdateStatus(bool succeeded)
 {
   bool savingEnabled = true;
@@ -33,7 +33,7 @@ void ablUpdateStatus(bool succeeded)
       break;
   }
 
-  if (succeeded) // if bed leveling process successfully terminated, allow to save to EEPROM
+  if (succeeded)  // if bed leveling process successfully terminated, allow to save to EEPROM
   {
     BUZZER_PLAY(sound_success);
 
@@ -48,7 +48,7 @@ void ablUpdateStatus(bool succeeded)
       popupReminder(DIALOG_TYPE_SUCCESS, tempTitle.index, (uint8_t *) tempMsg);
     }
   }
-  else // if bed leveling process failed, provide an error dialog
+  else  // if bed leveling process failed, provide an error dialog
   {
     BUZZER_PLAY(sound_error);
 

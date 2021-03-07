@@ -5,7 +5,6 @@
 const char axis_id[TOTAL_AXIS] = {'X', 'Y', 'Z', 'E'};
 
 static COORDINATE targetPosition = {{0.0f, 0.0f, 0.0f, 0.0f}, 3000};
-
 static COORDINATE curPosition = {{0.0f, 0.0f, 0.0f, 0.0f}, 3000};
 
 /**
@@ -52,11 +51,11 @@ void coordinateSetKnown(bool known)
   position_known = known;
 }
 
-void coordinateSetAxisTarget(AXIS axis,float position)
+void coordinateSetAxisTarget(AXIS axis, float position)
 {
   bool r = (axis == E_AXIS) ? relative_e || relative_mode : relative_mode;
 
-  if(r==false)
+  if (r == false)
   {
     targetPosition.axis[axis] = position;
   }

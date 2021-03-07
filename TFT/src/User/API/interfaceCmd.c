@@ -1,7 +1,6 @@
 #include "interfaceCmd.h"
 #include "includes.h"
 
-
 GCODE_QUEUE infoCmd;
 GCODE_QUEUE infoCacheCmd;  // Only when heatHasWaiting() is false the cmd in this cache will move to infoCmd queue.
 static uint8_t cmd_index = 0;
@@ -10,7 +9,7 @@ static bool ispolling = true;
 // Is there a code character in the current gcode command.
 static bool cmd_seen(char code)
 {
-  for(cmd_index = 0; infoCmd.queue[infoCmd.index_r].gcode[cmd_index] != 0 && cmd_index < CMD_MAX_CHAR; cmd_index++)
+  for (cmd_index = 0; infoCmd.queue[infoCmd.index_r].gcode[cmd_index] != 0 && cmd_index < CMD_MAX_CHAR; cmd_index++)
   {
     if (infoCmd.queue[infoCmd.index_r].gcode[cmd_index] == code)
     {
@@ -217,12 +216,12 @@ void sendQueueCmd(void)
     cmd_index = strcspn(infoCmd.queue[infoCmd.index_r].gcode, " ") + 1;
   }
 
-  switch(infoCmd.queue[infoCmd.index_r].gcode[cmd_index])
+  switch (infoCmd.queue[infoCmd.index_r].gcode[cmd_index])
   {
     // parse M-codes
     case 'M':
       cmd = strtol(&infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 1], NULL, 10);
-      switch(cmd)
+      switch (cmd)
       {
         case 0:
           if (isPrinting())
@@ -829,7 +828,7 @@ void sendQueueCmd(void)
             infoHost.wait = true;
             break;
         #endif
-        
+
         case 596: //M596 TMC StealthChop
         {
           uint8_t k = 0;
@@ -891,8 +890,8 @@ void sendQueueCmd(void)
       break; //end parsing M-codes
 
     case 'G':
-      cmd=strtol(&infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 1],NULL,10);
-      switch(cmd)
+      cmd=strtol(&infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 1], NULL, 10);
+      switch (cmd)
       {
         case 0: //G0
         case 1: //G1
@@ -900,7 +899,7 @@ void sendQueueCmd(void)
         case 3: //G3
         {
           AXIS i;
-          for(i=X_AXIS;i<TOTAL_AXIS;i++)
+          for (i = X_AXIS; i < TOTAL_AXIS; i++)
           {
             if (cmd_seen(axis_id[i]))
             {
@@ -952,7 +951,7 @@ void sendQueueCmd(void)
           // Set to absolute mode
           coorSetRelative(false);
           eSetRelative(false);
-          for(AXIS i = X_AXIS; i < TOTAL_AXIS; i++)
+          for (AXIS i = X_AXIS; i < TOTAL_AXIS; i++)
           {
             if (cmd_seen(axis_id[i]))
             {

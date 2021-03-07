@@ -111,7 +111,6 @@ const uint16_t ICON_COLOR[ICONCHAR_NUM]=
   WHITE,              //ICONCHAR_TOGGLE_SWITCH
   MAT_GREEN,          //ICONCHAR_TOGGLE_ON
   MAT_RED,            //ICONCHAR_TOGGLE_OFF
-
 };
 
 #define CHAR_BLANK                 '\0'

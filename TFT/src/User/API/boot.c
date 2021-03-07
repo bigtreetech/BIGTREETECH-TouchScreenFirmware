@@ -237,19 +237,19 @@ bool updateFont(char *font, uint32_t addr)
   GUI_DispString(0, 100, (uint8_t*)buffer);
   GUI_DispString(0, 140, (uint8_t*)"Updating:   %");
 
-  while(!f_eof(&myfp))
+  while (!f_eof(&myfp))
   {
     if (f_read(&myfp, tempbuf, W25QXX_SECTOR_SIZE, &rnum) != FR_OK) break;
 
     W25Qxx_EraseSector(addr + offset);
     W25Qxx_WriteBuffer(tempbuf, addr + offset, W25QXX_SECTOR_SIZE);
     offset += rnum;
-    if(progress != offset * 100 / f_size(&myfp))
+    if (progress != offset * 100 / f_size(&myfp))
     {
       progress = offset * 100 / f_size(&myfp);
       GUI_DispDec(0 + BYTE_WIDTH*9, 140, progress, 3, RIGHT);
     }
-    if(rnum !=W25QXX_SECTOR_SIZE)break;
+    if (rnum !=W25QXX_SECTOR_SIZE) break;
   }
 
   f_close(&myfp);
@@ -331,7 +331,7 @@ void scanUpdates(void)
   uint32_t cur_flash_sign[sign_count];
   W25Qxx_ReadBuffer((uint8_t*)&cur_flash_sign, FLASH_SIGN_ADDR, sizeof(cur_flash_sign));
 
-  if(mountSDCard())
+  if (mountSDCard())
   {
     if (f_dir_exists(FONT_ROOT_DIR))
     {

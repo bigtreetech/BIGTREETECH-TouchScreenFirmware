@@ -34,8 +34,8 @@ static uint32_t nextLayerDrawTime = 0;
 const  char *const Speed_ID[2] = {"Speed", "Flow"};
 bool hasFilamentData;
 
-#define TOGGLE_TIME 2000 // 1 seconds is 1000
-#define LAYER_DRAW_TIME 500 // 1 seconds is 1000
+#define TOGGLE_TIME     2000  // 1 seconds is 1000
+#define LAYER_DRAW_TIME 500   // 1 seconds is 1000
 
 #define LAYER_TITLE "Layer"
 #define EXT_ICON_POS 0
@@ -272,7 +272,7 @@ static inline void printingDrawPage(void)
   reDrawFan(FAN_ICON_POS);
   reDrawTime(TIM_ICON_POS);
   reDrawProgress(TIM_ICON_POS);
-  nextLayerDrawTime = 0; // Draw layer now
+  nextLayerDrawTime = 0;  // Draw layer now
   reDrawLayer(Z_ICON_POS);
   reDrawSpeed(SPD_ICON_POS);
 }
@@ -381,13 +381,13 @@ void menuPrinting(void)
     printingItems.title.address = (uint8_t *)infoPrintSummary.name;
 
     #ifdef TFT70_V3_0
-      printingItems.items[KEY_ICON_5] = itemIsPrinting[1]; // MainScreen
+      printingItems.items[KEY_ICON_5] = itemIsPrinting[1];  // MainScreen
     #else
-      printingItems.items[KEY_ICON_4] = itemIsPrinting[1]; // MainScreen
-      printingItems.items[KEY_ICON_5] = itemIsPrinting[0]; // BackGround
+      printingItems.items[KEY_ICON_4] = itemIsPrinting[1];  // MainScreen
+      printingItems.items[KEY_ICON_5] = itemIsPrinting[0];  // BackGround
     #endif
-      printingItems.items[KEY_ICON_6] = itemIsPrinting[0]; // BackGround
-      printingItems.items[KEY_ICON_7] = itemIsPrinting[2]; // Back
+      printingItems.items[KEY_ICON_6] = itemIsPrinting[0];  // BackGround
+      printingItems.items[KEY_ICON_7] = itemIsPrinting[2];  // Back
   }
 
   menuDrawPage(&printingItems);
@@ -405,7 +405,7 @@ void menuPrinting(void)
     {
       nowHeat.T[currentTool].current = heatGetCurrentTemp(currentTool);
       nowHeat.T[currentTool].target = heatGetTargetTemp(currentTool);
-      RAPID_SERIAL_LOOP(); //perform backend printing loop before drawing to avoid printer idling
+      RAPID_SERIAL_LOOP();  //perform backend printing loop before drawing to avoid printer idling
       reValueNozzle(EXT_ICON_POS);
     }
 
@@ -414,7 +414,7 @@ void menuPrinting(void)
     {
       nowHeat.T[BED].current = heatGetCurrentTemp(BED);
       nowHeat.T[BED].target = heatGetTargetTemp(BED);
-      RAPID_SERIAL_LOOP(); //perform backend printing loop before drawing to avoid printer idling
+      RAPID_SERIAL_LOOP();  //perform backend printing loop before drawing to avoid printer idling
       reValueBed(BED_ICON_POS);
     }
 
@@ -422,7 +422,7 @@ void menuPrinting(void)
     if (nowFan[currentFan] != fanGetCurSpeed(currentFan))
     {
       nowFan[currentFan] = fanGetCurSpeed(currentFan);
-      RAPID_SERIAL_LOOP(); //perform backend printing loop before drawing to avoid printer idling
+      RAPID_SERIAL_LOOP();  //perform backend printing loop before drawing to avoid printer idling
       reDrawFan(FAN_ICON_POS);
     }
 
@@ -435,7 +435,7 @@ void menuPrinting(void)
       {
         time = infoPrinting.time;
         infoPrinting.progress = MIN((uint64_t)infoPrinting.cur * 100 / infoPrinting.size, 100);
-        RAPID_SERIAL_LOOP(); //perform backend printing loop before drawing to avoid printer idling
+        RAPID_SERIAL_LOOP();  //perform backend printing loop before drawing to avoid printer idling
         reDrawTime(TIM_ICON_POS);
         reDrawProgress(TIM_ICON_POS);
       }
@@ -462,7 +462,7 @@ void menuPrinting(void)
     if (curspeed[currentSpeedID] != speedGetCurPercent(currentSpeedID))
     {
       curspeed[currentSpeedID] = speedGetCurPercent(currentSpeedID);
-      RAPID_SERIAL_LOOP(); //perform backend printing loop before drawing to avoid printer idling
+      RAPID_SERIAL_LOOP();  //perform backend printing loop before drawing to avoid printer idling
       reDrawSpeed(SPD_ICON_POS);
     }
 
@@ -478,11 +478,11 @@ void menuPrinting(void)
     if (lastPrinting != isPrinting())
     {
       lastPrinting = isPrinting();
-      if (lastPrinting != true) // print finished
+      if (lastPrinting != true)  // print finished
       {
         preparePrintSummary();
       }
-      return; // It will restart this interface if directly return this function without modify the value of infoMenu
+      return;  // It will restart this interface if directly return this function without modify the value of infoMenu
     }
 
     toggleInfo();

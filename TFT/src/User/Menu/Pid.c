@@ -29,7 +29,7 @@ bool pidSucceeded = false;
 bool pidRunning = false;
 bool pidInitialized = false;
 
-/* called by parseAck() to notify PID process status */
+// called by parseAck() to notify PID process status
 void pidUpdateStatus(bool succeeded)
 {
   if (pidCounter > 0)
@@ -165,7 +165,7 @@ static inline void pidStart(void)
     if (pidHeaterTarget[i] > 0)
     {
       mustStoreCmd("%s S%d\n", pidCmd[i], (int)pidHeaterTarget[i]);  // start PID autotune
-      mustStoreCmd("G4 S1\n");                                          // wait 1 sec
+      mustStoreCmd("G4 S1\n");                                       // wait 1 sec
     }
   }
 
@@ -254,7 +254,7 @@ void menuPid(void)
         int32_t val = numPadInt((uint8_t *) titlestr, pidHeaterTarget[curToolIndex], 0, false);
         val = NOBEYOND(0, val, infoSettings.max_temp[curToolIndex]);
 
-        if (val != pidHeaterTarget[curToolIndex])  // if value is different than target change it
+        if (val != pidHeaterTarget[curToolIndex])  // if value is different than target, change it
           pidHeaterTarget[curToolIndex] = val;
 
         menuDrawPage(&pidItems);
@@ -299,7 +299,7 @@ void menuPid(void)
         {
           pidUpdateCounter();
 
-          if (pidCounter == 0)                             // if no temperature was set to a value > 0
+          if (pidCounter == 0)  // if no temperature was set to a value > 0
           {
             addToast(DIALOG_TYPE_ERROR, (char *) textSelect(LABEL_INVALID_VALUE));
           }

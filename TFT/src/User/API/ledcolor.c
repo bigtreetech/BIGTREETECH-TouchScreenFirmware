@@ -2,7 +2,6 @@
 #include "GPIO_Init.h"
 #include "includes.h"
 
-
 #ifdef LED_COLOR_PIN
 
 //preset color list
@@ -36,12 +35,12 @@ void knob_LED_Init(void)
   GPIO_InitSet(LED_COLOR_PIN, MGPIO_MODE_OUT_PP, 0);
   GPIO_SetLevel(LED_COLOR_PIN, 0);
 
-  RCC->APB1ENR |= 1<<4; // TIM6 Clock enable
+  RCC->APB1ENR |= 1 << 4;  // TIM6 Clock enable
   TIM6->CNT = 0;
   TIM6->PSC = 1 - 1;
-  TIM6->SR = (uint16_t)~(1<<0);
+  TIM6->SR = (uint16_t)~(1 << 0);
 
-  WS2812_Send_DAT(led_color[infoSettings.knob_led_color]); //set last saved color after initialization
+  WS2812_Send_DAT(led_color[infoSettings.knob_led_color]);  //set last saved color after initialization
 }
 
 void knob_LED_DeInit(void)
@@ -57,7 +56,7 @@ void WS2812_Send_DAT(uint32_t ws2812_dat)
 {
   uint16_t led_num;
   int8_t bit;
-  uint16_t cycle = mcuClocks.PCLK1_Timer_Frequency * (0.000001 * (NEOPIXEL_T0H_US + NEOPIXEL_T1H_US)) / 2 - 1;   // Neopixel frequency
+  uint16_t cycle = mcuClocks.PCLK1_Timer_Frequency * (0.000001 * (NEOPIXEL_T0H_US + NEOPIXEL_T1H_US)) / 2 - 1;  // Neopixel frequency
   uint16_t code_0_tim_h_cnt = cycle * (NEOPIXEL_T0H_US / (NEOPIXEL_T0H_US + NEOPIXEL_T1H_US));  // Code 0, High level hold time,
   uint16_t code_1_tim_h_cnt = cycle - code_0_tim_h_cnt;
 
@@ -69,7 +68,7 @@ void WS2812_Send_DAT(uint32_t ws2812_dat)
     for (bit = 23; bit >= 0; bit--)
     {
       TIM6->CNT = 0;
-      WS2812_FAST_WRITE_HIGH(); // WS2812 required very high speed, so "GPIO_SetLevel(LED_COLOR_PIN, 1)" not applicable
+      WS2812_FAST_WRITE_HIGH();  // WS2812 required very high speed, so "GPIO_SetLevel(LED_COLOR_PIN, 1)" not applicable
       if (ws2812_dat & (1 << bit))
       {
         while (TIM6->CNT < code_1_tim_h_cnt);
@@ -84,6 +83,7 @@ void WS2812_Send_DAT(uint32_t ws2812_dat)
     }
   }
   TIM6->CR1 &= ~0x01;
-  __enable_irq(); // Enable interrupt
+  __enable_irq();  // Enable interrupt
 }
+
 #endif

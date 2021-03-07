@@ -23,8 +23,8 @@ bool powerFailedCreate(char *path)
   UINT br;
 
   create_ok = false;
-  if (!infoSettings.powerloss_en) return false; // disable plr
-  if (infoFile.source >= BOARD_SD) return false; // on board SD not support now
+  if (!infoSettings.powerloss_en) return false;   // disable plr
+  if (infoFile.source >= BOARD_SD) return false;  // on board SD not support now
 
   if (f_open(&fpPowerFailed, powerFailedFileName, FA_OPEN_ALWAYS | FA_WRITE) != FR_OK) return false;
 
@@ -42,7 +42,7 @@ void powerFailedCache(u32 offset)
 {
   UINT br;
 
-  if (infoBreakPoint.axis[Z_AXIS] == coordinateGetAxisTarget(Z_AXIS)) return; // Z axis no changed.
+  if (infoBreakPoint.axis[Z_AXIS] == coordinateGetAxisTarget(Z_AXIS)) return;  // Z axis no changed.
   if (create_ok == false) return;
   if (infoCacheCmd.count != 0) return;
   if (!isPause())
@@ -53,8 +53,8 @@ void powerFailedCache(u32 offset)
       infoBreakPoint.axis[i] = coordinateGetAxisTarget(i);
     }
     infoBreakPoint.feedrate = coordinateGetFeedRate();
-    infoBreakPoint.speed = speedGetCurPercent(0); // Move speed percent
-    infoBreakPoint.flow = speedGetCurPercent(1); // Flow percent
+    infoBreakPoint.speed = speedGetCurPercent(0);  // Move speed percent
+    infoBreakPoint.flow = speedGetCurPercent(1);  // Flow percent
 
     for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
     {
@@ -69,11 +69,11 @@ void powerFailedCache(u32 offset)
     infoBreakPoint.relative = coorGetRelative();
     infoBreakPoint.relative_e = eGetRelative();
   }
-  else if (infoBreakPoint.pause) return; // paused and the pause state has been saved
+  else if (infoBreakPoint.pause) return;  // paused and the pause state has been saved
 
   infoBreakPoint.pause = isPause();
 
-  f_lseek(&fpPowerFailed, MAX_PATH_LEN + 1); // infoFile.title + infoPrinting.model_icon
+  f_lseek(&fpPowerFailed, MAX_PATH_LEN + 1);  // infoFile.title + infoPrinting.model_icon
   f_write(&fpPowerFailed, &infoBreakPoint, sizeof(BREAK_POINT), &br);
   f_sync(&fpPowerFailed);
 }
@@ -106,14 +106,12 @@ static bool powerFailedExist(void)
   return true;
 }
 
-
 bool powerFailedlSeek(FIL* fp)
 {
   if (f_lseek(fp,infoBreakPoint.offset) != FR_OK) return false;
 
   return true;
 }
-
 
 bool powerOffGetData(void)
 {

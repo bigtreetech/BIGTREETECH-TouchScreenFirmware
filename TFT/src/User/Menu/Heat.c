@@ -120,7 +120,7 @@ void menuHeat(void)
           {
             if (encoderPosition > 0)
               heatSetTargetTemp(c_heater, actTarget + degreeSteps[degreeSteps_index]);
-            else // if < 0)
+            else  // if < 0)
               heatSetTargetTemp(c_heater, actTarget - degreeSteps[degreeSteps_index]);
             encoderPosition = 0;
           }
