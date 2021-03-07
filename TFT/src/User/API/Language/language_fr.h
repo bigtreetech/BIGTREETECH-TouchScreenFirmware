@@ -342,5 +342,6 @@
     #define STRING_EXT_TEMPLOW            "La température de la buse est inférieure\nà la température minimale (%d℃)."
     #define STRING_HEAT_HOTEND            "Chauffer la buse à %d℃ ?"
     #define STRING_Z_ALIGN                "Z Align"
+    #define STRING_TEST_LEVELING          "test de la nivelation"
 
 #endif

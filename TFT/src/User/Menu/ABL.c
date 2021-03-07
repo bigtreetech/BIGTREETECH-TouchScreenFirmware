@@ -158,7 +158,7 @@ void menuABL(void)
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
      {ICON_BLTOUCH,                 LABEL_BLTOUCH},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
+     {ICON_TEST_LEVELING,           LABEL_TEST_LEVELING},
      {ICON_HEAT,                    LABEL_PREHEAT},
      {ICON_BACK,                    LABEL_BACK}}
   };
@@ -237,6 +237,10 @@ void menuABL(void)
           infoMenu.menu[++infoMenu.cur] = menuTouchMi;
         else
           infoMenu.menu[++infoMenu.cur] = menuBLTouch;
+        break;
+
+        case KEY_ICON_5:
+          storeCmd("G26 R99\n"); 
         break;
 
       case KEY_ICON_6:
