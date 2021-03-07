@@ -64,16 +64,16 @@ void drawKeypadButton(uint8_t index, uint8_t isPressed)
         break;
      }
 
-    BUTTON btn = {fontColor  = fontcolor,
-                  backColor  = bgcolor,
-                  context    = (uint8_t *)numPadKeyChar[index],
-                  lineColor  = bgcolor,
-                  lineWidth  = 0,
-                  pBackColor = fontcolor,
-                  pFontColor = bgcolor,
-                  pLineColor = fontcolor,
-                  radius     = 13,
-                  rect       = rectBtn};
+    BUTTON btn = {.fontColor  = fontcolor,
+                  .backColor  = bgcolor,
+                  .context    = (uint8_t *)numPadKeyChar[index],
+                  .lineColor  = bgcolor,
+                  .lineWidth  = 0,
+                  .pBackColor = fontcolor,
+                  .pFontColor = bgcolor,
+                  .pLineColor = fontcolor,
+                  .radius     = 13,
+                  .rect       = rectBtn};
 
     setLargeFont(true);
     GUI_DrawButton(&btn, isPressed);
