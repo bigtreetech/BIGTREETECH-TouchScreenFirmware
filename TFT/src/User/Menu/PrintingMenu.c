@@ -337,7 +337,7 @@ void menuPrinting(void)
     //  title
     LABEL_BACKGROUND,
     // icon                       label
-    {{ICON_BACKGROUND, LABEL_BACKGROUND},
+    {{ICON_BACKGROUND,  LABEL_BACKGROUND},
       {ICON_BACKGROUND, LABEL_BACKGROUND},
       {ICON_BACKGROUND, LABEL_BACKGROUND},
       {ICON_BACKGROUND, LABEL_BACKGROUND},

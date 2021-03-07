@@ -35,15 +35,7 @@ typedef enum
   BOTTOM_RIGHT
 } ICON_POS;
 
-#define LISTBTN_BKCOLOR 0x2187
-#define MAT_RED         0xE124
-#define MAT_YELLOW      0xED80
-#define MAT_GREEN       0x1DC4
-#define MAT_BLUE        0x24BD
-#define MAT_ORANGE      0xF3A0
-#define MATT_DARKGRAY   0x52AA
-#define MAT_LOWWHITE    0xCE79
-#define MATT_PURPLE     0x9135
+#define LISTBTN_BKCOLOR MAT_DARKSLATE
 
 uint8_t * IconCharSelect(uint8_t sel);
 
