@@ -64,16 +64,16 @@ void drawKeypadButton(uint8_t index, uint8_t isPressed)
         break;
      }
 
-    BUTTON btn = {.fontColor  = fontcolor,
-                  .backColor  = bgcolor,
-                  .context    = (uint8_t *)numPadKeyChar[index],
-                  .lineColor  = bgcolor,
-                  .lineWidth  = 0,
-                  .pBackColor = fontcolor,
-                  .pFontColor = bgcolor,
-                  .pLineColor = fontcolor,
-                  .radius     = 13,
-                  .rect       = rectBtn};
+    BUTTON btn = {fontColor  = fontcolor,
+                  backColor  = bgcolor,
+                  context    = (uint8_t *)numPadKeyChar[index],
+                  lineColor  = bgcolor,
+                  lineWidth  = 0,
+                  pBackColor = fontcolor,
+                  pFontColor = bgcolor,
+                  pLineColor = fontcolor,
+                  radius     = 13,
+                  rect       = rectBtn};
 
     setLargeFont(true);
     GUI_DrawButton(&btn, isPressed);
@@ -82,7 +82,7 @@ void drawKeypadButton(uint8_t index, uint8_t isPressed)
 
     if (!isPressed)
       GUI_SetColor(BLACK);
-    GUI_DrawRect(rect_of_numkey[index].x0+2, rect_of_numkey[index].y0+2, rect_of_numkey[index].x1-2, rect_of_numkey[index].y1-2);
+    GUI_DrawRect(rect_of_numkey[index].x0 + 2, rect_of_numkey[index].y0 + 2, rect_of_numkey[index].x1-2, rect_of_numkey[index].y1 - 2);
     GUI_SetColor(infoSettings.font_color);
 
     #endif // KEYBOARD_MATERIAL_THEME
@@ -125,7 +125,7 @@ void Draw_keyboard(uint8_t * title, bool NumberOnly, bool negative)
     GUI_SetColor(infoSettings.font_color);
     GUI_HLine(rect_of_numkey[0].x0,rect_of_numkey[0].y0,rect_of_numkey[3].x1);
 
-    for (uint8_t i=0 ;i<KEY_NUM ;i++)
+    for (uint8_t i = 0; i < KEY_NUM ;i++)
     {
       if (!(i == NUM_KEY_DEC || i == NUM_KEY_MINUS || (i % 4) == 3))  // || i == NUM_KEY_DEL || i == NUM_KEY_EXIT || i == NUM_KEY_RESET) )
         GUI_DispStringInPrect(&rect_of_numkey[i], (u8 *)numPadKeyChar[i]);
@@ -251,8 +251,8 @@ double numPadFloat(u8* title, double old_val, double reset_val, bool negative)
       case NUM_KEY_DEC:
         if (!strchr((const char *)ParameterBuf, numPadKeyChar[key_num][0]) && nowIndex < (FLOAT_BUFLONG - 1))
         {
-          if (nowIndex == 0 || (nowIndex == 1 && strchr((const char *)ParameterBuf, '-'))) // check if no number exits or only minus exists
-            ParameterBuf[nowIndex++] = '0';                                                //add zero before decimal sign if it is the first character
+          if (nowIndex == 0 || (nowIndex == 1 && strchr((const char *)ParameterBuf, '-')))  // check if no number exits or only minus exists
+            ParameterBuf[nowIndex++] = '0';                                                 //add zero before decimal sign if it is the first character
           ParameterBuf[nowIndex++] = numPadKeyChar[key_num][0];
           ParameterBuf[nowIndex] = 0;
           BUZZER_PLAY(sound_keypress);
