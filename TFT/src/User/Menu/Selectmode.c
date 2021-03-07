@@ -76,7 +76,7 @@ void loopCheckMode(void)
 //  but before I can allow that I need a way to make sure that we swap back into
 //  the right mode (and correct screen) and I really want a reliable way to DETECT
 //  that the TFT should be in printing mode even when the print was started externally.
-  if(isPrinting() || skipMode)
+  if(isPrinting() || infoHost.printing || skipMode)
     return;
 
   if(infoMenu.menu[infoMenu.cur] == menuMode)
