@@ -54,6 +54,7 @@
     #define STRING_CURRENT_SETTING        "ドライバー電流 (mA)"
     #define STRING_BUMP_SENSITIVITY       "TMC バンプ感度"
     #define STRING_HYBRID_THRESHOLD       "TMC HybridThreshold"
+    #define STRING_STEALTH_CHOP           "TMC StealthChop"
     #define STRING_PRINT_ACCELERATION     "印刷加速度"
     #define STRING_RETRACT_ACCELERATION   "引き戻し加速度"
     #define STRING_TRAVEL_ACCELERATION    "空振り加速度"

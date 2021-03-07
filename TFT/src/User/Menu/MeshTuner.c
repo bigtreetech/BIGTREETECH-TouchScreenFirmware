@@ -9,7 +9,7 @@ static inline void meshInitPoint(uint16_t col, uint16_t row, float value)
 //  probeHeightEnable();                                     // temporary disable software endstops
 
   // Z offset gcode sequence start
-  if (infoMachineSettings.zProbe == ENABLED)
+  if (infoMachineSettings.zProbe == ENABLED && !(IS_DELTA))
     probeHeightStop();                                     // raise nozzle
 
   mustStoreCmd("G42 I%d J%d\n", col, row);                 // move nozzle to X and Y coordinates corresponding

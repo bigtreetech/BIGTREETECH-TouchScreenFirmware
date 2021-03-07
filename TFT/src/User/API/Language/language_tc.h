@@ -54,6 +54,7 @@
     #define STRING_CURRENT_SETTING        "驅動晶片電流設定 (mA)"
     #define STRING_BUMP_SENSITIVITY       "堵料檢測靈敏度"
     #define STRING_HYBRID_THRESHOLD       "TMC HybridThreshold"
+    #define STRING_STEALTH_CHOP           "TMC StealthChop"
     #define STRING_PRINT_ACCELERATION     "列印加速度"
     #define STRING_RETRACT_ACCELERATION   "回抽加速度"
     #define STRING_TRAVEL_ACCELERATION    "空跑加速度"

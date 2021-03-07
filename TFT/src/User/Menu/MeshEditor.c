@@ -891,6 +891,12 @@ void menuMeshEditor(void)
             forceHoming = false;
 
             mustStoreCmd("G28\n");                         // only the first time, home the printer
+            if (IS_DELTA)
+            {
+              mustStoreCmd("G91\n");                                  // Set Relative Positioning
+              mustStoreCmd("G1 Z-%.2f F1500\n", DELTA_MBL_Z_DROP_MM); // Drop by "DELTA_MBL_Z_DROP_MM" mm
+              mustStoreCmd("G90\n");                                  // Set Absolute Positioing
+            }
           }
 
           curValue = menuMeshTuner(meshGetCol(), meshGetJ(), meshGetValue(meshGetIndex()));
@@ -917,7 +923,13 @@ void menuMeshEditor(void)
       case ME_KEY_HOME:
         forceHoming = false;
 
-        mustStoreCmd("G28\n");                             // force homing (e.g. if steppers are disarmed)
+        mustStoreCmd("G28\n");
+        if (IS_DELTA)
+        {
+          mustStoreCmd("G91\n");                                  // Set Relative Positioning
+          mustStoreCmd("G1 Z-%.2f F1500\n", DELTA_MBL_Z_DROP_MM); // Drop by "DELTA_MBL_Z_DROP_MM" mm
+          mustStoreCmd("G90\n");                                  // Set Absolute Positioing
+        }                             // force homing (e.g. if steppers are disarmed)
         break;
 
       case ME_KEY_SAVE:

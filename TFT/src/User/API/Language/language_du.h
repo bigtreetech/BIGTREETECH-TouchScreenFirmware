@@ -54,6 +54,7 @@
     #define STRING_CURRENT_SETTING        "Driver stroom (mA)"
     #define STRING_BUMP_SENSITIVITY       "TMC bump sensitiviteit"
     #define STRING_HYBRID_THRESHOLD       "TMC HybridThreshold"
+    #define STRING_STEALTH_CHOP           "TMC StealthChop"
     #define STRING_PRINT_ACCELERATION     "Afdruk Acceleratie"
     #define STRING_RETRACT_ACCELERATION   "Retract Acceleratie"
     #define STRING_TRAVEL_ACCELERATION    "Travel Acceleratie"
