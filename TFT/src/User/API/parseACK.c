@@ -1019,7 +1019,7 @@ void parseACK(void)
         mblUpdateStatus(true);
       }
       // parse Mesh data
-/*      else if (meshIsWaitingFirstData() && (ack_seen("Mesh Bed Level data:") ||            // MBL
+      else if (meshIsWaitingFirstData() && (ack_seen("Mesh Bed Level data:") ||            // MBL
                                             ack_seen("Bed Topography Report for CSV:") ||  // UBL
                                             ack_seen("Bilinear Leveling Grid:") ||         // ABL Bilinear
                                             ack_seen("Bed Level Correction Matrix:") ||    // ABL Linear or 3-Point
@@ -1030,10 +1030,6 @@ void parseACK(void)
       else if (meshIsWaitingData())
       {
         meshUpdateData(dmaL2Cache);  // continue data updating
-      }*/
-      else if (meshIsWaitingData())
-      {
-        meshUpdateData(dmaL2Cache);  // mesh data updating
       }
       // parse PID Autotune finished message
       else if (ack_seen("PID Autotune finished"))
