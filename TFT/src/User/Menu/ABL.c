@@ -240,7 +240,8 @@ void menuABL(void)
         break;
 
         case KEY_ICON_5:
-          storeCmd("G26 R99\n"); 
+          storeCmd("G26 R99\n");
+          infoMenu.menu[++infoMenu.cur] = menuBabystep;
         break;
 
       case KEY_ICON_6:
