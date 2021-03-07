@@ -54,6 +54,7 @@
     #define STRING_CURRENT_SETTING        "Tok driverja mot. (mA)"
     #define STRING_BUMP_SENSITIVITY       "TMC občutljivost trka"
     #define STRING_HYBRID_THRESHOLD       "TMC HybridThreshold"
+    #define STRING_STEALTH_CHOP           "TMC StealthChop"
     #define STRING_PRINT_ACCELERATION     "Pospešek tiska"
     #define STRING_RETRACT_ACCELERATION   "Pospešek privleka fil."
     #define STRING_TRAVEL_ACCELERATION    "Pospešek pomika"

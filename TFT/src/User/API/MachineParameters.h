@@ -27,6 +27,7 @@ typedef enum
   P_CURRENT,
   P_BUMPSENSITIVITY,
   P_HYBRID_THRESHOLD,
+  P_STEALTH_CHOP,
   P_MBL_OFFSET,
   // Keep below items always at the end
   PARAMETERS_COUNT,
@@ -77,6 +78,7 @@ typedef struct
   float Current[STEPPER_COUNT];
   float BumpSensitivity[3];
   float HybridThreshold[STEPPER_COUNT];
+  float StealthChop[5];
   float MblOffset[1];
 } PARAMETERS;
 

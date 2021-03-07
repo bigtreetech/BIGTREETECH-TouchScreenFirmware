@@ -54,6 +54,7 @@
     #define STRING_CURRENT_SETTING        "Ένταση η. ρεύ. οδηγού(mA)"
     #define STRING_BUMP_SENSITIVITY       "TMC ευαισθησία χτυπήματος"
     #define STRING_HYBRID_THRESHOLD       "TMC HybridThreshold"
+    #define STRING_STEALTH_CHOP           "TMC StealthChop"
     #define STRING_PRINT_ACCELERATION     "Επιτάχυνση εκτύπωσης"
     #define STRING_RETRACT_ACCELERATION   "Eπιτάχυνση ανάκλησης"
     #define STRING_TRAVEL_ACCELERATION    "Επιτάχυνση ταξιδιού"

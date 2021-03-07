@@ -54,6 +54,7 @@
     #define STRING_CURRENT_SETTING        "TMC驱动电流设置"
     #define STRING_BUMP_SENSITIVITY       "TMC堵转检测灵敏度"
     #define STRING_HYBRID_THRESHOLD       "TMC混合阈值"
+    #define STRING_STEALTH_CHOP           "TMC StealthChop"
     #define STRING_PRINT_ACCELERATION     "打印加速度"
     #define STRING_RETRACT_ACCELERATION   "回抽加速度"
     #define STRING_TRAVEL_ACCELERATION    "空载加速度"

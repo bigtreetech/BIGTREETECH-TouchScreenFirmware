@@ -93,7 +93,7 @@ void popupDrawPage(DIALOG_TYPE type, BUTTON * btn, const uint8_t * title, const 
   }
 }
 
-static void menuDialog(void)
+void menuDialog(void)
 {
   while (infoMenu.menu[infoMenu.cur] == menuDialog)
   {

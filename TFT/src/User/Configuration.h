@@ -169,7 +169,7 @@
 #define SPEED_ID {"Sp.", "Fr."}  // (speed, flow rate)
 
 // Axes names displayed in Parameter Settings menu
-#define AXIS_DISPLAY_ID  {"X",  "Y",  "Z",   "E",  "E2"}  // (X, Y, Z, E, E2)
+#define AXIS_DISPLAY_ID  {"X",  "Y",  "Z",   "E0",  "E1"}  // (X, Y, Z, E0, E1)
 
 // Default X & Y speed (mm/min)
 #define SPEED_XY_SLOW   1000
@@ -193,6 +193,10 @@
 #define X_MAX_POS 235
 #define Y_MAX_POS 235
 #define Z_MAX_POS 250
+
+// Is this a Delta printer
+#define IS_DELTA             false
+#define DELTA_MBL_Z_DROP_MM  50 // MBL Drop 50mm first after home avoid crashing into the top of the towers.
 
 // Pause Settings
 #define NOZZLE_PAUSE_RETRACT_LENGTH               15  // (mm)

@@ -54,6 +54,7 @@
     #define STRING_CURRENT_SETTING        "Prúd ovládača (mA)"
     #define STRING_BUMP_SENSITIVITY       "TMC bump citlivosť"
     #define STRING_HYBRID_THRESHOLD       "TMC HybridThreshold"
+    #define STRING_STEALTH_CHOP           "TMC StealthChop"
     #define STRING_PRINT_ACCELERATION     "Akcelerácia pri tlači"
     #define STRING_RETRACT_ACCELERATION   "Akcelerácia retrakcie"
     #define STRING_TRAVEL_ACCELERATION    "Akcelerácia presunu"

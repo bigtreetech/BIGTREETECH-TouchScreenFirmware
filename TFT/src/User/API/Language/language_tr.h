@@ -54,6 +54,7 @@
     #define STRING_CURRENT_SETTING        "Sürücü Akımı (mA)"
     #define STRING_BUMP_SENSITIVITY       "TMC Çarpma Hassasiyeti"
     #define STRING_HYBRID_THRESHOLD       "TMC Hibrit Eşiği"
+    #define STRING_STEALTH_CHOP           "TMC StealthChop"
     #define STRING_PRINT_ACCELERATION     "Baskı İvme"
     #define STRING_RETRACT_ACCELERATION   "Geriçekme İvme"
     #define STRING_TRAVEL_ACCELERATION    "Gezinti İvme"

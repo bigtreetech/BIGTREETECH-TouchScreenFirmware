@@ -61,6 +61,7 @@ extern "C" {
 #define LANG_KEY_CURRENT_SETTING              "label_current_setting:"
 #define LANG_KEY_BUMP_SENSITIVITY             "label_bump_sensitivity:"
 #define LANG_KEY_HYBRID_THRESHOLD             "label_hybrid_threshold:"
+#define LANG_KEY_STEALTH_CHOP                 "label_stealth_chop:"
 #define LANG_KEY_PRINT_ACCELERATION           "label_print_acceleration:"
 #define LANG_KEY_RETRACT_ACCELERATION         "label_retract_acceleration:"
 #define LANG_KEY_TRAVEL_ACCELERATION          "label_travel_acceleration:"
