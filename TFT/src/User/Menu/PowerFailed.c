@@ -195,8 +195,13 @@ void menuPowerOff(void)
 
   if(mountFS()==true && powerFailedExist())
   {
+    char okTxt[50];
+    char cancelTxt[50];
+    loadLabelText((uint8_t*)okTxt, LABEL_CONFIRM);
+    loadLabelText((uint8_t*)cancelTxt, LABEL_CANCEL);
+
     popupDrawPage(DIALOG_TYPE_QUESTION, bottomDoubleBtn, textSelect(LABEL_POWER_FAILED), (u8* )infoFile.title,
-                    textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL));
+                  (uint8_t*)okTxt, (uint8_t*)cancelTxt);
 
     while(infoMenu.menu[infoMenu.cur]==menuPowerOff)
     {
