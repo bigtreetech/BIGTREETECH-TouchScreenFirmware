@@ -118,6 +118,8 @@ void Buzzer_play(SOUND sound)
     if (infoSettings.alertSound != 1)
       break;
     Buzzer_TurnOn(500, 10);
+    Buzzer_TurnOn(1000, 20);
+    break;
   case sound_toast:
     if (infoSettings.toastSound != 1)
       break;
