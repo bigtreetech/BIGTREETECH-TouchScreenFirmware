@@ -62,7 +62,7 @@ uint8_t calibrationEnsure(uint16_t x, uint16_t y)
   lcd_x = (A * tp_x + B * tp_y + C) / K;
   lcd_y = (D * tp_x + E * tp_y + F) / K;
 
-  if (lcd_x < x + TS_ERR_RANGE && lcd_x > x - TS_ERR_RANGE  && lcd_y > y - TS_ERR_RANGE && lcd_y < y + TS_ERR_RANGE)
+  if (lcd_x < x + TS_ERR_RANGE && lcd_x > x - TS_ERR_RANGE && lcd_y > y - TS_ERR_RANGE && lcd_y < y + TS_ERR_RANGE)
   {
     GUI_DispStringCenter(LCD_WIDTH / 2, LCD_HEIGHT - 40, (int32_t)LABEL_ADJUST_OK);
     Delay_ms(1000);
