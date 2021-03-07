@@ -54,6 +54,7 @@
     #define STRING_CURRENT_SETTING        "Courant drivers (mA)"
     #define STRING_BUMP_SENSITIVITY       "Sensibilité TMC"
     #define STRING_HYBRID_THRESHOLD       "Seuil Hybride TMC"
+    #define STRING_STEALTH_CHOP           "TMC StealthChop"
     #define STRING_PRINT_ACCELERATION     "Impression"
     #define STRING_RETRACT_ACCELERATION   "Rétraction"
     #define STRING_TRAVEL_ACCELERATION    "Déplacements"

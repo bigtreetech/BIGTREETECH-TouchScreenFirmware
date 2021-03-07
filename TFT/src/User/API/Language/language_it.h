@@ -54,6 +54,7 @@
     #define STRING_CURRENT_SETTING        "Corrente driver (mA)"
     #define STRING_BUMP_SENSITIVITY       "Sens.sensorless homing"
     #define STRING_HYBRID_THRESHOLD       "Hybrid threshold"
+    #define STRING_STEALTH_CHOP           "TMC StealthChop"
     #define STRING_PRINT_ACCELERATION     "Acc. in stampa"
     #define STRING_RETRACT_ACCELERATION   "Acc. retrazione"
     #define STRING_TRAVEL_ACCELERATION    "Acc. spostamenti"

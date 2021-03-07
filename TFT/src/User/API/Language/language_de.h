@@ -54,6 +54,7 @@
     #define STRING_CURRENT_SETTING        "Treiber Strom (mA)"
     #define STRING_BUMP_SENSITIVITY       "TMC Empfindlichkeit"
     #define STRING_HYBRID_THRESHOLD       "TMC HybridThreshold"
+    #define STRING_STEALTH_CHOP           "TMC StealthChop"
     #define STRING_PRINT_ACCELERATION     "Druck"
     #define STRING_RETRACT_ACCELERATION   "Rückzug"
     #define STRING_TRAVEL_ACCELERATION    "Fahrt"

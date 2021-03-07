@@ -54,6 +54,7 @@
     #define STRING_CURRENT_SETTING        "Налаштування TMC драйверів"
     #define STRING_BUMP_SENSITIVITY       "TMC чутливість удару"
     #define STRING_HYBRID_THRESHOLD       "TMC гібридний поріг"
+    #define STRING_STEALTH_CHOP           "TMC StealthChop"
     #define STRING_PRINT_ACCELERATION     "прискорення друку"
     #define STRING_RETRACT_ACCELERATION   "ретракт"
     #define STRING_TRAVEL_ACCELERATION    "Переміщення"
