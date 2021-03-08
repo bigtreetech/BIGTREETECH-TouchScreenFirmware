@@ -14,7 +14,7 @@ typedef enum
   MKEY_0 = 0,
   MKEY_1,
   MKEY_IDLE = IDLE_TOUCH,
-}MKEY_VALUES;
+} MKEY_VALUES;
 
 extern bool skipMode;
 extern bool freshBoot;

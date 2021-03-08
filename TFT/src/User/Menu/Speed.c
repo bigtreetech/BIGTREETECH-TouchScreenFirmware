@@ -8,7 +8,8 @@ const ITEM itemPercentType[SPEED_NUM] = {
 };
 
 const int16_t itemPercentTypeTitle[SPEED_NUM] = {
-  LABEL_PERCENTAGE_SPEED,     LABEL_PERCENTAGE_FLOW
+  LABEL_PERCENTAGE_SPEED,
+  LABEL_PERCENTAGE_FLOW
 };
 
 static uint8_t item_index = 0;
@@ -39,15 +40,17 @@ void menuSpeed(void)
   MENUITEMS percentageItems = {
     // title
     LABEL_PERCENTAGE_SPEED,
-    // icon                         label
-    {{ICON_DEC,                     LABEL_DEC},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_INC,                     LABEL_INC},
-     {ICON_MOVE,                    LABEL_PERCENTAGE_SPEED},
-     {ICON_E_5_PERCENT,             LABEL_5_PERCENT},
-     {ICON_NORMAL_SPEED,            LABEL_NORMAL},
-     {ICON_BACK,                    LABEL_BACK},}
+    // icon                          label
+    {
+      {ICON_DEC,                     LABEL_DEC},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_INC,                     LABEL_INC},
+      {ICON_MOVE,                    LABEL_PERCENTAGE_SPEED},
+      {ICON_E_5_PERCENT,             LABEL_5_PERCENT},
+      {ICON_NORMAL_SPEED,            LABEL_NORMAL},
+      {ICON_BACK,                    LABEL_BACK},
+    }
   };
 
   percentageItems.items[KEY_ICON_5] = itemPercent[percentSteps_index];

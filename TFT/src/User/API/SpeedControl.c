@@ -3,12 +3,11 @@
 
 const char *const speedCmd[SPEED_NUM] = {"M220","M221"};
 
-static uint16_t setPercent[SPEED_NUM]     = {100, 100};  //Speed  Flow
-static uint16_t lastSetPercent[SPEED_NUM] = {100, 100};  //Speed  Flow
-static uint16_t curPercent[SPEED_NUM]  = {100, 100};  //Speed  Flow
+static uint16_t setPercent[SPEED_NUM] = {100, 100};
+static uint16_t lastSetPercent[SPEED_NUM] = {100, 100};
+static uint16_t curPercent[SPEED_NUM] = {100, 100};
 
 static bool speedQueryWait = false;
-
 static uint32_t nextSpeedTime = 0;
 
 #define NEXT_SPEED_WAIT 500  // 1 second is 1000
@@ -41,7 +40,7 @@ void loopSpeed(void)
     {
       if (storeCmd("%s S%d D%d\n",speedCmd[i], setPercent[i], heatGetCurrentTool()))
         lastSetPercent[i] = setPercent[i];
-      nextSpeedTime = OS_GetTimeMs() + NEXT_SPEED_WAIT; // avoid rapid fire, clogging the queue
+      nextSpeedTime = OS_GetTimeMs() + NEXT_SPEED_WAIT;  // avoid rapid fire, clogging the queue
     }
   }
 }
@@ -55,6 +54,6 @@ void speedQuery(void)
 {
   if (infoHost.connected && !infoHost.wait && !speedQueryWait)
   {
-    speedQueryWait = storeCmd("M220\nM221 D%d\n",heatGetCurrentTool());
+    speedQueryWait = storeCmd("M220\nM221 D%d\n", heatGetCurrentTool());
   }
 }

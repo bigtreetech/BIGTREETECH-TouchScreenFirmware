@@ -1,22 +1,24 @@
 #include "LoadUnload.h"
 #include "includes.h"
 
-#define LOAD 1
+#define NONE   0
+#define LOAD   1
 #define UNLOAD 2
-#define NONE 0
 
 const MENUITEMS loadUnloadItems = {
   // title
   LABEL_LOAD_UNLOAD,
-  // icon                         label
-  {{ICON_UNLOAD,                  LABEL_UNLOAD},
-   {ICON_BACKGROUND,              LABEL_BACKGROUND},
-   {ICON_BACKGROUND,              LABEL_BACKGROUND},
-   {ICON_LOAD,                    LABEL_LOAD},
-   {ICON_NOZZLE,                  LABEL_NOZZLE},
-   {ICON_HEAT,                    LABEL_HEAT},
-   {ICON_COOLDOWN,                LABEL_COOLDOWN},
-   {ICON_BACK,                    LABEL_BACK},}
+  // icon                          label
+  {
+    {ICON_UNLOAD,                  LABEL_UNLOAD},
+    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_LOAD,                    LABEL_LOAD},
+    {ICON_NOZZLE,                  LABEL_NOZZLE},
+    {ICON_HEAT,                    LABEL_HEAT},
+    {ICON_COOLDOWN,                LABEL_COOLDOWN},
+    {ICON_BACK,                    LABEL_BACK},
+  }
 };
 
 static uint8_t curExt_index = 0;
@@ -41,12 +43,16 @@ void loadMinTemp_OK(void)
 void menuLoadUnload(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
-  while(infoCmd.count != 0) {loopProcess();}
+
+  while (infoCmd.count != 0)
+  {
+    loopProcess();
+  }
 
   menuDrawPage(&loadUnloadItems);
   extruderIdReDraw();
 
-  while(infoMenu.menu[infoMenu.cur] == menuLoadUnload)
+  while (infoMenu.menu[infoMenu.cur] == menuLoadUnload)
   {
     key_num = menuKeyGetValue();
 
@@ -68,72 +74,74 @@ void menuLoadUnload(void)
     }
     else
     {
-      switch(key_num)
+      switch (key_num)
       {
-      case KEY_ICON_0: // Unload
-      case KEY_ICON_3: // Load
-        if (heatGetCurrentTemp(curExt_index) < infoSettings.min_ext_temp)
-        { // low temperature warning
-          char tempMsg[120];
-          LABELCHAR(tempStr, LABEL_EXT_TEMPLOW);
-          sprintf(tempMsg, tempStr, infoSettings.min_ext_temp);
-          strcat(tempMsg, "\n");
-          sprintf(tempStr, (char *)textSelect(LABEL_HEAT_HOTEND), infoSettings.min_ext_temp);
-          strcat(tempMsg, tempStr);
+        case KEY_ICON_0:  // Unload
+        case KEY_ICON_3:  // Load
+          if (heatGetCurrentTemp(curExt_index) < infoSettings.min_ext_temp)
+          { // low temperature warning
+            char tempMsg[120];
 
-          setDialogText(LABEL_WARNING, (uint8_t *)tempMsg, LABEL_CONFIRM, LABEL_CANCEL);
-          showDialog(DIALOG_TYPE_ERROR, loadMinTemp_OK, NULL, NULL);
-        }
-        else if (key_num == KEY_ICON_0)
-        { // unload
-          mustStoreCmd("M702 T%d\n", curExt_index);
-          lastcmd = UNLOAD;
-        }
-        else
-        { // load
-          mustStoreCmd("M701 T%d\n", curExt_index);
-          lastcmd = LOAD;
-        }
-        break;
+            LABELCHAR(tempStr, LABEL_EXT_TEMPLOW);
+            sprintf(tempMsg, tempStr, infoSettings.min_ext_temp);
+            strcat(tempMsg, "\n");
+            sprintf(tempStr, (char *)textSelect(LABEL_HEAT_HOTEND), infoSettings.min_ext_temp);
+            strcat(tempMsg, tempStr);
 
-      case KEY_ICON_4:
-        curExt_index = (curExt_index + 1) % infoSettings.hotend_count;
-        extruderIdReDraw();
-        lastcmd = NONE;
-        break;
+            setDialogText(LABEL_WARNING, (uint8_t *)tempMsg, LABEL_CONFIRM, LABEL_CANCEL);
+            showDialog(DIALOG_TYPE_ERROR, loadMinTemp_OK, NULL, NULL);
+          }
+          else if (key_num == KEY_ICON_0)
+          { // unload
+            mustStoreCmd("M702 T%d\n", curExt_index);
+            lastcmd = UNLOAD;
+          }
+          else
+          { // load
+            mustStoreCmd("M701 T%d\n", curExt_index);
+            lastcmd = LOAD;
+          }
+          break;
 
-      case KEY_ICON_5:
-        infoMenu.menu[++infoMenu.cur] = menuHeat;
-        lastcmd = NONE;
-        break;
+        case KEY_ICON_4:
+          curExt_index = (curExt_index + 1) % infoSettings.hotend_count;
+          extruderIdReDraw();
+          lastcmd = NONE;
+          break;
 
-      case KEY_ICON_6:
-        heatCoolDown();
-        lastcmd = NONE;
-        break;
+        case KEY_ICON_5:
+          infoMenu.menu[++infoMenu.cur] = menuHeat;
+          lastcmd = NONE;
+          break;
 
-      case KEY_ICON_7:
-        if (!isPrinting())
-        {
-          for (uint8_t i = 0; i < infoSettings.hotend_count; i++)
+        case KEY_ICON_6:
+          heatCoolDown();
+          lastcmd = NONE;
+          break;
+
+        case KEY_ICON_7:
+          if (!isPrinting())
           {
-            if (heatGetTargetTemp(i) > 0)
+            for (uint8_t i = 0; i < infoSettings.hotend_count; i++)
             {
-              setDialogText(LABEL_WARNING, LABEL_HEATERS_ON, LABEL_CONFIRM, LABEL_CANCEL);
-              showDialog(DIALOG_TYPE_QUESTION, heatCoolDown, NULL, NULL);
-              break;
+              if (heatGetTargetTemp(i) > 0)
+              {
+                setDialogText(LABEL_WARNING, LABEL_HEATERS_ON, LABEL_CONFIRM, LABEL_CANCEL);
+                showDialog(DIALOG_TYPE_QUESTION, heatCoolDown, NULL, NULL);
+                break;
+              }
             }
           }
-        }
-        infoMenu.cur--;
-        lastcmd = NONE;
-        break;
+          infoMenu.cur--;
+          lastcmd = NONE;
+          break;
 
-      default:
-        extruderIdReDraw();
-        break;
+        default:
+          extruderIdReDraw();
+          break;
       }
     }
+
     loopProcess();
   }
 }

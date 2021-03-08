@@ -8,25 +8,25 @@ bool skipMode = false;
 
 const GUI_RECT rect_of_mode[MODE_COUNT] = {
   //2 select icon
-  {1*SPACE_SELEX+0*ICON_WIDTH, SPACE_SELEY, 1*SPACE_SELEX+1*ICON_WIDTH, SPACE_SELEY+ICON_HEIGHT},
-  {3*SPACE_SELEX+1*ICON_WIDTH, SPACE_SELEY, 3*SPACE_SELEX+2*ICON_WIDTH, SPACE_SELEY+ICON_HEIGHT},
+  {1 * SPACE_SELEX + 0 * ICON_WIDTH, SPACE_SELEY, 1 * SPACE_SELEX + 1 * ICON_WIDTH, SPACE_SELEY + ICON_HEIGHT},
+  {3 * SPACE_SELEX + 1 * ICON_WIDTH, SPACE_SELEY, 3 * SPACE_SELEX + 2 * ICON_WIDTH, SPACE_SELEY + ICON_HEIGHT},
 };
 
-const uint8_t icon_mode [MODE_COUNT]={
+const uint8_t icon_mode [MODE_COUNT] = {
   ICON_MARLIN,
   ICON_BIGTREETECH,
 };
 
 void drawModeIcon(void)
 {
-  for(uint8_t i = 0;i < MODE_COUNT; i++)
+  for (uint8_t i = 0;i < MODE_COUNT; i++)
   {
     ICON_ReadDisplay(rect_of_mode[i].x0, rect_of_mode[i].y0, icon_mode[i]);
   }
 
   const GUI_RECT mode_title_rect[MODE_COUNT] = {
-    {0,           rect_of_mode[0].y1 + BYTE_HEIGHT/2,   text_startx,  rect_of_mode[0].y1 + BYTE_HEIGHT/2 + BYTE_HEIGHT},
-    {text_startx, rect_of_mode[0].y1 + BYTE_HEIGHT/2,   LCD_WIDTH,    rect_of_mode[0].y1 + BYTE_HEIGHT/2 + BYTE_HEIGHT},
+    {0,           rect_of_mode[0].y1 + BYTE_HEIGHT / 2, text_startx, rect_of_mode[0].y1 + BYTE_HEIGHT / 2 + BYTE_HEIGHT},
+    {text_startx, rect_of_mode[0].y1 + BYTE_HEIGHT / 2, LCD_WIDTH,   rect_of_mode[0].y1 + BYTE_HEIGHT / 2 + BYTE_HEIGHT},
   };
 
   GUI_RestoreColorDefault();
@@ -37,9 +37,9 @@ void drawModeIcon(void)
 bool LCD_ReadPen(uint16_t intervals)
 {
   static uint32_t TouchTime = 0;
-  if(!XPT2046_Read_Pen())
+  if (!XPT2046_Read_Pen())
   {
-    if(OS_GetTimeMs() - TouchTime >= intervals)
+    if (OS_GetTimeMs() - TouchTime >= intervals)
     {
       TouchTime = OS_GetTimeMs();
       return true;
@@ -76,10 +76,10 @@ void loopCheckMode(void)
 //  but before I can allow that I need a way to make sure that we swap back into
 //  the right mode (and correct screen) and I really want a reliable way to DETECT
 //  that the TFT should be in printing mode even when the print was started externally.
-  if(isPrinting() || infoHost.printing || skipMode)
+  if (isPrinting() || infoHost.printing || skipMode)
     return;
 
-  if(infoMenu.menu[infoMenu.cur] == menuMode)
+  if (infoMenu.menu[infoMenu.cur] == menuMode)
     return;
 
 //  #endif
@@ -160,31 +160,31 @@ void menuMode(void)
 static inline void setupModeHardware(uint8_t mode)
 {
   if (infoSettings.serial_alwaysOn == ENABLED)
-    Serial_ReSourceInit(); // disable serial comm if `serial_alwaysOn` is disabled
+    Serial_ReSourceInit();  // disable serial comm if `serial_alwaysOn` is disabled
 
   if (mode == MODE_SERIAL_TSC)
   {
     Serial_ReSourceInit();  // enable serial comm in TSC mode
-    #ifdef BUZZER_PIN // enable buzzer in Touchsreen mode
+    #ifdef BUZZER_PIN  // enable buzzer in Touchsreen mode
       Buzzer_Config();
     #endif
 
-    #if LED_COLOR_PIN // enable knob led only in Touchscreen mode
+    #if LED_COLOR_PIN  // enable knob led only in Touchscreen mode
       #ifndef KEEP_KNOB_LED_COLOR_MARLIN_MODE
       knob_LED_Init();
       #endif
     #endif
 
-    #if ENC_ACTIVE_SIGNAL // set encoder inactive signal if touch mode is active
+    #if ENC_ACTIVE_SIGNAL  // set encoder inactive signal if touch mode is active
      setEncActiveSignal(0);
     #endif
   }
   else
   {
     if (infoSettings.serial_alwaysOn == DISABLED)
-      Serial_ReSourceDeInit(); // disable serial comm if `serial_alwaysOn` is disabled
+      Serial_ReSourceDeInit();  // disable serial comm if `serial_alwaysOn` is disabled
 
-    #ifdef BUZZER_PIN // disable buzzer in marlin mode
+    #ifdef BUZZER_PIN  // disable buzzer in marlin mode
       Buzzer_DeConfig();
     #endif
 
@@ -194,7 +194,7 @@ static inline void setupModeHardware(uint8_t mode)
       #endif
     #endif
 
-    #if ENC_ACTIVE_SIGNAL // set encoder active signal if marlin mode is active
+    #if ENC_ACTIVE_SIGNAL  // set encoder active signal if marlin mode is active
       setEncActiveSignal(1);
     #endif
 
@@ -211,11 +211,11 @@ void switchMode(void)
   infoMenu.cur = 0;
   setupModeHardware(infoSettings.mode);
 
-  switch(infoSettings.mode)
+  switch (infoSettings.mode)
   {
     case MODE_SERIAL_TSC:
       GUI_RestoreColorDefault();
-      if(infoSettings.status_screen == 1)  //if Unified menu is selected
+      if (infoSettings.status_screen == 1)  //if Unified menu is selected
         infoMenu.menu[infoMenu.cur] = menuStatus;  //status screen as default screen on boot
       else
         infoMenu.menu[infoMenu.cur] = menuMain;  // classic UI

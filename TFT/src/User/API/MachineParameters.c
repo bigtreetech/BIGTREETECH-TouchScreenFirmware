@@ -4,7 +4,7 @@
 const uint8_t parameter_element_count[PARAMETERS_COUNT] = {5, 5, 5, 3, 4, 1, 3, 4, 4, 1, 3, 2, 3, 2, 3, 5, 3, 5, 5, 1};
 
 const char * const parameter_Cmd[PARAMETERS_COUNT][STEPPER_COUNT] = {
-    {"M92 X%.2f\n",     "M92 Y%.2f\n",       "M92 Z%.2f\n",       "M92 T0 E%.2f\n",   "M92 T1 E%.2f\n"},     //Steps/mm
+    {"M92 X%.2f\n",     "M92 Y%.2f\n",       "M92 Z%.2f\n",       "M92 T0 E%.2f\n",   "M92 T1 E%.2f\n"},    //Steps/mm
     {"M203 X%.0f\n",    "M203 Y%.0f\n",      "M203 Z%.0f\n",      "M203 T0 E%.0f\n",  "M203 T1 E%.0f\n"},   //MaxFeedrate
     {"M201 X%.0f\n",    "M201 Y%.0f\n",      "M201 Z%.0f\n",      "M201 T0 E%.0f\n",  "M201 T1 E%.0f\n"},   //MaxAcceleration
     {"M204 P%.0f\n",    "M204 R%.0f\n",      "M204 T%.0f\n",      NULL,               NULL},                //Acceleration
@@ -51,10 +51,10 @@ const VAL_TYPE parameter_val_type[PARAMETERS_COUNT][STEPPER_COUNT] = {
 
 //Extra steppers current gcode command
 const char *const dualStepperParameter_cmd[4][AXIS_NUM] = {
-  {"M906 I1 X%.0f\n",   "M906 I1 Y%.0f\n",   "M906 I1 Z%.0f\n"},   //Current
-  {"M914 I1 X%.0f\n",   "M914 I1 Y%.0f\n",   "M914 I1 Z%.0f\n"},   //bump Sensitivity
-  {"M913 I1 X%.0f\n",   "M913 I1 Y%.0f\n",   "M913 I1 Z%.0f\n"},   //TMC Hybrid Threshold Speed
-  {"M569 S%.0f I1 X\n", "M569 S%.0f I1 Y\n", "M569 S%.0f I1 Z\n"}, //TMC StealthChop 
+  {"M906 I1 X%.0f\n",   "M906 I1 Y%.0f\n",   "M906 I1 Z%.0f\n"},    //Current
+  {"M914 I1 X%.0f\n",   "M914 I1 Y%.0f\n",   "M914 I1 Z%.0f\n"},    //bump Sensitivity
+  {"M913 I1 X%.0f\n",   "M913 I1 Y%.0f\n",   "M913 I1 Z%.0f\n"},    //TMC Hybrid Threshold Speed
+  {"M569 S%.0f I1 X\n", "M569 S%.0f I1 Y\n", "M569 S%.0f I1 Z\n"},  //TMC StealthChop 
 };
 
 PARAMETERS infoParameters;
@@ -82,7 +82,7 @@ uint8_t getParameterStatus(PARAMETER_NAME name)
 uint8_t getEnabledParameterCount(void)
 {
   uint8_t count = 0;
-  for(uint8_t i = 0; i < PARAMETERS_COUNT; i++)
+  for (uint8_t i = 0; i < PARAMETERS_COUNT; i++)
   {
     count += (parametersEnabled >> i)  & 1;
   }
@@ -94,7 +94,7 @@ PARAMETER_NAME getEnabledParameter(uint8_t index)
   uint8_t count = 0;
   uint8_t state = 0;
 
-  for(uint8_t i = 0; i < PARAMETERS_COUNT; i++)
+  for (uint8_t i = 0; i < PARAMETERS_COUNT; i++)
   {
     state = (parametersEnabled >> i)  & 1;
     count += state;
@@ -262,7 +262,7 @@ void setParameter(PARAMETER_NAME name, uint8_t index, float val)
     case P_STEALTH_CHOP:
       infoParameters.StealthChop[index] = val; 
       break;
-      
+
     case P_MBL_OFFSET:
       infoParameters.MblOffset[index] = val;
       break;
