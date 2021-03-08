@@ -342,6 +342,11 @@
     #define STRING_EXT_TEMPLOW            "Temperatur der Düse liegt\nunter dem Minimum (%d℃)."
     #define STRING_HEAT_HOTEND            "Heize Düse auf %d℃?"
     #define STRING_Z_ALIGN                "Z ausr."
-    #define STRING_TEST_LEVELING          "test Leveling"
+    #define STRING_TEST_LEVEL_VALID        "test Leveling valid "
+    #define STRING_TEST_LEVEL_PLA          "test Leveling pla "
+    #define STRING_TEST_LEVEL_ABS          "test Leveling abs "
+    #define STRING_TEST_LEVEL_PTEG         "test Leveling pteg "
+    #define STRING_TEST_LEVEL_ASA          "test Leveling asa "
+    
 
 #endif

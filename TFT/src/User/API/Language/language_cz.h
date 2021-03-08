@@ -342,6 +342,11 @@
     #define STRING_EXT_TEMPLOW            "Teplota hotendu je pod\nminimální teplotou (%d℃)."
     #define STRING_HEAT_HOTEND            "Zahřát hotend na %d℃?"
     #define STRING_Z_ALIGN                "Z Align"
-    #define STRING_TEST_LEVELING          "test Leveling"
+    #define STRING_TEST_LEVEL_VALID          "test Leveling valid "
+    #define STRING_TEST_LEVEL_PLA          "test Leveling pla "
+    #define STRING_TEST_LEVEL_ABS          "test Leveling abs "
+    #define STRING_TEST_LEVEL_PTEG         "test Leveling pteg "
+    #define STRING_TEST_LEVEL_ASA          "test Leveling asa "
+    
 
 #endif

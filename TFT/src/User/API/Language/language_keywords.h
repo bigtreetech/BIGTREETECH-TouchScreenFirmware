@@ -349,7 +349,14 @@ extern "C" {
 #define LANG_KEY_EXT_TEMPLOW                  "label_ext_templow:"
 #define LANG_KEY_HEAT_HOTEND                  "label_heat_hotend:"
 #define LANG_KEY_Z_ALIGN                      "label_z_align:"
-#define LANG_KEY_TEST_LEVELING                "label_test_leveling"
+#define LANG_KEY_TEST_LEVEL_VALID             "label_test_level_valid"
+#define LANG_KEY_TEST_LEVEL_PLA               "label_test_level_pla"
+#define LANG_KEY_TEST_LEVEL_ABS               "label_test_level_abs"
+#define LANG_KEY_TEST_LEVEL_PTEG              "label_test_level_pteg"
+#define LANG_KEY_TEST_LEVEL_ASA               "label_test_level_asa"
+
+
+
 
 #ifdef __cplusplus
 }
