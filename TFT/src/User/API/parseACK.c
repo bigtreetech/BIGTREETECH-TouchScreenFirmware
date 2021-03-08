@@ -570,6 +570,20 @@ void parseACK(void)
         if (ack_seen("Z: ")) setParameter(P_STEPS_PER_MM, Z_STEPPER, ack_value());
         if (ack_seen("E: ")) setParameter(P_STEPS_PER_MM, E_STEPPER, ack_value());
       }
+      // parse and store Filament settings values
+      else if (ack_seen("M200"))
+      {
+        if (ack_seen("M200 S")) setParameter(P_FILAMENT_SETTING, 0, ack_value());
+        if (ack_seen("T"))
+        {
+         if (ack_seen("T0 D")) setParameter(P_FILAMENT_SETTING, 1, ack_value());
+         if (ack_seen("T1 D")) setParameter(P_FILAMENT_SETTING, 2, ack_value());
+        }
+        else
+        {
+        if (ack_seen("D")) setParameter(P_FILAMENT_SETTING, 1, ack_value());
+        }
+      }
       // parse and store Max Acceleration values
       else if (ack_seen("M201"))
       {
@@ -682,6 +696,24 @@ void parseACK(void)
         if (ack_seen("S")) setParameter(P_ABL_STATE, 0, ack_value());
         if (ack_seen("Z")) setParameter(P_ABL_STATE, 1, ack_value());
       }
+      // parse and store TMC Stealth Chop
+      else if (ack_seen("M569"))
+      {
+        if (ack_seen("M569 S1") && !ack_seen("T"))
+        {
+          setParameter(P_STEALTH_CHOP, X_STEPPER, ack_seen("X") ? 1 : 0);
+          setParameter(P_STEALTH_CHOP, Y_STEPPER, ack_seen("Y") ? 1 : 0);
+          setParameter(P_STEALTH_CHOP, Z_STEPPER, ack_seen("Z") ? 1 : 0);
+        }
+        if (ack_seen("S1 T0"))
+        {
+          setParameter(P_STEALTH_CHOP, E_STEPPER, 1);
+        }
+        if (ack_seen("S1 T1"))
+        {
+          setParameter(P_STEALTH_CHOP, E2_STEPPER, 1);
+        }
+      }
       // parse and store Probe Offset values
       else if (ack_seen("M851 X"))
       {
@@ -700,20 +732,6 @@ void parseACK(void)
         else if (ack_seen("K"))
         {
           setParameter(P_LIN_ADV, 0, ack_value());
-        }
-      }
-      // parse and store Filament settings values
-      else if (ack_seen("M200"))
-      {
-        if (ack_seen("M200 S")) setParameter(P_FILAMENT_SETTING, 0, ack_value());
-        if (ack_seen("T"))
-        {
-         if (ack_seen("T0 D")) setParameter(P_FILAMENT_SETTING, 1, ack_value());
-         if (ack_seen("T1 D")) setParameter(P_FILAMENT_SETTING, 2, ack_value());
-        }
-        else
-        {
-        if (ack_seen("D")) setParameter(P_FILAMENT_SETTING, 1, ack_value());
         }
       }
       // parse and store stepper driver current values
@@ -779,24 +797,6 @@ void parseACK(void)
                            setParameter(P_BUMPSENSITIVITY, X_STEPPER, ack_value());
         if (ack_seen("Y")) setParameter(P_BUMPSENSITIVITY, Y_STEPPER, ack_value());
         if (ack_seen("Z")) setParameter(P_BUMPSENSITIVITY, Z_STEPPER, ack_value());
-      }
-      // parse and store TMC Stealth Chop
-      else if (ack_seen("M569"))
-      {
-        if (ack_seen("M569 S1") && !ack_seen("T"))
-        {
-          setParameter(P_STEALTH_CHOP, X_STEPPER, ack_seen("X") ? 1 : 0);
-          setParameter(P_STEALTH_CHOP, Y_STEPPER, ack_seen("Y") ? 1 : 0);
-          setParameter(P_STEALTH_CHOP, Z_STEPPER, ack_seen("Z") ? 1 : 0);
-        }
-        if (ack_seen("S1 T0"))
-        {
-          setParameter(P_STEALTH_CHOP, E_STEPPER, 1);
-        }
-        if (ack_seen("S1 T1"))
-        {
-          setParameter(P_STEALTH_CHOP, E2_STEPPER, 1);
-        }
       }
       // parse and store ABL type if auto-detect is enabled
       #if ENABLE_BL_VALUE == 1
