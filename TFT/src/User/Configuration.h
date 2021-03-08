@@ -196,7 +196,7 @@
 
 // Is this a Delta printer
 #define IS_DELTA             false
-#define DELTA_MBL_Z_DROP_MM  50 // MBL Drop 50mm first after home avoid crashing into the top of the towers.
+#define DELTA_MBL_Z_DROP_MM  50.0f // MBL Drop 50mm first after home avoid crashing into the top of the towers.
 
 // Pause Settings
 #define NOZZLE_PAUSE_RETRACT_LENGTH               15  // (mm)
