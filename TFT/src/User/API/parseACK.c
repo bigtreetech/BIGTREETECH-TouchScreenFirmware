@@ -699,6 +699,20 @@ void parseACK(void)
           setParameter(P_LIN_ADV, 0, ack_value());
         }
       }
+      // parse and store Filament settings values
+      else if (ack_seen("M200"))
+      {
+        if (ack_seen("M200 S")) setParameter(P_FILAMENT_SETTING, 0, ack_value());
+        if (ack_seen("T"))
+        {
+         if (ack_seen("T0 D")) setParameter(P_FILAMENT_SETTING, 1, ack_value());
+         if (ack_seen("T1 D")) setParameter(P_FILAMENT_SETTING, 2, ack_value());
+        }
+        else
+        {
+        if (ack_seen("D")) setParameter(P_FILAMENT_SETTING, 1, ack_value());
+        }
+      }
     // parse and store stepper driver current values
       else if (ack_seen("M906"))
       {

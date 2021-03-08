@@ -22,6 +22,7 @@ const LISTITEM parametertypes[PARAMETERS_COUNT] = {
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_ABL,                  LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_PROBE_OFFSET,         LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_LIN_ADVANCE,          LABEL_BACKGROUND},
+  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_FILAMENT_SETTING,     LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_CURRENT_SETTING,      LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_BUMP_SENSITIVITY,     LABEL_BACKGROUND},
   {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_HYBRID_THRESHOLD,     LABEL_BACKGROUND},
@@ -111,6 +112,12 @@ void menuShowParameter(void)
       case P_LIN_ADV:
         parameter_menuitems.items[0].titlelabel.address = "K-E";
         parameter_menuitems.items[1].titlelabel.address = "K-E2";
+        break;
+
+      case P_FILAMENT_SETTING:
+        parameter_menuitems.items[0].titlelabel.address = "S 1=ON 0=OFF";
+        parameter_menuitems.items[1].titlelabel.address = "T0 Ø Filament";
+        parameter_menuitems.items[2].titlelabel.address = "T1 Ø Filament";
         break;
 
       case P_STEALTH_CHOP:
