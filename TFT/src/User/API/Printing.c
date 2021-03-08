@@ -493,7 +493,8 @@ void loopCheckPrinting(void)
     infoPrinting.printing = true;
     if (!hasPrintingMenu())
     {
-      infoMenu.menu[++infoMenu.cur] = menuPrinting;
+      infoMenu.cur = 1;
+      infoMenu.menu[infoMenu.cur] = menuPrinting;
     }
   }
 
