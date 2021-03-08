@@ -787,7 +787,7 @@ void parseConfigKey(uint16_t index)
       break;
 
     case C_INDEX_LEVEL_EDGE:
-      SET_VALID_INT_VALUE(infoSettings.level_edge, MIN_XY_POS_LIMIT, MAX_SIZE_LIMIT);
+      SET_VALID_INT_VALUE(infoSettings.level_edge, MIN_Z_POS_LIMIT, MAX_SIZE_LIMIT);
       break;
 
     case C_INDEX_LEVEL_Z_POS:
