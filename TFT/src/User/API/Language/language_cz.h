@@ -51,6 +51,7 @@
     #define STRING_HOTEND_OFFSET          "Offset 2.trysky"
     #define STRING_PROBE_OFFSET           "Offset sondy"
     #define STRING_LIN_ADVANCE            "Linear Advance"
+    #define STRING_FILAMENT_SETTING       "Průměr Filamentu"
     #define STRING_CURRENT_SETTING        "TMC Proud motorů(mA)"
     #define STRING_BUMP_SENSITIVITY       "TMC Citlivost nárazu"
     #define STRING_HYBRID_THRESHOLD       "TMC Hybridní práh"

@@ -51,6 +51,7 @@
     #define STRING_HOTEND_OFFSET          "Offset 2nd Nozzle"
     #define STRING_PROBE_OFFSET           "Sonda Compensar"
     #define STRING_LIN_ADVANCE            "Avanç Lineal"
+    #define STRING_FILAMENT_SETTING       "Filament Diameter"
     #define STRING_CURRENT_SETTING        "Corrent del Driver (mA)"
     #define STRING_BUMP_SENSITIVITY       "Sensibilitat al topall TMC"
     #define STRING_HYBRID_THRESHOLD       "TMC HybridThreshold"

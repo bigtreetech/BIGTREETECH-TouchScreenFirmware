@@ -708,6 +708,14 @@ void sendQueueCmd(void)
             }
           }
           break;
+        case 200: //M200 Set Filament Diameter
+        {
+          if (cmd_seen('S')) setParameter(P_FILAMENT_SETTING, 0, cmd_float());
+          uint8_t i = 0;
+          if (cmd_seen('T')) i = cmd_value();
+          if (cmd_seen('D')) setParameter(P_FILAMENT_SETTING, 1 + i, cmd_float());
+          break;
+        }
         case 201: //M201 Maximum Acceleration (units/s2)
         {
           if (cmd_seen('X')) setParameter(P_MAX_ACCELERATION, X_STEPPER, cmd_float());

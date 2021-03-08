@@ -51,6 +51,7 @@
     #define STRING_HOTEND_OFFSET          "Második fej eltolása"
     #define STRING_PROBE_OFFSET           "Szonda eltolás"
     #define STRING_LIN_ADVANCE            "Lineáris haladás"
+    #define STRING_FILAMENT_SETTING       "Filament Diameter"
     #define STRING_CURRENT_SETTING        "Motoráramok beállítása"
     #define STRING_BUMP_SENSITIVITY       "TMC Ütközés érzékenység"
     #define STRING_HYBRID_THRESHOLD       "TMC Hibrid küszöbérték"

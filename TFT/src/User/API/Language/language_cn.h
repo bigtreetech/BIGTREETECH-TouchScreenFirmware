@@ -51,6 +51,7 @@
     #define STRING_HOTEND_OFFSET          "第2个喷头的偏移量"
     #define STRING_PROBE_OFFSET           "探针偏移量"
     #define STRING_LIN_ADVANCE            "Linear Advance"
+    #define STRING_FILAMENT_SETTING       "Filament Diameter"
     #define STRING_CURRENT_SETTING        "TMC驱动电流设置"
     #define STRING_BUMP_SENSITIVITY       "TMC堵转检测灵敏度"
     #define STRING_HYBRID_THRESHOLD       "TMC混合阈值"

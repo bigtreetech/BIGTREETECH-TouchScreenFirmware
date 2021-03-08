@@ -24,6 +24,7 @@ typedef enum
   P_ABL_STATE,
   P_PROBE_OFFSET,
   P_LIN_ADV,
+  P_FILAMENT_SETTING,
   P_CURRENT,
   P_BUMPSENSITIVITY,
   P_HYBRID_THRESHOLD,
@@ -75,6 +76,7 @@ typedef struct
   float ABLState[2];
   float ProbeOffset[3];
   float LinAdvance[2];
+  float FilamentSetting[3];
   float Current[STEPPER_COUNT];
   float BumpSensitivity[3];
   float HybridThreshold[STEPPER_COUNT];
