@@ -327,12 +327,12 @@ static inline void saveflashSign(uint8_t* buf, uint32_t size)
 
 void scanUpdates(void)
 {
-  //bool flashUpdate[sign_count] = {true, true, true, true};
-  uint32_t cur_flash_sign[sign_count];
-  W25Qxx_ReadBuffer((uint8_t*)&cur_flash_sign, FLASH_SIGN_ADDR, sizeof(cur_flash_sign));
-
   if (mountSDCard())
   {
+    uint32_t saved_flash_sign[sign_count];
+    W25Qxx_ReadBuffer((uint8_t*)&saved_flash_sign, FLASH_SIGN_ADDR, sizeof(saved_flash_sign));
+
+    uint32_t cur_flash_sign[sign_count];
     if (f_dir_exists(FONT_ROOT_DIR))
     {
       if (updateFont(FONT_ROOT_DIR "/byte_ascii.fon", BYTE_ASCII_ADDR) &&
@@ -351,8 +351,10 @@ void scanUpdates(void)
       cur_flash_sign[lang_sign] = LANGUAGE_CHECK_SIGN;
     scanRenameUpdate();
     scanResetDir();
-    saveflashSign((uint8_t*)cur_flash_sign, sizeof(cur_flash_sign));
 
+    if (memcpy(saved_flash_sign, cur_flash_sign, sizeof(saved_flash_sign)))
+    {
+      saveflashSign((uint8_t*)cur_flash_sign, sizeof(cur_flash_sign));
+    }
   }
 }
-
