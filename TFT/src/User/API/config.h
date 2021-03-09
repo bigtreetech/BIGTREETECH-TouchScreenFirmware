@@ -157,7 +157,7 @@ extern "C" {
 //-----------------------------Limits
 #define MAX_SIZE_LIMIT            2000      // machine size over this will not be parsed.
 #define MAX_EXT_SPEED_LIMIT       5000      // Extruder speed over this will not pe parsed.
-#define MAX_TOOL_TEMP             300       // extruder temp over this will not pe parsed.
+#define MAX_TOOL_TEMP             1000      // extruder temp over this will not pe parsed.
 #define MAX_BED_TEMP              200       // bed temp over this will not pe parsed.
 #define MAX_CHAMBER_TEMP          100       // bed temp over this will not pe parsed.
 #define MAX_SPEED_LIMIT           12000     // speed over this will not pe parsed.
