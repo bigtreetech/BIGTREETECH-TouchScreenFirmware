@@ -13,12 +13,6 @@ enum
   KEY_POPUP_CONFIRM = 0,
   KEY_POPUP_CANCEL,
 };
-enum
-{
-  KEY_TEXT_OK = 0,
-  KEY_TEXT_CANCEL,
-  KEY_TEXT_
-};
 
 extern const GUI_RECT doubleBtnRect[];
 extern BUTTON bottomDoubleBtn[];
@@ -56,11 +50,12 @@ void _setDialogCancelTextLabel(int16_t index);
     setDialogCancelText(canceltext);                  \
   }
 
-  void popupDrawPage(DIALOG_TYPE type, BUTTON * btn, const uint8_t * title, const uint8_t * context, const uint8_t * yes,
-                     const uint8_t * no);
-  //void popupReminder(DIALOG_TYPE type, u8* title, u8* msg);
-  void showDialog(DIALOG_TYPE type, void (*ok_action)(), void (*cancel_action)(), void (*loop_action)());
-  void loopPopup(void);
+void popupDrawPage(DIALOG_TYPE type, BUTTON * btn, const uint8_t * title, const uint8_t * context, const uint8_t * yes,
+                    const uint8_t * no);
+//void popupReminder(DIALOG_TYPE type, u8* title, u8* msg);
+void menuDialog(void);
+void showDialog(DIALOG_TYPE type, void (*ok_action)(), void (*cancel_action)(), void (*loop_action)());
+void loopPopup(void);
 
 #define popupReminder(_type, _title, _msg)                        \
   {                                                               \

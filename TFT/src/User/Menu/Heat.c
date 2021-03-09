@@ -33,15 +33,17 @@ void menuHeat(void)
   MENUITEMS heatItems = {
     // title
     LABEL_HEAT,
-    // icon                         label
-    {{ICON_DEC,                     LABEL_DEC},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_INC,                     LABEL_INC},
-     {ICON_NOZZLE,                  LABEL_NOZZLE},
-     {ICON_5_DEGREE,                LABEL_5_DEGREE},
-     {ICON_STOP,                    LABEL_STOP},
-     {ICON_BACK,                    LABEL_BACK},}
+    // icon                          label
+    {
+      {ICON_DEC,                     LABEL_DEC},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_INC,                     LABEL_INC},
+      {ICON_NOZZLE,                  LABEL_NOZZLE},
+      {ICON_5_DEGREE,                LABEL_5_DEGREE},
+      {ICON_STOP,                    LABEL_STOP},
+      {ICON_BACK,                    LABEL_BACK},
+    }
   };
 
   heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
@@ -61,7 +63,7 @@ void menuHeat(void)
     int16_t actCurrent = heatGetCurrentTemp(c_heater);
     int16_t actTarget = heatGetTargetTemp(c_heater);
 
-    switch(key_num)
+    switch (key_num)
     {
       case KEY_ICON_0:
         heatSetTargetTemp(c_heater, actTarget - degreeSteps[degreeSteps_index]);
@@ -118,7 +120,7 @@ void menuHeat(void)
           {
             if (encoderPosition > 0)
               heatSetTargetTemp(c_heater, actTarget + degreeSteps[degreeSteps_index]);
-            else // if < 0)
+            else  // if < 0)
               heatSetTargetTemp(c_heater, actTarget - degreeSteps[degreeSteps_index]);
             encoderPosition = 0;
           }

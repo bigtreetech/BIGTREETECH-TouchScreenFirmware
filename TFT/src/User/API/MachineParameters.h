@@ -24,9 +24,11 @@ typedef enum
   P_ABL_STATE,
   P_PROBE_OFFSET,
   P_LIN_ADV,
+  P_FILAMENT_SETTING,
   P_CURRENT,
   P_BUMPSENSITIVITY,
   P_HYBRID_THRESHOLD,
+  P_STEALTH_CHOP,
   P_MBL_OFFSET,
   // Keep below items always at the end
   PARAMETERS_COUNT,
@@ -74,9 +76,11 @@ typedef struct
   float ABLState[2];
   float ProbeOffset[3];
   float LinAdvance[2];
+  float FilamentSetting[3];
   float Current[STEPPER_COUNT];
   float BumpSensitivity[3];
   float HybridThreshold[STEPPER_COUNT];
+  float StealthChop[5];
   float MblOffset[1];
 } PARAMETERS;
 
