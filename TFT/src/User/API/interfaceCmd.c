@@ -815,8 +815,19 @@ void sendQueueCmd(void)
           //ABL state will be set through parsACK.c after receiving confirmation message from the printer
           // to prevent wrong state in case of error.
           if (cmd_seen('Z')) setParameter(P_ABL_STATE,1,cmd_float());
-        break;
-
+          break;
+        case 596: //M596 TMC StealthChop
+        {
+          uint8_t k = 0;
+          if(cmd_seen('S')) k = cmd_value();
+          if(cmd_seen('X')) setParameter(P_STEALTH_CHOP, X_STEPPER, k);
+          if(cmd_seen('Y')) setParameter(P_STEALTH_CHOP, Y_STEPPER, k);
+          if(cmd_seen('Z')) setParameter(P_STEALTH_CHOP, Z_STEPPER, k);
+          uint8_t i = 0;
+          if(cmd_seen('T')) i = cmd_value();
+          if(cmd_seen('E')) setParameter(P_STEALTH_CHOP, E_STEPPER + i, k);
+          break; 
+        }
         #ifdef NOZZLE_PAUSE_M600_M601
           case 600: //M600/M601 pause print
           case 601:
@@ -837,18 +848,6 @@ void sendQueueCmd(void)
             break;
         #endif
 
-        case 596: //M596 TMC StealthChop
-        {
-          uint8_t k = 0;
-          if(cmd_seen('S')) k = cmd_value();
-          if(cmd_seen('X')) setParameter(P_STEALTH_CHOP, X_STEPPER, k);
-          if(cmd_seen('Y')) setParameter(P_STEALTH_CHOP, Y_STEPPER, k);
-          if(cmd_seen('Z')) setParameter(P_STEALTH_CHOP, Z_STEPPER, k);
-          uint8_t i = 0;
-          if(cmd_seen('T')) i = cmd_value();
-          if(cmd_seen('E')) setParameter(P_STEALTH_CHOP, E_STEPPER + i, k);
-          break; 
-        }
         case 851: //M851 Z probe offset
         {
           if (cmd_seen('X')) setParameter(P_PROBE_OFFSET, X_AXIS, cmd_float());
