@@ -1,14 +1,13 @@
 #include "ProbeHeightControl.h"
 #include "includes.h"
 
-static uint32_t nextQueryTime = 0;
 #define PROBE_UPDATE_DELAY 200  // 1 seconds is 1000
 
+static uint32_t nextQueryTime = 0;
 static bool curSoftwareEndstops = true;
 
-/* Enable probe height
- * Temporary disable software endstops
- */
+// Enable probe height
+// Temporary disable software endstops
 void probeHeightEnable(void)
 {
   curSoftwareEndstops = infoMachineSettings.softwareEndstops;
@@ -22,9 +21,8 @@ void probeHeightEnable(void)
   }
 }
 
-/* Disable probe height
- * Restore original software endstops state
- */
+// Disable probe height
+// Restore original software endstops state
 void probeHeightDisable(void)
 {
   if (curSoftwareEndstops)  // if software endstops was originally enabled, enable it again
@@ -36,7 +34,7 @@ void probeHeightDisable(void)
   }
 }
 
-/* Start probe height */
+// Start probe height
 void probeHeightStart(float initialHeight)
 {
   mustStoreCmd("G90\n");                      // set absolute position mode
@@ -44,7 +42,7 @@ void probeHeightStart(float initialHeight)
   mustStoreCmd("G91\n");                      // set relative position mode
 }
 
-/* Stop probe height */
+// Stop probe height
 void probeHeightStop(void)
 {
   mustStoreCmd("G91\n");  // set relative position mode
@@ -52,19 +50,19 @@ void probeHeightStop(void)
   mustStoreCmd("G90\n");  // set absolute position mode
 }
 
-/* Set probe height to relative position mode */
+// Set probe height to relative position mode
 void probeHeightRelative(void)
 {
-  mustStoreCmd("G91\n");                      // set relative position mode
+  mustStoreCmd("G91\n");  // set relative position mode
 }
 
-/* Set probe height to absolute position mode */
+// Set probe height to absolute position mode
 void probeHeightAbsolute(void)
 {
-  mustStoreCmd("G90\n");                      // set absolute position mode
+  mustStoreCmd("G90\n");  // set absolute position mode
 }
 
-/* Change probe height */
+// Change probe height
 void probeHeightMove(float unit, int8_t direction)
 {
   // if invert is true, 'direction' multiplied by -1
@@ -72,7 +70,7 @@ void probeHeightMove(float unit, int8_t direction)
            infoSettings.level_feedrate[FEEDRATE_Z]);
 }
 
-/* Query for new coordinates */
+// Query for new coordinates
 void probeHeightQueryCoord(void)
 {
   if (OS_GetTimeMs() > nextQueryTime)

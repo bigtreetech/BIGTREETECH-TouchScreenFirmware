@@ -4,15 +4,17 @@
 const MENUITEMS settingsItems = {
   // title
   LABEL_SETTINGS,
-  // icon                         label
-  {{ICON_SCREEN_SETTINGS,         LABEL_SCREEN_SETTINGS},
-   {ICON_MACHINE_SETTINGS,        LABEL_MACHINE_SETTINGS},
-   {ICON_FEATURE_SETTINGS,        LABEL_FEATURE_SETTINGS},
-   {ICON_SCREEN_INFO,             LABEL_SCREEN_INFO},
-   {ICON_CONNECTION_SETTINGS,     LABEL_CONNECTION_SETTINGS},
-   {ICON_BACKGROUND,              LABEL_BACKGROUND},
-   {ICON_BACKGROUND,              LABEL_BACKGROUND},
-   {ICON_BACK,                    LABEL_BACK},}
+  // icon                          label
+  {
+    {ICON_SCREEN_SETTINGS,         LABEL_SCREEN_SETTINGS},
+    {ICON_MACHINE_SETTINGS,        LABEL_MACHINE_SETTINGS},
+    {ICON_FEATURE_SETTINGS,        LABEL_FEATURE_SETTINGS},
+    {ICON_SCREEN_INFO,             LABEL_SCREEN_INFO},
+    {ICON_CONNECTION_SETTINGS,     LABEL_CONNECTION_SETTINGS},
+    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_BACK,                    LABEL_BACK},
+  }
 };
 
 const GUI_POINT clocks[] = {
@@ -23,8 +25,8 @@ const GUI_POINT clocks[] = {
   {1 * LCD_WIDTH / 3, 1 * BYTE_HEIGHT},
   {2 * LCD_WIDTH / 3, 1 * BYTE_HEIGHT},};
 
-static uint8_t firmare_name[64] = "Unknow system"; // Marlin firmware version
-uint8_t machine_type[64] = "3D Printer"; // Marlin machine type
+static uint8_t firmare_name[64] = "Unknow system";  // Marlin firmware version
+uint8_t machine_type[64] = "3D Printer";  // Marlin machine type
 
 void infoSetFirmwareName(uint8_t *name, uint8_t name_len)
 {
@@ -86,7 +88,7 @@ void menuInfo(void)
   float usedMB = (float)FLASH_USED/1048576;
   sprintf(buf, "Used %.2f%% (%.2fMB/%uMB)", flashUsedPercentage(), usedMB, (W25Qxx_ReadCapacity()/1048576));
 
-  const uint16_t top_y = (LCD_HEIGHT - (7 * BYTE_HEIGHT)) / 2; // 8 firmware info lines + 1 SPI flash info line
+  const uint16_t top_y = (LCD_HEIGHT - (7 * BYTE_HEIGHT)) / 2;  // 8 firmware info lines + 1 SPI flash info line
   const uint16_t start_x = strlen("Firmware:") * BYTE_WIDTH;
   const GUI_RECT version[5] = {
     {start_x, top_y + 0*BYTE_HEIGHT, LCD_WIDTH, top_y + 2*BYTE_HEIGHT},
@@ -116,8 +118,8 @@ void menuInfo(void)
 
   GUI_DispStringInRect(20, LCD_HEIGHT - (BYTE_HEIGHT*2), LCD_WIDTH-20, LCD_HEIGHT, textSelect(LABEL_TOUCH_TO_EXIT));
 
-  while(!isPress()) loopBackEnd();
-  while(isPress())  loopBackEnd();
+  while (!isPress()) loopBackEnd();
+  while (isPress()) loopBackEnd();
 
   GUI_RestoreColorDefault();
   infoMenu.cur--;
@@ -129,10 +131,10 @@ void menuSettings(void)
 
   menuDrawPage(&settingsItems);
 
-  while(infoMenu.menu[infoMenu.cur] == menuSettings)
+  while (infoMenu.menu[infoMenu.cur] == menuSettings)
   {
     key_num = menuKeyGetValue();
-    switch(key_num)
+    switch (key_num)
     {
       case KEY_ICON_0:
         infoMenu.menu[++infoMenu.cur] = menuScreenSettings;
@@ -162,6 +164,7 @@ void menuSettings(void)
       default:
         break;
     }
+
     loopProcess();
   }
 }

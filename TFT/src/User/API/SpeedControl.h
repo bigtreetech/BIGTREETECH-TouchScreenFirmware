@@ -5,13 +5,13 @@
 extern "C" {
 #endif
 
-#define SPEED_NUM 2
-#define SPEED_MIN 10
-#define SPEED_MAX 999
-
 #include <stdint.h>
 #include <stdbool.h>
 #include "includes.h"
+
+#define SPEED_NUM 2
+#define SPEED_MIN 10
+#define SPEED_MAX 999
 
 void speedSetSendWaiting(uint8_t tool, bool isWaiting);
 void speedQuerySetWait(bool wait);

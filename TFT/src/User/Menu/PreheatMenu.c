@@ -1,9 +1,9 @@
 #include "PreheatMenu.h"
 #include "includes.h"
 
-const GUI_POINT preheat_title = {ICON_WIDTH/2, PREHEAT_TITLE_Y };
-const GUI_POINT preheat_val_tool = {ICON_WIDTH - BYTE_WIDTH/2, PREHEAT_TOOL_Y};
-const GUI_POINT preheat_val_bed = {ICON_WIDTH - BYTE_WIDTH/2, PREHEAT_BED_Y};
+const GUI_POINT preheat_title = {ICON_WIDTH / 2, PREHEAT_TITLE_Y };
+const GUI_POINT preheat_val_tool = {ICON_WIDTH - BYTE_WIDTH / 2, PREHEAT_TOOL_Y};
+const GUI_POINT preheat_val_bed = {ICON_WIDTH - BYTE_WIDTH / 2, PREHEAT_BED_Y};
 
 const ITEM itemToolPreheat[] = {
   // icon                        label
@@ -69,15 +69,17 @@ void menuPreheat(void)
   MENUITEMS preheatItems = {
     // title
     LABEL_PREHEAT,
-    // icon                         label
-    {{ICON_PREHEAT,                 LABEL_BACKGROUND},
-     {ICON_PREHEAT,                 LABEL_BACKGROUND},
-     {ICON_PREHEAT,                 LABEL_BACKGROUND},
-     {ICON_PREHEAT,                 LABEL_BACKGROUND},
-     {ICON_PREHEAT,                 LABEL_BACKGROUND},
-     {ICON_PREHEAT,                 LABEL_BACKGROUND},
-     {ICON_PREHEAT_BOTH,            LABEL_PREHEAT_BOTH},
-     {ICON_BACK,                    LABEL_BACK},}
+    // icon                          label
+    {
+      {ICON_PREHEAT,                 LABEL_BACKGROUND},
+      {ICON_PREHEAT,                 LABEL_BACKGROUND},
+      {ICON_PREHEAT,                 LABEL_BACKGROUND},
+      {ICON_PREHEAT,                 LABEL_BACKGROUND},
+      {ICON_PREHEAT,                 LABEL_BACKGROUND},
+      {ICON_PREHEAT,                 LABEL_BACKGROUND},
+      {ICON_PREHEAT_BOTH,            LABEL_PREHEAT_BOTH},
+      {ICON_BACK,                    LABEL_BACK},
+    }
   };
 
   static TOOLPREHEAT nowHeater = BOTH;
@@ -91,10 +93,10 @@ void menuPreheat(void)
     refreshPreheatIcon(i, i, &preheatItems.items[i]);
   }
 
-  while(infoMenu.menu[infoMenu.cur] == menuPreheat)
+  while (infoMenu.menu[infoMenu.cur] == menuPreheat)
   {
     key_num = menuKeyGetValue();
-    switch(key_num)
+    switch (key_num)
     {
       case KEY_ICON_0:
       case KEY_ICON_1:
@@ -102,15 +104,17 @@ void menuPreheat(void)
       case KEY_ICON_3:
       case KEY_ICON_4:
       case KEY_ICON_5:
-        switch(nowHeater)
+        switch (nowHeater)
         {
           case BOTH:
             heatSetTargetTemp(BED, infoSettings.preheat_bed[key_num]);
             heatSetTargetTemp(heatGetCurrentHotend(), infoSettings.preheat_temp[key_num]);
             break;
+
           case BED_PREHEAT:
             heatSetTargetTemp(BED, infoSettings.preheat_bed[key_num]);
             break;
+
           case NOZZLE0_PREHEAT:
             heatSetTargetTemp(heatGetCurrentHotend(), infoSettings.preheat_temp[key_num]);
             break;
@@ -125,9 +129,13 @@ void menuPreheat(void)
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur--; break;
-      default:break;
+        infoMenu.cur--;
+        break;
+
+      default:
+        break;
     }
+
     loopProcess();
   }
 }
