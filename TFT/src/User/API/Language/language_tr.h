@@ -51,6 +51,7 @@
     #define STRING_HOTEND_OFFSET          "2. Nozül Mesafesi"
     #define STRING_PROBE_OFFSET           "Prob Offseti"
     #define STRING_LIN_ADVANCE            "Linear Advance"
+    #define STRING_FILAMENT_SETTING       "Filament Diameter"
     #define STRING_CURRENT_SETTING        "Sürücü Akımı (mA)"
     #define STRING_BUMP_SENSITIVITY       "TMC Çarpma Hassasiyeti"
     #define STRING_HYBRID_THRESHOLD       "TMC Hibrit Eşiği"

@@ -25,16 +25,16 @@ const ECHO knownEcho[] = {
   {ECHO_NOTIFY_NONE, "Now doing file:"},
   {ECHO_NOTIFY_NONE, "Probe Offset"},
   {ECHO_NOTIFY_NONE, "Flow:"},
-  {ECHO_NOTIFY_NONE, "echo:;"},                 //M503
-  {ECHO_NOTIFY_NONE, "echo:  G"},               //M503
-  {ECHO_NOTIFY_NONE, "echo:  M"},               //M503
-  {ECHO_NOTIFY_NONE, "Cap:"},                   //M115
-  {ECHO_NOTIFY_NONE, "Config:"},                //M360
-  {ECHO_NOTIFY_TOAST, "Settings Stored"},       //M500
-  {ECHO_NOTIFY_TOAST, "echo:Bed"},              //M420
-  {ECHO_NOTIFY_TOAST, "echo:Fade"},             //M420
-  {ECHO_NOTIFY_TOAST, "echo:Active Extruder"},  //Tool Change
-  {ECHO_NOTIFY_NONE, "Unknown command: \"M150"}, //M150
+  {ECHO_NOTIFY_NONE, "echo:;"},                   //M503
+  {ECHO_NOTIFY_NONE, "echo:  G"},                 //M503
+  {ECHO_NOTIFY_NONE, "echo:  M"},                 //M503
+  {ECHO_NOTIFY_NONE, "Cap:"},                     //M115
+  {ECHO_NOTIFY_NONE, "Config:"},                  //M360
+  {ECHO_NOTIFY_TOAST, "Settings Stored"},         //M500
+  {ECHO_NOTIFY_TOAST, "echo:Bed"},                //M420
+  {ECHO_NOTIFY_TOAST, "echo:Fade"},               //M420
+  {ECHO_NOTIFY_TOAST, "echo:Active Extruder"},    //Tool Change
+  {ECHO_NOTIFY_NONE, "Unknown command: \"M150"},  //M150
 };
 
 // uint8_t forceIgnore[ECHO_ID_COUNT] = {0};
@@ -64,12 +64,13 @@ static bool ack_seen(const char * str)
 static bool ack_cmp(const char *str)
 {
   uint16_t i;
-  for(i=0; i<ACK_MAX_SIZE && str[i]!=0 && dmaL2Cache[i]!=0; i++)
+  for (i = 0; i<ACK_MAX_SIZE && str[i] != 0 && dmaL2Cache[i] != 0; i++)
   {
     if (str[i] != dmaL2Cache[i])
-    return false;
+      return false;
   }
-  if (dmaL2Cache[i] != 0) return false;
+  if (dmaL2Cache[i] != 0)
+    return false;
   return true;
 }
 
@@ -188,13 +189,14 @@ bool dmaL1NotEmpty(uint8_t port)
 void syncL2CacheFromL1(uint8_t port)
 {
   uint16_t i = 0;
+
   while (dmaL1NotEmpty(port))
   {
     dmaL2Cache[i] = dmaL1Data[port].cache[dmaL1Data[port].rIndex];
     dmaL1Data[port].rIndex = (dmaL1Data[port].rIndex + 1) % dmaL1Data[port].cacheSize;
     if (dmaL2Cache[i++] == '\n') break;
   }
-  dmaL2Cache[i] = 0; // End character
+  dmaL2Cache[i] = 0;  // End character
 }
 
 void hostActionCommands(void)
@@ -250,7 +252,7 @@ void hostActionCommands(void)
 
   if (ack_seen("prompt_show") && hostAction.prompt_show)
   {
-    switch(hostAction.button)
+    switch (hostAction.button)
     {
       case 0:
         BUZZER_PLAY(sound_notify);
@@ -258,12 +260,14 @@ void hostActionCommands(void)
                       LABEL_BACKGROUND);
         showDialog(DIALOG_TYPE_ALERT, setRunoutAlarmFalse, NULL, NULL);
         break;
+
       case 1:
         BUZZER_PLAY(sound_notify);
         setDialogText((uint8_t *)"Action command", (uint8_t *)hostAction.prompt_begin, (uint8_t *)hostAction.prompt_button1,
                       LABEL_BACKGROUND);
         showDialog(DIALOG_TYPE_ALERT, breakAndContinue, NULL, NULL);
         break;
+
       case 2:
         BUZZER_PLAY(sound_notify);
         setDialogText((uint8_t *)"Action command", (uint8_t *)hostAction.prompt_begin, (uint8_t *)hostAction.prompt_button1,
@@ -303,7 +307,7 @@ void parseACK(void)
     bool avoid_terminal = false;
     syncL2CacheFromL1(SERIAL_PORT);
     infoHost.rx_ok[SERIAL_PORT] = false;
-    if (infoHost.connected == false) // Not connected to printer
+    if (infoHost.connected == false)  // Not connected to printer
     {
       // parse error information even though not connected to printer
       if (ack_seen(errormagic)) ackPopupInfo(errormagic);
@@ -334,11 +338,11 @@ void parseACK(void)
 
       if (infoMachineSettings.firmwareType == FW_NOT_DETECTED)  // if never connected to the printer since boot
       {
-        storeCmd("M503\n"); // Query detailed printer capabilities
-        storeCmd("M92\n");  // Steps/mm of extruder is an important parameter for Smart filament runout
-                            // Avoid can't getting this parameter due to disabled M503 in Marlin
+        storeCmd("M503\n");  // Query detailed printer capabilities
+        storeCmd("M92\n");   // Steps/mm of extruder is an important parameter for Smart filament runout
+                             // Avoid can't getting this parameter due to disabled M503 in Marlin
         storeCmd("M115\n");
-        storeCmd("M211\n"); // retrieve the software endstops state
+        storeCmd("M211\n");  // retrieve the software endstops state
       }
       infoHost.connected = true;
     }
@@ -436,25 +440,25 @@ void parseACK(void)
         }
         coordinateQuerySetWait(false);
       }
-    // Parse actual extruder position, response of "M114 E\n", required "M114_DETAIL" in Marlin
+      // parse actual extruder position, response of "M114 E\n", required "M114_DETAIL" in Marlin
       else if (ack_seen("Count E:"))
       {
         coordinateSetExtruderActualSteps(ack_value());
       }
-    // parse and store feed rate percentage
+      // parse and store feed rate percentage
       else if ((infoMachineSettings.firmwareType == FW_REPRAPFW && ack_seen("factor: ")) ||
                ack_seen("FR:"))
       {
         speedSetCurPercent(0,ack_value());
         speedQuerySetWait(false);
       }
-    // parse and store flow rate percentage
+      // parse and store flow rate percentage
       else if (ack_seen("Flow: "))
       {
         speedSetCurPercent(1,ack_value());
         speedQuerySetWait(false);
       }
-    // parse fan speed
+      // parse fan speed
       else if (ack_seen("M106 P"))
       {
         uint8_t i = ack_value();
@@ -463,7 +467,7 @@ void parseACK(void)
           fanSetCurSpeed(i, ack_value());
         }
       }
-    // parse controller fan
+      // parse controller fan
       else if (ack_seen("M710"))
       {
         uint8_t i = 0;
@@ -480,7 +484,7 @@ void parseACK(void)
           fanQuerySetWait(false);
         }
       }
-    // parse "HOST_ACTION_COMMANDS"
+      // parse "HOST_ACTION_COMMANDS"
       else if (ack_seen("//action:"))
       {
         hostActionCommands();
@@ -535,8 +539,7 @@ void parseACK(void)
         printingFinished();
         infoPrinting.cur = infoPrinting.size;
       }
-
-    // parse and store stepper steps/mm values
+      // parse and store stepper steps/mm values
       else if (ack_seen("M92"))
       {
         if (ack_seen("M92 X"))
@@ -545,7 +548,7 @@ void parseACK(void)
           if (ack_seen("Y")) setParameter(P_STEPS_PER_MM, Y_STEPPER, ack_value());
           if (ack_seen("Z")) setParameter(P_STEPS_PER_MM, Z_STEPPER, ack_value());
         }
-        if(ack_seen("T"))
+        if (ack_seen("T"))
         {
           if (ack_seen("T0 E")) setParameter(P_STEPS_PER_MM, E_STEPPER, ack_value());
           if (ack_seen("T1 E"))
@@ -559,7 +562,7 @@ void parseACK(void)
           setParameter(P_STEPS_PER_MM, E_STEPPER, ack_value());
         }
       }
-    // parse and store stepper steps/mm values incase of RepRapFirmware
+      // parse and store stepper steps/mm values incase of RepRapFirmware
       else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && (ack_seen("Steps")))
       {
         if (ack_seen("X: ")) setParameter(P_STEPS_PER_MM, X_STEPPER, ack_value());
@@ -567,7 +570,21 @@ void parseACK(void)
         if (ack_seen("Z: ")) setParameter(P_STEPS_PER_MM, Z_STEPPER, ack_value());
         if (ack_seen("E: ")) setParameter(P_STEPS_PER_MM, E_STEPPER, ack_value());
       }
-    // parse and store Max Acceleration values
+      // parse and store Filament settings values
+      else if (ack_seen("M200"))
+      {
+        if (ack_seen("M200 S")) setParameter(P_FILAMENT_SETTING, 0, ack_value());
+        if (ack_seen("T"))
+        {
+         if (ack_seen("T0 D")) setParameter(P_FILAMENT_SETTING, 1, ack_value());
+         if (ack_seen("T1 D")) setParameter(P_FILAMENT_SETTING, 2, ack_value());
+        }
+        else
+        {
+        if (ack_seen("D")) setParameter(P_FILAMENT_SETTING, 1, ack_value());
+        }
+      }
+      // parse and store Max Acceleration values
       else if (ack_seen("M201"))
       {
         if (ack_seen("M201 X"))
@@ -576,7 +593,7 @@ void parseACK(void)
           if (ack_seen("Y")) setParameter(P_MAX_ACCELERATION, Y_STEPPER, ack_value());
           if (ack_seen("Z")) setParameter(P_MAX_ACCELERATION, Z_STEPPER, ack_value());
         }
-        if(ack_seen("T"))
+        if (ack_seen("T"))
         {
           if (ack_seen("T0 E")) setParameter(P_MAX_ACCELERATION, E_STEPPER, ack_value());
           if (ack_seen("T1 E"))
@@ -590,7 +607,7 @@ void parseACK(void)
           setParameter(P_MAX_ACCELERATION, E_STEPPER, ack_value());
         }
       }
-    // parse and store Max Feed Rate values
+      // parse and store Max Feed Rate values
       else if (ack_seen("M203"))
       {
         if (ack_seen("M203 X"))
@@ -613,14 +630,14 @@ void parseACK(void)
           setParameter(P_MAX_FEED_RATE, E_STEPPER, ack_value());
         }
       }
-    // parse and store Acceleration values
+      // parse and store Acceleration values
       else if (ack_seen("M204 P"))
       {
                            setParameter(P_ACCELERATION, 0, ack_value());
         if (ack_seen("R")) setParameter(P_ACCELERATION, 1, ack_value());
         if (ack_seen("T")) setParameter(P_ACCELERATION, 2, ack_value());
       }
-    // parse and store jerk values
+      // parse and store jerk values
       else if (ack_seen("M205"))
       {
         if (ack_seen("X")) setParameter(P_JERK, X_STEPPER, ack_value());
@@ -629,14 +646,14 @@ void parseACK(void)
         if (ack_seen("E")) setParameter(P_JERK, E_STEPPER, ack_value());
         if (ack_seen("J")) setParameter(P_JUNCTION_DEVIATION, 0, ack_value());
       }
-    // parse and store Home Offset values
+      // parse and store Home Offset values
       else if (ack_seen("M206 X"))
       {
                            setParameter(P_HOME_OFFSET, X_STEPPER, ack_value());
         if (ack_seen("Y")) setParameter(P_HOME_OFFSET, Y_STEPPER, ack_value());
         if (ack_seen("Z")) setParameter(P_HOME_OFFSET, Z_STEPPER, ack_value());
       }
-    // parse and store FW retraction values
+      // parse and store FW retraction values
       else if (ack_seen("M207 S"))
       {
                            setParameter(P_FWRETRACT, 0, ack_value());
@@ -644,7 +661,7 @@ void parseACK(void)
         if (ack_seen("F")) setParameter(P_FWRETRACT, 2, ack_value());
         if (ack_seen("Z")) setParameter(P_FWRETRACT, 3, ack_value());
       }
-    // parse and store FW recover values
+      // parse and store FW recover values
       else if (ack_seen("M208 S"))
       {
                            setParameter(P_FWRECOVER, 0, ack_value());
@@ -652,12 +669,12 @@ void parseACK(void)
         if (ack_seen("F")) setParameter(P_FWRECOVER, 2, ack_value());
         if (ack_seen("R")) setParameter(P_FWRECOVER, 3, ack_value());
       }
-    // parse and store auto FW retract state (M209 - Set Auto Retract)
+      // parse and store auto FW retract state (M209 - Set Auto Retract)
       else if (ack_seen("M209 S"))
       {
         setParameter(P_AUTO_RETRACT, 0, ack_value());
       }
-    // parse and store the software endstops state (M211)
+      // parse and store the software endstops state (M211)
       else if (ack_seen("Soft endstops"))
       {
         uint8_t curValue = infoMachineSettings.softwareEndstops;
@@ -666,27 +683,45 @@ void parseACK(void)
         if (curValue != infoMachineSettings.softwareEndstops)  // send a notification only if status is changed
           addToast(DIALOG_TYPE_INFO, dmaL2Cache);
       }
-    // parse and store Offset 2nd Nozzle
+      // parse and store Offset 2nd Nozzle
       else if (ack_seen("M218 T1 X"))
       {
                            setParameter(P_HOTEND_OFFSET, 0, ack_value());
         if (ack_seen("Y")) setParameter(P_HOTEND_OFFSET, 1, ack_value());
         if (ack_seen("Z")) setParameter(P_HOTEND_OFFSET, 2, ack_value());
       }
-    // parse and store ABL on/off state & Z fade value on M503
+      // parse and store ABL on/off state & Z fade value on M503
       else if (ack_seen("M420 S"))
       {
         if (ack_seen("S")) setParameter(P_ABL_STATE, 0, ack_value());
         if (ack_seen("Z")) setParameter(P_ABL_STATE, 1, ack_value());
       }
-    // parse and store Probe Offset values
+      // parse and store TMC Stealth Chop
+      else if (ack_seen("M569"))
+      {
+        if (ack_seen("M569 S1") && !ack_seen("T"))
+        {
+          setParameter(P_STEALTH_CHOP, X_STEPPER, ack_seen("X") ? 1 : 0);
+          setParameter(P_STEALTH_CHOP, Y_STEPPER, ack_seen("Y") ? 1 : 0);
+          setParameter(P_STEALTH_CHOP, Z_STEPPER, ack_seen("Z") ? 1 : 0);
+        }
+        if (ack_seen("S1 T0"))
+        {
+          setParameter(P_STEALTH_CHOP, E_STEPPER, 1);
+        }
+        if (ack_seen("S1 T1"))
+        {
+          setParameter(P_STEALTH_CHOP, E2_STEPPER, 1);
+        }
+      }
+      // parse and store Probe Offset values
       else if (ack_seen("M851 X"))
       {
                            setParameter(P_PROBE_OFFSET, X_STEPPER, ack_value());
         if (ack_seen("Y")) setParameter(P_PROBE_OFFSET, Y_STEPPER, ack_value());
         if (ack_seen("Z")) setParameter(P_PROBE_OFFSET, Z_STEPPER, ack_value());
       }
-    // parse and store linear advance values
+      // parse and store linear advance values
       else if (ack_seen("M900"))
       {
         if (ack_seen("T"))
@@ -699,10 +734,10 @@ void parseACK(void)
           setParameter(P_LIN_ADV, 0, ack_value());
         }
       }
-    // parse and store stepper driver current values
+      // parse and store stepper driver current values
       else if (ack_seen("M906"))
       {
-        if(ack_seen("I1"))
+        if (ack_seen("I1"))
         {
           if (ack_seen("X")) setDualStepperStatus(X_AXIS, true);
           if (ack_seen("Y")) setDualStepperStatus(Y_AXIS, true);
@@ -713,11 +748,11 @@ void parseACK(void)
           if (ack_seen("X")) setParameter(P_CURRENT, X_STEPPER, ack_value());
           if (ack_seen("Y")) setParameter(P_CURRENT, Y_STEPPER, ack_value());
           if (ack_seen("Z")) setParameter(P_CURRENT, Z_STEPPER, ack_value());
-          setParameter(P_STEALTH_CHOP, X_STEPPER, 0 );  //Sets 0 if StealthChop is off on all axes and the M569 string does not occur.
-          setParameter(P_STEALTH_CHOP, Y_STEPPER, 0 );  //Sets 0 if StealthChop is off on all axes and the M569 string does not occur.
-          setParameter(P_STEALTH_CHOP, Z_STEPPER, 0 );  //Sets 0 if StealthChop is off on all axes and the M569 string does not occur.
-          setParameter(P_STEALTH_CHOP, E_STEPPER, 0 );  //Sets 0 if StealthChop is off on all axes and the M569 string does not occur.
-          setParameter(P_STEALTH_CHOP, E2_STEPPER, 0 ); //Sets 0 if StealthChop is off on all axes and the M569 string does not occur.
+          setParameter(P_STEALTH_CHOP, X_STEPPER, 0 );   //Sets 0 if StealthChop is off on all axes and the M569 string does not occur.
+          setParameter(P_STEALTH_CHOP, Y_STEPPER, 0 );   //Sets 0 if StealthChop is off on all axes and the M569 string does not occur.
+          setParameter(P_STEALTH_CHOP, Z_STEPPER, 0 );   //Sets 0 if StealthChop is off on all axes and the M569 string does not occur.
+          setParameter(P_STEALTH_CHOP, E_STEPPER, 0 );   //Sets 0 if StealthChop is off on all axes and the M569 string does not occur.
+          setParameter(P_STEALTH_CHOP, E2_STEPPER, 0 );  //Sets 0 if StealthChop is off on all axes and the M569 string does not occur.
         }
         if (ack_seen("T"))
         {
@@ -733,7 +768,7 @@ void parseACK(void)
           setParameter(P_CURRENT, E_STEPPER, ack_value());
         }
       }
-    // parse and store TMC Hybrid Threshold Speed
+      // parse and store TMC Hybrid Threshold Speed
       else if (ack_seen("M913"))
       {
         if (ack_seen("M913 X"))
@@ -744,8 +779,8 @@ void parseACK(void)
         }
         if (ack_seen("T"))
         {
-          if(ack_seen("T0 E")) setParameter(P_HYBRID_THRESHOLD, E_STEPPER, ack_value());
-          if(ack_seen("T1 E"))
+          if (ack_seen("T0 E")) setParameter(P_HYBRID_THRESHOLD, E_STEPPER, ack_value());
+          if (ack_seen("T1 E"))
           {
             setParameter(P_HYBRID_THRESHOLD, E2_STEPPER, ack_value());
             setDualStepperStatus(E_AXIS, true);
@@ -756,41 +791,23 @@ void parseACK(void)
           setParameter(P_HYBRID_THRESHOLD, E_STEPPER, ack_value());
         }
       }
-    // parse and store TMC Bump sensitivity values
+      // parse and store TMC Bump sensitivity values
       else if (ack_seen("M914 X"))
       {
                            setParameter(P_BUMPSENSITIVITY, X_STEPPER, ack_value());
         if (ack_seen("Y")) setParameter(P_BUMPSENSITIVITY, Y_STEPPER, ack_value());
         if (ack_seen("Z")) setParameter(P_BUMPSENSITIVITY, Z_STEPPER, ack_value());
       }
-    // parse and store TMC Stealth Chop
-      else if (ack_seen("M569"))
-      {
-        if (ack_seen("M569 S1") && !ack_seen("T"))
-        {
-          setParameter(P_STEALTH_CHOP, X_STEPPER, ack_seen("X") ? 1 : 0);
-          setParameter(P_STEALTH_CHOP, Y_STEPPER, ack_seen("Y") ? 1 : 0);
-          setParameter(P_STEALTH_CHOP, Z_STEPPER, ack_seen("Z") ? 1 : 0);
-        }
-        if (ack_seen("S1 T0"))
-        {
-          setParameter(P_STEALTH_CHOP, E_STEPPER, 1 );
-        }
-        if (ack_seen("S1 T1"))
-        {
-           setParameter(P_STEALTH_CHOP, E2_STEPPER, 1 );
-        }
-      }
-    // parse and store ABL type if auto-detect is enabled
-    #if ENABLE_BL_VALUE == 1
-      else if (ack_seen("Auto Bed Leveling"))
-        infoMachineSettings.leveling = BL_ABL;
-      else if (ack_seen("Unified Bed Leveling"))
-        infoMachineSettings.leveling = BL_UBL;
-      else if (ack_seen("Mesh Bed Leveling"))
-        infoMachineSettings.leveling = BL_MBL;
-    #endif
-    // parse ABL state (M420)
+      // parse and store ABL type if auto-detect is enabled
+      #if ENABLE_BL_VALUE == 1
+        else if (ack_seen("Auto Bed Leveling"))
+          infoMachineSettings.leveling = BL_ABL;
+        else if (ack_seen("Unified Bed Leveling"))
+          infoMachineSettings.leveling = BL_UBL;
+        else if (ack_seen("Mesh Bed Leveling"))
+          infoMachineSettings.leveling = BL_MBL;
+      #endif
+      // parse ABL state (M420)
       else if (ack_seen("echo:Bed Leveling"))
       {
         if (ack_seen("ON"))
@@ -798,7 +815,7 @@ void parseACK(void)
         else
           setParameter(P_ABL_STATE, 0, DISABLED);
       }
-    // parse M115 capability report
+      // parse M115 capability report
       else if (ack_seen("FIRMWARE_NAME:"))
       {
         uint8_t *string = (uint8_t *)&dmaL2Cache[ack_index];
@@ -819,14 +836,14 @@ void parseACK(void)
           infoMachineSettings.firmwareType = FW_UNKNOWN;
           setupMachine();
         }
-        if (ack_seen("FIRMWARE_URL:")) // For Smoothieware
+        if (ack_seen("FIRMWARE_URL:"))  // For Smoothieware
           string_end = ack_index - sizeof("FIRMWARE_URL:");
-        else if (ack_seen("SOURCE_CODE_URL:")) // For Marlin
+        else if (ack_seen("SOURCE_CODE_URL:"))  // For Marlin
           string_end = ack_index - sizeof("SOURCE_CODE_URL:");
-        else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && ack_seen("ELECTRONICS")) // For RepRapFirmware
+        else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && ack_seen("ELECTRONICS"))  // For RepRapFirmware
           string_end = ack_index - sizeof("ELECTRONICS");
 
-        infoSetFirmwareName(string, string_end - string_start); // Set firmware name
+        infoSetFirmwareName(string, string_end - string_start);  // Set firmware name
 
         if (ack_seen("MACHINE_TYPE:"))
         {
@@ -840,7 +857,7 @@ void parseACK(void)
             }
             string_end = ack_index - sizeof("EXTRUDER_COUNT:");
           }
-          infoSetMachineType(string, string_end - string_start); // Set firmware name
+          infoSetMachineType(string, string_end - string_start);  // Set firmware name
         }
       }
       else if (ack_seen("Cap:EEPROM:"))
@@ -923,7 +940,7 @@ void parseACK(void)
           if (ack_seen("Z:")) infoSettings.machine_size_min[Z_AXIS] = ack_value();
         }
       }
-    // parse Repeatability Test
+      // parse Repeatability Test
       else if (ack_seen("Mean:"))
       {
         char tmpMsg[100];
@@ -956,7 +973,7 @@ void parseACK(void)
           showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
         }
       }
-    // parse and store Probe Z offset value (M851)
+      // parse and store Probe Z offset value (M851)
       else if (ack_seen("Probe Offset"))
       {
         if (ack_seen("Z:") || (ack_seen("Z")))
@@ -964,12 +981,12 @@ void parseACK(void)
           setParameter(P_PROBE_OFFSET, Z_STEPPER, ack_value());
         }
       }
-    // parse and store MBL Z offset value (from M503 (G29 S4 Zxx) or M420 V1 T1)
+      // parse and store MBL Z offset value (from M503 (G29 S4 Zxx) or M420 V1 T1)
       else if (ack_seen("G29 S4 Z") || ack_seen("mesh. Z offset:"))
       {
         setParameter(P_MBL_OFFSET, 0, ack_value());
       }
-    // parse and store flow rate percentage incase of RepRapFirmware
+      // parse and store flow rate percentage incase of RepRapFirmware
       else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && ack_seen("extruder"))
       {
         ack_index+=4;
@@ -987,33 +1004,33 @@ void parseACK(void)
         caseLightSetBrightness(ack_value());
         caseLightQuerySetWait(false);
       }
-    // parse pause message
+      // parse pause message
       else if (!infoMachineSettings.promptSupport && ack_seen("paused for user"))
       {
         setDialogText((u8*)"Printer is Paused",(u8*)"Paused for user\ncontinue?", LABEL_CONFIRM, LABEL_BACKGROUND);
         showDialog(DIALOG_TYPE_QUESTION, breakAndContinue, NULL,NULL);
       }
-    // parse ABL Complete message
+      // parse ABL Complete message
       else if (ack_seen("ABL Complete"))
       {
         ablUpdateStatus(true);
       }
-    // parse BBL Complete message
+      // parse BBL Complete message
       else if (ack_seen("BBL Complete"))
       {
         ablUpdateStatus(true);
       }
-    // parse UBL Complete message
+      // parse UBL Complete message
       else if (ack_seen("UBL Complete"))
       {
         ablUpdateStatus(true);
       }
-    // parse MBL Complete message
+      // parse MBL Complete message
       else if (ack_seen("Mesh probing done"))
       {
         mblUpdateStatus(true);
       }
-    // parse Mesh data
+      // parse Mesh data
       else if (meshIsWaitingFirstData() && (ack_seen("Mesh Bed Level data:") ||            // MBL
                                             ack_seen("Bed Topography Report for CSV:") ||  // UBL
                                             ack_seen("Bilinear Leveling Grid:") ||         // ABL Bilinear
@@ -1026,22 +1043,22 @@ void parseACK(void)
       {
         meshUpdateData(dmaL2Cache);  // continue data updating
       }
-    // parse PID Autotune finished message
+      // parse PID Autotune finished message
       else if (ack_seen("PID Autotune finished"))
       {
         pidUpdateStatus(true);
       }
-    // parse PID Autotune failed message
+      // parse PID Autotune failed message
       else if (ack_seen("PID Autotune failed"))
       {
         pidUpdateStatus(false);
       }
-    // parse error messages & Echo messages
+      // parse error messages & Echo messages
       else if (ack_seen(errormagic))
       {
         ackPopupInfo(errormagic);
       }
-    // if no known echo was found and processed, then popup the echo message
+      // if no known echo was found and processed, then popup the echo message
       else if (ack_seen(echomagic))
       {
         if (!processKnownEcho())
@@ -1049,7 +1066,7 @@ void parseACK(void)
           ackPopupInfo(echomagic);
         }
       }
-    // parse filament data from gCode (M118)
+      // parse filament data from gCode (M118)
       else if (ack_seen("filament_data"))
       {
         if (ack_seen("L:"))
@@ -1097,12 +1114,12 @@ void parseRcvGcode(void)
 {
   #ifdef SERIAL_PORT_2
     uint8_t i = 0;
-    for(i = 0; i < _UART_CNT; i++)
+    for (i = 0; i < _UART_CNT; i++)
     {
       if (i != SERIAL_PORT && infoHost.rx_ok[i] == true)
       {
         infoHost.rx_ok[i] = false;
-        while(dmaL1NotEmpty(i))
+        while (dmaL1NotEmpty(i))
         {
           syncL2CacheFromL1(i);
           storeCmdFromUART(i, dmaL2Cache);

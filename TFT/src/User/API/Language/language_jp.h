@@ -51,6 +51,7 @@
     #define STRING_HOTEND_OFFSET          "Offset 2nd Nozzle"
     #define STRING_PROBE_OFFSET           "プローブオフセット"
     #define STRING_LIN_ADVANCE            "Linear Advance"
+    #define STRING_FILAMENT_SETTING       "Filament Diameter"
     #define STRING_CURRENT_SETTING        "ドライバー電流 (mA)"
     #define STRING_BUMP_SENSITIVITY       "TMC バンプ感度"
     #define STRING_HYBRID_THRESHOLD       "TMC HybridThreshold"

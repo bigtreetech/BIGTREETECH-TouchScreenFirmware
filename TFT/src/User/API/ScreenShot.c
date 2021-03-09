@@ -3,7 +3,7 @@
 
 #if defined (SCREEN_SHOT_TO_SD)
 
-/* BMP file header 14byte */
+// BMP file header 14byte
 typedef struct __attribute__((__packed__))
 {
   uint16_t bfType;           // Must be "BM" (0x4D42), means .BMP file
@@ -13,7 +13,7 @@ typedef struct __attribute__((__packed__))
   uint32_t bfoffBits;        // The offset of the color pixel value (byte)
 } BMP_FILEHEADER;
 
-/* BMP info header 40byte */
+// BMP info header 40byte
 typedef struct __attribute__((__packed__))
 {
   uint32_t biSize;           // Size of BMP_INFOHEADER
@@ -29,12 +29,12 @@ typedef struct __attribute__((__packed__))
   uint32_t biClrImportant;   // Important color number
 } BMP_INFOHEADER;
 
-#define ALIGNMENT_4BYTE(n) (((n + 3) >> 2) << 2) //
+#define ALIGNMENT_4BYTE(n) (((n + 3) >> 2) << 2)
 
 bool screenShotBMP(char *bmp)
 {
   BMP_FILEHEADER bmp_file = {
-    .bfType = 0x4D42, // "BM"
+    .bfType = 0x4D42,  // "BM"
     .bfSize = (ALIGNMENT_4BYTE(LCD_WIDTH)  * LCD_HEIGHT) * 3 + sizeof(BMP_FILEHEADER) + sizeof(BMP_INFOHEADER),
     .bfReserved1 = 0,
     .bfReserved2 = 0,
@@ -42,11 +42,11 @@ bool screenShotBMP(char *bmp)
   };
 
   BMP_INFOHEADER bmp_info = {
-    .biSize =  sizeof(BMP_INFOHEADER), // 40byte
+    .biSize =  sizeof(BMP_INFOHEADER),  // 40byte
     .biWidth = ALIGNMENT_4BYTE(LCD_WIDTH),
     .biHeight = LCD_HEIGHT,
     .biPlanes = 1,
-    .biBitCount = 24, // 24bit depth
+    .biBitCount = 24,  // 24bit depth
     .biCompress = 0,
     .biSizeImage = (ALIGNMENT_4BYTE(LCD_WIDTH)  * LCD_HEIGHT) * 3,
     .biXPelsPerMeter = 0x1EC2,
@@ -55,8 +55,8 @@ bool screenShotBMP(char *bmp)
     .biClrImportant = 0,
   };
 
-  FIL   bmpFile;
-  UINT  mybw;
+  FIL bmpFile;
+  UINT mybw;
 
   if (f_open(&bmpFile, bmp, FA_CREATE_NEW | FA_WRITE) != FR_OK)
   {

@@ -1,7 +1,6 @@
 #include "interfaceCmd.h"
 #include "includes.h"
 
-
 GCODE_QUEUE infoCmd;
 GCODE_QUEUE infoCacheCmd;  // Only when heatHasWaiting() is false the cmd in this cache will move to infoCmd queue.
 static uint8_t cmd_index = 0;
@@ -10,7 +9,7 @@ static bool ispolling = true;
 // Is there a code character in the current gcode command.
 static bool cmd_seen(char code)
 {
-  for(cmd_index = 0; infoCmd.queue[infoCmd.index_r].gcode[cmd_index] != 0 && cmd_index < CMD_MAX_CHAR; cmd_index++)
+  for (cmd_index = 0; infoCmd.queue[infoCmd.index_r].gcode[cmd_index] != 0 && cmd_index < CMD_MAX_CHAR; cmd_index++)
   {
     if (infoCmd.queue[infoCmd.index_r].gcode[cmd_index] == code)
     {
@@ -217,12 +216,12 @@ void sendQueueCmd(void)
     cmd_index = strcspn(infoCmd.queue[infoCmd.index_r].gcode, " ") + 1;
   }
 
-  switch(infoCmd.queue[infoCmd.index_r].gcode[cmd_index])
+  switch (infoCmd.queue[infoCmd.index_r].gcode[cmd_index])
   {
     // parse M-codes
     case 'M':
       cmd = strtol(&infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 1], NULL, 10);
-      switch(cmd)
+      switch (cmd)
       {
         case 0:
           if (isPrinting())
@@ -709,6 +708,14 @@ void sendQueueCmd(void)
             }
           }
           break;
+        case 200: //M200 Set Filament Diameter
+        {
+          if (cmd_seen('S')) setParameter(P_FILAMENT_SETTING, 0, cmd_float());
+          uint8_t i = 0;
+          if (cmd_seen('T')) i = cmd_value();
+          if (cmd_seen('D')) setParameter(P_FILAMENT_SETTING, 1 + i, cmd_float());
+          break;
+        }
         case 201: //M201 Maximum Acceleration (units/s2)
         {
           if (cmd_seen('X')) setParameter(P_MAX_ACCELERATION, X_STEPPER, cmd_float());
@@ -808,8 +815,19 @@ void sendQueueCmd(void)
           //ABL state will be set through parsACK.c after receiving confirmation message from the printer
           // to prevent wrong state in case of error.
           if (cmd_seen('Z')) setParameter(P_ABL_STATE,1,cmd_float());
-        break;
-
+          break;
+        case 596: //M596 TMC StealthChop
+        {
+          uint8_t k = 0;
+          if(cmd_seen('S')) k = cmd_value();
+          if(cmd_seen('X')) setParameter(P_STEALTH_CHOP, X_STEPPER, k);
+          if(cmd_seen('Y')) setParameter(P_STEALTH_CHOP, Y_STEPPER, k);
+          if(cmd_seen('Z')) setParameter(P_STEALTH_CHOP, Z_STEPPER, k);
+          uint8_t i = 0;
+          if(cmd_seen('T')) i = cmd_value();
+          if(cmd_seen('E')) setParameter(P_STEALTH_CHOP, E_STEPPER + i, k);
+          break; 
+        }
         #ifdef NOZZLE_PAUSE_M600_M601
           case 600: //M600/M601 pause print
           case 601:
@@ -829,19 +847,7 @@ void sendQueueCmd(void)
             infoHost.wait = true;
             break;
         #endif
-        
-        case 596: //M596 TMC StealthChop
-        {
-          uint8_t k = 0;
-          if(cmd_seen('S')) k = cmd_value();
-          if(cmd_seen('X')) setParameter(P_STEALTH_CHOP, X_STEPPER, k);
-          if(cmd_seen('Y')) setParameter(P_STEALTH_CHOP, Y_STEPPER, k);
-          if(cmd_seen('Z')) setParameter(P_STEALTH_CHOP, Z_STEPPER, k);
-          uint8_t i = 0;
-          if(cmd_seen('T')) i = cmd_value();
-          if(cmd_seen('E')) setParameter(P_STEALTH_CHOP, E_STEPPER + i, k);
-          break; 
-        }
+
         case 851: //M851 Z probe offset
         {
           if (cmd_seen('X')) setParameter(P_PROBE_OFFSET, X_AXIS, cmd_float());
@@ -891,8 +897,8 @@ void sendQueueCmd(void)
       break; //end parsing M-codes
 
     case 'G':
-      cmd=strtol(&infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 1],NULL,10);
-      switch(cmd)
+      cmd=strtol(&infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 1], NULL, 10);
+      switch (cmd)
       {
         case 0: //G0
         case 1: //G1
@@ -900,7 +906,7 @@ void sendQueueCmd(void)
         case 3: //G3
         {
           AXIS i;
-          for(i=X_AXIS;i<TOTAL_AXIS;i++)
+          for (i = X_AXIS; i < TOTAL_AXIS; i++)
           {
             if (cmd_seen(axis_id[i]))
             {
@@ -952,7 +958,7 @@ void sendQueueCmd(void)
           // Set to absolute mode
           coorSetRelative(false);
           eSetRelative(false);
-          for(AXIS i = X_AXIS; i < TOTAL_AXIS; i++)
+          for (AXIS i = X_AXIS; i < TOTAL_AXIS; i++)
           {
             if (cmd_seen(axis_id[i]))
             {
