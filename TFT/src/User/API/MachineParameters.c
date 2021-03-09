@@ -14,7 +14,7 @@ const char * const parameter_Cmd[PARAMETERS_COUNT][STEPPER_COUNT] = {
     {"M207 S%.2f\n",    "M207 W%.2f\n",      "M207 F%.2f\n",      "M207 Z%.2f\n",     NULL},                //FW retract
     {"M208 S%.2f\n",    "M208 W%.2f\n",      "M208 F%.2f\n",      "M208 R%.2f\n",     NULL},                //FW retract recover
     {"M209 S%.0f\n",    NULL,                NULL,                NULL,               NULL},                //Set auto FW retract
-    {"M218 T1 X%.2f",   "M218 T1 Y%.2f\n",   "M218 T1 Z%.2f\n",   NULL,               NULL},                //Hotend Offset
+    {"M218 T1 X%.2f\n", "M218 T1 Y%.2f\n",   "M218 T1 Z%.2f\n",   NULL,               NULL},                //Hotend Offset
     {"M420 S%.0f\n",    "M420 Z%.2f\n",      NULL,                NULL,               NULL},                //ABL State + Z Fade
     {"M851 X%.2f\n",    "M851 Y%.2f\n",      "M851 Z%.2f\n",      NULL,               NULL},                //Probe offset
     {"M900 T0 K%.2f\n", "M900 T1 K%.2f\n",   NULL,                NULL,               NULL},                //Linear Advance

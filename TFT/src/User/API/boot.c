@@ -327,32 +327,47 @@ static inline void saveflashSign(uint8_t* buf, uint32_t size)
 
 void scanUpdates(void)
 {
-  //bool flashUpdate[sign_count] = {true, true, true, true};
-  uint32_t cur_flash_sign[sign_count];
-  W25Qxx_ReadBuffer((uint8_t*)&cur_flash_sign, FLASH_SIGN_ADDR, sizeof(cur_flash_sign));
-
   if (mountSDCard())
   {
+    bool flash_sign_updated = false;
+    uint32_t saved_flash_sign[sign_count];
+    W25Qxx_ReadBuffer((uint8_t*)&saved_flash_sign, FLASH_SIGN_ADDR, sizeof(saved_flash_sign));
+
     if (f_dir_exists(FONT_ROOT_DIR))
     {
       if (updateFont(FONT_ROOT_DIR "/byte_ascii.fon", BYTE_ASCII_ADDR) &&
           updateFont(FONT_ROOT_DIR "/word_unicode.fon", WORD_UNICODE) &&
-          updateFont(FONT_ROOT_DIR "/large_byte_ascii.fon", LARGE_FONT_ADDR))
-        cur_flash_sign[font_sign] = FONT_CHECK_SIGN;
+          updateFont(FONT_ROOT_DIR "/large_byte_ascii.fon", LARGE_FONT_ADDR) &&
+          (saved_flash_sign[font_sign] != FONT_CHECK_SIGN))
+      {
+        saved_flash_sign[font_sign] = FONT_CHECK_SIGN;
+        flash_sign_updated = true;
+      }
     }
     if (f_dir_exists(BMP_ROOT_DIR))
     {
-      if (updateIcon())
-        cur_flash_sign[icon_sign] = ICON_CHECK_SIGN;
+      if (updateIcon() && (saved_flash_sign[icon_sign] != ICON_CHECK_SIGN))
+      {
+        saved_flash_sign[icon_sign] = ICON_CHECK_SIGN;
+        flash_sign_updated = true;
+      }
     }
-    if (getConfigFromFile())
-      cur_flash_sign[config_sign] = CONFIG_CHECK_SIGN;
-    if (getLangFromFile())
-      cur_flash_sign[lang_sign] = LANGUAGE_CHECK_SIGN;
+    if (getConfigFromFile() && (saved_flash_sign[config_sign] != CONFIG_CHECK_SIGN))
+    {
+      saved_flash_sign[config_sign] = CONFIG_CHECK_SIGN;
+      flash_sign_updated = true;
+    }
+    if (getLangFromFile() && (saved_flash_sign[lang_sign] != LANGUAGE_CHECK_SIGN))
+    {
+      saved_flash_sign[lang_sign] = LANGUAGE_CHECK_SIGN;
+      flash_sign_updated = true;
+    }
     scanRenameUpdate();
     scanResetDir();
-    saveflashSign((uint8_t*)cur_flash_sign, sizeof(cur_flash_sign));
 
+    if (flash_sign_updated)
+    {
+      saveflashSign((uint8_t*)saved_flash_sign, sizeof(saved_flash_sign));
+    }
   }
 }
-

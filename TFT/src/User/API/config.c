@@ -772,12 +772,12 @@ void parseConfigKey(uint16_t index)
       break;
 
     case C_INDEX_PAUSE_POS:
-      if (key_seen("X")) SET_VALID_FLOAT_VALUE(infoSettings.pause_pos[X_AXIS], MIN_POS_LIMIT, MAX_SIZE_LIMIT);
-      if (key_seen("Y")) SET_VALID_FLOAT_VALUE(infoSettings.pause_pos[Y_AXIS], MIN_POS_LIMIT, MAX_SIZE_LIMIT);
+      if (key_seen("X")) SET_VALID_FLOAT_VALUE(infoSettings.pause_pos[X_AXIS], MIN_XY_POS_LIMIT, MAX_SIZE_LIMIT);
+      if (key_seen("Y")) SET_VALID_FLOAT_VALUE(infoSettings.pause_pos[Y_AXIS], MIN_XY_POS_LIMIT, MAX_SIZE_LIMIT);
       break;
 
     case C_INDEX_PAUSE_Z_RAISE:
-      SET_VALID_FLOAT_VALUE(infoSettings.pause_z_raise, MIN_POS_LIMIT, MAX_SIZE_LIMIT);
+      SET_VALID_FLOAT_VALUE(infoSettings.pause_z_raise, MIN_Z_POS_LIMIT, MAX_SIZE_LIMIT);
       break;
 
     case C_INDEX_PAUSE_FEEDRATE:
@@ -787,15 +787,15 @@ void parseConfigKey(uint16_t index)
       break;
 
     case C_INDEX_LEVEL_EDGE:
-      SET_VALID_INT_VALUE(infoSettings.level_edge, MIN_POS_LIMIT, MAX_SIZE_LIMIT);
+      SET_VALID_INT_VALUE(infoSettings.level_edge, MIN_Z_POS_LIMIT, MAX_SIZE_LIMIT);
       break;
 
     case C_INDEX_LEVEL_Z_POS:
-      SET_VALID_FLOAT_VALUE(infoSettings.level_z_pos, MIN_POS_LIMIT, MAX_SIZE_LIMIT);
+      SET_VALID_FLOAT_VALUE(infoSettings.level_z_pos, MIN_Z_POS_LIMIT, MAX_SIZE_LIMIT);
       break;
 
     case C_INDEX_LEVEL_Z_RAISE:
-      SET_VALID_FLOAT_VALUE(infoSettings.level_z_raise, MIN_POS_LIMIT, MAX_SIZE_LIMIT);
+      SET_VALID_FLOAT_VALUE(infoSettings.level_z_raise, MIN_Z_POS_LIMIT, MAX_SIZE_LIMIT);
       break;
 
     case C_INDEX_LEVEL_FEEDRATE:
@@ -807,7 +807,7 @@ void parseConfigKey(uint16_t index)
       infoSettings.xy_offset_probing = getOnOff();
       break;
 
-   case C_INDEX_Z_STEPPERS_ALIGNMENT:
+    case C_INDEX_Z_STEPPERS_ALIGNMENT:
       infoSettings.z_steppers_alignment = getOnOff();
       break;
 
