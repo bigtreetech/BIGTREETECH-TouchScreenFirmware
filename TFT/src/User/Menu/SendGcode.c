@@ -748,10 +748,10 @@ void menuTerminalWindow(void)
       terminalDrawPageNumber();
     }
 
-    getCharacterInfo((uint8_t *)(terminalBuf + lastTerminalIndex), &info);
-
     while (terminalBuf + lastTerminalIndex && (lastTerminalIndex != terminalData->terminalBufTail))
     {
+      getCharacterInfo((uint8_t *)(terminalBuf + lastTerminalIndex), &info);
+
       // Next Line
       if (cursorX + info.pixelWidth > terminalAreaRect[0].x1 ||
           (terminalBuf[lastTerminalIndex] == '\n' && cursorX != CURSOR_START_X))
