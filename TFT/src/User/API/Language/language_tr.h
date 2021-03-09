@@ -344,10 +344,10 @@
     #define STRING_EXT_TEMPLOW            "Ekstruder sıcaklığı minimum\nsıcaklığın altında (%d℃)."
     #define STRING_HEAT_HOTEND            "Ekstruderi %d℃ ye ısıt?"
     #define STRING_Z_ALIGN                "Z Hizala"
-    #define STRING_TEST_LEVEL_VALID        "test Leveling valid "
-    #define STRING_TEST_LEVEL_PLA          "test Leveling pla "
-    #define STRING_TEST_LEVEL_ABS          "test Leveling abs "
-    #define STRING_TEST_LEVEL_PTEG         "test Leveling pteg "
-    #define STRING_TEST_LEVEL_ASA          "test Leveling asa "
+    #define STRING_TEST_LEVEL_VALID        "Mesh Validation"
+    #define STRING_TEST_LEVEL_PLA          "Valid pla"
+    #define STRING_TEST_LEVEL_ABS          "Vaild abs"
+    #define STRING_TEST_LEVEL_PTEG         "Valid pteg"
+    #define STRING_TEST_LEVEL_ASA          "Valid asa"
 
 #endif

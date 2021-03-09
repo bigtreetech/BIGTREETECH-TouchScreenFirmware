@@ -28,19 +28,19 @@ void menuMeshValid(void)
     {
       //MESHVALID PLA
       case KEY_ICON_0:
-        storeCmd("G26 H205 B60 R99\n");
+        storeCmd("G26 H200 B60 R99\n");
         break;
       //MESHVALID ABS
       case KEY_ICON_1:
-        storeCmd("G26 H240 B95 R99\n");
+        storeCmd("G26 H230 B90 R99\n");
         break;
       //MESHVALID PTEG
       case KEY_ICON_2:
-        storeCmd("G26 H235 B75 R99\n");
+        storeCmd("G26 H240 B70 R99\n");
         break;
       //MESHVALID ASA 
       case KEY_ICON_3:
-        storeCmd("G26 H240 B95 R99\n");
+        storeCmd("G26 H240 B90 R99\n");
         break;
 
       case KEY_ICON_4:
