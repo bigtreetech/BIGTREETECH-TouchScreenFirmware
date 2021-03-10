@@ -109,7 +109,10 @@ char *request_M33(char *filename)
                           NULL,                  // The second error magic
                           NULL);                 // The third error magic
 
-  mustStoreCmd("M33 %s\n", filename);
+  if (filename[0] != '/')
+    mustStoreCmd("M33 /%s\n", filename); // append '/' to short file path
+  else
+    mustStoreCmd("M33 %s\n", filename);
 
   // Wait for response
   while (!requestCommandInfo.done)
@@ -158,7 +161,7 @@ long request_M23_M36(char *filename)
 
     mustStoreCmd("M36 %s\n", filename);
     offset = 6;
-    sizeTag = "size\":";  // reprap firmware reports size JSON 
+    sizeTag = "size\":";  // reprap firmware reports size JSON
   }
 
   // Wait for response

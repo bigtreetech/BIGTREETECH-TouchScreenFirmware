@@ -227,10 +227,12 @@ void sendQueueCmd(void)
           if (isPrinting())
             setPrintPause(true,true);
           break;
+
         case 1:
           if (isPrinting())
             setPrintPause(true,true);
           break;
+
         case 18: //M18/M84 disable steppers
         case 84:
           if (cmd_seen('S') && !cmd_seen('Y') && !cmd_seen('Z') && !cmd_seen('E'))
@@ -408,7 +410,7 @@ void sendQueueCmd(void)
               storeCmd("M221 D%d\n",heatGetCurrentTool());
               ispolling = true;
             }
-              break;
+            break;
 
           case 30: //M30
             if (!fromTFT)
@@ -599,6 +601,7 @@ void sendQueueCmd(void)
             }
           }
         // No break here, The data processing of M109 is the same as that of M104 below
+
         case 104: //M104
           if (fromTFT)
           {
@@ -660,6 +663,7 @@ void sendQueueCmd(void)
             }
           }
         // No break here, The data processing of M190 is the same as that of M140 below
+
         case 140: //M140
           if (fromTFT)
           {
@@ -692,6 +696,7 @@ void sendQueueCmd(void)
             }
           }
         // No break here, The data processing of M191 is the same as that of M141 below
+
         case 141: //M141
           if (fromTFT)
           {
@@ -708,6 +713,7 @@ void sendQueueCmd(void)
             }
           }
           break;
+
         case 200: //M200 Set Filament Diameter
         {
           if (cmd_seen('S')) setParameter(P_FILAMENT_SETTING, 0, cmd_float());
@@ -716,6 +722,7 @@ void sendQueueCmd(void)
           if (cmd_seen('D')) setParameter(P_FILAMENT_SETTING, 1 + i, cmd_float());
           break;
         }
+
         case 201: //M201 Maximum Acceleration (units/s2)
         {
           if (cmd_seen('X')) setParameter(P_MAX_ACCELERATION, X_STEPPER, cmd_float());
@@ -726,6 +733,7 @@ void sendQueueCmd(void)
           if (cmd_seen('E')) setParameter(P_MAX_ACCELERATION, E_STEPPER + i, cmd_float());
           break;
         }
+
         case 203: //M203 Maximum feedrates (units/s)
         {
           if (cmd_seen('X')) setParameter(P_MAX_FEED_RATE, X_STEPPER, cmd_float());
@@ -736,11 +744,13 @@ void sendQueueCmd(void)
           if (cmd_seen('E')) setParameter(P_MAX_FEED_RATE, E_STEPPER + i, cmd_float());
           break;
         }
+
         case 204: //M204 Acceleration (units/s2)
           if (cmd_seen('P')) setParameter(P_ACCELERATION, 0, cmd_float());
           if (cmd_seen('R')) setParameter(P_ACCELERATION, 1, cmd_float());
           if (cmd_seen('T')) setParameter(P_ACCELERATION, 2, cmd_float());
           break;
+
         case 205: //M205 - Set Advanced Settings
           if (cmd_seen('X')) setParameter(P_JERK, X_AXIS, cmd_float());
           if (cmd_seen('Y')) setParameter(P_JERK, Y_AXIS, cmd_float());
@@ -748,31 +758,38 @@ void sendQueueCmd(void)
           if (cmd_seen('E')) setParameter(P_JERK, E_AXIS, cmd_float());
           if (cmd_seen('J')) setParameter(P_JUNCTION_DEVIATION, 0, cmd_float());
           break;
+
         case 206: //M206 Home offset
           if (cmd_seen('X')) setParameter(P_HOME_OFFSET, X_AXIS, cmd_float());
           if (cmd_seen('Y')) setParameter(P_HOME_OFFSET, Y_AXIS, cmd_float());
           if (cmd_seen('Z')) setParameter(P_HOME_OFFSET, Z_AXIS, cmd_float());
           break;
+
         case 207: //M207 FW Retract
           if (cmd_seen('S')) setParameter(P_FWRETRACT, 0, cmd_float());
           if (cmd_seen('W')) setParameter(P_FWRETRACT, 1, cmd_float());
           if (cmd_seen('F')) setParameter(P_FWRETRACT, 2, cmd_float());
           if (cmd_seen('Z')) setParameter(P_FWRETRACT, 3, cmd_float());
           break;
+
         case 208: //M208 FW Retract recover
           if (cmd_seen('S')) setParameter(P_FWRECOVER, 0, cmd_float());
           if (cmd_seen('W')) setParameter(P_FWRECOVER, 1, cmd_float());
           if (cmd_seen('F')) setParameter(P_FWRECOVER, 2, cmd_float());
           if (cmd_seen('R')) setParameter(P_FWRECOVER, 3, cmd_float());
           break;
+
         case 218: //M218 Hotend Offset
           if (cmd_seen('X')) setParameter(P_HOTEND_OFFSET, X_AXIS, cmd_float());
           if (cmd_seen('Y')) setParameter(P_HOTEND_OFFSET, Y_AXIS, cmd_float());
           if (cmd_seen('Z')) setParameter(P_HOTEND_OFFSET, Z_AXIS, cmd_float());
+          break;
+
         case 220: //M220
           if (cmd_seen('S'))
             speedSetCurPercent(0,cmd_value());
           break;
+
         case 221: //M221
           if (cmd_seen('S'))
             speedSetCurPercent(1,cmd_value());
@@ -796,6 +813,7 @@ void sendQueueCmd(void)
             }
             break;
         #endif
+
         case 355: //M355
         {
           if (cmd_seen('S'))
@@ -808,14 +826,15 @@ void sendQueueCmd(void)
             caseLightSetBrightness(cmd_value());
             caseLightSendWaiting(false);
           }
-
           break;
         }
+
         case 420: //M420
           //ABL state will be set through parsACK.c after receiving confirmation message from the printer
           // to prevent wrong state in case of error.
           if (cmd_seen('Z')) setParameter(P_ABL_STATE,1,cmd_float());
           break;
+
         case 596: //M596 TMC StealthChop
         {
           uint8_t k = 0;
@@ -828,6 +847,7 @@ void sendQueueCmd(void)
           if(cmd_seen('E')) setParameter(P_STEALTH_CHOP, E_STEPPER + i, k);
           break; 
         }
+
         #ifdef NOZZLE_PAUSE_M600_M601
           case 600: //M600/M601 pause print
           case 601:
@@ -855,6 +875,7 @@ void sendQueueCmd(void)
           if (cmd_seen('Z')) setParameter(P_PROBE_OFFSET, Z_AXIS, cmd_float());
           break;
         }
+
         case 900: //M900 Linear advance
         {
           uint8_t i = 0;
@@ -862,6 +883,7 @@ void sendQueueCmd(void)
           if (cmd_seen('K')) setParameter(P_LIN_ADV, i, cmd_float());
           break;
         }
+
         case 906: //M906 Stepper driver current
         {
           if (cmd_seen('X')) setParameter(P_CURRENT, X_AXIS, cmd_value());
@@ -878,6 +900,7 @@ void sendQueueCmd(void)
           if (cmd_seen('E')) setParameter(P_CURRENT, E_STEPPER + i, cmd_value());
           break;
         }
+
         case 913: //M913 Hybrid Threshold Speed
         {
           if (cmd_seen('X')) setParameter(P_HYBRID_THRESHOLD, X_STEPPER, cmd_value());
@@ -888,6 +911,7 @@ void sendQueueCmd(void)
           if (cmd_seen('E')) setParameter(P_HYBRID_THRESHOLD, E_STEPPER + i, cmd_value());
           break;
         }
+
         case 914: //parse and store TMC Bump sensitivity values
           if (cmd_seen('X')) setParameter(P_BUMPSENSITIVITY, X_STEPPER, cmd_value());
           if (cmd_seen('Y')) setParameter(P_BUMPSENSITIVITY, Y_STEPPER, cmd_value());
