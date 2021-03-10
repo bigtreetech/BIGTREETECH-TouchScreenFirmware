@@ -43,18 +43,15 @@ const GUI_RECT macroTitleRect = {10, (TITLE_END_Y - BYTE_HEIGHT) / 2, LCD_WIDTH 
 const int16_t labelMacroError[] = {LABEL_READ_TFTSD_ERROR, LABEL_READ_U_DISK_ERROR, LABEL_READ_ONBOARDSD_ERROR};
 /****/
 
-/*** TODOS: proper subdirectory support, move away from half-using Vfs functions ***/
+/*** 
+ * TODOS:
+ *  proper subdirectory support,
+ *  move away from half-using Vfs functions,
+ *  sort order: Number_files first in order, hide Number_; alphabetical, directories alphabetical
+ ***/
 
 /************************************************************************/
 
-bool request_M988(char *filename)
-{
-  char command[100];
-  sprintf(command, "M98 P/macros/%s\n", filename);
-  mustStoreCmd(command);
-
-  return true;
-}
 /*
 */
 bool setMacroFile(char *nextdir)
