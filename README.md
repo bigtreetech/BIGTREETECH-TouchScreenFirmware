@@ -57,9 +57,9 @@ In case one of the three points above is not done right, "No printer attached" w
 
 A: In case your TFT does **not** have an EXP connector at all (TFT28 v1 for example), you can not use the Marlin emulator mode.
 
-B: In case your mainboard provides **EXP1 and EXP2**, you have to connect 2 ribbon cables connecting EXP1 and EXP2 of the mainboard to EXP1 and EXP2 of the TFT. In the Marlin firmware of your mainboard, make sure that **ONLY** the "REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER" is activated in Configuration.h and that all other controllers (especially the "CR10_STOCKDISPLAY") are **De**activated.
+B: In case your mainboard provides **EXP1 and EXP2**, you have to connect 2 ribbon cables connecting EXP1 and EXP2 of the mainboard to EXP1 and EXP2 of the TFT. In the Marlin firmware of your mainboard, make sure that **ONLY** the "REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER" is activated in Configuration.h and that all other controllers are **De**activated (especially the "CR10_STOCKDISPLAY").
 
-C: In case you have an **"E3" mainboard** which provides a **single EXP connector**, you have to connect 1 ribbon cable connecting EXP of the mainboard to **EXP3** of the TFT. In case your TFT does **not** provide an EXP3 connector but only two 10pin connectors (TFT24 v1.1 for example) you will need a "Y-split" cable with one 10pin connector on one side (for the mainboard) and two 10pin connectors on the other side (for the TFT). In the Marlin firmware of your mainboard, make sure that **ONLY** the "CR10_STOCKDISPLAY" is activated in Configuration.h and that all other controllers (especially the "REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER") are **De**activated.
+C: In case you have an **"E3" mainboard** which provides a **single EXP connector**, you have to connect 1 ribbon cable connecting EXP of the mainboard to **EXP3** of the TFT. In case your TFT does **not** provide an EXP3 connector but only two 10pin connectors (TFT24 v1.1 for example) you will need a "Y-split" cable with one 10pin connector on one side (for the mainboard) and two 10pin connectors on the other side (for the TFT). In the Marlin firmware of your mainboard, make sure that **ONLY** the "CR10_STOCKDISPLAY" is activated in Configuration.h and that all other controllers are **De**activated (especially the "REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER").
 
 ![Screenshot 2021-03-07 at 22 41 02](https://user-images.githubusercontent.com/54359396/110255941-96fe4400-7f96-11eb-93b9-199c5be14eb8.png)
 
@@ -67,7 +67,7 @@ This chart has been provided by user Thomas White
 
 ## Menus
 
-|              Main Screen Status Screen DISABLED              |              Main Screen Status Screen ENABLED               |
+|                    Status Screen DISABLED                    |                    Status Screen ENABLED                     |
 | :----------------------------------------------------------: | :----------------------------------------------------------: |
 | ![status screen 0](https://user-images.githubusercontent.com/54359396/103319145-09035b80-4a31-11eb-91d0-dd761a48b6f5.png) | ![Unified Material Main Screen](https://user-images.githubusercontent.com/54359396/98742038-03cd4d00-23ae-11eb-9552-36dc02fe66f4.png) |
 | In config.ini define: General Settings<br/>Enable Status Screen<br/># Select the Main Screen flavour<br/># Options: [Enable: 1, Disable: 0]<br/>**status_screen: 0** | In config.ini define: General Settings<br/>Enable Status Screen<br/># Select the Main Screen flavour<br/># Options: [Enable: 1, Disable: 0]<br/>**status_screen: 1** |
@@ -95,24 +95,24 @@ The TFT firmware update is done in three steps described below and includes up t
 
 **ELEMENTS:**
 
-**element1:** The firmware binary (`BIGTREE_TFT*_V*.*.*.bin`). Example: `BIGTREE_TFT35_V3.0.26.1.bin`:
+**element 1:** The firmware binary (`BIGTREE_TFT*_V*.*.*.bin`). Example: `BIGTREE_TFT35_V3.0.26.1.bin`:
 
 - `BIGTREE_TFT_35`: model
 - `V3.0`: hardware version
 - `26.1`: software version
 
-**element2:** Fonts and Icons (`TFT*` folder): Example: TFT35, which includes:
+**element 2:** Fonts and Icons (`TFT*` folder): Example: TFT35, which includes:
 
 - `TFT*/font`: fonts
 - `TFT*/bmp`: icons
 
-**element3:** The config.ini file
+**element 3:** The config.ini file
 
-**element4:**  One or several language file(s) **(optionally)**
+**element 4:**  One or several language file(s) **(optionally)**
 
 **STEPS:**
 
-**step1:** Copy your self compiled firmware or the BIGTREE_TFT*_V*.*.*.bin, plus the TFT*` folder and the config.ini to the root of a blank SD card that is <8GB and formatted as FAT32:
+**step 1:** Copy your self compiled firmware or the BIGTREE_TFT*_V*.*.*.bin, plus the TFT*` folder of your prefferred Material theme as well as the config.ini to the root of a blank SD card that is <8GB and formatted as FAT32:
 
 ![Firmware](https://user-images.githubusercontent.com/54359396/100600549-b6cffd00-3301-11eb-8b57-d56b7a4422f1.jpg)
 
@@ -120,8 +120,7 @@ The TFT firmware update is done in three steps described below and includes up t
 
 ![Language Pack](https://user-images.githubusercontent.com/54359396/100600564-b9caed80-3301-11eb-8997-d376f05323f6.jpg)
 
-
-**step2:** Place SD card with the `BIGTREE_TFT*_V*.*.*.bin`, the`TFT*` folder and the config.ini into the TFT's SD card reader and reset your TFT (or optionally - power cycle your printer) to start the update process.
+**step 2:** Place SD card with the `BIGTREE_TFT*_V*.*.*.bin`, the`TFT*` folder and the config.ini into the TFT's SD card reader and reset your TFT (or optionally - power cycle your printer) to start the update process.
 
 <p align=center> ⚠️ Failing to update your icons &amp; fonts will result in missing icons and/or unreadable text ⚠️ </p>
 
@@ -236,8 +235,6 @@ To reset the TFT's touch screen calibration, create a blank file named  "reset" 
 **Worst Case Scenario**
 
 In case the screen remains black or the brightness is not stable, the screen does not react after pressing a button or executes clicks by itself or does something similar - and the reset described above did not help - do the following. Remove the TFT from the enclosure and disconnect everything from the TFT, including the cable to the mainboard. Cut a USB cable you do not need anymore and connect the red and black wire to 5V and GND of the TFT. Do not use the unshielded wires directly but use a 2 pin connector instead. Power up the TFT and try to reset the TFT or to instal a new firmware like described in this document. With only power supplied, you should be able to navigate through the menus using the touchscreen and even to switch to Marlin Emulation (if available), even the Marlin Emulation screen will not show the interface with a proper EXP based connection.
-
-
 
 
 
