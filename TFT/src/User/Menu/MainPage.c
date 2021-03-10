@@ -23,7 +23,8 @@ void menuMain(void)
       {ICON_BACK,                    LABEL_BACK},
     }
   };
-  if (infoSettings.rrf_macros_enable) {
+  if (infoSettings.rrf_macros_enable)
+  {
     mainPageItems.items[5].label.index = LABEL_MACROS;
   }
 

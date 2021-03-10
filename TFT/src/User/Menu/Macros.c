@@ -199,7 +199,7 @@ void menuStartMacro(void)
   Delay_ms(500);
   infoMenu.cur--;
 
-//  loopProcess();
+  //  loopProcess();
 }
 
 void menuExecMacro(void)
