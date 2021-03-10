@@ -9,6 +9,7 @@ void loadNotificationItems(void)
   for (uint8_t i = 0; i < MAX_MSG_COUNT; i++)
   {
     NOTIFICATION * tempNotify = getNotification(i);
+
     if (tempNotify != NULL)
     {
       switch (tempNotify->style)
@@ -16,13 +17,16 @@ void loadNotificationItems(void)
         case DIALOG_TYPE_ERROR:
           itemlist->items[i].icon = ICONCHAR_ERROR;
           break;
+
         case DIALOG_TYPE_ALERT:
           itemlist->items[i].icon = ICONCHAR_ALERT;
           break;
+
         default:
           itemlist->items[i].icon = ICONCHAR_INFO;
           break;
       }
+
       itemlist->items[i].titlelabel.address = tempNotify->text;
       n++;
     }
@@ -30,6 +34,7 @@ void loadNotificationItems(void)
     {
       itemlist->items[i].icon = ICONCHAR_BACKGROUND;
     }
+
     menuDrawListItem(&itemlist->items[i], i);
   }
   //return n;
@@ -53,6 +58,7 @@ void menuNotification(void)
   };
 
   KEY_VALUES key_num = KEY_IDLE;
+
   menuDrawListPage(&notificationItems);
 
   loadNotificationItems();
@@ -68,17 +74,22 @@ void menuNotification(void)
       case KEY_ICON_2:
         replayNotification(key_num);
         break;
+
       case KEY_ICON_5:
         clearNotification();
         loadNotificationItems();
         break;
+
       case KEY_ICON_7:
         infoMenu.cur--;
         break;
+
       default:
         break;
     }
+
     loopProcess();
   }
+
   setNotificationHandler(NULL);
 }

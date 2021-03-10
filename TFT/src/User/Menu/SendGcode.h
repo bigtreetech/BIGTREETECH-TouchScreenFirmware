@@ -11,9 +11,8 @@ typedef enum
   TERMINAL_ACK,
 } TERMINAL_SRC;
 
-void menuSendGcode(void);
 void menuTerminal(void);
-void sendGcodeTerminalCache(char *stream, TERMINAL_SRC src);
+void terminalCache(char *stream, TERMINAL_SRC src);
 
 #ifdef __cplusplus
 }

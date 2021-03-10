@@ -241,18 +241,19 @@ void menuEmulatorFontColor(void)
 void menuMarlinModeSettings(void)
 {
   LISTITEMS marlinModeitems = {
-  // title
-  LABEL_MARLIN_MODE_SETTINGS,
-  // icon                 ItemType      Item Title        item value text(only for custom value)
-  {
-    {ICONCHAR_FONT_COLOR,       LIST_CUSTOMVALUE, LABEL_FONT_COLOR,        LABEL_CUSTOM},
-    {ICONCHAR_BACKGROUND_COLOR, LIST_CUSTOMVALUE, LABEL_BG_COLOR,          LABEL_CUSTOM},
-    {ICONCHAR_TOGGLE_ON,        LIST_TOGGLE,      LABEL_MARLIN_SHOW_TITLE, LABEL_BACKGROUND},
-    {ICONCHAR_TOGGLE_ON,        LIST_TOGGLE,      LABEL_MARLIN_FULLSCREEN, LABEL_BACKGROUND},
-    {ICONCHAR_BLANK,            LIST_CUSTOMVALUE, LABEL_MARLIN_TYPE,       LABEL_DYNAMIC},
-    {ICONCHAR_BACKGROUND,       LIST_LABEL,       LABEL_BACKGROUND,        LABEL_BACKGROUND},
-    {ICONCHAR_BACKGROUND,       LIST_LABEL,       LABEL_BACKGROUND,        LABEL_BACKGROUND},
-    {ICONCHAR_BACK,             LIST_LABEL,       LABEL_BACKGROUND,        LABEL_BACKGROUND},}
+    // title
+    LABEL_MARLIN_MODE_SETTINGS,
+    // icon                       ItemType          Item Title               item value text(only for custom value)
+    {
+      {ICONCHAR_FONT_COLOR,       LIST_CUSTOMVALUE, LABEL_FONT_COLOR,        LABEL_CUSTOM},
+      {ICONCHAR_BACKGROUND_COLOR, LIST_CUSTOMVALUE, LABEL_BG_COLOR,          LABEL_CUSTOM},
+      {ICONCHAR_TOGGLE_ON,        LIST_TOGGLE,      LABEL_MARLIN_SHOW_TITLE, LABEL_BACKGROUND},
+      {ICONCHAR_TOGGLE_ON,        LIST_TOGGLE,      LABEL_MARLIN_FULLSCREEN, LABEL_BACKGROUND},
+      {ICONCHAR_BLANK,            LIST_CUSTOMVALUE, LABEL_MARLIN_TYPE,       LABEL_DYNAMIC},
+      {ICONCHAR_BACKGROUND,       LIST_LABEL,       LABEL_BACKGROUND,        LABEL_BACKGROUND},
+      {ICONCHAR_BACKGROUND,       LIST_LABEL,       LABEL_BACKGROUND,        LABEL_BACKGROUND},
+      {ICONCHAR_BACK,             LIST_LABEL,       LABEL_BACKGROUND,        LABEL_BACKGROUND},
+    }
   };
 
   for (uint8_t i = 0; i < LCD_COLOR_COUNT; i++)
@@ -276,7 +277,7 @@ void menuMarlinModeSettings(void)
   while (infoMenu.menu[infoMenu.cur] == menuMarlinModeSettings)
   {
     key_num = menuKeyGetValue();
-    switch(key_num)
+    switch (key_num)
     {
       case KEY_ICON_0:
         infoMenu.menu[++infoMenu.cur] = menuEmulatorFontColor;
@@ -311,6 +312,7 @@ void menuMarlinModeSettings(void)
       default:
         break;
     }
+
     loopProcess();
   }
 
@@ -327,18 +329,19 @@ void menuMarlinModeSettings(void)
 void menuSoundSettings(void)
 {
   LISTITEMS sounditems = {
-  // title
-  LABEL_FEATURE_SETTINGS,
-  // icon                 ItemType      Item Title        item value text(only for custom value)
-  {
-    {ICONCHAR_TOGGLE_ON, LIST_TOGGLE,  LABEL_TOUCH_SOUND,  LABEL_BACKGROUND},
-    {ICONCHAR_TOGGLE_ON, LIST_TOGGLE,  LABEL_TOAST_SOUND,  LABEL_BACKGROUND},
-    {ICONCHAR_TOGGLE_ON, LIST_TOGGLE,  LABEL_ALERT_SOUND,  LABEL_BACKGROUND},
-    {ICONCHAR_TOGGLE_ON, LIST_TOGGLE,  LABEL_HEATER_SOUND, LABEL_BACKGROUND},
-    {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND,   LABEL_BACKGROUND},
-    {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND,   LABEL_BACKGROUND},
-    {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND,   LABEL_BACKGROUND},
-    {ICONCHAR_BACK,       LIST_LABEL,  LABEL_BACKGROUND,   LABEL_BACKGROUND},}
+    // title
+    LABEL_FEATURE_SETTINGS,
+    // icon                 ItemType     Item Title          item value text(only for custom value)
+    {
+      {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE, LABEL_TOUCH_SOUND,  LABEL_BACKGROUND},
+      {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE, LABEL_TOAST_SOUND,  LABEL_BACKGROUND},
+      {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE, LABEL_ALERT_SOUND,  LABEL_BACKGROUND},
+      {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE, LABEL_HEATER_SOUND, LABEL_BACKGROUND},
+      {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND,   LABEL_BACKGROUND},
+      {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND,   LABEL_BACKGROUND},
+      {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND,   LABEL_BACKGROUND},
+      {ICONCHAR_BACK,       LIST_LABEL,  LABEL_BACKGROUND,   LABEL_BACKGROUND},
+    }
   };
 
   sounditems.items[0].icon = (infoSettings.touchSound == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
@@ -387,6 +390,7 @@ void menuSoundSettings(void)
       default:
         break;
     }
+
     loopProcess();
   }
 
@@ -402,39 +406,40 @@ void menuSoundSettings(void)
 
 void menuBrightnessSettings(void)
 {
- LISTITEMS brightnessitems = {
-  // title
-  LABEL_LCD_BRIGHTNESS,
-  // icon                 ItemType      Item Title        item value text(only for custom value)
-  {
-    {ICONCHAR_BLANK,          LIST_CUSTOMVALUE, LABEL_LCD_BRIGHTNESS,      LABEL_DYNAMIC},
-    {ICONCHAR_BLANK,          LIST_CUSTOMVALUE, LABEL_LCD_IDLE_BRIGHTNESS, LABEL_DYNAMIC},
-    {ICONCHAR_BLANK,          LIST_CUSTOMVALUE, LABEL_LCD_IDLE_DELAY,      LABEL_DYNAMIC},
-    {ICONCHAR_BACKGROUND,     LIST_LABEL,       LABEL_BACKGROUND,          LABEL_BACKGROUND},
-    {ICONCHAR_BACKGROUND,     LIST_LABEL,       LABEL_BACKGROUND,          LABEL_BACKGROUND},
-    {ICONCHAR_BACKGROUND,     LIST_LABEL,       LABEL_BACKGROUND,          LABEL_BACKGROUND},
-    {ICONCHAR_BACKGROUND,     LIST_LABEL,       LABEL_BACKGROUND,          LABEL_BACKGROUND},
-    {ICONCHAR_BACK,           LIST_LABEL,       LABEL_BACKGROUND,          LABEL_BACKGROUND},}
+  LISTITEMS brightnessitems = {
+    // title
+    LABEL_LCD_BRIGHTNESS,
+    // icon                 ItemType          Item Title                 item value text(only for custom value)
+    {
+      {ICONCHAR_BLANK,      LIST_CUSTOMVALUE, LABEL_LCD_BRIGHTNESS,      LABEL_DYNAMIC},
+      {ICONCHAR_BLANK,      LIST_CUSTOMVALUE, LABEL_LCD_IDLE_BRIGHTNESS, LABEL_DYNAMIC},
+      {ICONCHAR_BLANK,      LIST_CUSTOMVALUE, LABEL_LCD_IDLE_DELAY,      LABEL_DYNAMIC},
+      {ICONCHAR_BACKGROUND, LIST_LABEL,       LABEL_BACKGROUND,          LABEL_BACKGROUND},
+      {ICONCHAR_BACKGROUND, LIST_LABEL,       LABEL_BACKGROUND,          LABEL_BACKGROUND},
+      {ICONCHAR_BACKGROUND, LIST_LABEL,       LABEL_BACKGROUND,          LABEL_BACKGROUND},
+      {ICONCHAR_BACKGROUND, LIST_LABEL,       LABEL_BACKGROUND,          LABEL_BACKGROUND},
+      {ICONCHAR_BACK,       LIST_LABEL,       LABEL_BACKGROUND,          LABEL_BACKGROUND},
+    }
   };
 
   KEY_VALUES key_num = KEY_IDLE;
   SETTINGS now = infoSettings;
+  char tempstr[8];
 
-    char tempstr[8];
-    sprintf(tempstr, (char *)textSelect(LABEL_PERCENT_VALUE), LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
-    setDynamicTextValue(KEY_ICON_0, tempstr);
+  sprintf(tempstr, (char *)textSelect(LABEL_PERCENT_VALUE), LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
+  setDynamicTextValue(KEY_ICON_0, tempstr);
 
-    sprintf(tempstr, (char *)textSelect(LABEL_PERCENT_VALUE), LCD_BRIGHTNESS[infoSettings.lcd_idle_brightness]);
-    setDynamicTextValue(KEY_ICON_1, tempstr);
+  sprintf(tempstr, (char *)textSelect(LABEL_PERCENT_VALUE), LCD_BRIGHTNESS[infoSettings.lcd_idle_brightness]);
+  setDynamicTextValue(KEY_ICON_1, tempstr);
 
-    brightnessitems.items[KEY_ICON_2].valueLabel = itemDimTime[infoSettings.lcd_idle_timer];
+  brightnessitems.items[KEY_ICON_2].valueLabel = itemDimTime[infoSettings.lcd_idle_timer];
 
   menuDrawListPage(&brightnessitems);
 
   while (infoMenu.menu[infoMenu.cur] == menuBrightnessSettings)
   {
     key_num = menuKeyGetValue();
-    switch(key_num)
+    switch (key_num)
     {
       case KEY_ICON_0:
       {
@@ -474,6 +479,7 @@ void menuBrightnessSettings(void)
       default:
         break;
     }
+
     loopProcess();
   }
 
@@ -488,24 +494,26 @@ void menuBrightnessSettings(void)
 void menuScreenSettings(void)
 {
   MENUITEMS screenSettingsItems = {
-  // title
-  LABEL_SCREEN_SETTINGS,
-  // icon                       label
-   {
-    {ICON_ROTATE_UI,          LABEL_ROTATE_UI},
-    {ICON_TOUCHSCREEN_ADJUST, LABEL_TOUCHSCREEN_ADJUST},
-    {ICON_LANGUAGE,           LABEL_LANGUAGE},
-    {ICON_BACKGROUND,         LABEL_BACKGROUND},
-    {ICON_BACKGROUND,         LABEL_BACKGROUND},
-    {ICON_BACKGROUND,         LABEL_BACKGROUND},
-    {ICON_BACKGROUND,         LABEL_BACKGROUND},
-    {ICON_BACK,               LABEL_BACK}}
+    // title
+    LABEL_SCREEN_SETTINGS,
+    // icon                          label
+    {
+      {ICON_ROTATE_UI,               LABEL_ROTATE_UI},
+      {ICON_TOUCHSCREEN_ADJUST,      LABEL_TOUCHSCREEN_ADJUST},
+      {ICON_LANGUAGE,                LABEL_LANGUAGE},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_BACK,                    LABEL_BACK},
+    }
   };
 
   #ifdef LCD_LED_PWM_CHANNEL
     screenSettingsItems.items[KEY_INDEX_BRIGHTNESS].icon = ICON_BRIGHTNESS;
     screenSettingsItems.items[KEY_INDEX_BRIGHTNESS].label.index = LABEL_LCD_BRIGHTNESS;
   #endif
+
   //load buzzer icon
   #ifdef BUZZER_PIN
     screenSettingsItems.items[KEY_INDEX_BUZZER].icon = ICON_SOUND;
@@ -523,10 +531,10 @@ void menuScreenSettings(void)
 
   menuDrawPage(&screenSettingsItems);
 
-  while(infoMenu.menu[infoMenu.cur] == menuScreenSettings)
+  while (infoMenu.menu[infoMenu.cur] == menuScreenSettings)
   {
     key_num = menuKeyGetValue();
-    switch(key_num)
+    switch (key_num)
     {
       case KEY_ICON_0:
         infoSettings.rotate_ui = !infoSettings.rotate_ui;
@@ -573,10 +581,11 @@ void menuScreenSettings(void)
       default:
         break;
     }
+
     loopProcess();
   }
 
-  if(memcmp(&now, &infoSettings, sizeof(SETTINGS)))
+  if (memcmp(&now, &infoSettings, sizeof(SETTINGS)))
   {
     storePara();
   }

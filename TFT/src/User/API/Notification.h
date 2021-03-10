@@ -7,30 +7,30 @@ extern "C" {
 
 #include "menu.h"
 
-#define TOAST_X_PAD           START_X
-#define TOAST_Y_PAD           3
+#define TOAST_X_PAD          START_X
+#define TOAST_Y_PAD          3
 
-#define TOAST_MSG_COUNT       3
-#define TOAST_MSG_LENGTH      35
-#define TOAST_DISPLAY_LENGTH  TOAST_MSG_LENGTH
+#define TOAST_MSG_COUNT      3
+#define TOAST_MSG_LENGTH     35
+#define TOAST_DISPLAY_LENGTH TOAST_MSG_LENGTH
 
-#define MAX_MSG_COUNT         3
-#define MAX_MSG_TITLE_LENGTH  15
-#define MAX_MSG_LENGTH        70
+#define MAX_MSG_COUNT        3
+#define MAX_MSG_TITLE_LENGTH 15
+#define MAX_MSG_LENGTH       70
 
 typedef struct
 {
   DIALOG_TYPE style;
   uint8_t isNew;
   char text[TOAST_MSG_LENGTH];
-}TOAST;
+} TOAST;
 
 typedef struct
 {
   DIALOG_TYPE style;
   char title[MAX_MSG_TITLE_LENGTH];
   char text[MAX_MSG_LENGTH];
-}NOTIFICATION;
+} NOTIFICATION;
 
 bool toastRunning(void);
 void addToast(DIALOG_TYPE style, char * text);

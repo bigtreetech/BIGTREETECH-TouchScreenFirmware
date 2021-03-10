@@ -1,9 +1,9 @@
 #include "Popup.h"
 #include "includes.h"
 
-#define X_MAX_CHAR      (LCD_WIDTH / BYTE_WIDTH)
-#define MAX_MSG_LINES   4
-#define POPUP_MAX_CHAR  (X_MAX_CHAR * MAX_MSG_LINES)
+#define X_MAX_CHAR     (LCD_WIDTH / BYTE_WIDTH)
+#define MAX_MSG_LINES  4
+#define POPUP_MAX_CHAR (X_MAX_CHAR * MAX_MSG_LINES)
 
 static BUTTON bottomSingleBtn = {
   //button location                       color before pressed   color after pressed
@@ -93,7 +93,7 @@ void popupDrawPage(DIALOG_TYPE type, BUTTON * btn, const uint8_t * title, const 
   }
 }
 
-static void menuDialog(void)
+void menuDialog(void)
 {
   while (infoMenu.menu[infoMenu.cur] == menuDialog)
   {

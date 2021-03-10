@@ -61,7 +61,7 @@ void infoSettingsReset(void)
   infoSettings.min_ext_temp           = PREVENT_COLD_EXTRUSION_MINTEMP;
   infoSettings.auto_load_leveling     = AUTO_SAVE_LOAD_BL_VALUE;
   infoSettings.touchmi_sensor         = TOUCHMI_SENSOR_VALUE;
-  infoSettings.onboardSD              = AUTO;                        //ENABLED / DISABLED / AUTO
+  infoSettings.onboardSD              = AUTO;  //ENABLED / DISABLED / AUTO
   infoSettings.m27_refresh_time       = M27_REFRESH;
   infoSettings.m27_active             = M27_WATCH_OTHER_SOURCES;
   infoSettings.longFileName           = AUTO;  //ENABLED / DISABLED / AUTO
@@ -77,7 +77,7 @@ void infoSettingsReset(void)
   infoSettings.level_z_pos            = LEVELING_POINT_Z;
   infoSettings.level_z_raise          = LEVELING_POINT_MOVE_Z;
 
-  infoSettings.move_speed             = 1; // index on infoSettings.axis_speed, infoSettings.ext_speed
+  infoSettings.move_speed             = 1;  // index on infoSettings.axis_speed, infoSettings.ext_speed
 
 // Power Supply Settings
   infoSettings.auto_off               = DISABLED;
@@ -126,14 +126,14 @@ void infoSettingsReset(void)
     infoSettings.fan_max[i]           = default_max_fanPWM[i];
   }
 
-  for (int i = 0; i < AXIS_NUM; i++) //x, y, z
+  for (int i = 0; i < AXIS_NUM; i++)  //x, y, z
   {
     infoSettings.invert_axis[i]       = DISABLED;
     infoSettings.machine_size_min[i]  = default_size_min[i];
     infoSettings.machine_size_max[i]  = default_size_max[i];
   }
 
-  for (int i = 0; i < FEEDRATE_COUNT - 1 ; i++) //xy, z
+  for (int i = 0; i < FEEDRATE_COUNT - 1 ; i++)  //xy, z
   {
     infoSettings.level_feedrate[i]    = default_level_speed[i];
   }
@@ -161,7 +161,7 @@ void infoSettingsReset(void)
 void initMachineSetting(void)
 {
   // some settings are assumes as active unless reported disabled by marlin
-  infoMachineSettings.firmwareType            = FW_NOT_DETECTED; // set fimware type to not_detected to avoid repeated ABL gcode on mode change
+  infoMachineSettings.firmwareType            = FW_NOT_DETECTED;  // set fimware type to not_detected to avoid repeated ABL gcode on mode change
   infoMachineSettings.EEPROM                  = ENABLED;
   infoMachineSettings.autoReportTemp          = DISABLED;
   infoMachineSettings.leveling                = BL_DISABLED;
@@ -205,7 +205,7 @@ void setupMachine(void)
     storeCmd("M420 S1\n");
   }
 
-  if (infoMachineSettings.firmwareType != FW_MARLIN) // Smoothieware does not report detailed M115 capabilities
+  if (infoMachineSettings.firmwareType != FW_MARLIN)  // Smoothieware does not report detailed M115 capabilities
   {
     infoMachineSettings.EEPROM                  = ENABLED;
     infoMachineSettings.autoReportTemp          = DISABLED;
@@ -244,7 +244,7 @@ float flashUsedPercentage(void)
 // check font/icon/config signature in SPI flash for update
 void checkflashSign(void)
 {
-  //cur_flash_sign[lang_sign] = flash_sign[lang_sign]; // ignore language signature not implemented yet
+  //cur_flash_sign[lang_sign] = flash_sign[lang_sign];  // ignore language signature not implemented yet
 
   bool statusfont = getFlashSignStatus(font_sign);
   bool statusconfig = getFlashSignStatus(config_sign);
