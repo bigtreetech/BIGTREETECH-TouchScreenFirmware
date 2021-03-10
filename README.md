@@ -63,7 +63,7 @@ C: In case you have an **"E3" mainboard** which provides a **single EXP connecto
 
 ![Screenshot 2021-03-07 at 22 41 02](https://user-images.githubusercontent.com/54359396/110255941-96fe4400-7f96-11eb-93b9-199c5be14eb8.png)
 
-This chart has been provided by user 4
+This chart has been provided by user Thomas White
 
 ## Menus
 
@@ -235,7 +235,9 @@ To reset the TFT's touch screen calibration, create a blank file named  "reset" 
 
 **Worst Case Scenario**
 
-In case the screen remains black or the brightness is not stable, the screen does not react after pressing a button or executes clicks by itself or does something similar - and the reset described above did not help - do the following. Remove the TFT from the enclosure and disconnect everything from the TFT, including the cable to the mainboard. Cut a USB cable you do not need anymore and connect the red and black wire to 5V and GND of the TFT. Do not use the unshielded wires directly but use a 2 pin connector instead. Power up the TFT and try to reset the TFT or to instal a new firmware like described in this document.
+In case the screen remains black or the brightness is not stable, the screen does not react after pressing a button or executes clicks by itself or does something similar - and the reset described above did not help - do the following. Remove the TFT from the enclosure and disconnect everything from the TFT, including the cable to the mainboard. Cut a USB cable you do not need anymore and connect the red and black wire to 5V and GND of the TFT. Do not use the unshielded wires directly but use a 2 pin connector instead. Power up the TFT and try to reset the TFT or to instal a new firmware like described in this document. With only power supplied, you should be able to navigate through the menus using the touchscreen and even to switch to Marlin Emulation (if available), even the Marlin Emulation screen will not show the interface with a proper EXP based connection.
+
+
 
 
 
