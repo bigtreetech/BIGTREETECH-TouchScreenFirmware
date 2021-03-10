@@ -1,3 +1,7 @@
+
+
+
+
 <!-- omit in toc -->
 
 # BigTreeTech TFT Touchscreen
@@ -47,6 +51,8 @@ Important information related to BigTreeTech's TFT touchscreen 3D printer contro
 2. Define a serial port in Marlin, to activate the port used by the TFT.
 3. Make sure the same BAUDRATE is defined in Marlin and the firmware of your TFT (config.ini)
 
+In case one of the three points above is not done right, "No printer attached" will be shown at the top of the screen in touchscreen mode This is because the TFT can not "see" the mainboard through the serial cable.
+
 **Do the following, to be able to use the Marlin emulation mode of your screen.** 
 
 A: In case your TFT does **not** have an EXP connector at all (TFT28 v1 for example), you can not use the Marlin emulator mode.
@@ -55,9 +61,13 @@ B: In case your mainboard provides **EXP1 and EXP2**, you have to connect 2 ribb
 
 C: In case you have an **"E3" mainboard** which provides a **single EXP connector**, you have to connect 1 ribbon cable connecting EXP of the mainboard to **EXP3** of the TFT. In case your TFT does **not** provide an EXP3 connector but only two 10pin connectors (TFT24 v1.1 for example) you will need a "Y-split" cable with one 10pin connector on one side (for the mainboard) and two 10pin connectors on the other side (for the TFT). In the Marlin firmware of your mainboard, make sure that **ONLY** the "CR10_STOCKDISPLAY" is activated in Configuration.h and that all other controllers (especially the "REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER") are **De**activated.
 
+![Screenshot 2021-03-07 at 22 41 02](https://user-images.githubusercontent.com/54359396/110255941-96fe4400-7f96-11eb-93b9-199c5be14eb8.png)
+
+This chart has been provided by user 4
+
 ## Menus
 
-|                    Status Screen DISABLED                    |                    Status Screen ENABLED                     |
+|              Main Screen Status Screen DISABLED              |              Main Screen Status Screen ENABLED               |
 | :----------------------------------------------------------: | :----------------------------------------------------------: |
 | ![status screen 0](https://user-images.githubusercontent.com/54359396/103319145-09035b80-4a31-11eb-91d0-dd761a48b6f5.png) | ![Unified Material Main Screen](https://user-images.githubusercontent.com/54359396/98742038-03cd4d00-23ae-11eb-9552-36dc02fe66f4.png) |
 | In config.ini define: General Settings<br/>Enable Status Screen<br/># Select the Main Screen flavour<br/># Options: [Enable: 1, Disable: 0]<br/>**status_screen: 0** | In config.ini define: General Settings<br/>Enable Status Screen<br/># Select the Main Screen flavour<br/># Options: [Enable: 1, Disable: 0]<br/>**status_screen: 1** |
@@ -66,10 +76,15 @@ C: In case you have an **"E3" mainboard** which provides a **single EXP connecto
 
 ## Themes
 
-|                      Unified Menu Theme                      | Hybrid Red Material Theme by **[AntoszHUN](https://github.com/AntoszHUN)** | The Round Miracle Theme by **[Acenotass](https://github.com/Acenotass)** |
-| :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
-| ![Unified Material Main Screen](https://user-images.githubusercontent.com/54359396/98742038-03cd4d00-23ae-11eb-9552-36dc02fe66f4.png) | ![Hybrid Red Menu Material Mainscreen](https://user-images.githubusercontent.com/54359396/98869176-a995c000-2471-11eb-94da-a0bc41abf3e9.png) | ![Round Miracle Main Screen](https://user-images.githubusercontent.com/54359396/99251566-d77e5a00-280d-11eb-9c7a-0e7c0111eedd.png) |
-| Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update - Unified Menu Material theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update/THEME_Unified%20Menu%20Material%20theme) folder | Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update - Hybrid Red Material theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update/THEME_Hybrid%20Red%20Menu%20Material%20theme) folder | Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update - The Round Miracle theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update/THEME_The%20Round%20Miracle%20Menu%20Material%20theme) folder |
+|                      Unified Menu Theme                      | The Round Miracle Theme by **[Acenotass](https://github.com/Acenotass)** |
+| :----------------------------------------------------------: | :----------------------------------------------------------: |
+| ![Unified Material Main Screen](https://user-images.githubusercontent.com/54359396/98742038-03cd4d00-23ae-11eb-9552-36dc02fe66f4.png) | ![Round Miracle Main Screen](https://user-images.githubusercontent.com/54359396/99251566-d77e5a00-280d-11eb-9c7a-0e7c0111eedd.png) |
+| Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update - Unified Menu Material theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update/THEME_Unified%20Menu%20Material%20theme) folder | Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update - The Round Miracle theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update/THEME_The%20Round%20Miracle%20Menu%20Material%20theme) folder |
+
+| Hybrid Red Material Theme by **[AntoszHUN](https://github.com/AntoszHUN)** | Hybrid Mono Material Theme by **[bepstein111](https://github.com/bepstein111)** |
+| :----------------------------------------------------------: | :----------------------------------------------------------: |
+| ![Hybrid Red Menu Material Mainscreen](https://user-images.githubusercontent.com/54359396/98869176-a995c000-2471-11eb-94da-a0bc41abf3e9.png) | ![Monochrome TFT35](https://user-images.githubusercontent.com/54359396/110254523-d5dccb80-7f8f-11eb-86a5-2d52ecd7ca4d.png) |
+| Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update - Hybrid Red Menu Material theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update/THEME_Hybrid%20Red%20Menu%20Material%20theme) folder | Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update - Hybrid Mono Menu Material theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update/THEME_Hybrid%20Mono%20Menu%20Material%20theme) folder |
 
 
 
@@ -94,8 +109,6 @@ The TFT firmware update is done in three steps described below and includes up t
 **element3:** The config.ini file
 
 **element4:**  One or several language file(s) **(optionally)**
-
-
 
 **STEPS:**
 
@@ -198,7 +211,6 @@ See [Customization guides](https://github.com/bigtreetech/BIGTREETECH-TouchScree
 ;MKS_32_V1_4_NOBL
 ;MKS_28_V1_0
 
-
 [platformio]
 src_dir      = TFT
 boards_dir   = buildroot/boards
@@ -209,13 +221,29 @@ default_envs = BIGTREE_TFT35_V3_0</pre></li>
 <li>A <code>BIGTREE_TFT*_V*.*.*.bin</code> file will be generated in the <em>hidden</em> <code>.pio\build\BIGTREE_TFT*_V*_*</code> folder. Follow the update process outlined in the <a href="#about-tft-firmware">About TFT Firmware</a> section above to update your TFT to the latest version.</li>
 </details>
 
+
+
 ## Troubleshooting
 
-To reset the TFT's touch screen calibration, create a blank file named `reset.txt` and place in root folder of the sd card. Insert the SD card into the TFT's SD card reader and power cycle your printer to start the reset process.
+**In case the upload of a new firmware failed**
+
+First, verify that you have been using the correct version for your TFT. After that, try to upload the new firmware again (like described above) using a **new** SD card - 8GB or smaller, FAT32 formatted. Some uploads worked fine after executing a low level format of the SD card and not a quick format.
+
+**Simple Reset**
+
+To reset the TFT's touch screen calibration, create a blank file named  "reset" with the file-extension "txt", and place it in the root folder of an SD card (the SD card capacity must be less than or equal 8GB and formatted as FAT32). Insert the SD card into the TFT's SD card reader and power cycle your printer or restet your TFT to start the reset process.
+
+**Worst Case Scenario**
+
+In case the screen remains black or the brightness is not stable, the screen does not react after pressing a button or executes clicks by itself or does something similar - and the reset described above did not help - do the following. Remove the TFT from the enclosure and disconnect everything from the TFT, including the cable to the mainboard. Cut a USB cable you do not need anymore and connect the red and black wire to 5V and GND of the TFT. Do not use the unshielded wires directly but use a 2 pin connector instead. Power up the TFT and try to reset the TFT or to instal a new firmware like described in this document.
+
+
 
 ## Version History
 
 See [BIGTREETECH-TouchScreenFirmware/releases](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/releases) for a complete version history.
+
+
 
 ## Appendix
 
