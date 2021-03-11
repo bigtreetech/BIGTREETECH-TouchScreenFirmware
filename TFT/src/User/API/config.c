@@ -675,11 +675,11 @@ void parseConfigKey(uint16_t index)
       break;
 
     case C_INDEX_EXT_COUNT:
-      SET_VALID_INT_VALUE(infoSettings.ext_count, 1, MAX_EXT_COUNT);
+      SET_VALID_INT_VALUE(infoSettings.ext_count, 1,MAX_EXT_COUNT);
       break;
 
     case C_INDEX_FAN_COUNT:
-      SET_VALID_INT_VALUE(infoSettings.fan_count, 1, MAX_FAN_COUNT - MAX_FAN_CTRL_COUNT);
+      SET_VALID_INT_VALUE(infoSettings.fan_count, 1, MAX_FAN_COUNT);
       break;
 
     case C_INDEX_FAN_CTRL_COUNT:

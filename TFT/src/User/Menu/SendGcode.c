@@ -791,7 +791,7 @@ void menuTerminalWindow(void)
         GUI_SetColor(TERM_FONT_COLOR);
         GUI_SetBkColor(TERM_BG_COLOR);
 
-        GUI_DispOne(cursorX, cursorY, &info);
+        GUI_DispOne(cursorX, cursorY, (uint8_t *)(terminalBuf + lastTerminalIndex));
         cursorX += info.pixelWidth;
       }
 
