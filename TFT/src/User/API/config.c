@@ -656,6 +656,10 @@ void parseConfigKey(uint16_t index)
 
     #endif // ST7920_EMULATOR || LCD2004_EMULATOR
 
+    //----------------------------RRF Mode Settings
+    case C_INDEX_RRF_MACROS_ON:
+      infoSettings.rrf_macros_enable = getOnOff();
+
     //----------------------------Printer / Machine Settings
 
     case C_INDEX_HOTEND_COUNT:
@@ -671,11 +675,11 @@ void parseConfigKey(uint16_t index)
       break;
 
     case C_INDEX_EXT_COUNT:
-      SET_VALID_INT_VALUE(infoSettings.ext_count, 1,MAX_EXT_COUNT);
+      SET_VALID_INT_VALUE(infoSettings.ext_count, 1, MAX_EXT_COUNT);
       break;
 
     case C_INDEX_FAN_COUNT:
-      SET_VALID_INT_VALUE(infoSettings.fan_count, 1, MAX_FAN_COUNT);
+      SET_VALID_INT_VALUE(infoSettings.fan_count, 1, MAX_FAN_COUNT - MAX_FAN_CTRL_COUNT);
       break;
 
     case C_INDEX_FAN_CTRL_COUNT:

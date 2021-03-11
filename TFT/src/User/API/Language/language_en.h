@@ -106,6 +106,7 @@
     #define STRING_HALF                   "Half"
     #define STRING_FULL                   "Full"
     #define STRING_CUSTOM                 "Custom"
+    #define STRING_MACROS                 "Macros"
     #define STRING_CLEAR                  "Clear"
     #define STRING_DEFAULT                "Default"
 
