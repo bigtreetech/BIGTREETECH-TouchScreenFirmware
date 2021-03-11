@@ -154,16 +154,17 @@ void menuABL(void)
   MENUITEMS autoLevelingItems = {
     // title
     LABEL_ABL_SETTINGS,
-
-    // icon                         label
-    {{ICON_LEVELING,                LABEL_START},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BLTOUCH,                 LABEL_BLTOUCH},
-     {ICON_TEST_LEVEL_VALID,        LABEL_TEST_LEVEL_VALID},
-     {ICON_HEAT,                    LABEL_PREHEAT},
-     {ICON_BACK,                    LABEL_BACK}}
+    // icon                          label
+    {
+      {ICON_LEVELING,                LABEL_START},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_BLTOUCH,                 LABEL_BLTOUCH},
+      {ICON_TEST_LEVEL_VALID,        LABEL_TEST_LEVEL_VALID},
+      {ICON_HEAT,                    LABEL_PREHEAT},
+      {ICON_BACK,                    LABEL_BACK},
+    }
   };
 
   KEY_VALUES key_num = KEY_IDLE;
@@ -242,8 +243,8 @@ void menuABL(void)
           infoMenu.menu[++infoMenu.cur] = menuBLTouch;
         break;
 
-        case KEY_ICON_5:
-          infoMenu.menu[++infoMenu.cur] = menuMeshValid;
+      case KEY_ICON_5:
+        infoMenu.menu[++infoMenu.cur] = menuMeshValid;
         break;
 
       case KEY_ICON_6:

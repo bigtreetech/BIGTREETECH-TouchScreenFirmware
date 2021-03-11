@@ -1,5 +1,5 @@
-#ifndef _MESHVALID_H_
-#define _MESHVALID_H_
+#ifndef _MESH_VALID_H_
+#define _MESH_VALID_H_
 
 #ifdef __cplusplus
 extern "C" {
