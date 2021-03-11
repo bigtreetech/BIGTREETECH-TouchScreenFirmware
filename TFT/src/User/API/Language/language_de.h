@@ -344,11 +344,11 @@
     #define STRING_EXT_TEMPLOW            "Temperatur der Düse liegt\nunter dem Minimum (%d℃)."
     #define STRING_HEAT_HOTEND            "Heize Düse auf %d℃?"
     #define STRING_Z_ALIGN                "Z ausr."
-    #define STRING_TEST_LEVEL_VALID        "Mesh Validation"
-    #define STRING_TEST_LEVEL_PLA          "Valid pla"
-    #define STRING_TEST_LEVEL_ABS          "Valid abs"
-    #define STRING_TEST_LEVEL_PTEG         "Valid pteg"
-    #define STRING_TEST_LEVEL_ASA          "Valid asa"
+    #define STRING_TEST_LEVEL_VALID       "Mesh Validation"
+    #define STRING_TEST_LEVEL_PLA         "Valid pla"
+    #define STRING_TEST_LEVEL_ABS         "Valid abs"
+    #define STRING_TEST_LEVEL_PTEG        "Valid pteg"
+    #define STRING_TEST_LEVEL_ASA         "Valid asa"
         
 
 #endif

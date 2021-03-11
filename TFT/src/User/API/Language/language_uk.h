@@ -344,10 +344,10 @@
     #define STRING_EXT_TEMPLOW            "Температура хотенду нижче\nмінімальної температури (%d℃)."
     #define STRING_HEAT_HOTEND            "Heat hotend to %d℃?"
     #define STRING_Z_ALIGN                "Z Align"
-    #define STRING_TEST_LEVEL_VALID        "Mesh Validation"
-    #define STRING_TEST_LEVEL_PLA          "Valid pla"
-    #define STRING_TEST_LEVEL_ABS          "Valid abs"
-    #define STRING_TEST_LEVEL_PTEG         "Valid pteg"
-    #define STRING_TEST_LEVEL_ASA          "Valid asa"
+    #define STRING_TEST_LEVEL_VALID       "Mesh Validation"
+    #define STRING_TEST_LEVEL_PLA         "Valid pla"
+    #define STRING_TEST_LEVEL_ABS         "Valid abs"
+    #define STRING_TEST_LEVEL_PTEG        "Valid pteg"
+    #define STRING_TEST_LEVEL_ASA         "Valid asa"
 
 #endif

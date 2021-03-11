@@ -344,11 +344,11 @@
     #define STRING_EXT_TEMPLOW            "Fejhőfok alacsonyabb, mint a\nminimális hőfok (%d℃)."
     #define STRING_HEAT_HOTEND            "Fűtöd a fejet %d℃-ra?"
     #define STRING_Z_ALIGN                "Z Igazítás"
-    #define STRING_TEST_LEVEL_VALID        "Mesh Validation"
-    #define STRING_TEST_LEVEL_PLA          "Valid pla"
-    #define STRING_TEST_LEVEL_ABS          "Valid abs"
-    #define STRING_TEST_LEVEL_PTEG         "Valid pteg"
-    #define STRING_TEST_LEVEL_ASA          "Valid asa"
+    #define STRING_TEST_LEVEL_VALID       "Mesh Validation"
+    #define STRING_TEST_LEVEL_PLA         "Valid pla"
+    #define STRING_TEST_LEVEL_ABS         "Valid abs"
+    #define STRING_TEST_LEVEL_PTEG        "Valid pteg"
+    #define STRING_TEST_LEVEL_ASA         "Valid asa"
     
 
 #endif
