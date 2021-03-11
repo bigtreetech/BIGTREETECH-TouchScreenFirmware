@@ -35,9 +35,6 @@ X_CONFIG(MARLIN_SHOW_TITLE)
 X_CONFIG(MARLIN_TYPE)
 X_CONFIG(MARLIN_TITLE)
 X_CONFIG(MARLIN_FULLSCREEN)
-
-//-----------------------------RRF Mode Settings
-X_CONFIG(RRF_MACROS_ON)
 //-----------------------------Printer / Machine Settings
 X_CONFIG(HOTEND_COUNT)
 X_CONFIG(HEATED_BED)
