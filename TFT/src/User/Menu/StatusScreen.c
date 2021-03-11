@@ -1,4 +1,5 @@
 #include "StatusScreen.h"
+
 #ifdef TFT70_V3_0
 #define KEY_SPEEDMENU         KEY_ICON_3
 #define KEY_FLOWMENU          (KEY_SPEEDMENU + 1)
@@ -13,20 +14,22 @@
 const MENUITEMS StatusItems = {
   // title
   LABEL_READY,
-  // icon                         label
-  {{ICON_STATUS_NOZZLE,           LABEL_BACKGROUND},
-   {ICON_STATUS_BED,              LABEL_BACKGROUND},
-   {ICON_STATUS_FAN,              LABEL_BACKGROUND},
-   {ICON_STATUS_SPEED,            LABEL_BACKGROUND},
-#ifdef TFT70_V3_0
-   {ICON_STATUS_FLOW,             LABEL_BACKGROUND},
-   {ICON_MAINMENU,                LABEL_MAINMENU},
-#else
-   {ICON_MAINMENU,                LABEL_MAINMENU},
-   {ICON_BACKGROUND,              LABEL_BACKGROUND},
-#endif
-   {ICON_BACKGROUND,              LABEL_BACKGROUND},
-   {ICON_PRINT,                   LABEL_PRINT},}
+  // icon                          label
+  {
+    {ICON_STATUS_NOZZLE,           LABEL_BACKGROUND},
+    {ICON_STATUS_BED,              LABEL_BACKGROUND},
+    {ICON_STATUS_FAN,              LABEL_BACKGROUND},
+    {ICON_STATUS_SPEED,            LABEL_BACKGROUND},
+    #ifdef TFT70_V3_0
+      {ICON_STATUS_FLOW,             LABEL_BACKGROUND},
+      {ICON_MAINMENU,                LABEL_MAINMENU},
+    #else
+      {ICON_MAINMENU,                LABEL_MAINMENU},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    #endif
+    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_PRINT,                   LABEL_PRINT},
+  }
 };
 
 const ITEM SpeedItems[2] = {
@@ -35,7 +38,7 @@ const ITEM SpeedItems[2] = {
   {ICON_STATUS_FLOW,             LABEL_BACKGROUND},
 };
 
-#define UPDATE_TOOL_TIME 2000 // 1 seconds is 1000
+#define UPDATE_TOOL_TIME 2000  // 1 seconds is 1000
 static int8_t lastConnection_status = -1;
 static bool msgNeedRefresh = false;
 
@@ -53,8 +56,8 @@ const GUI_POINT ss_val_point   = {SSICON_WIDTH/2, SSICON_VAL_Y0};
 #endif
 
 //info box msg area
-const  GUI_RECT msgRect ={START_X + 1 * ICON_WIDTH + 1 * SPACE_X + 2,   ICON_START_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + STATUS_MSG_BODY_YOFFSET,
-                          START_X + 3 * ICON_WIDTH + 2 * SPACE_X - 2,   ICON_START_Y +  2 * ICON_HEIGHT + 1 * SPACE_Y - STATUS_MSG_BODY_BOTTOM};
+const  GUI_RECT msgRect = {START_X + 1 * ICON_WIDTH + 1 * SPACE_X + 2,   ICON_START_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + STATUS_MSG_BODY_YOFFSET,
+                           START_X + 3 * ICON_WIDTH + 2 * SPACE_X - 2,   ICON_START_Y +  2 * ICON_HEIGHT + 1 * SPACE_Y - STATUS_MSG_BODY_BOTTOM};
 
 const GUI_RECT RecGantry = {START_X,                        1*SSICON_HEIGHT+0*SPACE_Y+ICON_START_Y + STATUS_GANTRY_YOFFSET,
                             4*ICON_WIDTH+3*SPACE_X+START_X, 1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y - STATUS_GANTRY_YOFFSET};
@@ -261,7 +264,7 @@ void menuStatus(void)
   drawStatusScreenMsg();
   while (infoMenu.menu[infoMenu.cur] == menuStatus)
   {
-    if(infoHost.connected != lastConnection_status)
+    if (infoHost.connected != lastConnection_status)
     {
       statusScreen_setReady();
       lastConnection_status = infoHost.connected;

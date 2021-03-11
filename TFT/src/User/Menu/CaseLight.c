@@ -27,15 +27,17 @@ void menuCaseLight(void)
   MENUITEMS caseLightItems = {
     // title
     LABEL_CASE_LIGHT,
-    // icon                         label
-    {{ICON_DEC,                     LABEL_DEC},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_INC,                     LABEL_INC},
-     {ICON_RGB_WHITE,               LABEL_ON},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACK,                    LABEL_BACK},}
+    // icon                          label
+    {
+      {ICON_DEC,                     LABEL_DEC},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_INC,                     LABEL_INC},
+      {ICON_RGB_WHITE,               LABEL_ON},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_BACK,                    LABEL_BACK},
+    }
   };
 
   KEY_VALUES key_num = KEY_IDLE;

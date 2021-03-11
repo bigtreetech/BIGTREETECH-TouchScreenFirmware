@@ -1,12 +1,14 @@
 #include "Fan.h"
 #include "includes.h"
 
+#define UPDATE_CTL_FAN_TIME 2000  // 1s
+
 static uint8_t curIndex = 0;
 
 const ITEM itemFan[2] = {
-  // icon                label
-  {ICON_FAN,             LABEL_FAN},
-  {ICON_FAN_HALF_SPEED,  LABEL_HALF},
+  // icon                        label
+  {ICON_FAN,                     LABEL_FAN},
+  {ICON_FAN_HALF_SPEED,          LABEL_HALF},
 };
 
 void fanSpeedReDraw(bool skip_header)
@@ -45,20 +47,22 @@ void menuFan(void)
   MENUITEMS fanItems = {
     // title
     LABEL_FAN,
-    // icon                         label
-    {{ICON_DEC,                     LABEL_DEC},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_INC,                     LABEL_INC},
-     {ICON_FAN ,                    LABEL_FAN},
-     {ICON_FAN_FULL_SPEED,          LABEL_FULL},
-     {ICON_STOP,                    LABEL_STOP},
-     {ICON_BACK,                    LABEL_BACK},}
+    // icon                          label
+    {
+      {ICON_DEC,                     LABEL_DEC},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_INC,                     LABEL_INC},
+      {ICON_FAN ,                    LABEL_FAN},
+      {ICON_FAN_FULL_SPEED,          LABEL_FULL},
+      {ICON_STOP,                    LABEL_STOP},
+      {ICON_BACK,                    LABEL_BACK},
+    }
   };
 
-  LASTFAN lastFan;
+  FAN lastFan;
   fanSetSpeed(curIndex, fanGetCurSpeed(curIndex));
-  lastFan = (LASTFAN) {fanGetCurSpeed(curIndex), fanGetSetSpeed(curIndex)};
+  lastFan = (FAN) {fanGetCurSpeed(curIndex), fanGetSetSpeed(curIndex)};
 
   if ((infoSettings.fan_count + infoSettings.fan_ctrl_count) > 1)
     fanItems.items[KEY_ICON_4] = itemFan[0];
@@ -174,10 +178,15 @@ void menuFan(void)
         break;
     }
 
-    if ((lastFan.cur != fanGetCurSpeed(curIndex)) || (lastFan.set != fanGetSetSpeed(curIndex)))
+    if ((lastFan.curFanSpeed != fanGetCurSpeed(curIndex)) || (lastFan.setFanSpeed != fanGetSetSpeed(curIndex)))
     {
-      lastFan = (LASTFAN) {fanGetCurSpeed(curIndex), fanGetSetSpeed(curIndex)};
+      lastFan = (FAN) {fanGetCurSpeed(curIndex), fanGetSetSpeed(curIndex)};
       fanSpeedReDraw(true);
+    }
+
+    if (nextScreenUpdate(UPDATE_CTL_FAN_TIME))
+    {
+      fanSpeedQuery();
     }
 
     loopProcess();

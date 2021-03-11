@@ -166,7 +166,7 @@ void preparePrintSummary(void)
 void updateFilamentUsed(void)
 {
   float E_pos = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
-  if ((E_pos + MAX_RETRACT_LIMIT) < last_E_pos) //Check whether E position reset (G92 E0)
+  if ((E_pos + MAX_RETRACT_LIMIT) < last_E_pos)  //Check whether E position reset (G92 E0)
   {
     last_E_pos = 0;
   }
@@ -306,7 +306,7 @@ void printingFinished(void)
 {
   BUZZER_PLAY(sound_success);
   endPrinting();
-  if (infoSettings.auto_off) // Auto shut down after printing
+  if (infoSettings.auto_off)  // Auto shut down after printing
   {
     startShutdown();
   }
@@ -326,7 +326,7 @@ void abortPrinting(void)
       breakAndContinue();
       breakAndContinue();
       if (infoMachineSettings.firmwareType == FW_REPRAPFW)
-        request_M0(); // M524 is not supportet in reprap firmware
+        request_M0();  // M524 is not supportet in reprap firmware
       else
         request_M524();
 
@@ -355,7 +355,7 @@ void abortPrinting(void)
 // wait for cool down, in the meantime, you can shut down by force
 void shutdown(void)
 {
-  for(uint8_t i = 0; i < infoSettings.fan_count; i++)
+  for (uint8_t i = 0; i < infoSettings.fan_count; i++)
   {
     if (fanIsType(i, FAN_TYPE_F)) mustStoreCmd("%s S0\n", fanCmd[i]);
   }
@@ -383,7 +383,7 @@ void startShutdown(void)
   LABELCHAR(tempbody, LABEL_WAIT_TEMP_SHUT_DOWN);
   sprintf(tempstr, tempbody, infoSettings.auto_off_temp);
 
-  for(uint8_t i = 0; i < infoSettings.fan_count; i++)
+  for (uint8_t i = 0; i < infoSettings.fan_count; i++)
   {
     if (fanIsType(i,FAN_TYPE_F)) mustStoreCmd("%s S255\n", fanCmd[i]);
   }
@@ -400,15 +400,15 @@ void getGcodeFromFile(void)
   uint8_t      sd_count = 0;
   UINT    br = 0;
 
-  if (isPrinting() == false || infoFile.source >= BOARD_SD)  return;
+  if (isPrinting() == false || infoFile.source >= BOARD_SD) return;
 
   powerFailedCache(infoPrinting.file.fptr);
 
-  if (heatHasWaiting() || infoCmd.count || infoPrinting.pause )  return;
+  if (heatHasWaiting() || infoCmd.count || infoPrinting.pause) return;
 
   if (moveCacheToCmd() == true) return;
 
-  for(;infoPrinting.cur < infoPrinting.size;)
+  for (;infoPrinting.cur < infoPrinting.size;)
   {
     if (f_read(&infoPrinting.file, &sd_char, 1, &br)!=FR_OK) break;
 
@@ -424,7 +424,7 @@ void getGcodeFromFile(void)
         infoCmd.queue[infoCmd.index_w].gcode[sd_count++] = '\n';
         infoCmd.queue[infoCmd.index_w].gcode[sd_count] = 0;  //terminate string
         infoCmd.queue[infoCmd.index_w].src = SERIAL_PORT;
-        sd_count = 0; //clear buffer
+        sd_count = 0;  //clear buffer
         infoCmd.index_w = (infoCmd.index_w + 1) % CMD_MAX_LIST;
         infoCmd.count++;
         break;
@@ -493,7 +493,8 @@ void loopCheckPrinting(void)
     infoPrinting.printing = true;
     if (!hasPrintingMenu())
     {
-      infoMenu.menu[++infoMenu.cur] = menuPrinting;
+      infoMenu.cur = 1;
+      infoMenu.menu[infoMenu.cur] = menuPrinting;
     }
   }
 
@@ -517,5 +518,5 @@ void loopCheckPrinting(void)
       break;
     nextCheckPrintTime = OS_GetTimeMs() + update_M27_time;
     updateM27_waiting = true;
-  } while(0);
+  } while (0);
 }

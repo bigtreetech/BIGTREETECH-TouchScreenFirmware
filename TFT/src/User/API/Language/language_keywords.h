@@ -58,6 +58,7 @@ extern "C" {
 #define LANG_KEY_HOTEND_OFFSET                "label_hotend_offset:"
 #define LANG_KEY_PROBE_OFFSET                 "label_probe_offset:"
 #define LANG_KEY_LIN_ADVANCE                  "label_lin_advance:"
+#define LANG_KEY_FILAMENT_SETTING             "label_filament_setting:"
 #define LANG_KEY_CURRENT_SETTING              "label_current_setting:"
 #define LANG_KEY_BUMP_SENSITIVITY             "label_bump_sensitivity:"
 #define LANG_KEY_HYBRID_THRESHOLD             "label_hybrid_threshold:"
@@ -112,6 +113,7 @@ extern "C" {
 #define LANG_KEY_HALF                         "label_half:"
 #define LANG_KEY_FULL                         "label_full:"
 #define LANG_KEY_CUSTOM                       "label_custom:"
+#define LANG_KEY_MACROS                       "label_macros:"
 #define LANG_KEY_CLEAR                        "label_clear:"
 #define LANG_KEY_DEFAULT                      "label_default:"
 

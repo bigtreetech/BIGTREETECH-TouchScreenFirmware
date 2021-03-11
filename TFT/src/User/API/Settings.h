@@ -31,10 +31,10 @@ typedef enum
 // this number should match CONFIG_VERSION in configuration.h
 #define CONFIG_SUPPPORT 20210217
 
-#define FONT_FLASH_SIGN       20200908 //(YYYYMMDD) change if fonts require updating
-#define CONFIG_FLASH_SIGN     20210217 //(YYYYMMDD) change if any keyword(s) in config.ini is added or removed
-#define LANGUAGE_FLASH_SIGN   20210217 //(YYYYMMDD) change if any keyword(s) in language pack is added or removed
-#define ICON_FLASH_SIGN       20210217 //(YYYYMMDD) change if any icon(s) is added or removed
+#define FONT_FLASH_SIGN       20200908  //(YYYYMMDD) change if fonts require updating
+#define CONFIG_FLASH_SIGN     20210217  //(YYYYMMDD) change if any keyword(s) in config.ini is added or removed
+#define LANGUAGE_FLASH_SIGN   20210217  //(YYYYMMDD) change if any keyword(s) in language pack is added or removed
+#define ICON_FLASH_SIGN       20210217  //(YYYYMMDD) change if any icon(s) is added or removed
 
 #define FONT_CHECK_SIGN       (FONT_FLASH_SIGN + WORD_UNICODE)
 #define CONFIG_CHECK_SIGN     (CONFIG_FLASH_SIGN + STRINGS_STORE_ADDR)
@@ -43,7 +43,7 @@ typedef enum
 
 #define MAX_EXT_COUNT         6
 #define MAX_HOTEND_COUNT      6
-#define MAX_HEATER_COUNT      (2 + MAX_HOTEND_COUNT) // chamber + bed + hotend
+#define MAX_HEATER_COUNT      (2 + MAX_HOTEND_COUNT)  // chamber + bed + hotend
 #define MAX_FAN_CTRL_COUNT    2
 #define MAX_FAN_COUNT         (6 + MAX_FAN_CTRL_COUNT)
 
@@ -112,6 +112,9 @@ typedef struct
   uint8_t  marlin_mode_showtitle;
   uint8_t  marlin_mode_fullscreen;
   uint8_t  marlin_type;
+
+  // rrf mode settings
+  uint8_t  rrf_macros_enable;
 
   // Printer / Machine Settings
   uint8_t  hotend_count;

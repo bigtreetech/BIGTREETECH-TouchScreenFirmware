@@ -79,12 +79,11 @@ void listWidgetRefreshMenu(void)
   menuDrawListPage(&listItems);
 }
 
-//
 void listWidgetRefreshItem(uint16_t item)
 {
   uint8_t cur_i = item % LISTITEM_PER_PAGE;
-  if (item > list_max_items) return; // error index.
-  if (item < list_cur_page * LISTITEM_PER_PAGE || item >= (list_cur_page + 1) * LISTITEM_PER_PAGE) return; // not in cur page
+  if (item > list_max_items) return;  // error index.
+  if (item < list_cur_page * LISTITEM_PER_PAGE || item >= (list_cur_page + 1) * LISTITEM_PER_PAGE) return;  // not in cur page
 
   if (item < list_max_items)
   {
