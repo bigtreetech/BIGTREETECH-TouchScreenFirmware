@@ -119,7 +119,7 @@ void ackPopupInfo(const char *info)
     BUZZER_PLAY(sound_notify);
 
   // set echo message in status screen
-  if (info == echomagic)
+  if (info == echomagic || info == messagemagic)
   {
     //ignore all messages if parameter settings is open
     if (infoMenu.menu[infoMenu.cur] == menuParameterSettings)
@@ -1091,6 +1091,38 @@ void parseACK(void)
         if (!processKnownEcho())  // if no known echo was found and processed, then popup the echo message
         {
           ackPopupInfo(echomagic);
+        }
+      }
+
+      // keep here and parse at lastest
+      else if (infoMachineSettings.firmwareType == FW_REPRAPFW)
+      {
+        if (ack_seen(warningmagic))
+        {
+          ackPopupInfo(warningmagic);
+        }
+        else if (ack_seen(messagemagic))
+        {
+          ackPopupInfo(messagemagic);
+        }
+        else if (ack_seen("access point "))
+        {
+          uint8_t *string = (uint8_t *)&dmaL2Cache[ack_index];
+          uint16_t string_start = ack_index;
+          uint16_t string_end = string_start;
+          if (ack_seen(","))  //
+            string_end = ack_index - 1 ;
+
+          infoSetAccessPoint(string, string_end - string_start);  // Set access poing
+
+          if (ack_seen("IP address "))
+          {
+            string = (uint8_t *)&dmaL2Cache[ack_index];
+            string_start = ack_index;
+            if (ack_seen("\n"))  //
+              string_end = ack_index - 1;
+            infoSetIPAddress(string, string_end - string_start);  // Set IP address
+          }
         }
       }
     }

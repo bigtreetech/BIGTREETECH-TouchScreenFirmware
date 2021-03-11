@@ -238,7 +238,7 @@ void setupMachine(void)
   }
   mustStoreCmd("M503 S0\n");
 
-  if (infoMachineSettings.firmwareType = FW_REPRAPFW)
+  if (infoMachineSettings.firmwareType == FW_REPRAPFW)
   {
     mustStoreCmd("M555 P2\n"); //  Set RRF compatibility behaves similar to 2: Marlin
   }
