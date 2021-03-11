@@ -4,18 +4,18 @@
 SETTINGS infoSettings;
 MACHINESETTINGS infoMachineSettings;
 
-const u16 default_max_temp[]      = HEAT_MAX_TEMP;
-const u16 default_max_fanPWM[]    = FAN_MAX_PWM;
-const u16 default_size_min[]      = {X_MIN_POS,Y_MIN_POS,Z_MIN_POS};
-const u16 default_size_max[]      = {X_MAX_POS,Y_MAX_POS,Z_MAX_POS};
-const u16 default_xy_speed[]      = {SPEED_XY_SLOW, SPEED_XY_NORMAL, SPEED_XY_FAST};
-const u16 default_z_speed[]       = {SPEED_Z_SLOW, SPEED_Z_NORMAL, SPEED_Z_FAST};
-const u16 default_ext_speed[]     = {EXTRUDE_SLOW_SPEED, EXTRUDE_NORMAL_SPEED, EXTRUDE_FAST_SPEED};
-const u16 default_level_speed[]   = {LEVELING_POINT_XY_FEEDRATE, LEVELING_POINT_Z_FEEDRATE};
-const u16 default_pause_speed[]   = {NOZZLE_PAUSE_XY_FEEDRATE, NOZZLE_PAUSE_Z_FEEDRATE, NOZZLE_PAUSE_E_FEEDRATE};
-const u16 default_preheat_ext[]   = PREHEAT_HOTEND;
-const u16 default_preheat_bed[]   = PREHEAT_BED;
-const u8 default_custom_enabled[] = CUSTOM_GCODE_ENABLED;
+const uint16_t default_max_temp[]      = HEAT_MAX_TEMP;
+const uint16_t default_max_fanPWM[]    = FAN_MAX_PWM;
+const uint16_t default_size_min[]      = {X_MIN_POS,Y_MIN_POS,Z_MIN_POS};
+const uint16_t default_size_max[]      = {X_MAX_POS,Y_MAX_POS,Z_MAX_POS};
+const uint16_t default_xy_speed[]      = {SPEED_XY_SLOW, SPEED_XY_NORMAL, SPEED_XY_FAST};
+const uint16_t default_z_speed[]       = {SPEED_Z_SLOW, SPEED_Z_NORMAL, SPEED_Z_FAST};
+const uint16_t default_ext_speed[]     = {EXTRUDE_SLOW_SPEED, EXTRUDE_NORMAL_SPEED, EXTRUDE_FAST_SPEED};
+const uint16_t default_level_speed[]   = {LEVELING_POINT_XY_FEEDRATE, LEVELING_POINT_Z_FEEDRATE};
+const uint16_t default_pause_speed[]   = {NOZZLE_PAUSE_XY_FEEDRATE, NOZZLE_PAUSE_Z_FEEDRATE, NOZZLE_PAUSE_E_FEEDRATE};
+const uint16_t default_preheat_ext[]   = PREHEAT_HOTEND;
+const uint16_t default_preheat_bed[]   = PREHEAT_BED;
+const uint8_t default_custom_enabled[] = CUSTOM_GCODE_ENABLED;
 
 // Reset settings data
 void infoSettingsReset(void)
@@ -48,8 +48,11 @@ void infoSettingsReset(void)
   infoSettings.marlin_mode_bg_color   = lcd_colors[MARLIN_BKCOLOR];
   infoSettings.marlin_mode_font_color = lcd_colors[MARLIN_FNCOLOR];
   infoSettings.marlin_mode_showtitle  = MARLIN_SHOW_BANNER;
-  infoSettings.marlin_mode_fullscreen = DEFAULT_ST7920_FULLSCREEN_MODE;
+  infoSettings.marlin_mode_fullscreen = MARLIN_MODE_FULLSCREEN;
   infoSettings.marlin_type            = LCD12864;
+
+// RRF Mode Settings
+  infoSettings.rrf_macros_enable      = 0;
 
 // Printer / Machine Settings
   infoSettings.hotend_count           = HOTEND_NUM;
@@ -61,7 +64,7 @@ void infoSettingsReset(void)
   infoSettings.min_ext_temp           = PREVENT_COLD_EXTRUSION_MINTEMP;
   infoSettings.auto_load_leveling     = AUTO_SAVE_LOAD_BL_VALUE;
   infoSettings.touchmi_sensor         = TOUCHMI_SENSOR_VALUE;
-  infoSettings.onboardSD              = AUTO;                        //ENABLED / DISABLED / AUTO
+  infoSettings.onboardSD              = AUTO;  //ENABLED / DISABLED / AUTO
   infoSettings.m27_refresh_time       = M27_REFRESH;
   infoSettings.m27_active             = M27_WATCH_OTHER_SOURCES;
   infoSettings.longFileName           = AUTO;  //ENABLED / DISABLED / AUTO
@@ -77,7 +80,11 @@ void infoSettingsReset(void)
   infoSettings.level_z_pos            = LEVELING_POINT_Z;
   infoSettings.level_z_raise          = LEVELING_POINT_MOVE_Z;
 
-  infoSettings.move_speed             = 1; // index on infoSettings.axis_speed, infoSettings.ext_speed
+  infoSettings.move_speed             = 1;  // index on infoSettings.axis_speed, infoSettings.ext_speed
+
+  infoSettings.xy_offset_probing      = ENABLED;
+  infoSettings.z_raise_probing        = PROBING_Z_RAISE;
+  infoSettings.z_steppers_alignment   = DISABLED;
 
 // Power Supply Settings
   infoSettings.auto_off               = DISABLED;
@@ -107,8 +114,6 @@ void infoSettingsReset(void)
   infoSettings.lcd_brightness         = DEFAULT_LCD_BRIGHTNESS;
   infoSettings.lcd_idle_brightness    = DEFAULT_LCD_IDLE_BRIGHTNESS;
   infoSettings.lcd_idle_timer         = DEFAULT_LCD_IDLE_TIMER;
-  infoSettings.xy_offset_probing      = ENABLED;
-  infoSettings.z_steppers_alignment   = DISABLED;
 
 // Start, End & Cancel G-codes
   infoSettings.send_start_gcode       = DISABLED;
@@ -126,14 +131,14 @@ void infoSettingsReset(void)
     infoSettings.fan_max[i]           = default_max_fanPWM[i];
   }
 
-  for (int i = 0; i < AXIS_NUM; i++) //x, y, z
+  for (int i = 0; i < AXIS_NUM; i++)  //x, y, z
   {
     infoSettings.invert_axis[i]       = DISABLED;
     infoSettings.machine_size_min[i]  = default_size_min[i];
     infoSettings.machine_size_max[i]  = default_size_max[i];
   }
 
-  for (int i = 0; i < FEEDRATE_COUNT - 1 ; i++) //xy, z
+  for (int i = 0; i < FEEDRATE_COUNT - 1 ; i++)  //xy, z
   {
     infoSettings.level_feedrate[i]    = default_level_speed[i];
   }
@@ -161,7 +166,7 @@ void infoSettingsReset(void)
 void initMachineSetting(void)
 {
   // some settings are assumes as active unless reported disabled by marlin
-  infoMachineSettings.firmwareType            = FW_NOT_DETECTED; // set fimware type to not_detected to avoid repeated ABL gcode on mode change
+  infoMachineSettings.firmwareType            = FW_NOT_DETECTED;  // set fimware type to not_detected to avoid repeated ABL gcode on mode change
   infoMachineSettings.EEPROM                  = ENABLED;
   infoMachineSettings.autoReportTemp          = DISABLED;
   infoMachineSettings.leveling                = BL_DISABLED;
@@ -205,7 +210,7 @@ void setupMachine(void)
     storeCmd("M420 S1\n");
   }
 
-  if (infoMachineSettings.firmwareType != FW_MARLIN) // Smoothieware does not report detailed M115 capabilities
+  if (infoMachineSettings.firmwareType != FW_MARLIN)  // Smoothieware does not report detailed M115 capabilities
   {
     infoMachineSettings.EEPROM                  = ENABLED;
     infoMachineSettings.autoReportTemp          = DISABLED;
@@ -244,7 +249,7 @@ float flashUsedPercentage(void)
 // check font/icon/config signature in SPI flash for update
 void checkflashSign(void)
 {
-  //cur_flash_sign[lang_sign] = flash_sign[lang_sign]; // ignore language signature not implemented yet
+  //cur_flash_sign[lang_sign] = flash_sign[lang_sign];  // ignore language signature not implemented yet
 
   bool statusfont = getFlashSignStatus(font_sign);
   bool statusconfig = getFlashSignStatus(config_sign);

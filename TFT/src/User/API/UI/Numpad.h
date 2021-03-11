@@ -55,7 +55,7 @@ typedef enum
 }NUM_KEY_VALUES;
 
 
-float numPadFloat(u8* title, float old_val, float reset_val, bool negative);
+double numPadFloat(u8* title, double old_val, double reset_val, bool negative);
 
 int32_t numPadInt(u8* title, int32_t old_val, int32_t reset_val, bool negative);
 

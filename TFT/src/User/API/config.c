@@ -17,11 +17,11 @@ const GUI_RECT  recterrortxt      = {BYTE_WIDTH/2,    BYTE_HEIGHT*2+4,    LCD_WI
 const GUI_RECT  rectProgressframe = {BYTE_WIDTH/2-2, LCD_HEIGHT-(BYTE_HEIGHT*2+BYTE_HEIGHT/2), LCD_WIDTH-BYTE_WIDTH/2+2,LCD_HEIGHT-BYTE_HEIGHT/2};
 const GUI_POINT pointProgressText = {BYTE_WIDTH/2-2, LCD_HEIGHT-(BYTE_HEIGHT*4)};
 
-u16 foundkeys = 0;
+uint16_t foundkeys = 0;
 
 CONFIGFILE * CurConfigFile;
 char * cur_line = NULL;
-static u16 c_index = 0;
+static uint16_t c_index = 0;
 
 uint8_t customcode_index = 0;
 uint8_t customcode_good[CUSTOM_GCODES_COUNT];
@@ -93,7 +93,7 @@ bool getLangFromFile(void)
   char langpath[256];
   sprintf(langpath, "0:%s", f.fname);
 
-  if(!f_file_exists(langpath))
+  if (!f_file_exists(langpath))
     return false;
 
   char cur_line_buffer[MAX_LANG_LABEL_LENGTH + 100];
@@ -134,7 +134,7 @@ bool readConfigFile(const char * path, void (*lineParser)(), uint16_t maxLineLen
   bool comment_space = true;
   char cur_char;
   char last_char = 0;
-  u8 count = 0;
+  uint8_t count = 0;
   UINT br = 0;
   CONFIGFILE configFile;
   CurConfigFile = &configFile;
@@ -240,7 +240,7 @@ bool inLimit(int val, int min, int max)
 //check if config keyword exits in the buffer line
 bool key_seen(const char * keyStr)
 {
-  u16 i;
+  uint16_t i;
   for (c_index = 0; c_index < ACK_MAX_SIZE && cur_line[c_index] != 0; c_index++)
   {
     for (i = 0; keyStr[i] != 0 && cur_line[c_index + i] != 0 && cur_line[c_index + i] == keyStr[i]; i++)
@@ -329,7 +329,7 @@ static inline void config_set_color(uint16_t *color_src)
 //check keywords in the config line in buffer
 void parseConfigLine(void)
 {
-  for (u16 i = 0; i < CONFIG_COUNT; i++)
+  for (uint16_t i = 0; i < CONFIG_COUNT; i++)
   {
     if (key_seen(config_keywords[i]))
     {
@@ -353,14 +353,14 @@ void parseLangLine(void)
       PRINTDEBUG("\n");
       PRINTDEBUG((char *)lang_key_list[i]);
       uint32_t key_addr = LANGUAGE_ADDR + (MAX_LANG_LABEL_LENGTH * i);
-      u8 * pchr = (u8 *)strchr(cur_line, ':') + 1;
+      uint8_t * pchr = (uint8_t *)strchr(cur_line, ':') + 1;
       int bytelen = strlen((char *)pchr);
 
       if (inLimit(bytelen, 1, MAX_LANG_LABEL_LENGTH))
       {
         W25Qxx_WritePage(pchr, key_addr, MAX_LANG_LABEL_LENGTH);
         char check[MAX_LANG_LABEL_LENGTH];
-        W25Qxx_ReadBuffer((u8 *)&check, key_addr, MAX_LANG_LABEL_LENGTH);
+        W25Qxx_ReadBuffer((uint8_t *)&check, key_addr, MAX_LANG_LABEL_LENGTH);
         if (strcmp(strchr(cur_line, ':') + 1, check) != 0)
           showError(CSTAT_SPI_WRITE_FAIL);
       }
@@ -383,7 +383,7 @@ void saveConfig(void)
 
   #ifdef CONFIG_DEBUG
     CUSTOM_GCODES tempgcode;  // = NULL;
-    uint8_t * data_r = (u8 *)&tempgcode;
+    uint8_t * data_r = (uint8_t *)&tempgcode;
 
     W25Qxx_ReadBuffer(data_r, CUSTOM_GCODE_ADDR, sizeof(CUSTOM_GCODES));
     PRINTDEBUG("\nread done");
@@ -428,7 +428,7 @@ void resetConfig(void)
   int n = 0;
   for (int i = 0; i < CUSTOM_GCODES_COUNT; i++)
   {
-    if(default_custom_enabled[i] == 1)
+    if (default_custom_enabled[i] == 1)
     {
       strcpy(tempCG.gcode[n],cg_list[i]);
       strcpy(tempCG.name[n],cg_names[i]);
@@ -456,7 +456,7 @@ void resetConfig(void)
   writeConfig((uint8_t *)&tempST, sizeof(STRINGS_STORE), STRINGS_STORE_ADDR, STRINGS_STORE_MAX_SIZE);
 }
 
-void drawProgressPage(u8 * title)
+void drawProgressPage(uint8_t * title)
 {
   GUI_Clear(BLACK);
   GUI_DispString(2, 2, title);
@@ -469,8 +469,8 @@ void drawProgress(void)
 {
   char tempstr[50];
   sprintf(tempstr, "Total keywords found: %d", foundkeys);
-  GUI_DispString(pointProgressText.x, pointProgressText.y, (u8 *)tempstr);
-  u16 p = map(CurConfigFile->cur, 0, CurConfigFile->size, rectProgressframe.x0, rectProgressframe.x1);
+  GUI_DispString(pointProgressText.x, pointProgressText.y, (uint8_t *)tempstr);
+  uint16_t p = map(CurConfigFile->cur, 0, CurConfigFile->size, rectProgressframe.x0, rectProgressframe.x1);
   GUI_FillRect(rectProgressframe.x0, rectProgressframe.y0, p, rectProgressframe.y1);
 }
 
@@ -523,7 +523,7 @@ void showError(CONFIG_STATS stat)
 }
 
 // parse the keyword values in the buffer
-void parseConfigKey(u16 index)
+void parseConfigKey(uint16_t index)
 {
   switch (index)
   {
@@ -613,7 +613,7 @@ void parseConfigKey(u16 index)
 
     //----------------------------Marlin Mode Settings (only for TFT24_V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70_V3.0)
 
-    #if defined(ST7920_SPI) || defined(LCD2004_simulator)
+    #ifdef HAS_EMULATOR
 
       case C_INDEX_MODE:
         SET_VALID_INT_VALUE(infoSettings.mode, 0, MODE_COUNT - 1);
@@ -654,7 +654,11 @@ void parseConfigKey(u16 index)
         break;
       }
 
-    #endif // ST7920_SPI || LCD2004_simulator
+    #endif // ST7920_EMULATOR || LCD2004_EMULATOR
+
+    //----------------------------RRF Mode Settings
+    case C_INDEX_RRF_MACROS_ON:
+      infoSettings.rrf_macros_enable = getOnOff();
 
     //----------------------------Printer / Machine Settings
 
@@ -772,12 +776,12 @@ void parseConfigKey(u16 index)
       break;
 
     case C_INDEX_PAUSE_POS:
-      if (key_seen("X")) SET_VALID_FLOAT_VALUE(infoSettings.pause_pos[X_AXIS], MIN_POS_LIMIT, MAX_SIZE_LIMIT);
-      if (key_seen("Y")) SET_VALID_FLOAT_VALUE(infoSettings.pause_pos[Y_AXIS], MIN_POS_LIMIT, MAX_SIZE_LIMIT);
+      if (key_seen("X")) SET_VALID_FLOAT_VALUE(infoSettings.pause_pos[X_AXIS], MIN_XY_POS_LIMIT, MAX_SIZE_LIMIT);
+      if (key_seen("Y")) SET_VALID_FLOAT_VALUE(infoSettings.pause_pos[Y_AXIS], MIN_XY_POS_LIMIT, MAX_SIZE_LIMIT);
       break;
 
     case C_INDEX_PAUSE_Z_RAISE:
-      SET_VALID_FLOAT_VALUE(infoSettings.pause_z_raise, MIN_POS_LIMIT, MAX_SIZE_LIMIT);
+      SET_VALID_FLOAT_VALUE(infoSettings.pause_z_raise, MIN_Z_POS_LIMIT, MAX_SIZE_LIMIT);
       break;
 
     case C_INDEX_PAUSE_FEEDRATE:
@@ -787,15 +791,15 @@ void parseConfigKey(u16 index)
       break;
 
     case C_INDEX_LEVEL_EDGE:
-      SET_VALID_INT_VALUE(infoSettings.level_edge, MIN_POS_LIMIT, MAX_SIZE_LIMIT);
+      SET_VALID_INT_VALUE(infoSettings.level_edge, MIN_Z_POS_LIMIT, MAX_SIZE_LIMIT);
       break;
 
     case C_INDEX_LEVEL_Z_POS:
-      SET_VALID_FLOAT_VALUE(infoSettings.level_z_pos, MIN_POS_LIMIT, MAX_SIZE_LIMIT);
+      SET_VALID_FLOAT_VALUE(infoSettings.level_z_pos, MIN_Z_POS_LIMIT, MAX_SIZE_LIMIT);
       break;
 
     case C_INDEX_LEVEL_Z_RAISE:
-      SET_VALID_FLOAT_VALUE(infoSettings.level_z_raise, MIN_POS_LIMIT, MAX_SIZE_LIMIT);
+      SET_VALID_FLOAT_VALUE(infoSettings.level_z_raise, MIN_Z_POS_LIMIT, MAX_SIZE_LIMIT);
       break;
 
     case C_INDEX_LEVEL_FEEDRATE:
@@ -807,7 +811,11 @@ void parseConfigKey(u16 index)
       infoSettings.xy_offset_probing = getOnOff();
       break;
 
-   case C_INDEX_Z_STEPPERS_ALIGNMENT:
+    case C_INDEX_Z_RAISE_PROBING:
+      SET_VALID_FLOAT_VALUE(infoSettings.z_raise_probing, MIN_Z_POS_LIMIT, MAX_SIZE_LIMIT);
+      break;
+
+    case C_INDEX_Z_STEPPERS_ALIGNMENT:
       infoSettings.z_steppers_alignment = getOnOff();
       break;
 
@@ -820,7 +828,7 @@ void parseConfigKey(u16 index)
     {
       char pchr[LINE_MAX_CHAR];
       strcpy(pchr, strrchr(cur_line, ':') + 1);
-      int utf8len = getUTF8Length((u8 *)pchr);
+      int utf8len = getUTF8Length((uint8_t *)pchr);
       int bytelen = strlen(pchr) + 1;
       if (inLimit(utf8len, NAME_MIN_LENGTH, MAX_STRING_LENGTH) && inLimit(bytelen, NAME_MIN_LENGTH, MAX_GCODE_LENGTH))
         strcpy(configStringsStore->preheat_name[index - C_INDEX_PREHEAT_NAME_1], pchr);
@@ -1030,7 +1038,7 @@ void parseConfigKey(u16 index)
         strcpy(configPrintGcodes->start_gcode, pchr);
         #ifdef CONFIG_DEBUG
           GUI_DispStringInRect(recterrortxt.x0, recterrortxt.y0 + (BYTE_HEIGHT * 2), recterrortxt.x1, recterrortxt.y1,
-                              (u8 *)configPrintGcodes->start_gcode);
+                              (uint8_t *)configPrintGcodes->start_gcode);
           Delay_ms(1000);
           Delay_ms(1000);
         #endif
@@ -1048,7 +1056,7 @@ void parseConfigKey(u16 index)
         strcpy(configPrintGcodes->end_gcode, pchr);
       #ifdef CONFIG_DEBUG
         GUI_DispStringInRect(recterrortxt.x0, recterrortxt.y0 + (BYTE_HEIGHT * 2), recterrortxt.x1, recterrortxt.y1,
-                             (u8 *)configPrintGcodes->end_gcode);
+                             (uint8_t *)configPrintGcodes->end_gcode);
         Delay_ms(1000);
         Delay_ms(1000);
       #endif
@@ -1066,7 +1074,7 @@ void parseConfigKey(u16 index)
         strcpy(configPrintGcodes->cancel_gcode, pchr);
       #ifdef CONFIG_DEBUG
         GUI_DispStringInRect(recterrortxt.x0, recterrortxt.y0 + (BYTE_HEIGHT * 2), recterrortxt.x1, recterrortxt.y1,
-                             (u8 *)configPrintGcodes->cancel_gcode);
+                             (uint8_t *)configPrintGcodes->cancel_gcode);
         Delay_ms(1000);
         Delay_ms(1000);
       #endif

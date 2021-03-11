@@ -17,7 +17,7 @@ const MENUITEMS connectionSettingsItems = {
   // title
   LABEL_CONNECTION_SETTINGS,
   // icon                         label
-  {{ICON_BAUD_RATE,               LABEL_BAUDRATE},
+  {{ICON_BAUD_RATE,                LABEL_BAUDRATE},
     {ICON_DISCONNECT,              LABEL_DISCONNECT},
     {ICON_STOP,                    LABEL_EMERGENCYSTOP},
     {ICON_RESET_VALUE,             LABEL_RESET},
@@ -32,17 +32,17 @@ const MENUITEMS connectionSettingsItems = {
 void menuDisconnect(void)
 {
   GUI_Clear(infoSettings.bg_color);
-  GUI_DispStringInRect(20, 0, LCD_WIDTH-20, LCD_HEIGHT, textSelect(LABEL_DISCONNECT_INFO));
-  GUI_DispStringInRect(20, LCD_HEIGHT - (BYTE_HEIGHT*2), LCD_WIDTH-20, LCD_HEIGHT, textSelect(LABEL_TOUCH_TO_EXIT));
+  GUI_DispStringInRect(20, 0, LCD_WIDTH - 20, LCD_HEIGHT, textSelect(LABEL_DISCONNECT_INFO));
+  GUI_DispStringInRect(20, LCD_HEIGHT - (BYTE_HEIGHT * 2), LCD_WIDTH - 20, LCD_HEIGHT, textSelect(LABEL_TOUCH_TO_EXIT));
 
   Serial_ReSourceDeInit();
-  while(!isPress())
+  while (!isPress())
   {
     #ifdef LCD_LED_PWM_CHANNEL
       loopDimTimer();
     #endif
   }
-  while(isPress())
+  while (isPress())
   {
     #ifdef LCD_LED_PWM_CHANNEL
       loopDimTimer();
@@ -53,8 +53,8 @@ void menuDisconnect(void)
   infoMenu.cur--;
 }
 
-const char * const item_baudrate_str[BAUDRATE_COUNT] = {"2400",   "9600",   "19200",  "38400",  "57600",
-                                                        "115200", "250000", "500000", "1000000"};
+const char * const item_baudrate_str[BAUDRATE_COUNT] = {
+  "2400", "9600", "19200", "38400", "57600", "115200", "250000", "500000", "1000000"};
 
 void menuBaudrate(void)
 {
@@ -65,7 +65,7 @@ void menuBaudrate(void)
   uint8_t cur_item = 0;
 
   // fill baudrate items
-  for(uint8_t i = 0; i < COUNT(totalItems); i++)
+  for (uint8_t i = 0; i < COUNT(totalItems); i++)
   {
     if (infoSettings.baudrate == i)
     {
@@ -100,19 +100,19 @@ void menuBaudrate(void)
         break;
 
       default:
-        if(key_num < LISTITEM_PER_PAGE)
+        if (key_num < LISTITEM_PER_PAGE)
         {
           uint16_t tmp_i = listWidgetGetCurPage() * LISTITEM_PER_PAGE + key_num;
           if (tmp_i != cur_item)
           { // has changed
             totalItems[cur_item].icon = ICONCHAR_UNCHECKED;
-            listWidgetRefreshItem(cur_item); // refresh unchecked status
+            listWidgetRefreshItem(cur_item);  // refresh unchecked status
             cur_item = tmp_i;
             totalItems[cur_item].icon = ICONCHAR_CHECKED;
-            listWidgetRefreshItem(cur_item); // refresh checked status
+            listWidgetRefreshItem(cur_item);  // refresh checked status
 
             infoSettings.baudrate = cur_item;
-            Serial_ReSourceDeInit(); // Serial_Init() will malloc a dynamic memory, so Serial_DeInit() first to free, then malloc again.
+            Serial_ReSourceDeInit();  // Serial_Init() will malloc a dynamic memory, so Serial_DeInit() first to free, then malloc again.
             Serial_ReSourceInit();
             reminderMessage(LABEL_UNCONNECTED, STATUS_UNCONNECT);
           }
@@ -123,7 +123,7 @@ void menuBaudrate(void)
     loopProcess();
   }
 
-  if(memcmp(&now, &infoSettings, sizeof(SETTINGS)))
+  if (memcmp(&now, &infoSettings, sizeof(SETTINGS)))
   {
     storePara();
   }
@@ -167,6 +167,7 @@ void menuConnectionSettings(void)
       default :
         break;
     }
+
     loopProcess();
   }
 }

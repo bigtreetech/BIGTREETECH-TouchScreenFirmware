@@ -100,6 +100,8 @@ void Hardware_GenericInit(void)
 
 int main(void)
 {
+  SystemClockInit();
+
   SCB->VTOR = VECT_TAB_FLASH;
 
   Hardware_GenericInit();

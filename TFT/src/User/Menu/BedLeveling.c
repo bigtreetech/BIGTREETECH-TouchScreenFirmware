@@ -21,15 +21,17 @@ void menuBedLeveling(void)
   MENUITEMS bedLevelingItems = {
     // title
     LABEL_ABL_SETTINGS,
-    // icon                         label
-    {{ICON_LEVELING,                LABEL_ABL},
-     {ICON_MESH_EDITOR,             LABEL_MESH_EDITOR},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_Z_FADE,                  LABEL_ABL_Z},
-     {ICON_PROBE_OFFSET,            LABEL_H_OFFSET},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACK,                    LABEL_BACK},}
+    // icon                          label
+    {
+      {ICON_LEVELING,                LABEL_ABL},
+      {ICON_MESH_EDITOR,             LABEL_MESH_EDITOR},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_Z_FADE,                  LABEL_ABL_Z},
+      {ICON_PROBE_OFFSET,            LABEL_H_OFFSET},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_BACK,                    LABEL_BACK},
+    }
   };
 
   KEY_VALUES key_num = KEY_IDLE;
@@ -112,9 +114,9 @@ void menuBedLeveling(void)
       case KEY_ICON_4:
       {
         char tempstr[30];
-        sprintf(tempstr, "%Min:%.2f | Max:%.2f", Z_FADE_MIN_VALUE, Z_FADE_MAX_VALUE);
+        sprintf(tempstr, "Min:%.2f | Max:%.2f", Z_FADE_MIN_VALUE, Z_FADE_MAX_VALUE);
 
-        float val = numPadFloat((u8 *) tempstr, getParameter(P_ABL_STATE, 1), 0.0f, false);
+        float val = numPadFloat((uint8_t *) tempstr, getParameter(P_ABL_STATE, 1), 0.0f, false);
         storeCmd("M420 Z%.2f\n", NOBEYOND(Z_FADE_MIN_VALUE, val, Z_FADE_MAX_VALUE));
 
         menuDrawPage(&bedLevelingItems);

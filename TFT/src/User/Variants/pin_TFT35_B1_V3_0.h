@@ -7,7 +7,7 @@
 #endif
 
 #ifndef NEOPIXEL_PIXELS
-  #define NEOPIXEL_PIXELS  2
+  #define NEOPIXEL_PIXELS 2
 #endif
 
 #include "pin_TFT35_E3_V3_0.h"

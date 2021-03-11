@@ -25,7 +25,7 @@ const char smallIconBmpName[][32]={
 //add new icons in small_icon_list.inc only
 };
 
-BMPUPDATE_STAT bmpDecode(char *bmp, u32 addr)
+BMPUPDATE_STAT bmpDecode(char *bmp, uint32_t addr)
 {
   FIL bmpFile;
   char magic[2];
@@ -217,11 +217,11 @@ void dispIconFail(uint8_t *lbl, BMPUPDATE_STAT bmpState)
   Delay_ms(1000); // give some time to the user to read failed icon name.
 }
 
-bool updateFont(char *font, u32 addr)
+bool updateFont(char *font, uint32_t addr)
 {
   uint8_t progress = 0;
   UINT rnum = 0;
-  u32 offset = 0;
+  uint32_t offset = 0;
   char buffer[128];
   FIL myfp;
   uint8_t*  tempbuf = NULL;
@@ -237,19 +237,19 @@ bool updateFont(char *font, u32 addr)
   GUI_DispString(0, 100, (uint8_t*)buffer);
   GUI_DispString(0, 140, (uint8_t*)"Updating:   %");
 
-  while(!f_eof(&myfp))
+  while (!f_eof(&myfp))
   {
     if (f_read(&myfp, tempbuf, W25QXX_SECTOR_SIZE, &rnum) != FR_OK) break;
 
     W25Qxx_EraseSector(addr + offset);
     W25Qxx_WriteBuffer(tempbuf, addr + offset, W25QXX_SECTOR_SIZE);
     offset += rnum;
-    if(progress != offset * 100 / f_size(&myfp))
+    if (progress != offset * 100 / f_size(&myfp))
     {
       progress = offset * 100 / f_size(&myfp);
       GUI_DispDec(0 + BYTE_WIDTH*9, 140, progress, 3, RIGHT);
     }
-    if(rnum !=W25QXX_SECTOR_SIZE)break;
+    if (rnum !=W25QXX_SECTOR_SIZE) break;
   }
 
   f_close(&myfp);
@@ -327,32 +327,47 @@ static inline void saveflashSign(uint8_t* buf, uint32_t size)
 
 void scanUpdates(void)
 {
-  //bool flashUpdate[sign_count] = {true, true, true, true};
-  uint32_t cur_flash_sign[sign_count];
-  W25Qxx_ReadBuffer((uint8_t*)&cur_flash_sign, FLASH_SIGN_ADDR, sizeof(cur_flash_sign));
-
-  if(mountSDCard())
+  if (mountSDCard())
   {
+    bool flash_sign_updated = false;
+    uint32_t saved_flash_sign[sign_count];
+    W25Qxx_ReadBuffer((uint8_t*)&saved_flash_sign, FLASH_SIGN_ADDR, sizeof(saved_flash_sign));
+
     if (f_dir_exists(FONT_ROOT_DIR))
     {
       if (updateFont(FONT_ROOT_DIR "/byte_ascii.fon", BYTE_ASCII_ADDR) &&
           updateFont(FONT_ROOT_DIR "/word_unicode.fon", WORD_UNICODE) &&
-          updateFont(FONT_ROOT_DIR "/large_byte_ascii.fon", LARGE_FONT_ADDR))
-        cur_flash_sign[font_sign] = FONT_CHECK_SIGN;
+          updateFont(FONT_ROOT_DIR "/large_byte_ascii.fon", LARGE_FONT_ADDR) &&
+          (saved_flash_sign[font_sign] != FONT_CHECK_SIGN))
+      {
+        saved_flash_sign[font_sign] = FONT_CHECK_SIGN;
+        flash_sign_updated = true;
+      }
     }
     if (f_dir_exists(BMP_ROOT_DIR))
     {
-      if (updateIcon())
-        cur_flash_sign[icon_sign] = ICON_CHECK_SIGN;
+      if (updateIcon() && (saved_flash_sign[icon_sign] != ICON_CHECK_SIGN))
+      {
+        saved_flash_sign[icon_sign] = ICON_CHECK_SIGN;
+        flash_sign_updated = true;
+      }
     }
-    if (getConfigFromFile())
-      cur_flash_sign[config_sign] = CONFIG_CHECK_SIGN;
-    if (getLangFromFile())
-      cur_flash_sign[lang_sign] = LANGUAGE_CHECK_SIGN;
+    if (getConfigFromFile() && (saved_flash_sign[config_sign] != CONFIG_CHECK_SIGN))
+    {
+      saved_flash_sign[config_sign] = CONFIG_CHECK_SIGN;
+      flash_sign_updated = true;
+    }
+    if (getLangFromFile() && (saved_flash_sign[lang_sign] != LANGUAGE_CHECK_SIGN))
+    {
+      saved_flash_sign[lang_sign] = LANGUAGE_CHECK_SIGN;
+      flash_sign_updated = true;
+    }
     scanRenameUpdate();
     scanResetDir();
-    saveflashSign((uint8_t*)cur_flash_sign, sizeof(cur_flash_sign));
 
+    if (flash_sign_updated)
+    {
+      saveflashSign((uint8_t*)saved_flash_sign, sizeof(saved_flash_sign));
+    }
   }
 }
-

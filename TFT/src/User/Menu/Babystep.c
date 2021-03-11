@@ -1,7 +1,7 @@
 #include "Babystep.h"
 #include "includes.h"
 
-static u8 moveLenSteps_index = 0;
+static uint8_t moveLenSteps_index = 0;
 
 void babyReDraw(float babystep, float z_offset, bool force_z_offset, bool skip_header)
 {
@@ -25,7 +25,7 @@ void babyReDraw(float babystep, float z_offset, bool force_z_offset, bool skip_h
   setLargeFont(true);
 
   sprintf(tempstr, "% 6.2f", babystep);
-  GUI_DispStringRight(point_bs.x, point_bs.y, (u8 *) tempstr);
+  GUI_DispStringRight(point_bs.x, point_bs.y, (uint8_t*) tempstr);
 
   sprintf(tempstr, "% 6.2f", z_offset);
 
@@ -34,7 +34,7 @@ void babyReDraw(float babystep, float z_offset, bool force_z_offset, bool skip_h
   else
     GUI_SetColor(infoSettings.font_color);
 
-  GUI_DispStringRight(point_of.x, point_of.y, (u8 *) tempstr);
+  GUI_DispStringRight(point_of.x, point_of.y, (uint8_t*) tempstr);
 
   // restore default font color
   GUI_SetColor(infoSettings.font_color);
@@ -62,15 +62,17 @@ void menuBabystep(void)
   MENUITEMS babyStepItems = {
     // title
     LABEL_BABYSTEP,
-    // icon                         label
-    {{ICON_DEC,                     LABEL_DEC},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_INC,                     LABEL_INC},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_001_MM,                  LABEL_001_MM},
-     {ICON_RESET_VALUE,             LABEL_RESET},
-     {ICON_BACK,                    LABEL_BACK},}
+    // icon                          label
+    {
+      {ICON_DEC,                     LABEL_DEC},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_INC,                     LABEL_INC},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_001_MM,                  LABEL_001_MM},
+      {ICON_RESET_VALUE,             LABEL_RESET},
+      {ICON_BACK,                    LABEL_BACK},
+    }
   };
 
   #ifdef FRIENDLY_Z_OFFSET_LANGUAGE
@@ -169,7 +171,7 @@ void menuBabystep(void)
         if (infoMachineSettings.zProbe == ENABLED || infoMachineSettings.leveling == BL_MBL)
           orig_z_offset = offsetSetValue(new_z_offset - babystep);  // set new Z offset. Required if current Z offset is not changed applying babystep changes (e.g. no BABYSTEP_ZPROBE_OFFSET is set in Marlin FW)
         else  // if HomeOffset
-          orig_z_offset = offsetSetValue(new_z_offset + babystep);  // set new Z offset. Required if current Z offset is not changed applying babystep changes (e.g. no BABYSTEP_ZPROBE_OFFSET is set in Marlin FW)        
+          orig_z_offset = offsetSetValue(new_z_offset + babystep);  // set new Z offset. Required if current Z offset is not changed applying babystep changes (e.g. no BABYSTEP_ZPROBE_OFFSET is set in Marlin FW)
         break;
 
       case KEY_ICON_7:

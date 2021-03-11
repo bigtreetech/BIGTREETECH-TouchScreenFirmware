@@ -1,10 +1,11 @@
 #include "MeshEditor.h"
 #include "includes.h"
 
-#define MESH_GRID_SIZE (MESH_GRID_MAX_POINTS_X * MESH_GRID_MAX_POINTS_Y)
-#define MESH_MAX_PARSED_ROWS 30                            // Set the maximum number of data rows to parse for retrieving the mesh
+#define MESH_GRID_SIZE             (MESH_GRID_MAX_POINTS_X * MESH_GRID_MAX_POINTS_Y)
+#define MESH_MAX_PARSED_ROWS       30                      // maximum number of data rows to parse for retrieving the mesh
                                                            // grid from the "M420 T1 V1" command output provided by the Marlin FW
-#define MESH_LINE_EDGE_DISTANCE 4
+#define MESH_MAX_RETRIEVE_ATTEMPTS 20                      // maximum number of attempts to retrieve the data format from Marlin FW
+#define MESH_LINE_EDGE_DISTANCE    4
 
 // colors
 #define VALUE_FONT_COLOR   infoSettings.font_color
@@ -263,7 +264,7 @@ void meshDeallocData(void)
 bool processKnownDataFormat(char *dataRow)
 {
   bool isKnown = false;
-  u8 i;
+  uint8_t i;
 
   for (i = 0; i < COUNT(meshDataFormat); i++)
   {
@@ -568,7 +569,7 @@ void meshDrawInfoCell(const GUI_RECT *rect, float *val, bool largeFont, uint16_t
 
     GUI_SetColor(color);
     setLargeFont(largeFont);
-    GUI_DispStringInPrect(rect, (u8 *) tempstr);
+    GUI_DispStringInPrect(rect, (uint8_t *) tempstr);
     setLargeFont(false);
   }
 
@@ -598,7 +599,7 @@ void meshDrawFullInfo(void)
   meshDrawInfo(&minValue, &maxValue, &origValue, &curValue);
 }
 
-void meshKeyPress(u8 index, u8 isPressed)
+void meshKeyPress(uint8_t index, uint8_t isPressed)
 {
   if (index >= ME_KEY_NUM)
     return;
@@ -635,7 +636,7 @@ void meshDrawKeyboard(void)
   for (uint8_t i = 0; i < ME_KEY_NUM; i++)
   {
     if (!(i == ME_KEY_SAVE || i == ME_KEY_OK || i == ME_KEY_RESET || i == ME_KEY_HOME))            // if not a unicode string
-      GUI_DispStringInPrect(&meshKeyRect[i], (u8 *) meshKeyString[i]);
+      GUI_DispStringInPrect(&meshKeyRect[i], (uint8_t *) meshKeyString[i]);
   }
 
   if (infoMachineSettings.EEPROM == 1)
@@ -698,7 +699,7 @@ void meshSave(bool saveOnChange)
 
   if (infoMachineSettings.EEPROM == 1)
   {
-    setDialogText((u8 *) meshData->saveTitle, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
+    setDialogText((uint8_t *) meshData->saveTitle, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
     showDialog(DIALOG_TYPE_QUESTION, meshSaveCallback, NULL, NULL);
   }
 }
@@ -715,7 +716,6 @@ bool meshIsWaitingFirstData(void)
 bool meshIsWaitingData(void)
 {
   if (meshData == NULL ||
-    meshData->status == ME_DATA_IDLE ||
     meshData->status == ME_DATA_FULL ||
     meshData->status == ME_DATA_FAILED)                    // if mesh editor is not running or is not waiting for data
     return false;
@@ -767,12 +767,25 @@ void meshUpdateData(char *dataRow)
   if (meshIsWaitingFirstData())                            // if waiting for first data
   {
     if (processKnownDataFormat(dataRow))                   // if known data format, change state to EMPTY and proceed with data handling
+    {
+      meshData->parsedRows = 0;
       meshData->status = ME_DATA_EMPTY;
+    }
+    else if (meshData->parsedRows < MESH_MAX_RETRIEVE_ATTEMPTS)      // max number of attempts to retrieve data format from Marlin
+    {
+      meshData->parsedRows++;
+
+      return;
+    }
     else
+    {
       failed = true;
+    }
   }
   else if (!meshIsWaitingData())                           // if not waiting for data, nothing to do
+  {
     return;
+  }
 
   if (!failed)
   {
@@ -814,7 +827,9 @@ void meshUpdateData(char *dataRow)
         memcpy(&meshData->data, &meshData->dataOrig, sizeof(meshData->dataOrig));
       }
       else                                                 // if mesh grid is smaller than a 1x1 matrix, data grid is marked as failed
+      {
         failed = true;
+      }
     }
   }
 
@@ -826,7 +841,7 @@ void meshUpdateData(char *dataRow)
 
     sprintf(&tempMsg[strlen(tempMsg)], "\n %s", dataRow);
 
-    popupReminder(DIALOG_TYPE_ERROR, LABEL_MESH_EDITOR, (u8 *) tempMsg);
+    popupReminder(DIALOG_TYPE_ERROR, LABEL_MESH_EDITOR, (uint8_t *) tempMsg);
 
     infoMenu.cur--;                                        // exit from mesh editor menu. it avoids to loop in case of persistent error
 
@@ -891,6 +906,7 @@ void menuMeshEditor(void)
             forceHoming = false;
 
             mustStoreCmd("G28\n");                         // only the first time, home the printer
+            probeHeightStop(infoSettings.z_raise_probing); // raise nozzle
           }
 
           curValue = menuMeshTuner(meshGetCol(), meshGetJ(), meshGetValue(meshGetIndex()));
@@ -918,6 +934,7 @@ void menuMeshEditor(void)
         forceHoming = false;
 
         mustStoreCmd("G28\n");                             // force homing (e.g. if steppers are disarmed)
+        probeHeightStop(infoSettings.z_raise_probing);     // raise nozzle
         break;
 
       case ME_KEY_SAVE:

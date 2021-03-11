@@ -1,29 +1,29 @@
 #include "MachineParameters.h"
 #include "includes.h"
 
-PARAMETERS infoParameters;
+const uint8_t parameter_element_count[PARAMETERS_COUNT] = {5, 5, 5, 3, 4, 1, 3, 4, 4, 1, 3, 2, 3, 2, 3, 5, 3, 5, 5, 1};
 
-const u8 parameter_element_count[PARAMETERS_COUNT] = {5, 5, 5, 3, 4, 1, 3, 4, 4, 1, 3, 2, 3, 2, 5, 3, 5, 1};
-
-const char *const parameter_Cmd[PARAMETERS_COUNT][STEPPER_COUNT] = {
-  {"M92 X%.2f\n",                "M92 Y%.2f\n",                "M92 Z%.2f\n",                "M92 T0 E%.2f\n",    "M92 T1 E%.2f\nM503 S0\n"},   //Steps/mm
-  {"M203 X%.0f\n",               "M203 Y%.0f\n",               "M203 Z%.0f\n",               "M203 T0 E%.0f\n",   "M203 T1 E%.0f\nM503 S0\n"},  //MaxFeedrate
-  {"M201 X%.0f\n",               "M201 Y%.0f\n",               "M201 Z%.0f\n",               "M201 T0 E%.0f\n",   "M201 T1 E%.0f\nM503 S0\n"},  //MaxAcceleration
-  {"M204 P%.0f\n",               "M204 R%.0f\n",               "M204 T%.0f\n",               NULL,                NULL},                        //Acceleration
-  {"M205 X%.0f\n",               "M205 Y%.0f\n",               "M205 Z%.2f\n",               "M205 E%.2f\n",      NULL},                        //Jerk
-  {"M205 J%.3f\n",               NULL,                         NULL,                         NULL,                NULL},                        //Junction Deviation
-  {"M206 X%.2f\n",               "M206 Y%.2f\n",               "M206 Z%.2f\n",               NULL,                NULL},                        //Home offset
-  {"M207 S%.2f\n",               "M207 W%.2f\n",               "M207 F%.2f\n",               "M207 Z%.2f\n",      NULL},                        //FW retract
-  {"M208 S%.2f\n",               "M208 W%.2f\n",               "M208 F%.2f\n",               "M208 R%.2f\n",      NULL},                        //FW retract recover
-  {"M209 S%.0f\nM503 S0\n",      NULL,                         NULL,                         NULL,                NULL},                        //Set auto FW retract
-  {"M218 T1 X%.2f\nM503 S0\n",   "M218 T1 Y%.2f\nM503 S0\n",   "M218 T1 Z%.2f\nM503 S0\n",   NULL,                NULL},                        //Offset Tools
-  {"M420 S%.0f\n",               "M420 Z%.2f\n",               NULL,                         NULL,                NULL},                        //ABL State + Z Fade
-  {"M851 X%.2f\n",               "M851 Y%.2f\n",               "M851 Z%.2f\n",               NULL,                NULL},                        //Probe offset
-  {"M900 T0 K%.2f\n",            "M900 T1 K%.2f\nM503 S0\n",   NULL,                         NULL,                NULL},                        //Linear Advance
-  {"M906 X%.0f\n",               "M906 Y%.0f\n",               "M906 Z%.0f\n",               "M906 T0 E%.0f\n",   "M906 T1 E%.0f\nM503 S0\n"},  //Current
-  {"M914 X%.0f\n",               "M914 Y%.0f\n",               "M914 Z%.0f\n",               NULL,                NULL},                        //bump Sensitivity
-  {"M913 X%.0f\n",               "M913 Y%.0f\n",               "M913 Z%.0f\n",               "M913 E%.0f\n",      "M913 T1 E%.0f\nM503 S0\n"},  //TMC Hybrid Threshold Speed
-  {"G29 S4 Z%.2f\n",             NULL,                         NULL,                         NULL,                NULL},                        //MBL offset
+const char * const parameter_Cmd[PARAMETERS_COUNT][STEPPER_COUNT] = {
+    {"M92 X%.2f\n",     "M92 Y%.2f\n",       "M92 Z%.2f\n",       "M92 T0 E%.2f\n",   "M92 T1 E%.2f\n"},    //Steps/mm
+    {"M203 X%.0f\n",    "M203 Y%.0f\n",      "M203 Z%.0f\n",      "M203 T0 E%.0f\n",  "M203 T1 E%.0f\n"},   //MaxFeedrate
+    {"M201 X%.0f\n",    "M201 Y%.0f\n",      "M201 Z%.0f\n",      "M201 T0 E%.0f\n",  "M201 T1 E%.0f\n"},   //MaxAcceleration
+    {"M204 P%.0f\n",    "M204 R%.0f\n",      "M204 T%.0f\n",      NULL,               NULL},                //Acceleration
+    {"M205 X%.0f\n",    "M205 Y%.0f\n",      "M205 Z%.2f\n",      "M205 E%.2f\n",     NULL},                //Jerk
+    {"M205 J%.3f\n",    NULL,                NULL,                NULL,               NULL},                //Junction Deviation
+    {"M206 X%.2f\n",    "M206 Y%.2f\n",      "M206 Z%.2f\n",      NULL,               NULL},                //Home offset
+    {"M207 S%.2f\n",    "M207 W%.2f\n",      "M207 F%.2f\n",      "M207 Z%.2f\n",     NULL},                //FW retract
+    {"M208 S%.2f\n",    "M208 W%.2f\n",      "M208 F%.2f\n",      "M208 R%.2f\n",     NULL},                //FW retract recover
+    {"M209 S%.0f\n",    NULL,                NULL,                NULL,               NULL},                //Set auto FW retract
+    {"M218 T1 X%.2f\n", "M218 T1 Y%.2f\n",   "M218 T1 Z%.2f\n",   NULL,               NULL},                //Hotend Offset
+    {"M420 S%.0f\n",    "M420 Z%.2f\n",      NULL,                NULL,               NULL},                //ABL State + Z Fade
+    {"M851 X%.2f\n",    "M851 Y%.2f\n",      "M851 Z%.2f\n",      NULL,               NULL},                //Probe offset
+    {"M900 T0 K%.2f\n", "M900 T1 K%.2f\n",   NULL,                NULL,               NULL},                //Linear Advance
+    {"M200 S%.0f\n",    "M200 S1 T0 D%.2f\n","M200 S1 T1 D%.2f\n",NULL,               NULL},                //Filament Diameter
+    {"M906 X%.0f\n",    "M906 Y%.0f\n",      "M906 Z%.0f\n",      "M906 T0 E%.0f\n",  "M906 T1 E%.0f\n"},   //Current
+    {"M914 X%.0f\n",    "M914 Y%.0f\n",      "M914 Z%.0f\n",      NULL,               NULL},                //bump Sensitivity
+    {"M913 X%.0f\n",    "M913 Y%.0f\n",      "M913 Z%.0f\n",      "M913 T0 E%.0f\n",  "M913 T1 E%.0f\n"},   //TMC Hybrid Threshold Speed
+    {"M569 S%.0f X\n",  "M569 S%.0f Y\n",    "M569 S%.0f Z\n",    "M569 S%.0f T0 E\n","M569 S%.0f T1 E\n"}, //TMC StealthChop
+    {"G29 S4 Z%.2f\n",  NULL,                NULL,                NULL,               NULL},                //MBL offset
 };
 
 const VAL_TYPE parameter_val_type[PARAMETERS_COUNT][STEPPER_COUNT] = {
@@ -37,26 +37,31 @@ const VAL_TYPE parameter_val_type[PARAMETERS_COUNT][STEPPER_COUNT] = {
   {VAL_TYPE_FLOAT,        VAL_TYPE_FLOAT,       VAL_TYPE_INT,          VAL_TYPE_FLOAT},                     //FW retract
   {VAL_TYPE_FLOAT,        VAL_TYPE_FLOAT,       VAL_TYPE_INT,          VAL_TYPE_INT},                       //FW retract recover
   {VAL_TYPE_INT},                                                                                           //Set auto FW retract
-  {VAL_TYPE_NEG_FLOAT,    VAL_TYPE_NEG_FLOAT,   VAL_TYPE_NEG_FLOAT},                                        //Offset Tools
+  {VAL_TYPE_NEG_FLOAT,    VAL_TYPE_NEG_FLOAT,   VAL_TYPE_NEG_FLOAT},                                        //Hotend Offset
   {VAL_TYPE_INT,          VAL_TYPE_FLOAT},                                                                  //ABL State + Z Fade
   {VAL_TYPE_NEG_FLOAT,    VAL_TYPE_NEG_FLOAT,   VAL_TYPE_NEG_FLOAT},                                        //Probe offset
   {VAL_TYPE_FLOAT,        VAL_TYPE_FLOAT},                                                                  //Linear Advance
+  {VAL_TYPE_INT,          VAL_TYPE_FLOAT,       VAL_TYPE_FLOAT},                                            //Filament Diameter
   {VAL_TYPE_INT,          VAL_TYPE_INT,         VAL_TYPE_INT,          VAL_TYPE_INT,      VAL_TYPE_INT},    //Current
   {VAL_TYPE_NEG_INT,      VAL_TYPE_NEG_INT,     VAL_TYPE_NEG_INT},                                          //bump Sensitivity
   {VAL_TYPE_INT,          VAL_TYPE_INT,         VAL_TYPE_INT,          VAL_TYPE_INT,      VAL_TYPE_INT},    //TMC Hybrid Threshold Speed
+  {VAL_TYPE_INT,          VAL_TYPE_INT,         VAL_TYPE_INT,          VAL_TYPE_INT,      VAL_TYPE_INT},    //TMC StealthChop 
   {VAL_TYPE_NEG_FLOAT},                                                                                     //MBL offset
 };
 
 //Extra steppers current gcode command
-const char *const dualStepperParameter_cmd[3][AXIS_NUM] = {
-  {"M906 I1 X%.0f\n", "M906 I1 Y%.0f\n", "M906 I1 Z%.0f\n"},  //Current
-  {"M914 I1 X%.0f\n", "M914 I1 Y%.0f\n", "M914 I1 Z%.0f\n"},  //bump Sensitivity
-  {"M913 I1 X%.0f\n", "M913 I1 Y%.0f\n", "M913 I1 Z%.0f\n"},  //TMC Hybrid Threshold Speed
+const char *const dualStepperParameter_cmd[4][AXIS_NUM] = {
+  {"M906 I1 X%.0f\n",   "M906 I1 Y%.0f\n",   "M906 I1 Z%.0f\n"},    //Current
+  {"M914 I1 X%.0f\n",   "M914 I1 Y%.0f\n",   "M914 I1 Z%.0f\n"},    //bump Sensitivity
+  {"M913 I1 X%.0f\n",   "M913 I1 Y%.0f\n",   "M913 I1 Z%.0f\n"},    //TMC Hybrid Threshold Speed
+  {"M569 S%.0f I1 X\n", "M569 S%.0f I1 Y\n", "M569 S%.0f I1 Z\n"},  //TMC StealthChop 
 };
 
-bool dualstepper[TOTAL_AXIS] = {false, false, false, false};
+PARAMETERS infoParameters;
+uint32_t parametersEnabled = 0;
+uint8_t dualsteppers = 0;
 
-char *const axisDisplayID[STEPPER_COUNT] = AXIS_DISPLAY_ID;
+char * const axisDisplayID[STEPPER_COUNT] = AXIS_DISPLAY_ID;
 
 const LABEL accel_disp_ID[] = {LABEL_PRINT_ACCELERATION, LABEL_RETRACT_ACCELERATION, LABEL_TRAVEL_ACCELERATION};
 const LABEL retract_disp_ID[] = {LABEL_RETRACT_LENGTH, LABEL_RETRACT_SWAP_LENGTH, LABEL_RETRACT_FEEDRATE, LABEL_RETRACT_Z_LIFT};
@@ -64,9 +69,47 @@ const LABEL recover_disp_ID[] = {LABEL_RECOVER_LENGTH, LABEL_SWAP_RECOVER_LENGTH
 const LABEL retract_auto_ID[] = {LABEL_RETRACT_AUTO};
 const LABEL junction_deviation_disp_ID[] = {LABEL_JUNCTION_DEVIATION};
 
-float getParameter(PARAMETER_NAME name, u8 index)
+void setParameterStatus(PARAMETER_NAME name, bool status)
 {
-  if (index >= parameter_element_count[name]) return 0.0f;
+  parametersEnabled = (status == 1) ? (1 << name) | parametersEnabled : parametersEnabled & (~(1 << name));
+}
+
+uint8_t getParameterStatus(PARAMETER_NAME name)
+{
+  return (parametersEnabled >> name)  & 1;
+}
+
+uint8_t getEnabledParameterCount(void)
+{
+  uint8_t count = 0;
+  for (uint8_t i = 0; i < PARAMETERS_COUNT; i++)
+  {
+    count += (parametersEnabled >> i)  & 1;
+  }
+  return count;
+}
+
+PARAMETER_NAME getEnabledParameter(uint8_t index)
+{
+  uint8_t count = 0;
+  uint8_t state = 0;
+
+  for (uint8_t i = 0; i < PARAMETERS_COUNT; i++)
+  {
+    state = (parametersEnabled >> i)  & 1;
+    count += state;
+    if (state && count == (index + 1))
+     return i;
+  }
+  return PARAMETERS_COUNT;
+}
+
+
+
+float getParameter(PARAMETER_NAME name, uint8_t index)
+{
+  if (index >= parameter_element_count[name] || !getParameterStatus(name))
+    return 0.0f;
 
   switch (name)
   {
@@ -100,8 +143,8 @@ float getParameter(PARAMETER_NAME name, u8 index)
     case P_AUTO_RETRACT:
       return infoParameters.AutoRetract[index];
 
-    case P_OFFSET_TOOL:
-      return infoParameters.OffsetTool[index];
+    case P_HOTEND_OFFSET:
+      return infoParameters.HotendOffset[index];
 
     case P_ABL_STATE:
       return infoParameters.ABLState[index];
@@ -112,6 +155,9 @@ float getParameter(PARAMETER_NAME name, u8 index)
     case P_LIN_ADV:
       return infoParameters.LinAdvance[index];
 
+    case P_FILAMENT_SETTING:
+      return infoParameters.FilamentSetting[index];
+
     case P_CURRENT:
       return infoParameters.Current[index];
 
@@ -121,6 +167,9 @@ float getParameter(PARAMETER_NAME name, u8 index)
     case P_HYBRID_THRESHOLD:
       return infoParameters.HybridThreshold[index];
 
+    case P_STEALTH_CHOP:
+      return infoParameters.StealthChop[index]; 
+
     case P_MBL_OFFSET:
       return infoParameters.MblOffset[index];
 
@@ -129,10 +178,12 @@ float getParameter(PARAMETER_NAME name, u8 index)
   }
 }
 
-void setParameter(PARAMETER_NAME name, u8 index, float val)
+void setParameter(PARAMETER_NAME name, uint8_t index, float val)
 {
   if (index >= parameter_element_count[name])
     return;
+
+  setParameterStatus(name, true);
 
   switch (name)
   {
@@ -176,8 +227,8 @@ void setParameter(PARAMETER_NAME name, u8 index, float val)
       infoParameters.AutoRetract[index] = val;
       break;
 
-    case P_OFFSET_TOOL:
-      infoParameters.OffsetTool[index] = val;
+    case P_HOTEND_OFFSET:
+      infoParameters.HotendOffset[index] = val;
       break;
 
     case P_ABL_STATE:
@@ -192,6 +243,10 @@ void setParameter(PARAMETER_NAME name, u8 index, float val)
       infoParameters.LinAdvance[index] = val;
       break;
 
+     case P_FILAMENT_SETTING:
+      infoParameters.FilamentSetting[index] = val;
+      break;
+
     case P_CURRENT:
       infoParameters.Current[index] = val;
       break;
@@ -204,6 +259,10 @@ void setParameter(PARAMETER_NAME name, u8 index, float val)
       infoParameters.HybridThreshold[index] = val;
       break;
 
+    case P_STEALTH_CHOP:
+      infoParameters.StealthChop[index] = val; 
+      break;
+
     case P_MBL_OFFSET:
       infoParameters.MblOffset[index] = val;
       break;
@@ -213,31 +272,31 @@ void setParameter(PARAMETER_NAME name, u8 index, float val)
   }
 }
 
-u8 getParameterElementCount(PARAMETER_NAME para)
+uint8_t getParameterElementCount(PARAMETER_NAME para)
 {
   return parameter_element_count[para];
 }
 
-VAL_TYPE getParameterValType(PARAMETER_NAME para, u8 index)
+VAL_TYPE getParameterValType(PARAMETER_NAME para, uint8_t index)
 {
   return parameter_val_type[para][index];
 }
 
-void setDualStepperStatus(u8 index, bool status)
+void setDualStepperStatus(uint8_t index, bool status)
 {
-  dualstepper[index] = status;
+  dualsteppers = (status == 0) ? (1 << index) | parametersEnabled : parametersEnabled & (~(1 << index));
 }
 
-bool getDualstepperStatus(u8 index)
+bool getDualStepperStatus(uint8_t index)
 {
-  return dualstepper[index];
+  return (dualsteppers >> index) & 1;
 }
 
-void sendParameterCmd(PARAMETER_NAME para, u8 stepper_index, float Value)
+void sendParameterCmd(PARAMETER_NAME para, uint8_t stepper_index, float Value)
 {
   storeCmd(parameter_Cmd[para][stepper_index], Value);
 
-  if (dualstepper[stepper_index] && stepper_index < AXIS_NUM)
+  if (getDualStepperStatus(stepper_index) && stepper_index < AXIS_NUM)
   {
     if (para == P_CURRENT)
       storeCmd(dualStepperParameter_cmd[0][stepper_index], Value);
@@ -247,6 +306,9 @@ void sendParameterCmd(PARAMETER_NAME para, u8 stepper_index, float Value)
 
     if (para == P_HYBRID_THRESHOLD)
       storeCmd(dualStepperParameter_cmd[2][stepper_index], Value);
+
+    if (para == P_STEALTH_CHOP)
+      storeCmd(dualStepperParameter_cmd[3][stepper_index], Value);
   }
 }
 

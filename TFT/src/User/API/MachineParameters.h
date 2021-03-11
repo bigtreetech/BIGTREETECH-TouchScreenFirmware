@@ -20,22 +20,27 @@ typedef enum
   P_FWRETRACT,
   P_FWRECOVER,
   P_AUTO_RETRACT,
-  P_OFFSET_TOOL,
+  P_HOTEND_OFFSET,
   P_ABL_STATE,
   P_PROBE_OFFSET,
   P_LIN_ADV,
+  P_FILAMENT_SETTING,
   P_CURRENT,
   P_BUMPSENSITIVITY,
   P_HYBRID_THRESHOLD,
+  P_STEALTH_CHOP,
   P_MBL_OFFSET,
   // Keep below items always at the end
-  P_SAVE_SETTINGS,
-  P_RESTORE_SETTINGS,
-  P_RESET_SETTINGS,
-  P_ITEMSCOUNT
+  PARAMETERS_COUNT,
 } PARAMETER_NAME;
 
-#define PARAMETERS_COUNT P_RESET_SETTINGS
+typedef enum
+{
+  P_SAVE_SETTINGS = 0,
+  P_RESTORE_SETTINGS,
+  P_RESET_SETTINGS,
+  P_SETTINGS_COUNT,
+} PARAMETER_SETTINGS;
 
 typedef enum
 {
@@ -67,13 +72,15 @@ typedef struct
   float FwRetract[4];
   float FwRecover[4];
   float AutoRetract[1];
-  float OffsetTool[3];
+  float HotendOffset[3];
   float ABLState[2];
   float ProbeOffset[3];
   float LinAdvance[2];
+  float FilamentSetting[3];
   float Current[STEPPER_COUNT];
   float BumpSensitivity[3];
   float HybridThreshold[STEPPER_COUNT];
+  float StealthChop[5];
   float MblOffset[1];
 } PARAMETERS;
 
@@ -86,6 +93,19 @@ extern const LABEL retract_disp_ID[];
 extern const LABEL recover_disp_ID[];
 extern const LABEL retract_auto_ID[];
 
+// Set a parameter status to enable or disable.
+void setParameterStatus(PARAMETER_NAME name, bool status);
+
+// Check status of a parameter
+uint8_t getParameterStatus(PARAMETER_NAME name);
+
+// Get total enabled parameters
+uint8_t getEnabledParameterCount(void);
+
+// Get PARAMETER_NAME of selected index out of total enabled parameters
+// If no parameter is enabled, total parameter count is returned
+PARAMETER_NAME getEnabledParameter(uint8_t index);
+
 float getParameter(PARAMETER_NAME name, uint8_t index);
 void setParameter(PARAMETER_NAME name, uint8_t index, float val);
 
@@ -93,16 +113,16 @@ void setParameter(PARAMETER_NAME name, uint8_t index, float val);
 uint8_t getParameterElementCount(PARAMETER_NAME para);
 
 //Get type of value a parameter element holds
-VAL_TYPE getParameterValType(PARAMETER_NAME para, u8 index);
+VAL_TYPE getParameterValType(PARAMETER_NAME para, uint8_t index);
 
 //set status of dual stepper for an axis
-void setDualStepperStatus(u8 index, bool status);
+void setDualStepperStatus(uint8_t index, bool status);
 
 //get status of dual stepper for an axis
-bool getDualstepperStatus(u8 index);
+bool getDualStepperStatus(uint8_t index);
 
 //send parameter cmd (Parameter value gets updated after the cmd passes through the cmd cache)
-void sendParameterCmd(PARAMETER_NAME para_index, u8 stepper_index, float Value);
+void sendParameterCmd(PARAMETER_NAME para_index, uint8_t stepper_index, float Value);
 
 //Save parameter setting to eeprom
 void saveEepromSettings(void);
