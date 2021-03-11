@@ -14,12 +14,6 @@ extern "C" {
 #define FAN_TYPE_CTRL_I  2  // Controller FAN on Idle            (Check - Marlin M710)
 #define FAN_TYPE_UNKNOWN 8  // Unknown / Not defined!
 
-typedef struct
-{
-  uint8_t curFanSpeed;
-  uint8_t setFanSpeed;
-} FAN;
-
 extern char*   fanID[MAX_FAN_COUNT];
 extern char*   fanCmd[MAX_FAN_COUNT];
 extern uint8_t fanType[MAX_FAN_COUNT];
@@ -36,8 +30,6 @@ void fanSetCurPercent(uint8_t i, uint8_t percent);
 uint8_t fanGetCurPercent(uint8_t i);
 void fanBuildList(void);
 void fanControlInit(void);
-void fanSyncSpeed(uint8_t i, uint8_t speed);
-void fanSetSendWaiting(uint8_t index, bool isWaiting);
 void loopFan(void);
 bool FanChanged(uint8_t i);
 void fanSpeedQuery(void);

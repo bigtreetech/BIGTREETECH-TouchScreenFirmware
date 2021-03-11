@@ -1,8 +1,6 @@
 #include "Fan.h"
 #include "includes.h"
 
-#define UPDATE_CTL_FAN_TIME 2000  // 1s
-
 static uint8_t curIndex = 0;
 
 const ITEM itemFan[2] = {
@@ -60,9 +58,9 @@ void menuFan(void)
     }
   };
 
-  FAN lastFan;
+  LASTFAN lastFan;
   fanSetSpeed(curIndex, fanGetCurSpeed(curIndex));
-  lastFan = (FAN) {fanGetCurSpeed(curIndex), fanGetSetSpeed(curIndex)};
+  lastFan = (LASTFAN) {fanGetCurSpeed(curIndex), fanGetSetSpeed(curIndex)};
 
   if ((infoSettings.fan_count + infoSettings.fan_ctrl_count) > 1)
     fanItems.items[KEY_ICON_4] = itemFan[0];
@@ -178,15 +176,10 @@ void menuFan(void)
         break;
     }
 
-    if ((lastFan.curFanSpeed != fanGetCurSpeed(curIndex)) || (lastFan.setFanSpeed != fanGetSetSpeed(curIndex)))
+    if ((lastFan.cur != fanGetCurSpeed(curIndex)) || (lastFan.set != fanGetSetSpeed(curIndex)))
     {
-      lastFan = (FAN) {fanGetCurSpeed(curIndex), fanGetSetSpeed(curIndex)};
+      lastFan = (LASTFAN) {fanGetCurSpeed(curIndex), fanGetSetSpeed(curIndex)};
       fanSpeedReDraw(true);
-    }
-
-    if (nextScreenUpdate(UPDATE_CTL_FAN_TIME))
-    {
-      fanSpeedQuery();
     }
 
     loopProcess();

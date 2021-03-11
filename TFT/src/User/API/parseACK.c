@@ -470,17 +470,17 @@ void parseACK(void)
       // parse controller fan
       else if (ack_seen("M710"))
       {
-        uint8_t ctrl_s = fanGetTypID(0, FAN_TYPE_CTRL_S);
-        uint8_t ctrl_i = fanGetTypID(0, FAN_TYPE_CTRL_I);
-
-        if (ack_seen("S") && ctrl_s != FAN_TYPE_UNKNOWN)
+        uint8_t i = 0;
+        if (ack_seen("S"))
         {
-          fanSyncSpeed(ctrl_s, ack_value());
+          i = fanGetTypID(0,FAN_TYPE_CTRL_S);
+          fanSetCurSpeed(i, ack_value());
           fanQuerySetWait(false);
         }
-        if (ack_seen("I") && ctrl_i != FAN_TYPE_UNKNOWN)
+        if (ack_seen("I"))
         {
-          fanSyncSpeed(ctrl_i, ack_value());
+          i = fanGetTypID(0,FAN_TYPE_CTRL_I);
+          fanSetCurSpeed(i, ack_value());
           fanQuerySetWait(false);
         }
       }
