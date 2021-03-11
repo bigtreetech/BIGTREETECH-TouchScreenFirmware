@@ -47,6 +47,7 @@ typedef struct
   const char *const msg;
 } ECHO;
 
+bool dmaL1NotEmpty(uint8_t port);
 void setCurrentAckSrc(uint8_t src);
 void parseACK(void);
 void parseRcvGcode(void);

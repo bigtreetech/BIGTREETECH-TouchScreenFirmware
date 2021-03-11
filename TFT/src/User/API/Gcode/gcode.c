@@ -59,7 +59,7 @@ void clearRequestCommandInfo(void)
 */
 bool request_M21(void)
 {
-  const char * sdString = (infoMachineSettings.firmwareType == FW_REPRAPFW) ? "SDHC card " : "SD card ";
+  const char * sdString = (infoMachineSettings.firmwareType == FW_REPRAPFW) ? "card mounted " : "SD card ";
 
   resetRequestCommandInfo(sdString,               // The magic to identify the start
                           "ok",                   // The magic to identify the stop
