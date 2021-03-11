@@ -579,9 +579,16 @@ void sendQueueCmd(void)
         case 710: //M710 Controller Fan
         {
           uint8_t i = 0;
-          if (cmd_seen('S')) i = fanGetTypID(i,FAN_TYPE_CTRL_S);
-          if (cmd_seen('I')) i = fanGetTypID(i=0,FAN_TYPE_CTRL_I);
-          fanSetCurSpeed(i, cmd_value());
+          if (cmd_seen('S'))
+          {
+            i = fanGetTypID(i,FAN_TYPE_CTRL_S);
+            fanSetCurSpeed(i, cmd_value());
+          }
+          if (cmd_seen('I'))
+          {
+            i = fanGetTypID(i=0,FAN_TYPE_CTRL_I);
+            fanSetCurSpeed(i, cmd_value());
+          }
           break;
         }
 
