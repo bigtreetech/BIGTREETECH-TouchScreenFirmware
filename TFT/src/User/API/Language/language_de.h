@@ -10,6 +10,7 @@
     #define STRING_PERSISTENT_INFO        "Speicherungs-Status"
     #define STRING_FILE_LIST_MODE         "Dateien als Liste"
     #define STRING_ACK_NOTIFICATION       "ACK - Stil"
+    #define STRING_EMULATE_M600           "Emulate M600"
     #define STRING_SERIAL_ALWAYS_ON       "Seriell Verbind. immer an"
     #define STRING_MARLIN_SHOW_TITLE      "Marlin Modus Titel anz."
     #define STRING_MARLIN_FULLSCREEN      "Marlin Modus im Vollbild"

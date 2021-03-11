@@ -299,11 +299,11 @@
 #define PID_PROCESS_TIMEOUT (15 * 60000)  // (MilliSeconds, 1 minute = 60000 MilliSeconds)
 
 /**
- * M600, M601 ; pause print
+ * M601 ; pause print
  * PrusaSlicer can add M601 on certain height.
  * Acts here like manual pause.
  */
-#define NOZZLE_PAUSE_M600_M601
+#define NOZZLE_PAUSE_M601
 
 /**
  * M701, M702 ; Marlin filament load unload gcodes support

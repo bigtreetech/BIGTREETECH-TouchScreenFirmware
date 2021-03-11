@@ -10,6 +10,7 @@
     #define STRING_PERSISTENT_INFO        "Állandó állapotinfó"
     #define STRING_FILE_LIST_MODE         "Fájlnéző listamód"
     #define STRING_ACK_NOTIFICATION       "ACK Értesítési stílus"
+    #define STRING_EMULATE_M600           "Emulate M600"
     #define STRING_SERIAL_ALWAYS_ON       "Soros port folytonos"
     #define STRING_MARLIN_SHOW_TITLE      "Marlin mód cím támogatás"
     #define STRING_MARLIN_FULLSCREEN      "Nagyképernyős Marlin mód"

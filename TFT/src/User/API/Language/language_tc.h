@@ -10,6 +10,7 @@
     #define STRING_PERSISTENT_INFO        "頂部溫度訊息"
     #define STRING_FILE_LIST_MODE         "文件預覽列表模式"
     #define STRING_ACK_NOTIFICATION       "ACK 弹窗类型"
+    #define STRING_EMULATE_M600           "Emulate M600"
     #define STRING_SERIAL_ALWAYS_ON       "Serial Always ON"
     #define STRING_MARLIN_SHOW_TITLE      "Marlin Mode Title Support"
     #define STRING_MARLIN_FULLSCREEN      "全螢幕Marlin模式"

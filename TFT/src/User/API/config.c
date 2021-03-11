@@ -611,6 +611,10 @@ void parseConfigKey(uint16_t index)
       SET_VALID_INT_VALUE(infoSettings.ack_notification, 0, 2);
       break;
 
+    case C_INDEX_EMULATE_M600:
+      infoSettings.emulate_m600 = getOnOff();
+      break;
+
     //----------------------------Marlin Mode Settings (only for TFT24_V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70_V3.0)
 
     #ifdef HAS_EMULATOR

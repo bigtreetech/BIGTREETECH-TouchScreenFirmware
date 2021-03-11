@@ -854,13 +854,22 @@ void sendQueueCmd(void)
           break;
         }
 
-        #ifdef NOZZLE_PAUSE_M600_M601
-          case 600:  //M600/M601 pause print
-          case 601:
+        case 600:  //M600 filament change
+          if (infoSettings.emulate_m600 == ENABLED && isPrinting())
+          {
+            setPrintPause(true, false);
+            // prevent sending M600 to marlin
+            purgeLastCmd();
+            return;
+          }
+          break;
+
+        #ifdef NOZZLE_PAUSE_M601
+          case 601:  //M601 print pause (PrusaSlicer)
             if (isPrinting())
             {
               setPrintPause(true, false);
-              // prevent sending M600/M601 to marlin
+              // prevent sending M601 to marlin
               purgeLastCmd();
               return;
             }

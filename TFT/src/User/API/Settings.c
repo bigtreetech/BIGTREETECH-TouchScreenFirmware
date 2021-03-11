@@ -41,6 +41,7 @@ void infoSettingsReset(void)
   infoSettings.persistent_info        = ENABLED;
   infoSettings.file_listmode          = ENABLED;
   infoSettings.ack_notification       = ACK_NOTIFICATION_STYLE;
+  infoSettings.emulate_m600           = ENABLED;
 
 // Marlin Mode Settings
   infoSettings.mode                   = DEFAULT_LCD_MODE;

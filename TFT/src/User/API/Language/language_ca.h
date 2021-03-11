@@ -10,6 +10,7 @@
     #define STRING_PERSISTENT_INFO        "Informació d'estat persistent"
     #define STRING_FILE_LIST_MODE         "Mode de visualització de fitxers"
     #define STRING_ACK_NOTIFICATION       "ACK notification style"
+    #define STRING_EMULATE_M600           "Emulate M600"
     #define STRING_SERIAL_ALWAYS_ON       "Serial Always ON"
     #define STRING_MARLIN_SHOW_TITLE      "Marlin Mode Title Support"
     #define STRING_MARLIN_FULLSCREEN      "Mode Marlin a pantalla completa"
