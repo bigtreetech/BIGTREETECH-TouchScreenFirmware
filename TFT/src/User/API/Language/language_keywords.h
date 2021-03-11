@@ -58,9 +58,11 @@ extern "C" {
 #define LANG_KEY_HOTEND_OFFSET                "label_hotend_offset:"
 #define LANG_KEY_PROBE_OFFSET                 "label_probe_offset:"
 #define LANG_KEY_LIN_ADVANCE                  "label_lin_advance:"
+#define LANG_KEY_FILAMENT_SETTING             "label_filament_setting:"
 #define LANG_KEY_CURRENT_SETTING              "label_current_setting:"
 #define LANG_KEY_BUMP_SENSITIVITY             "label_bump_sensitivity:"
 #define LANG_KEY_HYBRID_THRESHOLD             "label_hybrid_threshold:"
+#define LANG_KEY_STEALTH_CHOP                 "label_stealth_chop:"
 #define LANG_KEY_PRINT_ACCELERATION           "label_print_acceleration:"
 #define LANG_KEY_RETRACT_ACCELERATION         "label_retract_acceleration:"
 #define LANG_KEY_TRAVEL_ACCELERATION          "label_travel_acceleration:"
@@ -111,6 +113,7 @@ extern "C" {
 #define LANG_KEY_HALF                         "label_half:"
 #define LANG_KEY_FULL                         "label_full:"
 #define LANG_KEY_CUSTOM                       "label_custom:"
+#define LANG_KEY_MACROS                       "label_macros:"
 #define LANG_KEY_CLEAR                        "label_clear:"
 #define LANG_KEY_DEFAULT                      "label_default:"
 
@@ -349,6 +352,12 @@ extern "C" {
 #define LANG_KEY_EXT_TEMPLOW                  "label_ext_templow:"
 #define LANG_KEY_HEAT_HOTEND                  "label_heat_hotend:"
 #define LANG_KEY_Z_ALIGN                      "label_z_align:"
+#define LANG_KEY_TEST_LEVEL_VALID             "label_Mesh_Validation"
+#define LANG_KEY_TEST_LEVEL_PLA               "label_Valid_pla"
+#define LANG_KEY_TEST_LEVEL_ABS               "label_Vaild_abs"
+#define LANG_KEY_TEST_LEVEL_PTEG              "label_Valid_pteg"
+#define LANG_KEY_TEST_LEVEL_ASA               "label_Valid_asa"
+
 
 #ifdef __cplusplus
 }

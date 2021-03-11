@@ -51,9 +51,11 @@
     #define STRING_HOTEND_OFFSET          "Offset 2nd Nozzle"
     #define STRING_PROBE_OFFSET           "探針偏移"
     #define STRING_LIN_ADVANCE            "Linear Advance"
+    #define STRING_FILAMENT_SETTING       "Filament Diameter"
     #define STRING_CURRENT_SETTING        "驅動晶片電流設定 (mA)"
     #define STRING_BUMP_SENSITIVITY       "堵料檢測靈敏度"
     #define STRING_HYBRID_THRESHOLD       "TMC HybridThreshold"
+    #define STRING_STEALTH_CHOP           "TMC StealthChop"
     #define STRING_PRINT_ACCELERATION     "列印加速度"
     #define STRING_RETRACT_ACCELERATION   "回抽加速度"
     #define STRING_TRAVEL_ACCELERATION    "空跑加速度"
@@ -342,5 +344,10 @@
     #define STRING_EXT_TEMPLOW            "Hotend temperature is below\nminimum temperature (%d℃)."
     #define STRING_HEAT_HOTEND            "Heat hotend to %d℃?"
     #define STRING_Z_ALIGN                "Z Align"
+    #define STRING_TEST_LEVEL_VALID       "Mesh Validation"
+    #define STRING_TEST_LEVEL_PLA         "Valid pla"
+    #define STRING_TEST_LEVEL_ABS         "Valid abs"
+    #define STRING_TEST_LEVEL_PTEG        "Valid pteg"
+    #define STRING_TEST_LEVEL_ASA         "Valid asa"
 
 #endif

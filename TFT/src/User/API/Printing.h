@@ -10,41 +10,40 @@ extern "C" {
 #include "ff.h"
 
 #ifndef M27_WATCH_OTHER_SOURCES
-  #define M27_WATCH_OTHER_SOURCES    false
+  #define M27_WATCH_OTHER_SOURCES false
 #endif
 
 #ifndef M27_REFRESH
-  #define M27_REFRESH   3
+  #define M27_REFRESH 3
 #endif
 
 #ifdef RAPID_SERIAL_COMM
-  #define RAPID_SERIAL_LOOP()  loopBackEnd()
-  #define RAPID_PRINTING_COMM()  if(isPrinting() == true && infoSettings.serial_alwaysOn != 1){loopBackEnd();}
+  #define RAPID_SERIAL_LOOP() loopBackEnd()
+  #define RAPID_PRINTING_COMM() if (isPrinting() == true && infoSettings.serial_alwaysOn != 1) {loopBackEnd();}
 #else
   #define RAPID_SERIAL_LOOP()
   #define RAPID_PRINTING_COMM()
 #endif
 
-
-#define SUMMARY_NAME_LEN 26 // max character length to copy from name buffer
+#define SUMMARY_NAME_LEN 26  // max character length to copy from name buffer
 
 typedef struct
 {
   FIL file;
-  uint32_t time; // Printed time in sec
-  uint32_t size; // Gcode file total size
-  uint32_t cur;  // Gcode has printed file size
+  uint32_t time;        // Printed time in sec
+  uint32_t size;        // Gcode file total size
+  uint32_t cur;         // Gcode has printed file size
   uint8_t  progress;
-  bool     printing; // 1 means printing, 0 means idle
-  bool     pause;    // 1 means paused
-  bool     m0_pause; // pause triggered through M0/M1 gcode
-  bool     runout;   // 1: runout in printing, 0: idle
-  bool     model_icon; // 1: model preview icon exist, 0: not exist
+  bool     printing;    // 1 means printing, 0 means idle
+  bool     pause;       // 1 means paused
+  bool     m0_pause;    // pause triggered through M0/M1 gcode
+  bool     runout;      // 1: runout in printing, 0: idle
+  bool     model_icon;  // 1: model preview icon exist, 0: not exist
 } PRINTING;
 
 typedef struct
 {
-  /* data */
+  // data
   char name[SUMMARY_NAME_LEN + 1];
   uint32_t time;
   float length;

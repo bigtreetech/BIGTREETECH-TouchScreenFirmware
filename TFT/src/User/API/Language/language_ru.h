@@ -51,9 +51,11 @@
     #define STRING_HOTEND_OFFSET          "Смещение 2-го сопла"
     #define STRING_PROBE_OFFSET           "Смещение датчика"
     #define STRING_LIN_ADVANCE            "К-фактор"
+    #define STRING_FILAMENT_SETTING       "Filament Diameter"
     #define STRING_CURRENT_SETTING        "Настройка TMC драйверов"
     #define STRING_BUMP_SENSITIVITY       "TMC чувствительность удара"
     #define STRING_HYBRID_THRESHOLD       "TMC гибридный порог"
+    #define STRING_STEALTH_CHOP           "TMC StealthChop"
     #define STRING_PRINT_ACCELERATION     "Печати"
     #define STRING_RETRACT_ACCELERATION   "Ретракта"
     #define STRING_TRAVEL_ACCELERATION    "Перемещения"
@@ -342,5 +344,10 @@
     #define STRING_EXT_TEMPLOW            "Температура сопла ниже\nминимальной (%d℃)."
     #define STRING_HEAT_HOTEND            "Heat hotend to %d℃?"
     #define STRING_Z_ALIGN                "Z Align"
+    #define STRING_TEST_LEVEL_VALID       "Mesh Validation"
+    #define STRING_TEST_LEVEL_PLA         "Valid pla"
+    #define STRING_TEST_LEVEL_ABS         "Valid abs"
+    #define STRING_TEST_LEVEL_PTEG        "Valid pteg"
+    #define STRING_TEST_LEVEL_ASA         "Valid asa"
 
 #endif

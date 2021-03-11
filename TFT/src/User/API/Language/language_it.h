@@ -51,9 +51,11 @@
     #define STRING_HOTEND_OFFSET          "Offset secondo hotend"
     #define STRING_PROBE_OFFSET           "Probe offset"
     #define STRING_LIN_ADVANCE            "Linear advance"
+    #define STRING_FILAMENT_SETTING       "Diametro filamento"
     #define STRING_CURRENT_SETTING        "Corrente driver (mA)"
     #define STRING_BUMP_SENSITIVITY       "Sens.sensorless homing"
     #define STRING_HYBRID_THRESHOLD       "Hybrid threshold"
+    #define STRING_STEALTH_CHOP           "TMC StealthChop"
     #define STRING_PRINT_ACCELERATION     "Acc. in stampa"
     #define STRING_RETRACT_ACCELERATION   "Acc. retrazione"
     #define STRING_TRAVEL_ACCELERATION    "Acc. spostamenti"
@@ -342,5 +344,11 @@
     #define STRING_EXT_TEMPLOW            "La temperatura dell'hotend\nè al di sotto della temperatura\nminima (%d℃)."
     #define STRING_HEAT_HOTEND            "Scaldo l'hotend a %d℃?"
     #define STRING_Z_ALIGN                "Allinea Z"
+    #define STRING_TEST_LEVEL_VALID       "Mesh Validation"
+    #define STRING_TEST_LEVEL_PLA         "Valid pla"
+    #define STRING_TEST_LEVEL_ABS         "Valid abs"
+    #define STRING_TEST_LEVEL_PTEG        "Valid pteg"
+    #define STRING_TEST_LEVEL_ASA         "Valid asa"
+    
 
 #endif

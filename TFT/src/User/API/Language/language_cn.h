@@ -51,9 +51,11 @@
     #define STRING_HOTEND_OFFSET          "第2个喷头的偏移量"
     #define STRING_PROBE_OFFSET           "探针偏移量"
     #define STRING_LIN_ADVANCE            "Linear Advance"
+    #define STRING_FILAMENT_SETTING       "Filament Diameter"
     #define STRING_CURRENT_SETTING        "TMC驱动电流设置"
     #define STRING_BUMP_SENSITIVITY       "TMC堵转检测灵敏度"
     #define STRING_HYBRID_THRESHOLD       "TMC混合阈值"
+    #define STRING_STEALTH_CHOP           "TMC StealthChop"
     #define STRING_PRINT_ACCELERATION     "打印加速度"
     #define STRING_RETRACT_ACCELERATION   "回抽加速度"
     #define STRING_TRAVEL_ACCELERATION    "空载加速度"
@@ -342,5 +344,10 @@
     #define STRING_EXT_TEMPLOW            "喷头温度低于最小挤出问题 (%d℃)."
     #define STRING_HEAT_HOTEND            "加热喷头到%d℃?"
     #define STRING_Z_ALIGN                "Z Align"
+    #define STRING_TEST_LEVEL_VALID       "Mesh Validation"
+    #define STRING_TEST_LEVEL_PLA         "Valid pla"
+    #define STRING_TEST_LEVEL_ABS         "Valid abs"
+    #define STRING_TEST_LEVEL_PTEG        "Valid pteg"
+    #define STRING_TEST_LEVEL_ASA         "Valid asa"
 
 #endif

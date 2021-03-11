@@ -7,7 +7,7 @@ extern "C" {
 
 #include <stdbool.h>
 
-/* called by parseAck() to notify MBL process status */
+// called by parseAck() to notify MBL process status
 void mblUpdateStatus(bool succeeded);
 
 void menuMBL(void);

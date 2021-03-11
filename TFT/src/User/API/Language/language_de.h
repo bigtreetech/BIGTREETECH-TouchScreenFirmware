@@ -51,9 +51,11 @@
     #define STRING_HOTEND_OFFSET          "Abstand 2te Düse"
     #define STRING_PROBE_OFFSET           "Sensor Versatz"
     #define STRING_LIN_ADVANCE            "Linear Advance"
+    #define STRING_FILAMENT_SETTING       "Filament Diameter"
     #define STRING_CURRENT_SETTING        "Treiber Strom (mA)"
     #define STRING_BUMP_SENSITIVITY       "TMC Empfindlichkeit"
     #define STRING_HYBRID_THRESHOLD       "TMC HybridThreshold"
+    #define STRING_STEALTH_CHOP           "TMC StealthChop"
     #define STRING_PRINT_ACCELERATION     "Druck"
     #define STRING_RETRACT_ACCELERATION   "Rückzug"
     #define STRING_TRAVEL_ACCELERATION    "Fahrt"
@@ -342,5 +344,11 @@
     #define STRING_EXT_TEMPLOW            "Temperatur der Düse liegt\nunter dem Minimum (%d℃)."
     #define STRING_HEAT_HOTEND            "Heize Düse auf %d℃?"
     #define STRING_Z_ALIGN                "Z ausr."
+    #define STRING_TEST_LEVEL_VALID       "Mesh Validation"
+    #define STRING_TEST_LEVEL_PLA         "Valid pla"
+    #define STRING_TEST_LEVEL_ABS         "Valid abs"
+    #define STRING_TEST_LEVEL_PTEG        "Valid pteg"
+    #define STRING_TEST_LEVEL_ASA         "Valid asa"
+        
 
 #endif

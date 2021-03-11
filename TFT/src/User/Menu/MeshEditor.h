@@ -7,7 +7,7 @@ extern "C" {
 
 #include <stdbool.h>
 
-/* called by parseAck() */
+// called by parseAck()
 bool meshIsWaitingFirstData(void);
 bool meshIsWaitingData(void);
 void meshUpdateData(char *dataRow);

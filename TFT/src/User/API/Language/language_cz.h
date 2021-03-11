@@ -51,9 +51,11 @@
     #define STRING_HOTEND_OFFSET          "Offset 2.trysky"
     #define STRING_PROBE_OFFSET           "Offset sondy"
     #define STRING_LIN_ADVANCE            "Linear Advance"
-    #define STRING_CURRENT_SETTING        "Proud motorů (mA)"
-    #define STRING_BUMP_SENSITIVITY       "Citlivost nárazu TMC"
+    #define STRING_FILAMENT_SETTING       "Průměr Filamentu"
+    #define STRING_CURRENT_SETTING        "TMC Proud motorů(mA)"
+    #define STRING_BUMP_SENSITIVITY       "TMC Citlivost nárazu"
     #define STRING_HYBRID_THRESHOLD       "TMC Hybridní práh"
+    #define STRING_STEALTH_CHOP           "TMC Tichý režim"
     #define STRING_PRINT_ACCELERATION     "Zrychlení při tisku"
     #define STRING_RETRACT_ACCELERATION   "Zrychlení retrakcí"
     #define STRING_TRAVEL_ACCELERATION    "Zrychlení při přesunu"
@@ -342,5 +344,11 @@
     #define STRING_EXT_TEMPLOW            "Teplota hotendu je pod\nminimální teplotou (%d℃)."
     #define STRING_HEAT_HOTEND            "Zahřát hotend na %d℃?"
     #define STRING_Z_ALIGN                "Z Align"
+    #define STRING_TEST_LEVEL_VALID       "Mesh Validation"
+    #define STRING_TEST_LEVEL_PLA         "Valid pla"
+    #define STRING_TEST_LEVEL_ABS         "Valid abs"
+    #define STRING_TEST_LEVEL_PTEG        "Valid pteg"
+    #define STRING_TEST_LEVEL_ASA         "Valid asa"
+    
 
 #endif
