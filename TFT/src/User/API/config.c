@@ -811,6 +811,10 @@ void parseConfigKey(uint16_t index)
       infoSettings.xy_offset_probing = getOnOff();
       break;
 
+    case C_INDEX_Z_RAISE_PROBING:
+      SET_VALID_FLOAT_VALUE(infoSettings.z_raise_probing, MIN_Z_POS_LIMIT, MAX_SIZE_LIMIT);
+      break;
+
     case C_INDEX_Z_STEPPERS_ALIGNMENT:
       infoSettings.z_steppers_alignment = getOnOff();
       break;

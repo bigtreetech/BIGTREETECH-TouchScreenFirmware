@@ -44,9 +44,9 @@ extern "C" {
 #define CONFIG_MARLIN_BG_COLOR        "marlin_bg_color:"
 #define CONFIG_MARLIN_FONT_COLOR      "marlin_fn_color:"
 #define CONFIG_MARLIN_SHOW_TITLE      "marlin_show_title:"
+#define CONFIG_MARLIN_FULLSCREEN      "marlin_fullscreen:"
 #define CONFIG_MARLIN_TYPE            "marlin_type:"
 #define CONFIG_MARLIN_TITLE           "marlin_title:"
-#define CONFIG_MARLIN_FULLSCREEN      "marlin_fullscreen:"
 //-----------------------------RRF Mode Settings
 #define CONFIG_RRF_MACROS_ON          "rrf_macros_on:"
 //-----------------------------Printer / Machine Settings
@@ -80,6 +80,7 @@ extern "C" {
 #define CONFIG_LEVEL_Z_RAISE          "level_z_raise:"
 #define CONFIG_LEVEL_FEEDRATE         "level_feedrate:"
 #define CONFIG_XY_OFFSET_PROBING      "xy_offset_probing:"
+#define CONFIG_Z_RAISE_PROBING        "z_raise_probing:"
 #define CONFIG_Z_STEPPERS_ALIGNMENT   "z_steppers_alignment:"
 #define CONFIG_PREHEAT_NAME_1         "preheat_name1:"
 #define CONFIG_PREHEAT_NAME_2         "preheat_name2:"
