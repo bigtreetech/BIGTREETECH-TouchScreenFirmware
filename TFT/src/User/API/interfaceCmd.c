@@ -556,15 +556,18 @@ void sendQueueCmd(void)
         case 106: //M106
         {
           uint8_t i = cmd_seen('P') ? cmd_value() : 0;
-          if (cmd_seen('S') && fanIsType(i, FAN_TYPE_F) )
+          if (cmd_seen('S'))
           {
-            fanSetCurSpeed(i, cmd_value());
+            fanSyncSpeed(i, cmd_value());
           }
           else if (!cmd_seen('\n'))
           {
             char buf[12];
-            sprintf(buf, "S%u\n", fanGetCurSpeed(i));
+            uint8_t setSpeed = fanGetSetSpeed(i);
+            sprintf(buf, "S%u\n", setSpeed);
             strcat(infoCmd.queue[infoCmd.index_r].gcode,(const char*)buf);
+            fanSetSendWaiting(i, false);
+            fanSetCurSpeed(i, setSpeed);
           }
           break;
         }
@@ -572,16 +575,46 @@ void sendQueueCmd(void)
         case 107: //M107
         {
           uint8_t i = cmd_seen('P') ? cmd_value() : 0;
-          if (fanIsType(i, FAN_TYPE_F)) fanSetCurSpeed(i, 0);
+          if (fanIsType(i, FAN_TYPE_F)) fanSyncSpeed(i, 0);
           break;
         }
 
         case 710: //M710 Controller Fan
         {
-          uint8_t i = 0;
-          if (cmd_seen('S')) i = fanGetTypID(i,FAN_TYPE_CTRL_S);
-          if (cmd_seen('I')) i = fanGetTypID(i=0,FAN_TYPE_CTRL_I);
-          fanSetCurSpeed(i, cmd_value());
+          uint8_t ctrl_s = fanGetTypID(0, FAN_TYPE_CTRL_S);
+          uint8_t ctrl_i = fanGetTypID(0, FAN_TYPE_CTRL_I);
+
+          if (!cmd_seen('\n'))
+          {
+            char buf[12];
+            if (ctrl_s != FAN_TYPE_UNKNOWN)
+            {
+              uint8_t setSpeed = fanGetSetSpeed(ctrl_s);
+              sprintf(buf, "S%u%c", setSpeed, (ctrl_i != FAN_TYPE_UNKNOWN) ? ' ' : '\n');
+              strcat(infoCmd.queue[infoCmd.index_r].gcode,(const char*)buf);
+              fanSetSendWaiting(ctrl_s, false);
+              fanSetCurSpeed(ctrl_s, setSpeed);
+            }
+            if (ctrl_i != FAN_TYPE_UNKNOWN)
+            {
+              uint8_t setSpeed = fanGetSetSpeed(ctrl_i);
+              sprintf(buf, "I%u\n", setSpeed);
+              strcat(infoCmd.queue[infoCmd.index_r].gcode,(const char*)buf);
+              fanSetSendWaiting(ctrl_i, false);
+              fanSetCurSpeed(ctrl_i, setSpeed);
+            }
+          }
+          else
+          {
+            if (cmd_seen('S') && ctrl_s != FAN_TYPE_UNKNOWN)
+            {
+              fanSyncSpeed(ctrl_s, cmd_value());
+            }
+            if (cmd_seen('I') && ctrl_i != FAN_TYPE_UNKNOWN)
+            {
+              fanSyncSpeed(ctrl_i, cmd_value());
+            }
+          }
           break;
         }
 

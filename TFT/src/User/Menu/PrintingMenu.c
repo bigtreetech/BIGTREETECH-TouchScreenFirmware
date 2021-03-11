@@ -247,6 +247,7 @@ static inline void toggleInfo(void)
 
     if ((infoSettings.fan_count + infoSettings.fan_ctrl_count) > 1)
     {
+      fanSpeedQuery();
       currentFan = (currentFan + 1) % (infoSettings.fan_count + infoSettings.fan_ctrl_count);
       RAPID_SERIAL_LOOP();  //perform backend printing loop before drawing to avoid printer idling
       reDrawFan(FAN_ICON_POS);
