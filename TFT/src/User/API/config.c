@@ -663,6 +663,7 @@ void parseConfigKey(uint16_t index)
     //----------------------------RRF Mode Settings
     case C_INDEX_RRF_MACROS_ON:
       infoSettings.rrf_macros_enable = getOnOff();
+      break;
 
     //----------------------------Printer / Machine Settings
 
