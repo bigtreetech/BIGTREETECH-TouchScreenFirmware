@@ -19,7 +19,7 @@ void probeHeightDisable(void);
 void probeHeightStart(float initialHeight);
 
 // Stop probe height
-void probeHeightStop(void);
+void probeHeightStop(float raisedHeight);
 
 // Set probe height to relative position mode
 void probeHeightRelative(void);

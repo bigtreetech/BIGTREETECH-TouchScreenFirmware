@@ -344,5 +344,6 @@
     #define STRING_EXT_TEMPLOW            "Температура сопла ниже\nминимальной (%d℃)."
     #define STRING_HEAT_HOTEND            "Heat hotend to %d℃?"
     #define STRING_Z_ALIGN                "Z Align"
+    #define STRING_MACROS                 "Macros"
 
 #endif

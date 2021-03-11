@@ -344,5 +344,6 @@
     #define STRING_EXT_TEMPLOW            "Temperatur der Düse liegt\nunter dem Minimum (%d℃)."
     #define STRING_HEAT_HOTEND            "Heize Düse auf %d℃?"
     #define STRING_Z_ALIGN                "Z ausr."
+    #define STRING_MACROS                 "Macros"
 
 #endif

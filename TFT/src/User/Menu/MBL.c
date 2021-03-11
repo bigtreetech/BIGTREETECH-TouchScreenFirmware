@@ -16,8 +16,7 @@ static inline void mblStart(void)
   probeHeightEnable();  // temporary disable software endstops
 
   // MBL gcode sequence start
-  mustStoreCmd("G29 S1\n");  // home and move to first point for Z height adjustment
-
+  mustStoreCmd("G29 S1\n");                       // home and move to first point for Z height adjustment
   probeHeightStart(PROBE_HEIGHT_INITIAL_HEIGHT);  // lower nozzle to provided absolute Z point
   probeHeightRelative();                          // set relative position mode
 }
@@ -28,7 +27,7 @@ static inline void mblStop(void)
   mblRunning = false;
 
   if (infoMachineSettings.zProbe == ENABLED)
-    probeHeightStop();  // raise nozzle
+    probeHeightStop(infoSettings.level_z_raise);  // raise nozzle
 
   probeHeightAbsolute();  // set absolute position mode
 
