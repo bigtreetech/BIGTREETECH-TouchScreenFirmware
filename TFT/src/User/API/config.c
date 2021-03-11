@@ -656,6 +656,10 @@ void parseConfigKey(uint16_t index)
 
     #endif // ST7920_EMULATOR || LCD2004_EMULATOR
 
+    //----------------------------RRF Mode Settings
+    case C_INDEX_RRF_MACROS_ON:
+      infoSettings.rrf_macros_enable = getOnOff();
+
     //----------------------------Printer / Machine Settings
 
     case C_INDEX_HOTEND_COUNT:

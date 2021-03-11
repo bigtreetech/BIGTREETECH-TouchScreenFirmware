@@ -113,6 +113,9 @@ typedef struct
   uint8_t  marlin_mode_fullscreen;
   uint8_t  marlin_type;
 
+  // rrf mode settings
+  uint8_t  rrf_macros_enable;
+
   // Printer / Machine Settings
   uint8_t  hotend_count;
   uint8_t  bed_en;

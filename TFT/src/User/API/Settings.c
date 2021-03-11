@@ -51,6 +51,9 @@ void infoSettingsReset(void)
   infoSettings.marlin_mode_fullscreen = MARLIN_MODE_FULLSCREEN;
   infoSettings.marlin_type            = LCD12864;
 
+// RRF Mode Settings
+  infoSettings.rrf_macros_enable      = 0;
+
 // Printer / Machine Settings
   infoSettings.hotend_count           = HOTEND_NUM;
   infoSettings.bed_en                 = ENABLE;
