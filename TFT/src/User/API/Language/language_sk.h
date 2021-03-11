@@ -344,5 +344,6 @@
     #define STRING_EXT_TEMPLOW            "Hotend temperature is below\nminimum temperature (%d℃)."
     #define STRING_HEAT_HOTEND            "Heat hotend to %d℃?"
     #define STRING_Z_ALIGN                "Z Align"
+    #define STRING_MACROS                 "Macros"
 
 #endif

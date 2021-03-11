@@ -113,7 +113,6 @@ extern "C" {
 #define LANG_KEY_HALF                         "label_half:"
 #define LANG_KEY_FULL                         "label_full:"
 #define LANG_KEY_CUSTOM                       "label_custom:"
-#define LANG_KEY_MACROS                       "label_macros:"
 #define LANG_KEY_CLEAR                        "label_clear:"
 #define LANG_KEY_DEFAULT                      "label_default:"
 
@@ -352,6 +351,7 @@ extern "C" {
 #define LANG_KEY_EXT_TEMPLOW                  "label_ext_templow:"
 #define LANG_KEY_HEAT_HOTEND                  "label_heat_hotend:"
 #define LANG_KEY_Z_ALIGN                      "label_z_align:"
+#define LANG_KEY_MACROS                       "label_macros:"
 
 #ifdef __cplusplus
 }
