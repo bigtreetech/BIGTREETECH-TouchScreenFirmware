@@ -289,6 +289,7 @@ The statistic data in the gCode must have the following format (a good practice 
 * `M118 P0 filament_data L:{12.3456}m`	L: represents the length in meters
 * `M118 P0 filemant_data W:{1.23456}g`	W: represents the weight in grams
 * `M118 P0 filament_data C:{0.1234}`		C: represents the cost without a unit
+
 The values of every filament data can be in a brackets, parentheses, apostrophes, etc. or without them, measurement units can be there or not.
 So `M118 P0 filament_data L:(12.3456)m`, `M118 P0 filament_data L:12.3456meters`, `M118 P0 filament_data L:[12.3456]` and so on are all valid formats.
 For multi-filament print statistics the data for each used filament should be written, they can be separated by comma, space, asterix, whatever, except ";" and ".".
@@ -296,6 +297,7 @@ Examples for multi-filament:
 * `M118 P0 filament_data L:(12.3456, 8.2520974)m`
 * `M118 P0 filament_data W: 24.87652 15.568264 gramm`
 * `M118 P0 filament_data C:[1.3456], [0.56024]`
+
 The inclusion of the filament data into the gCode can be automated. In Cura all you have to do is to insert the following into the Start G-Code:
 * `M118 P0 filament_data L:{filament_amount}m`
 * `M118 P0 filament_data W:{filament_weight}g`
