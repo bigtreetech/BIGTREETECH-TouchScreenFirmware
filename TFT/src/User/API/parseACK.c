@@ -1094,7 +1094,7 @@ void parseACK(void)
         }
       }
 
-      // keep here and parse at lastest
+      // keep it here and parse it the latest
       else if (infoMachineSettings.firmwareType == FW_REPRAPFW)
       {
         if (ack_seen(warningmagic))

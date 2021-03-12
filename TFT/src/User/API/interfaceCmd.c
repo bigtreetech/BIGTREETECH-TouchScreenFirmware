@@ -225,12 +225,8 @@ void sendQueueCmd(void)
       switch (cmd)
       {
         case 0:
-          if (isPrinting() && infoMachineSettings.firmwareType != FW_REPRAPFW)  // Abort printing by "M0" in RepRapFirmware 
-            setPrintPause(true, true);
-          break;
-
         case 1:
-          if (isPrinting() && infoMachineSettings.firmwareType != FW_REPRAPFW)
+          if (isPrinting() && infoMachineSettings.firmwareType != FW_REPRAPFW)  // Abort printing by "M0" in RepRapFirmware 
             setPrintPause(true, true);
           break;
 
