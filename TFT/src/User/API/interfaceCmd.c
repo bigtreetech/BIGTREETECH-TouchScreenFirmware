@@ -183,6 +183,7 @@ void clearCmdQueue(void)
   infoCmd.count = infoCmd.index_w = infoCmd.index_r = 0;
   infoCacheCmd.count = infoCacheCmd.index_w = infoCacheCmd.index_r = 0;
   heatSetUpdateWaiting(false);
+  printSetUpdateWaiting(false);
 }
 
 //remove last line from cmd queue
