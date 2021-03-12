@@ -286,9 +286,9 @@ Edit the configuration.h file and enable the line that says: #define REPRAP_DISC
 
 Statistics as filament length, filament weight and filament cost can be embedded into the gCode. After the print is finished there will be an infobox that you can click and a popup will present you the printed filename (limited to the first 25 characters), the time needed for the print, the filament length used, the filament weight and its cost. In the case of multi-filament usage the statistics will show the sum of all individual data (sum of length, sum of weight, sum of cost).
 The statistic data in the gCode must have the following format (a good practice would be to include this at the beginning of the gCode):
-* `M118 P0 filament_data L:{12.3456}m`	L: represents the length in meters
-* `M118 P0 filemant_data W:{1.23456}g`	W: represents the weight in grams
-* `M118 P0 filament_data C:{0.1234}`		C: represents the cost without a unit
+* `M118 P0 filament_data L:{12.3456}m`  L: represents the length in meters
+* `M118 P0 filemant_data W:{1.23456}g`  W: represents the weight in grams
+* `M118 P0 filament_data C:{0.1234}`    C: represents the cost without a unit
 
 The values of every filament data can be in a brackets, parentheses, apostrophes, etc. or without them, measurement units can be there or not.
 So `M118 P0 filament_data L:(12.3456)m`, `M118 P0 filament_data L:12.3456meters`, `M118 P0 filament_data L:[12.3456]` and so on are all valid formats.
