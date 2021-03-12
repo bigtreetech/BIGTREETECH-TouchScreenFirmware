@@ -12,15 +12,22 @@ void heatSetCurrentIndex(uint8_t index)
 }
 
 // Show/draw temperature in heat menu
-void showTemperature(uint8_t index)
+void showTemperature(uint8_t index, bool skip_header)
 {
   char tempstr[20];
+  
+  setLargeFont(true);
 
-  sprintf(tempstr, "%-15s", heatDisplayID[index]);
-  GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *)tempstr);
+  if (!skip_header)
+  {
+    sprintf(tempstr, "%-15s", heatDisplayID[index]);
+    setLargeFont(false);
+    GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *)tempstr);
+    setLargeFont(true);
+    GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1)>>1, exhibitRect.y0, (uint8_t *)"ºC");
+  }
 
   sprintf(tempstr, "%4d/%-4d", heatGetCurrentTemp(index), heatGetTargetTemp(index));
-  setLargeFont(true);
   GUI_DispStringInPrect(&exhibitRect, (uint8_t *)tempstr);
   setLargeFont(false);
 }
@@ -51,7 +58,7 @@ void menuHeat(void)
   heatItems.items[KEY_ICON_4] = itemTool[c_heater];
   heatItems.items[KEY_ICON_5] = itemDegreeSteps[degreeSteps_index];
   menuDrawPage(&heatItems);
-  showTemperature(c_heater);
+  showTemperature(c_heater, false);
 
   #if LCD_ENCODER_SUPPORT
     encoderPosition = 0;
@@ -81,7 +88,7 @@ void menuHeat(void)
           heatSetTargetTemp(c_heater, val);
 
         menuDrawPage(&heatItems);
-        showTemperature(c_heater);
+        showTemperature(c_heater, false);
         break;
       }
 
@@ -97,7 +104,7 @@ void menuHeat(void)
 
         heatItems.items[key_num] = itemTool[c_heater];
         menuDrawItem(&heatItems.items[key_num], key_num);
-        showTemperature(c_heater);
+        showTemperature(c_heater, false);
         break;
 
       case KEY_ICON_5:
@@ -132,7 +139,7 @@ void menuHeat(void)
     {
       lastCurrent = actCurrent;
       lastTarget = actTarget;
-      showTemperature(c_heater);
+      showTemperature(c_heater, true);
     }
 
     loopProcess();

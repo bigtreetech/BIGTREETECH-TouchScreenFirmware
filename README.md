@@ -101,10 +101,20 @@ The TFT firmware update is done in three steps described below and includes up t
 - `V3.0`: hardware version
 - `26.1`: software version
 
-**element 2:** Fonts and Icons (`TFT*` folder): Example: TFT35, which includes:
+For the MKS TFT28 the binary file is `MKSTFT28.bin`.
 
+
+**element 2:** Fonts and Icons (in the `TFT*` or `MKS` folder):
+
+For BTT TFTs the ROOT folder for fonts and icons is TFT*, where * is the size of the TFT (example: TFT24, TFT35, TFT50, etc).
+Fonts and icons folder structure:
 - `TFT*/font`: fonts
 - `TFT*/bmp`: icons
+
+For MKS TFTs the ROOT folder for fonts and icons is "MKS".
+Fonts and icons folder structure:
+- `MKS/font`: fonts
+- `MKS/bmp`: icons
 
 **element 3:** The config.ini file
 
@@ -274,21 +284,22 @@ Edit the configuration.h file and enable the line that says: #define REPRAP_DISC
 
 ### Show more statistics at the end of the print
 
-Statistics as filament length, filament weight and filament cost can be embedded into the gCode. These statistics will be presented after the print is finished in the new infobox area as a scrolling text. You can click that infobox and a popup will present you the printed filename (limited to the first 25 characters), the time needed for the print, the filament length used, the filament weight and its cost.
-
+Statistics as filament length, filament weight and filament cost can be embedded into the gCode. After the print is finished there will be an infobox that you can click and a popup will present you the printed filename (limited to the first 25 characters), the time needed for the print, the filament length used, the filament weight and its cost. In the case of multi-filament usage the statistics will show the sum of all individual data (sum of length, sum of weight, sum of cost).
 The statistic data in the gCode must have the following format (a good practice would be to include this at the beginning of the gCode):
-
-M118 P0 filament_data L:{12.3456}m	L: represents the length in meters
-M118 P0 filemant_data W:{1.23456}g	W: represents the weight in grams
-M118 P0 filament_data C:{0.1234}		C: represents the cost without a unit
-
+* `M118 P0 filament_data L:{12.3456}m`	L: represents the length in meters
+* `M118 P0 filemant_data W:{1.23456}g`	W: represents the weight in grams
+* `M118 P0 filament_data C:{0.1234}`		C: represents the cost without a unit
 The values of every filament data can be in a brackets, parentheses, apostrophes, etc. or without them, measurement units can be there or not.
-So M118 P0 filament_data L:(12.3456)m, M118 P0 filament_data L:12.3456meters, M118 P0 filament_data L:[12.3456] and so on are all valid formats.
-
+So `M118 P0 filament_data L:(12.3456)m`, `M118 P0 filament_data L:12.3456meters`, `M118 P0 filament_data L:[12.3456]` and so on are all valid formats.
+For multi-filament print statistics the data for each used filament should be written, they can be separated by comma, space, asterix, whatever, except ";" and ".".
+Examples for multi-filament:
+* `M118 P0 filament_data L:(12.3456, 8.2520974)m`
+* `M118 P0 filament_data W: 24.87652 15.568264 gramm`
+* `M118 P0 filament_data C:[1.3456], [0.56024]`
 The inclusion of the filament data into the gCode can be automated. In Cura all you have to do is to insert the following into the Start G-Code:
-M118 P0 filament_data L:{filament_amount}m
-M118 P0 filament_data W:{filament_weight}g
-M118 P0 filament_data C:{filament_cost}
+* `M118 P0 filament_data L:{filament_amount}m`
+* `M118 P0 filament_data W:{filament_weight}g`
+* `M118 P0 filament_data C:{filament_cost}`
 
 In case the gCode file has been generated using the  [BTT 3D Plug-In Suit](https://github.com/bigtreetech/Bigtree3DPluginSuit), the data is automatically added.
 

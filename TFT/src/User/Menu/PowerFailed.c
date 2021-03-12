@@ -199,8 +199,8 @@ void menuPowerOff(void)
 
   if (mountFS() == true && powerFailedExist())
   {
-    char okTxt[50];
-    char cancelTxt[50];
+    char okTxt[MAX_LANG_LABEL_LENGTH];
+    char cancelTxt[MAX_LANG_LABEL_LENGTH];
     loadLabelText((uint8_t*)okTxt, LABEL_CONFIRM);
     loadLabelText((uint8_t*)cancelTxt, LABEL_CANCEL);
 
