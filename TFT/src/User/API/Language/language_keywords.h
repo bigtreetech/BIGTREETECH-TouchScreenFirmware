@@ -357,6 +357,7 @@ extern "C" {
 #define LANG_KEY_TEST_LEVEL_PTEG              "label_Valid_pteg"
 #define LANG_KEY_TEST_LEVEL_ASA               "label_Valid_asa"
 
+#define LANG_KEY_MACROS                       "label_macros:"
 
 #ifdef __cplusplus
 }

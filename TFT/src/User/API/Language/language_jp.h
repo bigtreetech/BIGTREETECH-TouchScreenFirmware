@@ -351,5 +351,6 @@
     #define STRING_TEST_LEVEL_ASA         "Valid asa"
     
 
+    #define STRING_MACROS                 "Macros"
 
 #endif

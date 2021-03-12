@@ -24,6 +24,11 @@ void menuMain(void)
     }
   };
 
+  if (infoSettings.rrf_macros_enable)
+  {
+    mainPageItems.items[5].label.index = LABEL_MACROS;
+  }
+
   KEY_VALUES key_num = KEY_IDLE;
 
   if (infoSettings.status_screen != 1)

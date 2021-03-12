@@ -352,5 +352,6 @@
     
 
 
+    #define STRING_MACROS                 "Macros"
 
 #endif

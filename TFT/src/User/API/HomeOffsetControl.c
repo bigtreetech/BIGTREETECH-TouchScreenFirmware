@@ -13,7 +13,6 @@ void homeOffsetEnable(bool skipZOffset)
 
   // Z offset gcode sequence start
   mustStoreCmd("G28\n");   // home printer
-  mustStoreCmd("G1 F%d\n", infoSettings.level_feedrate[FEEDRATE_XY]);  // set feedrate
   probeHeightStart(0.0f);  // lower nozzle to absolute Z0 point
   probeHeightRelative();   // set relative position mode
 }
@@ -42,6 +41,7 @@ float homeOffsetSetValue(float value)
   mustStoreCmd("M206 Z%.2f\n", value);
   mustStoreCmd("M206\n");  // needed by homeOffsetResetValue() to retrieve the new value
   z_offset_value = value;
+
   return z_offset_value;
 }
 
@@ -49,6 +49,7 @@ float homeOffsetSetValue(float value)
 float homeOffsetGetValue(void)
 {
   z_offset_value = getParameter(P_HOME_OFFSET, Z_STEPPER);
+
   return z_offset_value;
 }
 
@@ -63,6 +64,7 @@ float homeOffsetResetValue(void)
   z_offset_value = HOME_Z_OFFSET_DEFAULT_VALUE;
   mustStoreCmd("M206 Z%.2f\n", z_offset_value);  // set Z offset value
   mustStoreCmd("G1 Z%.2f\n", unit);              // move nozzle
+
   return z_offset_value;
 }
 

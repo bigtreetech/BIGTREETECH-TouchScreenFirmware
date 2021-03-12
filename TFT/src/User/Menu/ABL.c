@@ -207,7 +207,6 @@ void menuABL(void)
         {
           case BL_BBL:  // if Bilinear Bed Leveling
             storeCmd("G29\n");
-            storeCmd("M118 A1 BBL Complete\n");
             break;
 
           case BL_UBL:  // if Unified Bed Leveling
@@ -216,14 +215,14 @@ void menuABL(void)
             storeCmd("G29 P3\n");
             storeCmd("G29 P3\n");
             storeCmd("G29 P3\n");
-            storeCmd("M118 A1 UBL Complete\n");
             break;
 
           default:  // if any other Auto Bed Leveling
             storeCmd("G29\n");
-            storeCmd("M118 A1 ABL Complete\n");
             break;
         }
+
+        storeCmd("M118 A1 ABL Completed\n");
         break;
 
       case KEY_ICON_1:

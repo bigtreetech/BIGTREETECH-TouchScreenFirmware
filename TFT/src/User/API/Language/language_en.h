@@ -350,5 +350,6 @@
     #define STRING_TEST_LEVEL_PTEG        "Valid pteg"
     #define STRING_TEST_LEVEL_ASA         "Valid asa"
         
+    #define STRING_MACROS                 "Macros"
 
 #endif
