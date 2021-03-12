@@ -8,7 +8,7 @@ const MENUITEMS MeshValidItems = {
   {
     {ICON_TEST_LEVEL_PLA,          LABEL_TEST_LEVEL_PLA},
     {ICON_TEST_LEVEL_ABS,          LABEL_TEST_LEVEL_ABS},
-    {ICON_TEST_LEVEL_PTEG,         LABEL_TEST_LEVEL_PTEG},
+    {ICON_TEST_LEVEL_petg,         LABEL_TEST_LEVEL_petg},
     {ICON_TEST_LEVEL_ASA,          LABEL_TEST_LEVEL_ASA},
     {ICON_BABYSTEP,                LABEL_BABYSTEP},
     {ICON_BACKGROUND,              LABEL_BACKGROUND},
@@ -38,7 +38,7 @@ void menuMeshValid(void)
         storeCmd("G26 H230 B90 R99\n");
         break;
 
-      //MESHVALID PTEG
+      //MESHVALID petg
       case KEY_ICON_2:
         storeCmd("G26 H240 B70 R99\n");
         break;
