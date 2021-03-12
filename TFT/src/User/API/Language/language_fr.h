@@ -344,12 +344,13 @@
     #define STRING_EXT_TEMPLOW            "La température de la buse est inférieure\nà la température minimale (%d℃)."
     #define STRING_HEAT_HOTEND            "Chauffer la buse à %d℃ ?"
     #define STRING_Z_ALIGN                "Z Align"
+    #define STRING_MACROS                 "Macros"
     #define STRING_TEST_LEVEL_VALID       "Mesh Validation"
     #define STRING_TEST_LEVEL_PLA         "Valid pla"
     #define STRING_TEST_LEVEL_ABS         "Valid abs"
     #define STRING_TEST_LEVEL_PTEG        "Valid pteg"
     #define STRING_TEST_LEVEL_ASA         "Valid asa"
     
-    #define STRING_MACROS                 "Macros"
+    
 
 #endif

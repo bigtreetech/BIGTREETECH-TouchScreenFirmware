@@ -344,11 +344,12 @@
     #define STRING_EXT_TEMPLOW            "Hotend temperature is below\nminimum temperature (%d℃)."
     #define STRING_HEAT_HOTEND            "Heat hotend to %d℃?"
     #define STRING_Z_ALIGN                "Z Align"
+    #define STRING_MACROS                 "Macros"
     #define STRING_TEST_LEVEL_VALID       "Mesh Validation"
     #define STRING_TEST_LEVEL_PLA         "Valid pla"
     #define STRING_TEST_LEVEL_ABS         "Valid abs"
     #define STRING_TEST_LEVEL_PTEG        "Valid pteg"
     #define STRING_TEST_LEVEL_ASA         "Valid asa"
-    #define STRING_MACROS                 "Macros"
+    
 
 #endif
