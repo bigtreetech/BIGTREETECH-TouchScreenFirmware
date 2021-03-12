@@ -121,21 +121,23 @@ uint8_t *getCurGcodeName(char *path)
 void sendPrintCodes(uint8_t index)
 {
   PRINT_GCODES printcodes;
-  W25Qxx_ReadBuffer((uint8_t*)&printcodes,PRINT_GCODES_ADDR,sizeof(PRINT_GCODES));
+  W25Qxx_ReadBuffer((uint8_t*)&printcodes, PRINT_GCODES_ADDR, sizeof(PRINT_GCODES));
   switch (index)
   {
-  case 0:
-    mustStoreScript(printcodes.start_gcode);
-    break;
-  case 1:
-    mustStoreScript(printcodes.end_gcode);
-    break;
-  case 2:
-    mustStoreScript(printcodes.cancel_gcode);
-    break;
+    case 0:
+      mustStoreScript(printcodes.start_gcode);
+      break;
 
-  default:
-    break;
+    case 1:
+      mustStoreScript(printcodes.end_gcode);
+      break;
+
+    case 2:
+      mustStoreScript(printcodes.cancel_gcode);
+      break;
+
+    default:
+      break;
   }
 }
 
@@ -149,9 +151,9 @@ void initPrintSummary(void)
 void preparePrintSummary(void)
 {
   if (infoMachineSettings.long_filename_support == ENABLED && infoFile.source == BOARD_SD)
-   sprintf(infoPrintSummary.name,"%." STRINGIFY(SUMMARY_NAME_LEN) "s", infoFile.Longfile[infoFile.fileIndex]);
+    sprintf(infoPrintSummary.name,"%." STRINGIFY(SUMMARY_NAME_LEN) "s", infoFile.Longfile[infoFile.fileIndex]);
   else
-   sprintf(infoPrintSummary.name,"%." STRINGIFY(SUMMARY_NAME_LEN) "s", getCurGcodeName(infoFile.title));
+    sprintf(infoPrintSummary.name,"%." STRINGIFY(SUMMARY_NAME_LEN) "s", getCurGcodeName(infoFile.title));
 
   infoPrintSummary.time = infoPrinting.time;
 
@@ -223,8 +225,8 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
 
         coordinateGetAll(&tmp);
 
-        if (isCoorRelative == true)     mustStoreCmd("G90\n");
-        if (isExtrudeRelative == true)  mustStoreCmd("M82\n");
+        if (isCoorRelative == true)    mustStoreCmd("G90\n");
+        if (isExtrudeRelative == true) mustStoreCmd("M82\n");
 
         if (heatGetCurrentTemp(heatGetCurrentHotend()) > infoSettings.min_ext_temp)
         {
@@ -238,8 +240,8 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
                        infoSettings.pause_feedrate[FEEDRATE_XY]);
         }
 
-        if (isCoorRelative == true)     mustStoreCmd("G91\n");
-        if (isExtrudeRelative == true)  mustStoreCmd("M83\n");
+        if (isCoorRelative == true)    mustStoreCmd("G91\n");
+        if (isExtrudeRelative == true) mustStoreCmd("M83\n");
       }
       else
       {
@@ -249,8 +251,8 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
           breakAndContinue();
           break;
         }
-        if (isCoorRelative == true)     mustStoreCmd("G90\n");
-        if (isExtrudeRelative == true)  mustStoreCmd("M82\n");
+        if (isCoorRelative == true)    mustStoreCmd("G90\n");
+        if (isExtrudeRelative == true) mustStoreCmd("M82\n");
 
         if (coordinateIsKnown())
         {
@@ -265,8 +267,8 @@ bool setPrintPause(bool is_pause, bool is_m0pause)
         mustStoreCmd("G92 E%.5f\n", tmp.axis[E_AXIS]);
         mustStoreCmd("G1 F%d\n", tmp.feedrate);
 
-        if (isCoorRelative == true)     mustStoreCmd("G91\n");
-        if (isExtrudeRelative == true)  mustStoreCmd("M83\n");
+        if (isCoorRelative == true)    mustStoreCmd("G91\n");
+        if (isExtrudeRelative == true) mustStoreCmd("M83\n");
       }
       break;
   }
@@ -376,7 +378,7 @@ void shutdownLoop(void)
   }
   if (tempIsLower)
   {
-   shutdown();
+    shutdown();
   }
 }
 
@@ -388,7 +390,7 @@ void startShutdown(void)
 
   for (uint8_t i = 0; i < infoSettings.fan_count; i++)
   {
-    if (fanIsType(i,FAN_TYPE_F)) mustStoreCmd("%s S255\n", fanCmd[i]);
+    if (fanIsType(i, FAN_TYPE_F)) mustStoreCmd("%s S255\n", fanCmd[i]);
   }
   setDialogText(LABEL_SHUT_DOWN, (uint8_t *)tempstr, LABEL_FORCE_SHUT_DOWN, LABEL_CANCEL);
   showDialog(DIALOG_TYPE_INFO, shutdown, NULL, shutdownLoop);
@@ -400,7 +402,7 @@ void getGcodeFromFile(void)
   bool    sd_comment_mode = false;
   bool    sd_comment_space = true;
   char    sd_char;
-  uint8_t      sd_count = 0;
+  uint8_t sd_count = 0;
   UINT    br = 0;
 
   if (isPrinting() == false || infoFile.source >= BOARD_SD) return;
@@ -411,18 +413,18 @@ void getGcodeFromFile(void)
 
   if (moveCacheToCmd() == true) return;
 
-  for (;infoPrinting.cur < infoPrinting.size;)
+  for (; infoPrinting.cur < infoPrinting.size;)
   {
-    if (f_read(&infoPrinting.file, &sd_char, 1, &br)!=FR_OK) break;
+    if (f_read(&infoPrinting.file, &sd_char, 1, &br) != FR_OK) break;
 
     infoPrinting.cur++;
 
     //Gcode
     if (sd_char == '\n' )  //'\n' is end flag for per command
     {
-      sd_comment_mode = false;  //for new command
-      sd_comment_space= true;
-      if (sd_count!=0)
+      sd_comment_mode  = false;  //for new command
+      sd_comment_space = true;
+      if (sd_count != 0)
       {
         infoCmd.queue[infoCmd.index_w].gcode[sd_count++] = '\n';
         infoCmd.queue[infoCmd.index_w].gcode[sd_count] = 0;  //terminate string
@@ -441,7 +443,7 @@ void getGcodeFromFile(void)
         sd_comment_mode = true;
       else
       {
-        if (sd_comment_space && (sd_char== 'G'||sd_char == 'M'||sd_char == 'T'))  //ignore ' ' space bytes
+        if (sd_comment_space && (sd_char == 'G' || sd_char == 'M' || sd_char == 'T'))  //ignore ' ' space bytes
           sd_comment_space = false;
         if (!sd_comment_mode && !sd_comment_space && sd_char != '\r')  //normal gcode
           infoCmd.queue[infoCmd.index_w].gcode[sd_count++] = sd_char;
@@ -449,7 +451,7 @@ void getGcodeFromFile(void)
     }
   }
 
-  if ((infoPrinting.cur>=infoPrinting.size) && isPrinting())  // end of .gcode file
+  if ((infoPrinting.cur >= infoPrinting.size) && isPrinting())  // end of .gcode file
   {
     printingFinished();
   }
@@ -509,7 +511,7 @@ void loopCheckPrinting(void)
   uint32_t update_M27_time = infoSettings.m27_refresh_time * 1000;
 
   do
-  {  /* WAIT FOR M27  */
+  {  // WAIT FOR M27
     if (updateM27_waiting == true)
     {
       nextCheckPrintTime = OS_GetTimeMs() + update_M27_time;

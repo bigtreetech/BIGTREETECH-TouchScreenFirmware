@@ -852,7 +852,7 @@ void sendQueueCmd(void)
         }
 
         case 600:  //M600 filament change
-          if (infoSettings.emulate_m600 == ENABLED && isPrinting())
+          if (infoSettings.emulate_m600 == 1 && isPrinting())
           {
             setPrintPause(true, false);
             // prevent sending M600 to marlin
