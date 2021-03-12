@@ -23,13 +23,17 @@ void setSpeedItemIndex(uint8_t index)
 void percentageReDraw(bool skipHeader)
 {
   char tempstr[20];
-  if (!skipHeader)
-  {
-    GUI_DispString(exhibitRect.x0, exhibitRect.y0, textSelect(itemPercentTypeTitle[item_index]));
-  }
 
   setLargeFont(true);
-  GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1)>>1, exhibitRect.y0, (uint8_t *)"%");
+
+  if (!skipHeader)
+  {
+    setLargeFont(false);
+    GUI_DispString(exhibitRect.x0, exhibitRect.y0, textSelect(itemPercentTypeTitle[item_index]));
+    setLargeFont(true);
+    GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1)>>1, exhibitRect.y0, (uint8_t *)"%");
+  }
+
   sprintf(tempstr, "  %d/%d  ", speedGetCurPercent(item_index), speedGetSetPercent(item_index));
   GUI_DispStringInPrect(&exhibitRect,(u8*)tempstr);
   setLargeFont(false);
@@ -92,7 +96,7 @@ void menuSpeed(void)
             speedSetPercent(item_index, val);
 
           menuDrawPage(&percentageItems);
-          percentageReDraw(true);
+          percentageReDraw(false);
         }
         break;
 
