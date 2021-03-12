@@ -326,7 +326,10 @@ void abortPrinting(void)
       breakAndContinue();
       breakAndContinue();
       if (infoMachineSettings.firmwareType == FW_REPRAPFW)
+      {
+        request_M25(); // Must pause the print before cancel it
         request_M0();  // M524 is not supportet in reprap firmware
+      }
       else
         request_M524();
 
