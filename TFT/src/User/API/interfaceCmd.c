@@ -346,7 +346,8 @@ void sendQueueCmd(void)
                 {
                   setPrintPause(false, false);
                 }
-                else {
+                else
+                {
                   Serial_Puts(SERIAL_PORT_2, "ok\n");
                   purgeLastCmd();
                   infoMenu.cur = 1;
