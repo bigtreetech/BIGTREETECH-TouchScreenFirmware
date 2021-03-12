@@ -51,6 +51,7 @@
     #define STRING_HOTEND_OFFSET          "Зсув 2-го сопла"
     #define STRING_PROBE_OFFSET           "Зміщення датчика"
     #define STRING_LIN_ADVANCE            "К-фактор"
+    #define STRING_FILAMENT_SETTING       "Filament Diameter"
     #define STRING_CURRENT_SETTING        "Налаштування TMC драйверів"
     #define STRING_BUMP_SENSITIVITY       "TMC чутливість удару"
     #define STRING_HYBRID_THRESHOLD       "TMC гібридний поріг"
@@ -343,5 +344,6 @@
     #define STRING_EXT_TEMPLOW            "Температура хотенду нижче\nмінімальної температури (%d℃)."
     #define STRING_HEAT_HOTEND            "Heat hotend to %d℃?"
     #define STRING_Z_ALIGN                "Z Align"
+    #define STRING_MACROS                 "Macros"
 
 #endif

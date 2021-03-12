@@ -51,6 +51,7 @@
     #define STRING_HOTEND_OFFSET          "Offset 2nd Nozzle"
     #define STRING_PROBE_OFFSET           "Αντιστάθμιση Καθετήρας"
     #define STRING_LIN_ADVANCE            "Linear Advance"
+    #define STRING_FILAMENT_SETTING       "Filament Diameter"
     #define STRING_CURRENT_SETTING        "Ένταση η. ρεύ. οδηγού(mA)"
     #define STRING_BUMP_SENSITIVITY       "TMC ευαισθησία χτυπήματος"
     #define STRING_HYBRID_THRESHOLD       "TMC HybridThreshold"
@@ -343,5 +344,6 @@
     #define STRING_EXT_TEMPLOW            "Hotend temperature is below\nminimum temperature (%d℃)."
     #define STRING_HEAT_HOTEND            "Heat hotend to %d℃?"
     #define STRING_Z_ALIGN                "Z Align"
+    #define STRING_MACROS                 "Macros"
 
 #endif

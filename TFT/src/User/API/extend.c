@@ -30,7 +30,8 @@ void PS_ON_Off(void)
 #ifdef FIL_RUNOUT_PIN
 
 static bool update_PosE_waiting = false;
-/* Set whether we need to query the current position */
+
+// Set whether we need to query the current position
 void positionSetUpdateWaiting(bool isWaiting)
 {
   update_PosE_waiting = isWaiting;
@@ -66,7 +67,7 @@ bool FIL_RunoutPinFilteredLevel(void)
   if (OS_GetTimeMs() > nextRunoutTime)
   {
     rst = trueTimes > falseTimes ? true : false;
-    nextRunoutTime = OS_GetTimeMs() + infoSettings.runout_noise_ms ;
+    nextRunoutTime = OS_GetTimeMs() + infoSettings.runout_noise_ms;
     trueTimes = 0;
     falseTimes = 0;
   }
@@ -74,7 +75,7 @@ bool FIL_RunoutPinFilteredLevel(void)
   {
     bool filRunout = 0;
     uint8_t toolNum = heatGetCurrentTool();
-    switch(toolNum)
+    switch (toolNum)
     {
       case 0:
         filRunout = GPIO_GetLevel(FIL_RUNOUT_PIN);
@@ -117,7 +118,6 @@ bool FIL_RunoutPinFilteredLevel(void)
   return rst;
 }
 
-
 static uint32_t update_PosE_time = 2000;
 // Use an encoder disc to toggles the runout
 // Suitable for BigTreeTech Smart Filament Sensor
@@ -132,28 +132,28 @@ bool FIL_SmartRunoutDetect(void)
 {
   static float lastExtrudePosition = 0.0f;
   static uint8_t lastRunoutPinLevel = 0;
-  static uint32_t  nextRunoutTime = 0;
+  static uint32_t nextRunoutTime = 0;
 
   bool pinLevel = FIL_RunoutPinFilteredLevel();
   float actualExtrude = coordinateGetExtruderActual();
 
   do
-  {  /* Send M114 E query extrude position continuously	*/
-    if(update_PosE_waiting == true)
+  { // Send M114 E query extrude position continuously
+    if (update_PosE_waiting == true)
     {
       nextRunoutTime = OS_GetTimeMs() + update_PosE_time;
       break;
     }
     if (OS_GetTimeMs() < nextRunoutTime)
       break;
-    if (requestCommandInfoIsRunning()) //to avoid colision in Gcode response processing
+    if (requestCommandInfoIsRunning())  //to avoid colision in Gcode response processing
       break;
     if (storeCmd("M114 E\n") == false)
       break;
 
     nextRunoutTime = OS_GetTimeMs() + update_PosE_time;
     update_PosE_waiting = true;
-  } while(0);
+  } while (0);
 
   if (SFS_IsAlive == false)
   {
@@ -211,6 +211,7 @@ void loopFrontEndFILRunoutDetect(void)
 {
   static uint32_t nextTime = 0;
   #define ALARM_REMINDER_TIME 10000
+
   if (!getPrintRunout() && !getRunoutAlarm()) return;
 
   if (setPrintPause(true,false) && !getRunoutAlarm())

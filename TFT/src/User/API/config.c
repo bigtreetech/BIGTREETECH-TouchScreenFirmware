@@ -93,7 +93,7 @@ bool getLangFromFile(void)
   char langpath[256];
   sprintf(langpath, "0:%s", f.fname);
 
-  if(!f_file_exists(langpath))
+  if (!f_file_exists(langpath))
     return false;
 
   char cur_line_buffer[MAX_LANG_LABEL_LENGTH + 100];
@@ -428,7 +428,7 @@ void resetConfig(void)
   int n = 0;
   for (int i = 0; i < CUSTOM_GCODES_COUNT; i++)
   {
-    if(default_custom_enabled[i] == 1)
+    if (default_custom_enabled[i] == 1)
     {
       strcpy(tempCG.gcode[n],cg_list[i]);
       strcpy(tempCG.name[n],cg_names[i]);
@@ -656,6 +656,10 @@ void parseConfigKey(uint16_t index)
 
     #endif // ST7920_EMULATOR || LCD2004_EMULATOR
 
+    //----------------------------RRF Mode Settings
+    case C_INDEX_RRF_MACROS_ON:
+      infoSettings.rrf_macros_enable = getOnOff();
+
     //----------------------------Printer / Machine Settings
 
     case C_INDEX_HOTEND_COUNT:
@@ -772,12 +776,12 @@ void parseConfigKey(uint16_t index)
       break;
 
     case C_INDEX_PAUSE_POS:
-      if (key_seen("X")) SET_VALID_FLOAT_VALUE(infoSettings.pause_pos[X_AXIS], MIN_POS_LIMIT, MAX_SIZE_LIMIT);
-      if (key_seen("Y")) SET_VALID_FLOAT_VALUE(infoSettings.pause_pos[Y_AXIS], MIN_POS_LIMIT, MAX_SIZE_LIMIT);
+      if (key_seen("X")) SET_VALID_FLOAT_VALUE(infoSettings.pause_pos[X_AXIS], MIN_XY_POS_LIMIT, MAX_SIZE_LIMIT);
+      if (key_seen("Y")) SET_VALID_FLOAT_VALUE(infoSettings.pause_pos[Y_AXIS], MIN_XY_POS_LIMIT, MAX_SIZE_LIMIT);
       break;
 
     case C_INDEX_PAUSE_Z_RAISE:
-      SET_VALID_FLOAT_VALUE(infoSettings.pause_z_raise, MIN_POS_LIMIT, MAX_SIZE_LIMIT);
+      SET_VALID_FLOAT_VALUE(infoSettings.pause_z_raise, MIN_Z_POS_LIMIT, MAX_SIZE_LIMIT);
       break;
 
     case C_INDEX_PAUSE_FEEDRATE:
@@ -787,15 +791,15 @@ void parseConfigKey(uint16_t index)
       break;
 
     case C_INDEX_LEVEL_EDGE:
-      SET_VALID_INT_VALUE(infoSettings.level_edge, MIN_POS_LIMIT, MAX_SIZE_LIMIT);
+      SET_VALID_INT_VALUE(infoSettings.level_edge, MIN_Z_POS_LIMIT, MAX_SIZE_LIMIT);
       break;
 
     case C_INDEX_LEVEL_Z_POS:
-      SET_VALID_FLOAT_VALUE(infoSettings.level_z_pos, MIN_POS_LIMIT, MAX_SIZE_LIMIT);
+      SET_VALID_FLOAT_VALUE(infoSettings.level_z_pos, MIN_Z_POS_LIMIT, MAX_SIZE_LIMIT);
       break;
 
     case C_INDEX_LEVEL_Z_RAISE:
-      SET_VALID_FLOAT_VALUE(infoSettings.level_z_raise, MIN_POS_LIMIT, MAX_SIZE_LIMIT);
+      SET_VALID_FLOAT_VALUE(infoSettings.level_z_raise, MIN_Z_POS_LIMIT, MAX_SIZE_LIMIT);
       break;
 
     case C_INDEX_LEVEL_FEEDRATE:
@@ -807,7 +811,11 @@ void parseConfigKey(uint16_t index)
       infoSettings.xy_offset_probing = getOnOff();
       break;
 
-   case C_INDEX_Z_STEPPERS_ALIGNMENT:
+    case C_INDEX_Z_RAISE_PROBING:
+      SET_VALID_FLOAT_VALUE(infoSettings.z_raise_probing, MIN_Z_POS_LIMIT, MAX_SIZE_LIMIT);
+      break;
+
+    case C_INDEX_Z_STEPPERS_ALIGNMENT:
       infoSettings.z_steppers_alignment = getOnOff();
       break;
 

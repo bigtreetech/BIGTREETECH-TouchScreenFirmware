@@ -44,9 +44,11 @@ extern "C" {
 #define CONFIG_MARLIN_BG_COLOR        "marlin_bg_color:"
 #define CONFIG_MARLIN_FONT_COLOR      "marlin_fn_color:"
 #define CONFIG_MARLIN_SHOW_TITLE      "marlin_show_title:"
+#define CONFIG_MARLIN_FULLSCREEN      "marlin_fullscreen:"
 #define CONFIG_MARLIN_TYPE            "marlin_type:"
 #define CONFIG_MARLIN_TITLE           "marlin_title:"
-#define CONFIG_MARLIN_FULLSCREEN      "marlin_fullscreen:"
+//-----------------------------RRF Mode Settings
+#define CONFIG_RRF_MACROS_ON          "rrf_macros_on:"
 //-----------------------------Printer / Machine Settings
 #define CONFIG_HOTEND_COUNT           "hotend_count:"
 #define CONFIG_HEATED_BED             "heated_bed:"
@@ -78,6 +80,7 @@ extern "C" {
 #define CONFIG_LEVEL_Z_RAISE          "level_z_raise:"
 #define CONFIG_LEVEL_FEEDRATE         "level_feedrate:"
 #define CONFIG_XY_OFFSET_PROBING      "xy_offset_probing:"
+#define CONFIG_Z_RAISE_PROBING        "z_raise_probing:"
 #define CONFIG_Z_STEPPERS_ALIGNMENT   "z_steppers_alignment:"
 #define CONFIG_PREHEAT_NAME_1         "preheat_name1:"
 #define CONFIG_PREHEAT_NAME_2         "preheat_name2:"
@@ -157,7 +160,7 @@ extern "C" {
 //-----------------------------Limits
 #define MAX_SIZE_LIMIT            2000      // machine size over this will not be parsed.
 #define MAX_EXT_SPEED_LIMIT       5000      // Extruder speed over this will not pe parsed.
-#define MAX_TOOL_TEMP             300       // extruder temp over this will not pe parsed.
+#define MAX_TOOL_TEMP             1000      // extruder temp over this will not pe parsed.
 #define MAX_BED_TEMP              200       // bed temp over this will not pe parsed.
 #define MAX_CHAMBER_TEMP          100       // bed temp over this will not pe parsed.
 #define MAX_SPEED_LIMIT           12000     // speed over this will not pe parsed.
@@ -170,7 +173,12 @@ extern "C" {
 #define MIN_SIZE_LIMIT            -2000     // machine size less than this will not be parsed.
 #define NAME_MIN_LENGTH           3         // minimum name length
 #define GCODE_MIN_LENGTH          3         // gcode length less than this will not pe parsed.
-#define MIN_POS_LIMIT             0         // position value less than this will not be parsed.
+#if (IS_DELTA)
+  #define MIN_XY_POS_LIMIT        -2000     // Set a negative minimum position for Deltas
+#else
+  #define MIN_XY_POS_LIMIT        0         // position value less than this will not be parsed.
+#endif
+#define MIN_Z_POS_LIMIT           0
 #define MIN_TOOL_TEMP             20        // extruder temp less than this will not pe parsed.
 #define MIN_BED_TEMP              20        // bed temp less than this will not pe parsed.
 #define MIN_CHAMBER_TEMP          20        // chamber temp less than this will not pe parsed.

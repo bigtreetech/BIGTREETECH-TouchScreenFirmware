@@ -7,16 +7,17 @@ extern "C" {
 
 #include "variants.h"
 #include "menu.h"
-//24bit                           // G  R  B
-#define LED_OFF                   0x00000000
-#define LED_WHITE                 0x00FFFFFF
-#define LED_RED                   0x0000FF00
-#define LED_ORANGE                0x008CFF00
-#define LED_YELLOW                0x00FFFF00
-#define LED_GREEN                 0x00FF0000
-#define LED_BLUE                  0x000000FF
-#define LED_INDIGO                0x00004B82
-#define LED_VIOLET                0x0000FEFE
+
+//24bit                             // G  R  B
+#define LED_OFF                     0x00000000
+#define LED_WHITE                   0x00FFFFFF
+#define LED_RED                     0x0000FF00
+#define LED_ORANGE                  0x008CFF00
+#define LED_YELLOW                  0x00FFFF00
+#define LED_GREEN                   0x00FF0000
+#define LED_BLUE                    0x000000FF
+#define LED_INDIGO                  0x00004B82
+#define LED_VIOLET                  0x0000FEFE
 
 //Color macro  //颜色宏定            /*R G B*/
 #define COLOR_LIGHTPINK             0xFFB6C1  //浅粉

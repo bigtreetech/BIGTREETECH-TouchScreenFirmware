@@ -51,6 +51,7 @@
     #define STRING_HOTEND_OFFSET          "Második fej eltolása"
     #define STRING_PROBE_OFFSET           "Szonda eltolás"
     #define STRING_LIN_ADVANCE            "Lineáris haladás"
+    #define STRING_FILAMENT_SETTING       "Filament Diameter"
     #define STRING_CURRENT_SETTING        "Motoráramok beállítása"
     #define STRING_BUMP_SENSITIVITY       "TMC Ütközés érzékenység"
     #define STRING_HYBRID_THRESHOLD       "TMC Hibrid küszöbérték"
@@ -343,5 +344,6 @@
     #define STRING_EXT_TEMPLOW            "Fejhőfok alacsonyabb, mint a\nminimális hőfok (%d℃)."
     #define STRING_HEAT_HOTEND            "Fűtöd a fejet %d℃-ra?"
     #define STRING_Z_ALIGN                "Z Igazítás"
+    #define STRING_MACROS                 "Macros"
 
 #endif

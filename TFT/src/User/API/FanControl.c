@@ -1,16 +1,15 @@
 #include "FanControl.h"
 
-char*   fanID[MAX_FAN_COUNT];
-char*   fanCmd[MAX_FAN_COUNT];
+char* fanID[MAX_FAN_COUNT];
+char* fanCmd[MAX_FAN_COUNT];
 uint8_t fanType[MAX_FAN_COUNT];
 
 static uint8_t setFanSpeed[MAX_FAN_COUNT] = {0};
 static uint8_t lastSetFanSpeed[MAX_FAN_COUNT] = {0};
 static uint8_t curFanSpeed[MAX_FAN_COUNT] = {0};
 
-static bool fanQueryWait = false;
 static bool fanQueryEnable = false;
-
+static bool fanQueryWait = false;
 static uint32_t nextFanTime = 0;
 
 #define NEXT_FAN_WAIT 500  // 1 second is 1000
@@ -111,7 +110,7 @@ void loopFan(void)
   {
     if ((lastSetFanSpeed[i] != setFanSpeed[i]) && (OS_GetTimeMs() > nextFanTime))
     {
-      if(fanIsType(i,FAN_TYPE_F) || fanIsType(i,FAN_TYPE_CTRL_S))
+      if (fanIsType(i,FAN_TYPE_F) || fanIsType(i,FAN_TYPE_CTRL_S))
       {
         if (storeCmd("%s S%d\n", fanCmd[i], setFanSpeed[i]))
           lastSetFanSpeed[i] = setFanSpeed[i];
@@ -121,7 +120,7 @@ void loopFan(void)
         if (storeCmd("%s I%d\n", fanCmd[i], setFanSpeed[i]))
           lastSetFanSpeed[i] = setFanSpeed[i];
       }
-      nextFanTime = OS_GetTimeMs() + NEXT_FAN_WAIT; // avoid rapid fire, clogging the queue
+      nextFanTime = OS_GetTimeMs() + NEXT_FAN_WAIT;  // avoid rapid fire, clogging the queue
     }
   }
 }

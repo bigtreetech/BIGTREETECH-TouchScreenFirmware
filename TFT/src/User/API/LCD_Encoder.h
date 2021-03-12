@@ -7,11 +7,12 @@ extern "C" {
 
 #include "stdbool.h"
 #include "stdint.h"
+
 #define ENCODER_PULSES_PER_STEP   4
-#define LCD_CHANGE_MODE_INTERVALS 1500 //long pressed 1.5s
-#define LCD_BUTTON_INTERVALS      20   //20ms
-#define LCD_FREE_WIDTH         (LCD_WIDTH - LCD_WIDTH / 5)
-#define LCD_FREE_HEIGHT        (LCD_HEIGHT / 5)
+#define LCD_CHANGE_MODE_INTERVALS 1500  //long pressed 1.5s
+#define LCD_BUTTON_INTERVALS      20    //20ms
+#define LCD_FREE_WIDTH            (LCD_WIDTH - LCD_WIDTH / 5)
+#define LCD_FREE_HEIGHT           (LCD_HEIGHT / 5)
 #define EN_A (1<<0)
 #define EN_B (1<<1)
 #define EN_C (1<<2)
