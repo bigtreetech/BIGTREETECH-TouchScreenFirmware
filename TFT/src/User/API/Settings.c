@@ -237,6 +237,11 @@ void setupMachine(void)
     infoMachineSettings.long_filename_support = DISABLED;
   }
   mustStoreCmd("M503 S0\n");
+
+  if (infoMachineSettings.firmwareType == FW_REPRAPFW)
+  {
+    mustStoreCmd("M555 P2\n"); //  Set RRF compatibility behaves similar to 2: Marlin
+  }
 }
 
 float flashUsedPercentage(void)

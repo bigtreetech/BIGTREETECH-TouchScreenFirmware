@@ -59,11 +59,12 @@ void clearRequestCommandInfo(void)
 */
 bool request_M21(void)
 {
-  const char * sdString = (infoMachineSettings.firmwareType == FW_REPRAPFW) ? "SDHC card " : "SD card ";
+  const char * sdString = (infoMachineSettings.firmwareType == FW_REPRAPFW) ? "card mounted " : "SD card ";
+  const char * errString1 = (infoMachineSettings.firmwareType == FW_REPRAPFW) ? "Error" : "No SD card";
 
   resetRequestCommandInfo(sdString,               // The magic to identify the start
                           "ok",                   // The magic to identify the stop
-                          "No SD card",           // The first magic to identify the error response
+                          errString1,             // The first magic to identify the error response
                           "SD init fail",         // The second error magic
                           "volume.init failed");  // The third error magic
 
@@ -244,7 +245,7 @@ void send_and_wait_M20(const char* command)
   uint32_t timeout = ((uint32_t)0x000FFFFF);
   uint32_t waitloops = ((uint32_t)0x00000006);
 
-  resetRequestCommandInfo("{", "}", "Error:", "Error:", "Error:");
+  resetRequestCommandInfo("{", "}", "Error:", NULL, NULL);
   mustStoreCmd(command);
   while ((strstr(requestCommandInfo.cmd_rev_buf, "dir") == NULL) && (waitloops > 0x00)) //(!find_part("dir"))
   {
@@ -274,7 +275,7 @@ void send_and_wait_M20(const char* command)
     if (strstr(requestCommandInfo.cmd_rev_buf, "dir") == NULL)
     {
       clearRequestCommandInfo();
-      resetRequestCommandInfo("{", "}", "Error:", "Error:", "Error:");
+      resetRequestCommandInfo("{", "}", "Error:", NULL, NULL);
       mustStoreCmd("\n");
     }
   }

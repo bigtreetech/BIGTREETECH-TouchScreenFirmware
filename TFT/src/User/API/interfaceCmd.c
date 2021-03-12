@@ -183,6 +183,7 @@ void clearCmdQueue(void)
   infoCmd.count = infoCmd.index_w = infoCmd.index_r = 0;
   infoCacheCmd.count = infoCacheCmd.index_w = infoCacheCmd.index_r = 0;
   heatSetUpdateWaiting(false);
+  printSetUpdateWaiting(false);
 }
 
 //remove last line from cmd queue
@@ -224,12 +225,12 @@ void sendQueueCmd(void)
       switch (cmd)
       {
         case 0:
-          if (isPrinting())
+          if (isPrinting() && infoMachineSettings.firmwareType != FW_REPRAPFW) // Abort printing by "M0" in RepRapFirmware 
             setPrintPause(true, true);
           break;
 
         case 1:
-          if (isPrinting())
+          if (isPrinting() && infoMachineSettings.firmwareType != FW_REPRAPFW)
             setPrintPause(true, true);
           break;
 
