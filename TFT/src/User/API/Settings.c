@@ -48,8 +48,8 @@ void infoSettingsReset(void)
   infoSettings.serial_alwaysOn        = SERIAL_ALWAYS_ON;
   infoSettings.marlin_mode_bg_color   = lcd_colors[MARLIN_BKCOLOR];
   infoSettings.marlin_mode_font_color = lcd_colors[MARLIN_FNCOLOR];
-  infoSettings.marlin_mode_showtitle  = MARLIN_SHOW_BANNER;
   infoSettings.marlin_mode_fullscreen = MARLIN_MODE_FULLSCREEN;
+  infoSettings.marlin_mode_showtitle  = MARLIN_SHOW_BANNER;
   infoSettings.marlin_type            = LCD12864;
 
 // RRF Mode Settings
@@ -238,6 +238,11 @@ void setupMachine(void)
     infoMachineSettings.long_filename_support = DISABLED;
   }
   mustStoreCmd("M503 S0\n");
+
+  if (infoMachineSettings.firmwareType == FW_REPRAPFW)
+  {
+    mustStoreCmd("M555 P2\n");  //  Set RRF compatibility behaves similar to 2: Marlin
+  }
 }
 
 float flashUsedPercentage(void)

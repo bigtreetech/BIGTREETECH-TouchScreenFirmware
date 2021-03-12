@@ -110,8 +110,8 @@ typedef struct
   uint8_t  serial_alwaysOn;
   uint16_t marlin_mode_bg_color;
   uint16_t marlin_mode_font_color;
-  uint8_t  marlin_mode_showtitle;
   uint8_t  marlin_mode_fullscreen;
+  uint8_t  marlin_mode_showtitle;
   uint8_t  marlin_type;
 
   // rrf mode settings
