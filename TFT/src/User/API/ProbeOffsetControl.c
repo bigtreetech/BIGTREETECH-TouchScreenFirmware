@@ -42,9 +42,9 @@ void probeOffsetDisable(void)
   probe_offset_enabled = false;
 
   // Z offset gcode sequence stop
-  mustStoreCmd("G28\n");                        // home printer
-  probeHeightStop(infoSettings.level_z_raise);  // raise nozzle
-  probeHeightAbsolute();                        // set absolute position mode
+  mustStoreCmd("G28\n");                          // home printer
+  probeHeightStop(infoSettings.z_raise_probing);  // raise nozzle
+  probeHeightAbsolute();                          // set absolute position mode
 
   probeHeightDisable();  // restore original software endstops state
 }
