@@ -30,8 +30,8 @@ const GUI_RECT printinfo_val_rect[6] = {
    START_X + PICON_LG_WIDTH * 2 + PICON_SPACE_X * 2 + PICON_VAL_SM_EX, ICON_START_Y + PICON_HEIGHT * 1 + PICON_SPACE_Y * 1 + PICON_VAL_Y + BYTE_HEIGHT},
 };
 
-const GUI_RECT ProgressBar = {START_X + 1,                        ICON_START_Y + PICON_HEIGHT * 2 + PICON_SPACE_Y * 2 + 1,
-                              4*ICON_WIDTH+3*SPACE_X+START_X - 1, 1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y - PICON_SPACE_Y - 1};
+const GUI_RECT ProgressBar = {START_X + 1,                                ICON_START_Y + PICON_HEIGHT * 2 + PICON_SPACE_Y * 2 + 1,
+                              START_X + 4 * ICON_WIDTH + 3 * SPACE_X - 1, ICON_HEIGHT + SPACE_Y + ICON_START_Y - PICON_SPACE_Y - 1};
 
 static uint32_t nextLayerDrawTime = 0;
 const  char *const Speed_ID[2] = {"Speed", "Flow"};
