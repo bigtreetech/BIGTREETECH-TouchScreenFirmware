@@ -280,7 +280,7 @@ void hostActionCommands(void)
   if (ack_seen("paused") || ack_seen("pause"))
   {
     infoPrinting.pause = true;
-    if (ack_seen ("filament_runout"))
+    if (ack_seen("filament_runout"))
     {
       setRunoutAlarmTrue();
     }
