@@ -233,15 +233,11 @@ void hostActionCommands(void)
     hostAction.button = 0;
     hostAction.prompt_show = 1;
 
-    if (ack_seen("Resuming SD"))  // print fron onboard SD starting
+    if (ack_seen("Resuming"))  // resuming from onboard SD or TFT
     {
-      infoHost.printing = true;  // it's set by "File opened" but put here also just to be sure
-      hostAction.prompt_show = 0;
-      Serial_Puts(SERIAL_PORT, "M876 S0\n");  // auto-respond to a prompt request that is not shown on the TFT
-    }
-    else if (ack_seen("Resuming"))  //resuming from an onboard SD pause
-    {
-      infoHost.printing = true;
+      if (isPrinting() && (infoFile.source >= BOARD_SD))  // if printing from onboard SD
+        infoHost.printing = true;
+
       infoPrinting.pause = false;
       hostAction.prompt_show = 0;
       Serial_Puts(SERIAL_PORT, "M876 S0\n");  // auto-respond to a prompt request that is not shown on the TFT
@@ -532,8 +528,8 @@ void parseACK(void)
         strncat(infoFile.title, dmaL2Cache + start_index, path_len);
         infoFile.title[path_len + strlen(getCurFileSource()) + 1] = '\0';
 
-        infoPrinting.pause = false;
         infoHost.printing = true;
+        infoPrinting.pause = false;
         infoPrinting.time = 0;
         infoPrinting.cur = 0;
         infoPrinting.size = ack_value();
@@ -551,7 +547,7 @@ void parseACK(void)
                ack_seen("Not SD printing"))
       {
         infoHost.printing = false;
-        if (infoPrinting.printing)
+        if (isPrinting())
           infoPrinting.pause = true;
       }
       else if (infoMachineSettings.onboard_sd_support == ENABLED &&

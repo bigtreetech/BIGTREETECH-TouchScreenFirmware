@@ -321,7 +321,7 @@ void abortPrinting(void)
     case BOARD_SD:
     case BOARD_SD_REMOTE:
       // infoHost.printing = false;  // Not so fast! Let Marlin tell that he's done!
-      //Several M108 are sent to Marlin because consecutive blocking operations
+      // Several M108 are sent to Marlin because consecutive blocking operations
       // such as heating bed, extruder may defer processing of M524
       breakAndContinue();
       breakAndContinue();
