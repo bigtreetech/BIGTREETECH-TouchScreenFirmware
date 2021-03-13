@@ -105,7 +105,7 @@ int main(void)
 
   Hardware_GenericInit();
 
-  for (; ; )
+  for (; ;)
   {
     (*infoMenu.menu[infoMenu.cur])();
   }
