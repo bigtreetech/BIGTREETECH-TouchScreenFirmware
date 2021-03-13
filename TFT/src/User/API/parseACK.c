@@ -9,9 +9,9 @@ bool portSeen[_UART_CNT] = {false, false, false, false, false, false};
 
 struct HOST_ACTION
 {
-  char prompt_begin[20];
-  char prompt_button1[20];
-  char prompt_button2[20];
+  char prompt_begin[50];
+  char prompt_button1[30];
+  char prompt_button2[30];
   bool prompt_show;         //Show popup reminder or not
   uint8_t button;           //Number of buttons
 } hostAction;
@@ -203,21 +203,40 @@ void hostActionCommands(void)
 {
   char *find = strchr(dmaL2Cache + ack_index, '\n');
   *find = '\0';
-  if (ack_seen("notification "))
+
+  if (ack_seen(":notification "))
   {
-    strcpy(hostAction.prompt_begin, dmaL2Cache + ack_index);
+    addToast(DIALOG_TYPE_INFO, dmaL2Cache + ack_index);
     statusScreen_setMsg((uint8_t *)echomagic, (uint8_t *)dmaL2Cache + ack_index);
   }
-
-  if (ack_seen("prompt_begin "))
+  else if (ack_seen(":paused") || ack_seen(":pause"))
   {
+    infoPrinting.pause = true;
+    if (ack_seen("filament_runout"))
+    {
+      setRunoutAlarmTrue();
+    }
+  }
+  else if (ack_seen(":cancel"))  //To be added to Marlin abortprint routine
+  {
+    if (infoHost.printing == true)
+    {
+      request_M27(0);
+    }
+    infoHost.printing = false;
+    infoPrinting.printing = false;
+    infoPrinting.cur = infoPrinting.size;
+  }
+  else if (ack_seen(":prompt_begin "))
+  {
+    strcpy(hostAction.prompt_begin, dmaL2Cache + ack_index);
     hostAction.button = 0;
     hostAction.prompt_show = 1;
-    strcpy(hostAction.prompt_begin, dmaL2Cache + ack_index);
+
     if (ack_seen("Resuming SD"))  // print fron onboard SD starting
     {
-      hostAction.prompt_show = 0;
       infoHost.printing = true;  // it's set by "File opened" but put here also just to be sure
+      hostAction.prompt_show = 0;
       Serial_Puts(SERIAL_PORT, "M876 S0\n");  // auto-respond to a prompt request that is not shown on the TFT
     }
     else if (ack_seen("Resuming"))  //resuming from an onboard SD pause
@@ -237,7 +256,7 @@ void hostActionCommands(void)
       infoPrinting.pause = true;
     }
   }
-  else if (ack_seen("prompt_button "))
+  else if (ack_seen(":prompt_button "))
   {
     hostAction.button++;
     if (hostAction.button == 1)
@@ -249,8 +268,7 @@ void hostActionCommands(void)
       strcpy(hostAction.prompt_button2, dmaL2Cache + ack_index);
     }
   }
-
-  if (ack_seen("prompt_show") && hostAction.prompt_show)
+  else if (ack_seen(":prompt_show") && hostAction.prompt_show)
   {
     switch (hostAction.button)
     {
@@ -276,26 +294,6 @@ void hostActionCommands(void)
         break;
     }
   }
-
-  if (ack_seen("paused") || ack_seen("pause"))
-  {
-    infoPrinting.pause = true;
-    if (ack_seen("filament_runout"))
-    {
-      setRunoutAlarmTrue();
-    }
-  }
-  else if (ack_seen("cancel"))  //To be added to Marlin abortprint routine
-  {
-    if (infoHost.printing == true)
-    {
-      request_M27(0);
-    }
-    infoHost.printing = false;
-    infoPrinting.printing = false;
-    infoPrinting.cur = infoPrinting.size;
-  }
-
 }
 
 void parseACK(void)
@@ -373,7 +371,7 @@ void parseACK(void)
 
     if (requestCommandInfo.inResponse)
     {
-      if (strlen(requestCommandInfo.cmd_rev_buf)+strlen(dmaL2Cache) < CMD_MAX_REV)
+      if (strlen(requestCommandInfo.cmd_rev_buf) + strlen(dmaL2Cache) < CMD_MAX_REV)
       {
         strcat(requestCommandInfo.cmd_rev_buf, dmaL2Cache);
         if (ack_seen(requestCommandInfo.stopMagic))
