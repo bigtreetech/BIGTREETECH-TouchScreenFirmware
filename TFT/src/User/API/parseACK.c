@@ -500,7 +500,7 @@ void parseACK(void)
       else if (!infoMachineSettings.promptSupport && ack_seen("paused for user"))
       {
         setDialogText((u8*)"Printer is Paused",(u8*)"Paused for user\ncontinue?", LABEL_CONFIRM, LABEL_BACKGROUND);
-        showDialog(DIALOG_TYPE_QUESTION, breakAndContinue, NULL,NULL);
+        showDialog(DIALOG_TYPE_QUESTION, breakAndContinue, NULL, NULL);
       }
       // parse "HOST_ACTION_COMMANDS"
       else if (ack_seen("//action:"))
