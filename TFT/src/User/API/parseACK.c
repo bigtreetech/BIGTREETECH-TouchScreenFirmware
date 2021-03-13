@@ -99,7 +99,7 @@ void ack_values_sum(float *data)
     ack_index++;
   *data += ack_value();
   while ((((dmaL2Cache[ack_index] >= '0') && (dmaL2Cache[ack_index] <= '9')) ||
-          (dmaL2Cache[ack_index] == '.'))  && (dmaL2Cache[ack_index] != '\n'))
+          (dmaL2Cache[ack_index] == '.')) && (dmaL2Cache[ack_index] != '\n'))
     ack_index++;
   if (dmaL2Cache[ack_index] != '\n')
     ack_values_sum(data);
@@ -241,8 +241,8 @@ void hostActionCommands(void)
     }
     else if (ack_seen("Resuming"))  //resuming from an onboard SD pause
     {
-      infoPrinting.pause = false;
       infoHost.printing = true;
+      infoPrinting.pause = false;
       hostAction.prompt_show = 0;
       Serial_Puts(SERIAL_PORT, "M876 S0\n");  // auto-respond to a prompt request that is not shown on the TFT
     }
@@ -497,7 +497,7 @@ void parseACK(void)
       // parse pause message
       else if (!infoMachineSettings.promptSupport && ack_seen("paused for user"))
       {
-        setDialogText((u8*)"Printer is Paused",(u8*)"Paused for user\ncontinue?", LABEL_CONFIRM, LABEL_BACKGROUND);
+        setDialogText((u8*)"Printer is Paused", (u8*)"Paused for user\ncontinue?", LABEL_CONFIRM, LABEL_BACKGROUND);
         showDialog(DIALOG_TYPE_QUESTION, breakAndContinue, NULL, NULL);
       }
       // parse "HOST_ACTION_COMMANDS"
@@ -611,7 +611,7 @@ void parseACK(void)
         {
           sprintf (&tmpMsg[strlen(tmpMsg)], "\nRange: %0.5f", ack_value());
         }
-        setDialogText( (u8* )"Repeatability Test", (uint8_t *)tmpMsg, LABEL_CONFIRM, LABEL_BACKGROUND);
+        setDialogText((u8* )"Repeatability Test", (uint8_t *)tmpMsg, LABEL_CONFIRM, LABEL_BACKGROUND);
         showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
       }
       // parse M48, Standard Deviation
@@ -623,7 +623,7 @@ void parseACK(void)
         if (strcmp(tmpMsg, "Mean: ") == 0)
         {
           sprintf(tmpMsg, "%s\nStandard Deviation: %0.5f", (char *)getDialogMsgStr(), ack_value());
-          setDialogText( (u8* )"Repeatability Test", (uint8_t *)tmpMsg, LABEL_CONFIRM, LABEL_BACKGROUND);
+          setDialogText((u8* )"Repeatability Test", (uint8_t *)tmpMsg, LABEL_CONFIRM, LABEL_BACKGROUND);
           showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
         }
       }
