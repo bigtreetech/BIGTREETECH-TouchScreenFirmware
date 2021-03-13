@@ -9,9 +9,9 @@ bool portSeen[_UART_CNT] = {false, false, false, false, false, false};
 
 struct HOST_ACTION
 {
-  char prompt_begin[50];
-  char prompt_button1[30];
-  char prompt_button2[30];
+  char prompt_begin[30];
+  char prompt_button1[20];
+  char prompt_button2[20];
   bool prompt_show;         //Show popup reminder or not
   uint8_t button;           //Number of buttons
 } hostAction;
