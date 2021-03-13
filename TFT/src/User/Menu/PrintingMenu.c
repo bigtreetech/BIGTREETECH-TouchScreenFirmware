@@ -30,6 +30,9 @@ const GUI_RECT printinfo_val_rect[6] = {
    START_X + PICON_LG_WIDTH * 2 + PICON_SPACE_X * 2 + PICON_VAL_SM_EX, ICON_START_Y + PICON_HEIGHT * 1 + PICON_SPACE_Y * 1 + PICON_VAL_Y + BYTE_HEIGHT},
 };
 
+const GUI_RECT ProgressBar = {START_X + 1,                        ICON_START_Y + PICON_HEIGHT * 2 + PICON_SPACE_Y * 2 + 1,
+                              4*ICON_WIDTH+3*SPACE_X+START_X - 1, 1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y - PICON_SPACE_Y - 1};
+
 static uint32_t nextLayerDrawTime = 0;
 const  char *const Speed_ID[2] = {"Speed", "Flow"};
 bool hasFilamentData;
@@ -208,11 +211,16 @@ static inline void reDrawTime(int icon_pos)
 static inline void reDrawProgress(int icon_pos)
 {
   char buf[6];
+  uint16_t progLen;
 
   sprintf(buf, "%d%%", infoPrinting.progress);
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
   GUI_DispString(printinfo_points[3].x + PICON_TITLE_X, printinfo_points[3].y + PICON_TITLE_Y, (uint8_t *)buf);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
+  RAPID_SERIAL_LOOP();  //perform backend printing loop before drawing to avoid printer idling
+  progLen = ((ProgressBar.x1 - ProgressBar.x0) * infoPrinting.progress) / 100;
+  GUI_FillRectColor(ProgressBar.x0, ProgressBar.y0, ProgressBar.x0 + progLen, ProgressBar.y1, MAT_ORANGE);
+
 }
 
 static inline void reDrawLayer(int icon_pos)
@@ -275,6 +283,11 @@ static inline void printingDrawPage(void)
   nextLayerDrawTime = 0;  // Draw layer now
   reDrawLayer(Z_ICON_POS);
   reDrawSpeed(SPD_ICON_POS);
+  GUI_SetColor(ORANGE);
+  GUI_DrawRect(ProgressBar.x0 - 1, ProgressBar.y0 - 1, ProgressBar.x1 + 1, ProgressBar.y1 + 1);
+  GUI_SetColor(DARKGRAY);
+  GUI_FillPrect(&ProgressBar);
+  GUI_RestoreColorDefault();
 }
 
 void drawPrintInfo(void)
