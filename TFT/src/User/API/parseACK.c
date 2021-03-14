@@ -206,7 +206,7 @@ void hostActionCommands(void)
 
   if (ack_seen(":notification "))
   {
-    addToast(DIALOG_TYPE_INFO, dmaL2Cache + ack_index);
+//    addToast(DIALOG_TYPE_INFO, dmaL2Cache + ack_index);  // comment the line in case Marlin sends too much notifications
     statusScreen_setMsg((uint8_t *)echomagic, (uint8_t *)dmaL2Cache + ack_index);
   }
   else if (ack_seen(":paused") || ack_seen(":pause"))

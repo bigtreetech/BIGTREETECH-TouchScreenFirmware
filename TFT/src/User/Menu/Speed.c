@@ -20,18 +20,18 @@ void setSpeedItemIndex(uint8_t index)
   item_index = index;
 }
 
-void percentageReDraw(bool skipHeader)
+void percentageReDraw(bool skip_header)
 {
   char tempstr[20];
 
   setLargeFont(true);
 
-  if (!skipHeader)
+  if (!skip_header)
   {
     setLargeFont(false);
     GUI_DispString(exhibitRect.x0, exhibitRect.y0, textSelect(itemPercentTypeTitle[item_index]));
     setLargeFont(true);
-    GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1)>>1, exhibitRect.y0, (uint8_t *)"%");
+    GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1) >> 1, exhibitRect.y0, (uint8_t *)"%");
   }
 
   sprintf(tempstr, "  %d/%d  ", speedGetCurPercent(item_index), speedGetSetPercent(item_index));

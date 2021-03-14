@@ -94,19 +94,23 @@ void mblDrawHeader(uint8_t *point)
 
   if (point != NULL)
   {
-    sprintf(tempstr, "P%d   ", *point);
+    sprintf(tempstr, "P%-4d", *point);
 
     GUI_SetColor(infoSettings.sd_reminder_color);
   }
   else
   {
-    sprintf(tempstr, "%s   ", textSelect(LABEL_OFF));
+    sprintf(tempstr, "%-15s", textSelect(LABEL_OFF));
 
     GUI_SetColor(infoSettings.reminder_color);
   }
 
   GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *) tempstr);
+
   GUI_SetColor(infoSettings.font_color);
+  setLargeFont(true);
+  GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1) >> 1, exhibitRect.y0, (uint8_t *)"mm");
+  setLargeFont(false);
 }
 
 void mblDrawValue(float val)

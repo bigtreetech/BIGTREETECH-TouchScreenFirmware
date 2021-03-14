@@ -16,13 +16,14 @@ void extrudeCoordinateReDraw(bool skip_header)
 
   if (!skip_header)
   {
+    sprintf(tempstr, "%-15s", extruderDisplayID[curExtruder_index]);
     setLargeFont(false);
-    sprintf(tempstr, "%-15s ", extruderDisplayID[curExtruder_index]);
     GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *)tempstr);
     setLargeFont(true);
+    GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1) >> 1, exhibitRect.y0, (uint8_t *)"mm");
   }
 
-  sprintf(tempstr, "  %.2f mm ", extrudeCoordinate);
+  sprintf(tempstr, "  %.2f  ", extrudeCoordinate);
   GUI_DispStringInPrect(&exhibitRect, (uint8_t *)tempstr);
   setLargeFont(false);
 }
