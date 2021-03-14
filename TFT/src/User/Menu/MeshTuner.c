@@ -34,11 +34,7 @@ void meshDrawHeader(uint16_t col, uint16_t row)
 
   GUI_SetColor(infoSettings.sd_reminder_color);
   GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *) tempstr);
-
   GUI_SetColor(infoSettings.font_color);
-  setLargeFont(true);
-  GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1) >> 1, exhibitRect.y0, (uint8_t *)"mm");
-  setLargeFont(false);
 }
 
 void meshDrawValue(float val)
