@@ -29,10 +29,10 @@ typedef enum
 // Config version support
 // change if new elements/keywords are added/removed/changed in the configuration.h Format YYYYMMDD
 // this number should match CONFIG_VERSION in configuration.h
-#define CONFIG_SUPPPORT 20210310
+#define CONFIG_SUPPPORT 20210311
 
 #define FONT_FLASH_SIGN       20200908  //(YYYYMMDD) change if fonts require updating
-#define CONFIG_FLASH_SIGN     20210310  //(YYYYMMDD) change if any keyword(s) in config.ini is added or removed
+#define CONFIG_FLASH_SIGN     20210311  //(YYYYMMDD) change if any keyword(s) in config.ini is added or removed
 #define LANGUAGE_FLASH_SIGN   20210217  //(YYYYMMDD) change if any keyword(s) in language pack is added or removed
 #define ICON_FLASH_SIGN       20210217  //(YYYYMMDD) change if any icon(s) is added or removed
 
@@ -103,14 +103,15 @@ typedef struct
   uint8_t persistent_info;
   uint8_t file_listmode;
   uint8_t ack_notification;
+  uint8_t emulate_m600;
 
   // Marlin Mode Settings
   uint8_t  mode;
   uint8_t  serial_alwaysOn;
   uint16_t marlin_mode_bg_color;
   uint16_t marlin_mode_font_color;
-  uint8_t  marlin_mode_showtitle;
   uint8_t  marlin_mode_fullscreen;
+  uint8_t  marlin_mode_showtitle;
   uint8_t  marlin_type;
 
   // rrf mode settings

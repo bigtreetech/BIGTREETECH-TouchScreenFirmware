@@ -10,7 +10,7 @@
 #define SET_VALID_INT_VALUE(VARIABLE, MIN, MAX) VARIABLE = valid_intValue(MIN, MAX, VARIABLE)
 #define SET_VALID_FLOAT_VALUE(VARIABLE, MIN, MAX) VARIABLE = valid_floatValue(MIN, MAX, VARIABLE)
 
-const GUI_POINT pointConfigTitle  = {2,2};
+const GUI_POINT pointConfigTitle  = {2, 2};
 const GUI_RECT  rectTitleline     = {0,               BYTE_HEIGHT+4,      LCD_WIDTH,                BYTE_HEIGHT+6};
 const GUI_RECT  recterror         = {BYTE_WIDTH/2-2,  BYTE_HEIGHT*2+2,    LCD_WIDTH-BYTE_WIDTH/2+2, LCD_HEIGHT-(BYTE_HEIGHT*4)-4};
 const GUI_RECT  recterrortxt      = {BYTE_WIDTH/2,    BYTE_HEIGHT*2+4,    LCD_WIDTH-BYTE_WIDTH/2,   LCD_HEIGHT-(BYTE_HEIGHT*4)-6};
@@ -85,7 +85,7 @@ bool getLangFromFile(void)
   foundkeys = 0;
   DIR d;
   FILINFO f;
-  FRESULT r =  f_findfirst(&d,&f,"0:","language_*.ini");
+  FRESULT r =  f_findfirst(&d, &f, "0:", "language_*.ini");
   f_closedir(&d);
   if (r != FR_OK)
    return false;
@@ -287,7 +287,7 @@ static inline float config_float(void)
 // Get valid float value or old value
 static float valid_floatValue(float min, float max, float defaultVal)
 {
-  if (inLimit(config_float(),min, max))
+  if (inLimit(config_float(), min, max))
     return config_float();
   else
     return defaultVal;
@@ -446,9 +446,9 @@ void resetConfig(void)
   }
 
   //restore print gcodes
-  strcpy(tempPC.start_gcode,PRINT_START_GCODE);
-  strcpy(tempPC.end_gcode,PRINT_END_GCODE);
-  strcpy(tempPC.cancel_gcode,PRINT_CANCEL_GCODE);
+  strcpy(tempPC.start_gcode, PRINT_START_GCODE);
+  strcpy(tempPC.end_gcode, PRINT_END_GCODE);
+  strcpy(tempPC.cancel_gcode, PRINT_CANCEL_GCODE);
 
   // write restored config
   writeConfig((uint8_t *)&tempCG, sizeof(CUSTOM_GCODES), CUSTOM_GCODE_ADDR, CUSTOM_GCODE_MAX_SIZE);
@@ -611,6 +611,10 @@ void parseConfigKey(uint16_t index)
       SET_VALID_INT_VALUE(infoSettings.ack_notification, 0, 2);
       break;
 
+    case C_INDEX_EMULATE_M600:
+      infoSettings.emulate_m600 = getOnOff();
+      break;
+
     //----------------------------Marlin Mode Settings (only for TFT24_V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70_V3.0)
 
     #ifdef HAS_EMULATOR
@@ -631,34 +635,35 @@ void parseConfigKey(uint16_t index)
         config_set_color(&infoSettings.marlin_mode_font_color);
         break;
 
-      case C_INDEX_MARLIN_SHOW_TITLE:
-        infoSettings.marlin_mode_showtitle = getOnOff();
-        break;
-
       case C_INDEX_MARLIN_FULLSCREEN:
         infoSettings.marlin_mode_fullscreen = getOnOff();
         break;
 
-      case C_INDEX_MARLIN_TYPE:
-        SET_VALID_INT_VALUE(infoSettings.marlin_type, 0, MODE_COUNT - 1);
+      case C_INDEX_MARLIN_SHOW_TITLE:
+        infoSettings.marlin_mode_showtitle = getOnOff();
         break;
 
       case C_INDEX_MARLIN_TITLE:
       {
         char * pchr;
-        pchr = strrchr(cur_line,':') + 1;
+        pchr = strrchr(cur_line, ':') + 1;
         int utf8len = getUTF8Length((u8*)pchr);
         int bytelen = strlen(pchr) + 1;
-        if (inLimit(utf8len,NAME_MIN_LENGTH,MAX_STRING_LENGTH) && inLimit(bytelen,NAME_MIN_LENGTH,MAX_GCODE_LENGTH))
+        if (inLimit(utf8len, NAME_MIN_LENGTH, MAX_STRING_LENGTH) && inLimit(bytelen, NAME_MIN_LENGTH, MAX_GCODE_LENGTH))
           strcpy(configStringsStore->marlin_title, pchr);
         break;
       }
+
+      case C_INDEX_MARLIN_TYPE:
+        SET_VALID_INT_VALUE(infoSettings.marlin_type, 0, MODE_COUNT - 1);
+        break;
 
     #endif // ST7920_EMULATOR || LCD2004_EMULATOR
 
     //----------------------------RRF Mode Settings
     case C_INDEX_RRF_MACROS_ON:
       infoSettings.rrf_macros_enable = getOnOff();
+      break;
 
     //----------------------------Printer / Machine Settings
 
@@ -675,7 +680,7 @@ void parseConfigKey(uint16_t index)
       break;
 
     case C_INDEX_EXT_COUNT:
-      SET_VALID_INT_VALUE(infoSettings.ext_count, 1,MAX_EXT_COUNT);
+      SET_VALID_INT_VALUE(infoSettings.ext_count, 1, MAX_EXT_COUNT);
       break;
 
     case C_INDEX_FAN_COUNT:
@@ -687,18 +692,18 @@ void parseConfigKey(uint16_t index)
       break;
 
     case C_INDEX_MAX_TEMP:
-      if (key_seen("BED:")) SET_VALID_INT_VALUE(infoSettings.max_temp[BED], MIN_BED_TEMP, MAX_BED_TEMP);
-      if (key_seen("CHAMBER:")) SET_VALID_INT_VALUE(infoSettings.max_temp[CHAMBER], MIN_CHAMBER_TEMP, MAX_CHAMBER_TEMP);
       if (key_seen("T0:")) SET_VALID_INT_VALUE(infoSettings.max_temp[NOZZLE0], MIN_TOOL_TEMP, MAX_TOOL_TEMP);
       if (key_seen("T1:")) SET_VALID_INT_VALUE(infoSettings.max_temp[NOZZLE1], MIN_TOOL_TEMP, MAX_TOOL_TEMP);
       if (key_seen("T2:")) SET_VALID_INT_VALUE(infoSettings.max_temp[NOZZLE2], MIN_TOOL_TEMP, MAX_TOOL_TEMP);
       if (key_seen("T3:")) SET_VALID_INT_VALUE(infoSettings.max_temp[NOZZLE3], MIN_TOOL_TEMP, MAX_TOOL_TEMP);
       if (key_seen("T4:")) SET_VALID_INT_VALUE(infoSettings.max_temp[NOZZLE4], MIN_TOOL_TEMP, MAX_TOOL_TEMP);
       if (key_seen("T5:")) SET_VALID_INT_VALUE(infoSettings.max_temp[NOZZLE5], MIN_TOOL_TEMP, MAX_TOOL_TEMP);
+      if (key_seen("BED:")) SET_VALID_INT_VALUE(infoSettings.max_temp[BED], MIN_BED_TEMP, MAX_BED_TEMP);
+      if (key_seen("CHAMBER:")) SET_VALID_INT_VALUE(infoSettings.max_temp[CHAMBER], MIN_CHAMBER_TEMP, MAX_CHAMBER_TEMP);
       break;
 
     case C_INDEX_MIN_TEMP:
-      SET_VALID_INT_VALUE(infoSettings.min_ext_temp, 25, MAX_TOOL_TEMP);
+      SET_VALID_INT_VALUE(infoSettings.min_ext_temp, MIN_TOOL_TEMP, MAX_TOOL_TEMP);
       break;
 
     case C_INDEX_FAN_MAX:
@@ -812,7 +817,7 @@ void parseConfigKey(uint16_t index)
       break;
 
     case C_INDEX_Z_RAISE_PROBING:
-      SET_VALID_FLOAT_VALUE(infoSettings.z_raise_probing, MIN_Z_POS_LIMIT, MAX_SIZE_LIMIT);
+      SET_VALID_FLOAT_VALUE(infoSettings.z_raise_probing, MIN_Z_RAISE_PROBING, MAX_SIZE_LIMIT);
       break;
 
     case C_INDEX_Z_STEPPERS_ALIGNMENT:
@@ -860,7 +865,7 @@ void parseConfigKey(uint16_t index)
         break;
 
       case C_INDEX_SHUTDOWN_TEMP:
-        SET_VALID_INT_VALUE(infoSettings.auto_off_temp, MIN_BED_TEMP, MAX_BED_TEMP);
+        SET_VALID_INT_VALUE(infoSettings.auto_off_temp, MIN_TOOL_TEMP, MAX_TOOL_TEMP);
         break;
     #endif
 
@@ -897,7 +902,7 @@ void parseConfigKey(uint16_t index)
         break;
 
       case C_INDEX_POWERLOSS_ZRAISE:
-        SET_VALID_FLOAT_VALUE(infoSettings.powerloss_z_raise, MIN_SIZE_LIMIT, MAX_SIZE_LIMIT);
+        SET_VALID_FLOAT_VALUE(infoSettings.powerloss_z_raise, MIN_Z_POS_LIMIT, MAX_SIZE_LIMIT);
         break;
 
       case C_INDEX_BTT_MINIUPS:
@@ -972,10 +977,10 @@ void parseConfigKey(uint16_t index)
     case C_INDEX_CUSTOM_LABEL_15:
     {
       char pchr[LINE_MAX_CHAR];
-      strcpy(pchr,strrchr(cur_line,':') + 1);
+      strcpy(pchr,strrchr(cur_line, ':') + 1);
       int utf8len = getUTF8Length((u8*)pchr);
       int bytelen = strlen(pchr) + 1;
-      if (inLimit(utf8len,NAME_MIN_LENGTH,MAX_GCODE_NAME_LENGTH) && inLimit(bytelen,NAME_MIN_LENGTH,MAX_GCODE_LENGTH))
+      if (inLimit(utf8len, NAME_MIN_LENGTH, MAX_GCODE_NAME_LENGTH) && inLimit(bytelen, NAME_MIN_LENGTH, MAX_GCODE_LENGTH))
       {
         strcpy(configCustomGcodes->name[customcode_index++], pchr);
         customcode_good[index - C_INDEX_CUSTOM_LABEL_1] = 1;  //set name was found ok
@@ -1004,13 +1009,13 @@ void parseConfigKey(uint16_t index)
     {
       int fileindex = index - C_INDEX_CUSTOM_GCODE_1;  //actual gcode index in config file
       char pchr[LINE_MAX_CHAR];
-      strcpy(pchr,strrchr(cur_line,':') + 1);
+      strcpy(pchr,strrchr(cur_line, ':') + 1);
       int len = strlen(pchr) + 1;
       //check if gcode length is ok and the name was ok
-      if (inLimit(len,GCODE_MIN_LENGTH,MAX_GCODE_LENGTH) && (customcode_good[fileindex] == 1))
-          strcpy(configCustomGcodes->gcode[customcode_index - 1], pchr);
+      if (inLimit(len, GCODE_MIN_LENGTH, MAX_GCODE_LENGTH) && (customcode_good[fileindex] == 1))
+        strcpy(configCustomGcodes->gcode[customcode_index - 1], pchr);
       else if (customcode_good[fileindex] == 1)  //if name was ok but gcode is not ok then reduce count
-          customcode_index--;
+        customcode_index--;
       break;
     }
 
@@ -1031,7 +1036,7 @@ void parseConfigKey(uint16_t index)
     case C_INDEX_START_GCODE:
     {
       char * pchr;
-      pchr = strrchr(cur_line,':') + 1;
+      pchr = strrchr(cur_line, ':') + 1;
       int len = strlen(pchr);
       if (inLimit(len, GCODE_MIN_LENGTH, MAX_GCODE_LENGTH))
       {
@@ -1049,17 +1054,17 @@ void parseConfigKey(uint16_t index)
     case C_INDEX_END_GCODE:
     {
       char * pchr;
-      pchr = strrchr(cur_line,':') + 1;
+      pchr = strrchr(cur_line, ':') + 1;
       int len = strlen(pchr);
-      if (inLimit(len,GCODE_MIN_LENGTH,MAX_GCODE_LENGTH))
+      if (inLimit(len, GCODE_MIN_LENGTH, MAX_GCODE_LENGTH))
       {
         strcpy(configPrintGcodes->end_gcode, pchr);
-      #ifdef CONFIG_DEBUG
-        GUI_DispStringInRect(recterrortxt.x0, recterrortxt.y0 + (BYTE_HEIGHT * 2), recterrortxt.x1, recterrortxt.y1,
-                             (uint8_t *)configPrintGcodes->end_gcode);
-        Delay_ms(1000);
-        Delay_ms(1000);
-      #endif
+        #ifdef CONFIG_DEBUG
+          GUI_DispStringInRect(recterrortxt.x0, recterrortxt.y0 + (BYTE_HEIGHT * 2), recterrortxt.x1, recterrortxt.y1,
+                               (uint8_t *)configPrintGcodes->end_gcode);
+          Delay_ms(1000);
+          Delay_ms(1000);
+        #endif
       }
       break;
     }
@@ -1067,17 +1072,17 @@ void parseConfigKey(uint16_t index)
     case C_INDEX_CANCEL_GCODE:
     {
       char * pchr;
-      pchr = strrchr(cur_line,':') + 1;
+      pchr = strrchr(cur_line, ':') + 1;
       int len = strlen(pchr);
-      if (inLimit(len,GCODE_MIN_LENGTH,MAX_GCODE_LENGTH))
+      if (inLimit(len, GCODE_MIN_LENGTH, MAX_GCODE_LENGTH))
       {
         strcpy(configPrintGcodes->cancel_gcode, pchr);
-      #ifdef CONFIG_DEBUG
-        GUI_DispStringInRect(recterrortxt.x0, recterrortxt.y0 + (BYTE_HEIGHT * 2), recterrortxt.x1, recterrortxt.y1,
-                             (uint8_t *)configPrintGcodes->cancel_gcode);
-        Delay_ms(1000);
-        Delay_ms(1000);
-      #endif
+        #ifdef CONFIG_DEBUG
+          GUI_DispStringInRect(recterrortxt.x0, recterrortxt.y0 + (BYTE_HEIGHT * 2), recterrortxt.x1, recterrortxt.y1,
+                               (uint8_t *)configPrintGcodes->cancel_gcode);
+          Delay_ms(1000);
+          Delay_ms(1000);
+        #endif
       }
       break;
     }

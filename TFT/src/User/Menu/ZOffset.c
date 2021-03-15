@@ -24,7 +24,7 @@ void zOffsetDrawStatus(bool status, uint8_t *val)
 {
   char tempstr[20];
 
-  sprintf(tempstr, "%s  ", val);
+  sprintf(tempstr, "%-15s", val);
 
   if (!status)
     GUI_SetColor(infoSettings.reminder_color);
@@ -32,7 +32,11 @@ void zOffsetDrawStatus(bool status, uint8_t *val)
     GUI_SetColor(infoSettings.sd_reminder_color);
 
   GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *) tempstr);
+
   GUI_SetColor(infoSettings.font_color);
+  setLargeFont(true);
+  GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1) >> 1, exhibitRect.y0, (uint8_t *)"mm");
+  setLargeFont(false);
 }
 
 void zOffsetDrawValue(float val)

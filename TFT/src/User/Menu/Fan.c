@@ -21,13 +21,14 @@ void fanSpeedReDraw(bool skip_header)
     setLargeFont(false);
     GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *)tempstr);
     setLargeFont(true);
+
     if (infoSettings.fan_percentage == 1)
     {
-      GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1)>>1, exhibitRect.y0, (uint8_t *)"%");
+      GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1) >> 1, exhibitRect.y0, (uint8_t *)"%");
     }
     else
     {
-      GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1)>>1, exhibitRect.y0, (uint8_t *)"PWM");
+      GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1) >> 1, exhibitRect.y0, (uint8_t *)"PWM");
     }
   }
 

@@ -55,6 +55,7 @@ typedef enum
   SKEY_PERSISTENT_INFO,
   SKEY_FILE_LIST_MODE,
   SKEY_ACK_NOTIFICATION,
+  SKEY_EMULATE_M600,
   SKEY_SERIAL_ALWAYS_ON,
   SKEY_SPEED,
   SKEY_AUTO_LOAD_LEVELING,
@@ -85,8 +86,8 @@ typedef enum
   SKEY_START_GCODE_ENABLED,
   SKEY_END_GCODE_ENABLED,
   SKEY_CANCEL_GCODE_ENABLED,
-  SKEY_RESET_SETTINGS, // Keep reset always at the bottom of the settings menu list.
-  SKEY_COUNT //keep this always at the end
+  SKEY_RESET_SETTINGS,        // Keep reset always at the bottom of the settings menu list.
+  SKEY_COUNT                  // keep this always at the end
 } SKEY_LIST;
 
 #define FE_PAGE_COUNT  (SKEY_COUNT+LISTITEM_PER_PAGE - 1) / LISTITEM_PER_PAGE
@@ -100,6 +101,7 @@ LISTITEM settingPage[SKEY_COUNT] = {
   {ICONCHAR_TOGGLE_ON,   LIST_TOGGLE,        LABEL_PERSISTENT_INFO,        LABEL_BACKGROUND},
   {ICONCHAR_TOGGLE_ON,   LIST_TOGGLE,        LABEL_FILE_LIST_MODE,         LABEL_BACKGROUND},
   {ICONCHAR_BLANK,       LIST_CUSTOMVALUE,   LABEL_ACK_NOTIFICATION,       LABEL_DYNAMIC},
+  {ICONCHAR_TOGGLE_ON,   LIST_TOGGLE,        LABEL_EMULATE_M600,           LABEL_BACKGROUND},
   {ICONCHAR_TOGGLE_ON,   LIST_TOGGLE,        LABEL_SERIAL_ALWAYS_ON,       LABEL_BACKGROUND},
   {ICONCHAR_BLANK,       LIST_CUSTOMVALUE,   LABEL_MOVE_SPEED,             LABEL_NORMAL},
   {ICONCHAR_TOGGLE_ON,   LIST_TOGGLE,        LABEL_AUTO_LOAD_LEVELING,     LABEL_BACKGROUND},
@@ -168,6 +170,11 @@ void updateFeatureSettings(uint8_t key_val)
     case SKEY_ACK_NOTIFICATION:
       infoSettings.ack_notification = (infoSettings.ack_notification + 1) % ITEM_NOTIFICATION_TYPE_NUM;
       setDynamicTextValue(key_val, (char *)itemNotificationType[infoSettings.ack_notification]);
+      break;
+
+    case SKEY_EMULATE_M600:
+      infoSettings.emulate_m600 = (infoSettings.emulate_m600 + 1) % ITEM_TOGGLE_NUM;
+      settingPage[item_index].icon = iconToggle[infoSettings.emulate_m600];
       break;
 
     case SKEY_SERIAL_ALWAYS_ON:
@@ -241,7 +248,7 @@ void updateFeatureSettings(uint8_t key_val)
           infoSettings.knob_led_idle = (infoSettings.knob_led_idle + 1) % ITEM_TOGGLE_NUM;
           settingPage[item_index].icon = iconToggle[infoSettings.knob_led_idle];
           break;
-      #endif //LCD_LED_PWM_CHANNEL
+      #endif  //LCD_LED_PWM_CHANNEL
     #endif
 
     case SKEY_START_GCODE_ENABLED:
@@ -298,6 +305,10 @@ void loadFeatureSettings()
 
         case SKEY_ACK_NOTIFICATION:
           setDynamicTextValue(i, (char *)itemNotificationType[infoSettings.ack_notification]);
+          break;
+
+        case SKEY_EMULATE_M600:
+          settingPage[item_index].icon = iconToggle[infoSettings.emulate_m600];
           break;
 
         case SKEY_SERIAL_ALWAYS_ON:
@@ -414,7 +425,7 @@ void loadFeatureSettings()
   //menuDrawListItem(&featureSettingsItems.items[5],5);
   //menuDrawListItem(&featureSettingsItems.items[6],6);
 
-} //loadFeatureSettings
+}  //loadFeatureSettings
 
 void menuFeatureSettings(void)
 {

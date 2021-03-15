@@ -41,14 +41,15 @@ void infoSettingsReset(void)
   infoSettings.persistent_info        = ENABLED;
   infoSettings.file_listmode          = ENABLED;
   infoSettings.ack_notification       = ACK_NOTIFICATION_STYLE;
+  infoSettings.emulate_m600           = EMULATE_M600;
 
 // Marlin Mode Settings
   infoSettings.mode                   = DEFAULT_LCD_MODE;
   infoSettings.serial_alwaysOn        = SERIAL_ALWAYS_ON;
   infoSettings.marlin_mode_bg_color   = lcd_colors[MARLIN_BKCOLOR];
   infoSettings.marlin_mode_font_color = lcd_colors[MARLIN_FNCOLOR];
-  infoSettings.marlin_mode_showtitle  = MARLIN_SHOW_BANNER;
   infoSettings.marlin_mode_fullscreen = MARLIN_MODE_FULLSCREEN;
+  infoSettings.marlin_mode_showtitle  = MARLIN_SHOW_BANNER;
   infoSettings.marlin_type            = LCD12864;
 
 // RRF Mode Settings
@@ -240,7 +241,7 @@ void setupMachine(void)
 
   if (infoMachineSettings.firmwareType == FW_REPRAPFW)
   {
-    mustStoreCmd("M555 P2\n"); //  Set RRF compatibility behaves similar to 2: Marlin
+    mustStoreCmd("M555 P2\n");  //  Set RRF compatibility behaves similar to 2: Marlin
   }
 }
 

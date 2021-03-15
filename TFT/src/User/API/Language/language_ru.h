@@ -10,6 +10,7 @@
     #define STRING_PERSISTENT_INFO        "Нагрев в инфостроке"
     #define STRING_FILE_LIST_MODE         "Файлы в режиме строк"
     #define STRING_ACK_NOTIFICATION       "ACK стиль уведомления"
+    #define STRING_EMULATE_M600           "Emulate M600"
     #define STRING_SERIAL_ALWAYS_ON       "Serial Always ON"
     #define STRING_MARLIN_SHOW_TITLE      "Marlin Mode Title Support"
     #define STRING_MARLIN_FULLSCREEN      "Marlin на весь экран"

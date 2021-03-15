@@ -10,6 +10,7 @@
     #define STRING_PERSISTENT_INFO        "Temp. toujours affichées"
     #define STRING_FILE_LIST_MODE         "Fichiers en mode liste"
     #define STRING_ACK_NOTIFICATION       "Style de notification ACK"
+    #define STRING_EMULATE_M600           "Emulate M600"
     #define STRING_SERIAL_ALWAYS_ON       "Serial toujours actif"
     #define STRING_MARLIN_SHOW_TITLE      "Titre en Mode Marlin"
     #define STRING_MARLIN_FULLSCREEN      "Mode Marlin plein écran"
