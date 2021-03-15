@@ -162,18 +162,12 @@ void menuABL(void)
       {ICON_BACKGROUND,              LABEL_BACKGROUND},
       {ICON_BLTOUCH,                 LABEL_BLTOUCH},
       {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_HEAT,                    LABEL_PREHEAT},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
       {ICON_BACK,                    LABEL_BACK},
     }
   };
 
   KEY_VALUES key_num = KEY_IDLE;
-
-  if (infoSettings.touchmi_sensor != 0)
-  {
-    autoLevelingItems.items[4].icon = ICON_NOZZLE;
-    autoLevelingItems.items[4].label.index = LABEL_TOUCHMI;
-  }
 
   switch (infoMachineSettings.leveling)
   {
@@ -191,6 +185,12 @@ void menuABL(void)
 
     default:
       break;
+  }
+
+  if (infoSettings.touchmi_sensor != 0)
+  {
+    autoLevelingItems.items[4].icon = ICON_NOZZLE;
+    autoLevelingItems.items[4].label.index = LABEL_TOUCHMI;
   }
 
   menuDrawPage(&autoLevelingItems);
@@ -242,20 +242,7 @@ void menuABL(void)
           infoMenu.menu[++infoMenu.cur] = menuBLTouch;
         break;
 
-      case KEY_ICON_6:
-        infoMenu.menu[++infoMenu.cur] = menuPreheat;
-        break;
-
       case KEY_ICON_7:
-        for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
-        {
-          if (heatGetTargetTemp(i) > 0)
-          {
-            setDialogText(LABEL_WARNING, LABEL_HEATERS_ON, LABEL_CONFIRM, LABEL_CANCEL);
-            showDialog(DIALOG_TYPE_QUESTION, heatCoolDown, NULL, NULL);
-            break;
-          }
-        }
         infoMenu.cur--;
         break;
 

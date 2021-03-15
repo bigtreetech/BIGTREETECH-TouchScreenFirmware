@@ -26,9 +26,9 @@ void menuBedLeveling(void)
       {ICON_LEVELING,                LABEL_ABL},
       {ICON_MESH_EDITOR,             LABEL_MESH_EDITOR},
       {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_LEVELING_OFF,            LABEL_BL_DISABLE},
       {ICON_Z_FADE,                  LABEL_ABL_Z},
-      {ICON_PROBE_OFFSET,            LABEL_H_OFFSET},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
       {ICON_BACKGROUND,              LABEL_BACKGROUND},
       {ICON_BACK,                    LABEL_BACK},
     }
@@ -61,27 +61,22 @@ void menuBedLeveling(void)
       break;
   }
 
-  if (infoSettings.z_steppers_alignment)
-  {
-    bedLevelingItems.items[2].icon = ICON_Z_ALIGN;
-    bedLevelingItems.items[2].label.index = LABEL_Z_ALIGN;
-  }
-
   if (getParameter(P_ABL_STATE, 0) == ENABLED)
   {
     bedLevelingItems.items[3].icon = ICON_LEVELING_ON;
     bedLevelingItems.items[3].label.index = LABEL_BL_ENABLE;
   }
-  else
-  {
-    bedLevelingItems.items[3].icon = ICON_LEVELING_OFF;
-    bedLevelingItems.items[3].label.index = LABEL_BL_DISABLE;
-  }
 
   if (infoMachineSettings.zProbe == ENABLED)
   {
-    bedLevelingItems.items[6].icon = ICON_PROBE_OFFSET;
-    bedLevelingItems.items[6].label.index = LABEL_P_OFFSET;
+    bedLevelingItems.items[5].icon = ICON_PROBE_OFFSET;
+    bedLevelingItems.items[5].label.index = LABEL_P_OFFSET;
+  
+    if (infoSettings.z_steppers_alignment)
+    {
+      bedLevelingItems.items[6].icon = ICON_Z_ALIGN;
+      bedLevelingItems.items[6].label.index = LABEL_Z_ALIGN;
+    }
   }
 
   menuDrawPage(&bedLevelingItems);
@@ -97,11 +92,6 @@ void menuBedLeveling(void)
 
       case KEY_ICON_1:
         infoMenu.menu[++infoMenu.cur] = menuMeshEditor;
-        break;
-
-      case KEY_ICON_2:
-        if (infoSettings.z_steppers_alignment)
-          storeCmd("G34\n");
         break;
 
       case KEY_ICON_3:
@@ -124,18 +114,17 @@ void menuBedLeveling(void)
       }
 
       case KEY_ICON_5:
-        storeCmd("M206\n");
-        zOffsetSetMenu(false);  // use Home Offset menu
-        infoMenu.menu[++infoMenu.cur] = menuZOffset;
-        break;
-
-      case KEY_ICON_6:
         if (infoMachineSettings.zProbe == ENABLED)
         {
           storeCmd("M851\n");
           zOffsetSetMenu(true);  // use Probe Offset menu
           infoMenu.menu[++infoMenu.cur] = menuZOffset;
         }
+        break;
+
+      case KEY_ICON_6:
+        if (infoMachineSettings.zProbe == ENABLED && infoSettings.z_steppers_alignment)
+          storeCmd("G34\n");
         break;
 
       case KEY_ICON_7:

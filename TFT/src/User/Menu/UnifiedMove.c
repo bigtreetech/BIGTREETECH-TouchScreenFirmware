@@ -21,12 +21,6 @@ void menuUnifiedMove(void)
 
   KEY_VALUES key_num = KEY_IDLE;
 
-  if (infoMachineSettings.leveling != BL_DISABLED)
-  {
-    UnifiedMoveItems.items[6].icon = ICON_LEVELING;
-    UnifiedMoveItems.items[6].label.index = LABEL_BED_LEVELING;
-  }
-
   menuDrawPage(&UnifiedMoveItems);
 
   while (infoMenu.menu[infoMenu.cur] == menuUnifiedMove)
@@ -55,12 +49,7 @@ void menuUnifiedMove(void)
         break;
 
       case KEY_ICON_5:
-        infoMenu.menu[++infoMenu.cur] = menuManualLeveling;
-        break;
-
-      case KEY_ICON_6:
-        if (infoMachineSettings.leveling != BL_DISABLED)
-          infoMenu.menu[++infoMenu.cur] = menuBedLeveling;
+        infoMenu.menu[++infoMenu.cur] = menuLeveling;
         break;
 
       case KEY_ICON_7:

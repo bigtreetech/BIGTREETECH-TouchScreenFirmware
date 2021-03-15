@@ -107,6 +107,7 @@
 #include "FeatureSettings.h"
 #include "SendGcode.h"
 #include "Leveling.h"
+#include "ManualLeveling.h"
 #include "BedLeveling.h"
 #include "MBL.h"
 #include "ABL.h"
