@@ -21,7 +21,7 @@
 #define ICON_WIDTH   70
 #define ICON_HEIGHT  70
 #define TITLE_END_Y  30
-#define ICON_START_Y (TITLE_END_Y+5)
+#define ICON_START_Y (TITLE_END_Y+10)
 
 #define LIST_ICON_WIDTH   55
 #define LIST_ICON_HEIGHT  50
@@ -62,6 +62,7 @@
 #define PICON_HEIGHT       36
 #define PICON_SPACE_X      ((LCD_WIDTH - PICON_LG_WIDTH*2 - PICON_SM_WIDTH - SPACE_X )/2)
 #define PICON_SPACE_Y      (ICON_HEIGHT + SPACE_Y - PICON_HEIGHT*2)/4
+#define PICON_START_Y      (TITLE_END_Y+5)
 #define PICON_TITLE_X      37
 #define PICON_TITLE_Y      1
 #define PICON_VAL_X        PICON_TITLE_X
