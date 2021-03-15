@@ -346,7 +346,7 @@
     #define STRING_HEAT_HOTEND            "Heat hotend to %d℃?"
     #define STRING_Z_ALIGN                "Z Align"
     #define STRING_MACROS                 "Macros"
-    #define STRING_TEST_LEVEL_VALID       "Mesh Validatio
+    #define STRING_TEST_LEVEL_VALID       "Mesh Validation"
     #define STRING_TEST_LEVEL_PLA         "Valid pla"
     #define STRING_TEST_LEVEL_ABS         "Valid abs"
     #define STRING_TEST_LEVEL_petg        "Valid petg"
