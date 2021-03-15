@@ -349,7 +349,7 @@
     #define STRING_TEST_LEVEL_VALID       "Mesh Validation"
     #define STRING_TEST_LEVEL_PLA         "Valid pla"
     #define STRING_TEST_LEVEL_ABS         "Valid abs"
-    #define STRING_TEST_LEVEL_petg        "Valid petg"
+    #define STRING_TEST_LEVEL_PETG        "Valid petg"
     #define STRING_TEST_LEVEL_ASA         "Valid asa"
     
     

@@ -356,7 +356,7 @@ extern "C" {
 #define LANG_KEY_TEST_LEVEL_VALID             "label_Mesh_Validation"
 #define LANG_KEY_TEST_LEVEL_PLA               "label_Valid_pla"
 #define LANG_KEY_TEST_LEVEL_ABS               "label_Vaild_abs"
-#define LANG_KEY_TEST_LEVEL_petg              "label_Valid_petg"
+#define LANG_KEY_TEST_LEVEL_PETG              "label_Valid_petg"
 #define LANG_KEY_TEST_LEVEL_ASA               "label_Valid_asa"
 
 
