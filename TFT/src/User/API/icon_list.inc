@@ -146,7 +146,7 @@ X_ICON (BRIGHTNESS)
 X_ICON (TEST_LEVEL_VALID)
 X_ICON (TEST_LEVEL_PLA)
 X_ICON (TEST_LEVEL_ABS)
-X_ICON (TEST_LEVEL_PTEG)
+X_ICON (TEST_LEVEL_petg)
 X_ICON (TEST_LEVEL_ASA)
 
 //after changing/adding/removing an icon, change the ICON_FLASH_SIGN in Settings.h
