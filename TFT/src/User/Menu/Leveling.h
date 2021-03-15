@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-void menuLeveling(void);
+void menuManualLeveling(void);
 
 #ifdef __cplusplus
 }

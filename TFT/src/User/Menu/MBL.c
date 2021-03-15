@@ -79,11 +79,14 @@ void mblUpdateStatus(bool succeeded)
 }
 
 // Show an error notification
-void mblNotifyError(void)
+void mblNotifyError(bool isStarted)
 {
   LABELCHAR(tempMsg, LABEL_MBL);
 
-  sprintf(&tempMsg[strlen(tempMsg)], " %s", textSelect(LABEL_OFF));
+  if (!isStarted)
+    sprintf(&tempMsg[strlen(tempMsg)], " %s", textSelect(LABEL_OFF));
+  else
+    sprintf(&tempMsg[strlen(tempMsg)], " %s", textSelect(LABEL_ON));
 
   addToast(DIALOG_TYPE_ERROR, tempMsg);
 }
@@ -184,15 +187,22 @@ void menuMBL(void)
       // decrease Z height
       case KEY_ICON_0:
         if (!mblRunning)
-          mblNotifyError();
+          mblNotifyError(false);
         else
           probeHeightMove(unit, -1);
+        break;
+
+      case KEY_INFOBOX:
+        if (mblRunning)
+          mblNotifyError(true);
+        else
+          infoMenu.menu[++infoMenu.cur] = menuUnifiedHeat;
         break;
 
       // increase Z height
       case KEY_ICON_3:
         if (!mblRunning)
-          mblNotifyError();
+          mblNotifyError(false);
         else
           probeHeightMove(unit, 1);
         break;
@@ -209,7 +219,7 @@ void menuMBL(void)
       // reset Z height to 0
       case KEY_ICON_5:
         if (!mblRunning)
-          mblNotifyError();
+          mblNotifyError(false);
         else
           probeHeightMove(curValue, -1);
         break;
@@ -251,7 +261,7 @@ void menuMBL(void)
           if (encoderPosition)
           {
             if (!mblRunning)
-              mblNotifyError();
+              mblNotifyError(false);
             else
               probeHeightMove(unit, encoderPosition > 0 ? 1 : -1);
 

@@ -1,68 +1,90 @@
 #include "Leveling.h"
 #include "includes.h"
 
-void menuLeveling(void)
+const MENUITEMS manualLevelingItems = {
+  // title
+  LABEL_LEVELING,
+  // icon                          label
+  {
+    {ICON_POINT_4,                 LABEL_POINT_4},
+    {ICON_POINT_3,                 LABEL_POINT_3},
+    {ICON_LEVEL_EDGE_DISTANCE,     LABEL_DISTANCE},
+    {ICON_DISABLE_STEPPERS,        LABEL_XY_UNLOCK},
+    {ICON_POINT_1,                 LABEL_POINT_1},
+    {ICON_POINT_2,                 LABEL_POINT_2},
+    {ICON_POINT_5,                 LABEL_POINT_5},
+    {ICON_BACK,                    LABEL_BACK},
+  }
+};
+
+void moveToLevelingPoint(uint8_t point)
 {
-  MENUITEMS LevelingItems = {
-    // title
-    LABEL_LEVELING,
-    // icon                          label
-    {
-      {ICON_PROBE_OFFSET,            LABEL_H_OFFSET},
-      {ICON_MANUAL_LEVEL,            LABEL_LEVELING},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_HEAT_FAN,                LABEL_UNIFIEDHEAT},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACK,                    LABEL_BACK},
-    }
+  int16_t pointPosition[5][2] = {
+    {infoSettings.machine_size_min[X_AXIS] + infoSettings.level_edge, infoSettings.machine_size_min[Y_AXIS] + infoSettings.level_edge},
+    {infoSettings.machine_size_max[X_AXIS] - infoSettings.level_edge, infoSettings.machine_size_min[Y_AXIS] + infoSettings.level_edge},
+    {infoSettings.machine_size_max[X_AXIS] - infoSettings.level_edge, infoSettings.machine_size_max[Y_AXIS] - infoSettings.level_edge},
+    {infoSettings.machine_size_min[X_AXIS] + infoSettings.level_edge, infoSettings.machine_size_max[Y_AXIS] - infoSettings.level_edge},
+    {(infoSettings.machine_size_min[X_AXIS] + infoSettings.machine_size_max[X_AXIS]) / 2, (infoSettings.machine_size_min[Y_AXIS] + infoSettings.machine_size_max[Y_AXIS]) / 2},
   };
 
-  KEY_VALUES key_num = KEY_IDLE;
-
-  if (infoMachineSettings.leveling != BL_DISABLED)
+  if (coordinateIsKnown() == false)
   {
-    LevelingItems.items[2].icon = ICON_LEVELING;
-    LevelingItems.items[2].label.index = LABEL_BED_LEVELING;
+    storeCmd("G28\n");
   }
 
-  menuDrawPage(&LevelingItems);
+  storeCmd("G0 Z%.3f F%d\n", infoSettings.level_z_raise, infoSettings.level_feedrate[FEEDRATE_Z]);
+  storeCmd("G0 X%d Y%d F%d\n", pointPosition[point][0], pointPosition[point][1], infoSettings.level_feedrate[FEEDRATE_XY]);
+  storeCmd("G0 Z%.3f F%d\n", infoSettings.level_z_pos, infoSettings.level_feedrate[FEEDRATE_Z]);
+}
 
-  while (infoMenu.menu[infoMenu.cur] == menuLeveling)
+void menuManualLeveling(void)
+{
+  KEY_VALUES key_num = KEY_IDLE;
+
+  menuDrawPage(&manualLevelingItems);
+
+  while (infoMenu.menu[infoMenu.cur] == menuManualLeveling)
   {
     key_num = menuKeyGetValue();
     switch (key_num)
     {
       case KEY_ICON_0:
-        storeCmd("M206\n");
-        zOffsetSetMenu(false);  // use Home Offset menu
-        infoMenu.menu[++infoMenu.cur] = menuZOffset;
+        moveToLevelingPoint(3);
         break;
 
       case KEY_ICON_1:
-        infoMenu.menu[++infoMenu.cur] = menuManualLeveling;
+        moveToLevelingPoint(2);
         break;
 
       case KEY_ICON_2:
-        if (infoMachineSettings.leveling != BL_DISABLED)
-          infoMenu.menu[++infoMenu.cur] = menuBedLeveling;
+        {
+          char tempstr[30];
+          sprintf(tempstr, "Min:%d | Max:%d", LEVELING_EDGE_DISTANCE_MIN, LEVELING_EDGE_DISTANCE_MAX);
+
+          int val = numPadInt((uint8_t *)tempstr, infoSettings.level_edge, LEVELING_EDGE_DISTANCE_DEFAULT, false);
+          infoSettings.level_edge = NOBEYOND(LEVELING_EDGE_DISTANCE_MIN, val, LEVELING_EDGE_DISTANCE_MAX);
+
+          menuDrawPage(&manualLevelingItems);
+        }
+        break;
+
+      case KEY_ICON_3:
+        storeCmd("M84 X Y E\n");
+        break;
+
+      case KEY_ICON_4:
+        moveToLevelingPoint(0);
         break;
 
       case KEY_ICON_5:
-        infoMenu.menu[++infoMenu.cur] = menuUnifiedHeat;
+        moveToLevelingPoint(1);
+        break;
+
+      case KEY_ICON_6:
+        moveToLevelingPoint(4);
         break;
 
       case KEY_ICON_7:
-        for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
-        {
-          if (heatGetTargetTemp(i) > 0)
-          {
-            setDialogText(LABEL_WARNING, LABEL_HEATERS_ON, LABEL_CONFIRM, LABEL_CANCEL);
-            showDialog(DIALOG_TYPE_QUESTION, heatCoolDown, NULL, NULL);
-            break;
-          }
-        }
         infoMenu.cur--;
         break;
 
