@@ -346,5 +346,11 @@
     #define STRING_HEAT_HOTEND            "Fűtöd a fejet %d℃-ra?"
     #define STRING_Z_ALIGN                "Z Igazítás"
     #define STRING_MACROS                 "Makrók"
+    #define STRING_TEST_LEVEL_VALID       "Mesh Validation"
+    #define STRING_TEST_LEVEL_PLA         "Valid pla"
+    #define STRING_TEST_LEVEL_ABS         "Valid abs"
+    #define STRING_TEST_LEVEL_petg        "Valid petg"
+    #define STRING_TEST_LEVEL_ASA         "Valid asa"
+    
 
 #endif
