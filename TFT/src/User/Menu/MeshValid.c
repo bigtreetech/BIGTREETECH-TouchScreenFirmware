@@ -8,7 +8,7 @@ const MENUITEMS MeshValidItems = {
   {
     {ICON_TEST_LEVEL_PLA,          LABEL_TEST_LEVEL_PLA},
     {ICON_TEST_LEVEL_ABS,          LABEL_TEST_LEVEL_ABS},
-    {ICON_TEST_LEVEL_petg,         LABEL_TEST_LEVEL_petg},
+    {ICON_TEST_LEVEL_petg,         LABEL_TEST_LEVEL_PETG},
     {ICON_TEST_LEVEL_ASA,          LABEL_TEST_LEVEL_ASA},
     {ICON_BABYSTEP,                LABEL_BABYSTEP},
     {ICON_BACKGROUND,              LABEL_BACKGROUND},
