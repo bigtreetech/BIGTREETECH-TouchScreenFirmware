@@ -7,6 +7,7 @@ const char axis_id[TOTAL_AXIS] = {'X', 'Y', 'Z', 'E'};
 static COORDINATE targetPosition = {{0.0f, 0.0f, 0.0f, 0.0f}, 3000};
 static COORDINATE curPosition = {{0.0f, 0.0f, 0.0f, 0.0f}, 3000};
 
+static float levelCornerPosition[5]; // buffer current z value measured, position 1, position 2, position 3, position 4
 /**
  * Obtained from "M114 E" instead of "M114", Because the coordinates of "M114" are not real-time coordinates.
  * It may be replaced by "M114 R".
@@ -73,6 +74,16 @@ void coordinateSetFeedRate(uint32_t feedrate)
 float coordinateGetAxisTarget(AXIS axis)
 {
   return targetPosition.axis[axis];
+}
+// Set level corner position the measured Z offset from probe, see in ABL.c menu refreshLevelCornerValue(MENUITEMS levelItems) and value get from parseACK.c
+void SetLevelCornerPosition(int point,float position)
+{
+    levelCornerPosition[point] = position;
+}
+// Get level corner position the measured Z offset from probe, see in ABL.c menu refreshLevelCornerValue(MENUITEMS levelItems) and value get from parseACK.c
+float GetLevelCornerPosition(int point)
+{
+    return levelCornerPosition[point];
 }
 
 uint32_t coordinateGetFeedRate(void)
