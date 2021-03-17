@@ -10,9 +10,10 @@
     #define STRING_PERSISTENT_INFO        "Kalıcı Durum Mesajı"
     #define STRING_FILE_LIST_MODE         "Liste Görünümü"
     #define STRING_ACK_NOTIFICATION       "Onay mesajı stili"
+    #define STRING_EMULATE_M600           "Emulate M600"
     #define STRING_SERIAL_ALWAYS_ON       "Seri Bağ. Sürekli Açık"
-    #define STRING_MARLIN_SHOW_TITLE      "Marlin Modu Başlık Desteği"
     #define STRING_MARLIN_FULLSCREEN      "Tam Ekran Marlin Modu"
+    #define STRING_MARLIN_SHOW_TITLE      "Marlin Modu Başlık Desteği"
     #define STRING_MARLIN_TYPE            "Marlin Mode Type"
     #define STRING_MOVE_SPEED             "Hareket Hızı(X Y Z)"
     #define STRING_AUTO_LOAD_LEVELING     "Seviyelemeyi Oto Kaydet/Yükle"
@@ -51,6 +52,7 @@
     #define STRING_HOTEND_OFFSET          "2. Nozül Mesafesi"
     #define STRING_PROBE_OFFSET           "Prob Offseti"
     #define STRING_LIN_ADVANCE            "Linear Advance"
+    #define STRING_FILAMENT_SETTING       "Filament Diameter"
     #define STRING_CURRENT_SETTING        "Sürücü Akımı (mA)"
     #define STRING_BUMP_SENSITIVITY       "TMC Çarpma Hassasiyeti"
     #define STRING_HYBRID_THRESHOLD       "TMC Hibrit Eşiği"
@@ -343,5 +345,6 @@
     #define STRING_EXT_TEMPLOW            "Ekstruder sıcaklığı minimum\nsıcaklığın altında (%d℃)."
     #define STRING_HEAT_HOTEND            "Ekstruderi %d℃ ye ısıt?"
     #define STRING_Z_ALIGN                "Z Hizala"
+    #define STRING_MACROS                 "Macros"
 
 #endif

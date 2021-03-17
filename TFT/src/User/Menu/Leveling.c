@@ -4,15 +4,17 @@
 const MENUITEMS manualLevelingItems = {
   // title
   LABEL_LEVELING,
-  // icon                         label
-  {{ICON_POINT_1,                 LABEL_POINT_1},
-   {ICON_POINT_2,                 LABEL_POINT_2},
-   {ICON_POINT_3,                 LABEL_POINT_3},
-   {ICON_POINT_4,                 LABEL_POINT_4},
-   {ICON_POINT_5,                 LABEL_POINT_5},
-   {ICON_LEVEL_EDGE_DISTANCE,     LABEL_DISTANCE},
-   {ICON_DISABLE_STEPPERS,        LABEL_XY_UNLOCK},
-   {ICON_BACK,                    LABEL_BACK},}
+  // icon                          label
+  {
+    {ICON_POINT_4,                 LABEL_POINT_4},
+    {ICON_POINT_3,                 LABEL_POINT_3},
+    {ICON_LEVEL_EDGE_DISTANCE,     LABEL_DISTANCE},
+    {ICON_DISABLE_STEPPERS,        LABEL_XY_UNLOCK},
+    {ICON_POINT_1,                 LABEL_POINT_1},
+    {ICON_POINT_2,                 LABEL_POINT_2},
+    {ICON_POINT_5,                 LABEL_POINT_5},
+    {ICON_BACK,                    LABEL_BACK},
+  }
 };
 
 void moveToLevelingPoint(uint8_t point)
@@ -47,29 +49,17 @@ void menuManualLeveling(void)
     switch (key_num)
     {
       case KEY_ICON_0:
-        moveToLevelingPoint(0);
-        break;
-
-      case KEY_ICON_1:
-        moveToLevelingPoint(1);
-        break;
-
-      case KEY_ICON_2:
-        moveToLevelingPoint(2);
-        break;
-
-      case KEY_ICON_3:
         moveToLevelingPoint(3);
         break;
 
-      case KEY_ICON_4:
-        moveToLevelingPoint(4);
+      case KEY_ICON_1:
+        moveToLevelingPoint(2);
         break;
 
-      case KEY_ICON_5:
+      case KEY_ICON_2:
         {
           char tempstr[30];
-          sprintf(tempstr, "%Min:%d | Max:%d", LEVELING_EDGE_DISTANCE_MIN, LEVELING_EDGE_DISTANCE_MAX);
+          sprintf(tempstr, "Min:%d | Max:%d", LEVELING_EDGE_DISTANCE_MIN, LEVELING_EDGE_DISTANCE_MAX);
 
           int val = numPadInt((uint8_t *)tempstr, infoSettings.level_edge, LEVELING_EDGE_DISTANCE_DEFAULT, false);
           infoSettings.level_edge = NOBEYOND(LEVELING_EDGE_DISTANCE_MIN, val, LEVELING_EDGE_DISTANCE_MAX);
@@ -78,8 +68,20 @@ void menuManualLeveling(void)
         }
         break;
 
-      case KEY_ICON_6:
+      case KEY_ICON_3:
         storeCmd("M84 X Y E\n");
+        break;
+
+      case KEY_ICON_4:
+        moveToLevelingPoint(0);
+        break;
+
+      case KEY_ICON_5:
+        moveToLevelingPoint(1);
+        break;
+
+      case KEY_ICON_6:
+        moveToLevelingPoint(4);
         break;
 
       case KEY_ICON_7:

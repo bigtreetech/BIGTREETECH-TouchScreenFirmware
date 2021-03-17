@@ -10,9 +10,10 @@
     #define STRING_PERSISTENT_INFO        "Mostra barra di stato"
     #define STRING_FILE_LIST_MODE         "File in modalità lista"
     #define STRING_ACK_NOTIFICATION       "Tipo di popup"
+    #define STRING_EMULATE_M600           "Emulate M600"
     #define STRING_SERIAL_ALWAYS_ON       "Seriale sempre accesa"
-    #define STRING_MARLIN_SHOW_TITLE      "Mostra titolo in Marlin"
     #define STRING_MARLIN_FULLSCREEN      "Marlin a schermo intero"
+    #define STRING_MARLIN_SHOW_TITLE      "Mostra titolo in Marlin"
     #define STRING_MARLIN_TYPE            "Modalità Marlin"
     #define STRING_MOVE_SPEED             "Vel. movimenti(X Y Z)"
     #define STRING_AUTO_LOAD_LEVELING     "Auto salva/carica liv."
@@ -51,6 +52,7 @@
     #define STRING_HOTEND_OFFSET          "Offset secondo hotend"
     #define STRING_PROBE_OFFSET           "Probe offset"
     #define STRING_LIN_ADVANCE            "Linear advance"
+    #define STRING_FILAMENT_SETTING       "Diametro filamento"
     #define STRING_CURRENT_SETTING        "Corrente driver (mA)"
     #define STRING_BUMP_SENSITIVITY       "Sens.sensorless homing"
     #define STRING_HYBRID_THRESHOLD       "Hybrid threshold"
@@ -343,5 +345,6 @@
     #define STRING_EXT_TEMPLOW            "La temperatura dell'hotend\nè al di sotto della temperatura\nminima (%d℃)."
     #define STRING_HEAT_HOTEND            "Scaldo l'hotend a %d℃?"
     #define STRING_Z_ALIGN                "Allinea Z"
+    #define STRING_MACROS                 "Macros"
 
 #endif

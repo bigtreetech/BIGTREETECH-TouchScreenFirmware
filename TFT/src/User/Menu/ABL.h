@@ -7,13 +7,14 @@ extern "C" {
 
 #include <stdbool.h>
 
-/* called by parseAck() to notify ABL process status */
+// called by parseAck() to notify ABL process status
 void ablUpdateStatus(bool succeeded);
+
+// Start ABL process
+void ablStart(void);
 
 void menuUBLSave(void);
 void menuUBLLoad(void);
-
-void menuABL(void);
 
 #ifdef __cplusplus
 }

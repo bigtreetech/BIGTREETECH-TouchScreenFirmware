@@ -8,7 +8,8 @@ const ITEM itemPercentType[SPEED_NUM] = {
 };
 
 const int16_t itemPercentTypeTitle[SPEED_NUM] = {
-  LABEL_PERCENTAGE_SPEED,     LABEL_PERCENTAGE_FLOW
+  LABEL_PERCENTAGE_SPEED,
+  LABEL_PERCENTAGE_FLOW
 };
 
 static uint8_t item_index = 0;
@@ -19,16 +20,20 @@ void setSpeedItemIndex(uint8_t index)
   item_index = index;
 }
 
-void percentageReDraw(bool skipHeader)
+void percentageReDraw(bool skip_header)
 {
   char tempstr[20];
-  if (!skipHeader)
-  {
-    GUI_DispString(exhibitRect.x0, exhibitRect.y0, textSelect(itemPercentTypeTitle[item_index]));
-  }
 
   setLargeFont(true);
-  GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1)>>1, exhibitRect.y0, (uint8_t *)"%");
+
+  if (!skip_header)
+  {
+    setLargeFont(false);
+    GUI_DispString(exhibitRect.x0, exhibitRect.y0, textSelect(itemPercentTypeTitle[item_index]));
+    setLargeFont(true);
+    GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1) >> 1, exhibitRect.y0, (uint8_t *)"%");
+  }
+
   sprintf(tempstr, "  %d/%d  ", speedGetCurPercent(item_index), speedGetSetPercent(item_index));
   GUI_DispStringInPrect(&exhibitRect,(u8*)tempstr);
   setLargeFont(false);
@@ -39,15 +44,17 @@ void menuSpeed(void)
   MENUITEMS percentageItems = {
     // title
     LABEL_PERCENTAGE_SPEED,
-    // icon                         label
-    {{ICON_DEC,                     LABEL_DEC},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_INC,                     LABEL_INC},
-     {ICON_MOVE,                    LABEL_PERCENTAGE_SPEED},
-     {ICON_E_5_PERCENT,             LABEL_5_PERCENT},
-     {ICON_NORMAL_SPEED,            LABEL_NORMAL},
-     {ICON_BACK,                    LABEL_BACK},}
+    // icon                          label
+    {
+      {ICON_DEC,                     LABEL_DEC},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_INC,                     LABEL_INC},
+      {ICON_MOVE,                    LABEL_PERCENTAGE_SPEED},
+      {ICON_E_5_PERCENT,             LABEL_5_PERCENT},
+      {ICON_NORMAL_SPEED,            LABEL_NORMAL},
+      {ICON_BACK,                    LABEL_BACK},
+    }
   };
 
   percentageItems.items[KEY_ICON_5] = itemPercent[percentSteps_index];
@@ -89,7 +96,7 @@ void menuSpeed(void)
             speedSetPercent(item_index, val);
 
           menuDrawPage(&percentageItems);
-          percentageReDraw(true);
+          percentageReDraw(false);
         }
         break;
 

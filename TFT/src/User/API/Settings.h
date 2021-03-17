@@ -29,12 +29,12 @@ typedef enum
 // Config version support
 // change if new elements/keywords are added/removed/changed in the configuration.h Format YYYYMMDD
 // this number should match CONFIG_VERSION in configuration.h
-#define CONFIG_SUPPPORT 20210217
+#define CONFIG_SUPPPORT 20210311
 
-#define FONT_FLASH_SIGN       20200908 //(YYYYMMDD) change if fonts require updating
-#define CONFIG_FLASH_SIGN     20210217 //(YYYYMMDD) change if any keyword(s) in config.ini is added or removed
-#define LANGUAGE_FLASH_SIGN   20210217 //(YYYYMMDD) change if any keyword(s) in language pack is added or removed
-#define ICON_FLASH_SIGN       20210217 //(YYYYMMDD) change if any icon(s) is added or removed
+#define FONT_FLASH_SIGN       20200908  //(YYYYMMDD) change if fonts require updating
+#define CONFIG_FLASH_SIGN     20210311  //(YYYYMMDD) change if any keyword(s) in config.ini is added or removed
+#define LANGUAGE_FLASH_SIGN   20210217  //(YYYYMMDD) change if any keyword(s) in language pack is added or removed
+#define ICON_FLASH_SIGN       20210217  //(YYYYMMDD) change if any icon(s) is added or removed
 
 #define FONT_CHECK_SIGN       (FONT_FLASH_SIGN + WORD_UNICODE)
 #define CONFIG_CHECK_SIGN     (CONFIG_FLASH_SIGN + STRINGS_STORE_ADDR)
@@ -43,7 +43,7 @@ typedef enum
 
 #define MAX_EXT_COUNT         6
 #define MAX_HOTEND_COUNT      6
-#define MAX_HEATER_COUNT      (2 + MAX_HOTEND_COUNT) // chamber + bed + hotend
+#define MAX_HEATER_COUNT      (2 + MAX_HOTEND_COUNT)  // chamber + bed + hotend
 #define MAX_FAN_CTRL_COUNT    2
 #define MAX_FAN_COUNT         (6 + MAX_FAN_CTRL_COUNT)
 
@@ -103,15 +103,19 @@ typedef struct
   uint8_t persistent_info;
   uint8_t file_listmode;
   uint8_t ack_notification;
+  uint8_t emulate_m600;
 
   // Marlin Mode Settings
   uint8_t  mode;
   uint8_t  serial_alwaysOn;
   uint16_t marlin_mode_bg_color;
   uint16_t marlin_mode_font_color;
-  uint8_t  marlin_mode_showtitle;
   uint8_t  marlin_mode_fullscreen;
+  uint8_t  marlin_mode_showtitle;
   uint8_t  marlin_type;
+
+  // rrf mode settings
+  uint8_t  rrf_macros_enable;
 
   // Printer / Machine Settings
   uint8_t  hotend_count;
@@ -143,12 +147,17 @@ typedef struct
   uint8_t  level_edge;
   float    level_z_pos;
   float    level_z_raise;
-  uint16_t level_feedrate[FEEDRATE_COUNT - 1];  // XY, Z
-  uint16_t preheat_temp[PREHEAT_COUNT];
-  uint16_t preheat_bed[PREHEAT_COUNT];
 
   uint8_t  move_speed;  // index on infoSettings.axis_speed, infoSettings.ext_speed
 
+  uint8_t  xy_offset_probing;
+  float    z_raise_probing;
+  uint8_t  z_steppers_alignment;
+
+  uint16_t level_feedrate[FEEDRATE_COUNT - 1];  // XY, Z
+  uint16_t preheat_temp[PREHEAT_COUNT];
+  uint16_t preheat_bed[PREHEAT_COUNT];
+  
   // Power Supply Settings
   uint8_t  auto_off;
   uint8_t  ps_active_high;
@@ -177,8 +186,6 @@ typedef struct
   uint8_t  lcd_brightness;
   uint8_t  lcd_idle_brightness;
   uint8_t  lcd_idle_timer;
-  uint8_t  xy_offset_probing;
-  uint8_t  z_steppers_alignment;
 
   // Start, End & Cancel Gcode Commands
   uint8_t  send_start_gcode;
@@ -211,11 +218,11 @@ typedef struct
  */
 typedef enum
 {
-  BL_DISABLED = DISABLED, // Bed Leveling Diabled
-  BL_ABL,  // Auto Bed Leveling (ABL)
-  BL_BBL,  // Bilinear Bed Leveling (BBL)
-  BL_UBL,  // Unified Bed Leveling (UBL)
-  BL_MBL,  // Mesh Bed Leveling (MBL)
+  BL_DISABLED = DISABLED,  // Bed Leveling Diabled
+  BL_ABL,                  // Auto Bed Leveling (ABL)
+  BL_BBL,                  // Bilinear Bed Leveling (BBL)
+  BL_UBL,                  // Unified Bed Leveling (UBL)
+  BL_MBL,                  // Mesh Bed Leveling (MBL)
 } BL_TYPE;
 
 /**

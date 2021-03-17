@@ -1,8 +1,6 @@
 #include "mygcodefs.h"
 #include "includes.h"
 
-/*
-*/
 bool mountGcodeSDCard(void)
 {
   // Send M21 ( Init SD )
@@ -16,8 +14,8 @@ echo:SD card ok
   return request_M21();
 }
 
-//static uint32_t date=0;
-//static FILINFO  finfo;
+//static uint32_t date = 0;
+//static FILINFO finfo;
 //static uint16_t len = 0;
 /*
 SENDING:M20
@@ -39,30 +37,30 @@ bool scanPrintFilesGcodeFs(void)
 
   char *ret = request_M20();
   char *data = malloc(strlen(ret) + 1);
-  strcpy(data,ret);
+  strcpy(data, ret);
   clearRequestCommandInfo();
   char s[3];
 
-  if(strstr(data, "\r\n")) //for smoothieware
+  if (strstr(data, "\r\n"))  //for smoothieware
     strcpy(s, "\r\n");
-  else //for Marlin
+  else  //for Marlin
     strcpy(s, "\n");
 
   char *line = strtok(data, s);
-  for (;line != NULL;line = strtok(NULL, s))
+  for (; line != NULL; line = strtok(NULL, s))
   {
-    if (strcmp(line,"Begin file list") == 0 || strcmp(line,"End file list") == 0 || strcmp(line,"ok") == 0) continue; // Start and Stop tag
-    if (strlen(line) < strlen(infoFile.title)-4) continue; // No path line exclude
-    if (strlen(infoFile.title) > 4 && strstr(line,infoFile.title+4) == NULL) continue; // No current directory
+    if (strcmp(line, "Begin file list") == 0 || strcmp(line, "End file list") == 0 || strcmp(line, "ok") == 0) continue;  // Start and Stop tag
+    if (strlen(line) < strlen(infoFile.title) - 4) continue;  // No path line exclude
+    if (strlen(infoFile.title) > 4 && strstr(line, infoFile.title + 4) == NULL) continue;  // No current directory
 
     char *pline = line + strlen(infoFile.title) - 4;
-    if (strlen(infoFile.title) > 4)pline++;
+    if (strlen(infoFile.title) > 4) pline++;
 
     if (strchr(pline, '/') == NULL)
     {
       // FILE
       if (infoFile.fileCount >= FILE_NUM)
-        continue; /* Gcode max number is FILE_NUM*/
+        continue;  // Gcode max number is FILE_NUM
 
       if (infoMachineSettings.long_filename_support == ENABLED)
       {
@@ -102,11 +100,11 @@ bool scanPrintFilesGcodeFs(void)
           break;
         }
         strcpy(infoFile.Longfile[infoFile.fileCount], Pstr_tmp);
-        clearRequestCommandInfo(); // for M33
+        clearRequestCommandInfo();  // for M33
       }
 
       char* rest = pline;
-      char* file = strtok_r(rest," ",&rest);   //remove file size from pline
+      char* file = strtok_r(rest, " ", &rest);  //remove file size from pline
       infoFile.file[infoFile.fileCount] = malloc(strlen(file) + 1);
       if (infoFile.file[infoFile.fileCount] == NULL) break;
       strcpy(infoFile.file[infoFile.fileCount++], file);
@@ -115,29 +113,28 @@ bool scanPrintFilesGcodeFs(void)
     {
       // DIRECTORY
       if (infoFile.folderCount >= FOLDER_NUM)
-        continue; /* floder max number is FOLDER_NUM */
+        continue;  // floder max number is FOLDER_NUM
 
       char* rest = pline;
-      char* folder = strtok_r(rest,"/",&rest);
+      char* folder = strtok_r(rest, "/", &rest);
 
       bool found = false;
-      for(int i=0; i < infoFile.folderCount; i++)
+      for (int i = 0; i < infoFile.folderCount; i++)
       {
-        if(strcmp(folder, infoFile.folder[i]) == 0)
+        if (strcmp(folder, infoFile.folder[i]) == 0)
         {
           found = true;
           break;
         }
       }
 
-      if(!found)
+      if (!found)
       {
         uint16_t len = strlen(folder) + 1;
         infoFile.folder[infoFile.folderCount] = malloc(len);
         if (infoFile.folder[infoFile.folderCount] == NULL)
           break;
         strcpy(infoFile.folder[infoFile.folderCount++], folder);
-
       }
     }
   }

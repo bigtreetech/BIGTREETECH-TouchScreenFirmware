@@ -6,15 +6,17 @@
 const MENUITEMS pidWaitItems = {
   // title
   LABEL_PID_TITLE,
-  // icon                         label
-  {{ICON_BACKGROUND,              LABEL_BACKGROUND},
-   {ICON_BACKGROUND,              LABEL_BACKGROUND},
-   {ICON_BACKGROUND,              LABEL_BACKGROUND},
-   {ICON_BACKGROUND,              LABEL_BACKGROUND},
-   {ICON_BACKGROUND,              LABEL_BACKGROUND},
-   {ICON_BACKGROUND,              LABEL_BACKGROUND},
-   {ICON_BACKGROUND,              LABEL_BACKGROUND},
-   {ICON_BACKGROUND,              LABEL_BACKGROUND},}
+  // icon                          label
+  {
+    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+  }
 };
 
 const char *const pidCmd[] = PID_CMD;
@@ -27,7 +29,7 @@ bool pidSucceeded = false;
 bool pidRunning = false;
 bool pidInitialized = false;
 
-/* called by parseAck() to notify PID process status */
+// called by parseAck() to notify PID process status
 void pidUpdateStatus(bool succeeded)
 {
   if (pidCounter > 0)
@@ -38,7 +40,7 @@ void pidUpdateStatus(bool succeeded)
 
   if (pidCounter > 0)  // if all the PID processes were still not terminated, simply provide a notification
   {
-  #ifdef ENABLE_PID_STATUS_UPDATE_NOTIFICATION
+    #ifdef ENABLE_PID_STATUS_UPDATE_NOTIFICATION
       LABELCHAR(tempMsg, LABEL_PID_TITLE);
 
       if (succeeded)
@@ -53,7 +55,7 @@ void pidUpdateStatus(bool succeeded)
         BUZZER_PLAY(sound_error);
         addToast(DIALOG_TYPE_ERROR, tempMsg);
       }
-  #endif
+    #endif
   }
   else  // if all the PID processes terminated, provide the final dialog
   {
@@ -93,8 +95,8 @@ static inline void pidCheckTimeout(void)
     if (OS_GetTimeMs() > pidTimeout)
     {
       pidRunning = false;
-    //  uint8_t pidCounter = 0;  // we voluntary don't reset (commented out the code) also pidCounter and pidSucceeded to let the
-    //  pidSucceeded = false;  // pidUpdateStatus function allow to handle status updates eventually arriving after the timeout
+//      uint8_t pidCounter = 0;  // we voluntary don't reset (commented out the code) also pidCounter and pidSucceeded to let the
+//      pidSucceeded = false;  // pidUpdateStatus function allow to handle status updates eventually arriving after the timeout
       LABELCHAR(tempMsg, LABEL_TIMEOUT_REACHED);
 
       sprintf(&tempMsg[strlen(tempMsg)], "\n %s", textSelect(LABEL_PROCESS_ABORTED));
@@ -163,7 +165,7 @@ static inline void pidStart(void)
     if (pidHeaterTarget[i] > 0)
     {
       mustStoreCmd("%s S%d\n", pidCmd[i], (int)pidHeaterTarget[i]);  // start PID autotune
-      mustStoreCmd("G4 S1\n");                                          // wait 1 sec
+      mustStoreCmd("G4 S1\n");                                       // wait 1 sec
     }
   }
 
@@ -177,14 +179,18 @@ void pidTemperatureReDraw(bool skip_header)
 {
   char tempstr[20];
 
+  setLargeFont(true);
+
   if (!skip_header)
   {
-    sprintf(tempstr, "%s    ", heatDisplayID[curToolIndex]);
+    sprintf(tempstr, "%-15s", heatDisplayID[curToolIndex]);
+    setLargeFont(false);
     GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *) tempstr);
+    setLargeFont(true);
+    GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1) >> 1, exhibitRect.y0, (uint8_t *)"ºC");
   }
 
   sprintf(tempstr, "  %d  ", pidHeaterTarget[curToolIndex]);
-  setLargeFont(true);
   GUI_DispStringInPrect(&exhibitRect, (uint8_t *) tempstr);
   setLargeFont(false);
 }
@@ -195,15 +201,17 @@ void menuPid(void)
   MENUITEMS pidItems = {
     // title
     LABEL_PID_TITLE,
-    // icon                         label
-    {{ICON_DEC,                     LABEL_DEC},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_INC,                     LABEL_INC},
-     {ICON_NOZZLE,                  LABEL_NOZZLE},
-     {ICON_5_DEGREE,                LABEL_5_DEGREE},
-     {ICON_RESUME,                  LABEL_START},
-     {ICON_BACK,                    LABEL_BACK},}
+    // icon                          label
+    {
+      {ICON_DEC,                     LABEL_DEC},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_INC,                     LABEL_INC},
+      {ICON_NOZZLE,                  LABEL_NOZZLE},
+      {ICON_5_DEGREE,                LABEL_5_DEGREE},
+      {ICON_RESUME,                  LABEL_START},
+      {ICON_BACK,                    LABEL_BACK},
+    }
   };
 
   KEY_VALUES key_num = KEY_IDLE;
@@ -250,11 +258,11 @@ void menuPid(void)
         int32_t val = numPadInt((uint8_t *) titlestr, pidHeaterTarget[curToolIndex], 0, false);
         val = NOBEYOND(0, val, infoSettings.max_temp[curToolIndex]);
 
-        if (val != pidHeaterTarget[curToolIndex])  // if value is different than target change it
+        if (val != pidHeaterTarget[curToolIndex])  // if value is different than target, change it
           pidHeaterTarget[curToolIndex] = val;
 
         menuDrawPage(&pidItems);
-        pidTemperatureReDraw(true);
+        pidTemperatureReDraw(false);
         break;
       }
 
@@ -295,7 +303,7 @@ void menuPid(void)
         {
           pidUpdateCounter();
 
-          if (pidCounter == 0)                             // if no temperature was set to a value > 0
+          if (pidCounter == 0)  // if no temperature was set to a value > 0
           {
             addToast(DIALOG_TYPE_ERROR, (char *) textSelect(LABEL_INVALID_VALUE));
           }

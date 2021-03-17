@@ -1,6 +1,6 @@
 #ifndef _CONFIGURATION_H_
 #define _CONFIGURATION_H_
-#define CONFIG_VERSION 20210217
+#define CONFIG_VERSION 20210311
 
 //===========================================================================
 //============================= General Settings ============================
@@ -194,9 +194,13 @@
 #define Y_MAX_POS 235
 #define Z_MAX_POS 250
 
-// Is this a Delta printer
-#define IS_DELTA             false
-#define DELTA_MBL_Z_DROP_MM  50.0f // MBL Drop 50mm first after home avoid crashing into the top of the towers.
+/**
+ * Raised Z height for probing
+ * Z height to raise / drop after homing (G28) before starting to probe a point.
+ *
+ * WARNING: It MUST be negative (e.g. -50mm) for a Delta printer to avoid crashing into the top of the tower.
+ */
+#define PROBING_Z_RAISE 20.0f
 
 // Pause Settings
 #define NOZZLE_PAUSE_RETRACT_LENGTH               15  // (mm)
@@ -295,11 +299,19 @@
 #define PID_PROCESS_TIMEOUT (15 * 60000)  // (MilliSeconds, 1 minute = 60000 MilliSeconds)
 
 /**
- * M600, M601 ; pause print
+ * M600 ; emulate M600
+ * The TFT intercepts the M600 gcode (filament change) and emulates the logic instead of demanding it to Marlin firmware.
+ *
+ * NOTE: Enable it, in case Marlin firmware does not properly support M600 on the mainboard.
+ */
+#define EMULATE_M600 true  // To enabled: true | To disabled: false (Default: true)
+
+/**
+ * M601 ; pause print
  * PrusaSlicer can add M601 on certain height.
  * Acts here like manual pause.
  */
-#define NOZZLE_PAUSE_M600_M601
+#define NOZZLE_PAUSE_M601
 
 /**
  * M701, M702 ; Marlin filament load unload gcodes support

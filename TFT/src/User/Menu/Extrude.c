@@ -12,14 +12,18 @@ void extrudeCoordinateReDraw(bool skip_header)
 {
   char tempstr[20];
 
+  setLargeFont(true);
+
   if (!skip_header)
   {
     sprintf(tempstr, "%-15s", extruderDisplayID[curExtruder_index]);
+    setLargeFont(false);
     GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *)tempstr);
+    setLargeFont(true);
+    GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1) >> 1, exhibitRect.y0, (uint8_t *)"mm");
   }
 
   sprintf(tempstr, "  %.2f  ", extrudeCoordinate);
-  setLargeFont(true);
   GUI_DispStringInPrect(&exhibitRect, (uint8_t *)tempstr);
   setLargeFont(false);
 }
@@ -41,15 +45,17 @@ void menuExtrude(void)
   MENUITEMS extrudeItems = {
     // title
     LABEL_EXTRUDE,
-    // icon                         label
-    {{ICON_UNLOAD,                  LABEL_UNLOAD},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_LOAD,                    LABEL_LOAD},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_E_5_MM,                  LABEL_5_MM},
-     {ICON_NORMAL_SPEED,            LABEL_NORMAL},
-     {ICON_BACK,                    LABEL_BACK},}
+    // icon                          label
+    {
+      {ICON_UNLOAD,                  LABEL_UNLOAD},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_LOAD,                    LABEL_LOAD},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_E_5_MM,                  LABEL_5_MM},
+      {ICON_NORMAL_SPEED,            LABEL_NORMAL},
+      {ICON_BACK,                    LABEL_BACK},
+    }
   };
 
   extrudeItems.items[KEY_ICON_4].icon = (infoSettings.ext_count > 1) ? ICON_NOZZLE : ICON_HEAT;
@@ -90,7 +96,7 @@ void menuExtrude(void)
           char titlestr[30];
           sprintf(titlestr, "Min:%.0f | Max:%.0f", extlenSteps[COUNT(extlenSteps) - 1] * -1, extlenSteps[COUNT(extlenSteps) - 1]);
 
-          float val = numPadFloat((uint8_t *) titlestr, 0, 0, true);
+          float val = numPadFloat((uint8_t *) titlestr, 0, infoSettings.min_ext_temp, true);
           eTemp += val;
 
           menuDrawPage(&extrudeItems);
@@ -152,6 +158,7 @@ void menuExtrude(void)
         #endif
         break;
     }
+
     if (extrudeCoordinate != eTemp)
     {
       if (curExtruder_index != heatGetCurrentTool())
@@ -175,10 +182,13 @@ void menuExtrude(void)
         storeCmd("G0 E%.5f F%d\n", extrudeCoordinate, infoSettings.ext_speed[itemSpeed_index]);
       }
     }
+
     loopProcess();
   }
+
   mustStoreCmd("G92 E%.5f\n", eSaved);
   mustStoreCmd("G0 F%d\n", feedrate);
+
   if (eRelative)
     mustStoreCmd("M83\n");  // Set extruder to relative
 }

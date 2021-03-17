@@ -10,9 +10,10 @@
     #define STRING_PERSISTENT_INFO        "Нагрівання в інфостроці"
     #define STRING_FILE_LIST_MODE         "Файли в режимі рядків"
     #define STRING_ACK_NOTIFICATION       "ACK стиль повідомлення"
+    #define STRING_EMULATE_M600           "Emulate M600"
     #define STRING_SERIAL_ALWAYS_ON       "Serial Always ON"
-    #define STRING_MARLIN_SHOW_TITLE      "Marlin Mode Title Support"
     #define STRING_MARLIN_FULLSCREEN      "Marlin на весь екран"
+    #define STRING_MARLIN_SHOW_TITLE      "Marlin Mode Title Support"
     #define STRING_MARLIN_TYPE            "Marlin Mode Type"
     #define STRING_MOVE_SPEED             "Швидкість (X Y Z)"
     #define STRING_AUTO_LOAD_LEVELING     "Auto Save Load Leveling"
@@ -51,6 +52,7 @@
     #define STRING_HOTEND_OFFSET          "Зсув 2-го сопла"
     #define STRING_PROBE_OFFSET           "Зміщення датчика"
     #define STRING_LIN_ADVANCE            "К-фактор"
+    #define STRING_FILAMENT_SETTING       "Filament Diameter"
     #define STRING_CURRENT_SETTING        "Налаштування TMC драйверів"
     #define STRING_BUMP_SENSITIVITY       "TMC чутливість удару"
     #define STRING_HYBRID_THRESHOLD       "TMC гібридний поріг"
@@ -343,5 +345,6 @@
     #define STRING_EXT_TEMPLOW            "Температура хотенду нижче\nмінімальної температури (%d℃)."
     #define STRING_HEAT_HOTEND            "Heat hotend to %d℃?"
     #define STRING_Z_ALIGN                "Z Align"
+    #define STRING_MACROS                 "Macros"
 
 #endif
