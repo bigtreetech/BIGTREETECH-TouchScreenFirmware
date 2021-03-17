@@ -620,6 +620,26 @@ void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, const ITEM * item)
   GUI_RestoreColorDefault();
 }  //showLiveInfo
 
+//Show live info text on icons for LevelCorner
+void showLevelCornerLiveInfo(uint8_t index, uint8_t Levelindex, const LIVE_INFO * liveicon, const ITEM * item)
+{
+  if (item != NULL) menuDrawIconOnly(item,index);
+
+  GUI_SetColor(SSICON_VAL_COLOR);
+  GUI_SetBkColor(0);
+  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
+   
+
+  GUI_POINT loc;
+  loc.x = liveicon->lines[Levelindex].pos.x + curRect[index].x0;
+  loc.y = liveicon->lines[Levelindex].pos.y + curRect[index].y0 - BYTE_HEIGHT/2;
+
+  setLargeFont(VAL_LARGE_FONT);
+  GUI_DispStringCenter(loc.x, loc.y, liveicon->lines[Levelindex].text);
+
+  GUI_RestoreColorDefault();
+} //showLevelCornerLiveInfo
+
 //When there is a button value, the icon changes color and redraws
 void itemDrawIconPress(uint8_t position, uint8_t is_press)
 {
