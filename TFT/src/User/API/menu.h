@@ -137,6 +137,8 @@ typedef struct
 } LIVE_INFO;
 
 void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, const ITEM * item);
+// Display info for Level Corner feature in ABL menu 
+void showLevelCornerLiveInfo(uint8_t index, uint8_t Levelindex, const LIVE_INFO * liveicon, const ITEM * item);
 
 extern const GUI_RECT exhibitRect;
 extern const GUI_RECT rect_of_key[MENU_RECT_COUNT];
