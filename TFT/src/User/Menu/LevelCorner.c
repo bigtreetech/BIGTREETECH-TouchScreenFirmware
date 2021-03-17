@@ -107,7 +107,7 @@ void menuLEVELCORNERLoad(void)
           int val = numPadInt((u8 *)tempstr, infoSettings.level_edge, LEVELING_EDGE_DISTANCE_DEFAULT, false);
           infoSettings.level_edge = NOBEYOND(LEVELING_EDGE_DISTANCE_MIN, val, LEVELING_EDGE_DISTANCE_MAX);
           infoSettings.level_edge = ((val >= edge_min)?val:edge_min);
-          menuDrawPage(&LEVELCORNERItems);
+          menuDrawPage(&levelcornerItems);
         }
         break;
       case KEY_ICON_4:
@@ -122,7 +122,7 @@ void menuLEVELCORNERLoad(void)
       default:
         break;
     }
-    refreshLevelCornerValue(LEVELCORNERItems);    
+    refreshLevelCornerValue(levelcornerItems);    
     loopProcess();
   }
 }
