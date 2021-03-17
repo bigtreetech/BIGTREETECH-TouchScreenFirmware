@@ -23,7 +23,7 @@ const ECHO knownEcho[] = {
   {ECHO_NOTIFY_NONE, "busy: processing"},
   {ECHO_NOTIFY_NONE, "Now fresh file:"},
   {ECHO_NOTIFY_NONE, "Now doing file:"},
-  {ECHO_NOTIFY_NONE, "Probe Offset"},
+  // {ECHO_NOTIFY_NONE, "Probe Offset"},
   {ECHO_NOTIFY_NONE, "Flow:"},
   {ECHO_NOTIFY_NONE, "echo:;"},                   //M503
   {ECHO_NOTIFY_NONE, "echo:  G"},                 //M503
@@ -444,6 +444,40 @@ void parseACK(void)
       {
         coordinateSetExtruderActualSteps(ack_value());
       }
+      // G30 feedback to get the 4 corners Z value returned by Marlin for LevelCorner function in ABL.c 
+      else if (ack_seen("Bed X: ")) 			   
+      {
+        valx = ack_value();
+        if (ack_seen("Y: ")) valy = ack_value();
+        if ((valx < 100) && (valy < 100))		  
+        {
+          if (ack_seen("Z: ")) { 
+            SetLevelCornerPosition(1,ack_value());
+            SetLevelCornerPosition(0, 1);
+          }
+        }
+        else if ((valx > 100) && (valy < 100))	  
+        {
+          if (ack_seen("Z: ")) { 
+            SetLevelCornerPosition(2,ack_value());
+            SetLevelCornerPosition(0, 2);
+          }
+        }
+        else if ((valx > 100) && (valy > 100))
+        {
+          if (ack_seen("Z: ")) { 
+            SetLevelCornerPosition(3,ack_value());
+            SetLevelCornerPosition(0, 3);
+          }
+        }
+        else if ((valx < 100) && (valy > 100))   
+        {
+          if (ack_seen("Z: ")) { 
+            SetLevelCornerPosition(4,ack_value());
+            SetLevelCornerPosition(0, 4);
+          }
+        }
+      }
       // parse and store feed rate percentage
       else if ((infoMachineSettings.firmwareType == FW_REPRAPFW && ack_seen("factor: ")) ||
                ack_seen("FR:"))
@@ -677,14 +711,23 @@ void parseACK(void)
       {
         setParameter(P_MBL_OFFSET, 0, ack_value());
       }
-      // parse and store M851, Probe Z offset value (e.g. from Babystep menu)
+      // parse and store M851, Probe Z offset value (e.g. from Babystep menu) and X an Y probe Offset for LevelCorner position limit to be fixed see ABL.c
       else if (ack_seen("Probe Offset"))
       {
+        if (ack_seen("X"))
+        {
+          setParameter(P_PROBE_OFFSET, X_STEPPER, ack_value());
+        }
+        if (ack_seen("Y"))
+        {
+          setParameter(P_PROBE_OFFSET, Y_STEPPER, ack_value());
+        }
         if (ack_seen("Z:") || (ack_seen("Z")))
         {
           setParameter(P_PROBE_OFFSET, Z_STEPPER, ack_value());
         }
       }
+      
       // parse G29 (ABL) + M118, ABL Completed message (ABL, BBL, UBL) (e.g. from ABL menu)
       else if (ack_seen("ABL Completed"))
       {
