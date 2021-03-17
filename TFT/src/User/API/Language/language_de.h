@@ -346,11 +346,6 @@
     #define STRING_HEAT_HOTEND            "Heize Düse auf %d℃?"
     #define STRING_Z_ALIGN                "Z ausr."
     #define STRING_MACROS                 "Macros"
-    #define STRING_TEST_LEVEL_VALID       "Mesh Validation"
-    #define STRING_TEST_LEVEL_PLA         "Valid pla"
-    #define STRING_TEST_LEVEL_ABS         "Valid abs"
-    #define STRING_TEST_LEVEL_PETG        "Valid petg"
-    #define STRING_TEST_LEVEL_ASA         "Valid asa"
-        
+    #define STRING_MESH_VALID       "Mesh Validation"
 
 #endif

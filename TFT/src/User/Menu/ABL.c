@@ -161,7 +161,7 @@ void menuABL(void)
       {ICON_BACKGROUND,              LABEL_BACKGROUND},
       {ICON_BACKGROUND,              LABEL_BACKGROUND},
       {ICON_BLTOUCH,                 LABEL_BLTOUCH},
-      {ICON_TEST_LEVEL_VALID,        LABEL_TEST_LEVEL_VALID},
+      {ICON_MESH_VALID,        LABEL_MESH_VALID},
       {ICON_HEAT,                    LABEL_PREHEAT},
       {ICON_BACK,                    LABEL_BACK},
     }

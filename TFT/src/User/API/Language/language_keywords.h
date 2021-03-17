@@ -353,12 +353,7 @@ extern "C" {
 #define LANG_KEY_HEAT_HOTEND                  "label_heat_hotend:"
 #define LANG_KEY_Z_ALIGN                      "label_z_align:"
 #define LANG_KEY_MACROS                       "label_macros:"
-#define LANG_KEY_TEST_LEVEL_VALID             "label_Mesh_Validation"
-#define LANG_KEY_TEST_LEVEL_PLA               "label_Valid_pla"
-#define LANG_KEY_TEST_LEVEL_ABS               "label_Vaild_abs"
-#define LANG_KEY_TEST_LEVEL_PETG              "label_Valid_petg"
-#define LANG_KEY_TEST_LEVEL_ASA               "label_Valid_asa"
-
+#define LANG_KEY_MESH_VALID             "label_Mesh_Validation"
 
 #ifdef __cplusplus
 }
