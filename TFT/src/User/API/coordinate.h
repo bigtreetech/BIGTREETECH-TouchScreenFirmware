@@ -42,7 +42,10 @@ float coordinateGetAxisActual(AXIS axis);
 void coordinateSetAxisActual(AXIS axis, float position);
 void coordinateQuerySetWait(bool wait);
 void coordinateQuery(void);
-
+// Lever corner feature in ABL.c (use) and parseACK.c (read value from Marlin feedback on G30) 
+void  SetLevelCornerPosition(int point, float position);
+float GetLevelCornerPosition(int point);
+  
 #ifdef __cplusplus
 }
 #endif
