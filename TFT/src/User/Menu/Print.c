@@ -202,6 +202,10 @@ void menuPrintFromSource(void)
 
   if (mountFS() == true && scanPrintFiles() == true)
   {
+    if (infoMenu.menu[infoMenu.cur] != menuPrintFromSource) // Menu index be modify when "scanPrintFilesGcodeFs". (echo,error,warning popup windows)
+    {
+      return;
+    }
     if (list_mode != true)
     {
       menuDrawPage(&_printIconItems);
