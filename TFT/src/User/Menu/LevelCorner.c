@@ -56,11 +56,11 @@ void refreshLevelCornerValue(MENUITEMS levelItems)
   } 
 }
 
-void menuLEVELCORNERLoad(void)
+void menuLevelCorner(void)
 { 
   KEY_VALUES key_num = KEY_IDLE;
 
-  menuDrawPage(&LEVELCORNERItems);
+  menuDrawPage(&levelcornerItems);
 
   /* Init Probe Offset in parseAck to get probe offset X and Y*/
   mustStoreCmd("M851\n");
@@ -83,7 +83,7 @@ void menuLEVELCORNERLoad(void)
   ScanLevelCorner(2);
   ScanLevelCorner(3);
 
-  while (infoMenu.menu[infoMenu.cur] == menuLEVELCORNERLoad)
+  while (infoMenu.menu[infoMenu.cur] == menuLevelCorner)
   {
     key_num = menuKeyGetValue();
     switch (key_num)
