@@ -5,6 +5,8 @@
 //===========================================================================
 //============================= General Settings ============================
 //===========================================================================
+#define EMULATE_M600 false
+#define PROBING_Z_RAISE 20
 
 /**
  * Screenshot for documentation
@@ -34,7 +36,7 @@
  *
  * Options: [2400: 0, 9600: 1, 19200: 2, 38400: 3, 57600: 4, 115200: 5, 250000: 6, 500000: 7, 1000000: 8]
  */
-#define BAUDRATE 5  // Default: 5
+#define BAUDRATE 6  // Default: 5
 
 /**
  * Default Primary Language (for Touch-Mode only)
@@ -96,7 +98,7 @@
 #define MARLIN_FNCOLOR 0  // Default: 0
 
 // Text displayed at the top of the TFT in Marlin Mode
-#define MARLIN_BANNER_TEXT "Marlin Mode"  // Default: "Marlin Mode"
+#define MARLIN_BANNER_TEXT "Sidewinder X1"  // Default: "Marlin Mode"
 
 // Show banner text at the top of the TFT in Marlin Mode
 #define MARLIN_SHOW_BANNER true  // To enabled: true | To disabled: false (Default: true)
@@ -138,7 +140,7 @@
                            // of the number of extruders)
 
 #define PREHEAT_LABELS   {"PLA", "PETG", "ABS", "WOOD", "TPU", "NYLON"}
-#define PREHEAT_HOTEND   {200,   240,    230,   170,    220,   250}
+#define PREHEAT_HOTEND   {195,   230,    220,   160,    210,   240}
 #define PREHEAT_BED      {60,    70,     90,    50,     50,    90}
 
 #define HEAT_MAX_TEMP    {275,       275,       275,       275,       275,       275,       150,    60}
@@ -169,7 +171,7 @@
 #define SPEED_ID {"Sp.", "Fr."}  // (speed, flow rate)
 
 // Axes names displayed in Parameter Settings menu
-#define AXIS_DISPLAY_ID  {"X",  "Y",  "Z",   "E0",  "E1"}  // (X, Y, Z, E0, E1)
+#define AXIS_DISPLAY_ID  {"X",  "Y",  "Z",   "E",  "E1"}  // (X, Y, Z, E0, E1)
 
 // Default X & Y speed (mm/min)
 #define SPEED_XY_SLOW   1000
@@ -190,17 +192,13 @@
 #define X_MIN_POS   0
 #define Y_MIN_POS   0
 #define Z_MIN_POS   0
-#define X_MAX_POS 235
-#define Y_MAX_POS 235
-#define Z_MAX_POS 250
+#define X_MAX_POS 300
+#define Y_MAX_POS 300
+#define Z_MAX_POS 400
 
-/**
- * Raised Z height for probing
- * Z height to raise / drop after homing (G28) before starting to probe a point.
- *
- * WARNING: It MUST be negative (e.g. -50mm) for a Delta printer to avoid crashing into the top of the tower.
- */
-#define PROBING_Z_RAISE 20.0f
+// Is this a Delta printer
+#define IS_DELTA            false
+#define DELTA_MBL_Z_DROP_MM 50.0f  // MBL Drop 50mm first after home avoid crashing into the top of the towers.
 
 // Pause Settings
 #define NOZZLE_PAUSE_RETRACT_LENGTH               15  // (mm)
@@ -216,7 +214,7 @@
  * Manual Leveling
  * Move to four corner points to Leveling manually (Point 1, Point 2, Point 3, Point 4).
  */
-#define LEVELING_EDGE_DISTANCE        20  // Inset distance from bed's edge for calculating leveling point location
+#define LEVELING_EDGE_DISTANCE        50  // Inset distance from bed's edge for calculating leveling point location
 #define LEVELING_POINT_Z            0.2f  // Z-axis position when nozzle stays for leveling
 #define LEVELING_POINT_MOVE_Z      10.0f  // Z-axis position when nozzle move to next point
 #define LEVELING_POINT_XY_FEEDRATE  6000  // (mm/min) X and Y axes move feedrate
@@ -299,19 +297,11 @@
 #define PID_PROCESS_TIMEOUT (15 * 60000)  // (MilliSeconds, 1 minute = 60000 MilliSeconds)
 
 /**
- * M600 ; emulate M600
- * The TFT intercepts the M600 gcode (filament change) and emulates the logic instead of demanding it to Marlin firmware.
- *
- * NOTE: Enable it, in case Marlin firmware does not properly support M600 on the mainboard.
- */
-#define EMULATE_M600 true  // To enabled: true | To disabled: false (Default: true)
-
-/**
- * M601 ; pause print
+ * M600, M601 ; pause print
  * PrusaSlicer can add M601 on certain height.
  * Acts here like manual pause.
  */
-#define NOZZLE_PAUSE_M601
+#define NOZZLE_PAUSE_M600_M601
 
 /**
  * M701, M702 ; Marlin filament load unload gcodes support
@@ -344,7 +334,6 @@
 /**
  * Quick EEPROM Menu
  * Enable EEPROM menu (save/load/reset buttons) in Settings > Machine Menu.
-
  * NOTE: If disabled, EEPROM operations can also be accessed in the (settings > machine > parameters) menu.
  */
 #define QUICK_EEPROM_BUTTON
@@ -356,7 +345,7 @@
  *          3: LED_ORANGE,  4: LED_YELLOW,  5: LED_GREEN,
  *          6: LED_BLUE,    7: LED_INDIGO,  8: LED_VIOLET
 */
-#define STARTUP_KNOB_LED_COLOR 1  // Default: 1
+#define STARTUP_KNOB_LED_COLOR 2  // Default: 1
 
 // Keep the LED state in Marlin Mode
 #define KEEP_KNOB_LED_COLOR_MARLIN_MODE
@@ -381,7 +370,7 @@
  *          3: 30 Seconds,   4: 60 Seconds,     5: 120 Seconds,
  *          6: 300 Seconds,  7: CUSTOM Seconds
  */
-#define DEFAULT_LCD_IDLE_TIMER  0  // Default: 0
+#define DEFAULT_LCD_IDLE_TIMER  5  // Default: 0
 #define LCD_DIM_CUSTOM_SECONDS (10 * 60)  // Custom value in seconds. This will be used if DEFAULT_LCD_IDLE_TIMER
                                           // is set to 7 (CUSTOM Seconds).
 
@@ -462,7 +451,7 @@
  *  qwertz: The typically keyboard Layout for german.
  *  azerty: The typically keyboard Layout for french.
  */
-#define TERMINAL_KEYBOARD_LAYOUT 0  // Default: 0
+#define TERMINAL_KEYBOARD_LAYOUT 1  // Default: 0
 
 
 //===========================================================================
@@ -486,8 +475,8 @@
 //
 
 // Filament runout detection
-#define FIL_RUNOUT_INVERTING true  // Set to false to invert the logic of the sensor. (Default: true)
-#define FIL_NOISE_THRESHOLD  100   // (MilliSeconds) Pause print when filament runout is detected atleast for this duration.
+#define FIL_RUNOUT_INVERTING false  // Set to false to invert the logic of the sensor. (Default: true)
+#define FIL_NOISE_THRESHOLD  400   // (MilliSeconds) Pause print when filament runout is detected atleast for this duration.
 
 // Smart filament runout detection
 // For use with an encoder disc that toggles runout pin as filament moves.
