@@ -447,7 +447,8 @@ void parseACK(void)
       // G30 feedback to get the 4 corners Z value returned by Marlin for LevelCorner function in ABL.c 
       else if (ack_seen("Bed X: ")) 			   
       {
-        valx = ack_value();
+        float valy = 0;
+        float valx = ack_value();
         if (ack_seen("Y: ")) valy = ack_value();
         if ((valx < 100) && (valy < 100))		  
         {
@@ -731,7 +732,7 @@ void parseACK(void)
       // parse G29 (ABL) + M118, ABL Completed message (ABL, BBL, UBL) (e.g. from ABL menu)
       else if (ack_seen("ABL Completed"))
       {
-        ablUpdateStatus(true);
+        mblUpdateStatus(true);
       }
       // parse G29 (MBL), MBL Completed message (e.g. from MBL menu)
       else if (ack_seen("Mesh probing done"))
