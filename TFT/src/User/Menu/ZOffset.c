@@ -8,14 +8,17 @@ static uint8_t curUnit_index = 0;
 static uint8_t curSubmenu_index = 0;
 
 // Show an error notification
-void zOffsetNotifyError(void)
+void zOffsetNotifyError(bool isStarted)
 {
   LABELCHAR(tempMsg, LABEL_PROBE_OFFSET)
 
   if (!probeOffsetMenu)
     sprintf(tempMsg, "%s", textSelect(LABEL_HOME_OFFSET));
 
-  sprintf(&tempMsg[strlen(tempMsg)], " %s", textSelect(LABEL_OFF));
+  if (!isStarted)
+    sprintf(&tempMsg[strlen(tempMsg)], " %s", textSelect(LABEL_OFF));
+  else
+    sprintf(&tempMsg[strlen(tempMsg)], " %s", textSelect(LABEL_ON));
 
   addToast(DIALOG_TYPE_ERROR, tempMsg);
 }
@@ -153,15 +156,22 @@ void menuZOffset(void)
       // decrease Z offset
       case KEY_ICON_0:
         if (!offsetGetStatus())
-          zOffsetNotifyError();
+          zOffsetNotifyError(false);
         else
           z_offset = offsetDecreaseValue(unit);
+        break;
+
+      case KEY_INFOBOX:
+        if (offsetGetStatus())
+          zOffsetNotifyError(true);
+        else
+          infoMenu.menu[++infoMenu.cur] = menuUnifiedHeat;
         break;
 
       // increase Z offset
       case KEY_ICON_3:
         if (!offsetGetStatus())
-          zOffsetNotifyError();
+          zOffsetNotifyError(false);
         else
           z_offset = offsetIncreaseValue(unit);
         break;
@@ -203,7 +213,7 @@ void menuZOffset(void)
           // reset Z offset to default value
           case 1:
             if (!offsetGetStatus())
-              zOffsetNotifyError();
+              zOffsetNotifyError(false);
             else
               z_offset = offsetResetValue();
             break;
@@ -220,7 +230,7 @@ void menuZOffset(void)
           // unlock XY axis
           case 3:
             if (!offsetGetStatus())
-              zOffsetNotifyError();
+              zOffsetNotifyError(false);
             else
               storeCmd("M84 X Y E\n");
             break;
@@ -242,7 +252,7 @@ void menuZOffset(void)
           if (encoderPosition)
           {
             if (!offsetGetStatus())
-              zOffsetNotifyError();
+              zOffsetNotifyError(false);
             else
               z_offset = offsetUpdateValueByEncoder(unit, encoderPosition > 0 ? 1 : -1);
 

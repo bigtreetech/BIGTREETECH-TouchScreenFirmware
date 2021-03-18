@@ -108,6 +108,7 @@
 #include "SendGcode.h"
 #include "Leveling.h"
 #include "BedLeveling.h"
+#include "BedLevelingLayer2.h"
 #include "MBL.h"
 #include "ABL.h"
 #include "BLTouch.h"

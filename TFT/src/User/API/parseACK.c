@@ -397,7 +397,7 @@ void parseACK(void)
         infoHost.wait = false;
 
       //----------------------------------------
-      // Pushed / on printing parsed responses
+      // Pushed / polled / on printing parsed responses
       //----------------------------------------
 
       // parse and store temperatures
@@ -439,7 +439,7 @@ void parseACK(void)
         }
         coordinateQuerySetWait(false);
       }
-      // parse and store extruder position, response of "M114 E\n", required "M114_DETAIL" in Marlin
+      // parse and store M114 E, extruder position. Required "M114_DETAIL" in Marlin
       else if (ack_seen("Count E:"))
       {
         coordinateSetExtruderActualSteps(ack_value());
@@ -496,7 +496,7 @@ void parseACK(void)
         setDialogText((u8*)"Printer is Paused", (u8*)"Paused for user\ncontinue?", LABEL_CONFIRM, LABEL_BACKGROUND);
         showDialog(DIALOG_TYPE_QUESTION, breakAndContinue, NULL, NULL);
       }
-      // parse "HOST_ACTION_COMMANDS"
+      // parse host action commands. Required "HOST_ACTION_COMMANDS" and other settings in Marlin
       else if (ack_seen("//action:"))
       {
         hostActionCommands();
@@ -573,7 +573,7 @@ void parseACK(void)
       // Tuning parsed responses
       //----------------------------------------
 
-      // parse
+      // parse and store build volume size
       else if (ack_seen("work:"))
       {
         if (ack_seen("min:"))
