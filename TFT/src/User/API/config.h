@@ -38,15 +38,16 @@ extern "C" {
 #define CONFIG_PERSISTENT_TEMP        "persistent_info:"
 #define CONFIG_LIST_MODE              "files_list_mode:"
 #define CONFIG_ACK_NOTIFICATION       "ack_notification:"
+#define CONFIG_EMULATE_M600           "emulate_m600:"
 //-----------------------------Marlin Mode Settings (only for TFT24_V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70_V3.0)
 #define CONFIG_MODE                   "default_mode:"
 #define CONFIG_SERIAL_ON              "serial_always_on:"
 #define CONFIG_MARLIN_BG_COLOR        "marlin_bg_color:"
 #define CONFIG_MARLIN_FONT_COLOR      "marlin_fn_color:"
-#define CONFIG_MARLIN_SHOW_TITLE      "marlin_show_title:"
 #define CONFIG_MARLIN_FULLSCREEN      "marlin_fullscreen:"
-#define CONFIG_MARLIN_TYPE            "marlin_type:"
+#define CONFIG_MARLIN_SHOW_TITLE      "marlin_show_title:"
 #define CONFIG_MARLIN_TITLE           "marlin_title:"
+#define CONFIG_MARLIN_TYPE            "marlin_type:"
 //-----------------------------RRF Mode Settings
 #define CONFIG_RRF_MACROS_ON          "rrf_macros_on:"
 //-----------------------------Printer / Machine Settings
@@ -173,12 +174,9 @@ extern "C" {
 #define MIN_SIZE_LIMIT            -2000     // machine size less than this will not be parsed.
 #define NAME_MIN_LENGTH           3         // minimum name length
 #define GCODE_MIN_LENGTH          3         // gcode length less than this will not pe parsed.
-#if (IS_DELTA)
-  #define MIN_XY_POS_LIMIT        -2000     // Set a negative minimum position for Deltas
-#else
-  #define MIN_XY_POS_LIMIT        0         // position value less than this will not be parsed.
-#endif
+#define MIN_XY_POS_LIMIT          -2000     // Set a negative minimum position for Delta printers
 #define MIN_Z_POS_LIMIT           0
+#define MIN_Z_RAISE_PROBING       -2000     // Set a negative minimum position for Delta printers
 #define MIN_TOOL_TEMP             20        // extruder temp less than this will not pe parsed.
 #define MIN_BED_TEMP              20        // bed temp less than this will not pe parsed.
 #define MIN_CHAMBER_TEMP          20        // chamber temp less than this will not pe parsed.

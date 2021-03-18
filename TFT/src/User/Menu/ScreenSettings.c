@@ -247,8 +247,8 @@ void menuMarlinModeSettings(void)
     {
       {ICONCHAR_FONT_COLOR,       LIST_CUSTOMVALUE, LABEL_FONT_COLOR,        LABEL_CUSTOM},
       {ICONCHAR_BACKGROUND_COLOR, LIST_CUSTOMVALUE, LABEL_BG_COLOR,          LABEL_CUSTOM},
-      {ICONCHAR_TOGGLE_ON,        LIST_TOGGLE,      LABEL_MARLIN_SHOW_TITLE, LABEL_BACKGROUND},
       {ICONCHAR_TOGGLE_ON,        LIST_TOGGLE,      LABEL_MARLIN_FULLSCREEN, LABEL_BACKGROUND},
+      {ICONCHAR_TOGGLE_ON,        LIST_TOGGLE,      LABEL_MARLIN_SHOW_TITLE, LABEL_BACKGROUND},
       {ICONCHAR_BLANK,            LIST_CUSTOMVALUE, LABEL_MARLIN_TYPE,       LABEL_DYNAMIC},
       {ICONCHAR_BACKGROUND,       LIST_LABEL,       LABEL_BACKGROUND,        LABEL_BACKGROUND},
       {ICONCHAR_BACKGROUND,       LIST_LABEL,       LABEL_BACKGROUND,        LABEL_BACKGROUND},
@@ -265,8 +265,8 @@ void menuMarlinModeSettings(void)
       marlinModeitems.items[1].valueLabel = lcd_color_names[i];
   }
 
-  marlinModeitems.items[2].icon = (infoSettings.marlin_mode_showtitle == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
-  marlinModeitems.items[3].icon = (infoSettings.marlin_mode_fullscreen == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
+  marlinModeitems.items[2].icon = (infoSettings.marlin_mode_fullscreen == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
+  marlinModeitems.items[3].icon = (infoSettings.marlin_mode_showtitle == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
   setDynamicTextValue(4, (char *)labelMarlinType[infoSettings.marlin_type]);
 
   KEY_VALUES key_num = KEY_IDLE;
@@ -288,14 +288,14 @@ void menuMarlinModeSettings(void)
         break;
 
       case KEY_ICON_2:
-        infoSettings.marlin_mode_showtitle = (infoSettings.marlin_mode_showtitle + 1) % 2;
-        marlinModeitems.items[key_num].icon = (infoSettings.marlin_mode_showtitle == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
+        infoSettings.marlin_mode_fullscreen = (infoSettings.marlin_mode_fullscreen + 1) % 2;
+        marlinModeitems.items[key_num].icon = (infoSettings.marlin_mode_fullscreen == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
         menuDrawListItem(&marlinModeitems.items[key_num], key_num);
         break;
 
       case KEY_ICON_3:
-        infoSettings.marlin_mode_fullscreen = (infoSettings.marlin_mode_fullscreen + 1) % 2;
-        marlinModeitems.items[key_num].icon = (infoSettings.marlin_mode_fullscreen == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
+        infoSettings.marlin_mode_showtitle = (infoSettings.marlin_mode_showtitle + 1) % 2;
+        marlinModeitems.items[key_num].icon = (infoSettings.marlin_mode_showtitle == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
         menuDrawListItem(&marlinModeitems.items[key_num], key_num);
         break;
 

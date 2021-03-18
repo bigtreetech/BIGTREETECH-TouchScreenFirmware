@@ -1,6 +1,6 @@
 #ifndef _CONFIGURATION_H_
 #define _CONFIGURATION_H_
-#define CONFIG_VERSION 20210310
+#define CONFIG_VERSION 20210311
 
 //===========================================================================
 //============================= General Settings ============================
@@ -299,11 +299,19 @@
 #define PID_PROCESS_TIMEOUT (15 * 60000)  // (MilliSeconds, 1 minute = 60000 MilliSeconds)
 
 /**
- * M600, M601 ; pause print
+ * M600 ; emulate M600
+ * The TFT intercepts the M600 gcode (filament change) and emulates the logic instead of demanding it to Marlin firmware.
+ *
+ * NOTE: Enable it, in case Marlin firmware does not properly support M600 on the mainboard.
+ */
+#define EMULATE_M600 true  // To enabled: true | To disabled: false (Default: true)
+
+/**
+ * M601 ; pause print
  * PrusaSlicer can add M601 on certain height.
  * Acts here like manual pause.
  */
-#define NOZZLE_PAUSE_M600_M601
+#define NOZZLE_PAUSE_M601
 
 /**
  * M701, M702 ; Marlin filament load unload gcodes support
