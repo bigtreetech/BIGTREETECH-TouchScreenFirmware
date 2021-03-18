@@ -44,17 +44,16 @@ void menuBedLevelingLayer2(void)
 
   if (infoMachineSettings.zProbe == ENABLED)
   {
+    bedLevelingLayer2Items.items[3].icon = ICON_LEVELCORNER;
+    bedLevelingLayer2Items.items[3].label.index = LABEL_LEVELCORNER;
+    
     if (infoSettings.touchmi_sensor != 0)
     {
-      bedLevelingLayer2Items.items[3].icon = ICON_LEVELCORNER;
-      bedLevelingLayer2Items.items[3].label.index = LABEL_LEVELCORNER;
       bedLevelingLayer2Items.items[4].icon = ICON_NOZZLE;
       bedLevelingLayer2Items.items[4].label.index = LABEL_TOUCHMI;
     }
     else
     {
-      bedLevelingLayer2Items.items[3].icon = ICON_LEVELCORNER;
-      bedLevelingLayer2Items.items[3].label.index = LABEL_LEVELCORNER;
       bedLevelingLayer2Items.items[4].icon = ICON_BLTOUCH;
       bedLevelingLayer2Items.items[4].label.index = LABEL_BLTOUCH;
     }
