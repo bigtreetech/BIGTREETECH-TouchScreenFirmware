@@ -627,9 +627,7 @@ void showLevelCornerLiveInfo(uint8_t index, uint8_t Levelindex, const LIVE_INFO 
 
   GUI_SetColor(SSICON_VAL_COLOR);
   GUI_SetBkColor(0);
-  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-   
-
+  GUI_SetTextMode(GUI_TEXTMODE_TRANS);  
   GUI_POINT loc;
   loc.x = liveicon->lines[Levelindex].pos.x + curRect[index].x0;
   loc.y = liveicon->lines[Levelindex].pos.y + curRect[index].y0 - BYTE_HEIGHT/2;
