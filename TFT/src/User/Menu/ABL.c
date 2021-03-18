@@ -79,8 +79,10 @@ void ablStart(void)
       storeCmd("G29\n");
       break;
   }
-
-  storeCmd("M118 A1 ABL Completed\n");
+  if (infoMachineSettings.firmwareType != FW_REPRAPFW)
+  {
+    storeCmd("M118 A1 ABL Completed\n");
+  }
 }
 
 void ublSaveloadConfirm(void)
