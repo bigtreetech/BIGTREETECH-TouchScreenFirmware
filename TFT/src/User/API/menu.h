@@ -132,8 +132,8 @@ typedef struct
 
  typedef struct
 {
- uint8_t   enabled[LIVEICON_LINES + 1];
- LIVE_DATA lines[LIVEICON_LINES + 1];
+  uint8_t   enabled[LIVEICON_LINES + 1];
+  LIVE_DATA lines[LIVEICON_LINES + 1];
 } LIVE_INFO;
 
 void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, const ITEM * item);
