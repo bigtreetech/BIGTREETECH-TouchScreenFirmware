@@ -975,6 +975,11 @@ void parseACK(void)
           infoMachineSettings.firmwareType = FW_REPRAPFW;
           setupMachine();
         }
+        else if (ack_seen("Smoothieware"))
+        {
+          infoMachineSettings.firmwareType = FW_SMOOTHIEWARE;
+          setupMachine();
+        }
         else
         {
           infoMachineSettings.firmwareType = FW_UNKNOWN;
@@ -1118,6 +1123,13 @@ void parseACK(void)
             infoSetIPAddress(string, string_end - string_start);  // Set IP address
           }
         }
+      } 
+      else if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE)
+      {
+        if(ack_seen(errorZProbe)) //smoothieboard ZProbe triggered before move, aborting command.
+        {
+          ackPopupInfo("ZProbe triggered\n before move.\n Aborting Print!");
+        } 
       }
     }
 
