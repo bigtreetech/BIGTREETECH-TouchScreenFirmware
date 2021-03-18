@@ -346,7 +346,6 @@
     #define STRING_HEAT_HOTEND            "Zahřát hotend na %d℃?"
     #define STRING_Z_ALIGN                "Z Align"
     #define STRING_MACROS                 "Macros"
-    #define STRING_MESH_VALID       "Mesh Validation"
-    
+    #define STRING_MESH_VALID             "Mesh Validation"
 
 #endif
