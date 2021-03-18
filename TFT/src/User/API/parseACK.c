@@ -444,41 +444,6 @@ void parseACK(void)
       {
         coordinateSetExtruderActualSteps(ack_value());
       }
-      // G30 feedback to get the 4 corners Z value returned by Marlin for LevelCorner function in ABL.c 
-      else if (ack_seen("Bed X: ")) 			   
-      {
-        float valy = 0;
-        float valx = ack_value();
-        if (ack_seen("Y: ")) valy = ack_value();
-        if ((valx < 100) && (valy < 100))		  
-        {
-          if (ack_seen("Z: ")) { 
-            SetLevelCornerPosition(1,ack_value());
-            SetLevelCornerPosition(0, 1);
-          }
-        }
-        else if ((valx > 100) && (valy < 100))	  
-        {
-          if (ack_seen("Z: ")) { 
-            SetLevelCornerPosition(2,ack_value());
-            SetLevelCornerPosition(0, 2);
-          }
-        }
-        else if ((valx > 100) && (valy > 100))
-        {
-          if (ack_seen("Z: ")) { 
-            SetLevelCornerPosition(3,ack_value());
-            SetLevelCornerPosition(0, 3);
-          }
-        }
-        else if ((valx < 100) && (valy > 100))   
-        {
-          if (ack_seen("Z: ")) { 
-            SetLevelCornerPosition(4,ack_value());
-            SetLevelCornerPosition(0, 4);
-          }
-        }
-      }
       // parse and store feed rate percentage
       else if ((infoMachineSettings.firmwareType == FW_REPRAPFW && ack_seen("factor: ")) ||
                ack_seen("FR:"))
@@ -727,8 +692,7 @@ void parseACK(void)
         {
           setParameter(P_PROBE_OFFSET, Z_STEPPER, ack_value());
         }
-      }
-      
+      }     
       // parse G29 (ABL) + M118, ABL Completed message (ABL, BBL, UBL) (e.g. from ABL menu)
       else if (ack_seen("ABL Completed"))
       {
@@ -739,7 +703,41 @@ void parseACK(void)
       {
         mblUpdateStatus(true);
       }
-
+      // G30 feedback to get the 4 corners Z value returned by Marlin for LevelCorner function in ABL.c 
+      else if (ack_seen("Bed X: ")) 			   
+      {
+        float valy = 0;
+        float valx = ack_value();
+        if (ack_seen("Y: ")) valy = ack_value();
+        if ((valx < 100) && (valy < 100))		  
+        {
+          if (ack_seen("Z: ")) { 
+            SetLevelCornerPosition(1,ack_value());
+            SetLevelCornerPosition(0, 1);
+          }
+        }
+        else if ((valx > 100) && (valy < 100))	  
+        {
+          if (ack_seen("Z: ")) { 
+            SetLevelCornerPosition(2,ack_value());
+            SetLevelCornerPosition(0, 2);
+          }
+        }
+        else if ((valx > 100) && (valy > 100))
+        {
+          if (ack_seen("Z: ")) { 
+            SetLevelCornerPosition(3,ack_value());
+            SetLevelCornerPosition(0, 3);
+          }
+        }
+        else if ((valx < 100) && (valy > 100))   
+        {
+          if (ack_seen("Z: ")) { 
+            SetLevelCornerPosition(4,ack_value());
+            SetLevelCornerPosition(0, 4);
+          }
+        }
+      }
       //----------------------------------------
       // Parameter / M503 / M115 parsed responses
       //----------------------------------------
