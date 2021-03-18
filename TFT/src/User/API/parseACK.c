@@ -732,7 +732,7 @@ void parseACK(void)
       // parse G29 (ABL) + M118, ABL Completed message (ABL, BBL, UBL) (e.g. from ABL menu)
       else if (ack_seen("ABL Completed"))
       {
-        mblUpdateStatus(true);
+        ablUpdateStatus(true);
       }
       // parse G29 (MBL), MBL Completed message (e.g. from MBL menu)
       else if (ack_seen("Mesh probing done"))
