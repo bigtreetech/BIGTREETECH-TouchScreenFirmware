@@ -12,8 +12,8 @@
     #define STRING_ACK_NOTIFICATION       "ACK 弹窗类型"
     #define STRING_EMULATE_M600           "Emulate M600"
     #define STRING_SERIAL_ALWAYS_ON       "串口常开"
-    #define STRING_MARLIN_SHOW_TITLE      "Marlin模式显示标题"
     #define STRING_MARLIN_FULLSCREEN      "全屏显示Marlin模式"
+    #define STRING_MARLIN_SHOW_TITLE      "Marlin模式显示标题"
     #define STRING_MARLIN_TYPE            "Marlin模式类型"
     #define STRING_MOVE_SPEED             "移动速度(X Y Z)"
     #define STRING_AUTO_LOAD_LEVELING     "自动保存/加载调平数据"
@@ -346,6 +346,6 @@
     #define STRING_HEAT_HOTEND            "加热喷头到%d℃?"
     #define STRING_Z_ALIGN                "Z Align"
     #define STRING_MACROS                 "Macros"
-    #define STRING_MESH_VALID       "Mesh Validation"
+    #define STRING_MESH_VALID             "调平测试"
 
 #endif

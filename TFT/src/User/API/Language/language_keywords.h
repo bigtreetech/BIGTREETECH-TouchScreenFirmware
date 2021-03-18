@@ -19,8 +19,8 @@ extern "C" {
 #define LANG_KEY_ACK_NOTIFICATION             "label_ack_notification:"
 #define LANG_KEY_EMULATE_M600                 "label_emulate_m600:"
 #define LANG_KEY_SERIAL_ALWAYS_ON             "label_serial_always_on:"
-#define LANG_KEY_MARLIN_SHOW_TITLE            "label_marlin_show_title:"
 #define LANG_KEY_MARLIN_FULLSCREEN            "label_marlin_fullscreen:"
+#define LANG_KEY_MARLIN_SHOW_TITLE            "label_marlin_show_title:"
 #define LANG_KEY_MARLIN_TYPE                  "label_marlin_type:"
 #define LANG_KEY_MOVE_SPEED                   "label_move_speed:"
 #define LANG_KEY_AUTO_LOAD_LEVELING           "label_auto_load_leveling:"
@@ -353,7 +353,7 @@ extern "C" {
 #define LANG_KEY_HEAT_HOTEND                  "label_heat_hotend:"
 #define LANG_KEY_Z_ALIGN                      "label_z_align:"
 #define LANG_KEY_MACROS                       "label_macros:"
-#define LANG_KEY_MESH_VALID             "label_Mesh_Validation"
+#define LANG_KEY_MESH_VALID                   "label_Mesh_Validation"
 
 #ifdef __cplusplus
 }

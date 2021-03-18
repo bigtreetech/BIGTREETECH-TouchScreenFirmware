@@ -12,8 +12,8 @@
     #define STRING_ACK_NOTIFICATION       "Styl oznámení ACK"
     #define STRING_EMULATE_M600           "Emulate M600"
     #define STRING_SERIAL_ALWAYS_ON       "Seriový port vždy ON"
-    #define STRING_MARLIN_SHOW_TITLE      "Zobrazit tytulek Marlin"
     #define STRING_MARLIN_FULLSCREEN      "Fullscreen režim Marlin"
+    #define STRING_MARLIN_SHOW_TITLE      "Zobrazit tytulek Marlin"
     #define STRING_MARLIN_TYPE            "Typ Marlin Modu"
     #define STRING_MOVE_SPEED             "Rychlost pohybu X Y Z"
     #define STRING_AUTO_LOAD_LEVELING     "Automaticky Leveling"
@@ -346,7 +346,6 @@
     #define STRING_HEAT_HOTEND            "Zahřát hotend na %d℃?"
     #define STRING_Z_ALIGN                "Z Align"
     #define STRING_MACROS                 "Macros"
-    #define STRING_MESH_VALID       "Mesh Validation"
-    
+    #define STRING_MESH_VALID             "Mesh Validation"
 
 #endif

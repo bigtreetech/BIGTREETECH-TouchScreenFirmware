@@ -12,8 +12,8 @@
     #define STRING_ACK_NOTIFICATION       "Style de notification ACK"
     #define STRING_EMULATE_M600           "Emulate M600"
     #define STRING_SERIAL_ALWAYS_ON       "Serial toujours actif"
-    #define STRING_MARLIN_SHOW_TITLE      "Titre en Mode Marlin"
     #define STRING_MARLIN_FULLSCREEN      "Mode Marlin plein écran"
+    #define STRING_MARLIN_SHOW_TITLE      "Titre en Mode Marlin"
     #define STRING_MARLIN_TYPE            "Type du Mode Marlin"
     #define STRING_MOVE_SPEED             "Vitesse de déplacement (X Y Z)"
     #define STRING_AUTO_LOAD_LEVELING     "Auto-Sauvegarde Leveling"
@@ -346,6 +346,6 @@
     #define STRING_HEAT_HOTEND            "Chauffer la buse à %d℃ ?"
     #define STRING_Z_ALIGN                "Z Align"
     #define STRING_MACROS                 "Macros"
-    #define STRING_MESH_VALID       "Mesh Validation"
+    #define STRING_MESH_VALID             "Mesh Validation"
 
 #endif
