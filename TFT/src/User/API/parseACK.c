@@ -566,7 +566,8 @@ void parseACK(void)
         infoHost.printing = true;
         infoPrinting.pause = false;
         infoPrinting.time = 0;
-        infoPrinting.size = infoPrinting.cur = 0;
+        infoPrinting.cur = 0;
+        infoPrinting.size = 1; // Should be different with .cur to avoid 100% progress on TFT, Get the correct value by M27
 
         infoFile.source = BOARD_SD_REMOTE;
         initPrintSummary();
