@@ -540,24 +540,21 @@ void parseACK(void)
       }
       else if (infoMachineSettings.onboard_sd_support == ENABLED &&
                ack_seen(infoMachineSettings.firmwareType != FW_REPRAPFW
-                         ? "File opened:" : "fileName\":\""))
+                         ? "File opened:" : "job.file.fileName"))
       {
-        char *fileEndString, *sizeStartString;
+        char *fileEndString;
         if (infoMachineSettings.firmwareType != FW_REPRAPFW)
         {
           // Marlin
           // File opened: 1A29A~1.GCO Size: 6974
           fileEndString = " Size:";
-          sizeStartString = "Size: ";
         }
         else
         {
           // RRF
-          // "fileName":"0:/gcodes/test.gcode",
-          // "size":6974
-          fileEndString = "\",";
-          sizeStartString = "size\":";
-
+          // {"key":"job.file.fileName","flags": "","result":"0:/gcodes/pig-4H.gcode"}
+          ack_seen("result\":\"");
+          fileEndString = "\"";
         }
         uint16_t start_index = ack_index;
         uint16_t end_index = ack_continue_seen(fileEndString) ? (ack_index - strlen(fileEndString)) : start_index;
@@ -565,15 +562,11 @@ void parseACK(void)
         sprintf(infoFile.title,"%s/", getCurFileSource());
         strncat(infoFile.title, dmaL2Cache + start_index, path_len);
         infoFile.title[path_len + strlen(getCurFileSource()) + 1] = '\0';
-        if (ack_seen(sizeStartString))
-        {
-          infoPrinting.size = ack_value();
-        }
 
         infoHost.printing = true;
         infoPrinting.pause = false;
         infoPrinting.time = 0;
-        infoPrinting.cur = 0;
+        infoPrinting.size = infoPrinting.cur = 0;
 
         infoFile.source = BOARD_SD_REMOTE;
         initPrintSummary();
@@ -602,6 +595,7 @@ void parseACK(void)
         // Parsing printing data
         // Example: SD printing byte 123/12345
         infoPrinting.cur = ack_value();
+        infoPrinting.size = ack_second_value();
         // powerFailedCache(position);
       }
       else if (infoMachineSettings.onboard_sd_support == ENABLED &&
