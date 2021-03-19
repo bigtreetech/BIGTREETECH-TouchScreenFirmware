@@ -344,6 +344,7 @@
 /**
  * Quick EEPROM Menu
  * Enable EEPROM menu (save/load/reset buttons) in Settings > Machine Menu.
+
  * NOTE: If disabled, EEPROM operations can also be accessed in the (settings > machine > parameters) menu.
  */
 #define QUICK_EEPROM_BUTTON
