@@ -19,13 +19,41 @@ const MENUITEMS manualLevelingItems = {
 
 void moveToLevelingPoint(uint8_t point)
 {
-  int16_t pointPosition[5][2] = {
-    {infoSettings.machine_size_min[X_AXIS] + infoSettings.level_edge, infoSettings.machine_size_min[Y_AXIS] + infoSettings.level_edge},
-    {infoSettings.machine_size_max[X_AXIS] - infoSettings.level_edge, infoSettings.machine_size_min[Y_AXIS] + infoSettings.level_edge},
-    {infoSettings.machine_size_max[X_AXIS] - infoSettings.level_edge, infoSettings.machine_size_max[Y_AXIS] - infoSettings.level_edge},
-    {infoSettings.machine_size_min[X_AXIS] + infoSettings.level_edge, infoSettings.machine_size_max[Y_AXIS] - infoSettings.level_edge},
-    {(infoSettings.machine_size_min[X_AXIS] + infoSettings.machine_size_max[X_AXIS]) / 2, (infoSettings.machine_size_min[Y_AXIS] + infoSettings.machine_size_max[Y_AXIS]) / 2},
-  };
+  int16_t pointPosition[5][2];
+
+  if (infoSettings.invert_axis[X_AXIS] == 0)  // not inverted X coordinates
+  {
+    pointPosition[0][0] = infoSettings.machine_size_min[X_AXIS] + infoSettings.level_edge;
+    pointPosition[1][0] = infoSettings.machine_size_max[X_AXIS] - infoSettings.level_edge;
+    pointPosition[2][0] = infoSettings.machine_size_max[X_AXIS] - infoSettings.level_edge;
+    pointPosition[3][0] = infoSettings.machine_size_min[X_AXIS] + infoSettings.level_edge;
+    pointPosition[4][0] = (infoSettings.machine_size_min[X_AXIS] + infoSettings.machine_size_max[X_AXIS]) / 2;
+  }
+  else  // inverted X coordinates
+  {
+    pointPosition[0][0] = infoSettings.machine_size_max[X_AXIS] - infoSettings.level_edge;
+    pointPosition[1][0] = infoSettings.machine_size_min[X_AXIS] + infoSettings.level_edge;
+    pointPosition[2][0] = infoSettings.machine_size_min[X_AXIS] + infoSettings.level_edge;
+    pointPosition[3][0] = infoSettings.machine_size_max[X_AXIS] - infoSettings.level_edge;
+    pointPosition[4][0] = (infoSettings.machine_size_min[X_AXIS] + infoSettings.machine_size_max[X_AXIS]) / 2;
+  }
+
+  if (infoSettings.invert_axis[Y_AXIS] == 0)  // not inverted Y coordinates
+  {
+    pointPosition[0][1] = infoSettings.machine_size_min[Y_AXIS] + infoSettings.level_edge;
+    pointPosition[1][1] = infoSettings.machine_size_min[Y_AXIS] + infoSettings.level_edge;
+    pointPosition[2][1] = infoSettings.machine_size_max[Y_AXIS] - infoSettings.level_edge;
+    pointPosition[3][1] = infoSettings.machine_size_max[Y_AXIS] - infoSettings.level_edge;
+    pointPosition[4][1] = (infoSettings.machine_size_min[Y_AXIS] + infoSettings.machine_size_max[Y_AXIS]) / 2;
+  }
+  else  // inverted Y coordinates
+  {
+    pointPosition[0][1] = infoSettings.machine_size_max[Y_AXIS] - infoSettings.level_edge;
+    pointPosition[1][1] = infoSettings.machine_size_max[Y_AXIS] - infoSettings.level_edge;
+    pointPosition[2][1] = infoSettings.machine_size_min[Y_AXIS] + infoSettings.level_edge;
+    pointPosition[3][1] = infoSettings.machine_size_min[Y_AXIS] + infoSettings.level_edge;
+    pointPosition[4][1] = (infoSettings.machine_size_min[Y_AXIS] + infoSettings.machine_size_max[Y_AXIS]) / 2;
+  }
 
   if (coordinateIsKnown() == false)
   {

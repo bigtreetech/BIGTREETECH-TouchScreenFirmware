@@ -77,7 +77,6 @@ static bool ack_continue_seen(const char * str)
   return false;
 }
 
-
 static bool ack_cmp(const char *str)
 {
   uint16_t i;
@@ -539,8 +538,7 @@ void parseACK(void)
         hasFilamentData = true;
       }
       else if (infoMachineSettings.onboard_sd_support == ENABLED &&
-               ack_seen(infoMachineSettings.firmwareType != FW_REPRAPFW
-                         ? "File opened:" : "job.file.fileName"))
+               ack_seen(infoMachineSettings.firmwareType != FW_REPRAPFW ? "File opened:" : "job.file.fileName"))
       {
         char *fileEndString;
         if (infoMachineSettings.firmwareType != FW_REPRAPFW)
@@ -567,7 +565,7 @@ void parseACK(void)
         infoPrinting.pause = false;
         infoPrinting.time = 0;
         infoPrinting.cur = 0;
-        infoPrinting.size = 1; // Should be different with .cur to avoid 100% progress on TFT, Get the correct value by M27
+        infoPrinting.size = 1;  // Should be different with .cur to avoid 100% progress on TFT, Get the correct value by M27
 
         infoFile.source = BOARD_SD_REMOTE;
         initPrintSummary();
@@ -601,8 +599,7 @@ void parseACK(void)
       }
       else if (infoMachineSettings.onboard_sd_support == ENABLED &&
                infoFile.source >= BOARD_SD &&
-               ack_seen(infoMachineSettings.firmwareType != FW_REPRAPFW
-                         ? "Done printing file" : "Finished printing file"))
+               ack_seen(infoMachineSettings.firmwareType != FW_REPRAPFW ? "Done printing file" : "Finished printing file"))
       {
         infoHost.printing = false;
         printingFinished();
@@ -1163,13 +1160,13 @@ void parseACK(void)
             infoSetIPAddress(string, string_end - string_start);  // Set IP address
           }
         }
-      } 
+      }
       else if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE)
       {
         if (ack_seen(errorZProbe)) //smoothieboard ZProbe triggered before move, aborting command.
         {
           ackPopupInfo("ZProbe triggered\n before move.\n Aborting Print!");
-        } 
+        }
       }
     }
 
