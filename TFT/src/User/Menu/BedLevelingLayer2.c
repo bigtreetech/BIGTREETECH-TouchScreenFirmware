@@ -90,7 +90,7 @@ void menuBedLevelingLayer2(void)
         break;
        
       case KEY_ICON_3:    
-          infoMenu.menu[++infoMenu.cur] = menuLevelCorner;
+        infoMenu.menu[++infoMenu.cur] = menuLevelCorner;
         break;
 
       case KEY_ICON_4:
