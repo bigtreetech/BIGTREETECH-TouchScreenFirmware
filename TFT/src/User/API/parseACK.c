@@ -464,6 +464,18 @@ void parseACK(void)
         speedSetCurPercent(1, ack_value());
         speedQuerySetWait(false);
       }
+      // parse and store feed rate percentage in case of Smoothieware
+      else if ((infoMachineSettings.firmwareType == FW_SMOOTHIEWARE) && ack_seen("Speed factor at "))
+      {
+        speedSetCurPercent(0, ack_value());
+        speedQuerySetWait(false);
+      }      
+      // parse and store flow rate percentage in case of Smoothieware
+      else if ((infoMachineSettings.firmwareType == FW_SMOOTHIEWARE) && ack_seen("Flow rate at "))
+      {
+        speedSetCurPercent(1, ack_value());
+        speedQuerySetWait(false);
+      }
       // parse and store fan speed
       else if (ack_seen("M106 P"))
       {
@@ -637,8 +649,19 @@ void parseACK(void)
       {
         pidUpdateStatus(true);
       }
+      // parse M303, PID Autotune finished message in case of Smoothieware
+      else if ((infoMachineSettings.firmwareType == FW_SMOOTHIEWARE) && ack_seen("PID Autotune Complete!"))
+      {
+        //ack_index += 84; -> need length check
+        pidUpdateStatus(true);
+      }
       // parse M303, PID Autotune failed message
       else if (ack_seen("PID Autotune failed"))
+      {
+        pidUpdateStatus(false);
+      }
+      // parse M303, PID Autotune failed message in case of Smoothieware
+      else if ((infoMachineSettings.firmwareType == FW_SMOOTHIEWARE) && ack_seen("// WARNING: Autopid did not resolve within"))
       {
         pidUpdateStatus(false);
       }
