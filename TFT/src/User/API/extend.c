@@ -138,7 +138,7 @@ bool FIL_SmartRunoutDetect(void)
   float actualExtrude = coordinateGetExtruderActual();
 
   do
-  { // Send M114 E query extrude position continuously
+  { // Send M114 R query extrude position continuously
     if (update_PosE_waiting == true)
     {
       nextRunoutTime = OS_GetTimeMs() + update_PosE_time;
@@ -148,7 +148,7 @@ bool FIL_SmartRunoutDetect(void)
       break;
     if (requestCommandInfoIsRunning())  //to avoid colision in Gcode response processing
       break;
-    if (storeCmd("M114 E\n") == false)
+    if (storeCmd("M114 R\n") == false)
       break;
 
     nextRunoutTime = OS_GetTimeMs() + update_PosE_time;

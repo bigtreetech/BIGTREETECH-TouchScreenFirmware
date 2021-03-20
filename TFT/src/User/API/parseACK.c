@@ -441,7 +441,7 @@ void parseACK(void)
         avoid_terminal = !infoSettings.terminalACK;
         updateNextHeatCheckTime();
       }
-      // parse and store coordinates
+      // parse and store M114 R, current real position. Required "M114_REALTIME" in Marlin
       else if ((ack_seen("X:") && ack_index == 2) || ack_seen("C: X:"))  // Smoothieware axis position starts with "C: X:"
       {
         coordinateSetAxisActual(X_AXIS, ack_value());
@@ -453,17 +453,18 @@ void parseACK(void)
             coordinateSetAxisActual(Z_AXIS, ack_value());
             if (ack_seen("E:"))
             {
-              coordinateSetAxisActual(E_AXIS, ack_value());
+              coordinateSetExtruderActual(ack_value());
             }
           }
         }
         coordinateQuerySetWait(false);
       }
       // parse and store M114 E, extruder position. Required "M114_DETAIL" in Marlin
-      else if (ack_seen("Count E:"))
+/*      else if (ack_seen("Count E:"))
       {
-        coordinateSetExtruderActualSteps(ack_value());
-      }
+        coordinateSetExtruderActual
+        (ack_value());
+      }*/
       // parse and store feed rate percentage
       else if ((infoMachineSettings.firmwareType == FW_REPRAPFW && ack_seen("factor: ")) ||
                ack_seen("FR:"))
