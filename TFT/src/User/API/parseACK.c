@@ -226,7 +226,7 @@ void hostActionCommands(void)
 
     uint16_t index = ack_index;
 
-    if (!ack_seen("Ready."))  // avoid to display unneeded and frequent useless notifications (e.g. "My printer Ready.")
+    if (!ack_seen("Ready."))  // avoid to display unneeded/frequent useless notifications (e.g. "My printer Ready.")
       addToast(DIALOG_TYPE_INFO, dmaL2Cache + index);
   }
   else if (ack_seen(":paused") || ack_seen(":pause"))
