@@ -440,7 +440,7 @@ void parseACK(void)
         avoid_terminal = !infoSettings.terminalACK;
         updateNextHeatCheckTime();
       }
-      // parse and store coordinates
+      // parse and store M114, current position
       else if ((ack_seen("X:") && ack_index == 2) || ack_seen("C: X:"))  // Smoothieware axis position starts with "C: X:"
       {
         coordinateSetAxisActual(X_AXIS, ack_value());
@@ -483,7 +483,7 @@ void parseACK(void)
         speedSetCurPercent(1, ack_value());
         speedQuerySetWait(false);
       }
-      // parse and store fan speed
+      // parse and store M106, fan speed
       else if (ack_seen("M106 P"))
       {
         uint8_t i = ack_value();
@@ -492,7 +492,7 @@ void parseACK(void)
           fanSetCurSpeed(i, ack_value());
         }
       }
-      // parse and store controller fan
+      // parse and store M710, controller fan
       else if (ack_seen("M710"))
       {
         uint8_t i = 0;
