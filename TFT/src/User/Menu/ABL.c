@@ -56,6 +56,33 @@ void ablUpdateStatus(bool succeeded)
   }
 }
 
+// Start ABL process
+void ablStart(void)
+{
+  storeCmd("G28\n");
+
+  switch (infoMachineSettings.leveling)
+  {
+    case BL_BBL:  // if Bilinear Bed Leveling
+      storeCmd("G29\n");
+      break;
+
+    case BL_UBL:  // if Unified Bed Leveling
+      storeCmd("G29 P1\n");
+      // Run this multiple times since it only fills some missing points, not all.
+      storeCmd("G29 P3\n");
+      storeCmd("G29 P3\n");
+      storeCmd("G29 P3\n");
+      break;
+
+    default:  // if any other Auto Bed Leveling
+      storeCmd("G29\n");
+      break;
+  }
+
+  storeCmd("M118 A1 ABL Completed\n");
+}
+
 void ublSaveloadConfirm(void)
 {
   if (!ublIsSaving)
@@ -147,122 +174,4 @@ void menuUBLLoad(void)
 {
   ublIsSaving = false;
   infoMenu.menu[++infoMenu.cur] = menuUBLSaveLoad;
-}
-
-void menuABL(void)
-{
-  MENUITEMS autoLevelingItems = {
-    // title
-    LABEL_ABL_SETTINGS,
-    // icon                          label
-    {
-      {ICON_LEVELING,                LABEL_START},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BLTOUCH,                 LABEL_BLTOUCH},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_HEAT,                    LABEL_PREHEAT},
-      {ICON_BACK,                    LABEL_BACK},
-    }
-  };
-
-  KEY_VALUES key_num = KEY_IDLE;
-
-  if (infoSettings.touchmi_sensor != 0)
-  {
-    autoLevelingItems.items[4].icon = ICON_NOZZLE;
-    autoLevelingItems.items[4].label.index = LABEL_TOUCHMI;
-  }
-
-  switch (infoMachineSettings.leveling)
-  {
-    case BL_BBL:
-      autoLevelingItems.title.index = LABEL_ABL_SETTINGS_BBL;
-      break;
-
-    case BL_UBL:
-      autoLevelingItems.title.index = LABEL_ABL_SETTINGS_UBL;
-      autoLevelingItems.items[1].icon = ICON_EEPROM_SAVE;
-      autoLevelingItems.items[1].label.index = LABEL_SAVE;
-      autoLevelingItems.items[2].icon = ICON_EEPROM_RESTORE;
-      autoLevelingItems.items[2].label.index = LABEL_LOAD;
-      break;
-
-    default:
-      break;
-  }
-
-  menuDrawPage(&autoLevelingItems);
-
-  while (infoMenu.menu[infoMenu.cur] == menuABL)
-  {
-    key_num = menuKeyGetValue();
-    switch (key_num)
-    {
-      case KEY_ICON_0:
-        storeCmd("G28\n");
-
-        switch (infoMachineSettings.leveling)
-        {
-          case BL_BBL:  // if Bilinear Bed Leveling
-            storeCmd("G29\n");
-            break;
-
-          case BL_UBL:  // if Unified Bed Leveling
-            storeCmd("G29 P1\n");
-            // Run this multiple times since it only fills some missing points, not all.
-            storeCmd("G29 P3\n");
-            storeCmd("G29 P3\n");
-            storeCmd("G29 P3\n");
-            break;
-
-          default:  // if any other Auto Bed Leveling
-            storeCmd("G29\n");
-            break;
-        }
-
-        storeCmd("M118 A1 ABL Completed\n");
-        break;
-
-      case KEY_ICON_1:
-        if (infoMachineSettings.leveling == BL_UBL)
-          menuUBLSave();
-        break;
-
-      case KEY_ICON_2:
-        if (infoMachineSettings.leveling == BL_UBL)
-          menuUBLLoad();
-        break;
-
-      case KEY_ICON_4:
-        if (infoSettings.touchmi_sensor != 0)
-          infoMenu.menu[++infoMenu.cur] = menuTouchMi;
-        else
-          infoMenu.menu[++infoMenu.cur] = menuBLTouch;
-        break;
-
-      case KEY_ICON_6:
-        infoMenu.menu[++infoMenu.cur] = menuPreheat;
-        break;
-
-      case KEY_ICON_7:
-        for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
-        {
-          if (heatGetTargetTemp(i) > 0)
-          {
-            setDialogText(LABEL_WARNING, LABEL_HEATERS_ON, LABEL_CONFIRM, LABEL_CANCEL);
-            showDialog(DIALOG_TYPE_QUESTION, heatCoolDown, NULL, NULL);
-            break;
-          }
-        }
-        infoMenu.cur--;
-        break;
-
-      default:
-        break;
-    }
-
-    loopProcess();
-  }
 }

@@ -179,14 +179,18 @@ void pidTemperatureReDraw(bool skip_header)
 {
   char tempstr[20];
 
+  setLargeFont(true);
+
   if (!skip_header)
   {
-    sprintf(tempstr, "%s    ", heatDisplayID[curToolIndex]);
+    sprintf(tempstr, "%-15s", heatDisplayID[curToolIndex]);
+    setLargeFont(false);
     GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *) tempstr);
+    setLargeFont(true);
+    GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1) >> 1, exhibitRect.y0, (uint8_t *)"ºC");
   }
 
   sprintf(tempstr, "  %d  ", pidHeaterTarget[curToolIndex]);
-  setLargeFont(true);
   GUI_DispStringInPrect(&exhibitRect, (uint8_t *) tempstr);
   setLargeFont(false);
 }
@@ -258,7 +262,7 @@ void menuPid(void)
           pidHeaterTarget[curToolIndex] = val;
 
         menuDrawPage(&pidItems);
-        pidTemperatureReDraw(true);
+        pidTemperatureReDraw(false);
         break;
       }
 

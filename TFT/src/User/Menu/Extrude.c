@@ -12,14 +12,18 @@ void extrudeCoordinateReDraw(bool skip_header)
 {
   char tempstr[20];
 
+  setLargeFont(true);
+
   if (!skip_header)
   {
     sprintf(tempstr, "%-15s", extruderDisplayID[curExtruder_index]);
+    setLargeFont(false);
     GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *)tempstr);
+    setLargeFont(true);
+    GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1) >> 1, exhibitRect.y0, (uint8_t *)"mm");
   }
 
   sprintf(tempstr, "  %.2f  ", extrudeCoordinate);
-  setLargeFont(true);
   GUI_DispStringInPrect(&exhibitRect, (uint8_t *)tempstr);
   setLargeFont(false);
 }
@@ -92,7 +96,7 @@ void menuExtrude(void)
           char titlestr[30];
           sprintf(titlestr, "Min:%.0f | Max:%.0f", extlenSteps[COUNT(extlenSteps) - 1] * -1, extlenSteps[COUNT(extlenSteps) - 1]);
 
-          float val = numPadFloat((uint8_t *) titlestr, 0, 0, true);
+          float val = numPadFloat((uint8_t *) titlestr, 0, infoSettings.min_ext_temp, true);
           eTemp += val;
 
           menuDrawPage(&extrudeItems);

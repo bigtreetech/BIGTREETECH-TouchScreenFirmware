@@ -183,6 +183,7 @@ void clearCmdQueue(void)
   infoCmd.count = infoCmd.index_w = infoCmd.index_r = 0;
   infoCacheCmd.count = infoCacheCmd.index_w = infoCacheCmd.index_r = 0;
   heatSetUpdateWaiting(false);
+  printSetUpdateWaiting(false);
 }
 
 //remove last line from cmd queue
@@ -224,12 +225,8 @@ void sendQueueCmd(void)
       switch (cmd)
       {
         case 0:
-          if (isPrinting())
-            setPrintPause(true, true);
-          break;
-
         case 1:
-          if (isPrinting())
+          if (isPrinting() && infoMachineSettings.firmwareType != FW_REPRAPFW)  // Abort printing by "M0" in RepRapFirmware 
             setPrintPause(true, true);
           break;
 
@@ -349,7 +346,8 @@ void sendQueueCmd(void)
                 {
                   setPrintPause(false, false);
                 }
-                else {
+                else
+                {
                   Serial_Puts(SERIAL_PORT_2, "ok\n");
                   purgeLastCmd();
                   infoMenu.cur = 1;
@@ -854,13 +852,22 @@ void sendQueueCmd(void)
           break;
         }
 
-        #ifdef NOZZLE_PAUSE_M600_M601
-          case 600:  //M600/M601 pause print
-          case 601:
+        case 600:  //M600 filament change
+          if (infoSettings.emulate_m600 == 1 && isPrinting())
+          {
+            setPrintPause(true, false);
+            // prevent sending M600 to marlin
+            purgeLastCmd();
+            return;
+          }
+          break;
+
+        #ifdef NOZZLE_PAUSE_M601
+          case 601:  //M601 print pause (PrusaSlicer)
             if (isPrinting())
             {
               setPrintPause(true, false);
-              // prevent sending M600/M601 to marlin
+              // prevent sending M601 to marlin
               purgeLastCmd();
               return;
             }

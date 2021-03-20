@@ -13,6 +13,7 @@ extern "C" {
 #define SPEED_MIN 10
 #define SPEED_MAX 999
 
+void resetSpeedFlow(void);
 void speedSetSendWaiting(uint8_t tool, bool isWaiting);
 void speedQuerySetWait(bool wait);
 void speedSetCurPercent(uint8_t tool, uint16_t per);

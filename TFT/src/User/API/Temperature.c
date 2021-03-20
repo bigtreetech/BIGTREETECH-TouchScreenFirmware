@@ -27,7 +27,7 @@ void heatSetTargetTemp(uint8_t index, int16_t temp)
 {
   index = fixHeaterIndex(index);
   heater.T[index].target = NOBEYOND(0, temp, infoSettings.max_temp[index]);
-  if (heater.T[index].target + 2> heater.T[index].current)
+  if (heater.T[index].target + 2 > heater.T[index].current)
   {
     heater.T[index].status = HEATING;
   }

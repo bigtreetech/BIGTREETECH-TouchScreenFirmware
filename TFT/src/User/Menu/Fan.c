@@ -13,20 +13,23 @@ void fanSpeedReDraw(bool skip_header)
 {
   char tempstr[20];
 
+  setLargeFont(true);
+
   if (!skip_header)
   {
     sprintf(tempstr, "%-15s", fanID[curIndex]);
+    setLargeFont(false);
     GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *)tempstr);
     setLargeFont(true);
+
     if (infoSettings.fan_percentage == 1)
     {
-      GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1)>>1, exhibitRect.y0, (uint8_t *)"%");
+      GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1) >> 1, exhibitRect.y0, (uint8_t *)"%");
     }
     else
     {
-      GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1)>>1, exhibitRect.y0, (uint8_t *)"PWM");
+      GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1) >> 1, exhibitRect.y0, (uint8_t *)"PWM");
     }
-    setLargeFont(false);
   }
 
   if (infoSettings.fan_percentage == 1)
@@ -34,7 +37,6 @@ void fanSpeedReDraw(bool skip_header)
   else
     sprintf(tempstr, "  %d/%d  ", (int)fanGetCurSpeed(curIndex), (int)fanGetSetSpeed(curIndex));
 
-  setLargeFont(true);
   GUI_DispStringInPrect(&exhibitRect, (uint8_t *)tempstr);
   setLargeFont(false);
 }
@@ -112,7 +114,7 @@ void menuFan(void)
         }
 
         menuDrawPage(&fanItems);
-        fanSpeedReDraw(true);
+        fanSpeedReDraw(false);
         break;
       }
 

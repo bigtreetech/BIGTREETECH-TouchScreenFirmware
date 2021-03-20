@@ -10,9 +10,10 @@
     #define STRING_PERSISTENT_INFO        "Állandó állapotinfó"
     #define STRING_FILE_LIST_MODE         "Fájlnéző listamód"
     #define STRING_ACK_NOTIFICATION       "ACK Értesítési stílus"
+    #define STRING_EMULATE_M600           "Emulate M600"
     #define STRING_SERIAL_ALWAYS_ON       "Soros port folytonos"
-    #define STRING_MARLIN_SHOW_TITLE      "Marlin mód cím támogatás"
     #define STRING_MARLIN_FULLSCREEN      "Nagyképernyős Marlin mód"
+    #define STRING_MARLIN_SHOW_TITLE      "Marlin mód cím támogatás"
     #define STRING_MARLIN_TYPE            "Marlin mód típusa"
     #define STRING_MOVE_SPEED             "Mozgás seb. (X-Y-Z)"
     #define STRING_AUTO_LOAD_LEVELING     "Szint. auto-mentés/töltés"
@@ -344,6 +345,6 @@
     #define STRING_EXT_TEMPLOW            "Fejhőfok alacsonyabb, mint a\nminimális hőfok (%d℃)."
     #define STRING_HEAT_HOTEND            "Fűtöd a fejet %d℃-ra?"
     #define STRING_Z_ALIGN                "Z Igazítás"
-    #define STRING_MACROS                 "Macros"
+    #define STRING_MACROS                 "Makrók"
 
 #endif

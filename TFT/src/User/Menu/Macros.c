@@ -21,20 +21,22 @@ typedef struct
 extern MACROFILE macroFile;
 
 MACROFILE macroFile = {"?:", {0}, {0}, 0, 0, 0, BOARD_SD, {0}, "<>"};
+
 LISTITEMS macroListItems = {
-    // title
-    LABEL_BACKGROUND,
-    // icon                 ItemType      Item Title        item value text(only for custom value)
-    {
-        {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
-        {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
-        {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
-        {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
-        {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
-        {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
-        {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
-        {ICONCHAR_BACK, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
-    }};
+  // title
+  LABEL_BACKGROUND,
+  // icon                 ItemType    Item Title        item value text(only for custom value)
+  {
+    {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
+    {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
+    {ICONCHAR_BACK,       LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
+  }
+};
 
 // File list number per page
 #define NUM_PER_PAGE 5
@@ -43,7 +45,7 @@ const GUI_RECT macroTitleRect = {10, (TITLE_END_Y - BYTE_HEIGHT) / 2, LCD_WIDTH 
 const int16_t labelMacroError[] = {LABEL_READ_TFTSD_ERROR, LABEL_READ_U_DISK_ERROR, LABEL_READ_ONBOARDSD_ERROR};
 /****/
 
-/*** 
+/***
  * TODOS:
  *  proper subdirectory support,
  *  move away from half-using Vfs functions,
@@ -70,12 +72,14 @@ bool EnterMacroDir(char *nextdir)
   strcat(macroFile.title, nextdir);
   return 1;
 }
+
 /*
 */
 bool IsMacroRootDir(void)
 {
   return !strchr(macroFile.title, '/');
 }
+
 /*
 */
 void clearMacroFile(void)
@@ -96,6 +100,7 @@ void clearMacroFile(void)
   macroFile.F_num = 0;
   macroFile.f_num = 0;
 }
+
 /*
 */
 void resetMacroFile(void)
@@ -125,7 +130,7 @@ bool scanMacroFilesFs(void)
 
   strcpy(s, ","); // filenames containing "," will break
 
-  data = strtok(data, "]"); //  to end of Array
+  data = strtok(data, "]"); // to end of Array
 
   char *line = strtok(strstr(data, "files\":[") + 8, s);
   for (; line != NULL; line = strtok(NULL, s))
@@ -136,7 +141,7 @@ bool scanMacroFilesFs(void)
     {
       // FILE
       if (macroFile.f_num >= FILE_NUM)
-        continue; /* Gcode max number is FILE_NUM*/
+        continue; // Gcode max number is FILE_NUM
 
       char *Pstr_tmp = strrchr(line, '"');
       if (Pstr_tmp != NULL)
@@ -159,7 +164,7 @@ bool scanMacroFilesFs(void)
     {
       // DIRECTORY
       if (macroFile.F_num >= FOLDER_NUM)
-        continue; /* floder max number is FOLDER_NUM */
+        continue; // floder max number is FOLDER_NUM
 
       char *rest = pline + 1;
       char *folder = strtok_r(rest, "\"", &rest);
@@ -228,12 +233,14 @@ void menuExecMacro(void)
     loopProcess();
   }
 }
+
 /*
 */
 void drawTitle(void)
 {
   // menuDrawTitle(labelGetAddress(&listItems->title));
 }
+
 /*
 */
 void menuCallMacro(void)
@@ -261,72 +268,71 @@ void menuCallMacro(void)
   while (infoMenu.menu[infoMenu.cur] == menuCallMacro)
   {
     GUI_SetBkColor(TITLE_BACKGROUND_COLOR);
-    Scroll_DispString(&macroTitleScroll, LEFT); //
+    Scroll_DispString(&macroTitleScroll, LEFT);
     GUI_SetBkColor(BACKGROUND_COLOR);
 
     key_num = menuKeyGetValue();
 
     switch (key_num)
     {
-    case KEY_ICON_5:
-      if (macroFile.cur_page > 0)
-      {
-        macroFile.cur_page--;
-        update = 1;
-      }
-      break;
-
-    case KEY_ICON_6:
-      if (macroFile.cur_page + 1 < (macroFile.F_num + macroFile.f_num + (NUM_PER_PAGE - 1)) / NUM_PER_PAGE)
-      {
-        macroFile.cur_page++;
-        update = 1;
-      }
-      break;
-
-    case KEY_ICON_7:
-      macroFile.cur_page = 0;
-      if (IsRootDir() == true)
-      {
-        clearMacroFile();
-        infoMenu.cur--;
-        break;
-      }
-      else
-      {
-        ExitDir();
-        scanMacroFilesFs();
-        update = 1;
-      }
-      break;
-
-    case KEY_IDLE:
-      break;
-
-    default:
-      if (key_num <= KEY_ICON_4)
-      {
-        u16 start = macroFile.cur_page * NUM_PER_PAGE;
-        if (key_num + start < macroFile.F_num) //folder
+      case KEY_ICON_5:
+        if (macroFile.cur_page > 0)
         {
-          if (EnterMacroDir(macroFile.folder[key_num + start]) == false)
-            break;
+          macroFile.cur_page--;
+          update = 1;
+        }
+        break;
+
+      case KEY_ICON_6:
+        if (macroFile.cur_page + 1 < (macroFile.F_num + macroFile.f_num + (NUM_PER_PAGE - 1)) / NUM_PER_PAGE)
+        {
+          macroFile.cur_page++;
+          update = 1;
+        }
+        break;
+
+      case KEY_ICON_7:
+        macroFile.cur_page = 0;
+        if (IsRootDir() == true)
+        {
+          clearMacroFile();
+          infoMenu.cur--;
+          break;
+        }
+        else
+        {
+          ExitDir();
           scanMacroFilesFs();
           update = 1;
-          macroFile.cur_page = 0;
         }
-        else if (key_num + start < macroFile.F_num + macroFile.f_num) //gcode
+        break;
+
+      case KEY_IDLE:
+        break;
+
+      default:
+        if (key_num <= KEY_ICON_4)
         {
-          if (infoHost.connected != true)
-            break;
-          if (setMacroFile(macroFile.file[key_num + start - macroFile.F_num]) == false)
-            break;
+          u16 start = macroFile.cur_page * NUM_PER_PAGE;
+          if (key_num + start < macroFile.F_num) //folder
+          {
+            if (EnterMacroDir(macroFile.folder[key_num + start]) == false)
+              break;
+            scanMacroFilesFs();
+            update = 1;
+            macroFile.cur_page = 0;
+          }
+          else if (key_num + start < macroFile.F_num + macroFile.f_num) //gcode
+          {
+            if (infoHost.connected != true)
+              break;
+            if (setMacroFile(macroFile.file[key_num + start - macroFile.F_num]) == false)
+              break;
 
-          infoMenu.menu[++infoMenu.cur] = menuExecMacro;
+            infoMenu.menu[++infoMenu.cur] = menuExecMacro;
+          }
         }
-      }
-
-      break;
+        break;
     }
 
     if (update)
@@ -336,13 +342,14 @@ void menuCallMacro(void)
       macroListDraw();
     }
 
-#ifdef SD_CD_PIN
-    if (isVolumeExist(macroFile.source) != true)
-    {
-      resetMacroFile();
-      infoMenu.cur--;
-    }
-#endif
+    #ifdef SD_CD_PIN
+      if (isVolumeExist(macroFile.source) != true)
+      {
+        resetMacroFile();
+        infoMenu.cur--;
+      }
+    #endif
+
     loopProcess();
   }
 }
