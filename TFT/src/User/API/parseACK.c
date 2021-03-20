@@ -222,8 +222,12 @@ void hostActionCommands(void)
 
   if (ack_seen(":notification "))
   {
-//    addToast(DIALOG_TYPE_INFO, dmaL2Cache + ack_index);  // comment the line in case Marlin sends too much notifications
-    statusScreen_setMsg((uint8_t *)echomagic, (uint8_t *)dmaL2Cache + ack_index);
+    statusScreen_setMsg((uint8_t *)echomagic, (uint8_t *)dmaL2Cache + ack_index);  // always display the notification on status screen
+
+    uint16_t index = ack_index;
+
+    if (!ack_seen("Ready."))  // avoid to display unneeded and frequent useless notifications (e.g. "My printer Ready.")
+      addToast(DIALOG_TYPE_INFO, dmaL2Cache + index);
   }
   else if (ack_seen(":paused") || ack_seen(":pause"))
   {
