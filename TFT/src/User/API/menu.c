@@ -725,7 +725,7 @@ GUI_POINT getIconStartPoint(int index)
     static bool backHeld = false;
     #endif
 
-    if(!isPress())
+    if (!isPress())
     {
       #ifdef HAS_EMULATOR
       backHeld = false;
