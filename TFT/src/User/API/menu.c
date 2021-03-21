@@ -721,62 +721,71 @@ GUI_POINT getIconStartPoint(int index)
   void loopCheckBack(void)
   {
     static bool longPress = false;
-    static bool firstCheck = false;
+    #ifdef HAS_EMULATOR
     static bool backHeld = false;
+    #endif
 
-    if (isPrinting())
-      return;
-    if (!isPress())
+    if(!isPress())
     {
+      #ifdef HAS_EMULATOR
       backHeld = false;
+      #endif
       longPress = false;
+      #ifndef HAS_EMULATOR
+      LCD_ReadPen(0);
+      #endif
       return;
     }
+    if (isPrinting())
+      return;
     if (menuType != MENU_TYPE_ICON)
       return;
     if ((infoMenu.cur == 0) || (infoMenu.menu[infoMenu.cur] == menuMode))
       return;
+    #ifdef HAS_EMULATOR
     if (backHeld == true)  // prevent mode selection or screenshot if Back button is held
     {
       backHeld = LCD_ReadPen(0);
       return;
     }
-    if (longPress == false)  // check if longpress already handled
+    #endif
+ 
+    if (longPress == false)
     {
       if (LCD_ReadPen(LONG_TOUCH))  // check if TSC is pressed and held
       {
         longPress = true;
-        firstCheck = true;
-      }
-    }
-    if (firstCheck == true)  // do things only once if TSC is pressed and held
-    {
-      touchSound = false;
-      KEY_VALUES tempKey = KEY_IDLE;
-      if (infoMenu.menu[infoMenu.cur] == menuPrinting)
-      {
-        tempKey = Key_value(COUNT(rect_of_keySS), rect_of_keySS);
-      }
-      else
-      {
-        tempKey = Key_value(COUNT(rect_of_key), rect_of_key);
-      }
-      touchSound = true;
-
-      if (tempKey != KEY_IDLE)
-      {
-        if (curMenuItems->items[tempKey].label.index == LABEL_BACK)  // check if Back button is held
+        touchSound = false;
+        KEY_VALUES tempKey = KEY_IDLE;
+        if (infoMenu.menu[infoMenu.cur] == menuPrinting)
         {
-          BUZZER_PLAY(sound_ok);
-          backHeld = true;
-          infoMenu.menu[1] = infoMenu.menu[infoMenu.cur];
-          infoMenu.cur = 1;
-          if (infoMenu.menu[1] == menuPrinting)
-            clearInfoFile();
+          tempKey = Key_value(COUNT(rect_of_keySS), rect_of_keySS);
+        }
+        else
+        {
+          tempKey = Key_value(COUNT(rect_of_key), rect_of_key);
+        }
+        touchSound = true;
+
+        if (tempKey != KEY_IDLE)
+        {
+          if (curMenuItems->items[tempKey].label.index != LABEL_BACK)  // check if Back button is held
+          {
+            return;
+          }
+          else
+          {
+            BUZZER_PLAY(sound_ok);
+            #ifdef HAS_EMULATOR
+            backHeld = true;
+            #endif
+            infoMenu.menu[1] = infoMenu.menu[infoMenu.cur];
+            infoMenu.cur = 1;
+            if (infoMenu.menu[1] == menuPrinting)
+              clearInfoFile();
+          }
         }
       }
-
-      firstCheck = false;
     }
   }
 #endif //SMART_HOME
