@@ -51,8 +51,8 @@ void refreshLevelCornerValue(MENUITEMS levelItems)
       valPosSub = (int)GetLevelCornerPosition(0)-1;
       sprintf(tempstr, "  %1.4f  ", GetLevelCornerPosition(valPos));
       lvIcon.lines[valPosSub].text = (uint8_t*)tempstr;
-      showLevelCornerLiveInfo(valIndex[valPosSub], valPosSub, &lvIcon, &levelItems.items[valIndex[valPosSub]]); 
-      SetLevelCornerPosition(0, 0);  
+      showLevelCornerLiveInfo(valIndex[valPosSub], valPosSub, &lvIcon, &levelItems.items[valIndex[valPosSub]]);
+      SetLevelCornerPosition(0, 0);
     }
   }
 }
@@ -67,7 +67,7 @@ void menuLevelCorner(void)
   mustStoreCmd("M851\n");
 
   // Init Coordinate
-  if (coordinateIsKnown() == false) 
+  if (coordinateIsKnown() == false)
   {
     mustStoreCmd("G28\n");
   }
@@ -106,7 +106,7 @@ void menuLevelCorner(void)
 
       case KEY_ICON_3:
         {
-          char tempstr[30];         
+          char tempstr[30];
           sprintf(tempstr, "%Min:%d | Max:%d", edge_min, LEVELING_EDGE_DISTANCE_MAX);
           int val = numPadInt((u8 *)tempstr, infoSettings.level_edge, LEVELING_EDGE_DISTANCE_DEFAULT, false);
           infoSettings.level_edge = NOBEYOND(LEVELING_EDGE_DISTANCE_MIN, val, LEVELING_EDGE_DISTANCE_MAX);
@@ -130,7 +130,7 @@ void menuLevelCorner(void)
       default:
         break;
     }
-    refreshLevelCornerValue(levelcornerItems);    
+    refreshLevelCornerValue(levelcornerItems);
     loopProcess();
   }
 }
