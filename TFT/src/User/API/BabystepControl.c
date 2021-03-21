@@ -34,14 +34,20 @@ float babystepResetValue(void)
   step_count = (babystep_value * neg) / BABYSTEP_MAX_STEP;
   for (; step_count > 0; step_count--)
   {
-    mustStoreCmd("M290 Z%.2f\n", -(BABYSTEP_MAX_STEP * neg));
+    if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE)
+      mustStoreCmd("G43.2 Z%.2f\n", -(BABYSTEP_MAX_STEP * neg));
+    else
+      mustStoreCmd("M290 Z%.2f\n", -(BABYSTEP_MAX_STEP * neg));
     processed_baby_step += BABYSTEP_MAX_STEP;
   }
 
   last_unit = (babystep_value * neg) - processed_baby_step;
   if (last_unit > 0.0f)
   {
-    mustStoreCmd("M290 Z%.2f\n", -(last_unit * neg));
+    if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE)
+      mustStoreCmd("G43.2 Z%.2f\n", -(last_unit * neg));
+    else
+      mustStoreCmd("M290 Z%.2f\n", -(last_unit * neg));
     processed_baby_step += last_unit;
   }
 
@@ -58,7 +64,10 @@ float babystepDecreaseValue(float unit)
     float diff = babystep_value - BABYSTEP_MIN_VALUE;
 
     unit = (diff > unit) ? unit : diff;
-    mustStoreCmd("M290 Z-%.2f\n", unit);
+    if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE)
+      mustStoreCmd("G43.2 Z-%.2f\n", unit);
+    else
+      mustStoreCmd("M290 Z-%.2f\n", unit);
     babystep_value -= unit;
   }
 
@@ -73,7 +82,10 @@ float babystepIncreaseValue(float unit)
     float diff = BABYSTEP_MAX_VALUE - babystep_value;
 
     unit = (diff > unit) ? unit : diff;
-    mustStoreCmd("M290 Z%.2f\n", unit);
+    if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE)
+      mustStoreCmd("G43.2 Z%.2f\n", unit);
+    else
+      mustStoreCmd("M290 Z%.2f\n", unit);
     babystep_value += unit;
   }
 

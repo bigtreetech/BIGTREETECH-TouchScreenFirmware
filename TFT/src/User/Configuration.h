@@ -281,8 +281,8 @@
 
 // Mesh Leveling Max Grid points
 // Set the maximum number of grid points per dimension.
-#define MESH_GRID_MAX_POINTS_X 10  // (Minimum 1, Maximum 15)
-#define MESH_GRID_MAX_POINTS_Y 10  // (Minimum 1, Maximum 15)
+#define MESH_GRID_MAX_POINTS_X 15  // (Minimum 1, Maximum 15)
+#define MESH_GRID_MAX_POINTS_Y 15  // (Minimum 1, Maximum 15)
 
 /**
  * Auto save/load Bed Leveling data
@@ -344,7 +344,7 @@
 /**
  * Quick EEPROM Menu
  * Enable EEPROM menu (save/load/reset buttons) in Settings > Machine Menu.
-
+ *
  * NOTE: If disabled, EEPROM operations can also be accessed in the (settings > machine > parameters) menu.
  */
 #define QUICK_EEPROM_BUTTON
