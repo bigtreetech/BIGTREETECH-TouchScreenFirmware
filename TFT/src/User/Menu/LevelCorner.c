@@ -23,7 +23,7 @@ void ScanLevelCorner(u8 pointer)
     {infoSettings.machine_size_min[X_AXIS] + infoSettings.level_edge, infoSettings.machine_size_min[Y_AXIS] + infoSettings.level_edge},
     {infoSettings.machine_size_max[X_AXIS] - infoSettings.level_edge, infoSettings.machine_size_min[Y_AXIS] + infoSettings.level_edge},
     {infoSettings.machine_size_max[X_AXIS] - infoSettings.level_edge, infoSettings.machine_size_max[Y_AXIS] - infoSettings.level_edge},
-    {infoSettings.machine_size_min[X_AXIS] + infoSettings.level_edge, infoSettings.machine_size_max[Y_AXIS] - infoSettings.level_edge}, 
+    {infoSettings.machine_size_min[X_AXIS] + infoSettings.level_edge, infoSettings.machine_size_max[Y_AXIS] - infoSettings.level_edge},
   };
   mustStoreCmd("M401\n");
   mustStoreCmd("G30 E0 X%d Y%d\n", (s16)pointPosition[pointer][0], (s16)pointPosition[pointer][1]);
@@ -31,7 +31,7 @@ void ScanLevelCorner(u8 pointer)
   mustStoreCmd("M17 X Y Z\n");
 }
 
-void refreshLevelCornerValue(MENUITEMS levelItems) 
+void refreshLevelCornerValue(MENUITEMS levelItems)
 {
   char tempstr[10];
   int valIndex[4] = {4,6,2,0};
@@ -48,7 +48,7 @@ void refreshLevelCornerValue(MENUITEMS levelItems)
     if (((int)GetLevelCornerPosition(0) >= 1) && ((int)GetLevelCornerPosition(0) <= 4))
     {
       valPos = (int)GetLevelCornerPosition(0);
-      valPosSub = (int)GetLevelCornerPosition(0)-1;     
+      valPosSub = (int)GetLevelCornerPosition(0)-1;
       sprintf(tempstr, "  %1.4f  ", GetLevelCornerPosition(valPos));
       lvIcon.lines[valPosSub].text = (uint8_t*)tempstr;
       showLevelCornerLiveInfo(valIndex[valPosSub], valPosSub, &lvIcon, &levelItems.items[valIndex[valPosSub]]); 
