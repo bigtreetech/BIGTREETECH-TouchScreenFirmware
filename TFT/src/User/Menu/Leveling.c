@@ -19,12 +19,35 @@ const MENUITEMS manualLevelingItems = {
 
 void moveToLevelingPoint(uint8_t point)
 {
+  int16_t x_left_point = infoSettings.machine_size_min[X_AXIS] + infoSettings.level_edge,
+          x_right_point = infoSettings.machine_size_max[X_AXIS] - infoSettings.level_edge,
+          y_lower_point = infoSettings.machine_size_min[Y_AXIS] + infoSettings.level_edge,
+          y_upper_point = infoSettings.machine_size_max[Y_AXIS] - infoSettings.level_edge;
+
+  if (infoSettings.invert_axis[X_AXIS])
+  {
+    int16_t temp = x_left_point;  // Swap left and right
+    x_left_point = x_right_point;
+    x_right_point = temp;
+  }
+  if (infoSettings.invert_axis[Y_AXIS])
+  {
+    int16_t temp = y_lower_point;  // Swap lower and upper
+    y_lower_point = y_upper_point;
+    y_upper_point = temp;
+  }
+
   int16_t pointPosition[5][2] = {
-    {infoSettings.machine_size_min[X_AXIS] + infoSettings.level_edge, infoSettings.machine_size_min[Y_AXIS] + infoSettings.level_edge},
-    {infoSettings.machine_size_max[X_AXIS] - infoSettings.level_edge, infoSettings.machine_size_min[Y_AXIS] + infoSettings.level_edge},
-    {infoSettings.machine_size_max[X_AXIS] - infoSettings.level_edge, infoSettings.machine_size_max[Y_AXIS] - infoSettings.level_edge},
-    {infoSettings.machine_size_min[X_AXIS] + infoSettings.level_edge, infoSettings.machine_size_max[Y_AXIS] - infoSettings.level_edge},
-    {(infoSettings.machine_size_min[X_AXIS] + infoSettings.machine_size_max[X_AXIS]) / 2, (infoSettings.machine_size_min[Y_AXIS] + infoSettings.machine_size_max[Y_AXIS]) / 2},
+    // Left lower corner
+    {x_left_point,  y_lower_point},
+    // Right lower corner
+    {x_right_point, y_lower_point},
+    // Right upper corner
+    {x_right_point, y_upper_point},
+    // Left upper corner
+    {x_left_point,  y_upper_point},
+    // Center point
+    {(x_left_point + x_right_point) / 2, (y_lower_point + y_upper_point) / 2},
   };
 
   if (coordinateIsKnown() == false)
