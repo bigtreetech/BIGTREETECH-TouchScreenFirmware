@@ -732,11 +732,11 @@ GUI_POINT getIconStartPoint(int index)
       #endif
       longPress = false;
       #ifndef HAS_EMULATOR
-      LCD_ReadPen(0);
+      LCD_ReadPen(0);  // reset TSC press timer
       #endif
       return;
     }
-    if (isPrinting())
+    if (isPrinting())  // no jump to main menu while printing
       return;
     if (menuType != MENU_TYPE_ICON)
       return;
@@ -750,7 +750,7 @@ GUI_POINT getIconStartPoint(int index)
     }
     #endif
  
-    if (longPress == false)
+    if (longPress == false)  // check if longpress already handled
     {
       if (LCD_ReadPen(LONG_TOUCH))  // check if TSC is pressed and held
       {
@@ -779,7 +779,7 @@ GUI_POINT getIconStartPoint(int index)
             #ifdef HAS_EMULATOR
             backHeld = true;
             #endif
-            infoMenu.menu[1] = infoMenu.menu[infoMenu.cur];
+            infoMenu.menu[1] = infoMenu.menu[infoMenu.cur];  // prepare menu tree for jump to 0
             infoMenu.cur = 1;
             if (infoMenu.menu[1] == menuPrinting)
               clearInfoFile();
