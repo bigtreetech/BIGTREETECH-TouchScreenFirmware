@@ -4,16 +4,16 @@
 const MENUITEMS levelcornerItems = {
   // title
   LABEL_LEVELCORNER,
-  // icon                          label
+  // icon                      label
   {
-    {ICON_POINT_4,				   LABEL_BACKGROUND},
-    {ICON_RESET_VALUE,             LABEL_START},
-    {ICON_POINT_3,                 LABEL_BACKGROUND},
-    {ICON_LEVEL_EDGE_DISTANCE,     LABEL_DISTANCE},
-    {ICON_POINT_1,                 LABEL_BACKGROUND},
-    {ICON_BACKGROUND,              LABEL_BACKGROUND},
-    {ICON_POINT_2,           	   LABEL_BACKGROUND},
-    {ICON_BACK,         	       LABEL_BACK},
+    {ICON_POINT_4,             LABEL_BACKGROUND},
+    {ICON_RESET_VALUE,         LABEL_START},
+    {ICON_POINT_3,             LABEL_BACKGROUND},
+    {ICON_LEVEL_EDGE_DISTANCE, LABEL_DISTANCE},
+    {ICON_POINT_1,             LABEL_BACKGROUND},
+    {ICON_BACKGROUND,          LABEL_BACKGROUND},
+    {ICON_POINT_2,             LABEL_BACKGROUND},
+    {ICON_BACK,                LABEL_BACK},
   }
 };
 
@@ -29,7 +29,6 @@ void ScanLevelCorner(u8 pointer)
   mustStoreCmd("G30 E0 X%d Y%d\n", (s16)pointPosition[pointer][0], (s16)pointPosition[pointer][1]);
   mustStoreCmd("G1 Z15\n");
   mustStoreCmd("M17 X Y Z\n");
-
 }
 
 void refreshLevelCornerValue(MENUITEMS levelItems) 
