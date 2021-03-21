@@ -30,13 +30,13 @@ void ScanLevelCorner(u8 pointer)
   {
     mustStoreCmd("M401\n");
     mustStoreCmd("G30 E0 X%d Y%d\n", (s16)pointPosition[pointer][0], (s16)pointPosition[pointer][1]);
+	mustStoreCmd("G1 Z10\n");
   }
   else
   {
     mustStoreCmd("G30 E1 X%d Y%d\n", (s16)pointPosition[pointer][0], (s16)pointPosition[pointer][1]);
   }
 
-  mustStoreCmd("G1 Z15\n");
   mustStoreCmd("M17 X Y Z\n");
 }
 
