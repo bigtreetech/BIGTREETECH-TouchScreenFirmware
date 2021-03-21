@@ -87,9 +87,9 @@ void menuBedLeveling(void)
 
       case KEY_ICON_3:
         if (getParameter(P_ABL_STATE, 0) == ENABLED)
-          storeCmd("M420 S0\n");
+          storeCmd(infoMachineSettings.firmwareType != FW_REPRAPFW ? "M420 S0\n" : "G29 S2\n");
         else
-          storeCmd("M420 S1\n");
+          storeCmd(infoMachineSettings.firmwareType != FW_REPRAPFW ? "M420 S1\n" : "G29 S1\n");
         break;
 
       case KEY_ICON_4:

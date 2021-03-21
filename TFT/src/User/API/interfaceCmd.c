@@ -966,15 +966,33 @@ void sendQueueCmd(void)
         #if ENABLE_BL_VALUE > 0  // if not Disabled
           case 29:  //G29
           {
-            if (cmd_seen('A'))
+            if (infoMachineSettings.firmwareType != FW_REPRAPFW)
             {
-              setParameter(P_ABL_STATE, 0, 1);
-              storeCmd("M117 UBL active\n");
+              if (cmd_seen('A'))
+              {
+                setParameter(P_ABL_STATE, 0, 1);
+                storeCmd("M117 UBL active\n");
+              }
+              if (cmd_seen('D'))
+              {
+                setParameter(P_ABL_STATE, 0, 0);
+                storeCmd("M117 UBL inactive\n");
+              }
             }
-            if (cmd_seen('D'))
+            else
             {
-              setParameter(P_ABL_STATE, 0, 0);
-              storeCmd("M117 UBL inactive\n");
+              if (cmd_seen('S'))
+              {
+                uint8_t v = cmd_value();
+                if (v == 1)
+                {
+                  setParameter(P_ABL_STATE, 0, 1);
+                }
+                else if (v == 2)
+                {
+                  setParameter(P_ABL_STATE, 0, 0);
+                }
+              }
             }
           }
           break;
