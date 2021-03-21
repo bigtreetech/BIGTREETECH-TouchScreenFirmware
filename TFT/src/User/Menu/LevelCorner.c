@@ -28,7 +28,7 @@ void ScanLevelCorner(u8 pointer)
 
   if (infoSettings.touchmi_sensor != 0)
   {
-	  mustStoreCmd("M401\n");
+      mustStoreCmd("M401\n");
       mustStoreCmd("G30 E0 X%d Y%d\n", (s16)pointPosition[pointer][0], (s16)pointPosition[pointer][1]);
   }
   else
