@@ -705,19 +705,27 @@ void meshSave(bool saveOnChange)
 }
 
 bool meshIsWaitingFirstData(void)
-{
-  if (meshData == NULL ||
-    meshData->status != ME_DATA_IDLE)                      // if mesh editor is not running or is already handling data
+{ // just avoid to merge on the same "if" statement a check on NULL value and an access
+  // to attributes of the data structure meshData due to different compiler optimization
+  // settings (that could evaluate all the conditions in the "if" statement, causing a crash)
+  if (meshData == NULL)                                    // if mesh editor is not running
+    return false;
+
+  if (meshData->status != ME_DATA_IDLE)                    // if mesh editor is already handling data
     return false;
 
   return true;
 }
 
 bool meshIsWaitingData(void)
-{
-  if (meshData == NULL ||
-    meshData->status == ME_DATA_FULL ||
-    meshData->status == ME_DATA_FAILED)                    // if mesh editor is not running or is not waiting for data
+{ // just avoid to merge on the same "if" statement a check on NULL value and an access
+  // to attributes of the data structure meshData due to different compiler optimization
+  // settings (that could evaluate all the conditions in the "if" statement, causing a crash)
+  if (meshData == NULL)                                    // if mesh editor is not running
+    return false;
+
+  if (meshData->status == ME_DATA_FULL ||
+    meshData->status == ME_DATA_FAILED)                    // is not waiting for data
     return false;
 
   return true;
