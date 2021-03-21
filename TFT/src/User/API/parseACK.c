@@ -553,7 +553,7 @@ void parseACK(void)
         {
           // RRF
           // {"key":"job.file.fileName","flags": "","result":"0:/gcodes/pig-4H.gcode"}
-          ack_seen("result\":\"");
+          ack_seen("result\":\"0:/gcodes/");
           fileEndString = "\"";
         }
         uint16_t start_index = ack_index;
@@ -569,7 +569,6 @@ void parseACK(void)
         infoPrinting.cur = 0;
         infoPrinting.size = 1; // Should be different with .cur to avoid 100% progress on TFT, Get the correct value by M27
 
-        infoFile.source = BOARD_SD_REMOTE;
         initPrintSummary();
 
         if (infoMachineSettings.autoReportSDStatus == 1)
