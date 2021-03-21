@@ -153,23 +153,23 @@ void menuRGBSettings(void)
     key_num = menuKeyGetValue();
     switch (key_num)
     {
-      case KEY_ICON_0: //Red
+      case KEY_ICON_0:  //Red
         storeCmd("M150 R255 U0 B0 P255\n");
         break;
 
-      case KEY_ICON_1: //Green
+      case KEY_ICON_1:  //Green
         storeCmd("M150 R0 U255 B0 P255\n");
         break;
 
-      case KEY_ICON_2: //Blue
+      case KEY_ICON_2:  //Blue
         storeCmd("M150 R0 U0 B255 P255\n");
         break;
 
-      case KEY_ICON_3: //White
+      case KEY_ICON_3:  //White
         storeCmd("M150 R255 U255 B255 P255\n");
         break;
 
-      case KEY_ICON_4: //Turn Off
+      case KEY_ICON_4:  //Turn Off
         storeCmd("M150 R0 U0 B0 P0\n");
         break;
 
@@ -253,7 +253,7 @@ void menuEepromSettings(void)
   }
 }
 
-#endif // QUICK_EEPROM_BUTTON
+#endif  // QUICK_EEPROM_BUTTON
 
 void menuMachineSettings(void)
 {

@@ -183,13 +183,14 @@ void pidTemperatureReDraw(bool skip_header)
 
   if (!skip_header)
   {
-    sprintf(tempstr, "%s    ", heatDisplayID[curToolIndex]);
+    sprintf(tempstr, "%-15s", heatDisplayID[curToolIndex]);
     setLargeFont(false);
     GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *) tempstr);
     setLargeFont(true);
+    GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1) >> 1, exhibitRect.y0, (uint8_t *)"ºC");
   }
 
-  sprintf(tempstr, "  %d ºC ", pidHeaterTarget[curToolIndex]);
+  sprintf(tempstr, "  %d  ", pidHeaterTarget[curToolIndex]);
   GUI_DispStringInPrect(&exhibitRect, (uint8_t *) tempstr);
   setLargeFont(false);
 }
