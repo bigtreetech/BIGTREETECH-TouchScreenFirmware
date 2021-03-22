@@ -717,7 +717,7 @@ GUI_POINT getIconStartPoint(int index)
 }
 
 #ifdef SMART_HOME
-  #define LONG_TOUCH (LCD_CHANGE_MODE_INTERVALS / 3)
+  #define LONG_TOUCH (LCD_CHANGE_MODE_INTERVALS / 3)  // keep it lower than LCD_CHANGE_MODE_INTERVALS
   void loopCheckBack(void)
   {
     static bool longPress = false;
