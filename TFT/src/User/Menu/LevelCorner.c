@@ -59,7 +59,7 @@ void refreshLevelCornerValue(MENUITEMS levelItems)
       valPos = (int)GetLevelCornerPosition(0);
       valPosSub = (int)GetLevelCornerPosition(0)-1;
       sprintf(tempstr, "  %1.4f  ", GetLevelCornerPosition(valPos));
-      lvIcon.lines[valPosSub].text = (uint8_t*)tempstr;
+      lvIcon.lines[valPosSub].text = (uint8_t *)tempstr;
       showLevelCornerLiveInfo(valIndex[valPosSub], valPosSub, &lvIcon, &levelItems.items[valIndex[valPosSub]]);
       SetLevelCornerPosition(0, 0);
     }
@@ -68,9 +68,23 @@ void refreshLevelCornerValue(MENUITEMS levelItems)
 
 void menuLevelCorner(void)
 { 
+  char tempstr[8];
   KEY_VALUES key_num = KEY_IDLE;
 
   menuDrawPage(&levelcornerItems);
+
+  LIVE_INFO lvIconM48;
+  lvIconM48.enabled[4] = true;
+  lvIconM48.lines[4].h_align = CENTER;
+  lvIconM48.lines[4].v_align = CENTER;
+  lvIconM48.lines[4].fn_color = BLUE;
+  lvIconM48.lines[4].text_mode = GUI_TEXTMODE_TRANS;
+  lvIconM48.lines[4].pos = ss_title_point;
+  lvIconM48.lines[4].large_font = false;
+ 
+  sprintf(tempstr, "%s", "Accuracy");
+  lvIconM48.lines[0].text = (uint8_t *)tempstr;
+  showLiveInfo(4, &lvIconM48, &levelcornerItems.items[5]);
 
   // Init Probe Offset in parseAck to get probe offset X and Y
   mustStoreCmd("M851\n");
