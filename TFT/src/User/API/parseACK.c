@@ -765,7 +765,14 @@ void parseACK(void)
         }
         else
         {
-        if (ack_seen("D")) setParameter(P_FILAMENT_SETTING, 1, ack_value());
+          if (ack_seen("D")) setParameter(P_FILAMENT_SETTING, 1, ack_value());
+          if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE)
+          {
+            if (getParameter(P_FILAMENT_SETTING, 1) > 0.01F) 
+              setParameter(P_FILAMENT_SETTING, 0, 1);//filament_diameter>0.01 to enable  volumetric extrusion
+            else
+              setParameter(P_FILAMENT_SETTING, 0, 0); //filament_diameter<=0.01 to disable volumetric extrusion
+          }         
         }
       }
       // parse and store Max Acceleration values
@@ -1153,6 +1160,21 @@ void parseACK(void)
         {
           ackPopupInfo("ZProbe triggered\n before move.\n Aborting Print!");
         } 
+        // parse and store volumetric extrusion M200 response of Smoothieware
+        else if (ack_seen("Volumetric extrusion is disabled"))
+        {
+          setParameter(P_FILAMENT_SETTING, 0, 0);
+          setParameter(P_FILAMENT_SETTING, 1, 0.0F);
+        }
+        // parse and store volumetric extrusion M200 response of Smoothieware
+        else if (ack_seen("Filament Diameter:"))
+        {
+          setParameter(P_FILAMENT_SETTING, 1, ack_value());
+          if (getParameter(P_FILAMENT_SETTING, 1) > 0.01F)
+            setParameter(P_FILAMENT_SETTING, 0, 1); //filament_diameter>0.01 to enable  volumetric extrusion
+          else
+            setParameter(P_FILAMENT_SETTING, 0, 0); //filament_diameter<=0.01 to disable volumetric extrusion        
+        }      
       }
     }
 
