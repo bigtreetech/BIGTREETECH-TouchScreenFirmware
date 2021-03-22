@@ -77,7 +77,6 @@ static bool ack_continue_seen(const char * str)
   return false;
 }
 
-
 static bool ack_cmp(const char *str)
 {
   uint16_t i;
@@ -223,8 +222,12 @@ void hostActionCommands(void)
 
   if (ack_seen(":notification "))
   {
-//    addToast(DIALOG_TYPE_INFO, dmaL2Cache + ack_index);  // comment the line in case Marlin sends too much notifications
-    statusScreen_setMsg((uint8_t *)echomagic, (uint8_t *)dmaL2Cache + ack_index);
+    statusScreen_setMsg((uint8_t *)echomagic, (uint8_t *)dmaL2Cache + ack_index);  // always display the notification on status screen
+
+    uint16_t index = ack_index;
+
+    if (!ack_seen("Ready."))  // avoid to display unneeded/frequent useless notifications (e.g. "My printer Ready.")
+      addToast(DIALOG_TYPE_INFO, dmaL2Cache + index);
   }
   else if (ack_seen(":paused") || ack_seen(":pause"))
   {
@@ -441,7 +444,7 @@ void parseACK(void)
         avoid_terminal = !infoSettings.terminalACK;
         updateNextHeatCheckTime();
       }
-      // parse and store coordinates
+      // parse and store M114, current position
       else if ((ack_seen("X:") && ack_index == 2) || ack_seen("C: X:"))  // Smoothieware axis position starts with "C: X:"
       {
         coordinateSetAxisActual(X_AXIS, ack_value());
@@ -484,7 +487,7 @@ void parseACK(void)
         speedSetCurPercent(1, ack_value());
         speedQuerySetWait(false);
       }
-      // parse and store fan speed
+      // parse and store M106, fan speed
       else if (ack_seen("M106 P"))
       {
         uint8_t i = ack_value();
@@ -493,7 +496,7 @@ void parseACK(void)
           fanSetCurSpeed(i, ack_value());
         }
       }
-      // parse and store controller fan
+      // parse and store M710, controller fan
       else if (ack_seen("M710"))
       {
         uint8_t i = 0;
@@ -539,8 +542,7 @@ void parseACK(void)
         hasFilamentData = true;
       }
       else if (infoMachineSettings.onboard_sd_support == ENABLED &&
-               ack_seen(infoMachineSettings.firmwareType != FW_REPRAPFW
-                         ? "File opened:" : "job.file.fileName"))
+               ack_seen(infoMachineSettings.firmwareType != FW_REPRAPFW ? "File opened:" : "job.file.fileName"))
       {
         char *fileEndString;
         if (infoMachineSettings.firmwareType != FW_REPRAPFW)
@@ -553,7 +555,7 @@ void parseACK(void)
         {
           // RRF
           // {"key":"job.file.fileName","flags": "","result":"0:/gcodes/pig-4H.gcode"}
-          ack_seen("result\":\"");
+          ack_seen("result\":\"0:/gcodes/");
           fileEndString = "\"";
         }
         uint16_t start_index = ack_index;
@@ -567,9 +569,8 @@ void parseACK(void)
         infoPrinting.pause = false;
         infoPrinting.time = 0;
         infoPrinting.cur = 0;
-        infoPrinting.size = 1; // Should be different with .cur to avoid 100% progress on TFT, Get the correct value by M27
+        infoPrinting.size = 1;  // Should be different with .cur to avoid 100% progress on TFT, Get the correct value by M27
 
-        infoFile.source = BOARD_SD_REMOTE;
         initPrintSummary();
 
         if (infoMachineSettings.autoReportSDStatus == 1)
@@ -601,8 +602,7 @@ void parseACK(void)
       }
       else if (infoMachineSettings.onboard_sd_support == ENABLED &&
                infoFile.source >= BOARD_SD &&
-               ack_seen(infoMachineSettings.firmwareType != FW_REPRAPFW
-                         ? "Done printing file" : "Finished printing file"))
+               ack_seen(infoMachineSettings.firmwareType != FW_REPRAPFW ? "Done printing file" : "Finished printing file"))
       {
         infoHost.printing = false;
         printingFinished();
@@ -1163,13 +1163,13 @@ void parseACK(void)
             infoSetIPAddress(string, string_end - string_start);  // Set IP address
           }
         }
-      } 
+      }
       else if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE)
       {
         if (ack_seen(errorZProbe)) //smoothieboard ZProbe triggered before move, aborting command.
         {
           ackPopupInfo("ZProbe triggered\n before move.\n Aborting Print!");
-        } 
+        }
       }
     }
 

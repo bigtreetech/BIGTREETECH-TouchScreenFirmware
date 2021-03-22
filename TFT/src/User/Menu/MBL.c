@@ -1,8 +1,6 @@
 #include "MBL.h"
 #include "includes.h"
 
-#define PROBE_HEIGHT_INITIAL_HEIGHT 0.2f  // 0.2 mm
-
 static uint8_t curUnit_index = 0;
 uint8_t mblPoint = 0;
 bool mblRunning = false;
@@ -16,9 +14,9 @@ static inline void mblStart(void)
   probeHeightEnable();  // temporary disable software endstops
 
   // MBL gcode sequence start
-  mustStoreCmd("G29 S1\n");                       // home and move to first point for Z height adjustment
-  probeHeightStart(PROBE_HEIGHT_INITIAL_HEIGHT);  // lower nozzle to provided absolute Z point
-  probeHeightRelative();                          // set relative position mode
+  mustStoreCmd("G29 S1\n");                            // home and move to first point for Z height adjustment
+  probeHeightStart(infoSettings.level_z_raise, true);  // raise nozzle
+  probeHeightRelative();                               // set relative position mode
 }
 
 // Stop MBL
@@ -242,7 +240,7 @@ void menuMBL(void)
         {
           storeCmd("G29 S2\n");  // save Z height and move to next mesh point
 
-          probeHeightStart(PROBE_HEIGHT_INITIAL_HEIGHT);  // lower nozzle to provided absolute Z point
+          probeHeightStart(infoSettings.level_z_raise, true);  // raise nozzle
 
           ++mblPoint;
           mblDrawHeader(&mblPoint);
