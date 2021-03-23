@@ -635,11 +635,11 @@ void showLevelCornerLiveInfo(uint8_t index, uint8_t Levelindex, const LIVE_INFO 
   GUI_RestoreColorDefault();
 } //showLevelCornerLiveInfo
 
-//Show text on icons (used in LevelCorner)
+//Show text on icons (used in LevelCorner with ICON_BLTOUCH unified)
 void showTextOnIcon(uint8_t index, uint8_t Levelindex, const LIVE_INFO * liveicon, const ITEM * item)
 {
   if (item != NULL) menuDrawIconOnly(item,index);
-  GUI_SetColor(GRAY);
+  GUI_SetColor(ORANGE);
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
   GUI_POINT loc;
   loc.x = liveicon->lines[Levelindex].pos.x + curRect[index].x0 + 2;
