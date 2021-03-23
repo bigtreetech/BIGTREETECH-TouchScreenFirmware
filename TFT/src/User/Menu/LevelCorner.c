@@ -11,11 +11,14 @@ const MENUITEMS levelcornerItems = {
     {ICON_POINT_3,             LABEL_BACKGROUND},
     {ICON_LEVEL_EDGE_DISTANCE, LABEL_DISTANCE},
     {ICON_POINT_1,             LABEL_BACKGROUND},
-    {ICON_BACKGROUND,          LABEL_BACKGROUND},
+    {ICON_BLTOUCH,          LABEL_BACKGROUND},
     {ICON_POINT_2,             LABEL_BACKGROUND},
     {ICON_BACK,                LABEL_BACK},
   }
 };
+
+LIVE_INFO lvIcon;
+
 
 void ScanLevelCorner(u8 pointer)
 {
@@ -47,28 +50,50 @@ void refreshLevelCornerValue(MENUITEMS levelItems)
   int valPos;
   int valPosSub;
   LIVE_INFO lvIcon;
-  lvIcon.lines[0].pos = ss_val_point;
-  lvIcon.lines[1].pos = ss_val_point;
-  lvIcon.lines[2].pos = ss_val_point;
-  lvIcon.lines[3].pos = ss_val_point;
 
   if ((int)GetLevelCornerPosition(0) != 0)
   {
+    lvIcon.lines[0].pos = ss_val_point;
+    lvIcon.lines[1].pos = ss_val_point;
+    lvIcon.lines[2].pos = ss_val_point;
+    lvIcon.lines[3].pos = ss_val_point;
+
     if (((int)GetLevelCornerPosition(0) >= 1) && ((int)GetLevelCornerPosition(0) <= 4))
     {
       valPos = (int)GetLevelCornerPosition(0);
       valPosSub = (int)GetLevelCornerPosition(0)-1;
       sprintf(tempstr, "  %1.4f  ", GetLevelCornerPosition(valPos));
-      lvIcon.lines[valPosSub].text = (uint8_t*)tempstr;
+      lvIcon.lines[valPosSub].text = (uint8_t *)tempstr;
       showLevelCornerLiveInfo(valIndex[valPosSub], valPosSub, &lvIcon, &levelItems.items[valIndex[valPosSub]]);
       SetLevelCornerPosition(0, 0);
     }
   }
 }
 
+void refreshProbeAccuracy(MENUITEMS levelItems)
+{
+  char tempstr[12];
+  LIVE_INFO lvIcon;
+  LIVE_INFO lvIconM48;
+
+  if ((int)GetLevelCornerPosition(0) == 5)
+  {
+    lvIcon.lines[4].pos = ss_val_point;
+    sprintf(tempstr, "  %1.4f  ", GetLevelCornerPosition(5));
+    lvIcon.lines[4].text = (uint8_t *)tempstr;
+    showLevelCornerLiveInfo(5, 4, &lvIcon, &levelItems.items[5]);
+    lvIconM48.lines[0].pos = ss_val_point;
+    sprintf(tempstr, "%s", " Accuracy ");
+    lvIconM48.lines[0].text = (uint8_t *)tempstr;
+    showTextOnIcon(5, 0, &lvIconM48, &levelcornerItems.items[5]);
+    SetLevelCornerPosition(0, 0);
+  }
+}
+
 void menuLevelCorner(void)
 { 
   KEY_VALUES key_num = KEY_IDLE;
+  int ReadValuestored = 6;
 
   menuDrawPage(&levelcornerItems);
 
@@ -80,18 +105,13 @@ void menuLevelCorner(void)
   {
     mustStoreCmd("G28\n");
   }
+
   // Check min edge limit for the probe with probe offset set in parseACK.c
   uint8_t edge_min = MAX(ABS(getParameter((s16)P_PROBE_OFFSET, X_STEPPER)),ABS((s16)getParameter(P_PROBE_OFFSET, Y_STEPPER))) + 1;
   if (infoSettings.level_edge < edge_min) 
   {
     infoSettings.level_edge = ((LEVELING_EDGE_DISTANCE >= edge_min) ? LEVELING_EDGE_DISTANCE : edge_min);
   }
-
-  // Scan all 4 corner
-  ScanLevelCorner(0);
-  ScanLevelCorner(1);
-  ScanLevelCorner(2);
-  ScanLevelCorner(3);
 
   while (infoMenu.menu[infoMenu.cur] == menuLevelCorner)
   {
@@ -128,6 +148,10 @@ void menuLevelCorner(void)
         ScanLevelCorner(0);
         break;
 
+      case KEY_ICON_5:
+        mustStoreCmd("M48\n");
+        break;
+
       case KEY_ICON_6:
         ScanLevelCorner(1);
         break;
@@ -139,6 +163,15 @@ void menuLevelCorner(void)
       default:
         break;
     }
+
+    while (ReadValuestored != 0)
+    {
+      SetLevelCornerPosition(0, ReadValuestored--);
+      refreshLevelCornerValue(levelcornerItems);
+      refreshProbeAccuracy(levelcornerItems);
+    }
+
+    refreshProbeAccuracy(levelcornerItems);
     refreshLevelCornerValue(levelcornerItems);
     loopProcess();
   }
