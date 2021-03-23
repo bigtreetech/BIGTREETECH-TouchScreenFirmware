@@ -639,7 +639,7 @@ void showLevelCornerLiveInfo(uint8_t index, uint8_t Levelindex, const LIVE_INFO 
 void showTextOnIcon(uint8_t index, uint8_t Levelindex, const LIVE_INFO * liveicon, const ITEM * item)
 {
   if (item != NULL) menuDrawIconOnly(item,index);
-  GUI_SetColor(ORANGE);
+  GUI_SetColor(GRAY);
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
   GUI_POINT loc;
   loc.x = liveicon->lines[Levelindex].pos.x + curRect[index].x0 + 2;
