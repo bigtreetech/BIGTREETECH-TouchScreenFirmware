@@ -11,7 +11,7 @@ const MENUITEMS levelcornerItems = {
     {ICON_POINT_3,             LABEL_BACKGROUND},
     {ICON_LEVEL_EDGE_DISTANCE, LABEL_DISTANCE},
     {ICON_POINT_1,             LABEL_BACKGROUND},
-    {ICON_BACKGROUND,          LABEL_BACKGROUND},
+    {ICON_BLTOUCH,          LABEL_BACKGROUND},
     {ICON_POINT_2,             LABEL_BACKGROUND},
     {ICON_BACK,                LABEL_BACK},
   }
@@ -72,30 +72,28 @@ void refreshLevelCornerValue(MENUITEMS levelItems)
 
 void refreshProbeAccuracy(MENUITEMS levelItems)
 {
-  char tempstr[10];
+  char tempstr[12];
   LIVE_INFO lvIcon;
   LIVE_INFO lvIconM48;
 
   if ((int)GetLevelCornerPosition(0) == 5)
   {
-    lvIconM48.lines[0].pos = ss_val_point;
-    sprintf(tempstr, "%s", "Accuracy");
-    lvIconM48.lines[0].text = (uint8_t *)tempstr;
-    showTextOnIcon(5, 0, &lvIconM48, &levelcornerItems.items[5]);
-
     lvIcon.lines[4].pos = ss_val_point;
     sprintf(tempstr, "  %1.4f  ", GetLevelCornerPosition(5));
     lvIcon.lines[4].text = (uint8_t *)tempstr;
     showLevelCornerLiveInfo(5, 4, &lvIcon, &levelItems.items[5]);
     SetLevelCornerPosition(0, 0);
+    lvIconM48.lines[0].pos = ss_val_point;
+    sprintf(tempstr, "%s", " Accuracy ");
+    lvIconM48.lines[0].text = (uint8_t *)tempstr;
+    showTextOnIcon(5, 0, &lvIconM48, &levelcornerItems.items[5]);
   }
 }
 
 void menuLevelCorner(void)
 { 
   KEY_VALUES key_num = KEY_IDLE;
-  int ReadValuestored;
-  ReadValuestored = 6;
+  int ReadValuestored = 6;
 
   menuDrawPage(&levelcornerItems);
 
@@ -107,6 +105,7 @@ void menuLevelCorner(void)
   {
     mustStoreCmd("G28\n");
   }
+
   // Check min edge limit for the probe with probe offset set in parseACK.c
   uint8_t edge_min = MAX(ABS(getParameter((s16)P_PROBE_OFFSET, X_STEPPER)),ABS((s16)getParameter(P_PROBE_OFFSET, Y_STEPPER))) + 1;
   if (infoSettings.level_edge < edge_min) 
@@ -114,12 +113,6 @@ void menuLevelCorner(void)
     infoSettings.level_edge = ((LEVELING_EDGE_DISTANCE >= edge_min) ? LEVELING_EDGE_DISTANCE : edge_min);
   }
 
-  // Scan all 4 corner
-  //ScanLevelCorner(0);
-  //ScanLevelCorner(1);
-  //ScanLevelCorner(2);
-  //ScanLevelCorner(3);
- 
   while (infoMenu.menu[infoMenu.cur] == menuLevelCorner)
   {
     key_num = menuKeyGetValue();
@@ -173,9 +166,9 @@ void menuLevelCorner(void)
 
     while (ReadValuestored != 0)
     {
-      SetLevelCornerPosition(0, ReadValuestored--);
-      refreshProbeAccuracy(levelcornerItems);
+      SetLevelCornerPosition(0, ReadValuestored--);  
       refreshLevelCornerValue(levelcornerItems);
+      refreshProbeAccuracy(levelcornerItems);
     }
     
     refreshProbeAccuracy(levelcornerItems);
