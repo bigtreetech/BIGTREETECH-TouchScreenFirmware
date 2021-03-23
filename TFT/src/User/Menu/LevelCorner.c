@@ -166,11 +166,11 @@ void menuLevelCorner(void)
 
     while (ReadValuestored != 0)
     {
-      SetLevelCornerPosition(0, ReadValuestored--);  
+      SetLevelCornerPosition(0, ReadValuestored--);
       refreshLevelCornerValue(levelcornerItems);
       refreshProbeAccuracy(levelcornerItems);
     }
-    
+
     refreshProbeAccuracy(levelcornerItems);
     refreshLevelCornerValue(levelcornerItems);
     loopProcess();
