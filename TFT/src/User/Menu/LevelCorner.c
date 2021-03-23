@@ -150,6 +150,7 @@ void menuLevelCorner(void)
 
       case KEY_ICON_5:
         mustStoreCmd("M48\n");
+        mustStoreCmd("M17 X Y Z\n");
         break;
 
       case KEY_ICON_6:
