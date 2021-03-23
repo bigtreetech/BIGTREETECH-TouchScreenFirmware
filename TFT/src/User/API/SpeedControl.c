@@ -54,6 +54,6 @@ void speedQuery(void)
 {
   if (infoHost.connected && !infoHost.wait && !speedQueryWait)
   {
-    speedQueryWait = storeCmd("M220\nM221 D%d\n", heatGetCurrentTool());
+    speedQueryWait = storeCmd("M220\nM221\n");
   }
 }
