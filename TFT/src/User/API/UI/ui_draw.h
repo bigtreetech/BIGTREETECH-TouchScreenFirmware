@@ -33,6 +33,7 @@ bool model_DecodeToFlash(char *gcode);
 void ICON_CustomReadDisplay(uint16_t sx, uint16_t sy, u32 address);
 void SMALLICON_ReadDisplay(uint16_t sx, uint16_t sy, uint8_t icon);
 void ICON_PressedDisplay(uint16_t sx, uint16_t sy, uint8_t icon);
+uint32_t getBMPsize(uint8_t * w, uint8_t * h, uint32_t address);
 
 #ifdef __cplusplus
 }
