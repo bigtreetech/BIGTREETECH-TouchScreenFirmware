@@ -82,11 +82,11 @@ void refreshProbeAccuracy(MENUITEMS levelItems)
     sprintf(tempstr, "  %1.4f  ", GetLevelCornerPosition(5));
     lvIcon.lines[4].text = (uint8_t *)tempstr;
     showLevelCornerLiveInfo(5, 4, &lvIcon, &levelItems.items[5]);
-    SetLevelCornerPosition(0, 0);
     lvIconM48.lines[0].pos = ss_val_point;
     sprintf(tempstr, "%s", " Accuracy ");
     lvIconM48.lines[0].text = (uint8_t *)tempstr;
     showTextOnIcon(5, 0, &lvIconM48, &levelcornerItems.items[5]);
+    SetLevelCornerPosition(0, 0);
   }
 }
 
