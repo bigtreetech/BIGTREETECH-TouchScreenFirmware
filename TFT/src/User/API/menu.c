@@ -641,9 +641,13 @@ void showTextOnIcon(uint8_t index, uint8_t Levelindex, const LIVE_INFO * liveico
   // if (item != NULL) menuDrawIconOnly(item,index);
   const GUI_RECT *rect = curRect + index;
 //  if (item->icon != ICON_BACKGROUND)
- //   ICON_ReadDisplay(rect->x0, rect->y0, item->icon);
+//   ICON_ReadDisplay(rect->x0, rect->y0, item->icon);
 //  else
-  GUI_ClearPrect(rect);
+  const GUI_RECT rectVal = {rect->x0, rect->y0, rect->x1, rect->y1 - BYTE_HEIGHT};
+  GUI_ClearPrect(&rectVal);
+  uint16_t w, h;
+  uint32_t addr = getBMPsize((uint8_t *)&w, (uint8_t *)&h, ICON_ADDR(item->icon));
+  lcd_frame_display(rect->x0, rect->y0, w, h - BYTE_HEIGHT, addr);
 
   GUI_SetColor(SSICON_NAME_COLOR);
   GUI_SetBkColor(0);
