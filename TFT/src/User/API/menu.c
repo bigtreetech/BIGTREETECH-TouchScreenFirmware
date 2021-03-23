@@ -638,25 +638,13 @@ void showLevelCornerLiveInfo(uint8_t index, uint8_t Levelindex, const LIVE_INFO 
 //Show text on icons (used in LevelCorner)
 void showTextOnIcon(uint8_t index, uint8_t Levelindex, const LIVE_INFO * liveicon, const ITEM * item)
 {
-  // if (item != NULL) menuDrawIconOnly(item,index);
-  const GUI_RECT *rect = curRect + index;
-//  if (item->icon != ICON_BACKGROUND)
-//   ICON_ReadDisplay(rect->x0, rect->y0, item->icon);
-//  else
-  const GUI_RECT rectVal = {rect->x0, rect->y0, rect->x1, rect->y1 - BYTE_HEIGHT};
-  GUI_ClearPrect(&rectVal);
-  uint16_t w, h;
-  uint32_t addr = getBMPsize((uint8_t *)&w, (uint8_t *)&h, ICON_ADDR(item->icon));
-  lcd_frame_display(rect->x0, rect->y0, w, h - BYTE_HEIGHT, addr);
-
-  GUI_SetColor(SSICON_NAME_COLOR);
-  GUI_SetBkColor(0);
-  GUI_SetTextMode(GUI_TEXTMODE_NORMAL);  
+  if (item != NULL) menuDrawIconOnly(item,index);
+  GUI_SetColor(ORANGE);
+  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
   GUI_POINT loc;
   loc.x = liveicon->lines[Levelindex].pos.x + curRect[index].x0;
-  loc.y = liveicon->lines[Levelindex].pos.y + curRect[index].y0;
+  loc.y = liveicon->lines[Levelindex].pos.y + curRect[index].y0 - 4;
   setLargeFont(VAL_LARGE_FONT);
-  GUI_FillRectColor(loc.x - ((curRect[index].x1 - curRect[index].x0)/2), loc.y, loc.x + ((curRect[index].x1 - curRect[index].x0)/2), loc.y + BYTE_HEIGHT, BACKGROUND_COLOR);
   GUI_DispStringCenter(loc.x, loc.y, liveicon->lines[Levelindex].text);
   GUI_RestoreColorDefault();
 } //showTextOnIcon
