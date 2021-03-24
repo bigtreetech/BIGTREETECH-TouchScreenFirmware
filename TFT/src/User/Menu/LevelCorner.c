@@ -62,7 +62,7 @@ void refreshLevelCornerValue(MENUITEMS levelItems)
     {
       valPos = (int)GetLevelCornerPosition(0);
       valPosSub = (int)GetLevelCornerPosition(0)-1;
-      sprintf(tempstr, "  %1.4f  ", GetLevelCornerPosition(valPos));
+      sprintf(tempstr, "%1.4f", GetLevelCornerPosition(valPos));
       lvIcon.lines[valPosSub].text = (uint8_t *)tempstr;
       showLevelCornerLiveInfo(valIndex[valPosSub], valPosSub, &lvIcon, &levelItems.items[valIndex[valPosSub]]);
       SetLevelCornerPosition(0, 0);
