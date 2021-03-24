@@ -468,18 +468,20 @@ void parseACK(void)
         coordinateSetExtruderActualSteps(ack_value());
       }
       // parse and store feed rate percentage
-      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW && ack_seen("factor: ")) ||
+      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW && ack_seen("Speed factor: ")) ||
                ack_seen("FR:"))
       {
         speedSetCurPercent(0, ack_value());
         speedQuerySetWait(false);
       }
       // parse and store flow rate percentage in case of RepRapFirmware
-      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && ack_seen("extruder"))
+      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && ack_seen("Extrusion factor"))
       {
-        ack_index += 4;
-        speedSetCurPercent(1, ack_value());
-        speedQuerySetWait(false);
+        if (ack_continue_seen(": "))
+        {
+          speedSetCurPercent(1, ack_value());
+          speedQuerySetWait(false);
+        }
       }
       // parse and store flow rate percentage
       else if (ack_seen("Flow: "))
