@@ -7,7 +7,9 @@ const char axis_id[TOTAL_AXIS] = {'X', 'Y', 'Z', 'E'};
 static COORDINATE targetPosition = {{0.0f, 0.0f, 0.0f, 0.0f}, 3000};
 static COORDINATE curPosition = {{0.0f, 0.0f, 0.0f, 0.0f}, 3000};
 
-static float levelCornerPosition[6]; // buffer current z value measured = {Flag (new value), position 1, position 2, position 3, position 4, probe accuracy(M48)}
+// Buffer current z value measured in Level Corner = {Flag (new value trigger), position 1, position 2, position 3, position 4, probe accuracy(M48)}
+static float levelCornerPosition[6];
+
 /**
  * Obtained from "M114 E" instead of "M114", Because the coordinates of "M114" are not real-time coordinates.
  * It may be replaced by "M114 R".
