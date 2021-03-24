@@ -79,7 +79,7 @@ void refreshProbeAccuracy(MENUITEMS levelItems)
   if ((int)GetLevelCornerPosition(0) == 5)
   {
     lvIcon.lines[4].pos = ss_val_point;
-    sprintf(tempstr, "  %1.4f  ", GetLevelCornerPosition(5));
+    sprintf(tempstr, "%1.4f", GetLevelCornerPosition(5));
     lvIcon.lines[4].text = (uint8_t *)tempstr;
     showLevelCornerLiveInfo(5, 4, &lvIcon, &levelItems.items[5]);
     lvIconM48.lines[0].pos = ss_val_point;

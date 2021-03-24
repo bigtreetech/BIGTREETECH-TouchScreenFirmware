@@ -34,7 +34,7 @@
  *
  * Options: [2400: 0, 9600: 1, 19200: 2, 38400: 3, 57600: 4, 115200: 5, 250000: 6, 500000: 7, 1000000: 8]
  */
-#define BAUDRATE 5  // Default: 5
+#define BAUDRATE 6  // Default: 5
 
 /**
  * Default Primary Language (for Touch-Mode only)
@@ -187,12 +187,12 @@
 #define EXTRUDE_FAST_SPEED   1200
 
 // Size of machine
-#define X_MIN_POS   0
-#define Y_MIN_POS   0
+#define X_MIN_POS   -2
+#define Y_MIN_POS   -5
 #define Z_MIN_POS   0
-#define X_MAX_POS 235
-#define Y_MAX_POS 235
-#define Z_MAX_POS 250
+#define X_MAX_POS 300
+#define Y_MAX_POS 300
+#define Z_MAX_POS 400
 
 /**
  * Raised Z height for probing
