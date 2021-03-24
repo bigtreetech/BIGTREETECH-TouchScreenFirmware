@@ -623,6 +623,7 @@ void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, const ITEM * item)
 //Show live info text on icons for LevelCorner
 void showLevelCornerLiveInfo(uint8_t index, uint8_t Levelindex, const LIVE_INFO * liveicon, const ITEM * item)
 {
+  const GUI_RECT *rect = curRect + index;
   if (item != NULL) menuDrawIconOnly(item,index);
   GUI_SetColor(SSICON_NAME_COLOR);
   GUI_SetBkColor(0);
@@ -631,7 +632,8 @@ void showLevelCornerLiveInfo(uint8_t index, uint8_t Levelindex, const LIVE_INFO 
   loc.x = liveicon->lines[Levelindex].pos.x + curRect[index].x0;
   loc.y = liveicon->lines[Levelindex].pos.y + curRect[index].y0 + BYTE_HEIGHT;
   setLargeFont(VAL_LARGE_FONT);
-  GUI_DispStringCenter(loc.x, loc.y, liveicon->lines[Levelindex].text);
+  //GUI_DispStringCenter(loc.x, loc.y, liveicon->lines[Levelindex].text);
+  GUI_DispStringInPrect(rect, liveicon->lines[Levelindex].text);
   GUI_RestoreColorDefault();
 } //showLevelCornerLiveInfo
 
