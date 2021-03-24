@@ -72,7 +72,7 @@ void refreshLevelCornerValue(MENUITEMS levelItems)
 
 void refreshProbeAccuracy(MENUITEMS levelItems)
 {
-  char tempstr[12];
+  char tempstr[8];
   LIVE_INFO lvIcon;
   LIVE_INFO lvIconM48;
 
