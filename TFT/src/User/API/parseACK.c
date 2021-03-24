@@ -658,7 +658,7 @@ void parseACK(void)
         tmpMsg[6] = '\0';
         if (strcmp(tmpMsg, "Mean: ") == 0)
         {
-          SetLevelCornerPosition(5,ack_value());
+          SetLevelCornerPosition(5, ack_value());
           SetLevelCornerPosition(0, 5);
           sprintf(tmpMsg, "%s\nStandard Deviation: %0.5f", (char *)getDialogMsgStr(), GetLevelCornerPosition(5));
           setDialogText((u8* )"Repeatability Test", (uint8_t *)tmpMsg, LABEL_CONFIRM, LABEL_BACKGROUND);
