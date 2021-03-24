@@ -642,7 +642,7 @@ void showTextOnIcon(uint8_t index, uint8_t Levelindex, const LIVE_INFO * liveico
   GUI_SetColor(ORANGE);
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
   GUI_POINT loc;
-  loc.x = liveicon->lines[Levelindex].pos.x + curRect[index].x0 + 1;
+  loc.x = liveicon->lines[Levelindex].pos.x + curRect[index].x0 - 4;
   loc.y = liveicon->lines[Levelindex].pos.y + curRect[index].y0 - 6;
   setLargeFont(VAL_LARGE_FONT);
   GUI_DispStringCenter(loc.x, loc.y, liveicon->lines[Levelindex].text);
