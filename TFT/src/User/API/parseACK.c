@@ -476,7 +476,7 @@ void parseACK(void)
         speedSetCurPercent(1, ack_value());
         speedQuerySetWait(false);
       }
-      // parse and store fan speed
+      // parse and store M106, fan speed
       else if (ack_seen("M106 P"))
       {
         uint8_t i = ack_value();
