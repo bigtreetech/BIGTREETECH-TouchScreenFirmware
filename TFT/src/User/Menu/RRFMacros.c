@@ -1,11 +1,5 @@
-#include "Macros.h"
+#include "RRFMacros.h"
 #include "includes.h"
-
-LISTITEMS * macroListItems;
-
-// File list number per page
-const GUI_RECT macroTitleRect = {10, (TITLE_END_Y - BYTE_HEIGHT) / 2, LCD_WIDTH - 10, (TITLE_END_Y - BYTE_HEIGHT) / 2 + BYTE_HEIGHT};
-const int16_t labelMacroError[] = {LABEL_READ_TFTSD_ERROR, LABEL_READ_U_DISK_ERROR, LABEL_READ_ONBOARDSD_ERROR};
 
 /***
  * TODOS:
@@ -16,21 +10,9 @@ const int16_t labelMacroError[] = {LABEL_READ_TFTSD_ERROR, LABEL_READ_U_DISK_ERR
 
 /************************************************************************/
 
-// Open macro directory in RRF file list
-static inline bool EnterMacroDir(char *nextdir)
-{
-  if (strlen(infoFile.title) + strlen(nextdir) + 2 >= MAX_PATH_LEN)
-    return 0;
-  strcat(infoFile.title, "/");
-  strcat(infoFile.title, nextdir);
-  return 1;
-}
-
-// Check root directory
-static inline bool IsMacroRootDir(void)
-{
-  return !strchr(infoFile.title, '/');
-}
+LISTITEMS * macroListItems;
+const GUI_RECT macroTitleRect = {10, (TITLE_END_Y - BYTE_HEIGHT) / 2, LCD_WIDTH - 10, (TITLE_END_Y - BYTE_HEIGHT) / 2 + BYTE_HEIGHT};
+const int16_t labelMacroError[] = {LABEL_READ_TFTSD_ERROR, LABEL_READ_U_DISK_ERROR, LABEL_READ_ONBOARDSD_ERROR};
 
 //Scan files in RRF
 bool scaninfoFilesFs(void)
@@ -284,7 +266,7 @@ void menuCallMacro(void)
           u16 start = infoFile.cur_page * LISTITEM_PER_PAGE;
           if (key_num + start < infoFile.folderCount) //folder
           {
-            if (EnterMacroDir(infoFile.folder[key_num + start]) == false)
+            if (EnterDir(infoFile.folder[key_num + start]) == false)
               break;
             scaninfoFilesFs();
             update = 1;
