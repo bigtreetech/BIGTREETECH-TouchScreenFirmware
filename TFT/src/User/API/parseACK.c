@@ -464,18 +464,6 @@ void parseACK(void)
         speedSetCurPercent(1, ack_value());
         speedQuerySetWait(false);
       }
-      // parse and store feed rate percentage in case of Smoothieware
-      else if ((infoMachineSettings.firmwareType == FW_SMOOTHIEWARE) && ack_seen("Speed factor at "))
-      {
-        speedSetCurPercent(0, ack_value());
-        speedQuerySetWait(false);
-      }      
-      // parse and store flow rate percentage in case of Smoothieware
-      else if ((infoMachineSettings.firmwareType == FW_SMOOTHIEWARE) && ack_seen("Flow rate at "))
-      {
-        speedSetCurPercent(1, ack_value());
-        speedQuerySetWait(false);
-      }
       // parse and store M106, fan speed
       else if (ack_seen("M106 P"))
       {
