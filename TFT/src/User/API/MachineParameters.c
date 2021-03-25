@@ -243,7 +243,7 @@ void setParameter(PARAMETER_NAME name, uint8_t index, float val)
       infoParameters.LinAdvance[index] = val;
       break;
 
-     case P_FILAMENT_SETTING:
+    case P_FILAMENT_SETTING:
       infoParameters.FilamentSetting[index] = val;
       break;
 

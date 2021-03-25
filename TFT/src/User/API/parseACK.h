@@ -11,9 +11,9 @@ extern "C" {
 
 static const char errormagic[] = "Error:";
 static const char echomagic[] = "echo:";
-static const char warningmagic[] = "Warning:";  // RRF warning
-static const char messagemagic[] = "message";   // RRF message in Json format
-static const char errorZProbe[] = "ZProbe triggered before move"; //smoothieware message
+static const char warningmagic[] = "Warning:";                     // RRF warning
+static const char messagemagic[] = "message";                      // RRF message in Json format
+static const char errorZProbe[] = "ZProbe triggered before move";  // smoothieware message
 
 #define ACK_MAX_SIZE 512
 
