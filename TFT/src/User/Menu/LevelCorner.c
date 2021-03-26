@@ -142,6 +142,7 @@ void menuLevelCorner(void)
           infoSettings.level_edge = NOBEYOND(LEVELING_EDGE_DISTANCE_MIN, val, LEVELING_EDGE_DISTANCE_MAX);
           infoSettings.level_edge = ((val >= edge_min) ? val : edge_min);
           menuDrawPage(&levelcornerItems);
+          ReadValuestored = 6;
         }
         break;
 
