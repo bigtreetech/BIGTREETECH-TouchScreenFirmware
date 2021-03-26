@@ -106,6 +106,7 @@ void menuBedLevelingLayer2(void)
       case KEY_ICON_5:
         if (infoMachineSettings.zProbe == ENABLED && infoSettings.z_steppers_alignment)
           storeCmd("G34\n");
+          storeCmd("M18 S0 X Y Z\n");
         break;
 
       case KEY_ICON_7:
