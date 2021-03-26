@@ -624,6 +624,7 @@ void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, const ITEM * item)
 void showLevelCornerLiveInfo(uint8_t index, uint8_t Levelindex, const LIVE_INFO * liveicon, const ITEM * item)
 {
   const GUI_RECT *rect = curRect + ITEM_PER_PAGE + index;
+  GUI_ClearPrect(rect);
   if (item != NULL) menuDrawIconOnly(item,index);
   GUI_DispStringInPrect(rect, liveicon->lines[Levelindex].text);
 } //showLevelCornerLiveInfo
