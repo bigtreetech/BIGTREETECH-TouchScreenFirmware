@@ -41,6 +41,7 @@ void ScanLevelCorner(u8 pointer)
   }
 
   mustStoreCmd("M17 X Y Z\n");
+  mustStoreCmd("M118 S0 X Y Z\n");
 }
 
 void refreshLevelCornerValue(MENUITEMS levelItems)
@@ -151,6 +152,7 @@ void menuLevelCorner(void)
       case KEY_ICON_5:
         mustStoreCmd("M48\n");
         mustStoreCmd("M17 X Y Z\n");
+        mustStoreCmd("M118 S0 X Y Z\n");
         break;
 
       case KEY_ICON_6:
