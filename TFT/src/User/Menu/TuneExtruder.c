@@ -80,7 +80,7 @@ void menuTuneExtruder(void)
       {ICON_BACKGROUND,              LABEL_BACKGROUND},
       {ICON_INC,                     LABEL_INC},
       {ICON_NOZZLE,                  LABEL_NOZZLE},
-      {ICON_5_DEGREE,                LABEL_5_DEGREE},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
       {ICON_LOAD,                    LABEL_TUNE_EXT_EXTRUDE_100},
       {ICON_BACK,                    LABEL_BACK},
     }
@@ -95,6 +95,7 @@ void menuTuneExtruder(void)
 
   heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
 
+  tuneExtruderItems.items[KEY_ICON_5] = itemDegreeSteps[degreeSteps_index];
   menuDrawPage(&tuneExtruderItems);
   showExtrudeTemperature(c_heater, false);
 
