@@ -19,7 +19,6 @@ const MENUITEMS levelcornerItems = {
 
 LIVE_INFO lvIcon;
 
-
 void ScanLevelCorner(u8 pointer)
 {
   s16 pointPosition[4][2] = {
