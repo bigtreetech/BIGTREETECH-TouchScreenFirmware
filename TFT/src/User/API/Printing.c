@@ -481,15 +481,6 @@ void resumeAndContinue(void)
   Serial_Puts(SERIAL_PORT, "M876 S1\n");
 }
 
-bool hasPrintingMenu(void)
-{
-  for (uint8_t i = 0; i <= infoMenu.cur; i++)
-  {
-    if (infoMenu.menu[i] == menuPrinting) return true;
-  }
-  return false;
-}
-
 void loopCheckPrinting(void)
 {
   #ifdef HAS_EMULATOR
@@ -499,11 +490,10 @@ void loopCheckPrinting(void)
   if (infoHost.printing && !infoPrinting.printing)
   {
     infoPrinting.printing = true;
-    if (!hasPrintingMenu())
-    {
-      infoMenu.cur = 1;
-      infoMenu.menu[infoMenu.cur] = menuPrinting;
-    }
+    infoFile.source = BOARD_SD_REMOTE;  // Avoid BOARD_SD be parsed as BOARD_SD_REMOTE in parseACK.c
+
+    infoMenu.cur = 1;  // Clear menu buffer when printing menu is active by remote
+    infoMenu.menu[infoMenu.cur] = menuPrinting;
   }
 
   if (infoFile.source < BOARD_SD) return;

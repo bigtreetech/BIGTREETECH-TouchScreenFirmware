@@ -177,8 +177,8 @@ void menuExtrude(void)
       }
       else
       {
-        extrudeCoordinateReDraw(true);
         extrudeCoordinate = eTemp;
+        extrudeCoordinateReDraw(true);
         storeCmd("G0 E%.5f F%d\n", extrudeCoordinate, infoSettings.ext_speed[itemSpeed_index]);
       }
     }
