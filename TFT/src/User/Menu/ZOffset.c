@@ -78,9 +78,9 @@ void menuZOffset(void)
       {ICON_BACKGROUND,              LABEL_BACKGROUND},
       {ICON_BACKGROUND,              LABEL_BACKGROUND},
       {ICON_INC,                     LABEL_INC},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_PROBE_OFFSET,            LABEL_OFF},
       {ICON_PAGE_DOWN,               LABEL_NEXT},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_001_MM,                  LABEL_001_MM},
       {ICON_BACK,                    LABEL_BACK},
     }
   };
