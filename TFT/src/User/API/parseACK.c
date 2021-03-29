@@ -811,9 +811,9 @@ void parseACK(void)
           if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE)
           {
             if (getParameter(P_FILAMENT_SETTING, 1) > 0.01F) 
-              setParameter(P_FILAMENT_SETTING, 0, 1);//filament_diameter>0.01 to enable  volumetric extrusion
+              setParameter(P_FILAMENT_SETTING, 0, 1);  // filament_diameter>0.01 to enable  volumetric extrusion
             else
-              setParameter(P_FILAMENT_SETTING, 0, 0); //filament_diameter<=0.01 to disable volumetric extrusion
+              setParameter(P_FILAMENT_SETTING, 0, 0);  // filament_diameter<=0.01 to disable volumetric extrusion
           }         
         }
       }
@@ -1198,7 +1198,7 @@ void parseACK(void)
       } 
       else if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE)
       {
-        if (ack_seen(errorZProbe)) //smoothieboard ZProbe triggered before move, aborting command.
+        if (ack_seen(errorZProbe))  // smoothieboard ZProbe triggered before move, aborting command.
         {
           ackPopupInfo("ZProbe triggered\n before move.\n Aborting Print!");
         } 
@@ -1213,14 +1213,14 @@ void parseACK(void)
         {
           setParameter(P_FILAMENT_SETTING, 1, ack_value());
           if (getParameter(P_FILAMENT_SETTING, 1) > 0.01F)
-            setParameter(P_FILAMENT_SETTING, 0, 1); //filament_diameter>0.01 to enable  volumetric extrusion
+            setParameter(P_FILAMENT_SETTING, 0, 1);  // filament_diameter>0.01 to enable  volumetric extrusion
           else
-            setParameter(P_FILAMENT_SETTING, 0, 0); //filament_diameter<=0.01 to disable volumetric extrusion        
+            setParameter(P_FILAMENT_SETTING, 0, 0);  // filament_diameter<=0.01 to disable volumetric extrusion        
         }      
       }
       else if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE)
       {
-        if (ack_seen(errorZProbe)) //smoothieboard ZProbe triggered before move, aborting command.
+        if (ack_seen(errorZProbe))  // smoothieboard ZProbe triggered before move, aborting command.
         {
           ackPopupInfo("ZProbe triggered\n before move.\n Aborting Print!");
         }
