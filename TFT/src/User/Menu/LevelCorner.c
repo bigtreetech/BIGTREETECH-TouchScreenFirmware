@@ -7,12 +7,12 @@ const MENUITEMS levelcornerItems = {
   // icon                      label
   {
     {ICON_POINT_4,             LABEL_BACKGROUND},
-    {ICON_RESUME,              LABEL_START},
     {ICON_POINT_3,             LABEL_BACKGROUND},
     {ICON_LEVEL_EDGE_DISTANCE, LABEL_DISTANCE},
-    {ICON_POINT_1,             LABEL_BACKGROUND},
     {ICON_BLTOUCH,             LABEL_BACKGROUND},
+    {ICON_POINT_1,             LABEL_BACKGROUND},
     {ICON_POINT_2,             LABEL_BACKGROUND},
+    {ICON_RESUME,              LABEL_START},
     {ICON_BACK,                LABEL_BACK},
   }
 };
