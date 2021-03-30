@@ -101,10 +101,7 @@ void menuLevelCorner(void)
   mustStoreCmd("M851\n");
 
   // Init Coordinate
-  if (coordinateIsKnown() == false)
-  {
-    mustStoreCmd("G28\n");
-  }
+  mustStoreCmd("G28\n");
 
   // Check min edge limit for the probe with probe offset set in parseACK.c
   uint8_t edge_min = MAX(ABS(getParameter((s16)P_PROBE_OFFSET, X_STEPPER)),ABS((s16)getParameter(P_PROBE_OFFSET, Y_STEPPER))) + 1;
