@@ -674,16 +674,16 @@ void parseACK(void)
       {
         pidUpdateStatus(true);
       }
+      // parse M303, PID Autotune failed message
+      else if (ack_seen("PID Autotune failed"))
+      {
+        pidUpdateStatus(false);
+      }
       // parse M303, PID Autotune finished message in case of Smoothieware
       else if ((infoMachineSettings.firmwareType == FW_SMOOTHIEWARE) && ack_seen("PID Autotune Complete!"))
       {
         //ack_index += 84; -> need length check
         pidUpdateStatus(true);
-      }
-      // parse M303, PID Autotune failed message
-      else if (ack_seen("PID Autotune failed"))
-      {
-        pidUpdateStatus(false);
       }
       // parse M303, PID Autotune failed message in case of Smoothieware
       else if ((infoMachineSettings.firmwareType == FW_SMOOTHIEWARE) && ack_seen("// WARNING: Autopid did not resolve within"))
@@ -1199,13 +1199,6 @@ void parseACK(void)
             setParameter(P_FILAMENT_SETTING, 0, 1);  // filament_diameter>0.01 to enable  volumetric extrusion
           else
             setParameter(P_FILAMENT_SETTING, 0, 0);  // filament_diameter<=0.01 to disable volumetric extrusion
-        }
-      }
-      else if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE)
-      {
-        if (ack_seen(errorZProbe))  // smoothieboard ZProbe triggered before move, aborting command.
-        {
-          ackPopupInfo("ZProbe triggered\n before move.\n Aborting Print!");
         }
       }
     }
