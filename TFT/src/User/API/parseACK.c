@@ -1181,7 +1181,7 @@ void parseACK(void)
       }
       else if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE)
       {
-        if (ack_seen(errorZProbe)) // smoothieboard ZProbe triggered before move, aborting command.
+        if (ack_seen(errorZProbe))  // smoothieboard ZProbe triggered before move, aborting command.
         {
           ackPopupInfo("ZProbe triggered\n before move.\n Aborting Print!");
         }
