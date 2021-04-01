@@ -31,7 +31,7 @@ void menuMove(void)
   MENUITEMS moveItems = {
     // title
     LABEL_MOVE,
-    // icon                          label
+    //   icon                          label
     {
       #ifdef ALTERNATIVE_MOVE_MENU
         {ICON_Z_DEC,                   LABEL_Z_DEC},
@@ -92,6 +92,7 @@ void menuMove(void)
   else
     LOAD_XYZ_LABEL_INDEX(table[Z_AXIS][0], DEC, table[Z_AXIS][1], INC, Z);
 
+  moveItems.items[KEY_ICON_3] = itemMoveLen[item_moveLen_index];
   menuDrawPage(&moveItems);
   mustStoreCmd("G91\n");
   mustStoreCmd("M114\n");
