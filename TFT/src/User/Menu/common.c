@@ -167,7 +167,7 @@ const void temperatureReDraw(uint8_t toolIndex, int16_t * temp, bool skipHeader)
   if (temp != NULL)
     sprintf(tempstr, "%4d", *temp);
   else
-    sprintf(tempstr, "%4d/%-4d  ", heatGetCurrentTemp(toolIndex), heatGetTargetTemp(toolIndex));
+    sprintf(tempstr, "%4d/%-4d", heatGetCurrentTemp(toolIndex), heatGetTargetTemp(toolIndex));
 
   GUI_DispStringInPrect(&exhibitRect, (uint8_t *) tempstr);
   setLargeFont(false);
@@ -198,9 +198,9 @@ const void fanReDraw(uint8_t fanIndex, bool skipHeader)
   }
 
   if (infoSettings.fan_percentage == 1)
-    sprintf(tempstr, "%4d/%-4d  ", fanGetCurPercent(fanIndex), fanGetSetPercent(fanIndex));
+    sprintf(tempstr, "%4d/%-4d", fanGetCurPercent(fanIndex), fanGetSetPercent(fanIndex));
   else
-    sprintf(tempstr, "%4d/%-4d  ", fanGetCurSpeed(fanIndex), fanGetSetSpeed(fanIndex));
+    sprintf(tempstr, "%4d/%-4d", fanGetCurSpeed(fanIndex), fanGetSetSpeed(fanIndex));
 
   GUI_DispStringInPrect(&exhibitRect, (uint8_t *) tempstr);
   setLargeFont(false);
@@ -248,7 +248,7 @@ const void percentageReDraw(uint8_t itemIndex, bool skipHeader)
     GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1) >> 1, exhibitRect.y0, (uint8_t *) "%");
   }
 
-  sprintf(tempstr, "%4d/%-4d  ", speedGetCurPercent(itemIndex), speedGetSetPercent(itemIndex));
+  sprintf(tempstr, "%4d/%-4d", speedGetCurPercent(itemIndex), speedGetSetPercent(itemIndex));
   GUI_DispStringInPrect(&exhibitRect, (uint8_t *) tempstr);
   setLargeFont(false);
 }

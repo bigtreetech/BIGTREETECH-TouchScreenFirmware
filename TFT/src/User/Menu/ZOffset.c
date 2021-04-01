@@ -38,7 +38,7 @@ void zOffsetDrawStatus(bool status, uint8_t *val)
 
   GUI_SetColor(infoSettings.font_color);
   setLargeFont(true);
-  GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1) >> 1, exhibitRect.y0, (uint8_t *)"mm");
+  GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1) >> 1, exhibitRect.y0, (uint8_t *) "mm");
   setLargeFont(false);
 }
 
