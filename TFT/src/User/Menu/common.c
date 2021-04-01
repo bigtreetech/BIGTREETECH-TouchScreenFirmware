@@ -165,7 +165,7 @@ const void temperatureReDraw(uint8_t toolIndex, int16_t * temp, bool skipHeader)
   }
 
   if (temp != NULL)
-    sprintf(tempstr, "%4d", *temp);
+    sprintf(tempstr, "  %d  ", *temp);
   else
     sprintf(tempstr, "%4d/%-4d", heatGetCurrentTemp(toolIndex), heatGetTargetTemp(toolIndex));
 
