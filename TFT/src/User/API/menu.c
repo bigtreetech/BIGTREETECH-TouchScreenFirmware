@@ -793,7 +793,7 @@ GUI_POINT getIconStartPoint(int index)
 void loopBackEnd(void)
 {
   // Get Gcode command from the file to be printed
-  getGcodeFromFile();
+  loopPrintFromTFT();  // handle a print from TFT, if any
   // Parse and send Gcode commands in the queue
   sendQueueCmd();
   // Parse the received slave response information
@@ -817,7 +817,7 @@ void loopBackEnd(void)
 
   if (infoMachineSettings.onboard_sd_support == ENABLED)
   {
-    loopCheckPrinting();  //Check if there is a SD or USB print running.
+    loopPrintFromHost();  // handle a print from onboard SD or remote host, if any
   }
 
 #ifdef U_DISK_SUPPORT

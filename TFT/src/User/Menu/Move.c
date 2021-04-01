@@ -55,7 +55,10 @@ void menuMove(void)
     }
   };
 
-  KEY_VALUES key_num;
+  KEY_VALUES key_num = KEY_IDLE;
+
+  mustStoreCmd("G91\n");
+  mustStoreCmd("M114\n");
 
   // postion table of key
   uint8_t table[TOTAL_AXIS][2] =
@@ -93,9 +96,8 @@ void menuMove(void)
     LOAD_XYZ_LABEL_INDEX(table[Z_AXIS][0], DEC, table[Z_AXIS][1], INC, Z);
 
   moveItems.items[KEY_ICON_3] = itemMoveLen[item_moveLen_index];
+
   menuDrawPage(&moveItems);
-  mustStoreCmd("G91\n");
-  mustStoreCmd("M114\n");
   drawXYZ();
 
   #if LCD_ENCODER_SUPPORT

@@ -74,23 +74,24 @@ void menuZOffset(void)
     LABEL_PROBE_OFFSET,
     // icon                          label
     {
-      {ICON_DEC,                     LABEL_DEC},
+      #ifdef FRIENDLY_Z_OFFSET_LANGUAGE
+        {ICON_NOZZLE_DOWN,             LABEL_DOWN},
+      #else
+        {ICON_DEC,                     LABEL_DEC},
+      #endif
       {ICON_BACKGROUND,              LABEL_BACKGROUND},
       {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_INC,                     LABEL_INC},
+      #ifdef FRIENDLY_Z_OFFSET_LANGUAGE
+        {ICON_NOZZLE_UP,               LABEL_UP},
+      #else
+        {ICON_INC,                     LABEL_INC},
+      #endif
       {ICON_PROBE_OFFSET,            LABEL_OFF},
       {ICON_PAGE_DOWN,               LABEL_NEXT},
       {ICON_001_MM,                  LABEL_001_MM},
       {ICON_BACK,                    LABEL_BACK},
     }
   };
-
-  #ifdef FRIENDLY_Z_OFFSET_LANGUAGE
-    zOffsetItems.items[0].icon = ICON_NOZZLE_DOWN;
-    zOffsetItems.items[0].label.index = LABEL_DOWN;
-    zOffsetItems.items[3].icon = ICON_NOZZLE_UP;
-    zOffsetItems.items[3].label.index = LABEL_UP;
-  #endif
 
   KEY_VALUES key_num = KEY_IDLE;
   float now, z_offset;

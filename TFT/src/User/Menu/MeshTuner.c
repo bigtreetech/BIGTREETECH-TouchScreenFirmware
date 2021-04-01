@@ -28,9 +28,9 @@ static inline void meshResetPoint(void)
 
 void meshDrawHeader(uint16_t col, uint16_t row)
 {
-  char tempstr[20];
+  char tempstr[25];
 
-  sprintf(tempstr, "I: %d  J: %d", col, row);
+  sprintf(tempstr, "I:%d J:%d shim:%.3f", col, row, infoSettings.level_z_pos);
 
   GUI_SetColor(infoSettings.sd_reminder_color);
   GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *) tempstr);
@@ -56,10 +56,18 @@ float menuMeshTuner(uint16_t col, uint16_t row, float value)
     LABEL_MESH_TUNER,
     // icon                          label
     {
-      {ICON_DEC,                     LABEL_DEC},
+      #ifdef FRIENDLY_Z_OFFSET_LANGUAGE
+        {ICON_NOZZLE_DOWN,             LABEL_DOWN},
+      #else
+        {ICON_DEC,                     LABEL_DEC},
+      #endif
       {ICON_BACKGROUND,              LABEL_BACKGROUND},
       {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_INC,                     LABEL_INC},
+      #ifdef FRIENDLY_Z_OFFSET_LANGUAGE
+        {ICON_NOZZLE_UP,               LABEL_UP},
+      #else
+        {ICON_INC,                     LABEL_INC},
+      #endif
       {ICON_001_MM,                  LABEL_001_MM},
       {ICON_RESET_VALUE,             LABEL_RESET},
       {ICON_APPLY,                   LABEL_CONFIRM},
@@ -67,18 +75,11 @@ float menuMeshTuner(uint16_t col, uint16_t row, float value)
     }
   };
 
-  #ifdef FRIENDLY_Z_OFFSET_LANGUAGE
-    meshItems.items[0].icon = ICON_NOZZLE_DOWN;
-    meshItems.items[0].label.index = LABEL_DOWN;
-    meshItems.items[3].icon = ICON_NOZZLE_UP;
-    meshItems.items[3].label.index = LABEL_UP;
-  #endif
-
   KEY_VALUES key_num = KEY_IDLE;
   float now, curValue;
   float unit;
 
-  meshInitPoint(col, row, value);  // initialize mesh point
+  meshInitPoint(col, row, value + infoSettings.level_z_pos);  // initialize mesh point
 
   now = curValue = coordinateGetAxisActual(Z_AXIS);
 
@@ -120,16 +121,16 @@ float menuMeshTuner(uint16_t col, uint16_t row, float value)
         menuDrawItem(&meshItems.items[key_num], key_num);
         break;
 
-      // reset Z height to 0
+      // reset Z height to infoSettings.level_z_pos
       case KEY_ICON_5:
-        probeHeightMove(curValue, -1);
+        probeHeightMove(curValue - infoSettings.level_z_pos, -1);
         break;
 
       // return new Z height
       case KEY_ICON_6:
         meshResetPoint();  // reset mesh point
 
-        return curValue;  // return current Z height
+        return curValue - infoSettings.level_z_pos;  // return current Z height
         break;
 
       // return original Z height

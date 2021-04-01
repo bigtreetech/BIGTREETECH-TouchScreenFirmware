@@ -83,11 +83,12 @@ void menuPreheat(void)
   };
 
   static TOOLPREHEAT nowHeater = BOTH;
-  KEY_VALUES  key_num;
+  KEY_VALUES key_num = KEY_IDLE;
 
   preheatItems.items[KEY_ICON_6] = itemToolPreheat[nowHeater];
 
   menuDrawPage(&preheatItems);
+
   for (int i = 0; i < PREHEAT_COUNT; i++)
   {
     refreshPreheatIcon(i, i, &preheatItems.items[i]);
