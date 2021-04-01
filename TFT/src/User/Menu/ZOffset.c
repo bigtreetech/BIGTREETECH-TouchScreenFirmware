@@ -96,6 +96,7 @@ void menuZOffset(void)
   KEY_VALUES key_num = KEY_IDLE;
   float now, z_offset;
   float unit;
+  float ablState;
   bool (* offsetGetStatus)(void);                       // get current status
   void (* offsetEnable)(bool);                          // enable Z offset
   void (* offsetDisable)(void);                         // disable Z offset
@@ -104,6 +105,12 @@ void menuZOffset(void)
   float (* offsetResetValue)(void);                     // reset current Z offset
   float (* offsetGetValue)(void);                       // get current Z offset
   float (* offsetUpdateValueByEncoder)(float, int8_t);  // update current Z offset by encoder
+
+  ablState = getParameter(P_ABL_STATE, 0);
+  
+  // if enabled, always disable ABL before editing a mesh
+  if (ablState == ENABLED)
+    storeCmd(infoMachineSettings.firmwareType != FW_REPRAPFW ? "M420 S0\n" : "G29 S2\n");
 
   if (probeOffsetMenu)
   { // use Probe Offset menu
@@ -275,4 +282,8 @@ void menuZOffset(void)
 
     loopProcess();
   }
+
+  // restore original ABL state
+  if (ablState == ENABLED)
+    storeCmd(infoMachineSettings.firmwareType != FW_REPRAPFW ? "M420 S1\n" : "G29 S1\n");
 }

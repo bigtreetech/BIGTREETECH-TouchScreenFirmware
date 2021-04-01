@@ -30,7 +30,10 @@ void meshDrawHeader(uint16_t col, uint16_t row)
 {
   char tempstr[25];
 
-  sprintf(tempstr, "I:%d J:%d shim:%.3f", col, row, infoSettings.level_z_pos);
+  if (infoMachineSettings.leveling == BL_MBL)
+    sprintf(tempstr, "I:%d J:%d", col, row);
+  else
+    sprintf(tempstr, "I:%d J:%d shim:%.3f", col, row, infoSettings.level_z_pos);
 
   GUI_SetColor(infoSettings.sd_reminder_color);
   GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *) tempstr);
@@ -78,8 +81,14 @@ float menuMeshTuner(uint16_t col, uint16_t row, float value)
   KEY_VALUES key_num = KEY_IDLE;
   float now, curValue;
   float unit;
+  float shim;
 
-  meshInitPoint(col, row, value + infoSettings.level_z_pos);  // initialize mesh point
+  if (infoMachineSettings.leveling == BL_MBL)
+    shim = 0.0f;
+  else
+    shim = infoSettings.level_z_pos;
+
+  meshInitPoint(col, row, value + shim);  // initialize mesh point
 
   now = curValue = coordinateGetAxisActual(Z_AXIS);
 
@@ -121,16 +130,16 @@ float menuMeshTuner(uint16_t col, uint16_t row, float value)
         menuDrawItem(&meshItems.items[key_num], key_num);
         break;
 
-      // reset Z height to infoSettings.level_z_pos
+      // reset Z height
       case KEY_ICON_5:
-        probeHeightMove(curValue - infoSettings.level_z_pos, -1);
+        probeHeightMove(curValue - (value + shim), -1);
         break;
 
       // return new Z height
       case KEY_ICON_6:
         meshResetPoint();  // reset mesh point
 
-        return curValue - infoSettings.level_z_pos;  // return current Z height
+        return curValue - shim;  // return current Z height
         break;
 
       // return original Z height

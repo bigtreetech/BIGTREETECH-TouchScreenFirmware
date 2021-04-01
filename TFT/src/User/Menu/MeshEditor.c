@@ -59,6 +59,7 @@ typedef struct
 
   MESH_DATA_STATUS status;                                 // current status of dataOrig/data
 
+  float ablState;
   uint16_t parsedRows;
 
   uint16_t colsToSkip;
@@ -232,6 +233,7 @@ void meshInitData(void)
 
   meshData->status = ME_DATA_IDLE;
 
+  meshData->ablState = getParameter(P_ABL_STATE, 0);
   meshData->parsedRows = 0;
 
   meshSaveCallbackPtr = NULL;
@@ -247,12 +249,20 @@ static inline void meshAllocData(void)
   meshInitData();
 
   probeHeightEnable();                                     // temporary disable software endstops
+
+  // if enabled, always disable ABL before editing a mesh
+  if (meshData->ablState == ENABLED)
+    storeCmd(infoMachineSettings.firmwareType != FW_REPRAPFW ? "M420 S0\n" : "G29 S2\n");
 }
 
 void meshDeallocData(void)
 {
   if (meshData == NULL)
     return;
+
+  // restore original ABL state
+  if (meshData->ablState == ENABLED)
+    storeCmd(infoMachineSettings.firmwareType != FW_REPRAPFW ? "M420 S1\n" : "G29 S1\n");
 
   free(meshData);
 

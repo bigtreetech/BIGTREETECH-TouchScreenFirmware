@@ -14,9 +14,10 @@ static inline void mblStart(void)
   probeHeightEnable();  // temporary disable software endstops
 
   // MBL gcode sequence start
-  mustStoreCmd("G29 S1\n");                          // home and move to first point for Z height adjustment
-  probeHeightStart(infoSettings.level_z_pos, true);  // raise nozzle
-  probeHeightRelative();                             // set relative position mode
+  mustStoreCmd("G28\n");
+  mustStoreCmd("G29 S1\n");                           // home and move to first point for Z height adjustment
+  probeHeightStart(infoSettings.level_z_pos, false);  // raise nozzle
+  probeHeightRelative();                              // set relative position mode
 }
 
 // Stop MBL
@@ -241,7 +242,7 @@ void menuMBL(void)
         {
           storeCmd("G29 S2\n");  // save Z height and move to next mesh point
 
-          probeHeightStart(infoSettings.level_z_pos, true);  // raise nozzle
+          probeHeightStart(infoSettings.level_z_pos, false);  // raise nozzle
 
           ++mblPoint;
           mblDrawHeader(&mblPoint);
