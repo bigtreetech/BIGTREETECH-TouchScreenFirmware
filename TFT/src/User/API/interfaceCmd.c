@@ -724,6 +724,13 @@ void sendQueueCmd(void)
           uint8_t i = 0;
           if (cmd_seen('T')) i = cmd_value();
           if (cmd_seen('D')) setParameter(P_FILAMENT_SETTING, 1 + i, cmd_float());
+          if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE) 
+          {
+            if (getParameter(P_FILAMENT_SETTING, 1) > 0.01F)  // common extruder param
+              setParameter(P_FILAMENT_SETTING, 0, 1);  // filament_diameter>0.01 to enable  volumetric extrusion
+            else
+              setParameter(P_FILAMENT_SETTING, 0, 0);  // filament_diameter<=0.01 to disable volumetric extrusion
+          }
           break;
         }
 

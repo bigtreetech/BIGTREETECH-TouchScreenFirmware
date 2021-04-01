@@ -489,6 +489,18 @@ void parseACK(void)
         speedSetCurPercent(1, ack_value());
         speedQuerySetWait(false);
       }
+      // parse and store feed rate percentage in case of Smoothieware
+      else if ((infoMachineSettings.firmwareType == FW_SMOOTHIEWARE) && ack_seen("Speed factor at "))
+      {
+        speedSetCurPercent(0, ack_value());
+        speedQuerySetWait(false);
+      }      
+      // parse and store flow rate percentage in case of Smoothieware
+      else if ((infoMachineSettings.firmwareType == FW_SMOOTHIEWARE) && ack_seen("Flow rate at "))
+      {
+        speedSetCurPercent(1, ack_value());
+        speedQuerySetWait(false);
+      }      
       // parse and store M106, fan speed
       else if (ack_seen("M106 P"))
       {
@@ -679,8 +691,19 @@ void parseACK(void)
       {
         pidUpdateStatus(true);
       }
+      // parse M303, PID Autotune finished message in case of Smoothieware
+      else if ((infoMachineSettings.firmwareType == FW_SMOOTHIEWARE) && ack_seen("PID Autotune Complete!"))
+      {
+        //ack_index += 84; -> need length check
+        pidUpdateStatus(true);
+      }
       // parse M303, PID Autotune failed message
       else if (ack_seen("PID Autotune failed"))
+      {
+        pidUpdateStatus(false);
+      }
+      // parse M303, PID Autotune failed message in case of Smoothieware
+      else if ((infoMachineSettings.firmwareType == FW_SMOOTHIEWARE) && ack_seen("// WARNING: Autopid did not resolve within"))
       {
         pidUpdateStatus(false);
       }
@@ -784,7 +807,14 @@ void parseACK(void)
         }
         else
         {
-        if (ack_seen("D")) setParameter(P_FILAMENT_SETTING, 1, ack_value());
+          if (ack_seen("D")) setParameter(P_FILAMENT_SETTING, 1, ack_value());
+          if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE)
+          {
+            if (getParameter(P_FILAMENT_SETTING, 1) > 0.01F) 
+              setParameter(P_FILAMENT_SETTING, 0, 1);  // filament_diameter>0.01 to enable  volumetric extrusion
+            else
+              setParameter(P_FILAMENT_SETTING, 0, 0);  // filament_diameter<=0.01 to disable volumetric extrusion
+          }         
         }
       }
       // parse and store Max Acceleration values
@@ -1165,10 +1195,32 @@ void parseACK(void)
             infoSetIPAddress(string, string_end - string_start);  // Set IP address
           }
         }
+      } 
+      else if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE)
+      {
+        if (ack_seen(errorZProbe))  // smoothieboard ZProbe triggered before move, aborting command.
+        {
+          ackPopupInfo("ZProbe triggered\n before move.\n Aborting Print!");
+        } 
+        // parse and store volumetric extrusion M200 response of Smoothieware
+        else if (ack_seen("Volumetric extrusion is disabled"))
+        {
+          setParameter(P_FILAMENT_SETTING, 0, 0);
+          setParameter(P_FILAMENT_SETTING, 1, 0.0F);
+        }
+        // parse and store volumetric extrusion M200 response of Smoothieware
+        else if (ack_seen("Filament Diameter:"))
+        {
+          setParameter(P_FILAMENT_SETTING, 1, ack_value());
+          if (getParameter(P_FILAMENT_SETTING, 1) > 0.01F)
+            setParameter(P_FILAMENT_SETTING, 0, 1);  // filament_diameter>0.01 to enable  volumetric extrusion
+          else
+            setParameter(P_FILAMENT_SETTING, 0, 0);  // filament_diameter<=0.01 to disable volumetric extrusion        
+        }      
       }
       else if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE)
       {
-        if (ack_seen(errorZProbe)) //smoothieboard ZProbe triggered before move, aborting command.
+        if (ack_seen(errorZProbe))  // smoothieboard ZProbe triggered before move, aborting command.
         {
           ackPopupInfo("ZProbe triggered\n before move.\n Aborting Print!");
         }
