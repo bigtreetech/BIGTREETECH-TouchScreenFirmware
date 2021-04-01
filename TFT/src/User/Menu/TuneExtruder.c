@@ -95,6 +95,7 @@ void menuTuneExtruder(void)
 
   heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
 
+  tuneExtruderItems.items[KEY_ICON_5] = itemDegreeSteps[degreeSteps_index];
   menuDrawPage(&tuneExtruderItems);
   showExtrudeTemperature(c_heater, false);
 
