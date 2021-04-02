@@ -198,6 +198,7 @@ void menuZOffset(void)
 
         menuDrawItem(&zOffsetItems.items[key_num], key_num);
         zOffsetDrawStatus(offsetGetStatus());
+        zOffsetDrawValue(offsetGetStatus(), z_offset);  // just to switch/display current Z offset
         break;
 
       // change submenu
