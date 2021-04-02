@@ -224,7 +224,7 @@ void hostActionCommands(void)
   {
     statusScreen_setMsg((uint8_t *)echomagic, (uint8_t *)dmaL2Cache + ack_index);  // always display the notification on status screen
 
-    if (infoMenu.menu[infoMenu.cur] != menuStatus)  // don't show it when menuStatus
+    if (infoMenu.menu[infoMenu.cur] != menuStatus)  // don't show it when in menuStatus
     {
       uint16_t index = ack_index;
 
