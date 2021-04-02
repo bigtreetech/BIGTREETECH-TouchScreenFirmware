@@ -23,10 +23,8 @@ void babyReDraw(float babystep, float z_offset, bool force_z_offset, bool skip_h
   GUI_POINT point_of = {exhibitRect.x1, exhibitRect.y0 + BYTE_HEIGHT * 2 + LARGE_BYTE_HEIGHT};
 
   setLargeFont(true);
-
   sprintf(tempstr, "% 6.2f", babystep);
   GUI_DispStringRight(point_bs.x, point_bs.y, (uint8_t*) tempstr);
-
   sprintf(tempstr, "% 6.2f", z_offset);
 
   if (force_z_offset)
@@ -35,10 +33,7 @@ void babyReDraw(float babystep, float z_offset, bool force_z_offset, bool skip_h
     GUI_SetColor(infoSettings.font_color);
 
   GUI_DispStringRight(point_of.x, point_of.y, (uint8_t*) tempstr);
-
-  // restore default font color
-  GUI_SetColor(infoSettings.font_color);
-
+  GUI_SetColor(infoSettings.font_color);  // restore default font color
   setLargeFont(false);
 }
 

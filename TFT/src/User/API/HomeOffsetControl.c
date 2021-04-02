@@ -5,7 +5,7 @@ static float z_offset_value = HOME_Z_OFFSET_DEFAULT_VALUE;
 static bool home_offset_enabled = false;
 
 // Enable home offset
-void homeOffsetEnable(bool skipZOffset)
+void homeOffsetEnable(bool skipZOffset, float shim)
 {
   home_offset_enabled = true;
 
@@ -13,7 +13,7 @@ void homeOffsetEnable(bool skipZOffset)
 
   // Z offset gcode sequence start
   mustStoreCmd("G28\n");          // home printer
-  probeHeightStart(0.0f, false);  // lower nozzle to absolute Z0 point
+  probeHeightStart(shim, false);  // lower nozzle to absolute Z0 point + shim
   probeHeightRelative();          // set relative position mode
 }
 
