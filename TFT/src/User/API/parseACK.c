@@ -224,10 +224,13 @@ void hostActionCommands(void)
   {
     statusScreen_setMsg((uint8_t *)echomagic, (uint8_t *)dmaL2Cache + ack_index);  // always display the notification on status screen
 
-    uint16_t index = ack_index;
+    if (infoMenu.menu[infoMenu.cur] != menuStatus)  // don't show it when menuStatus
+    {
+      uint16_t index = ack_index;
 
-    if (!ack_seen("Ready."))  // avoid to display unneeded/frequent useless notifications (e.g. "My printer Ready.")
-      addToast(DIALOG_TYPE_INFO, dmaL2Cache + index);
+      if (!ack_seen("Ready."))  // avoid to display unneeded/frequent useless notifications (e.g. "My printer Ready.")
+        addToast(DIALOG_TYPE_INFO, dmaL2Cache + index);
+    }
   }
   else if (ack_seen(":paused") || ack_seen(":pause"))
   {
