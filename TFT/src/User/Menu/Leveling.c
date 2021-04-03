@@ -80,16 +80,12 @@ void menuManualLeveling(void)
         break;
 
       case KEY_ICON_2:
-        {
-          char tempstr[30];
-          sprintf(tempstr, "Min:%d | Max:%d", LEVELING_EDGE_DISTANCE_MIN, LEVELING_EDGE_DISTANCE_MAX);
+      {
+        infoSettings.level_edge = editIntValue(LEVELING_EDGE_DISTANCE_MIN, LEVELING_EDGE_DISTANCE_MAX, LEVELING_EDGE_DISTANCE_DEFAULT, infoSettings.level_edge);
 
-          int val = numPadInt((uint8_t *)tempstr, infoSettings.level_edge, LEVELING_EDGE_DISTANCE_DEFAULT, false);
-          infoSettings.level_edge = NOBEYOND(LEVELING_EDGE_DISTANCE_MIN, val, LEVELING_EDGE_DISTANCE_MAX);
-
-          menuDrawPage(&manualLevelingItems);
-        }
+        menuDrawPage(&manualLevelingItems);
         break;
+      }
 
       case KEY_ICON_3:
         storeCmd("M84 X Y E\n");

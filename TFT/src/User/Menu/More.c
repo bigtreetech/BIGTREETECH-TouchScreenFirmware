@@ -23,19 +23,19 @@ const MENUITEMS moreItems = {
 
 void isPauseExtrude(void)
 {
-  if (setPrintPause(true, false))
+  if (printPause(true, false))
     infoMenu.menu[infoMenu.cur] = menuExtrude;
 }
 
 void isPauseLoadUnload(void)
 {
-  if (setPrintPause(true, false))
+  if (printPause(true, false))
     infoMenu.menu[infoMenu.cur] = menuLoadUnload;
 }
 
 void menuMore(void)
 {
-  KEY_VALUES key_num;
+  KEY_VALUES key_num = KEY_IDLE;
 
   menuDrawPage(&moreItems);
 
@@ -53,7 +53,7 @@ void menuMore(void)
         break;
 
       case KEY_ICON_2:
-        if (isPrinting() && !isPause())  // need paused before extrude
+        if (isPrinting() && !isPaused())  // need paused before extrude
         {
           setDialogText(LABEL_WARNING, LABEL_IS_PAUSE, LABEL_CONFIRM, LABEL_CANCEL);
           showDialog(DIALOG_TYPE_ALERT, isPauseExtrude, NULL, NULL);
@@ -78,7 +78,7 @@ void menuMore(void)
 
       case KEY_ICON_6:
         #ifdef LOAD_UNLOAD_M701_M702
-          if (isPrinting() && !isPause())  // need paused before extrude
+          if (isPrinting() && !isPaused())  // need paused before extrude
           {
             setDialogText(LABEL_WARNING, LABEL_IS_PAUSE, LABEL_CONFIRM, LABEL_CANCEL);
             showDialog(DIALOG_TYPE_ALERT, isPauseLoadUnload, NULL, NULL);
