@@ -2,33 +2,36 @@
 #include "includes.h"
 
 const GUI_POINT printinfo_points[6] = {
-  {START_X + PICON_LG_WIDTH * 0 + PICON_SPACE_X * 0, ICON_START_Y + PICON_HEIGHT * 0 + PICON_SPACE_Y * 0},
-  {START_X + PICON_LG_WIDTH * 1 + PICON_SPACE_X * 1, ICON_START_Y + PICON_HEIGHT * 0 + PICON_SPACE_Y * 0},
-  {START_X + PICON_LG_WIDTH * 2 + PICON_SPACE_X * 2, ICON_START_Y + PICON_HEIGHT * 0 + PICON_SPACE_Y * 0},
-  {START_X + PICON_LG_WIDTH * 0 + PICON_SPACE_X * 0, ICON_START_Y + PICON_HEIGHT * 1 + PICON_SPACE_Y * 1},
-  {START_X + PICON_LG_WIDTH * 1 + PICON_SPACE_X * 1, ICON_START_Y + PICON_HEIGHT * 1 + PICON_SPACE_Y * 1},
-  {START_X + PICON_LG_WIDTH * 2 + PICON_SPACE_X * 2, ICON_START_Y + PICON_HEIGHT * 1 + PICON_SPACE_Y * 1},
+  {START_X + PICON_LG_WIDTH * 0 + PICON_SPACE_X * 0, PICON_START_Y + PICON_HEIGHT * 0 + PICON_SPACE_Y * 0},
+  {START_X + PICON_LG_WIDTH * 1 + PICON_SPACE_X * 1, PICON_START_Y + PICON_HEIGHT * 0 + PICON_SPACE_Y * 0},
+  {START_X + PICON_LG_WIDTH * 2 + PICON_SPACE_X * 2, PICON_START_Y + PICON_HEIGHT * 0 + PICON_SPACE_Y * 0},
+  {START_X + PICON_LG_WIDTH * 0 + PICON_SPACE_X * 0, PICON_START_Y + PICON_HEIGHT * 1 + PICON_SPACE_Y * 1},
+  {START_X + PICON_LG_WIDTH * 1 + PICON_SPACE_X * 1, PICON_START_Y + PICON_HEIGHT * 1 + PICON_SPACE_Y * 1},
+  {START_X + PICON_LG_WIDTH * 2 + PICON_SPACE_X * 2, PICON_START_Y + PICON_HEIGHT * 1 + PICON_SPACE_Y * 1},
 };
 
 const GUI_RECT printinfo_val_rect[6] = {
-  {START_X + PICON_LG_WIDTH * 0 + PICON_SPACE_X * 0 + PICON_VAL_X, ICON_START_Y + PICON_HEIGHT * 0 + PICON_SPACE_Y * 0 + PICON_VAL_Y,
-   START_X + PICON_LG_WIDTH * 0 + PICON_SPACE_X * 0 + PICON_VAL_LG_EX, ICON_START_Y + PICON_HEIGHT * 0 + PICON_SPACE_Y * 0 + PICON_VAL_Y + BYTE_HEIGHT},
+  {START_X + PICON_LG_WIDTH * 0 + PICON_SPACE_X * 0 + PICON_VAL_X, PICON_START_Y + PICON_HEIGHT * 0 + PICON_SPACE_Y * 0 + PICON_VAL_Y,
+   START_X + PICON_LG_WIDTH * 0 + PICON_SPACE_X * 0 + PICON_VAL_LG_EX, PICON_START_Y + PICON_HEIGHT * 0 + PICON_SPACE_Y * 0 + PICON_VAL_Y + BYTE_HEIGHT},
 
-  {START_X + PICON_LG_WIDTH * 1 + PICON_SPACE_X * 1 + PICON_VAL_X, ICON_START_Y + PICON_HEIGHT * 0 + PICON_SPACE_Y * 0 + PICON_VAL_Y,
-   START_X + PICON_LG_WIDTH * 1 + PICON_SPACE_X * 1 + PICON_VAL_LG_EX, ICON_START_Y + PICON_HEIGHT * 0 + PICON_SPACE_Y * 0 + PICON_VAL_Y + BYTE_HEIGHT},
+  {START_X + PICON_LG_WIDTH * 1 + PICON_SPACE_X * 1 + PICON_VAL_X, PICON_START_Y + PICON_HEIGHT * 0 + PICON_SPACE_Y * 0 + PICON_VAL_Y,
+   START_X + PICON_LG_WIDTH * 1 + PICON_SPACE_X * 1 + PICON_VAL_LG_EX, PICON_START_Y + PICON_HEIGHT * 0 + PICON_SPACE_Y * 0 + PICON_VAL_Y + BYTE_HEIGHT},
 
-  {START_X + PICON_LG_WIDTH * 2 + PICON_SPACE_X * 2 + PICON_VAL_X, ICON_START_Y + PICON_HEIGHT * 0 + PICON_SPACE_Y * 0 + PICON_VAL_Y,
-   START_X + PICON_LG_WIDTH * 2 + PICON_SPACE_X * 2 + PICON_VAL_SM_EX, ICON_START_Y + PICON_HEIGHT * 0 + PICON_SPACE_Y * 0 + PICON_VAL_Y + BYTE_HEIGHT},
+  {START_X + PICON_LG_WIDTH * 2 + PICON_SPACE_X * 2 + PICON_VAL_X, PICON_START_Y + PICON_HEIGHT * 0 + PICON_SPACE_Y * 0 + PICON_VAL_Y,
+   START_X + PICON_LG_WIDTH * 2 + PICON_SPACE_X * 2 + PICON_VAL_SM_EX, PICON_START_Y + PICON_HEIGHT * 0 + PICON_SPACE_Y * 0 + PICON_VAL_Y + BYTE_HEIGHT},
 
-  {START_X + PICON_LG_WIDTH * 0 + PICON_SPACE_X * 0 + PICON_VAL_X, ICON_START_Y + PICON_HEIGHT * 1 + PICON_SPACE_Y * 1 + PICON_VAL_Y,
-   START_X + PICON_LG_WIDTH * 0 + PICON_SPACE_X * 0 + PICON_VAL_LG_EX, ICON_START_Y + PICON_HEIGHT * 1 + PICON_SPACE_Y * 1 + PICON_VAL_Y + BYTE_HEIGHT},
+  {START_X + PICON_LG_WIDTH * 0 + PICON_SPACE_X * 0 + PICON_VAL_X, PICON_START_Y + PICON_HEIGHT * 1 + PICON_SPACE_Y * 1 + PICON_VAL_Y,
+   START_X + PICON_LG_WIDTH * 0 + PICON_SPACE_X * 0 + PICON_VAL_LG_EX, PICON_START_Y + PICON_HEIGHT * 1 + PICON_SPACE_Y * 1 + PICON_VAL_Y + BYTE_HEIGHT},
 
-  {START_X + PICON_LG_WIDTH * 1 + PICON_SPACE_X * 1 + PICON_VAL_X, ICON_START_Y + PICON_HEIGHT * 1 + PICON_SPACE_Y * 1 + PICON_VAL_Y,
-   START_X + PICON_LG_WIDTH * 1 + PICON_SPACE_X * 1 + PICON_VAL_LG_EX, ICON_START_Y + PICON_HEIGHT * 1 + PICON_SPACE_Y * 1 + PICON_VAL_Y + BYTE_HEIGHT},
+  {START_X + PICON_LG_WIDTH * 1 + PICON_SPACE_X * 1 + PICON_VAL_X, PICON_START_Y + PICON_HEIGHT * 1 + PICON_SPACE_Y * 1 + PICON_VAL_Y,
+   START_X + PICON_LG_WIDTH * 1 + PICON_SPACE_X * 1 + PICON_VAL_LG_EX, PICON_START_Y + PICON_HEIGHT * 1 + PICON_SPACE_Y * 1 + PICON_VAL_Y + BYTE_HEIGHT},
 
-  {START_X + PICON_LG_WIDTH * 2 + PICON_SPACE_X * 2 + PICON_VAL_X, ICON_START_Y + PICON_HEIGHT * 1 + PICON_SPACE_Y * 1 + PICON_VAL_Y,
-   START_X + PICON_LG_WIDTH * 2 + PICON_SPACE_X * 2 + PICON_VAL_SM_EX, ICON_START_Y + PICON_HEIGHT * 1 + PICON_SPACE_Y * 1 + PICON_VAL_Y + BYTE_HEIGHT},
+  {START_X + PICON_LG_WIDTH * 2 + PICON_SPACE_X * 2 + PICON_VAL_X, PICON_START_Y + PICON_HEIGHT * 1 + PICON_SPACE_Y * 1 + PICON_VAL_Y,
+   START_X + PICON_LG_WIDTH * 2 + PICON_SPACE_X * 2 + PICON_VAL_SM_EX, PICON_START_Y + PICON_HEIGHT * 1 + PICON_SPACE_Y * 1 + PICON_VAL_Y + BYTE_HEIGHT},
 };
+
+const GUI_RECT ProgressBar = {START_X + 1,                                PICON_START_Y + PICON_HEIGHT * 2 + PICON_SPACE_Y * 2 + 1,
+                              START_X + 4 * ICON_WIDTH + 3 * SPACE_X - 1, ICON_START_Y + ICON_HEIGHT + SPACE_Y - PICON_SPACE_Y - 1};
 
 static uint32_t nextLayerDrawTime = 0;
 const  char *const Speed_ID[2] = {"Speed", "Flow"};
@@ -205,14 +208,20 @@ static inline void reDrawTime(int icon_pos)
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
 
-static inline void reDrawProgress(int icon_pos)
+static inline void reDrawProgress(int icon_pos, uint8_t prevProgress)
 {
   char buf[6];
+  uint16_t progStart;
+  uint16_t progEnd;
 
   sprintf(buf, "%d%%", infoPrinting.progress);
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-  GUI_DispString(printinfo_points[3].x + PICON_TITLE_X, printinfo_points[3].y + PICON_TITLE_Y, (uint8_t *)buf);
+  GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (uint8_t *)buf);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
+  progStart = ((ProgressBar.x1 - ProgressBar.x0) * prevProgress) / 100;
+  progEnd = ((ProgressBar.x1 - ProgressBar.x0) * infoPrinting.progress) / 100;
+  GUI_FillRectColor(ProgressBar.x0 + progStart, ProgressBar.y0, ProgressBar.x0 + progEnd, ProgressBar.y1, MAT_ORANGE);
+
 }
 
 static inline void reDrawLayer(int icon_pos)
@@ -271,7 +280,12 @@ static inline void printingDrawPage(void)
   reValueBed(BED_ICON_POS);
   reDrawFan(FAN_ICON_POS);
   reDrawTime(TIM_ICON_POS);
-  reDrawProgress(TIM_ICON_POS);
+  GUI_SetColor(ORANGE);
+  GUI_DrawRect(ProgressBar.x0 - 1, ProgressBar.y0 - 1, ProgressBar.x1 + 1, ProgressBar.y1 + 1);
+  GUI_SetColor(DARKGRAY);
+  GUI_FillPrect(&ProgressBar);
+  GUI_RestoreColorDefault();
+  reDrawProgress(TIM_ICON_POS, 0);
   nextLayerDrawTime = 0;  // Draw layer now
   reDrawLayer(Z_ICON_POS);
   reDrawSpeed(SPD_ICON_POS);
@@ -357,6 +371,7 @@ void menuPrinting(void)
   };
 
   uint8_t nowFan[MAX_FAN_COUNT] = {0};
+  uint8_t oldProgress = 0;
   uint16_t curspeed[2] = {0};
   uint32_t time = 0;
   HEATER nowHeat;
@@ -434,19 +449,21 @@ void menuPrinting(void)
           infoPrinting.progress != MIN((uint64_t)infoPrinting.cur * 100 / infoPrinting.size, 100))
       {
         time = infoPrinting.time;
+        oldProgress = infoPrinting.progress;
         infoPrinting.progress = MIN((uint64_t)infoPrinting.cur * 100 / infoPrinting.size, 100);
         RAPID_SERIAL_LOOP();  //perform backend printing loop before drawing to avoid printer idling
         reDrawTime(TIM_ICON_POS);
-        reDrawProgress(TIM_ICON_POS);
+        reDrawProgress(TIM_ICON_POS, oldProgress);
       }
     }
     else
     {
       if (infoPrinting.progress != 100)
       {
+        oldProgress = infoPrinting.progress;
         infoPrinting.progress = 100;
         reDrawTime(TIM_ICON_POS);
-        reDrawProgress(TIM_ICON_POS);
+        reDrawProgress(TIM_ICON_POS, oldProgress);
       }
     }
 
