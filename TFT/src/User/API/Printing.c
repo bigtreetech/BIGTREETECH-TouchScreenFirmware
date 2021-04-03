@@ -556,10 +556,9 @@ void setPrintHost(bool isPrinting)
 void setPrintAbort(void)
 {
   // if printing from onboard SD or remote host
+  infoHost.printing = false;
   if (infoPrinting.printing && infoFile.source >= BOARD_SD)
   {
-    infoHost.printing = false;
-
     if (infoMachineSettings.autoReportSDStatus == 1)
       request_M27(0);
   }
