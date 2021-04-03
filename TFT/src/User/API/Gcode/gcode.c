@@ -13,7 +13,7 @@ static void resetRequestCommandInfo(
 {
   requestCommandInfo.cmd_rev_buf = malloc(CMD_MAX_REV);
   while (!requestCommandInfo.cmd_rev_buf)
-    ; // malloc failed
+    ;  // malloc failed
   memset(requestCommandInfo.cmd_rev_buf, 0, CMD_MAX_REV);
   requestCommandInfo.startMagic = string_start;
   requestCommandInfo.stopMagic = string_stop;
@@ -55,7 +55,6 @@ void clearRequestCommandInfo(void)
     SENDING:M21
     echo:SD card ok
     echo:No SD card
-
 */
 bool request_M21(void)
 {
@@ -101,7 +100,7 @@ char *request_M20(void)
  *   M33 miscel~1/armchair/armcha~1.gco
  * Output:
  *   /Miscellaneous/Armchair/Armchair.gcode
-*/
+ */
 char *request_M33(char *filename)
 {
   resetRequestCommandInfo("/",                   // The magic to identify the start
@@ -111,7 +110,7 @@ char *request_M33(char *filename)
                           NULL);                 // The third error magic
 
   if (filename[0] != '/')
-    mustStoreCmd("M33 /%s\n", filename); // append '/' to short file path
+    mustStoreCmd("M33 /%s\n", filename);  // append '/' to short file path
   else
     mustStoreCmd("M33 %s\n", filename);
 
@@ -212,7 +211,7 @@ bool request_M25(void)
 }
 
 /**
- * Print status ( start auto report)
+ * Print status (start auto report)
  * ->  SD printing byte 123/12345
  * ->  Not SD printing
  **/
@@ -247,21 +246,21 @@ void send_and_wait_M20(const char* command)
 
   resetRequestCommandInfo("{", "}", "Error:", NULL, NULL);
   mustStoreCmd(command);
-  while ((strstr(requestCommandInfo.cmd_rev_buf, "dir") == NULL) && (waitloops > 0x00)) //(!find_part("dir"))
+  while ((strstr(requestCommandInfo.cmd_rev_buf, "dir") == NULL) && (waitloops > 0x00))  //(!find_part("dir"))
   {
     waitloops--;
     timeout = ((uint32_t)0x0000FFFF);
     while ((!requestCommandInfo.done) && (timeout > 0x00))
     {
       loopBackEnd();
-            timeout--;
+      timeout--;
     }
     if (timeout <= 0x00)
     {
       uint16_t wIndex = (dmaL1Data[SERIAL_PORT].wIndex == 0) ? ACK_MAX_SIZE : dmaL1Data[SERIAL_PORT].wIndex;
-      if (dmaL1Data[SERIAL_PORT].cache[wIndex - 1] == '}') // \n fehlt
+      if (dmaL1Data[SERIAL_PORT].cache[wIndex - 1] == '}')  // \n fehlt
       {
-        BUZZER_PLAY(sound_notify); // for DEBUG
+        BUZZER_PLAY(sound_notify);  // for DEBUG
         dmaL1Data[SERIAL_PORT].cache[wIndex] = '\n';
         dmaL1Data[SERIAL_PORT].cache[wIndex + 1] = 0;
         dmaL1Data[SERIAL_PORT].wIndex++;
@@ -279,14 +278,14 @@ void send_and_wait_M20(const char* command)
       mustStoreCmd("\n");
     }
   }
-  return; //  requestCommandInfo.cmd_rev_buf;
+  return;  // requestCommandInfo.cmd_rev_buf;
 }
 
 char *request_M20_macros(char *nextdir)
 {
   // set pause Flag
   //infoHost.pauseGantry = true;
-  // waitPortReady();
+  //waitPortReady();
   clearRequestCommandInfo();
   char command[256];
   if ((nextdir == NULL) || strchr(nextdir, '/') == NULL)

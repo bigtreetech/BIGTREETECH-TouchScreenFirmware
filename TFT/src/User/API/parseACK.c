@@ -12,29 +12,29 @@ struct HOST_ACTION
   char prompt_begin[30];
   char prompt_button1[20];
   char prompt_button2[20];
-  bool prompt_show;         //Show popup reminder or not
-  uint8_t button;           //Number of buttons
+  bool prompt_show;         // Show popup reminder or not
+  uint8_t button;           // Number of buttons
 } hostAction;
 
 // notify or ignore messages starting with following text
 const ECHO knownEcho[] = {
-//  {ECHO_NOTIFY_NONE, "enqueueing \"M117\""},
+  //{ECHO_NOTIFY_NONE, "enqueueing \"M117\""},
   {ECHO_NOTIFY_NONE, "busy: paused for user"},
   {ECHO_NOTIFY_NONE, "busy: processing"},
   {ECHO_NOTIFY_NONE, "Now fresh file:"},
   {ECHO_NOTIFY_NONE, "Now doing file:"},
   {ECHO_NOTIFY_NONE, "Probe Offset"},
   {ECHO_NOTIFY_NONE, "Flow:"},
-  {ECHO_NOTIFY_NONE, "echo:;"},                   //M503
-  {ECHO_NOTIFY_NONE, "echo:  G"},                 //M503
-  {ECHO_NOTIFY_NONE, "echo:  M"},                 //M503
-  {ECHO_NOTIFY_NONE, "Cap:"},                     //M115
-  {ECHO_NOTIFY_NONE, "Config:"},                  //M360
-  {ECHO_NOTIFY_TOAST, "Settings Stored"},         //M500
-  {ECHO_NOTIFY_TOAST, "echo:Bed"},                //M420
-  {ECHO_NOTIFY_TOAST, "echo:Fade"},               //M420
-  {ECHO_NOTIFY_TOAST, "echo:Active Extruder"},    //Tool Change
-  {ECHO_NOTIFY_NONE, "Unknown command: \"M150"},  //M150
+  {ECHO_NOTIFY_NONE, "echo:;"},                   // M503
+  {ECHO_NOTIFY_NONE, "echo:  G"},                 // M503
+  {ECHO_NOTIFY_NONE, "echo:  M"},                 // M503
+  {ECHO_NOTIFY_NONE, "Cap:"},                     // M115
+  {ECHO_NOTIFY_NONE, "Config:"},                  // M360
+  {ECHO_NOTIFY_TOAST, "Settings Stored"},         // M500
+  {ECHO_NOTIFY_TOAST, "echo:Bed"},                // M420
+  {ECHO_NOTIFY_TOAST, "echo:Fade"},               // M420
+  {ECHO_NOTIFY_TOAST, "echo:Active Extruder"},    // Tool Change
+  {ECHO_NOTIFY_NONE, "Unknown command: \"M150"},  // M150
 };
 
 // uint8_t forceIgnore[ECHO_ID_COUNT] = {0};
@@ -137,18 +137,18 @@ void ackPopupInfo(const char *info)
   // set echo message in status screen
   if (info == echomagic || info == messagemagic)
   {
-    //ignore all messages if parameter settings is open
+    // ignore all messages if parameter settings is open
     if (infoMenu.menu[infoMenu.cur] == menuParameterSettings)
       return;
 
-    //show notification based on notificaiton settings
+    // show notification based on notificaiton settings
     if (infoSettings.ack_notification == 1)
     {
       addNotification(DIALOG_TYPE_INFO, (char *)info, (char *)dmaL2Cache + ack_index, show_dialog);
     }
     else if (infoSettings.ack_notification == 2)
     {
-      addToast(DIALOG_TYPE_INFO, dmaL2Cache);  //show toast notificaion if turned on
+      addToast(DIALOG_TYPE_INFO, dmaL2Cache);  // show toast notificaion if turned on
     }
   }
   else
@@ -157,10 +157,10 @@ void ackPopupInfo(const char *info)
   }
 }
 
-// void setIgnoreEcho(ECHO_ID msgId, bool state)
-// {
-//   forceIgnore[msgId] = state;
-// }
+//void setIgnoreEcho(ECHO_ID msgId, bool state)
+//{
+//  forceIgnore[msgId] = state;
+//}
 
 bool processKnownEcho(void)
 {
@@ -183,8 +183,8 @@ bool processKnownEcho(void)
   {
     if (knownEcho[i].notifyType == ECHO_NOTIFY_NONE)
       return isKnown;
-    // if (forceIgnore[i] == 0)
-    // {
+    //if (forceIgnore[i] == 0)
+    //{
       if (knownEcho[i].notifyType == ECHO_NOTIFY_TOAST)
         addToast(DIALOG_TYPE_INFO, dmaL2Cache);
       else if (knownEcho[i].notifyType == ECHO_NOTIFY_DIALOG)
@@ -192,7 +192,7 @@ bool processKnownEcho(void)
         BUZZER_PLAY(sound_notify);
         addNotification(DIALOG_TYPE_INFO, (char*)echomagic, (char*)dmaL2Cache + ack_index, true);
       }
-    // }
+    //}
   }
   return isKnown;
 }
@@ -224,55 +224,57 @@ void hostActionCommands(void)
   {
     statusScreen_setMsg((uint8_t *)echomagic, (uint8_t *)dmaL2Cache + ack_index);  // always display the notification on status screen
 
-    uint16_t index = ack_index;
+    if (infoMenu.menu[infoMenu.cur] != menuStatus)  // don't show it when in menuStatus
+    {
+      uint16_t index = ack_index;
 
-    if (!ack_seen("Ready."))  // avoid to display unneeded/frequent useless notifications (e.g. "My printer Ready.")
-      addToast(DIALOG_TYPE_INFO, dmaL2Cache + index);
+      if (!ack_seen("Ready."))  // avoid to display unneeded/frequent useless notifications (e.g. "My printer Ready.")
+        addToast(DIALOG_TYPE_INFO, dmaL2Cache + index);
+    }
   }
   else if (ack_seen(":paused") || ack_seen(":pause"))
   {
-    infoPrinting.pause = true;
+    // pass value "false" to let Marlin report when the host is not
+    // printing (when notification ack "Not SD printing" is caught)
+    setPrintPause(false);
+
     if (ack_seen("filament_runout"))
     {
       setRunoutAlarmTrue();
     }
   }
-  else if (ack_seen(":cancel"))  //To be added to Marlin abortprint routine
+  else if (ack_seen(":cancel"))  // To be added to Marlin abortprint routine
   {
-    if (infoHost.printing == true)
-    {
-      request_M27(0);
-    }
-    infoHost.printing = false;
-    infoPrinting.printing = false;
-    infoPrinting.cur = infoPrinting.size;
+    setPrintAbort();
   }
   else if (ack_seen(":prompt_begin "))
   {
     strcpy(hostAction.prompt_begin, dmaL2Cache + ack_index);
     hostAction.button = 0;
-    hostAction.prompt_show = 1;
+    hostAction.prompt_show = true;
 
     if (ack_seen("Resuming"))  // resuming from onboard SD or TFT
     {
-      if (isPrinting() && (infoFile.source >= BOARD_SD))  // if printing from onboard SD
-        infoHost.printing = true;
+      // pass value "true" to report the host is printing without waiting
+      // from Marlin (when notification ack "SD printing byte" is caught)
+      setPrintResume(true);
 
-      infoPrinting.pause = false;
-      hostAction.prompt_show = 0;
       if (infoMachineSettings.firmwareType != FW_REPRAPFW)
       {
+        hostAction.prompt_show = false;
         Serial_Puts(SERIAL_PORT, "M876 S0\n");  // auto-respond to a prompt request that is not shown on the TFT
       }
     }
     else if (ack_seen("Reheating"))
     {
-      hostAction.prompt_show = 0;
+      hostAction.prompt_show = false;
       Serial_Puts(SERIAL_PORT, "M876 S0\n");  // auto-respond to a prompt request that is not shown on the TFT
     }
     else if (ack_seen("Nozzle Parked"))
     {
-      infoPrinting.pause = true;
+      // pass value "false" to let Marlin report when the host is not
+      // printing (when notification ack "Not SD printing" is caught)
+      setPrintPause(false);
     }
   }
   else if (ack_seen(":prompt_button "))
@@ -317,7 +319,7 @@ void hostActionCommands(void)
 
 void parseACK(void)
 {
-  if (infoHost.rx_ok[SERIAL_PORT] != true) return;  //not get response data
+  if (infoHost.rx_ok[SERIAL_PORT] != true) return;  // not get response data
 
   while (dmaL1NotEmpty(SERIAL_PORT))
   {
@@ -344,7 +346,7 @@ void parseACK(void)
       if (ack_seen(heaterID[CHAMBER])) infoSettings.chamber_en = ENABLED;
       updateNextHeatCheckTime();
 
-      if (!ack_seen("@"))  //It's RepRapFirmware
+      if (!ack_seen("@"))  // It's RepRapFirmware
       {
         infoMachineSettings.firmwareType = FW_REPRAPFW;
         infoMachineSettings.softwareEndstops = ENABLED;
@@ -494,13 +496,13 @@ void parseACK(void)
       {
         speedSetCurPercent(0, ack_value());
         speedQuerySetWait(false);
-      }      
+      }
       // parse and store flow rate percentage in case of Smoothieware
       else if ((infoMachineSettings.firmwareType == FW_SMOOTHIEWARE) && ack_seen("Flow rate at "))
       {
         speedSetCurPercent(1, ack_value());
         speedQuerySetWait(false);
-      }      
+      }
       // parse and store M106, fan speed
       else if (ack_seen("M106 P"))
       {
@@ -579,48 +581,32 @@ void parseACK(void)
         strncat(infoFile.title, dmaL2Cache + start_index, path_len);
         infoFile.title[path_len + strlen(getCurFileSource()) + 1] = '\0';
 
-        infoHost.printing = true;
-        infoPrinting.pause = false;
-        infoPrinting.time = 0;
-        infoPrinting.cur = 0;
-        infoPrinting.size = 1;  // Should be different with .cur to avoid 100% progress on TFT, Get the correct value by M27
-
-        initPrintSummary();
-
-        if (infoMachineSettings.autoReportSDStatus == 1)
-        {
-          request_M27(infoSettings.m27_refresh_time);  // Check if there is a SD or USB print running.
-        }
+        setPrintHost(true);
       }
       else if (infoMachineSettings.onboard_sd_support == ENABLED &&
                infoFile.source >= BOARD_SD &&
                ack_seen("Not SD printing"))
       {
-        infoHost.printing = false;
-        if (isPrinting())
-          infoPrinting.pause = true;
+        setPrintPause(true);
       }
       else if (infoMachineSettings.onboard_sd_support == ENABLED &&
                infoFile.source >= BOARD_SD &&
                ack_seen("SD printing byte"))
       {
         if (infoMachineSettings.firmwareType != FW_REPRAPFW)
-        {
-          infoPrinting.pause = false;
-        }
+          setPrintResume(false);
+
         // Parsing printing data
         // Example: SD printing byte 123/12345
-        infoPrinting.cur = ack_value();
-        infoPrinting.size = ack_second_value();
-        // powerFailedCache(position);
+        setPrintProgress(ack_value(), ack_second_value());
+        //powerFailedCache(position);
       }
       else if (infoMachineSettings.onboard_sd_support == ENABLED &&
                infoFile.source >= BOARD_SD &&
                ack_seen(infoMachineSettings.firmwareType != FW_REPRAPFW ? "Done printing file" : "Finished printing file"))
       {
-        infoHost.printing = false;
-        printingFinished();
-        infoPrinting.cur = infoPrinting.size;
+        setPrintHost(false);
+        printComplete();
       }
 
       //----------------------------------------
@@ -691,16 +677,16 @@ void parseACK(void)
       {
         pidUpdateStatus(true);
       }
+      // parse M303, PID Autotune failed message
+      else if (ack_seen("PID Autotune failed"))
+      {
+        pidUpdateStatus(false);
+      }
       // parse M303, PID Autotune finished message in case of Smoothieware
       else if ((infoMachineSettings.firmwareType == FW_SMOOTHIEWARE) && ack_seen("PID Autotune Complete!"))
       {
         //ack_index += 84; -> need length check
         pidUpdateStatus(true);
-      }
-      // parse M303, PID Autotune failed message
-      else if (ack_seen("PID Autotune failed"))
-      {
-        pidUpdateStatus(false);
       }
       // parse M303, PID Autotune failed message in case of Smoothieware
       else if ((infoMachineSettings.firmwareType == FW_SMOOTHIEWARE) && ack_seen("// WARNING: Autopid did not resolve within"))
@@ -810,11 +796,11 @@ void parseACK(void)
           if (ack_seen("D")) setParameter(P_FILAMENT_SETTING, 1, ack_value());
           if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE)
           {
-            if (getParameter(P_FILAMENT_SETTING, 1) > 0.01F) 
+            if (getParameter(P_FILAMENT_SETTING, 1) > 0.01F)
               setParameter(P_FILAMENT_SETTING, 0, 1);  // filament_diameter>0.01 to enable  volumetric extrusion
             else
               setParameter(P_FILAMENT_SETTING, 0, 0);  // filament_diameter<=0.01 to disable volumetric extrusion
-          }         
+          }
         }
       }
       // parse and store Max Acceleration values
@@ -972,11 +958,11 @@ void parseACK(void)
           if (ack_seen("X")) setParameter(P_CURRENT, X_STEPPER, ack_value());
           if (ack_seen("Y")) setParameter(P_CURRENT, Y_STEPPER, ack_value());
           if (ack_seen("Z")) setParameter(P_CURRENT, Z_STEPPER, ack_value());
-          setParameter(P_STEALTH_CHOP, X_STEPPER, 0 );   //Sets 0 if StealthChop is off on all axes and the M569 string does not occur.
-          setParameter(P_STEALTH_CHOP, Y_STEPPER, 0 );   //Sets 0 if StealthChop is off on all axes and the M569 string does not occur.
-          setParameter(P_STEALTH_CHOP, Z_STEPPER, 0 );   //Sets 0 if StealthChop is off on all axes and the M569 string does not occur.
-          setParameter(P_STEALTH_CHOP, E_STEPPER, 0 );   //Sets 0 if StealthChop is off on all axes and the M569 string does not occur.
-          setParameter(P_STEALTH_CHOP, E2_STEPPER, 0 );  //Sets 0 if StealthChop is off on all axes and the M569 string does not occur.
+          setParameter(P_STEALTH_CHOP, X_STEPPER, 0 );   // Sets 0 if StealthChop is off on all axes and the M569 string does not occur.
+          setParameter(P_STEALTH_CHOP, Y_STEPPER, 0 );   // Sets 0 if StealthChop is off on all axes and the M569 string does not occur.
+          setParameter(P_STEALTH_CHOP, Z_STEPPER, 0 );   // Sets 0 if StealthChop is off on all axes and the M569 string does not occur.
+          setParameter(P_STEALTH_CHOP, E_STEPPER, 0 );   // Sets 0 if StealthChop is off on all axes and the M569 string does not occur.
+          setParameter(P_STEALTH_CHOP, E2_STEPPER, 0 );  // Sets 0 if StealthChop is off on all axes and the M569 string does not occur.
         }
         if (ack_seen("T"))
         {
@@ -1181,7 +1167,7 @@ void parseACK(void)
           uint8_t *string = (uint8_t *)&dmaL2Cache[ack_index];
           uint16_t string_start = ack_index;
           uint16_t string_end = string_start;
-          if (ack_seen(","))  //
+          if (ack_seen(","))
             string_end = ack_index - 1 ;
 
           infoSetAccessPoint(string, string_end - string_start);  // Set access poing
@@ -1190,18 +1176,18 @@ void parseACK(void)
           {
             string = (uint8_t *)&dmaL2Cache[ack_index];
             string_start = ack_index;
-            if (ack_seen("\n"))  //
+            if (ack_seen("\n"))
               string_end = ack_index - 1;
             infoSetIPAddress(string, string_end - string_start);  // Set IP address
           }
         }
-      } 
+      }
       else if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE)
       {
         if (ack_seen(errorZProbe))  // smoothieboard ZProbe triggered before move, aborting command.
         {
           ackPopupInfo("ZProbe triggered\n before move.\n Aborting Print!");
-        } 
+        }
         // parse and store volumetric extrusion M200 response of Smoothieware
         else if (ack_seen("Volumetric extrusion is disabled"))
         {
@@ -1215,14 +1201,7 @@ void parseACK(void)
           if (getParameter(P_FILAMENT_SETTING, 1) > 0.01F)
             setParameter(P_FILAMENT_SETTING, 0, 1);  // filament_diameter>0.01 to enable  volumetric extrusion
           else
-            setParameter(P_FILAMENT_SETTING, 0, 0);  // filament_diameter<=0.01 to disable volumetric extrusion        
-        }      
-      }
-      else if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE)
-      {
-        if (ack_seen(errorZProbe))  // smoothieboard ZProbe triggered before move, aborting command.
-        {
-          ackPopupInfo("ZProbe triggered\n before move.\n Aborting Print!");
+            setParameter(P_FILAMENT_SETTING, 0, 0);  // filament_diameter<=0.01 to disable volumetric extrusion
         }
       }
     }

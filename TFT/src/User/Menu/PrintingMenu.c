@@ -33,6 +33,7 @@ const GUI_RECT printinfo_val_rect[6] = {
 const GUI_RECT ProgressBar = {START_X + 1,                                PICON_START_Y + PICON_HEIGHT * 2 + PICON_SPACE_Y * 2 + 1,
                               START_X + 4 * ICON_WIDTH + 3 * SPACE_X - 1, ICON_START_Y + ICON_HEIGHT + SPACE_Y - PICON_SPACE_Y - 1};
 
+uint8_t oldProgress = 0;
 static uint32_t nextLayerDrawTime = 0;
 const  char *const Speed_ID[2] = {"Speed", "Flow"};
 bool hasFilamentData;
@@ -63,72 +64,66 @@ const ITEM itemIsPrinting[3] = {
 
 void menuBeforePrinting(void)
 {
-  //load stat/end/cancel gcodes from spi flash
-  uint32_t size = 0;
+  // load stat/end/cancel gcodes from spi flash
 
   switch (infoFile.source)
   {
-    case BOARD_SD: // GCode from file on ONBOARD SD
-      size = request_M23_M36(infoFile.title + 5);
-      //if (powerFailedCreate(infoFile.title) == false)
-      //{
-      //
-      //}  // FIXME: Powerfail resume is not yet supported for ONBOARD_SD. Need more work.
-
-      if (size == 0)
+    case BOARD_SD:  // GCode from file on ONBOARD SD
       {
-        ExitDir();
-        infoMenu.cur--;
-        return;
+        uint32_t size;
+
+        size = request_M23_M36(infoFile.title + 5);
+        //if (powerFailedCreate(infoFile.title) == false)
+        //{
+        //
+        //}  // FIXME: Powerfail resume is not yet supported for ONBOARD_SD. Need more work.
+
+        if (size == 0)
+        {
+          ExitDir();
+          infoMenu.cur--;
+          return;
+        }
+
+        //if (powerFailedExist())
+        //{
+        request_M24(0);
+        //}
+        //else
+        //{
+        //request_M24(infoBreakPoint.offset);
+        //}
+
+        printStart(NULL, size);
+        break;
       }
-
-      infoPrinting.size = size;
-
-      //if (powerFailedExist())
-      //{
-      request_M24(0);
-      //}
-      //else
-      //{
-      //request_M24(infoBreakPoint.offset);
-      //}
-
-      if (infoMachineSettings.autoReportSDStatus == 1)
-        request_M27(infoSettings.m27_refresh_time);  //Check if there is a SD or USB print running.
-      else
-        request_M27(0);
-
-      infoHost.printing = true;  // Global lock info on printer is busy in printing.
-      break;
 
     case TFT_UDISK:
     case TFT_SD:  // GCode from file on TFT SD
-      if (f_open(&infoPrinting.file, infoFile.title, FA_OPEN_EXISTING | FA_READ) != FR_OK)
       {
-        ExitDir();
-        infoMenu.cur--;
-        return;
-      }
-      if (powerFailedCreate(infoFile.title) == false)
-      {}
-      powerFailedlSeek(&infoPrinting.file);
+        FIL file;
 
-      infoPrinting.size = f_size(&infoPrinting.file);
-      infoPrinting.cur = infoPrinting.file.fptr;
-      if (infoSettings.send_start_gcode == 1 && infoPrinting.cur == 0)  // PLR continue printing, CAN NOT use start gcode
-      {
-        sendPrintCodes(0);
+        if (f_open(&file, infoFile.title, FA_OPEN_EXISTING | FA_READ) != FR_OK)
+        {
+          ExitDir();
+          infoMenu.cur--;
+          return;
+        }
+
+        if (powerFailedCreate(infoFile.title) == false)
+        {}
+        powerFailedlSeek(&file);
+
+        printStart(&file, f_size(&file));
+        break;
       }
-      break;
 
     default:
       ExitDir();
       infoMenu.cur--;
       return;
   }
-  infoPrinting.printing = true;
-  infoPrinting.time = 0;
-  initPrintSummary();
+
   infoMenu.menu[infoMenu.cur] = menuPrinting;
 }
 
@@ -194,10 +189,9 @@ static inline void reDrawSpeed(int icon_pos)
 
 static inline void reDrawTime(int icon_pos)
 {
-  uint8_t hour = infoPrinting.time / 3600;
-  uint8_t min = infoPrinting.time % 3600 / 60;
-  uint8_t sec = infoPrinting.time % 60;
+  uint8_t hour, min, sec;
 
+  getPrintTimeDetail(&hour, &min, &sec);
   GUI_SetNumMode(GUI_NUMMODE_ZERO);
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
   char tempstr[10];
@@ -208,19 +202,24 @@ static inline void reDrawTime(int icon_pos)
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
 
-static inline void reDrawProgress(int icon_pos, uint8_t prevProgress)
+static inline void reDrawProgress(int icon_pos)
 {
   char buf[6];
-  uint16_t progStart;
-  uint16_t progEnd;
+  uint8_t newProgress = getPrintProgress();
 
-  sprintf(buf, "%d%%", infoPrinting.progress);
+  sprintf(buf, "%d%%", newProgress);
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
   GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (uint8_t *)buf);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
-  progStart = ((ProgressBar.x1 - ProgressBar.x0) * prevProgress) / 100;
-  progEnd = ((ProgressBar.x1 - ProgressBar.x0) * infoPrinting.progress) / 100;
-  GUI_FillRectColor(ProgressBar.x0 + progStart, ProgressBar.y0, ProgressBar.x0 + progEnd, ProgressBar.y1, MAT_ORANGE);
+
+  if (oldProgress != newProgress)  // Update the progress bar only when the progress changes
+  {
+    uint16_t progStart = ((ProgressBar.x1 - ProgressBar.x0) * oldProgress) / 100;
+    uint16_t progEnd = ((ProgressBar.x1 - ProgressBar.x0) * newProgress) / 100;
+    GUI_FillRectColor(ProgressBar.x0 + progStart, ProgressBar.y0, ProgressBar.x0 + progEnd, ProgressBar.y1, MAT_ORANGE);
+
+    oldProgress = newProgress;  // Save the drawn progress as the starting point of the next drawing
+  }
 
 }
 
@@ -250,19 +249,19 @@ static inline void toggleInfo(void)
     if (infoSettings.hotend_count > 1)
     {
       currentTool = (currentTool + 1) % infoSettings.hotend_count;
-      RAPID_SERIAL_LOOP();  //perform backend printing loop before drawing to avoid printer idling
+      RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
       reValueNozzle(EXT_ICON_POS);
     }
 
     if ((infoSettings.fan_count + infoSettings.fan_ctrl_count) > 1)
     {
       currentFan = (currentFan + 1) % (infoSettings.fan_count + infoSettings.fan_ctrl_count);
-      RAPID_SERIAL_LOOP();  //perform backend printing loop before drawing to avoid printer idling
+      RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
       reDrawFan(FAN_ICON_POS);
     }
 
     currentSpeedID = (currentSpeedID + 1) % 2;
-    RAPID_SERIAL_LOOP();  //perform backend printing loop before drawing to avoid printer idling
+    RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
     reDrawSpeed(SPD_ICON_POS);
     speedQuery();
 
@@ -270,7 +269,7 @@ static inline void toggleInfo(void)
       coordinateQuery();
 
     if (!hasFilamentData && isPrinting())
-      updateFilamentUsed();
+      updatePrintUsedFilament();
   }
 }
 
@@ -285,7 +284,8 @@ static inline void printingDrawPage(void)
   GUI_SetColor(DARKGRAY);
   GUI_FillPrect(&ProgressBar);
   GUI_RestoreColorDefault();
-  reDrawProgress(TIM_ICON_POS, 0);
+  oldProgress = 0;
+  reDrawProgress(TIM_ICON_POS);
   nextLayerDrawTime = 0;  // Draw layer now
   reDrawLayer(Z_ICON_POS);
   reDrawSpeed(SPD_ICON_POS);
@@ -312,7 +312,7 @@ void drawPrintInfo(void)
 
 void stopConfirm(void)
 {
-  abortPrinting();
+  printAbort();
   infoMenu.cur--;
 }
 
@@ -353,9 +353,9 @@ void printInfoPopup(void)
 
 void menuPrinting(void)
 {
-  //1title, ITEM_PER_PAGE item(icon + label)
+  // 1 title, ITEM_PER_PAGE items (icon + label)
   MENUITEMS printingItems = {
-    //  title
+    // title
     LABEL_BACKGROUND,
     // icon                          label
     {
@@ -371,12 +371,11 @@ void menuPrinting(void)
   };
 
   uint8_t nowFan[MAX_FAN_COUNT] = {0};
-  uint8_t oldProgress = 0;
   uint16_t curspeed[2] = {0};
   uint32_t time = 0;
   HEATER nowHeat;
   float curLayer = 0;
-  bool lastPause = isPause();
+  bool lastPause = isPaused();
   bool lastPrinting = isPrinting();
 
   memset(&nowHeat, 0, sizeof(HEATER));
@@ -386,10 +385,9 @@ void menuPrinting(void)
     if (infoMachineSettings.long_filename_support == ENABLED && infoFile.source == BOARD_SD)
       printingItems.title.address = (uint8_t *) infoFile.Longfile[infoFile.fileIndex];
     else
-      printingItems.title.address = getCurGcodeName(infoFile.title);
+      printingItems.title.address = getPrintName(infoFile.title);
     printingItems.items[KEY_ICON_4] = itemIsPause[lastPause];
-    printingItems.items[KEY_ICON_5].icon = (infoFile.source < BOARD_SD && infoPrinting.model_icon) ?
-                                            ICON_PREVIEW : ICON_BABYSTEP;
+    printingItems.items[KEY_ICON_5].icon = (infoFile.source < BOARD_SD && isPrintModelIcon()) ? ICON_PREVIEW : ICON_BABYSTEP;
   }
   else // returned to this menu after a print was done (ex: after a popup)
   {
@@ -412,81 +410,79 @@ void menuPrinting(void)
 
   while (infoMenu.menu[infoMenu.cur] == menuPrinting)
   {
-    //    Scroll_DispString(&titleScroll, LEFT); //Scroll display file name will take too many CPU cycles
+    //Scroll_DispString(&titleScroll, LEFT); // Scroll display file name will take too many CPU cycles
 
-    //check nozzle temp change
+    // check nozzle temp change
     if (nowHeat.T[currentTool].current != heatGetCurrentTemp(currentTool) ||
         nowHeat.T[currentTool].target != heatGetTargetTemp(currentTool))
     {
       nowHeat.T[currentTool].current = heatGetCurrentTemp(currentTool);
       nowHeat.T[currentTool].target = heatGetTargetTemp(currentTool);
-      RAPID_SERIAL_LOOP();  //perform backend printing loop before drawing to avoid printer idling
+      RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
       reValueNozzle(EXT_ICON_POS);
     }
 
-    //check bed temp change
+    // check bed temp change
     if (nowHeat.T[BED].current != heatGetCurrentTemp(BED) || nowHeat.T[BED].target != heatGetTargetTemp(BED))
     {
       nowHeat.T[BED].current = heatGetCurrentTemp(BED);
       nowHeat.T[BED].target = heatGetTargetTemp(BED);
-      RAPID_SERIAL_LOOP();  //perform backend printing loop before drawing to avoid printer idling
+      RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
       reValueBed(BED_ICON_POS);
     }
 
-    //check Fan speed change
+    // check Fan speed change
     if (nowFan[currentFan] != fanGetCurSpeed(currentFan))
     {
       nowFan[currentFan] = fanGetCurSpeed(currentFan);
-      RAPID_SERIAL_LOOP();  //perform backend printing loop before drawing to avoid printer idling
+      RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
       reDrawFan(FAN_ICON_POS);
     }
 
-    //check printing progress
-    if (infoPrinting.size != 0)
+    // check printing progress
+    if (getPrintSize() != 0)
     {
-      //check print time change
-      if (time != infoPrinting.time ||
-          infoPrinting.progress != MIN((uint64_t)infoPrinting.cur * 100 / infoPrinting.size, 100))
+      // check print time change
+      if (time != getPrintTime() || updatePrintProgress())
       {
-        time = infoPrinting.time;
-        oldProgress = infoPrinting.progress;
-        infoPrinting.progress = MIN((uint64_t)infoPrinting.cur * 100 / infoPrinting.size, 100);
-        RAPID_SERIAL_LOOP();  //perform backend printing loop before drawing to avoid printer idling
+
+        time = getPrintTime();
+        RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
+
         reDrawTime(TIM_ICON_POS);
-        reDrawProgress(TIM_ICON_POS, oldProgress);
+        reDrawProgress(TIM_ICON_POS);
       }
     }
     else
     {
-      if (infoPrinting.progress != 100)
+      if (getPrintProgress() != 100)
       {
-        oldProgress = infoPrinting.progress;
-        infoPrinting.progress = 100;
+        updatePrintProgress();
         reDrawTime(TIM_ICON_POS);
-        reDrawProgress(TIM_ICON_POS, oldProgress);
+        reDrawProgress(TIM_ICON_POS);
       }
     }
 
-    //Z_AXIS coordinate
+    // Z_AXIS coordinate
     if (curLayer != ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS)))
     {
       curLayer = (infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS);
-      RAPID_SERIAL_LOOP();  //perform backend printing loop before drawing to avoid printer idling
+      RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
       reDrawLayer(Z_ICON_POS);
     }
 
-    //check change in speed or flow
+    // check change in speed or flow
     if (curspeed[currentSpeedID] != speedGetCurPercent(currentSpeedID))
     {
       curspeed[currentSpeedID] = speedGetCurPercent(currentSpeedID);
-      RAPID_SERIAL_LOOP();  //perform backend printing loop before drawing to avoid printer idling
+      RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
       reDrawSpeed(SPD_ICON_POS);
     }
 
     // check if print is paused
-    if (lastPause != isPause())
+    if (lastPause != isPaused())
     {
-      lastPause = isPause();
+      lastPause = isPaused();
       printingItems.items[KEY_ICON_4] = itemIsPause[lastPause];
       menuDrawItem(&printingItems.items[KEY_ICON_4], KEY_ICON_4);
     }
@@ -495,10 +491,6 @@ void menuPrinting(void)
     if (lastPrinting != isPrinting())
     {
       lastPrinting = isPrinting();
-      if (lastPrinting != true)  // print finished
-      {
-        preparePrintSummary();
-      }
       return;  // It will restart this interface if directly return this function without modify the value of infoMenu
     }
 
@@ -509,11 +501,11 @@ void menuPrinting(void)
     {
       case KEY_ICON_4:
         if (isPrinting())
-          setPrintPause(!isPause(), false);
+          printPause(!isPaused(), false);
         #ifndef TFT70_V3_0
           else
           {
-            exitPrinting();
+            clearInfoPrint();
             clearInfoFile();
             infoMenu.cur = 0;
           }
@@ -526,7 +518,7 @@ void menuPrinting(void)
             infoMenu.menu[++infoMenu.cur] = menuBabystep;
           else
           {
-            exitPrinting();
+            clearInfoPrint();
             clearInfoFile();
             infoMenu.cur = 0;
           }
@@ -547,7 +539,7 @@ void menuPrinting(void)
         }
         else
         {
-          exitPrinting();
+          clearInfoPrint();
           infoMenu.cur--;
         }
         break;

@@ -15,6 +15,7 @@ static inline void updateCaseLightIcon(MENUITEMS * curmenu, bool state)
 void caseLightBrightnessReDraw()
 {
   char tempstr[20];
+
   sprintf(tempstr, "  %d%%  ", caseLightGetBrightnessPercent());
   setLargeFont(true);
   GUI_DispStringInPrect(&exhibitRect, (uint8_t *)tempstr);

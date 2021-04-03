@@ -237,7 +237,7 @@ static inline void toggleTool(void)
   {
     if (infoSettings.hotend_count > 1)
     {
-      currentTool = (currentTool+1) % infoSettings.hotend_count;
+      currentTool = (currentTool + 1) % infoSettings.hotend_count;
     }
     if ((infoSettings.fan_count + infoSettings.fan_ctrl_count) > 1)
     {
