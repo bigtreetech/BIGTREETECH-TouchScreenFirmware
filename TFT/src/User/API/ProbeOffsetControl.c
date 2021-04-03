@@ -5,7 +5,7 @@ static float z_offset_value = PROBE_Z_OFFSET_DEFAULT_VALUE;
 static bool probe_offset_enabled = false;
 
 // Enable probe offset
-void probeOffsetEnable(bool skipZOffset)
+void probeOffsetEnable(bool skipZOffset, float shim)
 {
   probe_offset_enabled = true;
 
@@ -25,12 +25,12 @@ void probeOffsetEnable(bool skipZOffset)
 
   if (skipZOffset)
   {
-    probeHeightStart(-probeOffsetGetValue(), false);  // lower nozzle to probing Z0 point
-    probeOffsetSetValue(0.0f);                        // reset Z offset in order probing Z0 matches absolute Z0 point
+    probeHeightStart(-probeOffsetGetValue() + shim, false);  // lower nozzle to probing Z0 point + shim
+    probeOffsetSetValue(0.0f);                               // reset Z offset in order probing Z0 matches absolute Z0 point
   }
   else
   {
-    probeHeightStart(0.0f, false);  // lower nozzle to absolute Z0 point
+    probeHeightStart(shim, false);  // lower nozzle to absolute Z0 point + shim
   }
 
   probeHeightRelative();  // set relative position mode

@@ -29,7 +29,7 @@ void TIM7_IRQHandler(void)
 
     os_counter++;
 
-    setPrintingTime(os_counter);
+    setPrintTime(os_counter);
 
     loopTouchScreen();
 

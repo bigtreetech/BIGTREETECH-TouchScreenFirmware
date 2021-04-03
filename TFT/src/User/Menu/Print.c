@@ -4,7 +4,6 @@
 MENUITEMS * printIconItems;
 LISTITEMS * printListItems;
 
-
 const int16_t labelVolumeError[] = {LABEL_READ_TFTSD_ERROR, LABEL_READ_U_DISK_ERROR, LABEL_READ_ONBOARDSD_ERROR};
 
 // File list number per page
@@ -51,7 +50,7 @@ void gocdeIconDraw(void)
   GUI_ClearPrect(&titleRect);
   GUI_SetBkColor(infoSettings.bg_color);
 
-  //draw folders
+  // draw folders
   for (i = 0; (i + infoFile.cur_page * NUM_PER_PAGE < infoFile.folderCount) && (i < NUM_PER_PAGE); i++)
   {
     curItem.icon = ICON_FOLDER;
@@ -59,7 +58,7 @@ void gocdeIconDraw(void)
     normalNameDisp(&gcodeRect[i], (uint8_t*)infoFile.folder[i + infoFile.cur_page * NUM_PER_PAGE]);
   }
 
-  //draw files
+  // draw files
   for (; (i + infoFile.cur_page * NUM_PER_PAGE < infoFile.fileCount + infoFile.folderCount) && (i < NUM_PER_PAGE); i++)
   {
     if (EnterDir(infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.folderCount]) == false)
@@ -74,7 +73,7 @@ void gocdeIconDraw(void)
     normalNameDisp(&gcodeRect[i], (uint8_t*)infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.folderCount]);
   }
 
-  //clear blank icons
+  // clear blank icons
   for (; (i < NUM_PER_PAGE); i++)
   {
     curItem.icon = ICON_BACKGROUND;
@@ -116,7 +115,7 @@ void gocdeListDraw(void)
     menuDrawListItem(&printListItems->items[i], i);
   }
 
-  //background
+  // background
   for (; (i < NUM_PER_PAGE); i++)
   {
      printListItems->items[i].icon = ICONCHAR_BACKGROUND;
@@ -202,7 +201,7 @@ void menuPrintFromSource(void)
 
   if (mountFS() == true && scanPrintFiles() == true)
   {
-    if (infoMenu.menu[infoMenu.cur] != menuPrintFromSource) // Menu index be modify when "scanPrintFilesGcodeFs". (echo,error,warning popup windows)
+    if (infoMenu.menu[infoMenu.cur] != menuPrintFromSource)  // Menu index be modify when "scanPrintFilesGcodeFs". (echo,error,warning popup windows)
     {
       return;
     }
@@ -276,7 +275,7 @@ void menuPrintFromSource(void)
         if (key_num < ITEM_PER_PAGE)
         {
           uint16_t start = infoFile.cur_page * NUM_PER_PAGE;
-          if (key_num + start < infoFile.folderCount)  //folder
+          if (key_num + start < infoFile.folderCount)  // folder
           {
             if (EnterDir(infoFile.folder[key_num + start]) == false)
               break;
@@ -284,21 +283,21 @@ void menuPrintFromSource(void)
             update = 1;
             infoFile.cur_page = 0;
           }
-          else if (key_num + start < infoFile.folderCount + infoFile.fileCount)  //gcode
+          else if (key_num + start < infoFile.folderCount + infoFile.fileCount)  // gcode
           {
             if (infoHost.connected != true)
               break;
             infoFile.fileIndex = key_num + start - infoFile.folderCount;
             if (EnterDir(infoFile.file[infoFile.fileIndex]) == false)
               break;
-            //load model preview in flash if icon exists
+            // load model preview in flash if icon exists
             setPrintModelIcon(infoFile.source < BOARD_SD && model_DecodeToFlash(infoFile.title));
 
             char temp_info[FILE_NUM + 50];
             sprintf(temp_info, (char *)textSelect(LABEL_START_PRINT),
                     (uint8_t *)((infoMachineSettings.long_filename_support == ENABLED && infoFile.source == BOARD_SD) ?
                     infoFile.Longfile[infoFile.fileIndex] : infoFile.file[infoFile.fileIndex]));
-            //confirm file selction
+            // confirm file selction
             setDialogText(LABEL_PRINT, (uint8_t *)temp_info, LABEL_CONFIRM, LABEL_CANCEL);
             showDialog(DIALOG_TYPE_QUESTION, startPrint, ExitDir, NULL);
           }
@@ -329,8 +328,6 @@ void menuPrintFromSource(void)
 
 void menuPrint(void)
 {
-  KEY_VALUES  key_num;
-
   MENUITEMS sourceSelItems = {
     // title
     LABEL_PRINT,
@@ -353,17 +350,20 @@ void menuPrint(void)
     }
   };
 
+  KEY_VALUES key_num = KEY_IDLE;
+
   sourceSelItems.items[ONBOARD_SD_INDEX].icon = (infoMachineSettings.onboard_sd_support == ENABLED) ? ICON_ONBOARD_SD : ICON_BACKGROUND;
   sourceSelItems.items[ONBOARD_SD_INDEX].label.index = (infoMachineSettings.onboard_sd_support == ENABLED) ? LABEL_ONBOARDSD : LABEL_BACKGROUND;
 
   menuDrawPage(&sourceSelItems);
+
   while (infoMenu.menu[infoMenu.cur] == menuPrint)
   {
     key_num = menuKeyGetValue();
     switch (key_num)
     {
       case KEY_ICON_0:
-        list_mode = infoSettings.file_listmode;  //follow list mode setting in TFT sd card
+        list_mode = infoSettings.file_listmode;  // follow list mode setting in TFT sd card
         infoFile.source = TFT_SD;
         infoMenu.menu[++infoMenu.cur] = menuPrintFromSource;
         infoMenu.menu[++infoMenu.cur] = menuPowerOff;
@@ -371,7 +371,7 @@ void menuPrint(void)
 
       #ifdef U_DISK_SUPPORT
         case KEY_ICON_1:
-          list_mode = infoSettings.file_listmode;  //follow list mode setting in usb disk
+          list_mode = infoSettings.file_listmode;  // follow list mode setting in usb disk
           infoFile.source = TFT_UDISK;
           infoMenu.menu[++infoMenu.cur] = menuPrintFromSource;
           infoMenu.menu[++infoMenu.cur] = menuPowerOff;
@@ -382,9 +382,9 @@ void menuPrint(void)
       #endif
         if (infoMachineSettings.onboard_sd_support == ENABLED)
         {
-          list_mode = true;  //force list mode in Onboard sd card
+          list_mode = true;  // force list mode in Onboard sd card
           infoFile.source = BOARD_SD;
-          infoMenu.menu[++infoMenu.cur] = menuPrintFromSource;  //TODO: fix here,  onboard sd card PLR feature
+          infoMenu.menu[++infoMenu.cur] = menuPrintFromSource;  // TODO: fix here,  onboard sd card PLR feature
           goto selectEnd;
         }
         break;

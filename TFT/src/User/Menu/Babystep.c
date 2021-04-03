@@ -23,10 +23,8 @@ void babyReDraw(float babystep, float z_offset, bool force_z_offset, bool skip_h
   GUI_POINT point_of = {exhibitRect.x1, exhibitRect.y0 + BYTE_HEIGHT * 2 + LARGE_BYTE_HEIGHT};
 
   setLargeFont(true);
-
   sprintf(tempstr, "% 6.2f", babystep);
   GUI_DispStringRight(point_bs.x, point_bs.y, (uint8_t*) tempstr);
-
   sprintf(tempstr, "% 6.2f", z_offset);
 
   if (force_z_offset)
@@ -35,10 +33,7 @@ void babyReDraw(float babystep, float z_offset, bool force_z_offset, bool skip_h
     GUI_SetColor(infoSettings.font_color);
 
   GUI_DispStringRight(point_of.x, point_of.y, (uint8_t*) tempstr);
-
-  // restore default font color
-  GUI_SetColor(infoSettings.font_color);
-
+  GUI_SetColor(infoSettings.font_color);  // restore default font color
   setLargeFont(false);
 }
 
@@ -64,23 +59,24 @@ void menuBabystep(void)
     LABEL_BABYSTEP,
     // icon                          label
     {
-      {ICON_DEC,                     LABEL_DEC},
+      #ifdef FRIENDLY_Z_OFFSET_LANGUAGE
+        {ICON_NOZZLE_DOWN,             LABEL_DOWN},
+      #else
+        {ICON_DEC,                     LABEL_DEC},
+      #endif
       {ICON_BACKGROUND,              LABEL_BACKGROUND},
       {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_INC,                     LABEL_INC},
+      #ifdef FRIENDLY_Z_OFFSET_LANGUAGE
+        {ICON_NOZZLE_UP,               LABEL_UP},
+      #else
+        {ICON_INC,                     LABEL_INC},
+      #endif
       {ICON_BACKGROUND,              LABEL_BACKGROUND},
       {ICON_001_MM,                  LABEL_001_MM},
       {ICON_RESET_VALUE,             LABEL_RESET},
       {ICON_BACK,                    LABEL_BACK},
     }
   };
-
-  #ifdef FRIENDLY_Z_OFFSET_LANGUAGE
-    babyStepItems.items[0].icon = ICON_NOZZLE_DOWN;
-    babyStepItems.items[0].label.index = LABEL_DOWN;
-    babyStepItems.items[3].icon = ICON_NOZZLE_UP;
-    babyStepItems.items[3].label.index = LABEL_UP;
-  #endif
 
   KEY_VALUES key_num = KEY_IDLE;
   float now_babystep, babystep, orig_babystep;

@@ -29,7 +29,7 @@ bool powerFailedCreate(char *path)
   if (f_open(&fpPowerFailed, powerFailedFileName, FA_OPEN_ALWAYS | FA_WRITE) != FR_OK) return false;
 
   f_write(&fpPowerFailed, path, MAX_PATH_LEN, &br);
-  uint8_t model_icon = getPrintModelIcon();
+  uint8_t model_icon = isPrintModelIcon();
   f_write(&fpPowerFailed, &model_icon, 1, &br);
   f_write(&fpPowerFailed, &infoBreakPoint, sizeof(BREAK_POINT), &br);
   f_sync(&fpPowerFailed);
@@ -45,7 +45,7 @@ void powerFailedCache(u32 offset)
   if (infoBreakPoint.axis[Z_AXIS] == coordinateGetAxisTarget(Z_AXIS)) return;  // Z axis no changed.
   if (create_ok == false) return;
   if (infoCacheCmd.count != 0) return;
-  if (!isPause())
+  if (!isPaused())
   { // not paused, update printing progress status.
     infoBreakPoint.offset = offset;
     for (AXIS i = X_AXIS; i < TOTAL_AXIS; i++)
@@ -71,7 +71,7 @@ void powerFailedCache(u32 offset)
   }
   else if (infoBreakPoint.pause) return;  // paused and the pause state has been saved
 
-  infoBreakPoint.pause = isPause();
+  infoBreakPoint.pause = isPaused();
 
   f_lseek(&fpPowerFailed, MAX_PATH_LEN + 1);  // infoFile.title + infoPrinting.model_icon
   f_write(&fpPowerFailed, &infoBreakPoint, sizeof(BREAK_POINT), &br);

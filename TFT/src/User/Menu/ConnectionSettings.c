@@ -120,7 +120,6 @@ void menuBaudrate(void)
 
 void menuConnectionSettings(void)
 {
-
   KEY_VALUES key_num = KEY_IDLE;
 
   menuDrawPage(&connectionSettingsItems);
