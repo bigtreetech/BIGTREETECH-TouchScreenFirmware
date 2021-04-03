@@ -1,7 +1,6 @@
 #include "MeshValid.h"
 #include "includes.h"
 
-
 void menuMeshValid(void)
 {
   MENUITEMS meshValidItems = {
@@ -45,7 +44,11 @@ void menuMeshValid(void)
         case KEY_ICON_4:
         //MESHVALID NYLON
         case KEY_ICON_5:
-        storeCmd("G26 H%u B%u R99\n", infoSettings.preheat_temp[key_num], infoSettings.preheat_bed[key_num]);
+        mustStoreCmd("G28\n");
+        mustStoreCmd("G26 H%u B%u R99\n", infoSettings.preheat_temp[key_num], infoSettings.preheat_bed[key_num]);
+        mustStoreCmd("G1 Z10 F%d\n", infoSettings.level_feedrate[FEEDRATE_Z]);
+        mustStoreCmd("G1 X0 F%d\n", infoSettings.level_feedrate[FEEDRATE_XY]);
+        refreshPreheatIcon(key_num, key_num, &meshValidItems.items[key_num]);
         break;
 
         //Menu babystep 
@@ -63,4 +66,4 @@ void menuMeshValid(void)
 
     loopProcess();
   }
-}
+} 
