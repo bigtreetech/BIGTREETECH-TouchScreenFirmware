@@ -21,7 +21,7 @@ const MENUITEMS pidWaitItems = {
 
 const char *const pidCmd[] = PID_CMD;
 static int16_t pidHeaterTarget[MAX_HEATER_COUNT] = {0};
-static uint8_t curToolIndex = NOZZLE0;
+static uint8_t curTool_index = NOZZLE0;
 static uint8_t degreeSteps_index = 1;
 u32 pidTimeout = 0;
 uint8_t pidCounter = 0;
@@ -175,26 +175,6 @@ static inline void pidStart(void)
   infoMenu.menu[++infoMenu.cur] = menuPidWait;
 }
 
-void pidTemperatureReDraw(bool skip_header)
-{
-  char tempstr[20];
-
-  setLargeFont(true);
-
-  if (!skip_header)
-  {
-    sprintf(tempstr, "%-15s", heatDisplayID[curToolIndex]);
-    setLargeFont(false);
-    GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *) tempstr);
-    setLargeFont(true);
-    GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1) >> 1, exhibitRect.y0, (uint8_t *)"ºC");
-  }
-
-  sprintf(tempstr, "  %d  ", pidHeaterTarget[curToolIndex]);
-  GUI_DispStringInPrect(&exhibitRect, (uint8_t *) tempstr);
-  setLargeFont(false);
-}
-
 void menuPid(void)
 {
   // 1 title, ITEM_PER_PAGE items (icon + label)
@@ -226,15 +206,15 @@ void menuPid(void)
     pidInitialized = true;
   }
 
-  pidItems.items[KEY_ICON_4] = itemTool[curToolIndex];
+  pidItems.items[KEY_ICON_4] = itemTool[curTool_index];
   pidItems.items[KEY_ICON_5] = itemDegreeSteps[degreeSteps_index];
+
+  menuDrawPage(&pidItems);
+  temperatureReDraw(curTool_index, &pidHeaterTarget[curTool_index], false);
 
   #if LCD_ENCODER_SUPPORT
     encoderPosition = 0;
   #endif
-
-  menuDrawPage(&pidItems);
-  pidTemperatureReDraw(false);
 
   while (infoMenu.menu[infoMenu.cur] == menuPid)
   {
@@ -242,49 +222,45 @@ void menuPid(void)
     switch (key_num)
     {
       case KEY_ICON_0:
-        if (pidHeaterTarget[curToolIndex] > 0)
-          pidHeaterTarget[curToolIndex] =
-              NOBEYOND(0, pidHeaterTarget[curToolIndex] - degreeSteps[degreeSteps_index],
-                       infoSettings.max_temp[curToolIndex]);
+        if (pidHeaterTarget[curTool_index] > 0)
+          pidHeaterTarget[curTool_index] =
+              NOBEYOND(0, pidHeaterTarget[curTool_index] - degreeSteps[degreeSteps_index],
+                       infoSettings.max_temp[curTool_index]);
 
-        pidTemperatureReDraw(true);
+        temperatureReDraw(curTool_index, &pidHeaterTarget[curTool_index], true);
         break;
 
       case KEY_INFOBOX:
       {
-        char titlestr[30];
-        sprintf(titlestr, "Min:0 | Max:%i", infoSettings.max_temp[curToolIndex]);
+        int16_t val = editIntValue(0, infoSettings.max_temp[curTool_index], 0, pidHeaterTarget[curTool_index]);
 
-        int32_t val = numPadInt((uint8_t *) titlestr, pidHeaterTarget[curToolIndex], 0, false);
-        val = NOBEYOND(0, val, infoSettings.max_temp[curToolIndex]);
-
-        if (val != pidHeaterTarget[curToolIndex])  // if value is different than target, change it
-          pidHeaterTarget[curToolIndex] = val;
+        if (val != pidHeaterTarget[curTool_index])  // if value is different than target, change it
+          pidHeaterTarget[curTool_index] = val;
 
         menuDrawPage(&pidItems);
-        pidTemperatureReDraw(false);
+        temperatureReDraw(curTool_index, &pidHeaterTarget[curTool_index], false);
         break;
       }
 
       case KEY_ICON_3:
-        if (pidHeaterTarget[curToolIndex] < infoSettings.max_temp[curToolIndex])
-          pidHeaterTarget[curToolIndex] =
-              NOBEYOND(0, pidHeaterTarget[curToolIndex] + degreeSteps[degreeSteps_index],
-                       infoSettings.max_temp[curToolIndex]);
+        if (pidHeaterTarget[curTool_index] < infoSettings.max_temp[curTool_index])
+          pidHeaterTarget[curTool_index] =
+              NOBEYOND(0, pidHeaterTarget[curTool_index] + degreeSteps[degreeSteps_index],
+                       infoSettings.max_temp[curTool_index]);
 
-        pidTemperatureReDraw(true);
+        temperatureReDraw(curTool_index, &pidHeaterTarget[curTool_index], true);
         break;
 
       case KEY_ICON_4:
         do
         {
-          curToolIndex = (curToolIndex + 1) % MAX_HEATER_COUNT;
-        } while (!heaterIsValid(curToolIndex) || curToolIndex == CHAMBER);
+          curTool_index = (curTool_index + 1) % MAX_HEATER_COUNT;
+        } while (!heaterIsValid(curTool_index) || curTool_index == CHAMBER);
 
-        pidItems.items[key_num] = itemTool[curToolIndex];
+        pidItems.items[key_num] = itemTool[curTool_index];
 
         menuDrawItem(&pidItems.items[key_num], key_num);
-        pidTemperatureReDraw(false);
+        temperatureReDraw(curTool_index, &pidHeaterTarget[curTool_index], false);
         break;
 
       case KEY_ICON_5:
@@ -325,20 +301,20 @@ void menuPid(void)
           {
             if (encoderPosition > 0)
             {
-              if (pidHeaterTarget[curToolIndex] < infoSettings.max_temp[curToolIndex])
-                pidHeaterTarget[curToolIndex] =
-                    NOBEYOND(0, pidHeaterTarget[curToolIndex] + degreeSteps[degreeSteps_index],
-                             infoSettings.max_temp[curToolIndex]);
+              if (pidHeaterTarget[curTool_index] < infoSettings.max_temp[curTool_index])
+                pidHeaterTarget[curTool_index] =
+                    NOBEYOND(0, pidHeaterTarget[curTool_index] + degreeSteps[degreeSteps_index],
+                             infoSettings.max_temp[curTool_index]);
             }
             else  // if < 0
             {
-              if (pidHeaterTarget[curToolIndex] > 0)
-                pidHeaterTarget[curToolIndex] =
-                    NOBEYOND(0, pidHeaterTarget[curToolIndex] - degreeSteps[degreeSteps_index],
-                             infoSettings.max_temp[curToolIndex]);
+              if (pidHeaterTarget[curTool_index] > 0)
+                pidHeaterTarget[curTool_index] =
+                    NOBEYOND(0, pidHeaterTarget[curTool_index] - degreeSteps[degreeSteps_index],
+                             infoSettings.max_temp[curTool_index]);
             }
 
-            pidTemperatureReDraw(true);
+            temperatureReDraw(curTool_index, &pidHeaterTarget[curTool_index], true);
             encoderPosition = 0;
           }
         #endif

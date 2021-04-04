@@ -3,7 +3,7 @@
 
 void menuMain(void)
 {
-  // 1 title, ITEM_PER_PAGE items(icon+label)
+  // 1 title, ITEM_PER_PAGE items (icon + label)
   MENUITEMS mainPageItems = {
     // title
     LABEL_MAINMENU,

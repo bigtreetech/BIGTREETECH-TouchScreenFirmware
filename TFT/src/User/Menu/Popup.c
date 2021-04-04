@@ -206,7 +206,6 @@ void showDialog(DIALOG_TYPE type, void (*ok_action)(), void (*cancel_action)(), 
   action_loop = loop_action;
 }
 
-
 void loopPopup(void)
 {
   if (popup_redraw == false)

@@ -344,13 +344,13 @@ void menuSoundSettings(void)
     }
   };
 
+  KEY_VALUES key_num = KEY_IDLE;
+  SETTINGS now = infoSettings;
+
   sounditems.items[0].icon = (infoSettings.touchSound == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
   sounditems.items[2].icon = (infoSettings.toastSound == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
   sounditems.items[1].icon = (infoSettings.alertSound == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
   sounditems.items[3].icon = (infoSettings.heaterSound == 1) ? ICONCHAR_TOGGLE_ON : ICONCHAR_TOGGLE_OFF;
-
-  KEY_VALUES key_num = KEY_IDLE;
-  SETTINGS now = infoSettings;
 
   menuDrawListPage(&sounditems);
 

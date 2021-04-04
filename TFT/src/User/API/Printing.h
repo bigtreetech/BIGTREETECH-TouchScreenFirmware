@@ -29,74 +29,73 @@ extern "C" {
 
 typedef struct
 {
-  FIL file;
-  uint32_t time;        // Printed time in sec
-  uint32_t size;        // Gcode file total size
-  uint32_t cur;         // Gcode has printed file size
-  uint8_t  progress;
-  bool     printing;    // 1 means printing, 0 means idle
-  bool     pause;       // 1 means paused
-  bool     m0_pause;    // pause triggered through M0/M1 gcode
-  bool     runout;      // 1: runout in printing, 0: idle
-  bool     model_icon;  // 1: model preview icon exist, 0: not exist
-} PRINTING;
-
-typedef struct
-{
   // data
   char name[SUMMARY_NAME_LEN + 1];
   uint32_t time;
   float length;
   float weight;
   float cost;
-} PRINTSUMMARY;
+} PRINT_SUMMARY;
 
-extern PRINTING infoPrinting;
-extern PRINTSUMMARY infoPrintSummary;
-
-bool isPrinting(void);
-bool isPause(void);
-bool isM0_Pause(void);
-void setPrintingTime(uint32_t RTtime);
-void setPrintSize(uint32_t size);
-uint32_t getPrintSize(void);
-uint32_t getPrintCur(void);
-bool getPrintRunout(void);
-void setPrintRunout(bool runout);
-void setPrintCur(uint32_t cur);
+extern PRINT_SUMMARY infoPrintSummary;
 
 void setRunoutAlarmTrue(void);
 void setRunoutAlarmFalse(void);
 bool getRunoutAlarm(void);
 
-void setPrintModelIcon(bool exist);
-bool getPrintModelIcon(void);
-
-uint8_t getPrintProgress(void);
-uint32_t getPrintTime(void);
-void printSetUpdateWaiting(bool isWaiting);
-uint8_t *getCurGcodeName(char *path);
-void sendPrintCodes(uint8_t index);
-
-void initPrintSummary(void);
-void updateFilamentUsed(void);
-void preparePrintSummary(void);
-
-bool setPrintPause(bool is_pause, bool is_m0pause);
-void exitPrinting(void);
-void endPrinting(void);
-void abortPrinting(void);
-void printingFinished(void);
-void shutdown(void);
-void shutdownLoop(void);
-void startShutdown(void);
-
-void getGcodeFromFile(void);
 void breakAndContinue(void);
 void resumeAndPurge(void);
 void resumeAndContinue(void);
 
-void loopCheckPrinting(void);
+void setPrintTime(uint32_t RTtime);
+uint32_t getPrintTime(void);
+void getPrintTimeDetail(uint8_t * hour, uint8_t * min, uint8_t * sec);
+
+uint32_t getPrintSize(void);
+uint32_t getPrintCur(void);
+
+void setPrintProgress(float cur, float size);
+bool updatePrintProgress(void);
+uint8_t getPrintProgress(void);
+
+void setPrintModelIcon(bool exist);
+bool isPrintModelIcon(void);
+
+void setPrintRunout(bool runout);
+bool getPrintRunout(void);
+
+//
+// commented because NOT externally invoked
+//
+//void shutdown(void);
+//void shutdownLoop(void);
+//void shutdownStart(void);  // start auto shutdown after a print successfully completed
+//void initPrintSummary(void);
+//void preparePrintSummary(void);
+//void sendPrintCodes(uint8_t index);
+
+void printSetUpdateWaiting(bool isWaiting);       // called in interfaceCmd.c
+void updatePrintUsedFilament(void);               // called in PrintingMenu.c
+uint8_t * getPrintName(char * path);              // called in PrintingMenu.c
+void clearInfoPrint(void);                        // called in PrintingMenu.c
+
+void printStart(FIL * file, uint32_t size);       // it also sends start gcode
+void printEnd(void);                              // it also sends end gcode
+
+void printComplete(void);                         // print successfully completed
+void printAbort(void);                            // it also sends cancel gcode
+bool printPause(bool is_pause, bool is_m0pause);
+
+bool isPrinting(void);
+bool isPaused(void);
+
+void setPrintHost(bool isPrinting);
+void setPrintAbort(void);
+void setPrintPause(bool updateHost);
+void setPrintResume(bool updateHost);
+
+void loopPrintFromTFT(void);   // called in loopBackEnd(). It handles a print from TFT, if any
+void loopPrintFromHost(void);  // called in loopBackEnd(). It handles a print from onboard SD or remote host (e.g. USB), if any
 
 #ifdef __cplusplus
 }

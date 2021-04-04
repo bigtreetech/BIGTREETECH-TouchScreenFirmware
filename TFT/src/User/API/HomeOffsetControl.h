@@ -9,7 +9,7 @@ extern "C" {
 #include <stdint.h>
 
 // Enable home offset
-void homeOffsetEnable(bool skipZOffset);
+void homeOffsetEnable(bool skipZOffset, float shim);
 
 // Disable home offset
 void homeOffsetDisable(void);
