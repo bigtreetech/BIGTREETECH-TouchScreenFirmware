@@ -217,6 +217,7 @@ double numPadFloat(u8* title, double old_val, double reset_val, bool negative)
         nowIndex = strlen(ParameterBuf);
         lastIndex = nowIndex + 1;
         valueFirstPress = true;
+        BUZZER_PLAY(sound_keypress);
         break;
 
       case NUM_KEY_1:
@@ -249,6 +250,12 @@ double numPadFloat(u8* title, double old_val, double reset_val, bool negative)
         }
         break;
       case NUM_KEY_DEC:
+        if (valueFirstPress == true)
+        {
+          valueFirstPress = false;
+          ParameterBuf[0] = 0;
+          nowIndex = lastIndex = 0;
+        }
         if (!strchr((const char *)ParameterBuf, numPadKeyChar[key_num][0]) && nowIndex < (FLOAT_BUFLONG - 1))
         {
           if (nowIndex == 0 || (nowIndex == 1 && strchr((const char *)ParameterBuf, '-')))  // check if no number exits or only minus exists
@@ -265,6 +272,12 @@ double numPadFloat(u8* title, double old_val, double reset_val, bool negative)
       case NUM_KEY_MINUS:
         if (negative)
         {
+          if (valueFirstPress == true)
+          {
+            valueFirstPress = false;
+            ParameterBuf[0] = 0;
+            nowIndex = lastIndex = 0;
+          }
           if (!strchr((const char *)ParameterBuf, numPadKeyChar[key_num][0]) && nowIndex == 0)
           {
             ParameterBuf[nowIndex++] = numPadKeyChar[key_num][0];
@@ -384,15 +397,15 @@ int32_t numPadInt(u8* title, int32_t old_val, int32_t reset_val, bool negative)
         }
         len = strlen(ParameterBuf);
         if (len < INT_BUFLONG && !(val == 0 && key_num == NUM_KEY_0))
-          {
-            int num = (numPadKeyChar[key_num][0] - '0');
-            val = (val * 10) + ABS(num);
-            BUZZER_PLAY(sound_keypress);
-          }
-          else
-          {
-            BUZZER_PLAY(sound_deny);
-          }
+        {
+          int num = (numPadKeyChar[key_num][0] - '0');
+          val = (val * 10) + ABS(num);
+          BUZZER_PLAY(sound_keypress);
+        }
+        else
+        {
+          BUZZER_PLAY(sound_deny);
+        }
         break;
 
       case NUM_KEY_OK:
