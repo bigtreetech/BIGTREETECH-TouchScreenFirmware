@@ -723,7 +723,7 @@ void parseACK(void)
         else
           setParameter(P_ABL_STATE, 0, DISABLED);
       }
-      // parse and store M420 V1 T1 (mesh. Z offset:) or M503 (G29 S4 Zxx), MBL Z offset value (e.g. from Babystep menu)
+      // parse and store M420 V1 T1 or G29 S0 (mesh. Z offset:) or M503 (G29 S4 Zxx), MBL Z offset value (e.g. from Babystep menu)
       else if (ack_seen("mesh. Z offset:") || ack_seen("G29 S4 Z"))
       {
         setParameter(P_MBL_OFFSET, 0, ack_value());

@@ -34,7 +34,7 @@ void zOffsetDrawStatus(bool status)
   }
   else
   {
-    sprintf(tempstr, "shim:%.2f  ", infoSettings.level_z_pos);
+    sprintf(tempstr, "Shim:%.2f  ", infoSettings.level_z_pos);
     GUI_SetColor(infoSettings.sd_reminder_color);
   }
 

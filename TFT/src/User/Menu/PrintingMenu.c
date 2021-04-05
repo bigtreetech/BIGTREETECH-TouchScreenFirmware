@@ -33,8 +33,8 @@ const GUI_RECT printinfo_val_rect[6] = {
 const GUI_RECT ProgressBar = {START_X + 1,                                PICON_START_Y + PICON_HEIGHT * 2 + PICON_SPACE_Y * 2 + 1,
                               START_X + 4 * ICON_WIDTH + 3 * SPACE_X - 1, ICON_START_Y + ICON_HEIGHT + SPACE_Y - PICON_SPACE_Y - 1};
 
-static uint32_t nextLayerDrawTime = 0;
 const  char *const Speed_ID[2] = {"Speed", "Flow"};
+static uint32_t nextLayerDrawTime = 0;
 bool hasFilamentData;
 
 #define TOGGLE_TIME     2000  // 1 seconds is 1000
