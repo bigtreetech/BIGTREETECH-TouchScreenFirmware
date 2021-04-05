@@ -33,7 +33,6 @@ const GUI_RECT printinfo_val_rect[6] = {
 const GUI_RECT ProgressBar = {START_X + 1,                                PICON_START_Y + PICON_HEIGHT * 2 + PICON_SPACE_Y * 2 + 1,
                               START_X + 4 * ICON_WIDTH + 3 * SPACE_X - 1, ICON_START_Y + ICON_HEIGHT + SPACE_Y - PICON_SPACE_Y - 1};
 
-uint8_t oldProgress = 0;
 static uint32_t nextLayerDrawTime = 0;
 const  char *const Speed_ID[2] = {"Speed", "Flow"};
 bool hasFilamentData;
@@ -202,7 +201,7 @@ static inline void reDrawTime(int icon_pos)
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
 
-static inline void reDrawProgress(int icon_pos)
+static inline void reDrawProgress(int icon_pos, uint8_t prevProgress)
 {
   char buf[6];
   uint8_t newProgress = getPrintProgress();
@@ -212,15 +211,12 @@ static inline void reDrawProgress(int icon_pos)
   GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (uint8_t *)buf);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 
-  if (oldProgress != newProgress)  // Update the progress bar only when the progress changes
+  if (prevProgress != newProgress)  // Update the progress bar only when the progress changes
   {
-    uint16_t progStart = ((ProgressBar.x1 - ProgressBar.x0) * oldProgress) / 100;
+    uint16_t progStart = ((ProgressBar.x1 - ProgressBar.x0) * prevProgress) / 100;
     uint16_t progEnd = ((ProgressBar.x1 - ProgressBar.x0) * newProgress) / 100;
     GUI_FillRectColor(ProgressBar.x0 + progStart, ProgressBar.y0, ProgressBar.x0 + progEnd, ProgressBar.y1, MAT_ORANGE);
-
-    oldProgress = newProgress;  // Save the drawn progress as the starting point of the next drawing
   }
-
 }
 
 static inline void reDrawLayer(int icon_pos)
@@ -284,8 +280,8 @@ static inline void printingDrawPage(void)
   GUI_SetColor(DARKGRAY);
   GUI_FillPrect(&ProgressBar);
   GUI_RestoreColorDefault();
-  oldProgress = 0;
-  reDrawProgress(TIM_ICON_POS);
+  updatePrintProgress();
+  reDrawProgress(TIM_ICON_POS, 0);
   nextLayerDrawTime = 0;  // Draw layer now
   reDrawLayer(Z_ICON_POS);
   reDrawSpeed(SPD_ICON_POS);
@@ -371,6 +367,7 @@ void menuPrinting(void)
   };
 
   uint8_t nowFan[MAX_FAN_COUNT] = {0};
+  uint8_t oldProgress = 0;
   uint16_t curspeed[2] = {0};
   uint32_t time = 0;
   HEATER nowHeat;
@@ -440,17 +437,17 @@ void menuPrinting(void)
     }
 
     // check printing progress
+    oldProgress = getPrintProgress();  // get old progress before "updatePrintProgress()"
     if (getPrintSize() != 0)
     {
       // check print time change
       if (time != getPrintTime() || updatePrintProgress())
       {
-
         time = getPrintTime();
         RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
 
         reDrawTime(TIM_ICON_POS);
-        reDrawProgress(TIM_ICON_POS);
+        reDrawProgress(TIM_ICON_POS, oldProgress);
       }
     }
     else
@@ -459,7 +456,7 @@ void menuPrinting(void)
       {
         updatePrintProgress();
         reDrawTime(TIM_ICON_POS);
-        reDrawProgress(TIM_ICON_POS);
+        reDrawProgress(TIM_ICON_POS, oldProgress);
       }
     }
 
