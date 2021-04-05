@@ -211,12 +211,9 @@ static inline void reDrawProgress(int icon_pos, uint8_t prevProgress)
   GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (uint8_t *)buf);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 
-  if (prevProgress != newProgress)  // Update the progress bar only when the progress changes
-  {
-    uint16_t progStart = ((ProgressBar.x1 - ProgressBar.x0) * prevProgress) / 100;
-    uint16_t progEnd = ((ProgressBar.x1 - ProgressBar.x0) * newProgress) / 100;
-    GUI_FillRectColor(ProgressBar.x0 + progStart, ProgressBar.y0, ProgressBar.x0 + progEnd, ProgressBar.y1, MAT_ORANGE);
-  }
+  uint16_t progStart = ((ProgressBar.x1 - ProgressBar.x0) * prevProgress) / 100;
+  uint16_t progEnd = ((ProgressBar.x1 - ProgressBar.x0) * newProgress) / 100;
+  GUI_FillRectColor(ProgressBar.x0 + progStart, ProgressBar.y0, ProgressBar.x0 + progEnd, ProgressBar.y1, MAT_ORANGE);
 }
 
 static inline void reDrawLayer(int icon_pos)
