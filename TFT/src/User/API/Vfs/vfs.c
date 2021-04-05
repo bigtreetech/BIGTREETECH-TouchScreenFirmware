@@ -3,6 +3,16 @@
 
 MYFILE infoFile = {"?:", {0}, {0}, 0, 0, 0, 0, TFT_SD, {0}};
 
+void setPrintModelIcon(bool exist)
+{
+  infoFile.model_icon = exist;
+}
+
+bool isPrintModelIcon(void)
+{
+  return infoFile.model_icon;
+}
+
 bool mountFS(void)
 {
   //  resetInfoFile();  //needn't this
