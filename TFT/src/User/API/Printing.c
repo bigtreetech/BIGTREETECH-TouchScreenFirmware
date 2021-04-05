@@ -293,7 +293,9 @@ static inline void printRemoteStart(void)
 void printStart(FIL * file, uint32_t size)
 {
   // always clean infoPrinting first and then set the needed attributes
+  bool model_icon = infoPrinting.model_icon;  // 'model_icon' is set in print menu and cannot be cleared here.
   memset(&infoPrinting, 0, sizeof(PRINTING));
+  infoPrinting.model_icon = model_icon;  // Restore 'model_icon' flag
 
   // we assume infoPrinting is clean, so we need to set only the needed attributes
   infoPrinting.size = size;
