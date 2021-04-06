@@ -249,6 +249,7 @@ double numPadFloat(u8* title, double old_val, double reset_val, bool negative)
           BUZZER_PLAY(sound_deny);
         }
         break;
+
       case NUM_KEY_DEC:
         if (valueFirstPress == true)
         {
@@ -269,6 +270,7 @@ double numPadFloat(u8* title, double old_val, double reset_val, bool negative)
           BUZZER_PLAY(sound_deny);
         }
         break;
+
       case NUM_KEY_MINUS:
         if (negative)
         {
@@ -374,14 +376,14 @@ int32_t numPadInt(u8* title, int32_t old_val, int32_t reset_val, bool negative)
           BUZZER_PLAY(sound_deny);
         }
         break;
+
       case NUM_KEY_RESET:
-      {
         neg = (reset_val >= 0) ? 1 : -1;
         val = reset_val * neg;
         valueFirstPress = true;
         BUZZER_PLAY(sound_keypress);
         break;
-      }
+
       case NUM_KEY_1:
       case NUM_KEY_2:
       case NUM_KEY_3:
