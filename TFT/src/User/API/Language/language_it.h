@@ -345,7 +345,7 @@
     #define STRING_EXT_TEMPLOW            "La temperatura dell'hotend\nè al di sotto della temperatura\nminima (%d℃)."
     #define STRING_HEAT_HOTEND            "Scaldo l'hotend a %d℃?"
     #define STRING_Z_ALIGN                "Allinea Z"
-    #define STRING_MACROS                 "Macros"
-    #define STRING_MESH_VALID             "Mesh Validation"
+    #define STRING_MACROS                 "Macro"
+    #define STRING_MESH_VALID             "Validazione mesh"
 
 #endif
