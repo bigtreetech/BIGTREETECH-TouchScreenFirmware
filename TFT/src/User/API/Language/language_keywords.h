@@ -353,6 +353,7 @@ extern "C" {
 #define LANG_KEY_HEAT_HOTEND                  "label_heat_hotend:"
 #define LANG_KEY_Z_ALIGN                      "label_z_align:"
 #define LANG_KEY_MACROS                       "label_macros:"
+#define LANG_KEY_MESH_VALID                   "label_mesh_valid:"
 
 #ifdef __cplusplus
 }

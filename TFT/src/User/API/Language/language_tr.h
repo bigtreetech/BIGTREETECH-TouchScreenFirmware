@@ -346,5 +346,6 @@
     #define STRING_HEAT_HOTEND            "Ekstruderi %d℃ ye ısıt?"
     #define STRING_Z_ALIGN                "Z Hizala"
     #define STRING_MACROS                 "Macros"
+    #define STRING_MESH_VALID             "Mesh Validation"
 
 #endif
