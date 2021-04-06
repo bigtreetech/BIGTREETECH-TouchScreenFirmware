@@ -346,5 +346,6 @@
     #define STRING_HEAT_HOTEND            "Heize Düse auf %d℃?"
     #define STRING_Z_ALIGN                "Z ausr."
     #define STRING_MACROS                 "Macros"
+    #define STRING_MESH_VALID             "Mesh Validation"
 
 #endif

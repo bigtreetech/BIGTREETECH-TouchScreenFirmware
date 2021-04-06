@@ -346,5 +346,6 @@
     #define STRING_HEAT_HOTEND            "Scaldo l'hotend a %d℃?"
     #define STRING_Z_ALIGN                "Allinea Z"
     #define STRING_MACROS                 "Macros"
+    #define STRING_MESH_VALID             "Mesh Validation"
 
 #endif

@@ -25,7 +25,7 @@ void menuBedLeveling(void)
     {
       {ICON_LEVELING,                LABEL_ABL},
       {ICON_MESH_EDITOR,             LABEL_MESH_EDITOR},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_MESH_VALID,              LABEL_MESH_VALID},
       {ICON_LEVELING_OFF,            LABEL_BL_DISABLE},
       {ICON_Z_FADE,                  LABEL_ABL_Z},
       {ICON_BACKGROUND,              LABEL_BACKGROUND},
@@ -83,6 +83,10 @@ void menuBedLeveling(void)
 
       case KEY_ICON_1:
         infoMenu.menu[++infoMenu.cur] = menuMeshEditor;
+        break;
+
+      case KEY_ICON_2:
+        infoMenu.menu[++infoMenu.cur] = menuMeshValid;
         break;
 
       case KEY_ICON_3:

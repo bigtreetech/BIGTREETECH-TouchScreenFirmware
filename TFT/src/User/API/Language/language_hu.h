@@ -346,5 +346,6 @@
     #define STRING_HEAT_HOTEND            "Fűtöd a fejet %d℃-ra?"
     #define STRING_Z_ALIGN                "Z Igazítás"
     #define STRING_MACROS                 "Makrók"
+    #define STRING_MESH_VALID             "Mesh Validation"
 
 #endif
