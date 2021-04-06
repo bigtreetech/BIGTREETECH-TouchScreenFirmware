@@ -597,6 +597,7 @@ void parseConfigKey(uint16_t index)
       if (key_seen("X")) infoSettings.invert_axis[X_AXIS] = getOnOff();
       if (key_seen("Y")) infoSettings.invert_axis[Y_AXIS] = getOnOff();
       if (key_seen("Z")) infoSettings.invert_axis[Z_AXIS] = getOnOff();
+      if (key_seen("LY")) infoSettings.leveling_invert_y_axis = getOnOff();
       break;
 
     case C_INDEX_PERSISTENT_TEMP:

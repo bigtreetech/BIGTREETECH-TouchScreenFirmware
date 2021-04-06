@@ -28,9 +28,13 @@ typedef struct
   uint16_t fileIndex;          // selected file index
   FS_SOURCE source;            // The source of the file. TFT SD or ONBOARD SD.
   TCHAR * Longfile[FILE_NUM];  // Long file name buffer from ONBOARD SD only
+  bool     model_icon;         // 1: model preview icon exist, 0: not exist
 } MYFILE;
 
 extern MYFILE infoFile;
+
+void setPrintModelIcon(bool exist);
+bool isPrintModelIcon(void);
 
 bool mountFS(void);
 bool scanPrintFiles(void);

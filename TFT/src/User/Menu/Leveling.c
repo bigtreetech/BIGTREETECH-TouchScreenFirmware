@@ -30,7 +30,10 @@ void moveToLevelingPoint(uint8_t point)
     x_left_point = x_right_point;
     x_right_point = temp;
   }
-  if (infoSettings.invert_axis[Y_AXIS])
+  // The y-axis of different printer (move hotbed or move nozzle) move in different directions
+  // So y-axis leveling invert can't follow up invert_axis[Y_AXIS]
+  // We separate a single variable to deal with the y-axis leveling movement direction
+  if (infoSettings.leveling_invert_y_axis)
   {
     int16_t temp = y_lower_point;  // Swap lower and upper
     y_lower_point = y_upper_point;
