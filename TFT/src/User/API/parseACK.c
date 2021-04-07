@@ -756,13 +756,13 @@ void parseACK(void)
       {
         mblUpdateStatus(true);
       }
-      // G30 feedback to get the 4 corners Z value returned by Marlin for LevelCorner function 
-      else if (ack_seen("Bed X: ")) 			   
+      // G30 feedback to get the 4 corners Z value returned by Marlin for LevelCorner function
+      else if (ack_seen("Bed X: "))
       {
         float valy = 0;
         float valx = ack_value();
         if (ack_seen("Y: ")) valy = ack_value();
-        if ((valx < 100) && (valy < 100))		  
+        if ((valx < 100) && (valy < 100))
         {
           if (ack_seen("Z: "))
           {
@@ -770,7 +770,7 @@ void parseACK(void)
             SetLevelCornerPosition(0, 1);
           }
         }
-        else if ((valx > 100) && (valy < 100))	  
+        else if ((valx > 100) && (valy < 100))
         {
           if (ack_seen("Z: "))
           {
@@ -786,7 +786,7 @@ void parseACK(void)
             SetLevelCornerPosition(0, 3);
           }
         }
-        else if ((valx < 100) && (valy > 100))   
+        else if ((valx < 100) && (valy > 100))
         {
           if (ack_seen("Z: "))
           {
