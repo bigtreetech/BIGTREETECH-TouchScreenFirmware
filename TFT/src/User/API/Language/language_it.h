@@ -273,6 +273,7 @@
     #define STRING_ABL_SLOT3              "Slot 3"
     #define STRING_ABL_SLOT_EEPROM        "Ricordo lo slot per il prossimo\nriavvio? (Salva in EEPROM)"
     #define STRING_ABL_Z                  "Z fade"
+    #define STRING_LEVELCORNER            "L corner" 
     #define STRING_P_OFFSET               "P offset"
     #define STRING_H_OFFSET               "H offset"
     #define STRING_DISTANCE               "Distanza"
