@@ -32,7 +32,7 @@ void ScanLevelCorner(u8 pointer)
   {
     mustStoreCmd("M401\n");
     mustStoreCmd("G30 E0 X%d Y%d\n", (s16)pointPosition[pointer][0], (s16)pointPosition[pointer][1]);
-	  mustStoreCmd("G1 Z10\n");
+    mustStoreCmd("G1 Z10\n");
   }
   else
   {
@@ -91,7 +91,7 @@ void refreshProbeAccuracy(MENUITEMS levelItems)
 }
 
 void menuLevelCorner(void)
-{ 
+{
   KEY_VALUES key_num = KEY_IDLE;
   int ReadValuestored = 6;
 
@@ -105,7 +105,7 @@ void menuLevelCorner(void)
 
   // Check min edge limit for the probe with probe offset set in parseACK.c
   uint8_t edge_min = MAX(ABS(getParameter((s16)P_PROBE_OFFSET, X_STEPPER)),ABS((s16)getParameter(P_PROBE_OFFSET, Y_STEPPER))) + 1;
-  if (infoSettings.level_edge < edge_min) 
+  if (infoSettings.level_edge < edge_min)
   {
     infoSettings.level_edge = ((LEVELING_EDGE_DISTANCE >= edge_min) ? LEVELING_EDGE_DISTANCE : edge_min);
   }

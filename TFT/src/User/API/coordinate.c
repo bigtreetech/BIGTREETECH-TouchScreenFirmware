@@ -72,10 +72,9 @@ void coordinateSetAxisTarget(AXIS axis, float position)
   }
 }
 
-// Set level corner position the measured Z offset from probe, see in ABL.c menu refreshLevelCornerValue(MENUITEMS levelItems) and value get from parseACK.c
-void SetLevelCornerPosition(int point,float position)
+uint32_t coordinateGetFeedRate(void)
 {
-  levelCornerPosition[point] = position;
+  return targetPosition.feedrate;
 }
 
 void coordinateSetFeedRate(uint32_t feedrate)
@@ -127,7 +126,8 @@ float GetLevelCornerPosition(int point)
   return levelCornerPosition[point];
 }
 
-uint32_t coordinateGetFeedRate(void)
+// Set level corner position the measured Z offset from probe, see in ABL.c menu refreshLevelCornerValue(MENUITEMS levelItems) and value get from parseACK.c
+void SetLevelCornerPosition(int point,float position)
 {
-  return targetPosition.feedrate;
+  levelCornerPosition[point] = position;
 }
