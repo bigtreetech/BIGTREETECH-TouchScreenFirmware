@@ -96,7 +96,7 @@ void mblDrawHeader(uint8_t *point)
 
   if (point != NULL)
   {
-    sprintf(tempstr, "P%-4d", *point);
+    sprintf(tempstr, "P:%-4d", *point);
     GUI_SetColor(infoSettings.sd_reminder_color);
   }
   else

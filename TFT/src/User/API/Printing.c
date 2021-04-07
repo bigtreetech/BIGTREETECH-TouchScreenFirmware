@@ -544,8 +544,11 @@ void setPrintHost(bool isPrinting)
 
 void setPrintAbort(void)
 {
-  // if printing from onboard SD or remote host
+  // always reset the flag reporting the host is printing (even if the TFT didn't intercept it yet)
+  // due to no further notifications will be sent by the host to notify it is no more printing
   infoHost.printing = false;
+
+  // if printing from onboard SD or remote host
   if (infoPrinting.printing && infoFile.source >= BOARD_SD)
   {
     if (infoMachineSettings.autoReportSDStatus == 1)
