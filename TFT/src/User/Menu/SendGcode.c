@@ -1,7 +1,7 @@
 #include "SendGcode.h"
 #include "includes.h"
 
-#define TERMINAL_MAX_CHAR (NOBEYOND(600, RAM_SIZE*45, 4800))
+#define TERMINAL_MAX_CHAR (NOBEYOND(600, RAM_SIZE * 45, 4800))
 #define MAX_PAGE_COUNT    20
 
 typedef struct
@@ -107,8 +107,8 @@ typedef enum
 #define KEY_COUNT  (1 + (KB_COL_COUNT * KB_ROW_COUNT) + (CTRL_COL_COUNT))  // send + all keys + control bar keys
 
 // control bar sizes
-#define CTRL_WIDTH           (LCD_WIDTH / CTRL_COL_COUNT) // control bar button width in keyboard view
-#define TERMINAL_CTRL_WIDTH  (LCD_WIDTH / TERM_KEY_COUNT) // control bar button width in terminal view
+#define CTRL_WIDTH           (LCD_WIDTH / CTRL_COL_COUNT)  // control bar button width in keyboard view
+#define TERMINAL_CTRL_WIDTH  (LCD_WIDTH / TERM_KEY_COUNT)  // control bar button width in terminal view
 #define CTRL_HEIGHT          ROW_HEIGHT
 
 // value textbox inset padding
@@ -127,7 +127,7 @@ const GUI_RECT textBoxRect = {             0 + TEXTBOX_INSET, (COMMAND_START_ROW
                               3 * CTRL_WIDTH - TEXTBOX_INSET, (COMMAND_START_ROW + 1) * CTRL_HEIGHT - TEXTBOX_INSET};
 
 // keyboard rectangles
-  const GUI_RECT editorKeyRect[KEY_COUNT] = {
+const GUI_RECT editorKeyRect[KEY_COUNT] = {
   // row textbox
   {3 * CTRL_WIDTH, COMMAND_START_ROW * CTRL_HEIGHT, 4 * CTRL_WIDTH, (COMMAND_START_ROW + 1) * CTRL_HEIGHT},  // Send (top row)
 
@@ -184,6 +184,7 @@ const GUI_RECT textBoxRect = {             0 + TEXTBOX_INSET, (COMMAND_START_ROW
     {8 * KEY_WIDTH, (KB_START_ROW + 2) * KEY_HEIGHT, 9 * KEY_WIDTH, (KB_START_ROW + 3) * KEY_HEIGHT},
     {9 * KEY_WIDTH, (KB_START_ROW + 2) * KEY_HEIGHT, 10 * KEY_WIDTH, (KB_START_ROW + 3) * KEY_HEIGHT},
   #endif
+
     // row 4
     {0 * KEY_WIDTH, (KB_START_ROW + 3) * KEY_HEIGHT, 1 * KEY_WIDTH, (KB_START_ROW + 4) * KEY_HEIGHT},
     {1 * KEY_WIDTH, (KB_START_ROW + 3) * KEY_HEIGHT, 2 * KEY_WIDTH, (KB_START_ROW + 4) * KEY_HEIGHT},
@@ -229,17 +230,17 @@ const GUI_RECT textBoxRect = {             0 + TEXTBOX_INSET, (COMMAND_START_ROW
 
 // area rectangles
 const GUI_RECT editorAreaRect[3] = {
-  {0, COMMAND_START_ROW * CTRL_HEIGHT, LCD_WIDTH, ROW_HEIGHT},                   // text box + send area
+  {0, COMMAND_START_ROW * CTRL_HEIGHT, LCD_WIDTH, ROW_HEIGHT},                // text box + send area
   {0, ROW_HEIGHT,                      LCD_WIDTH, LCD_HEIGHT - CTRL_HEIGHT},  // keyboard area
-  {0, CRTL_START_ROW * CTRL_HEIGHT,    LCD_WIDTH, LCD_HEIGHT}                    // control bar area
+  {0, CRTL_START_ROW * CTRL_HEIGHT,    LCD_WIDTH, LCD_HEIGHT}                 // control bar area
 };
 
 const GUI_RECT terminalKeyRect[TERM_KEY_COUNT] = {
-  {0 * TERMINAL_CTRL_WIDTH, LCD_HEIGHT - CTRL_HEIGHT, 1 * TERMINAL_CTRL_WIDTH, LCD_HEIGHT},// page number
-  {1 * TERMINAL_CTRL_WIDTH, LCD_HEIGHT - CTRL_HEIGHT, 2 * TERMINAL_CTRL_WIDTH, LCD_HEIGHT},// page down
-  {2 * TERMINAL_CTRL_WIDTH, LCD_HEIGHT - CTRL_HEIGHT, 3 * TERMINAL_CTRL_WIDTH, LCD_HEIGHT},// page up
-  {3 * TERMINAL_CTRL_WIDTH, LCD_HEIGHT - CTRL_HEIGHT, 4 * TERMINAL_CTRL_WIDTH, LCD_HEIGHT},// ACK
-  {4 * TERMINAL_CTRL_WIDTH, LCD_HEIGHT - CTRL_HEIGHT, 5 * TERMINAL_CTRL_WIDTH, LCD_HEIGHT},// Back
+  {0 * TERMINAL_CTRL_WIDTH, LCD_HEIGHT - CTRL_HEIGHT, 1 * TERMINAL_CTRL_WIDTH, LCD_HEIGHT},  // page number
+  {1 * TERMINAL_CTRL_WIDTH, LCD_HEIGHT - CTRL_HEIGHT, 2 * TERMINAL_CTRL_WIDTH, LCD_HEIGHT},  // page down
+  {2 * TERMINAL_CTRL_WIDTH, LCD_HEIGHT - CTRL_HEIGHT, 3 * TERMINAL_CTRL_WIDTH, LCD_HEIGHT},  // page up
+  {3 * TERMINAL_CTRL_WIDTH, LCD_HEIGHT - CTRL_HEIGHT, 4 * TERMINAL_CTRL_WIDTH, LCD_HEIGHT},  // ACK
+  {4 * TERMINAL_CTRL_WIDTH, LCD_HEIGHT - CTRL_HEIGHT, 5 * TERMINAL_CTRL_WIDTH, LCD_HEIGHT},  // Back
 };
 
 const GUI_RECT terminalAreaRect[2] = {
@@ -249,7 +250,7 @@ const GUI_RECT terminalAreaRect[2] = {
 
 // keyboard keys for first layout
 const char * const gcodeKey123[KEY_COUNT] = {
-    "Send", "ABC", "Space", "Del", "Back",
+  "Send", "ABC", "Space", "Del", "Back",
   #if KB_COL_COUNT == LAYOUT_1_COL_COUNT
     "1", "2", "3", "M", "G", "T",
     "4", "5", "6", "X", "Y", "Z",
@@ -325,7 +326,7 @@ static inline void keyboardDrawButton(uint8_t index, uint8_t isPressed)
   if (index >= COUNT(editorKeyRect))
     return;
 
- // Setup colors and button info
+  // Setup colors and button info
   #ifdef KEYBOARD_MATERIAL_THEME
     uint16_t fontcolor = KEY_FONT_COLOR;
     uint16_t bgcolor = KEY_BG_COLOR;
@@ -363,11 +364,10 @@ static inline void keyboardDrawButton(uint8_t index, uint8_t isPressed)
 
   if (index != GKEY_SEND)
     setLargeFont(true);
-  // draw button
+    // draw button
     GUI_DrawButton(&btn, isPressed);
 
-  #else //KEYBOARD_MATERIAL_THEME
-
+  #else  // KEYBOARD_MATERIAL_THEME
     if (isPressed)
     {
       if (index > GKEY_BACK)
@@ -398,13 +398,14 @@ static inline void keyboardDrawButton(uint8_t index, uint8_t isPressed)
     if (index != GKEY_SEND)
       setLargeFont(true);
 
-    GUI_ClearRect(editorKeyRect[index].x0 + 1, editorKeyRect[index].y0 + 1, editorKeyRect[index].x1 - 1,
-                  editorKeyRect[index].y1 - 1);
+    GUI_ClearRect(editorKeyRect[index].x0 + 1, editorKeyRect[index].y0 + 1,  // skip border because used by button border
+                  editorKeyRect[index].x1 - 1, editorKeyRect[index].y1 - 1);
 
-    GUI_DispStringInRect(editorKeyRect[index].x0 + 1, editorKeyRect[index].y0 + 1, editorKeyRect[index].x1 - 1,
-                        editorKeyRect[index].y1 - 1, (uint8_t *)((numpad) ? gcodeKey123[index] : gcodeKeyABC[index]));
+    GUI_DispStringInRect(editorKeyRect[index].x0 + 1, editorKeyRect[index].y0 + 1,
+                         editorKeyRect[index].x1 - 1, editorKeyRect[index].y1 - 1,
+                         (uint8_t *)((numpad) ? gcodeKey123[index] : gcodeKeyABC[index]));
 
-  #endif // KEYBOARD_MATERIAL_THEME
+  #endif  // KEYBOARD_MATERIAL_THEME
 
   setLargeFont(false);
 }
@@ -413,7 +414,7 @@ static inline void drawGcodeText(char *gcode)
 {
   GUI_SetColor(TEXTBOX_FONT_COLOR);
   GUI_SetBkColor(TEXTBOX_BG_COLOR);
-  GUI_ClearPrect(&textBoxRect);
+  GUI_ClearRect(textBoxRect.x0 + 1, textBoxRect.y0 + 1, textBoxRect.x1 - 1, textBoxRect.y1 - 1);  // skip border because used by shadow border
 
   if (gcode != NULL)
     GUI_DispStringInRect(textBoxRect.x0 + 1, textBoxRect.y0 + 1, textBoxRect.x1 - 1, textBoxRect.y1 - 1, (uint8_t *)gcode);
@@ -433,13 +434,9 @@ static inline void drawKeyboard(void)
     // draw horizontal button borders
     for (int i = 0; i < (KB_ROW_COUNT - 1); i++)
     {
-      GUI_HLine( editorAreaRect[1].x0, editorKeyRect[(i * KB_COL_COUNT)  + GKEY_BACK + 1].y1, editorAreaRect[1].x1);
+      GUI_HLine(editorAreaRect[1].x0, editorKeyRect[(i * KB_COL_COUNT) + GKEY_BACK + 1].y1, editorAreaRect[1].x1);
     }
   #endif
-
-  GUI_SetColor(BAR_BORDER_COLOR);
-  GUI_HLine( editorAreaRect[0].x0, editorAreaRect[0].y1, editorAreaRect[0].x1);
-  GUI_HLine( editorAreaRect[2].x0, editorAreaRect[2].y0, editorAreaRect[1].x1);
 
   for (uint8_t i = 0; i < COUNT(gcodeKeyABC); i++)
   {
@@ -461,14 +458,14 @@ static inline void keyboardDrawMenu(void)
   GUI_ClearPrect(&editorAreaRect[2]);
 
   #ifndef KEYBOARD_MATERIAL_THEME
-    // draw bar area shadow border
     GUI_SetColor(BAR_BORDER_COLOR);
 
-    // draw gcode value area border
+    // draw text box area shadow border
     GUI_DrawPrect(&textBoxRect);
 
-    GUI_HLine(editorAreaRect[0].x0, editorAreaRect[0].y1, editorAreaRect[0].x1);
-    GUI_HLine(editorAreaRect[2].x0, editorAreaRect[2].y0, editorAreaRect[2].x1);
+    // draw bar area shadow border
+    GUI_HLine(editorAreaRect[0].x0, editorAreaRect[0].y1 - 1, editorAreaRect[0].x1);  // last row of bar 1 area used for shadow border
+    GUI_HLine(editorAreaRect[2].x0, editorAreaRect[2].y0, editorAreaRect[2].x1);      // first row of bar 2 area used for shadow border
   #endif
 
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
@@ -504,7 +501,7 @@ static inline void menuKeyboardView(void)
       case GKEY_SEND:
         if (nowIndex)
         {
-          gcodeBuf[nowIndex++] = '\n'; // End char '\n' for Gcode
+          gcodeBuf[nowIndex++] = '\n';  // End char '\n' for Gcode
           gcodeBuf[nowIndex] = 0;
           storeCmd(gcodeBuf);
           gcodeBuf[nowIndex = 0] = 0;
@@ -550,7 +547,7 @@ static inline void menuKeyboardView(void)
   GUI_RestoreColorDefault();
 }
 
-static inline void saveGcodeTerminalCache( char *str)
+static inline void saveGcodeTerminalCache(char *str)
 {
   uint16_t len = 0;
   uint16_t sign_len = strlen(str);
@@ -622,17 +619,18 @@ static inline void terminalDrawButton(uint8_t index, uint8_t isPressed)
     GUI_SetColor(BAR_FONT_COLOR);
     GUI_SetBkColor(BAR_BG_COLOR);
   }
-  #endif //KEYBOARD_MATERIAL_THEME
+  #endif  // KEYBOARD_MATERIAL_THEME
 
   setLargeFont(true);
 
   #ifdef KEYBOARD_MATERIAL_THEME
     GUI_DrawButton(&btn, isPressed);
   #else
-  GUI_ClearRect(terminalKeyRect[index].x0 + 1, terminalKeyRect[index].y0 + 1, terminalKeyRect[index].x1 - 1,
-                terminalKeyRect[index].y1 - 1);
-  GUI_DispStringInRect(terminalKeyRect[index].x0 + 1, terminalKeyRect[index].y0 + 1, terminalKeyRect[index].x1 - 1,
-                       terminalKeyRect[index].y1 - 1, (uint8_t *)terminalKey[index]);
+    GUI_ClearRect(terminalKeyRect[index].x0, terminalKeyRect[index].y0 + 1,  // skip first row because used by shadow border
+                  terminalKeyRect[index].x1, terminalKeyRect[index].y1 - 1);
+    GUI_DispStringInRect(terminalKeyRect[index].x0, terminalKeyRect[index].y0 + 1,
+                         terminalKeyRect[index].x1, terminalKeyRect[index].y1 - 1,
+                         (uint8_t *)terminalKey[index]);
   #endif
 
   setLargeFont(false);
@@ -641,7 +639,7 @@ static inline void terminalDrawButton(uint8_t index, uint8_t isPressed)
 static inline void terminalDrawPageNumber(void)
 {
   GUI_SetBkColor(BAR_BG_COLOR);
-  GUI_ClearRect(terminalKeyRect[TERM_PAGE_NUMBER].x0, terminalKeyRect[TERM_PAGE_NUMBER].y0 + 1,
+  GUI_ClearRect(terminalKeyRect[TERM_PAGE_NUMBER].x0, terminalKeyRect[TERM_PAGE_NUMBER].y0 + 1,  // skip first row because used by shadow border
                 terminalKeyRect[TERM_PAGE_NUMBER].x1, terminalKeyRect[TERM_PAGE_NUMBER].y1);
 
   char tempstr[10];
@@ -650,7 +648,9 @@ static inline void terminalDrawPageNumber(void)
 
   GUI_SetColor(BAR_FONT_COLOR);
   setLargeFont(true);
-  GUI_DispStringInPrect(&terminalKeyRect[TERM_PAGE_NUMBER], (uint8_t *)tempstr);
+  GUI_DispStringInRect(terminalKeyRect[TERM_PAGE_NUMBER].x0, terminalKeyRect[TERM_PAGE_NUMBER].y0 + 1,
+                       terminalKeyRect[TERM_PAGE_NUMBER].x1, terminalKeyRect[TERM_PAGE_NUMBER].y1 - 1,
+                       (uint8_t *)tempstr);
   setLargeFont(false);
 }
 
@@ -666,15 +666,16 @@ static inline void terminalDrawMenu(void)
   GUI_SetBkColor(BAR_BG_COLOR);
   GUI_ClearPrect(&terminalAreaRect[1]);
 
-  // draw border
+  // draw bar area shadow border
   GUI_SetColor(BAR_BORDER_COLOR);
-  GUI_HLine(terminalAreaRect[0].x0, terminalAreaRect[0].y1, terminalAreaRect[0].x1);
+  GUI_HLine(terminalAreaRect[1].x0, terminalAreaRect[1].y0, terminalAreaRect[1].x1);  // first row of bar area used for shadow border
 
   // draw keyboard
   for (uint8_t i = 0; i < COUNT(terminalKeyRect); i++)
   {
     terminalDrawButton(i, false);
   }
+
   terminalDrawPageNumber();
 }
 
@@ -818,7 +819,7 @@ void menuTerminal(void)
 {
   TERMINAL_DATA termPage = {{terminalBuf}, 0, 0, 0, 0, 0, 0, TERMINAL_MAX_CHAR, MAX_PAGE_COUNT, 0};
 
-  if (isPrinting() || infoHost.printing) // display only 1 page if printing
+  if (isPrinting() || infoHost.printing)  // display only 1 page if printing
   {
     termPage.buffSize = (LCD_WIDTH / BYTE_WIDTH * LCD_HEIGHT / BYTE_HEIGHT);
     termPage.maxPageCount = 1;
