@@ -57,7 +57,7 @@ void LCD_FSMC_Config(void)
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
   RCC_AHBPeriphClockCmd(RCC_AHBPeriph_FSMC, ENABLE);
 
-  readWriteTiming.FSMC_AddressSetupTime = 0x01;  //HCLK 1/36M=27ns
+  readWriteTiming.FSMC_AddressSetupTime = 0x01;  // HCLK 1/36M=27ns
   readWriteTiming.FSMC_AddressHoldTime = 0x00;
   readWriteTiming.FSMC_DataSetupTime = 0x0f;
   readWriteTiming.FSMC_BusTurnAroundDuration = 0x00;
@@ -94,7 +94,7 @@ void LCD_FSMC_Config(void)
   FSMC_NORSRAMInitStructure.FSMC_WriteTimingStruct = &writeTiming;
 
   FSMC_NORSRAMInit(&FSMC_NORSRAMInitStructure);
-  /*FSMC Bank1_SRAM Bank */
+  // FSMC Bank1_SRAM Bank
   FSMC_NORSRAMCmd(FSMC_Bank1_NORSRAM1, ENABLE);
 }
 
@@ -140,7 +140,7 @@ uint16_t LCD_RD_DATA(void)
 
   LCD_RS_SET;
   LCD_CS_CLR;
-  LCD_RD_CLR; // double for delay.
+  LCD_RD_CLR;  // double for delay.
   LCD_RD_CLR;
   ram = DATAIN();
   LCD_RD_SET;
@@ -166,12 +166,12 @@ void LCD_GPIO_Config(void)
 
   /*Configure GPIO pins : Pin1_Pin Pin2_Pin */
 
-  //GPIO_InitStructure.GPIO_Pin = LCD_nWR_Pin|FLASH_nCS_Pin|FILAMENT_DI_Pin|POWER_DI_Pin;
+  // GPIO_InitStructure.GPIO_Pin = LCD_nWR_Pin|FLASH_nCS_Pin|FILAMENT_DI_Pin|POWER_DI_Pin;
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_14|GPIO_Pin_9;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_Init(GPIOB, &GPIO_InitStructure);
-  //GPIO_InitStructure.GPIO_Pin = SDCARD_nCS_Pin|LCD_RS_Pin|LCD_BACKLIGHT_Pin|LCD_nRD_Pin;
+  // GPIO_InitStructure.GPIO_Pin = SDCARD_nCS_Pin|LCD_RS_Pin|LCD_BACKLIGHT_Pin|LCD_nRD_Pin;
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13|GPIO_Pin_15;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
@@ -192,7 +192,7 @@ void LCD_GPIO_Config(void)
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_InitStructure.GPIO_Mode =  GPIO_Mode_Out_PP;
   GPIO_Init(GPIOE, &GPIO_InitStructure);
-  LCD_RD_SET;//set this as we only change it when reading
+  LCD_RD_SET;  // set this as we only change it when reading
 
   #else
 

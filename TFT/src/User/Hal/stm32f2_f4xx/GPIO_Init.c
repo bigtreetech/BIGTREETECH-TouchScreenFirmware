@@ -20,7 +20,7 @@ void GPIO_InitSet(uint16_t io, GPIO_MODE mode, uint8_t AF)
   GPIO_Port[port]->PUPDR &= ~(3 << (pin*2));  //clear pull bits
   GPIO_Port[port]->PUPDR |= (GPIO_MODE_GET_PULL(mode)) << (pin*2);  //set pull bits
 
-  if ((GPIO_MODE_GET_MODE(mode) == 1) || (GPIO_MODE_GET_MODE(mode) == 2)) //output
+  if ((GPIO_MODE_GET_MODE(mode) == 1) || (GPIO_MODE_GET_MODE(mode) == 2))  //output
   {
     GPIO_Port[port]->OTYPER &= ~(1 << pin);  //clear output type bit
     GPIO_Port[port]->OTYPER |= GPIO_MODE_GET_OTYPE(mode) << pin;  //set output type bit

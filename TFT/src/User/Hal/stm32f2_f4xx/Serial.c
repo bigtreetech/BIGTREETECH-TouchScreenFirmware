@@ -41,7 +41,7 @@ void Serial_DMA_Config(uint8_t port)
 
   RCC_AHB1PeriphClockCmd(cfg->dma_rcc, ENABLE);  // DMA RCC EN
 
-  cfg->dma_stream->CR &= ~(1<<0); // Disable DMA
+  cfg->dma_stream->CR &= ~(1<<0);  // Disable DMA
   Serial_DMAClearFlag(port);
   cfg->uart->CR3 |= 1<<6;  // DMA enable receiver
 
@@ -64,7 +64,7 @@ void Serial_Config(uint8_t port, u32 baud)
 {
   dmaL1Data[port].rIndex = dmaL1Data[port].wIndex = 0;
   dmaL1Data[port].cache = malloc(dmaL1Data[port].cacheSize);
-  while(!dmaL1Data[port].cache); // malloc failed
+  while(!dmaL1Data[port].cache);           // malloc failed
   UART_Config(port, baud, USART_IT_IDLE);  // IDLE interrupt
   Serial_DMA_Config(port);
 }
@@ -73,7 +73,7 @@ void Serial_DeConfig(uint8_t port)
 {
   free(dmaL1Data[port].cache);
   dmaL1Data[port].cache = NULL;
-  Serial[port].dma_stream->CR &= ~(1<<0); // Disable DMA
+  Serial[port].dma_stream->CR &= ~(1<<0);  // Disable DMA
   Serial_DMAClearFlag(port);
   UART_DeConfig(port);
 }

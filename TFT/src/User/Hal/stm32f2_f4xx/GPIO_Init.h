@@ -3,6 +3,7 @@
 
 #include "variants.h"
 #include "STM32Fxx_Pins.h"
+
 /*
 * bit 0:1 gpio mode  00: Input (reset state)  01: General purpose output mode  10: Alternate function mode  11: Analog mode
 * bit 2   gpio output type  0: Output push-pull (reset state) 1: Output open-drain

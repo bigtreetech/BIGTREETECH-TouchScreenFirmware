@@ -128,7 +128,7 @@ void menuZOffset(void)
     offsetIncreaseValue = probeOffsetIncreaseValue;
     offsetResetValue = probeOffsetResetValue;
     offsetGetValue = probeOffsetGetValue;
-  
+
     #if LCD_ENCODER_SUPPORT
       offsetUpdateValueByEncoder = probeOffsetUpdateValueByEncoder;
     #endif
@@ -143,7 +143,7 @@ void menuZOffset(void)
     offsetIncreaseValue = homeOffsetIncreaseValue;
     offsetResetValue = homeOffsetResetValue;
     offsetGetValue = homeOffsetGetValue;
-  
+
     #if LCD_ENCODER_SUPPORT
       offsetUpdateValueByEncoder = homeOffsetUpdateValueByEncoder;
     #endif
