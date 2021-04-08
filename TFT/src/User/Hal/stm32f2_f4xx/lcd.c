@@ -62,21 +62,21 @@ void LCD_FSMC_Config(void)
 
   RCC_AHB3PeriphClockCmd(RCC_AHB3Periph_FSMC, ENABLE);
 
-  readWriteTiming.FSMC_AddressSetupTime = 0x01;	 //Address setup time (ADDSET) is 2 HCLK 1 / 36M = 27ns
+  readWriteTiming.FSMC_AddressSetupTime = 0x01;  //Address setup time (ADDSET) is 2 HCLK 1 / 36M = 27ns
   readWriteTiming.FSMC_AddressHoldTime = 0x00;
   readWriteTiming.FSMC_DataSetupTime = 0x0f;
   readWriteTiming.FSMC_BusTurnAroundDuration = 0x00;
   readWriteTiming.FSMC_CLKDivision = 0x00;
   readWriteTiming.FSMC_DataLatency = 0x00;
-  readWriteTiming.FSMC_AccessMode = FSMC_AccessMode_A;	 //Mode A
+  readWriteTiming.FSMC_AccessMode = FSMC_AccessMode_A;   //Mode A
 
-  writeTiming.FSMC_AddressSetupTime = 0x00;	 //Address setup time (ADDSET) is 1 HCLK
+  writeTiming.FSMC_AddressSetupTime = 0x00;  //Address setup time (ADDSET) is 1 HCLK
   writeTiming.FSMC_AddressHoldTime = 0x00;
   writeTiming.FSMC_DataSetupTime = TFTLCD_DRIVER_SPEED; //Data save time
   writeTiming.FSMC_BusTurnAroundDuration = 0x00;
   writeTiming.FSMC_CLKDivision = 0x00;
   writeTiming.FSMC_DataLatency = 0x00;
-  writeTiming.FSMC_AccessMode = FSMC_AccessMode_A;	 //Mode A
+  writeTiming.FSMC_AccessMode = FSMC_AccessMode_A;   //Mode A
 
   FSMC_NORSRAMInitStructure.FSMC_Bank = FSMC_Bank1_NORSRAM1;  //Select the address of the external storage area
   FSMC_NORSRAMInitStructure.FSMC_DataAddressMux = FSMC_DataAddressMux_Disable;//Configure whether the data and address lines are multiplexed

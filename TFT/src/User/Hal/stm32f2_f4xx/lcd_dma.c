@@ -37,13 +37,13 @@
 //16bits, SPI_RX to LCD_RAM.
 void LCD_DMA_Config(void)
 {
-  RCC->AHB1ENR |= W25QXX_SPI_DMA_RCC_AHB;				//Turn on the DMA clock
-  Delay_ms(5);					//Wait for the DMA clock to stabilize
-  W25QXX_SPI_DMA_STREAM->PAR = (u32)&W25QXX_SPI_NUM->DR;			//The peripheral address is: SPI-> DR
+  RCC->AHB1ENR |= W25QXX_SPI_DMA_RCC_AHB;               //Turn on the DMA clock
+  Delay_ms(5);                  //Wait for the DMA clock to stabilize
+  W25QXX_SPI_DMA_STREAM->PAR = (u32)&W25QXX_SPI_NUM->DR;            //The peripheral address is: SPI-> DR
   W25QXX_SPI_DMA_STREAM->M0AR = (u32)&LCD->LCD_RAM;//The target address is LCD_RAM
 //  W25QXX_SPI_DMA_STREAM->M1AR = 0; // (used in case of Double buffer mode)
 //  W25QXX_SPI_DMA_CHANNEL->CMAR =
-  W25QXX_SPI_DMA_STREAM->NDTR = 0;			// DMA, the amount of data transferred, temporarily set to 0
+  W25QXX_SPI_DMA_STREAM->NDTR = 0;          // DMA, the amount of data transferred, temporarily set to 0
 
   W25QXX_SPI_DMA_STREAM->CR = W25QXX_SPI_DMA_CHANNEL << 25;
   W25QXX_SPI_DMA_STREAM->CR |= 1<<16;  // Priority level: Medium
@@ -54,7 +54,7 @@ void LCD_DMA_Config(void)
   W25QXX_SPI_DMA_STREAM->CR |= 0<<6;   //Non-memory to memory mode
 }
 
-#define LCD_DMA_MAX_TRANS	65535		//DMA 65535 bytes one frame
+#define LCD_DMA_MAX_TRANS   65535       //DMA 65535 bytes one frame
 // start DMA transfer from SPI->DR to FSMC
 // the max bytes of one frame is LCD_DMA_MAX_TRANS 65535
 void lcd_frame_segment_display(u16 size, u32 addr)

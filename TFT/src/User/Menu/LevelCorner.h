@@ -1,5 +1,5 @@
-#ifndef _LEVELCORNER_H_
-#define _LEVELCORNER_H_
+#ifndef _LEVEL_CORNER_H_
+#define _LEVEL_CORNER_H_
 
 #ifdef __cplusplus
 extern "C" {

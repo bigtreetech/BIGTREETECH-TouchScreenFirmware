@@ -42,7 +42,7 @@ void LCD_GPIO_Config(void)
   /*
   * PD4-FSMC_NOE   :LCD-RD
   * PD5-FSMC_NWE   :LCD-WR
-  * PD7-FSMC_NE1	 :LCD-CS
+  * PD7-FSMC_NE1     :LCD-CS
   * PE2-FSMC_A23   :LCD-RS
   */
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_7  | GPIO_Pin_11;
@@ -57,7 +57,7 @@ void LCD_FSMC_Config(void)
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
   RCC_AHBPeriphClockCmd(RCC_AHBPeriph_FSMC, ENABLE);
 
-  readWriteTiming.FSMC_AddressSetupTime = 0x01;	 //HCLK 1/36M=27ns
+  readWriteTiming.FSMC_AddressSetupTime = 0x01;  //HCLK 1/36M=27ns
   readWriteTiming.FSMC_AddressHoldTime = 0x00;
   readWriteTiming.FSMC_DataSetupTime = 0x0f;
   readWriteTiming.FSMC_BusTurnAroundDuration = 0x00;
@@ -107,27 +107,27 @@ void LCD_HardwareConfig(void)
 #else
 void LCD_WR_REG(uint16_t data)
 {
-	LCD_RS_CLR;
- 	LCD_CS_CLR;
-	DATAOUT(data);
-	LCD_WR_CLR;
-	LCD_WR_SET;
- 	LCD_CS_SET;
+  LCD_RS_CLR;
+  LCD_CS_CLR;
+  DATAOUT(data);
+  LCD_WR_CLR;
+  LCD_WR_SET;
+  LCD_CS_SET;
 }
 
 void LCD_WR_DATA(uint16_t data)
 {
-	LCD_RS_SET;
-	LCD_CS_CLR;
-	DATAOUT(data);
-	LCD_WR_CLR;
-	LCD_WR_SET;
-	LCD_CS_SET;
+  LCD_RS_SET;
+  LCD_CS_CLR;
+  DATAOUT(data);
+  LCD_WR_CLR;
+  LCD_WR_SET;
+  LCD_CS_SET;
 }
 
 uint16_t LCD_RD_DATA(void)
 {
-  #if defined(MKS_32_V1_3) || defined(MKS_32_V1_4) || defined (MKS_28_V1_0)
+  #if defined(MKS_32_V1_3) || defined(MKS_32_V1_4) || defined (MKS_28_V3_0) || defined (MKS_28_V4_0)
     #define LCD_DATA_PORT GPIOE
   #else
     #define LCD_DATA_PORT GPIOC
@@ -155,7 +155,7 @@ uint16_t LCD_RD_DATA(void)
 void LCD_GPIO_Config(void)
 {
 
- #if defined(MKS_32_V1_3) || defined(MKS_32_V1_4) || defined (MKS_28_V1_0)
+ #if defined(MKS_32_V1_3) || defined(MKS_32_V1_4) || defined (MKS_28_V3_0) || defined (MKS_28_V4_0)
 
  GPIO_InitTypeDef GPIO_InitStructure;
   /* GPIO Ports Clock Enable */
@@ -205,7 +205,7 @@ void LCD_GPIO_Config(void)
   /*D0 - D15: PC0 - PC15 */
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_All;
   GPIO_Init(GPIOC, &GPIO_InitStructure);
-	GPIO_SetBits(GPIOC, GPIO_Pin_All);
+  GPIO_SetBits(GPIOC, GPIO_Pin_All);
 
   /*
   * PB6   :LCD-RD
@@ -215,7 +215,7 @@ void LCD_GPIO_Config(void)
   */
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9;
   GPIO_Init(GPIOB, &GPIO_InitStructure);
-	GPIO_SetBits(GPIOB, GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9);
+  GPIO_SetBits(GPIOB, GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9);
   #endif
 }
 

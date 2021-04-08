@@ -37,7 +37,7 @@ void TIM_PWM_Init(uint16_t tim_ch)
   uint16_t timerIndex = TIMER_GET_TIM(tim_ch);
   uint16_t channel = TIMER_GET_CH(tim_ch);
   const TIMER* timer = &pwmTimer[timerIndex];
-	uint32_t timerTmpClk = (timer->rcc_src == &RCC->APB1ENR) ? mcuClocks.PCLK1_Timer_Frequency : mcuClocks.PCLK2_Timer_Frequency;
+  uint32_t timerTmpClk = (timer->rcc_src == &RCC->APB1ENR) ? mcuClocks.PCLK1_Timer_Frequency : mcuClocks.PCLK2_Timer_Frequency;
 
   *timer->rcc_src |= (1 << timer->rcc_bit); // Enable timer clock
 

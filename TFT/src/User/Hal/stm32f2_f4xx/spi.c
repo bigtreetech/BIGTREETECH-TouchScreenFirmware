@@ -83,7 +83,7 @@ void SPI_Protocol_Init(uint8_t port, uint8_t baudrate)
 {
   *rcc_spi_rst[port] |= rcc_spi_bit[port];
   *rcc_spi_rst[port] &= ~rcc_spi_bit[port]; // Reset SPI clock
-  
+
   *rcc_spi_en[port] |= rcc_spi_bit[port]; // Enable SPI clock
 
   spi[port]->CR1 = (0<<15)        // 0:2-line 1: 1-line

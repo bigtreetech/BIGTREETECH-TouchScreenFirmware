@@ -87,9 +87,9 @@ void UART_GPIO_DeInit(uint8_t port)
 void UART_Protocol_Init(uint8_t port,uint32_t baud)
 {
   USART_InitTypeDef USART_InitStructure;
-  
+
   *rcc_uart_en[port] |= rcc_uart_bit[port];
-  
+
   USART_InitStructure.USART_BaudRate = baud;
   USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
   USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;

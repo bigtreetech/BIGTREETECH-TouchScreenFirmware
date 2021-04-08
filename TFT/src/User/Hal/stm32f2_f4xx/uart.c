@@ -139,7 +139,7 @@ void UART_Config(uint8_t port, uint32_t baud, uint16_t usart_it)
 void UART_DeConfig(uint8_t port)
 {
   UART_GPIO_DeInit(port);
-  
+
   *rcc_uart_rst[port] |= rcc_uart_bit[port];
   *rcc_uart_rst[port] &= ~rcc_uart_bit[port]; // Reset clock
 }
