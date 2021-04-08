@@ -8,7 +8,6 @@ typedef struct
   uint32_t size;        // Gcode file total size
   uint32_t cur;         // Gcode has printed file size
   uint8_t  progress;
-  bool     model_icon;  // 1: model preview icon exist, 0: not exist
   bool     runout;      // 1: runout in printing, 0: idle
   bool     printing;    // 1: means printing, 0: means idle
   bool     pause;       // 1: means paused
@@ -116,16 +115,6 @@ bool updatePrintProgress(void)
 uint8_t getPrintProgress(void)
 {
   return infoPrinting.progress;
-}
-
-void setPrintModelIcon(bool exist)
-{
-  infoPrinting.model_icon = exist;
-}
-
-bool isPrintModelIcon(void)
-{
-  return infoPrinting.model_icon;
 }
 
 void setPrintRunout(bool runout)
@@ -293,9 +282,7 @@ static inline void printRemoteStart(void)
 void printStart(FIL * file, uint32_t size)
 {
   // always clean infoPrinting first and then set the needed attributes
-  bool model_icon = infoPrinting.model_icon;  // 'model_icon' is set in print menu and cannot be cleared here.
   memset(&infoPrinting, 0, sizeof(PRINTING));
-  infoPrinting.model_icon = model_icon;  // Restore 'model_icon' flag
 
   // we assume infoPrinting is clean, so we need to set only the needed attributes
   infoPrinting.size = size;
@@ -557,8 +544,11 @@ void setPrintHost(bool isPrinting)
 
 void setPrintAbort(void)
 {
-  // if printing from onboard SD or remote host
+  // always reset the flag reporting the host is printing (even if the TFT didn't intercept it yet)
+  // due to no further notifications will be sent by the host to notify it is no more printing
   infoHost.printing = false;
+
+  // if printing from onboard SD or remote host
   if (infoPrinting.printing && infoFile.source >= BOARD_SD)
   {
     if (infoMachineSettings.autoReportSDStatus == 1)

@@ -32,7 +32,7 @@ typedef enum
 #define CONFIG_SUPPPORT 20210311
 
 #define FONT_FLASH_SIGN       20200908  //(YYYYMMDD) change if fonts require updating
-#define CONFIG_FLASH_SIGN     20210311  //(YYYYMMDD) change if any keyword(s) in config.ini is added or removed
+#define CONFIG_FLASH_SIGN     20210405  //(YYYYMMDD) change if any keyword(s) in config.ini is added or removed
 #define LANGUAGE_FLASH_SIGN   20210217  //(YYYYMMDD) change if any keyword(s) in language pack is added or removed
 #define ICON_FLASH_SIGN       20210217  //(YYYYMMDD) change if any icon(s) is added or removed
 
@@ -100,6 +100,7 @@ typedef struct
   uint8_t rotate_ui;
   uint8_t terminalACK;
   uint8_t invert_axis[AXIS_NUM];
+  uint8_t leveling_invert_y_axis;
   uint8_t persistent_info;
   uint8_t file_listmode;
   uint8_t ack_notification;

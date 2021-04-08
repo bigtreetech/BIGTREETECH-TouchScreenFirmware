@@ -138,6 +138,7 @@ void infoSettingsReset(void)
     infoSettings.machine_size_min[i]  = default_size_min[i];
     infoSettings.machine_size_max[i]  = default_size_max[i];
   }
+  infoSettings.leveling_invert_y_axis = DISABLED;
 
   for (int i = 0; i < FEEDRATE_COUNT - 1 ; i++)  //xy, z
   {

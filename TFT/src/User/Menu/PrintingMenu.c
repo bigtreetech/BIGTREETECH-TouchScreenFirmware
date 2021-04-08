@@ -33,8 +33,8 @@ const GUI_RECT printinfo_val_rect[6] = {
 const GUI_RECT ProgressBar = {START_X + 1,                                PICON_START_Y + PICON_HEIGHT * 2 + PICON_SPACE_Y * 2 + 1,
                               START_X + 4 * ICON_WIDTH + 3 * SPACE_X - 1, ICON_START_Y + ICON_HEIGHT + SPACE_Y - PICON_SPACE_Y - 1};
 
-static uint32_t nextLayerDrawTime = 0;
 const  char *const Speed_ID[2] = {"Speed", "Flow"};
+static uint32_t nextLayerDrawTime = 0;
 bool hasFilamentData;
 
 #define TOGGLE_TIME     2000  // 1 seconds is 1000
@@ -211,12 +211,9 @@ static inline void reDrawProgress(int icon_pos, uint8_t prevProgress)
   GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (uint8_t *)buf);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 
-  if (prevProgress != newProgress)  // Update the progress bar only when the progress changes
-  {
-    uint16_t progStart = ((ProgressBar.x1 - ProgressBar.x0) * prevProgress) / 100;
-    uint16_t progEnd = ((ProgressBar.x1 - ProgressBar.x0) * newProgress) / 100;
-    GUI_FillRectColor(ProgressBar.x0 + progStart, ProgressBar.y0, ProgressBar.x0 + progEnd, ProgressBar.y1, MAT_ORANGE);
-  }
+  uint16_t progStart = ((ProgressBar.x1 - ProgressBar.x0) * prevProgress) / 100;
+  uint16_t progEnd = ((ProgressBar.x1 - ProgressBar.x0) * newProgress) / 100;
+  GUI_FillRectColor(ProgressBar.x0 + progStart, ProgressBar.y0, ProgressBar.x0 + progEnd, ProgressBar.y1, MAT_ORANGE);
 }
 
 static inline void reDrawLayer(int icon_pos)

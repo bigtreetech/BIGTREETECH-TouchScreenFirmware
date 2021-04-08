@@ -31,9 +31,17 @@ void meshDrawHeader(uint16_t col, uint16_t row)
   char tempstr[25];
 
   if (infoMachineSettings.leveling == BL_MBL)
+  {
+    sprintf(tempstr, "MBL ZO:%.2f", infoParameters.MblOffset[0]);
+    GUI_SetColor(infoSettings.reminder_color);
+    GUI_DispString(exhibitRect.x0, exhibitRect.y1 - BYTE_HEIGHT, (uint8_t *) tempstr);
+
     sprintf(tempstr, "I:%d J:%d", col, row);
+  }
   else
-    sprintf(tempstr, "I:%d J:%d shim:%.2f", col, row, infoSettings.level_z_pos);
+  {
+    sprintf(tempstr, "I:%d J:%d Shim:%.2f", col, row, infoSettings.level_z_pos);
+  }
 
   GUI_SetColor(infoSettings.sd_reminder_color);
   GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *) tempstr);

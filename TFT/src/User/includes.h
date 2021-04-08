@@ -111,6 +111,7 @@
 #include "BedLevelingLayer2.h"
 #include "MBL.h"
 #include "ABL.h"
+#include "LevelCorner.h"
 #include "BLTouch.h"
 #include "Touchmi.h"
 #include "ZOffset.h"
@@ -127,6 +128,7 @@
 #include "MeshTuner.h"
 #include "MeshEditor.h"
 #include "CaseLight.h"
+#include "MeshValid.h"
 
 #define MAX_MENU_DEPTH 10       // max sub menu depth
 typedef void (*FP_MENU)(void);

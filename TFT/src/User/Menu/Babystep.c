@@ -41,7 +41,7 @@ void babyReDraw(float babystep, float z_offset, bool force_z_offset, bool skip_h
 float babyMblOffsetSetValue(float value)
 {
   mustStoreCmd("G29 S4 Z%.2f\n", value);
-  mustStoreCmd("M420 V1 T1\n");  // needed by babyMblOffsetGetValue() to retrieve the new value
+  mustStoreCmd("G29 S0\n");  // needed by babyMblOffsetGetValue() to retrieve the new value
   return value;
 }
 
