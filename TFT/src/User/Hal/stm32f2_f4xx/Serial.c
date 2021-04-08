@@ -41,9 +41,9 @@ void Serial_DMA_Config(uint8_t port)
 
   RCC_AHB1PeriphClockCmd(cfg->dma_rcc, ENABLE);  // DMA RCC EN
 
-  cfg->dma_stream->CR &= ~(1<<0);  // Disable DMA
+  cfg->dma_stream->CR &= ~(1<<0);                // Disable DMA
   Serial_DMAClearFlag(port);
-  cfg->uart->CR3 |= 1<<6;  // DMA enable receiver
+  cfg->uart->CR3 |= 1<<6;                        // DMA enable receiver
 
   cfg->dma_stream->PAR = (u32)(&cfg->uart->DR);
   cfg->dma_stream->M0AR = (u32)(dmaL1Data[port].cache);

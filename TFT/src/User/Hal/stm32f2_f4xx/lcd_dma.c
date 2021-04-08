@@ -16,21 +16,21 @@
   #define W25QXX_SPI_DMA_STREAM       DMA2_Stream0
   #define W25QXX_SPI_DMA_CHANNEL      3
   #define W25QXX_SPI_DMA_READING()    (DMA1->LISR & (1<<5)) == 0
-  #define W25QXX_SPI_DMA_CLEAR_FLAG() DMA1->LIFCR = 0x3F        // bit:0-5
+  #define W25QXX_SPI_DMA_CLEAR_FLAG() DMA1->LIFCR = 0x3F           // bit:0-5
 #elif W25Qxx_SPI == _SPI2
   #define W25QXX_SPI_NUM              SPI2
   #define W25QXX_SPI_DMA_RCC_AHB      RCC_AHB1Periph_DMA1
   #define W25QXX_SPI_DMA_STREAM       DMA1_Stream3
   #define W25QXX_SPI_DMA_CHANNEL      0
   #define W25QXX_SPI_DMA_READING()    (DMA1->LISR & (1<<27)) == 0
-  #define W25QXX_SPI_DMA_CLEAR_FLAG() DMA1->LIFCR = (0xFC<<20)  // bit:22-27
+  #define W25QXX_SPI_DMA_CLEAR_FLAG() DMA1->LIFCR = (0xFC<<20)     // bit:22-27
 #elif W25Qxx_SPI == _SPI3
   #define W25QXX_SPI_NUM              SPI3
   #define W25QXX_SPI_DMA_RCC_AHB      RCC_AHB1Periph_DMA1
   #define W25QXX_SPI_DMA_STREAM       DMA1_Stream0
   #define W25QXX_SPI_DMA_CHANNEL      0
   #define W25QXX_SPI_DMA_READING()   (DMA1->LISR & (1<<5)) == 0
-  #define W25QXX_SPI_DMA_CLEAR_FLAG() DMA1->LIFCR = 0x3F        // bit:0-5
+  #define W25QXX_SPI_DMA_CLEAR_FLAG() DMA1->LIFCR = 0x3F           // bit:0-5
 #endif
 
 // SPI --> FSMC DMA (LCD_RAM)
@@ -55,6 +55,7 @@ void LCD_DMA_Config(void)
 }
 
 #define LCD_DMA_MAX_TRANS 65535  // DMA 65535 bytes one frame
+
 // start DMA transfer from SPI->DR to FSMC
 // the max bytes of one frame is LCD_DMA_MAX_TRANS 65535
 void lcd_frame_segment_display(u16 size, u32 addr)

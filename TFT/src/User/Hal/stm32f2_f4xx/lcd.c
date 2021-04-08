@@ -3,6 +3,7 @@
 #include "GPIO_Init.h"
 
 #ifdef STM32_HAS_FSMC
+
 uint16_t LCD_RD_DATA(void)
 {
   volatile uint16_t ram;
@@ -25,7 +26,7 @@ u16 LCD_ReadReg(u8 LCD_Reg)
 
 void LCD_GPIO_Config(void)
 {
-  //fsmc 16bit data pins
+  // fsmc 16bit data pins
   GPIO_InitSet(PD0, MGPIO_MODE_AF_PP, GPIO_AF_FSMC);
   GPIO_InitSet(PD1, MGPIO_MODE_AF_PP, GPIO_AF_FSMC);
   GPIO_InitSet(PD8, MGPIO_MODE_AF_PP, GPIO_AF_FSMC);

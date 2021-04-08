@@ -21,7 +21,7 @@ typedef enum
   MGPIO_MODE_AF_PP = (0<<5)|(3<<3)|(0<<2)|(2),
   MGPIO_MODE_AF_OD = (0<<5)|(3<<3)|(1<<2)|(2),
   MGPIO_MODE_AIN = (0<<5)|(3<<3)|(0<<2)|(3),
-}GPIO_MODE;
+} GPIO_MODE;
 
 #define GPIO_MODE_GET_MODE(n) ((n) & 0x3)
 #define GPIO_MODE_GET_OTYPE(n) (((n)>>2) & 0x1)

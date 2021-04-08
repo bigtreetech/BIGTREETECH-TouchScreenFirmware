@@ -2,6 +2,7 @@
 #include "lcd.h"
 
 #ifdef STM32_HAS_FSMC
+
 uint16_t LCD_RD_DATA(void)
 {
   volatile uint16_t ram;
@@ -105,6 +106,7 @@ void LCD_HardwareConfig(void)
 }
 
 #else
+
 void LCD_WR_REG(uint16_t data)
 {
   LCD_RS_CLR;
@@ -154,15 +156,12 @@ uint16_t LCD_RD_DATA(void)
 
 void LCD_GPIO_Config(void)
 {
-
- #if defined(MKS_TFT32_V1_3) || defined(MKS_TFT32_V1_4) || defined (MKS_TFT28_V3_0) || defined (MKS_TFT28_V4_0)
-
- GPIO_InitTypeDef GPIO_InitStructure;
+#if defined(MKS_TFT32_V1_3) || defined(MKS_TFT32_V1_4) || defined (MKS_TFT28_V3_0) || defined (MKS_TFT28_V4_0)
+  GPIO_InitTypeDef GPIO_InitStructure;
   /* GPIO Ports Clock Enable */
 
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOE|RCC_APB2Periph_GPIOC |RCC_APB2Periph_GPIOD|RCC_APB2Periph_GPIOB, ENABLE);
   /*Configure GPIO pin Output Level */
-
 
   /*Configure GPIO pins : Pin1_Pin Pin2_Pin */
 
@@ -187,15 +186,12 @@ void LCD_GPIO_Config(void)
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_Init(GPIOC, &GPIO_InitStructure);
 
-
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_All;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_InitStructure.GPIO_Mode =  GPIO_Mode_Out_PP;
   GPIO_Init(GPIOE, &GPIO_InitStructure);
   LCD_RD_SET;  // set this as we only change it when reading
-
-  #else
-
+#else
   GPIO_InitTypeDef GPIO_InitStructure;
 
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB |RCC_APB2Periph_GPIOC, ENABLE);
@@ -216,11 +212,12 @@ void LCD_GPIO_Config(void)
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9;
   GPIO_Init(GPIOB, &GPIO_InitStructure);
   GPIO_SetBits(GPIOB, GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9);
-  #endif
+#endif
 }
 
 void LCD_HardwareConfig(void)
 {
   LCD_GPIO_Config();
 }
+
 #endif

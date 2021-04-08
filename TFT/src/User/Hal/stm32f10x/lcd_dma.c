@@ -48,6 +48,7 @@ void LCD_DMA_Config(void)
 }
 
 #define LCD_DMA_MAX_TRANS 65535  // DMA 65535 bytes one frame
+
 // start DMA transfer from SPI->DR to FSMC
 // the max bytes of one frame is LCD_DMA_MAX_TRANS 65535
 void lcd_frame_segment_display(u16 size, u32 addr)

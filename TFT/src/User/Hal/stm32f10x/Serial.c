@@ -31,8 +31,8 @@ void Serial_DMA_Config(uint8_t port)
 
   RCC_AHBPeriphClockCmd(cfg->dma_rcc, ENABLE);  // DMA RCC EN
 
-  cfg->dma_chanel->CCR &= ~(1<<0);  // DMA disable
-  cfg->uart->CR3 |= 1<<6;  // DMA enable receiver
+  cfg->dma_chanel->CCR &= ~(1<<0);              // DMA disable
+  cfg->uart->CR3 |= 1<<6;                       // DMA enable receiver
 
   cfg->dma_chanel->CPAR = (u32)(&cfg->uart->DR);
   cfg->dma_chanel->CMAR = (u32)(dmaL1Data[port].cache);
