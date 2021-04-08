@@ -400,7 +400,7 @@ void printAbort(void)
       {
         loopProcess();  // NOTE: it is executed at leat one time to print the above splash screen
       }
-      while (infoCmd.count != 0);  // wait the queue is processed (so also wait for the printer to settle down)
+      while (infoHost.printing == true);  // wait for the printer to settle down
       break;
 
     case TFT_UDISK:
