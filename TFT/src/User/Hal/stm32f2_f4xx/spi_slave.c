@@ -7,10 +7,10 @@
 #include "HD44780.h"
 
 #if defined(ST7920_EMULATOR)
-//TODO:
-//now support SPI2 and PB12 CS only
-//more compatibility changes are needed
-//Config for SPI Channel
+// TODO:
+// now support SPI2 and PB12 CS only
+// more compatibility changes are needed
+// Config for SPI Channel
 #if ST7920_SPI == _SPI1
   #define ST7920_SPI_NUM          SPI1
 #elif ST7920_SPI == _SPI2

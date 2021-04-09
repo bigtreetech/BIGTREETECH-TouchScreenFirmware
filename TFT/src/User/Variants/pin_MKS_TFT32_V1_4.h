@@ -16,12 +16,12 @@
 
 // Hardware version config
 #ifndef HARDWARE_VERSION
-  #define HARDWARE_VERSION "TFT32_V4.0"
+  #define HARDWARE_VERSION "TFT32_V1.4"
 #endif
 
 // LCD interface
 #ifndef TFTLCD_DRIVER
-  #define TFTLCD_DRIVER               HX8558  // Type of LCD driver, now support[RM68042, ILI9488, ILI9341, ST7789, HX8558].
+  #define TFTLCD_DRIVER               HX8558  // Type of LCD driver, now support[RM68042, ILI9488, ILI9341, ILI9325, ST7789, HX8558].
   #define TFTLCD_0_DEGREE_REG_VALUE   0xA4
   #define TFTLCD_180_DEGREE_REG_VALUE 0X64
 #endif

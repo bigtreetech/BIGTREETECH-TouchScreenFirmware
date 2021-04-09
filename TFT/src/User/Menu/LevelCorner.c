@@ -102,7 +102,7 @@ void refreshProbeAccuracy(MENUITEMS * levelItems)
 
 void menuLevelCorner(void)
 {
-  MENUITEMS levelcornerItems = {
+  MENUITEMS levelCornerItems = {
     // title
     LABEL_LEVELCORNER,
     // icon                      label
@@ -122,13 +122,13 @@ void menuLevelCorner(void)
   uint8_t ReadValuestored = 6;
   char iconText[5][15];
 
-  levelcornerItems.items[0].label.address = (uint8_t *)iconText[0];
-  levelcornerItems.items[1].label.address = (uint8_t *)iconText[1];
-  levelcornerItems.items[3].label.address = (uint8_t *)iconText[2];
-  levelcornerItems.items[4].label.address = (uint8_t *)iconText[3];
-  levelcornerItems.items[5].label.address = (uint8_t *)iconText[4];
+  levelCornerItems.items[0].label.address = (uint8_t *)iconText[0];
+  levelCornerItems.items[1].label.address = (uint8_t *)iconText[1];
+  levelCornerItems.items[3].label.address = (uint8_t *)iconText[2];
+  levelCornerItems.items[4].label.address = (uint8_t *)iconText[3];
+  levelCornerItems.items[5].label.address = (uint8_t *)iconText[4];
 
-  menuDrawPage(&levelcornerItems);
+  menuDrawPage(&levelCornerItems);
 
   mustStoreCmd("M851\n");  // Init Probe Offset in parseAck to get probe offset X and Y
   mustStoreCmd("G28\n");  // Init Coordinate
@@ -162,12 +162,8 @@ void menuLevelCorner(void)
 
       case KEY_ICON_2:
       {
-        char tempstr[30];
-        sprintf(tempstr, "%Min:%d | Max:%d", edge_min, LEVELING_EDGE_DISTANCE_MAX);
-        int val = numPadInt((u8 *)tempstr, infoSettings.level_edge, LEVELING_EDGE_DISTANCE_DEFAULT, false);
-        infoSettings.level_edge = NOBEYOND(LEVELING_EDGE_DISTANCE_MIN, val, LEVELING_EDGE_DISTANCE_MAX);
-        infoSettings.level_edge = ((val >= edge_min) ? val : edge_min);
-        menuDrawPage(&levelcornerItems);
+        infoSettings.level_edge = editIntValue(edge_min, LEVELING_EDGE_DISTANCE_MAX, LEVELING_EDGE_DISTANCE_DEFAULT, infoSettings.level_edge);
+        menuDrawPage(&levelCornerItems);
         ReadValuestored = 6;
         break;
       }
@@ -197,12 +193,12 @@ void menuLevelCorner(void)
     while (ReadValuestored != 0)
     {
       SetLevelCornerPosition(0, ReadValuestored--);
-      refreshLevelCornerValue(&levelcornerItems);
-      refreshProbeAccuracy(&levelcornerItems);
+      refreshLevelCornerValue(&levelCornerItems);
+      refreshProbeAccuracy(&levelCornerItems);
     }
 
-    refreshProbeAccuracy(&levelcornerItems);
-    refreshLevelCornerValue(&levelcornerItems);
+    refreshProbeAccuracy(&levelCornerItems);
+    refreshLevelCornerValue(&levelCornerItems);
     loopProcess();
   }
 }
