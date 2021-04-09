@@ -216,9 +216,11 @@ See [Customization guides](https://github.com/bigtreetech/BIGTREETECH-TouchScree
 ;BIGTREE_TFT28_V1_0
 ;BIGTREE_TFT28_V3_0
 ;BIGTREE_TFT24_V1_1
-;MKS_32_V1_4
-;MKS_32_V1_4_NOBL
-;MKS_28_V1_0
+;MKS_TFT32_V1_3
+;MKS_TFT32_V1_4
+;MKS_TFT32_V1_4_NOBL
+;MKS_TFT28_V3_0
+;MKS_TFT28_V4_0
 
 [platformio]
 src_dir      = TFT

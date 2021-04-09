@@ -396,14 +396,11 @@ void printAbort(void)
       setDialogText(LABEL_SCREEN_INFO, LABEL_BUSY, LABEL_BACKGROUND, LABEL_BACKGROUND);
       showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
 
-      //while (infoHost.printing == true)  // wait for the printer to settle down
       do
       {
-        loopProcess();  // NOTE: it must be executed at leat one time to print the above dialog and avoid a freeze
+        loopProcess();  // NOTE: it is executed at leat one time to print the above splash screen
       }
       while (infoHost.printing == true);  // wait for the printer to settle down
-
-      infoMenu.cur--;
       break;
 
     case TFT_UDISK:

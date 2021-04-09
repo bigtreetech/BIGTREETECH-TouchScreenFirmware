@@ -305,6 +305,7 @@ double numPadFloat(u8* title, double old_val, double reset_val, bool negative)
           touchSound = true;
           return strtod(ParameterBuf, NULL);
         }
+
       default:
         break;
     }

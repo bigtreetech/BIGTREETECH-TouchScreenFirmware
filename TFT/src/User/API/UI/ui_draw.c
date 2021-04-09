@@ -147,7 +147,7 @@ bool model_DecodeToFlash(char *gcode)
   return true;
 }
 
-//draw icon with different length and width (sx & sy cordinates for top left of icon, w width, h height, addr flash byte address)
+// draw icon with different length and width (sx & sy cordinates for top left of icon, w width, h height, addr flash byte address)
 void ICON_CustomReadDisplay(uint16_t sx, uint16_t sy, u32 address)
 {
   uint16_t w, h;
