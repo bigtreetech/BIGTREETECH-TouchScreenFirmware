@@ -104,7 +104,7 @@ void menuLevelCorner(void)
 {
   MENUITEMS levelCornerItems = {
     // title
-    LABEL_LEVELCORNER,
+    LABEL_LEVEL_CORNER,
     // icon                      label
     {
       {ICON_POINT_4,             LABEL_DYNAMIC},
