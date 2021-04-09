@@ -121,13 +121,13 @@ void coordinateQuery(void)
 }
 
 // Get level corner position the measured Z offset from probe, see in ABL.c menu refreshLevelCornerValue(MENUITEMS levelItems) and value get from parseACK.c
-float GetLevelCornerPosition(int point)
+float GetLevelCornerPosition(uint8_t point)
 {
   return levelCornerPosition[point];
 }
 
 // Set level corner position the measured Z offset from probe, see in ABL.c menu refreshLevelCornerValue(MENUITEMS levelItems) and value get from parseACK.c
-void SetLevelCornerPosition(int point,float position)
+void SetLevelCornerPosition(uint8_t point,float position)
 {
   levelCornerPosition[point] = position;
 }
