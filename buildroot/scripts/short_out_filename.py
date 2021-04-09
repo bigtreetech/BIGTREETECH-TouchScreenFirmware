@@ -6,7 +6,7 @@ def make_short_file(source, target, env):
     buildDir = env.subst('$BUILD_DIR')
     build_flags = env.ParseFlags(env['BUILD_FLAGS'])
     flags = {k: v for (k, v) in build_flags.get("CPPDEFINES")}
-    if flags.get("HARDWARE") == "MKS_28_V1_0":
+    if (flags.get("HARDWARE") == "MKS_TFT28_V3_0" or flags.get("HARDWARE") == "MKS_TFT28_V4_0"):
         filename = "MKSTFT28"
     else:
         filename = flags.get("HARDWARE") + "." + flags.get("SOFTWARE_VERSION")

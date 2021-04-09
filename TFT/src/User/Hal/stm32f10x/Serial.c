@@ -22,7 +22,7 @@ static const SERIAL_CFG Serial[_UART_CNT] = {
   {USART2, RCC_AHBPeriph_DMA1, DMA1_Channel6},
   {USART3, RCC_AHBPeriph_DMA1, DMA1_Channel3},
   {UART4,  RCC_AHBPeriph_DMA2, DMA2_Channel3},
-  //{UART5,  -1, -1}, // UART5 don't support DMA
+  //{UART5,  -1, -1},  // UART5 don't support DMA
 };
 
 void Serial_DMA_Config(uint8_t port)
@@ -31,24 +31,24 @@ void Serial_DMA_Config(uint8_t port)
 
   RCC_AHBPeriphClockCmd(cfg->dma_rcc, ENABLE);  // DMA RCC EN
 
-  cfg->dma_chanel->CCR &= ~(1<<0); // DMA disable
-  cfg->uart->CR3 |= 1<<6;  // DMA enable receiver
+  cfg->dma_chanel->CCR &= ~(1<<0);              // DMA disable
+  cfg->uart->CR3 |= 1<<6;                       // DMA enable receiver
 
   cfg->dma_chanel->CPAR = (u32)(&cfg->uart->DR);
   cfg->dma_chanel->CMAR = (u32)(dmaL1Data[port].cache);
   cfg->dma_chanel->CNDTR = dmaL1Data[port].cacheSize;
   cfg->dma_chanel->CCR = 0X00000000;
-  cfg->dma_chanel->CCR |= 3<<12;   // Channel priority level
-  cfg->dma_chanel->CCR |= 1<<7;    // Memory increment mode
-  cfg->dma_chanel->CCR |= 1<<5;    // Circular mode enabled
-  cfg->dma_chanel->CCR |= 1<<0;    // DMA EN
+  cfg->dma_chanel->CCR |= 3<<12;  // Channel priority level
+  cfg->dma_chanel->CCR |= 1<<7;   // Memory increment mode
+  cfg->dma_chanel->CCR |= 1<<5;   // Circular mode enabled
+  cfg->dma_chanel->CCR |= 1<<0;   // DMA EN
 }
 
 void Serial_Config(uint8_t port, u32 baud)
 {
   dmaL1Data[port].rIndex = dmaL1Data[port].wIndex = 0;
   dmaL1Data[port].cache = malloc(dmaL1Data[port].cacheSize);
-  while(!dmaL1Data[port].cache); // malloc failed
+  while(!dmaL1Data[port].cache);           // malloc failed
   UART_Config(port, baud, USART_IT_IDLE);  // IDLE interrupt
   Serial_DMA_Config(port);
 }
@@ -57,7 +57,7 @@ void Serial_DeConfig(uint8_t port)
 {
   free(dmaL1Data[port].cache);
   dmaL1Data[port].cache = NULL;
-  Serial[port].dma_chanel->CCR &= ~(1<<0); // Disable DMA
+  Serial[port].dma_chanel->CCR &= ~(1<<0);  // Disable DMA
   UART_DeConfig(port);
 }
 

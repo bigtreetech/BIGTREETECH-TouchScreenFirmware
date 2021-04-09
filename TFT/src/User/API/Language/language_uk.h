@@ -273,7 +273,7 @@
     #define STRING_ABL_SLOT3              "Слот 3"
     #define STRING_ABL_SLOT_EEPROM        "Пам'ятати слот \nпри перезавантаженні? \n(Зберегти в EEPROM)"
     #define STRING_ABL_Z                  "Z загасання"
-    #define STRING_LEVELCORNER            "L corner"
+    #define STRING_LEVEL_CORNER           "L corner"
     #define STRING_P_OFFSET               "Відступ P"
     #define STRING_H_OFFSET               "Відступ H"
     #define STRING_DISTANCE               "Відступи"

@@ -1,9 +1,9 @@
 #include "LevelCorner.h"
 #include "includes.h"
 
-const MENUITEMS levelcornerItems = {
+const MENUITEMS levelCornerItems = {
   // title
-  LABEL_LEVELCORNER,
+  LABEL_LEVEL_CORNER,
   // icon                      label
   {
     {ICON_POINT_4,             LABEL_BACKGROUND},
@@ -85,7 +85,7 @@ void refreshProbeAccuracy(MENUITEMS levelItems)
     lvIconM48.lines[0].pos = ss_val_point;
     sprintf(tempstr, "%s", " M48    ");
     lvIconM48.lines[0].text = (uint8_t *)tempstr;
-    showTextOnIcon(3, 0, &lvIconM48, &levelcornerItems.items[3]);
+    showTextOnIcon(3, 0, &lvIconM48, &levelCornerItems.items[3]);
     SetLevelCornerPosition(0, 0);
   }
 }
@@ -95,7 +95,7 @@ void menuLevelCorner(void)
   KEY_VALUES key_num = KEY_IDLE;
   int ReadValuestored = 6;
 
-  menuDrawPage(&levelcornerItems);
+  menuDrawPage(&levelCornerItems);
 
   // Init Probe Offset in parseAck to get probe offset X and Y
   mustStoreCmd("M851\n");
@@ -132,12 +132,8 @@ void menuLevelCorner(void)
 
       case KEY_ICON_2:
         {
-          char tempstr[30];
-          sprintf(tempstr, "%Min:%d | Max:%d", edge_min, LEVELING_EDGE_DISTANCE_MAX);
-          int val = numPadInt((u8 *)tempstr, infoSettings.level_edge, LEVELING_EDGE_DISTANCE_DEFAULT, false);
-          infoSettings.level_edge = NOBEYOND(LEVELING_EDGE_DISTANCE_MIN, val, LEVELING_EDGE_DISTANCE_MAX);
-          infoSettings.level_edge = ((val >= edge_min) ? val : edge_min);
-          menuDrawPage(&levelcornerItems);
+          infoSettings.level_edge = editIntValue(edge_min, LEVELING_EDGE_DISTANCE_MAX, LEVELING_EDGE_DISTANCE_DEFAULT, infoSettings.level_edge);
+          menuDrawPage(&levelCornerItems);
           ReadValuestored = 6;
         }
         break;
@@ -167,12 +163,12 @@ void menuLevelCorner(void)
     while (ReadValuestored != 0)
     {
       SetLevelCornerPosition(0, ReadValuestored--);
-      refreshLevelCornerValue(levelcornerItems);
-      refreshProbeAccuracy(levelcornerItems);
+      refreshLevelCornerValue(levelCornerItems);
+      refreshProbeAccuracy(levelCornerItems);
     }
 
-    refreshProbeAccuracy(levelcornerItems);
-    refreshLevelCornerValue(levelcornerItems);
+    refreshProbeAccuracy(levelCornerItems);
+    refreshLevelCornerValue(levelCornerItems);
     loopProcess();
   }
 }

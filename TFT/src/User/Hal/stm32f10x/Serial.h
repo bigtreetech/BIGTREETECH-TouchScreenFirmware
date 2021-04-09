@@ -9,7 +9,7 @@ typedef struct
   uint16_t wIndex;
   uint16_t rIndex;
   uint16_t cacheSize;
-}DMA_CIRCULAR_BUFFER;
+} DMA_CIRCULAR_BUFFER;
 
 extern DMA_CIRCULAR_BUFFER dmaL1Data[_UART_CNT];
 
