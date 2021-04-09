@@ -94,7 +94,7 @@ void LCD_FSMC_Config(void)
   FSMC_NORSRAMInitStructure.FSMC_WriteBurst = FSMC_WriteBurst_Disable;                      // Configure whether to allow burst writes
 
   FSMC_NORSRAMInitStructure.FSMC_WriteOperation = FSMC_WriteOperation_Enable;       // Configuration write operation enabled
-  FSMC_NORSRAMInitStructure.FSMC_ExtendedMode = FSMC_ExtendedMode_Enable ;          // Configure whether to use extended mode
+  FSMC_NORSRAMInitStructure.FSMC_ExtendedMode = FSMC_ExtendedMode_Enable;           // Configure whether to use extended mode
 
   FSMC_NORSRAMInitStructure.FSMC_ReadWriteTimingStruct = &readWriteTiming;          // Read timing
   FSMC_NORSRAMInitStructure.FSMC_WriteTimingStruct = &writeTiming;                  // Write timing
