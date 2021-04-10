@@ -72,7 +72,15 @@ void menuMain(void)
         break;
 
       case KEY_ICON_5:
-        infoMenu.menu[++infoMenu.cur] = infoSettings.rrf_macros_enable ? menuCallMacro : menuCustom;
+        if (infoSettings.rrf_macros_enable)
+        {
+          infoFile.title[0] = 0;
+          infoMenu.menu[++infoMenu.cur] = menuCallMacro;
+        }
+        else
+        {
+          infoMenu.menu[++infoMenu.cur] = menuCustom;
+        }
         break;
 
       case KEY_ICON_6:
