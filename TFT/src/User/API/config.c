@@ -581,6 +581,10 @@ void parseConfigKey(uint16_t index)
       config_set_color(&infoSettings.mesh_max_color);
       break;
 
+    case C_INDEX_TERMINAL_COLOR_SCHEME:
+      SET_VALID_INT_VALUE(infoSettings.terminal_color_scheme, 0, 2);
+      break;
+
     case C_INDEX_ROTATE_UI:
       if (infoSettings.rotate_ui != getOnOff())
       {
