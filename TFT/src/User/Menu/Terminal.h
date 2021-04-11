@@ -1,5 +1,5 @@
-#ifndef _SEND_GCODE_H_
-#define _SEND_GCODE_H_
+#ifndef _TERMINAL_H_
+#define _TERMINAL_H_
 
 #ifdef __cplusplus
 extern "C" {

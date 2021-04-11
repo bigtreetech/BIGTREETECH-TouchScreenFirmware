@@ -105,7 +105,7 @@
 #include "ScreenSettings.h"
 #include "MachineSettings.h"
 #include "FeatureSettings.h"
-#include "SendGcode.h"
+#include "Terminal.h"
 #include "Leveling.h"
 #include "BedLeveling.h"
 #include "BedLevelingLayer2.h"
