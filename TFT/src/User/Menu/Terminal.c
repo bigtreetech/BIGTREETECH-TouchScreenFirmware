@@ -799,8 +799,8 @@ void menuTerminalWindow(void)
     {
       getCharacterInfo((uint8_t *)(terminalBuf + lastTerminalIndex), &info);
 
-      //read source identifier
-      if(info.codePoint == 0x5 || info.codePoint == 0x6)
+      // read source identifier
+      if (info.codePoint == 0x5 || info.codePoint == 0x6)
         pageHeadSrc = info.codePoint - 0x5;
 
       // Next Line
