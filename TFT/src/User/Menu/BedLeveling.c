@@ -99,7 +99,9 @@ void menuBedLeveling(void)
       case KEY_ICON_4:
       {
         float val = editFloatValue(Z_FADE_MIN_VALUE, Z_FADE_MAX_VALUE, 0.0f, getParameter(P_ABL_STATE, 1));
-        storeCmd("M420 Z%.2f\n", val);
+
+        if (val != getParameter(P_ABL_STATE, 1))
+          storeCmd("M420 Z%.2f\n", val);
 
         menuDrawPage(&bedLevelingItems);
         break;
