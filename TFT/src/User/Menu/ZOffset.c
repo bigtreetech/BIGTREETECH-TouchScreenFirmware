@@ -23,36 +23,31 @@ void zOffsetNotifyError(bool isStarted)
   addToast(DIALOG_TYPE_ERROR, tempMsg);
 }
 
-void zOffsetDrawStatus(bool status)
+void zOffsetDraw(bool status, float val)
 {
-  char tempstr[20];
+  char tempstr[20], tempstr2[20], tempstr3[20];
 
   if (!status)
   {
     sprintf(tempstr, "%-15s", textSelect(itemToggle[status].index));
+    sprintf(tempstr3, "%-15s", "");
     GUI_SetColor(infoSettings.reminder_color);
+    sprintf(tempstr2, "  %.2f  ", val);
   }
   else
   {
-    sprintf(tempstr, "Shim:%.2f  ", infoSettings.level_z_pos);
+    sprintf(tempstr, "ZO:%.2f  ", val);
+    sprintf(tempstr3, "Shim:%.3f", infoSettings.level_z_pos);
     GUI_SetColor(infoSettings.sd_reminder_color);
+    sprintf(tempstr2, "  %.2f  ", val + infoSettings.level_z_pos);
   }
 
   GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *) tempstr);
+  GUI_DispString(exhibitRect.x0, exhibitRect.y1 - BYTE_HEIGHT, (uint8_t *) tempstr3);
+
   GUI_SetColor(infoSettings.font_color);
-}
-
-void zOffsetDrawValue(bool status, float val)
-{
-  char tempstr[20];
-
-  if (!status)
-    sprintf(tempstr, "  %.2f  ", val);
-  else
-    sprintf(tempstr, "  %.2f  ", val + infoSettings.level_z_pos);
-
   setLargeFont(true);
-  GUI_DispStringInPrect(&exhibitRect, (uint8_t *) tempstr);
+  GUI_DispStringInPrect(&exhibitRect, (uint8_t *) tempstr2);
   setLargeFont(false);
 }
 
@@ -157,8 +152,7 @@ void menuZOffset(void)
   zOffsetItems.items[KEY_ICON_6] = itemZOffsetSubmenu[curSubmenu_index];
 
   menuDrawPage(&zOffsetItems);
-  zOffsetDrawStatus(offsetGetStatus());
-  zOffsetDrawValue(offsetGetStatus(), now);
+  zOffsetDraw(offsetGetStatus(), now);
 
   #if LCD_ENCODER_SUPPORT
     encoderPosition = 0;
@@ -206,8 +200,7 @@ void menuZOffset(void)
         zOffsetItems.items[key_num].label = itemToggle[offsetGetStatus()];
 
         menuDrawItem(&zOffsetItems.items[key_num], key_num);
-        zOffsetDrawStatus(offsetGetStatus());
-        zOffsetDrawValue(offsetGetStatus(), z_offset);  // just to switch/display current Z offset
+        zOffsetDraw(offsetGetStatus(), z_offset);
         break;
 
       // change submenu
@@ -286,7 +279,7 @@ void menuZOffset(void)
     if (now != z_offset)
     {
       now = z_offset;
-      zOffsetDrawValue(offsetGetStatus(), now);
+      zOffsetDraw(offsetGetStatus(), now);
 
       // reset babystep every time Z offset is changed otherwise the set babystep value
       // will not be aligned with the new Z offset
