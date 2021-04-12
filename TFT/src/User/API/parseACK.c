@@ -658,9 +658,8 @@ void parseACK(void)
         tmpMsg[6] = '\0';
         if (strcmp(tmpMsg, "Mean: ") == 0)
         {
-          SetLevelCornerPosition(5, ack_value());
-          SetLevelCornerPosition(0, 5);
-          sprintf(tmpMsg, "%s\nStandard Deviation: %0.5f", (char *)getDialogMsgStr(), GetLevelCornerPosition(5));
+          SetLevelCornerPosition(4, ack_value());  // save value for Lever Corner display
+          sprintf(tmpMsg, "%s\nStandard Deviation: %0.5f", (char *)getDialogMsgStr(), ack_value());
           setDialogText((u8* )"Repeatability Test", (uint8_t *)tmpMsg, LABEL_CONFIRM, LABEL_BACKGROUND);
           showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
         }
@@ -755,25 +754,26 @@ void parseACK(void)
         if (ack_seen("Y: ")) valy = ack_value();
         if (ack_seen("Z: "))
         {
-          if ((valx < 100) && (valy < 100))
+          uint16_t x_mid = infoSettings.machine_size_min[X_AXIS] +
+                           (infoSettings.machine_size_max[X_AXIS] - infoSettings.machine_size_min[X_AXIS]) / 2;
+          uint16_t y_mid = infoSettings.machine_size_min[Y_AXIS] +
+                           (infoSettings.machine_size_max[Y_AXIS] - infoSettings.machine_size_min[Y_AXIS]) / 2;
+
+          if ((valx < x_mid) && (valy < y_mid))
+          {
+            SetLevelCornerPosition(0, ack_value());
+          }
+          else if ((valx > x_mid) && (valy < y_mid))
           {
             SetLevelCornerPosition(1, ack_value());
-            SetLevelCornerPosition(0, 1);
           }
-          else if ((valx > 100) && (valy < 100))
+          else if ((valx > x_mid) && (valy > y_mid))
           {
             SetLevelCornerPosition(2, ack_value());
-            SetLevelCornerPosition(0, 2);
           }
-          else if ((valx > 100) && (valy > 100))
+          else if ((valx < x_mid) && (valy > y_mid))
           {
             SetLevelCornerPosition(3, ack_value());
-            SetLevelCornerPosition(0, 3);
-          }
-          else if ((valx < 100) && (valy > 100))
-          {
-            SetLevelCornerPosition(4, ack_value());
-            SetLevelCornerPosition(0, 4);
           }
         }
       }

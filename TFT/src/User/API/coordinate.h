@@ -42,8 +42,6 @@ float coordinateGetAxisActual(AXIS axis);
 void coordinateSetAxisActual(AXIS axis, float position);
 void coordinateQuerySetWait(bool wait);
 void coordinateQuery(void);
-float GetLevelCornerPosition(uint8_t point);
-void  SetLevelCornerPosition(uint8_t point, float position);
 
 #ifdef __cplusplus
 }
