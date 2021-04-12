@@ -1,6 +1,6 @@
 #ifndef _CONFIGURATION_H_
 #define _CONFIGURATION_H_
-#define CONFIG_VERSION 20210311
+#define CONFIG_VERSION 20210321
 
 //===========================================================================
 //============================= General Settings ============================
@@ -440,17 +440,29 @@
 
 // Terminal Keyboard / Numpad theme
 // Uncomment to enable Material theme for keyboard and Numpad
-//#define KEYBOARD_MATERIAL_THEME // Default: disabled
+#define KEYBOARD_MATERIAL_THEME // Default: disabled
 
 /**
  * Color scheme for the Terminal Keyboard / Numpad
  *
  * Options: [0: Default, 1: Invert, 2: High-Contrast]
- *  Default: The keyboard follows system background and border colors.
- *  Invert: The keyboard is drawn with background swapped with border colors.
+ *  Default: The keyboard follows system background and border colors. (Material Dark
+ *           if KEYBOARD_MATERIAL_THEME is enabled).
+ *  Invert: The keyboard is drawn with background swapped with border colors. (Material
+ *          Light if KEYBOARD_MATERIAL_THEME is enabled).
  *  High-Contrast: Use white and black colors for high contrast.
  */
 #define KEYBOARD_COLOR_LAYOUT 0  // Default: 0
+
+/**
+ * Color scheme for the Terminal text display
+ *
+ * Options: [0: Material Dark, 1: Material Light, 2: High-Contrast]
+ *  Material Dark: Dark background with light font color and orange command font color.
+ *  Material Light: Light background with dark font color and orange command font color.
+ *  High-Contrast: Black background with white font color and orange command font color.
+ */
+#define TERMINAL_COLOR_SCHEME 0  // Default: 0
 
 /**
  * QWERTY/QWERTZ keyboard layout

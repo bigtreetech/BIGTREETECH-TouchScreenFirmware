@@ -1,4 +1,4 @@
-#include "SendGcode.h"
+#include "Terminal.h"
 #include "includes.h"
 
 #define TERMINAL_MAX_CHAR (NOBEYOND(600, RAM_SIZE * 45, 4800))
@@ -16,6 +16,7 @@ typedef struct
   uint16_t buffSize;             // maximum buffer/cache size
   uint8_t  maxPageCount;         // maximum page count allowed
   uint8_t  bufferFull;
+  uint8_t  lastSrc;
 } TERMINAL_DATA;
 
 typedef enum
@@ -65,9 +66,6 @@ typedef enum
   #define TEXTBOX_FONT_COLOR   BLACK
   #define TEXTBOX_BG_COLOR     0xFFF2
 #endif
-
-#define TERM_FONT_COLOR infoSettings.marlin_mode_font_color
-#define TERM_BG_COLOR   infoSettings.marlin_mode_bg_color
 
 // keyboard layouts
 #define LAYOUT_1_COL_COUNT 6
@@ -310,6 +308,13 @@ const char * const gcodeKeyABC[KEY_COUNT] = {
   #endif
 };
 
+const uint16_t fontSrcColor[3][3] = {
+  // Gcode     ACK            Background
+  {COLORSCHEME1_TERM_GCODE, COLORSCHEME1_TERM_ACK, COLORSCHEME1_TERM_BACK}, // Material Dark
+  {COLORSCHEME2_TERM_GCODE, COLORSCHEME2_TERM_ACK, COLORSCHEME2_TERM_BACK}, // Material Light
+  {COLORSCHEME3_TERM_GCODE, COLORSCHEME3_TERM_ACK, COLORSCHEME3_TERM_BACK}, // High Contrast
+};
+
 char * terminalBuf;
 TERMINAL_DATA * terminalData;
 uint8_t curView = 0;
@@ -364,8 +369,8 @@ static inline void keyboardDrawButton(uint8_t index, uint8_t isPressed)
 
   if (index != GKEY_SEND)
     setLargeFont(true);
-    // draw button
-    GUI_DrawButton(&btn, isPressed);
+  // draw button
+  GUI_DrawButton(&btn, isPressed);
 
   #else  // KEYBOARD_MATERIAL_THEME
     if (isPressed)
@@ -572,10 +577,48 @@ void terminalCache(char *stream, TERMINAL_SRC src)
 {
   if (infoMenu.menu[infoMenu.cur] != menuTerminal) return;
 
+  char * srcID[] = {"\5", "\6"};
+
+  // copy string source identifier
+  if (terminalData->lastSrc != src)
+  {
+    saveGcodeTerminalCache(srcID[src]);
+    terminalData->lastSrc = src;
+  }
+
   if (src == TERMINAL_GCODE)
     saveGcodeTerminalCache(">>");
 
   saveGcodeTerminalCache(stream);
+}
+
+// reverse lookup for source identifier
+TERMINAL_SRC getLastSrc(char * ptr)
+{
+  TERMINAL_SRC lastSrc = TERMINAL_GCODE;
+  char * endPtr = (ptr + 1);
+
+  // Set end of search pointer
+  if (endPtr > (terminalBuf + terminalData->buffSize))
+    endPtr = terminalBuf;
+
+  while (ptr != endPtr)
+  {
+    // check each byte for any source identifier
+    if (ptr[0] == 0x5 || ptr[0] == 0x6)
+    {
+      lastSrc = ptr[0] - 0x5;
+      break;
+    }
+
+    ptr--;
+
+    // loop to end if reached starting point of buffer
+    if (ptr < terminalBuf)
+      ptr = terminalBuf + terminalData->buffSize;
+  }
+
+  return lastSrc;
 }
 
 static inline void terminalDrawButton(uint8_t index, uint8_t isPressed)
@@ -659,7 +702,7 @@ static inline void terminalDrawMenu(void)
   setMenu(MENU_TYPE_FULLSCREEN, NULL, COUNT(terminalKeyRect), terminalKeyRect, terminalDrawButton, NULL);
 
   // clear terminal area
-  GUI_SetBkColor(TERM_BG_COLOR);
+  GUI_SetBkColor(fontSrcColor[infoSettings.terminal_color_scheme][2]);
   GUI_ClearPrect(&terminalAreaRect[0]);
 
   // clear bar area
@@ -685,10 +728,12 @@ void menuTerminalWindow(void)
 
   KEY_VALUES key_num = KEY_IDLE;
   CHAR_INFO info;
+  TERMINAL_SRC pageHeadSrc = TERMINAL_GCODE;
   uint16_t lastTerminalIndex = 0;
   uint8_t pageBufIndex = 0;
   int16_t cursorX = CURSOR_START_X;
   int16_t cursorY = terminalAreaRect[0].y0;
+
   terminalDrawMenu();
 
   while (curView == 2)
@@ -743,15 +788,20 @@ void menuTerminalWindow(void)
       cursorX = CURSOR_START_X;
       cursorY = terminalAreaRect[0].y0;
 
-      GUI_SetBkColor(TERM_BG_COLOR);
+      GUI_SetBkColor(fontSrcColor[infoSettings.terminal_color_scheme][2]);
       GUI_ClearPrect(&terminalAreaRect[0]);
 
       terminalDrawPageNumber();
+      pageHeadSrc = getLastSrc(terminalData->ptr[pageBufIndex]);
     }
 
     while (terminalBuf + lastTerminalIndex && (lastTerminalIndex != terminalData->terminalBufTail))
     {
       getCharacterInfo((uint8_t *)(terminalBuf + lastTerminalIndex), &info);
+
+      // read source identifier
+      if (info.codePoint == 0x5 || info.codePoint == 0x6)
+        pageHeadSrc = info.codePoint - 0x5;
 
       // Next Line
       if (cursorX + info.pixelWidth > terminalAreaRect[0].x1 ||
@@ -783,14 +833,14 @@ void menuTerminalWindow(void)
           cursorX = CURSOR_START_X;
           cursorY = terminalAreaRect[0].y0;
 
-          GUI_SetBkColor(TERM_BG_COLOR);
+          GUI_SetBkColor(fontSrcColor[infoSettings.terminal_color_scheme][2]);
           GUI_ClearPrect(&terminalAreaRect[0]);
 
           terminalDrawPageNumber();
         }
 
-        GUI_SetColor(TERM_FONT_COLOR);
-        GUI_SetBkColor(TERM_BG_COLOR);
+        GUI_SetColor(fontSrcColor[infoSettings.terminal_color_scheme][pageHeadSrc]);
+        GUI_SetBkColor(fontSrcColor[infoSettings.terminal_color_scheme][2]);
 
         GUI_DispOne(cursorX, cursorY, (uint8_t *)(terminalBuf + lastTerminalIndex));
         cursorX += info.pixelWidth;
@@ -811,13 +861,14 @@ void menuTerminalWindow(void)
   terminalData->pageHead = 0;
   terminalData->pageIndex = 0;
   terminalData->oldPageIndex = 0;
+  terminalData->lastSrc = (TERMINAL_ACK + 1);
 
   GUI_RestoreColorDefault();
 }
 
 void menuTerminal(void)
 {
-  TERMINAL_DATA termPage = {{terminalBuf}, 0, 0, 0, 0, 0, 0, TERMINAL_MAX_CHAR, MAX_PAGE_COUNT, 0};
+  TERMINAL_DATA termPage = {{terminalBuf}, 0, 0, 0, 0, 0, 0, TERMINAL_MAX_CHAR, MAX_PAGE_COUNT, 0, (TERMINAL_ACK + 1)};
 
   if (isPrinting() || infoHost.printing)  // display only 1 page if printing
   {

@@ -29,10 +29,10 @@ typedef enum
 // Config version support
 // change if new elements/keywords are added/removed/changed in the configuration.h Format YYYYMMDD
 // this number should match CONFIG_VERSION in configuration.h
-#define CONFIG_SUPPPORT 20210311
+#define CONFIG_SUPPPORT 20210321
 
 #define FONT_FLASH_SIGN       20200908  //(YYYYMMDD) change if fonts require updating
-#define CONFIG_FLASH_SIGN     20210405  //(YYYYMMDD) change if any keyword(s) in config.ini is added or removed
+#define CONFIG_FLASH_SIGN     20210409  //(YYYYMMDD) change if any keyword(s) in config.ini is added or removed
 #define LANGUAGE_FLASH_SIGN   20210217  //(YYYYMMDD) change if any keyword(s) in language pack is added or removed
 #define ICON_FLASH_SIGN       20210217  //(YYYYMMDD) change if any icon(s) is added or removed
 
@@ -96,6 +96,7 @@ typedef struct
   uint16_t list_button_color;
   uint16_t mesh_min_color;
   uint16_t mesh_max_color;
+  uint8_t  terminal_color_scheme;
 
   uint8_t rotate_ui;
   uint8_t terminalACK;
@@ -158,7 +159,7 @@ typedef struct
   uint16_t level_feedrate[FEEDRATE_COUNT - 1];  // XY, Z
   uint16_t preheat_temp[PREHEAT_COUNT];
   uint16_t preheat_bed[PREHEAT_COUNT];
-  
+
   // Power Supply Settings
   uint8_t  auto_off;
   uint8_t  ps_active_high;
