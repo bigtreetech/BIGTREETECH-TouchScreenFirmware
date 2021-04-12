@@ -26,35 +26,31 @@ static inline void meshResetPoint(void)
 //  probeHeightDisable();  // restore original software endstops state
 }
 
-void meshDrawHeader(uint16_t col, uint16_t row)
+void meshDraw(uint16_t col, uint16_t row, float val)
 {
-  char tempstr[25];
+  char tempstr[25], tempstr2[20], tempstr3[20];
 
   if (infoMachineSettings.leveling == BL_MBL)
   {
-    sprintf(tempstr, "MBL ZO:%.2f", infoParameters.MblOffset[0]);
-    GUI_SetColor(infoSettings.reminder_color);
-    GUI_DispString(exhibitRect.x0, exhibitRect.y1 - BYTE_HEIGHT, (uint8_t *) tempstr);
-
     sprintf(tempstr, "I:%d J:%d", col, row);
+    sprintf(tempstr3, "MBL ZO:%.3f", infoParameters.MblOffset[0]);
+    GUI_SetColor(infoSettings.reminder_color);
   }
   else
   {
-    sprintf(tempstr, "I:%d J:%d Shim:%.2f", col, row, infoSettings.level_z_pos);
+    sprintf(tempstr, "I:%d J:%d ZH:%.3f  ", col, row, val - infoSettings.level_z_pos);
+    sprintf(tempstr3, "Shim:%.3f", infoSettings.level_z_pos);
+    GUI_SetColor(infoSettings.sd_reminder_color);
   }
 
+  GUI_DispString(exhibitRect.x0, exhibitRect.y1 - BYTE_HEIGHT, (uint8_t *) tempstr3);
   GUI_SetColor(infoSettings.sd_reminder_color);
   GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *) tempstr);
+
+  sprintf(tempstr2, "  %.3f  ", val);
   GUI_SetColor(infoSettings.font_color);
-}
-
-void meshDrawValue(float val)
-{
-  char tempstr[20];
-
-  sprintf(tempstr, "  %.3f  ", val);
   setLargeFont(true);
-  GUI_DispStringInPrect(&exhibitRect, (uint8_t *) tempstr);
+  GUI_DispStringInPrect(&exhibitRect, (uint8_t *) tempstr2);
   setLargeFont(false);
 }
 
@@ -102,8 +98,7 @@ float menuMeshTuner(uint16_t col, uint16_t row, float value)
   meshItems.items[KEY_ICON_4] = itemMoveLen[curUnit_index];
 
   menuDrawPage(&meshItems);
-  meshDrawHeader(col, row);
-  meshDrawValue(now);
+  meshDraw(col, row, now);
 
   #if LCD_ENCODER_SUPPORT
     encoderPosition = 0;
@@ -171,7 +166,7 @@ float menuMeshTuner(uint16_t col, uint16_t row, float value)
     if (now != curValue)
     {
       now = curValue;
-      meshDrawValue(now);
+      meshDraw(col, row, now);
     }
 
     probeHeightQueryCoord();
@@ -183,8 +178,7 @@ float menuMeshTuner(uint16_t col, uint16_t row, float value)
       infoMenu.menu[infoMenu.cur]();
 
       menuDrawPage(&meshItems);
-      meshDrawHeader(col, row);
-      meshDrawValue(now);
+      meshDraw(col, row, now);
     }
   }
 }

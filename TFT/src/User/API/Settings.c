@@ -35,6 +35,7 @@ void infoSettingsReset(void)
   infoSettings.list_button_color      = lcd_colors[LISTVIEW_ICON_COLOR];
   infoSettings.mesh_min_color         = lcd_colors[MESH_MIN_COLOR];
   infoSettings.mesh_max_color         = lcd_colors[MESH_MAX_COLOR];
+  infoSettings.terminal_color_scheme  = TERMINAL_COLOR_SCHEME;
 
   infoSettings.rotate_ui              = DISABLED;
   infoSettings.terminalACK            = DISABLED;
