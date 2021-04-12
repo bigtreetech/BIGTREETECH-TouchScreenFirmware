@@ -1,5 +1,5 @@
-#ifndef _PARAMETERSETTING_H_
-#define _PARAMETERSETTING_H_
+#ifndef _PARAMETER_SETTINGS_H_
+#define _PARAMETER_SETTINGS_H_
 
 #ifdef __cplusplus
 extern "C" {

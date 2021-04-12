@@ -57,7 +57,7 @@
 #include "Gcode/mygcodefs.h"
 #include "flashStore.h"
 #include "parseACK.h"
-#include "Selectmode.h"
+#include "SelectMode.h"
 #include "MarlinMode.h"
 #include "Temperature.h"
 #include "Settings.h"
@@ -92,7 +92,7 @@
 #include "More.h"
 #include "Speed.h"
 #include "ledcolor.h"
-#include "Parametersetting.h"
+#include "ParameterSettings.h"
 #include "NotificationMenu.h"
 
 #include "Babystep.h"

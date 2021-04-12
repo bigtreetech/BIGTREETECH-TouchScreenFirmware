@@ -1,5 +1,5 @@
-#ifndef _SELECTMODE_H_
-#define _SELECTMODE_H_
+#ifndef _SELECT_MODE_H_
+#define _SELECT_MODE_H_
 
 #ifdef __cplusplus
 extern "C" {
