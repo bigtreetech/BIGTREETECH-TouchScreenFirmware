@@ -1,7 +1,7 @@
 name: Build Binaries
 on:
   push:
-    branches: [ master ]
+    branches: [ develop ]
     paths-ignore:
     - .devcontainer/**
     - .github/**
