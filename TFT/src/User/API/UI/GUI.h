@@ -70,7 +70,7 @@ void GUI_FillCircle(uint16_t x0, uint16_t y0, uint16_t r);
 void GUI_SetRange(int16_t x0, int16_t y0, int16_t x1, int16_t y1);
 void GUI_CancelRange(void);
 void GUI_DrawPixel(int16_t x, int16_t y, uint16_t color);
-CHAR_INFO GUI_DispOne(int16_t sx, int16_t sy, const uint8_t *p);
+void GUI_DispOne(int16_t sx, int16_t sy, const CHAR_INFO *pInfo);
 
 // display string from char array pointers
 void _GUI_DispString(int16_t x, int16_t y, const uint8_t *p);
