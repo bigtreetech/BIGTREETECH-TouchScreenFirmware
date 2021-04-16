@@ -240,7 +240,7 @@ void menuPrintFromSource(void)
         if (infoFile.cur_page > 0)
         {
           infoFile.cur_page--;
-          update=1;
+          update = 1;
         }
         break;
 
@@ -248,7 +248,7 @@ void menuPrintFromSource(void)
         if (infoFile.cur_page + 1 < (infoFile.folderCount + infoFile.fileCount + (NUM_PER_PAGE - 1)) / NUM_PER_PAGE)
         {
           infoFile.cur_page++;
-          update=1;
+          update = 1;
         }
         break;
 
