@@ -117,8 +117,7 @@ void menuLevelCorner(void)
   menuDrawPage(&levelCornerItems);
   drawProbeAccuracyIcon(&levelCornerItems);
 
-  if(!coordinateIsKnown())
-    mustStoreCmd("G28\n");  // Init Coordinate
+  mustStoreCmd("G28\n");  // Init Coordinate
 
   // Check min edge limit for the probe with probe offset set in parseACK.c
   uint8_t edge_min = MAX(ABS(getParameter((int16_t)P_PROBE_OFFSET, X_STEPPER)),
