@@ -13,12 +13,12 @@ static uint8_t list_max_page;
 static uint8_t list_cur_page;
 static bool handleBack = true;
 
-static void (*action_preparePage)(LISTITEMS * listItems, uint8_t index) = NULL;
+//static void (*action_preparePage)(LISTITEMS * listItems, uint8_t index) = NULL;
 static void (*action_prepareItem)(LISTITEM * item, uint16_t index, uint8_t itemPos) = NULL;
 static void (*action_pageChanged)(uint8_t pageIndex) = NULL;
 
 void listViewCreate(LABEL title, LISTITEM * items, uint16_t max_items, uint8_t cur_page, bool handleBackPress,
-                    void (*preparePage_action)(LISTITEMS * listItems, uint8_t pageIndex),
+//                    void (*preparePage_action)(LISTITEMS * listItems, uint8_t pageIndex),
                     void (*prepareItem_action)(LISTITEM * item, uint16_t index, uint8_t itemPos),
                     void (*pageChanged_action)(uint8_t pageIndex))
 {
@@ -27,7 +27,7 @@ void listViewCreate(LABEL title, LISTITEM * items, uint16_t max_items, uint8_t c
   list_max_items = max_items;
   list_max_page = (list_max_items + LISTITEM_PER_PAGE - 1) / LISTITEM_PER_PAGE;
   handleBack = handleBackPress;
-  action_preparePage = preparePage_action;
+  //action_preparePage = preparePage_action;
   action_prepareItem = prepareItem_action;
   action_pageChanged = pageChanged_action;
 
