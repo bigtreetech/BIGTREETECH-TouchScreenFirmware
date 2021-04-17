@@ -650,11 +650,11 @@ void meshDrawKeyboard(void)
   }
 
   if (infoMachineSettings.EEPROM == 1)
-    DrawCharIcon(&meshKeyRect[ME_KEY_SAVE], MIDDLE, ICONCHAR_SAVE, false, 0);
+    DrawCharIcon(&meshKeyRect[ME_KEY_SAVE], CENTER, CHARICON_SAVE, false, 0);
 
-  DrawCharIcon(&meshKeyRect[ME_KEY_OK], MIDDLE, ICONCHAR_OK, false, 0);
-  DrawCharIcon(&meshKeyRect[ME_KEY_RESET], MIDDLE, ICONCHAR_RESET, false, 0);
-  DrawCharIcon(&meshKeyRect[ME_KEY_HOME], MIDDLE, ICONCHAR_MOVE, false, 0);
+  DrawCharIcon(&meshKeyRect[ME_KEY_OK], CENTER, CHARICON_OK, false, 0);
+  DrawCharIcon(&meshKeyRect[ME_KEY_RESET], CENTER, CHARICON_RESET, false, 0);
+  DrawCharIcon(&meshKeyRect[ME_KEY_HOME], CENTER, CHARICON_MOVE, false, 0);
 
   GUI_RestoreColorDefault();
 

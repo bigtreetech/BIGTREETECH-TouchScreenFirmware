@@ -6,14 +6,13 @@ extern "C" {
 #endif
 
 #include "includes.h"
-#include "list_item.h"
 
-#define SKEYHEIGHT      (LCD_HEIGHT-ICON_START_Y)/4
-#define SKEYWIDTH       LCD_WIDTH/4
+#define SKEYHEIGHT (LCD_HEIGHT - ICON_START_Y) / 4
+#define SKEYWIDTH  LCD_WIDTH / 4
 
-#define KEY_NUM 16
+#define KEY_NUM       16
 #define FLOAT_BUFLONG 9
-#define INT_BUFLONG 6
+#define INT_BUFLONG   6
 
 typedef enum
 {

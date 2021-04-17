@@ -65,19 +65,19 @@ void drawToast(bool redraw)
     if (toastlist[curToastDisplay].style == DIALOG_TYPE_ERROR)
     {
       GUI_SetColor(MAT_RED);
-      icon = IconCharSelect(ICONCHAR_ERROR);
+      icon = IconCharSelect(CHARICON_ERROR);
       cursound = sound_error;
     }
     else if (toastlist[curToastDisplay].style == DIALOG_TYPE_SUCCESS)
     {
       GUI_SetColor(MAT_GREEN);
-      icon = IconCharSelect(ICONCHAR_OK_ROUND);
+      icon = IconCharSelect(CHARICON_OK_ROUND);
       cursound = sound_success;
     }
     else
     {
       GUI_SetColor(MAT_BLUE);
-      icon = IconCharSelect(ICONCHAR_INFO);
+      icon = IconCharSelect(CHARICON_INFO);
       cursound = sound_toast;
     }
 

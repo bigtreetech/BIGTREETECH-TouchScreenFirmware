@@ -19,6 +19,7 @@
 
 #include "Colors.h"
 #include "lcd.h"
+#include "CharIcon.h"
 #include "LCD_Init.h"
 #include "lcd_dma.h"
 #include "GUI.h"
@@ -46,7 +47,7 @@
 #include "ST7920_Emulator.h"
 #include "HD44780_Emulator.h"
 #include "ui_draw.h"
-#include "touch_process.h"
+#include "TouchProcess.h"
 #include "serialConnection.h"
 #include "interfaceCmd.h"
 #include "coordinate.h"
@@ -73,8 +74,8 @@
 
 #include "extend.h"
 #include "menu.h"
-#include "list_item.h"
-#include "list_widget.h"
+#include "ListItem.h"
+#include "ListManager.h"
 #include "common.h"
 #include "Popup.h"
 #include "Numpad.h"

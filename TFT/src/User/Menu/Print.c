@@ -94,7 +94,7 @@ void gocdeListDraw(void)
   // folder
   for (i = 0; (i + infoFile.cur_page * NUM_PER_PAGE < infoFile.folderCount) && (i < NUM_PER_PAGE); i++)
   {
-     printListItems->items[i].icon = ICONCHAR_FOLDER;
+     printListItems->items[i].icon = CHARICON_FOLDER;
     setDynamicLabel(i, infoFile.folder[i + infoFile.cur_page * NUM_PER_PAGE]);
      printListItems->items[i].titlelabel.index = LABEL_DYNAMIC;
     menuDrawListItem(&printListItems->items[i], i);
@@ -102,7 +102,7 @@ void gocdeListDraw(void)
   // gcode file
   for (; (i + infoFile.cur_page * NUM_PER_PAGE < infoFile.fileCount + infoFile.folderCount) && (i < NUM_PER_PAGE); i++)
   {
-     printListItems->items[i].icon = ICONCHAR_FILE;
+     printListItems->items[i].icon = CHARICON_FILE;
     if (infoMachineSettings.long_filename_support == ENABLED && infoFile.source == BOARD_SD)
     {
       setDynamicLabel(i, infoFile.Longfile[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.folderCount]);
@@ -118,7 +118,7 @@ void gocdeListDraw(void)
   // background
   for (; (i < NUM_PER_PAGE); i++)
   {
-     printListItems->items[i].icon = ICONCHAR_BACKGROUND;
+     printListItems->items[i].icon = CHARICON_BACKGROUND;
      printListItems->items[i].titlelabel.index = LABEL_BACKGROUND;
     menuDrawListItem(& printListItems->items[i], i);
   }
@@ -126,25 +126,25 @@ void gocdeListDraw(void)
   int t_pagenum = (infoFile.folderCount + infoFile.fileCount + (LISTITEM_PER_PAGE - 1)) / LISTITEM_PER_PAGE;
   if ((infoFile.folderCount + infoFile.fileCount) <= LISTITEM_PER_PAGE)
   {
-     printListItems->items[5].icon = ICONCHAR_BACKGROUND;
-     printListItems->items[6].icon = ICONCHAR_BACKGROUND;
+     printListItems->items[5].icon = CHARICON_BACKGROUND;
+     printListItems->items[6].icon = CHARICON_BACKGROUND;
   }
   else
   {
     if (infoFile.cur_page == 0)
     {
-       printListItems->items[5].icon = ICONCHAR_BACKGROUND;
-       printListItems->items[6].icon = ICONCHAR_PAGEDOWN;
+       printListItems->items[5].icon = CHARICON_BACKGROUND;
+       printListItems->items[6].icon = CHARICON_PAGEDOWN;
     }
     else if (infoFile.cur_page == (t_pagenum - 1))
     {
-       printListItems->items[5].icon = ICONCHAR_PAGEUP;
-       printListItems->items[6].icon = ICONCHAR_BACKGROUND;
+       printListItems->items[5].icon = CHARICON_PAGEUP;
+       printListItems->items[6].icon = CHARICON_BACKGROUND;
     }
     else
     {
-       printListItems->items[5].icon = ICONCHAR_PAGEUP;
-       printListItems->items[6].icon = ICONCHAR_PAGEDOWN;
+       printListItems->items[5].icon = CHARICON_PAGEUP;
+       printListItems->items[6].icon = CHARICON_PAGEDOWN;
     }
   }
   menuDrawListItem(&printListItems->items[5], 5);
@@ -179,14 +179,14 @@ void menuPrintFromSource(void)
     LABEL_BACKGROUND,
     // icon                 ItemType    Item Title        item value text(only for custom value)
     {
-      {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
-      {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
-      {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
-      {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
-      {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
-      {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
-      {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
-      {ICONCHAR_BACK,       LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
+      {CHARICON_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
+      {CHARICON_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
+      {CHARICON_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
+      {CHARICON_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
+      {CHARICON_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
+      {CHARICON_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
+      {CHARICON_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
+      {CHARICON_BACK,       LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
     }
   };
 

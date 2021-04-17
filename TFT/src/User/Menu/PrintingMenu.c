@@ -291,7 +291,7 @@ void drawPrintInfo(void)
   ICON_CustomReadDisplay(rect_of_keySS[17].x0, rect_of_keySS[17].y0, INFOBOX_ADDR);
   GUI_SetColor(INFOMSG_BKCOLOR);
   GUI_DispString(rect_of_keySS[17].x0 + STATUS_MSG_ICON_XOFFSET, rect_of_keySS[17].y0 + STATUS_MSG_ICON_YOFFSET,
-                 IconCharSelect(ICONCHAR_INFO));
+                 IconCharSelect(CHARICON_INFO));
   GUI_DispStringInRectEOL(rect_of_keySS[17].x0 + BYTE_HEIGHT + STATUS_MSG_TITLE_XOFFSET,
                           rect_of_keySS[17].y0 + STATUS_MSG_ICON_YOFFSET,
                           rect_of_keySS[17].x1 - BYTE_HEIGHT + STATUS_MSG_TITLE_XOFFSET,

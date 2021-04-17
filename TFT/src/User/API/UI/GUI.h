@@ -8,14 +8,18 @@ extern "C" {
 #include <stdint.h>
 #include "utf8_decode.h"
 
-enum
+typedef enum
 {
-  LEFT = 0,
-  RIGHT,
-  CENTER,
+  TOP_LEFT = 0,
   TOP,
+  TOP_RIGHT,
+  LEFT,
+  CENTER,
+  RIGHT,
+  BOTTOM_LEFT,
   BOTTOM,
-};
+  BOTTOM_RIGHT
+} ALIGN_POSITION;
 
 typedef enum
 {
@@ -126,7 +130,7 @@ typedef struct
   GUI_RECT rect;
   uint8_t  *text;
   uint32_t time;
-  int16_t    off_head;
+  int16_t  off_head;
   int16_t  off_tail;
   uint16_t maxByte;
   uint16_t curByte;
