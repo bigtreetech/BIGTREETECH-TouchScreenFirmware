@@ -357,7 +357,7 @@ void menuFeatureSettings(void)
   SETTINGS now = infoSettings;
   LABEL title = {LABEL_FEATURE_SETTINGS};
   uint16_t index = KEY_IDLE;
-  listViewCreate(title, settingPage, SKEY_COUNT, fe_cur_page, true, loadFeatureSettings, featurePageChange);
+  listViewCreate(title, settingPage, SKEY_COUNT, fe_cur_page, true, NULL, loadFeatureSettings, featurePageChange);
 
   while (infoMenu.menu[infoMenu.cur] == menuFeatureSettings)
   {

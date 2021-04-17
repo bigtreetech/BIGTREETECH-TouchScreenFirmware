@@ -48,7 +48,7 @@ void menuLanguage(void)
   }
   infoSettings.language = tmp_language;
 
-  listViewCreate(title, totalItems, COUNT(totalItems), infoSettings.language / LISTITEM_PER_PAGE, true, NULL, NULL);
+  listViewCreate(title, totalItems, COUNT(totalItems), infoSettings.language / LISTITEM_PER_PAGE, true, NULL, NULL, NULL);
 
   while (infoMenu.menu[infoMenu.cur] == menuLanguage)
   {
@@ -105,7 +105,7 @@ void menuEmulatorBGColor(void)
     totalItems[i].titlelabel = lcd_color_names[i];
   }
 
-  listViewCreate(title, totalItems, COUNT(totalItems), cur_item/ LISTITEM_PER_PAGE, true, NULL, NULL);
+  listViewCreate(title, totalItems, COUNT(totalItems), cur_item/ LISTITEM_PER_PAGE, true, NULL, NULL, NULL);
 
   while (infoMenu.menu[infoMenu.cur] == menuEmulatorBGColor)
   {
@@ -158,7 +158,7 @@ void menuEmulatorFontColor(void)
     totalItems[i].titlelabel = lcd_color_names[i];
   }
 
-  listViewCreate(title, totalItems, COUNT(totalItems), cur_item/ LISTITEM_PER_PAGE, true, NULL, NULL);
+  listViewCreate(title, totalItems, COUNT(totalItems), cur_item/ LISTITEM_PER_PAGE, true, NULL, NULL, NULL);
 
   while (infoMenu.menu[infoMenu.cur] == menuEmulatorFontColor)
   {
@@ -216,7 +216,7 @@ void menuMarlinModeSettings(void)
   uint16_t curIndex = KEY_IDLE;
   SETTINGS now = infoSettings;
 
-  listViewCreate(title, marlinModeitems, COUNT(marlinModeitems), 0, true, NULL, NULL);
+  listViewCreate(title, marlinModeitems, COUNT(marlinModeitems), 0, true, NULL, NULL, NULL);
 
   while (infoMenu.menu[infoMenu.cur] == menuMarlinModeSettings)
   {
@@ -286,7 +286,7 @@ void menuSoundSettings(void)
   sounditems[2].icon = (infoSettings.alertSound == 1) ? CHARICON_TOGGLE_ON : CHARICON_TOGGLE_OFF;
   sounditems[3].icon = (infoSettings.heaterSound == 1) ? CHARICON_TOGGLE_ON : CHARICON_TOGGLE_OFF;
 
-  listViewCreate(title, sounditems, COUNT(sounditems), 0, true, NULL, NULL);
+  listViewCreate(title, sounditems, COUNT(sounditems), 0, true, NULL, NULL, NULL);
 
   while (infoMenu.menu[infoMenu.cur] == menuSoundSettings)
   {
@@ -362,7 +362,7 @@ void menuBrightnessSettings(void)
 
   brightnessitems[2].valueLabel = itemDimTime[infoSettings.lcd_idle_timer];
 
-  listViewCreate(title, brightnessitems, COUNT(brightnessitems), 0, true, NULL, NULL);
+  listViewCreate(title, brightnessitems, COUNT(brightnessitems), 0, true, NULL, NULL, NULL);
 
   while (infoMenu.menu[infoMenu.cur] == menuBrightnessSettings)
   {

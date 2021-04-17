@@ -135,7 +135,7 @@ void menuShowParameter(void)
   }
 
   listViewCreate(parametertypes[cur_parameter].titlelabel, parameter_menuitems, getParameterElementCount(cur_parameter), 0,
-                 false, NULL, NULL);
+                 false, NULL, NULL, NULL);
 
   while (infoMenu.menu[infoMenu.cur] == menuShowParameter)
   {
@@ -226,7 +226,7 @@ void menuParameterSettings(void)
   LISTITEM parameterMainItems[totalItems];
   uint16_t curIndex = KEY_IDLE;
 
-  listViewCreate(title, parameterMainItems, totalItems, ps_cur_page, false, NULL, NULL);
+  listViewCreate(title, parameterMainItems, totalItems, ps_cur_page, false, NULL, NULL, NULL);
 
   while (infoMenu.menu[infoMenu.cur] == menuParameterSettings)
   {

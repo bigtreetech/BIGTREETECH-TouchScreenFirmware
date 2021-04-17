@@ -8,6 +8,7 @@ extern "C" {
 #include "includes.h"
 
   void listViewCreate(LABEL title, LISTITEM * items, uint16_t max_items, uint8_t cur_page, bool handleBackPress,
+                      void (*preparePage_action)(LISTITEMS * listItems, uint8_t pageIndex),
                       void (*prepareItem)(LISTITEM * item, uint16_t index, uint8_t itemPos),
                       void (*pageChange)(uint8_t PageIndex));
   void listViewSetTitle(LABEL title);
