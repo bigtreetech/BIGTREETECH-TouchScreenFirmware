@@ -29,8 +29,8 @@ void LCD_SetWindow(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey)
     LCD_WR_REG(0x2B);
     LCD_WR_DATA(sy>>8);LCD_WR_DATA(sy&0xFF);
     LCD_WR_DATA(ey>>8);LCD_WR_DATA(ey&0xFF);
-  }
-#endif
+  #endif
+}
 
 void GUI_SetColor(uint16_t color)
 {
