@@ -581,6 +581,10 @@ void parseConfigKey(uint16_t index)
       config_set_color(&infoSettings.mesh_max_color);
       break;
 
+    case C_INDEX_TERMINAL_COLOR_SCHEME:
+      SET_VALID_INT_VALUE(infoSettings.terminal_color_scheme, 0, 2);
+      break;
+
     case C_INDEX_ROTATE_UI:
       if (infoSettings.rotate_ui != getOnOff())
       {
@@ -597,6 +601,7 @@ void parseConfigKey(uint16_t index)
       if (key_seen("X")) infoSettings.invert_axis[X_AXIS] = getOnOff();
       if (key_seen("Y")) infoSettings.invert_axis[Y_AXIS] = getOnOff();
       if (key_seen("Z")) infoSettings.invert_axis[Z_AXIS] = getOnOff();
+      if (key_seen("LY")) infoSettings.leveling_invert_y_axis = getOnOff();
       break;
 
     case C_INDEX_PERSISTENT_TEMP:

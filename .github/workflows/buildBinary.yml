@@ -52,12 +52,16 @@ jobs:
         run: platformio run --environment BIGTREE_TFT28_V3_0
       - name: Build TFT24 V1.1
         run: platformio run --environment BIGTREE_TFT24_V1_1
+      - name: Build MKS TFT32 V1.3
+        run: platformio run --environment MKS_TFT32_V1_3
       - name: Build MKS TFT32 V1.4
-        run: platformio run --environment MKS_32_V1_4
+        run: platformio run --environment MKS_TFT32_V1_4
       - name: Build MKS TFT32 V1.4 No Bootloader
-        run: platformio run --environment MKS_32_V1_4_NOBL
-      - name: Build MKS TFT28 V1.0
-        run: platformio run --environment MKS_28_V1_0
+        run: platformio run --environment MKS_TFT32_V1_4_NOBL
+      - name: Build MKS TFT28 V3.0
+        run: platformio run --environment MKS_TFT28_V3_0
+      - name: Build MKS TFT28 V4.0
+        run: platformio run --environment MKS_TFT28_V4_0
       - name: Remove Old Binaries
         run: find "Copy to SD Card root directory to update/" -name '*.bin' -print -delete
       - name: Remove Old Config

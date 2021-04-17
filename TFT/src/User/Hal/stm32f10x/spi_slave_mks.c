@@ -4,13 +4,13 @@
 #include "stdlib.h"
 #include "stm32f10x_conf.h"
 
-#if defined(MKS_32_V1_4) || defined (MKS_28_V1_0)
+#if defined(MKS_TFT32_V1_3) || defined(MKS_TFT32_V1_4) || defined (MKS_TFT28_V3_0) || defined (MKS_TFT28_V4_0)
 
 #if defined(ST7920_EMULATOR)
-//TODO:
-//now support SPI3 and PB1 CS only
-//more compatibility changes are needed
-//Config for SPI Channel
+// TODO:
+// now support SPI3 and PB1 CS only
+// more compatibility changes are needed
+// Config for SPI Channel
 #if ST7920_SPI == _SPI1
   #define ST7920_SPI_NUM          SPI1
 #elif ST7920_SPI == _SPI2
@@ -159,4 +159,4 @@ void EXTI1_IRQHandler(void)
 }
 #endif             // endif for #if defined(ST7920_EMULATOR)
 
-#endif             // endif for #if defined(MKS_32_V1_4) || defined (MKS_28_V1_0)
+#endif             // endif for #if defined(MKS_TFT32_V1_3) || defined(MKS_TFT32_V1_4) || defined (MKS_TFT28_V3_0) || defined (MKS_TFT28_V4_0)

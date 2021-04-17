@@ -168,32 +168,32 @@ static inline void drawValue(char * str)
 //Numpad for decimal numbers
 double numPadFloat(u8* title, double old_val, double reset_val, bool negative)
 {
-    //bool exit = false;
-    NUM_KEY_VALUES key_num = NUM_KEY_IDLE;
-    uint8_t nowIndex = 0;
-    uint8_t lastIndex = 0;
-    char ParameterBuf[FLOAT_BUFLONG + 1] = {0};
-    uint8_t prec = (old_val == 0) ? 0 : 3;
-    bool valueFirstPress = true;
+  //bool exit = false;
+  NUM_KEY_VALUES key_num = NUM_KEY_IDLE;
+  uint8_t nowIndex = 0;
+  uint8_t lastIndex = 0;
+  char ParameterBuf[FLOAT_BUFLONG + 1] = {0};
+  uint8_t prec = (old_val == 0) ? 0 : 3;
+  bool valueFirstPress = true;
 
-    touchSound = false;
-    sprintf(ParameterBuf,"%.*f", prec, old_val);
-    nowIndex = strlen(ParameterBuf);
+  touchSound = false;
+  sprintf(ParameterBuf,"%.*f", prec, old_val);
+  nowIndex = strlen(ParameterBuf);
 
-    if (title == NULL)
+  if (title == NULL)
+  {
+    char tempstr[FLOAT_BUFLONG + 1];
+    sprintf(tempstr, "%.*f", prec, old_val);
+    title = (uint8_t *)tempstr;
+  }
+  setMenu(MENU_TYPE_FULLSCREEN, NULL, COUNT(rect_of_numkey), rect_of_numkey, drawKeypadButton, NULL);
+  Draw_keyboard(title, false, negative);
+
+  while (1)
+  {
+    key_num = menuKeyGetValue();
+    switch (key_num)
     {
-      char tempstr[FLOAT_BUFLONG + 1];
-      sprintf(tempstr, "%.*f", prec, old_val);
-      title = (uint8_t *)tempstr;
-    }
-    setMenu(MENU_TYPE_FULLSCREEN, NULL, COUNT(rect_of_numkey), rect_of_numkey, drawKeypadButton, NULL);
-    Draw_keyboard(title, false, negative);
-
-    while (1)
-    {
-      key_num = menuKeyGetValue();
-      switch (key_num)
-      {
       case NUM_KEY_EXIT:
         BUZZER_PLAY(sound_cancel);
         touchSound = true;
@@ -213,7 +213,7 @@ double numPadFloat(u8* title, double old_val, double reset_val, bool negative)
         break;
 
       case NUM_KEY_RESET:
-        sprintf(ParameterBuf,"%.*f", prec, old_val);
+        sprintf(ParameterBuf, "%.*f", prec, reset_val);
         nowIndex = strlen(ParameterBuf);
         lastIndex = nowIndex + 1;
         valueFirstPress = true;
@@ -249,6 +249,7 @@ double numPadFloat(u8* title, double old_val, double reset_val, bool negative)
           BUZZER_PLAY(sound_deny);
         }
         break;
+
       case NUM_KEY_DEC:
         if (valueFirstPress == true)
         {
@@ -269,6 +270,7 @@ double numPadFloat(u8* title, double old_val, double reset_val, bool negative)
           BUZZER_PLAY(sound_deny);
         }
         break;
+
       case NUM_KEY_MINUS:
         if (negative)
         {
@@ -295,60 +297,61 @@ double numPadFloat(u8* title, double old_val, double reset_val, bool negative)
         if (nowIndex > 0)
         {
           if (nowIndex == 1 && (strchr((const char *)ParameterBuf, '.') || strchr((const char *)ParameterBuf, '-')))
-            {
-              BUZZER_PLAY(sound_deny);
-              break;
-            }
+          {
+            BUZZER_PLAY(sound_deny);
+            break;
+          }
           BUZZER_PLAY(sound_ok);
           touchSound = true;
           return strtod(ParameterBuf, NULL);
         }
+
       default:
         break;
-      }
-
-      if (lastIndex != nowIndex)
-      {
-        lastIndex = nowIndex;
-        drawValue(ParameterBuf);
-      }
-      loopBackEnd();
     }
+
+    if (lastIndex != nowIndex)
+    {
+      lastIndex = nowIndex;
+      drawValue(ParameterBuf);
+    }
+    loopBackEnd();
+  }
 }
 
 //Numpad for integer numbers
 int32_t numPadInt(u8* title, int32_t old_val, int32_t reset_val, bool negative)
 {
-    NUM_KEY_VALUES key_num = NUM_KEY_IDLE;
-    touchSound = false;
+  NUM_KEY_VALUES key_num = NUM_KEY_IDLE;
+  touchSound = false;
 
-    int32_t val = old_val, lastval = 0;
-    uint8_t len = 0;
-    char ParameterBuf[INT_BUFLONG + 1];
-    int8_t neg = 1, lastneg = 1;
-    bool valueFirstPress = true;
+  int32_t val = old_val, lastval = 0;
+  uint8_t len = 0;
+  char ParameterBuf[INT_BUFLONG + 1];
+  int8_t neg = 1, lastneg = 1;
+  bool valueFirstPress = true;
 
-    if (old_val < 0)
-      neg = -1;
-    val = old_val * neg;
-    if (title == NULL)
+  if (old_val < 0)
+    neg = -1;
+  val = old_val * neg;
+  if (title == NULL)
+  {
+    char tempstr[INT_BUFLONG + 1];
+    sprintf(tempstr, "%i", old_val);
+    title = (uint8_t *)tempstr;
+  }
+  setMenu(MENU_TYPE_FULLSCREEN, NULL, COUNT(rect_of_numkey), rect_of_numkey, drawKeypadButton, NULL);
+  Draw_keyboard(title, true, negative);
+
+  sprintf(ParameterBuf, "%i", val);
+  drawValue(ParameterBuf);
+  len = strlen(ParameterBuf);
+
+  while (1)
+  {
+    key_num = menuKeyGetValue();
+    switch (key_num)
     {
-      char tempstr[INT_BUFLONG + 1];
-      sprintf(tempstr, "%i", old_val);
-      title = (uint8_t *)tempstr;
-    }
-    setMenu(MENU_TYPE_FULLSCREEN, NULL, COUNT(rect_of_numkey), rect_of_numkey, drawKeypadButton, NULL);
-    Draw_keyboard(title, true, negative);
-
-    sprintf(ParameterBuf,"%i",val);
-    drawValue(ParameterBuf);
-    len = strlen(ParameterBuf);
-
-    while (1)
-    {
-      key_num = menuKeyGetValue();
-      switch (key_num)
-      {
       case NUM_KEY_EXIT:
         BUZZER_PLAY(sound_cancel);
         touchSound = true;
@@ -374,12 +377,14 @@ int32_t numPadInt(u8* title, int32_t old_val, int32_t reset_val, bool negative)
           BUZZER_PLAY(sound_deny);
         }
         break;
+
       case NUM_KEY_RESET:
-          neg = (reset_val >= 0) ? 1: -1;
-          val = reset_val * neg;
-          valueFirstPress = true;
-          BUZZER_PLAY(sound_keypress);
-      break;
+        neg = (reset_val >= 0) ? 1 : -1;
+        val = reset_val * neg;
+        valueFirstPress = true;
+        BUZZER_PLAY(sound_keypress);
+        break;
+
       case NUM_KEY_1:
       case NUM_KEY_2:
       case NUM_KEY_3:
@@ -416,18 +421,18 @@ int32_t numPadInt(u8* title, int32_t old_val, int32_t reset_val, bool negative)
 
       default:
         break;
-      }
-
-      if (lastval != val || lastneg != neg)
-      {
-        lastval = val;
-        lastneg = neg;
-        char * n = (neg > 0) ? "" : "-";
-        GUI_ClearPrect(&newParameterRect);
-        sprintf(ParameterBuf, "%s%i", n, val);
-        setLargeFont(true);
-        drawValue(ParameterBuf);
-      }
-      loopBackEnd();
     }
+
+    if (lastval != val || lastneg != neg)
+    {
+      lastval = val;
+      lastneg = neg;
+      char * n = (neg > 0) ? "" : "-";
+      GUI_ClearPrect(&newParameterRect);
+      sprintf(ParameterBuf, "%s%i", n, val);
+      setLargeFont(true);
+      drawValue(ParameterBuf);
+    }
+    loopBackEnd();
+  }
 }

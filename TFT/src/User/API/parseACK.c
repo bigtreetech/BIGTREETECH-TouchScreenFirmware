@@ -23,7 +23,7 @@ const ECHO knownEcho[] = {
   {ECHO_NOTIFY_NONE, "busy: processing"},
   {ECHO_NOTIFY_NONE, "Now fresh file:"},
   {ECHO_NOTIFY_NONE, "Now doing file:"},
-  {ECHO_NOTIFY_NONE, "Probe Offset"},
+  // {ECHO_NOTIFY_NONE, "Probe Offset"},
   {ECHO_NOTIFY_NONE, "Flow:"},
   {ECHO_NOTIFY_NONE, "echo:;"},                   // M503
   {ECHO_NOTIFY_NONE, "echo:  G"},                 // M503
@@ -658,6 +658,7 @@ void parseACK(void)
         tmpMsg[6] = '\0';
         if (strcmp(tmpMsg, "Mean: ") == 0)
         {
+          SetLevelCornerPosition(4, ack_value());  // save value for Lever Corner display
           sprintf(tmpMsg, "%s\nStandard Deviation: %0.5f", (char *)getDialogMsgStr(), ack_value());
           setDialogText((u8* )"Repeatability Test", (uint8_t *)tmpMsg, LABEL_CONFIRM, LABEL_BACKGROUND);
           showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
@@ -723,18 +724,17 @@ void parseACK(void)
         else
           setParameter(P_ABL_STATE, 0, DISABLED);
       }
-      // parse and store M420 V1 T1 (mesh. Z offset:) or M503 (G29 S4 Zxx), MBL Z offset value (e.g. from Babystep menu)
+      // parse and store M420 V1 T1 or G29 S0 (mesh. Z offset:) or M503 (G29 S4 Zxx), MBL Z offset value (e.g. from Babystep menu)
       else if (ack_seen("mesh. Z offset:") || ack_seen("G29 S4 Z"))
       {
         setParameter(P_MBL_OFFSET, 0, ack_value());
       }
-      // parse and store M851, Probe Z offset value (e.g. from Babystep menu)
+      // parse and store M851, Probe Z offset value (e.g. from Babystep menu) and X an Y probe Offset for LevelCorner position limit to be fixed see ABL.c
       else if (ack_seen("Probe Offset"))
       {
-        if (ack_seen("Z:") || (ack_seen("Z")))
-        {
-          setParameter(P_PROBE_OFFSET, Z_STEPPER, ack_value());
-        }
+        if (ack_seen("X")) setParameter(P_PROBE_OFFSET, X_STEPPER, ack_value());
+        if (ack_seen("Y")) setParameter(P_PROBE_OFFSET, Y_STEPPER, ack_value());
+        if (ack_seen("Z:") || (ack_seen("Z"))) setParameter(P_PROBE_OFFSET, Z_STEPPER, ack_value());
       }
       // parse G29 (ABL) + M118, ABL Completed message (ABL, BBL, UBL) (e.g. from ABL menu)
       else if (ack_seen("ABL Completed"))
@@ -745,6 +745,37 @@ void parseACK(void)
       else if (ack_seen("Mesh probing done"))
       {
         mblUpdateStatus(true);
+      }
+      // G30 feedback to get the 4 corners Z value returned by Marlin for LevelCorner function
+      else if (ack_seen("Bed X: "))
+      {
+        float valx = ack_value();
+        float valy = 0;
+        if (ack_seen("Y: ")) valy = ack_value();
+        if (ack_seen("Z: "))
+        {
+          uint16_t x_mid = infoSettings.machine_size_min[X_AXIS] +
+                           (infoSettings.machine_size_max[X_AXIS] - infoSettings.machine_size_min[X_AXIS]) / 2;
+          uint16_t y_mid = infoSettings.machine_size_min[Y_AXIS] +
+                           (infoSettings.machine_size_max[Y_AXIS] - infoSettings.machine_size_min[Y_AXIS]) / 2;
+
+          if ((valx < x_mid) && (valy < y_mid))
+          {
+            SetLevelCornerPosition(0, ack_value());
+          }
+          else if ((valx > x_mid) && (valy < y_mid))
+          {
+            SetLevelCornerPosition(1, ack_value());
+          }
+          else if ((valx > x_mid) && (valy > y_mid))
+          {
+            SetLevelCornerPosition(2, ack_value());
+          }
+          else if ((valx < x_mid) && (valy > y_mid))
+          {
+            SetLevelCornerPosition(3, ack_value());
+          }
+        }
       }
 
       //----------------------------------------

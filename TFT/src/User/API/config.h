@@ -31,6 +31,7 @@ extern "C" {
 #define CONFIG_LIST_BUTTON_BG_COLOR   "list_button_bg_color:"
 #define CONFIG_MESH_MIN_COLOR         "mesh_min_color:"
 #define CONFIG_MESH_MAX_COLOR         "mesh_max_color:"
+#define CONFIG_TERMINAL_COLOR_SCHEME  "terminal_color_scheme:"
 
 #define CONFIG_ROTATE_UI              "rotate_ui:"
 #define CONFIG_TERMINAL_ACK           "terminal_ack:"

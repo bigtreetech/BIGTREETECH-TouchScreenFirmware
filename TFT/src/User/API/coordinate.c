@@ -116,3 +116,4 @@ void coordinateQuery(void)
     coordinateQueryWait = storeCmd("M114\n");
   }
 }
+

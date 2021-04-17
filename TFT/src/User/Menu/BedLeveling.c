@@ -25,7 +25,7 @@ void menuBedLeveling(void)
     {
       {ICON_LEVELING,                LABEL_ABL},
       {ICON_MESH_EDITOR,             LABEL_MESH_EDITOR},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_MESH_VALID,              LABEL_MESH_VALID},
       {ICON_LEVELING_OFF,            LABEL_BL_DISABLE},
       {ICON_Z_FADE,                  LABEL_ABL_Z},
       {ICON_BACKGROUND,              LABEL_BACKGROUND},
@@ -85,6 +85,10 @@ void menuBedLeveling(void)
         infoMenu.menu[++infoMenu.cur] = menuMeshEditor;
         break;
 
+      case KEY_ICON_2:
+        infoMenu.menu[++infoMenu.cur] = menuMeshValid;
+        break;
+
       case KEY_ICON_3:
         if (getParameter(P_ABL_STATE, 0) == ENABLED)
           storeCmd(infoMachineSettings.firmwareType != FW_REPRAPFW ? "M420 S0\n" : "G29 S2\n");
@@ -95,7 +99,9 @@ void menuBedLeveling(void)
       case KEY_ICON_4:
       {
         float val = editFloatValue(Z_FADE_MIN_VALUE, Z_FADE_MAX_VALUE, 0.0f, getParameter(P_ABL_STATE, 1));
-        storeCmd("M420 Z%.2f\n", val);
+
+        if (val != getParameter(P_ABL_STATE, 1))
+          storeCmd("M420 Z%.2f\n", val);
 
         menuDrawPage(&bedLevelingItems);
         break;

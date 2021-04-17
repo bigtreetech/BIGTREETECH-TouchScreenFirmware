@@ -1,7 +1,7 @@
 #include "includes.h"
 #include "xpt2046.h"
 #include "GPIO_Init.h"
-#include "Selectmode.h"
+#include "SelectMode.h"
 
 bool freshBoot = true;
 bool skipMode = false;
@@ -198,7 +198,7 @@ static inline void setupModeHardware(uint8_t mode)
       setEncActiveSignal(1);
     #endif
 
-    #if !defined(MKS_32_V1_4) && !defined(MKS_28_V1_0)
+    #if !defined(MKS_TFT32_V1_3) && !defined(MKS_TFT32_V1_4) && !defined(MKS_TFT28_V3_0) && !defined (MKS_TFT28_V4_0)
       //causes hang if we deinit spi1
       SD_DeInit();
     #endif

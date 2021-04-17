@@ -1,4 +1,4 @@
-#include "Parametersetting.h"
+#include "ParameterSettings.h"
 #include "includes.h"
 
 static uint8_t ps_cur_page = 0;

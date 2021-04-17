@@ -294,13 +294,13 @@ char *request_M20_macros(char *nextdir)
   }
   else
   {
-    snprintf(command, 256, "M20 S2 P\"/macros/\"%s\n\n", nextdir);
+    snprintf(command, 256, "M20 S2 P\"/macros/%s\"\n", nextdir);
   }
   // Send GCode and wait for responce
   send_and_wait_M20(command);
   // reset pause Flag
   //infoHost.pauseGantry = false;
-  GUI_Clear(BACKGROUND_COLOR);
+  //GUI_Clear(BACKGROUND_COLOR);
   return requestCommandInfo.cmd_rev_buf;
 }
 

@@ -58,9 +58,6 @@ void setPrintProgress(float cur, float size);
 bool updatePrintProgress(void);
 uint8_t getPrintProgress(void);
 
-void setPrintModelIcon(bool exist);
-bool isPrintModelIcon(void);
-
 void setPrintRunout(bool runout);
 bool getPrintRunout(void);
 
