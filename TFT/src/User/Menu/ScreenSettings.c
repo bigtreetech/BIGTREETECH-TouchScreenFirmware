@@ -122,7 +122,7 @@ void menuEmulatorBGColor(void)
     totalItems[i].titlelabel = lcd_color_names[i];
   }
 
-  listWidgetCreate(title, totalItems, COUNT(totalItems), cur_item/ LISTITEM_PER_PAGE);
+  listWidgetCreate(title, totalItems, COUNT(totalItems), cur_item / LISTITEM_PER_PAGE);
 
   while (infoMenu.menu[infoMenu.cur] == menuEmulatorBGColor)
   {
