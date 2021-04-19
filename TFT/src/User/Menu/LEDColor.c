@@ -156,9 +156,12 @@ LED_VECT ledValue = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 uint8_t ledPage = 0;
 uint8_t ledIndex = 0;
 
-void ledSendValue(const LED_VECT * led)
+void ledSendValue(const LED_VECT * led, bool skipNeopixel)
 {
-  storeCmd("M150 R%d U%d B%d W%d P%d I%d\n", (*led)[0], (*led)[1], (*led)[2], (*led)[3], (*led)[4], (*led)[5]);
+  if (skipNeopixel)
+    storeCmd("M150 R%d U%d B%d W%d\n", (*led)[0], (*led)[1], (*led)[2], (*led)[3]);
+  else
+    storeCmd("M150 R%d U%d B%d W%d P%d I%d\n", (*led)[0], (*led)[1], (*led)[2], (*led)[3], (*led)[4], (*led)[5]);
 }
 
 void ledGetValue(LED_VECT * led)
@@ -167,9 +170,11 @@ void ledGetValue(LED_VECT * led)
     (*led)[i] = ledValue[i];
 }
 
-void ledSetValue(const LED_VECT * led)
+void ledSetValue(const LED_VECT * led, bool skipNeopixel)
 {
-  for (int i = 0; i < LED_VECT_SIZE; i++)
+  int size = skipNeopixel ? LED_VECT_SIZE - 2 : LED_VECT_SIZE;
+
+  for (int i = 0; i < size; i++)
     ledValue[i] = (*led)[i];
 }
 
@@ -419,7 +424,7 @@ void menuLEDColorCustom(void)
 
       // restore original LED color
       case LED_KEY_RESET:
-        ledSetValue(&origLedValue);
+        ledSetValue(&origLedValue, false);
 
         updateForced = true;
         break;
@@ -490,7 +495,7 @@ void menuLEDColorCustom(void)
 
     if ((sendingNeeded && nextScreenUpdate(LED_UPDATE_TIME)) || updateForced)
     {
-      ledSendValue(&ledValue);
+      ledSendValue(&ledValue, false);
 
       updateForced = sendingNeeded = false;
     }
@@ -531,22 +536,22 @@ void menuLEDColor(void)
     {
       // red
       case KEY_ICON_0:
-        ledSetValue(&ledRed);
+        ledSetValue(&ledRed, true);
         break;
 
       // green
       case KEY_ICON_1:
-        ledSetValue(&ledGreen);
+        ledSetValue(&ledGreen, true);
         break;
 
       // blue
       case KEY_ICON_2:
-        ledSetValue(&ledBlue);
+        ledSetValue(&ledBlue, true);
         break;
 
       // white
       case KEY_ICON_3:
-        ledSetValue(&ledWhite);
+        ledSetValue(&ledWhite, true);
         break;
 
       // custom LED color
@@ -556,7 +561,7 @@ void menuLEDColor(void)
 
       // turn off
       case KEY_ICON_6:
-        ledSendValue(&ledOff);
+        ledSendValue(&ledOff, true);
         break;
 
       case KEY_ICON_7:
@@ -568,7 +573,7 @@ void menuLEDColor(void)
     }
 
     if (key_num <= KEY_ICON_5)  // change LED color
-      ledSendValue(&ledValue);
+      ledSendValue(&ledValue, false);
 
     loopProcess();
   }
