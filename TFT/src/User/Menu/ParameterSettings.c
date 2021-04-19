@@ -6,35 +6,34 @@ static uint8_t cur_parameter = 0;
 
 bool parametersChanged = false;
 
-const LISTITEM parametertypes[PARAMETERS_COUNT] = {
-  // icon               ItemType           Item Title                  item value text(only for custom value)
-  {CHARICON_SETTING1,   LIST_MOREBUTTON,   LABEL_STEPS_SETTING,        LABEL_BACKGROUND},
-  {CHARICON_SETTING1,   LIST_MOREBUTTON,   LABEL_MAXFEEDRATE,          LABEL_BACKGROUND},
-  {CHARICON_SETTING1,   LIST_MOREBUTTON,   LABEL_MAXACCELERATION,      LABEL_BACKGROUND},
-  {CHARICON_SETTING1,   LIST_MOREBUTTON,   LABEL_ACCELERATION,         LABEL_BACKGROUND},
-  {CHARICON_SETTING1,   LIST_MOREBUTTON,   LABEL_JERK,                 LABEL_BACKGROUND},
-  {CHARICON_SETTING1,   LIST_MOREBUTTON,   LABEL_JUNCTION_DEVIATION,   LABEL_BACKGROUND},
-  {CHARICON_SETTING1,   LIST_MOREBUTTON,   LABEL_HOME_OFFSET,          LABEL_BACKGROUND},
-  {CHARICON_SETTING1,   LIST_MOREBUTTON,   LABEL_FWRETRACT,            LABEL_BACKGROUND},
-  {CHARICON_SETTING1,   LIST_MOREBUTTON,   LABEL_FWRECOVER,            LABEL_BACKGROUND},
-  {CHARICON_SETTING1,   LIST_MOREBUTTON,   LABEL_RETRACT_AUTO,         LABEL_BACKGROUND},
-  {CHARICON_SETTING1,   LIST_MOREBUTTON,   LABEL_HOTEND_OFFSET,        LABEL_BACKGROUND},
-  {CHARICON_SETTING1,   LIST_MOREBUTTON,   LABEL_ABL,                  LABEL_BACKGROUND},
-  {CHARICON_SETTING1,   LIST_MOREBUTTON,   LABEL_PROBE_OFFSET,         LABEL_BACKGROUND},
-  {CHARICON_SETTING1,   LIST_MOREBUTTON,   LABEL_LIN_ADVANCE,          LABEL_BACKGROUND},
-  {CHARICON_SETTING1,   LIST_MOREBUTTON,   LABEL_FILAMENT_SETTING,     LABEL_BACKGROUND},
-  {CHARICON_SETTING1,   LIST_MOREBUTTON,   LABEL_CURRENT_SETTING,      LABEL_BACKGROUND},
-  {CHARICON_SETTING1,   LIST_MOREBUTTON,   LABEL_BUMP_SENSITIVITY,     LABEL_BACKGROUND},
-  {CHARICON_SETTING1,   LIST_MOREBUTTON,   LABEL_HYBRID_THRESHOLD,     LABEL_BACKGROUND},
-  {CHARICON_SETTING1,   LIST_MOREBUTTON,   LABEL_STEALTH_CHOP,         LABEL_BACKGROUND},
-  {CHARICON_SETTING1,   LIST_MOREBUTTON,   LABEL_MBL_OFFSET,           LABEL_BACKGROUND},
+const LABEL parameterTypes[PARAMETERS_COUNT] = {
+  LABEL_STEPS_SETTING,
+  LABEL_MAXFEEDRATE,
+  LABEL_MAXACCELERATION,
+  LABEL_ACCELERATION,
+  LABEL_JERK,
+  LABEL_JUNCTION_DEVIATION,
+  LABEL_HOME_OFFSET,
+  LABEL_FWRETRACT,
+  LABEL_FWRECOVER,
+  LABEL_RETRACT_AUTO,
+  LABEL_HOTEND_OFFSET,
+  LABEL_ABL,
+  LABEL_PROBE_OFFSET,
+  LABEL_LIN_ADVANCE,
+  LABEL_FILAMENT_SETTING,
+  LABEL_CURRENT_SETTING,
+  LABEL_BUMP_SENSITIVITY,
+  LABEL_HYBRID_THRESHOLD,
+  LABEL_STEALTH_CHOP,
+  LABEL_MBL_OFFSET,
 };
 
 const LISTITEM eepromItems[P_SETTINGS_COUNT] = {
-  // icon               ItemType           Item Title                  item value text(only for custom value)
-  {CHARICON_SAVE,       LIST_LABEL,        LABEL_SETTINGS_SAVE,        LABEL_BACKGROUND},
-  {CHARICON_UNDO,       LIST_LABEL,        LABEL_SETTINGS_RESTORE,     LABEL_BACKGROUND},
-  {CHARICON_RESET,      LIST_LABEL,        LABEL_SETTINGS_RESET,       LABEL_BACKGROUND},
+  // icon           ItemType   Item Title              item value text(only for custom value)
+  {CHARICON_SAVE,  LIST_LABEL, LABEL_SETTINGS_SAVE,    LABEL_BACKGROUND},
+  {CHARICON_UNDO,  LIST_LABEL, LABEL_SETTINGS_RESTORE, LABEL_BACKGROUND},
+  {CHARICON_RESET, LIST_LABEL, LABEL_SETTINGS_RESET,   LABEL_BACKGROUND},
 };
 
 //show menu for selected parameter type
@@ -134,7 +133,7 @@ void menuShowParameter(void)
     }
   }
 
-  listViewCreate(parametertypes[cur_parameter].titlelabel, parameter_menuitems, getParameterElementCount(cur_parameter), 0,
+  listViewCreate(parameterTypes[cur_parameter], parameter_menuitems, getParameterElementCount(cur_parameter), 0,
                  false, NULL, NULL, NULL);
 
   while (infoMenu.menu[infoMenu.cur] == menuShowParameter)
@@ -192,16 +191,22 @@ void menuShowParameter(void)
 void loadParameters(LISTITEM * parameterMainItem, uint16_t index, uint8_t itemPos)
 {
   uint8_t enabledParameterCount = getEnabledParameterCount();
-  uint8_t totalItems = (infoMachineSettings.EEPROM == 1) ? (enabledParameterCount + P_SETTINGS_COUNT): enabledParameterCount;
+  uint8_t totalItems = (infoMachineSettings.EEPROM == 1) ? (enabledParameterCount + P_SETTINGS_COUNT) : enabledParameterCount;
 
   if (index < enabledParameterCount)
   {
     uint8_t parameterIndex = getEnabledParameter(index);
 
     if (parameterIndex < PARAMETERS_COUNT)
-      *parameterMainItem = parametertypes[parameterIndex];
+    {
+      parameterMainItem->icon = CHARICON_SETTING1;
+      parameterMainItem->itemType = LIST_MOREBUTTON;
+      parameterMainItem->titlelabel = parameterTypes[parameterIndex];
+    }
     else
+    {
       parameterMainItem->icon = CHARICON_BACKGROUND;
+    }
   }
   else
   {
