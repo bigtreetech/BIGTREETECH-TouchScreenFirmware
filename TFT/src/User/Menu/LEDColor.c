@@ -1,4 +1,4 @@
-#include "LED.h"
+#include "LEDColor.h"
 #include "includes.h"
 
 // value ranges
@@ -173,26 +173,26 @@ void ledSetValue(const LED_VECT * led)
     ledValue[i] = (*led)[i];
 }
 
-uint8_t ledGetComponetIndex(uint8_t index)
+uint8_t ledGetComponentIndex(uint8_t index)
 {
   return ledPage * PAGE_ITEMS + index;
 }
 
 uint8_t ledGetComponentValue(uint8_t index)
 {
-  return ledValue[ledGetComponetIndex(index)];
+  return ledValue[ledGetComponentIndex(index)];
 }
 
 static inline uint8_t ledEditComponentValue(uint8_t index)
 {
-  uint8_t realIndex = ledGetComponetIndex(index);
+  uint8_t realIndex = ledGetComponentIndex(index);
 
   return ledValue[realIndex] = editIntValue(LED_MIN_VALUE, LED_MAX_VALUE, ledValue[realIndex], ledValue[realIndex]);
 }
 
 uint8_t ledUpdateComponentValue(uint8_t index, int8_t unit, int8_t direction)
 {
-  uint8_t realIndex = ledGetComponetIndex(index);
+  uint8_t realIndex = ledGetComponentIndex(index);
 
   return ledValue[realIndex] = NOBEYOND(LED_MIN_VALUE, ledValue[realIndex] + (int16_t) (direction * unit), LED_MAX_VALUE);
 }
@@ -234,7 +234,7 @@ void ledDrawControl(uint8_t index, bool isFocused, bool drawFocus, bool drawAll)
 {
   GUI_RECT rect, rect2;
   uint16_t bgColorFocus;
-  uint8_t realIndex = ledGetComponetIndex(index);
+  uint8_t realIndex = ledGetComponentIndex(index);
   uint8_t i = (LED_KEY_OK + 1) + index * 4;
   uint8_t j = i + 1;
 
@@ -363,7 +363,7 @@ void ledDrawMenu(void)
   ledDrawKeyboard();
 }
 
-void menuLEDCustom(void)
+void menuLEDColorCustom(void)
 {
   LED_KEY_VALUES key_num = LED_KEY_IDLE;
   LED_VECT origLedValue;
@@ -382,7 +382,7 @@ void menuLEDCustom(void)
     encoderPosition = 0;
   #endif
 
-  while (infoMenu.menu[infoMenu.cur] == menuLEDCustom)
+  while (infoMenu.menu[infoMenu.cur] == menuLEDColorCustom)
   {
     key_num = menuKeyGetValue();
     switch (key_num)
@@ -502,7 +502,7 @@ void menuLEDCustom(void)
   GUI_RestoreColorDefault();
 }
 
-const MENUITEMS LEDItems = {
+const MENUITEMS LEDColorItems = {
   // title
   LABEL_RGB_SETTINGS,
   // icon                          label
@@ -518,13 +518,13 @@ const MENUITEMS LEDItems = {
   }
 };
 
-void menuLED(void)
+void menuLEDColor(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
 
-  menuDrawPage(&LEDItems);
+  menuDrawPage(&LEDColorItems);
 
-  while (infoMenu.menu[infoMenu.cur] == menuLED)
+  while (infoMenu.menu[infoMenu.cur] == menuLEDColor)
   {
     key_num = menuKeyGetValue();
     switch (key_num)
@@ -551,7 +551,7 @@ void menuLED(void)
 
       // custom LED color
       case KEY_ICON_4:
-        infoMenu.menu[++infoMenu.cur] = menuLEDCustom;
+        infoMenu.menu[++infoMenu.cur] = menuLEDColorCustom;
         break;
 
       // turn off

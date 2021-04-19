@@ -1,11 +1,11 @@
-#ifndef _LED_H_
-#define _LED_H_
+#ifndef _LED_COLOR_H_
+#define _LED_COLOR_H_
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void menuLED(void);
+void menuLEDColor(void);
 
 #ifdef __cplusplus
 }

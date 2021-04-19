@@ -245,7 +245,7 @@ void menuMachineSettings(void)
         break;
 
       case KEY_ICON_3:
-        infoMenu.menu[++infoMenu.cur] = menuLED;
+        infoMenu.menu[++infoMenu.cur] = menuLEDColor;
         break;
 
       case KEY_ICON_4:

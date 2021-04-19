@@ -111,8 +111,11 @@ void infoSettingsReset(void)
   infoSettings.toastSound             = ENABLED;
   infoSettings.alertSound             = ENABLED;
   infoSettings.heaterSound            = ENABLED;
+#ifdef LED_COLOR_PIN
   infoSettings.knob_led_color         = STARTUP_KNOB_LED_COLOR;
   infoSettings.knob_led_idle          = ENABLED;
+  infoSettings.neopixel_pixels        = NEOPIXEL_PIXELS;
+#endif
   infoSettings.lcd_brightness         = DEFAULT_LCD_BRIGHTNESS;
   infoSettings.lcd_idle_brightness    = DEFAULT_LCD_IDLE_BRIGHTNESS;
   infoSettings.lcd_idle_timer         = DEFAULT_LCD_IDLE_TIMER;
@@ -163,6 +166,7 @@ void infoSettingsReset(void)
     infoSettings.preheat_temp[i]      = default_preheat_ext[i];
     infoSettings.preheat_bed[i]       = default_preheat_bed[i];
   }
+
   resetConfig();
 }
 
