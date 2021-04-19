@@ -99,13 +99,13 @@ typedef enum
 #define CTRL_COL_COUNT 4                              // control button count for keyboard view
 
 // keyboard key sizes
-#define KEY_WIDTH  LCD_WIDTH / KB_COL_COUNT + 0.5
+#define KEY_WIDTH  (LCD_WIDTH / KB_COL_COUNT + 0.5)
 #define KEY_HEIGHT ROW_HEIGHT
 #define KEY_COUNT  (1 + (KB_COL_COUNT * KB_ROW_COUNT) + (CTRL_COL_COUNT))  // send + all keys + control bar keys
 
 // control bar sizes
-#define CTRL_WIDTH           (LCD_WIDTH / CTRL_COL_COUNT)         // control bar button width in keyboard view
-#define TERMINAL_CTRL_WIDTH  (LCD_WIDTH / (TERM_KEY_COUNT + 1) )  // control bar button width in terminal view + page textbox
+#define CTRL_WIDTH           (LCD_WIDTH / CTRL_COL_COUNT)        // control bar button width in keyboard view
+#define TERMINAL_CTRL_WIDTH  (LCD_WIDTH / (TERM_KEY_COUNT + 1))  // control bar button width in terminal view + page textbox
 #define CTRL_HEIGHT          ROW_HEIGHT
 
 // value textbox inset padding
