@@ -25,7 +25,7 @@ const MENUITEMS settingsItems = {
 //   {1 * LCD_WIDTH / 3, 1 * BYTE_HEIGHT},
 //   {2 * LCD_WIDTH / 3, 1 * BYTE_HEIGHT},};
 
-static uint8_t firmare_name[64] = "Unknow system";  // Marlin firmware version
+static uint8_t firmare_name[64] = "Unknown system";  // Marlin firmware version
 uint8_t machine_type[64] = "3D Printer";  // Marlin machine type
 uint8_t access_point[64] = "Connecting...";  // Access point for RepRapFirmware
 uint8_t ip_address[20] = "0.0.0.0";  // IP address for RepRapFirmware

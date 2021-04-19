@@ -63,7 +63,7 @@ void WS2812_Send_DAT(uint32_t ws2812_dat)
   __disable_irq();  // Disable interrupt, avoid disturbing the timing of WS2812
   TIM6->ARR = cycle;
   TIM6->CR1 |= 0x01;
-  for (led_num=0; led_num < NEOPIXEL_PIXELS; led_num++)
+  for (led_num=0; led_num < infoSettings.neopixel_pixels; led_num++)
   {
     for (bit = 23; bit >= 0; bit--)
     {
