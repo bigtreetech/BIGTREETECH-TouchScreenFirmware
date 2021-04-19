@@ -143,13 +143,14 @@ void Draw_keyboard(uint8_t * title, bool NumberOnly, bool negative)
 
   #endif // KEYBOARD_MATERIAL_THEME
 
-    GUI_DispStringInPrect(&arrowRect,(uint8_t *)"\u089A");
+  GUI_DispStringInPrect(&arrowRect,(uint8_t *)"\u089A");
 
-    setLargeFont(true);
-    if ((oldParameterRect.x1 - oldParameterRect.x0) <= GUI_StrPixelWidth_str(title))
-      setLargeFont(false);
-    GUI_DispStringInPrect(&oldParameterRect, title);
+  setLargeFont(true);
+  if ((oldParameterRect.x1 - oldParameterRect.x0) <= GUI_StrPixelWidth_str(title))
     setLargeFont(false);
+
+  GUI_DispStringInPrect(&oldParameterRect, title);
+  setLargeFont(false);
 }
 
 static inline void drawValue(char * str)

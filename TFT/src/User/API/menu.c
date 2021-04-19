@@ -688,6 +688,7 @@ void itemDrawIconPress(uint8_t position, uint8_t is_press)
 KEY_VALUES menuKeyGetValue(void)
 {
   KEY_VALUES tempkey = KEY_IDLE;
+
   if (menuType == MENU_TYPE_ICON)
   {
     if ((infoMenu.menu[infoMenu.cur] == menuStatus) || ((infoMenu.menu[infoMenu.cur] == menuPrinting) && !isPrinting()))
@@ -785,6 +786,7 @@ GUI_POINT getIconStartPoint(int index)
         longPress = true;
         touchSound = false;
         KEY_VALUES tempKey = KEY_IDLE;
+
         if (infoMenu.menu[infoMenu.cur] == menuPrinting)
         {
           tempKey = Key_value(COUNT(rect_of_keySS), rect_of_keySS);
