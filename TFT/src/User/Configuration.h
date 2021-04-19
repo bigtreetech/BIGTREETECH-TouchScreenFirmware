@@ -428,11 +428,11 @@
 #define SHOW_FAN_PERCENTAGE true  // To enabled: true | To disabled: false (Default: true)
 
 /**
- * Mesh Editor Keyboard on left side
- * By default the Mesh Editor Keyboard is drawn on right side of the screen.
- * Enable MESH_LEFT_KEYBOARD to draw the mesh editor keyboard on left side of the screen.
+ * Keyboard on left side (Mesh Editor, RGB Settings Custom)
+ * By default the keyboard is drawn on right side of the screen.
+ * Enable KEYBOARD_ON_LEFT to draw the keyboard on left side of the screen.
  */
-//#define MESH_LEFT_KEYBOARD
+//#define KEYBOARD_ON_LEFT
 
 //
 // Terminal Keyboard / Numpad settings
@@ -440,7 +440,7 @@
 
 // Terminal Keyboard / Numpad theme
 // Uncomment to enable Material theme for keyboard and Numpad
-#define KEYBOARD_MATERIAL_THEME // Default: disabled
+#define KEYBOARD_MATERIAL_THEME  // Default: disabled
 
 /**
  * Color scheme for the Terminal Keyboard / Numpad

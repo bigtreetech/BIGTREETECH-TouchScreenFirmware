@@ -839,8 +839,10 @@ void _GUI_DispLabelInPrectEOL(const GUI_RECT *rect, uint16_t index)
 }
 
 /****************************************************     Widget    *******************************************************************/
+
 #define RADIO_SELECTED_COLOR GREEN
 #define RADIO_IDLE_COLOR     WHITE
+
 void RADIO_Create(RADIO *radio)
 {
   uint16_t tmp = GUI_GetColor();
