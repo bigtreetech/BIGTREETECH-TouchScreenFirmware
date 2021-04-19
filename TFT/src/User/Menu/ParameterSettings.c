@@ -189,32 +189,32 @@ void menuShowParameter(void)
 }
 
 //Load main parameter list page
-void loadParameters(LISTITEM * parameterMainItems)
+void loadParameters(LISTITEM * parameterMainItem, uint16_t index, uint8_t itemPos)
 {
   uint8_t enabledParameterCount = getEnabledParameterCount();
   uint8_t totalItems = (infoMachineSettings.EEPROM == 1) ? (enabledParameterCount + P_SETTINGS_COUNT): enabledParameterCount;
 
-  for (uint8_t i = 0; i < LISTITEM_PER_PAGE; i++)
+  if (index < enabledParameterCount)
   {
-    uint8_t curIndex = ps_cur_page * LISTITEM_PER_PAGE + i;
+    uint8_t parameterIndex = getEnabledParameter(index);
 
-    if (curIndex < enabledParameterCount)
-    {
-      uint8_t parameterIndex = getEnabledParameter(curIndex);
-
-      if (parameterIndex < PARAMETERS_COUNT)
-        parameterMainItems[i] = parametertypes[parameterIndex];
-      else
-        parameterMainItems[i].icon = CHARICON_BACKGROUND;
-    }
+    if (parameterIndex < PARAMETERS_COUNT)
+      *parameterMainItem = parametertypes[parameterIndex];
     else
-    {
-      if (infoMachineSettings.EEPROM == 1 && curIndex < totalItems)
-        parameterMainItems[i] = eepromItems[(curIndex - enabledParameterCount)];
-      else
-        parameterMainItems[i].icon = CHARICON_BACKGROUND;
-    }
+      parameterMainItem->icon = CHARICON_BACKGROUND;
   }
+  else
+  {
+    if (infoMachineSettings.EEPROM == 1 && index < totalItems)
+      *parameterMainItem = eepromItems[(index - enabledParameterCount)];
+    else
+      parameterMainItem->icon = CHARICON_BACKGROUND;
+  }
+}
+
+void parameterSetPageIndex(uint8_t index)
+{
+  ps_cur_page = index;
 }
 
 void menuParameterSettings(void)
@@ -223,10 +223,10 @@ void menuParameterSettings(void)
   uint8_t totalItems = (infoMachineSettings.EEPROM == 1) ? (enabledParameterCount + P_SETTINGS_COUNT): enabledParameterCount;
 
   LABEL title = {LABEL_PARAMETER_SETTING};
-  LISTITEM parameterMainItems[totalItems];
+  //LISTITEM parameterMainItems[totalItems];
   uint16_t curIndex = KEY_IDLE;
 
-  listViewCreate(title, parameterMainItems, totalItems, ps_cur_page, false, NULL, NULL, NULL);
+  listViewCreate(title, NULL, totalItems, ps_cur_page, false, NULL, loadParameters, parameterSetPageIndex);
 
   while (infoMenu.menu[infoMenu.cur] == menuParameterSettings)
   {

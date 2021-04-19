@@ -2,8 +2,8 @@
 #include "includes.h"
 
 #define KEY_INDEX_PAGEUP   (LISTITEM_PER_PAGE)
-#define KEY_INDEX_PAGEDOWN (KEY_PAGEUP + 1)
-#define KEY_INDEX_BACK     (KEY_PAGEDOWN + 1)
+#define KEY_INDEX_PAGEDOWN (KEY_INDEX_PAGEUP + 1)
+#define KEY_INDEX_BACK     (KEY_INDEX_PAGEDOWN + 1)
 
 static LISTITEMS listItems;
 static LISTITEM *totalItems;
@@ -163,6 +163,10 @@ void listViewRefreshItem(uint16_t item)
 uint16_t listViewGetSelectedIndex(void)
 {
   KEY_VALUES key_num = menuKeyGetValue();
+  char b[10];
+  sprintf(b,"key: %i\n", key_num);
+  if(key_num != KEY_IDLE)
+    Serial_Puts(SERIAL_PORT, b);
 
   if (key_num < LISTITEM_PER_PAGE)
   {
@@ -182,10 +186,12 @@ uint16_t listViewGetSelectedIndex(void)
   switch (key_num)
   {
     case KEY_INDEX_PAGEUP:
+      Serial_Puts(SERIAL_PORT, "up");
       listViewPreviousPage();
       return KEY_PAGEUP;
 
     case KEY_INDEX_PAGEDOWN:
+      Serial_Puts(SERIAL_PORT, "down");
       listViewNextPage();
       return KEY_PAGEDOWN;
 

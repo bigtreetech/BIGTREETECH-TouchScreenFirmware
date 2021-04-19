@@ -15,11 +15,11 @@ void menuCustom(void)
   for (uint32_t i = 0; i < customcodes.count; i++)
   {
     customItems[i].icon = CHARICON_CODE;
-    customItems[i].titlelabel.index = LABEL_DYNAMIC;
-    customItems[i].titlelabel.address = customcodes.name[i];
+    customItems[i].itemType = LIST_LABEL;
+    customItems[i].titlelabel.address = (uint8_t*)customcodes.name[i];
   }
 
-  listViewCreate(title,customItems, customcodes.count, 0, true, NULL, NULL, NULL);
+  listViewCreate(title, customItems, customcodes.count, 0, true, NULL, NULL, NULL);
 
   while (infoMenu.menu[infoMenu.cur] == menuCustom)
   {
