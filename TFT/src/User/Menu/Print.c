@@ -3,7 +3,8 @@
 
 // File list number per page
 #define NUM_PER_PAGE 5
-
+// error labels for files/Volume errors
+const int16_t labelVolumeError[3] = {LABEL_READ_TFTSD_ERROR, LABEL_READ_U_DISK_ERROR, LABEL_READ_ONBOARDSD_ERROR};
 static bool list_mode = true;
 SCROLL titleScroll;
 const GUI_RECT titleRect = {10, (TITLE_END_Y - BYTE_HEIGHT) / 2, LCD_WIDTH - 10, (TITLE_END_Y - BYTE_HEIGHT) / 2 + BYTE_HEIGHT};

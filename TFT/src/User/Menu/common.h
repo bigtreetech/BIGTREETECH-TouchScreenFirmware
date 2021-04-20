@@ -19,8 +19,6 @@ extern uint8_t currentTool;
 extern uint8_t currentFan;
 extern uint8_t currentSpeedID;
 
-extern const int16_t labelVolumeError[3];
-
 extern const ITEM itemTool[MAX_HEATER_COUNT];
 extern const ITEM itemDegreeSteps[ITEM_DEGREE_NUM];
 extern const uint8_t degreeSteps[ITEM_DEGREE_NUM];

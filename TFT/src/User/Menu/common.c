@@ -7,9 +7,6 @@ uint8_t currentFan = 0;
 uint8_t currentSpeedID = 0;
 static uint32_t lastTime = 0;
 
-// error labels for files
-const int16_t labelVolumeError[3] = {LABEL_READ_TFTSD_ERROR, LABEL_READ_U_DISK_ERROR, LABEL_READ_ONBOARDSD_ERROR};
-
 //Icons list for tool change
 const ITEM itemTool[MAX_HEATER_COUNT] =
 {
