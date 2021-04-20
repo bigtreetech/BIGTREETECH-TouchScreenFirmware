@@ -2,10 +2,10 @@
 #include "flashStore.h"
 #include "STM32_Flash.h"
 
-#define TSC_SIGN  0x20200512 // DO NOT MODIFY
-#define PARA_SIGN 0x20201228 // (YYYYMMDD) If a new setting parameter is added,
-                             // modify here and initialize the initial value
-                             // in the "infoSettingsReset()" function
+#define TSC_SIGN  0x20200512  // DO NOT MODIFY
+#define PARA_SIGN 0x20210311  // (YYYYMMDD) If a new setting parameter is added,
+                              // modify here and initialize the initial value
+                              // in the "infoSettingsReset()" function
 enum
 {
   PARA_TSC_EXIST = (1 << 0),
@@ -14,24 +14,25 @@ enum
 
 extern int32_t TSC_Para[7];
 extern SETTINGS infoSettings;
+
 uint8_t paraStatus = 0;
 
-void wordToByte(u32 word, u8 *bytes)
+void wordToByte(uint32_t word, uint8_t *bytes)
 {
-  u8 len = 4;
-  u8 i = 0;
-  for(i = 0; i < len; i++)
+  uint8_t len = 4;
+  uint8_t i = 0;
+  for (i = 0; i < len; i++)
   {
     bytes[i] = (word >> 24) & 0xFF;
     word <<= 8;
   }
 }
 
-u32 byteToWord(u8 *bytes, u8 len)
+uint32_t byteToWord(uint8_t *bytes, uint8_t len)
 {
-  u32 word = 0;
-  u8 i = 0;
-  for(i = 0; i < len; i++)
+  uint32_t word = 0;
+  uint8_t i = 0;
+  for (i = 0; i < len; i++)
   {
     word <<= 8;
     word |= bytes[i];
@@ -42,9 +43,9 @@ u32 byteToWord(u8 *bytes, u8 len)
 // Read settings parameter if exist, or reset settings parameter
 void readStoredPara(void)
 {
-  u8 data[PARA_SIZE];
-  u32 index = 0;
-  u32 sign = 0;
+  uint8_t data[PARA_SIZE];
+  uint32_t index = 0;
+  uint32_t sign = 0;
 
   STM32_FlashRead(data, PARA_SIZE);
 
@@ -61,20 +62,20 @@ void readStoredPara(void)
   sign = byteToWord(data + (index += 4), 4);
   if (sign != PARA_SIGN)  // If the settings parameter is illegal, reset settings parameter
   {
-    paraStatus |= PARA_WAS_RESTORED;
+    paraStatus = PARA_WAS_RESTORED;
     infoSettingsReset();
   }
   else
   {
     memcpy(&infoSettings, data + (index += 4), sizeof(SETTINGS));
-    if (sign != TSC_SIGN) infoSettings.rotate_ui = DISABLED;
+    if ((paraStatus & PARA_TSC_EXIST) == 0) infoSettings.rotate_ui = DISABLED;
   }
 }
 
 void storePara(void)
 {
-  u8 data[PARA_SIZE];
-  u32 index = 0;
+  uint8_t data[PARA_SIZE];
+  uint32_t index = 0;
 
   wordToByte(TSC_SIGN, data + (index += 4));
   for (int i = 0; i < sizeof(TSC_Para) / sizeof(TSC_Para[0]); i++)

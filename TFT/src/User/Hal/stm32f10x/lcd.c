@@ -2,6 +2,7 @@
 #include "lcd.h"
 
 #ifdef STM32_HAS_FSMC
+
 uint16_t LCD_RD_DATA(void)
 {
   volatile uint16_t ram;
@@ -42,7 +43,7 @@ void LCD_GPIO_Config(void)
   /*
   * PD4-FSMC_NOE   :LCD-RD
   * PD5-FSMC_NWE   :LCD-WR
-  * PD7-FSMC_NE1	 :LCD-CS
+  * PD7-FSMC_NE1     :LCD-CS
   * PE2-FSMC_A23   :LCD-RS
   */
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_7  | GPIO_Pin_11;
@@ -57,7 +58,7 @@ void LCD_FSMC_Config(void)
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
   RCC_AHBPeriphClockCmd(RCC_AHBPeriph_FSMC, ENABLE);
 
-  readWriteTiming.FSMC_AddressSetupTime = 0x01;	 //HCLK 1/36M=27ns
+  readWriteTiming.FSMC_AddressSetupTime = 0x01;  // HCLK 1/36M=27ns
   readWriteTiming.FSMC_AddressHoldTime = 0x00;
   readWriteTiming.FSMC_DataSetupTime = 0x0f;
   readWriteTiming.FSMC_BusTurnAroundDuration = 0x00;
@@ -94,7 +95,7 @@ void LCD_FSMC_Config(void)
   FSMC_NORSRAMInitStructure.FSMC_WriteTimingStruct = &writeTiming;
 
   FSMC_NORSRAMInit(&FSMC_NORSRAMInitStructure);
-  /*FSMC Bank1_SRAM Bank */
+  // FSMC Bank1_SRAM Bank
   FSMC_NORSRAMCmd(FSMC_Bank1_NORSRAM1, ENABLE);
 }
 
@@ -105,29 +106,30 @@ void LCD_HardwareConfig(void)
 }
 
 #else
+
 void LCD_WR_REG(uint16_t data)
 {
-	LCD_RS_CLR;
- 	LCD_CS_CLR;
-	DATAOUT(data);
-	LCD_WR_CLR;
-	LCD_WR_SET;
- 	LCD_CS_SET;
+  LCD_RS_CLR;
+  LCD_CS_CLR;
+  DATAOUT(data);
+  LCD_WR_CLR;
+  LCD_WR_SET;
+  LCD_CS_SET;
 }
 
 void LCD_WR_DATA(uint16_t data)
 {
-	LCD_RS_SET;
-	LCD_CS_CLR;
-	DATAOUT(data);
-	LCD_WR_CLR;
-	LCD_WR_SET;
-	LCD_CS_SET;
+  LCD_RS_SET;
+  LCD_CS_CLR;
+  DATAOUT(data);
+  LCD_WR_CLR;
+  LCD_WR_SET;
+  LCD_CS_SET;
 }
 
 uint16_t LCD_RD_DATA(void)
 {
-  #if defined(MKS_32_V1_4) || defined (MKS_28_V1_0)
+  #if defined(MKS_TFT32_V1_3) || defined(MKS_TFT32_V1_4) || defined (MKS_TFT28_V3_0) || defined (MKS_TFT28_V4_0)
     #define LCD_DATA_PORT GPIOE
   #else
     #define LCD_DATA_PORT GPIOC
@@ -140,7 +142,7 @@ uint16_t LCD_RD_DATA(void)
 
   LCD_RS_SET;
   LCD_CS_CLR;
-  LCD_RD_CLR; // double for delay.
+  LCD_RD_CLR;  // double for delay.
   LCD_RD_CLR;
   ram = DATAIN();
   LCD_RD_SET;
@@ -154,24 +156,21 @@ uint16_t LCD_RD_DATA(void)
 
 void LCD_GPIO_Config(void)
 {
-
- #if defined(MKS_32_V1_4) || defined (MKS_28_V1_0)
-
- GPIO_InitTypeDef GPIO_InitStructure;
+#if defined(MKS_TFT32_V1_3) || defined(MKS_TFT32_V1_4) || defined (MKS_TFT28_V3_0) || defined (MKS_TFT28_V4_0)
+  GPIO_InitTypeDef GPIO_InitStructure;
   /* GPIO Ports Clock Enable */
 
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOE|RCC_APB2Periph_GPIOC |RCC_APB2Periph_GPIOD|RCC_APB2Periph_GPIOB, ENABLE);
   /*Configure GPIO pin Output Level */
 
-
   /*Configure GPIO pins : Pin1_Pin Pin2_Pin */
 
-  //GPIO_InitStructure.GPIO_Pin = LCD_nWR_Pin|FLASH_nCS_Pin|FILAMENT_DI_Pin|POWER_DI_Pin;
+  // GPIO_InitStructure.GPIO_Pin = LCD_nWR_Pin|FLASH_nCS_Pin|FILAMENT_DI_Pin|POWER_DI_Pin;
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_14|GPIO_Pin_9;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_Init(GPIOB, &GPIO_InitStructure);
-  //GPIO_InitStructure.GPIO_Pin = SDCARD_nCS_Pin|LCD_RS_Pin|LCD_BACKLIGHT_Pin|LCD_nRD_Pin;
+  // GPIO_InitStructure.GPIO_Pin = SDCARD_nCS_Pin|LCD_RS_Pin|LCD_BACKLIGHT_Pin|LCD_nRD_Pin;
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13|GPIO_Pin_15;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
@@ -187,15 +186,12 @@ void LCD_GPIO_Config(void)
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_Init(GPIOC, &GPIO_InitStructure);
 
-
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_All;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_InitStructure.GPIO_Mode =  GPIO_Mode_Out_PP;
   GPIO_Init(GPIOE, &GPIO_InitStructure);
-  LCD_RD_SET;//set this as we only change it when reading
-
-  #else
-
+  LCD_RD_SET;  // set this as we only change it when reading
+#else
   GPIO_InitTypeDef GPIO_InitStructure;
 
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB |RCC_APB2Periph_GPIOC, ENABLE);
@@ -205,7 +201,7 @@ void LCD_GPIO_Config(void)
   /*D0 - D15: PC0 - PC15 */
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_All;
   GPIO_Init(GPIOC, &GPIO_InitStructure);
-	GPIO_SetBits(GPIOC, GPIO_Pin_All);
+  GPIO_SetBits(GPIOC, GPIO_Pin_All);
 
   /*
   * PB6   :LCD-RD
@@ -215,12 +211,13 @@ void LCD_GPIO_Config(void)
   */
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9;
   GPIO_Init(GPIOB, &GPIO_InitStructure);
-	GPIO_SetBits(GPIOB, GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9);
-  #endif
+  GPIO_SetBits(GPIOB, GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9);
+#endif
 }
 
 void LCD_HardwareConfig(void)
 {
   LCD_GPIO_Config();
 }
+
 #endif

@@ -1,4 +1,5 @@
 #include "StatusScreen.h"
+
 #ifdef TFT70_V3_0
 #define KEY_SPEEDMENU         KEY_ICON_3
 #define KEY_FLOWMENU          (KEY_SPEEDMENU + 1)
@@ -13,20 +14,22 @@
 const MENUITEMS StatusItems = {
   // title
   LABEL_READY,
-  // icon                         label
-  {{ICON_STATUS_NOZZLE,           LABEL_BACKGROUND},
-   {ICON_STATUS_BED,              LABEL_BACKGROUND},
-   {ICON_STATUS_FAN,              LABEL_BACKGROUND},
-   {ICON_STATUS_SPEED,            LABEL_BACKGROUND},
-#ifdef TFT70_V3_0
-   {ICON_STATUS_FLOW,             LABEL_BACKGROUND},
-   {ICON_MAINMENU,                LABEL_MAINMENU},
-#else
-   {ICON_MAINMENU,                LABEL_MAINMENU},
-   {ICON_BACKGROUND,              LABEL_BACKGROUND},
-#endif
-   {ICON_BACKGROUND,              LABEL_BACKGROUND},
-   {ICON_PRINT,                   LABEL_PRINT},}
+  // icon                          label
+  {
+    {ICON_STATUS_NOZZLE,           LABEL_BACKGROUND},
+    {ICON_STATUS_BED,              LABEL_BACKGROUND},
+    {ICON_STATUS_FAN,              LABEL_BACKGROUND},
+    {ICON_STATUS_SPEED,            LABEL_BACKGROUND},
+    #ifdef TFT70_V3_0
+      {ICON_STATUS_FLOW,             LABEL_BACKGROUND},
+      {ICON_MAINMENU,                LABEL_MAINMENU},
+    #else
+      {ICON_MAINMENU,                LABEL_MAINMENU},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    #endif
+    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_PRINT,                   LABEL_PRINT},
+  }
 };
 
 const ITEM SpeedItems[2] = {
@@ -35,9 +38,7 @@ const ITEM SpeedItems[2] = {
   {ICON_STATUS_FLOW,             LABEL_BACKGROUND},
 };
 
-#define UPDATE_TOOL_TIME  2000; // 1 seconds is 1000
-static u32 nextToolTime = 0;
-SCROLL     msgScroll;
+#define UPDATE_TOOL_TIME 2000  // 1 seconds is 1000
 static int8_t lastConnection_status = -1;
 static bool msgNeedRefresh = false;
 
@@ -48,18 +49,18 @@ SCROLL msgScroll;
 const char *const SpeedID[2] = SPEED_ID;
 // text position rectangles for Live icons
 //icon 0
-const GUI_POINT ss_title_point = {SSICON_WIDTH - BYTE_WIDTH/2, SSICON_NAME_Y0};
-const GUI_POINT ss_val_point   = {SSICON_WIDTH/2, SSICON_VAL_Y0};
+const GUI_POINT ss_title_point = {SSICON_WIDTH - BYTE_WIDTH / 2, SSICON_NAME_Y0};
+const GUI_POINT ss_val_point   = {SSICON_WIDTH / 2, SSICON_VAL_Y0};
 #ifdef TFT70_V3_0
   const GUI_POINT ss_val2_point = {SSICON_WIDTH/2, SSICON_VAL2_Y0};
 #endif
 
 //info box msg area
-const  GUI_RECT msgRect ={START_X + 1 * ICON_WIDTH + 1 * SPACE_X + 2,   ICON_START_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + STATUS_MSG_BODY_YOFFSET,
-                          START_X + 3 * ICON_WIDTH + 2 * SPACE_X - 2,   ICON_START_Y +  2 * ICON_HEIGHT + 1 * SPACE_Y - STATUS_MSG_BODY_BOTTOM};
+const  GUI_RECT msgRect = {START_X + 1 * ICON_WIDTH + 1 * SPACE_X + 2,   ICON_START_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + STATUS_MSG_BODY_YOFFSET,
+                           START_X + 3 * ICON_WIDTH + 2 * SPACE_X - 2,   ICON_START_Y +  2 * ICON_HEIGHT + 1 * SPACE_Y - STATUS_MSG_BODY_BOTTOM};
 
-const GUI_RECT RecGantry = {START_X,                        1*SSICON_HEIGHT+0*SPACE_Y+ICON_START_Y + STATUS_GANTRY_YOFFSET,
-                            4*ICON_WIDTH+3*SPACE_X+START_X, 1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y - STATUS_GANTRY_YOFFSET};
+const GUI_RECT RecGantry = {START_X,                                SSICON_HEIGHT + ICON_START_Y + STATUS_GANTRY_YOFFSET,
+                            START_X + 4 * ICON_WIDTH + 3 * SPACE_X, ICON_HEIGHT + SPACE_Y + ICON_START_Y - STATUS_GANTRY_YOFFSET};
 
 void drawTemperature(void)
 {
@@ -99,40 +100,40 @@ void drawTemperature(void)
     char tempstr2[45];
 
   //TOOL / EXT
-    lvIcon.lines[0].text = (u8 *)heatDisplayID[currentTool];
+    lvIcon.lines[0].text = (uint8_t *)heatDisplayID[currentTool];
     sprintf(tempstr, "%d℃", heatGetCurrentTemp(currentTool));
     sprintf(tempstr2, "%d℃", heatGetTargetTemp(currentTool));
-    lvIcon.lines[1].text = (u8 *)tempstr;
-    lvIcon.lines[2].text = (u8 *)tempstr2;
+    lvIcon.lines[1].text = (uint8_t *)tempstr;
+    lvIcon.lines[2].text = (uint8_t *)tempstr2;
     showLiveInfo(0, &lvIcon, &StatusItems.items[0]);
 
     //BED
-    lvIcon.lines[0].text = (u8 *)heatDisplayID[BED];
+    lvIcon.lines[0].text = (uint8_t *)heatDisplayID[BED];
     sprintf(tempstr, "%d℃", heatGetCurrentTemp(BED));
     sprintf(tempstr2, "%d℃", heatGetTargetTemp(BED));
-    lvIcon.lines[1].text = (u8 *)tempstr;
-    lvIcon.lines[2].text = (u8 *)tempstr2;
+    lvIcon.lines[1].text = (uint8_t *)tempstr;
+    lvIcon.lines[2].text = (uint8_t *)tempstr2;
     showLiveInfo(1, &lvIcon, &StatusItems.items[1]);
 
     lvIcon.enabled[2] = false;
   #else
 
     //TOOL / EXT
-    lvIcon.lines[0].text = (u8 *)heatDisplayID[currentTool];
+    lvIcon.lines[0].text = (uint8_t *)heatDisplayID[currentTool];
     sprintf(tempstr, "%d/%d", heatGetCurrentTemp(currentTool), heatGetTargetTemp(currentTool));
-    lvIcon.lines[1].text = (u8 *)tempstr;
+    lvIcon.lines[1].text = (uint8_t *)tempstr;
     showLiveInfo(0, &lvIcon, &StatusItems.items[0]);
 
     //BED
-    lvIcon.lines[0].text = (u8 *)heatDisplayID[BED];
+    lvIcon.lines[0].text = (uint8_t *)heatDisplayID[BED];
     sprintf(tempstr, "%d/%d", heatGetCurrentTemp(BED), heatGetTargetTemp(BED));
-    lvIcon.lines[1].text = (u8 *)tempstr;
+    lvIcon.lines[1].text = (uint8_t *)tempstr;
     showLiveInfo(1, &lvIcon, &StatusItems.items[1]);
 
   #endif
 
   //FAN
-  lvIcon.lines[0].text = (u8 *)fanID[currentFan];
+  lvIcon.lines[0].text = (uint8_t *)fanID[currentFan];
 
   if (infoSettings.fan_percentage == 1)
   {
@@ -142,27 +143,27 @@ void drawTemperature(void)
   {
     sprintf(tempstr, "%d", fanGetCurSpeed(currentFan));
   }
-  lvIcon.lines[1].text = (u8 *)tempstr;
+  lvIcon.lines[1].text = (uint8_t *)tempstr;
   showLiveInfo(2, &lvIcon, &StatusItems.items[2]);
 
   #ifdef TFT70_V3_0
     //SPEED
-    lvIcon.lines[0].text = (u8 *)SpeedID[0];
+    lvIcon.lines[0].text = (uint8_t *)SpeedID[0];
     sprintf(tempstr, "%d%%", speedGetCurPercent(0));
-    lvIcon.lines[1].text = (u8 *)tempstr;
+    lvIcon.lines[1].text = (uint8_t *)tempstr;
     showLiveInfo(3, &lvIcon, &SpeedItems[0]);
 
     //FLOW
-    lvIcon.lines[0].text = (u8 *)SpeedID[1];
+    lvIcon.lines[0].text = (uint8_t *)SpeedID[1];
     sprintf(tempstr, "%d%%", speedGetCurPercent(1));
-    lvIcon.lines[1].text = (u8 *)tempstr;
+    lvIcon.lines[1].text = (uint8_t *)tempstr;
     showLiveInfo(4, &lvIcon, &SpeedItems[1]);
 
   #else
     //SPEED / flow
-    lvIcon.lines[0].text = (u8 *)SpeedID[currentSpeedID];
+    lvIcon.lines[0].text = (uint8_t *)SpeedID[currentSpeedID];
     sprintf(tempstr, "%d%%", speedGetCurPercent(currentSpeedID));
-    lvIcon.lines[1].text = (u8 *)tempstr;
+    lvIcon.lines[1].text = (uint8_t *)tempstr;
     showLiveInfo(3, &lvIcon, &SpeedItems[currentSpeedID]);
   #endif
 
@@ -171,7 +172,7 @@ void drawTemperature(void)
   GUI_SetBkColor(infoSettings.status_xyz_bg_color);
   sprintf(tempstr, "   X: %.2f   Y: %.2f   Z: %.2f   ", coordinateGetAxisActual(X_AXIS), coordinateGetAxisActual(Y_AXIS),
           coordinateGetAxisActual(Z_AXIS));
-  GUI_DispStringInPrect(&RecGantry, (u8 *)tempstr);
+  GUI_DispStringInPrect(&RecGantry, (uint8_t *)tempstr);
 
   GUI_RestoreColorDefault();
 }
@@ -211,11 +212,11 @@ void drawStatusScreenMsg(void)
 
   GUI_DispString(rect_of_keySS[17].x0 + BYTE_HEIGHT + STATUS_MSG_TITLE_XOFFSET,
                  rect_of_keySS[17].y0 + STATUS_MSG_ICON_YOFFSET,
-                 (u8 *)msgtitle);
+                 (uint8_t *)msgtitle);
   GUI_SetBkColor(INFOMSG_BKCOLOR);
   GUI_FillPrect(&msgRect);
 
-  Scroll_CreatePara(&msgScroll, (u8 *)msgbody, &msgRect);
+  Scroll_CreatePara(&msgScroll, (uint8_t *)msgbody, &msgRect);
 
   GUI_RestoreColorDefault();
 
@@ -232,18 +233,17 @@ static inline void scrollMsg(void)
 
 static inline void toggleTool(void)
 {
-  if (OS_GetTimeMs() > nextToolTime)
+  if (nextScreenUpdate(UPDATE_TOOL_TIME))
   {
     if (infoSettings.hotend_count > 1)
     {
-      currentTool = (currentTool+1) % infoSettings.hotend_count;
+      currentTool = (currentTool + 1) % infoSettings.hotend_count;
     }
     if ((infoSettings.fan_count + infoSettings.fan_ctrl_count) > 1)
     {
       currentFan = (currentFan + 1) % (infoSettings.fan_count + infoSettings.fan_ctrl_count);
     }
     currentSpeedID = (currentSpeedID + 1) % 2;
-    nextToolTime = OS_GetTimeMs() + UPDATE_TOOL_TIME;
     drawTemperature();
 
     // gcode queries must be call after drawTemperature
@@ -264,7 +264,7 @@ void menuStatus(void)
   drawStatusScreenMsg();
   while (infoMenu.menu[infoMenu.cur] == menuStatus)
   {
-    if(infoHost.connected != lastConnection_status)
+    if (infoHost.connected != lastConnection_status)
     {
       statusScreen_setReady();
       lastConnection_status = infoHost.connected;

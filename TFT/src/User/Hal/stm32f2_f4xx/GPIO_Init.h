@@ -3,6 +3,7 @@
 
 #include "variants.h"
 #include "STM32Fxx_Pins.h"
+
 /*
 * bit 0:1 gpio mode  00: Input (reset state)  01: General purpose output mode  10: Alternate function mode  11: Analog mode
 * bit 2   gpio output type  0: Output push-pull (reset state) 1: Output open-drain
@@ -20,7 +21,7 @@ typedef enum
   MGPIO_MODE_AF_PP = (0<<5)|(3<<3)|(0<<2)|(2),
   MGPIO_MODE_AF_OD = (0<<5)|(3<<3)|(1<<2)|(2),
   MGPIO_MODE_AIN = (0<<5)|(3<<3)|(0<<2)|(3),
-}GPIO_MODE;
+} GPIO_MODE;
 
 #define GPIO_MODE_GET_MODE(n) ((n) & 0x3)
 #define GPIO_MODE_GET_OTYPE(n) (((n)>>2) & 0x1)

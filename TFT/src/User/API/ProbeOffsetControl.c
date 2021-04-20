@@ -1,44 +1,39 @@
 #include "ProbeOffsetControl.h"
 #include "includes.h"
 
-static float z_offset_value = PROBE_OFFSET_DEFAULT_VALUE;
+static float z_offset_value = PROBE_Z_OFFSET_DEFAULT_VALUE;
 static bool probe_offset_enabled = false;
 
 // Enable probe offset
-void probeOffsetEnable(bool skipZOffset)
+void probeOffsetEnable(bool skipZOffset, float shim)
 {
   probe_offset_enabled = true;
 
   probeHeightEnable();  // temporary disable software endstops
 
   // Z offset gcode sequence start
-  mustStoreCmd("G28\n");  // home printer
-  probeHeightStop();      // raise nozzle
+  mustStoreCmd("G28\n");                          // home printer
+  probeHeightStop(infoSettings.z_raise_probing);  // raise nozzle
 
   if (infoSettings.xy_offset_probing)  // if HW allows nozzle to reach XY probing point
   {
-    probeHeightStop();  // raise nozzle
-
-    mustStoreCmd("G91\n");  // set relative position mode
-    mustStoreCmd("G1 X%.2f Y%.2f F%d\n",
+    probeHeightRelative();                                  // set relative position mode
+    mustStoreCmd("G1 X%.2f Y%.2f\n",
                  getParameter(P_PROBE_OFFSET, X_STEPPER),
-                 getParameter(P_PROBE_OFFSET, Y_STEPPER),
-                 infoSettings.level_feedrate[FEEDRATE_XY]);  // move nozzle to XY probing point and set feedrate
-  }
-  else
-  {
-    mustStoreCmd("G1 F%d\n", infoSettings.level_feedrate[FEEDRATE_XY]);  // set feedrate
+                 getParameter(P_PROBE_OFFSET, Y_STEPPER));  // move nozzle to XY probing point and set feedrate
   }
 
-  if (!skipZOffset)
+  if (skipZOffset)
   {
-    probeHeightStart(0.0f);  // lower nozzle to absolute Z0 point
+    probeHeightStart(-probeOffsetGetValue() + shim, false);  // lower nozzle to probing Z0 point + shim
+    probeOffsetSetValue(0.0f);                               // reset Z offset in order probing Z0 matches absolute Z0 point
   }
   else
   {
-    probeHeightStart(-probeOffsetGetValue());  // lower nozzle to probing Z0 point
-    probeOffsetSetValue(0.0f);                 // reset Z offset in order probing Z0 matches absolute Z0 point
+    probeHeightStart(shim, false);  // lower nozzle to absolute Z0 point + shim
   }
+
+  probeHeightRelative();  // set relative position mode
 }
 
 // Disable probe offset
@@ -47,9 +42,11 @@ void probeOffsetDisable(void)
   probe_offset_enabled = false;
 
   // Z offset gcode sequence stop
-  mustStoreCmd("G28\n");  // home printer
-  probeHeightStop();      // raise nozzle
-  probeHeightDisable();   // restore original software endstops state
+  mustStoreCmd("G28\n");                          // home printer
+  probeHeightStop(infoSettings.z_raise_probing);  // raise nozzle
+  probeHeightAbsolute();                          // set absolute position mode
+
+  probeHeightDisable();  // restore original software endstops state
 }
 
 // Get probe offset status
@@ -62,7 +59,9 @@ bool probeOffsetGetStatus(void)
 float probeOffsetSetValue(float value)
 {
   mustStoreCmd("M851 Z%.2f\n", value);
+  mustStoreCmd("M851\n");  // needed by probeOffsetGetValue() to retrieve the new value
   z_offset_value = value;
+
   return z_offset_value;
 }
 
@@ -70,29 +69,31 @@ float probeOffsetSetValue(float value)
 float probeOffsetGetValue(void)
 {
   z_offset_value = getParameter(P_PROBE_OFFSET, Z_STEPPER);
+
   return z_offset_value;
 }
 
 // Reset Z offset value to default value
 float probeOffsetResetValue(void)
 {
-  if (z_offset_value == PROBE_OFFSET_DEFAULT_VALUE)  // if already default value, nothing to do
+  if (z_offset_value == PROBE_Z_OFFSET_DEFAULT_VALUE)  // if already default value, nothing to do
     return z_offset_value;
 
-  float unit = z_offset_value - PROBE_OFFSET_DEFAULT_VALUE;
+  float unit = z_offset_value - PROBE_Z_OFFSET_DEFAULT_VALUE;
 
-  z_offset_value = PROBE_OFFSET_DEFAULT_VALUE;
+  z_offset_value = PROBE_Z_OFFSET_DEFAULT_VALUE;
   mustStoreCmd("M851 Z%.2f\n", z_offset_value);  // set Z offset value
   mustStoreCmd("G1 Z%.2f\n", -unit);             // move nozzle
+
   return z_offset_value;
 }
 
 // Decrease Z offset value
 float probeOffsetDecreaseValue(float unit)
 {
-  if (z_offset_value > PROBE_OFFSET_MIN_VALUE)
+  if (z_offset_value > PROBE_Z_OFFSET_MIN_VALUE)
   {
-    float diff = z_offset_value - PROBE_OFFSET_MIN_VALUE;
+    float diff = z_offset_value - PROBE_Z_OFFSET_MIN_VALUE;
 
     unit = (diff > unit) ? unit : diff;
     z_offset_value -= unit;
@@ -106,9 +107,9 @@ float probeOffsetDecreaseValue(float unit)
 // Increase Z offset value
 float probeOffsetIncreaseValue(float unit)
 {
-  if (z_offset_value < PROBE_OFFSET_MAX_VALUE)
+  if (z_offset_value < PROBE_Z_OFFSET_MAX_VALUE)
   {
-    float diff = PROBE_OFFSET_MAX_VALUE - z_offset_value;
+    float diff = PROBE_Z_OFFSET_MAX_VALUE - z_offset_value;
 
     unit = (diff > unit) ? unit : diff;
     z_offset_value += unit;

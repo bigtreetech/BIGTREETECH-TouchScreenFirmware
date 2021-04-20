@@ -6,11 +6,11 @@
 #include "Settings.h"
 #include "HD44780.h"
 
-#if defined(ST7920_SPI)
-//TODO:
-//now support SPI2 and PB12 CS only
-//more compatibility changes are needed
-//Config for SPI Channel
+#if defined(ST7920_EMULATOR)
+// TODO:
+// now support SPI2 and PB12 CS only
+// more compatibility changes are needed
+// Config for SPI Channel
 #if ST7920_SPI == _SPI1
   #define ST7920_SPI_NUM          SPI1
 #elif ST7920_SPI == _SPI2
@@ -134,19 +134,19 @@ void SPI_Slave_CS_Config(void)
 }
 #endif
 
-#if defined(ST7920_SPI) || defined(LCD2004_simulator)
+#ifdef HAS_EMULATOR
 // External interruption
 void EXTI15_10_IRQHandler(void)
 {
   switch (infoSettings.marlin_type)
   {
-    #ifdef LCD2004_simulator
+    #ifdef LCD2004_EMULATOR
     case LCD2004:
       HD44780_writeData();
       break;
     #endif
 
-    #ifdef ST7920_SPI
+    #ifdef ST7920_EMULATOR
     case LCD12864:
       if((GPIOB->IDR & (1<<12)) != 0)
       {

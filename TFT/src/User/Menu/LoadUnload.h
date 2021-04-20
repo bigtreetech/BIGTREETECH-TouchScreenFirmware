@@ -7,7 +7,6 @@ extern "C" {
 
 void menuLoadUnload(void);
 
-
 #ifdef __cplusplus
 }
 #endif

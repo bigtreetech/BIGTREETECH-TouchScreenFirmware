@@ -3,7 +3,7 @@
 #include "HD44780.h"
 #include "includes.h"
 
-#if defined(ST7920_SPI) || defined(LCD2004_simulator)
+#ifdef HAS_EMULATOR
 
 typedef void (*CB_INIT)(CIRCULAR_QUEUE *);
 typedef void (*CB_DEINIT)(void);
@@ -21,14 +21,14 @@ void menuMarlinMode(void)
   GUI_SetColor(infoSettings.marlin_mode_font_color);
   GUI_SetBkColor(infoSettings.marlin_mode_bg_color);
 
-  if(infoSettings.marlin_mode_showtitle == 1)
+  if (infoSettings.marlin_mode_showtitle == 1)
   {
     STRINGS_STORE tempST;
     W25Qxx_ReadBuffer((uint8_t *)&tempST, STRINGS_STORE_ADDR, sizeof(STRINGS_STORE));
     GUI_DispStringInRect(0, 0, LCD_WIDTH, ST7920_GYSTART_FULLSCREEN, (uint8_t *)tempST.marlin_title);
   }
 
-  #if defined(ST7920_SPI)
+  #if defined(ST7920_EMULATOR)
     if (infoSettings.marlin_type == LCD12864)
     {
       marlinInit = SPI_Slave;
@@ -37,7 +37,8 @@ void menuMarlinMode(void)
       marlinParse = ST7920_ParseRecv;
     }
   #endif
-  #if defined(LCD2004_simulator)
+
+  #if defined(LCD2004_EMULATOR)
     if (infoSettings.marlin_type == LCD2004)
     {
       marlinInit = HD44780_Config;
@@ -52,18 +53,20 @@ void menuMarlinMode(void)
 
   marlinInit(&marlinQueue);
 
-  while(infoMenu.menu[infoMenu.cur] == menuMarlinMode)
+  while (infoMenu.menu[infoMenu.cur] == menuMarlinMode)
   {
-    while(marlinGetData(&data))
+    while (marlinGetData(&data))
     {
       marlinParse(data);
     }
+
     #if LCD_ENCODER_SUPPORT
       sendEncoder(LCD_ReadTouch());
 
-      if(LCD_BtnTouch(LCD_BUTTON_INTERVALS))
+      if (LCD_BtnTouch(LCD_BUTTON_INTERVALS))
         sendEncoder(1);
     #endif
+
     loopCheckMode();
 
     #if defined(SCREEN_SHOT_TO_SD)
@@ -74,7 +77,7 @@ void menuMarlinMode(void)
       loopDimTimer();
     #endif
 
-    if (infoSettings.serial_alwaysOn == 1)
+    if (infoSettings.serial_alwaysOn == ENABLED)
     {
       loopBackEnd();
     }

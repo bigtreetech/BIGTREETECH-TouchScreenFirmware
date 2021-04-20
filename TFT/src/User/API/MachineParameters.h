@@ -11,30 +11,36 @@ extern "C" {
 typedef enum
 {
   P_STEPS_PER_MM = 0,
-  P_CURRENT,
   P_MAX_FEED_RATE,
   P_MAX_ACCELERATION,
   P_ACCELERATION,
   P_JERK,
   P_JUNCTION_DEVIATION,
-  P_PROBE_OFFSET,
   P_HOME_OFFSET,
-  P_BUMPSENSITIVITY,
   P_FWRETRACT,
   P_FWRECOVER,
   P_AUTO_RETRACT,
-  P_LIN_ADV,
+  P_HOTEND_OFFSET,
   P_ABL_STATE,
-  P_OFFSET_TOOL,
+  P_PROBE_OFFSET,
+  P_LIN_ADV,
+  P_FILAMENT_SETTING,
+  P_CURRENT,
+  P_BUMPSENSITIVITY,
   P_HYBRID_THRESHOLD,
+  P_STEALTH_CHOP,
+  P_MBL_OFFSET,
   // Keep below items always at the end
-  P_SAVE_SETTINGS,
+  PARAMETERS_COUNT,
+} PARAMETER_NAME;
+
+typedef enum
+{
+  P_SAVE_SETTINGS = 0,
   P_RESTORE_SETTINGS,
   P_RESET_SETTINGS,
-  P_ITEMSCOUNT
-}PARAMETER_NAME;
-
-#define PARAMETERS_COUNT P_RESET_SETTINGS
+  P_SETTINGS_COUNT,
+} PARAMETER_SETTINGS;
 
 typedef enum
 {
@@ -44,7 +50,7 @@ typedef enum
   E_STEPPER,
   E2_STEPPER,
   STEPPER_COUNT
-}STEPPERS;
+} STEPPERS;
 
 typedef enum
 {
@@ -57,32 +63,48 @@ typedef enum
 typedef struct
 {
   float StepsPerMM[STEPPER_COUNT];
-  float Current[STEPPER_COUNT];
   float MaxFeedRate[STEPPER_COUNT];
   float MaxAcceleration[STEPPER_COUNT];
   float Acceleration[3];
   float Jerk[4];
   float JunctionDeviation[1];
-  float ProbeOffset[3];
   float HomeOffset[3];
-  float BumpSensitivity[3];
   float FwRetract[4];
   float FwRecover[4];
   float AutoRetract[1];
-  float LinAdvance[2];
+  float HotendOffset[3];
   float ABLState[2];
-  float OffsetTool[3];
+  float ProbeOffset[3];
+  float LinAdvance[2];
+  float FilamentSetting[3];
+  float Current[STEPPER_COUNT];
+  float BumpSensitivity[3];
   float HybridThreshold[STEPPER_COUNT];
+  float StealthChop[5];
+  float MblOffset[1];
 } PARAMETERS;
 
 extern PARAMETERS infoParameters;
 
 extern char *const axisDisplayID[STEPPER_COUNT];
 extern const LABEL accel_disp_ID[];
+extern const LABEL junction_deviation_disp_ID[];
 extern const LABEL retract_disp_ID[];
 extern const LABEL recover_disp_ID[];
 extern const LABEL retract_auto_ID[];
-extern const LABEL junction_deviation_disp_ID[];
+
+// Set a parameter status to enable or disable.
+void setParameterStatus(PARAMETER_NAME name, bool status);
+
+// Check status of a parameter
+uint8_t getParameterStatus(PARAMETER_NAME name);
+
+// Get total enabled parameters
+uint8_t getEnabledParameterCount(void);
+
+// Get PARAMETER_NAME of selected index out of total enabled parameters
+// If no parameter is enabled, total parameter count is returned
+PARAMETER_NAME getEnabledParameter(uint8_t index);
 
 float getParameter(PARAMETER_NAME name, uint8_t index);
 void setParameter(PARAMETER_NAME name, uint8_t index, float val);
@@ -91,16 +113,16 @@ void setParameter(PARAMETER_NAME name, uint8_t index, float val);
 uint8_t getParameterElementCount(PARAMETER_NAME para);
 
 //Get type of value a parameter element holds
-VAL_TYPE getParameterValType(PARAMETER_NAME para, u8 index);
+VAL_TYPE getParameterValType(PARAMETER_NAME para, uint8_t index);
 
 //set status of dual stepper for an axis
-void setDualStepperStatus(u8 index, bool status);
+void setDualStepperStatus(uint8_t index, bool status);
 
 //get status of dual stepper for an axis
-bool getDualstepperStatus(u8 index);
+bool getDualStepperStatus(uint8_t index);
 
 //send parameter cmd (Parameter value gets updated after the cmd passes through the cmd cache)
-void sendParameterCmd(PARAMETER_NAME para_index, u8 stepper_index, float Value);
+void sendParameterCmd(PARAMETER_NAME para_index, uint8_t stepper_index, float Value);
 
 //Save parameter setting to eeprom
 void saveEepromSettings(void);

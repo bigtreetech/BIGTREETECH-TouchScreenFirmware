@@ -1,7 +1,6 @@
 #include "includes.h"
 #include "Temperature.h"
 
-
 const char *const heaterID[MAX_HEATER_COUNT]      = HEAT_SIGN_ID;
 const char *const heatDisplayID[MAX_HEATER_COUNT] = HEAT_DISPLAY_ID;
 const char *const heatCmd[MAX_HEATER_COUNT]       = HEAT_CMD;
@@ -14,7 +13,7 @@ static bool    heat_update_waiting = false;
 static bool    heat_send_waiting[MAX_HEATER_COUNT];
 
 uint32_t nextHeatCheckTime = 0;
-#define AUTOREPORT_TIMEOUT (nextHeatCheckTime + 3000) // update interval + 3 second grace period
+#define AUTOREPORT_TIMEOUT (nextHeatCheckTime + 3000)  // update interval + 3 second grace period
 
 static uint8_t fixHeaterIndex(uint8_t index)
 {
@@ -28,6 +27,18 @@ void heatSetTargetTemp(uint8_t index, int16_t temp)
 {
   index = fixHeaterIndex(index);
   heater.T[index].target = NOBEYOND(0, temp, infoSettings.max_temp[index]);
+  if (heater.T[index].target + 2 > heater.T[index].current)
+  {
+    heater.T[index].status = HEATING;
+  }
+  if (heater.T[index].target < heater.T[index].current + 2)
+  {
+    heater.T[index].status = COOLING;
+  }
+  if (inRange(heater.T[index].current, heater.T[index].target, 2) == true)
+  {
+    heater.T[index].status = SETTLED;
+  }
 }
 
 //Sync target temperature
@@ -38,7 +49,7 @@ void heatSyncTargetTemp(uint8_t index, int16_t temp)
 }
 
 //Get target temperature
-u16 heatGetTargetTemp(uint8_t index)
+uint16_t heatGetTargetTemp(uint8_t index)
 {
   index = fixHeaterIndex(index);
   return heater.T[index].target;
@@ -51,7 +62,7 @@ void heatSetCurrentTemp(uint8_t index, int16_t temp)
   heater.T[index].current = NOBEYOND(-99, temp, 999);
 
   if (infoMachineSettings.autoReportTemp)
-    updateNextHeatCheckTime(); // set next timeout for temperature auto-report
+    updateNextHeatCheckTime();  // set next timeout for temperature auto-report
 }
 
 // Get current temperature
@@ -92,7 +103,7 @@ void heatSetIsWaiting(uint8_t tool, HEATER_WAIT isWaiting)
 {
   heater.T[tool].waiting = isWaiting;
 
-  if (isWaiting != WAIT_NONE) // wait heating now, query more frequently
+  if (isWaiting != WAIT_NONE)  // wait heating now, query more frequently
   {
     heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
   }
@@ -214,12 +225,12 @@ void loopCheckHeater(void)
       heat_update_waiting = true;
     } while (0);
   }
-  else // check temperature auto-report timout and resend M155 command
+  else  // check temperature auto-report timout and resend M155 command
   {
     if (OS_GetTimeMs() > AUTOREPORT_TIMEOUT && !heat_update_waiting)
     {
       heat_update_waiting = storeCmd("M155 ");
-      if(heat_update_waiting) updateNextHeatCheckTime();  // set next timeout for temperature auto-report
+      if (heat_update_waiting) updateNextHeatCheckTime();  // set next timeout for temperature auto-report
     }
   }
 
@@ -250,14 +261,42 @@ void loopCheckHeater(void)
     heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
   }
 
-  for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++) // If the target temperature changes, send a Gcode to set the motherboard
+  // Query heaters if they reached the target temperature (only if not prining)
+  for (uint8_t i = 0; (i < MAX_HEATER_COUNT) && (!isPrinting()); i++)
+  {
+    if (heater.T[i].status == SETTLED)
+    {
+      continue;
+    }
+    if (inRange(heater.T[i].current, heater.T[i].target, 2) != true)
+    {
+      continue;
+    }
+
+    switch (heater.T[i].status)
+    {
+      case HEATING:
+        BUZZER_PLAY(sound_heated);
+        break;
+
+      case COOLING:
+        BUZZER_PLAY(sound_cooled);
+        break;
+
+      default:
+        break;
+    }
+    heater.T[i].status = SETTLED;
+  }
+
+  for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)  // If the target temperature changes, send a Gcode to set the motherboard
   {
     if (lastTarget[i] != heater.T[i].target)
     {
       lastTarget[i] = heater.T[i].target;
       if (heat_send_waiting[i] != true)
       {
-        heat_send_waiting[i] = storeCmd("%s ",heatCmd[i]);
+        heat_send_waiting[i] = storeCmd("%s ", heatCmd[i]);
       }
     }
   }

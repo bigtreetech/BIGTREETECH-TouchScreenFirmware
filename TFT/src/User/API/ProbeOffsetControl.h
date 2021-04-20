@@ -9,7 +9,7 @@ extern "C" {
 #include <stdint.h>
 
 // Enable probe offset
-void probeOffsetEnable(bool skipZOffset);
+void probeOffsetEnable(bool skipZOffset, float shim);
 
 // Disable probe offset
 void probeOffsetDisable(void);

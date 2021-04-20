@@ -29,12 +29,12 @@ typedef enum
 // Config version support
 // change if new elements/keywords are added/removed/changed in the configuration.h Format YYYYMMDD
 // this number should match CONFIG_VERSION in configuration.h
-#define CONFIG_SUPPPORT 20210105
+#define CONFIG_SUPPPORT 20210321
 
-#define FONT_FLASH_SIGN       20200908 //(YYYYMMDD) change if fonts require updating
-#define CONFIG_FLASH_SIGN     20201221 //(YYYYMMDD) change if any keyword(s) in config.ini is added or removed
-#define LANGUAGE_FLASH_SIGN   20201218 //(YYYYMMDD) change if any keyword(s) in language pack is added or removed
-#define ICON_FLASH_SIGN       20201028 //(YYYYMMDD) change if any icon(s) is added or removed
+#define FONT_FLASH_SIGN       20200908  //(YYYYMMDD) change if fonts require updating
+#define CONFIG_FLASH_SIGN     20210416  //(YYYYMMDD) change if any keyword(s) in config.ini is added or removed
+#define LANGUAGE_FLASH_SIGN   20210217  //(YYYYMMDD) change if any keyword(s) in language pack is added or removed
+#define ICON_FLASH_SIGN       20210217  //(YYYYMMDD) change if any icon(s) is added or removed
 
 #define FONT_CHECK_SIGN       (FONT_FLASH_SIGN + WORD_UNICODE)
 #define CONFIG_CHECK_SIGN     (CONFIG_FLASH_SIGN + STRINGS_STORE_ADDR)
@@ -43,7 +43,7 @@ typedef enum
 
 #define MAX_EXT_COUNT         6
 #define MAX_HOTEND_COUNT      6
-#define MAX_HEATER_COUNT      (2 + MAX_HOTEND_COUNT) // chamber + bed + hotend
+#define MAX_HEATER_COUNT      (2 + MAX_HOTEND_COUNT)  // chamber + bed + hotend
 #define MAX_FAN_CTRL_COUNT    2
 #define MAX_FAN_COUNT         (6 + MAX_FAN_CTRL_COUNT)
 
@@ -75,13 +75,13 @@ typedef enum
 
 typedef enum
 {
-  LCD2004 = 0,
-  LCD12864
+  LCD12864 = 0,
+  LCD2004,
 } MARLIN_MODE_TYPE;
 
 typedef struct
 {
-// General Settings
+  // General Settings
   uint8_t status_screen;
   uint8_t baudrate;
   uint8_t language;
@@ -96,24 +96,30 @@ typedef struct
   uint16_t list_button_color;
   uint16_t mesh_min_color;
   uint16_t mesh_max_color;
+  uint8_t  terminal_color_scheme;
 
   uint8_t rotate_ui;
   uint8_t terminalACK;
   uint8_t invert_axis[AXIS_NUM];
+  uint8_t leveling_invert_y_axis;
   uint8_t persistent_info;
   uint8_t file_listmode;
   uint8_t ack_notification;
+  uint8_t emulate_m600;
 
   // Marlin Mode Settings
   uint8_t  mode;
   uint8_t  serial_alwaysOn;
   uint16_t marlin_mode_bg_color;
   uint16_t marlin_mode_font_color;
-  uint8_t  marlin_mode_showtitle;
   uint8_t  marlin_mode_fullscreen;
+  uint8_t  marlin_mode_showtitle;
   uint8_t  marlin_type;
 
-// Printer / Machine Settings
+  // rrf mode settings
+  uint8_t  rrf_macros_enable;
+
+  // Printer / Machine Settings
   uint8_t  hotend_count;
   uint8_t  bed_en;
   uint8_t  chamber_en;
@@ -125,9 +131,11 @@ typedef struct
   uint8_t  fan_max[MAX_FAN_COUNT];
   int16_t  machine_size_min[AXIS_NUM];  // X, Y, Z
   int16_t  machine_size_max[AXIS_NUM];  // X, Y, Z
-  uint16_t axis_speed[SPEED_COUNT];
+  uint16_t xy_speed[SPEED_COUNT];
+  uint16_t z_speed[SPEED_COUNT];
   uint16_t ext_speed[SPEED_COUNT];
   uint8_t  auto_load_leveling;
+  uint8_t  touchmi_sensor;
   uint8_t  onboardSD;
   uint8_t  m27_refresh_time;
   uint8_t  m27_active;
@@ -141,42 +149,51 @@ typedef struct
   uint8_t  level_edge;
   float    level_z_pos;
   float    level_z_raise;
+
+  uint8_t  move_speed;  // index on infoSettings.axis_speed, infoSettings.ext_speed
+
+  uint8_t  xy_offset_probing;
+  float    z_raise_probing;
+  uint8_t  z_steppers_alignment;
+
   uint16_t level_feedrate[FEEDRATE_COUNT - 1];  // XY, Z
   uint16_t preheat_temp[PREHEAT_COUNT];
   uint16_t preheat_bed[PREHEAT_COUNT];
 
-  uint8_t  move_speed;  // index on infoSettings.axis_speed, infoSettings.ext_speed
-
-// Power Supply Settings
+  // Power Supply Settings
   uint8_t  auto_off;
   uint8_t  ps_active_high;
   uint8_t  auto_off_temp;
 
-// Filament Runout Settings
+  // Filament Runout Settings
   uint8_t  runout;
   uint8_t  runout_invert;
   uint16_t runout_noise_ms;
   uint8_t  runout_distance;
 
-// Power Loss Recovery & BTT UPS Settings
+  // Power Loss Recovery & BTT UPS Settings
   uint8_t  powerloss_en;
   uint8_t  powerloss_home;
   uint8_t  powerloss_invert;
   uint8_t  powerloss_z_raise;
   uint8_t  btt_ups;
 
-// Other device-specific settings
+  // Other Device-Specific Settings
   uint8_t  touchSound;
   uint8_t  toastSound;
   uint8_t  alertSound;
+  uint8_t  heaterSound;
+
+#ifdef LED_COLOR_PIN
   uint8_t  knob_led_color;
   uint8_t  knob_led_idle;
+  uint8_t  neopixel_pixels;
+#endif
   uint8_t  lcd_brightness;
   uint8_t  lcd_idle_brightness;
   uint8_t  lcd_idle_timer;
-  uint8_t  xy_offset_probing;
 
-// Start, End & Cancel G-codes
+  // Start, End & Cancel Gcode Commands
   uint8_t  send_start_gcode;
   uint8_t  send_end_gcode;
   uint8_t  send_cancel_gcode;
@@ -207,16 +224,29 @@ typedef struct
  */
 typedef enum
 {
-  BL_DISABLED = DISABLED, // Bed Leveling Diabled
-  BL_ABL,  // Auto Bed Leveling (ABL)
-  BL_BBL,  // Bilinear Bed Leveling (BBL)
-  BL_UBL,  // Unified Bed Leveling (UBL)
-  BL_MBL,  // Mesh Bed Leveling (MBL)
+  BL_DISABLED = DISABLED,  // Bed Leveling Diabled
+  BL_ABL,                  // Auto Bed Leveling (ABL)
+  BL_BBL,                  // Bilinear Bed Leveling (BBL)
+  BL_UBL,                  // Unified Bed Leveling (UBL)
+  BL_MBL,                  // Mesh Bed Leveling (MBL)
 } BL_TYPE;
+
+/**
+ * Firmware type
+ */
+typedef enum
+{
+  FW_NOT_DETECTED,
+  FW_MARLIN,
+  FW_REPRAPFW,
+  FW_KLIPPER,
+  FW_SMOOTHIEWARE,
+  FW_UNKNOWN,
+} FW_TYPE;
 
 typedef struct
 {
-  int8_t isMarlinFirmware;
+  FW_TYPE firmwareType;
   uint8_t EEPROM;
   uint8_t autoReportTemp;
   BL_TYPE leveling;
@@ -234,21 +264,20 @@ typedef struct
   uint8_t softwareEndstops;
 } MACHINESETTINGS;
 
-
 extern SETTINGS infoSettings;
 extern MACHINESETTINGS infoMachineSettings;
 
-extern const u16 default_max_temp[];
-extern const u16 default_max_fanPWM[];
-extern const u16 default_size_min[];
-extern const u16 default_size_max[];
-extern const u16 default_move_speed[];
-extern const u16 default_ext_speed[];
-extern const u16 default_level_speed[];
-extern const u16 default_pause_speed[];
-extern const u16 default_preheat_ext[];
-extern const u16 default_preheat_bed[];
-extern const u8 default_custom_enabled[];
+extern const uint16_t default_max_temp[];
+extern const uint16_t default_max_fanPWM[];
+extern const uint16_t default_size_min[];
+extern const uint16_t default_size_max[];
+extern const uint16_t default_move_speed[];
+extern const uint16_t default_ext_speed[];
+extern const uint16_t default_level_speed[];
+extern const uint16_t default_pause_speed[];
+extern const uint16_t default_preheat_ext[];
+extern const uint16_t default_preheat_bed[];
+extern const uint8_t default_custom_enabled[];
 
 void initMachineSetting(void);
 void infoSettingsReset(void);

@@ -7,13 +7,13 @@ extern "C" {
 
 #include <stdint.h>
 
-/* Reset only babystep value to default value */
+// Reset only babystep value to default value
 float babystepReset(void);
 
-/* Get current babystep value */
+// Get current babystep value
 float babystepGetValue(void);
 
-/* Reset babystep value to default value */
+// Reset babystep value to default value
 float babystepResetValue(void);
 
 // Decrease babystep value

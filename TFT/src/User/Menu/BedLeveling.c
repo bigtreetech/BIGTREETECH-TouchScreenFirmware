@@ -5,15 +5,15 @@ static inline void blUpdateState(MENUITEMS *menu)
 {
   if (getParameter(P_ABL_STATE, 0) == ENABLED)
   {
-    menu->items[6].icon = ICON_LEVELING_ON;
-    menu->items[6].label.index = LABEL_BL_ENABLE;
+    menu->items[3].icon = ICON_LEVELING_ON;
+    menu->items[3].label.index = LABEL_BL_ENABLE;
   }
   else
   {
-    menu->items[6].icon = ICON_LEVELING_OFF;
-    menu->items[6].label.index = LABEL_BL_DISABLE;
+    menu->items[3].icon = ICON_LEVELING_OFF;
+    menu->items[3].label.index = LABEL_BL_DISABLE;
   }
-  menuDrawItem(&menu->items[6], 6);
+  menuDrawItem(&menu->items[3], 3);
 }
 
 void menuBedLeveling(void)
@@ -21,19 +21,20 @@ void menuBedLeveling(void)
   MENUITEMS bedLevelingItems = {
     // title
     LABEL_ABL_SETTINGS,
-    // icon                         label
-    {{ICON_LEVELING,                LABEL_ABL},
-     {ICON_LEVELING,                LABEL_MESH_EDITOR},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_PROBE_OFFSET,            LABEL_Z_OFFSET},
-     {ICON_Z_FADE,                  LABEL_ABL_Z},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACK,                    LABEL_BACK},}
+    // icon                          label
+    {
+      {ICON_LEVELING,                LABEL_ABL},
+      {ICON_MESH_EDITOR,             LABEL_MESH_EDITOR},
+      {ICON_MESH_VALID,              LABEL_MESH_VALID},
+      {ICON_LEVELING_OFF,            LABEL_BL_DISABLE},
+      {ICON_Z_FADE,                  LABEL_ABL_Z},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_HEAT_FAN,                LABEL_UNIFIEDHEAT},
+      {ICON_BACK,                    LABEL_BACK},
+    }
   };
 
   KEY_VALUES key_num = KEY_IDLE;
-  void (*menuBL)(void) = menuABL;
   int8_t levelStateOld = -1;
 
   switch (infoMachineSettings.leveling)
@@ -51,8 +52,6 @@ void menuBedLeveling(void)
     case BL_MBL:
       bedLevelingItems.title.index = LABEL_MBL_SETTINGS;
       bedLevelingItems.items[0].label.index = LABEL_MBL;
-
-      menuBL = menuMBL;
       break;
 
     default:
@@ -61,13 +60,14 @@ void menuBedLeveling(void)
 
   if (getParameter(P_ABL_STATE, 0) == ENABLED)
   {
-    bedLevelingItems.items[6].icon = ICON_LEVELING_ON;
-    bedLevelingItems.items[6].label.index = LABEL_BL_ENABLE;
+    bedLevelingItems.items[3].icon = ICON_LEVELING_ON;
+    bedLevelingItems.items[3].label.index = LABEL_BL_ENABLE;
   }
-  else
+
+  if (infoMachineSettings.zProbe == ENABLED)
   {
-    bedLevelingItems.items[6].icon = ICON_LEVELING_OFF;
-    bedLevelingItems.items[6].label.index = LABEL_BL_DISABLE;
+    bedLevelingItems.items[5].icon = ICON_PROBE_OFFSET;
+    bedLevelingItems.items[5].label.index = LABEL_P_OFFSET;
   }
 
   menuDrawPage(&bedLevelingItems);
@@ -78,38 +78,50 @@ void menuBedLeveling(void)
     switch (key_num)
     {
       case KEY_ICON_0:
-        infoMenu.menu[++infoMenu.cur] = menuBL;
+        infoMenu.menu[++infoMenu.cur] = menuBedLevelingLayer2;
         break;
 
       case KEY_ICON_1:
         infoMenu.menu[++infoMenu.cur] = menuMeshEditor;
         break;
 
-      case KEY_ICON_4:
-        storeCmd("M851\n");
-        infoMenu.menu[++infoMenu.cur] = menuProbeOffset;
+      case KEY_ICON_2:
+        infoMenu.menu[++infoMenu.cur] = menuMeshValid;
         break;
 
-      case KEY_ICON_5:
-      {
-        char tempstr[30];
-        sprintf(tempstr, "%Min:%.2f | Max:%.2f", Z_FADE_MIN_VALUE, Z_FADE_MAX_VALUE);
+      case KEY_ICON_3:
+        if (getParameter(P_ABL_STATE, 0) == ENABLED)
+          storeCmd(infoMachineSettings.firmwareType != FW_REPRAPFW ? "M420 S0\n" : "G29 S2\n");
+        else
+          storeCmd(infoMachineSettings.firmwareType != FW_REPRAPFW ? "M420 S1\n" : "G29 S1\n");
+        break;
 
-        float val = numPadFloat((u8 *) tempstr, getParameter(P_ABL_STATE, 1), 0.0f, false);
-        storeCmd("M420 Z%.2f\n", NOBEYOND(Z_FADE_MIN_VALUE, val, Z_FADE_MAX_VALUE));
+      case KEY_ICON_4:
+      {
+        float val = editFloatValue(Z_FADE_MIN_VALUE, Z_FADE_MAX_VALUE, 0.0f, getParameter(P_ABL_STATE, 1));
+
+        if (val != getParameter(P_ABL_STATE, 1))
+          storeCmd("M420 Z%.2f\n", val);
 
         menuDrawPage(&bedLevelingItems);
         break;
       }
 
+      case KEY_ICON_5:
+        if (infoMachineSettings.zProbe == ENABLED)
+        {
+          storeCmd("M851\n");
+          zOffsetSetMenu(true);  // use Probe Offset menu
+          infoMenu.menu[++infoMenu.cur] = menuZOffset;
+        }
+        break;
+
       case KEY_ICON_6:
-        if (getParameter(P_ABL_STATE, 0) == ENABLED)
-          storeCmd("M420 S0\n");
-        else
-          storeCmd("M420 S1\n");
+        infoMenu.menu[++infoMenu.cur] = menuUnifiedHeat;
         break;
 
       case KEY_ICON_7:
+        cooldownTemperature();
         infoMenu.cur--;
         break;
 

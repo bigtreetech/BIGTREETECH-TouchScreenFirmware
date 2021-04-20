@@ -4,7 +4,7 @@
 #include "variants.h"
 #include "Settings.h"
 
-#ifdef LCD2004_simulator
+#ifdef LCD2004_EMULATOR
 
 CIRCULAR_QUEUE *HD44780_queue = NULL;
 
@@ -52,11 +52,11 @@ void HD44780_Config(CIRCULAR_QUEUE *queue)
 
   // Connect GPIOB15 to the interrupt line
   #if !defined(TFT24_V1_1)
-  RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);             // Enable SYSCFG clock
-  SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOB, EXTI_PinSource15);     // PB15 is connected to interrupt line 15
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);           // Enable SYSCFG clock
+    SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOB, EXTI_PinSource15);   // PB15 is connected to interrupt line 15
   #else
-  RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
-  GPIO_EXTILineConfig(GPIO_PortSourceGPIOB, GPIO_PinSource15);
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
+    GPIO_EXTILineConfig(GPIO_PortSourceGPIOB, GPIO_PinSource15);
   #endif
 
   // Set interrupt line 12 bit external falling edge interrupt
@@ -77,14 +77,14 @@ bool HD44780_writeData(void)
 {
   bool dataWritten = false;
 
-  if ((GPIOB->IDR & (1<<15)) != 0)
+  if ((GPIOB->IDR & (1 << 15)) != 0)
   {
     uint8_t temp = ((LCD_D7_PORT->IDR & LCD_D7_PIN) >> 3 ) +         // D7
                    ((LCD_D6_PORT->IDR & LCD_D6_PIN) >> 5 ) +         // D6
                    ((LCD_D5_PORT->IDR & LCD_D5_PIN) >> 13) +         // D5
                    ((LCD_D4_PORT->IDR & LCD_D4_PIN) >> 13) ;         // D4
 
-    if ((GPIOB->IDR & (1<<12)) == 0)
+    if ((GPIOB->IDR & (1 << 12)) == 0)
     { //Command received
       temp |= 0x80;
     }

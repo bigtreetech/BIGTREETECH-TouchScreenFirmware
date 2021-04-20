@@ -45,12 +45,12 @@ extern "C" {
 #define FLASH_USED              (INFOBOX_ADDR + INFOBOX_MAX_SIZE)   //currently small icons are not used
 
 
-#define ADMIN_MODE_FILE "0:admin.txt"
+#define ADMIN_MODE_FILE "admin.txt"
 #define FIRMWARE_NAME STRINGIFY(HARDWARE) "." STRINGIFY(SOFTWARE_VERSION)
 #define FIRMWARE_NAME_SHORT STRINGIFY(HARDWARE_SHORT) STRINGIFY(SOFTWARE_VERSION_SHORT)
 #define BMP_ROOT_DIR "0:" ROOT_DIR "/bmp"
 #define FONT_ROOT_DIR "0:" ROOT_DIR "/font"
-#define TFT_RESET_FILE "0:reset.txt"
+#define TFT_RESET_FILE "reset.txt"
 
 //This List is Auto-Generated. Please add new icons in icon_list.inc only
 enum
@@ -89,18 +89,18 @@ typedef enum
 
 typedef union
 {
-  u16 color;
+  uint16_t color;
   struct
   {
-    u16  b:5;
-    u16  g:6;
-    u16  r:5;
+    uint16_t  b:5;
+    uint16_t  g:6;
+    uint16_t  r:5;
   }RGB;
 }GUI_COLOR;
 
 void scanUpdates(void);
-void dispIconFail(u8 *lbl);
-bool bmpDecode(char *bmp, u32 addr);
+void dispIconFail(uint8_t *lbl, BMPUPDATE_STAT bmpState);
+BMPUPDATE_STAT bmpDecode(char *bmp, uint32_t addr);
 
 #ifdef __cplusplus
 }
