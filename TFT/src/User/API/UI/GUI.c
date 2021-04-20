@@ -521,35 +521,31 @@ void  GUI_FillCircle(uint16_t x0, uint16_t y0, uint16_t r)
   }
 }
 
-CHAR_INFO GUI_DispOne(int16_t sx, int16_t sy, const uint8_t *p)
+void GUI_DispOne(int16_t sx, int16_t sy, const CHAR_INFO *pInfo)
 {
-  CHAR_INFO info = {.bytes = 0};
-
-  if (p == NULL || *p == 0) return info;
-
-  getCharacterInfo(p, &info);
+  if (pInfo->bytes == 0) return;
 
   uint8_t x = 0,
           y = 0,
           j = 0,
           i = 0;
-  uint16_t bitMapSize = (info.pixelHeight * info.pixelWidth / 8);
-  uint8_t  font[BYTE_HEIGHT * BYTE_HEIGHT / 8];  // TODO: match bitMapSize
+  uint16_t bitMapSize = (pInfo->pixelHeight * pInfo->pixelWidth / 8);
+  uint8_t  font[BYTE_HEIGHT * BYTE_HEIGHT / 8]; // TODO: match bitMapSize
   uint32_t temp = 0;
 
-  W25Qxx_ReadBuffer(font, info.bitMapAddr, bitMapSize);
+  W25Qxx_ReadBuffer(font, pInfo->bitMapAddr, bitMapSize);
 
-  for (x=0; x < info.pixelWidth; x++)
+  for (x=0; x < pInfo->pixelWidth; x++)
   {
-    for (j=0; j < (info.pixelHeight + 8-1)/8; j++)
+    for (j=0; j < (pInfo->pixelHeight + 8-1)/8; j++)
     {
       temp <<= 8;
       temp |= font[i++];
     }
 
-    for (y=0;y < info.pixelHeight;y++)
+    for (y=0;y < pInfo->pixelHeight;y++)
     {
-      if (temp & (1<<(info.pixelHeight-1)))
+      if (temp & (1<<(pInfo->pixelHeight-1)))
         GUI_DrawPixel(sx, sy+y, foreGroundColor);
       else if (guiTextMode == GUI_TEXTMODE_NORMAL)
         GUI_DrawPixel(sx, sy+y, backGroundColor);
@@ -557,7 +553,6 @@ CHAR_INFO GUI_DispOne(int16_t sx, int16_t sy, const uint8_t *p)
     }
     sx++;
   }
-  return info;
 }
 
 void _GUI_DispString(int16_t x, int16_t y, const uint8_t *p)
@@ -567,7 +562,8 @@ void _GUI_DispString(int16_t x, int16_t y, const uint8_t *p)
 
   while (*p)
   {
-    info = GUI_DispOne(x, y, p);
+    getCharacterInfo(p, &info);
+    GUI_DispOne(x, y, &info);
     x += info.pixelWidth;
     p += info.bytes;
   }
@@ -586,10 +582,14 @@ const uint8_t* _GUI_DispLenString(int16_t x, int16_t y, const uint8_t *p, uint16
     getCharacterInfo(p, &info);
     if (curPixelWidth + info.pixelWidth > pixelWidth)
     {
-      if (truncate) GUI_DispOne(x, y, (u8*)"…");
+      if (truncate)
+      {
+        getCharacterInfo((uint8_t *)"…", &info);
+        GUI_DispOne(x, y, &info);
+      }
       return p;
     }
-    GUI_DispOne(x, y, p);
+    GUI_DispOne(x, y, &info);
     x += info.pixelWidth;
     curPixelWidth += info.pixelWidth;
     p += info.bytes;
@@ -652,7 +652,7 @@ void _GUI_DispStringInRectEOL(int16_t sx, int16_t sy, int16_t ex, int16_t ey, co
     }
     if (*p != '\n')
     {
-      GUI_DispOne(x, sy, p);
+      GUI_DispOne(x, sy, &info);
       x += info.pixelWidth;
     }
     p += info.bytes;

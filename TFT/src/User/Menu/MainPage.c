@@ -74,7 +74,7 @@ void menuMain(void)
       case KEY_ICON_5:
         if (infoSettings.rrf_macros_enable)
         {
-          infoFile.title[0] = 0;
+          strcpy(infoFile.title, "Macros");
           infoMenu.menu[++infoMenu.cur] = menuCallMacro;
         }
         else
