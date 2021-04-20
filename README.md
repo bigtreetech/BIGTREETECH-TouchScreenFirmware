@@ -13,11 +13,15 @@
 
 Important information related to BigTreeTech's TFT touchscreen 3D printer controllers
 
-<img width=500 src="https://user-images.githubusercontent.com/13375512/76691608-ae1b8780-6609-11ea-9ee1-421bcf09e538.png">
+![TFT35v3 Image with cable](https://user-images.githubusercontent.com/54359396/115433717-25a5e800-a208-11eb-9bd1-8a66b4780cf7.png)
 
 <!-- omit in toc -->
 
 ## Table of Contents
+
+- [Supported TFT's](#supported-tft's)
+
+- [Marlin Dependencies](#marlin-dependencies)
 
 - [Connect the TFT to the Mainboard](#connect-the-tft-to-the-mainboard)
 
@@ -25,9 +29,9 @@ Important information related to BigTreeTech's TFT touchscreen 3D printer contro
 
 - [Update TFT Firmware](#update-tft-firmware)
 
-- [Configuration](#configuration)
+- [Configuration using config.ini](#configuration-using-config.ini)
 
-- [Customization](#customization)
+- [Customisation](#customisation)
 
   - [Bootscreen and Icons](#bootscreen-and-icons)
   - [Firmware](#firmware)
@@ -43,6 +47,106 @@ Important information related to BigTreeTech's TFT touchscreen 3D printer contro
 
   
 
+## Supported TFT's
+
+Only the TFT's listed below are currently supported. Trying to install the firmware on a TFT which is not supported can harm the hardware.
+
+BTT_TFT24_V1.1
+
+BTT_TFT28_V1.0 and V3.0
+
+BTT_TFT35_V1.0, V1.1, V1.2, V2.0, V3.0, E3_V3.0 and B1_V3.0
+
+BTT_TFT43_V3.0
+
+BTT_TFT50_V3.0
+
+BTT_TFT70_V3.0
+
+MKS_TFT28_V3.0 and V4.0
+
+MKS_TFT32_V1.3 and V1.4
+
+
+
+## Marlin Dependencies
+
+Firmware source: https://github.com/MarlinFirmware/Marlin
+
+Minimum Marlin firmware version: 2.0.5.4/Distribution date: 2020-05-12
+
+Recommended Marlin firmware version: bugfix-2.0.x/Distribution date: 2021-04-11
+
+In order the TFT firmware is able to provide all of its functionalities/features, ensure that the following options are enabled in Marlin firmware.
+
+**General options:**
+
+EEPROM_SETTINGS (in Configuration.h)
+
+AUTO_REPORT_TEMPERATURES (in Configuration_adv.h)
+
+M115_GEOMETRY_REPORT (in Configuration_adv.h)
+
+M114_DETAIL (in Configuration_adv.h)
+
+REPORT_FAN_CHANGE (in Configuration_adv.h)
+
+
+
+**Options to support printing from onboard SD:**
+
+SDSUPPORT (in Configuration.h)
+
+LONG_FILENAME_HOST_SUPPORT (in Configuration_adv.h)
+
+AUTO_REPORT_SD_STATUS (in Configuration_adv.h)
+
+SDCARD_CONNECTION ONBOARD (in Configuration_adv.h)
+
+
+
+**Options to support dialog with host:**
+
+EMERGENCY_PARSER (in Configuration_adv.h)
+
+SERIAL_FLOAT_PRECISION 4 (in Configuration_adv.h)
+
+HOST_ACTION_COMMANDS (in Configuration_adv.h)
+
+HOST_PROMPT_SUPPORT (in Configuration_adv.h)
+
+
+
+**Options to support M600 with host & (Un)Load menu: (Options to support dialog with host as pre requisite)**
+
+NOZZLE_PARK_FEATURE (in Configuration.h)
+
+ADVANCED_PAUSE_FEATURE (in Configuration_adv.h)
+
+PARK_HEAD_ON_PAUSE (in Configuration_adv.h)
+
+FILAMENT_LOAD_UNLOAD_GCODES (in Configuration_adv.h)
+
+
+
+**Options to support Babystep menu:**
+
+BABYSTEPPING (in Configuration_adv.h)
+
+
+
+**Options to support repeatability test to test probe accuracy (M48):**
+
+Z_MIN_PROBE_REPEATABILITY_TEST (in Configuration.h)
+
+
+
+**Options to support alignment of multiple Z steppers using a bed probe (G34):**
+
+Z_STEPPER_AUTO_ALIGN (in Configuration_adv.h)
+
+
+
 ## Connect the TFT to the Mainboard
 
 **Do the following, to be able to use the touchmode of your screen.** 
@@ -51,7 +155,7 @@ Important information related to BigTreeTech's TFT touchscreen 3D printer contro
 2. Define a serial port in Marlin, to activate the port used by the TFT.
 3. Make sure the same BAUDRATE is defined in Marlin and the firmware of your TFT (config.ini)
 
-In case one of the three points above is not done right, "No printer attached" will be shown at the top of the screen in touchscreen mode This is because the TFT can not "see" the mainboard through the serial cable.
+In case one of the three points above is not done right, "No printer attached" will be shown at the top of the screen in touchscreen mode. This is because the TFT can not "see" the mainboard through the serial cable.
 
 **Do the following, to be able to use the Marlin emulation mode of your screen.** 
 
@@ -61,7 +165,7 @@ B: In case your mainboard provides **EXP1 and EXP2**, you have to connect 2 ribb
 
 C: In case you have an **"E3" mainboard** which provides a **single EXP connector**, you have to connect 1 ribbon cable connecting EXP of the mainboard to **EXP3** of the TFT. In case your TFT does **not** provide an EXP3 connector but only two 10pin connectors (TFT24 v1.1 for example) you will need a "Y-split" cable with one 10pin connector on one side (for the mainboard) and two 10pin connectors on the other side (for the TFT). In the Marlin firmware of your mainboard, make sure that **ONLY** the "CR10_STOCKDISPLAY" is activated in Configuration.h and that all other controllers are **De**activated (especially the "REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER").
 
-![Screenshot 2021-03-07 at 22 41 02](https://user-images.githubusercontent.com/54359396/110255941-96fe4400-7f96-11eb-93b9-199c5be14eb8.png)
+![Table](https://user-images.githubusercontent.com/54359396/115434067-8cc39c80-a208-11eb-82f4-19e1192b4bf9.png)
 
 This chart has been provided by user Thomas White
 
@@ -91,28 +195,41 @@ This chart has been provided by user Thomas White
 ## Update TFT Firmware
 
 
-The TFT firmware update is done in three steps described below and includes up to four elements:
+The TFT firmware update is done in three steps and includes up to four elements:
 
-**ELEMENTS:**
+### **ELEMENTS:**
 
-**element 1:** The firmware binary (`BIGTREE_TFT*_V*.*.*.bin`). Example: `BIGTREE_TFT35_V3.0.26.1.bin`:
+**element 1:** The firmware binary (`BIGTREE_TFT*_V*.*.*.bin`). Example: `BIGTREE_TFT35_V3.0.27.bin`:
 
 - `BIGTREE_TFT_35`: model
 - `V3.0`: hardware version
-- `26.1`: software version
+- `27`: software version
 
-**element 2:** Fonts and Icons (`TFT*` folder): Example: TFT35, which includes:
+Exception: For the MKS TFT28 the binary file name must be `MKSTFT28.bin`.
+
+Attention TFT35 owners. There are currently three different kinds of firmware available: V3.0, E3_V3.0 and B1_V3.0. Please make sure to use the firmware which matches your TFT screen.
+
+**element 2:** Fonts and Icons (in the `TFT*` or `MKS` folder):
+
+For BTT TFTs, the ROOT folder for fonts and icons is TFT*, where * is the size of the TFT (example: TFT24, TFT35, TFT50, etc).
+Fonts and icons folder structure:
 
 - `TFT*/font`: fonts
 - `TFT*/bmp`: icons
 
-**element 3:** The config.ini file
+For MKS TFTs the ROOT folder for fonts and icons must be renamed to "MKS".
+Fonts and icons folder structure:
 
-**element 4:**  One or several language file(s) **(optionally)**
+- `MKS/font`: fonts
+- `MKS/bmp`: icons
 
-**STEPS:**
+**element 3:** The config.ini or config_rrf.ini file
 
-**step 1:** Copy your self compiled firmware or the BIGTREE_TFT*_V*.*.*.bin, plus the TFT*` folder of your prefferred Material theme as well as the config.ini to the root of a blank SD card that is <8GB and formatted as FAT32:
+**element 4 (optionally):**  One or several language file(s)
+
+### **STEPS:**
+
+**step 1:** Copy your self compiled **firmware** or the BIGTREE_TFT*_V*.*.*.bin, plus the **TFT*` folder** of your preferred Material theme as well as the **config.ini** (or config_rrf.ini) to the root of a blank SD card that is <8GB and formatted as FAT32:
 
 ![Firmware](https://user-images.githubusercontent.com/54359396/100600549-b6cffd00-3301-11eb-8b57-d56b7a4422f1.jpg)
 
@@ -120,7 +237,7 @@ The TFT firmware update is done in three steps described below and includes up t
 
 ![Language Pack](https://user-images.githubusercontent.com/54359396/100600564-b9caed80-3301-11eb-8997-d376f05323f6.jpg)
 
-**step 2:** Place SD card with the `BIGTREE_TFT*_V*.*.*.bin`, the`TFT*` folder and the config.ini into the TFT's SD card reader and reset your TFT (or optionally - power cycle your printer) to start the update process.
+**step 2:** Place the SD card with the `BIGTREE_TFT*_V*.*.*.bin`, the`TFT*` folder and the config.ini into the TFT's SD card reader and reset your TFT (or optionally - power cycle your printer) to start the update process.
 
 <p align=center> ⚠️ Failing to update your icons &amp; fonts will result in missing icons and/or unreadable text ⚠️ </p>
 
@@ -146,30 +263,32 @@ After the update is done and the files are renamed, it is possible to reuse them
 
 **step3:** Remove the SD card from the TFT and restart the printer.
 
+Tip: Format the SD card after the firmware update in case you would like to print from it.
 
 
 
-## Configuration
 
-The Firmware can be modified by changing the **config.ini** file from: [`Copy to SD Card root directory to update`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update) using a simple text editor (make sure to use UTF encoding).
+## Configuration using config.ini or config_rrf.ini
 
-Once saved, the config.ini can be uploaded without the need to upload the firmware or the TFT folder again, as long as the firmware and the config.ini are from the same version.
+The Firmware can be modified by changing the **config.ini** or **config_rrf.ini** file from: [`Copy to SD Card root directory to update`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update) using a simple text editor (make sure to use UTF encoding).
 
-### Editing configuration (config.ini) file
+Once saved, it can be uploaded without the need to upload the firmware or the TFT folder again, as long as the firmware and the config file are from the same version.
 
-To edit the **config.ini** file follow the instruction here: [Detailed Instructions here](config_instructions.md)
+### Editing the configuration file
+
+To edit the **config** file follow the instruction here: [Detailed Instructions here](config_instructions.md)
 
 ### Updating Firmware Configuration
 
 To update the Firmware configuration:
 
-1. Edit the settings in **config.ini**.
+1. Edit the settings like described above
 
-2. Copy the **config.ini** file to the root of the SD card. (The SD card capacity should be less than or equal to 8GB and formatted as FAT32)
+2. Copy the **config.ini** or **config_rrf.ini** file to the root of the SD card. (The SD card capacity should be less than or equal to 8GB and formatted as FAT32)
 
 3. Insert the SD card into the TFT's SD card slot and restart the printer or press the reset buttion of the TFT.
 
-4. The TFT will update and store the configuration from **config.ini** file.
+4. The TFT will update and store the configuration from the configuration file.
 
 5. Make sure to remove the SD card from the TFT and restart the printer.
 
@@ -177,15 +296,15 @@ To update the Firmware configuration:
 
    "Reset default settings ..."
 
-7. Restart the printer to finish the update of the config.ini
+7. Restart the printer to finish the update
 
 
 
-## Customization
+## Customisation
 
 ### Bootscreen and Icons
 
-See [Customization guides](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/readme/) for detailed  information.
+See [Customisation guides](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/readme/) for detailed  information.
 
 ### Firmware
 
@@ -206,10 +325,11 @@ See [Customization guides](https://github.com/bigtreetech/BIGTREETECH-TouchScree
 ;BIGTREE_TFT28_V1_0
 ;BIGTREE_TFT28_V3_0
 ;BIGTREE_TFT24_V1_1
-;MKS_32_V1_4
-;MKS_32_V1_4_NOBL
-;MKS_28_V1_0
-
+;MKS_TFT32_V1_3
+;MKS_TFT32_V1_4
+;MKS_TFT32_V1_4_NOBL
+;MKS_TFT28_V3_0
+;MKS_TFT28_V4_0
 [platformio]
 src_dir      = TFT
 boards_dir   = buildroot/boards
@@ -220,7 +340,7 @@ default_envs = BIGTREE_TFT35_V3_0</pre></li>
 <li>A <code>BIGTREE_TFT*_V*.*.*.bin</code> file will be generated in the <em>hidden</em> <code>.pio\build\BIGTREE_TFT*_V*_*</code> folder. Follow the update process outlined in the <a href="#about-tft-firmware">About TFT Firmware</a> section above to update your TFT to the latest version.</li>
 </details>
 
-
+Tip: In case there is a problem compiling the TFT firmware try to restart VSC. If this does not help and you are using macOS, delete the **packages** and **platforms** folder which you can find here: /Users/***username***/.platformio/.
 
 ## Troubleshooting
 
@@ -274,21 +394,24 @@ Edit the configuration.h file and enable the line that says: #define REPRAP_DISC
 
 ### Show more statistics at the end of the print
 
-Statistics as filament length, filament weight and filament cost can be embedded into the gCode. These statistics will be presented after the print is finished in the new infobox area as a scrolling text. You can click that infobox and a popup will present you the printed filename (limited to the first 25 characters), the time needed for the print, the filament length used, the filament weight and its cost.
-
+Statistics as filament length, filament weight and filament cost can be embedded into the gCode. After the print is finished there will be an infobox that you can click and a popup will present you the printed filename (limited to the first 25 characters), the time needed for the print, the filament length used, the filament weight and its cost. In the case of multi-filament usage the statistics will show the sum of all individual data (sum of length, sum of weight, sum of cost).
 The statistic data in the gCode must have the following format (a good practice would be to include this at the beginning of the gCode):
-
-M118 P0 filament_data L:{12.3456}m	L: represents the length in meters
-M118 P0 filemant_data W:{1.23456}g	W: represents the weight in grams
-M118 P0 filament_data C:{0.1234}		C: represents the cost without a unit
+* `M118 P0 filament_data L:{12.3456}m`  L: represents the length in meters
+* `M118 P0 filemant_data W:{1.23456}g`  W: represents the weight in grams
+* `M118 P0 filament_data C:{0.1234}`    C: represents the cost without a unit
 
 The values of every filament data can be in a brackets, parentheses, apostrophes, etc. or without them, measurement units can be there or not.
-So M118 P0 filament_data L:(12.3456)m, M118 P0 filament_data L:12.3456meters, M118 P0 filament_data L:[12.3456] and so on are all valid formats.
+So `M118 P0 filament_data L:(12.3456)m`, `M118 P0 filament_data L:12.3456meters`, `M118 P0 filament_data L:[12.3456]` and so on are all valid formats.
+For multi-filament print statistics the data for each used filament should be written, they can be separated by comma, space, asterix, whatever, except ";" and ".".
+Examples for multi-filament:
+* `M118 P0 filament_data L:(12.3456, 8.2520974)m`
+* `M118 P0 filament_data W: 24.87652 15.568264 gramm`
+* `M118 P0 filament_data C:[1.3456], [0.56024]`
 
 The inclusion of the filament data into the gCode can be automated. In Cura all you have to do is to insert the following into the Start G-Code:
-M118 P0 filament_data L:{filament_amount}m
-M118 P0 filament_data W:{filament_weight}g
-M118 P0 filament_data C:{filament_cost}
+* `M118 P0 filament_data L:{filament_amount}m`
+* `M118 P0 filament_data W:{filament_weight}g`
+* `M118 P0 filament_data C:{filament_cost}`
 
 In case the gCode file has been generated using the  [BTT 3D Plug-In Suit](https://github.com/bigtreetech/Bigtree3DPluginSuit), the data is automatically added.
 
