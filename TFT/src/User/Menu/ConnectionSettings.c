@@ -69,7 +69,7 @@ void menuBaudrate(void)
     totalItems[i].titlelabel.address = (uint8_t *) item_baudrate_str[i];
   }
 
-  listViewCreate(title, totalItems, COUNT(totalItems), cur_item / LISTITEM_PER_PAGE, true, NULL, NULL, NULL);
+  listViewCreate(title, totalItems, COUNT(totalItems), NULL, true, NULL, NULL);
 
   while (infoMenu.menu[infoMenu.cur] == menuBaudrate)
   {

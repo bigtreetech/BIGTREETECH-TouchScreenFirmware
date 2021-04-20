@@ -19,7 +19,7 @@ void menuCustom(void)
     customItems[i].titlelabel.address = (uint8_t*)customcodes.name[i];
   }
 
-  listViewCreate(title, customItems, customcodes.count, 0, true, NULL, NULL, NULL);
+  listViewCreate(title, customItems, customcodes.count, NULL, true, NULL, NULL);
 
   while (infoMenu.menu[infoMenu.cur] == menuCustom)
   {

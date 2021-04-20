@@ -1,7 +1,7 @@
 #include "ParameterSettings.h"
 #include "includes.h"
 
-static uint8_t ps_cur_page = 0;
+static uint16_t ps_cur_page = 0;
 static uint8_t cur_parameter = 0;
 
 bool parametersChanged = false;
@@ -133,8 +133,8 @@ void menuShowParameter(void)
     }
   }
 
-  listViewCreate(parameterTypes[cur_parameter], parameter_menuitems, getParameterElementCount(cur_parameter), 0,
-                 false, NULL, NULL, NULL);
+  listViewCreate(parameterTypes[cur_parameter], parameter_menuitems, getParameterElementCount(cur_parameter), NULL,
+                 false, NULL, NULL);
 
   while (infoMenu.menu[infoMenu.cur] == menuShowParameter)
   {
@@ -217,11 +217,6 @@ void loadParameters(LISTITEM * parameterMainItem, uint16_t index, uint8_t itemPo
   }
 }
 
-void parameterSetPageIndex(uint8_t index)
-{
-  ps_cur_page = index;
-}
-
 void menuParameterSettings(void)
 {
   uint8_t enabledParameterCount = getEnabledParameterCount();
@@ -231,7 +226,7 @@ void menuParameterSettings(void)
   //LISTITEM parameterMainItems[totalItems];
   uint16_t curIndex = KEY_IDLE;
 
-  listViewCreate(title, NULL, totalItems, ps_cur_page, false, NULL, loadParameters, parameterSetPageIndex);
+  listViewCreate(title, NULL, totalItems, &ps_cur_page, false, NULL, loadParameters);
 
   while (infoMenu.menu[infoMenu.cur] == menuParameterSettings)
   {

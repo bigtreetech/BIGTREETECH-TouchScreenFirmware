@@ -10,40 +10,43 @@ static LISTITEM *totalItems;
 
 static uint16_t maxItemCount;
 static uint8_t maxPageCount;
-static uint8_t curPageIndex;
+static uint16_t curPageIndex;
+static uint16_t * curPageIndexSource;
 static bool handleBack = true;
 
 static void (*action_preparePage)(LISTITEMS * listItems, uint8_t index) = NULL;
 static void (*action_prepareItem)(LISTITEM * item, uint16_t index, uint8_t itemPos) = NULL;
-static void (*action_pageChanged)(uint8_t pageIndex) = NULL;
 
 /**
  * @brief Set and innitialize list menu
  *
  * @param title Title of menu
  * @param items Preset list of items. Set to NUll if not used.
- * @param max_items Maximum number of items possilbe in current list.
- * @param cur_page Display this page index.
+ * @param maxItems Maximum number of items possilbe in current list.
+ * @param curPage Display this page index.
  * @param handleBackPress Set true to handle back button automatically.
  * @param preparePage_action Pointer to function to execute for preparing page before display. Set to NULL if not used.
  * @param prepareItem_action Pointer to function to execute for preparing item before display. Set to NULL if not used.
- * @param pageChanged_action Pointer to function to execute on changing page. Set to NULL if not used.
  */
-void listViewCreate(LABEL title, LISTITEM * items, uint16_t max_items, uint8_t cur_page, bool handleBackPress,
+void listViewCreate(LABEL title, LISTITEM * items, uint16_t maxItems, uint16_t * curPage, bool handleBackPress,
                     void (*preparePage_action)(LISTITEMS * listItems, uint8_t pageIndex),
-                    void (*prepareItem_action)(LISTITEM * item, uint16_t index, uint8_t itemPos),
-                    void (*pageChanged_action)(uint8_t pageIndex))
+                    void (*prepareItem_action)(LISTITEM * item, uint16_t index, uint8_t itemPos))
 {
   listItems.title = title;
   totalItems = items;
-  maxItemCount = max_items;
+  maxItemCount = maxItems;
   maxPageCount = (maxItemCount + LISTITEM_PER_PAGE - 1) / LISTITEM_PER_PAGE;
   handleBack = handleBackPress;
   action_preparePage = preparePage_action;
   action_prepareItem = prepareItem_action;
-  action_pageChanged = pageChanged_action;
+  curPageIndexSource = curPage;
 
-  listViewSetCurPage(cur_page);
+  if (curPage != NULL)
+    curPageIndex = *curPage;
+  else
+    curPageIndex = 0;
+
+  listViewSetCurPage(curPageIndex);
   menuDrawListPage(&listItems);
 }
 
@@ -58,17 +61,17 @@ uint8_t listViewGetCurPage(void)
   return curPageIndex;
 }
 
-void listViewSetCurPage(uint8_t cur_page)
+void listViewSetCurPage(uint8_t curPage)
 {
   if(action_preparePage != NULL)
   {
-    action_preparePage(&listItems, cur_page);
+    action_preparePage(&listItems, curPage);
   }
   else
   {
     for (uint8_t i = 0; i < LISTITEM_PER_PAGE; i++)
     {
-      uint16_t index = cur_page * LISTITEM_PER_PAGE + i;
+      uint16_t index = curPage * LISTITEM_PER_PAGE + i;
 
       if (index < maxItemCount)
       {
@@ -86,13 +89,13 @@ void listViewSetCurPage(uint8_t cur_page)
   }
 
   // only 1 page or in first page, hide up button
-  listItems.items[5].icon = ((maxItemCount <= LISTITEM_PER_PAGE) || (cur_page == 0)) ? CHARICON_BACKGROUND : CHARICON_PAGEUP;
+  listItems.items[5].icon = ((maxItemCount <= LISTITEM_PER_PAGE) || (curPage == 0)) ? CHARICON_BACKGROUND : CHARICON_PAGEUP;
   // only 1 page or in last page, hide down button
-  listItems.items[6].icon = ((maxItemCount <= LISTITEM_PER_PAGE) || (cur_page == maxPageCount - 1)) ? CHARICON_BACKGROUND : CHARICON_PAGEDOWN;
+  listItems.items[6].icon = ((maxItemCount <= LISTITEM_PER_PAGE) || (curPage == maxPageCount - 1)) ? CHARICON_BACKGROUND : CHARICON_PAGEDOWN;
 
   listItems.items[7].icon = CHARICON_BACK;
 
-  curPageIndex = cur_page;
+  curPageIndex = curPage;
 }
 
 bool listViewNextPage(void)
@@ -103,8 +106,8 @@ bool listViewNextPage(void)
   // goto next page
   curPageIndex++;
 
-  if (action_pageChanged != NULL)
-    action_pageChanged(curPageIndex);
+  if (curPageIndexSource != NULL)
+    *curPageIndexSource = curPageIndex;
 
   listViewSetCurPage(curPageIndex);
   menuRefreshListPage();
@@ -119,8 +122,8 @@ bool listViewPreviousPage(void)
   // goto previous page
   curPageIndex--;
 
-  if (action_pageChanged != NULL)
-    action_pageChanged(curPageIndex);
+  if (curPageIndexSource != NULL)
+    *curPageIndexSource = curPageIndex;
 
   listViewSetCurPage(curPageIndex);
   menuRefreshListPage();

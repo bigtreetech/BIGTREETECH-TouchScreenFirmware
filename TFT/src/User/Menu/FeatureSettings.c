@@ -304,11 +304,6 @@ void resetSettings(void)
   popupReminder(DIALOG_TYPE_SUCCESS, LABEL_INFO, LABEL_SETTINGS_RESET_DONE);
 }
 
-void featurePageChange(uint8_t page)
-{
-  fe_cur_page = page;
-}
-
 void menuFeatureSettings(void)
 {
   //
@@ -357,7 +352,7 @@ void menuFeatureSettings(void)
   SETTINGS now = infoSettings;
   LABEL title = {LABEL_FEATURE_SETTINGS};
   uint16_t index = KEY_IDLE;
-  listViewCreate(title, settingPage, SKEY_COUNT, fe_cur_page, true, NULL, loadFeatureSettings, featurePageChange);
+  listViewCreate(title, settingPage, SKEY_COUNT, &fe_cur_page, true, NULL, loadFeatureSettings);
 
   while (infoMenu.menu[infoMenu.cur] == menuFeatureSettings)
   {

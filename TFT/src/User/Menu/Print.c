@@ -1,10 +1,9 @@
 #include "Print.h"
 #include "includes.h"
 
-const int16_t labelVolumeError[] = {LABEL_READ_TFTSD_ERROR, LABEL_READ_U_DISK_ERROR, LABEL_READ_ONBOARDSD_ERROR};
-
 // File list number per page
 #define NUM_PER_PAGE 5
+
 static bool list_mode = true;
 SCROLL titleScroll;
 const GUI_RECT titleRect = {10, (TITLE_END_Y - BYTE_HEIGHT) / 2, LCD_WIDTH - 10, (TITLE_END_Y - BYTE_HEIGHT) / 2 + BYTE_HEIGHT};
@@ -88,11 +87,12 @@ void gocdeListDraw(LISTITEM * item, uint16_t index, uint8_t itemPos)
   {
     // gcode file
     item->icon = CHARICON_FILE;
+    item->itemType = LIST_LABEL;
+    item->titlelabel.index = LABEL_DYNAMIC;
     if (infoMachineSettings.long_filename_support == ENABLED && infoFile.source == BOARD_SD)
       setDynamicLabel(itemPos, infoFile.Longfile[index - infoFile.folderCount]);
     else
       setDynamicLabel(itemPos, infoFile.file[index - infoFile.folderCount]);
-    item->titlelabel.index = LABEL_DYNAMIC;
   }
 }
 
@@ -100,12 +100,6 @@ void gocdeListDraw(LISTITEM * item, uint16_t index, uint8_t itemPos)
 void startPrint(void)
 {
   infoMenu.menu[++infoMenu.cur] = menuBeforePrinting;
-}
-
-// save current page index
-void printPageIndexChanged(uint8_t index)
-{
-  infoFile.cur_page = index;
 }
 
 // open selected file/folder
@@ -287,11 +281,6 @@ void menuPrintFromSource(void)
     {
       update = 0;
 
-      Scroll_CreatePara(&titleScroll, (uint8_t *)infoFile.title, &titleRect);
-      GUI_SetBkColor(infoSettings.title_bg_color);
-      GUI_ClearRect(0, 0, LCD_WIDTH, TITLE_END_Y);
-      GUI_SetBkColor(infoSettings.bg_color);
-
       if (list_mode != true)
       {
         printIconItems.title.address = (uint8_t *)infoFile.title;
@@ -300,8 +289,13 @@ void menuPrintFromSource(void)
       else
       {
         listViewCreate((LABEL){.address = (uint8_t *)infoFile.title}, NULL, infoFile.folderCount + infoFile.fileCount,
-                       infoFile.cur_page, false, NULL, gocdeListDraw, printPageIndexChanged);
+                       &infoFile.cur_page, false, NULL, gocdeListDraw);
       }
+
+      Scroll_CreatePara(&titleScroll, (uint8_t *)infoFile.title, &titleRect);
+      GUI_SetBkColor(infoSettings.title_bg_color);
+      GUI_ClearRect(0, 0, LCD_WIDTH, TITLE_END_Y);
+      GUI_SetBkColor(infoSettings.bg_color);
     }
 
     #ifdef SD_CD_PIN
