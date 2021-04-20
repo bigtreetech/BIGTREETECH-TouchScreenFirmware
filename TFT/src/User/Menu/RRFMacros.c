@@ -14,24 +14,15 @@ extern SCROLL titleScroll;
 extern const GUI_RECT titleRect;
 
 //Scan files in RRF
-bool scaninfoFilesFs(void)
+bool scanInfoFilesFs(void)
 {
   clearInfoFile();
-  char *ret = request_M20_macros(infoFile.title);
-  if (strlen(ret) <= 3)
-    return false;
-
-  char *data = malloc(strlen(ret) + 1);
-  strcpy(data, ret);
-  clearRequestCommandInfo();
-  char s[3];
-
-  strcpy(s, ","); // filenames containing "," will break
+  char *data = request_M20_macros(infoFile.title);
 
   data = strtok(data, "]"); // to end of Array
 
-  char *line = strtok(strstr(data, "files\":[") + 8, s);
-  for (; line != NULL; line = strtok(NULL, s))
+  char *line = strtok(strstr(data, "files\":[") + 8, ",");
+  for (; line != NULL; line = strtok(NULL, ","))
   {
     char *pline = line + 1;
 
@@ -87,8 +78,8 @@ bool scaninfoFilesFs(void)
       }
     }
   }
-  free(data);
-  return true;
+
+  clearRequestCommandInfo();
 }
 
 void runMacro(void)
@@ -114,6 +105,7 @@ void macroListDraw(LISTITEM * item, uint16_t index, uint8_t itemPos)
     item->icon = CHARICON_FOLDER;
     item->titlelabel.index = LABEL_DYNAMIC;
     item->itemType = LIST_LABEL;
+
     setDynamicLabel(itemPos, infoFile.folder[index]);
   }
   else if (index < (infoFile.fileCount + infoFile.folderCount))
@@ -122,6 +114,7 @@ void macroListDraw(LISTITEM * item, uint16_t index, uint8_t itemPos)
     item->icon = CHARICON_FILE;
     item->titlelabel.index = LABEL_DYNAMIC;
     item->itemType = LIST_LABEL;
+
     if (infoFile.source == BOARD_SD)
       setDynamicLabel(itemPos, infoFile.Longfile[index - infoFile.folderCount]);
     else
@@ -134,20 +127,12 @@ void menuCallMacro(void)
 {
   uint16_t key_num = KEY_IDLE;
   uint8_t update = 1;
-  char pageTitle[40];
   infoFile.source = BOARD_SD;
-
-  sprintf(pageTitle, "<%s> %s", textSelect(LABEL_MACROS), infoFile.title);
 
   GUI_Clear(BACKGROUND_COLOR);
   GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, textSelect(LABEL_LOADING));
 
-  if (scaninfoFilesFs() != true)
-  {
-    GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, textSelect(labelVolumeError[infoFile.source]));
-    Delay_ms(1000);
-    infoMenu.cur--;
-  }
+  scanInfoFilesFs();
 
   while (infoMenu.menu[infoMenu.cur] == menuCallMacro)
   {
@@ -170,7 +155,7 @@ void menuCallMacro(void)
         else
         {
           ExitDir();
-          scaninfoFilesFs();
+          scanInfoFilesFs();
           update = 1;
         }
         break;
@@ -185,7 +170,7 @@ void menuCallMacro(void)
           {
             if (EnterDir(infoFile.folder[key_num]) == false)
               break;
-            scaninfoFilesFs();
+            scanInfoFilesFs();
             update = 1;
             infoFile.cur_page = 0;
           }
@@ -197,8 +182,8 @@ void menuCallMacro(void)
             if (EnterDir(infoFile.file[key_num - infoFile.folderCount]) == false)
               break;
 
-            char buf[89];
-            sprintf(buf, "Do you want to start %.65s?\n", infoFile.title);
+            char buf[93];
+            sprintf(buf, "Do you want to start:\n %.65s?\n", infoFile.title);
             setDialogText(LABEL_INFO, (uint8_t *)buf, LABEL_CONFIRM, LABEL_CANCEL);
             showDialog(DIALOG_TYPE_QUESTION, runMacro, ExitDir, NULL);
           }
@@ -210,13 +195,11 @@ void menuCallMacro(void)
     {
       update = 0;
 
-      sprintf(pageTitle, "<%s> %s", textSelect(LABEL_MACROS), infoFile.title);
-
-      listViewCreate((LABEL){.address = (uint8_t *)pageTitle}, NULL, infoFile.folderCount + infoFile.fileCount,
+      listViewCreate((LABEL){.address = (uint8_t *)infoFile.title}, NULL, infoFile.folderCount + infoFile.fileCount,
                        &infoFile.cur_page, false, NULL, macroListDraw);
 
       // set scrolling title text
-      Scroll_CreatePara(&titleScroll, (uint8_t *)pageTitle, &titleRect);
+      Scroll_CreatePara(&titleScroll, (uint8_t *)infoFile.title, &titleRect);
       GUI_SetBkColor(infoSettings.title_bg_color);
       GUI_ClearRect(0, 0, LCD_WIDTH, TITLE_END_Y);
       GUI_SetBkColor(infoSettings.bg_color);
