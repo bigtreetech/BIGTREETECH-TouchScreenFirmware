@@ -17,6 +17,8 @@ Important information related to BigTreeTech's TFT touchscreen 3D printer contro
 
 <!-- omit in toc -->
 
+
+
 ## Table of Contents
 
 - [Supported TFT's](#supported-tft's)
@@ -47,6 +49,8 @@ Important information related to BigTreeTech's TFT touchscreen 3D printer contro
 
   
 
+
+
 ## Supported TFT's
 
 Only the TFT's listed below are currently supported. Trying to install the firmware on a TFT which is not supported can harm the hardware.
@@ -66,6 +70,8 @@ BTT_TFT70_V3.0
 MKS_TFT28_V3.0 and V4.0
 
 MKS_TFT32_V1.3 and V1.4
+
+
 
 
 
@@ -147,6 +153,8 @@ Z_STEPPER_AUTO_ALIGN (in Configuration_adv.h)
 
 
 
+
+
 ## Connect the TFT to the Mainboard
 
 **Do the following, to be able to use the touchmode of your screen.** 
@@ -169,12 +177,16 @@ C: In case you have an **"E3" mainboard** which provides a **single EXP connecto
 
 This chart has been provided by user Thomas White
 
+
+
 ## Menus
 
 |                    Status Screen DISABLED                    |                    Status Screen ENABLED                     |
 | :----------------------------------------------------------: | :----------------------------------------------------------: |
 | ![status screen 0](https://user-images.githubusercontent.com/54359396/103319145-09035b80-4a31-11eb-91d0-dd761a48b6f5.png) | ![Unified Material Main Screen](https://user-images.githubusercontent.com/54359396/98742038-03cd4d00-23ae-11eb-9552-36dc02fe66f4.png) |
 | In config.ini define: General Settings<br/>Enable Status Screen<br/># Select the Main Screen flavour<br/># Options: [Enable: 1, Disable: 0]<br/>**status_screen: 0** | In config.ini define: General Settings<br/>Enable Status Screen<br/># Select the Main Screen flavour<br/># Options: [Enable: 1, Disable: 0]<br/>**status_screen: 1** |
+
+
 
 
 
@@ -189,6 +201,8 @@ This chart has been provided by user Thomas White
 | :----------------------------------------------------------: | :----------------------------------------------------------: |
 | ![Hybrid Red Menu Material Mainscreen](https://user-images.githubusercontent.com/54359396/98869176-a995c000-2471-11eb-94da-a0bc41abf3e9.png) | ![Monochrome TFT35](https://user-images.githubusercontent.com/54359396/110254523-d5dccb80-7f8f-11eb-86a5-2d52ecd7ca4d.png) |
 | Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update - Hybrid Red Menu Material theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update/THEME_Hybrid%20Red%20Menu%20Material%20theme) folder | Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update - Hybrid Mono Menu Material theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update/THEME_Hybrid%20Mono%20Menu%20Material%20theme) folder |
+
+
 
 
 
@@ -243,6 +257,8 @@ Fonts and icons folder structure:
 
 
 
+
+
 ## Update Process shown on TFT Screen
 
 A successful update looks like this on the screen:
@@ -264,6 +280,7 @@ After the update is done and the files are renamed, it is possible to reuse them
 **step3:** Remove the SD card from the TFT and restart the printer.
 
 Tip: Format the SD card after the firmware update in case you would like to print from it.
+
 
 
 
@@ -297,6 +314,8 @@ To update the Firmware configuration:
    "Reset default settings ..."
 
 7. Restart the printer to finish the update
+
+
 
 
 
@@ -342,6 +361,8 @@ default_envs = BIGTREE_TFT35_V3_0</pre></li>
 
 Tip: In case there is a problem compiling the TFT firmware try to restart VSC. If this does not help and you are using macOS, delete the **packages** and **platforms** folder which you can find here: /Users/***username***/.platformio/.
 
+
+
 ## Troubleshooting
 
 **In case the upload of a new firmware failed**
@@ -358,9 +379,13 @@ In case the screen remains black or the brightness is not stable, the screen doe
 
 
 
+
+
 ## Version History
 
 See [BIGTREETECH-TouchScreenFirmware/releases](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/releases) for a complete version history.
+
+
 
 
 
