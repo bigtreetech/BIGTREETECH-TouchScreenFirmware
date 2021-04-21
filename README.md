@@ -89,69 +89,69 @@ In order the TFT firmware is able to provide all of its functionalities/features
 
 **General options:**
 
-EEPROM_SETTINGS (in Configuration.h)
+`EEPROM_SETTINGS` (in Configuration.h)
 
-AUTO_REPORT_TEMPERATURES (in Configuration_adv.h)
+`AUTO_REPORT_TEMPERATURES` (in Configuration_adv.h)
 
-M115_GEOMETRY_REPORT (in Configuration_adv.h)
+`M115_GEOMETRY_REPORT` (in Configuration_adv.h)
 
-M114_DETAIL (in Configuration_adv.h)
+`M114_DETAIL` (in Configuration_adv.h)
 
-REPORT_FAN_CHANGE (in Configuration_adv.h)
+`REPORT_FAN_CHANGE` (in Configuration_adv.h)
 
 
 
 **Options to support printing from onboard SD:**
 
-SDSUPPORT (in Configuration.h)
+`SDSUPPORT` (in Configuration.h)
 
-LONG_FILENAME_HOST_SUPPORT (in Configuration_adv.h)
+`LONG_FILENAME_HOST_SUPPORT` (in Configuration_adv.h)
 
-AUTO_REPORT_SD_STATUS (in Configuration_adv.h)
+`AUTO_REPORT_SD_STATUS` (in Configuration_adv.h)
 
-SDCARD_CONNECTION ONBOARD (in Configuration_adv.h)
+`SDCARD_CONNECTION ONBOARD` (in Configuration_adv.h)
 
 
 
 **Options to support dialog with host:**
 
-EMERGENCY_PARSER (in Configuration_adv.h)
+`EMERGENCY_PARSER` (in Configuration_adv.h)
 
-SERIAL_FLOAT_PRECISION 4 (in Configuration_adv.h)
+`SERIAL_FLOAT_PRECISION 4` (in Configuration_adv.h)
 
-HOST_ACTION_COMMANDS (in Configuration_adv.h)
+`HOST_ACTION_COMMANDS` (in Configuration_adv.h)
 
-HOST_PROMPT_SUPPORT (in Configuration_adv.h)
+`HOST_PROMPT_SUPPORT` (in Configuration_adv.h)
 
 
 
 **Options to support M600 with host & (Un)Load menu: (Options to support dialog with host as pre requisite)**
 
-NOZZLE_PARK_FEATURE (in Configuration.h)
+`NOZZLE_PARK_FEATURE` (in Configuration.h)
 
-ADVANCED_PAUSE_FEATURE (in Configuration_adv.h)
+`ADVANCED_PAUSE_FEATURE` (in Configuration_adv.h)
 
-PARK_HEAD_ON_PAUSE (in Configuration_adv.h)
+`PARK_HEAD_ON_PAUSE` (in Configuration_adv.h)
 
-FILAMENT_LOAD_UNLOAD_GCODES (in Configuration_adv.h)
+`FILAMENT_LOAD_UNLOAD_GCODES` (in Configuration_adv.h)
 
 
 
 **Options to support Babystep menu:**
 
-BABYSTEPPING (in Configuration_adv.h)
+`BABYSTEPPING` (in Configuration_adv.h)
 
 
 
 **Options to support repeatability test to test probe accuracy (M48):**
 
-Z_MIN_PROBE_REPEATABILITY_TEST (in Configuration.h)
+`Z_MIN_PROBE_REPEATABILITY_TEST` (in Configuration.h)
 
 
 
 **Options to support alignment of multiple Z steppers using a bed probe (G34):**
 
-Z_STEPPER_AUTO_ALIGN (in Configuration_adv.h)
+`Z_STEPPER_AUTO_ALIGN` (in Configuration_adv.h)
 
 
 
@@ -171,9 +171,9 @@ In case one of the three points above is not done right, "No printer attached" w
 
 A: In case your TFT does **not** have an EXP connector at all (TFT28 v1 for example), you can not use the Marlin emulator mode.
 
-B: In case your mainboard provides **EXP1 and EXP2**, you have to connect 2 ribbon cables connecting EXP1 and EXP2 of the mainboard to EXP1 and EXP2 of the TFT. In the Marlin firmware of your mainboard, make sure that **ONLY** the "REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER" is activated in Configuration.h and that all other controllers are **De**activated (especially the "CR10_STOCKDISPLAY").
+B: In case your mainboard provides **EXP1 and EXP2**, you have to connect 2 ribbon cables connecting EXP1 and EXP2 of the mainboard to EXP1 and EXP2 of the TFT. In the Marlin firmware of your mainboard, make sure that **ONLY** the "`REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER`" is activated in Configuration.h and that all other controllers are **De**activated (especially the "`CR10_STOCKDISPLAY`").
 
-C: In case you have an **"E3" mainboard** which provides a **single EXP connector**, you have to connect 1 ribbon cable connecting EXP of the mainboard to **EXP3** of the TFT. In case your TFT does **not** provide an EXP3 connector but only two 10pin connectors (TFT24 v1.1 for example) you will need a "Y-split" cable with one 10pin connector on one side (for the mainboard) and two 10pin connectors on the other side (for the TFT). In the Marlin firmware of your mainboard, make sure that **ONLY** the "CR10_STOCKDISPLAY" is activated in Configuration.h and that all other controllers are **De**activated (especially the "REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER").
+C: In case you have an **"E3" mainboard** which provides a **single EXP connector**, you have to connect 1 ribbon cable connecting EXP of the mainboard to **EXP3** of the TFT. In case your TFT does **not** provide an EXP3 connector but only two 10pin connectors (TFT24 v1.1 for example) you will need a "Y-split" cable with one 10pin connector on one side (for the mainboard) and two 10pin connectors on the other side (for the TFT). In the Marlin firmware of your mainboard, make sure that **ONLY** the "`CR10_STOCKDISPLAY`" is activated in Configuration.h and that all other controllers are **De**activated (especially the "`REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER`").
 
 ![Table](https://user-images.githubusercontent.com/54359396/115434067-8cc39c80-a208-11eb-82f4-19e1192b4bf9.png)
 
