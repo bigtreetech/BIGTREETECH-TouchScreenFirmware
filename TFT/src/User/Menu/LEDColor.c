@@ -149,16 +149,19 @@ const LED_VECT ledRed =   {0xFF, 0x00, 0x00, 0xFF, 0xFF, 0xFF};
 const LED_VECT ledGreen = {0x00, 0xFF, 0x00, 0xFF, 0xFF, 0xFF};
 const LED_VECT ledBlue =  {0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF};
 const LED_VECT ledWhite = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
-const LED_VECT ledOff =   {0x00, 0x00, 0x00, 0x00, 0x00, 0xFF};
+const LED_VECT ledOff =   {0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF};
 
-LED_VECT ledValue = {0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF};
+LED_VECT ledValue = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
 uint8_t ledPage = 0;
 uint8_t ledIndex = 0;
 
-void ledSendValue(const LED_VECT * led)
+void ledSendValue(const LED_VECT * led, bool skipNeopixel)
 {
-  storeCmd("M150 R%d U%d B%d W%d P%d I%d\n", (*led)[0], (*led)[1], (*led)[2], (*led)[3], (*led)[4], (*led)[5]);
+  if (skipNeopixel)
+    storeCmd("M150 R%d U%d B%d W%d\n", (*led)[0], (*led)[1], (*led)[2], (*led)[3]);
+  else
+    storeCmd("M150 R%d U%d B%d W%d P%d I%d\n", (*led)[0], (*led)[1], (*led)[2], (*led)[3], (*led)[4], (*led)[5]);
 }
 
 void ledGetValue(LED_VECT * led)
@@ -492,7 +495,7 @@ void menuLEDColorCustom(void)
 
     if ((sendingNeeded && nextScreenUpdate(LED_UPDATE_TIME)) || updateForced)
     {
-      ledSendValue(&ledValue);
+      ledSendValue(&ledValue, false);
 
       updateForced = sendingNeeded = false;
     }
@@ -558,7 +561,7 @@ void menuLEDColor(void)
 
       // turn off
       case KEY_ICON_6:
-        ledSendValue(&ledOff);
+        ledSendValue(&ledOff, true);
         break;
 
       case KEY_ICON_7:
@@ -570,7 +573,7 @@ void menuLEDColor(void)
     }
 
     if (key_num <= KEY_ICON_5)  // change LED color
-      ledSendValue(&ledValue);
+      ledSendValue(&ledValue, false);
 
     loopProcess();
   }

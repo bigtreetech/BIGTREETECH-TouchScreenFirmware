@@ -183,28 +183,31 @@ long request_M23_M36(char *filename)
 /**
  * Start o resume print
  **/
-void request_M24(int pos)
+bool request_M24(int pos)
 {
   if (pos == 0)
     mustStoreCmd("M24\n");
   else
     mustStoreCmd("M24 S%d\n", pos);
+  return true;
 }
 
 /**
  * Abort print
  **/
-void request_M524(void)
+bool request_M524(void)
 {
   mustStoreCmd("M524\n");
+  return true;
 }
 
 /**
  * Pause print
  **/
-void request_M25(void)
+bool request_M25(void)
 {
   mustStoreCmd("M25 P1\n");
+  return true;
 }
 
 /**
@@ -212,97 +215,105 @@ void request_M25(void)
  * ->  SD printing byte 123/12345
  * ->  Not SD printing
  **/
-void request_M27(int seconds)
+bool request_M27(int seconds)
 {
   mustStoreCmd("M27 S%d\n", seconds);
+  return true;
 }
 
 /**
  * Park Head / Pause Print
  **/
-void request_M125(void)
+bool request_M125(void)
 {
   mustStoreCmd("M125 P1\n");
+  return true;
 }
 
 /**
  * Stop or Unconditional stop in reprap firmware
  **/
-void request_M0(void)
+bool request_M0(void)
 {
-  mustStoreCmd("M0\n");
+  mustStoreCmd("M0 \n");
+  return true;
 }
 
-// void send_and_wait_M20(const char* command)
-// {
-//   uint32_t timeout = ((uint32_t)0x000FFFFF);
-//   uint32_t waitloops = ((uint32_t)0x00000006);
+void send_and_wait_M20(const char* command)
+{
+  uint32_t timeout = ((uint32_t)0x000FFFFF);
+  uint32_t waitloops = ((uint32_t)0x00000006);
 
-//   resetRequestCommandInfo("{", "}", "Error:", NULL, NULL);
-//   mustStoreCmd(command);
-//   while ((strstr(requestCommandInfo.cmd_rev_buf, "dir") == NULL) && (waitloops > 0x00))  //(!find_part("dir"))
-//   {
-//     waitloops--;
-//     timeout = ((uint32_t)0x0000FFFF);
-//     while ((!requestCommandInfo.done) && (timeout > 0x00))
-//     {
-//       loopBackEnd();
-//       timeout--;
-//     }
-//     if (timeout <= 0x00)
-//     {
-//       uint16_t wIndex = (dmaL1Data[SERIAL_PORT].wIndex == 0) ? ACK_MAX_SIZE : dmaL1Data[SERIAL_PORT].wIndex;
-//       if (dmaL1Data[SERIAL_PORT].cache[wIndex - 1] == '}')  // \n fehlt
-//       {
-//         BUZZER_PLAY(sound_notify);  // for DEBUG
-//         dmaL1Data[SERIAL_PORT].cache[wIndex] = '\n';
-//         dmaL1Data[SERIAL_PORT].cache[wIndex + 1] = 0;
-//         dmaL1Data[SERIAL_PORT].wIndex++;
-//         infoHost.rx_ok[SERIAL_PORT] = true;
-//       }
-//     }
-//     if (dmaL1NotEmpty(SERIAL_PORT) && !infoHost.rx_ok[SERIAL_PORT])
-//     {
-//       infoHost.rx_ok[SERIAL_PORT] = true;
-//     }
-//     if (strstr(requestCommandInfo.cmd_rev_buf, "dir") == NULL)
-//     {
-//       clearRequestCommandInfo();
-//       resetRequestCommandInfo("{", "}", "Error:", NULL, NULL);
-//       mustStoreCmd("\n");
-//     }
-//   }
-//   return;  // requestCommandInfo.cmd_rev_buf;
-// }
+  resetRequestCommandInfo("{", "}", "Error:", NULL, NULL);
+  mustStoreCmd(command);
+  while ((strstr(requestCommandInfo.cmd_rev_buf, "dir") == NULL) && (waitloops > 0x00))  //(!find_part("dir"))
+  {
+    waitloops--;
+    timeout = ((uint32_t)0x0000FFFF);
+    while ((!requestCommandInfo.done) && (timeout > 0x00))
+    {
+      loopBackEnd();
+      timeout--;
+    }
+    if (timeout <= 0x00)
+    {
+      uint16_t wIndex = (dmaL1Data[SERIAL_PORT].wIndex == 0) ? ACK_MAX_SIZE : dmaL1Data[SERIAL_PORT].wIndex;
+      if (dmaL1Data[SERIAL_PORT].cache[wIndex - 1] == '}')  // \n fehlt
+      {
+        BUZZER_PLAY(sound_notify);  // for DEBUG
+        dmaL1Data[SERIAL_PORT].cache[wIndex] = '\n';
+        dmaL1Data[SERIAL_PORT].cache[wIndex + 1] = 0;
+        dmaL1Data[SERIAL_PORT].wIndex++;
+        infoHost.rx_ok[SERIAL_PORT] = true;
+      }
+    }
+    if (dmaL1NotEmpty(SERIAL_PORT) && !infoHost.rx_ok[SERIAL_PORT])
+    {
+      infoHost.rx_ok[SERIAL_PORT] = true;
+    }
+    if (strstr(requestCommandInfo.cmd_rev_buf, "dir") == NULL)
+    {
+      clearRequestCommandInfo();
+      resetRequestCommandInfo("{", "}", "Error:", NULL, NULL);
+      mustStoreCmd("\n");
+    }
+  }
+  return;  // requestCommandInfo.cmd_rev_buf;
+}
 
-// nextdir path must start with "macros"
 char *request_M20_macros(char *nextdir)
 {
-  resetRequestCommandInfo("{", "}", "Error:", NULL, NULL);
-
+  // set pause Flag
+  //infoHost.pauseGantry = true;
+  //waitPortReady();
+  clearRequestCommandInfo();
   char command[256];
-  snprintf(command, 256, "M20 S2 P\"/%s\"\n", nextdir);
-  mustStoreCmd(command);
-
-  // Wait for response
-  while (!requestCommandInfo.done)
+  if ((nextdir == NULL) || strchr(nextdir, '/') == NULL)
   {
-    loopProcess();
+    strncpy(command, "M20 S2 P\"/macros\"\n", 256);
   }
-  //clearRequestCommandInfo();  //shall be call after copying the buffer ...
+  else
+  {
+    snprintf(command, 256, "M20 S2 P\"/macros/%s\"\n", nextdir);
+  }
+  // Send GCode and wait for responce
+  send_and_wait_M20(command);
+  // reset pause Flag
+  //infoHost.pauseGantry = false;
+  //GUI_Clear(BACKGROUND_COLOR);
   return requestCommandInfo.cmd_rev_buf;
 }
 
-void request_M98(char *filename)
+bool request_M98(char *filename)
 {
   char command[256];
-  snprintf(command, 256, "M98 P/%s\n", filename);
-  resetRequestCommandInfo("", "ok", "Warning:", NULL, NULL);
+  snprintf(command, 256, "M98 P/macros/%s\n", filename);
+  resetRequestCommandInfo("", "ok", "Warning:", "Warning:", "Warning:");
   mustStoreCmd(command);
   // Wait for response
   while (!requestCommandInfo.done)
   {
     loopProcess();
   }
-  clearRequestCommandInfo();
+  return true;
 }
