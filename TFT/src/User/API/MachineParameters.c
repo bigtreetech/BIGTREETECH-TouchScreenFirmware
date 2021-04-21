@@ -45,7 +45,7 @@ const VAL_TYPE parameter_val_type[PARAMETERS_COUNT][STEPPER_COUNT] = {
   {VAL_TYPE_INT,          VAL_TYPE_INT,         VAL_TYPE_INT,          VAL_TYPE_INT,      VAL_TYPE_INT},    //Current
   {VAL_TYPE_NEG_INT,      VAL_TYPE_NEG_INT,     VAL_TYPE_NEG_INT},                                          //bump Sensitivity
   {VAL_TYPE_INT,          VAL_TYPE_INT,         VAL_TYPE_INT,          VAL_TYPE_INT,      VAL_TYPE_INT},    //TMC Hybrid Threshold Speed
-  {VAL_TYPE_INT,          VAL_TYPE_INT,         VAL_TYPE_INT,          VAL_TYPE_INT,      VAL_TYPE_INT},    //TMC StealthChop 
+  {VAL_TYPE_INT,          VAL_TYPE_INT,         VAL_TYPE_INT,          VAL_TYPE_INT,      VAL_TYPE_INT},    //TMC StealthChop
   {VAL_TYPE_NEG_FLOAT},                                                                                     //MBL offset
 };
 
@@ -54,7 +54,7 @@ const char *const dualStepperParameter_cmd[4][AXIS_NUM] = {
   {"M906 I1 X%.0f\n",   "M906 I1 Y%.0f\n",   "M906 I1 Z%.0f\n"},    //Current
   {"M914 I1 X%.0f\n",   "M914 I1 Y%.0f\n",   "M914 I1 Z%.0f\n"},    //bump Sensitivity
   {"M913 I1 X%.0f\n",   "M913 I1 Y%.0f\n",   "M913 I1 Z%.0f\n"},    //TMC Hybrid Threshold Speed
-  {"M569 S%.0f I1 X\n", "M569 S%.0f I1 Y\n", "M569 S%.0f I1 Z\n"},  //TMC StealthChop 
+  {"M569 S%.0f I1 X\n", "M569 S%.0f I1 Y\n", "M569 S%.0f I1 Z\n"},  //TMC StealthChop
 };
 
 PARAMETERS infoParameters;
@@ -166,7 +166,7 @@ float getParameter(PARAMETER_NAME name, uint8_t index)
       return infoParameters.HybridThreshold[index];
 
     case P_STEALTH_CHOP:
-      return infoParameters.StealthChop[index]; 
+      return infoParameters.StealthChop[index];
 
     case P_MBL_OFFSET:
       return infoParameters.MblOffset[index];
@@ -258,7 +258,7 @@ void setParameter(PARAMETER_NAME name, uint8_t index, float val)
       break;
 
     case P_STEALTH_CHOP:
-      infoParameters.StealthChop[index] = val; 
+      infoParameters.StealthChop[index] = val;
       break;
 
     case P_MBL_OFFSET:
