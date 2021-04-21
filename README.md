@@ -31,6 +31,8 @@ Important information related to BigTreeTech's TFT touchscreen 3D printer contro
 
 - [Update TFT Firmware](#update-tft-firmware)
 
+- [Calibrate the Screen](#calibrate-the-screen)
+
 - [Configuration using config.ini](#configuration-using-config.ini)
 
 - [Customisation](#customisation)
@@ -282,6 +284,10 @@ After the update is done and the files are renamed, it is possible to reuse them
 Tip: Format the SD card after the firmware update in case you would like to print from it.
 
 
+
+## Calibrate the Screen
+
+Sometimes a calibration will be executed automatically after a firmware update, showing a white screen with a red dot in the upper right corner and the text: Touch Screen Calibration - Please click on the red dot. To calibrate the screen press with your finger or a stylus the red dot in the upper left corner, then the red dot in the upper right corner and then  the red dot in the lower right corner. Even the screen asks you to press the red dot, press the black dot in the middle of the screen to finish the calibration. Repeat the process in case the message: "Adjustment failed, please try again" is shown
 
 
 
