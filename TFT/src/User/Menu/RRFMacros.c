@@ -14,7 +14,7 @@ extern SCROLL titleScroll;
 extern const GUI_RECT titleRect;
 
 //Scan files in RRF
-bool scanInfoFilesFs(void)
+void scanInfoFilesFs(void)
 {
   clearInfoFile();
   char *data = request_M20_macros(infoFile.title);
