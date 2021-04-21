@@ -10,30 +10,19 @@
 
 /************************************************************************/
 
-LISTITEMS * macroListItems;
-const int16_t labelMacroError[] = {LABEL_READ_TFTSD_ERROR, LABEL_READ_U_DISK_ERROR, LABEL_READ_ONBOARDSD_ERROR};
 extern SCROLL titleScroll;
 extern const GUI_RECT titleRect;
 
-//Scan files in RRF
-bool scaninfoFilesFs(void)
+// Scan files in RRF
+void scanInfoFilesFs(void)
 {
   clearInfoFile();
-  char *ret = request_M20_macros(infoFile.title);
-  if (strlen(ret) <= 3)
-    return false;
-
-  char *data = malloc(strlen(ret) + 1);
-  strcpy(data, ret);
-  clearRequestCommandInfo();
-  char s[3];
-
-  strcpy(s, ","); // filenames containing "," will break
+  char *data = request_M20_macros(infoFile.title);
 
   data = strtok(data, "]"); // to end of Array
 
-  char *line = strtok(strstr(data, "files\":[") + 8, s);
-  for (; line != NULL; line = strtok(NULL, s))
+  char *line = strtok(strstr(data, "files\":[") + 8, ",");
+  for (; line != NULL; line = strtok(NULL, ","))
   {
     char *pline = line + 1;
 
@@ -89,8 +78,8 @@ bool scaninfoFilesFs(void)
       }
     }
   }
-  free(data);
-  return true;
+
+  clearRequestCommandInfo();
 }
 
 void runMacro(void)
@@ -106,70 +95,70 @@ void runMacro(void)
   Delay_ms(500);
 }
 
-//Draw Macro file list
-void macroListDraw(void)
+// Draw Macro file list
+void macroListDraw(LISTITEMS *pListItems)
 {
   uint8_t i = 0;
 
-  Scroll_CreatePara(&titleScroll, (uint8_t *)macroListItems->title.address, &titleRect);
+  Scroll_CreatePara(&titleScroll, (uint8_t *)pListItems->title.address, &titleRect);
   GUI_SetBkColor(infoSettings.title_bg_color);
   GUI_ClearRect(0, 0, LCD_WIDTH, TITLE_END_Y);
   GUI_SetBkColor(infoSettings.bg_color);
 
   for (i = 0; (i + infoFile.cur_page * LISTITEM_PER_PAGE < infoFile.folderCount) && (i < LISTITEM_PER_PAGE); i++) // folder
   {
-    macroListItems->items[i].icon = ICONCHAR_FOLDER;
+    pListItems->items[i].icon = ICONCHAR_FOLDER;
     setDynamicLabel(i, infoFile.folder[i + infoFile.cur_page * LISTITEM_PER_PAGE]);
-    macroListItems->items[i].titlelabel.index = LABEL_DYNAMIC;
-    menuDrawListItem(&macroListItems->items[i], i);
+    pListItems->items[i].titlelabel.index = LABEL_DYNAMIC;
+    menuDrawListItem(&pListItems->items[i], i);
   }
   for (; (i + infoFile.cur_page * LISTITEM_PER_PAGE < infoFile.fileCount + infoFile.folderCount) && (i < LISTITEM_PER_PAGE); i++) // gcode file
   {
-    macroListItems->items[i].icon = ICONCHAR_FILE;
+    pListItems->items[i].icon = ICONCHAR_FILE;
     setDynamicLabel(i, (infoFile.source == BOARD_SD) ? infoFile.Longfile[i + infoFile.cur_page * LISTITEM_PER_PAGE - infoFile.folderCount] : infoFile.file[i + infoFile.cur_page * LISTITEM_PER_PAGE - infoFile.folderCount]);
-    macroListItems->items[i].titlelabel.index = LABEL_DYNAMIC;
-    menuDrawListItem(&macroListItems->items[i], i);
+    pListItems->items[i].titlelabel.index = LABEL_DYNAMIC;
+    menuDrawListItem(&pListItems->items[i], i);
   }
 
   for (; (i < LISTITEM_PER_PAGE); i++) //background
   {
-    macroListItems->items[i].icon = ICONCHAR_BACKGROUND;
-    macroListItems->items[i].titlelabel.index = LABEL_BACKGROUND;
-    menuDrawListItem(&macroListItems->items[i], i);
+    pListItems->items[i].icon = ICONCHAR_BACKGROUND;
+    pListItems->items[i].titlelabel.index = LABEL_BACKGROUND;
+    menuDrawListItem(&pListItems->items[i], i);
   }
-  // set page up down button according to page count and current page
+  // Set page up down button according to page count and current page
   int t_pagenum = (infoFile.folderCount + infoFile.fileCount + (LISTITEM_PER_PAGE - 1)) / LISTITEM_PER_PAGE;
   if ((infoFile.folderCount + infoFile.fileCount) <= LISTITEM_PER_PAGE)
   {
-    macroListItems->items[5].icon = ICONCHAR_BACKGROUND;
-    macroListItems->items[6].icon = ICONCHAR_BACKGROUND;
+    pListItems->items[5].icon = ICONCHAR_BACKGROUND;
+    pListItems->items[6].icon = ICONCHAR_BACKGROUND;
   }
   else
   {
     if (infoFile.cur_page == 0)
     {
-      macroListItems->items[5].icon = ICONCHAR_BACKGROUND;
-      macroListItems->items[6].icon = ICONCHAR_PAGEDOWN;
+      pListItems->items[5].icon = ICONCHAR_BACKGROUND;
+      pListItems->items[6].icon = ICONCHAR_PAGEDOWN;
     }
     else if (infoFile.cur_page == (t_pagenum - 1))
     {
-      macroListItems->items[5].icon = ICONCHAR_PAGEUP;
-      macroListItems->items[6].icon = ICONCHAR_BACKGROUND;
+      pListItems->items[5].icon = ICONCHAR_PAGEUP;
+      pListItems->items[6].icon = ICONCHAR_BACKGROUND;
     }
     else
     {
-      macroListItems->items[5].icon = ICONCHAR_PAGEUP;
-      macroListItems->items[6].icon = ICONCHAR_PAGEDOWN;
+      pListItems->items[5].icon = ICONCHAR_PAGEUP;
+      pListItems->items[6].icon = ICONCHAR_PAGEDOWN;
     }
   }
-  menuDrawListItem(&macroListItems->items[5], 5);
-  menuDrawListItem(&macroListItems->items[6], 6);
+  menuDrawListItem(&pListItems->items[5], 5);
+  menuDrawListItem(&pListItems->items[6], 6);
 }
 
 // View and run macros stored in RRF firmware
 void menuCallMacro(void)
 {
-  LISTITEMS _macroListItems = {
+  LISTITEMS macroListItems = {
     // title
     LABEL_BACKGROUND,
     // icon                 ItemType    Item Title        item value text(only for custom value)
@@ -187,27 +176,16 @@ void menuCallMacro(void)
 
   KEY_VALUES key_num = KEY_IDLE;
   uint8_t update = 0;
-  char pageTitle[40];
-  macroListItems = &_macroListItems;
   infoFile.source = BOARD_SD;
 
-  sprintf(pageTitle, "<%s> %s", textSelect(LABEL_MACROS), infoFile.title);
-  _macroListItems.title.address = (uint8_t *)pageTitle;
+  macroListItems.title.address = infoFile.title;
 
   GUI_Clear(BACKGROUND_COLOR);
   GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, textSelect(LABEL_LOADING));
 
-  if (scaninfoFilesFs() == true)
-  {
-    menuDrawListPage(&_macroListItems);
-    macroListDraw();
-  }
-  else
-  {
-    GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, textSelect(labelMacroError[infoFile.source]));
-    Delay_ms(1000);
-    infoMenu.cur--;
-  }
+  scanInfoFilesFs();
+  menuDrawListPage(&macroListItems);
+  macroListDraw(&macroListItems);
 
   while (infoMenu.menu[infoMenu.cur] == menuCallMacro)
   {
@@ -246,7 +224,7 @@ void menuCallMacro(void)
         else
         {
           ExitDir();
-          scaninfoFilesFs();
+          scanInfoFilesFs();
           update = 1;
         }
         break;
@@ -262,7 +240,7 @@ void menuCallMacro(void)
           {
             if (EnterDir(infoFile.folder[key_num + start]) == false)
               break;
-            scaninfoFilesFs();
+            scanInfoFilesFs();
             update = 1;
             infoFile.cur_page = 0;
           }
@@ -274,8 +252,8 @@ void menuCallMacro(void)
             if (EnterDir(infoFile.file[key_num + start - infoFile.folderCount]) == false)
               break;
 
-            char buf[89];
-            sprintf(buf, "Do you want to start %.65s?\n", infoFile.title);
+            char buf[93];
+            sprintf(buf, "Do you want to start:\n %.65s?\n", infoFile.title);
             setDialogText(LABEL_INFO, (uint8_t *)buf, LABEL_CONFIRM, LABEL_CANCEL);
             showDialog(DIALOG_TYPE_QUESTION, runMacro, ExitDir, NULL);
           }
@@ -286,11 +264,9 @@ void menuCallMacro(void)
     if (update)
     {
       update = 0;
-      sprintf(pageTitle, "<%s> %s", textSelect(LABEL_MACROS), infoFile.title);
-      macroListDraw();
+      macroListDraw(&macroListItems);
     }
 
     loopProcess();
   }
 }
-

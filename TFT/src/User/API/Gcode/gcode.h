@@ -29,13 +29,13 @@ bool request_M21(void);
 char *request_M20(void);
 char *request_M33(char *filename);
 long request_M23_M36(char *filename);
-bool request_M24(int pos);
-bool request_M524(void);
-bool request_M25(void);
-bool request_M27(int seconds);
-bool request_M125(void);
-bool request_M0(void);
-bool request_M98(char *filename);
+void request_M24(int pos);
+void request_M524(void);
+void request_M25(void);
+void request_M27(int seconds);
+void request_M125(void);
+void request_M0(void);
+void request_M98(char *filename);
 char *request_M20_macros(char *dir);
 
 #endif
