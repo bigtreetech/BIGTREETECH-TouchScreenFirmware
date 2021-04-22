@@ -1,5 +1,5 @@
-#ifndef _LEDCOLOR_H_
-#define _LEDCOLOR_H_
+#ifndef _LCD_LED_COLOR_H_
+#define _LCD_LED_COLOR_H_
 
 #ifdef __cplusplus
 extern "C" {
