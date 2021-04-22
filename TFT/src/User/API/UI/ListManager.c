@@ -50,17 +50,20 @@ void listViewCreate(LABEL title, LISTITEM * items, uint16_t maxItems, uint16_t *
   menuDrawListPage(&listItems);
 }
 
+// Set/Update List view title
 void listViewSetTitle(LABEL title)
 {
   listItems.title = title;
   menuDrawTitle(labelGetAddress(&listItems.title));
 }
 
+// Get current displayed pade index
 uint8_t listViewGetCurPage(void)
 {
   return curPageIndex;
 }
 
+// display page at selected index
 void listViewSetCurPage(uint8_t curPage)
 {
   if(action_preparePage != NULL)
@@ -98,9 +101,10 @@ void listViewSetCurPage(uint8_t curPage)
   curPageIndex = curPage;
 }
 
+// open next page
 bool listViewNextPage(void)
 {
-  if (maxPageCount <= 1) return false;  // only 0 or 1 page, can't goto next page
+  if (maxPageCount <= 1) return false;                 // only 0 or 1 page, can't goto next page
   if (curPageIndex + 1 >= maxPageCount) return false;  // already last page
 
   // goto next page
@@ -114,6 +118,7 @@ bool listViewNextPage(void)
   return true;
 }
 
+// open previous page
 bool listViewPreviousPage(void)
 {
   if (maxPageCount <= 1) return false;  // only 0 or 1 page, can't goto previous page
@@ -130,16 +135,19 @@ bool listViewPreviousPage(void)
   return true;
 }
 
+// refresh list items
 void listViewRefreshPage(void)
 {
   menuRefreshListPage();
 }
 
+// refresh whole list menu
 void listViewRefreshMenu(void)
 {
   menuDrawListPage(&listItems);
 }
 
+// refresh selected list item
 void listViewRefreshItem(uint16_t item)
 {
   uint8_t cur_i = item % LISTITEM_PER_PAGE;
@@ -163,6 +171,7 @@ void listViewRefreshItem(uint16_t item)
   menuDrawListItem(&listItems.items[cur_i], cur_i);
 }
 
+// get index of selected item
 uint16_t listViewGetSelectedIndex(void)
 {
   KEY_VALUES key_num = menuKeyGetValue();
