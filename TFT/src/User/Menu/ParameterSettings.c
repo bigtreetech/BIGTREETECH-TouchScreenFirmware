@@ -64,7 +64,7 @@ void menuShowParameter(void)
     switch (cur_parameter)
     {
       case P_ACCELERATION:
-        parameter_menuitems[i].titlelabel = accel_disp_ID[i];
+        parameter_menuitems[i].titlelabel = accelDisplayID[i];
         break;
 
       case P_JERK:
@@ -75,19 +75,19 @@ void menuShowParameter(void)
         break;
 
       case P_JUNCTION_DEVIATION:
-        parameter_menuitems[i].titlelabel = junction_deviation_disp_ID[i];
+        parameter_menuitems[i].titlelabel = junctionDeviationDisplayID[i];
         break;
 
       case P_FWRETRACT:
-        parameter_menuitems[i].titlelabel = retract_disp_ID[i];
+        parameter_menuitems[i].titlelabel = retractDisplayID[i];
         break;
 
       case P_FWRECOVER:
-        parameter_menuitems[i].titlelabel = recover_disp_ID[i];
+        parameter_menuitems[i].titlelabel = recoverDisplayID[i];
         break;
 
       case P_AUTO_RETRACT:
-        parameter_menuitems[i].titlelabel = retract_auto_ID[i];
+        parameter_menuitems[i].titlelabel.index = LABEL_RETRACT_AUTO;
         break;
 
       case P_HOTEND_OFFSET:
