@@ -328,10 +328,10 @@ void ledDrawKeyboard(void)
     }
   }
 
-  // draw unicode string
-  DrawCharIcon(&ledKeyRect[LED_KEY_RESET], MIDDLE, ICONCHAR_RESET, false, 0);
-  DrawCharIcon(&ledKeyRect[LED_KEY_CANCEL], MIDDLE, ICONCHAR_CANCEL, false, 0);
-  DrawCharIcon(&ledKeyRect[LED_KEY_OK], MIDDLE, ICONCHAR_OK, false, 0);
+  // draw control icons
+  DrawCharIcon(&ledKeyRect[LED_KEY_RESET], CENTER, CHARICON_RESET, false, 0);
+  DrawCharIcon(&ledKeyRect[LED_KEY_CANCEL], CENTER, CHARICON_CANCEL, false, 0);
+  DrawCharIcon(&ledKeyRect[LED_KEY_OK], CENTER, CHARICON_OK, false, 0);
 
   // draw focus for current LED component
   ledDrawControl(ledIndex, true, true, false);

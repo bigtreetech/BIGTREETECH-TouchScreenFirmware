@@ -1,5 +1,5 @@
 #include "Numpad.h"
-#include "list_item.h"
+#include "CharIcon.h"
 
 #define SKEYHEIGHT (LCD_HEIGHT-ICON_START_Y)/4
 #define SKEYWIDTH  LCD_WIDTH/4
@@ -7,23 +7,6 @@
 #define KEY_NUM       16
 #define FLOAT_BUFLONG 9
 #define INT_BUFLONG   6
-
-typedef enum
-{
-  SKEY_0 = 0,
-  SKEY_1,
-  SKEY_2,
-  SKEY_3,
-  SKEY_4,
-  SKEY_5,
-  SKEY_6,
-  SKEY_7,
-  SKEY_8,
-  SKEY_9,
-  SKEY_10,
-  SKEY_11,
-  SKEY_IDLE = IDLE_TOUCH,
-}SKEY_VALUES;
 
 typedef enum
 {
