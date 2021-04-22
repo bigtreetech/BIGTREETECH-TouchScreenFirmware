@@ -33,6 +33,7 @@ typedef enum
 
 // colors
 #define KB_FONT_COLOR     infoSettings.font_color
+#undef KB_BG_COLOR
 #define KB_BG_COLOR       infoSettings.bg_color
 #define KB_BORDER_COLOR   infoSettings.list_border_color
 #define KB_BORDER_COLOR_2 0x4b0d
