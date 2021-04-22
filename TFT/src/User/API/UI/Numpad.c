@@ -170,10 +170,10 @@ void Draw_keyboard(uint8_t * title, bool NumberOnly, bool negative)
 
     setLargeFont(true);
 
-    DrawCharIcon(&rect_of_numkey[NUM_KEY_OK], CENTER, CHARICON_OK, false, 0);
-    DrawCharIcon(&rect_of_numkey[NUM_KEY_DEL], CENTER, CHARICON_POINT_LEFT, false, 0);
-    DrawCharIcon(&rect_of_numkey[NUM_KEY_EXIT], CENTER, CHARICON_CANCEL, false, 0);
-    DrawCharIcon(&rect_of_numkey[NUM_KEY_RESET], MIDDLE, CHARICON_RESET, false, 0);
+    drawCharIcon(&rect_of_numkey[NUM_KEY_OK], CENTER, CHARICON_OK, false, 0);
+    drawCharIcon(&rect_of_numkey[NUM_KEY_DEL], CENTER, CHARICON_POINT_LEFT, false, 0);
+    drawCharIcon(&rect_of_numkey[NUM_KEY_EXIT], CENTER, CHARICON_CANCEL, false, 0);
+    drawCharIcon(&rect_of_numkey[NUM_KEY_RESET], MIDDLE, CHARICON_RESET, false, 0);
 
   #endif // KEYBOARD_MATERIAL_THEME
 

@@ -181,7 +181,7 @@ uint8_t ledGetComponentIndex(uint8_t index)
   return ledPage * PAGE_ITEMS + index;
 }
 
-uint8_t ledGetComponentValue(uint8_t index)
+static inline uint8_t ledGetComponentValue(uint8_t index)
 {
   return ledValue[ledGetComponentIndex(index)];
 }
@@ -329,9 +329,9 @@ void ledDrawKeyboard(void)
   }
 
   // draw control icons
-  DrawCharIcon(&ledKeyRect[LED_KEY_RESET], CENTER, CHARICON_RESET, false, 0);
-  DrawCharIcon(&ledKeyRect[LED_KEY_CANCEL], CENTER, CHARICON_CANCEL, false, 0);
-  DrawCharIcon(&ledKeyRect[LED_KEY_OK], CENTER, CHARICON_OK, false, 0);
+  drawCharIcon(&ledKeyRect[LED_KEY_RESET], CENTER, CHARICON_RESET, false, 0);
+  drawCharIcon(&ledKeyRect[LED_KEY_CANCEL], CENTER, CHARICON_CANCEL, false, 0);
+  drawCharIcon(&ledKeyRect[LED_KEY_OK], CENTER, CHARICON_OK, false, 0);
 
   // draw focus for current LED component
   ledDrawControl(ledIndex, true, true, false);

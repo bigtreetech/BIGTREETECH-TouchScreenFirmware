@@ -21,7 +21,6 @@ void setDynamicTextValue(uint8_t i, char * txt);  //set list item value to any t
 char * getDynamicTextValue(uint8_t i);            //get the custom text of the list item value
 void setDynamicValue(uint8_t i, float value);     //set list item value to any numeric value (upto 7 digits)
 
-void DrawCharIcon(const GUI_RECT * rect,ALIGN_POSITION iconalign, uint16_t iconindex, bool drawBgColor, uint16_t btn_color);
 void ListItem_Display(const GUI_RECT * rect, uint8_t position, const LISTITEM * curitem, bool pressed);
 void ListMenuSetItem(const LISTITEM * menuItem, uint8_t position);
 void draw_itemtitle(GUI_POINT pos, LABEL label, uint8_t position, int textarea_width);

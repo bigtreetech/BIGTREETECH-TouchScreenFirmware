@@ -572,6 +572,69 @@ void  GUI_FillCircle(uint16_t x0, uint16_t y0, uint16_t r)
   }
 }
 
+// get the text starting point on screen based on rectangle edges and desired display position
+GUI_POINT getTextStartPoint(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey,ALIGN_POSITION pos, const char * textchar)
+{
+  GUI_POINT point_item = {sx, sy};
+  uint16_t w = ex - sx;
+  uint16_t h = ey - sy;
+  size_t charIcon_w = strlen(textchar) / 3 * BYTE_HEIGHT;
+
+  switch (pos)
+  {
+    case TOP_LEFT:
+      point_item.x = sx + 1;
+      point_item.y = sy + 1;
+      break;
+
+    case TOP:
+      point_item.x = (sx + (w - charIcon_w) / 2);
+      point_item.y = sy + 1;
+      break;
+
+    case TOP_RIGHT:
+      point_item.x = ex - charIcon_w - 1;
+      point_item.y = sy + 1;
+      break;
+
+    case LEFT:
+      point_item.x = sx + 1;
+      point_item.y = (sy + (h - BYTE_HEIGHT) / 2);
+      break;
+
+    case CENTER:
+      point_item.x = (sx + (w - charIcon_w) / 2);
+      point_item.y = (sy + (h - BYTE_HEIGHT) / 2);
+      break;
+
+    case RIGHT:
+      point_item.x = ex - charIcon_w - 1;
+      point_item.y = (sy + (h - BYTE_HEIGHT) / 2);
+      break;
+
+    case BOTTOM_LEFT:
+      point_item.x = sx + 1;
+      point_item.y = sy + h - BYTE_HEIGHT - 1;
+      break;
+
+    case BOTTOM:
+      point_item.x = (sx + (w - charIcon_w) / 2);
+      point_item.y = sy + h - BYTE_HEIGHT - 1;
+      break;
+
+    case BOTTOM_RIGHT:
+      point_item.x = sx + w - charIcon_w - 1;
+      point_item.y = sy + h - BYTE_HEIGHT - 1;
+      break;
+
+    default:
+      point_item.x = sx + 1;
+      point_item.y = sy + 1;
+      break;
+  }
+  return point_item;
+}
+
 void GUI_DispOne(int16_t sx, int16_t sy, const CHAR_INFO *pInfo)
 {
   if (pInfo->bytes == 0) return;

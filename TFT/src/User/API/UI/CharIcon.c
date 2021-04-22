@@ -222,3 +222,17 @@ uint8_t * IconCharSelect(uint8_t sel)
 {
   return (uint8_t *)charIcon[sel];
 }
+
+//draw icons in item
+void drawCharIcon(const GUI_RECT * rect, ALIGN_POSITION iconalign, uint16_t iconindex, bool drawBgColor, uint16_t btn_color)
+{
+  GUI_POINT icon_p = getTextStartPoint(rect->x0, rect->y0, rect->x1, rect->y1, iconalign, (char *)IconCharSelect(iconindex));
+  GUI_SetColor(charIconColor[iconindex]);
+  if (drawBgColor)
+  {
+    GUI_SetBkColor(btn_color);
+    GUI_ClearPrect(rect);
+  }
+  GUI_DispString(icon_p.x, icon_p.y, IconCharSelect(iconindex));
+  GUI_RestoreColorDefault();
+}

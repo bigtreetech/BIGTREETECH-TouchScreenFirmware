@@ -43,83 +43,6 @@ void setDynamicValue(uint8_t i, float value)
     sprintf(dynamic_text_value[i], "%.1f", value);
 }
 
-// get the text starting point on screen based on rectangle edges and desired icon position
-GUI_POINT getTextStartPoint(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey,ALIGN_POSITION pos, const char * textchar)
-{
-  GUI_POINT point_item = {sx, sy};
-  uint16_t w = ex - sx;
-  uint16_t h = ey - sy;
-  size_t charIcon_w = strlen(textchar) / 3 * BYTE_HEIGHT;
-
-  switch (pos)
-  {
-    case TOP_LEFT:
-      point_item.x = sx + 1;
-      point_item.y = sy + 1;
-      break;
-
-    case TOP:
-      point_item.x = (sx + (w - charIcon_w) / 2);
-      point_item.y = sy + 1;
-      break;
-
-    case TOP_RIGHT:
-      point_item.x = ex - charIcon_w - 1;
-      point_item.y = sy + 1;
-      break;
-
-    case LEFT:
-      point_item.x = sx + 1;
-      point_item.y = (sy + (h - BYTE_HEIGHT) / 2);
-      break;
-
-    case CENTER:
-      point_item.x = (sx + (w - charIcon_w) / 2);
-      point_item.y = (sy + (h - BYTE_HEIGHT) / 2);
-      break;
-
-    case RIGHT:
-      point_item.x = ex - charIcon_w - 1;
-      point_item.y = (sy + (h - BYTE_HEIGHT) / 2);
-      break;
-
-    case BOTTOM_LEFT:
-      point_item.x = sx + 1;
-      point_item.y = sy + h - BYTE_HEIGHT - 1;
-      break;
-
-    case BOTTOM:
-      point_item.x = (sx + (w - charIcon_w) / 2);
-      point_item.y = sy + h - BYTE_HEIGHT - 1;
-      break;
-
-    case BOTTOM_RIGHT:
-      point_item.x = sx + w - charIcon_w - 1;
-      point_item.y = sy + h - BYTE_HEIGHT - 1;
-      break;
-
-    default:
-      point_item.x = sx + 1;
-      point_item.y = sy + 1;
-      break;
-  }
-  return point_item;
-}
-
-//draw icons in item
-void DrawCharIcon(const GUI_RECT * rect,ALIGN_POSITION iconalign, uint16_t iconindex, bool drawBgColor, uint16_t btn_color)
-{
-  GUI_POINT icon_p = getTextStartPoint(rect->x0, rect->y0, rect->x1, rect->y1, iconalign, (char *)IconCharSelect(iconindex));
-  GUI_SetColor(charIconColor[iconindex]);
-  if (drawBgColor)
-  {
-    GUI_SetBkColor(btn_color);
-    GUI_ClearPrect(rect);
-  }
-  GUI_DispString(icon_p.x, icon_p.y, IconCharSelect(iconindex));
-  GUI_RestoreColorDefault();
-}
-
 //draw item pressed feedback
 void DrawListItemPress(const GUI_RECT * rect, bool pressed)
 {
@@ -151,7 +74,7 @@ void ListItem_Display(const GUI_RECT * rect, uint8_t position, const LISTITEM * 
     {
       if (curitem->icon != CHARICON_BLANK)
       {
-        DrawCharIcon(rect, CENTER, curitem->icon, true, infoSettings.list_button_color);
+        drawCharIcon(rect, CENTER, curitem->icon, true, infoSettings.list_button_color);
       }
       else if (curitem->icon == CHARICON_BLANK && curitem->titlelabel.index != LABEL_BACKGROUND)
       {
@@ -181,7 +104,7 @@ void ListItem_Display(const GUI_RECT * rect, uint8_t position, const LISTITEM * 
       case LIST_LABEL:
         if (curitem->icon != CHARICON_BLANK)
         {
-          DrawCharIcon(rect, LEFT, curitem->icon, true, infoSettings.bg_color);
+          drawCharIcon(rect, LEFT, curitem->icon, true, infoSettings.bg_color);
           pos.x += (BYTE_HEIGHT + 1);
         }
         textarea_width = LISTITEM_WIDTH - (pos.x + 1);  //width after removing the width for icon
@@ -208,7 +131,7 @@ void ListItem_Display(const GUI_RECT * rect, uint8_t position, const LISTITEM * 
 
         if (curitem->icon != CHARICON_BLANK)
         {
-          DrawCharIcon(rect, LEFT, curitem->icon, true, infoSettings.bg_color);
+          drawCharIcon(rect, LEFT, curitem->icon, true, infoSettings.bg_color);
           pos.x += (BYTE_HEIGHT + 1);
         }
         textarea_width = LISTITEM_WIDTH - (pos.x + BYTE_HEIGHT + 2);  //width after removing the width for icon
@@ -223,7 +146,7 @@ void ListItem_Display(const GUI_RECT * rect, uint8_t position, const LISTITEM * 
       case LIST_CUSTOMVALUE:
         if (curitem->icon != CHARICON_BLANK)
         {
-          DrawCharIcon(rect, LEFT, curitem->icon, true, infoSettings.bg_color);
+          drawCharIcon(rect, LEFT, curitem->icon, true, infoSettings.bg_color);
           pos.x += (BYTE_HEIGHT + 3);
         }
         GUI_ClearRect(pos.x, rect->y0, rect->x1 - BYTE_WIDTH * 8 - 1, rect->y1);  // clear only text area
