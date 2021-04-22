@@ -91,7 +91,7 @@
 #include "Printing.h"
 #include "More.h"
 #include "Speed.h"
-#include "ledcolor.h"
+#include "LCD_LEDColor.h"
 #include "ParameterSettings.h"
 #include "NotificationMenu.h"
 
@@ -129,6 +129,7 @@
 #include "MeshEditor.h"
 #include "CaseLight.h"
 #include "MeshValid.h"
+#include "LEDColor.h"
 
 #define MAX_MENU_DEPTH 10       // max sub menu depth
 typedef void (*FP_MENU)(void);

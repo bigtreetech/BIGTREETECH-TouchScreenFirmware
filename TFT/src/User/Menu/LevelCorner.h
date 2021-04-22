@@ -1,10 +1,11 @@
 #ifndef _LEVEL_CORNER_H_
 #define _LEVEL_CORNER_H_
-#include <stdint.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#include <stdint.h>
 
 void SetLevelCornerPosition(uint8_t point, float position);
 void menuLevelCorner(void);
