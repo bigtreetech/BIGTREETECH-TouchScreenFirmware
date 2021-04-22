@@ -1,17 +1,14 @@
 #include "MeshEditor.h"
 #include "includes.h"
 
+// value ranges
 #define MESH_GRID_SIZE             (MESH_GRID_MAX_POINTS_X * MESH_GRID_MAX_POINTS_Y)
 #define MESH_MAX_PARSED_ROWS       30                      // maximum number of data rows to parse for retrieving the mesh
                                                            // grid from the "M420 T1 V1" command output provided by the Marlin FW
 #define MESH_MAX_RETRIEVE_ATTEMPTS 20                      // maximum number of attempts to retrieve the data format from Marlin FW
 #define MESH_LINE_EDGE_DISTANCE    4
 
-// colors
-#define VALUE_FONT_COLOR   infoSettings.font_color
-#define VALUE_BG_COLOR     infoSettings.list_button_color
-#define VALUE_BORDER_COLOR 0x4b0d
-
+// data structures
 typedef struct
 {
   const uint8_t colsToSkip;
@@ -69,38 +66,6 @@ typedef struct
   char saveTitle[120];
 } MESH_DATA;
 
-#define MESH_GRID_HEIGHT     (LCD_HEIGHT - ICON_START_Y)
-#define MESH_GRID_WIDTH      MESH_GRID_HEIGHT
-#define MESH_POINT_MIN_RATIO 3.0f
-#define MESH_POINT_MED_RATIO 5.0f
-#define MESH_POINT_MAX_RATIO 8.0f
-
-#define MESH_INFO_ROW_NUM 1
-#define MESH_INFO_COL_NUM 3
-#define MESH_INFO_HEIGHT  (ICON_START_Y / MESH_INFO_ROW_NUM)
-#define MESH_INFO_WIDTH   (MESH_GRID_WIDTH / MESH_INFO_COL_NUM)
-
-#define MESH_KEY_ROW_NUM 6
-#define MESH_KEY_COL_NUM 2
-#define MESH_KEY_HEIGHT  (LCD_HEIGHT / MESH_KEY_ROW_NUM)
-#define MESH_KEY_WIDTH   (LCD_WIDTH - MESH_GRID_WIDTH) / MESH_KEY_COL_NUM
-
-#ifdef MESH_LEFT_KEYBOARD
-  #define MESH_GRID_X0 (LCD_WIDTH - MESH_GRID_WIDTH)
-  #define MESH_GRID_Y0 ICON_START_Y
-  #define MESH_INFO_X0 (LCD_WIDTH - MESH_GRID_WIDTH)
-  #define MESH_INFO_Y0 0
-  #define MESH_KEY_X0  0
-  #define MESH_KEY_Y0  0
-#else
-  #define MESH_GRID_X0 0
-  #define MESH_GRID_Y0 ICON_START_Y
-  #define MESH_INFO_X0 0
-  #define MESH_INFO_Y0 0
-  #define MESH_KEY_X0  MESH_GRID_WIDTH
-  #define MESH_KEY_Y0  0
-#endif
-
 typedef enum
 {
   ME_INFO_MIN = 0,
@@ -135,10 +100,49 @@ typedef enum
   ME_AREA_IDLE = IDLE_TOUCH,
 } MESH_AREA_VALUES;
 
+// colors
+#define MESH_FONT_COLOR     infoSettings.font_color
+#define MESH_BG_COLOR       infoSettings.bg_color
+#define MESH_BORDER_COLOR   infoSettings.list_border_color
+#define MESH_BORDER_COLOR_2 0x4b0d
+
+// layout sizes
+#define MESH_GRID_HEIGHT     (LCD_HEIGHT - ICON_START_Y)
+#define MESH_GRID_WIDTH      MESH_GRID_HEIGHT
+#define MESH_POINT_MIN_RATIO 3.0f
+#define MESH_POINT_MED_RATIO 5.0f
+#define MESH_POINT_MAX_RATIO 8.0f
+
+#define MESH_INFO_ROW_NUM 1
+#define MESH_INFO_COL_NUM 3
+#define MESH_INFO_HEIGHT  (ICON_START_Y / MESH_INFO_ROW_NUM)
+#define MESH_INFO_WIDTH   (MESH_GRID_WIDTH / MESH_INFO_COL_NUM)
+
+#define MESH_KEY_ROW_NUM 6
+#define MESH_KEY_COL_NUM 2
+#define MESH_KEY_HEIGHT  (LCD_HEIGHT / MESH_KEY_ROW_NUM)
+#define MESH_KEY_WIDTH   (LCD_WIDTH - MESH_GRID_WIDTH) / MESH_KEY_COL_NUM
+
+#ifdef KEYBOARD_ON_LEFT
+  #define MESH_GRID_X0 (LCD_WIDTH - MESH_GRID_WIDTH)
+  #define MESH_GRID_Y0 ICON_START_Y
+  #define MESH_INFO_X0 (LCD_WIDTH - MESH_GRID_WIDTH)
+  #define MESH_INFO_Y0 0
+  #define MESH_KEY_X0  0
+  #define MESH_KEY_Y0  0
+#else
+  #define MESH_GRID_X0 0
+  #define MESH_GRID_Y0 ICON_START_Y
+  #define MESH_INFO_X0 0
+  #define MESH_INFO_Y0 0
+  #define MESH_KEY_X0  MESH_GRID_WIDTH
+  #define MESH_KEY_Y0  0
+#endif
+
 const GUI_RECT meshGridRect = {MESH_GRID_X0, MESH_GRID_Y0, MESH_GRID_X0 + MESH_GRID_WIDTH, MESH_GRID_Y0 + MESH_GRID_HEIGHT};
 
 const GUI_RECT meshInfoRect[ME_INFO_NUM] = {
-#ifdef MESH_LEFT_KEYBOARD
+#ifdef KEYBOARD_ON_LEFT
   {MESH_INFO_X0 + 1 * MESH_INFO_WIDTH, MESH_INFO_Y0 + 0 * MESH_INFO_HEIGHT, MESH_INFO_X0 + 2 * MESH_INFO_WIDTH, MESH_INFO_Y0 + 1 * MESH_INFO_HEIGHT},// min value
   {MESH_INFO_X0 + 2 * MESH_INFO_WIDTH, MESH_INFO_Y0 + 0 * MESH_INFO_HEIGHT, MESH_INFO_X0 + 3 * MESH_INFO_WIDTH, MESH_INFO_Y0 + 1 * MESH_INFO_HEIGHT},// max value
   {MESH_INFO_X0 + 0 * MESH_INFO_WIDTH, MESH_INFO_Y0 + 0 * MESH_INFO_HEIGHT, MESH_INFO_X0 + 1 * MESH_INFO_WIDTH, MESH_INFO_Y0 + 1 * MESH_INFO_HEIGHT},// original value
@@ -151,7 +155,7 @@ const GUI_RECT meshInfoRect[ME_INFO_NUM] = {
 };
 
 const GUI_RECT meshKeyRect[ME_KEY_NUM] = {
-#ifdef MESH_LEFT_KEYBOARD
+#ifdef KEYBOARD_ON_LEFT
   {MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 0 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 2 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 1 * MESH_KEY_HEIGHT},        // SAVE
   {MESH_KEY_X0 + 0 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 0 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 1 * MESH_KEY_HEIGHT},        // OK
   {MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 1 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 2 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 2 * MESH_KEY_HEIGHT},        // RESET
@@ -533,7 +537,7 @@ void meshDrawGridCell(uint16_t index, uint16_t edgeDistance, bool clearBgColor)
     GUI_ClearRect(meshGridRect.x0 + col * cellWidth + 1, meshGridRect.y0 + row * cellHeight + 1,
                   meshGridRect.x0 + (col + 1) * cellWidth - 1, meshGridRect.y0 + (row + 1) * cellHeight - 1);
 
-  GUI_SetColor(infoSettings.list_border_color);
+  GUI_SetColor(MESH_BORDER_COLOR);
 
   GUI_DrawLine(meshGridRect.x0 + col * cellWidth + edgeDistance, meshGridRect.y0 + row * cellHeight + cellHeight / 2,
                meshGridRect.x0 + (col + 1) * cellWidth - edgeDistance, meshGridRect.y0 + row * cellHeight + cellHeight / 2);
@@ -545,14 +549,14 @@ void meshDrawGridCell(uint16_t index, uint16_t edgeDistance, bool clearBgColor)
 
   GUI_FillCircle(meshGridRect.x0 + col * cellWidth + cellWidth / 2, meshGridRect.y0 + row * cellHeight + cellHeight / 2, radius);
 
-  GUI_SetColor(infoSettings.font_color);
+  GUI_SetColor(MESH_FONT_COLOR);
 }
 
 void meshDrawGrid(void)
 {
   meshFullUpdateValueMinMax();
 
-  GUI_ClearRect(meshGridRect.x0 + 1, meshGridRect.y0 + 1, meshGridRect.x1 - 1, meshGridRect.y1 - 1);
+  drawBackground(&meshGridRect, MESH_BG_COLOR, 1);
 
   uint16_t size = meshGetSize();
   for (uint16_t i = 0; i < size; i++)
@@ -561,42 +565,16 @@ void meshDrawGrid(void)
   }
 }
 
-void meshDrawInfoCell(const GUI_RECT *rect, float *val, bool largeFont, uint16_t color, uint16_t bgColor, uint16_t edgeDistance, bool clearBgColor)
-{
-  uint16_t origBgColor = GUI_GetBkColor();
-
-  if (val != NULL || clearBgColor)
-  {
-    GUI_SetBkColor(bgColor);
-    GUI_ClearRect(rect->x0 + edgeDistance, rect->y0 + edgeDistance, rect->x1 - edgeDistance, rect->y1 - edgeDistance);
-  }
-
-  if (val != NULL)
-  {
-    char tempstr[20];
-
-    sprintf(tempstr, "%.3f", *val);
-
-    GUI_SetColor(color);
-    setLargeFont(largeFont);
-    GUI_DispStringInPrect(rect, (uint8_t *) tempstr);
-    setLargeFont(false);
-  }
-
-  GUI_SetColor(infoSettings.font_color);
-  GUI_SetBkColor(origBgColor);
-}
-
 void meshDrawInfo(float *minVal, float *maxVal, float *origVal, float *curVal)
 {
   if (minVal != NULL)
-    meshDrawInfoCell(&meshInfoRect[ME_INFO_MIN], minVal, false, meshGetRGBColor(*minVal), infoSettings.bg_color, 1, false);
+    drawStandardValue(&meshInfoRect[ME_INFO_MIN], VALUE_FLOAT, minVal, false, meshGetRGBColor(*minVal), MESH_BG_COLOR, 1, true);
 
   if (maxVal != NULL)
-    meshDrawInfoCell(&meshInfoRect[ME_INFO_MAX], maxVal, false, meshGetRGBColor(*maxVal), infoSettings.bg_color, 1, false);
+    drawStandardValue(&meshInfoRect[ME_INFO_MAX], VALUE_FLOAT, maxVal, false, meshGetRGBColor(*maxVal), MESH_BG_COLOR, 1, true);
 
-  meshDrawInfoCell(&meshInfoRect[ME_INFO_ORIG], origVal, false, infoSettings.font_color, infoSettings.bg_color, 1, false);
-  meshDrawInfoCell(&meshInfoRect[ME_INFO_CUR], curVal, true, VALUE_FONT_COLOR, VALUE_BG_COLOR, 2, false);
+  drawStandardValue(&meshInfoRect[ME_INFO_ORIG], VALUE_FLOAT, origVal, false, MESH_FONT_COLOR, MESH_BG_COLOR, 1, true);
+  drawStandardValue(&meshInfoRect[ME_INFO_CUR], VALUE_FLOAT, curVal, true, MESH_FONT_COLOR, MESH_BORDER_COLOR, 4, true);
 }
 
 void meshDrawFullInfo(void)
@@ -609,46 +587,46 @@ void meshDrawFullInfo(void)
   meshDrawInfo(&minValue, &maxValue, &origValue, &curValue);
 }
 
-void meshKeyPress(uint8_t index, uint8_t isPressed)
+void meshDrawButton(uint8_t index, uint8_t isPressed)
 {
   if (index >= ME_KEY_NUM)
     return;
 
+  uint16_t color;
+
   if (isPressed)
   {
     if (index != ME_KEY_EDIT)
-      GUI_SetColor(infoSettings.list_border_color);
+      color = MESH_BORDER_COLOR;
     else
-      GUI_SetColor(VALUE_FONT_COLOR);
+      color = MESH_FONT_COLOR;
   }
   else
   {
     if (index != ME_KEY_EDIT)
-      GUI_SetColor(infoSettings.bg_color);
+      color = MESH_BG_COLOR;
     else
-      GUI_SetColor(VALUE_BG_COLOR);
+      color = MESH_BORDER_COLOR;
   }
 
-  GUI_DrawRect(meshKeyRect[index].x0 + 2, meshKeyRect[index].y0 + 2, meshKeyRect[index].x1 - 2, meshKeyRect[index].y1 - 2);
+  drawBorder(&meshKeyRect[index], color, 1);
 
   // restore default font color
-  GUI_SetColor(infoSettings.font_color);
+  GUI_SetColor(MESH_FONT_COLOR);
 }
 
 void meshDrawKeyboard(void)
 {
-  TSC_ReDrawIcon = meshKeyPress;
-
-  setLargeFont(true);
-
+  // draw buttons
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
   for (uint8_t i = 0; i < ME_KEY_NUM; i++)
   {
-    if (!(i == ME_KEY_SAVE || i == ME_KEY_OK || i == ME_KEY_RESET || i == ME_KEY_HOME))            // if not a unicode string
-      GUI_DispStringInPrect(&meshKeyRect[i], (uint8_t *) meshKeyString[i]);
+    if (i > ME_KEY_EDIT)                                   // if not a unicode string
+      drawStandardValue(&meshKeyRect[i], VALUE_STRING, meshKeyString[i], true, MESH_FONT_COLOR, MESH_BG_COLOR, 3, true);
   }
 
+  // draw unicode string
   if (infoMachineSettings.EEPROM == 1)
     DrawCharIcon(&meshKeyRect[ME_KEY_SAVE], MIDDLE, ICONCHAR_SAVE, false, 0);
 
@@ -656,17 +634,18 @@ void meshDrawKeyboard(void)
   DrawCharIcon(&meshKeyRect[ME_KEY_RESET], MIDDLE, ICONCHAR_RESET, false, 0);
   DrawCharIcon(&meshKeyRect[ME_KEY_HOME], MIDDLE, ICONCHAR_MOVE, false, 0);
 
+  // restore default
   GUI_RestoreColorDefault();
-
-  setLargeFont(false);
 }
 
 void meshDrawMenu(void)
 {
-  // clear screen
-  GUI_Clear(infoSettings.bg_color);
+  setMenu(MENU_TYPE_FULLSCREEN, NULL, COUNT(meshKeyRect), meshKeyRect, meshDrawButton, &meshDrawMenu);
 
-  GUI_SetColor(infoSettings.list_border_color);
+  // clear screen
+  GUI_Clear(MESH_BG_COLOR);
+
+  GUI_SetColor(MESH_BORDER_COLOR);
 
   // draw area borders
   GUI_DrawPrect(&meshAreaRect[ME_AREA_GRID]);              // draw grid area borders
@@ -674,16 +653,13 @@ void meshDrawMenu(void)
   GUI_DrawPrect(&meshAreaRect[ME_AREA_KEY]);               // draw key borders
 
   // draw value area borders (outer)
-  GUI_DrawRect(meshInfoRect[ME_INFO_CUR].x0, meshInfoRect[ME_INFO_CUR].y0,
-               meshInfoRect[ME_INFO_CUR].x1, meshInfoRect[ME_INFO_CUR].y1);
-
-  GUI_SetColor(VALUE_BORDER_COLOR);
+  drawBorder(&meshInfoRect[ME_INFO_CUR], MESH_BORDER_COLOR, 2);
 
   // draw value area borders (inner)
-  GUI_DrawRect(meshInfoRect[ME_INFO_CUR].x0 + 1, meshInfoRect[ME_INFO_CUR].y0 + 1,
-               meshInfoRect[ME_INFO_CUR].x1 - 1, meshInfoRect[ME_INFO_CUR].y1 - 1);
+  drawBorder(&meshInfoRect[ME_INFO_CUR], MESH_BORDER_COLOR_2, 3);
 
-  GUI_SetColor(infoSettings.font_color);
+  // restore default font color
+  GUI_SetColor(MESH_FONT_COLOR);
 
   // draw grid and keyboard
   meshDrawGrid();
@@ -885,7 +861,6 @@ void menuMeshEditor(void)
 
   mustStoreCmd("M420 V1 T1\n");                            // retrieve the mesh data
 
-  setMenu(MENU_TYPE_FULLSCREEN, NULL, COUNT(meshKeyRect), meshKeyRect, meshKeyPress, &meshDrawMenu);
   meshDrawMenu();
 
   #if LCD_ENCODER_SUPPORT
@@ -930,7 +905,6 @@ void menuMeshEditor(void)
           curValue = menuMeshTuner(meshGetCol(), meshGetJ(), meshGetValue(meshGetIndex()));
           meshSetValue(curValue);
 
-          setMenu(MENU_TYPE_FULLSCREEN, NULL, COUNT(meshKeyRect), meshKeyRect, meshKeyPress, &meshDrawMenu);
           meshDrawMenu();
         }
         break;
@@ -1008,4 +982,7 @@ void menuMeshEditor(void)
 
     meshDeallocData();                                     // deallocate mesh data
   }
+
+  // restore default
+  GUI_RestoreColorDefault();
 }
