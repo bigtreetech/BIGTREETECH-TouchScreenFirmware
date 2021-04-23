@@ -12,8 +12,8 @@ enum
   PARA_WAS_RESTORED = (1<< 1),
 };
 
-extern int32_t TSC_Para[7];
-extern SETTINGS infoSettings;
+int32_t TSC_Para[7];
+SETTINGS infoSettings;
 
 uint8_t paraStatus = 0;
 
