@@ -168,7 +168,7 @@ void menuShowParameter(void)
           }
 
           setDynamicValue(curIndex, val);
-          listViewRefreshItem(curIndex);
+          listViewRefreshMenu();
         }
         break;
     }
