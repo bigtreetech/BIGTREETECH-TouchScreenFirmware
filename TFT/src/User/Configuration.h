@@ -424,12 +424,6 @@
  */
 #define ACK_NOTIFICATION_STYLE 1  // Default: 1
 
-/**
-* Display of M117 messages on the notification screen
-* Options: [enable: 1, disable: 0]
-*/
-//# define NOTIFICATION_M117 0  // Default 0
-
 // Fan speed as a percentage instead of PWM value
 #define SHOW_FAN_PERCENTAGE true  // To enabled: true | To disabled: false (Default: true)
 
