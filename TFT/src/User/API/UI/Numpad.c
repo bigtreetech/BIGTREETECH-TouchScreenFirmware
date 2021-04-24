@@ -10,23 +10,6 @@
 
 typedef enum
 {
-  SKEY_0 = 0,
-  SKEY_1,
-  SKEY_2,
-  SKEY_3,
-  SKEY_4,
-  SKEY_5,
-  SKEY_6,
-  SKEY_7,
-  SKEY_8,
-  SKEY_9,
-  SKEY_10,
-  SKEY_11,
-  SKEY_IDLE = IDLE_TOUCH,
-}SKEY_VALUES;
-
-typedef enum
-{
   NUM_KEY_1 = 0,
   NUM_KEY_2,
   NUM_KEY_3,
@@ -69,15 +52,18 @@ const GUI_RECT rect_of_numkey[KEY_NUM]={
   {3*SKEYWIDTH, ICON_START_Y+3*SKEYHEIGHT, 4*SKEYWIDTH, ICON_START_Y+4*SKEYHEIGHT},//
 };
 
-const char *const numPadKeyChar[KEY_NUM] = {
-  "1","2","3","\u0894",
-  "4","5","6","\u0899",
-  "7","8","9","\u0895",
-  ".","0","-","\u08A5"
-};
 const GUI_RECT oldParameterRect = {0,                        0, LCD_WIDTH/2 - BYTE_WIDTH,  ICON_START_Y+0*SKEYHEIGHT};
 const GUI_RECT newParameterRect = {LCD_WIDTH/2 + BYTE_WIDTH, 0,                LCD_WIDTH,  ICON_START_Y+0*SKEYHEIGHT};
 const GUI_RECT arrowRect        = {LCD_WIDTH/2 - BYTE_WIDTH, 0, LCD_WIDTH/2 + BYTE_WIDTH,  ICON_START_Y+0*SKEYHEIGHT};
+
+const char *const numPadKeyChar[KEY_NUM] = {
+  "1", "2", "3", "\u0894",
+  "4", "5", "6", "\u0899",
+  "7", "8", "9", "\u0895",
+  ".", "0", "-", "\u08A5"
+};
+
+uint8_t numpadType = 0; //numpad type identifier
 
 void drawKeypadButton(uint8_t index, uint8_t isPressed)
 {
@@ -123,7 +109,8 @@ void drawKeypadButton(uint8_t index, uint8_t isPressed)
                   .rect       = rectBtn};
 
     setLargeFont(true);
-    GUI_DrawButton(&btn, isPressed);
+    if (!(index == NUM_KEY_DEC && ((numpadType >> 0) & 1)) && !(index == NUM_KEY_MINUS && !((numpadType >> 1) & 1)))
+      GUI_DrawButton(&btn, isPressed);
     setLargeFont(false);
     #else
 
@@ -137,6 +124,7 @@ void drawKeypadButton(uint8_t index, uint8_t isPressed)
 
 void Draw_keyboard(uint8_t * title, bool NumberOnly, bool negative)
 {
+  numpadType = (negative << 1) | (NumberOnly << 0); //numpad type identfier
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
   #ifdef KEYBOARD_MATERIAL_THEME
@@ -152,8 +140,7 @@ void Draw_keyboard(uint8_t * title, bool NumberOnly, bool negative)
 
     for (uint8_t i = 0; i < KEY_NUM; i++)
     {
-      if (!(i == NUM_KEY_DEC && NumberOnly) && !(i == NUM_KEY_MINUS && !negative))
-        drawKeypadButton(i, false);
+      drawKeypadButton(i, false);
     }
     GUI_SetColor(BAR_FONT_COLOR);
   #else
@@ -193,13 +180,14 @@ void Draw_keyboard(uint8_t * title, bool NumberOnly, bool negative)
     DrawCharIcon(&rect_of_numkey[NUM_KEY_RESET], MIDDLE, ICONCHAR_RESET, false, 0);
   #endif // KEYBOARD_MATERIAL_THEME
 
-    GUI_DispStringInPrect(&arrowRect,(uint8_t *)"\u089A");
+  GUI_DispStringInPrect(&arrowRect,(uint8_t *)"\u089A");
 
-    setLargeFont(true);
-    if ((oldParameterRect.x1 - oldParameterRect.x0) <= GUI_StrPixelWidth_str(title))
-      setLargeFont(false);
-    GUI_DispStringInPrect(&oldParameterRect, title);
+  setLargeFont(true);
+  if ((oldParameterRect.x1 - oldParameterRect.x0) <= GUI_StrPixelWidth_str(title))
     setLargeFont(false);
+
+  GUI_DispStringInPrect(&oldParameterRect, title);
+  setLargeFont(false);
 }
 
 static inline void drawValue(char * str)
