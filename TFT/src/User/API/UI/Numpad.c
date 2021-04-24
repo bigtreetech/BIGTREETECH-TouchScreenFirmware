@@ -4,9 +4,9 @@
 #define SKEYHEIGHT (LCD_HEIGHT-ICON_START_Y)/4
 #define SKEYWIDTH  LCD_WIDTH/4
 
-#define KEY_NUM       16
-#define FLOAT_BUFLONG 9
-#define INT_BUFLONG   6
+#define KEY_COUNT        16
+#define FLOAT_BUF_LENGTH  9
+#define INT_BUF_LENGTH    6
 
 typedef enum
 {
@@ -30,7 +30,7 @@ typedef enum
   NUM_KEY_IDLE = IDLE_TOUCH,
 }NUM_KEY_VALUES;
 
-const GUI_RECT rect_of_numkey[KEY_NUM]={
+const GUI_RECT rect_of_numkey[KEY_COUNT]={
   {0*SKEYWIDTH, ICON_START_Y+0*SKEYHEIGHT, 1*SKEYWIDTH, ICON_START_Y+1*SKEYHEIGHT},//1
   {1*SKEYWIDTH, ICON_START_Y+0*SKEYHEIGHT, 2*SKEYWIDTH, ICON_START_Y+1*SKEYHEIGHT},//2
   {2*SKEYWIDTH, ICON_START_Y+0*SKEYHEIGHT, 3*SKEYWIDTH, ICON_START_Y+1*SKEYHEIGHT},//3
@@ -56,7 +56,7 @@ const GUI_RECT oldParameterRect = {0,                        0, LCD_WIDTH/2 - BY
 const GUI_RECT newParameterRect = {LCD_WIDTH/2 + BYTE_WIDTH, 0,                LCD_WIDTH,  ICON_START_Y+0*SKEYHEIGHT};
 const GUI_RECT arrowRect        = {LCD_WIDTH/2 - BYTE_WIDTH, 0, LCD_WIDTH/2 + BYTE_WIDTH,  ICON_START_Y+0*SKEYHEIGHT};
 
-const char *const numPadKeyChar[KEY_NUM] = {
+const char *const numPadKeyChar[KEY_COUNT] = {
   "1", "2", "3", "\u0894",
   "4", "5", "6", "\u0899",
   "7", "8", "9", "\u0895",
@@ -138,7 +138,7 @@ void Draw_keyboard(uint8_t * title, bool NumberOnly, bool negative)
     // draw value display border line
     GUI_HLine(rect_of_numkey[0].x0,rect_of_numkey[0].y0,rect_of_numkey[3].x1);
 
-    for (uint8_t i = 0; i < KEY_NUM; i++)
+    for (uint8_t i = 0; i < KEY_COUNT; i++)
     {
       drawKeypadButton(i, false);
     }
@@ -161,7 +161,7 @@ void Draw_keyboard(uint8_t * title, bool NumberOnly, bool negative)
 
     setLargeFont(true);
 
-    for (uint8_t i = 0; i < KEY_NUM ;i++)
+    for (uint8_t i = 0; i < KEY_COUNT ;i++)
     {
       if (!(i == NUM_KEY_DEC || i == NUM_KEY_MINUS || (i % 4) == 3))  // || i == NUM_KEY_DEL || i == NUM_KEY_EXIT || i == NUM_KEY_RESET) )
         GUI_DispStringInPrect(&rect_of_numkey[i], (u8 *)numPadKeyChar[i]);
@@ -210,7 +210,7 @@ double numPadFloat(u8* title, double old_val, double reset_val, bool negative)
   NUM_KEY_VALUES key_num = NUM_KEY_IDLE;
   uint8_t nowIndex = 0;
   uint8_t lastIndex = 0;
-  char ParameterBuf[FLOAT_BUFLONG + 1] = {0};
+  char ParameterBuf[FLOAT_BUF_LENGTH + 1] = {0};
   uint8_t prec = (old_val == 0) ? 0 : 3;
   bool valueFirstPress = true;
 
@@ -220,7 +220,7 @@ double numPadFloat(u8* title, double old_val, double reset_val, bool negative)
 
   if (title == NULL)
   {
-    char tempstr[FLOAT_BUFLONG + 1];
+    char tempstr[FLOAT_BUF_LENGTH + 1];
     sprintf(tempstr, "%.*f", prec, old_val);
     title = (uint8_t *)tempstr;
   }
@@ -274,7 +274,7 @@ double numPadFloat(u8* title, double old_val, double reset_val, bool negative)
           ParameterBuf[0] = '0';
           nowIndex = 1;
         }
-        if (nowIndex < FLOAT_BUFLONG - 1)
+        if (nowIndex < FLOAT_BUF_LENGTH - 1)
         {
           if (ParameterBuf[0] == '0' && nowIndex == 1)
             nowIndex = lastIndex = 0;
@@ -295,7 +295,7 @@ double numPadFloat(u8* title, double old_val, double reset_val, bool negative)
           ParameterBuf[0] = 0;
           nowIndex = lastIndex = 0;
         }
-        if (!strchr((const char *)ParameterBuf, numPadKeyChar[key_num][0]) && nowIndex < (FLOAT_BUFLONG - 1))
+        if (!strchr((const char *)ParameterBuf, numPadKeyChar[key_num][0]) && nowIndex < (FLOAT_BUF_LENGTH - 1))
         {
           if (nowIndex == 0 || (nowIndex == 1 && strchr((const char *)ParameterBuf, '-')))  // check if no number exits or only minus exists
             ParameterBuf[nowIndex++] = '0';                                                 //add zero before decimal sign if it is the first character
@@ -365,7 +365,7 @@ int32_t numPadInt(u8* title, int32_t old_val, int32_t reset_val, bool negative)
 
   int32_t val = old_val, lastval = 0;
   uint8_t len = 0;
-  char ParameterBuf[INT_BUFLONG + 1];
+  char ParameterBuf[INT_BUF_LENGTH + 1];
   int8_t neg = 1, lastneg = 1;
   bool valueFirstPress = true;
 
@@ -374,7 +374,7 @@ int32_t numPadInt(u8* title, int32_t old_val, int32_t reset_val, bool negative)
   val = old_val * neg;
   if (title == NULL)
   {
-    char tempstr[INT_BUFLONG + 1];
+    char tempstr[INT_BUF_LENGTH + 1];
     sprintf(tempstr, "%i", old_val);
     title = (uint8_t *)tempstr;
   }
@@ -439,7 +439,7 @@ int32_t numPadInt(u8* title, int32_t old_val, int32_t reset_val, bool negative)
           val = 0;
         }
         len = strlen(ParameterBuf);
-        if (len < INT_BUFLONG && !(val == 0 && key_num == NUM_KEY_0))
+        if (len < INT_BUF_LENGTH && !(val == 0 && key_num == NUM_KEY_0))
         {
           int num = (numPadKeyChar[key_num][0] - '0');
           val = (val * 10) + ABS(num);
