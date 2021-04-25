@@ -122,9 +122,9 @@ void drawKeypadButton(uint8_t index, uint8_t isPressed)
     #endif // KEYBOARD_MATERIAL_THEME
 }
 
-void Draw_keyboard(uint8_t * title, bool NumberOnly, bool negative)
+void Draw_keyboard(uint8_t * title, bool numberOnly, bool negative)
 {
-  numpadType = (negative << 1) | (NumberOnly << 0);  // numpad type identfier
+  numpadType = (negative << 1) | (numberOnly << 0);  // numpad type identfier
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
   #ifdef KEYBOARD_MATERIAL_THEME
@@ -167,7 +167,7 @@ void Draw_keyboard(uint8_t * title, bool NumberOnly, bool negative)
         GUI_DispStringInPrect(&rect_of_numkey[i], (u8 *)numPadKeyChar[i]);
     }
 
-    if (!NumberOnly)
+    if (!numberOnly)
       GUI_DispStringInPrect(&rect_of_numkey[NUM_KEY_DEC],(u8*)numPadKeyChar[NUM_KEY_DEC]);
     if (negative)
       GUI_DispStringInPrect(&rect_of_numkey[NUM_KEY_MINUS],(u8*)numPadKeyChar[NUM_KEY_MINUS]);
