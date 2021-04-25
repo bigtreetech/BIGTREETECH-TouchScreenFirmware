@@ -468,9 +468,8 @@ int32_t numPadInt(uint8_t* title, int32_t old_val, int32_t reset_val, bool negat
     {
       lastval = val;
       lastneg = neg;
-      char * n = (neg > 0) ? "" : "-";
       GUI_ClearPrect(&newParameterRect);
-      sprintf(ParameterBuf, "%s%i", n, val);
+      sprintf(ParameterBuf, "%i", val * neg);
       drawValue(ParameterBuf);
     }
     loopBackEnd();
