@@ -164,13 +164,13 @@ void Draw_keyboard(uint8_t * title, bool numberOnly, bool negative)
     for (uint8_t i = 0; i < KEY_COUNT ;i++)
     {
       if (!(i == NUM_KEY_DEC || i == NUM_KEY_MINUS || (i % 4) == 3))  // || i == NUM_KEY_DEL || i == NUM_KEY_EXIT || i == NUM_KEY_RESET) )
-        GUI_DispStringInPrect(&rect_of_numkey[i], (u8 *)numPadKeyChar[i]);
+        GUI_DispStringInPrect(&rect_of_numkey[i], (uint8_t *)numPadKeyChar[i]);
     }
 
     if (!numberOnly)
-      GUI_DispStringInPrect(&rect_of_numkey[NUM_KEY_DEC],(u8*)numPadKeyChar[NUM_KEY_DEC]);
+      GUI_DispStringInPrect(&rect_of_numkey[NUM_KEY_DEC],(uint8_t *)numPadKeyChar[NUM_KEY_DEC]);
     if (negative)
-      GUI_DispStringInPrect(&rect_of_numkey[NUM_KEY_MINUS],(u8*)numPadKeyChar[NUM_KEY_MINUS]);
+      GUI_DispStringInPrect(&rect_of_numkey[NUM_KEY_MINUS],(uint8_t *)numPadKeyChar[NUM_KEY_MINUS]);
 
     setLargeFont(true);
 
@@ -204,18 +204,19 @@ static inline void drawValue(char * str)
 }
 
 //Numpad for decimal numbers
-double numPadFloat(u8* title, double old_val, double reset_val, bool negative)
+double numPadFloat(uint8_t * title, double old_val, double reset_val, bool negative)
 {
   //bool exit = false;
   NUM_KEY_VALUES key_num = NUM_KEY_IDLE;
+  touchSound = false;
+
   uint8_t nowIndex = 0;
   uint8_t lastIndex = 0;
   char ParameterBuf[FLOAT_BUF_LENGTH + 1] = {0};
   uint8_t prec = (old_val == 0) ? 0 : 3;
   bool valueFirstPress = true;
 
-  touchSound = false;
-  sprintf(ParameterBuf,"%.*f", prec, old_val);
+  sprintf(ParameterBuf, "%.*f", prec, old_val);
   nowIndex = strlen(ParameterBuf);
 
   if (title == NULL)
@@ -224,6 +225,7 @@ double numPadFloat(u8* title, double old_val, double reset_val, bool negative)
     sprintf(tempstr, "%.*f", prec, old_val);
     title = (uint8_t *)tempstr;
   }
+
   setMenu(MENU_TYPE_FULLSCREEN, NULL, COUNT(rect_of_numkey), rect_of_numkey, drawKeypadButton, NULL);
   Draw_keyboard(title, false, negative);
 
@@ -358,7 +360,7 @@ double numPadFloat(u8* title, double old_val, double reset_val, bool negative)
 }
 
 //Numpad for integer numbers
-int32_t numPadInt(u8* title, int32_t old_val, int32_t reset_val, bool negative)
+int32_t numPadInt(uint8_t* title, int32_t old_val, int32_t reset_val, bool negative)
 {
   NUM_KEY_VALUES key_num = NUM_KEY_IDLE;
   touchSound = false;
@@ -366,18 +368,19 @@ int32_t numPadInt(u8* title, int32_t old_val, int32_t reset_val, bool negative)
   int32_t val = old_val, lastval = 0;
   uint8_t len = 0;
   char ParameterBuf[INT_BUF_LENGTH + 1];
-  int8_t neg = 1, lastneg = 1;
+  int8_t neg = (old_val < 0) ? -1 : 1;
+  int8_t lastneg = 1;
   bool valueFirstPress = true;
 
-  if (old_val < 0)
-    neg = -1;
   val = old_val * neg;
+
   if (title == NULL)
   {
     char tempstr[INT_BUF_LENGTH + 1];
     sprintf(tempstr, "%i", old_val);
     title = (uint8_t *)tempstr;
   }
+
   setMenu(MENU_TYPE_FULLSCREEN, NULL, COUNT(rect_of_numkey), rect_of_numkey, drawKeypadButton, NULL);
   Draw_keyboard(title, true, negative);
 
@@ -468,7 +471,6 @@ int32_t numPadInt(u8* title, int32_t old_val, int32_t reset_val, bool negative)
       char * n = (neg > 0) ? "" : "-";
       GUI_ClearPrect(&newParameterRect);
       sprintf(ParameterBuf, "%s%i", n, val);
-      setLargeFont(true);
       drawValue(ParameterBuf);
     }
     loopBackEnd();
