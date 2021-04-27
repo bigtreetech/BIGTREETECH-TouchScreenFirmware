@@ -87,11 +87,10 @@ typedef struct
 extern PARAMETERS infoParameters;
 
 extern char *const axisDisplayID[STEPPER_COUNT];
-extern const LABEL accel_disp_ID[];
-extern const LABEL junction_deviation_disp_ID[];
-extern const LABEL retract_disp_ID[];
-extern const LABEL recover_disp_ID[];
-extern const LABEL retract_auto_ID[];
+extern const LABEL accelDisplayID[];
+extern const LABEL junctionDeviationDisplayID[];
+extern const LABEL retractDisplayID[];
+extern const LABEL recoverDisplayID[];
 
 // Set a parameter status to enable or disable.
 void setParameterStatus(PARAMETER_NAME name, bool status);

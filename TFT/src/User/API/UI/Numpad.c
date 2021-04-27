@@ -1,5 +1,5 @@
 #include "Numpad.h"
-#include "list_item.h"
+#include "CharIcon.h"
 
 #define SKEYHEIGHT (LCD_HEIGHT - ICON_START_Y) / 4
 #define SKEYWIDTH  LCD_WIDTH / 4
@@ -174,10 +174,11 @@ void Draw_keyboard(uint8_t * title, bool numberOnly, bool negative)
 
     setLargeFont(true);
 
-    DrawCharIcon(&rect_of_numkey[NUM_KEY_OK], MIDDLE, ICONCHAR_OK, false, 0);
-    DrawCharIcon(&rect_of_numkey[NUM_KEY_DEL], MIDDLE, ICONCHAR_POINT_LEFT, false, 0);
-    DrawCharIcon(&rect_of_numkey[NUM_KEY_EXIT], MIDDLE, ICONCHAR_CANCEL, false, 0);
-    DrawCharIcon(&rect_of_numkey[NUM_KEY_RESET], MIDDLE, ICONCHAR_RESET, false, 0);
+    drawCharIcon(&rect_of_numkey[NUM_KEY_OK], CENTER, CHARICON_OK, false, 0);
+    drawCharIcon(&rect_of_numkey[NUM_KEY_DEL], CENTER, CHARICON_POINT_LEFT, false, 0);
+    drawCharIcon(&rect_of_numkey[NUM_KEY_EXIT], CENTER, CHARICON_CANCEL, false, 0);
+    drawCharIcon(&rect_of_numkey[NUM_KEY_RESET], CENTER, CHARICON_RESET, false, 0);
+
   #endif // KEYBOARD_MATERIAL_THEME
 
   GUI_DispStringInPrect(&arrowRect,(uint8_t *)"\u089A");

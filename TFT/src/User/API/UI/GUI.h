@@ -8,14 +8,18 @@ extern "C" {
 #include <stdint.h>
 #include "utf8_decode.h"
 
-enum
+typedef enum
 {
-  LEFT = 0,
-  RIGHT,
-  CENTER,
+  TOP_LEFT = 0,
   TOP,
+  TOP_RIGHT,
+  LEFT,
+  CENTER,
+  RIGHT,
+  BOTTOM_LEFT,
   BOTTOM,
-};
+  BOTTOM_RIGHT
+} ALIGN_POSITION;
 
 typedef enum
 {
@@ -70,6 +74,7 @@ void GUI_FillCircle(uint16_t x0, uint16_t y0, uint16_t r);
 void GUI_SetRange(int16_t x0, int16_t y0, int16_t x1, int16_t y1);
 void GUI_CancelRange(void);
 void GUI_DrawPixel(int16_t x, int16_t y, uint16_t color);
+GUI_POINT getTextStartPoint(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey,ALIGN_POSITION pos, const char * textchar);
 void GUI_DispOne(int16_t sx, int16_t sy, const CHAR_INFO *pInfo);
 
 // display string from char array pointers
@@ -126,7 +131,7 @@ typedef struct
   GUI_RECT rect;
   uint8_t  *text;
   uint32_t time;
-  int16_t    off_head;
+  int16_t  off_head;
   int16_t  off_tail;
   uint16_t maxByte;
   uint16_t curByte;

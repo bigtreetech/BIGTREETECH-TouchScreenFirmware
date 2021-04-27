@@ -49,7 +49,7 @@ void menuBaudrate(void)
 {
   LABEL title = {LABEL_BAUDRATE};
   LISTITEM totalItems[BAUDRATE_COUNT];
-  KEY_VALUES key_num = KEY_IDLE;
+  KEY_VALUES curIndex = KEY_IDLE;
   SETTINGS now = infoSettings;
   uint8_t cur_item = 0;
 
@@ -58,55 +58,35 @@ void menuBaudrate(void)
   {
     if (infoSettings.baudrate == i)
     {
-      totalItems[i].icon = ICONCHAR_CHECKED;
+      totalItems[i].icon = CHARICON_CHECKED;
       cur_item = i;
     }
     else
     {
-      totalItems[i].icon = ICONCHAR_UNCHECKED;
+      totalItems[i].icon = CHARICON_UNCHECKED;
     }
     totalItems[i].itemType = LIST_LABEL;
     totalItems[i].titlelabel.address = (uint8_t *) item_baudrate_str[i];
   }
 
-  listWidgetCreate(title, totalItems, COUNT(totalItems), cur_item / LISTITEM_PER_PAGE);
+  listViewCreate(title, totalItems, COUNT(totalItems), NULL, true, NULL, NULL);
 
   while (infoMenu.menu[infoMenu.cur] == menuBaudrate)
   {
-    key_num = menuKeyGetValue();
-    switch (key_num)
-    {
-      case KEY_ICON_5:
-        listWidgetPreviousPage();
-        break;
+    curIndex = listViewGetSelectedIndex();
 
-      case KEY_ICON_6:
-        listWidgetNextPage();
-        break;
+    if (curIndex != KEY_IDLE && curIndex != cur_item)
+    {  // has changed
+      totalItems[cur_item].icon = CHARICON_UNCHECKED;
+      listViewRefreshItem(cur_item);  // refresh unchecked status
+      cur_item = curIndex;
+      totalItems[cur_item].icon = CHARICON_CHECKED;
+      listViewRefreshItem(cur_item);  // refresh checked status
 
-      case KEY_ICON_7:
-        infoMenu.cur--;
-        break;
-
-      default:
-        if (key_num < LISTITEM_PER_PAGE)
-        {
-          uint16_t tmp_i = listWidgetGetCurPage() * LISTITEM_PER_PAGE + key_num;
-          if (tmp_i != cur_item)
-          { // has changed
-            totalItems[cur_item].icon = ICONCHAR_UNCHECKED;
-            listWidgetRefreshItem(cur_item);  // refresh unchecked status
-            cur_item = tmp_i;
-            totalItems[cur_item].icon = ICONCHAR_CHECKED;
-            listWidgetRefreshItem(cur_item);  // refresh checked status
-
-            infoSettings.baudrate = cur_item;
-            Serial_ReSourceDeInit();  // Serial_Init() will malloc a dynamic memory, so Serial_DeInit() first to free, then malloc again.
-            Serial_ReSourceInit();
-            reminderMessage(LABEL_UNCONNECTED, STATUS_UNCONNECT);
-          }
-        }
-        break;
+      infoSettings.baudrate = cur_item;
+      Serial_ReSourceDeInit();  // Serial_Init() will malloc a dynamic memory, so Serial_DeInit() first to free, then malloc again.
+      Serial_ReSourceInit();
+      reminderMessage(LABEL_UNCONNECTED, STATUS_UNCONNECT);
     }
 
     loopProcess();
@@ -120,14 +100,14 @@ void menuBaudrate(void)
 
 void menuConnectionSettings(void)
 {
-  KEY_VALUES key_num = KEY_IDLE;
+  KEY_VALUES curIndex = KEY_IDLE;
 
   menuDrawPage(&connectionSettingsItems);
 
   while (infoMenu.menu[infoMenu.cur] == menuConnectionSettings)
   {
-    key_num = menuKeyGetValue();
-    switch (key_num)
+    curIndex = menuKeyGetValue();
+    switch (curIndex)
     {
       case KEY_ICON_0:
         infoMenu.menu[++infoMenu.cur] = menuBaudrate;

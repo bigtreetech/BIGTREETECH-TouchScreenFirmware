@@ -1,126 +1,32 @@
 #include "MachineSettings.h"
 
-//load values on page change and reload
-void loaditemsCustomGcode(LISTITEMS * customItems, CUSTOM_GCODES * customcodes, uint8_t gc_cur_page)
-{
-  uint8_t gc_page_count = (customcodes->count + LISTITEM_PER_PAGE - 1) / LISTITEM_PER_PAGE;
-
-  for (uint32_t i = 0; i < LISTITEM_PER_PAGE; i++)
-  {
-    uint32_t item_index = gc_cur_page * LISTITEM_PER_PAGE + i;
-    if (item_index < customcodes->count)
-    {
-      customItems->items[i].icon = ICONCHAR_CODE;
-      customItems->items[i].titlelabel.index = LABEL_DYNAMIC;
-      customItems->items[i].titlelabel.address = customcodes->name[item_index];
-    }
-    else
-    {
-      customItems->items[i].icon = ICONCHAR_BACKGROUND;
-      customItems->items[i].titlelabel.index = LABEL_BACKGROUND;
-    }
-  }
-  // set page up down button according to page count and current page
-  if (customcodes->count <= LISTITEM_PER_PAGE)
-  {
-    customItems->items[5].icon = ICONCHAR_BACKGROUND;
-    customItems->items[6].icon = ICONCHAR_BACKGROUND;
-  }
-  else
-  {
-    if (gc_cur_page == 0)
-    {
-      customItems->items[5].icon = ICONCHAR_BACKGROUND;
-      customItems->items[6].icon = ICONCHAR_PAGEDOWN;
-    }
-    else if (gc_cur_page == (gc_page_count - 1))
-    {
-      customItems->items[5].icon = ICONCHAR_PAGEUP;
-      customItems->items[6].icon = ICONCHAR_BACKGROUND;
-    }
-    else
-    {
-      customItems->items[5].icon = ICONCHAR_PAGEUP;
-      customItems->items[6].icon = ICONCHAR_PAGEDOWN;
-    }
-  }
-}
-
 void menuCustom(void)
 {
-  LISTITEMS customItems = {
-    // title
-    LABEL_CUSTOM,
-    // icon                 ItemType    Item Title        item value text(only for custom value)
-    {
-      {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
-      {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
-      {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
-      {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
-      {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
-      {ICONCHAR_PAGEUP,     LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
-      {ICONCHAR_PAGEDOWN,   LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
-      {ICONCHAR_BACK,       LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
-    }
-  };
-
-  KEY_VALUES key_num = KEY_IDLE;
   CUSTOM_GCODES customcodes;
 
   //load custom codes
   W25Qxx_ReadBuffer((u8 *)&customcodes, CUSTOM_GCODE_ADDR, sizeof(CUSTOM_GCODES));
 
-  uint8_t gc_page_count = (customcodes.count + LISTITEM_PER_PAGE - 1) / LISTITEM_PER_PAGE;
-  uint8_t gc_cur_page = 0;
+  LABEL title = {LABEL_CUSTOM};
+  LISTITEM customItems[customcodes.count];
+  uint16_t curIndex = KEY_IDLE;
 
-  loaditemsCustomGcode(&customItems, &customcodes, gc_cur_page);
-  menuDrawListPage(&customItems);
+  // load custom gcodes to list items
+  for (uint32_t i = 0; i < customcodes.count; i++)
+  {
+    customItems[i].icon = CHARICON_CODE;
+    customItems[i].itemType = LIST_LABEL;
+    customItems[i].titlelabel.address = (uint8_t*)customcodes.name[i];
+  }
+
+  listViewCreate(title, customItems, customcodes.count, NULL, true, NULL, NULL);
 
   while (infoMenu.menu[infoMenu.cur] == menuCustom)
   {
-    key_num = menuKeyGetValue();
+    curIndex = listViewGetSelectedIndex();
 
-    if (key_num < LISTITEM_PER_PAGE)
-    {
-      uint32_t item_index = gc_cur_page * LISTITEM_PER_PAGE + key_num;
-      if (item_index < customcodes.count)
-        mustStoreScript(customcodes.gcode[item_index]);
-    }
-
-    switch (key_num)
-    {
-      case KEY_ICON_5:
-        if (gc_page_count > 1)
-        {
-          if (gc_cur_page > 0)
-          {
-            gc_cur_page--;
-            loaditemsCustomGcode(&customItems, &customcodes, gc_cur_page);
-            menuRefreshListPage();
-          }
-        }
-        break;
-
-      case KEY_ICON_6:
-        if (gc_page_count > 1)
-        {
-          if (gc_cur_page < gc_page_count - 1)
-          {
-            gc_cur_page++;
-            loaditemsCustomGcode(&customItems, &customcodes, gc_cur_page);
-            menuRefreshListPage();
-          }
-        }
-        break;
-
-      case KEY_ICON_7:
-        gc_cur_page = 0;
-        infoMenu.cur--;
-        break;
-
-      default:
-        break;
-    }
+    if (curIndex < customcodes.count)
+      mustStoreScript(customcodes.gcode[curIndex]);
 
     loopProcess();
   }
@@ -133,27 +39,27 @@ void menuEepromSettings(void)
   MENUITEMS eepromSettingsItems = {
     // title
     LABEL_EEPROM_SETTINGS,
-    // icon                          label
+    // icon                  label
     {
-      {ICON_EEPROM_SAVE,             LABEL_SAVE},
-      {ICON_EEPROM_RESTORE,          LABEL_RESTORE},
-      {ICON_EEPROM_RESET,            LABEL_RESET},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACK,                    LABEL_BACK},
+      {ICON_EEPROM_SAVE,     LABEL_SAVE},
+      {ICON_EEPROM_RESTORE,  LABEL_RESTORE},
+      {ICON_EEPROM_RESET,    LABEL_RESET},
+      {ICON_BACKGROUND,      LABEL_BACKGROUND},
+      {ICON_BACKGROUND,      LABEL_BACKGROUND},
+      {ICON_BACKGROUND,      LABEL_BACKGROUND},
+      {ICON_BACKGROUND,      LABEL_BACKGROUND},
+      {ICON_BACK,            LABEL_BACK},
     }
   };
 
-  KEY_VALUES key_num = KEY_IDLE;
+  KEY_VALUES curIndex = KEY_IDLE;
 
   menuDrawPage(&eepromSettingsItems);
 
   while (infoMenu.menu[infoMenu.cur] == menuEepromSettings)
   {
-    key_num = menuKeyGetValue();
-    switch (key_num)
+    curIndex = menuKeyGetValue();
+    switch (curIndex)
     {
       case KEY_ICON_0:
         // save to EEPROM
@@ -219,7 +125,7 @@ void menuMachineSettings(void)
     }
   };
 
-  KEY_VALUES key_num = KEY_IDLE;
+  KEY_VALUES curIndex = KEY_IDLE;
   const ITEM itemCaseLight = {ICON_CASE_LIGHT, LABEL_CASE_LIGHT};
 
   if (infoMachineSettings.caseLightsBrightness == ENABLED)
@@ -229,8 +135,8 @@ void menuMachineSettings(void)
 
   while (infoMenu.menu[infoMenu.cur] == menuMachineSettings)
   {
-    key_num = menuKeyGetValue();
-    switch (key_num)
+    curIndex = menuKeyGetValue();
+    switch (curIndex)
     {
       case KEY_ICON_0:
         infoMenu.menu[++infoMenu.cur] = menuParameterSettings;

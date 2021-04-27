@@ -91,8 +91,8 @@ const LABEL itemToggle[ITEM_TOGGLE_NUM] =
 
 const uint16_t iconToggle[ITEM_TOGGLE_NUM] =
 {
-  ICONCHAR_TOGGLE_OFF,
-  ICONCHAR_TOGGLE_ON
+  CHARICON_TOGGLE_OFF,
+  CHARICON_TOGGLE_ON
 };
 
 // Check time elapsed against the time specified in milliseconds for displaying/updating info on screen
