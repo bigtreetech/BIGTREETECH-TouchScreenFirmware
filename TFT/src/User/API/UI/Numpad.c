@@ -1,5 +1,5 @@
 #include "Numpad.h"
-#include "list_item.h"
+#include "CharIcon.h"
 
 #define SKEYHEIGHT (LCD_HEIGHT-ICON_START_Y)/4
 #define SKEYWIDTH  LCD_WIDTH/4
@@ -7,23 +7,6 @@
 #define KEY_NUM       16
 #define FLOAT_BUFLONG 9
 #define INT_BUFLONG   6
-
-typedef enum
-{
-  SKEY_0 = 0,
-  SKEY_1,
-  SKEY_2,
-  SKEY_3,
-  SKEY_4,
-  SKEY_5,
-  SKEY_6,
-  SKEY_7,
-  SKEY_8,
-  SKEY_9,
-  SKEY_10,
-  SKEY_11,
-  SKEY_IDLE = IDLE_TOUCH,
-}SKEY_VALUES;
 
 typedef enum
 {
@@ -187,19 +170,21 @@ void Draw_keyboard(uint8_t * title, bool NumberOnly, bool negative)
 
     setLargeFont(true);
 
-    DrawCharIcon(&rect_of_numkey[NUM_KEY_OK], MIDDLE, ICONCHAR_OK, false, 0);
-    DrawCharIcon(&rect_of_numkey[NUM_KEY_DEL], MIDDLE, ICONCHAR_POINT_LEFT, false, 0);
-    DrawCharIcon(&rect_of_numkey[NUM_KEY_EXIT], MIDDLE, ICONCHAR_CANCEL, false, 0);
-    DrawCharIcon(&rect_of_numkey[NUM_KEY_RESET], MIDDLE, ICONCHAR_RESET, false, 0);
+    drawCharIcon(&rect_of_numkey[NUM_KEY_OK], CENTER, CHARICON_OK, false, 0);
+    drawCharIcon(&rect_of_numkey[NUM_KEY_DEL], CENTER, CHARICON_POINT_LEFT, false, 0);
+    drawCharIcon(&rect_of_numkey[NUM_KEY_EXIT], CENTER, CHARICON_CANCEL, false, 0);
+    drawCharIcon(&rect_of_numkey[NUM_KEY_RESET], CENTER, CHARICON_RESET, false, 0);
+
   #endif // KEYBOARD_MATERIAL_THEME
 
-    GUI_DispStringInPrect(&arrowRect,(uint8_t *)"\u089A");
+  GUI_DispStringInPrect(&arrowRect,(uint8_t *)"\u089A");
 
-    setLargeFont(true);
-    if ((oldParameterRect.x1 - oldParameterRect.x0) <= GUI_StrPixelWidth_str(title))
-      setLargeFont(false);
-    GUI_DispStringInPrect(&oldParameterRect, title);
+  setLargeFont(true);
+  if ((oldParameterRect.x1 - oldParameterRect.x0) <= GUI_StrPixelWidth_str(title))
     setLargeFont(false);
+
+  GUI_DispStringInPrect(&oldParameterRect, title);
+  setLargeFont(false);
 }
 
 static inline void drawValue(char * str)

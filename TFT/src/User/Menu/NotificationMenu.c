@@ -15,15 +15,15 @@ void loadNotificationItems(void)
       switch (tempNotify->style)
       {
         case DIALOG_TYPE_ERROR:
-          itemlist->items[i].icon = ICONCHAR_ERROR;
+          itemlist->items[i].icon = CHARICON_ERROR;
           break;
 
         case DIALOG_TYPE_ALERT:
-          itemlist->items[i].icon = ICONCHAR_ALERT;
+          itemlist->items[i].icon = CHARICON_ALERT;
           break;
 
         default:
-          itemlist->items[i].icon = ICONCHAR_INFO;
+          itemlist->items[i].icon = CHARICON_INFO;
           break;
       }
 
@@ -32,7 +32,7 @@ void loadNotificationItems(void)
     }
     else
     {
-      itemlist->items[i].icon = ICONCHAR_BACKGROUND;
+      itemlist->items[i].icon = CHARICON_BACKGROUND;
     }
 
     menuDrawListItem(&itemlist->items[i], i);
@@ -46,14 +46,14 @@ void menuNotification(void)
     LABEL_NOTIFICATIONS,
     // icon                 ItemType    Item Title        item value text(only for custom value)
     {
-      {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_DYNAMIC,    LABEL_BACKGROUND},
-      {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_DYNAMIC,    LABEL_BACKGROUND},
-      {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_DYNAMIC,    LABEL_BACKGROUND},
-      {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_DYNAMIC,    LABEL_BACKGROUND},
-      {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_DYNAMIC,    LABEL_BACKGROUND},
-      {ICONCHAR_BLANK,      LIST_LABEL, LABEL_CLEAR,      LABEL_BACKGROUND},
-      {ICONCHAR_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
-      {ICONCHAR_BACK,       LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
+      {CHARICON_BACKGROUND, LIST_LABEL, LABEL_DYNAMIC,    LABEL_BACKGROUND},
+      {CHARICON_BACKGROUND, LIST_LABEL, LABEL_DYNAMIC,    LABEL_BACKGROUND},
+      {CHARICON_BACKGROUND, LIST_LABEL, LABEL_DYNAMIC,    LABEL_BACKGROUND},
+      {CHARICON_BACKGROUND, LIST_LABEL, LABEL_DYNAMIC,    LABEL_BACKGROUND},
+      {CHARICON_BACKGROUND, LIST_LABEL, LABEL_DYNAMIC,    LABEL_BACKGROUND},
+      {CHARICON_BLANK,      LIST_LABEL, LABEL_CLEAR,      LABEL_BACKGROUND},
+      {CHARICON_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
+      {CHARICON_BACK,       LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
     }
   };
 

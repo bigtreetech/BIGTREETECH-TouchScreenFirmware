@@ -1,7 +1,7 @@
 #include "MachineParameters.h"
 #include "includes.h"
 
-const uint8_t parameter_element_count[PARAMETERS_COUNT] = {5, 5, 5, 3, 4, 1, 3, 4, 4, 1, 3, 2, 3, 2, 3, 5, 3, 5, 5, 1};
+const uint8_t parameterElementCount[PARAMETERS_COUNT] = {5, 5, 5, 3, 4, 1, 3, 4, 4, 1, 3, 2, 3, 2, 3, 5, 3, 5, 5, 1};
 
 const char * const parameter_Cmd[PARAMETERS_COUNT][STEPPER_COUNT] = {
     {"M92 X%.2f\n",           "M92 Y%.2f\n",       "M92 Z%.2f\n",       "M92 T0 E%.2f\n",   "M92 T1 E%.2f\n"},    //Steps/mm
@@ -26,7 +26,7 @@ const char * const parameter_Cmd[PARAMETERS_COUNT][STEPPER_COUNT] = {
     {"G29 S4 Z%.2f\nG29 S0\n",NULL,                NULL,                NULL,               NULL},                //MBL offset
 };
 
-const VAL_TYPE parameter_val_type[PARAMETERS_COUNT][STEPPER_COUNT] = {
+const VAL_TYPE parameterValType[PARAMETERS_COUNT][STEPPER_COUNT] = {
   {VAL_TYPE_FLOAT,        VAL_TYPE_FLOAT,       VAL_TYPE_FLOAT,        VAL_TYPE_FLOAT,    VAL_TYPE_FLOAT},  //Steps/mm
   {VAL_TYPE_INT,          VAL_TYPE_INT,         VAL_TYPE_INT,          VAL_TYPE_INT,      VAL_TYPE_INT},    //MaxFeedrate
   {VAL_TYPE_INT,          VAL_TYPE_INT,         VAL_TYPE_INT,          VAL_TYPE_INT,      VAL_TYPE_INT},    //MaxAcceleration
@@ -45,7 +45,7 @@ const VAL_TYPE parameter_val_type[PARAMETERS_COUNT][STEPPER_COUNT] = {
   {VAL_TYPE_INT,          VAL_TYPE_INT,         VAL_TYPE_INT,          VAL_TYPE_INT,      VAL_TYPE_INT},    //Current
   {VAL_TYPE_NEG_INT,      VAL_TYPE_NEG_INT,     VAL_TYPE_NEG_INT},                                          //bump Sensitivity
   {VAL_TYPE_INT,          VAL_TYPE_INT,         VAL_TYPE_INT,          VAL_TYPE_INT,      VAL_TYPE_INT},    //TMC Hybrid Threshold Speed
-  {VAL_TYPE_INT,          VAL_TYPE_INT,         VAL_TYPE_INT,          VAL_TYPE_INT,      VAL_TYPE_INT},    //TMC StealthChop 
+  {VAL_TYPE_INT,          VAL_TYPE_INT,         VAL_TYPE_INT,          VAL_TYPE_INT,      VAL_TYPE_INT},    //TMC StealthChop
   {VAL_TYPE_NEG_FLOAT},                                                                                     //MBL offset
 };
 
@@ -54,7 +54,7 @@ const char *const dualStepperParameter_cmd[4][AXIS_NUM] = {
   {"M906 I1 X%.0f\n",   "M906 I1 Y%.0f\n",   "M906 I1 Z%.0f\n"},    //Current
   {"M914 I1 X%.0f\n",   "M914 I1 Y%.0f\n",   "M914 I1 Z%.0f\n"},    //bump Sensitivity
   {"M913 I1 X%.0f\n",   "M913 I1 Y%.0f\n",   "M913 I1 Z%.0f\n"},    //TMC Hybrid Threshold Speed
-  {"M569 S%.0f I1 X\n", "M569 S%.0f I1 Y\n", "M569 S%.0f I1 Z\n"},  //TMC StealthChop 
+  {"M569 S%.0f I1 X\n", "M569 S%.0f I1 Y\n", "M569 S%.0f I1 Z\n"},  //TMC StealthChop
 };
 
 PARAMETERS infoParameters;
@@ -63,11 +63,10 @@ uint8_t dualsteppers = 0;
 
 char * const axisDisplayID[STEPPER_COUNT] = AXIS_DISPLAY_ID;
 
-const LABEL accel_disp_ID[] = {LABEL_PRINT_ACCELERATION, LABEL_RETRACT_ACCELERATION, LABEL_TRAVEL_ACCELERATION};
-const LABEL retract_disp_ID[] = {LABEL_RETRACT_LENGTH, LABEL_RETRACT_SWAP_LENGTH, LABEL_RETRACT_FEEDRATE, LABEL_RETRACT_Z_LIFT};
-const LABEL recover_disp_ID[] = {LABEL_RECOVER_LENGTH, LABEL_SWAP_RECOVER_LENGTH, LABEL_RECOVER_FEEDRATE, LABEL_SWAP_RECOVER_FEEDRATE};
-const LABEL retract_auto_ID[] = {LABEL_RETRACT_AUTO};
-const LABEL junction_deviation_disp_ID[] = {LABEL_JUNCTION_DEVIATION};
+const LABEL accelDisplayID[] = {LABEL_PRINT_ACCELERATION, LABEL_RETRACT_ACCELERATION, LABEL_TRAVEL_ACCELERATION};
+const LABEL retractDisplayID[] = {LABEL_RETRACT_LENGTH, LABEL_RETRACT_SWAP_LENGTH, LABEL_RETRACT_FEEDRATE, LABEL_RETRACT_Z_LIFT};
+const LABEL recoverDisplayID[] = {LABEL_RECOVER_LENGTH, LABEL_SWAP_RECOVER_LENGTH, LABEL_RECOVER_FEEDRATE, LABEL_SWAP_RECOVER_FEEDRATE};
+const LABEL junctionDeviationDisplayID[] = {LABEL_JUNCTION_DEVIATION};
 
 void setParameterStatus(PARAMETER_NAME name, bool status)
 {
@@ -106,7 +105,7 @@ PARAMETER_NAME getEnabledParameter(uint8_t index)
 
 float getParameter(PARAMETER_NAME name, uint8_t index)
 {
-  if (index >= parameter_element_count[name] || !getParameterStatus(name))
+  if (index >= parameterElementCount[name] || !getParameterStatus(name))
     return 0.0f;
 
   switch (name)
@@ -166,7 +165,7 @@ float getParameter(PARAMETER_NAME name, uint8_t index)
       return infoParameters.HybridThreshold[index];
 
     case P_STEALTH_CHOP:
-      return infoParameters.StealthChop[index]; 
+      return infoParameters.StealthChop[index];
 
     case P_MBL_OFFSET:
       return infoParameters.MblOffset[index];
@@ -178,7 +177,7 @@ float getParameter(PARAMETER_NAME name, uint8_t index)
 
 void setParameter(PARAMETER_NAME name, uint8_t index, float val)
 {
-  if (index >= parameter_element_count[name])
+  if (index >= parameterElementCount[name])
     return;
 
   setParameterStatus(name, true);
@@ -258,7 +257,7 @@ void setParameter(PARAMETER_NAME name, uint8_t index, float val)
       break;
 
     case P_STEALTH_CHOP:
-      infoParameters.StealthChop[index] = val; 
+      infoParameters.StealthChop[index] = val;
       break;
 
     case P_MBL_OFFSET:
@@ -272,12 +271,12 @@ void setParameter(PARAMETER_NAME name, uint8_t index, float val)
 
 uint8_t getParameterElementCount(PARAMETER_NAME para)
 {
-  return parameter_element_count[para];
+  return parameterElementCount[para];
 }
 
 VAL_TYPE getParameterValType(PARAMETER_NAME para, uint8_t index)
 {
-  return parameter_val_type[para][index];
+  return parameterValType[para][index];
 }
 
 void setDualStepperStatus(uint8_t index, bool status)
