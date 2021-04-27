@@ -1,6 +1,6 @@
 #include "menu.h"
 #include "includes.h"
-#include "list_item.h"
+#include "ListItem.h"
 #include "Notification.h"
 
 // exhibitRect is 2 ICON Space in the Upper Row and 2 Center column.
@@ -291,7 +291,7 @@ void menuDrawIconText(const ITEM *item, uint8_t position)
  void menuDrawListItem(const LISTITEM *item, uint8_t position)
 {
   const GUI_RECT *rect = rect_of_keyListView + position;
-  if (item->icon == ICONCHAR_BACKGROUND)
+  if (item->icon == CHARICON_BACKGROUND)
   {
     GUI_ClearPrect(rect);
   }
@@ -500,18 +500,21 @@ void menuReDrawCurTitle(void)
 {
   if (menuType == MENU_TYPE_LISTVIEW)
   {
-    if (curListItems == NULL) return;
+    if (curListItems == NULL)
+      return;
     if (curListItems->title.index < LABEL_BACKGROUND)
-    menuDrawTitle(labelGetAddress(&curListItems->title));
+      menuDrawTitle(labelGetAddress(&curListItems->title));
   }
   else if (menuType == MENU_TYPE_ICON)
   {
-    if (curMenuItems == NULL) return;
+    if (curMenuItems == NULL)
+      return;
     menuDrawTitle(labelGetAddress(&curMenuItems->title));
   }
   else if (menuType == MENU_TYPE_FULLSCREEN)
   {
-    if (curMenuRedrawHandle != NULL) curMenuRedrawHandle();
+    if (curMenuRedrawHandle != NULL)
+      curMenuRedrawHandle();
   }
   else if (menuType == MENU_TYPE_OTHER)
   {
@@ -528,9 +531,9 @@ void menuDrawPage(const MENUITEMS *menuItems)
   TSC_ReDrawIcon = itemDrawIconPress;
   curMenuRedrawHandle = NULL;
 
-  curRect = ((infoMenu.menu[infoMenu.cur] == menuStatus) || ((infoMenu.menu[infoMenu.cur] == menuPrinting) && !isPrinting())) ? rect_of_keySS : rect_of_key;
+  curRect = ((infoMenu.menu[infoMenu.cur] == menuStatus) ||
+             ((infoMenu.menu[infoMenu.cur] == menuPrinting) && !isPrinting())) ? rect_of_keySS : rect_of_key;
 
-  //GUI_Clear(BLACK);
   menuClearGaps();  // Use this function instead of GUI_Clear to eliminate the splash screen when clearing the screen.
   menuDrawTitle(labelGetAddress(&menuItems->title));
   for (i = 0; i < ITEM_PER_PAGE; i++)
@@ -554,15 +557,15 @@ void menuDrawListPage(const LISTITEMS *listItems)
   GUI_SetBkColor(infoSettings.bg_color);
   GUI_ClearRect(0, TITLE_END_Y, LCD_WIDTH, LCD_HEIGHT);
 
-  //menuClearGaps();  //Use this function instead of GUI_Clear to eliminate the splash screen when clearing the screen.
+  //menuClearGaps();  // Use this function instead of GUI_Clear to eliminate the splash screen when clearing the screen.
   menuDrawTitle(labelGetAddress(&listItems->title));
 
   for (i = 0; i < ITEM_PER_PAGE; i++)
   {
     //const GUI_RECT *rect = rect_of_keyListView + i;
-    if (curListItems->items[i].icon != ICONCHAR_BACKGROUND)
+    if (curListItems->items[i].icon != CHARICON_BACKGROUND)
       menuDrawListItem(&curListItems->items[i], i);
-    RAPID_PRINTING_COMM()  //perform backend printing loop between drawing icons to avoid printer idling
+    RAPID_PRINTING_COMM()  // perform backend printing loop between drawing icons to avoid printer idling
   }
 }
 
@@ -644,7 +647,7 @@ void itemDrawIconPress(uint8_t position, uint8_t is_press)
 
     const GUI_RECT *rect = rect_of_keyListView + position;
 
-    if (curListItems->items[position].icon == ICONCHAR_BACKGROUND)
+    if (curListItems->items[position].icon == CHARICON_BACKGROUND)
     {
       GUI_ClearPrect(rect);
       return;
@@ -660,6 +663,7 @@ void itemDrawIconPress(uint8_t position, uint8_t is_press)
 KEY_VALUES menuKeyGetValue(void)
 {
   KEY_VALUES tempkey = KEY_IDLE;
+
   if (menuType == MENU_TYPE_ICON)
   {
     if ((infoMenu.menu[infoMenu.cur] == menuStatus) || ((infoMenu.menu[infoMenu.cur] == menuPrinting) && !isPrinting()))
@@ -757,6 +761,7 @@ GUI_POINT getIconStartPoint(int index)
         longPress = true;
         touchSound = false;
         KEY_VALUES tempKey = KEY_IDLE;
+
         if (infoMenu.menu[infoMenu.cur] == menuPrinting)
         {
           tempKey = Key_value(COUNT(rect_of_keySS), rect_of_keySS);
