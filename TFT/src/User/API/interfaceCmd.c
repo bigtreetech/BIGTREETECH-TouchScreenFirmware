@@ -902,7 +902,7 @@ void sendQueueCmd(void)
           if (cmd_seen('Z')) setParameter(P_ABL_STATE, 1, cmd_float());
           break;
 
-        case 596:  // M596 TMC StealthChop
+        case 569:  // M569 TMC StealthChop
         {
           uint8_t k = (cmd_seen('S')) ? cmd_value() : 0;
           uint8_t i = (cmd_seen('I')) ? cmd_value() : 0;
