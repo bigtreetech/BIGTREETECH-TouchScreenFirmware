@@ -901,16 +901,34 @@ void parseACK(void)
         if (ack_seen("Z")) setParameter(P_ABL_STATE, 1, ack_value());
       }
       // parse and store TMC Stealth Chop
-      else if (ack_seen("M569"))
+      else if (ack_seen("Driver stepping mode:"))  // poll stelthchop settings separately to
       {
-        uint8_t k = (ack_seen("S")) ? ack_value() : 0;
-        uint8_t i = (ack_seen("I")) ? ack_value() : 0;
-        if (ack_seen("X")) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_X + i, k);
-        if (ack_seen("Y")) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_Y + i, k);
-        if (ack_seen("Z")) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_Z + i, k);
-
-        i = (ack_seen("T")) ? ack_value() : 0;
-        if (ack_seen("E")) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_E0 + i, k);
+        storeCmd("M569\n");
+      }
+      else if (ack_seen("driver mode:"))
+      {
+        uint8_t k = (ack_seen("stealthChop")) ? 1 : 0;
+        int8_t i = 0;
+        if (ack_seen("X"))
+        {
+          i = ack_value();
+          i = STEPPER_INDEX_X + ((i > 0) ? (i - 1) : 0);
+        }
+        else if (ack_seen("Y"))
+        {
+          i = ack_value();
+          i = STEPPER_INDEX_Y + ((i > 0) ? (i - 1) : 0);
+        }
+        else if (ack_seen("Z"))
+        {
+          i = ack_value();
+          i = STEPPER_INDEX_Z + ((i > 0) ? (i - 1) : 0);
+        }
+        else if (ack_seen("E"))
+        {
+          i = ack_value() + STEPPER_INDEX_E0;
+        }
+        setParameter(P_STEALTH_CHOP, i, k);
       }
       // parse and store Probe Offset values
       else if (ack_seen("M851 X"))
