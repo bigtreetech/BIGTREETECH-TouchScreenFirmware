@@ -587,13 +587,13 @@ void loopPrintFromTFT(void)
   uint8_t sd_count = 0;
   UINT    br = 0;
 
-  if (!infoPrinting.printing || infoFile.source >= BOARD_SD) return;
-
-  powerFailedCache(infoPrinting.file.fptr);
-
   if (heatHasWaiting() || infoCmd.count || infoPrinting.pause) return;
 
   if (moveCacheToCmd() == true) return;
+
+  if (!infoPrinting.printing || infoFile.source >= BOARD_SD) return;
+
+  powerFailedCache(infoPrinting.file.fptr);
 
   for (; infoPrinting.cur < infoPrinting.size;)
   {

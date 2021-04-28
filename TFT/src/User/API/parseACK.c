@@ -437,7 +437,7 @@ void parseACK(void)
 
         for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
         {
-          if (!heaterIsValid(i))
+          if (!heaterDisplayIsValid(i))
             continue;
           if (ack_seen(heaterID[i]))
           {

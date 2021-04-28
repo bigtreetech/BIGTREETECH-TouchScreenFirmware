@@ -78,7 +78,7 @@ void menuHeat(void)
         do
         {
           tool_index = (tool_index + 1) % MAX_HEATER_COUNT;
-        } while (!heaterIsValid(tool_index));
+        } while (!heaterDisplayIsValid(tool_index));
 
         heatItems.items[key_num] = itemTool[tool_index];
 
