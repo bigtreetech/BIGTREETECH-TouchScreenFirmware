@@ -39,6 +39,7 @@ extern "C" {
 #define CONFIG_PERSISTENT_TEMP        "persistent_info:"
 #define CONFIG_LIST_MODE              "files_list_mode:"
 #define CONFIG_ACK_NOTIFICATION       "ack_notification:"
+#define CONFIG_NOTIFICATION_M117      "notification_m117:"
 #define CONFIG_EMULATE_M600           "emulate_m600:"
 //-----------------------------Marlin Mode Settings (only for TFT24_V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70_V3.0)
 #define CONFIG_MODE                   "default_mode:"
