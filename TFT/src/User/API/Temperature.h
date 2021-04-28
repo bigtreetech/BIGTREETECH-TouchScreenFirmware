@@ -35,6 +35,7 @@ enum
   NOZZLE5,
   BED = MAX_HOTEND_COUNT,
   CHAMBER,
+  INVALID_HEATER,
 };
 
 typedef struct
@@ -73,11 +74,11 @@ void heatCoolDown(void);
 void heatSetCurrentTool(uint8_t tool);
 uint8_t heatGetCurrentTool(void);
 uint8_t heatGetCurrentHotend(void);
-bool heaterIsValid(uint8_t index);
+bool heaterDisplayIsValid(uint8_t index);
 
 bool heatGetIsWaiting(uint8_t index);
 bool heatHasWaiting(void);
-void heatSetIsWaiting(uint8_t index,HEATER_WAIT isWaiting);
+void heatSetIsWaiting(uint8_t index, HEATER_WAIT isWaiting);
 void heatClearIsWaiting(void);
 
 void updateNextHeatCheckTime(void);
