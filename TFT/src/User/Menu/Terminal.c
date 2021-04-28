@@ -99,7 +99,7 @@ typedef enum
 #define CTRL_COL_COUNT 4                              // control button count for keyboard view
 
 // keyboard key sizes
-#define KEY_WIDTH  (LCD_WIDTH / KB_COL_COUNT + 0.5)
+#define KEY_WIDTH  (LCD_WIDTH / KB_COL_COUNT + (0.5 * (LCD_WIDTH % KB_COL_COUNT > 0)))
 #define KEY_HEIGHT ROW_HEIGHT
 #define KEY_COUNT  (1 + (KB_COL_COUNT * KB_ROW_COUNT) + (CTRL_COL_COUNT))  // send + all keys + control bar keys
 
