@@ -56,7 +56,11 @@ void powerFailedCache(u32 offset)
     infoBreakPoint.speed = speedGetCurPercent(0);  // Move speed percent
     infoBreakPoint.flow = speedGetCurPercent(1);  // Flow percent
 
-    for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
+    for (uint8_t i = 0; i < infoSettings.hotend_count; i++)  // Tool nozzle
+    {
+      infoBreakPoint.target[i] = heatGetTargetTemp(i);
+    }
+    for (uint8_t i = MAX_HOTEND_COUNT; i < MAX_HEATER_COUNT; i++)  // Bed & Chamber
     {
       infoBreakPoint.target[i] = heatGetTargetTemp(i);
     }
@@ -85,7 +89,7 @@ void powerFailedClose(void)
   f_close(&fpPowerFailed);
 }
 
-void  powerFailedDelete(void)
+void powerFailedDelete(void)
 {
   if (create_ok == false) return;
 
@@ -135,7 +139,13 @@ bool powerOffGetData(void)
   }
 
   mustStoreCacheCmd("%s\n", tool_change[infoBreakPoint.tool]);
-  for (int8_t i = MAX_HEATER_COUNT - 1; i >= 0; i--)  // infoCacheCmd.queue[0 - 7]
+
+  for (uint8_t i = MAX_HEATER_COUNT - 1; i >= MAX_HOTEND_COUNT; i--)  // Bed & Chamber infoCacheCmd.queue[0 - 1]
+  {
+    if (infoBreakPoint.target[i] != 0)
+      mustStoreCacheCmd("%s S%d\n", heatWaitCmd[i], infoBreakPoint.target[i]);
+  }
+  for (int8_t i = infoSettings.hotend_count - 1; i >= 0; i--)  // Tool nozzle infoCacheCmd.queue[2 - 7]
   {
     if (infoBreakPoint.target[i] != 0)
       mustStoreCacheCmd("%s S%d\n", heatWaitCmd[i], infoBreakPoint.target[i]);
