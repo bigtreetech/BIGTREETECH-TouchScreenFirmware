@@ -279,6 +279,15 @@
  */
 #define TOUCHMI_SENSOR_VALUE 0  // Default: 0
 
+/**
+ * MBL settings
+ * Apply the "level_z_pos" configurable parameter value as the
+ * starting Z height for each point during MBL process.
+ * If not enabled, you can set the desired starting Z height
+ * in Marlin fw (MANUAL_PROBE_START_Z in Configuration.h).
+ */
+#define ENABLE_MBL_START_Z
+
 // Mesh Leveling Max Grid points
 // Set the maximum number of grid points per dimension.
 #define MESH_GRID_MAX_POINTS_X 15  // (Minimum 1, Maximum 15)

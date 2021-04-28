@@ -223,10 +223,12 @@ void hostActionCommands(void)
   if (ack_seen(":notification "))
   {
     statusScreen_setMsg((uint8_t *)echomagic, (uint8_t *)dmaL2Cache + ack_index);  // always display the notification on status screen
+
     if (infoSettings.notification_m117 == ENABLED)
     {
       addNotification(DIALOG_TYPE_INFO, (char*)echomagic, (char*)dmaL2Cache + ack_index, false);
     }  
+
     if (infoMenu.menu[infoMenu.cur] != menuStatus)  // don't show it when in menuStatus
     {
       uint16_t index = ack_index;
@@ -246,6 +248,12 @@ void hostActionCommands(void)
       setRunoutAlarmTrue();
     }
   }
+  else if (ack_seen(":resumed"))
+  {
+    // pass value "true" to report the host is printing without waiting
+    // from Marlin (when notification ack "SD printing byte" is caught)
+    setPrintResume(true);
+  }
   else if (ack_seen(":cancel"))  // To be added to Marlin abortprint routine
   {
     setPrintAbort();
@@ -256,7 +264,13 @@ void hostActionCommands(void)
     hostAction.button = 0;
     hostAction.prompt_show = true;
 
-    if (ack_seen("Resuming"))  // resuming from onboard SD or TFT
+    if (ack_seen("Nozzle Parked"))
+    {
+      // pass value "false" to let Marlin report when the host is not
+      // printing (when notification ack "Not SD printing" is caught)
+      setPrintPause(false);
+    }
+    else if (ack_seen("Resuming"))  // resuming from onboard SD or TFT
     {
       // pass value "true" to report the host is printing without waiting
       // from Marlin (when notification ack "SD printing byte" is caught)
@@ -272,12 +286,6 @@ void hostActionCommands(void)
     {
       hostAction.prompt_show = false;
       Serial_Puts(SERIAL_PORT, "M876 S0\n");  // auto-respond to a prompt request that is not shown on the TFT
-    }
-    else if (ack_seen("Nozzle Parked"))
-    {
-      // pass value "false" to let Marlin report when the host is not
-      // printing (when notification ack "Not SD printing" is caught)
-      setPrintPause(false);
     }
   }
   else if (ack_seen(":prompt_button "))
