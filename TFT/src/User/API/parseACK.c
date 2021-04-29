@@ -635,9 +635,9 @@ void parseACK(void)
         }
         if (ack_seen("max:"))
         {
-          if (ack_seen("X:")) infoSettings.machine_size_min[X_AXIS] = ack_value();
-          if (ack_seen("Y:")) infoSettings.machine_size_min[Y_AXIS] = ack_value();
-          if (ack_seen("Z:")) infoSettings.machine_size_min[Z_AXIS] = ack_value();
+          if (ack_seen("X:")) infoSettings.machine_size_max[X_AXIS] = ack_value();
+          if (ack_seen("Y:")) infoSettings.machine_size_max[Y_AXIS] = ack_value();
+          if (ack_seen("Z:")) infoSettings.machine_size_max[Z_AXIS] = ack_value();
         }
       }
       // parse M48, Repeatability Test
