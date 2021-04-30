@@ -4,100 +4,100 @@
 #define MAX_ELEMENT_COUNT 8
 
 const uint8_t parameterElementCount[PARAMETERS_COUNT] = {
-  AXIS_INDEX_COUNT,        //Steps/mm
-  AXIS_INDEX_COUNT,        //MaxFeedrate
-  AXIS_INDEX_COUNT,        //MaxAcceleration
-  3,                       //Acceleration
-  (AXIS_INDEX_COUNT - 1),  //Jerk
-  1,                       //Junction Deviation
-  (AXIS_INDEX_COUNT - 2),  //Home offset
-  4,                       //FW retract
-  4,                       //FW retract recover
-  1,                       //Set auto FW retract
-  (AXIS_INDEX_COUNT - 2),  //Hotend Offset
-  2,                       //ABL State & Z Fade
-  (AXIS_INDEX_COUNT - 2),  //Probe offset
-  2,                       //Linear Advance
-  3,                       //Filament Diameter
-  STEPPER_INDEX_COUNT,     //Current
-  STEPPER_INDEX_COUNT,     //bump Sensitivity
-  STEPPER_INDEX_COUNT,     //TMC Hybrid Threshold Speed
-  STEPPER_INDEX_COUNT,     //TMC StealthChop
-  1                        //MBL offset
+  AXIS_INDEX_COUNT,        // Steps/mm
+  AXIS_INDEX_COUNT,        // MaxFeedrate
+  AXIS_INDEX_COUNT,        // MaxAcceleration
+  3,                       // Acceleration
+  (AXIS_INDEX_COUNT - 1),  // Jerk
+  1,                       // Junction Deviation
+  (AXIS_INDEX_COUNT - 2),  // Home offset
+  4,                       // FW retract
+  4,                       // FW retract recover
+  1,                       // Set auto FW retract
+  (AXIS_INDEX_COUNT - 2),  // Hotend Offset
+  2,                       // ABL State & Z Fade
+  (AXIS_INDEX_COUNT - 2),  // Probe offset
+  2,                       // Linear Advance
+  3,                       // Filament Diameter
+  STEPPER_INDEX_COUNT,     // Current
+  STEPPER_INDEX_COUNT,     // bump Sensitivity
+  STEPPER_INDEX_COUNT,     // TMC Hybrid Threshold Speed
+  STEPPER_INDEX_COUNT,     // TMC StealthChop
+  1                        // MBL offset
 };
 
 const char * const parameterCode[PARAMETERS_COUNT] = {
-  "M92",   //Steps/mm
-  "M203",  //MaxFeedrate
-  "M201",  //MaxAcceleration
-  "M204",  //Acceleration
-  "M205",  //Jerk
-  "M205",  //Junction Deviation
-  "M206",  //Home offset
-  "M207",  //FW retract
-  "M208",  //FW retract recover
-  "M209",  //Set auto FW retract
-  "M218",  //Hotend Offset
-  "M420",  //ABL State & Z Fade
-  "M851",  //Probe offset
-  "M900",  //Linear Advance
-  "M200",  //Filament Diameter
-  "M906",  //Current
-  "M914",  //bump Sensitivity
-  "M913",  //TMC Hybrid Threshold Speed
-  "M569",  //TMC StealthChop
-  "G29",   //MBL offset
+  "M92",   // Steps/mm
+  "M203",  // MaxFeedrate
+  "M201",  // MaxAcceleration
+  "M204",  // Acceleration
+  "M205",  // Jerk
+  "M205",  // Junction Deviation
+  "M206",  // Home offset
+  "M207",  // FW retract
+  "M208",  // FW retract recover
+  "M209",  // Set auto FW retract
+  "M218",  // Hotend Offset
+  "M420",  // ABL State & Z Fade
+  "M851",  // Probe offset
+  "M900",  // Linear Advance
+  "M200",  // Filament Diameter
+  "M906",  // Current
+  "M914",  // bump Sensitivity
+  "M913",  // TMC Hybrid Threshold Speed
+  "M569",  // TMC StealthChop
+  "G29",   // MBL offset
 };
 
 const char * const parameterCmd[PARAMETERS_COUNT][MAX_ELEMENT_COUNT] = {
-  {"X%.2f\n",            "Y%.2f\n",       "Z%.2f\n",       "T0 E%.2f\n",   "T1 E%.2f\n", NULL,           NULL,           NULL},           //Steps/mm (X, Y, Z, E0, E1)
-  {"X%.0f\n",            "Y%.0f\n",       "Z%.0f\n",       "T0 E%.0f\n",   "T1 E%.0f\n", NULL,           NULL,           NULL},           //MaxFeedrate  (X, Y, Z, E0, E1)
-  {"X%.0f\n",            "Y%.0f\n",       "Z%.0f\n",       "T0 E%.0f\n",   "T1 E%.0f\n", NULL,           NULL,           NULL},           //MaxAcceleration (X, Y, Z, E0, E1)
-  {"P%.0f\n",            "R%.0f\n",       "T%.0f\n",       NULL,           NULL,         NULL,           NULL,           NULL},           //Acceleration (Print, Retract, Travel)
-  {"X%.0f\n",            "Y%.0f\n",       "Z%.2f\n",       "E%.2f\n",      NULL,         NULL,           NULL,           NULL},           //Jerk (X, Y, Z, E)
-  {"J%.3f\n",            NULL,            NULL,            NULL,           NULL,         NULL,           NULL,           NULL},           //Junction Deviation
-  {"X%.2f\n",            "Y%.2f\n",       "Z%.2f\n",       NULL,           NULL,         NULL,           NULL,           NULL},           //Home offset (X, Y, Z)
-  {"S%.2f\n",            "W%.2f\n",       "F%.2f\n",       "Z%.2f\n",      NULL,         NULL,           NULL,           NULL},           //FW retract (Length, Swap Length, Feedrate, Z lift height)
-  {"S%.2f\n",            "W%.2f\n",       "F%.2f\n",       "R%.2f\n",      NULL,         NULL,           NULL,           NULL},           //FW retract recover (Additional length, Additional Swap Length, Feedrate, Swap feedrate)
-  {"S%.0f\n",            NULL,            NULL,            NULL,           NULL,         NULL,           NULL,           NULL},           //Set auto FW retract
-  {"T1 X%.2f\n",         "T1 Y%.2f\n",    "T1 Z%.2f\n",    NULL,           NULL,         NULL,           NULL,           NULL},           //Hotend Offset (X, Y, Z)
-  {"S%.0f\n",            "Z%.2f\n",       NULL,            NULL,           NULL,         NULL,           NULL,           NULL},           //ABL State & Z Fade
-  {"X%.2f\n",            "Y%.2f\n",       "Z%.2f\n",       NULL,           NULL,         NULL,           NULL,           NULL},           //Probe offset (X, Y, Z)
-  {"T0 K%.2f\n",         "T1 K%.2f\n",    NULL,            NULL,           NULL,         NULL,           NULL,           NULL},           //Linear Advance (E0, E1)
-  {"S%.0f\n",            "S1 T0 D%.2f\n", "S1 T1 D%.2f\n", NULL,           NULL,         NULL,           NULL,           NULL},           //Filament Diameter (Enable, E0, E1)
-  {"X%.0f\n",            "I1 X%.0f\n",    "Y%.0f\n",       "I1 Y%.0f\n",   "Z%.0f\n",    "I1 Z%.0f\n",   "T0 E%.0f\n",   "T1 E%.0f\n"},   //Current (X, X2, Y, Y2, Z, Z2, E0, E1)
-  {"X%.0f\n",            "I1 X%.0f\n",    "Y%.0f\n",       "I1 Y%.0f\n",   "Z%.0f\n",    "I1 Z%.0f\n",   NULL,           NULL},           //bump Sensitivity  (X, X2, Y, Y2, Z, Z2)
-  {"X%.0f\n",            "I1 X%.0f\n",    "Y%.0f\n",       "I1 Y%.0f\n",   "Z%.0f\n",    "I1 Z%.0f\n",   "T0 E%.0f\n",   "T1 E%.0f\n"},   //TMC Hybrid Threshold Speed (X, X2, Y, Y2, Z, Z2, E0, E1)
-  {"S%.0f X\n",          "S%.0f I1 X\n",  "S%.0f Y\n",     "S%.0f I1 Y\n", "S%.0f Z\n",  "S%.0f I1 Z\n", "S%.0f T0 E\n", "S%.0f T1 E\n"}, //TMC StealthChop (X, X2, Y, Y2, Z, Z2, E0, E1)
-  {"S4 Z%.2f\nG29 S0\n", NULL,            NULL,            NULL,           NULL,         NULL,           NULL,           NULL},           //MBL offset
+  {"X%.2f\n",            "Y%.2f\n",       "Z%.2f\n",       "T0 E%.2f\n",   "T1 E%.2f\n", NULL,           NULL,           NULL},           // Steps/mm (X, Y, Z, E0, E1)
+  {"X%.0f\n",            "Y%.0f\n",       "Z%.0f\n",       "T0 E%.0f\n",   "T1 E%.0f\n", NULL,           NULL,           NULL},           // MaxFeedrate  (X, Y, Z, E0, E1)
+  {"X%.0f\n",            "Y%.0f\n",       "Z%.0f\n",       "T0 E%.0f\n",   "T1 E%.0f\n", NULL,           NULL,           NULL},           // MaxAcceleration (X, Y, Z, E0, E1)
+  {"P%.0f\n",            "R%.0f\n",       "T%.0f\n",       NULL,           NULL,         NULL,           NULL,           NULL},           // Acceleration (Print, Retract, Travel)
+  {"X%.0f\n",            "Y%.0f\n",       "Z%.2f\n",       "E%.2f\n",      NULL,         NULL,           NULL,           NULL},           // Jerk (X, Y, Z, E)
+  {"J%.3f\n",            NULL,            NULL,            NULL,           NULL,         NULL,           NULL,           NULL},           // Junction Deviation
+  {"X%.2f\n",            "Y%.2f\n",       "Z%.2f\n",       NULL,           NULL,         NULL,           NULL,           NULL},           // Home offset (X, Y, Z)
+  {"S%.2f\n",            "W%.2f\n",       "F%.2f\n",       "Z%.2f\n",      NULL,         NULL,           NULL,           NULL},           // FW retract (Length, Swap Length, Feedrate, Z lift height)
+  {"S%.2f\n",            "W%.2f\n",       "F%.2f\n",       "R%.2f\n",      NULL,         NULL,           NULL,           NULL},           // FW retract recover (Additional length, Additional Swap Length, Feedrate, Swap feedrate)
+  {"S%.0f\n",            NULL,            NULL,            NULL,           NULL,         NULL,           NULL,           NULL},           // Set auto FW retract
+  {"T1 X%.2f\n",         "T1 Y%.2f\n",    "T1 Z%.2f\n",    NULL,           NULL,         NULL,           NULL,           NULL},           // Hotend Offset (X, Y, Z)
+  {"S%.0f\n",            "Z%.2f\n",       NULL,            NULL,           NULL,         NULL,           NULL,           NULL},           // ABL State & Z Fade
+  {"X%.2f\n",            "Y%.2f\n",       "Z%.2f\n",       NULL,           NULL,         NULL,           NULL,           NULL},           // Probe offset (X, Y, Z)
+  {"T0 K%.2f\n",         "T1 K%.2f\n",    NULL,            NULL,           NULL,         NULL,           NULL,           NULL},           // Linear Advance (E0, E1)
+  {"S%.0f\n",            "S1 T0 D%.2f\n", "S1 T1 D%.2f\n", NULL,           NULL,         NULL,           NULL,           NULL},           // Filament Diameter (Enable, E0, E1)
+  {"X%.0f\n",            "I1 X%.0f\n",    "Y%.0f\n",       "I1 Y%.0f\n",   "Z%.0f\n",    "I1 Z%.0f\n",   "T0 E%.0f\n",   "T1 E%.0f\n"},   // Current (X, X2, Y, Y2, Z, Z2, E0, E1)
+  {"X%.0f\n",            "I1 X%.0f\n",    "Y%.0f\n",       "I1 Y%.0f\n",   "Z%.0f\n",    "I1 Z%.0f\n",   NULL,           NULL},           // bump Sensitivity  (X, X2, Y, Y2, Z, Z2)
+  {"X%.0f\n",            "I1 X%.0f\n",    "Y%.0f\n",       "I1 Y%.0f\n",   "Z%.0f\n",    "I1 Z%.0f\n",   "T0 E%.0f\n",   "T1 E%.0f\n"},   // TMC Hybrid Threshold Speed (X, X2, Y, Y2, Z, Z2, E0, E1)
+  {"S%.0f X\n",          "S%.0f I1 X\n",  "S%.0f Y\n",     "S%.0f I1 Y\n", "S%.0f Z\n",  "S%.0f I1 Z\n", "S%.0f T0 E\n", "S%.0f T1 E\n"}, // TMC StealthChop (X, X2, Y, Y2, Z, Z2, E0, E1)
+  {"S4 Z%.2f\nG29 S0\n", NULL,            NULL,            NULL,           NULL,         NULL,           NULL,           NULL},           // MBL offset
 };
 
 const VAL_TYPE parameterValType[PARAMETERS_COUNT][MAX_ELEMENT_COUNT] = {
 
-  {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,   VAL_TYPE_FLOAT},  //Steps/mm
-  {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT},    //MaxFeedrate
-  {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT},    //MaxAcceleration
-  {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT},                                           //Acceleration
-  {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT},                    //Jerk
-  {VAL_TYPE_FLOAT},                                                                                  //Junction Deviation
-  {VAL_TYPE_NEG_FLOAT,  VAL_TYPE_NEG_FLOAT, VAL_TYPE_NEG_FLOAT},                                     //Home offset
-  {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_INT,        VAL_TYPE_FLOAT},                    //FW retract
-  {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_INT,        VAL_TYPE_INT},                      //FW retract recover
-  {VAL_TYPE_INT},                                                                                    //Set auto FW retract
-  {VAL_TYPE_NEG_FLOAT,  VAL_TYPE_NEG_FLOAT, VAL_TYPE_NEG_FLOAT},                                     //Hotend Offset
-  {VAL_TYPE_INT,        VAL_TYPE_FLOAT},                                                             //ABL State + Z Fade
-  {VAL_TYPE_NEG_FLOAT,  VAL_TYPE_NEG_FLOAT, VAL_TYPE_NEG_FLOAT},                                     //Probe offset
-  {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT},                                                             //Linear Advance
-  {VAL_TYPE_INT,        VAL_TYPE_FLOAT,     VAL_TYPE_FLOAT},                                         //Filament Diameter
-  {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT,     //Current
+  {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,   VAL_TYPE_FLOAT},  // Steps/mm
+  {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT},    // MaxFeedrate
+  {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT},    // MaxAcceleration
+  {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT},                                           // Acceleration
+  {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT},                    // Jerk
+  {VAL_TYPE_FLOAT},                                                                                  // Junction Deviation
+  {VAL_TYPE_NEG_FLOAT,  VAL_TYPE_NEG_FLOAT, VAL_TYPE_NEG_FLOAT},                                     // Home offset
+  {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_INT,        VAL_TYPE_FLOAT},                    // FW retract
+  {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_INT,        VAL_TYPE_INT},                      // FW retract recover
+  {VAL_TYPE_INT},                                                                                    // Set auto FW retract
+  {VAL_TYPE_NEG_FLOAT,  VAL_TYPE_NEG_FLOAT, VAL_TYPE_NEG_FLOAT},                                     // Hotend Offset
+  {VAL_TYPE_INT,        VAL_TYPE_FLOAT},                                                             // ABL State + Z Fade
+  {VAL_TYPE_NEG_FLOAT,  VAL_TYPE_NEG_FLOAT, VAL_TYPE_NEG_FLOAT},                                     // Probe offset
+  {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT},                                                             // Linear Advance
+  {VAL_TYPE_INT,        VAL_TYPE_FLOAT,     VAL_TYPE_FLOAT},                                         // Filament Diameter
+  {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT,     // Current
    VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT},
-  {VAL_TYPE_NEG_INT,    VAL_TYPE_NEG_INT,   VAL_TYPE_NEG_INT,    VAL_TYPE_NEG_INT, VAL_TYPE_NEG_INT, //bump Sensitivity
+  {VAL_TYPE_NEG_INT,    VAL_TYPE_NEG_INT,   VAL_TYPE_NEG_INT,    VAL_TYPE_NEG_INT, VAL_TYPE_NEG_INT, // bump Sensitivity
    VAL_TYPE_NEG_INT},
-  {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT,     //TMC Hybrid Threshold Speed
+  {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT,     // TMC Hybrid Threshold Speed
    VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT},
-  {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT,     //TMC StealthChop
+  {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT,     // TMC StealthChop
    VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT},
-  {VAL_TYPE_NEG_FLOAT},                                                                              //MBL offset
+  {VAL_TYPE_NEG_FLOAT},                                                                              // MBL offset
 };
 
 PARAMETERS infoParameters;

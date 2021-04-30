@@ -97,8 +97,6 @@ typedef struct
   float MblOffset[1];
 } PARAMETERS;
 
-extern const char * const parameterCode[PARAMETERS_COUNT];
-
 extern PARAMETERS infoParameters;
 
 extern char * const axisDisplayID[AXIS_INDEX_COUNT];
@@ -114,10 +112,10 @@ extern const LABEL retractDisplayID[];
 extern const LABEL recoverDisplayID[];
 extern const LABEL autoRetractDisplayID[];
 
-// get enable element count for the parameter
+// Get enable element count for the parameter
 uint8_t getEnabledElementCount(PARAMETER_NAME name);
 
-// get element index out of total enabled enabled element
+// Get element index out of total enabled enabled element
 uint8_t getEnabledElement(PARAMETER_NAME name, uint8_t index);
 
 // Get total enabled parameters
@@ -130,22 +128,22 @@ PARAMETER_NAME getEnabledParameter(uint8_t index);
 float getParameter(PARAMETER_NAME name, uint8_t index);
 void setParameter(PARAMETER_NAME name, uint8_t index, float val);
 
-// get total elements in a parameter
+// Get total elements in a parameter
 uint8_t getElementCount(PARAMETER_NAME para);
 
-//Get type of value a parameter element holds
+// Get type of value a parameter element holds
 VAL_TYPE getParameterValType(PARAMETER_NAME para, uint8_t index);
 
-//send parameter cmd (Parameter value gets updated after the cmd passes through the cmd cache)
+// Send parameter cmd (Parameter value gets updated after the cmd passes through the cmd cache)
 void sendParameterCmd(PARAMETER_NAME para_index, uint8_t stepper_index, float Value);
 
-//Save parameter setting to eeprom
+// Save parameter setting to eeprom
 void saveEepromSettings(void);
 
-//restore settings from eeprom
+// Restore settings from eeprom
 void restoreEepromSettings(void);
 
-//reset settings and eeprom to default values
+// Reset settings and eeprom to default values
 void resetEepromSettings(void);
 
 #ifdef __cplusplus

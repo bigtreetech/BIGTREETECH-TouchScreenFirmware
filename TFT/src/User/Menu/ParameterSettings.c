@@ -1,7 +1,7 @@
 #include "ParameterSettings.h"
 #include "includes.h"
 
-static uint16_t ps_cur_page = 0;
+static uint16_t psCurPage = 0;
 static uint8_t curParameter = 0;
 
 bool parametersChanged = false;
@@ -36,7 +36,7 @@ const LISTITEM eepromItems[P_SETTINGS_COUNT] = {
   {CHARICON_RESET, LIST_LABEL, LABEL_SETTINGS_RESET,   LABEL_BACKGROUND},
 };
 
-//
+// Load elements for selected parameter
 void loadElements(LISTITEM * parameterMainItem, uint16_t index, uint8_t itemPos)
 {
   uint8_t enabledElementCount = getEnabledElementCount(curParameter);
@@ -120,7 +120,7 @@ void loadElements(LISTITEM * parameterMainItem, uint16_t index, uint8_t itemPos)
   }
 }
 
-// show menu for selected parameter type
+// Show menu for selected parameter type
 void menuShowParameter(void)
 {
   uint16_t curIndex = KEY_IDLE;
@@ -156,7 +156,7 @@ void menuShowParameter(void)
         if (elementIndex < getElementCount(curParameter))
         {
           VAL_TYPE val_type = getParameterValType(curParameter, elementIndex);
-          bool negative_val = val_type % 2;  //accept negative values only for probe offset
+          bool negative_val = val_type % 2;  // accept negative values only for probe offset
           float val = getParameter(curParameter, elementIndex);
 
           if (val_type == VAL_TYPE_FLOAT || val_type == VAL_TYPE_NEG_FLOAT)
@@ -187,7 +187,7 @@ void menuShowParameter(void)
   }
 }
 
-//Load main parameter list page
+// Load main parameter list page
 void loadParameters(LISTITEM * parameterMainItem, uint16_t index, uint8_t itemPos)
 {
   uint8_t enabledParameterCount = getEnabledParameterCount();
@@ -217,6 +217,8 @@ void loadParameters(LISTITEM * parameterMainItem, uint16_t index, uint8_t itemPo
   }
 }
 
+
+// Main parameter menu
 void menuParameterSettings(void)
 {
   uint8_t enabledParameterCount = getEnabledParameterCount();
@@ -226,7 +228,7 @@ void menuParameterSettings(void)
   //LISTITEM parameterMainItems[totalItems];
   uint16_t curIndex = KEY_IDLE;
 
-  listViewCreate(title, NULL, totalItems, &ps_cur_page, false, NULL, loadParameters);
+  listViewCreate(title, NULL, totalItems, &psCurPage, false, NULL, loadParameters);
 
   while (infoMenu.menu[infoMenu.cur] == menuParameterSettings)
   {
@@ -243,13 +245,12 @@ void menuParameterSettings(void)
         }
         else
         {
-          ps_cur_page = 0;
+          psCurPage = 0;
           infoMenu.cur--;
         }
         break;
 
       default:
-
         if (curIndex < enabledParameterCount)
         {
           curParameter = getEnabledParameter(curIndex);
@@ -287,121 +288,4 @@ void menuParameterSettings(void)
 
     loopProcess();
   }
-}
-
-bool temperatureStatusValid(void)
-{
-  if (infoSettings.persistent_info != 1) return false;
-  if (infoHost.connected == false) return false;
-  if (toastRunning()) return false;
-
-  if (infoMenu.menu[infoMenu.cur] == menuPrinting) return false;
-  if (infoMenu.menu[infoMenu.cur] == menuStatus) return false;
-  if (infoMenu.menu[infoMenu.cur] == menuMove) return false;
-  if (infoMenu.menu[infoMenu.cur] == menuInfo) return false;
-  if (infoMenu.menu[infoMenu.cur] == menuNotification) return false;
-
-  return true;
-}
-
-void loopTemperatureStatus(void)
-{
-  if (getMenuType() == MENU_TYPE_FULLSCREEN) return;
-  if (!temperatureStatusValid()) return;
-
-  uint8_t tmpHeater[3];  // chamber, bed, hotend
-  uint8_t tmpIndex = 0;
-
-  if (infoSettings.hotend_count)  // global hotend
-    tmpHeater[tmpIndex++] = heatGetCurrentHotend();
-
-  if (infoSettings.bed_en)  // global bed
-    tmpHeater[tmpIndex++] = BED;
-
-  if (infoSettings.chamber_en)  // global chamber
-    tmpHeater[tmpIndex++] = CHAMBER;
-
-  bool update = false;
-  static int16_t lastCurrent[3];
-  static int16_t lastTarget[3];
-
-  for (int8_t i = tmpIndex - 1; i >= 0; i--)
-  {
-    int16_t actCurrent = heatGetCurrentTemp(tmpHeater[i]);
-    int16_t actTarget = heatGetTargetTemp(tmpHeater[i]);
-
-    if (lastCurrent[i] != actCurrent || lastTarget[i] != actTarget)
-    {
-      lastCurrent[i] = actCurrent;
-      lastTarget[i] = actTarget;
-      update = true;
-    }
-  }
-
-  if (update) menuReDrawCurTitle();
-}
-
-int16_t drawTemperatureStatus(void)
-{
-  int16_t x_offset = LCD_WIDTH - 10;
-
-  if (!temperatureStatusValid()) return x_offset;
-
-  uint8_t tmpHeater[3];  // chamber, bed, 1-2hotend
-  uint16_t tmpIcon[3];
-  uint8_t tmpIndex = 0;
-
-  if (infoSettings.hotend_count)
-  { // global hotend
-    if (infoSettings.hotend_count == 2 && !infoSettings.chamber_en )  // dual hotend
-    {
-      tmpIcon[tmpIndex] = ICON_GLOBAL_NOZZLE;
-      tmpHeater[tmpIndex++] = NOZZLE0;
-      tmpIcon[tmpIndex] = ICON_GLOBAL_NOZZLE;
-      tmpHeater[tmpIndex++] = NOZZLE1;
-    }
-    else  // singl or mixing hotend
-    {
-      tmpIcon[tmpIndex] = ICON_GLOBAL_NOZZLE;
-      tmpHeater[tmpIndex++] = heatGetCurrentHotend();
-    }
-  }
-
-  if (infoSettings.bed_en)
-  { // global bed
-    tmpIcon[tmpIndex] = ICON_GLOBAL_BED;
-    tmpHeater[tmpIndex++] = BED;
-  }
-
-  if (infoSettings.chamber_en)
-  { // global chamber
-    tmpIcon[tmpIndex] = ICON_GLOBAL_CHAMBER;
-    tmpHeater[tmpIndex++] = CHAMBER;
-  }
-
-  uint16_t start_y = (TITLE_END_Y - BYTE_HEIGHT) / 2;
-
-  GUI_SetBkColor(infoSettings.title_bg_color);
-
-  for (int8_t i = tmpIndex - 1; i >= 0; i--)
-  {
-    char tempstr[10];
-
-    x_offset -= GLOBALICON_INTERVAL;
-    GUI_ClearRect(x_offset, start_y, x_offset + GLOBALICON_INTERVAL, start_y + GLOBALICON_HEIGHT);
-    sprintf(tempstr, "%d/%d", heatGetCurrentTemp(tmpHeater[i]), heatGetTargetTemp(tmpHeater[i]));
-
-    x_offset -= GUI_StrPixelWidth((uint8_t *)tempstr);
-    GUI_StrPixelWidth(LABEL_10_PERCENT);
-
-    GUI_DispString(x_offset, start_y, (uint8_t *)tempstr);  // value
-    x_offset -= GLOBALICON_INTERVAL;
-    GUI_ClearRect(x_offset, start_y, x_offset + GLOBALICON_INTERVAL, start_y + GLOBALICON_HEIGHT);
-    x_offset -= GLOBALICON_WIDTH;
-    ICON_ReadDisplay(x_offset, start_y, tmpIcon[i]);  // icon
-  }
-
-  GUI_SetBkColor(infoSettings.bg_color);
-
-  return x_offset;
 }

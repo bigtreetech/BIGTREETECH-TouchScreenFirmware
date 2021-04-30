@@ -95,6 +95,7 @@
 #include "LCD_LEDColor.h"
 #include "ParameterSettings.h"
 #include "NotificationMenu.h"
+#include "PersistentInfo.h"
 
 #include "Babystep.h"
 #include "Extrude.h"
