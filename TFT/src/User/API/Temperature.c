@@ -15,17 +15,30 @@ static bool    heat_send_waiting[MAX_HEATER_COUNT];
 uint32_t nextHeatCheckTime = 0;
 #define AUTOREPORT_TIMEOUT (nextHeatCheckTime + 3000)  // update interval + 3 second grace period
 
-static uint8_t fixHeaterIndex(uint8_t index)
+// Verify that the heater index is valid, and fix the index of multiple in and 1 out tool nozzles
+static uint8_t heaterIndexFix(uint8_t index)
 {
-  if (infoSettings.hotend_count == 1)
-    index = (index < MAX_HOTEND_COUNT) ? NOZZLE0 : index;
-  return index;
+  if (index == BED && infoSettings.bed_en)  // Bed
+    return index;
+  if (index == CHAMBER && infoSettings.chamber_en)  // Chamber
+    return index;
+  if (index < infoSettings.hotend_count)  // Vaild tool nozzle
+    return index;
+  if (index < infoSettings.ext_count && infoSettings.hotend_count == 1)  // "multi-extruder" that shares a single nozzle.
+  {
+    return NOZZLE0;
+  }
+
+  return INVALID_HEATER;  // Invalid heater
 }
 
-//Set target temperature
+// Set target temperature
 void heatSetTargetTemp(uint8_t index, int16_t temp)
 {
-  index = fixHeaterIndex(index);
+  index = heaterIndexFix(index);
+  if (index == INVALID_HEATER)
+    return;
+
   heater.T[index].target = NOBEYOND(0, temp, infoSettings.max_temp[index]);
   if (heater.T[index].target + 2 > heater.T[index].current)
   {
@@ -41,24 +54,33 @@ void heatSetTargetTemp(uint8_t index, int16_t temp)
   }
 }
 
-//Sync target temperature
+// Sync target temperature
 void heatSyncTargetTemp(uint8_t index, int16_t temp)
 {
-  index = fixHeaterIndex(index);
+  index = heaterIndexFix(index);
+  if (index == INVALID_HEATER)
+    return;
+
   lastTarget[index] = heater.T[index].target = temp;
 }
 
-//Get target temperature
+// Get target temperature
 uint16_t heatGetTargetTemp(uint8_t index)
 {
-  index = fixHeaterIndex(index);
+  index = heaterIndexFix(index);
+  if (index == INVALID_HEATER)
+    return 0;
+
   return heater.T[index].target;
 }
 
 // Set current temperature
 void heatSetCurrentTemp(uint8_t index, int16_t temp)
 {
-  index = fixHeaterIndex(index);
+  index = heaterIndexFix(index);
+  if (index == INVALID_HEATER)
+    return;
+
   heater.T[index].current = NOBEYOND(-99, temp, 999);
 
   if (infoMachineSettings.autoReportTemp)
@@ -68,7 +90,10 @@ void heatSetCurrentTemp(uint8_t index, int16_t temp)
 // Get current temperature
 int16_t heatGetCurrentTemp(uint8_t index)
 {
-  index = fixHeaterIndex(index);
+  index = heaterIndexFix(index);
+  if (index == INVALID_HEATER)
+    return 0;
+
   return heater.T[index].current;
 }
 
@@ -99,9 +124,13 @@ bool heatHasWaiting(void)
 }
 
 // Set heater waiting status
-void heatSetIsWaiting(uint8_t tool, HEATER_WAIT isWaiting)
+void heatSetIsWaiting(uint8_t index, HEATER_WAIT isWaiting)
 {
-  heater.T[tool].waiting = isWaiting;
+  index = heaterIndexFix(index);
+  if (index == INVALID_HEATER)
+    return;
+
+  heater.T[index].waiting = isWaiting;
 
   if (isWaiting != WAIT_NONE)  // wait heating now, query more frequently
   {
@@ -143,7 +172,7 @@ uint8_t heatGetCurrentHotend(void)
 }
 
 // Check whether the index is a valid heater index.
-bool heaterIsValid(uint8_t index)
+bool heaterDisplayIsValid(uint8_t index)
 {
   if (index >= infoSettings.hotend_count && index < MAX_HOTEND_COUNT)
     return false;

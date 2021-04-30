@@ -105,6 +105,7 @@ typedef struct
   uint8_t persistent_info;
   uint8_t file_listmode;
   uint8_t ack_notification;
+  uint8_t notification_m117;
   uint8_t emulate_m600;
 
   // Marlin Mode Settings

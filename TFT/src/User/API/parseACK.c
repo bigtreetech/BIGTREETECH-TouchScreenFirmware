@@ -223,7 +223,10 @@ void hostActionCommands(void)
   if (ack_seen(":notification "))
   {
     statusScreen_setMsg((uint8_t *)echomagic, (uint8_t *)dmaL2Cache + ack_index);  // always display the notification on status screen
-
+    if (infoSettings.notification_m117 == ENABLED)
+    {
+      addNotification(DIALOG_TYPE_INFO, (char*)echomagic, (char*)dmaL2Cache + ack_index, false);
+    }  
     if (infoMenu.menu[infoMenu.cur] != menuStatus)  // don't show it when in menuStatus
     {
       uint16_t index = ack_index;
@@ -434,7 +437,7 @@ void parseACK(void)
 
         for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
         {
-          if (!heaterIsValid(i))
+          if (!heaterDisplayIsValid(i))
             continue;
           if (ack_seen(heaterID[i]))
           {

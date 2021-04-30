@@ -616,6 +616,10 @@ void parseConfigKey(uint16_t index)
       SET_VALID_INT_VALUE(infoSettings.ack_notification, 0, 2);
       break;
 
+    case C_INDEX_NOTIFICATION_M117:
+      infoSettings.notification_m117 = getOnOff();
+      break;
+
     case C_INDEX_EMULATE_M600:
       infoSettings.emulate_m600 = getOnOff();
       break;

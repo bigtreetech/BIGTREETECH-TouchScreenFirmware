@@ -89,7 +89,6 @@ void menuEmulatorBGColor(void)
   uint16_t curIndex = KEY_IDLE;
   SETTINGS now = infoSettings;
   uint8_t curItem = 0;
-  uint16_t curPage = curItem / LISTITEM_PER_PAGE;
 
   // fill items
   for (uint8_t i = 0; i < COUNT(totalItems); i++)
@@ -106,6 +105,7 @@ void menuEmulatorBGColor(void)
     totalItems[i].itemType = LIST_LABEL;
     totalItems[i].titlelabel = lcd_color_names[i];
   }
+  uint16_t curPage = curItem / LISTITEM_PER_PAGE;
 
   listViewCreate(title, totalItems, COUNT(totalItems), &curPage, true, NULL, NULL);
 
@@ -143,7 +143,6 @@ void menuEmulatorFontColor(void)
   uint16_t curIndex = KEY_IDLE;
   SETTINGS now = infoSettings;
   uint8_t curItem = 0;
-  uint16_t curPage = curItem / LISTITEM_PER_PAGE;
 
   // fill items
   for (uint8_t i = 0; i < COUNT(totalItems); i++)
@@ -160,6 +159,7 @@ void menuEmulatorFontColor(void)
     totalItems[i].itemType = LIST_LABEL;
     totalItems[i].titlelabel = lcd_color_names[i];
   }
+  uint16_t curPage = curItem / LISTITEM_PER_PAGE;
 
   listViewCreate(title, totalItems, COUNT(totalItems), &curPage, true, NULL, NULL);
 
@@ -167,19 +167,19 @@ void menuEmulatorFontColor(void)
   {
     curIndex = listViewGetSelectedIndex();
 
-        if (curIndex < COUNT(totalItems))
-        {
-          if (curIndex < (uint16_t)LCD_COLOR_COUNT && curIndex != curItem)  // has changed
-          {
-            totalItems[curItem].icon = CHARICON_UNCHECKED;
-            listViewRefreshItem(curItem);  // refresh unchecked status
-            curItem = curIndex;
-            totalItems[curItem].icon = CHARICON_CHECKED;
-            listViewRefreshItem(curItem);  // refresh checked status
+    if (curIndex < COUNT(totalItems))
+    {
+      if (curIndex < (uint16_t)LCD_COLOR_COUNT && curIndex != curItem)  // has changed
+      {
+        totalItems[curItem].icon = CHARICON_UNCHECKED;
+        listViewRefreshItem(curItem);  // refresh unchecked status
+        curItem = curIndex;
+        totalItems[curItem].icon = CHARICON_CHECKED;
+        listViewRefreshItem(curItem);  // refresh checked status
 
-            infoSettings.marlin_mode_font_color = lcd_colors[curItem];
-          }
-        }
+        infoSettings.marlin_mode_font_color = lcd_colors[curItem];
+      }
+    }
 
     loopProcess();
   }
