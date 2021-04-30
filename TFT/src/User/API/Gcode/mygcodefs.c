@@ -39,11 +39,10 @@ bool scanPrintFilesGcodeFs(void)
   char *data = malloc(strlen(ret) + 1);
   strcpy(data, ret);
   clearRequestCommandInfo();
-  char * s;
 
-  s = strstr(data, "\r\n") ? "\r\n" : "\n";  // smoothieware report with \r\n, marlin reports with \n
-
+  char * s = strstr(data, "\r\n") ? "\r\n" : "\n";  // smoothieware report with \r\n, marlin reports with \n
   char *line = strtok(data, s);
+
   for (; line != NULL; line = strtok(NULL, s))
   {
     if (strcmp(line, "Begin file list") == 0 || strcmp(line, "End file list") == 0 || strcmp(line, "ok") == 0) continue;  // Start and Stop tag
