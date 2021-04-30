@@ -57,7 +57,7 @@ bool getConfigFromFile(void)
   char cur_line_buffer[LINE_MAX_CHAR];
   cur_line = cur_line_buffer;
 
-  drawProgressPage((u8*)"Updating Configuration...");
+  drawProgressPage((uint8_t*)"Updating Configuration...");
 
   if (readConfigFile(CONFIG_FILE_PATH, parseConfigLine, LINE_MAX_CHAR))
   {
@@ -101,7 +101,7 @@ bool getLangFromFile(void)
   char cur_line_buffer[MAX_LANG_LABEL_LENGTH + 100];
   cur_line = cur_line_buffer;
 
-  drawProgressPage((u8*)f.fname);
+  drawProgressPage((uint8_t*)f.fname);
 
   // erase part of flash to be rewritten
   for (int i = 0; i < (LANGUAGE_SIZE / W25QXX_SECTOR_SIZE);i++)
@@ -650,7 +650,7 @@ void parseConfigKey(uint16_t index)
       case C_INDEX_MARLIN_TITLE:
       {
         char * pchr = strrchr(cur_line, ':') + 1;
-        int utf8len = getUTF8Length((u8*)pchr);
+        int utf8len = getUTF8Length((uint8_t*)pchr);
         int bytelen = strlen(pchr) + 1;
         if (inLimit(utf8len, NAME_MIN_LENGTH, MAX_STRING_LENGTH) && inLimit(bytelen, NAME_MIN_LENGTH, MAX_GCODE_LENGTH))
           strcpy(configStringsStore->marlin_title, pchr);
@@ -986,7 +986,7 @@ void parseConfigKey(uint16_t index)
     {
       char pchr[LINE_MAX_CHAR];
       strcpy(pchr, strrchr(cur_line, ':') + 1);
-      int utf8len = getUTF8Length((u8 *)pchr);
+      int utf8len = getUTF8Length((uint8_t*)pchr);
       int bytelen = strlen(pchr) + 1;
       if (inLimit(utf8len, NAME_MIN_LENGTH, MAX_GCODE_NAME_LENGTH) && inLimit(bytelen, NAME_MIN_LENGTH, MAX_GCODE_LENGTH))
       {
