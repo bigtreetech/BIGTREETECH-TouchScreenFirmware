@@ -186,34 +186,43 @@ static inline void reDrawSpeed(int icon_pos)
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
 
-static inline void reDrawTime(int icon_pos)
-{
-  uint8_t hour, min, sec;
+// static inline void reDrawTime(int icon_pos)
+// {
+//   uint8_t hour, min, sec;
 
-  getPrintTimeDetail(&hour, &min, &sec);
-  GUI_SetNumMode(GUI_NUMMODE_ZERO);
-  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-  char tempstr[10];
-  sprintf(tempstr, "%02u:%02u:%02u", hour, min, sec);
-  ICON_ReadDisplay(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, ICON_PRINTING_TIMER);
-  GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (uint8_t *)tempstr);
-  GUI_SetNumMode(GUI_NUMMODE_SPACE);
-  GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
-}
+//   getPrintTimeDetail(&hour, &min, &sec);
+//   GUI_SetNumMode(GUI_NUMMODE_ZERO);
+//   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
+//   sprintf(tempstr, "%02u:%02u:%02u", hour, min, sec);
+//   // ICON_ReadDisplay(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, ICON_PRINTING_TIMER);
+//   GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_HEIGHT / 2 + PICON_TITLE_Y, (uint8_t *)tempstr);
+//   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
+// }
 
 static inline void reDrawProgress(int icon_pos, uint8_t prevProgress)
 {
-  char buf[6];
+  char progress[6];
+  char timeElapsed[10];
+  uint8_t hour, min, sec;
   uint8_t newProgress = getPrintProgress();
 
-  sprintf(buf, "%d%%", newProgress);
+  getPrintTimeDetail(&hour, &min, &sec);
+  sprintf(progress, "%d%%", newProgress);
+  sprintf(timeElapsed, "%02u:%02u:%02u", hour, min, sec);
+  GUI_SetNumMode(GUI_NUMMODE_ZERO);
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-  GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (uint8_t *)buf);
+  ICON_ReadDisplay(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, ICON_PRINTING_TIMER);
+  GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (uint8_t *)progress);
+  GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (uint8_t *)timeElapsed);
+  GUI_SetNumMode(GUI_NUMMODE_SPACE);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 
-  uint16_t progStart = ((ProgressBar.x1 - ProgressBar.x0) * prevProgress) / 100;
-  uint16_t progEnd = ((ProgressBar.x1 - ProgressBar.x0) * newProgress) / 100;
-  GUI_FillRectColor(ProgressBar.x0 + progStart, ProgressBar.y0, ProgressBar.x0 + progEnd, ProgressBar.y1, MAT_ORANGE);
+  if (newProgress != prevProgress)
+  {
+    uint16_t progStart = ((ProgressBar.x1 - ProgressBar.x0) * prevProgress) / 100;
+    uint16_t progEnd = ((ProgressBar.x1 - ProgressBar.x0) * newProgress) / 100;
+    GUI_FillRectColor(ProgressBar.x0 + progStart, ProgressBar.y0, ProgressBar.x0 + progEnd, ProgressBar.y1, MAT_ORANGE);
+  }
 }
 
 static inline void reDrawLayer(int icon_pos)
@@ -271,14 +280,13 @@ static inline void printingDrawPage(void)
   reValueNozzle(EXT_ICON_POS);
   reValueBed(BED_ICON_POS);
   reDrawFan(FAN_ICON_POS);
-  reDrawTime(TIM_ICON_POS);
+  reDrawProgress(TIM_ICON_POS, 0);
   GUI_SetColor(ORANGE);
   GUI_DrawRect(ProgressBar.x0 - 1, ProgressBar.y0 - 1, ProgressBar.x1 + 1, ProgressBar.y1 + 1);
   GUI_SetColor(DARKGRAY);
   GUI_FillPrect(&ProgressBar);
   GUI_RestoreColorDefault();
   updatePrintProgress();
-  reDrawProgress(TIM_ICON_POS, 0);
   nextLayerDrawTime = 0;  // Draw layer now
   reDrawLayer(Z_ICON_POS);
   reDrawSpeed(SPD_ICON_POS);
@@ -434,17 +442,15 @@ void menuPrinting(void)
     }
 
     // check printing progress
-    oldProgress = getPrintProgress();  // get old progress before "updatePrintProgress()"
     if (getPrintSize() != 0)
     {
       // check print time change
-      if (time != getPrintTime() || updatePrintProgress())
+      if ((time != getPrintTime()) || (updatePrintProgress()))
       {
         time = getPrintTime();
         RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
-
-        reDrawTime(TIM_ICON_POS);
         reDrawProgress(TIM_ICON_POS, oldProgress);
+        oldProgress = getPrintProgress();
       }
     }
     else
@@ -452,8 +458,8 @@ void menuPrinting(void)
       if (getPrintProgress() != 100)
       {
         updatePrintProgress();
-        reDrawTime(TIM_ICON_POS);
         reDrawProgress(TIM_ICON_POS, oldProgress);
+        oldProgress = getPrintProgress();
       }
     }
 
