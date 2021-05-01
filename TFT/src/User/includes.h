@@ -19,6 +19,7 @@
 
 #include "Colors.h"
 #include "lcd.h"
+#include "CharIcon.h"
 #include "LCD_Init.h"
 #include "lcd_dma.h"
 #include "GUI.h"
@@ -46,7 +47,7 @@
 #include "ST7920_Emulator.h"
 #include "HD44780_Emulator.h"
 #include "ui_draw.h"
-#include "touch_process.h"
+#include "TouchProcess.h"
 #include "serialConnection.h"
 #include "interfaceCmd.h"
 #include "coordinate.h"
@@ -73,8 +74,8 @@
 
 #include "extend.h"
 #include "menu.h"
-#include "list_item.h"
-#include "list_widget.h"
+#include "ListItem.h"
+#include "ListManager.h"
 #include "common.h"
 #include "Popup.h"
 #include "Numpad.h"
@@ -91,7 +92,7 @@
 #include "Printing.h"
 #include "More.h"
 #include "Speed.h"
-#include "ledcolor.h"
+#include "LCD_LEDColor.h"
 #include "ParameterSettings.h"
 #include "NotificationMenu.h"
 
@@ -105,6 +106,7 @@
 #include "ScreenSettings.h"
 #include "MachineSettings.h"
 #include "FeatureSettings.h"
+#include "ConnectionSettings.h"
 #include "Terminal.h"
 #include "Leveling.h"
 #include "BedLeveling.h"
@@ -124,11 +126,11 @@
 #include "Tuning.h"
 #include "Pid.h"
 #include "TuneExtruder.h"
-#include "ConnectionSettings.h"
 #include "MeshTuner.h"
 #include "MeshEditor.h"
 #include "CaseLight.h"
 #include "MeshValid.h"
+#include "LEDColor.h"
 
 #define MAX_MENU_DEPTH 10       // max sub menu depth
 typedef void (*FP_MENU)(void);

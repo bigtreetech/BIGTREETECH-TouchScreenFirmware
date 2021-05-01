@@ -44,7 +44,10 @@ typedef enum
   KEY_LABEL_7,
   KEY_TITLEBAR,
   KEY_INFOBOX,
-  KEY_IDLE = IDLE_TOUCH,
+  KEY_PAGEUP   = IDLE_TOUCH - 3,
+  KEY_PAGEDOWN = IDLE_TOUCH - 2,
+  KEY_BACK     = IDLE_TOUCH - 1,
+  KEY_IDLE     = IDLE_TOUCH,
 } KEY_VALUES;
 
 typedef enum

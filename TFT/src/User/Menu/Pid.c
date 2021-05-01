@@ -255,7 +255,7 @@ void menuPid(void)
         do
         {
           curTool_index = (curTool_index + 1) % MAX_HEATER_COUNT;
-        } while (!heaterIsValid(curTool_index) || curTool_index == CHAMBER);
+        } while (!heaterDisplayIsValid(curTool_index) || curTool_index == CHAMBER);
 
         pidItems.items[key_num] = itemTool[curTool_index];
 

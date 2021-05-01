@@ -1,155 +1,148 @@
 #include "ParameterSettings.h"
 #include "includes.h"
 
-static uint8_t ps_cur_page = 0;
+static uint16_t ps_cur_page = 0;
 static uint8_t cur_parameter = 0;
 
 bool parametersChanged = false;
 
-const LISTITEM parametertypes[PARAMETERS_COUNT] = {
-  // icon               ItemType           Item Title                  item value text(only for custom value)
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_STEPS_SETTING,        LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_MAXFEEDRATE,          LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_MAXACCELERATION,      LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_ACCELERATION,         LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_JERK,                 LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_JUNCTION_DEVIATION,   LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_HOME_OFFSET,          LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_FWRETRACT,            LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_FWRECOVER,            LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_RETRACT_AUTO,         LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_HOTEND_OFFSET,        LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_ABL,                  LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_PROBE_OFFSET,         LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_LIN_ADVANCE,          LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_FILAMENT_SETTING,     LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_CURRENT_SETTING,      LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_BUMP_SENSITIVITY,     LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_HYBRID_THRESHOLD,     LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_STEALTH_CHOP,         LABEL_BACKGROUND},
-  {ICONCHAR_SETTING1,   LIST_MOREBUTTON,   LABEL_MBL_OFFSET,           LABEL_BACKGROUND},
+const LABEL parameterTypes[PARAMETERS_COUNT] = {
+  LABEL_STEPS_SETTING,
+  LABEL_MAXFEEDRATE,
+  LABEL_MAXACCELERATION,
+  LABEL_ACCELERATION,
+  LABEL_JERK,
+  LABEL_JUNCTION_DEVIATION,
+  LABEL_HOME_OFFSET,
+  LABEL_FWRETRACT,
+  LABEL_FWRECOVER,
+  LABEL_RETRACT_AUTO,
+  LABEL_HOTEND_OFFSET,
+  LABEL_ABL,
+  LABEL_PROBE_OFFSET,
+  LABEL_LIN_ADVANCE,
+  LABEL_FILAMENT_SETTING,
+  LABEL_CURRENT_SETTING,
+  LABEL_BUMP_SENSITIVITY,
+  LABEL_HYBRID_THRESHOLD,
+  LABEL_STEALTH_CHOP,
+  LABEL_MBL_OFFSET,
 };
 
 const LISTITEM eepromItems[P_SETTINGS_COUNT] = {
-  // icon               ItemType           Item Title                  item value text(only for custom value)
-  {ICONCHAR_SAVE,       LIST_LABEL,        LABEL_SETTINGS_SAVE,        LABEL_BACKGROUND},
-  {ICONCHAR_UNDO,       LIST_LABEL,        LABEL_SETTINGS_RESTORE,     LABEL_BACKGROUND},
-  {ICONCHAR_RESET,      LIST_LABEL,        LABEL_SETTINGS_RESET,       LABEL_BACKGROUND},
+  // icon           ItemType   Item Title              item value text(only for custom value)
+  {CHARICON_SAVE,  LIST_LABEL, LABEL_SETTINGS_SAVE,    LABEL_BACKGROUND},
+  {CHARICON_UNDO,  LIST_LABEL, LABEL_SETTINGS_RESTORE, LABEL_BACKGROUND},
+  {CHARICON_RESET, LIST_LABEL, LABEL_SETTINGS_RESET,   LABEL_BACKGROUND},
 };
 
 //show menu for selected parameter type
 void menuShowParameter(void)
 {
-  KEY_VALUES key_num = KEY_IDLE;
+  uint16_t curIndex = KEY_IDLE;
   PARAMETERS now = infoParameters;
   float oldval[LISTITEM_PER_PAGE];
 
-  LISTITEMS parameter_menuitems = {
-    // title
-    parametertypes[cur_parameter].titlelabel,
-    // icon                   ItemType            Item Title          item value text(only for custom value)
-    {
-      {ICONCHAR_BACKGROUND,   LIST_CUSTOMVALUE,   LABEL_DYNAMIC,      LABEL_CUSTOM_VALUE},
-      {ICONCHAR_BACKGROUND,   LIST_CUSTOMVALUE,   LABEL_DYNAMIC,      LABEL_CUSTOM_VALUE},
-      {ICONCHAR_BACKGROUND,   LIST_CUSTOMVALUE,   LABEL_DYNAMIC,      LABEL_CUSTOM_VALUE},
-      {ICONCHAR_BACKGROUND,   LIST_CUSTOMVALUE,   LABEL_DYNAMIC,      LABEL_CUSTOM_VALUE},
-      {ICONCHAR_BACKGROUND,   LIST_CUSTOMVALUE,   LABEL_DYNAMIC,      LABEL_CUSTOM_VALUE},
-      {ICONCHAR_BACKGROUND,   LIST_LABEL,         LABEL_BACKGROUND,   LABEL_BACKGROUND},
-      {ICONCHAR_BACKGROUND,   LIST_LABEL,         LABEL_BACKGROUND,   LABEL_BACKGROUND},
-      {ICONCHAR_BACK,         LIST_LABEL,         LABEL_BACKGROUND,   LABEL_BACKGROUND},
-    }
+  LISTITEM parameter_menuitems[] = {
+  // icon                   ItemType            Item Title          item value text(only for custom value)
+    {CHARICON_BACKGROUND,   LIST_CUSTOMVALUE,   LABEL_DYNAMIC,      LABEL_CUSTOM_VALUE},
+    {CHARICON_BACKGROUND,   LIST_CUSTOMVALUE,   LABEL_DYNAMIC,      LABEL_CUSTOM_VALUE},
+    {CHARICON_BACKGROUND,   LIST_CUSTOMVALUE,   LABEL_DYNAMIC,      LABEL_CUSTOM_VALUE},
+    {CHARICON_BACKGROUND,   LIST_CUSTOMVALUE,   LABEL_DYNAMIC,      LABEL_CUSTOM_VALUE},
+    {CHARICON_BACKGROUND,   LIST_CUSTOMVALUE,   LABEL_DYNAMIC,      LABEL_CUSTOM_VALUE},
   };
 
-  for (int i = 0; i < getParameterElementCount(cur_parameter); i++)
+  for (uint8_t i = 0; i < getParameterElementCount(cur_parameter); i++)
   {
-    parameter_menuitems.items[i].titlelabel.address = axisDisplayID[i];
+    parameter_menuitems[i].titlelabel.address = axisDisplayID[i];
     setDynamicValue(i, getParameter(cur_parameter, i));
 
     if (i < E2_STEPPER)
-      parameter_menuitems.items[i].icon = ICONCHAR_EDIT;
+      parameter_menuitems[i].icon = CHARICON_EDIT;
 
     //load parameter specific labels
     switch (cur_parameter)
     {
       case P_ACCELERATION:
-        parameter_menuitems.items[i].titlelabel = accel_disp_ID[i];
+        parameter_menuitems[i].titlelabel = accelDisplayID[i];
         break;
 
       case P_JERK:
-        parameter_menuitems.items[X_AXIS].titlelabel.address = "X";
-        parameter_menuitems.items[Y_AXIS].titlelabel.address = "Y";
-        parameter_menuitems.items[Z_AXIS].titlelabel.address = "Z";
-        parameter_menuitems.items[E_AXIS].titlelabel.address = "E";
+        parameter_menuitems[X_AXIS].titlelabel.address = "X";
+        parameter_menuitems[Y_AXIS].titlelabel.address = "Y";
+        parameter_menuitems[Z_AXIS].titlelabel.address = "Z";
+        parameter_menuitems[E_AXIS].titlelabel.address = "E";
         break;
 
       case P_JUNCTION_DEVIATION:
-        parameter_menuitems.items[i].titlelabel = junction_deviation_disp_ID[i];
+        parameter_menuitems[i].titlelabel = junctionDeviationDisplayID[i];
         break;
 
       case P_FWRETRACT:
-        parameter_menuitems.items[i].titlelabel = retract_disp_ID[i];
+        parameter_menuitems[i].titlelabel = retractDisplayID[i];
         break;
 
       case P_FWRECOVER:
-        parameter_menuitems.items[i].titlelabel = recover_disp_ID[i];
+        parameter_menuitems[i].titlelabel = recoverDisplayID[i];
         break;
 
       case P_AUTO_RETRACT:
-        parameter_menuitems.items[i].titlelabel = retract_auto_ID[i];
+        parameter_menuitems[i].titlelabel.index = LABEL_RETRACT_AUTO;
         break;
 
       case P_HOTEND_OFFSET:
-        parameter_menuitems.items[X_AXIS].titlelabel.address = "X";
-        parameter_menuitems.items[Y_AXIS].titlelabel.address = "Y";
-        parameter_menuitems.items[Z_AXIS].titlelabel.address = "Z";
+        parameter_menuitems[X_AXIS].titlelabel.address = "X";
+        parameter_menuitems[Y_AXIS].titlelabel.address = "Y";
+        parameter_menuitems[Z_AXIS].titlelabel.address = "Z";
         break;
 
       case P_ABL_STATE:
-        parameter_menuitems.items[0].titlelabel.address = "S 1=ON 0=OFF";
-        parameter_menuitems.items[1].titlelabel.address = "Z fade";
+        parameter_menuitems[0].titlelabel.address = "S 1=ON 0=OFF";
+        parameter_menuitems[1].titlelabel.address = "Z fade";
         break;
 
       case P_LIN_ADV:
-        parameter_menuitems.items[0].titlelabel.address = "K-E";
-        parameter_menuitems.items[1].titlelabel.address = "K-E2";
+        parameter_menuitems[0].titlelabel.address = "K-E";
+        parameter_menuitems[1].titlelabel.address = "K-E2";
         break;
 
       case P_FILAMENT_SETTING:
-        parameter_menuitems.items[0].titlelabel.address = "S 1=ON 0=OFF";
-        parameter_menuitems.items[1].titlelabel.address = "T0 Ø Filament";
-        parameter_menuitems.items[2].titlelabel.address = "T1 Ø Filament";
+        parameter_menuitems[0].titlelabel.address = "S 1=ON 0=OFF";
+        parameter_menuitems[1].titlelabel.address = "T0 Ø Filament";
+        parameter_menuitems[2].titlelabel.address = "T1 Ø Filament";
         break;
 
       case P_STEALTH_CHOP:
-        parameter_menuitems.items[X_STEPPER].titlelabel.address = "X 1=ON 0=OFF";
-        parameter_menuitems.items[Y_STEPPER].titlelabel.address = "Y 1=ON 0=OFF";
-        parameter_menuitems.items[Z_STEPPER].titlelabel.address = "Z 1=ON 0=OFF";
-        parameter_menuitems.items[E_STEPPER].titlelabel.address = "E 1=ON 0=OFF";
-        parameter_menuitems.items[E2_STEPPER].titlelabel.address = "E2 1=ON 0=OFF";
+        parameter_menuitems[X_STEPPER].titlelabel.address = "X 1=ON 0=OFF";
+        parameter_menuitems[Y_STEPPER].titlelabel.address = "Y 1=ON 0=OFF";
+        parameter_menuitems[Z_STEPPER].titlelabel.address = "Z 1=ON 0=OFF";
+        parameter_menuitems[E_STEPPER].titlelabel.address = "E 1=ON 0=OFF";
+        parameter_menuitems[E2_STEPPER].titlelabel.address = "E2 1=ON 0=OFF";
         break;
 
       case P_MBL_OFFSET:
-        parameter_menuitems.items[i].titlelabel.address = "Z";
+        parameter_menuitems[i].titlelabel.address = "Z";
         break;
 
       default:
         if (getDualStepperStatus(E_STEPPER) && i == E2_STEPPER)
         {
-          parameter_menuitems.items[i].icon = ICONCHAR_EDIT;
+          parameter_menuitems[i].icon = CHARICON_EDIT;
         }
         break;
     }
   }
 
-  menuDrawListPage(&parameter_menuitems);
+  listViewCreate(parameterTypes[cur_parameter], parameter_menuitems, getParameterElementCount(cur_parameter), NULL,
+                 false, NULL, NULL);
 
   while (infoMenu.menu[infoMenu.cur] == menuShowParameter)
   {
-    key_num = menuKeyGetValue();
+    curIndex = listViewGetSelectedIndex();
 
-    switch (key_num)
+    switch (curIndex)
     {
-      case KEY_ICON_7:
+      case KEY_BACK:
         if (memcmp(&now, &infoParameters, sizeof(PARAMETERS)))
         {
           parametersChanged = true;
@@ -158,38 +151,35 @@ void menuShowParameter(void)
         break;
 
       default:
-        if (key_num < (KEY_VALUES)STEPPER_COUNT)
+        if (curIndex < (KEY_VALUES)STEPPER_COUNT)
         {
-          if (parameter_menuitems.items[key_num].icon == ICONCHAR_BACKGROUND)
-            break;
-
-          VAL_TYPE val_type = getParameterValType(cur_parameter, key_num);
+          VAL_TYPE val_type = getParameterValType(cur_parameter, curIndex);
           bool negative_val = val_type % 2;  //accept negative values only for probe offset
-          float val = getParameter(cur_parameter, key_num);
+          float val = getParameter(cur_parameter, curIndex);
 
           if (val_type == VAL_TYPE_FLOAT || val_type == VAL_TYPE_NEG_FLOAT)
             val = numPadFloat(NULL, val, val, negative_val);  // parameter is a decimal number
           else
             val = (float)numPadInt(NULL, val, val, negative_val);  // parameter is an integer
 
-          if (val != getParameter(cur_parameter, key_num))
+          if (val != getParameter(cur_parameter, curIndex))
           {
-            sendParameterCmd(cur_parameter, key_num, val);
+            sendParameterCmd(cur_parameter, curIndex, val);
           }
 
-          setDynamicValue(key_num, val);
-          menuDrawListPage(&parameter_menuitems);
+          setDynamicValue(curIndex, val);
+          listViewRefreshMenu();
         }
         break;
     }
 
-    for (int i = 0; i < STEPPER_COUNT; i++)
+    for (uint8_t i = 0; i < STEPPER_COUNT; i++)
     {
       if (oldval[i] != getParameter(cur_parameter, i))
       {
         oldval[i] = getParameter(cur_parameter, i);
         setDynamicValue(i, getParameter(cur_parameter, i));
-        menuDrawListItem(&parameter_menuitems.items[i], i);
+        listViewRefreshItem(curIndex);
       }
     }
 
@@ -198,115 +188,56 @@ void menuShowParameter(void)
 }
 
 //Load main parameter list page
-void loadParameterPage(LISTITEMS * parameterMainItems, uint8_t total_pages)
+void loadParameters(LISTITEM * parameterMainItem, uint16_t index, uint8_t itemPos)
 {
   uint8_t enabledParameterCount = getEnabledParameterCount();
-  uint8_t totalItems = (infoMachineSettings.EEPROM == 1) ? (enabledParameterCount + P_SETTINGS_COUNT): enabledParameterCount;
+  uint8_t totalItems = (infoMachineSettings.EEPROM == 1) ? (enabledParameterCount + P_SETTINGS_COUNT) : enabledParameterCount;
 
-  for (uint8_t i = 0; i < LISTITEM_PER_PAGE; i++)
+  if (index < enabledParameterCount)
   {
-    uint8_t itemIndex = ps_cur_page * LISTITEM_PER_PAGE + i;
+    uint8_t parameterIndex = getEnabledParameter(index);
 
-    if (itemIndex < enabledParameterCount)
+    if (parameterIndex < PARAMETERS_COUNT)
     {
-      uint8_t parameterIndex = getEnabledParameter(itemIndex);
-      if (parameterIndex < PARAMETERS_COUNT)
-        parameterMainItems->items[i] = parametertypes[parameterIndex];
-      else
-        parameterMainItems->items[i].icon = ICONCHAR_BACKGROUND;
+      parameterMainItem->icon = CHARICON_SETTING1;
+      parameterMainItem->itemType = LIST_MOREBUTTON;
+      parameterMainItem->titlelabel = parameterTypes[parameterIndex];
     }
     else
     {
-      if (infoMachineSettings.EEPROM == 1 && itemIndex < totalItems)
-        parameterMainItems->items[i] = eepromItems[(itemIndex - enabledParameterCount)];
-      else
-        parameterMainItems->items[i].icon = ICONCHAR_BACKGROUND;
+      parameterMainItem->icon = CHARICON_BACKGROUND;
     }
-  }
-  // set page up down button according to page count and current page
-  if (totalItems <= LISTITEM_PER_PAGE)
-  {
-    parameterMainItems->items[5].icon = ICONCHAR_BACKGROUND;
-    parameterMainItems->items[6].icon = ICONCHAR_BACKGROUND;
   }
   else
   {
-    if (ps_cur_page == 0)
-    {
-      parameterMainItems->items[5].icon = ICONCHAR_BACKGROUND;
-      parameterMainItems->items[6].icon = ICONCHAR_PAGEDOWN;
-    }
-    else if (ps_cur_page == (total_pages - 1))
-    {
-      parameterMainItems->items[5].icon = ICONCHAR_PAGEUP;
-      parameterMainItems->items[6].icon = ICONCHAR_BACKGROUND;
-    }
+    if (infoMachineSettings.EEPROM == 1 && index < totalItems)
+      *parameterMainItem = eepromItems[(index - enabledParameterCount)];
     else
-    {
-      parameterMainItems->items[5].icon = ICONCHAR_PAGEUP;
-      parameterMainItems->items[6].icon = ICONCHAR_PAGEDOWN;
-    }
+      parameterMainItem->icon = CHARICON_BACKGROUND;
   }
 }
 
 void menuParameterSettings(void)
 {
-  LISTITEMS parameterMainItems = {
-    // title
-    LABEL_PARAMETER_SETTING,
-    // icon                   ItemType      Item Title          item value text(only for custom value)
-    {
-      {ICONCHAR_BACKGROUND,   LIST_LABEL,   LABEL_BACKGROUND,   LABEL_BACKGROUND},
-      {ICONCHAR_BACKGROUND,   LIST_LABEL,   LABEL_BACKGROUND,   LABEL_BACKGROUND},
-      {ICONCHAR_BACKGROUND,   LIST_LABEL,   LABEL_BACKGROUND,   LABEL_BACKGROUND},
-      {ICONCHAR_BACKGROUND,   LIST_LABEL,   LABEL_BACKGROUND,   LABEL_BACKGROUND},
-      {ICONCHAR_BACKGROUND,   LIST_LABEL,   LABEL_BACKGROUND,   LABEL_BACKGROUND},
-      {ICONCHAR_BACKGROUND,   LIST_LABEL,   LABEL_BACKGROUND,   LABEL_BACKGROUND},
-      {ICONCHAR_BACKGROUND,   LIST_LABEL,   LABEL_BACKGROUND,   LABEL_BACKGROUND},
-      {ICONCHAR_BACK,         LIST_LABEL,   LABEL_BACKGROUND,   LABEL_BACKGROUND},
-    }
-  };
-
-  KEY_VALUES key_num = KEY_IDLE;
   uint8_t enabledParameterCount = getEnabledParameterCount();
-  uint8_t total_pages = (enabledParameterCount + LISTITEM_PER_PAGE - 1) / LISTITEM_PER_PAGE;;
   uint8_t totalItems = (infoMachineSettings.EEPROM == 1) ? (enabledParameterCount + P_SETTINGS_COUNT): enabledParameterCount;
 
-  if (infoMachineSettings.EEPROM == 1)
-    total_pages = (enabledParameterCount + P_SETTINGS_COUNT + LISTITEM_PER_PAGE - 1) / LISTITEM_PER_PAGE;
-  else
-    total_pages = (enabledParameterCount + LISTITEM_PER_PAGE - 1) / LISTITEM_PER_PAGE;
+  LABEL title = {LABEL_PARAMETER_SETTING};
+  //LISTITEM parameterMainItems[totalItems];
+  uint16_t curIndex = KEY_IDLE;
 
-  loadParameterPage(&parameterMainItems, total_pages);
-  menuDrawListPage(&parameterMainItems);
+  listViewCreate(title, NULL, totalItems, &ps_cur_page, false, NULL, loadParameters);
 
   while (infoMenu.menu[infoMenu.cur] == menuParameterSettings)
   {
-    key_num = menuKeyGetValue();
-    switch (key_num)
+    curIndex = listViewGetSelectedIndex();
+
+    switch (curIndex)
     {
-      case KEY_ICON_5:
-        if (total_pages > 1 && ps_cur_page > 0)
-        {
-          ps_cur_page--;
-          loadParameterPage(&parameterMainItems, total_pages);
-          menuRefreshListPage();
-        }
-        break;
-
-      case KEY_ICON_6:
-        if (total_pages > 1 && ps_cur_page < total_pages - 1)
-        {
-          ps_cur_page++;
-          loadParameterPage(&parameterMainItems, total_pages);
-          menuRefreshListPage();
-        }
-        break;
-
-      case KEY_ICON_7:
+      case KEY_BACK:
         if (parametersChanged && infoMachineSettings.EEPROM == 1)
         {
-          setDialogText(parameterMainItems.title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
+          setDialogText(title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
           showDialog(DIALOG_TYPE_QUESTION, saveEepromSettings, NULL, NULL);
           parametersChanged = false;
         }
@@ -318,42 +249,38 @@ void menuParameterSettings(void)
         break;
 
       default:
-        if (key_num < LISTITEM_PER_PAGE)
-        {
-          uint8_t itemIndex = ps_cur_page * LISTITEM_PER_PAGE + key_num;
 
-          if (itemIndex < enabledParameterCount)
+        if (curIndex < enabledParameterCount)
+        {
+          cur_parameter = getEnabledParameter(curIndex);
+          if (cur_parameter < PARAMETERS_COUNT)
           {
-            cur_parameter = getEnabledParameter(itemIndex);
-            if (cur_parameter < PARAMETERS_COUNT)
-            {
-              mustStoreCmd("M503 S0\n");
-              infoMenu.menu[++infoMenu.cur] = menuShowParameter;
-            }
+            mustStoreCmd("M503 S0\n");
+            infoMenu.menu[++infoMenu.cur] = menuShowParameter;
+          }
+          break;
+        }
+        else if (infoMachineSettings.EEPROM == 1 && curIndex < totalItems)
+        {
+          uint8_t curIndex_e = (curIndex - enabledParameterCount);
+          if (curIndex_e == P_SAVE_SETTINGS)
+          {
+            setDialogText(title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
+            showDialog(DIALOG_TYPE_ALERT, saveEepromSettings, NULL, NULL);
+            parametersChanged = false;
             break;
           }
-          else if (infoMachineSettings.EEPROM == 1 && itemIndex < totalItems)
+          else if (curIndex_e == P_RESET_SETTINGS)
           {
-            uint8_t itemIndex_e = (itemIndex - enabledParameterCount);
-            if (itemIndex_e == P_SAVE_SETTINGS)
-            {
-              setDialogText(parameterMainItems.title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
-              showDialog(DIALOG_TYPE_ALERT, saveEepromSettings, NULL, NULL);
-              parametersChanged = false;
-              break;
-            }
-            else if (itemIndex_e == P_RESET_SETTINGS)
-            {
-              setDialogText(LABEL_SETTINGS_RESET, LABEL_SETTINGS_RESET_INFO, LABEL_CONFIRM, LABEL_CANCEL);
-              showDialog(DIALOG_TYPE_ALERT, resetEepromSettings, NULL, NULL);
-              break;
-            }
-            else if (itemIndex_e == P_RESTORE_SETTINGS)
-            {
-              setDialogText(LABEL_SETTINGS_RESTORE, LABEL_EEPROM_RESTORE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
-              showDialog(DIALOG_TYPE_ALERT, restoreEepromSettings, NULL, NULL);
-              break;
-            }
+            setDialogText(LABEL_SETTINGS_RESET, LABEL_SETTINGS_RESET_INFO, LABEL_CONFIRM, LABEL_CANCEL);
+            showDialog(DIALOG_TYPE_ALERT, resetEepromSettings, NULL, NULL);
+            break;
+          }
+          else if (curIndex_e == P_RESTORE_SETTINGS)
+          {
+            setDialogText(LABEL_SETTINGS_RESTORE, LABEL_EEPROM_RESTORE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
+            showDialog(DIALOG_TYPE_ALERT, restoreEepromSettings, NULL, NULL);
+            break;
           }
         }
     }
