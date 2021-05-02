@@ -59,12 +59,6 @@ const ITEM itemIsPrinting[3] = {
   {ICON_BACK,                    LABEL_BACK},
 };
 
-const ITEM itemNotPrinting[2] = {
-// icon                       label
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_MAINMENU,             LABEL_STATUS}
-};
-
 void menuBeforePrinting(void)
 {
   // load stat/end/cancel gcodes from spi flash
@@ -229,10 +223,6 @@ static inline void reDrawLayer(int icon_pos)
                   (uint8_t *)LAYER_TITLE);
   GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (uint8_t *)tempstr);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
-  progStart = ((ProgressBar.x1 - ProgressBar.x0) * prevProgress) / 100;
-  progEnd = ((ProgressBar.x1 - ProgressBar.x0) * infoPrinting.progress) / 100;
-  GUI_FillRectColor(ProgressBar.x0 + progStart, ProgressBar.y0, ProgressBar.x0 + progEnd, ProgressBar.y1, MAT_ORANGE);
-
 }
 
 static inline void toggleInfo(void)
