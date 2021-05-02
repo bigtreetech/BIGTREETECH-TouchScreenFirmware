@@ -3,11 +3,11 @@
 
 GCODE_QUEUE infoCmd;
 GCODE_QUEUE infoCacheCmd;  // Only when heatHasWaiting() is false the cmd in this cache will move to infoCmd queue.
-uint8_t cmd_index = 0;
-bool ispolling = true;
+static uint8_t cmd_index = 0;
+static bool ispolling = true;
 
 // Is there a code character in the current gcode command.
-bool cmd_seen(char code)
+static bool cmd_seen(char code)
 {
   for (cmd_index = 0; infoCmd.queue[infoCmd.index_r].gcode[cmd_index] != 0 && cmd_index < CMD_MAX_CHAR; cmd_index++)
   {
@@ -21,20 +21,20 @@ bool cmd_seen(char code)
 }
 
 // Get the int after 'code', Call after cmd_seen('code').
-int32_t cmd_value(void)
+static int32_t cmd_value(void)
 {
   return (strtol(&infoCmd.queue[infoCmd.index_r].gcode[cmd_index], NULL, 10));
 }
 
 // Get the float after 'code', Call after cmd_seen('code').
-float cmd_float(void)
+static float cmd_float(void)
 {
   return (strtod(&infoCmd.queue[infoCmd.index_r].gcode[cmd_index], NULL));
 }
 
 #if defined(SERIAL_PORT_2) || defined(BUZZER_PIN)
 // check if 'string' start with 'search'
-bool startsWith(TCHAR *search, TCHAR *string)
+bool static startsWith(TCHAR *search, TCHAR *string)
 {
   return (strstr(string, search) - string == cmd_index) ? true : false;
 }
