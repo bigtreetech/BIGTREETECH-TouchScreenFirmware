@@ -424,7 +424,7 @@ void menuPrinting(void)
     // check printing progress
     if (getPrintSize() != 0)
     {
-      // check print time change
+      // check print time or progress percentage change
       if ((time != getPrintTime()) || (updatePrintProgress()))
       {
         time = getPrintTime();
