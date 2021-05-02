@@ -108,7 +108,7 @@
  #define SYSCLK_FREQ_24MHz  24000000
 // #elif defined (MKS_TFT32_V1_3) || defined (MKS_TFT32_V1_4) || defined (MKS_TFT28_V3_0) || defined (MKS_TFT28_V4_0)
 //  #define SYSCLK_FREQ_48MHz  48000000
-// #else
+#else
 /* #define SYSCLK_FREQ_HSE    HSE_VALUE */
 /* #define SYSCLK_FREQ_24MHz  24000000 */
 /* #define SYSCLK_FREQ_36MHz  36000000 */
