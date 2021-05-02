@@ -1,6 +1,6 @@
 #ifndef _CONFIGURATION_H_
 #define _CONFIGURATION_H_
-#define CONFIG_VERSION 20210311
+#define CONFIG_VERSION 20210321
 
 //===========================================================================
 //============================= General Settings ============================
@@ -284,8 +284,8 @@
 
 // Mesh Leveling Max Grid points
 // Set the maximum number of grid points per dimension.
-#define MESH_GRID_MAX_POINTS_X 10  // (Minimum 1, Maximum 15)
-#define MESH_GRID_MAX_POINTS_Y 10  // (Minimum 1, Maximum 15)
+#define MESH_GRID_MAX_POINTS_X 15  // (Minimum 1, Maximum 15)
+#define MESH_GRID_MAX_POINTS_Y 15  // (Minimum 1, Maximum 15)
 
 /**
  * Auto save/load Bed Leveling data
@@ -347,7 +347,7 @@
 /**
  * Quick EEPROM Menu
  * Enable EEPROM menu (save/load/reset buttons) in Settings > Machine Menu.
-
+ *
  * NOTE: If disabled, EEPROM operations can also be accessed in the (settings > machine > parameters) menu.
  */
 #define QUICK_EEPROM_BUTTON
@@ -431,11 +431,11 @@
 #define SHOW_FAN_PERCENTAGE true  // To enabled: true | To disabled: false (Default: true)
 
 /**
- * Mesh Editor Keyboard on left side
- * By default the Mesh Editor Keyboard is drawn on right side of the screen.
- * Enable MESH_LEFT_KEYBOARD to draw the mesh editor keyboard on left side of the screen.
+ * Keyboard on left side (Mesh Editor, RGB Settings Custom)
+ * By default the keyboard is drawn on right side of the screen.
+ * Enable KEYBOARD_ON_LEFT to draw the keyboard on left side of the screen.
  */
-//#define MESH_LEFT_KEYBOARD
+//#define KEYBOARD_ON_LEFT
 
 //
 // Terminal Keyboard / Numpad settings
@@ -443,17 +443,29 @@
 
 // Terminal Keyboard / Numpad theme
 // Uncomment to enable Material theme for keyboard and Numpad
-//#define KEYBOARD_MATERIAL_THEME // Default: disabled
+#define KEYBOARD_MATERIAL_THEME  // Default: disabled
 
 /**
  * Color scheme for the Terminal Keyboard / Numpad
  *
  * Options: [0: Default, 1: Invert, 2: High-Contrast]
- *  Default: The keyboard follows system background and border colors.
- *  Invert: The keyboard is drawn with background swapped with border colors.
+ *  Default: The keyboard follows system background and border colors. (Material Dark
+ *           if KEYBOARD_MATERIAL_THEME is enabled).
+ *  Invert: The keyboard is drawn with background swapped with border colors. (Material
+ *          Light if KEYBOARD_MATERIAL_THEME is enabled).
  *  High-Contrast: Use white and black colors for high contrast.
  */
 #define KEYBOARD_COLOR_LAYOUT 0  // Default: 0
+
+/**
+ * Color scheme for the Terminal text display
+ *
+ * Options: [0: Material Dark, 1: Material Light, 2: High-Contrast]
+ *  Material Dark: Dark background with light font color and orange command font color.
+ *  Material Light: Light background with dark font color and orange command font color.
+ *  High-Contrast: Black background with white font color and orange command font color.
+ */
+#define TERMINAL_COLOR_SCHEME 0  // Default: 0
 
 /**
  * QWERTY/QWERTZ keyboard layout

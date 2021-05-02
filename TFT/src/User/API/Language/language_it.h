@@ -10,7 +10,7 @@
     #define STRING_PERSISTENT_INFO        "Mostra barra di stato"
     #define STRING_FILE_LIST_MODE         "File in modalità lista"
     #define STRING_ACK_NOTIFICATION       "Tipo di popup"
-    #define STRING_EMULATE_M600           "Emulate M600"
+    #define STRING_EMULATE_M600           "Emula M600"
     #define STRING_SERIAL_ALWAYS_ON       "Seriale sempre accesa"
     #define STRING_MARLIN_FULLSCREEN      "Marlin a schermo intero"
     #define STRING_MARLIN_SHOW_TITLE      "Mostra titolo in Marlin"
@@ -273,6 +273,7 @@
     #define STRING_ABL_SLOT3              "Slot 3"
     #define STRING_ABL_SLOT_EEPROM        "Ricordo lo slot per il prossimo\nriavvio? (Salva in EEPROM)"
     #define STRING_ABL_Z                  "Z fade"
+    #define STRING_LEVEL_CORNER           "L corner"
     #define STRING_P_OFFSET               "P offset"
     #define STRING_H_OFFSET               "H offset"
     #define STRING_DISTANCE               "Distanza"
@@ -345,6 +346,7 @@
     #define STRING_EXT_TEMPLOW            "La temperatura dell'hotend\nè al di sotto della temperatura\nminima (%d℃)."
     #define STRING_HEAT_HOTEND            "Scaldo l'hotend a %d℃?"
     #define STRING_Z_ALIGN                "Allinea Z"
-    #define STRING_MACROS                 "Macros"
+    #define STRING_MACROS                 "Macro"
+    #define STRING_MESH_VALID             "Validazione mesh"
 
 #endif

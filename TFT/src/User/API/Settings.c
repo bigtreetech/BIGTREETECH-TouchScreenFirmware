@@ -35,12 +35,14 @@ void infoSettingsReset(void)
   infoSettings.list_button_color      = lcd_colors[LISTVIEW_ICON_COLOR];
   infoSettings.mesh_min_color         = lcd_colors[MESH_MIN_COLOR];
   infoSettings.mesh_max_color         = lcd_colors[MESH_MAX_COLOR];
+  infoSettings.terminal_color_scheme  = TERMINAL_COLOR_SCHEME;
 
   infoSettings.rotate_ui              = DISABLED;
   infoSettings.terminalACK            = DISABLED;
   infoSettings.persistent_info        = ENABLED;
   infoSettings.file_listmode          = ENABLED;
   infoSettings.ack_notification       = ACK_NOTIFICATION_STYLE;
+  infoSettings.notification_m117      = DISABLED;
   infoSettings.emulate_m600           = EMULATE_M600;
 
 // Marlin Mode Settings
@@ -110,8 +112,11 @@ void infoSettingsReset(void)
   infoSettings.toastSound             = ENABLED;
   infoSettings.alertSound             = ENABLED;
   infoSettings.heaterSound            = ENABLED;
+#ifdef LED_COLOR_PIN
   infoSettings.knob_led_color         = STARTUP_KNOB_LED_COLOR;
   infoSettings.knob_led_idle          = ENABLED;
+  infoSettings.neopixel_pixels        = NEOPIXEL_PIXELS;
+#endif
   infoSettings.lcd_brightness         = DEFAULT_LCD_BRIGHTNESS;
   infoSettings.lcd_idle_brightness    = DEFAULT_LCD_IDLE_BRIGHTNESS;
   infoSettings.lcd_idle_timer         = DEFAULT_LCD_IDLE_TIMER;
@@ -138,6 +143,7 @@ void infoSettingsReset(void)
     infoSettings.machine_size_min[i]  = default_size_min[i];
     infoSettings.machine_size_max[i]  = default_size_max[i];
   }
+  infoSettings.leveling_invert_y_axis = DISABLED;
 
   for (int i = 0; i < FEEDRATE_COUNT - 1 ; i++)  //xy, z
   {
@@ -161,6 +167,7 @@ void infoSettingsReset(void)
     infoSettings.preheat_temp[i]      = default_preheat_ext[i];
     infoSettings.preheat_bed[i]       = default_preheat_bed[i];
   }
+
   resetConfig();
 }
 

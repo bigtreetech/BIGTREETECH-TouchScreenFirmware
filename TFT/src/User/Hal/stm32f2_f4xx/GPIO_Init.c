@@ -13,25 +13,25 @@ void GPIO_InitSet(uint16_t io, GPIO_MODE mode, uint8_t AF)
   u16 port = GPIO_GET_PORT(io);
   u16 pin = GPIO_GET_PIN(io);
 
-  RCC->AHB1ENR |= 1 << port;  //Enable GPIO Clock
+  RCC->AHB1ENR |= 1 << port;                                               // Enable GPIO Clock
 
-  GPIO_Port[port]->MODER &= ~(3 << (pin*2));  //clear mode bits
-  GPIO_Port[port]->MODER |= (GPIO_MODE_GET_MODE(mode)) << (pin*2);  //set mode bits
-  GPIO_Port[port]->PUPDR &= ~(3 << (pin*2));  //clear pull bits
-  GPIO_Port[port]->PUPDR |= (GPIO_MODE_GET_PULL(mode)) << (pin*2);  //set pull bits
+  GPIO_Port[port]->MODER &= ~(3 << (pin*2));                               // clear mode bits
+  GPIO_Port[port]->MODER |= (GPIO_MODE_GET_MODE(mode)) << (pin*2);         // set mode bits
+  GPIO_Port[port]->PUPDR &= ~(3 << (pin*2));                               // clear pull bits
+  GPIO_Port[port]->PUPDR |= (GPIO_MODE_GET_PULL(mode)) << (pin*2);         // set pull bits
 
-  if ((GPIO_MODE_GET_MODE(mode) == 1) || (GPIO_MODE_GET_MODE(mode) == 2)) //output
+  if ((GPIO_MODE_GET_MODE(mode) == 1) || (GPIO_MODE_GET_MODE(mode) == 2))  // output
   {
-    GPIO_Port[port]->OTYPER &= ~(1 << pin);  //clear output type bit
-    GPIO_Port[port]->OTYPER |= GPIO_MODE_GET_OTYPE(mode) << pin;  //set output type bit
-    GPIO_Port[port]->OSPEEDR &= ~(3 << (pin*2));  //clear speed bits
-    GPIO_Port[port]->OSPEEDR |= (GPIO_MODE_GET_OSPEED(mode)) << (pin*2);  //set speed bits
+    GPIO_Port[port]->OTYPER &= ~(1 << pin);                                // clear output type bit
+    GPIO_Port[port]->OTYPER |= GPIO_MODE_GET_OTYPE(mode) << pin;           // set output type bit
+    GPIO_Port[port]->OSPEEDR &= ~(3 << (pin*2));                           // clear speed bits
+    GPIO_Port[port]->OSPEEDR |= (GPIO_MODE_GET_OSPEED(mode)) << (pin*2);   // set speed bits
   }
 
   if(GPIO_MODE_GET_MODE(mode) == GPIO_MODE_AF)
   {
-    GPIO_Port[port]->AFR[pin >> 0x03] &= ~(0xF << ((pin & 0x07) * 4));  //clear alternate function bits
-    GPIO_Port[port]->AFR[pin >> 0x03] |= AF<< ((pin & 0x07) * 4);  //set alternate function bits
+    GPIO_Port[port]->AFR[pin >> 0x03] &= ~(0xF << ((pin & 0x07) * 4));     // clear alternate function bits
+    GPIO_Port[port]->AFR[pin >> 0x03] |= AF<< ((pin & 0x07) * 4);          // set alternate function bits
   }
 }
 

@@ -581,6 +581,10 @@ void parseConfigKey(uint16_t index)
       config_set_color(&infoSettings.mesh_max_color);
       break;
 
+    case C_INDEX_TERMINAL_COLOR_SCHEME:
+      SET_VALID_INT_VALUE(infoSettings.terminal_color_scheme, 0, 2);
+      break;
+
     case C_INDEX_ROTATE_UI:
       if (infoSettings.rotate_ui != getOnOff())
       {
@@ -597,6 +601,7 @@ void parseConfigKey(uint16_t index)
       if (key_seen("X")) infoSettings.invert_axis[X_AXIS] = getOnOff();
       if (key_seen("Y")) infoSettings.invert_axis[Y_AXIS] = getOnOff();
       if (key_seen("Z")) infoSettings.invert_axis[Z_AXIS] = getOnOff();
+      if (key_seen("LY")) infoSettings.leveling_invert_y_axis = getOnOff();
       break;
 
     case C_INDEX_PERSISTENT_TEMP:
@@ -609,6 +614,10 @@ void parseConfigKey(uint16_t index)
 
     case C_INDEX_ACK_NOTIFICATION:
       SET_VALID_INT_VALUE(infoSettings.ack_notification, 0, 2);
+      break;
+
+    case C_INDEX_NOTIFICATION_M117:
+      infoSettings.notification_m117 = getOnOff();
       break;
 
     case C_INDEX_EMULATE_M600:
@@ -940,6 +949,16 @@ void parseConfigKey(uint16_t index)
           SET_VALID_INT_VALUE(infoSettings.knob_led_idle, 0, 1);
           break;
       #endif
+
+      case C_INDEX_NEOPIXEL_PIXELS:
+      {
+        uint16_t pixels = config_int();
+        if (inLimit(pixels, 0, MAX_NEOPIXEL_PIXELS))
+        {
+          infoSettings.neopixel_pixels = pixels ? pixels : NEOPIXEL_PIXELS;
+        }
+        break;
+      }
     #endif
 
     #ifdef LCD_LED_PWM_CHANNEL

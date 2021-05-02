@@ -25,7 +25,7 @@ void menuBedLeveling(void)
     {
       {ICON_LEVELING,                LABEL_ABL},
       {ICON_MESH_EDITOR,             LABEL_MESH_EDITOR},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_MESH_VALID,              LABEL_MESH_VALID},
       {ICON_LEVELING_OFF,            LABEL_BL_DISABLE},
       {ICON_Z_FADE,                  LABEL_ABL_Z},
       {ICON_BACKGROUND,              LABEL_BACKGROUND},
@@ -85,20 +85,23 @@ void menuBedLeveling(void)
         infoMenu.menu[++infoMenu.cur] = menuMeshEditor;
         break;
 
+      case KEY_ICON_2:
+        infoMenu.menu[++infoMenu.cur] = menuMeshValid;
+        break;
+
       case KEY_ICON_3:
         if (getParameter(P_ABL_STATE, 0) == ENABLED)
-          storeCmd("M420 S0\n");
+          storeCmd(infoMachineSettings.firmwareType != FW_REPRAPFW ? "M420 S0\n" : "G29 S2\n");
         else
-          storeCmd("M420 S1\n");
+          storeCmd(infoMachineSettings.firmwareType != FW_REPRAPFW ? "M420 S1\n" : "G29 S1\n");
         break;
 
       case KEY_ICON_4:
       {
-        char tempstr[30];
-        sprintf(tempstr, "Min:%.2f | Max:%.2f", Z_FADE_MIN_VALUE, Z_FADE_MAX_VALUE);
+        float val = editFloatValue(Z_FADE_MIN_VALUE, Z_FADE_MAX_VALUE, 0.0f, getParameter(P_ABL_STATE, 1));
 
-        float val = numPadFloat((uint8_t *) tempstr, getParameter(P_ABL_STATE, 1), 0.0f, false);
-        storeCmd("M420 Z%.2f\n", NOBEYOND(Z_FADE_MIN_VALUE, val, Z_FADE_MAX_VALUE));
+        if (val != getParameter(P_ABL_STATE, 1))
+          storeCmd("M420 Z%.2f\n", val);
 
         menuDrawPage(&bedLevelingItems);
         break;
@@ -118,15 +121,7 @@ void menuBedLeveling(void)
         break;
 
       case KEY_ICON_7:
-        for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
-        {
-          if (heatGetTargetTemp(i) > 0)
-          {
-            setDialogText(LABEL_WARNING, LABEL_HEATERS_ON, LABEL_CONFIRM, LABEL_CANCEL);
-            showDialog(DIALOG_TYPE_QUESTION, heatCoolDown, NULL, NULL);
-            break;
-          }
-        }
+        cooldownTemperature();
         infoMenu.cur--;
         break;
 

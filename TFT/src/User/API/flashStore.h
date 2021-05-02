@@ -9,7 +9,10 @@ extern "C" {
 #include "variants.h"
 #include "Settings.h"
 
-#define PARA_SIZE 256  // Max size of settings buffer to read/write
+#define PARA_SIZE (128 * 3)  // Max size of settings buffer to read/write
+
+extern int32_t TSC_Para[7];
+extern SETTINGS infoSettings;
 
 void readStoredPara(void);
 void storePara(void);

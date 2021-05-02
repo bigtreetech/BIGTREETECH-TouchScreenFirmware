@@ -273,6 +273,7 @@
     #define STRING_ABL_SLOT3              "Slot 3"
     #define STRING_ABL_SLOT_EEPROM        "Remember slot for next\nreboot? (Save EEPROM)"
     #define STRING_ABL_Z                  "Z Fade"
+    #define STRING_LEVEL_CORNER           "L corner"
     #define STRING_P_OFFSET               "P odmik"
     #define STRING_H_OFFSET               "H odmik"
     #define STRING_DISTANCE               "Distance"
@@ -346,5 +347,6 @@
     #define STRING_HEAT_HOTEND            "Heat hotend to %d℃?"
     #define STRING_Z_ALIGN                "Z Align"
     #define STRING_MACROS                 "Macros"
+    #define STRING_MESH_VALID             "Mesh Validation"
 
 #endif

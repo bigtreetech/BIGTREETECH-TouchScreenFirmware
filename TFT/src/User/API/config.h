@@ -31,6 +31,7 @@ extern "C" {
 #define CONFIG_LIST_BUTTON_BG_COLOR   "list_button_bg_color:"
 #define CONFIG_MESH_MIN_COLOR         "mesh_min_color:"
 #define CONFIG_MESH_MAX_COLOR         "mesh_max_color:"
+#define CONFIG_TERMINAL_COLOR_SCHEME  "terminal_color_scheme:"
 
 #define CONFIG_ROTATE_UI              "rotate_ui:"
 #define CONFIG_TERMINAL_ACK           "terminal_ack:"
@@ -38,6 +39,7 @@ extern "C" {
 #define CONFIG_PERSISTENT_TEMP        "persistent_info:"
 #define CONFIG_LIST_MODE              "files_list_mode:"
 #define CONFIG_ACK_NOTIFICATION       "ack_notification:"
+#define CONFIG_NOTIFICATION_M117      "notification_m117:"
 #define CONFIG_EMULATE_M600           "emulate_m600:"
 //-----------------------------Marlin Mode Settings (only for TFT24_V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70_V3.0)
 #define CONFIG_MODE                   "default_mode:"
@@ -116,6 +118,7 @@ extern "C" {
 #define CONFIG_HEATER_SOUND           "heater_sound:"
 #define CONFIG_KNOB_COLOR             "knob_led_color:"
 #define CONFIG_KNOB_LED_IDLE          "knob_led_idle:"
+#define CONFIG_NEOPIXEL_PIXELS        "neopixel_pixels:"
 #define CONFIG_BRIGHTNESS             "lcd_brightness:"
 #define CONFIG_BRIGHTNESS_IDLE        "lcd_idle_brightness:"
 #define CONFIG_BRIGHTNESS_IDLE_DELAY  "lcd_idle_delay:"
@@ -159,6 +162,8 @@ extern "C" {
 #define CONFIG_CANCEL_GCODE           "cancel_gcode:"
 
 //-----------------------------Limits
+#define MAX_NEOPIXEL_PIXELS       200       // neopixel pixels over this will not be parsed.
+
 #define MAX_SIZE_LIMIT            2000      // machine size over this will not be parsed.
 #define MAX_EXT_SPEED_LIMIT       5000      // Extruder speed over this will not pe parsed.
 #define MAX_TOOL_TEMP             1000      // extruder temp over this will not pe parsed.

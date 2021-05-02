@@ -1,8 +1,6 @@
 #include "MBL.h"
 #include "includes.h"
 
-#define PROBE_HEIGHT_INITIAL_HEIGHT 0.2f  // 0.2 mm
-
 static uint8_t curUnit_index = 0;
 uint8_t mblPoint = 0;
 bool mblRunning = false;
@@ -16,9 +14,10 @@ static inline void mblStart(void)
   probeHeightEnable();  // temporary disable software endstops
 
   // MBL gcode sequence start
-  mustStoreCmd("G29 S1\n");                       // home and move to first point for Z height adjustment
-  probeHeightStart(PROBE_HEIGHT_INITIAL_HEIGHT);  // lower nozzle to provided absolute Z point
-  probeHeightRelative();                          // set relative position mode
+  mustStoreCmd("G28\n");
+  mustStoreCmd("G29 S1\n");                           // home and move to first point for Z height adjustment
+  probeHeightStart(infoSettings.level_z_pos, false);  // raise nozzle
+  probeHeightRelative();                              // set relative position mode
 }
 
 // Stop MBL
@@ -97,22 +96,19 @@ void mblDrawHeader(uint8_t *point)
 
   if (point != NULL)
   {
-    sprintf(tempstr, "P%-4d", *point);
-
+    sprintf(tempstr, "P:%-4d", *point);
     GUI_SetColor(infoSettings.sd_reminder_color);
   }
   else
   {
     sprintf(tempstr, "%-15s", textSelect(LABEL_OFF));
-
     GUI_SetColor(infoSettings.reminder_color);
   }
 
   GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *) tempstr);
-
   GUI_SetColor(infoSettings.font_color);
   setLargeFont(true);
-  GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1) >> 1, exhibitRect.y0, (uint8_t *)"mm");
+  GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1) >> 1, exhibitRect.y0, (uint8_t *) "mm");
   setLargeFont(false);
 }
 
@@ -121,7 +117,6 @@ void mblDrawValue(float val)
   char tempstr[20];
 
   sprintf(tempstr, "  %.2f  ", val);
-
   setLargeFont(true);
   GUI_DispStringInPrect(&exhibitRect, (uint8_t *) tempstr);
   setLargeFont(false);
@@ -135,23 +130,24 @@ void menuMBL(void)
     LABEL_MBL_SETTINGS,
     // icon                          label
     {
-      {ICON_DEC,                     LABEL_DEC},
+      #ifdef FRIENDLY_Z_OFFSET_LANGUAGE
+        {ICON_NOZZLE_DOWN,             LABEL_DOWN},
+      #else
+        {ICON_DEC,                     LABEL_DEC},
+      #endif
       {ICON_BACKGROUND,              LABEL_BACKGROUND},
       {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_INC,                     LABEL_INC},
+      #ifdef FRIENDLY_Z_OFFSET_LANGUAGE
+        {ICON_NOZZLE_UP,               LABEL_UP},
+      #else
+        {ICON_INC,                     LABEL_INC},
+      #endif
       {ICON_001_MM,                  LABEL_001_MM},
       {ICON_RESET_VALUE,             LABEL_RESET},
       {ICON_RESUME,                  LABEL_START},
       {ICON_BACK,                    LABEL_BACK},
     }
   };
-
-  #ifdef FRIENDLY_Z_OFFSET_LANGUAGE
-    mblItems.items[0].icon = ICON_NOZZLE_DOWN;
-    mblItems.items[0].label.index = LABEL_DOWN;
-    mblItems.items[3].icon = ICON_NOZZLE_UP;
-    mblItems.items[3].label.index = LABEL_UP;
-  #endif
 
   KEY_VALUES key_num = KEY_IDLE;
   float now, curValue;
@@ -242,7 +238,7 @@ void menuMBL(void)
         {
           storeCmd("G29 S2\n");  // save Z height and move to next mesh point
 
-          probeHeightStart(PROBE_HEIGHT_INITIAL_HEIGHT);  // lower nozzle to provided absolute Z point
+          probeHeightStart(infoSettings.level_z_pos, false);  // raise nozzle
 
           ++mblPoint;
           mblDrawHeader(&mblPoint);

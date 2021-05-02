@@ -10,7 +10,7 @@
     #define STRING_PERSISTENT_INFO        "Állandó állapotinfó"
     #define STRING_FILE_LIST_MODE         "Fájlnéző listamód"
     #define STRING_ACK_NOTIFICATION       "ACK Értesítési stílus"
-    #define STRING_EMULATE_M600           "Emulate M600"
+    #define STRING_EMULATE_M600           "Emulált M600"
     #define STRING_SERIAL_ALWAYS_ON       "Soros port folytonos"
     #define STRING_MARLIN_FULLSCREEN      "Nagyképernyős Marlin mód"
     #define STRING_MARLIN_SHOW_TITLE      "Marlin mód cím támogatás"
@@ -52,7 +52,7 @@
     #define STRING_HOTEND_OFFSET          "Második fej eltolása"
     #define STRING_PROBE_OFFSET           "Szonda eltolás"
     #define STRING_LIN_ADVANCE            "Lineáris haladás"
-    #define STRING_FILAMENT_SETTING       "Filament Diameter"
+    #define STRING_FILAMENT_SETTING       "Filament átmérő"
     #define STRING_CURRENT_SETTING        "Motoráramok beállítása"
     #define STRING_BUMP_SENSITIVITY       "TMC Ütközés érzékenység"
     #define STRING_HYBRID_THRESHOLD       "TMC Hibrid küszöbérték"
@@ -273,6 +273,7 @@
     #define STRING_ABL_SLOT3              "Szlot 3"
     #define STRING_ABL_SLOT_EEPROM        "Emlékezzen a következő\nújraindításnál? (EEPROM Mentése)"
     #define STRING_ABL_Z                  "Z Áttűnés"
+    #define STRING_LEVEL_CORNER           "Sarok szint"
     #define STRING_P_OFFSET               "P Eltolás"
     #define STRING_H_OFFSET               "H Eltolás"
     #define STRING_DISTANCE               "Távolság"
@@ -346,5 +347,6 @@
     #define STRING_HEAT_HOTEND            "Fűtöd a fejet %d℃-ra?"
     #define STRING_Z_ALIGN                "Z Igazítás"
     #define STRING_MACROS                 "Makrók"
+    #define STRING_MESH_VALID             "Háló ellenőrzése"
 
 #endif

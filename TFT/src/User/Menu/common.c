@@ -91,8 +91,8 @@ const LABEL itemToggle[ITEM_TOGGLE_NUM] =
 
 const uint16_t iconToggle[ITEM_TOGGLE_NUM] =
 {
-  ICONCHAR_TOGGLE_OFF,
-  ICONCHAR_TOGGLE_ON
+  CHARICON_TOGGLE_OFF,
+  CHARICON_TOGGLE_ON
 };
 
 // Check time elapsed against the time specified in milliseconds for displaying/updating info on screen
@@ -109,4 +109,245 @@ bool nextScreenUpdate(uint32_t duration)
   {
     return false;
   }
+}
+
+const void drawBorder(const GUI_RECT *rect, uint16_t color, uint16_t edgeDistance)
+{
+  //uint16_t origColor = GUI_GetColor();
+
+  GUI_SetColor(color);
+  GUI_DrawRect(rect->x0 + edgeDistance, rect->y0 + edgeDistance,
+               rect->x1 - edgeDistance, rect->y1 - edgeDistance);
+
+  //GUI_SetColor(origColor);
+}
+
+const void drawBackground(const GUI_RECT *rect, uint16_t bgColor, uint16_t edgeDistance)
+{
+  //uint16_t origBgColor = GUI_GetBkColor();
+
+  GUI_SetBkColor(bgColor);
+  GUI_ClearRect(rect->x0 + edgeDistance, rect->y0 + edgeDistance,
+                rect->x1 - edgeDistance, rect->y1 - edgeDistance);
+
+  //GUI_SetBkColor(origBgColor);
+}
+
+const void drawStandardValue(const GUI_RECT *rect, VALUE_TYPE valType, const void *val, bool largeFont,
+                             uint16_t color, uint16_t bgColor, uint16_t edgeDistance, bool clearBgColor)
+{
+  uint16_t origColor = GUI_GetColor();
+  uint16_t origBgColor = GUI_GetBkColor();
+
+  if (clearBgColor)
+    drawBackground(rect, bgColor, edgeDistance);
+
+  if (val != NULL)
+  {
+    char tempstr[20] = "\0";
+    const char * buf = tempstr;
+
+    switch (valType)
+    {
+      case VALUE_BYTE:
+        sprintf(tempstr, "%d", *((uint8_t *) val));
+        break;
+
+      case VALUE_INT:
+        sprintf(tempstr, "%d", *((uint16_t *) val));
+        break;
+
+      case VALUE_FLOAT:
+        sprintf(tempstr, "%.3f", *((float *) val));
+        break;
+
+      case VALUE_STRING:
+        buf = val;
+        break;
+
+      default:
+        break;
+    }
+
+    GUI_SetColor(color);
+    GUI_SetBkColor(bgColor);
+
+    setLargeFont(largeFont);
+    GUI_DispStringInRect(rect->x0 + edgeDistance, rect->y0 + edgeDistance,
+                         rect->x1 - edgeDistance, rect->y1 - edgeDistance,
+                         (uint8_t *) buf);
+    setLargeFont(false);
+  }
+
+  GUI_SetColor(origColor);
+  GUI_SetBkColor(origBgColor);
+}
+
+const bool warmupTemperature(uint8_t toolIndex, void (* callback)(void))
+{
+  if (heatGetCurrentTemp(toolIndex) < infoSettings.min_ext_temp)
+  { // low temperature warning
+    char tempMsg[120];
+    LABELCHAR(tempStr, LABEL_EXT_TEMPLOW);
+
+    sprintf(tempMsg, tempStr, infoSettings.min_ext_temp);
+    strcat(tempMsg, "\n");
+    sprintf(tempStr, (char *) textSelect(LABEL_HEAT_HOTEND), infoSettings.min_ext_temp);
+    strcat(tempMsg, tempStr);
+
+    setDialogText(LABEL_WARNING, (uint8_t *) tempMsg, LABEL_CONFIRM, LABEL_CANCEL);
+    showDialog(DIALOG_TYPE_ERROR, callback, NULL, NULL);
+
+    return false;
+  }
+
+  return true;
+}
+
+const void cooldownTemperature(void)
+{
+  if (!isPrinting())
+  {
+    for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
+    {
+      if (heatGetTargetTemp(i) > 0)
+      {
+        setDialogText(LABEL_WARNING, LABEL_HEATERS_ON, LABEL_CONFIRM, LABEL_CANCEL);
+        showDialog(DIALOG_TYPE_QUESTION, heatCoolDown, NULL, NULL);
+        break;
+      }
+    }
+  }
+}
+
+// Show/draw a temperature in a standard menu
+const void temperatureReDraw(uint8_t toolIndex, int16_t * temp, bool skipHeader)
+{
+  char tempstr[20];
+
+  setLargeFont(true);
+
+  if (!skipHeader)
+  {
+    sprintf(tempstr, "%-8s", heatDisplayID[toolIndex]);
+    setLargeFont(false);
+    GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *) tempstr);
+    setLargeFont(true);
+    GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1) >> 1, exhibitRect.y0, (uint8_t *) "ºC");
+  }
+
+  if (temp != NULL)
+    sprintf(tempstr, "  %d  ", *temp);
+  else
+    sprintf(tempstr, "%4d/%-4d", heatGetCurrentTemp(toolIndex), heatGetTargetTemp(toolIndex));
+
+  GUI_DispStringInPrect(&exhibitRect, (uint8_t *) tempstr);
+  setLargeFont(false);
+}
+
+// Show/draw fan in a standard menu
+const void fanReDraw(uint8_t fanIndex, bool skipHeader)
+{
+  char tempstr[20];
+
+  setLargeFont(true);
+
+  if (!skipHeader)
+  {
+    sprintf(tempstr, "%-8s", fanID[fanIndex]);
+    setLargeFont(false);
+    GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *) tempstr);
+    setLargeFont(true);
+
+    if (infoSettings.fan_percentage == 1)
+    {
+      GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1) >> 1, exhibitRect.y0, (uint8_t *) " % ");
+    }
+    else
+    {
+      GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1) >> 1, exhibitRect.y0, (uint8_t *) "PWM");
+    }
+  }
+
+  if (infoSettings.fan_percentage == 1)
+    sprintf(tempstr, "%4d/%-4d", fanGetCurPercent(fanIndex), fanGetSetPercent(fanIndex));
+  else
+    sprintf(tempstr, "%4d/%-4d", fanGetCurSpeed(fanIndex), fanGetSetSpeed(fanIndex));
+
+  GUI_DispStringInPrect(&exhibitRect, (uint8_t *) tempstr);
+  setLargeFont(false);
+}
+
+// Show/draw extruder in a standard menu
+const void extruderReDraw(uint8_t extruderIndex, float extrusion, bool skipHeader)
+{
+  char tempstr[20];
+
+  setLargeFont(true);
+
+  if (!skipHeader)
+  {
+    sprintf(tempstr, "%-8s", extruderDisplayID[extruderIndex]);
+    setLargeFont(false);
+    GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *) tempstr);
+    setLargeFont(true);
+    GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1) >> 1, exhibitRect.y0, (uint8_t *) "mm");
+  }
+
+  sprintf(tempstr, "  %.2f  ", extrusion);
+  GUI_DispStringInPrect(&exhibitRect, (uint8_t *) tempstr);
+  setLargeFont(false);
+}
+
+// Show/draw percentage in a standard menu
+const void percentageReDraw(uint8_t itemIndex, bool skipHeader)
+{
+  char tempstr[20];
+
+  setLargeFont(true);
+
+  if (!skipHeader)
+  {
+    if (itemIndex == 0)
+      sprintf(tempstr, "%-15s", textSelect(LABEL_PERCENTAGE_SPEED));
+    else
+      sprintf(tempstr, "%-15s", textSelect(LABEL_PERCENTAGE_FLOW));
+
+    setLargeFont(false);
+    GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *) tempstr);
+    setLargeFont(true);
+    GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1) >> 1, exhibitRect.y0, (uint8_t *) "%");
+  }
+
+  sprintf(tempstr, "%4d/%-4d", speedGetCurPercent(itemIndex), speedGetSetPercent(itemIndex));
+  GUI_DispStringInPrect(&exhibitRect, (uint8_t *) tempstr);
+  setLargeFont(false);
+}
+
+// Edit an integer value in a standard menu
+const int16_t editIntValue(int16_t minValue, int16_t maxValue, int16_t resetValue, int16_t value)
+{
+  int16_t val;
+  char tempstr[30];
+
+  sprintf(tempstr, "Min:%i | Max:%i", minValue, maxValue);
+
+  val = numPadInt((uint8_t *) tempstr, value, resetValue, false);
+  val = NOBEYOND(minValue, val, maxValue);
+
+  return val;
+}
+
+// Edit a float value in a standard menu
+const float editFloatValue(float minValue, float maxValue, float resetValue, float value)
+{
+  float val;
+  char tempstr[30];
+
+  sprintf(tempstr, "Min:%.2f | Max:%.2f", minValue, maxValue);
+
+  val = numPadFloat((uint8_t *) tempstr, value, resetValue, true);
+  val = NOBEYOND(minValue, val, maxValue);
+
+  return val;
 }

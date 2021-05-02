@@ -107,13 +107,13 @@ void _wakeLCD(void)
 {
   if (infoSettings.lcd_idle_timer != LCD_DIM_OFF)
   {
-    //The LCD dim function is activated. First check if it's dimmed
+    // The LCD dim function is activated. First check if it's dimmed
     if (lcd_dim.dimmed)
     {
       lcd_dim.dimmed = false;
       Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
     }
-    //Set a new idle_ms time
+    // Set a new idle_ms time
     lcd_dim.idle_ms = OS_GetTimeMs();
   }
 }
@@ -138,15 +138,15 @@ void LCD_init_RGB(void)
 {
   LCD_WR_REG(0X11);
   Delay_ms(20);
-  LCD_WR_REG(0XD0);   //VCI1  VCL  VGH  VGL DDVDH VREG1OUT power amplitude setting
+  LCD_WR_REG(0XD0);   // VCI1  VCL  VGH  VGL DDVDH VREG1OUT power amplitude setting
   LCD_WR_DATA(0X07);
   LCD_WR_DATA(0X42);
   LCD_WR_DATA(0X1C);
-  LCD_WR_REG(0XD1);   //VCOMH VCOM_AC amplitude setting
+  LCD_WR_REG(0XD1);   // VCOMH VCOM_AC amplitude setting
   LCD_WR_DATA(0X00);
   LCD_WR_DATA(0X19);
   LCD_WR_DATA(0X16);
-  LCD_WR_REG(0XD2);   //Operational Amplifier Circuit Constant Current Adjust , charge pump frequency setting
+  LCD_WR_REG(0XD2);   // Operational Amplifier Circuit Constant Current Adjust , charge pump frequency setting
   LCD_WR_DATA(0X01);
   LCD_WR_DATA(0X11);
   LCD_WR_REG(0XE4);
@@ -154,15 +154,15 @@ void LCD_init_RGB(void)
   LCD_WR_REG(0XF3);
   LCD_WR_DATA(0X0000);
   LCD_WR_DATA(0X002A);
-  LCD_WR_REG(0XC0);   //REV SM GS
+  LCD_WR_REG(0XC0);   // REV SM GS
   LCD_WR_DATA(0X10);
   LCD_WR_DATA(0X3B);
   LCD_WR_DATA(0X00);
   LCD_WR_DATA(0X02);
   LCD_WR_DATA(0X11);
-  LCD_WR_REG(0XC5);   //Frame rate setting = 72HZ  when setting 0x03
+  LCD_WR_REG(0XC5);   // Frame rate setting = 72HZ  when setting 0x03
   LCD_WR_DATA(0X03);
-  LCD_WR_REG(0XC8);   //Gamma setting
+  LCD_WR_REG(0XC8);   // Gamma setting
   LCD_WR_DATA(0X00);
   LCD_WR_DATA(0X35);
   LCD_WR_DATA(0X23);
@@ -175,11 +175,11 @@ void LCD_init_RGB(void)
   LCD_WR_DATA(0X70);
   LCD_WR_DATA(0X00);
   LCD_WR_DATA(0X04);
-  LCD_WR_REG(0X20);   //Exit invert mode
+  LCD_WR_REG(0X20);   // Exit invert mode
   LCD_WR_REG(0X36);
   LCD_WR_DATA(0X28);
   LCD_WR_REG(0X3A);
-  LCD_WR_DATA(0X55);  //16λģʽ
+  LCD_WR_DATA(0X55);  // 16λģʽ
   Delay_ms(120);
   LCD_WR_REG(0X29);
 }
@@ -216,15 +216,15 @@ void LCD_init_RGB(void)
   LCD_WR_DATA(0x80);
   LCD_WR_REG(0x36);
   LCD_WR_DATA(0x28);
-  LCD_WR_REG(0x3A);   //Interface Mode Control
+  LCD_WR_REG(0x3A);   // Interface Mode Control
   LCD_WR_DATA(0x55);
-  LCD_WR_REG(0XB0);   //Interface Mode Control
+  LCD_WR_REG(0XB0);   // Interface Mode Control
   LCD_WR_DATA(0x00);
-  LCD_WR_REG(0xB1);   //Frame rate 70HZ
+  LCD_WR_REG(0xB1);   // Frame rate 70HZ
   LCD_WR_DATA(0xB0);
   LCD_WR_REG(0xB4);
   LCD_WR_DATA(0x02);
-  LCD_WR_REG(0xB6);   //RGB/MCU Interface Control
+  LCD_WR_REG(0xB6);   // RGB/MCU Interface Control
   LCD_WR_DATA(0x02);
   LCD_WR_DATA(0x02);
   LCD_WR_REG(0xE9);
@@ -301,7 +301,7 @@ void LCD_init_RGB(void)
   LCD_WR_DATA(0x33);
   LCD_WR_DATA(0x3C);
 
-  LCD_WR_REG(0xC7);   ///@diff VCM control2
+  LCD_WR_REG(0xC7);   /// @diff VCM control2
   LCD_WR_DATA(0x9A);
 
   LCD_WR_REG(0xB1);   /// @diff Frame Rate Control
@@ -394,8 +394,8 @@ uint32_t LCD_ReadPixel_24Bit(int16_t x, int16_t y)
 void LCD_init_RGB(void)
 {
   LCD_WR_REG(0x11);
-  Delay_ms(120);  //Delay 120ms
-  //------------------------------display and color format setting--------------------------------//
+  Delay_ms(120);  // Delay 120ms
+  //------------------------------display and color format setting------------------------------//
   LCD_WR_REG(0x36);
   LCD_WR_DATA(0x68);
   LCD_WR_REG(0x3a);
@@ -654,10 +654,10 @@ void LCD_init_RGB(void)
   LCD_WR_REG(0xF0);   // Set pixel data interface format
   LCD_WR_DATA(0x03);  // 16-bit(565 format) data for 16bpp
   LCD_WR_REG(0xBC);   // postprocessor for contrast/brightness/saturation.
-  LCD_WR_DATA(0x34);  //   Contrast value (0-127). Set to 52 to reduce banding/flickering.
-  LCD_WR_DATA(0x77);  //   Brightness value (0-127). Set to 119 to reduce banding/flickering.
-  LCD_WR_DATA(0x48);  //   Saturation value (0-127).
-  LCD_WR_DATA(0x01);  //   Enable/disable the postprocessor for contrast/brightness/saturation (1-0).
+  LCD_WR_DATA(0x34);  // Contrast value (0-127). Set to 52 to reduce banding/flickering.
+  LCD_WR_DATA(0x77);  // Brightness value (0-127). Set to 119 to reduce banding/flickering.
+  LCD_WR_DATA(0x48);  // Saturation value (0-127).
+  LCD_WR_DATA(0x01);  // Enable/disable the postprocessor for contrast/brightness/saturation (1-0).
   LCD_WR_REG(0x29);   // Set display on
 
   LCD_WR_REG(0x36);   // Set address mode
@@ -675,13 +675,28 @@ uint32_t LCD_ReadPixel_24Bit(int16_t x, int16_t y)
   return (pix.RGB.r << 19) | (pix.RGB.g << 10) | (pix.RGB.b << 3);
 }
 
+#elif LCD_DRIVER_IS(ILI9325)
+void LCD_init_RGB(void)
+{
+  uint16_t R01h, R03h, R60h;
+  R01h = (1 << 8) | (0 << 10);                        // SS = 1, SM = 0,  from S720 to S1 (see also  GS bit (R60h))
+  R03h = (1 << 12) | (1 << 5) | (1 << 4) | (1 << 3);  // TRI=0, DFM=0, BGR=1, ORG=0, I/D[1:0]=11, AM=1
+  R60h = (0 << 15) | (0x27 << 8);                     // Gate Scan Control (R60h) GS=0(G1) NL[5:0]=0x27 (320 lines)
+
+  LCD_WR_REG(0x0001); // Driver Output Control Register (R01h)
+  LCD_WR_DATA(R01h);
+  LCD_WR_REG(0x0003); // Entry Mode (R03h)
+  LCD_WR_DATA(R03h);
+  LCD_WR_REG(0x0060); // Driver Output Control (R60h)
+  LCD_WR_DATA(R60h);
+}
 #endif
 
 uint16_t LCD_ReadID(void)
 {
   uint16_t id = 0;
   LCD_WR_REG(0XD3);
-  id = LCD_RD_DATA();  //dummy read
+  id = LCD_RD_DATA();  // dummy read
   id = LCD_RD_DATA();
   id = LCD_RD_DATA();
   id <<= 8;
@@ -690,11 +705,28 @@ uint16_t LCD_ReadID(void)
   return id;
 }
 
+#if LCD_DRIVER_IS(ILI9325)
+void LCD_RefreshDirection(void)
+{
+  uint16_t R01h, R03h, R60h;
+  R01h = (infoSettings.rotate_ui ? 0 : 1 << 8) | (0 << 10);     // SS=horizontal flip, SM=0
+  R03h = (1 << 12) | (1 << 5) | (1 << 4) | (1 << 3);            // TRI=0, DFM=0, BGR=1, ORG=0, I/D[1:0]=11, AM=1
+  R60h = (infoSettings.rotate_ui ? 1 : 0 << 15) | (0x27 << 8);  // GS=vertical flip, NL[5:0]=0x27 (320 lines)
+
+  LCD_WR_REG(0x0001); // Driver Output Control Register (R01h)
+  LCD_WR_DATA(R01h);
+  LCD_WR_REG(0x0003); // Entry Mode (R03h)
+  LCD_WR_DATA(R03h);
+  LCD_WR_REG(0x0060); // Driver Output Control (R60h)
+  LCD_WR_DATA(R60h);
+}
+#else
 void LCD_RefreshDirection(void)
 {
   LCD_WR_REG(0X36);
   LCD_WR_DATA(infoSettings.rotate_ui ? TFTLCD_180_DEGREE_REG_VALUE : TFTLCD_0_DEGREE_REG_VALUE);
 }
+#endif
 
 void LCD_Init(void)
 {
@@ -709,6 +741,6 @@ void LCD_Init(void)
 #endif
 
 #ifdef STM32_HAS_FSMC
-  LCD_DMA_Config();  //spi flash to fsmc lcd DMA channel configuration
+  LCD_DMA_Config();  // spi flash to fsmc lcd DMA channel configuration
 #endif
 }

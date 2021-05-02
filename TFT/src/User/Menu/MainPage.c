@@ -3,7 +3,7 @@
 
 void menuMain(void)
 {
-  // 1 title, ITEM_PER_PAGE items(icon+label)
+  // 1 title, ITEM_PER_PAGE items (icon + label)
   MENUITEMS mainPageItems = {
     // title
     LABEL_MAINMENU,
@@ -72,7 +72,15 @@ void menuMain(void)
         break;
 
       case KEY_ICON_5:
-        infoMenu.menu[++infoMenu.cur] = infoSettings.rrf_macros_enable ? menuCallMacro : menuCustom;
+        if (infoSettings.rrf_macros_enable)
+        {
+          strcpy(infoFile.title, "Macros");
+          infoMenu.menu[++infoMenu.cur] = menuCallMacro;
+        }
+        else
+        {
+          infoMenu.menu[++infoMenu.cur] = menuCustom;
+        }
         break;
 
       case KEY_ICON_6:

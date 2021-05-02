@@ -1,6 +1,6 @@
 #include "menu.h"
 #include "includes.h"
-#include "list_item.h"
+#include "ListItem.h"
 #include "Notification.h"
 
 // exhibitRect is 2 ICON Space in the Upper Row and 2 Center column.
@@ -266,17 +266,8 @@ uint8_t *labelGetAddress(const LABEL *label)
 
 void menuDrawItem(const ITEM *item, uint8_t position)
 {
-  uint8_t *content = labelGetAddress(&item->label);
-  const GUI_RECT *rect = curRect + position;
-  if (item->icon != ICON_BACKGROUND)
-    ICON_ReadDisplay(rect->x0, rect->y0, item->icon);
-  else
-    GUI_ClearPrect(rect);
-
-  rect = curRect + ITEM_PER_PAGE + position;
-  GUI_ClearPrect(rect);
-  if (content)
-    GUI_DispStringInPrect(rect, content);
+  menuDrawIconOnly(item, position);
+  menuDrawIconText(item, position);
 }
 
 void menuDrawIconOnly(const ITEM *item, uint8_t position)
@@ -288,10 +279,19 @@ void menuDrawIconOnly(const ITEM *item, uint8_t position)
     GUI_ClearPrect(rect);
 }
 
+void menuDrawIconText(const ITEM *item, uint8_t position)
+{
+  uint8_t *content = labelGetAddress(&item->label);
+  const GUI_RECT *rect = curRect + ITEM_PER_PAGE + position;
+  GUI_ClearPrect(rect);
+  if (content)
+    GUI_DispStringInPrect(rect, content);
+}
+
  void menuDrawListItem(const LISTITEM *item, uint8_t position)
 {
   const GUI_RECT *rect = rect_of_keyListView + position;
-  if (item->icon == ICONCHAR_BACKGROUND)
+  if (item->icon == CHARICON_BACKGROUND)
   {
     GUI_ClearPrect(rect);
   }
@@ -500,18 +500,21 @@ void menuReDrawCurTitle(void)
 {
   if (menuType == MENU_TYPE_LISTVIEW)
   {
-    if (curListItems == NULL) return;
+    if (curListItems == NULL)
+      return;
     if (curListItems->title.index < LABEL_BACKGROUND)
-    menuDrawTitle(labelGetAddress(&curListItems->title));
+      menuDrawTitle(labelGetAddress(&curListItems->title));
   }
   else if (menuType == MENU_TYPE_ICON)
   {
-    if (curMenuItems == NULL) return;
+    if (curMenuItems == NULL)
+      return;
     menuDrawTitle(labelGetAddress(&curMenuItems->title));
   }
   else if (menuType == MENU_TYPE_FULLSCREEN)
   {
-    if (curMenuRedrawHandle != NULL) curMenuRedrawHandle();
+    if (curMenuRedrawHandle != NULL)
+      curMenuRedrawHandle();
   }
   else if (menuType == MENU_TYPE_OTHER)
   {
@@ -528,9 +531,9 @@ void menuDrawPage(const MENUITEMS *menuItems)
   TSC_ReDrawIcon = itemDrawIconPress;
   curMenuRedrawHandle = NULL;
 
-  curRect = ((infoMenu.menu[infoMenu.cur] == menuStatus) || ((infoMenu.menu[infoMenu.cur] == menuPrinting) && !isPrinting())) ? rect_of_keySS : rect_of_key;
+  curRect = ((infoMenu.menu[infoMenu.cur] == menuStatus) ||
+             ((infoMenu.menu[infoMenu.cur] == menuPrinting) && !isPrinting())) ? rect_of_keySS : rect_of_key;
 
-  //GUI_Clear(BLACK);
   menuClearGaps();  // Use this function instead of GUI_Clear to eliminate the splash screen when clearing the screen.
   menuDrawTitle(labelGetAddress(&menuItems->title));
   for (i = 0; i < ITEM_PER_PAGE; i++)
@@ -554,15 +557,15 @@ void menuDrawListPage(const LISTITEMS *listItems)
   GUI_SetBkColor(infoSettings.bg_color);
   GUI_ClearRect(0, TITLE_END_Y, LCD_WIDTH, LCD_HEIGHT);
 
-  //menuClearGaps();  //Use this function instead of GUI_Clear to eliminate the splash screen when clearing the screen.
+  //menuClearGaps();  // Use this function instead of GUI_Clear to eliminate the splash screen when clearing the screen.
   menuDrawTitle(labelGetAddress(&listItems->title));
 
   for (i = 0; i < ITEM_PER_PAGE; i++)
   {
     //const GUI_RECT *rect = rect_of_keyListView + i;
-    if (curListItems->items[i].icon != ICONCHAR_BACKGROUND)
+    if (curListItems->items[i].icon != CHARICON_BACKGROUND)
       menuDrawListItem(&curListItems->items[i], i);
-    RAPID_PRINTING_COMM()  //perform backend printing loop between drawing icons to avoid printer idling
+    RAPID_PRINTING_COMM()  // perform backend printing loop between drawing icons to avoid printer idling
   }
 }
 
@@ -644,7 +647,7 @@ void itemDrawIconPress(uint8_t position, uint8_t is_press)
 
     const GUI_RECT *rect = rect_of_keyListView + position;
 
-    if (curListItems->items[position].icon == ICONCHAR_BACKGROUND)
+    if (curListItems->items[position].icon == CHARICON_BACKGROUND)
     {
       GUI_ClearPrect(rect);
       return;
@@ -660,6 +663,7 @@ void itemDrawIconPress(uint8_t position, uint8_t is_press)
 KEY_VALUES menuKeyGetValue(void)
 {
   KEY_VALUES tempkey = KEY_IDLE;
+
   if (menuType == MENU_TYPE_ICON)
   {
     if ((infoMenu.menu[infoMenu.cur] == menuStatus) || ((infoMenu.menu[infoMenu.cur] == menuPrinting) && !isPrinting()))
@@ -712,71 +716,81 @@ KEY_VALUES menuKeyGetValue(void)
 //Get the top left point of the corresponding icon position)
 GUI_POINT getIconStartPoint(int index)
 {
-  GUI_POINT p = {curRect[index].x0,curRect[index].y0};
+  GUI_POINT p = {curRect[index].x0, curRect[index].y0};
   return p;
 }
 
 #ifdef SMART_HOME
-  #define LONG_TOUCH (LCD_CHANGE_MODE_INTERVALS / 3)
+  #define LONG_TOUCH (LCD_CHANGE_MODE_INTERVALS / 3)  // keep it lower than LCD_CHANGE_MODE_INTERVALS
   void loopCheckBack(void)
   {
     static bool longPress = false;
-    static bool firstCheck = false;
+    #ifdef HAS_EMULATOR
     static bool backHeld = false;
+    #endif
 
-    if (isPrinting())
-      return;
     if (!isPress())
     {
+      #ifdef HAS_EMULATOR
       backHeld = false;
+      #endif
       longPress = false;
+      #ifndef HAS_EMULATOR
+      LCD_ReadPen(0);  // reset TSC press timer
+      #endif
       return;
     }
+    if (isPrinting())  // no jump to main menu while printing
+      return;
     if (menuType != MENU_TYPE_ICON)
       return;
     if ((infoMenu.cur == 0) || (infoMenu.menu[infoMenu.cur] == menuMode))
       return;
+    #ifdef HAS_EMULATOR
     if (backHeld == true)  // prevent mode selection or screenshot if Back button is held
     {
       backHeld = LCD_ReadPen(0);
       return;
     }
+    #endif
+
     if (longPress == false)  // check if longpress already handled
     {
       if (LCD_ReadPen(LONG_TOUCH))  // check if TSC is pressed and held
       {
         longPress = true;
-        firstCheck = true;
-      }
-    }
-    if (firstCheck == true)  // do things only once if TSC is pressed and held
-    {
-      touchSound = false;
-      KEY_VALUES tempKey = KEY_IDLE;
-      if (infoMenu.menu[infoMenu.cur] == menuPrinting)
-      {
-        tempKey = Key_value(COUNT(rect_of_keySS), rect_of_keySS);
-      }
-      else
-      {
-        tempKey = Key_value(COUNT(rect_of_key), rect_of_key);
-      }
-      touchSound = true;
+        touchSound = false;
+        KEY_VALUES tempKey = KEY_IDLE;
 
-      if (tempKey != KEY_IDLE)
-      {
-        if (curMenuItems->items[tempKey].label.index == LABEL_BACK)  // check if Back button is held
+        if (infoMenu.menu[infoMenu.cur] == menuPrinting)
         {
-          BUZZER_PLAY(sound_ok);
-          backHeld = true;
-          infoMenu.menu[1] = infoMenu.menu[infoMenu.cur];
-          infoMenu.cur = 1;
-          if (infoMenu.menu[1] == menuPrinting)
-            clearInfoFile();
+          tempKey = Key_value(COUNT(rect_of_keySS), rect_of_keySS);
+        }
+        else
+        {
+          tempKey = Key_value(COUNT(rect_of_key), rect_of_key);
+        }
+        touchSound = true;
+
+        if (tempKey != KEY_IDLE)
+        {
+          if (curMenuItems->items[tempKey].label.index != LABEL_BACK)  // check if Back button is held
+          {
+            return;
+          }
+          else
+          {
+            BUZZER_PLAY(sound_ok);
+            #ifdef HAS_EMULATOR
+            backHeld = true;
+            #endif
+            infoMenu.menu[1] = infoMenu.menu[infoMenu.cur];  // prepare menu tree for jump to 0
+            infoMenu.cur = 1;
+            if (infoMenu.menu[1] == menuPrinting)
+              clearInfoFile();
+          }
         }
       }
-
-      firstCheck = false;
     }
   }
 #endif //SMART_HOME
@@ -784,7 +798,7 @@ GUI_POINT getIconStartPoint(int index)
 void loopBackEnd(void)
 {
   // Get Gcode command from the file to be printed
-  getGcodeFromFile();
+  loopPrintFromTFT();  // handle a print from TFT, if any
   // Parse and send Gcode commands in the queue
   sendQueueCmd();
   // Parse the received slave response information
@@ -808,7 +822,7 @@ void loopBackEnd(void)
 
   if (infoMachineSettings.onboard_sd_support == ENABLED)
   {
-    loopCheckPrinting();  //Check if there is a SD or USB print running.
+    loopPrintFromHost();  // handle a print from onboard SD or remote host, if any
   }
 
 #ifdef U_DISK_SUPPORT

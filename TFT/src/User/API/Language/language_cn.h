@@ -10,7 +10,7 @@
     #define STRING_PERSISTENT_INFO        "顶部温度信息"
     #define STRING_FILE_LIST_MODE         "文件浏览列表模式"
     #define STRING_ACK_NOTIFICATION       "ACK 弹窗类型"
-    #define STRING_EMULATE_M600           "Emulate M600"
+    #define STRING_EMULATE_M600           "模拟M600"
     #define STRING_SERIAL_ALWAYS_ON       "串口常开"
     #define STRING_MARLIN_FULLSCREEN      "全屏显示Marlin模式"
     #define STRING_MARLIN_SHOW_TITLE      "Marlin模式显示标题"
@@ -273,6 +273,7 @@
     #define STRING_ABL_SLOT3              "Slot 3"
     #define STRING_ABL_SLOT_EEPROM        "Remember slot for next\nreboot? (Save EEPROM)"
     #define STRING_ABL_Z                  "Z Fade"
+    #define STRING_LEVEL_CORNER           "L corner"
     #define STRING_P_OFFSET               "P Offset"
     #define STRING_H_OFFSET               "H Offset"
     #define STRING_DISTANCE               "距离"
@@ -346,5 +347,6 @@
     #define STRING_HEAT_HOTEND            "加热喷头到%d℃?"
     #define STRING_Z_ALIGN                "Z Align"
     #define STRING_MACROS                 "Macros"
+    #define STRING_MESH_VALID             "调平测试"
 
 #endif

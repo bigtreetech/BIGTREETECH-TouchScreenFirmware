@@ -106,9 +106,8 @@
 #if defined (STM32F10X_LD_VL) || defined (STM32F10X_MD_VL) || defined (STM32F10X_HD_VL)
 /* #define SYSCLK_FREQ_HSE    HSE_VALUE */
  #define SYSCLK_FREQ_24MHz  24000000
-#elif defined (MKS_32_V1_4) || defined (MKS_28_V1_0)
-//  #define SYSCLK_FREQ_48MHz  48000000
- #define SYSCLK_FREQ_72MHz  72000000  // by Lori
+#elif defined (MKS_TFT32_V1_3) || defined (MKS_TFT32_V1_4) || defined (MKS_TFT28_V3_0) || defined (MKS_TFT28_V4_0)
+ #define SYSCLK_FREQ_48MHz  48000000
 #else
 /* #define SYSCLK_FREQ_HSE    HSE_VALUE */
 /* #define SYSCLK_FREQ_24MHz  24000000 */
@@ -1032,12 +1031,12 @@ static void SetSysClockTo72(void)
 
 #ifdef STM32F10X_CL
     /* Configure PLLs ------------------------------------------------------*/
-    /* PLL2 configuration: PLL2CLK = (HSE / 5) * 8 = 40 MHz */
+    /* PLL2 configuration: PLL2CLK = (HSE / 2) * 10 = 40 MHz */
     /* PREDIV1 configuration: PREDIV1CLK = PLL2 / 5 = 8 MHz */
 
     RCC->CFGR2 &= (uint32_t)~(RCC_CFGR2_PREDIV2 | RCC_CFGR2_PLL2MUL |
                               RCC_CFGR2_PREDIV1 | RCC_CFGR2_PREDIV1SRC);
-    RCC->CFGR2 |= (uint32_t)(RCC_CFGR2_PREDIV2_DIV5 | RCC_CFGR2_PLL2MUL8 |
+    RCC->CFGR2 |= (uint32_t)(RCC_CFGR2_PREDIV2_DIV2 | RCC_CFGR2_PLL2MUL10 |
                              RCC_CFGR2_PREDIV1SRC_PLL2 | RCC_CFGR2_PREDIV1_DIV5);
 
     /* Enable PLL2 */

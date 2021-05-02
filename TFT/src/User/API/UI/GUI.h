@@ -8,37 +8,40 @@ extern "C" {
 #include <stdint.h>
 #include "utf8_decode.h"
 
-enum
+typedef enum
 {
-  LEFT=0,
-  RIGHT,
-  CENTER,
+  TOP_LEFT = 0,
   TOP,
+  TOP_RIGHT,
+  LEFT,
+  CENTER,
+  RIGHT,
+  BOTTOM_LEFT,
   BOTTOM,
-};
+  BOTTOM_RIGHT
+} ALIGN_POSITION;
 
 typedef enum
 {
   GUI_TEXTMODE_TRANS,
   GUI_TEXTMODE_NORMAL,
-}GUI_TEXT_MODE;
+} GUI_TEXT_MODE;
 
 typedef enum
 {
   GUI_NUMMODE_SPACE,
   GUI_NUMMODE_ZERO,
-}GUI_NUM_MODE;
+} GUI_NUM_MODE;
 
 typedef struct
 {
   int16_t x, y;
-}GUI_POINT;
+} GUI_POINT;
 
 typedef struct
 {
   int16_t x0, y0, x1, y1;
-}GUI_RECT;
-
+} GUI_RECT;
 
 void LCD_SetCursor(uint16_t Xpos, uint16_t Ypos);
 void LCD_SetWindow(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey);
@@ -71,7 +74,8 @@ void GUI_FillCircle(uint16_t x0, uint16_t y0, uint16_t r);
 void GUI_SetRange(int16_t x0, int16_t y0, int16_t x1, int16_t y1);
 void GUI_CancelRange(void);
 void GUI_DrawPixel(int16_t x, int16_t y, uint16_t color);
-CHAR_INFO GUI_DispOne(int16_t sx, int16_t sy, const uint8_t *p);
+GUI_POINT getTextStartPoint(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey,ALIGN_POSITION pos, const char * textchar);
+void GUI_DispOne(int16_t sx, int16_t sy, const CHAR_INFO *pInfo);
 
 // display string from char array pointers
 void _GUI_DispString(int16_t x, int16_t y, const uint8_t *p);
@@ -82,7 +86,6 @@ void _GUI_DispStringInRect(int16_t sx, int16_t sy, int16_t ex, int16_t ey, const
 void _GUI_DispStringInPrect(const GUI_RECT *rect, const uint8_t *p);
 void _GUI_DispStringInRectEOL(int16_t sx, int16_t sy, int16_t ex, int16_t ey, const uint8_t *p);
 void _GUI_DispStringInPrectEOL(const GUI_RECT *rect, const uint8_t *p);
-//
 
 // display string from label index
 void _GUI_DispLabel(int16_t x, int16_t y, uint16_t index);
@@ -93,9 +96,8 @@ void _GUI_DispLabelInRect(int16_t sx, int16_t sy, int16_t ex, int16_t ey, uint16
 void _GUI_DispLabelInPrect(const GUI_RECT *rect, uint16_t index);
 void _GUI_DispLabelInRectEOL(int16_t sx, int16_t sy, int16_t ex, int16_t ey, uint16_t index);
 void _GUI_DispLabelInPrectEOL(const GUI_RECT *rect, uint16_t index);
-//
 
-//macros for selecting right function based on variable type
+// macros for selecting right function based on variable type
 #define GUI_DispString(x, y, c)                       _Generic(((c+0)), const u8*: _GUI_DispString, u8*: _GUI_DispString, default: _GUI_DispLabel)(x,y,c)
 #define GUI_DispLenString(x, y, c, width, truncate)   _Generic(((c+0)), const u8*: _GUI_DispLenString, u8*: _GUI_DispLenString, default: _GUI_DispLenLabel)(x,y,c,width,truncate)
 #define GUI_DispStringRight(x, y, c)                  _Generic(((c+0)), const u8*: _GUI_DispStringRight, u8*: _GUI_DispStringRight, default: _GUI_DispLabelRight)(x,y,c)
@@ -104,10 +106,10 @@ void _GUI_DispLabelInPrectEOL(const GUI_RECT *rect, uint16_t index);
 #define GUI_DispStringInPrect(rect, c)                _Generic(((c+0)), const u8*: _GUI_DispStringInPrect, u8*: _GUI_DispStringInPrect, default: _GUI_DispLabelInPrect)(rect,c)
 #define GUI_DispStringInRectEOL(sx, sy, ex, ey, c)    _Generic(((c+0)), const u8*: _GUI_DispStringInRectEOL, u8*: _GUI_DispStringInRectEOL, default: _GUI_DispLabelInRectEOL)(sx,sy,ex,ey,c)
 #define GUI_DispStringInPrectEOL(rect, c)             _Generic(((c+0)), const u8*: _GUI_DispStringInPrectEOL, u8*: _GUI_DispStringInPrectEOL, default: _GUI_DispLabelInPrectEOL)(rect,c)
-//
 
 void GUI_DispDec(int16_t x, int16_t y,int32_t num, uint8_t len, uint8_t leftOrRight);
 void GUI_DispFloat(int16_t x, int16_t y, float num, uint8_t llen, uint8_t rlen, uint8_t leftOrRight);
+
 /****************************************************     Widget    *******************************************************************/
 
 #define RADIO_SIZE 5
@@ -119,7 +121,7 @@ typedef struct
   uint8_t  distance;
   uint8_t  num;
   uint8_t  select;
-}RADIO;
+} RADIO;
 
 void RADIO_Create(RADIO *radio);
 void RADIO_Select(RADIO *radio, uint8_t select);
@@ -129,7 +131,7 @@ typedef struct
   GUI_RECT rect;
   uint8_t  *text;
   uint32_t time;
-  int16_t	 off_head;
+  int16_t  off_head;
   int16_t  off_tail;
   uint16_t maxByte;
   uint16_t curByte;
@@ -137,7 +139,7 @@ typedef struct
   int16_t  curPixelWidth;
   uint16_t maxPixelWidth;
   uint8_t  has_disp;
-}SCROLL;
+} SCROLL;
 
 void Scroll_CreatePara(SCROLL * para,const uint8_t *pstr, const GUI_RECT *prect);
 void Scroll_DispString(SCROLL * para, uint8_t align);
@@ -157,13 +159,13 @@ typedef struct
   const uint8_t  *context;
   const uint16_t radius;
   const uint16_t lineWidth;
-  const uint16_t lineColor; //normal button colors
+  const uint16_t lineColor;  // normal button colors
   const uint16_t fontColor;
   const uint16_t backColor;
-  const uint16_t pLineColor; //pressed button colors
+  const uint16_t pLineColor;  // pressed button colors
   const uint16_t pFontColor;
   const uint16_t pBackColor;
-}BUTTON;
+} BUTTON;
 
 void GUI_DrawButton(const BUTTON *button, uint8_t pressed);
 
@@ -171,7 +173,7 @@ typedef struct
 {
   const uint16_t fontColor;
   const uint16_t backColor;
-}WINDOW_ITEM;
+} WINDOW_ITEM;
 
 typedef struct
 {
@@ -184,7 +186,7 @@ typedef struct
   const WINDOW_ITEM title;
   const WINDOW_ITEM info;
   const WINDOW_ITEM actionBar;
-}WINDOW;
+} WINDOW;
 
 void GUI_DrawWindow(const WINDOW *window, const uint8_t *title, const uint8_t *inf, bool actionBar);
 
