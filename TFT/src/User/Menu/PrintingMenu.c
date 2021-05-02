@@ -34,11 +34,9 @@ const GUI_RECT ProgressBar = {START_X + 1,                                PICON_
                               START_X + 4 * ICON_WIDTH + 3 * SPACE_X - 1, ICON_START_Y + ICON_HEIGHT + SPACE_Y - PICON_SPACE_Y - 1};
 
 const  char *const Speed_ID[2] = {"Speed", "Flow"};
-static uint32_t nextLayerDrawTime = 0;
 bool hasFilamentData;
 
 #define TOGGLE_TIME     2000  // 1 seconds is 1000
-#define LAYER_DRAW_TIME 500   // 1 seconds is 1000
 
 #define LAYER_TITLE "Layer"
 #define EXT_ICON_POS 0
@@ -186,18 +184,6 @@ static inline void reDrawSpeed(int icon_pos)
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
 
-// static inline void reDrawTime(int icon_pos)
-// {
-//   uint8_t hour, min, sec;
-
-//   getPrintTimeDetail(&hour, &min, &sec);
-//   GUI_SetNumMode(GUI_NUMMODE_ZERO);
-//   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-//   sprintf(tempstr, "%02u:%02u:%02u", hour, min, sec);
-//   // ICON_ReadDisplay(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, ICON_PRINTING_TIMER);
-//   GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_HEIGHT / 2 + PICON_TITLE_Y, (uint8_t *)tempstr);
-//   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
-// }
 
 static inline void reDrawProgress(int icon_pos, uint8_t prevProgress)
 {
@@ -227,21 +213,16 @@ static inline void reDrawProgress(int icon_pos, uint8_t prevProgress)
 
 static inline void reDrawLayer(int icon_pos)
 {
-  if (OS_GetTimeMs() > nextLayerDrawTime)
-  {
-    char tempstr[10];
+  char tempstr[10];
 
-    sprintf(tempstr, "%.2fmm",
-            (infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS));
+  sprintf(tempstr, "%.2fmm", (infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS));
 
-    GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-    ICON_ReadDisplay(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, ICON_PRINTING_ZLAYER);
-    GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y,
-                   (uint8_t *)LAYER_TITLE);
-    GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (uint8_t *)tempstr);
-    GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
-    nextLayerDrawTime = OS_GetTimeMs() + LAYER_DRAW_TIME;
-  }
+  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
+  ICON_ReadDisplay(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, ICON_PRINTING_ZLAYER);
+  GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y,
+                  (uint8_t *)LAYER_TITLE);
+  GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (uint8_t *)tempstr);
+  GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
 
 static inline void toggleInfo(void)
@@ -277,19 +258,18 @@ static inline void toggleInfo(void)
 
 static inline void printingDrawPage(void)
 {
+  updatePrintProgress();
   reValueNozzle(EXT_ICON_POS);
   reValueBed(BED_ICON_POS);
   reDrawFan(FAN_ICON_POS);
   reDrawProgress(TIM_ICON_POS, 0);
+  reDrawLayer(Z_ICON_POS);
+  reDrawSpeed(SPD_ICON_POS);
   GUI_SetColor(ORANGE);
   GUI_DrawRect(ProgressBar.x0 - 1, ProgressBar.y0 - 1, ProgressBar.x1 + 1, ProgressBar.y1 + 1);
   GUI_SetColor(DARKGRAY);
   GUI_FillPrect(&ProgressBar);
   GUI_RestoreColorDefault();
-  updatePrintProgress();
-  nextLayerDrawTime = 0;  // Draw layer now
-  reDrawLayer(Z_ICON_POS);
-  reDrawSpeed(SPD_ICON_POS);
 }
 
 void drawPrintInfo(void)
