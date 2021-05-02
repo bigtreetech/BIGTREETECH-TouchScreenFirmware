@@ -71,12 +71,12 @@ void menuHeat(void)
       }
 
       case KEY_ICON_3:
-          if (c_heater < MAX_HOTEND_COUNT) 
-            heatSetTargetTemp(c_heater, MAX(140, actTarget + degreeSteps[degreeSteps_index]));  // by Lori
-          else if ((c_heater == MAX_HOTEND_COUNT) && infoSettings.bed_en)                   // by Lori
-            heatSetTargetTemp(c_heater, MAX(40, actTarget + degreeSteps[degreeSteps_index]));   // by Lori
+          if (tool_index < MAX_HOTEND_COUNT) 
+            heatSetTargetTemp(tool_index, MAX(140, actTarget + degreeSteps[degreeSteps_index]));  // by Lori
+          else if ((tool_index == MAX_HOTEND_COUNT) && infoSettings.bed_en)                   // by Lori
+            heatSetTargetTemp(tool_index, MAX(40, actTarget + degreeSteps[degreeSteps_index]));   // by Lori
           else                                                                              // by Lori
-            heatSetTargetTemp(c_heater, actTarget + degreeSteps[degreeSteps_index]);
+            heatSetTargetTemp(tool_index, actTarget + degreeSteps[degreeSteps_index]);
         break;
 
       case KEY_ICON_4:
