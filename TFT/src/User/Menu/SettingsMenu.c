@@ -17,13 +17,13 @@ const MENUITEMS settingsItems = {
   }
 };
 
-// const GUI_POINT clocks[] = {
-//   {0 * LCD_WIDTH / 3, 0 * BYTE_HEIGHT},
-//   {1 * LCD_WIDTH / 3, 0 * BYTE_HEIGHT},
-//   {2 * LCD_WIDTH / 3, 0 * BYTE_HEIGHT},
-//   {0 * LCD_WIDTH / 3, 1 * BYTE_HEIGHT},
-//   {1 * LCD_WIDTH / 3, 1 * BYTE_HEIGHT},
-//   {2 * LCD_WIDTH / 3, 1 * BYTE_HEIGHT},};
+const GUI_POINT clocks[] = {
+  {0 * LCD_WIDTH / 3, 0 * BYTE_HEIGHT},
+  {1 * LCD_WIDTH / 3, 0 * BYTE_HEIGHT},
+  {2 * LCD_WIDTH / 3, 0 * BYTE_HEIGHT},
+  {0 * LCD_WIDTH / 3, 1 * BYTE_HEIGHT},
+  {1 * LCD_WIDTH / 3, 1 * BYTE_HEIGHT},
+  {2 * LCD_WIDTH / 3, 1 * BYTE_HEIGHT},};
 
 static uint8_t firmare_name[64] = "Unknown system";  // Marlin firmware version
 uint8_t machine_type[64] = "3D Printer";  // Marlin machine type
@@ -114,7 +114,7 @@ void menuInfo(void)
   float usedMB = (float)FLASH_USED/1048576;
   sprintf(buf, "Used %.2f%% (%.2fMB/%uMB)", flashUsedPercentage(), usedMB, (W25Qxx_ReadCapacity()/1048576));
 
-  const uint16_t top_y = 0; //(LCD_HEIGHT - (7 * BYTE_HEIGHT)) / 2;  // 8 firmware info lines + 1 SPI flash info line
+  const uint16_t top_y = (LCD_HEIGHT - (7 * BYTE_HEIGHT)) / 2;  // 8 firmware info lines + 1 SPI flash info line
   const uint16_t start_x = strlen("Firmware:") * BYTE_WIDTH;
   const GUI_RECT version[7] = {
     {start_x, top_y + 0*BYTE_HEIGHT, LCD_WIDTH, top_y + 2*BYTE_HEIGHT},
