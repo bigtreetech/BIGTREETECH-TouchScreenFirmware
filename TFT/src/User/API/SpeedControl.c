@@ -3,33 +3,14 @@
 
 const char *const speedCmd[SPEED_NUM] = {"M220","M221"};
 
-static uint16_t setPercent[SPEED_NUM]     = {100, 100};  //Speed  Flow
-static uint16_t lastSetPercent[SPEED_NUM] = {100, 100};  //Speed  Flow
-static uint16_t curPercent[SPEED_NUM]  = {100, 100};  //Speed  Flow
-
-static bool sendSpeed_waiting[SPEED_NUM];
-static bool queryWait = false;
+static uint16_t setPercent[SPEED_NUM] = {100, 100};
+static uint16_t lastSetPercent[SPEED_NUM] = {100, 100};
+static uint16_t curPercent[SPEED_NUM] = {100, 100};
 
 static bool speedQueryWait = false;
 static uint32_t nextSpeedTime = 0;
 
 #define NEXT_SPEED_WAIT 500  // 1 second is 1000
-
-void resetSpeedFlow(void)
-{
-  uint8_t i;
-  uint8_t j;
-  for (i = 0; i < SPEED_NUM; i++)
-  {
-    setPercent[i] = 100;
-    lastSetPercent[i] = 100;
-    curPercent[i] = 100;
-    for (j = 1; j <= infoSettings.ext_count; j++)
-    {
-      mustStoreCmd("%s S%d D%d\n",speedCmd[i], 100, j);
-    }
-  }
-}
 
 void speedSetCurPercent(uint8_t tool, uint16_t per)
 {
@@ -57,17 +38,12 @@ void loopSpeed(void)
   {
     if (lastSetPercent[i] != setPercent[i]  && (OS_GetTimeMs() > nextSpeedTime))
     {
-      if (sendSpeed_waiting[i] == false)
-      {
-        sendSpeed_waiting[i] = storeCmd("%s S%d D%d\n", speedCmd[i], setPercent[i], heatGetCurrentTool());
-      }
-      if (sendSpeed_waiting[i] == true)
-        curPercent[i] = setPercent[i];
-      nextSpeedTime = OS_GetTimeMs() + NEXT_SPEED_WAIT; // avoid rapid fire, clogging the queue
+      if (storeCmd("%s S%d D%d\n",speedCmd[i], setPercent[i], heatGetCurrentTool()))
+        lastSetPercent[i] = setPercent[i];
+      nextSpeedTime = OS_GetTimeMs() + NEXT_SPEED_WAIT;  // avoid rapid fire, clogging the queue
     }
   }
 }
-
 
 void speedQuerySetWait(bool wait)
 {
