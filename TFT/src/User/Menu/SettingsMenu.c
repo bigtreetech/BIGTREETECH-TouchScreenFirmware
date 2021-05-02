@@ -90,25 +90,25 @@ void menuInfo(void)
   GUI_Clear(infoSettings.bg_color);
   GUI_SetColor(GRAY);
 
-  // sprintf(buf, "SYS:%dMhz", mcuClocks.rccClocks.SYSCLK_Frequency / 1000000);
-  // GUI_DispString(clocks[0].x, clocks[0].y, (uint8_t *)buf);
+  sprintf(buf, "SYS:%dMhz", mcuClocks.rccClocks.SYSCLK_Frequency / 1000000);
+  GUI_DispString(clocks[0].x, clocks[0].y, (uint8_t *)buf);
 
-  // sprintf(buf, "APB1:%dMhz", mcuClocks.rccClocks.PCLK1_Frequency / 1000000);
-  // GUI_DispString(clocks[1].x, clocks[1].y, (uint8_t *)buf);
+  sprintf(buf, "APB1:%dMhz", mcuClocks.rccClocks.PCLK1_Frequency / 1000000);
+  GUI_DispString(clocks[1].x, clocks[1].y, (uint8_t *)buf);
 
-  // sprintf(buf, "P1Tim:%dMhz", mcuClocks.PCLK1_Timer_Frequency / 1000000);
-  // GUI_DispString(clocks[2].x, clocks[2].y, (uint8_t *)buf);
+  sprintf(buf, "P1Tim:%dMhz", mcuClocks.PCLK1_Timer_Frequency / 1000000);
+  GUI_DispString(clocks[2].x, clocks[2].y, (uint8_t *)buf);
 
-  // sprintf(buf, "AHB:%dMhz", mcuClocks.rccClocks.HCLK_Frequency / 1000000);
-  // GUI_DispString(clocks[3].x, clocks[3].y, (uint8_t *)buf);
+  sprintf(buf, "AHB:%dMhz", mcuClocks.rccClocks.HCLK_Frequency / 1000000);
+  GUI_DispString(clocks[3].x, clocks[3].y, (uint8_t *)buf);
 
-  // sprintf(buf, "APB2:%dMhz", mcuClocks.rccClocks.PCLK2_Frequency / 1000000);
-  // GUI_DispString(clocks[4].x, clocks[4].y, (uint8_t *)buf);
+  sprintf(buf, "APB2:%dMhz", mcuClocks.rccClocks.PCLK2_Frequency / 1000000);
+  GUI_DispString(clocks[4].x, clocks[4].y, (uint8_t *)buf);
 
-  // sprintf(buf, "P2Tim:%dMhz", mcuClocks.PCLK2_Timer_Frequency / 1000000);
-  // GUI_DispString(clocks[5].x, clocks[5].y, (uint8_t *)buf);
+  sprintf(buf, "P2Tim:%dMhz", mcuClocks.PCLK2_Timer_Frequency / 1000000);
+  GUI_DispString(clocks[5].x, clocks[5].y, (uint8_t *)buf);
 
-  // GUI_HLine(0, clocks[5].y + BYTE_HEIGHT, LCD_WIDTH);
+  GUI_HLine(0, clocks[5].y + BYTE_HEIGHT, LCD_WIDTH);
 
   //spi flash info
   float usedMB = (float)FLASH_USED/1048576;
