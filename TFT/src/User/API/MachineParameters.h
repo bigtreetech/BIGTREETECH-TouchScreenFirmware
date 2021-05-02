@@ -112,25 +112,25 @@ void setParameter(PARAMETER_NAME name, uint8_t index, float val);
 // get total elements in a parameter
 uint8_t getParameterElementCount(PARAMETER_NAME para);
 
-//Get type of value a parameter element holds
+// Get type of value a parameter element holds
 VAL_TYPE getParameterValType(PARAMETER_NAME para, uint8_t index);
 
-//set status of dual stepper for an axis
+// set status of dual stepper for an axis
 void setDualStepperStatus(uint8_t index, bool status);
 
-//get status of dual stepper for an axis
+// get status of dual stepper for an axis
 bool getDualStepperStatus(uint8_t index);
 
-//send parameter cmd (Parameter value gets updated after the cmd passes through the cmd cache)
+// send parameter cmd (Parameter value gets updated after the cmd passes through the cmd cache)
 void sendParameterCmd(PARAMETER_NAME para_index, uint8_t stepper_index, float Value);
 
-//Save parameter setting to eeprom
+// Save parameter setting to eeprom
 void saveEepromSettings(void);
 
-//restore settings from eeprom
+// restore settings from eeprom
 void restoreEepromSettings(void);
 
-//reset settings and eeprom to default values
+// reset settings and eeprom to default values
 void resetEepromSettings(void);
 
 #ifdef __cplusplus

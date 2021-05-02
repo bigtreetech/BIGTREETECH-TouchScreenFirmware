@@ -6,9 +6,10 @@ extern "C" {
 #endif
 
 #include <stdint.h>
+#include "variants.h"
 #include "menu.h"
 
-//24bit                             // G  R  B
+// 24bit                            // G  R  B
 #define LED_OFF                     0x00000000
 #define LED_WHITE                   0x00FFFFFF
 #define LED_RED                     0x0000FF00
@@ -19,7 +20,7 @@ extern "C" {
 #define LED_INDIGO                  0x00004B82
 #define LED_VIOLET                  0x0000FEFE
 
-//Color macro  //颜色宏定            /*R G B*/
+// Color macro  //颜色宏定           /*R G B*/
 #define COLOR_LIGHTPINK             0xFFB6C1  //浅粉
 #define COLOR_PINK                  0xFFC0CB  //粉红
 #define COLOR_CRIMSON               0xDC143C  //猩红
@@ -157,7 +158,7 @@ extern "C" {
 #define COLOR_DIMGRAY               0x696969  //暗淡的灰
 #define COLOR_BLACK                 0x000000
 
-//preset color list
+// preset color list
 #ifdef LED_COLOR_PIN
   #define LED_COLOR_NUM 9
   #define LED_IDLE 2
