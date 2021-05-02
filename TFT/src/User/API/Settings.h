@@ -7,6 +7,7 @@ extern "C" {
 
 #include <stdbool.h>
 #include <stdint.h>
+#include "variants.h"
 #include "coordinate.h"
 
 enum
