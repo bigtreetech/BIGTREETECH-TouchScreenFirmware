@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #include <stdint.h>
+#include "Variants.h"
 #include "utf8_decode.h"
 
 typedef enum

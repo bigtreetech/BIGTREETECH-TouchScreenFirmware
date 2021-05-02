@@ -5,9 +5,9 @@
 extern "C" {
 #endif
 
+#include <stdbool.h>
 #include <stdint.h>
 #include "coordinate.h"
-#include "Configuration.h"
 
 enum
 {

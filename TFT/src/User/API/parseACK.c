@@ -1,11 +1,19 @@
-#include "includes.h"
 #include "parseACK.h"
+#include "includes.h"
 
 char dmaL2Cache[ACK_MAX_SIZE];
 static uint16_t ack_index = 0;
 static uint8_t ack_cur_src = SERIAL_PORT;
 
+static const char errormagic[] = "Error:";
+static const char echomagic[] = "echo:";
+static const char warningmagic[] = "Warning:";                     // RRF warning
+static const char messagemagic[] = "message";                      // RRF message in Json format
+static const char errorZProbe[] = "ZProbe triggered before move";  // smoothieware message
+
 bool portSeen[_UART_CNT] = {false, false, false, false, false, false};
+
+bool hostDialog = false;
 
 struct HOST_ACTION
 {
@@ -16,14 +24,27 @@ struct HOST_ACTION
   uint8_t button;           // Number of buttons
 } hostAction;
 
+typedef enum  // popup message types available to display an echo message
+{
+  ECHO_NOTIFY_NONE = 0,  // ignore the echo message
+  ECHO_NOTIFY_TOAST,     // Show a non invasive toast on the title bar for a preset duration.
+  ECHO_NOTIFY_DIALOG,    // Show a window to notify the user and alow interaction.
+} ECHO_NOTIFY_TYPE;
+
+typedef struct
+{
+  ECHO_NOTIFY_TYPE  notifyType;
+  const char *const msg;
+} ECHO;
+
 // notify or ignore messages starting with following text
 const ECHO knownEcho[] = {
-  //{ECHO_NOTIFY_NONE, "enqueueing \"M117\""},
   {ECHO_NOTIFY_NONE, "busy: paused for user"},
   {ECHO_NOTIFY_NONE, "busy: processing"},
   {ECHO_NOTIFY_NONE, "Now fresh file:"},
   {ECHO_NOTIFY_NONE, "Now doing file:"},
-  // {ECHO_NOTIFY_NONE, "Probe Offset"},
+  //{ECHO_NOTIFY_NONE, "Probe Offset"},
+  //{ECHO_NOTIFY_NONE, "enqueueing \"M117\""},
   {ECHO_NOTIFY_NONE, "Flow:"},
   {ECHO_NOTIFY_NONE, "echo:;"},                   // M503
   {ECHO_NOTIFY_NONE, "echo:  G"},                 // M503
@@ -239,6 +260,8 @@ void hostActionCommands(void)
   }
   else if (ack_seen(":paused") || ack_seen(":pause"))
   {
+    hostDialog = true;  // disable resume/pause using the Resume/Pause button on the PrintingMenu
+
     // pass value "false" to let Marlin report when the host is not
     // printing (when notification ack "Not SD printing" is caught)
     setPrintPause(false);
@@ -250,6 +273,8 @@ void hostActionCommands(void)
   }
   else if (ack_seen(":resumed"))
   {
+    hostDialog = false;  // enable resume/pause using the Resume/Pause button on the PrintingMenu
+
     // pass value "true" to report the host is printing without waiting
     // from Marlin (when notification ack "SD printing byte" is caught)
     setPrintResume(true);

@@ -5,8 +5,7 @@
 extern "C" {
 #endif
 
-#include "variants.h"
-#include "stdbool.h"
+#include <stdbool.h>
 #include "config.h"
 
 #define W25QXX_SECTOR_SIZE (0x1000) // 4096-4K

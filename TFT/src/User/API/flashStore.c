@@ -1,6 +1,6 @@
-#include <string.h>
 #include "flashStore.h"
 #include "STM32_Flash.h"
+#include <string.h>
 
 #define TSC_SIGN  0x20200512  // DO NOT MODIFY
 #define PARA_SIGN 0x20210311  // (YYYYMMDD) If a new setting parameter is added,

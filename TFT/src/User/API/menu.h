@@ -5,8 +5,8 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 #include "GUI.h"
 
 #define IDLE_TOUCH 0xFFFF

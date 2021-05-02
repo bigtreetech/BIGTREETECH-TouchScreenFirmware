@@ -5,9 +5,6 @@
 extern "C" {
 #endif
 
-#include "includes.h"
-
-void menuRGBSettings(void);
 void menuMachineSettings(void);
 void menuCustom(void);
 

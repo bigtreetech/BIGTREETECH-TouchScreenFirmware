@@ -5,8 +5,8 @@
 extern "C" {
 #endif
 
-#include "stdbool.h"
-#include "stdint.h"
+#include <stdbool.h>
+#include <stdint.h>
 
 #define ENCODER_PULSES_PER_STEP   4
 #define LCD_CHANGE_MODE_INTERVALS 1500  //long pressed 1.5s

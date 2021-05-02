@@ -5,8 +5,7 @@
 extern "C" {
 #endif
 
-#include "menu.h"
-#include "MachineParameters.h"
+#include <stdint.h>
 
 // Global Info
 #define GLOBALICON_WIDTH    (BYTE_WIDTH * 2)

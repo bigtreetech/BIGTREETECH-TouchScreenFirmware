@@ -1,7 +1,6 @@
 #include "extend.h"
-#include "GPIO_Init.h"
-#include "variants.h"
 #include "includes.h"
+#include "GPIO_Init.h"
 
 // Power Supply
 #ifdef PS_ON_PIN

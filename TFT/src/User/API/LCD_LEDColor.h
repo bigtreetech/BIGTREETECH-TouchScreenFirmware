@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include "variants.h"
+#include <stdint.h>
 #include "menu.h"
 
 //24bit                             // G  R  B
