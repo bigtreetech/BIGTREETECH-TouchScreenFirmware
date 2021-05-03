@@ -122,8 +122,7 @@ const LABEL junctionDeviationDisplayID[] = {LABEL_JUNCTION_DEVIATION};
 
 static inline void setElementStatus(PARAMETER_NAME name, uint8_t element, bool status)
 {
-  elementEnabled[name] = (status == 1) ? (1 << element) | elementEnabled[name] :
-                                  elementEnabled[name] & (~(1 << element));
+  elementEnabled[name] = (status == 1) ? (1 << element) | elementEnabled[name] : elementEnabled[name] & (~(1 << element));
 }
 
 static inline uint8_t getElementStatus(PARAMETER_NAME name, uint8_t element)
