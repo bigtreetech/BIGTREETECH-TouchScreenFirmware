@@ -1,7 +1,7 @@
 #include "SelectMode.h"
 #include "includes.h"
-#include "xpt2046.h"
 #include "GPIO_Init.h"
+#include "xpt2046.h"
 
 bool freshBoot = true;
 bool skipMode = false;
