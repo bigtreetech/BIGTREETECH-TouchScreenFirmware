@@ -6,7 +6,6 @@ extern "C" {
 #endif
 
 #include "menu.h"
-#include "coordinate.h"
 
 typedef enum
 {

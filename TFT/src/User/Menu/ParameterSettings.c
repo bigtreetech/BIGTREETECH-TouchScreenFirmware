@@ -30,7 +30,7 @@ const LABEL parameterTypes[PARAMETERS_COUNT] = {
 };
 
 const LISTITEM eepromItems[P_SETTINGS_COUNT] = {
-  // icon           ItemType   Item Title              item value text(only for custom value)
+  // icon          ItemType    Item Title              item value text(only for custom value)
   {CHARICON_SAVE,  LIST_LABEL, LABEL_SETTINGS_SAVE,    LABEL_BACKGROUND},
   {CHARICON_UNDO,  LIST_LABEL, LABEL_SETTINGS_RESTORE, LABEL_BACKGROUND},
   {CHARICON_RESET, LIST_LABEL, LABEL_SETTINGS_RESET,   LABEL_BACKGROUND},
@@ -166,6 +166,7 @@ void menuShowParameter(void)
 
           if (val != getParameter(curParameter, elementIndex))
             sendParameterCmd(curParameter, elementIndex, val);
+
           listViewRefreshMenu();
           listViewRefreshItem(curIndex);
         }
@@ -222,11 +223,9 @@ void loadParameters(LISTITEM * parameterMainItem, uint16_t index, uint8_t itemPo
 void menuParameterSettings(void)
 {
   uint8_t enabledParameterCount = getEnabledParameterCount();
-  uint8_t totalItems = (infoMachineSettings.EEPROM == 1) ? (enabledParameterCount + P_SETTINGS_COUNT): enabledParameterCount;
-
-  LABEL title = {LABEL_PARAMETER_SETTING};
-  //LISTITEM parameterMainItems[totalItems];
+  uint8_t totalItems = (infoMachineSettings.EEPROM == 1) ? (enabledParameterCount + P_SETTINGS_COUNT) : enabledParameterCount;
   uint16_t curIndex = KEY_IDLE;
+  LABEL title = {LABEL_PARAMETER_SETTING};
 
   listViewCreate(title, NULL, totalItems, &psCurPage, false, NULL, loadParameters);
 
@@ -251,6 +250,7 @@ void menuParameterSettings(void)
         break;
 
       default:
+        // open selected parameter
         if (curIndex < enabledParameterCount)
         {
           curParameter = getEnabledParameter(curIndex);
@@ -261,6 +261,7 @@ void menuParameterSettings(void)
           }
           break;
         }
+        // perform EEPROM task
         else if (infoMachineSettings.EEPROM == 1 && curIndex < totalItems)
         {
           uint8_t curIndex_e = (curIndex - enabledParameterCount);
