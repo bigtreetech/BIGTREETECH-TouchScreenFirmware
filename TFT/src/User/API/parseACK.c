@@ -13,8 +13,6 @@ static const char errorZProbe[] = "ZProbe triggered before move";  // smoothiewa
 
 bool portSeen[_UART_CNT] = {false, false, false, false, false, false};
 
-bool hostDialog = false;
-
 struct HOST_ACTION
 {
   char prompt_begin[30];
