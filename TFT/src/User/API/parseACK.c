@@ -267,7 +267,7 @@ void hostActionCommands(void)
       setRunoutAlarmTrue();
     }
   }
-  else if (ack_seen(":resumed"))
+  else if (ack_seen(":resumed") || ack_seen(":resume"))
   {
     // pass value "true" to report the host is printing without waiting
     // from Marlin (when notification ack "SD printing byte" is caught)
