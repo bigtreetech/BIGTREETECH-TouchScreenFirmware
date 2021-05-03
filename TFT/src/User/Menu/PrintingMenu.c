@@ -496,10 +496,7 @@ void menuPrinting(void)
       case KEY_ICON_4:
         if (isPrinting())
         {
-          if (!isHostDialog())
-            printPause(!isPaused(), false);
-          else
-            addToast(DIALOG_TYPE_ERROR, (char *)textSelect(LABEL_BUSY));
+          printPause(!isPaused(), false);
         }
         #ifndef TFT70_V3_0
           else

@@ -260,8 +260,6 @@ void hostActionCommands(void)
   }
   else if (ack_seen(":paused") || ack_seen(":pause"))
   {
-    hostDialog = true;  // disable resume/pause using the Resume/Pause button on the PrintingMenu
-
     // pass value "false" to let Marlin report when the host is not
     // printing (when notification ack "Not SD printing" is caught)
     setPrintPause(false);
@@ -273,8 +271,6 @@ void hostActionCommands(void)
   }
   else if (ack_seen(":resumed"))
   {
-    hostDialog = false;  // enable resume/pause using the Resume/Pause button on the PrintingMenu
-
     // pass value "true" to report the host is printing without waiting
     // from Marlin (when notification ack "SD printing byte" is caught)
     setPrintResume(true);

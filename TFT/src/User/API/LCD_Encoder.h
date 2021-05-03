@@ -10,8 +10,8 @@ extern "C" {
 #include <variants.h>
 
 #define ENCODER_PULSES_PER_STEP   4
-#define LCD_CHANGE_MODE_INTERVALS 1500  //long pressed 1.5s
-#define LCD_BUTTON_INTERVALS      20    //20ms
+#define LCD_CHANGE_MODE_INTERVALS 1500  // long pressed 1.5s
+#define LCD_BUTTON_INTERVALS      20    // 20ms
 #define LCD_FREE_WIDTH            (LCD_WIDTH - LCD_WIDTH / 5)
 #define LCD_FREE_HEIGHT           (LCD_HEIGHT / 5)
 #define EN_A (1<<0)

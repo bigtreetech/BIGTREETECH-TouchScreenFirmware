@@ -10,8 +10,6 @@ extern "C" {
 
 #define ACK_MAX_SIZE 512
 
-extern bool hostDialog;
-
 typedef enum  // append at the end of this list the id of any new echo message for
 {             // which a specific popup message type must be used to notify the user
   ECHO_ID_BUSY_PAUSE = 0,
@@ -39,7 +37,6 @@ void setCurrentAckSrc(uint8_t src);
 void parseACK(void);
 void parseRcvGcode(void);
 
-inline bool isHostDialog() {return hostDialog;}
 void setIgnoreEcho(ECHO_ID msgId, bool state);
 
 #ifdef __cplusplus
