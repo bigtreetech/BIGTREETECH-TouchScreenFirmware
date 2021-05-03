@@ -116,6 +116,7 @@ extern const LABEL autoRetractDisplayID[];
 uint8_t getEnabledElementCount(PARAMETER_NAME name);
 
 // Get element index out of total enabled enabled element
+// If no element is enabled, total element count is returned
 uint8_t getEnabledElement(PARAMETER_NAME name, uint8_t index);
 
 // Get total enabled parameters
