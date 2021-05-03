@@ -27,21 +27,21 @@ extern "C" {
 
 // address in spiflash W25Qxx
 #define LOGO_ADDR               0x0
-#define WORD_UNICODE            LOGO_MAX_SIZE                        // unicode (+0x480000 4.5M)
-#define BYTE_ASCII_ADDR         (WORD_UNICODE + WORD_UNICODE_SIZE)   // ascii (+0x1000 4K)
-#define LARGE_FONT_ADDR         (BYTE_ASCII_ADDR + BYTE_ASCII_SIZE)  // Large ascii font
+#define WORD_UNICODE            LOGO_MAX_SIZE                                  // unicode (+0x480000 4.5M)
+#define BYTE_ASCII_ADDR         (WORD_UNICODE + WORD_UNICODE_SIZE)             // ascii (+0x1000 4K)
+#define LARGE_FONT_ADDR         (BYTE_ASCII_ADDR + BYTE_ASCII_SIZE)            // Large ascii font
 //#define BYTE_RESERVE_ADDR      0x710000
-#define FLASH_SIGN_ADDR         (LARGE_FONT_ADDR + LARGE_FONT_SIZE)  // for language label strings from language file
-#define LANGUAGE_ADDR           (FLASH_SIGN_ADDR + FLASH_SIGN_SIZE)  // for label strings from config file
-#define STRINGS_STORE_ADDR      (LANGUAGE_ADDR + LANGUAGE_SIZE)      // for label strings from config file
+#define FLASH_SIGN_ADDR         (LARGE_FONT_ADDR + LARGE_FONT_SIZE)            // for language label strings from language file
+#define LANGUAGE_ADDR           (FLASH_SIGN_ADDR + FLASH_SIGN_SIZE)            // for label strings from config file
+#define STRINGS_STORE_ADDR      (LANGUAGE_ADDR + LANGUAGE_SIZE)                // for label strings from config file
 #define PRINT_GCODES_ADDR       (STRINGS_STORE_ADDR + STRINGS_STORE_MAX_SIZE)  // for start/end/cancel gcodes from config file
 #define CUSTOM_GCODE_ADDR       (PRINT_GCODES_ADDR + PRINT_GCODES_MAX_SIZE)    // for custom gcodes from config file
 
 #define ICON_ADDR(num)          ((num) * ICON_MAX_SIZE + CUSTOM_GCODE_ADDR+CUSTOM_GCODE_MAX_SIZE)
-#define INFOBOX_ADDR            (ICON_ADDR(ICON_PREVIEW) + ICON_MAX_SIZE)  // total byte size 0xA7F8
+#define INFOBOX_ADDR            (ICON_ADDR(ICON_PREVIEW) + ICON_MAX_SIZE)      // total byte size 0xA7F8
 #define SMALL_ICON_START_ADDR   (INFOBOX_ADDR + INFOBOX_MAX_SIZE)
 #define SMALL_ICON_ADDR(num)    ((num)*SMALL_ICON_MAX_SIZE + SMALL_ICON_START_ADDR)
-#define FLASH_USED              (INFOBOX_ADDR + INFOBOX_MAX_SIZE)  // currently small icons are not used
+#define FLASH_USED              (INFOBOX_ADDR + INFOBOX_MAX_SIZE)              // currently small icons are not used
 
 #define ADMIN_MODE_FILE "admin.txt"
 #define FIRMWARE_NAME STRINGIFY(HARDWARE) "." STRINGIFY(SOFTWARE_VERSION)
