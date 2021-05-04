@@ -246,7 +246,7 @@ void hostActionCommands(void)
     if (infoSettings.notification_m117 == ENABLED)
     {
       addNotification(DIALOG_TYPE_INFO, (char*)echomagic, (char*)dmaL2Cache + ack_index, false);
-    }  
+    }
 
     if (infoMenu.menu[infoMenu.cur] != menuStatus)  // don't show it when in menuStatus
     {
