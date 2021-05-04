@@ -945,7 +945,7 @@ void parseConfigKey(uint16_t index)
       #endif
 
       case C_INDEX_NEOPIXEL_PIXELS:
-        SET_VALID_INT_VALUE(infoSettings.knob_led_idle, 0, MAX_NEOPIXEL_PIXELS);
+        SET_VALID_INT_VALUE(infoSettings.neopixel_pixels, 0, MAX_NEOPIXEL_PIXELS);
         infoSettings.neopixel_pixels = (infoSettings.neopixel_pixels == 0) ? NEOPIXEL_PIXELS : infoSettings.neopixel_pixels;
         break;
     #endif
