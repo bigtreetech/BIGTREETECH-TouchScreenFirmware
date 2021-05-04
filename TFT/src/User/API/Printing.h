@@ -27,6 +27,16 @@ extern "C" {
 
 #define SUMMARY_NAME_LEN 26  // max character length to copy from name buffer
 
+
+typedef enum
+{
+  PAUSE_NONE = 0,
+  PAUSE_TFT,
+  PAUSE_REMOTE,
+  PAUSE_M0,
+  PAUSE_M600,
+} PAUSE_TYPE;
+
 typedef struct
 {
   // data
@@ -81,7 +91,7 @@ void printEnd(void);                              // it also sends end gcode
 
 void printComplete(void);                         // print successfully completed
 void printAbort(void);                            // it also sends cancel gcode
-bool printPause(bool is_pause, bool is_m0pause);
+bool printPause(bool isPause, PAUSE_TYPE pauseType);
 
 bool isPrinting(void);
 bool isPaused(void);
