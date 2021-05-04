@@ -214,7 +214,7 @@ void loopFrontEndFILRunoutDetect(void)
 
   if (!getPrintRunout() && !getRunoutAlarm()) return;
 
-  if (printPause(true, false) && !getRunoutAlarm())
+  if (printPause(true, PAUSE_NORMAL) && !getRunoutAlarm())
   {
     setPrintRunout(false);
     setRunoutAlarmTrue();

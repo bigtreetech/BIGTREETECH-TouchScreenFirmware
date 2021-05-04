@@ -430,7 +430,6 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType)
 
   loopDetected = true;
   infoPrinting.pause = isPause;
-  infoPrinting.pauseType = pauseType;
 
   switch (infoFile.source)
   {
@@ -462,8 +461,8 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType)
           popupReminder(DIALOG_TYPE_ALERT, LABEL_PAUSE, LABEL_PAUSE);
           break;
         }
-        // do not send any command if the pause is through M600 and emulated M600 is off
-        if (!(infoPrinting.pauseType = PAUSE_M600 && infoSettings.emulate_m600 != 1))
+        // do not send any command if the pause originated outside TFT
+        if (pauseType < PAUSE_EXTERNAL)
         {
           coordinateGetAll(&tmp);
 
@@ -486,17 +485,18 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType)
           if (isCoorRelative == true)    mustStoreCmd("G91\n");
           if (isExtrudeRelative == true) mustStoreCmd("M83\n");
         }
+        // store pause type only on pause
+        infoPrinting.pauseType = pauseType;
       }
       else  // resume
       {
         if (infoPrinting.pauseType == PAUSE_M0)
         {
-          infoPrinting.pauseType = pauseType;
           breakAndContinue();  // clear the queue and send a break and continue
           break;
         }
-        // do not send any command if the pause is through M600 and emulated M600 is off
-        else if (!(infoPrinting.pauseType == PAUSE_M600 && infoSettings.emulate_m600 != 1))
+        // do not send any command if the pause originated outside TFT
+        if (infoPrinting.pauseType < PAUSE_EXTERNAL)
         {
           if (isCoorRelative == true)    mustStoreCmd("G90\n");
           if (isExtrudeRelative == true) mustStoreCmd("M82\n");
@@ -563,11 +563,13 @@ void setPrintAbort(void)
   infoPrinting.printing = infoPrinting.pause = false;
 }
 
-void setPrintPause(bool updateHost)
+void setPrintPause(bool updateHost, PAUSE_TYPE pauseType)
 {
   if (infoPrinting.printing)
+  {
     infoPrinting.pause = true;
-
+    infoPrinting.pauseType = pauseType;
+  }
   if (updateHost)
     infoHost.printing = false;
 }

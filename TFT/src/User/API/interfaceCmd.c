@@ -237,7 +237,7 @@ void sendQueueCmd(void)
             if (infoFile.source < BOARD_SD )
             {
               purgeLastCmd(avoid_terminal);
-              if (!isPaused()) printPause(true, PAUSE_M0);
+              printPause(true, PAUSE_M0);
               return;
             }
           }
@@ -345,7 +345,6 @@ void sendQueueCmd(void)
                 }
                 Serial_Puts(SERIAL_PORT_2, "ok\n");
                 purgeLastCmd(avoid_terminal);
-
                 return;
               }
             }
@@ -368,7 +367,7 @@ void sendQueueCmd(void)
                 }
                 else  // if printing, resume the print, in case it is paused, or continue to print
                 {
-                  printPause(false, PAUSE_NONE);
+                  printPause(false, PAUSE_NORMAL);
                 }
                 return;
               }
@@ -384,7 +383,7 @@ void sendQueueCmd(void)
                 // case the function loopProcess() is invoked by the following function printPause()
                 Serial_Puts(SERIAL_PORT_2, "ok\n");
                 purgeLastCmd(avoid_terminal);
-                printPause(true, PAUSE_NONE);
+                printPause(true, PAUSE_NORMAL);
                 return;
               }
             }
@@ -504,7 +503,7 @@ void sendQueueCmd(void)
                 Serial_Puts(SERIAL_PORT_2, "ok\n");
                 purgeLastCmd(avoid_terminal);
 
-                printPause(true, PAUSE_NONE);
+                printPause(true, PAUSE_NORMAL);
                 return;
               }
             }
@@ -902,7 +901,7 @@ void sendQueueCmd(void)
             if (infoSettings.emulate_m600 == 1)
             {
               purgeLastCmd(avoid_terminal);
-              printPause(true, PAUSE_M600);
+              printPause(true, PAUSE_NORMAL);
               return;
             }
           }
@@ -917,7 +916,7 @@ void sendQueueCmd(void)
               if (infoSettings.emulate_m600 == 1)
               {
                 purgeLastCmd(avoid_terminal);
-                printPause(true, PAUSE_M600);
+                printPause(true, PAUSE_NORMAL);
                 return;
               }
             }

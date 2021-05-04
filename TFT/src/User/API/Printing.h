@@ -30,9 +30,9 @@ extern "C" {
 
 typedef enum
 {
-  PAUSE_NONE = 0,
+  PAUSE_NORMAL = 0,
   PAUSE_M0,
-  PAUSE_M600,
+  PAUSE_EXTERNAL,
 } PAUSE_TYPE;
 
 typedef struct
@@ -96,7 +96,7 @@ bool isPaused(void);
 
 void setPrintHost(bool isPrinting);
 void setPrintAbort(void);
-void setPrintPause(bool updateHost);
+void setPrintPause(bool updateHost, PAUSE_TYPE pauseType);
 void setPrintResume(bool updateHost);
 
 void loopPrintFromTFT(void);   // called in loopBackEnd(). It handles a print from TFT, if any

@@ -226,7 +226,7 @@ void hostActionCommands(void)
     if (infoSettings.notification_m117 == ENABLED)
     {
       addNotification(DIALOG_TYPE_INFO, (char*)echomagic, (char*)dmaL2Cache + ack_index, false);
-    }  
+    }
     if (infoMenu.menu[infoMenu.cur] != menuStatus)  // don't show it when in menuStatus
     {
       uint16_t index = ack_index;
@@ -239,7 +239,7 @@ void hostActionCommands(void)
   {
     // pass value "false" to let Marlin report when the host is not
     // printing (when notification ack "Not SD printing" is caught)
-    setPrintPause(false);
+    setPrintPause(false, PAUSE_EXTERNAL);
 
     if (ack_seen("filament_runout"))
     {
@@ -277,7 +277,7 @@ void hostActionCommands(void)
     {
       // pass value "false" to let Marlin report when the host is not
       // printing (when notification ack "Not SD printing" is caught)
-      setPrintPause(false);
+      setPrintPause(false, PAUSE_EXTERNAL);
     }
   }
   else if (ack_seen(":prompt_button "))
@@ -590,7 +590,7 @@ void parseACK(void)
                infoFile.source >= BOARD_SD &&
                ack_seen("Not SD printing"))
       {
-        setPrintPause(true);
+        setPrintPause(true, PAUSE_EXTERNAL);
       }
       else if (infoMachineSettings.onboard_sd_support == ENABLED &&
                infoFile.source >= BOARD_SD &&
