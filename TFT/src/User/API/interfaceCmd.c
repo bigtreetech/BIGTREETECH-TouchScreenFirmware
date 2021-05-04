@@ -233,13 +233,12 @@ void sendQueueCmd(void)
         case 1:
           if (isPrinting() && infoMachineSettings.firmwareType != FW_REPRAPFW)  // Abort printing by "M0" in RepRapFirmware
           {
-            if (infoFile.source < BOARD_SD)
+            // pasue if printing form TFT and purge M0/M1 command.
+            if (infoFile.source < BOARD_SD )
             {
-              if (!printPause(true, PAUSE_M0)) // if print successfully paused, send the gcode
-              {
-                purgeLastCmd(avoid_terminal);
-                return;
-              }
+              purgeLastCmd(avoid_terminal);
+              if (!isPaused()) printPause(true, PAUSE_M0);
+              return;
             }
           }
           break;
@@ -385,7 +384,7 @@ void sendQueueCmd(void)
                 // case the function loopProcess() is invoked by the following function printPause()
                 Serial_Puts(SERIAL_PORT_2, "ok\n");
                 purgeLastCmd(avoid_terminal);
-                printPause(true, PAUSE_TFT);
+                printPause(true, PAUSE_NONE);
                 return;
               }
             }
@@ -505,7 +504,7 @@ void sendQueueCmd(void)
                 Serial_Puts(SERIAL_PORT_2, "ok\n");
                 purgeLastCmd(avoid_terminal);
 
-                printPause(true, PAUSE_TFT);
+                printPause(true, PAUSE_NONE);
                 return;
               }
             }

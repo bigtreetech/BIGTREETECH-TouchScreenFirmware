@@ -31,8 +31,6 @@ extern "C" {
 typedef enum
 {
   PAUSE_NONE = 0,
-  PAUSE_TFT,
-  PAUSE_REMOTE,
   PAUSE_M0,
   PAUSE_M600,
 } PAUSE_TYPE;
