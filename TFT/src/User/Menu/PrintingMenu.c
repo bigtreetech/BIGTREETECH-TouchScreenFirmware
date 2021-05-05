@@ -36,7 +36,8 @@ const GUI_RECT ProgressBar = {START_X + 1,                                PICON_
 const  char *const Speed_ID[2] = {"Speed", "Flow"};
 bool hasFilamentData;
 
-#define TOGGLE_TIME     2000  // 1 seconds is 1000
+#define TOGGLE_TIME  2000  // 1 seconds is 1000
+#define LAYER_DELTA  0.1   // minimal layer height change to update the layer display (avoid congestion in vase mode)
 
 #define LAYER_TITLE "Layer"
 #define EXT_ICON_POS 0
@@ -357,6 +358,7 @@ void menuPrinting(void)
   uint32_t time = 0;
   HEATER nowHeat;
   float curLayer = 0;
+  float oldLayer = 0;
   bool lastPause = isPaused();
   bool lastPrinting = isPrinting();
 
@@ -444,9 +446,10 @@ void menuPrinting(void)
     }
 
     // Z_AXIS coordinate
-    if (curLayer != ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS)))
+    curLayer = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS));
+    if (ABS(curLayer - oldLayer) > LAYER_DELTA)
     {
-      curLayer = (infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS);
+      oldLayer = curLayer;
       RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
       reDrawLayer(Z_ICON_POS);
     }
