@@ -447,7 +447,7 @@ void menuPrinting(void)
 
     // Z_AXIS coordinate
     curLayer = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS));
-    if (ABS(curLayer - oldLayer) > LAYER_DELTA)
+    if (ABS(curLayer - oldLayer) >= LAYER_DELTA)
     {
       oldLayer = curLayer;
       RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
