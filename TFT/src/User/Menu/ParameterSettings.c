@@ -3,7 +3,6 @@
 
 static uint16_t psCurPage = 0;
 static uint8_t curParameter = 0;
-
 bool parametersChanged = false;
 
 const LABEL parameterTypes[PARAMETERS_COUNT] = {
@@ -30,10 +29,10 @@ const LABEL parameterTypes[PARAMETERS_COUNT] = {
 };
 
 const LISTITEM eepromItems[P_SETTINGS_COUNT] = {
-  // icon          ItemType    Item Title              item value text(only for custom value)
-  {CHARICON_SAVE,  LIST_LABEL, LABEL_SETTINGS_SAVE,    LABEL_BACKGROUND},
-  {CHARICON_UNDO,  LIST_LABEL, LABEL_SETTINGS_RESTORE, LABEL_BACKGROUND},
-  {CHARICON_RESET, LIST_LABEL, LABEL_SETTINGS_RESET,   LABEL_BACKGROUND},
+  // icon            ItemType    Item Title              item value text(only for custom value)
+    {CHARICON_SAVE,  LIST_LABEL, LABEL_SETTINGS_SAVE,    LABEL_BACKGROUND},
+    {CHARICON_UNDO,  LIST_LABEL, LABEL_SETTINGS_RESTORE, LABEL_BACKGROUND},
+    {CHARICON_RESET, LIST_LABEL, LABEL_SETTINGS_RESET,   LABEL_BACKGROUND},
 };
 
 // Load elements for selected parameter
@@ -156,7 +155,7 @@ void menuShowParameter(void)
         if (elementIndex < getElementCount(curParameter))
         {
           VAL_TYPE val_type = getParameterValType(curParameter, elementIndex);
-          bool negative_val = val_type % 2;  // accept negative values only for probe offset
+          bool negative_val = val_type % 2;  // accept negative values only for val_types with negetive
           float val = getParameter(curParameter, elementIndex);
 
           if (val_type == VAL_TYPE_FLOAT || val_type == VAL_TYPE_NEG_FLOAT)
@@ -168,7 +167,6 @@ void menuShowParameter(void)
             sendParameterCmd(curParameter, elementIndex, val);
 
           listViewRefreshMenu();
-          listViewRefreshItem(curIndex);
         }
         break;
       }
@@ -177,6 +175,7 @@ void menuShowParameter(void)
     for (uint8_t i = 0; i < enabledElementCount; i++)
     {
       float newVal = getParameter(curParameter, getEnabledElement(curParameter, i));
+
       if (oldval[i] != newVal)
       {
         oldval[i] = newVal;
