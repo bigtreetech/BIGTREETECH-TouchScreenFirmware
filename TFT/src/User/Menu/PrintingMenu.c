@@ -446,7 +446,7 @@ void menuPrinting(void)
     }
 
     // Z_AXIS coordinate
-    // Almost every gcode of z-axis will change when gcode file is generated in Cura "vase" mode
+    // Almost every gcode command of z-axis will change when gcode file is generated in Cura "vase" mode
     // In order to avoid printing defects caused by frequent redrawing icon taking up CPU, so limit the frequency of update reDrawLayer
     if (OS_GetTimeMs() > nextLayerDrawTime)
     {
