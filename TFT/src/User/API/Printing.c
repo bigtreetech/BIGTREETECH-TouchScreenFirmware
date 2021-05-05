@@ -472,14 +472,14 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType)
           if (heatGetCurrentTemp(heatGetCurrentHotend()) > infoSettings.min_ext_temp)
           {
             mustStoreCmd("G1 E%.5f F%d\n", tmp.axis[E_AXIS] - infoSettings.pause_retract_len,
-                        infoSettings.pause_feedrate[FEEDRATE_E]);
+                         infoSettings.pause_feedrate[FEEDRATE_E]);
           }
 
           if (coordinateIsKnown())
           {
             mustStoreCmd("G1 Z%.3f F%d\n", tmp.axis[Z_AXIS] + infoSettings.pause_z_raise, infoSettings.pause_feedrate[FEEDRATE_Z]);
             mustStoreCmd("G1 X%.3f Y%.3f F%d\n", infoSettings.pause_pos[X_AXIS], infoSettings.pause_pos[Y_AXIS],
-                        infoSettings.pause_feedrate[FEEDRATE_XY]);
+                         infoSettings.pause_feedrate[FEEDRATE_XY]);
           }
 
           if (isCoorRelative == true)    mustStoreCmd("G91\n");
@@ -504,7 +504,7 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType)
           if (heatGetCurrentTemp(heatGetCurrentHotend()) > infoSettings.min_ext_temp)
           {
             mustStoreCmd("G1 E%.5f F%d\n", tmp.axis[E_AXIS] - infoSettings.pause_retract_len + infoSettings.resume_purge_len,
-                        infoSettings.pause_feedrate[FEEDRATE_E]);
+                         infoSettings.pause_feedrate[FEEDRATE_E]);
           }
 
           if (coordinateIsKnown())
