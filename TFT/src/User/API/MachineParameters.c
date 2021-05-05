@@ -73,7 +73,6 @@ const char * const parameterCmd[PARAMETERS_COUNT][MAX_ELEMENT_COUNT] = {
 };
 
 const VAL_TYPE parameterValType[PARAMETERS_COUNT][MAX_ELEMENT_COUNT] = {
-
   {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,   VAL_TYPE_FLOAT},  // Steps/mm (X, Y, Z, E0, E1)
   {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT},    // MaxFeedrate (X, Y, Z, E0, E1)
   {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT},    // MaxAcceleration (X, Y, Z, E0, E1)
