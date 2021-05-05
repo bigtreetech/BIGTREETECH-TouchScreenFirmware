@@ -36,8 +36,8 @@ const GUI_RECT ProgressBar = {START_X + 1,                                PICON_
 const  char *const Speed_ID[2] = {"Speed", "Flow"};
 bool hasFilamentData;
 
-#define TOGGLE_TIME     2000  // 1 seconds is 1000
-#define LAYER_DRAW_TIME 500   // 1 seconds is 1000
+#define TOGGLE_TIME  2000  // 1 seconds is 1000
+#define LAYER_DELTA  0.1   // minimal layer height change to update the layer display (avoid congestion in vase mode)
 
 #define LAYER_TITLE "Layer"
 #define EXT_ICON_POS 0
@@ -358,7 +358,7 @@ void menuPrinting(void)
   uint32_t time = 0;
   HEATER nowHeat;
   float curLayer = 0;
-  uint32_t nextLayerDrawTime = 0;
+  float oldLayer = 0;
   bool lastPause = isPaused();
   bool lastPrinting = isPrinting();
 
@@ -446,17 +446,12 @@ void menuPrinting(void)
     }
 
     // Z_AXIS coordinate
-    // Almost every gcode command of z-axis will change when gcode file is generated in Cura "vase" mode
-    // In order to avoid printing defects caused by frequent redrawing icon taking up CPU, so limit the frequency of update reDrawLayer
-    if (OS_GetTimeMs() > nextLayerDrawTime)
+    curLayer = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS));
+    if (ABS(curLayer - oldLayer) > LAYER_DELTA)
     {
-      if (curLayer != ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS)))
-      {
-        curLayer = (infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS);
-        RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
-        reDrawLayer(Z_ICON_POS);
-        nextLayerDrawTime = OS_GetTimeMs() + LAYER_DRAW_TIME;  // Update nextLayerDrawTime after reDrawLayer
-      }
+      oldLayer = curLayer;
+      RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
+      reDrawLayer(Z_ICON_POS);
     }
 
     // check change in speed or flow
