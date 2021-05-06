@@ -260,7 +260,7 @@ void hostActionCommands(void)
   {
     // pass value "false" to let Marlin report when the host is not
     // printing (when notification ack "Not SD printing" is caught)
-    setPrintPause(false);
+    setPrintPause(false, PAUSE_EXTERNAL);
 
     if (ack_seen("filament_runout"))
     {
@@ -287,7 +287,7 @@ void hostActionCommands(void)
     {
       // pass value "false" to let Marlin report when the host is not
       // printing (when notification ack "Not SD printing" is caught)
-      setPrintPause(false);
+      setPrintPause(false, PAUSE_EXTERNAL);
     }
     else if (ack_seen("Resuming"))  // resuming from onboard SD or TFT
     {
@@ -615,7 +615,7 @@ void parseACK(void)
                infoFile.source >= BOARD_SD &&
                ack_seen("Not SD printing"))
       {
-        setPrintPause(true);
+        setPrintPause(true, PAUSE_EXTERNAL);
       }
       else if (infoMachineSettings.onboard_sd_support == ENABLED &&
                infoFile.source >= BOARD_SD &&

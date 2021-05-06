@@ -27,6 +27,14 @@ extern "C" {
 
 #define SUMMARY_NAME_LEN 26  // max character length to copy from name buffer
 
+
+typedef enum
+{
+  PAUSE_NORMAL = 0,
+  PAUSE_M0,
+  PAUSE_EXTERNAL,
+} PAUSE_TYPE;
+
 typedef struct
 {
   // data
@@ -81,14 +89,14 @@ void printEnd(void);                              // it also sends end gcode
 
 void printComplete(void);                         // print successfully completed
 void printAbort(void);                            // it also sends cancel gcode
-bool printPause(bool is_pause, bool is_m0pause);
+bool printPause(bool isPause, PAUSE_TYPE pauseType);
 
 bool isPrinting(void);
 bool isPaused(void);
 
 void setPrintHost(bool isPrinting);
 void setPrintAbort(void);
-void setPrintPause(bool updateHost);
+void setPrintPause(bool updateHost, PAUSE_TYPE pauseType);
 void setPrintResume(bool updateHost);
 
 void loopPrintFromTFT(void);   // called in loopBackEnd(). It handles a print from TFT, if any

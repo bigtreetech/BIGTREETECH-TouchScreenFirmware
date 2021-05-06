@@ -23,13 +23,13 @@ const MENUITEMS moreItems = {
 
 void isPauseExtrude(void)
 {
-  if (printPause(true, false))
+  if (printPause(true, PAUSE_NORMAL))
     infoMenu.menu[infoMenu.cur] = menuExtrude;
 }
 
 void isPauseLoadUnload(void)
 {
-  if (printPause(true, false))
+  if (printPause(true, PAUSE_NORMAL))
     infoMenu.menu[infoMenu.cur] = menuLoadUnload;
 }
 
