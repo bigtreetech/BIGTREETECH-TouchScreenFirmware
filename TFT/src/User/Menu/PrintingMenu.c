@@ -485,7 +485,7 @@ void menuPrinting(void)
         if (isPrinting())
         {
           if (!isHostDialog())
-            printPause(!isPaused(), false);
+            printPause(!isPaused(), PAUSE_NORMAL);
           else
             addToast(DIALOG_TYPE_ERROR, (char *)textSelect(LABEL_BUSY));
         }
