@@ -134,9 +134,6 @@ bool getLangFromFile(void)
 
 bool readConfigFile(const char * path, void (*lineParser)(), uint16_t maxLineLen)
 {
-  #ifdef SERIAL_DEBUG_PORT
-    Serial_ReSourceInit();
-  #endif
   bool comment_mode = false;
   bool comment_space = true;
   char cur_char;

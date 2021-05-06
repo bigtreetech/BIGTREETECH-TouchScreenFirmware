@@ -16,7 +16,7 @@
 /**
  * Serial Communication Debug
  * Uncomment/Enable to forward/dump all serial communication to SERIAL_DEBUG_PORT defined in board specific Pin_xx.h file.
- * Use it only for debuging purposes. DON'T enable it for normal printing.
+ * Use it only for debugging purposes. DON'T enable it for normal printing.
  */
 //#define DEBUG_SERIAL_COMM
 

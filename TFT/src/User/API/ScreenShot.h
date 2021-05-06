@@ -6,7 +6,6 @@ extern "C" {
 #endif
 
 #include <stdbool.h>
-#include "variants.h"
 
 bool screenShotBMP(char *bmp);
 void loopScreenShot(void);

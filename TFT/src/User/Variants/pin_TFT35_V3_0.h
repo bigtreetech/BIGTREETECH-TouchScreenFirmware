@@ -47,7 +47,7 @@
 #define SERIAL_PORT_3 _USART3
 #define SERIAL_PORT_4 _UART4
 
-// Serial port for debuging Serial communications
+// Serial port for debugging Serial communications
 #ifdef DEBUG_SERIAL_COMM
   #define SERIAL_DEBUG_PORT SERIAL_PORT_3
 #endif

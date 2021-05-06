@@ -7,7 +7,6 @@ extern "C" {
 
 #include <stdbool.h>
 #include <stdint.h>
-#include "variants.h"
 #include "Settings.h"
 
 #define PARA_SIZE (128 * 3)  // Max size of settings buffer to read/write
