@@ -65,7 +65,7 @@ uint32_t getLabelFlashAddr(uint16_t index);
 bool loadLabelText(uint8_t * buf, uint16_t index);
 
 //initialize and preload label text
-#define LABELCHAR(x, i)  char x[MAX_LANG_LABEL_LENGTH]; loadLabelText((u8*)&x, i);
+#define LABELCHAR(x, i)  char x[MAX_LANG_LABEL_LENGTH]; loadLabelText((uint8_t*)&x, i);
 
 #ifdef __cplusplus
 }
