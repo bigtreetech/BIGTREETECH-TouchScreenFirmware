@@ -1,10 +1,11 @@
 #include "MachineSettings.h"
+#include "includes.h"
 
 void menuCustom(void)
 {
   CUSTOM_GCODES customcodes;
 
-  //load custom codes
+  // load custom codes
   W25Qxx_ReadBuffer((u8 *)&customcodes, CUSTOM_GCODE_ADDR, sizeof(CUSTOM_GCODES));
 
   LABEL title = {LABEL_CUSTOM};

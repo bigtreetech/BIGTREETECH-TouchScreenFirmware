@@ -5,8 +5,7 @@
 extern "C" {
 #endif
 
-#include "variants.h"
-#include "stdbool.h"
+#include <stdbool.h>
 
 bool screenShotBMP(char *bmp);
 void loopScreenShot(void);

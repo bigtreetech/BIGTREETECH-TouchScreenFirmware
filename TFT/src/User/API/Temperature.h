@@ -5,9 +5,8 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
 #include <stdbool.h>
-#include "Configuration.h"
+#include <stdint.h>
 #include "Settings.h"
 
 #define TEMPERATURE_QUERY_FAST_SECONDS 1  // "M105" query temperature every 1s

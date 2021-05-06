@@ -1,10 +1,12 @@
-#ifndef _MACHINEPARAMETERS_H_
-#define _MACHINEPARAMETERS_H_
+#ifndef _MACHINE_PARAMETERS_H_
+#define _MACHINE_PARAMETERS_H_
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+#include <stdbool.h>
+#include <stdint.h>
 #include "menu.h"
 
 typedef enum

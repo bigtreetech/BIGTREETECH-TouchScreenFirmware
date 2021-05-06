@@ -9,20 +9,20 @@ const GUI_RECT labelFailedRect = {0, (BYTE_HEIGHT*4) + PADDING*4 + ICON_HEIGHT, 
 
 GUI_POINT bmp_size;
 
-//This List is Auto-Generated. Please add new icons in icon_list.inc only
+// This List is Auto-Generated. Please add new icons in icon_list.inc only
 const char iconBmpName[][32]={
 #define X_ICON(NAME) STRINGIFY(NAME) ,
 #include "icon_list.inc"
 #undef  X_ICON
-//add new icons in icon_list.inc only
+// add new icons in icon_list.inc only
 };
 
-//This List is Auto-Generated. Please add new icons in icon_list.inc only
+// This List is Auto-Generated. Please add new icons in icon_list.inc only
 const char smallIconBmpName[][32]={
 #define X_SMALLICON(NAME) STRINGIFY(NAME) ,
 #include "small_icon_list.inc"
 #undef  X_SMALLICON
-//add new icons in small_icon_list.inc only
+// add new icons in small_icon_list.inc only
 };
 
 BMPUPDATE_STAT bmpDecode(char *bmp, uint32_t addr)
@@ -69,7 +69,7 @@ BMPUPDATE_STAT bmpDecode(char *bmp, uint32_t addr)
   bpp >>= 3;
   bytePerLine = w * bpp;
 
-  if (bytePerLine % 4 != 0)  //bmp
+  if (bytePerLine % 4 != 0)  // bmp
     bytePerLine = (bytePerLine / 4 + 1) * 4;
 
   for (bnum = 0; bnum < (w * h * 2 + W25QXX_SECTOR_SIZE - 1) / W25QXX_SECTOR_SIZE; bnum++)
@@ -77,7 +77,7 @@ BMPUPDATE_STAT bmpDecode(char *bmp, uint32_t addr)
     W25Qxx_EraseSector(addr + bnum * W25QXX_SECTOR_SIZE);
   }
   bnum = 0;
-  //store size of BMP
+  // store size of BMP
   memcpy(buf, (uint8_t *)&w, sizeof(uint16_t));
   bnum += sizeof(uint16_t);
   memcpy(buf + bnum, (uint8_t *)&h, sizeof(uint16_t));
@@ -94,7 +94,7 @@ BMPUPDATE_STAT bmpDecode(char *bmp, uint32_t addr)
       pix.RGB.g = lcdcolor[1] >> 2;
       pix.RGB.b = lcdcolor[0] >> 3;
 
-      //GUI_DrawPixel(iconUpdateRect.x0 + i,iconUpdateRect.y0 + j,pix.color);
+      // GUI_DrawPixel(iconUpdateRect.x0 + i,iconUpdateRect.y0 + j,pix.color);
 
       buf[bnum++] = (uint8_t)(pix.color >> 8);
       buf[bnum++] = (uint8_t)(pix.color & 0xFF);
@@ -149,13 +149,13 @@ bool updateIcon(void)
     GUI_DispString(labelUpdateRect.x0, labelUpdateRect.y0, (uint8_t *)nowBmp);
     bmpState = bmpDecode(nowBmp, ICON_ADDR(i));
     if (bmpState == BMP_SUCCESS)
-    {  //display bmp update success
+    {  // display bmp update success
       found++;
       GUI_ClearRect(iconUpdateRect.x0, iconUpdateRect.y0, iconUpdateRect.x0 + last_size.x, iconUpdateRect.y0 + last_size.y);
       ICON_CustomReadDisplay(iconUpdateRect.x0, iconUpdateRect.y0, ICON_ADDR(i));
     }
     else
-    {  //display bmp update fail
+    {  // display bmp update fail
       notfound++;
       GUI_ClearRect(iconUpdateRect.x0, iconUpdateRect.y0, iconUpdateRect.x0 + last_size.x, iconUpdateRect.y0 + last_size.y);
       dispIconFail((uint8_t *)nowBmp, bmpState);
@@ -214,7 +214,7 @@ void dispIconFail(uint8_t *lbl, BMPUPDATE_STAT bmpState)
   sprintf(error_txt, "Error: %s", stat_txt);
   GUI_DispString(labelFailedRect.x0, labelFailedRect.y0 + BYTE_HEIGHT + 2, (uint8_t*)error_txt);
   GUI_RestoreColorDefault();
-  Delay_ms(1000); // give some time to the user to read failed icon name.
+  Delay_ms(1000);  // give some time to the user to read failed icon name.
 }
 
 bool updateFont(char *font, uint32_t addr)
@@ -275,7 +275,7 @@ static inline void scanResetDir(void)
 
 static inline void scanRenameUpdate(void)
 {
-  if (f_file_exists(ADMIN_MODE_FILE)) return; // admin mode, need not rename
+  if (f_file_exists(ADMIN_MODE_FILE)) return;  // admin mode, need not rename
 
   if (f_dir_exists(ROOT_DIR))
   { // ROOT_DIR exists
@@ -321,7 +321,7 @@ static inline void scanRenameUpdate(void)
 static inline void saveflashSign(uint8_t* buf, uint32_t size)
 {
   W25Qxx_EraseSector(FLASH_SIGN_ADDR);
-  Delay_ms(100); //give time for spi flash to settle
+  Delay_ms(100);  // give time for spi flash to settle
   W25Qxx_WriteBuffer(buf, FLASH_SIGN_ADDR, size);
 }
 

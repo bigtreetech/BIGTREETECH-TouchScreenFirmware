@@ -5,8 +5,8 @@
 extern "C" {
 #endif
 
-#include "CircularQueue.h"
 #include <stdbool.h>
+#include "CircularQueue.h"
 
 void HD44780_DeConfig(void);
 void HD44780_Config(CIRCULAR_QUEUE *queue);
