@@ -30,7 +30,7 @@ const LABEL parameterTypes[PARAMETERS_COUNT] = {
 };
 
 const LISTITEM eepromItems[P_SETTINGS_COUNT] = {
-  // icon           ItemType   Item Title              item value text(only for custom value)
+// icon            ItemType    Item Title              item value text(only for custom value)
   {CHARICON_SAVE,  LIST_LABEL, LABEL_SETTINGS_SAVE,    LABEL_BACKGROUND},
   {CHARICON_UNDO,  LIST_LABEL, LABEL_SETTINGS_RESTORE, LABEL_BACKGROUND},
   {CHARICON_RESET, LIST_LABEL, LABEL_SETTINGS_RESET,   LABEL_BACKGROUND},
@@ -44,12 +44,12 @@ void menuShowParameter(void)
   float oldval[LISTITEM_PER_PAGE];
 
   LISTITEM parameter_menuitems[] = {
-  // icon                   ItemType            Item Title          item value text(only for custom value)
-    {CHARICON_BACKGROUND,   LIST_CUSTOMVALUE,   LABEL_DYNAMIC,      LABEL_CUSTOM_VALUE},
-    {CHARICON_BACKGROUND,   LIST_CUSTOMVALUE,   LABEL_DYNAMIC,      LABEL_CUSTOM_VALUE},
-    {CHARICON_BACKGROUND,   LIST_CUSTOMVALUE,   LABEL_DYNAMIC,      LABEL_CUSTOM_VALUE},
-    {CHARICON_BACKGROUND,   LIST_CUSTOMVALUE,   LABEL_DYNAMIC,      LABEL_CUSTOM_VALUE},
-    {CHARICON_BACKGROUND,   LIST_CUSTOMVALUE,   LABEL_DYNAMIC,      LABEL_CUSTOM_VALUE},
+  // icon                 ItemType          Item Title     item value text(only for custom value)
+    {CHARICON_BACKGROUND, LIST_CUSTOMVALUE, LABEL_DYNAMIC, LABEL_CUSTOM_VALUE},
+    {CHARICON_BACKGROUND, LIST_CUSTOMVALUE, LABEL_DYNAMIC, LABEL_CUSTOM_VALUE},
+    {CHARICON_BACKGROUND, LIST_CUSTOMVALUE, LABEL_DYNAMIC, LABEL_CUSTOM_VALUE},
+    {CHARICON_BACKGROUND, LIST_CUSTOMVALUE, LABEL_DYNAMIC, LABEL_CUSTOM_VALUE},
+    {CHARICON_BACKGROUND, LIST_CUSTOMVALUE, LABEL_DYNAMIC, LABEL_CUSTOM_VALUE},
   };
 
   for (uint8_t i = 0; i < getParameterElementCount(cur_parameter); i++)

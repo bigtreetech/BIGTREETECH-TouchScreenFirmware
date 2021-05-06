@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include "stdbool.h"
+#include <stdbool.h>
 #include "sw_spi.h"
 
 void XPT2046_Init(void);

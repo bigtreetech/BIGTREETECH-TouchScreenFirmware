@@ -1,9 +1,15 @@
-#include "includes.h"
 #include "parseACK.h"
+#include "includes.h"
 
 char dmaL2Cache[ACK_MAX_SIZE];
 static uint16_t ack_index = 0;
 static uint8_t ack_cur_src = SERIAL_PORT;
+
+static const char errormagic[] = "Error:";
+static const char echomagic[] = "echo:";
+static const char warningmagic[] = "Warning:";                     // RRF warning
+static const char messagemagic[] = "message";                      // RRF message in Json format
+static const char errorZProbe[] = "ZProbe triggered before move";  // smoothieware message
 
 bool portSeen[_UART_CNT] = {false, false, false, false, false, false};
 
@@ -16,14 +22,27 @@ struct HOST_ACTION
   uint8_t button;           // Number of buttons
 } hostAction;
 
+typedef enum  // popup message types available to display an echo message
+{
+  ECHO_NOTIFY_NONE = 0,  // ignore the echo message
+  ECHO_NOTIFY_TOAST,     // Show a non invasive toast on the title bar for a preset duration.
+  ECHO_NOTIFY_DIALOG,    // Show a window to notify the user and alow interaction.
+} ECHO_NOTIFY_TYPE;
+
+typedef struct
+{
+  ECHO_NOTIFY_TYPE  notifyType;
+  const char *const msg;
+} ECHO;
+
 // notify or ignore messages starting with following text
 const ECHO knownEcho[] = {
-  //{ECHO_NOTIFY_NONE, "enqueueing \"M117\""},
   {ECHO_NOTIFY_NONE, "busy: paused for user"},
   {ECHO_NOTIFY_NONE, "busy: processing"},
   {ECHO_NOTIFY_NONE, "Now fresh file:"},
   {ECHO_NOTIFY_NONE, "Now doing file:"},
-  // {ECHO_NOTIFY_NONE, "Probe Offset"},
+  //{ECHO_NOTIFY_NONE, "Probe Offset"},
+  //{ECHO_NOTIFY_NONE, "enqueueing \"M117\""},
   {ECHO_NOTIFY_NONE, "Flow:"},
   {ECHO_NOTIFY_NONE, "echo:;"},                   // M503
   {ECHO_NOTIFY_NONE, "echo:  G"},                 // M503
@@ -223,10 +242,12 @@ void hostActionCommands(void)
   if (ack_seen(":notification "))
   {
     statusScreen_setMsg((uint8_t *)echomagic, (uint8_t *)dmaL2Cache + ack_index);  // always display the notification on status screen
+
     if (infoSettings.notification_m117 == ENABLED)
     {
       addNotification(DIALOG_TYPE_INFO, (char*)echomagic, (char*)dmaL2Cache + ack_index, false);
-    }  
+    }
+
     if (infoMenu.menu[infoMenu.cur] != menuStatus)  // don't show it when in menuStatus
     {
       uint16_t index = ack_index;
@@ -246,6 +267,12 @@ void hostActionCommands(void)
       setRunoutAlarmTrue();
     }
   }
+  else if (ack_seen(":resumed") || ack_seen(":resume"))
+  {
+    // pass value "true" to report the host is printing without waiting
+    // from Marlin (when notification ack "SD printing byte" is caught)
+    setPrintResume(true);
+  }
   else if (ack_seen(":cancel"))  // To be added to Marlin abortprint routine
   {
     setPrintAbort();
@@ -256,7 +283,13 @@ void hostActionCommands(void)
     hostAction.button = 0;
     hostAction.prompt_show = true;
 
-    if (ack_seen("Resuming"))  // resuming from onboard SD or TFT
+    if (ack_seen("Nozzle Parked"))
+    {
+      // pass value "false" to let Marlin report when the host is not
+      // printing (when notification ack "Not SD printing" is caught)
+      setPrintPause(false);
+    }
+    else if (ack_seen("Resuming"))  // resuming from onboard SD or TFT
     {
       // pass value "true" to report the host is printing without waiting
       // from Marlin (when notification ack "SD printing byte" is caught)
@@ -272,12 +305,6 @@ void hostActionCommands(void)
     {
       hostAction.prompt_show = false;
       Serial_Puts(SERIAL_PORT, "M876 S0\n");  // auto-respond to a prompt request that is not shown on the TFT
-    }
-    else if (ack_seen("Nozzle Parked"))
-    {
-      // pass value "false" to let Marlin report when the host is not
-      // printing (when notification ack "Not SD printing" is caught)
-      setPrintPause(false);
     }
   }
   else if (ack_seen(":prompt_button "))
@@ -627,9 +654,9 @@ void parseACK(void)
         }
         if (ack_seen("max:"))
         {
-          if (ack_seen("X:")) infoSettings.machine_size_min[X_AXIS] = ack_value();
-          if (ack_seen("Y:")) infoSettings.machine_size_min[Y_AXIS] = ack_value();
-          if (ack_seen("Z:")) infoSettings.machine_size_min[Z_AXIS] = ack_value();
+          if (ack_seen("X:")) infoSettings.machine_size_max[X_AXIS] = ack_value();
+          if (ack_seen("Y:")) infoSettings.machine_size_max[Y_AXIS] = ack_value();
+          if (ack_seen("Z:")) infoSettings.machine_size_max[Z_AXIS] = ack_value();
         }
       }
       // parse M48, Repeatability Test

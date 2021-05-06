@@ -1,4 +1,5 @@
 #include "CaseLightControl.h"
+#include "includes.h"
 
 static uint8_t caseLightBrightness = 0;
 static uint8_t lastCaseLightBrightness = 0;

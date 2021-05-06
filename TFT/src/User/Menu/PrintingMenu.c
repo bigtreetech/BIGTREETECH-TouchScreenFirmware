@@ -495,7 +495,9 @@ void menuPrinting(void)
     {
       case KEY_ICON_4:
         if (isPrinting())
+        {
           printPause(!isPaused(), false);
+        }
         #ifndef TFT70_V3_0
           else
           {
