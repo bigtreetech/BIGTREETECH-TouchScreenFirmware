@@ -571,12 +571,12 @@ void sendQueueCmd(void)
 
         case 92:  // M92 Steps per unit
         {
-          if (cmd_seen('X')) setParameter(P_STEPS_PER_MM, X_AXIS, cmd_float());
-          if (cmd_seen('Y')) setParameter(P_STEPS_PER_MM, Y_AXIS, cmd_float());
-          if (cmd_seen('Z')) setParameter(P_STEPS_PER_MM, Z_AXIS, cmd_float());
-          uint8_t i = 0;
-          if (cmd_seen('T')) i = cmd_value();
-          if (cmd_seen('E')) setParameter(P_STEPS_PER_MM, E_STEPPER + i, cmd_float());
+          if (cmd_seen('X')) setParameter(P_STEPS_PER_MM, AXIS_INDEX_X, cmd_float());
+          if (cmd_seen('Y')) setParameter(P_STEPS_PER_MM, AXIS_INDEX_Y, cmd_float());
+          if (cmd_seen('Z')) setParameter(P_STEPS_PER_MM, AXIS_INDEX_Z, cmd_float());
+
+          uint8_t i = 0; (cmd_seen('T')) ? cmd_value() : 0;
+          if (cmd_seen('E')) setParameter(P_STEPS_PER_MM, AXIS_INDEX_E0 + i, cmd_float());
           break;
         }
 
@@ -772,39 +772,39 @@ void sendQueueCmd(void)
 
         case 200:  // M200 Set Filament Diameter
         {
-          if (cmd_seen('S')) setParameter(P_FILAMENT_SETTING, 0, cmd_float());
-          uint8_t i = 0;
-          if (cmd_seen('T')) i = cmd_value();
-          if (cmd_seen('D')) setParameter(P_FILAMENT_SETTING, 1 + i, cmd_float());
-          if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE) 
+          if (cmd_seen('S')) setParameter(P_FILAMENT_DIAMETER, 0, cmd_float());
+
+          uint8_t i = (cmd_seen('T')) ? cmd_value() : 0;
+          if (cmd_seen('D')) setParameter(P_FILAMENT_DIAMETER, 1 + i, cmd_float());
+          if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE)
           {
-            if (getParameter(P_FILAMENT_SETTING, 1) > 0.01F)  // common extruder param
-              setParameter(P_FILAMENT_SETTING, 0, 1);  // filament_diameter>0.01 to enable  volumetric extrusion
+            if (getParameter(P_FILAMENT_DIAMETER, 1) > 0.01F)  // common extruder param
+              setParameter(P_FILAMENT_DIAMETER, 0, 1);  // filament_diameter>0.01 to enable  volumetric extrusion
             else
-              setParameter(P_FILAMENT_SETTING, 0, 0);  // filament_diameter<=0.01 to disable volumetric extrusion
+              setParameter(P_FILAMENT_DIAMETER, 0, 0);  // filament_diameter<=0.01 to disable volumetric extrusion
           }
           break;
         }
 
         case 201:  // M201 Maximum Acceleration (units/s2)
         {
-          if (cmd_seen('X')) setParameter(P_MAX_ACCELERATION, X_STEPPER, cmd_float());
-          if (cmd_seen('Y')) setParameter(P_MAX_ACCELERATION, Y_STEPPER, cmd_float());
-          if (cmd_seen('Z')) setParameter(P_MAX_ACCELERATION, Z_STEPPER, cmd_float());
-          uint8_t i = 0;
-          if (cmd_seen('T')) i = cmd_value();
-          if (cmd_seen('E')) setParameter(P_MAX_ACCELERATION, E_STEPPER + i, cmd_float());
+          if (cmd_seen('X')) setParameter(P_MAX_ACCELERATION, AXIS_INDEX_X, cmd_float());
+          if (cmd_seen('Y')) setParameter(P_MAX_ACCELERATION, AXIS_INDEX_Y, cmd_float());
+          if (cmd_seen('Z')) setParameter(P_MAX_ACCELERATION, AXIS_INDEX_Z, cmd_float());
+
+          uint8_t i = (cmd_seen('T')) ? cmd_value() : 0;
+          if (cmd_seen('E')) setParameter(P_MAX_ACCELERATION, AXIS_INDEX_E0 + i, cmd_float());
           break;
         }
 
         case 203:  // M203 Maximum feedrates (units/s)
         {
-          if (cmd_seen('X')) setParameter(P_MAX_FEED_RATE, X_STEPPER, cmd_float());
-          if (cmd_seen('Y')) setParameter(P_MAX_FEED_RATE, Y_STEPPER, cmd_float());
-          if (cmd_seen('Z')) setParameter(P_MAX_FEED_RATE, Z_STEPPER, cmd_float());
-          uint8_t i = 0;
-          if (cmd_seen('T')) i = cmd_value();
-          if (cmd_seen('E')) setParameter(P_MAX_FEED_RATE, E_STEPPER + i, cmd_float());
+          if (cmd_seen('X')) setParameter(P_MAX_FEED_RATE, AXIS_INDEX_X, cmd_float());
+          if (cmd_seen('Y')) setParameter(P_MAX_FEED_RATE, AXIS_INDEX_Y, cmd_float());
+          if (cmd_seen('Z')) setParameter(P_MAX_FEED_RATE, AXIS_INDEX_Z, cmd_float());
+
+          uint8_t i = (cmd_seen('T')) ? cmd_value() : 0;
+          if (cmd_seen('E')) setParameter(P_MAX_FEED_RATE, AXIS_INDEX_E0 + i, cmd_float());
           break;
         }
 
@@ -815,17 +815,17 @@ void sendQueueCmd(void)
           break;
 
         case 205:  // M205 - Set Advanced Settings
-          if (cmd_seen('X')) setParameter(P_JERK, X_AXIS, cmd_float());
-          if (cmd_seen('Y')) setParameter(P_JERK, Y_AXIS, cmd_float());
-          if (cmd_seen('Z')) setParameter(P_JERK, Z_AXIS, cmd_float());
-          if (cmd_seen('E')) setParameter(P_JERK, E_AXIS, cmd_float());
+          if (cmd_seen('X')) setParameter(P_JERK, AXIS_INDEX_X, cmd_float());
+          if (cmd_seen('Y')) setParameter(P_JERK, AXIS_INDEX_Y, cmd_float());
+          if (cmd_seen('Z')) setParameter(P_JERK, AXIS_INDEX_Z, cmd_float());
+          if (cmd_seen('E')) setParameter(P_JERK, AXIS_INDEX_E0, cmd_float());
           if (cmd_seen('J')) setParameter(P_JUNCTION_DEVIATION, 0, cmd_float());
           break;
 
         case 206:  // M206 Home offset
-          if (cmd_seen('X')) setParameter(P_HOME_OFFSET, X_AXIS, cmd_float());
-          if (cmd_seen('Y')) setParameter(P_HOME_OFFSET, Y_AXIS, cmd_float());
-          if (cmd_seen('Z')) setParameter(P_HOME_OFFSET, Z_AXIS, cmd_float());
+          if (cmd_seen('X')) setParameter(P_HOME_OFFSET, AXIS_INDEX_X, cmd_float());
+          if (cmd_seen('Y')) setParameter(P_HOME_OFFSET, AXIS_INDEX_Y, cmd_float());
+          if (cmd_seen('Z')) setParameter(P_HOME_OFFSET, AXIS_INDEX_Z, cmd_float());
           break;
 
         case 207:  // M207 FW Retract
@@ -842,10 +842,14 @@ void sendQueueCmd(void)
           if (cmd_seen('R')) setParameter(P_FWRECOVER, 3, cmd_float());
           break;
 
+        case 209:  // M209 Auto Retract recover
+          if (cmd_seen('S')) setParameter(P_AUTO_RETRACT, 0, cmd_float());
+          break;
+
         case 218:  // M218 Hotend Offset
-          if (cmd_seen('X')) setParameter(P_HOTEND_OFFSET, X_AXIS, cmd_float());
-          if (cmd_seen('Y')) setParameter(P_HOTEND_OFFSET, Y_AXIS, cmd_float());
-          if (cmd_seen('Z')) setParameter(P_HOTEND_OFFSET, Z_AXIS, cmd_float());
+          if (cmd_seen('X')) setParameter(P_HOTEND_OFFSET, AXIS_INDEX_X, cmd_float());
+          if (cmd_seen('Y')) setParameter(P_HOTEND_OFFSET, AXIS_INDEX_Y, cmd_float());
+          if (cmd_seen('Z')) setParameter(P_HOTEND_OFFSET, AXIS_INDEX_Z, cmd_float());
           break;
 
         case 220:  // M220
@@ -900,14 +904,14 @@ void sendQueueCmd(void)
 
         case 569:  // M569 TMC StealthChop
         {
-          uint8_t k = 0;
-          if(cmd_seen('S')) k = cmd_value();
-          if(cmd_seen('X')) setParameter(P_STEALTH_CHOP, X_STEPPER, k);
-          if(cmd_seen('Y')) setParameter(P_STEALTH_CHOP, Y_STEPPER, k);
-          if(cmd_seen('Z')) setParameter(P_STEALTH_CHOP, Z_STEPPER, k);
-          uint8_t i = 0;
-          if(cmd_seen('T')) i = cmd_value();
-          if(cmd_seen('E')) setParameter(P_STEALTH_CHOP, E_STEPPER + i, k);
+          uint8_t k = (cmd_seen('S')) ? cmd_value() : 0;
+          uint8_t i = (cmd_seen('I')) ? cmd_value() : 0;
+          if (cmd_seen('X')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_X + i, k);
+          if (cmd_seen('Y')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_Y + i, k);
+          if (cmd_seen('Z')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_Z + i, k);
+
+          i = (cmd_seen('T')) ? cmd_value() : 0;
+          if(cmd_seen('E')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_E0 + i, k);
           break;
         }
 
@@ -917,7 +921,6 @@ void sendQueueCmd(void)
             // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
             // case the function loopProcess() is invoked by the following function printPause()
             purgeLastCmd();
-
             printPause(true, false);
             return;
           }
@@ -930,7 +933,6 @@ void sendQueueCmd(void)
               // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
               // case the function loopProcess() is invoked by the following function printPause()
               purgeLastCmd();
-
               printPause(true, false);
               return;
             }
@@ -962,37 +964,36 @@ void sendQueueCmd(void)
 
         case 906:  // M906 Stepper driver current
         {
-          if (cmd_seen('X')) setParameter(P_CURRENT, X_AXIS, cmd_value());
-          if (cmd_seen('Y')) setParameter(P_CURRENT, Y_AXIS, cmd_value());
-          if (cmd_seen('Z')) setParameter(P_CURRENT, Z_AXIS, cmd_value());
-          if (cmd_seen('I'))
-          {
-            if (cmd_seen('X')) setDualStepperStatus(X_STEPPER,true);
-            if (cmd_seen('Y')) setDualStepperStatus(Y_STEPPER,true);
-            if (cmd_seen('Z')) setDualStepperStatus(Z_STEPPER,true);
-          }
-          uint8_t i = 0;
-          if (cmd_seen('T')) i = cmd_value();
-          if (cmd_seen('E')) setParameter(P_CURRENT, E_STEPPER + i, cmd_value());
+          uint8_t i = (cmd_seen('I')) ? cmd_value() : 0;
+          if (cmd_seen('X')) setParameter(P_CURRENT, STEPPER_INDEX_X + i, cmd_value());
+          if (cmd_seen('Y')) setParameter(P_CURRENT, STEPPER_INDEX_Y + i, cmd_value());
+          if (cmd_seen('Z')) setParameter(P_CURRENT, STEPPER_INDEX_Z + i, cmd_value());
+
+          i = (cmd_seen('T')) ? cmd_value() : 0;
+          if (cmd_seen('E')) setParameter(P_CURRENT, STEPPER_INDEX_E0 + i, cmd_value());
           break;
         }
 
         case 913:  // M913 Hybrid Threshold Speed
         {
-          if (cmd_seen('X')) setParameter(P_HYBRID_THRESHOLD, X_STEPPER, cmd_value());
-          if (cmd_seen('Y')) setParameter(P_HYBRID_THRESHOLD, Y_STEPPER, cmd_value());
-          if (cmd_seen('Z')) setParameter(P_HYBRID_THRESHOLD, Z_STEPPER, cmd_value());
-          uint8_t i = 0;
-          if (cmd_seen('T')) i = cmd_value();
-          if (cmd_seen('E')) setParameter(P_HYBRID_THRESHOLD, E_STEPPER + i, cmd_value());
+          uint8_t i = (cmd_seen('I')) ? cmd_value() : 0;
+          if (cmd_seen('X')) setParameter(P_HYBRID_THRESHOLD, STEPPER_INDEX_X + i, cmd_value());
+          if (cmd_seen('Y')) setParameter(P_HYBRID_THRESHOLD, STEPPER_INDEX_Y + i, cmd_value());
+          if (cmd_seen('Z')) setParameter(P_HYBRID_THRESHOLD, STEPPER_INDEX_Z + i, cmd_value());
+
+          i = (cmd_seen('T')) ? cmd_value() : 0;
+          if (cmd_seen('E')) setParameter(P_HYBRID_THRESHOLD, STEPPER_INDEX_E0 + i, cmd_value());
           break;
         }
 
         case 914:  // parse and store TMC Bump sensitivity values
-          if (cmd_seen('X')) setParameter(P_BUMPSENSITIVITY, X_STEPPER, cmd_value());
-          if (cmd_seen('Y')) setParameter(P_BUMPSENSITIVITY, Y_STEPPER, cmd_value());
-          if (cmd_seen('Z')) setParameter(P_BUMPSENSITIVITY, Z_STEPPER, cmd_value());
+        {
+          uint8_t i = (cmd_seen('I')) ? cmd_value() : 0;
+          if (cmd_seen('X')) setParameter(P_BUMPSENSITIVITY, STEPPER_INDEX_X + i, cmd_value());
+          if (cmd_seen('Y')) setParameter(P_BUMPSENSITIVITY, STEPPER_INDEX_X + i, cmd_value());
+          if (cmd_seen('Z')) setParameter(P_BUMPSENSITIVITY, STEPPER_INDEX_X + i, cmd_value());
           break;
+        }
       }
       break;  // end parsing M-codes
 

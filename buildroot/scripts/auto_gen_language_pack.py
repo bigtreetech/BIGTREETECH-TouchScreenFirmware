@@ -68,8 +68,8 @@ def get_lang_sign():
     for text_line in lines_list:
         text_line = text_line.strip()
         if text_line.startswith(lang_sign_prefix):
-                l = text_line.split()
-                lang_sign = l[2]
+            l = text_line.split()
+            lang_sign = l[2]
     #print("lang sign :" + lang_sign)
     set_file.close()
 
