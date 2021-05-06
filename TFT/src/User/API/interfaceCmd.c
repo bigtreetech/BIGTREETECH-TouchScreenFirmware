@@ -191,7 +191,7 @@ void purgeLastCmd(bool avoidTerminal)
 {
   if (!avoidTerminal)
   {
-    terminalCache("[Purged] ",TERMINAL_GCODE);
+    terminalCache("[Purged] ", TERMINAL_GCODE);
     terminalCache(infoCmd.queue[infoCmd.index_r].gcode, TERMINAL_GCODE);
   }
   infoCmd.count--;
@@ -233,7 +233,7 @@ void sendQueueCmd(void)
         case 1:
           if (isPrinting() && infoMachineSettings.firmwareType != FW_REPRAPFW)  // Abort printing by "M0" in RepRapFirmware
           {
-            // pasue if printing form TFT and purge M0/M1 command.
+            // pause if printing form TFT and purge M0/M1 command.
             if (infoFile.source < BOARD_SD )
             {
               purgeLastCmd(avoid_terminal);
