@@ -7,6 +7,7 @@ extern "C" {
 
 #include <stdbool.h>
 #include "ff.h"
+#include "includes.h"
 
 //after changing/adding/removing a keyword, change the CONFIG_FLASH_SIGN in Settings.h and PARA_SIGN in flashStore.c
 
