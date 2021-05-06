@@ -393,7 +393,7 @@ void menuPrinting(void)
 
   while (infoMenu.menu[infoMenu.cur] == menuPrinting)
   {
-    //Scroll_DispString(&titleScroll, LEFT); // Scroll display file name will take too many CPU cycles
+    //Scroll_DispString(&titleScroll, LEFT);  // Scroll display file name will take too many CPU cycles
 
     // check nozzle temp change
     if (nowHeat.T[currentTool].current != heatGetCurrentTemp(currentTool) ||
