@@ -60,7 +60,6 @@ void menuNotification(void)
   KEY_VALUES key_num = KEY_IDLE;
 
   menuDrawListPage(&notificationItems);
-
   loadNotificationItems();
   setNotificationHandler(loadNotificationItems);
 

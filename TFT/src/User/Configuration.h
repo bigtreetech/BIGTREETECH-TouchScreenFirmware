@@ -169,7 +169,8 @@
 #define SPEED_ID {"Sp.", "Fr."}  // (speed, flow rate)
 
 // Axes names displayed in Parameter Settings menu
-#define AXIS_DISPLAY_ID  {"X",  "Y",  "Z",   "E0",  "E1"}  // (X, Y, Z, E0, E1)
+#define AXIS_DISPLAY_ID    {"X", "Y", "Z", "E0", "E1"}  // (X, Y, Z, E0, E1)
+#define STEPPER_DISPLAY_ID {"X", "X2", "Y", "Y2", "Z", "Z2", "E0", "E1"} // (X, X2, Y, Y2, Z, Z2, E0, E1)
 
 // Default X & Y speed (mm/min)
 #define SPEED_XY_SLOW   1000
@@ -278,6 +279,15 @@
  * Options: [0: Disabled, 1: Enabled]
  */
 #define TOUCHMI_SENSOR_VALUE 0  // Default: 0
+
+/**
+ * MBL settings
+ * Apply the "level_z_pos" configurable parameter value as the
+ * starting Z height for each point during MBL process.
+ * If not enabled, you can set the desired starting Z height
+ * in Marlin fw (MANUAL_PROBE_START_Z in Configuration.h).
+ */
+#define ENABLE_MBL_START_Z
 
 // Mesh Leveling Max Grid points
 // Set the maximum number of grid points per dimension.

@@ -80,7 +80,6 @@ bool screenShotBMP(char *bmp)
   return true;
 }
 
-
 void loopScreenShot(void)
 {
   /*

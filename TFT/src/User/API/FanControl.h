@@ -1,13 +1,13 @@
-#ifndef _FANCONTROL_H_
-#define _FANCONTROL_H_
+#ifndef _FAN_CONTROL_H_
+#define _FAN_CONTROL_H_
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include <stdint.h>
 #include <stdbool.h>
-#include "includes.h"
+#include <stdint.h>
+#include "Settings.h"
 
 #define FAN_TYPE_F       0  // Default cooling fan
 #define FAN_TYPE_CTRL_S  1  // Controller FAN on Stepper/Bed On  (Check - Marlin M710)

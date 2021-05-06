@@ -1,6 +1,6 @@
-#include "GPIO_Init.h"
-#include "includes.h"
 #include "LCD_Encoder.h"
+#include "includes.h"
+#include "GPIO_Init.h"
 
 #if LCD_ENCODER_SUPPORT
 
@@ -62,7 +62,7 @@ bool encoder_ReadBtn(uint16_t intervals)
   return false;
 }
 
-//check touch to send select button
+// check touch to send select button
 bool LCD_BtnTouch(uint16_t intervals)
 {
   static uint32_t BtnTime = 0;
@@ -83,7 +83,7 @@ bool LCD_BtnTouch(uint16_t intervals)
   return false;
 }
 
-//return hardware encoder pin states
+// return hardware encoder pin states
 uint8_t encoder_GetPos(void)
 {
   uint8_t newbutton = 0;
@@ -138,7 +138,7 @@ void loopCheckEncoderSteps(void)
 }
 
 #if 1
-//Parse the touch to control encoder
+// Parse the touch to control encoder
 uint8_t LCD_ReadTouch(void)
 {
   uint16_t ex = 0, ey = 0;
@@ -152,7 +152,7 @@ uint8_t LCD_ReadTouch(void)
     if (!MOVE)
       sy = ey;
 
-    if (ex > LCD_FREE_WIDTH)  //stop mode switch if touched in navigation area
+    if (ex > LCD_FREE_WIDTH)  // stop mode switch if touched in navigation area
       skipMode = true;
     else
       skipMode = false;
@@ -162,7 +162,7 @@ uint8_t LCD_ReadTouch(void)
     {
       if ((sy > ey) && ey != 0)
       {
-        if (sy - ey > LCD_HEIGHT / 9 && sy - ey < LCD_HEIGHT / 7)  //7 - 5
+        if (sy - ey > LCD_HEIGHT / 9 && sy - ey < LCD_HEIGHT / 7)  // 7 - 5
         {
           sy = ey;
           return 2;
@@ -185,14 +185,14 @@ uint8_t LCD_ReadTouch(void)
     CTime = OS_GetTimeMs();
     sy = ey = 0;
     MOVE = false;
-    skipMode = false; //resume mode change loop
+    skipMode = false;  // resume mode change loop
     //return 0;
   }
   return 0;
 }
 #endif
 
-//Send encoder pulse
+// Send encoder pulse
 void sendEncoder(uint8_t num)
 {
   if (num == 1 || num == 2 || num == 3)
