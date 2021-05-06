@@ -38,7 +38,7 @@ bool powerFailedCreate(char *path)
   return true;
 }
 
-void powerFailedCache(u32 offset)
+void powerFailedCache(uint32_t offset)
 {
   UINT br;
 

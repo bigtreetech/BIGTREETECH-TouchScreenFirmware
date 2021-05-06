@@ -1,7 +1,6 @@
 #include "extend.h"
-#include "GPIO_Init.h"
-#include "variants.h"
 #include "includes.h"
+#include "GPIO_Init.h"
 
 // Power Supply
 #ifdef PS_ON_PIN
@@ -214,7 +213,7 @@ void loopFrontEndFILRunoutDetect(void)
 
   if (!getPrintRunout() && !getRunoutAlarm()) return;
 
-  if (printPause(true, false) && !getRunoutAlarm())
+  if (printPause(true, PAUSE_NORMAL) && !getRunoutAlarm())
   {
     setPrintRunout(false);
     setRunoutAlarmTrue();

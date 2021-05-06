@@ -39,14 +39,10 @@ bool scanPrintFilesGcodeFs(void)
   char *data = malloc(strlen(ret) + 1);
   strcpy(data, ret);
   clearRequestCommandInfo();
-  char s[3];
 
-  if (strstr(data, "\r\n"))  //for smoothieware
-    strcpy(s, "\r\n");
-  else  //for Marlin
-    strcpy(s, "\n");
-
+  char * s = strstr(data, "\r\n") ? "\r\n" : "\n";  // smoothieware report with \r\n, marlin reports with \n
   char *line = strtok(data, s);
+
   for (; line != NULL; line = strtok(NULL, s))
   {
     if (strcmp(line, "Begin file list") == 0 || strcmp(line, "End file list") == 0 || strcmp(line, "ok") == 0) continue;  // Start and Stop tag
@@ -67,9 +63,9 @@ bool scanPrintFilesGcodeFs(void)
         char *Pstr_tmp = strrchr(line, ' ');
         if (Pstr_tmp != NULL)
           *Pstr_tmp = 0;
-        //remove file size from line
+        // remove file size from line
         char *longfilename;
-        if (strrchr(line, '~') != NULL)  //check if file name is 8.3 format
+        if (strrchr(line, '~') != NULL)  // check if file name is 8.3 format
           longfilename = request_M33(line);
         else
           longfilename = line;
@@ -84,9 +80,9 @@ bool scanPrintFilesGcodeFs(void)
         */
         Pstr_tmp = strstr(longfilename, "\nok");
         if (Pstr_tmp != NULL)
-          *Pstr_tmp = 0;  //remove end of M33 command
+          *Pstr_tmp = 0;  // remove end of M33 command
 
-        Pstr_tmp = strrchr(longfilename, '/');  //remove folder information
+        Pstr_tmp = strrchr(longfilename, '/');  // remove folder information
         if (Pstr_tmp == NULL)
           Pstr_tmp = longfilename;
         else
@@ -104,7 +100,7 @@ bool scanPrintFilesGcodeFs(void)
       }
 
       char* rest = pline;
-      char* file = strtok_r(rest, " ", &rest);  //remove file size from pline
+      char* file = strtok_r(rest, " ", &rest);  // remove file size from pline
       infoFile.file[infoFile.fileCount] = malloc(strlen(file) + 1);
       if (infoFile.file[infoFile.fileCount] == NULL) break;
       strcpy(infoFile.file[infoFile.fileCount++], file);

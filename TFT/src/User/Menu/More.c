@@ -1,5 +1,5 @@
-#include "includes.h"
 #include "More.h"
+#include "includes.h"
 
 const MENUITEMS moreItems = {
   // title
@@ -23,13 +23,13 @@ const MENUITEMS moreItems = {
 
 void isPauseExtrude(void)
 {
-  if (printPause(true, false))
+  if (printPause(true, PAUSE_NORMAL))
     infoMenu.menu[infoMenu.cur] = menuExtrude;
 }
 
 void isPauseLoadUnload(void)
 {
-  if (printPause(true, false))
+  if (printPause(true, PAUSE_NORMAL))
     infoMenu.menu[infoMenu.cur] = menuLoadUnload;
 }
 

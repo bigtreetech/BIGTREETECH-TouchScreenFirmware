@@ -1,7 +1,7 @@
 #include "MarlinMode.h"
+#include "includes.h"
 #include "spi_slave.h"
 #include "HD44780.h"
-#include "includes.h"
 
 #ifdef HAS_EMULATOR
 

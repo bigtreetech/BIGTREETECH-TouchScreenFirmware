@@ -626,7 +626,7 @@ void meshDrawKeyboard(void)
       drawStandardValue(&meshKeyRect[i], VALUE_STRING, meshKeyString[i], true, MESH_FONT_COLOR, MESH_BG_COLOR, 3, true);
   }
 
-  // draw unicode string
+  // draw control icons
   if (infoMachineSettings.EEPROM == 1)
     drawCharIcon(&meshKeyRect[ME_KEY_SAVE], CENTER, CHARICON_SAVE, false, 0);
 

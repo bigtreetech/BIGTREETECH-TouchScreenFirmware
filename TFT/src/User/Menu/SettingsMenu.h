@@ -1,12 +1,11 @@
-#ifndef _SETTINGSMENU_H_
-#define _SETTINGSMENU_H_
+#ifndef _SETTINGS_MENU_H_
+#define _SETTINGS_MENU_H_
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 #include <stdint.h>
-#include "Settings.h"
 
 extern uint8_t machine_type[64];
 

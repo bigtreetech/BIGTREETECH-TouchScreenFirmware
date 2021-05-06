@@ -2,8 +2,6 @@
 
 #include "ListItem.h"
 #include "includes.h"
-#include "menu.h"
-#include "GUI.h"
 
 char * dynamic_label[LISTITEM_PER_PAGE];
 char dynamic_text_value[LISTITEM_PER_PAGE][10];
