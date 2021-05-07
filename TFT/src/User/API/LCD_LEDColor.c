@@ -1,12 +1,12 @@
 #include "LCD_LEDColor.h"
-#include "GPIO_Init.h"
 #include "includes.h"
+#include "GPIO_Init.h"
 
 #ifdef LED_COLOR_PIN
 
-//preset color list
+// preset color list
 const LABEL itemLedcolor[LED_COLOR_NUM] = {
-  //label
+  // label
   LABEL_OFF,
   LABEL_WHITE,
   LABEL_RED,
@@ -40,7 +40,7 @@ void knob_LED_Init(void)
   TIM6->PSC = 1 - 1;
   TIM6->SR = (uint16_t)~(1 << 0);
 
-  WS2812_Send_DAT(led_color[infoSettings.knob_led_color]);  //set last saved color after initialization
+  WS2812_Send_DAT(led_color[infoSettings.knob_led_color]);  // set last saved color after initialization
 }
 
 void knob_LED_DeInit(void)

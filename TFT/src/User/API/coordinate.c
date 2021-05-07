@@ -1,5 +1,4 @@
 #include "coordinate.h"
-#include "string.h"
 #include "includes.h"
 
 const char axis_id[TOTAL_AXIS] = {'X', 'Y', 'Z', 'E'};
@@ -57,7 +56,7 @@ float coordinateGetAxisTarget(AXIS axis)
 
 void coordinateSetAxisTarget(AXIS axis, float position)
 {
-  bool r = (axis == E_AXIS) ? relative_e || relative_mode : relative_mode;
+  bool r = (axis == E_AXIS) ? (relative_e || relative_mode) : relative_mode;
 
   if (r == false)
   {

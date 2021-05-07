@@ -5,6 +5,8 @@
 extern "C" {
 #endif
 
+#include <stdbool.h>
+#include <stdint.h>
 #include "menu.h"
 
 #define TOAST_X_PAD          START_X

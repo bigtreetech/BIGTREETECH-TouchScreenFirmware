@@ -43,6 +43,7 @@
 #include "xpt2046.h"
 #include "buzzer.h"
 
+#include "config.h"
 #include "LCD_Encoder.h"
 #include "ST7920_Emulator.h"
 #include "HD44780_Emulator.h"
@@ -95,6 +96,7 @@
 #include "LCD_LEDColor.h"
 #include "ParameterSettings.h"
 #include "NotificationMenu.h"
+#include "PersistentInfo.h"
 
 #include "Babystep.h"
 #include "Extrude.h"

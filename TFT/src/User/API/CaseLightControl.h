@@ -4,9 +4,8 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
 #include <stdbool.h>
-#include "includes.h"
+#include <stdint.h>
 
 void caseLightValueQuery(void);
 void caseLightSetState(bool state);

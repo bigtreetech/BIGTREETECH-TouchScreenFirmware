@@ -1,3 +1,4 @@
+#include "BLTouch.h"
 #include "includes.h"
 
 const MENUITEMS BLTouchItems = {

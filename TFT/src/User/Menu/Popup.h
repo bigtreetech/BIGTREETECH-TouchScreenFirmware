@@ -5,8 +5,8 @@
 extern "C" {
 #endif
 
-#include "GUI.h"
 #include "variants.h"
+#include "GUI.h"
 
 enum
 {
