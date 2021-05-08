@@ -5,9 +5,10 @@
 extern "C" {
 #endif
 
+#include <stdbool.h>
 #include <stdint.h>
+#include "variants.h"
 #include "coordinate.h"
-#include "Configuration.h"
 
 enum
 {
@@ -31,10 +32,10 @@ typedef enum
 // this number should match CONFIG_VERSION in configuration.h
 #define CONFIG_SUPPPORT 20210321
 
-#define FONT_FLASH_SIGN       20200908  //(YYYYMMDD) change if fonts require updating
-#define CONFIG_FLASH_SIGN     20210421  //(YYYYMMDD) change if any keyword(s) in config.ini is added or removed
-#define LANGUAGE_FLASH_SIGN   20210417  //(YYYYMMDD) change if any keyword(s) in language pack is added or removed
-#define ICON_FLASH_SIGN       20210217  //(YYYYMMDD) change if any icon(s) is added or removed
+#define FONT_FLASH_SIGN       20200908  // (YYYYMMDD) change if fonts require updating
+#define CONFIG_FLASH_SIGN     20210422  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
+#define LANGUAGE_FLASH_SIGN   20210417  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
+#define ICON_FLASH_SIGN       20210217  // (YYYYMMDD) change if any icon(s) is added or removed
 
 #define FONT_CHECK_SIGN       (FONT_FLASH_SIGN + WORD_UNICODE)
 #define CONFIG_CHECK_SIGN     (CONFIG_FLASH_SIGN + STRINGS_STORE_ADDR)

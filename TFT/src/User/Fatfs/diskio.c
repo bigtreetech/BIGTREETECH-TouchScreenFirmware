@@ -129,14 +129,14 @@ DRESULT disk_write(
   switch (pdrv)
   {
     case DEV_MMC:
-      while (SD_WriteDisk((u8*)buff, sector, count))  // write error
+      while (SD_WriteDisk((uint8_t*)buff, sector, count))  // write error
       {
         SD_Init();  // init again
       }
       return RES_OK;
 
     case DEV_USB:
-      if (USBH_UDISK_Write((u8*)buff, sector, count) == 0)
+      if (USBH_UDISK_Write((uint8_t*)buff, sector, count) == 0)
         return RES_OK;
       else
         return RES_ERROR;

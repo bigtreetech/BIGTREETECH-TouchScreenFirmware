@@ -5,7 +5,6 @@
 extern "C" {
 #endif
 
-#include "stdint.h"
 #include "Configuration.h"
 
 // User-defined colors for Marlin mode from Configuration.h

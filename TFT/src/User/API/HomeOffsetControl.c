@@ -48,7 +48,7 @@ float homeOffsetSetValue(float value)
 // Get current Z offset value
 float homeOffsetGetValue(void)
 {
-  z_offset_value = getParameter(P_HOME_OFFSET, Z_STEPPER);
+  z_offset_value = getParameter(P_HOME_OFFSET, AXIS_INDEX_Z);
 
   return z_offset_value;
 }

@@ -1,15 +1,14 @@
-#ifndef _POWERFAILED_H_
-#define _POWERFAILED_H_
+#ifndef _POWER_FAILED_H_
+#define _POWER_FAILED_H_
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "variants.h"
-#include "Heat.h"
-#include "coordinate.h"
+#include <stdbool.h>
+#include <stdint.h>
+#include "Settings.h"
 #include "ff.h"
-#include "Configuration.h"
 
 #define BREAK_POINT_FILE "Printing.sys"
 
@@ -27,12 +26,11 @@ typedef struct
   bool     pause;
 } BREAK_POINT;
 
-
 void menuPowerOff(void);
 
 void powerFailedSetDriverSource(char *src);
 bool powerFailedCreate(char *path) ;
-void powerFailedCache(u32 offset);
+void powerFailedCache(uint32_t offset);
 void powerFailedClose(void);
 void powerFailedDelete(void);
 

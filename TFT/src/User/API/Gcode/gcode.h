@@ -1,6 +1,7 @@
 #ifndef _GCODE_H_
 #define _GCODE_H_
-#include "stdbool.h"
+
+#include <stdbool.h>
 #include "interfaceCmd.h"
 
 #define CMD_MAX_REV 5000

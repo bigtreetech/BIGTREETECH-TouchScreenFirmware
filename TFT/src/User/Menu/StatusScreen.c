@@ -1,4 +1,5 @@
 #include "StatusScreen.h"
+#include "includes.h"
 
 #ifdef TFT70_V3_0
 #define KEY_SPEEDMENU         KEY_ICON_3

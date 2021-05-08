@@ -120,8 +120,8 @@ void menuLevelCorner(void)
   mustStoreCmd("G28\n");  // Init Coordinate
 
   // Check min edge limit for the probe with probe offset set in parseACK.c
-  uint8_t edge_min = MAX(ABS(getParameter((int16_t)P_PROBE_OFFSET, X_STEPPER)),
-                         ABS((int16_t)getParameter(P_PROBE_OFFSET, Y_STEPPER))) + 1;
+  uint8_t edge_min = MAX(ABS(getParameter((int16_t)P_PROBE_OFFSET, AXIS_INDEX_X)),
+                         ABS((int16_t)getParameter(P_PROBE_OFFSET, AXIS_INDEX_Y))) + 1;
 
   if (infoSettings.level_edge < edge_min)
   {
