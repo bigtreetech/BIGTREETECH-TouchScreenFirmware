@@ -7,6 +7,7 @@ extern "C" {
 
 #include <stdbool.h>
 #include <stdint.h>
+#include "variants.h"
 
 #define W25QXX_SECTOR_SIZE (0x1000)  // 4096-4K
 
@@ -40,7 +41,7 @@ extern "C" {
 #define ICON_ADDR(num)          ((num) * ICON_MAX_SIZE + CUSTOM_GCODE_ADDR + CUSTOM_GCODE_MAX_SIZE)
 #define INFOBOX_ADDR            (ICON_ADDR(ICON_PREVIEW) + ICON_MAX_SIZE)      // total byte size 0xA7F8
 #define SMALL_ICON_START_ADDR   (INFOBOX_ADDR + INFOBOX_MAX_SIZE)
-#define SMALL_ICON_ADDR(num)    ((num)*SMALL_ICON_MAX_SIZE + SMALL_ICON_START_ADDR)
+#define SMALL_ICON_ADDR(num)    ((num) * SMALL_ICON_MAX_SIZE + SMALL_ICON_START_ADDR)
 #define FLASH_USED              (INFOBOX_ADDR + INFOBOX_MAX_SIZE)              // currently small icons are not used
 
 #define ADMIN_MODE_FILE "admin.txt"
