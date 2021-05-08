@@ -99,14 +99,14 @@ void _GUI_DispLabelInRectEOL(int16_t sx, int16_t sy, int16_t ex, int16_t ey, uin
 void _GUI_DispLabelInPrectEOL(const GUI_RECT *rect, uint16_t index);
 
 // macros for selecting right function based on variable type
-#define GUI_DispString(x, y, c)                       _Generic(((c+0)), const u8*: _GUI_DispString, u8*: _GUI_DispString, default: _GUI_DispLabel)(x,y,c)
-#define GUI_DispLenString(x, y, c, width, truncate)   _Generic(((c+0)), const u8*: _GUI_DispLenString, u8*: _GUI_DispLenString, default: _GUI_DispLenLabel)(x,y,c,width,truncate)
-#define GUI_DispStringRight(x, y, c)                  _Generic(((c+0)), const u8*: _GUI_DispStringRight, u8*: _GUI_DispStringRight, default: _GUI_DispLabelRight)(x,y,c)
-#define GUI_DispStringCenter(x, y, c)                 _Generic(((c+0)), const u8*: _GUI_DispStringCenter, u8*: _GUI_DispStringCenter, default: _GUI_DispLabelCenter)(x,y,c)
-#define GUI_DispStringInRect(sx, sy, ex, ey, c)       _Generic(((c+0)), const u8*: _GUI_DispStringInRect, u8*: _GUI_DispStringInRect, default: _GUI_DispLabelInRect)(sx,sy,ex,ey,c)
-#define GUI_DispStringInPrect(rect, c)                _Generic(((c+0)), const u8*: _GUI_DispStringInPrect, u8*: _GUI_DispStringInPrect, default: _GUI_DispLabelInPrect)(rect,c)
-#define GUI_DispStringInRectEOL(sx, sy, ex, ey, c)    _Generic(((c+0)), const u8*: _GUI_DispStringInRectEOL, u8*: _GUI_DispStringInRectEOL, default: _GUI_DispLabelInRectEOL)(sx,sy,ex,ey,c)
-#define GUI_DispStringInPrectEOL(rect, c)             _Generic(((c+0)), const u8*: _GUI_DispStringInPrectEOL, u8*: _GUI_DispStringInPrectEOL, default: _GUI_DispLabelInPrectEOL)(rect,c)
+#define GUI_DispString(x, y, c)                       _Generic(((c+0)), const uint8_t*: _GUI_DispString, uint8_t*: _GUI_DispString, default: _GUI_DispLabel)(x,y,c)
+#define GUI_DispLenString(x, y, c, width, truncate)   _Generic(((c+0)), const uint8_t*: _GUI_DispLenString, uint8_t*: _GUI_DispLenString, default: _GUI_DispLenLabel)(x,y,c,width,truncate)
+#define GUI_DispStringRight(x, y, c)                  _Generic(((c+0)), const uint8_t*: _GUI_DispStringRight, uint8_t*: _GUI_DispStringRight, default: _GUI_DispLabelRight)(x,y,c)
+#define GUI_DispStringCenter(x, y, c)                 _Generic(((c+0)), const uint8_t*: _GUI_DispStringCenter, uint8_t*: _GUI_DispStringCenter, default: _GUI_DispLabelCenter)(x,y,c)
+#define GUI_DispStringInRect(sx, sy, ex, ey, c)       _Generic(((c+0)), const uint8_t*: _GUI_DispStringInRect, uint8_t*: _GUI_DispStringInRect, default: _GUI_DispLabelInRect)(sx,sy,ex,ey,c)
+#define GUI_DispStringInPrect(rect, c)                _Generic(((c+0)), const uint8_t*: _GUI_DispStringInPrect, uint8_t*: _GUI_DispStringInPrect, default: _GUI_DispLabelInPrect)(rect,c)
+#define GUI_DispStringInRectEOL(sx, sy, ex, ey, c)    _Generic(((c+0)), const uint8_t*: _GUI_DispStringInRectEOL, uint8_t*: _GUI_DispStringInRectEOL, default: _GUI_DispLabelInRectEOL)(sx,sy,ex,ey,c)
+#define GUI_DispStringInPrectEOL(rect, c)             _Generic(((c+0)), const uint8_t*: _GUI_DispStringInPrectEOL, uint8_t*: _GUI_DispStringInPrectEOL, default: _GUI_DispLabelInPrectEOL)(rect,c)
 
 void GUI_DispDec(int16_t x, int16_t y,int32_t num, uint8_t len, uint8_t leftOrRight);
 void GUI_DispFloat(int16_t x, int16_t y, float num, uint8_t llen, uint8_t rlen, uint8_t leftOrRight);

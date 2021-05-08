@@ -228,22 +228,12 @@ void setupMachine(void)
     infoMachineSettings.emergencyParser         = ENABLED;
     infoMachineSettings.autoReportSDStatus      = DISABLED;
   }
-  if (infoSettings.onboardSD == ENABLED)
-  {
-    infoMachineSettings.onboard_sd_support = ENABLED;
-  }
-  else if (infoSettings.onboardSD == DISABLED)
-  {
-    infoMachineSettings.onboard_sd_support = DISABLED;
-  }
-  if (infoSettings.longFileName == ENABLED)
-  {
-    infoMachineSettings.long_filename_support = ENABLED;
-  }
-  else if (infoSettings.longFileName == DISABLED)
-  {
-    infoMachineSettings.long_filename_support = DISABLED;
-  }
+  if (infoSettings.onboardSD != AUTO)
+    infoMachineSettings.onboard_sd_support = infoSettings.onboardSD;
+
+  if (infoSettings.longFileName != AUTO)
+    infoMachineSettings.long_filename_support = infoSettings.longFileName;
+
   mustStoreCmd("M503 S0\n");
 
   if (infoMachineSettings.firmwareType == FW_REPRAPFW)

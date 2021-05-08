@@ -1,11 +1,10 @@
 #include "config.h"
 #include "includes.h"
 
-//#define CONFIG_DEBUG  // To be used only when calling 'getConfigFromFile()' after boot process
-#ifdef CONFIG_DEBUG
-#define PRINTDEBUG(x) Serial_Puts(SERIAL_PORT, x);
+#ifdef SERIAL_DEBUG_PORT  // To be used only when calling 'getConfigFromFile()' after boot process
+  #define PRINTDEBUG(x) Serial_Puts(SERIAL_DEBUG_PORT, x);
 #else
-#define PRINTDEBUG(x)
+  #define PRINTDEBUG(x)
 #endif
 
 #define SET_VALID_INT_VALUE(VARIABLE, MIN, MAX) VARIABLE = valid_intValue(MIN, MAX, VARIABLE)
@@ -43,7 +42,10 @@ bool scheduleRotate = false;
 bool getConfigFromFile(void)
 {
   if (f_file_exists(CONFIG_FILE_PATH) == false)
+  {
+    PRINTDEBUG("configFile not found\n");
     return false;
+  }
 
   CUSTOM_GCODES tempCustomGcodes;
   PRINT_GCODES tempPrintCodes;
@@ -74,10 +76,12 @@ bool getConfigFromFile(void)
     }
     storePara();
     saveConfig();
+    PRINTDEBUG("config saved\n");
     return true;
   }
   else
   {
+    PRINTDEBUG("configFile save failed\n");
     return false;
   }
 }
@@ -130,9 +134,6 @@ bool getLangFromFile(void)
 
 bool readConfigFile(const char * path, void (*lineParser)(), uint16_t maxLineLen)
 {
-  #ifdef CONFIG_DEBUG
-    Serial_ReSourceInit();
-  #endif
   bool comment_mode = false;
   bool comment_space = true;
   char cur_char;
@@ -170,7 +171,7 @@ bool readConfigFile(const char * path, void (*lineParser)(), uint16_t maxLineLen
         return false;
       }
       configFile.cur++;
-      PRINTDEBUG("Line ++\n");
+      //PRINTDEBUG("Line ++\n");
 
       if (cur_char == '\n')  // start parsing line after new line.
       {
