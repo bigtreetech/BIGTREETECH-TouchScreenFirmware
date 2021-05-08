@@ -233,7 +233,7 @@ bool updateFont(char *font, uint32_t addr)
   if (tempbuf == NULL)
     return false;
   GUI_Clear(infoSettings.bg_color);
-  sprintf((void *)buffer,"%s Size: %dKB",font, (u32)f_size(&myfp)>>10);
+  sprintf((void *)buffer,"%s Size: %dKB",font, (uint32_t)f_size(&myfp)>>10);
   GUI_DispString(0, 100, (uint8_t*)buffer);
   GUI_DispString(0, 140, (uint8_t*)"Updating:   %");
 

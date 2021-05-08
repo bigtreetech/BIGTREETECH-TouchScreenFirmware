@@ -50,6 +50,11 @@
 #define USART3_RX_PIN PD9
 //#define SERIAL_PORT_4 _UART4
 
+// Serial port for debugging Serial communications
+#ifdef DEBUG_SERIAL_COMM
+  #define SERIAL_DEBUG_PORT SERIAL_PORT_3
+#endif
+
 // XPT2046 Software SPI Pins (touch screen ic)
 // need CS/SCK/MISO/MOSI for Software SPI, and TPEN for pen interrupt
 #define XPT2046_CS   PC9
