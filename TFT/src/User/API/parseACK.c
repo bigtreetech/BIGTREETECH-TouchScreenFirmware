@@ -12,7 +12,6 @@ static const char messagemagic[] = "message";                      // RRF messag
 static const char errorZProbe[] = "ZProbe triggered before move";  // smoothieware message
 
 bool portSeen[_UART_CNT] = {false, false, false, false, false, false};
-
 bool hostDialog = false;
 
 struct HOST_ACTION
