@@ -249,7 +249,6 @@ void hostActionCommands(void)
     {
       addNotification(DIALOG_TYPE_INFO, (char*)echomagic, (char*)dmaL2Cache + ack_index, false);
     }
-
     if (infoMenu.menu[infoMenu.cur] != menuStatus)  // don't show it when in menuStatus
     {
       uint16_t index = ack_index;
