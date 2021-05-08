@@ -71,7 +71,7 @@ Only the TFT's listed below are currently supported. Trying to install the firmw
 
   BTT_TFT70_V3.0
 
-**MKS TFT:**(Warning: BTT does not officially provide MKS TFT hardware support, MKS TFT is maintained by open source contributors, and BTT does not bear any risk of MKS TFT hardware using this firmware
+**MKS TFT:** *Warning: BTT does not officially provide MKS TFT hardware support, MKS TFT is maintained by open source contributors, and BTT does not bear any risk of MKS TFT hardware using this firmware*
 
   MKS_TFT28_V3.0 and V4.0
 
