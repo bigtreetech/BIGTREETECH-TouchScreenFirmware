@@ -68,14 +68,15 @@ void menuBaudrate(void)
     totalItems[i].itemType = LIST_LABEL;
     totalItems[i].titlelabel.address = (uint8_t *) item_baudrate_str[i];
   }
+  uint16_t curPage = cur_item / LISTITEM_PER_PAGE;
 
-  listViewCreate(title, totalItems, COUNT(totalItems), NULL, true, NULL, NULL);
+  listViewCreate(title, totalItems, COUNT(totalItems), &curPage, true, NULL, NULL);
 
   while (infoMenu.menu[infoMenu.cur] == menuBaudrate)
   {
     curIndex = listViewGetSelectedIndex();
 
-    if (curIndex != KEY_IDLE && curIndex != cur_item)
+    if (curIndex < COUNT(totalItems) && curIndex != cur_item)
     {  // has changed
       totalItems[cur_item].icon = CHARICON_UNCHECKED;
       listViewRefreshItem(cur_item);  // refresh unchecked status

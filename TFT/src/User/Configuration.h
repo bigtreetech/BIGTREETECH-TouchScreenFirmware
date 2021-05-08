@@ -3,28 +3,38 @@
 #define CONFIG_VERSION 20210321
 
 //===========================================================================
-//============================= General Settings ============================
+//============================ Developer Settings ===========================
 //===========================================================================
 
 /**
  * Screenshot for documentation
  * Long press touch screen capture the current full screen to SD card
- * Only for documentation purposes, DON'T enable it when normal printing.
+ * Only for documentation purposes, DON'T enable it for normal printing.
  */
 //#define SCREEN_SHOT_TO_SD
 
 /**
+ * Serial Communication Debug
+ * Uncomment/Enable to forward/dump all serial communication to SERIAL_DEBUG_PORT defined in board specific Pin_xx.h file.
+ * Use it only for debugging purposes. DON'T enable it for normal printing.
+ */
+//#define DEBUG_SERIAL_COMM
+
+//===========================================================================
+//============================= General Settings ============================
+//===========================================================================
+
+// Enable Status Screen
+// Enable this to show status screen as the default home screen. Disabling it will show a static menu.
+#define ENABLE_STATUS_SCREEN true  // To enabled: true | To disabled: false (Default: true)
+
+/**
  * Smart Home
- *
  * If enabled, long press "Back" button triggers Home screen
  * It doesn't interfere with the "Screenshot" and "Marlin/Touch Mode" other than if
  * enabled, long press "Back" will not trigger "Screenshot" or "Marlin/Touch Mode"
  */
 #define SMART_HOME
-
-// Enable Status Screen
-// Enable this to show status screen as the default home screen. Disabling it will show a static menu.
-#define ENABLE_STATUS_SCREEN true  // To enabled: true | To disabled: false (Default: true)
 
 /**
  * This setting determines the communication speed of the printer.
@@ -139,7 +149,7 @@
 
 #define PREHEAT_LABELS   {"PLA", "PETG", "ABS", "WOOD", "TPU", "NYLON"}
 #define PREHEAT_HOTEND   {200,   240,    230,   170,    220,   250}
-#define PREHEAT_BED      {60,    70,     90,    50,     50,    90}
+#define PREHEAT_BED      { 60,    70,     90,    50,     50,    90}
 
 #define HEAT_MAX_TEMP    {275,       275,       275,       275,       275,       275,       150,    60}
 #define HEAT_SIGN_ID     {"T0:",     "T1:",     "T2:",     "T3:",     "T4:",     "T5:",     "B:",   "C:"}
@@ -169,7 +179,8 @@
 #define SPEED_ID {"Sp.", "Fr."}  // (speed, flow rate)
 
 // Axes names displayed in Parameter Settings menu
-#define AXIS_DISPLAY_ID  {"X",  "Y",  "Z",   "E0",  "E1"}  // (X, Y, Z, E0, E1)
+#define AXIS_DISPLAY_ID    {"X", "Y", "Z", "E0", "E1"}  // (X, Y, Z, E0, E1)
+#define STEPPER_DISPLAY_ID {"X", "X2", "Y", "Y2", "Z", "Z2", "E0", "E1"} // (X, X2, Y, Y2, Z, Z2, E0, E1)
 
 // Default X & Y speed (mm/min)
 #define SPEED_XY_SLOW   1000
@@ -278,6 +289,15 @@
  * Options: [0: Disabled, 1: Enabled]
  */
 #define TOUCHMI_SENSOR_VALUE 0  // Default: 0
+
+/**
+ * MBL settings
+ * Apply the "level_z_pos" configurable parameter value as the
+ * starting Z height for each point during MBL process.
+ * If not enabled, you can set the desired starting Z height
+ * in Marlin fw (MANUAL_PROBE_START_Z in Configuration.h).
+ */
+#define ENABLE_MBL_START_Z
 
 // Mesh Leveling Max Grid points
 // Set the maximum number of grid points per dimension.

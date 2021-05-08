@@ -5,9 +5,8 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
 #include <stdbool.h>
-#include "GUI.h"
+#include "menu.h"
 
 typedef enum
 {

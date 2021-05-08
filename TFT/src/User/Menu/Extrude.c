@@ -37,7 +37,7 @@ void menuExtrude(void)
   float eSaved = 0.0f;
   float eTemp  = 0.0f;
   bool eRelative = false;
-  u32 feedrate = 0;
+  uint32_t feedrate = 0;
 
   while (infoCmd.count != 0)
   {

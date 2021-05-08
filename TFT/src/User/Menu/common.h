@@ -4,8 +4,9 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#include "Settings.h"
 #include "menu.h"
-#include "Heat.h"
 
 #define ITEM_DEGREE_NUM         3
 #define ITEM_SPEED_NUM          3

@@ -6,7 +6,7 @@ extern "C" {
 #endif
 
 #include <stdbool.h>
-#include "variants.h"
+#include <stdint.h>
 
 typedef enum
 {

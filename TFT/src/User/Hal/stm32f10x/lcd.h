@@ -1,7 +1,7 @@
 #ifndef _LCD_H_
 #define _LCD_H_
 
-#include "stdint.h"
+#include <stdint.h>
 #include "variants.h"
 
 #ifdef STM32_HAS_FSMC

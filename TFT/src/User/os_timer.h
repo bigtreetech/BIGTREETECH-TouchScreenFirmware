@@ -1,7 +1,7 @@
 #ifndef _OS_TIMER_H_
 #define _OS_TIMER_H_
-#include "stdint.h"
 
+#include <stdint.h>
 
 typedef void (*FP_TASK)(void *);
 
@@ -13,8 +13,7 @@ typedef struct
   void    *para;
   uint8_t  is_exist;
   uint8_t  is_repeat;
-}OS_TASK;
-
+} OS_TASK;
 
 void OS_TimerInitMs(void);
 uint32_t OS_GetTimeMs(void);

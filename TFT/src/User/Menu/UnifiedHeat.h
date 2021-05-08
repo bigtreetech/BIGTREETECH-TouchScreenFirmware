@@ -1,5 +1,5 @@
-#ifndef _UNIFIEDHEAT_H_
-#define _UNIFIEDHEAT_H_
+#ifndef _UNIFIED_HEAT_H_
+#define _UNIFIED_HEAT_H_
 
 #ifdef __cplusplus
 extern "C" {
