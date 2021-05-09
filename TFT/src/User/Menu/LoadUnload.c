@@ -105,6 +105,9 @@ void menuLoadUnload(void)
           cooldownTemperature();
           lastCmd = NONE;
           infoMenu.cur--;
+          // The E axis position known by the TFT must be updated because
+          // M701 and M702 changes E coordinate without the TFT knowing about it
+          coordinateSetAxisTarget(E_AXIS, coordinateGetAxisActual(E_AXIS));
           break;
 
         default:

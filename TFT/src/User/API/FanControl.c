@@ -1,4 +1,5 @@
 #include "FanControl.h"
+#include "includes.h"
 
 char* fanID[MAX_FAN_COUNT];
 char* fanCmd[MAX_FAN_COUNT];

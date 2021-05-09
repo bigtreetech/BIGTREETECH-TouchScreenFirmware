@@ -1,12 +1,12 @@
-#ifndef _INTERFACECMD_H_
-#define _INTERFACECMD_H_
+#ifndef _INTERFACE_CMD_H_
+#define _INTERFACE_CMD_H_
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "stdint.h"
-#include "stdbool.h"
+#include <stdbool.h>
+#include <stdint.h>
 
 #define CMD_MAX_LIST 20
 #define CMD_MAX_CHAR 100

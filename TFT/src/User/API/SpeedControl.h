@@ -1,13 +1,12 @@
-#ifndef _SPEEDCONTROL_H_
-#define _SPEEDCONTROL_H_
+#ifndef _SPEED_CONTROL_H_
+#define _SPEED_CONTROL_H_
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include <stdint.h>
 #include <stdbool.h>
-#include "includes.h"
+#include <stdint.h>
 
 #define SPEED_NUM 2
 #define SPEED_MIN 10

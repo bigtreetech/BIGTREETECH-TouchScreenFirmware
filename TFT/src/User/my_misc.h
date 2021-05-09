@@ -1,7 +1,7 @@
 #ifndef _MY_MISC_H_
 #define _MY_MISC_H_
 
-#include "stdint.h"
+#include <stdint.h>
 
 // Macros to make a string from a macro
 #define STRINGIFY_(M) #M

@@ -186,7 +186,7 @@ uint16_t GUI_StrPixelWidth_str(const uint8_t * str)
 uint16_t GUI_StrPixelWidth_label(int16_t index)
 {
   uint8_t tempstr[MAX_LANG_LABEL_LENGTH];
-  if (loadLabelText((u8*)tempstr, index) == false) return 0;
+  if (loadLabelText((uint8_t*)tempstr, index) == false) return 0;
   return GUI_StrPixelWidth_str(tempstr);
 }
 

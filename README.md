@@ -57,21 +57,26 @@ Important information related to BigTreeTech's TFT touchscreen 3D printer contro
 
 Only the TFT's listed below are currently supported. Trying to install the firmware on a TFT which is not supported can harm the hardware.
 
-BTT_TFT24_V1.1
+**BTT TFT**
 
-BTT_TFT28_V1.0 and V3.0
+    BTT_TFT24_V1.1
 
-BTT_TFT35_V1.0, V1.1, V1.2, V2.0, V3.0, E3_V3.0 and B1_V3.0
+    BTT_TFT28_V1.0 and V3.0
 
-BTT_TFT43_V3.0
+    BTT_TFT35_V1.0, V1.1, V1.2, V2.0, V3.0, E3_V3.0 and B1_V3.0
 
-BTT_TFT50_V3.0
+    BTT_TFT43_V3.0
 
-BTT_TFT70_V3.0
+    BTT_TFT50_V3.0
 
-MKS_TFT28_V3.0 and V4.0
+    BTT_TFT70_V3.0
 
-MKS_TFT32_V1.3 and V1.4
+**MKS TFT** *Warning: BTT does not officially provide MKS TFT hardware support, MKS TFT is maintained by open source contributors, and BTT does not bear any risk of MKS TFT hardware using this firmware*
+
+
+    MKS_TFT28_V3.0 and V4.0
+
+    MKS_TFT32_V1.3 and V1.4
 
 
 

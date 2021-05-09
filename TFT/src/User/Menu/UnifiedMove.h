@@ -1,5 +1,5 @@
-#ifndef _UNIFIEDMOVE_H_
-#define _UNIFIEDMOVE_H_
+#ifndef _UNIFIED_MOVE_H_
+#define _UNIFIED_MOVE_H_
 
 #ifdef __cplusplus
 extern "C" {

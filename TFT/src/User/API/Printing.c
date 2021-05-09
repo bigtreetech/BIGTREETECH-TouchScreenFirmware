@@ -3,15 +3,15 @@
 
 typedef struct
 {
-  FIL      file;
-  uint32_t time;        // Printed time in sec
-  uint32_t size;        // Gcode file total size
-  uint32_t cur;         // Gcode has printed file size
-  uint8_t  progress;
-  bool     runout;      // 1: runout in printing, 0: idle
-  bool     printing;    // 1: means printing, 0: means idle
-  bool     pause;       // 1: means paused
-  bool     m0_pause;    // 1: pause triggered through M0/M1 gcode
+  FIL        file;
+  uint32_t   time;        // Printed time in sec
+  uint32_t   size;        // Gcode file total size
+  uint32_t   cur;         // Gcode has printed file size
+  uint8_t    progress;
+  bool       runout;      // 1: runout in printing, 0: idle
+  bool       printing;    // 1: means printing, 0: means idle
+  bool       pause;       // 1: means paused
+  PAUSE_TYPE pauseType;   // pause type trigged by different sources and gcodes like M0 & M600
 } PRINTING;
 
 PRINTING infoPrinting;
@@ -347,7 +347,6 @@ void printEnd(void)
 void printComplete(void)
 {
   BUZZER_PLAY(sound_success);
-
   printEnd();
 
   if (infoSettings.auto_off)  // Auto shut down after print
@@ -418,18 +417,18 @@ void printAbort(void)
   loopDetected = false;
 }
 
-bool printPause(bool is_pause, bool is_m0pause)
+bool printPause(bool isPause, PAUSE_TYPE pauseType)
 {
   // used to avoid a possible loop in case a pause gcode (e.g. M25) is present in
   // the queue infoCmd and the function loopProcess() is invoked by this function
   static bool loopDetected = false;
 
-  if (loopDetected)                   return false;
-  if (!infoPrinting.printing)         return false;
-  if (infoPrinting.pause == is_pause) return false;
+  if (loopDetected)                  return false;
+  if (!infoPrinting.printing)        return false;
+  if (infoPrinting.pause == isPause) return false;
 
   loopDetected = true;
-  infoPrinting.pause = is_pause;
+  infoPrinting.pause = isPause;
 
   switch (infoFile.source)
   {
@@ -443,7 +442,7 @@ bool printPause(bool is_pause, bool is_m0pause)
 
     case TFT_UDISK:
     case TFT_SD:
-      if (infoPrinting.pause == true && is_m0pause == false)
+      if (infoPrinting.pause == true && pauseType == PAUSE_M0)
       {
         while (infoCmd.count != 0) {loopProcess();}
       }
@@ -456,64 +455,71 @@ bool printPause(bool is_pause, bool is_m0pause)
       {
         // restore status before pause
         // if pause was triggered through M0/M1 then break
-        if (is_m0pause == true)
+        if (pauseType == PAUSE_M0)
         {
-          infoPrinting.m0_pause = is_m0pause;
           popupReminder(DIALOG_TYPE_ALERT, LABEL_PAUSE, LABEL_PAUSE);
           break;
         }
-
-        coordinateGetAll(&tmp);
-
-        if (isCoorRelative == true)    mustStoreCmd("G90\n");
-        if (isExtrudeRelative == true) mustStoreCmd("M82\n");
-
-        if (heatGetCurrentTemp(heatGetCurrentHotend()) > infoSettings.min_ext_temp)
+        // do not send any command if the pause originated outside TFT
+        if (pauseType < PAUSE_EXTERNAL)
         {
-          mustStoreCmd("G1 E%.5f F%d\n", tmp.axis[E_AXIS] - infoSettings.pause_retract_len,
-                       infoSettings.pause_feedrate[FEEDRATE_E]);
-        }
+          coordinateGetAll(&tmp);
 
-        if (coordinateIsKnown())
-        {
-          mustStoreCmd("G1 Z%.3f F%d\n", tmp.axis[Z_AXIS] + infoSettings.pause_z_raise, infoSettings.pause_feedrate[FEEDRATE_Z]);
-          mustStoreCmd("G1 X%.3f Y%.3f F%d\n", infoSettings.pause_pos[X_AXIS], infoSettings.pause_pos[Y_AXIS],
-                       infoSettings.pause_feedrate[FEEDRATE_XY]);
-        }
+          if (isCoorRelative == true)    mustStoreCmd("G90\n");
+          if (isExtrudeRelative == true) mustStoreCmd("M82\n");
 
-        if (isCoorRelative == true)    mustStoreCmd("G91\n");
-        if (isExtrudeRelative == true) mustStoreCmd("M83\n");
+          if (heatGetCurrentTemp(heatGetCurrentHotend()) > infoSettings.min_ext_temp)
+          {
+            mustStoreCmd("G1 E%.5f F%d\n", tmp.axis[E_AXIS] - infoSettings.pause_retract_len,
+                         infoSettings.pause_feedrate[FEEDRATE_E]);
+          }
+
+          if (coordinateIsKnown())
+          {
+            mustStoreCmd("G1 Z%.3f F%d\n", tmp.axis[Z_AXIS] + infoSettings.pause_z_raise, infoSettings.pause_feedrate[FEEDRATE_Z]);
+            mustStoreCmd("G1 X%.3f Y%.3f F%d\n", infoSettings.pause_pos[X_AXIS], infoSettings.pause_pos[Y_AXIS],
+                         infoSettings.pause_feedrate[FEEDRATE_XY]);
+          }
+
+          if (isCoorRelative == true)    mustStoreCmd("G91\n");
+          if (isExtrudeRelative == true) mustStoreCmd("M83\n");
+        }
+        // store pause type only on pause
+        infoPrinting.pauseType = pauseType;
       }
       else  // resume
       {
-        if (infoPrinting.m0_pause == true)
+        if (infoPrinting.pauseType == PAUSE_M0)
         {
-          infoPrinting.m0_pause = is_m0pause;
           breakAndContinue();  // clear the queue and send a break and continue
           break;
         }
-
-        if (isCoorRelative == true)    mustStoreCmd("G90\n");
-        if (isExtrudeRelative == true) mustStoreCmd("M82\n");
-
-        if (heatGetCurrentTemp(heatGetCurrentHotend()) > infoSettings.min_ext_temp)
+        // do not send any command if the pause originated outside TFT
+        if (infoPrinting.pauseType < PAUSE_EXTERNAL)
         {
-          mustStoreCmd("G1 E%.5f F%d\n", tmp.axis[E_AXIS] - infoSettings.pause_retract_len + infoSettings.resume_purge_len,
-                       infoSettings.pause_feedrate[FEEDRATE_E]);
+          if (isCoorRelative == true)    mustStoreCmd("G90\n");
+          if (isExtrudeRelative == true) mustStoreCmd("M82\n");
+
+          if (heatGetCurrentTemp(heatGetCurrentHotend()) > infoSettings.min_ext_temp)
+          {
+            mustStoreCmd("G1 E%.5f F%d\n", tmp.axis[E_AXIS] - infoSettings.pause_retract_len + infoSettings.resume_purge_len,
+                         infoSettings.pause_feedrate[FEEDRATE_E]);
+          }
+
+          if (coordinateIsKnown())
+          {
+            mustStoreCmd("G1 X%.3f Y%.3f F%d\n", tmp.axis[X_AXIS], tmp.axis[Y_AXIS], infoSettings.pause_feedrate[FEEDRATE_XY]);
+            mustStoreCmd("G1 Z%.3f F%d\n", tmp.axis[Z_AXIS], infoSettings.pause_feedrate[FEEDRATE_Z]);
+          }
+
+          mustStoreCmd("G92 E%.5f\n", tmp.axis[E_AXIS]);
+          mustStoreCmd("G1 F%d\n", tmp.feedrate);
+
+          if (isCoorRelative == true)    mustStoreCmd("G91\n");
+          if (isExtrudeRelative == true) mustStoreCmd("M83\n");
         }
-
-        if (coordinateIsKnown())
-        {
-          mustStoreCmd("G1 X%.3f Y%.3f F%d\n", tmp.axis[X_AXIS], tmp.axis[Y_AXIS], infoSettings.pause_feedrate[FEEDRATE_XY]);
-          mustStoreCmd("G1 Z%.3f F%d\n", tmp.axis[Z_AXIS], infoSettings.pause_feedrate[FEEDRATE_Z]);
-        }
-
-        mustStoreCmd("G92 E%.5f\n", tmp.axis[E_AXIS]);
-        mustStoreCmd("G1 F%d\n", tmp.feedrate);
-
-        if (isCoorRelative == true)    mustStoreCmd("G91\n");
-        if (isExtrudeRelative == true) mustStoreCmd("M83\n");
       }
+
       break;
   }
 
@@ -556,11 +562,13 @@ void setPrintAbort(void)
   infoPrinting.printing = infoPrinting.pause = false;
 }
 
-void setPrintPause(bool updateHost)
+void setPrintPause(bool updateHost, PAUSE_TYPE pauseType)
 {
   if (infoPrinting.printing)
+  {
     infoPrinting.pause = true;
-
+    infoPrinting.pauseType = pauseType;
+  }
   if (updateHost)
     infoHost.printing = false;
 }
