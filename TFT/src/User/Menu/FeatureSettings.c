@@ -224,6 +224,7 @@ void loadFeatureSettings(LISTITEM * item, uint16_t item_index, uint8_t itemPos)
       case SKEY_FILE_SORT_BY:
         setDynamicTextValue(itemPos, (char *)itemSortBy[infoSettings.files_sort_by]);
         break;
+
       case SKEY_ACK_NOTIFICATION:
         setDynamicTextValue(itemPos, (char *)itemNotificationType[infoSettings.ack_notification]);
         break;

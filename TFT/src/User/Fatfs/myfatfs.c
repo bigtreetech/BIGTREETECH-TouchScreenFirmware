@@ -23,16 +23,16 @@ bool compareFile(char * name1, int32_t date1, char * name2, int32_t date2)
   // sort by name
   else
   {
-    uint16_t maxlen = (strlen(name1) < strlen(name2)) ? strlen(name1):strlen(name2);
+    uint16_t maxlen = (strlen(name1) < strlen(name2)) ? strlen(name1) : strlen(name2);
 
     // compare each character
     for (uint16_t i = 0; i < maxlen; i++)
     {
       // convert all upper case characters to lower case
-      char a = (name1[i] > 64  && name1[i] < 91) ? (name1[i] + 32) : name1[i];
-      char b = (name2[i] > 64  && name2[i] < 91) ? (name2[i] + 32) : name2[i];
+      char a = (name1[i] > 64 && name1[i] < 91) ? (name1[i] + 32) : name1[i];
+      char b = (name2[i] > 64 && name2[i] < 91) ? (name2[i] + 32) : name2[i];
 
-      if(a != b)
+      if (a != b)
         return ((a < b) == infoSettings.files_sort_by % 2);
     }
     // file with longer name displays last in ascending order and first in descending order
