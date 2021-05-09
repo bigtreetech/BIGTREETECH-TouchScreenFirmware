@@ -186,40 +186,35 @@ const void drawStandardValue(const GUI_RECT *rect, VALUE_TYPE valType, const voi
 const bool warmupTemperature(uint8_t toolIndex, void (* callback)(void))
 {
   #define TEMP_OFFSET 5  // offset temperature to avoid denial of extrusion/retraction due to the nozzle temperature lag
-  if (heatGetTargetTemp(toolIndex) < infoSettings.min_ext_temp)
-  {
-    if (heatGetCurrentTemp(toolIndex) < infoSettings.min_ext_temp - TEMP_OFFSET)
-    {  // low temperature warning and heatup offering
-      char tempMsg[120];
-      LABELCHAR(tempStr, LABEL_EXT_TEMPLOW);
+  if (heatGetCurrentTemp(toolIndex) < infoSettings.min_ext_temp - TEMP_OFFSET)
+  {// low temperature warning 
+    char tempMsg[120];
+    LABELCHAR(tempStr, LABEL_EXT_TEMPLOW);
 
-      sprintf(tempMsg, tempStr, infoSettings.min_ext_temp);
+    sprintf(tempMsg, tempStr, infoSettings.min_ext_temp);
+
+    if (heatGetTargetTemp(toolIndex) < infoSettings.min_ext_temp)
+    {// heatup offering
       strcat(tempMsg, "\n");
       sprintf(tempStr, (char *) textSelect(LABEL_HEAT_HOTEND), infoSettings.min_ext_temp);
       strcat(tempMsg, tempStr);
       
       setDialogText(LABEL_WARNING, (uint8_t *) tempMsg, LABEL_CONFIRM, LABEL_CANCEL);
       showDialog(DIALOG_TYPE_ERROR, callback, NULL, NULL);
-      return false;
     }
     else
-    { // contiunue with current temp but no lower than the minimum extruder temperature
-      heatSetTargetTemp(toolIndex, MAX(infoSettings.min_ext_temp, heatGetCurrentTemp(toolIndex)));
-    }
-  }
-  else
-    if (heatGetCurrentTemp(toolIndex) < infoSettings.min_ext_temp - TEMP_OFFSET)
-    { // low temperature warning
-      char tempMsg[120];
-      LABELCHAR(tempStr, LABEL_EXT_TEMPLOW);
-
-      sprintf(tempMsg, tempStr, infoSettings.min_ext_temp);
-      strcat(tempMsg, "\n");
-      
+    {
       setDialogText(LABEL_WARNING, (uint8_t *) tempMsg, LABEL_CONFIRM, LABEL_BACKGROUND);
       showDialog(DIALOG_TYPE_ERROR, NULL, NULL, NULL);
-      return false;
     }
+    return false;
+  }
+  else
+    // temperature falling down to a target lower than the minimal extrusion temperature
+    if (heatGetTargetTemp(toolIndex) < infoSettings.min_ext_temp)
+      { // contiunue with current temp but no lower than the minimum extruder temperature
+        heatSetTargetTemp(toolIndex, MAX(infoSettings.min_ext_temp, heatGetCurrentTemp(toolIndex)));
+      }
 
   return true;
 }
