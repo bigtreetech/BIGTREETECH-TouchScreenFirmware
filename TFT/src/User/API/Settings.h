@@ -49,17 +49,17 @@ typedef enum
 #define MAX_FAN_COUNT         (6 + MAX_FAN_CTRL_COUNT)
 
 #define AXIS_NUM              (TOTAL_AXIS - 1)
-#define SPEED_COUNT           3
-#define PREHEAT_COUNT         6
+#define SPEED_COUNT            3
+#define PREHEAT_COUNT          6
 #define CUSTOM_GCODES_COUNT   15
 #define MAX_STRING_LENGTH     20
-#define MAX_LABEL_LENGTH      7
+#define MAX_LABEL_LENGTH       7
 #define MAX_GCODE_NAME_LENGTH 24
 #define MAX_GCODE_LENGTH      75
 
-#define MIN_STRING_LENGTH     3
-#define MIN_LABEL_LENGTH      3
-#define MIN_GCODE_LENGTH      3
+#define MIN_STRING_LENGTH      3
+#define MIN_LABEL_LENGTH       3
+#define MIN_GCODE_LENGTH       3
 
 #define DISABLED  0
 #define ENABLED   1

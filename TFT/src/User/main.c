@@ -39,15 +39,17 @@ void Hardware_GenericInit(void)
     GPIO_PinRemapConfig(GPIO_Remap_USART2, ENABLE);
   #endif
 
-  #ifdef SERIAL_DEBUG_PORT
-    Serial_ReSourceInit();  // Initialize serial ports first if debugging is enabled
-  #endif
 
   XPT2046_Init();
   OS_TimerInitMs();        // System clock timer, cycle 1ms, called after XPT2046_Init()
   W25Qxx_Init();
   LCD_Init();
   readStoredPara();        // Read settings parameter
+
+  #ifdef SERIAL_DEBUG_PORT
+    Serial_ReSourceInit();  // Initialize serial ports first if debugging is enabled
+  #endif
+  
   LCD_RefreshDirection();  // refresh display direction after reading settings
   scanUpdates();           // scan icon, fonts and config files
   checkflashSign();        // check font/icon/config signature in SPI flash for update
