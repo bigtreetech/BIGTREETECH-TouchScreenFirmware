@@ -9,6 +9,7 @@
     #define STRING_TERMINAL_ACK           "Εμφάνιση ACK στο τερματικό"
     #define STRING_PERSISTENT_INFO        "Πληροφορίες μόνιμης κατάστασης"
     #define STRING_FILE_LIST_MODE         "Λειτουργία λίστας προβολής αρχείων"
+    #define STRING_FILE_SORT_BY           "Sort files by"
     #define STRING_ACK_NOTIFICATION       "ACK notification style"
     #define STRING_EMULATE_M600           "Emulate M600"
     #define STRING_SERIAL_ALWAYS_ON       "Serial Always ON"

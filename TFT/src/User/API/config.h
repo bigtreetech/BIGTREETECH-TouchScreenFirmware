@@ -36,6 +36,7 @@ extern "C" {
 #define CONFIG_INVERT_AXIS            "invert_axis:"
 #define CONFIG_PERSISTENT_TEMP        "persistent_info:"
 #define CONFIG_LIST_MODE              "files_list_mode:"
+#define CONFIG_FILES_SORT_BY          "files_sort_by:"
 #define CONFIG_ACK_NOTIFICATION       "ack_notification:"
 #define CONFIG_NOTIFICATION_M117      "notification_m117:"
 #define CONFIG_EMULATE_M600           "emulate_m600:"
