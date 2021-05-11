@@ -176,7 +176,7 @@
 //
 
 // ST7920 Emulator SPI pins
-// #define ST7920_EMULATOR  // uncomment to enable Marlin mode
+//#define ST7920_EMULATOR  // uncomment to enable Marlin mode
 #ifdef ST7920_EMULATOR
   #define ST7920_SPI _SPI3
 #endif

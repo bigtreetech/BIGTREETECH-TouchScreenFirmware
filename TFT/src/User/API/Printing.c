@@ -460,6 +460,7 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType)
           popupReminder(DIALOG_TYPE_ALERT, LABEL_PAUSE, LABEL_PAUSE);
           break;
         }
+
         // do not send any command if the pause originated outside TFT
         if (pauseType < PAUSE_EXTERNAL)
         {
@@ -484,6 +485,7 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType)
           if (isCoorRelative == true)    mustStoreCmd("G91\n");
           if (isExtrudeRelative == true) mustStoreCmd("M83\n");
         }
+
         // store pause type only on pause
         infoPrinting.pauseType = pauseType;
       }
@@ -494,6 +496,7 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType)
           breakAndContinue();  // clear the queue and send a break and continue
           break;
         }
+
         // do not send any command if the pause originated outside TFT
         if (infoPrinting.pauseType < PAUSE_EXTERNAL)
         {
@@ -569,6 +572,7 @@ void setPrintPause(bool updateHost, PAUSE_TYPE pauseType)
     infoPrinting.pause = true;
     infoPrinting.pauseType = pauseType;
   }
+
   if (updateHost)
     infoHost.printing = false;
 }

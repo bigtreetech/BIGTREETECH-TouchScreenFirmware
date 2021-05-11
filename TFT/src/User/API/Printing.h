@@ -27,7 +27,6 @@ extern "C" {
 
 #define SUMMARY_NAME_LEN 26  // max character length to copy from name buffer
 
-
 typedef enum
 {
   PAUSE_NORMAL = 0,
