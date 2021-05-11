@@ -186,15 +186,16 @@ const void drawStandardValue(const GUI_RECT *rect, VALUE_TYPE valType, const voi
 const bool warmupTemperature(uint8_t toolIndex, void (* callback)(void))
 {
   #define TEMP_OFFSET 5  // offset temperature to avoid denial of extrusion/retraction due to the nozzle temperature lag
+
   if (heatGetCurrentTemp(toolIndex) < infoSettings.min_ext_temp - TEMP_OFFSET)
-  {// low temperature warning 
+  { // low temperature warning 
     char tempMsg[120];
     LABELCHAR(tempStr, LABEL_EXT_TEMPLOW);
 
     sprintf(tempMsg, tempStr, infoSettings.min_ext_temp);
 
     if (heatGetTargetTemp(toolIndex) < infoSettings.min_ext_temp)
-    {// heatup offering
+    { // heatup offering
       strcat(tempMsg, "\n");
       sprintf(tempStr, (char *) textSelect(LABEL_HEAT_HOTEND), infoSettings.min_ext_temp);
       strcat(tempMsg, tempStr);
@@ -210,11 +211,12 @@ const bool warmupTemperature(uint8_t toolIndex, void (* callback)(void))
     return false;
   }
   else
-    // temperature falling down to a target lower than the minimal extrusion temperature
+  { // temperature falling down to a target lower than the minimal extrusion temperature
     if (heatGetTargetTemp(toolIndex) < infoSettings.min_ext_temp)
-      { // contiunue with current temp but no lower than the minimum extruder temperature
-        heatSetTargetTemp(toolIndex, MAX(infoSettings.min_ext_temp, heatGetCurrentTemp(toolIndex)));
-      }
+    { // contiunue with current temp but no lower than the minimum extruder temperature
+      heatSetTargetTemp(toolIndex, MAX(infoSettings.min_ext_temp, heatGetCurrentTemp(toolIndex)));
+    }
+  }
 
   return true;
 }
