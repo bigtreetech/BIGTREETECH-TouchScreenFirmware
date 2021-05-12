@@ -17,9 +17,9 @@ void caseLightBrightnessReDraw()
   char tempstr[20];
 
   sprintf(tempstr, "  %d%%  ", caseLightGetBrightnessPercent());
-  setLargeFont(true);
+  setFontSize(FONT_SIZE_LARGE);
   GUI_DispStringInPrect(&exhibitRect, (uint8_t *)tempstr);
-  setLargeFont(false);
+  setFontSize(FONT_SIZE_NORMAL);
 }
 
 void menuCaseLight(void)
