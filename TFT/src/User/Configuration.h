@@ -1,6 +1,6 @@
 #ifndef _CONFIGURATION_H_
 #define _CONFIGURATION_H_
-#define CONFIG_VERSION 20210321
+#define CONFIG_VERSION 20210513
 
 //===========================================================================
 //============================ Developer Settings ===========================
@@ -142,38 +142,37 @@
 
 #define HOTEND_NUM      1  // set in 1~6
 #define EXTRUDER_NUM    1  // set in 1~6
-#define FAN_NUM         1  // set in 1~6
-#define FAN_CTRL_NUM    0  // set in 1~2
 #define MIXING_EXTRUDER 0  // Default: 0. For mixing_extruder set to 1 (This option turns off autodetection
                            // of the number of extruders)
+#define FAN_NUM         1  // set in 1~6
+#define ENABLE_CTRL_FAN 1  // Set 0 to disable & 1 to enable controller fan speed control for Idle and Active
+                           // cooling if marlin supports ontroller fan (M710).
 
-#define PREHEAT_LABELS   {"PLA", "PETG", "ABS", "WOOD", "TPU", "NYLON"}
-#define PREHEAT_HOTEND   {200,   240,    230,   170,    220,   250}
-#define PREHEAT_BED      { 60,    70,     90,    50,     50,    90}
+#define PREHEAT_LABELS {"PLA", "PETG", "ABS", "WOOD", "TPU", "NYLON"}
+#define PREHEAT_HOTEND {200,   240,    230,   170,    220,   250}
+#define PREHEAT_BED    { 60,    70,     90,    50,     50,    90}
 
-#define HEAT_MAX_TEMP    {275,       275,       275,       275,       275,       275,       150,    60}
-#define HEAT_SIGN_ID     {"T0:",     "T1:",     "T2:",     "T3:",     "T4:",     "T5:",     "B:",   "C:"}
-#define HEAT_DISPLAY_ID  {"T0",      "T1",      "T2",      "T3",      "T4",      "T5",      "Bed",  "Chamber"}
-#define HEAT_CMD         {"M104 T0", "M104 T1", "M104 T2", "M104 T3", "M104 T4", "M104 T5", "M140", "M141"};
-#define HEAT_WAIT_CMD    {"M109 T0", "M109 T1", "M109 T2", "M109 T3", "M109 T4", "M109 T5", "M190", "M191"};
+#define HEAT_MAX_TEMP   {275,       275,       275,       275,       275,       275,       150,    60}
+#define HEAT_SIGN_ID    {"T0:",     "T1:",     "T2:",     "T3:",     "T4:",     "T5:",     "B:",   "C:"}
+#define HEAT_DISPLAY_ID {"T0",      "T1",      "T2",      "T3",      "T4",      "T5",      "Bed",  "Chamber"}
+#define HEAT_CMD        {"M104 T0", "M104 T1", "M104 T2", "M104 T3", "M104 T4", "M104 T5", "M140", "M141"}
+#define HEAT_WAIT_CMD   {"M109 T0", "M109 T1", "M109 T2", "M109 T3", "M109 T4", "M109 T5", "M190", "M191"}
 
-#define TOOL_CHANGE      {"T0",   "T1",      "T2",      "T3",      "T4",      "T5"}
-#define EXTRUDER_ID      {"E0",   "E1",      "E2",      "E3",      "E4",      "E5"}
+#define TOOL_CHANGE {"T0", "T1", "T2", "T3", "T4", "T5"}
+#define EXTRUDER_ID {"E0", "E1", "E2", "E3", "E4", "E5"}
 
 // Prevent extrusion if the temperature is below set temperature
 #define PREVENT_COLD_EXTRUSION_MINTEMP 180
 
 /**
- * Fan control & Fan type Options:
- *  0: FAN_TYPE_F       - default cooling fan speed (Check Marlin GCode M106)
- *  1: FAN_TYPE_CTRL_S  - Controller fan speed for stepper or hot bed ON (Check Marlin GCode M710)
- *  2: FAN_TYPE_CTRL_I  - Controller fan idle speed  (Check Marlin gcode - M710)
- *  8: FAN_TYPE_UNKNOWN - Unknown / Not defined
+ * Cooling Fan & Controller Fan
+ * Cooling fan have index from 0 to 5.
+ * Controller fan have two speed (Active and Idle) index 6 and 7.
  */
-#define FAN_MAX_PWM      {       255,       255,       255,       255,       255,       255,       255,       255 };
-#define FAN_DISPLAY_ID   {      "F0",      "F1",      "F2",      "F3",      "F4",      "F5",     "CtL",     "CtI" };
-#define FAN_CMD          { "M106 P0", "M106 P1", "M106 P2", "M106 P3", "M106 P4", "M106 P5",    "M710",    "M710" };
-#define FAN_TYPE         {         0,         0,         0,         0,         0,         0,         1,         2 };
+#define FAN_MAX_PWM    {255,  255,  255,  255,  255,  255,  255,   255}
+#define FAN_DISPLAY_ID {"F0", "F1", "F2", "F3", "F4", "F5", "CtS", "CtI"}
+#define FAN_CMD        {"M106 P0 S%d\n", "M106 P1 S%d\n", "M106 P2 S%d\n", "M106 P3 S%d\n", "M106 P4 S%d\n", "M106 P5 S%d\n", \
+                        "M710 S%d\n",    "M710 I%d\n" }
 
 // Speed/flow rate names displayed in status screen
 #define SPEED_ID {"Sp.", "Fr."}  // (speed, flow rate)
@@ -315,26 +314,26 @@
 #define AUTO_SAVE_LOAD_BL_VALUE 1  // Default: 1
 
 // PID autotune
-#define PID_CMD {"M303 U1 C8 E0", "M303 U1 C8 E1", "M303 U1 C8 E2", "M303 U1 C8 E3", "M303 U1 C8 E4", "M303 U1 C8 E5", "M303 U1 C8 E-1", ""};
+#define PID_CMD {"M303 U1 C8 E0", "M303 U1 C8 E1", "M303 U1 C8 E2", "M303 U1 C8 E3", "M303 U1 C8 E4", "M303 U1 C8 E5", "M303 U1 C8 E-1", ""}
 #define PID_PROCESS_TIMEOUT (15 * 60000)  // (MilliSeconds, 1 minute = 60000 MilliSeconds)
 
 /**
- * M600 ; emulate M600
- * The TFT intercepts the M600 gcode (filament change) and emulates the logic instead of demanding it to Marlin firmware.
+ * M600: Emulate M600
+ * The TFT intercepts the M600 gcode (filament change) and emulates the logic instead of passing it to Marlin firmware.
  *
  * NOTE: Enable it, in case Marlin firmware does not properly support M600 on the mainboard.
  */
 #define EMULATE_M600 true  // To enabled: true | To disabled: false (Default: true)
 
 /**
- * M601 ; pause print
+ * M601: Pause Print
  * PrusaSlicer can add M601 on certain height.
  * Acts here like manual pause.
  */
 #define NOZZLE_PAUSE_M601
 
 /**
- * M701, M702 ; Marlin filament load unload gcodes support
+ * M701, M702: Marlin filament load unload gcodes support
  * FILAMENT_LOAD_UNLOAD_GCODES option on Marlin configuration_adv.h need to be uncommented.
  * Adds a submenu to the movement menu for selecting load and unload actions.
  */

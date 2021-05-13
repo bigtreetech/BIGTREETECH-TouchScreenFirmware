@@ -30,7 +30,7 @@ typedef enum
 // Config version support
 // change if new elements/keywords are added/removed/changed in the configuration.h Format YYYYMMDD
 // this number should match CONFIG_VERSION in configuration.h
-#define CONFIG_SUPPPORT 20210321
+#define CONFIG_SUPPPORT 20210513
 
 #define FONT_FLASH_SIGN       20200908  // (YYYYMMDD) change if fonts require updating
 #define CONFIG_FLASH_SIGN     20210509  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
@@ -45,8 +45,9 @@ typedef enum
 #define MAX_EXT_COUNT         6
 #define MAX_HOTEND_COUNT      6
 #define MAX_HEATER_COUNT      (2 + MAX_HOTEND_COUNT)  // chamber + bed + hotend
-#define MAX_FAN_CTRL_COUNT    2
-#define MAX_FAN_COUNT         (6 + MAX_FAN_CTRL_COUNT)
+#define MAX_COOLING_FAN_COUNT 6
+#define MAX_CRTL_FAN_COUNT    2
+#define MAX_FAN_COUNT         (MAX_COOLING_FAN_COUNT + MAX_CRTL_FAN_COUNT)
 
 #define AXIS_NUM              (TOTAL_AXIS - 1)
 #define SPEED_COUNT            3
@@ -128,7 +129,7 @@ typedef struct
   uint8_t  chamber_en;
   uint8_t  ext_count;
   uint8_t  fan_count;
-  uint8_t  fan_ctrl_count;
+  uint8_t  ctrl_fan_en;
   uint16_t max_temp[MAX_HEATER_COUNT];  // chamber + bed + hotend
   uint16_t min_ext_temp;
   uint8_t  fan_max[MAX_FAN_COUNT];
