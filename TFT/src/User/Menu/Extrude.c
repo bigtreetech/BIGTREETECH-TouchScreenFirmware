@@ -34,7 +34,7 @@ void menuExtrude(void)
   };
 
   KEY_VALUES key_num = KEY_IDLE;
-  float eSaved = 0.0f;
+  float eBackup = 0.0f;
   float eTemp  = 0.0f;
   bool eRelative = false;
   uint32_t feedrate = 0;
@@ -43,7 +43,7 @@ void menuExtrude(void)
   {
     loopProcess();
   }
-  extrudeCoordinate = eTemp = eSaved = coordinateGetAxisTarget(E_AXIS);
+  extrudeCoordinate = eTemp = eBackup = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
   feedrate = coordinateGetFeedRate();
   eRelative = eGetRelative();
 
@@ -133,10 +133,7 @@ void menuExtrude(void)
       if (curExtruder_index != heatGetCurrentTool())
         storeCmd("%s\n", tool_change[curExtruder_index]);
 
-      if (!warmupTemperature(curExtruder_index, extrusionMinTemp_OK))
-      {
-      }
-      else
+      if (warmupTemperature(curExtruder_index, &extrusionMinTemp_OK))
       {
         extrudeCoordinate = eTemp;
         storeCmd("G0 E%.5f F%d\n", extrudeCoordinate, infoSettings.ext_speed[itemSpeed_index]);
@@ -148,7 +145,7 @@ void menuExtrude(void)
     loopProcess();
   }
 
-  mustStoreCmd("G92 E%.5f\n", eSaved);
+  mustStoreCmd("G92 E%.5f\n", eBackup);
   mustStoreCmd("G0 F%d\n", feedrate);
 
   if (eRelative)

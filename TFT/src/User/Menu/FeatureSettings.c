@@ -32,6 +32,15 @@ const char *const itemNotificationType[ITEM_NOTIFICATION_TYPE_NUM] =
   "TOAST"
 };
 
+const char *const itemSortBy[SORT_BY_COUNT] =
+{
+  //item value text(only for custom value)
+  "Date ▼",
+  "Date ▲",
+  "Name ▲",
+  "Name ▼",
+};
+
 //
 //add key number index of the items
 //
@@ -40,6 +49,7 @@ typedef enum
   SKEY_TERMINAL_ACK = 0,
   SKEY_PERSISTENT_INFO,
   SKEY_FILE_LIST_MODE,
+  SKEY_FILE_SORT_BY,
   SKEY_ACK_NOTIFICATION,
   SKEY_EMULATE_M600,
   SKEY_SERIAL_ALWAYS_ON,
@@ -93,6 +103,10 @@ void updateFeatureSettings(uint8_t item_index)
 
     case SKEY_FILE_LIST_MODE:
       infoSettings.file_listmode = (infoSettings.file_listmode + 1) % ITEM_TOGGLE_NUM;
+      break;
+
+      case SKEY_FILE_SORT_BY:
+      infoSettings.files_sort_by = (infoSettings.files_sort_by + 1) % SORT_BY_COUNT;
       break;
 
     case SKEY_ACK_NOTIFICATION:
@@ -207,6 +221,10 @@ void loadFeatureSettings(LISTITEM * item, uint16_t item_index, uint8_t itemPos)
         item->icon = iconToggle[infoSettings.file_listmode];
         break;
 
+      case SKEY_FILE_SORT_BY:
+        setDynamicTextValue(itemPos, (char *)itemSortBy[infoSettings.files_sort_by]);
+        break;
+
       case SKEY_ACK_NOTIFICATION:
         setDynamicTextValue(itemPos, (char *)itemNotificationType[infoSettings.ack_notification]);
         break;
@@ -313,6 +331,7 @@ void menuFeatureSettings(void)
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_TERMINAL_ACK,           LABEL_BACKGROUND},
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_PERSISTENT_INFO,        LABEL_BACKGROUND},
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_FILE_LIST_MODE,         LABEL_BACKGROUND},
+    {CHARICON_BLANK,       LIST_CUSTOMVALUE,   LABEL_FILE_SORT_BY,           LABEL_DYNAMIC},
     {CHARICON_BLANK,       LIST_CUSTOMVALUE,   LABEL_ACK_NOTIFICATION,       LABEL_DYNAMIC},
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_EMULATE_M600,           LABEL_BACKGROUND},
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_SERIAL_ALWAYS_ON,       LABEL_BACKGROUND},

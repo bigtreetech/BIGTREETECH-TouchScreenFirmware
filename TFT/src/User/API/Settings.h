@@ -33,8 +33,8 @@ typedef enum
 #define CONFIG_SUPPPORT 20210321
 
 #define FONT_FLASH_SIGN       20200908  // (YYYYMMDD) change if fonts require updating
-#define CONFIG_FLASH_SIGN     20210422  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
-#define LANGUAGE_FLASH_SIGN   20210417  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
+#define CONFIG_FLASH_SIGN     20210509  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
+#define LANGUAGE_FLASH_SIGN   20210509  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
 #define ICON_FLASH_SIGN       20210217  // (YYYYMMDD) change if any icon(s) is added or removed
 
 #define FONT_CHECK_SIGN       (FONT_FLASH_SIGN + WORD_UNICODE)
@@ -49,17 +49,17 @@ typedef enum
 #define MAX_FAN_COUNT         (6 + MAX_FAN_CTRL_COUNT)
 
 #define AXIS_NUM              (TOTAL_AXIS - 1)
-#define SPEED_COUNT           3
-#define PREHEAT_COUNT         6
+#define SPEED_COUNT            3
+#define PREHEAT_COUNT          6
 #define CUSTOM_GCODES_COUNT   15
 #define MAX_STRING_LENGTH     20
-#define MAX_LABEL_LENGTH      7
+#define MAX_LABEL_LENGTH       7
 #define MAX_GCODE_NAME_LENGTH 24
 #define MAX_GCODE_LENGTH      75
 
-#define MIN_STRING_LENGTH     3
-#define MIN_LABEL_LENGTH      3
-#define MIN_GCODE_LENGTH      3
+#define MIN_STRING_LENGTH      3
+#define MIN_LABEL_LENGTH       3
+#define MIN_GCODE_LENGTH       3
 
 #define DISABLED  0
 #define ENABLED   1
@@ -105,6 +105,7 @@ typedef struct
   uint8_t leveling_invert_y_axis;
   uint8_t persistent_info;
   uint8_t file_listmode;
+  uint8_t files_sort_by;
   uint8_t ack_notification;
   uint8_t notification_m117;
   uint8_t emulate_m600;

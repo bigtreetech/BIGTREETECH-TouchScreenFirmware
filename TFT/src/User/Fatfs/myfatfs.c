@@ -4,6 +4,42 @@
 
 FATFS fatfs[FF_VOLUMES];  // FATFS work area
 
+/**
+ * @brief  Compare file/folder details according to sort settings
+ *
+ * @param name1 name of first file/folder
+ * @param date1 date/time for first file/folder
+ * @param name2 name of second file/folder
+ * @param date2 date/time for second file/folder
+ */
+bool compareFile(char * name1, int32_t date1, char * name2, int32_t date2)
+{
+  // sort by date
+  if (infoSettings.files_sort_by <= SORT_DATE_OLD_FIRST)
+  {
+    // file with most recent date displays first in newest first and last in oldest first
+    return ((date1 > date2) == infoSettings.files_sort_by % 2);
+  }
+  // sort by name
+  else
+  {
+    uint16_t maxlen = (strlen(name1) < strlen(name2)) ? strlen(name1) : strlen(name2);
+
+    // compare each character
+    for (uint16_t i = 0; i < maxlen; i++)
+    {
+      // convert all upper case characters to lower case
+      char a = (name1[i] > 64 && name1[i] < 91) ? (name1[i] + 32) : name1[i];
+      char b = (name2[i] > 64 && name2[i] < 91) ? (name2[i] + 32) : name2[i];
+
+      if (a != b)
+        return ((a < b) == infoSettings.files_sort_by % 2);
+    }
+    // file with longer name displays last in ascending order and first in descending order
+    return ((strlen(name1) < strlen(name2)) == infoSettings.files_sort_by % 2);
+  }
+}
+
 /*
  mount SD Card from Fatfs
  true: mount ok
@@ -32,7 +68,8 @@ bool scanPrintFilesFatFs(void)
   FILINFO finfo;
   uint16_t len = 0;
   DIR dir;
-  uint8_t i = 0;
+  int32_t folderDate[FILE_NUM];
+  int32_t fileDate[FILE_NUM];
 
   clearInfoFile();
 
@@ -57,6 +94,10 @@ bool scanPrintFilesFatFs(void)
       infoFile.folder[infoFile.folderCount] = malloc(len);
       if (infoFile.folder[infoFile.folderCount] == NULL)
         break;
+
+      // copy date/time modified
+      folderDate[infoFile.folderCount] = (finfo.fdate * 100000) + finfo.ftime;
+      // copy folder name
       memcpy(infoFile.folder[infoFile.folderCount++], finfo.fname, len);
     }
     else
@@ -70,23 +111,52 @@ bool scanPrintFilesFatFs(void)
       infoFile.file[infoFile.fileCount] = malloc(len);
       if (infoFile.file[infoFile.fileCount] == NULL)
         break;
+
+      // copy date/time modified
+      fileDate[infoFile.fileCount] = (finfo.fdate * 100000) + finfo.ftime;
+      // copy file name
       memcpy(infoFile.file[infoFile.fileCount++], finfo.fname, len);
     }
   }
 
   f_closedir(&dir);
 
-  for (i = 0; i < infoFile.folderCount / 2; i++)
+  // sort folder list
+  for (int i = 1; i < infoFile.folderCount; i++)
   {
-    char *temp = infoFile.folder[i];
-    infoFile.folder[i] = infoFile.folder[infoFile.folderCount - i - 1];
-    infoFile.folder[infoFile.folderCount - i - 1] = temp;
+    // compare folders with each other
+    for (int j = i;
+         j > 0 && compareFile(infoFile.folder[j - 1], folderDate[j - 1], infoFile.folder[j], folderDate[j]);
+         j--)
+    {
+      // swap places if not in order
+      char * tmp = infoFile.folder[j - 1];
+      infoFile.folder[j - 1] = infoFile.folder[j];
+      infoFile.folder[j] = tmp;
+
+      int32_t tmpInt = folderDate[j - 1];
+      folderDate[j - 1] = folderDate[j];
+      folderDate[j] = tmpInt;
+    }
   }
-  for (i = 0; i < infoFile.fileCount / 2; i++)
+
+  // sort file list
+  for (int i = 1; i < infoFile.fileCount; i++)
   {
-    char *temp = infoFile.file[i];
-    infoFile.file[i] = infoFile.file[infoFile.fileCount - i - 1];
-    infoFile.file[infoFile.fileCount - i - 1] = temp;
+    // compare files with each other
+    for (int j = i;
+         j > 0 && compareFile(infoFile.file[j - 1], fileDate[j - 1], infoFile.file[j], fileDate[j]);
+         j--)
+    {
+      // swap places
+      char * tmp = infoFile.file[j - 1];
+      infoFile.file[j - 1] = infoFile.file[j];
+      infoFile.file[j] = tmp;
+
+      int32_t tmpInt = fileDate[j - 1];
+      fileDate[j - 1] = fileDate[j];
+      fileDate[j] = tmpInt;
+    }
   }
   return true;
 }
