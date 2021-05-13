@@ -16,7 +16,7 @@ extern "C" {
 #define LANG_KEY_TERMINAL_ACK                 "label_terminal_ack:"
 #define LANG_KEY_PERSISTENT_INFO              "label_persistent_info:"
 #define LANG_KEY_FILE_LIST_MODE               "label_file_list_mode:"
-#define LANG_KEY_FILE_SORT_BY                 "label_files_sort_by:"
+#define LANG_KEY_FILE_SORT_BY                 "label_file_sort_by:"
 #define LANG_KEY_ACK_NOTIFICATION             "label_ack_notification:"
 #define LANG_KEY_EMULATE_M600                 "label_emulate_m600:"
 #define LANG_KEY_SERIAL_ALWAYS_ON             "label_serial_always_on:"
