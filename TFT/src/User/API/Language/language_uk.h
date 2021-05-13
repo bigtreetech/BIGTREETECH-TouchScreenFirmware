@@ -9,6 +9,7 @@
     #define STRING_TERMINAL_ACK           "ACK терміналу (°С)"
     #define STRING_PERSISTENT_INFO        "Нагрівання в інфостроці"
     #define STRING_FILE_LIST_MODE         "Файли в режимі рядків"
+    #define STRING_FILE_SORT_BY           "Sort files by"
     #define STRING_ACK_NOTIFICATION       "ACK стиль повідомлення"
     #define STRING_EMULATE_M600           "Emulate M600"
     #define STRING_SERIAL_ALWAYS_ON       "Serial Always ON"

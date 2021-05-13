@@ -609,6 +609,10 @@ void parseConfigKey(uint16_t index)
       infoSettings.file_listmode = getOnOff();
       break;
 
+    case C_INDEX_FILES_SORT_BY:
+      SET_VALID_INT_VALUE(infoSettings.files_sort_by, 0, SORT_BY_COUNT);
+      break;
+
     case C_INDEX_ACK_NOTIFICATION:
       SET_VALID_INT_VALUE(infoSettings.ack_notification, 0, 2);
       break;

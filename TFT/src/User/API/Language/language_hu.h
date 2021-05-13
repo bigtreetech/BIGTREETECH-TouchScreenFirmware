@@ -9,6 +9,7 @@
     #define STRING_TERMINAL_ACK           "ACK Megjelenítése"
     #define STRING_PERSISTENT_INFO        "Állandó állapotinfó"
     #define STRING_FILE_LIST_MODE         "Fájlnéző listamód"
+    #define STRING_FILE_SORT_BY           "Sort files by"
     #define STRING_ACK_NOTIFICATION       "ACK Értesítési stílus"
     #define STRING_EMULATE_M600           "Emulált M600"
     #define STRING_SERIAL_ALWAYS_ON       "Soros port folytonos"

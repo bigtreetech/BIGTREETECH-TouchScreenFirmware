@@ -9,6 +9,7 @@
     #define STRING_TERMINAL_ACK           "Show ACK in Terminal"
     #define STRING_PERSISTENT_INFO        "Trvalé info o stave"
     #define STRING_FILE_LIST_MODE         "Zobraziť súbory ako zoznam"
+    #define STRING_FILE_SORT_BY           "Sort files by"
     #define STRING_ACK_NOTIFICATION       "ACK notification style"
     #define STRING_EMULATE_M600           "Emulate M600"
     #define STRING_SERIAL_ALWAYS_ON       "Serial Always ON"
