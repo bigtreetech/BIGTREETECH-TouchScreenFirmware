@@ -514,7 +514,6 @@ void sendQueueCmd(void)
                 // case the function loopProcess() is invoked by the following function printPause()
                 Serial_Puts(SERIAL_PORT_2, "ok\n");
                 purgeLastCmd(true, avoid_terminal);
-
                 printPause(true, PAUSE_NORMAL);
                 return;
               }
@@ -530,7 +529,6 @@ void sendQueueCmd(void)
                 // case the function loopProcess() is invoked by the following function printAbort()
                 Serial_Puts(SERIAL_PORT_2, "ok\n");
                 purgeLastCmd(true, avoid_terminal);
-
                 printAbort();
                 return;
               }
@@ -905,7 +903,7 @@ void sendQueueCmd(void)
           if (cmd_seen('Z')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_Z + i, k);
 
           i = (cmd_seen('T')) ? cmd_value() : 0;
-          if(cmd_seen('E')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_E0 + i, k);
+          if (cmd_seen('E')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_E0 + i, k);
           break;
         }
 

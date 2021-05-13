@@ -110,7 +110,7 @@ void menuInfo(void)
 
   // GUI_HLine(0, clocks[5].y + BYTE_HEIGHT, LCD_WIDTH);
 
-  //spi flash info
+  // spi flash info
   float usedMB = (float)FLASH_USED/1048576;
   sprintf(buf, "Used %.2f%% (%.2fMB/%uMB)", flashUsedPercentage(), usedMB, (W25Qxx_ReadCapacity()/1048576));
 
@@ -124,8 +124,9 @@ void menuInfo(void)
     {start_x, top_y + 6*BYTE_HEIGHT, LCD_WIDTH, top_y + 7*BYTE_HEIGHT},
     {start_x, top_y + 7*BYTE_HEIGHT, LCD_WIDTH, top_y + 8*BYTE_HEIGHT},
     {start_x, top_y + 8*BYTE_HEIGHT, LCD_WIDTH, top_y + 9*BYTE_HEIGHT},
-    };
-  //draw titles
+  };
+
+  // draw titles
   GUI_DispString(0, version[0].y0, (uint8_t *)"System  :");
   GUI_DispString(0, version[1].y0, (uint8_t *)"Machine :");
   GUI_DispString(0, version[2].y0, (uint8_t *)"Board   :");
@@ -137,7 +138,7 @@ void menuInfo(void)
     GUI_DispString(0, version[6].y0, (uint8_t *)"IP      :");
   }
 
-  //draw info
+  // draw info
   GUI_SetColor(0xDB40);
   GUI_DispStringInPrectEOL(&version[0], firmare_name);
   GUI_DispStringInPrectEOL(&version[1], machine_type);
