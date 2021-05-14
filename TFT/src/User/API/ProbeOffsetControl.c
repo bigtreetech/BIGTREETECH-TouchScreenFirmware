@@ -17,7 +17,7 @@ void probeOffsetEnable(bool skipZOffset, float shim)
 
   if (infoSettings.xy_offset_probing)  // if HW allows nozzle to reach XY probing point
   {
-    probeHeightRelative();                                  // set relative position mode
+    probeHeightRelative();                                     // set relative position mode
     mustStoreCmd("G1 X%.2f Y%.2f\n",
                  getParameter(P_PROBE_OFFSET, AXIS_INDEX_X),
                  getParameter(P_PROBE_OFFSET, AXIS_INDEX_Y));  // move nozzle to XY probing point and set feedrate
@@ -88,47 +88,30 @@ float probeOffsetResetValue(void)
   return z_offset_value;
 }
 
-// Decrease Z offset value
-float probeOffsetDecreaseValue(float unit)
+// Update Z offset value
+float probeOffsetUpdateValue(float unit, int8_t direction)
 {
-  if (z_offset_value > PROBE_Z_OFFSET_MIN_VALUE)
+  float diff;
+
+  if (direction < 0)
   {
-    float diff = z_offset_value - PROBE_Z_OFFSET_MIN_VALUE;
+    if (z_offset_value <= PROBE_Z_OFFSET_MIN_VALUE)
+      return z_offset_value;
 
-    unit = (diff > unit) ? unit : diff;
-    z_offset_value -= unit;
-    mustStoreCmd("M851 Z%.2f\n", z_offset_value);  // set Z offset value
-    mustStoreCmd("G1 Z%.2f\n", -unit);             // move nozzle
+    diff = z_offset_value - PROBE_Z_OFFSET_MIN_VALUE;
   }
-
-  return z_offset_value;
-}
-
-// Increase Z offset value
-float probeOffsetIncreaseValue(float unit)
-{
-  if (z_offset_value < PROBE_Z_OFFSET_MAX_VALUE)
-  {
-    float diff = PROBE_Z_OFFSET_MAX_VALUE - z_offset_value;
-
-    unit = (diff > unit) ? unit : diff;
-    z_offset_value += unit;
-    mustStoreCmd("M851 Z%.2f\n", z_offset_value);  // set Z offset value
-    mustStoreCmd("G1 Z%.2f\n", unit);              // move nozzle
-  }
-
-  return z_offset_value;
-}
-
-// Update Z offset value by encoder
-float probeOffsetUpdateValueByEncoder(float unit, int8_t direction)
-{
-  float overall_unit = (direction > 0) ? (direction * unit) : (-direction * unit);  // always positive unit
-
-  if (direction < 0)  // if negative encoder value, decrease the value. Otherwise increase the value
-    probeOffsetDecreaseValue(overall_unit);
   else
-    probeOffsetIncreaseValue(overall_unit);
+  {
+    if (z_offset_value >= PROBE_Z_OFFSET_MAX_VALUE)
+      return z_offset_value;
+
+    diff = PROBE_Z_OFFSET_MAX_VALUE - z_offset_value;
+  }
+
+  unit = ((diff > unit) ? unit : diff) * direction;
+  z_offset_value += unit;
+  mustStoreCmd("M851 Z%.2f\n", z_offset_value);  // set Z offset value
+  mustStoreCmd("G1 Z%.2f\n", unit);              // move nozzle
 
   return z_offset_value;
 }

@@ -49,7 +49,7 @@ void Hardware_GenericInit(void)
   #ifdef SERIAL_DEBUG_PORT
     Serial_ReSourceInit();  // Initialize serial ports first if debugging is enabled
   #endif
-  
+
   LCD_RefreshDirection();  // refresh display direction after reading settings
   scanUpdates();           // scan icon, fonts and config files
   checkflashSign();        // check font/icon/config signature in SPI flash for update

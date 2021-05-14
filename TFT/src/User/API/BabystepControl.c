@@ -38,6 +38,7 @@ float babystepResetValue(void)
       mustStoreCmd("G43.2 Z%.2f\n", -(BABYSTEP_MAX_STEP * neg));
     else
       mustStoreCmd("M290 Z%.2f\n", -(BABYSTEP_MAX_STEP * neg));
+
     processed_baby_step += BABYSTEP_MAX_STEP;
   }
 
@@ -48,6 +49,7 @@ float babystepResetValue(void)
       mustStoreCmd("G43.2 Z%.2f\n", -(last_unit * neg));
     else
       mustStoreCmd("M290 Z%.2f\n", -(last_unit * neg));
+
     processed_baby_step += last_unit;
   }
 
@@ -56,51 +58,33 @@ float babystepResetValue(void)
   return babystep_value;
 }
 
-// Decrease babystep value
-float babystepDecreaseValue(float unit)
+// Update babystep value
+float babystepUpdateValue(float unit, int8_t direction)
 {
-  if (babystep_value > BABYSTEP_MIN_VALUE)
+  float diff;
+
+  if (direction < 0)
   {
-    float diff = babystep_value - BABYSTEP_MIN_VALUE;
+    if (babystep_value <= BABYSTEP_MIN_VALUE)
+      return babystep_value;
 
-    unit = (diff > unit) ? unit : diff;
-    if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE)
-      mustStoreCmd("G43.2 Z-%.2f\n", unit);
-    else
-      mustStoreCmd("M290 Z-%.2f\n", unit);
-    babystep_value -= unit;
+    diff = babystep_value - BABYSTEP_MIN_VALUE;
   }
-
-  return babystep_value;
-}
-
-// Increase babystep value
-float babystepIncreaseValue(float unit)
-{
-  if (babystep_value < BABYSTEP_MAX_VALUE)
-  {
-    float diff = BABYSTEP_MAX_VALUE - babystep_value;
-
-    unit = (diff > unit) ? unit : diff;
-    if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE)
-      mustStoreCmd("G43.2 Z%.2f\n", unit);
-    else
-      mustStoreCmd("M290 Z%.2f\n", unit);
-    babystep_value += unit;
-  }
-
-  return babystep_value;
-}
-
-// Update babystep value by encoder
-float babystepUpdateValueByEncoder(float unit, int8_t direction)
-{
-  float overall_unit = (direction > 0) ? (direction * unit) : (-direction * unit);  // always positive unit
-
-  if (direction < 0)  // if negative encoder value, decrease the value. Otherwise increase the value
-    babystepDecreaseValue(overall_unit);
   else
-    babystepIncreaseValue(overall_unit);
+  {
+    if (babystep_value >= BABYSTEP_MAX_VALUE)
+      return babystep_value;
+
+    diff = BABYSTEP_MAX_VALUE - babystep_value;
+  }
+
+  unit = ((diff > unit) ? unit : diff) * direction;
+  babystep_value += unit;
+
+  if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE)
+    mustStoreCmd("G43.2 Z%.2f\n", unit);
+  else
+    mustStoreCmd("M290 Z%.2f\n", unit);
 
   return babystep_value;
 }
