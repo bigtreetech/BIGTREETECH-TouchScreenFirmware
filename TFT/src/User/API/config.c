@@ -899,7 +899,7 @@ void parseConfigKey(uint16_t index)
         break;
     #endif
 
-    //----------------------------Power Loss Recovery & BTT UPS Settings (if connected to TFT controller)
+    //----------------------------Power Loss Recovery & BTT UPS Settings
 
     #ifdef BTT_MINI_UPS
       case C_INDEX_POWERLOSS_EN:

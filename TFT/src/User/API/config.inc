@@ -95,7 +95,7 @@ X_CONFIG(RUNOUT)
 X_CONFIG(RUNOUT_LOGIC)
 X_CONFIG(RUNOUT_NOISE)
 X_CONFIG(RUNOUT_DISTANCE)
-//-----------------------------Power Loss Recovery & BTT UPS Settings (if connected to TFT Controller)
+//-----------------------------Power Loss Recovery & BTT UPS Settings
 X_CONFIG(POWERLOSS_EN)
 X_CONFIG(POWERLOSS_HOME)
 X_CONFIG(POWERLOSS_ZRAISE)
