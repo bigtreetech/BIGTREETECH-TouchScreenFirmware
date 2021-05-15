@@ -134,7 +134,7 @@ void drawBackground(const GUI_RECT *rect, uint16_t bgColor, uint16_t edgeDistanc
 }
 
 void drawStandardValue(const GUI_RECT *rect, VALUE_TYPE valType, const void *val, bool largeFont,
-                             uint16_t color, uint16_t bgColor, uint16_t edgeDistance, bool clearBgColor)
+                       uint16_t color, uint16_t bgColor, uint16_t edgeDistance, bool clearBgColor)
 {
   uint16_t origColor = GUI_GetColor();
   uint16_t origBgColor = GUI_GetBkColor();
@@ -183,12 +183,12 @@ void drawStandardValue(const GUI_RECT *rect, VALUE_TYPE valType, const void *val
   GUI_SetBkColor(origBgColor);
 }
 
-const bool warmupTemperature(uint8_t toolIndex, void (* callback)(void))
+bool warmupTemperature(uint8_t toolIndex, void (* callback)(void))
 {
   #define TEMP_OFFSET 5  // offset temperature to avoid denial of extrusion/retraction due to the nozzle temperature lag
 
   if (heatGetCurrentTemp(toolIndex) < infoSettings.min_ext_temp - TEMP_OFFSET)
-  { // low temperature warning 
+  { // low temperature warning
     char tempMsg[120];
     LABELCHAR(tempStr, LABEL_EXT_TEMPLOW);
 
@@ -342,7 +342,7 @@ void percentageReDraw(uint8_t itemIndex, bool skipHeader)
 }
 
 // Edit an integer value in a standard menu
-const int32_t editIntValue(int32_t minValue, int32_t maxValue, int32_t resetValue, int32_t value)
+int32_t editIntValue(int32_t minValue, int32_t maxValue, int32_t resetValue, int32_t value)
 {
   int32_t val;
   char tempstr[30];
@@ -356,7 +356,7 @@ const int32_t editIntValue(int32_t minValue, int32_t maxValue, int32_t resetValu
 }
 
 // Edit a float value in a standard menu
-const float editFloatValue(float minValue, float maxValue, float resetValue, float value)
+float editFloatValue(float minValue, float maxValue, float resetValue, float value)
 {
   float val;
   char tempstr[30];
