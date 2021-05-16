@@ -199,7 +199,7 @@ const bool warmupTemperature(uint8_t toolIndex, void (* callback)(void))
       strcat(tempMsg, "\n");
       sprintf(tempStr, (char *) textSelect(LABEL_HEAT_HOTEND), infoSettings.min_ext_temp);
       strcat(tempMsg, tempStr);
-
+      
       setDialogText(LABEL_WARNING, (uint8_t *) tempMsg, LABEL_CONFIRM, LABEL_CANCEL);
       showDialog(DIALOG_TYPE_ERROR, callback, NULL, NULL);
     }
