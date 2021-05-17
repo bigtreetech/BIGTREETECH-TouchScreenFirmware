@@ -360,7 +360,6 @@ void menuPrinting(void)
   float usedLayer = 0;
   float prevLayer = 0;
   bool layerDrawEnabled = true;
-  bool microLayer = false;
   bool lastPause = isPaused();
   bool lastPrinting = isPrinting();
 
