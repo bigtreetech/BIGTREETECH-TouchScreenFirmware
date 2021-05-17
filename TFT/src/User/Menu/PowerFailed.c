@@ -134,7 +134,7 @@ bool powerOffGetData(void)
   {
     if (infoBreakPoint.fan[i] != 0)
     {
-      mustStoreCacheCmd("%s S%d\n", fanCmd[i], infoBreakPoint.fan[i]);
+      mustStoreCacheCmd(fanCmd[i], infoBreakPoint.fan[i]);
     }
   }
 

@@ -34,7 +34,7 @@ void menuFan(void)
   fanSetSpeed(fan_index, fanGetCurSpeed(fan_index));
   lastFan = (LASTFAN) {fanGetCurSpeed(fan_index), fanGetSetSpeed(fan_index)};
 
-  if ((infoSettings.fan_count + infoSettings.fan_ctrl_count) > 1)
+  if ((infoSettings.fan_count + infoSettings.ctrl_fan_en) > 1)
     fanItems.items[KEY_ICON_4] = itemFan[0];
   else
     fanItems.items[KEY_ICON_4] = itemFan[1];
@@ -96,16 +96,18 @@ void menuFan(void)
         break;
 
       case KEY_ICON_4:
-        if ((infoSettings.fan_count + infoSettings.fan_ctrl_count) > 1)
+        if ((infoSettings.fan_count + infoSettings.ctrl_fan_en) > 1)
         {
-          fan_index = (fan_index + 1) % (infoSettings.fan_count + infoSettings.fan_ctrl_count);
+          do
+          {
+            fan_index = (fan_index + 1) % MAX_FAN_COUNT;
+          } while (!fanIsValid(fan_index));
 
           fanReDraw(fan_index, false);
         }
         else
         {
           fanSetSpeed(fan_index, infoSettings.fan_max[fan_index] / 2);  // 50%
-
           fanReDraw(fan_index, true);
         }
         break;

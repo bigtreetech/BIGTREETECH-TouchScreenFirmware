@@ -10,7 +10,6 @@
 
 /************************************************************************/
 
-extern SCROLL titleScroll;
 extern const GUI_RECT titleRect;
 
 // Scan files in RRF
@@ -137,7 +136,7 @@ void menuCallMacro(void)
   while (infoMenu.menu[infoMenu.cur] == menuCallMacro)
   {
     GUI_SetBkColor(infoSettings.title_bg_color);
-    Scroll_DispString(&titleScroll, LEFT);
+    Scroll_DispString(&scrollLine, LEFT);
     GUI_SetBkColor(infoSettings.bg_color);
 
     key_num = listViewGetSelectedIndex();
@@ -199,7 +198,7 @@ void menuCallMacro(void)
                        &infoFile.cur_page, false, NULL, macroListDraw);
 
       // set scrolling title text
-      Scroll_CreatePara(&titleScroll, (uint8_t *)infoFile.title, &titleRect);
+      Scroll_CreatePara(&scrollLine, (uint8_t *)infoFile.title, &titleRect);
       GUI_SetBkColor(infoSettings.title_bg_color);
       GUI_ClearRect(0, 0, LCD_WIDTH, TITLE_END_Y);
       GUI_SetBkColor(infoSettings.bg_color);

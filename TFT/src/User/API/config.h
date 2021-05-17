@@ -57,7 +57,7 @@ extern "C" {
 #define CONFIG_HEATED_CHAMBER         "heated_chamber:"
 #define CONFIG_EXT_COUNT              "ext_count:"
 #define CONFIG_FAN_COUNT              "fan_count:"
-#define CONFIG_FAN_CTRL_COUNT         "fan_ctrl_count:"
+#define CONFIG_CONTROLLER_FAN         "controller_fan:"
 #define CONFIG_MAX_TEMP               "max_temp:"
 #define CONFIG_MIN_TEMP               "min_temp:"
 #define CONFIG_FAN_MAX                "fan_max:"

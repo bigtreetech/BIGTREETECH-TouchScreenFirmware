@@ -552,19 +552,9 @@ void parseACK(void)
       // parse and store M710, controller fan
       else if (ack_seen("M710"))
       {
-        uint8_t i = 0;
-        if (ack_seen("S"))
-        {
-          i = fanGetTypID(0, FAN_TYPE_CTRL_S);
-          fanSetCurSpeed(i, ack_value());
-          fanQuerySetWait(false);
-        }
-        if (ack_seen("I"))
-        {
-          i = fanGetTypID(0, FAN_TYPE_CTRL_I);
-          fanSetCurSpeed(i, ack_value());
-          fanQuerySetWait(false);
-        }
+        if (ack_seen("S")) fanSetCurSpeed(MAX_COOLING_FAN_COUNT, ack_value());
+        if (ack_seen("I")) fanSetCurSpeed(MAX_COOLING_FAN_COUNT + 1, ack_value());
+        ctrlFanQuerySetWait(false);
       }
       // parse pause message
       else if (!infoMachineSettings.promptSupport && ack_seen("paused for user"))
