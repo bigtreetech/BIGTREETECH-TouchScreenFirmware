@@ -449,7 +449,7 @@ Auto detect fw type + separate config.ini for easier setup
 - Print status monitoring with mid-print tuneing/pausing
 - Macro support
 - Print from onboard/external SD card
-- Please see [Feature request #1791:](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/issues/1791) for more information.
+- Please see [Feature request #1791](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/issues/1791) for more information.
 
 Menu system for macros
 - Thumbnail and menu system support for onboard gcodes
