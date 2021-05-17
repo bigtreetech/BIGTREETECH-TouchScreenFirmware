@@ -105,6 +105,8 @@ In order the TFT firmware is able to provide all of its functionalities/features
 
 `REPORT_FAN_CHANGE` (in Configuration_adv.h)
 
+`AUTO_REPORT_POSITION` (in Configuration_adv.h)
+
 
 
 **Options to support printing from onboard SD:**
