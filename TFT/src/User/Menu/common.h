@@ -25,6 +25,8 @@ typedef enum
   VALUE_STRING,
 } VALUE_TYPE;
 
+extern SCROLL scrollLine;
+
 extern uint8_t currentTool;
 extern uint8_t currentFan;
 extern uint8_t currentSpeedID;
@@ -47,6 +49,7 @@ extern const float extlenSteps[ITEM_EXT_LEN_NUM];
 extern const LABEL itemToggle[ITEM_TOGGLE_NUM];
 extern const uint16_t iconToggle[ITEM_TOGGLE_NUM];
 
+// Check if next screen update is due
 bool nextScreenUpdate(uint32_t duration);
 
 void drawBorder(const GUI_RECT *rect, uint16_t color, uint16_t edgeDistance);

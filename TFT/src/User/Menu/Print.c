@@ -6,7 +6,7 @@
 // error labels for files/Volume errors
 const int16_t labelVolumeError[3] = {LABEL_READ_TFTSD_ERROR, LABEL_READ_U_DISK_ERROR, LABEL_READ_ONBOARDSD_ERROR};
 static bool list_mode = true;
-SCROLL titleScroll;
+
 const GUI_RECT titleRect = {10, (TITLE_END_Y - BYTE_HEIGHT) / 2, LCD_WIDTH - 10, (TITLE_END_Y - BYTE_HEIGHT) / 2 + BYTE_HEIGHT};
 
 const GUI_RECT gcodeRect[NUM_PER_PAGE] = {
@@ -196,7 +196,7 @@ void menuPrintFromSource(void)
   while (infoMenu.menu[infoMenu.cur] == menuPrintFromSource)
   {
     GUI_SetBkColor(infoSettings.title_bg_color);
-    Scroll_DispString(&titleScroll, LEFT);
+    Scroll_DispString(&scrollLine, LEFT);
     GUI_SetBkColor(infoSettings.bg_color);
 
     if (list_mode != true) // select item from icon view
@@ -293,7 +293,7 @@ void menuPrintFromSource(void)
                        &infoFile.cur_page, false, NULL, gocdeListDraw);
       }
 
-      Scroll_CreatePara(&titleScroll, (uint8_t *)infoFile.title, &titleRect);
+      Scroll_CreatePara(&scrollLine, (uint8_t *)infoFile.title, &titleRect);
       GUI_SetBkColor(infoSettings.title_bg_color);
       GUI_ClearRect(0, 0, LCD_WIDTH, TITLE_END_Y);
       GUI_SetBkColor(infoSettings.bg_color);

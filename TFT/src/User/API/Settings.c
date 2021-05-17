@@ -64,7 +64,7 @@ void infoSettingsReset(void)
   infoSettings.chamber_en             = DISABLE;
   infoSettings.ext_count              = EXTRUDER_NUM;
   infoSettings.fan_count              = FAN_NUM;
-  infoSettings.fan_ctrl_count         = FAN_CTRL_NUM;
+  infoSettings.ctrl_fan_en            = ENABLE_CTRL_FAN;
   infoSettings.min_ext_temp           = PREVENT_COLD_EXTRUSION_MINTEMP;
   infoSettings.auto_load_leveling     = AUTO_SAVE_LOAD_BL_VALUE;
   infoSettings.touchmi_sensor         = TOUCHMI_SENSOR_VALUE;
@@ -191,8 +191,6 @@ void initMachineSetting(void)
   infoMachineSettings.long_filename_support   = DISABLED;
   infoMachineSettings.babyStepping            = DISABLED;
   infoMachineSettings.softwareEndstops        = ENABLED;
-
-  fanControlInit();
 }
 
 void setupMachine(void)

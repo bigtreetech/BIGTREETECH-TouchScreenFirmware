@@ -133,7 +133,7 @@ void shutdown(void)
 {
   for (uint8_t i = 0; i < infoSettings.fan_count; i++)
   {
-    if (fanIsType(i, FAN_TYPE_F)) mustStoreCmd("%s S0\n", fanCmd[i]);
+    mustStoreCmd(fanCmd[i], 0);
   }
 
   mustStoreCmd("M81\n");
@@ -165,7 +165,7 @@ void shutdownStart(void)
 
   for (uint8_t i = 0; i < infoSettings.fan_count; i++)
   {
-    if (fanIsType(i, FAN_TYPE_F)) mustStoreCmd("%s S255\n", fanCmd[i]);
+    mustStoreCmd(fanCmd[i], infoSettings.fan_max[i]);
   }
 
   setDialogText(LABEL_SHUT_DOWN, (uint8_t *)tempstr, LABEL_FORCE_SHUT_DOWN, LABEL_CANCEL);

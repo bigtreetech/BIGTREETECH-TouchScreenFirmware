@@ -1,6 +1,9 @@
 #include "common.h"
 #include "includes.h"
 
+// scrolling text line
+SCROLL scrollLine;
+
 // indexes for status icon toggles
 uint8_t currentTool = NOZZLE0;
 uint8_t currentFan = 0;
@@ -348,11 +351,9 @@ int32_t editIntValue(int32_t minValue, int32_t maxValue, int32_t resetValue, int
   char tempstr[30];
 
   sprintf(tempstr, "Min:%i | Max:%i", minValue, maxValue);
-
   val = numPadInt((uint8_t *) tempstr, value, resetValue, false);
-  val = NOBEYOND(minValue, val, maxValue);
 
-  return val;
+  return NOBEYOND(minValue, val, maxValue);
 }
 
 // Edit a float value in a standard menu
@@ -362,9 +363,7 @@ float editFloatValue(float minValue, float maxValue, float resetValue, float val
   char tempstr[30];
 
   sprintf(tempstr, "Min:%.2f | Max:%.2f", minValue, maxValue);
-
   val = numPadFloat((uint8_t *) tempstr, value, resetValue, true);
-  val = NOBEYOND(minValue, val, maxValue);
 
-  return val;
+  return NOBEYOND(minValue, val, maxValue);
 }
