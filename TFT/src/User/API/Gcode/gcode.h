@@ -33,7 +33,7 @@ long request_M23_M36(char *filename);
 void request_M24(int pos);
 void request_M524(void);
 void request_M25(void);
-void request_M27(int seconds);
+void request_M27(uint8_t seconds);
 void request_M125(void);
 void request_M0(void);
 void request_M98(char *filename);

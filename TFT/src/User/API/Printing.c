@@ -270,9 +270,7 @@ static inline void printRemoteStart(void)
   infoPrinting.size = 1;  // .size should be different with .cur to avoid 100% progress on TFT, Get the correct value by M27
   infoPrinting.printing = true;
 
-  if (infoMachineSettings.autoReportSDStatus == 1)
-    request_M27(infoSettings.m27_refresh_time);  // check if there is a print running from onboard SD or remote host (USB)
-
+  request_M27(infoSettings.m27_refresh_time);  // check if there is a print running from onboard SD or remote host (USB)
   initPrintSummary();  // init print summary
 
   infoMenu.cur = 1;  // Clear menu buffer when printing menu is active by remote
@@ -293,9 +291,7 @@ void printStart(FIL * file, uint32_t size)
     case BOARD_SD_REMOTE:  // present just to make the code robust. It should never been executed
     case BOARD_SD:
       //infoHost.printing = true;  // Not so fast! Let Marlin tell that he's done!
-
-      if (infoMachineSettings.autoReportSDStatus == 1)
-        request_M27(infoSettings.m27_refresh_time);  // check if there is a print running from onboard SD or remote host (USB)
+      request_M27(infoSettings.m27_refresh_time);  // check if there is a print running from onboard SD or remote host (USB)
       break;
 
     case TFT_UDISK:
@@ -319,8 +315,8 @@ void printEnd(void)
   {
     case BOARD_SD_REMOTE:
     case BOARD_SD:
-      if (infoMachineSettings.autoReportSDStatus == 1)
-        request_M27(0);
+      request_M27(0);
+      coordinateQuery(0);  // disable auto report position
       break;
 
     case TFT_UDISK:
@@ -557,8 +553,8 @@ void setPrintAbort(void)
   // if printing from onboard SD or remote host
   if (infoPrinting.printing && infoFile.source >= BOARD_SD)
   {
-    if (infoMachineSettings.autoReportSDStatus == 1)
-      request_M27(0);
+    request_M27(0);
+    coordinateQuery(0);
   }
 
   infoPrinting.cur = infoPrinting.size;
