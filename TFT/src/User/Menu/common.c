@@ -137,7 +137,7 @@ void drawBackground(const GUI_RECT *rect, uint16_t bgColor, uint16_t edgeDistanc
 }
 
 void drawStandardValue(const GUI_RECT *rect, VALUE_TYPE valType, const void *val, bool largeFont,
-                             uint16_t color, uint16_t bgColor, uint16_t edgeDistance, bool clearBgColor)
+                       uint16_t color, uint16_t bgColor, uint16_t edgeDistance, bool clearBgColor)
 {
   uint16_t origColor = GUI_GetColor();
   uint16_t origBgColor = GUI_GetBkColor();

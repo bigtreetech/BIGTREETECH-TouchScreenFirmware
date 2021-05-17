@@ -16,14 +16,8 @@ float babystepGetValue(void);
 // Reset babystep value to default value
 float babystepResetValue(void);
 
-// Decrease babystep value
-float babystepDecreaseValue(float unit);
-
-// Increase babystep value
-float babystepIncreaseValue(float unit);
-
-// Update babystep value by encoder
-float babystepUpdateValueByEncoder(float unit, int8_t direction);
+// Update babystep value
+float babystepUpdateValue(float unit, int8_t direction);
 
 #ifdef __cplusplus
 }
