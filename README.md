@@ -84,11 +84,11 @@ Only the TFT's listed below are currently supported. Trying to install the firmw
 
 ## Marlin Dependencies
 
-Firmware source: https://github.com/MarlinFirmware/Marlin
+Firmware source: https://github.com/MarlinFirmware/Marlin/releases
 
-Minimum Marlin firmware version: 2.0.5.4/Distribution date: 2020-05-12
+Minimum Marlin firmware version: 2.0.8.1
 
-Recommended Marlin firmware version: bugfix-2.0.x/Distribution date: 2021-04-11
+Distribution date: 2021-05-15
 
 In order the TFT firmware is able to provide all of its functionalities/features, ensure that the following options are enabled in Marlin firmware.
 
@@ -244,13 +244,15 @@ Fonts and icons folder structure:
 - `MKS/font`: fonts
 - `MKS/bmp`: icons
 
-**element 3:** The config.ini or config_rrf.ini file
+**element 3:** The config.ini or (the renamed) config_rrf.ini file
+
+Attention RepRap Firmware users. You have to make your changes to the config_rrf.ini file and rename it to config.ini before you upload it to the TFT.
 
 **element 4 (optionally):**  One or several language file(s)
 
 ### **STEPS:**
 
-**step 1:** Copy your self compiled **firmware** or the BIGTREE_TFT*_V*.*.*.bin, plus the **TFT*` folder** of your preferred Material theme as well as the **config.ini** (or config_rrf.ini) to the root of a blank SD card that is <8GB and formatted as FAT32:
+**step 1:** Copy your self compiled **firmware** or the BIGTREE_TFT*_V*.*.*.bin, plus the **TFT*` folder** of your preferred Material theme as well as the **config.ini** to the root of a blank SD card that is <8GB and formatted as FAT32:
 
 ![Firmware](https://user-images.githubusercontent.com/54359396/100600549-b6cffd00-3301-11eb-8b57-d56b7a4422f1.jpg)
 
@@ -296,9 +298,9 @@ Sometimes a calibration will be executed automatically after a firmware update, 
 
 
 
-## Configuration using config.ini or config_rrf.ini
+## Configuration using config.ini (or the renamed config_rrf.ini) file
 
-The Firmware can be modified by changing the **config.ini** or **config_rrf.ini** file from: [`Copy to SD Card root directory to update`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update) using a simple text editor (make sure to use UTF encoding).
+The Firmware can be modified by changing the **config.ini** file from: [`Copy to SD Card root directory to update`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update) using a simple text editor (make sure to use UTF encoding).
 
 Once saved, it can be uploaded without the need to upload the firmware or the TFT folder again, as long as the firmware and the config file are from the same version.
 
