@@ -46,6 +46,7 @@ Important information related to BigTreeTech's TFT touchscreen 3D printer contro
 
 - [Appendix](#appendix)
 
+  - [A basic WIP documentation for RRF users](#A-basic-WIP-documentation-for-RRF-users)
   - [Setup of BTT TFT35 E3 V3.0 with MKS SGEN_L Mainboards](#Setup-of-BTT-TFT35-E3-V3.0-with-MKS-SGEN-L-Mainboards)
   - [Show more statistics at the end of the print](#show-more-statistics-at-the-end-of-the-print)
 
@@ -410,6 +411,50 @@ See [BIGTREETECH-TouchScreenFirmware/releases](https://github.com/bigtreetech/BI
 
 
 ## Appendix
+### A basic WIP documentation for RRF users
+
+TFT Screen Configuration and support for RRF
+
+Overview
+The most recent version of the standard bigtreetech TFT firmware has built in support for RepRapFirmware. The pre-built images have this enabled by default.
+
+Loading the firmware
+There is now an RRF config.ini
+It needs to be renamed from config_rrf.ini to config.ini for flashing of the firmware.
+
+Config.g Changes
+Add the following line to your config.g to enable the screen: M575 P1 S2 B57600
+
+Start.g Changes
+Add the following line in your start.g file to allow the screen to know when a job has started.
+M409 K"job.file.fileName"
+
+Stop.g Changes
+Add the following line in your stop.g file to allow the screen to know when a job has stopped.
+M118 P2 S"//action:cancel"
+M0 also need to be added to your stop gcode in your slicer to allow stop.g to be ran.
+
+Pause.g Changes
+Add the following line in your pause.g file to allow the screen to know when a job has been aused.
+M118 P2 S"//action::paused"
+
+Cancel.g Changes
+Add the following line in your cancel.g file to allow the screen to know when a job has been cancelled.
+M118 P2 S"//action::prompt_begin Resuming"
+
+Implemented features:
+
+Auto detect fw type + separate config.ini for easier setup
+-Temperature/movement/cooling status monitoring and control
+- Print status monitoring with mid-print tuneing/pausing
+- Macro support
+- Print from onboard/external SD card
+Feature requests #1791:
+
+Menu system for macros
+- Thumbnail and menu system support for onboard gcodes
+- Load/unload menu
+- PID tune menu
 
 ### Setup of BTT TFT35 E3 V3.0 with MKS SGEN_L Mainboards
 
