@@ -359,7 +359,7 @@ void menuPrinting(void)
   float curLayer = 0;
   float usedLayer = 0;
   float prevLayer = 0;
-  bool layerDrawEnabled = true;
+  bool layerDrawEnabled = false;
   bool lastPause = isPaused();
   bool lastPrinting = isPrinting();
 
