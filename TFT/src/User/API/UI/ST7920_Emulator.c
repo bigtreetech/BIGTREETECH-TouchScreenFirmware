@@ -5,9 +5,9 @@
 
 #ifdef ST7920_EMULATOR
 
-const ST7920_PIXEL st7920_init_pixel = {
-  .x = 0,             // current x pixel, range is 0 - 127
-  .y = 0,             // current y pixel, range is 0 - 63
+const ST7920_POSITION st7920_init_position = {
+  .xByte = 0,         // current x byte, range is 0 ~ 15 byte = 0 ~ 127 pixel
+  .yPixel = 0,        // current y pixel, range is 0 ~ 63
   .address_is_y = 1,  // Extended Instruction, The first address set Y, second address set X
 };
 
@@ -24,33 +24,11 @@ const ST7920_REG st7920_inti_reg = {
     .rev  = 0x00,  // Begin with normal and toggle to reverse
   },
   .reverse = 0,    // Begin with normal and toggle to reverse
-  .cgram = 0,
   .data_type = ST7920_DATA_DDRAM,
   .ctrl_status = ST7920_IDLE,
 };
 
 ST7920 *pSt7920;
-
-void ST7920_ClearRAM(void)
-{
-  // Clear CGRAM buffer
-  memset(pSt7920->CGRAM, 0, sizeof(pSt7920->CGRAM));
-  // Clear DDRAM buffer, Fill with "20H"(space code).
-  memset(pSt7920->DDRAM, ' ', sizeof(pSt7920->DDRAM));
-  // Clear GDRAM buffer
-  memset(pSt7920->GDRAM, 0, sizeof(pSt7920->GDRAM));
-}
-
-void ST7920_Init(ST7920 *pStruct)
-{
-  pSt7920 = pStruct;
-  // Init pSt7920
-  pSt7920->pixel = st7920_init_pixel;
-  pSt7920->reg = st7920_inti_reg;
-  ST7920_ClearRAM();
-  // Init 8x16Font
-  W25Qxx_ReadBuffer((uint8_t *)pSt7920->_8x16Font, _8X16_FONT_ADDR, sizeof(pSt7920->_8x16Font));
-}
 
 const float st7920_gx_start_full = ST7920_GXSTART_FULLSCREEN;
 const float st7920_gy_start_full = ST7920_GYSTART_FULLSCREEN;
@@ -81,44 +59,76 @@ void ST7920_DrawPixel(int16_t x, int16_t y, bool isForeGround)
   }
 }
 
-uint8_t ST7920_GetMixedByte(uint8_t x, uint8_t y)
+void ST7920_ClearRAM(void)
 {
-  uint8_t byte_x = x / 8,
-          byte_y = y / 16,
-          y_offset = y - byte_y * 16;
+  // Clear CGRAM buffer
+  memset(pSt7920->CGRAM, 0, sizeof(pSt7920->CGRAM));
+  // Clear DDRAM buffer, Fill with "20H"(space code).
+  memset(pSt7920->DDRAM, ' ', sizeof(pSt7920->DDRAM));
+  // Clear GDRAM buffer
+  memset(pSt7920->GDRAM, 0, sizeof(pSt7920->GDRAM));
+}
 
-  uint8_t p = pSt7920->DDRAM[byte_y][byte_x];
+// Init St7920 struct and load 8x16 ASCII font from SPI flash
+void ST7920_Init(ST7920 *pStruct)
+{
+  pSt7920 = pStruct;
+  // Init pSt7920
+  pSt7920->position = st7920_init_position;
+  pSt7920->reg = st7920_inti_reg;
+  ST7920_ClearRAM();
+  // Init 8x16Font
+  W25Qxx_ReadBuffer((uint8_t *)pSt7920->_8x16Font, _8X16_FONT_ADDR, sizeof(pSt7920->_8x16Font));
+}
 
-  uint8_t data = 0;
-
-  for (uint8_t i = 0; i < (byte_x + 1) && (i < 15); )  // Traversing this line to detect whether the current byte is CGRAM data
+// When I/D = "1", cursor moves right, address counter (AC) is increased by 1
+void ST7920_CursorIncrease(void)
+{
+  pSt7920->position.xByte++;
+  if (pSt7920->position.xByte >= 16)
   {
-    uint8_t p = pSt7920->DDRAM[byte_y][i],
-            np = pSt7920->DDRAM[byte_y][i + 1] & 0xF6;  // bit0 and bit3 are don’t care
-    if (p == 0 && (np & 0xF0) == 0)
+    pSt7920->position.xByte = 0;
+    pSt7920->position.yPixel = (pSt7920->position.yPixel + 32);
+    if (pSt7920->position.yPixel == 64) pSt7920->position.yPixel = 16;
+    else if (pSt7920->position.yPixel == 80) pSt7920->position.yPixel = 0;
+  }
+}
+
+// Draw the byte at the specified position
+// The byte comes from the XOR of DDRAM(CGRAM or HCGROM) and GDRAM
+void ST7920_DrawByte(uint8_t xByte, uint8_t yPixel)
+{
+  uint8_t yByte = yPixel / 16;
+  uint8_t yOffset = yPixel & 0x0F;
+  uint8_t xStartByte = xByte & 0xFE; // CGRAM fonts can only be displayed in the start position of each address
+
+  uint8_t drawByte = 0;
+
+  if (pSt7920->DDRAM[yByte][xStartByte] == 0)  // 0x00 means this is a CGRAM data(0x0000, 0x0002, 0x0004, 0x0006)
+  {
+    uint8_t np = pSt7920->DDRAM[yByte][xStartByte + 1] & 0xF6;  // bit0 and bit3 are don’t care
+    if (xByte == xStartByte)  // CGRAM high 8bits
     {
-      if (i == byte_x)  // CGRAM high 8bits
-      {
-        data = pSt7920->CGRAM[np * 8 + y_offset][0];
-        return data;
-      }
-      else if ((i + 1) == byte_x)  // CGRAM low 8bits
-      {
-        data = pSt7920->CGRAM[np * 8 + y_offset][1];
-        return data;
-      }
-      i += 2;  // Skip this CGRAM data
+      drawByte = pSt7920->CGRAM[np * 8 + yOffset][0];
     }
-    else
+    else  // CGRAM low 8bits
     {
-      i++;  // Keep traversing
+      drawByte = pSt7920->CGRAM[np * 8 + yOffset][1];
     }
   }
+  else
+  {
+    // HCGROM fonts
+    uint8_t p = pSt7920->DDRAM[yByte][xByte];
+    drawByte = pSt7920->_8x16Font[p - ' '][yOffset];
+  }
 
-  // HCGROM fonts
-  data = pSt7920->_8x16Font[p - ' '][y_offset];
-
-  return data;
+  drawByte ^= pSt7920->GDRAM[yPixel][xByte];  // XOR GDRAM
+  for (uint8_t i = 0; i < 8; i++)
+  {
+    ST7920_DrawPixel(xByte * 8 + i, yPixel, drawByte & (1 << 7));
+    drawByte <<= 1;
+  }
 }
 
 // Display graphic
@@ -126,84 +136,61 @@ void ST7920_DrawGDRAM(uint8_t data)
 {
   if (pSt7920->reg.fs.g != 1) return;  // Graphic display off
 
-  pSt7920->GDRAM[pSt7920->pixel.y][pSt7920->pixel.x / 8] = data;
-  data ^= ST7920_GetMixedByte(pSt7920->pixel.x, pSt7920->pixel.y);
-  for (uint8_t i = 0; i < 8; i++)
-  {
-    ST7920_DrawPixel(pSt7920->pixel.x, pSt7920->pixel.y, data & (1 << 7));
-    data <<= 1;
-    pSt7920->pixel.x++;
-  }
+  pSt7920->GDRAM[pSt7920->position.yPixel][pSt7920->position.xByte] = data;
 
-  if (pSt7920->pixel.x >= 128)
-  {
-    pSt7920->pixel.x = 0;
-    pSt7920->pixel.y = (pSt7920->pixel.y + 32);
-    if (pSt7920->pixel.y >= 64) pSt7920->pixel.y = (pSt7920->pixel.y + 1) & (64 - 1);
-  }
+  ST7920_DrawByte(pSt7920->position.xByte, pSt7920->position.yPixel);
+
+  ST7920_CursorIncrease();
 }
 
-// Display CGRAM fonts, only 0x0000, 0x0002, 0x0004, 0x0006
-void ST7920_DispCGRAM(uint8_t data)
+// Display DDRAM(CGRAM or HCGROM)
+void ST7920_DrawDDRAM(uint8_t data)
 {
-  uint8_t ex = pSt7920->pixel.x + 16,  // GRAM, 16*16 bitmap font
-          ey = pSt7920->pixel.y + 16,
-          yIndex = data * 8;
+  uint8_t xStartByte = pSt7920->position.xByte & 0xFE; // CGRAM fonts can only be displayed in the start position of each address
+  uint8_t yByte = pSt7920->position.yPixel / 16;
+  uint8_t tempDDRAM = pSt7920->DDRAM[yByte][pSt7920->position.xByte];
 
-  pSt7920->DDRAM[pSt7920->pixel.y / 16][pSt7920->pixel.x / 8] = 0x00;
-  pSt7920->DDRAM[pSt7920->pixel.y / 16][pSt7920->pixel.x / 8 + 1] = data;
+  pSt7920->DDRAM[yByte][pSt7920->position.xByte] = data;
 
-  for (uint8_t y = pSt7920->pixel.y; y < ey; y++)
+  uint8_t ey = pSt7920->position.yPixel + 16;
+
+  if (pSt7920->DDRAM[yByte][xStartByte] == 0)  // 0x00 means this is a CGRAM data(0x0000, 0x0002, 0x0004, 0x0006)
   {
-    uint16_t temp = pSt7920->CGRAM[yIndex][0] << 8 | pSt7920->CGRAM[yIndex][1];
-    temp ^= ((pSt7920->GDRAM[y][pSt7920->pixel.x / 8] << 8 ) | pSt7920->GDRAM[y][pSt7920->pixel.x / 8 + 1]);
-    for (uint8_t x = pSt7920->pixel.x; x < ex; x++)
+    if (xStartByte != pSt7920->position.xByte)
     {
-      ST7920_DrawPixel(x, y, temp & (1 << 15));
-      temp <<= 1;
+      // Display CGRAM 16*16 bitmap fonts
+      for (uint8_t y = pSt7920->position.yPixel; y < ey; y++)
+      {
+        ST7920_DrawByte(xStartByte, y);
+        ST7920_DrawByte(pSt7920->position.xByte, y);
+      }
     }
-    yIndex++;
   }
-
-  pSt7920->pixel.x += 16;
-  if (pSt7920->pixel.x >= 128)
+  else
   {
-    pSt7920->pixel.x = 0;
-    pSt7920->pixel.y = (pSt7920->pixel.y + 32);
-    if (pSt7920->pixel.y == 64) pSt7920->pixel.y = 16;
-    else if (pSt7920->pixel.y == 80) pSt7920->pixel.y = 0;
-  }
-}
-
-// Display HCGROM fonts, 02H~7EH.
-void ST7920_DispHCGROM(uint8_t p)
-{
-  if (p < ' ' || p > '~') return;
-
-  pSt7920->DDRAM[pSt7920->pixel.y / 16][pSt7920->pixel.x / 8] = p;
-
-  uint8_t ex = pSt7920->pixel.x + 8,
-          ey = pSt7920->pixel.y + 16;
-
-  for (uint8_t y = pSt7920->pixel.y; y < ey; y++)
-  {
-    uint32_t temp = pSt7920->_8x16Font[p - ' '][y - pSt7920->pixel.y];
-    temp ^= pSt7920->GDRAM[y][pSt7920->pixel.x / 8];
-    for (uint8_t x = pSt7920->pixel.x; x < ex; x++)
+    // Display HCGROM fonts, 02H~7EH.
+    if (data >= ' ' && data <= '~')
     {
-      ST7920_DrawPixel(x, y, temp & (1 << 7));
-      temp <<= 1;
+      for (uint8_t y = pSt7920->position.yPixel; y < ey; y++)
+      {
+        ST7920_DrawByte(pSt7920->position.xByte, y);
+      }
+    }
+
+    // Check if CGRAM data(0x0000, 0x0002, 0x0004, 0x0006) has been overwritten
+    if ((tempDDRAM == 0) && (xStartByte == pSt7920->position.xByte))
+    {
+      // Clear second char of DDRAM for CGRAM data
+      pSt7920->DDRAM[yByte][pSt7920->position.xByte + 1] = 0x20;
+
+      for (uint8_t y = pSt7920->position.yPixel; y < ey; y++)
+      {
+        ST7920_DrawByte(pSt7920->position.xByte + 1, y);
+      }
     }
   }
 
-  pSt7920->pixel.x += 8;
-  if (pSt7920->pixel.x >= 128)
-  {
-    pSt7920->pixel.x = 0;
-    pSt7920->pixel.y = (pSt7920->pixel.y + 32);
-    if (pSt7920->pixel.y == 64) pSt7920->pixel.y = 16;
-    else if (pSt7920->pixel.y == 80) pSt7920->pixel.y = 0;
-  }
+  ST7920_CursorIncrease();
 }
 
 /*** Common instruction ***/
@@ -220,7 +207,7 @@ void ST7920_CI15_FunctionSet(uint8_t cmd)
 void ST7920_BI10_DisplayClear(uint8_t cmd)
 {
   // Set DDRAM address counter (AC) to"00H"
-  pSt7920->pixel.x = pSt7920->pixel.y = 0;
+  pSt7920->position.xByte = pSt7920->position.yPixel = 0;
   // Set Entry Mode I/D bit to be "1". Cursor moves right and AC adds 1 after write or read operation
   pSt7920->reg.bi.ems.id = 1;
   // Clear CGRAM/DDRAM/GDRAM
@@ -231,7 +218,7 @@ void ST7920_BI10_DisplayClear(uint8_t cmd)
 void ST7920_BI11_ReturnHome(uint8_t cmd)
 {
   // Set address counter (AC) to "00H".
-  pSt7920->pixel.x = pSt7920->pixel.y = 0;
+  pSt7920->position.xByte = pSt7920->position.yPixel = 0;
 }
 
 // cmd : 1 << 2
@@ -258,20 +245,20 @@ void ST7920_BI16_SetCGRAMAddress(uint8_t cmd)
   pSt7920->reg.bi.cgrama.reg = cmd;
   uint8_t address = pSt7920->reg.bi.cgrama.ac;
   // Set CGRAM address
-  // x is 0-1 = [2*8], y is 0-64 = [4*16], means 4 * [16*16] bitmap font
-  pSt7920->pixel.x = 0;
-  pSt7920->pixel.y = address;
+  // xByte is 0-1 = [2*8], yPixel is 0-64 = [4*16], means 4 * [16*16] bitmap font
+  pSt7920->position.xByte = 0;
+  pSt7920->position.yPixel = address;
   pSt7920->reg.data_type = ST7920_DATA_CGRAM;
 }
 
 // the data follow cmd : 1 << 6
 void ST7920_BI_SetCGRAMData(uint8_t data)
 {
-  pSt7920->CGRAM[pSt7920->pixel.y][pSt7920->pixel.x++] = data;
-  if (pSt7920->pixel.x >= 2)
+  pSt7920->CGRAM[pSt7920->position.yPixel][pSt7920->position.xByte++] = data;
+  if (pSt7920->position.xByte >= 2)
   {
-    pSt7920->pixel.x = 0;
-    pSt7920->pixel.y = (pSt7920->pixel.y + 1) & (64 - 1);
+    pSt7920->position.xByte = 0;
+    pSt7920->position.yPixel = (pSt7920->position.yPixel + 1) & (64 - 1);
   }
 }
 
@@ -281,9 +268,9 @@ void ST7920_BI17_SetDDRAMAddress(uint8_t cmd)
   pSt7920->reg.bi.ddrama.reg = cmd;
   uint8_t address = pSt7920->reg.bi.ddrama.ac;
   // Set DDRAM address
-  // x is 0-127. y is 0-63
-  pSt7920->pixel.x = (address & 0x07) * 16;
-  pSt7920->pixel.y = ((address >> 4) & 0x01) * 16 + ((address >> 3) & 0x01) * 32;
+  // xByte is 0~15. y is 0~63
+  pSt7920->position.xByte = (address & 0x07) * 2;
+  pSt7920->position.yPixel = ((address >> 4) & 0x01) * 16 + ((address >> 3) & 0x01) * 32;
   pSt7920->reg.data_type = ST7920_DATA_DDRAM;
 }
 
@@ -315,20 +302,20 @@ void ST7920_EI16_SetScrollAddress(uint8_t cmd)
 }
 
 // cmd : 1 << 7
-void ST7920_EI17_SetGRAMAddress(uint8_t cmd)
+void ST7920_EI17_SetGDRAMAddress(uint8_t cmd)
 {
-  pSt7920->reg.ei.grama.reg = cmd;
-  uint8_t address = pSt7920->reg.ei.grama.ac;
-  if (pSt7920->pixel.address_is_y)
+  pSt7920->reg.ei.gdrama.reg = cmd;
+  uint8_t address = pSt7920->reg.ei.gdrama.ac;
+  if (pSt7920->position.address_is_y)
   {
-    pSt7920->pixel.y = address;
-    pSt7920->pixel.address_is_y = 0;
+    pSt7920->position.yPixel = address;
+    pSt7920->position.address_is_y = 0;
   }
   else
   {
-    if (address & 0x08) pSt7920->pixel.y += 32;
-    pSt7920->pixel.x = (address & 0x07) * 16;
-    pSt7920->pixel.address_is_y = 1;
+    if (address & 0x08) pSt7920->position.yPixel += 32;
+    pSt7920->position.xByte = (address & 0x07) * 2;
+    pSt7920->position.address_is_y = 1;
   }
   pSt7920->reg.data_type = ST7920_DATA_GDRAM;
 }
@@ -342,7 +329,7 @@ static const FP_CMD st7920CmdCallBack[8][2] = {
   { ST7920_BI14_CursorDisplayControl, NULL},                            // cmd 1 << 4
   { ST7920_CI15_FunctionSet,          ST7920_CI15_FunctionSet},         // cmd 1 << 5
   { ST7920_BI16_SetCGRAMAddress,      ST7920_EI16_SetScrollAddress},    // cmd 1 << 6
-  { ST7920_BI17_SetDDRAMAddress,      ST7920_EI17_SetGRAMAddress},      // cmd 1 << 7
+  { ST7920_BI17_SetDDRAMAddress,      ST7920_EI17_SetGDRAMAddress},     // cmd 1 << 7
 };
 
 void ST7920_ST7920_ParseWCmd(uint8_t cmd)
@@ -365,20 +352,7 @@ void ST7920_ST7920_ParseWData(uint8_t data)
   switch (pSt7920->reg.data_type)
   {
     case ST7920_DATA_DDRAM:
-      if (pSt7920->reg.cgram == 1)
-      {
-        pSt7920->reg.cgram = 0;
-        ST7920_DispCGRAM(data);
-      }
-      else if (data == 0x00)
-      {
-        pSt7920->reg.cgram = 1;
-        return;
-      }
-      else
-      {
-        ST7920_DispHCGROM(data);
-      }
+      ST7920_DrawDDRAM(data);
       break;
 
     case ST7920_DATA_CGRAM:
@@ -410,8 +384,7 @@ void ST7920_ParseRecv(uint8_t val)
     rcvIndex = 0;
     if (pSt7920->reg.ctrl_status == ST7920_WDATA)
     {
-      pSt7920->pixel.address_is_y = 1;
-      pSt7920->reg.cgram = 0;
+      pSt7920->position.address_is_y = 1;
     }
   }
   else
