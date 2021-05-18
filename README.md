@@ -46,7 +46,7 @@ Important information related to BigTreeTech's TFT touchscreen 3D printer contro
 
 - [Appendix](#appendix)
 
-  - [A basic WIP documentation for RRF users](#A-basic-WIP-documentation-for-RRF-users)
+  - [TFT Screen Configuration and support for RRF](#TFT-Screen-Configuration-and-support-for-RRF)
   - [Setup of BTT TFT35 E3 V3.0 with MKS SGEN_L Mainboards](#Setup-of-BTT-TFT35-E3-V3.0-with-MKS-SGEN-L-Mainboards)
   - [Show more statistics at the end of the print](#show-more-statistics-at-the-end-of-the-print)
 
@@ -411,9 +411,7 @@ See [BIGTREETECH-TouchScreenFirmware/releases](https://github.com/bigtreetech/BI
 
 
 ## Appendix
-### A basic WIP documentation for RRF users
-
-TFT Screen Configuration and support for RRF
+### TFT Screen Configuration and support for RRF
 
 Overview
 The most recent version of the standard bigtreetech TFT firmware has built in support for RepRapFirmware. The pre-built images have this enabled by default.
