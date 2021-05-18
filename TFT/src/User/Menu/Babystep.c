@@ -106,7 +106,7 @@ void menuBabystep(void)
   now_z_offset = z_offset = orig_z_offset = new_z_offset = offsetGetValue();
   force_z_offset = false;
 
-  UPDATE_MENU_IF_INVERTED_Z_AXIS(&babyStepItems);
+  INVERT_Z_AXIS_ICONS(&babyStepItems);
 
   if (infoMachineSettings.EEPROM == 1)
   {

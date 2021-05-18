@@ -115,7 +115,7 @@ bool nextScreenUpdate(uint32_t duration)
 }
 
 #ifdef FRIENDLY_Z_OFFSET_LANGUAGE
-  void updateMenuIfInvertedZAxis(MENUITEMS * menuItems)
+  void invertZAxisIcons(MENUITEMS * menuItems)
   {
     if (infoSettings.invert_axis[Z_AXIS] == 1)
     {

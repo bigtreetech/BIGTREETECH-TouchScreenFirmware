@@ -53,11 +53,11 @@ extern const uint16_t iconToggle[ITEM_TOGGLE_NUM];
 bool nextScreenUpdate(uint32_t duration);
 
 #ifdef FRIENDLY_Z_OFFSET_LANGUAGE
-  void updateMenuIfInvertedZAxis(MENUITEMS * menuItems);
+  void invertZAxisIcons(MENUITEMS * menuItems);
 
-  #define UPDATE_MENU_IF_INVERTED_Z_AXIS(menuItemsPtr) updateMenuIfInvertedZAxis(menuItemsPtr)
+  #define  INVERT_Z_AXIS_ICONS(menuItemsPtr) invertZAxisIcons(menuItemsPtr)
 #else
-  #define UPDATE_MENU_IF_INVERTED_Z_AXIS(menuItemsPtr)
+  #define  INVERT_Z_AXIS_ICONS(menuItemsPtr)
 #endif
 
 void drawBorder(const GUI_RECT *rect, uint16_t color, uint16_t edgeDistance);
