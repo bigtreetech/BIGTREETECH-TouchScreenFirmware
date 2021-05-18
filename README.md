@@ -46,6 +46,7 @@ Important information related to BigTreeTech's TFT touchscreen 3D printer contro
 
 - [Appendix](#appendix)
 
+  - [TFT Screen Configuration and support for RRF](#TFT-Screen-Configuration-and-support-for-RRF)
   - [Setup of BTT TFT35 E3 V3.0 with MKS SGEN_L Mainboards](#Setup-of-BTT-TFT35-E3-V3.0-with-MKS-SGEN-L-Mainboards)
   - [Show more statistics at the end of the print](#show-more-statistics-at-the-end-of-the-print)
 
@@ -84,13 +85,14 @@ Only the TFT's listed below are currently supported. Trying to install the firmw
 
 ## Marlin Dependencies
 
-Firmware source: https://github.com/MarlinFirmware/Marlin
+Firmware source: https://github.com/MarlinFirmware/Marlin/releases
 
-Minimum Marlin firmware version: 2.0.5.4/Distribution date: 2020-05-12
+Minimum Marlin firmware version: 2.0.8.1
 
-Recommended Marlin firmware version: bugfix-2.0.x/Distribution date: 2021-04-11
+Distribution date: 2021-05-15
 
-In order the TFT firmware is able to provide all of its functionalities/features, ensure that the following options are enabled in Marlin firmware.
+
+In order the TFT firmware is able to provide all of its functionalities/features, the following options must be enabled in Marlin firmware.
 
 **General options:**
 
@@ -103,6 +105,8 @@ In order the TFT firmware is able to provide all of its functionalities/features
 `M114_DETAIL` (in Configuration_adv.h)
 
 `REPORT_FAN_CHANGE` (in Configuration_adv.h)
+
+`AUTO_REPORT_POSITION` (in Configuration_adv.h)
 
 
 
@@ -216,7 +220,7 @@ This chart has been provided by user Thomas White
 ## Update TFT Firmware
 
 
-The TFT firmware update is done in three steps and includes up to four elements:
+The TFT firmware update includes up to four elements and is done in three steps:
 
 ### **ELEMENTS:**
 
@@ -229,6 +233,7 @@ The TFT firmware update is done in three steps and includes up to four elements:
 Exception: For the MKS TFT28 the binary file name must be `MKSTFT28.bin`.
 
 Attention TFT35 owners. There are currently three different kinds of firmware available: V3.0, E3_V3.0 and B1_V3.0. Please make sure to use the firmware which matches your TFT screen.
+
 
 **element 2:** Fonts and Icons (in the `TFT*` or `MKS` folder):
 
@@ -244,13 +249,18 @@ Fonts and icons folder structure:
 - `MKS/font`: fonts
 - `MKS/bmp`: icons
 
-**element 3:** The config.ini or config_rrf.ini file
+
+**element 3:** The config.ini or (the renamed) config_rrf.ini file
+
+Attention RepRap Firmware users. You have to make your changes to the config_rrf.ini file and rename it to config.ini before you upload it to the TFT.
+
 
 **element 4 (optionally):**  One or several language file(s)
 
+
 ### **STEPS:**
 
-**step 1:** Copy your self compiled **firmware** or the BIGTREE_TFT*_V*.*.*.bin, plus the **TFT*` folder** of your preferred Material theme as well as the **config.ini** (or config_rrf.ini) to the root of a blank SD card that is <8GB and formatted as FAT32:
+**step 1:** Copy your self compiled **firmware** or the BIGTREE_TFT*_V*.*.*.bin, plus the **TFT*` folder** of your preferred Material theme as well as the **config.ini** to the root of a blank SD card that is <8GB and formatted as FAT32:
 
 ![Firmware](https://user-images.githubusercontent.com/54359396/100600549-b6cffd00-3301-11eb-8b57-d56b7a4422f1.jpg)
 
@@ -258,10 +268,10 @@ Fonts and icons folder structure:
 
 ![Language Pack](https://user-images.githubusercontent.com/54359396/100600564-b9caed80-3301-11eb-8997-d376f05323f6.jpg)
 
+
 **step 2:** Place the SD card with the `BIGTREE_TFT*_V*.*.*.bin`, the`TFT*` folder and the config.ini into the TFT's SD card reader and reset your TFT (or optionally - power cycle your printer) to start the update process.
 
 <p align=center> ⚠️ Failing to update your icons &amp; fonts will result in missing icons and/or unreadable text ⚠️ </p>
-
 
 
 
@@ -284,6 +294,7 @@ In case one or several parts of the update failed, an error will be shown. Follo
 
 After the update is done and the files are renamed, it is possible to reuse them again. To do so, change the name of the element(s) to the pre-update name and start the update process again.
 
+
 **step3:** Remove the SD card from the TFT and restart the printer.
 
 Tip: Format the SD card after the firmware update in case you would like to print from it.
@@ -292,19 +303,20 @@ Tip: Format the SD card after the firmware update in case you would like to prin
 
 ## Calibrate the Screen
 
-Sometimes a calibration will be executed automatically after a firmware update, showing a white screen with a red dot in the upper right corner and the text: Touch Screen Calibration - Please click on the red dot. To calibrate the screen press with your finger or a stylus the red dot in the upper left corner, then the red dot in the upper right corner and then  the red dot in the lower right corner. Even the screen asks you to press the red dot, press the black dot in the middle of the screen to finish the calibration. Repeat the process in case the message: "Adjustment failed, please try again" is shown
+Sometimes a calibration will be executed automatically after a firmware update, showing a white screen with a red dot in the upper right corner and the text: Touch Screen Calibration - Please click on the red dot. To calibrate the screen press with your finger or a stylus the red dot in the upper left corner, then the red dot in the upper right corner and then  the red dot in the lower right corner. Even the screen asks you to press the red dot, press the black dot in the middle of the screen to finish the calibration. Repeat the process in case the message: "Adjustment failed, please try again" is shown.
 
 
+## Configuration using config.ini (or the renamed config_rrf.ini) file
 
-## Configuration using config.ini or config_rrf.ini
-
-The Firmware can be modified by changing the **config.ini** or **config_rrf.ini** file from: [`Copy to SD Card root directory to update`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update) using a simple text editor (make sure to use UTF encoding).
+The Firmware can be modified by changing the **config.ini** file from: [`Copy to SD Card root directory to update`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update) using a simple text editor (make sure to use UTF encoding).
 
 Once saved, it can be uploaded without the need to upload the firmware or the TFT folder again, as long as the firmware and the config file are from the same version.
+
 
 ### Editing the configuration file
 
 To edit the **config** file follow the instruction here: [Detailed Instructions here](config_instructions.md)
+
 
 ### Updating Firmware Configuration
 
@@ -325,8 +337,6 @@ To update the Firmware configuration:
    "Reset default settings ..."
 
 7. Restart the printer to finish the update
-
-
 
 
 
@@ -378,7 +388,7 @@ Tip: In case there is a problem compiling the TFT firmware try to restart VSC. I
 
 **In case the upload of a new firmware failed**
 
-First, verify that you have been using the correct version for your TFT. After that, try to upload the new firmware again (like described above) using a **new** SD card - 8GB or smaller, FAT32 formatted. Some uploads worked fine after executing a low level format of the SD card and not a quick format.
+First, verify that you have been using the firmware which matches your TFT. After that, try to upload the firmware, the config.ini and the TFT** folder again (like described above) using a **new** SD card - 8GB or smaller, FAT32 formatted. Some uploads worked fine after executing a low level format of the SD card and not a quick format.
 
 **Simple Reset**
 
@@ -401,6 +411,48 @@ See [BIGTREETECH-TouchScreenFirmware/releases](https://github.com/bigtreetech/BI
 
 
 ## Appendix
+### TFT Screen Configuration and support for RRF
+
+Overview
+The most recent version of the standard bigtreetech TFT firmware has built in support for RepRapFirmware. The pre-built images have this enabled by default.
+
+Loading the firmware
+There is now an RRF config.ini
+It needs to be renamed from config_rrf.ini to config.ini for flashing of the firmware.
+
+Config.g Changes
+Add the following line to your config.g to enable the screen: M575 P1 S2 B57600
+
+Start.g Changes
+Add the following line in your start.g file to allow the screen to know when a job has started.
+M409 K"job.file.fileName"
+
+Stop.g Changes
+Add the following line in your stop.g file to allow the screen to know when a job has stopped.
+M118 P2 S"//action:cancel"
+M0 also need to be added to your stop gcode in your slicer to allow stop.g to be ran.
+
+Pause.g Changes
+Add the following line in your pause.g file to allow the screen to know when a job has been aused.
+M118 P2 S"//action::paused"
+
+Cancel.g Changes
+Add the following line in your cancel.g file to allow the screen to know when a job has been cancelled.
+M118 P2 S"//action::prompt_begin Resuming"
+
+Implemented features:
+
+Auto detect fw type + separate config.ini for easier setup
+-Temperature/movement/cooling status monitoring and control
+- Print status monitoring with mid-print tuneing/pausing
+- Macro support
+- Print from onboard/external SD card
+- Please see [Feature request #1791](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/issues/1791) for more information.
+
+Menu system for macros
+- Thumbnail and menu system support for onboard gcodes
+- Load/unload menu
+- PID tune menu
 
 ### Setup of BTT TFT35 E3 V3.0 with MKS SGEN_L Mainboards
 
