@@ -52,6 +52,14 @@ extern const uint16_t iconToggle[ITEM_TOGGLE_NUM];
 // Check if next screen update is due
 bool nextScreenUpdate(uint32_t duration);
 
+#ifdef FRIENDLY_Z_OFFSET_LANGUAGE
+  void updateMenuIfInvertedZAxis(MENUITEMS * menuItems);
+
+  #define UPDATE_MENU_IF_INVERTED_Z_AXIS(menuItemsPtr) updateMenuIfInvertedZAxis(menuItemsPtr)
+#else
+  #define UPDATE_MENU_IF_INVERTED_Z_AXIS(menuItemsPtr)
+#endif
+
 void drawBorder(const GUI_RECT *rect, uint16_t color, uint16_t edgeDistance);
 
 void drawBackground(const GUI_RECT *rect, uint16_t bgColor, uint16_t edgeDistance);

@@ -131,6 +131,7 @@ void menuZOffset(void)
 
   now = z_offset = offsetGetValue();
 
+  UPDATE_MENU_IF_INVERTED_Z_AXIS(&zOffsetItems);
   zOffsetItems.items[KEY_ICON_4].label = itemToggle[offsetGetStatus()];
 
   itemZOffsetSubmenu[0] = itemMoveLen[curUnit_index];

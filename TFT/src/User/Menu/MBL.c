@@ -159,6 +159,7 @@ void menuMBL(void)
 
   now = curValue = coordinateGetAxisActual(Z_AXIS);
 
+  UPDATE_MENU_IF_INVERTED_Z_AXIS(&mblItems);
   mblItems.items[KEY_ICON_4] = itemMoveLen[curUnit_index];
 
   if (mblRunning)
