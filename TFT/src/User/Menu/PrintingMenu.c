@@ -253,7 +253,7 @@ static inline void toggleInfo(void)
     speedQuery();
 
     if (infoFile.source >= BOARD_SD)
-      coordinateQuery();
+      coordinateQuery(TOGGLE_TIME / 1000);
 
     if (!hasFilamentData && isPrinting())
       updatePrintUsedFilament();

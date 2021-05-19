@@ -178,6 +178,7 @@ void initMachineSetting(void)
   infoMachineSettings.firmwareType            = FW_NOT_DETECTED;  // set fimware type to not_detected to avoid repeated ABL gcode on mode change
   infoMachineSettings.EEPROM                  = ENABLED;
   infoMachineSettings.autoReportTemp          = DISABLED;
+  infoMachineSettings.autoReportPos           = DISABLED;
   infoMachineSettings.leveling                = BL_DISABLED;
   infoMachineSettings.zProbe                  = ENABLED;
   infoMachineSettings.levelingData            = ENABLED;
@@ -221,6 +222,7 @@ void setupMachine(void)
   {
     infoMachineSettings.EEPROM                  = ENABLED;
     infoMachineSettings.autoReportTemp          = DISABLED;
+    infoMachineSettings.autoReportPos           = DISABLED;
     infoMachineSettings.leveling                = ENABLED;
     infoMachineSettings.zProbe                  = ENABLED;
     infoMachineSettings.levelingData            = ENABLED;
