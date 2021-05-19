@@ -9,6 +9,7 @@
     #define STRING_TERMINAL_ACK           "Afficher ACK sur Terminal"
     #define STRING_PERSISTENT_INFO        "Temp. toujours affichées"
     #define STRING_FILE_LIST_MODE         "Fichiers en mode liste"
+    #define STRING_FILE_SORT_BY           "Sort files by"
     #define STRING_ACK_NOTIFICATION       "Style de notification ACK"
     #define STRING_EMULATE_M600           "Emuler M600"
     #define STRING_SERIAL_ALWAYS_ON       "Serial toujours actif"

@@ -159,6 +159,7 @@ void menuMBL(void)
 
   now = curValue = coordinateGetAxisActual(Z_AXIS);
 
+  INVERT_Z_AXIS_ICONS(&mblItems);
   mblItems.items[KEY_ICON_4] = itemMoveLen[curUnit_index];
 
   if (mblRunning)
@@ -265,7 +266,7 @@ void menuMBL(void)
             if (!mblRunning)
               mblNotifyError(false);
             else
-              probeHeightMove(unit, encoderPosition > 0 ? 1 : -1);
+              probeHeightMove(unit, encoderPosition < 0 ? -1 : 1);
 
             encoderPosition = 0;
           }

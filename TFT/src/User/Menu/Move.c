@@ -162,7 +162,7 @@ void update_gantry(void)
 {
   if (nextScreenUpdate(GANTRY_UPDATE_DELAY))
   {
-    coordinateQuery();
+    coordinateQuery(0);  // query position manually for delay less than 1 second
     drawXYZ();
   }
 }

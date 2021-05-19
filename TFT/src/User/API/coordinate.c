@@ -18,6 +18,7 @@ static bool relative_e = false;
 // false after M18/M84 disable stepper or power up, true after G28
 static bool position_known = false;
 static bool coordinateQueryWait = false;
+static uint8_t curQuerySeconds = 0;
 
 bool coorGetRelative(void)
 {
@@ -108,11 +109,27 @@ void coordinateQuerySetWait(bool wait)
   coordinateQueryWait = wait;
 }
 
-void coordinateQuery(void)
+/**
+ * @brief query gantry position.
+ * @param seconds: Pass 0 to query manually or disable auto report. Pass delay in seconds
+ *                 for auto query if available in marlin.
+ */
+void coordinateQuery(uint8_t seconds)
 {
   if (infoHost.connected == true && infoHost.wait == false && !coordinateQueryWait)
   {
-    coordinateQueryWait = storeCmd("M114\n");
+    if (infoMachineSettings.autoReportPos == 1 && seconds > 0)  // auto report only accepts delay in seconds
+    {
+      if (seconds != curQuerySeconds)  // send M154 only if not already sent
+        coordinateQueryWait = storeCmd("M154 S%d\n", seconds);
+    }
+    else  // send M114 if delay is less than 1 second or auto report is disabled
+    {
+      char * strQueryOff = (curQuerySeconds > 0) ? "M154 S0\n" : "";  // turn off auto report if it was turned on
+      coordinateQueryWait = storeCmd("%sM114\n", strQueryOff);
+    }
+
+    if (coordinateQueryWait)
+      curQuerySeconds = seconds;
   }
 }
-

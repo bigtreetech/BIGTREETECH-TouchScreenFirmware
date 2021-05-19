@@ -52,7 +52,6 @@
   #define SERIAL_DEBUG_PORT SERIAL_PORT_3
 #endif
 
-
 // XPT2046 Software SPI Pins (touch screen ic)
 // need CS/SCK/MISO/MOSI for Software SPI, and TPEN for pen interrupt
 #define XPT2046_CS   PC0

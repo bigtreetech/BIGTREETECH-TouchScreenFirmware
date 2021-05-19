@@ -1,8 +1,8 @@
 #ifndef _VFS_H_
 #define _VFS_H_
 
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 #include "ff.h"
 
 #define FOLDER_NUM   255

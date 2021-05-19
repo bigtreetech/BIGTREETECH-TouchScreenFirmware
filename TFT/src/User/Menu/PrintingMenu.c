@@ -185,7 +185,6 @@ static inline void reDrawSpeed(int icon_pos)
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
 
-
 static inline void reDrawProgress(int icon_pos, uint8_t prevProgress)
 {
   char progress[6];
@@ -237,9 +236,13 @@ static inline void toggleInfo(void)
       reValueNozzle(EXT_ICON_POS);
     }
 
-    if ((infoSettings.fan_count + infoSettings.fan_ctrl_count) > 1)
+    if ((infoSettings.fan_count + infoSettings.ctrl_fan_en) > 1)
     {
-      currentFan = (currentFan + 1) % (infoSettings.fan_count + infoSettings.fan_ctrl_count);
+      do
+      {
+        currentFan = (currentFan + 1) % MAX_FAN_COUNT;
+      } while (!fanIsValid(currentFan));
+
       RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
       reDrawFan(FAN_ICON_POS);
     }
@@ -250,7 +253,7 @@ static inline void toggleInfo(void)
     speedQuery();
 
     if (infoFile.source >= BOARD_SD)
-      coordinateQuery();
+      coordinateQuery(TOGGLE_TIME / 1000);
 
     if (!hasFilamentData && isPrinting())
       updatePrintUsedFilament();
@@ -358,7 +361,9 @@ void menuPrinting(void)
   uint32_t time = 0;
   HEATER nowHeat;
   float curLayer = 0;
-  float oldLayer = 0;
+  float usedLayer = 0;
+  float prevLayer = 0;
+  bool layerDrawEnabled = false;
   bool lastPause = isPaused();
   bool lastPrinting = isPrinting();
 
@@ -394,7 +399,7 @@ void menuPrinting(void)
 
   while (infoMenu.menu[infoMenu.cur] == menuPrinting)
   {
-    //Scroll_DispString(&titleScroll, LEFT); // Scroll display file name will take too many CPU cycles
+    //Scroll_DispString(&titleScroll, LEFT);  // Scroll display file name will take too many CPU cycles
 
     // check nozzle temp change
     if (nowHeat.T[currentTool].current != heatGetCurrentTemp(currentTool) ||
@@ -447,11 +452,23 @@ void menuPrinting(void)
 
     // Z_AXIS coordinate
     curLayer = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS));
-    if (ABS(curLayer - oldLayer) >= LAYER_DELTA)
+    if (prevLayer != curLayer)
     {
-      oldLayer = curLayer;
-      RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
-      reDrawLayer(Z_ICON_POS);
+      if (ABS(curLayer - usedLayer) >= LAYER_DELTA)
+      {
+        layerDrawEnabled = true;
+      }
+      if (layerDrawEnabled == true)
+      {
+        usedLayer = curLayer;
+        RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
+        reDrawLayer(Z_ICON_POS);
+      }
+      if (ABS(curLayer - prevLayer) < LAYER_DELTA)
+      {
+        layerDrawEnabled = false;
+      }
+      prevLayer = curLayer;
     }
 
     // check change in speed or flow
@@ -485,7 +502,10 @@ void menuPrinting(void)
       case KEY_ICON_4:
         if (isPrinting())
         {
-          printPause(!isPaused(), PAUSE_NORMAL);
+          if (!isHostDialog())
+            printPause(!isPaused(), PAUSE_NORMAL);
+          else
+            addToast(DIALOG_TYPE_ERROR, (char *)textSelect(LABEL_BUSY));
         }
         #ifndef TFT70_V3_0
           else

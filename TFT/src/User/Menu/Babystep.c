@@ -106,6 +106,8 @@ void menuBabystep(void)
   now_z_offset = z_offset = orig_z_offset = new_z_offset = offsetGetValue();
   force_z_offset = false;
 
+  INVERT_Z_AXIS_ICONS(&babyStepItems);
+
   if (infoMachineSettings.EEPROM == 1)
   {
     babyStepItems.items[KEY_ICON_4].icon = ICON_EEPROM_SAVE;
@@ -132,12 +134,12 @@ void menuBabystep(void)
     {
       // decrease babystep / Z offset
       case KEY_ICON_0:
-        babystep = babystepDecreaseValue(unit);
+        babystep = babystepUpdateValue(unit, -1);
         break;
 
       // increase babystep / Z offset
       case KEY_ICON_3:
-        babystep = babystepIncreaseValue(unit);
+        babystep = babystepUpdateValue(unit, 1);
         break;
 
       // save to EEPROM and apply Z offset
@@ -178,7 +180,7 @@ void menuBabystep(void)
         #if LCD_ENCODER_SUPPORT
           if (encoderPosition)
           {
-            babystep = babystepUpdateValueByEncoder(unit, encoderPosition > 0 ? 1 : -1);
+            babystep = babystepUpdateValue(unit, encoderPosition < 0 ? -1 : 1);
 
             encoderPosition = 0;
           }

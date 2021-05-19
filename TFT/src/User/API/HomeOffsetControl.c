@@ -68,47 +68,30 @@ float homeOffsetResetValue(void)
   return z_offset_value;
 }
 
-// Decrease Z offset value
-float homeOffsetDecreaseValue(float unit)
+// Update Z offset value
+float homeOffsetUpdateValue(float unit, int8_t direction)
 {
-  if (z_offset_value > HOME_Z_OFFSET_MIN_VALUE)
+  float diff;
+
+  if (direction < 0)
   {
-    float diff = z_offset_value - HOME_Z_OFFSET_MIN_VALUE;
+    if (z_offset_value <= HOME_Z_OFFSET_MIN_VALUE)
+      return z_offset_value;
 
-    unit = (diff > unit) ? unit : diff;
-    z_offset_value += unit;
-    mustStoreCmd("M206 Z%.2f\n", z_offset_value);  // set Z offset value
-    mustStoreCmd("G1 Z%.2f\n", -unit);             // move nozzle
+    diff = z_offset_value - HOME_Z_OFFSET_MIN_VALUE;
   }
-
-  return z_offset_value;
-}
-
-// Increase Z offset value
-float homeOffsetIncreaseValue(float unit)
-{
-  if (z_offset_value < HOME_Z_OFFSET_MAX_VALUE)
-  {
-    float diff = HOME_Z_OFFSET_MAX_VALUE - z_offset_value;
-
-    unit = (diff > unit) ? unit : diff;
-    z_offset_value -= unit;
-    mustStoreCmd("M206 Z%.2f\n", z_offset_value);  // set Z offset value
-    mustStoreCmd("G1 Z%.2f\n", unit);              // move nozzle
-  }
-
-  return z_offset_value;
-}
-
-// Update Z offset value by encoder
-float homeOffsetUpdateValueByEncoder(float unit, int8_t direction)
-{
-  float overall_unit = (direction > 0) ? (direction * unit) : (-direction * unit);  // always positive unit
-
-  if (direction < 0)  // if negative encoder value, decrease the value. Otherwise increase the value
-    homeOffsetDecreaseValue(overall_unit);
   else
-    homeOffsetIncreaseValue(overall_unit);
+  {
+    if (z_offset_value >= HOME_Z_OFFSET_MAX_VALUE)
+      return z_offset_value;
+
+    diff = HOME_Z_OFFSET_MAX_VALUE - z_offset_value;
+  }
+
+  unit = ((diff > unit) ? unit : diff) * direction;
+  z_offset_value -= unit;
+  mustStoreCmd("M206 Z%.2f\n", z_offset_value);  // set Z offset value
+  mustStoreCmd("G1 Z%.2f\n", unit);              // move nozzle
 
   return z_offset_value;
 }
