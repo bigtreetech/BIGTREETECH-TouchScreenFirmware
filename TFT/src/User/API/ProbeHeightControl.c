@@ -73,8 +73,7 @@ void probeHeightAbsolute(void)
 // Change probe height
 void probeHeightMove(float unit, int8_t direction)
 {
-  // if invert is true, 'direction' multiplied by -1
-  storeCmd("G1 Z%.2f F%d\n", (infoSettings.invert_axis[Z_AXIS] ? -direction : direction) * unit,
+  storeCmd("G1 Z%.2f F%d\n", unit * direction,
            infoSettings.level_feedrate[FEEDRATE_Z]);
 }
 

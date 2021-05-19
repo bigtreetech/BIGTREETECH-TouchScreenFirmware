@@ -45,7 +45,6 @@ static bool msgNeedRefresh = false;
 
 static char msgtitle[20];
 static char msgbody[MAX_MSG_LENGTH];
-SCROLL msgScroll;
 
 const char *const SpeedID[2] = SPEED_ID;
 // text position rectangles for Live icons
@@ -214,11 +213,10 @@ void drawStatusScreenMsg(void)
   GUI_DispString(rect_of_keySS[17].x0 + BYTE_HEIGHT + STATUS_MSG_TITLE_XOFFSET,
                  rect_of_keySS[17].y0 + STATUS_MSG_ICON_YOFFSET,
                  (uint8_t *)msgtitle);
+
   GUI_SetBkColor(INFOMSG_BKCOLOR);
   GUI_FillPrect(&msgRect);
-
-  Scroll_CreatePara(&msgScroll, (uint8_t *)msgbody, &msgRect);
-
+  Scroll_CreatePara(&scrollLine, (uint8_t *)msgbody, &msgRect);
   GUI_RestoreColorDefault();
 
   msgNeedRefresh = false;
@@ -228,7 +226,7 @@ static inline void scrollMsg(void)
 {
   GUI_SetBkColor(INFOMSG_BKCOLOR);
   GUI_SetColor(INFOMSG_COLOR);
-  Scroll_DispString(&msgScroll,CENTER);
+  Scroll_DispString(&scrollLine, CENTER);
   GUI_RestoreColorDefault();
 }
 
@@ -236,33 +234,39 @@ static inline void toggleTool(void)
 {
   if (nextScreenUpdate(UPDATE_TOOL_TIME))
   {
+    // increment hotend index
     if (infoSettings.hotend_count > 1)
-    {
       currentTool = (currentTool + 1) % infoSettings.hotend_count;
-    }
-    if ((infoSettings.fan_count + infoSettings.fan_ctrl_count) > 1)
+    // increment fan index
+    if ((infoSettings.fan_count + infoSettings.ctrl_fan_en) > 1)
     {
-      currentFan = (currentFan + 1) % (infoSettings.fan_count + infoSettings.fan_ctrl_count);
+      do
+      {
+        currentFan = (currentFan + 1) % MAX_FAN_COUNT;
+      } while (!fanIsValid(currentFan));
     }
+    // switch speed/flow
     currentSpeedID = (currentSpeedID + 1) % 2;
     drawTemperature();
 
     // gcode queries must be call after drawTemperature
     coordinateQuery();
     speedQuery();
-    fanSpeedQuery();
+    ctrlFanQuery();
   }
 }
 
 void menuStatus(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
+
   GUI_SetBkColor(infoSettings.bg_color);
   menuDrawPage(&StatusItems);
   GUI_SetColor(infoSettings.status_xyz_bg_color);
   GUI_FillPrect(&RecGantry);
   drawTemperature();
   drawStatusScreenMsg();
+
   while (infoMenu.menu[infoMenu.cur] == menuStatus)
   {
     if (infoHost.connected != lastConnection_status)
@@ -270,46 +274,55 @@ void menuStatus(void)
       statusScreen_setReady();
       lastConnection_status = infoHost.connected;
     }
+
     if (msgNeedRefresh)
-    {
       drawStatusScreenMsg();
-    }
+
     scrollMsg();
     key_num = menuKeyGetValue();
+
     switch (key_num)
     {
       case KEY_ICON_0:
         heatSetCurrentIndex(currentTool);
         infoMenu.menu[++infoMenu.cur] = menuHeat;
         break;
+
       case KEY_ICON_1:
         heatSetCurrentIndex(BED);
         infoMenu.menu[++infoMenu.cur] = menuHeat;
         break;
+
       case KEY_ICON_2:
         infoMenu.menu[++infoMenu.cur] = menuFan;
         break;
+
       case KEY_SPEEDMENU:
         SET_SPEEDMENUINDEX(0);
         infoMenu.menu[++infoMenu.cur] = menuSpeed;
         break;
+
       #ifdef TFT70_V3_0
         case KEY_FLOWMENU:
           SET_SPEEDMENUINDEX(1);
           infoMenu.menu[++infoMenu.cur] = menuSpeed;
           break;
       #endif
+
       case KEY_MAINMENU:
         infoMenu.menu[++infoMenu.cur] = menuMain;
         break;
+
       case KEY_ICON_7:
         infoMenu.menu[++infoMenu.cur] = menuPrint;
         break;
+
       case KEY_INFOBOX:
         infoMenu.menu[++infoMenu.cur] = menuNotification;
       default:
         break;
     }
+
     toggleTool();
     loopProcess();
   }

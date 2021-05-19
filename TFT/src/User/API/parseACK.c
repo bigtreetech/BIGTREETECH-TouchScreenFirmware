@@ -12,6 +12,7 @@ static const char messagemagic[] = "message";                      // RRF messag
 static const char errorZProbe[] = "ZProbe triggered before move";  // smoothieware message
 
 bool portSeen[_UART_CNT] = {false, false, false, false, false, false};
+bool hostDialog = false;
 
 struct HOST_ACTION
 {
@@ -258,6 +259,11 @@ void hostActionCommands(void)
   }
   else if (ack_seen(":paused") || ack_seen(":pause"))
   {
+    if (ack_seen(":paused"))  // if paused with ADVANCED_PAUSE_FEATURE enabled in Marlin (:paused),
+      hostDialog = true;      // disable Resume/Pause button in the Printing menu
+    //else                      // otherwise, if ADVANCED_PAUSE_FEATURE is disabled in Marlin (:pause),
+    //  hostDialog = false;     // enable Resume/Pause button in the Printing menu
+
     // pass value "false" to let Marlin report when the host is not
     // printing (when notification ack "Not SD printing" is caught)
     setPrintPause(false, PAUSE_EXTERNAL);
@@ -269,6 +275,8 @@ void hostActionCommands(void)
   }
   else if (ack_seen(":resumed") || ack_seen(":resume"))
   {
+    hostDialog = false;  // enable Resume/Pause button in the Printing menu
+
     // pass value "true" to report the host is printing without waiting
     // from Marlin (when notification ack "SD printing byte" is caught)
     setPrintResume(true);
@@ -552,19 +560,9 @@ void parseACK(void)
       // parse and store M710, controller fan
       else if (ack_seen("M710"))
       {
-        uint8_t i = 0;
-        if (ack_seen("S"))
-        {
-          i = fanGetTypID(0, FAN_TYPE_CTRL_S);
-          fanSetCurSpeed(i, ack_value());
-          fanQuerySetWait(false);
-        }
-        if (ack_seen("I"))
-        {
-          i = fanGetTypID(0, FAN_TYPE_CTRL_I);
-          fanSetCurSpeed(i, ack_value());
-          fanQuerySetWait(false);
-        }
+        if (ack_seen("S")) fanSetCurSpeed(MAX_COOLING_FAN_COUNT, ack_value());
+        if (ack_seen("I")) fanSetCurSpeed(MAX_COOLING_FAN_COUNT + 1, ack_value());
+        ctrlFanQuerySetWait(false);
       }
       // parse pause message
       else if (!infoMachineSettings.promptSupport && ack_seen("paused for user"))

@@ -236,9 +236,13 @@ static inline void toggleInfo(void)
       reValueNozzle(EXT_ICON_POS);
     }
 
-    if ((infoSettings.fan_count + infoSettings.fan_ctrl_count) > 1)
+    if ((infoSettings.fan_count + infoSettings.ctrl_fan_en) > 1)
     {
-      currentFan = (currentFan + 1) % (infoSettings.fan_count + infoSettings.fan_ctrl_count);
+      do
+      {
+        currentFan = (currentFan + 1) % MAX_FAN_COUNT;
+      } while (!fanIsValid(currentFan));
+
       RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
       reDrawFan(FAN_ICON_POS);
     }
@@ -484,7 +488,10 @@ void menuPrinting(void)
       case KEY_ICON_4:
         if (isPrinting())
         {
-          printPause(!isPaused(), PAUSE_NORMAL);
+          if (!isHostDialog())
+            printPause(!isPaused(), PAUSE_NORMAL);
+          else
+            addToast(DIALOG_TYPE_ERROR, (char *)textSelect(LABEL_BUSY));
         }
         #ifndef TFT70_V3_0
           else
