@@ -5,12 +5,9 @@
 
 const char *const speedCmd[SPEED_NUM] = {"M220", "M221"};
 
-static uint16_t setPercent[SPEED_NUM]     = {100, 100};  //Speed  Flow
-static uint16_t lastSetPercent[SPEED_NUM] = {100, 100};  //Speed  Flow
-static uint16_t curPercent[SPEED_NUM]  = {100, 100};  //Speed  Flow
-
-static bool sendSpeed_waiting[SPEED_NUM];
-static bool speedQueryWait = false;
+static uint16_t setPercent[SPEED_NUM] = {100, 100};
+static uint16_t lastSetPercent[SPEED_NUM] = {100, 100};
+static uint16_t curPercent[SPEED_NUM] = {100, 100};
 
 static bool speedQueryWait = false;
 static uint32_t nextSpeedTime = 0;
