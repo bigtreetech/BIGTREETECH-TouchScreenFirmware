@@ -256,7 +256,7 @@ typedef struct
   uint8_t GDRAM[64][16];  // [64*16] = [64 * 16*8], means 64 * 128 pixels
   // 8x16 ASCII font
   uint8_t _8x16Font[95][16];  // 0x20 ~ 0x7E = 95char, 8width * 16height / 8 = 16 bytes, scan dir: left to right & top to bottom
-}ST7920;
+} ST7920;
 
 void ST7920_Init(ST7920 *pStruct);
 void ST7920_ParseRecv(uint8_t val);
