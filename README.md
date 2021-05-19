@@ -100,6 +100,8 @@ In order the TFT firmware is able to provide all of its functionalities/features
 
 `AUTO_REPORT_TEMPERATURES` (in Configuration_adv.h)
 
+`AUTO_REPORT_POSITION` (in Configuration_adv.h)
+
 `M115_GEOMETRY_REPORT` (in Configuration_adv.h)
 
 `M114_DETAIL` (in Configuration_adv.h)
