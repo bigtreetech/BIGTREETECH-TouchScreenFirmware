@@ -27,7 +27,7 @@ Important information related to BigTreeTech's TFT touchscreen 3D printer contro
 
 - [Connect the TFT to the Mainboard](#connect-the-tft-to-the-mainboard)
 
-- [Menus and Themes](#menus-and-themes)
+- [Menus and Themes](#menus)
 
 - [Update TFT Firmware](#update-tft-firmware)
 
