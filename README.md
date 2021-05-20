@@ -47,7 +47,7 @@ Important information related to BigTreeTech's TFT touchscreen 3D printer contro
 - [Appendix](#appendix)
 
   - [TFT Screen Configuration and support for RRF](#TFT-Screen-Configuration-and-support-for-RRF)
-  - [Setup of BTT TFT35 E3 V3 with MKS SGEN_L Mainboards](#Setup-of-BTT-TFT35-E3-V3-with-MKS-SGEN-L-Mainboards)
+  - [Setup of BTT TFT35 E3 V3 with MKS SGEN L Mainboards](#Setup-of-BTT-TFT35-E3-V3-with-MKS-SGEN-L-Mainboards)
   - [Show more statistics at the end of the print](#show-more-statistics-at-the-end-of-the-print)
 
   
@@ -453,7 +453,7 @@ Menu system for macros
 - Load/unload menu
 - PID tune menu
 
-### Setup of BTT TFT35 E3 V3 with MKS SGEN_L Mainboards
+### Setup of BTT TFT35 E3 V3 with MKS SGEN L Mainboards
 
 The following mainboards are covered by this document.
 
