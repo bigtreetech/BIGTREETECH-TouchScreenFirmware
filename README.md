@@ -21,7 +21,7 @@ Important information related to BigTreeTech's TFT touchscreen 3D printer contro
 
 ## Table of Contents
 
-- [Supported TFT's](#Supported-TFT's)
+- [Supported TFT's](#supported-tft's)
 
 - [Marlin Dependencies](#marlin-dependencies)
 
