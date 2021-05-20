@@ -181,7 +181,7 @@ long request_M23_M36(char *filename)
 }
 
 /**
- * Start o resume print
+ * Start or resume print
  **/
 void request_M24(int pos)
 {
@@ -208,13 +208,17 @@ void request_M25(void)
 }
 
 /**
- * Print status (start auto report)
+ * @brief Print status (start auto report)
+ * @param seconds: Pass 0 to disable auto report. Pass delay in seconds
+ *                 for auto query if available in marlin.
+ *
  * ->  SD printing byte 123/12345
  * ->  Not SD printing
- **/
-void request_M27(int seconds)
+ */
+void request_M27(uint8_t seconds)
 {
-  mustStoreCmd("M27 S%d\n", seconds);
+  if (infoMachineSettings.autoReportSDStatus == 1)
+    mustStoreCmd("M27 S%d\n", seconds);
 }
 
 /**

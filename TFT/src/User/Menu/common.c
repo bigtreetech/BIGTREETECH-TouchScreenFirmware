@@ -114,6 +114,19 @@ bool nextScreenUpdate(uint32_t duration)
   }
 }
 
+#ifdef FRIENDLY_Z_OFFSET_LANGUAGE
+  void invertZAxisIcons(MENUITEMS * menuItems)
+  {
+    if (infoSettings.invert_axis[Z_AXIS] == 1)
+    {
+      menuItems->items[KEY_ICON_0].icon = ICON_Z_INC;
+      menuItems->items[KEY_ICON_0].label.index = LABEL_UP;
+      menuItems->items[KEY_ICON_3].icon = ICON_Z_DEC;
+      menuItems->items[KEY_ICON_3].label.index = LABEL_DOWN;
+    }
+  }
+#endif
+
 void drawBorder(const GUI_RECT *rect, uint16_t color, uint16_t edgeDistance)
 {
   //uint16_t origColor = GUI_GetColor();

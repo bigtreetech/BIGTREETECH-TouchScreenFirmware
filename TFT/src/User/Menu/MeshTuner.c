@@ -95,6 +95,7 @@ float menuMeshTuner(uint16_t col, uint16_t row, float value)
 
   now = curValue = coordinateGetAxisActual(Z_AXIS);
 
+  INVERT_Z_AXIS_ICONS(&meshItems);
   meshItems.items[KEY_ICON_4] = itemMoveLen[curUnit_index];
 
   menuDrawPage(&meshItems);

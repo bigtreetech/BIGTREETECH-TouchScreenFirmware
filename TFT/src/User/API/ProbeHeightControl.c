@@ -82,7 +82,7 @@ void probeHeightQueryCoord(void)
 {
   if (OS_GetTimeMs() > nextQueryTime)
   {
-    coordinateQuery();
+    coordinateQuery(0);  // query position manually for delay less than 1 second
     nextQueryTime = OS_GetTimeMs() + PROBE_UPDATE_DELAY;
   }
 }

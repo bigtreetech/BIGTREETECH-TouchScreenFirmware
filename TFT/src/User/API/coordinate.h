@@ -41,7 +41,7 @@ void coordinateSetExtruderActualSteps(float steps);
 float coordinateGetAxisActual(AXIS axis);
 void coordinateSetAxisActual(AXIS axis, float position);
 void coordinateQuerySetWait(bool wait);
-void coordinateQuery(void);
+void coordinateQuery(uint8_t delay);
 
 #ifdef __cplusplus
 }

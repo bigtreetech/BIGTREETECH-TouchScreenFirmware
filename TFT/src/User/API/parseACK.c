@@ -1078,6 +1078,10 @@ void parseACK(void)
           storeCmd("M155 ");
         }
       }
+      else if (ack_seen("Cap:AUTOREPORT_POS:"))
+      {
+        infoMachineSettings.autoReportPos = ack_value();
+      }
       else if (ack_seen("Cap:AUTOLEVEL:") && infoMachineSettings.leveling == BL_DISABLED)
       {
         infoMachineSettings.leveling = ack_value();
