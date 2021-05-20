@@ -33,7 +33,7 @@ Important information related to BigTreeTech's TFT touchscreen 3D printer contro
 
 - [Calibrate the Screen](#calibrate-the-screen)
 
-- [Using the Configuration file](#using-the -configuration-file)
+- [Using the Configuration file](#using-the-configuration-file)
 
 - [Customisation](#customisation)
 
