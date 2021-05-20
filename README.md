@@ -21,7 +21,7 @@ Important information related to BigTreeTech's TFT touchscreen 3D printer contro
 
 ## Table of Contents
 
-- [Supported TFT's](#supported-tft's)
+- [Supported TFT's](#Supported TFT's)
 
 - [Marlin Dependencies](#marlin-dependencies)
 
@@ -94,7 +94,7 @@ Distribution date: 2021-05-15
 
 In order the TFT firmware is able to provide all of its functionalities/features, the following options must be enabled in Marlin firmware.
 
-**General options:**
+**General options which MUST be activated:**
 
 `EEPROM_SETTINGS` (in Configuration.h)
 
@@ -235,22 +235,22 @@ Attention TFT35 owners. There are currently three different kinds of firmware av
 
 **element 2:** Fonts and Icons (in the `TFT*` or `MKS` folder):
 
-For BTT TFTs, the ROOT folder for fonts and icons is TFT*, where * is the size of the TFT (example: TFT24, TFT35, TFT50, etc).
+For BTT TFTs, the ROOT FOLDER for fonts and icons is TFT*, where * is the size of the TFT (example: TFT24, TFT35, TFT50, etc).
 Fonts and icons folder structure:
 
-- `TFT*/font`: fonts
-- `TFT*/bmp`: icons
+- `TFT*/font`: includes the fonts in .fon format and a readme.md
+- `TFT*/bmp`: includes the icons in .bmp format and a readme.md
 
-For MKS TFTs the ROOT folder for fonts and icons must be renamed to "MKS".
+For MKS TFTs the ROOT FOLDER for fonts and icons must be renamed to "MKS".
 Fonts and icons folder structure:
 
-- `MKS/font`: fonts
-- `MKS/bmp`: icons
+- `MKS/font`: includes the fonts in .fon format and a readme.md
+- `MKS/bmp`: includes the icons in .bmp format and a readme.md
 
 
 **element 3:** The config.ini or (the renamed) config_rrf.ini file
 
-Attention RepRap Firmware users. You have to make your changes to the config_rrf.ini file and rename it to config.ini before you upload it to the TFT.
+Attention RepRap Firmware users. You have to make your changes using the config_rrf.ini file and rename it to config.ini before you upload it to the TFT.
 
 
 **element 4 (optionally):**  One or several language file(s)
