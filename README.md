@@ -21,7 +21,7 @@ Important information related to BigTreeTech's TFT touchscreen 3D printer contro
 
 ## Table of Contents
 
-- [Supported TFTs](#supported-tfts)
+- [Supported Screens](#supported-screens)
 
 - [Marlin Dependencies](#marlin-dependencies)
 
@@ -33,7 +33,7 @@ Important information related to BigTreeTech's TFT touchscreen 3D printer contro
 
 - [Calibrate the Screen](#calibrate-the-screen)
 
-- [Configuration using config.ini](#configuration-using-config.ini)
+- [Using the Configuration file](#using-the -configuration-file)
 
 - [Customisation](#customisation)
 
@@ -47,14 +47,14 @@ Important information related to BigTreeTech's TFT touchscreen 3D printer contro
 - [Appendix](#appendix)
 
   - [TFT Screen Configuration and support for RRF](#TFT-Screen-Configuration-and-support-for-RRF)
-  - [Setup of BTT TFT35 E3 V3.0 with MKS SGEN_L Mainboards](#Setup-of-BTT-TFT35-E3-V3.0-with-MKS-SGEN-L-Mainboards)
+  - [Setup of BTT TFT35 E3 V3 with MKS SGEN_L Mainboards](#Setup-of-BTT-TFT35-E3-V3-with-MKS-SGEN-L-Mainboards)
   - [Show more statistics at the end of the print](#show-more-statistics-at-the-end-of-the-print)
 
   
 
 
 
-## Supported TFTs
+## Supported Screens
 
 Only the TFT's listed below are currently supported. Trying to install the firmware on a TFT which is not supported can harm the hardware.
 
@@ -303,10 +303,11 @@ Tip: Format the SD card after the firmware update in case you would like to prin
 
 Sometimes a calibration will be executed automatically after a firmware update, showing a white screen with a red dot in the upper right corner and the text: Touch Screen Calibration - Please click on the red dot. To calibrate the screen press with your finger or a stylus the red dot in the upper left corner, then the red dot in the upper right corner and then  the red dot in the lower right corner. Even the screen asks you to press the red dot, press the black dot in the middle of the screen to finish the calibration. Repeat the process in case the message: "Adjustment failed, please try again" is shown.
 
+## Using the Configuration file
 
-## Configuration using config.ini (or the renamed config_rrf.ini) file
+Attention RepRap Firmware users. You have to make your changes using the config_rrf.ini file and rename it to config.ini before you copy it to the TFT.
 
-The Firmware can be modified by changing the **config.ini** file from: [`Copy to SD Card root directory to update`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update) using a simple text editor (make sure to use UTF encoding).
+The Firmware can be modified by changing the **config.ini** (or the renamed config_rrf.ini) file from: [`Copy to SD Card root directory to update`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update) using a simple text editor (make sure to use UTF encoding).
 
 Once saved, it can be uploaded without the need to upload the firmware or the TFT folder again, as long as the firmware and the config file are from the same version.
 
@@ -322,7 +323,7 @@ To update the Firmware configuration:
 
 1. Edit the settings like described above
 
-2. Copy the **config.ini** or **config_rrf.ini** file to the root of the SD card. (The SD card capacity should be less than or equal to 8GB and formatted as FAT32)
+2. Copy the **config.ini** file to the root of the SD card. (The SD card capacity should be less than or equal to 8GB and formatted as FAT32)
 
 3. Insert the SD card into the TFT's SD card slot and restart the printer or press the reset buttion of the TFT.
 
@@ -452,7 +453,7 @@ Menu system for macros
 - Load/unload menu
 - PID tune menu
 
-### Setup of BTT TFT35 E3 V3.0 with MKS SGEN_L Mainboards
+### Setup of BTT TFT35 E3 V3 with MKS SGEN_L Mainboards
 
 The following mainboards are covered by this document.
 
