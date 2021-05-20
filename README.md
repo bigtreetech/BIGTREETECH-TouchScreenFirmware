@@ -21,7 +21,7 @@ Important information related to BigTreeTech's TFT touchscreen 3D printer contro
 
 ## Table of Contents
 
-- [Supported TFTs](#supported-tfts)
+- [Supported TFT's](#supported-tft's)
 
 - [Marlin Dependencies](#marlin-dependencies)
 
@@ -54,7 +54,7 @@ Important information related to BigTreeTech's TFT touchscreen 3D printer contro
 
 
 
-## Supported TFTs
+## Supported TFT's
 
 Only the TFT's listed below are currently supported. Trying to install the firmware on a TFT which is not supported can harm the hardware.
 
