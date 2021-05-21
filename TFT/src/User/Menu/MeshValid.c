@@ -6,16 +6,16 @@ void menuMeshValid(void)
   MENUITEMS meshValidItems = {
     // title
     LABEL_MESH_VALID,
-    // icon                          label
+    // icon             label
     {
-      {ICON_PREHEAT,                 LABEL_BACKGROUND},
-      {ICON_PREHEAT,                 LABEL_BACKGROUND},
-      {ICON_PREHEAT,                 LABEL_BACKGROUND},
-      {ICON_PREHEAT,                 LABEL_BACKGROUND},
-      {ICON_PREHEAT,                 LABEL_BACKGROUND},
-      {ICON_PREHEAT,                 LABEL_BACKGROUND},
-      {ICON_BABYSTEP,                LABEL_BABYSTEP},
-      {ICON_BACK,                    LABEL_BACK},
+      {ICON_PREHEAT,    LABEL_BACKGROUND},
+      {ICON_PREHEAT,    LABEL_BACKGROUND},
+      {ICON_PREHEAT,    LABEL_BACKGROUND},
+      {ICON_PREHEAT,    LABEL_BACKGROUND},
+      {ICON_PREHEAT,    LABEL_BACKGROUND},
+      {ICON_PREHEAT,    LABEL_BACKGROUND},
+      {ICON_BACKGROUND, LABEL_BACKGROUND},
+      {ICON_BACK,       LABEL_BACK},
     }
   };
 

@@ -203,15 +203,14 @@ bool warmupTemperature(uint8_t toolIndex, void (* callback)(void))
 {
   if (heatGetCurrentTemp(toolIndex) < infoSettings.min_ext_temp - TEMPERATURE_RANGE)
   { // low temperature warning
-    char tempMsg[120];
-    LABELCHAR(tempStr, LABEL_EXT_TEMPLOW);
-
-    sprintf(tempMsg, tempStr, infoSettings.min_ext_temp);
+    char tempMsg[200];
+    sprintf(tempMsg, (char *)textSelect(LABEL_EXT_TEMPLOW), infoSettings.min_ext_temp);
 
     if (heatGetTargetTemp(toolIndex) < infoSettings.min_ext_temp)
     { // heatup offering
-      strcat(tempMsg, "\n");
+      char tempStr[100];
       sprintf(tempStr, (char *)textSelect(LABEL_HEAT_HOTEND), infoSettings.min_ext_temp);
+      strcat(tempMsg, "\n");
       strcat(tempMsg, tempStr);
 
       setDialogText(LABEL_WARNING, (uint8_t *)tempMsg, LABEL_CONFIRM, LABEL_CANCEL);
