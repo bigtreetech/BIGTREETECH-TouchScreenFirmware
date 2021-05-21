@@ -277,7 +277,7 @@ void loopCheckHeater(void)
     }
     else if (heater.T[i].waiting == WAIT_COOLING_HEATING)
     {
-      if (inRange(heater.T[i].current, heater.T[i].target, TEMPERATURE_RANGE) != true)
+      if (inRange(heater.T[i].current, heater.T[i].target, TEMPERATURE_RANGE) == false)
         continue;
     }
 
@@ -293,7 +293,7 @@ void loopCheckHeater(void)
   // Query heaters if they reached the target temperature (only if not prining)
   for (uint8_t i = 0; (i < MAX_HEATER_COUNT) && (!isPrinting()); i++)
   {
-    if (heater.T[i].status != SETTLED && inRange(heater.T[i].current, heater.T[i].target, 2))
+    if (heater.T[i].status != SETTLED && inRange(heater.T[i].current, heater.T[i].target, TEMPERATURE_RANGE))
     {
       switch (heater.T[i].status)
       {
