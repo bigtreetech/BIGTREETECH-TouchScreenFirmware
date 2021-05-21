@@ -24,11 +24,6 @@ void caseLightSetState(bool state)
   caseLightState = state;
 }
 
-void caseLightToggleState(void)
-{
-  caseLightState = !caseLightState;
-}
-
 void caseLightSetBrightness(uint8_t brightness)
 {
   caseLightBrightness = NOBEYOND(0, brightness, 255);

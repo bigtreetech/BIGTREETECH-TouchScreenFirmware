@@ -11,6 +11,7 @@ extern "C" {
 
 #define TEMPERATURE_QUERY_FAST_SECONDS 1  // "M105" query temperature every 1s
 #define TEMPERATURE_QUERY_SLOW_SECONDS 3  // 3s
+#define TEMPERATURE_RANGE              2
 
 typedef enum {
   WAIT_NONE = 0,
