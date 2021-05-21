@@ -51,11 +51,6 @@ void menuMeshValid(void)
         refreshPreheatIcon(key_num, key_num, &meshValidItems.items[key_num]);
         break;
 
-      // Menu babystep
-      case KEY_ICON_6:
-        infoMenu.menu[++infoMenu.cur] = menuBabystep;
-        break;
-
       case KEY_ICON_7:
         infoMenu.cur--;
         break;
