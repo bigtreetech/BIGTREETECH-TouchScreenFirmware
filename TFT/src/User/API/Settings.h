@@ -33,7 +33,7 @@ typedef enum
 #define CONFIG_SUPPPORT 20210513
 
 #define FONT_FLASH_SIGN       20200908  // (YYYYMMDD) change if fonts require updating
-#define CONFIG_FLASH_SIGN     20210509  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
+#define CONFIG_FLASH_SIGN     20210521  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
 #define LANGUAGE_FLASH_SIGN   20210509  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
 #define ICON_FLASH_SIGN       20210217  // (YYYYMMDD) change if any icon(s) is added or removed
 
@@ -178,7 +178,6 @@ typedef struct
   // Power Loss Recovery & BTT UPS Settings
   uint8_t  powerloss_en;
   uint8_t  powerloss_home;
-  uint8_t  powerloss_invert;
   uint8_t  powerloss_z_raise;
   uint8_t  btt_ups;
 

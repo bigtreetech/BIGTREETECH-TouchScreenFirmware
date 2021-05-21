@@ -104,7 +104,6 @@ void infoSettingsReset(void)
 // Power Loss Recovery & BTT UPS Settings
   infoSettings.powerloss_en           = ENABLED;
   infoSettings.powerloss_home         = HOME_BEFORE_PLR;
-  infoSettings.powerloss_invert       = PS_ON_ACTIVE_HIGH;
   infoSettings.powerloss_z_raise      = POWER_LOSS_ZRAISE;
   infoSettings.btt_ups                = BTT_MINI_UPS;
 

@@ -870,7 +870,7 @@ void parseConfigKey(uint16_t index)
         break;
 
       case C_INDEX_PS_LOGIC:
-        infoSettings.powerloss_invert = getOnOff();
+        infoSettings.ps_active_high = getOnOff();
         break;
 
       case C_INDEX_SHUTDOWN_TEMP:
