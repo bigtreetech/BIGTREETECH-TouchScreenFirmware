@@ -227,7 +227,7 @@ void GUI_RestoreColorDefault(void)
   GUI_SetColor(infoSettings.font_color);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
   GUI_SetNumMode(GUI_NUMMODE_SPACE);
-  setLargeFont(false);
+  setFontSize(FONT_SIZE_NORMAL);
 }
 
 static const MENUITEMS *curMenuItems = NULL;  //current menu
@@ -599,7 +599,7 @@ void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, const ITEM * item)
         loc.y = liveicon->lines[i].pos.y + curRect[index].y0;
       }
 
-      setLargeFont(liveicon->lines[i].large_font);
+      setFontSize(liveicon->lines[i].font);
 
       switch (liveicon->lines[i].h_align)
       {

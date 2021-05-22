@@ -108,10 +108,10 @@ void drawKeypadButton(uint8_t index, uint8_t isPressed)
                   .radius     = 13,
                   .rect       = rectBtn};
 
-    setLargeFont(true);
+    setFontSize(FONT_SIZE_LARGE);
     if (!(index == NUM_KEY_DEC && ((numpadType >> 0) & 1)) && !(index == NUM_KEY_MINUS && !((numpadType >> 1) & 1)))
       GUI_DrawButton(&btn, isPressed);
-    setLargeFont(false);
+    setFontSize(FONT_SIZE_NORMAL);
     #else
 
     if (!isPressed)
@@ -159,7 +159,7 @@ void Draw_keyboard(uint8_t * title, bool numberOnly, bool negative)
     GUI_SetColor(infoSettings.font_color);
     GUI_HLine(rect_of_numkey[0].x0,rect_of_numkey[0].y0,rect_of_numkey[3].x1);
 
-    setLargeFont(true);
+    setFontSize(FONT_SIZE_LARGE);
 
     for (uint8_t i = 0; i < KEY_COUNT ;i++)
     {
@@ -172,7 +172,7 @@ void Draw_keyboard(uint8_t * title, bool numberOnly, bool negative)
     if (negative)
       GUI_DispStringInPrect(&rect_of_numkey[NUM_KEY_MINUS],(uint8_t *)numPadKeyChar[NUM_KEY_MINUS]);
 
-    setLargeFont(true);
+    setFontSize(FONT_SIZE_LARGE);
 
     drawCharIcon(&rect_of_numkey[NUM_KEY_OK], CENTER, CHARICON_OK, false, 0);
     drawCharIcon(&rect_of_numkey[NUM_KEY_DEL], CENTER, CHARICON_POINT_LEFT, false, 0);
@@ -183,12 +183,12 @@ void Draw_keyboard(uint8_t * title, bool numberOnly, bool negative)
 
   GUI_DispStringInPrect(&arrowRect,(uint8_t *)"\u089A");
 
-  setLargeFont(true);
+  setFontSize(FONT_SIZE_LARGE);
   if ((oldParameterRect.x1 - oldParameterRect.x0) <= GUI_StrPixelWidth_str(title))
-    setLargeFont(false);
+    setFontSize(FONT_SIZE_NORMAL);
 
   GUI_DispStringInPrect(&oldParameterRect, title);
-  setLargeFont(false);
+  setFontSize(FONT_SIZE_NORMAL);
 }
 
 static inline void drawValue(char * str)
@@ -199,9 +199,9 @@ static inline void drawValue(char * str)
   #endif
   GUI_ClearPrect(&newParameterRect);
 
-  setLargeFont(true);
+  setFontSize(FONT_SIZE_LARGE);
   GUI_DispStringInPrect(&newParameterRect, (uint8_t *)str);
-  setLargeFont(false);
+  setFontSize(FONT_SIZE_NORMAL);
 }
 
 //Numpad for decimal numbers
@@ -457,7 +457,7 @@ int32_t numPadInt(uint8_t* title, int32_t old_val, int32_t reset_val, bool negat
 
       case NUM_KEY_OK:
         BUZZER_PLAY(sound_ok);
-        setLargeFont(false);
+        setFontSize(FONT_SIZE_NORMAL);
         touchSound = true;
         return (val * neg);
 

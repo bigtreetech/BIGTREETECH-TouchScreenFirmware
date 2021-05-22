@@ -338,6 +338,7 @@ void scanUpdates(void)
       if (updateFont(FONT_ROOT_DIR "/byte_ascii.fon", BYTE_ASCII_ADDR) &&
           updateFont(FONT_ROOT_DIR "/word_unicode.fon", WORD_UNICODE) &&
           updateFont(FONT_ROOT_DIR "/large_byte_ascii.fon", LARGE_FONT_ADDR) &&
+          updateFont(FONT_ROOT_DIR "/8x16_byte_ascii.fon", _8X16_FONT_ADDR) &&
           (saved_flash_sign[font_sign] != FONT_CHECK_SIGN))
       {
         saved_flash_sign[font_sign] = FONT_CHECK_SIGN;
