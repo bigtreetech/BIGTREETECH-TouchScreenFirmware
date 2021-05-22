@@ -86,6 +86,7 @@ typedef struct
   // General Settings
   uint8_t status_screen;
   uint8_t baudrate;
+  uint8_t multi_serial;
   uint8_t language;
 
   uint16_t title_bg_color;
