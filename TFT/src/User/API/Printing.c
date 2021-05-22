@@ -4,14 +4,17 @@
 typedef struct
 {
   FIL        file;
-  uint32_t   time;        // Printed time in sec
-  uint32_t   size;        // Gcode file total size
-  uint32_t   cur;         // Gcode has printed file size
+  uint32_t   time;           // current elapsed time in sec
+  #ifdef ENABLE_SLICER_REMAINING_TIME
+    uint32_t remainingTime;  // current remaining time in sec (if set with M73 or M117)
+  #endif
+  uint32_t   size;           // Gcode file total size
+  uint32_t   cur;            // Gcode has printed file size
   uint8_t    progress;
-  bool       runout;      // 1: runout in printing, 0: idle
-  bool       printing;    // 1: means printing, 0: means idle
-  bool       pause;       // 1: means paused
-  PAUSE_TYPE pauseType;   // pause type trigged by different sources and gcodes like M0 & M600
+  bool       runout;         // 1: runout in printing, 0: idle
+  bool       printing;       // 1: means printing, 0: means idle
+  bool       pause;          // 1: means paused
+  PAUSE_TYPE pauseType;      // pause type trigged by different sources and gcodes like M0 & M600
 } PRINTING;
 
 PRINTING infoPrinting;
@@ -57,13 +60,20 @@ void resumeAndContinue(void)
   Serial_Puts(SERIAL_PORT, "M876 S1\n");
 }
 
-void setPrintTime(uint32_t RTtime)
+void setPrintTime(uint32_t elapsedTime)
 {
-  if (RTtime % 1000 == 0)
+  if (elapsedTime % 1000 == 0)
   {
     if (infoPrinting.printing && !infoPrinting.pause)
     {
       infoPrinting.time++;
+
+      #ifdef ENABLE_SLICER_REMAINING_TIME
+        if (infoPrinting.remainingTime > 0  && !heatHasWaiting())
+        {
+          infoPrinting.remainingTime--;
+        }
+      #endif
     }
   }
 }
@@ -79,6 +89,37 @@ void getPrintTimeDetail(uint8_t * hour, uint8_t * min, uint8_t * sec)
   *min = infoPrinting.time % 3600 / 60;
   *sec = infoPrinting.time % 60;
 }
+
+#ifdef ENABLE_SLICER_REMAINING_TIME
+  void setPrintRemainingTime(int32_t remainingTime)
+  {
+    // Cura Slicer put a negative value at the end instead of zero
+    if (remainingTime < 0)
+      remainingTime = 0;
+
+    infoPrinting.remainingTime = remainingTime;
+  }
+
+  void parsePrintRemainingTime(char * buffer)
+  {
+    int hour, min, sec;
+
+    sscanf(buffer, "%dh%dm%ds", &hour, &min, &sec);
+    setPrintRemainingTime(((int32_t) (hour) * 3600) + ((int32_t) (min) * 60) + (int32_t) (sec));
+  }
+
+  uint32_t getPrintRemainingTime()
+  {
+    return infoPrinting.remainingTime;
+  }
+
+  void getPrintRemainingTimeDetail(uint8_t * hour, uint8_t * min, uint8_t * sec)
+  {
+    *hour = infoPrinting.remainingTime / 3600;
+    *min = infoPrinting.remainingTime % 3600 / 60;
+    *sec = infoPrinting.remainingTime % 60;
+  }
+#endif
 
 uint32_t getPrintSize(void)
 {
