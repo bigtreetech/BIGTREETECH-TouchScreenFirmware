@@ -2,6 +2,8 @@
 
 
 
+
+
 <!-- omit in toc -->
 
 # BigTreeTech TFT Touchscreen
@@ -21,19 +23,19 @@ Important information related to BigTreeTech's TFT touchscreen 3D printer contro
 
 ## Table of Contents
 
-- [Supported TFT's](#supported-tft's)
+- [Supported Screens](#supported-screens)
 
 - [Marlin Dependencies](#marlin-dependencies)
 
 - [Connect the TFT to the Mainboard](#connect-the-tft-to-the-mainboard)
 
-- [Menus and Themes](#menus-and-themes)
+- [Menus and Themes](#menus)
 
 - [Update TFT Firmware](#update-tft-firmware)
 
 - [Calibrate the Screen](#calibrate-the-screen)
 
-- [Configuration using config.ini](#configuration-using-config.ini)
+- [Using the Configuration file](#using-the-configuration-file)
 
 - [Customisation](#customisation)
 
@@ -46,15 +48,15 @@ Important information related to BigTreeTech's TFT touchscreen 3D printer contro
 
 - [Appendix](#appendix)
 
-  - [TFT Screen Configuration and support for RRF](#TFT-Screen-Configuration-and-support-for-RRF)
-  - [Setup of BTT TFT35 E3 V3.0 with MKS SGEN_L Mainboards](#Setup-of-BTT-TFT35-E3-V3.0-with-MKS-SGEN-L-Mainboards)
+  - [TFT Screen Configuration and support for RRF](#tft-screen-configuration-and-support-for-rrf)
+  - [Setup of BTT TFT35 E3 V3 with MKS SGEN L Mainboards](#setup-of-btt-tft35-e3-v3-with-mks-sgen-l-mainboards)
   - [Show more statistics at the end of the print](#show-more-statistics-at-the-end-of-the-print)
 
   
 
 
 
-## Supported TFT's
+## Supported Screens
 
 Only the TFT's listed below are currently supported. Trying to install the firmware on a TFT which is not supported can harm the hardware.
 
@@ -94,7 +96,7 @@ Distribution date: 2021-05-15
 
 In order the TFT firmware is able to provide all of its functionalities/features, the following options must be enabled in Marlin firmware.
 
-**General options:**
+**General options which MUST be activated:**
 
 `EEPROM_SETTINGS` (in Configuration.h)
 
@@ -107,8 +109,6 @@ In order the TFT firmware is able to provide all of its functionalities/features
 `M114_DETAIL` (in Configuration_adv.h)
 
 `REPORT_FAN_CHANGE` (in Configuration_adv.h)
-
-`AUTO_REPORT_POSITION` (in Configuration_adv.h)
 
 
 
@@ -237,22 +237,22 @@ Attention TFT35 owners. There are currently three different kinds of firmware av
 
 **element 2:** Fonts and Icons (in the `TFT*` or `MKS` folder):
 
-For BTT TFTs, the ROOT folder for fonts and icons is TFT*, where * is the size of the TFT (example: TFT24, TFT35, TFT50, etc).
+For BTT TFTs, the ROOT FOLDER for fonts and icons is TFT*, where * is the size of the TFT (example: TFT24, TFT35, TFT50, etc).
 Fonts and icons folder structure:
 
-- `TFT*/font`: fonts
-- `TFT*/bmp`: icons
+- `TFT*/font`: includes the fonts in .fon format and a readme.md
+- `TFT*/bmp`: includes the icons in .bmp format and a readme.md
 
-For MKS TFTs the ROOT folder for fonts and icons must be renamed to "MKS".
+For MKS TFTs the ROOT FOLDER for fonts and icons must be renamed to "MKS".
 Fonts and icons folder structure:
 
-- `MKS/font`: fonts
-- `MKS/bmp`: icons
+- `MKS/font`: includes the fonts in .fon format and a readme.md
+- `MKS/bmp`: includes the icons in .bmp format and a readme.md
 
 
 **element 3:** The config.ini or (the renamed) config_rrf.ini file
 
-Attention RepRap Firmware users. You have to make your changes to the config_rrf.ini file and rename it to config.ini before you upload it to the TFT.
+Attention RepRap Firmware users. You have to make your changes using the config_rrf.ini file and rename it to config.ini before you upload it to the TFT.
 
 
 **element 4 (optionally):**  One or several language file(s)
@@ -305,10 +305,11 @@ Tip: Format the SD card after the firmware update in case you would like to prin
 
 Sometimes a calibration will be executed automatically after a firmware update, showing a white screen with a red dot in the upper right corner and the text: Touch Screen Calibration - Please click on the red dot. To calibrate the screen press with your finger or a stylus the red dot in the upper left corner, then the red dot in the upper right corner and then  the red dot in the lower right corner. Even the screen asks you to press the red dot, press the black dot in the middle of the screen to finish the calibration. Repeat the process in case the message: "Adjustment failed, please try again" is shown.
 
+## Using the Configuration file
 
-## Configuration using config.ini (or the renamed config_rrf.ini) file
+Attention RepRap Firmware users. You have to make your changes using the config_rrf.ini file and rename it to config.ini before you copy it to the TFT.
 
-The Firmware can be modified by changing the **config.ini** file from: [`Copy to SD Card root directory to update`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update) using a simple text editor (make sure to use UTF encoding).
+The Firmware can be modified by changing the **config.ini** (or the renamed config_rrf.ini) file from: [`Copy to SD Card root directory to update`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update) using a simple text editor (make sure to use UTF encoding).
 
 Once saved, it can be uploaded without the need to upload the firmware or the TFT folder again, as long as the firmware and the config file are from the same version.
 
@@ -324,7 +325,7 @@ To update the Firmware configuration:
 
 1. Edit the settings like described above
 
-2. Copy the **config.ini** or **config_rrf.ini** file to the root of the SD card. (The SD card capacity should be less than or equal to 8GB and formatted as FAT32)
+2. Copy the **config.ini** file to the root of the SD card. (The SD card capacity should be less than or equal to 8GB and formatted as FAT32)
 
 3. Insert the SD card into the TFT's SD card slot and restart the printer or press the reset buttion of the TFT.
 
@@ -454,7 +455,7 @@ Menu system for macros
 - Load/unload menu
 - PID tune menu
 
-### Setup of BTT TFT35 E3 V3.0 with MKS SGEN_L Mainboards
+### Setup of BTT TFT35 E3 V3 with MKS SGEN L Mainboards
 
 The following mainboards are covered by this document.
 
