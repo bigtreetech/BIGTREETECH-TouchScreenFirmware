@@ -201,7 +201,7 @@ void drawStandardValue(const GUI_RECT *rect, VALUE_TYPE valType, const void *val
 
 bool warmupTemperature(uint8_t toolIndex, void (* callback)(void))
 {
-  if (heatGetCurrentTemp(toolIndex) < infoSettings.min_ext_temp - TEMPERATURE_RANGE)
+  if (heatGetCurrentTemp(toolIndex) < infoSettings.min_ext_temp - TEMPERATURE_MIN_EXT_RANGE)
   { // low temperature warning
     char tempMsg[200];
     sprintf(tempMsg, (char *)textSelect(LABEL_EXT_TEMPLOW), infoSettings.min_ext_temp);
