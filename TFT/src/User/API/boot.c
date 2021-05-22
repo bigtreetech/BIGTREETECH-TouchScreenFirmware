@@ -152,7 +152,7 @@ bool updateIcon(void)
     {  // display bmp update success
       found++;
       GUI_ClearRect(iconUpdateRect.x0, iconUpdateRect.y0, iconUpdateRect.x0 + last_size.x, iconUpdateRect.y0 + last_size.y);
-      ICON_CustomReadDisplay(iconUpdateRect.x0, iconUpdateRect.y0, ICON_ADDR(i));
+      IMAGE_ReadDisplay(iconUpdateRect.x0, iconUpdateRect.y0, ICON_ADDR(i));
     }
     else
     {  // display bmp update fail
@@ -177,7 +177,7 @@ bool updateIcon(void)
   bmpState = bmpDecode(BMP_ROOT_DIR "/InfoBox.bmp", INFOBOX_ADDR);
   if (bmpState == BMP_SUCCESS)
   {
-    ICON_CustomReadDisplay(iconUpdateRect.x0, iconUpdateRect.y0, INFOBOX_ADDR);
+    IMAGE_ReadDisplay(iconUpdateRect.x0, iconUpdateRect.y0, INFOBOX_ADDR);
     found++;
   }
   else

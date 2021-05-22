@@ -40,15 +40,15 @@ void heatSetTargetTemp(uint8_t index, int16_t temp)
     return;
 
   heater.T[index].target = NOBEYOND(0, temp, infoSettings.max_temp[index]);
-  if (heater.T[index].target + 2 > heater.T[index].current)
+  if (heater.T[index].target + TEMPERATURE_RANGE > heater.T[index].current)
   {
     heater.T[index].status = HEATING;
   }
-  if (heater.T[index].target < heater.T[index].current + 2)
+  if (heater.T[index].target < heater.T[index].current + TEMPERATURE_RANGE)
   {
     heater.T[index].status = COOLING;
   }
-  if (inRange(heater.T[index].current, heater.T[index].target, 2) == true)
+  if (inRange(heater.T[index].current, heater.T[index].target, TEMPERATURE_RANGE))
   {
     heater.T[index].status = SETTLED;
   }
@@ -272,12 +272,12 @@ void loopCheckHeater(void)
     }
     else if (heater.T[i].waiting == WAIT_HEATING)
     {
-      if (heater.T[i].current + 2 <= heater.T[i].target)
+      if (heater.T[i].current + TEMPERATURE_RANGE <= heater.T[i].target)
         continue;
     }
     else if (heater.T[i].waiting == WAIT_COOLING_HEATING)
     {
-      if (inRange(heater.T[i].current, heater.T[i].target, 2) != true)
+      if (inRange(heater.T[i].current, heater.T[i].target, TEMPERATURE_RANGE) == false)
         continue;
     }
 
@@ -293,29 +293,23 @@ void loopCheckHeater(void)
   // Query heaters if they reached the target temperature (only if not prining)
   for (uint8_t i = 0; (i < MAX_HEATER_COUNT) && (!isPrinting()); i++)
   {
-    if (heater.T[i].status == SETTLED)
+    if (heater.T[i].status != SETTLED && inRange(heater.T[i].current, heater.T[i].target, TEMPERATURE_ALERT_RANGE))
     {
-      continue;
-    }
-    if (inRange(heater.T[i].current, heater.T[i].target, 2) != true)
-    {
-      continue;
-    }
+      switch (heater.T[i].status)
+      {
+        case HEATING:
+          BUZZER_PLAY(sound_heated);
+          break;
 
-    switch (heater.T[i].status)
-    {
-      case HEATING:
-        BUZZER_PLAY(sound_heated);
-        break;
+        case COOLING:
+          BUZZER_PLAY(sound_cooled);
+          break;
 
-      case COOLING:
-        BUZZER_PLAY(sound_cooled);
-        break;
-
-      default:
-        break;
+        default:
+          break;
+      }
+      heater.T[i].status = SETTLED;
     }
-    heater.T[i].status = SETTLED;
   }
 
   for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)  // If the target temperature changes, send a Gcode to set the motherboard

@@ -72,8 +72,7 @@ void menuCaseLight(void)
         break;
 
       case KEY_ICON_4:
-        caseLightToggleState();
-        menuDrawPage(&caseLightItems);
+        caseLightSetState(!currentCaseLightState);
         caseLightBrightnessReDraw();
         break;
 
