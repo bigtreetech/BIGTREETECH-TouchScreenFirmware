@@ -541,6 +541,8 @@ void parseConfigKey(uint16_t index)
         #define MAX_MULTI_SERIAL (1 << 2)
       #elif defined(SERIAL_PORT_2)
         #define MAX_MULTI_SERIAL (1 << 1)
+      #else
+        #define MAX_MULTI_SERIAL (1 << 0)
       #endif
 
       SET_VALID_INT_VALUE(infoSettings.multi_serial, 0, MAX_MULTI_SERIAL - 1);
