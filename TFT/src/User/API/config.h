@@ -17,6 +17,7 @@ extern "C" {
 //-----------------------------General Settings
 #define CONFIG_STATUS_SCREEN          "status_screen:"
 #define CONFIG_UART_BAUDRATE          "baudrate:"
+#define CONFIG_MULTI_SERIAL           "multi_serial:"
 #define CONFIG_LANGUAGE               "language:"
 
 #define CONFIG_TITLE_BG               "title_back_color:"

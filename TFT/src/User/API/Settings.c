@@ -23,6 +23,7 @@ void infoSettingsReset(void)
 // General Settings
   infoSettings.status_screen          = ENABLE_STATUS_SCREEN;
   infoSettings.baudrate               = BAUDRATE;
+  infoSettings.multi_serial           = 0;
   infoSettings.language               = LANG_DEFAULT;
 
   infoSettings.title_bg_color         = lcd_colors[TITLE_BACKGROUND_COLOR];

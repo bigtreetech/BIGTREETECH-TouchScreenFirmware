@@ -534,6 +534,18 @@ void parseConfigKey(uint16_t index)
       SET_VALID_INT_VALUE(infoSettings.baudrate, 0, BAUDRATE_COUNT - 1);
       break;
 
+    case C_INDEX_MULTI_SERIAL:
+      #ifdef SERIAL_PORT_4
+        #define MAX_MULTI_SERIAL (1 << 3)
+      #elif defined(SERIAL_PORT_3)
+        #define MAX_MULTI_SERIAL (1 << 2)
+      #elif defined(SERIAL_PORT_2)
+        #define MAX_MULTI_SERIAL (1 << 1)
+      #endif
+
+      SET_VALID_INT_VALUE(infoSettings.multi_serial, 0, MAX_MULTI_SERIAL - 1);
+      break;
+
     case C_INDEX_LANGUAGE:
       SET_VALID_INT_VALUE(infoSettings.language, 0, LANGUAGE_NUM - 1);
       break;

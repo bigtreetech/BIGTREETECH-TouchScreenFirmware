@@ -33,7 +33,7 @@ typedef enum
 #define CONFIG_SUPPPORT 20210513
 
 #define FONT_FLASH_SIGN       20200908  // (YYYYMMDD) change if fonts require updating
-#define CONFIG_FLASH_SIGN     20210509  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
+#define CONFIG_FLASH_SIGN     20210521  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
 #define LANGUAGE_FLASH_SIGN   20210509  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
 #define ICON_FLASH_SIGN       20210217  // (YYYYMMDD) change if any icon(s) is added or removed
 
@@ -86,6 +86,7 @@ typedef struct
   // General Settings
   uint8_t status_screen;
   uint8_t baudrate;
+  uint8_t multi_serial;
   uint8_t language;
 
   uint16_t title_bg_color;

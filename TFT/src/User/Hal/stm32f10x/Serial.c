@@ -34,8 +34,8 @@ void Serial_DMA_Config(uint8_t port)
   cfg->dma_chanel->CCR &= ~(1<<0);              // DMA disable
   cfg->uart->CR3 |= 1<<6;                       // DMA enable receiver
 
-  cfg->dma_chanel->CPAR = (u32)(&cfg->uart->DR);
-  cfg->dma_chanel->CMAR = (u32)(dmaL1Data[port].cache);
+  cfg->dma_chanel->CPAR = (uint32_t)(&cfg->uart->DR);
+  cfg->dma_chanel->CMAR = (uint32_t)(dmaL1Data[port].cache);
   cfg->dma_chanel->CNDTR = dmaL1Data[port].cacheSize;
   cfg->dma_chanel->CCR = 0X00000000;
   cfg->dma_chanel->CCR |= 3<<12;  // Channel priority level
@@ -44,7 +44,7 @@ void Serial_DMA_Config(uint8_t port)
   cfg->dma_chanel->CCR |= 1<<0;   // DMA EN
 }
 
-void Serial_Config(uint8_t port, u32 baud)
+void Serial_Config(uint8_t port, uint32_t baud)
 {
   dmaL1Data[port].rIndex = dmaL1Data[port].wIndex = 0;
   dmaL1Data[port].cache = malloc(dmaL1Data[port].cacheSize);
@@ -61,21 +61,44 @@ void Serial_DeConfig(uint8_t port)
   UART_DeConfig(port);
 }
 
-void Serial_Init(u32 baud)
+#ifdef SERIAL_PORT_2
+  const uint8_t mulSerialPorts[] = {
+    SERIAL_PORT_2,
+    #ifdef SERIAL_PORT_3
+      SERIAL_PORT_3,
+    #endif
+    #ifdef SERIAL_PORT_4
+      SERIAL_PORT_4,
+    #endif
+  };
+
+  const uint16_t mulQueueSize[] = {
+    SERIAL_PORT_2_QUEUE_SIZE,
+    #ifdef SERIAL_PORT_3
+      SERIAL_PORT_3_QUEUE_SIZE,
+    #endif
+    #ifdef SERIAL_PORT_4
+      SERIAL_PORT_4_QUEUE_SIZE,
+    #endif
+  };
+#endif
+
+void Serial_Init(uint32_t baud)
 {
   dmaL1Data[SERIAL_PORT].cacheSize = SERIAL_PORT_QUEUE_SIZE;
   Serial_Config(SERIAL_PORT, baud);
+
   #ifdef SERIAL_PORT_2
-    dmaL1Data[SERIAL_PORT_2].cacheSize = SERIAL_PORT_2_QUEUE_SIZE;
-    Serial_Config(SERIAL_PORT_2, baud);
-  #endif
-  #ifdef SERIAL_PORT_3
-    dmaL1Data[SERIAL_PORT_3].cacheSize = SERIAL_PORT_3_QUEUE_SIZE;
-    Serial_Config(SERIAL_PORT_3, baud);
-  #endif
-  #ifdef SERIAL_PORT_4
-    dmaL1Data[SERIAL_PORT_4].cacheSize = SERIAL_PORT_4_QUEUE_SIZE;
-    Serial_Config(SERIAL_PORT_4, baud);
+    for (uint8_t i = 0; i < sizeof(mulSerialPorts); i++)
+    {
+      // The extended Multi-Serials port should be enabled according to config.ini
+      // Avoid the floating serial port be enabled that external interference causes the serial port received wrong data
+      if (infoSettings.multi_serial & (1 << i))
+      {
+        dmaL1Data[mulSerialPorts[i]].cacheSize = mulQueueSize[i];
+        Serial_Config(mulSerialPorts[i], baud);
+      }
+    }
   #endif
 }
 
@@ -84,15 +107,15 @@ void Serial_DeInit(void)
   Serial_DeConfig(SERIAL_PORT);
 
   #ifdef SERIAL_PORT_2
-    Serial_DeConfig(SERIAL_PORT_2);
-  #endif
-
-  #ifdef SERIAL_PORT_3
-    Serial_DeConfig(SERIAL_PORT_3);
-  #endif
-
-  #ifdef SERIAL_PORT_4
-    Serial_DeConfig(SERIAL_PORT_4);
+    for (uint8_t i = 0; i < sizeof(mulSerialPorts); i++)
+    {
+      // The extended Multi-Serials port should be enabled according to config.ini
+      // Avoid the floating serial port be enabled that external interference causes the serial port received wrong data
+      if (infoSettings.multi_serial & (1 << i))
+      {
+        Serial_DeConfig(mulSerialPorts[i]);
+      }
+    }
   #endif
 }
 
@@ -150,6 +173,6 @@ void Serial_Puts(uint8_t port, char *s)
 int fputc(int ch, FILE *f)
 {
   while((Serial[SERIAL_PORT].uart->SR&0X40) == 0);
-  Serial[SERIAL_PORT].uart->DR = (u8) ch;
+  Serial[SERIAL_PORT].uart->DR = (uint8_t) ch;
   return ch;
 }
