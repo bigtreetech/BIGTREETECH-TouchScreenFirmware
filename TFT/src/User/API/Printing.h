@@ -54,9 +54,16 @@ void breakAndContinue(void);
 void resumeAndPurge(void);
 void resumeAndContinue(void);
 
-void setPrintTime(uint32_t RTtime);
+void setPrintTime(uint32_t elapsedTime);
 uint32_t getPrintTime(void);
 void getPrintTimeDetail(uint8_t * hour, uint8_t * min, uint8_t * sec);
+
+#ifdef ENABLE_SLICER_REMAINING_TIME
+  void setPrintRemainingTime(int32_t remainingTime);
+  void parsePrintRemainingTime(char * buffer);
+  uint32_t getPrintRemainingTime();
+  void getPrintRemainingTimeDetail(uint8_t * hour, uint8_t * min, uint8_t * sec);
+#endif
 
 uint32_t getPrintSize(void);
 uint32_t getPrintCur(void);
