@@ -7,31 +7,6 @@ uint16_t backGroundColor = BLACK;
 GUI_TEXT_MODE guiTextMode = GUI_TEXTMODE_NORMAL;
 GUI_NUM_MODE guiNumMode = GUI_NUMMODE_SPACE;
 
-void LCD_SetWindow(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey)
-{
-  #if LCD_DRIVER_IS(ILI9325)
-    LCD_WR_REG(0x50);
-    LCD_WR_DATA(sy);
-    LCD_WR_REG(0x52);
-    LCD_WR_DATA(sx);
-    LCD_WR_REG(0x51);
-    LCD_WR_DATA(ey);
-    LCD_WR_REG(0x53);
-    LCD_WR_DATA(ex);
-    LCD_WR_REG(0x20);
-    LCD_WR_DATA(sy);
-    LCD_WR_REG(0x21);
-    LCD_WR_DATA(sx);
-  #else
-    LCD_WR_REG(0x2A);
-    LCD_WR_DATA(sx>>8);LCD_WR_DATA(sx&0xFF);
-    LCD_WR_DATA(ex>>8);LCD_WR_DATA(ex&0xFF);
-    LCD_WR_REG(0x2B);
-    LCD_WR_DATA(sy>>8);LCD_WR_DATA(sy&0xFF);
-    LCD_WR_DATA(ey>>8);LCD_WR_DATA(ey&0xFF);
-  #endif
-}
-
 void GUI_SetColor(uint16_t color)
 {
   foreGroundColor = color;
@@ -76,7 +51,6 @@ void GUI_Clear(uint16_t color)
 {
   uint32_t index=0;
   LCD_SetWindow(0, 0, LCD_WIDTH-1, LCD_HEIGHT-1);
-  LCD_WR_REG(TFTLCD_WRITEMEMORY);
   for (index=0; index<LCD_WIDTH*LCD_HEIGHT; index++)
   {
     LCD_WR_16BITS_DATA(color);
@@ -115,14 +89,12 @@ void GUI_DrawPixel(int16_t x, int16_t y, uint16_t color)
     return ;
 
   LCD_SetWindow(x, y, x, y);
-  LCD_WR_REG(TFTLCD_WRITEMEMORY);
   LCD_WR_16BITS_DATA(color);
 }
 
 void GUI_DrawPoint(uint16_t x, uint16_t y)
 {
   LCD_SetWindow(x, y, x, y);
-  LCD_WR_REG(TFTLCD_WRITEMEMORY);
   LCD_WR_16BITS_DATA(foreGroundColor);
 }
 
@@ -136,7 +108,6 @@ void GUI_FillRect(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey)
 {
   uint16_t i=0, j=0;
   LCD_SetWindow( sx, sy, ex-1, ey-1);
-  LCD_WR_REG(TFTLCD_WRITEMEMORY);
   for (i=sx; i<ex; i++)
   {
     for (j=sy; j<ey; j++)
@@ -161,7 +132,6 @@ void GUI_ClearRect(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey)
 {
   uint16_t i=0, j=0;
   LCD_SetWindow( sx, sy, ex-1, ey-1);
-  LCD_WR_REG(TFTLCD_WRITEMEMORY);
   for (i=sx; i<ex; i++)
   {
     for (j=sy; j<ey; j++)
@@ -187,7 +157,6 @@ void GUI_FillRectColor(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey, uint1
 {
   uint16_t i=0, j=0;
   LCD_SetWindow(sx, sy, ex-1, ey-1);
-  LCD_WR_REG(TFTLCD_WRITEMEMORY);
   for (i=sx; i<ex; i++)
   {
     for (j=sy; j<ey; j++)
@@ -201,7 +170,6 @@ void GUI_FillRectArry(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey, uint8_
 {
   uint16_t i = 0, j = 0, color;
   LCD_SetWindow(sx, sy, ex - 1, ey - 1);
-  LCD_WR_REG(TFTLCD_WRITEMEMORY);
   for (i = sx; i < ex; i++)
   {
     for (j = sy; j < ey; j++)
@@ -291,7 +259,6 @@ void GUI_HLine(uint16_t x1, uint16_t y, uint16_t x2)
 {
   uint16_t i=0;
   LCD_SetWindow(x1, y, x2-1, y);
-  LCD_WR_REG(TFTLCD_WRITEMEMORY);
   for (i=x1; i<x2; i++)
   {
     LCD_WR_16BITS_DATA(foreGroundColor);
@@ -307,7 +274,6 @@ void GUI_VLine(uint16_t x, uint16_t y1, uint16_t y2)
 {
   uint16_t i=0;
   LCD_SetWindow(x, y1, x, y2-1);
-  LCD_WR_REG(TFTLCD_WRITEMEMORY);
   for (i=y1; i<y2; i++)
   {
     LCD_WR_16BITS_DATA(foreGroundColor);
@@ -644,7 +610,7 @@ void GUI_DispOne(int16_t sx, int16_t sy, const CHAR_INFO *pInfo)
           j = 0,
           i = 0;
   uint16_t bitMapSize = (pInfo->pixelHeight * pInfo->pixelWidth / 8);
-  uint8_t  font[BYTE_HEIGHT * BYTE_HEIGHT / 8]; // TODO: match bitMapSize
+  uint8_t  font[bitMapSize];
   uint32_t temp = 0;
 
   W25Qxx_ReadBuffer(font, pInfo->bitMapAddr, bitMapSize);

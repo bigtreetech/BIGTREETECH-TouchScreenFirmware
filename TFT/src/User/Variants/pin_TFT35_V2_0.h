@@ -21,10 +21,8 @@
 
 // LCD interface
 #ifndef TFTLCD_DRIVER
-  #define TFTLCD_DRIVER               ILI9488  // Type of LCD driver, now support[RM68042, ILI9488, ILI9341, ST7789, HX8558].
+  #define TFTLCD_DRIVER               (ILI9488 | NT35310)  // Type of LCD driver, now support[RM68042, ILI9488, ILI9341, ST7789, HX8558].
   #define TFTLCD_DRIVER_SPEED         0x03
-  #define TFTLCD_0_DEGREE_REG_VALUE   0X28
-  #define TFTLCD_180_DEGREE_REG_VALUE 0XE8
 #endif
 #define STM32_HAS_FSMC  // FSMC 8080 interface(high speed), or normal IO interface(low speed)
 #ifndef LCD_DATA_16BIT

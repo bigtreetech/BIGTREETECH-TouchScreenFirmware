@@ -17,6 +17,7 @@ extern "C" {
 //-----------------------------General Settings
 #define CONFIG_STATUS_SCREEN          "status_screen:"
 #define CONFIG_UART_BAUDRATE          "baudrate:"
+#define CONFIG_MULTI_SERIAL           "multi_serial:"
 #define CONFIG_LANGUAGE               "language:"
 
 #define CONFIG_TITLE_BG               "title_back_color:"
@@ -57,7 +58,7 @@ extern "C" {
 #define CONFIG_HEATED_CHAMBER         "heated_chamber:"
 #define CONFIG_EXT_COUNT              "ext_count:"
 #define CONFIG_FAN_COUNT              "fan_count:"
-#define CONFIG_FAN_CTRL_COUNT         "fan_ctrl_count:"
+#define CONFIG_CONTROLLER_FAN         "controller_fan:"
 #define CONFIG_MAX_TEMP               "max_temp:"
 #define CONFIG_MIN_TEMP               "min_temp:"
 #define CONFIG_FAN_MAX                "fan_max:"

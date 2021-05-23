@@ -26,14 +26,8 @@ float probeOffsetGetValue(void);
 // Reset Z offset value to default value
 float probeOffsetResetValue(void);
 
-// Decrease Z offset value
-float probeOffsetDecreaseValue(float unit);
-
-// Increase Z offset value
-float probeOffsetIncreaseValue(float unit);
-
-// Update Z offset value by encoder
-float probeOffsetUpdateValueByEncoder(float unit, int8_t direction);
+// Update Z offset value
+float probeOffsetUpdateValue(float unit, int8_t direction);
 
 #ifdef __cplusplus
 }

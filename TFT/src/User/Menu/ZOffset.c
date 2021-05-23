@@ -46,9 +46,9 @@ void zOffsetDraw(bool status, float val)
   GUI_DispString(exhibitRect.x0, exhibitRect.y1 - BYTE_HEIGHT, (uint8_t *) tempstr3);
 
   GUI_SetColor(infoSettings.font_color);
-  setLargeFont(true);
+  setFontSize(FONT_SIZE_LARGE);
   GUI_DispStringInPrect(&exhibitRect, (uint8_t *) tempstr2);
-  setLargeFont(false);
+  setFontSize(FONT_SIZE_NORMAL);
 }
 
 void zOffsetSetMenu(bool probeOffset)
@@ -95,20 +95,15 @@ void menuZOffset(void)
   float now, z_offset;
   float unit;
   float ablState;
-  bool (* offsetGetStatus)(void);                       // get current status
-  void (* offsetEnable)(bool, float);                   // enable Z offset
-  void (* offsetDisable)(void);                         // disable Z offset
-  float (* offsetDecreaseValue)(float);                 // decrease current Z offset
-  float (* offsetIncreaseValue)(float);                 // increase current Z offset
-  float (* offsetResetValue)(void);                     // reset current Z offset
-  float (* offsetGetValue)(void);                       // get current Z offset
-
-  #if LCD_ENCODER_SUPPORT
-    float (* offsetUpdateValueByEncoder)(float, int8_t);  // update current Z offset by encoder
-  #endif
+  void (* offsetEnable)(bool, float);          // enable Z offset
+  void (* offsetDisable)(void);                // disable Z offset
+  bool (* offsetGetStatus)(void);              // get current status
+  float (* offsetGetValue)(void);              // get current Z offset
+  float (* offsetResetValue)(void);            // reset current Z offset
+  float (* offsetUpdateValue)(float, int8_t);  // update current Z offset
 
   ablState = getParameter(P_ABL_STATE, 0);
-  
+
   // if enabled, always disable ABL before editing a mesh
   if (ablState == ENABLED)
     storeCmd(infoMachineSettings.firmwareType != FW_REPRAPFW ? "M420 S0\n" : "G29 S2\n");
@@ -116,36 +111,27 @@ void menuZOffset(void)
   if (probeOffsetMenu)
   { // use Probe Offset menu
     zOffsetItems.title.index = LABEL_PROBE_OFFSET;
-    offsetGetStatus = probeOffsetGetStatus;
     offsetEnable = probeOffsetEnable;
     offsetDisable = probeOffsetDisable;
-    offsetDecreaseValue = probeOffsetDecreaseValue;
-    offsetIncreaseValue = probeOffsetIncreaseValue;
-    offsetResetValue = probeOffsetResetValue;
+    offsetGetStatus = probeOffsetGetStatus;
     offsetGetValue = probeOffsetGetValue;
-
-    #if LCD_ENCODER_SUPPORT
-      offsetUpdateValueByEncoder = probeOffsetUpdateValueByEncoder;
-    #endif
+    offsetResetValue = probeOffsetResetValue;
+    offsetUpdateValue = probeOffsetUpdateValue;
   }
   else
   { // use Home Offset menu
     zOffsetItems.title.index = LABEL_HOME_OFFSET;
-    offsetGetStatus = homeOffsetGetStatus;
     offsetEnable = homeOffsetEnable;
     offsetDisable = homeOffsetDisable;
-    offsetDecreaseValue = homeOffsetDecreaseValue;
-    offsetIncreaseValue = homeOffsetIncreaseValue;
-    offsetResetValue = homeOffsetResetValue;
+    offsetGetStatus = homeOffsetGetStatus;
     offsetGetValue = homeOffsetGetValue;
-
-    #if LCD_ENCODER_SUPPORT
-      offsetUpdateValueByEncoder = homeOffsetUpdateValueByEncoder;
-    #endif
+    offsetResetValue = homeOffsetResetValue;
+    offsetUpdateValue = homeOffsetUpdateValue;
   }
 
   now = z_offset = offsetGetValue();
 
+  INVERT_Z_AXIS_ICONS(&zOffsetItems);
   zOffsetItems.items[KEY_ICON_4].label = itemToggle[offsetGetStatus()];
 
   itemZOffsetSubmenu[0] = itemMoveLen[curUnit_index];
@@ -172,7 +158,7 @@ void menuZOffset(void)
         if (!offsetGetStatus())
           zOffsetNotifyError(false);
         else
-          z_offset = offsetDecreaseValue(unit);
+          z_offset = offsetUpdateValue(unit, -1);
         break;
 
       case KEY_INFOBOX:
@@ -187,7 +173,7 @@ void menuZOffset(void)
         if (!offsetGetStatus())
           zOffsetNotifyError(false);
         else
-          z_offset = offsetIncreaseValue(unit);
+          z_offset = offsetUpdateValue(unit, 1);
         break;
 
       // enable/disable Z offset change
@@ -268,7 +254,7 @@ void menuZOffset(void)
             if (!offsetGetStatus())
               zOffsetNotifyError(false);
             else
-              z_offset = offsetUpdateValueByEncoder(unit, encoderPosition > 0 ? 1 : -1);
+              z_offset = offsetUpdateValue(unit, encoderPosition < 0 ? -1 : 1);
 
             encoderPosition = 0;
           }

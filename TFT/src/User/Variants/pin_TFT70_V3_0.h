@@ -23,8 +23,6 @@
 #ifndef TFTLCD_DRIVER
   #define TFTLCD_DRIVER               SSD1963  // Type of LCD driver, now support[RM68042, ILI9488, ILI9341, ST7789, HX8558, SSD1963].
   #define TFTLCD_DRIVER_SPEED         0x10     // SSD1963 needs slower speed
-  #define TFTLCD_0_DEGREE_REG_VALUE   0x00
-  #define TFTLCD_180_DEGREE_REG_VALUE 0x03
 #endif
 
 #ifndef SSD1963_LCD_PARA

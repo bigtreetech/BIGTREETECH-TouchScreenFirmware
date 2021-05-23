@@ -22,7 +22,7 @@ void babyReDraw(float babystep, float z_offset, bool force_z_offset, bool skip_h
   GUI_POINT point_bs = {exhibitRect.x1, exhibitRect.y0 + BYTE_HEIGHT};
   GUI_POINT point_of = {exhibitRect.x1, exhibitRect.y0 + BYTE_HEIGHT * 2 + LARGE_BYTE_HEIGHT};
 
-  setLargeFont(true);
+  setFontSize(FONT_SIZE_LARGE);
   sprintf(tempstr, "% 6.2f", babystep);
   GUI_DispStringRight(point_bs.x, point_bs.y, (uint8_t*) tempstr);
   sprintf(tempstr, "% 6.2f", z_offset);
@@ -34,7 +34,7 @@ void babyReDraw(float babystep, float z_offset, bool force_z_offset, bool skip_h
 
   GUI_DispStringRight(point_of.x, point_of.y, (uint8_t*) tempstr);
   GUI_SetColor(infoSettings.font_color);  // restore default font color
-  setLargeFont(false);
+  setFontSize(FONT_SIZE_NORMAL);
 }
 
 // Set Z offset value for MBL bl type
@@ -106,6 +106,8 @@ void menuBabystep(void)
   now_z_offset = z_offset = orig_z_offset = new_z_offset = offsetGetValue();
   force_z_offset = false;
 
+  INVERT_Z_AXIS_ICONS(&babyStepItems);
+
   if (infoMachineSettings.EEPROM == 1)
   {
     babyStepItems.items[KEY_ICON_4].icon = ICON_EEPROM_SAVE;
@@ -132,12 +134,12 @@ void menuBabystep(void)
     {
       // decrease babystep / Z offset
       case KEY_ICON_0:
-        babystep = babystepDecreaseValue(unit);
+        babystep = babystepUpdateValue(unit, -1);
         break;
 
       // increase babystep / Z offset
       case KEY_ICON_3:
-        babystep = babystepIncreaseValue(unit);
+        babystep = babystepUpdateValue(unit, 1);
         break;
 
       // save to EEPROM and apply Z offset
@@ -178,7 +180,7 @@ void menuBabystep(void)
         #if LCD_ENCODER_SUPPORT
           if (encoderPosition)
           {
-            babystep = babystepUpdateValueByEncoder(unit, encoderPosition > 0 ? 1 : -1);
+            babystep = babystepUpdateValue(unit, encoderPosition < 0 ? -1 : 1);
 
             encoderPosition = 0;
           }

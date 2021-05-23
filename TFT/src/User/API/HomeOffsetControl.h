@@ -26,14 +26,8 @@ float homeOffsetGetValue(void);
 // Reset Z offset value to default value
 float homeOffsetResetValue(void);
 
-// Decrease Z offset value
-float homeOffsetDecreaseValue(float unit);
-
-// Increase Z offset value
-float homeOffsetIncreaseValue(float unit);
-
-// Update Z offset value by encoder
-float homeOffsetUpdateValueByEncoder(float unit, int8_t direction);
+// Update Z offset value
+float homeOffsetUpdateValue(float unit, int8_t direction);
 
 #ifdef __cplusplus
 }

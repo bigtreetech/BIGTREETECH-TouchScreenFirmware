@@ -1,7 +1,7 @@
 #include "lcd_dma.h"
 #include "variants.h"
 #include "lcd.h"
-#include "GUI.h"
+#include "LCD_Init.h"
 #include "delay.h"
 #include "w25qxx.h"
 
@@ -93,7 +93,6 @@ void lcd_frame_display(u16 sx,u16 sy,u16 w,u16 h, u32 addr)
   u32 totalSize = w*h*(2-LCD_DATA_16BIT);
 
   LCD_SetWindow(sx,sy,sx+w-1,sy+h-1);
-  LCD_WR_REG(0x2C);
 
   for(cur = 0; cur < totalSize; cur += LCD_DMA_MAX_TRANS)
   {

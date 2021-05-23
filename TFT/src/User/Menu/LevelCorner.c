@@ -65,14 +65,14 @@ static inline void drawProbeAccuracyIcon(MENUITEMS * levelItems)
   lvIcon.lines[0].fn_color = ORANGE;
   lvIcon.lines[0].text_mode = GUI_TEXTMODE_TRANS;
   lvIcon.lines[0].pos = loc;
-  lvIcon.lines[0].large_font = false;
+  lvIcon.lines[0].font = FONT_SIZE_NORMAL;
 
   lvIcon.lines[1].h_align = LEFT;
   lvIcon.lines[1].v_align = BOTTOM;
   lvIcon.lines[1].fn_color = WHITE;
   lvIcon.lines[1].text_mode = GUI_TEXTMODE_TRANS;
   lvIcon.lines[1].pos = (GUI_POINT){loc.x - 2, loc.y - 2};
-  lvIcon.lines[1].large_font = false;
+  lvIcon.lines[1].font = FONT_SIZE_NORMAL;
 
   lvIcon.lines[0].text = (uint8_t *)str;
   lvIcon.lines[1].text = (uint8_t *)str;

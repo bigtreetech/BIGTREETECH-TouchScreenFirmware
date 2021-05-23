@@ -49,9 +49,9 @@ void meshDraw(uint16_t col, uint16_t row, float val)
 
   sprintf(tempstr2, "  %.3f  ", val);
   GUI_SetColor(infoSettings.font_color);
-  setLargeFont(true);
+  setFontSize(FONT_SIZE_LARGE);
   GUI_DispStringInPrect(&exhibitRect, (uint8_t *) tempstr2);
-  setLargeFont(false);
+  setFontSize(FONT_SIZE_NORMAL);
 }
 
 float menuMeshTuner(uint16_t col, uint16_t row, float value)
@@ -95,6 +95,7 @@ float menuMeshTuner(uint16_t col, uint16_t row, float value)
 
   now = curValue = coordinateGetAxisActual(Z_AXIS);
 
+  INVERT_Z_AXIS_ICONS(&meshItems);
   meshItems.items[KEY_ICON_4] = itemMoveLen[curUnit_index];
 
   menuDrawPage(&meshItems);
@@ -155,7 +156,7 @@ float menuMeshTuner(uint16_t col, uint16_t row, float value)
         #if LCD_ENCODER_SUPPORT
           if (encoderPosition)
           {
-            probeHeightMove(unit, encoderPosition > 0 ? 1 : -1);
+            probeHeightMove(unit, encoderPosition < 0 ? -1 : 1);
 
             encoderPosition = 0;
           }

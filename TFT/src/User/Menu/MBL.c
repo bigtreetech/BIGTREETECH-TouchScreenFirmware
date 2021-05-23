@@ -111,9 +111,9 @@ void mblDrawHeader(uint8_t *point)
 
   GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *) tempstr);
   GUI_SetColor(infoSettings.font_color);
-  setLargeFont(true);
+  setFontSize(FONT_SIZE_LARGE);
   GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1) >> 1, exhibitRect.y0, (uint8_t *) "mm");
-  setLargeFont(false);
+  setFontSize(FONT_SIZE_NORMAL);
 }
 
 void mblDrawValue(float val)
@@ -121,9 +121,9 @@ void mblDrawValue(float val)
   char tempstr[20];
 
   sprintf(tempstr, "  %.2f  ", val);
-  setLargeFont(true);
+  setFontSize(FONT_SIZE_LARGE);
   GUI_DispStringInPrect(&exhibitRect, (uint8_t *) tempstr);
-  setLargeFont(false);
+  setFontSize(FONT_SIZE_NORMAL);
 }
 
 void menuMBL(void)
@@ -159,6 +159,7 @@ void menuMBL(void)
 
   now = curValue = coordinateGetAxisActual(Z_AXIS);
 
+  INVERT_Z_AXIS_ICONS(&mblItems);
   mblItems.items[KEY_ICON_4] = itemMoveLen[curUnit_index];
 
   if (mblRunning)
@@ -265,7 +266,7 @@ void menuMBL(void)
             if (!mblRunning)
               mblNotifyError(false);
             else
-              probeHeightMove(unit, encoderPosition > 0 ? 1 : -1);
+              probeHeightMove(unit, encoderPosition < 0 ? -1 : 1);
 
             encoderPosition = 0;
           }

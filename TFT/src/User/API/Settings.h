@@ -30,12 +30,12 @@ typedef enum
 // Config version support
 // change if new elements/keywords are added/removed/changed in the configuration.h Format YYYYMMDD
 // this number should match CONFIG_VERSION in configuration.h
-#define CONFIG_SUPPPORT 20210321
+#define CONFIG_SUPPPORT 20210513
 
-#define FONT_FLASH_SIGN       20200908  // (YYYYMMDD) change if fonts require updating
-#define CONFIG_FLASH_SIGN     20210509  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
-#define LANGUAGE_FLASH_SIGN   20210509  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
-#define ICON_FLASH_SIGN       20210217  // (YYYYMMDD) change if any icon(s) is added or removed
+#define FONT_FLASH_SIGN       20210522  // (YYYYMMDD) change if fonts require updating
+#define CONFIG_FLASH_SIGN     20210522  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
+#define LANGUAGE_FLASH_SIGN   20210522  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
+#define ICON_FLASH_SIGN       20210522  // (YYYYMMDD) change if any icon(s) is added or removed
 
 #define FONT_CHECK_SIGN       (FONT_FLASH_SIGN + WORD_UNICODE)
 #define CONFIG_CHECK_SIGN     (CONFIG_FLASH_SIGN + STRINGS_STORE_ADDR)
@@ -45,8 +45,9 @@ typedef enum
 #define MAX_EXT_COUNT         6
 #define MAX_HOTEND_COUNT      6
 #define MAX_HEATER_COUNT      (2 + MAX_HOTEND_COUNT)  // chamber + bed + hotend
-#define MAX_FAN_CTRL_COUNT    2
-#define MAX_FAN_COUNT         (6 + MAX_FAN_CTRL_COUNT)
+#define MAX_COOLING_FAN_COUNT 6
+#define MAX_CRTL_FAN_COUNT    2
+#define MAX_FAN_COUNT         (MAX_COOLING_FAN_COUNT + MAX_CRTL_FAN_COUNT)
 
 #define AXIS_NUM              (TOTAL_AXIS - 1)
 #define SPEED_COUNT            3
@@ -85,6 +86,7 @@ typedef struct
   // General Settings
   uint8_t status_screen;
   uint8_t baudrate;
+  uint8_t multi_serial;
   uint8_t language;
 
   uint16_t title_bg_color;
@@ -128,7 +130,7 @@ typedef struct
   uint8_t  chamber_en;
   uint8_t  ext_count;
   uint8_t  fan_count;
-  uint8_t  fan_ctrl_count;
+  uint8_t  ctrl_fan_en;
   uint16_t max_temp[MAX_HEATER_COUNT];  // chamber + bed + hotend
   uint16_t min_ext_temp;
   uint8_t  fan_max[MAX_FAN_COUNT];
@@ -177,7 +179,6 @@ typedef struct
   // Power Loss Recovery & BTT UPS Settings
   uint8_t  powerloss_en;
   uint8_t  powerloss_home;
-  uint8_t  powerloss_invert;
   uint8_t  powerloss_z_raise;
   uint8_t  btt_ups;
 
@@ -252,6 +253,7 @@ typedef struct
   FW_TYPE firmwareType;
   uint8_t EEPROM;
   uint8_t autoReportTemp;
+  uint8_t autoReportPos;
   BL_TYPE leveling;
   uint8_t zProbe;
   uint8_t levelingData;

@@ -23,6 +23,7 @@ void infoSettingsReset(void)
 // General Settings
   infoSettings.status_screen          = ENABLE_STATUS_SCREEN;
   infoSettings.baudrate               = BAUDRATE;
+  infoSettings.multi_serial           = 0;
   infoSettings.language               = LANG_DEFAULT;
 
   infoSettings.title_bg_color         = lcd_colors[TITLE_BACKGROUND_COLOR];
@@ -41,7 +42,7 @@ void infoSettingsReset(void)
   infoSettings.terminalACK            = DISABLED;
   infoSettings.persistent_info        = ENABLED;
   infoSettings.file_listmode          = ENABLED;
-  infoSettings.files_sort_by         = SORT_DATE_NEW_FIRST;
+  infoSettings.files_sort_by          = SORT_DATE_NEW_FIRST;
   infoSettings.ack_notification       = ACK_NOTIFICATION_STYLE;
   infoSettings.notification_m117      = DISABLED;
   infoSettings.emulate_m600           = EMULATE_M600;
@@ -64,7 +65,7 @@ void infoSettingsReset(void)
   infoSettings.chamber_en             = DISABLE;
   infoSettings.ext_count              = EXTRUDER_NUM;
   infoSettings.fan_count              = FAN_NUM;
-  infoSettings.fan_ctrl_count         = FAN_CTRL_NUM;
+  infoSettings.ctrl_fan_en            = ENABLE_CTRL_FAN;
   infoSettings.min_ext_temp           = PREVENT_COLD_EXTRUSION_MINTEMP;
   infoSettings.auto_load_leveling     = AUTO_SAVE_LOAD_BL_VALUE;
   infoSettings.touchmi_sensor         = TOUCHMI_SENSOR_VALUE;
@@ -104,7 +105,6 @@ void infoSettingsReset(void)
 // Power Loss Recovery & BTT UPS Settings
   infoSettings.powerloss_en           = ENABLED;
   infoSettings.powerloss_home         = HOME_BEFORE_PLR;
-  infoSettings.powerloss_invert       = PS_ON_ACTIVE_HIGH;
   infoSettings.powerloss_z_raise      = POWER_LOSS_ZRAISE;
   infoSettings.btt_ups                = BTT_MINI_UPS;
 
@@ -178,6 +178,7 @@ void initMachineSetting(void)
   infoMachineSettings.firmwareType            = FW_NOT_DETECTED;  // set fimware type to not_detected to avoid repeated ABL gcode on mode change
   infoMachineSettings.EEPROM                  = ENABLED;
   infoMachineSettings.autoReportTemp          = DISABLED;
+  infoMachineSettings.autoReportPos           = DISABLED;
   infoMachineSettings.leveling                = BL_DISABLED;
   infoMachineSettings.zProbe                  = ENABLED;
   infoMachineSettings.levelingData            = ENABLED;
@@ -191,8 +192,6 @@ void initMachineSetting(void)
   infoMachineSettings.long_filename_support   = DISABLED;
   infoMachineSettings.babyStepping            = DISABLED;
   infoMachineSettings.softwareEndstops        = ENABLED;
-
-  fanControlInit();
 }
 
 void setupMachine(void)
@@ -223,6 +222,7 @@ void setupMachine(void)
   {
     infoMachineSettings.EEPROM                  = ENABLED;
     infoMachineSettings.autoReportTemp          = DISABLED;
+    infoMachineSettings.autoReportPos           = DISABLED;
     infoMachineSettings.leveling                = ENABLED;
     infoMachineSettings.zProbe                  = ENABLED;
     infoMachineSettings.levelingData            = ENABLED;
