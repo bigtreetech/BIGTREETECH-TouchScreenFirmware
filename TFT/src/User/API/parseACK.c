@@ -1137,9 +1137,9 @@ void parseACK(void)
       {
         infoMachineSettings.babyStepping = ack_value();
       }
-      else if (ack_seen("Cap:PROGRESS:"))
+      else if (ack_seen("Cap:BUILD_PERCENT:"))  // M73 support. Required "LCD_SET_PROGRESS_MANUALLY" in Marlin
       {
-        infoMachineSettings.progress = ack_value();
+        infoMachineSettings.buildPercent = ack_value();
       }
       else if (ack_seen("Cap:CHAMBER_TEMPERATURE:"))
       {
