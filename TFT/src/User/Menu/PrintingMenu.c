@@ -201,15 +201,13 @@ static inline void reDrawTime(int icon_pos)
   ICON_ReadDisplay(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, ICON_PRINTING_TIMER);
   GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (uint8_t *)timeStr);
 
-  #ifdef ENABLE_SLICER_REMAINING_TIME
-    if (getPrintRemainingTime())  // if remaining time is pending
-    {
-      getPrintRemainingTimeDetail(&hour, &min, &sec);
-      sprintf(timeStr, "%02u:%02u:%02u", hour, min, sec);
+  if (getPrintRemainingTime())  // if remaining time is pending
+  {
+    getPrintRemainingTimeDetail(&hour, &min, &sec);
+    sprintf(timeStr, "%02u:%02u:%02u", hour, min, sec);
 
-      GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (uint8_t *)timeStr);
-    }
-  #endif
+    GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (uint8_t *)timeStr);
+  }
 
   GUI_SetNumMode(GUI_NUMMODE_SPACE);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
@@ -223,9 +221,12 @@ static inline void reDrawProgress(uint8_t prevProgress)
   uint16_t progEnd = ((progressBar.x1 - progressBar.x0) * newProgress) / 100;
 
   sprintf(progStr, " %d%% ", newProgress);
-
   GUI_DispStringCenter((progressVal.x0 + progressVal.x1) >> 1, progressVal.y0, (uint8_t *)progStr);
-  GUI_FillRectColor(progressBar.x0 + progStart, progressBar.y0, progressBar.x0 + progEnd, progressBar.y1, MAT_ORANGE);
+
+  if (progEnd >= progStart)
+    GUI_FillRectColor(progressBar.x0 + progStart, progressBar.y0, progressBar.x0 + progEnd, progressBar.y1, MAT_ORANGE);
+  else  // if regress
+    GUI_FillRectColor(progressBar.x0 + progEnd, progressBar.y0, progressBar.x0 + progStart, progressBar.y1, DARKGRAY);
 }
 
 static inline void reDrawLayer(int icon_pos)
@@ -290,7 +291,6 @@ static inline void printingDrawPage(void)
   GUI_SetColor(DARKGRAY);
   GUI_FillPrect(&progressBar);
   GUI_RestoreColorDefault();
-  updatePrintProgress();
   reDrawProgress(0);
 }
 

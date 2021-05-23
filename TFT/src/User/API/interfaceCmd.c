@@ -32,13 +32,11 @@ static float cmd_float(void)
   return (strtod(&infoCmd.queue[infoCmd.index_r].gcode[cmd_index], NULL));
 }
 
-#if defined(SERIAL_PORT_2) || defined(BUZZER_PIN) || defined(ENABLE_SLICER_REMAINING_TIME)
 // check if 'string' start with 'search'
-bool static startsWith(TCHAR *search, TCHAR *string)
+static bool startsWith(TCHAR *search, TCHAR *string)
 {
   return (strstr(string, search) - string == cmd_index) ? true : false;
 }
-#endif
 
 // Common store cmd
 void commonStoreCmd(GCODE_QUEUE *pQueue, const char* format, va_list va)
@@ -541,25 +539,19 @@ void sendQueueCmd(void)
             break;
         #endif  // not SERIAL_PORT_2
 
-        #if defined(ENABLE_SLICER_PROGRESS) || defined(ENABLE_SLICER_REMAINING_TIME)
-          case 73:
-            #ifdef ENABLE_SLICER_PROGRESS
-              if (cmd_seen('P'))
-                setPrintProgressPercentage(cmd_value());
-            #endif
+        case 73:
+          if (cmd_seen('P'))
+            setPrintProgressPercentage(cmd_value());
 
-            #ifdef ENABLE_SLICER_REMAINING_TIME
-              if (cmd_seen('R'))
-                setPrintRemainingTime((int32_t) (cmd_float() * 60));
-            #endif
+          if (cmd_seen('R'))
+            setPrintRemainingTime((int32_t) (cmd_float() * 60));
 
-            if (!infoMachineSettings.buildPercent)  // if M73 is not supported by Marlin, skip it
-            {
-              purgeLastCmd(true, avoid_terminal);
-              return;
-            }
-            break;
-        #endif
+          if (!infoMachineSettings.buildPercent)  // if M73 is not supported by Marlin, skip it
+          {
+            purgeLastCmd(true, avoid_terminal);
+            return;
+          }
+          break;
 
         case 80:  // M80
           #ifdef PS_ON_PIN
@@ -673,13 +665,11 @@ void sendQueueCmd(void)
           break;
 
         case 117:  // M117
-          #if defined(ENABLE_SLICER_REMAINING_TIME)
-            if (startsWith("Time Left", &infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 5]))
-            {
-              parsePrintRemainingTime(&infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 14]);
-            }
-            else
-          #endif
+          if (startsWith("Time Left", &infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 5]))
+          {
+            parsePrintRemainingTime(&infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 14]);
+          }
+          else
           {
             char message[CMD_MAX_CHAR];
 
