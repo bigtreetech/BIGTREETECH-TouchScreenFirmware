@@ -59,10 +59,11 @@ uint32_t getPrintTime(void);
 void getPrintTimeDetail(uint8_t * hour, uint8_t * min, uint8_t * sec);
 
 #ifdef ENABLE_SLICER_REMAINING_TIME
-  void setPrintRemainingTime(int32_t remainingTime);
-  void parsePrintRemainingTime(char * buffer);
+  void setPrintRemainingTime(int32_t remainingTime);    // used for M73 Rxx and M117 Time Left xx
+  void parsePrintRemainingTime(char * buffer);          // used for M117 Time Left xx
   uint32_t getPrintRemainingTime();
   void getPrintRemainingTimeDetail(uint8_t * hour, uint8_t * min, uint8_t * sec);
+  void setPrintProgressPercentage(uint8_t percentage);  // used by M73 Pxx
 #endif
 
 uint32_t getPrintSize(void);

@@ -4,17 +4,18 @@
 typedef struct
 {
   FIL        file;
-  uint32_t   time;           // current elapsed time in sec
+  uint32_t   time;                // current elapsed time in sec
   #ifdef ENABLE_SLICER_REMAINING_TIME
-    uint32_t remainingTime;  // current remaining time in sec (if set with M73 or M117)
+    uint32_t remainingTime;       // current remaining time in sec (if set with M73 or M117)
+    bool     progressPercentage;  // 1: progress controlled by Slicer (if set with M73)
   #endif
-  uint32_t   size;           // Gcode file total size
-  uint32_t   cur;            // Gcode has printed file size
+  uint32_t   size;                // Gcode file total size
+  uint32_t   cur;                 // Gcode has printed file size
   uint8_t    progress;
-  bool       runout;         // 1: runout in printing, 0: idle
-  bool       printing;       // 1: means printing, 0: means idle
-  bool       pause;          // 1: means paused
-  PAUSE_TYPE pauseType;      // pause type trigged by different sources and gcodes like M0 & M600
+  bool       runout;              // 1: runout in printing, 0: idle
+  bool       printing;            // 1: means printing, 0: means idle
+  bool       pause;               // 1: means paused
+  PAUSE_TYPE pauseType;           // pause type trigged by different sources and gcodes like M0 & M600
 } PRINTING;
 
 PRINTING infoPrinting;
@@ -119,6 +120,13 @@ void getPrintTimeDetail(uint8_t * hour, uint8_t * min, uint8_t * sec)
     *min = infoPrinting.remainingTime % 3600 / 60;
     *sec = infoPrinting.remainingTime % 60;
   }
+
+  void setPrintProgressPercentage(uint8_t percentage)
+  {
+    infoPrinting.progressPercentage = true;  // set to true to force a progress controlled by slicer
+    infoPrinting.cur = percentage;
+    infoPrinting.size = 100;
+  }
 #endif
 
 uint32_t getPrintSize(void)
@@ -133,8 +141,11 @@ uint32_t getPrintCur(void)
 
 void setPrintProgress(float cur, float size)
 {
-  infoPrinting.cur = cur;
-  infoPrinting.size = size;
+  if (!infoPrinting.progressPercentage)  // avoid to update progress if it is controlled by slicer
+  {
+    infoPrinting.cur = cur;
+    infoPrinting.size = size;
+  }
 }
 
 bool updatePrintProgress(void)

@@ -545,15 +545,15 @@ void sendQueueCmd(void)
           case 73:
             #ifdef ENABLE_SLICER_PROGRESS
               if (cmd_seen('P'))
-                setPrintProgress(cmd_value(), 100);
+                setPrintProgressPercentage(cmd_value());
             #endif
 
             #ifdef ENABLE_SLICER_REMAINING_TIME
               if (cmd_seen('R'))
-                setPrintRemainingTime(cmd_float() * 60);
+                setPrintRemainingTime((int32_t) (cmd_float() * 60));
             #endif
 
-            if (!infoMachineSettings.progress)  // if M73 is not supported by Marlin, skip it
+            if (!infoMachineSettings.buildPercent)  // if M73 is not supported by Marlin, skip it
             {
               purgeLastCmd(true, avoid_terminal);
               return;
