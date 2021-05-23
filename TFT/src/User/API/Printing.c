@@ -7,7 +7,8 @@ typedef struct
   uint32_t   time;                // current elapsed time in sec
   #ifdef ENABLE_SLICER_REMAINING_TIME
     uint32_t remainingTime;       // current remaining time in sec (if set with M73 or M117)
-    bool     progressPercentage;  // 1: progress controlled by Slicer (if set with M73)
+    bool     progressFromSlicer;  // 1: progress controlled by Slicer (if set with M73)
+    uint8_t  prevProgress;
   #endif
   uint32_t   size;                // Gcode file total size
   uint32_t   cur;                 // Gcode has printed file size
@@ -123,9 +124,9 @@ void getPrintTimeDetail(uint8_t * hour, uint8_t * min, uint8_t * sec)
 
   void setPrintProgressPercentage(uint8_t percentage)
   {
-    infoPrinting.progressPercentage = true;  // set to true to force a progress controlled by slicer
-    infoPrinting.cur = percentage;
-    infoPrinting.size = 100;
+    infoPrinting.progressFromSlicer = true;  // set to true to force a progress controlled by slicer
+    infoPrinting.prevProgress = infoPrinting.progress;
+    infoPrinting.progress = percentage;
   }
 #endif
 
@@ -141,22 +142,30 @@ uint32_t getPrintCur(void)
 
 void setPrintProgress(float cur, float size)
 {
-  if (!infoPrinting.progressPercentage)  // avoid to update progress if it is controlled by slicer
-  {
-    infoPrinting.cur = cur;
-    infoPrinting.size = size;
-  }
+  infoPrinting.cur = cur;
+  infoPrinting.size = size;
 }
 
 bool updatePrintProgress(void)
 {
-  uint8_t curProgress = infoPrinting.progress;
+  uint8_t curProgress;
 
-  // in case not printing or a wrong size was set, we consider progress as 100%
-  if (infoPrinting.size == 0)  // avoid a division for 0 (a crash) and set progress to 100%
-    infoPrinting.progress = 100;
-  else
-    infoPrinting.progress = MIN((uint64_t)infoPrinting.cur * 100 / infoPrinting.size, 100);
+  #ifdef ENABLE_SLICER_REMAINING_TIME
+    if (infoPrinting.progressFromSlicer)  // avoid to update progress if it is controlled by slicer
+    {
+      curProgress = infoPrinting.prevProgress;
+    }
+    else
+  #endif
+  {
+    curProgress = infoPrinting.progress;
+
+    // in case not printing or a wrong size was set, we consider progress as 100%
+    if (infoPrinting.size == 0)  // avoid a division for 0 (a crash) and set progress to 100%
+      infoPrinting.progress = 100;
+    else
+      infoPrinting.progress = MIN((uint64_t)infoPrinting.cur * 100 / infoPrinting.size, 100);
+  }
 
   if (infoPrinting.progress != curProgress)
     return true;
