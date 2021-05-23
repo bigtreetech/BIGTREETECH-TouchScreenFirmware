@@ -339,20 +339,6 @@
  */
 #define LOAD_UNLOAD_M701_M702
 
-/**
- * Slicer Progress
- * Enable this to parse M73 command to set progress.
- */
-#define ENABLE_SLICER_PROGRESS
-
-/**
- * Slicer Remaining Time
- * Enable this to parse:
- *   M73 command to set remaining time (PrusaSlicer only).
- *   M117 command starting with "Time left" (Cura Slicer).
- */
-#define ENABLE_SLICER_REMAINING_TIME
-
 
 //===========================================================================
 //========================== Other UI Settings ==============================
