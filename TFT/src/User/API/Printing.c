@@ -8,9 +8,9 @@ typedef struct
   uint32_t   remainingTime;       // current remaining time in sec (if set with M73 or M117)
   uint32_t   size;                // Gcode file total size
   uint32_t   cur;                 // Gcode has printed file size
-  bool       progressFromSlicer;  // 1: progress controlled by Slicer (if set with M73)
   uint8_t    prevProgress;
   uint8_t    progress;
+  bool       progressFromSlicer;  // 1: progress controlled by Slicer (if set with M73)
   bool       runout;              // 1: runout in printing, 0: idle
   bool       printing;            // 1: means printing, 0: means idle
   bool       pause;               // 1: means paused
