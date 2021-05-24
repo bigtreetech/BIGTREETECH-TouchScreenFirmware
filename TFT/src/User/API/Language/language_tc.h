@@ -2,7 +2,6 @@
 #define _LANGUAGE_TC_H_
 
     // config.ini Parameter Settings / Feature Settings
-    #define STRING_STATUS_SCREEN          "Enable Status Screen"
     #define STRING_BAUDRATE               "串列傳輸速率"
     #define STRING_LANGUAGE               "正體中文"
     #define STRING_ROTATE_UI              "顯示方向"
@@ -168,7 +167,7 @@
     #define STRING_DISABLE_STEPPERS       "解鎖電機"
     #define STRING_XY_UNLOCK              "解锁XY"
 
-    #define STRING_START_PRINT            "是否开始打印:\n %s?"
+    #define STRING_START_PRINT            "是否开始打印:\n%s?"
     #define STRING_STOP_PRINT             "要停止列印嗎？"
     #define STRING_IS_PAUSE               "列印時無法擠出耗材，要暫停列印嗎？"
     #define STRING_M0_PAUSE               "M0暫停"
@@ -272,7 +271,7 @@
     #define STRING_ABL_SLOT1              "Slot 1"
     #define STRING_ABL_SLOT2              "Slot 2"
     #define STRING_ABL_SLOT3              "Slot 3"
-    #define STRING_ABL_SLOT_EEPROM        "Remember slot for next\nreboot? (Save EEPROM)"
+    #define STRING_ABL_SLOT_EEPROM        "Save the mesh to EEPROM to load after reboot?"
     #define STRING_ABL_Z                  "Z Fade"
     #define STRING_LEVEL_CORNER           "L corner"
     #define STRING_P_OFFSET               "P軸偏移"
@@ -318,12 +317,12 @@
     #define STRING_TUNE_EXTRUDER          "Tune steps"
     #define STRING_TUNE_EXT_EXTRUDE_100   "挤出100mm"
     #define STRING_TUNE_EXT_TEMP          "Extruder tuning | Heat"
-    #define STRING_TUNE_EXT_TEMPLOW       "Desired temperature too low!\nMinimum temperature: %d C"
-    #define STRING_TUNE_EXT_DESIREDVAL    "Temperature is not yet at the desired value"
-    #define STRING_TUNE_EXT_MARK120MM     "Mark 120 mm on your fillament\nPress '%s' when ready\nMeasure remaining length\nafter extruding"
+    #define STRING_TUNE_EXT_TEMPLOW       "Desired temperature is below minimum temperature (%d℃)."
+    #define STRING_TUNE_EXT_DESIREDVAL    "Temperature is not yet at the desired value."
+    #define STRING_TUNE_EXT_MARK120MM     "Mark 120 mm on your fillament.\nPress '%s' when ready.\nMeasure remaining length after extruding."
     #define STRING_TUNE_EXT_HEATOFF       "Turn the heater off?"
     #define STRING_TUNE_EXT_ADJ_ESTEPS    "Adjust E-Steps"
-    #define STRING_TUNE_EXT_ESTEPS_SAVED  "New E-steps saved!\nDon't forget to\nsave it in EEPROM\nNew value: %0.2f"
+    #define STRING_TUNE_EXT_ESTEPS_SAVED  "New E-steps applied.\nDon't forget to save it in EEPROM.\nNew value: %0.2f"
     #define STRING_TUNE_EXT_MEASURED      "Length remaining:"
     #define STRING_TUNE_EXT_OLD_ESTEP     "Old e-steps: %0.2f"
     #define STRING_TUNE_EXT_NEW_ESTEP     "New e-steps: %0.2f"
@@ -332,8 +331,8 @@
     #define STRING_MESH_EDITOR            "Mesh edit"
     #define STRING_MESH_TUNER             "Mesh tuner"
     #define STRING_CASE_LIGHT             "Case light"
-    #define STRING_LOAD_STARTED           "Loading filament.\nPlease wait for the process\nto complete."  // translation needed
-    #define STRING_UNLOAD_STARTED         "Unloading filament.\nPlease wait for the process\nto complete."  // translation needed
+    #define STRING_LOAD_STARTED           "Loading filament.\nPlease wait for the process to complete."  // translation needed
+    #define STRING_UNLOAD_STARTED         "Unloading filament.\nPlease wait for the process to complete."  // translation needed
     #define STRING_HEATERS_ON             "Some heaters are still ON.\nDo you want to stop them?"  // translation needed
     #define STRING_PRINT_FINISHED         "   Print\n   finished"
     #define STRING_MAIN_SCREEN            "Main"
@@ -344,7 +343,7 @@
     #define STRING_FILAMENT_COST          "\nFilament cost: %1.2f"
     #define STRING_NO_FILAMENT_STATS      "\nFilament data not available."
     #define STRING_CLICK_FOR_MORE         "Click for summary"
-    #define STRING_EXT_TEMPLOW            "Hotend temperature is below\nminimum temperature (%d℃)."
+    #define STRING_EXT_TEMPLOW            "Hotend temperature is below minimum temperature (%d℃)."
     #define STRING_HEAT_HOTEND            "Heat hotend to %d℃?"
     #define STRING_Z_ALIGN                "Z Align"
     #define STRING_MACROS                 "Macros"
