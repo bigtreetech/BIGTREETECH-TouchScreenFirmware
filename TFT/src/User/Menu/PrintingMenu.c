@@ -30,10 +30,10 @@ const GUI_RECT printinfo_val_rect[6] = {
    START_X + PICON_LG_WIDTH * 2 + PICON_SPACE_X * 2 + PICON_VAL_SM_EX, PICON_START_Y + PICON_HEIGHT * 1 + PICON_SPACE_Y * 1 + PICON_VAL_Y + BYTE_HEIGHT},
 };
 
-const GUI_RECT progressVal = {START_X,                                PICON_START_Y + PICON_HEIGHT * 2 + PICON_SPACE_Y * 2 - 2,
-                              1 * ICON_WIDTH + 1 * SPACE_X + START_X, ICON_START_Y + ICON_HEIGHT + SPACE_Y - PICON_SPACE_Y};
+const GUI_RECT progressVal = {START_X,                  PICON_START_Y + PICON_HEIGHT * 2 + PICON_SPACE_Y,
+                              START_X + 1 * ICON_WIDTH, ICON_START_Y + ICON_HEIGHT + SPACE_Y};
 
-const GUI_RECT progressBar = {1 * ICON_WIDTH + 1 * SPACE_X + START_X + 1, PICON_START_Y + PICON_HEIGHT * 2 + PICON_SPACE_Y * 2 + 1,
+const GUI_RECT progressBar = {START_X + 1 * ICON_WIDTH + 1 * SPACE_X + 1, PICON_START_Y + PICON_HEIGHT * 2 + PICON_SPACE_Y * 2 + 1,
                               START_X + 4 * ICON_WIDTH + 3 * SPACE_X - 1, ICON_START_Y + ICON_HEIGHT + SPACE_Y - PICON_SPACE_Y - 1};
 
 const char *const speedId[2] = {"Speed", "Flow"};
@@ -221,7 +221,7 @@ static inline void reDrawProgress(uint8_t prevProgress)
   uint16_t progEnd = ((progressBar.x1 - progressBar.x0) * newProgress) / 100;
 
   sprintf(progStr, " %d%% ", newProgress);
-  GUI_DispStringCenter((progressVal.x0 + progressVal.x1) >> 1, progressVal.y0, (uint8_t *)progStr);
+  GUI_DispStringInPrect(&progressVal, (uint8_t *)progStr);
 
   if (progEnd >= progStart)
     GUI_FillRectColor(progressBar.x0 + progStart, progressBar.y0, progressBar.x0 + progEnd, progressBar.y1, MAT_ORANGE);
