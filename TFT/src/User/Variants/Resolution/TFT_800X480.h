@@ -52,9 +52,9 @@
 #define STATUS_MSG_BODY_BOTTOM    29
 #define STATUS_GANTRY_YOFFSET     6
 
-#define NAME_LARGE_FONT           false
-#define VAL_LARGE_FONT            true
-#define VAL2_LARGE_FONT           false
+#define NAME_LARGE_FONT           FONT_SIZE_NORMAL
+#define VAL_LARGE_FONT            FONT_SIZE_LARGE
+#define VAL2_LARGE_FONT           FONT_SIZE_NORMAL
 
 //Heating Menu
 #define PREHEAT_TITLE_Y   6
@@ -96,6 +96,7 @@
   #define WORD_UNICODE_SIZE       0x480000    // 24*24/8 * 65536(unicode) = 0x480000 bytes(4.5M)
   #define BYTE_ASCII_SIZE           0x1000    // 24*12/8 * 95(visible ascii) = 0x0D5C (+0x1000 4K)
   #define LARGE_FONT_SIZE           0x3000
+  #define _8X16_FONT_SIZE           0x1000
   #define FLASH_SIGN_SIZE           0x1000    // store status of last font/icon/config update
   #define LANGUAGE_SIZE            0x14000
   #define STRINGS_STORE_MAX_SIZE    0x5000    // label strings max size

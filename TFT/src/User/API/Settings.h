@@ -32,10 +32,10 @@ typedef enum
 // this number should match CONFIG_VERSION in configuration.h
 #define CONFIG_SUPPPORT 20210513
 
-#define FONT_FLASH_SIGN       20200908  // (YYYYMMDD) change if fonts require updating
-#define CONFIG_FLASH_SIGN     20210509  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
-#define LANGUAGE_FLASH_SIGN   20210509  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
-#define ICON_FLASH_SIGN       20210217  // (YYYYMMDD) change if any icon(s) is added or removed
+#define FONT_FLASH_SIGN       20210522  // (YYYYMMDD) change if fonts require updating
+#define CONFIG_FLASH_SIGN     20210522  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
+#define LANGUAGE_FLASH_SIGN   20210522  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
+#define ICON_FLASH_SIGN       20210522  // (YYYYMMDD) change if any icon(s) is added or removed
 
 #define FONT_CHECK_SIGN       (FONT_FLASH_SIGN + WORD_UNICODE)
 #define CONFIG_CHECK_SIGN     (CONFIG_FLASH_SIGN + STRINGS_STORE_ADDR)
@@ -86,6 +86,7 @@ typedef struct
   // General Settings
   uint8_t status_screen;
   uint8_t baudrate;
+  uint8_t multi_serial;
   uint8_t language;
 
   uint16_t title_bg_color;
@@ -178,7 +179,6 @@ typedef struct
   // Power Loss Recovery & BTT UPS Settings
   uint8_t  powerloss_en;
   uint8_t  powerloss_home;
-  uint8_t  powerloss_invert;
   uint8_t  powerloss_z_raise;
   uint8_t  btt_ups;
 

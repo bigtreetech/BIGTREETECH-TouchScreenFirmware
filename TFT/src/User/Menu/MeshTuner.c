@@ -49,9 +49,9 @@ void meshDraw(uint16_t col, uint16_t row, float val)
 
   sprintf(tempstr2, "  %.3f  ", val);
   GUI_SetColor(infoSettings.font_color);
-  setLargeFont(true);
+  setFontSize(FONT_SIZE_LARGE);
   GUI_DispStringInPrect(&exhibitRect, (uint8_t *) tempstr2);
-  setLargeFont(false);
+  setFontSize(FONT_SIZE_NORMAL);
 }
 
 float menuMeshTuner(uint16_t col, uint16_t row, float value)

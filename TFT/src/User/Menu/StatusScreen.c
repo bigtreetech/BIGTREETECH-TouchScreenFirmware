@@ -74,7 +74,7 @@ void drawTemperature(void)
   lvIcon.lines[0].fn_color = SSICON_NAME_COLOR;
   lvIcon.lines[0].text_mode = GUI_TEXTMODE_TRANS;
   lvIcon.lines[0].pos = ss_title_point;
-  lvIcon.lines[0].large_font = NAME_LARGE_FONT;
+  lvIcon.lines[0].font = NAME_LARGE_FONT;
 
   lvIcon.enabled[1] = true;
   lvIcon.lines[1].h_align = CENTER;
@@ -82,7 +82,7 @@ void drawTemperature(void)
   lvIcon.lines[1].fn_color = SSICON_VAL_COLOR;
   lvIcon.lines[1].text_mode = GUI_TEXTMODE_TRANS;
   lvIcon.lines[1].pos = ss_val_point;
-  lvIcon.lines[1].large_font = VAL_LARGE_FONT;
+  lvIcon.lines[1].font = VAL_LARGE_FONT;
 
   #ifndef TFT70_V3_0
     lvIcon.enabled[2] = false;
@@ -93,7 +93,7 @@ void drawTemperature(void)
     lvIcon.lines[2].fn_color = SSICON_VAL2_COLOR;
     lvIcon.lines[2].text_mode = GUI_TEXTMODE_TRANS;
     lvIcon.lines[2].pos = ss_val2_point;
-    lvIcon.lines[2].large_font = VAL2_LARGE_FONT;
+    lvIcon.lines[2].font = VAL2_LARGE_FONT;
   #endif
 
   #ifdef TFT70_V3_0
@@ -204,7 +204,7 @@ void drawStatusScreenMsg(void)
 {
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
-  ICON_CustomReadDisplay(rect_of_keySS[17].x0, rect_of_keySS[17].y0, INFOBOX_ADDR);
+  IMAGE_ReadDisplay(rect_of_keySS[17].x0, rect_of_keySS[17].y0, INFOBOX_ADDR);
   GUI_SetColor(INFOMSG_BKCOLOR);
   GUI_DispString(rect_of_keySS[17].x0 + STATUS_MSG_ICON_XOFFSET,
                  rect_of_keySS[17].y0 + STATUS_MSG_ICON_YOFFSET,

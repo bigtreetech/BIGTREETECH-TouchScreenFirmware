@@ -152,7 +152,7 @@ bool updateIcon(void)
     {  // display bmp update success
       found++;
       GUI_ClearRect(iconUpdateRect.x0, iconUpdateRect.y0, iconUpdateRect.x0 + last_size.x, iconUpdateRect.y0 + last_size.y);
-      ICON_CustomReadDisplay(iconUpdateRect.x0, iconUpdateRect.y0, ICON_ADDR(i));
+      IMAGE_ReadDisplay(iconUpdateRect.x0, iconUpdateRect.y0, ICON_ADDR(i));
     }
     else
     {  // display bmp update fail
@@ -177,7 +177,7 @@ bool updateIcon(void)
   bmpState = bmpDecode(BMP_ROOT_DIR "/InfoBox.bmp", INFOBOX_ADDR);
   if (bmpState == BMP_SUCCESS)
   {
-    ICON_CustomReadDisplay(iconUpdateRect.x0, iconUpdateRect.y0, INFOBOX_ADDR);
+    IMAGE_ReadDisplay(iconUpdateRect.x0, iconUpdateRect.y0, INFOBOX_ADDR);
     found++;
   }
   else
@@ -338,6 +338,7 @@ void scanUpdates(void)
       if (updateFont(FONT_ROOT_DIR "/byte_ascii.fon", BYTE_ASCII_ADDR) &&
           updateFont(FONT_ROOT_DIR "/word_unicode.fon", WORD_UNICODE) &&
           updateFont(FONT_ROOT_DIR "/large_byte_ascii.fon", LARGE_FONT_ADDR) &&
+          updateFont(FONT_ROOT_DIR "/8x16_byte_ascii.fon", _8X16_FONT_ADDR) &&
           (saved_flash_sign[font_sign] != FONT_CHECK_SIGN))
       {
         saved_flash_sign[font_sign] = FONT_CHECK_SIGN;

@@ -14,7 +14,6 @@ void lcd_frame_display(uint16_t sx, uint16_t sy, uint16_t w, uint16_t h, uint32_
   uint32_t address = addr;
 
   LCD_SetWindow(sx, sy, sx + w - 1, sy + h - 1);
-  LCD_WR_REG(TFTLCD_WRITEMEMORY);
 
   W25Qxx_SPI_CS_Set(0);
   W25Qxx_SPI_Read_Write_Byte(CMD_READ_DATA);
@@ -45,18 +44,22 @@ uint32_t getBMPsize(uint8_t * w, uint8_t * h, uint32_t address)
   return address;
 }
 
-void LOGO_ReadDisplay(void)
+// draw an image from specific address on flash (sx & sy cordinates for top left of image, w width, h height, addr flash byte address)
+void IMAGE_ReadDisplay(uint16_t sx, uint16_t sy, uint32_t address)
 {
   uint16_t w, h;
-  uint32_t addr = getBMPsize((uint8_t *)&w, (uint8_t *)&h, LOGO_ADDR);
-  lcd_frame_display(0, 0, w, h, addr);
+  address = getBMPsize((uint8_t *)&w, (uint8_t *)&h, address);
+  lcd_frame_display(sx, sy, w, h, address);
+}
+
+void LOGO_ReadDisplay(void)
+{
+  IMAGE_ReadDisplay(0, 0, LOGO_ADDR);
 }
 
 void ICON_ReadDisplay(uint16_t sx, uint16_t sy, uint8_t icon)
 {
-  uint16_t w, h;
-  uint32_t addr = getBMPsize((uint8_t *)&w, (uint8_t *)&h, ICON_ADDR(icon));
-  lcd_frame_display(sx, sy, w, h, addr);
+  IMAGE_ReadDisplay(sx, sy, ICON_ADDR(icon));
 }
 
 uint16_t modelFileReadHalfword(FIL * fp)
@@ -81,7 +84,6 @@ bool model_DirectDisplay(GUI_POINT pos, char *gcode)
   f_lseek(&gcodeFile, gcodeFile.fptr + 3);
 
   LCD_SetWindow(pos.x, pos.y, pos.x + ICON_WIDTH - 1, pos.y + ICON_HEIGHT - 1);
-  LCD_WR_REG(TFTLCD_WRITEMEMORY);
   for (uint16_t y = 0; y < ICON_HEIGHT; y++)
   {
     for (uint16_t x = 0; x < ICON_WIDTH; x++)
@@ -147,14 +149,6 @@ bool model_DecodeToFlash(char *gcode)
   return true;
 }
 
-// draw icon with different length and width (sx & sy cordinates for top left of icon, w width, h height, addr flash byte address)
-void ICON_CustomReadDisplay(uint16_t sx, uint16_t sy, uint32_t address)
-{
-  uint16_t w, h;
-  address = getBMPsize((uint8_t *)&w, (uint8_t *)&h, address);
-  lcd_frame_display(sx, sy, w, h, address);
-}
-
 void SMALLICON_ReadDisplay(uint16_t sx, uint16_t sy, uint8_t icon)
 {
   lcd_frame_display(sx, sy, SMALLICON_WIDTH, SMALLICON_HEIGHT, SMALL_ICON_ADDR(icon));
@@ -169,7 +163,6 @@ void ICON_PressedDisplay(uint16_t sx, uint16_t sy, uint8_t icon)
   uint32_t address = getBMPsize((uint8_t *)&w, (uint8_t *)&h, ICON_ADDR(icon));
 
   LCD_SetWindow(sx, sy, sx + w - 1, sy + h - 1);
-  LCD_WR_REG(TFTLCD_WRITEMEMORY);
 
   W25Qxx_SPI_CS_Set(0);
   W25Qxx_SPI_Read_Write_Byte(CMD_READ_DATA);

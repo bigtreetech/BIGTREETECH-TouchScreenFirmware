@@ -130,7 +130,7 @@ typedef struct
   uint16_t      fn_color;
   uint16_t      bk_color;
   GUI_TEXT_MODE text_mode;
-  bool          large_font;
+  uint16_t      font;
 } LIVE_DATA;
 
  typedef struct

@@ -23,6 +23,7 @@ void infoSettingsReset(void)
 // General Settings
   infoSettings.status_screen          = ENABLE_STATUS_SCREEN;
   infoSettings.baudrate               = BAUDRATE;
+  infoSettings.multi_serial           = 0;
   infoSettings.language               = LANG_DEFAULT;
 
   infoSettings.title_bg_color         = lcd_colors[TITLE_BACKGROUND_COLOR];
@@ -104,7 +105,6 @@ void infoSettingsReset(void)
 // Power Loss Recovery & BTT UPS Settings
   infoSettings.powerloss_en           = ENABLED;
   infoSettings.powerloss_home         = HOME_BEFORE_PLR;
-  infoSettings.powerloss_invert       = PS_ON_ACTIVE_HIGH;
   infoSettings.powerloss_z_raise      = POWER_LOSS_ZRAISE;
   infoSettings.btt_ups                = BTT_MINI_UPS;
 

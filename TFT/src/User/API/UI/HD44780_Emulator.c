@@ -162,8 +162,8 @@ void HD44780_DispDDRAM(uint8_t data)
     uint16_t x = 0,
              y = 0,
              j = 0;
-    uint16_t bitMapSize = (BYTE_HEIGHT * BYTE_WIDTH / 8);
-    uint8_t  font[BYTE_HEIGHT * BYTE_WIDTH / 8];
+    uint16_t bitMapSize =(info.pixelHeight * info.pixelWidth / 8);
+    uint8_t  font[bitMapSize];
     uint32_t temp = 0;
 
     W25Qxx_ReadBuffer(font, info.bitMapAddr, bitMapSize);

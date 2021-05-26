@@ -534,6 +534,10 @@ void parseConfigKey(uint16_t index)
       SET_VALID_INT_VALUE(infoSettings.baudrate, 0, BAUDRATE_COUNT - 1);
       break;
 
+    case C_INDEX_MULTI_SERIAL:
+      SET_VALID_INT_VALUE(infoSettings.multi_serial, 0, MAX_MULTI_SERIAL - 1);
+      break;
+
     case C_INDEX_LANGUAGE:
       SET_VALID_INT_VALUE(infoSettings.language, 0, LANGUAGE_NUM - 1);
       break;
@@ -870,7 +874,7 @@ void parseConfigKey(uint16_t index)
         break;
 
       case C_INDEX_PS_LOGIC:
-        infoSettings.powerloss_invert = getOnOff();
+        infoSettings.ps_active_high = getOnOff();
         break;
 
       case C_INDEX_SHUTDOWN_TEMP:
