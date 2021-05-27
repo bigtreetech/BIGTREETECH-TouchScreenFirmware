@@ -56,7 +56,7 @@
 #define VAL_LARGE_FONT            FONT_SIZE_LARGE
 #define VAL2_LARGE_FONT           FONT_SIZE_NORMAL
 
-//Heating Menu
+// Heating Menu
 #define PREHEAT_TITLE_Y   6
 #define PREHEAT_TOOL_Y    65
 #define PREHEAT_BED_Y     105
