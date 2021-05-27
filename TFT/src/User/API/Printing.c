@@ -88,9 +88,13 @@ void getPrintTimeDetail(uint8_t * hour, uint8_t * min, uint8_t * sec)
 
 void setPrintRemainingTime(int32_t remainingTime)
 {
+  float speedFactor = (float) (speedGetCurPercent(0)) / 100;  // speed (feed rate) factor (e.g. 50% -> 0.5)
+
   // Cura Slicer put a negative value at the end instead of zero
-  if (remainingTime < 0)
+  if (remainingTime < 0 || speedFactor <= 0.0f)
     remainingTime = 0;
+  else
+    remainingTime = remainingTime / speedFactor;  // remaining time = slicer remaining time / speed factor
 
   infoPrinting.remainingTime = remainingTime;
 }
