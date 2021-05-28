@@ -138,16 +138,15 @@ void setPrintProgress(float cur, float size)
 void setPrintProgressPercentage(uint8_t percentage)
 {
   infoPrinting.progressFromSlicer = true;  // set to true to force a progress controlled by slicer
-  infoPrinting.prevProgress = infoPrinting.progress;
   infoPrinting.progress = percentage;
 }
 
 bool updatePrintProgress(void)
 {
+  uint8_t prevProgress = infoPrinting.prevProgress;
+
   if (!infoPrinting.progressFromSlicer)  // avoid to update progress if it is controlled by slicer
   {
-    infoPrinting.prevProgress = infoPrinting.progress;
-
     // in case not printing or a wrong size was set, we consider progress as 100%
     if (infoPrinting.size == 0)  // avoid a division for 0 (a crash) and set progress to 100%
       infoPrinting.progress = 100;
@@ -155,8 +154,12 @@ bool updatePrintProgress(void)
       infoPrinting.progress = MIN((uint64_t)infoPrinting.cur * 100 / infoPrinting.size, 100);
   }
 
-  if (infoPrinting.progress != infoPrinting.prevProgress)
+  if (infoPrinting.progress != prevProgress)
+  {
+    infoPrinting.prevProgress = infoPrinting.progress;
+
     return true;
+  }
 
   return false;
 }
@@ -377,7 +380,7 @@ void printEnd(void)
   powerFailedClose();
   powerFailedDelete();
 
-  infoPrinting.cur = infoPrinting.size;  // always update the print progress to 100% even if the print was abaorted
+  infoPrinting.cur = infoPrinting.size;  // always update the print progress to 100% even if the print terminated
   infoPrinting.printing = infoPrinting.pause = false;
   preparePrintSummary();  // update print summary. infoPrinting are used
 
@@ -606,7 +609,7 @@ void setPrintAbort(void)
     coordinateQuery(0);
   }
 
-  infoPrinting.cur = infoPrinting.size;
+  infoPrinting.cur = infoPrinting.size;  // always update the print progress to 100% even if the print was abaorted
   infoPrinting.printing = infoPrinting.pause = false;
 }
 
