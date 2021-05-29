@@ -31,22 +31,25 @@ const GUI_RECT printinfo_val_rect[6] = {
 };
 
 #if !defined(TFT43_V3_0) && !defined(TFT50_V3_0)
-  const GUI_RECT progressVal = {START_X,                                PICON_START_Y + PICON_HEIGHT * 2 + PICON_SPACE_Y,
-                                START_X + 1 * ICON_WIDTH + 1 * SPACE_X, ICON_START_Y + ICON_HEIGHT + SPACE_Y};
-
-  #define PROGRESS_BAR_RAW_X0 (START_X + 1 * ICON_WIDTH + 1 * SPACE_X + 1)
+  #define PROGRESS_BAR_RAW_X0    (START_X + 1 * ICON_WIDTH + 1 * SPACE_X + 1)         // X0 aligned to second icon
 #else
-  #define PROGRESS_BAR_RAW_X0 (START_X + 0 * ICON_WIDTH + 0 * SPACE_X + 1)
+  #define PROGRESS_BAR_RAW_X0    (START_X + 0 * ICON_WIDTH + 0 * SPACE_X + 1)         // X0 aligned to first icon
 #endif
 
-#define PROGRESS_BAR_RAW_X1  (START_X + 4 * ICON_WIDTH + 3 * SPACE_X - 1)
-#define PROGRESS_BAR_DELTA_X ((PROGRESS_BAR_RAW_X1 - PROGRESS_BAR_RAW_X0) % 100)
+#define PROGRESS_BAR_RAW_X1      (START_X + 4 * ICON_WIDTH + 3 * SPACE_X - 1)         // X1 aligned to last icon
+#define PROGRESS_BAR_DELTA_X     ((PROGRESS_BAR_RAW_X1 - PROGRESS_BAR_RAW_X0) % 100)  // width rounding factor (multiple of 100 pixels)
 
-#define PROGRESS_BAR_X0 (PROGRESS_BAR_RAW_X0 + PROGRESS_BAR_DELTA_X - PROGRESS_BAR_DELTA_X / 2)
-#define PROGRESS_BAR_X1 (PROGRESS_BAR_RAW_X1 - PROGRESS_BAR_DELTA_X / 2)
+// progress bar rounded and aligned to center of icons
+#define PROGRESS_BAR_X0          (PROGRESS_BAR_RAW_X0 + PROGRESS_BAR_DELTA_X - PROGRESS_BAR_DELTA_X / 2)
+#define PROGRESS_BAR_X1          (PROGRESS_BAR_RAW_X1 - PROGRESS_BAR_DELTA_X / 2)
 
-#define PROGRESS_BAR_FULL_WIDTH  (PROGRESS_BAR_X1 - PROGRESS_BAR_X0)
-#define PROGRESS_BAR_SLICE_WIDTH (PROGRESS_BAR_FULL_WIDTH / 10)
+#define PROGRESS_BAR_FULL_WIDTH  (PROGRESS_BAR_X1 - PROGRESS_BAR_X0)  // 100% progress bar width
+#define PROGRESS_BAR_SLICE_WIDTH (PROGRESS_BAR_FULL_WIDTH / 10)       // 10% progress bar width
+
+#if !defined(TFT43_V3_0) && !defined(TFT50_V3_0)
+  const GUI_RECT progressVal = {START_X,             PICON_START_Y + PICON_HEIGHT * 2 + PICON_SPACE_Y,
+                                PROGRESS_BAR_X0 - 1, ICON_START_Y + ICON_HEIGHT + SPACE_Y};
+#endif
 
 const GUI_RECT progressBar = {PROGRESS_BAR_X0, PICON_START_Y + PICON_HEIGHT * 2 + PICON_SPACE_Y * 2 + 1,
                               PROGRESS_BAR_X1, ICON_START_Y + ICON_HEIGHT + SPACE_Y - PICON_SPACE_Y - 1};
