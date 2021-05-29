@@ -30,11 +30,26 @@ const GUI_RECT printinfo_val_rect[6] = {
    START_X + PICON_LG_WIDTH * 2 + PICON_SPACE_X * 2 + PICON_VAL_SM_EX, PICON_START_Y + PICON_HEIGHT * 1 + PICON_SPACE_Y * 1 + PICON_VAL_Y + BYTE_HEIGHT},
 };
 
-const GUI_RECT progressVal = {START_X,                                PICON_START_Y + PICON_HEIGHT * 2 + PICON_SPACE_Y,
-                              START_X + 1 * ICON_WIDTH + 1 * SPACE_X, ICON_START_Y + ICON_HEIGHT + SPACE_Y};
+#if !defined(TFT43_V3_0)
+  const GUI_RECT progressVal = {START_X,                                PICON_START_Y + PICON_HEIGHT * 2 + PICON_SPACE_Y,
+                                START_X + 1 * ICON_WIDTH + 1 * SPACE_X, ICON_START_Y + ICON_HEIGHT + SPACE_Y};
 
-const GUI_RECT progressBar = {START_X + 1 * ICON_WIDTH + 1 * SPACE_X + 1, PICON_START_Y + PICON_HEIGHT * 2 + PICON_SPACE_Y * 2 + 1,
-                              START_X + 4 * ICON_WIDTH + 3 * SPACE_X - 1, ICON_START_Y + ICON_HEIGHT + SPACE_Y - PICON_SPACE_Y - 1};
+  #define PROGRESS_BAR_RAW_X0 (START_X + 1 * ICON_WIDTH + 1 * SPACE_X + 1)
+#else
+  #define PROGRESS_BAR_RAW_X0 (START_X + 0 * ICON_WIDTH + 0 * SPACE_X + 1)
+#endif
+
+#define PROGRESS_BAR_RAW_X1  (START_X + 4 * ICON_WIDTH + 3 * SPACE_X - 1)
+#define PROGRESS_BAR_DELTA_X ((PROGRESS_BAR_RAW_X1 - PROGRESS_BAR_RAW_X0) % 100)
+
+#define PROGRESS_BAR_X0 (PROGRESS_BAR_RAW_X0 + PROGRESS_BAR_DELTA_X - PROGRESS_BAR_DELTA_X / 2)
+#define PROGRESS_BAR_X1 (PROGRESS_BAR_RAW_X1 - PROGRESS_BAR_DELTA_X / 2)
+
+#define PROGRESS_BAR_FULL_WIDTH  (PROGRESS_BAR_X1 - PROGRESS_BAR_X0)
+#define PROGRESS_BAR_SLICE_WIDTH (PROGRESS_BAR_FULL_WIDTH / 10)
+
+const GUI_RECT progressBar = {PROGRESS_BAR_X0, PICON_START_Y + PICON_HEIGHT * 2 + PICON_SPACE_Y * 2 + 1,
+                              PROGRESS_BAR_X1, ICON_START_Y + ICON_HEIGHT + SPACE_Y - PICON_SPACE_Y - 1};
 
 const char *const speedId[2] = {"Speed", "Flow"};
 bool hasFilamentData;
@@ -213,20 +228,41 @@ static inline void reDrawTime(int icon_pos)
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
 
+static inline void reDrawProgressBar(uint8_t prevProgress, uint8_t nextProgress, uint16_t barColor, uint16_t sliceColor)
+{
+  uint16_t start = (PROGRESS_BAR_FULL_WIDTH * prevProgress) / 100;
+  uint16_t end = (PROGRESS_BAR_FULL_WIDTH * nextProgress) / 100;
+
+  GUI_FillRectColor(progressBar.x0 + start, progressBar.y0, progressBar.x0 + end, progressBar.y1, barColor);
+  GUI_SetColor(sliceColor);
+
+  start /= PROGRESS_BAR_SLICE_WIDTH;
+  end /= PROGRESS_BAR_SLICE_WIDTH;
+
+  for (int i = start; i <= end; i++)
+  {
+    if (i > 0 && i <= 10)
+      GUI_VLine(progressBar.x0 + (PROGRESS_BAR_SLICE_WIDTH * i - 1), progressBar.y0, progressBar.y1);
+  }
+
+  GUI_RestoreColorDefault();
+}
+
 static inline void reDrawProgress(uint8_t prevProgress)
 {
-  char progStr[8];
-  uint8_t newProgress = getPrintProgress();
-  uint16_t progStart = ((progressBar.x1 - progressBar.x0) * prevProgress) / 100;
-  uint16_t progEnd = ((progressBar.x1 - progressBar.x0) * newProgress) / 100;
+  uint8_t nextProgress = getPrintProgress();
 
-  sprintf(progStr, " %d%% ", newProgress);
-  GUI_DispStringInPrect(&progressVal, (uint8_t *)progStr);
+  #if !defined(TFT43_V3_0)
+    char progStr[8];
 
-  if (progEnd >= progStart)
-    GUI_FillRectColor(progressBar.x0 + progStart, progressBar.y0, progressBar.x0 + progEnd, progressBar.y1, MAT_ORANGE);
-  else  // if regress
-    GUI_FillRectColor(progressBar.x0 + progEnd, progressBar.y0, progressBar.x0 + progStart, progressBar.y1, DARKGRAY);
+    sprintf(progStr, " %d%% ", nextProgress);
+    GUI_DispStringInPrect(&progressVal, (uint8_t *)progStr);
+  #endif
+
+  if (nextProgress >= prevProgress)
+    reDrawProgressBar(prevProgress, nextProgress, MAT_ORANGE, DARKGRAY);
+  else  // if regress, swap indexes and colors
+    reDrawProgressBar(nextProgress, prevProgress, DARKGRAY, MAT_ORANGE);
 }
 
 static inline void reDrawLayer(int icon_pos)
@@ -286,11 +322,11 @@ static inline void printingDrawPage(void)
   reDrawTime(TIM_ICON_POS);
   reDrawLayer(Z_ICON_POS);
   reDrawSpeed(SPD_ICON_POS);
+
+  // progress bar
   GUI_SetColor(ORANGE);
   GUI_DrawRect(progressBar.x0 - 1, progressBar.y0 - 1, progressBar.x1 + 1, progressBar.y1 + 1);
-  GUI_SetColor(DARKGRAY);
-  GUI_FillPrect(&progressBar);
-  GUI_RestoreColorDefault();
+  reDrawProgressBar(0, 100, DARKGRAY, ORANGE);
   reDrawProgress(0);
 }
 
