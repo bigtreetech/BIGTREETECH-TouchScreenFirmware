@@ -30,7 +30,7 @@ const GUI_RECT printinfo_val_rect[6] = {
    START_X + PICON_LG_WIDTH * 2 + PICON_SPACE_X * 2 + PICON_VAL_SM_EX, PICON_START_Y + PICON_HEIGHT * 1 + PICON_SPACE_Y * 1 + PICON_VAL_Y + BYTE_HEIGHT},
 };
 
-#if !defined(TFT43_V3_0)
+#if !defined(TFT43_V3_0) && !defined(TFT50_V3_0)
   const GUI_RECT progressVal = {START_X,                                PICON_START_Y + PICON_HEIGHT * 2 + PICON_SPACE_Y,
                                 START_X + 1 * ICON_WIDTH + 1 * SPACE_X, ICON_START_Y + ICON_HEIGHT + SPACE_Y};
 
@@ -236,14 +236,11 @@ static inline void reDrawProgressBar(uint8_t prevProgress, uint8_t nextProgress,
   GUI_FillRectColor(progressBar.x0 + start, progressBar.y0, progressBar.x0 + end, progressBar.y1, barColor);
   GUI_SetColor(sliceColor);
 
-  start /= PROGRESS_BAR_SLICE_WIDTH;
-  end /= PROGRESS_BAR_SLICE_WIDTH;
+  start = prevProgress / 10 + 1;  // number of 10% markers + 1 (to skip redraw of 0% and already drawn marker)
+  end = nextProgress / 10;        // number of 10% markers
 
   for (int i = start; i <= end; i++)
-  {
-    if (i > 0 && i <= 10)
-      GUI_VLine(progressBar.x0 + (PROGRESS_BAR_SLICE_WIDTH * i - 1), progressBar.y0, progressBar.y1);
-  }
+    GUI_VLine(progressBar.x0 + PROGRESS_BAR_SLICE_WIDTH * i - 1, progressBar.y0 + 1, progressBar.y1 - 1);
 
   GUI_RestoreColorDefault();
 }
@@ -252,7 +249,7 @@ static inline void reDrawProgress(uint8_t prevProgress)
 {
   uint8_t nextProgress = getPrintProgress();
 
-  #if !defined(TFT43_V3_0)
+  #if !defined(TFT43_V3_0) && !defined(TFT50_V3_0)
     char progStr[8];
 
     sprintf(progStr, " %d%% ", nextProgress);
@@ -260,7 +257,7 @@ static inline void reDrawProgress(uint8_t prevProgress)
   #endif
 
   if (nextProgress >= prevProgress)
-    reDrawProgressBar(prevProgress, nextProgress, MAT_ORANGE, DARKGRAY);
+    reDrawProgressBar(prevProgress, nextProgress, MAT_ORANGE, BLACK);
   else  // if regress, swap indexes and colors
     reDrawProgressBar(nextProgress, prevProgress, DARKGRAY, MAT_ORANGE);
 }
@@ -326,7 +323,7 @@ static inline void printingDrawPage(void)
   // progress bar
   GUI_SetColor(ORANGE);
   GUI_DrawRect(progressBar.x0 - 1, progressBar.y0 - 1, progressBar.x1 + 1, progressBar.y1 + 1);
-  reDrawProgressBar(0, 100, DARKGRAY, ORANGE);
+  reDrawProgressBar(0, 100, DARKGRAY, MAT_ORANGE);
   reDrawProgress(0);
 }
 
