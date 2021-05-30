@@ -81,11 +81,10 @@ void mustStoreCmd(const char * format,...)
   GCODE_QUEUE *pQueue = &infoCmd;
 
   if (pQueue->count >= CMD_MAX_LIST)
+  {
     reminderMessage(LABEL_BUSY, STATUS_BUSY);
 
-  while (pQueue->count >= CMD_MAX_LIST)
-  {
-    loopProcess();
+    loopProcessToCondition(&fullQueueConditionCallback);  // wait for a free slot in the queue in case the queue is currently full
   }
 
   va_list va;
@@ -152,11 +151,11 @@ void mustStoreCacheCmd(const char * format,...)
 {
   GCODE_QUEUE *pQueue = &infoCacheCmd;
 
-  if (pQueue->count == CMD_MAX_LIST) reminderMessage(LABEL_BUSY, STATUS_BUSY);
-
-  while (pQueue->count >= CMD_MAX_LIST)
+  if (pQueue->count >= CMD_MAX_LIST)
   {
-    loopProcess();
+    reminderMessage(LABEL_BUSY, STATUS_BUSY);
+
+    loopProcessToCondition(&fullQueueConditionCallback);  // wait for a free slot in the queue in case the queue is currently full
   }
 
   va_list va;
