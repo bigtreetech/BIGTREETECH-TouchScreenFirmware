@@ -18,6 +18,15 @@ const MENUITEMS loadUnloadItems = {
   }
 };
 
+typedef enum
+{
+  NONE = 0,
+  LOAD_REQUESTED,
+  UNLOAD_REQUESTED,
+  LOAD_STARTED,
+  UNLOAD_STARTED,
+} CMD_TYPE;
+
 static uint8_t tool_index = NOZZLE0;
 CMD_TYPE lastCmd = NONE;
 

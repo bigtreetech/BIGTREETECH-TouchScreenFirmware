@@ -14,7 +14,8 @@ extern "C" {
 #define TEMPERATURE_RANGE              2  // temperature difference to treat temperature reached target
 #define NOZZLE_TEMP_LAG                5  // nozzle max allowed lag 
 
-typedef enum {
+typedef enum
+{
   WAIT_NONE = 0,
   WAIT_HEATING,
   WAIT_COOLING_HEATING,
@@ -50,8 +51,10 @@ typedef struct
 
 typedef struct
 {
-  union {
-    struct {
+  union
+  {
+    struct
+    {
       _HEATER hotend[MAX_HOTEND_COUNT];
       _HEATER bed;
       _HEATER chamber;
