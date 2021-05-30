@@ -27,10 +27,7 @@ static void resetRequestCommandInfo(
   if (string_error2)
     requestCommandInfo.error_num = 3;
 
-  while (infoCmd.count || infoHost.wait)
-  {
-    loopProcess();  // Wait for the communication to be clean before requestCommand
-  }
+  loopProcessToCondition(&usedQueueConditionCallback);  // wait for the communication to be clean before requestCommand
 
   requestCommandInfo.inWaitResponse = true;
   requestCommandInfo.inResponse = false;
@@ -70,7 +67,8 @@ bool request_M21(void)
   mustStoreCmd("M21\n");
 
   // Wait for response
-  while (!requestCommandInfo.done) { loopProcess(); }
+  loopProcessToCondition(&noResponseConditionCallback);
+
   clearRequestCommandInfo();
   // Check reponse
   return !requestCommandInfo.inError;
@@ -87,10 +85,8 @@ char *request_M20(void)
   mustStoreCmd("M20\n");
 
   // Wait for response
-  while (!requestCommandInfo.done)
-  {
-    loopProcess();
-  }
+  loopProcessToCondition(&noResponseConditionCallback);
+
   //clearRequestCommandInfo();  //shall be call after copying the buffer ...
   return requestCommandInfo.cmd_rev_buf;
 }
@@ -115,11 +111,9 @@ char *request_M33(char *filename)
     mustStoreCmd("M33 %s\n", filename);
 
   // Wait for response
-  while (!requestCommandInfo.done)
-  {
-    loopProcess();
-  }
-  //clearRequestCommandInfo(); //shall be call after copying the buffer ...
+  loopProcessToCondition(&noResponseConditionCallback);
+
+  //clearRequestCommandInfo();  //shall be call after copying the buffer ...
   return requestCommandInfo.cmd_rev_buf;
 }
 
@@ -165,7 +159,8 @@ long request_M23_M36(char *filename)
   }
 
   // Wait for response
-  while (!requestCommandInfo.done) loopProcess();
+  loopProcessToCondition(&noResponseConditionCallback);
+
   if (requestCommandInfo.inError)
   {
     clearRequestCommandInfo();
@@ -289,10 +284,8 @@ char *request_M20_macros(char *nextdir)
   mustStoreCmd(command);
 
   // Wait for response
-  while (!requestCommandInfo.done)
-  {
-    loopProcess();
-  }
+  loopProcessToCondition(&noResponseConditionCallback);
+
   //clearRequestCommandInfo();  //shall be call after copying the buffer ...
   return requestCommandInfo.cmd_rev_buf;
 }
@@ -303,10 +296,9 @@ void request_M98(char *filename)
   snprintf(command, 256, "M98 P/%s\n", filename);
   resetRequestCommandInfo("", "ok", "Warning:", NULL, NULL);
   mustStoreCmd(command);
+
   // Wait for response
-  while (!requestCommandInfo.done)
-  {
-    loopProcess();
-  }
+  loopProcessToCondition(&noResponseConditionCallback);
+
   clearRequestCommandInfo();
 }

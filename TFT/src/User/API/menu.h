@@ -66,7 +66,7 @@ typedef union
   void *address;
 } LABEL;
 
-//always initialize label to default values
+// always initialize label to default values
 #define init_label(X) LABEL X = {.index = LABEL_BACKGROUND, .address = NULL}
 
 typedef struct
@@ -177,7 +177,8 @@ GUI_POINT getIconStartPoint(int index);
 
 void loopBackEnd(void);
 void loopFrontEnd(void);
-void loopProcess (void);
+void loopProcess(void);
+void loopProcessToCondition(bool (*conditionCallback)(void));
 
 #ifdef __cplusplus
 }
