@@ -67,10 +67,6 @@ void drawBackground(const GUI_RECT *rect, uint16_t bgColor, uint16_t edgeDistanc
 void drawStandardValue(const GUI_RECT *rect, VALUE_TYPE valType, const void *val, uint16_t font,
                        uint16_t color, uint16_t bgColor, uint16_t edgeDistance, bool clearBgColor);
 
-bool warmupTemperature(uint8_t toolIndex, void (* callback)(void));
-
-void cooldownTemperature(void);
-
 // Show/draw temperature in a standard menu
 void temperatureReDraw(uint8_t toolIndex, int16_t * temp, bool skipHeader);
 

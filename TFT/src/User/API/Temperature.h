@@ -9,11 +9,10 @@ extern "C" {
 #include <stdint.h>
 #include "Settings.h"
 
-#define TEMPERATURE_QUERY_FAST_SECONDS 1                  // "M105" temperature query delay in heat menu or while heating.
-#define TEMPERATURE_QUERY_SLOW_SECONDS 3                  // temperature query delay when idle
-#define TEMPERATURE_RANGE              2                  // temperature difference to treat temperature reached target
-#define TEMPERATURE_ALERT_RANGE        TEMPERATURE_RANGE  // treat this much difference as no change in target temperature for sound alerts
-#define TEMPERATURE_MIN_EXT_RANGE      TEMPERATURE_RANGE  // treat this much diference in minimum extruder temperature as ok for extrusion
+#define TEMPERATURE_QUERY_FAST_SECONDS 1  // "M105" temperature query delay in heat menu or while heating.
+#define TEMPERATURE_QUERY_SLOW_SECONDS 3  // temperature query delay when idle
+#define TEMPERATURE_RANGE              2  // temperature difference to treat temperature reached target
+#define NOZZLE_TEMP_LAG                5  // nozzle max allowed lag 
 
 typedef enum {
   WAIT_NONE = 0,
@@ -21,11 +20,19 @@ typedef enum {
   WAIT_COOLING_HEATING,
 } HEATER_WAIT;
 
-typedef enum {
+typedef enum
+{
   SETTLED = 0,
   HEATING,
   COOLING,
 } HEATER_STATUS;
+
+typedef enum
+{
+  COLD = 0,
+  SETTLING,
+  HEATED,
+} NOZZLE_STATUS;
 
 enum
 {
@@ -72,6 +79,7 @@ uint16_t heatGetTargetTemp(uint8_t index);
 void heatSetCurrentTemp(uint8_t index, int16_t temp);
 int16_t heatGetCurrentTemp(uint8_t index);
 void heatCoolDown(void);
+void cooldownTemperature(void);
 
 void heatSetCurrentTool(uint8_t tool);
 uint8_t heatGetCurrentTool(void);
@@ -92,6 +100,8 @@ void heatSetSendWaiting(uint8_t index, bool isWaiting);
 bool heatGetSendWaiting(uint8_t index);
 
 void loopCheckHeater(void);
+
+NOZZLE_STATUS warmupNozzle(uint8_t toolIndex, void (* callback)(void));
 
 #ifdef __cplusplus
 }

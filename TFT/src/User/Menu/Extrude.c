@@ -39,10 +39,6 @@ void menuExtrude(void)
   bool eRelative = false;
   uint32_t feedrate = 0;
 
-  while (infoCmd.count != 0)
-  {
-    loopProcess();
-  }
   extrudeCoordinate = eTemp = eBackup = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
   feedrate = coordinateGetFeedRate();
   eRelative = eGetRelative();
@@ -61,6 +57,8 @@ void menuExtrude(void)
   #if LCD_ENCODER_SUPPORT
     encoderPosition = 0;
   #endif
+
+  heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
 
   while (infoMenu.menu[infoMenu.cur] == menuExtrude)
   {
@@ -133,12 +131,23 @@ void menuExtrude(void)
       if (curExtruder_index != heatGetCurrentTool())
         storeCmd("%s\n", tool_change[curExtruder_index]);
 
-      if (warmupTemperature(curExtruder_index, &extrusionMinTemp_OK))
+      switch (warmupNozzle(curExtruder_index, &extrusionMinTemp_OK))
       {
-        extrudeCoordinate = eTemp;
-        storeCmd("G0 E%.5f F%d\n", extrudeCoordinate, infoSettings.ext_speed[itemSpeed_index]);
+        case COLD:
+          eTemp = extrudeCoordinate;
+          break;
 
-        extruderReDraw(curExtruder_index, extrudeCoordinate, true);
+        case SETTLING:
+             extruderReDraw(curExtruder_index, eTemp, true);
+         break;
+
+        case HEATED:
+          if (storeCmd("G0 E%.5f F%d\n", eTemp, infoSettings.ext_speed[itemSpeed_index]))
+          {
+            extrudeCoordinate = eTemp;
+            extruderReDraw(curExtruder_index, eTemp, true);
+          }
+          break;
       }
     }
 
@@ -150,4 +159,8 @@ void menuExtrude(void)
 
   if (eRelative)
     mustStoreCmd("M83\n");  // Set extruder to relative
+
+  // Set slow update time if not waiting for target temperature
+  if (heatHasWaiting() == false)
+    heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
 }
