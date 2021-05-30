@@ -27,13 +27,6 @@ typedef enum
   COOLING,
 } HEATER_STATUS;
 
-typedef enum
-{
-  COLD = 0,
-  SETTLING,
-  HEATED,
-} NOZZLE_STATUS;
-
 enum
 {
   NOZZLE0 = 0,
@@ -79,7 +72,6 @@ uint16_t heatGetTargetTemp(uint8_t index);
 void heatSetCurrentTemp(uint8_t index, int16_t temp);
 int16_t heatGetCurrentTemp(uint8_t index);
 void heatCoolDown(void);
-void cooldownTemperature(void);
 
 void heatSetCurrentTool(uint8_t tool);
 uint8_t heatGetCurrentTool(void);
@@ -100,8 +92,6 @@ void heatSetSendWaiting(uint8_t index, bool isWaiting);
 bool heatGetSendWaiting(uint8_t index);
 
 void loopCheckHeater(void);
-
-NOZZLE_STATUS warmupNozzle(uint8_t toolIndex, void (* callback)(void));
 
 #ifdef __cplusplus
 }

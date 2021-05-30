@@ -25,6 +25,13 @@ typedef enum
   VALUE_STRING,
 } VALUE_TYPE;
 
+typedef enum
+{
+  COLD = 0,
+  SETTLING,
+  HEATED,
+} NOZZLE_STATUS;
+
 extern SCROLL scrollLine;
 
 extern uint8_t currentTool;
@@ -84,6 +91,10 @@ int32_t editIntValue(int32_t minValue, int32_t maxValue, int32_t resetValue, int
 
 // Edit a float value in a standard menu
 float editFloatValue(float minValue, float maxValue, float resetValue, float value);
+
+NOZZLE_STATUS warmupNozzle(uint8_t toolIndex, void (* callback)(void));
+
+void cooldownTemperature(void);
 
 #ifdef __cplusplus
 }

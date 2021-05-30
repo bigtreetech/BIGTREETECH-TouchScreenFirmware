@@ -106,23 +106,6 @@ void heatCoolDown(void)
   }
 }
 
-// user choice for disabling all heaters/hotends
-void cooldownTemperature(void)
-{
-  if (!isPrinting())
-  {
-    for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
-    {
-      if (heatGetTargetTemp(i) > 0)
-      {
-        setDialogText(LABEL_WARNING, LABEL_HEATERS_ON, LABEL_CONFIRM, LABEL_CANCEL);
-        showDialog(DIALOG_TYPE_QUESTION, heatCoolDown, NULL, NULL);
-        break;
-      }
-    }
-  }
-}
-
 // Is heating waiting to heat up
 bool heatGetIsWaiting(uint8_t index)
 {
@@ -341,65 +324,3 @@ void loopCheckHeater(void)
     }
   }
 }
-
-NOZZLE_STATUS warmupNozzle(uint8_t toolIndex, void (* callback)(void))
-{
-  if (heatGetTargetTemp(toolIndex) < infoSettings.min_ext_temp)
-  {
-    if (heatGetCurrentTemp(toolIndex) < infoSettings.min_ext_temp)
-    { // low temperature warning
-      char tempMsg[200];
-      char tempStr[100];
-
-      sprintf(tempMsg, (char *)textSelect(LABEL_EXT_TEMPLOW), infoSettings.min_ext_temp);
-      sprintf(tempStr, (char *)textSelect(LABEL_HEAT_HOTEND), infoSettings.min_ext_temp);
-      strcat(tempMsg, "\n");
-      strcat(tempMsg, tempStr);
-
-      setDialogText(LABEL_WARNING, (uint8_t *)tempMsg, LABEL_CONFIRM, LABEL_CANCEL);
-      showDialog(DIALOG_TYPE_ERROR, callback, NULL, NULL);
-
-      return COLD;
-    }
-    // temperature falling down to a target lower than the minimal extrusion temperature
-    else
-    { // contiunue with current temp but no lower than the minimum extruder temperature
-      heatSetTargetTemp(toolIndex, MAX(infoSettings.min_ext_temp, heatGetCurrentTemp(toolIndex)));
-      return SETTLING;
-    }
-  }
-  else
-  {
-    if (heatGetCurrentTemp(toolIndex) < heatGetTargetTemp(toolIndex))
-    {
-      if (heatGetCurrentTemp(toolIndex) < heatGetTargetTemp(toolIndex) - NOZZLE_TEMP_LAG)
-      { // low temperature warning
-        char tempMsg[200];
-        char tempStr[100];
-
-        sprintf(tempMsg, (char *)textSelect(LABEL_DESIRED_TEMPLOW), heatGetTargetTemp(toolIndex));
-        sprintf(tempStr, (char *)textSelect(LABEL_WAIT_HEAT_UP));
-        strcat(tempMsg, "\n");
-        strcat(tempMsg, tempStr);
-
-        setDialogText(LABEL_WARNING, (uint8_t *)tempMsg, LABEL_CONFIRM, LABEL_BACKGROUND);
-        showDialog(DIALOG_TYPE_ERROR, NULL, NULL, NULL);
-        return COLD;
-      }
-      else
-      {
-        char tempMsg[200];
-
-        sprintf(tempMsg, (char *)textSelect(LABEL_NOZZLE_STABILIZING), heatGetTargetTemp(toolIndex));
-        if (!toastRunning())
-        {
-          addToast(DIALOG_TYPE_INFO, tempMsg);
-        }
-        return SETTLING;
-      }
-    }
-  }
-
-  return HEATED;
-}
-
