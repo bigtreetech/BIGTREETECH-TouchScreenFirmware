@@ -2,7 +2,6 @@
 #define _LANGUAGE_CA_H_
 
     // config.ini Parameter Settings / Feature Settings
-    #define STRING_STATUS_SCREEN          "Enable Status Screen"
     #define STRING_BAUDRATE               "Velocitat de transmissió"
     #define STRING_LANGUAGE               "Català"
     #define STRING_ROTATE_UI              "Rotar"
@@ -75,14 +74,14 @@
     #define STRING_SAVE                   "Gravar"
     #define STRING_RESTORE                "Restore"
     #define STRING_RESET                  "Reset"
-    #define STRING_EEPROM_SAVE_INFO       "Desa la configuració de la impressora\na la EEPROM?"
-    #define STRING_EEPROM_RESTORE_INFO    "Carregar la configuració de\nEEPROM?"
+    #define STRING_EEPROM_SAVE_INFO       "Desa la configuració de la impressora a la EEPROM?"
+    #define STRING_EEPROM_RESTORE_INFO    "Carregar la configuració de EEPROM?"
     #define STRING_EEPROM_RESET_INFO      "Reset EEPROM to stock printer settings?"
     #define STRING_SETTINGS_SAVE          "Save settings"
     #define STRING_SETTINGS_RESTORE       "Restaura la configuració"
     #define STRING_SETTINGS_RESET         "Restableix la configuració"
-    #define STRING_SETTINGS_RESET_INFO    "Restableix tota la configuració a\nvalors predeterminats?"
-    #define STRING_SETTINGS_RESET_DONE    "Restableix tota la configuració\naconseguit.\nreinicieu el dispositiu."
+    #define STRING_SETTINGS_RESET_INFO    "Restableix tota la configuració a valors predeterminats?"
+    #define STRING_SETTINGS_RESET_DONE    "Restableix tota la configuració aconseguit.\nreinicieu el dispositiu."
 
     // Navigation Buttons
     #define STRING_PAGE_UP                "Retrocedir"
@@ -145,7 +144,7 @@
     #define STRING_TIMEOUT_REACHED        "Timeout reached!"
     #define STRING_DISCONNECT_INFO        "Ara pot controlar la impressora des del seu ordinador!"
     #define STRING_SHUTTING_DOWN          "Apagant..."
-    #define STRING_WAIT_TEMP_SHUT_DOWN    "Espereu que la\ntemperatura del hotend\nsigui inferior a %d℃" // Wait for the temperature of hotend to be lower than 50℃
+    #define STRING_WAIT_TEMP_SHUT_DOWN    "Espereu que la temperatura del hotend sigui inferior a %d℃" // Wait for the temperature of hotend to be lower than 50℃
     #define STRING_POWER_FAILED           "¿Continuar imprimint?"
     #define STRING_PROCESS_RUNNING        "Process already running!"
     #define STRING_PROCESS_COMPLETED      "Process completed!"
@@ -168,9 +167,9 @@
     #define STRING_DISABLE_STEPPERS       "Disarm All"
     #define STRING_XY_UNLOCK              "Disarm XY"
 
-    #define STRING_START_PRINT            "Comenceu a imprimir:\n %s?"
+    #define STRING_START_PRINT            "Comenceu a imprimir:\n%s?"
     #define STRING_STOP_PRINT             "Voleu aturar la impressió?"
-    #define STRING_IS_PAUSE               "No es pot extruir\nal imprimir,¿\nPausar la impressió?"
+    #define STRING_IS_PAUSE               "No es pot extruir al imprimir,¿\nPausar la impressió?"
     #define STRING_M0_PAUSE               "En pausa per l'ordre M0"
 
     #define STRING_TEST                   "Provar"
@@ -255,7 +254,7 @@
     #define STRING_POINT_5                "Punt 5"
     #define STRING_BED_LEVELING           "Bed Level"
     #define STRING_BL_COMPLETE            "Nivellat del llit completat"
-    #define STRING_BL_SMART_FILL          "Falten punts de prova\ns'han omplert de forma intel·ligent.\n \nNota: recordeu guardar!"
+    #define STRING_BL_SMART_FILL          "Falten punts de prova s'han omplert de forma intel·ligent.\n\nNota: recordeu guardar!"
     #define STRING_BL_ENABLE              "BL: on"
     #define STRING_BL_DISABLE             "BL: off"
     #define STRING_ABL                    "ABL"
@@ -272,7 +271,7 @@
     #define STRING_ABL_SLOT1              "Ranura 1"
     #define STRING_ABL_SLOT2              "Ranura 2"
     #define STRING_ABL_SLOT3              "Ranura 3"
-    #define STRING_ABL_SLOT_EEPROM        "Recordar la ranura per al proper\nreinici? (Guardar EEPROM)"
+    #define STRING_ABL_SLOT_EEPROM        "Recordar la ranura per al proper reinici? (Guardar EEPROM)"
     #define STRING_ABL_Z                  "Z Fade"
     #define STRING_LEVEL_CORNER           "L corner"
     #define STRING_P_OFFSET               "P Offset"
@@ -312,18 +311,18 @@
     #define STRING_TUNING                 "Tuning"
     #define STRING_PID                    "PID"
     #define STRING_PID_TITLE              "PID autotune"
-    #define STRING_PID_START_INFO         "PID autotune may take\nsome time to complete.\nContinue?"
+    #define STRING_PID_START_INFO         "PID autotune may take some time to complete.\nContinue?"
     #define STRING_PID_START_INFO_2       "PID autotune in progress!"
     #define STRING_PID_START_INFO_3       "Do not touch the screen until completed (green LED ON)!"
     #define STRING_TUNE_EXTRUDER          "Tune steps"
     #define STRING_TUNE_EXT_EXTRUDE_100   "Ext. 100mm"
     #define STRING_TUNE_EXT_TEMP          "Extruder tuning | Heat"
-    #define STRING_TUNE_EXT_TEMPLOW       "Desired temperature too low!\nMinimum temperature: %d C"
-    #define STRING_TUNE_EXT_DESIREDVAL    "Temperature is not yet at the desired value"
-    #define STRING_TUNE_EXT_MARK120MM     "Mark 120 mm on your fillament\nPress '%s' when ready\nMeasure remaining length\nafter extruding"
+    #define STRING_TUNE_EXT_TEMPLOW       "Desired temperature is below minimum temperature (%d℃)."
+    #define STRING_TUNE_EXT_DESIREDVAL    "Temperature is not yet at the desired value."
+    #define STRING_TUNE_EXT_MARK120MM     "Mark 120 mm on your fillament.\nPress '%s' when ready.\nMeasure remaining length after extruding."
     #define STRING_TUNE_EXT_HEATOFF       "Turn the heater off?"
     #define STRING_TUNE_EXT_ADJ_ESTEPS    "Adjust E-Steps"
-    #define STRING_TUNE_EXT_ESTEPS_SAVED  "New E-steps saved!\nDon't forget to\nsave it in EEPROM\nNew value: %0.2f"
+    #define STRING_TUNE_EXT_ESTEPS_SAVED  "New E-steps applied.\nDon't forget to save it in EEPROM.\nNew value: %0.2f"
     #define STRING_TUNE_EXT_MEASURED      "Length remaining:"
     #define STRING_TUNE_EXT_OLD_ESTEP     "Old e-steps: %0.2f"
     #define STRING_TUNE_EXT_NEW_ESTEP     "New e-steps: %0.2f"
@@ -332,8 +331,8 @@
     #define STRING_MESH_EDITOR            "Mesh edit"
     #define STRING_MESH_TUNER             "Mesh tuner"
     #define STRING_CASE_LIGHT             "Case light"
-    #define STRING_LOAD_STARTED           "Loading filament.\nPlease wait for the process\nto complete."  // translation needed
-    #define STRING_UNLOAD_STARTED         "Unloading filament.\nPlease wait for the process\nto complete."  // translation needed
+    #define STRING_LOAD_STARTED           "Loading filament.\nPlease wait for the process to complete."  // translation needed
+    #define STRING_UNLOAD_STARTED         "Unloading filament.\nPlease wait for the process to complete."  // translation needed
     #define STRING_HEATERS_ON             "Some heaters are still ON.\nDo you want to stop them?"  // translation needed
     #define STRING_PRINT_FINISHED         "   Print\n   finished"
     #define STRING_MAIN_SCREEN            "Main"
@@ -344,7 +343,7 @@
     #define STRING_FILAMENT_COST          "\nFilament cost: %1.2f"
     #define STRING_NO_FILAMENT_STATS      "\nFilament data not available."
     #define STRING_CLICK_FOR_MORE         "Click for summary"
-    #define STRING_EXT_TEMPLOW            "Hotend temperature is below\nminimum temperature (%d℃)."
+    #define STRING_EXT_TEMPLOW            "Hotend temperature is below minimum temperature (%d℃)."
     #define STRING_HEAT_HOTEND            "Heat hotend to %d℃?"
     #define STRING_Z_ALIGN                "Z Align"
     #define STRING_MACROS                 "Macros"

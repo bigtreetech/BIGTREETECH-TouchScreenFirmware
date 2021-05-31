@@ -168,7 +168,7 @@
     #define STRING_DISABLE_STEPPERS       "解锁电机"
     #define STRING_XY_UNLOCK              "解锁XY"
 
-    #define STRING_START_PRINT            "是否开始打印:\n %s?"
+    #define STRING_START_PRINT            "是否开始打印:\n%s?"
     #define STRING_STOP_PRINT             "是否停止打印?"
     #define STRING_IS_PAUSE               "打印中无法挤出耗材, 是否暂停打印?"
     #define STRING_M0_PAUSE               "M0暂停"
@@ -272,7 +272,7 @@
     #define STRING_ABL_SLOT1              "Slot 1"
     #define STRING_ABL_SLOT2              "Slot 2"
     #define STRING_ABL_SLOT3              "Slot 3"
-    #define STRING_ABL_SLOT_EEPROM        "Remember slot for next\nreboot? (Save EEPROM)"
+    #define STRING_ABL_SLOT_EEPROM        "Save the mesh to EEPROM to load after reboot?"
     #define STRING_ABL_Z                  "Z Fade"
     #define STRING_LEVEL_CORNER           "L corner"
     #define STRING_P_OFFSET               "P Offset"
