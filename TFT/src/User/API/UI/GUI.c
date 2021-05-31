@@ -714,6 +714,7 @@ void _GUI_DispStringInRect(int16_t sx, int16_t sy, int16_t ex, int16_t ey, const
 void _GUI_DispStringInPrect(const GUI_RECT *rect, const uint8_t *p)
 {
   _GUI_DispStringInRect(rect->x0, rect->y0, rect->x1, rect->y1, p);
+<<<<<<< HEAD
 }
 
 static GUI_POINT GUI_DisplayWordInPrect(const GUI_RECT *rect, GUI_POINT cursor, uint8_t *str)
@@ -753,6 +754,8 @@ static GUI_POINT GUI_DisplayWordInPrect(const GUI_RECT *rect, GUI_POINT cursor, 
   }
 
   return cursor;
+=======
+>>>>>>> baac795caa6debeb01a3cc7e351ecccaf940a0b5
 }
 
 void _GUI_DispStringInRectEOL(int16_t sx, int16_t sy, int16_t ex, int16_t ey, const uint8_t *p)
