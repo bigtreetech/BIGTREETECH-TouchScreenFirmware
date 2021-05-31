@@ -186,7 +186,7 @@ B: In case your mainboard provides **EXP1 and EXP2**, you have to connect 2 ribb
 
 C: In case you have an **"E3" mainboard** which provides a **single EXP connector**, you have to connect 1 ribbon cable connecting EXP of the mainboard to **EXP3** of the TFT. In case your TFT does **not** provide an EXP3 connector but only two 10pin connectors (TFT24 v1.1 for example) you will need a "Y-split" cable with one 10pin connector on one side (for the mainboard) and two 10pin connectors on the other side (for the TFT). In the Marlin firmware of your mainboard, make sure that **ONLY** the "`CR10_STOCKDISPLAY`" is activated in Configuration.h and that all other controllers are **De**activated (especially the "`REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER`").
 
-![Thomas White May 2021](https://user-images.githubusercontent.com/54359396/118848226-d74f3c00-b8ce-11eb-8210-d9e61a8f5650.png)
+![Thomas White May 2021](https://user-images.githubusercontent.com/54359396/120190324-bcf35780-c218-11eb-8f31-b50175839156.png)
 
 
 
