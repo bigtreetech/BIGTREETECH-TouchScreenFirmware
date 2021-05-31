@@ -144,7 +144,7 @@
     #define STRING_TIMEOUT_REACHED        "Zeit überschritten!"
     #define STRING_DISCONNECT_INFO        "Verbindung getrennt!"
     #define STRING_SHUTTING_DOWN          "Fahre herunter..."
-    #define STRING_WAIT_TEMP_SHUT_DOWN    "Warte bis Düsen- temperatur unter %d℃ fällt." // Wait for the temperature of hotend to be lower than 50℃
+    #define STRING_WAIT_TEMP_SHUT_DOWN    "Warte bis Düsen- temperatur unter\n%d°C fällt." // Wait for the temperature of hotend to be lower than 50°C
     #define STRING_POWER_FAILED           "Druck fortsetzen?" //Question Sign
     #define STRING_PROCESS_RUNNING        "Prozess läuft bereits!"
     #define STRING_PROCESS_COMPLETED      "Prozess fertiggestellt!"
@@ -187,9 +187,9 @@
     #define STRING_TOUCHMI                "TouchMi"
 
     // Values
-    #define STRING_1_DEGREE               "1℃"
-    #define STRING_5_DEGREE               "5℃"
-    #define STRING_10_DEGREE              "10℃"
+    #define STRING_1_DEGREE               "1°C"
+    #define STRING_5_DEGREE               "5°C"
+    #define STRING_10_DEGREE              "10°C"
 
     #define STRING_001_MM                 "0.01mm"
     #define STRING_01_MM                  "0.1mm"
@@ -317,7 +317,7 @@
     #define STRING_TUNE_EXTRUDER          "Schritte"
     #define STRING_TUNE_EXT_EXTRUDE_100   "100mm ext."
     #define STRING_TUNE_EXT_TEMP          "Düsentemperatur"
-    #define STRING_TUNE_EXT_TEMPLOW       "Temparatur zu niedrig!\nMinimale Temparatur: %d℃"
+    #define STRING_TUNE_EXT_TEMPLOW       "Temparatur zu niedrig!\nMinimale Temparatur: %d°C"
     #define STRING_TUNE_EXT_DESIREDVAL    "Temparatur hat gewünschten Wert noch nicht erreicht!"
     #define STRING_TUNE_EXT_MARK120MM     "Filament 120 mm über Einlass markieren,\ndann '%s' drücken & nach Extrusion\nerneut messen."
     #define STRING_TUNE_EXT_HEATOFF       "Heizung abschalten?"
@@ -343,8 +343,8 @@
     #define STRING_FILAMENT_COST          "\nFilament Kosten: %1.2f"
     #define STRING_NO_FILAMENT_STATS      "\nFilament Daten nicht verfügbar."
     #define STRING_CLICK_FOR_MORE         "Klick für Statistik"
-    #define STRING_EXT_TEMPLOW            "Temperatur der Düse liegt unter dem Minimum (%d℃)."
-    #define STRING_HEAT_HOTEND            "Heize Düse auf %d℃?"
+    #define STRING_EXT_TEMPLOW            "Temperatur der Düse liegt unter dem Minimum (%d°C)."
+    #define STRING_HEAT_HOTEND            "Heize Düse auf %d°C?"
     #define STRING_Z_ALIGN                "Z ausr."
     #define STRING_MACROS                 "Macros"
     #define STRING_MESH_VALID             "Mesh Validation"
