@@ -716,27 +716,82 @@ void _GUI_DispStringInPrect(const GUI_RECT *rect, const uint8_t *p)
   _GUI_DispStringInRect(rect->x0, rect->y0, rect->x1, rect->y1,p);
 }
 
+static GUI_POINT GUI_DisplayWordInPrect(const GUI_RECT *rect, GUI_POINT cursor, uint8_t *str)
+{
+  CHAR_INFO info;
+  // return cursor to new line if line is full or on new line character
+  if ((cursor.x + GUI_StrPixelWidth(str)) > rect->x1 || (*str == '\n'))
+  {
+    getCharacterInfo(str, &info);
+    cursor.x = rect->x0;
+    cursor.y += info.pixelHeight;
+
+    if ((cursor.y + info.pixelHeight) > rect->y1)
+      cursor.y = rect->y0;
+
+    if (*str == ' ' || *str == '\n')  // treat space as new line if it causes line change
+      return cursor;
+  }
+
+  // draw word
+  while (*str)
+  {
+    getCharacterInfo(str, &info);
+    // check line width after each character to clip long words to rect width
+    if ((cursor.x + info.pixelWidth) > rect->x1)
+    {
+      cursor.x = rect->x0;
+      cursor.y += info.pixelHeight;
+
+      if ((cursor.y + info.pixelHeight) > rect->y1)
+        cursor.y = rect->y0;
+    }
+
+    GUI_DispOne(cursor.x, cursor.y, &info);
+    cursor.x += info.pixelWidth;
+    str += info.bytes;
+  }
+
+  return cursor;
+}
+
 void _GUI_DispStringInRectEOL(int16_t sx, int16_t sy, int16_t ex, int16_t ey, const uint8_t *p)
 {
   if (p == NULL || *p == 0) return;
-  CHAR_INFO info;
-  int16_t x = sx;
+
+  GUI_RECT rect = (GUI_RECT){sx, sy, ex, ey};
+  GUI_POINT cursor = (GUI_POINT){sx, sy};
+  uint16_t bufLength = 0;
+  char buf[100];
+
   while (*p)
   {
-    getCharacterInfo(p, &info);
-    if (x + info.pixelWidth > ex || (*p == '\n' && x != sx))
+    if (*p == ' ' || *p == '\n')
     {
-      x = sx;
-      sy += info.pixelHeight;
-      if (sy + info.pixelHeight > ey)
-        return;
+      if (bufLength)
+      {
+        // draw word from buffer before reading next word
+        cursor = GUI_DisplayWordInPrect(&rect, cursor, (uint8_t*)buf);
+        bufLength = 0;
+        buf[bufLength] = 0;
+      }
+      // draw space or new line individually
+      cursor = GUI_DisplayWordInPrect(&rect, cursor, (uint8_t *)((*p == ' ') ? " " : "\n"));
     }
-    if (*p != '\n')
+    else  // copy word character to buffer
     {
-      GUI_DispOne(x, sy, &info);
-      x += info.pixelWidth;
+      buf[bufLength++] = *p;
+      buf[bufLength] = 0;
     }
-    p += info.bytes;
+
+    p++;
+
+    if (!*p && bufLength)  // draw remaining text if reached end of string
+    {
+      cursor = GUI_DisplayWordInPrect(&rect, cursor, (uint8_t*)buf);
+      bufLength = 0;
+      buf[bufLength] = 0;
+    }
   }
 }
 
@@ -757,20 +812,21 @@ void GUI_DispDec(int16_t x, int16_t y, int32_t num, uint8_t len, uint8_t leftOrR
   uint8_t decBuf[64];
   uint8_t bufIndex = 0;
 
-  if (num<0)
+  if (num < 0)
   {
     num = -num;
     isNegative = 1;
     len--;  // Negative '-' takes up a display length
   }
-  for (i=0;i<len;i++)
+
+  for (i = 0; i < len; i++)
   {
-    bit_value=(num/GUI_Pow10[len-i-1])%10;
+    bit_value = (num / GUI_Pow10[len - i - 1]) % 10;
     if (notZero == 0)
     {
-      if (bit_value == 0 && i<(len-1))
+      if (bit_value == 0 && i < (len - 1))
       {
-        if (leftOrRight==RIGHT)
+        if (leftOrRight == RIGHT)
         {
           decBuf[bufIndex++] = (guiNumMode == GUI_NUMMODE_SPACE) ? ' ' : '0';
         }
@@ -791,7 +847,7 @@ void GUI_DispDec(int16_t x, int16_t y, int32_t num, uint8_t len, uint8_t leftOrR
     }
     decBuf[bufIndex++] = bit_value + '0';
   }
-  for (; blank_bit_len>0; blank_bit_len--)
+  for (; blank_bit_len > 0; blank_bit_len--)
   {
     decBuf[bufIndex++] = ' ';
   }
@@ -919,6 +975,7 @@ void _GUI_DispLabelInPrectEOL(const GUI_RECT *rect, uint16_t index)
 /****************************************************     Widget    *******************************************************************/
 #define RADIO_SELECTED_COLOR GREEN
 #define RADIO_IDLE_COLOR     WHITE
+
 void RADIO_Create(RADIO *radio)
 {
   uint16_t tmp = GUI_GetColor();
@@ -1054,10 +1111,10 @@ void GUI_DrawButton(const BUTTON *button, uint8_t pressed)
 {
   const uint16_t radius = button->radius;
   const uint16_t lineWidth = button->lineWidth;
-  const int16_t sx = button->rect.x0,
-  sy = button->rect.y0,
-  ex = button->rect.x1,
-  ey = button->rect.y1;
+  const int16_t sx = button->rect.x0;
+  const int16_t sy = button->rect.y0;
+  const int16_t ex = button->rect.x1;
+  const int16_t ey = button->rect.y1;
   const uint16_t nowBackColor = GUI_GetBkColor();
   const uint16_t nowFontColor = GUI_GetColor();
   const GUI_TEXT_MODE nowTextMode = GUI_GetTextMode();
@@ -1067,20 +1124,21 @@ void GUI_DrawButton(const BUTTON *button, uint8_t pressed)
   const uint16_t fontColor = pressed ? button->pFontColor : button->fontColor;
 
   GUI_SetColor(lineColor);
-  GUI_FillCircle(sx + radius,     sy + radius,  radius);  // �ĸ��ǵ�Բ��
+  GUI_FillCircle(sx + radius,     sy + radius,  radius);
   GUI_FillCircle(ex - radius - 1, sy + radius,  radius);
   GUI_FillCircle(sx + radius,     ey - radius - 1, radius);
   GUI_FillCircle(ex - radius - 1, ey - radius - 1, radius);
 
   for (uint16_t i=0; i<lineWidth ;i++)
   {
-    GUI_HLine(sx + radius, sy + i,      ex - radius);  // �ĸ����?
+    GUI_HLine(sx + radius, sy + i,      ex - radius);
     GUI_HLine(sx + radius, ey - 1 - i,  ex - radius);
     GUI_VLine(sx + i,      sy + radius, ey - radius);
     GUI_VLine(ex - 1 - i,  sy + radius, ey - radius);
   }
+
   GUI_SetColor(backColor);
-  GUI_FillCircle(sx + radius,     sy + radius,  radius - lineWidth);  // ����ĸ��ǵ�Բ��?
+  GUI_FillCircle(sx + radius,     sy + radius,  radius - lineWidth);
   GUI_FillCircle(ex - radius - 1, sy + radius,  radius - lineWidth);
   GUI_FillCircle(sx + radius,     ey - radius - 1, radius - lineWidth);
   GUI_FillCircle(ex - radius - 1, ey - radius - 1, radius - lineWidth);
@@ -1121,65 +1179,74 @@ void GUI_DrawWindow(const WINDOW *window, const uint8_t *title, const uint8_t *i
     GUI_SetColor(window->actionBar.backColor);
     GUI_FillRect(w_rect.x0, action_y0, w_rect.x1, w_rect.y1);
   }
-  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
   // draw window type icon
   uint8_t * char_icon;
+
   switch (window->type)
   {
     case DIALOG_TYPE_ALERT:
       GUI_SetColor(ORANGE);
       char_icon = IconCharSelect(CHARICON_ALERT);
       break;
+
     case DIALOG_TYPE_QUESTION:
       GUI_SetColor(PURPLE);
       char_icon = IconCharSelect(CHARICON_QUESTION);
       break;
+
     case DIALOG_TYPE_ERROR:
       GUI_SetColor(RED);
       char_icon = IconCharSelect(CHARICON_ERROR);
       break;
+
     case DIALOG_TYPE_SUCCESS:
       GUI_SetColor(GREEN);
       char_icon = IconCharSelect(CHARICON_OK);
       break;
+
     case DIALOG_TYPE_INFO:
     default:
       GUI_SetColor(BLUE);
       char_icon = IconCharSelect(CHARICON_INFO);
       break;
-    }
-    GUI_DispString(w_rect.x0 + BYTE_WIDTH, title_txt_y0, char_icon);
-    // draw title accent line
-    GUI_DrawRect(w_rect.x0, title_y1 - 1, w_rect.x1, title_y1 + 1);
+  }
 
-    if (actionBar)
-    { // draw actionbar accent line
-      GUI_SetColor(GRAY);
-      GUI_DrawRect(w_rect.x0, action_y0 - 1, w_rect.x1, action_y0 + 1);
-    }
-    else
-    {
-      w_rect.y1 -= window->actionBarHeight;
-    }
-    // draw window border
-    GUI_SetColor(window->lineColor);
-    for (uint8_t i = 0; i < window->lineWidth; i++)
-    {
-      GUI_DrawRect(w_rect.x0 - i, w_rect.y0 - i, w_rect.x1 + i, w_rect.y1 + i);
-    }
+  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
+  GUI_DispString(w_rect.x0 + BYTE_WIDTH, title_txt_y0, char_icon);
 
-    // draw title text
-    GUI_SetColor(window->title.fontColor);
-    GUI_DispLenString(w_rect.x0 + BYTE_HEIGHT * 2, title_txt_y0, title,
-                      window->rect.x1 - (w_rect.x0 + BYTE_HEIGHT * 2), true);
+  // draw title accent line
+  GUI_DrawRect(w_rect.x0, title_y1 - 1, w_rect.x1, title_y1 + 1);
 
-    // draw info text
-    GUI_SetColor(window->info.fontColor);
-    if ((GUI_StrPixelWidth(inf) < w_rect.x1 - w_rect.x0) && (strchr((const char *)inf,'\n') == NULL))
-      GUI_DispStringInRect(w_rect.x0, title_y1, w_rect.x1, action_y0, inf);
-    else
-      GUI_DispStringInRectEOL(w_rect.x0 + margin, title_y1 + margin, w_rect.x1 - margin, action_y0 - margin, inf);
+  if (actionBar)
+  { // draw actionbar accent line
+    GUI_SetColor(GRAY);
+    GUI_DrawRect(w_rect.x0, action_y0 - 1, w_rect.x1, action_y0 + 1);
+  }
+  else
+  {
+    w_rect.y1 -= window->actionBarHeight;
+  }
+  // draw window border
+  GUI_SetColor(window->lineColor);
 
-    GUI_RestoreColorDefault();
+  for (uint8_t i = 0; i < window->lineWidth; i++)
+  {
+    GUI_DrawRect(w_rect.x0 - i, w_rect.y0 - i, w_rect.x1 + i, w_rect.y1 + i);
+  }
+
+  // draw title text
+  GUI_SetColor(window->title.fontColor);
+  GUI_DispLenString(w_rect.x0 + BYTE_HEIGHT * 2, title_txt_y0, title,
+                    window->rect.x1 - (w_rect.x0 + BYTE_HEIGHT * 2), true);
+
+  // draw info text
+  GUI_SetColor(window->info.fontColor);
+
+  if ((GUI_StrPixelWidth(inf) < w_rect.x1 - w_rect.x0) && (strchr((const char *)inf,'\n') == NULL))
+    GUI_DispStringInRect(w_rect.x0, title_y1, w_rect.x1, action_y0, inf);
+  else
+    GUI_DispStringInRectEOL(w_rect.x0 + margin, title_y1 + margin, w_rect.x1 - margin, action_y0 - margin, inf);
+
+  GUI_RestoreColorDefault();
 }

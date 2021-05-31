@@ -1,5 +1,4 @@
 // config.ini Parameter Settings / Feature Settings
-X_WORD (STATUS_SCREEN)
 X_WORD (BAUDRATE)
 X_WORD (LANGUAGE)
 X_WORD (ROTATE_UI)
