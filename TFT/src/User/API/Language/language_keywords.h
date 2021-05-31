@@ -9,7 +9,6 @@ extern "C" {
 #include "variants.h"
 
 // config.ini Parameter Settings / Feature Settings
-#define LANG_KEY_STATUS_SCREEN                "label_status_screen:"
 #define LANG_KEY_BAUDRATE                     "label_baudrate:"
 #define LANG_KEY_LANGUAGE                     "label_language:"
 #define LANG_KEY_ROTATE_UI                    "label_rotate_ui:"
