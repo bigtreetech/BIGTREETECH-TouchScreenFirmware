@@ -39,10 +39,8 @@ void menuExtrude(void)
   bool eRelative = false;
   uint32_t feedrate = 0;
 
-  while (infoCmd.count != 0)
-  {
-    loopProcess();
-  }
+  loopProcessToCondition(&usedQueueConditionCallback);  // wait for the communication to be clean
+
   extrudeCoordinate = eTemp = eBackup = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
   feedrate = coordinateGetFeedRate();
   eRelative = eGetRelative();

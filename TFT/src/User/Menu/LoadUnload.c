@@ -36,10 +36,7 @@ void menuLoadUnload(void)
   KEY_VALUES key_num = KEY_IDLE;
   float eBackup = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
 
-  while (infoCmd.count != 0)
-  {
-    loopProcess();
-  }
+  loopProcessToCondition(&usedQueueConditionCallback);  // wait for the communication to be clean
 
   menuDrawPage(&loadUnloadItems);
   temperatureReDraw(tool_index, NULL, false);
@@ -116,5 +113,6 @@ void menuLoadUnload(void)
 
     loopProcess();
   }
+
   mustStoreCmd("G92 E%.5f\n", eBackup);  // reset E axis position in Marlin to pre - load/unload state
 }
