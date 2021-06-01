@@ -727,6 +727,16 @@ void parseACK(void)
       {
         pidUpdateStatus(false);
       }
+      // parse M303, PID Autotune completed message in case of RRF
+      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && ack_seen("Auto tuning heater") && ack_seen("completed"))
+      {
+        pidUpdateStatus(true);
+      }
+      // parse M303, PID Autotune failed message in case of RRF
+      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && ack_seen("Auto tune of heater") && ack_seen("failed"))
+      {
+        pidUpdateStatus(false);
+      }
       // parse and store M355, Case light message
       else if (ack_seen("Case light: OFF"))
       {

@@ -19,7 +19,8 @@ const MENUITEMS pidWaitItems = {
   }
 };
 
-const char *const pidCmd[] = PID_CMD;
+const char *const pidCmdMarlin[] = PID_CMD_MARLIN;
+const char *const pidCmdRRF[] = PID_CMD_RRF;
 static int16_t pidHeaterTarget[MAX_HEATER_COUNT] = {0};
 static uint8_t curTool_index = NOZZLE0;
 static uint8_t degreeSteps_index = 1;
@@ -150,6 +151,7 @@ void menuPidWait(void)
 
 static inline void pidStart(void)
 {
+  const char *const *pidCmd = (infoMachineSettings.firmwareType == FW_REPRAPFW) ? pidCmdRRF : pidCmdMarlin;
   pidRunning = true;
   pidSucceeded = true;
 
