@@ -31,13 +31,18 @@ const GUI_RECT printinfo_val_rect[6] = {
 };
 
 #if !defined(TFT43_V3_0) && !defined(TFT50_V3_0)
-  #define PROGRESS_BAR_RAW_X0    (START_X + 1 * ICON_WIDTH + 1 * SPACE_X + 1)         // X0 aligned to second icon
+  #define PROGRESS_BAR_RAW_X0    (START_X + 1 * ICON_WIDTH + 1 * SPACE_X + 1)        // X0 aligned to second icon
 #else
-  #define PROGRESS_BAR_RAW_X0    (START_X + 0 * ICON_WIDTH + 0 * SPACE_X + 1)         // X0 aligned to first icon
+  #define PROGRESS_BAR_RAW_X0    (START_X + 0 * ICON_WIDTH + 0 * SPACE_X + 1)        // X0 aligned to first icon
 #endif
 
-#define PROGRESS_BAR_RAW_X1      (START_X + 4 * ICON_WIDTH + 3 * SPACE_X - 1)         // X1 aligned to last icon
-#define PROGRESS_BAR_DELTA_X     ((PROGRESS_BAR_RAW_X1 - PROGRESS_BAR_RAW_X0) % 100)  // width rounding factor (multiple of 100 pixels)
+#define PROGRESS_BAR_RAW_X1      (START_X + 4 * ICON_WIDTH + 3 * SPACE_X - 1)        // X1 aligned to last icon
+
+#ifdef MARKED_PROGRESS_BAR
+  #define PROGRESS_BAR_DELTA_X   ((PROGRESS_BAR_RAW_X1 - PROGRESS_BAR_RAW_X0) % 10)  // use marked progress bar. Width rounding factor (multiple of 10 slices)
+#else 
+  #define PROGRESS_BAR_DELTA_X   0                                                   // use standard progress bar
+#endif
 
 // progress bar rounded and aligned to center of icons
 #define PROGRESS_BAR_X0          (PROGRESS_BAR_RAW_X0 + PROGRESS_BAR_DELTA_X - PROGRESS_BAR_DELTA_X / 2)
@@ -237,15 +242,21 @@ static inline void reDrawProgressBar(uint8_t prevProgress, uint8_t nextProgress,
   uint16_t end = (PROGRESS_BAR_FULL_WIDTH * nextProgress) / 100;
 
   GUI_FillRectColor(progressBar.x0 + start, progressBar.y0, progressBar.x0 + end, progressBar.y1, barColor);
-  GUI_SetColor(sliceColor);
 
-  start = prevProgress / 10 + 1;  // number of 10% markers + 1 (to skip redraw of 0% and already drawn marker)
-  end = nextProgress / 10;        // number of 10% markers
+  #ifdef MARKED_PROGRESS_BAR
+    GUI_SetColor(sliceColor);
 
-  for (int i = start; i <= end; i++)
-    GUI_VLine(progressBar.x0 + PROGRESS_BAR_SLICE_WIDTH * i - 1, progressBar.y0 + 1, progressBar.y1 - 1);
+    start = prevProgress / 10 + 1;  // number of 10% markers + 1 (to skip redraw of 0% and already drawn marker)
+    end = nextProgress / 10;        // number of 10% markers
 
-  GUI_RestoreColorDefault();
+    if (end == 10)  // avoid to draw the marker for 100% progress
+      end--;
+
+    for (int i = start; i <= end; i++)
+      GUI_VLine(progressBar.x0 + PROGRESS_BAR_SLICE_WIDTH * i - 1, progressBar.y0 + 1, progressBar.y1 - 1);
+
+    GUI_RestoreColorDefault();
+  #endif
 }
 
 static inline void reDrawProgress(uint8_t prevProgress)
@@ -323,11 +334,12 @@ static inline void printingDrawPage(void)
   reDrawLayer(Z_ICON_POS);
   reDrawSpeed(SPD_ICON_POS);
 
-  // progress bar
+  // progress
   GUI_SetColor(ORANGE);
-  GUI_DrawRect(progressBar.x0 - 1, progressBar.y0 - 1, progressBar.x1 + 1, progressBar.y1 + 1);
-  reDrawProgressBar(0, 100, DARKGRAY, MAT_ORANGE);
-  reDrawProgress(0);
+  GUI_DrawRect(progressBar.x0 - 1, progressBar.y0 - 1, progressBar.x1 + 1, progressBar.y1 + 1);  // draw progress bar border
+  GUI_RestoreColorDefault();
+  reDrawProgressBar(0, 100, DARKGRAY, MAT_ORANGE);  // draw progress bar
+  reDrawProgress(0);  // draw progress
 }
 
 void drawPrintInfo(void)
