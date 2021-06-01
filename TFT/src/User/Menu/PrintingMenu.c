@@ -39,9 +39,9 @@ const GUI_RECT printinfo_val_rect[6] = {
 #define PROGRESS_BAR_RAW_X1      (START_X + 4 * ICON_WIDTH + 3 * SPACE_X)            // X1 aligned to last icon
 
 #ifdef MARKED_PROGRESS_BAR
-  #define PROGRESS_BAR_DELTA_X   ((PROGRESS_BAR_RAW_X1 - PROGRESS_BAR_RAW_X0) % 10)  // use marked progress bar. Width rounding factor (multiple of 10 slices)
-#else 
-  #define PROGRESS_BAR_DELTA_X   2                                                   // use standard progress bar. Reserve 2 pixels for vertical borders
+  #define PROGRESS_BAR_DELTA_X   ((PROGRESS_BAR_RAW_X1 - PROGRESS_BAR_RAW_X0) % 10)  // use marked progress bar. Width rounding factor multiple of 10 slices
+#else
+  #define PROGRESS_BAR_DELTA_X   2                                                   // use standard progress bar. Reserve a 2 pixels width for vertical borders
 #endif
 
 // progress bar rounded and aligned to center of icons
