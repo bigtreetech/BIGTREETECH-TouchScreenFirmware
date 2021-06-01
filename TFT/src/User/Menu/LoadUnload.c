@@ -97,6 +97,7 @@ void menuLoadUnload(void)
 
         case KEY_ICON_5:  // heat menu
           infoMenu.menu[++infoMenu.cur] = menuHeat;
+          eAxisBackup.backedUp = false;  // exiting from Extrude menu (user might never come back by "Back" long press in Heat menu)
           lastCmd = NONE;
           break;
 

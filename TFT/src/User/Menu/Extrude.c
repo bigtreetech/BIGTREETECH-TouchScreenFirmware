@@ -50,7 +50,7 @@ void menuExtrude(void)
     eAxisBackup.backedUp = true;
   }
 
-  extrKnownCoord = extrNewCoord = eAxisBackup.coordinate;
+  extrKnownCoord = extrNewCoord = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
 
   if (eAxisBackup.relative) // Set extruder to absolute
     mustStoreCmd("M82\n");
@@ -102,7 +102,7 @@ void menuExtrude(void)
         else
         {
           infoMenu.menu[++infoMenu.cur] = menuHeat;
-          eAxisBackup.backedUp = false;  // exiting from Extrude menu, no need for it anymore
+          eAxisBackup.backedUp = false;  // exiting from Extrude menu (user might never come back by "Back" long press in Heat menu)
         }
         break;
 
@@ -166,7 +166,7 @@ void menuExtrude(void)
   }
 
   if (eAxisBackup.backedUp == false)  // the user exited from menu (not any other process/popup/etc)
-  {
+  { // restore E axis coordinate, feedrate and relativeness to pre-extrude state
     mustStoreCmd("G92 E%.5f\n", eAxisBackup.coordinate);
     mustStoreCmd("G0 F%d\n", eAxisBackup.feedrate);
 
