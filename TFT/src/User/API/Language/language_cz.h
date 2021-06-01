@@ -317,8 +317,6 @@
     #define STRING_TUNE_EXTRUDER          "E-Krok"
     #define STRING_TUNE_EXT_EXTRUDE_100   "100mm Vysunutí"
     #define STRING_TUNE_EXT_TEMP          "Kalibrace extruderu, ohřev"
-    #define STRING_TUNE_EXT_TEMPLOW       "Požadovaná teplota je příliš nízká! Minimální teplota: %d℃"
-    #define STRING_TUNE_EXT_DESIREDVAL    "Teplota ještě není na požadované hodnotě"
     #define STRING_TUNE_EXT_MARK120MM     "Označ 120mm na filamentu\nStlač '%s' pokud jsi připraven.\nZměř zbývající délku po vytlačení."
     #define STRING_TUNE_EXT_HEATOFF       "Vypnout topení?"
     #define STRING_TUNE_EXT_ADJ_ESTEPS    "Nastavení E-Kroků"

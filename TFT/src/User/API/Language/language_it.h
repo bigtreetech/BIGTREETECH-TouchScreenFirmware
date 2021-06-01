@@ -317,8 +317,6 @@
     #define STRING_TUNE_EXTRUDER          "Step/mm E"
     #define STRING_TUNE_EXT_EXTRUDE_100   "Estr. 100mm"
     #define STRING_TUNE_EXT_TEMP          "Regolazione estr. | Scalda"
-    #define STRING_TUNE_EXT_TEMPLOW       "Temperatura desiderata troppo bassa! Temperatura minima: %d℃"
-    #define STRING_TUNE_EXT_DESIREDVAL    "La temperatura non è ancora al valore desiderato"
     #define STRING_TUNE_EXT_MARK120MM     "Fai un segno a 120mm sul filamento\nPremi '%s' quando sei pronto\nMisura la lunghezza mancante dopo l'estrusione"
     #define STRING_TUNE_EXT_HEATOFF       "Spegnere l'hotend?"
     #define STRING_TUNE_EXT_ADJ_ESTEPS    "Regola step/mm E"

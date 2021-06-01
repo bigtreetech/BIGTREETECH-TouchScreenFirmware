@@ -317,8 +317,6 @@
     #define STRING_TUNE_EXTRUDER          "Lépés hangolás"
     #define STRING_TUNE_EXT_EXTRUDE_100   "Kiad 100mm"
     #define STRING_TUNE_EXT_TEMP          "Adagoló hangolás | Fűt"
-    #define STRING_TUNE_EXT_TEMPLOW       "Túl alacsony a kívánt hőfok!\nMinimum hőmérséklet: %d℃"
-    #define STRING_TUNE_EXT_DESIREDVAL    "A hőfok még nem érte el a kívánt értéket."
     #define STRING_TUNE_EXT_MARK120MM     "A 120mm-t jelöld be a szálon\nNyomd '%s' ha kész\nMérd meg a hátralévő hosszt adagolás után."
     #define STRING_TUNE_EXT_HEATOFF       "Kikapcsolod a fűtést?"
     #define STRING_TUNE_EXT_ADJ_ESTEPS    "E-lépés állítás"

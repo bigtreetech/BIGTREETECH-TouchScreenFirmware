@@ -39,7 +39,17 @@ void loadMinTemp_OK(void)
 void menuLoadUnload(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
-  float eBackup = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
+
+  if (eAxisBackup.backedUp == false)
+  {
+    while (infoCmd.count != 0)
+    {
+      loopProcess();
+    }
+    
+    eAxisBackup.coordinate = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
+    eAxisBackup.backedUp = true;
+  }
 
   menuDrawPage(&loadUnloadItems);
   temperatureReDraw(tool_index, NULL, false);
@@ -90,7 +100,7 @@ void menuLoadUnload(void)
           lastCmd = NONE;
           break;
 
-        case KEY_ICON_6:  // ccol down nozzle
+        case KEY_ICON_6:  // cool down nozzle
           heatCoolDown();
           lastCmd = NONE;
           break;
@@ -99,6 +109,7 @@ void menuLoadUnload(void)
           cooldownTemperature();
           lastCmd = NONE;
           infoMenu.cur--;
+          eAxisBackup.backedUp = false;  // the user exited from menu (not any other process/popup/etc)
           break;
 
         default:
@@ -134,7 +145,10 @@ void menuLoadUnload(void)
 
     loopProcess();
   }
-  mustStoreCmd("G92 E%.5f\n", eBackup);  // reset E axis position in Marlin to pre - load/unload state
+  if (eAxisBackup.backedUp == false)  // the user exited from menu (not any other process/popup/etc)
+  {
+    mustStoreCmd("G92 E%.5f\n", eAxisBackup.coordinate);  // reset E axis position in Marlin to pre - load/unload state
+  }
 
   // Set slow update time if not waiting for target temperature
   if (heatHasWaiting() == false)

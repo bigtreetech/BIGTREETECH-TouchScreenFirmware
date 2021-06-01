@@ -317,8 +317,6 @@
     #define STRING_TUNE_EXTRUDER          "Schritte"
     #define STRING_TUNE_EXT_EXTRUDE_100   "100mm ext."
     #define STRING_TUNE_EXT_TEMP          "Düsentemperatur"
-    #define STRING_TUNE_EXT_TEMPLOW       "Temparatur zu niedrig!\nMinimale Temparatur: %d°C"
-    #define STRING_TUNE_EXT_DESIREDVAL    "Temparatur hat gewünschten Wert noch nicht erreicht!"
     #define STRING_TUNE_EXT_MARK120MM     "Filament 120 mm über Einlass markieren,\ndann '%s' drücken & nach Extrusion\nerneut messen."
     #define STRING_TUNE_EXT_HEATOFF       "Heizung abschalten?"
     #define STRING_TUNE_EXT_ADJ_ESTEPS    "E-Schritte einstellen"

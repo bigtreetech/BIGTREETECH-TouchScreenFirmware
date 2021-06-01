@@ -2,7 +2,6 @@
 #define _LANGUAGE_CN_H_
 
     // config.ini Parameter Settings / Feature Settings
-    #define STRING_STATUS_SCREEN          "启用状态首界面"
     #define STRING_BAUDRATE               "波特率"
     #define STRING_LANGUAGE               "简体中文"
     #define STRING_ROTATE_UI              "旋转界面"
@@ -318,8 +317,6 @@
     #define STRING_TUNE_EXTRUDER          "微调E-Steps"
     #define STRING_TUNE_EXT_EXTRUDE_100   "挤出100mm"
     #define STRING_TUNE_EXT_TEMP          "挤出机微调 | 加热"
-    #define STRING_TUNE_EXT_TEMPLOW       "目标温度太低,最低温度为: %d℃"
-    #define STRING_TUNE_EXT_DESIREDVAL    "实际温度还没达到设定值"
     #define STRING_TUNE_EXT_MARK120MM     "在耗材上标记120mm\n标记完成后点击 '%s'\n挤出完成后测量剩余长度"
     #define STRING_TUNE_EXT_HEATOFF       "关闭加热?"
     #define STRING_TUNE_EXT_ADJ_ESTEPS    "调整E-Steps"

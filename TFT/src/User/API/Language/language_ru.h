@@ -317,8 +317,6 @@
     #define STRING_TUNE_EXTRUDER          "Настройка шагов"
     #define STRING_TUNE_EXT_EXTRUDE_100   "100мм экст."
     #define STRING_TUNE_EXT_TEMP          "Настройка экструдера/Нагрев"
-    #define STRING_TUNE_EXT_TEMPLOW       "Требуемая температура слишком низкая!\nМинимальная температура: %d℃"
-    #define STRING_TUNE_EXT_DESIREDVAL    "Температура еще не достигла требуемого значения"
     #define STRING_TUNE_EXT_MARK120MM     "Отметьте 120 мм на прутке\nНажмите '%s' по говности\nИзмерьте полученную длину/nпосле экструдирования"
     #define STRING_TUNE_EXT_HEATOFF       "Отключить нагрев?"
     #define STRING_TUNE_EXT_ADJ_ESTEPS    "Подстройка E-шагов"

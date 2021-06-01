@@ -317,8 +317,6 @@
     #define STRING_TUNE_EXTRUDER          "Ext. Adım"
     #define STRING_TUNE_EXT_EXTRUDE_100   "Ext. 100mm"
     #define STRING_TUNE_EXT_TEMP          "Ekstruder ayarlama | Isı"
-    #define STRING_TUNE_EXT_TEMPLOW       "İstenen sıcaklık çok düşük!\nMinimum sıcaklık: %d℃"
-    #define STRING_TUNE_EXT_DESIREDVAL    "Sıcaklık henüz istenen değerde değil"
     #define STRING_TUNE_EXT_MARK120MM     "Filamanda 120mm'yi işaretleyin\nHazır olunca '%s'e basın\nEkstrüzyondan sonra kalan mesafeyi ölçün"
     #define STRING_TUNE_EXT_HEATOFF       "Isıtıcıyı kapat?"
     #define STRING_TUNE_EXT_ADJ_ESTEPS    "E-Adım ayarla"

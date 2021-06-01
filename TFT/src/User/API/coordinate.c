@@ -5,6 +5,7 @@ const char axis_id[TOTAL_AXIS] = {'X', 'Y', 'Z', 'E'};
 
 static COORDINATE targetPosition = {{0.0f, 0.0f, 0.0f, 0.0f}, 3000};
 static COORDINATE curPosition = {{0.0f, 0.0f, 0.0f, 0.0f}, 3000};
+E_AXIS_BACKUP eAxisBackup = {0, 0, false, false};
 
 /**
  * Obtained from "M114 E" instead of "M114", Because the coordinates of "M114" are not real-time coordinates.

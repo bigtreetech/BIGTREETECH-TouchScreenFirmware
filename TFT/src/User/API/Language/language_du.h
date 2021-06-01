@@ -317,8 +317,6 @@
     #define STRING_TUNE_EXTRUDER          "Tune steps"
     #define STRING_TUNE_EXT_EXTRUDE_100   "Ext. 100mm"
     #define STRING_TUNE_EXT_TEMP          "Extruder tuning | Heat"
-    #define STRING_TUNE_EXT_TEMPLOW       "Desired temperature is below minimum temperature (%d℃)."
-    #define STRING_TUNE_EXT_DESIREDVAL    "Temperature is not yet at the desired value."
     #define STRING_TUNE_EXT_MARK120MM     "Mark 120 mm on your fillament.\nPress '%s' when ready.\nMeasure remaining length after extruding."
     #define STRING_TUNE_EXT_HEATOFF       "Turn the heater off?"
     #define STRING_TUNE_EXT_ADJ_ESTEPS    "Adjust E-Steps"

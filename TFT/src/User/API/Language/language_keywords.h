@@ -324,8 +324,6 @@ extern "C" {
 #define LANG_KEY_TUNE_EXTRUDER                "label_tune_extruder:"
 #define LANG_KEY_TUNE_EXT_EXTRUDE_100         "label_tune_ext_extrude_100:"
 #define LANG_KEY_TUNE_EXT_TEMP                "label_tune_ext_temp:"
-#define LANG_KEY_TUNE_EXT_TEMPLOW             "label_tune_ext_templow:"
-#define LANG_KEY_TUNE_EXT_DESIREDVAL          "label_tune_ext_desiredval:"
 #define LANG_KEY_TUNE_EXT_MARK120MM           "label_tune_ext_mark120mm:"
 #define LANG_KEY_TUNE_EXT_HEATOFF             "label_tune_ext_heatoff:"
 #define LANG_KEY_TUNE_EXT_ADJ_ESTEPS          "label_tune_ext_adj_esteps:"
