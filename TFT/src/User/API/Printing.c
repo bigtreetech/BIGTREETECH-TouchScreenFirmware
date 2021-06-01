@@ -21,6 +21,11 @@ static bool updateM27_waiting = false;
 static float last_E_pos;
 bool filamentRunoutAlarm;
 
+bool isHostPrinting(void)
+{
+  return (infoHost.printing);
+}
+
 void setRunoutAlarmTrue(void)
 {
   filamentRunoutAlarm = true;
@@ -393,7 +398,7 @@ void printAbort(void)
         setDialogText(LABEL_SCREEN_INFO, LABEL_BUSY, LABEL_BACKGROUND, LABEL_BACKGROUND);
         showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
 
-        loopProcessToCondition(&hostPrintingConditionCallback);  // wait for the printer to settle down
+        loopProcessToCondition(&isHostPrinting);  // wait for the printer to settle down
       }
       break;
 
@@ -438,7 +443,7 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType)
     case TFT_UDISK:
     case TFT_SD:
       if (infoPrinting.pause == true && pauseType == PAUSE_M0)
-        loopProcessToCondition(&usedQueueConditionCallback);  // wait for the communication to be clean
+        loopProcessToCondition(&isNotEmptyCmdQueue);  // wait for the communication to be clean
 
       static COORDINATE tmp;
       bool isCoorRelative = coorGetRelative();

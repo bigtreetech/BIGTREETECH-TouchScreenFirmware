@@ -894,12 +894,12 @@ void menuDummy(void)
   infoMenu.cur--;
 }
 
-void loopProcessToCondition(bool (*conditionCallback)(void))
+void loopProcessToCondition(CONDITION_CALLBACK condCallback)
 {
   uint8_t curMenu = infoMenu.cur;
   bool invokedUI = false;
 
-  while (conditionCallback())  // loop until the condition is no more satisfied
+  while (condCallback())  // loop until the condition is no more satisfied
   {
     loopProcess();
 

@@ -36,7 +36,7 @@ void menuLoadUnload(void)
   KEY_VALUES key_num = KEY_IDLE;
   float eBackup = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
 
-  loopProcessToCondition(&usedQueueConditionCallback);  // wait for the communication to be clean
+  loopProcessToCondition(&isNotEmptyCmdQueue);  // wait for the communication to be clean
 
   menuDrawPage(&loadUnloadItems);
   temperatureReDraw(tool_index, NULL, false);
