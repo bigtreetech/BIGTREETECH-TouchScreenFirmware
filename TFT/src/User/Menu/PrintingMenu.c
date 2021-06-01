@@ -31,17 +31,17 @@ const GUI_RECT printinfo_val_rect[6] = {
 };
 
 #if !defined(TFT43_V3_0) && !defined(TFT50_V3_0)
-  #define PROGRESS_BAR_RAW_X0    (START_X + 1 * ICON_WIDTH + 1 * SPACE_X + 1)        // X0 aligned to second icon
+  #define PROGRESS_BAR_RAW_X0    (START_X + 1 * ICON_WIDTH + 1 * SPACE_X)            // X0 aligned to second icon
 #else
-  #define PROGRESS_BAR_RAW_X0    (START_X + 0 * ICON_WIDTH + 0 * SPACE_X + 1)        // X0 aligned to first icon
+  #define PROGRESS_BAR_RAW_X0    (START_X + 0 * ICON_WIDTH + 0 * SPACE_X)            // X0 aligned to first icon
 #endif
 
-#define PROGRESS_BAR_RAW_X1      (START_X + 4 * ICON_WIDTH + 3 * SPACE_X - 1)        // X1 aligned to last icon
+#define PROGRESS_BAR_RAW_X1      (START_X + 4 * ICON_WIDTH + 3 * SPACE_X)            // X1 aligned to last icon
 
 #ifdef MARKED_PROGRESS_BAR
   #define PROGRESS_BAR_DELTA_X   ((PROGRESS_BAR_RAW_X1 - PROGRESS_BAR_RAW_X0) % 10)  // use marked progress bar. Width rounding factor (multiple of 10 slices)
 #else 
-  #define PROGRESS_BAR_DELTA_X   0                                                   // use standard progress bar
+  #define PROGRESS_BAR_DELTA_X   1                                                   // use standard progress bar. Reserve 2 pixels for vertical borders
 #endif
 
 // progress bar rounded and aligned to center of icons
