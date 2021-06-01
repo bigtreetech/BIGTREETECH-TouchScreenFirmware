@@ -733,7 +733,7 @@ void parseACK(void)
         pidUpdateStatus(true);
       }
       // parse M303, PID Autotune failed message in case of RRF
-      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && ack_seen("Auto tune of heater") && ack_seen("failed"))
+      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && (ack_seen("Error: M303") || (ack_seen("Auto tune of heater") && ack_seen("failed"))))
       {
         pidUpdateStatus(false);
       }
