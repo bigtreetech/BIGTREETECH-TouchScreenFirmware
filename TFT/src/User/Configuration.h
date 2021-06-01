@@ -500,7 +500,7 @@
  * Uncomment to enable progress bar with 10% markers.
  * Comment to enable standard progress bar.
  */
-#define MARKED_PROGRESS_BAR  // Default: disabled
+//#define MARKED_PROGRESS_BAR  // Default: disabled
 
 
 //===========================================================================
