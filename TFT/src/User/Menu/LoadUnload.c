@@ -42,11 +42,8 @@ void menuLoadUnload(void)
 
   if (eAxisBackup.backedUp == false)
   {
-    while (infoCmd.count != 0)
-    {
-      loopProcess();
-    }
-    
+    loopProcessToCondition(&isNotEmptyCmdQueue);  // wait for the communication to be clean
+
     eAxisBackup.coordinate = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
     eAxisBackup.backedUp = true;
   }
@@ -146,6 +143,7 @@ void menuLoadUnload(void)
 
     loopProcess();
   }
+
   if (eAxisBackup.backedUp == false)  // the user exited from menu (not any other process/popup/etc)
   {
     mustStoreCmd("G92 E%.5f\n", eAxisBackup.coordinate);  // reset E axis position in Marlin to pre - load/unload state

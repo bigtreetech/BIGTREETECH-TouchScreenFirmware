@@ -36,14 +36,10 @@ void menuExtrude(void)
   float extrNewCoord  = 0.0f;
   float extrKnownCoord = 0.0f;
 
-
   if (eAxisBackup.backedUp == false)
   {
-    while (infoCmd.count != 0)
-    {
-      loopProcess();
-    }
-    
+    loopProcessToCondition(&isNotEmptyCmdQueue);  // wait for the communication to be clean
+
     eAxisBackup.coordinate = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
     eAxisBackup.feedrate = coordinateGetFeedRate();
     eAxisBackup.relative = eGetRelative();
