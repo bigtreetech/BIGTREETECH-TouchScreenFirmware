@@ -6,6 +6,16 @@ GCODE_QUEUE infoCacheCmd;  // Only when heatHasWaiting() is false the cmd in thi
 static uint8_t cmd_index = 0;
 static bool ispolling = true;
 
+bool isFullCmdQueue(void)
+{
+  return (infoCmd.count >= CMD_MAX_LIST);
+}
+
+bool isNotEmptyCmdQueue(void)
+{
+  return (infoCmd.count || infoHost.wait);
+}
+
 // Is there a code character in the current gcode command.
 static bool cmd_seen(char code)
 {
@@ -79,11 +89,10 @@ void mustStoreCmd(const char * format,...)
   GCODE_QUEUE *pQueue = &infoCmd;
 
   if (pQueue->count >= CMD_MAX_LIST)
+  {
     reminderMessage(LABEL_BUSY, STATUS_BUSY);
 
-  while (pQueue->count >= CMD_MAX_LIST)
-  {
-    loopProcess();
+    loopProcessToCondition(&isFullCmdQueue);  // wait for a free slot in the queue in case the queue is currently full
   }
 
   va_list va;
@@ -150,11 +159,11 @@ void mustStoreCacheCmd(const char * format,...)
 {
   GCODE_QUEUE *pQueue = &infoCacheCmd;
 
-  if (pQueue->count == CMD_MAX_LIST) reminderMessage(LABEL_BUSY, STATUS_BUSY);
-
-  while (pQueue->count >= CMD_MAX_LIST)
+  if (pQueue->count >= CMD_MAX_LIST)
   {
-    loopProcess();
+    reminderMessage(LABEL_BUSY, STATUS_BUSY);
+
+    loopProcessToCondition(&isFullCmdQueue);  // wait for a free slot in the queue in case the queue is currently full
   }
 
   va_list va;

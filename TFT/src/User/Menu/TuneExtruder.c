@@ -6,6 +6,13 @@
 static uint8_t tool_index = NOZZLE0;
 static uint8_t degreeSteps_index = 1;
 static uint8_t extStep_index = 0;
+static bool loadRequested = false;
+
+// set the hotend to the minimum extrusion temperature if user selected "OK"
+void extrudeMinTemp_OK(void)
+{
+  heatSetTargetTemp(tool_index, infoSettings.min_ext_temp);
+}
 
 static inline void turnHeaterOff(void)
 {
@@ -123,29 +130,7 @@ void menuTuneExtruder(void)
         break;
 
       case KEY_ICON_6:
-        {
-          char tempMsg[120];
-
-          if (heatGetTargetTemp(tool_index) < infoSettings.min_ext_temp)
-          {
-            LABELCHAR(tempStr, LABEL_TUNE_EXT_TEMPLOW);
-
-            sprintf(tempMsg, tempStr, infoSettings.min_ext_temp);
-            popupReminder(DIALOG_TYPE_ALERT, tuneExtruderItems.title.index, (uint8_t *) tempMsg);
-          }
-          else if (heatGetCurrentTemp(tool_index) < heatGetTargetTemp(tool_index) - 1)
-          {
-            popupReminder(DIALOG_TYPE_ALERT, tuneExtruderItems.title.index, LABEL_TUNE_EXT_DESIREDVAL);
-          }
-          else
-          {
-            LABELCHAR(tempStr, LABEL_TUNE_EXT_MARK120MM);
-
-            sprintf(tempMsg, tempStr, textSelect(LABEL_EXTRUDE));
-            setDialogText(tuneExtruderItems.title.index, (uint8_t *) tempMsg, LABEL_EXTRUDE, LABEL_CANCEL);
-            showDialog(DIALOG_TYPE_QUESTION, extrudeFilament, NULL, NULL);
-          }
-        }
+        loadRequested = true;
         break;
 
       case KEY_ICON_7:
@@ -169,6 +154,32 @@ void menuTuneExtruder(void)
           }
         #endif
         break;
+    }
+
+    if (loadRequested == true)
+    {
+      switch (warmupNozzle(tool_index, extrudeMinTemp_OK))
+      {
+        case COLD:
+          loadRequested = false;
+          break;
+
+        case SETTLING:
+          break;
+
+        case HEATED:
+          {
+            char tempMsg[120];
+
+            LABELCHAR(tempStr, LABEL_TUNE_EXT_MARK120MM);
+
+            sprintf(tempMsg, tempStr, textSelect(LABEL_EXTRUDE));
+            setDialogText(tuneExtruderItems.title.index, (uint8_t *) tempMsg, LABEL_EXTRUDE, LABEL_CANCEL);
+            showDialog(DIALOG_TYPE_QUESTION, extrudeFilament, NULL, NULL);
+          }
+          loadRequested = false;
+          break;
+      }
     }
 
     if (lastCurrent != actCurrent || lastTarget != actTarget)
