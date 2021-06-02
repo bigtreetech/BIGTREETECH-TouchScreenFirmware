@@ -38,8 +38,11 @@ void menuExtrude(void)
 
   if (eAxisBackup.backedUp == false)
   {
-    loopProcessToCondition(&isNotEmptyCmdQueue);  // wait for the communication to be clean
-
+    while (infoCmd.count != 0)
+    {
+      loopProcess();
+    }
+    
     eAxisBackup.coordinate = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
     eAxisBackup.feedrate = coordinateGetFeedRate();
     eAxisBackup.relative = eGetRelative();
