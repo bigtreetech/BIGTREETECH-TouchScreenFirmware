@@ -267,6 +267,7 @@ typedef struct
   uint8_t autoReportSDStatus;
   uint8_t long_filename_support;
   uint8_t babyStepping;
+  uint8_t buildPercent;
   uint8_t softwareEndstops;
 } MACHINESETTINGS;
 

@@ -495,6 +495,13 @@
  */
 #define TERMINAL_KEYBOARD_LAYOUT 0  // Default: 0
 
+/**
+ * Progress bar layout
+ * Uncomment to enable progress bar with 10% markers.
+ * Comment to enable standard progress bar.
+ */
+//#define MARKED_PROGRESS_BAR  // Default: disabled
+
 
 //===========================================================================
 //=========================== Other Settings ================================

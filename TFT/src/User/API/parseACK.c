@@ -32,8 +32,8 @@ typedef enum  // popup message types available to display an echo message
 
 typedef struct
 {
-  ECHO_NOTIFY_TYPE  notifyType;
-  const char *const msg;
+  ECHO_NOTIFY_TYPE   notifyType;
+  const char * const msg;
 } ECHO;
 
 // notify or ignore messages starting with following text
@@ -97,7 +97,7 @@ static bool ack_continue_seen(const char * str)
   return false;
 }
 
-static bool ack_cmp(const char *str)
+static bool ack_cmp(const char * str)
 {
   uint16_t i;
   for (i = 0; i < ACK_MAX_SIZE && str[i] != 0 && dmaL2Cache[i] != 0; i++)
@@ -118,7 +118,7 @@ static float ack_value()
 // Read the value after the / if exists
 static float ack_second_value()
 {
-  char *secondValue = strchr(&dmaL2Cache[ack_index], '/');
+  char * secondValue = strchr(&dmaL2Cache[ack_index], '/');
   if (secondValue != NULL)
   {
     return (strtod(secondValue + 1, NULL));
@@ -141,7 +141,7 @@ void ack_values_sum(float *data)
     ack_values_sum(data);
 }
 
-void ackPopupInfo(const char *info)
+void ackPopupInfo(const char * info)
 {
   bool show_dialog = true;
   if (infoMenu.menu[infoMenu.cur] == menuTerminal ||
@@ -210,7 +210,7 @@ bool processKnownEcho(void)
       else if (knownEcho[i].notifyType == ECHO_NOTIFY_DIALOG)
       {
         BUZZER_PLAY(sound_notify);
-        addNotification(DIALOG_TYPE_INFO, (char*)echomagic, (char*)dmaL2Cache + ack_index, true);
+        addNotification(DIALOG_TYPE_INFO, (char *)echomagic, (char *)dmaL2Cache + ack_index, true);
       }
     //}
   }
@@ -237,24 +237,29 @@ void syncL2CacheFromL1(uint8_t port)
 
 void hostActionCommands(void)
 {
-  char *find = strchr(dmaL2Cache + ack_index, '\n');
+  char * find = strchr(dmaL2Cache + ack_index, '\n');
   *find = '\0';
 
   if (ack_seen(":notification "))
   {
-    statusScreen_setMsg((uint8_t *)echomagic, (uint8_t *)dmaL2Cache + ack_index);  // always display the notification on status screen
+    uint16_t index = ack_index;  // save the current index for further usage
 
-    if (infoSettings.notification_m117 == ENABLED)
+    if (ack_seen("Time Left"))
     {
-      addNotification(DIALOG_TYPE_INFO, (char*)echomagic, (char*)dmaL2Cache + ack_index, false);
+      parsePrintRemainingTime((char *)dmaL2Cache + ack_index);
     }
-
-    if (infoMenu.menu[infoMenu.cur] != menuStatus)  // don't show it when in menuStatus
+    else
     {
-      uint16_t index = ack_index;
+      statusScreen_setMsg((uint8_t *)echomagic, (uint8_t *)dmaL2Cache + index);  // always display the notification on status screen
 
       if (!ack_seen("Ready."))  // avoid to display unneeded/frequent useless notifications (e.g. "My printer Ready.")
-        addToast(DIALOG_TYPE_INFO, dmaL2Cache + index);
+      {
+        if (infoMenu.menu[infoMenu.cur] != menuStatus)  // don't show it when in menuStatus
+          addToast(DIALOG_TYPE_INFO, dmaL2Cache + index);
+
+        if (infoSettings.notification_m117 == ENABLED)
+          addNotification(DIALOG_TYPE_INFO, (char *)echomagic, (char *)dmaL2Cache + index, false);
+      }
     }
   }
   else if (ack_seen(":paused") || ack_seen(":pause"))
@@ -595,7 +600,7 @@ void parseACK(void)
       else if (infoMachineSettings.onboard_sd_support == ENABLED &&
                ack_seen(infoMachineSettings.firmwareType != FW_REPRAPFW ? "File opened:" : "job.file.fileName"))
       {
-        char *fileEndString;
+        char * fileEndString;
         if (infoMachineSettings.firmwareType != FW_REPRAPFW)
         {
           // Marlin
@@ -1129,6 +1134,10 @@ void parseACK(void)
       else if (ack_seen("Cap:BABYSTEPPING:"))
       {
         infoMachineSettings.babyStepping = ack_value();
+      }
+      else if (ack_seen("Cap:BUILD_PERCENT:"))  // M73 support. Required "LCD_SET_PROGRESS_MANUALLY" in Marlin
+      {
+        infoMachineSettings.buildPercent = ack_value();
       }
       else if (ack_seen("Cap:CHAMBER_TEMPERATURE:"))
       {
