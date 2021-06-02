@@ -42,13 +42,11 @@ static float cmd_float(void)
   return (strtod(&infoCmd.queue[infoCmd.index_r].gcode[cmd_index], NULL));
 }
 
-#if defined(SERIAL_PORT_2) || defined(BUZZER_PIN)
 // check if 'string' start with 'search'
-bool static startsWith(TCHAR *search, TCHAR *string)
+static bool startsWith(TCHAR *search, TCHAR *string)
 {
   return (strstr(string, search) - string == cmd_index) ? true : false;
 }
-#endif
 
 // Common store cmd
 void commonStoreCmd(GCODE_QUEUE *pQueue, const char* format, va_list va)
@@ -550,6 +548,20 @@ void sendQueueCmd(void)
             break;
         #endif  // not SERIAL_PORT_2
 
+        case 73:
+          if (cmd_seen('P'))
+            setPrintProgressPercentage(cmd_value());
+
+          if (cmd_seen('R'))
+            setPrintRemainingTime((int32_t) (cmd_float() * 60));
+
+          if (!infoMachineSettings.buildPercent)  // if M73 is not supported by Marlin, skip it
+          {
+            purgeLastCmd(true, avoid_terminal);
+            return;
+          }
+          break;
+
         case 80:  // M80
           #ifdef PS_ON_PIN
             PS_ON_On();
@@ -662,25 +674,33 @@ void sendQueueCmd(void)
           break;
 
         case 117:  // M117
-        {
-          char message[CMD_MAX_CHAR];
-          strncpy(message, &infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 4], CMD_MAX_CHAR);
-          // strip out any checksum that might be in the string
-          for (int i = 0; i < CMD_MAX_CHAR && message[i] != 0 ; i++)
+          if (startsWith("Time Left", &infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 5]))
           {
-            if (message[i] == '*')
+            parsePrintRemainingTime(&infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 14]);
+          }
+          else
+          {
+            char message[CMD_MAX_CHAR];
+
+            strncpy(message, &infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 4], CMD_MAX_CHAR);
+            // strip out any checksum that might be in the string
+            for (int i = 0; i < CMD_MAX_CHAR && message[i] != 0; i++)
             {
-              message[i] = 0;
-              break;
+              if (message[i] == '*')
+              {
+                message[i] = 0;
+                break;
+              }
+            }
+
+            statusScreen_setMsg((uint8_t *)"M117", (uint8_t *)&message);
+
+            if (infoMenu.menu[infoMenu.cur] != menuStatus)
+            {
+              addToast(DIALOG_TYPE_INFO, message);
             }
           }
-          statusScreen_setMsg((uint8_t *)"M117", (uint8_t *)&message);
-          if (infoMenu.menu[infoMenu.cur] != menuStatus)
-          {
-            addToast(DIALOG_TYPE_INFO, message);
-          }
-        }
-        break;
+          break;
 
         case 190:  // M190
           if (fromTFT)

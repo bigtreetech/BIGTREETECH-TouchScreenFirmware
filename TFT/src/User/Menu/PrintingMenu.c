@@ -30,16 +30,42 @@ const GUI_RECT printinfo_val_rect[6] = {
    START_X + PICON_LG_WIDTH * 2 + PICON_SPACE_X * 2 + PICON_VAL_SM_EX, PICON_START_Y + PICON_HEIGHT * 1 + PICON_SPACE_Y * 1 + PICON_VAL_Y + BYTE_HEIGHT},
 };
 
-const GUI_RECT ProgressBar = {START_X + 1,                                PICON_START_Y + PICON_HEIGHT * 2 + PICON_SPACE_Y * 2 + 1,
-                              START_X + 4 * ICON_WIDTH + 3 * SPACE_X - 1, ICON_START_Y + ICON_HEIGHT + SPACE_Y - PICON_SPACE_Y - 1};
+#if !defined(TFT43_V3_0) && !defined(TFT50_V3_0)
+  #define PROGRESS_BAR_RAW_X0    (START_X + 1 * ICON_WIDTH + 1 * SPACE_X)            // X0 aligned to second icon
+#else
+  #define PROGRESS_BAR_RAW_X0    (START_X + 0 * ICON_WIDTH + 0 * SPACE_X)            // X0 aligned to first icon
+#endif
 
-const  char *const Speed_ID[2] = {"Speed", "Flow"};
+#define PROGRESS_BAR_RAW_X1      (START_X + 4 * ICON_WIDTH + 3 * SPACE_X)            // X1 aligned to last icon
+
+#ifdef MARKED_PROGRESS_BAR
+  #define PROGRESS_BAR_DELTA_X   ((PROGRESS_BAR_RAW_X1 - PROGRESS_BAR_RAW_X0) % 10)  // use marked progress bar. Width rounding factor multiple of 10 slices
+#else
+  #define PROGRESS_BAR_DELTA_X   2                                                   // use standard progress bar. Reserve a 2 pixels width for vertical borders
+#endif
+
+// progress bar rounded and aligned to center of icons
+#define PROGRESS_BAR_X0          (PROGRESS_BAR_RAW_X0 + PROGRESS_BAR_DELTA_X - PROGRESS_BAR_DELTA_X / 2)
+#define PROGRESS_BAR_X1          (PROGRESS_BAR_RAW_X1 - PROGRESS_BAR_DELTA_X / 2)
+
+#define PROGRESS_BAR_FULL_WIDTH  (PROGRESS_BAR_X1 - PROGRESS_BAR_X0)  // 100% progress bar width
+#define PROGRESS_BAR_SLICE_WIDTH (PROGRESS_BAR_FULL_WIDTH / 10)       // 10% progress bar width
+
+#if !defined(TFT43_V3_0) && !defined(TFT50_V3_0)
+  const GUI_RECT progressVal = {START_X,             PICON_START_Y + PICON_HEIGHT * 2 + PICON_SPACE_Y,
+                                PROGRESS_BAR_X0 - 1, ICON_START_Y + ICON_HEIGHT + SPACE_Y};
+#endif
+
+const GUI_RECT progressBar = {PROGRESS_BAR_X0, PICON_START_Y + PICON_HEIGHT * 2 + PICON_SPACE_Y * 2 + 1,
+                              PROGRESS_BAR_X1, ICON_START_Y + ICON_HEIGHT + SPACE_Y - PICON_SPACE_Y - 1};
+
+const char *const speedId[2] = {"Speed", "Flow"};
 bool hasFilamentData;
 
 #define TOGGLE_TIME  2000  // 1 seconds is 1000
 #define LAYER_DELTA  0.1   // minimal layer height change to update the layer display (avoid congestion in vase mode)
 
-#define LAYER_TITLE "Layer"
+#define LAYER_TITLE  "Layer"
 #define EXT_ICON_POS 0
 #define BED_ICON_POS 1
 #define FAN_ICON_POS 2
@@ -180,35 +206,74 @@ static inline void reDrawSpeed(int icon_pos)
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
   sprintf(tempstr, "%d%%", speedGetCurPercent(currentSpeedID));
   GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y,
-                 (uint8_t *)Speed_ID[currentSpeedID]);
+                 (uint8_t *)speedId[currentSpeedID]);
   GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (uint8_t *)tempstr);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
 
-static inline void reDrawProgress(int icon_pos, uint8_t prevProgress)
+static inline void reDrawTime(int icon_pos)
 {
-  char progress[6];
-  char timeElapsed[10];
+  char timeStr[10];
   uint8_t hour, min, sec;
-  uint8_t newProgress = getPrintProgress();
 
   getPrintTimeDetail(&hour, &min, &sec);
-  sprintf(progress, "%d%%", newProgress);
-  sprintf(timeElapsed, "%02u:%02u:%02u", hour, min, sec);
+  sprintf(timeStr, "%02u:%02u:%02u", hour, min, sec);
+
   GUI_SetNumMode(GUI_NUMMODE_ZERO);
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
   ICON_ReadDisplay(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, ICON_PRINTING_TIMER);
-  GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (uint8_t *)progress);
-  GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (uint8_t *)timeElapsed);
+  GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (uint8_t *)timeStr);
+
+  if (getPrintRemainingTime())  // if remaining time is pending
+  {
+    getPrintRemainingTimeDetail(&hour, &min, &sec);
+    sprintf(timeStr, "%02u:%02u:%02u", hour, min, sec);
+
+    GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (uint8_t *)timeStr);
+  }
+
   GUI_SetNumMode(GUI_NUMMODE_SPACE);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
+}
 
-  if (newProgress != prevProgress)
-  {
-    uint16_t progStart = ((ProgressBar.x1 - ProgressBar.x0) * prevProgress) / 100;
-    uint16_t progEnd = ((ProgressBar.x1 - ProgressBar.x0) * newProgress) / 100;
-    GUI_FillRectColor(ProgressBar.x0 + progStart, ProgressBar.y0, ProgressBar.x0 + progEnd, ProgressBar.y1, MAT_ORANGE);
-  }
+static inline void reDrawProgressBar(uint8_t prevProgress, uint8_t nextProgress, uint16_t barColor, uint16_t sliceColor)
+{
+  uint16_t start = (PROGRESS_BAR_FULL_WIDTH * prevProgress) / 100;
+  uint16_t end = (PROGRESS_BAR_FULL_WIDTH * nextProgress) / 100;
+
+  GUI_FillRectColor(progressBar.x0 + start, progressBar.y0, progressBar.x0 + end, progressBar.y1, barColor);
+
+  #ifdef MARKED_PROGRESS_BAR
+    GUI_SetColor(sliceColor);
+
+    start = prevProgress / 10 + 1;  // number of 10% markers + 1 (to skip redraw of 0% and already drawn marker)
+    end = nextProgress / 10;        // number of 10% markers
+
+    if (end == 10)  // avoid to draw the marker for 100% progress
+      end--;
+
+    for (int i = start; i <= end; i++)
+      GUI_VLine(progressBar.x0 + PROGRESS_BAR_SLICE_WIDTH * i - 1, progressBar.y0 + 1, progressBar.y1 - 1);
+
+    GUI_RestoreColorDefault();
+  #endif
+}
+
+static inline void reDrawProgress(uint8_t prevProgress)
+{
+  uint8_t nextProgress = getPrintProgress();
+
+  #if !defined(TFT43_V3_0) && !defined(TFT50_V3_0)
+    char progStr[8];
+
+    sprintf(progStr, " %d%% ", nextProgress);
+    GUI_DispStringInPrect(&progressVal, (uint8_t *)progStr);
+  #endif
+
+  if (nextProgress >= prevProgress)
+    reDrawProgressBar(prevProgress, nextProgress, MAT_ORANGE, BLACK);
+  else  // if regress, swap indexes and colors
+    reDrawProgressBar(nextProgress, prevProgress, DARKGRAY, MAT_ORANGE);
 }
 
 static inline void reDrawLayer(int icon_pos)
@@ -262,18 +327,19 @@ static inline void toggleInfo(void)
 
 static inline void printingDrawPage(void)
 {
-  updatePrintProgress();
   reValueNozzle(EXT_ICON_POS);
   reValueBed(BED_ICON_POS);
   reDrawFan(FAN_ICON_POS);
-  reDrawProgress(TIM_ICON_POS, 0);
+  reDrawTime(TIM_ICON_POS);
   reDrawLayer(Z_ICON_POS);
   reDrawSpeed(SPD_ICON_POS);
+
+  // progress
   GUI_SetColor(ORANGE);
-  GUI_DrawRect(ProgressBar.x0 - 1, ProgressBar.y0 - 1, ProgressBar.x1 + 1, ProgressBar.y1 + 1);
-  GUI_SetColor(DARKGRAY);
-  GUI_FillPrect(&ProgressBar);
+  GUI_DrawRect(progressBar.x0 - 1, progressBar.y0 - 1, progressBar.x1 + 1, progressBar.y1 + 1);  // draw progress bar border
   GUI_RestoreColorDefault();
+  reDrawProgressBar(0, 100, DARKGRAY, MAT_ORANGE);  // draw progress bar
+  reDrawProgress(0);  // draw progress
 }
 
 void drawPrintInfo(void)
@@ -431,12 +497,19 @@ void menuPrinting(void)
     // check printing progress
     if (getPrintSize() != 0)
     {
-      // check print time or progress percentage change
-      if ((time != getPrintTime()) || (updatePrintProgress()))
+      // check print time change
+      if (time != getPrintTime())
       {
         time = getPrintTime();
         RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
-        reDrawProgress(TIM_ICON_POS, oldProgress);
+        reDrawTime(TIM_ICON_POS);
+      }
+
+      // check print progress percentage change
+      if (updatePrintProgress())
+      {
+        RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
+        reDrawProgress(oldProgress);
         oldProgress = getPrintProgress();
       }
     }
@@ -444,8 +517,9 @@ void menuPrinting(void)
     {
       if (getPrintProgress() != 100)
       {
+        reDrawTime(TIM_ICON_POS);
         updatePrintProgress();
-        reDrawProgress(TIM_ICON_POS, oldProgress);
+        reDrawProgress(oldProgress);
         oldProgress = getPrintProgress();
       }
     }
