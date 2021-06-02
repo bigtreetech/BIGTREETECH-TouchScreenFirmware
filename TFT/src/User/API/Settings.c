@@ -191,6 +191,7 @@ void initMachineSetting(void)
   infoMachineSettings.autoReportSDStatus      = DISABLED;
   infoMachineSettings.long_filename_support   = DISABLED;
   infoMachineSettings.babyStepping            = DISABLED;
+  infoMachineSettings.buildPercent            = DISABLED;
   infoMachineSettings.softwareEndstops        = ENABLED;
 }
 

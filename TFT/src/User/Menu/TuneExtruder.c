@@ -8,7 +8,6 @@ static uint8_t degreeSteps_index = 1;
 static uint8_t extStep_index = 0;
 static bool loadRequested = false;
 
-
 // set the hotend to the minimum extrusion temperature if user selected "OK"
 void extrudeMinTemp_OK(void)
 {

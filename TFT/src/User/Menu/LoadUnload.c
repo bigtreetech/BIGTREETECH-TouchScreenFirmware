@@ -64,7 +64,7 @@ void menuLoadUnload(void)
       { // unloading in progress
         popupReminder(DIALOG_TYPE_INFO, LABEL_UNLOAD, LABEL_UNLOAD_STARTED);
       }
-      else if ((lastCmd == LOAD_REQUESTED) || (lastCmd == LOAD_STARTED)) 
+      else if ((lastCmd == LOAD_REQUESTED) || (lastCmd == LOAD_STARTED))
       { // loading in progress
         popupReminder(DIALOG_TYPE_INFO, LABEL_LOAD, LABEL_LOAD_STARTED);
       }

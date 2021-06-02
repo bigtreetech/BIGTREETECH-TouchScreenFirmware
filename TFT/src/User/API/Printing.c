@@ -4,14 +4,17 @@
 typedef struct
 {
   FIL        file;
-  uint32_t   time;        // Printed time in sec
-  uint32_t   size;        // Gcode file total size
-  uint32_t   cur;         // Gcode has printed file size
+  uint32_t   time;                // current elapsed time in sec
+  uint32_t   remainingTime;       // current remaining time in sec (if set with M73 or M117)
+  uint32_t   size;                // Gcode file total size
+  uint32_t   cur;                 // Gcode has printed file size
+  uint8_t    prevProgress;
   uint8_t    progress;
-  bool       runout;      // 1: runout in printing, 0: idle
-  bool       printing;    // 1: means printing, 0: means idle
-  bool       pause;       // 1: means paused
-  PAUSE_TYPE pauseType;   // pause type trigged by different sources and gcodes like M0 & M600
+  bool       progressFromSlicer;  // 1: progress controlled by Slicer (if set with M73)
+  bool       runout;              // 1: runout in printing, 0: idle
+  bool       printing;            // 1: means printing, 0: means idle
+  bool       pause;               // 1: means paused
+  PAUSE_TYPE pauseType;           // pause type trigged by different sources and gcodes like M0 & M600
 } PRINTING;
 
 PRINTING infoPrinting;
@@ -62,13 +65,16 @@ void resumeAndContinue(void)
   Serial_Puts(SERIAL_PORT, "M876 S1\n");
 }
 
-void setPrintTime(uint32_t RTtime)
+void setPrintTime(uint32_t elapsedTime)
 {
-  if (RTtime % 1000 == 0)
+  if (elapsedTime % 1000 == 0)
   {
     if (infoPrinting.printing && !infoPrinting.pause)
     {
       infoPrinting.time++;
+
+      if (infoPrinting.remainingTime > 0  && !heatHasWaiting())
+        infoPrinting.remainingTime--;
     }
   }
 }
@@ -83,6 +89,39 @@ void getPrintTimeDetail(uint8_t * hour, uint8_t * min, uint8_t * sec)
   *hour = infoPrinting.time / 3600;
   *min = infoPrinting.time % 3600 / 60;
   *sec = infoPrinting.time % 60;
+}
+
+void setPrintRemainingTime(int32_t remainingTime)
+{
+  float speedFactor = (float) (speedGetCurPercent(0)) / 100;  // speed (feed rate) factor (e.g. 50% -> 0.5)
+
+  // Cura Slicer put a negative value at the end instead of zero
+  if (remainingTime < 0 || speedFactor <= 0.0f)
+    remainingTime = 0;
+  else
+    remainingTime = remainingTime / speedFactor;  // remaining time = slicer remaining time / speed factor
+
+  infoPrinting.remainingTime = remainingTime;
+}
+
+void parsePrintRemainingTime(char * buffer)
+{
+  int hour, min, sec;
+
+  sscanf(buffer, "%dh%dm%ds", &hour, &min, &sec);
+  setPrintRemainingTime(((int32_t) (hour) * 3600) + ((int32_t) (min) * 60) + (int32_t) (sec));
+}
+
+uint32_t getPrintRemainingTime()
+{
+  return infoPrinting.remainingTime;
+}
+
+void getPrintRemainingTimeDetail(uint8_t * hour, uint8_t * min, uint8_t * sec)
+{
+  *hour = infoPrinting.remainingTime / 3600;
+  *min = infoPrinting.remainingTime % 3600 / 60;
+  *sec = infoPrinting.remainingTime % 60;
 }
 
 uint32_t getPrintSize(void)
@@ -101,18 +140,31 @@ void setPrintProgress(float cur, float size)
   infoPrinting.size = size;
 }
 
+void setPrintProgressPercentage(uint8_t percentage)
+{
+  infoPrinting.progressFromSlicer = true;  // set to true to force a progress controlled by slicer
+  infoPrinting.progress = percentage;
+}
+
 bool updatePrintProgress(void)
 {
-  uint8_t curProgress = infoPrinting.progress;
+  uint8_t prevProgress = infoPrinting.prevProgress;
 
-  // in case not printing or a wrong size was set, we consider progress as 100%
-  if (infoPrinting.size == 0)  // avoid a division for 0 (a crash) and set progress to 100%
-    infoPrinting.progress = 100;
-  else
-    infoPrinting.progress = MIN((uint64_t)infoPrinting.cur * 100 / infoPrinting.size, 100);
+  if (!infoPrinting.progressFromSlicer)  // avoid to update progress if it is controlled by slicer
+  {
+    // in case not printing or a wrong size was set, we consider progress as 100%
+    if (infoPrinting.size == 0)  // avoid a division for 0 (a crash) and set progress to 100%
+      infoPrinting.progress = 100;
+    else
+      infoPrinting.progress = MIN((uint64_t)infoPrinting.cur * 100 / infoPrinting.size, 100);
+  }
 
-  if (infoPrinting.progress != curProgress)
+  if (infoPrinting.progress != prevProgress)
+  {
+    infoPrinting.prevProgress = infoPrinting.progress;
+
     return true;
+  }
 
   return false;
 }
@@ -333,7 +385,7 @@ void printEnd(void)
   powerFailedClose();
   powerFailedDelete();
 
-  infoPrinting.cur = infoPrinting.size;  // always update the print progress to 100% even if the print was abaorted
+  infoPrinting.cur = infoPrinting.size;  // always update the print progress to 100% even if the print terminated
   infoPrinting.printing = infoPrinting.pause = false;
   preparePrintSummary();  // update print summary. infoPrinting are used
 
@@ -559,7 +611,7 @@ void setPrintAbort(void)
     coordinateQuery(0);
   }
 
-  infoPrinting.cur = infoPrinting.size;
+  infoPrinting.cur = infoPrinting.size;  // always update the print progress to 100% even if the print was abaorted
   infoPrinting.printing = infoPrinting.pause = false;
 }
 
