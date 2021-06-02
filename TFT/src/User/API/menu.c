@@ -858,13 +858,16 @@ void loopBackEnd(void)
   {
     loopCaseLight();
   }
+
+  // Query fan speed, only for RRF now
+  fanQuery();
 }  //loopBackEnd
 
 void loopFrontEnd(void)
 {
   // Check if volume source(SD/U disk) insert
   loopVolumeSource();
-  // loop to check and run toast messages
+  // Loop to check and run toast messages
   loopToast();
   // If there is a message in the status bar, timed clear
   loopReminderClear();
@@ -879,7 +882,7 @@ void loopFrontEnd(void)
   loopFrontEndFILRunoutDetect();
 #endif
 
-  // loop for popup menu
+  // Loop for popup menu
   loopPopup();
 }
 

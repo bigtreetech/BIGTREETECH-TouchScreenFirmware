@@ -557,6 +557,15 @@ void parseACK(void)
           fanSetCurSpeed(i, ack_value());
         }
       }
+      // parse and store flow rate percentage in case of Smoothieware
+      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && ack_seen("fanPercent\":["))
+      {
+        for (uint8_t i = 0; i < infoSettings.fan_count; i++)
+        {
+          fanSetPercent(i, ack_value() + 0.5f);
+          ack_continue_seen(",");
+        }
+      }
       // parse and store M710, controller fan
       else if (ack_seen("M710"))
       {

@@ -95,3 +95,22 @@ void ctrlFanQuery(void)
     ctrlFanQueryWait = storeCmd("M710\n");
   }
 }
+
+#define RRF_FAN_QUERY_MS  3000
+
+void fanQuery(void)
+{
+  if (!infoHost.connected)
+    return;
+
+  if (infoMachineSettings.firmwareType == FW_REPRAPFW)
+  {
+    static uint32_t rrf_next_fan_time = 0;
+
+    if (OS_GetTimeMs() > rrf_next_fan_time)
+    {
+      rrf_next_fan_time = OS_GetTimeMs() + RRF_FAN_QUERY_MS;
+      storeCmd("M408 S0\n");
+    }
+  }
+}
