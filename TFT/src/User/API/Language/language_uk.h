@@ -2,7 +2,6 @@
 #define _LANGUAGE_UK_H_
 
     // config.ini Parameter Settings / Feature Settings
-    #define STRING_STATUS_SCREEN          "Enable Status Screen"
     #define STRING_BAUDRATE               "Baudrate"
     #define STRING_LANGUAGE               "Українська"
     #define STRING_ROTATE_UI              "Повернути інтерфейс"
@@ -318,8 +317,6 @@
     #define STRING_TUNE_EXTRUDER          "Налаштування кроків"
     #define STRING_TUNE_EXT_EXTRUDE_100   "Екст. 100мм"
     #define STRING_TUNE_EXT_TEMP          "Налаштування екструдера\nНагрівання"
-    #define STRING_TUNE_EXT_TEMPLOW       "Необхідна температура дуже низька!\nМінімальна температура:%d℃"
-    #define STRING_TUNE_EXT_DESIREDVAL    "Температура ще не досягла необхідного значення"
     #define STRING_TUNE_EXT_MARK120MM     "Позначте 120 мм на філаменті.\nПо готовності '%s' введіть\nвиміряну отриману довжину після екструзії"
     #define STRING_TUNE_EXT_HEATOFF       "Відключити нагрів?"
     #define STRING_TUNE_EXT_ADJ_ESTEPS    "Підстроювання E-кроків"
@@ -346,6 +343,9 @@
     #define STRING_CLICK_FOR_MORE         "Click for summary"
     #define STRING_EXT_TEMPLOW            "Температура хотенду нижче мінімальної температури (%d℃)."
     #define STRING_HEAT_HOTEND            "Heat hotend to %d℃?"
+    #define STRING_DESIRED_TEMPLOW        "Hotend temperature is below\ndesired temperature (%d℃)."
+    #define STRING_WAIT_HEAT_UP           "Wait for it to heat up."
+    #define STRING_NOZZLE_STABILIZING     "Wait, nozzle stabilizing..."
     #define STRING_Z_ALIGN                "Z Align"
     #define STRING_MACROS                 "Macros"
     #define STRING_MESH_VALID             "Mesh Validation"
