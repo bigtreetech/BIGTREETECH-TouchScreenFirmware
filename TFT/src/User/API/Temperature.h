@@ -9,19 +9,20 @@ extern "C" {
 #include <stdint.h>
 #include "Settings.h"
 
-#define TEMPERATURE_QUERY_FAST_SECONDS 1                  // "M105" temperature query delay in heat menu or while heating.
-#define TEMPERATURE_QUERY_SLOW_SECONDS 3                  // temperature query delay when idle
-#define TEMPERATURE_RANGE              2                  // temperature difference to treat temperature reached target
-#define TEMPERATURE_ALERT_RANGE        TEMPERATURE_RANGE  // treat this much difference as no change in target temperature for sound alerts
-#define TEMPERATURE_MIN_EXT_RANGE      TEMPERATURE_RANGE  // treat this much diference in minimum extruder temperature as ok for extrusion
+#define TEMPERATURE_QUERY_FAST_SECONDS 1  // "M105" temperature query delay in heat menu or while heating.
+#define TEMPERATURE_QUERY_SLOW_SECONDS 3  // temperature query delay when idle
+#define TEMPERATURE_RANGE              2  // temperature difference to treat temperature reached target
+#define NOZZLE_TEMP_LAG                5  // nozzle max allowed lag 
 
-typedef enum {
+typedef enum
+{
   WAIT_NONE = 0,
   WAIT_HEATING,
   WAIT_COOLING_HEATING,
 } HEATER_WAIT;
 
-typedef enum {
+typedef enum
+{
   SETTLED = 0,
   HEATING,
   COOLING,
@@ -50,8 +51,10 @@ typedef struct
 
 typedef struct
 {
-  union {
-    struct {
+  union
+  {
+    struct
+    {
       _HEATER hotend[MAX_HOTEND_COUNT];
       _HEATER bed;
       _HEATER chamber;
