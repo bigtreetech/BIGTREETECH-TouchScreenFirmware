@@ -77,7 +77,7 @@ void menuTuneExtruder(void)
   int16_t lastTarget = heatGetTargetTemp(tool_index);
   int16_t actCurrent;
   int16_t actTarget;
-  
+
   heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
 
   tuneExtruderItems.items[KEY_ICON_5] = itemDegreeSteps[degreeSteps_index];
