@@ -66,7 +66,7 @@ typedef union
   void *address;
 } LABEL;
 
-//always initialize label to default values
+// always initialize label to default values
 #define init_label(X) LABEL X = {.index = LABEL_BACKGROUND, .address = NULL}
 
 typedef struct
@@ -133,11 +133,13 @@ typedef struct
   uint16_t      font;
 } LIVE_DATA;
 
- typedef struct
+typedef struct
 {
   uint8_t   enabled[LIVEICON_LINES];
   LIVE_DATA lines[LIVEICON_LINES];
 } LIVE_INFO;
+
+typedef bool (* CONDITION_CALLBACK)(void);
 
 void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, const ITEM * item);
 
@@ -177,7 +179,8 @@ GUI_POINT getIconStartPoint(int index);
 
 void loopBackEnd(void);
 void loopFrontEnd(void);
-void loopProcess (void);
+void loopProcess(void);
+void loopProcessToCondition(CONDITION_CALLBACK condCallback);
 
 #ifdef __cplusplus
 }
