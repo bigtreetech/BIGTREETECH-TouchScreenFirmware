@@ -21,6 +21,11 @@ static bool updateM27_waiting = false;
 static float last_E_pos;
 bool filamentRunoutAlarm;
 
+bool isHostPrinting(void)
+{
+  return (infoHost.printing);
+}
+
 void setRunoutAlarmTrue(void)
 {
   filamentRunoutAlarm = true;
@@ -388,14 +393,13 @@ void printAbort(void)
         request_M0();  // M524 is not supportet in reprap firmware
       }
 
-      setDialogText(LABEL_SCREEN_INFO, LABEL_BUSY, LABEL_BACKGROUND, LABEL_BACKGROUND);
-      showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
-
-      do
+      if (infoHost.printing)
       {
-        loopProcess();  // NOTE: it is executed at leat one time to print the above splash screen
+        setDialogText(LABEL_SCREEN_INFO, LABEL_BUSY, LABEL_BACKGROUND, LABEL_BACKGROUND);
+        showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
+
+        loopProcessToCondition(&isHostPrinting);  // wait for the printer to settle down
       }
-      while (infoHost.printing == true);  // wait for the printer to settle down
       break;
 
     case TFT_UDISK:
@@ -439,9 +443,7 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType)
     case TFT_UDISK:
     case TFT_SD:
       if (infoPrinting.pause == true && pauseType == PAUSE_M0)
-      {
-        while (infoCmd.count != 0) {loopProcess();}
-      }
+        loopProcessToCondition(&isNotEmptyCmdQueue);  // wait for the communication to be clean
 
       static COORDINATE tmp;
       bool isCoorRelative = coorGetRelative();

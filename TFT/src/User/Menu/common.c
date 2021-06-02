@@ -199,55 +199,6 @@ void drawStandardValue(const GUI_RECT *rect, VALUE_TYPE valType, const void *val
   GUI_SetBkColor(origBgColor);
 }
 
-bool warmupTemperature(uint8_t toolIndex, void (* callback)(void))
-{
-  if (heatGetCurrentTemp(toolIndex) < infoSettings.min_ext_temp - TEMPERATURE_MIN_EXT_RANGE)
-  { // low temperature warning
-    char tempMsg[200];
-    sprintf(tempMsg, (char *)textSelect(LABEL_EXT_TEMPLOW), infoSettings.min_ext_temp);
-
-    if (heatGetTargetTemp(toolIndex) < infoSettings.min_ext_temp)
-    { // heatup offering
-      char tempStr[100];
-      sprintf(tempStr, (char *)textSelect(LABEL_HEAT_HOTEND), infoSettings.min_ext_temp);
-      strcat(tempMsg, "\n");
-      strcat(tempMsg, tempStr);
-
-      setDialogText(LABEL_WARNING, (uint8_t *)tempMsg, LABEL_CONFIRM, LABEL_CANCEL);
-      showDialog(DIALOG_TYPE_ERROR, callback, NULL, NULL);
-    }
-    else
-    {
-      setDialogText(LABEL_WARNING, (uint8_t *)tempMsg, LABEL_CONFIRM, LABEL_BACKGROUND);
-      showDialog(DIALOG_TYPE_ERROR, NULL, NULL, NULL);
-    }
-    return false;
-  }
-  // temperature falling down to a target lower than the minimal extrusion temperature
-  else if (heatGetTargetTemp(toolIndex) < infoSettings.min_ext_temp)
-  { // contiunue with current temp but no lower than the minimum extruder temperature
-    heatSetTargetTemp(toolIndex, MAX(infoSettings.min_ext_temp, heatGetCurrentTemp(toolIndex)));
-  }
-
-  return true;
-}
-
-void cooldownTemperature(void)
-{
-  if (!isPrinting())
-  {
-    for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
-    {
-      if (heatGetTargetTemp(i) > 0)
-      {
-        setDialogText(LABEL_WARNING, LABEL_HEATERS_ON, LABEL_CONFIRM, LABEL_CANCEL);
-        showDialog(DIALOG_TYPE_QUESTION, heatCoolDown, NULL, NULL);
-        break;
-      }
-    }
-  }
-}
-
 // Show/draw a temperature in a standard menu
 void temperatureReDraw(uint8_t toolIndex, int16_t * temp, bool skipHeader)
 {
@@ -374,4 +325,82 @@ float editFloatValue(float minValue, float maxValue, float resetValue, float val
   val = numPadFloat((uint8_t *) tempstr, value, resetValue, true);
 
   return NOBEYOND(minValue, val, maxValue);
+}
+
+NOZZLE_STATUS warmupNozzle(uint8_t toolIndex, void (* callback)(void))
+{
+  if (heatGetTargetTemp(toolIndex) < infoSettings.min_ext_temp)
+  {
+    if (heatGetCurrentTemp(toolIndex) < infoSettings.min_ext_temp)
+    { // low temperature warning
+      char tempMsg[200];
+      char tempStr[100];
+
+      sprintf(tempMsg, (char *)textSelect(LABEL_EXT_TEMPLOW), infoSettings.min_ext_temp);
+      sprintf(tempStr, (char *)textSelect(LABEL_HEAT_HOTEND), infoSettings.min_ext_temp);
+      strcat(tempMsg, "\n");
+      strcat(tempMsg, tempStr);
+
+      setDialogText(LABEL_WARNING, (uint8_t *)tempMsg, LABEL_CONFIRM, LABEL_CANCEL);
+      showDialog(DIALOG_TYPE_ERROR, callback, NULL, NULL);
+
+      return COLD;
+    }
+    // temperature falling down to a target lower than the minimal extrusion temperature
+    else
+    { // contiunue with current temp but no lower than the minimum extruder temperature
+      heatSetTargetTemp(toolIndex, MAX(infoSettings.min_ext_temp, heatGetCurrentTemp(toolIndex)));
+      return SETTLING;
+    }
+  }
+  else
+  {
+    if (heatGetCurrentTemp(toolIndex) < heatGetTargetTemp(toolIndex))
+    {
+      if (heatGetCurrentTemp(toolIndex) < heatGetTargetTemp(toolIndex) - NOZZLE_TEMP_LAG)
+      { // low temperature warning
+        char tempMsg[200];
+        char tempStr[100];
+
+        sprintf(tempMsg, (char *)textSelect(LABEL_DESIRED_TEMPLOW), heatGetTargetTemp(toolIndex));
+        sprintf(tempStr, (char *)textSelect(LABEL_WAIT_HEAT_UP));
+        strcat(tempMsg, "\n");
+        strcat(tempMsg, tempStr);
+
+        setDialogText(LABEL_WARNING, (uint8_t *)tempMsg, LABEL_CONFIRM, LABEL_BACKGROUND);
+        showDialog(DIALOG_TYPE_ERROR, NULL, NULL, NULL);
+        return COLD;
+      }
+      else
+      {
+        char tempMsg[200];
+
+        sprintf(tempMsg, (char *)textSelect(LABEL_NOZZLE_STABILIZING), heatGetTargetTemp(toolIndex));
+        if (!toastRunning())
+        {
+          addToast(DIALOG_TYPE_INFO, tempMsg);
+        }
+        return SETTLING;
+      }
+    }
+  }
+
+  return HEATED;
+}
+
+// user choice for disabling all heaters/hotends
+void cooldownTemperature(void)
+{
+  if (!isPrinting())
+  {
+    for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
+    {
+      if (heatGetTargetTemp(i) > 0)
+      {
+        setDialogText(LABEL_WARNING, LABEL_HEATERS_ON, LABEL_CONFIRM, LABEL_CANCEL);
+        showDialog(DIALOG_TYPE_QUESTION, heatCoolDown, NULL, NULL);
+        break;
+      }
+    }
+  }
 }
