@@ -796,6 +796,45 @@ static GUI_POINT GUI_DisplayWordInPrect(const GUI_RECT *rect, GUI_POINT cursor, 
   return cursor;
 }
 
+static GUI_POINT GUI_DisplayWordInPrect(const GUI_RECT *rect, GUI_POINT cursor, uint8_t *str)
+{
+  CHAR_INFO info;
+  // return cursor to new line if line is full or on new line character
+  if ((cursor.x + GUI_StrPixelWidth(str)) > rect->x1 || (*str == '\n'))
+  {
+    getCharacterInfo(str, &info);
+    cursor.x = rect->x0;
+    cursor.y += info.pixelHeight;
+
+    if ((cursor.y + info.pixelHeight) > rect->y1)
+      cursor.y = rect->y0;
+
+    if (*str == ' ' || *str == '\n')  // treat space as new line if it causes line change
+      return cursor;
+  }
+
+  // draw word
+  while (*str)
+  {
+    getCharacterInfo(str, &info);
+    // check line width after each character to clip long words to rect width
+    if ((cursor.x + info.pixelWidth) > rect->x1)
+    {
+      cursor.x = rect->x0;
+      cursor.y += info.pixelHeight;
+
+      if ((cursor.y + info.pixelHeight) > rect->y1)
+        cursor.y = rect->y0;
+    }
+
+    GUI_DispOne(cursor.x, cursor.y, &info);
+    cursor.x += info.pixelWidth;
+    str += info.bytes;
+  }
+
+  return cursor;
+}
+
 void _GUI_DispStringInRectEOL(int16_t sx, int16_t sy, int16_t ex, int16_t ey, const uint8_t *p)
 {
   if (p == NULL || *p == 0) return;

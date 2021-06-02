@@ -158,6 +158,8 @@ typedef struct
 
 typedef bool (* CONDITION_CALLBACK)(void);
 
+void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, const ITEM * item);
+
 extern const GUI_RECT exhibitRect;
 extern const GUI_RECT rect_of_key[MENU_RECT_COUNT];
 extern const GUI_RECT rect_of_keySS[SS_RECT_COUNT];
