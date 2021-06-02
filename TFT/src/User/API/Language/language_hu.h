@@ -1,8 +1,7 @@
 #ifndef _LANGUAGE_HU_H_
 #define _LANGUAGE_HU_H_
 
-    // config.ini Paraméterbeállítások / Funkcióbeállítások
-    #define STRING_STATUS_SCREEN          "Állapot képernyő aktív"
+    // config.ini Parameter Settings / Feature Settings
     #define STRING_BAUDRATE               "Kapcsolat"
     #define STRING_LANGUAGE               "Magyar"
     #define STRING_ROTATE_UI              "Forgatás"

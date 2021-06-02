@@ -691,9 +691,6 @@ void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, const ITEM * item)
   }
 
   GUI_RestoreColorDefault();
-
-  if (item != NULL)
-    ICON_PrepareReadEnd();
 }  // showLiveInfo
 
 void displayExhibitHeader(const char * titleStr, const char * unitStr)
