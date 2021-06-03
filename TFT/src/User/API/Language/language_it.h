@@ -8,7 +8,7 @@
     #define STRING_TERMINAL_ACK           "Mostra ACK in console"
     #define STRING_PERSISTENT_INFO        "Mostra barra di stato"
     #define STRING_FILE_LIST_MODE         "File in modalità lista"
-    #define STRING_FILE_SORT_BY           "Sort files by"
+    #define STRING_FILE_SORT_BY           "Ordina file per"
     #define STRING_ACK_NOTIFICATION       "Tipo di popup"
     #define STRING_EMULATE_M600           "Emula M600"
     #define STRING_SERIAL_ALWAYS_ON       "Seriale sempre accesa"
