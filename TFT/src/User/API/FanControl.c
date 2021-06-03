@@ -1,6 +1,7 @@
 #include "FanControl.h"
 #include "includes.h"
 
+#define RRF_FAN_QUERY_MS  3000
 #define NEXT_FAN_WAIT 500  // 1 second is 1000
 
 const char* fanID[MAX_FAN_COUNT] = FAN_DISPLAY_ID;
@@ -76,7 +77,7 @@ void loopFan(void)
     {
       if (storeCmd(fanCmd[i], setFanSpeed[i]))
         lastSetFanSpeed[i] = setFanSpeed[i];
-        
+
       nextCtrlFanTime = OS_GetTimeMs() + NEXT_FAN_WAIT;  // avoid rapid fire, clogging the queue
     }
   }
@@ -95,8 +96,6 @@ void ctrlFanQuery(void)
     ctrlFanQueryWait = storeCmd("M710\n");
   }
 }
-
-#define RRF_FAN_QUERY_MS  3000
 
 void fanQuery(void)
 {

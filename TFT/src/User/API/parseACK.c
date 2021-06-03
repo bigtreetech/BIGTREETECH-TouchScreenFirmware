@@ -562,7 +562,7 @@ void parseACK(void)
           fanSetCurSpeed(i, ack_value());
         }
       }
-      // parse and store flow rate percentage in case of Smoothieware
+      // parse and store flow rate percentage in case of RepRapFirmware
       else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && ack_seen("fanPercent\":["))
       {
         for (uint8_t i = 0; i < infoSettings.fan_count; i++)
