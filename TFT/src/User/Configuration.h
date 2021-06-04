@@ -527,6 +527,31 @@
  */
 //#define MARKED_PROGRESS_BAR  // Default: disabled
 
+/**
+ * Show embedded thumbnails of gcode files
+ *
+ * Options: [0: classic, 1: RGB565 bitmap, 2: Base64 PNG]
+ *  classic: RGB565 bitmaps for all possible thumbnail sizes are embedded
+ *   in the gcode file at fixed file offsets. It is fastest to parse but least flexible.
+ *  RGB565 bitmap:
+ *    A specific thumbnail comment identifies the location of a  single 'classic'
+ *    embedded RB565 bitmap thumbnail. It is almost as fast as classic and
+ *    flexible but requires a dedicated post-processing of gcode files for
+ *    most slicers. "Classic" is used as fallback.
+ *  Base64 PNG:
+ *    A specific thumbnail comment identifies the location of a Base64-encoded
+ *    PNG thumbnail. It is slower as classic but most flexible. It does _not_
+ *    require dedicated post-processing of gcode files for most slicers.
+ *    "RGB565 bitmap" and "Classic" are used as fallback.
+ *
+ *  Restrictions:
+ *    "Base64 PNG" option utilizes about 43kb statically allocated RAM and
+ *    about 1kb dynamically allocated RAM. Therefore this option is only suitable
+ *    for devices >96KB RAM.
+ *    If you choose "Base64 PNG" on such a low RAM device it will automatically
+ *    downgraded to "RGB565 bitmap" option.
+ */
+#define THUMBNAIL_PARSER 2  // Default: 0
 
 //===========================================================================
 //=========================== Other Settings ================================
