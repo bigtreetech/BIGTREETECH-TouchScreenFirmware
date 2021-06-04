@@ -46,8 +46,9 @@ void Hardware_GenericInit(void)
   LCD_Init();
   readStoredPara();        // Read settings parameter
 
-  #ifdef SERIAL_DEBUG_PORT
+  #if defined(SERIAL_DEBUG_PORT) && defined(SERIAL_DEBUG_ENABLED)
     Serial_ReSourceInit();  // Initialize serial ports first if debugging is enabled
+    dbg_print("Main Startup: Generic debug output is enabled.\n");
   #endif
 
   LCD_RefreshDirection();  // refresh display direction after reading settings

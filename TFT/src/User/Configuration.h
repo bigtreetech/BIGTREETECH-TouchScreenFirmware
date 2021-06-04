@@ -13,12 +13,37 @@
  */
 //#define SCREEN_SHOT_TO_SD
 
+//===========================================================================
+//============================== Debug Settings =============================
+//===========================================================================
+
+/* If one of the DEBUG_x below is defined the SERIAL_DEBUG_PORT defined in board specific Pin_xx.h file
+ * will be used for debugging purposes. DON'T enable one of the DEBUG_x below for normal printing.
+ */
+
+/**
+ * Generic Debug
+ * Uncomment/Enable to enable arbitrary debug serial communication to SERIAL_DEBUG_PORT defined in board specific Pin_xx.h file.
+ */
+//#define DEBUG_SERIAL_GENERIC
+
 /**
  * Serial Communication Debug
  * Uncomment/Enable to forward/dump all serial communication to SERIAL_DEBUG_PORT defined in board specific Pin_xx.h file.
- * Use it only for debugging purposes. DON'T enable it for normal printing.
  */
 //#define DEBUG_SERIAL_COMM
+
+/**
+ * Config File Debug
+ * Uncomment/Enable to show debug information during config file processing.
+ */
+//#define DEBUG_SERIAL_CONFIG
+
+#if defined(DEBUG_SERIAL_GENERIC) || defined(DEBUG_SERIAL_CONFIG) || defined(DEBUG_SERIAL_COMM)
+  #define SERIAL_DEBUG_ENABLED
+#else
+  #undef SERIAL_DEBUG_ENABLED
+#endif
 
 //===========================================================================
 //============================= General Settings ============================
