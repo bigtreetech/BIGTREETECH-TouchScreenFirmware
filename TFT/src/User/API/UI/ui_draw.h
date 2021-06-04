@@ -28,6 +28,9 @@ extern "C" {
 
 void LOGO_ReadDisplay(void);
 void ICON_ReadDisplay(uint16_t sx, uint16_t sy, uint8_t icon);
+void ICON_PrepareRead(uint16_t sx, uint16_t sy, uint8_t icon);
+void ICON_PrepareReadEnd(void);
+uint16_t ICON_ReadPixel(int16_t x, int16_t y);
 bool model_DirectDisplay(GUI_POINT pos, char *gcode);
 bool model_DecodeToFlash(char *gcode);
 void IMAGE_ReadDisplay(uint16_t sx, uint16_t sy, uint32_t address);

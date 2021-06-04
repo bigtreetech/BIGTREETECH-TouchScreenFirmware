@@ -63,7 +63,7 @@ const char *const speedId[2] = {"Speed", "Flow"};
 bool hasFilamentData;
 
 #define TOGGLE_TIME  2000  // 1 seconds is 1000
-#define LAYER_DELTA  0.1   // minimal layer height change to update the layer display (avoid congestion in vase mode)
+#define LAYER_DELTA  0.01   // minimal layer height change to update the layer display (avoid congestion in vase mode)
 
 #define LAYER_TITLE  "Layer"
 #define EXT_ICON_POS 0
@@ -154,27 +154,25 @@ void menuBeforePrinting(void)
 static inline void reValueNozzle(int icon_pos)
 {
   char tempstr[10];
-  sprintf(tempstr, "%d/%d", heatGetCurrentTemp(currentTool), heatGetTargetTemp(currentTool));
+  sprintf(tempstr, "%3d/%-3d", heatGetCurrentTemp(currentTool), heatGetTargetTemp(currentTool));
 
-  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-  ICON_ReadDisplay(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, ICON_PRINTING_NOZZLE);
+  ICON_PrepareRead(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, ICON_PRINTING_NOZZLE);
   GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y,
                  (uint8_t *)heatDisplayID[currentTool]);
   GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (uint8_t *)tempstr);
-  GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
+  ICON_PrepareReadEnd();
 }
 
 static inline void reValueBed(int icon_pos)
 {
   char tempstr[10];
-  sprintf(tempstr, "%d/%d", heatGetCurrentTemp(BED), heatGetTargetTemp(BED));
+  sprintf(tempstr, "%3d/%-3d", heatGetCurrentTemp(BED), heatGetTargetTemp(BED));
 
-  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-  ICON_ReadDisplay(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, ICON_PRINTING_BED);
+  ICON_PrepareRead(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, ICON_PRINTING_BED);
   GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y,
                  (uint8_t *)heatDisplayID[BED]);
   GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (uint8_t *)tempstr);
-  GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
+  ICON_PrepareReadEnd();
 }
 
 static inline void reDrawFan(int icon_pos)
@@ -182,33 +180,27 @@ static inline void reDrawFan(int icon_pos)
   char tempstr[10];
 
   if (infoSettings.fan_percentage == 1)
-    sprintf(tempstr, "%d%%", fanGetCurPercent(currentFan));
+    sprintf(tempstr, "%3d%%", fanGetCurPercent(currentFan));
   else
-    sprintf(tempstr, "%d", fanGetCurSpeed(currentFan));
+    sprintf(tempstr, "%3d", fanGetCurSpeed(currentFan));
 
-  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-  ICON_ReadDisplay(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, ICON_PRINTING_FAN);
+  ICON_PrepareRead(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, ICON_PRINTING_FAN);
   GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y,
                  (uint8_t *)fanID[currentFan]);
   GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (uint8_t *)tempstr);
-  GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
+  ICON_PrepareReadEnd();
 }
 
 static inline void reDrawSpeed(int icon_pos)
 {
   char tempstr[10];
 
-  if (currentSpeedID == 0)
-    ICON_ReadDisplay(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, ICON_PRINTING_SPEED);
-  else
-    ICON_ReadDisplay(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, ICON_PRINTING_FLOW);
-
-  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-  sprintf(tempstr, "%d%%", speedGetCurPercent(currentSpeedID));
+  ICON_PrepareRead(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, (currentSpeedID == 0) ? ICON_PRINTING_SPEED : ICON_PRINTING_FLOW);
+  sprintf(tempstr, "%3d%%", speedGetCurPercent(currentSpeedID));
   GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y,
                  (uint8_t *)speedId[currentSpeedID]);
   GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (uint8_t *)tempstr);
-  GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
+  ICON_PrepareReadEnd();
 }
 
 static inline void reDrawTime(int icon_pos)
@@ -219,9 +211,7 @@ static inline void reDrawTime(int icon_pos)
   getPrintTimeDetail(&hour, &min, &sec);
   sprintf(timeStr, "%02u:%02u:%02u", hour, min, sec);
 
-  GUI_SetNumMode(GUI_NUMMODE_ZERO);
-  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-  ICON_ReadDisplay(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, ICON_PRINTING_TIMER);
+  ICON_PrepareRead(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, ICON_PRINTING_TIMER);
   GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (uint8_t *)timeStr);
 
   if (getPrintRemainingTime())  // if remaining time is pending
@@ -231,9 +221,7 @@ static inline void reDrawTime(int icon_pos)
 
     GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (uint8_t *)timeStr);
   }
-
-  GUI_SetNumMode(GUI_NUMMODE_SPACE);
-  GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
+  ICON_PrepareReadEnd();
 }
 
 static inline void reDrawProgressBar(uint8_t prevProgress, uint8_t nextProgress, uint16_t barColor, uint16_t sliceColor)
@@ -280,14 +268,13 @@ static inline void reDrawLayer(int icon_pos)
 {
   char tempstr[10];
 
-  sprintf(tempstr, "%.2fmm", (infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS));
+  sprintf(tempstr, "%3.2fmm", (infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS));
 
-  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-  ICON_ReadDisplay(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, ICON_PRINTING_ZLAYER);
+  ICON_PrepareRead(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, ICON_PRINTING_ZLAYER);
   GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y,
                   (uint8_t *)LAYER_TITLE);
   GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (uint8_t *)tempstr);
-  GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
+  ICON_PrepareReadEnd();
 }
 
 static inline void toggleInfo(void)
@@ -314,6 +301,8 @@ static inline void toggleInfo(void)
 
     currentSpeedID = (currentSpeedID + 1) % 2;
     RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
+
+    ICON_ReadDisplay(printinfo_points[SPD_ICON_POS].x, printinfo_points[SPD_ICON_POS].y, (currentSpeedID == 0) ? ICON_PRINTING_SPEED : ICON_PRINTING_FLOW);
     reDrawSpeed(SPD_ICON_POS);
     speedQuery();
 
@@ -327,11 +316,17 @@ static inline void toggleInfo(void)
 
 static inline void printingDrawPage(void)
 {
+  ICON_ReadDisplay(printinfo_points[EXT_ICON_POS].x, printinfo_points[EXT_ICON_POS].y, ICON_PRINTING_NOZZLE);
   reValueNozzle(EXT_ICON_POS);
+  ICON_ReadDisplay(printinfo_points[BED_ICON_POS].x, printinfo_points[BED_ICON_POS].y, ICON_PRINTING_BED);
   reValueBed(BED_ICON_POS);
+  ICON_ReadDisplay(printinfo_points[FAN_ICON_POS].x, printinfo_points[FAN_ICON_POS].y, ICON_PRINTING_FAN);
   reDrawFan(FAN_ICON_POS);
+  ICON_ReadDisplay(printinfo_points[TIM_ICON_POS].x, printinfo_points[TIM_ICON_POS].y, ICON_PRINTING_TIMER);
   reDrawTime(TIM_ICON_POS);
+  ICON_ReadDisplay(printinfo_points[Z_ICON_POS].x, printinfo_points[Z_ICON_POS].y, ICON_PRINTING_ZLAYER);
   reDrawLayer(Z_ICON_POS);
+  ICON_ReadDisplay(printinfo_points[SPD_ICON_POS].x, printinfo_points[SPD_ICON_POS].y, ICON_PRINTING_SPEED);
   reDrawSpeed(SPD_ICON_POS);
 
   // progress

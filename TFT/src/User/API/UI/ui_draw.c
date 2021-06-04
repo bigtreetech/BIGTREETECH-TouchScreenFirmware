@@ -34,7 +34,7 @@ void lcd_frame_display(uint16_t sx, uint16_t sy, uint16_t w, uint16_t h, uint32_
 }
 #endif
 
-uint32_t getBMPsize(uint8_t * w, uint8_t * h, uint32_t address)
+uint32_t getBMPsize(uint8_t *w, uint8_t *h, uint32_t address)
 {
   uint16_t len = sizeof(uint16_t);
   W25Qxx_ReadBuffer(w, address, len);
@@ -60,6 +60,53 @@ void LOGO_ReadDisplay(void)
 void ICON_ReadDisplay(uint16_t sx, uint16_t sy, uint8_t icon)
 {
   IMAGE_ReadDisplay(sx, sy, ICON_ADDR(icon));
+}
+
+typedef struct
+{
+  uint16_t sx;
+  uint16_t sy;
+  uint16_t w;
+  uint16_t h;
+  uint32_t address;
+  GUI_TEXT_MODE pre_mode;
+} TEXT_ON_ICON;
+
+TEXT_ON_ICON backGroundIcon;
+
+void ICON_PrepareRead(uint16_t sx, uint16_t sy, uint8_t icon)
+{
+  backGroundIcon.pre_mode = GUI_GetTextMode();
+  backGroundIcon.address = getBMPsize((uint8_t *)&backGroundIcon.w, (uint8_t *)&backGroundIcon.h, ICON_ADDR(icon));
+  backGroundIcon.sx = sx;
+  backGroundIcon.sy = sy;
+  GUI_SetTextMode(GUI_TEXTMODE_ON_ICON);
+}
+
+void ICON_PrepareReadEnd(void)
+{
+  GUI_SetTextMode(backGroundIcon.pre_mode);
+}
+
+uint16_t ICON_ReadPixel(int16_t x, int16_t y)
+{
+  // // Out of range calls
+  // if ((x > backGroundIcon.sx + backGroundIcon.w) || (y > backGroundIcon.sy + backGroundIcon.h))
+  //   return 0;
+  uint16_t color;
+  uint32_t address = backGroundIcon.address + ((x - backGroundIcon.sx) + (y - backGroundIcon.sy) * backGroundIcon.w) * 2;
+
+  W25Qxx_SPI_CS_Set(0);
+  W25Qxx_SPI_Read_Write_Byte(CMD_READ_DATA);
+  W25Qxx_SPI_Read_Write_Byte((address & 0xFF0000) >> 16);
+  W25Qxx_SPI_Read_Write_Byte((address & 0xFF00) >> 8);
+  W25Qxx_SPI_Read_Write_Byte(address & 0xFF);
+
+  color  = (W25Qxx_SPI_Read_Write_Byte(W25QXX_DUMMY_BYTE) << 8);
+  color |= W25Qxx_SPI_Read_Write_Byte(W25QXX_DUMMY_BYTE);
+
+  W25Qxx_SPI_CS_Set(1);
+  return color;
 }
 
 uint16_t modelFileReadHalfword(FIL * fp)

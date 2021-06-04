@@ -629,6 +629,8 @@ void GUI_DispOne(int16_t sx, int16_t sy, const CHAR_INFO *pInfo)
         GUI_DrawPixel(sx, sy+y, foreGroundColor);
       else if (guiTextMode == GUI_TEXTMODE_NORMAL)
         GUI_DrawPixel(sx, sy+y, backGroundColor);
+      else if  (guiTextMode == GUI_TEXTMODE_ON_ICON)
+        GUI_DrawPixel(sx, sy+y, ICON_ReadPixel(sx, sy+y));
       temp <<= 1;
     }
     sx++;

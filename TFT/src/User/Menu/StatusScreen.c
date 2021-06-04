@@ -99,7 +99,7 @@ void drawTemperature(void)
   #ifdef TFT70_V3_0
     char tempstr2[45];
 
-  //TOOL / EXT
+    // TOOL / EXT
     lvIcon.lines[0].text = (uint8_t *)heatDisplayID[currentTool];
     sprintf(tempstr, "%d℃", heatGetCurrentTemp(currentTool));
     sprintf(tempstr2, "%d℃", heatGetTargetTemp(currentTool));
@@ -107,7 +107,7 @@ void drawTemperature(void)
     lvIcon.lines[2].text = (uint8_t *)tempstr2;
     showLiveInfo(0, &lvIcon, &StatusItems.items[0]);
 
-    //BED
+    // BED
     lvIcon.lines[0].text = (uint8_t *)heatDisplayID[BED];
     sprintf(tempstr, "%d℃", heatGetCurrentTemp(BED));
     sprintf(tempstr2, "%d℃", heatGetTargetTemp(BED));
@@ -118,13 +118,13 @@ void drawTemperature(void)
     lvIcon.enabled[2] = false;
   #else
 
-    //TOOL / EXT
+    // TOOL / EXT
     lvIcon.lines[0].text = (uint8_t *)heatDisplayID[currentTool];
     sprintf(tempstr, "%d/%d", heatGetCurrentTemp(currentTool), heatGetTargetTemp(currentTool));
     lvIcon.lines[1].text = (uint8_t *)tempstr;
     showLiveInfo(0, &lvIcon, &StatusItems.items[0]);
 
-    //BED
+    // BED
     lvIcon.lines[0].text = (uint8_t *)heatDisplayID[BED];
     sprintf(tempstr, "%d/%d", heatGetCurrentTemp(BED), heatGetTargetTemp(BED));
     lvIcon.lines[1].text = (uint8_t *)tempstr;
@@ -132,7 +132,7 @@ void drawTemperature(void)
 
   #endif
 
-  //FAN
+  // FAN
   lvIcon.lines[0].text = (uint8_t *)fanID[currentFan];
 
   if (infoSettings.fan_percentage == 1)
@@ -147,20 +147,20 @@ void drawTemperature(void)
   showLiveInfo(2, &lvIcon, &StatusItems.items[2]);
 
   #ifdef TFT70_V3_0
-    //SPEED
+    // SPEED
     lvIcon.lines[0].text = (uint8_t *)SpeedID[0];
     sprintf(tempstr, "%d%%", speedGetCurPercent(0));
     lvIcon.lines[1].text = (uint8_t *)tempstr;
     showLiveInfo(3, &lvIcon, &SpeedItems[0]);
 
-    //FLOW
+    // FLOW
     lvIcon.lines[0].text = (uint8_t *)SpeedID[1];
     sprintf(tempstr, "%d%%", speedGetCurPercent(1));
     lvIcon.lines[1].text = (uint8_t *)tempstr;
     showLiveInfo(4, &lvIcon, &SpeedItems[1]);
 
   #else
-    //SPEED / flow
+    // SPEED / flow
     lvIcon.lines[0].text = (uint8_t *)SpeedID[currentSpeedID];
     sprintf(tempstr, "%d%%", speedGetCurPercent(currentSpeedID));
     lvIcon.lines[1].text = (uint8_t *)tempstr;
