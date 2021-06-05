@@ -1,6 +1,6 @@
 #ifndef _CONFIGURATION_H_
 #define _CONFIGURATION_H_
-#define CONFIG_VERSION 20210513
+#define CONFIG_VERSION 20210605
 
 //===========================================================================
 //============================ Developer Settings ===========================
