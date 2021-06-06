@@ -179,10 +179,10 @@ void loopBackEnd(void);
 void loopFrontEnd(void);
 
 // to be used in subfunctions of the menus
-extern void loopProcessNoPopup(void);
+void loopProcessNoPopup(void);
 
 // to be used in menus in the "while" loop where the key presses are checked
-extern void loopProcessWithPopup(void);
+void loopProcessWithPopup(void);
 
 // to be used at start of menus in the "while" loop where waiting for a conditional
 // (ex. waiting for an empty buffer, waiting for host, etc)

@@ -28,7 +28,6 @@ typedef enum
 } CMD_TYPE;
 
 static uint8_t tool_index = NOZZLE0;
-static CMD_TYPE lastCmd = NONE;
 
 // set the hotend to the minimum extrusion temperature if user selected "OK"
 void loadMinTemp_OK(void)
@@ -39,6 +38,7 @@ void loadMinTemp_OK(void)
 void menuLoadUnload(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
+  static CMD_TYPE lastCmd = NONE;
 
   if (eAxisBackup.backedUp == false)
   {
@@ -105,7 +105,7 @@ void menuLoadUnload(void)
         case KEY_ICON_5:  // heat menu
           infoMenu.menu[++infoMenu.cur] = menuHeat;
           lastCmd = NONE;
-          eAxisBackup.backedUp = false; // exiting from Extrude menu (user might never come back by "Back" long press in Heat menu)
+          eAxisBackup.backedUp = false;  // exiting from Extrude menu (user might never come back by "Back" long press in Heat menu)
           break;
 
         case KEY_ICON_6:  // cool down nozzle
@@ -117,7 +117,7 @@ void menuLoadUnload(void)
           cooldownTemperature();
           lastCmd = NONE;
           infoMenu.cur--;
-          eAxisBackup.backedUp = false; // the user exited from menu (not any other process/popup/etc)
+          eAxisBackup.backedUp = false;  // the user exited from menu (not any other process/popup/etc)
           break;
 
         default:

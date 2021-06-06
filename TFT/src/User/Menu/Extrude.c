@@ -107,7 +107,7 @@ void menuExtrude(void)
         else
         {
           infoMenu.menu[++infoMenu.cur] = menuHeat;
-          eAxisBackup.backedUp = false; // exiting from Extrude menu (user might never come back by "Back" long press in Heat menu)
+          eAxisBackup.backedUp = false;  // exiting from Extrude menu (user might never come back by "Back" long press in Heat menu)
         }
         break;
 
@@ -128,7 +128,7 @@ void menuExtrude(void)
       case KEY_ICON_7:
         cooldownTemperature();
         infoMenu.cur--;
-        eAxisBackup.backedUp = false; // exiting from Extrude menu, no need for it anymore
+        eAxisBackup.backedUp = false;  // exiting from Extrude menu, no need for it anymore
         break;
 
       default:
