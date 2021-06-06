@@ -59,6 +59,6 @@ void menuMeshValid(void)
         break;
     }
 
-    loopProcess();
+    loopProcessWithPopup();
   }
 }

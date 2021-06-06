@@ -70,7 +70,7 @@ void menuLanguage(void)
       }
     }
 
-    loopProcess();
+    loopProcessWithPopup();
   }
 
   if (memcmp(&now, &infoSettings, sizeof(SETTINGS)))
@@ -127,7 +127,7 @@ void menuEmulatorBGColor(void)
       }
     }
 
-    loopProcess();
+    loopProcessWithPopup();
   }
 
   if (memcmp(&now, &infoSettings, sizeof(SETTINGS)))
@@ -181,7 +181,7 @@ void menuEmulatorFontColor(void)
       }
     }
 
-    loopProcess();
+    loopProcessWithPopup();
   }
 
   if (memcmp(&now, &infoSettings, sizeof(SETTINGS)))
@@ -257,7 +257,7 @@ void menuMarlinModeSettings(void)
         break;
     }
 
-    loopProcess();
+    loopProcessWithPopup();
   }
 
   if (memcmp(&now, &infoSettings, sizeof(SETTINGS)))
@@ -325,7 +325,7 @@ void menuSoundSettings(void)
         break;
     }
 
-    loopProcess();
+    loopProcessWithPopup();
   }
 
   if (memcmp(&now, &infoSettings, sizeof(SETTINGS)))
@@ -396,7 +396,7 @@ void menuBrightnessSettings(void)
         break;
     }
 
-    loopProcess();
+    loopProcessWithPopup();
   }
 
   if (memcmp(&now, &infoSettings, sizeof(SETTINGS)))
@@ -498,7 +498,7 @@ void menuScreenSettings(void)
         break;
     }
 
-    loopProcess();
+    loopProcessWithPopup();
   }
 
   if (memcmp(&now, &infoSettings, sizeof(SETTINGS)))

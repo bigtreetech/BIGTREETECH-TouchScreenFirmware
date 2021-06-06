@@ -63,6 +63,13 @@ void loopPopup(void);
     showDialog(_type, NULL, NULL, NULL);                          \
   }
 
+#define popupSplash(_type, _title, _msg)                                          \
+  {                                                                               \
+    LABELCHAR(title, _title);                                                     \
+    LABELCHAR(msg, _msg);                                                         \
+    popupDrawPage(_type, NULL, (uint8_t *)title, (uint8_t *)msg, NULL, NULL);     \
+  }
+
 #ifdef __cplusplus
 }
 #endif

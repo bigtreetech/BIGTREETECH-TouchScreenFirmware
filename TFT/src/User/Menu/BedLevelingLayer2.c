@@ -119,6 +119,6 @@ void menuBedLevelingLayer2(void)
         break;
     }
 
-    loopProcess();
+    loopProcessWithPopup();
   }
 }

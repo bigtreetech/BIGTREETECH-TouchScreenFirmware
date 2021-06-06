@@ -114,6 +114,6 @@ void menuManualLeveling(void)
         break;
     }
 
-    loopProcess();
+    loopProcessWithPopup();
   }
 }

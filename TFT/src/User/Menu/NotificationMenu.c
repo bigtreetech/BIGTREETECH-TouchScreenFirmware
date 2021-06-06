@@ -87,7 +87,7 @@ void menuNotification(void)
         break;
     }
 
-    loopProcess();
+    loopProcessWithPopup();
   }
 
   setNotificationHandler(NULL);

@@ -966,7 +966,7 @@ void menuMeshEditor(void)
       oldIndex = curIndex;
     }
 
-    loopProcess();
+    loopProcessWithPopup();
   }
 
   if (forceExit)

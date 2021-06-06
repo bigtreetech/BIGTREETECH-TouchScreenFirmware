@@ -878,38 +878,19 @@ void loopFrontEnd(void)
   // Loop for filament runout detection
   loopFrontEndFILRunoutDetect();
 #endif
-
-  // loop for popup menu
-  loopPopup();
 }
 
-void loopProcess(void)
+// to be used in subfunctions of the menus
+void loopProcessNoPopup(void)  // use this in "while" loops where popups & dialogs should be avoided
 {
   loopBackEnd();
   loopFrontEnd();
 }
 
-void menuDummy(void)
+// to be used in menus in the "while" loop where the key presses are checked
+void loopProcessWithPopup(void)
 {
-  infoMenu.cur--;
-}
-
-void loopProcessToCondition(CONDITION_CALLBACK condCallback)
-{
-  uint8_t curMenu = infoMenu.cur;
-  bool invokedUI = false;
-
-  while (condCallback())  // loop until the condition is no more satisfied
-  {
-    loopProcess();
-
-    if (infoMenu.cur > curMenu)  // if a user interaction is needed (e.g. dialog box UI), handle it
-    {
-      invokedUI = true;
-      (*infoMenu.menu[infoMenu.cur])();
-    }
-  }
-
-  if (invokedUI)  // if a UI was invoked, load a dummy menu just to force the caller also to refresh its menu
-    infoMenu.menu[++infoMenu.cur] = menuDummy;
+  loopBackEnd();
+  loopFrontEnd();
+  loopPopup();
 }

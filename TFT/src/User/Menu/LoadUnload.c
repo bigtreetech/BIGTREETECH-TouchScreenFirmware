@@ -28,7 +28,7 @@ typedef enum
 } CMD_TYPE;
 
 static uint8_t tool_index = NOZZLE0;
-CMD_TYPE lastCmd = NONE;
+static CMD_TYPE lastCmd = NONE;
 
 // set the hotend to the minimum extrusion temperature if user selected "OK"
 void loadMinTemp_OK(void)
@@ -42,8 +42,18 @@ void menuLoadUnload(void)
 
   if (eAxisBackup.backedUp == false)
   {
-    loopProcessToCondition(&isNotEmptyCmdQueue);  // wait for the communication to be clean
+    if (infoCmd.count != 0)
+    {
+      if ((strncmp(infoCmd.queue[infoCmd.index_r].gcode, "M155", 4) != 0) || (infoCmd.count > 1))
+      { // avoid splash when returning from "Heat" menu 
+        popupSplash(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, LABEL_BUSY);
+      }
 
+      while (infoCmd.count != 0)
+      {
+        LOOP_PROCESS_POPUP_HANDLE;
+      }
+    }
     eAxisBackup.coordinate = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
     eAxisBackup.backedUp = true;
   }
@@ -94,8 +104,8 @@ void menuLoadUnload(void)
 
         case KEY_ICON_5:  // heat menu
           infoMenu.menu[++infoMenu.cur] = menuHeat;
-          eAxisBackup.backedUp = false;  // exiting from Extrude menu (user might never come back by "Back" long press in Heat menu)
           lastCmd = NONE;
+          eAxisBackup.backedUp = false; // exiting from Extrude menu (user might never come back by "Back" long press in Heat menu)
           break;
 
         case KEY_ICON_6:  // cool down nozzle
@@ -107,7 +117,7 @@ void menuLoadUnload(void)
           cooldownTemperature();
           lastCmd = NONE;
           infoMenu.cur--;
-          eAxisBackup.backedUp = false;  // the user exited from menu (not any other process/popup/etc)
+          eAxisBackup.backedUp = false; // the user exited from menu (not any other process/popup/etc)
           break;
 
         default:
@@ -141,7 +151,7 @@ void menuLoadUnload(void)
       }
     }
 
-    loopProcess();
+    loopProcessWithPopup();
   }
 
   if (eAxisBackup.backedUp == false)  // the user exited from menu (not any other process/popup/etc)

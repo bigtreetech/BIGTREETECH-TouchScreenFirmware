@@ -109,6 +109,6 @@ void menuCaseLight(void)
       caseLightBrightnessReDraw();
     }
 
-    loopProcess();
+    loopProcessWithPopup();
   }
 }

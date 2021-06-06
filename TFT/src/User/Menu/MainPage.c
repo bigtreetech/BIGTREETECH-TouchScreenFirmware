@@ -98,7 +98,7 @@ void menuMain(void)
         break;
     }
 
-    loopProcess();
+    loopProcessWithPopup();
   }
 }
 

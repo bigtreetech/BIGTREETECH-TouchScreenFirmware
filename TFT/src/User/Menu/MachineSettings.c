@@ -29,7 +29,7 @@ void menuCustom(void)
     if (curIndex < customcodes.count)
       mustStoreScript(customcodes.gcode[curIndex]);
 
-    loopProcess();
+    loopProcessWithPopup();
   }
 }
 
@@ -97,7 +97,7 @@ void menuEepromSettings(void)
         break;
     }
 
-    loopProcess();
+    loopProcessWithPopup();
   }
 }
 
@@ -178,6 +178,6 @@ void menuMachineSettings(void)
         break;
     }
 
-    loopProcess();
+    loopProcessWithPopup();
   }
 }

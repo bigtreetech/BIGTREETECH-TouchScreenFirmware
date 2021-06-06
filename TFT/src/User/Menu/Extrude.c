@@ -33,12 +33,23 @@ void menuExtrude(void)
   };
 
   KEY_VALUES key_num = KEY_IDLE;
-  float extrNewCoord  = 0.0f;
-  float extrKnownCoord = 0.0f;
+  float eTemp  = 0.0f;
+  float eLength = 0.0f;
 
   if (eAxisBackup.backedUp == false)
   {
-    loopProcessToCondition(&isNotEmptyCmdQueue);  // wait for the communication to be clean
+    if (infoCmd.count != 0)
+    {
+      if ((strncmp(infoCmd.queue[infoCmd.index_r].gcode, "M155", 4) != 0) || (infoCmd.count > 1))
+      { // avoid splash when returning from "Heat" menu 
+        popupSplash(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, LABEL_BUSY);
+      }
+
+      while (infoCmd.count != 0)
+      {
+        LOOP_PROCESS_POPUP_HANDLE;
+      }
+    }
 
     eAxisBackup.coordinate = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
     eAxisBackup.feedrate = coordinateGetFeedRate();
@@ -46,24 +57,22 @@ void menuExtrude(void)
     eAxisBackup.backedUp = true;
   }
 
-  extrKnownCoord = extrNewCoord = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
-
-  if (eAxisBackup.relative) // Set extruder to absolute
-    mustStoreCmd("M82\n");
-
   extrudeItems.items[KEY_ICON_4].icon = (infoSettings.ext_count > 1) ? ICON_NOZZLE : ICON_HEAT;
   extrudeItems.items[KEY_ICON_4].label.index = (infoSettings.ext_count > 1) ? LABEL_NOZZLE : LABEL_HEAT;
   extrudeItems.items[KEY_ICON_5] = itemExtLenSteps[extlenSteps_index];
   extrudeItems.items[KEY_ICON_6] = itemSpeed[itemSpeed_index];
 
   menuDrawPage(&extrudeItems);
-  extruderReDraw(curExtruder_index, extrKnownCoord, false);
+  extruderReDraw(curExtruder_index, eLength, false);
+
+  heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
+
+  if (eAxisBackup.relative) // Set extruder to absolute
+    mustStoreCmd("M82\n");
 
   #if LCD_ENCODER_SUPPORT
     encoderPosition = 0;
   #endif
-
-  heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
 
   while (infoMenu.menu[infoMenu.cur] == menuExtrude)
   {
@@ -71,21 +80,21 @@ void menuExtrude(void)
     switch (key_num)
     {
       case KEY_ICON_0:
-        extrNewCoord -= extlenSteps[extlenSteps_index];
+        eTemp -= extlenSteps[extlenSteps_index];
         break;
 
       case KEY_INFOBOX:
       {
         float val = editFloatValue(extlenSteps[COUNT(extlenSteps) - 1] * -1, extlenSteps[COUNT(extlenSteps) - 1], 0, 0);
-        extrNewCoord += val;
+        eTemp += val;
 
         menuDrawPage(&extrudeItems);
-        extruderReDraw(curExtruder_index, extrKnownCoord, false);
+        extruderReDraw(curExtruder_index, eLength, false);
         break;
       }
 
       case KEY_ICON_3:
-        extrNewCoord += extlenSteps[extlenSteps_index];
+        eTemp += extlenSteps[extlenSteps_index];
         break;
 
       case KEY_ICON_4:
@@ -93,12 +102,12 @@ void menuExtrude(void)
         {
           curExtruder_index = (curExtruder_index + 1) % infoSettings.ext_count;
 
-          extruderReDraw(curExtruder_index, extrKnownCoord, false);
+          extruderReDraw(curExtruder_index, eLength, false);
         }
         else
         {
           infoMenu.menu[++infoMenu.cur] = menuHeat;
-          eAxisBackup.backedUp = false;  // exiting from Extrude menu (user might never come back by "Back" long press in Heat menu)
+          eAxisBackup.backedUp = false; // exiting from Extrude menu (user might never come back by "Back" long press in Heat menu)
         }
         break;
 
@@ -119,21 +128,21 @@ void menuExtrude(void)
       case KEY_ICON_7:
         cooldownTemperature();
         infoMenu.cur--;
-        eAxisBackup.backedUp = false;  // exiting from Extrude menu, no need for it anymore
+        eAxisBackup.backedUp = false; // exiting from Extrude menu, no need for it anymore
         break;
 
       default:
         #if LCD_ENCODER_SUPPORT
           if (encoderPosition)
           {
-            extrNewCoord += extlenSteps[extlenSteps_index] * encoderPosition;
+            eTemp += extlenSteps[extlenSteps_index] * encoderPosition;
             encoderPosition = 0;
           }
         #endif
         break;
     }
 
-    if (extrKnownCoord != extrNewCoord)
+    if (eLength != eTemp)
     {
       if (curExtruder_index != heatGetCurrentTool())
         storeCmd("%s\n", tool_change[curExtruder_index]);
@@ -141,24 +150,24 @@ void menuExtrude(void)
       switch (warmupNozzle(curExtruder_index, &extrusionMinTemp_OK))
       {
         case COLD:
-          extrNewCoord = extrKnownCoord;
+          eTemp = eLength;
           break;
 
         case SETTLING:
-             extruderReDraw(curExtruder_index, extrNewCoord, true);
+             extruderReDraw(curExtruder_index, eTemp, true);
          break;
 
         case HEATED:
-          if (storeCmd("G0 E%.5f F%d\n", extrNewCoord, infoSettings.ext_speed[itemSpeed_index]))
+          if (storeCmd("G0 E%.5f F%d\n", eTemp, infoSettings.ext_speed[itemSpeed_index]))
           {
-            extrKnownCoord = extrNewCoord;
-            extruderReDraw(curExtruder_index, extrNewCoord, true);
+            eLength = eTemp;
+            extruderReDraw(curExtruder_index, eTemp, true);
           }
           break;
       }
     }
 
-    loopProcess();
+    loopProcessWithPopup();
   }
 
   if (eAxisBackup.backedUp == false)  // the user exited from menu (not any other process/popup/etc)
@@ -167,7 +176,9 @@ void menuExtrude(void)
     mustStoreCmd("G0 F%d\n", eAxisBackup.feedrate);
 
     if (eAxisBackup.relative == true)
+    {
       mustStoreCmd("M83\n");  // Set extruder to relative
+    }
   }
 
   // Set slow update time if not waiting for target temperature

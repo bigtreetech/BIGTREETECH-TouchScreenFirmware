@@ -163,7 +163,7 @@ void menuUBLSaveLoad(void)
         break;
     }
 
-    loopProcess();
+    loopProcessWithPopup();
   }
 }
 

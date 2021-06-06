@@ -36,6 +36,6 @@ void menuHome(void)
       default: break;
     }
 
-    loopProcess();
+    loopProcessWithPopup();
   }
 }

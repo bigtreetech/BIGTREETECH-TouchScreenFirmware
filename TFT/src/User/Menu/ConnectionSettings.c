@@ -90,7 +90,7 @@ void menuBaudrate(void)
       reminderMessage(LABEL_UNCONNECTED, STATUS_UNCONNECT);
     }
 
-    loopProcess();
+    loopProcessWithPopup();
   }
 
   if (memcmp(&now, &infoSettings, sizeof(SETTINGS)))
@@ -137,6 +137,6 @@ void menuConnectionSettings(void)
         break;
     }
 
-    loopProcess();
+    loopProcessWithPopup();
   }
 }

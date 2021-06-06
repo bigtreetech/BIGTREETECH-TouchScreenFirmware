@@ -324,7 +324,7 @@ void menuStatus(void)
     }
 
     toggleTool();
-    loopProcess();
+    loopProcessWithPopup();
   }
   // disable position auto report
   coordinateQuery(0);

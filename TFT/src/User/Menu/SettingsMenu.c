@@ -205,6 +205,6 @@ void menuSettings(void)
         break;
     }
 
-    loopProcess();
+    loopProcessWithPopup();
   }
 }

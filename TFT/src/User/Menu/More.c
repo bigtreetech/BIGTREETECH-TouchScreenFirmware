@@ -100,6 +100,6 @@ void menuMore(void)
         break;
     }
 
-    loopProcess();
+    loopProcessWithPopup();
   }
 }

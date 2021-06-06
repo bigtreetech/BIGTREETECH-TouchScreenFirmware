@@ -139,8 +139,6 @@ typedef struct
   LIVE_DATA lines[LIVEICON_LINES];
 } LIVE_INFO;
 
-typedef bool (* CONDITION_CALLBACK)(void);
-
 void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, const ITEM * item);
 
 extern const GUI_RECT exhibitRect;
@@ -179,8 +177,23 @@ GUI_POINT getIconStartPoint(int index);
 
 void loopBackEnd(void);
 void loopFrontEnd(void);
-void loopProcess(void);
-void loopProcessToCondition(CONDITION_CALLBACK condCallback);
+
+// to be used in subfunctions of the menus
+extern void loopProcessNoPopup(void);
+
+// to be used in menus in the "while" loop where the key presses are checked
+extern void loopProcessWithPopup(void);
+
+// to be used at start of menus in the "while" loop where waiting for a conditional
+// (ex. waiting for an empty buffer, waiting for host, etc)
+#define LOOP_PROCESS_POPUP_HANDLE               \
+{                                               \
+  loopProcessWithPopup();                       \
+  if (lastMenu != infoMenu.menu[infoMenu.cur])  \
+  {                                             \
+    return;                                     \
+  }                                             \
+}
 
 #ifdef __cplusplus
 }

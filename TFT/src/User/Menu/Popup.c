@@ -119,7 +119,7 @@ void menuDialog(void)
     if (action_loop != NULL)
       action_loop();
 
-    loopProcess();
+    loopProcessWithPopup();
   }
 }
 

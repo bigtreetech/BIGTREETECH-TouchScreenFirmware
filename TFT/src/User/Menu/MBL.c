@@ -282,6 +282,6 @@ void menuMBL(void)
 
     probeHeightQueryCoord();
 
-    loopProcess();
+    loopProcessWithPopup();
   }
 }
