@@ -27,6 +27,7 @@ extern "C" {
 #define text_startx      (LCD_WIDTH / 2)
 
 void LOGO_ReadDisplay(void);
+void ICON_PartialReadDisplay(uint16_t sx, uint16_t sy, int16_t width, int16_t height, uint8_t icon, uint16_t isx, uint16_t isy);
 void ICON_ReadDisplay(uint16_t sx, uint16_t sy, uint8_t icon);
 void ICON_PrepareRead(uint16_t sx, uint16_t sy, uint8_t icon);
 void ICON_PrepareReadEnd(void);
