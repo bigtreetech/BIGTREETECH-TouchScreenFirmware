@@ -170,7 +170,7 @@
  * Controller fan have two speed (Active and Idle) index 6 and 7.
  */
 #define FAN_MAX_PWM    {255,  255,  255,  255,  255,  255,  255,   255}
-#define FAN_DISPLAY_ID {"F0", "F1", "F2", "F3", "F4", "F5", "CtS", "CtI"}
+#define FAN_DISPLAY_ID {"F0 ", "F1 ", "F2 ", "F3 ", "F4 ", "F5 ", "CtS", "CtI"}
 #define FAN_CMD        {"M106 P0 S%d\n", "M106 P1 S%d\n", "M106 P2 S%d\n", "M106 P3 S%d\n", "M106 P4 S%d\n", "M106 P5 S%d\n", \
                         "M710 S%d\n",    "M710 I%d\n" }
 
