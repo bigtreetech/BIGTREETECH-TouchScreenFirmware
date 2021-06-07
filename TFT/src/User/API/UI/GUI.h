@@ -26,6 +26,7 @@ typedef enum
 {
   GUI_TEXTMODE_TRANS,
   GUI_TEXTMODE_NORMAL,
+  GUI_TEXTMODE_ON_ICON,
 } GUI_TEXT_MODE;
 
 typedef enum

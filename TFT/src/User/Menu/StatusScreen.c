@@ -48,14 +48,14 @@ static char msgbody[MAX_MSG_LENGTH];
 
 const char *const SpeedID[2] = SPEED_ID;
 // text position rectangles for Live icons
-//icon 0
+// icon 0
 const GUI_POINT ss_title_point = {SSICON_WIDTH - BYTE_WIDTH / 2, SSICON_NAME_Y0};
 const GUI_POINT ss_val_point   = {SSICON_WIDTH / 2, SSICON_VAL_Y0};
 #ifdef TFT70_V3_0
   const GUI_POINT ss_val2_point = {SSICON_WIDTH/2, SSICON_VAL2_Y0};
 #endif
 
-//info box msg area
+// info box msg area
 const  GUI_RECT msgRect = {START_X + 1 * ICON_WIDTH + 1 * SPACE_X + 2,   ICON_START_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + STATUS_MSG_BODY_YOFFSET,
                            START_X + 3 * ICON_WIDTH + 2 * SPACE_X - 2,   ICON_START_Y +  2 * ICON_HEIGHT + 1 * SPACE_Y - STATUS_MSG_BODY_BOTTOM};
 
@@ -64,7 +64,7 @@ const GUI_RECT RecGantry = {START_X,                                SSICON_HEIGH
 
 void drawTemperature(void)
 {
-  //icons and their values are updated one by one to reduce flicker/clipping
+  // icons and their values are updated one by one to reduce flicker/clipping
   char tempstr[45];
 
   LIVE_INFO lvIcon;
@@ -99,71 +99,70 @@ void drawTemperature(void)
   #ifdef TFT70_V3_0
     char tempstr2[45];
 
-  //TOOL / EXT
+    // TOOL / EXT
     lvIcon.lines[0].text = (uint8_t *)heatDisplayID[currentTool];
-    sprintf(tempstr, "%d℃", heatGetCurrentTemp(currentTool));
-    sprintf(tempstr2, "%d℃", heatGetTargetTemp(currentTool));
+    sprintf(tempstr, "%3d℃", heatGetCurrentTemp(currentTool));
+    sprintf(tempstr2, "%3d℃", heatGetTargetTemp(currentTool));
     lvIcon.lines[1].text = (uint8_t *)tempstr;
     lvIcon.lines[2].text = (uint8_t *)tempstr2;
     showLiveInfo(0, &lvIcon, &StatusItems.items[0]);
 
-    //BED
+    // BED
     lvIcon.lines[0].text = (uint8_t *)heatDisplayID[BED];
-    sprintf(tempstr, "%d℃", heatGetCurrentTemp(BED));
-    sprintf(tempstr2, "%d℃", heatGetTargetTemp(BED));
+    sprintf(tempstr, "%3d℃", heatGetCurrentTemp(BED));
+    sprintf(tempstr2, "%3d℃", heatGetTargetTemp(BED));
     lvIcon.lines[1].text = (uint8_t *)tempstr;
     lvIcon.lines[2].text = (uint8_t *)tempstr2;
     showLiveInfo(1, &lvIcon, &StatusItems.items[1]);
 
     lvIcon.enabled[2] = false;
   #else
-
-    //TOOL / EXT
+    // TOOL / EXT
     lvIcon.lines[0].text = (uint8_t *)heatDisplayID[currentTool];
-    sprintf(tempstr, "%d/%d", heatGetCurrentTemp(currentTool), heatGetTargetTemp(currentTool));
+    sprintf(tempstr, "%3d/%-3d", heatGetCurrentTemp(currentTool), heatGetTargetTemp(currentTool));
     lvIcon.lines[1].text = (uint8_t *)tempstr;
     showLiveInfo(0, &lvIcon, &StatusItems.items[0]);
 
-    //BED
+    // BED
     lvIcon.lines[0].text = (uint8_t *)heatDisplayID[BED];
-    sprintf(tempstr, "%d/%d", heatGetCurrentTemp(BED), heatGetTargetTemp(BED));
+    sprintf(tempstr, "%3d/%-3d", heatGetCurrentTemp(BED), heatGetTargetTemp(BED));
     lvIcon.lines[1].text = (uint8_t *)tempstr;
     showLiveInfo(1, &lvIcon, &StatusItems.items[1]);
-
   #endif
 
-  //FAN
+  // FAN
   lvIcon.lines[0].text = (uint8_t *)fanID[currentFan];
 
   if (infoSettings.fan_percentage == 1)
   {
-    sprintf(tempstr, "%d%%", fanGetCurPercent(currentFan));
+    sprintf(tempstr, "%3d%%", fanGetCurPercent(currentFan));
   }
   else
   {
-    sprintf(tempstr, "%d", fanGetCurSpeed(currentFan));
+    sprintf(tempstr, "%3d", fanGetCurSpeed(currentFan));
   }
   lvIcon.lines[1].text = (uint8_t *)tempstr;
   showLiveInfo(2, &lvIcon, &StatusItems.items[2]);
 
   #ifdef TFT70_V3_0
-    //SPEED
+    // SPEED
     lvIcon.lines[0].text = (uint8_t *)SpeedID[0];
-    sprintf(tempstr, "%d%%", speedGetCurPercent(0));
+    sprintf(tempstr, "%3d%%", speedGetCurPercent(0));
     lvIcon.lines[1].text = (uint8_t *)tempstr;
     showLiveInfo(3, &lvIcon, &SpeedItems[0]);
 
-    //FLOW
+    // FLOW
     lvIcon.lines[0].text = (uint8_t *)SpeedID[1];
-    sprintf(tempstr, "%d%%", speedGetCurPercent(1));
+    sprintf(tempstr, "%3d%%", speedGetCurPercent(1));
     lvIcon.lines[1].text = (uint8_t *)tempstr;
     showLiveInfo(4, &lvIcon, &SpeedItems[1]);
-
   #else
-    //SPEED / flow
+    // SPEED / FLOW
     lvIcon.lines[0].text = (uint8_t *)SpeedID[currentSpeedID];
-    sprintf(tempstr, "%d%%", speedGetCurPercent(currentSpeedID));
+    sprintf(tempstr, "%3d%%", speedGetCurPercent(currentSpeedID));
     lvIcon.lines[1].text = (uint8_t *)tempstr;
+
+    menuDrawIconOnly(&SpeedItems[currentSpeedID], 3);
     showLiveInfo(3, &lvIcon, &SpeedItems[currentSpeedID]);
   #endif
 
