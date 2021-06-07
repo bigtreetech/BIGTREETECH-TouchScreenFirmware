@@ -510,8 +510,9 @@
  *
  * NOTE: Enable it only in case all the icons have the same and uniform background color under
  *       all the live text areas.
- *       If enabled, it speeds up the rendering of the live text. Suitable in particular for
- *       the TFTs with a not fast HW (e.g. 24, 48 MHz).
+ *       If enabled, it speeds up the rendering of the live text and the responsiveness of the TFT,
+ *       so it can improve the print quality.
+ *       Suitable in particular for the TFTs with a not fast HW (e.g. 24, 48 MHz).
  */
 //#define UNIFORM_LIVE_TEXT_BG_COLOR  // Default: disabled
 
