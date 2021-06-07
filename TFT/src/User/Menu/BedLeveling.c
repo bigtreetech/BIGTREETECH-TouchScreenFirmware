@@ -135,6 +135,6 @@ void menuBedLeveling(void)
       blUpdateState(&bedLevelingItems);
     }
 
-    loopProcessWithPopup();
+    loopProcess_MenuLoop();
   }
 }

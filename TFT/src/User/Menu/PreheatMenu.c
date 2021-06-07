@@ -137,6 +137,6 @@ void menuPreheat(void)
         break;
     }
 
-    loopProcessWithPopup();
+    loopProcess_MenuLoop();
   }
 }

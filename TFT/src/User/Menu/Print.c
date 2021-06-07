@@ -307,7 +307,7 @@ void menuPrintFromSource(void)
       }
     #endif
 
-    loopProcessWithPopup();
+    loopProcess_MenuLoop();
   }
 }
 
@@ -386,7 +386,7 @@ void menuPrint(void)
       default:
         break;
     }
-    loopProcessWithPopup();
+    loopProcess_MenuLoop();
   }
 
 selectEnd:

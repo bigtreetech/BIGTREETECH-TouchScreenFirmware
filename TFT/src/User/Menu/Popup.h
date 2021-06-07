@@ -56,6 +56,7 @@ void popupDrawPage(DIALOG_TYPE type, BUTTON * btn, const uint8_t * title, const 
 void menuDialog(void);
 void showDialog(DIALOG_TYPE type, void (*ok_action)(), void (*cancel_action)(), void (*loop_action)());
 void loopPopup(void);
+void loopPopupHandle(void);
 
 #define popupReminder(_type, _title, _msg)                        \
   {                                                               \

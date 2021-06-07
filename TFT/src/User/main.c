@@ -114,7 +114,14 @@ int main(void)
 
   for (; ;)
   {
-    lastMenu = infoMenu.menu[infoMenu.cur];
+    if (infoMenu.menu[infoMenu.cur]== NULL)
+    { // there has been a popup in the menu, it needs to be redrawn
+      infoMenu.menu[infoMenu.cur] = lastMenu;
+    }
+    else
+    { // keep track of last active menu
+      lastMenu = infoMenu.menu[infoMenu.cur];
+    }
     (*infoMenu.menu[infoMenu.cur])();
   }
 }

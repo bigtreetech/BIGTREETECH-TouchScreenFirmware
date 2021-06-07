@@ -45,13 +45,17 @@ void menuLoadUnload(void)
     if (infoCmd.count != 0)
     {
       if ((strncmp(infoCmd.queue[infoCmd.index_r].gcode, "M155", 4) != 0) || (infoCmd.count > 1))
-      { // avoid splash when returning from "Heat" menu 
+      { // avoid splash when returning from "Heat" menu
+        if (lastMenu == menuDialog)
+        { // delete screen otherwise action buttons would be visible from previous dialog
+          GUI_Clear(infoSettings.bg_color);
+        }
         popupSplash(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, LABEL_BUSY);
       }
 
       while (infoCmd.count != 0)
       {
-        LOOP_PROCESS_POPUP_HANDLE;
+        LOOP_PROCESS_START_OF_MENU;
       }
     }
     eAxisBackup.coordinate = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
@@ -151,7 +155,7 @@ void menuLoadUnload(void)
       }
     }
 
-    loopProcessWithPopup();
+    loopProcess_MenuLoop();
   }
 
   if (eAxisBackup.backedUp == false)  // the user exited from menu (not any other process/popup/etc)

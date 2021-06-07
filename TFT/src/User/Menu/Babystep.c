@@ -217,7 +217,7 @@ void menuBabystep(void)
       babyReDraw(now_babystep, new_z_offset, force_z_offset, true);
     }
 
-    loopProcessWithPopup();
+    loopProcess_MenuLoop();
   }
 
   offsetSetValue(new_z_offset);  // set new Z offset. Required if current Z offset is not changed applying babystep changes (e.g. no BABYSTEP_ZPROBE_OFFSET is set in Marlin FW)

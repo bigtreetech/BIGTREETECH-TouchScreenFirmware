@@ -631,6 +631,6 @@ void menuPrinting(void)
         break;
     }
 
-    loopProcessWithPopup();
+    loopProcess_MenuLoop();
   }
 }

@@ -177,19 +177,16 @@ GUI_POINT getIconStartPoint(int index);
 
 void loopBackEnd(void);
 void loopFrontEnd(void);
-
-// to be used in subfunctions of the menus
-void loopProcessNoPopup(void);
-
-// to be used in menus in the "while" loop where the key presses are checked
-void loopProcessWithPopup(void);
+void loopProcess(void);
+void loopProcess_PopupHandle(void);
+void loopProcess_MenuLoop(void);
 
 // to be used at start of menus in the "while" loop where waiting for a conditional
 // (ex. waiting for an empty buffer, waiting for host, etc)
-#define LOOP_PROCESS_POPUP_HANDLE               \
+#define LOOP_PROCESS_START_OF_MENU              \
 {                                               \
-  loopProcessWithPopup();                       \
-  if (lastMenu != infoMenu.menu[infoMenu.cur])  \
+  loopProcess_PopupHandle();                    \
+  if (lastMenu == menuDialog)                   \
   {                                             \
     return;                                     \
   }                                             \

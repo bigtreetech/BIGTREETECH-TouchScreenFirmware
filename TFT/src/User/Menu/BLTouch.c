@@ -57,6 +57,6 @@ void menuBLTouch(void)
         break;
     }
 
-    loopProcessWithPopup();
+    loopProcess_MenuLoop();
   }
 }

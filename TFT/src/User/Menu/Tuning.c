@@ -50,6 +50,6 @@ void menuTuning(void)
         break;
     }
 
-    loopProcessWithPopup();
+    loopProcess_MenuLoop();
   }
 }

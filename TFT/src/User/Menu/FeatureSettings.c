@@ -383,7 +383,7 @@ void menuFeatureSettings(void)
         listViewRefreshItem(index);
       }
 
-    loopProcessWithPopup();
+    loopProcess_MenuLoop();
   }
 
   if (memcmp(&now, &infoSettings, sizeof(SETTINGS)))

@@ -71,6 +71,6 @@ void menuUnifiedMove(void)
         break;
     }
 
-    loopProcessWithPopup();
+    loopProcess_MenuLoop();
   }
 }

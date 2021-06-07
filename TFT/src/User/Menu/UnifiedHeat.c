@@ -52,6 +52,6 @@ void menuUnifiedHeat(void)
         break;
     }
 
-    loopProcessWithPopup();
+    loopProcess_MenuLoop();
   }
 }

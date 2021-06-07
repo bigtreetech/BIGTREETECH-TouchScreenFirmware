@@ -152,7 +152,7 @@ void menuMove(void)
           #endif
           break;
     }
-    loopProcessWithPopup();
+    loopProcess_MenuLoop();
     update_gantry();
   }
   mustStoreCmd("G90\n");

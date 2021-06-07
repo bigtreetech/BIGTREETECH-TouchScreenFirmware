@@ -442,10 +442,11 @@ void printAbort(void)
 
       if (infoHost.printing == true)
       {
+        GUI_Clear(infoSettings.bg_color);  // delete screen otherwise action buttons would be visible from previous dialog
         popupSplash(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, LABEL_BUSY);
         while (infoHost.printing == true)  // wait for the printer to settle down
         {
-          loopProcessNoPopup();
+          loopProcess_PopupHandle();
         }
       }
       break;
@@ -494,7 +495,7 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType)
       {
         while (infoCmd.count != 0)
         {
-          loopProcessNoPopup();
+          loopProcess_PopupHandle();
         }
       }
 

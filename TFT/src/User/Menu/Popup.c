@@ -119,7 +119,7 @@ void menuDialog(void)
     if (action_loop != NULL)
       action_loop();
 
-    loopProcessWithPopup();
+    loopProcess_MenuLoop();
   }
 }
 
@@ -238,5 +238,17 @@ void loopPopup(void)
   if (infoMenu.menu[infoMenu.cur] != menuDialog)
   { //handle the user interaction, then reload the previous menu
     infoMenu.menu[++infoMenu.cur] = menuDialog;
+  }
+}
+
+void loopPopupHandle(void)
+{
+  if ((lastMenu != NULL) && (infoMenu.menu[infoMenu.cur] == menuDialog))
+  {
+    lastMenu = NULL;  // popup in a loop
+    (*infoMenu.menu[infoMenu.cur])();
+    
+    // process will return here after the popup/dialog is closed
+    lastMenu = menuDialog;  // flag that there has been a popup during a loop
   }
 }

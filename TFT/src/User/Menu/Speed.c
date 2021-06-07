@@ -131,6 +131,6 @@ void menuSpeed(void)
       percentageReDraw(item_index, true);
     }
 
-    loopProcessWithPopup();
+    loopProcess_MenuLoop();
   }
 }

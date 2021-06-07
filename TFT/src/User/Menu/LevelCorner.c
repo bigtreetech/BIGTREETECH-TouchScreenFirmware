@@ -188,6 +188,6 @@ void menuLevelCorner(void)
       }
     }
 
-    loopProcessWithPopup();
+    loopProcess_MenuLoop();
   }
 }

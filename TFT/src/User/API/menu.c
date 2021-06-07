@@ -878,19 +878,32 @@ void loopFrontEnd(void)
   // Loop for filament runout detection
   loopFrontEndFILRunoutDetect();
 #endif
-}
 
-// to be used in subfunctions of the menus
-void loopProcessNoPopup(void)  // use this in "while" loops where popups & dialogs should be avoided
-{
-  loopBackEnd();
-  loopFrontEnd();
-}
-
-// to be used in menus in the "while" loop where the key presses are checked
-void loopProcessWithPopup(void)
-{
-  loopBackEnd();
-  loopFrontEnd();
+  // loop for popup menu
   loopPopup();
 }
+
+void loopProcess(void)
+{
+  loopBackEnd();
+  loopFrontEnd();
+}
+
+// to be used in subroutines with loops that need to handle eventual popups
+void loopProcess_PopupHandle(void)
+{
+  loopProcess();
+  loopPopupHandle();
+}
+
+// to be used inside menus in the while loop that keeps the menu alive
+void loopProcess_MenuLoop(void)
+{
+  loopProcess_PopupHandle();
+  if (lastMenu == menuDialog)
+  {
+    lastMenu = infoMenu.menu[infoMenu.cur];
+    infoMenu.menu[infoMenu.cur] = NULL;  // flag, popup in a loop
+  }
+}
+

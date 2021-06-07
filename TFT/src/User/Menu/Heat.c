@@ -122,7 +122,7 @@ void menuHeat(void)
       temperatureReDraw(tool_index, NULL, true);
     }
 
-    loopProcessWithPopup();
+    loopProcess_MenuLoop();
   }
 
   // Set slow update time if not waiting for target temperature

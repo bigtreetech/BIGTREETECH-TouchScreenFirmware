@@ -144,7 +144,7 @@ void menuPidWait(void)
 
     pidCheckTimeout();
 
-    loopProcessWithPopup();
+    loopProcess_MenuLoop();
   }
 }
 
@@ -323,6 +323,6 @@ void menuPid(void)
 
     pidCheckTimeout();
 
-    loopProcessWithPopup();
+    loopProcess_MenuLoop();
   }
 }

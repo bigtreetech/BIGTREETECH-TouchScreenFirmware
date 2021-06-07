@@ -156,6 +156,6 @@ void menuFan(void)
       fanReDraw(fan_index, true);
     }
 
-    loopProcessWithPopup();
+    loopProcess_MenuLoop();
   }
 }

@@ -272,7 +272,7 @@ void menuZOffset(void)
       babystepReset();
     }
 
-    loopProcessWithPopup();
+    loopProcess_MenuLoop();
   }
 
   // restore original ABL state

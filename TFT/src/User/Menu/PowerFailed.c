@@ -249,7 +249,7 @@ void menuPowerOff(void)
         }
       #endif
 
-      loopProcessWithPopup();
+      loopProcess_MenuLoop();
     }
   }
   else

@@ -189,7 +189,7 @@ void menuTuneExtruder(void)
       temperatureReDraw(tool_index, NULL, true);
     }
 
-    loopProcessWithPopup();
+    loopProcess_MenuLoop();
   }
 
   // Set slow update time if not waiting for target temperature
@@ -292,6 +292,6 @@ void menuNewExtruderESteps(void)
       showNewESteps(measured_length, old_esteps, &new_esteps);
     }
 
-    loopProcessWithPopup();
+    loopProcess_MenuLoop();
   }
 }

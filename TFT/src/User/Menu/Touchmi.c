@@ -67,6 +67,6 @@ void menuTouchMi(void)
         break;
     }
 
-    loopProcessWithPopup();
+    loopProcess_MenuLoop();
   }
 }
