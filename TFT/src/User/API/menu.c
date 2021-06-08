@@ -892,14 +892,17 @@ void loopProcess(void)
 // to be used in subroutines with loops that need to handle eventual popups
 void loopProcess_PopupHandle(void)
 {
-  loopProcess();
+  loopBackEnd();
+  loopFrontEnd();
   loopPopupHandle();
 }
 
 // to be used inside menus in the while loop that keeps the menu alive
 void loopProcess_MenuLoop(void)
 {
-  loopProcess_PopupHandle();
+  loopBackEnd();
+  loopFrontEnd();
+  loopPopupHandle();
   if (lastMenu == menuDialog)
   {
     lastMenu = infoMenu.menu[infoMenu.cur];

@@ -71,8 +71,10 @@ void menuExtrude(void)
 
   heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
 
-  if (eAxisBackup.relative) // Set extruder to absolute
-    mustStoreCmd("M82\n");
+  if (eAxisBackup.relative == false) // Set extruder to relative
+  {
+    mustStoreCmd("M83\n");
+  }
 
   #if LCD_ENCODER_SUPPORT
     encoderPosition = 0;
@@ -84,13 +86,13 @@ void menuExtrude(void)
     switch (key_num)
     {
       case KEY_ICON_0:
-        eTemp -= extlenSteps[extlenSteps_index];
+        eTemp = 0 - extlenSteps[extlenSteps_index];
         break;
 
       case KEY_INFOBOX:
       {
         float val = editFloatValue(extlenSteps[COUNT(extlenSteps) - 1] * -1, extlenSteps[COUNT(extlenSteps) - 1], 0, 0);
-        eTemp += val;
+        eTemp = val;
 
         menuDrawPage(&extrudeItems);
         extruderReDraw(curExtruder_index, eLength, false);
@@ -98,7 +100,7 @@ void menuExtrude(void)
       }
 
       case KEY_ICON_3:
-        eTemp += extlenSteps[extlenSteps_index];
+        eTemp = extlenSteps[extlenSteps_index];
         break;
 
       case KEY_ICON_4:
@@ -146,7 +148,7 @@ void menuExtrude(void)
         break;
     }
 
-    if (eLength != eTemp)
+    if (eTemp != 0)
     {
       if (curExtruder_index != heatGetCurrentTool())
         storeCmd("%s\n", tool_change[curExtruder_index]);
@@ -154,18 +156,19 @@ void menuExtrude(void)
       switch (warmupNozzle(curExtruder_index, &extrusionMinTemp_OK))
       {
         case COLD:
-          eTemp = eLength;
+          eTemp = 0;
           break;
 
         case SETTLING:
-             extruderReDraw(curExtruder_index, eTemp, true);
+             extruderReDraw(curExtruder_index, eLength + eTemp, true);
          break;
 
         case HEATED:
           if (storeCmd("G0 E%.5f F%d\n", eTemp, infoSettings.ext_speed[itemSpeed_index]))
           {
-            eLength = eTemp;
-            extruderReDraw(curExtruder_index, eTemp, true);
+            eLength += eTemp;
+            eTemp = 0;
+            extruderReDraw(curExtruder_index, eLength, true);
           }
           break;
       }
@@ -179,9 +182,9 @@ void menuExtrude(void)
     mustStoreCmd("G92 E%.5f\n", eAxisBackup.coordinate);
     mustStoreCmd("G0 F%d\n", eAxisBackup.feedrate);
 
-    if (eAxisBackup.relative == true)
+    if (eAxisBackup.relative == false)
     {
-      mustStoreCmd("M83\n");  // Set extruder to relative
+      mustStoreCmd("M82\n");  // Set extruder to absolute
     }
   }
 
