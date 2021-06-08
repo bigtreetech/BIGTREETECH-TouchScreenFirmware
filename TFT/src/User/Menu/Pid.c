@@ -159,7 +159,10 @@ static inline void pidStart(void)
   pidTimeout = OS_GetTimeMs() + PID_PROCESS_TIMEOUT;  // set timeout for overall PID process
 
   mustStoreCmd("M150 R255 U0 B0\n");  // set LED light to RED
-  mustStoreCmd("M106 S255\n");        // set fan speed to max
+  if (infoMachineSettings.firmwareType != FW_REPRAPFW)
+  {
+    mustStoreCmd("M106 S255\n");      // set fan speed to max
+  }
   mustStoreCmd("G4 S1\n");            // wait 1 sec
 
   for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)  // hotends + bed + chamber
