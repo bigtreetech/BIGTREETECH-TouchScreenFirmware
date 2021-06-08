@@ -270,13 +270,6 @@ void menuDrawItem(const ITEM *item, uint8_t position)
   menuDrawIconText(item, position);
 }
 
-void menuDrawPartialIconOnly(const ITEM *item, uint8_t position, uint16_t sx, uint16_t sy, int16_t width, int16_t height, uint16_t isx, uint16_t isy)
-{
-  const GUI_RECT *rect = curRect + position;
-
-  ICON_PartialReadDisplay(rect->x0 + sx, rect->y0 + sy, width, height, item->icon, isx, isy);
-}
-
 void menuDrawIconOnly(const ITEM *item, uint8_t position)
 {
   const GUI_RECT *rect = curRect + position;
@@ -607,14 +600,7 @@ void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, const ITEM * item)
         GUI_SetTextMode(liveicon->lines[i].text_mode);
         GUI_SetBkColor(liveicon->lines[i].bk_color);
       }
-/*     #ifdef UNIFORM_LIVE_TEXT_BG_COLOR
-        else
-        {
-          GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
-          GUI_SetBkColor(ICON_ReadPixel(loc.x, loc.y));
-        }
-      #endif
-*/
+
       GUI_SetColor(liveicon->lines[i].fn_color);
       setFontSize(liveicon->lines[i].font);
 
