@@ -48,7 +48,6 @@ void Hardware_GenericInit(void)
 
   #if defined(SERIAL_DEBUG_PORT) && defined(SERIAL_DEBUG_ENABLED)
     Serial_ReSourceInit();  // Initialize serial ports first if debugging is enabled
-    dbg_print("Main Startup: Generic debug output is enabled.\n");
   #endif
 
   LCD_RefreshDirection();  // refresh display direction after reading settings
@@ -111,6 +110,10 @@ int main(void)
   SCB->VTOR = VECT_TAB_FLASH;
 
   Hardware_GenericInit();
+
+  #if defined(SERIAL_DEBUG_PORT) && defined(SERIAL_DEBUG_ENABLED)
+    dbg_print("Main Startup: Generic debug output is enabled.\n");
+  #endif
 
   for (; ;)
   {
