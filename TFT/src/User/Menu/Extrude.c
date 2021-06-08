@@ -36,20 +36,7 @@ void menuExtrude(void)
   float extrNewCoord  = 0.0f;
   float extrKnownCoord = 0.0f;
 
-  if (eAxisBackup.backedUp == false)
-  {
-    loopProcessToCondition(&isNotEmptyCmdQueue);  // wait for the communication to be clean
-
-    eAxisBackup.coordinate = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
-    eAxisBackup.feedrate = coordinateGetFeedRate();
-    eAxisBackup.relative = eGetRelative();
-    eAxisBackup.backedUp = true;
-  }
-
   extrKnownCoord = extrNewCoord = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
-
-  if (eAxisBackup.relative) // Set extruder to absolute
-    mustStoreCmd("M82\n");
 
   extrudeItems.items[KEY_ICON_4].icon = (infoSettings.ext_count > 1) ? ICON_NOZZLE : ICON_HEAT;
   extrudeItems.items[KEY_ICON_4].label.index = (infoSettings.ext_count > 1) ? LABEL_NOZZLE : LABEL_HEAT;
@@ -58,6 +45,23 @@ void menuExtrude(void)
 
   menuDrawPage(&extrudeItems);
   extruderReDraw(curExtruder_index, extrKnownCoord, false);
+
+  if (eAxisBackup.backedUp == false)
+  {
+    if (loopProcessToCondition(&isNotEmptyCmdQueue, false) == true)  // wait for the communication to be clean
+    { // if a popup was handled, redraw the menu
+      menuDrawPage(&extrudeItems);
+      extruderReDraw(curExtruder_index, extrKnownCoord, false);
+    }
+
+    eAxisBackup.coordinate = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
+    eAxisBackup.feedrate = coordinateGetFeedRate();
+    eAxisBackup.relative = eGetRelative();
+    eAxisBackup.backedUp = true;
+  }
+
+  if (eAxisBackup.relative) // Set extruder to absolute
+    mustStoreCmd("M82\n");
 
   #if LCD_ENCODER_SUPPORT
     encoderPosition = 0;

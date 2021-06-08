@@ -180,7 +180,20 @@ GUI_POINT getIconStartPoint(int index);
 void loopBackEnd(void);
 void loopFrontEnd(void);
 void loopProcess(void);
-void loopProcessToCondition(CONDITION_CALLBACK condCallback);
+
+/**
+ * RETURN:
+ *   true: if a popup was handled
+ *   false if no popup was handled
+ *
+ * INPUT:
+ *   reloadMenuOnPopup: taken into account in case a popup was handled:
+ *     false: to let the caller handle the menu relaod. Usable in case the caller is a menu so it can decide to simply redraw the menu instead of reloading the entire menu
+ *     true: used in case the caller is not a menu so it is not able to provide any kind of menu relaod (e.g. mustStoreCmd). The previous menu will be forced to be reloaded
+ */
+bool loopProcessWithPopup(bool reloadMenuOnPopup);
+
+bool loopProcessToCondition(CONDITION_CALLBACK condCallback, bool reloadMenuOnPopup);
 
 #ifdef __cplusplus
 }

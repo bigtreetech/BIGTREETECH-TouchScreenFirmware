@@ -32,7 +32,7 @@ static void resetRequestCommandInfo(
   if (string_error2)
     requestCommandInfo.error_num = 3;
 
-  loopProcessToCondition(&isNotEmptyCmdQueue);  // wait for the communication to be clean before requestCommand
+  loopProcessToCondition(&isNotEmptyCmdQueue, true);  // wait for the communication to be clean before requestCommand
 
   requestCommandInfo.inWaitResponse = true;
   requestCommandInfo.inResponse = false;
@@ -72,7 +72,7 @@ bool request_M21(void)
   mustStoreCmd("M21\n");
 
   // Wait for response
-  loopProcessToCondition(&isWaitingResponse);
+  loopProcessToCondition(&isWaitingResponse, true);
 
   clearRequestCommandInfo();
   // Check reponse
@@ -90,7 +90,7 @@ char *request_M20(void)
   mustStoreCmd("M20\n");
 
   // Wait for response
-  loopProcessToCondition(&isWaitingResponse);
+  loopProcessToCondition(&isWaitingResponse, true);
 
   //clearRequestCommandInfo();  //shall be call after copying the buffer ...
   return requestCommandInfo.cmd_rev_buf;
@@ -116,7 +116,7 @@ char *request_M33(char *filename)
     mustStoreCmd("M33 %s\n", filename);
 
   // Wait for response
-  loopProcessToCondition(&isWaitingResponse);
+  loopProcessToCondition(&isWaitingResponse, true);
 
   //clearRequestCommandInfo();  //shall be call after copying the buffer ...
   return requestCommandInfo.cmd_rev_buf;
@@ -164,7 +164,7 @@ long request_M23_M36(char *filename)
   }
 
   // Wait for response
-  loopProcessToCondition(&isWaitingResponse);
+  loopProcessToCondition(&isWaitingResponse, true);
 
   if (requestCommandInfo.inError)
   {
@@ -289,7 +289,7 @@ char *request_M20_macros(char *nextdir)
   mustStoreCmd(command);
 
   // Wait for response
-  loopProcessToCondition(&isWaitingResponse);
+  loopProcessToCondition(&isWaitingResponse, true);
 
   //clearRequestCommandInfo();  //shall be call after copying the buffer ...
   return requestCommandInfo.cmd_rev_buf;
@@ -303,7 +303,7 @@ void request_M98(char *filename)
   mustStoreCmd(command);
 
   // Wait for response
-  loopProcessToCondition(&isWaitingResponse);
+  loopProcessToCondition(&isWaitingResponse, true);
 
   clearRequestCommandInfo();
 }

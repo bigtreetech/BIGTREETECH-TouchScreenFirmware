@@ -92,7 +92,7 @@ void mustStoreCmd(const char * format,...)
   {
     reminderMessage(LABEL_BUSY, STATUS_BUSY);
 
-    loopProcessToCondition(&isFullCmdQueue);  // wait for a free slot in the queue in case the queue is currently full
+    loopProcessToCondition(&isFullCmdQueue, true);  // wait for a free slot in the queue in case the queue is currently full
   }
 
   va_list va;
@@ -163,7 +163,7 @@ void mustStoreCacheCmd(const char * format,...)
   {
     reminderMessage(LABEL_BUSY, STATUS_BUSY);
 
-    loopProcessToCondition(&isFullCmdQueue);  // wait for a free slot in the queue in case the queue is currently full
+    loopProcessToCondition(&isFullCmdQueue, true);  // wait for a free slot in the queue in case the queue is currently full
   }
 
   va_list va;

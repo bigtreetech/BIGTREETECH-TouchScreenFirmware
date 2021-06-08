@@ -40,16 +40,20 @@ void menuLoadUnload(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
 
+  menuDrawPage(&loadUnloadItems);
+  temperatureReDraw(tool_index, NULL, false);
+
   if (eAxisBackup.backedUp == false)
   {
-    loopProcessToCondition(&isNotEmptyCmdQueue);  // wait for the communication to be clean
+    if (loopProcessToCondition(&isNotEmptyCmdQueue, false) == true)  // wait for the communication to be clean
+    { // if a popup was handled, redraw the menu
+      menuDrawPage(&loadUnloadItems);
+      temperatureReDraw(tool_index, NULL, false);
+    }
 
     eAxisBackup.coordinate = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
     eAxisBackup.backedUp = true;
   }
-
-  menuDrawPage(&loadUnloadItems);
-  temperatureReDraw(tool_index, NULL, false);
 
   heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
 
