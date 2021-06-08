@@ -450,7 +450,7 @@ void printAbort(void)
         setDialogText(LABEL_SCREEN_INFO, LABEL_BUSY, LABEL_BACKGROUND, LABEL_BACKGROUND);
         showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
 
-        loopProcessToCondition(&isHostPrinting);  // wait for the printer to settle down
+        loopProcessToCondition(&isHostPrinting, true);  // wait for the printer to settle down
       }
       break;
 
@@ -495,7 +495,7 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType)
     case TFT_UDISK:
     case TFT_SD:
       if (infoPrinting.pause == true && pauseType == PAUSE_M0)
-        loopProcessToCondition(&isNotEmptyCmdQueue);  // wait for the communication to be clean
+        loopProcessToCondition(&isNotEmptyCmdQueue, true);  // wait for the communication to be clean
 
       static COORDINATE tmp;
       bool isCoorRelative = coorGetRelative();
