@@ -270,6 +270,13 @@ void menuDrawItem(const ITEM *item, uint8_t position)
   menuDrawIconText(item, position);
 }
 
+void menuDrawPartialIconOnly(const ITEM *item, uint8_t position, uint16_t sx, uint16_t sy, int16_t width, int16_t height, uint16_t isx, uint16_t isy)
+{
+  const GUI_RECT *rect = curRect + position;
+
+  ICON_PartialReadDisplay(rect->x0 + sx, rect->y0 + sy, width, height, item->icon, isx, isy);
+}
+
 void menuDrawIconOnly(const ITEM *item, uint8_t position)
 {
   const GUI_RECT *rect = curRect + position;
@@ -600,7 +607,14 @@ void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, const ITEM * item)
         GUI_SetTextMode(liveicon->lines[i].text_mode);
         GUI_SetBkColor(liveicon->lines[i].bk_color);
       }
-
+/*     #ifdef UNIFORM_LIVE_TEXT_BG_COLOR
+        else
+        {
+          GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
+          GUI_SetBkColor(ICON_ReadPixel(loc.x, loc.y));
+        }
+      #endif
+*/
       GUI_SetColor(liveicon->lines[i].fn_color);
       setFontSize(liveicon->lines[i].font);
 
@@ -903,32 +917,34 @@ void menuDummy(void)
 
 bool loopProcessWithPopup(bool reloadMenuOnPopup)
 {
-  bool invokedUI = false;
+  bool invokedMenu = false;
   uint8_t curMenu = infoMenu.cur;
 
   loopBackEnd();
   loopFrontEnd();
 
-  if (infoMenu.cur > curMenu)  // if a user interaction is needed (e.g. dialog box UI), handle it
+  if (infoMenu.cur > curMenu)  // if a user interaction is needed (e.g. popup dialog menu), handle it
   {
-    invokedUI = true;
+    invokedMenu = true;
     (*infoMenu.menu[infoMenu.cur])();
   }
 
-  if (invokedUI && reloadMenuOnPopup)  // if a UI was invoked, load a dummy menu just to force the caller also to refresh its menu
+  // if a menu was invoked, load a dummy menu just to force the underlying menu to release the control
+  // to the main function that will reload the entire menu again
+  if (invokedMenu && reloadMenuOnPopup)
     infoMenu.menu[++infoMenu.cur] = menuDummy;
 
-  return invokedUI;
+  return invokedMenu;
 }
 
 bool loopProcessToCondition(CONDITION_CALLBACK condCallback, bool reloadMenuOnPopup)
 {
-  bool invokedUI = false;
+  bool invokedMenu = false;
 
   while (condCallback())  // loop until the condition is no more satisfied
   {
-    invokedUI |= loopProcessWithPopup(reloadMenuOnPopup);
+    invokedMenu |= loopProcessWithPopup(reloadMenuOnPopup);
   }
 
-  return invokedUI;
+  return invokedMenu;
 }
