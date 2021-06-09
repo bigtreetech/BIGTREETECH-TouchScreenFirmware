@@ -11,15 +11,14 @@ void lcd_frame_display(uint16_t sx, uint16_t sy, uint16_t w, uint16_t h, uint32_
 {
   uint16_t x, y;
   uint16_t color = 0;
-  uint32_t address = addr;
 
   LCD_SetWindow(sx, sy, sx + w - 1, sy + h - 1);
 
   W25Qxx_SPI_CS_Set(0);
   W25Qxx_SPI_Read_Write_Byte(CMD_READ_DATA);
-  W25Qxx_SPI_Read_Write_Byte((address & 0xFF0000) >> 16);
-  W25Qxx_SPI_Read_Write_Byte((address & 0xFF00) >> 8);
-  W25Qxx_SPI_Read_Write_Byte(address & 0xFF);
+  W25Qxx_SPI_Read_Write_Byte((addr & 0xFF0000) >> 16);
+  W25Qxx_SPI_Read_Write_Byte((addr & 0xFF00) >> 8);
+  W25Qxx_SPI_Read_Write_Byte(addr & 0xFF);
 
   for (y = sy; y < sy + h; y++)
   {
@@ -30,11 +29,41 @@ void lcd_frame_display(uint16_t sx, uint16_t sy, uint16_t w, uint16_t h, uint32_
       LCD_WR_16BITS_DATA(color);
     }
   }
+
   W25Qxx_SPI_CS_Set(1);
 }
+
 #endif
 
-uint32_t getBMPsize(uint8_t *w, uint8_t *h, uint32_t address)
+void lcd_frame_partial_display(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey, uint16_t w, uint16_t h, uint32_t addr)
+{
+  uint16_t x, y;
+  uint16_t color;
+
+  LCD_SetWindow(sx, sy, ex - 1, ey - 1);
+
+  W25Qxx_SPI_CS_Set(0);
+  W25Qxx_SPI_Read_Write_Byte(CMD_READ_DATA);
+  W25Qxx_SPI_Read_Write_Byte((addr & 0xFF0000) >> 16);
+  W25Qxx_SPI_Read_Write_Byte((addr & 0xFF00) >> 8);
+  W25Qxx_SPI_Read_Write_Byte(addr & 0xFF);
+
+  for (y = sy; y < ey; y++)
+  {
+    for (x = sx; x < sx + w; x++)
+    {
+      color = (W25Qxx_SPI_Read_Write_Byte(W25QXX_DUMMY_BYTE) << 8);
+      color |= W25Qxx_SPI_Read_Write_Byte(W25QXX_DUMMY_BYTE);
+
+      if (x < ex)
+        LCD_WR_16BITS_DATA(color);
+    }
+  }
+
+  W25Qxx_SPI_CS_Set(1);
+}
+
+uint32_t getBMPsize(uint8_t * w, uint8_t * h, uint32_t address)
 {
   uint16_t len = sizeof(uint16_t);
   W25Qxx_ReadBuffer(w, address, len);
@@ -57,6 +86,19 @@ void LOGO_ReadDisplay(void)
   IMAGE_ReadDisplay(0, 0, LOGO_ADDR);
 }
 
+void ICON_PartialReadDisplay(uint16_t sx, uint16_t sy, int16_t width, int16_t height, uint8_t icon, uint16_t isx, uint16_t isy)
+{
+  uint16_t w, h;
+  uint32_t address;
+
+  address = getBMPsize((uint8_t *)&w, (uint8_t *)&h, ICON_ADDR(icon));
+
+  if (width < 0 || (isx + width) > w) width = w - isx;
+  if (height < 0 || (isy + height) > h) height = h - isy;
+
+  lcd_frame_partial_display(sx, sy, sx + width, sy + height, w, h, address + (isy * w * 2) + (isx * 2));
+}
+
 void ICON_ReadDisplay(uint16_t sx, uint16_t sy, uint8_t icon)
 {
   IMAGE_ReadDisplay(sx, sy, ICON_ADDR(icon));
@@ -70,12 +112,14 @@ typedef struct
   uint16_t h;
   uint32_t address;
   GUI_TEXT_MODE pre_mode;
+  uint16_t pre_bgColor;
 } TEXT_ON_ICON;
 
 TEXT_ON_ICON backGroundIcon;
 
 void ICON_PrepareRead(uint16_t sx, uint16_t sy, uint8_t icon)
 {
+  backGroundIcon.pre_bgColor = GUI_GetBkColor();
   backGroundIcon.pre_mode = GUI_GetTextMode();
   backGroundIcon.address = getBMPsize((uint8_t *)&backGroundIcon.w, (uint8_t *)&backGroundIcon.h, ICON_ADDR(icon));
   backGroundIcon.sx = sx;
@@ -85,6 +129,7 @@ void ICON_PrepareRead(uint16_t sx, uint16_t sy, uint8_t icon)
 
 void ICON_PrepareReadEnd(void)
 {
+  GUI_SetBkColor(backGroundIcon.pre_bgColor);
   GUI_SetTextMode(backGroundIcon.pre_mode);
 }
 
