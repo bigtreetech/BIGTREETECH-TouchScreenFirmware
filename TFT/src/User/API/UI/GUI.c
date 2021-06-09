@@ -1100,7 +1100,7 @@ void Scroll_DispString(SCROLL * para, uint8_t align)
       }
       case CENTER:
       {
-        uint16_t x_offset=((para->rect.x1 - para->rect.x0 - para->totalPixelWidth) >>1);
+        uint16_t x_offset=((para->rect.x1 - para->rect.x0 - para->totalPixelWidth) >> 1);
         GUI_DispString(para->rect.x0+x_offset, para->rect.y0, para->text);
         break;
       }

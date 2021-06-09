@@ -496,11 +496,25 @@
 #define TERMINAL_KEYBOARD_LAYOUT 0  // Default: 0
 
 /**
- * Progress bar layout
- * Uncomment to enable progress bar with 10% markers.
- * Comment to enable standard progress bar.
+ * Progress bar layout on Printing menu
+ * Uncomment to enable a progress bar with 10% markers.
+ * Comment to enable a standard progress bar.
  */
 //#define MARKED_PROGRESS_BAR  // Default: disabled
+
+/**
+ * Live text background color rendering technique on Printing menu
+ * Uncomment to enable the sampling and use of a uniform background color across all the icons.
+ * Comment to enable a standard rendering based on the sampling and use, in a pixel by pixel basis,
+ * of the underlying icon background colors.
+ *
+ * NOTE: Enable it only in case all the icons have the same and uniform background color under all
+ *       the live text areas (e.g. applicable to Unified, Round Miracle etc... menu themes).
+ *       If enabled, it speeds up the rendering of the live text and the responsiveness of the TFT,
+ *       so it can improve the print quality.
+ *       Suitable in particular for the TFTs with a not fast HW (e.g. 24, 48 MHz).
+ */
+//#define UNIFORM_LIVE_TEXT_BG_COLOR  // Default: disabled
 
 
 //===========================================================================
