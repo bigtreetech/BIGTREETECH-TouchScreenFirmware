@@ -70,7 +70,8 @@ enum
   PRINTING_VALUE = (1 << 2),
 };
 
-const uint8_t printingIcon[] = {ICON_PRINTING_NOZZLE, ICON_PRINTING_BED, ICON_PRINTING_FAN, ICON_PRINTING_TIMER, ICON_PRINTING_ZLAYER, ICON_PRINTING_SPEED, ICON_PRINTING_FLOW};
+const uint8_t printingIcon[] = {ICON_PRINTING_NOZZLE, ICON_PRINTING_BED,   ICON_PRINTING_FAN,
+                                ICON_PRINTING_TIMER, ICON_PRINTING_ZLAYER, ICON_PRINTING_SPEED, ICON_PRINTING_FLOW};
 const char *const speedId[2] = {"Speed", "Flow "};
 bool hasFilamentData;
 
