@@ -565,7 +565,7 @@
  *    If you choose "Base64 PNG" on such a low RAM device it will automatically
  *    downgraded to "RGB565 bitmap" option.
  */
-#define THUMBNAIL_PARSER 2  // Default: 0
+#define THUMBNAIL_PARSER 0  // Default: 0
 
 //===========================================================================
 //=========================== Other Settings ================================
