@@ -26,6 +26,7 @@ typedef enum
 {
   GUI_TEXTMODE_TRANS,
   GUI_TEXTMODE_NORMAL,
+  GUI_TEXTMODE_ON_ICON,
 } GUI_TEXT_MODE;
 
 typedef enum
@@ -43,9 +44,6 @@ typedef struct
 {
   int16_t x0, y0, x1, y1;
 } GUI_RECT;
-
-void LCD_SetCursor(uint16_t Xpos, uint16_t Ypos);
-void LCD_SetWindow(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey);
 
 void GUI_SetColor(uint16_t color);
 uint16_t GUI_GetColor(void);

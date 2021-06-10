@@ -7,6 +7,7 @@ extern "C" {
 
 #include <stdint.h>
 #include "menu.h"
+#include "Settings.h"
 
 typedef enum
 {
@@ -15,7 +16,7 @@ typedef enum
   NOZZLE0_PREHEAT = 2,
 } TOOLPREHEAT;
 
-void refreshPreheatIcon(int8_t preheatnum, int8_t icon_index, const ITEM * menuitem);
+void refreshPreheatIcon(PREHEAT_STORE * preheatStore, int8_t index, const ITEM * menuitem);
 void menuPreheat(void);
 
 #ifdef __cplusplus

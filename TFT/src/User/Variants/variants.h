@@ -11,13 +11,14 @@
 */
 
 // Type of LCD driver, now support[RM68042, ILI9488, ILI9341, ILI9325, ST7789, HX8558, SSD1963].
-#define RM68042 0
-#define ILI9488 1
-#define ILI9341 2
-#define ST7789  3
-#define HX8558  4
-#define SSD1963 5
-#define ILI9325 6
+#define RM68042 (1 << 0)
+#define ILI9488 (1 << 1)
+#define ILI9341 (1 << 2)
+#define ST7789  (1 << 3)
+#define HX8558  (1 << 4)
+#define SSD1963 (1 << 5)
+#define ILI9325 (1 << 6)
+#define NT35310 (1 << 7)
 
 #if defined(TFT24_V1_1)
   #include "pin_TFT24_V1_1.h"
@@ -55,15 +56,27 @@
   #include "pin_MKS_TFT28_V4_0.h"
 #endif
 
+#ifdef SERIAL_PORT_4
+  #define MAX_MULTI_SERIAL (1 << 3)
+#elif defined(SERIAL_PORT_3)
+  #define MAX_MULTI_SERIAL (1 << 2)
+#elif defined(SERIAL_PORT_2)
+  #define MAX_MULTI_SERIAL (1 << 1)
+#else
+  #define MAX_MULTI_SERIAL (1 << 0)
+#endif
+
 #define LCD_ENCODER_SUPPORT (defined(LCD_ENCA_PIN) && defined(LCD_ENCB_PIN) && defined(LCD_BTN_PIN))
 #define ENC_ACTIVE_SIGNAL (defined(LCD_ENC_EN_PIN) && defined(ST7920_EMULATOR) && defined(LCD_ENCODER_SUPPORT))
 
-#define LCD_DRIVER_IS(n) (TFTLCD_DRIVER == n)
+#define LCD_DRIVER_IS(n)  ((TFTLCD_DRIVER) == (n))
+#define LCD_DRIVER_HAS(n) (((TFTLCD_DRIVER) & (n)) == (n))
 
-#if LCD_DRIVER_IS(ILI9325)
-  #define TFTLCD_WRITEMEMORY 0x22
-#else
-  #define TFTLCD_WRITEMEMORY 0x2C
-#endif
+#define _FONT_SIZE(h, w) ((h << 8) | w)
+#define _FONT_H(size) (size >> 8)
+#define _FONT_W(size) (size & 0xFF)
+
+#define FONT_SIZE_NORMAL _FONT_SIZE(BYTE_HEIGHT, BYTE_WIDTH)  // Normal font for common menu
+#define FONT_SIZE_LARGE  _FONT_SIZE(LARGE_BYTE_HEIGHT, LARGE_BYTE_WIDTH)  // Large font for numpad menu etc...
 
 #endif

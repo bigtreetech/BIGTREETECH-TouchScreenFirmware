@@ -48,10 +48,10 @@
 #define STATUS_MSG_BODY_BOTTOM    4
 #define STATUS_GANTRY_YOFFSET     4
 
-#define NAME_LARGE_FONT           false
-#define VAL_LARGE_FONT            false
+#define NAME_LARGE_FONT           FONT_SIZE_NORMAL
+#define VAL_LARGE_FONT            FONT_SIZE_NORMAL
 
-//Heating Menu
+// Heating Menu
 #define PREHEAT_TITLE_Y   3
 #define PREHEAT_TOOL_Y    32
 #define PREHEAT_BED_Y     55

@@ -233,7 +233,7 @@ static inline void ledDrawPageNumber(void)
 
   sprintf(tempstr, "%d/%d", ledPage + 1, PAGE_NUM);
 
-  drawStandardValue(&ledPageRect, VALUE_STRING, &tempstr, true, CTRL_FONT_COLOR, CTRL_BG_COLOR, 1, true);
+  drawStandardValue(&ledPageRect, VALUE_STRING, &tempstr, FONT_SIZE_LARGE, CTRL_FONT_COLOR, CTRL_BG_COLOR, 1, true);
 }
 
 void ledDrawControl(uint8_t index, bool isFocused, bool drawFocus, bool drawAll)
@@ -259,13 +259,13 @@ void ledDrawControl(uint8_t index, bool isFocused, bool drawFocus, bool drawAll)
     drawBorder(&ledKeyRect[i], bgColorFocus, 2);
 
   // draw LED component string
-  drawStandardValue(&rect, VALUE_STRING, ledString[realIndex], true, KB_FONT_COLOR, bgColorFocus, 3, drawFocus);
+  drawStandardValue(&rect, VALUE_STRING, ledString[realIndex], FONT_SIZE_LARGE, KB_FONT_COLOR, bgColorFocus, 3, drawFocus);
 
   // draw LED component RGB color
-  drawStandardValue(&rect2, VALUE_NONE, NULL, true, KB_FONT_COLOR, ledGetComponentRGBColor(ledValue[realIndex], realIndex), 3, true);
+  drawStandardValue(&rect2, VALUE_NONE, NULL, FONT_SIZE_LARGE, KB_FONT_COLOR, ledGetComponentRGBColor(ledValue[realIndex], realIndex), 3, true);
 
   // draw LED component value
-  drawStandardValue(&ledKeyRect[j], VALUE_BYTE, &ledValue[realIndex], true, KB_FONT_COLOR, KB_BORDER_COLOR, 4, true);
+  drawStandardValue(&ledKeyRect[j], VALUE_BYTE, &ledValue[realIndex], FONT_SIZE_LARGE, KB_FONT_COLOR, KB_BORDER_COLOR, 4, true);
 
   if (drawAll)
   {
@@ -276,8 +276,8 @@ void ledDrawControl(uint8_t index, bool isFocused, bool drawFocus, bool drawAll)
     drawBorder(&ledKeyRect[j], KB_BORDER_COLOR_2, 3);
 
     // draw buttons
-    drawStandardValue(&ledKeyRect[j + 1], VALUE_STRING, ledKeyString[LED_KEY_PREV], true, KB_FONT_COLOR, KB_BG_COLOR, 3, true);
-    drawStandardValue(&ledKeyRect[j + 2], VALUE_STRING, ledKeyString[LED_KEY_NEXT], true, KB_FONT_COLOR, KB_BG_COLOR, 3, true);
+    drawStandardValue(&ledKeyRect[j + 1], VALUE_STRING, ledKeyString[LED_KEY_PREV], FONT_SIZE_LARGE, KB_FONT_COLOR, KB_BG_COLOR, 3, true);
+    drawStandardValue(&ledKeyRect[j + 2], VALUE_STRING, ledKeyString[LED_KEY_NEXT], FONT_SIZE_LARGE, KB_FONT_COLOR, KB_BG_COLOR, 3, true);
   }
 }
 
@@ -289,14 +289,14 @@ void ledDrawButton(uint8_t index, uint8_t isPressed)
   if (isPressed)
   {
     if (index <= LED_KEY_NEXT)
-      drawStandardValue(&ledKeyRect[index], VALUE_STRING, ledKeyString[index], true, CTRL_BG_COLOR, CTRL_FONT_COLOR, 1, true);
+      drawStandardValue(&ledKeyRect[index], VALUE_STRING, ledKeyString[index], FONT_SIZE_LARGE, CTRL_BG_COLOR, CTRL_FONT_COLOR, 1, true);
     else
       drawBorder(&ledKeyRect[index], KB_FONT_COLOR, 1);
   }
   else
   {
     if (index <= LED_KEY_NEXT)
-      drawStandardValue(&ledKeyRect[index], VALUE_STRING, ledKeyString[index], true, CTRL_FONT_COLOR, CTRL_BG_COLOR, 1, true);
+      drawStandardValue(&ledKeyRect[index], VALUE_STRING, ledKeyString[index], FONT_SIZE_LARGE, CTRL_FONT_COLOR, CTRL_BG_COLOR, 1, true);
     else
       drawBorder(&ledKeyRect[index], KB_BG_COLOR, 1);
   }
@@ -337,7 +337,7 @@ void ledDrawKeyboard(void)
   ledDrawControl(ledIndex, true, true, false);
 
   // draw RGB color
-  drawStandardValue(&ledColorRect, VALUE_NONE, NULL, true, KB_FONT_COLOR, ledGetRGBColor(&ledValue), 3, true);
+  drawStandardValue(&ledColorRect, VALUE_NONE, NULL, FONT_SIZE_LARGE, KB_FONT_COLOR, ledGetRGBColor(&ledValue), 3, true);
 
   // draw page number
   ledDrawPageNumber();
@@ -488,7 +488,7 @@ void menuLEDColorCustom(void)
     if (newValue != curValue)
     {
       ledDrawControl(ledIndex, newIndex == ledIndex, false, false);  // draw changed LED component value
-      drawStandardValue(&ledColorRect, VALUE_NONE, NULL, true, KB_FONT_COLOR, ledGetRGBColor(&ledValue), 3, true);  // draw RGB color
+      drawStandardValue(&ledColorRect, VALUE_NONE, NULL, FONT_SIZE_LARGE, KB_FONT_COLOR, ledGetRGBColor(&ledValue), 3, true);  // draw RGB color
 
       newValue = curValue;
       sendingNeeded = true;

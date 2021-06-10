@@ -132,606 +132,209 @@ void LCD_LED_Init(void)
 }
 #endif
 
-#if LCD_DRIVER_IS(RM68042)
-// RM68042
-void LCD_init_RGB(void)
-{
-  LCD_WR_REG(0X11);
-  Delay_ms(20);
-  LCD_WR_REG(0XD0);   // VCI1  VCL  VGH  VGL DDVDH VREG1OUT power amplitude setting
-  LCD_WR_DATA(0X07);
-  LCD_WR_DATA(0X42);
-  LCD_WR_DATA(0X1C);
-  LCD_WR_REG(0XD1);   // VCOMH VCOM_AC amplitude setting
-  LCD_WR_DATA(0X00);
-  LCD_WR_DATA(0X19);
-  LCD_WR_DATA(0X16);
-  LCD_WR_REG(0XD2);   // Operational Amplifier Circuit Constant Current Adjust , charge pump frequency setting
-  LCD_WR_DATA(0X01);
-  LCD_WR_DATA(0X11);
-  LCD_WR_REG(0XE4);
-  LCD_WR_DATA(0X00A0);
-  LCD_WR_REG(0XF3);
-  LCD_WR_DATA(0X0000);
-  LCD_WR_DATA(0X002A);
-  LCD_WR_REG(0XC0);   // REV SM GS
-  LCD_WR_DATA(0X10);
-  LCD_WR_DATA(0X3B);
-  LCD_WR_DATA(0X00);
-  LCD_WR_DATA(0X02);
-  LCD_WR_DATA(0X11);
-  LCD_WR_REG(0XC5);   // Frame rate setting = 72HZ  when setting 0x03
-  LCD_WR_DATA(0X03);
-  LCD_WR_REG(0XC8);   // Gamma setting
-  LCD_WR_DATA(0X00);
-  LCD_WR_DATA(0X35);
-  LCD_WR_DATA(0X23);
-  LCD_WR_DATA(0X07);
-  LCD_WR_DATA(0X00);
-  LCD_WR_DATA(0X04);
-  LCD_WR_DATA(0X45);
-  LCD_WR_DATA(0X53);
-  LCD_WR_DATA(0X77);
-  LCD_WR_DATA(0X70);
-  LCD_WR_DATA(0X00);
-  LCD_WR_DATA(0X04);
-  LCD_WR_REG(0X20);   // Exit invert mode
-  LCD_WR_REG(0X36);
-  LCD_WR_DATA(0X28);
-  LCD_WR_REG(0X3A);
-  LCD_WR_DATA(0X55);  // 16λģʽ
-  Delay_ms(120);
-  LCD_WR_REG(0X29);
-}
-
-#ifdef SCREEN_SHOT_TO_SD
-  uint32_t LCD_ReadPixel_24Bit(int16_t x, int16_t y)
-  {
-    LCD_SetWindow(x, y, x, y);
-    LCD_WR_REG(0X2E);
-    Delay_us(1);
-    LCD_RD_DATA();  // Dummy read
-
-    uint16_t rg, br;
-    rg = LCD_RD_DATA();  // First pixel R:8bit-G:8bit
-    br = LCD_RD_DATA();  // First pixel B:8bit - Second pixel R:8bit
-
-    return ((rg) << 8) | ((br & 0xFF00) >> 8);  // RG-B
-  }
-  #warning "LCD_ReadPixel_24Bit() hasn't been tested yet"
+// LCD driver sequential
+#if LCD_DRIVER_HAS(RM68042)
+  #include "LCD_Driver/RM68042.h"
+#endif
+#if LCD_DRIVER_HAS(ILI9488)
+  #include "LCD_Driver/ILI9488.h"
+#endif
+#if LCD_DRIVER_HAS(ILI9341)
+  #include "LCD_Driver/ILI9341.h"
+#endif
+#if LCD_DRIVER_HAS(ST7789)
+  #include "LCD_Driver/ST7789.h"
+#endif
+#if LCD_DRIVER_HAS(HX8558)
+  #include "LCD_Driver/HX8558.h"
+#endif
+#if LCD_DRIVER_HAS(SSD1963)
+  #include "LCD_Driver/SSD1963.h"
+#endif
+#if LCD_DRIVER_HAS(ILI9325)
+  #include "LCD_Driver/ILI9325.h"
+#endif
+#if LCD_DRIVER_HAS(NT35310)
+  #include "LCD_Driver/NT35310.h"
 #endif
 
-#elif LCD_DRIVER_IS(ILI9488)
-// ILI9488
-void LCD_init_RGB(void)
-{
-  LCD_WR_REG(0xC0);
-  LCD_WR_DATA(0x0c);
-  LCD_WR_DATA(0x02);
-  LCD_WR_REG(0xC1);
-  LCD_WR_DATA(0x44);
-  LCD_WR_REG(0xC5);
-  LCD_WR_DATA(0x00);
-  LCD_WR_DATA(0x16);
-  LCD_WR_DATA(0x80);
-  LCD_WR_REG(0x36);
-  LCD_WR_DATA(0x28);
-  LCD_WR_REG(0x3A);   // Interface Mode Control
-  LCD_WR_DATA(0x55);
-  LCD_WR_REG(0XB0);   // Interface Mode Control
-  LCD_WR_DATA(0x00);
-  LCD_WR_REG(0xB1);   // Frame rate 70HZ
-  LCD_WR_DATA(0xB0);
-  LCD_WR_REG(0xB4);
-  LCD_WR_DATA(0x02);
-  LCD_WR_REG(0xB6);   // RGB/MCU Interface Control
-  LCD_WR_DATA(0x02);
-  LCD_WR_DATA(0x02);
-  LCD_WR_REG(0xE9);
-  LCD_WR_DATA(0x00);
-  LCD_WR_REG(0XF7);
-  LCD_WR_DATA(0xA9);
-  LCD_WR_DATA(0x51);
-  LCD_WR_DATA(0x2C);
-  LCD_WR_DATA(0x82);
-  LCD_WR_REG(0x11);
-  Delay_ms(120);
-  LCD_WR_REG(0x29);
-}
-
+void (*pLCD_SetDirection)(uint8_t rotate);
+void (*pLCD_SetWindow)(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey);
 #ifdef SCREEN_SHOT_TO_SD
+  uint32_t (*pLCD_ReadPixel_24Bit)(int16_t x, int16_t y);
+
   uint32_t LCD_ReadPixel_24Bit(int16_t x, int16_t y)
   {
-    LCD_SetWindow(x, y, x, y);
-    LCD_WR_REG(0X2E);
-    Delay_us(1);
-    LCD_RD_DATA();  // Dummy read
-
-    uint16_t rg, br;
-    rg = LCD_RD_DATA();  // First pixel R:8bit-G:8bit
-    br = LCD_RD_DATA();  // First pixel B:8bit - Second pixel R:8bit
-
-    return ((rg) << 8) | ((br & 0xFF00) >> 8);  // RG-B
+    return pLCD_ReadPixel_24Bit(x, y);
   }
 #endif
 
-#elif LCD_DRIVER_IS(ILI9341)
-// ILI9341
-void LCD_init_RGB(void)
+void LCD_Init_Sequential(void)
 {
-  Delay_ms(50);  // delay 50 ms
-
-  LCD_WR_REG(0xCF);
-  LCD_WR_DATA(0x00);
-  LCD_WR_DATA(0xC1);
-  LCD_WR_DATA(0X30);
-
-  LCD_WR_REG(0xED);
-  LCD_WR_DATA(0x64);
-  LCD_WR_DATA(0x03);
-  LCD_WR_DATA(0X12);
-  LCD_WR_DATA(0X81);
-
-  LCD_WR_REG(0xE8);   /// @diff :Driver timing control A
-  LCD_WR_DATA(0x8A);
-  LCD_WR_DATA(0x00);
-  LCD_WR_DATA(0x78);
-
-  LCD_WR_REG(0xEA);
-  LCD_WR_DATA(0x00);
-  LCD_WR_DATA(0x00);
-
-  LCD_WR_REG(0xCB);
-  LCD_WR_DATA(0x39);
-  LCD_WR_DATA(0x2C);
-  LCD_WR_DATA(0x00);
-  LCD_WR_DATA(0x34);
-  LCD_WR_DATA(0x02);
-
-  LCD_WR_REG(0xF7);
-  LCD_WR_DATA(0x20);
-
-  LCD_WR_REG(0xC0);   /// @diff Power control
-  LCD_WR_DATA(0x25);  // VRH[5:0]
-
-  LCD_WR_REG(0xC1);   /// @diff control
-  LCD_WR_DATA(0x12);  // SAP[2:0];BT[3:0]
-
-  LCD_WR_REG(0xC5);   /// @diff VCM control
-  LCD_WR_DATA(0x33);
-  LCD_WR_DATA(0x3C);
-
-  LCD_WR_REG(0xC7);   /// @diff VCM control2
-  LCD_WR_DATA(0x9A);
-
-  LCD_WR_REG(0xB1);   /// @diff Frame Rate Control
-  LCD_WR_DATA(0x00);
-  LCD_WR_DATA(0x15);
-
-  LCD_WR_REG(0x3A);
-  LCD_WR_DATA(0x55);
-
-  LCD_WR_REG(0x36);   // Memory Access Control
-  LCD_WR_DATA(0x68);
-
-  LCD_WR_REG(0xB6);   // Display Function Control
-  LCD_WR_DATA(0x0A);
-  LCD_WR_DATA(0xA2);
-
-  LCD_WR_REG(0xF2);   // 3Gamma Function Disable
-  LCD_WR_DATA(0x00);
-
-  LCD_WR_REG(0x26);   // Gamma curve selected
-  LCD_WR_DATA(0x01);
-
-  LCD_WR_REG(0xE0);   /// @diff Set Gamma
-  LCD_WR_DATA(0x1F);
-  LCD_WR_DATA(0x1C);
-  LCD_WR_DATA(0x1A);
-  LCD_WR_DATA(0x0B);
-  LCD_WR_DATA(0x0F);
-  LCD_WR_DATA(0x08);
-  LCD_WR_DATA(0x47);
-  LCD_WR_DATA(0xC8);
-  LCD_WR_DATA(0x37);
-  LCD_WR_DATA(0x0B);
-  LCD_WR_DATA(0x14);
-  LCD_WR_DATA(0x05);
-  LCD_WR_DATA(0x0A);
-  LCD_WR_DATA(0x08);
-  LCD_WR_DATA(0x00);
-
-  LCD_WR_REG(0XE1);   /// @diff Set Gamma
-  LCD_WR_DATA(0x00);
-  LCD_WR_DATA(0x24);
-  LCD_WR_DATA(0x25);
-  LCD_WR_DATA(0x04);
-  LCD_WR_DATA(0x10);
-  LCD_WR_DATA(0x07);
-  LCD_WR_DATA(0x38);
-  LCD_WR_DATA(0x48);
-  LCD_WR_DATA(0x48);
-  LCD_WR_DATA(0x03);
-  LCD_WR_DATA(0x0B);
-  LCD_WR_DATA(0x0A);
-  LCD_WR_DATA(0x35);
-  LCD_WR_DATA(0x37);
-  LCD_WR_DATA(0x1F);
-
-  LCD_WR_REG(0x2A);
-  LCD_WR_DATA(0x00);
-  LCD_WR_DATA(0x00);
-  LCD_WR_DATA(0x01);
-  LCD_WR_DATA(0x3f);
-
-  LCD_WR_REG(0x2B);
-  LCD_WR_DATA(0x00);
-  LCD_WR_DATA(0x00);
-  LCD_WR_DATA(0x00);
-  LCD_WR_DATA(0xef);
-
-  LCD_WR_REG(0x11);   // Exit Sleep
-  Delay_ms(120);
-  LCD_WR_REG(0x29);   // Display on
+  #if LCD_DRIVER_IS(RM68042)
+    RM68042_Init_Sequential();
+    pLCD_SetDirection = RM68042_SetDirection;
+    pLCD_SetWindow = RM68042_SetWindow;
+    #ifdef SCREEN_SHOT_TO_SD
+      pLCD_ReadPixel_24Bit = RM68042_ReadPixel_24Bit;
+    #endif
+  #elif LCD_DRIVER_IS(ILI9488)
+    ILI9488_Init_Sequential();
+    pLCD_SetDirection = ILI9488_SetDirection;
+    pLCD_SetWindow = ILI9488_SetWindow;
+    #ifdef SCREEN_SHOT_TO_SD
+      pLCD_ReadPixel_24Bit = ILI9488_ReadPixel_24Bit;
+    #endif
+  #elif LCD_DRIVER_IS(ILI9341)
+    ILI9341_Init_Sequential();
+    pLCD_SetDirection = ILI9341_SetDirection;
+    pLCD_SetWindow = ILI9341_SetWindow;
+    #ifdef SCREEN_SHOT_TO_SD
+      pLCD_ReadPixel_24Bit = ILI9341_ReadPixel_24Bit;
+    #endif
+  #elif LCD_DRIVER_IS(ST7789)
+    ST7789_Init_Sequential();
+    pLCD_SetDirection = ST7789_SetDirection;
+    pLCD_SetWindow = ST7789_SetWindow;
+    #ifdef SCREEN_SHOT_TO_SD
+      pLCD_ReadPixel_24Bit = ST7789_ReadPixel_24Bit;
+    #endif
+  #elif LCD_DRIVER_IS(HX8558)
+    HX8558_Init_Sequential();
+    pLCD_SetDirection = HX8558_SetDirection;
+    pLCD_SetWindow = HX8558_SetWindow;
+    #ifdef SCREEN_SHOT_TO_SD
+      pLCD_ReadPixel_24Bit = HX8558_ReadPixel_24Bit;
+    #endif
+  #elif LCD_DRIVER_IS(SSD1963)
+    SSD1963_Init_Sequential();
+    pLCD_SetDirection = SSD1963_SetDirection;
+    pLCD_SetWindow = SSD1963_SetWindow;
+    #ifdef SCREEN_SHOT_TO_SD
+      pLCD_ReadPixel_24Bit = SSD1963_ReadPixel_24Bit;
+    #endif
+  #elif LCD_DRIVER_IS(ILI9325)
+    ILI9325_Init_Sequential();
+    pLCD_SetDirection = ILI9325_SetDirection;
+    pLCD_SetWindow = ILI9325_SetWindow;
+    #ifdef SCREEN_SHOT_TO_SD
+      pLCD_ReadPixel_24Bit = ILI9325_ReadPixel_24Bit;
+    #endif
+  #elif LCD_DRIVER_IS(NT35310)
+    NT35310_Init_Sequential();
+    pLCD_SetDirection = NT35310_SetDirection;
+    pLCD_SetWindow = NT35310_SetWindow;
+    #ifdef SCREEN_SHOT_TO_SD
+      pLCD_ReadPixel_24Bit = NT35310_ReadPixel_24Bit;
+    #endif
+  #else
+      if (0)
+      {}
+    #if LCD_DRIVER_HAS(RM68042)
+      else if (LCD_DriveIsRM68042())
+      {
+        RM68042_Init_Sequential();
+        pLCD_SetDirection = RM68042_SetDirection
+        pLCD_SetWindow = RM68042_SetWindow;
+        #ifdef SCREEN_SHOT_TO_SD
+          pLCD_ReadPixel_24Bit = RM68042_ReadPixel_24Bit;
+        #endif
+      }
+    #endif
+    #if LCD_DRIVER_HAS(ILI9488)
+      else if (LCD_DriveIsILI9488())
+      {
+        ILI9488_Init_Sequential();
+        pLCD_SetDirection = ILI9488_SetDirection;
+        pLCD_SetWindow = ILI9488_SetWindow;
+        #ifdef SCREEN_SHOT_TO_SD
+          pLCD_ReadPixel_24Bit = ILI9488_ReadPixel_24Bit;
+        #endif
+      }
+    #endif
+    #if LCD_DRIVER_HAS(ILI9341)
+      else if (LCD_DriveIsILI9341())
+      {
+        ILI9341_Init_Sequential();
+        pLCD_SetDirection = ILI9341_SetDirection;
+        pLCD_SetWindow = ILI9341_SetWindow;
+        #ifdef SCREEN_SHOT_TO_SD
+          pLCD_ReadPixel_24Bit = ILI9341_ReadPixel_24Bit;
+        #endif
+      }
+    #endif
+    #if LCD_DRIVER_HAS(ST7789)
+      else if (LCD_DriveIsST7789())
+      {
+        ST7789_Init_Sequential();
+        pLCD_SetDirection = ST7789_SetDirection;
+        pLCD_SetWindow = ST7789_SetWindow;
+        #ifdef SCREEN_SHOT_TO_SD
+          pLCD_ReadPixel_24Bit = ST7789_ReadPixel_24Bit;
+        #endif
+      }
+    #endif
+    #if LCD_DRIVER_HAS(HX8558)
+      else if (LCD_DriveIsHX8558())
+      {
+        HX8558_Init_Sequential();
+        pLCD_SetDirection = HX8558_SetDirection;
+        pLCD_SetWindow = HX8558_SetWindow;
+        #ifdef SCREEN_SHOT_TO_SD
+          pLCD_ReadPixel_24Bit = HX8558_ReadPixel_24Bit;
+        #endif
+      }
+    #endif
+    #if LCD_DRIVER_HAS(SSD1963)
+      else if (LCD_DriveIsSSD1963())
+      {
+        SSD1963_Init_Sequential();
+        pLCD_SetDirection = SSD1963_SetDirection;
+        pLCD_SetWindow = SSD1963_SetWindow;
+        #ifdef SCREEN_SHOT_TO_SD
+          pLCD_ReadPixel_24Bit = SSD1963_ReadPixel_24Bit;
+        #endif
+      }
+    #endif
+    #if LCD_DRIVER_HAS(ILI9325)
+      else if (LCD_DriveIsILI9325())
+      {
+        ILI9325_Init_Sequential();
+        pLCD_SetDirection = ILI9325_SetDirection;
+        pLCD_SetWindow = ILI9325_SetWindow;
+        #ifdef SCREEN_SHOT_TO_SD
+          pLCD_ReadPixel_24Bit = ILI9325_ReadPixel_24Bit;
+        #endif
+      }
+    #endif
+    #if LCD_DRIVER_HAS(NT35310)
+      else if (LCD_DriveIsNT35310())
+      {
+        NT35310_Init_Sequential();
+        pLCD_SetDirection = NT35310_SetDirection;
+        pLCD_SetWindow = NT35310_SetWindow;
+        #ifdef SCREEN_SHOT_TO_SD
+          pLCD_ReadPixel_24Bit = NT35310_ReadPixel_24Bit;
+        #endif
+      }
+    #endif
+  #endif
 }
 
-uint32_t LCD_ReadPixel_24Bit(int16_t x, int16_t y)
-{
-  LCD_SetWindow(x, y, x, y);
-  LCD_WR_REG(0X2E);
-  Delay_us(1);
-  LCD_RD_DATA();  // Dummy read
-
-  uint16_t rg, br;
-  rg = LCD_RD_DATA();  // First pixel R:8bit-G:8bit
-  br = LCD_RD_DATA();  // First pixel B:8bit - Second pixel R:8bit
-
-  return ((rg) << 8) | ((br & 0xFF00) >> 8);  // RG-B
-}
-
-#elif LCD_DRIVER_IS(ST7789)
-// ST7789
-void LCD_init_RGB(void)
-{
-  LCD_WR_REG(0x11);
-  Delay_ms(120);  // Delay 120ms
-  //------------------------------display and color format setting------------------------------//
-  LCD_WR_REG(0x36);
-  LCD_WR_DATA(0x68);
-  LCD_WR_REG(0x3a);
-  LCD_WR_DATA(0x05);
-  //--------------------------------ST7789V Frame rate setting----------------------------------//
-  LCD_WR_REG(0xb2);
-  LCD_WR_DATA(0x0c);
-  LCD_WR_DATA(0x0c);
-  LCD_WR_DATA(0x00);
-  LCD_WR_DATA(0x33);
-  LCD_WR_DATA(0x33);
-  LCD_WR_REG(0xb7);
-  LCD_WR_DATA(0x35);
-  //---------------------------------ST7789V Power setting--------------------------------------//
-  LCD_WR_REG(0xbb);
-  LCD_WR_DATA(0x28);
-  LCD_WR_REG(0xc0);
-  LCD_WR_DATA(0x2c);
-  LCD_WR_REG(0xc2);
-  LCD_WR_DATA(0x01);
-  LCD_WR_REG(0xc3);
-  LCD_WR_DATA(0x0b);
-  LCD_WR_REG(0xc4);
-  LCD_WR_DATA(0x20);
-  LCD_WR_REG(0xc6);
-  LCD_WR_DATA(0x0f);
-  LCD_WR_REG(0xd0);
-  LCD_WR_DATA(0xa4);
-  LCD_WR_DATA(0xa1);
-  //--------------------------------ST7789V gamma setting---------------------------------------//
-  LCD_WR_REG(0xe0);
-  LCD_WR_DATA(0xd0);
-  LCD_WR_DATA(0x01);
-  LCD_WR_DATA(0x08);
-  LCD_WR_DATA(0x0f);
-  LCD_WR_DATA(0x11);
-  LCD_WR_DATA(0x2a);
-  LCD_WR_DATA(0x36);
-  LCD_WR_DATA(0x55);
-  LCD_WR_DATA(0x44);
-  LCD_WR_DATA(0x3a);
-  LCD_WR_DATA(0x0b);
-  LCD_WR_DATA(0x06);
-  LCD_WR_DATA(0x11);
-  LCD_WR_DATA(0x20);
-  LCD_WR_REG(0xe1);
-  LCD_WR_DATA(0xd0);
-  LCD_WR_DATA(0x02);
-  LCD_WR_DATA(0x07);
-  LCD_WR_DATA(0x0a);
-  LCD_WR_DATA(0x0b);
-  LCD_WR_DATA(0x18);
-  LCD_WR_DATA(0x34);
-  LCD_WR_DATA(0x43);
-  LCD_WR_DATA(0x4a);
-  LCD_WR_DATA(0x2b);
-  LCD_WR_DATA(0x1b);
-  LCD_WR_DATA(0x1c);
-  LCD_WR_DATA(0x22);
-  LCD_WR_DATA(0x1f);
-  LCD_WR_REG(0x29);
-}
-
-#ifdef SCREEN_SHOT_TO_SD
-  uint32_t LCD_ReadPixel_24Bit(int16_t x, int16_t y)
-  {
-    LCD_SetWindow(x, y, x, y);
-    LCD_WR_REG(0X2E);
-    Delay_us(1);
-    LCD_RD_DATA();  // Dummy read
-
-    uint16_t rg, br;
-    rg = LCD_RD_DATA();  // First pixel R:8bit-G:8bit
-    br = LCD_RD_DATA();  // First pixel B:8bit - Second pixel R:8bit
-
-    return ((rg) << 8) | ((br & 0xFF00) >> 8);  // RG-B
-  }
-#endif
-
-#elif LCD_DRIVER_IS(HX8558)
-// HX8558
-void LCD_init_RGB(void)
-{
-  Delay_ms(50);  // delay 50 ms
-
-  LCD_WR_REG(0xFE);
-  LCD_WR_REG(0xEF);
-  LCD_WR_REG(0x3A);
-  LCD_WR_DATA(5);
-  LCD_WR_REG(0X36);
-  LCD_WR_DATA(0x64);
-  LCD_WR_REG(0xE8);
-  LCD_WR_DATA(0x12);
-  LCD_WR_DATA(0x22);
-  LCD_WR_REG(0xE3);
-  LCD_WR_DATA(1);
-  LCD_WR_DATA(4);
-  LCD_WR_REG(0xA5);
-  LCD_WR_DATA(0x40);
-  LCD_WR_DATA(0x40);
-  LCD_WR_REG(0xA4);
-  LCD_WR_DATA(0x44);
-  LCD_WR_DATA(0x44);
-  LCD_WR_REG(0xAB);
-  LCD_WR_DATA(8);
-  LCD_WR_REG(0xAA);
-  LCD_WR_DATA(0x88);
-  LCD_WR_DATA(0x88);
-  LCD_WR_REG(0xAE);
-  LCD_WR_DATA(0xB);
-  LCD_WR_REG(0xAC);
-  LCD_WR_DATA(0);
-  LCD_WR_REG(0xAF);
-  LCD_WR_DATA(0x77);
-  LCD_WR_REG(0xAD);
-  LCD_WR_DATA(0x77);
-
-  LCD_WR_REG(0x2A);
-  LCD_WR_DATA(0);
-  LCD_WR_DATA(0);
-  LCD_WR_DATA(0);
-  LCD_WR_DATA(0xEF);
-  LCD_WR_REG(0x2B);
-  LCD_WR_DATA(0);
-  LCD_WR_DATA(0);
-  LCD_WR_DATA(1);
-  LCD_WR_DATA(0x3F);
-
-  LCD_WR_REG(0x2C);
-
-  LCD_WR_REG(0xF0);
-  LCD_WR_DATA(2);
-  LCD_WR_DATA(0);
-  LCD_WR_DATA(0);
-  LCD_WR_DATA(1);
-  LCD_WR_DATA(1);
-  LCD_WR_DATA(7);
-
-  LCD_WR_REG(0xF1);
-  LCD_WR_DATA(1);
-  LCD_WR_DATA(3);
-  LCD_WR_DATA(0);
-  LCD_WR_DATA(0x36);
-  LCD_WR_DATA(41);
-  LCD_WR_DATA(0x13);
-
-  LCD_WR_REG(0xF2);
-  LCD_WR_DATA(8);
-  LCD_WR_DATA(6);
-  LCD_WR_DATA(0x24);
-  LCD_WR_DATA(3);
-  LCD_WR_DATA(5);
-  LCD_WR_DATA(0x34);
-
-  LCD_WR_REG(0xF3);
-  LCD_WR_DATA(0x16);
-  LCD_WR_DATA(0xC);
-  LCD_WR_DATA(0x5A);
-  LCD_WR_DATA(4);
-  LCD_WR_DATA(3);
-  LCD_WR_DATA(0x69);
-
-  LCD_WR_REG(0xF4);
-  LCD_WR_DATA(0xD);
-  LCD_WR_DATA(0x18);
-  LCD_WR_DATA(0x15);
-  LCD_WR_DATA(5);
-  LCD_WR_DATA(5);
-  LCD_WR_DATA(0);
-
-  LCD_WR_REG(0xF5);
-  LCD_WR_DATA(0xD);
-  LCD_WR_DATA(0x18);
-  LCD_WR_DATA(0x17);
-  LCD_WR_DATA(0x35);
-  LCD_WR_DATA(0x39);
-  LCD_WR_DATA(0);
-  LCD_WR_REG(0x11);
-
-  Delay_ms(150);
-
-  LCD_WR_REG(0x29);
-  LCD_WR_REG(0x2C);
-}
-
-#ifdef SCREEN_SHOT_TO_SD
-  uint32_t LCD_ReadPixel_24Bit(int16_t x, int16_t y)
-  {
-    LCD_SetWindow(x, y, x, y);
-    LCD_WR_REG(0X22);
-    Delay_us(1);
-    LCD_RD_DATA();  // Dummy read
-
-    GUI_COLOR pix;
-    pix.color = LCD_RD_DATA();
-    return (pix.RGB.r << 19) | (pix.RGB.g << 10) | (pix.RGB.b << 3);
-  }
-  #warning "LCD_ReadPixel_24Bit() hasn't been tested yet"
-#endif
-
-#elif LCD_DRIVER_IS(SSD1963)
-// SSD1963  resolution max:864*480
-#define SSD_HOR_RESOLUTION LCD_WIDTH   // LCD width pixel
-#define SSD_VER_RESOLUTION LCD_HEIGHT  // LCD height pixel
-
-#define SSD_HT  (SSD_HOR_RESOLUTION+SSD_HOR_BACK_PORCH+SSD_HOR_FRONT_PORCH)
-#define SSD_HPS (SSD_HOR_BACK_PORCH)
-#define SSD_VT  (SSD_VER_RESOLUTION+SSD_VER_BACK_PORCH+SSD_VER_FRONT_PORCH)
-#define SSD_VPS (SSD_VER_BACK_PORCH)
-
-void LCD_init_RGB(void)
-{
-  uint32_t LCDC_FPR;
-  LCD_WR_REG(0xE2);   // Set PLL with OSC = 25MHz (hardware), 250Mhz < VC0 < 800Mhz
-  LCD_WR_DATA(0x17);  // M = 0x17 = 23, VCO = 25Mhz * (M + 1) = 25 * 24 = 600Mhz
-  LCD_WR_DATA(0x04);  // N = 0x04 = 4, PLL = VCO / (N + 1) = 600 / 5 = 120Mhz
-  LCD_WR_DATA(0x54);  // C[2] = 1, Effectuate the multiplier and divider value
-  LCD_WR_REG(0xE0);   // Start PLL command
-  LCD_WR_DATA(0x01);  // enable PLL
-  Delay_ms(10);
-  LCD_WR_REG(0xE0);   // Start PLL command again
-  LCD_WR_DATA(0x03);  // now, use PLL output as system clock
-  Delay_ms(10);
-  LCD_WR_REG(0x01);   // Soft reset
-  Delay_ms(100);
-  LCDC_FPR = (SSD_DCLK_FREQUENCY * 1048576) / 120 -1;  // DCLK Frequency = PLL * (LCDC_FPR + 1)/1048576, LCDC_FPR = (DCLK Frequency * 1048576) / PLL - 1
-  LCD_WR_REG(0xE6);   // 12Mhz = 120Mhz * (LCDC_FPR + 1)/1048576, LCDC_FPR = 104856.6 = 0x019998
-  LCD_WR_DATA((LCDC_FPR >> 16) & 0xFF);
-  LCD_WR_DATA((LCDC_FPR >> 8) & 0xFF);
-  LCD_WR_DATA(LCDC_FPR & 0xFF);
-  LCD_WR_REG(0xB0);   // Set LCD mode
-  LCD_WR_DATA(0x00);  // 0x00: 16bits data, 0x20: 24bits data
-  LCD_WR_DATA(0x00);  // 0x00: TFT Mode
-  LCD_WR_DATA((SSD_HOR_RESOLUTION - 1) >> 8);  // LCD width pixel
-  LCD_WR_DATA((SSD_HOR_RESOLUTION - 1) & 0xFF);
-  LCD_WR_DATA((SSD_VER_RESOLUTION - 1) >> 8);  // LCD height pixel
-  LCD_WR_DATA((SSD_VER_RESOLUTION - 1) & 0xFF);
-  LCD_WR_DATA(0x00);  // RGB format
-  LCD_WR_REG(0xB4);   // Set horizontal period
-  LCD_WR_DATA((SSD_HT - 1) >> 8);  // Horizontal total period (display + non-display) in pixel clock
-  LCD_WR_DATA(SSD_HT - 1);
-  LCD_WR_DATA(SSD_HPS >> 8);  // Non-display period between the start of the horizontal sync (LLINE) signal and the first display data
-  LCD_WR_DATA(SSD_HPS);
-  LCD_WR_DATA(SSD_HOR_PULSE_WIDTH - 1);  // horizontal sync pulse width (LLINE) in pixel clock
-  LCD_WR_DATA(0x00);
-  LCD_WR_DATA(0x00);
-  LCD_WR_DATA(0x00);
-  LCD_WR_REG(0xB6);   // Set vertical period
-  LCD_WR_DATA((SSD_VT - 1) >> 8);
-  LCD_WR_DATA(SSD_VT - 1);
-  LCD_WR_DATA(SSD_VPS >> 8);
-  LCD_WR_DATA(SSD_VPS);
-  LCD_WR_DATA(SSD_VER_FRONT_PORCH - 1);
-  LCD_WR_DATA(0x00);
-  LCD_WR_DATA(0x00);
-  LCD_WR_REG(0xF0);   // Set pixel data interface format
-  LCD_WR_DATA(0x03);  // 16-bit(565 format) data for 16bpp
-  LCD_WR_REG(0xBC);   // postprocessor for contrast/brightness/saturation.
-  LCD_WR_DATA(0x34);  // Contrast value (0-127). Set to 52 to reduce banding/flickering.
-  LCD_WR_DATA(0x77);  // Brightness value (0-127). Set to 119 to reduce banding/flickering.
-  LCD_WR_DATA(0x48);  // Saturation value (0-127).
-  LCD_WR_DATA(0x01);  // Enable/disable the postprocessor for contrast/brightness/saturation (1-0).
-  LCD_WR_REG(0x29);   // Set display on
-
-  LCD_WR_REG(0x36);   // Set address mode
-  LCD_WR_DATA(0x00);
-}
-
-uint32_t LCD_ReadPixel_24Bit(int16_t x, int16_t y)
-{
-  LCD_SetWindow(x, y, x, y);
-  LCD_WR_REG(0X2E);
-  Delay_us(1);
-
-  GUI_COLOR pix;
-  pix.color = LCD_RD_DATA();
-  return (pix.RGB.r << 19) | (pix.RGB.g << 10) | (pix.RGB.b << 3);
-}
-
-#elif LCD_DRIVER_IS(ILI9325)
-void LCD_init_RGB(void)
-{
-  uint16_t R01h, R03h, R60h;
-  R01h = (1 << 8) | (0 << 10);                        // SS = 1, SM = 0,  from S720 to S1 (see also  GS bit (R60h))
-  R03h = (1 << 12) | (1 << 5) | (1 << 4) | (1 << 3);  // TRI=0, DFM=0, BGR=1, ORG=0, I/D[1:0]=11, AM=1
-  R60h = (0 << 15) | (0x27 << 8);                     // Gate Scan Control (R60h) GS=0(G1) NL[5:0]=0x27 (320 lines)
-
-  LCD_WR_REG(0x0001); // Driver Output Control Register (R01h)
-  LCD_WR_DATA(R01h);
-  LCD_WR_REG(0x0003); // Entry Mode (R03h)
-  LCD_WR_DATA(R03h);
-  LCD_WR_REG(0x0060); // Driver Output Control (R60h)
-  LCD_WR_DATA(R60h);
-}
-#endif
-
-uint16_t LCD_ReadID(void)
-{
-  uint16_t id = 0;
-  LCD_WR_REG(0XD3);
-  id = LCD_RD_DATA();  // dummy read
-  id = LCD_RD_DATA();
-  id = LCD_RD_DATA();
-  id <<= 8;
-
-  id |= LCD_RD_DATA();
-  return id;
-}
-
-#if LCD_DRIVER_IS(ILI9325)
 void LCD_RefreshDirection(void)
 {
-  uint16_t R01h, R03h, R60h;
-  R01h = (infoSettings.rotate_ui ? 0 : 1 << 8) | (0 << 10);     // SS=horizontal flip, SM=0
-  R03h = (1 << 12) | (1 << 5) | (1 << 4) | (1 << 3);            // TRI=0, DFM=0, BGR=1, ORG=0, I/D[1:0]=11, AM=1
-  R60h = (infoSettings.rotate_ui ? 1 : 0 << 15) | (0x27 << 8);  // GS=vertical flip, NL[5:0]=0x27 (320 lines)
+  pLCD_SetDirection(infoSettings.rotate_ui);
+}
 
-  LCD_WR_REG(0x0001); // Driver Output Control Register (R01h)
-  LCD_WR_DATA(R01h);
-  LCD_WR_REG(0x0003); // Entry Mode (R03h)
-  LCD_WR_DATA(R03h);
-  LCD_WR_REG(0x0060); // Driver Output Control (R60h)
-  LCD_WR_DATA(R60h);
-}
-#else
-void LCD_RefreshDirection(void)
+void LCD_SetWindow(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey)
 {
-  LCD_WR_REG(0X36);
-  LCD_WR_DATA(infoSettings.rotate_ui ? TFTLCD_180_DEGREE_REG_VALUE : TFTLCD_0_DEGREE_REG_VALUE);
+  pLCD_SetWindow(sx, sy, ex, ey);
 }
-#endif
 
 void LCD_Init(void)
 {
   LCD_HardwareConfig();
-  LCD_init_RGB();
+  LCD_Init_Sequential();
   GUI_Clear(BLACK);
   Delay_ms(120);
 
