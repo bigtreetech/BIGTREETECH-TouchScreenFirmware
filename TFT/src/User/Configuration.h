@@ -19,6 +19,12 @@
 
 /* If one of the DEBUG_x below is defined the SERIAL_DEBUG_PORT defined in board specific Pin_xx.h file
  * will be used for debugging purposes. DON'T enable one of the DEBUG_x below for normal printing.
+ *
+ * Warning: SERIAL_DEBUG_PORT needs to be activated specifically. Please consider settings MULTI_SERIAL > 0
+ * in the Configuration.h or set e.g. "multi_serial: 2" in the config.ini.
+ * If the TFT is only showing the boot logo and is not responding anymore, check the MULTI_SERIAL setting.
+ * If you update the config.ini you need to reset the TFT *twice* (first reset to update the config, second
+ * reset to enable the SERIAL_DEBUG_PORT due to the changed firmware config).
  */
 
 /**
