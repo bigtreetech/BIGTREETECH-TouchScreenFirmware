@@ -163,12 +163,6 @@ void infoSettingsReset(void)
     infoSettings.pause_feedrate[i]    = default_pause_speed[i];  // XY, Z, E
   }
 
-  for (int i = 0; i < PREHEAT_COUNT; i++)
-  {
-    infoSettings.preheat_temp[i]      = default_preheat_ext[i];
-    infoSettings.preheat_bed[i]       = default_preheat_bed[i];
-  }
-
   resetConfig();
 }
 

@@ -573,16 +573,12 @@ void menuDrawListPage(const LISTITEMS *listItems)
 void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, const ITEM * item)
 {
   if (item != NULL)
-    menuDrawIconOnly(item,index);
+    ICON_PrepareRead(curRect[index].x0, curRect[index].y0, item->icon);
 
   for (uint8_t i = 0; i < LIVEICON_LINES; i++)
   {
     if (liveicon->enabled[i] == true)
     {
-      GUI_SetColor(liveicon->lines[i].fn_color);
-      GUI_SetBkColor(liveicon->lines[i].bk_color);
-      GUI_SetTextMode(liveicon->lines[i].text_mode);
-
       GUI_POINT loc;
       loc.x = liveicon->lines[i].pos.x + curRect[index].x0;
 
@@ -599,6 +595,13 @@ void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, const ITEM * item)
         loc.y = liveicon->lines[i].pos.y + curRect[index].y0;
       }
 
+      if (item == NULL)  // if no icon used as background, set own bg color and text mode
+      {
+        GUI_SetTextMode(liveicon->lines[i].text_mode);
+        GUI_SetBkColor(liveicon->lines[i].bk_color);
+      }
+
+      GUI_SetColor(liveicon->lines[i].fn_color);
       setFontSize(liveicon->lines[i].font);
 
       switch (liveicon->lines[i].h_align)
@@ -620,7 +623,11 @@ void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, const ITEM * item)
       }
     }
   }
+
   GUI_RestoreColorDefault();
+
+  if (item != NULL)
+    ICON_PrepareReadEnd();
 }  // showLiveInfo
 
 // When there is a button value, the icon changes color and redraws

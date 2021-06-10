@@ -39,7 +39,8 @@ typedef enum
 
 #define FONT_CHECK_SIGN       (FONT_FLASH_SIGN + WORD_UNICODE + FLASH_SIGN_ADDR)
 #define CONFIG_CHECK_SIGN     (CONFIG_FLASH_SIGN + STRINGS_STORE_ADDR + \
-                               sizeof(SETTINGS) + sizeof(STRINGS_STORE) + sizeof(CUSTOM_GCODES) + sizeof(PRINT_GCODES))
+                               sizeof(SETTINGS) + sizeof(STRINGS_STORE) + sizeof(PREHEAT_STORE) + \
+                               sizeof(CUSTOM_GCODES) + sizeof(PRINT_GCODES))
 #define LANGUAGE_CHECK_SIGN   (LANGUAGE_FLASH_SIGN + LANGUAGE_ADDR + LABEL_NUM)
 #define ICON_CHECK_SIGN       (ICON_FLASH_SIGN + ICON_ADDR(0) + ICON_PREVIEW)
 
@@ -163,8 +164,6 @@ typedef struct
   uint8_t  z_steppers_alignment;
 
   uint16_t level_feedrate[FEEDRATE_COUNT - 1];  // XY, Z
-  uint16_t preheat_temp[PREHEAT_COUNT];
-  uint16_t preheat_bed[PREHEAT_COUNT];
 
   // Power Supply Settings
   uint8_t  auto_off;
@@ -207,8 +206,14 @@ typedef struct
 typedef struct
 {
   char marlin_title[MAX_GCODE_LENGTH + 1];
-  char preheat_name[PREHEAT_COUNT][MAX_GCODE_LENGTH + 1];
 } STRINGS_STORE;
+
+typedef struct
+{
+  char     preheat_name[PREHEAT_COUNT][MAX_GCODE_LENGTH + 1];
+  uint16_t preheat_temp[PREHEAT_COUNT];
+  uint16_t preheat_bed[PREHEAT_COUNT];
+} PREHEAT_STORE;
 
 typedef struct
 {

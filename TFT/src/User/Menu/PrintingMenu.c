@@ -59,7 +59,20 @@ const GUI_RECT printinfo_val_rect[6] = {
 const GUI_RECT progressBar = {PROGRESS_BAR_X0, PICON_START_Y + PICON_HEIGHT * 2 + PICON_SPACE_Y * 2 + 1,
                               PROGRESS_BAR_X1, ICON_START_Y + ICON_HEIGHT + SPACE_Y - PICON_SPACE_Y - 1};
 
-const char *const speedId[2] = {"Speed", "Flow"};
+#ifdef UNIFORM_LIVE_TEXT_BG_COLOR
+  uint16_t textBgColor;
+#endif
+
+enum
+{
+  PRINTING_ICON = (1 << 0),
+  PRINTING_TEXT = (1 << 1),
+  PRINTING_VALUE = (1 << 2),
+};
+
+const uint8_t printingIcon[] = {ICON_PRINTING_NOZZLE, ICON_PRINTING_BED,   ICON_PRINTING_FAN,
+                                ICON_PRINTING_TIMER, ICON_PRINTING_ZLAYER, ICON_PRINTING_SPEED, ICON_PRINTING_FLOW};
+const char *const speedId[2] = {"Speed", "Flow "};
 bool hasFilamentData;
 
 #define TOGGLE_TIME  2000  // 1 seconds is 1000
@@ -151,89 +164,154 @@ void menuBeforePrinting(void)
   infoMenu.menu[infoMenu.cur] = menuPrinting;
 }
 
-static inline void reValueNozzle(int icon_pos)
+static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
 {
-  char tempstr[10];
-  sprintf(tempstr, "%d/%d", heatGetCurrentTemp(currentTool), heatGetTargetTemp(currentTool));
-
-  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-  ICON_ReadDisplay(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, ICON_PRINTING_NOZZLE);
-  GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y,
-                 (uint8_t *)heatDisplayID[currentTool]);
-  GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (uint8_t *)tempstr);
-  GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
-}
-
-static inline void reValueBed(int icon_pos)
-{
-  char tempstr[10];
-  sprintf(tempstr, "%d/%d", heatGetCurrentTemp(BED), heatGetTargetTemp(BED));
-
-  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-  ICON_ReadDisplay(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, ICON_PRINTING_BED);
-  GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y,
-                 (uint8_t *)heatDisplayID[BED]);
-  GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (uint8_t *)tempstr);
-  GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
-}
-
-static inline void reDrawFan(int icon_pos)
-{
+  uint8_t icon = (icon_pos == SPD_ICON_POS) ? printingIcon[icon_pos + currentSpeedID] : printingIcon[icon_pos];
   char tempstr[10];
 
-  if (infoSettings.fan_percentage == 1)
-    sprintf(tempstr, "%d%%", fanGetCurPercent(currentFan));
-  else
-    sprintf(tempstr, "%d", fanGetCurSpeed(currentFan));
+  if (draw_type & PRINTING_ICON)
+    ICON_ReadDisplay(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, icon);
 
-  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-  ICON_ReadDisplay(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, ICON_PRINTING_FAN);
-  GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y,
-                 (uint8_t *)fanID[currentFan]);
-  GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (uint8_t *)tempstr);
-  GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
-}
+  ICON_PrepareRead(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, icon);
 
-static inline void reDrawSpeed(int icon_pos)
-{
-  char tempstr[10];
+  #ifdef UNIFORM_LIVE_TEXT_BG_COLOR  // it set the sampled background color as the background color to be used
+    GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
+    GUI_SetBkColor(textBgColor);
+  #endif
 
-  if (currentSpeedID == 0)
-    ICON_ReadDisplay(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, ICON_PRINTING_SPEED);
-  else
-    ICON_ReadDisplay(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, ICON_PRINTING_FLOW);
-
-  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-  sprintf(tempstr, "%d%%", speedGetCurPercent(currentSpeedID));
-  GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y,
-                 (uint8_t *)speedId[currentSpeedID]);
-  GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (uint8_t *)tempstr);
-  GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
-}
-
-static inline void reDrawTime(int icon_pos)
-{
-  char timeStr[10];
-  uint8_t hour, min, sec;
-
-  getPrintTimeDetail(&hour, &min, &sec);
-  sprintf(timeStr, "%02u:%02u:%02u", hour, min, sec);
-
-  GUI_SetNumMode(GUI_NUMMODE_ZERO);
-  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-  ICON_ReadDisplay(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, ICON_PRINTING_TIMER);
-  GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, (uint8_t *)timeStr);
-
-  if (getPrintRemainingTime())  // if remaining time is pending
+  if (draw_type & PRINTING_TEXT)
   {
-    getPrintRemainingTimeDetail(&hour, &min, &sec);
-    sprintf(timeStr, "%02u:%02u:%02u", hour, min, sec);
+    uint8_t* textString = NULL;  // always initialize to NULL pointer as default value
 
-    GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (uint8_t *)timeStr);
+    switch (icon_pos)
+    {
+      case EXT_ICON_POS:
+        textString = (uint8_t *)heatDisplayID[currentTool];
+        break;
+
+      case BED_ICON_POS:
+        textString = (uint8_t *)heatDisplayID[BED];
+        break;
+
+      case FAN_ICON_POS:
+        textString = (uint8_t *)fanID[currentFan];
+        break;
+
+      case TIM_ICON_POS:
+      {
+        uint8_t hour, min, sec;
+
+        getPrintTimeDetail(&hour, &min, &sec);
+        sprintf(tempstr, "%02u:%02u:%02u", hour, min, sec);
+        textString = (uint8_t *)tempstr;
+        break;
+      }
+
+      case Z_ICON_POS:
+        textString = (uint8_t *)LAYER_TITLE;
+        break;
+
+      case SPD_ICON_POS:
+        textString = (uint8_t *)speedId[currentSpeedID];
+        break;
+
+      default:
+        break;
+    }
+
+    GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, textString);
   }
 
-  GUI_SetNumMode(GUI_NUMMODE_SPACE);
-  GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
+  if (draw_type & PRINTING_VALUE)
+  {
+    tempstr[0] = 0;  // always initialize to empty string as default value
+
+    switch (icon_pos)
+    {
+      case EXT_ICON_POS:
+        sprintf(tempstr, "%3d/%-3d", heatGetCurrentTemp(currentTool), heatGetTargetTemp(currentTool));
+        break;
+
+      case BED_ICON_POS:
+        sprintf(tempstr, "%3d/%-3d", heatGetCurrentTemp(BED), heatGetTargetTemp(BED));
+        break;
+
+      case FAN_ICON_POS:
+        if (infoSettings.fan_percentage == 1)
+          sprintf(tempstr, "%3d%%", fanGetCurPercent(currentFan));
+        else
+          sprintf(tempstr, "%3d", fanGetCurSpeed(currentFan));
+        break;
+
+      case TIM_ICON_POS:
+        if (getPrintRemainingTime())  // if remaining time is pending
+        {
+          uint8_t hour, min, sec;
+
+          getPrintRemainingTimeDetail(&hour, &min, &sec);
+          sprintf(tempstr, "%02u:%02u:%02u", hour, min, sec);
+        }
+        break;
+
+      case Z_ICON_POS:
+        sprintf(tempstr, "%6.2fmm", (infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS));
+        break;
+
+      case SPD_ICON_POS:
+        sprintf(tempstr, "%3d%%", speedGetCurPercent(currentSpeedID));
+        break;
+
+      default:
+        break;
+    }
+
+    GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (uint8_t *)tempstr);
+  }
+
+  ICON_PrepareReadEnd();
+}
+
+static inline void toggleInfo(void)
+{
+  if (nextScreenUpdate(TOGGLE_TIME))
+  {
+    if (infoSettings.hotend_count > 1)
+    {
+      currentTool = (currentTool + 1) % infoSettings.hotend_count;
+      RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
+      reDrawPrintingValue(EXT_ICON_POS, PRINTING_TEXT | PRINTING_VALUE);
+    }
+
+    if ((infoSettings.fan_count + infoSettings.ctrl_fan_en) > 1)
+    {
+      do
+      {
+        currentFan = (currentFan + 1) % MAX_FAN_COUNT;
+      } while (!fanIsValid(currentFan));
+
+      RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
+      reDrawPrintingValue(FAN_ICON_POS, PRINTING_TEXT | PRINTING_VALUE);
+    }
+
+    currentSpeedID = (currentSpeedID + 1) % 2;
+    RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
+
+    #ifdef UNIFORM_LIVE_TEXT_BG_COLOR  // it allows to eliminate flickering on alternating icons
+      ICON_PartialReadDisplay(printinfo_points[SPD_ICON_POS].x, printinfo_points[SPD_ICON_POS].y, PICON_TITLE_X, -1,
+                              (currentSpeedID == 0) ? ICON_PRINTING_SPEED : ICON_PRINTING_FLOW, 0, 0);
+      reDrawPrintingValue(SPD_ICON_POS, PRINTING_TEXT | PRINTING_VALUE);
+    #else
+      reDrawPrintingValue(SPD_ICON_POS, PRINTING_ICON | PRINTING_TEXT | PRINTING_VALUE);
+    #endif
+
+    speedQuery();
+
+    if (infoFile.source >= BOARD_SD)
+      coordinateQuery(TOGGLE_TIME / 1000);
+
+    if (!hasFilamentData && isPrinting())
+      updatePrintUsedFilament();
+  }
 }
 
 static inline void reDrawProgressBar(uint8_t prevProgress, uint8_t nextProgress, uint16_t barColor, uint16_t sliceColor)
@@ -276,63 +354,16 @@ static inline void reDrawProgress(uint8_t prevProgress)
     reDrawProgressBar(nextProgress, prevProgress, DARKGRAY, MAT_ORANGE);
 }
 
-static inline void reDrawLayer(int icon_pos)
-{
-  char tempstr[10];
-
-  sprintf(tempstr, "%.2fmm", (infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS));
-
-  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-  ICON_ReadDisplay(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, ICON_PRINTING_ZLAYER);
-  GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y,
-                  (uint8_t *)LAYER_TITLE);
-  GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (uint8_t *)tempstr);
-  GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
-}
-
-static inline void toggleInfo(void)
-{
-  if (nextScreenUpdate(TOGGLE_TIME))
-  {
-    if (infoSettings.hotend_count > 1)
-    {
-      currentTool = (currentTool + 1) % infoSettings.hotend_count;
-      RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
-      reValueNozzle(EXT_ICON_POS);
-    }
-
-    if ((infoSettings.fan_count + infoSettings.ctrl_fan_en) > 1)
-    {
-      do
-      {
-        currentFan = (currentFan + 1) % MAX_FAN_COUNT;
-      } while (!fanIsValid(currentFan));
-
-      RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
-      reDrawFan(FAN_ICON_POS);
-    }
-
-    currentSpeedID = (currentSpeedID + 1) % 2;
-    RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
-    reDrawSpeed(SPD_ICON_POS);
-    speedQuery();
-
-    if (infoFile.source >= BOARD_SD)
-      coordinateQuery(TOGGLE_TIME / 1000);
-
-    if (!hasFilamentData && isPrinting())
-      updatePrintUsedFilament();
-  }
-}
-
 static inline void printingDrawPage(void)
 {
-  reValueNozzle(EXT_ICON_POS);
-  reValueBed(BED_ICON_POS);
-  reDrawFan(FAN_ICON_POS);
-  reDrawTime(TIM_ICON_POS);
-  reDrawLayer(Z_ICON_POS);
-  reDrawSpeed(SPD_ICON_POS);
+  #ifdef UNIFORM_LIVE_TEXT_BG_COLOR  // it samples the background color from an icon
+    ICON_PrepareRead(printinfo_points[EXT_ICON_POS].x, printinfo_points[EXT_ICON_POS].y, ICON_PRINTING_NOZZLE);
+    textBgColor = ICON_ReadPixel(printinfo_points[EXT_ICON_POS].x + PICON_TITLE_X, printinfo_points[EXT_ICON_POS].y + PICON_TITLE_Y);
+    ICON_PrepareReadEnd();
+  #endif
+
+  for (uint8_t i = 0; i < 6; i++)
+    reDrawPrintingValue(i, PRINTING_ICON | PRINTING_TEXT | PRINTING_VALUE);
 
   // progress
   GUI_SetColor(ORANGE);
@@ -352,7 +383,7 @@ void drawPrintInfo(void)
                  IconCharSelect(CHARICON_INFO));
   GUI_DispStringInRectEOL(rect_of_keySS[17].x0 + BYTE_HEIGHT + STATUS_MSG_TITLE_XOFFSET,
                           rect_of_keySS[17].y0 + STATUS_MSG_ICON_YOFFSET,
-                          rect_of_keySS[17].x1 - BYTE_HEIGHT + STATUS_MSG_TITLE_XOFFSET,
+                          rect_of_keySS[17].x1 - STATUS_MSG_TITLE_XOFFSET,
                           rect_of_keySS[17].y1 - STATUS_MSG_ICON_YOFFSET,
                           (uint8_t *)textSelect(LABEL_PRINT_FINISHED));
   GUI_SetColor(INFOMSG_COLOR);
@@ -474,7 +505,7 @@ void menuPrinting(void)
       nowHeat.T[currentTool].current = heatGetCurrentTemp(currentTool);
       nowHeat.T[currentTool].target = heatGetTargetTemp(currentTool);
       RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
-      reValueNozzle(EXT_ICON_POS);
+      reDrawPrintingValue(EXT_ICON_POS, PRINTING_VALUE);
     }
 
     // check bed temp change
@@ -483,7 +514,7 @@ void menuPrinting(void)
       nowHeat.T[BED].current = heatGetCurrentTemp(BED);
       nowHeat.T[BED].target = heatGetTargetTemp(BED);
       RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
-      reValueBed(BED_ICON_POS);
+      reDrawPrintingValue(BED_ICON_POS, PRINTING_VALUE);
     }
 
     // check Fan speed change
@@ -491,7 +522,7 @@ void menuPrinting(void)
     {
       nowFan[currentFan] = fanGetCurSpeed(currentFan);
       RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
-      reDrawFan(FAN_ICON_POS);
+      reDrawPrintingValue(FAN_ICON_POS, PRINTING_VALUE);
     }
 
     // check printing progress
@@ -502,7 +533,7 @@ void menuPrinting(void)
       {
         time = getPrintTime();
         RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
-        reDrawTime(TIM_ICON_POS);
+        reDrawPrintingValue(TIM_ICON_POS, PRINTING_TEXT | PRINTING_VALUE);
       }
 
       // check print progress percentage change
@@ -517,7 +548,7 @@ void menuPrinting(void)
     {
       if (getPrintProgress() != 100)
       {
-        reDrawTime(TIM_ICON_POS);
+        reDrawPrintingValue(TIM_ICON_POS, PRINTING_VALUE);
         updatePrintProgress();
         reDrawProgress(oldProgress);
         oldProgress = getPrintProgress();
@@ -536,7 +567,7 @@ void menuPrinting(void)
       {
         usedLayer = curLayer;
         RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
-        reDrawLayer(Z_ICON_POS);
+        reDrawPrintingValue(Z_ICON_POS, PRINTING_VALUE);
       }
       if (ABS(curLayer - prevLayer) < LAYER_DELTA)
       {
@@ -550,7 +581,7 @@ void menuPrinting(void)
     {
       curspeed[currentSpeedID] = speedGetCurPercent(currentSpeedID);
       RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
-      reDrawSpeed(SPD_ICON_POS);
+      reDrawPrintingValue(SPD_ICON_POS, PRINTING_VALUE);
     }
 
     // check if print is paused
