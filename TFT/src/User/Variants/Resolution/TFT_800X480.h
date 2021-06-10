@@ -92,19 +92,20 @@
 #define W25QXX_SECTOR_SIZE (0x1000) // 4096byte = 4K
 
 #ifndef LOGO_MAX_SIZE
-  #define LOGO_MAX_SIZE            0xBC000    // 800*480*2 = 0xBB800(+0xBC000) bytes
-  #define WORD_UNICODE_SIZE       0x480000    // 24*24/8 * 65536(unicode) = 0x480000 bytes(4.5M)
-  #define BYTE_ASCII_SIZE           0x1000    // 24*12/8 * 95(visible ascii) = 0x0D5C (+0x1000 4K)
+  #define LOGO_MAX_SIZE            0xBC000  // 800*480*2 = 0xBB800(+0xBC000) bytes
+  #define WORD_UNICODE_SIZE       0x480000  // 24*24/8 * 65536(unicode) = 0x480000 bytes(4.5M)
+  #define BYTE_ASCII_SIZE           0x1000  // 24*12/8 * 95(visible ascii) = 0x0D5C (+0x1000 4K)
   #define LARGE_FONT_SIZE           0x3000
   #define _8X16_FONT_SIZE           0x1000
-  #define FLASH_SIGN_SIZE           0x1000    // store status of last font/icon/config update
+  #define FLASH_SIGN_SIZE           0x1000  // store status of last font/icon/config update
   #define LANGUAGE_SIZE            0x14000
-  #define STRINGS_STORE_MAX_SIZE    0x5000    // label strings max size
-  #define PRINT_GCODES_MAX_SIZE     0x5000    // start/end/cancel gcodes  max size
-  #define CUSTOM_GCODE_MAX_SIZE     0x5000    // custom gocdes max size
-  #define ICON_MAX_SIZE             0xB000    // 160*140*2 = 0xAF00 (+0xB000) per button icon
-  #define INFOBOX_MAX_SIZE         0x19000    // 360*140*2 = 0x189C0 (+0x19000)
-  #define SMALL_ICON_MAX_SIZE       0x2000    // 24*24*2 = 0x480 (+0x1000) per small icon
+  #define STRINGS_STORE_MAX_SIZE    0x1000  // label strings max size
+  #define PREHEAT_STORE_MAX_SIZE    0x1000  // preheat setting max size
+  #define PRINT_GCODES_MAX_SIZE     0x5000  // start/end/cancel gcodes  max size
+  #define CUSTOM_GCODE_MAX_SIZE     0x5000  // custom gocdes max size
+  #define ICON_MAX_SIZE             0xB000  // 160*140*2 = 0xAF00 (+0xB000) per button icon
+  #define INFOBOX_MAX_SIZE         0x19000  // 360*140*2 = 0x189C0 (+0x19000)
+  #define SMALL_ICON_MAX_SIZE       0x2000  // 24*24*2 = 0x480 (+0x1000) per small icon
 #endif
 
 // The offset of the model preview icon in the gcode file

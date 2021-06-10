@@ -18,11 +18,8 @@ const ITEM itemToolPreheat[] = {
 };
 
 // Redraw Preheat icon details
-void refreshPreheatIcon(int8_t preheatnum, int8_t icon_index, const ITEM * menuitem)
+void refreshPreheatIcon(PREHEAT_STORE * preheatStore, int8_t index, const ITEM * menuitem)
 {
-  STRINGS_STORE preheatnames;
-  W25Qxx_ReadBuffer((uint8_t*)&preheatnames,STRINGS_STORE_ADDR,sizeof(STRINGS_STORE));
-
   LIVE_INFO lvIcon;
   lvIcon.enabled[0] = true;
   lvIcon.enabled[1] = true;
@@ -52,16 +49,16 @@ void refreshPreheatIcon(int8_t preheatnum, int8_t icon_index, const ITEM * menui
   lvIcon.lines[2].pos = preheat_val_bed;
   lvIcon.lines[2].font = FONT_SIZE_NORMAL;
 
-  lvIcon.lines[0].text = (uint8_t *)preheatnames.preheat_name[preheatnum];
+  lvIcon.lines[0].text = (uint8_t *)preheatStore->preheat_name[index];
 
   char temptool[5];
   char tempbed[5];
-  sprintf(temptool, "%d", infoSettings.preheat_temp[preheatnum]);
-  sprintf(tempbed, "%d", infoSettings.preheat_bed[preheatnum]);
+  sprintf(temptool, "%d", preheatStore->preheat_temp[index]);
+  sprintf(tempbed, "%d", preheatStore->preheat_bed[index]);
   lvIcon.lines[1].text = (uint8_t *)temptool;
   lvIcon.lines[2].text = (uint8_t *)tempbed;
 
-  showLiveInfo(icon_index, &lvIcon, menuitem);
+  showLiveInfo(index, &lvIcon, menuitem);
 }
 
 void menuPreheat(void)
@@ -84,14 +81,16 @@ void menuPreheat(void)
 
   static TOOLPREHEAT nowHeater = BOTH;
   KEY_VALUES key_num = KEY_IDLE;
+  PREHEAT_STORE preheatStore;
 
   preheatItems.items[KEY_ICON_6] = itemToolPreheat[nowHeater];
 
+  W25Qxx_ReadBuffer((uint8_t*)&preheatStore, PREHEAT_STORE_ADDR, sizeof(PREHEAT_STORE));
   menuDrawPage(&preheatItems);
 
   for (int i = 0; i < PREHEAT_COUNT; i++)
   {
-    refreshPreheatIcon(i, i, &preheatItems.items[i]);
+    refreshPreheatIcon(&preheatStore, i, &preheatItems.items[i]);
   }
 
   while (infoMenu.menu[infoMenu.cur] == menuPreheat)
@@ -108,23 +107,23 @@ void menuPreheat(void)
         switch (nowHeater)
         {
           case BOTH:
-            heatSetTargetTemp(BED, infoSettings.preheat_bed[key_num]);
-            heatSetTargetTemp(heatGetCurrentHotend(), infoSettings.preheat_temp[key_num]);
+            heatSetTargetTemp(BED, preheatStore.preheat_bed[key_num]);
+            heatSetTargetTemp(heatGetCurrentHotend(), preheatStore.preheat_temp[key_num]);
             break;
 
           case BED_PREHEAT:
-            heatSetTargetTemp(BED, infoSettings.preheat_bed[key_num]);
+            heatSetTargetTemp(BED, preheatStore.preheat_bed[key_num]);
             break;
 
           case NOZZLE0_PREHEAT:
-            heatSetTargetTemp(heatGetCurrentHotend(), infoSettings.preheat_temp[key_num]);
+            heatSetTargetTemp(heatGetCurrentHotend(), preheatStore.preheat_temp[key_num]);
             break;
         }
-        refreshPreheatIcon(key_num, key_num, &preheatItems.items[key_num]);
+        refreshPreheatIcon(&preheatStore, key_num, &preheatItems.items[key_num]);
         break;
 
       case KEY_ICON_6:
-        nowHeater = (TOOLPREHEAT)((nowHeater+1) % 3);
+        nowHeater = (TOOLPREHEAT)((nowHeater + 1) % 3);
         preheatItems.items[key_num] = itemToolPreheat[nowHeater];
         menuDrawItem(&preheatItems.items[key_num], key_num);
         break;
