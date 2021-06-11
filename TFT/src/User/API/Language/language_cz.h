@@ -150,7 +150,7 @@
     #define STRING_TIMEOUT_REACHED        "Časový limit vypršel!"
     #define STRING_DISCONNECT_INFO        "Nyní můžete tiskárnu ovládat z počítače!"
     #define STRING_SHUTTING_DOWN          "Vypínám se..."
-    #define STRING_WAIT_TEMP_SHUT_DOWN    "Čekám na zchladnutí extruderu pod %d℃" // Wait for the temperature of hotend to be lower than 50℃
+    #define STRING_WAIT_TEMP_SHUT_DOWN    "Čekám na zchladnutí trysky pod %d℃" // Wait for the temperature of hotend to be lower than 50℃
     #define STRING_POWER_FAILED           "Obnovit tisk?"
     #define STRING_PROCESS_RUNNING        "Probíhá proces!"
     #define STRING_PROCESS_COMPLETED      "Proces dokončen!"

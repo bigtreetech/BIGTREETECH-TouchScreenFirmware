@@ -38,7 +38,7 @@ void loopSpeed(void)
   {
     if ((lastSetPercent[i] != setPercent[i]) && (OS_GetTimeMs() > nextSpeedTime))
     {
-      if (storeCmd("%s S%d D%d\n",speedCmd[i], setPercent[i], heatGetCurrentTool()))
+      if (storeCmd("%s S%d D%d\n", speedCmd[i], setPercent[i], heatGetCurrentTool()))
         lastSetPercent[i] = setPercent[i];
       nextSpeedTime = OS_GetTimeMs() + NEXT_SPEED_WAIT;  // avoid rapid fire, clogging the queue
     }
