@@ -166,7 +166,7 @@ void menuPrintFromSource(void)
   };
 
   KEY_VALUES key_num = KEY_IDLE;
-  uint8_t update = 1;
+  bool update = true;
 
   GUI_Clear(infoSettings.bg_color);
   GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, LABEL_LOADING);
@@ -209,7 +209,7 @@ void menuPrintFromSource(void)
           if (infoFile.cur_page > 0)
           {
             infoFile.cur_page--;
-            update = 1;
+            update = true;
           }
           break;
 
@@ -217,7 +217,7 @@ void menuPrintFromSource(void)
           if (infoFile.cur_page + 1 < (infoFile.folderCount + infoFile.fileCount + (NUM_PER_PAGE - 1)) / NUM_PER_PAGE)
           {
             infoFile.cur_page++;
-            update = 1;
+            update = true;
           }
           break;
 
@@ -233,7 +233,7 @@ void menuPrintFromSource(void)
           {
             ExitDir();
             scanPrintFiles();
-            update = 1;
+            update = true;
           }
           break;
 
@@ -261,7 +261,7 @@ void menuPrintFromSource(void)
           {
             ExitDir();
             scanPrintFiles();
-            update = 1;
+            update = true;
           }
           break;
 
@@ -272,7 +272,7 @@ void menuPrintFromSource(void)
 
         default:
           if (printPageItemSelected(key_num))
-            update = 1;
+            update = true;
           break;
       }
     }
@@ -280,7 +280,7 @@ void menuPrintFromSource(void)
     // refresh file menu
     if (update)
     {
-      update = 0;
+      update = false;
 
       if (list_mode != true)
       {
@@ -307,7 +307,16 @@ void menuPrintFromSource(void)
       }
     #endif
 
-    loopProcess_MenuLoop();
+    loopProcess();
+    if (popupState == PRESENT)
+    { // redraw screen to make popup dissappear
+      update = true;
+      if (list_mode != true)
+      {
+        menuDrawPage(&printIconItems);
+      }
+      popupState = ABSENT;
+    }
   }
 }
 
@@ -386,7 +395,12 @@ void menuPrint(void)
       default:
         break;
     }
-    loopProcess_MenuLoop();
+    loopProcess();
+    if (popupState == PRESENT)
+    { // redraw screen to make popup dissappear
+      menuDrawPage(&sourceSelItems);
+      popupState = ABSENT;
+    }
   }
 
 selectEnd:

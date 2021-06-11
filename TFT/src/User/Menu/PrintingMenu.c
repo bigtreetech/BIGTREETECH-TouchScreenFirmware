@@ -444,7 +444,7 @@ void menuPrinting(void)
     printingItems.items[KEY_ICON_4] = itemIsPause[lastPause];
     printingItems.items[KEY_ICON_5].icon = (infoFile.source < BOARD_SD && isPrintModelIcon()) ? ICON_PREVIEW : ICON_BABYSTEP;
   }
-  else // returned to this menu after a print was done (ex: after a popup)
+  else // returned to this menu after a print was done
   {
     printingItems.title.address = (uint8_t *)infoPrintSummary.name;
 
@@ -461,7 +461,9 @@ void menuPrinting(void)
   menuDrawPage(&printingItems);
   printingDrawPage();
   if (lastPrinting == false)
-    drawPrintInfo();
+  {
+      drawPrintInfo();
+  }
 
   while (infoMenu.menu[infoMenu.cur] == menuPrinting)
   {
@@ -631,6 +633,16 @@ void menuPrinting(void)
         break;
     }
 
-    loopProcess_MenuLoop();
+    loopProcess();
+    if (popupState == PRESENT)
+    { // redraw screen to make popup dissappear
+      menuDrawPage(&printingItems);
+      printingDrawPage();
+      if (lastPrinting == false)
+      {
+        drawPrintInfo();
+      }
+      popupState = ABSENT;
+    }
   }
 }

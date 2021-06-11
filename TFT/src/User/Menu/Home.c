@@ -36,6 +36,11 @@ void menuHome(void)
       default: break;
     }
 
-    loopProcess_MenuLoop();
+    loopProcess();
+    if (popupState == PRESENT)
+    { // redraw screen to make popup dissappear
+      menuDrawPage(&homeItems);
+      popupState = ABSENT;
+    }
   }
 }

@@ -14,6 +14,15 @@ enum
   KEY_POPUP_CANCEL,
 };
 
+typedef enum
+{
+  ABSENT = 0,
+  NEEDED,
+  PRESENT,
+} POPUP_STATUS;
+
+POPUP_STATUS popupState;
+
 extern const GUI_RECT doubleBtnRect[];
 extern BUTTON bottomDoubleBtn[];
 
@@ -56,7 +65,6 @@ void popupDrawPage(DIALOG_TYPE type, BUTTON * btn, const uint8_t * title, const 
 void menuDialog(void);
 void showDialog(DIALOG_TYPE type, void (*ok_action)(), void (*cancel_action)(), void (*loop_action)());
 void loopPopup(void);
-void loopPopupHandle(void);
 
 #define popupReminder(_type, _title, _msg)                        \
   {                                                               \

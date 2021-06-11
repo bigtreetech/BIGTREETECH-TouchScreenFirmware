@@ -119,6 +119,11 @@ void menuBedLevelingLayer2(void)
         break;
     }
 
-    loopProcess_MenuLoop();
+    loopProcess();
+    if (popupState == PRESENT)
+    { // redraw screen to make popup dissappear
+      menuDrawPage(&bedLevelingLayer2Items);
+      popupState = ABSENT;
+    }
   }
 }

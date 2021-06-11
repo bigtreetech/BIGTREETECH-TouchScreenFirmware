@@ -85,7 +85,7 @@ void mustStoreCmd(const char * format,...)
 
   while (pQueue->count >= CMD_MAX_LIST)
   {
-    loopProcess_PopupHandle();
+    loopProcess();
   }
 
   va_list va;
@@ -159,7 +159,7 @@ void mustStoreCacheCmd(const char * format,...)
 
   while (pQueue->count >= CMD_MAX_LIST)
   {
-    loopProcess_PopupHandle();
+    loopProcess();
   }
 
   va_list va;

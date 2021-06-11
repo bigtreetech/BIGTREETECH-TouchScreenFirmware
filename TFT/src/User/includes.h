@@ -144,7 +144,6 @@ typedef struct
 } MENU;
 
 extern MENU infoMenu;
-extern FP_MENU lastMenu;
 
 typedef struct
 {

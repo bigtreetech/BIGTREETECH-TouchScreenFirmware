@@ -131,6 +131,11 @@ void menuSpeed(void)
       percentageReDraw(item_index, true);
     }
 
-    loopProcess_MenuLoop();
+    loopProcess();
+    if (popupState == PRESENT)
+    { // redraw screen to make popup dissappear
+      menuDrawPage(&percentageItems);
+      popupState = ABSENT;
+    }
   }
 }

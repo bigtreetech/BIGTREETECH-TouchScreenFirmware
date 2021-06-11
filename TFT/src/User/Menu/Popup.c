@@ -38,7 +38,7 @@ static void (*action_ok)() = NULL;
 static void (*action_cancel)() = NULL;
 static void (*action_loop)() = NULL;
 
-static bool popup_redraw = false;
+POPUP_STATUS popupState = ABSENT;
 static uint8_t popup_title[X_MAX_CHAR];
 static uint8_t popup_msg[POPUP_MAX_CHAR];
 static uint8_t popup_ok[24];
@@ -119,7 +119,7 @@ void menuDialog(void)
     if (action_loop != NULL)
       action_loop();
 
-    loopProcess_MenuLoop();
+    loopProcess();
   }
 }
 
@@ -198,7 +198,7 @@ void showDialog(DIALOG_TYPE type, void (*ok_action)(), void (*cancel_action)(), 
   if (infoSettings.mode == MODE_MARLIN)
     return;
 
-  popup_redraw = true;
+  popupState = NEEDED;
   popup_type = type;
 
   action_ok = ok_action;
@@ -208,10 +208,10 @@ void showDialog(DIALOG_TYPE type, void (*ok_action)(), void (*cancel_action)(), 
 
 void loopPopup(void)
 {
-  if (popup_redraw == false)
+  if (popupState != NEEDED)
     return;
 
-  popup_redraw = false;
+  popupState = PRESENT;
 
   wakeLCD();
 
@@ -238,17 +238,6 @@ void loopPopup(void)
   if (infoMenu.menu[infoMenu.cur] != menuDialog)
   { //handle the user interaction, then reload the previous menu
     infoMenu.menu[++infoMenu.cur] = menuDialog;
-  }
-}
-
-void loopPopupHandle(void)
-{
-  if ((lastMenu != NULL) && (infoMenu.menu[infoMenu.cur] == menuDialog))
-  {
-    lastMenu = NULL;  // popup in a loop
-    (*infoMenu.menu[infoMenu.cur])();
-    
-    // process will return here after the popup/dialog is closed
-    lastMenu = menuDialog;  // flag that there has been a popup during a loop
+    (*infoMenu.menu[infoMenu.cur])();  // activate the popup dialog handler
   }
 }

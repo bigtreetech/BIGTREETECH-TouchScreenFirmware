@@ -100,6 +100,11 @@ void menuMore(void)
         break;
     }
 
-    loopProcess_MenuLoop();
+    loopProcess();
+    if (popupState == PRESENT)
+    { // redraw screen to make popup dissappear
+      menuDrawPage(&moreItems);
+      popupState = ABSENT;
+    }
   }
 }

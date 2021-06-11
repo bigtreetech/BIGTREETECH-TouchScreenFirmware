@@ -29,7 +29,7 @@ static void resetRequestCommandInfo(
 
   while (infoCmd.count || infoHost.wait)
   {
-    loopProcess_PopupHandle();  // Wait for the communication to be clean before requestCommand
+    loopProcess();  // Wait for the communication to be clean before requestCommand
   }
   requestCommandInfo.inWaitResponse = true;
   requestCommandInfo.inResponse = false;
@@ -71,7 +71,7 @@ bool request_M21(void)
   // Wait for response
   while (!requestCommandInfo.done)
   {
-    loopProcess_PopupHandle();
+    loopProcess();
   }
 
   clearRequestCommandInfo();
@@ -92,7 +92,7 @@ char *request_M20(void)
   // Wait for response
   while (!requestCommandInfo.done)
   {
-    loopProcess_PopupHandle();
+    loopProcess();
   }
 
   //clearRequestCommandInfo();  //shall be call after copying the buffer ...
@@ -121,7 +121,7 @@ char *request_M33(char *filename)
   // Wait for response
   while (!requestCommandInfo.done)
   {
-    loopProcess_PopupHandle();
+    loopProcess();
   }
 
   //clearRequestCommandInfo();  //shall be call after copying the buffer ...
@@ -172,7 +172,7 @@ long request_M23_M36(char *filename)
   // Wait for response
   while (!requestCommandInfo.done)
   {
-    loopProcess_PopupHandle();
+    loopProcess();
   }
 
   if (requestCommandInfo.inError)
@@ -300,7 +300,7 @@ char *request_M20_macros(char *nextdir)
   // Wait for response
   while (!requestCommandInfo.done)
   {
-    loopProcess_PopupHandle();
+    loopProcess();
   }
 
   //clearRequestCommandInfo();  //shall be call after copying the buffer ...
@@ -317,7 +317,7 @@ void request_M98(char *filename)
   // Wait for response
   while (!requestCommandInfo.done)
   {
-    loopProcess_PopupHandle();
+    loopProcess();
   }
 
   clearRequestCommandInfo();

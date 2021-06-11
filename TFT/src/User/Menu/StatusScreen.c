@@ -324,7 +324,17 @@ void menuStatus(void)
     }
 
     toggleTool();
-    loopProcess_MenuLoop();
+    loopProcess();
+    if (popupState == PRESENT)
+    { // redraw screen to make popup dissappear
+      GUI_SetBkColor(infoSettings.bg_color);
+      menuDrawPage(&StatusItems);
+      GUI_SetColor(infoSettings.status_xyz_bg_color);
+      GUI_FillPrect(&RecGantry);
+      drawTemperature();
+      drawStatusScreenMsg();
+      popupState = ABSENT;
+    }
   }
   // disable position auto report
   coordinateQuery(0);

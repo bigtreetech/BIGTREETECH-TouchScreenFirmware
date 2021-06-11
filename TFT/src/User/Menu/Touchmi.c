@@ -67,6 +67,11 @@ void menuTouchMi(void)
         break;
     }
 
-    loopProcess_MenuLoop();
+    loopProcess();
+    if (popupState == PRESENT)
+    { // redraw screen to make popup dissappear
+      menuDrawPage(&touchmiItems);
+      popupState = ABSENT;
+    }
   }
 }

@@ -70,7 +70,7 @@ void menuLanguage(void)
       }
     }
 
-    loopProcess_MenuLoop();
+    loopProcess();
   }
 
   if (memcmp(&now, &infoSettings, sizeof(SETTINGS)))
@@ -127,7 +127,7 @@ void menuEmulatorBGColor(void)
       }
     }
 
-    loopProcess_MenuLoop();
+    loopProcess();
   }
 
   if (memcmp(&now, &infoSettings, sizeof(SETTINGS)))
@@ -181,7 +181,7 @@ void menuEmulatorFontColor(void)
       }
     }
 
-    loopProcess_MenuLoop();
+    loopProcess();
   }
 
   if (memcmp(&now, &infoSettings, sizeof(SETTINGS)))
@@ -257,7 +257,7 @@ void menuMarlinModeSettings(void)
         break;
     }
 
-    loopProcess_MenuLoop();
+    loopProcess();
   }
 
   if (memcmp(&now, &infoSettings, sizeof(SETTINGS)))
@@ -325,7 +325,7 @@ void menuSoundSettings(void)
         break;
     }
 
-    loopProcess_MenuLoop();
+    loopProcess();
   }
 
   if (memcmp(&now, &infoSettings, sizeof(SETTINGS)))
@@ -396,7 +396,7 @@ void menuBrightnessSettings(void)
         break;
     }
 
-    loopProcess_MenuLoop();
+    loopProcess();
   }
 
   if (memcmp(&now, &infoSettings, sizeof(SETTINGS)))
@@ -498,7 +498,12 @@ void menuScreenSettings(void)
         break;
     }
 
-    loopProcess_MenuLoop();
+    loopProcess();
+    if (popupState == PRESENT)
+    { // redraw screen to make popup dissappear
+      menuDrawPage(&screenSettingsItems);
+      popupState = ABSENT;
+    }
   }
 
   if (memcmp(&now, &infoSettings, sizeof(SETTINGS)))

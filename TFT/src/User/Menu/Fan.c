@@ -156,6 +156,12 @@ void menuFan(void)
       fanReDraw(fan_index, true);
     }
 
-    loopProcess_MenuLoop();
+    loopProcess();
+    if (popupState == PRESENT)
+    { // redraw screen to make popup dissappear
+      menuDrawPage(&fanItems);
+      fanReDraw(fan_index, false);
+      popupState = ABSENT;
+    }
   }
 }

@@ -501,7 +501,7 @@ void menuLEDColorCustom(void)
       updateForced = sendingNeeded = false;
     }
 
-    loopProcess_MenuLoop();
+    loopProcess();
   }
 
   // restore default
@@ -576,6 +576,11 @@ void menuLEDColor(void)
     if (key_num <= KEY_ICON_5)  // change LED color
       ledSendValue(&ledValue);
 
-    loopProcess_MenuLoop();
+    loopProcess();
+    if (popupState == PRESENT)
+    { // redraw screen to make popup dissappear
+      menuDrawPage(&LEDColorItems);
+      popupState = ABSENT;
+    }
   }
 }

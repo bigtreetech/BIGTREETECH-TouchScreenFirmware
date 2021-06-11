@@ -114,6 +114,11 @@ void menuManualLeveling(void)
         break;
     }
 
-    loopProcess_MenuLoop();
+    loopProcess();
+    if (popupState == PRESENT)
+    { // redraw screen to make popup dissappear
+      menuDrawPage(&manualLevelingItems);
+      popupState = ABSENT;
+    }
   }
 }

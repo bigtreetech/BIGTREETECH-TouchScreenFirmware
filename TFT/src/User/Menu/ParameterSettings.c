@@ -183,7 +183,7 @@ void menuShowParameter(void)
       }
     }
 
-    loopProcess_MenuLoop();
+    loopProcess();
   }
 }
 
@@ -286,6 +286,6 @@ void menuParameterSettings(void)
         }
     }
 
-    loopProcess_MenuLoop();
+    loopProcess();
   }
 }

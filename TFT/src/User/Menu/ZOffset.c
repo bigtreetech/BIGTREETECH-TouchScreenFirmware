@@ -272,7 +272,13 @@ void menuZOffset(void)
       babystepReset();
     }
 
-    loopProcess_MenuLoop();
+    loopProcess();
+    if (popupState == PRESENT)
+    { // redraw screen to make popup dissappear
+      menuDrawPage(&zOffsetItems);
+      zOffsetDraw(offsetGetStatus(), now);
+      popupState = ABSENT;
+    }
   }
 
   // restore original ABL state

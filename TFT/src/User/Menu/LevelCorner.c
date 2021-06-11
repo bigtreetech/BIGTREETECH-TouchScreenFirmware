@@ -188,6 +188,12 @@ void menuLevelCorner(void)
       }
     }
 
-    loopProcess_MenuLoop();
+    loopProcess();
+    if (popupState == PRESENT)
+    { // redraw screen to make popup dissappear
+      menuDrawPage(&levelCornerItems);
+      drawProbeAccuracyIcon(&levelCornerItems);
+      popupState = ABSENT;
+    }
   }
 }

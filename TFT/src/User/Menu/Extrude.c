@@ -36,22 +36,34 @@ void menuExtrude(void)
   float eTemp  = 0.0f;
   float eLength = 0.0f;
 
+  extrudeItems.items[KEY_ICON_4].icon = (infoSettings.ext_count > 1) ? ICON_NOZZLE : ICON_HEAT;
+  extrudeItems.items[KEY_ICON_4].label.index = (infoSettings.ext_count > 1) ? LABEL_NOZZLE : LABEL_HEAT;
+  extrudeItems.items[KEY_ICON_5] = itemExtLenSteps[extlenSteps_index];
+  extrudeItems.items[KEY_ICON_6] = itemSpeed[itemSpeed_index];
+
+  menuDrawPage(&extrudeItems);
+  extruderReDraw(curExtruder_index, eLength, false);
+
   if (eAxisBackup.backedUp == false)
   {
     if (infoCmd.count != 0)
     {
       if ((strncmp(infoCmd.queue[infoCmd.index_r].gcode, "M155", 4) != 0) || (infoCmd.count > 1))
       { // avoid splash when returning from "Heat" menu
-        if (lastMenu == menuDialog)
-        { // delete screen otherwise action buttons would be visible from previous dialog
-          GUI_Clear(infoSettings.bg_color);
-        }
         popupSplash(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, LABEL_BUSY);
+        popupState = PRESENT;
       }
 
       while (infoCmd.count != 0)
       {
-        LOOP_PROCESS_START_OF_MENU;
+        loopProcess();
+      }
+
+      if (popupState == PRESENT)
+      { // redraw screen to make popup disappear
+        menuDrawPage(&extrudeItems);
+        extruderReDraw(curExtruder_index, eLength, false);
+        popupState = ABSENT;
       }
     }
 
@@ -60,14 +72,6 @@ void menuExtrude(void)
     eAxisBackup.relative = eGetRelative();
     eAxisBackup.backedUp = true;
   }
-
-  extrudeItems.items[KEY_ICON_4].icon = (infoSettings.ext_count > 1) ? ICON_NOZZLE : ICON_HEAT;
-  extrudeItems.items[KEY_ICON_4].label.index = (infoSettings.ext_count > 1) ? LABEL_NOZZLE : LABEL_HEAT;
-  extrudeItems.items[KEY_ICON_5] = itemExtLenSteps[extlenSteps_index];
-  extrudeItems.items[KEY_ICON_6] = itemSpeed[itemSpeed_index];
-
-  menuDrawPage(&extrudeItems);
-  extruderReDraw(curExtruder_index, eLength, false);
 
   heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
 
@@ -174,7 +178,13 @@ void menuExtrude(void)
       }
     }
 
-    loopProcess_MenuLoop();
+    loopProcess();
+    if (popupState == PRESENT)
+    { // redraw screen to make popup dissappear
+      menuDrawPage(&extrudeItems);
+      extruderReDraw(curExtruder_index, eLength, false);
+      popupState = ABSENT;
+    }
   }
 
   if (eAxisBackup.backedUp == false)  // the user exited from menu (not any other process/popup/etc)

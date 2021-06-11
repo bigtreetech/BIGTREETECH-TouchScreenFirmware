@@ -446,7 +446,7 @@ void printAbort(void)
         popupSplash(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, LABEL_BUSY);
         while (infoHost.printing == true)  // wait for the printer to settle down
         {
-          loopProcess_PopupHandle();
+          loopProcess();
         }
       }
       break;
@@ -495,7 +495,7 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType)
       {
         while (infoCmd.count != 0)
         {
-          loopProcess_PopupHandle();
+          loopProcess();
         }
       }
 

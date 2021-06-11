@@ -204,7 +204,7 @@ void menuCallMacro(void)
       GUI_SetBkColor(infoSettings.bg_color);
     }
 
-    loopProcess_MenuLoop();
+    loopProcess();
   }
 }
 

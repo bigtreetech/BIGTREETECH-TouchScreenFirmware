@@ -29,7 +29,7 @@ void menuCustom(void)
     if (curIndex < customcodes.count)
       mustStoreScript(customcodes.gcode[curIndex]);
 
-    loopProcess_MenuLoop();
+    loopProcess();
   }
 }
 
@@ -97,7 +97,12 @@ void menuEepromSettings(void)
         break;
     }
 
-    loopProcess_MenuLoop();
+    loopProcess();
+    if (popupState == PRESENT)
+    { // redraw screen to make popup dissappear
+      menuDrawPage(&eepromSettingsItems);
+      popupState = ABSENT;
+    }
   }
 }
 
@@ -178,6 +183,11 @@ void menuMachineSettings(void)
         break;
     }
 
-    loopProcess_MenuLoop();
+    loopProcess();
+    if (popupState == PRESENT)
+    { // redraw screen to make popup dissappear
+      menuDrawPage(&machineSettingsItems);
+      popupState = ABSENT;
+    }
   }
 }

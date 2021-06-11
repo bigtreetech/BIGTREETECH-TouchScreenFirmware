@@ -152,7 +152,12 @@ void menuMove(void)
           #endif
           break;
     }
-    loopProcess_MenuLoop();
+    loopProcess();
+    if (popupState == PRESENT)
+    { // redraw screen to make popup dissappear
+      menuDrawPage(&moveItems);
+      popupState = ABSENT;
+    }
     update_gantry();
   }
   mustStoreCmd("G90\n");
