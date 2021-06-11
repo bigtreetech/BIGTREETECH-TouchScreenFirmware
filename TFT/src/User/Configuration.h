@@ -1,6 +1,6 @@
 #ifndef _CONFIGURATION_H_
 #define _CONFIGURATION_H_
-#define CONFIG_VERSION 20210513
+#define CONFIG_VERSION 20210605
 
 //===========================================================================
 //============================ Developer Settings ===========================
@@ -13,12 +13,43 @@
  */
 //#define SCREEN_SHOT_TO_SD
 
+//===========================================================================
+//============================== Debug Settings =============================
+//===========================================================================
+
+/* If one of the DEBUG_x below is defined the SERIAL_DEBUG_PORT defined in board specific Pin_xx.h file
+ * will be used for debugging purposes. DON'T enable one of the DEBUG_x below for normal printing.
+ *
+ * Warning: SERIAL_DEBUG_PORT needs to be activated specifically. Please consider settings MULTI_SERIAL > 0
+ * in the Configuration.h or set e.g. "multi_serial: 2" in the config.ini.
+ * If the TFT is only showing the boot logo and is not responding anymore, check the MULTI_SERIAL setting.
+ * If you update the config.ini you need to reset the TFT *twice* (first reset to update the config, second
+ * reset to enable the SERIAL_DEBUG_PORT due to the changed firmware config).
+ */
+
+/**
+ * Generic Debug
+ * Uncomment/Enable to enable arbitrary debug serial communication to SERIAL_DEBUG_PORT defined in board specific Pin_xx.h file.
+ */
+//#define DEBUG_SERIAL_GENERIC
+
 /**
  * Serial Communication Debug
  * Uncomment/Enable to forward/dump all serial communication to SERIAL_DEBUG_PORT defined in board specific Pin_xx.h file.
- * Use it only for debugging purposes. DON'T enable it for normal printing.
  */
 //#define DEBUG_SERIAL_COMM
+
+/**
+ * Config File Debug
+ * Uncomment/Enable to show debug information during config file processing.
+ */
+//#define DEBUG_SERIAL_CONFIG
+
+#if defined(DEBUG_SERIAL_GENERIC) || defined(DEBUG_SERIAL_CONFIG) || defined(DEBUG_SERIAL_COMM)
+  #define SERIAL_DEBUG_ENABLED
+#else
+  #undef SERIAL_DEBUG_ENABLED
+#endif
 
 //===========================================================================
 //============================= General Settings ============================
@@ -516,6 +547,31 @@
  */
 //#define UNIFORM_LIVE_TEXT_BG_COLOR  // Default: disabled
 
+/**
+ * Show embedded thumbnails of gcode files
+ *
+ * Options: [0: classic, 1: RGB565 bitmap, 2: Base64 PNG]
+ *  classic: RGB565 bitmaps for all possible thumbnail sizes are embedded
+ *   in the gcode file at fixed file offsets. It is fastest to parse but least flexible.
+ *  RGB565 bitmap:
+ *    A specific thumbnail comment identifies the location of a  single 'classic'
+ *    embedded RB565 bitmap thumbnail. It is almost as fast as classic and
+ *    flexible but requires a dedicated post-processing of gcode files for
+ *    most slicers. "Classic" is used as fallback.
+ *  Base64 PNG:
+ *    A specific thumbnail comment identifies the location of a Base64-encoded
+ *    PNG thumbnail. It is slower as classic but most flexible. It does _not_
+ *    require dedicated post-processing of gcode files for most slicers.
+ *    "RGB565 bitmap" and "Classic" are used as fallback.
+ *
+ *  Restrictions:
+ *    "Base64 PNG" option utilizes about 43kb statically allocated RAM and
+ *    about 1kb dynamically allocated RAM. Therefore this option is only suitable
+ *    for devices >96KB RAM.
+ *    If you choose "Base64 PNG" on such a low RAM device it will automatically
+ *    downgraded to "RGB565 bitmap" option.
+ */
+#define THUMBNAIL_PARSER 0  // Default: 0
 
 //===========================================================================
 //=========================== Other Settings ================================

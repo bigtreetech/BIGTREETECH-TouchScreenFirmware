@@ -16,5 +16,6 @@ extern DMA_CIRCULAR_BUFFER dmaL1Data[_UART_CNT];
 void Serial_Init(u32 baud);
 void Serial_DeInit(void);
 void Serial_Puts(uint8_t port, char *s);
+void Serial_Putchar(uint8_t port, char ch);
 
 #endif
