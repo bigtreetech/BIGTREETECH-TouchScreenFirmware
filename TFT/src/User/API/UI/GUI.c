@@ -629,6 +629,8 @@ void GUI_DispOne(int16_t sx, int16_t sy, const CHAR_INFO *pInfo)
         GUI_DrawPixel(sx, sy+y, foreGroundColor);
       else if (guiTextMode == GUI_TEXTMODE_NORMAL)
         GUI_DrawPixel(sx, sy+y, backGroundColor);
+      else if  (guiTextMode == GUI_TEXTMODE_ON_ICON)
+        GUI_DrawPixel(sx, sy+y, ICON_ReadPixel(sx, sy+y));
       temp <<= 1;
     }
     sx++;
@@ -1098,7 +1100,7 @@ void Scroll_DispString(SCROLL * para, uint8_t align)
       }
       case CENTER:
       {
-        uint16_t x_offset=((para->rect.x1 - para->rect.x0 - para->totalPixelWidth) >>1);
+        uint16_t x_offset=((para->rect.x1 - para->rect.x0 - para->totalPixelWidth) >> 1);
         GUI_DispString(para->rect.x0+x_offset, para->rect.y0, para->text);
         break;
       }

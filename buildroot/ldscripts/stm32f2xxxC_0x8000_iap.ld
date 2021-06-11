@@ -8,8 +8,6 @@
 /* Entry Point */
 ENTRY(Reset_Handler)
 
-/* Highest address of the user mode stack */ 
-_estack = 0x2000c000;    /* end of RAM */
 /* Generate a link error if heap and stack don't fit into RAM */
 _Min_Heap_Size = 0x5000;      /* required amount of heap  */
 _Min_Stack_Size = 0x1000;     /* required amount of stack */
@@ -20,6 +18,9 @@ MEMORY
     RAM (xrw)      : ORIGIN = 0x20000000, LENGTH = 96K
     FLASH (rx)      : ORIGIN = 0x8008000, LENGTH = 256K - 32K
 }
+
+/* Highest address of the user mode stack */
+_estack = ALIGN(ORIGIN(RAM) + LENGTH(RAM) - 16 ,8);    /* end of RAM */
 
 /* Define output sections */
 SECTIONS

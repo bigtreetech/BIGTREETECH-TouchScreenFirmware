@@ -1,7 +1,7 @@
 #include "config.h"
 #include "includes.h"
 
-#ifdef SERIAL_DEBUG_PORT  // To be used only when calling 'getConfigFromFile()' after boot process
+#if defined(SERIAL_DEBUG_PORT) && defined(DEBUG_SERIAL_CONFIG)  // To be used only when calling 'getConfigFromFile()' after boot process
   #define PRINTDEBUG(x) Serial_Puts(SERIAL_DEBUG_PORT, x);
 #else
   #define PRINTDEBUG(x)
@@ -31,6 +31,7 @@ CONFIGFILE* CurConfigFile;
 CUSTOM_GCODES* configCustomGcodes = NULL;
 PRINT_GCODES* configPrintGcodes = NULL;
 STRINGS_STORE* configStringsStore = NULL;
+PREHEAT_STORE* configPreheatStore = NULL;
 
 char * cur_line = NULL;
 uint16_t c_index = 0;
@@ -50,10 +51,12 @@ bool getConfigFromFile(void)
   CUSTOM_GCODES tempCustomGcodes;
   PRINT_GCODES tempPrintCodes;
   STRINGS_STORE tempStringStore;
+  PREHEAT_STORE tempPreheatStore;
 
   configCustomGcodes = &tempCustomGcodes;
   configPrintGcodes = &tempPrintCodes;
   configStringsStore = &tempStringStore;
+  configPreheatStore = &tempPreheatStore;
   customcode_index = 0;
   foundkeys = 0;
 
@@ -383,6 +386,7 @@ void saveConfig(void)
   writeConfig((uint8_t *)configCustomGcodes, sizeof(CUSTOM_GCODES), CUSTOM_GCODE_ADDR, CUSTOM_GCODE_MAX_SIZE);
   writeConfig((uint8_t *)configPrintGcodes, sizeof(PRINT_GCODES), PRINT_GCODES_ADDR, PRINT_GCODES_MAX_SIZE);
   writeConfig((uint8_t *)configStringsStore, sizeof(STRINGS_STORE), STRINGS_STORE_ADDR, STRINGS_STORE_MAX_SIZE);
+  writeConfig((uint8_t *)configPreheatStore, sizeof(PREHEAT_STORE), PREHEAT_STORE_ADDR, PREHEAT_STORE_MAX_SIZE);
 
   #ifdef CONFIG_DEBUG
     CUSTOM_GCODES tempgcode;  // = NULL;
@@ -422,6 +426,7 @@ void resetConfig(void)
   CUSTOM_GCODES tempCG;
   STRINGS_STORE tempST;
   PRINT_GCODES tempPC;
+  PREHEAT_STORE tempPH;
 
   // restore custom gcode presets
   int n = 0;
@@ -441,7 +446,7 @@ void resetConfig(void)
 
   for (int i = 0; i < PREHEAT_COUNT; i++)
   {
-    strcpy(tempST.preheat_name[i],preheatNames[i]);
+    strcpy(tempPH.preheat_name[i], preheatNames[i]);
   }
 
   // restore print gcodes
@@ -849,7 +854,7 @@ void parseConfigKey(uint16_t index)
       int utf8len = getUTF8Length((uint8_t *)pchr);
       int bytelen = strlen(pchr) + 1;
       if (inLimit(utf8len, NAME_MIN_LENGTH, MAX_STRING_LENGTH) && inLimit(bytelen, NAME_MIN_LENGTH, MAX_GCODE_LENGTH))
-        strcpy(configStringsStore->preheat_name[index - C_INDEX_PREHEAT_NAME_1], pchr);
+        strcpy(configPreheatStore->preheat_name[index - C_INDEX_PREHEAT_NAME_1], pchr);
       break;
     }
 
@@ -861,8 +866,8 @@ void parseConfigKey(uint16_t index)
     case C_INDEX_PREHEAT_TEMP_6:
     {
       int val_index = index - C_INDEX_PREHEAT_TEMP_1;
-      if (key_seen("B")) SET_VALID_INT_VALUE(infoSettings.preheat_bed[val_index], MIN_BED_TEMP, MAX_BED_TEMP);
-      if (key_seen("T")) SET_VALID_INT_VALUE(infoSettings.preheat_temp[val_index], MIN_TOOL_TEMP, MAX_TOOL_TEMP);
+      if (key_seen("B")) SET_VALID_INT_VALUE(configPreheatStore->preheat_bed[val_index], MIN_BED_TEMP, MAX_BED_TEMP);
+      if (key_seen("T")) SET_VALID_INT_VALUE(configPreheatStore->preheat_temp[val_index], MIN_TOOL_TEMP, MAX_TOOL_TEMP);
       break;
     }
 

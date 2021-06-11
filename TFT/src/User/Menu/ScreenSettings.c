@@ -26,7 +26,6 @@ const char *const labelMarlinType[ITEM_MARLIN_TYPE_NUM] =
 
 void menuLanguage(void)
 {
-  #define LANGUAGE_PAGE_COUNT  (LANGUAGE_NUM + LISTITEM_PER_PAGE - 1) / LISTITEM_PER_PAGE
   LABEL title = {LABEL_LANGUAGE};
   LISTITEM totalItems[LANGUAGE_NUM];
   uint16_t curIndex = KEY_IDLE;

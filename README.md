@@ -48,6 +48,7 @@ Important information related to BigTreeTech's TFT touchscreen 3D printer contro
 
 - [Appendix](#appendix)
 
+  - [Embedded Gcode Thumbnails](#embedded-gcode-thumbnails)
   - [TFT Screen Configuration and support for RRF](#tft-screen-configuration-and-support-for-rrf)
   - [Setup of BTT TFT35 E3 V3 with MKS SGEN L Mainboards](#setup-of-btt-tft35-e3-v3-with-mks-sgen-l-mainboards)
   - [Show more statistics at the end of the print](#show-more-statistics-at-the-end-of-the-print)
@@ -186,7 +187,7 @@ B: In case your mainboard provides **EXP1 and EXP2**, you have to connect 2 ribb
 
 C: In case you have an **"E3" mainboard** which provides a **single EXP connector**, you have to connect 1 ribbon cable connecting EXP of the mainboard to **EXP3** of the TFT. In case your TFT does **not** provide an EXP3 connector but only two 10pin connectors (TFT24 v1.1 for example) you will need a "Y-split" cable with one 10pin connector on one side (for the mainboard) and two 10pin connectors on the other side (for the TFT). In the Marlin firmware of your mainboard, make sure that **ONLY** the "`CR10_STOCKDISPLAY`" is activated in Configuration.h and that all other controllers are **De**activated (especially the "`REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER`").
 
-![Thomas White May 2021](https://user-images.githubusercontent.com/54359396/120190324-bcf35780-c218-11eb-8f31-b50175839156.png)
+![118848226-d74f3c00-b8ce-11eb-8210-d9e61a8f5650](https://user-images.githubusercontent.com/54359396/121323737-5ead2f80-c910-11eb-936e-c2815dab360a.png)
 
 
 
@@ -412,6 +413,39 @@ See [BIGTREETECH-TouchScreenFirmware/releases](https://github.com/bigtreetech/BI
 
 
 ## Appendix
+
+### Embedded Gcode Thumbnails
+
+The TFT is able to display embedded gcode thumbnails in the file list viewer using two different flavors: Bigtreetech-style or PrusaSlicer-style.
+
+![ps-thumbnail](https://user-images.githubusercontent.com/54359396/121322884-a4b5c380-c90f-11eb-9380-09757d57d84e.png)
+
+The first type is to store the thumbnails at a specific location in the gcode file using a dedicated Cura plugin or external post-processing script.
+The thumbnail's image data is raw encoded in a format which can be displayed on the TFT without any complex image transformations.
+Displaying these embedded thumbnails at the TFT is the fastest approach and suitable for all different BigTreeTech's TFT variants.
+Downside is that you either need a dedicated plugin, for example the [BTT 3D Plug-In Suit](https://github.com/bigtreetech/Bigtree3DPluginSuit), or you have to use the post-processing script.
+
+The other type is to store the thumbnails using dedicated comments (`thumbnail begin...` and `thumbnail end`) which is implemented in stock by some slicers like Prusa-Slicer.
+The thumbnail's image data is a PNG file encoded in Base64 which cannot be displayed directly on the TFT:
+A base64 decoding and png decoding needs to be performed which is quite complex for the TFT.
+Displaying these thumbnails is slower but more flexible.
+Due to the memory requirements it is not suitable for all the different TFT variants (only for those with `RAM_SIZE > 96`).
+
+Thumbnail generation needs to be specifically enabled in Prusa-Slicer.
+Under _Printer Settings_ at the _G-code thumbnails_ settings you have to enter the specific required thumbnail image size for your TFT.
+
+![ps-thumbnail-settings](https://user-images.githubusercontent.com/54359396/121322977-b9925700-c90f-11eb-9a6a-bcebd8f21542.png)
+
+Thumbnail image sizes are:
+
+* `70x70`: TFT24 / TFT28
+* `95x80`: TFT43 / TFT50
+* `95x95`: TFT35
+* `160x140`: TFT70
+
+If this setting is not visible within the Prusa-Slicer you need to enable _Expert Settings Mode_:
+![ps-expert-settings](https://user-images.githubusercontent.com/54359396/121323041-c7e07300-c90f-11eb-9644-e12e31f7b5f9.png)
+
 ### TFT Screen Configuration and support for RRF
 
 Overview

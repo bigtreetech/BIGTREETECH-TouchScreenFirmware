@@ -370,7 +370,7 @@ void parseACK(void)
     syncL2CacheFromL1(SERIAL_PORT);
     infoHost.rx_ok[SERIAL_PORT] = false;
 
-    #ifdef SERIAL_DEBUG_PORT
+    #if defined(SERIAL_DEBUG_PORT) && defined(DEBUG_SERIAL_COMM)
       // dump raw serial data received to debug port
       Serial_Puts(SERIAL_DEBUG_PORT, "<<");
       Serial_Puts(SERIAL_DEBUG_PORT, dmaL2Cache);

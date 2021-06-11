@@ -139,8 +139,6 @@ typedef struct
   LIVE_DATA lines[LIVEICON_LINES];
 } LIVE_INFO;
 
-void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, const ITEM * item);
-
 extern const GUI_RECT exhibitRect;
 extern const GUI_RECT rect_of_key[MENU_RECT_COUNT];
 extern const GUI_RECT rect_of_keySS[SS_RECT_COUNT];
@@ -171,6 +169,11 @@ void menuDrawTitle(const uint8_t *content);  //(const MENUITEMS * menuItems);
 void menuReDrawCurTitle(void);
 void menuDrawPage (const MENUITEMS * menuItems);
 void menuDrawListPage(const LISTITEMS *listItems);
+
+void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, const ITEM * item);
+void displayExhibitHeader(const char * titleStr, const char * unitStr);
+void displayExhibitValue(const char * valueStr);
+
 void itemDrawIconPress(uint8_t position, uint8_t is_press);
 KEY_VALUES menuKeyGetValue(void);
 GUI_POINT getIconStartPoint(int index);
