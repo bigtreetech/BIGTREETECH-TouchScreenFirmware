@@ -181,7 +181,7 @@ uint16_t modelFileReadHalfword(FIL * fp)
   while (rest > 0)
   {
     f_read(fp, buf, rest, &mybr);
- 
+
     if (mybr != rest)
       return 0;
 
@@ -330,7 +330,7 @@ bool model_DirectDisplay_Base64PNG(GUI_POINT pos, char * gcode)
   char buf[256];
 
   dbg_printf("PNG Gcode: %s\n", gcode);
-  
+
   if (f_open(&gcodeFile, gcode, FA_OPEN_EXISTING | FA_READ) != FR_OK)
     return false;
 
