@@ -630,6 +630,33 @@ void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, const ITEM * item)
     ICON_PrepareReadEnd();
 }  // showLiveInfo
 
+void displayExhibitHeader(const char * titleStr, const char * unitStr)
+{
+  // draw header title
+  if (titleStr != NULL)
+  {
+    char tempstr[20];
+    sprintf(tempstr, "%-8s", titleStr);
+    GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *)tempstr);
+  }
+
+  // draw unit string
+  if (unitStr != NULL)
+  {
+    setFontSize(FONT_SIZE_LARGE);
+    GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1) >> 1, exhibitRect.y0, (uint8_t *)unitStr);
+  }
+
+  setFontSize(FONT_SIZE_NORMAL);
+}
+
+void displayExhibitValue(const char * valueStr)
+{
+  setFontSize(FONT_SIZE_LARGE);
+  GUI_DispStringInPrect(&exhibitRect, (uint8_t *) valueStr);
+  setFontSize(FONT_SIZE_NORMAL);
+}
+
 // When there is a button value, the icon changes color and redraws
 void itemDrawIconPress(uint8_t position, uint8_t is_press)
 {
