@@ -288,7 +288,7 @@ void menuDrawIconText(const ITEM *item, uint8_t position)
     GUI_DispStringInPrect(rect, content);
 }
 
- void menuDrawListItem(const LISTITEM *item, uint8_t position)
+void menuDrawListItem(const LISTITEM *item, uint8_t position)
 {
   const GUI_RECT *rect = rect_of_keyListView + position;
   if (item->icon == CHARICON_BACKGROUND)
