@@ -38,12 +38,12 @@ static void (*action_ok)() = NULL;
 static void (*action_cancel)() = NULL;
 static void (*action_loop)() = NULL;
 
-static bool popup_redraw = false;
+static bool popup_draw = false;
 static uint8_t popup_title[X_MAX_CHAR];
 static uint8_t popup_msg[POPUP_MAX_CHAR];
 static uint8_t popup_ok[24];
 static uint8_t popup_cancel[24];
-static bool popup_draw;
+static DIALOG_TYPE popup_type;
 
 void windowReDrawButton(uint8_t position, uint8_t pressed)
 {
@@ -198,8 +198,8 @@ void showDialog(DIALOG_TYPE type, void (*ok_action)(), void (*cancel_action)(), 
   if (infoSettings.mode == MODE_MARLIN)
     return;
 
-  popup_redraw = true;
-  popup_draw = type;
+  popup_draw = true;
+  popup_type = type;
 
   action_ok = ok_action;
   action_cancel = cancel_action;
@@ -208,29 +208,29 @@ void showDialog(DIALOG_TYPE type, void (*ok_action)(), void (*cancel_action)(), 
 
 void loopPopup(void)
 {
-  if (popup_redraw == true)
+  if (popup_draw == false)
     return;
 
-  popup_redraw = false;
+  popup_draw = false;
 
   wakeLCD();
 
   //display the last received popup message, overriding previous popup messages, if any
   if (popup_cancel[0])
   {
-    popupDrawPage(popup_draw, bottomDoubleBtn, popup_title, popup_msg, popup_ok, popup_cancel);
+    popupDrawPage(popup_type, bottomDoubleBtn, popup_title, popup_msg, popup_ok, popup_cancel);
     cur_btn_rect = doubleBtnRect;
   }
   else if (popup_ok[0])
   {
-    popupDrawPage(popup_draw, &bottomSingleBtn, popup_title, popup_msg, popup_ok, NULL);
+    popupDrawPage(popup_type, &bottomSingleBtn, popup_title, popup_msg, popup_ok, NULL);
     cur_btn_rect = &singleBtnRect;
   }
   else  // if no button is requested
   {
     // display only a splash screen, avoiding to register the menuDialog handler
     // (the handler needs at least one button to allow to close the dialog box)
-    popupDrawPage(popup_draw, NULL, popup_title, popup_msg, NULL, NULL);
+    popupDrawPage(popup_type, NULL, popup_title, popup_msg, NULL, NULL);
     return;
   }
 
