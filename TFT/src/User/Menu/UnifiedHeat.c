@@ -53,10 +53,5 @@ void menuUnifiedHeat(void)
     }
 
     loopProcess();
-    if (popupState == PRESENT)
-    { // redraw screen to make popup dissappear
-      menuDrawPage(&UnifiedHeatItems);
-      popupState = ABSENT;
-    }
   }
 }

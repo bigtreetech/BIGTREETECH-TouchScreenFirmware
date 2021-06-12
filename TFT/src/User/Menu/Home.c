@@ -37,10 +37,5 @@ void menuHome(void)
     }
 
     loopProcess();
-    if (popupState == PRESENT)
-    { // redraw screen to make popup dissappear
-      menuDrawPage(&homeItems);
-      popupState = ABSENT;
-    }
   }
 }

@@ -63,10 +63,5 @@ void menuMeshValid(void)
     }
 
     loopProcess();
-    if (popupState == PRESENT)
-    { // redraw screen to make popup dissappear
-      menuDrawPage(&meshValidItems);
-      popupState = ABSENT;
-    }
   }
 }

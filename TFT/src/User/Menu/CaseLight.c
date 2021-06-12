@@ -110,12 +110,5 @@ void menuCaseLight(void)
     }
 
     loopProcess();
-    if (popupState == PRESENT)
-    { // redraw screen to make popup dissappear
-      updateCaseLightIcon(&caseLightItems, currentCaseLightState);
-      menuDrawPage(&caseLightItems);
-      caseLightBrightnessReDraw();
-      popupState = ABSENT;
-    }
   }
 }

@@ -665,15 +665,5 @@ void menuPrinting(void)
     }
 
     loopProcess();
-    if (popupState == PRESENT)
-    { // redraw screen to make popup dissappear
-      menuDrawPage(&printingItems);
-      printingDrawPage();
-      if (lastPrinting == false)
-      {
-        drawPrintInfo();
-      }
-      popupState = ABSENT;
-    }
   }
 }

@@ -51,10 +51,5 @@ void menuTuning(void)
     }
 
     loopProcess();
-    if (popupState == PRESENT)
-    { // redraw screen to make popup dissappear
-      menuDrawPage(&TuningItems);
-      popupState = ABSENT;
-    }
   }
 }

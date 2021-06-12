@@ -218,12 +218,6 @@ void menuBabystep(void)
     }
 
     loopProcess();
-    if (popupState == PRESENT)
-    { // redraw screen to make popup dissappear
-      menuDrawPage(&babyStepItems);
-      babyReDraw(now_babystep, now_z_offset, force_z_offset, false);
-      popupState = ABSENT;
-    }
   }
 
   offsetSetValue(new_z_offset);  // set new Z offset. Required if current Z offset is not changed applying babystep changes (e.g. no BABYSTEP_ZPROBE_OFFSET is set in Marlin FW)

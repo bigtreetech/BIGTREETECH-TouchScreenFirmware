@@ -173,7 +173,7 @@ void menuPrintFromSource(void)
 
   if (mountFS() == true && scanPrintFiles() == true)
   {
-    if (popupState == PRESENT)  // some popup when "scanPrintFilesGcodeFs". (echo,error,warning popup windows)
+    if (infoMenu.menu[infoMenu.cur] != menuPrintFromSource) // Menu index be modify when "scanPrintFilesGcodeFs". (echo,error,warning popup windows)
     {
       return;
     }
@@ -308,15 +308,6 @@ void menuPrintFromSource(void)
     #endif
 
     loopProcess();
-    if (popupState == PRESENT)
-    { // redraw screen to make popup dissappear
-      update = true;
-      if (list_mode != true)
-      {
-        menuDrawPage(&printIconItems);
-      }
-      popupState = ABSENT;
-    }
   }
 }
 
@@ -396,11 +387,6 @@ void menuPrint(void)
         break;
     }
     loopProcess();
-    if (popupState == PRESENT)
-    { // redraw screen to make popup dissappear
-      menuDrawPage(&sourceSelItems);
-      popupState = ABSENT;
-    }
   }
 
 selectEnd:

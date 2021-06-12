@@ -145,11 +145,6 @@ void menuPidWait(void)
     pidCheckTimeout();
 
     loopProcess();
-    if (popupState == PRESENT)
-    { // redraw screen to make popup dissappear
-      menuDrawPage(&pidWaitItems);
-      popupState = ABSENT;
-    }
   }
 }
 
@@ -329,11 +324,5 @@ void menuPid(void)
     pidCheckTimeout();
 
     loopProcess();
-    if (popupState == PRESENT)
-    { // redraw screen to make popup dissappear
-      menuDrawPage(&pidItems);
-      temperatureReDraw(curTool_index, &pidHeaterTarget[curTool_index], false);
-      popupState = ABSENT;
-    }
   }
 }

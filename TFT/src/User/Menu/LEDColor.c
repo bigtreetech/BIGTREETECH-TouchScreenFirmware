@@ -577,10 +577,5 @@ void menuLEDColor(void)
       ledSendValue(&ledValue);
 
     loopProcess();
-    if (popupState == PRESENT)
-    { // redraw screen to make popup dissappear
-      menuDrawPage(&LEDColorItems);
-      popupState = ABSENT;
-    }
   }
 }

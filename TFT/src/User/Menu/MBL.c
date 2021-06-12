@@ -283,12 +283,5 @@ void menuMBL(void)
     probeHeightQueryCoord();
 
     loopProcess();
-    if (popupState == PRESENT)
-    { // redraw screen to make popup dissappear
-      menuDrawPage(&mblItems);
-      mblDrawHeader(!mblRunning ? NULL : &mblPoint);
-      mblDrawValue(now);
-      popupState = ABSENT;
-    }
   }
 }

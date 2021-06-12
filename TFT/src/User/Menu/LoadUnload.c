@@ -50,7 +50,6 @@ void menuLoadUnload(void)
       if ((strncmp(infoCmd.queue[infoCmd.index_r].gcode, "M155", 4) != 0) || (infoCmd.count > 1))
       { // avoid splash when returning from "Heat" menu
         popupSplash(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, LABEL_BUSY);
-        popupState = PRESENT;
       }
 
       while (infoCmd.count != 0)
@@ -58,11 +57,11 @@ void menuLoadUnload(void)
         loopProcess();
       }
 
-      if (popupState == PRESENT)
+      if (getMenuType() == MENU_TYPE_DIALOG)
       { // redraw screen to make popup disappear
         menuDrawPage(&loadUnloadItems);
         temperatureReDraw(tool_index, NULL, false);
-        popupState = ABSENT;
+        infoMenu.menu[infoMenu.cur] = menuLoadUnload;  // in case of a popup, no need to reload the menu with menuDummy()
       }
     }
     eAxisBackup.coordinate = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
@@ -160,12 +159,6 @@ void menuLoadUnload(void)
     }
 
     loopProcess();
-    if (popupState == PRESENT)
-    { // redraw screen to make popup dissappear
-      menuDrawPage(&loadUnloadItems);
-      temperatureReDraw(tool_index, NULL, false);
-      popupState = ABSENT;
-    }
   }
 
   if (eAxisBackup.backedUp == false)  // the user exited from menu (not any other process/popup/etc)

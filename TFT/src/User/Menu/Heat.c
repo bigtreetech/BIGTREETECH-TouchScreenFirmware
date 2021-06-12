@@ -123,12 +123,6 @@ void menuHeat(void)
     }
 
     loopProcess();
-    if (popupState == PRESENT)
-    { // redraw screen to make popup dissappear
-      menuDrawPage(&heatItems);
-      temperatureReDraw(tool_index, NULL, false);
-      popupState = ABSENT;
-    }
   }
 
   // Set slow update time if not waiting for target temperature

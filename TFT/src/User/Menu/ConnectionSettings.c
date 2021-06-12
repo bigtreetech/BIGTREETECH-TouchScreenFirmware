@@ -138,10 +138,5 @@ void menuConnectionSettings(void)
     }
 
     loopProcess();
-    if (popupState == PRESENT)
-    { // redraw screen to make popup dissappear
-      menuDrawPage(&connectionSettingsItems);
-      popupState = ABSENT;
-    }
   }
 }

@@ -14,15 +14,6 @@ enum
   KEY_POPUP_CANCEL,
 };
 
-typedef enum
-{
-  ABSENT = 0,
-  NEEDED,
-  PRESENT,
-} POPUP_STATUS;
-
-POPUP_STATUS popupState;
-
 extern const GUI_RECT doubleBtnRect[];
 extern BUTTON bottomDoubleBtn[];
 

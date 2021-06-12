@@ -137,10 +137,5 @@ void menuPreheat(void)
     }
 
     loopProcess();
-    if (popupState == PRESENT)
-    { // redraw screen to make popup dissappear
-      menuDrawPage(&preheatItems);
-      popupState = ABSENT;
-    }
   }
 }

@@ -58,10 +58,5 @@ void menuBLTouch(void)
     }
 
     loopProcess();
-    if (popupState == PRESENT)
-    { // redraw screen to make popup dissappear
-      menuDrawPage(&BLTouchItems);
-      popupState = ABSENT;
-    }
   }
 }

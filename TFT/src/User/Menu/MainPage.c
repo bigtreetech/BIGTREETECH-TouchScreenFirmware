@@ -99,11 +99,6 @@ void menuMain(void)
     }
 
     loopProcess();
-    if (popupState == PRESENT)
-    { // redraw screen to make popup dissappear
-      menuDrawPage(&mainPageItems);
-      popupState = ABSENT;
-    }
   }
 }
 

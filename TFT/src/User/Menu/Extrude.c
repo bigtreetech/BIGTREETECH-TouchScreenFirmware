@@ -51,7 +51,6 @@ void menuExtrude(void)
       if ((strncmp(infoCmd.queue[infoCmd.index_r].gcode, "M155", 4) != 0) || (infoCmd.count > 1))
       { // avoid splash when returning from "Heat" menu
         popupSplash(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, LABEL_BUSY);
-        popupState = PRESENT;
       }
 
       while (infoCmd.count != 0)
@@ -59,11 +58,11 @@ void menuExtrude(void)
         loopProcess();
       }
 
-      if (popupState == PRESENT)
+      if (getMenuType() == MENU_TYPE_DIALOG)
       { // redraw screen to make popup disappear
         menuDrawPage(&extrudeItems);
         extruderReDraw(curExtruder_index, eLength, false);
-        popupState = ABSENT;
+        infoMenu.menu[infoMenu.cur] = menuExtrude;  // in case of a popup, no need to reload the menu with menuDummy()
       }
     }
 
@@ -179,12 +178,6 @@ void menuExtrude(void)
     }
 
     loopProcess();
-    if (popupState == PRESENT)
-    { // redraw screen to make popup dissappear
-      menuDrawPage(&extrudeItems);
-      extruderReDraw(curExtruder_index, eLength, false);
-      popupState = ABSENT;
-    }
   }
 
   if (eAxisBackup.backedUp == false)  // the user exited from menu (not any other process/popup/etc)

@@ -120,10 +120,5 @@ void menuBedLevelingLayer2(void)
     }
 
     loopProcess();
-    if (popupState == PRESENT)
-    { // redraw screen to make popup dissappear
-      menuDrawPage(&bedLevelingLayer2Items);
-      popupState = ABSENT;
-    }
   }
 }

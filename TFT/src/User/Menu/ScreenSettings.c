@@ -498,11 +498,6 @@ void menuScreenSettings(void)
     }
 
     loopProcess();
-    if (popupState == PRESENT)
-    { // redraw screen to make popup dissappear
-      menuDrawPage(&screenSettingsItems);
-      popupState = ABSENT;
-    }
   }
 
   if (memcmp(&now, &infoSettings, sizeof(SETTINGS)))

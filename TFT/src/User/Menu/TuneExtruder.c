@@ -190,11 +190,6 @@ void menuTuneExtruder(void)
     }
 
     loopProcess();
-    if (popupState == PRESENT)
-    { // redraw screen to make popup dissappear
-      menuDrawPage(&tuneExtruderItems);
-      popupState = ABSENT;
-    }
   }
 
   // Set slow update time if not waiting for target temperature
@@ -298,10 +293,5 @@ void menuNewExtruderESteps(void)
     }
 
     loopProcess();
-    if (popupState == PRESENT)
-    { // redraw screen to make popup dissappear
-      menuDrawPage(&newExtruderESteps);
-      popupState = ABSENT;
-    }
   }
 }

@@ -264,6 +264,11 @@ uint8_t *labelGetAddress(const LABEL *label)
     return label->address;
 }
 
+void menuDummy(void)
+{
+  infoMenu.cur--;
+}
+
 void menuDrawItem(const ITEM *item, uint8_t position)
 {
   menuDrawIconOnly(item, position);
