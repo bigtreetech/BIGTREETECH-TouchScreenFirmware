@@ -72,7 +72,7 @@ void lcd_frame_partial_display(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t e
   W25Qxx_SPI_CS_Set(1);
 }
 
-uint32_t getBMPsize(uint8_t * w, uint8_t * h, uint32_t address)
+uint32_t getBMPsize(uint8_t *w, uint8_t *h, uint32_t address)
 {
   uint16_t len = sizeof(uint16_t);
 
@@ -170,11 +170,11 @@ uint16_t ICON_ReadPixel(int16_t x, int16_t y)
   return color;
 }
 
-uint16_t modelFileReadHalfword(FIL * fp)
+uint16_t modelFileReadHalfword(FIL *fp)
 {
   uint8_t buf[4];
   uint8_t ascii[4];
-  uint8_t * pd = ascii;
+  uint8_t *pd = ascii;
   UINT mybr;
   uint8_t rest = 4;
 
@@ -186,7 +186,7 @@ uint16_t modelFileReadHalfword(FIL * fp)
       return 0;
 
     // Check buf for non-valid character i.e. not 0-9, a-f or A-F and skip
-    for (uint8_t * ps = buf; ps < buf + rest; )
+    for (uint8_t *ps = buf; ps < buf + rest; )
     {
       char c = *ps++;
 
@@ -207,10 +207,10 @@ uint16_t modelFileReadHalfword(FIL * fp)
 #define MAX_THUMBNAIL_SEARCH_BLOCKS (100 * 2)
 
 // Search for the gcode thumbnail comment signature within the first BLOCKSIZE_THUMBNAIL_SEARCH * MAX_THUMBNAIL_SEARCH_BLOCKS bytes
-bool modelFileFind(FIL * fp, char * find)
+bool modelFileFind(FIL *fp, char *find)
 {
   char search_buf[BLOCKSIZE_THUMBNAIL_SEARCH];
-  char * cFind = find;
+  char *cFind = find;
 
   dbg_printf("Find: '%s' starting from %d\n", find, f_tell(fp));
 
@@ -224,7 +224,7 @@ bool modelFileFind(FIL * fp, char * find)
     if (len == 0)
       return false;
 
-    for (char * cSearch = search_buf; cSearch < search_buf + len; cSearch++)
+    for (char *cSearch = search_buf; cSearch < search_buf + len; cSearch++)
     {
       if (*cSearch == *cFind)
         cFind++;
@@ -249,7 +249,7 @@ bool modelFileFind(FIL * fp, char * find)
 #if (THUMBNAIL_PARSER == PARSER_BASE64PNG)
 
 // Read an unsigned int value from a file
-uint32_t modelFileReadValue(FIL * fp)
+uint32_t modelFileReadValue(FIL *fp)
 {
   char current = 0;
   UINT br = 0;
@@ -264,13 +264,13 @@ uint32_t modelFileReadValue(FIL * fp)
       return value;
 
     value *= 10;
-    value += current-'0';
+    value += current - '0';
   }
 
   return 0;
 }
 
-uint32_t modelFileSeekToThumbnailBase64PNG(FIL * fp, uint16_t width, uint16_t height)
+uint32_t modelFileSeekToThumbnailBase64PNG(FIL *fp, uint16_t width, uint16_t height)
 {
   uint32_t len = 0;
   char buf[32];
@@ -308,9 +308,9 @@ uint16_t color_alpha_565(const uint8_t r0, const uint8_t g0, const uint8_t b0, c
   return ((r >> 3) << 11) | ((g >> 2) << 5) | (b >> 3);
 }
 
-void on_draw_png_pixel(pngle_t * pngle, uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint8_t rgba[4])
+void on_draw_png_pixel(pngle_t *pngle, uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint8_t rgba[4])
 {
-  GUI_POINT * pos = (GUI_POINT *)pngle_get_user_data(pngle);
+  GUI_POINT *pos = (GUI_POINT *)pngle_get_user_data(pngle);
 
   LCD_SetWindow(pos->x + x, pos->y + y, pos->x + x, pos->y + y);
   LCD_WR_16BITS_DATA(color_alpha_565(0, 0, 0, rgba[0], rgba[1], rgba[2], rgba[3]));
@@ -323,7 +323,7 @@ void on_draw_png_pixel(pngle_t * pngle, uint32_t x, uint32_t y, uint32_t w, uint
  * <BASE64 encoded PNG>
  * ; thumbnail end
  */
-bool model_DirectDisplay_Base64PNG(GUI_POINT pos, char * gcode)
+bool model_DirectDisplay_Base64PNG(GUI_POINT pos, char *gcode)
 {
   FIL gcodeFile;
   uint32_t base64_len;
@@ -347,7 +347,7 @@ bool model_DirectDisplay_Base64PNG(GUI_POINT pos, char * gcode)
   // Base64 decode on the fly while reading the PNG
   b64_init(&gcode_thumb_b64, &gcodeFile, base64_len);
 
-  pngle_t * pngle = pngle_new();
+  pngle_t *pngle = pngle_new();
 
   if (!pngle)
     goto pngle_new_failed;
@@ -390,7 +390,7 @@ pngle_new_failed:
 
 #if (THUMBNAIL_PARSER == PARSER_BASE64PNG) || (THUMBNAIL_PARSER == PARSER_RGB565)
 
-bool modelFileSeekToThumbnailRGB565(FIL * fp, uint16_t width, uint16_t height)
+bool modelFileSeekToThumbnailRGB565(FIL *fp, uint16_t width, uint16_t height)
 {
   char buf[39];
 
@@ -417,7 +417,7 @@ bool modelFileSeekToThumbnailRGB565(FIL * fp, uint16_t width, uint16_t height)
  * <WIDTHxHEIGHT 16-Bit RGB565 Data as Hexstring>
  * ; bigtreetech thumbnail end
  */
-bool model_DirectDisplay_RGB565(GUI_POINT pos, char * gcode)
+bool model_DirectDisplay_RGB565(GUI_POINT pos, char *gcode)
 {
   FIL gcodeFile;
 
@@ -446,7 +446,7 @@ bool model_DirectDisplay_RGB565(GUI_POINT pos, char * gcode)
 
 #endif
 
-bool model_DirectDisplay_Classic(GUI_POINT pos, char * gcode)
+bool model_DirectDisplay_Classic(GUI_POINT pos, char *gcode)
 {
   FIL gcodeFile;
 
@@ -470,7 +470,7 @@ bool model_DirectDisplay_Classic(GUI_POINT pos, char * gcode)
   return true;
 }
 
-bool model_DirectDisplay(GUI_POINT pos, char * gcode)
+bool model_DirectDisplay(GUI_POINT pos, char *gcode)
 {
   // Try all compiled in options from fastest to slowest
   if (model_DirectDisplay_Classic(pos, gcode))
@@ -489,7 +489,7 @@ bool model_DirectDisplay(GUI_POINT pos, char * gcode)
   return false;
 }
 
-bool model_DecodeToFlash(char * gcode)
+bool model_DecodeToFlash(char *gcode)
 {
   uint32_t addr = ICON_ADDR(ICON_PREVIEW);
   uint16_t bnum;
