@@ -604,6 +604,34 @@ void menuPrinting(void)
     KEY_VALUES key_num = menuKeyGetValue();
     switch (key_num)
     {
+      case KEY_ICON_0:
+        if (isPrinting())
+        {
+          infoMenu.menu[++infoMenu.cur] = menuHeat;
+        }
+        break;
+
+      case KEY_ICON_1:
+        if (isPrinting())
+        {
+          infoMenu.menu[++infoMenu.cur] = menuFan;
+        }
+        break;
+
+      case KEY_ICON_2:
+        if (isPrinting())
+        {
+          //  will be implemented in a future PR
+        }
+        break;
+
+      case KEY_ICON_3:
+        if (isPrinting())
+        {
+          infoMenu.menu[++infoMenu.cur] = menuSpeed;
+        }
+        break;
+
       case KEY_ICON_4:
         if (isPrinting())
         {
