@@ -23,7 +23,6 @@
   #endif
 #endif
 
-
 #ifdef THUMBNAIL_PARSER
   #if (THUMBNAIL_PARSER != PARSER_CLASSIC) && (THUMBNAIL_PARSER != PARSER_RGB565) && (THUMBNAIL_PARSER != PARSER_BASE64PNG)
     #error "Configuration error: THUMBNAIL_PARSER is not set to a valid value of 0, 1 or 2."
