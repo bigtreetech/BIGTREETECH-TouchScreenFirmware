@@ -236,6 +236,8 @@ void setupMachine(void)
   {
     mustStoreCmd("M555 P2\n");  //  Set RRF compatibility behaves similar to 2: Marlin
   }
+  mustStoreCmd("M82\n");  // Set extruder to absolute mode
+  mustStoreCmd("G90\n");  // Set to Absolute Positioning
 }
 
 float flashUsedPercentage(void)
