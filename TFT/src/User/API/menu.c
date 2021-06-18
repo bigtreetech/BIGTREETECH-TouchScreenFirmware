@@ -313,7 +313,7 @@ void menuDrawIconText(const ITEM *item, uint8_t position)
     GUI_DispStringInPrect(rect, content);
 }
 
- void menuDrawListItem(const LISTITEM *item, uint8_t position)
+void menuDrawListItem(const LISTITEM *item, uint8_t position)
 {
   const GUI_RECT *rect = rect_of_keyListView + position;
   if (item->icon == CHARICON_BACKGROUND)
@@ -921,13 +921,16 @@ void loopBackEnd(void)
   {
     loopCaseLight();
   }
+
+  // Query fan speed, only for RRF now
+  fanQuery();
 }  // loopBackEnd
 
 void loopFrontEnd(void)
 {
   // Check if volume source(SD/U disk) insert
   loopVolumeSource();
-  // loop to check and run toast messages
+  // Loop to check and run toast messages
   loopToast();
   // If there is a message in the status bar, timed clear
   loopReminderClear();
@@ -942,7 +945,7 @@ void loopFrontEnd(void)
   loopFrontEndFILRunoutDetect();
 #endif
 
-  // loop for popup menu
+  // Loop for popup menu
   loopPopup();
 }
 

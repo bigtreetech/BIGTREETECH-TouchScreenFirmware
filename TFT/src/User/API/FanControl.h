@@ -30,6 +30,7 @@ void fanBuildList(void);
 void loopFan(void);
 void ctrlFanQuery(void);
 void ctrlFanQuerySetWait(bool wait);
+void fanQuery(void);
 
 #ifdef __cplusplus
 }
