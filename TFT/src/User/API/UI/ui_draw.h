@@ -11,8 +11,8 @@ extern "C" {
 #include "GUI.h"
 
 #define SPACE_X          ((LCD_WIDTH - ICON_WIDTH * 4) / 4)
-#define START_X          (SPACE_X/2)
-#define SPACE_X_PER_ICON (LCD_WIDTH/4)
+#define START_X          (SPACE_X / 2)
+#define SPACE_X_PER_ICON (LCD_WIDTH / 4)
 
 #define SPACE_Y          ((LCD_HEIGHT - ICON_START_Y - ICON_HEIGHT * 2) / 2)
 

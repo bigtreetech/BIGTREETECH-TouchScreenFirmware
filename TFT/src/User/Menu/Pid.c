@@ -19,7 +19,8 @@ const MENUITEMS pidWaitItems = {
   }
 };
 
-const char *const pidCmd[] = PID_CMD;
+const char *const pidCmdMarlin[] = PID_CMD_MARLIN;
+const char *const pidCmdRRF[] = PID_CMD_RRF;
 static int16_t pidHeaterTarget[MAX_HEATER_COUNT] = {0};
 static uint8_t curTool_index = NOZZLE0;
 static uint8_t degreeSteps_index = 1;
@@ -150,6 +151,7 @@ void menuPidWait(void)
 
 static inline void pidStart(void)
 {
+  const char *const *pidCmd = (infoMachineSettings.firmwareType == FW_REPRAPFW) ? pidCmdRRF : pidCmdMarlin;
   pidRunning = true;
   pidSucceeded = true;
 
@@ -157,7 +159,10 @@ static inline void pidStart(void)
   pidTimeout = OS_GetTimeMs() + PID_PROCESS_TIMEOUT;  // set timeout for overall PID process
 
   mustStoreCmd("M150 R255 U0 B0\n");  // set LED light to RED
-  mustStoreCmd("M106 S255\n");        // set fan speed to max
+  if (infoMachineSettings.firmwareType != FW_REPRAPFW)
+  {
+    mustStoreCmd("M106 S255\n");      // set fan speed to max
+  }
   mustStoreCmd("G4 S1\n");            // wait 1 sec
 
   for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)  // hotends + bed + chamber

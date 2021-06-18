@@ -195,9 +195,6 @@ void menuPrintFromSource(void)
 
   while (infoMenu.menu[infoMenu.cur] == menuPrintFromSource)
   {
-    GUI_SetBkColor(infoSettings.title_bg_color);
-    Scroll_DispString(&scrollLine, LEFT);
-    GUI_SetBkColor(infoSettings.bg_color);
 
     if (list_mode != true) // select item from icon view
     {
@@ -298,6 +295,10 @@ void menuPrintFromSource(void)
       GUI_ClearRect(0, 0, LCD_WIDTH, TITLE_END_Y);
       GUI_SetBkColor(infoSettings.bg_color);
     }
+
+    GUI_SetBkColor(infoSettings.title_bg_color);
+    Scroll_DispString(&scrollLine, LEFT);
+    GUI_SetBkColor(infoSettings.bg_color);
 
     #ifdef SD_CD_PIN
       if (isVolumeExist(infoFile.source) != true)
