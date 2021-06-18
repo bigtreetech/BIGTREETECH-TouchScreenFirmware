@@ -74,6 +74,7 @@ extern "C" {
 #define CONFIG_M27_KEEP_ON            "M27_always_active:"
 #define CONFIG_LONG_FILENAME          "long_filename_support:"
 #define CONFIG_FAN_PERCENT            "fan_speed_percent:"
+#define CONFIG_PROG_DISP_TYPE         "prog_disp_type:"
 #define CONFIG_PAUSE_RETRACT          "pause_retract:"
 #define CONFIG_PAUSE_POS              "pause_pos:"
 #define CONFIG_PAUSE_Z_RAISE          "pause_z_raise:"

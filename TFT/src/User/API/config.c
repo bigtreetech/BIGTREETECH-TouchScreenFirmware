@@ -793,6 +793,10 @@ void parseConfigKey(uint16_t index)
       infoSettings.fan_percentage = getOnOff();
       break;
 
+    case C_INDEX_PROG_DISP_TYPE:
+        SET_VALID_INT_VALUE(infoSettings.prog_disp_type, 0, 2);
+        break;
+
     case C_INDEX_PAUSE_RETRACT:
       if (key_seen("R")) SET_VALID_FLOAT_VALUE(infoSettings.pause_retract_len, MIN_RETRACT_LIMIT, MAX_RETRACT_LIMIT);
       if (key_seen("P")) SET_VALID_FLOAT_VALUE(infoSettings.resume_purge_len, MIN_RETRACT_LIMIT, MAX_RETRACT_LIMIT);

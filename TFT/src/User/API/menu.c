@@ -731,7 +731,7 @@ KEY_VALUES menuKeyGetValue(void)
     }
     else if((infoMenu.menu[infoMenu.cur] == menuPrinting) && isPrinting())
     {
-      tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keysIN), rect_of_keyPS);
+      tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keyPS), rect_of_keyPS);
     }
     else if ((infoMenu.menu[infoMenu.cur] == menuHeat) ||
              (infoMenu.menu[infoMenu.cur] == menuPid) ||
