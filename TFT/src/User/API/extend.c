@@ -180,27 +180,34 @@ bool FIL_SmartRunoutDetect(void)
 
 bool FIL_IsRunout(void)
 {
-  switch (infoSettings.runout)
+  if (infoSettings.runout & 1)
   {
-    case FILAMENT_RUNOUT_ON:
-      // Detect HIGH/LOW level, Suitable for general mechanical / photoelectric switches
-      return (FIL_RunoutPinFilteredLevel() == infoSettings.runout_invert);
+    // Get sensor type
+    uint8_t sensorType = (infoSettings.runout >> 1) & 1;
 
-    case FILAMENT_SMART_RUNOUT_ON:
-      return FIL_SmartRunoutDetect();
+    switch (sensorType)
+    {
+      case FILAMENT_SENSOR_NORMAL:
+        // Detect HIGH/LOW level, Suitable for general mechanical / photoelectric switches
+        return (FIL_RunoutPinFilteredLevel() == infoSettings.runout_invert);
 
-    default:
-      return false;
+      case FILAMENT_SENSOR_SMART:
+        return FIL_SmartRunoutDetect();
+
+      default:
+        return false;
+    }
   }
+  return false;
 }
 
 void loopBackEndFILRunoutDetect(void)
 {
-  if (infoSettings.runout == FILAMENT_RUNOUT_OFF)          // Filament runout turn off
+  if (!(infoSettings.runout & 1))   // Filament runout turn off
     return;
-  if (!FIL_IsRunout())                                     // Filament not runout yet, need constant scanning to filter interference
+  if (!FIL_IsRunout())              // Filament not runout yet, need constant scanning to filter interference
     return;
-  if (!isPrinting() || isPaused())                         // No printing or printing paused
+  if (!isPrinting() || isPaused())  // No printing or printing paused
     return;
 
   setPrintRunout(true);

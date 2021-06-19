@@ -891,7 +891,7 @@ void parseConfigKey(uint16_t index)
 
     #ifdef FIL_RUNOUT_PIN
       case C_INDEX_RUNOUT:
-        if (inLimit(config_int(), 0, 2))
+        if (inLimit(config_int(), 0, 3))
           infoSettings.runout = config_int();
         break;
 
