@@ -264,10 +264,13 @@ void hostActionCommands(void)
   }
   else if (ack_seen(":paused") || ack_seen(":pause"))
   {
-    if (ack_seen(":paused"))  // if paused with ADVANCED_PAUSE_FEATURE enabled in Marlin (:paused),
-      hostDialog = true;      // disable Resume/Pause button in the Printing menu
-    //else                      // otherwise, if ADVANCED_PAUSE_FEATURE is disabled in Marlin (:pause),
-    //  hostDialog = false;     // enable Resume/Pause button in the Printing menu
+    if (infoMachineSettings.firmwareType == FW_MARLIN)
+    {
+      if (ack_seen(":paused"))  // if paused with ADVANCED_PAUSE_FEATURE enabled in Marlin (:paused),
+        hostDialog = true;      // disable Resume/Pause button in the Printing menu
+      //else                      // otherwise, if ADVANCED_PAUSE_FEATURE is disabled in Marlin (:pause),
+      //  hostDialog = false;     // enable Resume/Pause button in the Printing menu
+    }
 
     // pass value "false" to let Marlin report when the host is not
     // printing (when notification ack "Not SD printing" is caught)
