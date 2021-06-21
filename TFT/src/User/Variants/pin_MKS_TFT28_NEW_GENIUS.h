@@ -6,10 +6,8 @@
   #define HARDWARE_VERSION "TFT28_NEW_GENIUS"
 #endif
 
-#if !defined(ST7920_EMULATOR) || defined(SPI3_PIN_SMART_USAGE)
-  #ifndef FIL_RUNOUT_PIN
-    #define FIL_RUNOUT_PIN PB0
-  #endif
+#if (!defined(ST7920_EMULATOR) && defined(FIL_RUNOUT_PIN))
+  #define FIL_RUNOUT_PIN PB0
 #endif
   
 #include "pin_MKS_TFT32_V1_4.h"
