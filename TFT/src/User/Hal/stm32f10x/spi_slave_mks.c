@@ -56,7 +56,11 @@ void SPI_Slave(CIRCULAR_QUEUE *queue)
 
 #ifndef SPI3_PIN_SMART_USAGE                                         // if enabled, it avoids any SPI3 CS pin usage and free the MISO (PB4 pin) for encoder pins
   SPI_GPIO_Init(ST7920_SPI);
-  GPIO_InitSet(SPI3_CS_PIN, MGPIO_MODE_IPU, 0);                      // CS
+  #ifdef MKS_TFT
+    GPIO_InitSet(SPI3_CS_PIN, MGPIO_MODE_IPN, 0);                      // CS
+  #else
+    GPIO_InitSet(SPI3_CS_PIN, MGPIO_MODE_IPU, 0);                      // CS
+  #endif
 #endif
 
   NVIC_InitStructure.NVIC_IRQChannel = SPI3_IRQn;
