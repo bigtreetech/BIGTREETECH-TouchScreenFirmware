@@ -30,13 +30,8 @@ const GUI_RECT printinfo_val_rect[6] = {
    START_X + PICON_LG_WIDTH * 2 + PICON_SPACE_X * 2 + PICON_VAL_SM_EX, PICON_START_Y + PICON_HEIGHT * 1 + PICON_SPACE_Y * 1 + PICON_VAL_Y + BYTE_HEIGHT},
 };
 
-#if !defined(TFT43_V3_0) && !defined(TFT50_V3_0)
-  #define PROGRESS_BAR_RAW_X0    (START_X + 1 * ICON_WIDTH + 1 * SPACE_X)            // X0 aligned to second icon
-#else
-  #define PROGRESS_BAR_RAW_X0    (START_X + 0 * ICON_WIDTH + 0 * SPACE_X)            // X0 aligned to first icon
-#endif
-
-#define PROGRESS_BAR_RAW_X1      (START_X + 4 * ICON_WIDTH + 3 * SPACE_X)            // X1 aligned to last icon
+#define PROGRESS_BAR_RAW_X0    (START_X)                                             // X0 aligned to first icon
+#define PROGRESS_BAR_RAW_X1    (START_X + 4 * ICON_WIDTH + 3 * SPACE_X)              // X1 aligned to last icon
 
 #ifdef MARKED_PROGRESS_BAR
   #define PROGRESS_BAR_DELTA_X   ((PROGRESS_BAR_RAW_X1 - PROGRESS_BAR_RAW_X0) % 10)  // use marked progress bar. Width rounding factor multiple of 10 slices
@@ -51,11 +46,6 @@ const GUI_RECT printinfo_val_rect[6] = {
 #define PROGRESS_BAR_FULL_WIDTH  (PROGRESS_BAR_X1 - PROGRESS_BAR_X0)  // 100% progress bar width
 #define PROGRESS_BAR_SLICE_WIDTH (PROGRESS_BAR_FULL_WIDTH / 10)       // 10% progress bar width
 
-#if !defined(TFT43_V3_0) && !defined(TFT50_V3_0)
-  const GUI_RECT progressVal = {START_X,             PICON_START_Y + PICON_HEIGHT * 2 + PICON_SPACE_Y,
-                                PROGRESS_BAR_X0 - 1, ICON_START_Y + ICON_HEIGHT + SPACE_Y};
-#endif
-
 const GUI_RECT progressBar = {PROGRESS_BAR_X0, PICON_START_Y + PICON_HEIGHT * 2 + PICON_SPACE_Y * 2 + 1,
                               PROGRESS_BAR_X1, ICON_START_Y + ICON_HEIGHT + SPACE_Y - PICON_SPACE_Y - 1};
 
@@ -65,15 +55,16 @@ const GUI_RECT progressBar = {PROGRESS_BAR_X0, PICON_START_Y + PICON_HEIGHT * 2 
 
 enum
 {
-  PRINTING_ICON = (1 << 0),
-  PRINTING_TEXT = (1 << 1),
-  PRINTING_VALUE = (1 << 2),
+  PRINT_ICON = (1 << 0),
+  PRINT_TOP_ROW = (1 << 1),
+  PRINT_BOTTOM_ROW = (1 << 2),
 };
 
 const uint8_t printingIcon[] = {ICON_PRINTING_NOZZLE, ICON_PRINTING_BED,   ICON_PRINTING_FAN,
                                 ICON_PRINTING_TIMER, ICON_PRINTING_ZLAYER, ICON_PRINTING_SPEED, ICON_PRINTING_FLOW};
 const char *const speedId[2] = {"Speed", "Flow "};
 bool hasFilamentData;
+PROGRESS_DISPLAY progDisplayType;
 
 #define TOGGLE_TIME  2000  // 1 seconds is 1000
 #define LAYER_DELTA  0.1   // minimal layer height change to update the layer display (avoid congestion in vase mode)
@@ -160,7 +151,7 @@ void menuBeforePrinting(void)
       infoMenu.cur--;
       return;
   }
-
+  progDisplayType = infoSettings.prog_disp_type;
   infoMenu.menu[infoMenu.cur] = menuPrinting;
 }
 
@@ -169,7 +160,7 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
   uint8_t icon = (icon_pos == SPD_ICON_POS) ? printingIcon[icon_pos + currentSpeedID] : printingIcon[icon_pos];
   char tempstr[10];
 
-  if (draw_type & PRINTING_ICON)
+  if (draw_type & PRINT_ICON)
     ICON_ReadDisplay(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, icon);
 
   ICON_PrepareRead(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, icon);
@@ -179,7 +170,7 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
     GUI_SetBkColor(textBgColor);
   #endif
 
-  if (draw_type & PRINTING_TEXT)
+  if (draw_type & PRINT_TOP_ROW)
   {
     uint8_t* textString = NULL;  // always initialize to NULL pointer as default value
 
@@ -199,10 +190,18 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
 
       case TIM_ICON_POS:
       {
-        uint8_t hour, min, sec;
+        if ((getPrintRemainingTime() == 0) || (progDisplayType != ELAPSED_REMAINING))
+        {
+          uint8_t printProgress = getPrintProgress();
+          snprintf(tempstr, 9, "%d%%      ", printProgress);
+        }
+        else
+        {
+          uint8_t hour, min, sec;
 
-        getPrintTimeDetail(&hour, &min, &sec);
-        sprintf(tempstr, "%02u:%02u:%02u", hour, min, sec);
+          getPrintTimeDetail(&hour, &min, &sec);
+          sprintf(tempstr, "%02u:%02u:%02u", hour, min, sec);
+        }
         textString = (uint8_t *)tempstr;
         break;
       }
@@ -222,7 +221,7 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
     GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, textString);
   }
 
-  if (draw_type & PRINTING_VALUE)
+  if (draw_type & PRINT_BOTTOM_ROW)
   {
     tempstr[0] = 0;  // always initialize to empty string as default value
 
@@ -244,11 +243,17 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
         break;
 
       case TIM_ICON_POS:
-        if (getPrintRemainingTime())  // if remaining time is pending
         {
           uint8_t hour, min, sec;
 
-          getPrintRemainingTimeDetail(&hour, &min, &sec);
+          if ((getPrintRemainingTime() == 0) || (progDisplayType == PERCENTAGE_ELAPSED))
+          {
+            getPrintTimeDetail(&hour, &min, &sec);
+          }
+          else
+          {
+            getPrintRemainingTimeDetail(&hour, &min, &sec);
+          }
           sprintf(tempstr, "%02u:%02u:%02u", hour, min, sec);
         }
         break;
@@ -279,7 +284,7 @@ static inline void toggleInfo(void)
     {
       currentTool = (currentTool + 1) % infoSettings.hotend_count;
       RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
-      reDrawPrintingValue(EXT_ICON_POS, PRINTING_TEXT | PRINTING_VALUE);
+      reDrawPrintingValue(EXT_ICON_POS, PRINT_TOP_ROW | PRINT_BOTTOM_ROW);
     }
 
     if ((infoSettings.fan_count + infoSettings.ctrl_fan_en) > 1)
@@ -290,7 +295,7 @@ static inline void toggleInfo(void)
       } while (!fanIsValid(currentFan));
 
       RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
-      reDrawPrintingValue(FAN_ICON_POS, PRINTING_TEXT | PRINTING_VALUE);
+      reDrawPrintingValue(FAN_ICON_POS, PRINT_TOP_ROW | PRINT_BOTTOM_ROW);
     }
 
     currentSpeedID = (currentSpeedID + 1) % 2;
@@ -299,9 +304,9 @@ static inline void toggleInfo(void)
     #ifdef UNIFORM_LIVE_TEXT_BG_COLOR  // it allows to eliminate flickering on alternating icons
       ICON_PartialReadDisplay(printinfo_points[SPD_ICON_POS].x, printinfo_points[SPD_ICON_POS].y, PICON_TITLE_X, -1,
                               (currentSpeedID == 0) ? ICON_PRINTING_SPEED : ICON_PRINTING_FLOW, 0, 0);
-      reDrawPrintingValue(SPD_ICON_POS, PRINTING_TEXT | PRINTING_VALUE);
+      reDrawPrintingValue(SPD_ICON_POS, PRINT_TOP_ROW | PRINT_BOTTOM_ROW);
     #else
-      reDrawPrintingValue(SPD_ICON_POS, PRINTING_ICON | PRINTING_TEXT | PRINTING_VALUE);
+      reDrawPrintingValue(SPD_ICON_POS, PRINT_ICON | PRINT_TOP_ROW | PRINT_BOTTOM_ROW);
     #endif
 
     speedQuery();
@@ -341,17 +346,17 @@ static inline void reDrawProgress(uint8_t prevProgress)
 {
   uint8_t nextProgress = getPrintProgress();
 
-  #if !defined(TFT43_V3_0) && !defined(TFT50_V3_0)
-    char progStr[8];
-
-    sprintf(progStr, " %d%% ", nextProgress);
-    GUI_DispStringInPrect(&progressVal, (uint8_t *)progStr);
-  #endif
-
-  if (nextProgress >= prevProgress)
-    reDrawProgressBar(prevProgress, nextProgress, MAT_ORANGE, BLACK);
-  else  // if regress, swap indexes and colors
-    reDrawProgressBar(nextProgress, prevProgress, DARKGRAY, MAT_ORANGE);
+  if (nextProgress != prevProgress)
+  { // we need speed, do not draw anything if progress isn't changed
+    if (nextProgress > prevProgress)
+      reDrawProgressBar(prevProgress, nextProgress, MAT_ORANGE, BLACK);
+    else  // if regress, swap indexes and colors
+      reDrawProgressBar(nextProgress, prevProgress, DARKGRAY, MAT_ORANGE);
+    if (progDisplayType != ELAPSED_REMAINING)
+    {
+      reDrawPrintingValue(TIM_ICON_POS, PRINT_TOP_ROW);
+    }
+  }
 }
 
 static inline void printingDrawPage(void)
@@ -363,7 +368,7 @@ static inline void printingDrawPage(void)
   #endif
 
   for (uint8_t i = 0; i < 6; i++)
-    reDrawPrintingValue(i, PRINTING_ICON | PRINTING_TEXT | PRINTING_VALUE);
+    reDrawPrintingValue(i, PRINT_ICON | PRINT_TOP_ROW | PRINT_BOTTOM_ROW);
 
   // progress
   GUI_SetColor(ORANGE);
@@ -505,7 +510,7 @@ void menuPrinting(void)
       nowHeat.T[currentTool].current = heatGetCurrentTemp(currentTool);
       nowHeat.T[currentTool].target = heatGetTargetTemp(currentTool);
       RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
-      reDrawPrintingValue(EXT_ICON_POS, PRINTING_VALUE);
+      reDrawPrintingValue(EXT_ICON_POS, PRINT_BOTTOM_ROW);
     }
 
     // check bed temp change
@@ -514,7 +519,7 @@ void menuPrinting(void)
       nowHeat.T[BED].current = heatGetCurrentTemp(BED);
       nowHeat.T[BED].target = heatGetTargetTemp(BED);
       RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
-      reDrawPrintingValue(BED_ICON_POS, PRINTING_VALUE);
+      reDrawPrintingValue(BED_ICON_POS, PRINT_BOTTOM_ROW);
     }
 
     // check Fan speed change
@@ -522,7 +527,7 @@ void menuPrinting(void)
     {
       nowFan[currentFan] = fanGetCurSpeed(currentFan);
       RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
-      reDrawPrintingValue(FAN_ICON_POS, PRINTING_VALUE);
+      reDrawPrintingValue(FAN_ICON_POS, PRINT_BOTTOM_ROW);
     }
 
     // check printing progress
@@ -533,7 +538,14 @@ void menuPrinting(void)
       {
         time = getPrintTime();
         RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
-        reDrawPrintingValue(TIM_ICON_POS, PRINTING_TEXT | PRINTING_VALUE);
+        if (progDisplayType == ELAPSED_REMAINING)
+        {
+          reDrawPrintingValue(TIM_ICON_POS, PRINT_TOP_ROW | PRINT_BOTTOM_ROW);
+        }
+        else
+        {
+          reDrawPrintingValue(TIM_ICON_POS, PRINT_BOTTOM_ROW);
+        }
       }
 
       // check print progress percentage change
@@ -548,7 +560,7 @@ void menuPrinting(void)
     {
       if (getPrintProgress() != 100)
       {
-        reDrawPrintingValue(TIM_ICON_POS, PRINTING_VALUE);
+        reDrawPrintingValue(TIM_ICON_POS, PRINT_BOTTOM_ROW);
         updatePrintProgress();
         reDrawProgress(oldProgress);
         oldProgress = getPrintProgress();
@@ -567,7 +579,7 @@ void menuPrinting(void)
       {
         usedLayer = curLayer;
         RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
-        reDrawPrintingValue(Z_ICON_POS, PRINTING_VALUE);
+        reDrawPrintingValue(Z_ICON_POS, PRINT_BOTTOM_ROW);
       }
       if (ABS(curLayer - prevLayer) < LAYER_DELTA)
       {
@@ -581,7 +593,7 @@ void menuPrinting(void)
     {
       curspeed[currentSpeedID] = speedGetCurPercent(currentSpeedID);
       RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
-      reDrawPrintingValue(SPD_ICON_POS, PRINTING_VALUE);
+      reDrawPrintingValue(SPD_ICON_POS, PRINT_BOTTOM_ROW);
     }
 
     // check if print is paused
@@ -621,7 +633,8 @@ void menuPrinting(void)
       case KEY_ICON_2:
         if (isPrinting())
         {
-          //  will be implemented in a future PR
+          progDisplayType = (progDisplayType + 1) % 3;
+          reDrawPrintingValue(TIM_ICON_POS, PRINT_TOP_ROW | PRINT_BOTTOM_ROW);
         }
         break;
 
