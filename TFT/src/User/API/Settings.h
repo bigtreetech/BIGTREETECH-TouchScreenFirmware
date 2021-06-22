@@ -33,7 +33,7 @@ typedef enum
 #define CONFIG_SUPPPORT 20210605
 
 #define FONT_FLASH_SIGN       20210522  // (YYYYMMDD) change if fonts require updating
-#define CONFIG_FLASH_SIGN     20210522  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
+#define CONFIG_FLASH_SIGN     20210615  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
 #define LANGUAGE_FLASH_SIGN   20210530  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
 #define ICON_FLASH_SIGN       20210522  // (YYYYMMDD) change if any icon(s) is added or removed
 
@@ -148,6 +148,7 @@ typedef struct
   uint8_t  m27_active;
   uint8_t  longFileName;
   uint8_t  fan_percentage;
+  uint8_t  prog_disp_type;
   float    pause_retract_len;
   float    resume_purge_len;
   float    pause_pos[AXIS_NUM-1];  // X, Y
@@ -275,6 +276,13 @@ typedef struct
   uint8_t buildPercent;
   uint8_t softwareEndstops;
 } MACHINESETTINGS;
+
+typedef enum
+{
+  PERCENTAGE_ELAPSED = 0,
+  PERCENTAGE_REMAINING,
+  ELAPSED_REMAINING,
+} PROGRESS_DISPLAY;
 
 extern SETTINGS infoSettings;
 extern MACHINESETTINGS infoMachineSettings;
