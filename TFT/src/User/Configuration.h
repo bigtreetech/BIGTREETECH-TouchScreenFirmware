@@ -589,9 +589,20 @@
  */
 #define AUTO_SHUT_DOWN_MAXTEMP 50
 
-//
-// Filament Runout Settings (if connected to TFT controller)
-//
+/*
+  Filament Runout Settings (if connected to TFT controller)
+
+ If the sensor is connected to the mainboard, in config.ini file:
+   You must set this to 0 (Disabled. 'OFF' option in the TFT Display), 
+   and put a M75 code at 'start_gcode' option, and enable it. For consistency you would to put a M77 code 
+   at end gcode script an enable it too.
+
+   Example:
+     end_gcode_enabled:1
+     start_gcode_enabled:1
+     start_gcode:M75\n
+     end_gcode:M77\n
+*/
 
 // Filament runout detection
 #define FIL_RUNOUT_INVERTING true  // Set to false to invert the logic of the sensor. (Default: true)
