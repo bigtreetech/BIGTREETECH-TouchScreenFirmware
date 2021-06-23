@@ -590,7 +590,7 @@
 #define AUTO_SHUT_DOWN_MAXTEMP 50
 
 /**
- * Filament Runout Settings (if connected to TFT controller Only)
+ * Filament Runout Settings (if connected to TFT controller only)
  *
  * Select the type of filament/runout sensor and its default enabled/disabled state.
  *
