@@ -1,10 +1,10 @@
 /**
-* Char Icons Kewords Generation
-* Usage: X_CHAR(VALUE)
-* 'VALUE' is the keyword name without the 'CHARICON_'
-*
-* Description: https://en.wikipedia.org/wiki/X_Macro
-*/
+ * Char Icons Kewords Generation
+ * Usage: X_CHAR(VALUE)
+ * 'VALUE' is the keyword name without the 'CHARICON_'
+ *
+ * Description: https://en.wikipedia.org/wiki/X_Macro
+ */
 X_CHAR (BLANK)
 X_CHAR (NOZZLE)
 X_CHAR (BED)

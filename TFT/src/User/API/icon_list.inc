@@ -1,11 +1,12 @@
 /**
-* Icon Keywords Generation
-* Usage: X_ICON(VALUE)
-* 'VALUE' is the keyword name without the 'ICON_'
-*
-* Description: https://en.wikipedia.org/wiki/X_Macro
-*/
-//after changing/adding/removing an icon, change the ICON_FLASH_SIGN in Settings.h
+ * Icon Keywords Generation
+ * Usage: X_ICON(VALUE)
+ * 'VALUE' is the keyword name without the 'ICON_'
+ *
+ * Description: https://en.wikipedia.org/wiki/X_Macro
+ *
+ * After changing/adding/removing an icon, change the ICON_FLASH_SIGN in Settings.h
+ */
 
 X_ICON (HEAT)
 X_ICON (MOVE)

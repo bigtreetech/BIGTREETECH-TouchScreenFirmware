@@ -343,7 +343,7 @@
     #define STRING_CLICK_FOR_MORE         "Click for summary"
     #define STRING_EXT_TEMPLOW            "Hotend temperature is below minimum temperature (%d℃)."
     #define STRING_HEAT_HOTEND            "Heat hotend to %d℃?"
-    #define STRING_DESIRED_TEMPLOW        "Hotend temperature is below\ndesired temperature (%d℃)."
+    #define STRING_DESIRED_TEMPLOW        "Hotend temperature is below desired temperature (%d℃)."
     #define STRING_WAIT_HEAT_UP           "Wait for it to heat up."
     #define STRING_NOZZLE_STABILIZING     "Wait, nozzle stabilizing..."
     #define STRING_Z_ALIGN                "Z Align"
