@@ -98,7 +98,7 @@ void infoSettingsReset(void)
   infoSettings.auto_off_temp          = AUTO_SHUT_DOWN_MAXTEMP;
 
 // Filament Runout Settings
-  infoSettings.runout                 = DISABLED;
+  infoSettings.runout                 = FIL_SENSOR_TYPE;
   infoSettings.runout_invert          = FIL_RUNOUT_INVERTING;
   infoSettings.runout_noise_ms        = FIL_NOISE_THRESHOLD;
   infoSettings.runout_distance        = FILAMENT_RUNOUT_DISTANCE_MM;

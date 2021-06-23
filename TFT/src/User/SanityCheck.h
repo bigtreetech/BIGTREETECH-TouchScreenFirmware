@@ -160,6 +160,10 @@
   #error "FAN_NUM can not be more than 6"
 #endif
 
+#if FIL_SENSOR_TYPE > 3 || FIL_SENSOR_TYPE < 0
+  #error "FIL_SENSOR_TYPE cannot be greater than 3 or less than 0"
+#endif
+
 #ifdef CUSTOM_0_LABEL
   #define ENABLE_CUSTOM0 1
 #else
