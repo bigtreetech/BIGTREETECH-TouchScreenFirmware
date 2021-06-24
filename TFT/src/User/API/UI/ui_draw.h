@@ -16,11 +16,6 @@ extern "C" {
 
 #define SPACE_Y          ((LCD_HEIGHT - ICON_START_Y - ICON_HEIGHT * 2) / 2)
 
-#ifdef TFT70_V3_0
-#define SSICON_FIRST_ROW 5
-#define SSICON_SECOND    ROW
-#endif
-
 // select marlin or bigtree
 #define SPACE_SELEX      ((LCD_WIDTH - ICON_WIDTH * 2) / 4)
 #define SPACE_SELEY      ((LCD_HEIGHT - ICON_HEIGHT) / 2)
