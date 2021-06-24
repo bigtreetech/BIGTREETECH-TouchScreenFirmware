@@ -15,6 +15,14 @@
   #endif
 #endif
 
+#if CONFIG_VERSION != CONFIG_SUPPPORT
+  #error "the Configuration.h is old. please use the latest Configuration.h file"
+#endif
+
+#if BAUDRATE < 0 || BAUDRATE >= BAUDRATE_COUNT
+  #error "invalid Baudrate index. Pleas select a value only from options provided in configuration.h"
+#endif
+
 #if THUMBNAIL_PARSER == PARSER_BASE64PNG
   #if RAM_SIZE<96
     // Decoding Base64-encoded PNGs is not possible due to memory requirements. Downgrading to the "RGB565 bitmap" option.
@@ -27,14 +35,6 @@
   #if (THUMBNAIL_PARSER != PARSER_CLASSIC) && (THUMBNAIL_PARSER != PARSER_RGB565) && (THUMBNAIL_PARSER != PARSER_BASE64PNG)
     #error "Configuration error: THUMBNAIL_PARSER is not set to a valid value of 0, 1 or 2."
   #endif
-#endif
-
-#if CONFIG_VERSION != CONFIG_SUPPPORT
-  #error "the Configuration.h is old. please use the latest Configuration.h file"
-#endif
-
-#if BAUDRATE < 0 || BAUDRATE >= BAUDRATE_COUNT
-  #error "invalid Baudrate index. Pleas select a value only from options provided in configuration.h"
 #endif
 
 #ifdef ST7920_EMULATOR
