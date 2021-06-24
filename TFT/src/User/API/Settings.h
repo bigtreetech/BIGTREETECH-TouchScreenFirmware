@@ -211,7 +211,7 @@ typedef struct
 
 typedef struct
 {
-  char     preheat_name[PREHEAT_COUNT][MAX_STRING_LENGTH + 1];
+  char preheat_name[PREHEAT_COUNT][MAX_STRING_LENGTH + 1];
   uint16_t preheat_temp[PREHEAT_COUNT];
   uint16_t preheat_bed[PREHEAT_COUNT];
 } PREHEAT_STORE;
