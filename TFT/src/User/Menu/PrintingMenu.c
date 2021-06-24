@@ -498,8 +498,8 @@ void menuPrinting(void)
     #endif
       printingItems.items[KEY_ICON_6] = itemIsPrinting[0];  // BackGround
       printingItems.items[KEY_ICON_7] = itemIsPrinting[2];  // Back
-      for (uint8_t i = 0; i < 6; i++)
-      {
+      for (uint8_t i = 0; i < PS_TOUCH_6; i++)
+      { // make status icons unclickable
         rect_of_touchPS[i] = touchPS_elements[PS_DUMMY];
       }
       rect_of_touchPS[PS_TOUCH_7] = touchPS_elements[PS_DUMMY];

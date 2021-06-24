@@ -767,10 +767,10 @@ void itemDrawIconPress(uint8_t position, uint8_t is_press)
 void itemDrawIconPress_PS(uint8_t position, uint8_t is_press)
 {
   if (position < PS_TOUCH_6 || position > PS_TOUCH_9) return;
-
-  const GUI_RECT *rect = rect_of_touchPS + position;
-
   position -= PS_TOUCH_OFFSET;
+
+  const GUI_RECT *rect = curRect + position;
+
   if (is_press)  // Turn green when pressed
     ICON_PressedDisplay(rect->x0, rect->y0, curMenuItems->items[position].icon);
   else  // Redraw normal icon when released
