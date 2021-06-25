@@ -55,9 +55,9 @@ typedef enum
 #define SPEED_COUNT            3
 #define PREHEAT_COUNT          6
 #define CUSTOM_GCODES_COUNT   15
-#define MAX_STRING_LENGTH     20
+#define MAX_STRING_LENGTH     75
 #define MAX_LABEL_LENGTH       7
-#define MAX_GCODE_NAME_LENGTH 24
+#define MAX_GCODE_NAME_LENGTH 75
 #define MAX_GCODE_LENGTH      75
 
 #define MIN_STRING_LENGTH      3
@@ -206,12 +206,12 @@ typedef struct
 
 typedef struct
 {
-  char marlin_title[MAX_GCODE_LENGTH + 1];
+  char marlin_title[MAX_STRING_LENGTH + 1];
 } STRINGS_STORE;
 
 typedef struct
 {
-  char     preheat_name[PREHEAT_COUNT][MAX_GCODE_LENGTH + 1];
+  char preheat_name[PREHEAT_COUNT][MAX_STRING_LENGTH + 1];
   uint16_t preheat_temp[PREHEAT_COUNT];
   uint16_t preheat_bed[PREHEAT_COUNT];
 } PREHEAT_STORE;
@@ -219,7 +219,7 @@ typedef struct
 typedef struct
 {
   uint8_t count;
-  char name[CUSTOM_GCODES_COUNT][MAX_GCODE_LENGTH + 1];
+  char name[CUSTOM_GCODES_COUNT][MAX_GCODE_NAME_LENGTH + 1];
   char gcode[CUSTOM_GCODES_COUNT][MAX_GCODE_LENGTH + 1];
 } CUSTOM_GCODES;
 

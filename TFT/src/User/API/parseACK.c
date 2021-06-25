@@ -206,7 +206,9 @@ bool processKnownEcho(void)
     //if (forceIgnore[i] == 0)
     //{
       if (knownEcho[i].notifyType == ECHO_NOTIFY_TOAST)
+      {
         addToast(DIALOG_TYPE_INFO, dmaL2Cache);
+      }
       else if (knownEcho[i].notifyType == ECHO_NOTIFY_DIALOG)
       {
         BUZZER_PLAY(sound_notify);
@@ -624,6 +626,7 @@ void parseACK(void)
           ack_seen("result\":\"0:/gcodes/");  // {"key":"job.file.fileName","flags": "","result":"0:/gcodes/pig-4H.gcode"}
           fileEndString = "\"";
         }
+
         uint16_t start_index = ack_index;
         uint16_t end_index = ack_continue_seen(fileEndString) ? (ack_index - strlen(fileEndString)) : start_index;
         uint16_t path_len = MIN(end_index - start_index, MAX_PATH_LEN - strlen(getCurFileSource()) - 1);
@@ -755,15 +758,17 @@ void parseACK(void)
         pidUpdateStatus(false);
       }
       // parse and store M355, Case light message
-      else if (ack_seen("Case light: OFF"))
+      else if (ack_seen("Case light:"))
       {
-        caseLightSetState(false);
-        caseLightQuerySetWait(false);
-      }
-      else if (ack_seen("Case light: "))
-      {
-        caseLightSetState(true);
-        caseLightSetBrightness(ack_value());
+        if (ack_seen("OFF"))
+        {
+          caseLightSetState(false);
+        }
+        else
+        {
+          caseLightSetState(true);
+          caseLightSetBrightness(ack_value());
+        }
         caseLightQuerySetWait(false);
       }
       // parse and store M420 V1 T1, Mesh data (e.g. from Mesh Editor menu)
@@ -1220,7 +1225,7 @@ void parseACK(void)
       {
         if (ack_seen(errorZProbe))  // smoothieboard ZProbe triggered before move, aborting command.
         {
-          ackPopupInfo("ZProbe triggered\n before move.\n Aborting Print!");
+          ackPopupInfo("ZProbe triggered before move.\nAborting Print!");
         }
         // parse and store volumetric extrusion M200 response of Smoothieware
         else if (ack_seen("Volumetric extrusion is disabled"))
