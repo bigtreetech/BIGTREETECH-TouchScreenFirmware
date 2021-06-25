@@ -129,7 +129,7 @@ void LCD_WR_DATA(uint16_t data)
 
 uint16_t LCD_RD_DATA(void)
 {
-  #if defined(MKS_TFT32_V1_3) || defined(MKS_TFT32_V1_4) || defined (MKS_TFT28_V3_0) || defined (MKS_TFT28_V4_0)
+  #if defined(MKS_TFT)
     #define LCD_DATA_PORT GPIOE
   #else
     #define LCD_DATA_PORT GPIOC
@@ -156,7 +156,7 @@ uint16_t LCD_RD_DATA(void)
 
 void LCD_GPIO_Config(void)
 {
-#if defined(MKS_TFT32_V1_3) || defined(MKS_TFT32_V1_4) || defined (MKS_TFT28_V3_0) || defined (MKS_TFT28_V4_0)
+#if defined(MKS_TFT)
   GPIO_InitTypeDef GPIO_InitStructure;
   /* GPIO Ports Clock Enable */
 

@@ -204,6 +204,12 @@ void Serial_Puts(uint8_t port, char *s)
   }
 }
 
+void Serial_Putchar(uint8_t port, char ch)
+{
+  while((Serial[port].uart->SR & USART_FLAG_TC) == (uint16_t)RESET);
+  Serial[port].uart->DR = (uint8_t) ch;
+}
+
 #include "stdio.h"
 int fputc(int ch, FILE *f)
 {

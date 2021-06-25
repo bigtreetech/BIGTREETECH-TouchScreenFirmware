@@ -1,6 +1,8 @@
 #include "BLTouch.h"
 #include "includes.h"
 
+const char * const SERVO_GCODE = "M280 P0 S%d\n";
+
 const MENUITEMS BLTouchItems = {
   // title
   LABEL_BLTOUCH,
@@ -29,19 +31,19 @@ void menuBLTouch(void)
     switch (key_num)
     {
       case KEY_ICON_0:
-        storeCmd("M280 P0 S160\n");
+        storeCmd(SERVO_GCODE, 160);
         break;
 
       case KEY_ICON_1:
-        storeCmd("M280 P0 S120\n");
+        storeCmd(SERVO_GCODE, 120);
         break;
 
       case KEY_ICON_2:
-        storeCmd("M280 P0 S10\n");
+        storeCmd(SERVO_GCODE, 10);
         break;
 
       case KEY_ICON_3:
-        storeCmd("M280 P0 S90\n");
+        storeCmd(SERVO_GCODE, 90);
         break;
 
       case KEY_ICON_4:

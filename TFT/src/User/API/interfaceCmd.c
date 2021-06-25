@@ -205,7 +205,7 @@ void purgeLastCmd(bool purged, bool avoidTerminal)
     terminalCache(infoCmd.queue[infoCmd.index_r].gcode, TERMINAL_GCODE);
   }
 
-  #ifdef SERIAL_DEBUG_PORT
+  #if defined(SERIAL_DEBUG_PORT) && defined(DEBUG_SERIAL_COMM)
     // dump serial data sent to debug port
     Serial_Puts(SERIAL_DEBUG_PORT, ">>");
     if (purged)

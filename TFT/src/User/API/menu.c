@@ -12,8 +12,8 @@ const GUI_RECT exhibitRect = {
 const GUI_RECT rect_of_keysIN[TM_RECT_COUNT] = {
   // 8 icons area
   {0*ICON_WIDTH+0*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  1*ICON_WIDTH+0*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
-  {0,0,0,0},
-  {0,0,0,0},
+  {0, 0, 0, 0},
+  {0, 0, 0, 0},
   {3*ICON_WIDTH+3*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  4*ICON_WIDTH+3*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
   {0*ICON_WIDTH+0*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  1*ICON_WIDTH+0*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
   {1*ICON_WIDTH+1*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  2*ICON_WIDTH+1*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
@@ -31,7 +31,7 @@ const GUI_RECT rect_of_keysIN[TM_RECT_COUNT] = {
   {3*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  4*SPACE_X_PER_ICON,  2*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y},
 
   // title bar area
-  {0 ,0 ,LCD_WIDTH, ICON_START_Y},
+  {0, 0, LCD_WIDTH, ICON_START_Y},
   // tempbox area
   {1*ICON_WIDTH+1*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  3*ICON_WIDTH+2*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y}
 };
@@ -58,7 +58,7 @@ const GUI_RECT rect_of_key[MENU_RECT_COUNT]={
   {3*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  4*SPACE_X_PER_ICON,  2*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y},
 
   // title bar area
-  {0 ,0 ,LCD_WIDTH, ICON_START_Y},
+  {0, 0, LCD_WIDTH, ICON_START_Y},
 };
 
 const GUI_RECT rect_of_keySS[SS_RECT_COUNT] = {
@@ -73,21 +73,21 @@ const GUI_RECT rect_of_keySS[SS_RECT_COUNT] = {
   {4*SSICON_WIDTH+4*SS_SPACE_X+START_X,  0*SSICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  5*SSICON_WIDTH+4*SS_SPACE_X+START_X,  1*SSICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
   // 2nd icon row area
   {0*ICON_WIDTH+0*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  1*ICON_WIDTH+0*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
-  {0,0,0,0},
+  {0, 0, 0, 0},
   {3*ICON_WIDTH+3*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  4*ICON_WIDTH+3*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
 
   // 8 labels area
-  {0,0,0,0},
-  {0,0,0,0},
-  {0,0,0,0},
-  {0,0,0,0},
-  {0,0,0,0},
+  {0, 0, 0, 0},
+  {0, 0, 0, 0},
+  {0, 0, 0, 0},
+  {0, 0, 0, 0},
+  {0, 0, 0, 0},
   {0*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  1*SPACE_X_PER_ICON,  2*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y},
   {1*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  3*SPACE_X_PER_ICON,  2*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y},
   {3*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  4*SPACE_X_PER_ICON,  2*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y},
 
   // title bar area
-  {0 ,0 ,LCD_WIDTH, ICON_START_Y},
+  {0, 0, LCD_WIDTH, ICON_START_Y},
 
   // infobox area
   {1*ICON_WIDTH+1*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  3*ICON_WIDTH+2*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y}
@@ -100,8 +100,8 @@ const GUI_RECT rect_of_keySS[SS_RECT_COUNT] = {
   {2*ICON_WIDTH+2*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  3*ICON_WIDTH+2*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
   {3*ICON_WIDTH+3*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  4*ICON_WIDTH+3*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
   {0*ICON_WIDTH+0*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  1*ICON_WIDTH+0*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
-  {0,0,0,0},
-  {0,0,0,0},
+  {0, 0, 0, 0},
+  {0, 0, 0, 0},
   {3*ICON_WIDTH+3*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  4*ICON_WIDTH+3*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
 
   // 8 labels area
@@ -115,12 +115,46 @@ const GUI_RECT rect_of_keySS[SS_RECT_COUNT] = {
   {3*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  4*SPACE_X_PER_ICON,  2*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y},
 
   // title bar area
-  {0 ,0 ,LCD_WIDTH, ICON_START_Y},
+  {0, 0, LCD_WIDTH, ICON_START_Y},
 
   // infobox area
   {1*ICON_WIDTH+1*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  3*ICON_WIDTH+2*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
 
 #endif
+};
+
+const GUI_RECT rect_of_keyPS[MENU_RECT_COUNT] = {
+  // hotend + bed area
+  {START_X+PICON_LG_WIDTH*0+PICON_SPACE_X*0, PICON_START_Y+PICON_HEIGHT*0+PICON_SPACE_Y*0,
+   START_X+PICON_LG_WIDTH*2+PICON_SPACE_X*1, PICON_START_Y+PICON_HEIGHT*1+PICON_SPACE_Y*0},
+  // fan area
+  {START_X+PICON_LG_WIDTH*2+PICON_SPACE_X*2,                PICON_START_Y+PICON_HEIGHT*0+PICON_SPACE_Y*0,
+   START_X+PICON_LG_WIDTH*2+PICON_SPACE_X*2+PICON_SM_WIDTH, PICON_START_Y+PICON_HEIGHT*1+PICON_SPACE_Y*0},
+  // timer area
+  {START_X+PICON_LG_WIDTH*0+PICON_SPACE_X*0, PICON_START_Y+PICON_HEIGHT*1+PICON_SPACE_Y*1,
+   START_X+PICON_LG_WIDTH*1+PICON_SPACE_X*0, PICON_START_Y+PICON_HEIGHT*2+PICON_SPACE_Y*1},
+  // speed area
+  {START_X+PICON_LG_WIDTH*2+PICON_SPACE_X*2,                PICON_START_Y+PICON_HEIGHT*1+PICON_SPACE_Y*1,
+   START_X+PICON_LG_WIDTH*2+PICON_SPACE_X*2+PICON_SM_WIDTH, PICON_START_Y+PICON_HEIGHT*2+PICON_SPACE_Y*1},
+
+  // 4 bottom icons area
+  {0*ICON_WIDTH+0*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  1*ICON_WIDTH+0*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
+  {1*ICON_WIDTH+1*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  2*ICON_WIDTH+1*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
+  {2*ICON_WIDTH+2*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  3*ICON_WIDTH+2*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
+  {3*ICON_WIDTH+3*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  4*ICON_WIDTH+3*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
+
+  // 8 labels area
+  {0, 0, 0, 0},
+  {0, 0, 0, 0},
+  {0, 0, 0, 0},
+  {0, 0, 0, 0},
+  {0*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  1*SPACE_X_PER_ICON,  2*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y},
+  {1*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  2*SPACE_X_PER_ICON,  2*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y},
+  {2*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  3*SPACE_X_PER_ICON,  2*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y},
+  {3*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  4*SPACE_X_PER_ICON,  2*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y},
+
+  // title bar area
+  {0, 0, LCD_WIDTH, ICON_START_Y},
 };
 
 const GUI_RECT rect_of_keyListView[ITEM_PER_PAGE + 1] = {
@@ -136,12 +170,12 @@ const GUI_RECT rect_of_keyListView[ITEM_PER_PAGE + 1] = {
   {2*START_X + LISTITEM_WIDTH,  2*LIST_ICON_HEIGHT+2*LISTICON_SPACE_Y+ICON_START_Y,  2*START_X + LISTITEM_WIDTH + 1*LIST_ICON_WIDTH,  3*LIST_ICON_HEIGHT+2*LISTICON_SPACE_Y+ICON_START_Y},
 
   // title bar area
-  {0 ,0 ,LCD_WIDTH, ICON_START_Y}
+  {0, 0, LCD_WIDTH, ICON_START_Y}
 };
 
 // titlebar touch area
 const GUI_RECT rect_of_titleBar[] = {
-  {0 ,0 ,LCD_WIDTH, ICON_START_Y}
+  {0, 0, LCD_WIDTH, ICON_START_Y}
 };
 
 // Clean up the gaps outside icons
@@ -288,7 +322,7 @@ void menuDrawIconText(const ITEM *item, uint8_t position)
     GUI_DispStringInPrect(rect, content);
 }
 
- void menuDrawListItem(const LISTITEM *item, uint8_t position)
+void menuDrawListItem(const LISTITEM *item, uint8_t position)
 {
   const GUI_RECT *rect = rect_of_keyListView + position;
   if (item->icon == CHARICON_BACKGROUND)
@@ -630,6 +664,33 @@ void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, const ITEM * item)
     ICON_PrepareReadEnd();
 }  // showLiveInfo
 
+void displayExhibitHeader(const char * titleStr, const char * unitStr)
+{
+  // draw header title
+  if (titleStr != NULL)
+  {
+    char tempstr[20];
+    sprintf(tempstr, "%-8s", titleStr);
+    GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *)tempstr);
+  }
+
+  // draw unit string
+  if (unitStr != NULL)
+  {
+    setFontSize(FONT_SIZE_LARGE);
+    GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1) >> 1, exhibitRect.y0, (uint8_t *)unitStr);
+  }
+
+  setFontSize(FONT_SIZE_NORMAL);
+}
+
+void displayExhibitValue(const char * valueStr)
+{
+  setFontSize(FONT_SIZE_LARGE);
+  GUI_DispStringInPrect(&exhibitRect, (uint8_t *) valueStr);
+  setFontSize(FONT_SIZE_NORMAL);
+}
+
 // When there is a button value, the icon changes color and redraws
 void itemDrawIconPress(uint8_t position, uint8_t is_press)
 {
@@ -676,6 +737,10 @@ KEY_VALUES menuKeyGetValue(void)
     if ((infoMenu.menu[infoMenu.cur] == menuStatus) || ((infoMenu.menu[infoMenu.cur] == menuPrinting) && !isPrinting()))
     {
       tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keySS), rect_of_keySS);
+    }
+    else if((infoMenu.menu[infoMenu.cur] == menuPrinting) && isPrinting())
+    {
+      tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keyPS), rect_of_keyPS);
     }
     else if ((infoMenu.menu[infoMenu.cur] == menuHeat) ||
              (infoMenu.menu[infoMenu.cur] == menuPid) ||
@@ -865,13 +930,16 @@ void loopBackEnd(void)
   {
     loopCaseLight();
   }
+
+  // Query fan speed, only for RRF now
+  fanQuery();
 }  // loopBackEnd
 
 void loopFrontEnd(void)
 {
   // Check if volume source(SD/U disk) insert
   loopVolumeSource();
-  // loop to check and run toast messages
+  // Loop to check and run toast messages
   loopToast();
   // If there is a message in the status bar, timed clear
   loopReminderClear();
@@ -886,7 +954,7 @@ void loopFrontEnd(void)
   loopFrontEndFILRunoutDetect();
 #endif
 
-  // loop for popup menu
+  // Loop for popup menu
   loopPopup();
 }
 

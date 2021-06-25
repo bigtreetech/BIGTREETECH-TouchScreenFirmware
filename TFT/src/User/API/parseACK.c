@@ -206,7 +206,9 @@ bool processKnownEcho(void)
     //if (forceIgnore[i] == 0)
     //{
       if (knownEcho[i].notifyType == ECHO_NOTIFY_TOAST)
+      {
         addToast(DIALOG_TYPE_INFO, dmaL2Cache);
+      }
       else if (knownEcho[i].notifyType == ECHO_NOTIFY_DIALOG)
       {
         BUZZER_PLAY(sound_notify);
@@ -264,10 +266,13 @@ void hostActionCommands(void)
   }
   else if (ack_seen(":paused") || ack_seen(":pause"))
   {
-    if (ack_seen(":paused"))  // if paused with ADVANCED_PAUSE_FEATURE enabled in Marlin (:paused),
-      hostDialog = true;      // disable Resume/Pause button in the Printing menu
-    //else                      // otherwise, if ADVANCED_PAUSE_FEATURE is disabled in Marlin (:pause),
-    //  hostDialog = false;     // enable Resume/Pause button in the Printing menu
+    if (infoMachineSettings.firmwareType == FW_MARLIN)
+    {
+      if (ack_seen(":paused"))  // if paused with ADVANCED_PAUSE_FEATURE enabled in Marlin (:paused),
+        hostDialog = true;      // disable Resume/Pause button in the Printing menu
+      //else                      // otherwise, if ADVANCED_PAUSE_FEATURE is disabled in Marlin (:pause),
+      //  hostDialog = false;     // enable Resume/Pause button in the Printing menu
+    }
 
     // pass value "false" to let Marlin report when the host is not
     // printing (when notification ack "Not SD printing" is caught)
@@ -370,7 +375,7 @@ void parseACK(void)
     syncL2CacheFromL1(SERIAL_PORT);
     infoHost.rx_ok[SERIAL_PORT] = false;
 
-    #ifdef SERIAL_DEBUG_PORT
+    #if defined(SERIAL_DEBUG_PORT) && defined(DEBUG_SERIAL_COMM)
       // dump raw serial data received to debug port
       Serial_Puts(SERIAL_DEBUG_PORT, "<<");
       Serial_Puts(SERIAL_DEBUG_PORT, dmaL2Cache);
@@ -562,6 +567,15 @@ void parseACK(void)
           fanSetCurSpeed(i, ack_value());
         }
       }
+      // parse and store flow rate percentage in case of RepRapFirmware
+      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && ack_seen("fanPercent\":["))
+      {
+        for (uint8_t i = 0; i < infoSettings.fan_count; i++)
+        {
+          fanSetPercent(i, ack_value() + 0.5f);
+          ack_continue_seen(",");
+        }
+      }
       // parse and store M710, controller fan
       else if (ack_seen("M710"))
       {
@@ -612,6 +626,7 @@ void parseACK(void)
           ack_seen("result\":\"0:/gcodes/");  // {"key":"job.file.fileName","flags": "","result":"0:/gcodes/pig-4H.gcode"}
           fileEndString = "\"";
         }
+
         uint16_t start_index = ack_index;
         uint16_t end_index = ack_continue_seen(fileEndString) ? (ack_index - strlen(fileEndString)) : start_index;
         uint16_t path_len = MIN(end_index - start_index, MAX_PATH_LEN - strlen(getCurFileSource()) - 1);
@@ -732,16 +747,28 @@ void parseACK(void)
       {
         pidUpdateStatus(false);
       }
-      // parse and store M355, Case light message
-      else if (ack_seen("Case light: OFF"))
+      // parse M303, PID Autotune completed message in case of RRF
+      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && ack_seen("Auto tuning heater") && ack_seen("completed"))
       {
-        caseLightSetState(false);
-        caseLightQuerySetWait(false);
+        pidUpdateStatus(true);
       }
-      else if (ack_seen("Case light: "))
+      // parse M303, PID Autotune failed message in case of RRF
+      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && (ack_seen("Error: M303") || (ack_seen("Auto tune of heater") && ack_seen("failed"))))
       {
-        caseLightSetState(true);
-        caseLightSetBrightness(ack_value());
+        pidUpdateStatus(false);
+      }
+      // parse and store M355, Case light message
+      else if (ack_seen("Case light:"))
+      {
+        if (ack_seen("OFF"))
+        {
+          caseLightSetState(false);
+        }
+        else
+        {
+          caseLightSetState(true);
+          caseLightSetBrightness(ack_value());
+        }
         caseLightQuerySetWait(false);
       }
       // parse and store M420 V1 T1, Mesh data (e.g. from Mesh Editor menu)
@@ -1198,7 +1225,7 @@ void parseACK(void)
       {
         if (ack_seen(errorZProbe))  // smoothieboard ZProbe triggered before move, aborting command.
         {
-          ackPopupInfo("ZProbe triggered\n before move.\n Aborting Print!");
+          ackPopupInfo("ZProbe triggered before move.\nAborting Print!");
         }
         // parse and store volumetric extrusion M200 response of Smoothieware
         else if (ack_seen("Volumetric extrusion is disabled"))

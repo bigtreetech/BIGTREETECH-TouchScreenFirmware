@@ -300,21 +300,21 @@ static inline bool processKnownDataFormat(char *dataRow)
     switch (infoMachineSettings.leveling)
     {
       case BL_BBL:
-        sprintf(meshData->saveTitle, "%s", textSelect(LABEL_ABL_SETTINGS_BBL));
+        strcpy(meshData->saveTitle, (char *)textSelect(LABEL_ABL_SETTINGS_BBL));
         break;
 
       case BL_UBL:
         meshSaveCallbackPtr = menuUBLSave;
 
-        sprintf(meshData->saveTitle, "%s", textSelect(LABEL_ABL_SETTINGS_UBL));
+        strcpy(meshData->saveTitle, (char *)textSelect(LABEL_ABL_SETTINGS_UBL));
         break;
 
       case BL_MBL:
-        sprintf(meshData->saveTitle, "%s", textSelect(LABEL_MBL_SETTINGS));
+        strcpy(meshData->saveTitle, (char *)textSelect(LABEL_MBL_SETTINGS));
         break;
 
       default:
-        sprintf(meshData->saveTitle, "%s", textSelect(LABEL_ABL_SETTINGS));
+        strcpy(meshData->saveTitle, (char *)textSelect(LABEL_ABL_SETTINGS));
         break;
     }
   }

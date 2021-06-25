@@ -1,6 +1,8 @@
 #include "common.h"
 #include "includes.h"
 
+#define DUAL_VAL_FORMAT "%4d/%-4d"
+
 // scrolling text line
 SCROLL scrollLine;
 
@@ -204,24 +206,17 @@ void temperatureReDraw(uint8_t toolIndex, int16_t * temp, bool skipHeader)
 {
   char tempstr[20];
 
-  setFontSize(FONT_SIZE_LARGE);
-
   if (!skipHeader)
   {
-    sprintf(tempstr, "%-8s", heatDisplayID[toolIndex]);
-    setFontSize(FONT_SIZE_NORMAL);
-    GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *) tempstr);
-    setFontSize(FONT_SIZE_LARGE);
-    GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1) >> 1, exhibitRect.y0, (uint8_t *) "ºC");
+    displayExhibitHeader(heatDisplayID[toolIndex], "ºC");
   }
 
   if (temp != NULL)
     sprintf(tempstr, "  %d  ", *temp);
   else
-    sprintf(tempstr, "%4d/%-4d", heatGetCurrentTemp(toolIndex), heatGetTargetTemp(toolIndex));
+    sprintf(tempstr, DUAL_VAL_FORMAT, heatGetCurrentTemp(toolIndex), heatGetTargetTemp(toolIndex));
 
-  GUI_DispStringInPrect(&exhibitRect, (uint8_t *) tempstr);
-  setFontSize(FONT_SIZE_NORMAL);
+  displayExhibitValue(tempstr);
 }
 
 // Show/draw fan in a standard menu
@@ -229,32 +224,17 @@ void fanReDraw(uint8_t fanIndex, bool skipHeader)
 {
   char tempstr[20];
 
-  setFontSize(FONT_SIZE_LARGE);
-
   if (!skipHeader)
   {
-    sprintf(tempstr, "%-8s", fanID[fanIndex]);
-    setFontSize(FONT_SIZE_NORMAL);
-    GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *) tempstr);
-    setFontSize(FONT_SIZE_LARGE);
-
-    if (infoSettings.fan_percentage == 1)
-    {
-      GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1) >> 1, exhibitRect.y0, (uint8_t *) " % ");
-    }
-    else
-    {
-      GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1) >> 1, exhibitRect.y0, (uint8_t *) "PWM");
-    }
+    displayExhibitHeader(fanID[fanIndex], (infoSettings.fan_percentage == 1) ? " % " : "PWM");
   }
 
   if (infoSettings.fan_percentage == 1)
-    sprintf(tempstr, "%4d/%-4d", fanGetCurPercent(fanIndex), fanGetSetPercent(fanIndex));
+    sprintf(tempstr, DUAL_VAL_FORMAT, fanGetCurPercent(fanIndex), fanGetSetPercent(fanIndex));
   else
-    sprintf(tempstr, "%4d/%-4d", fanGetCurSpeed(fanIndex), fanGetSetSpeed(fanIndex));
+    sprintf(tempstr, DUAL_VAL_FORMAT, fanGetCurSpeed(fanIndex), fanGetSetSpeed(fanIndex));
 
-  GUI_DispStringInPrect(&exhibitRect, (uint8_t *) tempstr);
-  setFontSize(FONT_SIZE_NORMAL);
+  displayExhibitValue(tempstr);
 }
 
 // Show/draw extruder in a standard menu
@@ -262,20 +242,13 @@ void extruderReDraw(uint8_t extruderIndex, float extrusion, bool skipHeader)
 {
   char tempstr[20];
 
-  setFontSize(FONT_SIZE_LARGE);
-
   if (!skipHeader)
   {
-    sprintf(tempstr, "%-8s", extruderDisplayID[extruderIndex]);
-    setFontSize(FONT_SIZE_NORMAL);
-    GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *) tempstr);
-    setFontSize(FONT_SIZE_LARGE);
-    GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1) >> 1, exhibitRect.y0, (uint8_t *) "mm");
+    displayExhibitHeader(extruderDisplayID[extruderIndex], "mm");
   }
 
   sprintf(tempstr, "  %.2f  ", extrusion);
-  GUI_DispStringInPrect(&exhibitRect, (uint8_t *) tempstr);
-  setFontSize(FONT_SIZE_NORMAL);
+  displayExhibitValue(tempstr);
 }
 
 // Show/draw percentage in a standard menu
@@ -283,24 +256,13 @@ void percentageReDraw(uint8_t itemIndex, bool skipHeader)
 {
   char tempstr[20];
 
-  setFontSize(FONT_SIZE_LARGE);
-
   if (!skipHeader)
   {
-    if (itemIndex == 0)
-      sprintf(tempstr, "%-15s", textSelect(LABEL_PERCENTAGE_SPEED));
-    else
-      sprintf(tempstr, "%-15s", textSelect(LABEL_PERCENTAGE_FLOW));
-
-    setFontSize(FONT_SIZE_NORMAL);
-    GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *) tempstr);
-    setFontSize(FONT_SIZE_LARGE);
-    GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1) >> 1, exhibitRect.y0, (uint8_t *) "%");
+    displayExhibitHeader((char *)textSelect((itemIndex == 0) ? LABEL_PERCENTAGE_SPEED : LABEL_PERCENTAGE_FLOW), "%");
   }
 
-  sprintf(tempstr, "%4d/%-4d", speedGetCurPercent(itemIndex), speedGetSetPercent(itemIndex));
-  GUI_DispStringInPrect(&exhibitRect, (uint8_t *) tempstr);
-  setFontSize(FONT_SIZE_NORMAL);
+  sprintf(tempstr, DUAL_VAL_FORMAT, speedGetCurPercent(itemIndex), speedGetSetPercent(itemIndex));
+  displayExhibitValue(tempstr);
 }
 
 // Edit an integer value in a standard menu

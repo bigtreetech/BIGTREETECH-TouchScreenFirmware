@@ -386,6 +386,7 @@ void printEnd(void)
   powerFailedDelete();
 
   infoPrinting.cur = infoPrinting.size;  // always update the print progress to 100% even if the print terminated
+  setPrintRemainingTime(0);
   infoPrinting.printing = infoPrinting.pause = false;
   preparePrintSummary();  // update print summary. infoPrinting are used
 
