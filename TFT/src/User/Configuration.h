@@ -552,7 +552,7 @@
  *
  * Options: [0: classic, 1: RGB565 bitmap, 2: Base64 PNG]
  *  classic: RGB565 bitmaps for all possible thumbnail sizes are embedded
- *   in the gcode file at fixed file offsets. It is fastest to parse but least flexible.
+ *    in the gcode file at fixed file offsets. It is fastest to parse but least flexible.
  *  RGB565 bitmap:
  *    A specific thumbnail comment identifies the location of a  single 'classic'
  *    embedded RB565 bitmap thumbnail. It is almost as fast as classic and
@@ -589,9 +589,24 @@
  */
 #define AUTO_SHUT_DOWN_MAXTEMP 50
 
-//
-// Filament Runout Settings (if connected to TFT controller)
-//
+/**
+ * Filament Runout Settings (if connected to TFT controller only)
+ *
+ * Select the type of filament/runout sensor and its default enabled/disabled state.
+ *
+ * NOTE: If the sensor is connected to the board, then this must be set to 0 (Disabled) or 'OFF' in
+ *       the TFT Display. It is recommended to add a M75 code to the 'start_gcode' option and add a
+ *       M77 code to the 'end_gcode' and enable both in config.ini file.
+ *
+ *       Example (in config.ini):
+ *         end_gcode_enabled:1
+ *         start_gcode_enabled:1
+ *         start_gcode:M75\n
+ *         end_gcode:M77\n
+ *
+ * Options: [0: Normal Disabled, 1: Normal Enabled, 2: Smart Disabled, 3: Smart Enabled]
+*/
+#define FIL_SENSOR_TYPE 0
 
 // Filament runout detection
 #define FIL_RUNOUT_INVERTING true  // Set to false to invert the logic of the sensor. (Default: true)

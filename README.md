@@ -372,6 +372,7 @@ See [Customisation guides](https://github.com/bigtreetech/BIGTREETECH-TouchScree
 ;MKS_TFT32_V1_4_NOBL
 ;MKS_TFT28_V3_0
 ;MKS_TFT28_V4_0
+;MKS_TFT28_NEW_GENIUS
 [platformio]
 src_dir      = TFT
 boards_dir   = buildroot/boards

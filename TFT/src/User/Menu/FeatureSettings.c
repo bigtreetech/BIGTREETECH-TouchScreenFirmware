@@ -15,10 +15,9 @@ const LABEL itemToggleAuto[ITEM_TOGGLE_AUTO_NUM] =
   LABEL_AUTO
 };
 
-#define ITEM_TOGGLE_SMART_NUM 3
+#define ITEM_TOGGLE_SMART_NUM 2
 const LABEL itemToggleSmart[ITEM_TOGGLE_SMART_NUM] =
 {
-  LABEL_OFF,
   LABEL_ON,
   LABEL_SMART
 };
@@ -149,7 +148,7 @@ void updateFeatureSettings(uint8_t item_index)
 
     #ifdef FIL_RUNOUT_PIN
       case SKEY_FIL_RUNOUT:
-        infoSettings.runout = (infoSettings.runout + 1) % ITEM_TOGGLE_SMART_NUM;
+        infoSettings.runout ^= (1U << 0);
         break;
     #endif
 
@@ -265,8 +264,11 @@ void loadFeatureSettings(LISTITEM * item, uint16_t item_index, uint8_t itemPos)
 
       #ifdef FIL_RUNOUT_PIN
         case SKEY_FIL_RUNOUT:
-          item->valueLabel = itemToggleSmart[infoSettings.runout];
+        {
+          LABEL sensorLabel = itemToggleSmart[(infoSettings.runout >> 1) & 1];
+          item->valueLabel.index = (infoSettings.runout & 1) ? sensorLabel.index : LABEL_OFF ;
           break;
+        }
       #endif
 
       case SKEY_PL_RECOVERY_EN:

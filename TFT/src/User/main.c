@@ -34,7 +34,7 @@ void Hardware_GenericInit(void)
     GPIO_PinRemapConfig(GPIO_Remap_SWJ_Disable, ENABLE);  //disable JTAG & SWD
   #endif
 
-  #if defined(MKS_TFT32_V1_3) ||defined(MKS_TFT32_V1_4) || defined (MKS_TFT28_V3_0) || defined (MKS_TFT28_V4_0)
+  #if defined (MKS_TFT)
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
     GPIO_PinRemapConfig(GPIO_Remap_USART2, ENABLE);
   #endif
@@ -63,7 +63,7 @@ void Hardware_GenericInit(void)
     Buzzer_Config();
   #endif
 
-  #if !defined(MKS_TFT32_V1_3) && !defined(MKS_TFT32_V1_4) && !defined (MKS_TFT28_V3_0) && !defined (MKS_TFT28_V4_0)
+  #if !defined (MKS_TFT)
     //causes hang if we deinit spi1
     SD_DeInit();
   #endif
