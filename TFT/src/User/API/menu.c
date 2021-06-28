@@ -123,19 +123,59 @@ const GUI_RECT rect_of_keySS[SS_RECT_COUNT] = {
 #endif
 };
 
-const GUI_RECT rect_of_keyPS[MENU_RECT_COUNT] = {
-  // hotend + bed area
-  {START_X+PICON_LG_WIDTH*0+PICON_SPACE_X*0, PICON_START_Y+PICON_HEIGHT*0+PICON_SPACE_Y*0,
-   START_X+PICON_LG_WIDTH*2+PICON_SPACE_X*1, PICON_START_Y+PICON_HEIGHT*1+PICON_SPACE_Y*0},
+GUI_RECT rect_of_touchPS[SS_RECT_COUNT] = {
+  // hotend area
+  {0, 0, 0, 0},
+  // bed area
+  {0, 0, 0, 0},
   // fan area
-  {START_X+PICON_LG_WIDTH*2+PICON_SPACE_X*2,                PICON_START_Y+PICON_HEIGHT*0+PICON_SPACE_Y*0,
-   START_X+PICON_LG_WIDTH*2+PICON_SPACE_X*2+PICON_SM_WIDTH, PICON_START_Y+PICON_HEIGHT*1+PICON_SPACE_Y*0},
+  {0, 0, 0, 0},
   // timer area
-  {START_X+PICON_LG_WIDTH*0+PICON_SPACE_X*0, PICON_START_Y+PICON_HEIGHT*1+PICON_SPACE_Y*1,
-   START_X+PICON_LG_WIDTH*1+PICON_SPACE_X*0, PICON_START_Y+PICON_HEIGHT*2+PICON_SPACE_Y*1},
+  {0, 0, 0, 0},
+  // layer area
+  {0, 0, 0, 0},
   // speed area
-  {START_X+PICON_LG_WIDTH*2+PICON_SPACE_X*2,                PICON_START_Y+PICON_HEIGHT*1+PICON_SPACE_Y*1,
-   START_X+PICON_LG_WIDTH*2+PICON_SPACE_X*2+PICON_SM_WIDTH, PICON_START_Y+PICON_HEIGHT*2+PICON_SPACE_Y*1},
+  {0, 0, 0, 0},
+  // 4 bottom icons area
+  {0, 0, 0, 0},
+  {0, 0, 0, 0},
+  {0, 0, 0, 0},
+  {0, 0, 0, 0},
+
+  // dummy area
+  {0, 0, 0, 0},
+  {0, 0, 0, 0},
+  {0, 0, 0, 0},
+  {0, 0, 0, 0},
+  {0, 0, 0, 0},
+  {0, 0, 0, 0},
+
+  // title bar area
+  {0, 0, 0, 0},
+
+  // infobox area
+  {0, 0, 0, 0}
+};
+
+const GUI_RECT touchPS_elements[PS_COUNT] = {
+  // hotend area
+  {START_X+PICON_LG_WIDTH*0+PICON_SPACE_X*0,                  PICON_START_Y+PICON_HEIGHT*0+PICON_SPACE_Y*0,
+   START_X+PICON_LG_WIDTH*1+PICON_SPACE_X*0+PICON_SM_WIDTH*0, PICON_START_Y+PICON_HEIGHT*1+PICON_SPACE_Y*0},
+  // bed area
+  {START_X+PICON_LG_WIDTH*1+PICON_SPACE_X*1,                  PICON_START_Y+PICON_HEIGHT*0+PICON_SPACE_Y*0,
+   START_X+PICON_LG_WIDTH*2+PICON_SPACE_X*1+PICON_SM_WIDTH*0, PICON_START_Y+PICON_HEIGHT*1+PICON_SPACE_Y*0},
+  // fan area
+  {START_X+PICON_LG_WIDTH*2+PICON_SPACE_X*2,                  PICON_START_Y+PICON_HEIGHT*0+PICON_SPACE_Y*0,
+   START_X+PICON_LG_WIDTH*2+PICON_SPACE_X*2+PICON_SM_WIDTH*1, PICON_START_Y+PICON_HEIGHT*1+PICON_SPACE_Y*0},
+  // timer area
+  {START_X+PICON_LG_WIDTH*0+PICON_SPACE_X*0,                  PICON_START_Y+PICON_HEIGHT*1+PICON_SPACE_Y*1,
+   START_X+PICON_LG_WIDTH*1+PICON_SPACE_X*0+PICON_SM_WIDTH*0, PICON_START_Y+PICON_HEIGHT*2+PICON_SPACE_Y*1},
+  // layer area
+  {START_X+PICON_LG_WIDTH*0+PICON_SPACE_X*0,                  PICON_START_Y+PICON_HEIGHT*1+PICON_SPACE_Y*1,
+   START_X+PICON_LG_WIDTH*2+PICON_SPACE_X*1+PICON_SM_WIDTH*0, PICON_START_Y+PICON_HEIGHT*2+PICON_SPACE_Y*1},
+  // speed area
+  {START_X+PICON_LG_WIDTH*2+PICON_SPACE_X*2,                  PICON_START_Y+PICON_HEIGHT*1+PICON_SPACE_Y*1,
+   START_X+PICON_LG_WIDTH*2+PICON_SPACE_X*2+PICON_SM_WIDTH*1, PICON_START_Y+PICON_HEIGHT*2+PICON_SPACE_Y*1},
 
   // 4 bottom icons area
   {0*ICON_WIDTH+0*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  1*ICON_WIDTH+0*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
@@ -143,18 +183,14 @@ const GUI_RECT rect_of_keyPS[MENU_RECT_COUNT] = {
   {2*ICON_WIDTH+2*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  3*ICON_WIDTH+2*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
   {3*ICON_WIDTH+3*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  4*ICON_WIDTH+3*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
 
-  // 8 labels area
-  {0, 0, 0, 0},
-  {0, 0, 0, 0},
-  {0, 0, 0, 0},
-  {0, 0, 0, 0},
-  {0*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  1*SPACE_X_PER_ICON,  2*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y},
-  {1*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  2*SPACE_X_PER_ICON,  2*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y},
-  {2*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  3*SPACE_X_PER_ICON,  2*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y},
-  {3*SPACE_X_PER_ICON,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  4*SPACE_X_PER_ICON,  2*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y},
-
   // title bar area
   {0, 0, LCD_WIDTH, ICON_START_Y},
+
+  // infobox
+  {1*ICON_WIDTH+1*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  3*ICON_WIDTH+2*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
+
+  // dummy 
+  {0, 0, 0, 0}
 };
 
 const GUI_RECT rect_of_keyListView[ITEM_PER_PAGE + 1] = {
@@ -562,7 +598,7 @@ void menuDrawPage(const MENUITEMS *menuItems)
   uint8_t i = 0;
   menuType = MENU_TYPE_ICON;
   curMenuItems = menuItems;
-  TSC_ReDrawIcon = itemDrawIconPress;
+  TSC_ReDrawIcon = (infoMenu.menu[infoMenu.cur] == menuPrinting) ? itemDrawIconPress_PS : itemDrawIconPress;
   curMenuRedrawHandle = NULL;
 
   curRect = ((infoMenu.menu[infoMenu.cur] == menuStatus) ||
@@ -727,6 +763,20 @@ void itemDrawIconPress(uint8_t position, uint8_t is_press)
   }
 }
 
+// When there is a button value, the icon changes color and redraws
+void itemDrawIconPress_PS(uint8_t position, uint8_t is_press)
+{
+  if (position < PS_TOUCH_6 || position > PS_TOUCH_9) return;
+  position -= PS_TOUCH_OFFSET;
+
+  const GUI_RECT *rect = curRect + position;
+
+  if (is_press)  // Turn green when pressed
+    ICON_PressedDisplay(rect->x0, rect->y0, curMenuItems->items[position].icon);
+  else  // Redraw normal icon when released
+    ICON_ReadDisplay(rect->x0, rect->y0,curMenuItems->items[position].icon);
+}
+
 // Get button value
 KEY_VALUES menuKeyGetValue(void)
 {
@@ -734,13 +784,13 @@ KEY_VALUES menuKeyGetValue(void)
 
   if (menuType == MENU_TYPE_ICON)
   {
-    if ((infoMenu.menu[infoMenu.cur] == menuStatus) || ((infoMenu.menu[infoMenu.cur] == menuPrinting) && !isPrinting()))
+    if (infoMenu.menu[infoMenu.cur] == menuStatus)
     {
       tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keySS), rect_of_keySS);
     }
-    else if((infoMenu.menu[infoMenu.cur] == menuPrinting) && isPrinting())
+    else if(infoMenu.menu[infoMenu.cur] == menuPrinting)
     {
-      tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keyPS), rect_of_keyPS);
+      tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_touchPS), rect_of_touchPS);
     }
     else if ((infoMenu.menu[infoMenu.cur] == menuHeat) ||
              (infoMenu.menu[infoMenu.cur] == menuPid) ||

@@ -479,6 +479,12 @@ void menuPrinting(void)
       printingItems.title.address = getPrintName(infoFile.title);
     printingItems.items[KEY_ICON_4] = itemIsPause[lastPause];
     printingItems.items[KEY_ICON_5].icon = (infoFile.source < BOARD_SD && isPrintModelIcon()) ? ICON_PREVIEW : ICON_BABYSTEP;
+    for (uint8_t i = 0; i < PS_TITLEBAR; i++)
+    {
+      rect_of_touchPS[i] = touchPS_elements[i];
+    }
+    rect_of_touchPS[KEY_TITLEBAR] = touchPS_elements[PS_TITLEBAR];
+    rect_of_touchPS[KEY_INFOBOX] = touchPS_elements[PS_DUMMY];
   }
   else // returned to this menu after a print was done (ex: after a popup)
   {
@@ -492,6 +498,13 @@ void menuPrinting(void)
     #endif
       printingItems.items[KEY_ICON_6] = itemIsPrinting[0];  // BackGround
       printingItems.items[KEY_ICON_7] = itemIsPrinting[2];  // Back
+      for (uint8_t i = 0; i < PS_TOUCH_6; i++)
+      { // make status icons unclickable
+        rect_of_touchPS[i] = touchPS_elements[PS_DUMMY];
+      }
+      rect_of_touchPS[PS_TOUCH_7] = touchPS_elements[PS_DUMMY];
+      rect_of_touchPS[PS_TOUCH_8] = touchPS_elements[PS_DUMMY];
+      rect_of_touchPS[KEY_INFOBOX] = touchPS_elements[PS_INFOBOX];
   }
 
   menuDrawPage(&printingItems);
@@ -616,36 +629,34 @@ void menuPrinting(void)
     KEY_VALUES key_num = menuKeyGetValue();
     switch (key_num)
     {
-      case KEY_ICON_0:
-        if (isPrinting())
-        {
-          infoMenu.menu[++infoMenu.cur] = menuHeat;
-        }
+      case PS_TOUCH_0:
+        heatSetCurrentIndex(currentTool);
+        infoMenu.menu[++infoMenu.cur] = menuHeat;
         break;
 
-      case KEY_ICON_1:
-        if (isPrinting())
-        {
-          infoMenu.menu[++infoMenu.cur] = menuFan;
-        }
+      case PS_TOUCH_1:
+        heatSetCurrentIndex(BED);
+        infoMenu.menu[++infoMenu.cur] = menuHeat;
         break;
 
-      case KEY_ICON_2:
-        if (isPrinting())
-        {
-          progDisplayType = (progDisplayType + 1) % 3;
-          reDrawPrintingValue(TIM_ICON_POS, PRINT_TOP_ROW | PRINT_BOTTOM_ROW);
-        }
+      case PS_TOUCH_2:
+        infoMenu.menu[++infoMenu.cur] = menuFan;
         break;
 
-      case KEY_ICON_3:
-        if (isPrinting())
-        {
-          infoMenu.menu[++infoMenu.cur] = menuSpeed;
-        }
+      case PS_TOUCH_3:
+        progDisplayType = (progDisplayType + 1) % 3;
+        reDrawPrintingValue(TIM_ICON_POS, PRINT_TOP_ROW | PRINT_BOTTOM_ROW);
         break;
 
-      case KEY_ICON_4:
+      case PS_TOUCH_4:
+        // will be implemented in the future
+        break;
+
+      case PS_TOUCH_5:
+        infoMenu.menu[++infoMenu.cur] = menuSpeed;
+        break;
+
+      case PS_TOUCH_6:
         if (isPrinting())
         {
           if (!isHostDialog())
@@ -663,7 +674,7 @@ void menuPrinting(void)
         #endif
         break;
 
-      case KEY_ICON_5:
+      case PS_TOUCH_7:
         #ifdef TFT70_V3_0
           if (isPrinting())
             infoMenu.menu[++infoMenu.cur] = menuBabystep;
@@ -678,11 +689,11 @@ void menuPrinting(void)
         #endif
         break;
 
-      case KEY_ICON_6:
+      case PS_TOUCH_8:
         infoMenu.menu[++infoMenu.cur] = menuMore;
         break;
 
-      case KEY_ICON_7:
+      case PS_TOUCH_9:
         if (isPrinting())
         {
           setDialogText(LABEL_WARNING, LABEL_STOP_PRINT, LABEL_CONFIRM, LABEL_CANCEL);
