@@ -145,8 +145,8 @@ void menuExtrude(void)
           break;
 
         case SETTLING:
-             extruderReDraw(curExtruder_index, extrNewCoord, true);
-         break;
+          extruderReDraw(curExtruder_index, extrNewCoord, true);
+          break;
 
         case HEATED:
           if (storeCmd("G0 E%.5f F%d\n", extrNewCoord, infoSettings.ext_speed[itemSpeed_index]))
