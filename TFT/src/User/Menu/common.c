@@ -317,13 +317,12 @@ NOZZLE_STATUS warmupNozzle(uint8_t toolIndex, void (* callback)(void))
   }
   else
   {
-    if (heatGetCurrentTemp(toolIndex) < infoSettings.min_ext_temp - NOZZLE_TEMP_LAG)
-    {
-      // low temperature warning
+    if (heatGetCurrentTemp(toolIndex) < heatGetTargetTemp(toolIndex) - NOZZLE_TEMP_LAG)
+    { // low temperature warning
       char tempMsg[200];
       char tempStr[100];
 
-      sprintf(tempMsg, (char *)textSelect(LABEL_EXT_TEMPLOW), infoSettings.min_ext_temp);
+      sprintf(tempMsg, (char *)textSelect(LABEL_DESIRED_TEMPLOW), heatGetTargetTemp(toolIndex));
       sprintf(tempStr, (char *)textSelect(LABEL_WAIT_HEAT_UP));
       strcat(tempMsg, "\n");
       strcat(tempMsg, tempStr);
