@@ -481,13 +481,12 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType)
   if (infoPrinting.pause == isPause) return false;
 
   loopDetected = true;
-  infoPrinting.pause = isPause;
 
   switch (infoFile.source)
   {
     case BOARD_SD_REMOTE:
     case BOARD_SD:
-      if (infoPrinting.pause)
+      if (isPause)
         request_M25();   // pause
       else
         request_M24(0);  // resume
@@ -495,14 +494,14 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType)
 
     case TFT_UDISK:
     case TFT_SD:
-      if (infoPrinting.pause == true && pauseType == PAUSE_M0)
+      if (isPause == true && pauseType == PAUSE_M0)
         loopProcessToCondition(&isNotEmptyCmdQueue);  // wait for the communication to be clean
 
       static COORDINATE tmp;
       bool isCoorRelative = coorGetRelative();
       bool isExtrudeRelative = eGetRelative();
 
-      if (infoPrinting.pause)  // pause
+      if (isPause)  // pause
       {
         // restore status before pause
         // if pause was triggered through M0/M1 then break
@@ -577,6 +576,7 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType)
       break;
   }
 
+  infoPrinting.pause = isPause; // update pause status after pause/resume procedure
   loopDetected = false;
 
   return true;
