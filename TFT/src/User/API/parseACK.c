@@ -1033,11 +1033,12 @@ void parseACK(void)
         if (ack_seen("E")) setParameter(P_HYBRID_THRESHOLD, STEPPER_INDEX_E0 + i, ack_value());
       }
       // parse and store TMC Bump sensitivity values
-      else if (ack_seen("M914 X"))
+      else if (ack_seen("M914"))
       {
-                           setParameter(P_BUMPSENSITIVITY, AXIS_INDEX_X, ack_value());
-        if (ack_seen("Y")) setParameter(P_BUMPSENSITIVITY, AXIS_INDEX_Y, ack_value());
-        if (ack_seen("Z")) setParameter(P_BUMPSENSITIVITY, AXIS_INDEX_Z, ack_value());
+        uint8_t i = (ack_seen("I")) ? ack_value() : 0;
+        if (ack_seen("X")) setParameter(P_BUMPSENSITIVITY, STEPPER_INDEX_X + i, ack_value());
+        if (ack_seen("Y")) setParameter(P_BUMPSENSITIVITY, STEPPER_INDEX_Y + i, ack_value());
+        if (ack_seen("Z")) setParameter(P_BUMPSENSITIVITY, STEPPER_INDEX_Z + i, ack_value());
       }
       // parse and store ABL type if auto-detect is enabled
       #if ENABLE_BL_VALUE == 1
