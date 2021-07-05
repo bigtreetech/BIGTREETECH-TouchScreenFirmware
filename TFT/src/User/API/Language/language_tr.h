@@ -345,7 +345,6 @@
     #define STRING_HEAT_HOTEND            "Ekstruderi %d℃ ye ısıt?"
     #define STRING_DESIRED_TEMPLOW        "Hotend temperature is below\ndesired temperature (%d℃)."
     #define STRING_WAIT_HEAT_UP           "Wait for it to heat up."
-    #define STRING_NOZZLE_STABILIZING     "Wait, nozzle stabilizing..."
     #define STRING_Z_ALIGN                "Z Hizala"
     #define STRING_MACROS                 "Macros"
     #define STRING_MESH_VALID             "Mesh Validation"

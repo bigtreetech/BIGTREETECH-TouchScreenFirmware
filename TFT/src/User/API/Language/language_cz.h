@@ -345,7 +345,6 @@
     #define STRING_HEAT_HOTEND            "Zahřát trysku na %d℃?"
     #define STRING_DESIRED_TEMPLOW        "Teplota trysky je pod požadovanou teplotou (%d℃)."
     #define STRING_WAIT_HEAT_UP           "Počkej na cílovou teplotu."
-    #define STRING_NOZZLE_STABILIZING     "Čekej, tryska se stabilizuje..."
     #define STRING_Z_ALIGN                "Z Align"
     #define STRING_MACROS                 "Makro"
     #define STRING_MESH_VALID             "Test sítě"

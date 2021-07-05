@@ -352,7 +352,6 @@ extern "C" {
 #define LANG_KEY_HEAT_HOTEND                  "label_heat_hotend:"
 #define LANG_KEY_DESIRED_TEMPLOW              "label_desired_templow:"
 #define LANG_KEY_WAIT_HEAT_UP                 "label_wait_heat_up:"
-#define LANG_KEY_NOZZLE_STABILIZING           "label_nozzle_stabilizing:"
 #define LANG_KEY_Z_ALIGN                      "label_z_align:"
 #define LANG_KEY_MACROS                       "label_macros:"
 #define LANG_KEY_MESH_VALID                   "label_mesh_valid:"

@@ -341,13 +341,12 @@
     #define STRING_FILAMENT_COST          "\n已使用耗材成本: %1.2f"
     #define STRING_NO_FILAMENT_STATS      "\n无耗材历史数据"
     #define STRING_CLICK_FOR_MORE         "点击查看详情"
-    #define STRING_EXT_TEMPLOW            "喷头温度低于最小挤出问题 (%d℃)."
+    #define STRING_EXT_TEMPLOW            "喷头温度低于最小挤出温度 (%d℃)."
     #define STRING_HEAT_HOTEND            "加热喷头到%d℃?"
-    #define STRING_DESIRED_TEMPLOW        "Hotend temperature is below\ndesired temperature (%d℃)."
-    #define STRING_WAIT_HEAT_UP           "Wait for it to heat up."
-    #define STRING_NOZZLE_STABILIZING     "Wait, nozzle stabilizing..."
+    #define STRING_DESIRED_TEMPLOW        "喷头温度过低\n设置的温度为 (%d℃)."
+    #define STRING_WAIT_HEAT_UP           "等待加热完成."
     #define STRING_Z_ALIGN                "Z Align"
-    #define STRING_MACROS                 "Macros"
+    #define STRING_MACROS                 "宏指令"
     #define STRING_MESH_VALID             "调平测试"
 
 #endif

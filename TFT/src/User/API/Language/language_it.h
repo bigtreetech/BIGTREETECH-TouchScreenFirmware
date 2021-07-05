@@ -345,7 +345,6 @@
     #define STRING_HEAT_HOTEND            "Scaldo l'hotend a %d℃?"
     #define STRING_DESIRED_TEMPLOW        "Hotend temperature is below\ndesired temperature (%d℃)."
     #define STRING_WAIT_HEAT_UP           "Wait for it to heat up."
-    #define STRING_NOZZLE_STABILIZING     "Wait, nozzle stabilizing..."
     #define STRING_Z_ALIGN                "Allinea Z"
     #define STRING_MACROS                 "Macro"
     #define STRING_MESH_VALID             "Validazione mesh"
