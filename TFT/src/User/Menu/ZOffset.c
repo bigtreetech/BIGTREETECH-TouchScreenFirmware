@@ -1,8 +1,6 @@
 #include "ZOffset.h"
 #include "includes.h"
 
-#define ITEM_Z_OFFSET_SUBMENU_NUM 4
-
 static bool probeOffsetMenu = false;
 static uint8_t curUnit_index = 0;
 static uint8_t curSubmenu_index = 0;
@@ -58,7 +56,7 @@ void zOffsetSetMenu(bool probeOffset)
 
 void menuZOffset(void)
 {
-  ITEM itemZOffsetSubmenu[ITEM_Z_OFFSET_SUBMENU_NUM] = {
+  ITEM itemZOffsetSubmenu[] = {
     // icon                        label
     {ICON_01_MM,                   LABEL_01_MM},
     {ICON_RESET_VALUE,             LABEL_RESET},
@@ -191,7 +189,7 @@ void menuZOffset(void)
 
       // change submenu
       case KEY_ICON_5:
-        curSubmenu_index = (curSubmenu_index + 1) % ITEM_Z_OFFSET_SUBMENU_NUM;
+        curSubmenu_index = (curSubmenu_index + 1) % COUNT(itemZOffsetSubmenu);
         zOffsetItems.items[KEY_ICON_6] = itemZOffsetSubmenu[curSubmenu_index];
 
         menuDrawItem(&zOffsetItems.items[KEY_ICON_6], KEY_ICON_6);
@@ -203,7 +201,7 @@ void menuZOffset(void)
         {
           // change unit
           case 0:
-            curUnit_index = (curUnit_index + 1) % ITEM_FINE_MOVE_LEN_NUM;
+            curUnit_index = (curUnit_index + 1) % COUNT(itemZOffsetSubmenu);
             itemZOffsetSubmenu[curSubmenu_index] = itemMoveLen[curUnit_index];
             zOffsetItems.items[key_num] = itemZOffsetSubmenu[curSubmenu_index];
 

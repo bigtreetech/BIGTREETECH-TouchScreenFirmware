@@ -553,7 +553,7 @@ void sendQueueCmd(void)
             setPrintProgressPercentage(cmd_value());
 
           if (cmd_seen('R'))
-            setPrintRemainingTime((int32_t) (cmd_float() * 60));
+            setPrintRemainingTime((cmd_value() * 60));
 
           if (!infoMachineSettings.buildPercent)  // if M73 is not supported by Marlin, skip it
           {

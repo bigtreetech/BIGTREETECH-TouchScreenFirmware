@@ -3,7 +3,6 @@
 
 static float z_offset_value = HOME_Z_OFFSET_DEFAULT_VALUE;
 static bool home_offset_enabled = false;
-
 // Enable home offset
 void homeOffsetEnable(bool skipZOffset, float shim)
 {
@@ -38,7 +37,7 @@ bool homeOffsetGetStatus(void)
 // Set Z offset value
 float homeOffsetSetValue(float value)
 {
-  mustStoreCmd("M206 Z%.2f\n", value);
+  sendParameterCmd(P_HOME_OFFSET, AXIS_INDEX_Z, value);
   mustStoreCmd("M206\n");  // needed by homeOffsetResetValue() to retrieve the new value
   z_offset_value = value;
 
@@ -62,7 +61,7 @@ float homeOffsetResetValue(void)
   float unit = z_offset_value - HOME_Z_OFFSET_DEFAULT_VALUE;
 
   z_offset_value = HOME_Z_OFFSET_DEFAULT_VALUE;
-  mustStoreCmd("M206 Z%.2f\n", z_offset_value);  // set Z offset value
+  sendParameterCmd(P_HOME_OFFSET, AXIS_INDEX_Z, z_offset_value);  // set Z offset value
   mustStoreCmd("G1 Z%.2f\n", unit);              // move nozzle
 
   return z_offset_value;
@@ -90,7 +89,7 @@ float homeOffsetUpdateValue(float unit, int8_t direction)
 
   unit = ((diff > unit) ? unit : diff) * direction;
   z_offset_value -= unit;
-  mustStoreCmd("M206 Z%.2f\n", z_offset_value);  // set Z offset value
+  sendParameterCmd(P_HOME_OFFSET, AXIS_INDEX_Z, z_offset_value);  // set Z offset value
   mustStoreCmd("G1 Z%.2f\n", unit);              // move nozzle
 
   return z_offset_value;
