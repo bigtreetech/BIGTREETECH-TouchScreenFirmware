@@ -345,7 +345,6 @@
     #define STRING_HEAT_HOTEND            "Нагреть сопло до %d℃?"
     #define STRING_DESIRED_TEMPLOW        "Температура сопла низка\nжелательная температура (%d℃)."
     #define STRING_WAIT_HEAT_UP           "Подождите, пока он нагреется."
-    #define STRING_NOZZLE_STABILIZING     "Подождите, сопло стабилизируется..."
     #define STRING_Z_ALIGN                "Z Выравнивание"
     #define STRING_MACROS                 "Макросы"
     #define STRING_MESH_VALID             "Проверка сетки"

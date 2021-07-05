@@ -345,7 +345,6 @@
     #define STRING_HEAT_HOTEND            "Chauffer la buse à %d℃ ?"
     #define STRING_DESIRED_TEMPLOW        "La température de la buse est inférieure à la température désirée (%d℃)."
     #define STRING_WAIT_HEAT_UP           "Attendre la chauffe."
-    #define STRING_NOZZLE_STABILIZING     "Patientez, stabilisation de la buse..."
     #define STRING_Z_ALIGN                "Z Align"
     #define STRING_MACROS                 "Macros"
     #define STRING_MESH_VALID             "Test Mesh"

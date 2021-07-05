@@ -345,7 +345,6 @@
     #define STRING_HEAT_HOTEND            "Fűtöd a fejet %d℃-ra?"
     #define STRING_DESIRED_TEMPLOW        "Fejhőfok alacsonyabb, mint a\nkívánt hőfok (%d℃)."
     #define STRING_WAIT_HEAT_UP           "Várj, míg felmelegszik."
-    #define STRING_NOZZLE_STABILIZING     "Fejhőfok stabilizálódik..."
     #define STRING_Z_ALIGN                "Z Igazítás"
     #define STRING_MACROS                 "Makrók"
     #define STRING_MESH_VALID             "Háló ellenőrzése"
