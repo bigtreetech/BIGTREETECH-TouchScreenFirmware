@@ -269,7 +269,7 @@ static inline int config_int(void)
 // Get valid int value or old value
 static int valid_intValue(int min, int max, int defaultVal)
 {
-  if (inLimit(config_int(),min, max))
+  if (inLimit(config_int(), min, max))
     return config_int();
   else
     return defaultVal;
@@ -794,8 +794,8 @@ void parseConfigKey(uint16_t index)
       break;
 
     case C_INDEX_PROG_DISP_TYPE:
-        SET_VALID_INT_VALUE(infoSettings.prog_disp_type, 0, 2);
-        break;
+      SET_VALID_INT_VALUE(infoSettings.prog_disp_type, 0, 2);
+      break;
 
     case C_INDEX_PAUSE_RETRACT:
       if (key_seen("R")) SET_VALID_FLOAT_VALUE(infoSettings.pause_retract_len, MIN_RETRACT_LIMIT, MAX_RETRACT_LIMIT);
