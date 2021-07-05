@@ -40,7 +40,7 @@ void FIL_Runout_Init(void)
 {
   #if defined(MKS_TFT)
     GPIO_InitSet(FIL_RUNOUT_PIN, MGPIO_MODE_IPN, 0);  // MKS TFTs already have an external pull-up resistor on PB0 and PB1 pins
-  #else  
+  #else
     GPIO_InitSet(FIL_RUNOUT_PIN, infoSettings.runout_invert ? MGPIO_MODE_IPU : MGPIO_MODE_IPD, 0);
   #endif
   #ifdef FIL_RUNOUT_PIN_1
@@ -209,9 +209,9 @@ void loopBackEndFILRunoutDetect(void)
 {
   if (!(infoSettings.runout & 1))   // Filament runout turn off
     return;
-  if (!FIL_IsRunout())              // Filament not runout yet, need constant scanning to filter interference
+  if (!isPrinting() || isPaused())  // Check for No printing or printing paused before reading sensor
     return;
-  if (!isPrinting() || isPaused())  // No printing or printing paused
+  if (!FIL_IsRunout())              // Filament not runout yet, need constant scanning to filter interference
     return;
 
   setPrintRunout(true);
