@@ -1043,11 +1043,17 @@ void parseACK(void)
       // parse and store ABL type if auto-detect is enabled
       #if ENABLE_BL_VALUE == 1
         else if (ack_seen("Auto Bed Leveling"))
+        {
           infoMachineSettings.leveling = BL_ABL;
+        }
         else if (ack_seen("Unified Bed Leveling"))
+        {
           infoMachineSettings.leveling = BL_UBL;
+        }
         else if (ack_seen("Mesh Bed Leveling"))
+        {
           infoMachineSettings.leveling = BL_MBL;
+        }
       #endif
       // parse M115 capability report
       else if (ack_seen("FIRMWARE_NAME:"))
