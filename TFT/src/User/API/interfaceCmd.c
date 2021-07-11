@@ -940,6 +940,26 @@ void sendQueueCmd(void)
             }
             break;
         #endif
+        
+        case 665:  // Delta Configuration / Delta Tower Angle
+        {
+          if (cmd_seen('H')) setParameter(P_DELTA_CONFIGURATION, 0, cmd_float());
+          if (cmd_seen('S')) setParameter(P_DELTA_CONFIGURATION, 1, cmd_float());
+          if (cmd_seen('R')) setParameter(P_DELTA_CONFIGURATION, 2, cmd_float());
+          if (cmd_seen('L')) setParameter(P_DELTA_CONFIGURATION, 3, cmd_float());
+          if (cmd_seen('X')) setParameter(P_DELTA_TOWER_ANGLE, AXIS_INDEX_X, cmd_float());
+          if (cmd_seen('Y')) setParameter(P_DELTA_TOWER_ANGLE, AXIS_INDEX_Y, cmd_float());
+          if (cmd_seen('Z')) setParameter(P_DELTA_TOWER_ANGLE, AXIS_INDEX_Z, cmd_float());
+          break;
+        }
+
+        case 666:  // Delta Endstop Adjustments
+        {
+          if (cmd_seen('X')) setParameter(P_DELTA_ENDSTOP, 0, cmd_float());
+          if (cmd_seen('Y')) setParameter(P_DELTA_ENDSTOP, 1, cmd_float());
+          if (cmd_seen('Z')) setParameter(P_DELTA_ENDSTOP, 2, cmd_float());
+          break;
+        }
 
         #ifdef LOAD_UNLOAD_M701_M702
           case 701:  // M701 Load filament

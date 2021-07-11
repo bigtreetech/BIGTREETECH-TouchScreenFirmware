@@ -21,6 +21,9 @@ typedef enum
   P_FWRETRACT,
   P_FWRECOVER,
   P_AUTO_RETRACT,
+  P_DELTA_CONFIGURATION,
+  P_DELTA_TOWER_ANGLE,
+  P_DELTA_ENDSTOP,
   P_HOTEND_OFFSET,
   P_ABL_STATE,
   P_PROBE_OFFSET,
@@ -86,6 +89,9 @@ typedef struct
   float FwRetract[4];
   float FwRecover[4];
   float AutoRetract[1];
+  float DeltaConfiguration[4];
+  float DeltaTowerAngle[3];
+  float DeltaEndstop[3];
   float HotendOffset[AXIS_INDEX_COUNT - 2];
   float ABLState[2];
   float ProbeOffset[AXIS_INDEX_COUNT - 2];
@@ -106,6 +112,9 @@ extern char * const ablStateDisplayID[];
 extern char * const linAdvDisplayID[];
 extern char * const filamentDiaDisplayID[];
 extern char * const stealthChopDisplayID[];
+extern char * const deltaConfigurationDisplayID[];
+extern char * const deltaTowerAngleDisplayID[];
+extern char * const deltaEndstopDisplayID[];
 
 extern const LABEL accelDisplayID[];
 extern const LABEL junctionDeviationDisplayID[];

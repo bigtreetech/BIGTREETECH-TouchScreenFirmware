@@ -56,6 +56,9 @@ extern "C" {
 #define LANG_KEY_FWRETRACT                    "label_fwretract:"
 #define LANG_KEY_FWRECOVER                    "label_fwrecover:"
 #define LANG_KEY_RETRACT_AUTO                 "label_retract_auto:"
+#define LANG_KEY_DELTA_CONFIGURATION                   "label_delta_configuration:"
+#define LANG_KEY_DELTA_TOWER_ANGLE                   "label_delta_tower_angle:"
+#define LANG_KEY_DELTA_ENDSTOP                   "label_delta_endstop:"
 #define LANG_KEY_HOTEND_OFFSET                "label_hotend_offset:"
 #define LANG_KEY_PROBE_OFFSET                 "label_probe_offset:"
 #define LANG_KEY_LIN_ADVANCE                  "label_lin_advance:"
@@ -355,6 +358,8 @@ extern "C" {
 #define LANG_KEY_Z_ALIGN                      "label_z_align:"
 #define LANG_KEY_MACROS                       "label_macros:"
 #define LANG_KEY_MESH_VALID                   "label_mesh_valid:"
+#define LANG_KEY_CONNECT_PROBE                   "label_connect_probe:"
+#define LANG_KEY_CALIBRATION                   "label_calibration:"
 
 #ifdef __cplusplus
 }
