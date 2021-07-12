@@ -97,7 +97,7 @@ int16_t heatGetCurrentTemp(uint8_t index)
   return heater.T[index].current;
 }
 
-// Disable all heater/hotends
+// Disable all heaters/hotends
 void heatCoolDown(void)
 {
   for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
@@ -293,7 +293,7 @@ void loopCheckHeater(void)
   // Query heaters if they reached the target temperature (only if not prining)
   for (uint8_t i = 0; (i < MAX_HEATER_COUNT) && (!isPrinting()); i++)
   {
-    if (heater.T[i].status != SETTLED && inRange(heater.T[i].current, heater.T[i].target, TEMPERATURE_ALERT_RANGE))
+    if (heater.T[i].status != SETTLED && inRange(heater.T[i].current, heater.T[i].target, TEMPERATURE_RANGE))
     {
       switch (heater.T[i].status)
       {

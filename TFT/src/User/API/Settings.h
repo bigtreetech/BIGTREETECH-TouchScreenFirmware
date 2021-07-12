@@ -30,17 +30,19 @@ typedef enum
 // Config version support
 // change if new elements/keywords are added/removed/changed in the configuration.h Format YYYYMMDD
 // this number should match CONFIG_VERSION in configuration.h
-#define CONFIG_SUPPPORT 20210513
+#define CONFIG_SUPPPORT 20210605
 
 #define FONT_FLASH_SIGN       20210522  // (YYYYMMDD) change if fonts require updating
-#define CONFIG_FLASH_SIGN     20210522  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
-#define LANGUAGE_FLASH_SIGN   20210522  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
+#define CONFIG_FLASH_SIGN     20210615  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
+#define LANGUAGE_FLASH_SIGN   20210530  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
 #define ICON_FLASH_SIGN       20210522  // (YYYYMMDD) change if any icon(s) is added or removed
 
-#define FONT_CHECK_SIGN       (FONT_FLASH_SIGN + WORD_UNICODE)
-#define CONFIG_CHECK_SIGN     (CONFIG_FLASH_SIGN + STRINGS_STORE_ADDR)
-#define LANGUAGE_CHECK_SIGN   (LANGUAGE_FLASH_SIGN + LANGUAGE_ADDR)
-#define ICON_CHECK_SIGN       (ICON_FLASH_SIGN + ICON_ADDR(0))
+#define FONT_CHECK_SIGN       (FONT_FLASH_SIGN + WORD_UNICODE + FLASH_SIGN_ADDR)
+#define CONFIG_CHECK_SIGN     (CONFIG_FLASH_SIGN + STRINGS_STORE_ADDR + \
+                               sizeof(SETTINGS) + sizeof(STRINGS_STORE) + sizeof(PREHEAT_STORE) + \
+                               sizeof(CUSTOM_GCODES) + sizeof(PRINT_GCODES))
+#define LANGUAGE_CHECK_SIGN   (LANGUAGE_FLASH_SIGN + LANGUAGE_ADDR + LABEL_NUM)
+#define ICON_CHECK_SIGN       (ICON_FLASH_SIGN + ICON_ADDR(0) + ICON_PREVIEW)
 
 #define MAX_EXT_COUNT         6
 #define MAX_HOTEND_COUNT      6
@@ -53,9 +55,9 @@ typedef enum
 #define SPEED_COUNT            3
 #define PREHEAT_COUNT          6
 #define CUSTOM_GCODES_COUNT   15
-#define MAX_STRING_LENGTH     20
+#define MAX_STRING_LENGTH     75
 #define MAX_LABEL_LENGTH       7
-#define MAX_GCODE_NAME_LENGTH 24
+#define MAX_GCODE_NAME_LENGTH 75
 #define MAX_GCODE_LENGTH      75
 
 #define MIN_STRING_LENGTH      3
@@ -146,6 +148,7 @@ typedef struct
   uint8_t  m27_active;
   uint8_t  longFileName;
   uint8_t  fan_percentage;
+  uint8_t  prog_disp_type;
   float    pause_retract_len;
   float    resume_purge_len;
   float    pause_pos[AXIS_NUM-1];  // X, Y
@@ -162,8 +165,6 @@ typedef struct
   uint8_t  z_steppers_alignment;
 
   uint16_t level_feedrate[FEEDRATE_COUNT - 1];  // XY, Z
-  uint16_t preheat_temp[PREHEAT_COUNT];
-  uint16_t preheat_bed[PREHEAT_COUNT];
 
   // Power Supply Settings
   uint8_t  auto_off;
@@ -205,14 +206,20 @@ typedef struct
 
 typedef struct
 {
-  char marlin_title[MAX_GCODE_LENGTH + 1];
-  char preheat_name[PREHEAT_COUNT][MAX_GCODE_LENGTH + 1];
+  char marlin_title[MAX_STRING_LENGTH + 1];
 } STRINGS_STORE;
 
 typedef struct
 {
+  char preheat_name[PREHEAT_COUNT][MAX_STRING_LENGTH + 1];
+  uint16_t preheat_temp[PREHEAT_COUNT];
+  uint16_t preheat_bed[PREHEAT_COUNT];
+} PREHEAT_STORE;
+
+typedef struct
+{
   uint8_t count;
-  char name[CUSTOM_GCODES_COUNT][MAX_GCODE_LENGTH + 1];
+  char name[CUSTOM_GCODES_COUNT][MAX_GCODE_NAME_LENGTH + 1];
   char gcode[CUSTOM_GCODES_COUNT][MAX_GCODE_LENGTH + 1];
 } CUSTOM_GCODES;
 
@@ -266,8 +273,16 @@ typedef struct
   uint8_t autoReportSDStatus;
   uint8_t long_filename_support;
   uint8_t babyStepping;
+  uint8_t buildPercent;
   uint8_t softwareEndstops;
 } MACHINESETTINGS;
+
+typedef enum
+{
+  PERCENTAGE_ELAPSED = 0,
+  PERCENTAGE_REMAINING,
+  ELAPSED_REMAINING,
+} PROGRESS_DISPLAY;
 
 extern SETTINGS infoSettings;
 extern MACHINESETTINGS infoMachineSettings;

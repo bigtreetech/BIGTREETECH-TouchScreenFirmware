@@ -74,6 +74,7 @@ void infoSettingsReset(void)
   infoSettings.m27_active             = M27_WATCH_OTHER_SOURCES;
   infoSettings.longFileName           = AUTO;  //ENABLED / DISABLED / AUTO
   infoSettings.fan_percentage         = SHOW_FAN_PERCENTAGE;
+  infoSettings.prog_disp_type         = ELAPSED_REMAINING;
 
   infoSettings.pause_retract_len      = NOZZLE_PAUSE_RETRACT_LENGTH;
   infoSettings.resume_purge_len       = NOZZLE_RESUME_PURGE_LENGTH;
@@ -97,7 +98,7 @@ void infoSettingsReset(void)
   infoSettings.auto_off_temp          = AUTO_SHUT_DOWN_MAXTEMP;
 
 // Filament Runout Settings
-  infoSettings.runout                 = DISABLED;
+  infoSettings.runout                 = FIL_SENSOR_TYPE;
   infoSettings.runout_invert          = FIL_RUNOUT_INVERTING;
   infoSettings.runout_noise_ms        = FIL_NOISE_THRESHOLD;
   infoSettings.runout_distance        = FILAMENT_RUNOUT_DISTANCE_MM;
@@ -163,12 +164,6 @@ void infoSettingsReset(void)
     infoSettings.pause_feedrate[i]    = default_pause_speed[i];  // XY, Z, E
   }
 
-  for (int i = 0; i < PREHEAT_COUNT; i++)
-  {
-    infoSettings.preheat_temp[i]      = default_preheat_ext[i];
-    infoSettings.preheat_bed[i]       = default_preheat_bed[i];
-  }
-
   resetConfig();
 }
 
@@ -191,6 +186,7 @@ void initMachineSetting(void)
   infoMachineSettings.autoReportSDStatus      = DISABLED;
   infoMachineSettings.long_filename_support   = DISABLED;
   infoMachineSettings.babyStepping            = DISABLED;
+  infoMachineSettings.buildPercent            = DISABLED;
   infoMachineSettings.softwareEndstops        = ENABLED;
 }
 
@@ -241,6 +237,8 @@ void setupMachine(void)
   {
     mustStoreCmd("M555 P2\n");  //  Set RRF compatibility behaves similar to 2: Marlin
   }
+  mustStoreCmd("M82\n");  // Set extruder to absolute mode
+  mustStoreCmd("G90\n");  // Set to Absolute Positioning
 }
 
 float flashUsedPercentage(void)

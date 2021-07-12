@@ -19,7 +19,8 @@ extern "C" {
   #define _8X16_FONT_SIZE           0x1000
   #define FLASH_SIGN_SIZE           0x1000  // store status of last font/icon/config update
   #define LANGUAGE_SIZE            0x14000  // Language pack size
-  #define STRINGS_STORE_MAX_SIZE    0x5000  // label strings max size
+  #define STRINGS_STORE_MAX_SIZE    0x1000  // label strings max size
+  #define PREHEAT_STORE_MAX_SIZE    0x1000  // preheat setting max size
   #define PRINT_GCODES_MAX_SIZE     0x5000  // start/end/cancel gcodes  max size
   #define CUSTOM_GCODE_MAX_SIZE     0x5000  // custom gocdes max size
   #define ICON_MAX_SIZE             0x5000
@@ -37,7 +38,8 @@ extern "C" {
 #define FLASH_SIGN_ADDR         (_8X16_FONT_ADDR + _8X16_FONT_SIZE)            // for language label strings from language file
 #define LANGUAGE_ADDR           (FLASH_SIGN_ADDR + FLASH_SIGN_SIZE)            // for label strings from config file
 #define STRINGS_STORE_ADDR      (LANGUAGE_ADDR + LANGUAGE_SIZE)                // for label strings from config file
-#define PRINT_GCODES_ADDR       (STRINGS_STORE_ADDR + STRINGS_STORE_MAX_SIZE)  // for start/end/cancel gcodes from config file
+#define PREHEAT_STORE_ADDR      (STRINGS_STORE_ADDR + STRINGS_STORE_MAX_SIZE)  // for preheat settings from config file
+#define PRINT_GCODES_ADDR       (PREHEAT_STORE_ADDR + PREHEAT_STORE_MAX_SIZE)  // for start/end/cancel gcodes from config file
 #define CUSTOM_GCODE_ADDR       (PRINT_GCODES_ADDR + PRINT_GCODES_MAX_SIZE)    // for custom gcodes from config file
 
 #define ICON_ADDR(num)          ((num) * ICON_MAX_SIZE + CUSTOM_GCODE_ADDR + CUSTOM_GCODE_MAX_SIZE)

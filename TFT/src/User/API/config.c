@@ -1,7 +1,7 @@
 #include "config.h"
 #include "includes.h"
 
-#ifdef SERIAL_DEBUG_PORT  // To be used only when calling 'getConfigFromFile()' after boot process
+#if defined(SERIAL_DEBUG_PORT) && defined(DEBUG_SERIAL_CONFIG)  // To be used only when calling 'getConfigFromFile()' after boot process
   #define PRINTDEBUG(x) Serial_Puts(SERIAL_DEBUG_PORT, x);
 #else
   #define PRINTDEBUG(x)
@@ -31,6 +31,7 @@ CONFIGFILE* CurConfigFile;
 CUSTOM_GCODES* configCustomGcodes = NULL;
 PRINT_GCODES* configPrintGcodes = NULL;
 STRINGS_STORE* configStringsStore = NULL;
+PREHEAT_STORE* configPreheatStore = NULL;
 
 char * cur_line = NULL;
 uint16_t c_index = 0;
@@ -50,10 +51,12 @@ bool getConfigFromFile(void)
   CUSTOM_GCODES tempCustomGcodes;
   PRINT_GCODES tempPrintCodes;
   STRINGS_STORE tempStringStore;
+  PREHEAT_STORE tempPreheatStore;
 
   configCustomGcodes = &tempCustomGcodes;
   configPrintGcodes = &tempPrintCodes;
   configStringsStore = &tempStringStore;
+  configPreheatStore = &tempPreheatStore;
   customcode_index = 0;
   foundkeys = 0;
 
@@ -266,7 +269,7 @@ static inline int config_int(void)
 // Get valid int value or old value
 static int valid_intValue(int min, int max, int defaultVal)
 {
-  if (inLimit(config_int(),min, max))
+  if (inLimit(config_int(), min, max))
     return config_int();
   else
     return defaultVal;
@@ -383,6 +386,7 @@ void saveConfig(void)
   writeConfig((uint8_t *)configCustomGcodes, sizeof(CUSTOM_GCODES), CUSTOM_GCODE_ADDR, CUSTOM_GCODE_MAX_SIZE);
   writeConfig((uint8_t *)configPrintGcodes, sizeof(PRINT_GCODES), PRINT_GCODES_ADDR, PRINT_GCODES_MAX_SIZE);
   writeConfig((uint8_t *)configStringsStore, sizeof(STRINGS_STORE), STRINGS_STORE_ADDR, STRINGS_STORE_MAX_SIZE);
+  writeConfig((uint8_t *)configPreheatStore, sizeof(PREHEAT_STORE), PREHEAT_STORE_ADDR, PREHEAT_STORE_MAX_SIZE);
 
   #ifdef CONFIG_DEBUG
     CUSTOM_GCODES tempgcode;  // = NULL;
@@ -422,6 +426,7 @@ void resetConfig(void)
   CUSTOM_GCODES tempCG;
   STRINGS_STORE tempST;
   PRINT_GCODES tempPC;
+  PREHEAT_STORE tempPH;
 
   // restore custom gcode presets
   int n = 0;
@@ -441,7 +446,7 @@ void resetConfig(void)
 
   for (int i = 0; i < PREHEAT_COUNT; i++)
   {
-    strcpy(tempST.preheat_name[i],preheatNames[i]);
+    strcpy(tempPH.preheat_name[i], preheatNames[i]);
   }
 
   // restore print gcodes
@@ -788,6 +793,10 @@ void parseConfigKey(uint16_t index)
       infoSettings.fan_percentage = getOnOff();
       break;
 
+    case C_INDEX_PROG_DISP_TYPE:
+      SET_VALID_INT_VALUE(infoSettings.prog_disp_type, 0, 2);
+      break;
+
     case C_INDEX_PAUSE_RETRACT:
       if (key_seen("R")) SET_VALID_FLOAT_VALUE(infoSettings.pause_retract_len, MIN_RETRACT_LIMIT, MAX_RETRACT_LIMIT);
       if (key_seen("P")) SET_VALID_FLOAT_VALUE(infoSettings.resume_purge_len, MIN_RETRACT_LIMIT, MAX_RETRACT_LIMIT);
@@ -848,8 +857,8 @@ void parseConfigKey(uint16_t index)
       strcpy(pchr, strrchr(cur_line, ':') + 1);
       int utf8len = getUTF8Length((uint8_t *)pchr);
       int bytelen = strlen(pchr) + 1;
-      if (inLimit(utf8len, NAME_MIN_LENGTH, MAX_STRING_LENGTH) && inLimit(bytelen, NAME_MIN_LENGTH, MAX_GCODE_LENGTH))
-        strcpy(configStringsStore->preheat_name[index - C_INDEX_PREHEAT_NAME_1], pchr);
+      if (inLimit(utf8len, NAME_MIN_LENGTH, MAX_STRING_LENGTH) && inLimit(bytelen, NAME_MIN_LENGTH, MAX_STRING_LENGTH))
+        strcpy(configPreheatStore->preheat_name[index - C_INDEX_PREHEAT_NAME_1], pchr);
       break;
     }
 
@@ -861,8 +870,8 @@ void parseConfigKey(uint16_t index)
     case C_INDEX_PREHEAT_TEMP_6:
     {
       int val_index = index - C_INDEX_PREHEAT_TEMP_1;
-      if (key_seen("B")) SET_VALID_INT_VALUE(infoSettings.preheat_bed[val_index], MIN_BED_TEMP, MAX_BED_TEMP);
-      if (key_seen("T")) SET_VALID_INT_VALUE(infoSettings.preheat_temp[val_index], MIN_TOOL_TEMP, MAX_TOOL_TEMP);
+      if (key_seen("B")) SET_VALID_INT_VALUE(configPreheatStore->preheat_bed[val_index], MIN_BED_TEMP, MAX_BED_TEMP);
+      if (key_seen("T")) SET_VALID_INT_VALUE(configPreheatStore->preheat_temp[val_index], MIN_TOOL_TEMP, MAX_TOOL_TEMP);
       break;
     }
 
@@ -886,7 +895,7 @@ void parseConfigKey(uint16_t index)
 
     #ifdef FIL_RUNOUT_PIN
       case C_INDEX_RUNOUT:
-        if (inLimit(config_int(), 0, 2))
+        if (inLimit(config_int(), 0, 3))
           infoSettings.runout = config_int();
         break;
 

@@ -106,7 +106,7 @@
 #if defined (STM32F10X_LD_VL) || defined (STM32F10X_MD_VL) || defined (STM32F10X_HD_VL)
 /* #define SYSCLK_FREQ_HSE    HSE_VALUE */
  #define SYSCLK_FREQ_24MHz  24000000
-#elif defined (MKS_TFT32_V1_3) || defined (MKS_TFT32_V1_4) || defined (MKS_TFT28_V3_0) || defined (MKS_TFT28_V4_0)
+#elif defined (MKS_TFT)
  #define SYSCLK_FREQ_48MHz  48000000
 #else
 /* #define SYSCLK_FREQ_HSE    HSE_VALUE */
@@ -213,6 +213,9 @@ static void SetSysClock(void);
   */
 void SystemClockInit (void)
 {
+  /* Restore "Reset value", reset the value be setted in bootloader */
+  RCC->CR = 0x83;
+  RCC->CFGR = 0x00000000;
   /* Reset the RCC clock configuration to the default reset state(for debug purpose) */
   /* Set HSION bit */
   RCC->CR |= (uint32_t)0x00000001;

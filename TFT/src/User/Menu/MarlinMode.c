@@ -30,6 +30,7 @@ void menuMarlinMode(void)
 
   #if defined(ST7920_EMULATOR)
     ST7920 st7920;
+
     if (infoSettings.marlin_type == LCD12864)
     {
       marlinInit = SPI_Slave;

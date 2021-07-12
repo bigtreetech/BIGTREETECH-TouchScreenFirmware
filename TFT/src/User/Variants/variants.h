@@ -54,6 +54,8 @@
   #include "pin_MKS_TFT28_V3_0.h"
 #elif defined(MKS_TFT28_V4_0)
   #include "pin_MKS_TFT28_V4_0.h"
+#elif defined(MKS_TFT28_NEW_GENIUS)
+  #include "pin_MKS_TFT28_NEW_GENIUS.h"
 #endif
 
 #ifdef SERIAL_PORT_4

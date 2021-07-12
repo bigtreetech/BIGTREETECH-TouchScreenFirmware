@@ -46,6 +46,8 @@ typedef struct
 
 extern PRINT_SUMMARY infoPrintSummary;
 
+bool isHostPrinting(void);  // condition callback for loopProcessToCondition()
+
 void setRunoutAlarmTrue(void);
 void setRunoutAlarmFalse(void);
 bool getRunoutAlarm(void);
@@ -54,14 +56,20 @@ void breakAndContinue(void);
 void resumeAndPurge(void);
 void resumeAndContinue(void);
 
-void setPrintTime(uint32_t RTtime);
+void setPrintTime(uint32_t elapsedTime);
 uint32_t getPrintTime(void);
 void getPrintTimeDetail(uint8_t * hour, uint8_t * min, uint8_t * sec);
+
+void setPrintRemainingTime(int32_t remainingTime);  // used for M73 Rxx and M117 Time Left xx
+void parsePrintRemainingTime(char * buffer);        // used for M117 Time Left xx
+uint32_t getPrintRemainingTime();
+void getPrintRemainingTimeDetail(uint8_t * hour, uint8_t * min, uint8_t * sec);
 
 uint32_t getPrintSize(void);
 uint32_t getPrintCur(void);
 
 void setPrintProgress(float cur, float size);
+void setPrintProgressPercentage(uint8_t percentage);  // used by M73 Pxx
 bool updatePrintProgress(void);
 uint8_t getPrintProgress(void);
 

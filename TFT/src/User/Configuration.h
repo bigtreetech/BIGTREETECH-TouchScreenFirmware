@@ -1,6 +1,6 @@
 #ifndef _CONFIGURATION_H_
 #define _CONFIGURATION_H_
-#define CONFIG_VERSION 20210513
+#define CONFIG_VERSION 20210605
 
 //===========================================================================
 //============================ Developer Settings ===========================
@@ -13,12 +13,43 @@
  */
 //#define SCREEN_SHOT_TO_SD
 
+//===========================================================================
+//============================== Debug Settings =============================
+//===========================================================================
+
+/* If one of the DEBUG_x below is defined the SERIAL_DEBUG_PORT defined in board specific Pin_xx.h file
+ * will be used for debugging purposes. DON'T enable one of the DEBUG_x below for normal printing.
+ *
+ * Warning: SERIAL_DEBUG_PORT needs to be activated specifically. Please consider settings MULTI_SERIAL > 0
+ * in the Configuration.h or set e.g. "multi_serial: 2" in the config.ini.
+ * If the TFT is only showing the boot logo and is not responding anymore, check the MULTI_SERIAL setting.
+ * If you update the config.ini you need to reset the TFT *twice* (first reset to update the config, second
+ * reset to enable the SERIAL_DEBUG_PORT due to the changed firmware config).
+ */
+
+/**
+ * Generic Debug
+ * Uncomment/Enable to enable arbitrary debug serial communication to SERIAL_DEBUG_PORT defined in board specific Pin_xx.h file.
+ */
+//#define DEBUG_SERIAL_GENERIC
+
 /**
  * Serial Communication Debug
  * Uncomment/Enable to forward/dump all serial communication to SERIAL_DEBUG_PORT defined in board specific Pin_xx.h file.
- * Use it only for debugging purposes. DON'T enable it for normal printing.
  */
 //#define DEBUG_SERIAL_COMM
+
+/**
+ * Config File Debug
+ * Uncomment/Enable to show debug information during config file processing.
+ */
+//#define DEBUG_SERIAL_CONFIG
+
+#if defined(DEBUG_SERIAL_GENERIC) || defined(DEBUG_SERIAL_CONFIG) || defined(DEBUG_SERIAL_COMM)
+  #define SERIAL_DEBUG_ENABLED
+#else
+  #undef SERIAL_DEBUG_ENABLED
+#endif
 
 //===========================================================================
 //============================= General Settings ============================
@@ -170,7 +201,7 @@
  * Controller fan have two speed (Active and Idle) index 6 and 7.
  */
 #define FAN_MAX_PWM    {255,  255,  255,  255,  255,  255,  255,   255}
-#define FAN_DISPLAY_ID {"F0", "F1", "F2", "F3", "F4", "F5", "CtS", "CtI"}
+#define FAN_DISPLAY_ID {"F0 ", "F1 ", "F2 ", "F3 ", "F4 ", "F5 ", "CtS", "CtI"}
 #define FAN_CMD        {"M106 P0 S%d\n", "M106 P1 S%d\n", "M106 P2 S%d\n", "M106 P3 S%d\n", "M106 P4 S%d\n", "M106 P5 S%d\n", \
                         "M710 S%d\n",    "M710 I%d\n" }
 
@@ -314,7 +345,8 @@
 #define AUTO_SAVE_LOAD_BL_VALUE 1  // Default: 1
 
 // PID autotune
-#define PID_CMD {"M303 U1 C8 E0", "M303 U1 C8 E1", "M303 U1 C8 E2", "M303 U1 C8 E3", "M303 U1 C8 E4", "M303 U1 C8 E5", "M303 U1 C8 E-1", ""}
+#define PID_CMD_MARLIN {"M303 U1 C8 E0", "M303 U1 C8 E1", "M303 U1 C8 E2", "M303 U1 C8 E3", "M303 U1 C8 E4", "M303 U1 C8 E5", "M303 U1 C8 E-1", ""}
+#define PID_CMD_RRF {"M303 T0", "M303 T1", "M303 T2", "M303 T3", "M303 T4", "M303 T5", "M303 H0", ""}
 #define PID_PROCESS_TIMEOUT (15 * 60000)  // (MilliSeconds, 1 minute = 60000 MilliSeconds)
 
 /**
@@ -338,7 +370,6 @@
  * Adds a submenu to the movement menu for selecting load and unload actions.
  */
 #define LOAD_UNLOAD_M701_M702
-
 
 //===========================================================================
 //========================== Other UI Settings ==============================
@@ -495,6 +526,52 @@
  */
 #define TERMINAL_KEYBOARD_LAYOUT 0  // Default: 0
 
+/**
+ * Progress bar layout on Printing menu
+ * Uncomment to enable a progress bar with 10% markers.
+ * Comment to enable a standard progress bar.
+ */
+//#define MARKED_PROGRESS_BAR  // Default: disabled
+
+/**
+ * Live text background color rendering technique on Printing menu
+ * Uncomment to enable the sampling and use of a uniform background color across all the icons.
+ * Comment to enable a standard rendering based on the sampling and use, in a pixel by pixel basis,
+ * of the underlying icon background colors.
+ *
+ * NOTE: Enable it only in case all the icons have the same and uniform background color under all
+ *       the live text areas (e.g. applicable to Unified, Round Miracle etc... menu themes).
+ *       If enabled, it speeds up the rendering of the live text and the responsiveness of the TFT,
+ *       so it can improve the print quality.
+ *       Suitable in particular for the TFTs with a not fast HW (e.g. 24, 48 MHz).
+ */
+//#define UNIFORM_LIVE_TEXT_BG_COLOR  // Default: disabled
+
+/**
+ * Show embedded thumbnails of gcode files
+ *
+ * Options: [0: classic, 1: RGB565 bitmap, 2: Base64 PNG]
+ *  classic: RGB565 bitmaps for all possible thumbnail sizes are embedded
+ *    in the gcode file at fixed file offsets. It is fastest to parse but least flexible.
+ *  RGB565 bitmap:
+ *    A specific thumbnail comment identifies the location of a  single 'classic'
+ *    embedded RB565 bitmap thumbnail. It is almost as fast as classic and
+ *    flexible but requires a dedicated post-processing of gcode files for
+ *    most slicers. "Classic" is used as fallback.
+ *  Base64 PNG:
+ *    A specific thumbnail comment identifies the location of a Base64-encoded
+ *    PNG thumbnail. It is slower as classic but most flexible. It does _not_
+ *    require dedicated post-processing of gcode files for most slicers.
+ *    "RGB565 bitmap" and "Classic" are used as fallback.
+ *
+ *  Restrictions:
+ *    "Base64 PNG" option utilizes about 43kb statically allocated RAM and
+ *    about 1kb dynamically allocated RAM. Therefore this option is only suitable
+ *    for devices >96KB RAM.
+ *    If you choose "Base64 PNG" on such a low RAM device it will automatically
+ *    downgraded to "RGB565 bitmap" option.
+ */
+#define THUMBNAIL_PARSER 0  // Default: 0
 
 //===========================================================================
 //=========================== Other Settings ================================
@@ -512,9 +589,24 @@
  */
 #define AUTO_SHUT_DOWN_MAXTEMP 50
 
-//
-// Filament Runout Settings (if connected to TFT controller)
-//
+/**
+ * Filament Runout Settings (if connected to TFT controller only)
+ *
+ * Select the type of filament/runout sensor and its default enabled/disabled state.
+ *
+ * NOTE: If the sensor is connected to the board, then this must be set to 0 (Disabled) or 'OFF' in
+ *       the TFT Display. It is recommended to add a M75 code to the 'start_gcode' option and add a
+ *       M77 code to the 'end_gcode' and enable both in config.ini file.
+ *
+ *       Example (in config.ini):
+ *         end_gcode_enabled:1
+ *         start_gcode_enabled:1
+ *         start_gcode:M75\n
+ *         end_gcode:M77\n
+ *
+ * Options: [0: Normal Disabled, 1: Normal Enabled, 2: Smart Disabled, 3: Smart Enabled]
+*/
+#define FIL_SENSOR_TYPE 0
 
 // Filament runout detection
 #define FIL_RUNOUT_INVERTING true  // Set to false to invert the logic of the sensor. (Default: true)

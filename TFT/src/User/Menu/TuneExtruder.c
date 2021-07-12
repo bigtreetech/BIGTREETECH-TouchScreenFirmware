@@ -3,9 +3,18 @@
 
 #define ITEM_TUNE_EXTRUDER_LEN_NUM 4
 
+#define EXTRUDE_LEN 100.0f // in MM
+
 static uint8_t tool_index = NOZZLE0;
 static uint8_t degreeSteps_index = 1;
 static uint8_t extStep_index = 0;
+static bool loadRequested = false;
+
+// set the hotend to the minimum extrusion temperature if user selected "OK"
+void extrudeMinTemp_OK(void)
+{
+  heatSetTargetTemp(tool_index, infoSettings.min_ext_temp);
+}
 
 static inline void turnHeaterOff(void)
 {
@@ -23,7 +32,7 @@ void showNewESteps(const float measured_length, const float old_esteps, float * 
   char tempstr[20];
 
   // First we calculate the new E-step value:
-  *new_esteps = (100 * old_esteps) / (100 - (measured_length - 20));
+  *new_esteps = (EXTRUDE_LEN * old_esteps) / (EXTRUDE_LEN - (measured_length - 20));
 
   GUI_DispString(exhibitRect.x0, exhibitRect.y0, textSelect(LABEL_TUNE_EXT_MEASURED));
 
@@ -39,9 +48,17 @@ void showNewESteps(const float measured_length, const float old_esteps, float * 
 
 static inline void extrudeFilament(void)
 {
-  storeCmd("G28\n");                              // Home extruder
-  mustStoreScript("G90\nG0 F3000 X0 Y0 Z100\n");  // present extruder
-  mustStoreScript("M83\nG1 F50 E100\nM82\n");     // extrude
+  // Home extruder
+  mustStoreScript("G28\nG90\n");
+  // Raise Z axis to pause height
+  mustStoreCmd("G0 Z%.3f F%d\n", coordinateGetAxisActual(Z_AXIS) + infoSettings.pause_z_raise,
+                  infoSettings.pause_feedrate[FEEDRATE_Z]);
+  // Move to pause location
+  mustStoreCmd("G0 X%.3f Y%.3f F%d\n", infoSettings.pause_pos[X_AXIS], infoSettings.pause_pos[Y_AXIS],
+                  infoSettings.pause_feedrate[FEEDRATE_XY]);
+  // extrude 100MM
+  mustStoreScript("M83\nG1 F50 E%.2f\nM82\n", EXTRUDE_LEN);
+
   infoMenu.menu[++infoMenu.cur] = menuNewExtruderESteps;
 }
 // end Esteps part
@@ -123,29 +140,7 @@ void menuTuneExtruder(void)
         break;
 
       case KEY_ICON_6:
-        {
-          char tempMsg[120];
-
-          if (heatGetTargetTemp(tool_index) < infoSettings.min_ext_temp)
-          {
-            LABELCHAR(tempStr, LABEL_TUNE_EXT_TEMPLOW);
-
-            sprintf(tempMsg, tempStr, infoSettings.min_ext_temp);
-            popupReminder(DIALOG_TYPE_ALERT, tuneExtruderItems.title.index, (uint8_t *) tempMsg);
-          }
-          else if (heatGetCurrentTemp(tool_index) < heatGetTargetTemp(tool_index) - 1)
-          {
-            popupReminder(DIALOG_TYPE_ALERT, tuneExtruderItems.title.index, LABEL_TUNE_EXT_DESIREDVAL);
-          }
-          else
-          {
-            LABELCHAR(tempStr, LABEL_TUNE_EXT_MARK120MM);
-
-            sprintf(tempMsg, tempStr, textSelect(LABEL_EXTRUDE));
-            setDialogText(tuneExtruderItems.title.index, (uint8_t *) tempMsg, LABEL_EXTRUDE, LABEL_CANCEL);
-            showDialog(DIALOG_TYPE_QUESTION, extrudeFilament, NULL, NULL);
-          }
-        }
+        loadRequested = true;
         break;
 
       case KEY_ICON_7:
@@ -169,6 +164,32 @@ void menuTuneExtruder(void)
           }
         #endif
         break;
+    }
+
+    if (loadRequested == true)
+    {
+      switch (warmupNozzle(tool_index, extrudeMinTemp_OK))
+      {
+        case COLD:
+          loadRequested = false;
+          break;
+
+        case SETTLING:
+          break;
+
+        case HEATED:
+          {
+            char tempMsg[120];
+
+            LABELCHAR(tempStr, LABEL_TUNE_EXT_MARK120MM);
+
+            sprintf(tempMsg, tempStr, textSelect(LABEL_EXTRUDE));
+            setDialogText(tuneExtruderItems.title.index, (uint8_t *) tempMsg, LABEL_EXTRUDE, LABEL_CANCEL);
+            showDialog(DIALOG_TYPE_QUESTION, extrudeFilament, NULL, NULL);
+          }
+          loadRequested = false;
+          break;
+      }
     }
 
     if (lastCurrent != actCurrent || lastTarget != actTarget)
@@ -243,7 +264,7 @@ void menuNewExtruderESteps(void)
         char tempMsg[120];
         LABELCHAR(tempStr, LABEL_TUNE_EXT_ESTEPS_SAVED);
 
-        storeCmd("M92 T0 E%0.2f\n", new_esteps);
+        sendParameterCmd(P_STEPS_PER_MM, AXIS_INDEX_E0, new_esteps);
         sprintf(tempMsg, tempStr, new_esteps);
         popupReminder(DIALOG_TYPE_QUESTION, newExtruderESteps.title.index, (uint8_t *) tempMsg);
         break;

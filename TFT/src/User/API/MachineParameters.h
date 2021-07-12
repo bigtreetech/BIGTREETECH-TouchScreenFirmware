@@ -92,7 +92,7 @@ typedef struct
   float LinAdvance[2];
   float FilamentSetting[3];
   float Current[STEPPER_INDEX_COUNT];
-  float BumpSensitivity[3];
+  float BumpSensitivity[STEPPER_INDEX_COUNT];
   float HybridThreshold[STEPPER_INDEX_COUNT];
   float StealthChop[STEPPER_INDEX_COUNT];
   float MblOffset[1];
