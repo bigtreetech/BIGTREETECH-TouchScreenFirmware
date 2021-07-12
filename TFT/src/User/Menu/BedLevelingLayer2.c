@@ -101,7 +101,7 @@ void menuBedLevelingLayer2(void)
 
       case KEY_ICON_3:
         if (infoMachineSettings.zProbe == ENABLED && !(REMOVABLE_PROBE))
-        infoMenu.menu[++infoMenu.cur] = menuLevelCorner;
+          infoMenu.menu[++infoMenu.cur] = menuLevelCorner;
         break;
 
       case KEY_ICON_4:
