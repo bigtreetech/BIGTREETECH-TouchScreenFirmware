@@ -18,7 +18,11 @@ void menuUnifiedMove(void)
       {ICON_EXTRUDE,                 LABEL_EXTRUDE},
       {ICON_DISABLE_STEPPERS,        LABEL_DISABLE_STEPPERS},
       {ICON_BABYSTEP,                LABEL_BABYSTEP},
-      {ICON_BACKGROUND,            LABEL_BACKGROUND},
+      #ifdef DELTA_PRINTER
+        {ICON_CALIBRATION,            ICON_CALIBRATION},
+      #else
+        {ICON_MANUAL_LEVEL,            LABEL_LEVELING},
+      #endif
       {ICON_BACKGROUND,              LABEL_BACKGROUND},
       {ICON_BACK,                    LABEL_BACK},
     }
@@ -30,17 +34,6 @@ void menuUnifiedMove(void)
   {
     UnifiedMoveItems.items[6].icon = ICON_LEVELING;
     UnifiedMoveItems.items[6].label.index = LABEL_BED_LEVELING;
-  }
-  
-  if (DELTA_PRINTER)
-  {
-    UnifiedMoveItems.items[5].icon = ICON_CALIBRATION;
-    UnifiedMoveItems.items[5].label.index = LABEL_CALIBRATION;
-  }
-  else
-  {
-    UnifiedMoveItems.items[5].icon = ICON_MANUAL_LEVEL;
-    UnifiedMoveItems.items[5].label.index = LABEL_LEVELING;
   }
 
   menuDrawPage(&UnifiedMoveItems);
