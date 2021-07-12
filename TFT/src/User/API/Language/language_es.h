@@ -52,7 +52,6 @@
     #define STRING_DELTA_CONFIGURATION           "Delta Configuration"
     #define STRING_DELTA_TOWER_ANGLE           "Tower Angle Trim"
     #define STRING_DELTA_ENDSTOP           "Endstop Adjustments"
-    #define STRING_DIAGONAL_ROD           "Diagonal rod"
     #define STRING_HOTEND_OFFSET          "Offset 2nd Nozzle"
     #define STRING_PROBE_OFFSET           "Sonda Compensar"
     #define STRING_LIN_ADVANCE            "Linear Advance"
