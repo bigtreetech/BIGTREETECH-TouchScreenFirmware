@@ -758,18 +758,18 @@ void parseACK(void)
         pidUpdateStatus(false);
       }
       // parse and store M355, Case light message
-      else if (ack_seen("Case light:"))
+      else if (ack_seen("Case light: OFF"))
       {
-        if (ack_seen("OFF"))
-        {
-          caseLightSetState(false);
-        }
-        else
-        {
-          caseLightSetState(true);
-          caseLightSetBrightness(ack_value());
-        }
+        caseLightSetState(false);
         caseLightQuerySetWait(false);
+        caseLightApplied(true);
+      }
+      else if (ack_seen("Case light: "))
+      {
+        caseLightSetState(true);
+        caseLightSetBrightness(ack_value());
+        caseLightQuerySetWait(false);
+        caseLightApplied(true);
       }
       // parse and store M420 V1 T1, Mesh data (e.g. from Mesh Editor menu)
       //
