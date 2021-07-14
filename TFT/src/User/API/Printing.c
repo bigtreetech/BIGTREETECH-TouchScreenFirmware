@@ -576,7 +576,7 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType)
       break;
   }
 
-  infoPrinting.pause = isPause; // update pause status after pause/resume procedure
+  infoPrinting.pause = isPause;  // update pause status after pause/resume procedure
   loopDetected = false;
 
   return true;
