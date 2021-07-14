@@ -6,7 +6,7 @@
 #include "Settings.h"
 #include "HD44780.h"
 
-#if !defined (MKS_TFT)
+#if !defined(MKS_TFT)
 
 #if defined(ST7920_EMULATOR)
 // TODO:
@@ -169,4 +169,4 @@ void EXTI15_10_IRQHandler(void)
 }
 #endif
 
-#endif             // endif for #if !defined (MKS_TFT)
+#endif             // endif for #if !defined(MKS_TFT)

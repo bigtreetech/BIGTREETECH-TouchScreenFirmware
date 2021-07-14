@@ -23,6 +23,7 @@ void PS_ON_Off(void)
 {
   GPIO_SetLevel(PS_ON_PIN, !infoSettings.ps_active_high);
 }
+
 #endif
 
 // Filament runout detect
@@ -60,56 +61,59 @@ void FIL_Runout_Init(void)
   #endif
 }
 
-bool FIL_RunoutPinFilteredLevel(void)
+bool FIL_NormalRunoutDetect(void)
 {
-  static bool rst = false;
-  static uint32_t nextRunoutTime = 0;
+  static bool runout = false;
   static uint32_t trueTimes = 0;
   static uint32_t falseTimes = 0;
+  static uint32_t nextRunoutTime = 0;
 
   if (OS_GetTimeMs() > nextRunoutTime)
   {
-    rst = trueTimes > falseTimes ? true : false;
-    nextRunoutTime = OS_GetTimeMs() + infoSettings.runout_noise_ms;
+    runout = trueTimes > falseTimes ? true : false;
     trueTimes = 0;
     falseTimes = 0;
+    nextRunoutTime = OS_GetTimeMs() + infoSettings.runout_noise_ms;
   }
   else
   {
-    bool filRunout = 0;
+    bool pinState = false;
     uint8_t toolNum = heatGetCurrentTool();
+
     switch (toolNum)
     {
       case 0:
-        filRunout = GPIO_GetLevel(FIL_RUNOUT_PIN);
+        pinState = GPIO_GetLevel(FIL_RUNOUT_PIN);
         break;
+
       #ifdef FIL_RUNOUT_PIN_1
         case 1:
-          filRunout = GPIO_GetLevel(FIL_RUNOUT_PIN_1);
+          pinState = GPIO_GetLevel(FIL_RUNOUT_PIN_1);
           break;
       #endif
       #ifdef FIL_RUNOUT_PIN_2
         case 2:
-          filRunout = GPIO_GetLevel(FIL_RUNOUT_PIN_2);
+          pinState = GPIO_GetLevel(FIL_RUNOUT_PIN_2);
           break;
       #endif
       #ifdef FIL_RUNOUT_PIN_3
         case 3:
-          filRunout = GPIO_GetLevel(FIL_RUNOUT_PIN_3);
+          pinState = GPIO_GetLevel(FIL_RUNOUT_PIN_3);
           break;
       #endif
       #ifdef FIL_RUNOUT_PIN_4
         case 4:
-          filRunout = GPIO_GetLevel(FIL_RUNOUT_PIN_4);
+          pinState = GPIO_GetLevel(FIL_RUNOUT_PIN_4);
           break;
       #endif
       #ifdef FIL_RUNOUT_PIN_5
         case 5:
-          filRunout = GPIO_GetLevel(FIL_RUNOUT_PIN_5);
+          pinState = GPIO_GetLevel(FIL_RUNOUT_PIN_5);
           break;
       #endif
     }
-    if (filRunout)
+
+    if (pinState)
     {
       trueTimes++;
     }
@@ -118,7 +122,9 @@ bool FIL_RunoutPinFilteredLevel(void)
       falseTimes++;
     }
   }
-  return rst;
+
+  // Detect HIGH/LOW level, Suitable for general mechanical / photoelectric switches
+  return (runout == infoSettings.runout_invert);
 }
 
 static uint32_t update_PosE_time = 2000;
@@ -134,11 +140,11 @@ void FIL_SFS_SetAlive(uint8_t alive)
 bool FIL_SmartRunoutDetect(void)
 {
   static float lastExtrudePosition = 0.0f;
-  static uint8_t lastRunoutPinLevel = 0;
+  static bool lastRunout = false;
   static uint32_t nextRunoutTime = 0;
 
-  bool pinLevel = FIL_RunoutPinFilteredLevel();
   float actualExtrude = coordinateGetExtruderActual();
+  bool runout = FIL_NormalRunoutDetect();
 
   do
   { // Send M114 E query extrude position continuously
@@ -147,10 +153,13 @@ bool FIL_SmartRunoutDetect(void)
       nextRunoutTime = OS_GetTimeMs() + update_PosE_time;
       break;
     }
+
     if (OS_GetTimeMs() < nextRunoutTime)
       break;
-    if (requestCommandInfoIsRunning())  //to avoid colision in Gcode response processing
+
+    if (requestCommandInfoIsRunning())  // To avoid colision in Gcode response processing
       break;
+
     if (storeCmd("M114 E\n") == false)
       break;
 
@@ -160,7 +169,7 @@ bool FIL_SmartRunoutDetect(void)
 
   if (SFS_IsAlive == false)
   {
-    if (lastRunoutPinLevel != pinLevel)
+    if (lastRunout != runout)
     {
       SFS_IsAlive = true;
     }
@@ -169,16 +178,18 @@ bool FIL_SmartRunoutDetect(void)
   if (ABS(actualExtrude - lastExtrudePosition) >= infoSettings.runout_distance)
   {
     lastExtrudePosition = actualExtrude;
+
     if (SFS_IsAlive)
     {
       SFS_IsAlive = false;
-      lastRunoutPinLevel = pinLevel;
+      lastRunout = runout;
     }
     else
     {
       return true;
     }
   }
+
   return false;
 }
 
@@ -192,8 +203,7 @@ bool FIL_IsRunout(void)
     switch (sensorType)
     {
       case FILAMENT_SENSOR_NORMAL:
-        // Detect HIGH/LOW level, Suitable for general mechanical / photoelectric switches
-        return (FIL_RunoutPinFilteredLevel() == infoSettings.runout_invert);
+        return FIL_NormalRunoutDetect();
 
       case FILAMENT_SENSOR_SMART:
         return FIL_SmartRunoutDetect();
@@ -202,31 +212,28 @@ bool FIL_IsRunout(void)
         return false;
     }
   }
+
   return false;
 }
 
 void loopBackEndFILRunoutDetect(void)
 {
-  if (!(infoSettings.runout & 1))   // Filament runout turn off
-    return;
-  if (!isPrinting() || isPaused())  // Check for No printing or printing paused before reading sensor
-    return;
-  if (!FIL_IsRunout())              // Filament not runout yet, need constant scanning to filter interference
+  if (!(infoSettings.runout & 1))  // Filament runout turn off
     return;
 
-  setPrintRunout(true);
+  setPrintRunout(FIL_IsRunout());  // Need constant scanning to filter interference
 }
 
 void loopFrontEndFILRunoutDetect(void)
 {
-  static uint32_t nextTime = 0;
   #define ALARM_REMINDER_TIME 10000
+  static uint32_t nextTime = 0;
 
-  if (!getPrintRunout() && !getRunoutAlarm()) return;
+  if (!getPrintRunout() && !getRunoutAlarm())
+    return;
 
-  if (printPause(true, PAUSE_NORMAL) && !getRunoutAlarm())
-  {
-    setPrintRunout(false);
+  if (printPause(true, PAUSE_NORMAL) && !getRunoutAlarm())  // If not printing, printPause() function will always fail
+  {                                                         // so no useless error message is displayed
     setRunoutAlarmTrue();
     setDialogText(LABEL_WARNING, LABEL_FILAMENT_RUNOUT, LABEL_CONFIRM, LABEL_BACKGROUND);
     showDialog(DIALOG_TYPE_ALERT, setRunoutAlarmFalse, NULL, NULL);
