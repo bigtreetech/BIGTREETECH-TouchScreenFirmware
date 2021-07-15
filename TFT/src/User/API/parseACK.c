@@ -82,8 +82,10 @@ static bool ack_seen(const char * str)
 }
 
 static bool ack_continue_seen(const char * str)
-{
+{ // unlike "ack_seen()", this retains "ack_index" if the searched string is not found
   uint16_t i;
+  uint16_t indexBackup = ack_index;
+
   for (; ack_index < ACK_MAX_SIZE && dmaL2Cache[ack_index] != 0; ack_index++)
   {
     for (i = 0; str[i] != 0 && dmaL2Cache[ack_index + i] != 0 && dmaL2Cache[ack_index + i] == str[i]; i++)
@@ -94,6 +96,7 @@ static bool ack_continue_seen(const char * str)
       return true;
     }
   }
+  ack_index = indexBackup;
   return false;
 }
 
@@ -758,16 +761,17 @@ void parseACK(void)
         pidUpdateStatus(false);
       }
       // parse and store M355, Case light message
-      else if (ack_seen("Case light: OFF"))
-      {
-        caseLightSetState(false);
-        caseLightQuerySetWait(false);
-        caseLightApplied(true);
-      }
       else if (ack_seen("Case light: "))
       {
-        caseLightSetState(true);
-        caseLightSetBrightness(ack_value());
+        if (ack_continue_seen("OFF"))
+        {
+          caseLightSetState(false);
+        }
+        else
+        {
+          caseLightSetState(true);
+          caseLightSetBrightness(ack_value());
+        }
         caseLightQuerySetWait(false);
         caseLightApplied(true);
       }

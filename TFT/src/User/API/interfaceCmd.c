@@ -887,6 +887,7 @@ void sendQueueCmd(void)
           {
             caseLightSetBrightness(cmd_value());
           }
+          caseLightApplied(true);
           break;
         }
 
