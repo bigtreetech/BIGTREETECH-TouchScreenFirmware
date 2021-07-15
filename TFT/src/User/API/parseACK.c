@@ -761,7 +761,7 @@ void parseACK(void)
         pidUpdateStatus(false);
       }
       // parse and store M355, Case light message
-      else if (ack_seen("Case light: "))
+      else if (ack_seen("Case light:"))
       {
         if (ack_continue_seen("OFF"))
         {
