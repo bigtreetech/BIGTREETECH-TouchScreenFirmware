@@ -669,7 +669,7 @@ void sendQueueCmd(void)
         case 114:  // M114
           #ifdef FIL_RUNOUT_PIN
             if (fromTFT)
-              FIL_PosE_SetUpdate(false);
+              FIL_PosE_SetUpdateWaiting(false);
           #endif
           break;
 

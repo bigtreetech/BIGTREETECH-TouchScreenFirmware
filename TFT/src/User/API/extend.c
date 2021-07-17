@@ -32,8 +32,8 @@ void PS_ON_Off(void)
 #define POS_E_UPDATE_TIME   2000
 #define ALARM_REMINDER_TIME 10000
 
-static bool posE_isUpdated = false;
-static bool sfs_isAlive = false;  // Use an encoder disc to toggles the runout. Suitable for BigTreeTech Smart Filament Sensor
+static bool posE_updateWaiting = false;
+static bool sfs_alive = false;  // Use an encoder disc to toggles the runout. Suitable for BigTreeTech Smart Filament Sensor
 
 void FIL_Runout_Init(void)
 {
@@ -60,14 +60,14 @@ void FIL_Runout_Init(void)
 }
 
 // Set whether we need to query the current position
-void FIL_PosE_SetUpdate(bool isUpdated)
+void FIL_PosE_SetUpdateWaiting(bool waiting)
 {
-  posE_isUpdated = isUpdated;
+  posE_updateWaiting = waiting;
 }
 
-void FIL_SFS_SetAlive(bool isAlive)
+void FIL_SFS_SetAlive(bool alive)
 {
-  sfs_isAlive = isAlive;
+  sfs_alive = alive;
 }
 
 bool FIL_NormalRunoutDetect(void)
@@ -138,22 +138,22 @@ bool FIL_NormalRunoutDetect(void)
 
 bool FIL_SmartRunoutDetect(void)
 {
-  static float lastExtrudePosition = 0.0f;
+  static float lastPosE = 0.0f;
   static bool lastRunout = false;
-  static uint32_t nextRunoutTime = 0;
+  static uint32_t nextUpdateTime = 0;
 
-  float actualExtrude = coordinateGetExtruderActual();
+  float posE = coordinateGetExtruderActual();
   bool runout = FIL_NormalRunoutDetect();
 
   do
-  { // Send M114 E query extrude position continuously
-    if (posE_isUpdated == true)
+  { // Send M114 E to query extrude position continuously
+    if (posE_updateWaiting == true)
     {
-      nextRunoutTime = OS_GetTimeMs() + POS_E_UPDATE_TIME;
+      nextUpdateTime = OS_GetTimeMs() + POS_E_UPDATE_TIME;
       break;
     }
 
-    if (OS_GetTimeMs() < nextRunoutTime)
+    if (OS_GetTimeMs() < nextUpdateTime)
       break;
 
     if (requestCommandInfoIsRunning())  // To avoid colision in Gcode response processing
@@ -162,25 +162,25 @@ bool FIL_SmartRunoutDetect(void)
     if (storeCmd("M114 E\n") == false)
       break;
 
-    posE_isUpdated = true;
-    nextRunoutTime = OS_GetTimeMs() + POS_E_UPDATE_TIME;
+    posE_updateWaiting = true;
+    nextUpdateTime = OS_GetTimeMs() + POS_E_UPDATE_TIME;
   } while (0);
 
-  if (sfs_isAlive == false)
+  if (sfs_alive == false)
   {
     if (lastRunout != runout)
     {
-      sfs_isAlive = true;
+      sfs_alive = true;
     }
   }
 
-  if (ABS(actualExtrude - lastExtrudePosition) >= infoSettings.runout_distance)
+  if (ABS(posE - lastPosE) >= infoSettings.runout_distance)
   {
-    lastExtrudePosition = actualExtrude;
+    lastPosE = posE;
 
-    if (sfs_isAlive)
+    if (sfs_alive)
     {
-      sfs_isAlive = false;
+      sfs_alive = false;
       lastRunout = runout;
     }
     else
@@ -225,7 +225,7 @@ void loopBackEndFILRunoutDetect(void)
 
 void loopFrontEndFILRunoutDetect(void)
 {
-  static uint32_t nextAlarmTime = 0;
+  static uint32_t nextReminderTime = 0;
 
   if (!getPrintRunout() && !getRunoutAlarm())
     return;
@@ -237,10 +237,10 @@ void loopFrontEndFILRunoutDetect(void)
     showDialog(DIALOG_TYPE_ALERT, setRunoutAlarmFalse, NULL, NULL);
   }
 
-  if ((OS_GetTimeMs() > nextAlarmTime) && (getRunoutAlarm() == true))
+  if ((OS_GetTimeMs() > nextReminderTime) && (getRunoutAlarm() == true))
   {
     BUZZER_PLAY(sound_error);
-    nextAlarmTime = OS_GetTimeMs() + ALARM_REMINDER_TIME;
+    nextReminderTime = OS_GetTimeMs() + ALARM_REMINDER_TIME;
   }
 }
 
