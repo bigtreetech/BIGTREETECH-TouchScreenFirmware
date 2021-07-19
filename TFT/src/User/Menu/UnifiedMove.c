@@ -18,7 +18,7 @@ void menuUnifiedMove(void)
       {ICON_EXTRUDE,                 LABEL_EXTRUDE},
       {ICON_DISABLE_STEPPERS,        LABEL_DISABLE_STEPPERS},
       {ICON_BABYSTEP,                LABEL_BABYSTEP},
-      {ICON_MANUAL_LEVEL,            LABEL_LEVELING},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
       {ICON_BACKGROUND,              LABEL_BACKGROUND},
       {ICON_BACK,                    LABEL_BACK},
     }
@@ -29,7 +29,12 @@ void menuUnifiedMove(void)
   if (DELTA_PRINTER)
   {
     UnifiedMoveItems.items[5].icon = ICON_CALIBRATION;
-    UnifiedMoveItems.items[5].label.index = LABEL_DELTA_CONFIGURATION;
+    UnifiedMoveItems.items[5].label.index = LABEL_CALIBRATION;
+  }
+  else
+  {
+    UnifiedMoveItems.items[5].icon = ICON_MANUAL_LEVEL;
+    UnifiedMoveItems.items[5].label.index = LABEL_LEVELING;
   }
 
   if (infoMachineSettings.leveling != BL_DISABLED)
