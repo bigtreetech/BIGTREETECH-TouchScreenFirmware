@@ -82,9 +82,8 @@ float probeOffsetResetValue(void)
   float unit = z_offset_value - PROBE_Z_OFFSET_DEFAULT_VALUE;
 
   z_offset_value = PROBE_Z_OFFSET_DEFAULT_VALUE;
-
   sendParameterCmd(P_PROBE_OFFSET, AXIS_INDEX_Z, z_offset_value);  // set Z offset value
-  mustStoreCmd("G1 Z%.2f\n", -unit);  // move nozzle
+  mustStoreCmd("G1 Z%.2f\n", -unit);                               // move nozzle
 
   return z_offset_value;
 }
@@ -112,7 +111,7 @@ float probeOffsetUpdateValue(float unit, int8_t direction)
   unit = ((diff > unit) ? unit : diff) * direction;
   z_offset_value += unit;
   sendParameterCmd(P_PROBE_OFFSET, AXIS_INDEX_Z, z_offset_value);  // set Z offset value
-  mustStoreCmd("G1 Z%.2f\n", unit);  // move nozzle
+  mustStoreCmd("G1 Z%.2f\n", unit);                                // move nozzle
 
   return z_offset_value;
 }

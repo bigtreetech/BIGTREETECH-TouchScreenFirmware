@@ -54,13 +54,9 @@ void SPI_Slave(CIRCULAR_QUEUE *queue)
 
   NVIC_InitTypeDef NVIC_InitStructure;
 
-#ifndef SPI3_PIN_SMART_USAGE                       // if enabled, it avoids any SPI3 CS pin usage and free the MISO (PB4 pin) for encoder pins
+#ifndef SPI3_PIN_SMART_USAGE                                         // if enabled, it avoids any SPI3 CS pin usage and free the MISO (PB4 pin) for encoder pins
   SPI_GPIO_Init(ST7920_SPI);
-  #ifdef MKS_TFT                                   // MKS TFTs already have an external pull-up resistor on PB0 and PB1 pins
-    GPIO_InitSet(SPI3_CS_PIN, MGPIO_MODE_IPN, 0);  // CS
-  #else
-    GPIO_InitSet(SPI3_CS_PIN, MGPIO_MODE_IPU, 0);  // CS
-  #endif
+  GPIO_InitSet(SPI3_CS_PIN, MGPIO_MODE_IPN, 0);                      // MKS TFTs already have an external pull-up resistor on PB0 and PB1 pins
 #endif
 
   NVIC_InitStructure.NVIC_IRQChannel = SPI3_IRQn;
