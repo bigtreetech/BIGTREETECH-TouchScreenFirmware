@@ -24,8 +24,6 @@ typedef struct
 
 extern REQUEST_COMMAND_INFO requestCommandInfo;
 
-bool isWaitingResponse(void);  // condition callback for loopProcessToCondition()
-
 void clearRequestCommandInfo(void);
 bool requestCommandInfoIsRunning(void);
 bool request_M21(void);
