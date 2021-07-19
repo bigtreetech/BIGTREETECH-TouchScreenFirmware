@@ -30,9 +30,7 @@ void ScanLevelCorner(uint8_t point)
 
   // move to selected point
   mustStoreCmd("G30 E0 X%d Y%d\n", pointPosition[point][0], pointPosition[point][1]);
-
-  if (infoSettings.touchmi_sensor == 1)
-    mustStoreCmd("G1 Z10\n");
+  mustStoreCmd("G1 Z10\n");
 
   mustStoreCmd(ENABLE_STEPPER_CMD);
   mustStoreCmd(DISABLE_STEPPER_CMD);
