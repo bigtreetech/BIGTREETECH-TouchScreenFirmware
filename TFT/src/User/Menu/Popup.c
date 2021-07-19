@@ -38,7 +38,7 @@ static void (*action_ok)() = NULL;
 static void (*action_cancel)() = NULL;
 static void (*action_loop)() = NULL;
 
-static bool popup_redraw = false;
+static bool popup_draw = false;
 static uint8_t popup_title[X_MAX_CHAR];
 static uint8_t popup_msg[POPUP_MAX_CHAR];
 static uint8_t popup_ok[24];
@@ -198,7 +198,7 @@ void showDialog(DIALOG_TYPE type, void (*ok_action)(), void (*cancel_action)(), 
   if (infoSettings.mode == MODE_MARLIN)
     return;
 
-  popup_redraw = true;
+  popup_draw = true;
   popup_type = type;
 
   action_ok = ok_action;
@@ -208,10 +208,10 @@ void showDialog(DIALOG_TYPE type, void (*ok_action)(), void (*cancel_action)(), 
 
 void loopPopup(void)
 {
-  if (popup_redraw == false)
+  if (popup_draw == false)
     return;
 
-  popup_redraw = false;
+  popup_draw = false;
 
   wakeLCD();
 
@@ -236,7 +236,13 @@ void loopPopup(void)
 
   //avoid to nest menuDialog popup type (while a menuNotification popup type can be overridden)
   if (infoMenu.menu[infoMenu.cur] != menuDialog)
-  { //handle the user interaction, then reload the previous menu
-    infoMenu.menu[++infoMenu.cur] = menuDialog;
+  { //handle the user interaction, then prepare the reload of the previous menu
+    if (infoMenu.menu[infoMenu.cur] != menuDummy)
+    {
+      infoMenu.cur++;
+    }
+    infoMenu.menu[infoMenu.cur] = menuDialog;
+    menuDialog();  // activate the popup dialog handler
+    infoMenu.menu[++infoMenu.cur] = menuDummy;
   }
 }

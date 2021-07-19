@@ -334,6 +334,11 @@ uint8_t *labelGetAddress(const LABEL *label)
     return label->address;
 }
 
+void menuDummy(void)
+{
+  infoMenu.cur--;
+}
+
 void menuDrawItem(const ITEM *item, uint8_t position)
 {
   menuDrawIconOnly(item, position);
@@ -1012,29 +1017,4 @@ void loopProcess(void)
 {
   loopBackEnd();
   loopFrontEnd();
-}
-
-void menuDummy(void)
-{
-  infoMenu.cur--;
-}
-
-void loopProcessToCondition(CONDITION_CALLBACK condCallback)
-{
-  uint8_t curMenu = infoMenu.cur;
-  bool invokedUI = false;
-
-  while (condCallback())  // loop until the condition is no more satisfied
-  {
-    loopProcess();
-
-    if (infoMenu.cur > curMenu)  // if a user interaction is needed (e.g. dialog box UI), handle it
-    {
-      invokedUI = true;
-      (*infoMenu.menu[infoMenu.cur])();
-    }
-  }
-
-  if (invokedUI)  // if a UI was invoked, load a dummy menu just to force the caller also to refresh its menu
-    infoMenu.menu[++infoMenu.cur] = menuDummy;
 }

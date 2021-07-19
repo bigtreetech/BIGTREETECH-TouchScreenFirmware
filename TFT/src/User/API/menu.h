@@ -158,8 +158,6 @@ typedef struct
   LIVE_DATA lines[LIVEICON_LINES];
 } LIVE_INFO;
 
-typedef bool (* CONDITION_CALLBACK)(void);
-
 extern const GUI_RECT exhibitRect;
 extern const GUI_RECT rect_of_key[MENU_RECT_COUNT];
 extern const GUI_RECT rect_of_keySS[SS_RECT_COUNT];
@@ -184,6 +182,7 @@ LISTITEMS *getCurListItems(void);
 void GUI_RestoreColorDefault(void);
 uint8_t *labelGetAddress(const LABEL * label);
 void setMenu(MENU_TYPE menu_type, LABEL * title, uint16_t rectCount, const GUI_RECT * menuRect, void(*action_redraw)(uint8_t position, uint8_t is_press),  void (* menu_redraw)(void));
+void menuDummy(void);
 void menuDrawItem (const ITEM * menuItem, uint8_t position);
 void menuDrawIconOnly(const ITEM *item, uint8_t position);
 void menuDrawIconText(const ITEM *item, uint8_t position);
@@ -206,7 +205,6 @@ GUI_POINT getIconStartPoint(int index);
 void loopBackEnd(void);
 void loopFrontEnd(void);
 void loopProcess(void);
-void loopProcessToCondition(CONDITION_CALLBACK condCallback);
 
 #ifdef __cplusplus
 }

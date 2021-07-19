@@ -8,7 +8,6 @@
 static uint8_t tool_index = NOZZLE0;
 static uint8_t degreeSteps_index = 1;
 static uint8_t extStep_index = 0;
-static bool loadRequested = false;
 
 // set the hotend to the minimum extrusion temperature if user selected "OK"
 void extrudeMinTemp_OK(void)
@@ -86,6 +85,7 @@ void menuTuneExtruder(void)
   int16_t lastTarget = heatGetTargetTemp(tool_index);
   int16_t actCurrent;
   int16_t actTarget;
+  static bool loadRequested;
 
   heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
 

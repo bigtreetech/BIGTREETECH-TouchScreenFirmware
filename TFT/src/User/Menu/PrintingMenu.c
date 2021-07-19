@@ -486,7 +486,7 @@ void menuPrinting(void)
     rect_of_touchPS[KEY_TITLEBAR] = touchPS_elements[PS_TITLEBAR];
     rect_of_touchPS[KEY_INFOBOX] = touchPS_elements[PS_DUMMY];
   }
-  else // returned to this menu after a print was done (ex: after a popup)
+  else // returned to this menu after a print was done
   {
     printingItems.title.address = (uint8_t *)infoPrintSummary.name;
 
@@ -510,7 +510,9 @@ void menuPrinting(void)
   menuDrawPage(&printingItems);
   printingDrawPage();
   if (lastPrinting == false)
-    drawPrintInfo();
+  {
+      drawPrintInfo();
+  }
 
   while (infoMenu.menu[infoMenu.cur] == menuPrinting)
   {

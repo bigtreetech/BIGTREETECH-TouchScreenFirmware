@@ -166,14 +166,14 @@ void menuPrintFromSource(void)
   };
 
   KEY_VALUES key_num = KEY_IDLE;
-  uint8_t update = 1;
+  bool update = true;
 
   GUI_Clear(infoSettings.bg_color);
   GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, LABEL_LOADING);
 
   if (mountFS() == true && scanPrintFiles() == true)
   {
-    if (infoMenu.menu[infoMenu.cur] != menuPrintFromSource)  // Menu index be modify when "scanPrintFilesGcodeFs". (echo,error,warning popup windows)
+    if (infoMenu.menu[infoMenu.cur] != menuPrintFromSource) // Menu index be modify when "scanPrintFilesGcodeFs". (echo,error,warning popup windows)
     {
       return;
     }
@@ -206,7 +206,7 @@ void menuPrintFromSource(void)
           if (infoFile.cur_page > 0)
           {
             infoFile.cur_page--;
-            update = 1;
+            update = true;
           }
           break;
 
@@ -214,7 +214,7 @@ void menuPrintFromSource(void)
           if (infoFile.cur_page + 1 < (infoFile.folderCount + infoFile.fileCount + (NUM_PER_PAGE - 1)) / NUM_PER_PAGE)
           {
             infoFile.cur_page++;
-            update = 1;
+            update = true;
           }
           break;
 
@@ -230,7 +230,7 @@ void menuPrintFromSource(void)
           {
             ExitDir();
             scanPrintFiles();
-            update = 1;
+            update = true;
           }
           break;
 
@@ -258,7 +258,7 @@ void menuPrintFromSource(void)
           {
             ExitDir();
             scanPrintFiles();
-            update = 1;
+            update = true;
           }
           break;
 
@@ -269,7 +269,7 @@ void menuPrintFromSource(void)
 
         default:
           if (printPageItemSelected(key_num))
-            update = 1;
+            update = true;
           break;
       }
     }
@@ -277,7 +277,7 @@ void menuPrintFromSource(void)
     // refresh file menu
     if (update)
     {
-      update = 0;
+      update = false;
 
       if (list_mode != true)
       {

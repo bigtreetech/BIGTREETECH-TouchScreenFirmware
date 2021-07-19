@@ -28,7 +28,6 @@ const MENUITEMS loadUnloadItems = {
 };
 
 static uint8_t tool_index = NOZZLE0;
-CMD_TYPE lastCmd = NONE;
 
 // set the hotend to the minimum extrusion temperature if user selected "OK"
 void loadMinTemp_OK(void)
@@ -39,17 +38,35 @@ void loadMinTemp_OK(void)
 void menuLoadUnload(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
-
-  if (eAxisBackup.backedUp == false)
-  {
-    loopProcessToCondition(&isNotEmptyCmdQueue);  // wait for the communication to be clean
-
-    eAxisBackup.coordinate = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
-    eAxisBackup.backedUp = true;
-  }
+  static CMD_TYPE lastCmd = NONE;
 
   menuDrawPage(&loadUnloadItems);
   temperatureReDraw(tool_index, NULL, false);
+
+  if (eAxisBackup.backedUp == false)
+  {
+    if (infoCmd.count != 0)
+    {
+      if ((strncmp(infoCmd.queue[infoCmd.index_r].gcode, "M155", 4) != 0) || (infoCmd.count > 1))
+      { // avoid splash when returning from "Heat" menu
+        popupSplash(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, LABEL_BUSY);
+      }
+
+      while (infoCmd.count != 0)
+      {
+        loopProcess();
+      }
+
+      if (getMenuType() == MENU_TYPE_DIALOG)
+      { // redraw screen to make popup disappear
+        menuDrawPage(&loadUnloadItems);
+        temperatureReDraw(tool_index, NULL, false);
+        infoMenu.menu[infoMenu.cur] = menuLoadUnload;  // in case of a popup, no need to reload the menu with menuDummy()
+      }
+    }
+    eAxisBackup.coordinate = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
+    eAxisBackup.backedUp = true;
+  }
 
   heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
 
@@ -94,8 +111,8 @@ void menuLoadUnload(void)
 
         case KEY_ICON_5:  // heat menu
           infoMenu.menu[++infoMenu.cur] = menuHeat;
-          eAxisBackup.backedUp = false;  // exiting from Extrude menu (user might never come back by "Back" long press in Heat menu)
           lastCmd = NONE;
+          eAxisBackup.backedUp = false;  // exiting from Extrude menu (user might never come back by "Back" long press in Heat menu)
           break;
 
         case KEY_ICON_6:  // cool down nozzle
