@@ -46,8 +46,6 @@ typedef struct
 
 extern PRINT_SUMMARY infoPrintSummary;
 
-bool isHostPrinting(void);  // condition callback for loopProcessToCondition()
-
 void setRunoutAlarmTrue(void);
 void setRunoutAlarmFalse(void);
 bool getRunoutAlarm(void);
