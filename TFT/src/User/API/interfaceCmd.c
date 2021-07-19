@@ -882,13 +882,12 @@ void sendQueueCmd(void)
           if (cmd_seen('S'))
           {
             caseLightSetState(cmd_value() > 0);
-            caseLightSendWaiting(false);
           }
           if (cmd_seen('P'))
           {
             caseLightSetBrightness(cmd_value());
-            caseLightSendWaiting(false);
           }
+          caseLightApplied(true);
           break;
         }
 
