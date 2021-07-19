@@ -19,7 +19,7 @@ void menuUnifiedMove(void)
       {ICON_DISABLE_STEPPERS,        LABEL_DISABLE_STEPPERS},
       {ICON_BABYSTEP,                LABEL_BABYSTEP},
       #ifdef DELTA_PRINTER
-        {ICON_CALIBRATION,             ICON_CALIBRATION},
+        {ICON_CALIBRATION,             LABEL_CALIBRATION},
       #else
         {ICON_MANUAL_LEVEL,            LABEL_LEVELING},
       #endif
