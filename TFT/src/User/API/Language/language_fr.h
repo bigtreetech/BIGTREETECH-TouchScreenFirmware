@@ -49,7 +49,10 @@
     #define STRING_FWRETRACT              "Rétraction firmware"
     #define STRING_FWRECOVER              "Récupération firmware"
     #define STRING_RETRACT_AUTO           "Rétraction firmware auto"
-    #define STRING_HOTEND_OFFSET          "Offset 2ème Buse"
+    #define STRING_DELTA_CONFIGURATION           "Réglages Delta"
+    #define STRING_DELTA_TOWER_ANGLE           "Corrections d'angle des tours"
+    #define STRING_DELTA_ENDSTOP           "Ajustements Endstop"
+    #define STRING_HOTEND_OFFSET          "Décalage 2ème buse"
     #define STRING_PROBE_OFFSET           "Décalage palpeur"
     #define STRING_LIN_ADVANCE            "Linear Advance"
     #define STRING_FILAMENT_SETTING       "Diamètre filament"
@@ -68,7 +71,7 @@
     #define STRING_SWAP_RECOVER_LENGTH    "Longueur de retrait"
     #define STRING_RECOVER_FEEDRATE       "Vitesse"
     #define STRING_SWAP_RECOVER_FEEDRATE  "Vitesse de retrait"
-    #define STRING_MBL_OFFSET             "Offset MBL"
+    #define STRING_MBL_OFFSET             "Décalage MBL"
 
     // Save / Load
     #define STRING_SAVE                   "Sauver"
@@ -348,5 +351,7 @@
     #define STRING_Z_ALIGN                "Z Align"
     #define STRING_MACROS                 "Macros"
     #define STRING_MESH_VALID             "Test Mesh"
+    #define STRING_CONNECT_PROBE          "Connectez le palpeur avant de démarrer le processus. Veillez à le déconnecter ensuite."
+    #define STRING_CALIBRATION            "Calibration"
 
 #endif

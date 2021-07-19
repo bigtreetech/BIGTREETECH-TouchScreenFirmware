@@ -49,6 +49,9 @@
     #define STRING_FWRETRACT              "FW Retraction"
     #define STRING_FWRECOVER              "FW Retraction Recover"
     #define STRING_RETRACT_AUTO           "FW自动回抽"
+    #define STRING_DELTA_CONFIGURATION           "Delta Configuration"
+    #define STRING_DELTA_TOWER_ANGLE           "Tower Angle Trim"
+    #define STRING_DELTA_ENDSTOP           "Endstop Adjustments"
     #define STRING_HOTEND_OFFSET          "第2个喷头的偏移量"
     #define STRING_PROBE_OFFSET           "探针偏移量"
     #define STRING_LIN_ADVANCE            "Linear Advance"
@@ -348,5 +351,7 @@
     #define STRING_Z_ALIGN                "Z Align"
     #define STRING_MACROS                 "宏指令"
     #define STRING_MESH_VALID             "调平测试"
+    #define STRING_CONNECT_PROBE          "开启此操作前请先连接探头, 操作完成后请断开连接"
+    #define STRING_CALIBRATION            "校准"
 
 #endif

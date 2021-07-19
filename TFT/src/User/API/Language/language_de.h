@@ -49,6 +49,9 @@
     #define STRING_FWRETRACT              "FW Rückzug"
     #define STRING_FWRECOVER              "FW Rückeinschub"
     #define STRING_RETRACT_AUTO           "Auto-Rückzug (Firmware)"
+    #define STRING_DELTA_CONFIGURATION           "Delta Configuration"
+    #define STRING_DELTA_TOWER_ANGLE           "Tower Angle Trim"
+    #define STRING_DELTA_ENDSTOP           "Endstop Adjustments"
     #define STRING_HOTEND_OFFSET          "Abstand 2te Düse"
     #define STRING_PROBE_OFFSET           "Sensor Versatz"
     #define STRING_LIN_ADVANCE            "Linear Advance"
@@ -348,5 +351,7 @@
     #define STRING_Z_ALIGN                "Z ausr."
     #define STRING_MACROS                 "Macros"
     #define STRING_MESH_VALID             "Mesh Validation"
+    #define STRING_CONNECT_PROBE          "Connect probe before starting the process. Make sure to disconnect it afterwards."
+    #define STRING_CALIBRATION            "Calibration"
 
 #endif

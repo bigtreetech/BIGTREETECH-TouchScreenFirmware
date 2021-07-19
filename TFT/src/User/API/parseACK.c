@@ -954,6 +954,24 @@ void parseACK(void)
       {
         setParameter(P_AUTO_RETRACT, 0, ack_value());
       }
+      // parse and store Delta Configuration values
+      else if (ack_seen("M665"))
+      {
+        if (ack_seen("H")) setParameter(P_DELTA_CONFIGURATION, 0, ack_value());
+        if (ack_seen("S")) setParameter(P_DELTA_CONFIGURATION, 1, ack_value());
+        if (ack_seen("R")) setParameter(P_DELTA_CONFIGURATION, 2, ack_value());
+        if (ack_seen("L")) setParameter(P_DELTA_CONFIGURATION, 3, ack_value());
+        if (ack_seen("X")) setParameter(P_DELTA_TOWER_ANGLE, AXIS_INDEX_X, ack_value());
+        if (ack_seen("Y")) setParameter(P_DELTA_TOWER_ANGLE, AXIS_INDEX_Y, ack_value());
+        if (ack_seen("Z")) setParameter(P_DELTA_TOWER_ANGLE, AXIS_INDEX_Z, ack_value());
+      }
+      // parse and store Delta Endstop Adjustments values
+      else if (ack_seen("M666"))
+      {
+        if (ack_seen("X")) setParameter(P_DELTA_ENDSTOP, 0, ack_value());
+        if (ack_seen("Y")) setParameter(P_DELTA_ENDSTOP, 1, ack_value());
+        if (ack_seen("Z")) setParameter(P_DELTA_ENDSTOP, 2, ack_value());
+      }
       // parse and store Offset 2nd Nozzle
       else if (ack_seen("M218 T1 X"))
       {

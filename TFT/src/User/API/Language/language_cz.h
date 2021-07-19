@@ -49,6 +49,9 @@
     #define STRING_FWRETRACT              "FW Zatažení"
     #define STRING_FWRECOVER              "FW Obnovení"
     #define STRING_RETRACT_AUTO           "Auto Firmware Retract"
+    #define STRING_DELTA_CONFIGURATION           "Delta Configuration"
+    #define STRING_DELTA_TOWER_ANGLE           "Tower Angle Trim"
+    #define STRING_DELTA_ENDSTOP           "Endstop Adjustments"
     #define STRING_HOTEND_OFFSET          "Offset 2.trysky"
     #define STRING_PROBE_OFFSET           "Offset sondy"
     #define STRING_LIN_ADVANCE            "Linear Advance"
@@ -348,5 +351,7 @@
     #define STRING_Z_ALIGN                "Z Align"
     #define STRING_MACROS                 "Makro"
     #define STRING_MESH_VALID             "Test sítě"
+    #define STRING_CONNECT_PROBE          "Connect probe before starting the process. Make sure to disconnect it afterwards."
+    #define STRING_CALIBRATION            "Calibration"
 
 #endif
