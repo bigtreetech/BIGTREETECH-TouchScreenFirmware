@@ -939,7 +939,7 @@ void sendQueueCmd(void)
             }
             break;
         #endif
-        
+
         case 665:  // Delta Configuration / Delta Tower Angle
         {
           if (cmd_seen('H')) setParameter(P_DELTA_CONFIGURATION, 0, cmd_float());

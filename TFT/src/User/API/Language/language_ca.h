@@ -38,10 +38,11 @@
     #define STRING_END_GCODE_ENABLED      "Enviar Gcode final"
     #define STRING_CANCEL_GCODE_ENABLED   "Cancel · lar Gcode"
 
-    // Machine Parameter Settings
+    // Machine Parameter Settings - Param Title (ordered by gcode)
     #define STRING_STEPS_SETTING          "Passos per MM"
-    #define STRING_MAXFEEDRATE            "Max Feed Rate"
+    #define STRING_FILAMENT_SETTING       "Filament Diameter"
     #define STRING_MAXACCELERATION        "Max Acceleració"
+    #define STRING_MAXFEEDRATE            "Max Feed Rate"
     #define STRING_ACCELERATION           "Acceleració"
     #define STRING_JERK                   "Jerk"
     #define STRING_JUNCTION_DEVIATION     "Junction Deviation"
@@ -49,17 +50,19 @@
     #define STRING_FWRETRACT              "Retracció de FW"
     #define STRING_FWRECOVER              "Recuperació de Retracció de FW"
     #define STRING_RETRACT_AUTO           "Auto Firmware Retract"
-    #define STRING_DELTA_CONFIGURATION           "Delta Configuration"
-    #define STRING_DELTA_TOWER_ANGLE           "Tower Angle Trim"
-    #define STRING_DELTA_ENDSTOP           "Endstop Adjustments"
     #define STRING_HOTEND_OFFSET          "Offset 2nd Nozzle"
+    #define STRING_STEALTH_CHOP           "TMC StealthChop"
+    #define STRING_DELTA_CONFIGURATION    "Delta Configuration"
+    #define STRING_DELTA_TOWER_ANGLE      "Tower Angle Trim"
+    #define STRING_DELTA_ENDSTOP          "Endstop Adjustments"
     #define STRING_PROBE_OFFSET           "Sonda Compensar"
     #define STRING_LIN_ADVANCE            "Avanç Lineal"
-    #define STRING_FILAMENT_SETTING       "Filament Diameter"
     #define STRING_CURRENT_SETTING        "Corrent del Driver (mA)"
-    #define STRING_BUMP_SENSITIVITY       "Sensibilitat al topall TMC"
     #define STRING_HYBRID_THRESHOLD       "TMC HybridThreshold"
-    #define STRING_STEALTH_CHOP           "TMC StealthChop"
+    #define STRING_BUMP_SENSITIVITY       "Sensibilitat al topall TMC"
+    #define STRING_MBL_OFFSET             "MBL Offset"
+
+    // Machine Parameter Settings - Param Attributes (ordered by gcode)
     #define STRING_PRINT_ACCELERATION     "Acceleració Impressió"
     #define STRING_RETRACT_ACCELERATION   "Acceleració Retracció"
     #define STRING_TRAVEL_ACCELERATION    "Acceleració Viatge"
@@ -71,7 +74,6 @@
     #define STRING_SWAP_RECOVER_LENGTH    "Distancia recuperació intercanvi extra"
     #define STRING_RECOVER_FEEDRATE       "Velocitat recuperació"
     #define STRING_SWAP_RECOVER_FEEDRATE  "Velocitat recuperació intercanvi"
-    #define STRING_MBL_OFFSET             "MBL Offset"
 
     // Save / Load
     #define STRING_SAVE                   "Gravar"

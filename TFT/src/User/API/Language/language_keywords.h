@@ -45,10 +45,11 @@ extern "C" {
 #define LANG_KEY_END_GCODE_ENABLED            "label_end_gcode_enabled:"
 #define LANG_KEY_CANCEL_GCODE_ENABLED         "label_cancel_gcode_enabled:"
 
-// Machine Parameter Settings
+// Machine Parameter Settings - Param Title (ordered by gcode)
 #define LANG_KEY_STEPS_SETTING                "label_steps_setting:"
-#define LANG_KEY_MAXFEEDRATE                  "label_maxfeedrate:"
+#define LANG_KEY_FILAMENT_SETTING             "label_filament_setting:"
 #define LANG_KEY_MAXACCELERATION              "label_maxacceleration:"
+#define LANG_KEY_MAXFEEDRATE                  "label_maxfeedrate:"
 #define LANG_KEY_ACCELERATION                 "label_acceleration:"
 #define LANG_KEY_JERK                         "label_jerk:"
 #define LANG_KEY_JUNCTION_DEVIATION           "label_junction_deviation:"
@@ -56,17 +57,19 @@ extern "C" {
 #define LANG_KEY_FWRETRACT                    "label_fwretract:"
 #define LANG_KEY_FWRECOVER                    "label_fwrecover:"
 #define LANG_KEY_RETRACT_AUTO                 "label_retract_auto:"
-#define LANG_KEY_DELTA_CONFIGURATION                   "label_delta_configuration:"
-#define LANG_KEY_DELTA_TOWER_ANGLE                   "label_delta_tower_angle:"
-#define LANG_KEY_DELTA_ENDSTOP                   "label_delta_endstop:"
 #define LANG_KEY_HOTEND_OFFSET                "label_hotend_offset:"
+#define LANG_KEY_STEALTH_CHOP                 "label_stealth_chop:"
+#define LANG_KEY_DELTA_CONFIGURATION          "label_delta_configuration:"
+#define LANG_KEY_DELTA_TOWER_ANGLE            "label_delta_tower_angle:"
+#define LANG_KEY_DELTA_ENDSTOP                "label_delta_endstop:"
 #define LANG_KEY_PROBE_OFFSET                 "label_probe_offset:"
 #define LANG_KEY_LIN_ADVANCE                  "label_lin_advance:"
-#define LANG_KEY_FILAMENT_SETTING             "label_filament_setting:"
 #define LANG_KEY_CURRENT_SETTING              "label_current_setting:"
-#define LANG_KEY_BUMP_SENSITIVITY             "label_bump_sensitivity:"
 #define LANG_KEY_HYBRID_THRESHOLD             "label_hybrid_threshold:"
-#define LANG_KEY_STEALTH_CHOP                 "label_stealth_chop:"
+#define LANG_KEY_BUMP_SENSITIVITY             "label_bump_sensitivity:"
+#define LANG_KEY_MBL_OFFSET                   "label_mbl_offset:"
+
+// Machine Parameter Settings - Param Attributes (ordered by gcode)
 #define LANG_KEY_PRINT_ACCELERATION           "label_print_acceleration:"
 #define LANG_KEY_RETRACT_ACCELERATION         "label_retract_acceleration:"
 #define LANG_KEY_TRAVEL_ACCELERATION          "label_travel_acceleration:"
@@ -78,7 +81,6 @@ extern "C" {
 #define LANG_KEY_SWAP_RECOVER_LENGTH          "label_swap_recover_length:"
 #define LANG_KEY_RECOVER_FEEDRATE             "label_recover_feedrate:"
 #define LANG_KEY_SWAP_RECOVER_FEEDRATE        "label_swap_recover_feedrate:"
-#define LANG_KEY_MBL_OFFSET                   "label_mbl_offset:"
 
 // Save / Load
 #define LANG_KEY_SAVE                         "label_save:"
@@ -358,8 +360,8 @@ extern "C" {
 #define LANG_KEY_Z_ALIGN                      "label_z_align:"
 #define LANG_KEY_MACROS                       "label_macros:"
 #define LANG_KEY_MESH_VALID                   "label_mesh_valid:"
-#define LANG_KEY_CONNECT_PROBE                   "label_connect_probe:"
-#define LANG_KEY_CALIBRATION                   "label_calibration:"
+#define LANG_KEY_CONNECT_PROBE                "label_connect_probe:"
+#define LANG_KEY_CALIBRATION                  "label_calibration:"
 
 #ifdef __cplusplus
 }

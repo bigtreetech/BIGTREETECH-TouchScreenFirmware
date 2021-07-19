@@ -171,8 +171,8 @@
 //=========================== Machine Settings ==============================
 //===========================================================================
 
-#define DELTA_PRINTER false  // Set to true if printer is a Delta. Default: false.
-#define REMOVABLE_PROBE false // Set to true if printer have a removable probe. Default: false.
+#define DELTA_PRINTER false    // Set to true if printer is a Delta. Default: false.
+#define REMOVABLE_PROBE false  // Set to true if printer have a removable probe. Default: false.
 
 #define HOTEND_NUM      1  // set in 1~6
 #define EXTRUDER_NUM    1  // set in 1~6

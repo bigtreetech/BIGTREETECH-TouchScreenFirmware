@@ -7,8 +7,9 @@ bool parametersChanged = false;
 
 const LABEL parameterTypes[PARAMETERS_COUNT] = {
   LABEL_STEPS_SETTING,
-  LABEL_MAXFEEDRATE,
+  LABEL_FILAMENT_SETTING,
   LABEL_MAXACCELERATION,
+  LABEL_MAXFEEDRATE,
   LABEL_ACCELERATION,
   LABEL_JERK,
   LABEL_JUNCTION_DEVIATION,
@@ -16,18 +17,17 @@ const LABEL parameterTypes[PARAMETERS_COUNT] = {
   LABEL_FWRETRACT,
   LABEL_FWRECOVER,
   LABEL_RETRACT_AUTO,
+  LABEL_HOTEND_OFFSET,
+  LABEL_ABL,
+  LABEL_STEALTH_CHOP,
   LABEL_DELTA_CONFIGURATION,
   LABEL_DELTA_TOWER_ANGLE,
   LABEL_DELTA_ENDSTOP,
-  LABEL_HOTEND_OFFSET,
-  LABEL_ABL,
   LABEL_PROBE_OFFSET,
   LABEL_LIN_ADVANCE,
-  LABEL_FILAMENT_SETTING,
   LABEL_CURRENT_SETTING,
-  LABEL_BUMP_SENSITIVITY,
   LABEL_HYBRID_THRESHOLD,
-  LABEL_STEALTH_CHOP,
+  LABEL_BUMP_SENSITIVITY,
   LABEL_MBL_OFFSET,
 };
 
@@ -61,6 +61,10 @@ void loadElements(LISTITEM * parameterMainItem, uint16_t index, uint8_t itemPos)
       // load parameter specific labels
       switch (curParameter)
       {
+        case P_FILAMENT_DIAMETER:
+          parameterMainItem->titlelabel.address = filamentDiaDisplayID[elementIndex];
+          break;
+
         case P_ACCELERATION:
           parameterMainItem->titlelabel = accelDisplayID[elementIndex];
           break;
@@ -81,6 +85,14 @@ void loadElements(LISTITEM * parameterMainItem, uint16_t index, uint8_t itemPos)
           parameterMainItem->titlelabel = autoRetractDisplayID[elementIndex];
           break;
 
+        case P_ABL_STATE:
+          parameterMainItem->titlelabel.address = ablStateDisplayID[elementIndex];
+          break;
+
+        case P_STEALTH_CHOP:
+          parameterMainItem->titlelabel.address = stealthChopDisplayID[elementIndex];
+          break;
+
         case P_DELTA_CONFIGURATION:
           parameterMainItem->titlelabel.address = deltaConfigurationDisplayID[elementIndex];
           break;
@@ -93,26 +105,14 @@ void loadElements(LISTITEM * parameterMainItem, uint16_t index, uint8_t itemPos)
           parameterMainItem->titlelabel.address = deltaEndstopDisplayID[elementIndex];
           break;
 
-        case P_ABL_STATE:
-          parameterMainItem->titlelabel.address = ablStateDisplayID[elementIndex];
-          break;
-
         case P_LIN_ADV:
           parameterMainItem->titlelabel.address = linAdvDisplayID[elementIndex];
           break;
 
-        case P_FILAMENT_DIAMETER:
-          parameterMainItem->titlelabel.address = filamentDiaDisplayID[elementIndex];
-          break;
-
         case P_CURRENT:
-        case P_BUMPSENSITIVITY:
         case P_HYBRID_THRESHOLD:
+        case P_BUMPSENSITIVITY:
           parameterMainItem->titlelabel.address = stepperDisplayID[elementIndex];
-          break;
-
-        case P_STEALTH_CHOP:
-          parameterMainItem->titlelabel.address = stealthChopDisplayID[elementIndex];
           break;
 
         case P_MBL_OFFSET:

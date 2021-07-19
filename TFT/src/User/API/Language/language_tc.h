@@ -38,10 +38,11 @@
     #define STRING_END_GCODE_ENABLED      "執行結尾G-code"
     #define STRING_CANCEL_GCODE_ENABLED   "中斷執行G-code"
 
-    // Machine Parameter Settings
+    // Machine Parameter Settings - Param Title (ordered by gcode)
     #define STRING_STEPS_SETTING          "電機每毫米步數Steps/mm"
-    #define STRING_MAXFEEDRATE            "最大移動速度"
+    #define STRING_FILAMENT_SETTING       "Filament Diameter"
     #define STRING_MAXACCELERATION        "最大加速度"
+    #define STRING_MAXFEEDRATE            "最大移動速度"
     #define STRING_ACCELERATION           "加速度"
     #define STRING_JERK                   "Jerk"
     #define STRING_JUNCTION_DEVIATION     "Junction Deviation"
@@ -49,17 +50,19 @@
     #define STRING_FWRETRACT              "FW Retraction"
     #define STRING_FWRECOVER              "FW Retraction Recover"
     #define STRING_RETRACT_AUTO           "FW自动回抽"
-    #define STRING_DELTA_CONFIGURATION           "Delta Configuration"
-    #define STRING_DELTA_TOWER_ANGLE           "Tower Angle Trim"
-    #define STRING_DELTA_ENDSTOP           "Endstop Adjustments"
     #define STRING_HOTEND_OFFSET          "Offset 2nd Nozzle"
+    #define STRING_STEALTH_CHOP           "TMC StealthChop"
+    #define STRING_DELTA_CONFIGURATION    "Delta Configuration"
+    #define STRING_DELTA_TOWER_ANGLE      "Tower Angle Trim"
+    #define STRING_DELTA_ENDSTOP          "Endstop Adjustments"
     #define STRING_PROBE_OFFSET           "探針偏移"
     #define STRING_LIN_ADVANCE            "Linear Advance"
-    #define STRING_FILAMENT_SETTING       "Filament Diameter"
     #define STRING_CURRENT_SETTING        "驅動晶片電流設定 (mA)"
-    #define STRING_BUMP_SENSITIVITY       "堵料檢測靈敏度"
     #define STRING_HYBRID_THRESHOLD       "TMC HybridThreshold"
-    #define STRING_STEALTH_CHOP           "TMC StealthChop"
+    #define STRING_BUMP_SENSITIVITY       "堵料檢測靈敏度"
+    #define STRING_MBL_OFFSET             "MBL Offset"
+
+    // Machine Parameter Settings - Param Attributes (ordered by gcode)
     #define STRING_PRINT_ACCELERATION     "列印加速度"
     #define STRING_RETRACT_ACCELERATION   "回抽加速度"
     #define STRING_TRAVEL_ACCELERATION    "空跑加速度"
@@ -71,7 +74,6 @@
     #define STRING_SWAP_RECOVER_LENGTH    "换料时额外挤出的长度"
     #define STRING_RECOVER_FEEDRATE       "FW挤出速度"
     #define STRING_SWAP_RECOVER_FEEDRATE  "换料时挤出的速度"
-    #define STRING_MBL_OFFSET             "MBL Offset"
 
     // Save / Load
     #define STRING_SAVE                   "儲存設定"
