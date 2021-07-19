@@ -22,7 +22,7 @@ void babyReDraw(float babystep, float z_offset, bool force_z_offset, bool skip_h
   GUI_POINT point_bs = {exhibitRect.x1, exhibitRect.y0 + BYTE_HEIGHT};
   GUI_POINT point_of = {exhibitRect.x1, exhibitRect.y0 + BYTE_HEIGHT * 2 + LARGE_BYTE_HEIGHT};
 
-  setLargeFont(true);
+  setFontSize(FONT_SIZE_LARGE);
   sprintf(tempstr, "% 6.2f", babystep);
   GUI_DispStringRight(point_bs.x, point_bs.y, (uint8_t*) tempstr);
   sprintf(tempstr, "% 6.2f", z_offset);
@@ -34,7 +34,7 @@ void babyReDraw(float babystep, float z_offset, bool force_z_offset, bool skip_h
 
   GUI_DispStringRight(point_of.x, point_of.y, (uint8_t*) tempstr);
   GUI_SetColor(infoSettings.font_color);  // restore default font color
-  setLargeFont(false);
+  setFontSize(FONT_SIZE_NORMAL);
 }
 
 // Set Z offset value for MBL bl type

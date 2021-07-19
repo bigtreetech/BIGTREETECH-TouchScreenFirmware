@@ -16,6 +16,9 @@ const LABEL parameterTypes[PARAMETERS_COUNT] = {
   LABEL_FWRETRACT,
   LABEL_FWRECOVER,
   LABEL_RETRACT_AUTO,
+  LABEL_DELTA_CONFIGURATION,
+  LABEL_DELTA_TOWER_ANGLE,
+  LABEL_DELTA_ENDSTOP,
   LABEL_HOTEND_OFFSET,
   LABEL_ABL,
   LABEL_PROBE_OFFSET,
@@ -76,6 +79,18 @@ void loadElements(LISTITEM * parameterMainItem, uint16_t index, uint8_t itemPos)
 
         case P_AUTO_RETRACT:
           parameterMainItem->titlelabel = autoRetractDisplayID[elementIndex];
+          break;
+
+        case P_DELTA_CONFIGURATION:
+          parameterMainItem->titlelabel.address = deltaConfigurationDisplayID[elementIndex];
+          break;
+
+        case P_DELTA_TOWER_ANGLE:
+          parameterMainItem->titlelabel.address = deltaTowerAngleDisplayID[elementIndex];
+          break;
+
+        case P_DELTA_ENDSTOP:
+          parameterMainItem->titlelabel.address = deltaEndstopDisplayID[elementIndex];
           break;
 
         case P_ABL_STATE:

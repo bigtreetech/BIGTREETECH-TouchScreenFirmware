@@ -47,11 +47,11 @@ typedef enum
 
 typedef struct
 {
-  int16_t  x;             // current x pixel, range is 0 - 127
-  int16_t  y;             // current y pixel, range is 0 - 63
+  int16_t  xByte;   // current x byte, range is 0 ~ 15 byte = 0 ~ 127 pixel
+  int16_t  yPixel;  // current y pixel, range is 0 ~ 63
   // Extended Instruction, The first address set Y, second address set X
   uint8_t  address_is_y;  // record current address is Y or X
-} ST7920_PIXEL;
+} ST7920_POSITION;
 
 /*** Common Instruction ***/
 
@@ -206,7 +206,7 @@ typedef struct
       uint8_t ac : 6;
     };
   };
-} ST7920_EIREG_GRAMA;  // Set Graphic RAM Address
+} ST7920_EIREG_GDRAMA;  // Set Graphic Display RAM Address
 
 typedef struct
 {
@@ -222,14 +222,14 @@ typedef struct
 
 typedef struct
 {
-  ST7920_EIREG_SB    sb;     // 1 << 0 : Standby
-  ST7920_EIREG_VSRA  vsra;   // 1 << 1 : Vertical Scroll or RAM Address Select
-  ST7920_EIREG_REV   rev;    // 1 << 2 : Reverse
+  ST7920_EIREG_SB     sb;     // 1 << 0 : Standby
+  ST7920_EIREG_VSRA   vsra;   // 1 << 1 : Vertical Scroll or RAM Address Select
+  ST7920_EIREG_REV    rev;    // 1 << 2 : Reverse
   // 1 << 3 : Reserved
   // 1 << 4 : Reserved
   // 1 << 5 : Function Set
-  ST7920_EIREG_SA    sa;     // 1 << 6 : Set Scroll Address
-  ST7920_EIREG_GRAMA grama;  // 1 << 7 : Set Graphic RAM Address
+  ST7920_EIREG_SA     sa;     // 1 << 6 : Set Scroll Address
+  ST7920_EIREG_GDRAMA gdrama; // 1 << 7 : Set Graphic Display RAM Address
 } ST7920_EI;  // Extended Instruction
 
 typedef struct
@@ -238,11 +238,27 @@ typedef struct
   ST7920_BI          bi;       // Basic Instruction
   ST7920_EI          ei;       // Extended Instruction
   uint8_t            reverse;  // Begin with normal and toggle to reverse
-  uint8_t            cgram;
   ST7920_DATA_TYPE   data_type;
   ST7920_CTRL_STATUS ctrl_status;
 } ST7920_REG;  // Extended Instruction
 
+typedef struct 
+{
+  // Position info
+  ST7920_POSITION position;
+  // ST7920 register
+  ST7920_REG reg;
+  // Character Generation RAM
+  uint8_t CGRAM[64][2];  // [64*2] = [4 * 16*2*8], means 4 * [16*16] bitmap font
+  // Display Data RAM
+  uint8_t DDRAM[4][16];  // 16 characters (8x16) by 4 lines
+  // Graphic Display RAM
+  uint8_t GDRAM[64][16];  // [64*16] = [64 * 16*8], means 64 * 128 pixels
+  // 8x16 ASCII font
+  uint8_t _8x16Font[95][16];  // 0x20 ~ 0x7E = 95char, 8width * 16height / 8 = 16 bytes, scan dir: left to right & top to bottom
+} ST7920;
+
+void ST7920_Init(ST7920 *pStruct);
 void ST7920_ParseRecv(uint8_t val);
 
 #ifdef __cplusplus

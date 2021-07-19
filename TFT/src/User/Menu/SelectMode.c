@@ -198,7 +198,7 @@ static inline void setupModeHardware(uint8_t mode)
       setEncActiveSignal(1);
     #endif
 
-    #if !defined(MKS_TFT32_V1_3) && !defined(MKS_TFT32_V1_4) && !defined(MKS_TFT28_V3_0) && !defined (MKS_TFT28_V4_0)
+    #if !defined(MKS_TFT)
       //causes hang if we deinit spi1
       SD_DeInit();
     #endif

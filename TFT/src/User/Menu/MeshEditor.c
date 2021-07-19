@@ -300,21 +300,21 @@ static inline bool processKnownDataFormat(char *dataRow)
     switch (infoMachineSettings.leveling)
     {
       case BL_BBL:
-        sprintf(meshData->saveTitle, "%s", textSelect(LABEL_ABL_SETTINGS_BBL));
+        strcpy(meshData->saveTitle, (char *)textSelect(LABEL_ABL_SETTINGS_BBL));
         break;
 
       case BL_UBL:
         meshSaveCallbackPtr = menuUBLSave;
 
-        sprintf(meshData->saveTitle, "%s", textSelect(LABEL_ABL_SETTINGS_UBL));
+        strcpy(meshData->saveTitle, (char *)textSelect(LABEL_ABL_SETTINGS_UBL));
         break;
 
       case BL_MBL:
-        sprintf(meshData->saveTitle, "%s", textSelect(LABEL_MBL_SETTINGS));
+        strcpy(meshData->saveTitle, (char *)textSelect(LABEL_MBL_SETTINGS));
         break;
 
       default:
-        sprintf(meshData->saveTitle, "%s", textSelect(LABEL_ABL_SETTINGS));
+        strcpy(meshData->saveTitle, (char *)textSelect(LABEL_ABL_SETTINGS));
         break;
     }
   }
@@ -568,13 +568,13 @@ void meshDrawGrid(void)
 void meshDrawInfo(float *minVal, float *maxVal, float *origVal, float *curVal)
 {
   if (minVal != NULL)
-    drawStandardValue(&meshInfoRect[ME_INFO_MIN], VALUE_FLOAT, minVal, false, meshGetRGBColor(*minVal), MESH_BG_COLOR, 1, true);
+    drawStandardValue(&meshInfoRect[ME_INFO_MIN], VALUE_FLOAT, minVal, FONT_SIZE_NORMAL, meshGetRGBColor(*minVal), MESH_BG_COLOR, 1, true);
 
   if (maxVal != NULL)
-    drawStandardValue(&meshInfoRect[ME_INFO_MAX], VALUE_FLOAT, maxVal, false, meshGetRGBColor(*maxVal), MESH_BG_COLOR, 1, true);
+    drawStandardValue(&meshInfoRect[ME_INFO_MAX], VALUE_FLOAT, maxVal, FONT_SIZE_NORMAL, meshGetRGBColor(*maxVal), MESH_BG_COLOR, 1, true);
 
-  drawStandardValue(&meshInfoRect[ME_INFO_ORIG], VALUE_FLOAT, origVal, false, MESH_FONT_COLOR, MESH_BG_COLOR, 1, true);
-  drawStandardValue(&meshInfoRect[ME_INFO_CUR], VALUE_FLOAT, curVal, true, MESH_FONT_COLOR, MESH_BORDER_COLOR, 4, true);
+  drawStandardValue(&meshInfoRect[ME_INFO_ORIG], VALUE_FLOAT, origVal, FONT_SIZE_NORMAL, MESH_FONT_COLOR, MESH_BG_COLOR, 1, true);
+  drawStandardValue(&meshInfoRect[ME_INFO_CUR], VALUE_FLOAT, curVal, FONT_SIZE_LARGE, MESH_FONT_COLOR, MESH_BORDER_COLOR, 4, true);
 }
 
 void meshDrawFullInfo(void)
@@ -623,7 +623,7 @@ void meshDrawKeyboard(void)
   for (uint8_t i = 0; i < ME_KEY_NUM; i++)
   {
     if (i > ME_KEY_EDIT)                                   // if not a unicode string
-      drawStandardValue(&meshKeyRect[i], VALUE_STRING, meshKeyString[i], true, MESH_FONT_COLOR, MESH_BG_COLOR, 3, true);
+      drawStandardValue(&meshKeyRect[i], VALUE_STRING, meshKeyString[i], FONT_SIZE_LARGE, MESH_FONT_COLOR, MESH_BG_COLOR, 3, true);
   }
 
   // draw control icons

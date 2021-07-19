@@ -14,6 +14,9 @@ const uint8_t parameterElementCount[PARAMETERS_COUNT] = {
   4,                       // FW retract (Length, Swap Length, Feedrate, Z lift height)
   4,                       // FW retract recover (Additional length, Additional Swap Length, Feedrate, Swap feedrate)
   1,                       // Set auto FW retract
+  4,                       // Delta Configuration
+  3,                       // Delta Tower Angle
+  3,                       // Delta Endstop Adjustments
   (AXIS_INDEX_COUNT - 2),  // Hotend Offset (X, Y, Z)
   2,                       // ABL State & Z Fade
   (AXIS_INDEX_COUNT - 2),  // Probe offset (X, Y, Z)
@@ -37,6 +40,9 @@ const char * const parameterCode[PARAMETERS_COUNT] = {
   "M207",  // FW retract
   "M208",  // FW retract recover
   "M209",  // Set auto FW retract
+  "M665",  // Delta Configuration
+  "M665",  // Delta Tower Angle
+  "M666",  // Delta Endstop Adjustments
   "M218",  // Hotend Offset
   "M420",  // ABL State & Z Fade
   "M851",  // Probe offset
@@ -60,6 +66,9 @@ const char * const parameterCmd[PARAMETERS_COUNT][MAX_ELEMENT_COUNT] = {
   {"S%.2f\n",            "W%.2f\n",       "F%.2f\n",       "Z%.2f\n",      NULL,         NULL,           NULL,           NULL},           // FW retract (Length, Swap Length, Feedrate, Z lift height)
   {"S%.2f\n",            "W%.2f\n",       "F%.2f\n",       "R%.2f\n",      NULL,         NULL,           NULL,           NULL},           // FW retract recover (Additional length, Additional Swap Length, Feedrate, Swap feedrate)
   {"S%.0f\n",            NULL,            NULL,            NULL,           NULL,         NULL,           NULL,           NULL},           // Set auto FW retract
+  {"H%.2f\n",            "S%.2f\n",       "R%.2f\n",       "L%.2f\n",           NULL,         NULL,           NULL,           NULL},           // Delta Configuration (Height, Segment per sec, Radius, Diagonal Rod)
+  {"X%.2f\n",            "Y%.2f\n",       "Z%.2f\n",       NULL,           NULL,         NULL,           NULL,           NULL},           // Delta Tower Angle (Tx, Ty, Tz)
+  {"X%.2f\n",            "Y%.2f\n",       "Z%.2f\n",       NULL,           NULL,         NULL,           NULL,           NULL},           // Delta Endstop Adjustments (Ex, Ey, Ez)
   {"T1 X%.2f\n",         "T1 Y%.2f\n",    "T1 Z%.2f\n",    NULL,           NULL,         NULL,           NULL,           NULL},           // Hotend Offset (X, Y, Z)
   {"S%.0f\n",            "Z%.2f\n",       NULL,            NULL,           NULL,         NULL,           NULL,           NULL},           // ABL State & Z Fade
   {"X%.2f\n",            "Y%.2f\n",       "Z%.2f\n",       NULL,           NULL,         NULL,           NULL,           NULL},           // Probe offset (X, Y, Z)
@@ -83,6 +92,9 @@ const VAL_TYPE parameterValType[PARAMETERS_COUNT][MAX_ELEMENT_COUNT] = {
   {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_INT,        VAL_TYPE_FLOAT},                    // FW retract (Length, Swap Length, Feedrate, Z lift height)
   {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_INT,        VAL_TYPE_INT},                      // FW retract recover (Additional length, Additional Swap Length, Feedrate, Swap feedrate)
   {VAL_TYPE_INT},                                                                                    // Set auto FW retract
+  {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_FLOAT,     VAL_TYPE_FLOAT},                      // Delta Configuration (Height, Segment per sec, Radius, Diagonal Rod)
+  {VAL_TYPE_NEG_FLOAT,      VAL_TYPE_NEG_FLOAT,     VAL_TYPE_NEG_FLOAT},                      // Delta Tower Angle (Tx, Ty, Tz)
+  {VAL_TYPE_NEG_FLOAT,        VAL_TYPE_NEG_FLOAT,       VAL_TYPE_NEG_FLOAT},                      // Delta Endstop Adjustments  (Ex, Ey, Ez)
   {VAL_TYPE_NEG_FLOAT,  VAL_TYPE_NEG_FLOAT, VAL_TYPE_NEG_FLOAT},                                     // Hotend Offset (X, Y, Z)
   {VAL_TYPE_INT,        VAL_TYPE_FLOAT},                                                             // ABL State + Z Fade
   {VAL_TYPE_NEG_FLOAT,  VAL_TYPE_NEG_FLOAT, VAL_TYPE_NEG_FLOAT},                                     // Probe offset (X, Y, Z)
@@ -112,6 +124,9 @@ char * const linAdvDisplayID[] = {"K-Factor E0", "K-Factor E1"};
 char * const filamentDiaDisplayID[] = {"S " ONOFF_DISPLAY_ID, "T0 Ø Filament", "T1 Ø Filament"};
 char * const stealthChopDisplayID[] = {"X " ONOFF_DISPLAY_ID, "X2 " ONOFF_DISPLAY_ID, "Y "ONOFF_DISPLAY_ID, "Y2 "ONOFF_DISPLAY_ID,
                                        "Z " ONOFF_DISPLAY_ID, "Z2 " ONOFF_DISPLAY_ID, "E0 "ONOFF_DISPLAY_ID, "E1 "ONOFF_DISPLAY_ID};
+char * const deltaConfigurationDisplayID[] = {"Height", "Segment/sec.", "Radius", "Diagonal"};
+char * const deltaTowerAngleDisplayID[] = {"Tx", "Ty", "Tz"};
+char * const deltaEndstopDisplayID[] = {"Ex", "Ey", "Ez"};
 
 const LABEL accelDisplayID[] = {LABEL_PRINT_ACCELERATION, LABEL_RETRACT_ACCELERATION, LABEL_TRAVEL_ACCELERATION};
 const LABEL retractDisplayID[] = {LABEL_RETRACT_LENGTH, LABEL_RETRACT_SWAP_LENGTH, LABEL_RETRACT_FEEDRATE, LABEL_RETRACT_Z_LIFT};
@@ -221,6 +236,15 @@ float getParameter(PARAMETER_NAME name, uint8_t index)
 
     case P_AUTO_RETRACT:
       return infoParameters.AutoRetract[index];
+      
+    case P_DELTA_CONFIGURATION:
+      return infoParameters.DeltaConfiguration[index];
+      
+    case P_DELTA_TOWER_ANGLE:
+      return infoParameters.DeltaTowerAngle[index];
+
+    case P_DELTA_ENDSTOP:
+      return infoParameters.DeltaEndstop[index];
 
     case P_HOTEND_OFFSET:
       return infoParameters.HotendOffset[index];
@@ -305,6 +329,18 @@ void setParameter(PARAMETER_NAME name, uint8_t index, float val)
 
     case P_AUTO_RETRACT:
       infoParameters.AutoRetract[index] = val;
+      break;
+      
+    case P_DELTA_CONFIGURATION:
+      infoParameters.DeltaConfiguration[index] = val;
+      break;
+
+    case P_DELTA_TOWER_ANGLE:
+      infoParameters.DeltaTowerAngle[index] = val;
+      break;
+
+    case P_DELTA_ENDSTOP:
+      infoParameters.DeltaEndstop[index] = val;
       break;
 
     case P_HOTEND_OFFSET:

@@ -21,9 +21,7 @@
 
 // LCD interface
 #ifndef TFTLCD_DRIVER
-  #define TFTLCD_DRIVER               HX8558  // Type of LCD driver, now support[RM68042, ILI9488, ILI9341, ILI9325, ST7789, HX8558].
-  #define TFTLCD_0_DEGREE_REG_VALUE   0xA4
-  #define TFTLCD_180_DEGREE_REG_VALUE 0X64
+  #define TFTLCD_DRIVER HX8558  // Type of LCD driver, now support[RM68042, ILI9488, ILI9341, ILI9325, ST7789, HX8558].
 #endif
 //#define STM32_HAS_FSMC  // FSMC 8080 interface(high speed), or normal IO interface(low speed)
 #ifndef LCD_DATA_16BIT
@@ -50,8 +48,8 @@
 #define USART3_RX_PIN PD9
 //#define SERIAL_PORT_4 _UART4
 
-// Serial port for debugging Serial communications
-#ifdef DEBUG_SERIAL_COMM
+// Serial port for debugging
+#ifdef SERIAL_DEBUG_ENABLED
   #define SERIAL_DEBUG_PORT SERIAL_PORT_3
 #endif
 

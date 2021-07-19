@@ -69,6 +69,7 @@ extern "C" {
 
 uint32_t LCD_ReadPixel_24Bit(int16_t x, int16_t y);
 void LCD_RefreshDirection(void);
+void LCD_SetWindow(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey);
 void LCD_Init(void);
 
 #ifdef __cplusplus

@@ -2,6 +2,8 @@
 
 
 
+
+
 <!-- omit in toc -->
 
 # BigTreeTech TFT Touchscreen
@@ -21,19 +23,19 @@ Important information related to BigTreeTech's TFT touchscreen 3D printer contro
 
 ## Table of Contents
 
-- [Supported TFT's](#supported-tft's)
+- [Supported Screens](#supported-screens)
 
 - [Marlin Dependencies](#marlin-dependencies)
 
 - [Connect the TFT to the Mainboard](#connect-the-tft-to-the-mainboard)
 
-- [Menus and Themes](#menus-and-themes)
+- [Menus and Themes](#menus)
 
 - [Update TFT Firmware](#update-tft-firmware)
 
 - [Calibrate the Screen](#calibrate-the-screen)
 
-- [Configuration using config.ini](#configuration-using-config.ini)
+- [Using the Configuration file](#using-the-configuration-file)
 
 - [Customisation](#customisation)
 
@@ -46,37 +48,38 @@ Important information related to BigTreeTech's TFT touchscreen 3D printer contro
 
 - [Appendix](#appendix)
 
-  - [TFT Screen Configuration and support for RRF](#TFT-Screen-Configuration-and-support-for-RRF)
-  - [Setup of BTT TFT35 E3 V3.0 with MKS SGEN_L Mainboards](#Setup-of-BTT-TFT35-E3-V3.0-with-MKS-SGEN-L-Mainboards)
+  - [Embedded Gcode Thumbnails](#embedded-gcode-thumbnails)
+  - [TFT Screen Configuration and support for RRF](#tft-screen-configuration-and-support-for-rrf)
+  - [Setup of BTT TFT35 E3 V3 with MKS SGEN L Mainboards](#setup-of-btt-tft35-e3-v3-with-mks-sgen-l-mainboards)
   - [Show more statistics at the end of the print](#show-more-statistics-at-the-end-of-the-print)
 
   
 
 
 
-## Supported TFT's
+## Supported Screens
 
 Only the TFT's listed below are currently supported. Trying to install the firmware on a TFT which is not supported can harm the hardware.
 
 **BTT TFT**
 
     BTT_TFT24_V1.1
-
+    
     BTT_TFT28_V1.0 and V3.0
-
+    
     BTT_TFT35_V1.0, V1.1, V1.2, V2.0, V3.0, E3_V3.0 and B1_V3.0
-
+    
     BTT_TFT43_V3.0
-
+    
     BTT_TFT50_V3.0
-
+    
     BTT_TFT70_V3.0
 
 **MKS TFT** *Warning: BTT does not officially provide MKS TFT hardware support, MKS TFT is maintained by open source contributors, and BTT does not bear any risk of MKS TFT hardware using this firmware*
 
 
     MKS_TFT28_V3.0 and V4.0
-
+    
     MKS_TFT32_V1.3 and V1.4
 
 
@@ -94,7 +97,7 @@ Distribution date: 2021-05-15
 
 In order the TFT firmware is able to provide all of its functionalities/features, the following options must be enabled in Marlin firmware.
 
-**General options:**
+**General options which MUST be activated:**
 
 `EEPROM_SETTINGS` (in Configuration.h)
 
@@ -107,8 +110,6 @@ In order the TFT firmware is able to provide all of its functionalities/features
 `M114_DETAIL` (in Configuration_adv.h)
 
 `REPORT_FAN_CHANGE` (in Configuration_adv.h)
-
-`AUTO_REPORT_POSITION` (in Configuration_adv.h)
 
 
 
@@ -186,9 +187,7 @@ B: In case your mainboard provides **EXP1 and EXP2**, you have to connect 2 ribb
 
 C: In case you have an **"E3" mainboard** which provides a **single EXP connector**, you have to connect 1 ribbon cable connecting EXP of the mainboard to **EXP3** of the TFT. In case your TFT does **not** provide an EXP3 connector but only two 10pin connectors (TFT24 v1.1 for example) you will need a "Y-split" cable with one 10pin connector on one side (for the mainboard) and two 10pin connectors on the other side (for the TFT). In the Marlin firmware of your mainboard, make sure that **ONLY** the "`CR10_STOCKDISPLAY`" is activated in Configuration.h and that all other controllers are **De**activated (especially the "`REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER`").
 
-![Table](https://user-images.githubusercontent.com/54359396/115434067-8cc39c80-a208-11eb-82f4-19e1192b4bf9.png)
-
-This chart has been provided by user Thomas White
+![118848226-d74f3c00-b8ce-11eb-8210-d9e61a8f5650](https://user-images.githubusercontent.com/54359396/121323737-5ead2f80-c910-11eb-936e-c2815dab360a.png)
 
 
 
@@ -239,22 +238,22 @@ Attention TFT35 owners. There are currently three different kinds of firmware av
 
 **element 2:** Fonts and Icons (in the `TFT*` or `MKS` folder):
 
-For BTT TFTs, the ROOT folder for fonts and icons is TFT*, where * is the size of the TFT (example: TFT24, TFT35, TFT50, etc).
+For BTT TFTs, the ROOT FOLDER for fonts and icons is TFT*, where * is the size of the TFT (example: TFT24, TFT35, TFT50, etc).
 Fonts and icons folder structure:
 
-- `TFT*/font`: fonts
-- `TFT*/bmp`: icons
+- `TFT*/font`: includes the fonts in .fon format and a readme.md
+- `TFT*/bmp`: includes the icons in .bmp format and a readme.md
 
-For MKS TFTs the ROOT folder for fonts and icons must be renamed to "MKS".
+For MKS TFTs the ROOT FOLDER for fonts and icons must be renamed to "MKS".
 Fonts and icons folder structure:
 
-- `MKS/font`: fonts
-- `MKS/bmp`: icons
+- `MKS/font`: includes the fonts in .fon format and a readme.md
+- `MKS/bmp`: includes the icons in .bmp format and a readme.md
 
 
 **element 3:** The config.ini or (the renamed) config_rrf.ini file
 
-Attention RepRap Firmware users. You have to make your changes to the config_rrf.ini file and rename it to config.ini before you upload it to the TFT.
+Attention RepRap Firmware users. You have to make your changes using the config_rrf.ini file and rename it to config.ini before you upload it to the TFT.
 
 
 **element 4 (optionally):**  One or several language file(s)
@@ -307,10 +306,11 @@ Tip: Format the SD card after the firmware update in case you would like to prin
 
 Sometimes a calibration will be executed automatically after a firmware update, showing a white screen with a red dot in the upper right corner and the text: Touch Screen Calibration - Please click on the red dot. To calibrate the screen press with your finger or a stylus the red dot in the upper left corner, then the red dot in the upper right corner and then  the red dot in the lower right corner. Even the screen asks you to press the red dot, press the black dot in the middle of the screen to finish the calibration. Repeat the process in case the message: "Adjustment failed, please try again" is shown.
 
+## Using the Configuration file
 
-## Configuration using config.ini (or the renamed config_rrf.ini) file
+Attention RepRap Firmware users. You have to make your changes using the config_rrf.ini file and rename it to config.ini before you copy it to the TFT.
 
-The Firmware can be modified by changing the **config.ini** file from: [`Copy to SD Card root directory to update`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update) using a simple text editor (make sure to use UTF encoding).
+The Firmware can be modified by changing the **config.ini** (or the renamed config_rrf.ini) file from: [`Copy to SD Card root directory to update`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update) using a simple text editor (make sure to use UTF encoding).
 
 Once saved, it can be uploaded without the need to upload the firmware or the TFT folder again, as long as the firmware and the config file are from the same version.
 
@@ -326,7 +326,7 @@ To update the Firmware configuration:
 
 1. Edit the settings like described above
 
-2. Copy the **config.ini** or **config_rrf.ini** file to the root of the SD card. (The SD card capacity should be less than or equal to 8GB and formatted as FAT32)
+2. Copy the **config.ini** file to the root of the SD card. (The SD card capacity should be less than or equal to 8GB and formatted as FAT32)
 
 3. Insert the SD card into the TFT's SD card slot and restart the printer or press the reset buttion of the TFT.
 
@@ -372,6 +372,7 @@ See [Customisation guides](https://github.com/bigtreetech/BIGTREETECH-TouchScree
 ;MKS_TFT32_V1_4_NOBL
 ;MKS_TFT28_V3_0
 ;MKS_TFT28_V4_0
+;MKS_TFT28_NEW_GENIUS
 [platformio]
 src_dir      = TFT
 boards_dir   = buildroot/boards
@@ -413,6 +414,39 @@ See [BIGTREETECH-TouchScreenFirmware/releases](https://github.com/bigtreetech/BI
 
 
 ## Appendix
+
+### Embedded Gcode Thumbnails
+
+The TFT is able to display embedded gcode thumbnails in the file list viewer using two different flavors: Bigtreetech-style or PrusaSlicer-style.
+
+![ps-thumbnail](https://user-images.githubusercontent.com/54359396/121322884-a4b5c380-c90f-11eb-9380-09757d57d84e.png)
+
+The first type is to store the thumbnails at a specific location in the gcode file using a dedicated Cura plugin or external post-processing script.
+The thumbnail's image data is raw encoded in a format which can be displayed on the TFT without any complex image transformations.
+Displaying these embedded thumbnails at the TFT is the fastest approach and suitable for all different BigTreeTech's TFT variants.
+Downside is that you either need a dedicated plugin, for example the [BTT 3D Plug-In Suit](https://github.com/bigtreetech/Bigtree3DPluginSuit), or you have to use the post-processing script.
+
+The other type is to store the thumbnails using dedicated comments (`thumbnail begin...` and `thumbnail end`) which is implemented in stock by some slicers like Prusa-Slicer.
+The thumbnail's image data is a PNG file encoded in Base64 which cannot be displayed directly on the TFT:
+A base64 decoding and png decoding needs to be performed which is quite complex for the TFT.
+Displaying these thumbnails is slower but more flexible.
+Due to the memory requirements it is not suitable for all the different TFT variants (only for those with `RAM_SIZE > 96`).
+
+Thumbnail generation needs to be specifically enabled in Prusa-Slicer.
+Under _Printer Settings_ at the _G-code thumbnails_ settings you have to enter the specific required thumbnail image size for your TFT.
+
+![ps-thumbnail-settings](https://user-images.githubusercontent.com/54359396/121322977-b9925700-c90f-11eb-9a6a-bcebd8f21542.png)
+
+Thumbnail image sizes are:
+
+* `70x70`: TFT24 / TFT28
+* `95x80`: TFT43 / TFT50
+* `95x95`: TFT35
+* `160x140`: TFT70
+
+If this setting is not visible within the Prusa-Slicer you need to enable _Expert Settings Mode_:
+![ps-expert-settings](https://user-images.githubusercontent.com/54359396/121323041-c7e07300-c90f-11eb-9644-e12e31f7b5f9.png)
+
 ### TFT Screen Configuration and support for RRF
 
 Overview
@@ -456,7 +490,7 @@ Menu system for macros
 - Load/unload menu
 - PID tune menu
 
-### Setup of BTT TFT35 E3 V3.0 with MKS SGEN_L Mainboards
+### Setup of BTT TFT35 E3 V3 with MKS SGEN L Mainboards
 
 The following mainboards are covered by this document.
 

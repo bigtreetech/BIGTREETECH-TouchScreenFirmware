@@ -372,11 +372,11 @@ static inline void keyboardDrawButton(uint8_t index, uint8_t isPressed)
                   .rect       = rectBtn};
 
     if (index != GKEY_SEND)
-      setLargeFont(true);
+      setFontSize(FONT_SIZE_LARGE);
 
     // draw button
     GUI_DrawButton(&btn, isPressed);
-    setLargeFont(false);
+    setFontSize(FONT_SIZE_NORMAL);
   #else  // KEYBOARD_MATERIAL_THEME
     uint16_t color;
     uint16_t bgColor;
@@ -409,13 +409,13 @@ static inline void keyboardDrawButton(uint8_t index, uint8_t isPressed)
     }
 
     drawStandardValue(&editorKeyRect[index], VALUE_STRING, (numpad) ? gcodeKey123[index] : gcodeKeyABC[index],
-                      index != GKEY_SEND, color, bgColor, 1, true);
+                      (index != GKEY_SEND) ? FONT_SIZE_LARGE : FONT_SIZE_NORMAL, color, bgColor, 1, true);
   #endif  // KEYBOARD_MATERIAL_THEME
 }
 
 static inline void drawGcodeText(char *gcode)
 {
-  drawStandardValue(&textBoxRect, VALUE_STRING, gcode, false, TEXTBOX_FONT_COLOR, TEXTBOX_BG_COLOR, 1, true);
+  drawStandardValue(&textBoxRect, VALUE_STRING, gcode, FONT_SIZE_NORMAL, TEXTBOX_FONT_COLOR, TEXTBOX_BG_COLOR, 1, true);
 }
 
 static inline void drawKeyboard(void)
@@ -648,9 +648,9 @@ static inline void terminalDrawButton(uint8_t index, uint8_t isPressed)
                   .radius     = BTN_ROUND_CORNER,
                   .rect       = rectBtn};
 
-    setLargeFont(true);
+    setFontSize(FONT_SIZE_LARGE);
     GUI_DrawButton(&btn, isPressed);
-    setLargeFont(false);
+    setFontSize(FONT_SIZE_NORMAL);
   #else
     uint16_t color;
     uint16_t bgColor;
@@ -666,7 +666,7 @@ static inline void terminalDrawButton(uint8_t index, uint8_t isPressed)
       bgColor = BAR_BG_COLOR;
     }
 
-    drawStandardValue(&terminalKeyRect[index], VALUE_STRING, terminalKey[index], true, color, bgColor, 1, true);
+    drawStandardValue(&terminalKeyRect[index], VALUE_STRING, terminalKey[index], FONT_SIZE_LARGE, color, bgColor, 1, true);
   #endif  // KEYBOARD_MATERIAL_THEME
 }
 
@@ -677,7 +677,7 @@ static inline void terminalDrawPageNumber(void)
   sprintf(tempstr, "%d/%d", abs(((terminalData->pageTail - terminalData->pageHead) - terminalData->pageIndex) + 1),
           abs((terminalData->pageTail - terminalData->pageHead) + 1));
 
-  drawStandardValue(&terminalPageRect, VALUE_STRING, &tempstr, true, BAR_FONT_COLOR, BAR_BG_COLOR, 1, true);
+  drawStandardValue(&terminalPageRect, VALUE_STRING, &tempstr, FONT_SIZE_LARGE, BAR_FONT_COLOR, BAR_BG_COLOR, 1, true);
 }
 
 static inline void terminalDrawMenu(void)
