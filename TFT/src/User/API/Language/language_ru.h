@@ -49,6 +49,9 @@
     #define STRING_FWRETRACT              "M207 ретракт"
     #define STRING_FWRECOVER              "M208 восстановление ретракта"
     #define STRING_RETRACT_AUTO           "Авто FW ретракт"
+    #define STRING_DELTA_CONFIGURATION           "Delta Configuration"
+    #define STRING_DELTA_TOWER_ANGLE           "Tower Angle Trim"
+    #define STRING_DELTA_ENDSTOP           "Endstop Adjustments"
     #define STRING_HOTEND_OFFSET          "Смещение 2-го сопла"
     #define STRING_PROBE_OFFSET           "Смещение датчика"
     #define STRING_LIN_ADVANCE            "К-фактор"
@@ -345,9 +348,10 @@
     #define STRING_HEAT_HOTEND            "Нагреть сопло до %d℃?"
     #define STRING_DESIRED_TEMPLOW        "Температура сопла низка\nжелательная температура (%d℃)."
     #define STRING_WAIT_HEAT_UP           "Подождите, пока он нагреется."
-    #define STRING_NOZZLE_STABILIZING     "Подождите, сопло стабилизируется..."
     #define STRING_Z_ALIGN                "Z Выравнивание"
     #define STRING_MACROS                 "Макросы"
     #define STRING_MESH_VALID             "Проверка сетки"
+    #define STRING_CONNECT_PROBE          "Connect probe before starting the process. Make sure to disconnect it afterwards."
+    #define STRING_CALIBRATION            "Calibration"
 
 #endif

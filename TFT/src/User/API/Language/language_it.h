@@ -49,6 +49,9 @@
     #define STRING_FWRETRACT              "Retrazione firmware"
     #define STRING_FWRECOVER              "Retrazione firmware rec."
     #define STRING_RETRACT_AUTO           "Retrazione firmware"
+    #define STRING_DELTA_CONFIGURATION           "Delta Configuration"
+    #define STRING_DELTA_TOWER_ANGLE           "Tower Angle Trim"
+    #define STRING_DELTA_ENDSTOP           "Endstop Adjustments"
     #define STRING_HOTEND_OFFSET          "Offset secondo hotend"
     #define STRING_PROBE_OFFSET           "Probe offset"
     #define STRING_LIN_ADVANCE            "Linear advance"
@@ -345,9 +348,10 @@
     #define STRING_HEAT_HOTEND            "Scaldo l'hotend a %d℃?"
     #define STRING_DESIRED_TEMPLOW        "Hotend temperature is below\ndesired temperature (%d℃)."
     #define STRING_WAIT_HEAT_UP           "Wait for it to heat up."
-    #define STRING_NOZZLE_STABILIZING     "Wait, nozzle stabilizing..."
     #define STRING_Z_ALIGN                "Allinea Z"
     #define STRING_MACROS                 "Macro"
     #define STRING_MESH_VALID             "Validazione mesh"
+    #define STRING_CONNECT_PROBE          "Connect probe before starting the process. Make sure to disconnect it afterwards."
+    #define STRING_CALIBRATION            "Calibration"
 
 #endif

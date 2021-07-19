@@ -49,6 +49,9 @@
     #define STRING_FWRETRACT              "FW Visszahúzás"
     #define STRING_FWRECOVER              "FW Visszanyomás"
     #define STRING_RETRACT_AUTO           "Automata visszahúz."
+    #define STRING_DELTA_CONFIGURATION           "Delta Configuration"
+    #define STRING_DELTA_TOWER_ANGLE           "Tower Angle Trim"
+    #define STRING_DELTA_ENDSTOP           "Endstop Adjustments"
     #define STRING_HOTEND_OFFSET          "Második fej eltolása"
     #define STRING_PROBE_OFFSET           "Szonda eltolás"
     #define STRING_LIN_ADVANCE            "Lineáris haladás"
@@ -345,9 +348,10 @@
     #define STRING_HEAT_HOTEND            "Fűtöd a fejet %d℃-ra?"
     #define STRING_DESIRED_TEMPLOW        "Fejhőfok alacsonyabb, mint a\nkívánt hőfok (%d℃)."
     #define STRING_WAIT_HEAT_UP           "Várj, míg felmelegszik."
-    #define STRING_NOZZLE_STABILIZING     "Fejhőfok stabilizálódik..."
     #define STRING_Z_ALIGN                "Z Igazítás"
     #define STRING_MACROS                 "Makrók"
     #define STRING_MESH_VALID             "Háló ellenőrzése"
+    #define STRING_CONNECT_PROBE          "Connect probe before starting the process. Make sure to disconnect it afterwards."
+    #define STRING_CALIBRATION            "Calibration"
 
 #endif

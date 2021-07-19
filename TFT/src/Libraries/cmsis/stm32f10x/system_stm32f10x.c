@@ -213,6 +213,9 @@ static void SetSysClock(void);
   */
 void SystemClockInit (void)
 {
+  /* Restore "Reset value", reset the value be setted in bootloader */
+  RCC->CR = 0x83;
+  RCC->CFGR = 0x00000000;
   /* Reset the RCC clock configuration to the default reset state(for debug purpose) */
   /* Set HSION bit */
   RCC->CR |= (uint32_t)0x00000001;

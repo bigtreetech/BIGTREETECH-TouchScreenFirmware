@@ -119,19 +119,21 @@ const GUI_RECT ledKeyRect[KEY_NUM] = {
 #endif
 };
 
-#ifdef KEYBOARD_ON_LEFT
 const GUI_RECT ledColorRect = {
-  3 * KB_WIDTH, 0 * KB_HEIGHT, 4 * KB_WIDTH, 1 * KB_HEIGHT};
+  #ifdef KEYBOARD_ON_LEFT
+    3 * KB_WIDTH, 0 * KB_HEIGHT, 4 * KB_WIDTH, 1 * KB_HEIGHT
+  #else
+    0 * KB_WIDTH, 0 * KB_HEIGHT, 1 * KB_WIDTH, 1 * KB_HEIGHT
+  #endif
+};
 
 const GUI_RECT ledPageRect = {
-  2 * CTRL_WIDTH, 4 * CTRL_HEIGHT, 3 * CTRL_WIDTH, 5 * KB_HEIGHT};
-#else
-const GUI_RECT ledColorRect = {
-  0 * KB_WIDTH, 0 * KB_HEIGHT, 1 * KB_WIDTH, 1 * KB_HEIGHT};
-
-const GUI_RECT ledPageRect = {
-  0 * CTRL_WIDTH, 4 * CTRL_HEIGHT, 1 * CTRL_WIDTH, 5 * KB_HEIGHT};
-#endif
+  #ifdef KEYBOARD_ON_LEFT
+    2 * CTRL_WIDTH, 4 * CTRL_HEIGHT, 3 * CTRL_WIDTH, 5 * KB_HEIGHT
+  #else
+    0 * CTRL_WIDTH, 4 * CTRL_HEIGHT, 1 * CTRL_WIDTH, 5 * KB_HEIGHT
+  #endif
+};
 
 // area rectangles
 const GUI_RECT ledAreaRect[2] = {

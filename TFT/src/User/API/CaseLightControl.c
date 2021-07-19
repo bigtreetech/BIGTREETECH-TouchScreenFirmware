@@ -7,7 +7,7 @@ static bool lastCaseLightState = true;
 static bool caseLightState = true;
 
 static bool lightQueryWait = false;
-static bool caseLight_send_waiting = false;
+static bool caseLight_applied = false;
 
 // Sends a query (M355) to the printer asking for the current brightness
 void caseLightValueQuery(void)
@@ -60,20 +60,24 @@ bool caseLightGetState(void)
   return caseLightState;
 }
 
-void caseLightSendWaiting(bool isWaiting)
+void caseLightApplied(bool applied)
 {
-  caseLight_send_waiting = isWaiting;
+  caseLight_applied = applied;
 }
 
 void loopCaseLight(void)
 {
   if (lastCaseLightBrightness != caseLightBrightness || lastCaseLightState != caseLightState)
   {
-    lastCaseLightBrightness = caseLightBrightness;
-    lastCaseLightState = caseLightState;
-    if (caseLight_send_waiting == false)
+    if (caseLight_applied == false)
     {
-      caseLight_send_waiting = storeCmd("M355 S%d P%d\n", caseLightState ? 1 : 0, caseLightBrightness);
+      caseLight_applied = storeCmd("M355 S%d P%d\n", caseLightState ? 1 : 0, caseLightBrightness);
+    }
+    if (caseLight_applied == true)
+    {
+      lastCaseLightBrightness = caseLightBrightness;
+      lastCaseLightState = caseLightState;
+      caseLight_applied = false;
     }
   }
 }
