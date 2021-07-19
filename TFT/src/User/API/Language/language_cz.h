@@ -351,7 +351,7 @@
     #define STRING_Z_ALIGN                "Z Align"
     #define STRING_MACROS                 "Makro"
     #define STRING_MESH_VALID             "Test sítě"
-    #define STRING_CONNECT_PROBE             "Connect probe before starting the process. Make sure to disconnect it afterwards."
-    #define STRING_CALIBRATION             "Calibration"
+    #define STRING_CONNECT_PROBE          "Connect probe before starting the process. Make sure to disconnect it afterwards."
+    #define STRING_CALIBRATION            "Calibration"
 
 #endif

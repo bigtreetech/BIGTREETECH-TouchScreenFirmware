@@ -351,7 +351,7 @@
     #define STRING_Z_ALIGN                "Z Align"
     #define STRING_MACROS                 "宏指令"
     #define STRING_MESH_VALID             "调平测试"
-    #define STRING_CONNECT_PROBE             "Connect probe before starting the process. Make sure to disconnect it afterwards."
-    #define STRING_CALIBRATION             "Calibration"
+    #define STRING_CONNECT_PROBE          "开启此操作前请先连接探头, 操作完成后请断开连接"
+    #define STRING_CALIBRATION            "校准"
 
 #endif

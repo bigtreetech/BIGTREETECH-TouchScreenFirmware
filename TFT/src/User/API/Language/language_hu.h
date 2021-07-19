@@ -351,7 +351,7 @@
     #define STRING_Z_ALIGN                "Z Igazítás"
     #define STRING_MACROS                 "Makrók"
     #define STRING_MESH_VALID             "Háló ellenőrzése"
-    #define STRING_CONNECT_PROBE             "Connect probe before starting the process. Make sure to disconnect it afterwards."
-    #define STRING_CALIBRATION             "Calibration"
+    #define STRING_CONNECT_PROBE          "Connect probe before starting the process. Make sure to disconnect it afterwards."
+    #define STRING_CALIBRATION            "Calibration"
 
 #endif

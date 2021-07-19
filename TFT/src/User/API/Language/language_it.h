@@ -351,7 +351,7 @@
     #define STRING_Z_ALIGN                "Allinea Z"
     #define STRING_MACROS                 "Macro"
     #define STRING_MESH_VALID             "Validazione mesh"
-    #define STRING_CONNECT_PROBE             "Connect probe before starting the process. Make sure to disconnect it afterwards."
-    #define STRING_CALIBRATION             "Calibration"
+    #define STRING_CONNECT_PROBE          "Connect probe before starting the process. Make sure to disconnect it afterwards."
+    #define STRING_CALIBRATION            "Calibration"
 
 #endif
