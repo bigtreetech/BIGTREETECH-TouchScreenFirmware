@@ -38,10 +38,11 @@
     #define STRING_END_GCODE_ENABLED      "G-код после печати"
     #define STRING_CANCEL_GCODE_ENABLED   "G-код отмены печати"
 
-    // Machine Parameter Settings
+    // Machine Parameter Settings - Param Title (ordered by gcode)
     #define STRING_STEPS_SETTING          "Настройка шагов на мм"
-    #define STRING_MAXFEEDRATE            "MAX скорость подачи"
+    #define STRING_FILAMENT_SETTING       "Диаметр прутка"
     #define STRING_MAXACCELERATION        "MAX ускорение"
+    #define STRING_MAXFEEDRATE            "MAX скорость подачи"
     #define STRING_ACCELERATION           "Ускорение"
     #define STRING_JERK                   "Рывок"
     #define STRING_JUNCTION_DEVIATION     "Отклонение узла"
@@ -49,17 +50,19 @@
     #define STRING_FWRETRACT              "M207 ретракт"
     #define STRING_FWRECOVER              "M208 восстановление ретракта"
     #define STRING_RETRACT_AUTO           "Авто FW ретракт"
-    #define STRING_DELTA_CONFIGURATION           "Delta Configuration"
-    #define STRING_DELTA_TOWER_ANGLE           "Tower Angle Trim"
-    #define STRING_DELTA_ENDSTOP           "Endstop Adjustments"
     #define STRING_HOTEND_OFFSET          "Смещение 2-го сопла"
+    #define STRING_STEALTH_CHOP           "TMC StealthChop"
+    #define STRING_DELTA_CONFIGURATION    "Delta Configuration"
+    #define STRING_DELTA_TOWER_ANGLE      "Tower Angle Trim"
+    #define STRING_DELTA_ENDSTOP          "Endstop Adjustments"
     #define STRING_PROBE_OFFSET           "Смещение датчика"
     #define STRING_LIN_ADVANCE            "К-фактор"
-    #define STRING_FILAMENT_SETTING       "Диаметр прутка"
     #define STRING_CURRENT_SETTING        "Настройка TMC драйверов"
-    #define STRING_BUMP_SENSITIVITY       "TMC чувствительность удара"
     #define STRING_HYBRID_THRESHOLD       "TMC гибридный порог"
-    #define STRING_STEALTH_CHOP           "TMC StealthChop"
+    #define STRING_BUMP_SENSITIVITY       "TMC чувствительность удара"
+    #define STRING_MBL_OFFSET             "MBL Смещение"
+
+    // Machine Parameter Settings - Param Attributes (ordered by gcode)
     #define STRING_PRINT_ACCELERATION     "Печати"
     #define STRING_RETRACT_ACCELERATION   "Ретракта"
     #define STRING_TRAVEL_ACCELERATION    "Перемещения"
@@ -71,7 +74,6 @@
     #define STRING_SWAP_RECOVER_LENGTH    "Длина при смене сопла"
     #define STRING_RECOVER_FEEDRATE       "Скорость"
     #define STRING_SWAP_RECOVER_FEEDRATE  "Скорость при смене сопла"
-    #define STRING_MBL_OFFSET             "MBL Смещение"
 
     // Save / Load
     #define STRING_SAVE                   "Сохранить"

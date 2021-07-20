@@ -38,10 +38,11 @@
     #define STRING_END_GCODE_ENABLED      "印刷後にGコードを終了する"
     #define STRING_CANCEL_GCODE_ENABLED   "Gコードをキャンセルする"
 
-    // Machine Parameter Settings
+    // Machine Parameter Settings - Param Title (ordered by gcode)
     #define STRING_STEPS_SETTING          "MMあたりのステップ"
-    #define STRING_MAXFEEDRATE            "マックスフィード率"
+    #define STRING_FILAMENT_SETTING       "Filament Diameter"
     #define STRING_MAXACCELERATION        "最大加速度"
+    #define STRING_MAXFEEDRATE            "マックスフィード率"
     #define STRING_ACCELERATION           "加速度"
     #define STRING_JERK                   "Jerk"
     #define STRING_JUNCTION_DEVIATION     "Junction Deviation"
@@ -49,17 +50,19 @@
     #define STRING_FWRETRACT              "FW Retraction"
     #define STRING_FWRECOVER              "FW Retraction Recover"
     #define STRING_RETRACT_AUTO           "Auto Firmware Retract"
-    #define STRING_DELTA_CONFIGURATION           "Delta Configuration"
-    #define STRING_DELTA_TOWER_ANGLE           "Tower Angle Trim"
-    #define STRING_DELTA_ENDSTOP           "Endstop Adjustments"
     #define STRING_HOTEND_OFFSET          "Offset 2nd Nozzle"
+    #define STRING_STEALTH_CHOP           "TMC StealthChop"
+    #define STRING_DELTA_CONFIGURATION    "Delta Configuration"
+    #define STRING_DELTA_TOWER_ANGLE      "Tower Angle Trim"
+    #define STRING_DELTA_ENDSTOP          "Endstop Adjustments"
     #define STRING_PROBE_OFFSET           "プローブオフセット"
     #define STRING_LIN_ADVANCE            "Linear Advance"
-    #define STRING_FILAMENT_SETTING       "Filament Diameter"
     #define STRING_CURRENT_SETTING        "ドライバー電流 (mA)"
-    #define STRING_BUMP_SENSITIVITY       "TMC バンプ感度"
     #define STRING_HYBRID_THRESHOLD       "TMC HybridThreshold"
-    #define STRING_STEALTH_CHOP           "TMC StealthChop"
+    #define STRING_BUMP_SENSITIVITY       "TMC バンプ感度"
+    #define STRING_MBL_OFFSET             "MBL Offset"
+
+    // Machine Parameter Settings - Param Attributes (ordered by gcode)
     #define STRING_PRINT_ACCELERATION     "印刷加速度"
     #define STRING_RETRACT_ACCELERATION   "引き戻し加速度"
     #define STRING_TRAVEL_ACCELERATION    "空振り加速度"
@@ -71,7 +74,6 @@
     #define STRING_SWAP_RECOVER_LENGTH    "交換時の余分な押し出し長さ"
     #define STRING_RECOVER_FEEDRATE       "押出速度"
     #define STRING_SWAP_RECOVER_FEEDRATE  "交換時の押出速度"
-    #define STRING_MBL_OFFSET             "MBL Offset"
 
     // Save / Load
     #define STRING_SAVE                   "保存"

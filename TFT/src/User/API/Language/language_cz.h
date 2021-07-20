@@ -38,10 +38,11 @@
     #define STRING_END_GCODE_ENABLED      "Spustit Gcode po tisku"
     #define STRING_CANCEL_GCODE_ENABLED   "Spustit Gcode po stornu"
 
-    // Machine Parameter Settings
+    // Machine Parameter Settings - Param Title (ordered by gcode)
     #define STRING_STEPS_SETTING          "Kroků/mm"
-    #define STRING_MAXFEEDRATE            "Max rychlost"
+    #define STRING_FILAMENT_SETTING       "Průměr Filamentu"
     #define STRING_MAXACCELERATION        "Max zrychlení"
+    #define STRING_MAXFEEDRATE            "Max rychlost"
     #define STRING_ACCELERATION           "Zrychlení"
     #define STRING_JERK                   "Jerk-trhnutí"
     #define STRING_JUNCTION_DEVIATION     "Junction Deviation"
@@ -49,17 +50,19 @@
     #define STRING_FWRETRACT              "FW Zatažení"
     #define STRING_FWRECOVER              "FW Obnovení"
     #define STRING_RETRACT_AUTO           "Auto Firmware Retract"
-    #define STRING_DELTA_CONFIGURATION           "Delta Configuration"
-    #define STRING_DELTA_TOWER_ANGLE           "Tower Angle Trim"
-    #define STRING_DELTA_ENDSTOP           "Endstop Adjustments"
     #define STRING_HOTEND_OFFSET          "Offset 2.trysky"
+    #define STRING_STEALTH_CHOP           "TMC Tichý režim"
+    #define STRING_DELTA_CONFIGURATION    "Delta Configuration"
+    #define STRING_DELTA_TOWER_ANGLE      "Tower Angle Trim"
+    #define STRING_DELTA_ENDSTOP          "Endstop Adjustments"
     #define STRING_PROBE_OFFSET           "Offset sondy"
     #define STRING_LIN_ADVANCE            "Linear Advance"
-    #define STRING_FILAMENT_SETTING       "Průměr Filamentu"
     #define STRING_CURRENT_SETTING        "TMC Proud motorů(mA)"
-    #define STRING_BUMP_SENSITIVITY       "TMC Citlivost dorazu"
     #define STRING_HYBRID_THRESHOLD       "TMC Hybridní práh"
-    #define STRING_STEALTH_CHOP           "TMC Tichý režim"
+    #define STRING_BUMP_SENSITIVITY       "TMC Citlivost dorazu"
+    #define STRING_MBL_OFFSET             "MBL Offset"
+
+    // Machine Parameter Settings - Param Attributes (ordered by gcode)
     #define STRING_PRINT_ACCELERATION     "Zrychlení při tisku"
     #define STRING_RETRACT_ACCELERATION   "Zrychlení retrakcí"
     #define STRING_TRAVEL_ACCELERATION    "Zrychlení při přesunu"
@@ -71,7 +74,6 @@
     #define STRING_SWAP_RECOVER_LENGTH    "Délka obnovení Swap"
     #define STRING_RECOVER_FEEDRATE       "Rychlost obnovení"
     #define STRING_SWAP_RECOVER_FEEDRATE  "Rychlost obnovení Swap"
-    #define STRING_MBL_OFFSET             "MBL Offset"
 
     // Save / Load
     #define STRING_SAVE                   "Uložit"

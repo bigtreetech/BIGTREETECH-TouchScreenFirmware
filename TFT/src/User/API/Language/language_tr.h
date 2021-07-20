@@ -38,10 +38,11 @@
     #define STRING_END_GCODE_ENABLED      "Bitiş gcodeu kullan"
     #define STRING_CANCEL_GCODE_ENABLED   "İptal gcodeu kullan"
 
-    // Machine Parameter Settings
+    // Machine Parameter Settings - Param Title (ordered by gcode)
     #define STRING_STEPS_SETTING          "mm/adım"
-    #define STRING_MAXFEEDRATE            "Maks. İlerleme Hızı"
+    #define STRING_FILAMENT_SETTING       "Filament Diameter"
     #define STRING_MAXACCELERATION        "Maks. İvmelenme"
+    #define STRING_MAXFEEDRATE            "Maks. İlerleme Hızı"
     #define STRING_ACCELERATION           "İvmelenme"
     #define STRING_JERK                   "Jerk"
     #define STRING_JUNCTION_DEVIATION     "Junction Deviation"
@@ -49,17 +50,19 @@
     #define STRING_FWRETRACT              "Yazılım Geriçekmesi"
     #define STRING_FWRECOVER              "Yazılım Geriitmesi"
     #define STRING_RETRACT_AUTO           "Oto. yazılım geriçekmesi"
-    #define STRING_DELTA_CONFIGURATION           "Delta Configuration"
-    #define STRING_DELTA_TOWER_ANGLE           "Tower Angle Trim"
-    #define STRING_DELTA_ENDSTOP           "Endstop Adjustments"
     #define STRING_HOTEND_OFFSET          "2. Nozül Mesafesi"
+    #define STRING_STEALTH_CHOP           "TMC StealthChop"
+    #define STRING_DELTA_CONFIGURATION    "Delta Configuration"
+    #define STRING_DELTA_TOWER_ANGLE      "Tower Angle Trim"
+    #define STRING_DELTA_ENDSTOP          "Endstop Adjustments"
     #define STRING_PROBE_OFFSET           "Prob Offseti"
     #define STRING_LIN_ADVANCE            "Linear Advance"
-    #define STRING_FILAMENT_SETTING       "Filament Diameter"
     #define STRING_CURRENT_SETTING        "Sürücü Akımı (mA)"
-    #define STRING_BUMP_SENSITIVITY       "TMC Çarpma Hassasiyeti"
     #define STRING_HYBRID_THRESHOLD       "TMC Hibrit Eşiği"
-    #define STRING_STEALTH_CHOP           "TMC StealthChop"
+    #define STRING_BUMP_SENSITIVITY       "TMC Çarpma Hassasiyeti"
+    #define STRING_MBL_OFFSET             "MBL Offset"
+
+    // Machine Parameter Settings - Param Attributes (ordered by gcode)
     #define STRING_PRINT_ACCELERATION     "Baskı İvme"
     #define STRING_RETRACT_ACCELERATION   "Geriçekme İvme"
     #define STRING_TRAVEL_ACCELERATION    "Gezinti İvme"
@@ -71,7 +74,6 @@
     #define STRING_SWAP_RECOVER_LENGTH    "Ekstra geriitme değişim mesafesi"
     #define STRING_RECOVER_FEEDRATE       "Geriitme hızı"
     #define STRING_SWAP_RECOVER_FEEDRATE  "Geriitme değişim hızı"
-    #define STRING_MBL_OFFSET             "MBL Offset"
 
     // Save / Load
     #define STRING_SAVE                   "Kaydet"

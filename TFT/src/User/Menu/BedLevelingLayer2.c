@@ -1,11 +1,6 @@
 #include "BedLevelingLayer2.h"
 #include "includes.h"
 
-void ProbeWarning(void)
-{
-  ablStart();  
-}
-
 void menuBedLevelingLayer2(void)
 {
   MENUITEMS bedLevelingLayer2Items = {
@@ -79,14 +74,18 @@ void menuBedLevelingLayer2(void)
     {
       case KEY_ICON_0:
         if (infoMachineSettings.leveling < BL_MBL && !(REMOVABLE_PROBE))  // if ABL
+        {
           ablStart();
+        }
         else if (infoMachineSettings.leveling < BL_MBL && REMOVABLE_PROBE)  // if ABL and removal probe
         {
           setDialogText(LABEL_WARNING, LABEL_CONNECT_PROBE, LABEL_CONTINUE, LABEL_CANCEL);
-          showDialog(DIALOG_TYPE_ALERT, ProbeWarning, NULL, NULL);
+          showDialog(DIALOG_TYPE_ALERT, ablStart, NULL, NULL);
         }
-        else                                        // if MBL
+        else  // if MBL
+        {
           infoMenu.menu[++infoMenu.cur] = menuMBL;
+        }
         break;
 
       case KEY_ICON_1:

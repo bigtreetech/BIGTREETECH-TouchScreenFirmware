@@ -38,10 +38,11 @@
     #define STRING_END_GCODE_ENABLED      "Inserisci end gcode"
     #define STRING_CANCEL_GCODE_ENABLED   "Script canc. stampa"
 
-    // Machine Parameter Settings
+    // Machine Parameter Settings - Param Title (ordered by gcode)
     #define STRING_STEPS_SETTING          "Step per mm"
-    #define STRING_MAXFEEDRATE            "Feedrate massimo"
+    #define STRING_FILAMENT_SETTING       "Diametro filamento"
     #define STRING_MAXACCELERATION        "Accelerazione massima"
+    #define STRING_MAXFEEDRATE            "Feedrate massimo"
     #define STRING_ACCELERATION           "Accelerazione"
     #define STRING_JERK                   "Jerk"
     #define STRING_JUNCTION_DEVIATION     "Junction deviation"
@@ -49,17 +50,19 @@
     #define STRING_FWRETRACT              "Retrazione firmware"
     #define STRING_FWRECOVER              "Retrazione firmware rec."
     #define STRING_RETRACT_AUTO           "Retrazione firmware"
-    #define STRING_DELTA_CONFIGURATION           "Delta Configuration"
-    #define STRING_DELTA_TOWER_ANGLE           "Tower Angle Trim"
-    #define STRING_DELTA_ENDSTOP           "Endstop Adjustments"
     #define STRING_HOTEND_OFFSET          "Offset secondo hotend"
+    #define STRING_STEALTH_CHOP           "TMC StealthChop"
+    #define STRING_DELTA_CONFIGURATION    "Delta Configuration"
+    #define STRING_DELTA_TOWER_ANGLE      "Tower Angle Trim"
+    #define STRING_DELTA_ENDSTOP          "Endstop Adjustments"
     #define STRING_PROBE_OFFSET           "Probe offset"
     #define STRING_LIN_ADVANCE            "Linear advance"
-    #define STRING_FILAMENT_SETTING       "Diametro filamento"
     #define STRING_CURRENT_SETTING        "Corrente driver (mA)"
-    #define STRING_BUMP_SENSITIVITY       "Sens.sensorless homing"
     #define STRING_HYBRID_THRESHOLD       "Hybrid threshold"
-    #define STRING_STEALTH_CHOP           "TMC StealthChop"
+    #define STRING_BUMP_SENSITIVITY       "Sens.sensorless homing"
+    #define STRING_MBL_OFFSET             "MBL Offset"
+
+    // Machine Parameter Settings - Param Attributes (ordered by gcode)
     #define STRING_PRINT_ACCELERATION     "Acc. in stampa"
     #define STRING_RETRACT_ACCELERATION   "Acc. retrazione"
     #define STRING_TRAVEL_ACCELERATION    "Acc. spostamenti"
@@ -71,7 +74,6 @@
     #define STRING_SWAP_RECOVER_LENGTH    "Lung. di recupero scambio extra"
     #define STRING_RECOVER_FEEDRATE       "Feedrate recupero"
     #define STRING_SWAP_RECOVER_FEEDRATE  "Rec.feedrate di scambio"
-    #define STRING_MBL_OFFSET             "MBL Offset"
 
     // Save / Load
     #define STRING_SAVE                   "Salva"

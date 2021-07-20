@@ -38,10 +38,11 @@
     #define STRING_END_GCODE_ENABLED      "Befejező G-Kód"
     #define STRING_CANCEL_GCODE_ENABLED   "Leállító G-Kód"
 
-    // Machine Parameter Settings
+    // Machine Parameter Settings - Param Title (ordered by gcode)
     #define STRING_STEPS_SETTING          "Lépés beállítás"
-    #define STRING_MAXFEEDRATE            "Max előtolási sebesség"
+    #define STRING_FILAMENT_SETTING       "Filament átmérő"
     #define STRING_MAXACCELERATION        "Max gyorsulás"
+    #define STRING_MAXFEEDRATE            "Max előtolási sebesség"
     #define STRING_ACCELERATION           "Gyorsulás"
     #define STRING_JERK                   "Rántás"
     #define STRING_JUNCTION_DEVIATION     "Keresztezés eltérés"
@@ -49,17 +50,19 @@
     #define STRING_FWRETRACT              "FW Visszahúzás"
     #define STRING_FWRECOVER              "FW Visszanyomás"
     #define STRING_RETRACT_AUTO           "Automata visszahúz."
-    #define STRING_DELTA_CONFIGURATION           "Delta Configuration"
-    #define STRING_DELTA_TOWER_ANGLE           "Tower Angle Trim"
-    #define STRING_DELTA_ENDSTOP           "Endstop Adjustments"
     #define STRING_HOTEND_OFFSET          "Második fej eltolása"
+    #define STRING_STEALTH_CHOP           "TMC StealthChop"
+    #define STRING_DELTA_CONFIGURATION    "Delta Configuration"
+    #define STRING_DELTA_TOWER_ANGLE      "Tower Angle Trim"
+    #define STRING_DELTA_ENDSTOP          "Endstop Adjustments"
     #define STRING_PROBE_OFFSET           "Szonda eltolás"
     #define STRING_LIN_ADVANCE            "Lineáris haladás"
-    #define STRING_FILAMENT_SETTING       "Filament átmérő"
     #define STRING_CURRENT_SETTING        "Motoráramok beállítása"
-    #define STRING_BUMP_SENSITIVITY       "TMC Ütközés érzékenység"
     #define STRING_HYBRID_THRESHOLD       "TMC Hibrid küszöbérték"
-    #define STRING_STEALTH_CHOP           "TMC StealthChop"
+    #define STRING_BUMP_SENSITIVITY       "TMC Ütközés érzékenység"
+    #define STRING_MBL_OFFSET             "MBL Eltolás"
+
+    // Machine Parameter Settings - Param Attributes (ordered by gcode)
     #define STRING_PRINT_ACCELERATION     "Nyomtatás gyorsulás"
     #define STRING_RETRACT_ACCELERATION   "Visszahúzás gyorsulás"
     #define STRING_TRAVEL_ACCELERATION    "Utazási gyorsulás"
@@ -71,7 +74,6 @@
     #define STRING_SWAP_RECOVER_LENGTH    "Cserehossz javítás"
     #define STRING_RECOVER_FEEDRATE       "Előtolás javítás"
     #define STRING_SWAP_RECOVER_FEEDRATE  "Csere előtolás jav."
-    #define STRING_MBL_OFFSET             "MBL Eltolás"
 
     // Save / Load
     #define STRING_SAVE                   "Mentés"

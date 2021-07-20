@@ -1,7 +1,7 @@
 #include "UnifiedMove.h"
 #include "includes.h"
 
-void DeltaCalibration(void)
+void deltaCalibration(void)
 {
   mustStoreCmd("G33\n");
 }
@@ -18,8 +18,8 @@ void menuUnifiedMove(void)
       {ICON_EXTRUDE,                 LABEL_EXTRUDE},
       {ICON_DISABLE_STEPPERS,        LABEL_DISABLE_STEPPERS},
       {ICON_BABYSTEP,                LABEL_BABYSTEP},
-      #ifdef DELTA_PRINTER
-        {ICON_CALIBRATION,            ICON_CALIBRATION},
+      #if DELTA_PRINTER
+        {ICON_CALIBRATION,             LABEL_CALIBRATION},
       #else
         {ICON_MANUAL_LEVEL,            LABEL_LEVELING},
       #endif
@@ -64,16 +64,16 @@ void menuUnifiedMove(void)
         break;
 
       case KEY_ICON_5:
-        if (DELTA_PRINTER && !(REMOVABLE_PROBE))
-        mustStoreCmd("G33\n");
-        else
-        if (DELTA_PRINTER && REMOVABLE_PROBE)
-        {
-        setDialogText(LABEL_WARNING, LABEL_CONNECT_PROBE, LABEL_CONTINUE, LABEL_CANCEL);
-        showDialog(DIALOG_TYPE_ALERT, DeltaCalibration, NULL, NULL);
-        }
-        else
-        infoMenu.menu[++infoMenu.cur] = menuManualLeveling;
+        #if DELTA_PRINTER
+          #if REMOVABLE_PROBE
+            setDialogText(LABEL_WARNING, LABEL_CONNECT_PROBE, LABEL_CONTINUE, LABEL_CANCEL);
+            showDialog(DIALOG_TYPE_ALERT, deltaCalibration, NULL, NULL);
+          #else
+            deltaCalibration();
+          #endif
+        #else
+          infoMenu.menu[++infoMenu.cur] = menuManualLeveling;
+        #endif
         break;
 
       case KEY_ICON_6:
