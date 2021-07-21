@@ -726,12 +726,12 @@
  * Terminal Keyboard / Numpad Color Layout
  * Color layout for the Terminal Keyboard / Numpad.
  *
- *   Options: [Default: 0, Invert: 1, High-Contrast: 2]
+ *   Options: [Default: 0, Invert: 1, High Contrast: 2]
  *     Default:       The keyboard follows system background and border colors.
  *                    (Material Dark if KEYBOARD_MATERIAL_THEME is enabled).
  *     Invert:        The keyboard is drawn with background swapped with border colors.
  *                    (Material Light if KEYBOARD_MATERIAL_THEME is enabled).
- *     High-Contrast: Use white and black colors for high contrast.
+ *     High Contrast: Use white and black colors for high contrast.
  */
 #define KEYBOARD_COLOR_LAYOUT 0  // Default: 0
 
@@ -739,10 +739,10 @@
  * Terminal Text Display Color Scheme
  * Color scheme for the Terminal text display.
  *
- *   Options: [Material Dark: 0, Material Light: 1, High-Contrast: 2]
+ *   Options: [Material Dark: 0, Material Light: 1, High Contrast: 2]
  *     Material Dark:  Dark background with light font color and orange command font color.
  *     Material Light: Light background with dark font color and orange command font color.
- *     High-Contrast:  Black background with white font color and orange command font color.
+ *     High Contrast:  Black background with white font color and orange command font color.
  */
 #define TERMINAL_COLOR_SCHEME 0  // Default: 0
 
@@ -787,10 +787,10 @@
  *       If you choose "Base64 PNG" on such a low RAM device it will automatically downgraded to
  *       "RGB565 bitmap" option.
  *
- *   Options: [classic: 0, RGB565 bitmap: 1, Base64 PNG: 2]
- *     classic:       RGB565 bitmaps for all possible thumbnail sizes are embedded in the gcode
+ *   Options: [Classic: 0, RGB565 Bitmap: 1, Base64 PNG: 2]
+ *     Classic:       RGB565 bitmaps for all possible thumbnail sizes are embedded in the gcode
  *                    file at fixed file offsets. It is fastest to parse but least flexible.
- *     RGB565 bitmap: A specific thumbnail comment identifies the location of a single 'classic'
+ *     RGB565 Bitmap: A specific thumbnail comment identifies the location of a single 'classic'
  *                    embedded RB565 bitmap thumbnail. It is almost as fast as classic and
  *                    flexible but requires a dedicated post-processing of gcode files for
  *                    most slicers. "Classic" is used as fallback.
