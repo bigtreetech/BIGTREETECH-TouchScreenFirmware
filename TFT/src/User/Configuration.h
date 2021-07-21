@@ -21,11 +21,11 @@
 
 /**
  * Baudrate / Connection speed
- * This baudrate setting is used for serial connection
- * to the printer and other serial hosts like ESP8266.
+ * This baudrate setting is used for serial connection to the printer and other serial
+ * hosts like ESP8266.
  *
- * NOTE: 250000 works in most cases, but you might try a lower speed
- *       if you commonly experience drop-outs during host printing.
+ * NOTE: 250000 works in most cases, but you might try a lower speed if you commonly
+ *       experience drop-outs during host printing.
  *       You may try up to 1000000 to speed up SD file transfer.
  *
  *   Options: [2400: 0, 9600: 1, 19200: 2, 38400: 3, 57600: 4, 115200: 5, 250000: 6, 500000: 7, 1000000: 8]
@@ -77,8 +77,8 @@
 
 /**
  * Emulate M600
- * The TFT intercepts the M600 gcode (filament change) and emulates
- * the logic instead of demanding it to Marlin firmware.
+ * The TFT intercepts the M600 gcode (filament change) and emulates the logic instead of
+ * demanding it to Marlin firmware.
  *
  * NOTE: Enable it, in case Marlin firmware does not properly support M600 on the mainboard.
  *
@@ -104,8 +104,8 @@
 /**
  * Serial Always ON
  * Keep UART (serial communication) alive in Marlin Mode.
- * Allows seamless OctoPrint UART connection to the TFT's UART/serial
- * expansion port no matter which mode the TFT is in.
+ * Allows seamless OctoPrint UART connection to the TFT's UART/serial expansion port
+ * no matter which mode the TFT is in.
  *
  *   Options: [enable: true, disable: false]
  */
@@ -271,8 +271,8 @@
 /**
  * Auto Save/Load Bed Leveling Data
  * The TFT will auto-detect if Auto Bed Level is available.
- * Enable this will send "M500" after "G29" to store leveling value
- * and send "M420 S1" to enable leveling state after startup.
+ * Enable this will send "M500" after "G29" to store leveling value and send "M420 S1"
+ * to enable leveling state after startup.
  *
  *   Options: [enable: true, disable: false]
  */
@@ -416,8 +416,8 @@
 
 /**
  * Default LCD Idle Time (only for TFT28 V3.0, TFT35 E3.0, TFT43 V3.0, TFT50 V3.0 & TFT70 V3.0)
- * The LCD screen will dim to idle brightness, if the display
- * is not touched for the period of the lcd idle timer.
+ * The LCD screen will dim to idle brightness, if the display is not touched for the
+ * period of the lcd idle timer.
  *
  *   Options: [off: 0, 5sec: 1, 10sec: 2, 30sec: 3, 1min: 4, 2min: 5, 5min: 6, CUSTOM: 7]
  */
@@ -617,8 +617,8 @@
  * Default Primary Language (for Touch-Mode only)
  * Select the language to display on the LCD while in Touch Mode.
  *
- * NOTE: To add/flash a second language copy the required "language_xx.ini"
- *       file from "Language Packs" folder to the SD root folder.
+ * NOTE: To add/flash a second language copy the required "language_xx.ini" file from
+ *       "Language Packs" folder to the SD root folder.
  *       Then press on the reset button to load/flash the copied language file.
  *
  *   Options: [ENGLISH,    CHINESE,  RUSSIAN,     JAPANESE,   ARMENIAN,  GERMAN,        CZECH,
