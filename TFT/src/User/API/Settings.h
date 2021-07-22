@@ -166,12 +166,12 @@ typedef struct
 
   uint16_t level_feedrate[FEEDRATE_COUNT - 1];  // XY, Z
 
-  // Power Supply Settings (if connected to TFT controller only)
+  // Power Supply Settings (only if connected to TFT controller)
   uint8_t  auto_off;
   uint8_t  ps_active_high;
   uint8_t  auto_off_temp;
 
-  // Filament Runout Settings (if connected to TFT controller only)
+  // Filament Runout Settings (only if connected to TFT controller)
   uint8_t  runout;
   uint8_t  runout_invert;
   uint16_t runout_noise_ms;

@@ -875,7 +875,7 @@ void parseConfigKey(uint16_t index)
       break;
     }
 
-    //----------------------------Power Supply Settings (if connected to TFT controller only)
+    //----------------------------Power Supply Settings (only if connected to TFT controller)
 
     #ifdef PS_ON_PIN
       case C_INDEX_PS_ON:
@@ -891,7 +891,7 @@ void parseConfigKey(uint16_t index)
         break;
     #endif
 
-    //----------------------------Filament Runout Settings (if connected to TFT controller only)
+    //----------------------------Filament Runout Settings (only if connected to TFT controller)
 
     #ifdef FIL_RUNOUT_PIN
       case C_INDEX_RUNOUT:

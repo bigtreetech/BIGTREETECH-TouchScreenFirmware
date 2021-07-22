@@ -98,11 +98,11 @@ extern "C" {
 #define CONFIG_PREHEAT_TEMP_4         "preheat_temp4:"
 #define CONFIG_PREHEAT_TEMP_5         "preheat_temp5:"
 #define CONFIG_PREHEAT_TEMP_6         "preheat_temp6:"
-//-----------------------------Power Supply Settings (if connected to TFT controller only)
+//-----------------------------Power Supply Settings (only if connected to TFT controller)
 #define CONFIG_PS_ON                  "ps_on:"
 #define CONFIG_PS_LOGIC               "ps_on_active_high:"
 #define CONFIG_SHUTDOWN_TEMP          "auto_shutdown_temp:"
-//-----------------------------Filament Runout Settings (if connected to TFT controller only)
+//-----------------------------Filament Runout Settings (only if connected to TFT controller)
 #define CONFIG_RUNOUT                 "fil_runout:"
 #define CONFIG_RUNOUT_LOGIC           "fil_runout_inverting:"
 #define CONFIG_RUNOUT_NOISE           "fil_noise_threshold:"

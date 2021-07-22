@@ -308,7 +308,7 @@
 
 //================================================================================
 //============================ Power Supply Settings =============================
-//==================== (if connected to TFT controller only) =====================
+//==================== (only if connected to TFT controller) =====================
 //================================================================================
 
 /**
@@ -330,7 +330,7 @@
 
 //================================================================================
 //=========================== Filament Runout Settings ===========================
-//==================== (if connected to TFT controller only) =====================
+//==================== (only if connected to TFT controller) =====================
 //================================================================================
 
 /**
@@ -621,7 +621,7 @@
  *
  * NOTE: To add/flash a second language copy the required "language_xx.ini" file from
  *       "Language Packs" folder to the SD root folder.
- *       Then press on the reset button to load/flash the copied language file.
+ *       Then press the reset button to load/flash the copied language file.
  *
  *   Options: [ENGLISH,    CHINESE,  RUSSIAN,     JAPANESE,   ARMENIAN,  GERMAN,        CZECH,
  *             SPANISH,    FRENCH,   PORTUGUESE,  ITALIAN,    POLISH,    SLOVAK,        DUTCH,

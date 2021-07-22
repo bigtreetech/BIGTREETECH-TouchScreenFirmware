@@ -92,12 +92,12 @@ void infoSettingsReset(void)
   infoSettings.z_raise_probing        = PROBING_Z_RAISE;
   infoSettings.z_steppers_alignment   = DISABLED;
 
-// Power Supply Settings (if connected to TFT controller only)
+// Power Supply Settings (only if connected to TFT controller)
   infoSettings.auto_off               = DISABLED;
   infoSettings.ps_active_high         = PS_ON_ACTIVE_HIGH;
   infoSettings.auto_off_temp          = AUTO_SHUT_DOWN_MAXTEMP;
 
-// Filament Runout Settings (if connected to TFT controller only)
+// Filament Runout Settings (only if connected to TFT controller)
   infoSettings.runout                 = FIL_SENSOR_TYPE;
   infoSettings.runout_invert          = FIL_RUNOUT_INVERTING;
   infoSettings.runout_noise_ms        = FIL_NOISE_THRESHOLD;
