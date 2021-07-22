@@ -77,8 +77,8 @@
 
 /**
  * Emulate M600
- * The TFT intercepts the M600 gcode (filament change) and emulates the logic instead of
- * demanding it to Marlin firmware.
+ * The TFT intercepts the M600 gcode (filament change) and emulates the handling logic
+ * otherwise provided by Marlin firmware.
  *
  * NOTE: Enable it, in case Marlin firmware does not properly support M600 on the mainboard.
  *
