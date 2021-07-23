@@ -71,7 +71,7 @@ void drawSelectedMode(int8_t nowMode)
 
 void loopCheckMode(void)
 {
-//  #ifndef CLEAN_MODE_SWITCHING_SUPPORT
+//  #ifndef SERIAL_ALWAYS_ON
 //  IDEALLY I would like to be able to swap even when the TFT is in printing mode
 //  but before I can allow that I need a way to make sure that we swap back into
 //  the right mode (and correct screen) and I really want a reliable way to DETECT

@@ -30,11 +30,11 @@ typedef enum
 // Config version support
 // change if new elements/keywords are added/removed/changed in the configuration.h Format YYYYMMDD
 // this number should match CONFIG_VERSION in configuration.h
-#define CONFIG_SUPPPORT 20210711
+#define CONFIG_SUPPPORT 20210721
 
 #define FONT_FLASH_SIGN       20210522  // (YYYYMMDD) change if fonts require updating
-#define CONFIG_FLASH_SIGN     20210615  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
-#define LANGUAGE_FLASH_SIGN   20210711  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
+#define CONFIG_FLASH_SIGN     20210721  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
+#define LANGUAGE_FLASH_SIGN   20210721  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
 #define ICON_FLASH_SIGN       20210711  // (YYYYMMDD) change if any icon(s) is added or removed
 
 #define FONT_CHECK_SIGN       (FONT_FLASH_SIGN + WORD_UNICODE + FLASH_SIGN_ADDR)
@@ -86,10 +86,10 @@ typedef enum
 typedef struct
 {
   // General Settings
-  uint8_t status_screen;
-  uint8_t baudrate;
-  uint8_t multi_serial;
-  uint8_t language;
+  uint8_t  status_screen;
+  uint8_t  baudrate;
+  uint8_t  multi_serial;
+  uint8_t  language;
 
   uint16_t title_bg_color;
   uint16_t bg_color;
@@ -103,18 +103,20 @@ typedef struct
   uint16_t mesh_max_color;
   uint8_t  terminal_color_scheme;
 
-  uint8_t rotate_ui;
-  uint8_t terminalACK;
-  uint8_t invert_axis[AXIS_NUM];
-  uint8_t leveling_invert_y_axis;
-  uint8_t persistent_info;
-  uint8_t file_listmode;
-  uint8_t files_sort_by;
-  uint8_t ack_notification;
-  uint8_t notification_m117;
-  uint8_t emulate_m600;
+  uint8_t  rotate_ui;
+  uint8_t  terminalACK;
+  uint8_t  invert_axis[AXIS_NUM];
+  uint8_t  leveling_invert_y_axis;
+  uint8_t  persistent_info;
+  uint8_t  fan_percentage;
+  uint8_t  file_listmode;
+  uint8_t  files_sort_by;
+  uint8_t  ack_notification;
+  uint8_t  notification_m117;
+  uint8_t  emulate_m600;
+  uint8_t  prog_disp_type;
 
-  // Marlin Mode Settings
+  // Marlin Mode Settings (only for TFT24_V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70_V3.0)
   uint8_t  mode;
   uint8_t  serial_alwaysOn;
   uint16_t marlin_mode_bg_color;
@@ -123,7 +125,7 @@ typedef struct
   uint8_t  marlin_mode_showtitle;
   uint8_t  marlin_type;
 
-  // rrf mode settings
+  // RRF Mode Settings
   uint8_t  rrf_macros_enable;
 
   // Printer / Machine Settings
@@ -147,8 +149,6 @@ typedef struct
   uint8_t  m27_refresh_time;
   uint8_t  m27_active;
   uint8_t  longFileName;
-  uint8_t  fan_percentage;
-  uint8_t  prog_disp_type;
   float    pause_retract_len;
   float    resume_purge_len;
   float    pause_pos[AXIS_NUM-1];  // X, Y
@@ -166,12 +166,12 @@ typedef struct
 
   uint16_t level_feedrate[FEEDRATE_COUNT - 1];  // XY, Z
 
-  // Power Supply Settings
+  // Power Supply Settings (only if connected to TFT controller)
   uint8_t  auto_off;
   uint8_t  ps_active_high;
   uint8_t  auto_off_temp;
 
-  // Filament Runout Settings
+  // Filament Runout Settings (only if connected to TFT controller)
   uint8_t  runout;
   uint8_t  runout_invert;
   uint16_t runout_noise_ms;

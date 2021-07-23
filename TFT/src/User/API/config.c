@@ -614,6 +614,10 @@ void parseConfigKey(uint16_t index)
       infoSettings.persistent_info = getOnOff();
       break;
 
+    case C_INDEX_FAN_PERCENT:
+      infoSettings.fan_percentage = getOnOff();
+      break;
+
     case C_INDEX_LIST_MODE:
       infoSettings.file_listmode = getOnOff();
       break;
@@ -632,6 +636,10 @@ void parseConfigKey(uint16_t index)
 
     case C_INDEX_EMULATE_M600:
       infoSettings.emulate_m600 = getOnOff();
+      break;
+
+    case C_INDEX_PROG_DISP_TYPE:
+      SET_VALID_INT_VALUE(infoSettings.prog_disp_type, 0, 2);
       break;
 
     //----------------------------Marlin Mode Settings (only for TFT24_V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70_V3.0)
@@ -789,14 +797,6 @@ void parseConfigKey(uint16_t index)
       SET_VALID_INT_VALUE(infoSettings.longFileName, 0, 2);
       break;
 
-    case C_INDEX_FAN_PERCENT:
-      infoSettings.fan_percentage = getOnOff();
-      break;
-
-    case C_INDEX_PROG_DISP_TYPE:
-      SET_VALID_INT_VALUE(infoSettings.prog_disp_type, 0, 2);
-      break;
-
     case C_INDEX_PAUSE_RETRACT:
       if (key_seen("R")) SET_VALID_FLOAT_VALUE(infoSettings.pause_retract_len, MIN_RETRACT_LIMIT, MAX_RETRACT_LIMIT);
       if (key_seen("P")) SET_VALID_FLOAT_VALUE(infoSettings.resume_purge_len, MIN_RETRACT_LIMIT, MAX_RETRACT_LIMIT);
@@ -875,7 +875,7 @@ void parseConfigKey(uint16_t index)
       break;
     }
 
-    //----------------------------Power Supply Settings (if connected to TFT controller)
+    //----------------------------Power Supply Settings (only if connected to TFT controller)
 
     #ifdef PS_ON_PIN
       case C_INDEX_PS_ON:
@@ -891,7 +891,7 @@ void parseConfigKey(uint16_t index)
         break;
     #endif
 
-    //----------------------------Filament Runout Settings (if connected to TFT controller)
+    //----------------------------Filament Runout Settings (only if connected to TFT controller)
 
     #ifdef FIL_RUNOUT_PIN
       case C_INDEX_RUNOUT:

@@ -47,6 +47,7 @@ typedef enum
 {
   SKEY_TERMINAL_ACK = 0,
   SKEY_PERSISTENT_INFO,
+  SKEY_FAN_SPEED_PERCENT,
   SKEY_FILE_LIST_MODE,
   SKEY_FILE_SORT_BY,
   SKEY_ACK_NOTIFICATION,
@@ -54,7 +55,6 @@ typedef enum
   SKEY_SERIAL_ALWAYS_ON,
   SKEY_SPEED,
   SKEY_AUTO_LOAD_LEVELING,
-  SKEY_FAN_SPEED_PERCENT,
   SKEY_XY_OFFSET_PROBING,
   SKEY_Z_STEPPERS_ALIGNMENT,
 
@@ -100,6 +100,10 @@ void updateFeatureSettings(uint8_t item_index)
       infoSettings.persistent_info = (infoSettings.persistent_info + 1) % ITEM_TOGGLE_NUM;
       break;
 
+    case SKEY_FAN_SPEED_PERCENT:
+      infoSettings.fan_percentage = (infoSettings.fan_percentage + 1) % ITEM_TOGGLE_NUM;
+      break;
+
     case SKEY_FILE_LIST_MODE:
       infoSettings.file_listmode = (infoSettings.file_listmode + 1) % ITEM_TOGGLE_NUM;
       break;
@@ -126,10 +130,6 @@ void updateFeatureSettings(uint8_t item_index)
 
     case SKEY_AUTO_LOAD_LEVELING:
       infoSettings.auto_load_leveling = (infoSettings.auto_load_leveling + 1) % ITEM_TOGGLE_NUM;
-      break;
-
-    case SKEY_FAN_SPEED_PERCENT:
-      infoSettings.fan_percentage = (infoSettings.fan_percentage + 1) % ITEM_TOGGLE_NUM;
       break;
 
     case SKEY_XY_OFFSET_PROBING:
@@ -216,6 +216,10 @@ void loadFeatureSettings(LISTITEM * item, uint16_t item_index, uint8_t itemPos)
         item->icon = iconToggle[infoSettings.persistent_info];
         break;
 
+      case SKEY_FAN_SPEED_PERCENT:
+        item->icon = iconToggle[infoSettings.fan_percentage];
+        break;
+
       case SKEY_FILE_LIST_MODE:
         item->icon = iconToggle[infoSettings.file_listmode];
         break;
@@ -242,10 +246,6 @@ void loadFeatureSettings(LISTITEM * item, uint16_t item_index, uint8_t itemPos)
 
       case SKEY_AUTO_LOAD_LEVELING:
         item->icon = iconToggle[infoSettings.auto_load_leveling];
-        break;
-
-      case SKEY_FAN_SPEED_PERCENT:
-        item->icon = iconToggle[infoSettings.fan_percentage];
         break;
 
       case SKEY_XY_OFFSET_PROBING:
@@ -332,6 +332,7 @@ void menuFeatureSettings(void)
   LISTITEM settingPage[SKEY_COUNT] = {
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_TERMINAL_ACK,           LABEL_BACKGROUND},
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_PERSISTENT_INFO,        LABEL_BACKGROUND},
+    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_FAN_SPEED_PERCENT,      LABEL_BACKGROUND},
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_FILE_LIST_MODE,         LABEL_BACKGROUND},
     {CHARICON_BLANK,       LIST_CUSTOMVALUE,   LABEL_FILE_SORT_BY,           LABEL_DYNAMIC},
     {CHARICON_BLANK,       LIST_CUSTOMVALUE,   LABEL_ACK_NOTIFICATION,       LABEL_DYNAMIC},
@@ -339,7 +340,6 @@ void menuFeatureSettings(void)
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_SERIAL_ALWAYS_ON,       LABEL_BACKGROUND},
     {CHARICON_BLANK,       LIST_CUSTOMVALUE,   LABEL_MOVE_SPEED,             LABEL_NORMAL},
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_AUTO_LOAD_LEVELING,     LABEL_BACKGROUND},
-    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_FAN_SPEED_PERCENT,      LABEL_BACKGROUND},
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_XY_OFFSET_PROBING,      LABEL_BACKGROUND},
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_Z_STEPPERS_ALIGNMENT,   LABEL_BACKGROUND},
 
