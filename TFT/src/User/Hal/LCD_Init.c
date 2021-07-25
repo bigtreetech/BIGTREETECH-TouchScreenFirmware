@@ -123,8 +123,10 @@
       {
         if (lcd_dim.dimmed)
         {
+          if (isPress())  // only in case of a press on the LCD (not on the encoder)
+            lcd_dim.waitKeyPress = true;
+
           lcd_dim.dimmed = false;
-          lcd_dim.waitKeyPress = true;
           Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
 
           #ifdef LED_COLOR_PIN
@@ -144,8 +146,8 @@
 
         if (!lcd_dim.dimmed)
         {
-          lcd_dim.dimmed = true;
           lcd_dim.waitKeyPress = false;
+          lcd_dim.dimmed = true;
           Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_idle_brightness]);
 
           #ifdef LED_COLOR_PIN
