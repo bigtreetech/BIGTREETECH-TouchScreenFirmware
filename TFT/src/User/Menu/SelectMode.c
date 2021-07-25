@@ -139,12 +139,16 @@ void menuMode(void)
       loopCheckEncoderSteps();
     #endif
 
-    #ifdef LCD_LED_PWM_CHANNEL
-      loopDimTimer();
-    #endif
-
     if (infoSettings.mode == MODE_SERIAL_TSC || infoSettings.serial_alwaysOn == 1)
+    {
       loopBackEnd();
+    }
+    #ifdef LCD_LED_PWM_CHANNEL  // loopDimTimer() is invoked by loopBackEnd(), so we guarantee it is invoked only once
+      else
+      {
+        loopDimTimer();
+      }
+    #endif
   }
 
   if (infoSettings.mode != nowMode)

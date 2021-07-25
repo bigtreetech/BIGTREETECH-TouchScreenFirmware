@@ -196,6 +196,13 @@ uint16_t KEY_GetValue(uint8_t total_rect, const GUI_RECT* menuRect)
       key_return = key_num;
       key_num = IDLE_TOUCH;
       firstPress = true;
+
+      #ifdef LCD_LED_PWM_CHANNEL
+        // if LCD is dimmed, skip the first touch to avoid any wrong action is performed
+        // and wait the LCD brightness is restored first
+        if (LCD_isDimmed())
+          key_return = IDLE_TOUCH;
+      #endif
     }
   }
   return key_return;

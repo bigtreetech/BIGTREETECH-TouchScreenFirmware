@@ -20,7 +20,7 @@
 #define ENABLE_STATUS_SCREEN true  // Default: true
 
 /**
- * Baudrate / Connection speed
+ * Baudrate / Connection Speed
  * This baudrate setting is used for serial connection to the printer and other serial
  * hosts like ESP8266.
  *
@@ -279,8 +279,8 @@
 #define AUTO_SAVE_LOAD_BL_VALUE true  // Default: true
 
 /**
- * TouchMI settings (on ABL menu)
- * Enable this option for settings TouchMI sensor on ABL Menu (Init, Z Offset, Save, Test).
+ * TouchMI settings (ABL)
+ * Enable this option for displaying TouchMI sensor settings in ABL menu (Init, Z Offset, Save, Test).
  *
  *   Options: [enable: true, disable: false]
  */
@@ -398,7 +398,7 @@
 //================================================================================
 
 /**
- * Knob LED Color (only for TFT28 V3.0, TFT35 E3.0, TFT43 V3.0, TFT50 V3.0 & TFT70 V3.0)
+ * Knob LED Color (only for TFT28 V3.0, TFT35 (E3) V3.0, TFT43 V3.0, TFT50 V3.0 & TFT70 V3.0)
  *
  *   Options: [OFF: 0, WHITE: 1, RED: 2, ORANGE: 3, YELLOW: 4, GREEN: 5, BLUE: 6, INDIGO: 7, VIOLET: 8]
  */
@@ -408,7 +408,7 @@
 #define KEEP_KNOB_LED_COLOR_MARLIN_MODE
 
 /**
- * Default LCD Brightness Levels (only for TFT28 V3.0, TFT35 E3.0, TFT43 V3.0, TFT50 V3.0 & TFT70 V3.0)
+ * Default LCD Brightness Levels (only for TFT28 V3.0, TFT35 (E3) V3.0, TFT43 V3.0, TFT50 V3.0 & TFT70 V3.0)
  * Default brightness values for LCD.
  *
  *   Options: [off: 0, 5%: 1, 10%: 2, 20%: 3, 30%: 4, 40%: 5, 50%: 6, 60%: 7, 70%: 8, 80%: 9, 90%: 10, 100%: 11]
@@ -417,7 +417,7 @@
 #define DEFAULT_LCD_IDLE_BRIGHTNESS   3  // Display brightness when device is idle (Default: 3)
 
 /**
- * Default LCD Idle Time (only for TFT28 V3.0, TFT35 E3.0, TFT43 V3.0, TFT50 V3.0 & TFT70 V3.0)
+ * Default LCD Idle Time (only for TFT28 V3.0, TFT35 (E3) V3.0, TFT43 V3.0, TFT50 V3.0 & TFT70 V3.0)
  * The LCD screen will dim to idle brightness, if the display is not touched for the
  * period of the lcd idle timer.
  *
@@ -425,7 +425,7 @@
  */
 #define DEFAULT_LCD_IDLE_TIMER  0  // Default: 0
 
-// Custom value in seconds. This will be used if DEFAULT_LCD_IDLE_TIMER is set to 7 (CUSTOM Seconds).
+// Custom value in seconds. This will be used if DEFAULT_LCD_IDLE_TIMER is set to 7 (CUSTOM Seconds)
 #define LCD_DIM_CUSTOM_SECONDS (10 * 60)
 
 //================================================================================
@@ -666,10 +666,10 @@
  */
 #define BUZZER_STOP_LEVEL LOW  // Default: LOW
 
-// Show bootscreen when starting up.
+// Show bootscreen when starting up
 #define SHOW_BTT_BOOTSCREEN
 
-// Bootscreen logo time in ms.
+// Bootscreen logo time in ms
 #define BTT_BOOTSCREEN_TIME 3000
 
 /**
@@ -738,8 +738,8 @@
 #define KEYBOARD_COLOR_LAYOUT 0  // Default: 0
 
 /**
- * Terminal Text Display Color Scheme
- * Color scheme for the Terminal text display.
+ * Terminal Text Color Scheme
+ * Color scheme for displaying text in Terminal menu.
  *
  *   Options: [Material Dark: 0, Material Light: 1, High Contrast: 2]
  *     Material Dark:  Dark background with light font color and orange command font color.
@@ -761,14 +761,14 @@
 #define TERMINAL_KEYBOARD_LAYOUT 0  // Default: 0
 
 /**
- * Progress Bar Layout (Printing Menu)
+ * Progress Bar Layout (Printing menu)
  * Uncomment to enable a progress bar with 10% markers.
  * Comment to enable a standard progress bar.
  */
 //#define MARKED_PROGRESS_BAR  // Default: commented (disabled)
 
 /**
- * Live Text Background Color Rendering Technique (Printing Menu)
+ * Live Text Background Color Rendering Technique (Printing menu)
  * Uncomment to enable the sampling and use of a uniform background color across all the icons.
  * Comment to enable a standard rendering based on the sampling and use, in a pixel by pixel basis,
  * of the underlying icon background colors.
