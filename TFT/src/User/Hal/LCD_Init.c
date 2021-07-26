@@ -122,7 +122,7 @@
         if (lcd_dim.dimmed)
         {
           if (infoSettings.block_touch_on_idle && isPress())  // if touch is blocked on idle and pressing on the LCD (not on the encoder),
-            lcd_dim.blocked = true;                           // the first touch will be skipped avoiding to trigger any undesired action
+            lcd_dim.blocked = true;                           // the first touch will be skipped preventing to trigger any undesired action
 
           lcd_dim.dimmed = false;
           Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
