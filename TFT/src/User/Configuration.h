@@ -1,6 +1,6 @@
 #ifndef _CONFIGURATION_H_
 #define _CONFIGURATION_H_
-#define CONFIG_VERSION 20210721
+#define CONFIG_VERSION 20210726
 
 //====================================================================================================
 //=============================== Settings Configurable On config.ini ================================
@@ -88,7 +88,7 @@
 
 //================================================================================
 //============================= Marlin Mode Settings =============================
-//========== (only for TFT24_V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70_V3.0) ==========
+//========== (only for TFT24 V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70 V3.0) ==========
 //================================================================================
 
 /**
@@ -398,7 +398,7 @@
 //================================================================================
 
 /**
- * Knob LED Color (only for TFT28 V3.0, TFT35 (E3) V3.0, TFT43 V3.0, TFT50 V3.0 & TFT70 V3.0)
+ * Knob LED Color (only for TFT28/TFT35_E3/TFT43/TFT50/TFT70 V3.0)
  *
  *   Options: [OFF: 0, WHITE: 1, RED: 2, ORANGE: 3, YELLOW: 4, GREEN: 5, BLUE: 6, INDIGO: 7, VIOLET: 8]
  */
@@ -408,7 +408,7 @@
 #define KEEP_KNOB_LED_COLOR_MARLIN_MODE
 
 /**
- * Default LCD Brightness Levels (only for TFT28 V3.0, TFT35 (E3) V3.0, TFT43 V3.0, TFT50 V3.0 & TFT70 V3.0)
+ * Default LCD Brightness Levels (only for TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
  * Default brightness values for LCD.
  *
  *   Options: [off: 0, 5%: 1, 10%: 2, 20%: 3, 30%: 4, 40%: 5, 50%: 6, 60%: 7, 70%: 8, 80%: 9, 90%: 10, 100%: 11]
@@ -417,7 +417,7 @@
 #define DEFAULT_LCD_IDLE_BRIGHTNESS   3  // Display brightness when device is idle (Default: 3)
 
 /**
- * Default LCD Idle Time (only for TFT28 V3.0, TFT35 (E3) V3.0, TFT43 V3.0, TFT50 V3.0 & TFT70 V3.0)
+ * Default LCD Idle Time (only for TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
  * The LCD screen will dim to idle brightness, if the display is not touched for the
  * period of the lcd idle timer.
  *

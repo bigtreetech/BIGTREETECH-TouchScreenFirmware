@@ -198,9 +198,9 @@ uint16_t KEY_GetValue(uint8_t total_rect, const GUI_RECT* menuRect)
       firstPress = true;
 
       #ifdef LCD_LED_PWM_CHANNEL
-        // if LCD is dimmed, skip the first touch to avoid any wrong action is performed
+        // if LCD is blocked (on idle), skip the first touch, preventing to trigger any undesired action,
         // and wait the LCD brightness is restored first
-        if (LCD_isDimmed())
+        if (LCD_isBlocked())
           key_return = IDLE_TOUCH;
       #endif
     }

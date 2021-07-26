@@ -30,7 +30,7 @@
   {
     uint32_t idle_ms;
     bool dimmed;
-    bool waitKeyPress;
+    bool blocked;
   } LCD_AUTO_DIM;
 
   LCD_AUTO_DIM lcd_dim;
@@ -98,16 +98,14 @@
       LCD_DIM_CUSTOM_SECONDS
     };
 
-    bool LCD_isDimmed(void)
+    bool LCD_isBlocked(void)
     {
-      if (lcd_dim.waitKeyPress)
-      {
-        lcd_dim.waitKeyPress = false;
+      if (!lcd_dim.blocked)
+        return false;
 
-        return true;
-      }
+      lcd_dim.blocked = false;
 
-      return lcd_dim.dimmed;
+      return true;
     }
 
     void loopDimTimer(void)
@@ -123,8 +121,8 @@
       {
         if (lcd_dim.dimmed)
         {
-          if (isPress())  // only in case of a press on the LCD (not on the encoder)
-            lcd_dim.waitKeyPress = true;
+          if (infoSettings.block_touch_on_idle && isPress())  // if touch is blocked on idle and pressing on the LCD (not on the encoder),
+            lcd_dim.blocked = true;                           // the first touch will be skipped avoiding to trigger any undesired action
 
           lcd_dim.dimmed = false;
           Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
@@ -146,7 +144,7 @@
 
         if (!lcd_dim.dimmed)
         {
-          lcd_dim.waitKeyPress = false;
+          lcd_dim.blocked = false;
           lcd_dim.dimmed = true;
           Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_idle_brightness]);
 
@@ -167,6 +165,7 @@
         // The LCD dim function is activated. First check if it's dimmed
         if (lcd_dim.dimmed)
         {
+          lcd_dim.blocked = false;
           lcd_dim.dimmed = false;
           Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
         }

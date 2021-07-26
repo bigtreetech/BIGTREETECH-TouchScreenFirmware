@@ -642,7 +642,7 @@ void parseConfigKey(uint16_t index)
       SET_VALID_INT_VALUE(infoSettings.prog_disp_type, 0, 2);
       break;
 
-    //----------------------------Marlin Mode Settings (only for TFT24_V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70_V3.0)
+    //----------------------------Marlin Mode Settings (only for TFT24 V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
 
     #ifdef HAS_EMULATOR
 
@@ -982,6 +982,10 @@ void parseConfigKey(uint16_t index)
 
       case C_INDEX_BRIGHTNESS_IDLE_DELAY:
         SET_VALID_INT_VALUE(infoSettings.lcd_idle_timer, 0, ITEM_SECONDS_NUM - 1);
+        break;
+
+      case C_INDEX_BLOCK_TOUCH_ON_IDLE:
+        infoSettings.block_touch_on_idle = getOnOff();
         break;
     #endif
 

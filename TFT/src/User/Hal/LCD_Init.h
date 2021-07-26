@@ -10,7 +10,7 @@ extern "C" {
 
 #ifdef LCD_LED_PWM_CHANNEL
 
-  #define ITEM_SECONDS_NUM 8
+  #define ITEM_SECONDS_NUM     8
   #define ITEM_BRIGHTNESS_NUM 12
 
   extern const uint32_t LCD_DIM_IDLE_TIME[ITEM_SECONDS_NUM];
@@ -20,7 +20,7 @@ extern "C" {
   extern const LABEL itemBrightness[ITEM_BRIGHTNESS_NUM];
 
   void LCD_LED_PWM_Init(void);
-  bool LCD_isDimmed(void);
+  bool LCD_isBlocked(void);
   void loopDimTimer(void);
   void _wakeLCD(void);
 
