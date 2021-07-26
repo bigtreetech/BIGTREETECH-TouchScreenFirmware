@@ -188,11 +188,9 @@ typedef struct
   uint8_t  toastSound;
   uint8_t  alertSound;
   uint8_t  heaterSound;
-#ifdef LED_COLOR_PIN
   uint8_t  knob_led_color;
   uint8_t  knob_led_idle;
   uint8_t  neopixel_pixels;
-#endif
   uint8_t  lcd_brightness;
   uint8_t  lcd_idle_brightness;
   uint8_t  lcd_idle_timer;
