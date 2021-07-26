@@ -19,7 +19,7 @@ enum
 #define ITEM_MARLIN_TYPE_NUM 2
 const char *const labelMarlinType[ITEM_MARLIN_TYPE_NUM] =
 {
-  //item value text(only for custom value)
+  // item value text(only for custom value)
   "128x64",
   "20x4"
 };
@@ -265,7 +265,7 @@ void menuMarlinModeSettings(void)
   }
 }
 
-#endif // ST7920_EMULATOR
+#endif  // ST7920_EMULATOR
 
 #ifdef BUZZER_PIN
 
@@ -331,9 +331,9 @@ void menuSoundSettings(void)
   {
     storePara();
   }
-} //menuSoundSettings
+}  // menuSoundSettings
 
-#endif // BUZZER_PIN
+#endif  // BUZZER_PIN
 
 #ifdef LCD_LED_PWM_CHANNEL
 
@@ -341,10 +341,11 @@ void menuBrightnessSettings(void)
 {
   LABEL title = {LABEL_LCD_BRIGHTNESS};
   LISTITEM brightnessitems[] = {
-  // icon            ItemType          Item Title                 item value text(only for custom value)
-    {CHARICON_BLANK, LIST_CUSTOMVALUE, LABEL_LCD_BRIGHTNESS,      LABEL_DYNAMIC},
-    {CHARICON_BLANK, LIST_CUSTOMVALUE, LABEL_LCD_IDLE_BRIGHTNESS, LABEL_DYNAMIC},
-    {CHARICON_BLANK, LIST_CUSTOMVALUE, LABEL_LCD_IDLE_DELAY,      LABEL_DYNAMIC},
+  // icon                ItemType          Item Title                 item value text(only for custom value)
+    {CHARICON_BLANK,     LIST_CUSTOMVALUE, LABEL_LCD_BRIGHTNESS,      LABEL_DYNAMIC},
+    {CHARICON_BLANK,     LIST_CUSTOMVALUE, LABEL_LCD_IDLE_BRIGHTNESS, LABEL_DYNAMIC},
+    {CHARICON_BLANK,     LIST_CUSTOMVALUE, LABEL_LCD_IDLE_DELAY,      LABEL_DYNAMIC},
+    {CHARICON_TOGGLE_ON, LIST_TOGGLE,      LABEL_BLOCK_TOUCH_ON_IDLE, LABEL_BACKGROUND},
   };
 
   uint16_t curIndex = KEY_IDLE;
@@ -358,6 +359,7 @@ void menuBrightnessSettings(void)
   setDynamicTextValue(KEY_ICON_1, tempstr);
 
   brightnessitems[2].valueLabel = itemDimTime[infoSettings.lcd_idle_timer];
+  brightnessitems[3].icon = (infoSettings.block_touch_on_idle == 1) ? CHARICON_TOGGLE_ON : CHARICON_TOGGLE_OFF;
 
   listViewCreate(title, brightnessitems, COUNT(brightnessitems), NULL, true, NULL, NULL);
 
@@ -370,7 +372,7 @@ void menuBrightnessSettings(void)
         infoSettings.lcd_brightness = (infoSettings.lcd_brightness + 1) % ITEM_BRIGHTNESS_NUM;
 
         if (infoSettings.lcd_brightness == 0)
-          infoSettings.lcd_brightness = 1;  //In Normal it should not be off. Set back to 5%
+          infoSettings.lcd_brightness = 1;  // In Normal it should not be off. Set back to 5%
 
         sprintf(tempstr, (char *)textSelect(LABEL_PERCENT_VALUE), LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
         setDynamicTextValue(curIndex, tempstr);
@@ -391,6 +393,12 @@ void menuBrightnessSettings(void)
         listViewRefreshItem(curIndex);
         break;
 
+      case 3:
+        infoSettings.block_touch_on_idle = (infoSettings.block_touch_on_idle + 1) % 2;
+        brightnessitems[curIndex].icon = (infoSettings.block_touch_on_idle == 1) ? CHARICON_TOGGLE_ON : CHARICON_TOGGLE_OFF;
+        listViewRefreshItem(curIndex);
+        break;
+
       default:
         break;
     }
@@ -404,7 +412,7 @@ void menuBrightnessSettings(void)
   }
 }
 
-#endif //LCD_LED_PWM_CHANNEL
+#endif  // LCD_LED_PWM_CHANNEL
 
 void menuScreenSettings(void)
 {
@@ -429,7 +437,7 @@ void menuScreenSettings(void)
     screenSettingsItems.items[KEY_INDEX_BRIGHTNESS].label.index = LABEL_LCD_BRIGHTNESS;
   #endif
 
-  //load buzzer icon
+  // load buzzer icon
   #ifdef BUZZER_PIN
     screenSettingsItems.items[KEY_INDEX_BUZZER].icon = ICON_SOUND;
     screenSettingsItems.items[KEY_INDEX_BUZZER].label.index = LABEL_SOUND;

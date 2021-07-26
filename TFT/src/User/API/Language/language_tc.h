@@ -34,6 +34,7 @@
     #define STRING_LCD_BRIGHTNESS         "螢幕亮度"
     #define STRING_LCD_IDLE_BRIGHTNESS    "睡眠狀態螢幕亮度"
     #define STRING_LCD_IDLE_DELAY         "螢幕進入睡眠時間"
+    #define STRING_BLOCK_TOUCH_ON_IDLE    "Block touch on idle"
     #define STRING_START_GCODE_ENABLED    "執行起始G-code"
     #define STRING_END_GCODE_ENABLED      "執行結尾G-code"
     #define STRING_CANCEL_GCODE_ENABLED   "中斷執行G-code"

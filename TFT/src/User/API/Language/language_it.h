@@ -34,6 +34,7 @@
     #define STRING_LCD_BRIGHTNESS         "Luminosità"
     #define STRING_LCD_IDLE_BRIGHTNESS    "Luminosità in idle"
     #define STRING_LCD_IDLE_DELAY         "Timer luminosità"
+    #define STRING_BLOCK_TOUCH_ON_IDLE    "Block touch on idle"
     #define STRING_START_GCODE_ENABLED    "Inserisci start gcode"
     #define STRING_END_GCODE_ENABLED      "Inserisci end gcode"
     #define STRING_CANCEL_GCODE_ENABLED   "Script canc. stampa"

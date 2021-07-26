@@ -34,6 +34,7 @@
     #define STRING_LCD_BRIGHTNESS         "Jas LCD"
     #define STRING_LCD_IDLE_BRIGHTNESS    "Zníženie jasu LCD"
     #define STRING_LCD_IDLE_DELAY         "Zníženie jasu LCD po"
+    #define STRING_BLOCK_TOUCH_ON_IDLE    "Block touch on idle"
     #define STRING_START_GCODE_ENABLED    "Začiatočný Gcode"
     #define STRING_END_GCODE_ENABLED      "Koncový Gcode"
     #define STRING_CANCEL_GCODE_ENABLED   "Cancel Gcode"

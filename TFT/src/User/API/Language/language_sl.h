@@ -34,6 +34,7 @@
     #define STRING_LCD_BRIGHTNESS         "Svetilnost"
     #define STRING_LCD_IDLE_BRIGHTNESS    "Zatemnitev LCD"
     #define STRING_LCD_IDLE_DELAY         "Zatemnitev po času"
+    #define STRING_BLOCK_TOUCH_ON_IDLE    "Block touch on idle"
     #define STRING_START_GCODE_ENABLED    "Zaženi startno G-kodo"
     #define STRING_END_GCODE_ENABLED      "Zaženi končno G-kodo"
     #define STRING_CANCEL_GCODE_ENABLED   "Zaženi G-kodo preklica"

@@ -34,7 +34,7 @@ typedef enum
 
 #define FONT_FLASH_SIGN       20210522  // (YYYYMMDD) change if fonts require updating
 #define CONFIG_FLASH_SIGN     20210726  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
-#define LANGUAGE_FLASH_SIGN   20210721  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
+#define LANGUAGE_FLASH_SIGN   20210726  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
 #define ICON_FLASH_SIGN       20210711  // (YYYYMMDD) change if any icon(s) is added or removed
 
 #define FONT_CHECK_SIGN       (FONT_FLASH_SIGN + WORD_UNICODE + FLASH_SIGN_ADDR)

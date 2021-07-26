@@ -34,6 +34,7 @@
     #define STRING_LCD_BRIGHTNESS         "Helligkeit"
     #define STRING_LCD_IDLE_BRIGHTNESS    "LCD Helligkeit (Standby)"
     #define STRING_LCD_IDLE_DELAY         "LCD Timer Standby"
+    #define STRING_BLOCK_TOUCH_ON_IDLE    "Block touch on idle"
     #define STRING_START_GCODE_ENABLED    "Gcode vor Druck"
     #define STRING_END_GCODE_ENABLED      "Gcode nach Druck"
     #define STRING_CANCEL_GCODE_ENABLED   "Gcode bei Abbruch"

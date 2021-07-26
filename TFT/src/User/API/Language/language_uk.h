@@ -34,6 +34,7 @@
     #define STRING_LCD_BRIGHTNESS         "Яскравість"
     #define STRING_LCD_IDLE_BRIGHTNESS    "Регулювання яскравості LCD"
     #define STRING_LCD_IDLE_DELAY         "Час до загасання LCD"
+    #define STRING_BLOCK_TOUCH_ON_IDLE    "Block touch on idle"
     #define STRING_START_GCODE_ENABLED    "Розпочати G-код перед друком"
     #define STRING_END_GCODE_ENABLED      "Завершити G-код після друку"
     #define STRING_CANCEL_GCODE_ENABLED   "G-код скасувати друк"

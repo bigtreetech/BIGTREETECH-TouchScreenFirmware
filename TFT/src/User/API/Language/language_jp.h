@@ -34,6 +34,7 @@
     #define STRING_LCD_BRIGHTNESS         "LCD明るさ"
     #define STRING_LCD_IDLE_BRIGHTNESS    "LCDの輝度が薄暗い"
     #define STRING_LCD_IDLE_DELAY         "LCD調光アイドルタイマー"
+    #define STRING_BLOCK_TOUCH_ON_IDLE    "Block touch on idle"
     #define STRING_START_GCODE_ENABLED    "印刷前にGコードを開始する"
     #define STRING_END_GCODE_ENABLED      "印刷後にGコードを終了する"
     #define STRING_CANCEL_GCODE_ENABLED   "Gコードをキャンセルする"
