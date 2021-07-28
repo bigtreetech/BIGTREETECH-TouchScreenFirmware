@@ -143,10 +143,10 @@ void menuMode(void)
     {
       loopBackEnd();
     }
-    #ifdef LCD_LED_PWM_CHANNEL  // loopDimTimer() is invoked by loopBackEnd(), so we guarantee it is invoked only once
+    #ifdef LCD_LED_PWM_CHANNEL  // LCD_HandleDimming() is invoked by loopBackEnd(), so we guarantee it is invoked only once
       else
       {
-        loopDimTimer();
+        LCD_HandleDimming();
       }
     #endif
   }
@@ -169,13 +169,15 @@ static inline void setupModeHardware(uint8_t mode)
   if (mode == MODE_SERIAL_TSC)
   {
     Serial_ReSourceInit();  // enable serial comm in TSC mode
+
     #ifdef BUZZER_PIN  // enable buzzer in Touchsreen mode
       Buzzer_Config();
     #endif
 
     #if LED_COLOR_PIN  // enable knob led only in Touchscreen mode
       #ifndef KEEP_KNOB_LED_COLOR_MARLIN_MODE
-      knob_LED_Init();
+        knob_LED_Init();
+        Knob_LED_SetColor(led_colors[infoSettings.knob_led_color], infoSettings.neopixel_pixels);  // set last saved color after initialization
       #endif
     #endif
 

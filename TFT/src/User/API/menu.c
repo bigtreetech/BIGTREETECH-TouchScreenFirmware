@@ -425,7 +425,7 @@ void reminderMessage(int16_t inf, SYS_STATUS status)
 
 void volumeReminderMessage(int16_t inf, SYS_STATUS status)
 {
-  wakeLCD();
+  LCD_Wake();
   if (toastRunning()) return;
 
   volumeReminder.inf = inf;
@@ -990,7 +990,7 @@ void loopBackEnd(void)
 #endif
 
 #ifdef LCD_LED_PWM_CHANNEL
-  loopDimTimer();
+  LCD_HandleDimming();
 #endif
 
   if (infoMachineSettings.caseLightsBrightness == ENABLED)

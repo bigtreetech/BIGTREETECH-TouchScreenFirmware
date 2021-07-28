@@ -5,7 +5,9 @@
 extern "C" {
 #endif
 
-#include "includes.h"
+#include <stdbool.h>
+#include <stdint.h>
+#include "menu.h"
 
 void listViewCreate(LABEL title, LISTITEM * items, uint16_t max_items, uint16_t * cur_page, bool handleBackPress,
                     void (*preparePage_action)(LISTITEMS * listItems, uint8_t pageIndex),

@@ -200,7 +200,7 @@ uint16_t KEY_GetValue(uint8_t total_rect, const GUI_RECT* menuRect)
       #ifdef LCD_LED_PWM_CHANNEL
         // if LCD is blocked (on idle), skip the first touch, preventing to trigger any undesired action,
         // and wait the LCD brightness is restored first
-        if (LCD_isBlocked())
+        if (LCD_IsBlocked())
           key_return = IDLE_TOUCH;
       #endif
     }

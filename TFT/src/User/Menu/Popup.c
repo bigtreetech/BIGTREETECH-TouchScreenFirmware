@@ -213,7 +213,7 @@ void loopPopup(void)
 
   popup_redraw = false;
 
-  wakeLCD();
+  LCD_Wake();
 
   //display the last received popup message, overriding previous popup messages, if any
   if (popup_cancel[0])

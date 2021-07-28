@@ -1,6 +1,6 @@
 #include "CharIcon.h"
 #include <stdint.h>
-#include "Colors.h"
+#include "LCD_Colors.h"
 
 const uint16_t charIconColor[CHARICON_NUM] =
 {

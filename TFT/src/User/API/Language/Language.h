@@ -32,7 +32,6 @@ extern "C" {
 #define TRAD_CHINESE  19
 #define UKRAINIAN     20
 
-
 enum
 {
   LANG_DEFAULT = 0,

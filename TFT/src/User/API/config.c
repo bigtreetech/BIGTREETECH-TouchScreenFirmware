@@ -74,7 +74,7 @@ bool getConfigFromFile(void)
     PRINTDEBUG(configCustomGcodes->gcode[1]);
     if (scheduleRotate)
     {
-      LCD_RefreshDirection();
+      LCD_RefreshDirection(infoSettings.rotate_ui);
       TSC_Calibration();
     }
     storePara();
@@ -954,7 +954,7 @@ void parseConfigKey(uint16_t index)
 
     #ifdef LED_COLOR_PIN
       case C_INDEX_KNOB_COLOR:
-        SET_VALID_INT_VALUE(infoSettings.knob_led_color, 0, LED_COLOR_NUM - 1);
+        SET_VALID_INT_VALUE(infoSettings.knob_led_color, 0, LED_COLOR_COUNT - 1);
         break;
 
       #ifdef LCD_LED_PWM_CHANNEL
@@ -971,17 +971,17 @@ void parseConfigKey(uint16_t index)
 
     #ifdef LCD_LED_PWM_CHANNEL
       case C_INDEX_BRIGHTNESS:
-        SET_VALID_INT_VALUE(infoSettings.lcd_brightness, 0, ITEM_BRIGHTNESS_NUM - 1);
+        SET_VALID_INT_VALUE(infoSettings.lcd_brightness, 0, LCD_BRIGHTNESS_COUNT - 1);
         if (infoSettings.lcd_brightness == 0)
-          infoSettings.lcd_brightness = 1; // If someone set it to 0 set it to 1
+          infoSettings.lcd_brightness = 1;  // If someone set it to 0 set it to 1
         break;
 
       case C_INDEX_BRIGHTNESS_IDLE:
-        SET_VALID_INT_VALUE(infoSettings.lcd_idle_brightness, 0, ITEM_BRIGHTNESS_NUM - 1);
+        SET_VALID_INT_VALUE(infoSettings.lcd_idle_brightness, 0, LCD_BRIGHTNESS_COUNT - 1);
         break;
 
       case C_INDEX_BRIGHTNESS_IDLE_DELAY:
-        SET_VALID_INT_VALUE(infoSettings.lcd_idle_timer, 0, ITEM_SECONDS_NUM - 1);
+        SET_VALID_INT_VALUE(infoSettings.lcd_idle_timer, 0, LCD_IDLE_TIME_COUNT - 1);
         break;
 
       case C_INDEX_BLOCK_TOUCH_ON_IDLE:

@@ -77,7 +77,7 @@ void menuMarlinMode(void)
     {
       loopBackEnd();
     }
-    #if defined(SCREEN_SHOT_TO_SD) || defined(LCD_LED_PWM_CHANNEL)  // loopScreenShot() and loopDimTimer() are invoked by loopBackEnd(),
+    #if defined(SCREEN_SHOT_TO_SD) || defined(LCD_LED_PWM_CHANNEL)  // loopScreenShot() and LCD_HandleDimming() are invoked by loopBackEnd(),
       else                                                          // so we guarantee they are invoked only once
       {
         #ifdef SCREEN_SHOT_TO_SD
@@ -85,7 +85,7 @@ void menuMarlinMode(void)
         #endif
 
         #ifdef LCD_LED_PWM_CHANNEL
-          loopDimTimer();
+          LCD_HandleDimming();
         #endif
       }
     #endif

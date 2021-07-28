@@ -4,7 +4,7 @@
 static uint16_t fe_cur_page = 0;
 
 //
-//parameter values
+// parameter values
 //
 
 #define ITEM_TOGGLE_AUTO_NUM 3
@@ -25,7 +25,7 @@ const LABEL itemToggleSmart[ITEM_TOGGLE_SMART_NUM] =
 #define ITEM_NOTIFICATION_TYPE_NUM 3
 const char *const itemNotificationType[ITEM_NOTIFICATION_TYPE_NUM] =
 {
-  //item value text(only for custom value)
+  // item value text(only for custom value)
   "OFF",
   "POPUP",
   "TOAST"
@@ -33,7 +33,7 @@ const char *const itemNotificationType[ITEM_NOTIFICATION_TYPE_NUM] =
 
 const char *const itemSortBy[SORT_BY_COUNT] =
 {
-  //item value text(only for custom value)
+  // item value text(only for custom value)
   "Date ▼",
   "Date ▲",
   "Name ▲",
@@ -41,7 +41,7 @@ const char *const itemSortBy[SORT_BY_COUNT] =
 };
 
 //
-//add key number index of the items
+// add key number index of the items
 //
 typedef enum
 {
@@ -86,7 +86,7 @@ typedef enum
 } SKEY_LIST;
 
 //
-//perform action on button press
+// perform action on button press
 //
 void updateFeatureSettings(uint8_t item_index)
 {
@@ -166,15 +166,15 @@ void updateFeatureSettings(uint8_t item_index)
 
     #ifdef LED_COLOR_PIN
       case SKEY_KNOB_LED_COLOR:
-        infoSettings.knob_led_color = (infoSettings.knob_led_color + 1 ) % LED_COLOR_NUM;
-        WS2812_Send_DAT(led_color[infoSettings.knob_led_color]);
+        infoSettings.knob_led_color = (infoSettings.knob_led_color + 1 ) % LED_COLOR_COUNT;
+        Knob_LED_SetColor(led_colors[infoSettings.knob_led_color], infoSettings.neopixel_pixels);
         break;
 
       #ifdef LCD_LED_PWM_CHANNEL
         case SKEY_KNOB_LED_IDLE:
           infoSettings.knob_led_idle = (infoSettings.knob_led_idle + 1) % ITEM_TOGGLE_NUM;
           break;
-      #endif  //LCD_LED_PWM_CHANNEL
+      #endif  // LCD_LED_PWM_CHANNEL
     #endif
 
     case SKEY_START_GCODE_ENABLED:
@@ -197,10 +197,10 @@ void updateFeatureSettings(uint8_t item_index)
     default:
       return;
   }
-}  //updateFeatureSettings
+}  // updateFeatureSettings
 
 //
-//load values on page change and reload
+// load values on page change and reload
 //
 void loadFeatureSettings(LISTITEM * item, uint16_t item_index, uint8_t itemPos)
 {
@@ -285,7 +285,7 @@ void loadFeatureSettings(LISTITEM * item, uint16_t item_index, uint8_t itemPos)
 
       #ifdef LED_COLOR_PIN
         case SKEY_KNOB_LED_COLOR:
-          item->valueLabel = itemLedcolor[infoSettings.knob_led_color];
+          item->valueLabel = led_color_names[infoSettings.knob_led_color];
           break;
 
         #ifdef LCD_LED_PWM_CHANNEL
@@ -314,8 +314,7 @@ void loadFeatureSettings(LISTITEM * item, uint16_t item_index, uint8_t itemPos)
         break;
     }
   }
-}  //loadFeatureSettings
-
+}  // loadFeatureSettings
 
 void resetSettings(void)
 {
@@ -327,7 +326,7 @@ void resetSettings(void)
 void menuFeatureSettings(void)
 {
   //
-  //set item types
+  // set item types
   //
   LISTITEM settingPage[SKEY_COUNT] = {
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_TERMINAL_ACK,           LABEL_BACKGROUND},

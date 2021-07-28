@@ -1,6 +1,6 @@
 #include "ScreenSettings.h"
 #include "includes.h"
-#include "Colors.h"
+#include "LCD_Colors.h"
 
 enum
 {
@@ -352,13 +352,13 @@ void menuBrightnessSettings(void)
   SETTINGS now = infoSettings;
   char tempstr[8];
 
-  sprintf(tempstr, (char *)textSelect(LABEL_PERCENT_VALUE), LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
+  sprintf(tempstr, (char *)textSelect(LABEL_PERCENT_VALUE), lcd_brightness[infoSettings.lcd_brightness]);
   setDynamicTextValue(KEY_ICON_0, tempstr);
 
-  sprintf(tempstr, (char *)textSelect(LABEL_PERCENT_VALUE), LCD_BRIGHTNESS[infoSettings.lcd_idle_brightness]);
+  sprintf(tempstr, (char *)textSelect(LABEL_PERCENT_VALUE), lcd_brightness[infoSettings.lcd_idle_brightness]);
   setDynamicTextValue(KEY_ICON_1, tempstr);
 
-  brightnessitems[2].valueLabel = itemDimTime[infoSettings.lcd_idle_timer];
+  brightnessitems[2].valueLabel = lcd_idle_time_names[infoSettings.lcd_idle_timer];
   brightnessitems[3].icon = (infoSettings.block_touch_on_idle == 1) ? CHARICON_TOGGLE_ON : CHARICON_TOGGLE_OFF;
 
   listViewCreate(title, brightnessitems, COUNT(brightnessitems), NULL, true, NULL, NULL);
@@ -369,27 +369,27 @@ void menuBrightnessSettings(void)
     switch (curIndex)
     {
       case 0:
-        infoSettings.lcd_brightness = (infoSettings.lcd_brightness + 1) % ITEM_BRIGHTNESS_NUM;
+        infoSettings.lcd_brightness = (infoSettings.lcd_brightness + 1) % LCD_BRIGHTNESS_COUNT;
 
         if (infoSettings.lcd_brightness == 0)
           infoSettings.lcd_brightness = 1;  // In Normal it should not be off. Set back to 5%
 
-        sprintf(tempstr, (char *)textSelect(LABEL_PERCENT_VALUE), LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
+        sprintf(tempstr, (char *)textSelect(LABEL_PERCENT_VALUE), lcd_brightness[infoSettings.lcd_brightness]);
         setDynamicTextValue(curIndex, tempstr);
-        Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
+        LCD_SetBrightness(lcd_brightness[infoSettings.lcd_brightness]);
         listViewRefreshItem(curIndex);
         break;
 
       case 1:
-        infoSettings.lcd_idle_brightness = (infoSettings.lcd_idle_brightness + 1) % ITEM_BRIGHTNESS_NUM;
-        sprintf(tempstr, (char *)textSelect(LABEL_PERCENT_VALUE), LCD_BRIGHTNESS[infoSettings.lcd_idle_brightness]);
+        infoSettings.lcd_idle_brightness = (infoSettings.lcd_idle_brightness + 1) % LCD_BRIGHTNESS_COUNT;
+        sprintf(tempstr, (char *)textSelect(LABEL_PERCENT_VALUE), lcd_brightness[infoSettings.lcd_idle_brightness]);
         setDynamicTextValue(curIndex, tempstr);
         listViewRefreshItem(curIndex);
         break;
 
       case 2:
-        infoSettings.lcd_idle_timer = (infoSettings.lcd_idle_timer + 1) % ITEM_SECONDS_NUM;
-        brightnessitems[curIndex].valueLabel = itemDimTime[infoSettings.lcd_idle_timer];
+        infoSettings.lcd_idle_timer = (infoSettings.lcd_idle_timer + 1) % LCD_IDLE_TIME_COUNT;
+        brightnessitems[curIndex].valueLabel = lcd_idle_time_names[infoSettings.lcd_idle_timer];
         listViewRefreshItem(curIndex);
         break;
 
@@ -461,7 +461,7 @@ void menuScreenSettings(void)
     {
       case KEY_ICON_0:
         infoSettings.rotate_ui = !infoSettings.rotate_ui;
-        LCD_RefreshDirection();
+        LCD_RefreshDirection(infoSettings.rotate_ui);
         TSC_Calibration();
         menuDrawPage(&screenSettingsItems);
         break;
