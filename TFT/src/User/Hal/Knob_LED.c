@@ -1,6 +1,6 @@
 #include "Knob_LED.h"
+#include "includes.h"  // for mcuClocks, LED_COLOR_PIN etc...
 #include "GPIO_Init.h"
-#include "includes.h"
 
 #ifdef LED_COLOR_PIN
 

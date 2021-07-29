@@ -1,9 +1,7 @@
 #include "spi_slave.h"
+#include "includes.h"  // for infoSettings, ST7920_EMULATOR etc...
 #include "spi.h"
 #include "GPIO_Init.h"
-#include "stdlib.h"
-#include "variants.h"
-#include "Settings.h"
 #include "HD44780.h"
 
 #if defined(ST7920_EMULATOR)

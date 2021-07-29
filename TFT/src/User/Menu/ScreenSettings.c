@@ -1,6 +1,5 @@
 #include "ScreenSettings.h"
 #include "includes.h"
-#include "LCD_Colors.h"
 
 enum
 {

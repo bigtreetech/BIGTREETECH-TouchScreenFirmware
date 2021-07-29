@@ -1,6 +1,6 @@
-#include "includes.h"
 #include "lcd.h"
 #include "GPIO_Init.h"
+#include "delay.h"
 
 #ifdef STM32_HAS_FSMC
 
@@ -58,8 +58,8 @@ void LCD_GPIO_Config(void)
 
 void LCD_FSMC_Config(void)
 {
-  FSMC_NORSRAMInitTypeDef  FSMC_NORSRAMInitStructure;
-  FSMC_NORSRAMTimingInitTypeDef  readWriteTiming,writeTiming;
+  FSMC_NORSRAMInitTypeDef FSMC_NORSRAMInitStructure;
+  FSMC_NORSRAMTimingInitTypeDef readWriteTiming,writeTiming;
 
   RCC_AHB3PeriphClockCmd(RCC_AHB3Periph_FSMC, ENABLE);
 

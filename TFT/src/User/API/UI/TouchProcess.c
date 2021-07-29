@@ -1,6 +1,6 @@
 #include "TouchProcess.h"
-#include "GPIO_Init.h"
 #include "includes.h"
+#include "GPIO_Init.h"
 
 #define XL1 LCD_X[0]
 #define XL2 LCD_X[1]

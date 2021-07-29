@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include "variants.h"  // for LCD_DATA_16BIT, LCD_LED_PWM_CHANNEL
+#include "variants.h"  // for LCD_DATA_16BIT, LCD_LED_PWM_CHANNEL etc...
 
 #if LCD_DATA_16BIT == 1
   #define LCD_WR_16BITS_DATA(c) do{ LCD_WR_DATA(c); }while(0)

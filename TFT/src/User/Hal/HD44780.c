@@ -1,8 +1,7 @@
 #include "HD44780.h"
+#include "variants.h"  // for LCD2004_EMULATOR etc...
 #include "GPIO_Init.h"
-#include "stdlib.h"
-#include "variants.h"
-#include "Settings.h"
+#include <stdlib.h>
 
 #ifdef LCD2004_EMULATOR
 

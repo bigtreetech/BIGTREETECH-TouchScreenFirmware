@@ -1,6 +1,6 @@
 #include "LCD_Init.h"
+#include "includes.h"  // for RM68042..., lcd.h, lcd_dma.h, timer_pwm.h etc...
 #include "GPIO_Init.h"
-#include "includes.h"
 
 // LCD driver sequential
 #if LCD_DRIVER_HAS(RM68042)

@@ -1,6 +1,6 @@
 #include "LCD_Dimming.h"
-#include "GPIO_Init.h"
 #include "includes.h"
+#include "GPIO_Init.h"
 
 #ifdef LCD_LED_PWM_CHANNEL
 

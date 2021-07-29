@@ -1,6 +1,6 @@
 #include "myfatfs.h"
+#include "includes.h"  // for infoSettings etc...
 #include "diskio.h"
-#include "includes.h"
 
 FATFS fatfs[FF_VOLUMES];  // FATFS work area
 

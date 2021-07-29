@@ -1,6 +1,6 @@
 #include "xpt2046.h"
 #include "GPIO_Init.h"
-#include "includes.h"
+#include "sw_spi.h"
 
 /***************************************** XPT2046 SPI mode low-level porting interface********************************************/
 

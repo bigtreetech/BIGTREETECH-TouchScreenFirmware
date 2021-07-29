@@ -1,4 +1,6 @@
 #include "w25qxx.h"
+#include "GPIO_Init.h"
+#include "spi.h"
 
 /*************************** W25Qxx SPI Interface ported by the underlying pattern ***************************/
 //#define W25Qxx_SPI     _SPI3

@@ -1,8 +1,9 @@
-#include "variants.h"
+#include "variants.h"  // for SD_SPI_SUPPORT etc...
 
 #ifdef SD_SPI_SUPPORT
 #include "sd.h"
 #include "GPIO_Init.h"
+#include "spi.h"
 
 u8 SD_Type = 0;  //SDCard type
 

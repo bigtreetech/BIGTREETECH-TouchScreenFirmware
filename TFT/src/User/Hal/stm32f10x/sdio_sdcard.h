@@ -1,7 +1,7 @@
 #ifndef __SDIO_SDCARD_H
 #define __SDIO_SDCARD_H
-#include "stm32f10x.h"
 
+#include "variants.h"  // for u16 etc...
 
 //SDIO��ر�־λ
 #define SDIO_FLAG_CCRCFAIL                  ((uint32_t)0x00000001)
