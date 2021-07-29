@@ -72,6 +72,7 @@ void Hardware_GenericInit(void)
   #if LCD_ENCODER_SUPPORT
     HW_EncoderInit();
   #endif
+
   #if ENC_ACTIVE_SIGNAL
     HW_EncActiveSignalInit();
   #endif

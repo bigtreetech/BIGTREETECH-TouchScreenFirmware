@@ -12,8 +12,11 @@
 
 /**
  * Enable Status Screen
- * Status screen or home screen displays the current temperature, fan and speeds.
- * If this disabled, the main menu will become the default home screen.
+ * If enabled, the Status Screen menu will become the default home screen.
+ * If disabled, the Main menu will become the default home screen.
+ *
+ * NOTE: Both the Status Screen and Main menus display the current temperature, fan and speeds.
+ *       Furthermore, the Status Screen menu provides the status area reporting the printer notifications.
  *
  *   Options: [disable: 0, enable: 1]
  */
@@ -95,9 +98,10 @@
  * Default Mode
  * Set Marlin/Touch mode as the default mode at startup.
  *
- * NOTE: Mode switching is still possible by holding down the encorder for two seconds.
+ * NOTE: Mode switching is possible only for Marlin Mode and Touch Mode by a long press of
+ *       three seconds on the display or holding down the encorder button for two seconds.
  *
- *   Options: [Marlin Mode: MODE_MARLIN, Touch Mode: MODE_SERIAL_TSC]
+ *   Options: [Marlin Mode: 0, Touch Mode: 1, Blocked Marlin Mode: 2, Blocked Touch Mode: 3]
  */
 #define DEFAULT_LCD_MODE MODE_SERIAL_TSC  // Default: MODE_SERIAL_TSC
 

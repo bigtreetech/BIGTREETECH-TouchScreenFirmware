@@ -44,6 +44,7 @@ typedef enum
 #define LANGUAGE_CHECK_SIGN   (LANGUAGE_FLASH_SIGN + LANGUAGE_ADDR + LABEL_NUM)
 #define ICON_CHECK_SIGN       (ICON_FLASH_SIGN + ICON_ADDR(0) + ICON_PREVIEW)
 
+#define MAX_MODE_COUNT        4
 #define MAX_EXT_COUNT         6
 #define MAX_HOTEND_COUNT      6
 #define MAX_HEATER_COUNT      (2 + MAX_HOTEND_COUNT)  // chamber + bed + hotend
@@ -81,6 +82,7 @@ typedef enum
 {
   LCD12864 = 0,
   LCD2004,
+  MODE_TYPE_COUNT
 } MARLIN_MODE_TYPE;
 
 typedef struct

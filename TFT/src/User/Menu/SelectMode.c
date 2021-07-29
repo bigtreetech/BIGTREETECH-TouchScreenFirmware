@@ -6,7 +6,7 @@ bool freshBoot = true;
 bool skipMode = false;
 
 const GUI_RECT rect_of_mode[MODE_COUNT] = {
-  //2 select icon
+  // 2 select icon
   {1 * SPACE_SELEX + 0 * ICON_WIDTH, SPACE_SELEY, 1 * SPACE_SELEX + 1 * ICON_WIDTH, SPACE_SELEY + ICON_HEIGHT},
   {3 * SPACE_SELEX + 1 * ICON_WIDTH, SPACE_SELEY, 3 * SPACE_SELEX + 2 * ICON_WIDTH, SPACE_SELEY + ICON_HEIGHT},
 };
@@ -71,10 +71,10 @@ void drawSelectedMode(int8_t nowMode)
 void loopCheckMode(void)
 {
 //  #ifndef SERIAL_ALWAYS_ON
-//  IDEALLY I would like to be able to swap even when the TFT is in printing mode
-//  but before I can allow that I need a way to make sure that we swap back into
-//  the right mode (and correct screen) and I really want a reliable way to DETECT
-//  that the TFT should be in printing mode even when the print was started externally.
+  // IDEALLY I would like to be able to swap even when the TFT is in printing mode
+  // but before I can allow that I need a way to make sure that we swap back into
+  // the right mode (and correct screen) and I really want a reliable way to DETECT
+  // that the TFT should be in printing mode even when the print was started externally.
   if (isPrinting() || infoHost.printing || skipMode)
     return;
 
@@ -88,6 +88,10 @@ void loopCheckMode(void)
     #endif
     )
   {
+    // NOTE: leave this check after LCD_ReadPen() to allow the Smart Home feature to work properly
+    if (infoSettings.mode >= MODE_COUNT)  // if blocked mode, then exit
+      return;
+
     infoMenu.menu[++infoMenu.cur] = menuMode;
   }
 }
@@ -104,10 +108,10 @@ void menuMode(void)
 
   #if LCD_ENCODER_SUPPORT
     while (!XPT2046_Read_Pen() || encoder_ReadBtn(LCD_BUTTON_INTERVALS))
-      ;  //wait for button release
+      ;  // wait for button release
   #else
     while (!XPT2046_Read_Pen())
-      ;  //wait for touch release
+      ;  // wait for touch release
   #endif
 
   #if LCD_ENCODER_SUPPORT
@@ -204,7 +208,7 @@ static inline void setupModeHardware(uint8_t mode)
     #endif
 
     #if !defined(MKS_TFT)
-      //causes hang if we deinit spi1
+      // causes hang if we deinit spi1
       SD_DeInit();
     #endif
   }
@@ -213,15 +217,17 @@ static inline void setupModeHardware(uint8_t mode)
 // Change UI Mode
 void switchMode(void)
 {
+  int8_t nowMode = infoSettings.mode % MODE_COUNT;  // Marlin mode or Touch mode
   infoMenu.cur = 0;
-  setupModeHardware(infoSettings.mode);
 
-  switch (infoSettings.mode)
+  setupModeHardware(nowMode);
+
+  switch (nowMode)
   {
     case MODE_SERIAL_TSC:
       GUI_RestoreColorDefault();
-      if (infoSettings.status_screen == 1)  //if Unified menu is selected
-        infoMenu.menu[infoMenu.cur] = menuStatus;  //status screen as default screen on boot
+      if (infoSettings.status_screen == 1)  // if Unified menu is selected
+        infoMenu.menu[infoMenu.cur] = menuStatus;  // status screen as default screen on boot
       else
         infoMenu.menu[infoMenu.cur] = menuMain;  // classic UI
 

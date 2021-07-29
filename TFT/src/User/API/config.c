@@ -647,7 +647,7 @@ void parseConfigKey(uint16_t index)
     #ifdef HAS_EMULATOR
 
       case C_INDEX_MODE:
-        SET_VALID_INT_VALUE(infoSettings.mode, 0, MODE_COUNT - 1);
+        SET_VALID_INT_VALUE(infoSettings.mode, 0, MAX_MODE_COUNT - 1);
         break;
 
       case C_INDEX_SERIAL_ON:
@@ -681,7 +681,7 @@ void parseConfigKey(uint16_t index)
       }
 
       case C_INDEX_MARLIN_TYPE:
-        SET_VALID_INT_VALUE(infoSettings.marlin_type, 0, MODE_COUNT - 1);
+        SET_VALID_INT_VALUE(infoSettings.marlin_type, 0, MODE_TYPE_COUNT - 1);
         break;
 
     #endif  // ST7920_EMULATOR || LCD2004_EMULATOR
