@@ -99,7 +99,7 @@
  * Set Marlin/Touch mode as the default mode at startup.
  *
  * NOTE: Mode switching is possible only for Marlin Mode and Touch Mode by a long press of
- *       three seconds on the display or holding down the encorder button for two seconds.
+ *       1.5 seconds on the display or holding down the encorder button for 1.5 seconds.
  *
  *   Options: [Marlin Mode: 0, Touch Mode: 1, Blocked Marlin Mode: 2, Blocked Touch Mode: 3]
  */

@@ -73,6 +73,7 @@
 #include "FanControl.h"
 #include "flashStore.h"
 #include "HomeOffsetControl.h"
+#include "HW_Init.h"
 #include "interfaceCmd.h"
 #include "LCD_Colors.h"
 #include "LCD_Dimming.h"
@@ -80,6 +81,7 @@
 #include "LED_Colors.h"
 #include "MachineParameters.h"
 #include "menu.h"
+#include "ModeSwitching.h"
 #include "Notification.h"
 #include "parseACK.h"
 #include "Printing.h"
@@ -90,6 +92,7 @@
 #include "Settings.h"
 #include "SpeedControl.h"
 #include "Temperature.h"
+#include "Touch_Encoder.h"
 
 // User/Menu
 #include "ABL.h"
