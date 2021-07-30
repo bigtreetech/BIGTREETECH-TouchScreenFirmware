@@ -1,11 +1,6 @@
 #include "Touch_Encoder.h"
 #include "includes.h"
 
-#if LCD_ENCODER_SUPPORT
-
-#define LCD_FREE_WIDTH  (LCD_WIDTH - LCD_WIDTH / 5)
-#define LCD_FREE_HEIGHT (LCD_HEIGHT / 5)
-
 bool Touch_Enc_ReadPen(uint16_t interval)
 {
   static uint32_t nowTime = 0;
@@ -26,6 +21,11 @@ bool Touch_Enc_ReadPen(uint16_t interval)
 
   return false;
 }
+
+#if LCD_ENCODER_SUPPORT
+
+#define LCD_FREE_WIDTH  (LCD_WIDTH - LCD_WIDTH / 5)
+#define LCD_FREE_HEIGHT (LCD_HEIGHT / 5)
 
 bool Touch_Enc_ReadBtn(uint16_t interval)
 {
