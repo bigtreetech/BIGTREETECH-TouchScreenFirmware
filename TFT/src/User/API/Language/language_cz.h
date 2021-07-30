@@ -53,9 +53,9 @@
     #define STRING_RETRACT_AUTO           "Auto Firmware Retract"
     #define STRING_HOTEND_OFFSET          "Offset 2.trysky"
     #define STRING_STEALTH_CHOP           "TMC Tichý režim"
-    #define STRING_DELTA_CONFIGURATION    "Delta Configuration"
-    #define STRING_DELTA_TOWER_ANGLE      "Tower Angle Trim"
-    #define STRING_DELTA_ENDSTOP          "Endstop Adjustments"
+    #define STRING_DELTA_CONFIGURATION    "Delta konfigurace"
+    #define STRING_DELTA_TOWER_ANGLE      "Úhel věže"
+    #define STRING_DELTA_ENDSTOP          "Nastavení dorazu"
     #define STRING_PROBE_OFFSET           "Offset sondy"
     #define STRING_LIN_ADVANCE            "Linear Advance"
     #define STRING_CURRENT_SETTING        "TMC Proud motorů(mA)"
@@ -354,7 +354,7 @@
     #define STRING_Z_ALIGN                "Z Align"
     #define STRING_MACROS                 "Makro"
     #define STRING_MESH_VALID             "Test sítě"
-    #define STRING_CONNECT_PROBE          "Connect probe before starting the process. Make sure to disconnect it afterwards."
-    #define STRING_CALIBRATION            "Calibration"
+    #define STRING_CONNECT_PROBE          "Před zahájením procesu připojte sondu. Poté ji nezapomeňte odpojit."
+    #define STRING_CALIBRATION            "Kalibrace"
 
 #endif
