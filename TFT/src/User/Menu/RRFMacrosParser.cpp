@@ -42,9 +42,8 @@ void RRFMacrosParser::handle_value(const char * value)
     if (current >= FILE_NUM)
         return;
 
-    if (*value == '*')
+    if (macroList[current].is_directory = *value == '*')
     {
-        macroList[current].is_directory = true;
         ++value;
     }
     uint16_t len = strlen(value) + 1;
@@ -58,22 +57,13 @@ void RRFMacrosParser::handle_value(const char * value)
        strcpy(macroList[current].display_name, value);
 }
 
-
 void parseMacroListResponse(char *data)
 {
     JsonStreamingParser parser;
     RRFMacrosParser handler;
     parser.setListener(&handler);
-    bool started = false;
-    while (*data++ != 0)
+    while (*data != 0)
     {
-        if (!started)
-        {
-            started = *data == '{';
-        }
-        if (started)
-        {
-            parser.parse(*data);
-        }
+        parser.parse(*data++);
     }
 }
