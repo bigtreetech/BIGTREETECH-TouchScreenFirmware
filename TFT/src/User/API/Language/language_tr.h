@@ -34,6 +34,7 @@
     #define STRING_LCD_BRIGHTNESS         "Parlaklık"
     #define STRING_LCD_IDLE_BRIGHTNESS    "Parlaklık Kısılma Oranı"
     #define STRING_LCD_IDLE_DELAY         "Parlaklık Kısılma Süresi"
+    #define STRING_BLOCK_TOUCH_ON_IDLE    "Block touch on idle"
     #define STRING_START_GCODE_ENABLED    "Başlangıç gcodeu kullan"
     #define STRING_END_GCODE_ENABLED      "Bitiş gcodeu kullan"
     #define STRING_CANCEL_GCODE_ENABLED   "İptal gcodeu kullan"

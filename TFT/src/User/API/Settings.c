@@ -49,7 +49,7 @@ void infoSettingsReset(void)
   infoSettings.emulate_m600           = EMULATE_M600;
   infoSettings.prog_disp_type         = ELAPSED_REMAINING;
 
-// Marlin Mode Settings (only for TFT24_V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70_V3.0)
+// Marlin Mode Settings (only for TFT24 V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
   infoSettings.mode                   = DEFAULT_LCD_MODE;
   infoSettings.serial_alwaysOn        = SERIAL_ALWAYS_ON;
   infoSettings.marlin_mode_bg_color   = lcd_colors[MARLIN_BKCOLOR];
@@ -114,14 +114,17 @@ void infoSettingsReset(void)
   infoSettings.toastSound             = ENABLED;
   infoSettings.alertSound             = ENABLED;
   infoSettings.heaterSound            = ENABLED;
-#ifdef LED_COLOR_PIN
   infoSettings.knob_led_color         = STARTUP_KNOB_LED_COLOR;
   infoSettings.knob_led_idle          = ENABLED;
-  infoSettings.neopixel_pixels        = NEOPIXEL_PIXELS;
-#endif
+  #ifdef NEOPIXEL_PIXELS
+    infoSettings.neopixel_pixels      = NEOPIXEL_PIXELS;
+  #else
+    infoSettings.neopixel_pixels      = 0;
+  #endif
   infoSettings.lcd_brightness         = DEFAULT_LCD_BRIGHTNESS;
   infoSettings.lcd_idle_brightness    = DEFAULT_LCD_IDLE_BRIGHTNESS;
   infoSettings.lcd_idle_timer         = DEFAULT_LCD_IDLE_TIMER;
+  infoSettings.block_touch_on_idle    = DISABLED;
 
 // Start, End & Cancel Gcode Commands
   infoSettings.send_start_gcode       = DISABLED;

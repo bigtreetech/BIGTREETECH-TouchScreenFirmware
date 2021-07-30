@@ -1,5 +1,5 @@
 #include "Serial.h"
-#include "includes.h"
+#include "includes.h"  // for infoSettings, SERIAL_PORT etc...
 
 #define SERIAL_PORT_QUEUE_SIZE NOBEYOND(512, RAM_SIZE * 64, 4096)
 #define SERIAL_PORT_2_QUEUE_SIZE 512
@@ -24,7 +24,7 @@ typedef struct
   uint32_t dma_rcc;
   uint8_t  dma_channel;
   DMA_Stream_TypeDef *dma_stream;
-}SERIAL_CFG;
+} SERIAL_CFG;
 
 static const SERIAL_CFG Serial[_UART_CNT] = {
   {USART1, RCC_AHB1Periph_DMA2, 4, DMA2_Stream2},

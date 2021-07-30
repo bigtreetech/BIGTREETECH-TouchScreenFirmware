@@ -1,9 +1,10 @@
 #include "lcd_dma.h"
-#include "variants.h"
+#include "variants.h"  // for STM32_HAS_FSMC etc...
 #include "lcd.h"
+#include "spi.h"
 #include "LCD_Init.h"
-#include "delay.h"
 #include "w25qxx.h"
+#include "delay.h"
 
 #ifdef STM32_HAS_FSMC
 // Config for SPI Channel
@@ -87,7 +88,7 @@ void lcd_frame_display(u16 sx,u16 sy,u16 w,u16 h, u32 addr)
 
   LCD_SetWindow(sx,sy,sx+w-1,sy+h-1);
 
-  for(cur = 0; cur < totalSize; cur += LCD_DMA_MAX_TRANS)
+  for (cur = 0; cur < totalSize; cur += LCD_DMA_MAX_TRANS)
   {
     segmentSize = (cur+LCD_DMA_MAX_TRANS)<=totalSize ? LCD_DMA_MAX_TRANS : totalSize-cur;
     lcd_frame_segment_display(segmentSize, addr+cur*(LCD_DATA_16BIT + 1));

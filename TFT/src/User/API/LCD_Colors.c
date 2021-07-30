@@ -1,4 +1,4 @@
-#include "Colors.h"
+#include "LCD_Colors.h"
 #include "includes.h"
 
 const uint16_t lcd_colors[LCD_COLOR_COUNT] = {

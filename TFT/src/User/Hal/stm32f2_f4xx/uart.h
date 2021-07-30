@@ -1,7 +1,7 @@
 #ifndef _UART_H_
 #define _UART_H_
 
-#include "variants.h"
+#include <stdint.h>
 
 #define _USART1    0
 #define _USART2    1

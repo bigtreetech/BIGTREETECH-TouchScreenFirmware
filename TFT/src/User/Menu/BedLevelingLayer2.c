@@ -59,7 +59,7 @@ void menuBedLevelingLayer2(void)
         bedLevelingLayer2Items.items[4].label.index = LABEL_BLTOUCH;
       }
 
-      if (infoSettings.z_steppers_alignment)
+      if (infoSettings.z_steppers_alignment != 0)
       {
         bedLevelingLayer2Items.items[5].icon = ICON_Z_ALIGN;
         bedLevelingLayer2Items.items[5].label.index = LABEL_Z_ALIGN;
@@ -120,7 +120,7 @@ void menuBedLevelingLayer2(void)
         break;
 
       case KEY_ICON_5:
-        if (infoMachineSettings.zProbe == ENABLED && infoSettings.z_steppers_alignment)
+        if (infoMachineSettings.zProbe == ENABLED && infoSettings.z_steppers_alignment != 0)
         {
           storeCmd("G34\n");
           storeCmd("M18 S0 X Y Z\n");

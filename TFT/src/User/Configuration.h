@@ -1,6 +1,6 @@
 #ifndef _CONFIGURATION_H_
 #define _CONFIGURATION_H_
-#define CONFIG_VERSION 20210721
+#define CONFIG_VERSION 20210726
 
 //====================================================================================================
 //=============================== Settings Configurable On config.ini ================================
@@ -12,15 +12,18 @@
 
 /**
  * Enable Status Screen
- * Status screen or home screen displays the current temperature, fan and speeds.
- * If this disabled, the main menu will become the default home screen.
+ * If enabled, the Status Screen menu will become the default home screen.
+ * If disabled, the Main menu will become the default home screen.
  *
- *   Options: [enable: true, disable: false]
+ * NOTE: Both the Status Screen and Main menus display the current temperature, fan and speeds.
+ *       Furthermore, the Status Screen menu provides the status area reporting the printer notifications.
+ *
+ *   Options: [disable: 0, enable: 1]
  */
-#define ENABLE_STATUS_SCREEN true  // Default: true
+#define ENABLE_STATUS_SCREEN 1  // Default: 1
 
 /**
- * Baudrate / Connection speed
+ * Baudrate / Connection Speed
  * This baudrate setting is used for serial connection to the printer and other serial
  * hosts like ESP8266.
  *
@@ -57,13 +60,13 @@
  * Fan Speed As Percentage
  * Show fan speed as percentage. If disabled fan speeed will be displayed as PWM values.
  *
- *   Options: [enable: true, disable: false]
+ *   Options: [disable: 0, enable: 1]
  */
-#define SHOW_FAN_PERCENTAGE true  // Default: true
+#define SHOW_FAN_PERCENTAGE 1  // Default: 1
 
 /**
  * Notification Style For ACK Messages
- * Set the notification style to use for displaying the ACK messages which start with 'echo:'.
+ * Set the notification style to use for displaying the ACK messages which start with "echo:".
  *
  * NOTE: The OFF value is applied to any ACK message type (e.g. even to known echo ACK).
  *       It means that any kind of ACK message is silently discarded.
@@ -82,22 +85,23 @@
  *
  * NOTE: Enable it, in case Marlin firmware does not properly support M600 on the mainboard.
  *
- *   Options: [enable: true, disable: false]
+ *   Options: [disable: 0, enable: 1]
  */
-#define EMULATE_M600 true  // Default: true
+#define EMULATE_M600 1  // Default: 1
 
 //================================================================================
 //============================= Marlin Mode Settings =============================
-//========== (only for TFT24_V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70_V3.0) ==========
+//========== (only for TFT24 V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70 V3.0) ==========
 //================================================================================
 
 /**
  * Default Mode
  * Set Marlin/Touch mode as the default mode at startup.
  *
- * NOTE: Mode switching is still possible by holding down the encorder for two seconds.
+ * NOTE: Mode switching is possible only for Marlin Mode and Touch Mode by a long press of
+ *       three seconds on the display or holding down the encorder button for two seconds.
  *
- *   Options: [Marlin Mode: MODE_MARLIN, Touch Mode: MODE_SERIAL_TSC]
+ *   Options: [Marlin Mode: 0, Touch Mode: 1, Blocked Marlin Mode: 2, Blocked Touch Mode: 3]
  */
 #define DEFAULT_LCD_MODE MODE_SERIAL_TSC  // Default: MODE_SERIAL_TSC
 
@@ -107,9 +111,9 @@
  * Allows seamless OctoPrint UART connection to the TFT's UART/serial expansion port
  * no matter which mode the TFT is in.
  *
- *   Options: [enable: true, disable: false]
+ *   Options: [disable: 0, enable: 1]
  */
-#define SERIAL_ALWAYS_ON false  // Default: false
+#define SERIAL_ALWAYS_ON 0  // Default: 0
 
 /**
  * Default Marlin Mode Background & Font Colors
@@ -127,17 +131,17 @@
  *
  * NOTE: Disable is recommended for TFT24.
  *
- *   Options: [enable: true, disable: false]
+ *   Options: [disable: 0, enable: 1]
  */
-#define MARLIN_MODE_FULLSCREEN false  // Default: false
+#define MARLIN_MODE_FULLSCREEN 0  // Default: 0
 
 /**
  * Marlin Mode Title Support
  * Show banner text at the top of the TFT in Marlin Mode.
  *
- *   Options: [enable: true, disable: false]
+ *   Options: [disable: 0, enable: 1]
  */
-#define MARLIN_SHOW_BANNER true  // Default: true
+#define MARLIN_SHOW_BANNER 1  // Default: 1
 
 /**
  * Marlin Mode Title
@@ -274,17 +278,17 @@
  * Enable this will send "M500" after "G29" to store leveling value and send "M420 S1"
  * to enable leveling state after startup.
  *
- *   Options: [enable: true, disable: false]
+ *   Options: [disable: 0, enable: 1]
  */
-#define AUTO_SAVE_LOAD_BL_VALUE true  // Default: true
+#define AUTO_SAVE_LOAD_BL_VALUE 1  // Default: 1
 
 /**
- * TouchMI settings (on ABL menu)
- * Enable this option for settings TouchMI sensor on ABL Menu (Init, Z Offset, Save, Test).
+ * TouchMI settings (ABL)
+ * Enable this option for displaying TouchMI sensor settings in ABL menu (Init, Z Offset, Save, Test).
  *
- *   Options: [enable: true, disable: false]
+ *   Options: [disable: 0, enable: 1]
  */
-#define TOUCHMI_SENSOR_VALUE false  // Default: false
+#define TOUCHMI_SENSOR_VALUE 0  // Default: 0
 
 /**
  * Onboard / Printer SD
@@ -292,9 +296,9 @@
  * On-Board SD Card and auto-configure M27 AutoReport with M115 command.
  * Set the time interval to poll SD Printing status if Marlin reports M27 AutoReport as disabled.
  */
-#define M27_REFRESH             3     // Time in sec for M27 command
-#define M27_WATCH_OTHER_SOURCES true  // if true the polling on M27 report is always active. Case: SD print
-                                      // started not from TFT35
+#define M27_REFRESH             3  // Time in sec for M27 command
+#define M27_WATCH_OTHER_SOURCES 1  // if "1" the polling on M27 report is always active. Case: SD print
+                                   // started not from TFT35
 
 /**
  * Z Raise Probing Support (Probe Offset, Mesh Editor)
@@ -315,9 +319,9 @@
  * Power Supply Active HIGH
  * Enable the logic of the mode on HIGH signal.
  *
- *   Options: [enable: true, disable: false]
+ *   Options: [disable: 0, enable: 1]
  */
-#define PS_ON_ACTIVE_HIGH true  // Default: true ('false' for ATX (1), 'true' for X-Box (2))
+#define PS_ON_ACTIVE_HIGH 1  // Default: 1 ("0" for ATX (1), "1" for X-Box (2))
 
 /**
  * Power Supply Auto Shutdown Temperature
@@ -335,9 +339,9 @@
 
 /**
  * NOTE for users having a filament sensor connected to the mainboard:
- * 1) Define 'FIL_SENSOR_TYPE 0' below to disable the sensor handling on the TFT.
+ * 1) Define "FIL_SENSOR_TYPE 0" below to disable the sensor handling on the TFT.
  * 2) Configure the sensor in the firmware of your mainboard.
- * 3) Add M75 to 'PRINT_START_GCODE' and M77 to 'PRINT_END_GCODE' of the TFT (or your slicer).
+ * 3) Add M75 to "PRINT_START_GCODE" and M77 to "PRINT_END_GCODE" of the TFT (or your slicer).
  */
 
 /**
@@ -352,9 +356,9 @@
  * Inverted Filament Runout Logic
  * Invert the logic of the sensor.
  *
- *   Options: [enable: true, disable: false]
+ *   Options: [disable: 0, enable: 1]
  */
-#define FIL_RUNOUT_INVERTING true  // Default: true
+#define FIL_RUNOUT_INVERTING 1  // Default: 1
 
 // Filament Noise Threshold
 // Pause print when filament runout is detected at least for this time period.
@@ -377,9 +381,9 @@
  * Power Loss Recovery Homing
  * Home before power loss recovery.
  *
- *   Options: [enable: true, disable: false]
+ *   Options: [disable: 0, enable: 1]
  */
-#define HOME_BEFORE_PLR false  // Default: false
+#define HOME_BEFORE_PLR 0  // Default: 0
 
 // Power Loss Z Raise
 // Raise Z axis on resume (on power loss with UPS).
@@ -389,16 +393,16 @@
  * BTT UPS Support
  * Enable backup power/UPS to move Z axis on power loss.
  *
- *   Options: [enable: true, disable: false]
+ *   Options: [disable: 0, enable: 1]
  */
-#define BTT_MINI_UPS false  // Default: false
+#define BTT_MINI_UPS 0  // Default: 0
 
 //================================================================================
 //======================== Other Device-Specific Settings ========================
 //================================================================================
 
 /**
- * Knob LED Color (only for TFT28 V3.0, TFT35 E3.0, TFT43 V3.0, TFT50 V3.0 & TFT70 V3.0)
+ * Knob LED Color (only for TFT28/TFT35_E3/TFT43/TFT50/TFT70 V3.0)
  *
  *   Options: [OFF: 0, WHITE: 1, RED: 2, ORANGE: 3, YELLOW: 4, GREEN: 5, BLUE: 6, INDIGO: 7, VIOLET: 8]
  */
@@ -408,7 +412,7 @@
 #define KEEP_KNOB_LED_COLOR_MARLIN_MODE
 
 /**
- * Default LCD Brightness Levels (only for TFT28 V3.0, TFT35 E3.0, TFT43 V3.0, TFT50 V3.0 & TFT70 V3.0)
+ * Default LCD Brightness Levels (only for TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
  * Default brightness values for LCD.
  *
  *   Options: [off: 0, 5%: 1, 10%: 2, 20%: 3, 30%: 4, 40%: 5, 50%: 6, 60%: 7, 70%: 8, 80%: 9, 90%: 10, 100%: 11]
@@ -417,7 +421,7 @@
 #define DEFAULT_LCD_IDLE_BRIGHTNESS   3  // Display brightness when device is idle (Default: 3)
 
 /**
- * Default LCD Idle Time (only for TFT28 V3.0, TFT35 E3.0, TFT43 V3.0, TFT50 V3.0 & TFT70 V3.0)
+ * Default LCD Idle Time (only for TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
  * The LCD screen will dim to idle brightness, if the display is not touched for the
  * period of the lcd idle timer.
  *
@@ -425,8 +429,8 @@
  */
 #define DEFAULT_LCD_IDLE_TIMER  0  // Default: 0
 
-// Custom value in seconds. This will be used if DEFAULT_LCD_IDLE_TIMER is set to 7 (CUSTOM Seconds).
-#define LCD_DIM_CUSTOM_SECONDS (10 * 60)
+// Custom value in seconds. This will be used if DEFAULT_LCD_IDLE_TIMER is set to 7 (CUSTOM Seconds)
+#define IDLE_TIME_CUSTOM (10 * 60)
 
 //================================================================================
 //============================ Custom Gcode Commands =============================
@@ -437,8 +441,8 @@
  * Up to 15 custom gcode commands that will be available in the Custom menu.
  *
  * Usage:
- *   To enable a custom command, remove '//' at the begining of custom commands label & gcode.
- *   To disable a custom command, add '//' at the begining of custom commands label & gcode.
+ *   To enable a custom command, remove "//" at the begining of custom commands label & gcode.
+ *   To disable a custom command, add "//" at the begining of custom commands label & gcode.
  *
  * NOTE: If the values are left blank then default name and gcode will be used.
  *
@@ -666,10 +670,10 @@
  */
 #define BUZZER_STOP_LEVEL LOW  // Default: LOW
 
-// Show bootscreen when starting up.
+// Show bootscreen when starting up
 #define SHOW_BTT_BOOTSCREEN
 
-// Bootscreen logo time in ms.
+// Bootscreen logo time in ms
 #define BTT_BOOTSCREEN_TIME 3000
 
 /**
@@ -738,8 +742,8 @@
 #define KEYBOARD_COLOR_LAYOUT 0  // Default: 0
 
 /**
- * Terminal Text Display Color Scheme
- * Color scheme for the Terminal text display.
+ * Terminal Text Color Scheme
+ * Color scheme for displaying text in Terminal menu.
  *
  *   Options: [Material Dark: 0, Material Light: 1, High Contrast: 2]
  *     Material Dark:  Dark background with light font color and orange command font color.
@@ -761,14 +765,14 @@
 #define TERMINAL_KEYBOARD_LAYOUT 0  // Default: 0
 
 /**
- * Progress Bar Layout (Printing Menu)
+ * Progress Bar Layout (Printing menu)
  * Uncomment to enable a progress bar with 10% markers.
  * Comment to enable a standard progress bar.
  */
 //#define MARKED_PROGRESS_BAR  // Default: commented (disabled)
 
 /**
- * Live Text Background Color Rendering Technique (Printing Menu)
+ * Live Text Background Color Rendering Technique (Printing menu)
  * Uncomment to enable the sampling and use of a uniform background color across all the icons.
  * Comment to enable a standard rendering based on the sampling and use, in a pixel by pixel basis,
  * of the underlying icon background colors.
@@ -792,7 +796,7 @@
  *   Options: [Classic: 0, RGB565 Bitmap: 1, Base64 PNG: 2]
  *     Classic:       RGB565 bitmaps for all possible thumbnail sizes are embedded in the gcode
  *                    file at fixed file offsets. It is fastest to parse but least flexible.
- *     RGB565 Bitmap: A specific thumbnail comment identifies the location of a single 'classic'
+ *     RGB565 Bitmap: A specific thumbnail comment identifies the location of a single "Classic"
  *                    embedded RB565 bitmap thumbnail. It is almost as fast as classic and
  *                    flexible but requires a dedicated post-processing of gcode files for
  *                    most slicers. "Classic" is used as fallback.

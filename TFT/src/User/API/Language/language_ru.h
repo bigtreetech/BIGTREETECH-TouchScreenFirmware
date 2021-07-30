@@ -34,6 +34,7 @@
     #define STRING_LCD_BRIGHTNESS         "Яркость"
     #define STRING_LCD_IDLE_BRIGHTNESS    "Регулировка яркости LCD"
     #define STRING_LCD_IDLE_DELAY         "Время до гашения LCD"
+    #define STRING_BLOCK_TOUCH_ON_IDLE    "Block touch on idle"
     #define STRING_START_GCODE_ENABLED    "G-код перед печатью"
     #define STRING_END_GCODE_ENABLED      "G-код после печати"
     #define STRING_CANCEL_GCODE_ENABLED   "G-код отмены печати"

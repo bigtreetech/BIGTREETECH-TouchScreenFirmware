@@ -8,6 +8,7 @@ extern "C" {
 #include <stdint.h>
 
 #define BUZZER_CACHE_SIZE 5
+
 typedef struct
 {
   uint32_t frequency[BUZZER_CACHE_SIZE];

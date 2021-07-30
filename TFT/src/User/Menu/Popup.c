@@ -6,7 +6,7 @@
 #define POPUP_MAX_CHAR (X_MAX_CHAR * MAX_MSG_LINES)
 
 static BUTTON bottomSingleBtn = {
-  //button location                       color before pressed   color after pressed
+  // button location                      color before pressed   color after pressed
   POPUP_RECT_SINGLE_CONFIRM, NULL, 5, 1,  DARKGREEN, DARKGREEN,  MAT_LOWWHITE, DARKGREEN, WHITE, DARKGREEN
 };
 
@@ -19,15 +19,15 @@ const GUI_RECT doubleBtnRect[] = {POPUP_RECT_DOUBLE_CONFIRM, POPUP_RECT_DOUBLE_C
 static const GUI_RECT singleBtnRect = POPUP_RECT_SINGLE_CONFIRM;
 
 static WINDOW window = {
-  DIALOG_TYPE_INFO,             //default window type
-  POPUP_RECT_WINDOW,            //rectangle position and size of popup window
-  POPUP_TITLE_HEIGHT,           //height of title bar
-  POPUP_BOTTOM_HEIGHT,          //height of action bar
-  2,                            //window border width
-  GRAY,                         //window border color
-  {DARKGRAY, MAT_LOWWHITE},     //Title bar font color / background color
-  {DARKGRAY, MAT_LOWWHITE},     //Message area font color / background color
-  {DARKGRAY, MAT_LOWWHITE},     //actionbar font color / background color
+  DIALOG_TYPE_INFO,             // default window type
+  POPUP_RECT_WINDOW,            // rectangle position and size of popup window
+  POPUP_TITLE_HEIGHT,           // height of title bar
+  POPUP_BOTTOM_HEIGHT,          // height of action bar
+  2,                            // window border width
+  GRAY,                         // window border color
+  {DARKGRAY, MAT_LOWWHITE},     // Title bar font color / background color
+  {DARKGRAY, MAT_LOWWHITE},     // Message area font color / background color
+  {DARKGRAY, MAT_LOWWHITE},     // actionbar font color / background color
 };
 
 static BUTTON *windowButton =  NULL;
@@ -195,7 +195,7 @@ void _setDialogCancelTextLabel(int16_t index)
 */
 void showDialog(DIALOG_TYPE type, void (*ok_action)(), void (*cancel_action)(), void (*loop_action)())
 {
-  if (infoSettings.mode == MODE_MARLIN)
+  if ((infoSettings.mode % MODE_COUNT) == MODE_MARLIN)  // if standard/blocked Marlin mode, then exit
     return;
 
   popup_redraw = true;
@@ -213,9 +213,9 @@ void loopPopup(void)
 
   popup_redraw = false;
 
-  wakeLCD();
+  LCD_Wake();
 
-  //display the last received popup message, overriding previous popup messages, if any
+  // display the last received popup message, overriding previous popup messages, if any
   if (popup_cancel[0])
   {
     popupDrawPage(popup_type, bottomDoubleBtn, popup_title, popup_msg, popup_ok, popup_cancel);
@@ -234,9 +234,9 @@ void loopPopup(void)
     return;
   }
 
-  //avoid to nest menuDialog popup type (while a menuNotification popup type can be overridden)
+  // avoid to nest menuDialog popup type (while a menuNotification popup type can be overridden)
   if (infoMenu.menu[infoMenu.cur] != menuDialog)
-  { //handle the user interaction, then reload the previous menu
+  { // handle the user interaction, then reload the previous menu
     infoMenu.menu[++infoMenu.cur] = menuDialog;
   }
 }

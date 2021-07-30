@@ -189,7 +189,7 @@ const GUI_RECT touchPS_elements[PS_COUNT] = {
   // infobox
   {1*ICON_WIDTH+1*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  3*ICON_WIDTH+2*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
 
-  // dummy 
+  // dummy
   {0, 0, 0, 0}
 };
 
@@ -425,7 +425,7 @@ void reminderMessage(int16_t inf, SYS_STATUS status)
 
 void volumeReminderMessage(int16_t inf, SYS_STATUS status)
 {
-  wakeLCD();
+  LCD_Wake();
   if (toastRunning()) return;
 
   volumeReminder.inf = inf;
@@ -843,46 +843,56 @@ GUI_POINT getIconStartPoint(int index)
 }
 
 #ifdef SMART_HOME
+
   #define LONG_TOUCH (LCD_CHANGE_MODE_INTERVALS / 3)  // keep it lower than LCD_CHANGE_MODE_INTERVALS
+
   void loopCheckBack(void)
   {
     static bool longPress = false;
+
     #ifdef HAS_EMULATOR
-    static bool backHeld = false;
+      static bool backHeld = false;
     #endif
 
     if (!isPress())
     {
       #ifdef HAS_EMULATOR
-      backHeld = false;
+        backHeld = false;
       #endif
+
       longPress = false;
+
       #ifndef HAS_EMULATOR
-      LCD_ReadPen(0);  // reset TSC press timer
+        LCD_ReadPen(0);  // reset TSC press timer
       #endif
+
       return;
     }
+
     if (isPrinting())  // no jump to main menu while printing
       return;
+
     if (menuType != MENU_TYPE_ICON)
       return;
+
     if ((infoMenu.cur == 0) || (infoMenu.menu[infoMenu.cur] == menuMode))
       return;
+
     #ifdef HAS_EMULATOR
-    if (backHeld == true)  // prevent mode selection or screenshot if Back button is held
-    {
-      backHeld = LCD_ReadPen(0);
-      return;
-    }
+      if (backHeld == true)  // prevent mode selection or screenshot if Back button is held
+      {
+        backHeld = LCD_ReadPen(0);
+        return;
+      }
     #endif
 
     if (longPress == false)  // check if longpress already handled
     {
       if (LCD_ReadPen(LONG_TOUCH))  // check if TSC is pressed and held
       {
+        KEY_VALUES tempKey = KEY_IDLE;
         longPress = true;
         touchSound = false;
-        KEY_VALUES tempKey = KEY_IDLE;
 
         if (infoMenu.menu[infoMenu.cur] == menuPrinting)
         {
@@ -892,6 +902,7 @@ GUI_POINT getIconStartPoint(int index)
         {
           tempKey = Key_value(COUNT(rect_of_key), rect_of_key);
         }
+
         touchSound = true;
 
         if (tempKey != KEY_IDLE)
@@ -903,11 +914,14 @@ GUI_POINT getIconStartPoint(int index)
           else
           {
             BUZZER_PLAY(sound_ok);
+
             #ifdef HAS_EMULATOR
-            backHeld = true;
+              backHeld = true;
             #endif
+
             infoMenu.menu[1] = infoMenu.menu[infoMenu.cur];  // prepare menu tree for jump to 0
             infoMenu.cur = 1;
+
             if (infoMenu.menu[1] == menuPrinting)
               clearInfoFile();
           }
@@ -915,6 +929,7 @@ GUI_POINT getIconStartPoint(int index)
       }
     }
   }
+
 #endif  // SMART_HOME
 
 void loopBackEnd(void)
@@ -933,10 +948,12 @@ void loopBackEnd(void)
   loopFan();
   // Speed & flow monitor
   loopSpeed();
+
 #ifdef SMART_HOME
   // check if Back is pressed and held
   loopCheckBack();
 #endif
+
 #ifdef BUZZER_PIN
   // Buzzer handling
   loopBuzzer();
@@ -973,7 +990,7 @@ void loopBackEnd(void)
 #endif
 
 #ifdef LCD_LED_PWM_CHANNEL
-  loopDimTimer();
+  LCD_HandleDimming();
 #endif
 
   if (infoMachineSettings.caseLightsBrightness == ENABLED)

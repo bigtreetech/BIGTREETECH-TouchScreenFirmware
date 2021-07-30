@@ -7,12 +7,12 @@
 /* storage control modules to the FatFs module with a defined API.       */
 /*-----------------------------------------------------------------------*/
 
-#include "ff.h"      // Obtains integer types
-#include "diskio.h"  // Declarations of disk functions
+#include "ff.h"        // Obtains integer types
+#include "variants.h"  // for SD_SPI_SUPPORT etc...
+#include "diskio.h"    // Declarations of disk functions
 #include "usb_conf.h"
 #include "usbh_msc_core.h"
 #include "usbh_usr.h"
-#include "variants.h"
 
 #ifdef SD_SPI_SUPPORT
   #include "sd.h"

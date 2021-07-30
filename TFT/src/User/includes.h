@@ -3,137 +3,149 @@
 
 #include "variants.h"
 
-#include <stdio.h>
+// standard libs
 #include <stdarg.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "my_misc.h"
-#include "printf/printf.h"
-#include "debug.h"
 
-#include "os_timer.h"
-#include "delay.h"
-
-#include "boot.h"
-#include "ScreenShot.h"
-
-#include "Colors.h"
-#include "lcd.h"
-#include "CharIcon.h"
-#include "LCD_Init.h"
+// User/HAL/stm32f10x or // HAL/stm32f2_f4xx
 #include "lcd_dma.h"
-#include "GUI.h"
+#include "lcd.h"
+#include "Serial.h"     // it uses infoSettings. HAL should be independent by that!
+#include "spi_slave.h"  // it uses infoSettings. HAL should be independent by that!
+#include "spi.h"
+#include "timer_pwm.h"
+#include "uart.h"
+
+// User/HAL/USB
+#include "usbh_msc_core.h"  // HAL/STM32_USB_HOST_Library/Class/MSC/inc
+#include "usbh_core.h"      // HAL/STM32_USB_HOST_Library/Core/inc
+#include "usbh_usr.h"       // HAL/STM32_USB_HOST_Library/Usr/inc
+
+// User/HAL
+#include "buzzer.h"    // it uses infoSettings. HAL should be independent by that!
+#include "Knob_LED.h"
+#include "LCD_Init.h"
+#include "sd.h"
+#include "sw_spi.h"
+#include "w25qxx.h"
+#include "xpt2046.h"
+
+// User/Fatfs
+#include "ff.h"
+#include "myfatfs.h"
+
+// User/API/Vfs
+#include "Vfs/vfs.h"
+
+// User/API/printf
+#include "printf/printf.h"
+
+// User/API/Gcode
+#include "Gcode/gcode.h"
+#include "Gcode/mygcodefs.h"
+
+// User/API/Language
 #include "Language.h"
 #include "utf8_decode.h"
 
-#include "uart.h"
-#include "Serial.h"
-#include "spi.h"
-#include "sw_spi.h"
-#include "CircularQueue.h"
-#include "spi_slave.h"
-#include "timer_pwm.h"
-
-#include "usbh_core.h"
-#include "usbh_usr.h"
-#include "usbh_msc_core.h"
-
-#include "sd.h"
-#include "w25qxx.h"
-#include "xpt2046.h"
-#include "buzzer.h"
-
-#include "config.h"
-#include "LCD_Encoder.h"
-#include "ST7920_Emulator.h"
-#include "HD44780_Emulator.h"
-#include "ui_draw.h"
-#include "TouchProcess.h"
-#include "serialConnection.h"
-#include "interfaceCmd.h"
-#include "coordinate.h"
-#include "ff.h"
-#include "Vfs/vfs.h"
-#include "myfatfs.h"
-#include "Gcode/gcode.h"
-#include "Gcode/mygcodefs.h"
-#include "flashStore.h"
-#include "parseACK.h"
-#include "SelectMode.h"
-#include "MarlinMode.h"
-#include "Temperature.h"
-#include "Settings.h"
-#include "Printing.h"
-#include "MachineParameters.h"
-#include "FanControl.h"
-#include "SpeedControl.h"
-#include "BabystepControl.h"
-#include "ProbeOffsetControl.h"
-#include "ProbeHeightControl.h"
-#include "HomeOffsetControl.h"
-#include "CaseLightControl.h"
-
-#include "extend.h"
-#include "menu.h"
-#include "ListItem.h"
+// User/API/UI
+#include "CharIcon.h"
+#include "GUI.h"
+#include "HD44780_Emulator.h"  // it uses infoSettings
+#include "ListItem.h"          // it uses infoSettings
 #include "ListManager.h"
-#include "common.h"
-#include "Popup.h"
-#include "Numpad.h"
+#include "Numpad.h"            // it uses infoSettings
+#include "ST7920_Emulator.h"   // it uses infoSettings
+#include "TouchProcess.h"
+#include "ui_draw.h"
+
+// User/API
+#include "BabystepControl.h"
+#include "boot.h"
+#include "CaseLightControl.h"
+#include "config.h"
+#include "coordinate.h"
+#include "debug.h"
+#include "extend.h"
+#include "FanControl.h"
+#include "flashStore.h"
+#include "HomeOffsetControl.h"
+#include "interfaceCmd.h"
+#include "LCD_Colors.h"
+#include "LCD_Dimming.h"
+#include "LCD_Encoder.h"
+#include "LED_Colors.h"
+#include "MachineParameters.h"
+#include "menu.h"
 #include "Notification.h"
-#include "SanityCheck.h"
-
-//menu
-#include "MainPage.h"
-#include "Heat.h"
-#include "PreheatMenu.h"
-#include "Move.h"
-#include "Home.h"
-#include "Print.h"
+#include "parseACK.h"
 #include "Printing.h"
-#include "More.h"
-#include "Speed.h"
-#include "LCD_LEDColor.h"
-#include "ParameterSettings.h"
-#include "NotificationMenu.h"
-#include "PersistentInfo.h"
+#include "ProbeHeightControl.h"
+#include "ProbeOffsetControl.h"
+#include "ScreenShot.h"
+#include "serialConnection.h"
+#include "Settings.h"
+#include "SpeedControl.h"
+#include "Temperature.h"
 
+// User/Menu
+#include "ABL.h"
 #include "Babystep.h"
-#include "Extrude.h"
-#include "LoadUnload.h"
-#include "RRFMacros.h"
-#include "Fan.h"
-#include "SettingsMenu.h"
-#include "PrintingMenu.h"
-#include "ScreenSettings.h"
-#include "MachineSettings.h"
-#include "FeatureSettings.h"
-#include "ConnectionSettings.h"
-#include "Terminal.h"
-#include "Leveling.h"
 #include "BedLeveling.h"
 #include "BedLevelingLayer2.h"
-#include "MBL.h"
-#include "ABL.h"
-#include "LevelCorner.h"
 #include "BLTouch.h"
-#include "Touchmi.h"
-#include "ZOffset.h"
-#include "PowerFailed.h"
-
-#include "UnifiedMove.h"
-#include "UnifiedHeat.h"
-#include "StatusScreen.h"
-
-#include "Tuning.h"
-#include "Pid.h"
-#include "TuneExtruder.h"
-#include "MeshTuner.h"
-#include "MeshEditor.h"
 #include "CaseLight.h"
-#include "MeshValid.h"
+#include "common.h"
+#include "ConnectionSettings.h"
+#include "Extrude.h"
+#include "Fan.h"
+#include "FeatureSettings.h"
+#include "Heat.h"
+#include "Home.h"
 #include "LEDColor.h"
+#include "LevelCorner.h"
+#include "Leveling.h"
+#include "LoadUnload.h"
+#include "MachineSettings.h"
+#include "MainPage.h"
+#include "MarlinMode.h"
+#include "MBL.h"
+#include "MeshEditor.h"
+#include "MeshTuner.h"
+#include "MeshValid.h"
+#include "More.h"
+#include "Move.h"
+#include "NotificationMenu.h"
+#include "ParameterSettings.h"
+#include "PersistentInfo.h"
+#include "Pid.h"
+#include "Popup.h"
+#include "PowerFailed.h"
+#include "PreheatMenu.h"
+#include "Print.h"
+#include "PrintingMenu.h"
+#include "RRFMacros.h"
+#include "ScreenSettings.h"
+#include "SelectMode.h"
+#include "SettingsMenu.h"
+#include "Speed.h"
+#include "StatusScreen.h"
+#include "Terminal.h"
+#include "Touchmi.h"
+#include "TuneExtruder.h"
+#include "Tuning.h"
+#include "UnifiedHeat.h"
+#include "UnifiedMove.h"
+#include "ZOffset.h"
+
+// User
+#include "delay.h"
+#include "my_misc.h"
+#include "os_timer.h"
+#include "SanityCheck.h"
 
 #define MAX_MENU_DEPTH 10       // max sub menu depth
 typedef void (*FP_MENU)(void);

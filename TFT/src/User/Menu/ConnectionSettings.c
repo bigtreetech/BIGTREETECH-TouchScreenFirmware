@@ -28,13 +28,13 @@ void menuDisconnect(void)
   while (!isPress())
   {
     #ifdef LCD_LED_PWM_CHANNEL
-      loopDimTimer();
+      LCD_HandleDimming();
     #endif
   }
   while (isPress())
   {
     #ifdef LCD_LED_PWM_CHANNEL
-      loopDimTimer();
+      LCD_HandleDimming();
     #endif
   }
   Serial_ReSourceInit();

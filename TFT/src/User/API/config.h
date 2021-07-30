@@ -43,7 +43,7 @@ extern "C" {
 #define CONFIG_NOTIFICATION_M117      "notification_m117:"
 #define CONFIG_EMULATE_M600           "emulate_m600:"
 #define CONFIG_PROG_DISP_TYPE         "prog_disp_type:"
-//-----------------------------Marlin Mode Settings (only for TFT24_V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70_V3.0)
+//-----------------------------Marlin Mode Settings (only for TFT24 V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
 #define CONFIG_MODE                   "default_mode:"
 #define CONFIG_SERIAL_ON              "serial_always_on:"
 #define CONFIG_MARLIN_BG_COLOR        "marlin_bg_color:"
@@ -123,6 +123,7 @@ extern "C" {
 #define CONFIG_BRIGHTNESS             "lcd_brightness:"
 #define CONFIG_BRIGHTNESS_IDLE        "lcd_idle_brightness:"
 #define CONFIG_BRIGHTNESS_IDLE_DELAY  "lcd_idle_delay:"
+#define CONFIG_BLOCK_TOUCH_ON_IDLE    "block_touch_on_idle:"
 //-----------------------------Custom Gcode Commands
 #define CONFIG_CUSTOM_LABEL_1         "custom_label_1:"
 #define CONFIG_CUSTOM_LABEL_2         "custom_label_2:"

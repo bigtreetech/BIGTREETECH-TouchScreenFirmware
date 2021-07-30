@@ -41,6 +41,7 @@ extern "C" {
 #define LANG_KEY_LCD_BRIGHTNESS               "label_lcd_brightness:"
 #define LANG_KEY_LCD_IDLE_BRIGHTNESS          "label_lcd_idle_brightness:"
 #define LANG_KEY_LCD_IDLE_DELAY               "label_lcd_idle_delay:"
+#define LANG_KEY_BLOCK_TOUCH_ON_IDLE          "label_block_touch_on_idle:"
 #define LANG_KEY_START_GCODE_ENABLED          "label_start_gcode_enabled:"
 #define LANG_KEY_END_GCODE_ENABLED            "label_end_gcode_enabled:"
 #define LANG_KEY_CANCEL_GCODE_ENABLED         "label_cancel_gcode_enabled:"

@@ -34,6 +34,7 @@
     #define STRING_LCD_BRIGHTNESS         "LCD背光亮度"
     #define STRING_LCD_IDLE_BRIGHTNESS    "LCD睡眠背光亮度"
     #define STRING_LCD_IDLE_DELAY         "LCD自动睡眠时间"
+    #define STRING_BLOCK_TOUCH_ON_IDLE    "Block touch on idle"
     #define STRING_START_GCODE_ENABLED    "执行打印前起始Gcode"
     #define STRING_END_GCODE_ENABLED      "执行打印后结束Gcode"
     #define STRING_CANCEL_GCODE_ENABLED   "中断打印Gcode"

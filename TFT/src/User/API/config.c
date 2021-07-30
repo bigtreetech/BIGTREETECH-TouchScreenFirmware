@@ -74,7 +74,7 @@ bool getConfigFromFile(void)
     PRINTDEBUG(configCustomGcodes->gcode[1]);
     if (scheduleRotate)
     {
-      LCD_RefreshDirection();
+      LCD_RefreshDirection(infoSettings.rotate_ui);
       TSC_Calibration();
     }
     storePara();
@@ -642,12 +642,12 @@ void parseConfigKey(uint16_t index)
       SET_VALID_INT_VALUE(infoSettings.prog_disp_type, 0, 2);
       break;
 
-    //----------------------------Marlin Mode Settings (only for TFT24_V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70_V3.0)
+    //----------------------------Marlin Mode Settings (only for TFT24 V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
 
     #ifdef HAS_EMULATOR
 
       case C_INDEX_MODE:
-        SET_VALID_INT_VALUE(infoSettings.mode, 0, MODE_COUNT - 1);
+        SET_VALID_INT_VALUE(infoSettings.mode, 0, MAX_MODE_COUNT - 1);
         break;
 
       case C_INDEX_SERIAL_ON:
@@ -681,7 +681,7 @@ void parseConfigKey(uint16_t index)
       }
 
       case C_INDEX_MARLIN_TYPE:
-        SET_VALID_INT_VALUE(infoSettings.marlin_type, 0, MODE_COUNT - 1);
+        SET_VALID_INT_VALUE(infoSettings.marlin_type, 0, MODE_TYPE_COUNT - 1);
         break;
 
     #endif  // ST7920_EMULATOR || LCD2004_EMULATOR
@@ -954,7 +954,7 @@ void parseConfigKey(uint16_t index)
 
     #ifdef LED_COLOR_PIN
       case C_INDEX_KNOB_COLOR:
-        SET_VALID_INT_VALUE(infoSettings.knob_led_color, 0, LED_COLOR_NUM - 1);
+        SET_VALID_INT_VALUE(infoSettings.knob_led_color, 0, LED_COLOR_COUNT - 1);
         break;
 
       #ifdef LCD_LED_PWM_CHANNEL
@@ -971,17 +971,21 @@ void parseConfigKey(uint16_t index)
 
     #ifdef LCD_LED_PWM_CHANNEL
       case C_INDEX_BRIGHTNESS:
-        SET_VALID_INT_VALUE(infoSettings.lcd_brightness, 0, ITEM_BRIGHTNESS_NUM - 1);
+        SET_VALID_INT_VALUE(infoSettings.lcd_brightness, 0, LCD_BRIGHTNESS_COUNT - 1);
         if (infoSettings.lcd_brightness == 0)
-          infoSettings.lcd_brightness = 1; // If someone set it to 0 set it to 1
+          infoSettings.lcd_brightness = 1;  // If someone set it to 0 set it to 1
         break;
 
       case C_INDEX_BRIGHTNESS_IDLE:
-        SET_VALID_INT_VALUE(infoSettings.lcd_idle_brightness, 0, ITEM_BRIGHTNESS_NUM - 1);
+        SET_VALID_INT_VALUE(infoSettings.lcd_idle_brightness, 0, LCD_BRIGHTNESS_COUNT - 1);
         break;
 
       case C_INDEX_BRIGHTNESS_IDLE_DELAY:
-        SET_VALID_INT_VALUE(infoSettings.lcd_idle_timer, 0, ITEM_SECONDS_NUM - 1);
+        SET_VALID_INT_VALUE(infoSettings.lcd_idle_timer, 0, LCD_IDLE_TIME_COUNT - 1);
+        break;
+
+      case C_INDEX_BLOCK_TOUCH_ON_IDLE:
+        infoSettings.block_touch_on_idle = getOnOff();
         break;
     #endif
 

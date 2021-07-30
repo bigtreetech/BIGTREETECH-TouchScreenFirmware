@@ -30,11 +30,11 @@ typedef enum
 // Config version support
 // change if new elements/keywords are added/removed/changed in the configuration.h Format YYYYMMDD
 // this number should match CONFIG_VERSION in configuration.h
-#define CONFIG_SUPPPORT 20210721
+#define CONFIG_SUPPPORT 20210726
 
 #define FONT_FLASH_SIGN       20210522  // (YYYYMMDD) change if fonts require updating
-#define CONFIG_FLASH_SIGN     20210721  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
-#define LANGUAGE_FLASH_SIGN   20210721  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
+#define CONFIG_FLASH_SIGN     20210726  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
+#define LANGUAGE_FLASH_SIGN   20210726  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
 #define ICON_FLASH_SIGN       20210711  // (YYYYMMDD) change if any icon(s) is added or removed
 
 #define FONT_CHECK_SIGN       (FONT_FLASH_SIGN + WORD_UNICODE + FLASH_SIGN_ADDR)
@@ -44,6 +44,7 @@ typedef enum
 #define LANGUAGE_CHECK_SIGN   (LANGUAGE_FLASH_SIGN + LANGUAGE_ADDR + LABEL_NUM)
 #define ICON_CHECK_SIGN       (ICON_FLASH_SIGN + ICON_ADDR(0) + ICON_PREVIEW)
 
+#define MAX_MODE_COUNT        4
 #define MAX_EXT_COUNT         6
 #define MAX_HOTEND_COUNT      6
 #define MAX_HEATER_COUNT      (2 + MAX_HOTEND_COUNT)  // chamber + bed + hotend
@@ -81,6 +82,7 @@ typedef enum
 {
   LCD12864 = 0,
   LCD2004,
+  MODE_TYPE_COUNT
 } MARLIN_MODE_TYPE;
 
 typedef struct
@@ -116,7 +118,7 @@ typedef struct
   uint8_t  emulate_m600;
   uint8_t  prog_disp_type;
 
-  // Marlin Mode Settings (only for TFT24_V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70_V3.0)
+  // Marlin Mode Settings (only for TFT24 V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
   uint8_t  mode;
   uint8_t  serial_alwaysOn;
   uint16_t marlin_mode_bg_color;
@@ -188,15 +190,13 @@ typedef struct
   uint8_t  toastSound;
   uint8_t  alertSound;
   uint8_t  heaterSound;
-
-#ifdef LED_COLOR_PIN
   uint8_t  knob_led_color;
   uint8_t  knob_led_idle;
   uint8_t  neopixel_pixels;
-#endif
   uint8_t  lcd_brightness;
   uint8_t  lcd_idle_brightness;
   uint8_t  lcd_idle_timer;
+  uint8_t  block_touch_on_idle;
 
   // Start, End & Cancel Gcode Commands
   uint8_t  send_start_gcode;

@@ -34,6 +34,7 @@
     #define STRING_LCD_BRIGHTNESS         "Φωτεινότητα"
     #define STRING_LCD_IDLE_BRIGHTNESS    "Φωτεινότητα LCD σκοτεινή"
     #define STRING_LCD_IDLE_DELAY         "Xρονομετρητής αδράνειας οθόνης"
+    #define STRING_BLOCK_TOUCH_ON_IDLE    "Block touch on idle"
     #define STRING_START_GCODE_ENABLED    "Αρχικό Gcode προ εκτύπωσης"
     #define STRING_END_GCODE_ENABLED      "Τερματικό Gcode εφότου εκτύπωσης"
     #define STRING_CANCEL_GCODE_ENABLED   "Ματαίωση Gcode"
