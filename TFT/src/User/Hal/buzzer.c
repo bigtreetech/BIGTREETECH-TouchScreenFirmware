@@ -1,6 +1,6 @@
 #include "buzzer.h"
+#include "includes.h"  // for mcuClocks, infoSettings etc...
 #include "GPIO_Init.h"
-#include "includes.h"
 
 #ifdef BUZZER_PIN
 

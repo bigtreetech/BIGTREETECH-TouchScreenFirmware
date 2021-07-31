@@ -644,10 +644,12 @@ void menuPrinting(void)
       case PS_KEY_6:
         if (isPrinting())
         {
-          if (!isHostDialog())
-            printPause(!isPaused(), PAUSE_NORMAL);
-          else
+          if (isHostDialog())
             addToast(DIALOG_TYPE_ERROR, (char *)textSelect(LABEL_BUSY));
+          else if (getPrintRunout())
+            addToast(DIALOG_TYPE_ERROR, (char *)textSelect(LABEL_FILAMENT_RUNOUT));
+          else
+            printPause(!isPaused(), PAUSE_NORMAL);
         }
         #ifndef TFT70_V3_0
           else

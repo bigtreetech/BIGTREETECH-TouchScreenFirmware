@@ -1,6 +1,6 @@
 #include "TouchProcess.h"
-#include "GPIO_Init.h"
 #include "includes.h"
+#include "GPIO_Init.h"
 
 #define XL1 LCD_X[0]
 #define XL2 LCD_X[1]
@@ -196,6 +196,13 @@ uint16_t KEY_GetValue(uint8_t total_rect, const GUI_RECT* menuRect)
       key_return = key_num;
       key_num = IDLE_TOUCH;
       firstPress = true;
+
+      #ifdef LCD_LED_PWM_CHANNEL
+        // if LCD is blocked (on idle), skip the first touch, preventing to trigger any undesired action,
+        // and wait the LCD brightness is restored first
+        if (LCD_IsBlocked())
+          key_return = IDLE_TOUCH;
+      #endif
     }
   }
   return key_return;

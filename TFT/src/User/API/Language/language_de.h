@@ -7,6 +7,7 @@
     #define STRING_ROTATE_UI              "UI drehen"
     #define STRING_TERMINAL_ACK           "Zeige ACK im Terminal"
     #define STRING_PERSISTENT_INFO        "Persistente Status Info"
+    #define STRING_FAN_SPEED_PERCENT      "Lüft. Geschw. in Prozent"
     #define STRING_FILE_LIST_MODE         "Dateien als Liste"
     #define STRING_FILE_SORT_BY           "Sortiere Dateien nach"
     #define STRING_ACK_NOTIFICATION       "ACK - Stil"
@@ -17,7 +18,6 @@
     #define STRING_MARLIN_TYPE            "Marlin Modus Typ"
     #define STRING_MOVE_SPEED             "Geschwindigkeit (XYZ)"
     #define STRING_AUTO_LOAD_LEVELING     "Auto Laden/Speichern Leveling"
-    #define STRING_FAN_SPEED_PERCENT      "Lüft. Geschw. in Prozent"
     #define STRING_XY_OFFSET_PROBING      "XY Offset Probing Untertützung"
     #define STRING_Z_STEPPERS_ALIGNMENT   "Z Stepper Auto-Justierung"
     #define STRING_PS_ON                  "Auto-aus (PS_ON)"
@@ -34,14 +34,16 @@
     #define STRING_LCD_BRIGHTNESS         "Helligkeit"
     #define STRING_LCD_IDLE_BRIGHTNESS    "LCD Helligkeit (Standby)"
     #define STRING_LCD_IDLE_DELAY         "LCD Timer Standby"
+    #define STRING_BLOCK_TOUCH_ON_IDLE    "Block touch on idle"
     #define STRING_START_GCODE_ENABLED    "Gcode vor Druck"
     #define STRING_END_GCODE_ENABLED      "Gcode nach Druck"
     #define STRING_CANCEL_GCODE_ENABLED   "Gcode bei Abbruch"
 
-    // Machine Parameter Settings
+    // Machine Parameter Settings - Param Title (ordered by gcode)
     #define STRING_STEPS_SETTING          "Schritte pro mm"
-    #define STRING_MAXFEEDRATE            "max. Feed Geschwindig."
+    #define STRING_FILAMENT_SETTING       "Filament Durchmesser"
     #define STRING_MAXACCELERATION        "max. Beschleunigung"
+    #define STRING_MAXFEEDRATE            "max. Feed Geschwindig."
     #define STRING_ACCELERATION           "Beschleunigung"
     #define STRING_JERK                   "Jerk"
     #define STRING_JUNCTION_DEVIATION     "Junction Deviation"
@@ -50,13 +52,18 @@
     #define STRING_FWRECOVER              "FW Rückeinschub"
     #define STRING_RETRACT_AUTO           "Auto-Rückzug (Firmware)"
     #define STRING_HOTEND_OFFSET          "Abstand 2te Düse"
+    #define STRING_STEALTH_CHOP           "TMC StealthChop"
+    #define STRING_DELTA_CONFIGURATION    "Delta Configuration"
+    #define STRING_DELTA_TOWER_ANGLE      "Tower Angle Trim"
+    #define STRING_DELTA_ENDSTOP          "Endstop Adjustments"
     #define STRING_PROBE_OFFSET           "Sensor Versatz"
     #define STRING_LIN_ADVANCE            "Linear Advance"
-    #define STRING_FILAMENT_SETTING       "Filament Durchmesser"
     #define STRING_CURRENT_SETTING        "Treiber Strom (mA)"
-    #define STRING_BUMP_SENSITIVITY       "TMC Empfindlichkeit"
     #define STRING_HYBRID_THRESHOLD       "TMC HybridThreshold"
-    #define STRING_STEALTH_CHOP           "TMC StealthChop"
+    #define STRING_BUMP_SENSITIVITY       "TMC Empfindlichkeit"
+    #define STRING_MBL_OFFSET             "MBL Versatz"
+
+    // Machine Parameter Settings - Param Attributes (ordered by gcode)
     #define STRING_PRINT_ACCELERATION     "Druck Beschl."
     #define STRING_RETRACT_ACCELERATION   "Rückzug Beschl."
     #define STRING_TRAVEL_ACCELERATION    "Fahrt Beschl."
@@ -68,7 +75,6 @@
     #define STRING_SWAP_RECOVER_LENGTH    "extra Länge (Wechsel)"
     #define STRING_RECOVER_FEEDRATE       "Geschwindigkeit"
     #define STRING_SWAP_RECOVER_FEEDRATE  "Geschwindigkeit (Wechsel)"
-    #define STRING_MBL_OFFSET             "MBL Versatz"
 
     // Save / Load
     #define STRING_SAVE                   "Speichern"
@@ -348,5 +354,7 @@
     #define STRING_Z_ALIGN                "Z ausr."
     #define STRING_MACROS                 "Macros"
     #define STRING_MESH_VALID             "Mesh Validation"
+    #define STRING_CONNECT_PROBE          "Connect probe before starting the process. Make sure to disconnect it afterwards."
+    #define STRING_CALIBRATION            "Calibration"
 
 #endif

@@ -7,6 +7,7 @@
     #define STRING_ROTATE_UI              "Переворот"
     #define STRING_TERMINAL_ACK           "ACK терминала (C°)"
     #define STRING_PERSISTENT_INFO        "Нагрев в инфостроке"
+    #define STRING_FAN_SPEED_PERCENT      "Скорость вентилятора в процентах"
     #define STRING_FILE_LIST_MODE         "Файлы в режиме строк"
     #define STRING_FILE_SORT_BY           "Сортировать по"
     #define STRING_ACK_NOTIFICATION       "ACK стиль уведомления"
@@ -17,7 +18,6 @@
     #define STRING_MARLIN_TYPE            "Marlin тип режима"
     #define STRING_MOVE_SPEED             "Скорость (X Y Z)"
     #define STRING_AUTO_LOAD_LEVELING     "Автоматическая Загрузка Сетки"
-    #define STRING_FAN_SPEED_PERCENT      "Скорость вентилятора в процентах"
     #define STRING_XY_OFFSET_PROBING      "XY Офсет Датчика"
     #define STRING_Z_STEPPERS_ALIGNMENT   "Z Автоматическое выравнивание"
     #define STRING_PS_ON                  "Автовыключение"
@@ -34,14 +34,16 @@
     #define STRING_LCD_BRIGHTNESS         "Яркость"
     #define STRING_LCD_IDLE_BRIGHTNESS    "Регулировка яркости LCD"
     #define STRING_LCD_IDLE_DELAY         "Время до гашения LCD"
+    #define STRING_BLOCK_TOUCH_ON_IDLE    "Block touch on idle"
     #define STRING_START_GCODE_ENABLED    "G-код перед печатью"
     #define STRING_END_GCODE_ENABLED      "G-код после печати"
     #define STRING_CANCEL_GCODE_ENABLED   "G-код отмены печати"
 
-    // Machine Parameter Settings
+    // Machine Parameter Settings - Param Title (ordered by gcode)
     #define STRING_STEPS_SETTING          "Настройка шагов на мм"
-    #define STRING_MAXFEEDRATE            "MAX скорость подачи"
+    #define STRING_FILAMENT_SETTING       "Диаметр прутка"
     #define STRING_MAXACCELERATION        "MAX ускорение"
+    #define STRING_MAXFEEDRATE            "MAX скорость подачи"
     #define STRING_ACCELERATION           "Ускорение"
     #define STRING_JERK                   "Рывок"
     #define STRING_JUNCTION_DEVIATION     "Отклонение узла"
@@ -50,13 +52,18 @@
     #define STRING_FWRECOVER              "M208 восстановление ретракта"
     #define STRING_RETRACT_AUTO           "Авто FW ретракт"
     #define STRING_HOTEND_OFFSET          "Смещение 2-го сопла"
+    #define STRING_STEALTH_CHOP           "TMC StealthChop"
+    #define STRING_DELTA_CONFIGURATION    "Delta Configuration"
+    #define STRING_DELTA_TOWER_ANGLE      "Tower Angle Trim"
+    #define STRING_DELTA_ENDSTOP          "Endstop Adjustments"
     #define STRING_PROBE_OFFSET           "Смещение датчика"
     #define STRING_LIN_ADVANCE            "К-фактор"
-    #define STRING_FILAMENT_SETTING       "Диаметр прутка"
     #define STRING_CURRENT_SETTING        "Настройка TMC драйверов"
-    #define STRING_BUMP_SENSITIVITY       "TMC чувствительность удара"
     #define STRING_HYBRID_THRESHOLD       "TMC гибридный порог"
-    #define STRING_STEALTH_CHOP           "TMC StealthChop"
+    #define STRING_BUMP_SENSITIVITY       "TMC чувствительность удара"
+    #define STRING_MBL_OFFSET             "MBL Смещение"
+
+    // Machine Parameter Settings - Param Attributes (ordered by gcode)
     #define STRING_PRINT_ACCELERATION     "Печати"
     #define STRING_RETRACT_ACCELERATION   "Ретракта"
     #define STRING_TRAVEL_ACCELERATION    "Перемещения"
@@ -68,7 +75,6 @@
     #define STRING_SWAP_RECOVER_LENGTH    "Длина при смене сопла"
     #define STRING_RECOVER_FEEDRATE       "Скорость"
     #define STRING_SWAP_RECOVER_FEEDRATE  "Скорость при смене сопла"
-    #define STRING_MBL_OFFSET             "MBL Смещение"
 
     // Save / Load
     #define STRING_SAVE                   "Сохранить"
@@ -348,5 +354,7 @@
     #define STRING_Z_ALIGN                "Z Выравнивание"
     #define STRING_MACROS                 "Макросы"
     #define STRING_MESH_VALID             "Проверка сетки"
+    #define STRING_CONNECT_PROBE          "Connect probe before starting the process. Make sure to disconnect it afterwards."
+    #define STRING_CALIBRATION            "Calibration"
 
 #endif

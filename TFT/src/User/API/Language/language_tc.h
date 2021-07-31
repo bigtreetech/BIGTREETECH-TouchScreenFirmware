@@ -7,6 +7,7 @@
     #define STRING_ROTATE_UI              "顯示方向"
     #define STRING_TERMINAL_ACK           "在G-code終端顯示溫度"
     #define STRING_PERSISTENT_INFO        "頂部溫度訊息"
+    #define STRING_FAN_SPEED_PERCENT      "Fan Speed As Percentage"
     #define STRING_FILE_LIST_MODE         "文件預覽列表模式"
     #define STRING_FILE_SORT_BY           "Sort files by"
     #define STRING_ACK_NOTIFICATION       "ACK 弹窗类型"
@@ -17,7 +18,6 @@
     #define STRING_MARLIN_TYPE            "Marlin Mode Type"
     #define STRING_MOVE_SPEED             "移動速度(X Y Z)"
     #define STRING_AUTO_LOAD_LEVELING     "Auto Save Load Leveling"
-    #define STRING_FAN_SPEED_PERCENT      "Fan Speed As Percentage"
     #define STRING_XY_OFFSET_PROBING      "XY Offset Probing Support"
     #define STRING_Z_STEPPERS_ALIGNMENT   "Z Steppers Auto-Alignment"
     #define STRING_PS_ON                  "自動關機"
@@ -34,14 +34,16 @@
     #define STRING_LCD_BRIGHTNESS         "螢幕亮度"
     #define STRING_LCD_IDLE_BRIGHTNESS    "睡眠狀態螢幕亮度"
     #define STRING_LCD_IDLE_DELAY         "螢幕進入睡眠時間"
+    #define STRING_BLOCK_TOUCH_ON_IDLE    "Block touch on idle"
     #define STRING_START_GCODE_ENABLED    "執行起始G-code"
     #define STRING_END_GCODE_ENABLED      "執行結尾G-code"
     #define STRING_CANCEL_GCODE_ENABLED   "中斷執行G-code"
 
-    // Machine Parameter Settings
+    // Machine Parameter Settings - Param Title (ordered by gcode)
     #define STRING_STEPS_SETTING          "電機每毫米步數Steps/mm"
-    #define STRING_MAXFEEDRATE            "最大移動速度"
+    #define STRING_FILAMENT_SETTING       "Filament Diameter"
     #define STRING_MAXACCELERATION        "最大加速度"
+    #define STRING_MAXFEEDRATE            "最大移動速度"
     #define STRING_ACCELERATION           "加速度"
     #define STRING_JERK                   "Jerk"
     #define STRING_JUNCTION_DEVIATION     "Junction Deviation"
@@ -50,13 +52,18 @@
     #define STRING_FWRECOVER              "FW Retraction Recover"
     #define STRING_RETRACT_AUTO           "FW自动回抽"
     #define STRING_HOTEND_OFFSET          "Offset 2nd Nozzle"
+    #define STRING_STEALTH_CHOP           "TMC StealthChop"
+    #define STRING_DELTA_CONFIGURATION    "Delta Configuration"
+    #define STRING_DELTA_TOWER_ANGLE      "Tower Angle Trim"
+    #define STRING_DELTA_ENDSTOP          "Endstop Adjustments"
     #define STRING_PROBE_OFFSET           "探針偏移"
     #define STRING_LIN_ADVANCE            "Linear Advance"
-    #define STRING_FILAMENT_SETTING       "Filament Diameter"
     #define STRING_CURRENT_SETTING        "驅動晶片電流設定 (mA)"
-    #define STRING_BUMP_SENSITIVITY       "堵料檢測靈敏度"
     #define STRING_HYBRID_THRESHOLD       "TMC HybridThreshold"
-    #define STRING_STEALTH_CHOP           "TMC StealthChop"
+    #define STRING_BUMP_SENSITIVITY       "堵料檢測靈敏度"
+    #define STRING_MBL_OFFSET             "MBL Offset"
+
+    // Machine Parameter Settings - Param Attributes (ordered by gcode)
     #define STRING_PRINT_ACCELERATION     "列印加速度"
     #define STRING_RETRACT_ACCELERATION   "回抽加速度"
     #define STRING_TRAVEL_ACCELERATION    "空跑加速度"
@@ -68,7 +75,6 @@
     #define STRING_SWAP_RECOVER_LENGTH    "换料时额外挤出的长度"
     #define STRING_RECOVER_FEEDRATE       "FW挤出速度"
     #define STRING_SWAP_RECOVER_FEEDRATE  "换料时挤出的速度"
-    #define STRING_MBL_OFFSET             "MBL Offset"
 
     // Save / Load
     #define STRING_SAVE                   "儲存設定"
@@ -348,5 +354,7 @@
     #define STRING_Z_ALIGN                "Z Align"
     #define STRING_MACROS                 "Macros"
     #define STRING_MESH_VALID             "Mesh Validation"
+    #define STRING_CONNECT_PROBE          "Connect probe before starting the process. Make sure to disconnect it afterwards."
+    #define STRING_CALIBRATION            "Calibration"
 
 #endif

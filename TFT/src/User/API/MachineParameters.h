@@ -12,8 +12,9 @@ extern "C" {
 typedef enum
 {
   P_STEPS_PER_MM = 0,
-  P_MAX_FEED_RATE,
+  P_FILAMENT_DIAMETER,
   P_MAX_ACCELERATION,
+  P_MAX_FEED_RATE,
   P_ACCELERATION,
   P_JERK,
   P_JUNCTION_DEVIATION,
@@ -23,13 +24,15 @@ typedef enum
   P_AUTO_RETRACT,
   P_HOTEND_OFFSET,
   P_ABL_STATE,
+  P_STEALTH_CHOP,
+  P_DELTA_CONFIGURATION,
+  P_DELTA_TOWER_ANGLE,
+  P_DELTA_ENDSTOP,
   P_PROBE_OFFSET,
   P_LIN_ADV,
-  P_FILAMENT_DIAMETER,
   P_CURRENT,
-  P_BUMPSENSITIVITY,
   P_HYBRID_THRESHOLD,
-  P_STEALTH_CHOP,
+  P_BUMPSENSITIVITY,
   P_MBL_OFFSET,
   // Keep below items always at the end
   PARAMETERS_COUNT,
@@ -77,8 +80,9 @@ typedef enum
 typedef struct
 {
   float StepsPerMM[AXIS_INDEX_COUNT];
-  float MaxFeedRate[AXIS_INDEX_COUNT];
+  float FilamentSetting[3];
   float MaxAcceleration[AXIS_INDEX_COUNT];
+  float MaxFeedRate[AXIS_INDEX_COUNT];
   float Acceleration[3];
   float Jerk[AXIS_INDEX_COUNT - 1];
   float JunctionDeviation[1];
@@ -88,25 +92,34 @@ typedef struct
   float AutoRetract[1];
   float HotendOffset[AXIS_INDEX_COUNT - 2];
   float ABLState[2];
+  float StealthChop[STEPPER_INDEX_COUNT];
+  float DeltaConfiguration[4];
+  float DeltaTowerAngle[3];
+  float DeltaEndstop[3];
   float ProbeOffset[AXIS_INDEX_COUNT - 2];
   float LinAdvance[2];
-  float FilamentSetting[3];
   float Current[STEPPER_INDEX_COUNT];
-  float BumpSensitivity[STEPPER_INDEX_COUNT];
   float HybridThreshold[STEPPER_INDEX_COUNT];
-  float StealthChop[STEPPER_INDEX_COUNT];
+  float BumpSensitivity[STEPPER_INDEX_COUNT];
   float MblOffset[1];
 } PARAMETERS;
 
 extern PARAMETERS infoParameters;
 
+// param attributes multi purpose hard coded labels
 extern char * const axisDisplayID[AXIS_INDEX_COUNT];
 extern char * const stepperDisplayID[STEPPER_INDEX_COUNT];
-extern char * const ablStateDisplayID[];
-extern char * const linAdvDisplayID[];
-extern char * const filamentDiaDisplayID[];
-extern char * const stealthChopDisplayID[];
 
+// param attributes hard coded labels
+extern char * const filamentDiaDisplayID[];
+extern char * const ablStateDisplayID[];
+extern char * const stealthChopDisplayID[];
+extern char * const deltaConfigurationDisplayID[];
+extern char * const deltaTowerAngleDisplayID[];
+extern char * const deltaEndstopDisplayID[];
+extern char * const linAdvDisplayID[];
+
+// param attributes configurable labels
 extern const LABEL accelDisplayID[];
 extern const LABEL junctionDeviationDisplayID[];
 extern const LABEL retractDisplayID[];

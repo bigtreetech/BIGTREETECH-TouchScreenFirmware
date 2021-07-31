@@ -82,8 +82,10 @@ static bool ack_seen(const char * str)
 }
 
 static bool ack_continue_seen(const char * str)
-{
+{ // unlike "ack_seen()", this retains "ack_index" if the searched string is not found
   uint16_t i;
+  uint16_t indexBackup = ack_index;
+
   for (; ack_index < ACK_MAX_SIZE && dmaL2Cache[ack_index] != 0; ack_index++)
   {
     for (i = 0; str[i] != 0 && dmaL2Cache[ack_index + i] != 0 && dmaL2Cache[ack_index + i] == str[i]; i++)
@@ -94,6 +96,7 @@ static bool ack_continue_seen(const char * str)
       return true;
     }
   }
+  ack_index = indexBackup;
   return false;
 }
 
@@ -760,7 +763,7 @@ void parseACK(void)
       // parse and store M355, Case light message
       else if (ack_seen("Case light:"))
       {
-        if (ack_seen("OFF"))
+        if (ack_continue_seen("OFF"))
         {
           caseLightSetState(false);
         }
@@ -770,6 +773,7 @@ void parseACK(void)
           caseLightSetBrightness(ack_value());
         }
         caseLightQuerySetWait(false);
+        caseLightApplied(true);
       }
       // parse and store M420 V1 T1, Mesh data (e.g. from Mesh Editor menu)
       //
@@ -960,6 +964,32 @@ void parseACK(void)
                            setParameter(P_HOTEND_OFFSET, 0, ack_value());
         if (ack_seen("Y")) setParameter(P_HOTEND_OFFSET, 1, ack_value());
         if (ack_seen("Z")) setParameter(P_HOTEND_OFFSET, 2, ack_value());
+      }
+      // parse and store Delta Configuration values
+      //
+      // IMPORTANT: It must be placed before the following keys:
+      //            1) M420 S
+      //
+      else if (ack_seen("M665"))
+      {
+        if (ack_seen("H")) setParameter(P_DELTA_CONFIGURATION, 0, ack_value());
+        if (ack_seen("S")) setParameter(P_DELTA_CONFIGURATION, 1, ack_value());
+        if (ack_seen("R")) setParameter(P_DELTA_CONFIGURATION, 2, ack_value());
+        if (ack_seen("L")) setParameter(P_DELTA_CONFIGURATION, 3, ack_value());
+        if (ack_seen("X")) setParameter(P_DELTA_TOWER_ANGLE, AXIS_INDEX_X, ack_value());
+        if (ack_seen("Y")) setParameter(P_DELTA_TOWER_ANGLE, AXIS_INDEX_Y, ack_value());
+        if (ack_seen("Z")) setParameter(P_DELTA_TOWER_ANGLE, AXIS_INDEX_Z, ack_value());
+      }
+      // parse and store Delta Endstop Adjustments values
+      //
+      // IMPORTANT: It must be placed before the following keys:
+      //            1) M420 S
+      //
+      else if (ack_seen("M666"))
+      {
+        if (ack_seen("X")) setParameter(P_DELTA_ENDSTOP, 0, ack_value());
+        if (ack_seen("Y")) setParameter(P_DELTA_ENDSTOP, 1, ack_value());
+        if (ack_seen("Z")) setParameter(P_DELTA_ENDSTOP, 2, ack_value());
       }
       // parse and store ABL on/off state & Z fade value on M503
       else if (ack_seen("M420 S"))

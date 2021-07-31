@@ -7,6 +7,7 @@
     #define STRING_ROTATE_UI              "Otočiť"
     #define STRING_TERMINAL_ACK           "Show ACK in Terminal"
     #define STRING_PERSISTENT_INFO        "Trvalé info o stave"
+    #define STRING_FAN_SPEED_PERCENT      "Fan Speed As Percentage"
     #define STRING_FILE_LIST_MODE         "Zobraziť súbory ako zoznam"
     #define STRING_FILE_SORT_BY           "Sort files by"
     #define STRING_ACK_NOTIFICATION       "ACK notification style"
@@ -17,7 +18,6 @@
     #define STRING_MARLIN_TYPE            "Marlin Mode Type"
     #define STRING_MOVE_SPEED             "Rýchlosť pohybu XYZ"
     #define STRING_AUTO_LOAD_LEVELING     "Auto Save Load Leveling"
-    #define STRING_FAN_SPEED_PERCENT      "Fan Speed As Percentage"
     #define STRING_XY_OFFSET_PROBING      "XY Offset Probing Support"
     #define STRING_Z_STEPPERS_ALIGNMENT   "Z Steppers Auto-Alignment"
     #define STRING_PS_ON                  "Auto vyp."
@@ -34,14 +34,16 @@
     #define STRING_LCD_BRIGHTNESS         "Jas LCD"
     #define STRING_LCD_IDLE_BRIGHTNESS    "Zníženie jasu LCD"
     #define STRING_LCD_IDLE_DELAY         "Zníženie jasu LCD po"
+    #define STRING_BLOCK_TOUCH_ON_IDLE    "Block touch on idle"
     #define STRING_START_GCODE_ENABLED    "Začiatočný Gcode"
     #define STRING_END_GCODE_ENABLED      "Koncový Gcode"
     #define STRING_CANCEL_GCODE_ENABLED   "Cancel Gcode"
 
-    // Machine Parameter Settings
+    // Machine Parameter Settings - Param Title (ordered by gcode)
     #define STRING_STEPS_SETTING          "Počet krokov na MM"
-    #define STRING_MAXFEEDRATE            "Max Feed Rate"
+    #define STRING_FILAMENT_SETTING       "Filament Diameter"
     #define STRING_MAXACCELERATION        "Maximálna akcelerácia"
+    #define STRING_MAXFEEDRATE            "Max Feed Rate"
     #define STRING_ACCELERATION           "Akcelerácia"
     #define STRING_JERK                   "Jerk"
     #define STRING_JUNCTION_DEVIATION     "Junction Deviation"
@@ -50,13 +52,18 @@
     #define STRING_FWRECOVER              "FW Retraction Recover"
     #define STRING_RETRACT_AUTO           "Auto Firmware Retract"
     #define STRING_HOTEND_OFFSET          "Offset 2nd Nozzle"
+    #define STRING_STEALTH_CHOP           "TMC StealthChop"
+    #define STRING_DELTA_CONFIGURATION    "Delta Configuration"
+    #define STRING_DELTA_TOWER_ANGLE      "Tower Angle Trim"
+    #define STRING_DELTA_ENDSTOP          "Endstop Adjustments"
     #define STRING_PROBE_OFFSET           "Probe Offset"
     #define STRING_LIN_ADVANCE            "Linear Advance"
-    #define STRING_FILAMENT_SETTING       "Filament Diameter"
     #define STRING_CURRENT_SETTING        "Prúd ovládača (mA)"
-    #define STRING_BUMP_SENSITIVITY       "TMC bump citlivosť"
     #define STRING_HYBRID_THRESHOLD       "TMC HybridThreshold"
-    #define STRING_STEALTH_CHOP           "TMC StealthChop"
+    #define STRING_BUMP_SENSITIVITY       "TMC bump citlivosť"
+    #define STRING_MBL_OFFSET             "MBL Offset"
+
+    // Machine Parameter Settings - Param Attributes (ordered by gcode)
     #define STRING_PRINT_ACCELERATION     "Akcelerácia pri tlači"
     #define STRING_RETRACT_ACCELERATION   "Akcelerácia retrakcie"
     #define STRING_TRAVEL_ACCELERATION    "Akcelerácia presunu"
@@ -68,7 +75,6 @@
     #define STRING_SWAP_RECOVER_LENGTH    "Extra recover swap length"
     #define STRING_RECOVER_FEEDRATE       "Recover feedrate"
     #define STRING_SWAP_RECOVER_FEEDRATE  "Swap recover feedrate"
-    #define STRING_MBL_OFFSET             "MBL Offset"
 
     // Save / Load
     #define STRING_SAVE                   "Uložiť"
@@ -348,5 +354,7 @@
     #define STRING_Z_ALIGN                "Z Align"
     #define STRING_MACROS                 "Macros"
     #define STRING_MESH_VALID             "Mesh Validation"
+    #define STRING_CONNECT_PROBE          "Connect probe before starting the process. Make sure to disconnect it afterwards."
+    #define STRING_CALIBRATION            "Calibration"
 
 #endif

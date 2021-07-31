@@ -1,136 +1,6 @@
 #include "LCD_Init.h"
+#include "includes.h"  // for RM68042..., lcd.h, lcd_dma.h, timer_pwm.h etc...
 #include "GPIO_Init.h"
-#include "includes.h"
-
-#ifdef LCD_LED_PIN
-void LCD_LED_On()
-{
-  #ifdef LCD_LED_PWM_CHANNEL
-    Set_LCD_Brightness(100);
-  #else
-    GPIO_SetLevel(LCD_LED_PIN, 1);
-  #endif
-}
-void LCD_LED_Off()
-{
-  #ifdef LCD_LED_PWM_CHANNEL
-    Set_LCD_Brightness(0);
-  #else
-    GPIO_SetLevel(LCD_LED_PIN, 0);
-  #endif
-}
-
-#ifdef LCD_LED_PWM_CHANNEL
-LCD_AUTO_DIM lcd_dim = {0, 0};
-const uint32_t LCD_BRIGHTNESS[ITEM_BRIGHTNESS_NUM] = {
-  LCD_0_PERCENT,
-  LCD_5_PERCENT,
-  LCD_10_PERCENT,
-  LCD_20_PERCENT,
-  LCD_30_PERCENT,
-  LCD_40_PERCENT,
-  LCD_50_PERCENT,
-  LCD_60_PERCENT,
-  LCD_70_PERCENT,
-  LCD_80_PERCENT,
-  LCD_90_PERCENT,
-  LCD_100_PERCENT
-};
-
-const LABEL itemDimTime[ITEM_SECONDS_NUM] = {
-  //item value text(only for custom value)
-  LABEL_OFF,
-  LABEL_5_SECONDS,
-  LABEL_10_SECONDS,
-  LABEL_30_SECONDS,
-  LABEL_60_SECONDS,
-  LABEL_120_SECONDS,
-  LABEL_300_SECONDS,
-  LABEL_CUSTOM
-};
-
-const uint32_t LCD_DIM_IDLE_TIME[ITEM_SECONDS_NUM] = {
-  LCD_DIM_OFF,
-  LCD_DIM_5_SECONDS,
-  LCD_DIM_10_SECONDS,
-  LCD_DIM_30_SECONDS,
-  LCD_DIM_60_SECONDS,
-  LCD_DIM_120_SECONDS,
-  LCD_DIM_300_SECONDS,
-  LCD_DIM_CUSTOM_SECONDS
-};
-
-void loopDimTimer(void)
-{
-  if (infoSettings.lcd_idle_timer == LCD_DIM_OFF)
-    return;
-
-  if (isPress()
-    #if LCD_ENCODER_SUPPORT
-      || encoder_CheckState() || encoder_ReadBtn(LCD_BUTTON_INTERVALS)
-    #endif
-  )
-  {
-    if (lcd_dim.dimmed)
-    {
-      lcd_dim.dimmed = false;
-      Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
-      #ifdef LED_COLOR_PIN
-        if (infoSettings.knob_led_idle)
-        {
-          WS2812_Send_DAT(led_color[infoSettings.knob_led_color]);
-        }
-      #endif
-    }
-    lcd_dim.idle_ms = OS_GetTimeMs();
-  }
-  else
-  {
-    if (OS_GetTimeMs() - lcd_dim.idle_ms < (LCD_DIM_IDLE_TIME[infoSettings.lcd_idle_timer] * 1000))
-      return;
-
-    if (!lcd_dim.dimmed)
-    {
-      lcd_dim.dimmed = true;
-      Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_idle_brightness]);
-      #ifdef LED_COLOR_PIN
-        if (infoSettings.knob_led_idle)
-        {
-          WS2812_Send_DAT(led_color[LED_OFF]);
-        }
-      #endif
-    }
-  }
-}
-
-void _wakeLCD(void)
-{
-  if (infoSettings.lcd_idle_timer != LCD_DIM_OFF)
-  {
-    // The LCD dim function is activated. First check if it's dimmed
-    if (lcd_dim.dimmed)
-    {
-      lcd_dim.dimmed = false;
-      Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
-    }
-    // Set a new idle_ms time
-    lcd_dim.idle_ms = OS_GetTimeMs();
-  }
-}
-
-#endif
-
-void LCD_LED_Init(void)
-{
-  #ifdef LCD_LED_PWM_CHANNEL
-    GPIO_InitSet(LCD_LED_PIN, MGPIO_MODE_AF_PP, LCD_LED_PIN_ALTERNATE);
-    TIM_PWM_Init(LCD_LED_PWM_CHANNEL);
-  #else
-    LCD_LED_Off();
-    GPIO_InitSet(LCD_LED_PIN, MGPIO_MODE_OUT_PP, 0);
-  #endif
-}
-#endif
 
 // LCD driver sequential
 #if LCD_DRIVER_HAS(RM68042)
@@ -160,14 +30,50 @@ void LCD_LED_Init(void)
 
 void (*pLCD_SetDirection)(uint8_t rotate);
 void (*pLCD_SetWindow)(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey);
+
+#ifdef LCD_LED_PIN
+
+  void LCD_LED_On()
+  {
+    #ifdef LCD_LED_PWM_CHANNEL
+      LCD_SetBrightness(100);
+    #else
+      GPIO_SetLevel(LCD_LED_PIN, 1);
+    #endif
+  }
+
+  void LCD_LED_Off()
+  {
+    #ifdef LCD_LED_PWM_CHANNEL
+      LCD_SetBrightness(0);
+    #else
+      GPIO_SetLevel(LCD_LED_PIN, 0);
+    #endif
+  }
+
+  void LCD_LED_Init(void)
+  {
+    #ifdef LCD_LED_PWM_CHANNEL
+      GPIO_InitSet(LCD_LED_PIN, MGPIO_MODE_AF_PP, LCD_LED_PIN_ALTERNATE);
+      TIM_PWM_Init(LCD_LED_PWM_CHANNEL);
+    #else
+      LCD_LED_Off();
+      GPIO_InitSet(LCD_LED_PIN, MGPIO_MODE_OUT_PP, 0);
+    #endif
+  }
+
+#endif  // LCD_LED_PIN
+
 #ifdef SCREEN_SHOT_TO_SD
+
   uint32_t (*pLCD_ReadPixel_24Bit)(int16_t x, int16_t y);
 
   uint32_t LCD_ReadPixel_24Bit(int16_t x, int16_t y)
   {
     return pLCD_ReadPixel_24Bit(x, y);
   }
-#endif
+
+#endif  // SCREEN_SHOT_TO_SD
 
 void LCD_Init_Sequential(void)
 {
@@ -321,9 +227,9 @@ void LCD_Init_Sequential(void)
   #endif
 }
 
-void LCD_RefreshDirection(void)
+void LCD_RefreshDirection(uint8_t rotate)
 {
-  pLCD_SetDirection(infoSettings.rotate_ui);
+  pLCD_SetDirection(rotate);
 }
 
 void LCD_SetWindow(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey)
@@ -338,12 +244,12 @@ void LCD_Init(void)
   GUI_Clear(BLACK);
   Delay_ms(120);
 
-#ifdef LCD_LED_PIN
-  LCD_LED_Init();
-  LCD_LED_On();
-#endif
+  #ifdef LCD_LED_PIN
+    LCD_LED_Init();
+    LCD_LED_On();
+  #endif
 
-#ifdef STM32_HAS_FSMC
-  LCD_DMA_Config();  // spi flash to fsmc lcd DMA channel configuration
-#endif
+  #ifdef STM32_HAS_FSMC
+    LCD_DMA_Config();  // spi flash to fsmc lcd DMA channel configuration
+  #endif
 }

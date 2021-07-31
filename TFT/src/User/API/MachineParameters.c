@@ -5,8 +5,9 @@
 
 const uint8_t parameterElementCount[PARAMETERS_COUNT] = {
   AXIS_INDEX_COUNT,        // Steps/mm (X, Y, Z, E0, E1)
-  AXIS_INDEX_COUNT,        // MaxFeedrate (X, Y, Z, E0, E1)
+  3,                       // Filament Diameter (Enable, E0, E1)
   AXIS_INDEX_COUNT,        // MaxAcceleration (X, Y, Z, E0, E1)
+  AXIS_INDEX_COUNT,        // MaxFeedrate (X, Y, Z, E0, E1)
   3,                       // Acceleration (Print, Retract, Travel)
   (AXIS_INDEX_COUNT - 1),  // Jerk (X, Y, Z, E)
   1,                       // Junction Deviation
@@ -16,20 +17,23 @@ const uint8_t parameterElementCount[PARAMETERS_COUNT] = {
   1,                       // Set auto FW retract
   (AXIS_INDEX_COUNT - 2),  // Hotend Offset (X, Y, Z)
   2,                       // ABL State & Z Fade
+  STEPPER_INDEX_COUNT,     // TMC StealthChop (X, X2, Y, Y2, Z, Z2, E0, E1)
+  4,                       // Delta Configuration
+  3,                       // Delta Tower Angle
+  3,                       // Delta Endstop Adjustments
   (AXIS_INDEX_COUNT - 2),  // Probe offset (X, Y, Z)
   2,                       // Linear Advance (E0, E1)
-  3,                       // Filament Diameter (Enable, E0, E1)
   STEPPER_INDEX_COUNT,     // Current (X, X2, Y, Y2, Z, Z2, E0, E1)
-  STEPPER_INDEX_COUNT,     // bump Sensitivity (X, X2, Y, Y2, Z, Z2)
   STEPPER_INDEX_COUNT,     // TMC Hybrid Threshold Speed (X, X2, Y, Y2, Z, Z2, E0, E1)
-  STEPPER_INDEX_COUNT,     // TMC StealthChop (X, X2, Y, Y2, Z, Z2, E0, E1)
+  STEPPER_INDEX_COUNT,     // bump Sensitivity (X, X2, Y, Y2, Z, Z2)
   1                        // MBL offset
 };
 
 const char * const parameterCode[PARAMETERS_COUNT] = {
   "M92",   // Steps/mm
-  "M203",  // MaxFeedrate
+  "M200",  // Filament Diameter
   "M201",  // MaxAcceleration
+  "M203",  // MaxFeedrate
   "M204",  // Acceleration
   "M205",  // Jerk
   "M205",  // Junction Deviation
@@ -39,20 +43,23 @@ const char * const parameterCode[PARAMETERS_COUNT] = {
   "M209",  // Set auto FW retract
   "M218",  // Hotend Offset
   "M420",  // ABL State & Z Fade
+  "M569",  // TMC StealthChop
+  "M665",  // Delta Configuration
+  "M665",  // Delta Tower Angle
+  "M666",  // Delta Endstop Adjustments
   "M851",  // Probe offset
   "M900",  // Linear Advance
-  "M200",  // Filament Diameter
   "M906",  // Current
-  "M914",  // bump Sensitivity
   "M913",  // TMC Hybrid Threshold Speed
-  "M569",  // TMC StealthChop
+  "M914",  // bump Sensitivity
   "G29",   // MBL offset
 };
 
 const char * const parameterCmd[PARAMETERS_COUNT][MAX_ELEMENT_COUNT] = {
   {"X%.2f\n",            "Y%.2f\n",       "Z%.2f\n",       "T0 E%.2f\n",   "T1 E%.2f\n", NULL,           NULL,           NULL},           // Steps/mm (X, Y, Z, E0, E1)
-  {"X%.0f\n",            "Y%.0f\n",       "Z%.0f\n",       "T0 E%.0f\n",   "T1 E%.0f\n", NULL,           NULL,           NULL},           // MaxFeedrate (X, Y, Z, E0, E1)
+  {"S%.0f\n",            "S1 T0 D%.2f\n", "S1 T1 D%.2f\n", NULL,           NULL,         NULL,           NULL,           NULL},           // Filament Diameter (Enable, E0, E1)
   {"X%.0f\n",            "Y%.0f\n",       "Z%.0f\n",       "T0 E%.0f\n",   "T1 E%.0f\n", NULL,           NULL,           NULL},           // MaxAcceleration (X, Y, Z, E0, E1)
+  {"X%.0f\n",            "Y%.0f\n",       "Z%.0f\n",       "T0 E%.0f\n",   "T1 E%.0f\n", NULL,           NULL,           NULL},           // MaxFeedrate (X, Y, Z, E0, E1)
   {"P%.0f\n",            "R%.0f\n",       "T%.0f\n",       NULL,           NULL,         NULL,           NULL,           NULL},           // Acceleration (Print, Retract, Travel)
   {"X%.0f\n",            "Y%.0f\n",       "Z%.2f\n",       "E%.2f\n",      NULL,         NULL,           NULL,           NULL},           // Jerk (X, Y, Z, E)
   {"J%.3f\n",            NULL,            NULL,            NULL,           NULL,         NULL,           NULL,           NULL},           // Junction Deviation
@@ -62,20 +69,23 @@ const char * const parameterCmd[PARAMETERS_COUNT][MAX_ELEMENT_COUNT] = {
   {"S%.0f\n",            NULL,            NULL,            NULL,           NULL,         NULL,           NULL,           NULL},           // Set auto FW retract
   {"T1 X%.2f\n",         "T1 Y%.2f\n",    "T1 Z%.2f\n",    NULL,           NULL,         NULL,           NULL,           NULL},           // Hotend Offset (X, Y, Z)
   {"S%.0f\n",            "Z%.2f\n",       NULL,            NULL,           NULL,         NULL,           NULL,           NULL},           // ABL State & Z Fade
+  {"S%.0f X\n",          "S%.0f I1 X\n",  "S%.0f Y\n",     "S%.0f I1 Y\n", "S%.0f Z\n",  "S%.0f I1 Z\n", "S%.0f T0 E\n", "S%.0f T1 E\n"}, // TMC StealthChop (X, X2, Y, Y2, Z, Z2, E0, E1)
+  {"H%.2f\n",            "S%.2f\n",       "R%.2f\n",       "L%.2f\n",      NULL,         NULL,           NULL,           NULL},           // Delta Configuration (Height, Segment per sec, Radius, Diagonal Rod)
+  {"X%.2f\n",            "Y%.2f\n",       "Z%.2f\n",       NULL,           NULL,         NULL,           NULL,           NULL},           // Delta Tower Angle (Tx, Ty, Tz)
+  {"X%.2f\n",            "Y%.2f\n",       "Z%.2f\n",       NULL,           NULL,         NULL,           NULL,           NULL},           // Delta Endstop Adjustments (Ex, Ey, Ez)
   {"X%.2f\n",            "Y%.2f\n",       "Z%.2f\n",       NULL,           NULL,         NULL,           NULL,           NULL},           // Probe offset (X, Y, Z)
   {"T0 K%.2f\n",         "T1 K%.2f\n",    NULL,            NULL,           NULL,         NULL,           NULL,           NULL},           // Linear Advance (E0, E1)
-  {"S%.0f\n",            "S1 T0 D%.2f\n", "S1 T1 D%.2f\n", NULL,           NULL,         NULL,           NULL,           NULL},           // Filament Diameter (Enable, E0, E1)
   {"X%.0f\n",            "I1 X%.0f\n",    "Y%.0f\n",       "I1 Y%.0f\n",   "Z%.0f\n",    "I1 Z%.0f\n",   "T0 E%.0f\n",   "T1 E%.0f\n"},   // Current (X, X2, Y, Y2, Z, Z2, E0, E1)
-  {"X%.0f\n",            "I1 X%.0f\n",    "Y%.0f\n",       "I1 Y%.0f\n",   "Z%.0f\n",    "I1 Z%.0f\n",   NULL,           NULL},           // bump Sensitivity (X, X2, Y, Y2, Z, Z2)
   {"X%.0f\n",            "I1 X%.0f\n",    "Y%.0f\n",       "I1 Y%.0f\n",   "Z%.0f\n",    "I1 Z%.0f\n",   "T0 E%.0f\n",   "T1 E%.0f\n"},   // TMC Hybrid Threshold Speed (X, X2, Y, Y2, Z, Z2, E0, E1)
-  {"S%.0f X\n",          "S%.0f I1 X\n",  "S%.0f Y\n",     "S%.0f I1 Y\n", "S%.0f Z\n",  "S%.0f I1 Z\n", "S%.0f T0 E\n", "S%.0f T1 E\n"}, // TMC StealthChop (X, X2, Y, Y2, Z, Z2, E0, E1)
+  {"X%.0f\n",            "I1 X%.0f\n",    "Y%.0f\n",       "I1 Y%.0f\n",   "Z%.0f\n",    "I1 Z%.0f\n",   NULL,           NULL},           // bump Sensitivity (X, X2, Y, Y2, Z, Z2)
   {"S4 Z%.2f\nG29 S0\n", NULL,            NULL,            NULL,           NULL,         NULL,           NULL,           NULL},           // MBL offset
 };
 
 const VAL_TYPE parameterValType[PARAMETERS_COUNT][MAX_ELEMENT_COUNT] = {
   {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,   VAL_TYPE_FLOAT},  // Steps/mm (X, Y, Z, E0, E1)
-  {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT},    // MaxFeedrate (X, Y, Z, E0, E1)
+  {VAL_TYPE_INT,        VAL_TYPE_FLOAT,     VAL_TYPE_FLOAT},                                         // Filament Diameter (Enable, E0, E1)
   {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT},    // MaxAcceleration (X, Y, Z, E0, E1)
+  {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT},    // MaxFeedrate (X, Y, Z, E0, E1)
   {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT},                                           // Acceleration (Print, Retract, Travel)
   {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT},                    // Jerk (X, Y, Z, E)
   {VAL_TYPE_FLOAT},                                                                                  // Junction Deviation
@@ -85,17 +95,19 @@ const VAL_TYPE parameterValType[PARAMETERS_COUNT][MAX_ELEMENT_COUNT] = {
   {VAL_TYPE_INT},                                                                                    // Set auto FW retract
   {VAL_TYPE_NEG_FLOAT,  VAL_TYPE_NEG_FLOAT, VAL_TYPE_NEG_FLOAT},                                     // Hotend Offset (X, Y, Z)
   {VAL_TYPE_INT,        VAL_TYPE_FLOAT},                                                             // ABL State + Z Fade
+  {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT,     // TMC StealthChop (X, X2, Y, Y2, Z, Z2, E0, E1)
+   VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT},
+  {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT},                    // Delta Configuration (Height, Segment per sec, Radius, Diagonal Rod)
+  {VAL_TYPE_NEG_FLOAT,  VAL_TYPE_NEG_FLOAT, VAL_TYPE_NEG_FLOAT},                                     // Delta Tower Angle (Tx, Ty, Tz)
+  {VAL_TYPE_NEG_FLOAT,  VAL_TYPE_NEG_FLOAT, VAL_TYPE_NEG_FLOAT},                                     // Delta Endstop Adjustments (Ex, Ey, Ez)
   {VAL_TYPE_NEG_FLOAT,  VAL_TYPE_NEG_FLOAT, VAL_TYPE_NEG_FLOAT},                                     // Probe offset (X, Y, Z)
   {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT},                                                             // Linear Advance (E0, E1)
-  {VAL_TYPE_INT,        VAL_TYPE_FLOAT,     VAL_TYPE_FLOAT},                                         // Filament Diameter (Enable, E0, E1)
   {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT,     // Current (X, X2, Y, Y2, Z, Z2, E0, E1)
+   VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT},
+  {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT,     // TMC Hybrid Threshold Speed (X, X2, Y, Y2, Z, Z2, E0, E1)
    VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT},
   {VAL_TYPE_NEG_INT,    VAL_TYPE_NEG_INT,   VAL_TYPE_NEG_INT,    VAL_TYPE_NEG_INT, VAL_TYPE_NEG_INT, // bump Sensitivity (X, X2, Y, Y2, Z, Z2)
    VAL_TYPE_NEG_INT},
-  {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT,     // TMC Hybrid Threshold Speed (X, X2, Y, Y2, Z, Z2, E0, E1)
-   VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT},
-  {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT,     // TMC StealthChop (X, X2, Y, Y2, Z, Z2, E0, E1)
-   VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT},
   {VAL_TYPE_NEG_FLOAT},                                                                              // MBL offset
 };
 
@@ -105,19 +117,26 @@ uint8_t elementEnabled[PARAMETERS_COUNT];
 
 #define ONOFF_DISPLAY_ID "1=ON 0=OFF"
 
+// param attributes multi purpose hard coded labels
 char * const axisDisplayID[AXIS_INDEX_COUNT] = AXIS_DISPLAY_ID;
 char * const stepperDisplayID[STEPPER_INDEX_COUNT] = STEPPER_DISPLAY_ID;
-char * const ablStateDisplayID[] = {"S " ONOFF_DISPLAY_ID, "Z fade height"};
-char * const linAdvDisplayID[] = {"K-Factor E0", "K-Factor E1"};
+
+// param attributes hard coded labels
 char * const filamentDiaDisplayID[] = {"S " ONOFF_DISPLAY_ID, "T0 Ø Filament", "T1 Ø Filament"};
+char * const ablStateDisplayID[] = {"S " ONOFF_DISPLAY_ID, "Z fade height"};
 char * const stealthChopDisplayID[] = {"X " ONOFF_DISPLAY_ID, "X2 " ONOFF_DISPLAY_ID, "Y "ONOFF_DISPLAY_ID, "Y2 "ONOFF_DISPLAY_ID,
                                        "Z " ONOFF_DISPLAY_ID, "Z2 " ONOFF_DISPLAY_ID, "E0 "ONOFF_DISPLAY_ID, "E1 "ONOFF_DISPLAY_ID};
+char * const deltaConfigurationDisplayID[] = {"Height", "Segment/sec.", "Radius", "Diagonal"};
+char * const deltaTowerAngleDisplayID[] = {"Tx", "Ty", "Tz"};
+char * const deltaEndstopDisplayID[] = {"Ex", "Ey", "Ez"};
+char * const linAdvDisplayID[] = {"K-Factor E0", "K-Factor E1"};
 
+// param attributes configurable labels
 const LABEL accelDisplayID[] = {LABEL_PRINT_ACCELERATION, LABEL_RETRACT_ACCELERATION, LABEL_TRAVEL_ACCELERATION};
+const LABEL junctionDeviationDisplayID[] = {LABEL_JUNCTION_DEVIATION};
 const LABEL retractDisplayID[] = {LABEL_RETRACT_LENGTH, LABEL_RETRACT_SWAP_LENGTH, LABEL_RETRACT_FEEDRATE, LABEL_RETRACT_Z_LIFT};
 const LABEL recoverDisplayID[] = {LABEL_RECOVER_LENGTH, LABEL_SWAP_RECOVER_LENGTH, LABEL_RECOVER_FEEDRATE, LABEL_SWAP_RECOVER_FEEDRATE};
 const LABEL autoRetractDisplayID[] = {LABEL_RETRACT_AUTO};
-const LABEL junctionDeviationDisplayID[] = {LABEL_JUNCTION_DEVIATION};
 
 static inline void setElementStatus(PARAMETER_NAME name, uint8_t element, bool status)
 {
@@ -159,7 +178,7 @@ static inline void setParameterStatus(PARAMETER_NAME name, bool status)
 
 static inline uint8_t getParameterStatus(PARAMETER_NAME name)
 {
-  return (parametersEnabled >> name)  & 1;
+  return (parametersEnabled >> name) & 1;
 }
 
 uint8_t getEnabledParameterCount(void)
@@ -195,11 +214,14 @@ float getParameter(PARAMETER_NAME name, uint8_t index)
     case P_STEPS_PER_MM:
       return infoParameters.StepsPerMM[index];
 
-    case P_MAX_FEED_RATE:
-      return infoParameters.MaxFeedRate[index];
+    case P_FILAMENT_DIAMETER:
+      return infoParameters.FilamentSetting[index];
 
     case P_MAX_ACCELERATION:
       return infoParameters.MaxAcceleration[index];
+
+    case P_MAX_FEED_RATE:
+      return infoParameters.MaxFeedRate[index];
 
     case P_ACCELERATION:
       return infoParameters.Acceleration[index];
@@ -228,26 +250,32 @@ float getParameter(PARAMETER_NAME name, uint8_t index)
     case P_ABL_STATE:
       return infoParameters.ABLState[index];
 
+    case P_STEALTH_CHOP:
+      return infoParameters.StealthChop[index];
+
+    case P_DELTA_CONFIGURATION:
+      return infoParameters.DeltaConfiguration[index];
+
+    case P_DELTA_TOWER_ANGLE:
+      return infoParameters.DeltaTowerAngle[index];
+
+    case P_DELTA_ENDSTOP:
+      return infoParameters.DeltaEndstop[index];
+
     case P_PROBE_OFFSET:
       return infoParameters.ProbeOffset[index];
 
     case P_LIN_ADV:
       return infoParameters.LinAdvance[index];
 
-    case P_FILAMENT_DIAMETER:
-      return infoParameters.FilamentSetting[index];
-
     case P_CURRENT:
       return infoParameters.Current[index];
-
-    case P_BUMPSENSITIVITY:
-      return infoParameters.BumpSensitivity[index];
 
     case P_HYBRID_THRESHOLD:
       return infoParameters.HybridThreshold[index];
 
-    case P_STEALTH_CHOP:
-      return infoParameters.StealthChop[index];
+    case P_BUMPSENSITIVITY:
+      return infoParameters.BumpSensitivity[index];
 
     case P_MBL_OFFSET:
       return infoParameters.MblOffset[index];
@@ -271,12 +299,16 @@ void setParameter(PARAMETER_NAME name, uint8_t index, float val)
       infoParameters.StepsPerMM[index] = val;
       break;
 
-    case P_MAX_FEED_RATE:
-      infoParameters.MaxFeedRate[index] = val;
+    case P_FILAMENT_DIAMETER:
+      infoParameters.FilamentSetting[index] = val;
       break;
 
     case P_MAX_ACCELERATION:
       infoParameters.MaxAcceleration[index] = val;
+      break;
+
+    case P_MAX_FEED_RATE:
+      infoParameters.MaxFeedRate[index] = val;
       break;
 
     case P_ACCELERATION:
@@ -315,6 +347,22 @@ void setParameter(PARAMETER_NAME name, uint8_t index, float val)
       infoParameters.ABLState[index] = val;
       break;
 
+    case P_STEALTH_CHOP:
+      infoParameters.StealthChop[index] = val;
+      break;
+
+    case P_DELTA_CONFIGURATION:
+      infoParameters.DeltaConfiguration[index] = val;
+      break;
+
+    case P_DELTA_TOWER_ANGLE:
+      infoParameters.DeltaTowerAngle[index] = val;
+      break;
+
+    case P_DELTA_ENDSTOP:
+      infoParameters.DeltaEndstop[index] = val;
+      break;
+
     case P_PROBE_OFFSET:
       infoParameters.ProbeOffset[index] = val;
       break;
@@ -323,24 +371,16 @@ void setParameter(PARAMETER_NAME name, uint8_t index, float val)
       infoParameters.LinAdvance[index] = val;
       break;
 
-    case P_FILAMENT_DIAMETER:
-      infoParameters.FilamentSetting[index] = val;
-      break;
-
     case P_CURRENT:
       infoParameters.Current[index] = val;
-      break;
-
-    case P_BUMPSENSITIVITY:
-      infoParameters.BumpSensitivity[index] = val;
       break;
 
     case P_HYBRID_THRESHOLD:
       infoParameters.HybridThreshold[index] = val;
       break;
 
-    case P_STEALTH_CHOP:
-      infoParameters.StealthChop[index] = val;
+    case P_BUMPSENSITIVITY:
+      infoParameters.BumpSensitivity[index] = val;
       break;
 
     case P_MBL_OFFSET:

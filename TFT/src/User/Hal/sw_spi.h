@@ -5,7 +5,8 @@
 extern "C" {
 #endif
 
-#include "variants.h"
+#include <stdint.h>
+#include "variants.h"  // for u8 etc...
 
 typedef enum
 {

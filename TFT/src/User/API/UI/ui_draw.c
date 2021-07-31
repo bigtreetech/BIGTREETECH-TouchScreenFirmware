@@ -1,9 +1,9 @@
 #define _GNU_SOURCE
-#include <stdio.h>
-#include <malloc.h>
 
 #include "ui_draw.h"
 #include "includes.h"
+#include <stdio.h>
+#include <malloc.h>
 
 #if (THUMBNAIL_PARSER == PARSER_BASE64PNG)
   #include "pngle.h"
