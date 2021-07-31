@@ -844,96 +844,6 @@ GUI_POINT getIconStartPoint(int index)
   return p;
 }
 
-#ifdef SMART_HOME
-
-#define LONG_TOUCH (MODE_SWITCHING_INTERVAL / 3)  // keep it lower than MODE_SWITCHING_INTERVAL
-
-void loopCheckBack(void)
-{
-  static bool longPress = false;
-
-  #ifdef HAS_EMULATOR
-    static bool backHeld = false;
-  #endif
-
-  if (!isPress())
-  {
-    #ifdef HAS_EMULATOR
-      backHeld = false;
-    #endif
-
-    longPress = false;
-
-    #ifndef HAS_EMULATOR
-      Touch_Enc_ReadPen(0);  // reset TSC press timer
-    #endif
-
-    return;
-  }
-
-  if (isPrinting())  // no jump to main menu while printing
-    return;
-
-  if (menuType != MENU_TYPE_ICON)
-    return;
-
-  if ((infoMenu.cur == 0) || (infoMenu.menu[infoMenu.cur] == menuMode))
-    return;
-
-  #ifdef HAS_EMULATOR
-    if (backHeld == true)  // prevent mode selection or screenshot if Back button is held
-    {
-      backHeld = Touch_Enc_ReadPen(0);
-      return;
-    }
-  #endif
-
-  if (longPress == false)  // check if longpress already handled
-  {
-    if (Touch_Enc_ReadPen(LONG_TOUCH))  // check if TSC is pressed and held
-    {
-      KEY_VALUES tempKey = KEY_IDLE;
-      longPress = true;
-      touchSound = false;
-
-      if (infoMenu.menu[infoMenu.cur] == menuPrinting)
-      {
-        tempKey = Key_value(COUNT(rect_of_keySS), rect_of_keySS);
-      }
-      else
-      {
-        tempKey = Key_value(COUNT(rect_of_key), rect_of_key);
-      }
-
-      touchSound = true;
-
-      if (tempKey != KEY_IDLE)
-      {
-        if (curMenuItems->items[tempKey].label.index != LABEL_BACK)  // check if Back button is held
-        {
-          return;
-        }
-        else
-        {
-          BUZZER_PLAY(sound_ok);
-
-          #ifdef HAS_EMULATOR
-            backHeld = true;
-          #endif
-
-          infoMenu.menu[1] = infoMenu.menu[infoMenu.cur];  // prepare menu tree for jump to 0
-          infoMenu.cur = 1;
-
-          if (infoMenu.menu[1] == menuPrinting)
-            clearInfoFile();
-        }
-      }
-    }
-  }
-}
-
-#endif  // SMART_HOME
-
 void loopBackEnd(void)
 {
   // Get Gcode command from the file to be printed
@@ -951,11 +861,6 @@ void loopBackEnd(void)
   // Speed & flow monitor
   loopSpeed();
 
-  #ifdef SMART_HOME
-    // check if Back is pressed and held
-    loopCheckBack();
-  #endif
-
   #ifdef BUZZER_PIN
     // Buzzer handling
     loopBuzzer();
@@ -970,10 +875,6 @@ void loopBackEnd(void)
     USBH_Process(&USB_OTG_Core, &USB_Host);
   #endif
 
-  #if defined(SCREEN_SHOT_TO_SD)
-    loopScreenShot();
-  #endif
-
   #if LCD_ENCODER_SUPPORT
     #ifdef HAS_EMULATOR
       if (infoMenu.menu[infoMenu.cur] != menuMarlinMode)
@@ -983,12 +884,21 @@ void loopBackEnd(void)
     }
   #endif
 
+  #if defined(SCREEN_SHOT_TO_SD)
+    loopScreenShot();
+  #endif
+
+  #ifdef SMART_HOME
+    // check if Back is pressed and held
+    loopCheckBack();
+  #endif
+
   #ifdef HAS_EMULATOR
     Mode_CheckSwitching();
   #endif
 
   #ifdef FIL_RUNOUT_PIN
-    loopBackEndFILRunoutDetect();
+    FIL_BE_CheckRunout();
   #endif
 
   #ifdef LCD_LED_PWM_CHANNEL
@@ -1020,7 +930,7 @@ void loopFrontEnd(void)
 
   #ifdef FIL_RUNOUT_PIN
     // Loop for filament runout detection
-    loopFrontEndFILRunoutDetect();
+    FIL_FE_CheckRunout();
   #endif
 
   // Loop for popup menu
