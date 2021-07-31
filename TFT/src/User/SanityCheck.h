@@ -1,5 +1,9 @@
-#ifndef _SANITYCHECK_H_
-#define _SANITYCHECK_H_
+#ifndef _SANITY_CHECK_H_
+#define _SANITY_CHECK_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "includes.h"
 #include "Configuration.h"
@@ -297,4 +301,8 @@
   #endif
 #endif
 
-#endif //_SANITYCHECK_H_
+#ifdef __cplusplus
+}
+#endif
+
+#endif  // _SANITY_CHECK_H_
