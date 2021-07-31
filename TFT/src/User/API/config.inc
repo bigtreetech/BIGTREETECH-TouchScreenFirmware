@@ -153,4 +153,4 @@ X_CONFIG(START_GCODE)
 X_CONFIG(END_GCODE)
 X_CONFIG(CANCEL_GCODE)
 
-//after changing/adding/removing a keyword, change the CONFIG_FLASH_SIGN in Settings.h and PARA_SIGN in flashStore.c
+//after changing/adding/removing a keyword, change the CONFIG_FLASH_SIGN in Settings.h and PARA_SIGN in FlashStore.c

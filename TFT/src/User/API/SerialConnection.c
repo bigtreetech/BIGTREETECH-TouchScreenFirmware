@@ -1,4 +1,4 @@
-#include "serialConnection.h"
+#include "SerialConnection.h"
 #include "includes.h"
 
 bool serialHasBeenInitialized = false;

@@ -8,7 +8,7 @@ extern "C" {
 #include <stdbool.h>
 #include "ff.h"
 
-//after changing/adding/removing a keyword, change the CONFIG_FLASH_SIGN in Settings.h and PARA_SIGN in flashStore.c
+//after changing/adding/removing a keyword, change the CONFIG_FLASH_SIGN in Settings.h and PARA_SIGN in FlashStore.c
 
 #define LINE_MAX_CHAR                 100
 #define CONFIG_FILE_PATH              "0:config.ini"
