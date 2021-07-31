@@ -203,14 +203,14 @@ void drawStatusScreenMsg(void)
 {
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
-  IMAGE_ReadDisplay(rect_of_keySS[17].x0, rect_of_keySS[17].y0, INFOBOX_ADDR);
+  IMAGE_ReadDisplay(rect_of_keySS[KEY_INFOBOX].x0, rect_of_keySS[KEY_INFOBOX].y0, INFOBOX_ADDR);
   GUI_SetColor(INFOMSG_BKCOLOR);
-  GUI_DispString(rect_of_keySS[17].x0 + STATUS_MSG_ICON_XOFFSET,
-                 rect_of_keySS[17].y0 + STATUS_MSG_ICON_YOFFSET,
+  GUI_DispString(rect_of_keySS[KEY_INFOBOX].x0 + STATUS_MSG_ICON_XOFFSET,
+                 rect_of_keySS[KEY_INFOBOX].y0 + STATUS_MSG_ICON_YOFFSET,
                  IconCharSelect(CHARICON_INFO));
 
-  GUI_DispString(rect_of_keySS[17].x0 + BYTE_HEIGHT + STATUS_MSG_TITLE_XOFFSET,
-                 rect_of_keySS[17].y0 + STATUS_MSG_ICON_YOFFSET,
+  GUI_DispString(rect_of_keySS[KEY_INFOBOX].x0 + BYTE_HEIGHT + STATUS_MSG_TITLE_XOFFSET,
+                 rect_of_keySS[KEY_INFOBOX].y0 + STATUS_MSG_ICON_YOFFSET,
                  (uint8_t *)msgtitle);
 
   GUI_SetBkColor(INFOMSG_BKCOLOR);

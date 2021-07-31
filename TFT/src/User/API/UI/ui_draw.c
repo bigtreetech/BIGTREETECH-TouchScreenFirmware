@@ -130,31 +130,32 @@ typedef struct
   uint16_t pre_bgColor;
 } TEXT_ON_ICON;
 
-TEXT_ON_ICON backGroundIcon;
+TEXT_ON_ICON backgroundIcon;
 
 void ICON_PrepareRead(uint16_t sx, uint16_t sy, uint8_t icon)
 {
-  backGroundIcon.pre_bgColor = GUI_GetBkColor();
-  backGroundIcon.pre_mode = GUI_GetTextMode();
-  backGroundIcon.address = getBMPsize((uint8_t *)&backGroundIcon.w, (uint8_t *)&backGroundIcon.h, ICON_ADDR(icon));
-  backGroundIcon.sx = sx;
-  backGroundIcon.sy = sy;
+  backgroundIcon.pre_bgColor = GUI_GetBkColor();
+  backgroundIcon.pre_mode = GUI_GetTextMode();
+  backgroundIcon.address = getBMPsize((uint8_t *)&backgroundIcon.w, (uint8_t *)&backgroundIcon.h, ICON_ADDR(icon));
+  backgroundIcon.sx = sx;
+  backgroundIcon.sy = sy;
+
   GUI_SetTextMode(GUI_TEXTMODE_ON_ICON);
 }
 
 void ICON_PrepareReadEnd(void)
 {
-  GUI_SetBkColor(backGroundIcon.pre_bgColor);
-  GUI_SetTextMode(backGroundIcon.pre_mode);
+  GUI_SetBkColor(backgroundIcon.pre_bgColor);
+  GUI_SetTextMode(backgroundIcon.pre_mode);
 }
 
 uint16_t ICON_ReadPixel(int16_t x, int16_t y)
 {
   // // Out of range calls
-  // if ((x > backGroundIcon.sx + backGroundIcon.w) || (y > backGroundIcon.sy + backGroundIcon.h))
+  // if ((x > backgroundIcon.sx + backgroundIcon.w) || (y > backgroundIcon.sy + backgroundIcon.h))
   //   return 0;
   uint16_t color;
-  uint32_t address = backGroundIcon.address + ((x - backGroundIcon.sx) + (y - backGroundIcon.sy) * backGroundIcon.w) * 2;
+  uint32_t address = backgroundIcon.address + ((x - backgroundIcon.sx) + (y - backgroundIcon.sy) * backgroundIcon.w) * 2;
 
   W25Qxx_SPI_CS_Set(0);
   W25Qxx_SPI_Read_Write_Byte(CMD_READ_DATA);

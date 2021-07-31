@@ -1,42 +1,33 @@
 #include "Printing.h"
 #include "includes.h"
 
-const GUI_POINT printinfo_points[6] = {
-  {START_X + PICON_LG_WIDTH * 0 + PICON_SPACE_X * 0, PICON_START_Y + PICON_HEIGHT * 0 + PICON_SPACE_Y * 0},
-  {START_X + PICON_LG_WIDTH * 1 + PICON_SPACE_X * 1, PICON_START_Y + PICON_HEIGHT * 0 + PICON_SPACE_Y * 0},
-  {START_X + PICON_LG_WIDTH * 2 + PICON_SPACE_X * 2, PICON_START_Y + PICON_HEIGHT * 0 + PICON_SPACE_Y * 0},
-  {START_X + PICON_LG_WIDTH * 0 + PICON_SPACE_X * 0, PICON_START_Y + PICON_HEIGHT * 1 + PICON_SPACE_Y * 1},
-  {START_X + PICON_LG_WIDTH * 1 + PICON_SPACE_X * 1, PICON_START_Y + PICON_HEIGHT * 1 + PICON_SPACE_Y * 1},
-  {START_X + PICON_LG_WIDTH * 2 + PICON_SPACE_X * 2, PICON_START_Y + PICON_HEIGHT * 1 + PICON_SPACE_Y * 1},
-};
-
 const GUI_RECT printinfo_val_rect[6] = {
-  {START_X + PICON_LG_WIDTH * 0 + PICON_SPACE_X * 0 + PICON_VAL_X, PICON_START_Y + PICON_HEIGHT * 0 + PICON_SPACE_Y * 0 + PICON_VAL_Y,
-   START_X + PICON_LG_WIDTH * 0 + PICON_SPACE_X * 0 + PICON_VAL_LG_EX, PICON_START_Y + PICON_HEIGHT * 0 + PICON_SPACE_Y * 0 + PICON_VAL_Y + BYTE_HEIGHT},
+  {START_X+PICON_LG_WIDTH*0+PICON_SPACE_X*0+PICON_VAL_X,     PICON_START_Y+PICON_HEIGHT*0+PICON_SPACE_Y*0+PICON_VAL_Y,
+   START_X+PICON_LG_WIDTH*0+PICON_SPACE_X*0+PICON_VAL_LG_EX, PICON_START_Y+PICON_HEIGHT*0+PICON_SPACE_Y*0+PICON_VAL_Y+BYTE_HEIGHT},
 
-  {START_X + PICON_LG_WIDTH * 1 + PICON_SPACE_X * 1 + PICON_VAL_X, PICON_START_Y + PICON_HEIGHT * 0 + PICON_SPACE_Y * 0 + PICON_VAL_Y,
-   START_X + PICON_LG_WIDTH * 1 + PICON_SPACE_X * 1 + PICON_VAL_LG_EX, PICON_START_Y + PICON_HEIGHT * 0 + PICON_SPACE_Y * 0 + PICON_VAL_Y + BYTE_HEIGHT},
+  {START_X+PICON_LG_WIDTH*1+PICON_SPACE_X*1+PICON_VAL_X,     PICON_START_Y+PICON_HEIGHT*0+PICON_SPACE_Y*0+PICON_VAL_Y,
+   START_X+PICON_LG_WIDTH*1+PICON_SPACE_X*1+PICON_VAL_LG_EX, PICON_START_Y+PICON_HEIGHT*0+PICON_SPACE_Y*0+PICON_VAL_Y+BYTE_HEIGHT},
 
-  {START_X + PICON_LG_WIDTH * 2 + PICON_SPACE_X * 2 + PICON_VAL_X, PICON_START_Y + PICON_HEIGHT * 0 + PICON_SPACE_Y * 0 + PICON_VAL_Y,
-   START_X + PICON_LG_WIDTH * 2 + PICON_SPACE_X * 2 + PICON_VAL_SM_EX, PICON_START_Y + PICON_HEIGHT * 0 + PICON_SPACE_Y * 0 + PICON_VAL_Y + BYTE_HEIGHT},
+  {START_X+PICON_LG_WIDTH*2+PICON_SPACE_X*2+PICON_VAL_X,     PICON_START_Y+PICON_HEIGHT*0+PICON_SPACE_Y*0+PICON_VAL_Y,
+   START_X+PICON_LG_WIDTH*2+PICON_SPACE_X*2+PICON_VAL_SM_EX, PICON_START_Y+PICON_HEIGHT*0+PICON_SPACE_Y*0+PICON_VAL_Y+BYTE_HEIGHT},
 
-  {START_X + PICON_LG_WIDTH * 0 + PICON_SPACE_X * 0 + PICON_VAL_X, PICON_START_Y + PICON_HEIGHT * 1 + PICON_SPACE_Y * 1 + PICON_VAL_Y,
-   START_X + PICON_LG_WIDTH * 0 + PICON_SPACE_X * 0 + PICON_VAL_LG_EX, PICON_START_Y + PICON_HEIGHT * 1 + PICON_SPACE_Y * 1 + PICON_VAL_Y + BYTE_HEIGHT},
+  {START_X+PICON_LG_WIDTH*0+PICON_SPACE_X*0+PICON_VAL_X,     PICON_START_Y+PICON_HEIGHT*1+PICON_SPACE_Y*1+PICON_VAL_Y,
+   START_X+PICON_LG_WIDTH*0+PICON_SPACE_X*0+PICON_VAL_LG_EX, PICON_START_Y+PICON_HEIGHT*1+PICON_SPACE_Y*1+PICON_VAL_Y+BYTE_HEIGHT},
 
-  {START_X + PICON_LG_WIDTH * 1 + PICON_SPACE_X * 1 + PICON_VAL_X, PICON_START_Y + PICON_HEIGHT * 1 + PICON_SPACE_Y * 1 + PICON_VAL_Y,
-   START_X + PICON_LG_WIDTH * 1 + PICON_SPACE_X * 1 + PICON_VAL_LG_EX, PICON_START_Y + PICON_HEIGHT * 1 + PICON_SPACE_Y * 1 + PICON_VAL_Y + BYTE_HEIGHT},
+  {START_X+PICON_LG_WIDTH*1+PICON_SPACE_X*1+PICON_VAL_X,     PICON_START_Y+PICON_HEIGHT*1+PICON_SPACE_Y*1+PICON_VAL_Y,
+   START_X+PICON_LG_WIDTH*1+PICON_SPACE_X*1+PICON_VAL_LG_EX, PICON_START_Y+PICON_HEIGHT*1+PICON_SPACE_Y*1+PICON_VAL_Y+BYTE_HEIGHT},
 
-  {START_X + PICON_LG_WIDTH * 2 + PICON_SPACE_X * 2 + PICON_VAL_X, PICON_START_Y + PICON_HEIGHT * 1 + PICON_SPACE_Y * 1 + PICON_VAL_Y,
-   START_X + PICON_LG_WIDTH * 2 + PICON_SPACE_X * 2 + PICON_VAL_SM_EX, PICON_START_Y + PICON_HEIGHT * 1 + PICON_SPACE_Y * 1 + PICON_VAL_Y + BYTE_HEIGHT},
+  {START_X+PICON_LG_WIDTH*2+PICON_SPACE_X*2+PICON_VAL_X,     PICON_START_Y+PICON_HEIGHT*1+PICON_SPACE_Y*1+PICON_VAL_Y,
+   START_X+PICON_LG_WIDTH*2+PICON_SPACE_X*2+PICON_VAL_SM_EX, PICON_START_Y+PICON_HEIGHT*1+PICON_SPACE_Y*1+PICON_VAL_Y+BYTE_HEIGHT},
 };
 
-#define PROGRESS_BAR_RAW_X0    (START_X)                                             // X0 aligned to first icon
-#define PROGRESS_BAR_RAW_X1    (START_X + 4 * ICON_WIDTH + 3 * SPACE_X)              // X1 aligned to last icon
+#define PROGRESS_BAR_RAW_X0 (START_X)                             // X0 aligned to first icon
+#define PROGRESS_BAR_RAW_X1 (START_X + 4*ICON_WIDTH + 3*SPACE_X)  // X1 aligned to last icon
 
 #ifdef MARKED_PROGRESS_BAR
-  #define PROGRESS_BAR_DELTA_X   ((PROGRESS_BAR_RAW_X1 - PROGRESS_BAR_RAW_X0) % 10)  // use marked progress bar. Width rounding factor multiple of 10 slices
+  #define PROGRESS_BAR_DELTA_X ((PROGRESS_BAR_RAW_X1 - PROGRESS_BAR_RAW_X0) % 10)  // use marked progress bar. Width rounding factor multiple of 10 slices
 #else
-  #define PROGRESS_BAR_DELTA_X   2                                                   // use standard progress bar. Reserve a 2 pixels width for vertical borders
+  #define PROGRESS_BAR_DELTA_X 2                                                   // use standard progress bar. Reserve a 2 pixels width for vertical borders
 #endif
 
 // progress bar rounded and aligned to center of icons
@@ -60,8 +51,8 @@ enum
   PRINT_BOTTOM_ROW = (1 << 2),
 };
 
-const uint8_t printingIcon[] = {ICON_PRINTING_NOZZLE, ICON_PRINTING_BED,   ICON_PRINTING_FAN,
-                                ICON_PRINTING_TIMER, ICON_PRINTING_ZLAYER, ICON_PRINTING_SPEED, ICON_PRINTING_FLOW};
+const uint8_t printingIcon[] = {ICON_PRINTING_NOZZLE, ICON_PRINTING_BED,    ICON_PRINTING_FAN,
+                                ICON_PRINTING_TIMER,  ICON_PRINTING_ZLAYER, ICON_PRINTING_SPEED, ICON_PRINTING_FLOW};
 const char *const speedId[2] = {"Speed", "Flow "};
 bool hasFilamentData;
 PROGRESS_DISPLAY progDisplayType;
@@ -161,9 +152,14 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
   char tempstr[10];
 
   if (draw_type & PRINT_ICON)
-    ICON_ReadDisplay(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, icon);
-
-  ICON_PrepareRead(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, icon);
+  {
+    ICON_ReadDisplay(rect_of_keyPS[icon_pos].x0, rect_of_keyPS[icon_pos].y0, icon);
+    GUI_SetTextMode(GUI_TEXTMODE_TRANS);
+  }
+  else
+  {
+    ICON_PrepareRead(rect_of_keyPS[icon_pos].x0, rect_of_keyPS[icon_pos].y0, icon);
+  }
 
   #ifdef UNIFORM_LIVE_TEXT_BG_COLOR  // it set the sampled background color as the background color to be used
     GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
@@ -218,7 +214,7 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
         break;
     }
 
-    GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y, textString);
+    GUI_DispString(rect_of_keyPS[icon_pos].x0 + PICON_TITLE_X, rect_of_keyPS[icon_pos].y0 + PICON_TITLE_Y, textString);
   }
 
   if (draw_type & PRINT_BOTTOM_ROW)
@@ -247,13 +243,10 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
           uint8_t hour, min, sec;
 
           if ((getPrintRemainingTime() == 0) || (progDisplayType == PERCENTAGE_ELAPSED))
-          {
             getPrintTimeDetail(&hour, &min, &sec);
-          }
           else
-          {
             getPrintRemainingTimeDetail(&hour, &min, &sec);
-          }
+
           sprintf(tempstr, "%02u:%02u:%02u", hour, min, sec);
         }
         break;
@@ -273,8 +266,9 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
     GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (uint8_t *)tempstr);
   }
 
-  ICON_PrepareReadEnd();
-}
+  if (!(draw_type & PRINT_ICON))
+    ICON_PrepareReadEnd();
+} // reDrawPrintingValue
 
 static inline void toggleInfo(void)
 {
@@ -382,15 +376,17 @@ void drawPrintInfo(void)
 {
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
-  IMAGE_ReadDisplay(rect_of_keySS[17].x0, rect_of_keySS[17].y0, INFOBOX_ADDR);
+  IMAGE_ReadDisplay(rect_of_keySS[KEY_INFOBOX].x0, rect_of_keySS[KEY_INFOBOX].y0, INFOBOX_ADDR);
+
   GUI_SetColor(INFOMSG_BKCOLOR);
-  GUI_DispString(rect_of_keySS[17].x0 + STATUS_MSG_ICON_XOFFSET, rect_of_keySS[17].y0 + STATUS_MSG_ICON_YOFFSET,
+  GUI_DispString(rect_of_keySS[KEY_INFOBOX].x0 + STATUS_MSG_ICON_XOFFSET, rect_of_keySS[KEY_INFOBOX].y0 + STATUS_MSG_ICON_YOFFSET,
                  IconCharSelect(CHARICON_INFO));
-  GUI_DispStringInRectEOL(rect_of_keySS[17].x0 + BYTE_HEIGHT + STATUS_MSG_TITLE_XOFFSET,
-                          rect_of_keySS[17].y0 + STATUS_MSG_ICON_YOFFSET,
-                          rect_of_keySS[17].x1 - STATUS_MSG_TITLE_XOFFSET,
-                          rect_of_keySS[17].y1 - STATUS_MSG_ICON_YOFFSET,
+  GUI_DispStringInRectEOL(rect_of_keySS[KEY_INFOBOX].x0 + BYTE_HEIGHT + STATUS_MSG_TITLE_XOFFSET,
+                          rect_of_keySS[KEY_INFOBOX].y0 + STATUS_MSG_ICON_YOFFSET,
+                          rect_of_keySS[KEY_INFOBOX].x1 - STATUS_MSG_TITLE_XOFFSET,
+                          rect_of_keySS[KEY_INFOBOX].y1 - STATUS_MSG_ICON_YOFFSET,
                           (uint8_t *)textSelect(LABEL_PRINT_FINISHED));
+
   GUI_SetColor(INFOMSG_COLOR);
   GUI_SetBkColor(INFOMSG_BKCOLOR);
   GUI_DispStringInPrect(&msgRect,LABEL_CLICK_FOR_MORE);
@@ -477,14 +473,9 @@ void menuPrinting(void)
       printingItems.title.address = (uint8_t *) infoFile.Longfile[infoFile.fileIndex];
     else
       printingItems.title.address = getPrintName(infoFile.title);
+
     printingItems.items[KEY_ICON_4] = itemIsPause[lastPause];
     printingItems.items[KEY_ICON_5].icon = (infoFile.source < BOARD_SD && isPrintModelIcon()) ? ICON_PREVIEW : ICON_BABYSTEP;
-    for (uint8_t i = 0; i < PS_TITLEBAR; i++)
-    {
-      rect_of_touchPS[i] = touchPS_elements[i];
-    }
-    rect_of_touchPS[KEY_TITLEBAR] = touchPS_elements[PS_TITLEBAR];
-    rect_of_touchPS[KEY_INFOBOX] = touchPS_elements[PS_DUMMY];
   }
   else // returned to this menu after a print was done (ex: after a popup)
   {
@@ -498,17 +489,11 @@ void menuPrinting(void)
     #endif
       printingItems.items[KEY_ICON_6] = itemIsPrinting[0];  // BackGround
       printingItems.items[KEY_ICON_7] = itemIsPrinting[2];  // Back
-      for (uint8_t i = 0; i < PS_TOUCH_6; i++)
-      { // make status icons unclickable
-        rect_of_touchPS[i] = touchPS_elements[PS_DUMMY];
-      }
-      rect_of_touchPS[PS_TOUCH_7] = touchPS_elements[PS_DUMMY];
-      rect_of_touchPS[PS_TOUCH_8] = touchPS_elements[PS_DUMMY];
-      rect_of_touchPS[KEY_INFOBOX] = touchPS_elements[PS_INFOBOX];
   }
 
   menuDrawPage(&printingItems);
   printingDrawPage();
+
   if (lastPrinting == false)
     drawPrintInfo();
 
@@ -629,34 +614,34 @@ void menuPrinting(void)
     KEY_VALUES key_num = menuKeyGetValue();
     switch (key_num)
     {
-      case PS_TOUCH_0:
+      case PS_KEY_0:
         heatSetCurrentIndex(currentTool);
         infoMenu.menu[++infoMenu.cur] = menuHeat;
         break;
 
-      case PS_TOUCH_1:
+      case PS_KEY_1:
         heatSetCurrentIndex(BED);
         infoMenu.menu[++infoMenu.cur] = menuHeat;
         break;
 
-      case PS_TOUCH_2:
+      case PS_KEY_2:
         infoMenu.menu[++infoMenu.cur] = menuFan;
         break;
 
-      case PS_TOUCH_3:
+      case PS_KEY_3:
         progDisplayType = (progDisplayType + 1) % 3;
         reDrawPrintingValue(TIM_ICON_POS, PRINT_TOP_ROW | PRINT_BOTTOM_ROW);
         break;
 
-      case PS_TOUCH_4:
-        // will be implemented in the future
+      case PS_KEY_4:
+          infoMenu.menu[++infoMenu.cur] = menuBabystep;
         break;
 
-      case PS_TOUCH_5:
+      case PS_KEY_5:
         infoMenu.menu[++infoMenu.cur] = menuSpeed;
         break;
 
-      case PS_TOUCH_6:
+      case PS_KEY_6:
         if (isPrinting())
         {
           if (!isHostDialog())
@@ -674,7 +659,7 @@ void menuPrinting(void)
         #endif
         break;
 
-      case PS_TOUCH_7:
+      case PS_KEY_7:
         #ifdef TFT70_V3_0
           if (isPrinting())
             infoMenu.menu[++infoMenu.cur] = menuBabystep;
@@ -689,11 +674,11 @@ void menuPrinting(void)
         #endif
         break;
 
-      case PS_TOUCH_8:
+      case PS_KEY_8:
         infoMenu.menu[++infoMenu.cur] = menuMore;
         break;
 
-      case PS_TOUCH_9:
+      case PS_KEY_9:
         if (isPrinting())
         {
           setDialogText(LABEL_WARNING, LABEL_STOP_PRINT, LABEL_CONFIRM, LABEL_CANCEL);
@@ -706,7 +691,7 @@ void menuPrinting(void)
         }
         break;
 
-      case KEY_INFOBOX:
+      case PS_KEY_INFOBOX:
         printInfoPopup();
         break;
 
