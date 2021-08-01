@@ -9,39 +9,19 @@
 //check size of settings against max allocated size at compile time
 #define SIZE_CHECK(object) ((void)sizeof(char[1 - 2*!!(object)]))
 
-#if defined(TFT35_V2_0) || defined(TFT35_V3_0) || defined(TFT35_B1_V3_0) || defined(TFT35_E3_V3_0)
-  #ifdef SCREEN_SHOT_TO_SD
-    #error "Hardware error, need to change the TFT Pin39 from GND to 3.3V to use this feature. Otherwise, the color read out is incorrect"
-  #endif
-#endif
-
 #if CONFIG_VERSION != CONFIG_SUPPPORT
   #error "the Configuration.h is old. please use the latest Configuration.h file"
 #endif
+
+//====================================================================================================
+//=============================== Settings Configurable On config.ini ================================
+//====================================================================================================
 
 #if BAUDRATE < 0 || BAUDRATE >= BAUDRATE_COUNT
   #error "invalid Baudrate index. Pleas select a value only from options provided in configuration.h"
 #endif
 
-#if THUMBNAIL_PARSER == PARSER_BASE64PNG
-  #if RAM_SIZE<96
-    // Decoding Base64-encoded PNGs is not possible due to memory requirements. Downgrading to the "RGB565 bitmap" option.
-    #undef THUMBNAIL_PARSER
-    #define THUMBNAIL_PARSER PARSER_RGB565
-  #endif
-#endif
-
-#ifdef THUMBNAIL_PARSER
-  #if (THUMBNAIL_PARSER != PARSER_CLASSIC) && (THUMBNAIL_PARSER != PARSER_RGB565) && (THUMBNAIL_PARSER != PARSER_BASE64PNG)
-    #error "Configuration error: THUMBNAIL_PARSER is not set to a valid value of 0, 1 or 2."
-  #endif
-#endif
-
-#ifdef ST7920_EMULATOR
-  #ifdef CLEAN_MODE_SWITCHING_SUPPORT
-    #error "CLEAN_MODE_SWITCHING_SUPPORT is now SERIAL_ALWAYS_ON. Please update your configuration."
-  #endif
-#else
+#ifndef ST7920_EMULATOR
   #if defined(_PIN_TFT35_V2_0_H_) || defined(_PIN_TFT35_V1_0_H_)
     #ifdef DEFAULT_LCD_MODE
       #undef DEFAULT_LCD_MODE
@@ -49,6 +29,26 @@
     #define DEFAULT_LCD_MODE MODE_SERIAL_TSC  // Just set hardcoded here.
     //#warning "DEFAULT_LCD_MODE supports only SERIAL_TSC. Please update/check your configuration."
   #endif
+#endif
+
+#ifndef MARLIN_BANNER_TEXT
+  #define MARLIN_BANNER_TEXT "Marlin Mode"
+#endif
+
+#if HOTEND_NUM > MAX_HOTEND_COUNT
+  #error "HOTEND_NUM can not be more than 6"
+#endif
+
+#if EXTRUDER_NUM > MAX_EXT_COUNT
+  #error "EXTRUDER_NUM can not be more than 6"
+#endif
+
+#if FAN_NUM > MAX_FAN_COUNT
+  #error "FAN_NUM can not be more than 6"
+#endif
+
+#if FIL_SENSOR_TYPE > 3 || FIL_SENSOR_TYPE < 0
+  #error "FIL_SENSOR_TYPE cannot be greater than 3 or less than 0"
 #endif
 
 #ifdef LED_COLOR_PIN
@@ -71,97 +71,6 @@
     #endif
   #endif
   #define STARTUP_KNOB_LED_COLOR 0
-#endif
-
-#ifdef EXTRUDE_STEPS
-  #error "EXTRUDE_STEPS is now auto-configured with 'M92'. Please remove EXTRUDE_STEPS from your Configuration.h file."
-#endif
-
-#ifdef AUTO_BED_LEVELING
-  #error "AUTO_BED_LEVELING is now auto-configured with 'M115'. Please remove AUTO_BED_LEVELING from your Configuration.h file."
-#endif
-
-#ifdef ENABLE_BL_VALUE
-  #if ENABLE_BL_VALUE > 5
-    #error "ENABLE_BL_VALUE cannot be greater than 5"
-  #endif
-
-  #if ENABLE_BL_VALUE < 0
-    #error "ENABLE_BL_VALUE cannot be less than 0"
-  #endif
-#endif
-#ifndef ENABLE_BL_VALUE
-  #define ENABLE_BL_VALUE 1
-#endif
-
-#ifdef MESH_GRID_MAX_POINTS_X
-  #if MESH_GRID_MAX_POINTS_X > 15
-    #error "MESH_GRID_MAX_POINTS_X cannot be greater than 15"
-  #endif
-
-  #if MESH_GRID_MAX_POINTS_X < 1
-    #error "MESH_GRID_MAX_POINTS_X cannot be less than 1"
-  #endif
-#endif
-#ifndef MESH_GRID_MAX_POINTS_X
-  #define MESH_GRID_MAX_POINTS_X 10
-#endif
-
-#ifdef MESH_GRID_MAX_POINTS_Y
-  #if MESH_GRID_MAX_POINTS_Y > 15
-    #error "MESH_GRID_MAX_POINTS_Y cannot be greater than 15"
-  #endif
-
-  #if MESH_GRID_MAX_POINTS_Y < 1
-    #error "MESH_GRID_MAX_POINTS_Y cannot be less than 1"
-  #endif
-#endif
-#ifndef MESH_GRID_MAX_POINTS_Y
-  #define MESH_GRID_MAX_POINTS_Y 10
-#endif
-
-#ifdef KEYBOARD_COLOR_LAYOUT
-  #if KEYBOARD_COLOR_LAYOUT > 2
-    #error "KEYBOARD_COLOR_LAYOUT cannot be greater than 2"
-  #endif
-
-  #if KEYBOARD_COLOR_LAYOUT < 0
-    #error "KEYBOARD_COLOR_LAYOUT cannot be less than 0"
-  #endif
-#endif
-#ifndef KEYBOARD_COLOR_LAYOUT
-  #define KEYBOARD_COLOR_LAYOUT 0
-#endif
-#if KEYBOARD_COLOR_LAYOUT == 2 && defined(KEYBOARD_MATERIAL_THEME)
-  #undef KEYBOARD_MATERIAL_THEME
-#endif
-
-#ifdef CANCEL_PRINT_GCODE
-  #error "CANCEL_PRINT_GCODE is now PRINT_CANCEL_GCODE. Please update your Configuration.h file."
-#endif
-
-#ifndef MARLIN_BANNER_TEXT
-  #define MARLIN_BANNER_TEXT "Marlin Mode"
-#endif
-
-#ifdef TOOL_NUM
-  #error "TOOL_NUM is now HOTEND_NUM. Please update your Configuration.h file."
-#endif
-
-#if HOTEND_NUM > MAX_HOTEND_COUNT
-  #error "HOTEND_NUM can not be more than 6"
-#endif
-
-#if EXTRUDER_NUM > MAX_EXT_COUNT
-  #error "EXTRUDER_NUM can not be more than 6"
-#endif
-
-#if FAN_NUM > MAX_FAN_COUNT
-  #error "FAN_NUM can not be more than 6"
-#endif
-
-#if FIL_SENSOR_TYPE > 3 || FIL_SENSOR_TYPE < 0
-  #error "FIL_SENSOR_TYPE cannot be greater than 3 or less than 0"
 #endif
 
 #ifdef CUSTOM_0_LABEL
@@ -295,5 +204,97 @@
 #define CUSTOM_GCODE_LABELS  {CUSTOM_0_LABEL, CUSTOM_1_LABEL, CUSTOM_2_LABEL, CUSTOM_3_LABEL, CUSTOM_4_LABEL,\
                               CUSTOM_5_LABEL, CUSTOM_6_LABEL, CUSTOM_7_LABEL, CUSTOM_8_LABEL, CUSTOM_9_LABEL,\
                               CUSTOM_10_LABEL,CUSTOM_11_LABEL,CUSTOM_12_LABEL,CUSTOM_13_LABEL,CUSTOM_14_LABEL}
+
+//====================================================================================================
+//============================ Settings Configurable At Compile Time Only ============================
+//====================================================================================================
+
+#if defined(TFT35_V2_0) || defined(TFT35_V3_0) || defined(TFT35_B1_V3_0) || defined(TFT35_E3_V3_0)
+  #ifdef SCREEN_SHOT_TO_SD
+    #error "Hardware error, need to change the TFT Pin39 from GND to 3.3V to use this feature. Otherwise, the color read out is incorrect"
+  #endif
+#endif
+
+#ifdef MESH_GRID_MAX_POINTS_X
+  #if MESH_GRID_MAX_POINTS_X > 15
+    #error "MESH_GRID_MAX_POINTS_X cannot be greater than 15"
+  #endif
+
+  #if MESH_GRID_MAX_POINTS_X < 1
+    #error "MESH_GRID_MAX_POINTS_X cannot be less than 1"
+  #endif
+#endif
+#ifndef MESH_GRID_MAX_POINTS_X
+  #define MESH_GRID_MAX_POINTS_X 10
+#endif
+
+#ifdef MESH_GRID_MAX_POINTS_Y
+  #if MESH_GRID_MAX_POINTS_Y > 15
+    #error "MESH_GRID_MAX_POINTS_Y cannot be greater than 15"
+  #endif
+
+  #if MESH_GRID_MAX_POINTS_Y < 1
+    #error "MESH_GRID_MAX_POINTS_Y cannot be less than 1"
+  #endif
+#endif
+#ifndef MESH_GRID_MAX_POINTS_Y
+  #define MESH_GRID_MAX_POINTS_Y 10
+#endif
+
+#ifdef ENABLE_BL_VALUE
+  #if ENABLE_BL_VALUE > 5
+    #error "ENABLE_BL_VALUE cannot be greater than 5"
+  #endif
+
+  #if ENABLE_BL_VALUE < 0
+    #error "ENABLE_BL_VALUE cannot be less than 0"
+  #endif
+#endif
+#ifndef ENABLE_BL_VALUE
+  #define ENABLE_BL_VALUE 1
+#endif
+
+#ifdef DELTA_PROBE_TYPE
+  #if DELTA_PROBE_TYPE > 2
+    #error "DELTA_PROBE_TYPE cannot be greater than 2"
+  #endif
+
+  #if DELTA_PROBE_TYPE < 0
+    #error "DELTA_PROBE_TYPE cannot be less than 0"
+  #endif
+#endif
+#ifndef DELTA_PROBE_TYPE
+  #define DELTA_PROBE_TYPE 0
+#endif
+
+#ifdef KEYBOARD_COLOR_LAYOUT
+  #if KEYBOARD_COLOR_LAYOUT > 2
+    #error "KEYBOARD_COLOR_LAYOUT cannot be greater than 2"
+  #endif
+
+  #if KEYBOARD_COLOR_LAYOUT < 0
+    #error "KEYBOARD_COLOR_LAYOUT cannot be less than 0"
+  #endif
+#endif
+#ifndef KEYBOARD_COLOR_LAYOUT
+  #define KEYBOARD_COLOR_LAYOUT 0
+#endif
+#if KEYBOARD_COLOR_LAYOUT == 2 && defined(KEYBOARD_MATERIAL_THEME)
+  #undef KEYBOARD_MATERIAL_THEME
+#endif
+
+#if THUMBNAIL_PARSER == PARSER_BASE64PNG
+  #if RAM_SIZE < 96
+    // Decoding Base64-encoded PNGs is not possible due to memory requirements. Downgrading to the "RGB565 bitmap" option.
+    #undef THUMBNAIL_PARSER
+    #define THUMBNAIL_PARSER PARSER_RGB565
+  #endif
+#endif
+
+#ifdef THUMBNAIL_PARSER
+  #if (THUMBNAIL_PARSER != PARSER_CLASSIC) && (THUMBNAIL_PARSER != PARSER_RGB565) && (THUMBNAIL_PARSER != PARSER_BASE64PNG)
+    #error "Configuration error: THUMBNAIL_PARSER is not set to a valid value of 0, 1 or 2."
+  #endif
+#endif
 
 #endif //_SANITYCHECK_H_

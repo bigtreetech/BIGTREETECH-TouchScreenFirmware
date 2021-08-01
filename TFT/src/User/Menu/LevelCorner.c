@@ -25,12 +25,16 @@ void ScanLevelCorner(uint8_t point)
     {infoSettings.machine_size_min[X_AXIS] + infoSettings.level_edge, infoSettings.machine_size_max[Y_AXIS] - infoSettings.level_edge},
   };
 
-  if (infoSettings.touchmi_sensor == 1)
+  if (infoSettings.touchmi_sensor != 0)
+  {
     mustStoreCmd("M401\n");
-
-  // move to selected point
-  mustStoreCmd("G30 E0 X%d Y%d\n", pointPosition[point][0], pointPosition[point][1]);
-  mustStoreCmd("G1 Z10\n");
+    mustStoreCmd("G30 E0 X%d Y%d\n", pointPosition[point][0], pointPosition[point][1]);  // move to selected point
+    mustStoreCmd("G1 Z10\n");
+  }
+  else
+  {
+    mustStoreCmd("G30 E1 X%d Y%d\n", pointPosition[point][0], pointPosition[point][1]);  // move to selected point
+  }
 
   mustStoreCmd(ENABLE_STEPPER_CMD);
   mustStoreCmd(DISABLE_STEPPER_CMD);

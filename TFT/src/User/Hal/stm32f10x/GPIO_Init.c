@@ -19,7 +19,7 @@ void GPIO_InitSet(uint16_t io, GPIO_MODE mode, uint8_t AF)
     GPIO_Port[port]->BSRR = 1 << pin;       // set high
   }
 
-  if(pin <= 7)
+  if (pin <= 7)
   {
     GPIO_Port[port]->CRL &= ~(0xF << 4*(pin & 0x7));  // clear control reg bits
     GPIO_Port[port]->CRL |= mode << 4*(pin & 0x7);    // clear control reg bits

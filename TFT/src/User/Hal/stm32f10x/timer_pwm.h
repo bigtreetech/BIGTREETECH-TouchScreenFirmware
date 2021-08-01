@@ -1,7 +1,7 @@
 #ifndef _TIMER_PWM_H_
 #define _TIMER_PWM_H_
 
-#include "stm32f10x.h"
+#include <stdint.h>
 
 #define _TIM1    0
 #define _TIM2    1

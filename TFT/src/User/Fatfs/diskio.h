@@ -9,6 +9,8 @@
 extern "C" {
 #endif
 
+#include "ff.h"
+
 enum
 {
  VOLUMES_SD_CARD = 0,  //SD�?,卷标�?0

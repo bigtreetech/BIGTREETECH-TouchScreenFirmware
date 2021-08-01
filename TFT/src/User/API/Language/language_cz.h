@@ -7,6 +7,7 @@
     #define STRING_ROTATE_UI              "Otočit UI"
     #define STRING_TERMINAL_ACK           "zobrazit ACK Terminálu"
     #define STRING_PERSISTENT_INFO        "Zobrazení stavových ikon"
+    #define STRING_FAN_SPEED_PERCENT      "Rychlost ventilátoru v %"
     #define STRING_FILE_LIST_MODE         "Soubory jako seznam"
     #define STRING_FILE_SORT_BY           "Řazení souborů"
     #define STRING_ACK_NOTIFICATION       "Styl oznámení ACK"
@@ -17,7 +18,6 @@
     #define STRING_MARLIN_TYPE            "Typ Marlin Modu"
     #define STRING_MOVE_SPEED             "Rychlost pohybu X Y Z"
     #define STRING_AUTO_LOAD_LEVELING     "Automaticky Leveling"
-    #define STRING_FAN_SPEED_PERCENT      "Rychlost ventilátoru v %"
     #define STRING_XY_OFFSET_PROBING      "Podpora XY Offset sondy"
     #define STRING_Z_STEPPERS_ALIGNMENT   "Z Motor Auto-Alignment"
     #define STRING_PS_ON                  "Auto.vypnutí"
@@ -34,14 +34,16 @@
     #define STRING_LCD_BRIGHTNESS         "LCD Jas"
     #define STRING_LCD_IDLE_BRIGHTNESS    "LCD snížení jasu"
     #define STRING_LCD_IDLE_DELAY         "LCD snížení jasu po"
+    #define STRING_BLOCK_TOUCH_ON_IDLE    "Block touch on idle"
     #define STRING_START_GCODE_ENABLED    "Spustit Gcode před tiskem"
     #define STRING_END_GCODE_ENABLED      "Spustit Gcode po tisku"
     #define STRING_CANCEL_GCODE_ENABLED   "Spustit Gcode po stornu"
 
-    // Machine Parameter Settings
+    // Machine Parameter Settings - Param Title (ordered by gcode)
     #define STRING_STEPS_SETTING          "Kroků/mm"
-    #define STRING_MAXFEEDRATE            "Max rychlost"
+    #define STRING_FILAMENT_SETTING       "Průměr Filamentu"
     #define STRING_MAXACCELERATION        "Max zrychlení"
+    #define STRING_MAXFEEDRATE            "Max rychlost"
     #define STRING_ACCELERATION           "Zrychlení"
     #define STRING_JERK                   "Jerk-trhnutí"
     #define STRING_JUNCTION_DEVIATION     "Junction Deviation"
@@ -49,17 +51,19 @@
     #define STRING_FWRETRACT              "FW Zatažení"
     #define STRING_FWRECOVER              "FW Obnovení"
     #define STRING_RETRACT_AUTO           "Auto Firmware Retract"
-    #define STRING_DELTA_CONFIGURATION           "Delta Configuration"
-    #define STRING_DELTA_TOWER_ANGLE           "Tower Angle Trim"
-    #define STRING_DELTA_ENDSTOP           "Endstop Adjustments"
     #define STRING_HOTEND_OFFSET          "Offset 2.trysky"
+    #define STRING_STEALTH_CHOP           "TMC Tichý režim"
+    #define STRING_DELTA_CONFIGURATION    "Delta konfigurace"
+    #define STRING_DELTA_TOWER_ANGLE      "Úhel věže"
+    #define STRING_DELTA_ENDSTOP          "Nastavení dorazu"
     #define STRING_PROBE_OFFSET           "Offset sondy"
     #define STRING_LIN_ADVANCE            "Linear Advance"
-    #define STRING_FILAMENT_SETTING       "Průměr Filamentu"
     #define STRING_CURRENT_SETTING        "TMC Proud motorů(mA)"
-    #define STRING_BUMP_SENSITIVITY       "TMC Citlivost dorazu"
     #define STRING_HYBRID_THRESHOLD       "TMC Hybridní práh"
-    #define STRING_STEALTH_CHOP           "TMC Tichý režim"
+    #define STRING_BUMP_SENSITIVITY       "TMC Citlivost dorazu"
+    #define STRING_MBL_OFFSET             "MBL Offset"
+
+    // Machine Parameter Settings - Param Attributes (ordered by gcode)
     #define STRING_PRINT_ACCELERATION     "Zrychlení při tisku"
     #define STRING_RETRACT_ACCELERATION   "Zrychlení retrakcí"
     #define STRING_TRAVEL_ACCELERATION    "Zrychlení při přesunu"
@@ -71,7 +75,6 @@
     #define STRING_SWAP_RECOVER_LENGTH    "Délka obnovení Swap"
     #define STRING_RECOVER_FEEDRATE       "Rychlost obnovení"
     #define STRING_SWAP_RECOVER_FEEDRATE  "Rychlost obnovení Swap"
-    #define STRING_MBL_OFFSET             "MBL Offset"
 
     // Save / Load
     #define STRING_SAVE                   "Uložit"
@@ -351,7 +354,7 @@
     #define STRING_Z_ALIGN                "Z Align"
     #define STRING_MACROS                 "Makro"
     #define STRING_MESH_VALID             "Test sítě"
-    #define STRING_CONNECT_PROBE          "Connect probe before starting the process. Make sure to disconnect it afterwards."
-    #define STRING_CALIBRATION            "Calibration"
+    #define STRING_CONNECT_PROBE          "Před zahájením procesu připojte sondu. Poté ji nezapomeňte odpojit."
+    #define STRING_CALIBRATION            "Kalibrace"
 
 #endif

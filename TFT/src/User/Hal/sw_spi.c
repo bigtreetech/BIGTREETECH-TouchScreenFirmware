@@ -1,6 +1,6 @@
 #include "sw_spi.h"
-#include "delay.h"
 #include "GPIO_Init.h"
+#include "delay.h"
 
 void SW_SPI_Config(_SW_SPI *sw_spi, _SPI_MODE mode, u8 dataSize,
   uint16_t cs,

@@ -958,7 +958,18 @@ void parseACK(void)
       {
         setParameter(P_AUTO_RETRACT, 0, ack_value());
       }
+      // parse and store Offset 2nd Nozzle
+      else if (ack_seen("M218 T1 X"))
+      {
+                           setParameter(P_HOTEND_OFFSET, 0, ack_value());
+        if (ack_seen("Y")) setParameter(P_HOTEND_OFFSET, 1, ack_value());
+        if (ack_seen("Z")) setParameter(P_HOTEND_OFFSET, 2, ack_value());
+      }
       // parse and store Delta Configuration values
+      //
+      // IMPORTANT: It must be placed before the following keys:
+      //            1) M420 S
+      //
       else if (ack_seen("M665"))
       {
         if (ack_seen("H")) setParameter(P_DELTA_CONFIGURATION, 0, ack_value());
@@ -970,18 +981,15 @@ void parseACK(void)
         if (ack_seen("Z")) setParameter(P_DELTA_TOWER_ANGLE, AXIS_INDEX_Z, ack_value());
       }
       // parse and store Delta Endstop Adjustments values
+      //
+      // IMPORTANT: It must be placed before the following keys:
+      //            1) M420 S
+      //
       else if (ack_seen("M666"))
       {
         if (ack_seen("X")) setParameter(P_DELTA_ENDSTOP, 0, ack_value());
         if (ack_seen("Y")) setParameter(P_DELTA_ENDSTOP, 1, ack_value());
         if (ack_seen("Z")) setParameter(P_DELTA_ENDSTOP, 2, ack_value());
-      }
-      // parse and store Offset 2nd Nozzle
-      else if (ack_seen("M218 T1 X"))
-      {
-                           setParameter(P_HOTEND_OFFSET, 0, ack_value());
-        if (ack_seen("Y")) setParameter(P_HOTEND_OFFSET, 1, ack_value());
-        if (ack_seen("Z")) setParameter(P_HOTEND_OFFSET, 2, ack_value());
       }
       // parse and store ABL on/off state & Z fade value on M503
       else if (ack_seen("M420 S"))
