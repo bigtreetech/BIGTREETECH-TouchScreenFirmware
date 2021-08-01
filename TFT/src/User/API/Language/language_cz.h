@@ -355,6 +355,7 @@
     #define STRING_MACROS                 "Makro"
     #define STRING_MESH_VALID             "Test sítě"
     #define STRING_CONNECT_PROBE          "Před zahájením procesu připojte sondu. Poté ji nezapomeňte odpojit."
+    #define STRING_DISCONNECT_PROBE       "Make sure you have disconnected probe before using this feature."
     #define STRING_CALIBRATION            "Kalibrace"
 
 #endif
