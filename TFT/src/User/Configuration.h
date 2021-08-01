@@ -551,7 +551,7 @@
  *       so it can improve the print quality.
  *       Suitable in particular for the TFTs with a not fast HW (e.g. 24, 48 MHz).
  */
-//#define UNIFORM_LIVE_TEXT_BG_COLOR  // Default: disabled
+#define UNIFORM_LIVE_TEXT_BG_COLOR  // Default: disabled
 
 /**
  * Show embedded thumbnails of gcode files
