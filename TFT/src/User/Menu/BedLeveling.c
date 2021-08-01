@@ -96,11 +96,11 @@ void menuBedLeveling(void)
         break;
 
       case KEY_ICON_1:
-        #if DELTA_PROBE_TYPE == 2  // if Delta printer with removable probe
+        #if DELTA_PROBE_TYPE != 2
+          infoMenu.menu[++infoMenu.cur] = menuMeshEditor;
+        #else  
           setDialogText(LABEL_WARNING, LABEL_DISCONNECT_PROBE, LABEL_CONTINUE, LABEL_CANCEL);
           showDialog(DIALOG_TYPE_ALERT, deltaMeshEditor, NULL, NULL);
-        #else  
-          infoMenu.menu[++infoMenu.cur] = menuMeshEditor;
         #endif
         break;
 
@@ -129,13 +129,13 @@ void menuBedLeveling(void)
       case KEY_ICON_5:
         if (infoMachineSettings.zProbe == ENABLED)
         {
-          #if DELTA_PROBE_TYPE == 2  // if Delta printer with removable probe
-            setDialogText(LABEL_WARNING, LABEL_DISCONNECT_PROBE, LABEL_CONTINUE, LABEL_CANCEL);
-            showDialog(DIALOG_TYPE_ALERT, deltaZOffset, NULL, NULL);
-          #else    
+          #if DELTA_PROBE_TYPE != 2
             storeCmd("M851\n");
             zOffsetSetMenu(true);  // use Probe Offset menu
             infoMenu.menu[++infoMenu.cur] = menuZOffset;
+          #else    
+            setDialogText(LABEL_WARNING, LABEL_DISCONNECT_PROBE, LABEL_CONTINUE, LABEL_CANCEL);
+            showDialog(DIALOG_TYPE_ALERT, deltaZOffset, NULL, NULL);
           #endif  
         }
         break;
