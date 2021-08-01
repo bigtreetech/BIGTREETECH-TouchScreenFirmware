@@ -5,8 +5,8 @@
 extern "C" {
 #endif
 
-#include <stdbool.h>
-#include "sw_spi.h"
+#include <stdint.h>
+#include "variants.h"  // for u8 etc...
 
 void XPT2046_Init(void);
 uint8_t XPT2046_Read_Pen(void);

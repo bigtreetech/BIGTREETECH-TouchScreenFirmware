@@ -1,9 +1,7 @@
 #include "spi_slave.h"
+#include "includes.h"  // for infoSettings, ST7920_EMULATOR etc...
 #include "spi.h"
 #include "GPIO_Init.h"
-#include "stdlib.h"
-#include "stm32f10x_conf.h"
-#include "Settings.h"
 #include "HD44780.h"
 
 #if !defined(MKS_TFT)
@@ -135,7 +133,7 @@ void SPI_Slave_CS_Config(void)
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;                    // Enable external interrupt channel
   NVIC_Init(&NVIC_InitStructure);
 }
-#endif
+#endif             // endif for #if defined(ST7920_EMULATOR)
 
 #ifdef HAS_EMULATOR
 // External interruption
@@ -151,7 +149,7 @@ void EXTI15_10_IRQHandler(void)
 
     #ifdef ST7920_EMULATOR
     case LCD12864:
-      if((GPIOB->IDR & (1<<12)) != 0)
+      if ((GPIOB->IDR & (1<<12)) != 0)
       {
         SPI_ReEnable(!!(GPIOB->IDR & (1<<13)));                      // Adaptive spi mode0 / mode3
         ST7920_SPI_NUM->CR1 |= (1<<6);
@@ -167,6 +165,6 @@ void EXTI15_10_IRQHandler(void)
     #endif
   }
 }
-#endif
+#endif             // endif for #ifdef HAS_EMULATOR
 
 #endif             // endif for #if !defined(MKS_TFT)

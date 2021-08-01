@@ -21,7 +21,7 @@ Sector 11 0x080E 0000 - 0x080F FFFF 128 Kbyte
 void STM32_FlashRead(u8 *data, u32 len)
 {
   u32 i = 0;
-  for(i = 0; i < len; i++)
+  for (i = 0; i < len; i++)
   {
     data[i] = *(vu8*)(SIGN_ADDRESS + i);
   }
@@ -32,7 +32,7 @@ void STM32_FlashWrite(u8 *data, u32 len)
   u32 i = 0;
   FLASH_Unlock();
   FLASH_EraseSector(FLASH_SECTOR, VoltageRange_1);
-  for(i = 0; i < len; i++)
+  for (i = 0; i < len; i++)
   {
     FLASH_ProgramByte(SIGN_ADDRESS + i, data[i]);
   }

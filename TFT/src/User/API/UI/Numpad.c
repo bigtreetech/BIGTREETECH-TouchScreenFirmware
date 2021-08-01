@@ -1,4 +1,5 @@
 #include "Numpad.h"
+#include "includes.h"
 #include "CharIcon.h"
 
 #define SKEYHEIGHT (LCD_HEIGHT - ICON_START_Y) / 4

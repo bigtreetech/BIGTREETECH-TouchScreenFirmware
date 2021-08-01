@@ -36,12 +36,14 @@ extern "C" {
 #define CONFIG_TERMINAL_ACK           "terminal_ack:"
 #define CONFIG_INVERT_AXIS            "invert_axis:"
 #define CONFIG_PERSISTENT_TEMP        "persistent_info:"
+#define CONFIG_FAN_PERCENT            "fan_speed_percent:"
 #define CONFIG_LIST_MODE              "files_list_mode:"
 #define CONFIG_FILES_SORT_BY          "files_sort_by:"
 #define CONFIG_ACK_NOTIFICATION       "ack_notification:"
 #define CONFIG_NOTIFICATION_M117      "notification_m117:"
 #define CONFIG_EMULATE_M600           "emulate_m600:"
-//-----------------------------Marlin Mode Settings (only for TFT24_V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70_V3.0)
+#define CONFIG_PROG_DISP_TYPE         "prog_disp_type:"
+//-----------------------------Marlin Mode Settings (only for TFT24 V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
 #define CONFIG_MODE                   "default_mode:"
 #define CONFIG_SERIAL_ON              "serial_always_on:"
 #define CONFIG_MARLIN_BG_COLOR        "marlin_bg_color:"
@@ -73,8 +75,6 @@ extern "C" {
 #define CONFIG_M27_DELAY              "M27_refresh_time:"
 #define CONFIG_M27_KEEP_ON            "M27_always_active:"
 #define CONFIG_LONG_FILENAME          "long_filename_support:"
-#define CONFIG_FAN_PERCENT            "fan_speed_percent:"
-#define CONFIG_PROG_DISP_TYPE         "prog_disp_type:"
 #define CONFIG_PAUSE_RETRACT          "pause_retract:"
 #define CONFIG_PAUSE_POS              "pause_pos:"
 #define CONFIG_PAUSE_Z_RAISE          "pause_z_raise:"
@@ -98,16 +98,16 @@ extern "C" {
 #define CONFIG_PREHEAT_TEMP_4         "preheat_temp4:"
 #define CONFIG_PREHEAT_TEMP_5         "preheat_temp5:"
 #define CONFIG_PREHEAT_TEMP_6         "preheat_temp6:"
-//-----------------------------Power Supply Settings (if connected to TFT controller)
+//-----------------------------Power Supply Settings (only if connected to TFT controller)
 #define CONFIG_PS_ON                  "ps_on:"
 #define CONFIG_PS_LOGIC               "ps_on_active_high:"
 #define CONFIG_SHUTDOWN_TEMP          "auto_shutdown_temp:"
-//-----------------------------Filament Runout Settings (if connected to TFT controller)
+//-----------------------------Filament Runout Settings (only if connected to TFT controller)
 #define CONFIG_RUNOUT                 "fil_runout:"
 #define CONFIG_RUNOUT_LOGIC           "fil_runout_inverting:"
 #define CONFIG_RUNOUT_NOISE           "fil_noise_threshold:"
 #define CONFIG_RUNOUT_DISTANCE        "fil_runout_distance:"
-//-----------------------------Power Loss Recovery & BTT UPS Settings (if connected to TFT controller)
+//-----------------------------Power Loss Recovery & BTT UPS Settings
 #define CONFIG_POWERLOSS_EN           "pl_recovery_en:"
 #define CONFIG_POWERLOSS_HOME         "pl_recovery_home:"
 #define CONFIG_POWERLOSS_ZRAISE       "pl_z_raise:"
@@ -123,6 +123,7 @@ extern "C" {
 #define CONFIG_BRIGHTNESS             "lcd_brightness:"
 #define CONFIG_BRIGHTNESS_IDLE        "lcd_idle_brightness:"
 #define CONFIG_BRIGHTNESS_IDLE_DELAY  "lcd_idle_delay:"
+#define CONFIG_BLOCK_TOUCH_ON_IDLE    "block_touch_on_idle:"
 //-----------------------------Custom Gcode Commands
 #define CONFIG_CUSTOM_LABEL_1         "custom_label_1:"
 #define CONFIG_CUSTOM_LABEL_2         "custom_label_2:"

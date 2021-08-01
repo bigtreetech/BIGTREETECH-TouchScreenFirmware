@@ -41,13 +41,15 @@ void infoSettingsReset(void)
   infoSettings.rotate_ui              = DISABLED;
   infoSettings.terminalACK            = DISABLED;
   infoSettings.persistent_info        = ENABLED;
+  infoSettings.fan_percentage         = SHOW_FAN_PERCENTAGE;
   infoSettings.file_listmode          = ENABLED;
   infoSettings.files_sort_by          = SORT_DATE_NEW_FIRST;
   infoSettings.ack_notification       = ACK_NOTIFICATION_STYLE;
   infoSettings.notification_m117      = DISABLED;
   infoSettings.emulate_m600           = EMULATE_M600;
+  infoSettings.prog_disp_type         = ELAPSED_REMAINING;
 
-// Marlin Mode Settings
+// Marlin Mode Settings (only for TFT24 V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
   infoSettings.mode                   = DEFAULT_LCD_MODE;
   infoSettings.serial_alwaysOn        = SERIAL_ALWAYS_ON;
   infoSettings.marlin_mode_bg_color   = lcd_colors[MARLIN_BKCOLOR];
@@ -73,8 +75,6 @@ void infoSettingsReset(void)
   infoSettings.m27_refresh_time       = M27_REFRESH;
   infoSettings.m27_active             = M27_WATCH_OTHER_SOURCES;
   infoSettings.longFileName           = AUTO;  //ENABLED / DISABLED / AUTO
-  infoSettings.fan_percentage         = SHOW_FAN_PERCENTAGE;
-  infoSettings.prog_disp_type         = ELAPSED_REMAINING;
 
   infoSettings.pause_retract_len      = NOZZLE_PAUSE_RETRACT_LENGTH;
   infoSettings.resume_purge_len       = NOZZLE_RESUME_PURGE_LENGTH;
@@ -92,12 +92,12 @@ void infoSettingsReset(void)
   infoSettings.z_raise_probing        = PROBING_Z_RAISE;
   infoSettings.z_steppers_alignment   = DISABLED;
 
-// Power Supply Settings
+// Power Supply Settings (only if connected to TFT controller)
   infoSettings.auto_off               = DISABLED;
   infoSettings.ps_active_high         = PS_ON_ACTIVE_HIGH;
   infoSettings.auto_off_temp          = AUTO_SHUT_DOWN_MAXTEMP;
 
-// Filament Runout Settings
+// Filament Runout Settings (only if connected to TFT controller)
   infoSettings.runout                 = FIL_SENSOR_TYPE;
   infoSettings.runout_invert          = FIL_RUNOUT_INVERTING;
   infoSettings.runout_noise_ms        = FIL_NOISE_THRESHOLD;
@@ -109,21 +109,24 @@ void infoSettingsReset(void)
   infoSettings.powerloss_z_raise      = POWER_LOSS_ZRAISE;
   infoSettings.btt_ups                = BTT_MINI_UPS;
 
-// Other device-specific settings
+// Other Device-Specific Settings
   infoSettings.touchSound             = ENABLED;
   infoSettings.toastSound             = ENABLED;
   infoSettings.alertSound             = ENABLED;
   infoSettings.heaterSound            = ENABLED;
-#ifdef LED_COLOR_PIN
   infoSettings.knob_led_color         = STARTUP_KNOB_LED_COLOR;
   infoSettings.knob_led_idle          = ENABLED;
-  infoSettings.neopixel_pixels        = NEOPIXEL_PIXELS;
-#endif
+  #ifdef NEOPIXEL_PIXELS
+    infoSettings.neopixel_pixels      = NEOPIXEL_PIXELS;
+  #else
+    infoSettings.neopixel_pixels      = 0;
+  #endif
   infoSettings.lcd_brightness         = DEFAULT_LCD_BRIGHTNESS;
   infoSettings.lcd_idle_brightness    = DEFAULT_LCD_IDLE_BRIGHTNESS;
   infoSettings.lcd_idle_timer         = DEFAULT_LCD_IDLE_TIMER;
+  infoSettings.block_touch_on_idle    = DISABLED;
 
-// Start, End & Cancel G-codes
+// Start, End & Cancel Gcode Commands
   infoSettings.send_start_gcode       = DISABLED;
   infoSettings.send_end_gcode         = DISABLED;
   infoSettings.send_cancel_gcode      = ENABLED;
