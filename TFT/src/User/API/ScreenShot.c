@@ -1,7 +1,7 @@
 #include "ScreenShot.h"
 #include "includes.h"
 
-#if defined (SCREEN_SHOT_TO_SD)
+#ifdef SCREEN_SHOT_TO_SD
 
 // BMP file header 14byte
 typedef struct __attribute__((__packed__))

@@ -876,6 +876,10 @@ void loopBackEnd(void)
     USBH_Process(&USB_OTG_Core, &USB_Host);
   #endif
 
+  #ifdef FIL_RUNOUT_PIN
+    FIL_BE_CheckRunout();
+  #endif
+
   #if LCD_ENCODER_SUPPORT
     #ifdef HAS_EMULATOR
       if (infoMenu.menu[infoMenu.cur] != menuMarlinMode)
@@ -885,21 +889,17 @@ void loopBackEnd(void)
     }
   #endif
 
-  #if defined(SCREEN_SHOT_TO_SD)
+  #ifdef HAS_EMULATOR
+    Mode_CheckSwitching();
+  #endif
+
+  #ifdef SCREEN_SHOT_TO_SD
     loopScreenShot();
   #endif
 
   #ifdef SMART_HOME
     // check if Back is pressed and held
     loopCheckBack();
-  #endif
-
-  #ifdef HAS_EMULATOR
-    Mode_CheckSwitching();
-  #endif
-
-  #ifdef FIL_RUNOUT_PIN
-    FIL_BE_CheckRunout();
   #endif
 
   #ifdef LCD_LED_PWM_CHANNEL
