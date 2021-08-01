@@ -62,14 +62,14 @@ bool LCD_IsBlocked(void)
 
 void LCD_Wake(void)
 {
-  if (infoSettings.lcd_idle_timer != IDLE_TIME_OFF)
+  if (infoSettings.lcd_idle_time != IDLE_TIME_OFF)
   {
     // the LCD dim function is activated. First check if it's dimmed
     if (lcd_dim.dimmed)
     {
       lcd_dim.blocked = false;
       lcd_dim.dimmed = false;
-      LCD_SetBrightness(lcd_brightness[infoSettings.lcd_brightness]);
+      LCD_SET_BRIGHTNESS(lcd_brightness[infoSettings.lcd_brightness]);
 
       #ifdef LED_COLOR_PIN
         if (infoSettings.knob_led_idle)
@@ -86,7 +86,7 @@ void LCD_Wake(void)
 
 void LCD_CheckDimming(void)
 {
-  if (infoSettings.lcd_idle_timer == IDLE_TIME_OFF)
+  if (infoSettings.lcd_idle_time == IDLE_TIME_OFF)
     return;
 
   if (isPress()
@@ -101,7 +101,7 @@ void LCD_CheckDimming(void)
         lcd_dim.blocked = true;                           // the first touch will be skipped preventing to trigger any undesired action
 
       lcd_dim.dimmed = false;
-      LCD_SetBrightness(lcd_brightness[infoSettings.lcd_brightness]);
+      LCD_SET_BRIGHTNESS(lcd_brightness[infoSettings.lcd_brightness]);
 
       #ifdef LED_COLOR_PIN
         if (infoSettings.knob_led_idle)
@@ -115,14 +115,14 @@ void LCD_CheckDimming(void)
   }
   else
   {
-    if (OS_GetTimeMs() - lcd_dim.idle_ms < (lcd_idle_times[infoSettings.lcd_idle_timer] * 1000))
+    if (OS_GetTimeMs() - lcd_dim.idle_ms < (lcd_idle_times[infoSettings.lcd_idle_time] * 1000))
       return;
 
     if (!lcd_dim.dimmed)
     {
       lcd_dim.blocked = false;
       lcd_dim.dimmed = true;
-      LCD_SetBrightness(lcd_brightness[infoSettings.lcd_idle_brightness]);
+      LCD_SET_BRIGHTNESS(lcd_brightness[infoSettings.lcd_idle_brightness]);
 
       #ifdef LED_COLOR_PIN
         if (infoSettings.knob_led_idle)

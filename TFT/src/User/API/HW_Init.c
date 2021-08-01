@@ -97,9 +97,7 @@ void HW_Init(void)
     storePara();
   }
 
-  #ifdef LCD_LED_PWM_CHANNEL
-    LCD_SetBrightness(lcd_brightness[infoSettings.lcd_brightness]);
-  #endif
+  LCD_SET_BRIGHTNESS(lcd_brightness[infoSettings.lcd_brightness]);
 
   Mode_Switch();
 }
@@ -125,7 +123,7 @@ void HW_InitMode(uint8_t mode)
     #endif
 
     #if ENC_ACTIVE_SIGNAL  // set encoder inactive signal if Touch mode is active
-     LCD_Enc_SetActiveSignal(0);
+      LCD_Enc_SetActiveSignal(0);
     #endif
   }
   else

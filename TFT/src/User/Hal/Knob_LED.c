@@ -24,7 +24,7 @@ void knob_LED_DeInit(void)
   GPIO_InitSet(LED_COLOR_PIN, MGPIO_MODE_IPN, 0);
 }
 
-void Knob_LED_SetColor(uint32_t ws2812_dat, uint8_t neopixel_pixels)
+void Knob_LED_SetColor(uint32_t color, uint8_t neopixel_pixels)
 {
   uint16_t led_num;
   int8_t bit;
@@ -36,14 +36,14 @@ void Knob_LED_SetColor(uint32_t ws2812_dat, uint8_t neopixel_pixels)
   TIM6->ARR = cycle;
   TIM6->CR1 |= 0x01;
 
-  for (led_num=0; led_num < neopixel_pixels; led_num++)
+  for (led_num = 0; led_num < neopixel_pixels; led_num++)
   {
     for (bit = 23; bit >= 0; bit--)
     {
       TIM6->CNT = 0;
       WS2812_FAST_WRITE_HIGH();  // WS2812 required very high speed, so "GPIO_SetLevel(LED_COLOR_PIN, 1)" not applicable
 
-      if (ws2812_dat & (1 << bit))
+      if (color & (1 << bit))
       {
         while (TIM6->CNT < code_1_tim_h_cnt);
       }

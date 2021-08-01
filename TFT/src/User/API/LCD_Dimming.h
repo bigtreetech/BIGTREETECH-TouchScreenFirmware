@@ -71,9 +71,11 @@ extern "C" {
   void LCD_Wake(void);
   void LCD_CheckDimming(void);
 
+  #define LCD_WAKE() LCD_Wake()
+
 #else
 
-  #define LCD_Wake()
+  #define LCD_WAKE()
 
 #endif  // LCD_LED_PWM_CHANNEL
 

@@ -36,7 +36,7 @@ void (*pLCD_SetWindow)(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey);
 void LCD_LED_On()
 {
   #ifdef LCD_LED_PWM_CHANNEL
-    LCD_SetBrightness(100);
+    LCD_SET_BRIGHTNESS(100);
   #else
     GPIO_SetLevel(LCD_LED_PIN, 1);
   #endif
@@ -45,7 +45,7 @@ void LCD_LED_On()
 void LCD_LED_Off()
 {
   #ifdef LCD_LED_PWM_CHANNEL
-    LCD_SetBrightness(0);
+    LCD_SET_BRIGHTNESS(0);
   #else
     GPIO_SetLevel(LCD_LED_PIN, 0);
   #endif
@@ -227,16 +227,6 @@ void LCD_Init_Sequential(void)
   #endif
 }
 
-void LCD_RefreshDirection(uint8_t rotate)
-{
-  pLCD_SetDirection(rotate);
-}
-
-void LCD_SetWindow(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey)
-{
-  pLCD_SetWindow(sx, sy, ex, ey);
-}
-
 void LCD_Init(void)
 {
   LCD_HardwareConfig();
@@ -252,4 +242,14 @@ void LCD_Init(void)
   #ifdef STM32_HAS_FSMC
     LCD_DMA_Config();  // spi flash to fsmc lcd DMA channel configuration
   #endif
+}
+
+void LCD_RefreshDirection(uint8_t rotate)
+{
+  pLCD_SetDirection(rotate);
+}
+
+void LCD_SetWindow(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey)
+{
+  pLCD_SetWindow(sx, sy, ex, ey);
 }

@@ -427,7 +427,8 @@ void reminderMessage(int16_t inf, SYS_STATUS status)
 
 void volumeReminderMessage(int16_t inf, SYS_STATUS status)
 {
-  LCD_Wake();
+  LCD_WAKE();
+
   if (toastRunning()) return;
 
   volumeReminder.inf = inf;

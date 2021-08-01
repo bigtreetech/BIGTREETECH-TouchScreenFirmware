@@ -952,8 +952,28 @@ void parseConfigKey(uint16_t index)
         break;
     #endif
 
+    #ifdef LCD_LED_PWM_CHANNEL
+      case C_INDEX_BRIGHTNESS:
+        SET_VALID_INT_VALUE(infoSettings.lcd_brightness, 0, LCD_BRIGHTNESS_COUNT - 1);
+        if (infoSettings.lcd_brightness == 0)
+          infoSettings.lcd_brightness = 1;  // If someone set it to 0 set it to 1
+        break;
+
+      case C_INDEX_BRIGHTNESS_IDLE:
+        SET_VALID_INT_VALUE(infoSettings.lcd_idle_brightness, 0, LCD_BRIGHTNESS_COUNT - 1);
+        break;
+
+      case C_INDEX_BRIGHTNESS_IDLE_TIME:
+        SET_VALID_INT_VALUE(infoSettings.lcd_idle_time, 0, LCD_IDLE_TIME_COUNT - 1);
+        break;
+
+      case C_INDEX_BLOCK_TOUCH_ON_IDLE:
+        infoSettings.block_touch_on_idle = getOnOff();
+        break;
+    #endif
+
     #ifdef LED_COLOR_PIN
-      case C_INDEX_KNOB_COLOR:
+      case C_INDEX_KNOB_LED_COLOR:
         SET_VALID_INT_VALUE(infoSettings.knob_led_color, 0, LED_COLOR_COUNT - 1);
         break;
 
@@ -966,26 +986,6 @@ void parseConfigKey(uint16_t index)
       case C_INDEX_NEOPIXEL_PIXELS:
         SET_VALID_INT_VALUE(infoSettings.neopixel_pixels, 0, MAX_NEOPIXEL_PIXELS);
         infoSettings.neopixel_pixels = (infoSettings.neopixel_pixels == 0) ? NEOPIXEL_PIXELS : infoSettings.neopixel_pixels;
-        break;
-    #endif
-
-    #ifdef LCD_LED_PWM_CHANNEL
-      case C_INDEX_BRIGHTNESS:
-        SET_VALID_INT_VALUE(infoSettings.lcd_brightness, 0, LCD_BRIGHTNESS_COUNT - 1);
-        if (infoSettings.lcd_brightness == 0)
-          infoSettings.lcd_brightness = 1;  // If someone set it to 0 set it to 1
-        break;
-
-      case C_INDEX_BRIGHTNESS_IDLE:
-        SET_VALID_INT_VALUE(infoSettings.lcd_idle_brightness, 0, LCD_BRIGHTNESS_COUNT - 1);
-        break;
-
-      case C_INDEX_BRIGHTNESS_IDLE_DELAY:
-        SET_VALID_INT_VALUE(infoSettings.lcd_idle_timer, 0, LCD_IDLE_TIME_COUNT - 1);
-        break;
-
-      case C_INDEX_BLOCK_TOUCH_ON_IDLE:
-        infoSettings.block_touch_on_idle = getOnOff();
         break;
     #endif
 
