@@ -349,12 +349,12 @@
     #define STRING_CLICK_FOR_MORE         "Klick für Statistik"
     #define STRING_EXT_TEMPLOW            "Temperatur der Düse liegt unter dem Minimum (%d℃)."
     #define STRING_HEAT_HOTEND            "Heize Düse auf %d℃?"
-    #define STRING_DESIRED_TEMPLOW        "Hotend temperature is below\ndesired temperature (%d℃)."
-    #define STRING_WAIT_HEAT_UP           "Wait for it to heat up."
+    #define STRING_DESIRED_TEMPLOW        "Temperatur der Düse liegt unter\nder gewünschten Temperatur (%d℃)."
+    #define STRING_WAIT_HEAT_UP           "Bitte warten, bis Temperatur erreicht."
     #define STRING_Z_ALIGN                "Z ausr."
-    #define STRING_MACROS                 "Macros"
-    #define STRING_MESH_VALID             "Mesh Validation"
-    #define STRING_CONNECT_PROBE          "Connect probe before starting the process. Make sure to disconnect it afterwards."
-    #define STRING_CALIBRATION            "Calibration"
+    #define STRING_MACROS                 "Makros"
+    #define STRING_MESH_VALID             "Mesh Validierung"
+    #define STRING_CONNECT_PROBE          "Bitte Sensor anschließen, bevor der Vorgang gestartet wird. Danach bitte Sensor wieder trennen."
+    #define STRING_CALIBRATION            "Kalibrierung"
 
 #endif
