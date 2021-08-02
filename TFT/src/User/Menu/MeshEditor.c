@@ -317,9 +317,9 @@ static inline bool processKnownDataFormat(char *dataRow)
 
 void meshSaveCallback(void)
 {
- if (infoMachineSettings.leveling == BL_UBL)
+  if (infoMachineSettings.leveling == BL_UBL)
     menuUBLSave();
-  else if(infoMachineSettings.leveling != BL_DISABLED)
+  else if (infoMachineSettings.leveling != BL_DISABLED)
     saveEepromSettings();
 
   meshDeallocData();                                       // deallocate mesh data. It forces data reloading during Mesh Editor menu reloading
