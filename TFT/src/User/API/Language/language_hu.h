@@ -32,7 +32,7 @@
     #define STRING_LCD_BRIGHTNESS         "Fényerősség"
     #define STRING_LCD_IDLE_BRIGHTNESS    "LCD Halványítás"
     #define STRING_LCD_IDLE_TIME          "LCD Halványítási idő"
-    #define STRING_BLOCK_TOUCH_ON_IDLE    "Block touch on idle"
+    #define STRING_BLOCK_TOUCH_ON_IDLE    "Érintés tiltás alapjáraton"
     #define STRING_KNOB_LED_COLOR         "Forgatógomb LED"
     #define STRING_KNOB_LED_IDLE          "Forgatógomb tétlen"
     #define STRING_START_GCODE_ENABLED    "Kezdő G-Kód"
