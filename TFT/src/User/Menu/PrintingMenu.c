@@ -161,12 +161,12 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
   switch (icon_pos)
   {
     case ICON_POS_BED:
-      if (currentBCIndex != 0);
+      if (currentBCIndex != 0)
         icon = printingIcon2nd[0];
       break;
 
     case ICON_POS_SPD:
-      if (currentSpeedID != 0);
+      if (currentSpeedID != 0)
         icon = printingIcon2nd[1];
       break;
 
