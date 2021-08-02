@@ -106,7 +106,7 @@ void drawStatus(void)
     char tempstr2[45];
 
     // TOOL / EXT
-    lvIcon.lines[0].text = (uint8_t *)heatDisplayID[currentTool];
+    lvIcon.lines[0].text = (uint8_t *)heatShortID[currentTool];
     sprintf(tempstr, "%3d℃", heatGetCurrentTemp(currentTool));
     sprintf(tempstr2, "%3d℃", heatGetTargetTemp(currentTool));
     lvIcon.lines[1].text = (uint8_t *)tempstr;
@@ -114,7 +114,7 @@ void drawStatus(void)
     showLiveInfo(0, &lvIcon, &StatusItems.items[0]);
 
     // BED / CHAMBER
-    lvIcon.lines[0].text = (uint8_t *)heatDisplayID[BED + currentBCIndex];
+    lvIcon.lines[0].text = (uint8_t *)heatShortID[BED + currentBCIndex];
     sprintf(tempstr, "%3d℃", heatGetCurrentTemp(BED + currentBCIndex));
     sprintf(tempstr2, "%3d℃", heatGetTargetTemp(BED + currentBCIndex));
     lvIcon.lines[1].text = (uint8_t *)tempstr;
@@ -126,13 +126,13 @@ void drawStatus(void)
     lvIcon.enabled[2] = false;
   #else
     // TOOL / EXT
-    lvIcon.lines[0].text = (uint8_t *)heatDisplayID[currentTool];
+    lvIcon.lines[0].text = (uint8_t *)heatShortID[currentTool];
     sprintf(tempstr, "%3d/%-3d", heatGetCurrentTemp(currentTool), heatGetTargetTemp(currentTool));
     lvIcon.lines[1].text = (uint8_t *)tempstr;
     showLiveInfo(0, &lvIcon, &StatusItems.items[0]);
 
     // BED
-    lvIcon.lines[0].text = (uint8_t *)heatDisplayID[BED + currentBCIndex];
+    lvIcon.lines[0].text = (uint8_t *)heatShortID[BED + currentBCIndex];
     sprintf(tempstr, "%3d/%-3d", heatGetCurrentTemp(BED + currentBCIndex), heatGetTargetTemp(BED + currentBCIndex));
     lvIcon.lines[1].text = (uint8_t *)tempstr;
 
