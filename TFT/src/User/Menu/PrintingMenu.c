@@ -52,7 +52,10 @@ enum
 };
 
 const uint8_t printingIcon[] = {ICON_PRINTING_NOZZLE, ICON_PRINTING_BED,    ICON_PRINTING_FAN,
-                                ICON_PRINTING_TIMER,  ICON_PRINTING_ZLAYER, ICON_PRINTING_SPEED, ICON_PRINTING_FLOW};
+                                ICON_PRINTING_TIMER,  ICON_PRINTING_ZLAYER, ICON_PRINTING_SPEED};
+
+const uint8_t printingIcon2nd[] = {ICON_PRINTING_CHAMBER, ICON_PRINTING_FLOW};
+
 const char *const speedId[2] = {"Speed", "Flow "};
 bool hasFilamentData;
 PROGRESS_DISPLAY progDisplayType;
@@ -61,12 +64,16 @@ PROGRESS_DISPLAY progDisplayType;
 #define LAYER_DELTA  0.1   // minimal layer height change to update the layer display (avoid congestion in vase mode)
 
 #define LAYER_TITLE  "Layer"
-#define EXT_ICON_POS 0
-#define BED_ICON_POS 1
-#define FAN_ICON_POS 2
-#define TIM_ICON_POS 3
-#define Z_ICON_POS   4
-#define SPD_ICON_POS 5
+
+enum
+{
+  ICON_POS_EXT = 0,
+  ICON_POS_BED,
+  ICON_POS_FAN,
+  ICON_POS_TIM,
+  ICON_POS_Z,
+  ICON_POS_SPD,
+};
 
 const ITEM itemIsPause[2] = {
   // icon                        label
@@ -148,8 +155,24 @@ void menuBeforePrinting(void)
 
 static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
 {
-  uint8_t icon = (icon_pos == SPD_ICON_POS) ? printingIcon[icon_pos + currentSpeedID] : printingIcon[icon_pos];
+  uint8_t icon = printingIcon[icon_pos];
   char tempstr[10];
+
+  switch (icon_pos)
+  {
+    case ICON_POS_BED:
+      if (currentBCIndex != 0);
+        icon = printingIcon2nd[0];
+      break;
+
+    case ICON_POS_SPD:
+      if (currentSpeedID != 0);
+        icon = printingIcon2nd[1];
+      break;
+
+    default:
+      break;
+  }
 
   if (draw_type & PRINT_ICON)
   {
@@ -172,19 +195,19 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
 
     switch (icon_pos)
     {
-      case EXT_ICON_POS:
+      case ICON_POS_EXT:
         textString = (uint8_t *)heatDisplayID[currentTool];
         break;
 
-      case BED_ICON_POS:
-        textString = (uint8_t *)heatDisplayID[BED];
+      case ICON_POS_BED:
+        textString = (uint8_t *)heatDisplayID[BED + currentBCIndex];
         break;
 
-      case FAN_ICON_POS:
+      case ICON_POS_FAN:
         textString = (uint8_t *)fanID[currentFan];
         break;
 
-      case TIM_ICON_POS:
+      case ICON_POS_TIM:
       {
         if ((getPrintRemainingTime() == 0) || (progDisplayType != ELAPSED_REMAINING))
         {
@@ -202,11 +225,11 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
         break;
       }
 
-      case Z_ICON_POS:
+      case ICON_POS_Z:
         textString = (uint8_t *)LAYER_TITLE;
         break;
 
-      case SPD_ICON_POS:
+      case ICON_POS_SPD:
         textString = (uint8_t *)speedId[currentSpeedID];
         break;
 
@@ -223,22 +246,22 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
 
     switch (icon_pos)
     {
-      case EXT_ICON_POS:
+      case ICON_POS_EXT:
         sprintf(tempstr, "%3d/%-3d", heatGetCurrentTemp(currentTool), heatGetTargetTemp(currentTool));
         break;
 
-      case BED_ICON_POS:
-        sprintf(tempstr, "%3d/%-3d", heatGetCurrentTemp(BED), heatGetTargetTemp(BED));
+      case ICON_POS_BED:
+        sprintf(tempstr, "%3d/%-3d", heatGetCurrentTemp(BED + currentBCIndex), heatGetTargetTemp(BED + currentBCIndex));
         break;
 
-      case FAN_ICON_POS:
+      case ICON_POS_FAN:
         if (infoSettings.fan_percentage == 1)
           sprintf(tempstr, "%3d%%", fanGetCurPercent(currentFan));
         else
           sprintf(tempstr, "%3d", fanGetCurSpeed(currentFan));
         break;
 
-      case TIM_ICON_POS:
+      case ICON_POS_TIM:
         {
           uint8_t hour, min, sec;
 
@@ -251,11 +274,11 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
         }
         break;
 
-      case Z_ICON_POS:
+      case ICON_POS_Z:
         sprintf(tempstr, "%6.2fmm", (infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS));
         break;
 
-      case SPD_ICON_POS:
+      case ICON_POS_SPD:
         sprintf(tempstr, "%3d%%", speedGetCurPercent(currentSpeedID));
         break;
 
@@ -278,7 +301,19 @@ static inline void toggleInfo(void)
     {
       currentTool = (currentTool + 1) % infoSettings.hotend_count;
       RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
-      reDrawPrintingValue(EXT_ICON_POS, PRINT_TOP_ROW | PRINT_BOTTOM_ROW);
+      reDrawPrintingValue(ICON_POS_EXT, PRINT_TOP_ROW | PRINT_BOTTOM_ROW);
+    }
+
+    if (infoSettings.chamber_en == 1)
+    {
+      currentBCIndex = (currentBCIndex + 1) % 2;
+      RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
+      reDrawPrintingValue(ICON_POS_BED, PRINT_ICON | PRINT_TOP_ROW | PRINT_BOTTOM_ROW);
+    }
+    else
+    {
+      RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
+      reDrawPrintingValue(ICON_POS_BED, PRINT_TOP_ROW | PRINT_BOTTOM_ROW);
     }
 
     if ((infoSettings.fan_count + infoSettings.ctrl_fan_en) > 1)
@@ -289,18 +324,18 @@ static inline void toggleInfo(void)
       } while (!fanIsValid(currentFan));
 
       RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
-      reDrawPrintingValue(FAN_ICON_POS, PRINT_TOP_ROW | PRINT_BOTTOM_ROW);
+      reDrawPrintingValue(ICON_POS_FAN, PRINT_TOP_ROW | PRINT_BOTTOM_ROW);
     }
 
     currentSpeedID = (currentSpeedID + 1) % 2;
     RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
 
     #ifdef UNIFORM_LIVE_TEXT_BG_COLOR  // it allows to eliminate flickering on alternating icons
-      ICON_PartialReadDisplay(printinfo_points[SPD_ICON_POS].x, printinfo_points[SPD_ICON_POS].y, PICON_TITLE_X, -1,
+      ICON_PartialReadDisplay(printinfo_points[ICON_POS_SPD].x, printinfo_points[ICON_POS_SPD].y, PICON_TITLE_X, -1,
                               (currentSpeedID == 0) ? ICON_PRINTING_SPEED : ICON_PRINTING_FLOW, 0, 0);
-      reDrawPrintingValue(SPD_ICON_POS, PRINT_TOP_ROW | PRINT_BOTTOM_ROW);
+      reDrawPrintingValue(ICON_POS_SPD, PRINT_TOP_ROW | PRINT_BOTTOM_ROW);
     #else
-      reDrawPrintingValue(SPD_ICON_POS, PRINT_ICON | PRINT_TOP_ROW | PRINT_BOTTOM_ROW);
+      reDrawPrintingValue(ICON_POS_SPD, PRINT_ICON | PRINT_TOP_ROW | PRINT_BOTTOM_ROW);
     #endif
 
     speedQuery();
@@ -348,7 +383,7 @@ static inline void reDrawProgress(uint8_t prevProgress)
       reDrawProgressBar(nextProgress, prevProgress, DARKGRAY, MAT_ORANGE);
     if (progDisplayType != ELAPSED_REMAINING)
     {
-      reDrawPrintingValue(TIM_ICON_POS, PRINT_TOP_ROW);
+      reDrawPrintingValue(ICON_POS_TIM, PRINT_TOP_ROW);
     }
   }
 }
@@ -356,8 +391,8 @@ static inline void reDrawProgress(uint8_t prevProgress)
 static inline void printingDrawPage(void)
 {
   #ifdef UNIFORM_LIVE_TEXT_BG_COLOR  // it samples the background color from an icon
-    ICON_PrepareRead(printinfo_points[EXT_ICON_POS].x, printinfo_points[EXT_ICON_POS].y, ICON_PRINTING_NOZZLE);
-    textBgColor = ICON_ReadPixel(printinfo_points[EXT_ICON_POS].x + PICON_TITLE_X, printinfo_points[EXT_ICON_POS].y + PICON_TITLE_Y);
+    ICON_PrepareRead(printinfo_points[ICON_POS_EXT].x, printinfo_points[ICON_POS_EXT].y, ICON_PRINTING_NOZZLE);
+    textBgColor = ICON_ReadPixel(printinfo_points[ICON_POS_EXT].x + PICON_TITLE_X, printinfo_points[ICON_POS_EXT].y + PICON_TITLE_Y);
     ICON_PrepareReadEnd();
   #endif
 
@@ -508,7 +543,7 @@ void menuPrinting(void)
       nowHeat.T[currentTool].current = heatGetCurrentTemp(currentTool);
       nowHeat.T[currentTool].target = heatGetTargetTemp(currentTool);
       RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
-      reDrawPrintingValue(EXT_ICON_POS, PRINT_BOTTOM_ROW);
+      reDrawPrintingValue(ICON_POS_EXT, PRINT_BOTTOM_ROW);
     }
 
     // check bed temp change
@@ -517,7 +552,7 @@ void menuPrinting(void)
       nowHeat.T[BED].current = heatGetCurrentTemp(BED);
       nowHeat.T[BED].target = heatGetTargetTemp(BED);
       RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
-      reDrawPrintingValue(BED_ICON_POS, PRINT_BOTTOM_ROW);
+      reDrawPrintingValue(ICON_POS_BED, PRINT_BOTTOM_ROW);
     }
 
     // check Fan speed change
@@ -525,7 +560,7 @@ void menuPrinting(void)
     {
       nowFan[currentFan] = fanGetCurSpeed(currentFan);
       RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
-      reDrawPrintingValue(FAN_ICON_POS, PRINT_BOTTOM_ROW);
+      reDrawPrintingValue(ICON_POS_FAN, PRINT_BOTTOM_ROW);
     }
 
     // check printing progress
@@ -538,11 +573,11 @@ void menuPrinting(void)
         RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
         if (progDisplayType == ELAPSED_REMAINING)
         {
-          reDrawPrintingValue(TIM_ICON_POS, PRINT_TOP_ROW | PRINT_BOTTOM_ROW);
+          reDrawPrintingValue(ICON_POS_TIM, PRINT_TOP_ROW | PRINT_BOTTOM_ROW);
         }
         else
         {
-          reDrawPrintingValue(TIM_ICON_POS, PRINT_BOTTOM_ROW);
+          reDrawPrintingValue(ICON_POS_TIM, PRINT_BOTTOM_ROW);
         }
       }
 
@@ -558,7 +593,7 @@ void menuPrinting(void)
     {
       if (getPrintProgress() != 100)
       {
-        reDrawPrintingValue(TIM_ICON_POS, PRINT_BOTTOM_ROW);
+        reDrawPrintingValue(ICON_POS_TIM, PRINT_BOTTOM_ROW);
         updatePrintProgress();
         reDrawProgress(oldProgress);
         oldProgress = getPrintProgress();
@@ -577,7 +612,7 @@ void menuPrinting(void)
       {
         usedLayer = curLayer;
         RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
-        reDrawPrintingValue(Z_ICON_POS, PRINT_BOTTOM_ROW);
+        reDrawPrintingValue(ICON_POS_Z, PRINT_BOTTOM_ROW);
       }
       if (ABS(curLayer - prevLayer) < LAYER_DELTA)
       {
@@ -591,7 +626,7 @@ void menuPrinting(void)
     {
       curspeed[currentSpeedID] = speedGetCurPercent(currentSpeedID);
       RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
-      reDrawPrintingValue(SPD_ICON_POS, PRINT_BOTTOM_ROW);
+      reDrawPrintingValue(ICON_POS_SPD, PRINT_BOTTOM_ROW);
     }
 
     // check if print is paused
@@ -620,7 +655,7 @@ void menuPrinting(void)
         break;
 
       case PS_KEY_1:
-        heatSetCurrentIndex(BED);
+        heatSetCurrentIndex(BED + currentBCIndex);
         infoMenu.menu[++infoMenu.cur] = menuHeat;
         break;
 
@@ -630,7 +665,7 @@ void menuPrinting(void)
 
       case PS_KEY_3:
         progDisplayType = (progDisplayType + 1) % 3;
-        reDrawPrintingValue(TIM_ICON_POS, PRINT_TOP_ROW | PRINT_BOTTOM_ROW);
+        reDrawPrintingValue(ICON_POS_TIM, PRINT_TOP_ROW | PRINT_BOTTOM_ROW);
         break;
 
       case PS_KEY_4:
