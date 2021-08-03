@@ -21,6 +21,7 @@ extern COMMENT gCode_comment;
 void parseComment();
 uint16_t getLayerNumber();
 uint16_t getLayerCount();
+void setLayerNumber (uint16_t layer_number);
 
 #ifdef __cplusplus
 }

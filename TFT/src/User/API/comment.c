@@ -27,6 +27,11 @@ uint16_t getLayerCount()
   return layerCount;
 }
 
+void setLayerNumber (uint16_t layer_number)
+{
+  layerNumber = layer_number;
+}
+
 void parseComment()
 {
     char * temp_char;
