@@ -33,7 +33,7 @@ typedef enum
 #define CONFIG_SUPPPORT 20210726
 
 #define FONT_FLASH_SIGN       20210522  // (YYYYMMDD) change if fonts require updating
-#define CONFIG_FLASH_SIGN     20210726  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
+#define CONFIG_FLASH_SIGN     20210803  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
 #define LANGUAGE_FLASH_SIGN   20210726  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
 #define ICON_FLASH_SIGN       20210711  // (YYYYMMDD) change if any icon(s) is added or removed
 
@@ -117,6 +117,7 @@ typedef struct
   uint8_t  notification_m117;
   uint8_t  emulate_m600;
   uint8_t  prog_disp_type;
+  uint8_t  layer_disp_type;
 
   // Marlin Mode Settings (only for TFT24 V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
   uint8_t  mode;
@@ -283,6 +284,14 @@ typedef enum
   PERCENTAGE_REMAINING,
   ELAPSED_REMAINING,
 } PROGRESS_DISPLAY;
+
+typedef enum
+{
+  LAYER_HEIGHT,
+  LAYER_NUMBER,
+  CLEAN_HEIGHT,
+  CLEAN_NUMBER,
+} LAYER_TYPE;
 
 extern SETTINGS infoSettings;
 extern MACHINESETTINGS infoMachineSettings;

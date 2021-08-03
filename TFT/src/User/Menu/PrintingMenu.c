@@ -65,6 +65,7 @@ const uint8_t printingIcon[] = {ICON_PRINTING_NOZZLE, ICON_PRINTING_BED,   ICON_
 const char *const speedId[2] = {"Speed", "Flow "};
 bool hasFilamentData;
 PROGRESS_DISPLAY progDisplayType;
+LAYER_TYPE layerDisplayType;
 
 #define TOGGLE_TIME  2000  // 1 seconds is 1000
 #define LAYER_DELTA  0.1   // minimal layer height change to update the layer display (avoid congestion in vase mode)
@@ -152,6 +153,7 @@ void menuBeforePrinting(void)
       return;
   }
   progDisplayType = infoSettings.prog_disp_type;
+  layerDisplayType = infoSettings.layer_disp_type;
   infoMenu.menu[infoMenu.cur] = menuPrinting;
 }
 
@@ -259,7 +261,25 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
         break;
 
       case Z_ICON_POS:
-        sprintf(tempstr, "%6.2fmm", (infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS));
+        if (layerDisplayType == LAYER_HEIGHT)  // layer height
+        {
+          sprintf(tempstr, "%6.2fmm", (infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS));
+        }
+        else if (layerDisplayType == LAYER_NUMBER) // layer number
+        {
+          if (getLayerCount() > 0)
+          {
+            sprintf(tempstr, "%u/%u", getLayerNumber(), getLayerCount());
+          }
+          else
+          {
+            sprintf(tempstr, "%u", getLayerNumber());
+          }
+        }
+        else
+        {
+          strcpy(tempstr, "         ");
+        }
         break;
 
       case SPD_ICON_POS:
@@ -462,9 +482,12 @@ void menuPrinting(void)
   uint16_t curspeed[2] = {0};
   uint32_t time = 0;
   HEATER nowHeat;
-  float curLayer = 0;
-  float usedLayer = 0;
-  float prevLayer = 0;
+  float curLayerHeight = 0;
+  float usedLayerHeight = 0;
+  float prevLayerHeight = 0;
+  uint16_t curLayerNumber = 0;
+  uint16_t prevLayerNumber = 0;
+
   bool layerDrawEnabled = false;
   bool lastPause = isPaused();
   bool lastPrinting = isPrinting();
@@ -581,24 +604,42 @@ void menuPrinting(void)
     }
 
     // Z_AXIS coordinate
-    curLayer = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS));
-    if (prevLayer != curLayer)
+    switch (layerDisplayType)
     {
-      if (ABS(curLayer - usedLayer) >= LAYER_DELTA)
-      {
-        layerDrawEnabled = true;
-      }
-      if (layerDrawEnabled == true)
-      {
-        usedLayer = curLayer;
-        RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
-        reDrawPrintingValue(Z_ICON_POS, PRINT_BOTTOM_ROW);
-      }
-      if (ABS(curLayer - prevLayer) < LAYER_DELTA)
-      {
-        layerDrawEnabled = false;
-      }
-      prevLayer = curLayer;
+      case LAYER_HEIGHT:
+        curLayerHeight = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS));
+        if (prevLayerHeight != curLayerHeight)
+        {
+          if (ABS(curLayerHeight - usedLayerHeight) >= LAYER_DELTA)
+          {
+            layerDrawEnabled = true;
+          }
+          if (layerDrawEnabled == true)
+          {
+            usedLayerHeight = curLayerHeight;
+            RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
+            reDrawPrintingValue(Z_ICON_POS, PRINT_BOTTOM_ROW);
+          }
+          if (ABS(curLayerHeight - prevLayerHeight) < LAYER_DELTA)
+          {
+            layerDrawEnabled = false;
+          }
+          prevLayerHeight = curLayerHeight;
+        }
+        break;
+
+      case LAYER_NUMBER:
+        curLayerNumber = getLayerNumber();
+        if (curLayerNumber != prevLayerNumber)
+        {
+          prevLayerNumber = curLayerNumber;
+          reDrawPrintingValue(Z_ICON_POS, PRINT_BOTTOM_ROW);
+        }
+        break;
+
+      case CLEAN_HEIGHT:
+      case CLEAN_NUMBER:
+        break;
     }
 
     // check change in speed or flow
@@ -650,6 +691,10 @@ void menuPrinting(void)
 
       case PS_TOUCH_4:
         // will be implemented in the future
+        layerDisplayType += 2;  // trigger cleaning previous values
+        reDrawPrintingValue(Z_ICON_POS, PRINT_BOTTOM_ROW);
+        layerDisplayType = 1 - (layerDisplayType - 2);  // flip layerDisplayType
+        reDrawPrintingValue(Z_ICON_POS, PRINT_BOTTOM_ROW);
         break;
 
       case PS_TOUCH_5:
