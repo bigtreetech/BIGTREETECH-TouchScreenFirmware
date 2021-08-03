@@ -41,9 +41,6 @@ void parseComment()
         if (temp_char != NULL)
         {
           lowerCase(temp_char);
-          Serial_Puts(SERIAL_PORT_4, "parse1: ");
-          Serial_Puts(SERIAL_PORT_4, temp_char);
-          Serial_Puts(SERIAL_PORT_4, "\n");
         }
         if (strcmp(temp_char, "layer") == 0)
         {
