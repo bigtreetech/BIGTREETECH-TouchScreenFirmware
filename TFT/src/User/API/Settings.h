@@ -30,11 +30,11 @@ typedef enum
 // Config version support
 // change if new elements/keywords are added/removed/changed in the configuration.h Format YYYYMMDD
 // this number should match CONFIG_VERSION in configuration.h
-#define CONFIG_SUPPPORT 20210726
+#define CONFIG_SUPPPORT 20210730
 
 #define FONT_FLASH_SIGN       20210522  // (YYYYMMDD) change if fonts require updating
-#define CONFIG_FLASH_SIGN     20210726  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
-#define LANGUAGE_FLASH_SIGN   20210726  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
+#define CONFIG_FLASH_SIGN     20210730  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
+#define LANGUAGE_FLASH_SIGN   20210730  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
 #define ICON_FLASH_SIGN       20210711  // (YYYYMMDD) change if any icon(s) is added or removed
 
 #define FONT_CHECK_SIGN       (FONT_FLASH_SIGN + WORD_UNICODE + FLASH_SIGN_ADDR)
@@ -190,13 +190,13 @@ typedef struct
   uint8_t  toastSound;
   uint8_t  alertSound;
   uint8_t  heaterSound;
+  uint8_t  lcd_brightness;
+  uint8_t  lcd_idle_brightness;
+  uint8_t  lcd_idle_time;
+  uint8_t  block_touch_on_idle;
   uint8_t  knob_led_color;
   uint8_t  knob_led_idle;
   uint8_t  neopixel_pixels;
-  uint8_t  lcd_brightness;
-  uint8_t  lcd_idle_brightness;
-  uint8_t  lcd_idle_timer;
-  uint8_t  block_touch_on_idle;
 
   // Start, End & Cancel Gcode Commands
   uint8_t  send_start_gcode;

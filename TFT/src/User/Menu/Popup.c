@@ -195,7 +195,7 @@ void _setDialogCancelTextLabel(int16_t index)
 */
 void showDialog(DIALOG_TYPE type, void (*ok_action)(), void (*cancel_action)(), void (*loop_action)())
 {
-  if ((infoSettings.mode % MODE_COUNT) == MODE_MARLIN)  // if standard/blocked Marlin mode, then exit
+  if (!(infoSettings.mode & 1) == MODE_MARLIN)  // if standard/blocked Marlin mode, then exit
     return;
 
   popup_redraw = true;
@@ -213,7 +213,7 @@ void loopPopup(void)
 
   popup_redraw = false;
 
-  LCD_Wake();
+  LCD_WAKE();
 
   // display the last received popup message, overriding previous popup messages, if any
   if (popup_cancel[0])

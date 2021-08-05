@@ -1,5 +1,5 @@
-#ifndef _LANGUAGE_DU_H_
-#define _LANGUAGE_DU_H_
+#ifndef _LANGUAGE_NL_H_
+#define _LANGUAGE_NL_H_
 
     // config.ini Parameter Settings / Feature Settings
     #define STRING_BAUDRATE               "Baudsnelheid"
@@ -29,12 +29,12 @@
     #define STRING_TOAST_SOUND            "Toast Notifications"
     #define STRING_ALERT_SOUND            "Popups and Alerts"
     #define STRING_HEATER_SOUND           "Heater notification"
-    #define STRING_KNOB_LED_COLOR         "Draaiknop LED"
-    #define STRING_KNOB_LED_IDLE          "Draaiknop LED inactief"
     #define STRING_LCD_BRIGHTNESS         "Brightness"
     #define STRING_LCD_IDLE_BRIGHTNESS    "Idle brightness"
-    #define STRING_LCD_IDLE_DELAY         "Idle timeout"
+    #define STRING_LCD_IDLE_TIME          "Idle timeout"
     #define STRING_BLOCK_TOUCH_ON_IDLE    "Block touch on idle"
+    #define STRING_KNOB_LED_COLOR         "Draaiknop LED"
+    #define STRING_KNOB_LED_IDLE          "Draaiknop LED inactief"
     #define STRING_START_GCODE_ENABLED    "Start Gcode before print"
     #define STRING_END_GCODE_ENABLED      "End Gcode after print"
     #define STRING_CANCEL_GCODE_ENABLED   "Cancel Gcode"
