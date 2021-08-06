@@ -29,12 +29,12 @@
     #define STRING_TOAST_SOUND            "Звуки инфостроки"
     #define STRING_ALERT_SOUND            "Предупреждения"
     #define STRING_HEATER_SOUND           "Уведомление о нагревателе"
-    #define STRING_KNOB_LED_COLOR         "Подсветка энкодера"
-    #define STRING_KNOB_LED_IDLE          "Простой подсветки энкодера"
     #define STRING_LCD_BRIGHTNESS         "Яркость"
     #define STRING_LCD_IDLE_BRIGHTNESS    "Регулировка яркости LCD"
-    #define STRING_LCD_IDLE_DELAY         "Время до гашения LCD"
+    #define STRING_LCD_IDLE_TIME          "Время до гашения LCD"
     #define STRING_BLOCK_TOUCH_ON_IDLE    "Block touch on idle"
+    #define STRING_KNOB_LED_COLOR         "Подсветка энкодера"
+    #define STRING_KNOB_LED_IDLE          "Простой подсветки энкодера"
     #define STRING_START_GCODE_ENABLED    "G-код перед печатью"
     #define STRING_END_GCODE_ENABLED      "G-код после печати"
     #define STRING_CANCEL_GCODE_ENABLED   "G-код отмены печати"
@@ -355,6 +355,7 @@
     #define STRING_MACROS                 "Макросы"
     #define STRING_MESH_VALID             "Проверка сетки"
     #define STRING_CONNECT_PROBE          "Connect probe before starting the process. Make sure to disconnect it afterwards."
+    #define STRING_DISCONNECT_PROBE       "Make sure you have disconnected probe before using this feature."
     #define STRING_CALIBRATION            "Calibration"
 
 #endif

@@ -66,7 +66,7 @@ uint8_t listViewGetCurPage(void)
 // display page at selected index
 void listViewSetCurPage(uint8_t curPage)
 {
-  if(action_preparePage != NULL)
+  if (action_preparePage != NULL)
   {
     action_preparePage(&listItems, curPage);
   }
@@ -202,7 +202,7 @@ uint16_t listViewGetSelectedIndex(void)
       return KEY_PAGEDOWN;
 
     case KEY_INDEX_BACK:
-      if(handleBack)
+      if (handleBack)
         infoMenu.cur--;
       return KEY_BACK;
 

@@ -32,11 +32,11 @@ const GUI_RECT rect_of_keysIN[TM_RECT_COUNT] = {
 
   // title bar area
   {0, 0, LCD_WIDTH, ICON_START_Y},
-  // tempbox area
+  // display area
   {1*ICON_WIDTH+1*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  3*ICON_WIDTH+2*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y}
 };
 
-const GUI_RECT rect_of_key[MENU_RECT_COUNT]={
+const GUI_RECT rect_of_key[MENU_RECT_COUNT] = {
   // 8 icons area
   {0*ICON_WIDTH+0*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  1*ICON_WIDTH+0*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
   {1*ICON_WIDTH+1*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  2*ICON_WIDTH+1*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
@@ -121,43 +121,40 @@ const GUI_RECT rect_of_keySS[SS_RECT_COUNT] = {
   {1*ICON_WIDTH+1*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  3*ICON_WIDTH+2*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
 
 #endif
+
 };
 
-GUI_RECT rect_of_touchPS[SS_RECT_COUNT] = {
+const GUI_RECT rect_of_keyPS[] = {
   // hotend area
-  {0, 0, 0, 0},
+  {START_X+PICON_LG_WIDTH*0+PICON_SPACE_X*0,                  PICON_START_Y+PICON_HEIGHT*0+PICON_SPACE_Y*0,
+   START_X+PICON_LG_WIDTH*1+PICON_SPACE_X*0+PICON_SM_WIDTH*0, PICON_START_Y+PICON_HEIGHT*1+PICON_SPACE_Y*0},
   // bed area
-  {0, 0, 0, 0},
+  {START_X+PICON_LG_WIDTH*1+PICON_SPACE_X*1,                  PICON_START_Y+PICON_HEIGHT*0+PICON_SPACE_Y*0,
+   START_X+PICON_LG_WIDTH*2+PICON_SPACE_X*1+PICON_SM_WIDTH*0, PICON_START_Y+PICON_HEIGHT*1+PICON_SPACE_Y*0},
   // fan area
-  {0, 0, 0, 0},
+  {START_X+PICON_LG_WIDTH*2+PICON_SPACE_X*2,                  PICON_START_Y+PICON_HEIGHT*0+PICON_SPACE_Y*0,
+   START_X+PICON_LG_WIDTH*2+PICON_SPACE_X*2+PICON_SM_WIDTH*1, PICON_START_Y+PICON_HEIGHT*1+PICON_SPACE_Y*0},
   // timer area
-  {0, 0, 0, 0},
+  {START_X+PICON_LG_WIDTH*0+PICON_SPACE_X*0,                  PICON_START_Y+PICON_HEIGHT*1+PICON_SPACE_Y*1,
+   START_X+PICON_LG_WIDTH*1+PICON_SPACE_X*0+PICON_SM_WIDTH*0, PICON_START_Y+PICON_HEIGHT*2+PICON_SPACE_Y*1},
   // layer area
-  {0, 0, 0, 0},
+  {START_X+PICON_LG_WIDTH*1+PICON_SPACE_X*1,                  PICON_START_Y+PICON_HEIGHT*1+PICON_SPACE_Y*1,
+   START_X+PICON_LG_WIDTH*2+PICON_SPACE_X*1+PICON_SM_WIDTH*0, PICON_START_Y+PICON_HEIGHT*2+PICON_SPACE_Y*1},
   // speed area
-  {0, 0, 0, 0},
-  // 4 bottom icons area
-  {0, 0, 0, 0},
-  {0, 0, 0, 0},
-  {0, 0, 0, 0},
-  {0, 0, 0, 0},
+  {START_X+PICON_LG_WIDTH*2+PICON_SPACE_X*2,                  PICON_START_Y+PICON_HEIGHT*1+PICON_SPACE_Y*1,
+   START_X+PICON_LG_WIDTH*2+PICON_SPACE_X*2+PICON_SM_WIDTH*1, PICON_START_Y+PICON_HEIGHT*2+PICON_SPACE_Y*1},
 
-  // dummy area
-  {0, 0, 0, 0},
-  {0, 0, 0, 0},
-  {0, 0, 0, 0},
-  {0, 0, 0, 0},
-  {0, 0, 0, 0},
-  {0, 0, 0, 0},
+  // 4 bottom icons area
+  {0*ICON_WIDTH+0*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  1*ICON_WIDTH+0*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
+  {1*ICON_WIDTH+1*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  2*ICON_WIDTH+1*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
+  {2*ICON_WIDTH+2*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  3*ICON_WIDTH+2*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
+  {3*ICON_WIDTH+3*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  4*ICON_WIDTH+3*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
 
   // title bar area
-  {0, 0, 0, 0},
-
-  // infobox area
-  {0, 0, 0, 0}
+  {0, 0, LCD_WIDTH, ICON_START_Y},
 };
 
-const GUI_RECT touchPS_elements[PS_COUNT] = {
+const GUI_RECT rect_of_keyPS_end[] = {
   // hotend area
   {START_X+PICON_LG_WIDTH*0+PICON_SPACE_X*0,                  PICON_START_Y+PICON_HEIGHT*0+PICON_SPACE_Y*0,
    START_X+PICON_LG_WIDTH*1+PICON_SPACE_X*0+PICON_SM_WIDTH*0, PICON_START_Y+PICON_HEIGHT*1+PICON_SPACE_Y*0},
@@ -179,8 +176,8 @@ const GUI_RECT touchPS_elements[PS_COUNT] = {
 
   // 4 bottom icons area
   {0*ICON_WIDTH+0*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  1*ICON_WIDTH+0*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
-  {1*ICON_WIDTH+1*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  2*ICON_WIDTH+1*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
-  {2*ICON_WIDTH+2*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  3*ICON_WIDTH+2*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
+  {0,0,0,0},
+  {0,0,0,0},
   {3*ICON_WIDTH+3*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  4*ICON_WIDTH+3*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
 
   // title bar area
@@ -188,9 +185,6 @@ const GUI_RECT touchPS_elements[PS_COUNT] = {
 
   // infobox
   {1*ICON_WIDTH+1*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  3*ICON_WIDTH+2*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
-
-  // dummy
-  {0, 0, 0, 0}
 };
 
 const GUI_RECT rect_of_keyListView[ITEM_PER_PAGE + 1] = {
@@ -289,6 +283,7 @@ void menuClearGaps(void)
   for (uint8_t i = 1; i < COUNT(gaps); i++)
     GUI_ClearPrect(gaps + i);
 }
+
 #endif
 
 void GUI_RestoreColorDefault(void)
@@ -425,7 +420,8 @@ void reminderMessage(int16_t inf, SYS_STATUS status)
 
 void volumeReminderMessage(int16_t inf, SYS_STATUS status)
 {
-  LCD_Wake();
+  LCD_WAKE();
+
   if (toastRunning()) return;
 
   volumeReminder.inf = inf;
@@ -766,7 +762,7 @@ void itemDrawIconPress(uint8_t position, uint8_t is_press)
 // When there is a button value, the icon changes color and redraws
 void itemDrawIconPress_PS(uint8_t position, uint8_t is_press)
 {
-  if (position < PS_TOUCH_6 || position > PS_TOUCH_9) return;
+  if (position < PS_KEY_6 || position > PS_KEY_9) return;
   position -= PS_TOUCH_OFFSET;
 
   const GUI_RECT *rect = curRect + position;
@@ -782,57 +778,72 @@ KEY_VALUES menuKeyGetValue(void)
 {
   KEY_VALUES tempkey = KEY_IDLE;
 
-  if (menuType == MENU_TYPE_ICON)
+  if (tempkey == KEY_IDLE)
   {
-    if (infoMenu.menu[infoMenu.cur] == menuStatus)
+    switch (menuType)
     {
-      tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keySS), rect_of_keySS);
-    }
-    else if(infoMenu.menu[infoMenu.cur] == menuPrinting)
-    {
-      tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_touchPS), rect_of_touchPS);
-    }
-    else if ((infoMenu.menu[infoMenu.cur] == menuHeat) ||
-             (infoMenu.menu[infoMenu.cur] == menuPid) ||
-             (infoMenu.menu[infoMenu.cur] == menuTuneExtruder) ||
-             (infoMenu.menu[infoMenu.cur] == menuFan) ||
-             (infoMenu.menu[infoMenu.cur] == menuExtrude) ||
-             (infoMenu.menu[infoMenu.cur] == menuSpeed) ||
-             (infoMenu.menu[infoMenu.cur] == menuZOffset) ||
-             (infoMenu.menu[infoMenu.cur] == menuMBL))
-    {
-      tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keysIN), rect_of_keysIN);
-    }
-    else
-    {
-      tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_key), rect_of_key);
+      case MENU_TYPE_ICON:
+        {
+          if (infoMenu.menu[infoMenu.cur] == menuStatus)
+          {
+            tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keySS), rect_of_keySS);
+          }
+          else if(infoMenu.menu[infoMenu.cur] == menuPrinting)
+          {
+            if(isPrinting() || infoHost.printing == true)
+              tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keySS), rect_of_keyPS);
+            else
+              tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keyPS_end), rect_of_keyPS_end);
+
+            if (tempkey == (KEY_VALUES)PS_KEY_TITLEBAR)
+              tempkey = KEY_TITLEBAR;
+          }
+          else if ((infoMenu.menu[infoMenu.cur] == menuHeat) ||
+                  (infoMenu.menu[infoMenu.cur] == menuPid) ||
+                  (infoMenu.menu[infoMenu.cur] == menuTuneExtruder) ||
+                  (infoMenu.menu[infoMenu.cur] == menuFan) ||
+                  (infoMenu.menu[infoMenu.cur] == menuExtrude) ||
+                  (infoMenu.menu[infoMenu.cur] == menuSpeed) ||
+                  (infoMenu.menu[infoMenu.cur] == menuZOffset) ||
+                  (infoMenu.menu[infoMenu.cur] == menuMBL))
+          {
+            tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keysIN), rect_of_keysIN);
+          }
+          else
+          {
+            tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_key), rect_of_key);
+          }
+        }
+        break;
+
+      case MENU_TYPE_LISTVIEW:
+        tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keyListView), rect_of_keyListView);
+
+        if (tempkey == ITEM_PER_PAGE)
+          tempkey = KEY_TITLEBAR;
+        break;
+
+      case MENU_TYPE_OTHER:
+        if ((KEY_VALUES)KEY_GetValue(1, rect_of_titleBar) == 0)
+          tempkey = KEY_TITLEBAR;
+        else
+          tempkey = (KEY_VALUES)KEY_GetValue(curRectCount, curRect);
+        break;
+
+      case MENU_TYPE_FULLSCREEN:
+      default:
+        tempkey = (KEY_VALUES)KEY_GetValue(curRectCount, curRect);
+        break;
     }
   }
-  else if (menuType == MENU_TYPE_LISTVIEW)
-  {
-    tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keyListView), rect_of_keyListView);  // for listview
-  }
-  else if (menuType == MENU_TYPE_OTHER)
-  {
-    if ((KEY_VALUES)KEY_GetValue(1, rect_of_titleBar) == 0)
-      tempkey = KEY_TITLEBAR;
-    else
-      return(KEY_VALUES)KEY_GetValue(curRectCount, curRect);
-  }
-  else if (menuType == MENU_TYPE_FULLSCREEN)
-  {
-    return tempkey = (KEY_VALUES)KEY_GetValue(curRectCount, curRect);
-  }
-  // catch titlebar press to enable it on every menu
-  if (tempkey == KEY_TITLEBAR)
+
+  if (menuType != MENU_TYPE_FULLSCREEN && tempkey == KEY_TITLEBAR)
   {
     titleBarPress();
-    return KEY_IDLE;
+    tempkey = KEY_IDLE;
   }
-  else
-  {
-    return tempkey;
-  }
+
+  return tempkey;
 }
 
 // Get the top left point of the corresponding icon position)
@@ -841,96 +852,6 @@ GUI_POINT getIconStartPoint(int index)
   GUI_POINT p = {curRect[index].x0, curRect[index].y0};
   return p;
 }
-
-#ifdef SMART_HOME
-
-  #define LONG_TOUCH (LCD_CHANGE_MODE_INTERVALS / 3)  // keep it lower than LCD_CHANGE_MODE_INTERVALS
-
-  void loopCheckBack(void)
-  {
-    static bool longPress = false;
-
-    #ifdef HAS_EMULATOR
-      static bool backHeld = false;
-    #endif
-
-    if (!isPress())
-    {
-      #ifdef HAS_EMULATOR
-        backHeld = false;
-      #endif
-
-      longPress = false;
-
-      #ifndef HAS_EMULATOR
-        LCD_ReadPen(0);  // reset TSC press timer
-      #endif
-
-      return;
-    }
-
-    if (isPrinting())  // no jump to main menu while printing
-      return;
-
-    if (menuType != MENU_TYPE_ICON)
-      return;
-
-    if ((infoMenu.cur == 0) || (infoMenu.menu[infoMenu.cur] == menuMode))
-      return;
-
-    #ifdef HAS_EMULATOR
-      if (backHeld == true)  // prevent mode selection or screenshot if Back button is held
-      {
-        backHeld = LCD_ReadPen(0);
-        return;
-      }
-    #endif
-
-    if (longPress == false)  // check if longpress already handled
-    {
-      if (LCD_ReadPen(LONG_TOUCH))  // check if TSC is pressed and held
-      {
-        KEY_VALUES tempKey = KEY_IDLE;
-        longPress = true;
-        touchSound = false;
-
-        if (infoMenu.menu[infoMenu.cur] == menuPrinting)
-        {
-          tempKey = Key_value(COUNT(rect_of_keySS), rect_of_keySS);
-        }
-        else
-        {
-          tempKey = Key_value(COUNT(rect_of_key), rect_of_key);
-        }
-
-        touchSound = true;
-
-        if (tempKey != KEY_IDLE)
-        {
-          if (curMenuItems->items[tempKey].label.index != LABEL_BACK)  // check if Back button is held
-          {
-            return;
-          }
-          else
-          {
-            BUZZER_PLAY(sound_ok);
-
-            #ifdef HAS_EMULATOR
-              backHeld = true;
-            #endif
-
-            infoMenu.menu[1] = infoMenu.menu[infoMenu.cur];  // prepare menu tree for jump to 0
-            infoMenu.cur = 1;
-
-            if (infoMenu.menu[1] == menuPrinting)
-              clearInfoFile();
-          }
-        }
-      }
-    }
-  }
-
-#endif  // SMART_HOME
 
 void loopBackEnd(void)
 {
@@ -949,49 +870,49 @@ void loopBackEnd(void)
   // Speed & flow monitor
   loopSpeed();
 
-#ifdef SMART_HOME
-  // check if Back is pressed and held
-  loopCheckBack();
-#endif
-
-#ifdef BUZZER_PIN
-  // Buzzer handling
-  loopBuzzer();
-#endif
+  #ifdef BUZZER_PIN
+    // Buzzer handling
+    loopBuzzer();
+  #endif
 
   if (infoMachineSettings.onboard_sd_support == ENABLED)
   {
     loopPrintFromHost();  // handle a print from onboard SD or remote host, if any
   }
 
-#ifdef U_DISK_SUPPORT
-  USBH_Process(&USB_OTG_Core, &USB_Host);
-#endif
-
-#if defined(SCREEN_SHOT_TO_SD)
-  loopScreenShot();
-#endif
-
-#if LCD_ENCODER_SUPPORT
-  #ifdef HAS_EMULATOR
-  if (infoMenu.menu[infoMenu.cur] != menuMarlinMode)
+  #ifdef U_DISK_SUPPORT
+    USBH_Process(&USB_OTG_Core, &USB_Host);
   #endif
-  {
-    loopCheckEncoderSteps();  // check change in encoder steps
-  }
-#endif
 
-#ifdef HAS_EMULATOR
-  loopCheckMode();
-#endif
+  #ifdef FIL_RUNOUT_PIN
+    FIL_BE_CheckRunout();
+  #endif
 
-#ifdef FIL_RUNOUT_PIN
-  loopBackEndFILRunoutDetect();
-#endif
+  #if LCD_ENCODER_SUPPORT
+    #ifdef HAS_EMULATOR
+      if (infoMenu.menu[infoMenu.cur] != menuMarlinMode)
+    #endif
+    {
+      LCD_Enc_CheckSteps();  // check change in encoder steps
+    }
+  #endif
 
-#ifdef LCD_LED_PWM_CHANNEL
-  LCD_HandleDimming();
-#endif
+  #ifdef HAS_EMULATOR
+    Mode_CheckSwitching();
+  #endif
+
+  #ifdef SCREEN_SHOT_TO_SD
+    loopScreenShot();
+  #endif
+
+  #ifdef SMART_HOME
+    // check if Back is pressed and held
+    loopCheckBack();
+  #endif
+
+  #ifdef LCD_LED_PWM_CHANNEL
+    LCD_CheckDimming();
+  #endif
 
   if (infoMachineSettings.caseLightsBrightness == ENABLED)
   {
@@ -1016,10 +937,10 @@ void loopFrontEnd(void)
   // Check update temperature status
   loopTemperatureStatus();
 
-#ifdef FIL_RUNOUT_PIN
-  // Loop for filament runout detection
-  loopFrontEndFILRunoutDetect();
-#endif
+  #ifdef FIL_RUNOUT_PIN
+    // Loop for filament runout detection
+    FIL_FE_CheckRunout();
+  #endif
 
   // Loop for popup menu
   loopPopup();
