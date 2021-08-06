@@ -11,7 +11,11 @@ extern "C" {
 #ifdef LED_COLOR_PIN
   void knob_LED_Init(void);
   void knob_LED_DeInit(void);
-  void Knob_LED_SetColor(uint32_t ws2812_dat, uint8_t neopixel_pixels);
+  void Knob_LED_SetColor(uint32_t color, uint8_t neopixel_pixels);
+
+  #define KNOB_LED_SET_COLOR(color, neopixel_pixels) Knob_LED_SetColor(color, neopixel_pixels)
+#else
+  #define KNOB_LED_SET_COLOR(color, neopixel_pixels)
 #endif
 
 #ifdef __cplusplus

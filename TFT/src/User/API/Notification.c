@@ -22,7 +22,8 @@ bool _toastRunning = false;
 //Add new message to toast notification queue
 void addToast(DIALOG_TYPE style, char * text)
 {
-  LCD_Wake();
+  LCD_WAKE();
+
   TOAST t;
   strncpy(t.text, text, TOAST_MSG_LENGTH);
   t.text[TOAST_MSG_LENGTH - 1] = 0;  //ensure string ends with null terminator
@@ -131,7 +132,7 @@ void loopToast(void)
 //Add new message to notification queue
 void addNotification(DIALOG_TYPE style, char *title, char *text, bool ShowDialog)
 {
-  LCD_Wake();
+  LCD_WAKE();
 
   if (nextMsgIndex > MAX_MSG_COUNT - 1)
   {

@@ -8,7 +8,7 @@ extern "C" {
 #include <stdbool.h>
 #include "ff.h"
 
-//after changing/adding/removing a keyword, change the CONFIG_FLASH_SIGN in Settings.h and PARA_SIGN in flashStore.c
+//after changing/adding/removing a keyword, change the CONFIG_FLASH_SIGN in Settings.h and PARA_SIGN in FlashStore.c
 
 #define LINE_MAX_CHAR                 100
 #define CONFIG_FILE_PATH              "0:config.ini"
@@ -117,13 +117,13 @@ extern "C" {
 #define CONFIG_TOAST_SOUND            "toast_sound:"
 #define CONFIG_ALERT_SOUND            "alert_sound:"
 #define CONFIG_HEATER_SOUND           "heater_sound:"
-#define CONFIG_KNOB_COLOR             "knob_led_color:"
-#define CONFIG_KNOB_LED_IDLE          "knob_led_idle:"
-#define CONFIG_NEOPIXEL_PIXELS        "neopixel_pixels:"
 #define CONFIG_BRIGHTNESS             "lcd_brightness:"
 #define CONFIG_BRIGHTNESS_IDLE        "lcd_idle_brightness:"
-#define CONFIG_BRIGHTNESS_IDLE_DELAY  "lcd_idle_delay:"
+#define CONFIG_BRIGHTNESS_IDLE_TIME   "lcd_idle_time:"
 #define CONFIG_BLOCK_TOUCH_ON_IDLE    "block_touch_on_idle:"
+#define CONFIG_KNOB_LED_COLOR         "knob_led_color:"
+#define CONFIG_KNOB_LED_IDLE          "knob_led_idle:"
+#define CONFIG_NEOPIXEL_PIXELS        "neopixel_pixels:"
 //-----------------------------Custom Gcode Commands
 #define CONFIG_CUSTOM_LABEL_1         "custom_label_1:"
 #define CONFIG_CUSTOM_LABEL_2         "custom_label_2:"

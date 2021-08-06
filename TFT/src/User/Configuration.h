@@ -1,6 +1,6 @@
 #ifndef _CONFIGURATION_H_
 #define _CONFIGURATION_H_
-#define CONFIG_VERSION 20210726
+#define CONFIG_VERSION 20210730
 
 //====================================================================================================
 //=============================== Settings Configurable On config.ini ================================
@@ -99,7 +99,7 @@
  * Set Marlin/Touch mode as the default mode at startup.
  *
  * NOTE: Mode switching is possible only for Marlin Mode and Touch Mode by a long press of
- *       three seconds on the display or holding down the encorder button for two seconds.
+ *       1.5 seconds on the display or holding down the encorder button for 1.5 seconds.
  *
  *   Options: [Marlin Mode: 0, Touch Mode: 1, Blocked Marlin Mode: 2, Blocked Touch Mode: 3]
  */
@@ -402,7 +402,29 @@
 //================================================================================
 
 /**
+ * Default LCD Brightness Levels (only for TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
+ * Default brightness values for LCD.
+ *
+ *   Options: [off: 0, 5%: 1, 10%: 2, 20%: 3, 30%: 4, 40%: 5, 50%: 6, 60%: 7, 70%: 8, 80%: 9, 90%: 10, 100%: 11]
+ */
+#define DEFAULT_LCD_BRIGHTNESS      11  // Default display brightness (Default: 11)
+#define DEFAULT_LCD_IDLE_BRIGHTNESS  3  // Display brightness when device is idle (Default: 3)
+
+/**
+ * Default LCD Idle Time (only for TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
+ * The LCD screen will dim to idle brightness, if the display is not touched for the
+ * period of the LCD idle time.
+ *
+ *   Options: [off: 0, 5sec: 1, 10sec: 2, 30sec: 3, 1min: 4, 2min: 5, 5min: 6, CUSTOM: 7]
+ */
+#define DEFAULT_LCD_IDLE_TIME 0  // Default: 0
+
+// Custom value in seconds. This will be used if DEFAULT_LCD_IDLE_TIME is set to 7 (CUSTOM Seconds)
+#define IDLE_TIME_CUSTOM (10 * 60)
+
+/**
  * Knob LED Color (only for TFT28/TFT35_E3/TFT43/TFT50/TFT70 V3.0)
+ * Knob LED color at startup.
  *
  *   Options: [OFF: 0, WHITE: 1, RED: 2, ORANGE: 3, YELLOW: 4, GREEN: 5, BLUE: 6, INDIGO: 7, VIOLET: 8]
  */
@@ -410,27 +432,6 @@
 
 // Keep the LED state in Marlin Mode
 #define KEEP_KNOB_LED_COLOR_MARLIN_MODE
-
-/**
- * Default LCD Brightness Levels (only for TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
- * Default brightness values for LCD.
- *
- *   Options: [off: 0, 5%: 1, 10%: 2, 20%: 3, 30%: 4, 40%: 5, 50%: 6, 60%: 7, 70%: 8, 80%: 9, 90%: 10, 100%: 11]
- */
-#define DEFAULT_LCD_BRIGHTNESS       11  // Default display brightness (Default: 11)
-#define DEFAULT_LCD_IDLE_BRIGHTNESS   3  // Display brightness when device is idle (Default: 3)
-
-/**
- * Default LCD Idle Time (only for TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
- * The LCD screen will dim to idle brightness, if the display is not touched for the
- * period of the lcd idle timer.
- *
- *   Options: [off: 0, 5sec: 1, 10sec: 2, 30sec: 3, 1min: 4, 2min: 5, 5min: 6, CUSTOM: 7]
- */
-#define DEFAULT_LCD_IDLE_TIMER  0  // Default: 0
-
-// Custom value in seconds. This will be used if DEFAULT_LCD_IDLE_TIMER is set to 7 (CUSTOM Seconds)
-#define IDLE_TIME_CUSTOM (10 * 60)
 
 //================================================================================
 //============================ Custom Gcode Commands =============================
@@ -659,8 +660,8 @@
  * NOTE: Test audio output with the G-Code:
  *       M300 S<frequency Hz> P<duration MilliSeconds>
  */
-#define BUZZER_FREQUENCY_DURATION_MS     20  // (MilliSeconds) Default: 20
-#define BUZZER_FREQUENCY_HZ           10000  // (Hz) Default: 10000 (20Hz to 60000Hz)
+#define BUZZER_FREQUENCY_DURATION_MS    20  // (MilliSeconds) Default: 20
+#define BUZZER_FREQUENCY_HZ          10000  // (Hz) Default: 10000 (20Hz to 60000Hz)
 
 /**
  * Buzzer Stop Level
