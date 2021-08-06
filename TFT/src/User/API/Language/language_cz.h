@@ -1,17 +1,17 @@
 #ifndef _LANGUAGE_CZ_H_
 #define _LANGUAGE_CZ_H_
 
-    // config.ini Parameter Settings / Feature Settings
+    // config.ini Parameter Settings - Screen Settings and Feature Settings
     #define STRING_BAUDRATE               "Sériový Port"
-    #define STRING_LANGUAGE               "Čeština"
-    #define STRING_ROTATE_UI              "Otočit UI"
-    #define STRING_TERMINAL_ACK           "zobrazit ACK Terminálu"
-    #define STRING_PERSISTENT_INFO        "Zobrazení stavových ikon"
-    #define STRING_FAN_SPEED_PERCENT      "Rychlost ventilátoru v %"
-    #define STRING_FILE_LIST_MODE         "Soubory jako seznam"
-    #define STRING_FILE_SORT_BY           "Řazení souborů"
-    #define STRING_ACK_NOTIFICATION       "Styl oznámení ACK"
     #define STRING_EMULATE_M600           "Emulace M600"
+    #define STRING_ROTATE_UI              "Otočit UI"
+    #define STRING_LANGUAGE               "Čeština"
+    #define STRING_ACK_NOTIFICATION       "Styl oznámení ACK"
+    #define STRING_FILE_SORT_BY           "Řazení souborů"
+    #define STRING_FILE_LIST_MODE         "Soubory jako seznam"
+    #define STRING_FAN_SPEED_PERCENT      "Rychlost ventilátoru v %"
+    #define STRING_PERSISTENT_INFO        "Zobrazení stavových ikon"
+    #define STRING_TERMINAL_ACK           "zobrazit ACK Terminálu"
     #define STRING_SERIAL_ALWAYS_ON       "Sériový port vždy ON"
     #define STRING_MARLIN_FULLSCREEN      "Fullscreen režim Marlin"
     #define STRING_MARLIN_SHOW_TITLE      "Zobrazit tytulek Marlin"
@@ -32,7 +32,7 @@
     #define STRING_LCD_BRIGHTNESS         "LCD Jas"
     #define STRING_LCD_IDLE_BRIGHTNESS    "LCD snížení jasu"
     #define STRING_LCD_IDLE_TIME          "LCD snížení jasu po"
-    #define STRING_BLOCK_TOUCH_ON_IDLE    "Blok. dotek při zatmavení"
+    #define STRING_BLOCK_TOUCH_ON_IDLE    "Block touch on idle"
     #define STRING_KNOB_LED_COLOR         "Rotační knob LED"
     #define STRING_KNOB_LED_IDLE          "Rotační knob LED idle"
     #define STRING_START_GCODE_ENABLED    "Spustit Gcode před tiskem"
@@ -246,6 +246,7 @@
     #define STRING_SETTINGS               "Nastavení"
     #define STRING_SCREEN_SETTINGS        "Displej"
     #define STRING_MACHINE_SETTINGS       "Tiskárna"
+    #define STRING_UI_SETTINGS            "UI"
     #define STRING_MARLIN_MODE_SETTINGS   "MarlinMode"
     #define STRING_FEATURE_SETTINGS       "Vlastnosti"
     #define STRING_SOUND                  "Zvuk"

@@ -1,17 +1,17 @@
 #ifndef _LANGUAGE_HU_H_
 #define _LANGUAGE_HU_H_
 
-    // config.ini Parameter Settings / Feature Settings
+    // config.ini Parameter Settings - Screen Settings and Feature Settings
     #define STRING_BAUDRATE               "Kapcsolat"
-    #define STRING_LANGUAGE               "Magyar"
-    #define STRING_ROTATE_UI              "Forgatás"
-    #define STRING_TERMINAL_ACK           "ACK Megjelenítése"
-    #define STRING_PERSISTENT_INFO        "Állandó állapotinfó"
-    #define STRING_FAN_SPEED_PERCENT      "Ventilátor sebesség %-ban"
-    #define STRING_FILE_LIST_MODE         "Fájlnéző listamód"
-    #define STRING_FILE_SORT_BY           "Fájlok rendezése"
-    #define STRING_ACK_NOTIFICATION       "ACK Értesítési stílus"
     #define STRING_EMULATE_M600           "Emulált M600"
+    #define STRING_ROTATE_UI              "Forgatás"
+    #define STRING_LANGUAGE               "Magyar"
+    #define STRING_ACK_NOTIFICATION       "ACK Értesítési stílus"
+    #define STRING_FILE_SORT_BY           "Fájlok rendezése"
+    #define STRING_FILE_LIST_MODE         "Fájlnéző listamód"
+    #define STRING_FAN_SPEED_PERCENT      "Ventilátor sebesség %-ban"
+    #define STRING_PERSISTENT_INFO        "Állandó állapotinfó"
+    #define STRING_TERMINAL_ACK           "ACK Megjelenítése"
     #define STRING_SERIAL_ALWAYS_ON       "Soros port folytonos"
     #define STRING_MARLIN_FULLSCREEN      "Nagyképernyős Marlin mód"
     #define STRING_MARLIN_SHOW_TITLE      "Marlin mód cím támogatás"
@@ -246,6 +246,7 @@
     #define STRING_SETTINGS               "Opciók"
     #define STRING_SCREEN_SETTINGS        "Kijelző"
     #define STRING_MACHINE_SETTINGS       "Gép"
+    #define STRING_UI_SETTINGS            "UI"
     #define STRING_MARLIN_MODE_SETTINGS   "Marlin mód"
     #define STRING_FEATURE_SETTINGS       "Funkciók"
     #define STRING_SOUND                  "Hangok"

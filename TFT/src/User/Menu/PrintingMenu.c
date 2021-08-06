@@ -331,7 +331,7 @@ static inline void toggleInfo(void)
     RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
 
     #ifdef UNIFORM_LIVE_TEXT_BG_COLOR  // it allows to eliminate flickering on alternating icons
-      ICON_PartialReadDisplay(printinfo_points[ICON_POS_SPD].x, printinfo_points[ICON_POS_SPD].y, PICON_TITLE_X, -1,
+      ICON_PartialReadDisplay(rect_of_keyPS[ICON_POS_SPD].x0, rect_of_keyPS[ICON_POS_SPD].y0, PICON_TITLE_X, -1,
                               (currentSpeedID == 0) ? ICON_PRINTING_SPEED : ICON_PRINTING_FLOW, 0, 0);
       reDrawPrintingValue(ICON_POS_SPD, PRINT_TOP_ROW | PRINT_BOTTOM_ROW);
     #else
@@ -391,8 +391,8 @@ static inline void reDrawProgress(uint8_t prevProgress)
 static inline void printingDrawPage(void)
 {
   #ifdef UNIFORM_LIVE_TEXT_BG_COLOR  // it samples the background color from an icon
-    ICON_PrepareRead(printinfo_points[ICON_POS_EXT].x, printinfo_points[ICON_POS_EXT].y, ICON_PRINTING_NOZZLE);
-    textBgColor = ICON_ReadPixel(printinfo_points[ICON_POS_EXT].x + PICON_TITLE_X, printinfo_points[ICON_POS_EXT].y + PICON_TITLE_Y);
+    ICON_PrepareRead(rect_of_keyPS[ICON_POS_EXT].x0, rect_of_keyPS[ICON_POS_EXT].y0, ICON_PRINTING_NOZZLE);
+    textBgColor = ICON_ReadPixel(rect_of_keyPS[ICON_POS_EXT].x0 + PICON_TITLE_X, rect_of_keyPS[ICON_POS_EXT].y0 + PICON_TITLE_Y);
     ICON_PrepareReadEnd();
   #endif
 

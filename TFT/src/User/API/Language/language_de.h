@@ -1,17 +1,17 @@
 #ifndef _LANGUAGE_DE_H_
 #define _LANGUAGE_DE_H_
 
-    // config.ini Parameter Settings / Feature Settings
+    // config.ini Parameter Settings - Screen Settings and Feature Settings
     #define STRING_BAUDRATE               "Baudrate"
-    #define STRING_LANGUAGE               "Deutsch"
-    #define STRING_ROTATE_UI              "UI drehen"
-    #define STRING_TERMINAL_ACK           "Zeige ACK im Terminal"
-    #define STRING_PERSISTENT_INFO        "Persistente Status Info"
-    #define STRING_FAN_SPEED_PERCENT      "Lüft. Geschw. in Prozent"
-    #define STRING_FILE_LIST_MODE         "Dateien als Liste"
-    #define STRING_FILE_SORT_BY           "Sortiere Dateien nach"
-    #define STRING_ACK_NOTIFICATION       "ACK - Stil"
     #define STRING_EMULATE_M600           "Emuliere M600"
+    #define STRING_ROTATE_UI              "UI drehen"
+    #define STRING_LANGUAGE               "Deutsch"
+    #define STRING_ACK_NOTIFICATION       "ACK - Stil"
+    #define STRING_FILE_SORT_BY           "Sortiere Dateien nach"
+    #define STRING_FILE_LIST_MODE         "Dateien als Liste"
+    #define STRING_FAN_SPEED_PERCENT      "Lüft. Geschw. in Prozent"
+    #define STRING_PERSISTENT_INFO        "Persistente Status Info"
+    #define STRING_TERMINAL_ACK           "Zeige ACK im Terminal"
     #define STRING_SERIAL_ALWAYS_ON       "Seriell Verbind. immer an"
     #define STRING_MARLIN_FULLSCREEN      "Marlin Vollbild"
     #define STRING_MARLIN_SHOW_TITLE      "Marlin Titel anz."
@@ -246,6 +246,7 @@
     #define STRING_SETTINGS               "Parameter"
     #define STRING_SCREEN_SETTINGS        "Bildschirm"
     #define STRING_MACHINE_SETTINGS       "Drucker"
+    #define STRING_UI_SETTINGS            "UI"
     #define STRING_MARLIN_MODE_SETTINGS   "MarlinMode"
     #define STRING_FEATURE_SETTINGS       "Andere"
     #define STRING_SOUND                  "Töne"
