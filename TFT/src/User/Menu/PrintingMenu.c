@@ -431,7 +431,7 @@ void drawPrintInfo(void)
 
   GUI_SetColor(INFOMSG_COLOR);
   GUI_SetBkColor(INFOMSG_BKCOLOR);
-  GUI_DispStringInPrect(&msgRect,LABEL_CLICK_FOR_MORE);
+  GUI_DispStringInPrect(&msgRect, LABEL_CLICK_FOR_MORE);
   GUI_RestoreColorDefault();
 }
 

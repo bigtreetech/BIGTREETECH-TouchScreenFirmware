@@ -2,15 +2,17 @@
 #include "includes.h"
 
 #ifdef TFT70_V3_0
-#define KEY_SPEEDMENU         KEY_ICON_3
-#define KEY_FLOWMENU          (KEY_SPEEDMENU + 1)
-#define KEY_MAINMENU          (KEY_FLOWMENU + 1)
-#define SET_SPEEDMENUINDEX(x) setSpeedItemIndex(x)
+  #define KEY_SPEEDMENU         KEY_ICON_3
+  #define KEY_FLOWMENU          (KEY_SPEEDMENU + 1)
+  #define KEY_MAINMENU          (KEY_FLOWMENU + 1)
+  #define SET_SPEEDMENUINDEX(x) setSpeedItemIndex(x)
 #else
-#define KEY_SPEEDMENU         KEY_ICON_3
-#define KEY_MAINMENU          (KEY_SPEEDMENU + 1)
-#define SET_SPEEDMENUINDEX(x)
+  #define KEY_SPEEDMENU         KEY_ICON_3
+  #define KEY_MAINMENU          (KEY_SPEEDMENU + 1)
+  #define SET_SPEEDMENUINDEX(x)
 #endif
+
+#define UPDATE_TOOL_TIME 2000  // 1 seconds is 1000
 
 const MENUITEMS StatusItems = {
   // title
@@ -35,8 +37,8 @@ const MENUITEMS StatusItems = {
 
 const ITEM BedItems[2] = {
   // icon                        label
-  {ICON_STATUS_BED,            LABEL_BACKGROUND},
-  {ICON_STATUS_CHAMBER,        LABEL_BACKGROUND},
+  {ICON_STATUS_BED,              LABEL_BACKGROUND},
+  {ICON_STATUS_CHAMBER,          LABEL_BACKGROUND},
 };
 
 const ITEM SpeedItems[2] = {
@@ -45,7 +47,6 @@ const ITEM SpeedItems[2] = {
   {ICON_STATUS_FLOW,             LABEL_BACKGROUND},
 };
 
-#define UPDATE_TOOL_TIME 2000  // 1 seconds is 1000
 static int8_t lastConnection_status = -1;
 static bool msgNeedRefresh = false;
 
@@ -120,7 +121,9 @@ void drawStatus(void)
     lvIcon.lines[1].text = (uint8_t *)tempstr;
     lvIcon.lines[2].text = (uint8_t *)tempstr2;
 
-    menuDrawIconOnly(&BedItems[currentBCIndex], 1);
+    if (infoSettings.chamber_en == 1)
+      menuDrawIconOnly(&BedItems[currentBCIndex], 1);
+
     showLiveInfo(1, &lvIcon, &StatusItems.items[1]);
 
     lvIcon.enabled[2] = false;
@@ -136,7 +139,9 @@ void drawStatus(void)
     sprintf(tempstr, "%3d/%-3d", heatGetCurrentTemp(BED + currentBCIndex), heatGetTargetTemp(BED + currentBCIndex));
     lvIcon.lines[1].text = (uint8_t *)tempstr;
 
-    menuDrawIconOnly(&BedItems[currentBCIndex], 1);
+    if (infoSettings.chamber_en == 1)
+      menuDrawIconOnly(&BedItems[currentBCIndex], 1);
+
     showLiveInfo(1, &lvIcon, &StatusItems.items[1]);
   #endif
 
@@ -193,6 +198,7 @@ void statusScreen_setMsg(const uint8_t *title, const uint8_t *msg)
 void statusScreen_setReady(void)
 {
   strncpy(msgtitle, (char *)textSelect(LABEL_STATUS), sizeof(msgtitle));
+
   if (infoHost.connected == false)
   {
     strncpy(msgbody, (char *)textSelect(LABEL_UNCONNECTED), sizeof(msgbody));
@@ -203,6 +209,7 @@ void statusScreen_setReady(void)
     strcat(msgbody, " ");
     strcat(msgbody, (char *)textSelect(LABEL_READY));
   }
+
   msgNeedRefresh = true;
 }
 
@@ -212,6 +219,7 @@ void drawStatusScreenMsg(void)
 
   IMAGE_ReadDisplay(rect_of_keySS[KEY_INFOBOX].x0, rect_of_keySS[KEY_INFOBOX].y0, INFOBOX_ADDR);
   GUI_SetColor(INFOMSG_BKCOLOR);
+
   GUI_DispString(rect_of_keySS[KEY_INFOBOX].x0 + STATUS_MSG_ICON_XOFFSET,
                  rect_of_keySS[KEY_INFOBOX].y0 + STATUS_MSG_ICON_YOFFSET,
                  IconCharSelect(CHARICON_INFO));
@@ -256,8 +264,10 @@ static inline void toggleTool(void)
         currentFan = (currentFan + 1) % MAX_FAN_COUNT;
       } while (!fanIsValid(currentFan));
     }
+
     // switch speed/flow
     currentSpeedID = (currentSpeedID + 1) % 2;
+
     drawStatus();
 
     // gcode queries must be call after drawStatus
@@ -290,8 +300,8 @@ void menuStatus(void)
       drawStatusScreenMsg();
 
     scrollMsg();
-    key_num = menuKeyGetValue();
 
+    key_num = menuKeyGetValue();
     switch (key_num)
     {
       case KEY_ICON_0:
@@ -337,6 +347,7 @@ void menuStatus(void)
     toggleTool();
     loopProcess();
   }
+
   // disable position auto report
   coordinateQuery(0);
 }
