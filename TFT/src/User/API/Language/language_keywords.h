@@ -362,6 +362,7 @@ extern "C" {
 #define LANG_KEY_MACROS                       "label_macros:"
 #define LANG_KEY_MESH_VALID                   "label_mesh_valid:"
 #define LANG_KEY_CONNECT_PROBE                "label_connect_probe:"
+#define LANG_KEY_DISCONNECT_PROBE             "label_disconnect_probe:"
 #define LANG_KEY_CALIBRATION                  "label_calibration:"
 
 #ifdef __cplusplus
