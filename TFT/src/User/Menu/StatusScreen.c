@@ -33,6 +33,12 @@ const MENUITEMS StatusItems = {
   }
 };
 
+const ITEM BedItems[2] = {
+  // icon                        label
+  {ICON_STATUS_BED,            LABEL_BACKGROUND},
+  {ICON_STATUS_CHAMBER,        LABEL_BACKGROUND},
+};
+
 const ITEM SpeedItems[2] = {
   // icon                        label
   {ICON_STATUS_SPEED,            LABEL_BACKGROUND},
@@ -62,7 +68,7 @@ const  GUI_RECT msgRect = {START_X + 1 * ICON_WIDTH + 1 * SPACE_X + 2,   ICON_ST
 const GUI_RECT RecGantry = {START_X,                                SSICON_HEIGHT + ICON_START_Y + STATUS_GANTRY_YOFFSET,
                             START_X + 4 * ICON_WIDTH + 3 * SPACE_X, ICON_HEIGHT + SPACE_Y + ICON_START_Y - STATUS_GANTRY_YOFFSET};
 
-void drawTemperature(void)
+void drawStatus(void)
 {
   // icons and their values are updated one by one to reduce flicker/clipping
   char tempstr[45];
@@ -100,33 +106,37 @@ void drawTemperature(void)
     char tempstr2[45];
 
     // TOOL / EXT
-    lvIcon.lines[0].text = (uint8_t *)heatDisplayID[currentTool];
+    lvIcon.lines[0].text = (uint8_t *)heatShortID[currentTool];
     sprintf(tempstr, "%3d℃", heatGetCurrentTemp(currentTool));
     sprintf(tempstr2, "%3d℃", heatGetTargetTemp(currentTool));
     lvIcon.lines[1].text = (uint8_t *)tempstr;
     lvIcon.lines[2].text = (uint8_t *)tempstr2;
     showLiveInfo(0, &lvIcon, &StatusItems.items[0]);
 
-    // BED
-    lvIcon.lines[0].text = (uint8_t *)heatDisplayID[BED];
-    sprintf(tempstr, "%3d℃", heatGetCurrentTemp(BED));
-    sprintf(tempstr2, "%3d℃", heatGetTargetTemp(BED));
+    // BED / CHAMBER
+    lvIcon.lines[0].text = (uint8_t *)heatShortID[BED + currentBCIndex];
+    sprintf(tempstr, "%3d℃", heatGetCurrentTemp(BED + currentBCIndex));
+    sprintf(tempstr2, "%3d℃", heatGetTargetTemp(BED + currentBCIndex));
     lvIcon.lines[1].text = (uint8_t *)tempstr;
     lvIcon.lines[2].text = (uint8_t *)tempstr2;
+
+    menuDrawIconOnly(&BedItems[currentBCIndex], 1);
     showLiveInfo(1, &lvIcon, &StatusItems.items[1]);
 
     lvIcon.enabled[2] = false;
   #else
     // TOOL / EXT
-    lvIcon.lines[0].text = (uint8_t *)heatDisplayID[currentTool];
+    lvIcon.lines[0].text = (uint8_t *)heatShortID[currentTool];
     sprintf(tempstr, "%3d/%-3d", heatGetCurrentTemp(currentTool), heatGetTargetTemp(currentTool));
     lvIcon.lines[1].text = (uint8_t *)tempstr;
     showLiveInfo(0, &lvIcon, &StatusItems.items[0]);
 
     // BED
-    lvIcon.lines[0].text = (uint8_t *)heatDisplayID[BED];
-    sprintf(tempstr, "%3d/%-3d", heatGetCurrentTemp(BED), heatGetTargetTemp(BED));
+    lvIcon.lines[0].text = (uint8_t *)heatShortID[BED + currentBCIndex];
+    sprintf(tempstr, "%3d/%-3d", heatGetCurrentTemp(BED + currentBCIndex), heatGetTargetTemp(BED + currentBCIndex));
     lvIcon.lines[1].text = (uint8_t *)tempstr;
+
+    menuDrawIconOnly(&BedItems[currentBCIndex], 1);
     showLiveInfo(1, &lvIcon, &StatusItems.items[1]);
   #endif
 
@@ -134,13 +144,10 @@ void drawTemperature(void)
   lvIcon.lines[0].text = (uint8_t *)fanID[currentFan];
 
   if (infoSettings.fan_percentage == 1)
-  {
     sprintf(tempstr, "%3d%%", fanGetCurPercent(currentFan));
-  }
   else
-  {
     sprintf(tempstr, "%3d", fanGetCurSpeed(currentFan));
-  }
+
   lvIcon.lines[1].text = (uint8_t *)tempstr;
   showLiveInfo(2, &lvIcon, &StatusItems.items[2]);
 
@@ -203,14 +210,14 @@ void drawStatusScreenMsg(void)
 {
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
-  IMAGE_ReadDisplay(rect_of_keySS[17].x0, rect_of_keySS[17].y0, INFOBOX_ADDR);
+  IMAGE_ReadDisplay(rect_of_keySS[KEY_INFOBOX].x0, rect_of_keySS[KEY_INFOBOX].y0, INFOBOX_ADDR);
   GUI_SetColor(INFOMSG_BKCOLOR);
-  GUI_DispString(rect_of_keySS[17].x0 + STATUS_MSG_ICON_XOFFSET,
-                 rect_of_keySS[17].y0 + STATUS_MSG_ICON_YOFFSET,
+  GUI_DispString(rect_of_keySS[KEY_INFOBOX].x0 + STATUS_MSG_ICON_XOFFSET,
+                 rect_of_keySS[KEY_INFOBOX].y0 + STATUS_MSG_ICON_YOFFSET,
                  IconCharSelect(CHARICON_INFO));
 
-  GUI_DispString(rect_of_keySS[17].x0 + BYTE_HEIGHT + STATUS_MSG_TITLE_XOFFSET,
-                 rect_of_keySS[17].y0 + STATUS_MSG_ICON_YOFFSET,
+  GUI_DispString(rect_of_keySS[KEY_INFOBOX].x0 + BYTE_HEIGHT + STATUS_MSG_TITLE_XOFFSET,
+                 rect_of_keySS[KEY_INFOBOX].y0 + STATUS_MSG_ICON_YOFFSET,
                  (uint8_t *)msgtitle);
 
   GUI_SetBkColor(INFOMSG_BKCOLOR);
@@ -236,6 +243,11 @@ static inline void toggleTool(void)
     // increment hotend index
     if (infoSettings.hotend_count > 1)
       currentTool = (currentTool + 1) % infoSettings.hotend_count;
+
+    // switch bed/chamber index
+    if (infoSettings.chamber_en == 1)
+      currentBCIndex = (currentBCIndex + 1) % 2;
+
     // increment fan index
     if ((infoSettings.fan_count + infoSettings.ctrl_fan_en) > 1)
     {
@@ -246,9 +258,9 @@ static inline void toggleTool(void)
     }
     // switch speed/flow
     currentSpeedID = (currentSpeedID + 1) % 2;
-    drawTemperature();
+    drawStatus();
 
-    // gcode queries must be call after drawTemperature
+    // gcode queries must be call after drawStatus
     coordinateQuery(UPDATE_TOOL_TIME / 1000);
     speedQuery();
     ctrlFanQuery();
@@ -263,7 +275,7 @@ void menuStatus(void)
   menuDrawPage(&StatusItems);
   GUI_SetColor(infoSettings.status_xyz_bg_color);
   GUI_FillPrect(&RecGantry);
-  drawTemperature();
+  drawStatus();
   drawStatusScreenMsg();
 
   while (infoMenu.menu[infoMenu.cur] == menuStatus)
@@ -288,7 +300,7 @@ void menuStatus(void)
         break;
 
       case KEY_ICON_1:
-        heatSetCurrentIndex(BED);
+        heatSetCurrentIndex(BED + currentBCIndex);
         infoMenu.menu[++infoMenu.cur] = menuHeat;
         break;
 

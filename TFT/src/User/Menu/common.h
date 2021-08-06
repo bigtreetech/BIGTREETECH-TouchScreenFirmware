@@ -34,9 +34,10 @@ typedef enum
 
 extern SCROLL scrollLine;
 
-extern uint8_t currentTool;
-extern uint8_t currentFan;
-extern uint8_t currentSpeedID;
+extern uint8_t currentTool;      // current hotend index
+extern uint8_t currentBCIndex;  // current bed/chamber index
+extern uint8_t currentFan;       // current fan index
+extern uint8_t currentSpeedID;   // current speed/flow index
 
 extern const ITEM itemTool[MAX_HEATER_COUNT];
 extern const ITEM itemDegreeSteps[ITEM_DEGREE_NUM];
