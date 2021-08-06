@@ -291,7 +291,7 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
 
   if (!(draw_type & PRINT_ICON))
     ICON_PrepareReadEnd();
-} // reDrawPrintingValue
+}  // reDrawPrintingValue
 
 static inline void toggleInfo(void)
 {
@@ -308,7 +308,14 @@ static inline void toggleInfo(void)
     {
       currentBCIndex = (currentBCIndex + 1) % 2;
       RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
-      reDrawPrintingValue(ICON_POS_BED, PRINT_ICON | PRINT_TOP_ROW | PRINT_BOTTOM_ROW);
+
+      #ifdef UNIFORM_LIVE_TEXT_BG_COLOR  // it allows to eliminate flickering on alternating icons
+        ICON_PartialReadDisplay(rect_of_keyPS[ICON_POS_BED].x0, rect_of_keyPS[ICON_POS_BED].y0, PICON_TITLE_X, -1,
+                                (currentBCIndex == 0) ? ICON_PRINTING_BED : ICON_PRINTING_CHAMBER, 0, 0);
+        reDrawPrintingValue(ICON_POS_BED, PRINT_TOP_ROW | PRINT_BOTTOM_ROW);
+      #else
+        reDrawPrintingValue(ICON_POS_BED, PRINT_ICON | PRINT_TOP_ROW | PRINT_BOTTOM_ROW);
+      #endif
     }
     else
     {
@@ -512,7 +519,7 @@ void menuPrinting(void)
     printingItems.items[KEY_ICON_4] = itemIsPause[lastPause];
     printingItems.items[KEY_ICON_5].icon = (infoFile.source < BOARD_SD && isPrintModelIcon()) ? ICON_PREVIEW : ICON_BABYSTEP;
   }
-  else // returned to this menu after a print was done (ex: after a popup)
+  else  // returned to this menu after a print was done (ex: after a popup)
   {
     printingItems.title.address = (uint8_t *)infoPrintSummary.name;
 
