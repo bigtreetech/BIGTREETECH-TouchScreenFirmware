@@ -75,7 +75,9 @@ typedef enum
 {
   MODE_MARLIN = 0,
   MODE_SERIAL_TSC,
-  MODE_COUNT
+  MODE_COUNT,
+  MODE_BLOCKED_MARLIN = 2,
+  MODE_BLOCKED_SERIAL_TSC,
 } LCD_MODE;
 
 typedef enum
