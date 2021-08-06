@@ -355,7 +355,7 @@
     #define STRING_MACROS                 "Makros"
     #define STRING_MESH_VALID             "Mesh Validierung"
     #define STRING_CONNECT_PROBE          "Bitte Sensor anschließen, bevor der Vorgang gestartet wird. Danach bitte Sensor wieder trennen."
-    #define STRING_DISCONNECT_PROBE       "Make sure you have disconnected probe before using this feature."
+    #define STRING_DISCONNECT_PROBE       "Bitte sicherstellen, dass vor Nutzung dieser Funktion der Sensor getrennt wurde."
     #define STRING_CALIBRATION            "Kalibrierung"
 
 #endif
