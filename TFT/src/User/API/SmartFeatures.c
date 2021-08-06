@@ -1,4 +1,4 @@
-#include "extend.h"
+#include "SmartFeatures.h"
 #include "includes.h"
 #include "GPIO_Init.h"
 
@@ -24,13 +24,16 @@ void PS_ON_Off(void)
   GPIO_SetLevel(PS_ON_PIN, !infoSettings.ps_active_high);
 }
 
-#endif
+#endif  // PS_ON_PIN
 
-// Filament runout detect
+// Filament runout detection
 #ifdef FIL_RUNOUT_PIN
 
-#define POS_E_UPDATE_TIME   2000
-#define ALARM_REMINDER_TIME 10000
+enum
+{
+  FILAMENT_SENSOR_NORMAL,
+  FILAMENT_SENSOR_SMART,
+};
 
 static bool posE_updateWaiting = false;
 static bool sfs_alive = false;  // Use an encoder disc to toggles the runout. Suitable for BigTreeTech Smart Filament Sensor
@@ -215,7 +218,7 @@ bool FIL_IsRunout(void)
   return false;
 }
 
-void loopBackEndFILRunoutDetect(void)
+void FIL_BE_CheckRunout(void)
 {
   if (!(infoSettings.runout & 1))  // Filament runout turn off
     return;
@@ -223,7 +226,7 @@ void loopBackEndFILRunoutDetect(void)
   setPrintRunout(FIL_IsRunout());  // Need constant scanning to filter interference
 }
 
-void loopFrontEndFILRunoutDetect(void)
+void FIL_FE_CheckRunout(void)
 {
   static uint32_t nextReminderTime = 0;
 
@@ -244,4 +247,93 @@ void loopFrontEndFILRunoutDetect(void)
   }
 }
 
-#endif
+#endif  // FIL_RUNOUT_PIN
+
+// Smart home
+#ifdef SMART_HOME
+
+void loopCheckBack(void)
+{
+  static bool longPress = false;
+
+  #ifdef HAS_EMULATOR
+    static bool backHeld = false;
+  #endif
+
+  if (!isPress())
+  {
+    #ifdef HAS_EMULATOR
+      backHeld = false;
+    #endif
+
+    longPress = false;
+
+    #ifndef HAS_EMULATOR
+      Touch_Enc_ReadPen(0);  // reset TSC press timer
+    #endif
+
+    return;
+  }
+
+  if (isPrinting())  // no jump to main menu while printing
+    return;
+
+  if (getMenuType() != MENU_TYPE_ICON)
+    return;
+
+  if ((infoMenu.cur == 0) || (infoMenu.menu[infoMenu.cur] == menuMode))
+    return;
+
+  #ifdef HAS_EMULATOR
+    if (backHeld == true)  // prevent mode selection or screenshot if Back button is held
+    {
+      backHeld = Touch_Enc_ReadPen(0);
+      return;
+    }
+  #endif
+
+  if (longPress == false)  // check if longpress already handled
+  {
+    if (Touch_Enc_ReadPen(LONG_TOUCH))  // check if TSC is pressed and held
+    {
+      KEY_VALUES tempKey = KEY_IDLE;
+      longPress = true;
+      touchSound = false;
+
+      if (infoMenu.menu[infoMenu.cur] == menuPrinting)
+      {
+        tempKey = Key_value(COUNT(rect_of_keySS), rect_of_keySS);
+      }
+      else
+      {
+        tempKey = Key_value(COUNT(rect_of_key), rect_of_key);
+      }
+
+      touchSound = true;
+
+      if (tempKey != KEY_IDLE)
+      {
+        if (getCurMenuItems()->items[tempKey].label.index != LABEL_BACK)  // check if Back button is held
+        {
+          return;
+        }
+        else
+        {
+          BUZZER_PLAY(sound_ok);
+
+          #ifdef HAS_EMULATOR
+            backHeld = true;
+          #endif
+
+          infoMenu.menu[1] = infoMenu.menu[infoMenu.cur];  // prepare menu tree for jump to 0
+          infoMenu.cur = 1;
+
+          if (infoMenu.menu[1] == menuPrinting)
+            clearInfoFile();
+        }
+      }
+    }
+  }
+}
+
+#endif  // SMART_HOME

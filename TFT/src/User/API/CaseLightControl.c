@@ -73,6 +73,7 @@ void loopCaseLight(void)
     {
       caseLight_applied = storeCmd("M355 S%d P%d\n", caseLightState ? 1 : 0, caseLightBrightness);
     }
+
     if (caseLight_applied == true)
     {
       lastCaseLightBrightness = caseLightBrightness;

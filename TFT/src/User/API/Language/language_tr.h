@@ -29,12 +29,12 @@
     #define STRING_TOAST_SOUND            "Ara Bildirimler"
     #define STRING_ALERT_SOUND            "Uyarılar ve Sesler"
     #define STRING_HEATER_SOUND           "Heater notification"
-    #define STRING_KNOB_LED_COLOR         "Döner Düğme LED"
-    #define STRING_KNOB_LED_IDLE          "Düğme LED bekleme"
     #define STRING_LCD_BRIGHTNESS         "Parlaklık"
     #define STRING_LCD_IDLE_BRIGHTNESS    "Parlaklık Kısılma Oranı"
-    #define STRING_LCD_IDLE_DELAY         "Parlaklık Kısılma Süresi"
+    #define STRING_LCD_IDLE_TIME          "Parlaklık Kısılma Süresi"
     #define STRING_BLOCK_TOUCH_ON_IDLE    "Block touch on idle"
+    #define STRING_KNOB_LED_COLOR         "Döner Düğme LED"
+    #define STRING_KNOB_LED_IDLE          "Düğme LED bekleme"
     #define STRING_START_GCODE_ENABLED    "Başlangıç gcodeu kullan"
     #define STRING_END_GCODE_ENABLED      "Bitiş gcodeu kullan"
     #define STRING_CANCEL_GCODE_ENABLED   "İptal gcodeu kullan"
@@ -355,6 +355,7 @@
     #define STRING_MACROS                 "Macros"
     #define STRING_MESH_VALID             "Mesh Validation"
     #define STRING_CONNECT_PROBE          "Connect probe before starting the process. Make sure to disconnect it afterwards."
+    #define STRING_DISCONNECT_PROBE       "Make sure you have disconnected probe before using this feature."
     #define STRING_CALIBRATION            "Calibration"
 
 #endif

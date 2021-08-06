@@ -65,19 +65,19 @@ void menuMarlinMode(void)
     }
 
     #if LCD_ENCODER_SUPPORT
-      sendEncoder(LCD_ReadTouch());
+      if (Touch_Enc_ReadBtn(LCD_ENC_BUTTON_INTERVAL))
+        LCD_Enc_SendPulse(1);
 
-      if (LCD_BtnTouch(LCD_BUTTON_INTERVALS))
-        sendEncoder(1);
+      LCD_Enc_SendPulse(Touch_Enc_ReadPos());
     #endif
 
-    loopCheckMode();
+    Mode_CheckSwitching();
 
     if (infoSettings.serial_alwaysOn == ENABLED)
     {
       loopBackEnd();
     }
-    #if defined(SCREEN_SHOT_TO_SD) || defined(LCD_LED_PWM_CHANNEL)  // loopScreenShot() and LCD_HandleDimming() are invoked by loopBackEnd(),
+    #if defined(SCREEN_SHOT_TO_SD) || defined(LCD_LED_PWM_CHANNEL)  // loopScreenShot() and LCD_CheckDimming() are invoked by loopBackEnd(),
       else                                                          // so we guarantee they are invoked only once
       {
         #ifdef SCREEN_SHOT_TO_SD
@@ -85,7 +85,7 @@ void menuMarlinMode(void)
         #endif
 
         #ifdef LCD_LED_PWM_CHANNEL
-          LCD_HandleDimming();
+          LCD_CheckDimming();
         #endif
       }
     #endif

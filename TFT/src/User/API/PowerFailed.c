@@ -1,21 +1,49 @@
 #include "PowerFailed.h"
 #include "includes.h"
 
+typedef struct
+{
+  float    axis[TOTAL_AXIS];
+  uint32_t feedrate;
+  uint16_t speed;
+  uint16_t flow;
+  uint16_t target[MAX_HEATER_COUNT];
+  uint16_t fan[MAX_FAN_COUNT];
+  uint8_t  tool;
+  uint32_t offset;
+  bool     relative;
+  bool     relative_e;
+  bool     pause;
+} BREAK_POINT;
+
 BREAK_POINT  infoBreakPoint;
 char powerFailedFileName[256];
 FIL fpPowerFailed;
 
 static bool create_ok = false;
 
+void powerFailedClear(void)
+{
+  memset(&infoBreakPoint, 0, sizeof(BREAK_POINT));
+}
+
+bool powerFailedExist(void)
+{
+  FIL fp;
+  UINT br;
+
+  if (f_open(&fp, powerFailedFileName, FA_OPEN_EXISTING | FA_READ) != FR_OK) return false;
+  if (f_read(&fp, infoFile.title, MAX_PATH_LEN, &br)               != FR_OK) return false;
+  if (f_close(&fp)                                                 != FR_OK) return false;
+
+  create_ok = true;
+  return true;
+}
+
 void powerFailedSetDriverSource(char *src)
 {
   strcpy(powerFailedFileName, src);
   strcat(powerFailedFileName, BREAK_POINT_FILE);
-}
-
-void clearPowerFailed(void)
-{
-  memset(&infoBreakPoint, 0, sizeof(BREAK_POINT));
 }
 
 bool powerFailedCreate(char *path)
@@ -94,30 +122,17 @@ void powerFailedDelete(void)
   if (create_ok == false) return;
 
   f_unlink(powerFailedFileName);
-  clearPowerFailed();
+  powerFailedClear();
 }
 
-static bool powerFailedExist(void)
-{
-  FIL fp;
-  UINT br;
-
-  if (f_open(&fp, powerFailedFileName, FA_OPEN_EXISTING | FA_READ) != FR_OK) return false;
-  if (f_read(&fp, infoFile.title, MAX_PATH_LEN, &br)               != FR_OK) return false;
-  if (f_close(&fp)                                                 != FR_OK) return false;
-
-  create_ok = true;
-  return true;
-}
-
-bool powerFailedlSeek(FIL* fp)
+bool powerFailedlSeek(FIL *fp)
 {
   if (f_lseek(fp,infoBreakPoint.offset) != FR_OK) return false;
 
   return true;
 }
 
-bool powerOffGetData(void)
+bool powerFailedGetData(void)
 {
   FIL     fp;
   UINT    br;
@@ -200,60 +215,4 @@ bool powerOffGetData(void)
 
   f_close(&fp);
   return true;
-}
-
-void menuPowerOff(void)
-{
-  uint16_t key_num = IDLE_TOUCH;
-
-  clearPowerFailed();
-  GUI_Clear(infoSettings.bg_color);
-
-  GUI_DispString((LCD_WIDTH - GUI_StrPixelWidth(LABEL_LOADING)) / 2, LCD_HEIGHT / 2 - BYTE_HEIGHT, LABEL_LOADING);
-
-  if (mountFS() == true && powerFailedExist())
-  {
-    char okTxt[MAX_LANG_LABEL_LENGTH];
-    char cancelTxt[MAX_LANG_LABEL_LENGTH];
-    loadLabelText((uint8_t*)okTxt, LABEL_CONFIRM);
-    loadLabelText((uint8_t*)cancelTxt, LABEL_CANCEL);
-
-    popupDrawPage(DIALOG_TYPE_QUESTION, bottomDoubleBtn, textSelect(LABEL_POWER_FAILED), (uint8_t* )infoFile.title,
-                  (uint8_t*)okTxt, (uint8_t*)cancelTxt);
-
-    while (infoMenu.menu[infoMenu.cur] == menuPowerOff)
-    {
-      key_num = KEY_GetValue(2, doubleBtnRect);
-      switch (key_num)
-      {
-        case KEY_POPUP_CONFIRM:
-          powerOffGetData();
-          infoMenu.menu[1] = menuPrintFromSource;
-          infoMenu.menu[2] = menuBeforePrinting;
-          infoMenu.cur = 2;
-          break;
-
-        case KEY_POPUP_CANCEL:
-          powerFailedDelete();
-          ExitDir();
-          infoMenu.cur--;
-          break;
-      }
-
-      #ifdef SD_CD_PIN
-        if (isVolumeExist(infoFile.source) != true)
-        {
-          resetInfoFile();
-          clearPowerFailed();
-          infoMenu.cur--;
-        }
-      #endif
-
-      loopProcess();
-    }
-  }
-  else
-  {
-    infoMenu.cur--;
-  }
 }
