@@ -1,5 +1,4 @@
 #include "HD44780.h"
-#include "variants.h"  // for LCD2004_EMULATOR etc...
 #include "GPIO_Init.h"
 #include <stdlib.h>
 
@@ -114,4 +113,4 @@ bool HD44780_getData(uint8_t *data)
   return dataRead;
 }
 
-#endif
+#endif  // LCD2004_EMULATOR

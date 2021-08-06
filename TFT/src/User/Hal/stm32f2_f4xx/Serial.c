@@ -64,7 +64,7 @@ void Serial_Config(uint8_t port, uint32_t baud)
 {
   dmaL1Data[port].rIndex = dmaL1Data[port].wIndex = 0;
   dmaL1Data[port].cache = malloc(dmaL1Data[port].cacheSize);
-  while(!dmaL1Data[port].cache);           // malloc failed
+  while (!dmaL1Data[port].cache);          // malloc failed
   UART_Config(port, baud, USART_IT_IDLE);  // IDLE interrupt
   Serial_DMA_Config(port);
 }
@@ -151,14 +151,14 @@ void Serial_DMAClearFlag(uint8_t port)
 
 void USART_IRQHandler(uint8_t port)
 {
-  if((Serial[port].uart->SR & (1<<4))!=0)
+  if ((Serial[port].uart->SR & (1<<4)) !=0)
   {
     Serial[port].uart->SR;
     Serial[port].uart->DR;
 
     dmaL1Data[port].wIndex = dmaL1Data[port].cacheSize - Serial[port].dma_stream->NDTR;
     uint16_t wIndex = (dmaL1Data[port].wIndex == 0) ? dmaL1Data[port].cacheSize : dmaL1Data[port].wIndex;
-    if(dmaL1Data[port].cache[wIndex-1] == '\n')  // Receive completed
+    if (dmaL1Data[port].cache[wIndex-1] == '\n')  // Receive completed
     {
       infoHost.rx_ok[port] = true;
     }
@@ -199,21 +199,21 @@ void Serial_Puts(uint8_t port, char *s)
 {
   while (*s)
   {
-    while((Serial[port].uart->SR & USART_FLAG_TC) == (uint16_t)RESET);
+    while ((Serial[port].uart->SR & USART_FLAG_TC) == (uint16_t)RESET);
     Serial[port].uart->DR = ((u16)*s++ & (uint16_t)0x01FF);
   }
 }
 
 void Serial_Putchar(uint8_t port, char ch)
 {
-  while((Serial[port].uart->SR & USART_FLAG_TC) == (uint16_t)RESET);
+  while ((Serial[port].uart->SR & USART_FLAG_TC) == (uint16_t)RESET);
   Serial[port].uart->DR = (uint8_t) ch;
 }
 
 #include "stdio.h"
 int fputc(int ch, FILE *f)
 {
-  while((Serial[SERIAL_PORT].uart->SR&0X40) == 0);
+  while ((Serial[SERIAL_PORT].uart->SR&0X40) == 0);
   Serial[SERIAL_PORT].uart->DR = (uint8_t) ch;
   return ch;
 }

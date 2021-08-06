@@ -29,12 +29,12 @@
     #define STRING_TOAST_SOUND            "Toast 提示聲音"
     #define STRING_ALERT_SOUND            "彈窗和提示聲音"
     #define STRING_HEATER_SOUND           "Heater notification"
-    #define STRING_KNOB_LED_COLOR         "旋鈕LED顏色"
-    #define STRING_KNOB_LED_IDLE          "旋鈕LED自動睡眠"
     #define STRING_LCD_BRIGHTNESS         "螢幕亮度"
     #define STRING_LCD_IDLE_BRIGHTNESS    "睡眠狀態螢幕亮度"
-    #define STRING_LCD_IDLE_DELAY         "螢幕進入睡眠時間"
+    #define STRING_LCD_IDLE_TIME          "螢幕進入睡眠時間"
     #define STRING_BLOCK_TOUCH_ON_IDLE    "Block touch on idle"
+    #define STRING_KNOB_LED_COLOR         "旋鈕LED顏色"
+    #define STRING_KNOB_LED_IDLE          "旋鈕LED自動睡眠"
     #define STRING_START_GCODE_ENABLED    "執行起始G-code"
     #define STRING_END_GCODE_ENABLED      "執行結尾G-code"
     #define STRING_CANCEL_GCODE_ENABLED   "中斷執行G-code"
@@ -355,6 +355,7 @@
     #define STRING_MACROS                 "Macros"
     #define STRING_MESH_VALID             "Mesh Validation"
     #define STRING_CONNECT_PROBE          "Connect probe before starting the process. Make sure to disconnect it afterwards."
+    #define STRING_DISCONNECT_PROBE       "Make sure you have disconnected probe before using this feature."
     #define STRING_CALIBRATION            "Calibration"
 
 #endif

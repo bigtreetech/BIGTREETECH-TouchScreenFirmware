@@ -9,37 +9,24 @@ extern "C" {
 #include <stdint.h>
 #include <variants.h>
 
-#define ENCODER_PULSES_PER_STEP   4
-#define LCD_CHANGE_MODE_INTERVALS 1500  // long pressed 1.5s
-#define LCD_BUTTON_INTERVALS      20    // 20ms
-#define LCD_FREE_WIDTH            (LCD_WIDTH - LCD_WIDTH / 5)
-#define LCD_FREE_HEIGHT           (LCD_HEIGHT / 5)
-#define EN_A (1<<0)
-#define EN_B (1<<1)
-#define EN_C (1<<2)
-#define B01  1
-#define B10  2
-
-extern int16_t encoderPosition;
-
-void HW_EncoderInit(void);
+#if ENC_ACTIVE_SIGNAL
+  void LCD_Enc_InitActiveSignal(void);
+  void LCD_Enc_SetActiveSignal(uint8_t status);
+#endif
 
 #if LCD_ENCODER_SUPPORT
-  bool encoder_ReadBtn(uint16_t intervals);
-#endif
+  #define LCD_ENC_PULSES_PER_STEP  4
+  #define LCD_ENC_BUTTON_INTERVAL 20  // 20ms
 
-#if ENC_ACTIVE_SIGNAL
-  void HW_EncActiveSignalInit(void);
-  void setEncActiveSignal(uint8_t status);
-#endif
+  extern int16_t encoderPosition;
 
-bool LCD_ReadPen(uint16_t intervals);
-bool LCD_BtnTouch(uint16_t intervals);
-uint8_t LCD_ReadTouch(void);
-void loopCheckEncoderSteps(void);
-uint8_t encoder_GetPos(void);
-bool encoder_CheckState(void);
-void sendEncoder(uint8_t num);
+  void LCD_Enc_Init(void);
+  bool LCD_Enc_ReadBtn(uint16_t interval);  // return the button press state. Interval is in milli seconds
+  uint8_t LCD_Enc_ReadPos(void);            // return the position pins state
+  void LCD_Enc_SendPulse(uint8_t num);      // send a pulse to the encoder
+  bool LCD_Enc_CheckState(void);
+  void LCD_Enc_CheckSteps(void);
+#endif
 
 #ifdef __cplusplus
 }

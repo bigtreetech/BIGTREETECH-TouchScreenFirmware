@@ -29,12 +29,12 @@
     #define STRING_TOAST_SOUND            "Toast Notifications"
     #define STRING_ALERT_SOUND            "Popups and Alerts"
     #define STRING_HEATER_SOUND           "Heater notification"
-    #define STRING_KNOB_LED_COLOR         "Rotary Knob LED"
-    #define STRING_KNOB_LED_IDLE          "Rotary Knob LED idle"
     #define STRING_LCD_BRIGHTNESS         "Brightness"
     #define STRING_LCD_IDLE_BRIGHTNESS    "Idle brightness"
-    #define STRING_LCD_IDLE_DELAY         "Idle timeout"
+    #define STRING_LCD_IDLE_TIME          "Idle timeout"
     #define STRING_BLOCK_TOUCH_ON_IDLE    "Block touch on idle"
+    #define STRING_KNOB_LED_COLOR         "Rotary Knob LED"
+    #define STRING_KNOB_LED_IDLE          "Rotary Knob LED idle"
     #define STRING_START_GCODE_ENABLED    "Start Gcode before print"
     #define STRING_END_GCODE_ENABLED      "End Gcode after print"
     #define STRING_CANCEL_GCODE_ENABLED   "Cancel Gcode"
@@ -355,6 +355,7 @@
     #define STRING_MACROS                 "Macros"
     #define STRING_MESH_VALID             "Mesh Validation"
     #define STRING_CONNECT_PROBE          "Connect probe before starting the process. Make sure to disconnect it afterwards."
+    #define STRING_DISCONNECT_PROBE       "Make sure you have disconnected probe before using this feature."
     #define STRING_CALIBRATION            "Calibration"
 
 #endif

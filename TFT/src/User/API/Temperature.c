@@ -3,6 +3,7 @@
 
 const char *const heaterID[MAX_HEATER_COUNT]      = HEAT_SIGN_ID;
 const char *const heatDisplayID[MAX_HEATER_COUNT] = HEAT_DISPLAY_ID;
+const char *const heatShortID[MAX_HEATER_COUNT]   = HEAT_SHORT_ID;
 const char *const heatCmd[MAX_HEATER_COUNT]       = HEAT_CMD;
 const char *const heatWaitCmd[MAX_HEATER_COUNT]   = HEAT_WAIT_CMD;
 

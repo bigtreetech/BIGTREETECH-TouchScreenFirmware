@@ -36,12 +36,12 @@ extern "C" {
 #define LANG_KEY_TOAST_SOUND                  "label_toast_sound:"
 #define LANG_KEY_ALERT_SOUND                  "label_alert_sound:"
 #define LANG_KEY_HEATER_SOUND                 "label_heater_sound:"
-#define LANG_KEY_KNOB_LED_COLOR               "label_knob_led_color:"
-#define LANG_KEY_KNOB_LED_IDLE                "label_knob_led_idle:"
 #define LANG_KEY_LCD_BRIGHTNESS               "label_lcd_brightness:"
 #define LANG_KEY_LCD_IDLE_BRIGHTNESS          "label_lcd_idle_brightness:"
-#define LANG_KEY_LCD_IDLE_DELAY               "label_lcd_idle_delay:"
+#define LANG_KEY_LCD_IDLE_TIME                "label_lcd_idle_time:"
 #define LANG_KEY_BLOCK_TOUCH_ON_IDLE          "label_block_touch_on_idle:"
+#define LANG_KEY_KNOB_LED_COLOR               "label_knob_led_color:"
+#define LANG_KEY_KNOB_LED_IDLE                "label_knob_led_idle:"
 #define LANG_KEY_START_GCODE_ENABLED          "label_start_gcode_enabled:"
 #define LANG_KEY_END_GCODE_ENABLED            "label_end_gcode_enabled:"
 #define LANG_KEY_CANCEL_GCODE_ENABLED         "label_cancel_gcode_enabled:"
@@ -362,6 +362,7 @@ extern "C" {
 #define LANG_KEY_MACROS                       "label_macros:"
 #define LANG_KEY_MESH_VALID                   "label_mesh_valid:"
 #define LANG_KEY_CONNECT_PROBE                "label_connect_probe:"
+#define LANG_KEY_DISCONNECT_PROBE             "label_disconnect_probe:"
 #define LANG_KEY_CALIBRATION                  "label_calibration:"
 
 #ifdef __cplusplus

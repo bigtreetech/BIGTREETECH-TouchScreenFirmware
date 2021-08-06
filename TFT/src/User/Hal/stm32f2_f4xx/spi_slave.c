@@ -146,7 +146,7 @@ void EXTI15_10_IRQHandler(void)
 
     #ifdef ST7920_EMULATOR
     case LCD12864:
-      if((GPIOB->IDR & (1<<12)) != 0)
+      if ((GPIOB->IDR & (1<<12)) != 0)
       {
         SPI_ReEnable(!!(GPIOB->IDR & (1<<13)));                      // Adaptive spi mode0 / mode3
         ST7920_SPI_NUM->CR1 |= (1<<6);
