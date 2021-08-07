@@ -219,7 +219,6 @@ void drawStatusScreenMsg(void)
 
   IMAGE_ReadDisplay(rect_of_keySS[KEY_INFOBOX].x0, rect_of_keySS[KEY_INFOBOX].y0, INFOBOX_ADDR);
   GUI_SetColor(INFOMSG_BKCOLOR);
-
   GUI_DispString(rect_of_keySS[KEY_INFOBOX].x0 + STATUS_MSG_ICON_XOFFSET,
                  rect_of_keySS[KEY_INFOBOX].y0 + STATUS_MSG_ICON_YOFFSET,
                  IconCharSelect(CHARICON_INFO));
@@ -267,7 +266,6 @@ static inline void toggleTool(void)
 
     // switch speed/flow
     currentSpeedID = (currentSpeedID + 1) % 2;
-
     drawStatus();
 
     // gcode queries must be call after drawStatus
@@ -300,8 +298,8 @@ void menuStatus(void)
       drawStatusScreenMsg();
 
     scrollMsg();
-
     key_num = menuKeyGetValue();
+
     switch (key_num)
     {
       case KEY_ICON_0:
@@ -347,7 +345,6 @@ void menuStatus(void)
     toggleTool();
     loopProcess();
   }
-
   // disable position auto report
   coordinateQuery(0);
 }
