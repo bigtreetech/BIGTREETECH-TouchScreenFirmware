@@ -43,7 +43,7 @@ void RRFMacrosParser::handle_value(const char *value)
   if (current >= FILE_NUM)
     return;
 
-  if (macroList[current].is_directory = *value == '*')
+  if ((macroList[current].is_directory = (*value == '*')))
   {
     ++value;
   }

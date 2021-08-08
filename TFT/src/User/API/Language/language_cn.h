@@ -29,12 +29,12 @@
     #define STRING_TOAST_SOUND            "Toast 提示声音"
     #define STRING_ALERT_SOUND            "弹窗和提示声音"
     #define STRING_HEATER_SOUND           "加热提示音"
-    #define STRING_KNOB_LED_COLOR         "旋钮LED颜色"
-    #define STRING_KNOB_LED_IDLE          "旋钮LED自动睡眠"
     #define STRING_LCD_BRIGHTNESS         "LCD背光亮度"
     #define STRING_LCD_IDLE_BRIGHTNESS    "LCD睡眠背光亮度"
-    #define STRING_LCD_IDLE_DELAY         "LCD自动睡眠时间"
+    #define STRING_LCD_IDLE_TIME          "LCD自动睡眠时间"
     #define STRING_BLOCK_TOUCH_ON_IDLE    "Block touch on idle"
+    #define STRING_KNOB_LED_COLOR         "旋钮LED颜色"
+    #define STRING_KNOB_LED_IDLE          "旋钮LED自动睡眠"
     #define STRING_START_GCODE_ENABLED    "执行打印前起始Gcode"
     #define STRING_END_GCODE_ENABLED      "执行打印后结束Gcode"
     #define STRING_CANCEL_GCODE_ENABLED   "中断打印Gcode"
@@ -355,6 +355,7 @@
     #define STRING_MACROS                 "宏指令"
     #define STRING_MESH_VALID             "调平测试"
     #define STRING_CONNECT_PROBE          "开启此操作前请先连接探头, 操作完成后请断开连接"
+    #define STRING_DISCONNECT_PROBE       "Make sure you have disconnected probe before using this feature."
     #define STRING_CALIBRATION            "校准"
 
 #endif

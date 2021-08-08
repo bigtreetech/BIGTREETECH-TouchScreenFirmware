@@ -24,13 +24,13 @@ extern "C" {
   #define BRIGHTNESS_100 100
 
   #define IDLE_TIME_OFF              0  // Off
-  #define IDLE_TIME_5                5  // Seconds
-  #define IDLE_TIME_10              10  // Seconds
-  #define IDLE_TIME_30              30  // Seconds
-  #define IDLE_TIME_60              60  // Seconds
-  #define IDLE_TIME_120            120  // Seconds
-  #define IDLE_TIME_300            300  // Seconds
-  //#define IDLE_TIME_CUSTOM IDLE_TIME_5  // Custom value predefined in Configuration.h
+  #define IDLE_TIME_5                5  // seconds
+  #define IDLE_TIME_10              10  // seconds
+  #define IDLE_TIME_30              30  // seconds
+  #define IDLE_TIME_60              60  // seconds
+  #define IDLE_TIME_120            120  // seconds
+  #define IDLE_TIME_300            300  // seconds
+  //#define IDLE_TIME_CUSTOM IDLE_TIME_5  // custom value predefined in Configuration.h
 
   typedef enum
   {
@@ -68,12 +68,15 @@ extern "C" {
   extern const LABEL lcd_idle_time_names[LCD_IDLE_TIME_COUNT];
 
   bool LCD_IsBlocked(void);
-  void LCD_HandleDimming(void);
-  void _LCD_Wake(void);
+  void LCD_Wake(void);
+  void LCD_CheckDimming(void);
 
-  #define LCD_Wake() _LCD_Wake()
+  #define LCD_WAKE() LCD_Wake()
+
 #else
-  #define LCD_Wake()
+
+  #define LCD_WAKE()
+
 #endif  // LCD_LED_PWM_CHANNEL
 
 #ifdef __cplusplus

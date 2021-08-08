@@ -8,6 +8,7 @@ SCROLL scrollLine;
 
 // indexes for status icon toggles
 uint8_t currentTool = NOZZLE0;
+uint8_t currentBCIndex = 0;
 uint8_t currentFan = 0;
 uint8_t currentSpeedID = 0;
 static uint32_t lastTime = 0;

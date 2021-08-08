@@ -343,7 +343,7 @@ void menuBrightnessSettings(void)
   // icon                ItemType          Item Title                 item value text(only for custom value)
     {CHARICON_BLANK,     LIST_CUSTOMVALUE, LABEL_LCD_BRIGHTNESS,      LABEL_DYNAMIC},
     {CHARICON_BLANK,     LIST_CUSTOMVALUE, LABEL_LCD_IDLE_BRIGHTNESS, LABEL_DYNAMIC},
-    {CHARICON_BLANK,     LIST_CUSTOMVALUE, LABEL_LCD_IDLE_DELAY,      LABEL_DYNAMIC},
+    {CHARICON_BLANK,     LIST_CUSTOMVALUE, LABEL_LCD_IDLE_TIME,       LABEL_DYNAMIC},
     {CHARICON_TOGGLE_ON, LIST_TOGGLE,      LABEL_BLOCK_TOUCH_ON_IDLE, LABEL_BACKGROUND},
   };
 
@@ -357,7 +357,7 @@ void menuBrightnessSettings(void)
   sprintf(tempstr, (char *)textSelect(LABEL_PERCENT_VALUE), lcd_brightness[infoSettings.lcd_idle_brightness]);
   setDynamicTextValue(KEY_ICON_1, tempstr);
 
-  brightnessitems[2].valueLabel = lcd_idle_time_names[infoSettings.lcd_idle_timer];
+  brightnessitems[2].valueLabel = lcd_idle_time_names[infoSettings.lcd_idle_time];
   brightnessitems[3].icon = (infoSettings.block_touch_on_idle == 1) ? CHARICON_TOGGLE_ON : CHARICON_TOGGLE_OFF;
 
   listViewCreate(title, brightnessitems, COUNT(brightnessitems), NULL, true, NULL, NULL);
@@ -375,7 +375,7 @@ void menuBrightnessSettings(void)
 
         sprintf(tempstr, (char *)textSelect(LABEL_PERCENT_VALUE), lcd_brightness[infoSettings.lcd_brightness]);
         setDynamicTextValue(curIndex, tempstr);
-        LCD_SetBrightness(lcd_brightness[infoSettings.lcd_brightness]);
+        LCD_SET_BRIGHTNESS(lcd_brightness[infoSettings.lcd_brightness]);
         listViewRefreshItem(curIndex);
         break;
 
@@ -387,8 +387,8 @@ void menuBrightnessSettings(void)
         break;
 
       case 2:
-        infoSettings.lcd_idle_timer = (infoSettings.lcd_idle_timer + 1) % LCD_IDLE_TIME_COUNT;
-        brightnessitems[curIndex].valueLabel = lcd_idle_time_names[infoSettings.lcd_idle_timer];
+        infoSettings.lcd_idle_time = (infoSettings.lcd_idle_time + 1) % LCD_IDLE_TIME_COUNT;
+        brightnessitems[curIndex].valueLabel = lcd_idle_time_names[infoSettings.lcd_idle_time];
         listViewRefreshItem(curIndex);
         break;
 
