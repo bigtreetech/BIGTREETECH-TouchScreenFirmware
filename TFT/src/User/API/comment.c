@@ -27,7 +27,7 @@ uint16_t getLayerCount()
   return layerCount;
 }
 
-void setLayerNumber (uint16_t layer_number)
+void setLayerNumber(uint16_t layer_number)
 {
   layerNumber = layer_number;
 }
@@ -51,18 +51,19 @@ void parseComment()
         {
           temp_char = strtok(NULL, TOKEN_DELIMITERS);
           lowerCase(temp_char);
-          if (strcmp(temp_char, "count") == 0)
+          if (strcmp(temp_char, "count") == 0)  // check if next word is "count"
           {
             temp_char = strtok(NULL, TOKEN_DELIMITERS);
             temp_value = strtoul(temp_char, NULL, 0);
             if (temp_value != 0)
               layerCount = temp_value;
           }
-          else
+          else if (temp_char[0] >= '0' && temp_char[0] <= '9')  // check if a number is found
           {
             temp_value = strtoul(temp_char, NULL, 0);
-            if (temp_value != 0)
-              layerNumber = temp_value;
+
+            // if there is "layer 0" add an offset of 1 (avoiding using an offset variable)
+            layerNumber = (layerNumber == temp_value) ? temp_value + 1: temp_value;
           }
         }
     }

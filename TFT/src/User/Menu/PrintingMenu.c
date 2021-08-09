@@ -151,7 +151,7 @@ void menuBeforePrinting(void)
       return;
   }
   progDisplayType = infoSettings.prog_disp_type;
-  layerDisplayType = infoSettings.layer_disp_type;
+  layerDisplayType = infoSettings.layer_disp_type * 2;
   setLayerNumber(0);
   infoMenu.menu[infoMenu.cur] = menuPrinting;
 }
@@ -296,13 +296,20 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
         }
         else if (layerDisplayType == SHOW_LAYER_NUMBER || layerDisplayType == SHOW_LAYER_BOTH) // layer number or height & number (both)
         {
-          if (getLayerCount() > 0)
+          if (getLayerNumber() > 0)
           {
-            sprintf(tempstr, "%u/%u", getLayerNumber(), getLayerCount());
+            if (getLayerCount() > 0)
+            {
+              sprintf(tempstr, "%u/%u", getLayerNumber(), getLayerCount());
+            }
+            else
+            {
+              sprintf(tempstr, "%u", getLayerNumber());
+            }
           }
           else
           {
-            sprintf(tempstr, "%u", getLayerNumber());
+            sprintf(tempstr, "-");
           }
         }
         else
