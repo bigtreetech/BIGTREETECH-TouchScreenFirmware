@@ -40,25 +40,29 @@ static bool sfs_alive = false;  // Use an encoder disc to toggles the runout. Su
 
 void FIL_Runout_Init(void)
 {
+  GPIO_MODE pull =
   #if defined(MKS_TFT)
-    GPIO_InitSet(FIL_RUNOUT_PIN, MGPIO_MODE_IPN, 0);  // MKS TFTs already have an external pull-up resistor on PB0 and PB1 pins
+    MGPIO_MODE_IPN;  // MKS TFTs already have an external pull-up resistor on PB0 and PB1 pins
   #else
-    GPIO_InitSet(FIL_RUNOUT_PIN, infoSettings.runout_invert ? MGPIO_MODE_IPU : MGPIO_MODE_IPD, 0);
+    (infoSettings.runout_invert ^ infoSettings.runout_nc) ? MGPIO_MODE_IPD : MGPIO_MODE_IPU;
   #endif
+
+  GPIO_InitSet(FIL_RUNOUT_PIN, pull, 0);
+
   #ifdef FIL_RUNOUT_PIN_1
-    GPIO_InitSet(FIL_RUNOUT_PIN_1, infoSettings.runout_invert ? MGPIO_MODE_IPU : MGPIO_MODE_IPD, 0);
+    GPIO_InitSet(FIL_RUNOUT_PIN_1, pull, 0);
   #endif
   #ifdef FIL_RUNOUT_PIN_2
-    GPIO_InitSet(FIL_RUNOUT_PIN_2, infoSettings.runout_invert ? MGPIO_MODE_IPU : MGPIO_MODE_IPD, 0);
+    GPIO_InitSet(FIL_RUNOUT_PIN_2, pull, 0);
   #endif
   #ifdef FIL_RUNOUT_PIN_3
-    GPIO_InitSet(FIL_RUNOUT_PIN_3, infoSettings.runout_invert ? MGPIO_MODE_IPU : MGPIO_MODE_IPD, 0);
+    GPIO_InitSet(FIL_RUNOUT_PIN_3, pull, 0);
   #endif
   #ifdef FIL_RUNOUT_PIN_4
-    GPIO_InitSet(FIL_RUNOUT_PIN_4, infoSettings.runout_invert ? MGPIO_MODE_IPU : MGPIO_MODE_IPD, 0);
+    GPIO_InitSet(FIL_RUNOUT_PIN_4, pull, 0);
   #endif
   #ifdef FIL_RUNOUT_PIN_5
-    GPIO_InitSet(FIL_RUNOUT_PIN_5, infoSettings.runout_invert ? MGPIO_MODE_IPU : MGPIO_MODE_IPD, 0);
+    GPIO_InitSet(FIL_RUNOUT_PIN_5, pull, 0);
   #endif
 }
 
@@ -123,6 +127,9 @@ bool FIL_NormalRunoutDetect(void)
           pinState = GPIO_GetLevel(FIL_RUNOUT_PIN_5);
           break;
       #endif
+      default:
+        pinState = GPIO_GetLevel(FIL_RUNOUT_PIN);
+        break;
     }
 
     if (pinState)
