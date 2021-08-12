@@ -1,5 +1,5 @@
 #ifndef _RRF_MACROS_PARSER_H_
-#define _RRF_MACROS_PARSER_H
+#define _RRF_MACROS_PARSER_H_
 
 #include <string.h>
 #include <stdlib.h>
@@ -25,14 +25,13 @@ extern "C"
 #include "JsonStreamingParser.hpp"
 #include <string.h>
 
-static const char *EMPTY = "";
 static const char *FILES = "files";
 class RRFMacrosParser : public JsonListener
 {
 
 private:
-  const char *current_key = EMPTY;
   bool in_array = false;
+  bool in_files = false;
   uint16_t macroCount = 0;
   MACRO_LIST_ITEM macroList[FILE_NUM];
 
@@ -44,7 +43,7 @@ public:
   virtual void endDocument();
   inline void startArray()
   {
-    in_array = strcmp(FILES, current_key) == 0;
+    in_array = in_files;
   }
   inline void endArray()
   {
@@ -53,7 +52,7 @@ public:
 
   inline void key(const char *key)
   {
-    current_key = key;
+    in_files = strcmp(FILES, key) == 0;
   }
   inline void value(const char *value)
   {

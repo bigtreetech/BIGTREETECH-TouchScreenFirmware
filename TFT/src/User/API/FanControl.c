@@ -8,7 +8,7 @@ const char* fanID[MAX_FAN_COUNT] = FAN_DISPLAY_ID;
 const char* fanCmd[MAX_FAN_COUNT] = FAN_CMD;
 
 static uint8_t setFanSpeed[MAX_FAN_COUNT] = {0};
-static uint8_t lastSetFanSpeed[MAX_FAN_COUNT] = {0};
+static bool needSetFanSpeed[MAX_FAN_COUNT] = {false};
 static uint8_t curFanSpeed[MAX_FAN_COUNT] = {0};
 
 static bool ctrlFanQueryWait = false;
@@ -29,6 +29,7 @@ bool fanIsValid(uint8_t index)
 
 void fanSetSpeed(uint8_t i, uint8_t speed)
 {
+  needSetFanSpeed[i] = fanGetCurSpeed(i) != speed;
   setFanSpeed[i] = speed;
 }
 
@@ -40,7 +41,7 @@ uint8_t fanGetSetSpeed(uint8_t i)
 void fanSetPercent(uint8_t i, uint8_t percent)
 {
   percent = NOBEYOND(0, percent, 100);
-  setFanSpeed[i] = (percent * infoSettings.fan_max[i]) / 100;
+  fanSetSpeed(i, (percent * infoSettings.fan_max[i]) / 100);
 }
 
 uint8_t fanGetSetPercent(uint8_t i)
@@ -73,10 +74,12 @@ void loopFan(void)
 {
   for (uint8_t i = 0; i < MAX_FAN_COUNT; i++)
   {
-    if ((lastSetFanSpeed[i] != setFanSpeed[i]) && (OS_GetTimeMs() > nextCtrlFanTime))
+    if (needSetFanSpeed[i] && (OS_GetTimeMs() > nextCtrlFanTime))
     {
       if (storeCmd(fanCmd[i], setFanSpeed[i]))
-        lastSetFanSpeed[i] = setFanSpeed[i];
+      {
+        needSetFanSpeed[i] = false;
+      }
 
       nextCtrlFanTime = OS_GetTimeMs() + NEXT_FAN_WAIT;  // avoid rapid fire, clogging the queue
     }
@@ -97,6 +100,7 @@ void ctrlFanQuery(void)
   }
 }
 
+// TODO refactor this into something called `rrfStatusQuery()` in the proper location
 void fanQuery(void)
 {
   if (!infoHost.connected)
