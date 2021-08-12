@@ -560,8 +560,15 @@
 
 /**
  * Screenshot For Documentation
- * Long press touch screen capture the current full screen to SD card
- * Only for documentation purposes, DON'T enable it for normal printing.
+ * A press on touch screen or on encoder button will take and save a full screen screenshot to SD card.
+ * Only for documentation purposes. DON'T enable it for normal printing.
+ *
+ * For TFTLCD with an encoder "LCD_ENCODER_SUPPORT":
+ * - A press on touch screen to trigger a screenshot in Marlin mode
+ * - A press on encoder button to trigger a screenshot in other menu
+ *
+ * For TFTLCD with no encoder:
+ * - A long press of 1.5 seconds on touch screen to trigger a screenshot
  */
 //#define SCREEN_SHOT_TO_SD  // Default: commented (disabled)
 

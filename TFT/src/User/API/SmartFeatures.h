@@ -6,7 +6,7 @@ extern "C" {
 #endif
 
 #include <stdbool.h>
-#include "variants.h"
+#include "variants.h"  // for PS_ON_PIN, FIL_RUNOUT_PIN etc...
 
 // Power Supply
 #ifdef PS_ON_PIN

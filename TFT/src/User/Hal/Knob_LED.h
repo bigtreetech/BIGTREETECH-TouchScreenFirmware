@@ -6,7 +6,7 @@ extern "C" {
 #endif
 
 #include <stdint.h>
-#include "variants.h"  // for LED_COLOR_PIN
+#include "variants.h"  // for LED_COLOR_PIN etc...
 
 #ifdef LED_COLOR_PIN
   void knob_LED_Init(void);
