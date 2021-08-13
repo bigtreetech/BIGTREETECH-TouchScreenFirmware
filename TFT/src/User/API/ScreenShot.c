@@ -85,7 +85,7 @@ void loopScreenShot(void)
   /*
    * For TFTLCD with an encoder "LCD_ENCODER_SUPPORT":
    * - A press on touch screen to trigger a screenshot in Marlin mode
-   * - A press on encoder button to trigger a screenshot in other menu
+   * - A press on encoder button to trigger a screenshot in Touch mode
    *
    * For TFTLCD with no encoder:
    * - A long press of 1.5 seconds on touch screen to trigger a screenshot
