@@ -1,9 +1,10 @@
 #include "lcd_dma.h"
-#include "variants.h"
+#include "variants.h"  // for STM32_HAS_FSMC etc...
 #include "lcd.h"
+#include "spi.h"
 #include "LCD_Init.h"
-#include "delay.h"
 #include "w25qxx.h"
+#include "delay.h"
 
 #ifdef STM32_HAS_FSMC
 // Config for SPI Channel
@@ -78,7 +79,7 @@ void lcd_frame_segment_display(u16 size, u32 addr)
   W25QXX_SPI_DMA_STREAM->CR |= 1<<0;            // enable dma channel
   W25QXX_SPI_NUM->CR1 |= 1<<6;                  // enable SPI
 
-  while(W25QXX_SPI_DMA_READING());              // wait for rx complete
+  while (W25QXX_SPI_DMA_READING());             // wait for rx complete
   W25QXX_SPI_DMA_STREAM->CR &= (u32)(~(1<<0));
   W25QXX_SPI_DMA_CLEAR_FLAG();                  // clear ISR for rx complete
   W25Qxx_SPI_CS_Set(1);
@@ -94,7 +95,7 @@ void lcd_frame_display(u16 sx,u16 sy,u16 w,u16 h, u32 addr)
 
   LCD_SetWindow(sx,sy,sx+w-1,sy+h-1);
 
-  for(cur = 0; cur < totalSize; cur += LCD_DMA_MAX_TRANS)
+  for (cur = 0; cur < totalSize; cur += LCD_DMA_MAX_TRANS)
   {
     segmentSize = (cur+LCD_DMA_MAX_TRANS)<=totalSize ? LCD_DMA_MAX_TRANS : totalSize-cur;
     lcd_frame_segment_display(segmentSize, addr+cur*(LCD_DATA_16BIT + 1));

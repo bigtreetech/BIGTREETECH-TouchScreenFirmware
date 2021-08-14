@@ -1,8 +1,12 @@
 #ifndef _GCODE_H_
 #define _GCODE_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdbool.h>
-#include "interfaceCmd.h"
+#include <stdint.h>
 
 #define CMD_MAX_REV   5000
 #define MAX_ERROR_NUM 3
@@ -40,5 +44,9 @@ void request_M125(void);
 void request_M0(void);
 void request_M98(char *filename);
 char *request_M20_macros(char *dir);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -42,28 +42,30 @@ void menuBedLevelingLayer2(void)
       break;
   }
 
-  if (infoMachineSettings.zProbe == ENABLED)
-  {
-    bedLevelingLayer2Items.items[3].icon = ICON_LEVEL_CORNER;
-    bedLevelingLayer2Items.items[3].label.index = LABEL_LEVEL_CORNER;
+  #if DELTA_PROBE_TYPE != 2  // if not removable probe
+    if (infoMachineSettings.zProbe == ENABLED)
+    {
+      bedLevelingLayer2Items.items[3].icon = ICON_LEVEL_CORNER;
+      bedLevelingLayer2Items.items[3].label.index = LABEL_LEVEL_CORNER;
 
-    if (infoSettings.touchmi_sensor != 0)
-    {
-      bedLevelingLayer2Items.items[4].icon = ICON_NOZZLE;
-      bedLevelingLayer2Items.items[4].label.index = LABEL_TOUCHMI;
-    }
-    else
-    {
-      bedLevelingLayer2Items.items[4].icon = ICON_BLTOUCH;
-      bedLevelingLayer2Items.items[4].label.index = LABEL_BLTOUCH;
-    }
+      if (infoSettings.touchmi_sensor != 0)
+      {
+        bedLevelingLayer2Items.items[4].icon = ICON_NOZZLE;
+        bedLevelingLayer2Items.items[4].label.index = LABEL_TOUCHMI;
+      }
+      else
+      {
+        bedLevelingLayer2Items.items[4].icon = ICON_BLTOUCH;
+        bedLevelingLayer2Items.items[4].label.index = LABEL_BLTOUCH;
+      }
 
-    if (infoSettings.z_steppers_alignment)
-    {
-      bedLevelingLayer2Items.items[5].icon = ICON_Z_ALIGN;
-      bedLevelingLayer2Items.items[5].label.index = LABEL_Z_ALIGN;
+      if (infoSettings.z_steppers_alignment != 0)
+      {
+        bedLevelingLayer2Items.items[5].icon = ICON_Z_ALIGN;
+        bedLevelingLayer2Items.items[5].label.index = LABEL_Z_ALIGN;
+      }
     }
-  }
+  #endif
 
   menuDrawPage(&bedLevelingLayer2Items);
 
@@ -74,9 +76,18 @@ void menuBedLevelingLayer2(void)
     {
       case KEY_ICON_0:
         if (infoMachineSettings.leveling < BL_MBL)  // if ABL
-          ablStart();
-        else                                        // if MBL
+        {
+          #if DELTA_PROBE_TYPE != 2  // if not removable probe
+            ablStart();
+          #else  // if removable probe
+            setDialogText(LABEL_WARNING, LABEL_CONNECT_PROBE, LABEL_CONTINUE, LABEL_CANCEL);
+            showDialog(DIALOG_TYPE_ALERT, ablStart, NULL, NULL);
+          #endif
+        }
+        else  // if MBL
+        {
           infoMenu.menu[++infoMenu.cur] = menuMBL;
+        }
         break;
 
       case KEY_ICON_1:
@@ -90,21 +101,26 @@ void menuBedLevelingLayer2(void)
         break;
 
       case KEY_ICON_3:
-        infoMenu.menu[++infoMenu.cur] = menuLevelCorner;
+        #if DELTA_PROBE_TYPE != 2  // if not removable probe
+          if (infoMachineSettings.zProbe == ENABLED)
+            infoMenu.menu[++infoMenu.cur] = menuLevelCorner;
+        #endif
         break;
 
       case KEY_ICON_4:
-        if (infoMachineSettings.zProbe == ENABLED)
-        {
-          if (infoSettings.touchmi_sensor != 0)
-            infoMenu.menu[++infoMenu.cur] = menuTouchMi;
-          else
-            infoMenu.menu[++infoMenu.cur] = menuBLTouch;
-        }
+        #if DELTA_PROBE_TYPE != 2  // if not removable probe
+          if (infoMachineSettings.zProbe == ENABLED)
+          {
+            if (infoSettings.touchmi_sensor != 0)
+              infoMenu.menu[++infoMenu.cur] = menuTouchMi;
+            else
+              infoMenu.menu[++infoMenu.cur] = menuBLTouch;
+          }
+        #endif
         break;
 
       case KEY_ICON_5:
-        if (infoMachineSettings.zProbe == ENABLED && infoSettings.z_steppers_alignment)
+        if (infoMachineSettings.zProbe == ENABLED && infoSettings.z_steppers_alignment != 0)
         {
           storeCmd("G34\n");
           storeCmd("M18 S0 X Y Z\n");

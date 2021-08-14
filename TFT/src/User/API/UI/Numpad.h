@@ -5,7 +5,8 @@
 extern "C" {
 #endif
 
-#include "includes.h"
+#include <stdbool.h>
+#include <stdint.h>
 
 double numPadFloat(uint8_t* title, double old_val, double reset_val, bool negative);
 

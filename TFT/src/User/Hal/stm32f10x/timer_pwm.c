@@ -1,11 +1,11 @@
 #include "timer_pwm.h"
-#include "includes.h"
+#include "includes.h"  // for mcuClocks
 
 typedef struct {
   TIM_TypeDef* tim;
   volatile uint32_t* rcc_src;
   uint8_t rcc_bit;
-}TIMER;
+} TIMER;
 
 static const TIMER pwmTimer[_TIM_CNT] = {
   {TIM1,  &RCC->APB2ENR, 11},  // Timer1  APB2 bit11

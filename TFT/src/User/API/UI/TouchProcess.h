@@ -5,7 +5,9 @@
 extern "C" {
 #endif
 
-#include "includes.h"
+#include <stdbool.h>
+#include <stdint.h>
+#include "GUI.h"
 
 #define CMD_RDX 0xD0
 #define CMD_RDY 0x90

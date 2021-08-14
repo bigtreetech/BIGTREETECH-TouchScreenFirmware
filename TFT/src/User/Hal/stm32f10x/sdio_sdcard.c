@@ -1,10 +1,10 @@
-#include "variants.h"
+#include "variants.h"  // for SD_SDIO_SUPPORT etc...
 
 #ifdef SD_SDIO_SUPPORT
 
 #include "sdio_sdcard.h"
-#include "string.h"
 #include "GPIO_Init.h"
+#include <string.h>
 
 static u8 CardType=SDIO_STD_CAPACITY_SD_CARD_V1_1;
 static u32 CSD_Tab[4],CID_Tab[4],RCA=0;

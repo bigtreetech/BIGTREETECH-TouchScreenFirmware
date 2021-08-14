@@ -12,7 +12,7 @@ extern "C" {
 #define TEMPERATURE_QUERY_FAST_SECONDS 1  // "M105" temperature query delay in heat menu or while heating.
 #define TEMPERATURE_QUERY_SLOW_SECONDS 3  // temperature query delay when idle
 #define TEMPERATURE_RANGE              2  // temperature difference to treat temperature reached target
-#define NOZZLE_TEMP_LAG                5  // nozzle max allowed lag 
+#define NOZZLE_TEMP_LAG                5  // nozzle max allowed lag
 
 typedef enum
 {
@@ -66,6 +66,7 @@ typedef struct
 
 extern const char *const heaterID[];
 extern const char *const heatDisplayID[];
+extern const char *const heatShortID[];
 extern const char *const heatCmd[];
 extern const char *const heatWaitCmd[];
 

@@ -1,4 +1,5 @@
 #include "uart.h"
+#include "variants.h"  // for USART2_TX_PIN etc...
 #include "GPIO_Init.h"
 
 // USART1 default pins config
@@ -126,20 +127,21 @@ void UART_Config(uint8_t port, uint32_t baud, uint16_t usart_it)
 void UART_DeConfig(uint8_t port)
 {
   UART_GPIO_DeInit(port);
+
   *rcc_uart_rst[port] |= rcc_uart_bit[port];
   *rcc_uart_rst[port] &= ~rcc_uart_bit[port];
 }
 
 void UART_Write(uint8_t port, uint8_t d)
 {
-  while((uart[port]->SR & USART_FLAG_TC) == (uint16_t)RESET);
+  while ((uart[port]->SR & USART_FLAG_TC) == (uint16_t)RESET);
   uart[port]->DR = ((u16)d & (uint16_t)0x01FF);
 }
 void UART_Puts(uint8_t port, uint8_t *str)
 {
   while (*str)
   {
-    while((uart[port]->SR & USART_FLAG_TC) == (uint16_t)RESET);
+    while ((uart[port]->SR & USART_FLAG_TC) == (uint16_t)RESET);
     uart[port]->DR = ((u16)*str++ & (uint16_t)0x01FF);
   }
 }

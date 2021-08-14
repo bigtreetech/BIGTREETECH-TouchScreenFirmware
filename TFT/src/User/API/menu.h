@@ -12,6 +12,7 @@ extern "C" {
 #define IDLE_TOUCH 0xFFFF
 
 #define ITEM_PER_PAGE     8
+#define PS_TOUCH_OFFSET   2  // printing screen icon index offset for touch input
 #define MENU_RECT_COUNT   (ITEM_PER_PAGE * 2 + 1)      // 8 items + title bar
 #define SS_RECT_COUNT     (ITEM_PER_PAGE * 2 + 1 + 1)  // 8 items + title bar + infobox
 #define TM_RECT_COUNT     (ITEM_PER_PAGE * 2 + 1 + 1)  // 8 items + title bar + tempbox
@@ -49,6 +50,22 @@ typedef enum
   KEY_BACK     = IDLE_TOUCH - 1,
   KEY_IDLE     = IDLE_TOUCH,
 } KEY_VALUES;
+
+typedef enum
+{
+  PS_KEY_0 = 0,
+  PS_KEY_1,
+  PS_KEY_2,
+  PS_KEY_3,
+  PS_KEY_4,
+  PS_KEY_5,
+  PS_KEY_6,
+  PS_KEY_7,
+  PS_KEY_8,
+  PS_KEY_9,
+  PS_KEY_TITLEBAR,
+  PS_KEY_INFOBOX,
+} PS_KEY_VALUES;
 
 typedef enum
 {
@@ -144,6 +161,9 @@ typedef bool (* CONDITION_CALLBACK)(void);
 extern const GUI_RECT exhibitRect;
 extern const GUI_RECT rect_of_key[MENU_RECT_COUNT];
 extern const GUI_RECT rect_of_keySS[SS_RECT_COUNT];
+extern const GUI_RECT rect_of_keyPS[];
+extern const GUI_RECT rect_of_keyPS_end[];
+
 extern const GUI_RECT rect_of_titleBar[1];
 
 void setMenuType(MENU_TYPE type);
@@ -177,6 +197,7 @@ void displayExhibitHeader(const char * titleStr, const char * unitStr);
 void displayExhibitValue(const char * valueStr);
 
 void itemDrawIconPress(uint8_t position, uint8_t is_press);
+void itemDrawIconPress_PS(uint8_t position, uint8_t is_press);
 KEY_VALUES menuKeyGetValue(void);
 GUI_POINT getIconStartPoint(int index);
 

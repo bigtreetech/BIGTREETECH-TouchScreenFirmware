@@ -1,9 +1,7 @@
 #include "spi_slave.h"
+#include "includes.h"  // for infoSettings, ST7920_EMULATOR etc...
 #include "spi.h"
 #include "GPIO_Init.h"
-#include "stdlib.h"
-#include "variants.h"
-#include "Settings.h"
 #include "HD44780.h"
 
 #if defined(ST7920_EMULATOR)
@@ -148,7 +146,7 @@ void EXTI15_10_IRQHandler(void)
 
     #ifdef ST7920_EMULATOR
     case LCD12864:
-      if((GPIOB->IDR & (1<<12)) != 0)
+      if ((GPIOB->IDR & (1<<12)) != 0)
       {
         SPI_ReEnable(!!(GPIOB->IDR & (1<<13)));                      // Adaptive spi mode0 / mode3
         ST7920_SPI_NUM->CR1 |= (1<<6);

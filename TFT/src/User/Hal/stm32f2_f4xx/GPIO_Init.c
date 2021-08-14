@@ -28,7 +28,7 @@ void GPIO_InitSet(uint16_t io, GPIO_MODE mode, uint8_t AF)
     GPIO_Port[port]->OSPEEDR |= (GPIO_MODE_GET_OSPEED(mode)) << (pin*2);   // set speed bits
   }
 
-  if(GPIO_MODE_GET_MODE(mode) == GPIO_MODE_AF)
+  if (GPIO_MODE_GET_MODE(mode) == GPIO_MODE_AF)
   {
     GPIO_Port[port]->AFR[pin >> 0x03] &= ~(0xF << ((pin & 0x07) * 4));     // clear alternate function bits
     GPIO_Port[port]->AFR[pin >> 0x03] |= AF<< ((pin & 0x07) * 4);          // set alternate function bits
@@ -40,7 +40,7 @@ void GPIO_SetLevel(uint16_t io, uint8_t level)
   u16 port = GPIO_GET_PORT(io);
   u16 pin = GPIO_GET_PIN(io);
 
-  if(level)
+  if (level)
     GPIO_Port[port]->BSRRL = 1 << pin;
   else
     GPIO_Port[port]->BSRRH = 1 << pin;

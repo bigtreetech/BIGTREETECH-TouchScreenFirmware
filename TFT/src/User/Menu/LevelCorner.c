@@ -3,6 +3,9 @@
 
 #define LC_VALUE_COUNT 5
 
+#define ENABLE_STEPPER_CMD "M17 X Y Z\n"
+#define DISABLE_STEPPER_CMD "M18 S0 X Y Z\n"
+
 // Buffer current z value measured in Level Corner = {position 1, position 2, position 3, position 4, probe accuracy(M48)}
 static float levelCornerPosition[LC_VALUE_COUNT];
 const uint8_t valIconIndex[LC_VALUE_COUNT] = {4, 5, 1, 0, 3};
@@ -25,16 +28,16 @@ void ScanLevelCorner(uint8_t point)
   if (infoSettings.touchmi_sensor != 0)
   {
     mustStoreCmd("M401\n");
-    mustStoreCmd("G30 E0 X%d Y%d\n", pointPosition[point][0], pointPosition[point][1]);
+    mustStoreCmd("G30 E0 X%d Y%d\n", pointPosition[point][0], pointPosition[point][1]);  // move to selected point
     mustStoreCmd("G1 Z10\n");
   }
   else
   {
-    mustStoreCmd("G30 E1 X%d Y%d\n", pointPosition[point][0], pointPosition[point][1]);
+    mustStoreCmd("G30 E1 X%d Y%d\n", pointPosition[point][0], pointPosition[point][1]);  // move to selected point
   }
 
-  mustStoreCmd("M17 X Y Z\n");
-  mustStoreCmd("M18 S0 X Y Z\n");
+  mustStoreCmd(ENABLE_STEPPER_CMD);
+  mustStoreCmd(DISABLE_STEPPER_CMD);
 }
 
 // Draw values under icons
@@ -151,8 +154,8 @@ void menuLevelCorner(void)
 
       case KEY_ICON_3:
         mustStoreCmd("M48\n");
-        mustStoreCmd("M17 X Y Z\n");
-        mustStoreCmd("M18 S0 X Y Z\n");
+        mustStoreCmd(ENABLE_STEPPER_CMD);
+        mustStoreCmd(DISABLE_STEPPER_CMD);
         drawProbeAccuracyIcon(&levelCornerItems);
         break;
 

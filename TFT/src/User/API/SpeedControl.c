@@ -1,6 +1,8 @@
 #include "SpeedControl.h"
 #include "includes.h"
 
+#define NEXT_SPEED_WAIT 500  // 1 second is 1000
+
 const char *const speedCmd[SPEED_NUM] = {"M220", "M221"};
 
 static uint16_t setPercent[SPEED_NUM] = {100, 100};
@@ -9,8 +11,6 @@ static uint16_t curPercent[SPEED_NUM] = {100, 100};
 
 static bool speedQueryWait = false;
 static uint32_t nextSpeedTime = 0;
-
-#define NEXT_SPEED_WAIT 500  // 1 second is 1000
 
 void speedSetCurPercent(uint8_t tool, uint16_t per)
 {
@@ -36,10 +36,11 @@ void loopSpeed(void)
 {
   for (uint8_t i = 0; i < SPEED_NUM; i++)
   {
-    if (lastSetPercent[i] != setPercent[i] && (OS_GetTimeMs() > nextSpeedTime))
+    if ((lastSetPercent[i] != setPercent[i]) && (OS_GetTimeMs() > nextSpeedTime))
     {
       if (storeCmd("%s S%d D%d\n", speedCmd[i], setPercent[i], heatGetCurrentTool()))
         lastSetPercent[i] = setPercent[i];
+
       nextSpeedTime = OS_GetTimeMs() + NEXT_SPEED_WAIT;  // avoid rapid fire, clogging the queue
     }
   }

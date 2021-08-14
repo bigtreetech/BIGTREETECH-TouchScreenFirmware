@@ -1,14 +1,6 @@
 #include "RRFMacros.h"
 #include "includes.h"
-
-/***
- * TODOS:
- *  proper subdirectory support,
- *  move away from half-using Vfs functions,
- *  sort order: Number_files first in order, hide Number_; alphabetical, directories alphabetical
- ***/
-
-/************************************************************************/
+#include "RRFMacrosParser.hpp"
 
 extern const GUI_RECT titleRect;
 
@@ -17,67 +9,7 @@ void scanInfoFilesFs(void)
 {
   clearInfoFile();
   char *data = request_M20_macros(infoFile.title);
-
-  data = strtok(data, "]");  // to end of array
-
-  char *line = strtok(strstr(data, "files\":[") + 8, ",");
-  for (; line != NULL; line = strtok(NULL, ","))
-  {
-    char *pline = line + 1;
-
-    if (strchr(pline, '*') == NULL)
-    {
-      // FILE
-      if (infoFile.fileCount >= FILE_NUM)
-        continue;  // gcode max number is FILE_NUM
-
-      char *Pstr_tmp = strrchr(line, '"');
-      if (Pstr_tmp != NULL)
-        *Pstr_tmp = 0;                // remove right quote
-      Pstr_tmp = strrchr(line, '"');  // remove initial quote
-      if (Pstr_tmp == NULL)
-        Pstr_tmp = line;
-      else
-        Pstr_tmp++;
-      infoFile.Longfile[infoFile.fileCount] = malloc(strlen(Pstr_tmp) + 1);
-
-      strcpy(infoFile.Longfile[infoFile.fileCount], Pstr_tmp);
-
-      infoFile.file[infoFile.fileCount] = malloc(strlen(pline) + 1);
-      if (infoFile.file[infoFile.fileCount] == NULL)
-        break;
-      strcpy(infoFile.file[infoFile.fileCount++], pline);
-    }
-    else
-    {
-      // DIRECTORY
-      if (infoFile.folderCount >= FOLDER_NUM)
-        continue;  // folder max number is FOLDER_NUM
-
-      char *rest = pline + 1;
-      char *folder = strtok_r(rest, "\"", &rest);
-
-      bool found = false;
-      for (int i = 0; i < infoFile.folderCount; i++)
-      {
-        if (strcmp(folder, infoFile.folder[i]) == 0)
-        {
-          found = true;
-          break;
-        }
-      }
-
-      if (!found)
-      {
-        uint16_t len = strlen(folder) + 1;
-        infoFile.folder[infoFile.folderCount] = malloc(len);
-        if (infoFile.folder[infoFile.folderCount] == NULL)
-          break;
-        strcpy(infoFile.folder[infoFile.folderCount++], folder);
-      }
-    }
-  }
-
+  parseMacroListResponse(data);
   clearRequestCommandInfo();
 }
 
@@ -114,10 +46,7 @@ void macroListDraw(LISTITEM * item, uint16_t index, uint8_t itemPos)
     item->titlelabel.index = LABEL_DYNAMIC;
     item->itemType = LIST_LABEL;
 
-    if (infoFile.source == BOARD_SD)
-      setDynamicLabel(itemPos, infoFile.Longfile[index - infoFile.folderCount]);
-    else
-      setDynamicLabel(itemPos, infoFile.file[index - infoFile.folderCount]);
+    setDynamicLabel(itemPos, infoFile.file[index - infoFile.folderCount]);
   }
 }
 
@@ -178,7 +107,7 @@ void menuCallMacro(void)
             if (infoHost.connected != true)
               break;
 
-            if (EnterDir(infoFile.file[key_num - infoFile.folderCount]) == false)
+            if (EnterDir(infoFile.Longfile[key_num - infoFile.folderCount]) == false)
               break;
 
             char buf[93];

@@ -1,6 +1,6 @@
 #include "GUI.h"
 #include "includes.h"
-#include "math.h"
+#include <math.h>
 
 uint16_t foreGroundColor = WHITE;
 uint16_t backGroundColor = BLACK;
