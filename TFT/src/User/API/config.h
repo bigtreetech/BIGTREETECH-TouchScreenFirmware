@@ -10,7 +10,7 @@ extern "C" {
 
 //after changing/adding/removing a keyword, change the CONFIG_FLASH_SIGN in Settings.h and PARA_SIGN in FlashStore.c
 
-#define LINE_MAX_CHAR                 100
+#define LINE_MAX_CHAR                 200
 #define CONFIG_FILE_PATH              "0:config.ini"
 #define LANG_FILE_PATH                "0:language.ini"
 

@@ -45,12 +45,11 @@ void Serial_Config(uint8_t port, uint16_t cacheSize, uint32_t baudrate)
   dmaL1Data[port].rIndex = dmaL1Data[port].wIndex = 0;
 
   if (dmaL1Data[port].cache != NULL)
-  {
     free(dmaL1Data[port].cache);
-    dmaL1Data[port].cache = NULL;
-  }
+
   dmaL1Data[port].cache = malloc(cacheSize);
   while (!dmaL1Data[port].cache);              // malloc failed
+
   UART_Config(port, baudrate, USART_IT_IDLE);  // IDLE interrupt
   Serial_DMA_Config(port);
 }
@@ -62,6 +61,7 @@ void Serial_DeConfig(uint8_t port)
     free(dmaL1Data[port].cache);
     dmaL1Data[port].cache = NULL;
   }
+
   Serial[port].dma_chanel->CCR &= ~(1<<0);  // Disable DMA
   UART_DeConfig(port);
 }

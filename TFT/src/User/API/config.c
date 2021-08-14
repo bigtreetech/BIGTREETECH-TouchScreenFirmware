@@ -247,7 +247,7 @@ bool inLimit(int val, int min, int max)
 bool key_seen(const char * keyStr)
 {
   uint16_t i;
-  for (c_index = 0; c_index < ACK_MAX_SIZE && cur_line[c_index] != 0; c_index++)
+  for (c_index = 0; c_index < LINE_MAX_CHAR && cur_line[c_index] != 0; c_index++)
   {
     for (i = 0; keyStr[i] != 0 && cur_line[c_index + i] != 0 && cur_line[c_index + i] == keyStr[i]; i++)
     {}

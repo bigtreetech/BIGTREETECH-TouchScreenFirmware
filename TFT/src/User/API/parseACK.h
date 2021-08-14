@@ -8,8 +8,6 @@ extern "C" {
 #include <stdbool.h>
 #include <stdint.h>
 
-#define ACK_MAX_SIZE 512
-
 extern bool hostDialog;
 
 // append at the end of this list the id of any new echo message for
