@@ -47,7 +47,11 @@ bool requestCommandInfoIsRunning(void)
 
 void clearRequestCommandInfo(void)
 {
-  free(requestCommandInfo.cmd_rev_buf);
+  if (requestCommandInfo.cmd_rev_buf != NULL)
+  {
+    free(requestCommandInfo.cmd_rev_buf);
+    requestCommandInfo.cmd_rev_buf = NULL;
+  }
 }
 
 /*

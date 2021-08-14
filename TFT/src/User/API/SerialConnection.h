@@ -10,9 +10,10 @@ extern "C" {
 #define BAUDRATE_COUNT 9
 
 extern const uint32_t baudrateList[BAUDRATE_COUNT];
+extern const char * const baudrateNames[BAUDRATE_COUNT];
 
-void Serial_ReSourceDeInit(void);
 void Serial_ReSourceInit(void);
+void Serial_ReSourceDeInit(void);
 
 #ifdef __cplusplus
 }
