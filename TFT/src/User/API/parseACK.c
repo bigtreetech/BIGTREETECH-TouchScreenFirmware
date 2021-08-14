@@ -57,7 +57,12 @@ const ECHO knownEcho[] = {
   {ECHO_NOTIFY_NONE, "Unknown command: \"M150"},  // M150
 };
 
-// uint8_t forceIgnore[ECHO_ID_COUNT] = {0};
+//uint8_t forceIgnore[ECHO_ID_COUNT] = {0};
+
+//void setIgnoreEcho(ECHO_ID msgId, bool state)
+//{
+//  forceIgnore[msgId] = state;
+//}
 
 void setCurrentAckSrc(uint8_t src)
 {
@@ -179,11 +184,6 @@ void ackPopupInfo(const char * info)
     addNotification(DIALOG_TYPE_ERROR, (char *)info, (char *)dmaL2Cache + ack_index, show_dialog);
   }
 }
-
-//void setIgnoreEcho(ECHO_ID msgId, bool state)
-//{
-//  forceIgnore[msgId] = state;
-//}
 
 bool processKnownEcho(void)
 {
