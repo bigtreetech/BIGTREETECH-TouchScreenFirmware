@@ -97,6 +97,16 @@ typedef enum
 
 typedef enum
 {
+  SHOW_LAYER_HEIGHT,
+  CLEAN_LAYER_HEIGHT,
+  SHOW_LAYER_NUMBER,
+  CLEAN_LAYER_NUMBER,
+  SHOW_LAYER_BOTH,
+  CLEAN_LAYER_BOTH,
+} LAYER_TYPE;
+
+typedef enum
+{
   FEEDRATE_XY = 0,
   FEEDRATE_Z,
   FEEDRATE_E,
@@ -295,16 +305,6 @@ typedef struct
   uint8_t buildPercent;
   uint8_t softwareEndstops;
 } MACHINESETTINGS;
-
-typedef enum
-{
-  SHOW_LAYER_HEIGHT,
-  CLEAN_LAYER_HEIGHT,
-  SHOW_LAYER_NUMBER,
-  CLEAN_LAYER_NUMBER,
-  SHOW_LAYER_BOTH,
-  CLEAN_LAYER_BOTH,
-} LAYER_TYPE;
 
 extern SETTINGS infoSettings;
 extern MACHINESETTINGS infoMachineSettings;
