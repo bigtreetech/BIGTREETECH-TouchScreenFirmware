@@ -26,7 +26,7 @@ extern "C" {
   {
     uint8_t port;        // physical port (e.g. _USART1) related to logical port (e.g. SERIAL_PORT_2)
     uint16_t cacheSize;  // queue size for sending/receiving data to/from the port
-    bool activePort;     // set to "true" if the port is connected to an active device (a devide that already sent data to the TFT)
+    bool activePort;     // set to "true" if the port is connected to an active device (a device that already sent data to the TFT)
   } MS_PORT_INFO;        // Multi-Serial port info
 
   extern MS_PORT_INFO multiSerialPort[PORT_COUNT];

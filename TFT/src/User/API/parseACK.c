@@ -1293,7 +1293,7 @@ void parseACK(void)
         // pass on the spontaneous ACK messages to all the Multi-Serial ports (since these messages come unrequested)
         for (uint8_t i = 0; i < PORT_COUNT; i++)
         {
-          if (multiSerialPort[i].activePort)  // if the port is connected to an active device (a devide that already sent data to the TFT)
+          if (multiSerialPort[i].activePort)  // if the port is connected to an active device (a device that already sent data to the TFT)
           {
             // pass on the ACK message to the port
             Serial_Puts(multiSerialPort[i].port, dmaL2Cache);
