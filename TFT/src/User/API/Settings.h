@@ -134,6 +134,7 @@ typedef struct
   uint8_t  terminalACK;
   uint8_t  notification_m117;
   uint8_t  prog_disp_type;
+  uint8_t  layer_disp_type;
 
   // Marlin Mode Settings (only for TFT24 V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
   uint8_t  mode;
@@ -294,6 +295,16 @@ typedef struct
   uint8_t buildPercent;
   uint8_t softwareEndstops;
 } MACHINESETTINGS;
+
+typedef enum
+{
+  SHOW_LAYER_HEIGHT,
+  CLEAN_LAYER_HEIGHT,
+  SHOW_LAYER_NUMBER,
+  CLEAN_LAYER_NUMBER,
+  SHOW_LAYER_BOTH,
+  CLEAN_LAYER_BOTH,
+} LAYER_TYPE;
 
 extern SETTINGS infoSettings;
 extern MACHINESETTINGS infoMachineSettings;

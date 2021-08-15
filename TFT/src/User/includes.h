@@ -66,6 +66,7 @@
 #include "BabystepControl.h"
 #include "boot.h"
 #include "CaseLightControl.h"
+#include "comment.h"
 #include "config.h"
 #include "coordinate.h"
 #include "debug.h"
