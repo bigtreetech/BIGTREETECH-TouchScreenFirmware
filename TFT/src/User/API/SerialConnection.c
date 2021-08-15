@@ -51,8 +51,6 @@ void Serial_ReSourceInit(void)
     }
   #endif
 
-  sprintf(serialPortId[SERIAL_PORT], "%d", 1);  // "1" for SERIAL_PORT
-
   serialHasBeenInitialized = true;
 }
 
