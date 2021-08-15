@@ -1288,15 +1288,15 @@ void parseACK(void)
       Serial_Puts(ack_cur_src, dmaL2Cache);
     }
     #ifdef SERIAL_PORT_2
-      else if (!ack_seen("ok") || ack_seen("T:") || ack_seen("T0:"))  // if a spontaneous ACK messages
+      else if (!ack_seen("ok") || ack_seen("T:") || ack_seen("T0:"))  // if a spontaneous ACK message
       {
-        // pass on the spontaneous ACK messages to all the Multi-Serial ports (since these messages come unrequested)
+        // pass on the spontaneous ACK message to all the extra serial ports (since these messages come unrequested)
         for (uint8_t i = 0; i < PORT_COUNT; i++)
         {
-          if (multiSerialPort[i].activePort)  // if the port is connected to an active device (a device that already sent data to the TFT)
+          if (extraSerialPort[i].activePort)  // if the port is connected to an active device (a device that already sent data to the TFT)
           {
             // pass on the ACK message to the port
-            Serial_Puts(multiSerialPort[i].port, dmaL2Cache);
+            Serial_Puts(extraSerialPort[i].port, dmaL2Cache);
           }
         }
       }
@@ -1317,7 +1317,7 @@ void parseRcvGcode(void)
     // scan all the Multi-Serial ports
     for (uint8_t i = 0; i < PORT_COUNT; i++)
     {
-      port = multiSerialPort[i].port;
+      port = extraSerialPort[i].port;
 
       if (infoHost.rx_ok[port] == true)
       {
@@ -1329,7 +1329,7 @@ void parseRcvGcode(void)
           storeCmdFromUART(port, dmaL2Cache);
         }
 
-        multiSerialPort[i].activePort = true;
+        extraSerialPort[i].activePort = true;
       }
     }
   #endif
