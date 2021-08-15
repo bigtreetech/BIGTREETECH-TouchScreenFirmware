@@ -48,6 +48,7 @@ void infoSettingsReset(void)
   infoSettings.notification_m117      = DISABLED;
   infoSettings.emulate_m600           = EMULATE_M600;
   infoSettings.prog_disp_type         = ELAPSED_REMAINING;
+  infoSettings.layer_disp_type        = SHOW_LAYER_HEIGHT;
 
 // Marlin Mode Settings (only for TFT24 V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
   infoSettings.mode                   = DEFAULT_LCD_MODE;

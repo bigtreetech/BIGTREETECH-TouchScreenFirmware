@@ -642,6 +642,10 @@ void parseConfigKey(uint16_t index)
       SET_VALID_INT_VALUE(infoSettings.prog_disp_type, 0, 2);
       break;
 
+    case C_INDEX_LAYER_DISP_TYPE:
+      SET_VALID_INT_VALUE(infoSettings.layer_disp_type, 0, 2);
+      break;
+
     //----------------------------Marlin Mode Settings (only for TFT24 V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
 
     #ifdef HAS_EMULATOR

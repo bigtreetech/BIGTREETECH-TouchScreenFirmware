@@ -641,13 +641,13 @@ void setPrintResume(bool updateHost)
   }
 }
 
-// get gcode command from sd card
+// get gcode command from TFT (SD card or USB)
 void loopPrintFromTFT(void)
 {
-  bool    sd_comment_mode = false;
-  bool    sd_comment_space = true;
-  char    sd_char;
-  uint8_t sd_count = 0;
+  bool    read_comment_mode = false;
+  bool    read_leading_space = true;
+  char    read_char;
+  uint8_t read_count = 0;
   UINT    br = 0;
 
   if (heatHasWaiting() || infoCmd.count || infoPrinting.pause) return;
@@ -660,42 +660,62 @@ void loopPrintFromTFT(void)
 
   for (; infoPrinting.cur < infoPrinting.size;)
   {
-    if (f_read(&infoPrinting.file, &sd_char, 1, &br) != FR_OK) break;
+    if (f_read(&infoPrinting.file, &read_char, 1, &br) != FR_OK) break;
 
     infoPrinting.cur++;
 
-    // Gcode
-    if (sd_char == '\n' )  // '\n' is end flag for per command
+    // Gcode or comment
+    if (read_char == '\n' )  // '\n' is end flag for per command
     {
-      sd_comment_mode  = false;  // for new command
-      sd_comment_space = true;
-
-      if (sd_count != 0)
+      if (read_count != 0)
       {
-        infoCmd.queue[infoCmd.index_w].gcode[sd_count++] = '\n';
-        infoCmd.queue[infoCmd.index_w].gcode[sd_count] = 0;  // terminate string
-        infoCmd.queue[infoCmd.index_w].src = SERIAL_PORT;
-        sd_count = 0;  // clear buffer
-        infoCmd.index_w = (infoCmd.index_w + 1) % CMD_MAX_LIST;
-        infoCmd.count++;
+        switch (read_comment_mode)
+        {
+          case false:
+            infoCmd.queue[infoCmd.index_w].gcode[read_count++] = '\n';
+            infoCmd.queue[infoCmd.index_w].gcode[read_count] = 0;  // terminate string
+            infoCmd.queue[infoCmd.index_w].src = SERIAL_PORT;
+            infoCmd.index_w = (infoCmd.index_w + 1) % CMD_MAX_LIST;
+            infoCmd.count++;
+            break;
+
+          case true:
+            gCode_comment.content[read_count++] = '\n';
+            gCode_comment.content[read_count] = 0;  // terminate string
+            gCode_comment.handled = false;
+            break;
+        }
+
+        read_count = 0;  // clear buffer
         break;
       }
+
+      read_comment_mode  = false;  // for new command
+      read_leading_space = true;
     }
-    else if (sd_count >= CMD_MAX_CHAR - 2)
+    else if (read_count >= CMD_MAX_CHAR - 2)
     {}  // when the command length beyond the maximum, ignore the following bytes
     else
     {
-      if (sd_char == ';')  // ';' is comment out flag
+      if (read_char == ';')  // ';' is comment out flag
       {
-        sd_comment_mode = true;
+        read_comment_mode = true;
+        read_leading_space = true;  // comment might come after a gCode in the same line
       }
       else
       {
-        if (sd_comment_space && (sd_char == 'G' || sd_char == 'M' || sd_char == 'T'))  // ignore ' ' space bytes
-          sd_comment_space = false;
+        if (read_leading_space && read_char != ' ')  // ignore ' ' space bytes
+          read_leading_space = false;
 
-        if (!sd_comment_mode && !sd_comment_space && sd_char != '\r')  // normal gcode
-          infoCmd.queue[infoCmd.index_w].gcode[sd_count++] = sd_char;
+        if (!read_leading_space && read_char != '\r')
+        {
+          if (!read_comment_mode)   // normal gcode
+            infoCmd.queue[infoCmd.index_w].gcode[read_count++] = read_char;
+          else // comment
+          {
+            gCode_comment.content[read_count++] = read_char;
+          }
+        }
       }
     }
   }

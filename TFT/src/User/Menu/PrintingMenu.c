@@ -59,6 +59,7 @@ const uint8_t printingIcon2nd[] = {ICON_PRINTING_CHAMBER, ICON_PRINTING_FLOW};
 const char *const speedId[2] = {"Speed", "Flow "};
 bool hasFilamentData;
 PROGRESS_DISPLAY progDisplayType;
+LAYER_TYPE layerDisplayType;
 
 #define TOGGLE_TIME  2000  // 1 seconds is 1000
 #define LAYER_DELTA  0.1   // minimal layer height change to update the layer display (avoid congestion in vase mode)
@@ -150,6 +151,8 @@ void menuBeforePrinting(void)
       return;
   }
   progDisplayType = infoSettings.prog_disp_type;
+  layerDisplayType = infoSettings.layer_disp_type * 2;
+  setLayerNumber(0);
   infoMenu.menu[infoMenu.cur] = menuPrinting;
 }
 
@@ -226,7 +229,19 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
       }
 
       case ICON_POS_Z:
-        textString = (uint8_t *)LAYER_TITLE;
+        if (layerDisplayType == SHOW_LAYER_BOTH)
+        {
+          sprintf(tempstr, "%6.2fmm", (infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS));
+        }
+        else if (layerDisplayType == CLEAN_LAYER_NUMBER || layerDisplayType == CLEAN_LAYER_BOTH)
+        {
+          strcpy(tempstr, "        ");
+        }
+        else
+        {
+          strcpy(tempstr, LAYER_TITLE);
+        }
+        textString = (uint8_t *)tempstr;
         break;
 
       case ICON_POS_SPD:
@@ -275,7 +290,32 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
         break;
 
       case ICON_POS_Z:
-        sprintf(tempstr, "%6.2fmm", (infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS));
+        if (layerDisplayType == SHOW_LAYER_HEIGHT)  // layer height
+        {
+          sprintf(tempstr, "%3.2fmm", (infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS));
+        }
+        else if (layerDisplayType == SHOW_LAYER_NUMBER || layerDisplayType == SHOW_LAYER_BOTH) // layer number or height & number (both)
+        {
+          if (getLayerNumber() > 0)
+          {
+            if (getLayerCount() > 0)
+            {
+              sprintf(tempstr, "%u/%u", getLayerNumber(), getLayerCount());
+            }
+            else
+            {
+              sprintf(tempstr, "%u", getLayerNumber());
+            }
+          }
+          else
+          {
+            sprintf(tempstr, "-");
+          }
+        }
+        else
+        {
+          strcpy(tempstr, "        ");
+        }
         break;
 
       case ICON_POS_SPD:
@@ -493,9 +533,12 @@ void menuPrinting(void)
   uint16_t curspeed[2] = {0};
   uint32_t time = 0;
   HEATER nowHeat;
-  float curLayer = 0;
-  float usedLayer = 0;
-  float prevLayer = 0;
+  float curLayerHeight = 0;
+  float usedLayerHeight = 0;
+  float prevLayerHeight = 0;
+  uint16_t curLayerNumber = 0;
+  uint16_t prevLayerNumber = 0;
+
   bool layerDrawEnabled = false;
   bool lastPause = isPaused();
   bool lastPrinting = isPrinting();
@@ -601,24 +644,37 @@ void menuPrinting(void)
     }
 
     // Z_AXIS coordinate
-    curLayer = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS));
-    if (prevLayer != curLayer)
+    if (layerDisplayType == SHOW_LAYER_BOTH || layerDisplayType == SHOW_LAYER_HEIGHT)
     {
-      if (ABS(curLayer - usedLayer) >= LAYER_DELTA)
+      curLayerHeight = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS));
+      if (prevLayerHeight != curLayerHeight)
       {
-        layerDrawEnabled = true;
+        if (ABS(curLayerHeight - usedLayerHeight) >= LAYER_DELTA)
+        {
+          layerDrawEnabled = true;
+        }
+        if (layerDrawEnabled == true)
+        {
+          usedLayerHeight = curLayerHeight;
+          RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
+          reDrawPrintingValue(ICON_POS_Z, (layerDisplayType == SHOW_LAYER_BOTH) ? PRINT_TOP_ROW : PRINT_BOTTOM_ROW);
+        }
+        if (ABS(curLayerHeight - prevLayerHeight) < LAYER_DELTA)
+        {
+          layerDrawEnabled = false;
+        }
+        prevLayerHeight = curLayerHeight;
       }
-      if (layerDrawEnabled == true)
+    }
+
+    if (layerDisplayType == SHOW_LAYER_BOTH || layerDisplayType == SHOW_LAYER_NUMBER)
+    {
+      curLayerNumber = getLayerNumber();
+      if (curLayerNumber != prevLayerNumber)
       {
-        usedLayer = curLayer;
-        RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
+        prevLayerNumber = curLayerNumber;
         reDrawPrintingValue(ICON_POS_Z, PRINT_BOTTOM_ROW);
       }
-      if (ABS(curLayer - prevLayer) < LAYER_DELTA)
-      {
-        layerDrawEnabled = false;
-      }
-      prevLayer = curLayer;
     }
 
     // check change in speed or flow
@@ -669,7 +725,19 @@ void menuPrinting(void)
         break;
 
       case PS_KEY_4:
-          infoMenu.menu[++infoMenu.cur] = menuBabystep;
+        layerDisplayType ++;  // trigger cleaning previous values
+        if (layerDisplayType != CLEAN_LAYER_HEIGHT)
+        {
+          reDrawPrintingValue(ICON_POS_Z, PRINT_TOP_ROW);
+        }
+        reDrawPrintingValue(ICON_POS_Z, PRINT_BOTTOM_ROW);
+
+        layerDisplayType = (layerDisplayType + 1) % 6;  // iterate layerDisplayType
+        if (layerDisplayType != SHOW_LAYER_NUMBER)  // upper row content changes
+        {
+          reDrawPrintingValue(ICON_POS_Z, PRINT_TOP_ROW);
+        }
+        reDrawPrintingValue(ICON_POS_Z, PRINT_BOTTOM_ROW);
         break;
 
       case PS_KEY_5:
