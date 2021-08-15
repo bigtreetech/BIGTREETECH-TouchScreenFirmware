@@ -1314,7 +1314,7 @@ void parseRcvGcode(void)
   #ifdef SERIAL_PORT_2
     uint8_t port;
 
-    // scan all the Multi-Serial ports
+    // scan all the extra serial ports
     for (uint8_t i = 0; i < PORT_COUNT; i++)
     {
       port = extraSerialPort[i].port;
