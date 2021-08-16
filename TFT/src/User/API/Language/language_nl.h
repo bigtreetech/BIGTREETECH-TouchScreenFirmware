@@ -1,17 +1,17 @@
-#ifndef _LANGUAGE_DU_H_
-#define _LANGUAGE_DU_H_
+#ifndef _LANGUAGE_NL_H_
+#define _LANGUAGE_NL_H_
 
-    // config.ini Parameter Settings / Feature Settings
+    // config.ini Parameter Settings - Screen Settings and Feature Settings
     #define STRING_BAUDRATE               "Baudsnelheid"
-    #define STRING_LANGUAGE               "Dutch"
-    #define STRING_ROTATE_UI              "Draai UI"
-    #define STRING_TERMINAL_ACK           "Laat ACK in Terminal zien"
-    #define STRING_PERSISTENT_INFO        "Aanhoudende statusinfo"
-    #define STRING_FAN_SPEED_PERCENT      "Fan Speed As Percentage"
-    #define STRING_FILE_LIST_MODE         "Files viewer List Mode"
-    #define STRING_FILE_SORT_BY           "Sort files by"
-    #define STRING_ACK_NOTIFICATION       "ACK notification style"
     #define STRING_EMULATE_M600           "Emulate M600"
+    #define STRING_ROTATE_UI              "Draai UI"
+    #define STRING_LANGUAGE               "Dutch"
+    #define STRING_ACK_NOTIFICATION       "ACK notification style"
+    #define STRING_FILE_SORT_BY           "Sort files by"
+    #define STRING_FILE_LIST_MODE         "Files viewer List Mode"
+    #define STRING_FAN_SPEED_PERCENT      "Fan Speed As Percentage"
+    #define STRING_PERSISTENT_INFO        "Aanhoudende statusinfo"
+    #define STRING_TERMINAL_ACK           "Laat ACK in Terminal zien"
     #define STRING_SERIAL_ALWAYS_ON       "Serial Always ON"
     #define STRING_MARLIN_FULLSCREEN      "Marlin mode in fullscreen"
     #define STRING_MARLIN_SHOW_TITLE      "Marlin Mode Title Support"
@@ -29,12 +29,12 @@
     #define STRING_TOAST_SOUND            "Toast Notifications"
     #define STRING_ALERT_SOUND            "Popups and Alerts"
     #define STRING_HEATER_SOUND           "Heater notification"
-    #define STRING_KNOB_LED_COLOR         "Draaiknop LED"
-    #define STRING_KNOB_LED_IDLE          "Draaiknop LED inactief"
     #define STRING_LCD_BRIGHTNESS         "Brightness"
     #define STRING_LCD_IDLE_BRIGHTNESS    "Idle brightness"
-    #define STRING_LCD_IDLE_DELAY         "Idle timeout"
+    #define STRING_LCD_IDLE_TIME          "Idle timeout"
     #define STRING_BLOCK_TOUCH_ON_IDLE    "Block touch on idle"
+    #define STRING_KNOB_LED_COLOR         "Draaiknop LED"
+    #define STRING_KNOB_LED_IDLE          "Draaiknop LED inactief"
     #define STRING_START_GCODE_ENABLED    "Start Gcode before print"
     #define STRING_END_GCODE_ENABLED      "End Gcode after print"
     #define STRING_CANCEL_GCODE_ENABLED   "Cancel Gcode"
@@ -246,6 +246,7 @@
     #define STRING_SETTINGS               "Instellingen"
     #define STRING_SCREEN_SETTINGS        "Scherm"
     #define STRING_MACHINE_SETTINGS       "Machine"
+    #define STRING_UI_SETTINGS            "UI"
     #define STRING_MARLIN_MODE_SETTINGS   "MarlinMode"
     #define STRING_FEATURE_SETTINGS       "Kenmerk"
     #define STRING_SOUND                  "Sound"
@@ -355,6 +356,7 @@
     #define STRING_MACROS                 "Macros"
     #define STRING_MESH_VALID             "Mesh Validation"
     #define STRING_CONNECT_PROBE          "Connect probe before starting the process. Make sure to disconnect it afterwards."
+    #define STRING_DISCONNECT_PROBE       "Make sure you have disconnected probe before using this feature."
     #define STRING_CALIBRATION            "Calibration"
 
 #endif

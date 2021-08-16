@@ -1,3 +1,6 @@
+#ifndef _FF_CONFIG_DEFINED
+#define _FF_CONFIG_DEFINED
+
 /*---------------------------------------------------------------------------/
 /  FatFs Functional Configurations
 /---------------------------------------------------------------------------*/
@@ -269,3 +272,5 @@
 /  included somewhere in the scope of ff.h. */
 
 /*--- End of configuration options ---*/
+
+#endif

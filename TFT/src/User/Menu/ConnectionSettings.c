@@ -28,22 +28,19 @@ void menuDisconnect(void)
   while (!isPress())
   {
     #ifdef LCD_LED_PWM_CHANNEL
-      LCD_HandleDimming();
+      LCD_CheckDimming();
     #endif
   }
   while (isPress())
   {
     #ifdef LCD_LED_PWM_CHANNEL
-      LCD_HandleDimming();
+      LCD_CheckDimming();
     #endif
   }
   Serial_ReSourceInit();
 
   infoMenu.cur--;
 }
-
-const char * const item_baudrate_str[BAUDRATE_COUNT] = {
-  "2400", "9600", "19200", "38400", "57600", "115200", "250000", "500000", "1000000"};
 
 void menuBaudrate(void)
 {
@@ -66,7 +63,7 @@ void menuBaudrate(void)
       totalItems[i].icon = CHARICON_UNCHECKED;
     }
     totalItems[i].itemType = LIST_LABEL;
-    totalItems[i].titlelabel.address = (uint8_t *) item_baudrate_str[i];
+    totalItems[i].titlelabel.address = (uint8_t *) baudrateNames[i];
   }
   uint16_t curPage = cur_item / LISTITEM_PER_PAGE;
 

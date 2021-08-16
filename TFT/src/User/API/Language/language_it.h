@@ -1,17 +1,17 @@
 #ifndef _LANGUAGE_IT_H_
 #define _LANGUAGE_IT_H_
 
-    // config.ini Parameter Settings / Feature Settings
+    // config.ini Parameter Settings - Screen Settings and Feature Settings
     #define STRING_BAUDRATE               "Baudrate"
-    #define STRING_LANGUAGE               "Italiano"
-    #define STRING_ROTATE_UI              "Ruota"
-    #define STRING_TERMINAL_ACK           "Mostra ACK in console"
-    #define STRING_PERSISTENT_INFO        "Mostra barra di stato"
-    #define STRING_FAN_SPEED_PERCENT      "Ventola in percentuale"
-    #define STRING_FILE_LIST_MODE         "File in modalità lista"
-    #define STRING_FILE_SORT_BY           "Ordina file per"
-    #define STRING_ACK_NOTIFICATION       "Tipo di popup"
     #define STRING_EMULATE_M600           "Emula M600"
+    #define STRING_ROTATE_UI              "Ruota"
+    #define STRING_LANGUAGE               "Italiano"
+    #define STRING_ACK_NOTIFICATION       "Tipo di popup"
+    #define STRING_FILE_SORT_BY           "Ordina file per"
+    #define STRING_FILE_LIST_MODE         "File in modalità lista"
+    #define STRING_FAN_SPEED_PERCENT      "Ventola in percentuale"
+    #define STRING_PERSISTENT_INFO        "Mostra barra di stato"
+    #define STRING_TERMINAL_ACK           "Mostra ACK in console"
     #define STRING_SERIAL_ALWAYS_ON       "Seriale sempre accesa"
     #define STRING_MARLIN_FULLSCREEN      "Marlin a schermo intero"
     #define STRING_MARLIN_SHOW_TITLE      "Mostra titolo in Marlin"
@@ -29,12 +29,12 @@
     #define STRING_TOAST_SOUND            "Notifiche toast"
     #define STRING_ALERT_SOUND            "Popup e avvisi"
     #define STRING_HEATER_SOUND           "Notifica temperatura"
-    #define STRING_KNOB_LED_COLOR         "LED manopola "
-    #define STRING_KNOB_LED_IDLE          "LED manopola spento"
     #define STRING_LCD_BRIGHTNESS         "Luminosità"
     #define STRING_LCD_IDLE_BRIGHTNESS    "Luminosità in idle"
-    #define STRING_LCD_IDLE_DELAY         "Timer luminosità"
+    #define STRING_LCD_IDLE_TIME          "Timer luminosità"
     #define STRING_BLOCK_TOUCH_ON_IDLE    "Block touch on idle"
+    #define STRING_KNOB_LED_COLOR         "LED manopola "
+    #define STRING_KNOB_LED_IDLE          "LED manopola spento"
     #define STRING_START_GCODE_ENABLED    "Inserisci start gcode"
     #define STRING_END_GCODE_ENABLED      "Inserisci end gcode"
     #define STRING_CANCEL_GCODE_ENABLED   "Script canc. stampa"
@@ -246,6 +246,7 @@
     #define STRING_SETTINGS               "Opzioni"
     #define STRING_SCREEN_SETTINGS        "Schermo"
     #define STRING_MACHINE_SETTINGS       "Stampante"
+    #define STRING_UI_SETTINGS            "UI"
     #define STRING_MARLIN_MODE_SETTINGS   "MarlinMode"
     #define STRING_FEATURE_SETTINGS       "Configura"
     #define STRING_SOUND                  "Suono"
@@ -355,6 +356,7 @@
     #define STRING_MACROS                 "Macro"
     #define STRING_MESH_VALID             "Validazione mesh"
     #define STRING_CONNECT_PROBE          "Connect probe before starting the process. Make sure to disconnect it afterwards."
+    #define STRING_DISCONNECT_PROBE       "Make sure you have disconnected probe before using this feature."
     #define STRING_CALIBRATION            "Calibration"
 
 #endif

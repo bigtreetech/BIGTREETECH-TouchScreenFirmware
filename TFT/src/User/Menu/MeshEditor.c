@@ -201,7 +201,6 @@ const MESH_DATA_FORMAT meshDataFormat[] = {
   {0, 1, 1, "Bed Level Correction Matrix:"},               // ABL Linear or 3-Point
 };
 
-void (*meshSaveCallbackPtr)(void) = NULL;
 static MESH_DATA *meshData = NULL;
 
 void meshInitData(void)
@@ -239,8 +238,6 @@ void meshInitData(void)
 
   meshData->ablState = getParameter(P_ABL_STATE, 0);
   meshData->parsedRows = 0;
-
-  meshSaveCallbackPtr = NULL;
 }
 
 static inline void meshAllocData(void)
@@ -295,8 +292,6 @@ static inline bool processKnownDataFormat(char *dataRow)
     meshData->rowsToSkip = meshDataFormat[i].rowsToSkip;
     meshData->rowsInverted = meshDataFormat[i].rowsInverted;
 
-    meshSaveCallbackPtr = saveEepromSettings;
-
     switch (infoMachineSettings.leveling)
     {
       case BL_BBL:
@@ -304,8 +299,6 @@ static inline bool processKnownDataFormat(char *dataRow)
         break;
 
       case BL_UBL:
-        meshSaveCallbackPtr = menuUBLSave;
-
         strcpy(meshData->saveTitle, (char *)textSelect(LABEL_ABL_SETTINGS_UBL));
         break;
 
@@ -324,8 +317,10 @@ static inline bool processKnownDataFormat(char *dataRow)
 
 void meshSaveCallback(void)
 {
-  if (meshSaveCallbackPtr != NULL)
-    meshSaveCallbackPtr();
+  if (infoMachineSettings.leveling == BL_UBL)
+    menuUBLSave();
+  else if (infoMachineSettings.leveling != BL_DISABLED)
+    saveEepromSettings();
 
   meshDeallocData();                                       // deallocate mesh data. It forces data reloading during Mesh Editor menu reloading
 }

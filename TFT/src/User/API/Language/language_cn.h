@@ -1,17 +1,17 @@
 #ifndef _LANGUAGE_CN_H_
 #define _LANGUAGE_CN_H_
 
-    // config.ini Parameter Settings / Feature Settings
+    // config.ini Parameter Settings - Screen Settings and Feature Settings
     #define STRING_BAUDRATE               "波特率"
-    #define STRING_LANGUAGE               "简体中文"
-    #define STRING_ROTATE_UI              "旋转界面"
-    #define STRING_TERMINAL_ACK           "在G-code终端中显示温度信息"
-    #define STRING_PERSISTENT_INFO        "顶部温度信息"
-    #define STRING_FAN_SPEED_PERCENT      "百分比显示风扇速度"
-    #define STRING_FILE_LIST_MODE         "文件浏览列表模式"
-    #define STRING_FILE_SORT_BY           "Sort files by"
-    #define STRING_ACK_NOTIFICATION       "ACK 弹窗类型"
     #define STRING_EMULATE_M600           "模拟M600"
+    #define STRING_ROTATE_UI              "旋转界面"
+    #define STRING_LANGUAGE               "简体中文"
+    #define STRING_ACK_NOTIFICATION       "ACK 弹窗类型"
+    #define STRING_FILE_SORT_BY           "Sort files by"
+    #define STRING_FILE_LIST_MODE         "文件浏览列表模式"
+    #define STRING_FAN_SPEED_PERCENT      "百分比显示风扇速度"
+    #define STRING_PERSISTENT_INFO        "顶部温度信息"
+    #define STRING_TERMINAL_ACK           "在G-code终端中显示温度信息"
     #define STRING_SERIAL_ALWAYS_ON       "串口常开"
     #define STRING_MARLIN_FULLSCREEN      "全屏显示Marlin模式"
     #define STRING_MARLIN_SHOW_TITLE      "Marlin模式显示标题"
@@ -29,12 +29,12 @@
     #define STRING_TOAST_SOUND            "Toast 提示声音"
     #define STRING_ALERT_SOUND            "弹窗和提示声音"
     #define STRING_HEATER_SOUND           "加热提示音"
-    #define STRING_KNOB_LED_COLOR         "旋钮LED颜色"
-    #define STRING_KNOB_LED_IDLE          "旋钮LED自动睡眠"
     #define STRING_LCD_BRIGHTNESS         "LCD背光亮度"
     #define STRING_LCD_IDLE_BRIGHTNESS    "LCD睡眠背光亮度"
-    #define STRING_LCD_IDLE_DELAY         "LCD自动睡眠时间"
+    #define STRING_LCD_IDLE_TIME          "LCD自动睡眠时间"
     #define STRING_BLOCK_TOUCH_ON_IDLE    "Block touch on idle"
+    #define STRING_KNOB_LED_COLOR         "旋钮LED颜色"
+    #define STRING_KNOB_LED_IDLE          "旋钮LED自动睡眠"
     #define STRING_START_GCODE_ENABLED    "执行打印前起始Gcode"
     #define STRING_END_GCODE_ENABLED      "执行打印后结束Gcode"
     #define STRING_CANCEL_GCODE_ENABLED   "中断打印Gcode"
@@ -246,6 +246,7 @@
     #define STRING_SETTINGS               "设置"
     #define STRING_SCREEN_SETTINGS        "屏幕设置"
     #define STRING_MACHINE_SETTINGS       "机器设置"
+    #define STRING_UI_SETTINGS            "UI"
     #define STRING_MARLIN_MODE_SETTINGS   "MarlinMode"
     #define STRING_FEATURE_SETTINGS       "功能设置"
     #define STRING_SOUND                  "声音"
@@ -355,6 +356,7 @@
     #define STRING_MACROS                 "宏指令"
     #define STRING_MESH_VALID             "调平测试"
     #define STRING_CONNECT_PROBE          "开启此操作前请先连接探头, 操作完成后请断开连接"
+    #define STRING_DISCONNECT_PROBE       "Make sure you have disconnected probe before using this feature."
     #define STRING_CALIBRATION            "校准"
 
 #endif

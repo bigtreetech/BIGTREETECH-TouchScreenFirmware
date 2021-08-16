@@ -1,6 +1,8 @@
 #include "parseACK.h"
 #include "includes.h"
 
+#define ACK_MAX_SIZE 512
+
 char dmaL2Cache[ACK_MAX_SIZE];
 static uint16_t ack_index = 0;
 static uint8_t ack_cur_src = SERIAL_PORT;
@@ -11,7 +13,6 @@ static const char warningmagic[] = "Warning:";                     // RRF warnin
 static const char messagemagic[] = "message";                      // RRF message in Json format
 static const char errorZProbe[] = "ZProbe triggered before move";  // smoothieware message
 
-bool portSeen[_UART_CNT] = {false, false, false, false, false, false};
 bool hostDialog = false;
 
 struct HOST_ACTION
@@ -57,12 +58,16 @@ const ECHO knownEcho[] = {
   {ECHO_NOTIFY_NONE, "Unknown command: \"M150"},  // M150
 };
 
-// uint8_t forceIgnore[ECHO_ID_COUNT] = {0};
+//uint8_t forceIgnore[ECHO_ID_COUNT] = {0};
+
+//void setIgnoreEcho(ECHO_ID msgId, bool state)
+//{
+//  forceIgnore[msgId] = state;
+//}
 
 void setCurrentAckSrc(uint8_t src)
 {
   ack_cur_src = src;
-  portSeen[src] = true;
 }
 
 static bool ack_seen(const char * str)
@@ -179,11 +184,6 @@ void ackPopupInfo(const char * info)
     addNotification(DIALOG_TYPE_ERROR, (char *)info, (char *)dmaL2Cache + ack_index, show_dialog);
   }
 }
-
-//void setIgnoreEcho(ECHO_ID msgId, bool state)
-//{
-//  forceIgnore[msgId] = state;
-//}
 
 bool processKnownEcho(void)
 {
@@ -1287,18 +1287,20 @@ void parseACK(void)
     {
       Serial_Puts(ack_cur_src, dmaL2Cache);
     }
-    else if (!ack_seen("ok") || ack_seen("T:") || ack_seen("T0:"))
-    {
-      // make sure we pass on spontaneous messages to all connected ports (since these can come unrequested)
-      for (int port = 0; port < _UART_CNT; port++)
+    #ifdef SERIAL_PORT_2
+      else if (!ack_seen("ok") || ack_seen("T:") || ack_seen("T0:"))  // if a spontaneous ACK message
       {
-        if (port != SERIAL_PORT && portSeen[port])
+        // pass on the spontaneous ACK message to all the extra serial ports (since these messages come unrequested)
+        for (uint8_t i = 0; i < PORT_COUNT; i++)
         {
-          // pass on this one to anyone else who might be listening
-          Serial_Puts(port, dmaL2Cache);
+          if (extraSerialPort[i].activePort)  // if the port is connected to an active device (a device that already sent data to the TFT)
+          {
+            // pass on the ACK message to the port
+            Serial_Puts(extraSerialPort[i].port, dmaL2Cache);
+          }
         }
       }
-    }
+    #endif
 
     if (avoid_terminal != true)
     {
@@ -1310,17 +1312,24 @@ void parseACK(void)
 void parseRcvGcode(void)
 {
   #ifdef SERIAL_PORT_2
-    uint8_t i = 0;
-    for (i = 0; i < _UART_CNT; i++)
+    uint8_t port;
+
+    // scan all the extra serial ports
+    for (uint8_t i = 0; i < PORT_COUNT; i++)
     {
-      if (i != SERIAL_PORT && infoHost.rx_ok[i] == true)
+      port = extraSerialPort[i].port;
+
+      if (infoHost.rx_ok[port] == true)
       {
-        infoHost.rx_ok[i] = false;
-        while (dmaL1NotEmpty(i))
+        infoHost.rx_ok[port] = false;
+
+        while (dmaL1NotEmpty(port))
         {
-          syncL2CacheFromL1(i);
-          storeCmdFromUART(i, dmaL2Cache);
+          syncL2CacheFromL1(port);
+          storeCmdFromUART(port, dmaL2Cache);
         }
+
+        extraSerialPort[i].activePort = true;
       }
     }
   #endif

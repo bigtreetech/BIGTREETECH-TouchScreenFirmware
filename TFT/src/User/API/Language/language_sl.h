@@ -1,17 +1,17 @@
 #ifndef _LANGUAGE_SL_H_
 #define _LANGUAGE_SL_H_
 
-    // config.ini Parameter Settings / Feature Settings
+    // config.ini Parameter Settings - Screen Settings and Feature Settings
     #define STRING_BAUDRATE               "Baud hitr."
-    #define STRING_LANGUAGE               "Slovenski"
-    #define STRING_ROTATE_UI              "Obrni UI"
-    #define STRING_TERMINAL_ACK           "Pokaži ACK v terminalu"
-    #define STRING_PERSISTENT_INFO        "Stalno prikazuj status"
-    #define STRING_FAN_SPEED_PERCENT      "Fan Speed As Percentage"
-    #define STRING_FILE_LIST_MODE         "Prikaz datotek v seznamu"
-    #define STRING_FILE_SORT_BY           "Sort files by"
-    #define STRING_ACK_NOTIFICATION       "ACK notification style"
     #define STRING_EMULATE_M600           "Emulate M600"
+    #define STRING_ROTATE_UI              "Obrni UI"
+    #define STRING_LANGUAGE               "Slovenski"
+    #define STRING_ACK_NOTIFICATION       "ACK notification style"
+    #define STRING_FILE_SORT_BY           "Sort files by"
+    #define STRING_FILE_LIST_MODE         "Prikaz datotek v seznamu"
+    #define STRING_FAN_SPEED_PERCENT      "Fan Speed As Percentage"
+    #define STRING_PERSISTENT_INFO        "Stalno prikazuj status"
+    #define STRING_TERMINAL_ACK           "Pokaži ACK v terminalu"
     #define STRING_SERIAL_ALWAYS_ON       "Serial Always ON"
     #define STRING_MARLIN_FULLSCREEN      "Marlin čez cel zaslon"
     #define STRING_MARLIN_SHOW_TITLE      "Marlin Mode Title Support"
@@ -29,12 +29,12 @@
     #define STRING_TOAST_SOUND            "Toast Notifications"
     #define STRING_ALERT_SOUND            "Popups and Alerts"
     #define STRING_HEATER_SOUND           "Heater notification"
-    #define STRING_KNOB_LED_COLOR         "LED enkoder gumba"
-    #define STRING_KNOB_LED_IDLE          "Rotary Knob LED idle"
     #define STRING_LCD_BRIGHTNESS         "Svetilnost"
     #define STRING_LCD_IDLE_BRIGHTNESS    "Zatemnitev LCD"
-    #define STRING_LCD_IDLE_DELAY         "Zatemnitev po času"
+    #define STRING_LCD_IDLE_TIME          "Zatemnitev po času"
     #define STRING_BLOCK_TOUCH_ON_IDLE    "Block touch on idle"
+    #define STRING_KNOB_LED_COLOR         "LED enkoder gumba"
+    #define STRING_KNOB_LED_IDLE          "Rotary Knob LED idle"
     #define STRING_START_GCODE_ENABLED    "Zaženi startno G-kodo"
     #define STRING_END_GCODE_ENABLED      "Zaženi končno G-kodo"
     #define STRING_CANCEL_GCODE_ENABLED   "Zaženi G-kodo preklica"
@@ -246,6 +246,7 @@
     #define STRING_SETTINGS               "Nastavitve"
     #define STRING_SCREEN_SETTINGS        "Zaslon"
     #define STRING_MACHINE_SETTINGS       "Naprava"
+    #define STRING_UI_SETTINGS            "UI"
     #define STRING_MARLIN_MODE_SETTINGS   "MarlinMode"
     #define STRING_FEATURE_SETTINGS       "Funkcije"
     #define STRING_SOUND                  "Sound"
@@ -355,6 +356,7 @@
     #define STRING_MACROS                 "Macros"
     #define STRING_MESH_VALID             "Mesh Validation"
     #define STRING_CONNECT_PROBE          "Connect probe before starting the process. Make sure to disconnect it afterwards."
+    #define STRING_DISCONNECT_PROBE       "Make sure you have disconnected probe before using this feature."
     #define STRING_CALIBRATION            "Calibration"
 
 #endif
