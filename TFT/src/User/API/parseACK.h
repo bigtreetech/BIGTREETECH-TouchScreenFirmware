@@ -8,12 +8,12 @@ extern "C" {
 #include <stdbool.h>
 #include <stdint.h>
 
-#define ACK_MAX_SIZE 512
-
 extern bool hostDialog;
 
-typedef enum  // append at the end of this list the id of any new echo message for
-{             // which a specific popup message type must be used to notify the user
+// append at the end of this list the id of any new echo message for
+// which a specific popup message type must be used to notify the user
+typedef enum
+{
   ECHO_ID_BUSY_PAUSE = 0,
   ECHO_ID_BUSY_PROCESSING,
   ECHO_ID_FRESH_FILE,
@@ -34,13 +34,12 @@ typedef enum  // append at the end of this list the id of any new echo message f
   ECHO_ID_COUNT,
 } ECHO_ID;
 
-bool dmaL1NotEmpty(uint8_t port);
+inline bool isHostDialog() {return hostDialog;}
+
+//void setIgnoreEcho(ECHO_ID msgId, bool state);
 void setCurrentAckSrc(uint8_t src);
 void parseACK(void);
 void parseRcvGcode(void);
-
-inline bool isHostDialog() {return hostDialog;}
-void setIgnoreEcho(ECHO_ID msgId, bool state);
 
 #ifdef __cplusplus
 }

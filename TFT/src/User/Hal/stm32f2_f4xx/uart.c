@@ -1,5 +1,5 @@
 #include "uart.h"
-#include "variants.h"  // for USART2_TX_PIN etc...
+#include "variants.h"  // for USART1_TX_PIN etc...
 #include "GPIO_Init.h"
 
 // USART1 default pins config

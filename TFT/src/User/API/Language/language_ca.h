@@ -1,17 +1,17 @@
 #ifndef _LANGUAGE_CA_H_
 #define _LANGUAGE_CA_H_
 
-    // config.ini Parameter Settings / Feature Settings
+    // config.ini Parameter Settings - Screen Settings and Feature Settings
     #define STRING_BAUDRATE               "Velocitat de transmissió"
-    #define STRING_LANGUAGE               "Català"
-    #define STRING_ROTATE_UI              "Rotar"
-    #define STRING_TERMINAL_ACK           "Mostra ACK a la terminal"
-    #define STRING_PERSISTENT_INFO        "Informació d'estat persistent"
-    #define STRING_FAN_SPEED_PERCENT      "Fan Speed As Percentage"
-    #define STRING_FILE_LIST_MODE         "Mode de visualització de fitxers"
-    #define STRING_FILE_SORT_BY           "Sort files by"
-    #define STRING_ACK_NOTIFICATION       "ACK notification style"
     #define STRING_EMULATE_M600           "Emulate M600"
+    #define STRING_ROTATE_UI              "Rotar"
+    #define STRING_LANGUAGE               "Català"
+    #define STRING_ACK_NOTIFICATION       "ACK notification style"
+    #define STRING_FILE_SORT_BY           "Sort files by"
+    #define STRING_FILE_LIST_MODE         "Mode de visualització de fitxers"
+    #define STRING_FAN_SPEED_PERCENT      "Fan Speed As Percentage"
+    #define STRING_PERSISTENT_INFO        "Informació d'estat persistent"
+    #define STRING_TERMINAL_ACK           "Mostra ACK a la terminal"
     #define STRING_SERIAL_ALWAYS_ON       "Serial Always ON"
     #define STRING_MARLIN_FULLSCREEN      "Mode Marlin a pantalla completa"
     #define STRING_MARLIN_SHOW_TITLE      "Marlin Mode Title Support"
@@ -246,6 +246,7 @@
     #define STRING_SETTINGS               "Configura"
     #define STRING_SCREEN_SETTINGS        "Pantalla"
     #define STRING_MACHINE_SETTINGS       "Màquina"
+    #define STRING_UI_SETTINGS            "UI"
     #define STRING_MARLIN_MODE_SETTINGS   "MarlinMode"
     #define STRING_FEATURE_SETTINGS       "Afegits"
     #define STRING_SOUND                  "Sound"
