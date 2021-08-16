@@ -153,6 +153,7 @@ void menuBeforePrinting(void)
   progDisplayType = infoSettings.prog_disp_type;
   layerDisplayType = infoSettings.layer_disp_type * 2;
   setLayerNumber(0);
+  setTotalTime(0);
   infoMenu.menu[infoMenu.cur] = menuPrinting;
 }
 
