@@ -83,13 +83,13 @@ bool screenShotBMP(char *bmp)
 void loopScreenShot(void)
 {
   /*
-  * For "LCD_ENCODER_SUPPORT" TFTLCD
-  * Pressed touch screen triggered ScreenShot in Marlin mode
-  * Pressed encoder button triggered ScreenShot in other menu
-  *
-  * For no encoder TFTLCD
-  * Long pressed touch screen triggered ScreenShot
-  */
+   * For TFTLCD with an encoder "LCD_ENCODER_SUPPORT":
+   * - A press on touch screen to trigger a screenshot in Marlin mode
+   * - A press on encoder button to trigger a screenshot in Touch mode
+   *
+   * For TFTLCD with no encoder:
+   * - A long press of 1.5 seconds on touch screen to trigger a screenshot
+   */
   #if LCD_ENCODER_SUPPORT
     bool (*screenShotTriggered)(uint16_t ) = (infoMenu.menu[infoMenu.cur] == menuMarlinMode) ? Touch_Enc_ReadPen : LCD_Enc_ReadBtn;
 

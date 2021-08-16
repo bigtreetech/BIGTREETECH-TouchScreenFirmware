@@ -1,17 +1,17 @@
 #ifndef _LANGUAGE_TR_H_
 #define _LANGUAGE_TR_H_
 
-    // config.ini Parameter Settings / Feature Settings
+    // config.ini Parameter Settings - Screen Settings and Feature Settings
     #define STRING_BAUDRATE               "BaudRate"
-    #define STRING_LANGUAGE               "Türkçe"
-    #define STRING_ROTATE_UI              "Döndür"
-    #define STRING_TERMINAL_ACK           "Terminalde onay mesajları"
-    #define STRING_PERSISTENT_INFO        "Kalıcı Durum Mesajı"
-    #define STRING_FAN_SPEED_PERCENT      "Yüzdesel Fan Hızı"
-    #define STRING_FILE_LIST_MODE         "Liste Görünümü"
-    #define STRING_FILE_SORT_BY           "Sort files by"
-    #define STRING_ACK_NOTIFICATION       "Onay mesajı stili"
     #define STRING_EMULATE_M600           "Emulate M600"
+    #define STRING_ROTATE_UI              "Döndür"
+    #define STRING_LANGUAGE               "Türkçe"
+    #define STRING_ACK_NOTIFICATION       "Onay mesajı stili"
+    #define STRING_FILE_SORT_BY           "Sort files by"
+    #define STRING_FILE_LIST_MODE         "Liste Görünümü"
+    #define STRING_FAN_SPEED_PERCENT      "Yüzdesel Fan Hızı"
+    #define STRING_PERSISTENT_INFO        "Kalıcı Durum Mesajı"
+    #define STRING_TERMINAL_ACK           "Terminalde onay mesajları"
     #define STRING_SERIAL_ALWAYS_ON       "Seri Bağ. Sürekli Açık"
     #define STRING_MARLIN_FULLSCREEN      "Tam Ekran Marlin Modu"
     #define STRING_MARLIN_SHOW_TITLE      "Marlin Modu Başlık Desteği"
@@ -246,6 +246,7 @@
     #define STRING_SETTINGS               "Ayarlar"
     #define STRING_SCREEN_SETTINGS        "Ekran"
     #define STRING_MACHINE_SETTINGS       "Makine"
+    #define STRING_UI_SETTINGS            "UI"
     #define STRING_MARLIN_MODE_SETTINGS   "MarlinMode"
     #define STRING_FEATURE_SETTINGS       "Özellik"
     #define STRING_SOUND                  "Ses"

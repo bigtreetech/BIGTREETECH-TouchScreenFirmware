@@ -1,17 +1,17 @@
 #ifndef _LANGUAGE_IT_H_
 #define _LANGUAGE_IT_H_
 
-    // config.ini Parameter Settings / Feature Settings
+    // config.ini Parameter Settings - Screen Settings and Feature Settings
     #define STRING_BAUDRATE               "Baudrate"
-    #define STRING_LANGUAGE               "Italiano"
-    #define STRING_ROTATE_UI              "Ruota"
-    #define STRING_TERMINAL_ACK           "Mostra ACK in console"
-    #define STRING_PERSISTENT_INFO        "Mostra barra di stato"
-    #define STRING_FAN_SPEED_PERCENT      "Ventola in percentuale"
-    #define STRING_FILE_LIST_MODE         "File in modalità lista"
-    #define STRING_FILE_SORT_BY           "Ordina file per"
-    #define STRING_ACK_NOTIFICATION       "Tipo di popup"
     #define STRING_EMULATE_M600           "Emula M600"
+    #define STRING_ROTATE_UI              "Ruota"
+    #define STRING_LANGUAGE               "Italiano"
+    #define STRING_ACK_NOTIFICATION       "Tipo di popup"
+    #define STRING_FILE_SORT_BY           "Ordina file per"
+    #define STRING_FILE_LIST_MODE         "File in modalità lista"
+    #define STRING_FAN_SPEED_PERCENT      "Ventola in percentuale"
+    #define STRING_PERSISTENT_INFO        "Mostra barra di stato"
+    #define STRING_TERMINAL_ACK           "Mostra ACK in console"
     #define STRING_SERIAL_ALWAYS_ON       "Seriale sempre accesa"
     #define STRING_MARLIN_FULLSCREEN      "Marlin a schermo intero"
     #define STRING_MARLIN_SHOW_TITLE      "Mostra titolo in Marlin"
@@ -246,6 +246,7 @@
     #define STRING_SETTINGS               "Opzioni"
     #define STRING_SCREEN_SETTINGS        "Schermo"
     #define STRING_MACHINE_SETTINGS       "Stampante"
+    #define STRING_UI_SETTINGS            "UI"
     #define STRING_MARLIN_MODE_SETTINGS   "MarlinMode"
     #define STRING_FEATURE_SETTINGS       "Configura"
     #define STRING_SOUND                  "Suono"

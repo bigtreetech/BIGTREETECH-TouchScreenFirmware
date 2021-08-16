@@ -584,7 +584,10 @@ void terminalCache(char *stream, TERMINAL_SRC src)
   }
 
   if (src == TERMINAL_GCODE)
+  {
+    saveGcodeTerminalCache(serialPortId[infoCmd.queue[infoCmd.index_r].src]);  // logical port ID (e.g. "2" for SERIAL_PORT_2)
     saveGcodeTerminalCache(">>");
+  }
 
   saveGcodeTerminalCache(stream);
 }

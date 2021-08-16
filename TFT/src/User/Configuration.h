@@ -1,6 +1,7 @@
 #ifndef _CONFIGURATION_H_
 #define _CONFIGURATION_H_
-#define CONFIG_VERSION 20210730
+
+#define CONFIG_VERSION 20210815
 
 //====================================================================================================
 //=============================== Settings Configurable On config.ini ================================
@@ -11,16 +12,21 @@
 //================================================================================
 
 /**
- * Enable Status Screen
- * If enabled, the Status Screen menu will become the default home screen.
- * If disabled, the Main menu will become the default home screen.
+ * Enable Multi-Serial Ports
+ * Serial ports connected to devices such as ESP3D, OctoPrint, other TFTs etc.
+ * Disable the serial port when it is not in use and floating to avoid to receive
+ * and process wrong data due to electromagnetic interference (EMI).
  *
- * NOTE: Both the Status Screen and Main menus display the current temperature, fan and speeds.
- *       Furthermore, the Status Screen menu provides the status area reporting the printer notifications.
- *
- *   Options: [disable: 0, enable: 1]
+ *   Options: [0: Disable all multi-serials,
+ *             1: Enable SERIAL_PORT_2 alone,
+ *             2: Enable SERIAL_PORT_3 alone,
+ *             4: Enable SERIAL_PORT_4 alone,
+ *             3: = 1 + 2: Enable SERIAL_PORT_2 + SERIAL_PORT_3,
+ *             5: = 1 + 4: Enable SERIAL_PORT_2 + SERIAL_PORT_4,
+ *             6: = 2 + 4: Enable SERIAL_PORT_3 + SERIAL_PORT_4,
+ *             7: = 1 + 2 + 4: Enable SERIAL_PORT_2 + SERIAL_PORT_3 + SERIAL_PORT_4]
  */
-#define ENABLE_STATUS_SCREEN 1  // Default: 1
+#define MULTI_SERIAL 0
 
 /**
  * Baudrate / Connection Speed
@@ -36,8 +42,36 @@
 #define BAUDRATE 5  // Default: 5
 
 /**
+ * Emulate M600
+ * The TFT intercepts the M600 gcode (filament change) and emulates the handling logic
+ * otherwise provided by Marlin firmware.
+ *
+ * NOTE: Enable it, in case Marlin firmware does not properly support M600 on the mainboard.
+ *
+ *   Options: [disable: 0, enable: 1]
+ */
+#define EMULATE_M600 1  // Default: 1
+
+//================================================================================
+//================================= UI Settings ==================================
+//================================================================================
+
+/**
+ * Enable Status Screen
+ * Select the default home screen while in Touch Mode.
+ * If enabled, the Status Screen menu will become the default home screen.
+ * If disabled, the Main menu will become the default home screen.
+ *
+ * NOTE: Both the Status Screen and Main menus display the current temperature, fan and speeds.
+ *       Furthermore, the Status Screen menu provides the status area reporting the printer notifications.
+ *
+ *   Options: [disable: 0, enable: 1]
+ */
+#define ENABLE_STATUS_SCREEN 1  // Default: 1
+
+/**
  * Default Touch Mode Colors
- * Set colors used in touchscreen mode.
+ * Set colors used in Touch Mode.
  *
  *   Options: [ WHITE: 0,  BLACK: 1,  RED: 2,  GREEN: 3,      BLUE: 4,       CYAN: 5,  MAGENTA: 6,    YELLOW: 7,
  *             ORANGE: 8, PURPLE: 9, LIME: 10, BROWN: 11, DARKBLUE: 12, DARKGREEN: 13,    GRAY: 14, DARKGRAY: 15]
@@ -57,14 +91,6 @@
 #define MESH_MAX_COLOR 2  // Default: 2
 
 /**
- * Fan Speed As Percentage
- * Show fan speed as percentage. If disabled fan speeed will be displayed as PWM values.
- *
- *   Options: [disable: 0, enable: 1]
- */
-#define SHOW_FAN_PERCENTAGE 1  // Default: 1
-
-/**
  * Notification Style For ACK Messages
  * Set the notification style to use for displaying the ACK messages which start with "echo:".
  *
@@ -79,15 +105,26 @@
 #define ACK_NOTIFICATION_STYLE 1  // Default: 1
 
 /**
- * Emulate M600
- * The TFT intercepts the M600 gcode (filament change) and emulates the handling logic
- * otherwise provided by Marlin firmware.
- *
- * NOTE: Enable it, in case Marlin firmware does not properly support M600 on the mainboard.
+ * Fan Speed As Percentage
+ * Show fan speed as percentage. If disabled fan speeed will be displayed as PWM values.
  *
  *   Options: [disable: 0, enable: 1]
  */
-#define EMULATE_M600 1  // Default: 1
+#define SHOW_FAN_PERCENTAGE 1  // Default: 1
+
+/**
+ * Notification M117
+ * If enabled, any notification received from Marlin through "//action:notification" is also
+ * stored on the notification screen. The notification screen reporting the history of the
+ * received notifications is displayed pressing on the notification bar.
+ *
+ * NOTE: Marlin notifications are also always displayed on the Status Screen menu.
+ *       Furthermore, they are also displayed on the notification bar as toast messages
+ *       in case the current menu is not the Status Screen menu.
+ *
+ *   Options: [disable: 0, enable: 1]
+ */
+#define NOTIFICATION_M117 0  // Default: 0
 
 //================================================================================
 //============================= Marlin Mode Settings =============================
@@ -96,14 +133,14 @@
 
 /**
  * Default Mode
- * Set Marlin/Touch mode as the default mode at startup.
+ * Set Marlin/Touch Mode as the default mode at startup.
  *
  * NOTE: Mode switching is possible only for Marlin Mode and Touch Mode by a long press of
  *       1.5 seconds on the display or holding down the encorder button for 1.5 seconds.
  *
  *   Options: [Marlin Mode: 0, Touch Mode: 1, Blocked Marlin Mode: 2, Blocked Touch Mode: 3]
  */
-#define DEFAULT_LCD_MODE MODE_SERIAL_TSC  // Default: MODE_SERIAL_TSC
+#define DEFAULT_LCD_MODE 1  // Default: 1
 
 /**
  * Serial Always ON
@@ -117,7 +154,7 @@
 
 /**
  * Default Marlin Mode Background & Font Colors
- * Set colors used in Marlin mode.
+ * Set colors used in Marlin Mode.
  *
  *   Options: [ WHITE: 0,  BLACK: 1,  RED: 2,  GREEN: 3,      BLUE: 4,       CYAN: 5,  MAGENTA: 6,    YELLOW: 7,
  *             ORANGE: 8, PURPLE: 9, LIME: 10, BROWN: 11, DARKBLUE: 12, DARKGREEN: 13,    GRAY: 14, DARKGRAY: 15]
@@ -284,14 +321,6 @@
 #define AUTO_SAVE_LOAD_BL_VALUE 1  // Default: 1
 
 /**
- * TouchMI settings (ABL)
- * Enable this option for displaying TouchMI sensor settings in ABL menu (Init, Z Offset, Save, Test).
- *
- *   Options: [disable: 0, enable: 1]
- */
-#define TOUCHMI_SENSOR_VALUE 0  // Default: 0
-
-/**
  * Onboard / Printer SD
  * Starting from Marlin Bugfix 2.0.x Distribution Date: 2020-04-27 & above, the TFT will auto detect
  * On-Board SD Card and auto-configure M27 AutoReport with M115 command.
@@ -306,10 +335,19 @@
  * Used by the Probe Offset / Mesh Editor menu for the Z offset / Z height tuning process.
  * Z height to raise / drop after homing (G28) before starting to probe a point.
  *
- * NOTE: It MUST BE a value >= 0 (e.g. 20) for a Cartesian printer to avoid crashing into the bed.
- *       It MUST BE a value <= 0 (e.g. -50) for a Delta printer to avoid crashing into the top of the tower.
+ * NOTES:
+ *   - It MUST BE a value >= 0 (e.g. 20) for a Cartesian printer to avoid crashing into the bed.
+ *   - It MUST BE a value <= 0 (e.g. -50) for a Delta printer to avoid crashing into the top of the tower.
  */
-#define PROBING_Z_RAISE 20.0f
+#define Z_RAISE_PROBING 20.0f
+
+/**
+ * TouchMI settings (ABL)
+ * Enable this option for displaying TouchMI sensor settings in ABL menu (Init, Z Offset, Save, Test).
+ *
+ *   Options: [disable: 0, enable: 1]
+ */
+#define TOUCHMI_SENSOR_VALUE 0  // Default: 0
 
 //================================================================================
 //============================ Power Supply Settings =============================
@@ -339,10 +377,10 @@
 //================================================================================
 
 /**
- * NOTE for users having a filament sensor connected to the mainboard:
- * 1) Define "FIL_SENSOR_TYPE 0" below to disable the sensor handling on the TFT.
- * 2) Configure the sensor in the firmware of your mainboard.
- * 3) Add M75 to "PRINT_START_GCODE" and M77 to "PRINT_END_GCODE" of the TFT (or your slicer).
+ * NOTES for users having a filament sensor connected to the mainboard:
+ *   1) Define "FIL_SENSOR_TYPE 0" below to disable the sensor handling on the TFT.
+ *   2) Configure the sensor in the firmware of your mainboard.
+ *   3) Add M75 to "PRINT_START_GCODE" and M77 to "PRINT_END_GCODE" of the TFT (or your slicer).
  */
 
 /**
@@ -406,7 +444,7 @@
  * Default LCD Brightness Levels (only for TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
  * Default brightness values for LCD.
  *
- *   Options: [off: 0, 5%: 1, 10%: 2, 20%: 3, 30%: 4, 40%: 5, 50%: 6, 60%: 7, 70%: 8, 80%: 9, 90%: 10, 100%: 11]
+ *   Options: [OFF: 0, 5%: 1, 10%: 2, 20%: 3, 30%: 4, 40%: 5, 50%: 6, 60%: 7, 70%: 8, 80%: 9, 90%: 10, 100%: 11]
  */
 #define DEFAULT_LCD_BRIGHTNESS      11  // Default display brightness (Default: 11)
 #define DEFAULT_LCD_IDLE_BRIGHTNESS  3  // Display brightness when device is idle (Default: 3)
@@ -416,7 +454,7 @@
  * The LCD screen will dim to idle brightness, if the display is not touched for the
  * period of the LCD idle time.
  *
- *   Options: [off: 0, 5sec: 1, 10sec: 2, 30sec: 3, 1min: 4, 2min: 5, 5min: 6, CUSTOM: 7]
+ *   Options: [OFF: 0, 5sec: 1, 10sec: 2, 30sec: 3, 1min: 4, 2min: 5, 5min: 6, CUSTOM: 7]
  */
 #define DEFAULT_LCD_IDLE_TIME 0  // Default: 0
 
@@ -443,8 +481,8 @@
  * Up to 15 custom gcode commands that will be available in the Custom menu.
  *
  * Usage:
- *   To enable a custom command, remove "//" at the begining of custom commands label & gcode.
- *   To disable a custom command, add "//" at the begining of custom commands label & gcode.
+ *   - To enable a custom command, remove "//" at the begining of custom commands label & gcode.
+ *   - To disable a custom command, add "//" at the begining of custom commands label & gcode.
  *
  * NOTE: If the values are left blank then default name and gcode will be used.
  *
@@ -491,11 +529,11 @@
  * Gcode that runs after a print starts, ends, or canceled.
  * Enable Start/End/Cancel gcode in SETTINGS -> FEATURE menu.
  *
- * NOTE for users having a filament sensor connected to the mainboard:
- * 1) Enable the start/end gcode.
- * 2) Add the following commands to the start/end gcode:
- *    PRINT_START_GCODE: M75\n
- *    PRINT_END_GCODE: M77\n
+ * NOTES for users having a filament sensor connected to the mainboard:
+ *   1) Enable the start/end gcode.
+ *   2) Add the following commands to the start/end gcode:
+ *      - PRINT_START_GCODE: M75\n
+ *      - PRINT_END_GCODE: M77\n
  *
  *   Value range: [min: 3, max: 75 characters]
  */
@@ -523,8 +561,15 @@
 
 /**
  * Screenshot For Documentation
- * Long press touch screen capture the current full screen to SD card
- * Only for documentation purposes, DON'T enable it for normal printing.
+ * A press on touch screen or on encoder button will take and save a full screen screenshot to SD card.
+ * Only for documentation purposes. DON'T enable it for normal printing.
+ *
+ * For TFTLCD with an encoder "LCD_ENCODER_SUPPORT":
+ * - A press on touch screen to trigger a screenshot in Marlin mode
+ * - A press on encoder button to trigger a screenshot in Touch mode
+ *
+ * For TFTLCD with no encoder:
+ * - A long press of 1.5 seconds on touch screen to trigger a screenshot
  */
 //#define SCREEN_SHOT_TO_SD  // Default: commented (disabled)
 
@@ -592,21 +637,21 @@
  * If not enabled, you can set the desired starting Z height
  * in Marlin fw (MANUAL_PROBE_START_Z in Configuration.h).
  */
-#define ENABLE_MBL_START_Z
+#define ENABLE_MBL_START_Z  // Default: uncommented (enabled)
 
 /**
  * M601: Pause Print
  * PrusaSlicer can add M601 on certain height.
  * Acts here like manual pause.
  */
-#define NOZZLE_PAUSE_M601
+#define NOZZLE_PAUSE_M601  // Default: uncommented (enabled)
 
 /**
  * M701, M702: Marlin Filament Load / Unload Gcodes Support
  * FILAMENT_LOAD_UNLOAD_GCODES option on Marlin configuration_adv.h need to be uncommented.
  * Adds a submenu to the movement menu for selecting load and unload actions.
  */
-#define LOAD_UNLOAD_M701_M702
+#define LOAD_UNLOAD_M701_M702  // Default: uncommented (enabled)
 
 /**
  * Delta Probe Type
@@ -643,7 +688,7 @@
  *
  * NOTE: This may slow down graphics while switching menus while printing.
 */
-#define RAPID_SERIAL_COMM
+#define RAPID_SERIAL_COMM  // Default: uncommented (enabled)
 
 /**
  * LCD/Touch Encoder
@@ -673,10 +718,10 @@
 #define BUZZER_STOP_LEVEL LOW  // Default: LOW
 
 // Show bootscreen when starting up
-#define SHOW_BTT_BOOTSCREEN
+#define SHOW_BTT_BOOTSCREEN  // Default: uncommented (enabled)
 
 // Bootscreen logo time in ms
-#define BTT_BOOTSCREEN_TIME 3000
+#define BTT_BOOTSCREEN_TIME 3000  // Default: 3000
 
 /**
  * Smart Home
@@ -684,7 +729,7 @@
  * It doesn't interfere with the "Screenshot" and "Marlin/Touch Mode" other than if
  * enabled, long press "Back" will not trigger "Screenshot" or "Marlin/Touch Mode"
  */
-#define SMART_HOME
+#define SMART_HOME  // Default: uncommented (enabled)
 
 /**
  * Alternative Move Menu Layout
@@ -697,7 +742,7 @@
  * Friendly Z Offset Language
  * Replace decrease/increase and "-" & "+" icons with down/up and friendly icons.
  */
-#define FRIENDLY_Z_OFFSET_LANGUAGE
+#define FRIENDLY_Z_OFFSET_LANGUAGE  // Default: uncommented (enabled)
 
 /**
  * Quick EEPROM Menu
@@ -705,7 +750,7 @@
  *
  * NOTE: If disabled, EEPROM operations can also be accessed in the (settings > machine > parameters) menu.
  */
-#define QUICK_EEPROM_BUTTON
+#define QUICK_EEPROM_BUTTON  // Default: uncommented (enabled)
 
 /**
  * Toast Notification Duration (in MilliSeconds)
@@ -718,7 +763,7 @@
  * By default the keyboard is drawn on right side of the screen.
  * Enable KEYBOARD_ON_LEFT to draw the keyboard on left side of the screen.
  */
-//#define KEYBOARD_ON_LEFT
+//#define KEYBOARD_ON_LEFT  // Default: commented (disabled)
 
 //
 // Terminal Keyboard / Numpad Settings

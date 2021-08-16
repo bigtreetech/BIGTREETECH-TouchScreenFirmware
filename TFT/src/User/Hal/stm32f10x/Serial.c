@@ -1,13 +1,8 @@
 #include "Serial.h"
-#include "includes.h"  // for infoSettings, SERIAL_PORT etc...
-
-#define SERIAL_PORT_QUEUE_SIZE NOBEYOND(512, RAM_SIZE * 64, 4096)
-#define SERIAL_PORT_2_QUEUE_SIZE 512
-#define SERIAL_PORT_3_QUEUE_SIZE 512
-#define SERIAL_PORT_4_QUEUE_SIZE 512
+#include "includes.h"  // for infoHost
 
 // dma rx buffer
-DMA_CIRCULAR_BUFFER dmaL1Data[_UART_CNT];
+DMA_CIRCULAR_BUFFER dmaL1Data[_UART_CNT] = {0};
 
 // Config for USART Channel
 typedef struct
@@ -44,84 +39,36 @@ void Serial_DMA_Config(uint8_t port)
   cfg->dma_chanel->CCR |= 1<<0;   // DMA EN
 }
 
-void Serial_Config(uint8_t port, uint32_t baud)
+void Serial_Config(uint8_t port, uint16_t cacheSize, uint32_t baudrate)
 {
+  dmaL1Data[port].cacheSize = cacheSize;
   dmaL1Data[port].rIndex = dmaL1Data[port].wIndex = 0;
-  dmaL1Data[port].cache = malloc(dmaL1Data[port].cacheSize);
-  while (!dmaL1Data[port].cache);          // malloc failed
-  UART_Config(port, baud, USART_IT_IDLE);  // IDLE interrupt
+
+  if (dmaL1Data[port].cache != NULL)
+    free(dmaL1Data[port].cache);
+
+  dmaL1Data[port].cache = malloc(cacheSize);
+  while (!dmaL1Data[port].cache);              // malloc failed
+
+  UART_Config(port, baudrate, USART_IT_IDLE);  // IDLE interrupt
   Serial_DMA_Config(port);
 }
 
 void Serial_DeConfig(uint8_t port)
 {
-  free(dmaL1Data[port].cache);
-  dmaL1Data[port].cache = NULL;
+  if (dmaL1Data[port].cache != NULL)
+  {
+    free(dmaL1Data[port].cache);
+    dmaL1Data[port].cache = NULL;
+  }
+
   Serial[port].dma_chanel->CCR &= ~(1<<0);  // Disable DMA
   UART_DeConfig(port);
 }
 
-#ifdef SERIAL_PORT_2
-  const uint8_t mulSerialPorts[] = {
-    SERIAL_PORT_2,
-    #ifdef SERIAL_PORT_3
-      SERIAL_PORT_3,
-    #endif
-    #ifdef SERIAL_PORT_4
-      SERIAL_PORT_4,
-    #endif
-  };
-
-  const uint16_t mulQueueSize[] = {
-    SERIAL_PORT_2_QUEUE_SIZE,
-    #ifdef SERIAL_PORT_3
-      SERIAL_PORT_3_QUEUE_SIZE,
-    #endif
-    #ifdef SERIAL_PORT_4
-      SERIAL_PORT_4_QUEUE_SIZE,
-    #endif
-  };
-#endif
-
-void Serial_Init(uint32_t baud)
-{
-  dmaL1Data[SERIAL_PORT].cacheSize = SERIAL_PORT_QUEUE_SIZE;
-  Serial_Config(SERIAL_PORT, baud);
-
-  #ifdef SERIAL_PORT_2
-    for (uint8_t i = 0; i < sizeof(mulSerialPorts); i++)
-    {
-      // The extended Multi-Serials port should be enabled according to config.ini
-      // Avoid the floating serial port be enabled that external interference causes the serial port received wrong data
-      if (infoSettings.multi_serial & (1 << i))
-      {
-        dmaL1Data[mulSerialPorts[i]].cacheSize = mulQueueSize[i];
-        Serial_Config(mulSerialPorts[i], baud);
-      }
-    }
-  #endif
-}
-
-void Serial_DeInit(void)
-{
-  Serial_DeConfig(SERIAL_PORT);
-
-  #ifdef SERIAL_PORT_2
-    for (uint8_t i = 0; i < sizeof(mulSerialPorts); i++)
-    {
-      // The extended Multi-Serials port should be enabled according to config.ini
-      // Avoid the floating serial port be enabled that external interference causes the serial port received wrong data
-      if (infoSettings.multi_serial & (1 << i))
-      {
-        Serial_DeConfig(mulSerialPorts[i]);
-      }
-    }
-  #endif
-}
-
 void USART_IRQHandler(uint8_t port)
 {
-  if ((Serial[port].uart->SR & (1<<4))!=0)
+  if ((Serial[port].uart->SR & (1<<4)) != 0)
   {
     Serial[port].uart->SR;
     Serial[port].uart->DR;
@@ -173,12 +120,4 @@ void Serial_Putchar(uint8_t port, char ch)
 {
   while ((Serial[port].uart->SR & USART_FLAG_TC) == (uint16_t)RESET);
   Serial[port].uart->DR = (uint8_t) ch;
-}
-
-#include "stdio.h"
-int fputc(int ch, FILE *f)
-{
-  while ((Serial[SERIAL_PORT].uart->SR&0X40) == 0);
-  Serial[SERIAL_PORT].uart->DR = (uint8_t) ch;
-  return ch;
 }

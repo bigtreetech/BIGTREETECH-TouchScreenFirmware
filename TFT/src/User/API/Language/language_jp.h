@@ -1,17 +1,17 @@
 #ifndef _LANGUAGE_JP_H_
 #define _LANGUAGE_JP_H_
 
-    // config.ini Parameter Settings / Feature Settings
+    // config.ini Parameter Settings - Screen Settings and Feature Settings
     #define STRING_BAUDRATE               "ポートレート"
-    #define STRING_LANGUAGE               "日本語"
-    #define STRING_ROTATE_UI              "回転UI"
-    #define STRING_TERMINAL_ACK           "端末でACKを表示する"
-    #define STRING_PERSISTENT_INFO        "永続的なステータス情報"
-    #define STRING_FAN_SPEED_PERCENT      "Fan Speed As Percentage"
-    #define STRING_FILE_LIST_MODE         "ファイルビューアリストモード"
-    #define STRING_FILE_SORT_BY           "Sort files by"
-    #define STRING_ACK_NOTIFICATION       "ACK notification style"
     #define STRING_EMULATE_M600           "Emulate M600"
+    #define STRING_ROTATE_UI              "回転UI"
+    #define STRING_LANGUAGE               "日本語"
+    #define STRING_ACK_NOTIFICATION       "ACK notification style"
+    #define STRING_FILE_SORT_BY           "Sort files by"
+    #define STRING_FILE_LIST_MODE         "ファイルビューアリストモード"
+    #define STRING_FAN_SPEED_PERCENT      "Fan Speed As Percentage"
+    #define STRING_PERSISTENT_INFO        "永続的なステータス情報"
+    #define STRING_TERMINAL_ACK           "端末でACKを表示する"
     #define STRING_SERIAL_ALWAYS_ON       "Serial Always ON"
     #define STRING_MARLIN_FULLSCREEN      "フルスクリーンでマーリンモード"
     #define STRING_MARLIN_SHOW_TITLE      "Marlin Mode Title Support"
@@ -246,6 +246,7 @@
     #define STRING_SETTINGS               "設定"
     #define STRING_SCREEN_SETTINGS        "画面"
     #define STRING_MACHINE_SETTINGS       "マシン"
+    #define STRING_UI_SETTINGS            "UI"
     #define STRING_MARLIN_MODE_SETTINGS   "MarlinMode"
     #define STRING_FEATURE_SETTINGS       "機能"
     #define STRING_SOUND                  "Sound"

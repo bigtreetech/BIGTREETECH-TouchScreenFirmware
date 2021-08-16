@@ -861,6 +861,8 @@ void loopBackEnd(void)
   sendQueueCmd();
   // Parse the received slave response information
   parseACK();
+  // Parse comment from gCode file
+  parseComment();
   // Parse the received Gcode from other UART, such as: ESP3D, etc...
   parseRcvGcode();
   // Temperature monitor

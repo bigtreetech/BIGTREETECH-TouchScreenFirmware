@@ -21,7 +21,7 @@ static inline void blUpdateState(MENUITEMS *menu)
   {
     infoMenu.menu[++infoMenu.cur] = menuMeshEditor;
   }
-  
+
   void deltaZOffset(void)
   {
     storeCmd("M851\n");
@@ -98,7 +98,7 @@ void menuBedLeveling(void)
       case KEY_ICON_1:
         #if DELTA_PROBE_TYPE != 2
           infoMenu.menu[++infoMenu.cur] = menuMeshEditor;
-        #else  
+        #else
           setDialogText(LABEL_WARNING, LABEL_DISCONNECT_PROBE, LABEL_CONTINUE, LABEL_CANCEL);
           showDialog(DIALOG_TYPE_ALERT, deltaMeshEditor, NULL, NULL);
         #endif
@@ -133,10 +133,10 @@ void menuBedLeveling(void)
             storeCmd("M851\n");
             zOffsetSetMenu(true);  // use Probe Offset menu
             infoMenu.menu[++infoMenu.cur] = menuZOffset;
-          #else    
+          #else
             setDialogText(LABEL_WARNING, LABEL_DISCONNECT_PROBE, LABEL_CONTINUE, LABEL_CANCEL);
             showDialog(DIALOG_TYPE_ALERT, deltaZOffset, NULL, NULL);
-          #endif  
+          #endif
         }
         break;
 
