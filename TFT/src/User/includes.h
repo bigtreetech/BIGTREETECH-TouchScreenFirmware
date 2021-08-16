@@ -13,7 +13,7 @@
 // User/HAL/stm32f10x or // HAL/stm32f2_f4xx
 #include "lcd_dma.h"
 #include "lcd.h"
-#include "Serial.h"     // it uses infoSettings. HAL should be independent by that!
+#include "Serial.h"
 #include "spi_slave.h"  // it uses infoSettings. HAL should be independent by that!
 #include "spi.h"
 #include "timer_pwm.h"
@@ -66,6 +66,7 @@
 #include "BabystepControl.h"
 #include "boot.h"
 #include "CaseLightControl.h"
+#include "comment.h"
 #include "config.h"
 #include "coordinate.h"
 #include "debug.h"

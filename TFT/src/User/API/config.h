@@ -10,16 +10,19 @@ extern "C" {
 
 //after changing/adding/removing a keyword, change the CONFIG_FLASH_SIGN in Settings.h and PARA_SIGN in FlashStore.c
 
-#define LINE_MAX_CHAR                 100
+#define LINE_MAX_CHAR                 200
 #define CONFIG_FILE_PATH              "0:config.ini"
 #define LANG_FILE_PATH                "0:language.ini"
 
 //-----------------------------General Settings
-#define CONFIG_STATUS_SCREEN          "status_screen:"
-#define CONFIG_UART_BAUDRATE          "baudrate:"
 #define CONFIG_MULTI_SERIAL           "multi_serial:"
-#define CONFIG_LANGUAGE               "language:"
+#define CONFIG_UART_BAUDRATE          "baudrate:"
+#define CONFIG_EMULATE_M600           "emulate_m600:"
 
+//-----------------------------UI Settings
+#define CONFIG_ROTATE_UI              "rotate_ui:"
+#define CONFIG_LANGUAGE               "language:"
+#define CONFIG_STATUS_SCREEN          "status_screen:"
 #define CONFIG_TITLE_BG               "title_back_color:"
 #define CONFIG_MENU_BG_COLOR          "background_color:"
 #define CONFIG_MENU_FONT_COLOR        "font_color:"
@@ -32,17 +35,15 @@ extern "C" {
 #define CONFIG_MESH_MAX_COLOR         "mesh_max_color:"
 #define CONFIG_TERMINAL_COLOR_SCHEME  "terminal_color_scheme:"
 
-#define CONFIG_ROTATE_UI              "rotate_ui:"
-#define CONFIG_TERMINAL_ACK           "terminal_ack:"
-#define CONFIG_INVERT_AXIS            "invert_axis:"
-#define CONFIG_PERSISTENT_TEMP        "persistent_info:"
-#define CONFIG_FAN_PERCENT            "fan_speed_percent:"
-#define CONFIG_LIST_MODE              "files_list_mode:"
-#define CONFIG_FILES_SORT_BY          "files_sort_by:"
 #define CONFIG_ACK_NOTIFICATION       "ack_notification:"
+#define CONFIG_FILES_SORT_BY          "files_sort_by:"
+#define CONFIG_LIST_MODE              "files_list_mode:"
+#define CONFIG_FAN_PERCENT            "fan_speed_percent:"
+#define CONFIG_PERSISTENT_TEMP        "persistent_info:"
+#define CONFIG_TERMINAL_ACK           "terminal_ack:"
 #define CONFIG_NOTIFICATION_M117      "notification_m117:"
-#define CONFIG_EMULATE_M600           "emulate_m600:"
 #define CONFIG_PROG_DISP_TYPE         "prog_disp_type:"
+#define CONFIG_LAYER_DISP_TYPE        "layer_disp_type:"
 //-----------------------------Marlin Mode Settings (only for TFT24 V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
 #define CONFIG_MODE                   "default_mode:"
 #define CONFIG_SERIAL_ON              "serial_always_on:"
@@ -70,7 +71,6 @@ extern "C" {
 #define CONFIG_Z_SPEED                "z_speed:"
 #define CONFIG_EXT_SPEED              "ext_speed:"
 #define CONFIG_AUTO_LEVEL             "auto_load_leveling:"
-#define CONFIG_TOUCHMI_SENSOR         "touchmi_sensor:"
 #define CONFIG_ONBOARD_SD             "onboard_sd_support:"
 #define CONFIG_M27_DELAY              "M27_refresh_time:"
 #define CONFIG_M27_KEEP_ON            "M27_always_active:"
@@ -83,9 +83,11 @@ extern "C" {
 #define CONFIG_LEVEL_Z_POS            "level_z_pos:"
 #define CONFIG_LEVEL_Z_RAISE          "level_z_raise:"
 #define CONFIG_LEVEL_FEEDRATE         "level_feedrate:"
+#define CONFIG_INVERT_AXIS            "invert_axis:"
 #define CONFIG_XY_OFFSET_PROBING      "xy_offset_probing:"
 #define CONFIG_Z_RAISE_PROBING        "z_raise_probing:"
 #define CONFIG_Z_STEPPERS_ALIGNMENT   "z_steppers_alignment:"
+#define CONFIG_TOUCHMI_SENSOR         "touchmi_sensor:"
 #define CONFIG_PREHEAT_NAME_1         "preheat_name1:"
 #define CONFIG_PREHEAT_NAME_2         "preheat_name2:"
 #define CONFIG_PREHEAT_NAME_3         "preheat_name3:"

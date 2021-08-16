@@ -1,17 +1,17 @@
 #ifndef _LANGUAGE_GR_H_
 #define _LANGUAGE_GR_H_
 
-    // config.ini Parameter Settings / Feature Settings
+    // config.ini Parameter Settings - Screen Settings and Feature Settings
     #define STRING_BAUDRATE               "BaudRate"
-    #define STRING_LANGUAGE               "Ελληνικά"
-    #define STRING_ROTATE_UI              "Περιστροφή UI"
-    #define STRING_TERMINAL_ACK           "Εμφάνιση ACK στο τερματικό"
-    #define STRING_PERSISTENT_INFO        "Πληροφορίες μόνιμης κατάστασης"
-    #define STRING_FAN_SPEED_PERCENT      "Fan Speed As Percentage"
-    #define STRING_FILE_LIST_MODE         "Λειτουργία λίστας προβολής αρχείων"
-    #define STRING_FILE_SORT_BY           "Sort files by"
-    #define STRING_ACK_NOTIFICATION       "ACK notification style"
     #define STRING_EMULATE_M600           "Emulate M600"
+    #define STRING_ROTATE_UI              "Περιστροφή UI"
+    #define STRING_LANGUAGE               "Ελληνικά"
+    #define STRING_ACK_NOTIFICATION       "ACK notification style"
+    #define STRING_FILE_SORT_BY           "Sort files by"
+    #define STRING_FILE_LIST_MODE         "Λειτουργία λίστας προβολής αρχείων"
+    #define STRING_FAN_SPEED_PERCENT      "Fan Speed As Percentage"
+    #define STRING_PERSISTENT_INFO        "Πληροφορίες μόνιμης κατάστασης"
+    #define STRING_TERMINAL_ACK           "Εμφάνιση ACK στο τερματικό"
     #define STRING_SERIAL_ALWAYS_ON       "Serial Always ON"
     #define STRING_MARLIN_FULLSCREEN      "Λειτουργία Marlin σε πλήρη οθόνη"
     #define STRING_MARLIN_SHOW_TITLE      "Marlin Mode Title Support"
@@ -246,6 +246,7 @@
     #define STRING_SETTINGS               "Ρυθμίσεις"
     #define STRING_SCREEN_SETTINGS        "Οθόνη"
     #define STRING_MACHINE_SETTINGS       "Μηχανήματος"
+    #define STRING_UI_SETTINGS            "UI"
     #define STRING_MARLIN_MODE_SETTINGS   "MarlinMode"
     #define STRING_FEATURE_SETTINGS       "Χαρακτηριστικών"
     #define STRING_SOUND                  "Sound"

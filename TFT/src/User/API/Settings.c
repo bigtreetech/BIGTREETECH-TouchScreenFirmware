@@ -21,11 +21,14 @@ const uint8_t default_custom_enabled[] = CUSTOM_GCODE_ENABLED;
 void infoSettingsReset(void)
 {
 // General Settings
-  infoSettings.status_screen          = ENABLE_STATUS_SCREEN;
+  infoSettings.multi_serial           = MULTI_SERIAL;
   infoSettings.baudrate               = BAUDRATE;
-  infoSettings.multi_serial           = 0;
-  infoSettings.language               = LANG_DEFAULT;
+  infoSettings.emulate_m600           = EMULATE_M600;
 
+// UI Settings
+  infoSettings.rotate_ui              = DISABLED;
+  infoSettings.language               = LANG_DEFAULT;
+  infoSettings.status_screen          = ENABLE_STATUS_SCREEN;
   infoSettings.title_bg_color         = lcd_colors[TITLE_BACKGROUND_COLOR];
   infoSettings.bg_color               = lcd_colors[BACKGROUND_COLOR];
   infoSettings.font_color             = lcd_colors[FONT_COLOR];
@@ -38,16 +41,15 @@ void infoSettingsReset(void)
   infoSettings.mesh_max_color         = lcd_colors[MESH_MAX_COLOR];
   infoSettings.terminal_color_scheme  = TERMINAL_COLOR_SCHEME;
 
-  infoSettings.rotate_ui              = DISABLED;
-  infoSettings.terminalACK            = DISABLED;
-  infoSettings.persistent_info        = ENABLED;
-  infoSettings.fan_percentage         = SHOW_FAN_PERCENTAGE;
-  infoSettings.file_listmode          = ENABLED;
-  infoSettings.files_sort_by          = SORT_DATE_NEW_FIRST;
   infoSettings.ack_notification       = ACK_NOTIFICATION_STYLE;
-  infoSettings.notification_m117      = DISABLED;
-  infoSettings.emulate_m600           = EMULATE_M600;
+  infoSettings.files_sort_by          = SORT_DATE_NEW_FIRST;
+  infoSettings.file_listmode          = ENABLED;
+  infoSettings.fan_percentage         = SHOW_FAN_PERCENTAGE;
+  infoSettings.persistent_info        = ENABLED;
+  infoSettings.terminalACK            = DISABLED;
+  infoSettings.notification_m117      = NOTIFICATION_M117;
   infoSettings.prog_disp_type         = ELAPSED_REMAINING;
+  infoSettings.layer_disp_type        = SHOW_LAYER_HEIGHT;
 
 // Marlin Mode Settings (only for TFT24 V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
   infoSettings.mode                   = DEFAULT_LCD_MODE;
@@ -70,7 +72,6 @@ void infoSettingsReset(void)
   infoSettings.ctrl_fan_en            = ENABLE_CTRL_FAN;
   infoSettings.min_ext_temp           = PREVENT_COLD_EXTRUSION_MINTEMP;
   infoSettings.auto_load_leveling     = AUTO_SAVE_LOAD_BL_VALUE;
-  infoSettings.touchmi_sensor         = TOUCHMI_SENSOR_VALUE;
   infoSettings.onboardSD              = AUTO;  //ENABLED / DISABLED / AUTO
   infoSettings.m27_refresh_time       = M27_REFRESH;
   infoSettings.m27_active             = M27_WATCH_OTHER_SOURCES;
@@ -89,8 +90,9 @@ void infoSettingsReset(void)
   infoSettings.move_speed             = 1;  // index on infoSettings.axis_speed, infoSettings.ext_speed
 
   infoSettings.xy_offset_probing      = ENABLED;
-  infoSettings.z_raise_probing        = PROBING_Z_RAISE;
+  infoSettings.z_raise_probing        = Z_RAISE_PROBING;
   infoSettings.z_steppers_alignment   = DISABLED;
+  infoSettings.touchmi_sensor         = TOUCHMI_SENSOR_VALUE;
 
 // Power Supply Settings (only if connected to TFT controller)
   infoSettings.auto_off               = DISABLED;

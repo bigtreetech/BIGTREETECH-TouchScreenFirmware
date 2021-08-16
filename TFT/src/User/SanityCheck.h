@@ -215,7 +215,7 @@ extern "C" {
 
 #if defined(TFT35_V2_0) || defined(TFT35_V3_0) || defined(TFT35_B1_V3_0) || defined(TFT35_E3_V3_0)
   #ifdef SCREEN_SHOT_TO_SD
-    #error "Hardware error, need to change the TFT Pin39 from GND to 3.3V to use this feature. Otherwise, the color read out is incorrect"
+    #error "Hardware error: This feature requires that pin 39 on the 40 pins TFT connector is switched from GND to 3.3V. Otherwise, the color read out is incorrect"
   #endif
 #endif
 

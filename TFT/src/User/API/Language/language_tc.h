@@ -1,17 +1,17 @@
 #ifndef _LANGUAGE_TC_H_
 #define _LANGUAGE_TC_H_
 
-    // config.ini Parameter Settings / Feature Settings
+    // config.ini Parameter Settings - Screen Settings and Feature Settings
     #define STRING_BAUDRATE               "串列傳輸速率"
-    #define STRING_LANGUAGE               "正體中文"
-    #define STRING_ROTATE_UI              "顯示方向"
-    #define STRING_TERMINAL_ACK           "在G-code終端顯示溫度"
-    #define STRING_PERSISTENT_INFO        "頂部溫度訊息"
-    #define STRING_FAN_SPEED_PERCENT      "Fan Speed As Percentage"
-    #define STRING_FILE_LIST_MODE         "文件預覽列表模式"
-    #define STRING_FILE_SORT_BY           "Sort files by"
-    #define STRING_ACK_NOTIFICATION       "ACK 弹窗类型"
     #define STRING_EMULATE_M600           "Emulate M600"
+    #define STRING_ROTATE_UI              "顯示方向"
+    #define STRING_LANGUAGE               "正體中文"
+    #define STRING_ACK_NOTIFICATION       "ACK 弹窗类型"
+    #define STRING_FILE_SORT_BY           "Sort files by"
+    #define STRING_FILE_LIST_MODE         "文件預覽列表模式"
+    #define STRING_FAN_SPEED_PERCENT      "Fan Speed As Percentage"
+    #define STRING_PERSISTENT_INFO        "頂部溫度訊息"
+    #define STRING_TERMINAL_ACK           "在G-code終端顯示溫度"
     #define STRING_SERIAL_ALWAYS_ON       "Serial Always ON"
     #define STRING_MARLIN_FULLSCREEN      "全螢幕Marlin模式"
     #define STRING_MARLIN_SHOW_TITLE      "Marlin Mode Title Support"
@@ -246,6 +246,7 @@
     #define STRING_SETTINGS               "設定"
     #define STRING_SCREEN_SETTINGS        "螢幕設定"
     #define STRING_MACHINE_SETTINGS       "機器設定"
+    #define STRING_UI_SETTINGS            "UI"
     #define STRING_MARLIN_MODE_SETTINGS   "MarlinMode"
     #define STRING_FEATURE_SETTINGS       "功能設定"
     #define STRING_SOUND                  "聲音"

@@ -1,17 +1,17 @@
 #ifndef _LANGUAGE_RU_H_
 #define _LANGUAGE_RU_H_
 
-    // config.ini Parameter Settings / Feature Settings
+    // config.ini Parameter Settings - Screen Settings and Feature Settings
     #define STRING_BAUDRATE               "Скорость"
-    #define STRING_LANGUAGE               "Русский"
-    #define STRING_ROTATE_UI              "Переворот"
-    #define STRING_TERMINAL_ACK           "ACK терминала (C°)"
-    #define STRING_PERSISTENT_INFO        "Нагрев в инфостроке"
-    #define STRING_FAN_SPEED_PERCENT      "Скорость вентилятора в процентах"
-    #define STRING_FILE_LIST_MODE         "Файлы в режиме строк"
-    #define STRING_FILE_SORT_BY           "Сортировать по"
-    #define STRING_ACK_NOTIFICATION       "ACK стиль уведомления"
     #define STRING_EMULATE_M600           "Эмуляция M600"
+    #define STRING_ROTATE_UI              "Переворот"
+    #define STRING_LANGUAGE               "Русский"
+    #define STRING_ACK_NOTIFICATION       "ACK стиль уведомления"
+    #define STRING_FILE_SORT_BY           "Сортировать по"
+    #define STRING_FILE_LIST_MODE         "Файлы в режиме строк"
+    #define STRING_FAN_SPEED_PERCENT      "Скорость вентилятора в процентах"
+    #define STRING_PERSISTENT_INFO        "Нагрев в инфостроке"
+    #define STRING_TERMINAL_ACK           "ACK терминала (C°)"
     #define STRING_SERIAL_ALWAYS_ON       "Серийный порт Всегда ВКЛЮЧЕН"
     #define STRING_MARLIN_FULLSCREEN      "Marlin на весь экран"
     #define STRING_MARLIN_SHOW_TITLE      "Marlin Mode Title Support"
@@ -246,6 +246,7 @@
     #define STRING_SETTINGS               "Настройки"
     #define STRING_SCREEN_SETTINGS        "Экран"
     #define STRING_MACHINE_SETTINGS       "Принтер"
+    #define STRING_UI_SETTINGS            "UI"
     #define STRING_MARLIN_MODE_SETTINGS   "MarlinMode"
     #define STRING_FEATURE_SETTINGS       "Опции"
     #define STRING_SOUND                  "Звуки"

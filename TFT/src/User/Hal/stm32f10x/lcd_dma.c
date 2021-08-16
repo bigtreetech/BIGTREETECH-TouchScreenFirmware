@@ -72,9 +72,9 @@ void lcd_frame_segment_display(u16 size, u32 addr)
   W25QXX_SPI_DMA_CHANNEL->CCR |= 1<<0;        // enable dma channel
   W25QXX_SPI_NUM->CR1 |= 1<<6;                // enable SPI
 
-  while ((W25QXX_SPI_DMA->ISR&(1<<W25QXX_SPI_DMA_IFCR_BIT)) == 0);  // wait for rx complete
+  while ((W25QXX_SPI_DMA->ISR & (1<<W25QXX_SPI_DMA_IFCR_BIT)) == 0);  // wait for rx complete
   W25QXX_SPI_DMA_CHANNEL->CCR &= (u32)(~(1<<0));
-  W25QXX_SPI_DMA->IFCR |= (u32)(1<<W25QXX_SPI_DMA_IFCR_BIT);        // clear ISR for rx complete
+  W25QXX_SPI_DMA->IFCR |= (u32)(1<<W25QXX_SPI_DMA_IFCR_BIT);          // clear ISR for rx complete
   W25Qxx_SPI_CS_Set(1);
 
   SPI_Protocol_Init(W25Qxx_SPI, W25Qxx_SPEED);  // Reset SPI clock and config again
