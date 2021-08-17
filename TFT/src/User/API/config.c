@@ -910,6 +910,10 @@ void parseConfigKey(uint16_t index)
         infoSettings.runout_invert = getOnOff();
         break;
 
+      case C_INDEX_RUNOUT_NC:
+        infoSettings.runout_nc = getOnOff();
+        break;
+
       case C_INDEX_RUNOUT_NOISE:
         SET_VALID_INT_VALUE(infoSettings.runout_noise_ms, MIN_DELAY_MS, MAX_DELAY_MS);
         break;

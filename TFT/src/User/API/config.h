@@ -107,6 +107,7 @@ extern "C" {
 //-----------------------------Filament Runout Settings (only if connected to TFT controller)
 #define CONFIG_RUNOUT                 "fil_runout:"
 #define CONFIG_RUNOUT_LOGIC           "fil_runout_inverting:"
+#define CONFIG_RUNOUT_NC              "fil_runout_nc:"
 #define CONFIG_RUNOUT_NOISE           "fil_noise_threshold:"
 #define CONFIG_RUNOUT_DISTANCE        "fil_runout_distance:"
 //-----------------------------Power Loss Recovery & BTT UPS Settings

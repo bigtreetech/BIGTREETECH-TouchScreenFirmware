@@ -399,6 +399,14 @@
  */
 #define FIL_RUNOUT_INVERTING 1  // Default: 1
 
+/**
+ * Filament runout sensor NC(Normal Close)
+ * Invert the logic of the sensor.
+ *
+ *   Options: [Normal Open: 0, Normal Close: 1]
+ */
+#define FIL_RUNOUT_NC 1  // Default: 1
+
 // Filament Noise Threshold
 // Pause print when filament runout is detected at least for this time period.
 #define FIL_NOISE_THRESHOLD 100   // Default: 100 (ms)

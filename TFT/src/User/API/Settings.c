@@ -102,6 +102,7 @@ void infoSettingsReset(void)
 // Filament Runout Settings (only if connected to TFT controller)
   infoSettings.runout                 = FIL_SENSOR_TYPE;
   infoSettings.runout_invert          = FIL_RUNOUT_INVERTING;
+  infoSettings.runout_nc              = FIL_RUNOUT_NC;
   infoSettings.runout_noise_ms        = FIL_NOISE_THRESHOLD;
   infoSettings.runout_distance        = FILAMENT_RUNOUT_DISTANCE_MM;
 

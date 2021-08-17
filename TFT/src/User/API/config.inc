@@ -99,6 +99,7 @@ X_CONFIG(SHUTDOWN_TEMP)
 //-----------------------------Filament Runout Settings (only if connected to TFT controller)
 X_CONFIG(RUNOUT)
 X_CONFIG(RUNOUT_LOGIC)
+X_CONFIG(RUNOUT_NC)
 X_CONFIG(RUNOUT_NOISE)
 X_CONFIG(RUNOUT_DISTANCE)
 //-----------------------------Power Loss Recovery & BTT UPS Settings
