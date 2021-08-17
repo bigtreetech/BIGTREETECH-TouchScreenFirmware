@@ -3,7 +3,7 @@
 #include <string.h>
 
 #define TSC_SIGN  0x20200512  // DO NOT MODIFY
-#define PARA_SIGN 0x20210311  // (YYYYMMDD) If a new setting parameter is added,
+#define PARA_SIGN 0x20210817  // (YYYYMMDD) If a new setting parameter is added,
                               // modify here and initialize the initial value
                               // in the "infoSettingsReset()" function
 enum
