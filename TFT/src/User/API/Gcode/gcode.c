@@ -243,48 +243,6 @@ void request_M0(void)
   mustStoreCmd("M0\n");
 }
 
-// void send_and_wait_M20(const char* command)
-// {
-//   uint32_t timeout = ((uint32_t)0x000FFFFF);
-//   uint32_t waitloops = ((uint32_t)0x00000006);
-
-//   resetRequestCommandInfo("{", "}", "Error:", NULL, NULL);
-//   mustStoreCmd(command);
-//   while ((strstr(requestCommandInfo.cmd_rev_buf, "dir") == NULL) && (waitloops > 0x00))  //(!find_part("dir"))
-//   {
-//     waitloops--;
-//     timeout = ((uint32_t)0x0000FFFF);
-//     while ((!requestCommandInfo.done) && (timeout > 0x00))
-//     {
-//       loopBackEnd();
-//       timeout--;
-//     }
-//     if (timeout <= 0x00)
-//     {
-//       uint16_t wIndex = (dmaL1Data[SERIAL_PORT].wIndex == 0) ? ACK_MAX_SIZE : dmaL1Data[SERIAL_PORT].wIndex;
-//       if (dmaL1Data[SERIAL_PORT].cache[wIndex - 1] == '}')  // \n fehlt
-//       {
-//         BUZZER_PLAY(sound_notify);  // for DEBUG
-//         dmaL1Data[SERIAL_PORT].cache[wIndex] = '\n';
-//         dmaL1Data[SERIAL_PORT].cache[wIndex + 1] = 0;
-//         dmaL1Data[SERIAL_PORT].wIndex++;
-//         infoHost.rx_ok[SERIAL_PORT] = true;
-//       }
-//     }
-//     if (dmaL1NotEmpty(SERIAL_PORT) && !infoHost.rx_ok[SERIAL_PORT])
-//     {
-//       infoHost.rx_ok[SERIAL_PORT] = true;
-//     }
-//     if (strstr(requestCommandInfo.cmd_rev_buf, "dir") == NULL)
-//     {
-//       clearRequestCommandInfo();
-//       resetRequestCommandInfo("{", "}", "Error:", NULL, NULL);
-//       mustStoreCmd("\n");
-//     }
-//   }
-//   return;  // requestCommandInfo.cmd_rev_buf;
-// }
-
 void request_M98(char *filename)
 {
   char command[256];

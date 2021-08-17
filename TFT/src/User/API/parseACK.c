@@ -1,5 +1,6 @@
 #include "parseACK.h"
 #include "includes.h"
+#include "parseACKJson.hpp"
 
 #define ACK_MAX_SIZE 512
 
@@ -422,6 +423,7 @@ void parseACK(void)
         storeCmd("M211\n");  // retrieve the software endstops state
       }
       infoHost.connected = true;
+      requestCommandInfo.inJson = false;
     }
 
     // Onboard sd Gcode command response
@@ -446,6 +448,7 @@ void parseACK(void)
         BUZZER_PLAY(sound_error);
         goto parse_end;
       }
+      requestCommandInfo.inJson = false;
     }
 
     if (requestCommandInfo.inResponse)
@@ -466,9 +469,23 @@ void parseACK(void)
         ackPopupInfo(errormagic);
       }
       infoHost.wait = false;
+      requestCommandInfo.inJson = false;
       goto parse_end;
     }
     // Onboard sd Gcode command response end
+
+    if (!requestCommandInfo.inWaitResponse && !requestCommandInfo.inResponse && infoMachineSettings.firmwareType == FW_REPRAPFW)
+    {
+      if (strchr(dmaL2Cache, '{') != NULL)
+      {
+        requestCommandInfo.inJson = true;
+      }
+    }
+
+    if (requestCommandInfo.inJson)
+    {
+      parseACKJson(dmaL2Cache);
+    }
 
     if (ack_cmp("ok\n"))
     {
@@ -568,15 +585,6 @@ void parseACK(void)
         if (ack_seen("S"))
         {
           fanSetCurSpeed(i, ack_value());
-        }
-      }
-      // parse and store flow rate percentage in case of RepRapFirmware
-      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && ack_seen("fanPercent\":["))
-      {
-        for (uint8_t i = 0; i < infoSettings.fan_count; i++)
-        {
-          fanSetPercent(i, ack_value() + 0.5f);
-          ack_continue_seen(",");
         }
       }
       // parse and store M710, controller fan

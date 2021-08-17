@@ -42,7 +42,8 @@ void menuSpeed(void)
   KEY_VALUES key_num = KEY_IDLE;
   LASTSPEED lastSpeed;
 
-  storeCmd("M220\nM221\n");
+  if (infoMachineSettings.firmwareType != FW_REPRAPFW)
+    storeCmd("M220\nM221\n"); // RRF has current settings via periodic polling (fanQuery)
 
   speedSetPercent(item_index, speedGetCurPercent(item_index));
   lastSpeed = (LASTSPEED) {speedGetCurPercent(item_index), speedGetSetPercent(item_index)};
