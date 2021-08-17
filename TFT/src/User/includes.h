@@ -27,6 +27,7 @@
 // User/HAL
 #include "buzzer.h"
 #include "Knob_LED.h"
+#include "LCD_Encoder.h"
 #include "LCD_Init.h"
 #include "sd.h"
 #include "sw_spi.h"
@@ -78,7 +79,6 @@
 #include "interfaceCmd.h"
 #include "LCD_Colors.h"
 #include "LCD_Dimming.h"
-#include "LCD_Encoder.h"
 #include "LED_Colors.h"
 #include "MachineParameters.h"
 #include "menu.h"

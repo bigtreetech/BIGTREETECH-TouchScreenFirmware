@@ -72,7 +72,7 @@ void HW_Init(void)
   #endif
 
   #if ENC_ACTIVE_SIGNAL
-    LCD_Enc_InitActiveSignal();
+    LCD_Enc_InitActiveSignal(infoSettings.marlin_type == LCD12864);
   #endif
 
   #ifdef PS_ON_PIN
@@ -123,7 +123,7 @@ void HW_InitMode(uint8_t mode)
     #endif
 
     #if ENC_ACTIVE_SIGNAL  // set encoder inactive signal if Touch mode is active
-      LCD_Enc_SetActiveSignal(0);
+      LCD_Enc_SetActiveSignal(infoSettings.marlin_type == LCD12864, 0);
     #endif
   }
   else
@@ -142,7 +142,7 @@ void HW_InitMode(uint8_t mode)
     #endif
 
     #if ENC_ACTIVE_SIGNAL  // set encoder active signal if Marlin mode is active
-      LCD_Enc_SetActiveSignal(1);
+      LCD_Enc_SetActiveSignal(infoSettings.marlin_type == LCD12864, 1);
     #endif
 
     #if !defined(MKS_TFT)
