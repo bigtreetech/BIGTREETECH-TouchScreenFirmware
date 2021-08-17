@@ -10,7 +10,7 @@ extern "C" {
 #include "FlashStore.h"
 #include "Settings.h"
 
-//check size of settings against max allocated size at compile time
+// check size of settings against max allocated size at compile time
 #define SIZE_CHECK(object) ((void)sizeof(char[1 - 2*!!(object)]))
 
 #if CONFIG_VERSION != CONFIG_SUPPPORT
@@ -215,7 +215,7 @@ extern "C" {
 
 #if defined(TFT35_V2_0) || defined(TFT35_V3_0) || defined(TFT35_B1_V3_0) || defined(TFT35_E3_V3_0)
   #ifdef SCREEN_SHOT_TO_SD
-    #error "Hardware error: This feature requires that pin 39 on the 40 pins TFT connector is switched from GND to 3.3V. Otherwise, the color read out is incorrect"
+    #error "WARNING! This feature requires that pin 39 on the 40 pins TFT connector is switched from GND to 3.3V. Otherwise, the color read out is incorrect"
   #endif
 #endif
 

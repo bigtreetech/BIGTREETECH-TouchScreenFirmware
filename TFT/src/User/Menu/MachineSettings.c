@@ -111,7 +111,7 @@ void menuMachineSettings(void)
     LABEL_MACHINE_SETTINGS,
     // icon                          label
     {
-      {ICON_PARAMETER,               LABEL_PARAMETER_SETTING},
+      {ICON_PARAMETER,               LABEL_PARAMETER_SETTINGS},
       {ICON_GCODE,                   LABEL_TERMINAL},
       {ICON_CUSTOM,                  LABEL_CUSTOM},
       {ICON_RGB_SETTINGS,            LABEL_RGB_SETTINGS},

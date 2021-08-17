@@ -15,8 +15,8 @@ extern "C" {
 #define LANG_FILE_PATH                "0:language.ini"
 
 //-----------------------------General Settings
-#define CONFIG_MULTI_SERIAL           "multi_serial:"
 #define CONFIG_UART_BAUDRATE          "baudrate:"
+#define CONFIG_SERIAL_PORT            "serial_port:"
 #define CONFIG_EMULATE_M600           "emulate_m600:"
 
 //-----------------------------UI Settings

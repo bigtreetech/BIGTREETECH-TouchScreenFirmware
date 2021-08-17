@@ -25,7 +25,7 @@
 #include "usbh_usr.h"       // HAL/STM32_USB_HOST_Library/Usr/inc
 
 // User/HAL
-#include "buzzer.h"    // it uses infoSettings. HAL should be independent by that!
+#include "buzzer.h"
 #include "Knob_LED.h"
 #include "LCD_Init.h"
 #include "sd.h"
@@ -65,6 +65,7 @@
 // User/API
 #include "BabystepControl.h"
 #include "boot.h"
+#include "BuzzerControl.h"
 #include "CaseLightControl.h"
 #include "comment.h"
 #include "config.h"
@@ -84,6 +85,7 @@
 #include "ModeSwitching.h"
 #include "Notification.h"
 #include "parseACK.h"
+#include "parseACKJson.hpp"
 #include "PowerFailed.h"
 #include "Printing.h"
 #include "ProbeHeightControl.h"

@@ -531,12 +531,14 @@ void parseConfigKey(uint16_t index)
   {
     //----------------------------General Settings
 
-    case C_INDEX_MULTI_SERIAL:
-      SET_VALID_INT_VALUE(infoSettings.multi_serial, 0, MAX_MULTI_SERIAL - 1);
+    case C_INDEX_UART_BAUDRATE:
+      SET_VALID_INT_VALUE(infoSettings.serial_port[0], 1, BAUDRATE_COUNT - 1);
       break;
 
-    case C_INDEX_UART_BAUDRATE:
-      SET_VALID_INT_VALUE(infoSettings.baudrate, 0, BAUDRATE_COUNT - 1);
+    case C_INDEX_SERIAL_PORT:
+      if (key_seen("P2:")) SET_VALID_INT_VALUE(infoSettings.serial_port[1], 0, BAUDRATE_COUNT - 1);
+      if (key_seen("P3:")) SET_VALID_INT_VALUE(infoSettings.serial_port[2], 0, BAUDRATE_COUNT - 1);
+      if (key_seen("P4:")) SET_VALID_INT_VALUE(infoSettings.serial_port[3], 0, BAUDRATE_COUNT - 1);
       break;
 
     case C_INDEX_EMULATE_M600:

@@ -7,10 +7,10 @@ extern "C" {
 #endif
 
 #include <stdint.h>
+#include "Configuration.h"  // for KEYBOARD_MATERIAL_THEME etc...
 #include "menu.h"
 
 // Color Definition
-
 #define WHITE         0xFFFF
 #define BLACK         0x0000
 #define RED           0xF800

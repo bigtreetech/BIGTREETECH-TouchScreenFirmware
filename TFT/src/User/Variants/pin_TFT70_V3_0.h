@@ -14,9 +14,19 @@
   #define ROOT_DIR "TFT70"
 #endif
 
+// Hardware manufacturer
+#ifndef HARDWARE_MANUFACTURER
+  #define HARDWARE_MANUFACTURER "BIGTREETECH_"
+#endif
+
 // Hardware version config
 #ifndef HARDWARE_VERSION
   #define HARDWARE_VERSION "TFT70_V3.0"
+#endif
+
+// Software manufacturer
+#ifndef SOFTWARE_MANUFACTURER
+  #define SOFTWARE_MANUFACTURER HARDWARE_VERSION"."
 #endif
 
 // LCD interface

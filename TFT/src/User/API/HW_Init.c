@@ -45,7 +45,7 @@ void HW_Init(void)
   readStoredPara();  // read settings parameter
 
   #if defined(SERIAL_DEBUG_PORT) && defined(SERIAL_DEBUG_ENABLED)
-    Serial_ReSourceInit();  // Initialize serial ports first if debugging is enabled
+    Serial_Init(-1);  // Initialize serial ports first if debugging is enabled
   #endif
 
   LCD_RefreshDirection(infoSettings.rotate_ui);  // refresh display direction after reading settings
@@ -105,11 +105,11 @@ void HW_Init(void)
 void HW_InitMode(uint8_t mode)
 {
   if (infoSettings.serial_alwaysOn == ENABLED)  // disable serial comm if `serial_alwaysOn` is disabled
-    Serial_ReSourceInit();
+    Serial_Init(-1);
 
   if (mode == MODE_SERIAL_TSC)
   {
-    Serial_ReSourceInit();  // enable serial comm in Touch mode
+    Serial_Init(-1);  // enable serial comm in Touch mode
 
     #ifdef BUZZER_PIN  // enable buzzer in Touch mode
       Buzzer_Config();
@@ -129,7 +129,7 @@ void HW_InitMode(uint8_t mode)
   else
   {
     if (infoSettings.serial_alwaysOn == DISABLED)  // disable serial comm if `serial_alwaysOn` is disabled
-      Serial_ReSourceDeInit();
+      Serial_DeInit(-1);
 
     #ifdef BUZZER_PIN  // disable buzzer in Marlin mode
       Buzzer_DeConfig();

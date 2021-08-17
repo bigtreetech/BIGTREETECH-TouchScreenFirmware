@@ -14,9 +14,19 @@
   #define ROOT_DIR "MKS"
 #endif
 
+// Hardware manufacturer
+#ifndef HARDWARE_MANUFACTURER
+  #define HARDWARE_MANUFACTURER "MKS_"
+#endif
+
 // Hardware version config
 #ifndef HARDWARE_VERSION
   #define HARDWARE_VERSION "TFT32_V1.4"
+#endif
+
+// Software manufacturer
+#ifndef SOFTWARE_MANUFACTURER
+  #define SOFTWARE_MANUFACTURER HARDWARE_VERSION"."
 #endif
 
 // LCD interface

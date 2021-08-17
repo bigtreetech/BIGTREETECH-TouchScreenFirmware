@@ -7,7 +7,7 @@ extern "C" {
 
 #include <stdbool.h>
 #include <stdint.h>
-#include <variants.h>
+#include "variants.h"  // for ENC_ACTIVE_SIGNAL, LCD_ENCODER_SUPPORT
 
 #if ENC_ACTIVE_SIGNAL
   void LCD_Enc_InitActiveSignal(void);

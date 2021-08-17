@@ -1,6 +1,5 @@
 #include "parseACK.h"
 #include "includes.h"
-#include "parseACKJson.hpp"
 
 #define ACK_MAX_SIZE 512
 
@@ -1298,13 +1297,13 @@ void parseACK(void)
     #ifdef SERIAL_PORT_2
       else if (!ack_seen("ok") || ack_seen("T:") || ack_seen("T0:"))  // if a spontaneous ACK message
       {
-        // pass on the spontaneous ACK message to all the extra serial ports (since these messages come unrequested)
-        for (uint8_t i = 0; i < PORT_COUNT; i++)
+        // pass on the spontaneous ACK message to all the supplementary serial ports (since these messages come unrequested)
+        for (uint8_t i = 1; i < SERIAL_PORT_COUNT; i++)
         {
-          if (extraSerialPort[i].activePort)  // if the port is connected to an active device (a device that already sent data to the TFT)
+          if (serialPort[i].activePort)  // if the port is connected to an active device (a device that already sent data to the TFT)
           {
             // pass on the ACK message to the port
-            Serial_Puts(extraSerialPort[i].port, dmaL2Cache);
+            Serial_Puts(serialPort[i].port, dmaL2Cache);
           }
         }
       }
@@ -1322,10 +1321,10 @@ void parseRcvGcode(void)
   #ifdef SERIAL_PORT_2
     uint8_t port;
 
-    // scan all the extra serial ports
-    for (uint8_t i = 0; i < PORT_COUNT; i++)
+    // scan all the supplementary serial ports
+    for (uint8_t i = 1; i < SERIAL_PORT_COUNT; i++)
     {
-      port = extraSerialPort[i].port;
+      port = serialPort[i].port;
 
       if (infoHost.rx_ok[port] == true)
       {
@@ -1337,7 +1336,7 @@ void parseRcvGcode(void)
           storeCmdFromUART(port, dmaL2Cache);
         }
 
-        extraSerialPort[i].activePort = true;
+        serialPort[i].activePort = true;
       }
     }
   #endif
