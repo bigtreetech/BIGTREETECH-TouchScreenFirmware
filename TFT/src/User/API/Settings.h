@@ -177,8 +177,8 @@ typedef struct
 
   // Filament Runout Settings (only if connected to TFT controller)
   uint8_t  runout;
-  uint8_t  runout_nc;
   uint8_t  runout_invert;
+  uint8_t  runout_nc;
   uint16_t runout_noise_ms;
   uint8_t  runout_distance;
 
