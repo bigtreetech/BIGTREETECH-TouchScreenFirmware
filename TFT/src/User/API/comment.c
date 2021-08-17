@@ -41,7 +41,7 @@ void setTotalTime(uint32_t time)
 void parseComment()
 {
     char * temp_char;
-    uint16_t temp_value = 0;
+    uint32_t temp_value = 0;
     if (gCode_comment.handled == true)
       return;
 
