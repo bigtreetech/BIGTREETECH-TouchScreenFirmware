@@ -597,8 +597,7 @@ void menuDrawPage(const MENUITEMS *menuItems)
   TSC_ReDrawIcon = (infoMenu.menu[infoMenu.cur] == menuPrinting) ? itemDrawIconPress_PS : itemDrawIconPress;
   curMenuRedrawHandle = NULL;
 
-  curRect = ((infoMenu.menu[infoMenu.cur] == menuStatus) ||
-             ((infoMenu.menu[infoMenu.cur] == menuPrinting) && !isPrinting())) ? rect_of_keySS : rect_of_key;
+  curRect = (infoMenu.menu[infoMenu.cur] == menuStatus) ? rect_of_keySS : rect_of_key;
 
   menuClearGaps();  // Use this function instead of GUI_Clear to eliminate the splash screen when clearing the screen.
   menuDrawTitle(labelGetAddress(&menuItems->title));
@@ -791,7 +790,7 @@ KEY_VALUES menuKeyGetValue(void)
           else if(infoMenu.menu[infoMenu.cur] == menuPrinting)
           {
             if(isPrinting() || infoHost.printing == true)
-              tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keySS), rect_of_keyPS);
+              tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keyPS), rect_of_keyPS);
             else
               tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keyPS_end), rect_of_keyPS_end);
 
