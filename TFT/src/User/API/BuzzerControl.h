@@ -7,21 +7,21 @@ extern "C" {
 
 #include "variants.h"  // for BUZZER_PIN etc...
 
-#ifdef BUZZER_PIN
-  typedef enum
-  {
-    sound_success = 0,
-    sound_error,
-    sound_ok,
-    sound_cancel,
-    sound_notify,
-    sound_deny,
-    sound_toast,
-    sound_keypress,
-    sound_heated,
-    sound_cooled,
-  } SOUND;
+typedef enum
+{
+  sound_success = 0,
+  sound_error,
+  sound_ok,
+  sound_cancel,
+  sound_notify,
+  sound_deny,
+  sound_toast,
+  sound_keypress,
+  sound_heated,
+  sound_cooled,
+} SOUND;
 
+#ifdef BUZZER_PIN
   void Buzzer_play(SOUND sound);
 
   #define BUZZER_PLAY(x) Buzzer_play(x)
