@@ -112,10 +112,10 @@ void parseComment()
       {
         temp_char = strtok(NULL, TOKEN_DELIMITERS);
         lowerCase(temp_char);
-        if (strcmp(temp_char, "time") == 0 && totalTime > 0)  // check if next word is "time"
+        if (strcmp(temp_char, "time") == 0)  // check if next word is "time"
         {
           temp_char = strtok(NULL, TOKEN_DELIMITERS);
-          temp_value = strtoul(temp_char, NULL, 0);  // get the elapsed time in seconds
+          temp_value = strtoul(temp_char, NULL, 0);  // get the remaining time in seconds
           setPrintRemainingTime(temp_value);
         }
       }
