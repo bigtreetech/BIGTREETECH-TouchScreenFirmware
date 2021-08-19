@@ -2,19 +2,21 @@
 #include "includes.h"
 #include <string.h>
 
-#define TOKEN_DELIMITERS " :=_"
+#define TOKEN_DELIMITERS     " :=_"
+#define HIGH_TO_LOW_CASE 32  // 'a' - 'A'
 
 COMMENT gCode_comment = {0, true};
 static uint16_t layerNumber = 0;
 static uint16_t layerCount = 0;
 static uint32_t totalTime = 0;
+bool M73R_presence = false;
 
 void lowerCase (char * tempChar)
 {
     for (uint8_t i=0; i < strlen(tempChar); i++)
     {
       if (tempChar[i] >= 'A' && tempChar[i] <= 'Z')
-        tempChar[i] = tempChar[i] -'A' + 'a';
+        tempChar[i] = tempChar[i] + HIGH_TO_LOW_CASE;
     }
 }
 
@@ -31,6 +33,11 @@ uint16_t getLayerCount()
 void setLayerNumber(uint16_t layer_number)
 {
   layerNumber = layer_number;
+}
+
+void setM73_presence(bool present)
+{
+  M73R_presence = present;
 }
 
 void setTotalTime(uint32_t time)
@@ -77,7 +84,7 @@ void parseComment()
     {
       temp_char = strtok(gCode_comment.content, TOKEN_DELIMITERS);
       lowerCase(temp_char);
-      if (strcmp(temp_char, "time") == 0)
+      if (strcmp(temp_char, "time") == 0 && M73R_presence == false)// check if first word is "time"
       {
         temp_char = strtok(NULL, TOKEN_DELIMITERS);
         lowerCase(temp_char);
@@ -94,6 +101,25 @@ void parseComment()
         }
       }
       // continue here with "else if" for another token that starts with "t" or "T"
+    }
+
+    // check for "remaining" keyword in comment to retrieve remaining time
+    else if (gCode_comment.content[0] == 'r' || gCode_comment.content[0] == 'R')
+    {
+      temp_char = strtok(gCode_comment.content, TOKEN_DELIMITERS);
+      lowerCase(temp_char);
+      if (strcmp(temp_char, "remaining") == 0 && M73R_presence == false)// check if first word is "remaining"
+      {
+        temp_char = strtok(NULL, TOKEN_DELIMITERS);
+        lowerCase(temp_char);
+        if (strcmp(temp_char, "time") == 0 && totalTime > 0)  // check if next word is "time"
+        {
+          temp_char = strtok(NULL, TOKEN_DELIMITERS);
+          temp_value = strtoul(temp_char, NULL, 0);  // get the elapsed time in seconds
+          setPrintRemainingTime(temp_value);
+        }
+      }
+      // continue here with "else if" for another token that starts with "r" or "R"
     }
 
     gCode_comment.handled = true;
