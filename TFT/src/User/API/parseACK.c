@@ -1,6 +1,6 @@
 #include "parseACK.h"
 #include "includes.h"
-#include "parseACKJson.hpp"
+#include "RRFParseACK.hpp"
 
 #define ACK_MAX_SIZE 512
 
@@ -484,7 +484,7 @@ void parseACK(void)
 
     if (requestCommandInfo.inJson)
     {
-      parseACKJson(dmaL2Cache);
+      rrfParseACK(dmaL2Cache);
     }
 
     if (ack_cmp("ok\n"))
@@ -545,20 +545,10 @@ void parseACK(void)
         coordinateSetExtruderActualSteps(ack_value());
       }
       // parse and store feed rate percentage
-      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW && ack_seen("Speed factor: ")) ||
-               ack_seen("FR:"))
+      else if (ack_seen("FR:"))
       {
         speedSetCurPercent(0, ack_value());
         speedQuerySetWait(false);
-      }
-      // parse and store flow rate percentage in case of RepRapFirmware
-      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && ack_seen("Extrusion factor"))
-      {
-        if (ack_continue_seen(": "))
-        {
-          speedSetCurPercent(1, ack_value());
-          speedQuerySetWait(false);
-        }
       }
       // parse and store flow rate percentage
       else if (ack_seen("Flow: "))

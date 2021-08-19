@@ -5,7 +5,7 @@
 extern "C"
 {
 #endif
-  void parseACKJson(const char *data);
+  void rrfParseACK(const char *data);
 #ifdef __cplusplus
 }
 #endif

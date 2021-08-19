@@ -1,4 +1,4 @@
-#include "parseACKJson.hpp"
+#include "RRFParseACK.hpp"
 #include "includes.h"
 
 /*
@@ -143,7 +143,7 @@ void ParseACKJsonParser::value(const char *value)
     ++index;
 }
 
-void parseACKJson(const char *data)
+void rrfParseACK(const char *data)
 {
   parser.setListener(&handler);
   if (need_parser_reset)
