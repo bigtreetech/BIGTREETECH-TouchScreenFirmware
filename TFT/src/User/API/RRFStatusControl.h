@@ -11,8 +11,10 @@ void rrfStatusQuery(void);
 void rrfStatusQueryFast(void);
 void rrfStatusQueryNormal(void);
 void rrfStatusSet(char status);
-void rrfStatusSetBusy(void);
 bool rrfStatusIsBusy(void);
+void rrfStatusSetBusy(void);
+bool rrfStatusIsMacroBusy(void);
+void rrfStatusSetMacroBusy(void);
 
 #ifdef __cplusplus
 }

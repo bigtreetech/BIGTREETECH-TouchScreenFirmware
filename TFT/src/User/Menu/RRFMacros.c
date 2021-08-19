@@ -23,8 +23,7 @@ void runMacro(void)
   request_M98(infoFile.title);
 
   ExitDir();
-  // TODO uncomment when TFT-initiated macros can display M291
-  //infoMenu.menu[++infoMenu.cur] = menuDummy; // force a redraw
+  infoMenu.menu[++infoMenu.cur] = menuDummy; // force a redraw
 }
 
 // Draw Macro file list
@@ -111,15 +110,7 @@ void menuCallMacro(void)
             if (EnterDir(infoFile.Longfile[key_num - infoFile.folderCount]) == false)
               break;
 
-            // TODO remove when TFT-initiated macros can display M291
-            char buf[93];
-            sprintf(buf, "Do you want to start:\n %.65s?\n", infoFile.title);
-            setDialogText(LABEL_INFO, (uint8_t *)buf, LABEL_CONFIRM, LABEL_CANCEL);
-            showDialog(DIALOG_TYPE_QUESTION, runMacro, ExitDir, NULL);
-            // TODO remove to here
-
-            // TODO uncomment when TFT-initiated macros can display M291
-            //runMacro();
+            runMacro();
           }
         }
         break;

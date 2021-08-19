@@ -427,6 +427,11 @@ void sendQueueCmd(void)
             break;
 
           case 27:  // M27
+            if (rrfStatusIsMacroBusy())
+            {
+              purgeLastCmd(true, avoid_terminal);
+              return;
+            }
             if (!fromTFT)
             {
               if (isPrinting() && infoFile.source < BOARD_SD)  // if printing from TFT
@@ -508,6 +513,12 @@ void sendQueueCmd(void)
               }
             }
             break;
+
+          case 98: // RRF macro execution, do not wait for it to complete
+            Serial_Puts(SERIAL_PORT, infoCmd.queue[infoCmd.index_r].gcode);
+            infoHost.wait = false;
+            purgeLastCmd(true, avoid_terminal);
+            return;
 
           case 115:  // M115 TFT
             if (!fromTFT && startsWith("M115 TFT", infoCmd.queue[infoCmd.index_r].gcode))
@@ -612,6 +623,11 @@ void sendQueueCmd(void)
         }
 
         case 105:  // M105
+          if (rrfStatusIsMacroBusy())
+          {
+            purgeLastCmd(true, avoid_terminal);
+            return;
+          }
           if (fromTFT)
           {
             heatSetUpdateWaiting(false);
@@ -620,6 +636,11 @@ void sendQueueCmd(void)
           break;
 
         case 155:  // M155
+          if (rrfStatusIsMacroBusy())
+          {
+            purgeLastCmd(true, avoid_terminal);
+            return;
+          }
           if (fromTFT)
           {
             heatSetUpdateWaiting(false);
@@ -908,6 +929,18 @@ void sendQueueCmd(void)
           caseLightApplied(true);
           break;
         }
+
+        case 292:
+        case 408:
+          // RRF does not send 'ok' while executing M98
+          if (rrfStatusIsMacroBusy())
+          {
+            Serial_Puts(SERIAL_PORT, infoCmd.queue[infoCmd.index_r].gcode);
+            infoHost.wait = false;
+            purgeLastCmd(true, avoid_terminal);
+            return;
+          }
+          break;
 
         case 420:  // M420
           // ABL state will be set through parsACK.c after receiving confirmation message from the printer

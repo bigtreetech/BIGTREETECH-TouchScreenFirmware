@@ -10,10 +10,15 @@
 static char rrf_status = 'I';
 
 static uint16_t rrf_query_interval = RRF_NORMAL_STATUS_QUERY_MS;
+static bool macro_busy = false;
 
 void rrfStatusSet(char status)
 {
   rrf_status = status;
+  if (status != 'B')
+  {
+    macro_busy = false;
+  }
 }
 
 void rrfStatusSetBusy(void)
@@ -24,6 +29,17 @@ void rrfStatusSetBusy(void)
 bool rrfStatusIsBusy(void)
 {
   return rrf_status == 'B';
+}
+
+bool rrfStatusIsMacroBusy(void)
+{
+  return macro_busy;
+}
+
+void rrfStatusSetMacroBusy(void)
+{
+  macro_busy = true;
+  rrfStatusSetBusy();
 }
 
 void rrfStatusQueryFast(void)
