@@ -30,6 +30,7 @@ extern GCODE_QUEUE infoCacheCmd;
 
 bool isFullCmdQueue(void);      // condition callback for loopProcessToCondition()
 bool isNotEmptyCmdQueue(void);  // condition callback for loopProcessToCondition()
+bool isEnqueued(const char *cmd);
 
 bool storeCmd(const char * format,...);
 void mustStoreCmd(const char * format,...);

@@ -16,6 +16,17 @@ bool isNotEmptyCmdQueue(void)
   return (infoCmd.count || infoHost.wait);
 }
 
+bool isEnqueued(const char *cmd)
+{
+  bool found = false;
+  int i;
+  for (i = 0; i < infoCmd.count && !found; ++i)
+  {
+    found = strcmp(cmd, infoCmd.queue[(infoCmd.index_r + i) % CMD_MAX_LIST].gcode) == 0;
+  }
+  return found;
+}
+
 // Check the presence of the specified 'code' character in the current gcode command.
 static bool cmd_seen(char code)
 {
