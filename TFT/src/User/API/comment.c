@@ -85,7 +85,7 @@ void parseComment()
       temp_char = strtok(gCode_comment.content, TOKEN_DELIMITERS);
       lowerCase(temp_char);
       if (strcmp(temp_char, "time") == 0 && M73R_presence == false)// check if first word is "time"
-      {
+      {// Cura specific
         temp_char = strtok(NULL, TOKEN_DELIMITERS);
         lowerCase(temp_char);
         if (strcmp(temp_char, "elapsed") == 0 && totalTime > 0)  // check if next word is "elapsed"
@@ -109,7 +109,7 @@ void parseComment()
       temp_char = strtok(gCode_comment.content, TOKEN_DELIMITERS);
       lowerCase(temp_char);
       if (strcmp(temp_char, "remaining") == 0 && M73R_presence == false)// check if first word is "remaining"
-      {
+      {// IdeaMaker specific
         temp_char = strtok(NULL, TOKEN_DELIMITERS);
         lowerCase(temp_char);
         if (strcmp(temp_char, "time") == 0)  // check if next word is "time"
