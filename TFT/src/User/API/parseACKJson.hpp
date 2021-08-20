@@ -1,5 +1,5 @@
-#ifndef _RRF_PARSE_ACK_JSON_H_
-#define _RRF_PARSE_ACK_JSON_H_
+#ifndef _PARSE_ACK_JSON_H_
+#define _PARSE_ACK_JSON_H_
 
 #ifdef __cplusplus
 extern "C"
