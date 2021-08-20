@@ -47,17 +47,26 @@ static ParseACKJsonParser handler;
 static void m291_confirm(void)
 {
   if (m291_mode > 1) mustStoreCmd("M292 P0\n");
+  if (rrfStatusIsMacroBusy())
+    rrfShowRunningMacro();
 }
 
 static void m291_cancel(void)
 {
   if (m291_mode > 2) mustStoreCmd("M292 P1\n");
   if (m291_mode == 2) mustStoreCmd("M292 P0\n");
+  if (rrfStatusIsMacroBusy())
+    rrfShowRunningMacro();
 }
 
 static void m291_loop(void)
 {
-  if (m291_mode == -1 || (expire_time > 0 && OS_GetTimeMs() > expire_time)) infoMenu.cur--;
+  if (m291_mode == -1 || (expire_time > 0 && OS_GetTimeMs() > expire_time))
+  {
+    infoMenu.cur--;
+    if (rrfStatusIsMacroBusy())
+      rrfShowRunningMacro();
+  }
 }
 
 void ParseACKJsonParser::endDocument()

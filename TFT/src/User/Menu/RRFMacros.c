@@ -2,6 +2,7 @@
 #include "includes.h"
 #include "RRFMacrosParser.hpp"
 
+static const char *running_macro_name;
 extern const GUI_RECT titleRect;
 
 // Scan files in RRF
@@ -13,12 +14,19 @@ void scanInfoFilesFs(void)
   clearRequestCommandInfo();
 }
 
-void runMacro(void)
+void rrfShowRunningMacro(void)
 {
-  char info[100];
-  sprintf(info, "%s - %s\n", textSelect(LABEL_MACROS), infoFile.title);
   GUI_Clear(BACKGROUND_COLOR);
-  GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, (uint8_t *)info);
+  GUI_SetColor(infoSettings.reminder_color);
+  GUI_DispStringInPrectEOL(&titleRect, LABEL_BUSY);
+  GUI_RestoreColorDefault();
+  GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, (uint8_t *)running_macro_name);
+}
+
+void runMacro(const char *display_name)
+{
+  running_macro_name = display_name;
+  rrfShowRunningMacro();
 
   request_M98(infoFile.title);
 
@@ -110,7 +118,7 @@ void menuCallMacro(void)
             if (EnterDir(infoFile.Longfile[key_num - infoFile.folderCount]) == false)
               break;
 
-            runMacro();
+            runMacro(infoFile.file[key_num - infoFile.folderCount]);
           }
         }
         break;
