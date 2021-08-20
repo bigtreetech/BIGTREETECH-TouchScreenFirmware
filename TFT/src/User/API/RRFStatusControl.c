@@ -21,17 +21,17 @@ void rrfStatusSet(char status)
   }
 }
 
-void rrfStatusSetBusy(void)
+inline void rrfStatusSetBusy(void)
 {
   rrf_status = 'B';
 }
 
-bool rrfStatusIsBusy(void)
+inline bool rrfStatusIsBusy(void)
 {
   return rrf_status == 'B';
 }
 
-bool rrfStatusIsMacroBusy(void)
+inline bool rrfStatusIsMacroBusy(void)
 {
   return macro_busy;
 }
@@ -42,12 +42,12 @@ void rrfStatusSetMacroBusy(void)
   rrfStatusSetBusy();
 }
 
-void rrfStatusQueryFast(void)
+inline void rrfStatusQueryFast(void)
 {
   rrf_query_interval = RRF_FAST_STATUS_QUERY_MS;
 }
 
-void rrfStatusQueryNormal(void)
+inline void rrfStatusQueryNormal(void)
 {
   rrf_query_interval = RRF_NORMAL_STATUS_QUERY_MS;
 }
