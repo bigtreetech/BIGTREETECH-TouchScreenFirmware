@@ -32,7 +32,7 @@ typedef struct
   uint8_t port;             // physical port (e.g. _USART1) related to serial port (e.g. 0 for SERIAL_PORT, 1 for SERIAL_PORT_2 etc...)
   uint16_t cacheSize;       // queue size for sending/receiving data to/from the port
   bool activePort;          // set to "true" if the port is connected to an active device (a device that already sent data to the TFT)
-  const char * const id;    // serial port ID (e.g. "2" for SERIAL_PORT_2)
+  const char * const id;    // serial port ID (e.g. "" for SERIAL_PORT, "2" for SERIAL_PORT_2 etc...)
   const char * const desc;  // serial port description (e.g. "1 - Printer" for SERIAL_PORT, "2 - WIFI" for SERIAL_PORT_2 etc...)
 } SERIAL_PORT_INFO;         // serial port info
 
