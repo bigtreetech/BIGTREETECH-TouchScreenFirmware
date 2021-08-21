@@ -6,11 +6,11 @@ const MENUITEMS connectionSettingsItems = {
   LABEL_CONNECTION_SETTINGS,
   // icon                          label
   {
-    {ICON_BAUD_RATE,               LABEL_BAUDRATE},
     {ICON_BAUD_RATE,               LABEL_SERIAL_PORTS},
+    {ICON_DISCONNECT,              LABEL_DISCONNECT},
     {ICON_STOP,                    LABEL_EMERGENCYSTOP},
     {ICON_SHUT_DOWN,               LABEL_SHUT_DOWN},
-    {ICON_DISCONNECT,              LABEL_DISCONNECT},
+    {ICON_BACKGROUND,              LABEL_BACKGROUND},
     {ICON_BACKGROUND,              LABEL_BACKGROUND},
     {ICON_BACKGROUND,              LABEL_BACKGROUND},
     {ICON_BACK,                    LABEL_BACK},
@@ -101,44 +101,51 @@ void menuBaudrate(void)
   }
 }
 
-void menuSerialPort(void)
+void menuSerialPorts(void)
 {
   LABEL title = {LABEL_SERIAL_PORTS};
-  LISTITEM totalItems[SERIAL_PORT_COUNT - 1];  // only supplementary serial ports (primary serial port is skipped)
+  LISTITEM totalItems[SERIAL_PORT_COUNT];
   KEY_VALUES curIndex = KEY_IDLE;
 
-  for (uint8_t i = 0, j = 1; j < SERIAL_PORT_COUNT; i++, j++)  // scan all the supplementary serial ports
+  for (uint8_t i = 0; i < SERIAL_PORT_COUNT; i++)
   {
     totalItems[i].icon = CHARICON_EDIT;
     totalItems[i].itemType = LIST_CUSTOMVALUE;
-    totalItems[i].titlelabel.address = (uint8_t *) serialPortId[serialPort[j].port];
+    totalItems[i].titlelabel.address = (uint8_t *) serialPort[i].desc;
     totalItems[i].valueLabel.index = LABEL_DYNAMIC;  // must be LABEL_DYNAMIC or LABEL_CUSTOM_VALUE in order to use dynamic text
-    setDynamicTextValue(i, (char *) baudrateNames[infoSettings.serial_port[j]]);
+    setDynamicTextValue(i, (char *) baudrateNames[infoSettings.serial_port[i]]);
   }
 
-  listViewCreate(title, totalItems, SERIAL_PORT_COUNT - 1, NULL, true, NULL, NULL);
+  listViewCreate(title, totalItems, SERIAL_PORT_COUNT, NULL, true, NULL, NULL);
 
-  while (infoMenu.menu[infoMenu.cur] == menuSerialPort)
+  while (infoMenu.menu[infoMenu.cur] == menuSerialPorts)
   {
     curIndex = listViewGetSelectedIndex();
     switch (curIndex)
     {
-      #ifdef SERIAL_PORT_2
+      #ifdef SERIAL_PORT
         case 0:
+          portIndex = 0;
+          infoMenu.menu[++infoMenu.cur] = menuBaudrate;
+          break;
+      #endif
+
+      #ifdef SERIAL_PORT_2
+        case 1:
           portIndex = 1;
           infoMenu.menu[++infoMenu.cur] = menuBaudrate;
           break;
       #endif
 
       #ifdef SERIAL_PORT_3
-        case 1:
+        case 2:
           portIndex = 2;
           infoMenu.menu[++infoMenu.cur] = menuBaudrate;
           break;
       #endif
 
       #ifdef SERIAL_PORT_4
-        case 2:
+        case 3:
           portIndex = 3;
           infoMenu.menu[++infoMenu.cur] = menuBaudrate;
           break;
@@ -164,12 +171,11 @@ void menuConnectionSettings(void)
     switch (curIndex)
     {
       case KEY_ICON_0:
-        portIndex = 0;
-        infoMenu.menu[++infoMenu.cur] = menuBaudrate;
+        infoMenu.menu[++infoMenu.cur] = menuSerialPorts;
         break;
 
       case KEY_ICON_1:
-        infoMenu.menu[++infoMenu.cur] = menuSerialPort;
+        infoMenu.menu[++infoMenu.cur] = menuDisconnect;
         break;
 
       case KEY_ICON_2:
@@ -181,10 +187,6 @@ void menuConnectionSettings(void)
 
       case KEY_ICON_3:
         storeCmd("M81\n");
-        break;
-
-      case KEY_ICON_4:
-        infoMenu.menu[++infoMenu.cur] = menuDisconnect;
         break;
 
       case KEY_ICON_7:

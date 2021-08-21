@@ -21,6 +21,7 @@ const uint8_t default_custom_enabled[] = CUSTOM_GCODE_ENABLED;
 void infoSettingsReset(void)
 {
 // General Settings
+  infoSettings.serial_port[0]         = PRIMARY_BAUDRATE;  // primary serial port
   infoSettings.emulate_m600           = EMULATE_M600;
 
 // UI Settings
@@ -133,7 +134,7 @@ void infoSettingsReset(void)
   infoSettings.send_cancel_gcode      = ENABLED;
 
 // All the remaining array initializations
-  for (int i = 0; i < MAX_SERIAL_PORT_COUNT; i++)
+  for (int i = 1; i < MAX_SERIAL_PORT_COUNT; i++)  // supplemetary serial ports
   {
     infoSettings.serial_port[i]       = DISABLED;
   }
