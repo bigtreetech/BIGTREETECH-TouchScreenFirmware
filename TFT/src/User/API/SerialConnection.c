@@ -49,8 +49,8 @@ void Serial_Init(int8_t port)
         for (uint8_t i = 1; i < SERIAL_PORT_COUNT; i++)
         {
           // the supplementary serial ports should be enabled according to config.ini.
-          // Disable the serial port when it is not in use and floating to avoid to receive
-          // and process wrong data due to possible electromagnetic interference (EMI).
+          // Disable the serial port when it is not in use and/or not connected to a device (floating) to
+          // avoid to receive and process wrong data due to possible electromagnetic interference (EMI).
           if (infoSettings.serial_port[i] >= 0)  // if serial port is enabled
             Serial_Config(serialPort[i].port, serialPort[i].cacheSize, baudrateValues[infoSettings.serial_port[i]]);
 
