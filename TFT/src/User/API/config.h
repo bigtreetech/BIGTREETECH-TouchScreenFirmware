@@ -53,8 +53,6 @@ extern "C" {
 #define CONFIG_MARLIN_SHOW_TITLE      "marlin_show_title:"
 #define CONFIG_MARLIN_TITLE           "marlin_title:"
 #define CONFIG_MARLIN_TYPE            "marlin_type:"
-//-----------------------------RRF Mode Settings
-#define CONFIG_RRF_MACROS_ON          "rrf_macros_on:"
 //-----------------------------Printer / Machine Settings
 #define CONFIG_HOTEND_COUNT           "hotend_count:"
 #define CONFIG_HEATED_BED             "heated_bed:"
