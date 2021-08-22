@@ -823,14 +823,12 @@ void menuMeshEditor(void)
   bool oldStatus, curStatus;
   uint16_t oldIndex, curIndex;
   float origValue, curValue;
-  bool forceHoming;
   bool forceExit;
 
   meshAllocData();                                         // allocates and initialize mesh data if not already allocated and initialized
 
   oldStatus = curStatus = meshGetStatus();                 // after allocation, we acces data status etc...
   oldIndex = curIndex = meshGetIndex();
-  forceHoming = true;
   forceExit = false;
 
   mustStoreCmd("M420 V1 T1\n");                            // retrieve the mesh data
@@ -868,12 +866,8 @@ void menuMeshEditor(void)
       case ME_KEY_EDIT:
         if (meshGetStatus())
         {
-          if (forceHoming)
-          {
-            forceHoming = false;
-
-            probeHeightHome();                             // only the first time, home the printer
-          }
+          if (coordinateIsKnown() == false)
+            probeHeightHome();                             // home printer
 
           curValue = menuMeshTuner(meshGetCol(), meshGetJ(), meshGetValue(meshGetIndex()));
           meshSetValue(curValue);
@@ -896,8 +890,6 @@ void menuMeshEditor(void)
         break;
 
       case ME_KEY_HOME:
-        forceHoming = false;
-
         probeHeightHome();                                 // force homing (e.g. if steppers are disarmed)
         break;
 

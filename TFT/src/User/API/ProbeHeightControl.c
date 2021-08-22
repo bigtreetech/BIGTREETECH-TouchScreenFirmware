@@ -1,15 +1,15 @@
 #include "ProbeHeightControl.h"
 #include "includes.h"
 
+#define ENDSTOP_CMD     "M211 S%d\n"
+#define ENDSTOP_CMD_RRF "M564 S%d H%d\n" // for RRF
+#define MOVE_Z_CMD      "G1 Z%.2f F%d\n"
+
 #define PROBE_UPDATE_DELAY 200  // 1 seconds is 1000
 
 static uint32_t nextQueryTime = 0;
 static uint8_t origEndstopsState = DISABLED;
 static float origAblState = DISABLED;
-
-#define ENDSTOP_CMD     "M211 S%d\n"
-#define ENDSTOP_CMD_RRF "M564 S%d H%d\n" // for RRF
-#define MOVE_Z_CMD      "G1 Z%.2f F%d\n"
 
 // Enable probe height
 // Temporary disable software endstops and save ABL state

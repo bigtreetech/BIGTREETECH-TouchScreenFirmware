@@ -1,10 +1,10 @@
 #include "LevelCorner.h"
 #include "includes.h"
 
-#define LC_VALUE_COUNT 5
-
-#define ENABLE_STEPPER_CMD "M17 X Y Z\n"
+#define ENABLE_STEPPER_CMD  "M17 X Y Z\n"
 #define DISABLE_STEPPER_CMD "M18 S0 X Y Z\n"
+
+#define LC_VALUE_COUNT 5
 
 // Buffer current z value measured in Level Corner = {position 1, position 2, position 3, position 4, probe accuracy(M48)}
 static float levelCornerPosition[LC_VALUE_COUNT];
@@ -16,24 +16,21 @@ void SetLevelCornerPosition(uint8_t point, float position)
   levelCornerPosition[point] = position;
 }
 
-void ScanLevelCorner(uint8_t point)
+void ScanLevelCorner(LEVELING_POINT point)
 {
-  uint16_t pointPosition[4][2] = {
-    {infoSettings.machine_size_min[X_AXIS] + infoSettings.level_edge, infoSettings.machine_size_min[Y_AXIS] + infoSettings.level_edge},
-    {infoSettings.machine_size_max[X_AXIS] - infoSettings.level_edge, infoSettings.machine_size_min[Y_AXIS] + infoSettings.level_edge},
-    {infoSettings.machine_size_max[X_AXIS] - infoSettings.level_edge, infoSettings.machine_size_max[Y_AXIS] - infoSettings.level_edge},
-    {infoSettings.machine_size_min[X_AXIS] + infoSettings.level_edge, infoSettings.machine_size_max[Y_AXIS] - infoSettings.level_edge},
-  };
+  LEVELING_POINTS levelPoints;
+
+  levelingGetPoints(levelPoints);
 
   if (infoSettings.touchmi_sensor != 0)
   {
     mustStoreCmd("M401\n");
-    mustStoreCmd("G30 E0 X%d Y%d\n", pointPosition[point][0], pointPosition[point][1]);  // move to selected point
+    mustStoreCmd("G30 E0 X%d Y%d\n", levelPoints[point][0], levelPoints[point][1]);  // move to selected point
     mustStoreCmd("G1 Z10\n");
   }
   else
   {
-    mustStoreCmd("G30 E1 X%d Y%d\n", pointPosition[point][0], pointPosition[point][1]);  // move to selected point
+    mustStoreCmd("G30 E1 X%d Y%d\n", levelPoints[point][0], levelPoints[point][1]);  // move to selected point
   }
 
   mustStoreCmd(ENABLE_STEPPER_CMD);
@@ -121,6 +118,7 @@ void menuLevelCorner(void)
   drawProbeAccuracyIcon(&levelCornerItems);
 
   mustStoreCmd("G28\n");  // Init Coordinate
+  mustStoreCmd("G0 Z%.3f\n", infoSettings.level_z_raise);  // raise nozzle
 
   // Check min edge limit for the probe with probe offset set in parseACK.c
   uint8_t edge_min = MAX(ABS(getParameter((int16_t)P_PROBE_OFFSET, AXIS_INDEX_X)),
@@ -137,11 +135,11 @@ void menuLevelCorner(void)
     switch (key_num)
     {
       case KEY_ICON_0:
-        ScanLevelCorner(3);
+        ScanLevelCorner(LEVEL_TOP_LEFT);
         break;
 
       case KEY_ICON_1:
-        ScanLevelCorner(2);
+        ScanLevelCorner(LEVEL_TOP_RIGHT);
         break;
 
       case KEY_ICON_2:
@@ -160,18 +158,18 @@ void menuLevelCorner(void)
         break;
 
       case KEY_ICON_4:
-        ScanLevelCorner(0);
+        ScanLevelCorner(LEVEL_BOTTOM_LEFT);
         break;
 
       case KEY_ICON_5:
-        ScanLevelCorner(1);
+        ScanLevelCorner(LEVEL_BOTTOM_RIGHT);
         break;
 
       case KEY_ICON_6:
-        ScanLevelCorner(0);
-        ScanLevelCorner(1);
-        ScanLevelCorner(2);
-        ScanLevelCorner(3);
+        ScanLevelCorner(LEVEL_BOTTOM_LEFT);
+        ScanLevelCorner(LEVEL_BOTTOM_RIGHT);
+        ScanLevelCorner(LEVEL_TOP_RIGHT);
+        ScanLevelCorner(LEVEL_TOP_LEFT);
         break;
 
       case KEY_ICON_7:

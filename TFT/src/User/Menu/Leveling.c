@@ -17,7 +17,7 @@ const MENUITEMS manualLevelingItems = {
   }
 };
 
-void moveToLevelingPoint(uint8_t point)
+void levelingGetPoints(LEVELING_POINTS points)
 {
   int16_t x_left_point = infoSettings.machine_size_min[X_AXIS] + infoSettings.level_edge,
           x_right_point = infoSettings.machine_size_max[X_AXIS] - infoSettings.level_edge,
@@ -30,6 +30,7 @@ void moveToLevelingPoint(uint8_t point)
     x_left_point = x_right_point;
     x_right_point = temp;
   }
+
   // The y-axis of different printer (move hotbed or move nozzle) move in different directions
   // So y-axis leveling invert can't follow up invert_axis[Y_AXIS]
   // We separate a single variable to deal with the y-axis leveling movement direction
@@ -40,26 +41,29 @@ void moveToLevelingPoint(uint8_t point)
     y_upper_point = temp;
   }
 
-  int16_t pointPosition[5][2] = {
-    // Left lower corner
-    {x_left_point,  y_lower_point},
-    // Right lower corner
-    {x_right_point, y_lower_point},
-    // Right upper corner
-    {x_right_point, y_upper_point},
-    // Left upper corner
-    {x_left_point,  y_upper_point},
-    // Center point
-    {(x_left_point + x_right_point) / 2, (y_lower_point + y_upper_point) / 2},
-  };
+  points[LEVEL_BOTTOM_LEFT][0] = x_left_point;
+  points[LEVEL_BOTTOM_LEFT][1] = y_lower_point;
+  points[LEVEL_BOTTOM_RIGHT][0] = x_right_point;
+  points[LEVEL_BOTTOM_RIGHT][1] = y_lower_point;
+  points[LEVEL_TOP_RIGHT][0] = x_right_point;
+  points[LEVEL_TOP_RIGHT][1] = y_upper_point;
+  points[LEVEL_TOP_LEFT][0] = x_left_point;
+  points[LEVEL_TOP_LEFT][1] = y_upper_point;
+  points[LEVEL_CENTER][0] = (x_left_point + x_right_point) / 2;
+  points[LEVEL_CENTER][1] = (y_lower_point + y_upper_point) / 2;
+}
+
+void levelingMoveToPoint(LEVELING_POINT point)
+{
+  LEVELING_POINTS levelPoints;
+
+  levelingGetPoints(levelPoints);
 
   if (coordinateIsKnown() == false)
-  {
     storeCmd("G28\n");
-  }
 
   storeCmd("G0 Z%.3f F%d\n", infoSettings.level_z_raise, infoSettings.level_feedrate[FEEDRATE_Z]);
-  storeCmd("G0 X%d Y%d F%d\n", pointPosition[point][0], pointPosition[point][1], infoSettings.level_feedrate[FEEDRATE_XY]);
+  storeCmd("G0 X%d Y%d F%d\n", levelPoints[point][0], levelPoints[point][1], infoSettings.level_feedrate[FEEDRATE_XY]);
   storeCmd("G0 Z%.3f F%d\n", infoSettings.level_z_pos, infoSettings.level_feedrate[FEEDRATE_Z]);
 }
 
@@ -75,11 +79,11 @@ void menuManualLeveling(void)
     switch (key_num)
     {
       case KEY_ICON_0:
-        moveToLevelingPoint(3);
+        levelingMoveToPoint(LEVEL_TOP_LEFT);
         break;
 
       case KEY_ICON_1:
-        moveToLevelingPoint(2);
+        levelingMoveToPoint(LEVEL_TOP_RIGHT);
         break;
 
       case KEY_ICON_2:
@@ -95,15 +99,15 @@ void menuManualLeveling(void)
         break;
 
       case KEY_ICON_4:
-        moveToLevelingPoint(0);
+        levelingMoveToPoint(LEVEL_BOTTOM_LEFT);
         break;
 
       case KEY_ICON_5:
-        moveToLevelingPoint(1);
+        levelingMoveToPoint(LEVEL_BOTTOM_RIGHT);
         break;
 
       case KEY_ICON_6:
-        moveToLevelingPoint(4);
+        levelingMoveToPoint(LEVEL_CENTER);
         break;
 
       case KEY_ICON_7:
