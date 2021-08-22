@@ -9,11 +9,10 @@ void probeOffsetEnable(bool skipZOffset, float shim)
 {
   probe_offset_enabled = true;
 
-  probeHeightEnable();  // temporary disable software endstops
+  probeHeightEnable();  // temporary disable software endstops and save ABL state
 
   // Z offset gcode sequence start
-  mustStoreCmd("G28\n");                          // home printer
-  probeHeightStop(infoSettings.z_raise_probing);  // raise nozzle
+  probeHeightHome();  // home, disable ABL and raise nozzle
 
   if (infoSettings.xy_offset_probing)  // if HW allows nozzle to reach XY probing point
   {
@@ -42,11 +41,10 @@ void probeOffsetDisable(void)
   probe_offset_enabled = false;
 
   // Z offset gcode sequence stop
-  mustStoreCmd("G28\n");                          // home printer
-  probeHeightStop(infoSettings.z_raise_probing);  // raise nozzle
-  probeHeightAbsolute();                          // set absolute position mode
+  probeHeightHome();      // home, disable ABL and raise nozzle
+  probeHeightAbsolute();  // set absolute position mode
 
-  probeHeightDisable();  // restore original software endstops state
+  probeHeightDisable();  // restore original software endstops state and ABL state
 }
 
 // Get probe offset status

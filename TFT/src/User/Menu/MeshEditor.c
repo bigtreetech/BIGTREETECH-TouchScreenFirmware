@@ -55,8 +55,6 @@ typedef struct
   float bDelta;                                            // bEnd - bStart
 
   MESH_DATA_STATUS status;                                 // current status of dataOrig/data
-
-  float ablState;
   uint16_t parsedRows;
 
   uint16_t colsToSkip;
@@ -235,8 +233,6 @@ void meshInitData(void)
   meshData->bDelta = (float) (meshData->bEnd) - meshData->bStart;
 
   meshData->status = ME_DATA_IDLE;
-
-  meshData->ablState = getParameter(P_ABL_STATE, 0);
   meshData->parsedRows = 0;
 }
 
@@ -246,14 +242,9 @@ static inline void meshAllocData(void)
     return;
 
   meshData = (MESH_DATA *) malloc(sizeof(MESH_DATA));
-
   meshInitData();
 
-  probeHeightEnable();                                     // temporary disable software endstops
-
-  // if enabled, always disable ABL before editing a mesh
-  if (meshData->ablState == ENABLED)
-    storeCmd(infoMachineSettings.firmwareType != FW_REPRAPFW ? "M420 S0\n" : "G29 S2\n");
+  probeHeightEnable();                                     // temporary disable software endstops and save ABL state
 }
 
 void meshDeallocData(void)
@@ -261,15 +252,10 @@ void meshDeallocData(void)
   if (meshData == NULL)
     return;
 
-  // restore original ABL state
-  if (meshData->ablState == ENABLED)
-    storeCmd(infoMachineSettings.firmwareType != FW_REPRAPFW ? "M420 S1\n" : "G29 S1\n");
-
   free(meshData);
-
   meshData = NULL;
 
-  probeHeightDisable();                                    // restore original software endstops state
+  probeHeightDisable();                                    // restore original software endstops state and ABL state
 }
 
 static inline bool processKnownDataFormat(char *dataRow)
@@ -886,8 +872,7 @@ void menuMeshEditor(void)
           {
             forceHoming = false;
 
-            mustStoreCmd("G28\n");                         // only the first time, home the printer
-            probeHeightStop(infoSettings.z_raise_probing); // raise nozzle
+            probeHeightHome();                             // only the first time, home the printer
           }
 
           curValue = menuMeshTuner(meshGetCol(), meshGetJ(), meshGetValue(meshGetIndex()));
@@ -913,8 +898,7 @@ void menuMeshEditor(void)
       case ME_KEY_HOME:
         forceHoming = false;
 
-        mustStoreCmd("G28\n");                             // force homing (e.g. if steppers are disarmed)
-        probeHeightStop(infoSettings.z_raise_probing);     // raise nozzle
+        probeHeightHome();                                 // force homing (e.g. if steppers are disarmed)
         break;
 
       case ME_KEY_SAVE:
