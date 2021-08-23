@@ -876,8 +876,8 @@ void parseConfigKey(uint16_t index)
     case C_INDEX_PREHEAT_TEMP_6:
     {
       int val_index = index - C_INDEX_PREHEAT_TEMP_1;
-      if (key_seen("B")) SET_VALID_INT_VALUE(configPreheatStore->preheat_bed[val_index], MIN_BED_TEMP, MAX_BED_TEMP);
       if (key_seen("T")) SET_VALID_INT_VALUE(configPreheatStore->preheat_temp[val_index], MIN_TOOL_TEMP, MAX_TOOL_TEMP);
+      if (key_seen("B")) SET_VALID_INT_VALUE(configPreheatStore->preheat_bed[val_index], MIN_BED_TEMP, MAX_BED_TEMP);
       break;
     }
 
