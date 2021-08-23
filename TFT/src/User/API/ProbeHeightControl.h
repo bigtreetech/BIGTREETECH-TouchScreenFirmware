@@ -19,6 +19,12 @@ void probeHeightDisable(void);
 // Home, disable ABL and raise nozzle
 void probeHeightHome(void);
 
+// Home and disable ABL
+void probeHeightHomeAndNoABL(void);
+
+// Home and raise nozzle
+void probeHeightHomeAndRaise(void);
+
 // Start probe height
 void probeHeightStart(float initialHeight, bool relativeHeight);
 

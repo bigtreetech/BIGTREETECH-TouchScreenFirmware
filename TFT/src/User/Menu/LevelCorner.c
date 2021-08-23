@@ -1,40 +1,15 @@
 #include "LevelCorner.h"
 #include "includes.h"
 
-#define ENABLE_STEPPER_CMD  "M17 X Y Z\n"
-#define DISABLE_STEPPER_CMD "M18 S0 X Y Z\n"
+const uint8_t valIconIndex[LEVEL_POINT_COUNT] = {4, 5, 1, 0, 3};
 
-#define LC_VALUE_COUNT 5
+// Buffer current Z value measured in Level Corner = {position 1, position 2, position 3, position 4, probe accuracy(M48)}
+float levelCornerPosition[LEVEL_POINT_COUNT] = {0};
 
-// Buffer current z value measured in Level Corner = {position 1, position 2, position 3, position 4, probe accuracy(M48)}
-static float levelCornerPosition[LC_VALUE_COUNT];
-const uint8_t valIconIndex[LC_VALUE_COUNT] = {4, 5, 1, 0, 3};
-
-// Set level corner position the measured Z offset from probe.
-void SetLevelCornerPosition(uint8_t point, float position)
+// Set level corner position from the Z offset measured by probe
+void setLevelCornerPosition(int16_t x, int16_t y, float position)
 {
-  levelCornerPosition[point] = position;
-}
-
-void ScanLevelCorner(LEVELING_POINT point)
-{
-  LEVELING_POINTS levelPoints;
-
-  levelingGetPoints(levelPoints);
-
-  if (infoSettings.touchmi_sensor != 0)
-  {
-    mustStoreCmd("M401\n");
-    mustStoreCmd("G30 E0 X%d Y%d\n", levelPoints[point][0], levelPoints[point][1]);  // move to selected point
-    mustStoreCmd("G1 Z10\n");
-  }
-  else
-  {
-    mustStoreCmd("G30 E1 X%d Y%d\n", levelPoints[point][0], levelPoints[point][1]);  // move to selected point
-  }
-
-  mustStoreCmd(ENABLE_STEPPER_CMD);
-  mustStoreCmd(DISABLE_STEPPER_CMD);
+  levelCornerPosition[levelingGetPoint(x, y)] = position;
 }
 
 // Draw values under icons
@@ -99,16 +74,15 @@ void menuLevelCorner(void)
   };
 
   KEY_VALUES key_num = KEY_IDLE;
-  float oldValue[5];
-  char iconText[5][15];
+  float oldValue[LEVEL_POINT_COUNT];
+  char iconText[LEVEL_POINT_COUNT][15];
 
-  levelCornerItems.items[0].label.address = (uint8_t *)iconText[0];
-  levelCornerItems.items[1].label.address = (uint8_t *)iconText[1];
-  levelCornerItems.items[3].label.address = (uint8_t *)iconText[2];
-  levelCornerItems.items[4].label.address = (uint8_t *)iconText[3];
-  levelCornerItems.items[5].label.address = (uint8_t *)iconText[4];
+  for (uint8_t i = 0; i < LEVEL_POINT_COUNT; i++)
+  {
+    levelCornerItems.items[valIconIndex[i]].label.address = (uint8_t *)iconText[i];
+  }
 
-  for (uint8_t i = 0; i < LC_VALUE_COUNT; i++)
+  for (uint8_t i = 0; i < LEVEL_POINT_COUNT; i++)
   {
     refreshValue(&levelCornerItems, i);
     oldValue[i] = levelCornerPosition[i];
@@ -117,8 +91,8 @@ void menuLevelCorner(void)
   menuDrawPage(&levelCornerItems);
   drawProbeAccuracyIcon(&levelCornerItems);
 
-  mustStoreCmd("G28\n");  // Init Coordinate
-  mustStoreCmd("G0 Z%.3f\n", infoSettings.level_z_raise);  // raise nozzle
+  if (coordinateIsKnown() == false)
+    probeHeightHomeAndRaise();  // home and raise nozzle
 
   // Check min edge limit for the probe with probe offset set in parseACK.c
   uint8_t edge_min = MAX(ABS(getParameter((int16_t)P_PROBE_OFFSET, AXIS_INDEX_X)),
@@ -135,11 +109,11 @@ void menuLevelCorner(void)
     switch (key_num)
     {
       case KEY_ICON_0:
-        ScanLevelCorner(LEVEL_TOP_LEFT);
+        levelingProbePoint(LEVEL_TOP_LEFT);
         break;
 
       case KEY_ICON_1:
-        ScanLevelCorner(LEVEL_TOP_RIGHT);
+        levelingProbePoint(LEVEL_TOP_RIGHT);
         break;
 
       case KEY_ICON_2:
@@ -158,18 +132,18 @@ void menuLevelCorner(void)
         break;
 
       case KEY_ICON_4:
-        ScanLevelCorner(LEVEL_BOTTOM_LEFT);
+        levelingProbePoint(LEVEL_BOTTOM_LEFT);
         break;
 
       case KEY_ICON_5:
-        ScanLevelCorner(LEVEL_BOTTOM_RIGHT);
+        levelingProbePoint(LEVEL_BOTTOM_RIGHT);
         break;
 
       case KEY_ICON_6:
-        ScanLevelCorner(LEVEL_BOTTOM_LEFT);
-        ScanLevelCorner(LEVEL_BOTTOM_RIGHT);
-        ScanLevelCorner(LEVEL_TOP_RIGHT);
-        ScanLevelCorner(LEVEL_TOP_LEFT);
+        levelingProbePoint(LEVEL_BOTTOM_LEFT);
+        levelingProbePoint(LEVEL_BOTTOM_RIGHT);
+        levelingProbePoint(LEVEL_TOP_RIGHT);
+        levelingProbePoint(LEVEL_TOP_LEFT);
         break;
 
       case KEY_ICON_7:
@@ -180,7 +154,7 @@ void menuLevelCorner(void)
         break;
     }
 
-    for (uint8_t i = 0; i < LC_VALUE_COUNT; i++)
+    for (uint8_t i = 0; i < LEVEL_POINT_COUNT; i++)
     {
       if (oldValue[i] != levelCornerPosition[i])
       {

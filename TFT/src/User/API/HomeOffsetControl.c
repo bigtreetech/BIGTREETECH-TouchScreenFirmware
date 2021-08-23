@@ -12,7 +12,7 @@ void homeOffsetEnable(bool skipZOffset, float shim)
   probeHeightEnable();  // temporary disable software endstops and save ABL state
 
   // Z offset gcode sequence start
-  probeHeightHome();              // home, disable ABL and raise nozzle
+  probeHeightHomeAndNoABL();      // home and disable ABL
   probeHeightStart(shim, false);  // lower nozzle to absolute Z0 point + shim
   probeHeightRelative();          // set relative position mode
 }
@@ -23,8 +23,8 @@ void homeOffsetDisable(void)
   home_offset_enabled = false;
 
   // Z offset gcode sequence stop
-  probeHeightHome();      // home, disable ABL and raise nozzle
-  probeHeightAbsolute();  // set absolute position mode
+  probeHeightHomeAndNoABL();  // home and disable ABL
+  probeHeightAbsolute();      // set absolute position mode
 
   probeHeightDisable();  // restore original software endstops state and ABL state
 }

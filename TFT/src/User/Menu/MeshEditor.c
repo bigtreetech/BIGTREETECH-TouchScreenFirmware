@@ -867,7 +867,7 @@ void menuMeshEditor(void)
         if (meshGetStatus())
         {
           if (coordinateIsKnown() == false)
-            probeHeightHome();                             // home printer
+            probeHeightHome();                             // home, disable ABL and raise nozzle
 
           curValue = menuMeshTuner(meshGetCol(), meshGetJ(), meshGetValue(meshGetIndex()));
           meshSetValue(curValue);

@@ -721,7 +721,7 @@ void parseACK(void)
         tmpMsg[6] = '\0';
         if (strcmp(tmpMsg, "Mean: ") == 0)
         {
-          SetLevelCornerPosition(4, ack_value());  // save value for Lever Corner display
+          setLevelCornerPosition(-1, -1, ack_value());  // save value for LevelCorner menu
           sprintf(tmpMsg, "%s\nStandard Deviation: %0.5f", (char *)getDialogMsgStr(), ack_value());
           setDialogText((uint8_t* )"Repeatability Test", (uint8_t *)tmpMsg, LABEL_CONFIRM, LABEL_BACKGROUND);
           showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
@@ -822,36 +822,13 @@ void parseACK(void)
       {
         mblUpdateStatus(true);
       }
-      // G30 feedback to get the 4 corners Z value returned by Marlin for LevelCorner function
+      // parse G30, feedback to get the 4 corners Z value returned by Marlin for LevelCorner menu
       else if (ack_seen("Bed X: "))
       {
-        float valx = ack_value();
-        float valy = 0;
-        if (ack_seen("Y: ")) valy = ack_value();
-        if (ack_seen("Z: "))
-        {
-          uint16_t x_mid = infoSettings.machine_size_min[X_AXIS] +
-                           (infoSettings.machine_size_max[X_AXIS] - infoSettings.machine_size_min[X_AXIS]) / 2;
-          uint16_t y_mid = infoSettings.machine_size_min[Y_AXIS] +
-                           (infoSettings.machine_size_max[Y_AXIS] - infoSettings.machine_size_min[Y_AXIS]) / 2;
-
-          if ((valx < x_mid) && (valy < y_mid))
-          {
-            SetLevelCornerPosition(0, ack_value());
-          }
-          else if ((valx > x_mid) && (valy < y_mid))
-          {
-            SetLevelCornerPosition(1, ack_value());
-          }
-          else if ((valx > x_mid) && (valy > y_mid))
-          {
-            SetLevelCornerPosition(2, ack_value());
-          }
-          else if ((valx < x_mid) && (valy > y_mid))
-          {
-            SetLevelCornerPosition(3, ack_value());
-          }
-        }
+        float x = ack_value();
+        float y = 0;
+        if (ack_seen("Y: ")) y = ack_value();
+        if (ack_seen("Z: ")) setLevelCornerPosition(x, y, ack_value());
       }
 
       //----------------------------------------
