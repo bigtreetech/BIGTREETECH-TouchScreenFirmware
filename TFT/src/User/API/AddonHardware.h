@@ -27,13 +27,6 @@ extern "C" {
   void FIL_FE_CheckRunout(void);
 #endif
 
-// Smart home
-#ifdef SMART_HOME
-  #define LONG_TOUCH (MODE_SWITCHING_INTERVAL / 3)  // keep it lower than MODE_SWITCHING_INTERVAL
-
-  void loopCheckBack(void);
-#endif
-
 #ifdef __cplusplus
 }
 #endif

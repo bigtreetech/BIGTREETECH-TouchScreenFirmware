@@ -94,7 +94,7 @@
 #include "ScreenShot.h"
 #include "SerialConnection.h"
 #include "Settings.h"
-#include "SmartFeatures.h"
+#include "AddonHardware.h"
 #include "SpeedControl.h"
 #include "Temperature.h"
 #include "Touch_Encoder.h"

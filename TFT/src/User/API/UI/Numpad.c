@@ -110,7 +110,7 @@ void drawKeypadButton(uint8_t index, uint8_t isPressed)
                   .rect       = rectBtn};
 
     setFontSize(FONT_SIZE_LARGE);
-    if (!(index == NUM_KEY_DEC && ((numpadType >> 0) & 1)) && !(index == NUM_KEY_MINUS && !((numpadType >> 1) & 1)))
+    if (!(index == NUM_KEY_DEC && GET_BIT(numpadType, 0)) && !(index == NUM_KEY_MINUS && !GET_BIT(numpadType, 1)))
       GUI_DrawButton(&btn, isPressed);
     setFontSize(FONT_SIZE_NORMAL);
     #else

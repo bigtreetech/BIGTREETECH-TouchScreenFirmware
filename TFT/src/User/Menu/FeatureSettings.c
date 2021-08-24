@@ -102,15 +102,9 @@ void updateFeatureSettings(uint8_t item_index)
       break;
 
     case SKEY_START_GCODE_ENABLED:
-      infoSettings.send_start_gcode = (infoSettings.send_start_gcode + 1) % ITEM_TOGGLE_NUM;
-      break;
-
     case SKEY_END_GCODE_ENABLED:
-      infoSettings.send_end_gcode = (infoSettings.send_end_gcode + 1) % ITEM_TOGGLE_NUM;
-      break;
-
     case SKEY_CANCEL_GCODE_ENABLED:
-      infoSettings.send_cancel_gcode = (infoSettings.send_cancel_gcode + 1) % ITEM_TOGGLE_NUM;
+      TOGGLE_BIT(infoSettings.send_gcodes, (item_index - SKEY_START_GCODE_ENABLED));
       break;
 
     case SKEY_RESET_SETTINGS:
@@ -163,8 +157,8 @@ void loadFeatureSettings(LISTITEM * item, uint16_t item_index, uint8_t itemPos)
       #ifdef FIL_RUNOUT_PIN
         case SKEY_FIL_RUNOUT:
         {
-          LABEL sensorLabel = itemToggleSmart[(infoSettings.runout >> 1) & 1];
-          item->valueLabel.index = (infoSettings.runout & 1) ? sensorLabel.index : LABEL_OFF ;
+          LABEL sensorLabel = itemToggleSmart[GET_BIT(infoSettings.runout, 1)];
+          item->valueLabel.index = (GET_BIT(infoSettings.runout, 0)) ? sensorLabel.index : LABEL_OFF ;
           break;
         }
       #endif
@@ -182,15 +176,9 @@ void loadFeatureSettings(LISTITEM * item, uint16_t item_index, uint8_t itemPos)
         break;
 
       case SKEY_START_GCODE_ENABLED:
-        item->icon = iconToggle[infoSettings.send_start_gcode];
-        break;
-
       case SKEY_END_GCODE_ENABLED:
-        item->icon = iconToggle[infoSettings.send_end_gcode];
-        break;
-
       case SKEY_CANCEL_GCODE_ENABLED:
-        item->icon = iconToggle[infoSettings.send_cancel_gcode];
+        item->icon = iconToggle[GET_BIT(infoSettings.send_gcodes, (item_index - SKEY_START_GCODE_ENABLED))];
         break;
 
       case SKEY_RESET_SETTINGS:
