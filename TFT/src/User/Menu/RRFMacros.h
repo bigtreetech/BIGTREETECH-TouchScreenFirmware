@@ -5,6 +5,7 @@
 extern "C" {
 #endif
 
+void rrfShowRunningMacro(void);
 void menuCallMacro(void);
 
 #ifdef __cplusplus

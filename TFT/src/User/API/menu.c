@@ -920,8 +920,8 @@ void loopBackEnd(void)
     loopCaseLight();
   }
 
-  // Query fan speed, only for RRF now
-  fanQuery();
+  // Query RRF status
+  rrfStatusQuery();
 }  // loopBackEnd
 
 void loopFrontEnd(void)

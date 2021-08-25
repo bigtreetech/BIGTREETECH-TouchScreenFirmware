@@ -245,15 +245,20 @@ void request_M0(void)
 
 void request_M98(char *filename)
 {
-  char command[256];
-  snprintf(command, 256, "M98 P/%s\n", filename);
-  resetRequestCommandInfo("", "ok", "Warning:", NULL, NULL);
+  char command[CMD_MAX_CHAR];
+  snprintf(command, CMD_MAX_CHAR, "M98 P/%s\n", filename);
+  rrfStatusSetMacroBusy();
   mustStoreCmd(command);
+  // prevent a race condition when rrfStatusQuery returns !busy before executing the macro
+  while (isEnqueued(command))
+  {
+    loopProcess();
+  }
+  rrfStatusQueryFast();
 
-  // Wait for response
-  loopProcessToCondition(&isWaitingResponse);
-
-  clearRequestCommandInfo();
+  // Wait for macro to complete
+  loopProcessToCondition(&rrfStatusIsBusy);
+  rrfStatusQueryNormal();
 }
 
 // nextdir path must start with "macros"
@@ -261,9 +266,7 @@ char *request_M20_macros(char *nextdir)
 {
   resetRequestCommandInfo("{", "}", "Error:", NULL, NULL);
 
-  char command[256];
-  snprintf(command, 256, "M20 S2 P\"/%s\"\n", nextdir);
-  mustStoreCmd(command);
+  mustStoreCmd("M20 S2 P\"/%s\"\n", nextdir);
 
   // Wait for response
   loopProcessToCondition(&isWaitingResponse);
