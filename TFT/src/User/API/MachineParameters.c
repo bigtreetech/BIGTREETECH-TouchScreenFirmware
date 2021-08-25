@@ -173,7 +173,7 @@ uint8_t getEnabledElement(PARAMETER_NAME name, uint8_t index)
 
 static inline void setParameterStatus(PARAMETER_NAME name, bool status)
 {
-  SET_BIT_VALUE(parametersEnabled,name, status);
+  SET_BIT_VALUE(parametersEnabled, name, status);
 }
 
 static inline uint8_t getParameterStatus(PARAMETER_NAME name)

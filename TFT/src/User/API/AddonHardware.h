@@ -6,7 +6,7 @@ extern "C" {
 #endif
 
 #include <stdbool.h>
-#include "variants.h"  // for PS_ON_PIN, FIL_RUNOUT_PIN etc...
+#include "variants.h"  // for PS_ON_PIN, FIL_RUNOUT_PIN etc.
 
 // Power Supply
 #ifdef PS_ON_PIN
@@ -17,7 +17,7 @@ extern "C" {
 
 // Filament runout detection
 #ifdef FIL_RUNOUT_PIN
-  #define POS_E_UPDATE_TIME   2000
+  #define POS_E_UPDATE_TIME    2000
   #define ALARM_REMINDER_TIME 10000
 
   void FIL_Runout_Init(void);
