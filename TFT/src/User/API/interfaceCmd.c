@@ -557,10 +557,15 @@ void sendQueueCmd(void)
 
         case 73:
           if (cmd_seen('P'))
+          {
             setPrintProgressPercentage(cmd_value());
+          }
 
           if (cmd_seen('R'))
+          {
             setPrintRemainingTime((cmd_value() * 60));
+            setM73_presence(0);  // disable parsing remaning time from gCode comments
+          }
 
           if (!infoMachineSettings.buildPercent)  // if M73 is not supported by Marlin, skip it
           {

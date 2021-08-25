@@ -150,9 +150,14 @@ void menuBeforePrinting(void)
       infoMenu.cur--;
       return;
   }
+
+  // initialize things before print start
   progDisplayType = infoSettings.prog_disp_type;
   layerDisplayType = infoSettings.layer_disp_type * 2;
   setLayerNumber(0);
+  setM73_presence(false);
+  setTotalTime(0);
+  
   infoMenu.menu[infoMenu.cur] = menuPrinting;
 }
 
