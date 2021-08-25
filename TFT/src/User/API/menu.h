@@ -201,6 +201,7 @@ void itemDrawIconPress_PS(uint8_t position, uint8_t is_press);
 KEY_VALUES menuKeyGetValue(void);
 GUI_POINT getIconStartPoint(int index);
 
+void menuDummy(void);
 void loopBackEnd(void);
 void loopFrontEnd(void);
 void loopProcess(void);
