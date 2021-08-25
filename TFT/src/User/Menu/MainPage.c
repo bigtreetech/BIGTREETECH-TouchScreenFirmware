@@ -26,7 +26,7 @@ void menuMain(void)
 
   KEY_VALUES key_num = KEY_IDLE;
 
-  if (infoSettings.rrf_macros_enable)
+  if (infoMachineSettings.firmwareType == FW_REPRAPFW)
   {
     mainPageItems.items[5].label.index = LABEL_MACROS;
   }

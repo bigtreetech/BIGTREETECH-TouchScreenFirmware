@@ -1,5 +1,6 @@
 #include "parseACK.h"
 #include "includes.h"
+#include "RRFParseACK.hpp"
 
 #define ACK_MAX_SIZE 512
 
@@ -483,7 +484,7 @@ void parseACK(void)
 
     if (requestCommandInfo.inJson)
     {
-      parseACKJson(dmaL2Cache);
+      rrfParseACK(dmaL2Cache);
     }
 
     if (ack_cmp("ok\n"))
@@ -544,20 +545,10 @@ void parseACK(void)
         coordinateSetExtruderActualSteps(ack_value());
       }
       // parse and store feed rate percentage
-      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW && ack_seen("Speed factor: ")) ||
-               ack_seen("FR:"))
+      else if (ack_seen("FR:"))
       {
         speedSetCurPercent(0, ack_value());
         speedQuerySetWait(false);
-      }
-      // parse and store flow rate percentage in case of RepRapFirmware
-      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && ack_seen("Extrusion factor"))
-      {
-        if (ack_continue_seen(": "))
-        {
-          speedSetCurPercent(1, ack_value());
-          speedQuerySetWait(false);
-        }
       }
       // parse and store flow rate percentage
       else if (ack_seen("Flow: "))
@@ -679,17 +670,17 @@ void parseACK(void)
       // parse and store build volume size
       else if (ack_seen("work:"))
       {
-        if (ack_seen("min:"))
+        if (ack_continue_seen("min:"))
         {
-          if (ack_seen("X:")) infoSettings.machine_size_min[X_AXIS] = ack_value();
-          if (ack_seen("Y:")) infoSettings.machine_size_min[Y_AXIS] = ack_value();
-          if (ack_seen("Z:")) infoSettings.machine_size_min[Z_AXIS] = ack_value();
+          if (ack_continue_seen("x:")) infoSettings.machine_size_min[X_AXIS] = ack_value();
+          if (ack_continue_seen("y:")) infoSettings.machine_size_min[Y_AXIS] = ack_value();
+          if (ack_continue_seen("z:")) infoSettings.machine_size_min[Z_AXIS] = ack_value();
         }
-        if (ack_seen("max:"))
+        if (ack_continue_seen("max:"))
         {
-          if (ack_seen("X:")) infoSettings.machine_size_max[X_AXIS] = ack_value();
-          if (ack_seen("Y:")) infoSettings.machine_size_max[Y_AXIS] = ack_value();
-          if (ack_seen("Z:")) infoSettings.machine_size_max[Z_AXIS] = ack_value();
+          if (ack_continue_seen("x:")) infoSettings.machine_size_max[X_AXIS] = ack_value();
+          if (ack_continue_seen("y:")) infoSettings.machine_size_max[Y_AXIS] = ack_value();
+          if (ack_continue_seen("z:")) infoSettings.machine_size_max[Z_AXIS] = ack_value();
         }
       }
       // parse M48, Repeatability Test
