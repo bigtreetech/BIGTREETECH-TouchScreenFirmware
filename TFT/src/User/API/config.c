@@ -896,13 +896,15 @@ void parseConfigKey(uint16_t index)
     #ifdef FIL_RUNOUT_PIN
       case C_INDEX_RUNOUT:
         if (inLimit(config_int(), 0, 3))
+        {
           SET_BIT_VALUE(infoSettings.runout, RUNOUT_ENABLED, GET_BIT(config_int(), RUNOUT_ENABLED));
           SET_BIT_VALUE(infoSettings.runout, RUNOUT_SENSOR_TYPE, GET_BIT(config_int(), RUNOUT_SENSOR_TYPE));
+        }
         break;
 
       case C_INDEX_RUNOUT_LOGIC:
       case C_INDEX_RUNOUT_NC:
-          SET_BIT_VALUE(infoSettings.runout, (c_index - C_INDEX_RUNOUT_LOGIC), getOnOff());
+        SET_BIT_VALUE(infoSettings.runout, (c_index - C_INDEX_RUNOUT_LOGIC), getOnOff());
         break;
 
       case C_INDEX_RUNOUT_NOISE:
