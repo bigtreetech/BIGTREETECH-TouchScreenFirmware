@@ -45,7 +45,7 @@ static inline void mblAbort(void)
 
   mblStop();
 
-  BUZZER_PLAY(sound_error);
+  BUZZER_PLAY(SOUND_ERROR);
 
   popupReminder(DIALOG_TYPE_ERROR, LABEL_MBL_SETTINGS, LABEL_PROCESS_ABORTED);
 }
@@ -57,7 +57,7 @@ void mblUpdateStatus(bool succeeded)
 
   if (succeeded)  // if bed leveling process successfully terminated, allow to save to EEPROM
   {
-    BUZZER_PLAY(sound_success);
+    BUZZER_PLAY(SOUND_SUCCESS);
 
     LABELCHAR(tempMsg, LABEL_BL_COMPLETE);
 
@@ -75,7 +75,7 @@ void mblUpdateStatus(bool succeeded)
   }
   else  // if bed leveling process failed, provide an error dialog
   {
-    BUZZER_PLAY(sound_error);
+    BUZZER_PLAY(SOUND_ERROR);
 
     popupReminder(DIALOG_TYPE_ERROR, LABEL_MBL_SETTINGS, LABEL_PROCESS_ABORTED);
   }

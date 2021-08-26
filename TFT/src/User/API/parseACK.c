@@ -159,9 +159,9 @@ void ackPopupInfo(const char * info)
 
   // play notification sound if buzzer for ACK is enabled
   if (info == errormagic)
-    BUZZER_PLAY(sound_error);
+    BUZZER_PLAY(SOUND_ERROR);
   else if (info == echomagic && infoSettings.ack_notification == 1)
-    BUZZER_PLAY(sound_notify);
+    BUZZER_PLAY(SOUND_NOTIFY);
 
   // set echo message in status screen
   if (info == echomagic || info == messagemagic)
@@ -215,7 +215,7 @@ bool processKnownEcho(void)
       }
       else if (knownEcho[i].notifyType == ECHO_NOTIFY_DIALOG)
       {
-        BUZZER_PLAY(sound_notify);
+        BUZZER_PLAY(SOUND_NOTIFY);
         addNotification(DIALOG_TYPE_INFO, (char *)echomagic, (char *)dmaL2Cache + ack_index, true);
       }
     //}
@@ -346,21 +346,21 @@ void hostActionCommands(void)
     switch (hostAction.button)
     {
       case 0:
-        BUZZER_PLAY(sound_notify);
+        BUZZER_PLAY(SOUND_NOTIFY);
         setDialogText((uint8_t *)"Message", (uint8_t *)hostAction.prompt_begin, LABEL_CONFIRM,
                       LABEL_BACKGROUND);
         showDialog(DIALOG_TYPE_ALERT, setRunoutAlarmFalse, NULL, NULL);
         break;
 
       case 1:
-        BUZZER_PLAY(sound_notify);
+        BUZZER_PLAY(SOUND_NOTIFY);
         setDialogText((uint8_t *)"Action command", (uint8_t *)hostAction.prompt_begin, (uint8_t *)hostAction.prompt_button1,
                       LABEL_BACKGROUND);
         showDialog(DIALOG_TYPE_ALERT, breakAndContinue, NULL, NULL);
         break;
 
       case 2:
-        BUZZER_PLAY(sound_notify);
+        BUZZER_PLAY(SOUND_NOTIFY);
         setDialogText((uint8_t *)"Action command", (uint8_t *)hostAction.prompt_begin, (uint8_t *)hostAction.prompt_button1,
                       (uint8_t *)hostAction.prompt_button2);
         showDialog(DIALOG_TYPE_ALERT, resumeAndPurge, resumeAndContinue, NULL);
@@ -445,7 +445,7 @@ void parseACK(void)
         requestCommandInfo.inWaitResponse = false;
 
         strcpy(requestCommandInfo.cmd_rev_buf, dmaL2Cache);
-        BUZZER_PLAY(sound_error);
+        BUZZER_PLAY(SOUND_ERROR);
         goto parse_end;
       }
       requestCommandInfo.inJson = false;
@@ -1270,8 +1270,7 @@ void parseACK(void)
         {
           if (serialPort[i].activePort)  // if the port is connected to an active device (a device that already sent data to the TFT)
           {
-            // pass on the ACK message to the port
-            Serial_Puts(serialPort[i].port, dmaL2Cache);
+            Serial_Puts(serialPort[i].port, dmaL2Cache);  // pass on the ACK message to the port
           }
         }
       }

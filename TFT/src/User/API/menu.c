@@ -920,7 +920,7 @@ void loopCheckBackPress(void)
         }
         else
         {
-          BUZZER_PLAY(sound_ok);
+          BUZZER_PLAY(SOUND_OK);
 
           #ifdef HAS_EMULATOR
             backHeld = true;

@@ -9,16 +9,16 @@ extern "C" {
 
 typedef enum
 {
-  sound_success = 0,
-  sound_error,
-  sound_ok,
-  sound_cancel,
-  sound_notify,
-  sound_deny,
-  sound_toast,
-  sound_keypress,
-  sound_heated,
-  sound_cooled,
+  SOUND_SUCCESS = 0,
+  SOUND_ERROR,
+  SOUND_OK,
+  SOUND_CANCEL,
+  SOUND_NOTIFY,
+  SOUND_DENY,
+  SOUND_TOAST,
+  SOUND_KEYPRESS,
+  SOUND_HEATED,
+  SOUND_COOLED,
 } SOUND;
 
 #ifdef BUZZER_PIN

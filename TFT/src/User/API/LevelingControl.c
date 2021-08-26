@@ -8,7 +8,7 @@ void levelingGetPointCoords(LEVELING_POINT_COORDS coords)
   int16_t y_bottom = infoSettings.machine_size_min[Y_AXIS] + infoSettings.level_edge;
   int16_t y_top = infoSettings.machine_size_max[Y_AXIS] - infoSettings.level_edge;
 
-  if (infoSettings.invert_axis[X_AXIS])
+  if (GET_BIT(infoSettings.invert_axis, X_AXIS))
   {
     int16_t temp = x_left;  // Swap left and right
     x_left = x_right;

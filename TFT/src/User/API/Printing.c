@@ -398,7 +398,7 @@ void printEnd(void)
 
 void printComplete(void)
 {
-  BUZZER_PLAY(sound_success);
+  BUZZER_PLAY(SOUND_SUCCESS);
   printEnd();
 
   if (infoSettings.auto_off)  // Auto shut down after print

@@ -255,7 +255,7 @@ void FIL_FE_CheckRunout(void)
 
   if ((OS_GetTimeMs() > nextReminderTime) && (getRunoutAlarm() == true))
   {
-    BUZZER_PLAY(sound_error);
+    BUZZER_PLAY(SOUND_ERROR);
     nextReminderTime = OS_GetTimeMs() + ALARM_REMINDER_TIME;
   }
 }

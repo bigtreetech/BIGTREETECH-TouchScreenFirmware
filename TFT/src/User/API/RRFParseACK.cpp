@@ -85,7 +85,7 @@ void ParseACKJsonParser::endDocument()
     expire_time = m291_timeo > 0 ? OS_GetTimeMs() + m291_timeo : 0;
     showDialog(m291_mode > 2 ? DIALOG_TYPE_QUESTION : DIALOG_TYPE_INFO, m291_confirm,
         m291_mode > 2 ? m291_cancel : NULL, m291_loop);
-    BUZZER_PLAY(sound_notify);
+    BUZZER_PLAY(SOUND_NOTIFY);
     show_m291 = false;
   }
 
