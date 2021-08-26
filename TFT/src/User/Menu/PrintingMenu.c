@@ -99,7 +99,7 @@ void menuBeforePrinting(void)
       {
         uint32_t size;
 
-        size = request_M23_M36(infoFile.title + 5);
+        size = request_M23_M36(infoFile.title + (infoMachineSettings.firmwareType == FW_REPRAPFW ? 0 : 5));
         //if (powerFailedCreate(infoFile.title) == false)
         //{
         //

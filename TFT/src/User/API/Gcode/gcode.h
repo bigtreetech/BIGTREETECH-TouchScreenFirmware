@@ -44,7 +44,7 @@ void request_M27(uint8_t seconds);
 void request_M125(void);
 void request_M0(void);
 void request_M98(char *filename);
-char *request_M20_macros(char *dir);
+char *request_M20_rrf(char *dir);
 
 #ifdef __cplusplus
 }

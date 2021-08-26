@@ -60,9 +60,6 @@ void infoSettingsReset(void)
   infoSettings.marlin_mode_showtitle  = MARLIN_SHOW_BANNER;
   infoSettings.marlin_type            = LCD12864;
 
-// RRF Mode Settings
-  infoSettings.rrf_macros_enable      = 0;
-
 // Printer / Machine Settings
   infoSettings.hotend_count           = HOTEND_NUM;
   infoSettings.bed_en                 = ENABLE;
@@ -242,6 +239,7 @@ void setupMachine(void)
   if (infoMachineSettings.firmwareType == FW_REPRAPFW)
   {
     mustStoreCmd("M555 P2\n");  //  Set RRF compatibility behaves similar to 2: Marlin
+    mustStoreCmd("M552\n"); // query network state, populate IP if the screen boots up after RRF
   }
   mustStoreCmd("M82\n");  // Set extruder to absolute mode
   mustStoreCmd("G90\n");  // Set to Absolute Positioning

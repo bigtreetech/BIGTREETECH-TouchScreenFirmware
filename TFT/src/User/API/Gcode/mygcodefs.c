@@ -1,5 +1,6 @@
 #include "mygcodefs.h"
 #include "includes.h"
+#include "RRFM20Parser.hpp"
 
 bool mountGcodeSDCard(void)
 {
@@ -12,6 +13,11 @@ SENDING:M21
 echo:SD card ok
 */
   return request_M21();
+}
+
+void rrfScanPrintFilesGcodeFs(void)
+{
+  parseJobListResponse(request_M20_rrf(infoFile.title));
 }
 
 //static uint32_t date = 0;
@@ -35,6 +41,11 @@ bool scanPrintFilesGcodeFs(void)
 {
   clearInfoFile();
 
+  if (infoMachineSettings.firmwareType == FW_REPRAPFW)
+  {
+    rrfScanPrintFilesGcodeFs();
+    return true;
+  }
   char *ret = request_M20();
   char *data = malloc(strlen(ret) + 1);
   strcpy(data, ret);

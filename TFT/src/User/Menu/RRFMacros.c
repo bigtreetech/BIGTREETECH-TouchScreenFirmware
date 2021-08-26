@@ -1,6 +1,6 @@
 #include "RRFMacros.h"
 #include "includes.h"
-#include "RRFMacrosParser.hpp"
+#include "RRFM20Parser.hpp"
 
 static const char *running_macro_name;
 extern const GUI_RECT titleRect;
@@ -9,7 +9,7 @@ extern const GUI_RECT titleRect;
 void scanInfoFilesFs(void)
 {
   clearInfoFile();
-  char *data = request_M20_macros(infoFile.title);
+  char *data = request_M20_rrf(infoFile.title);
   parseMacroListResponse(data);
   clearRequestCommandInfo();
 }
