@@ -6,8 +6,8 @@ MACHINESETTINGS infoMachineSettings;
 
 const uint16_t default_max_temp[]      = HEAT_MAX_TEMP;
 const uint16_t default_max_fanPWM[]    = FAN_MAX_PWM;
-const uint16_t default_size_min[]      = {X_MIN_POS,Y_MIN_POS,Z_MIN_POS};
-const uint16_t default_size_max[]      = {X_MAX_POS,Y_MAX_POS,Z_MAX_POS};
+const uint16_t default_size_min[]      = {X_MIN_POS, Y_MIN_POS, Z_MIN_POS};
+const uint16_t default_size_max[]      = {X_MAX_POS, Y_MAX_POS, Z_MAX_POS};
 const uint16_t default_xy_speed[]      = {SPEED_XY_SLOW, SPEED_XY_NORMAL, SPEED_XY_FAST};
 const uint16_t default_z_speed[]       = {SPEED_Z_SLOW, SPEED_Z_NORMAL, SPEED_Z_FAST};
 const uint16_t default_ext_speed[]     = {EXTRUDE_SLOW_SPEED, EXTRUDE_NORMAL_SPEED, EXTRUDE_FAST_SPEED};
@@ -21,8 +21,7 @@ const uint8_t default_custom_enabled[] = CUSTOM_GCODE_ENABLED;
 void infoSettingsReset(void)
 {
 // General Settings
-  infoSettings.multi_serial           = MULTI_SERIAL;
-  infoSettings.baudrate               = BAUDRATE;
+  infoSettings.serial_port[0]         = PRIMARY_BAUDRATE;  // primary serial port
   infoSettings.emulate_m600           = EMULATE_M600;
 
 // UI Settings
@@ -135,6 +134,11 @@ void infoSettingsReset(void)
   infoSettings.send_cancel_gcode      = ENABLED;
 
 // All the remaining array initializations
+  for (int i = 1; i < MAX_SERIAL_PORT_COUNT; i++)  // supplemetary serial ports
+  {
+    infoSettings.serial_port[i]       = DISABLED;
+  }
+
   for (int i = 0; i < MAX_HEATER_COUNT; i++)
   {
     infoSettings.max_temp[i]          = default_max_temp[i];

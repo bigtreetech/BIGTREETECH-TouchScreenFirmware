@@ -712,7 +712,7 @@ void parseACK(void)
         tmpMsg[6] = '\0';
         if (strcmp(tmpMsg, "Mean: ") == 0)
         {
-          SetLevelCornerPosition(4, ack_value());  // save value for Lever Corner display
+          setLevelCornerPosition(-1, -1, ack_value());  // save value for LevelCorner menu
           sprintf(tmpMsg, "%s\nStandard Deviation: %0.5f", (char *)getDialogMsgStr(), ack_value());
           setDialogText((uint8_t* )"Repeatability Test", (uint8_t *)tmpMsg, LABEL_CONFIRM, LABEL_BACKGROUND);
           showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
@@ -813,36 +813,13 @@ void parseACK(void)
       {
         mblUpdateStatus(true);
       }
-      // G30 feedback to get the 4 corners Z value returned by Marlin for LevelCorner function
+      // parse G30, feedback to get the 4 corners Z value returned by Marlin for LevelCorner menu
       else if (ack_seen("Bed X: "))
       {
-        float valx = ack_value();
-        float valy = 0;
-        if (ack_seen("Y: ")) valy = ack_value();
-        if (ack_seen("Z: "))
-        {
-          uint16_t x_mid = infoSettings.machine_size_min[X_AXIS] +
-                           (infoSettings.machine_size_max[X_AXIS] - infoSettings.machine_size_min[X_AXIS]) / 2;
-          uint16_t y_mid = infoSettings.machine_size_min[Y_AXIS] +
-                           (infoSettings.machine_size_max[Y_AXIS] - infoSettings.machine_size_min[Y_AXIS]) / 2;
-
-          if ((valx < x_mid) && (valy < y_mid))
-          {
-            SetLevelCornerPosition(0, ack_value());
-          }
-          else if ((valx > x_mid) && (valy < y_mid))
-          {
-            SetLevelCornerPosition(1, ack_value());
-          }
-          else if ((valx > x_mid) && (valy > y_mid))
-          {
-            SetLevelCornerPosition(2, ack_value());
-          }
-          else if ((valx < x_mid) && (valy > y_mid))
-          {
-            SetLevelCornerPosition(3, ack_value());
-          }
-        }
+        float x = ack_value();
+        float y = 0;
+        if (ack_seen("Y: ")) y = ack_value();
+        if (ack_seen("Z: ")) setLevelCornerPosition(x, y, ack_value());
       }
 
       //----------------------------------------
@@ -1288,13 +1265,13 @@ void parseACK(void)
     #ifdef SERIAL_PORT_2
       else if (!ack_seen("ok") || ack_seen("T:") || ack_seen("T0:"))  // if a spontaneous ACK message
       {
-        // pass on the spontaneous ACK message to all the extra serial ports (since these messages come unrequested)
-        for (uint8_t i = 0; i < PORT_COUNT; i++)
+        // pass on the spontaneous ACK message to all the supplementary serial ports (since these messages come unrequested)
+        for (uint8_t i = 1; i < SERIAL_PORT_COUNT; i++)
         {
-          if (extraSerialPort[i].activePort)  // if the port is connected to an active device (a device that already sent data to the TFT)
+          if (serialPort[i].activePort)  // if the port is connected to an active device (a device that already sent data to the TFT)
           {
             // pass on the ACK message to the port
-            Serial_Puts(extraSerialPort[i].port, dmaL2Cache);
+            Serial_Puts(serialPort[i].port, dmaL2Cache);
           }
         }
       }
@@ -1312,10 +1289,10 @@ void parseRcvGcode(void)
   #ifdef SERIAL_PORT_2
     uint8_t port;
 
-    // scan all the extra serial ports
-    for (uint8_t i = 0; i < PORT_COUNT; i++)
+    // scan all the supplementary serial ports
+    for (uint8_t i = 1; i < SERIAL_PORT_COUNT; i++)
     {
-      port = extraSerialPort[i].port;
+      port = serialPort[i].port;
 
       if (infoHost.rx_ok[port] == true)
       {
@@ -1327,7 +1304,7 @@ void parseRcvGcode(void)
           storeCmdFromUART(port, dmaL2Cache);
         }
 
-        extraSerialPort[i].activePort = true;
+        serialPort[i].activePort = true;
       }
     }
   #endif

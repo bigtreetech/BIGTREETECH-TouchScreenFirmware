@@ -8,8 +8,7 @@
 //after changing/adding/removing a keyword, change the CONFIG_FLASH_SIGN in Settings.h
 
 //-----------------------------General Settings
-X_CONFIG(MULTI_SERIAL)
-X_CONFIG(UART_BAUDRATE)
+X_CONFIG(SERIAL_PORT)
 X_CONFIG(EMULATE_M600)
 //-----------------------------UI Settings
 X_CONFIG(ROTATE_UI)

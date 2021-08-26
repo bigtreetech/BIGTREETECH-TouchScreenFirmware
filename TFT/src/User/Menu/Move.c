@@ -26,6 +26,32 @@ void storeMoveCmd(AXIS xyz, int8_t direction)
                                                             moveItems.items[p1].label.index = LABEL_##axis##_##dir1; \
                                                          }while(0)
 
+void drawXYZ(void)
+{
+  char tempstr[20];
+  GUI_SetColor(INFOBOX_ICON_COLOR);
+
+  sprintf(tempstr, "X:%.2f  ", coordinateGetAxisActual(X_AXIS));
+  GUI_DispString(START_X + 1 * SPACE_X + 1 * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
+
+  sprintf(tempstr, "Y:%.2f  ", coordinateGetAxisActual(Y_AXIS));
+  GUI_DispString(START_X + 2 * SPACE_X + 2 * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
+
+  sprintf(tempstr, "Z:%.2f  ", coordinateGetAxisActual(Z_AXIS));
+  GUI_DispString(START_X + 3 * SPACE_X + 3 * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
+
+  GUI_SetColor(infoSettings.font_color);
+}
+
+void updateGantry(void)
+{
+  if (nextScreenUpdate(GANTRY_UPDATE_DELAY))
+  {
+    coordinateQuery(0);  // query position manually for delay less than 1 second
+    drawXYZ();
+  }
+}
+
 void menuMove(void)
 {
   MENUITEMS moveItems = {
@@ -152,34 +178,10 @@ void menuMove(void)
           #endif
           break;
     }
+
     loopProcess();
-    update_gantry();
+    updateGantry();
   }
+
   mustStoreCmd("G90\n");
-}
-
-void update_gantry(void)
-{
-  if (nextScreenUpdate(GANTRY_UPDATE_DELAY))
-  {
-    coordinateQuery(0);  // query position manually for delay less than 1 second
-    drawXYZ();
-  }
-}
-
-void drawXYZ(void)
-{
-  char tempstr[20];
-  GUI_SetColor(INFOBOX_ICON_COLOR);
-
-  sprintf(tempstr, "X:%.2f  ", coordinateGetAxisActual(X_AXIS));
-  GUI_DispString(START_X + 1 * SPACE_X + 1 * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
-
-  sprintf(tempstr, "Y:%.2f  ", coordinateGetAxisActual(Y_AXIS));
-  GUI_DispString(START_X + 2 * SPACE_X + 2 * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
-
-  sprintf(tempstr, "Z:%.2f  ", coordinateGetAxisActual(Z_AXIS));
-  GUI_DispString(START_X + 3 * SPACE_X + 3 * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
-
-  GUI_SetColor(infoSettings.font_color);
 }

@@ -11,7 +11,7 @@ static inline void mblStart(void)
   mblRunning = true;
   mblPoint = 0;
 
-  probeHeightEnable();  // temporary disable software endstops
+  probeHeightEnable();  // temporary disable software endstops and save ABL state
 
   // MBL gcode sequence start
   mustStoreCmd("G28\n");
@@ -34,7 +34,7 @@ static inline void mblStop(void)
 
   probeHeightAbsolute();  // set absolute position mode
 
-  probeHeightDisable();  // restore original software endstops state
+  probeHeightDisable();  // restore original software endstops state and ABL state
 }
 
 // Abort MBL

@@ -58,16 +58,6 @@
   #include "pin_MKS_TFT28_NEW_GENIUS.h"
 #endif
 
-#ifdef SERIAL_PORT_4
-  #define MAX_MULTI_SERIAL (1 << 3)
-#elif defined(SERIAL_PORT_3)
-  #define MAX_MULTI_SERIAL (1 << 2)
-#elif defined(SERIAL_PORT_2)
-  #define MAX_MULTI_SERIAL (1 << 1)
-#else
-  #define MAX_MULTI_SERIAL (1 << 0)
-#endif
-
 #define LCD_ENCODER_SUPPORT (defined(LCD_ENCA_PIN) && defined(LCD_ENCB_PIN) && defined(LCD_BTN_PIN))
 #define ENC_ACTIVE_SIGNAL (defined(LCD_ENC_EN_PIN) && defined(ST7920_EMULATOR) && defined(LCD_ENCODER_SUPPORT))
 

@@ -39,7 +39,6 @@ bool storeCmdFromUART(uint8_t port, const char * gcode);
 void mustStoreCacheCmd(const char * format,...);
 bool moveCacheToCmd(void);
 void clearCmdQueue(void);
-void parseQueueCmd(void);
 void sendQueueCmd(void);
 
 #ifdef __cplusplus

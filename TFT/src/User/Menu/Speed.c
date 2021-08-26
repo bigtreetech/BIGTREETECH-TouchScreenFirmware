@@ -43,7 +43,7 @@ void menuSpeed(void)
   LASTSPEED lastSpeed;
 
   if (infoMachineSettings.firmwareType != FW_REPRAPFW)
-    storeCmd("M220\nM221\n"); // RRF has current settings via periodic polling (fanQuery)
+    storeCmd("M220\nM221\n");  // RRF has current settings via periodic polling (fanQuery)
 
   speedSetPercent(item_index, speedGetCurPercent(item_index));
   lastSpeed = (LASTSPEED) {speedGetCurPercent(item_index), speedGetSetPercent(item_index)};

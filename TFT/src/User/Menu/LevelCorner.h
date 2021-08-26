@@ -7,7 +7,7 @@ extern "C" {
 
 #include <stdint.h>
 
-void SetLevelCornerPosition(uint8_t point, float position);
+void setLevelCornerPosition(int16_t x, int16_t y, float position);
 void menuLevelCorner(void);
 
 #ifdef __cplusplus

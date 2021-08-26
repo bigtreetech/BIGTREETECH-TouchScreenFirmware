@@ -224,7 +224,7 @@ void purgeLastCmd(bool purged, bool avoidTerminal)
 
   #if defined(SERIAL_DEBUG_PORT) && defined(DEBUG_SERIAL_COMM)
     // dump serial data sent to debug port
-    Serial_Puts(SERIAL_DEBUG_PORT, serialPortId[infoCmd.queue[infoCmd.index_r].src]);  // logical port ID (e.g. "2" for SERIAL_PORT_2)
+    Serial_Puts(SERIAL_DEBUG_PORT, serialPort[serialPortIndex[infoCmd.queue[infoCmd.index_r].src]].id);  // serial port ID (e.g. "2" for SERIAL_PORT_2)
     Serial_Puts(SERIAL_DEBUG_PORT, ">>");
     if (purged)
       Serial_Puts(SERIAL_DEBUG_PORT, purgeStr);

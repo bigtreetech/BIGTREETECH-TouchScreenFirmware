@@ -68,14 +68,24 @@ void Serial_DMA_Config(uint8_t port)
   cfg->dma_stream->CR |= 1<<0;   // Enable DMA
 }
 
-void Serial_Config(uint8_t port, uint16_t cacheSize, uint32_t baudrate)
+void Serial_ClearData(uint8_t port)
 {
-  dmaL1Data[port].cacheSize = cacheSize;
-  dmaL1Data[port].rIndex = dmaL1Data[port].wIndex = 0;
+  dmaL1Data[port].rIndex = dmaL1Data[port].wIndex = dmaL1Data[port].cacheSize = 0;
 
   if (dmaL1Data[port].cache != NULL)
+  {
     free(dmaL1Data[port].cache);
+    dmaL1Data[port].cache = NULL;
+  }
 
+  infoHost.rx_ok[port] = false;
+}
+
+void Serial_Config(uint8_t port, uint16_t cacheSize, uint32_t baudrate)
+{
+  Serial_ClearData(port);
+
+  dmaL1Data[port].cacheSize = cacheSize;
   dmaL1Data[port].cache = malloc(cacheSize);
   while (!dmaL1Data[port].cache);              // malloc failed
 
@@ -85,11 +95,7 @@ void Serial_Config(uint8_t port, uint16_t cacheSize, uint32_t baudrate)
 
 void Serial_DeConfig(uint8_t port)
 {
-  if (dmaL1Data[port].cache != NULL)
-  {
-    free(dmaL1Data[port].cache);
-    dmaL1Data[port].cache = NULL;
-  }
+  Serial_ClearData(port);
 
   Serial[port].dma_stream->CR &= ~(1<<0);  // Disable DMA
   Serial_DMAClearFlag(port);

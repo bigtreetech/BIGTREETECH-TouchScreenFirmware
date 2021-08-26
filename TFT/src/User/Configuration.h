@@ -1,7 +1,7 @@
 #ifndef _CONFIGURATION_H_
 #define _CONFIGURATION_H_
 
-#define CONFIG_VERSION 20210815
+#define CONFIG_VERSION 20210821
 
 //====================================================================================================
 //=============================== Settings Configurable On config.ini ================================
@@ -12,34 +12,31 @@
 //================================================================================
 
 /**
- * Enable Multi-Serial Ports
- * Serial ports connected to devices such as ESP3D, OctoPrint, other TFTs etc.
- * Disable the serial port when it is not in use and floating to avoid to receive
- * and process wrong data due to electromagnetic interference (EMI).
+ * Serial Ports (Primary and Supplementary)
+ * Serial ports connected to devices such as Printer, ESP3D, OctoPrint, other TFTs etc.
+ * In order to successfully establish a communication through a serial port, set a baudrate
+ * matching the baudrate configured on the connected device.
+ * Disable the serial port when it is not in use and/or not connected to a device (floating) to
+ * avoid to receive and process wrong data due to possible electromagnetic interference (EMI).
  *
- *   Options: [0: Disable all multi-serials,
- *             1: Enable SERIAL_PORT_2 alone,
- *             2: Enable SERIAL_PORT_3 alone,
- *             4: Enable SERIAL_PORT_4 alone,
- *             3: = 1 + 2: Enable SERIAL_PORT_2 + SERIAL_PORT_3,
- *             5: = 1 + 4: Enable SERIAL_PORT_2 + SERIAL_PORT_4,
- *             6: = 2 + 4: Enable SERIAL_PORT_3 + SERIAL_PORT_4,
- *             7: = 1 + 2 + 4: Enable SERIAL_PORT_2 + SERIAL_PORT_3 + SERIAL_PORT_4]
+ * NOTES:
+ *   - Serial port P1 is the primary serial connection to the printer and cannot be disabled.
+ *   - A baudrate of 250000 works in most cases, but you might try a lower speed if you
+ *     commonly experience drop-outs during host printing.
+ *     You may try up to 1000000 to speed up SD file transfer.
+ *
+ *   Format: [serial_port: P1:<baudrate> P2:<baudrate> P3:<baudrate> P4:<baudrate>
+ *   Target port: P1: Printer
+ *                P2: WIFI    (e.g. ESP3D)
+ *                P3: UART 3  (e.g. OctoPrint)
+ *                P4: UART 4
+ *   Value range: P1: [min: 1, max: 9]
+ *                P2: [min: 0, max: 9]
+ *                P3: [min: 0, max: 9]
+ *                P4: [min: 0, max: 9]
+ *   Options: [OFF (port disabled): 0, 2400: 1, 9600: 2, 19200: 3, 38400: 4, 57600: 5, 115200: 6, 250000: 7, 500000: 8, 1000000: 9]
  */
-#define MULTI_SERIAL 0
-
-/**
- * Baudrate / Connection Speed
- * This baudrate setting is used for serial connection to the printer and other serial
- * hosts like ESP8266.
- *
- * NOTE: 250000 works in most cases, but you might try a lower speed if you commonly
- *       experience drop-outs during host printing.
- *       You may try up to 1000000 to speed up SD file transfer.
- *
- *   Options: [2400: 0, 9600: 1, 19200: 2, 38400: 3, 57600: 4, 115200: 5, 250000: 6, 500000: 7, 1000000: 8]
- */
-#define BAUDRATE 5  // Default: 5
+#define PRIMARY_BAUDRATE 6  // Default: 6
 
 /**
  * Emulate M600
@@ -572,12 +569,16 @@
  * A press on touch screen or on encoder button will take and save a full screen screenshot to SD card.
  * Only for documentation purposes. DON'T enable it for normal printing.
  *
- * For TFTLCD with an encoder "LCD_ENCODER_SUPPORT":
+ * For TFT with an encoder "LCD_ENCODER_SUPPORT":
  * - A press on touch screen to trigger a screenshot in Marlin mode
  * - A press on encoder button to trigger a screenshot in Touch mode
  *
- * For TFTLCD with no encoder:
+ * For TFT with no encoder:
  * - A long press of 1.5 seconds on touch screen to trigger a screenshot
+ *
+ * WARNING for TFT35 V2, TFT35 V3, TFT35 B1 V3 and TFT35 E3 V3:
+ *   This feature requires that pin 39 on the 40 pins TFT connector is switched from GND to 3.3V.
+ *   Otherwise, the color read out is incorrect.
  */
 //#define SCREEN_SHOT_TO_SD  // Default: commented (disabled)
 
