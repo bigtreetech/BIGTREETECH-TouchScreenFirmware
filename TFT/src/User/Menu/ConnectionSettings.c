@@ -124,7 +124,7 @@ void menuSerialPorts(void)
 
     if (curIndex < (KEY_VALUES)SERIAL_PORT_COUNT)
     {
-      portIndex = 0;
+      portIndex = curIndex;
       infoMenu.menu[++infoMenu.cur] = menuBaudrate;
     }
 
