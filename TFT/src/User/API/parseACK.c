@@ -1268,7 +1268,7 @@ void parseACK(void)
         // pass on the spontaneous ACK message to all the supplementary serial ports (since these messages come unrequested)
         for (uint8_t i = 1; i < SERIAL_PORT_COUNT; i++)
         {
-          if (serialPort[i].activePort)  // if the port is connected to an active device (a device that already sent data to the TFT)
+          if (getSerialPortActive(i))  // if the port is connected to an active device (a device that already sent data to the TFT)
           {
             Serial_Puts(serialPort[i].port, dmaL2Cache);  // pass on the ACK message to the port
           }
@@ -1303,7 +1303,7 @@ void parseRcvGcode(void)
           storeCmdFromUART(port, dmaL2Cache);
         }
 
-        serialPort[i].activePort = true;
+        setSerialPortActive(i, true);
       }
     }
   #endif
