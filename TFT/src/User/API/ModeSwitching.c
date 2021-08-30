@@ -7,7 +7,7 @@ bool modeSwitching = false;
 // change UI mode
 void Mode_Switch(void)
 {
-  int8_t nowMode = infoSettings.mode & 1;  // Marlin mode or Touch mode
+  int8_t nowMode = GET_BIT(infoSettings.mode, 0);  // Marlin mode or Touch mode
   infoMenu.cur = 0;
 
   HW_InitMode(nowMode);

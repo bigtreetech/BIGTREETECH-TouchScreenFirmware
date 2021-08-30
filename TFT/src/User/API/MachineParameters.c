@@ -140,18 +140,18 @@ const LABEL autoRetractDisplayID[] = {LABEL_RETRACT_AUTO};
 
 static inline void setElementStatus(PARAMETER_NAME name, uint8_t element, bool status)
 {
-  elementEnabled[name] = (status == 1) ? (1 << element) | elementEnabled[name] : elementEnabled[name] & (~(1 << element));
+  SET_BIT_VALUE(elementEnabled[name], element, status);
 }
 
 static inline uint8_t getElementStatus(PARAMETER_NAME name, uint8_t element)
 {
-  return (elementEnabled[name] >> element) & 1;
+  return GET_BIT(elementEnabled[name], element);
 }
 
 uint8_t getEnabledElementCount(PARAMETER_NAME name)
 {
   uint8_t count = 0;
-  for (uint8_t i = 0; i < parameterElementCount[name]; i++) { count += (elementEnabled[name] >> i) & 1; }
+  for (uint8_t i = 0; i < parameterElementCount[name]; i++) { count += GET_BIT(elementEnabled[name], i); }
   return count;
 }
 
@@ -162,7 +162,7 @@ uint8_t getEnabledElement(PARAMETER_NAME name, uint8_t index)
 
   for (uint8_t i = 0; i < parameterElementCount[name]; i++)
   {
-    state = (elementEnabled[name] >> i) & 1;
+    state = GET_BIT(elementEnabled[name], i);
     count += state;
 
     if (state && count == (index + 1))
@@ -173,18 +173,18 @@ uint8_t getEnabledElement(PARAMETER_NAME name, uint8_t index)
 
 static inline void setParameterStatus(PARAMETER_NAME name, bool status)
 {
-  parametersEnabled = (status == 1) ? (1 << name) | parametersEnabled : parametersEnabled & (~(1 << name));
+  SET_BIT_VALUE(parametersEnabled, name, status);
 }
 
 static inline uint8_t getParameterStatus(PARAMETER_NAME name)
 {
-  return (parametersEnabled >> name) & 1;
+  return GET_BIT(parametersEnabled, name);
 }
 
 uint8_t getEnabledParameterCount(void)
 {
   uint8_t count = 0;
-  for (uint8_t i = 0; i < PARAMETERS_COUNT; i++) { count += (parametersEnabled >> i) & 1; }
+  for (uint8_t i = 0; i < PARAMETERS_COUNT; i++) { count += GET_BIT(parametersEnabled, i); }
   return count;
 }
 
@@ -195,7 +195,7 @@ PARAMETER_NAME getEnabledParameter(uint8_t index)
 
   for (uint8_t i = 0; i < PARAMETERS_COUNT; i++)
   {
-    state = (parametersEnabled >> i)  & 1;
+    state = GET_BIT(parametersEnabled, i);
     count += state;
 
     if (state && count == (index + 1))

@@ -16,6 +16,8 @@ const uint16_t default_pause_speed[]   = {NOZZLE_PAUSE_XY_FEEDRATE, NOZZLE_PAUSE
 const uint16_t default_preheat_ext[]   = PREHEAT_HOTEND;
 const uint16_t default_preheat_bed[]   = PREHEAT_BED;
 const uint8_t default_custom_enabled[] = CUSTOM_GCODE_ENABLED;
+const uint8_t default_sounds           = 0b00001111;  // all sounds enabled
+const uint8_t default_invertAxis       = 0b00000000;  // all invert axis disabled
 
 // Reset settings data
 void infoSettingsReset(void)
@@ -85,6 +87,8 @@ void infoSettingsReset(void)
 
   infoSettings.move_speed             = 1;  // index on infoSettings.axis_speed, infoSettings.ext_speed
 
+  infoSettings.invert_axis            = default_invertAxis;
+
   infoSettings.xy_offset_probing      = ENABLED;
   infoSettings.z_raise_probing        = Z_RAISE_PROBING;
   infoSettings.z_steppers_alignment   = DISABLED;
@@ -96,9 +100,7 @@ void infoSettingsReset(void)
   infoSettings.auto_off_temp          = AUTO_SHUT_DOWN_MAXTEMP;
 
 // Filament Runout Settings (only if connected to TFT controller)
-  infoSettings.runout                 = FIL_SENSOR_TYPE;
-  infoSettings.runout_invert          = FIL_RUNOUT_INVERTING;
-  infoSettings.runout_nc              = FIL_RUNOUT_NC;
+  infoSettings.runout                 = (FIL_SENSOR_TYPE | (FIL_RUNOUT_INVERTING << RUNOUT_INVERT) | (FIL_RUNOUT_NC << RUNOUT_NO_NC));
   infoSettings.runout_noise_ms        = FIL_NOISE_THRESHOLD;
   infoSettings.runout_distance        = FILAMENT_RUNOUT_DISTANCE_MM;
 
@@ -109,10 +111,7 @@ void infoSettingsReset(void)
   infoSettings.btt_ups                = BTT_MINI_UPS;
 
 // Other Device-Specific Settings
-  infoSettings.touchSound             = ENABLED;
-  infoSettings.toastSound             = ENABLED;
-  infoSettings.alertSound             = ENABLED;
-  infoSettings.heaterSound            = ENABLED;
+  infoSettings.sounds                 = default_sounds;
   infoSettings.lcd_brightness         = DEFAULT_LCD_BRIGHTNESS;
   infoSettings.lcd_idle_brightness    = DEFAULT_LCD_IDLE_BRIGHTNESS;
   infoSettings.lcd_idle_time          = DEFAULT_LCD_IDLE_TIME;
@@ -126,9 +125,7 @@ void infoSettingsReset(void)
   #endif
 
 // Start, End & Cancel Gcode Commands
-  infoSettings.send_start_gcode       = DISABLED;
-  infoSettings.send_end_gcode         = DISABLED;
-  infoSettings.send_cancel_gcode      = ENABLED;
+  infoSettings.send_gcodes            = DISABLED;
 
 // All the remaining array initializations
   for (int i = 1; i < MAX_SERIAL_PORT_COUNT; i++)  // supplemetary serial ports
@@ -148,7 +145,6 @@ void infoSettingsReset(void)
 
   for (int i = 0; i < AXIS_NUM; i++)  //x, y, z
   {
-    infoSettings.invert_axis[i]       = DISABLED;
     infoSettings.machine_size_min[i]  = default_size_min[i];
     infoSettings.machine_size_max[i]  = default_size_max[i];
   }

@@ -158,7 +158,7 @@ void menuInfo(void)
   GUI_DispStringInRect(20, LCD_HEIGHT - (BYTE_HEIGHT*2), LCD_WIDTH-20, LCD_HEIGHT, textSelect(LABEL_TOUCH_TO_EXIT));
 
   while (!isPress()) loopBackEnd();
-  BUZZER_PLAY(sound_keypress);
+  BUZZER_PLAY(SOUND_KEYPRESS);
   while (isPress()) loopBackEnd();
 
   GUI_RestoreColorDefault();

@@ -824,9 +824,9 @@ void parseConfigKey(uint16_t index)
       break;
 
     case C_INDEX_INVERT_AXIS:
-      if (key_seen("X")) infoSettings.invert_axis[X_AXIS] = getOnOff();
-      if (key_seen("Y")) infoSettings.invert_axis[Y_AXIS] = getOnOff();
-      if (key_seen("Z")) infoSettings.invert_axis[Z_AXIS] = getOnOff();
+      if (key_seen("X")) SET_BIT_VALUE(infoSettings.invert_axis, X_AXIS, getOnOff());
+      if (key_seen("Y")) SET_BIT_VALUE(infoSettings.invert_axis, Y_AXIS, getOnOff());
+      if (key_seen("Z")) SET_BIT_VALUE(infoSettings.invert_axis, Z_AXIS, getOnOff());
       if (key_seen("LY")) infoSettings.leveling_invert_y_axis = getOnOff();
       break;
 
@@ -896,15 +896,15 @@ void parseConfigKey(uint16_t index)
     #ifdef FIL_RUNOUT_PIN
       case C_INDEX_RUNOUT:
         if (inLimit(config_int(), 0, 3))
-          infoSettings.runout = config_int();
+        {
+          SET_BIT_VALUE(infoSettings.runout, RUNOUT_ENABLED, GET_BIT(config_int(), RUNOUT_ENABLED));
+          SET_BIT_VALUE(infoSettings.runout, RUNOUT_SENSOR_TYPE, GET_BIT(config_int(), RUNOUT_SENSOR_TYPE));
+        }
         break;
 
       case C_INDEX_RUNOUT_LOGIC:
-        infoSettings.runout_invert = getOnOff();
-        break;
-
       case C_INDEX_RUNOUT_NC:
-        infoSettings.runout_nc = getOnOff();
+        SET_BIT_VALUE(infoSettings.runout, (c_index - C_INDEX_RUNOUT_LOGIC), getOnOff());
         break;
 
       case C_INDEX_RUNOUT_NOISE:
@@ -940,19 +940,10 @@ void parseConfigKey(uint16_t index)
 
     #ifdef BUZZER_PIN
       case C_INDEX_TOUCH_SOUND:
-        infoSettings.touchSound = getOnOff();
-        break;
-
       case C_INDEX_TOAST_SOUND:
-        infoSettings.toastSound = getOnOff();
-        break;
-
       case C_INDEX_ALERT_SOUND:
-        infoSettings.alertSound = getOnOff();
-        break;
-
       case C_INDEX_HEATER_SOUND:
-        infoSettings.heaterSound = getOnOff();
+        SET_BIT_VALUE(infoSettings.sounds, (c_index - C_INDEX_TOUCH_SOUND), getOnOff());
         break;
     #endif
 
@@ -1057,15 +1048,9 @@ void parseConfigKey(uint16_t index)
     //----------------------------Start, End & Cancel Gcode Commands
 
     case C_INDEX_START_GCODE_ON:
-      infoSettings.send_start_gcode = getOnOff();
-      break;
-
     case C_INDEX_END_GCODE_ON:
-      infoSettings.send_end_gcode = getOnOff();
-      break;
-
     case C_INDEX_CANCEL_GCODE_ON:
-      infoSettings.send_cancel_gcode = getOnOff();
+      SET_BIT_VALUE(infoSettings.send_gcodes, (c_index - C_INDEX_START_GCODE_ON), getOnOff());
       break;
 
     case C_INDEX_START_GCODE:

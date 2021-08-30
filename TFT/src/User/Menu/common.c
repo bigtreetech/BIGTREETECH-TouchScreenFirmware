@@ -120,7 +120,7 @@ bool nextScreenUpdate(uint32_t duration)
 #ifdef FRIENDLY_Z_OFFSET_LANGUAGE
   void invertZAxisIcons(MENUITEMS * menuItems)
   {
-    if (infoSettings.invert_axis[Z_AXIS] == 1)
+    if (GET_BIT(infoSettings.invert_axis, Z_AXIS))
     {
       menuItems->items[KEY_ICON_0].icon = ICON_Z_INC;
       menuItems->items[KEY_ICON_0].label.index = LABEL_UP;

@@ -299,11 +299,11 @@ void loopCheckHeater(void)
       switch (heater.T[i].status)
       {
         case HEATING:
-          BUZZER_PLAY(sound_heated);
+          BUZZER_PLAY(SOUND_HEATED);
           break;
 
         case COOLING:
-          BUZZER_PLAY(sound_cooled);
+          BUZZER_PLAY(SOUND_COOLED);
           break;
 
         default:

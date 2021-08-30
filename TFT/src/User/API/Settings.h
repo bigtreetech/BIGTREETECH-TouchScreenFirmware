@@ -80,14 +80,39 @@ typedef enum
   MODE_TYPE_COUNT
 } MARLIN_MODE_TYPE;
 
-enum
+typedef enum
 {
   SORT_DATE_NEW_FIRST = 0,
   SORT_DATE_OLD_FIRST,
   SORT_NAME_ASCENDING,
   SORT_NAME_DESCENDING,
   SORT_BY_COUNT
-};
+} SORT_BY;
+
+typedef enum
+{
+  SOUND_TYPE_TOUCH = 0,
+  SOUND_TYPE_TOAST,
+  SOUND_TYPE_ALERT,
+  SOUND_TYPE_HEATER,
+  SOUND_TYPE_COUNT
+}SOUND_TYPE;
+
+typedef enum
+{
+  SEND_GCODES_START_PRINT = 0,
+  SEND_GCODES_END_PRINT,
+  SEND_GCODES_CANCEL_PRINT,
+  SEND_GCODES_COUNT,
+}SEND_GCODES_TYPE;
+
+typedef enum
+{
+  RUNOUT_ENABLED = 0,
+  RUNOUT_SENSOR_TYPE,
+  RUNOUT_INVERT,
+  RUNOUT_NO_NC,
+}RUNOUT_SETTINGS;
 
 typedef enum
 {
@@ -187,7 +212,7 @@ typedef struct
 
   uint8_t  move_speed;  // index on infoSettings.axis_speed, infoSettings.ext_speed
 
-  uint8_t  invert_axis[AXIS_NUM];
+  uint8_t  invert_axis;  // invert X Y Z axis (Bit Values)
   uint8_t  leveling_invert_y_axis;
   uint8_t  xy_offset_probing;
   float    z_raise_probing;
@@ -201,8 +226,6 @@ typedef struct
 
   // Filament Runout Settings (only if connected to TFT controller)
   uint8_t  runout;
-  uint8_t  runout_invert;
-  uint8_t  runout_nc;
   uint16_t runout_noise_ms;
   uint8_t  runout_distance;
 
@@ -213,10 +236,7 @@ typedef struct
   uint8_t  btt_ups;
 
   // Other Device-Specific Settings
-  uint8_t  touchSound;
-  uint8_t  toastSound;
-  uint8_t  alertSound;
-  uint8_t  heaterSound;
+  uint8_t  sounds;  // sound alert toggles (Bit Values)
   uint8_t  lcd_brightness;
   uint8_t  lcd_idle_brightness;
   uint8_t  lcd_idle_time;
@@ -226,9 +246,7 @@ typedef struct
   uint8_t  neopixel_pixels;
 
   // Start, End & Cancel Gcode Commands
-  uint8_t  send_start_gcode;
-  uint8_t  send_end_gcode;
-  uint8_t  send_cancel_gcode;
+  uint8_t  send_gcodes;  // send printing gcodes toggles (Bit Values)
 } SETTINGS;
 
 typedef struct

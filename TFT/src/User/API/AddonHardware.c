@@ -1,8 +1,11 @@
-#include "SmartFeatures.h"
+#include "AddonHardware.h"
 #include "includes.h"
 #include "GPIO_Init.h"
 
+//
 // Power Supply
+//
+
 #ifdef PS_ON_PIN
 
 // Power Supply Control pins Initialization
@@ -26,7 +29,10 @@ void PS_ON_Off(void)
 
 #endif  // PS_ON_PIN
 
+//
 // Filament runout detection
+//
+
 #ifdef FIL_RUNOUT_PIN
 
 enum
@@ -44,7 +50,7 @@ void FIL_Runout_Init(void)
   #if defined(MKS_TFT)
     MGPIO_MODE_IPN;  // MKS TFTs already have an external pull-up resistor on PB0 and PB1 pins
   #else
-    (infoSettings.runout_invert ^ infoSettings.runout_nc) ? MGPIO_MODE_IPD : MGPIO_MODE_IPU;
+    (GET_BIT(infoSettings.runout, RUNOUT_INVERT) ^ GET_BIT(infoSettings.runout, RUNOUT_NO_NC)) ? MGPIO_MODE_IPD : MGPIO_MODE_IPU;
   #endif
 
   GPIO_InitSet(FIL_RUNOUT_PIN, pull, 0);
@@ -143,7 +149,7 @@ bool FIL_NormalRunoutDetect(void)
   }
 
   // Detect HIGH/LOW level, Suitable for general mechanical / photoelectric switches
-  return (runout == infoSettings.runout_invert);
+  return (runout == GET_BIT(infoSettings.runout,RUNOUT_INVERT));
 }
 
 bool FIL_SmartRunoutDetect(void)
@@ -204,10 +210,10 @@ bool FIL_SmartRunoutDetect(void)
 
 bool FIL_IsRunout(void)
 {
-  if (infoSettings.runout & 1)
+  if (GET_BIT(infoSettings.runout, RUNOUT_ENABLED))
   {
     // Get sensor type
-    uint8_t sensorType = (infoSettings.runout >> 1) & 1;
+    uint8_t sensorType = GET_BIT(infoSettings.runout, RUNOUT_SENSOR_TYPE);
 
     switch (sensorType)
     {
@@ -227,7 +233,7 @@ bool FIL_IsRunout(void)
 
 void FIL_BE_CheckRunout(void)
 {
-  if (!(infoSettings.runout & 1))  // Filament runout turn off
+  if (!(GET_BIT(infoSettings.runout, 0)))  // Filament runout turn off
     return;
 
   setPrintRunout(FIL_IsRunout());  // Need constant scanning to filter interference
@@ -249,98 +255,9 @@ void FIL_FE_CheckRunout(void)
 
   if ((OS_GetTimeMs() > nextReminderTime) && (getRunoutAlarm() == true))
   {
-    BUZZER_PLAY(sound_error);
+    BUZZER_PLAY(SOUND_ERROR);
     nextReminderTime = OS_GetTimeMs() + ALARM_REMINDER_TIME;
   }
 }
 
 #endif  // FIL_RUNOUT_PIN
-
-// Smart home
-#ifdef SMART_HOME
-
-void loopCheckBack(void)
-{
-  static bool longPress = false;
-
-  #ifdef HAS_EMULATOR
-    static bool backHeld = false;
-  #endif
-
-  if (!isPress())
-  {
-    #ifdef HAS_EMULATOR
-      backHeld = false;
-    #endif
-
-    longPress = false;
-
-    #ifndef HAS_EMULATOR
-      Touch_Enc_ReadPen(0);  // reset TSC press timer
-    #endif
-
-    return;
-  }
-
-  if (isPrinting())  // no jump to main menu while printing
-    return;
-
-  if (getMenuType() != MENU_TYPE_ICON)
-    return;
-
-  if ((infoMenu.cur == 0) || (infoMenu.menu[infoMenu.cur] == menuMode))
-    return;
-
-  #ifdef HAS_EMULATOR
-    if (backHeld == true)  // prevent mode selection or screenshot if Back button is held
-    {
-      backHeld = Touch_Enc_ReadPen(0);
-      return;
-    }
-  #endif
-
-  if (longPress == false)  // check if longpress already handled
-  {
-    if (Touch_Enc_ReadPen(LONG_TOUCH))  // check if TSC is pressed and held
-    {
-      KEY_VALUES tempKey = KEY_IDLE;
-      longPress = true;
-      touchSound = false;
-
-      if (infoMenu.menu[infoMenu.cur] == menuPrinting)
-      {
-        tempKey = Key_value(COUNT(rect_of_keySS), rect_of_keySS);
-      }
-      else
-      {
-        tempKey = Key_value(COUNT(rect_of_key), rect_of_key);
-      }
-
-      touchSound = true;
-
-      if (tempKey != KEY_IDLE)
-      {
-        if (getCurMenuItems()->items[tempKey].label.index != LABEL_BACK)  // check if Back button is held
-        {
-          return;
-        }
-        else
-        {
-          BUZZER_PLAY(sound_ok);
-
-          #ifdef HAS_EMULATOR
-            backHeld = true;
-          #endif
-
-          infoMenu.menu[1] = infoMenu.menu[infoMenu.cur];  // prepare menu tree for jump to 0
-          infoMenu.cur = 1;
-
-          if (infoMenu.menu[1] == menuPrinting)
-            clearInfoFile();
-        }
-      }
-    }
-  }
-}
-
-#endif  // SMART_HOME

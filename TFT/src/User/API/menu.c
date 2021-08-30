@@ -319,6 +319,13 @@ LISTITEMS *getCurListItems(void)
   return (LISTITEMS *)curListItems;
 }
 
+// Get the top left point of the corresponding icon position)
+GUI_POINT getIconStartPoint(int index)
+{
+  GUI_POINT p = {curRect[index].x0, curRect[index].y0};
+  return p;
+}
+
 uint8_t *labelGetAddress(const LABEL *label)
 {
   if (label->index == LABEL_BACKGROUND)  // No content in label
@@ -845,13 +852,94 @@ KEY_VALUES menuKeyGetValue(void)
   return tempkey;
 }
 
-// Get the top left point of the corresponding icon position)
-GUI_POINT getIconStartPoint(int index)
+// Smart home (long press on back button to go to status screen)
+#ifdef SMART_HOME
+
+void loopCheckBackPress(void)
 {
-  GUI_POINT p = {curRect[index].x0, curRect[index].y0};
-  return p;
+  static bool longPress = false;
+
+  #ifdef HAS_EMULATOR
+    static bool backHeld = false;
+  #endif
+
+  if (!isPress())
+  {
+    longPress = false;
+
+    #ifdef HAS_EMULATOR
+      backHeld = false;
+    #else
+      Touch_Enc_ReadPen(0);  // reset TSC press timer
+    #endif
+
+    return;
+  }
+
+  if (isPrinting())  // no jump to main menu while printing
+    return;
+
+  if (getMenuType() != MENU_TYPE_ICON)
+    return;
+
+  if ((infoMenu.cur == 0) || (infoMenu.menu[infoMenu.cur] == menuMode))
+    return;
+
+  #ifdef HAS_EMULATOR
+    if (backHeld == true)  // prevent mode selection or screenshot if Back button is held
+    {
+      backHeld = Touch_Enc_ReadPen(0);
+      return;
+    }
+  #endif
+
+  if (longPress == false)  // check if longpress already handled
+  {
+    if (Touch_Enc_ReadPen(LONG_TOUCH))  // check if TSC is pressed and held
+    {
+      KEY_VALUES tempKey = KEY_IDLE;
+      longPress = true;
+      touchSound = false;
+
+      if (infoMenu.menu[infoMenu.cur] == menuPrinting)
+      {
+        tempKey = Key_value(COUNT(rect_of_keySS), rect_of_keySS);
+      }
+      else
+      {
+        tempKey = Key_value(COUNT(rect_of_key), rect_of_key);
+      }
+
+      touchSound = true;
+
+      if (tempKey != KEY_IDLE)
+      {
+        if (getCurMenuItems()->items[tempKey].label.index != LABEL_BACK)  // check if Back button is held
+        {
+          return;
+        }
+        else
+        {
+          BUZZER_PLAY(SOUND_OK);
+
+          #ifdef HAS_EMULATOR
+            backHeld = true;
+          #endif
+
+          infoMenu.menu[1] = infoMenu.menu[infoMenu.cur];  // prepare menu tree for jump to 0
+          infoMenu.cur = 1;
+
+          if (infoMenu.menu[1] == menuPrinting)
+            clearInfoFile();
+        }
+      }
+    }
+  }
 }
 
+#endif  // SMART_HOME
+
+// Non-UI background loop tasks
 void loopBackEnd(void)
 {
   // Get Gcode command from the file to be printed
@@ -908,7 +996,7 @@ void loopBackEnd(void)
 
   #ifdef SMART_HOME
     // check if Back is pressed and held
-    loopCheckBack();
+    loopCheckBackPress();
   #endif
 
   #ifdef LCD_LED_PWM_CHANNEL
@@ -924,6 +1012,7 @@ void loopBackEnd(void)
   rrfStatusQuery();
 }  // loopBackEnd
 
+// UI-related background loop tasks
 void loopFrontEnd(void)
 {
   // Check if volume source(SD/U disk) insert

@@ -121,38 +121,11 @@ void menuSerialPorts(void)
   while (infoMenu.menu[infoMenu.cur] == menuSerialPorts)
   {
     curIndex = listViewGetSelectedIndex();
-    switch (curIndex)
+
+    if (curIndex < (KEY_VALUES)SERIAL_PORT_COUNT)
     {
-      #ifdef SERIAL_PORT
-        case 0:
-          portIndex = 0;
-          infoMenu.menu[++infoMenu.cur] = menuBaudrate;
-          break;
-      #endif
-
-      #ifdef SERIAL_PORT_2
-        case 1:
-          portIndex = 1;
-          infoMenu.menu[++infoMenu.cur] = menuBaudrate;
-          break;
-      #endif
-
-      #ifdef SERIAL_PORT_3
-        case 2:
-          portIndex = 2;
-          infoMenu.menu[++infoMenu.cur] = menuBaudrate;
-          break;
-      #endif
-
-      #ifdef SERIAL_PORT_4
-        case 3:
-          portIndex = 3;
-          infoMenu.menu[++infoMenu.cur] = menuBaudrate;
-          break;
-      #endif
-
-      default:
-        break;
+      portIndex = curIndex;
+      infoMenu.menu[++infoMenu.cur] = menuBaudrate;
     }
 
     loopProcess();
@@ -193,7 +166,7 @@ void menuConnectionSettings(void)
         infoMenu.cur--;
         break;
 
-      default :
+      default:
         break;
     }
 

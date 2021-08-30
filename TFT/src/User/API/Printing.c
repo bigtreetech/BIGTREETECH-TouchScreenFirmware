@@ -356,7 +356,7 @@ void printStart(FIL * file, uint32_t size)
       infoPrinting.file = *file;
       infoPrinting.cur = infoPrinting.file.fptr;
 
-      if (infoSettings.send_start_gcode == 1 && infoPrinting.cur == 0)  // PLR continue printing, CAN NOT use start gcode
+      if (GET_BIT(infoSettings.send_gcodes, SEND_GCODES_START_PRINT) && infoPrinting.cur == 0)  // PLR continue printing, CAN NOT use start gcode
       {
         sendPrintCodes(0);
       }
@@ -390,17 +390,15 @@ void printEnd(void)
   setPrintRemainingTime(0);
   preparePrintSummary();  // update print summary. infoPrinting are used
 
-  if (infoSettings.send_end_gcode == 1)
-  {
+  if (GET_BIT(infoSettings.send_gcodes, SEND_GCODES_END_PRINT))
     sendPrintCodes(1);
-  }
 
   heatClearIsWaiting();
 }
 
 void printComplete(void)
 {
-  BUZZER_PLAY(sound_success);
+  BUZZER_PLAY(SOUND_SUCCESS);
   printEnd();
 
   if (infoSettings.auto_off)  // Auto shut down after print
@@ -461,7 +459,7 @@ void printAbort(void)
       break;
   }
 
-  if (infoSettings.send_cancel_gcode == 1)
+  if (GET_BIT(infoSettings.send_gcodes, SEND_GCODES_CANCEL_PRINT))
     sendPrintCodes(2);
 
   printEnd();

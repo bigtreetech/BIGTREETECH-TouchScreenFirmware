@@ -8,6 +8,7 @@ extern "C" {
 #include "includes.h"
 #include "Configuration.h"
 #include "FlashStore.h"
+#include "SerialConnection.h"
 #include "Settings.h"
 
 // check size of settings against max allocated size at compile time
