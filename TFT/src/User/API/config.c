@@ -920,7 +920,7 @@ void parseConfigKey(uint16_t index)
 
       case C_INDEX_FIL_RUNOUT_INVERTED:
       case C_INDEX_FIL_RUNOUT_NC:
-        SET_BIT_VALUE(infoSettings.runout, (c_index - C_INDEX_FIL_RUNOUT), getOnOff());
+        SET_BIT_VALUE(infoSettings.runout, (RUNOUT_INVERTED + (index - C_INDEX_FIL_RUNOUT_INVERTED)), getOnOff());
         break;
 
       case C_INDEX_FIL_RUNOUT_NOISE:
@@ -959,7 +959,7 @@ void parseConfigKey(uint16_t index)
       case C_INDEX_TOAST_SOUND:
       case C_INDEX_ALERT_SOUND:
       case C_INDEX_HEATER_SOUND:
-        SET_BIT_VALUE(infoSettings.sounds, (c_index - C_INDEX_TOUCH_SOUND), getOnOff());
+        SET_BIT_VALUE(infoSettings.sounds, (index - C_INDEX_TOUCH_SOUND), getOnOff());
         break;
     #endif
 
@@ -1066,7 +1066,7 @@ void parseConfigKey(uint16_t index)
     case C_INDEX_START_GCODE_ENABLED:
     case C_INDEX_END_GCODE_ENABLED:
     case C_INDEX_CANCEL_GCODE_ENABLED:
-      SET_BIT_VALUE(infoSettings.send_gcodes, (c_index - C_INDEX_START_GCODE_ENABLED), getOnOff());
+      SET_BIT_VALUE(infoSettings.send_gcodes, (index - C_INDEX_START_GCODE_ENABLED), getOnOff());
       break;
 
     case C_INDEX_START_GCODE:
