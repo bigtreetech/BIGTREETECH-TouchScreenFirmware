@@ -134,7 +134,7 @@ uint16_t Key_value(uint8_t total_rect, const GUI_RECT *menuRect)
     if ((x > menuRect[i].x0) && (x < menuRect[i].x1) && (y > menuRect[i].y0) && (y < menuRect[i].y1))
     {
       #ifdef BUZZER_PIN
-        if (touchSound == true) BUZZER_PLAY(sound_keypress);
+        if (touchSound == true) BUZZER_PLAY(SOUND_KEYPRESS);
       #endif
       return i;
     }

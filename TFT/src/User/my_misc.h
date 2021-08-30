@@ -18,6 +18,27 @@ extern "C" {
 #define MIN(a, b) ((a) > (b) ? (b) : (a))
 #define NOBEYOND(min, v, max) MAX(min, MIN(v, max))
 
+// Bitwise macros
+
+// Get bit status at selected index
+#define GET_BIT(num, index) ((num >> index) & 1)
+
+// set bit status at selected index to 1
+#define SET_BIT_ON(num, index) num = (1 << index) | num
+
+// set bit status at selected index to 0
+#define SET_BIT_OFF(num, index) num = num & (~(1 << index))
+
+// set bit status value (0 or 1) at selected index
+#define SET_BIT_VALUE(num, index, value) num = (value == 1) ? (1 << index) | num : num & (~(1 << index))
+
+// Toggle bit status at selected index
+#define TOGGLE_BIT(num, index) num =  num ^ (1 << index)
+
+// Flip all bits
+#define FLIP_BITS(num) ~num
+
+
 #define strtod stringToDouble  // enable light weight string to double function without exponential support
 
 uint8_t inRange(int cur, int tag , int range);

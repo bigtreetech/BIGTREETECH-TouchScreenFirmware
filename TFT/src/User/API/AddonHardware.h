@@ -6,7 +6,7 @@ extern "C" {
 #endif
 
 #include <stdbool.h>
-#include "variants.h"  // for PS_ON_PIN, FIL_RUNOUT_PIN etc...
+#include "variants.h"  // for PS_ON_PIN, FIL_RUNOUT_PIN etc.
 
 // Power Supply
 #ifdef PS_ON_PIN
@@ -17,7 +17,7 @@ extern "C" {
 
 // Filament runout detection
 #ifdef FIL_RUNOUT_PIN
-  #define POS_E_UPDATE_TIME   2000
+  #define POS_E_UPDATE_TIME    2000
   #define ALARM_REMINDER_TIME 10000
 
   void FIL_Runout_Init(void);
@@ -25,13 +25,6 @@ extern "C" {
   void FIL_SFS_SetAlive(bool alive);
   void FIL_BE_CheckRunout(void);
   void FIL_FE_CheckRunout(void);
-#endif
-
-// Smart home
-#ifdef SMART_HOME
-  #define LONG_TOUCH (MODE_SWITCHING_INTERVAL / 3)  // keep it lower than MODE_SWITCHING_INTERVAL
-
-  void loopCheckBack(void);
 #endif
 
 #ifdef __cplusplus

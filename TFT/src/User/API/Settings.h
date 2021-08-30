@@ -13,11 +13,11 @@ extern "C" {
 // Config version support
 // change if new elements/keywords are added/removed/changed in the configuration.h Format YYYYMMDD
 // this number should match CONFIG_VERSION in configuration.h
-#define CONFIG_SUPPPORT 20210815
+#define CONFIG_SUPPPORT 20210821
 
 #define FONT_FLASH_SIGN       20210522  // (YYYYMMDD) change if fonts require updating
-#define CONFIG_FLASH_SIGN     20210815  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
-#define LANGUAGE_FLASH_SIGN   20210815  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
+#define CONFIG_FLASH_SIGN     20210821  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
+#define LANGUAGE_FLASH_SIGN   20210821  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
 #define ICON_FLASH_SIGN       20210711  // (YYYYMMDD) change if any icon(s) is added or removed
 
 #define FONT_CHECK_SIGN       (FONT_FLASH_SIGN + WORD_UNICODE + FLASH_SIGN_ADDR)
@@ -27,6 +27,7 @@ extern "C" {
 #define LANGUAGE_CHECK_SIGN   (LANGUAGE_FLASH_SIGN + LANGUAGE_ADDR + LABEL_NUM)
 #define ICON_CHECK_SIGN       (ICON_FLASH_SIGN + ICON_ADDR(0) + ICON_PREVIEW)
 
+#define MAX_SERIAL_PORT_COUNT 4
 #define MAX_EXT_COUNT         6
 #define MAX_HOTEND_COUNT      6
 #define MAX_HEATER_COUNT      (2 + MAX_HOTEND_COUNT)  // chamber + bed + hotend
@@ -79,14 +80,39 @@ typedef enum
   MODE_TYPE_COUNT
 } MARLIN_MODE_TYPE;
 
-enum
+typedef enum
 {
   SORT_DATE_NEW_FIRST = 0,
   SORT_DATE_OLD_FIRST,
   SORT_NAME_ASCENDING,
   SORT_NAME_DESCENDING,
   SORT_BY_COUNT
-};
+} SORT_BY;
+
+typedef enum
+{
+  SOUND_TYPE_TOUCH = 0,
+  SOUND_TYPE_TOAST,
+  SOUND_TYPE_ALERT,
+  SOUND_TYPE_HEATER,
+  SOUND_TYPE_COUNT
+}SOUND_TYPE;
+
+typedef enum
+{
+  SEND_GCODES_START_PRINT = 0,
+  SEND_GCODES_END_PRINT,
+  SEND_GCODES_CANCEL_PRINT,
+  SEND_GCODES_COUNT,
+}SEND_GCODES_TYPE;
+
+typedef enum
+{
+  RUNOUT_ENABLED = 0,
+  RUNOUT_SENSOR_TYPE,
+  RUNOUT_INVERT,
+  RUNOUT_NO_NC,
+}RUNOUT_SETTINGS;
 
 typedef enum
 {
@@ -116,8 +142,7 @@ typedef enum
 typedef struct
 {
   // General Settings
-  uint8_t  multi_serial;
-  uint8_t  baudrate;
+  uint8_t  serial_port[MAX_SERIAL_PORT_COUNT];
   uint8_t  emulate_m600;
 
   // UI Settings
@@ -155,9 +180,6 @@ typedef struct
   uint8_t  marlin_mode_showtitle;
   uint8_t  marlin_type;
 
-  // RRF Mode Settings
-  uint8_t  rrf_macros_enable;
-
   // Printer / Machine Settings
   uint8_t  hotend_count;
   uint8_t  bed_en;
@@ -190,7 +212,7 @@ typedef struct
 
   uint8_t  move_speed;  // index on infoSettings.axis_speed, infoSettings.ext_speed
 
-  uint8_t  invert_axis[AXIS_NUM];
+  uint8_t  invert_axis;  // invert X Y Z axis (Bit Values)
   uint8_t  leveling_invert_y_axis;
   uint8_t  xy_offset_probing;
   float    z_raise_probing;
@@ -204,7 +226,6 @@ typedef struct
 
   // Filament Runout Settings (only if connected to TFT controller)
   uint8_t  runout;
-  uint8_t  runout_invert;
   uint16_t runout_noise_ms;
   uint8_t  runout_distance;
 
@@ -215,10 +236,7 @@ typedef struct
   uint8_t  btt_ups;
 
   // Other Device-Specific Settings
-  uint8_t  touchSound;
-  uint8_t  toastSound;
-  uint8_t  alertSound;
-  uint8_t  heaterSound;
+  uint8_t  sounds;  // sound alert toggles (Bit Values)
   uint8_t  lcd_brightness;
   uint8_t  lcd_idle_brightness;
   uint8_t  lcd_idle_time;
@@ -228,9 +246,7 @@ typedef struct
   uint8_t  neopixel_pixels;
 
   // Start, End & Cancel Gcode Commands
-  uint8_t  send_start_gcode;
-  uint8_t  send_end_gcode;
-  uint8_t  send_cancel_gcode;
+  uint8_t  send_gcodes;  // send printing gcodes toggles (Bit Values)
 } SETTINGS;
 
 typedef struct

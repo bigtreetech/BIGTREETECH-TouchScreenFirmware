@@ -58,7 +58,7 @@ void drawSelectedMode(int8_t nowMode)
 // open mode switching menu
 void menuMode(void)
 {
-  int8_t nowMode = infoSettings.mode & 1;
+  int8_t nowMode = GET_BIT(infoSettings.mode, 0);
   TSC_ReDrawIcon = NULL;  // disable icon redraw callback function
 
   GUI_Clear(infoSettings.bg_color);

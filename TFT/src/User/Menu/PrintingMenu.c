@@ -99,7 +99,7 @@ void menuBeforePrinting(void)
       {
         uint32_t size;
 
-        size = request_M23_M36(infoFile.title + 5);
+        size = request_M23_M36(infoFile.title + (infoMachineSettings.firmwareType == FW_REPRAPFW ? 0 : 5));
         //if (powerFailedCreate(infoFile.title) == false)
         //{
         //
@@ -150,9 +150,14 @@ void menuBeforePrinting(void)
       infoMenu.cur--;
       return;
   }
+
+  // initialize things before print start
   progDisplayType = infoSettings.prog_disp_type;
   layerDisplayType = infoSettings.layer_disp_type * 2;
   setLayerNumber(0);
+  setM73_presence(false);
+  setTotalTime(0);
+  
   infoMenu.menu[infoMenu.cur] = menuPrinting;
 }
 
@@ -566,14 +571,10 @@ void menuPrinting(void)
   {
     printingItems.title.address = (uint8_t *)infoPrintSummary.name;
 
-    #ifdef TFT70_V3_0
-      printingItems.items[KEY_ICON_5] = itemIsPrinting[1];  // MainScreen
-    #else
-      printingItems.items[KEY_ICON_4] = itemIsPrinting[1];  // MainScreen
-      printingItems.items[KEY_ICON_5] = itemIsPrinting[0];  // BackGround
-    #endif
-      printingItems.items[KEY_ICON_6] = itemIsPrinting[0];  // BackGround
-      printingItems.items[KEY_ICON_7] = itemIsPrinting[2];  // Back
+    printingItems.items[KEY_ICON_4] = itemIsPrinting[1];  // MainScreen
+    printingItems.items[KEY_ICON_5] = itemIsPrinting[0];  // BackGround
+    printingItems.items[KEY_ICON_6] = itemIsPrinting[0];  // BackGround
+    printingItems.items[KEY_ICON_7] = itemIsPrinting[2];  // Back
   }
 
   menuDrawPage(&printingItems);
@@ -761,29 +762,16 @@ void menuPrinting(void)
           else
             printPause(!isPaused(), PAUSE_NORMAL);
         }
-        #ifndef TFT70_V3_0
-          else
-          {
-            clearInfoPrint();
-            clearInfoFile();
-            infoMenu.cur = 0;
-          }
-        #endif
+        else
+        {
+          clearInfoPrint();
+          clearInfoFile();
+          infoMenu.cur = 0;
+        }
         break;
 
       case PS_KEY_7:
-        #ifdef TFT70_V3_0
-          if (isPrinting())
-            infoMenu.menu[++infoMenu.cur] = menuBabystep;
-          else
-          {
-            clearInfoPrint();
-            clearInfoFile();
-            infoMenu.cur = 0;
-          }
-        #else
-          infoMenu.menu[++infoMenu.cur] = menuBabystep;
-        #endif
+        infoMenu.menu[++infoMenu.cur] = menuBabystep;
         break;
 
       case PS_KEY_8:

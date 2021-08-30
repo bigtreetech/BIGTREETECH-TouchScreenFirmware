@@ -6,7 +6,7 @@ extern "C" {
 #endif
 
 #include <stdbool.h>
-#include "variants.h"  // for SCREEN_SHOT_TO_SD etc...
+#include "variants.h"  // for SCREEN_SHOT_TO_SD
 
 #ifdef SCREEN_SHOT_TO_SD
   bool screenShotBMP(char *bmp);

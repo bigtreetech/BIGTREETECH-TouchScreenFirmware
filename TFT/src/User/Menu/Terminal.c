@@ -549,7 +549,7 @@ static inline void menuKeyboardView(void)
   GUI_RestoreColorDefault();
 }
 
-static inline void saveGcodeTerminalCache(char *str)
+static inline void saveGcodeTerminalCache(const char *str)
 {
   uint16_t len = 0;
   uint16_t sign_len = strlen(str);
@@ -585,7 +585,7 @@ void terminalCache(char *stream, TERMINAL_SRC src)
 
   if (src == TERMINAL_GCODE)
   {
-    saveGcodeTerminalCache(serialPortId[infoCmd.queue[infoCmd.index_r].src]);  // logical port ID (e.g. "2" for SERIAL_PORT_2)
+    saveGcodeTerminalCache(serialPort[serialPortIndex[infoCmd.queue[infoCmd.index_r].src]].id);  // serial port ID (e.g. "2" for SERIAL_PORT_2)
     saveGcodeTerminalCache(">>");
   }
 

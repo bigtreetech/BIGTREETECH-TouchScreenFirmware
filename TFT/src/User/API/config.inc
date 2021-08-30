@@ -8,8 +8,7 @@
 //after changing/adding/removing a keyword, change the CONFIG_FLASH_SIGN in Settings.h
 
 //-----------------------------General Settings
-X_CONFIG(MULTI_SERIAL)
-X_CONFIG(UART_BAUDRATE)
+X_CONFIG(SERIAL_PORT)
 X_CONFIG(EMULATE_M600)
 //-----------------------------UI Settings
 X_CONFIG(ROTATE_UI)
@@ -45,8 +44,6 @@ X_CONFIG(MARLIN_FULLSCREEN)
 X_CONFIG(MARLIN_SHOW_TITLE)
 X_CONFIG(MARLIN_TITLE)
 X_CONFIG(MARLIN_TYPE)
-//-----------------------------RRF Mode Settings
-X_CONFIG(RRF_MACROS_ON)
 //-----------------------------Printer / Machine Settings
 X_CONFIG(HOTEND_COUNT)
 X_CONFIG(HEATED_BED)
@@ -99,6 +96,7 @@ X_CONFIG(SHUTDOWN_TEMP)
 //-----------------------------Filament Runout Settings (only if connected to TFT controller)
 X_CONFIG(RUNOUT)
 X_CONFIG(RUNOUT_LOGIC)
+X_CONFIG(RUNOUT_NC)
 X_CONFIG(RUNOUT_NOISE)
 X_CONFIG(RUNOUT_DISTANCE)
 //-----------------------------Power Loss Recovery & BTT UPS Settings

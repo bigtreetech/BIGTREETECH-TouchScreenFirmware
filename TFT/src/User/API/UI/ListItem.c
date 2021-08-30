@@ -41,7 +41,7 @@ void setDynamicValue(uint8_t i, float value)
     sprintf(dynamic_text_value[i], "%.1f", value);
 }
 
-//draw item pressed feedback
+// draw item pressed feedback
 void DrawListItemPress(const GUI_RECT * rect, bool pressed)
 {
   if (pressed != false)
@@ -62,7 +62,7 @@ void DrawListItemPress(const GUI_RECT * rect, bool pressed)
 
 void ListItem_Display(const GUI_RECT * rect, uint8_t position, const LISTITEM * curitem, bool pressed)
 {
-  //draw navigation icons
+  // draw navigation icons
   if (getMenuType() != MENU_TYPE_LISTVIEW)
     return;
 
@@ -92,7 +92,7 @@ void ListItem_Display(const GUI_RECT * rect, uint8_t position, const LISTITEM * 
     }
     GUI_RestoreColorDefault();
   }
-  //draw list tiems
+  // draw list items
   else if (curitem->icon != CHARICON_BACKGROUND)
   {
     GUI_POINT pos = getTextStartPoint(rect->x0, rect->y0, rect->x1, rect->y1, LEFT, (char *)IconCharSelect(curitem->icon));
@@ -105,16 +105,16 @@ void ListItem_Display(const GUI_RECT * rect, uint8_t position, const LISTITEM * 
           drawCharIcon(rect, LEFT, curitem->icon, true, infoSettings.bg_color);
           pos.x += (BYTE_HEIGHT + 1);
         }
-        textarea_width = LISTITEM_WIDTH - (pos.x + 1);  //width after removing the width for icon
+        textarea_width = LISTITEM_WIDTH - (pos.x + 1);  // width after removing the width for icon
         draw_itemtitle(pos, curitem->titlelabel, position, textarea_width);
         DrawListItemPress(rect, pressed);
         break;
 
       case LIST_TOGGLE:
         {
-          int16_t wy = (1 + GUI_StrPixelWidth(IconCharSelect(CHARICON_TOGGLE_BODY)) + 1);  //right edge of text area
+          int16_t wy = (1 + GUI_StrPixelWidth(IconCharSelect(CHARICON_TOGGLE_BODY)) + 1);  // right edge of text area
           GUI_ClearRect(rect->x0, rect->y0, rect->x1 - wy, rect->y1);                      // clear only text area
-          textarea_width = LISTITEM_WIDTH - (pos.x + wy);  //width after removing the width for icon
+          textarea_width = LISTITEM_WIDTH - (pos.x + wy);  // width after removing the width for icon
           draw_itemtitle(pos, curitem->titlelabel, position, textarea_width);
 
           pos = getTextStartPoint(rect->x0, rect->y0, rect->x1, rect->y1, RIGHT, (char *)IconCharSelect(CHARICON_TOGGLE_BODY));
@@ -132,7 +132,7 @@ void ListItem_Display(const GUI_RECT * rect, uint8_t position, const LISTITEM * 
           drawCharIcon(rect, LEFT, curitem->icon, true, infoSettings.bg_color);
           pos.x += (BYTE_HEIGHT + 1);
         }
-        textarea_width = LISTITEM_WIDTH - (pos.x + BYTE_HEIGHT + 2);  //width after removing the width for icon
+        textarea_width = LISTITEM_WIDTH - (pos.x + BYTE_HEIGHT + 2);  // width after removing the width for icon
         draw_itemtitle(pos, curitem->titlelabel, position, textarea_width);
 
         pos = getTextStartPoint(rect->x0, rect->y0, rect->x1, rect->y1, RIGHT, (char *)IconCharSelect(CHARICON_DETAIL2));
@@ -148,7 +148,7 @@ void ListItem_Display(const GUI_RECT * rect, uint8_t position, const LISTITEM * 
           pos.x += (BYTE_HEIGHT + 3);
         }
         GUI_ClearRect(pos.x, rect->y0, rect->x1 - BYTE_WIDTH * 8 - 1, rect->y1);  // clear only text area
-        textarea_width = LISTITEM_WIDTH - (pos.x + 1);                            //width after removing the width for icon
+        textarea_width = LISTITEM_WIDTH - (pos.x + 1);                            // width after removing the width for icon
         draw_itemtitle(pos, curitem->titlelabel, position, textarea_width);
         ListItem_DisplayCustomValue(rect, curitem->valueLabel, position);
         DrawListItemPress(rect, pressed);
@@ -165,12 +165,12 @@ void ListItem_Display(const GUI_RECT * rect, uint8_t position, const LISTITEM * 
   GUI_RestoreColorDefault();
 }
 
-//draw title text of list item
+// draw title text of list item
 void draw_itemtitle(GUI_POINT pos, LABEL label, uint8_t position, int textarea_width)
 {
   if (label.index != LABEL_BACKGROUND)
   {
-    int textarea_width = LISTITEM_WIDTH - (pos.x + 1);  //width after removing the width for icon
+    int textarea_width = LISTITEM_WIDTH - (pos.x + 1);  // width after removing the width for icon
     if (label.index == LABEL_DYNAMIC)
       GUI_DispLenString(pos.x, pos.y, (uint8_t *)getDynamicLabel(position), textarea_width, true);
     else
@@ -178,7 +178,7 @@ void draw_itemtitle(GUI_POINT pos, LABEL label, uint8_t position, int textarea_w
   }
 }
 
-//display toggle button
+// display toggle button
 void ListItem_DisplayToggle(uint16_t sx, uint16_t sy, uint8_t iconchar_state)
 {
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
@@ -195,7 +195,7 @@ void ListItem_DisplayToggle(uint16_t sx, uint16_t sy, uint8_t iconchar_state)
   GUI_RestoreColorDefault();
 }
 
-//draw custom value for list item
+// draw custom value for list item
 void ListItem_DisplayCustomValue(const GUI_RECT * rect, LABEL value, int i)
 {
   const GUI_RECT rectVal = {rect->x1 - BYTE_WIDTH * 8 - 1, rect->y0 + (LISTITEM_HEIGHT - BYTE_HEIGHT) / 2, rect->x1 - 1,
@@ -209,9 +209,9 @@ void ListItem_DisplayCustomValue(const GUI_RECT * rect, LABEL value, int i)
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
   GUI_SetColor(MAT_LOWWHITE);
 
-  if (value.index == LABEL_CUSTOM_VALUE || value.index == LABEL_DYNAMIC)  //show custom text value
+  if (value.index == LABEL_CUSTOM_VALUE || value.index == LABEL_DYNAMIC)  // show custom text value
     GUI_DispStringInPrect(&rectVal, (uint8_t *)getDynamicTextValue(i));
-  else  //show regular text labels
+  else  // show regular text labels
     GUI_DispStringInPrect(&rectVal, (int32_t)value.index);
 
   GUI_RestoreColorDefault();

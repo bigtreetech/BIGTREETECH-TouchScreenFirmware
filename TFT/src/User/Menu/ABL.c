@@ -35,7 +35,7 @@ void ablUpdateStatus(bool succeeded)
 
   if (succeeded)  // if bed leveling process successfully terminated, allow to save to EEPROM
   {
-    BUZZER_PLAY(sound_success);
+    BUZZER_PLAY(SOUND_SUCCESS);
 
     if (savingEnabled && infoMachineSettings.EEPROM == 1)
     {
@@ -50,7 +50,7 @@ void ablUpdateStatus(bool succeeded)
   }
   else  // if bed leveling process failed, provide an error dialog
   {
-    BUZZER_PLAY(sound_error);
+    BUZZER_PLAY(SOUND_ERROR);
 
     popupReminder(DIALOG_TYPE_ERROR, tempTitle.index, LABEL_PROCESS_ABORTED);
   }

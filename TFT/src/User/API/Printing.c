@@ -356,7 +356,7 @@ void printStart(FIL * file, uint32_t size)
       infoPrinting.file = *file;
       infoPrinting.cur = infoPrinting.file.fptr;
 
-      if (infoSettings.send_start_gcode == 1 && infoPrinting.cur == 0)  // PLR continue printing, CAN NOT use start gcode
+      if (GET_BIT(infoSettings.send_gcodes, SEND_GCODES_START_PRINT) && infoPrinting.cur == 0)  // PLR continue printing, CAN NOT use start gcode
       {
         sendPrintCodes(0);
       }
@@ -390,17 +390,15 @@ void printEnd(void)
   setPrintRemainingTime(0);
   preparePrintSummary();  // update print summary. infoPrinting are used
 
-  if (infoSettings.send_end_gcode == 1)
-  {
+  if (GET_BIT(infoSettings.send_gcodes, SEND_GCODES_END_PRINT))
     sendPrintCodes(1);
-  }
 
   heatClearIsWaiting();
 }
 
 void printComplete(void)
 {
-  BUZZER_PLAY(sound_success);
+  BUZZER_PLAY(SOUND_SUCCESS);
   printEnd();
 
   if (infoSettings.auto_off)  // Auto shut down after print
@@ -461,7 +459,7 @@ void printAbort(void)
       break;
   }
 
-  if (infoSettings.send_cancel_gcode == 1)
+  if (GET_BIT(infoSettings.send_gcodes, SEND_GCODES_CANCEL_PRINT))
     sendPrintCodes(2);
 
   printEnd();
@@ -644,10 +642,11 @@ void setPrintResume(bool updateHost)
 // get gcode command from TFT (SD card or USB)
 void loopPrintFromTFT(void)
 {
-  bool    read_comment_mode = false;
+  bool    read_comment = false;
   bool    read_leading_space = true;
   char    read_char;
-  uint8_t read_count = 0;
+  uint8_t gCode_count = 0;
+  uint8_t comment_count = 0;
   UINT    br = 0;
 
   if (heatHasWaiting() || infoCmd.count || infoPrinting.pause) return;
@@ -667,53 +666,58 @@ void loopPrintFromTFT(void)
     // Gcode or comment
     if (read_char == '\n' )  // '\n' is end flag for per command
     {
-      if (read_count != 0)
+      if (gCode_count != 0)
       {
-        switch (read_comment_mode)
-        {
-          case false:
-            infoCmd.queue[infoCmd.index_w].gcode[read_count++] = '\n';
-            infoCmd.queue[infoCmd.index_w].gcode[read_count] = 0;  // terminate string
-            infoCmd.queue[infoCmd.index_w].src = SERIAL_PORT;
-            infoCmd.index_w = (infoCmd.index_w + 1) % CMD_MAX_LIST;
-            infoCmd.count++;
-            break;
+        infoCmd.queue[infoCmd.index_w].gcode[gCode_count++] = '\n';
+        infoCmd.queue[infoCmd.index_w].gcode[gCode_count] = 0;  // terminate string
+        infoCmd.queue[infoCmd.index_w].src = SERIAL_PORT;
+        infoCmd.index_w = (infoCmd.index_w + 1) % CMD_MAX_LIST;
+        infoCmd.count++;
+      }
 
-          case true:
-            gCode_comment.content[read_count++] = '\n';
-            gCode_comment.content[read_count] = 0;  // terminate string
-            gCode_comment.handled = false;
-            break;
-        }
+      if (comment_count != 0)
+      {
+        gCode_comment.content[comment_count++] = '\n';
+        gCode_comment.content[comment_count] = 0;  // terminate string
+        gCode_comment.handled = false;
+      }
 
-        read_count = 0;  // clear buffer
+      if (gCode_count + comment_count > 0)
+      {
         break;
       }
 
-      read_comment_mode  = false;  // for new command
+      read_comment = false;
       read_leading_space = true;
     }
-    else if (read_count >= CMD_MAX_CHAR - 2)
-    {}  // when the command length beyond the maximum, ignore the following bytes
+    else if (!read_comment && gCode_count >= CMD_MAX_CHAR - 2)
+    {}  // if command length is beyond the maximum, ignore the following bytes
+    else if (read_comment && comment_count >= CMD_MAX_CHAR - 2)
+    {}  // if comment length is beyond the maximum, ignore the following bytes
     else
     {
-      if (read_char == ';')  // ';' is comment out flag
+      if (read_char == ';')  // ';' is comment flag
       {
-        read_comment_mode = true;
+        read_comment = true;
         read_leading_space = true;  // comment might come after a gCode in the same line
+        comment_count = 0;  // there might be a comment in a commented line
       }
       else
       {
         if (read_leading_space && read_char != ' ')  // ignore ' ' space bytes
+        {
           read_leading_space = false;
+        }
 
         if (!read_leading_space && read_char != '\r')
         {
-          if (!read_comment_mode)   // normal gcode
-            infoCmd.queue[infoCmd.index_w].gcode[read_count++] = read_char;
+          if (!read_comment)   // normal gcode
+          {
+            infoCmd.queue[infoCmd.index_w].gcode[gCode_count++] = read_char;
+          }
           else // comment
           {
-            gCode_comment.content[read_count++] = read_char;
+            gCode_comment.content[comment_count++] = read_char;
           }
         }
       }
@@ -739,6 +743,7 @@ void loopPrintFromHost(void)
 
   if (infoFile.source < BOARD_SD) return;
   if (infoMachineSettings.autoReportSDStatus == ENABLED) return;
+  if (infoMenu.menu[infoMenu.cur] == menuTerminal) return;
   if (!infoSettings.m27_active && !infoPrinting.printing) return;
 
   static uint32_t nextCheckPrintTime = 0;

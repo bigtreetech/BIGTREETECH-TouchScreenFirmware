@@ -1,5 +1,5 @@
-#ifndef _RRF_MACROS_PARSER_H_
-#define _RRF_MACROS_PARSER_H
+#ifndef _RRF_M20_PARSER_H_
+#define _RRF_M20_PARSER_H_
 
 #include <string.h>
 #include <stdlib.h>
@@ -15,8 +15,9 @@ extern "C"
     bool is_directory;
     TCHAR *display_name;
     TCHAR *file_name;
-  } MACRO_LIST_ITEM;
-  void parseMacroListResponse(char *data);
+  } M20_LIST_ITEM;
+  void parseMacroListResponse(const char *data);
+  void parseJobListResponse(const char *data);
 #ifdef __cplusplus
 }
 #endif
@@ -25,18 +26,19 @@ extern "C"
 #include "JsonStreamingParser.hpp"
 #include <string.h>
 
-static const char *EMPTY = "";
 static const char *FILES = "files";
-class RRFMacrosParser : public JsonListener
+class RRFM20Parser : public JsonListener
 {
 
 private:
-  const char *current_key = EMPTY;
   bool in_array = false;
-  uint16_t macroCount = 0;
-  MACRO_LIST_ITEM macroList[FILE_NUM];
+  bool in_files = false;
+  uint16_t fileCount = 0;
+  M20_LIST_ITEM fileList[FILE_NUM];
 
 public:
+  bool macro_sort = false;
+
   inline void startDocument() {}
   inline void startObject() {}
   inline void endObject() {}
@@ -44,7 +46,7 @@ public:
   virtual void endDocument();
   inline void startArray()
   {
-    in_array = strcmp(FILES, current_key) == 0;
+    in_array = in_files;
   }
   inline void endArray()
   {
@@ -53,7 +55,7 @@ public:
 
   inline void key(const char *key)
   {
-    current_key = key;
+    in_files = strcmp(FILES, key) == 0;
   }
   inline void value(const char *value)
   {
