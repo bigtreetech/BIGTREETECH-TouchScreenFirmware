@@ -54,7 +54,7 @@
 //================================================================================
 
 /**
- * Enable Status Screen
+ * Status Screen
  * Select the default home screen while in Touch Mode.
  * If enabled, the Status Screen menu will become the default home screen.
  * If disabled, the Main menu will become the default home screen.
@@ -454,8 +454,8 @@
  *
  *   Options: [OFF: 0, 5%: 1, 10%: 2, 20%: 3, 30%: 4, 40%: 5, 50%: 6, 60%: 7, 70%: 8, 80%: 9, 90%: 10, 100%: 11]
  */
-#define DEFAULT_LCD_BRIGHTNESS      11  // Default display brightness (Default: 11)
-#define DEFAULT_LCD_IDLE_BRIGHTNESS  3  // Display brightness when device is idle (Default: 3)
+#define LCD_BRIGHTNESS      11  // Default display brightness (Default: 11)
+#define LCD_IDLE_BRIGHTNESS  3  // Display brightness when device is idle (Default: 3)
 
 /**
  * Default LCD Idle Time (only for TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
@@ -464,7 +464,7 @@
  *
  *   Options: [OFF: 0, 5sec: 1, 10sec: 2, 30sec: 3, 1min: 4, 2min: 5, 5min: 6, CUSTOM: 7]
  */
-#define DEFAULT_LCD_IDLE_TIME 0  // Default: 0
+#define LCD_IDLE_TIME 0  // Default: 0
 
 // Custom value in seconds. This will be used if DEFAULT_LCD_IDLE_TIME is set to 7 (CUSTOM Seconds)
 #define IDLE_TIME_CUSTOM (10 * 60)
@@ -553,7 +553,7 @@
 // End Gcode
 // This gcode will runs after a print is completed.
 #define END_GCODE "G90\nG1 E-4\nG92 E0\nM18\n"  // Switch to absolute positioning, reduce filament pressure by
-                                                      // performing small retract, reset extruder position, disable steppers
+                                                // performing small retract, reset extruder position, disable steppers
 
 // Cancel Gcode
 // This gcode will runs when a print is canceled.

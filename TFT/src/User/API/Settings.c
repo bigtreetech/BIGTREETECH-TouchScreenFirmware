@@ -112,9 +112,9 @@ void infoSettingsReset(void)
 
 // Other Device-Specific Settings
   infoSettings.sounds                 = default_sounds;
-  infoSettings.lcd_brightness         = DEFAULT_LCD_BRIGHTNESS;
-  infoSettings.lcd_idle_brightness    = DEFAULT_LCD_IDLE_BRIGHTNESS;
-  infoSettings.lcd_idle_time          = DEFAULT_LCD_IDLE_TIME;
+  infoSettings.lcd_brightness         = LCD_BRIGHTNESS;
+  infoSettings.lcd_idle_brightness    = LCD_IDLE_BRIGHTNESS;
+  infoSettings.lcd_idle_time          = LCD_IDLE_TIME;
   infoSettings.block_touch_on_idle    = DISABLED;
   infoSettings.knob_led_color         = KNOB_LED_COLOR;
   infoSettings.knob_led_idle          = ENABLED;
