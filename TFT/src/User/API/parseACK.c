@@ -76,7 +76,7 @@ static bool ack_seen(const char * str)
   uint16_t i;
   for (ack_index = 0; ack_index < ACK_MAX_SIZE && dmaL2Cache[ack_index] != 0; ack_index++)
   {
-    for (i = 0; str[i] != 0 && dmaL2Cache[ack_index + i] != 0 && dmaL2Cache[ack_index + i] == str[i]; i++)
+    for (i = 0; (ack_index + i) < ACK_MAX_SIZE && str[i] != 0 && dmaL2Cache[ack_index + i] == str[i]; i++)
     {}
     if (str[i] == 0)
     {
@@ -91,10 +91,9 @@ static bool ack_continue_seen(const char * str)
 { // unlike "ack_seen()", this retains "ack_index" if the searched string is not found
   uint16_t i;
   uint16_t indexBackup = ack_index;
-
   for (; ack_index < ACK_MAX_SIZE && dmaL2Cache[ack_index] != 0; ack_index++)
   {
-    for (i = 0; str[i] != 0 && dmaL2Cache[ack_index + i] != 0 && dmaL2Cache[ack_index + i] == str[i]; i++)
+    for (i = 0; (ack_index + i) < ACK_MAX_SIZE && str[i] != 0 && dmaL2Cache[ack_index + i] == str[i]; i++)
     {}
     if (str[i] == 0)
     {
@@ -109,7 +108,7 @@ static bool ack_continue_seen(const char * str)
 static bool ack_cmp(const char * str)
 {
   uint16_t i;
-  for (i = 0; i < ACK_MAX_SIZE && str[i] != 0 && dmaL2Cache[i] != 0; i++)
+  for (i = 0; i < ACK_MAX_SIZE && dmaL2Cache[i] != 0 && str[i] != 0; i++)
   {
     if (str[i] != dmaL2Cache[i])
       return false;
@@ -518,7 +517,7 @@ void parseACK(void)
               heatSyncTargetTemp(i, ack_second_value() + 0.5f);
           }
         }
-        avoid_terminal = !infoSettings.terminalACK;
+        avoid_terminal = !infoSettings.terminal_ack;
         updateNextHeatCheckTime();
       }
       // parse and store M114, current position
@@ -712,7 +711,7 @@ void parseACK(void)
         tmpMsg[6] = '\0';
         if (strcmp(tmpMsg, "Mean: ") == 0)
         {
-          setLevelCornerPosition(-1, -1, ack_value());  // save value for LevelCorner menu
+          levelingSetProbedPoint(-1, -1, ack_value());  // save probed Z value
           sprintf(tmpMsg, "%s\nStandard Deviation: %0.5f", (char *)getDialogMsgStr(), ack_value());
           setDialogText((uint8_t* )"Repeatability Test", (uint8_t *)tmpMsg, LABEL_CONFIRM, LABEL_BACKGROUND);
           showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
@@ -819,7 +818,7 @@ void parseACK(void)
         float x = ack_value();
         float y = 0;
         if (ack_seen("Y: ")) y = ack_value();
-        if (ack_seen("Z: ")) setLevelCornerPosition(x, y, ack_value());
+        if (ack_seen("Z: ")) levelingSetProbedPoint(x, y, ack_value());  // save probed Z value
       }
 
       //----------------------------------------
@@ -1046,7 +1045,7 @@ void parseACK(void)
         if (ack_seen("Z")) setParameter(P_BUMPSENSITIVITY, STEPPER_INDEX_Z + i, ack_value());
       }
       // parse and store ABL type if auto-detect is enabled
-      #if ENABLE_BL_VALUE == 1
+      #if BED_LEVELING_TYPE == 1
         else if (ack_seen("Auto Bed Leveling"))
         {
           infoMachineSettings.leveling = BL_ABL;
@@ -1158,7 +1157,7 @@ void parseACK(void)
       {
         infoMachineSettings.promptSupport = ack_value();
       }
-      else if (ack_seen("Cap:SDCARD:") && infoSettings.onboardSD == AUTO)
+      else if (ack_seen("Cap:SDCARD:") && infoSettings.onboard_sd == AUTO)
       {
         infoMachineSettings.onboard_sd_support = ack_value();
       }
@@ -1166,7 +1165,7 @@ void parseACK(void)
       {
         infoMachineSettings.autoReportSDStatus = ack_value();
       }
-      else if (ack_seen("Cap:LONG_FILENAME:") && infoSettings.longFileName == AUTO)
+      else if (ack_seen("Cap:LONG_FILENAME:") && infoSettings.long_filename == AUTO)
       {
         infoMachineSettings.long_filename_support = ack_value();
       }

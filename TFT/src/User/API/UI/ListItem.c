@@ -72,11 +72,11 @@ void ListItem_Display(const GUI_RECT * rect, uint8_t position, const LISTITEM * 
     {
       if (curitem->icon != CHARICON_BLANK)
       {
-        drawCharIcon(rect, CENTER, curitem->icon, true, infoSettings.list_button_color);
+        drawCharIcon(rect, CENTER, curitem->icon, true, infoSettings.list_button_bg_color);
       }
       else if (curitem->icon == CHARICON_BLANK && curitem->titlelabel.index != LABEL_BACKGROUND)
       {
-        GUI_SetBkColor(infoSettings.list_button_color);
+        GUI_SetBkColor(infoSettings.list_button_bg_color);
         GUI_ClearPrect(rect);
         GUI_DispStringInPrect(rect, curitem->titlelabel.index);
       }

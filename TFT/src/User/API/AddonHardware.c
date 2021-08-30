@@ -95,7 +95,7 @@ bool FIL_NormalRunoutDetect(void)
     runout = trueTimes > falseTimes ? true : false;
     trueTimes = 0;
     falseTimes = 0;
-    nextRunoutTime = OS_GetTimeMs() + infoSettings.runout_noise_ms;
+    nextRunoutTime = OS_GetTimeMs() + infoSettings.runout_noise;
   }
   else
   {
@@ -149,7 +149,7 @@ bool FIL_NormalRunoutDetect(void)
   }
 
   // Detect HIGH/LOW level, Suitable for general mechanical / photoelectric switches
-  return (runout == GET_BIT(infoSettings.runout,RUNOUT_INVERT));
+  return (runout == GET_BIT(infoSettings.runout, RUNOUT_INVERTED));
 }
 
 bool FIL_SmartRunoutDetect(void)

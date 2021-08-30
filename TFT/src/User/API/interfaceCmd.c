@@ -19,8 +19,7 @@ bool isNotEmptyCmdQueue(void)
 bool isEnqueued(const char *cmd)
 {
   bool found = false;
-  int i;
-  for (i = 0; i < infoCmd.count && !found; ++i)
+  for (int i = 0; i < infoCmd.count && !found; ++i)
   {
     found = strcmp(cmd, infoCmd.queue[(infoCmd.index_r + i) % CMD_MAX_LIST].gcode) == 0;
   }
@@ -30,7 +29,7 @@ bool isEnqueued(const char *cmd)
 // Check the presence of the specified 'code' character in the current gcode command.
 static bool cmd_seen(char code)
 {
-  for (cmd_index = 0; infoCmd.queue[infoCmd.index_r].gcode[cmd_index] != 0 && cmd_index < CMD_MAX_CHAR; cmd_index++)
+  for (cmd_index = 0; cmd_index < CMD_MAX_CHAR && infoCmd.queue[infoCmd.index_r].gcode[cmd_index] != 0; cmd_index++)
   {
     if (infoCmd.queue[infoCmd.index_r].gcode[cmd_index] == code)
     {
@@ -514,7 +513,7 @@ void sendQueueCmd(void)
             }
             break;
 
-          case 98: // RRF macro execution, do not wait for it to complete
+          case 98:  // RRF macro execution, do not wait for it to complete
             Serial_Puts(SERIAL_PORT, infoCmd.queue[infoCmd.index_r].gcode);
             infoHost.wait = false;
             purgeLastCmd(true, avoid_terminal);
@@ -636,7 +635,7 @@ void sendQueueCmd(void)
           if (fromTFT)
           {
             heatSetUpdateWaiting(false);
-            avoid_terminal = !infoSettings.terminalACK;
+            avoid_terminal = !infoSettings.terminal_ack;
           }
           break;
 
@@ -971,7 +970,7 @@ void sendQueueCmd(void)
           {
             // purge and pause only if emulated M600 is enabled.
             // if emulated M600 is disabled then let the printer pause the print to avoid premature pause
-            if (infoSettings.emulate_m600 == 1)
+            if (infoSettings.emulated_m600 == 1)
             {
               purgeLastCmd(true, avoid_terminal);
               printPause(true, PAUSE_NORMAL);
@@ -986,7 +985,7 @@ void sendQueueCmd(void)
             {
               // purge and pause only if emulated M600 is enabled.
               // if emulated M600 is disabled then let the printer pause the print to avoid premature pause
-              if (infoSettings.emulate_m600 == 1)
+              if (infoSettings.emulated_m600 == 1)
               {
                 purgeLastCmd(true, avoid_terminal);
                 printPause(true, PAUSE_NORMAL);
@@ -1111,7 +1110,7 @@ void sendQueueCmd(void)
           storeCmd("M503 S0\n");
           break;
 
-        #if ENABLE_BL_VALUE > 0  // if not Disabled
+        #if BED_LEVELING_TYPE > 0  // if not Disabled
           case 29:  // G29
           {
             if (infoMachineSettings.firmwareType != FW_REPRAPFW)

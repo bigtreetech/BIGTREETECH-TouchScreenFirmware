@@ -437,7 +437,7 @@ void volumeReminderMessage(int16_t inf, SYS_STATUS status)
 
   if (menuType != MENU_TYPE_FULLSCREEN)
   {
-    GUI_SetColor(infoSettings.sd_reminder_color);
+    GUI_SetColor(infoSettings.status_color);
     GUI_SetBkColor(infoSettings.title_bg_color);
     GUI_DispStringInPrect(&volumeReminder.rect, volumeReminder.inf);
     GUI_RestoreColorDefault();

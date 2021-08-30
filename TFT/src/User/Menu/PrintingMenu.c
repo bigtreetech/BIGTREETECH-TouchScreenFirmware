@@ -236,7 +236,7 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
       case ICON_POS_Z:
         if (layerDisplayType == SHOW_LAYER_BOTH)
         {
-          sprintf(tempstr, "%6.2fmm", (infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS));
+          sprintf(tempstr, "%3.2fmm", (infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS));
         }
         else if (layerDisplayType == CLEAN_LAYER_NUMBER || layerDisplayType == CLEAN_LAYER_BOTH)
         {
@@ -276,9 +276,9 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
 
       case ICON_POS_FAN:
         if (infoSettings.fan_percentage == 1)
-          sprintf(tempstr, "%3d%%", fanGetCurPercent(currentFan));
+          sprintf(tempstr, "%3d%%", fanGetCurPercent(currentFan));  // 4 chars
         else
-          sprintf(tempstr, "%3d", fanGetCurSpeed(currentFan));
+          sprintf(tempstr, "%3d ", fanGetCurSpeed(currentFan));  // 4 chars
         break;
 
       case ICON_POS_TIM:
@@ -299,7 +299,7 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
         {
           sprintf(tempstr, "%3.2fmm", (infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS));
         }
-        else if (layerDisplayType == SHOW_LAYER_NUMBER || layerDisplayType == SHOW_LAYER_BOTH) // layer number or height & number (both)
+        else if (layerDisplayType == SHOW_LAYER_NUMBER || layerDisplayType == SHOW_LAYER_BOTH)  // layer number or height & number (both)
         {
           if (getLayerNumber() > 0)
           {
