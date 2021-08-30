@@ -466,7 +466,7 @@
  */
 #define LCD_IDLE_TIME 0  // Default: 0
 
-// Custom value in seconds. This will be used if DEFAULT_LCD_IDLE_TIME is set to 7 (CUSTOM Seconds)
+// Custom value in seconds. This will be used if LCD_IDLE_TIME is set to 7 (CUSTOM Seconds)
 #define IDLE_TIME_CUSTOM (10 * 60)
 
 /**
