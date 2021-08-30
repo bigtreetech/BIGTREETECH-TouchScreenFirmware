@@ -50,6 +50,7 @@ static void resetRequestCommandInfo(
 
   loopProcessToCondition(&isNotEmptyCmdQueue);  // wait for the communication to be clean before requestCommand
 
+  requestCommandInfo.stream_handler = NULL;
   requestCommandInfo.inWaitResponse = true;
   requestCommandInfo.inResponse = false;
   requestCommandInfo.done = false;
@@ -271,6 +272,20 @@ char *request_M20_rrf(char *nextdir)
   // Wait for response
   loopProcessToCondition(&isWaitingResponse);
 
-  //clearRequestCommandInfo();  //shall be call after copying the buffer ...
   return requestCommandInfo.cmd_rev_buf;
+}
+
+// nextdir path must start with "macros" or "gcodes"
+// streaming variant, as there is easily potential for the data response to exceed the 5K buffer
+// RRF internally limits responses at about ~8k (with pagination handling) handle that as a TODO
+void request_M20_rrf_streaming(char *nextdir, FP_STREAM_HANDLER handler)
+{
+  resetRequestCommandInfo("{", "}", "Error:", NULL, NULL);
+  requestCommandInfo.stream_handler = handler;
+
+  // TODO replace S2 with S3, for some reason, this immediately crashes when S3 is used???
+  // S3 works perfectly fine if used in request_M20_rrf above.
+  mustStoreCmd("M20 S2 P\"/%s\"\n", nextdir);
+
+  loopProcessToCondition(&isWaitingResponse);
 }

@@ -15,9 +15,23 @@ echo:SD card ok
   return request_M21();
 }
 
-void rrfScanPrintFilesGcodeFs(void)
+static inline void rrfScanPrintFilesGcodeFs(void)
 {
-  parseJobListResponse(request_M20_rrf(infoFile.title));
+  // TODO enable the optimization for fetching M20 S2 once the problem with M20 S3 is fixed
+  // switch (infoSettings.files_sort_by)
+  // {
+    // case SORT_NAME_ASCENDING:
+    // case SORT_NAME_DESCENDING:
+      // parseJobListResponse(request_M20_rrf(infoFile.title));
+      // clearRequestCommandInfo();
+      // break;
+    // case SORT_DATE_NEW_FIRST:
+    // case SORT_DATE_OLD_FIRST:
+      // properly getting timestamps requires M20 S3, which has a larger payload
+      // ~50 files would exceed 5K easily with M20 S3, ~100 files would exceed 5K with M20 S2
+  request_M20_rrf_streaming(infoFile.title, parseJobListResponseStreaming);
+      // break;
+  // }
 }
 
 //static uint32_t date = 0;

@@ -39,10 +39,6 @@ static int8_t m291_mode = 0;
 static bool show_m291 = false;
 static uint32_t m291_seq = 0xffffffff;
 static uint32_t expire_time = 0;
-static bool need_parser_reset = false;
-
-static JsonStreamingParser parser;
-static ParseACKJsonParser handler;
 
 static void m291_confirm(void)
 {
@@ -154,11 +150,14 @@ void ParseACKJsonParser::value(const char *value)
 
 void rrfParseACK(const char *data)
 {
+  static JsonStreamingParser parser;
+  static ParseACKJsonParser handler;
+
   parser.setListener(&handler);
-  if (need_parser_reset)
+  if (handler.need_parser_reset)
   {
     parser.reset();
-    need_parser_reset = false;
+    handler.need_parser_reset = false;
   }
   while (*data != 0)
   {
