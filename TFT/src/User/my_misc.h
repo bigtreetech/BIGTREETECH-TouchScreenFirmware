@@ -30,7 +30,7 @@ extern "C" {
 #define SET_BIT_OFF(num, index) num = num & (~(1 << index))
 
 // set bit status value (0 or 1) at selected index
-#define SET_BIT_VALUE(num, index, value) num = (value == 1) ? (1 << index) | num : num & (~(1 << index))
+#define SET_BIT_VALUE(num, index, value) num = ((value) == 1) ? (1 << index) | num : num & (~(1 << index))
 
 // Toggle bit status at selected index
 #define TOGGLE_BIT(num, index) num =  num ^ (1 << index)
