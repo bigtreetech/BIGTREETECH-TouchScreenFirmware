@@ -10,31 +10,14 @@ extern "C" {
 #include "variants.h"
 #include "coordinate.h"
 
-enum
-{
-  font_sign,
-  config_sign,
-  lang_sign,
-  icon_sign,
-  sign_count
-};
-
-typedef enum
-{
-  FEEDRATE_XY = 0,
-  FEEDRATE_Z,
-  FEEDRATE_E,
-  FEEDRATE_COUNT,
-} FEEDRATE_INDEX;
-
 // Config version support
 // change if new elements/keywords are added/removed/changed in the configuration.h Format YYYYMMDD
 // this number should match CONFIG_VERSION in configuration.h
-#define CONFIG_SUPPPORT 20210730
+#define CONFIG_SUPPPORT 20210821
 
 #define FONT_FLASH_SIGN       20210522  // (YYYYMMDD) change if fonts require updating
-#define CONFIG_FLASH_SIGN     20210806  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
-#define LANGUAGE_FLASH_SIGN   20210806  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
+#define CONFIG_FLASH_SIGN     20210821  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
+#define LANGUAGE_FLASH_SIGN   20210821  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
 #define ICON_FLASH_SIGN       20210711  // (YYYYMMDD) change if any icon(s) is added or removed
 
 #define FONT_CHECK_SIGN       (FONT_FLASH_SIGN + WORD_UNICODE + FLASH_SIGN_ADDR)
@@ -44,7 +27,7 @@ typedef enum
 #define LANGUAGE_CHECK_SIGN   (LANGUAGE_FLASH_SIGN + LANGUAGE_ADDR + LABEL_NUM)
 #define ICON_CHECK_SIGN       (ICON_FLASH_SIGN + ICON_ADDR(0) + ICON_PREVIEW)
 
-#define MAX_MODE_COUNT        4
+#define MAX_SERIAL_PORT_COUNT 4
 #define MAX_EXT_COUNT         6
 #define MAX_HOTEND_COUNT      6
 #define MAX_HEATER_COUNT      (2 + MAX_HOTEND_COUNT)  // chamber + bed + hotend
@@ -71,13 +54,23 @@ typedef enum
 #define HIGH      1
 #define LOW       0
 
+enum
+{
+  font_sign,
+  config_sign,
+  lang_sign,
+  icon_sign,
+  sign_count
+};
+
 typedef enum
 {
   MODE_MARLIN = 0,
   MODE_SERIAL_TSC,
-  MODE_COUNT,
+  MODE_COUNT,               // number of different modes
   MODE_BLOCKED_MARLIN = 2,
   MODE_BLOCKED_SERIAL_TSC,
+  MAX_MODE_COUNT            // total number of modes
 } LCD_MODE;
 
 typedef enum
@@ -87,14 +80,75 @@ typedef enum
   MODE_TYPE_COUNT
 } MARLIN_MODE_TYPE;
 
+typedef enum
+{
+  SORT_DATE_NEW_FIRST = 0,
+  SORT_DATE_OLD_FIRST,
+  SORT_NAME_ASCENDING,
+  SORT_NAME_DESCENDING,
+  SORT_BY_COUNT
+} SORT_BY;
+
+typedef enum
+{
+  SOUND_TYPE_TOUCH = 0,
+  SOUND_TYPE_TOAST,
+  SOUND_TYPE_ALERT,
+  SOUND_TYPE_HEATER,
+  SOUND_TYPE_COUNT
+}SOUND_TYPE;
+
+typedef enum
+{
+  SEND_GCODES_START_PRINT = 0,
+  SEND_GCODES_END_PRINT,
+  SEND_GCODES_CANCEL_PRINT,
+  SEND_GCODES_COUNT,
+}SEND_GCODES_TYPE;
+
+typedef enum
+{
+  RUNOUT_ENABLED = 0,
+  RUNOUT_SENSOR_TYPE,
+  RUNOUT_INVERT,
+  RUNOUT_NO_NC,
+}RUNOUT_SETTINGS;
+
+typedef enum
+{
+  PERCENTAGE_ELAPSED = 0,
+  PERCENTAGE_REMAINING,
+  ELAPSED_REMAINING,
+} PROGRESS_DISPLAY;
+
+typedef enum
+{
+  SHOW_LAYER_HEIGHT,
+  CLEAN_LAYER_HEIGHT,
+  SHOW_LAYER_NUMBER,
+  CLEAN_LAYER_NUMBER,
+  SHOW_LAYER_BOTH,
+  CLEAN_LAYER_BOTH,
+} LAYER_TYPE;
+
+typedef enum
+{
+  FEEDRATE_XY = 0,
+  FEEDRATE_Z,
+  FEEDRATE_E,
+  FEEDRATE_COUNT,
+} FEEDRATE_INDEX;
+
 typedef struct
 {
   // General Settings
-  uint8_t  status_screen;
-  uint8_t  baudrate;
-  uint8_t  multi_serial;
-  uint8_t  language;
+  uint8_t  serial_port[MAX_SERIAL_PORT_COUNT];
+  uint8_t  emulate_m600;
 
+  // UI Settings
+  uint8_t  rotate_ui;
+  uint8_t  language;
+  uint8_t  status_screen;
   uint16_t title_bg_color;
   uint16_t bg_color;
   uint16_t font_color;
@@ -107,18 +161,15 @@ typedef struct
   uint16_t mesh_max_color;
   uint8_t  terminal_color_scheme;
 
-  uint8_t  rotate_ui;
-  uint8_t  terminalACK;
-  uint8_t  invert_axis[AXIS_NUM];
-  uint8_t  leveling_invert_y_axis;
-  uint8_t  persistent_info;
-  uint8_t  fan_percentage;
-  uint8_t  file_listmode;
-  uint8_t  files_sort_by;
   uint8_t  ack_notification;
+  uint8_t  files_sort_by;
+  uint8_t  file_listmode;
+  uint8_t  fan_percentage;
+  uint8_t  persistent_info;
+  uint8_t  terminalACK;
   uint8_t  notification_m117;
-  uint8_t  emulate_m600;
   uint8_t  prog_disp_type;
+  uint8_t  layer_disp_type;
 
   // Marlin Mode Settings (only for TFT24 V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
   uint8_t  mode;
@@ -128,9 +179,6 @@ typedef struct
   uint8_t  marlin_mode_fullscreen;
   uint8_t  marlin_mode_showtitle;
   uint8_t  marlin_type;
-
-  // RRF Mode Settings
-  uint8_t  rrf_macros_enable;
 
   // Printer / Machine Settings
   uint8_t  hotend_count;
@@ -148,27 +196,28 @@ typedef struct
   uint16_t z_speed[SPEED_COUNT];
   uint16_t ext_speed[SPEED_COUNT];
   uint8_t  auto_load_leveling;
-  uint8_t  touchmi_sensor;
   uint8_t  onboardSD;
   uint8_t  m27_refresh_time;
   uint8_t  m27_active;
   uint8_t  longFileName;
   float    pause_retract_len;
   float    resume_purge_len;
-  float    pause_pos[AXIS_NUM-1];  // X, Y
+  float    pause_pos[AXIS_NUM - 1];  // X, Y
   float    pause_z_raise;
   uint16_t pause_feedrate[FEEDRATE_COUNT];  // XY, Z, E
   uint8_t  level_edge;
   float    level_z_pos;
   float    level_z_raise;
+  uint16_t level_feedrate[FEEDRATE_COUNT - 1];  // XY, Z
 
   uint8_t  move_speed;  // index on infoSettings.axis_speed, infoSettings.ext_speed
 
+  uint8_t  invert_axis;  // invert X Y Z axis (Bit Values)
+  uint8_t  leveling_invert_y_axis;
   uint8_t  xy_offset_probing;
   float    z_raise_probing;
   uint8_t  z_steppers_alignment;
-
-  uint16_t level_feedrate[FEEDRATE_COUNT - 1];  // XY, Z
+  uint8_t  touchmi_sensor;
 
   // Power Supply Settings (only if connected to TFT controller)
   uint8_t  auto_off;
@@ -177,7 +226,6 @@ typedef struct
 
   // Filament Runout Settings (only if connected to TFT controller)
   uint8_t  runout;
-  uint8_t  runout_invert;
   uint16_t runout_noise_ms;
   uint8_t  runout_distance;
 
@@ -188,10 +236,7 @@ typedef struct
   uint8_t  btt_ups;
 
   // Other Device-Specific Settings
-  uint8_t  touchSound;
-  uint8_t  toastSound;
-  uint8_t  alertSound;
-  uint8_t  heaterSound;
+  uint8_t  sounds;  // sound alert toggles (Bit Values)
   uint8_t  lcd_brightness;
   uint8_t  lcd_idle_brightness;
   uint8_t  lcd_idle_time;
@@ -201,9 +246,7 @@ typedef struct
   uint8_t  neopixel_pixels;
 
   // Start, End & Cancel Gcode Commands
-  uint8_t  send_start_gcode;
-  uint8_t  send_end_gcode;
-  uint8_t  send_cancel_gcode;
+  uint8_t  send_gcodes;  // send printing gcodes toggles (Bit Values)
 } SETTINGS;
 
 typedef struct
@@ -233,18 +276,6 @@ typedef struct
 } PRINT_GCODES;
 
 /**
- * Bed Leveling type
- */
-typedef enum
-{
-  BL_DISABLED = DISABLED,  // Bed Leveling Diabled
-  BL_ABL,                  // Auto Bed Leveling (ABL)
-  BL_BBL,                  // Bilinear Bed Leveling (BBL)
-  BL_UBL,                  // Unified Bed Leveling (UBL)
-  BL_MBL,                  // Mesh Bed Leveling (MBL)
-} BL_TYPE;
-
-/**
  * Firmware type
  */
 typedef enum
@@ -256,6 +287,18 @@ typedef enum
   FW_SMOOTHIEWARE,
   FW_UNKNOWN,
 } FW_TYPE;
+
+/**
+ * Bed Leveling type
+ */
+typedef enum
+{
+  BL_DISABLED = DISABLED,  // Bed Leveling Diabled
+  BL_ABL,                  // Auto Bed Leveling (ABL)
+  BL_BBL,                  // Bilinear Bed Leveling (BBL)
+  BL_UBL,                  // Unified Bed Leveling (UBL)
+  BL_MBL,                  // Mesh Bed Leveling (MBL)
+} BL_TYPE;
 
 typedef struct
 {
@@ -278,13 +321,6 @@ typedef struct
   uint8_t buildPercent;
   uint8_t softwareEndstops;
 } MACHINESETTINGS;
-
-typedef enum
-{
-  PERCENTAGE_ELAPSED = 0,
-  PERCENTAGE_REMAINING,
-  ELAPSED_REMAINING,
-} PROGRESS_DISPLAY;
 
 extern SETTINGS infoSettings;
 extern MACHINESETTINGS infoMachineSettings;

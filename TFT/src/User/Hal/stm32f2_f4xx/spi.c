@@ -1,5 +1,5 @@
 #include "spi.h"
-#include "variants.h"  // for SPI3_SCK_PIN etc...
+#include "variants.h"  // for SPI1_SCK_PIN etc...
 #include "GPIO_Init.h"
 
 // SPI1 default pins config

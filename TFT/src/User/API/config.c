@@ -247,7 +247,7 @@ bool inLimit(int val, int min, int max)
 bool key_seen(const char * keyStr)
 {
   uint16_t i;
-  for (c_index = 0; c_index < ACK_MAX_SIZE && cur_line[c_index] != 0; c_index++)
+  for (c_index = 0; c_index < LINE_MAX_CHAR && cur_line[c_index] != 0; c_index++)
   {
     for (i = 0; keyStr[i] != 0 && cur_line[c_index + i] != 0 && cur_line[c_index + i] == keyStr[i]; i++)
     {}
@@ -531,20 +531,33 @@ void parseConfigKey(uint16_t index)
   {
     //----------------------------General Settings
 
-    case C_INDEX_STATUS_SCREEN:
-      infoSettings.status_screen = getOnOff();
+    case C_INDEX_SERIAL_PORT:
+      if (key_seen("P1:")) SET_VALID_INT_VALUE(infoSettings.serial_port[0], 1, BAUDRATE_COUNT - 1);
+      if (key_seen("P2:")) SET_VALID_INT_VALUE(infoSettings.serial_port[1], 0, BAUDRATE_COUNT - 1);
+      if (key_seen("P3:")) SET_VALID_INT_VALUE(infoSettings.serial_port[2], 0, BAUDRATE_COUNT - 1);
+      if (key_seen("P4:")) SET_VALID_INT_VALUE(infoSettings.serial_port[3], 0, BAUDRATE_COUNT - 1);
       break;
 
-    case C_INDEX_UART_BAUDRATE:
-      SET_VALID_INT_VALUE(infoSettings.baudrate, 0, BAUDRATE_COUNT - 1);
+    case C_INDEX_EMULATE_M600:
+      infoSettings.emulate_m600 = getOnOff();
       break;
 
-    case C_INDEX_MULTI_SERIAL:
-      SET_VALID_INT_VALUE(infoSettings.multi_serial, 0, MAX_MULTI_SERIAL - 1);
+    //----------------------------UI Settings
+
+    case C_INDEX_ROTATE_UI:
+      if (infoSettings.rotate_ui != getOnOff())
+      {
+        scheduleRotate = true;
+        infoSettings.rotate_ui = getOnOff();
+      }
       break;
 
     case C_INDEX_LANGUAGE:
       SET_VALID_INT_VALUE(infoSettings.language, 0, LANGUAGE_NUM - 1);
+      break;
+
+    case C_INDEX_STATUS_SCREEN:
+      infoSettings.status_screen = getOnOff();
       break;
 
     case C_INDEX_TITLE_BG:
@@ -591,55 +604,40 @@ void parseConfigKey(uint16_t index)
       SET_VALID_INT_VALUE(infoSettings.terminal_color_scheme, 0, 2);
       break;
 
-    case C_INDEX_ROTATE_UI:
-      if (infoSettings.rotate_ui != getOnOff())
-      {
-        scheduleRotate = true;
-        infoSettings.rotate_ui = getOnOff();
-      }
-      break;
-
-    case C_INDEX_TERMINAL_ACK:
-      infoSettings.terminalACK = getOnOff();
-      break;
-
-    case C_INDEX_INVERT_AXIS:
-      if (key_seen("X")) infoSettings.invert_axis[X_AXIS] = getOnOff();
-      if (key_seen("Y")) infoSettings.invert_axis[Y_AXIS] = getOnOff();
-      if (key_seen("Z")) infoSettings.invert_axis[Z_AXIS] = getOnOff();
-      if (key_seen("LY")) infoSettings.leveling_invert_y_axis = getOnOff();
-      break;
-
-    case C_INDEX_PERSISTENT_TEMP:
-      infoSettings.persistent_info = getOnOff();
-      break;
-
-    case C_INDEX_FAN_PERCENT:
-      infoSettings.fan_percentage = getOnOff();
-      break;
-
-    case C_INDEX_LIST_MODE:
-      infoSettings.file_listmode = getOnOff();
+    case C_INDEX_ACK_NOTIFICATION:
+      SET_VALID_INT_VALUE(infoSettings.ack_notification, 0, 2);
       break;
 
     case C_INDEX_FILES_SORT_BY:
       SET_VALID_INT_VALUE(infoSettings.files_sort_by, 0, SORT_BY_COUNT);
       break;
 
-    case C_INDEX_ACK_NOTIFICATION:
-      SET_VALID_INT_VALUE(infoSettings.ack_notification, 0, 2);
+    case C_INDEX_LIST_MODE:
+      infoSettings.file_listmode = getOnOff();
+      break;
+
+    case C_INDEX_FAN_PERCENT:
+      infoSettings.fan_percentage = getOnOff();
+      break;
+
+    case C_INDEX_PERSISTENT_TEMP:
+      infoSettings.persistent_info = getOnOff();
+      break;
+
+    case C_INDEX_TERMINAL_ACK:
+      infoSettings.terminalACK = getOnOff();
       break;
 
     case C_INDEX_NOTIFICATION_M117:
       infoSettings.notification_m117 = getOnOff();
       break;
 
-    case C_INDEX_EMULATE_M600:
-      infoSettings.emulate_m600 = getOnOff();
-      break;
-
     case C_INDEX_PROG_DISP_TYPE:
       SET_VALID_INT_VALUE(infoSettings.prog_disp_type, 0, 2);
+      break;
+
+    case C_INDEX_LAYER_DISP_TYPE:
+      SET_VALID_INT_VALUE(infoSettings.layer_disp_type, 0, 2);
       break;
 
     //----------------------------Marlin Mode Settings (only for TFT24 V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
@@ -685,11 +683,6 @@ void parseConfigKey(uint16_t index)
         break;
 
     #endif  // ST7920_EMULATOR || LCD2004_EMULATOR
-
-    //----------------------------RRF Mode Settings
-    case C_INDEX_RRF_MACROS_ON:
-      infoSettings.rrf_macros_enable = getOnOff();
-      break;
 
     //----------------------------Printer / Machine Settings
 
@@ -777,10 +770,6 @@ void parseConfigKey(uint16_t index)
       infoSettings.auto_load_leveling = getOnOff();
       break;
 
-    case C_INDEX_TOUCHMI_SENSOR:
-      infoSettings.touchmi_sensor = getOnOff();
-      break;
-
     case C_INDEX_ONBOARD_SD:
       SET_VALID_INT_VALUE(infoSettings.onboardSD, 0, 2);
       break;
@@ -834,6 +823,13 @@ void parseConfigKey(uint16_t index)
       if (key_seen("Z")) SET_VALID_INT_VALUE(infoSettings.level_feedrate[FEEDRATE_Z], MIN_SPEED_LIMIT, MAX_SPEED_LIMIT);
       break;
 
+    case C_INDEX_INVERT_AXIS:
+      if (key_seen("X")) SET_BIT_VALUE(infoSettings.invert_axis, X_AXIS, getOnOff());
+      if (key_seen("Y")) SET_BIT_VALUE(infoSettings.invert_axis, Y_AXIS, getOnOff());
+      if (key_seen("Z")) SET_BIT_VALUE(infoSettings.invert_axis, Z_AXIS, getOnOff());
+      if (key_seen("LY")) infoSettings.leveling_invert_y_axis = getOnOff();
+      break;
+
     case C_INDEX_XY_OFFSET_PROBING:
       infoSettings.xy_offset_probing = getOnOff();
       break;
@@ -844,6 +840,10 @@ void parseConfigKey(uint16_t index)
 
     case C_INDEX_Z_STEPPERS_ALIGNMENT:
       infoSettings.z_steppers_alignment = getOnOff();
+      break;
+
+    case C_INDEX_TOUCHMI_SENSOR:
+      infoSettings.touchmi_sensor = getOnOff();
       break;
 
     case C_INDEX_PREHEAT_NAME_1:
@@ -870,8 +870,8 @@ void parseConfigKey(uint16_t index)
     case C_INDEX_PREHEAT_TEMP_6:
     {
       int val_index = index - C_INDEX_PREHEAT_TEMP_1;
-      if (key_seen("B")) SET_VALID_INT_VALUE(configPreheatStore->preheat_bed[val_index], MIN_BED_TEMP, MAX_BED_TEMP);
       if (key_seen("T")) SET_VALID_INT_VALUE(configPreheatStore->preheat_temp[val_index], MIN_TOOL_TEMP, MAX_TOOL_TEMP);
+      if (key_seen("B")) SET_VALID_INT_VALUE(configPreheatStore->preheat_bed[val_index], MIN_BED_TEMP, MAX_BED_TEMP);
       break;
     }
 
@@ -896,11 +896,15 @@ void parseConfigKey(uint16_t index)
     #ifdef FIL_RUNOUT_PIN
       case C_INDEX_RUNOUT:
         if (inLimit(config_int(), 0, 3))
-          infoSettings.runout = config_int();
+        {
+          SET_BIT_VALUE(infoSettings.runout, RUNOUT_ENABLED, GET_BIT(config_int(), RUNOUT_ENABLED));
+          SET_BIT_VALUE(infoSettings.runout, RUNOUT_SENSOR_TYPE, GET_BIT(config_int(), RUNOUT_SENSOR_TYPE));
+        }
         break;
 
       case C_INDEX_RUNOUT_LOGIC:
-        infoSettings.runout_invert = getOnOff();
+      case C_INDEX_RUNOUT_NC:
+        SET_BIT_VALUE(infoSettings.runout, (c_index - C_INDEX_RUNOUT_LOGIC), getOnOff());
         break;
 
       case C_INDEX_RUNOUT_NOISE:
@@ -936,19 +940,10 @@ void parseConfigKey(uint16_t index)
 
     #ifdef BUZZER_PIN
       case C_INDEX_TOUCH_SOUND:
-        infoSettings.touchSound = getOnOff();
-        break;
-
       case C_INDEX_TOAST_SOUND:
-        infoSettings.toastSound = getOnOff();
-        break;
-
       case C_INDEX_ALERT_SOUND:
-        infoSettings.alertSound = getOnOff();
-        break;
-
       case C_INDEX_HEATER_SOUND:
-        infoSettings.heaterSound = getOnOff();
+        SET_BIT_VALUE(infoSettings.sounds, (c_index - C_INDEX_TOUCH_SOUND), getOnOff());
         break;
     #endif
 
@@ -1053,15 +1048,9 @@ void parseConfigKey(uint16_t index)
     //----------------------------Start, End & Cancel Gcode Commands
 
     case C_INDEX_START_GCODE_ON:
-      infoSettings.send_start_gcode = getOnOff();
-      break;
-
     case C_INDEX_END_GCODE_ON:
-      infoSettings.send_end_gcode = getOnOff();
-      break;
-
     case C_INDEX_CANCEL_GCODE_ON:
-      infoSettings.send_cancel_gcode = getOnOff();
+      SET_BIT_VALUE(infoSettings.send_gcodes, (c_index - C_INDEX_START_GCODE_ON), getOnOff());
       break;
 
     case C_INDEX_START_GCODE:

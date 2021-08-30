@@ -10,16 +10,18 @@ extern "C" {
 
 //after changing/adding/removing a keyword, change the CONFIG_FLASH_SIGN in Settings.h and PARA_SIGN in FlashStore.c
 
-#define LINE_MAX_CHAR                 100
+#define LINE_MAX_CHAR                 200
 #define CONFIG_FILE_PATH              "0:config.ini"
 #define LANG_FILE_PATH                "0:language.ini"
 
 //-----------------------------General Settings
-#define CONFIG_STATUS_SCREEN          "status_screen:"
-#define CONFIG_UART_BAUDRATE          "baudrate:"
-#define CONFIG_MULTI_SERIAL           "multi_serial:"
-#define CONFIG_LANGUAGE               "language:"
+#define CONFIG_SERIAL_PORT            "serial_port:"
+#define CONFIG_EMULATE_M600           "emulate_m600:"
 
+//-----------------------------UI Settings
+#define CONFIG_ROTATE_UI              "rotate_ui:"
+#define CONFIG_LANGUAGE               "language:"
+#define CONFIG_STATUS_SCREEN          "status_screen:"
 #define CONFIG_TITLE_BG               "title_back_color:"
 #define CONFIG_MENU_BG_COLOR          "background_color:"
 #define CONFIG_MENU_FONT_COLOR        "font_color:"
@@ -32,17 +34,15 @@ extern "C" {
 #define CONFIG_MESH_MAX_COLOR         "mesh_max_color:"
 #define CONFIG_TERMINAL_COLOR_SCHEME  "terminal_color_scheme:"
 
-#define CONFIG_ROTATE_UI              "rotate_ui:"
-#define CONFIG_TERMINAL_ACK           "terminal_ack:"
-#define CONFIG_INVERT_AXIS            "invert_axis:"
-#define CONFIG_PERSISTENT_TEMP        "persistent_info:"
-#define CONFIG_FAN_PERCENT            "fan_speed_percent:"
-#define CONFIG_LIST_MODE              "files_list_mode:"
-#define CONFIG_FILES_SORT_BY          "files_sort_by:"
 #define CONFIG_ACK_NOTIFICATION       "ack_notification:"
+#define CONFIG_FILES_SORT_BY          "files_sort_by:"
+#define CONFIG_LIST_MODE              "files_list_mode:"
+#define CONFIG_FAN_PERCENT            "fan_speed_percent:"
+#define CONFIG_PERSISTENT_TEMP        "persistent_info:"
+#define CONFIG_TERMINAL_ACK           "terminal_ack:"
 #define CONFIG_NOTIFICATION_M117      "notification_m117:"
-#define CONFIG_EMULATE_M600           "emulate_m600:"
 #define CONFIG_PROG_DISP_TYPE         "prog_disp_type:"
+#define CONFIG_LAYER_DISP_TYPE        "layer_disp_type:"
 //-----------------------------Marlin Mode Settings (only for TFT24 V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
 #define CONFIG_MODE                   "default_mode:"
 #define CONFIG_SERIAL_ON              "serial_always_on:"
@@ -52,8 +52,6 @@ extern "C" {
 #define CONFIG_MARLIN_SHOW_TITLE      "marlin_show_title:"
 #define CONFIG_MARLIN_TITLE           "marlin_title:"
 #define CONFIG_MARLIN_TYPE            "marlin_type:"
-//-----------------------------RRF Mode Settings
-#define CONFIG_RRF_MACROS_ON          "rrf_macros_on:"
 //-----------------------------Printer / Machine Settings
 #define CONFIG_HOTEND_COUNT           "hotend_count:"
 #define CONFIG_HEATED_BED             "heated_bed:"
@@ -70,7 +68,6 @@ extern "C" {
 #define CONFIG_Z_SPEED                "z_speed:"
 #define CONFIG_EXT_SPEED              "ext_speed:"
 #define CONFIG_AUTO_LEVEL             "auto_load_leveling:"
-#define CONFIG_TOUCHMI_SENSOR         "touchmi_sensor:"
 #define CONFIG_ONBOARD_SD             "onboard_sd_support:"
 #define CONFIG_M27_DELAY              "M27_refresh_time:"
 #define CONFIG_M27_KEEP_ON            "M27_always_active:"
@@ -83,9 +80,11 @@ extern "C" {
 #define CONFIG_LEVEL_Z_POS            "level_z_pos:"
 #define CONFIG_LEVEL_Z_RAISE          "level_z_raise:"
 #define CONFIG_LEVEL_FEEDRATE         "level_feedrate:"
+#define CONFIG_INVERT_AXIS            "invert_axis:"
 #define CONFIG_XY_OFFSET_PROBING      "xy_offset_probing:"
 #define CONFIG_Z_RAISE_PROBING        "z_raise_probing:"
 #define CONFIG_Z_STEPPERS_ALIGNMENT   "z_steppers_alignment:"
+#define CONFIG_TOUCHMI_SENSOR         "touchmi_sensor:"
 #define CONFIG_PREHEAT_NAME_1         "preheat_name1:"
 #define CONFIG_PREHEAT_NAME_2         "preheat_name2:"
 #define CONFIG_PREHEAT_NAME_3         "preheat_name3:"
@@ -105,6 +104,7 @@ extern "C" {
 //-----------------------------Filament Runout Settings (only if connected to TFT controller)
 #define CONFIG_RUNOUT                 "fil_runout:"
 #define CONFIG_RUNOUT_LOGIC           "fil_runout_inverting:"
+#define CONFIG_RUNOUT_NC              "fil_runout_nc:"
 #define CONFIG_RUNOUT_NOISE           "fil_noise_threshold:"
 #define CONFIG_RUNOUT_DISTANCE        "fil_runout_distance:"
 //-----------------------------Power Loss Recovery & BTT UPS Settings
@@ -165,31 +165,31 @@ extern "C" {
 
 //-----------------------------Limits
 #define MAX_SIZE_LIMIT         2000  // machine size over this will not be parsed.
-#define MAX_EXT_SPEED_LIMIT    5000  // Extruder speed over this will not pe parsed.
-#define MAX_TOOL_TEMP          1000  // extruder temp over this will not pe parsed.
-#define MAX_BED_TEMP            200  // bed temp over this will not pe parsed.
-#define MAX_CHAMBER_TEMP        100  // bed temp over this will not pe parsed.
-#define MAX_SPEED_LIMIT       12000  // speed over this will not pe parsed.
-#define MAX_RUNOUT_DISTANCE      50  // runout distance over this will not pe parsed.
-#define MAX_DELAY_MS           1800  // time delay (ms) over this will not pe parsed.
-#define MAX_DELAY_SEC           100  // time delay (sec) over this will not pe parsed.
+#define MAX_EXT_SPEED_LIMIT    5000  // Extruder speed over this will not be parsed.
+#define MAX_TOOL_TEMP          1000  // extruder temp over this will not be parsed.
+#define MAX_BED_TEMP            400  // bed temp over this will not be parsed.
+#define MAX_CHAMBER_TEMP        200  // bed temp over this will not be parsed.
+#define MAX_SPEED_LIMIT       12000  // speed over this will not be parsed.
+#define MAX_RUNOUT_DISTANCE      50  // runout distance over this will not be parsed.
+#define MAX_DELAY_MS           1800  // time delay (ms) over this will not be parsed.
+#define MAX_DELAY_SEC           100  // time delay (sec) over this will not be parsed.
 #define MAX_RETRACT_LIMIT        20  // retract length over this will not be parsed.
 #define MAX_FAN_SPEED           255  // fan speed (PWM) over this will not be parsed.
 #define MAX_NEOPIXEL_PIXELS     200  // neopixel pixels over this will not be parsed.
 
 #define MIN_SIZE_LIMIT        -2000  // machine size less than this will not be parsed.
 #define NAME_MIN_LENGTH           3  // minimum name length
-#define GCODE_MIN_LENGTH          3  // gcode length less than this will not pe parsed.
+#define GCODE_MIN_LENGTH          3  // gcode length less than this will not be parsed.
 #define MIN_XY_POS_LIMIT      -2000  // Set a negative minimum position for Delta printers
 #define MIN_Z_POS_LIMIT           0
 #define MIN_Z_RAISE_PROBING   -2000  // Set a negative minimum position for Delta printers
-#define MIN_TOOL_TEMP            20  // extruder temp less than this will not pe parsed.
-#define MIN_BED_TEMP             20  // bed temp less than this will not pe parsed.
-#define MIN_CHAMBER_TEMP         20  // chamber temp less than this will not pe parsed.
+#define MIN_TOOL_TEMP            20  // extruder temp less than this will not be parsed.
+#define MIN_BED_TEMP             20  // bed temp less than this will not be parsed.
+#define MIN_CHAMBER_TEMP         20  // chamber temp less than this will not be parsed.
 #define MIN_RUNOUT_DISTANCE       1  // runout distance less than this will not be parsed.
-#define MIN_DELAY_MS             10  // time delay (ms) less than this will not pe parsed.
-#define MIN_DELAY_SEC             1  // time delay (sec) less than this will not pe parsed.
-#define MIN_SPEED_LIMIT          10  // speed less than this will not pe parsed.
+#define MIN_DELAY_MS             10  // time delay (ms) less than this will not be parsed.
+#define MIN_DELAY_SEC             1  // time delay (sec) less than this will not be parsed.
+#define MIN_SPEED_LIMIT          10  // speed less than this will not be parsed.
 #define MIN_RETRACT_LIMIT         0  // retract length less than this will not be parsed.
 #define MIN_FAN_SPEED            25  // fan speed (PWM) less than this will not be parsed.
 

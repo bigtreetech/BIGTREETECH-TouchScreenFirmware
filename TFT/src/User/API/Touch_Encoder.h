@@ -7,7 +7,7 @@ extern "C" {
 
 #include <stdbool.h>
 #include <stdint.h>
-#include <variants.h>
+#include "variants.h"  // for LCD_ENCODER_SUPPORT
 
 bool Touch_Enc_ReadPen(uint16_t interval);  // return the button press state resetting internal timer when reached. Interval is in milli seconds
 

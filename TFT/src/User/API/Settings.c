@@ -6,8 +6,8 @@ MACHINESETTINGS infoMachineSettings;
 
 const uint16_t default_max_temp[]      = HEAT_MAX_TEMP;
 const uint16_t default_max_fanPWM[]    = FAN_MAX_PWM;
-const uint16_t default_size_min[]      = {X_MIN_POS,Y_MIN_POS,Z_MIN_POS};
-const uint16_t default_size_max[]      = {X_MAX_POS,Y_MAX_POS,Z_MAX_POS};
+const uint16_t default_size_min[]      = {X_MIN_POS, Y_MIN_POS, Z_MIN_POS};
+const uint16_t default_size_max[]      = {X_MAX_POS, Y_MAX_POS, Z_MAX_POS};
 const uint16_t default_xy_speed[]      = {SPEED_XY_SLOW, SPEED_XY_NORMAL, SPEED_XY_FAST};
 const uint16_t default_z_speed[]       = {SPEED_Z_SLOW, SPEED_Z_NORMAL, SPEED_Z_FAST};
 const uint16_t default_ext_speed[]     = {EXTRUDE_SLOW_SPEED, EXTRUDE_NORMAL_SPEED, EXTRUDE_FAST_SPEED};
@@ -16,16 +16,20 @@ const uint16_t default_pause_speed[]   = {NOZZLE_PAUSE_XY_FEEDRATE, NOZZLE_PAUSE
 const uint16_t default_preheat_ext[]   = PREHEAT_HOTEND;
 const uint16_t default_preheat_bed[]   = PREHEAT_BED;
 const uint8_t default_custom_enabled[] = CUSTOM_GCODE_ENABLED;
+const uint8_t default_sounds           = 0b00001111;  // all sounds enabled
+const uint8_t default_invertAxis       = 0b00000000;  // all invert axis disabled
 
 // Reset settings data
 void infoSettingsReset(void)
 {
 // General Settings
-  infoSettings.status_screen          = ENABLE_STATUS_SCREEN;
-  infoSettings.baudrate               = BAUDRATE;
-  infoSettings.multi_serial           = 0;
-  infoSettings.language               = LANG_DEFAULT;
+  infoSettings.serial_port[0]         = PRIMARY_BAUDRATE;  // primary serial port
+  infoSettings.emulate_m600           = EMULATE_M600;
 
+// UI Settings
+  infoSettings.rotate_ui              = DISABLED;
+  infoSettings.language               = LANG_DEFAULT;
+  infoSettings.status_screen          = ENABLE_STATUS_SCREEN;
   infoSettings.title_bg_color         = lcd_colors[TITLE_BACKGROUND_COLOR];
   infoSettings.bg_color               = lcd_colors[BACKGROUND_COLOR];
   infoSettings.font_color             = lcd_colors[FONT_COLOR];
@@ -38,16 +42,15 @@ void infoSettingsReset(void)
   infoSettings.mesh_max_color         = lcd_colors[MESH_MAX_COLOR];
   infoSettings.terminal_color_scheme  = TERMINAL_COLOR_SCHEME;
 
-  infoSettings.rotate_ui              = DISABLED;
-  infoSettings.terminalACK            = DISABLED;
-  infoSettings.persistent_info        = ENABLED;
-  infoSettings.fan_percentage         = SHOW_FAN_PERCENTAGE;
-  infoSettings.file_listmode          = ENABLED;
-  infoSettings.files_sort_by          = SORT_DATE_NEW_FIRST;
   infoSettings.ack_notification       = ACK_NOTIFICATION_STYLE;
-  infoSettings.notification_m117      = DISABLED;
-  infoSettings.emulate_m600           = EMULATE_M600;
+  infoSettings.files_sort_by          = SORT_DATE_NEW_FIRST;
+  infoSettings.file_listmode          = ENABLED;
+  infoSettings.fan_percentage         = SHOW_FAN_PERCENTAGE;
+  infoSettings.persistent_info        = ENABLED;
+  infoSettings.terminalACK            = DISABLED;
+  infoSettings.notification_m117      = NOTIFICATION_M117;
   infoSettings.prog_disp_type         = ELAPSED_REMAINING;
+  infoSettings.layer_disp_type        = SHOW_LAYER_HEIGHT;
 
 // Marlin Mode Settings (only for TFT24 V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
   infoSettings.mode                   = DEFAULT_LCD_MODE;
@@ -58,9 +61,6 @@ void infoSettingsReset(void)
   infoSettings.marlin_mode_showtitle  = MARLIN_SHOW_BANNER;
   infoSettings.marlin_type            = LCD12864;
 
-// RRF Mode Settings
-  infoSettings.rrf_macros_enable      = 0;
-
 // Printer / Machine Settings
   infoSettings.hotend_count           = HOTEND_NUM;
   infoSettings.bed_en                 = ENABLE;
@@ -70,7 +70,6 @@ void infoSettingsReset(void)
   infoSettings.ctrl_fan_en            = ENABLE_CTRL_FAN;
   infoSettings.min_ext_temp           = PREVENT_COLD_EXTRUSION_MINTEMP;
   infoSettings.auto_load_leveling     = AUTO_SAVE_LOAD_BL_VALUE;
-  infoSettings.touchmi_sensor         = TOUCHMI_SENSOR_VALUE;
   infoSettings.onboardSD              = AUTO;  //ENABLED / DISABLED / AUTO
   infoSettings.m27_refresh_time       = M27_REFRESH;
   infoSettings.m27_active             = M27_WATCH_OTHER_SOURCES;
@@ -88,9 +87,12 @@ void infoSettingsReset(void)
 
   infoSettings.move_speed             = 1;  // index on infoSettings.axis_speed, infoSettings.ext_speed
 
+  infoSettings.invert_axis            = default_invertAxis;
+
   infoSettings.xy_offset_probing      = ENABLED;
-  infoSettings.z_raise_probing        = PROBING_Z_RAISE;
+  infoSettings.z_raise_probing        = Z_RAISE_PROBING;
   infoSettings.z_steppers_alignment   = DISABLED;
+  infoSettings.touchmi_sensor         = TOUCHMI_SENSOR_VALUE;
 
 // Power Supply Settings (only if connected to TFT controller)
   infoSettings.auto_off               = DISABLED;
@@ -98,8 +100,7 @@ void infoSettingsReset(void)
   infoSettings.auto_off_temp          = AUTO_SHUT_DOWN_MAXTEMP;
 
 // Filament Runout Settings (only if connected to TFT controller)
-  infoSettings.runout                 = FIL_SENSOR_TYPE;
-  infoSettings.runout_invert          = FIL_RUNOUT_INVERTING;
+  infoSettings.runout                 = (FIL_SENSOR_TYPE | (FIL_RUNOUT_INVERTING << RUNOUT_INVERT) | (FIL_RUNOUT_NC << RUNOUT_NO_NC));
   infoSettings.runout_noise_ms        = FIL_NOISE_THRESHOLD;
   infoSettings.runout_distance        = FILAMENT_RUNOUT_DISTANCE_MM;
 
@@ -110,10 +111,7 @@ void infoSettingsReset(void)
   infoSettings.btt_ups                = BTT_MINI_UPS;
 
 // Other Device-Specific Settings
-  infoSettings.touchSound             = ENABLED;
-  infoSettings.toastSound             = ENABLED;
-  infoSettings.alertSound             = ENABLED;
-  infoSettings.heaterSound            = ENABLED;
+  infoSettings.sounds                 = default_sounds;
   infoSettings.lcd_brightness         = DEFAULT_LCD_BRIGHTNESS;
   infoSettings.lcd_idle_brightness    = DEFAULT_LCD_IDLE_BRIGHTNESS;
   infoSettings.lcd_idle_time          = DEFAULT_LCD_IDLE_TIME;
@@ -127,11 +125,14 @@ void infoSettingsReset(void)
   #endif
 
 // Start, End & Cancel Gcode Commands
-  infoSettings.send_start_gcode       = DISABLED;
-  infoSettings.send_end_gcode         = DISABLED;
-  infoSettings.send_cancel_gcode      = ENABLED;
+  infoSettings.send_gcodes            = DISABLED;
 
 // All the remaining array initializations
+  for (int i = 1; i < MAX_SERIAL_PORT_COUNT; i++)  // supplemetary serial ports
+  {
+    infoSettings.serial_port[i]       = DISABLED;
+  }
+
   for (int i = 0; i < MAX_HEATER_COUNT; i++)
   {
     infoSettings.max_temp[i]          = default_max_temp[i];
@@ -144,7 +145,6 @@ void infoSettingsReset(void)
 
   for (int i = 0; i < AXIS_NUM; i++)  //x, y, z
   {
-    infoSettings.invert_axis[i]       = DISABLED;
     infoSettings.machine_size_min[i]  = default_size_min[i];
     infoSettings.machine_size_max[i]  = default_size_max[i];
   }
@@ -239,6 +239,7 @@ void setupMachine(void)
   if (infoMachineSettings.firmwareType == FW_REPRAPFW)
   {
     mustStoreCmd("M555 P2\n");  //  Set RRF compatibility behaves similar to 2: Marlin
+    mustStoreCmd("M552\n"); // query network state, populate IP if the screen boots up after RRF
   }
   mustStoreCmd("M82\n");  // Set extruder to absolute mode
   mustStoreCmd("G90\n");  // Set to Absolute Positioning
