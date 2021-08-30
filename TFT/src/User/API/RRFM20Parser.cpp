@@ -58,28 +58,12 @@ int compare_items(void *arg, const void *a, const void *b)
 
   switch (infoSettings.files_sort_by)
   {
-    case SORT_DATE_NEW_FIRST:
-      return strcmp(((M20_LIST_ITEM *)b)->timestamp, ((M20_LIST_ITEM *)a)->timestamp);
-    case SORT_DATE_OLD_FIRST:
-      return strcmp(((M20_LIST_ITEM *)a)->timestamp, ((M20_LIST_ITEM *)b)->timestamp);
     case SORT_NAME_ASCENDING:
       return strcasecmp(((M20_LIST_ITEM *)a)->file_name, ((M20_LIST_ITEM *)b)->file_name);
     case SORT_NAME_DESCENDING:
       return strcasecmp(((M20_LIST_ITEM *)b)->file_name, ((M20_LIST_ITEM *)a)->file_name);
   }
   return strcmp(((M20_LIST_ITEM *)a)->file_name, ((M20_LIST_ITEM *)b)->file_name);
-}
-
-void RRFM20Parser::startObject()
-{
-  in_object = in_files;
-}
-
-void RRFM20Parser::endObject()
-{
-  in_object = false;
-  if (in_files && fileCount < FILE_NUM)
-    ++fileCount;
 }
 
 void RRFM20Parser::endDocument()
@@ -90,7 +74,6 @@ void RRFM20Parser::endDocument()
   {
     switch (infoSettings.files_sort_by)
     {
-      // TODO remove workaround for broken M20 S3 in gcode.c (request_M20_rrf_timestamps)
       case SORT_DATE_NEW_FIRST:
         // M20 appears to be sorted oldest first, implicitly, reverse it.
         int i, j;
@@ -121,8 +104,6 @@ void RRFM20Parser::endDocument()
       infoFile.file[infoFile.fileCount++] = fileList[i].display_name;
     }
 
-    if (fileList[i].timestamp != NULL)
-      free(fileList[i].timestamp);
   }
   need_reset = true;
 }
@@ -131,19 +112,8 @@ void RRFM20Parser::endDocument()
 // above ~8k response payloads result in pagination that needs handling
 void RRFM20Parser::key(const char *key)
 {
-  state = none;
   if (!in_array)
     in_files = strcmp(FILES, key) == 0;
-
-  if (in_files)
-  {
-    if (strcmp(FILES_TYPE, key) == 0)
-      state = type;
-    else if (strcmp(FILES_NAME, key) == 0)
-      state = name;
-    else if (strcmp(FILES_DATE, key) == 0)
-      state = date;
-  }
 }
 
 void RRFM20Parser::value(const char *value)
@@ -151,60 +121,23 @@ void RRFM20Parser::value(const char *value)
   if (!in_files)
     return;
 
-  if (in_object)
+  uint16_t current = fileCount++;
+  if (current >= FILE_NUM)
+    return;
+
+  if ((fileList[current].is_directory = (*value == '*')))
   {
-    if (fileCount >= FILE_NUM)
-      return;
-
-    uint16_t len = strlen(value + 1);
-
-    switch (state)
-    {
-      case type:
-        fileList[fileCount].is_directory = value[0] == 'd';
-        break;
-
-      case name:
-        if ((fileList[fileCount].file_name = (TCHAR *)malloc(len)) != NULL)
-          strcpy(fileList[fileCount].file_name, value);
-        value = macro_sort ? skip_number(value) : value;
-        len = strlen(value) + 1;
-        if ((fileList[fileCount].display_name = (TCHAR *)malloc(len)) != NULL)
-          strcpy(fileList[fileCount].display_name, value);
-        break;
-
-      case date:
-        if ((fileList[fileCount].timestamp = (TCHAR *)malloc(len)) != NULL)
-          strcpy(fileList[fileCount].timestamp, value);
-        break;
-
-      case none:
-        break;
-    }
-    state = none;
+    ++value;
   }
-  else
-  {
-    uint16_t current = fileCount++;
-    if (current >= FILE_NUM)
-      return;
+  uint16_t len = strlen(value) + 1;
 
-    fileList[current].timestamp = NULL;
+  if ((fileList[current].file_name = (TCHAR *)malloc(len)) != NULL)
+    strcpy(fileList[current].file_name, value);
 
-    if ((fileList[current].is_directory = (*value == '*')))
-    {
-      ++value;
-    }
-    uint16_t len = strlen(value) + 1;
-
-    if ((fileList[current].file_name = (TCHAR *)malloc(len)) != NULL)
-      strcpy(fileList[current].file_name, value);
-
-    value = macro_sort ? skip_number(value) : value;
-    len = strlen(value) + 1;
-    if ((fileList[current].display_name = (TCHAR *)malloc(len)) != NULL)
-      strcpy(fileList[current].display_name, value);
-  }
+  value = macro_sort ? skip_number(value) : value;
+  len = strlen(value) + 1;
+  if ((fileList[current].display_name = (TCHAR *)malloc(len)) != NULL)
+    strcpy(fileList[current].display_name, value);
 }
 
 void parseM20Response(const char *data, bool macro_sorting)

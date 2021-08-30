@@ -283,8 +283,6 @@ void request_M20_rrf_streaming(char *nextdir, FP_STREAM_HANDLER handler)
   resetRequestCommandInfo("{", "}", "Error:", NULL, NULL);
   requestCommandInfo.stream_handler = handler;
 
-  // TODO replace S2 with S3, for some reason, this immediately crashes when S3 is used???
-  // S3 works perfectly fine if used in request_M20_rrf above.
   mustStoreCmd("M20 S2 P\"/%s\"\n", nextdir);
 
   loopProcessToCondition(&isWaitingResponse);
