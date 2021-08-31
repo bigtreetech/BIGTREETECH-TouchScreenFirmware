@@ -670,7 +670,7 @@ void loopPrintFromTFT(void)
       {
         infoCmd.queue[infoCmd.index_w].gcode[gCode_count++] = '\n';
         infoCmd.queue[infoCmd.index_w].gcode[gCode_count] = 0;  // terminate string
-        infoCmd.queue[infoCmd.index_w].src = SERIAL_PORT;
+        infoCmd.queue[infoCmd.index_w].port_index = PORT_1;     // port index for SERIAL_PORT
         infoCmd.index_w = (infoCmd.index_w + 1) % CMD_MAX_LIST;
         infoCmd.count++;
       }

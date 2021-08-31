@@ -585,7 +585,7 @@ void terminalCache(char *stream, TERMINAL_SRC src)
 
   if (src == TERMINAL_GCODE)
   {
-    saveGcodeTerminalCache(serialPort[serialPortIndex[infoCmd.queue[infoCmd.index_r].src]].id);  // serial port ID (e.g. "2" for SERIAL_PORT_2)
+    saveGcodeTerminalCache(serialPort[infoCmd.queue[infoCmd.index_r].port_index].id);  // serial port ID (e.g. "2" for SERIAL_PORT_2)
     saveGcodeTerminalCache(">>");
   }
 

@@ -6,7 +6,7 @@
 
 char dmaL2Cache[ACK_MAX_SIZE];
 static uint16_t ack_index = 0;
-static uint8_t ack_cur_src = SERIAL_PORT;
+static uint8_t ack_src_port_index = PORT_1;  // port index for SERIAL_PORT;
 
 static const char errormagic[] = "Error:";
 static const char echomagic[] = "echo:";
@@ -66,9 +66,9 @@ const ECHO knownEcho[] = {
 //  forceIgnore[msgId] = state;
 //}
 
-void setCurrentAckSrc(uint8_t src)
+void setCurrentAckSrc(uint8_t portIndex)
 {
-  ack_cur_src = src;
+  ack_src_port_index = portIndex;
 }
 
 static bool ack_seen(const char * str)
@@ -1257,9 +1257,9 @@ void parseACK(void)
     }
 
   parse_end:
-    if (ack_cur_src != SERIAL_PORT)
+    if (ack_src_port_index != PORT_1)  // if different than port index for SERIAL_PORT
     {
-      Serial_Puts(ack_cur_src, dmaL2Cache);
+      Serial_Puts(serialPort[ack_src_port_index].port, dmaL2Cache);
     }
     #ifdef SERIAL_PORT_2
       else if (!ack_seen("ok") || ack_seen("T:") || ack_seen("T0:"))  // if a spontaneous ACK message
@@ -1267,7 +1267,7 @@ void parseACK(void)
         // pass on the spontaneous ACK message to all the supplementary serial ports (since these messages come unrequested)
         for (uint8_t i = 1; i < SERIAL_PORT_COUNT; i++)
         {
-          if (serialPort[i].activePort)  // if the port is connected to an active device (a device that already sent data to the TFT)
+          if (infoSettings.serial_port[i] > 0)  // if serial port is enabled
           {
             Serial_Puts(serialPort[i].port, dmaL2Cache);  // pass on the ACK message to the port
           }
@@ -1290,19 +1290,20 @@ void parseRcvGcode(void)
     // scan all the supplementary serial ports
     for (uint8_t i = 1; i < SERIAL_PORT_COUNT; i++)
     {
-      port = serialPort[i].port;
-
-      if (infoHost.rx_ok[port] == true)
+      if (infoSettings.serial_port[i] > 0)  // if serial port is enabled
       {
-        infoHost.rx_ok[port] = false;
+        port = serialPort[i].port;
 
-        while (dmaL1NotEmpty(port))
+        if (infoHost.rx_ok[port] == true)
         {
-          syncL2CacheFromL1(port);
-          storeCmdFromUART(port, dmaL2Cache);
-        }
+          infoHost.rx_ok[port] = false;
 
-        serialPort[i].activePort = true;
+          while (dmaL1NotEmpty(port))
+          {
+            syncL2CacheFromL1(port);
+            storeCmdFromUART(i, dmaL2Cache);
+          }
+        }
       }
     }
   #endif
