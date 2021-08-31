@@ -105,11 +105,11 @@ void HW_Init(void)
 void HW_InitMode(uint8_t mode)
 {
   if (infoSettings.serial_alwaysOn == ENABLED)  // disable serial comm if `serial_alwaysOn` is disabled
-    Serial_Init(-1);
+    Serial_Init(ALL_PORTS);
 
   if (mode == MODE_SERIAL_TSC)
   {
-    Serial_Init(-1);  // enable serial comm in Touch mode
+    Serial_Init(ALL_PORTS);  // enable serial comm in Touch mode
 
     #ifdef BUZZER_PIN  // enable buzzer in Touch mode
       Buzzer_Config();

@@ -26,7 +26,7 @@ void menuDisconnect(void)
   GUI_DispStringInRect(20, 0, LCD_WIDTH - 20, LCD_HEIGHT, textSelect(LABEL_DISCONNECT_INFO));
   GUI_DispStringInRect(20, LCD_HEIGHT - (BYTE_HEIGHT * 2), LCD_WIDTH - 20, LCD_HEIGHT, textSelect(LABEL_TOUCH_TO_EXIT));
 
-  Serial_DeInit(-1);
+  Serial_DeInit(ALL_PORTS);
   while (!isPress())
   {
     #ifdef LCD_LED_PWM_CHANNEL
@@ -39,7 +39,7 @@ void menuDisconnect(void)
       LCD_CheckDimming();
     #endif
   }
-  Serial_Init(-1);
+  Serial_Init(ALL_PORTS);
 
   infoMenu.cur--;
 }

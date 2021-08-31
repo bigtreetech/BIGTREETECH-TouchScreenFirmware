@@ -14,6 +14,7 @@ extern "C" {
 
 typedef enum
 {
+  ALL_PORTS = -1,
   PORT_1 = 0,
   #ifdef SERIAL_PORT_2
     PORT_2,
