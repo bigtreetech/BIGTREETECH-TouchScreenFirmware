@@ -1257,8 +1257,8 @@ void parseACK(void)
     }
 
   parse_end:
-    if (ack_src_port_index != PORT_1)  // if different than port index for SERIAL_PORT
-    {
+    if (ack_src_port_index != PORT_1)  // if the ACK message is related to a gcode originated by a supplementary serial port,
+    {                                  // forward the message to the supplementary serial port
       Serial_Puts(serialPort[ack_src_port_index].port, dmaL2Cache);
     }
     #ifdef SERIAL_PORT_2
