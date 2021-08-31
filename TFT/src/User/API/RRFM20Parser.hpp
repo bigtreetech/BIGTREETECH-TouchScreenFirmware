@@ -18,9 +18,8 @@ extern "C"
     TCHAR *file_name;
     TCHAR *timestamp;
   } M20_LIST_ITEM;
-  void parseMacroListResponse(const char *data);
   void parseJobListResponse(const char *data);
-  void parseJobListResponseStreaming(const char *data);
+  void parseMacroListResponse(const char *data);
 #ifdef __cplusplus
 }
 #endif
@@ -50,6 +49,7 @@ public:
   bool macro_sort = false;
   bool need_reset = false;
 
+  virtual ~RRFM20Parser() {}
   inline void startDocument() {}
   virtual void startObject();
   virtual void endObject();

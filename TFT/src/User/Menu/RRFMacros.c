@@ -9,9 +9,7 @@ extern const GUI_RECT titleRect;
 void scanInfoFilesFs(void)
 {
   clearInfoFile();
-  char *data = request_M20_rrf(infoFile.title);
-  parseMacroListResponse(data);
-  clearRequestCommandInfo();
+  request_M20_rrf(infoFile.title, false, parseMacroListResponse);
 }
 
 void rrfShowRunningMacro(void)

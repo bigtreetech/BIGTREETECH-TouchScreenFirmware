@@ -150,17 +150,16 @@ void ParseACKJsonParser::value(const char *value)
 
 void rrfParseACK(const char *data)
 {
-  static JsonStreamingParser parser;
   static ParseACKJsonParser handler;
 
-  parser.setListener(&handler);
-  if (handler.need_parser_reset)
-  {
-    parser.reset();
-    handler.need_parser_reset = false;
-  }
+  jsonStreamingParser.setListener(&handler);
   while (*data != 0)
   {
-    parser.parse(*data++);
+    jsonStreamingParser.parse(*data++);
+  }
+  if (handler.need_parser_reset)
+  {
+    jsonStreamingParser.reset();
+    handler.need_parser_reset = false;
   }
 }

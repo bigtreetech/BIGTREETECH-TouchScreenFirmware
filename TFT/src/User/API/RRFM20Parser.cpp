@@ -58,6 +58,7 @@ int compare_items(void *arg, const void *a, const void *b)
 
   switch (infoSettings.files_sort_by)
   {
+    // if M20 S3 ever works, we can make use of this
     case SORT_DATE_NEW_FIRST:
       return strcmp(((M20_LIST_ITEM *)b)->timestamp, ((M20_LIST_ITEM *)a)->timestamp);
     case SORT_DATE_OLD_FIRST:
@@ -90,8 +91,8 @@ void RRFM20Parser::endDocument()
   {
     switch (infoSettings.files_sort_by)
     {
-      // TODO remove workaround for broken M20 S3 in gcode.c (request_M20_rrf_timestamps)
       case SORT_DATE_NEW_FIRST:
+        // TODO use this implicit sort until M20 S3 works
         // M20 appears to be sorted oldest first, implicitly, reverse it.
         int i, j;
         for (i = 0, j = fileCount - 1; i < j; ++i, --j)
@@ -209,13 +210,25 @@ void RRFM20Parser::value(const char *value)
 
 void parseM20Response(const char *data, bool macro_sorting)
 {
-  JsonStreamingParser parser;
-  RRFM20Parser handler;
-  handler.macro_sort = macro_sorting;
-  parser.setListener(&handler);
+  static RRFM20Parser *handler = NULL;
+
+  if (handler == NULL)
+  {
+    handler = new RRFM20Parser;
+  }
+
+  handler->macro_sort = macro_sorting;
+  jsonStreamingParser.setListener(handler);
   while (*data != 0)
   {
-    parser.parse(*data++);
+    jsonStreamingParser.parse(*data++);
+  }
+
+  if (handler->need_reset)
+  {
+    jsonStreamingParser.reset();
+    delete handler;
+    handler = NULL;
   }
 }
 
@@ -224,26 +237,7 @@ void parseMacroListResponse(const char *data)
   parseM20Response(data, true);
 }
 
-void parseJobListResponse(const char *data)
+void parseJobListResponse(const char  *data)
 {
   parseM20Response(data, false);
-}
-
-void parseJobListResponseStreaming(const char  *data)
-{
-  static JsonStreamingParser parser;
-  static RRFM20Parser handler;
-
-  handler.macro_sort = false;
-  parser.setListener(&handler);
-  while (*data != 0)
-  {
-    parser.parse(*data++);
-  }
-
-  if (handler.need_reset)
-  {
-    handler.reset();
-    parser.reset();
-  }
 }
