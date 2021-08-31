@@ -28,24 +28,24 @@ static inline void Serial_InitPrimary(void)
   reminderSetUnConnected();  // reset connect status
   reminderMessage(LABEL_UNCONNECTED, STATUS_UNCONNECT);
 
-  Serial_Config(serialPort[0].port, serialPort[0].cacheSize, baudrateValues[infoSettings.serial_port[0]]);
+  Serial_Config(serialPort[PORT_1].port, serialPort[PORT_1].cacheSize, baudrateValues[infoSettings.serial_port[PORT_1]]);
 }
 
 static inline void Serial_DeInitPrimary(void)
 {
-  Serial_DeConfig(serialPort[0].port);
+  Serial_DeConfig(serialPort[PORT_1].port);
 }
 
 void Serial_Init(int8_t port)
 {
-  if (port <= 0)  // if primary or all serial ports
+  if (port <= PORT_1)  // if primary or all serial ports
   {
     Serial_InitPrimary();
 
     #ifdef SERIAL_PORT_2
-      if (port < 0)  // if < 0, initialize also all the supplementary serial ports
+      if (port < PORT_1)  // if < 0, initialize also all the supplementary serial ports
       {
-        for (uint8_t i = 1; i < SERIAL_PORT_COUNT; i++)
+        for (uint8_t i = PORT_2; i < SERIAL_PORT_COUNT; i++)
         {
           // the supplementary serial ports should be enabled according to config.ini.
           // Disable the serial port when it is not in use and/or not connected to a device (floating) to
@@ -69,14 +69,14 @@ void Serial_Init(int8_t port)
 
 void Serial_DeInit(int8_t port)
 {
-  if (port <= 0)  // if primary or all serial ports
+  if (port <= PORT_1)  // if primary or all serial ports
   {
     Serial_DeInitPrimary();
 
     #ifdef SERIAL_PORT_2
-      if (port < 0)  // if < 0, deinitialize also all the supplementary serial ports
+      if (port < PORT_1)  // if < 0, deinitialize also all the supplementary serial ports
       {
-        for (uint8_t i = 1; i < SERIAL_PORT_COUNT; i++)
+        for (uint8_t i = PORT_2; i < SERIAL_PORT_COUNT; i++)
         {
           Serial_DeConfig(serialPort[i].port);
         }

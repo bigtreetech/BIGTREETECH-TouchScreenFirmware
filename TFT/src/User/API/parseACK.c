@@ -1265,7 +1265,7 @@ void parseACK(void)
       else if (!ack_seen("ok") || ack_seen("T:") || ack_seen("T0:"))  // if a spontaneous ACK message
       {
         // pass on the spontaneous ACK message to all the supplementary serial ports (since these messages come unrequested)
-        for (uint8_t i = 1; i < SERIAL_PORT_COUNT; i++)
+        for (uint8_t i = PORT_2; i < SERIAL_PORT_COUNT; i++)
         {
           if (infoSettings.serial_port[i] > 0)  // if serial port is enabled
           {
@@ -1288,7 +1288,7 @@ void parseRcvGcode(void)
     uint8_t port;
 
     // scan all the supplementary serial ports
-    for (uint8_t i = 1; i < SERIAL_PORT_COUNT; i++)
+    for (uint8_t i = PORT_2; i < SERIAL_PORT_COUNT; i++)
     {
       if (infoSettings.serial_port[i] > 0)  // if serial port is enabled
       {
