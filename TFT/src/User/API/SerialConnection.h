@@ -32,7 +32,7 @@ typedef enum
     PORT_6,
   #endif
   SERIAL_PORT_COUNT
-} SERIAL_PORTS;  // serial ports (primary and supplementary)
+} SERIAL_PORT_INDEX;  // serial port index for all enabled serial ports (This is not actual physical port number)
 
 typedef struct
 {

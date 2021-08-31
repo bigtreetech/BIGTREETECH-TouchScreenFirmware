@@ -19,13 +19,13 @@ const SERIAL_PORT_INFO serialPort[SERIAL_PORT_COUNT] = {
     {SERIAL_PORT_3, SERIAL_PORT_3_QUEUE_SIZE, "3", "3 - UART3"},
   #endif
   #ifdef SERIAL_PORT_4
-    {SERIAL_PORT_4, SERIAL_PORT_4_QUEUE_SIZE, "4", "4 - UART4"}
+    {SERIAL_PORT_4, SERIAL_PORT_4_QUEUE_SIZE, "4", "4 - UART4"},
   #endif
   #ifdef SERIAL_PORT_5
-    {SERIAL_PORT_5, SERIAL_PORT_5_QUEUE_SIZE, "5", "5 - UART5"}
+    {SERIAL_PORT_5, SERIAL_PORT_5_QUEUE_SIZE, "5", "5 - UART5"},
   #endif
   #ifdef SERIAL_PORT_6
-    {SERIAL_PORT_6, SERIAL_PORT_6_QUEUE_SIZE, "6", "6 - UART6"}
+    {SERIAL_PORT_6, SERIAL_PORT_6_QUEUE_SIZE, "6", "6 - UART6"},
   #endif
 };
 
@@ -59,12 +59,12 @@ static inline void Serial_InitPrimary(void)
   reminderSetUnConnected();  // reset connect status
   reminderMessage(LABEL_UNCONNECTED, STATUS_UNCONNECT);
 
-  Serial_Config(serialPort[0].port, serialPort[0].cacheSize, baudrateValues[infoSettings.serial_port[0]]);
+  Serial_Config(serialPort[PORT_1].port, serialPort[PORT_1].cacheSize, baudrateValues[infoSettings.serial_port[0]]);
 }
 
 static inline void Serial_DeInitPrimary(void)
 {
-  Serial_DeConfig(serialPort[0].port);
+  Serial_DeConfig(serialPort[PORT_1].port);
 }
 
 void Serial_Init(int8_t port)
