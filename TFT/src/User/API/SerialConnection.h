@@ -48,6 +48,7 @@ extern const char * const baudrateNames[BAUDRATE_COUNT];      // baudrate names
 
 bool getSerialPortActive(int8_t port);               // check if a serial port is active
 void setSerialPortActive(int8_t port, bool active);  // set enable/disable a serial port
+char * getSerialID(uint8_t port);                    // get serial port ID for display in terminal
 void Serial_Init(int8_t port);                       // -1 to apply to all serial ports (primary and supplementary)
 void Serial_DeInit(int8_t port);                     // -1 to apply to all serial ports (primary and supplementary)
 

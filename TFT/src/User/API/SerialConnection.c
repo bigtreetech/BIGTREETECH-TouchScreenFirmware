@@ -29,35 +29,6 @@ const SERIAL_PORT_INFO serialPort[SERIAL_PORT_COUNT] = {
   #endif
 };
 
-const uint8_t serialPortIndex[_UART_CNT] = {
-  PORT_1,
-  #ifdef SERIAL_PORT_2
-    PORT_2,
-  #else
-    0,
-  #endif
-  #ifdef SERIAL_PORT_3
-    PORT_3,
-  #else
-    0,
-  #endif
-  #ifdef SERIAL_PORT_4
-    PORT_4,
-  #else
-    0,
-  #endif
-  #ifdef SERIAL_PORT_5
-    PORT_5,
-  #else
-    0,
-  #endif
-  #ifdef SERIAL_PORT_6
-    PORT_6,
-  #else
-    0,
-  #endif
-};
-
 const uint32_t baudrateValues[BAUDRATE_COUNT] =    { 0,     2400,   9600,   19200,   38400,   57600,   115200,   250000,   500000,   1000000};
 const char * const baudrateNames[BAUDRATE_COUNT] = {"OFF", "2400", "9600", "19200", "38400", "57600", "115200", "250000", "500000", "1000000"};
 
@@ -69,6 +40,17 @@ bool getSerialPortActive(int8_t port)
 void setSerialPortActive(int8_t port, bool active)
 {
   SET_BIT_VALUE(serialActive, port, active);
+}
+
+char * getSerialID(uint8_t port)
+{
+  for (uint8_t i = 0; i < SERIAL_PORT_COUNT; i++)
+  {
+    if (serialPort[i].port == port)
+      return serialPort[i].id;
+  }
+
+  return NULL;
 }
 
 static inline void Serial_InitPrimary(void)
