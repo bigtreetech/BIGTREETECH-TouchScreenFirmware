@@ -222,7 +222,7 @@ bool processKnownEcho(void)
   return isKnown;
 }
 
-bool dmaL1NotEmpty(uint8_t port)
+static inline bool dmaL1NotEmpty(uint8_t port)
 {
   return dmaL1Data[port].rIndex != dmaL1Data[port].wIndex;
 }
