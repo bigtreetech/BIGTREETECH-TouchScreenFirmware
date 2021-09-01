@@ -59,7 +59,7 @@ void Serial_Init(int8_t port)
   #ifdef SERIAL_PORT_2
     else if (port < SERIAL_PORT_COUNT)  // if supplementary serial port
     {
-      if (infoSettings.serial_port[port] >= 0)  // if serial port is enabled
+      if (infoSettings.serial_port[port] > 0)  // if serial port is enabled
       {
         Serial_Config(serialPort[port].port, serialPort[port].cacheSize, baudrateValues[infoSettings.serial_port[port]]);
       }
