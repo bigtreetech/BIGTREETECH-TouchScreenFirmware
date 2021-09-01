@@ -25,12 +25,6 @@ typedef enum
   #ifdef SERIAL_PORT_4
     PORT_4,
   #endif
-  #ifdef SERIAL_PORT_5
-    PORT_5,
-  #endif
-  #ifdef SERIAL_PORT_6
-    PORT_6,
-  #endif
   SERIAL_PORT_COUNT
 } SERIAL_PORT_INDEX;  // serial port index for all enabled serial ports (This is not actual physical port number)
 
