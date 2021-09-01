@@ -236,7 +236,7 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
       case ICON_POS_Z:
         if (layerDisplayType == SHOW_LAYER_BOTH)
         {
-          sprintf(tempstr, "%3.2fmm", (infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS));
+          sprintf(tempstr, "%6.2fmm", (infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS));
         }
         else if (layerDisplayType == CLEAN_LAYER_NUMBER || layerDisplayType == CLEAN_LAYER_BOTH)
         {
