@@ -164,7 +164,7 @@ void menuBeforePrinting(void)
 static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
 {
   uint8_t icon = printingIcon[icon_pos];
-  char tempstr[10];
+  char tempstr[14];
 
   switch (icon_pos)
   {
