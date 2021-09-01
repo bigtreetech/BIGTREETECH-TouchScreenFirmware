@@ -2,9 +2,9 @@
 #include "includes.h"
 #include "RRFParseACK.hpp"
 
-#define ACK_MAX_SIZE 512
+#define L2_CACHE_SIZE 512  // including ending character '\0'
 
-char dmaL2Cache[ACK_MAX_SIZE];
+char dmaL2Cache[L2_CACHE_SIZE];
 static uint16_t ack_index = 0;
 static uint8_t ack_src_port_index = PORT_1;  // port index for SERIAL_PORT;
 
@@ -74,9 +74,9 @@ void setCurrentAckSrc(uint8_t portIndex)
 static bool ack_seen(const char * str)
 {
   uint16_t i;
-  for (ack_index = 0; ack_index < ACK_MAX_SIZE && dmaL2Cache[ack_index] != 0; ack_index++)
+  for (ack_index = 0; ack_index < L2_CACHE_SIZE && dmaL2Cache[ack_index] != 0; ack_index++)
   {
-    for (i = 0; (ack_index + i) < ACK_MAX_SIZE && str[i] != 0 && dmaL2Cache[ack_index + i] == str[i]; i++)
+    for (i = 0; (ack_index + i) < L2_CACHE_SIZE && str[i] != 0 && dmaL2Cache[ack_index + i] == str[i]; i++)
     {}
     if (str[i] == 0)
     {
@@ -91,9 +91,9 @@ static bool ack_continue_seen(const char * str)
 { // unlike "ack_seen()", this retains "ack_index" if the searched string is not found
   uint16_t i;
   uint16_t indexBackup = ack_index;
-  for (; ack_index < ACK_MAX_SIZE && dmaL2Cache[ack_index] != 0; ack_index++)
+  for (; ack_index < L2_CACHE_SIZE && dmaL2Cache[ack_index] != 0; ack_index++)
   {
-    for (i = 0; (ack_index + i) < ACK_MAX_SIZE && str[i] != 0 && dmaL2Cache[ack_index + i] == str[i]; i++)
+    for (i = 0; (ack_index + i) < L2_CACHE_SIZE && str[i] != 0 && dmaL2Cache[ack_index + i] == str[i]; i++)
     {}
     if (str[i] == 0)
     {
@@ -108,7 +108,7 @@ static bool ack_continue_seen(const char * str)
 static bool ack_cmp(const char * str)
 {
   uint16_t i;
-  for (i = 0; i < ACK_MAX_SIZE && dmaL2Cache[i] != 0 && str[i] != 0; i++)
+  for (i = 0; i < L2_CACHE_SIZE && dmaL2Cache[i] != 0 && str[i] != 0; i++)
   {
     if (str[i] != dmaL2Cache[i])
       return false;
@@ -222,22 +222,28 @@ bool processKnownEcho(void)
   return isKnown;
 }
 
-static inline bool dmaL1NotEmpty(uint8_t port)
+bool syncL2CacheFromL1(uint8_t port)
 {
-  return dmaL1Data[port].rIndex != dmaL1Data[port].wIndex;
-}
+  DMA_CIRCULAR_BUFFER * dmaL1Data_ptr = &dmaL1Data[port];  // make access to most used variables/attributes faster reducing also the code
+  uint16_t * rIndex_ptr = &dmaL1Data_ptr->rIndex;          // make access to most used variables/attributes faster reducing also the code
 
-void syncL2CacheFromL1(uint8_t port)
-{
+  if (*rIndex_ptr == dmaL1Data_ptr->wIndex)  // if L1 cache is empty
+    return false;
+
   uint16_t i = 0;
 
-  while (dmaL1NotEmpty(port))
+  while (i < (L2_CACHE_SIZE - 1) && *rIndex_ptr != dmaL1Data_ptr->wIndex)  // retrieve data until L2 cache is full or L1 cache is empty
   {
-    dmaL2Cache[i] = dmaL1Data[port].cache[dmaL1Data[port].rIndex];
-    dmaL1Data[port].rIndex = (dmaL1Data[port].rIndex + 1) % dmaL1Data[port].cacheSize;
-    if (dmaL2Cache[i++] == '\n') break;
+    dmaL2Cache[i] = dmaL1Data_ptr->cache[*rIndex_ptr];
+    *rIndex_ptr = (*rIndex_ptr + 1) % dmaL1Data_ptr->cacheSize;
+
+    if (dmaL2Cache[i++] == '\n')
+      break;
   }
-  dmaL2Cache[i] = 0;  // End character
+
+  dmaL2Cache[i] = 0;  // end character
+
+  return true;
 }
 
 void hostActionCommands(void)
@@ -372,10 +378,9 @@ void parseACK(void)
 {
   if (infoHost.rx_ok[SERIAL_PORT] != true) return;  // not get response data
 
-  while (dmaL1NotEmpty(SERIAL_PORT))
+  while (syncL2CacheFromL1(SERIAL_PORT))  // if some data are retrieved from L1 to L2 cache
   {
     bool avoid_terminal = false;
-    syncL2CacheFromL1(SERIAL_PORT);
     infoHost.rx_ok[SERIAL_PORT] = false;
 
     #if defined(SERIAL_DEBUG_PORT) && defined(DEBUG_SERIAL_COMM)
@@ -1298,9 +1303,8 @@ void parseRcvGcode(void)
         {
           infoHost.rx_ok[port] = false;
 
-          while (dmaL1NotEmpty(port))
+          while (syncL2CacheFromL1(port))  // if some data are retrieved from L1 to L2 cache
           {
-            syncL2CacheFromL1(port);
             storeCmdFromUART(i, dmaL2Cache);
           }
         }
