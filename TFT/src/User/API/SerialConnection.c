@@ -5,8 +5,6 @@
 #define SERIAL_PORT_2_QUEUE_SIZE 512
 #define SERIAL_PORT_3_QUEUE_SIZE 512
 #define SERIAL_PORT_4_QUEUE_SIZE 512
-#define SERIAL_PORT_5_QUEUE_SIZE 512
-#define SERIAL_PORT_6_QUEUE_SIZE 512
 
 uint8_t serialActive = 0; // Bit array to store serial port state
 
@@ -20,12 +18,6 @@ const SERIAL_PORT_INFO serialPort[SERIAL_PORT_COUNT] = {
   #endif
   #ifdef SERIAL_PORT_4
     {SERIAL_PORT_4, SERIAL_PORT_4_QUEUE_SIZE, "4", "4 - UART4"},
-  #endif
-  #ifdef SERIAL_PORT_5
-    {SERIAL_PORT_5, SERIAL_PORT_5_QUEUE_SIZE, "5", "5 - UART5"},
-  #endif
-  #ifdef SERIAL_PORT_6
-    {SERIAL_PORT_6, SERIAL_PORT_6_QUEUE_SIZE, "6", "6 - UART6"},
   #endif
 };
 
