@@ -60,9 +60,9 @@ int compare_items(void *arg, const void *a, const void *b)
   {
     // if M20 S3 ever works, we can make use of this
     case SORT_DATE_NEW_FIRST:
-      return strcmp(((M20_LIST_ITEM *)b)->timestamp, ((M20_LIST_ITEM *)a)->timestamp);
+      return ((M20_LIST_ITEM *)b)->timestamp - ((M20_LIST_ITEM *)a)->timestamp;
     case SORT_DATE_OLD_FIRST:
-      return strcmp(((M20_LIST_ITEM *)a)->timestamp, ((M20_LIST_ITEM *)b)->timestamp);
+      return ((M20_LIST_ITEM *)a)->timestamp - ((M20_LIST_ITEM *)b)->timestamp;
     case SORT_NAME_ASCENDING:
       return strcasecmp(((M20_LIST_ITEM *)a)->file_name, ((M20_LIST_ITEM *)b)->file_name);
     case SORT_NAME_DESCENDING:
@@ -115,15 +115,14 @@ void RRFM20Parser::endDocument()
     if (fileList[i].is_directory)
     {
       infoFile.folder[infoFile.folderCount++] = fileList[i].file_name;
+      free(fileList[i].display_name);
+      fileList[i].display_name = NULL;
     }
     else
     {
       infoFile.Longfile[infoFile.fileCount] = fileList[i].file_name;
       infoFile.file[infoFile.fileCount++] = fileList[i].display_name;
     }
-
-    if (fileList[i].timestamp != NULL)
-      free(fileList[i].timestamp);
   }
   need_reset = true;
 }
@@ -166,18 +165,37 @@ void RRFM20Parser::value(const char *value)
         break;
 
       case name:
+      {
         if ((fileList[fileCount].file_name = (TCHAR *)malloc(len)) != NULL)
           strcpy(fileList[fileCount].file_name, value);
-        value = macro_sort ? skip_number(value) : value;
-        len = strlen(value) + 1;
-        if ((fileList[fileCount].display_name = (TCHAR *)malloc(len)) != NULL)
-          strcpy(fileList[fileCount].display_name, value);
+        const char *skipped = macro_sort ? skip_number(value) : value;
+        len = strlen(skipped) + 1;
+        if (macro_sort && value != skipped && (fileList[fileCount].display_name = (TCHAR *)malloc(len)) != NULL)
+        {
+          strcpy(fileList[fileCount].display_name, skipped);
+        }
+        else
+        {
+          fileList[fileCount].display_name = fileList[fileCount].file_name;
+        }
         break;
+      }
 
       case date:
-        if ((fileList[fileCount].timestamp = (TCHAR *)malloc(len)) != NULL)
-          strcpy(fileList[fileCount].timestamp, value);
+      {
+        // convert to uint to enable sorting: 2021-08-11T07:06:28
+        char *out;
+        uint8_t year = strtol(value,   &out, 10) - 1970; // will allow up to year 2225
+        uint8_t mnth = strtol(out + 1, &out, 10);
+        uint8_t date = strtol(out + 1, &out, 10);
+        uint8_t hour = strtol(out + 1, &out, 10);
+        uint8_t mins = strtol(out + 1, &out, 10);
+        uint8_t secs = strtol(out + 1, NULL, 10);
+        // uint32_t will allow about up until year 2098, 31 days in a month because I'm lazy
+        fileList[fileCount].timestamp = secs + (mins * 60) + (hour * 60 * 60) +
+          (date * 60 * 60 * 24) + (mnth * 31 * 60 * 60 * 24) + (year * 12 * 31 * 60 * 60 * 24);
         break;
+      }
 
       case none:
         break;
@@ -189,8 +207,6 @@ void RRFM20Parser::value(const char *value)
     uint16_t current = fileCount++;
     if (current >= FILE_NUM)
       return;
-
-    fileList[current].timestamp = NULL;
 
     if ((fileList[current].is_directory = (*value == '*')))
     {

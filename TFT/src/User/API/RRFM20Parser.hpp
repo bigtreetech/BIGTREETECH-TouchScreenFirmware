@@ -16,7 +16,7 @@ extern "C"
     bool is_directory;
     TCHAR *display_name;
     TCHAR *file_name;
-    TCHAR *timestamp;
+    uint32_t timestamp;
   } M20_LIST_ITEM;
   void parseJobListResponse(const char *data);
   void parseMacroListResponse(const char *data);
