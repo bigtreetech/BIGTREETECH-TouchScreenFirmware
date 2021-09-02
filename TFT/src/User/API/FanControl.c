@@ -7,8 +7,8 @@ const char* fanID[MAX_FAN_COUNT] = FAN_DISPLAY_ID;
 const char* fanCmd[MAX_FAN_COUNT] = FAN_CMD;
 
 static uint8_t setFanSpeed[MAX_FAN_COUNT] = {0};
-static bool needSetFanSpeed[MAX_FAN_COUNT] = {false};
 static uint8_t curFanSpeed[MAX_FAN_COUNT] = {0};
+static uint8_t needSetFanSpeed = 0;
 
 static bool ctrlFanQueryWait = false;
 static uint32_t nextCtrlFanTime = 0;
@@ -28,7 +28,7 @@ bool fanIsValid(uint8_t index)
 
 void fanSetSpeed(uint8_t i, uint8_t speed)
 {
-  needSetFanSpeed[i] = fanGetCurSpeed(i) != speed;
+  SET_BIT_VALUE(needSetFanSpeed, i, fanGetCurSpeed(i) != speed);
   setFanSpeed[i] = speed;
 }
 
@@ -73,11 +73,11 @@ void loopFan(void)
 {
   for (uint8_t i = 0; i < MAX_FAN_COUNT; i++)
   {
-    if (needSetFanSpeed[i] && (OS_GetTimeMs() > nextCtrlFanTime))
+    if (GET_BIT(needSetFanSpeed, i) && (OS_GetTimeMs() > nextCtrlFanTime))
     {
       if (storeCmd(fanCmd[i], setFanSpeed[i]))
       {
-        needSetFanSpeed[i] = false;
+        SET_BIT_OFF(needSetFanSpeed, i);
       }
 
       nextCtrlFanTime = OS_GetTimeMs() + NEXT_FAN_WAIT;  // avoid rapid fire, clogging the queue

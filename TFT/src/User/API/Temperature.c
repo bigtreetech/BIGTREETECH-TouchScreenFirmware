@@ -11,7 +11,7 @@ static HEATER  heater = {{}, NOZZLE0};
 static int16_t lastTarget[MAX_HEATER_COUNT] = {0};
 static uint8_t heat_update_seconds = TEMPERATURE_QUERY_SLOW_SECONDS;
 static bool    heat_update_waiting = false;
-static bool    heat_send_waiting[MAX_HEATER_COUNT];
+static uint8_t heat_send_waiting = 0;
 
 uint32_t nextHeatCheckTime = 0;
 #define AUTOREPORT_TIMEOUT (nextHeatCheckTime + 3000)  // update interval + 3 second grace period
@@ -217,13 +217,13 @@ void heatSetUpdateWaiting(bool isWaiting)
 // Set whether the heating command has been sent
 void heatSetSendWaiting(uint8_t index, bool isWaiting)
 {
-  heat_send_waiting[index] = isWaiting;
+  SET_BIT_VALUE(heat_send_waiting, index, isWaiting);
 }
 
 // Get whether has heating command in Queue
 bool heatGetSendWaiting(uint8_t index)
 {
-  return heat_send_waiting[index];
+  return GET_BIT(heat_send_waiting, index);
 }
 
 void updateNextHeatCheckTime(void)
@@ -318,9 +318,9 @@ void loopCheckHeater(void)
     if (lastTarget[i] != heater.T[i].target)
     {
       lastTarget[i] = heater.T[i].target;
-      if (heat_send_waiting[i] != true)
+      if ( GET_BIT(heat_send_waiting, i) != true)
       {
-        heat_send_waiting[i] = storeCmd("%s ", heatCmd[i]);
+        SET_BIT_VALUE(heat_send_waiting, i, storeCmd("%s ", heatCmd[i]));
       }
     }
   }

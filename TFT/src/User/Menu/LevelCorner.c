@@ -1,21 +1,15 @@
 #include "LevelCorner.h"
 #include "includes.h"
 
-const uint8_t valIconIndex[LEVEL_POINT_COUNT] = {4, 5, 1, 0, 3};
+const uint8_t valIconIndex[LEVELING_POINT_COUNT] = {4, 5, 1, 0, 3};
 
 // Buffer current Z value measured in Level Corner = {position 1, position 2, position 3, position 4, probe accuracy(M48)}
-float levelCornerPosition[LEVEL_POINT_COUNT] = {0};
-
-// Set level corner position from the Z offset measured by probe
-void setLevelCornerPosition(int16_t x, int16_t y, float position)
-{
-  levelCornerPosition[levelingGetPoint(x, y)] = position;
-}
+float levelCornerPosition[LEVELING_POINT_COUNT] = {0};
 
 // Draw values under icons
 static inline void refreshValue(MENUITEMS * levelItems, uint8_t index)
 {
-  sprintf((char *)levelItems->items[valIconIndex[index]].label.address, "%1.4f", levelCornerPosition[index]);
+  sprintf((char *)levelItems->items[valIconIndex[index]].label.address, "%.4f", levelCornerPosition[index]);
   menuDrawIconText(&levelItems->items[valIconIndex[index]], valIconIndex[index]);
 }
 
@@ -74,22 +68,7 @@ void menuLevelCorner(void)
   };
 
   KEY_VALUES key_num = KEY_IDLE;
-  float oldValue[LEVEL_POINT_COUNT];
-  char iconText[LEVEL_POINT_COUNT][15];
-
-  for (uint8_t i = 0; i < LEVEL_POINT_COUNT; i++)
-  {
-    levelCornerItems.items[valIconIndex[i]].label.address = (uint8_t *)iconText[i];
-  }
-
-  for (uint8_t i = 0; i < LEVEL_POINT_COUNT; i++)
-  {
-    refreshValue(&levelCornerItems, i);
-    oldValue[i] = levelCornerPosition[i];
-  }
-
-  menuDrawPage(&levelCornerItems);
-  drawProbeAccuracyIcon(&levelCornerItems);
+  char iconText[LEVELING_POINT_COUNT][15];
 
   if (coordinateIsKnown() == false)
     probeHeightHomeAndRaise();  // home and raise nozzle
@@ -102,6 +81,19 @@ void menuLevelCorner(void)
   {
     infoSettings.level_edge = ((LEVELING_EDGE_DISTANCE >= edge_min) ? LEVELING_EDGE_DISTANCE : edge_min);
   }
+
+  for (uint8_t i = 0; i < LEVELING_POINT_COUNT; i++)
+  {
+    levelCornerItems.items[valIconIndex[i]].label.address = (uint8_t *)iconText[i];
+  }
+
+  for (uint8_t i = 0; i < LEVELING_POINT_COUNT; i++)
+  {
+    refreshValue(&levelCornerItems, i);
+  }
+
+  menuDrawPage(&levelCornerItems);
+  drawProbeAccuracyIcon(&levelCornerItems);
 
   while (infoMenu.menu[infoMenu.cur] == menuLevelCorner)
   {
@@ -154,13 +146,12 @@ void menuLevelCorner(void)
         break;
     }
 
-    for (uint8_t i = 0; i < LEVEL_POINT_COUNT; i++)
+    if (levelingGetProbedPoint() != LEVEL_NO_POINT)
     {
-      if (oldValue[i] != levelCornerPosition[i])
-      {
-        refreshValue(&levelCornerItems, i);
-        oldValue[i] = levelCornerPosition[i];
-      }
+      levelCornerPosition[levelingGetProbedPoint()] = levelingGetProbedZ();
+      refreshValue(&levelCornerItems, levelingGetProbedPoint());
+
+      levelingResetProbedPoint();  // reset to check for new updates
     }
 
     loopProcess();

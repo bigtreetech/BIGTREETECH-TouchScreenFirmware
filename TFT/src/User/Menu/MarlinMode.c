@@ -17,11 +17,11 @@ void menuMarlinMode(void)
   CB_DATA   marlinGetData = NULL;
   CB_PARSE  marlinParse = NULL;
 
-  GUI_Clear(infoSettings.marlin_mode_bg_color);
-  GUI_SetColor(infoSettings.marlin_mode_font_color);
-  GUI_SetBkColor(infoSettings.marlin_mode_bg_color);
+  GUI_Clear(infoSettings.marlin_bg_color);
+  GUI_SetColor(infoSettings.marlin_font_color);
+  GUI_SetBkColor(infoSettings.marlin_bg_color);
 
-  if (infoSettings.marlin_mode_showtitle == 1)
+  if (infoSettings.marlin_show_title == 1)
   {
     STRINGS_STORE tempST;
     W25Qxx_ReadBuffer((uint8_t *)&tempST, STRINGS_STORE_ADDR, sizeof(STRINGS_STORE));
@@ -73,7 +73,7 @@ void menuMarlinMode(void)
 
     Mode_CheckSwitching();
 
-    if (infoSettings.serial_alwaysOn == ENABLED)
+    if (infoSettings.serial_always_on == ENABLED)
     {
       loopBackEnd();
     }

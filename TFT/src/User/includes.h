@@ -67,9 +67,9 @@
 
 // User/API
 #include "AddonHardware.h"
+#include "BabystepControl.h"
 #include "boot.h"
 #include "BuzzerControl.h"
-#include "BabystepControl.h"
 #include "CaseLightControl.h"
 #include "comment.h"
 #include "config.h"

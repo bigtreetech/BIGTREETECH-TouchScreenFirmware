@@ -5,7 +5,7 @@ static float z_offset_value = HOME_Z_OFFSET_DEFAULT_VALUE;
 static bool home_offset_enabled = false;
 
 // Enable home offset
-void homeOffsetEnable(bool skipZOffset, float shim)
+void homeOffsetEnable(float shim)
 {
   home_offset_enabled = true;
 

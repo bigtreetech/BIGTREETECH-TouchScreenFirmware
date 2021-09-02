@@ -36,7 +36,7 @@ void zOffsetDraw(bool status, float val)
   {
     sprintf(tempstr, "ZO:%.2f  ", val);
     sprintf(tempstr3, "Shim:%.3f", infoSettings.level_z_pos);
-    GUI_SetColor(infoSettings.sd_reminder_color);
+    GUI_SetColor(infoSettings.status_color);
     sprintf(tempstr2, "  %.2f  ", val + infoSettings.level_z_pos);
   }
 
@@ -92,7 +92,7 @@ void menuZOffset(void)
   KEY_VALUES key_num = KEY_IDLE;
   float now, z_offset;
   float unit;
-  void (* offsetEnable)(bool, float);          // enable Z offset
+  void (* offsetEnable)(float);                // enable Z offset
   void (* offsetDisable)(void);                // disable Z offset
   bool (* offsetGetStatus)(void);              // get current status
   float (* offsetGetValue)(void);              // get current Z offset
@@ -170,7 +170,7 @@ void menuZOffset(void)
       // enable/disable Z offset change
       case KEY_ICON_4:
         if (!offsetGetStatus())
-          offsetEnable(true, infoSettings.level_z_pos);
+          offsetEnable(infoSettings.level_z_pos);
         else
           offsetDisable();
 

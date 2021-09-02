@@ -585,7 +585,7 @@ void terminalCache(char *stream, TERMINAL_SRC src)
 
   if (src == TERMINAL_GCODE)
   {
-    saveGcodeTerminalCache(serialPort[serialPortIndex[infoCmd.queue[infoCmd.index_r].src]].id);  // serial port ID (e.g. "2" for SERIAL_PORT_2)
+    saveGcodeTerminalCache(serialPort[infoCmd.queue[infoCmd.index_r].port_index].id);  // serial port ID (e.g. "2" for SERIAL_PORT_2)
     saveGcodeTerminalCache(">>");
   }
 
@@ -626,7 +626,7 @@ static inline void terminalDrawButton(uint8_t index, uint8_t isPressed)
   if (index >= TERM_KEY_COUNT)
     return;
 
-  const char * terminalKey[] = {"<", ">", (char *)textSelect(itemToggle[infoSettings.terminalACK].index), "Back"};
+  const char * terminalKey[] = {"<", ">", (char *)textSelect(itemToggle[infoSettings.terminal_ack].index), "Back"};
 
   #ifdef KEYBOARD_MATERIAL_THEME
     uint16_t fontcolor = KEY_FONT_COLOR;
@@ -748,7 +748,7 @@ void menuTerminalWindow(void)
         break;
 
       case TERM_TOGGLE_ACK:  // toggle ack in terminal
-        infoSettings.terminalACK = (infoSettings.terminalACK + 1) % ITEM_TOGGLE_NUM;
+        infoSettings.terminal_ack = (infoSettings.terminal_ack + 1) % ITEM_TOGGLE_NUM;
         terminalDrawButton(TERM_TOGGLE_ACK, false);
         break;
 
