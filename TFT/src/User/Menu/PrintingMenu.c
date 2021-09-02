@@ -683,6 +683,7 @@ void menuPrinting(void)
       if (curLayerNumber != prevLayerNumber)
       {
         prevLayerNumber = curLayerNumber;
+        RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
         reDrawPrintingValue(ICON_POS_Z, PRINT_BOTTOM_ROW);
       }
     }
