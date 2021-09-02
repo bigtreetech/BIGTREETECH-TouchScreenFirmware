@@ -6,8 +6,6 @@
 #define SERIAL_PORT_3_QUEUE_SIZE 512
 #define SERIAL_PORT_4_QUEUE_SIZE 512
 
-uint8_t serialActive = 0; // Bit array to store serial port state
-
 const SERIAL_PORT_INFO serialPort[SERIAL_PORT_COUNT] = {
   {SERIAL_PORT, SERIAL_PORT_QUEUE_SIZE, "", "1 - Printer"},
   #ifdef SERIAL_PORT_2
@@ -24,34 +22,13 @@ const SERIAL_PORT_INFO serialPort[SERIAL_PORT_COUNT] = {
 const uint32_t baudrateValues[BAUDRATE_COUNT] =    { 0,     2400,   9600,   19200,   38400,   57600,   115200,   250000,   500000,   1000000};
 const char * const baudrateNames[BAUDRATE_COUNT] = {"OFF", "2400", "9600", "19200", "38400", "57600", "115200", "250000", "500000", "1000000"};
 
-bool getSerialPortActive(int8_t port)
-{
-  return GET_BIT(serialActive, port);
-}
-
-void setSerialPortActive(int8_t port, bool active)
-{
-  SET_BIT_VALUE(serialActive, port, active);
-}
-
-char * getSerialID(uint8_t port)
-{
-  for (uint8_t i = 0; i < SERIAL_PORT_COUNT; i++)
-  {
-    if (serialPort[i].port == port)
-      return serialPort[i].id;
-  }
-
-  return NULL;
-}
-
 static inline void Serial_InitPrimary(void)
 {
   infoHost.connected = infoHost.wait = infoHost.printing = false;
   reminderSetUnConnected();  // reset connect status
   reminderMessage(LABEL_UNCONNECTED, STATUS_UNCONNECT);
 
-  Serial_Config(serialPort[PORT_1].port, serialPort[PORT_1].cacheSize, baudrateValues[infoSettings.serial_port[0]]);
+  Serial_Config(serialPort[PORT_1].port, serialPort[PORT_1].cacheSize, baudrateValues[infoSettings.serial_port[PORT_1]]);
 }
 
 static inline void Serial_DeInitPrimary(void)
@@ -66,14 +43,14 @@ void Serial_Init(int8_t port)
     Serial_InitPrimary();
 
     #ifdef SERIAL_PORT_2
-      if (port == ALL_PORTS)  // if < 0, initialize all the supplementary serial ports
+      if (port == ALL_PORTS)  // if < 0, initialize also all the supplementary serial ports
       {
-        for (uint8_t i = 1; i < SERIAL_PORT_COUNT; i++)
+        for (uint8_t i = PORT_2; i < SERIAL_PORT_COUNT; i++)
         {
           // the supplementary serial ports should be enabled according to config.ini.
           // Disable the serial port when it is not in use and/or not connected to a device (floating) to
           // avoid to receive and process wrong data due to possible electromagnetic interference (EMI).
-          if (infoSettings.serial_port[i] >= 0)  // if serial port is enabled
+          if (infoSettings.serial_port[i] > 0)  // if serial port is enabled
             Serial_Config(serialPort[i].port, serialPort[i].cacheSize, baudrateValues[infoSettings.serial_port[i]]);
         }
       }
@@ -82,7 +59,7 @@ void Serial_Init(int8_t port)
   #ifdef SERIAL_PORT_2
     else if (port < SERIAL_PORT_COUNT)  // if supplementary serial port
     {
-      if (infoSettings.serial_port[port] >= 0)  // if serial port is enabled
+      if (infoSettings.serial_port[port] > 0)  // if serial port is enabled
       {
         Serial_Config(serialPort[port].port, serialPort[port].cacheSize, baudrateValues[infoSettings.serial_port[port]]);
       }
@@ -97,7 +74,7 @@ void Serial_DeInit(int8_t port)
     Serial_DeInitPrimary();
 
     #ifdef SERIAL_PORT_2
-      if (port < PORT_1)  // if < 0, deinitialize all the supplementary serial ports
+      if (port == ALL_PORTS)  // if < 0, deinitialize also all the supplementary serial ports
       {
         for (uint8_t i = PORT_2; i < SERIAL_PORT_COUNT; i++)
         {

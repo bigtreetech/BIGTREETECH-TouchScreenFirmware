@@ -47,7 +47,7 @@ extern "C" {
     LCD_BRIGHTNESS_90,
     LCD_BRIGHTNESS_100,
     LCD_BRIGHTNESS_COUNT
-  } LCD_BRIGHTNESS;
+  } LCD_BRIGHTNESS_;
 
   typedef enum
   {
@@ -60,7 +60,7 @@ extern "C" {
     LCD_IDLE_TIME_300,
     LCD_IDLE_TIME_CUSTOM,
     LCD_IDLE_TIME_COUNT
-  } LCD_IDLE_TIME;
+  } LCD_IDLE_TIME_;
 
   extern const uint32_t lcd_brightness[LCD_BRIGHTNESS_COUNT];
 

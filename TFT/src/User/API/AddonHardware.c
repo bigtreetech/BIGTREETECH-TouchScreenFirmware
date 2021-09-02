@@ -50,7 +50,7 @@ void FIL_Runout_Init(void)
   #if defined(MKS_TFT)
     MGPIO_MODE_IPN;  // MKS TFTs already have an external pull-up resistor on PB0 and PB1 pins
   #else
-    (GET_BIT(infoSettings.runout, RUNOUT_INVERT) ^ GET_BIT(infoSettings.runout, RUNOUT_NO_NC)) ? MGPIO_MODE_IPD : MGPIO_MODE_IPU;
+    (GET_BIT(infoSettings.runout, RUNOUT_INVERTED) ^ GET_BIT(infoSettings.runout, RUNOUT_NO_NC)) ? MGPIO_MODE_IPD : MGPIO_MODE_IPU;
   #endif
 
   GPIO_InitSet(FIL_RUNOUT_PIN, pull, 0);
@@ -95,7 +95,7 @@ bool FIL_NormalRunoutDetect(void)
     runout = trueTimes > falseTimes ? true : false;
     trueTimes = 0;
     falseTimes = 0;
-    nextRunoutTime = OS_GetTimeMs() + infoSettings.runout_noise_ms;
+    nextRunoutTime = OS_GetTimeMs() + infoSettings.runout_noise;
   }
   else
   {
@@ -149,7 +149,7 @@ bool FIL_NormalRunoutDetect(void)
   }
 
   // Detect HIGH/LOW level, Suitable for general mechanical / photoelectric switches
-  return (runout == GET_BIT(infoSettings.runout,RUNOUT_INVERT));
+  return (runout == GET_BIT(infoSettings.runout, RUNOUT_INVERTED));
 }
 
 bool FIL_SmartRunoutDetect(void)

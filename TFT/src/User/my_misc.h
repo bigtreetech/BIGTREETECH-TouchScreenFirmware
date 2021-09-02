@@ -38,7 +38,6 @@ extern "C" {
 // Flip all bits
 #define FLIP_BITS(num) ~num
 
-
 #define strtod stringToDouble  // enable light weight string to double function without exponential support
 
 uint8_t inRange(int cur, int tag , int range);
