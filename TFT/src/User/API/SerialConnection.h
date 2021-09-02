@@ -7,13 +7,14 @@ extern "C" {
 
 #include <stdbool.h>
 #include <stdint.h>
-#include "variants.h"  // for SERIAL_PORT_2 etc...
-#include "uart.h"      // for _UART_CNT etc...
+#include "variants.h"  // for SERIAL_PORT_2 etc.
+#include "uart.h"      // for _UART_CNT etc.
 
 #define BAUDRATE_COUNT 10
 
 typedef enum
 {
+  ALL_PORTS = -1,
   PORT_1 = 0,
   #ifdef SERIAL_PORT_2
     PORT_2,
@@ -25,7 +26,7 @@ typedef enum
     PORT_4,
   #endif
   SERIAL_PORT_COUNT
-} SERIAL_PORTS;  // serial ports (primary and supplementary)
+} SERIAL_PORT_INDEX;  // serial port index for all enabled serial ports (This is not actual physical port number)
 
 typedef struct
 {

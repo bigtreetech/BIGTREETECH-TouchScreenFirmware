@@ -15,7 +15,7 @@ const SERIAL_PORT_INFO serialPort[SERIAL_PORT_COUNT] = {
     {SERIAL_PORT_3, SERIAL_PORT_3_QUEUE_SIZE, "3", "3 - UART3"},
   #endif
   #ifdef SERIAL_PORT_4
-    {SERIAL_PORT_4, SERIAL_PORT_4_QUEUE_SIZE, "4", "4 - UART4"}
+    {SERIAL_PORT_4, SERIAL_PORT_4_QUEUE_SIZE, "4", "4 - UART4"},
   #endif
 };
 
@@ -43,7 +43,7 @@ void Serial_Init(int8_t port)
     Serial_InitPrimary();
 
     #ifdef SERIAL_PORT_2
-      if (port < PORT_1)  // if < 0, initialize also all the supplementary serial ports
+      if (port == ALL_PORTS)  // if < 0, initialize also all the supplementary serial ports
       {
         for (uint8_t i = PORT_2; i < SERIAL_PORT_COUNT; i++)
         {
@@ -74,7 +74,7 @@ void Serial_DeInit(int8_t port)
     Serial_DeInitPrimary();
 
     #ifdef SERIAL_PORT_2
-      if (port < PORT_1)  // if < 0, deinitialize also all the supplementary serial ports
+      if (port == ALL_PORTS)  // if < 0, deinitialize also all the supplementary serial ports
       {
         for (uint8_t i = PORT_2; i < SERIAL_PORT_COUNT; i++)
         {
