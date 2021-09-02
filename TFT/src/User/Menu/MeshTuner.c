@@ -40,11 +40,11 @@ void meshDraw(uint16_t col, uint16_t row, float val)
   {
     sprintf(tempstr, "I:%d J:%d ZH:%.3f  ", col, row, val - infoSettings.level_z_pos);
     sprintf(tempstr3, "Shim:%.3f", infoSettings.level_z_pos);
-    GUI_SetColor(infoSettings.sd_reminder_color);
+    GUI_SetColor(infoSettings.status_color);
   }
 
   GUI_DispString(exhibitRect.x0, exhibitRect.y1 - BYTE_HEIGHT, (uint8_t *) tempstr3);
-  GUI_SetColor(infoSettings.sd_reminder_color);
+  GUI_SetColor(infoSettings.status_color);
   GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *) tempstr);
 
   sprintf(tempstr2, "  %.3f  ", val);

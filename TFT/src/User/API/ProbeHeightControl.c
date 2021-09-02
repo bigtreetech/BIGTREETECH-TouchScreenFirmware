@@ -48,7 +48,7 @@ void probeHeightHome(void)
 {
   mustStoreCmd("G28\n");  // home printer
   mustStoreCmd(infoMachineSettings.firmwareType != FW_REPRAPFW ? "M420 S0\n" : "G29 S2\n");  // disable ABL
-  probeHeightStop(infoSettings.z_raise_probing);  // raise nozzle
+  probeHeightStop(infoSettings.probing_z_raise);  // raise nozzle
 }
 
 // Home and disable ABL
@@ -62,7 +62,7 @@ void probeHeightHomeAndNoABL(void)
 void probeHeightHomeAndRaise(void)
 {
   mustStoreCmd("G28\n");  // home printer
-  probeHeightStop(infoSettings.z_raise_probing);  // raise nozzle
+  probeHeightStop(infoSettings.probing_z_raise);  // raise nozzle
 }
 
 // Start probe height

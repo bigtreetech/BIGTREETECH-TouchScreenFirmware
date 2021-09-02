@@ -51,8 +51,8 @@ bool powerFailedCreate(char *path)
   UINT br;
 
   create_ok = false;
-  if (!infoSettings.powerloss_en) return false;   // disable plr
-  if (infoFile.source >= BOARD_SD) return false;  // on board SD not support now
+  if (!infoSettings.plr) return false;            // if disabled plr
+  if (infoFile.source >= BOARD_SD) return false;  // on board SD not supported now
 
   if (f_open(&fpPowerFailed, powerFailedFileName, FA_OPEN_ALWAYS | FA_WRITE) != FR_OK) return false;
 
@@ -171,17 +171,17 @@ bool powerFailedGetData(void)
     uint16_t z_raised = 0;
 
     if (infoSettings.btt_ups == 1)
-      z_raised += infoSettings.powerloss_z_raise;
+      z_raised += infoSettings.plr_z_raise;
 
     if (infoBreakPoint.pause)
       z_raised += infoSettings.pause_z_raise;
 
     mustStoreCacheCmd("G92 Z%.3f\n", infoBreakPoint.axis[Z_AXIS] + z_raised);  // infoCacheCmd.queue[8 - 11]
-    mustStoreCacheCmd("G1 Z%.3f\n", infoBreakPoint.axis[Z_AXIS] + infoSettings.powerloss_z_raise);
-    if (infoSettings.powerloss_home)
+    mustStoreCacheCmd("G1 Z%.3f\n", infoBreakPoint.axis[Z_AXIS] + infoSettings.plr_z_raise);
+    if (infoSettings.plr_home)
     {
       mustStoreCacheCmd("G28\n");
-      mustStoreCacheCmd("G1 Z%.3f\n", infoBreakPoint.axis[Z_AXIS] + infoSettings.powerloss_z_raise);
+      mustStoreCacheCmd("G1 Z%.3f\n", infoBreakPoint.axis[Z_AXIS] + infoSettings.plr_z_raise);
     }
     else
     {

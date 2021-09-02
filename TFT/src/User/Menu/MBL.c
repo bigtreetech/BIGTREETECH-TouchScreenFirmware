@@ -17,7 +17,7 @@ static inline void mblStart(void)
   mustStoreCmd("G28\n");
   mustStoreCmd("G29 S1\n");  // home and move to first point for Z height adjustment
 
-  #ifdef ENABLE_MBL_START_Z
+  #ifdef MBL_START_Z
     probeHeightStart(infoSettings.level_z_pos, false);  // raise nozzle
   #endif
 
@@ -101,7 +101,7 @@ void mblDrawHeader(uint8_t *point)
   if (point != NULL)
   {
     sprintf(tempstr, "P:%-4d", *point);
-    GUI_SetColor(infoSettings.sd_reminder_color);
+    GUI_SetColor(infoSettings.status_color);
   }
   else
   {
@@ -243,7 +243,7 @@ void menuMBL(void)
         {
           storeCmd("G29 S2\n");  // save Z height and move to next mesh point
 
-          #ifdef ENABLE_MBL_START_Z
+          #ifdef MBL_START_Z
             probeHeightStart(infoSettings.level_z_pos, false);  // raise nozzle
           #endif
 

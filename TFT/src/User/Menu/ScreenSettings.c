@@ -54,7 +54,7 @@ void menuEmulatorFontColor(void)
   // fill items
   for (uint8_t i = 0; i < COUNT(totalItems); i++)
   {
-    if (infoSettings.marlin_mode_font_color == lcd_colors[i])
+    if (infoSettings.marlin_font_color == lcd_colors[i])
     {
       totalItems[i].icon = CHARICON_CHECKED;
       curItem = i;
@@ -84,7 +84,7 @@ void menuEmulatorFontColor(void)
         totalItems[curItem].icon = CHARICON_CHECKED;
         listViewRefreshItem(curItem);  // refresh checked status
 
-        infoSettings.marlin_mode_font_color = lcd_colors[curItem];
+        infoSettings.marlin_font_color = lcd_colors[curItem];
       }
     }
 
@@ -108,7 +108,7 @@ void menuEmulatorBGColor(void)
   // fill items
   for (uint8_t i = 0; i < COUNT(totalItems); i++)
   {
-    if (infoSettings.marlin_mode_bg_color == lcd_colors[i])
+    if (infoSettings.marlin_bg_color == lcd_colors[i])
     {
       totalItems[i].icon = CHARICON_CHECKED;
       curItem = i;
@@ -138,7 +138,7 @@ void menuEmulatorBGColor(void)
         totalItems[curItem].icon = CHARICON_CHECKED;
         listViewRefreshItem(curItem);  // refresh checked status
 
-        infoSettings.marlin_mode_bg_color = lcd_colors[curItem];
+        infoSettings.marlin_bg_color = lcd_colors[curItem];
       }
     }
 
@@ -165,15 +165,15 @@ void menuMarlinModeSettings(void)
 
   for (uint8_t i = 0; i < LCD_COLOR_COUNT; i++)
   {
-    if (infoSettings.marlin_mode_font_color == lcd_colors[i])
+    if (infoSettings.marlin_font_color == lcd_colors[i])
       marlinModeitems[0].valueLabel = lcd_color_names[i];
 
-    if (infoSettings.marlin_mode_bg_color == lcd_colors[i])
+    if (infoSettings.marlin_bg_color == lcd_colors[i])
       marlinModeitems[1].valueLabel = lcd_color_names[i];
   }
 
-  marlinModeitems[2].icon = iconToggle[infoSettings.marlin_mode_fullscreen];
-  marlinModeitems[3].icon = iconToggle[infoSettings.marlin_mode_showtitle];
+  marlinModeitems[2].icon = iconToggle[infoSettings.marlin_fullscreen];
+  marlinModeitems[3].icon = iconToggle[infoSettings.marlin_show_title];
 
   setDynamicTextValue(4, (char *)labelMarlinType[infoSettings.marlin_type]);
 
@@ -197,14 +197,14 @@ void menuMarlinModeSettings(void)
         break;
 
       case 2:
-        infoSettings.marlin_mode_fullscreen = (infoSettings.marlin_mode_fullscreen + 1) % 2;
-        marlinModeitems[2].icon = iconToggle[infoSettings.marlin_mode_fullscreen];
+        infoSettings.marlin_fullscreen = (infoSettings.marlin_fullscreen + 1) % 2;
+        marlinModeitems[2].icon = iconToggle[infoSettings.marlin_fullscreen];
         listViewRefreshItem(curIndex);
         break;
 
       case 3:
-        infoSettings.marlin_mode_showtitle = (infoSettings.marlin_mode_showtitle + 1) % 2;
-        marlinModeitems[3].icon = iconToggle[infoSettings.marlin_mode_showtitle];
+        infoSettings.marlin_show_title = (infoSettings.marlin_show_title + 1) % 2;
+        marlinModeitems[3].icon = iconToggle[infoSettings.marlin_show_title];
         listViewRefreshItem(curIndex);
         break;
 
@@ -288,19 +288,19 @@ void menuUISettings(void)
 {
   LABEL title = {LABEL_UI_SETTINGS};
   LISTITEM uiItems[] = {
-  // icon                ItemType          Item Title               item value text(only for custom value)
-    {CHARICON_BLANK,     LIST_CUSTOMVALUE, LABEL_ACK_NOTIFICATION,  LABEL_DYNAMIC},
-    {CHARICON_BLANK,     LIST_CUSTOMVALUE, LABEL_FILE_SORT_BY,      LABEL_DYNAMIC},
-    {CHARICON_TOGGLE_ON, LIST_TOGGLE,      LABEL_FILE_LIST_MODE,    LABEL_BACKGROUND},
-    {CHARICON_TOGGLE_ON, LIST_TOGGLE,      LABEL_FAN_SPEED_PERCENT, LABEL_BACKGROUND},
-    {CHARICON_TOGGLE_ON, LIST_TOGGLE,      LABEL_PERSISTENT_INFO,   LABEL_BACKGROUND},
-    {CHARICON_TOGGLE_ON, LIST_TOGGLE,      LABEL_TERMINAL_ACK,      LABEL_BACKGROUND},
+  // icon                ItemType          Item Title                  item value text(only for custom value)
+    {CHARICON_BLANK,     LIST_CUSTOMVALUE, LABEL_ACK_NOTIFICATION,     LABEL_DYNAMIC},
+    {CHARICON_BLANK,     LIST_CUSTOMVALUE, LABEL_FILES_SORT_BY,        LABEL_DYNAMIC},
+    {CHARICON_TOGGLE_ON, LIST_TOGGLE,      LABEL_FILES_LIST_MODE,      LABEL_BACKGROUND},
+    {CHARICON_TOGGLE_ON, LIST_TOGGLE,      LABEL_FAN_SPEED_PERCENTAGE, LABEL_BACKGROUND},
+    {CHARICON_TOGGLE_ON, LIST_TOGGLE,      LABEL_PERSISTENT_INFO,      LABEL_BACKGROUND},
+    {CHARICON_TOGGLE_ON, LIST_TOGGLE,      LABEL_TERMINAL_ACK,         LABEL_BACKGROUND},
 
     #ifdef LED_COLOR_PIN
-      {CHARICON_BLANK,     LIST_CUSTOMVALUE, LABEL_KNOB_LED_COLOR,    LABEL_OFF},
+      {CHARICON_BLANK,     LIST_CUSTOMVALUE, LABEL_KNOB_LED_COLOR,       LABEL_OFF},
 
       #ifdef LCD_LED_PWM_CHANNEL
-        {CHARICON_TOGGLE_ON, LIST_TOGGLE,      LABEL_KNOB_LED_IDLE,     LABEL_BACKGROUND},
+        {CHARICON_TOGGLE_ON, LIST_TOGGLE,      LABEL_KNOB_LED_IDLE,        LABEL_BACKGROUND},
       #endif
     #endif
   };
@@ -310,10 +310,10 @@ void menuUISettings(void)
 
   setDynamicTextValue(0, (char *)itemNotificationType[infoSettings.ack_notification]);
   setDynamicTextValue(1, (char *)itemSortBy[infoSettings.files_sort_by]);
-  uiItems[2].icon = iconToggle[infoSettings.file_listmode];
+  uiItems[2].icon = iconToggle[infoSettings.files_list_mode];
   uiItems[3].icon = iconToggle[infoSettings.fan_percentage];
   uiItems[4].icon = iconToggle[infoSettings.persistent_info];
-  uiItems[5].icon = iconToggle[infoSettings.terminalACK];
+  uiItems[5].icon = iconToggle[infoSettings.terminal_ack];
 
   #ifdef LED_COLOR_PIN
     uiItems[6].valueLabel = led_color_names[infoSettings.knob_led_color];
@@ -341,8 +341,8 @@ void menuUISettings(void)
         break;
 
       case 2:
-        infoSettings.file_listmode = (infoSettings.file_listmode + 1) % ITEM_TOGGLE_NUM;
-        uiItems[curIndex].icon = iconToggle[infoSettings.file_listmode];
+        infoSettings.files_list_mode = (infoSettings.files_list_mode + 1) % ITEM_TOGGLE_NUM;
+        uiItems[curIndex].icon = iconToggle[infoSettings.files_list_mode];
         break;
 
       case 3:
@@ -356,8 +356,8 @@ void menuUISettings(void)
         break;
 
       case 5:
-        infoSettings.terminalACK = (infoSettings.terminalACK + 1) % ITEM_TOGGLE_NUM;
-        uiItems[curIndex].icon = iconToggle[infoSettings.terminalACK];
+        infoSettings.terminal_ack = (infoSettings.terminal_ack + 1) % ITEM_TOGGLE_NUM;
+        uiItems[curIndex].icon = iconToggle[infoSettings.terminal_ack];
         break;
 
       #ifdef LED_COLOR_PIN
@@ -397,11 +397,11 @@ void menuSoundSettings(void)
 {
   LABEL title = {LABEL_SOUND};
   LISTITEM sounditems[] = {
-  // icon                 ItemType     Item Title          item value text(only for custom value)
-    {CHARICON_TOGGLE_ON,  LIST_TOGGLE, LABEL_TOUCH_SOUND,  LABEL_BACKGROUND},
-    {CHARICON_TOGGLE_ON,  LIST_TOGGLE, LABEL_TOAST_SOUND,  LABEL_BACKGROUND},
-    {CHARICON_TOGGLE_ON,  LIST_TOGGLE, LABEL_ALERT_SOUND,  LABEL_BACKGROUND},
-    {CHARICON_TOGGLE_ON,  LIST_TOGGLE, LABEL_HEATER_SOUND, LABEL_BACKGROUND},
+  // icon                ItemType     Item Title          item value text(only for custom value)
+    {CHARICON_TOGGLE_ON, LIST_TOGGLE, LABEL_TOUCH_SOUND,  LABEL_BACKGROUND},
+    {CHARICON_TOGGLE_ON, LIST_TOGGLE, LABEL_TOAST_SOUND,  LABEL_BACKGROUND},
+    {CHARICON_TOGGLE_ON, LIST_TOGGLE, LABEL_ALERT_SOUND,  LABEL_BACKGROUND},
+    {CHARICON_TOGGLE_ON, LIST_TOGGLE, LABEL_HEATER_SOUND, LABEL_BACKGROUND},
   };
 
   uint16_t curIndex = KEY_IDLE;

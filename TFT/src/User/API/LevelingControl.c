@@ -1,6 +1,9 @@
 #include "LevelingControl.h"
 #include "includes.h"
 
+LEVELING_POINT probedPoint = LEVEL_NO_POINT;
+float probedZ = 0.0f;
+
 void levelingGetPointCoords(LEVELING_POINT_COORDS coords)
 {
   int16_t x_left = infoSettings.machine_size_min[X_AXIS] + infoSettings.level_edge;
@@ -8,17 +11,14 @@ void levelingGetPointCoords(LEVELING_POINT_COORDS coords)
   int16_t y_bottom = infoSettings.machine_size_min[Y_AXIS] + infoSettings.level_edge;
   int16_t y_top = infoSettings.machine_size_max[Y_AXIS] - infoSettings.level_edge;
 
-  if (GET_BIT(infoSettings.invert_axis, X_AXIS))
+  if (GET_BIT(infoSettings.inverted_axis, X_AXIS))
   {
     int16_t temp = x_left;  // Swap left and right
     x_left = x_right;
     x_right = temp;
   }
 
-  // The Y-axis of different printer (move hotbed or move nozzle) move in different directions.
-  // So Y-axis leveling invert can't follow up invert_axis[Y_AXIS].
-  // We separate a single variable to deal with the Y-axis leveling movement direction.
-  if (infoSettings.leveling_invert_y_axis)
+  if (infoSettings.leveling_inverted_y_axis)
   {
     int16_t temp = y_bottom;  // Swap lower and upper
     y_bottom = y_top;
@@ -44,16 +44,30 @@ LEVELING_POINT levelingGetPoint(int16_t x, int16_t y)
 
   levelingGetPointCoords(coords);
 
-  for (i = 0; i < LEVEL_POINT_COUNT; i++)
+  for (i = 0; i < LEVELING_POINT_COUNT; i++)
   {
     if (coords[i][0] == x && coords[i][1] == y)  // if point is found, exit from loop
       break;
   }
 
-  if (i < LEVEL_POINT_COUNT)  // if point is found, return the point
+  if (i < LEVELING_POINT_COUNT)  // if point is found, return the point
     return i;
 
   return LEVEL_CENTER;  // if point is not found, return the center point
+}
+
+void levelingMoveToPoint(LEVELING_POINT point)
+{
+  LEVELING_POINT_COORDS coords;
+
+  levelingGetPointCoords(coords);
+
+  if (coordinateIsKnown() == false)
+    storeCmd("G28\n");
+
+  storeCmd("G0 Z%.3f F%d\n", infoSettings.level_z_raise, infoSettings.level_feedrate[FEEDRATE_Z]);
+  storeCmd("G0 X%d Y%d F%d\n", coords[point][0], coords[point][1], infoSettings.level_feedrate[FEEDRATE_XY]);
+  storeCmd("G0 Z%.3f F%d\n", infoSettings.level_z_pos, infoSettings.level_feedrate[FEEDRATE_Z]);
 }
 
 void levelingProbePoint(LEVELING_POINT point)
@@ -75,18 +89,12 @@ void levelingProbePoint(LEVELING_POINT point)
 
   mustStoreCmd(ENABLE_STEPPER_CMD);
   mustStoreCmd(DISABLE_STEPPER_CMD);
+
+  probedPoint = LEVEL_NO_POINT;  // reset probedPoint before waiting for new probed Z
 }
 
-void levelingMoveToPoint(LEVELING_POINT point)
+void levelingSetProbedPoint(int16_t x, int16_t y, float z)
 {
-  LEVELING_POINT_COORDS coords;
-
-  levelingGetPointCoords(coords);
-
-  if (coordinateIsKnown() == false)
-    storeCmd("G28\n");
-
-  storeCmd("G0 Z%.3f F%d\n", infoSettings.level_z_raise, infoSettings.level_feedrate[FEEDRATE_Z]);
-  storeCmd("G0 X%d Y%d F%d\n", coords[point][0], coords[point][1], infoSettings.level_feedrate[FEEDRATE_XY]);
-  storeCmd("G0 Z%.3f F%d\n", infoSettings.level_z_pos, infoSettings.level_feedrate[FEEDRATE_Z]);
+  probedPoint = levelingGetPoint(x, y);
+  probedZ = z;
 }

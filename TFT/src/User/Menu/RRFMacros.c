@@ -16,7 +16,7 @@ void scanInfoFilesFs(void)
 
 void rrfShowRunningMacro(void)
 {
-  GUI_Clear(BACKGROUND_COLOR);
+  GUI_Clear(MENU_BACKGROUND_COLOR);
   GUI_SetColor(infoSettings.reminder_color);
   GUI_DispStringInPrectEOL(&titleRect, LABEL_BUSY);
   GUI_RestoreColorDefault();
@@ -31,7 +31,7 @@ void runMacro(const char *display_name)
   request_M98(infoFile.title);
 
   ExitDir();
-  infoMenu.menu[++infoMenu.cur] = menuDummy; // force a redraw
+  infoMenu.menu[++infoMenu.cur] = menuDummy;  // force a redraw
 }
 
 // Draw Macro file list
@@ -65,7 +65,7 @@ void menuCallMacro(void)
   uint8_t update = 1;
   infoFile.source = BOARD_SD;
 
-  GUI_Clear(BACKGROUND_COLOR);
+  GUI_Clear(MENU_BACKGROUND_COLOR);
   GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, textSelect(LABEL_LOADING));
 
   scanInfoFilesFs();

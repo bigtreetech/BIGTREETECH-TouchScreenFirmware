@@ -44,7 +44,7 @@ void Mode_Switch(void)
 
     case MODE_MARLIN:
       #ifdef HAS_EMULATOR
-        if (infoSettings.serial_alwaysOn == ENABLED)
+        if (infoSettings.serial_always_on == ENABLED)
           updateNextHeatCheckTime();  // send "M105" after a delay, because of mega2560 will be hanged when received data at startup
 
         infoMenu.menu[infoMenu.cur] = menuMarlinMode;
