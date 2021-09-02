@@ -41,13 +41,13 @@ const uint16_t st7920_gy_dot = ST7920_GYDOT;
 
 void ST7920_DrawPixel(int16_t x, int16_t y, bool isForeGround)
 {
-  if (infoSettings.marlin_mode_fullscreen)
+  if (infoSettings.marlin_fullscreen)
   {
     GUI_FillRectColor(st7920_gx_start_full + st7920_gx_dot_full * x,
                       st7920_gy_start_full + st7920_gy_dot_full * y,
                       st7920_gx_start_full + st7920_gx_dot_full * (x + 1),
                       st7920_gy_start_full + st7920_gy_dot_full * (y + 1),
-                      isForeGround ? infoSettings.marlin_mode_font_color : infoSettings.marlin_mode_bg_color);
+                      isForeGround ? infoSettings.marlin_font_color : infoSettings.marlin_bg_color);
   }
   else
   {
@@ -55,7 +55,7 @@ void ST7920_DrawPixel(int16_t x, int16_t y, bool isForeGround)
                       st7920_gy_start + st7920_gy_dot * y,
                       st7920_gx_start + st7920_gx_dot * (x + 1),
                       st7920_gy_start + st7920_gy_dot * (y + 1),
-                      isForeGround ? infoSettings.marlin_mode_font_color : infoSettings.marlin_mode_bg_color);
+                      isForeGround ? infoSettings.marlin_font_color : infoSettings.marlin_bg_color);
   }
 }
 

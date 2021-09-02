@@ -47,7 +47,7 @@ void drawSelectedMode(int8_t nowMode)
 
   for (uint8_t i = 0; i < MODE_COUNT; i++)
   {
-    GUI_SetColor(i == nowMode ? infoSettings.marlin_mode_font_color : BACKGROUND_COLOR);
+    GUI_SetColor(i == nowMode ? infoSettings.marlin_font_color : MENU_BACKGROUND_COLOR);
     GUI_DrawRect(rect_of_mode[i].x0 - border_off, rect_of_mode[i].y0 - border_off,
                  rect_of_mode[i].x1 + border_off, rect_of_mode[i].y1 + border_off);
   }
@@ -101,7 +101,7 @@ void menuMode(void)
       LCD_Enc_CheckSteps();
     #endif
 
-    if (infoSettings.mode == MODE_SERIAL_TSC || infoSettings.serial_alwaysOn == 1)
+    if (infoSettings.mode == MODE_SERIAL_TSC || infoSettings.serial_always_on == 1)
     {
       loopBackEnd();
     }

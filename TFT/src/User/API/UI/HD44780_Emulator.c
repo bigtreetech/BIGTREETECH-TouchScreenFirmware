@@ -35,7 +35,7 @@ void HD44780_BI10_DisplayClear(uint8_t cmd)
                     YSTART,
                     LCD_WIDTH,
                     LCD_HEIGHT,
-                    infoSettings.marlin_mode_bg_color);
+                    infoSettings.marlin_bg_color);
   HD44780.x = HD44780.y = 0;
   HD44780_reg.bi.ems.id = 1;
 }
@@ -119,7 +119,7 @@ void HD44780_DrawPixel(int16_t x, int16_t y, bool isForeGround, bool isFont)
                       YSTART + FONT_PIXEL * y,
                       XSTART + FONT_PIXEL * (x + 1),
                       YSTART + FONT_PIXEL * (y + 1),
-                      isForeGround ? infoSettings.marlin_mode_font_color : infoSettings.marlin_mode_bg_color);
+                      isForeGround ? infoSettings.marlin_font_color : infoSettings.marlin_bg_color);
   }
   else
   {
@@ -127,7 +127,7 @@ void HD44780_DrawPixel(int16_t x, int16_t y, bool isForeGround, bool isFont)
                       YSTART + YOFFSET + BITMAP_PIXEL * y,
                       XSTART + BITMAP_PIXEL * (x + 1),
                       YSTART + YOFFSET + BITMAP_PIXEL * (y + 1),
-                      isForeGround ? infoSettings.marlin_mode_font_color : infoSettings.marlin_mode_bg_color);
+                      isForeGround ? infoSettings.marlin_font_color : infoSettings.marlin_bg_color);
   }
 }
 

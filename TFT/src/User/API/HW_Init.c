@@ -104,7 +104,7 @@ void HW_Init(void)
 
 void HW_InitMode(uint8_t mode)
 {
-  if (infoSettings.serial_alwaysOn == ENABLED)  // disable serial comm if `serial_alwaysOn` is disabled
+  if (infoSettings.serial_always_on == ENABLED)  // disable serial comm if `serial_always_on` is disabled
     Serial_Init(-1);
 
   if (mode == MODE_SERIAL_TSC)
@@ -128,7 +128,7 @@ void HW_InitMode(uint8_t mode)
   }
   else
   {
-    if (infoSettings.serial_alwaysOn == DISABLED)  // disable serial comm if `serial_alwaysOn` is disabled
+    if (infoSettings.serial_always_on == DISABLED)  // disable serial comm if `serial_always_on` is disabled
       Serial_DeInit(-1);
 
     #ifdef BUZZER_PIN  // disable buzzer in Marlin mode

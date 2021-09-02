@@ -100,9 +100,9 @@ static inline void pidCheckTimeout(void)
 //      pidSucceeded = false;  // pidUpdateStatus function allow to handle status updates eventually arriving after the timeout
       LABELCHAR(tempMsg, LABEL_TIMEOUT_REACHED);
 
-      sprintf(&tempMsg[strlen(tempMsg)], "\n %s", textSelect(LABEL_PROCESS_ABORTED));
-      BUZZER_PLAY(SOUND_ERROR);
-      popupReminder(DIALOG_TYPE_ERROR, LABEL_PID_TITLE, (uint8_t *) tempMsg);
+      sprintf(&tempMsg[strlen(tempMsg)], "\n %s", textSelect(LABEL_BUSY));
+      BUZZER_PLAY(SOUND_NOTIFY);
+      popupReminder(DIALOG_TYPE_ALERT, LABEL_PID_TITLE, (uint8_t *) tempMsg);
     }
   }
 }

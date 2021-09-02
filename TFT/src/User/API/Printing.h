@@ -9,17 +9,9 @@ extern "C" {
 #include "variants.h"
 #include "ff.h"
 
-#ifndef M27_WATCH_OTHER_SOURCES
-  #define M27_WATCH_OTHER_SOURCES false
-#endif
-
-#ifndef M27_REFRESH
-  #define M27_REFRESH 3
-#endif
-
 #ifdef RAPID_SERIAL_COMM
   #define RAPID_SERIAL_LOOP() loopBackEnd()
-  #define RAPID_PRINTING_COMM() if (isPrinting() == true && infoSettings.serial_alwaysOn != 1) {loopBackEnd();}
+  #define RAPID_PRINTING_COMM() if (isPrinting() == true && infoSettings.serial_always_on != 1) {loopBackEnd();}
 #else
   #define RAPID_SERIAL_LOOP()
   #define RAPID_PRINTING_COMM()

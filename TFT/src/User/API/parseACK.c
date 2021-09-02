@@ -2,11 +2,11 @@
 #include "includes.h"
 #include "RRFParseACK.hpp"
 
-#define ACK_MAX_SIZE 512
+#define L2_CACHE_SIZE 512  // including ending character '\0'
 
-char dmaL2Cache[ACK_MAX_SIZE];
+char dmaL2Cache[L2_CACHE_SIZE];
 static uint16_t ack_index = 0;
-static uint8_t ack_cur_src = SERIAL_PORT;
+static uint8_t ack_src_port_index = PORT_1;  // port index for SERIAL_PORT;
 
 static const char errormagic[] = "Error:";
 static const char echomagic[] = "echo:";
@@ -66,17 +66,17 @@ const ECHO knownEcho[] = {
 //  forceIgnore[msgId] = state;
 //}
 
-void setCurrentAckSrc(uint8_t src)
+void setCurrentAckSrc(uint8_t portIndex)
 {
-  ack_cur_src = src;
+  ack_src_port_index = portIndex;
 }
 
 static bool ack_seen(const char * str)
 {
   uint16_t i;
-  for (ack_index = 0; ack_index < ACK_MAX_SIZE && dmaL2Cache[ack_index] != 0; ack_index++)
+  for (ack_index = 0; ack_index < L2_CACHE_SIZE && dmaL2Cache[ack_index] != 0; ack_index++)
   {
-    for (i = 0; str[i] != 0 && dmaL2Cache[ack_index + i] != 0 && dmaL2Cache[ack_index + i] == str[i]; i++)
+    for (i = 0; (ack_index + i) < L2_CACHE_SIZE && str[i] != 0 && dmaL2Cache[ack_index + i] == str[i]; i++)
     {}
     if (str[i] == 0)
     {
@@ -91,10 +91,9 @@ static bool ack_continue_seen(const char * str)
 { // unlike "ack_seen()", this retains "ack_index" if the searched string is not found
   uint16_t i;
   uint16_t indexBackup = ack_index;
-
-  for (; ack_index < ACK_MAX_SIZE && dmaL2Cache[ack_index] != 0; ack_index++)
+  for (; ack_index < L2_CACHE_SIZE && dmaL2Cache[ack_index] != 0; ack_index++)
   {
-    for (i = 0; str[i] != 0 && dmaL2Cache[ack_index + i] != 0 && dmaL2Cache[ack_index + i] == str[i]; i++)
+    for (i = 0; (ack_index + i) < L2_CACHE_SIZE && str[i] != 0 && dmaL2Cache[ack_index + i] == str[i]; i++)
     {}
     if (str[i] == 0)
     {
@@ -109,7 +108,7 @@ static bool ack_continue_seen(const char * str)
 static bool ack_cmp(const char * str)
 {
   uint16_t i;
-  for (i = 0; i < ACK_MAX_SIZE && str[i] != 0 && dmaL2Cache[i] != 0; i++)
+  for (i = 0; i < L2_CACHE_SIZE && dmaL2Cache[i] != 0 && str[i] != 0; i++)
   {
     if (str[i] != dmaL2Cache[i])
       return false;
@@ -223,22 +222,28 @@ bool processKnownEcho(void)
   return isKnown;
 }
 
-bool dmaL1NotEmpty(uint8_t port)
+bool syncL2CacheFromL1(uint8_t port)
 {
-  return dmaL1Data[port].rIndex != dmaL1Data[port].wIndex;
-}
+  DMA_CIRCULAR_BUFFER * dmaL1Data_ptr = &dmaL1Data[port];  // make access to most used variables/attributes faster reducing also the code
+  uint16_t * rIndex_ptr = &dmaL1Data_ptr->rIndex;          // make access to most used variables/attributes faster reducing also the code
 
-void syncL2CacheFromL1(uint8_t port)
-{
+  if (*rIndex_ptr == dmaL1Data_ptr->wIndex)  // if L1 cache is empty
+    return false;
+
   uint16_t i = 0;
 
-  while (dmaL1NotEmpty(port))
+  while (i < (L2_CACHE_SIZE - 1) && *rIndex_ptr != dmaL1Data_ptr->wIndex)  // retrieve data until L2 cache is full or L1 cache is empty
   {
-    dmaL2Cache[i] = dmaL1Data[port].cache[dmaL1Data[port].rIndex];
-    dmaL1Data[port].rIndex = (dmaL1Data[port].rIndex + 1) % dmaL1Data[port].cacheSize;
-    if (dmaL2Cache[i++] == '\n') break;
+    dmaL2Cache[i] = dmaL1Data_ptr->cache[*rIndex_ptr];
+    *rIndex_ptr = (*rIndex_ptr + 1) % dmaL1Data_ptr->cacheSize;
+
+    if (dmaL2Cache[i++] == '\n')
+      break;
   }
-  dmaL2Cache[i] = 0;  // End character
+
+  dmaL2Cache[i] = 0;  // end character
+
+  return true;
 }
 
 void hostActionCommands(void)
@@ -373,10 +378,9 @@ void parseACK(void)
 {
   if (infoHost.rx_ok[SERIAL_PORT] != true) return;  // not get response data
 
-  while (dmaL1NotEmpty(SERIAL_PORT))
+  while (syncL2CacheFromL1(SERIAL_PORT))  // if some data are retrieved from L1 to L2 cache
   {
     bool avoid_terminal = false;
-    syncL2CacheFromL1(SERIAL_PORT);
     infoHost.rx_ok[SERIAL_PORT] = false;
 
     #if defined(SERIAL_DEBUG_PORT) && defined(DEBUG_SERIAL_COMM)
@@ -518,7 +522,7 @@ void parseACK(void)
               heatSyncTargetTemp(i, ack_second_value() + 0.5f);
           }
         }
-        avoid_terminal = !infoSettings.terminalACK;
+        avoid_terminal = !infoSettings.terminal_ack;
         updateNextHeatCheckTime();
       }
       // parse and store M114, current position
@@ -712,7 +716,7 @@ void parseACK(void)
         tmpMsg[6] = '\0';
         if (strcmp(tmpMsg, "Mean: ") == 0)
         {
-          setLevelCornerPosition(-1, -1, ack_value());  // save value for LevelCorner menu
+          levelingSetProbedPoint(-1, -1, ack_value());  // save probed Z value
           sprintf(tmpMsg, "%s\nStandard Deviation: %0.5f", (char *)getDialogMsgStr(), ack_value());
           setDialogText((uint8_t* )"Repeatability Test", (uint8_t *)tmpMsg, LABEL_CONFIRM, LABEL_BACKGROUND);
           showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
@@ -819,7 +823,7 @@ void parseACK(void)
         float x = ack_value();
         float y = 0;
         if (ack_seen("Y: ")) y = ack_value();
-        if (ack_seen("Z: ")) setLevelCornerPosition(x, y, ack_value());
+        if (ack_seen("Z: ")) levelingSetProbedPoint(x, y, ack_value());  // save probed Z value
       }
 
       //----------------------------------------
@@ -1046,7 +1050,7 @@ void parseACK(void)
         if (ack_seen("Z")) setParameter(P_BUMPSENSITIVITY, STEPPER_INDEX_Z + i, ack_value());
       }
       // parse and store ABL type if auto-detect is enabled
-      #if ENABLE_BL_VALUE == 1
+      #if BED_LEVELING_TYPE == 1
         else if (ack_seen("Auto Bed Leveling"))
         {
           infoMachineSettings.leveling = BL_ABL;
@@ -1158,7 +1162,7 @@ void parseACK(void)
       {
         infoMachineSettings.promptSupport = ack_value();
       }
-      else if (ack_seen("Cap:SDCARD:") && infoSettings.onboardSD == AUTO)
+      else if (ack_seen("Cap:SDCARD:") && infoSettings.onboard_sd == AUTO)
       {
         infoMachineSettings.onboard_sd_support = ack_value();
       }
@@ -1166,7 +1170,7 @@ void parseACK(void)
       {
         infoMachineSettings.autoReportSDStatus = ack_value();
       }
-      else if (ack_seen("Cap:LONG_FILENAME:") && infoSettings.longFileName == AUTO)
+      else if (ack_seen("Cap:LONG_FILENAME:") && infoSettings.long_filename == AUTO)
       {
         infoMachineSettings.long_filename_support = ack_value();
       }
@@ -1258,17 +1262,17 @@ void parseACK(void)
     }
 
   parse_end:
-    if (ack_cur_src != SERIAL_PORT)
-    {
-      Serial_Puts(ack_cur_src, dmaL2Cache);
+    if (ack_src_port_index != PORT_1)  // if the ACK message is related to a gcode originated by a supplementary serial port,
+    {                                  // forward the message to the supplementary serial port
+      Serial_Puts(serialPort[ack_src_port_index].port, dmaL2Cache);
     }
     #ifdef SERIAL_PORT_2
       else if (!ack_seen("ok") || ack_seen("T:") || ack_seen("T0:"))  // if a spontaneous ACK message
       {
         // pass on the spontaneous ACK message to all the supplementary serial ports (since these messages come unrequested)
-        for (uint8_t i = 1; i < SERIAL_PORT_COUNT; i++)
+        for (uint8_t i = PORT_2; i < SERIAL_PORT_COUNT; i++)
         {
-          if (serialPort[i].activePort)  // if the port is connected to an active device (a device that already sent data to the TFT)
+          if (infoSettings.serial_port[i] > 0)  // if serial port is enabled
           {
             Serial_Puts(serialPort[i].port, dmaL2Cache);  // pass on the ACK message to the port
           }
@@ -1289,21 +1293,21 @@ void parseRcvGcode(void)
     uint8_t port;
 
     // scan all the supplementary serial ports
-    for (uint8_t i = 1; i < SERIAL_PORT_COUNT; i++)
+    for (uint8_t i = PORT_2; i < SERIAL_PORT_COUNT; i++)
     {
-      port = serialPort[i].port;
-
-      if (infoHost.rx_ok[port] == true)
+      if (infoSettings.serial_port[i] > 0)  // if serial port is enabled
       {
-        infoHost.rx_ok[port] = false;
+        port = serialPort[i].port;
 
-        while (dmaL1NotEmpty(port))
+        if (infoHost.rx_ok[port] == true)
         {
-          syncL2CacheFromL1(port);
-          storeCmdFromUART(port, dmaL2Cache);
-        }
+          infoHost.rx_ok[port] = false;
 
-        serialPort[i].activePort = true;
+          while (syncL2CacheFromL1(port))  // if some data are retrieved from L1 to L2 cache
+          {
+            storeCmdFromUART(i, dmaL2Cache);
+          }
+        }
       }
     }
   #endif

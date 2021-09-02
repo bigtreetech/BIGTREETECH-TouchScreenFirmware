@@ -107,7 +107,7 @@ void menuSerialPorts(void)
   LISTITEM totalItems[SERIAL_PORT_COUNT];
   KEY_VALUES curIndex = KEY_IDLE;
 
-  for (uint8_t i = 0; i < SERIAL_PORT_COUNT; i++)
+  for (uint8_t i = PORT_1; i < SERIAL_PORT_COUNT; i++)
   {
     totalItems[i].icon = CHARICON_EDIT;
     totalItems[i].itemType = LIST_CUSTOMVALUE;

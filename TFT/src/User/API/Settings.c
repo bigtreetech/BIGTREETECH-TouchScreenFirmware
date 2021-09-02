@@ -17,48 +17,48 @@ const uint16_t default_preheat_ext[]   = PREHEAT_HOTEND;
 const uint16_t default_preheat_bed[]   = PREHEAT_BED;
 const uint8_t default_custom_enabled[] = CUSTOM_GCODE_ENABLED;
 const uint8_t default_sounds           = 0b00001111;  // all sounds enabled
-const uint8_t default_invertAxis       = 0b00000000;  // all invert axis disabled
+const uint8_t default_inverted_axis    = 0b00000000;  // all inverted axis disabled
 
 // Reset settings data
 void infoSettingsReset(void)
 {
 // General Settings
   infoSettings.serial_port[0]         = PRIMARY_BAUDRATE;  // primary serial port
-  infoSettings.emulate_m600           = EMULATE_M600;
+  infoSettings.emulated_m600          = EMULATED_M600;
 
 // UI Settings
   infoSettings.rotate_ui              = DISABLED;
   infoSettings.language               = LANG_DEFAULT;
-  infoSettings.status_screen          = ENABLE_STATUS_SCREEN;
+  infoSettings.status_screen          = STATUS_SCREEN;
   infoSettings.title_bg_color         = lcd_colors[TITLE_BACKGROUND_COLOR];
-  infoSettings.bg_color               = lcd_colors[BACKGROUND_COLOR];
-  infoSettings.font_color             = lcd_colors[FONT_COLOR];
+  infoSettings.bg_color               = lcd_colors[MENU_BACKGROUND_COLOR];
+  infoSettings.font_color             = lcd_colors[MENU_FONT_COLOR];
   infoSettings.reminder_color         = lcd_colors[REMINDER_FONT_COLOR];
-  infoSettings.sd_reminder_color      = lcd_colors[VOLUME_REMINDER_FONT_COLOR];
+  infoSettings.status_color           = lcd_colors[STATUS_FONT_COLOR];
   infoSettings.status_xyz_bg_color    = lcd_colors[STATUS_XYZ_BG_COLOR];
   infoSettings.list_border_color      = lcd_colors[LISTVIEW_BORDER_COLOR];
-  infoSettings.list_button_color      = lcd_colors[LISTVIEW_ICON_COLOR];
+  infoSettings.list_button_bg_color   = lcd_colors[LISTVIEW_BUTTON_BG_COLOR];
   infoSettings.mesh_min_color         = lcd_colors[MESH_MIN_COLOR];
   infoSettings.mesh_max_color         = lcd_colors[MESH_MAX_COLOR];
   infoSettings.terminal_color_scheme  = TERMINAL_COLOR_SCHEME;
 
-  infoSettings.ack_notification       = ACK_NOTIFICATION_STYLE;
+  infoSettings.ack_notification       = ACK_NOTIFICATION;
   infoSettings.files_sort_by          = SORT_DATE_NEW_FIRST;
-  infoSettings.file_listmode          = ENABLED;
-  infoSettings.fan_percentage         = SHOW_FAN_PERCENTAGE;
+  infoSettings.files_list_mode        = ENABLED;
+  infoSettings.fan_percentage         = FAN_SPEED_PERCENTAGE;
   infoSettings.persistent_info        = ENABLED;
-  infoSettings.terminalACK            = DISABLED;
+  infoSettings.terminal_ack           = DISABLED;
   infoSettings.notification_m117      = NOTIFICATION_M117;
   infoSettings.prog_disp_type         = ELAPSED_REMAINING;
   infoSettings.layer_disp_type        = SHOW_LAYER_HEIGHT;
 
 // Marlin Mode Settings (only for TFT24 V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
-  infoSettings.mode                   = DEFAULT_LCD_MODE;
-  infoSettings.serial_alwaysOn        = SERIAL_ALWAYS_ON;
-  infoSettings.marlin_mode_bg_color   = lcd_colors[MARLIN_BKCOLOR];
-  infoSettings.marlin_mode_font_color = lcd_colors[MARLIN_FNCOLOR];
-  infoSettings.marlin_mode_fullscreen = MARLIN_MODE_FULLSCREEN;
-  infoSettings.marlin_mode_showtitle  = MARLIN_SHOW_BANNER;
+  infoSettings.mode                   = DEFAULT_MODE;
+  infoSettings.serial_always_on       = SERIAL_ALWAYS_ON;
+  infoSettings.marlin_bg_color        = lcd_colors[MARLIN_BACKGROUND_COLOR];
+  infoSettings.marlin_font_color      = lcd_colors[MARLIN_FONT_COLOR];
+  infoSettings.marlin_fullscreen      = MARLIN_FULLSCREEN;
+  infoSettings.marlin_show_title      = MARLIN_SHOW_TITLE;
   infoSettings.marlin_type            = LCD12864;
 
 // Printer / Machine Settings
@@ -69,11 +69,11 @@ void infoSettingsReset(void)
   infoSettings.fan_count              = FAN_NUM;
   infoSettings.ctrl_fan_en            = ENABLE_CTRL_FAN;
   infoSettings.min_ext_temp           = PREVENT_COLD_EXTRUSION_MINTEMP;
-  infoSettings.auto_load_leveling     = AUTO_SAVE_LOAD_BL_VALUE;
-  infoSettings.onboardSD              = AUTO;  //ENABLED / DISABLED / AUTO
-  infoSettings.m27_refresh_time       = M27_REFRESH;
-  infoSettings.m27_active             = M27_WATCH_OTHER_SOURCES;
-  infoSettings.longFileName           = AUTO;  //ENABLED / DISABLED / AUTO
+  infoSettings.auto_load_leveling     = AUTO_LOAD_LEVELING;
+  infoSettings.onboard_sd             = AUTO;  // ENABLED / DISABLED / AUTO
+  infoSettings.m27_refresh_time       = M27_REFRESH_TIME;
+  infoSettings.m27_active             = M27_ALWAYS_ACTIVE;
+  infoSettings.long_filename          = AUTO;  // ENABLED / DISABLED / AUTO
 
   infoSettings.pause_retract_len      = NOZZLE_PAUSE_RETRACT_LENGTH;
   infoSettings.resume_purge_len       = NOZZLE_RESUME_PURGE_LENGTH;
@@ -87,36 +87,36 @@ void infoSettingsReset(void)
 
   infoSettings.move_speed             = 1;  // index on infoSettings.axis_speed, infoSettings.ext_speed
 
-  infoSettings.invert_axis            = default_invertAxis;
+  infoSettings.inverted_axis          = default_inverted_axis;
 
-  infoSettings.xy_offset_probing      = ENABLED;
-  infoSettings.z_raise_probing        = Z_RAISE_PROBING;
+  infoSettings.probing_z_offset       = ENABLED;
+  infoSettings.probing_z_raise        = PROBING_Z_RAISE;
   infoSettings.z_steppers_alignment   = DISABLED;
-  infoSettings.touchmi_sensor         = TOUCHMI_SENSOR_VALUE;
+  infoSettings.touchmi_sensor         = TOUCHMI_SENSOR;
 
 // Power Supply Settings (only if connected to TFT controller)
-  infoSettings.auto_off               = DISABLED;
-  infoSettings.ps_active_high         = PS_ON_ACTIVE_HIGH;
-  infoSettings.auto_off_temp          = AUTO_SHUT_DOWN_MAXTEMP;
+  infoSettings.ps_active_high         = PS_ACTIVE_HIGH;
+  infoSettings.auto_shutdown          = DISABLED;
+  infoSettings.auto_shutdown_temp     = PS_AUTO_SHUTDOWN_TEMP;
 
 // Filament Runout Settings (only if connected to TFT controller)
-  infoSettings.runout                 = (FIL_SENSOR_TYPE | (FIL_RUNOUT_INVERTING << RUNOUT_INVERT) | (FIL_RUNOUT_NC << RUNOUT_NO_NC));
-  infoSettings.runout_noise_ms        = FIL_NOISE_THRESHOLD;
-  infoSettings.runout_distance        = FILAMENT_RUNOUT_DISTANCE_MM;
+  infoSettings.runout                 = (FIL_RUNOUT | (FIL_RUNOUT_INVERTED << RUNOUT_INVERTED) | (FIL_RUNOUT_NC << RUNOUT_NO_NC));
+  infoSettings.runout_noise           = FIL_RUNOUT_NOISE_THRESHOLD;
+  infoSettings.runout_distance        = FIL_RUNOUT_DISTANCE;
 
 // Power Loss Recovery & BTT UPS Settings
-  infoSettings.powerloss_en           = ENABLED;
-  infoSettings.powerloss_home         = HOME_BEFORE_PLR;
-  infoSettings.powerloss_z_raise      = POWER_LOSS_ZRAISE;
+  infoSettings.plr                    = ENABLED;
+  infoSettings.plr_home               = PL_RECOVERY_HOME;
+  infoSettings.plr_z_raise            = PL_RECOVERY_Z_RAISE;
   infoSettings.btt_ups                = BTT_MINI_UPS;
 
 // Other Device-Specific Settings
   infoSettings.sounds                 = default_sounds;
-  infoSettings.lcd_brightness         = DEFAULT_LCD_BRIGHTNESS;
-  infoSettings.lcd_idle_brightness    = DEFAULT_LCD_IDLE_BRIGHTNESS;
-  infoSettings.lcd_idle_time          = DEFAULT_LCD_IDLE_TIME;
+  infoSettings.lcd_brightness         = LCD_BRIGHTNESS;
+  infoSettings.lcd_idle_brightness    = LCD_IDLE_BRIGHTNESS;
+  infoSettings.lcd_idle_time          = LCD_IDLE_TIME;
   infoSettings.block_touch_on_idle    = DISABLED;
-  infoSettings.knob_led_color         = STARTUP_KNOB_LED_COLOR;
+  infoSettings.knob_led_color         = KNOB_LED_COLOR;
   infoSettings.knob_led_idle          = ENABLED;
   #ifdef NEOPIXEL_PIXELS
     infoSettings.neopixel_pixels      = NEOPIXEL_PIXELS;
@@ -148,7 +148,7 @@ void infoSettingsReset(void)
     infoSettings.machine_size_min[i]  = default_size_min[i];
     infoSettings.machine_size_max[i]  = default_size_max[i];
   }
-  infoSettings.leveling_invert_y_axis = DISABLED;
+  infoSettings.leveling_inverted_y_axis = DISABLED;
 
   for (int i = 0; i < FEEDRATE_COUNT - 1 ; i++)  //xy, z
   {
@@ -200,14 +200,14 @@ void setupMachine(void)
   if (!firstCall) return;
   firstCall = false;
 
-  #ifdef ENABLE_BL_VALUE
-    #if ENABLE_BL_VALUE == 2
+  #ifdef BED_LEVELING_TYPE
+    #if BED_LEVELING_TYPE == 2
         infoMachineSettings.leveling = BL_ABL;
-    #elif ENABLE_BL_VALUE == 3
+    #elif BED_LEVELING_TYPE == 3
         infoMachineSettings.leveling = BL_BBL;
-    #elif ENABLE_BL_VALUE == 4
+    #elif BED_LEVELING_TYPE == 4
         infoMachineSettings.leveling = BL_UBL;
-    #elif ENABLE_BL_VALUE == 5
+    #elif BED_LEVELING_TYPE == 5
         infoMachineSettings.leveling = BL_MBL;
     #endif
   #endif
@@ -228,18 +228,18 @@ void setupMachine(void)
     infoMachineSettings.emergencyParser         = ENABLED;
     infoMachineSettings.autoReportSDStatus      = DISABLED;
   }
-  if (infoSettings.onboardSD != AUTO)
-    infoMachineSettings.onboard_sd_support = infoSettings.onboardSD;
+  if (infoSettings.onboard_sd != AUTO)
+    infoMachineSettings.onboard_sd_support = infoSettings.onboard_sd;
 
-  if (infoSettings.longFileName != AUTO)
-    infoMachineSettings.long_filename_support = infoSettings.longFileName;
+  if (infoSettings.long_filename != AUTO)
+    infoMachineSettings.long_filename_support = infoSettings.long_filename;
 
   mustStoreCmd("M503 S0\n");
 
   if (infoMachineSettings.firmwareType == FW_REPRAPFW)
   {
     mustStoreCmd("M555 P2\n");  //  Set RRF compatibility behaves similar to 2: Marlin
-    mustStoreCmd("M552\n"); // query network state, populate IP if the screen boots up after RRF
+    mustStoreCmd("M552\n");     // query network state, populate IP if the screen boots up after RRF
   }
   mustStoreCmd("M82\n");  // Set extruder to absolute mode
   mustStoreCmd("G90\n");  // Set to Absolute Positioning

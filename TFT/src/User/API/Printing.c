@@ -203,7 +203,7 @@ void shutdownLoop(void)
 
   for (uint8_t i = NOZZLE0; i < infoSettings.hotend_count; i++)
   {
-    if (heatGetCurrentTemp(i) >= AUTO_SHUT_DOWN_MAXTEMP)
+    if (heatGetCurrentTemp(i) >= infoSettings.auto_shutdown_temp)
       tempIsLower = false;
   }
 
@@ -218,7 +218,7 @@ void shutdownStart(void)
   char tempstr[75];
 
   LABELCHAR(tempbody, LABEL_WAIT_TEMP_SHUT_DOWN);
-  sprintf(tempstr, tempbody, infoSettings.auto_off_temp);
+  sprintf(tempstr, tempbody, infoSettings.auto_shutdown_temp);
 
   for (uint8_t i = 0; i < infoSettings.fan_count; i++)
   {
@@ -401,7 +401,7 @@ void printComplete(void)
   BUZZER_PLAY(SOUND_SUCCESS);
   printEnd();
 
-  if (infoSettings.auto_off)  // Auto shut down after print
+  if (infoSettings.auto_shutdown)  // Auto shutdown after print
   {
     shutdownStart();
   }
@@ -670,7 +670,7 @@ void loopPrintFromTFT(void)
       {
         infoCmd.queue[infoCmd.index_w].gcode[gCode_count++] = '\n';
         infoCmd.queue[infoCmd.index_w].gcode[gCode_count] = 0;  // terminate string
-        infoCmd.queue[infoCmd.index_w].src = SERIAL_PORT;
+        infoCmd.queue[infoCmd.index_w].port_index = PORT_1;     // port index for SERIAL_PORT
         infoCmd.index_w = (infoCmd.index_w + 1) % CMD_MAX_LIST;
         infoCmd.count++;
       }
