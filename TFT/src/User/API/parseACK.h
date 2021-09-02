@@ -37,7 +37,7 @@ typedef enum
 inline bool isHostDialog() {return hostDialog;}
 
 //void setIgnoreEcho(ECHO_ID msgId, bool state);
-void setCurrentAckSrc(uint8_t src);
+void setCurrentAckSrc(uint8_t portIndex);
 void parseACK(void);
 void parseRcvGcode(void);
 

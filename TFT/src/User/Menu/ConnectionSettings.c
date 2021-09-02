@@ -26,7 +26,7 @@ void menuDisconnect(void)
   GUI_DispStringInRect(20, 0, LCD_WIDTH - 20, LCD_HEIGHT, textSelect(LABEL_DISCONNECT_INFO));
   GUI_DispStringInRect(20, LCD_HEIGHT - (BYTE_HEIGHT * 2), LCD_WIDTH - 20, LCD_HEIGHT, textSelect(LABEL_TOUCH_TO_EXIT));
 
-  Serial_DeInit(-1);
+  Serial_DeInit(ALL_PORTS);
   while (!isPress())
   {
     #ifdef LCD_LED_PWM_CHANNEL
@@ -39,7 +39,7 @@ void menuDisconnect(void)
       LCD_CheckDimming();
     #endif
   }
-  Serial_Init(-1);
+  Serial_Init(ALL_PORTS);
 
   infoMenu.cur--;
 }
@@ -107,7 +107,7 @@ void menuSerialPorts(void)
   LISTITEM totalItems[SERIAL_PORT_COUNT];
   KEY_VALUES curIndex = KEY_IDLE;
 
-  for (uint8_t i = 0; i < SERIAL_PORT_COUNT; i++)
+  for (uint8_t i = PORT_1; i < SERIAL_PORT_COUNT; i++)
   {
     totalItems[i].icon = CHARICON_EDIT;
     totalItems[i].itemType = LIST_CUSTOMVALUE;
