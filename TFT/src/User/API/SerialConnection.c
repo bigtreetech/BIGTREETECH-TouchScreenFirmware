@@ -15,7 +15,7 @@ const SERIAL_PORT_INFO serialPort[SERIAL_PORT_COUNT] = {
     {SERIAL_PORT_3, SERIAL_PORT_3_QUEUE_SIZE, "3", "3 - UART3"},
   #endif
   #ifdef SERIAL_PORT_4
-    {SERIAL_PORT_4, SERIAL_PORT_4_QUEUE_SIZE, "4", "4 - UART4"},
+    {SERIAL_PORT_4, SERIAL_PORT_4_QUEUE_SIZE, "4", "4 - UART4"}
   #endif
 };
 
@@ -36,16 +36,16 @@ static inline void Serial_DeInitPrimary(void)
   Serial_DeConfig(serialPort[PORT_1].port);
 }
 
-void Serial_Init(int8_t port)
+void Serial_Init(SERIAL_PORT_INDEX port)
 {
   if (port <= PORT_1)  // if primary or all serial ports
   {
     Serial_InitPrimary();
 
     #ifdef SERIAL_PORT_2
-      if (port == ALL_PORTS)  // if < 0, initialize also all the supplementary serial ports
+      if (port == ALL_PORTS)  // if ALL_PORTS, initialize also all the supplementary serial ports
       {
-        for (uint8_t i = PORT_2; i < SERIAL_PORT_COUNT; i++)
+        for (SERIAL_PORT_INDEX i = PORT_2; i < SERIAL_PORT_COUNT; i++)
         {
           // the supplementary serial ports should be enabled according to config.ini.
           // Disable the serial port when it is not in use and/or not connected to a device (floating) to
@@ -67,16 +67,16 @@ void Serial_Init(int8_t port)
   #endif
 }
 
-void Serial_DeInit(int8_t port)
+void Serial_DeInit(SERIAL_PORT_INDEX port)
 {
   if (port <= PORT_1)  // if primary or all serial ports
   {
     Serial_DeInitPrimary();
 
     #ifdef SERIAL_PORT_2
-      if (port == ALL_PORTS)  // if < 0, deinitialize also all the supplementary serial ports
+      if (port == ALL_PORTS)  // if ALL_PORTS, deinitialize also all the supplementary serial ports
       {
-        for (uint8_t i = PORT_2; i < SERIAL_PORT_COUNT; i++)
+        for (SERIAL_PORT_INDEX i = PORT_2; i < SERIAL_PORT_COUNT; i++)
         {
           Serial_DeConfig(serialPort[i].port);
         }

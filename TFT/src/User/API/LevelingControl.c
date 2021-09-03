@@ -1,8 +1,8 @@
 #include "LevelingControl.h"
 #include "includes.h"
 
-LEVELING_POINT probedPoint = LEVEL_NO_POINT;
-float probedZ = 0.0f;
+LEVELING_POINT probedPoint = LEVEL_NO_POINT;  // last probed point or LEVEL_NO_POINT in case of no new updates
+float probedZ = 0.0f;                         // last Z offset measured by probe
 
 void levelingGetPointCoords(LEVELING_POINT_COORDS coords)
 {
@@ -98,3 +98,18 @@ void levelingSetProbedPoint(int16_t x, int16_t y, float z)
   probedPoint = levelingGetPoint(x, y);
   probedZ = z;
 }
+
+LEVELING_POINT levelingGetProbedPoint(void)
+{
+  return probedPoint;
+};
+
+void levelingResetProbedPoint(void)
+{
+  probedPoint = LEVEL_NO_POINT;
+};
+
+float levelingGetProbedZ(void)
+{
+  return probedZ;
+};

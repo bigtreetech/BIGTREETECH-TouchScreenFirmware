@@ -29,7 +29,7 @@ void probeOffsetEnable(float shim)
     }
 
     probedZ = levelingGetProbedZ();
-    levelingResetProbedPoint();
+    levelingResetProbedPoint();  // reset to check for new updates
   }
 
   probeHeightRelative();                                            // set relative position mode

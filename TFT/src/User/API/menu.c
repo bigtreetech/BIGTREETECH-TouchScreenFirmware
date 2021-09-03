@@ -464,7 +464,7 @@ void loopReminderClear(void)
       return;
 
     case STATUS_BUSY:
-      if (infoCmd.count == CMD_MAX_LIST)
+      if (isFullCmdQueue())
         return;
       break;
 

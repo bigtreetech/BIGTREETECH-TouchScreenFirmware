@@ -17,7 +17,7 @@ const MENUITEMS connectionSettingsItems = {
   }
 };
 
-uint8_t portIndex = 0;  // index on serialPort array
+SERIAL_PORT_INDEX portIndex = 0;  // index on serialPort array
 
 // Set uart pins to input, free uart
 void menuDisconnect(void)
@@ -47,7 +47,7 @@ void menuDisconnect(void)
 void menuBaudrate(void)
 {
   LABEL title = {LABEL_BAUDRATE};
-  uint8_t minIndex = portIndex == 0 ? 1 : 0;  // if primary serial port, set minIndex to 1 (value OFF is skipped)
+  uint8_t minIndex = portIndex == PORT_1 ? 1 : 0;  // if primary serial port, set minIndex to 1 (value OFF is skipped)
   uint8_t size = BAUDRATE_COUNT - minIndex;
   LISTITEM totalItems[size];
   KEY_VALUES curIndex = KEY_IDLE;
@@ -107,7 +107,7 @@ void menuSerialPorts(void)
   LISTITEM totalItems[SERIAL_PORT_COUNT];
   KEY_VALUES curIndex = KEY_IDLE;
 
-  for (uint8_t i = PORT_1; i < SERIAL_PORT_COUNT; i++)
+  for (SERIAL_PORT_INDEX i = PORT_1; i < SERIAL_PORT_COUNT; i++)
   {
     totalItems[i].icon = CHARICON_EDIT;
     totalItems[i].itemType = LIST_CUSTOMVALUE;
@@ -124,7 +124,7 @@ void menuSerialPorts(void)
 
     if (curIndex < (KEY_VALUES)SERIAL_PORT_COUNT)
     {
-      portIndex = curIndex;
+      portIndex = (SERIAL_PORT_INDEX)curIndex;
       infoMenu.menu[++infoMenu.cur] = menuBaudrate;
     }
 
