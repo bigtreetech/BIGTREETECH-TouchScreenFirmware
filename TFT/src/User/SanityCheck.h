@@ -10,6 +10,7 @@ extern "C" {
 #include "FlashStore.h"
 #include "SerialConnection.h"
 #include "Settings.h"
+#include "ui_draw.h"
 
 // check size of settings against max allocated size at compile time
 #define SIZE_CHECK(object) ((void)sizeof(char[1 - 2*!!(object)]))
