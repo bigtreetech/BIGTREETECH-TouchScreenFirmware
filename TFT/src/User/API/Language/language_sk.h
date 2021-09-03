@@ -3,6 +3,7 @@
 
     // config.ini Parameter Settings - Screen Settings and Feature Settings
     #define STRING_EMULATED_M600          "Emulated M600"
+    #define STRING_EMULATED_M109_M190     "Emulated M109 / M190"
     #define STRING_ROTATE_UI              "Otočiť"
     #define STRING_LANGUAGE               "Slovensky"
     #define STRING_ACK_NOTIFICATION       "ACK notification style"

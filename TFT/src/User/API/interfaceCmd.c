@@ -712,6 +712,9 @@ void sendQueueCmd(void)
         case 109: // M109
           if (fromTFT)
           {
+            if (GET_BIT(infoSettings.general_settings, EMULATED_M109_M190) == 0)  // if emulated M109 / M190 is disabled
+              break;
+
             cmd_ptr[cmd_index + 3] = '4';  // Avoid send M109 to Marlin
             uint8_t i = cmd_seen('T') ? cmd_value() : heatGetCurrentHotend();
             if (cmd_seen('R'))
@@ -782,6 +785,9 @@ void sendQueueCmd(void)
         case 190:  // M190
           if (fromTFT)
           {
+            if (GET_BIT(infoSettings.general_settings, EMULATED_M109_M190) == 0)  // if emulated M109 / M190 is disabled
+              break;
+
             cmd_ptr[cmd_index + 2] = '4';  // Avoid send M190 to Marlin
             if (cmd_seen('R'))
             {
@@ -1004,7 +1010,7 @@ void sendQueueCmd(void)
           {
             // purge and pause only if emulated M600 is enabled.
             // if emulated M600 is disabled then let the printer pause the print to avoid premature pause
-            if (infoSettings.emulated_m600 == 1)
+            if (GET_BIT(infoSettings.general_settings, EMULATED_M600) == 1)
             {
               purgeCmd(true, avoid_terminal);
               printPause(true, PAUSE_NORMAL);
@@ -1019,7 +1025,7 @@ void sendQueueCmd(void)
             {
               // purge and pause only if emulated M600 is enabled.
               // if emulated M600 is disabled then let the printer pause the print to avoid premature pause
-              if (infoSettings.emulated_m600 == 1)
+              if (GET_BIT(infoSettings.general_settings, EMULATED_M600) == 1)
               {
                 purgeCmd(true, avoid_terminal);
                 printPause(true, PAUSE_NORMAL);

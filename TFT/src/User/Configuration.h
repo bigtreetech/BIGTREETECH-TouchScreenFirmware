@@ -1,7 +1,7 @@
 #ifndef _CONFIGURATION_H_
 #define _CONFIGURATION_H_
 
-#define CONFIG_VERSION 20210829
+#define CONFIG_VERSION 20210903
 
 //====================================================================================================
 //=============================== Settings Configurable On config.ini ================================
@@ -37,17 +37,6 @@
  *   Options: [OFF (port disabled): 0, 2400: 1, 9600: 2, 19200: 3, 38400: 4, 57600: 5, 115200: 6, 250000: 7, 500000: 8, 1000000: 9]
  */
 #define PRIMARY_BAUDRATE 6  // Default: 6
-
-/**
- * Emulated M600
- * The TFT intercepts the M600 gcode (filament change) and emulates the handling logic
- * otherwise provided by Marlin firmware.
- *
- * NOTE: Enable it, in case Marlin firmware does not properly support M600 on the mainboard.
- *
- *   Options: [disable: 0, enable: 1]
- */
-#define EMULATED_M600 1  // Default: 1
 
 //================================================================================
 //================================= UI Settings ==================================

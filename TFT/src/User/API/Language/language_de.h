@@ -3,6 +3,7 @@
 
     // config.ini Parameter Settings - Screen Settings and Feature Settings
     #define STRING_EMULATED_M600          "Emuliere M600"
+    #define STRING_EMULATED_M109_M190     "Emulated M109 / M190"
     #define STRING_ROTATE_UI              "UI drehen"
     #define STRING_LANGUAGE               "Deutsch"
     #define STRING_ACK_NOTIFICATION       "ACK - Stil"

@@ -10,6 +10,7 @@
 //-----------------------------General Settings
 X_CONFIG(SERIAL_PORT)
 X_CONFIG(EMULATED_M600)
+X_CONFIG(EMULATED_M109_M190)
 //-----------------------------UI Settings
 X_CONFIG(ROTATE_UI)
 X_CONFIG(LANGUAGE)
