@@ -22,6 +22,7 @@ GCODE_QUEUE infoCacheCmd;  // Only when heatHasWaiting() is false the cmd in thi
 char * cmd_ptr;
 uint8_t cmd_len;
 uint8_t cmd_index;
+SERIAL_PORT_INDEX cmd_port_index;  // index of serial port originating the gcode
 bool isPolling = true;
 
 bool isFullCmdQueue(void)
@@ -197,34 +198,34 @@ void clearCmdQueue(void)
 
 static inline bool getCmd(void)
 {
-  cmd_ptr = &infoCmd.queue[infoCmd.index_r].gcode[0];  // gcode
-  cmd_len = strlen(cmd_ptr);                           // length of gcode
+  cmd_ptr = &infoCmd.queue[infoCmd.index_r].gcode[0];          // gcode
+  cmd_len = strlen(cmd_ptr);                                   // length of gcode
+  cmd_port_index = infoCmd.queue[infoCmd.index_r].port_index;  // index of serial port originating the gcode
 
-  return (infoCmd.queue[infoCmd.index_r].port_index == PORT_1);  // if port index for SERIAL_PORT
+  return (cmd_port_index == PORT_1);  // if gcode is originated by TFT (SERIAL_PORT), return true
 }
 
 void updateCmd(const char * buf)
 {
   strcat(cmd_ptr, buf);       // append buf to gcode
-  cmd_len = strlen(cmd_ptr);  // length of gcode
+  cmd_len = strlen(cmd_ptr);  // new length of gcode
 }
 
 // Remove leading gcode cmd from infoCmd queue.
 void purgeCmd(bool purged, bool avoidTerminal)
 {
   char * purgeStr = "[Purged] ";
-  SERIAL_PORT_INDEX portIndex = infoCmd.queue[infoCmd.index_r].port_index;
 
   if (!avoidTerminal)
   {
     if (purged)
-      terminalCache(purgeStr, strlen(purgeStr), portIndex, TERMINAL_GCODE);
-    terminalCache(cmd_ptr, cmd_len, portIndex, TERMINAL_GCODE);
+      terminalCache(purgeStr, strlen(purgeStr), cmd_port_index, TERMINAL_GCODE);
+    terminalCache(cmd_ptr, cmd_len, cmd_port_index, TERMINAL_GCODE);
   }
 
   #if defined(SERIAL_DEBUG_PORT) && defined(DEBUG_SERIAL_COMM)
     // dump serial data sent to debug port
-    Serial_Puts(SERIAL_DEBUG_PORT, serialPort[portIndex].id);  // serial port ID (e.g. "2" for SERIAL_PORT_2)
+    Serial_Puts(SERIAL_DEBUG_PORT, serialPort[cmd_port_index].id);  // serial port ID (e.g. "2" for SERIAL_PORT_2)
     Serial_Puts(SERIAL_DEBUG_PORT, ">>");
     if (purged)
       Serial_Puts(SERIAL_DEBUG_PORT, purgeStr);
@@ -1224,7 +1225,7 @@ void sendQueueCmd(void)
 
   infoHost.wait = infoHost.connected;
 
-  setCurrentAckSrc(infoCmd.queue[infoCmd.index_r].port_index);
+  setCurrentAckSrc(cmd_port_index);
   Serial_Puts(SERIAL_PORT, cmd_ptr);
   purgeCmd(false, avoid_terminal);
 }  // sendQueueCmd
