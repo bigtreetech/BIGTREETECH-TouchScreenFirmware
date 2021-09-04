@@ -48,10 +48,10 @@ void HW_Init(void)
     Serial_Init(ALL_PORTS);  // Initialize serial ports first if debugging is enabled
   #endif
 
-  LCD_RefreshDirection(infoSettings.rotate_ui);  // refresh display direction after reading settings
-  scanUpdates();                                 // scan icon, fonts and config files
-  checkflashSign();                              // check font/icon/config signature in SPI flash for update
-  initMachineSetting();                          // load default machine settings
+  LCD_RefreshDirection(infoSettings.rotated_ui);  // refresh display direction after reading settings
+  scanUpdates();                                  // scan icon, fonts and config files
+  checkflashSign();                               // check font/icon/config signature in SPI flash for update
+  initMachineSetting();                           // load default machine settings
 
   #ifdef LED_COLOR_PIN
     knob_LED_Init();

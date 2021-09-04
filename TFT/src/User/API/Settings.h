@@ -166,7 +166,7 @@ typedef struct
   uint8_t  general_settings;  // emulated M600 / M109 / M190 toggles (Bit Values)
 
   // UI Settings
-  uint8_t  rotate_ui;
+  uint8_t  rotated_ui;
   uint8_t  language;
   uint8_t  status_screen;
   uint16_t title_bg_color;
@@ -260,7 +260,7 @@ typedef struct
   uint8_t  lcd_brightness;
   uint8_t  lcd_idle_brightness;
   uint8_t  lcd_idle_time;
-  uint8_t  block_touch_on_idle;
+  uint8_t  lcd_lock_on_idle;
   uint8_t  knob_led_color;
   uint8_t  knob_led_idle;
   uint8_t  neopixel_pixels;

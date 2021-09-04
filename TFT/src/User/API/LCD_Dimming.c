@@ -45,17 +45,17 @@ typedef struct
 {
   uint32_t idle_ms;
   bool dimmed;
-  bool blocked;
+  bool locked;
 } LCD_AUTO_DIM;
 
 LCD_AUTO_DIM lcd_dim = {0, false, false};
 
 bool LCD_IsBlocked(void)
 {
-  if (!lcd_dim.blocked)
+  if (!lcd_dim.locked)
     return false;
 
-  lcd_dim.blocked = false;
+  lcd_dim.locked = false;
 
   return true;
 }
@@ -67,7 +67,7 @@ void LCD_Wake(void)
     // the LCD dim function is activated. First check if it's dimmed
     if (lcd_dim.dimmed)
     {
-      lcd_dim.blocked = false;
+      lcd_dim.locked = false;
       lcd_dim.dimmed = false;
       LCD_SET_BRIGHTNESS(lcd_brightness[infoSettings.lcd_brightness]);
 
@@ -97,8 +97,8 @@ void LCD_CheckDimming(void)
   {
     if (lcd_dim.dimmed)
     {
-      if (infoSettings.block_touch_on_idle && isPress())  // if touch is blocked on idle and pressing on the LCD (not on the encoder),
-        lcd_dim.blocked = true;                           // the first touch will be skipped preventing to trigger any undesired action
+      if (infoSettings.lcd_lock_on_idle && isPress())  // if touch is blocked on idle and pressing on the LCD (not on the encoder),
+        lcd_dim.locked = true;                         // the first touch will be skipped preventing to trigger any undesired action
 
       lcd_dim.dimmed = false;
       LCD_SET_BRIGHTNESS(lcd_brightness[infoSettings.lcd_brightness]);
@@ -120,7 +120,7 @@ void LCD_CheckDimming(void)
 
     if (!lcd_dim.dimmed)
     {
-      lcd_dim.blocked = false;
+      lcd_dim.locked = false;
       lcd_dim.dimmed = true;
       LCD_SET_BRIGHTNESS(lcd_brightness[infoSettings.lcd_idle_brightness]);
 

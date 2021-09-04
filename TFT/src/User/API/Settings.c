@@ -28,7 +28,7 @@ void infoSettingsReset(void)
   infoSettings.general_settings       = default_general_settings;
 
 // UI Settings
-  infoSettings.rotate_ui              = DISABLED;
+  infoSettings.rotated_ui             = DISABLED;
   infoSettings.language               = LANG_DEFAULT;
   infoSettings.status_screen          = STATUS_SCREEN;
   infoSettings.title_bg_color         = lcd_colors[TITLE_BACKGROUND_COLOR];
@@ -116,7 +116,7 @@ void infoSettingsReset(void)
   infoSettings.lcd_brightness         = LCD_BRIGHTNESS;
   infoSettings.lcd_idle_brightness    = LCD_IDLE_BRIGHTNESS;
   infoSettings.lcd_idle_time          = LCD_IDLE_TIME;
-  infoSettings.block_touch_on_idle    = DISABLED;
+  infoSettings.lcd_lock_on_idle       = DISABLED;
   infoSettings.knob_led_color         = KNOB_LED_COLOR;
   infoSettings.knob_led_idle          = ENABLED;
   #ifdef NEOPIXEL_PIXELS
