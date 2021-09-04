@@ -458,7 +458,7 @@ void resetConfig(void)
   tempCG.count = n;
 
   // restore strings store
-  strcpy(tempST.marlin_title, MARLIN_BANNER_TEXT);
+  strcpy(tempST.marlin_title, MARLIN_TITLE);
 
   for (int i = 0; i < PREHEAT_COUNT; i++)
   {
