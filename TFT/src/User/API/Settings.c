@@ -186,9 +186,9 @@ void initMachineSetting(void)
   infoMachineSettings.caseLightsBrightness    = DISABLED;
   infoMachineSettings.emergencyParser         = DISABLED;
   infoMachineSettings.promptSupport           = DISABLED;
-  infoMachineSettings.onboard_sd_support      = DISABLED;
+  infoMachineSettings.onboardSD               = DISABLED;
   infoMachineSettings.autoReportSDStatus      = DISABLED;
-  infoMachineSettings.long_filename_support   = DISABLED;
+  infoMachineSettings.longFilename            = DISABLED;
   infoMachineSettings.babyStepping            = DISABLED;
   infoMachineSettings.buildPercent            = DISABLED;
   infoMachineSettings.softwareEndstops        = ENABLED;
@@ -230,10 +230,10 @@ void setupMachine(void)
     infoMachineSettings.autoReportSDStatus      = DISABLED;
   }
   if (infoSettings.onboard_sd != AUTO)
-    infoMachineSettings.onboard_sd_support = infoSettings.onboard_sd;
+    infoMachineSettings.onboardSD = infoSettings.onboard_sd;
 
   if (infoSettings.long_filename != AUTO)
-    infoMachineSettings.long_filename_support = infoSettings.long_filename;
+    infoMachineSettings.longFilename = infoSettings.long_filename;
 
   mustStoreCmd("M503 S0\n");
 

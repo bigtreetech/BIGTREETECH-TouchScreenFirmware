@@ -635,7 +635,7 @@ void parseACK(void)
         }
         hasFilamentData = true;
       }
-      else if (infoMachineSettings.onboard_sd_support == ENABLED &&
+      else if (infoMachineSettings.onboardSD == ENABLED &&
                ack_seen(infoMachineSettings.firmwareType != FW_REPRAPFW ? "File opened:" : "job.file.fileName"))
       {
         char * fileEndString;
@@ -660,13 +660,13 @@ void parseACK(void)
 
         setPrintHost(true);
       }
-      else if (infoMachineSettings.onboard_sd_support == ENABLED &&
+      else if (infoMachineSettings.onboardSD == ENABLED &&
                infoFile.source >= BOARD_SD &&
                ack_seen("Not SD printing"))
       {
         setPrintPause(true, PAUSE_EXTERNAL);
       }
-      else if (infoMachineSettings.onboard_sd_support == ENABLED &&
+      else if (infoMachineSettings.onboardSD == ENABLED &&
                infoFile.source >= BOARD_SD &&
                ack_seen("SD printing byte"))
       {
@@ -678,7 +678,7 @@ void parseACK(void)
         setPrintProgress(ack_value(), ack_second_value());
         //powerFailedCache(position);
       }
-      else if (infoMachineSettings.onboard_sd_support == ENABLED &&
+      else if (infoMachineSettings.onboardSD == ENABLED &&
                infoFile.source >= BOARD_SD &&
                ack_seen(infoMachineSettings.firmwareType != FW_REPRAPFW ? "Done printing file" : "Finished printing file"))
       {
@@ -1183,7 +1183,7 @@ void parseACK(void)
       }
       else if (ack_seen("Cap:SDCARD:") && infoSettings.onboard_sd == AUTO)
       {
-        infoMachineSettings.onboard_sd_support = ack_value();
+        infoMachineSettings.onboardSD = ack_value();
       }
       else if (ack_seen("Cap:AUTOREPORT_SD_STATUS:"))
       {
@@ -1191,7 +1191,7 @@ void parseACK(void)
       }
       else if (ack_seen("Cap:LONG_FILENAME:") && infoSettings.long_filename == AUTO)
       {
-        infoMachineSettings.long_filename_support = ack_value();
+        infoMachineSettings.longFilename = ack_value();
       }
       else if (ack_seen("Cap:BABYSTEPPING:"))
       {

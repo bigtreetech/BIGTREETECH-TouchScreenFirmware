@@ -212,7 +212,7 @@ uint16_t listViewGetSelectedIndex(void)
 
     default:
       #if LCD_ENCODER_SUPPORT
-        if (encoderPosition != 0)  // if a page scrolling is requested
+        if (encoderPosition)  // if a page scrolling is requested
         {
           if (encoderPosition < 0)  // if page up
           {

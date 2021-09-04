@@ -964,7 +964,7 @@ void loopBackEnd(void)
     loopBuzzer();
   #endif
 
-  if (infoMachineSettings.onboard_sd_support == ENABLED)
+  if (infoMachineSettings.onboardSD == ENABLED)
   {
     loopPrintFromHost();  // handle a print from onboard SD or remote host, if any
   }

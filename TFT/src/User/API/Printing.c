@@ -238,7 +238,7 @@ void initPrintSummary(void)
 
 void preparePrintSummary(void)
 {
-  if (infoMachineSettings.long_filename_support == ENABLED && infoFile.source == BOARD_SD)
+  if (infoMachineSettings.longFilename == ENABLED && infoFile.source == BOARD_SD)
     sprintf(infoPrintSummary.name,"%." STRINGIFY(SUMMARY_NAME_LEN) "s", infoFile.Longfile[infoFile.fileIndex]);
   else
     sprintf(infoPrintSummary.name,"%." STRINGIFY(SUMMARY_NAME_LEN) "s", getPrintName(infoFile.title));

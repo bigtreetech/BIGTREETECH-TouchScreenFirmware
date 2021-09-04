@@ -334,9 +334,9 @@ typedef struct
   uint8_t caseLightsBrightness;
   uint8_t emergencyParser;
   uint8_t promptSupport;
-  uint8_t onboard_sd_support;
+  uint8_t onboardSD;
   uint8_t autoReportSDStatus;
-  uint8_t long_filename_support;
+  uint8_t longFilename;
   uint8_t babyStepping;
   uint8_t buildPercent;
   uint8_t softwareEndstops;

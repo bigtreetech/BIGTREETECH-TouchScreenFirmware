@@ -90,7 +90,7 @@ void gocdeListDraw(LISTITEM * item, uint16_t index, uint8_t itemPos)
     item->icon = CHARICON_FILE;
     item->itemType = LIST_LABEL;
     item->titlelabel.index = LABEL_DYNAMIC;
-    if (infoMachineSettings.long_filename_support == ENABLED && infoFile.source == BOARD_SD)
+    if (infoMachineSettings.longFilename == ENABLED && infoFile.source == BOARD_SD)
       setDynamicLabel(itemPos, infoFile.Longfile[index - infoFile.folderCount]);
     else
       setDynamicLabel(itemPos, infoFile.file[index - infoFile.folderCount]);
@@ -134,7 +134,7 @@ bool printPageItemSelected(uint16_t index)
 
       char temp_info[FILE_NUM + 50];
       sprintf(temp_info, (char *)textSelect(LABEL_START_PRINT),
-              (uint8_t *)((infoMachineSettings.long_filename_support == ENABLED && infoFile.source == BOARD_SD) ?
+              (uint8_t *)((infoMachineSettings.longFilename == ENABLED && infoFile.source == BOARD_SD) ?
                               infoFile.Longfile[infoFile.fileIndex] :
                               infoFile.file[infoFile.fileIndex]));
       // confirm file selction
@@ -193,9 +193,12 @@ void menuPrintFromSource(void)
     infoMenu.cur--;
   }
 
+  #if LCD_ENCODER_SUPPORT
+    encoderPosition = 0;
+  #endif
+
   while (infoMenu.menu[infoMenu.cur] == menuPrintFromSource)
   {
-
     if (list_mode != true) // select item from icon view
     {
       key_num = menuKeyGetValue();
@@ -235,6 +238,29 @@ void menuPrintFromSource(void)
           break;
 
         case KEY_IDLE:
+          #if LCD_ENCODER_SUPPORT
+            if (encoderPosition)  // if a page scrolling is requested
+            {
+              if (encoderPosition < 0)  // if page up
+              {
+                if (infoFile.cur_page > 0)
+                {
+                  infoFile.cur_page--;
+                  update = 1;
+                }
+              }
+              else  // if page down
+              {
+                if (infoFile.cur_page + 1 < (infoFile.folderCount + infoFile.fileCount + (NUM_PER_PAGE - 1)) / NUM_PER_PAGE)
+                {
+                  infoFile.cur_page++;
+                  update = 1;
+                }
+              }
+
+              encoderPosition = 0;
+            }
+          #endif
           break;
 
         default:
@@ -346,8 +372,8 @@ void menuPrint(void)
 
   KEY_VALUES key_num = KEY_IDLE;
 
-  sourceSelItems.items[ONBOARD_SD_INDEX].icon = (infoMachineSettings.onboard_sd_support == ENABLED) ? ICON_ONBOARD_SD : ICON_BACKGROUND;
-  sourceSelItems.items[ONBOARD_SD_INDEX].label.index = (infoMachineSettings.onboard_sd_support == ENABLED) ? LABEL_ONBOARDSD : LABEL_BACKGROUND;
+  sourceSelItems.items[ONBOARD_SD_INDEX].icon = (infoMachineSettings.onboardSD == ENABLED) ? ICON_ONBOARD_SD : ICON_BACKGROUND;
+  sourceSelItems.items[ONBOARD_SD_INDEX].label.index = (infoMachineSettings.onboardSD == ENABLED) ? LABEL_ONBOARDSD : LABEL_BACKGROUND;
 
   menuDrawPage(&sourceSelItems);
 
@@ -374,7 +400,7 @@ void menuPrint(void)
       #else
         case KEY_ICON_1:
       #endif
-        if (infoMachineSettings.onboard_sd_support == ENABLED)
+        if (infoMachineSettings.onboardSD == ENABLED)
         {
           list_mode = true;  // force list mode in Onboard sd card
           infoFile.source = BOARD_SD;
