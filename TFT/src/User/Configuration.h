@@ -692,11 +692,14 @@
 #define RAPID_SERIAL_COMM  // Default: uncommented (enabled)
 
 /**
- * LCD/Touch Encoder
- * In case LCD/Touch Encoder's sliding buttons (pin LCD_ENCA_PIN and LCD_ENCB_PIN)
- * don't produce any movement on menu, try to increase the delay in ms (e.g. 64).
+ * LCD Encoder (HW Rotary Encoder)
+ * In case LCD Encoder's sliding buttons (pin LCD_ENCA_PIN and LCD_ENCB_PIN) don't produce
+ * any movement on menu, try to increase the delay (in MilliSeconds) (e.g. 64).
  */
-#define LCD_ENCODER_DELAY 8  // Default: 8 (ms) (1 ms = 0.000001 seconds)
+#define LCD_ENC_DELAY 8  // in ms. Default: 8
+
+#define LCD_ENC_PULSES_PER_STEP  4  // Default: 4
+#define LCD_ENC_BUTTON_INTERVAL 20  // in ms. Default: 20
 
 /**
  * Buzzer Settings
@@ -707,8 +710,8 @@
  * NOTE: Test audio output with the G-Code:
  *       M300 S<frequency Hz> P<duration MilliSeconds>
  */
-#define BUZZER_FREQUENCY_DURATION_MS    20  // (MilliSeconds) Default: 20
-#define BUZZER_FREQUENCY_HZ          10000  // (Hz) Default: 10000 (20Hz to 60000Hz)
+#define BUZZER_FREQUENCY_DURATION_MS    20  // in ms. Default: 20
+#define BUZZER_FREQUENCY_HZ          10000  // in Hz (20Hz to 60000Hz). Default: 10000
 
 /**
  * Buzzer Stop Level
@@ -757,7 +760,7 @@
  * Toast Notification Duration (in MilliSeconds)
  * Set the duration for displaying toast notification on top of the screen.
  */
-#define TOAST_DURATION (3 * 1000)  // (MilliSeconds)  1000 MilliSeconds = 1 Second
+#define TOAST_DURATION (3 * 1000)  // in ms. Default: 3 * 1000
 
 /**
  * Keyboard On Left Side (Mesh Editor, RGB Settings Custom)
