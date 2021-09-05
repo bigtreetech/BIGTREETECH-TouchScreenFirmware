@@ -696,8 +696,7 @@
  * In case LCD Encoder's sliding buttons (pin LCD_ENCA_PIN and LCD_ENCB_PIN) don't produce
  * any movement on menu, try to increase the delay (in MilliSeconds) (e.g. 64).
  */
-#define LCD_ENC_DELAY 8  // in ms. Default: 8
-
+#define LCD_ENC_DELAY            8  // in ms. Default: 8
 #define LCD_ENC_PULSES_PER_STEP  4  // Default: 4
 #define LCD_ENC_BUTTON_INTERVAL 20  // in ms. Default: 20
 
