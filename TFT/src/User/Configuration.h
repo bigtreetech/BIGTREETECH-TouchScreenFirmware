@@ -56,7 +56,7 @@
 #define STATUS_SCREEN 1  // Default: 1
 
 /**
- * Default Touch Mode Colors
+ * Touch Mode Colors
  * Set colors used in Touch Mode.
  *
  *   Options: [ WHITE: 0,  BLACK: 1,  RED: 2,  GREEN: 3,      BLUE: 4,       CYAN: 5,  MAGENTA: 6,    YELLOW: 7,
@@ -139,7 +139,7 @@
 #define SERIAL_ALWAYS_ON 0  // Default: 0
 
 /**
- * Default Marlin Mode Background & Font Colors
+ * Marlin Mode Background & Font Colors
  * Set colors used in Marlin Mode.
  *
  *   Options: [ WHITE: 0,  BLACK: 1,  RED: 2,  GREEN: 3,      BLUE: 4,       CYAN: 5,  MAGENTA: 6,    YELLOW: 7,
@@ -235,12 +235,12 @@
 #define AXIS_DISPLAY_ID    {"X", "Y", "Z", "E0", "E1"}  // (X, Y, Z, E0, E1)
 #define STEPPER_DISPLAY_ID {"X", "X2", "Y", "Y2", "Z", "Z2", "E0", "E1"}  // (X, X2, Y, Y2, Z, Z2, E0, E1)
 
-// Default X & Y speed (mm/min)
+// X & Y speed (mm/min)
 #define SPEED_XY_SLOW   1000
 #define SPEED_XY_NORMAL 3000
 #define SPEED_XY_FAST   5000
 
-// Default Z speed (mm/min)
+// Z speed (mm/min)
 #define SPEED_Z_SLOW   500
 #define SPEED_Z_NORMAL 1000
 #define SPEED_Z_FAST   2000
@@ -372,7 +372,7 @@
  */
 
 /**
- * Default Filament Runout Sensor
+ * Filament Runout Sensor
  * Select the type of filament runout sensor and its default enabled/disabled state.
  *
  *   Options: [Normal Disabled: 0, Normal Enabled: 1, Smart Disabled: 2, Smart Enabled: 3]
@@ -438,16 +438,16 @@
 //================================================================================
 
 /**
- * Default LCD Brightness Levels (only for TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
- * Default brightness values for LCD.
+ * LCD Brightness Levels (only for TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
+ * Brightness levels for LCD.
  *
  *   Options: [OFF: 0, 5%: 1, 10%: 2, 20%: 3, 30%: 4, 40%: 5, 50%: 6, 60%: 7, 70%: 8, 80%: 9, 90%: 10, 100%: 11]
  */
-#define LCD_BRIGHTNESS      11  // Default display brightness (Default: 11)
-#define LCD_IDLE_BRIGHTNESS  3  // Display brightness when device is idle (Default: 3)
+#define LCD_BRIGHTNESS      11  // LCD brightness level (Default: 11)
+#define LCD_IDLE_BRIGHTNESS  3  // LCD brightness level when device is idle (Default: 3)
 
 /**
- * Default LCD Idle Time (only for TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
+ * LCD Idle Time (only for TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
  * The LCD screen will dim to idle brightness, if the display is not touched for the
  * period of the LCD idle time.
  *
@@ -668,8 +668,8 @@
 //================================================================================
 
 /**
- * Default Primary Language (for Touch-Mode only)
- * Select the language to display on the LCD while in Touch Mode.
+ * Primary Language (for Touch-Mode only)
+ * Select the language to use on the LCD while in Touch Mode.
  *
  * NOTE: To add/flash a second language copy the required "language_xx.ini" file from
  *       "Language Packs" folder to the SD root folder.
