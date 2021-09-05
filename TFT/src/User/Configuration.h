@@ -579,8 +579,7 @@
  * will be used for debugging purposes. DON'T enable one of the DEBUG_x below for normal printing.
  *
  * WARNINGS:
- *   - SERIAL_DEBUG_PORT needs to be activated specifically. Please consider SERIAL_PORT setting
- *     in the config.ini.
+ *   - SERIAL_DEBUG_PORT needs to be activated specifically. Please consider SERIAL_PORT setting in the config.ini.
  *   - If the TFT is only showing the boot logo and is not responding anymore, check the SERIAL_PORT setting.
  *   - If you update the config.ini you need to reset the TFT *twice* (first reset to update the config, second
  *     reset to enable the SERIAL_DEBUG_PORT due to the changed firmware config).
@@ -705,7 +704,7 @@
  * Buzzer Settings
  * The duration and frequency for the UI feedback sound.
  * Set these to 0 to disable audio feedback in the LCD menus.
- * Only valid for SERIAL_TSC LCD MODE and if BUZZER_PIN is set or available.
+ * Only valid for Touch Mode and if BUZZER_PIN is set or available.
  *
  * NOTE: Test audio output with the G-Code:
  *       M300 S<frequency Hz> P<duration MilliSeconds>
@@ -764,7 +763,7 @@
 #define TOAST_DURATION (3 * 1000)  // in ms. Default: 3 * 1000
 
 /**
- * Keyboard On Left Side (Mesh Editor, RGB Settings Custom)
+ * Keyboard On Left Side (Mesh Editor, LED Color Custom)
  * By default the keyboard is drawn on right side of the screen.
  * Enable KEYBOARD_ON_LEFT to draw the keyboard on left side of the screen.
  */
