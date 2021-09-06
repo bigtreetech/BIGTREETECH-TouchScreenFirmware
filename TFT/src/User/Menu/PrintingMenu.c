@@ -99,7 +99,7 @@ static void setLayerHeightText(char * layer_height_txt)
   }
   else
   {
-    strcpy(layer_height_txt, " --- mm ");  // leading and trailing space char so the text to be centered on both rows
+    strcpy(layer_height_txt, " --- mm ");  // leading and trailing space char so the text is centered on both rows
   }
 }
 
