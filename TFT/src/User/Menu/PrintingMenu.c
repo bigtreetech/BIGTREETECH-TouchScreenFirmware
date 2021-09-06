@@ -151,10 +151,12 @@ void menuBeforePrinting(void)
       return;
   }
 
-  // initialize things before print start
+  // initialize things before the print starts
   progDisplayType = infoSettings.prog_disp_type;
   layerDisplayType = infoSettings.layer_disp_type * 2;
   setLayerNumber(0);
+  coordinateSetAxisActual(Z_AXIS, 0);
+  coordinateSetAxisTarget(Z_AXIS, 0);
   setM73_presence(false);
   setTotalTime(0);
   
