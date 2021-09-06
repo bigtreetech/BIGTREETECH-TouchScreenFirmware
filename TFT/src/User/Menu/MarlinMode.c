@@ -17,11 +17,11 @@ void menuMarlinMode(void)
   CB_DATA   marlinGetData = NULL;
   CB_PARSE  marlinParse = NULL;
 
-  GUI_Clear(infoSettings.marlin_mode_bg_color);
-  GUI_SetColor(infoSettings.marlin_mode_font_color);
-  GUI_SetBkColor(infoSettings.marlin_mode_bg_color);
+  GUI_Clear(infoSettings.marlin_bg_color);
+  GUI_SetColor(infoSettings.marlin_font_color);
+  GUI_SetBkColor(infoSettings.marlin_bg_color);
 
-  if (infoSettings.marlin_mode_showtitle == 1)
+  if (infoSettings.marlin_show_title == 1)
   {
     STRINGS_STORE tempST;
     W25Qxx_ReadBuffer((uint8_t *)&tempST, STRINGS_STORE_ADDR, sizeof(STRINGS_STORE));
@@ -65,26 +65,30 @@ void menuMarlinMode(void)
     }
 
     #if LCD_ENCODER_SUPPORT
-      sendEncoder(LCD_ReadTouch());
+      if (Touch_Enc_ReadBtn(LCD_ENC_BUTTON_INTERVAL))
+        LCD_Enc_SendPulse(1);
 
-      if (LCD_BtnTouch(LCD_BUTTON_INTERVALS))
-        sendEncoder(1);
+      LCD_Enc_SendPulse(Touch_Enc_ReadPos());
     #endif
 
-    loopCheckMode();
+    Mode_CheckSwitching();
 
-    #if defined(SCREEN_SHOT_TO_SD)
-      loopScreenShot();
-    #endif
-
-    #ifdef LCD_LED_PWM_CHANNEL
-      loopDimTimer();
-    #endif
-
-    if (infoSettings.serial_alwaysOn == ENABLED)
+    if (infoSettings.serial_always_on == ENABLED)
     {
       loopBackEnd();
     }
+    #if defined(SCREEN_SHOT_TO_SD) || defined(LCD_LED_PWM_CHANNEL)  // loopScreenShot() and LCD_CheckDimming() are invoked by loopBackEnd(),
+      else                                                          // so we guarantee they are invoked only once
+      {
+        #ifdef SCREEN_SHOT_TO_SD
+          loopScreenShot();
+        #endif
+
+        #ifdef LCD_LED_PWM_CHANNEL
+          LCD_CheckDimming();
+        #endif
+      }
+    #endif
   }
 
   marlinDeInit();

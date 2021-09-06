@@ -1,8 +1,12 @@
 #ifndef _GCODE_H_
 #define _GCODE_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdbool.h>
-#include "interfaceCmd.h"
+#include <stdint.h>
 
 #define CMD_MAX_REV   5000
 #define MAX_ERROR_NUM 3
@@ -20,12 +24,14 @@ typedef struct
   bool inWaitResponse;     // true if waiting for start magic
   bool done;               // true if command is executed and response is received
   bool inError;            // true if error response
+  bool inJson;             // true if !inResponse and !inWaitResponse and '{' is found
 } REQUEST_COMMAND_INFO;
 
 extern REQUEST_COMMAND_INFO requestCommandInfo;
 
 void clearRequestCommandInfo(void);
 bool requestCommandInfoIsRunning(void);
+
 bool request_M21(void);
 char *request_M20(void);
 char *request_M33(char *filename);
@@ -37,6 +43,10 @@ void request_M27(uint8_t seconds);
 void request_M125(void);
 void request_M0(void);
 void request_M98(char *filename);
-char *request_M20_macros(char *dir);
+char *request_M20_rrf(char *dir);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

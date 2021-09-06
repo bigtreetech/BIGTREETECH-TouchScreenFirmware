@@ -47,13 +47,13 @@ void pidUpdateStatus(bool succeeded)
       if (succeeded)
       {
         sprintf(&tempMsg[strlen(tempMsg)], " %s", textSelect(LABEL_PROCESS_COMPLETED));
-        BUZZER_PLAY(sound_notify);
+        BUZZER_PLAY(SOUND_NOTIFY);
         addToast(DIALOG_TYPE_INFO, tempMsg);
       }
       else
       {
         sprintf(&tempMsg[strlen(tempMsg)], " %s", textSelect(LABEL_PROCESS_ABORTED));
-        BUZZER_PLAY(sound_error);
+        BUZZER_PLAY(SOUND_ERROR);
         addToast(DIALOG_TYPE_ERROR, tempMsg);
       }
     #endif
@@ -64,7 +64,7 @@ void pidUpdateStatus(bool succeeded)
 
     if (pidSucceeded)  // if all the PID processes successfully terminated, allow to save to EEPROM
     {
-      BUZZER_PLAY(sound_success);
+      BUZZER_PLAY(SOUND_SUCCESS);
 
       LABELCHAR(tempMsg, LABEL_PROCESS_COMPLETED);
 
@@ -82,7 +82,7 @@ void pidUpdateStatus(bool succeeded)
     }
     else  // if at least a PID process failed, provide an error dialog
     {
-      BUZZER_PLAY(sound_error);
+      BUZZER_PLAY(SOUND_ERROR);
 
       popupReminder(DIALOG_TYPE_ERROR, LABEL_PID_TITLE, LABEL_PROCESS_ABORTED);
     }
@@ -100,9 +100,9 @@ static inline void pidCheckTimeout(void)
 //      pidSucceeded = false;  // pidUpdateStatus function allow to handle status updates eventually arriving after the timeout
       LABELCHAR(tempMsg, LABEL_TIMEOUT_REACHED);
 
-      sprintf(&tempMsg[strlen(tempMsg)], "\n %s", textSelect(LABEL_PROCESS_ABORTED));
-      BUZZER_PLAY(sound_error);
-      popupReminder(DIALOG_TYPE_ERROR, LABEL_PID_TITLE, (uint8_t *) tempMsg);
+      sprintf(&tempMsg[strlen(tempMsg)], "\n %s", textSelect(LABEL_BUSY));
+      BUZZER_PLAY(SOUND_NOTIFY);
+      popupReminder(DIALOG_TYPE_ALERT, LABEL_PID_TITLE, (uint8_t *) tempMsg);
     }
   }
 }

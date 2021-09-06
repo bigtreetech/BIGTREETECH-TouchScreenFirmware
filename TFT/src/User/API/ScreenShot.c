@@ -1,7 +1,7 @@
 #include "ScreenShot.h"
 #include "includes.h"
 
-#if defined (SCREEN_SHOT_TO_SD)
+#ifdef SCREEN_SHOT_TO_SD
 
 // BMP file header 14byte
 typedef struct __attribute__((__packed__))
@@ -83,18 +83,19 @@ bool screenShotBMP(char *bmp)
 void loopScreenShot(void)
 {
   /*
-  * For "LCD_ENCODER_SUPPORT" TFTLCD
-  * Pressed touch screen triggered ScreenShot in Marlin mode
-  * Pressed encoder button triggered ScreenShot in other menu
-  *
-  * For no encoder TFTLCD
-  * Long pressed touch screen triggered ScreenShot
-  */
+   * For TFTLCD with an encoder "LCD_ENCODER_SUPPORT":
+   * - A press on touch screen to trigger a screenshot in Marlin mode
+   * - A press on encoder button to trigger a screenshot in Touch mode
+   *
+   * For TFTLCD with no encoder:
+   * - A long press of 1.5 seconds on touch screen to trigger a screenshot
+   */
   #if LCD_ENCODER_SUPPORT
-    bool (*screenShotTriggered)(uint16_t ) = (infoMenu.menu[infoMenu.cur] == menuMarlinMode) ? LCD_ReadPen : encoder_ReadBtn;
-    #define SCREEN_SHOT_TRIGGERED() screenShotTriggered(LCD_BUTTON_INTERVALS)
+    bool (*screenShotTriggered)(uint16_t ) = (infoMenu.menu[infoMenu.cur] == menuMarlinMode) ? Touch_Enc_ReadPen : LCD_Enc_ReadBtn;
+
+    #define SCREEN_SHOT_TRIGGERED() screenShotTriggered(LCD_ENC_BUTTON_INTERVAL)
   #else
-    #define SCREEN_SHOT_TRIGGERED() LCD_ReadPen(LCD_CHANGE_MODE_INTERVALS)
+    #define SCREEN_SHOT_TRIGGERED() Touch_Enc_ReadPen(MODE_SWITCHING_INTERVAL)
   #endif
 
   if (SCREEN_SHOT_TRIGGERED())

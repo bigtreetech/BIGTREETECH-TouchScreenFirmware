@@ -16,8 +16,9 @@ void MB_Reset() // by Lori
 const MENUITEMS connectionSettingsItems = {
   // title
   LABEL_CONNECTION_SETTINGS,
-  // icon                         label
-  {{ICON_BAUD_RATE,                LABEL_BAUDRATE},
+  // icon                          label
+  {
+    {ICON_BAUD_RATE,               LABEL_SERIAL_PORTS},
     {ICON_DISCONNECT,              LABEL_DISCONNECT},
     {ICON_STOP,                    LABEL_EMERGENCYSTOP},
     {ICON_RESET_VALUE,             LABEL_RESET},
@@ -27,6 +28,7 @@ const MENUITEMS connectionSettingsItems = {
     {ICON_BACK,                    LABEL_BACK},}
 };
 
+uint8_t portIndex = 0;  // index on serialPort array
 
 // Set uart pins to input, free uart
 void menuDisconnect(void)
@@ -35,70 +37,70 @@ void menuDisconnect(void)
   GUI_DispStringInRect(20, 0, LCD_WIDTH - 20, LCD_HEIGHT, textSelect(LABEL_DISCONNECT_INFO));
   GUI_DispStringInRect(20, LCD_HEIGHT - (BYTE_HEIGHT * 2), LCD_WIDTH - 20, LCD_HEIGHT, textSelect(LABEL_TOUCH_TO_EXIT));
 
-  Serial_ReSourceDeInit();
+  Serial_DeInit(ALL_PORTS);
   while (!isPress())
   {
     #ifdef LCD_LED_PWM_CHANNEL
-      loopDimTimer();
+      LCD_CheckDimming();
     #endif
   }
   while (isPress())
   {
     #ifdef LCD_LED_PWM_CHANNEL
-      loopDimTimer();
+      LCD_CheckDimming();
     #endif
   }
-  Serial_ReSourceInit();
+  Serial_Init(ALL_PORTS);
 
   infoMenu.cur--;
 }
 
-const char * const item_baudrate_str[BAUDRATE_COUNT] = {
-  "2400", "9600", "19200", "38400", "57600", "115200", "250000", "500000", "1000000"};
-
 void menuBaudrate(void)
 {
   LABEL title = {LABEL_BAUDRATE};
-  LISTITEM totalItems[BAUDRATE_COUNT];
+  uint8_t minIndex = portIndex == 0 ? 1 : 0;  // if primary serial port, set minIndex to 1 (value OFF is skipped)
+  uint8_t size = BAUDRATE_COUNT - minIndex;
+  LISTITEM totalItems[size];
   KEY_VALUES curIndex = KEY_IDLE;
+  uint8_t curItem = 0;
+  uint16_t curPage;
   SETTINGS now = infoSettings;
-  uint8_t cur_item = 0;
 
   // fill baudrate items
-  for (uint8_t i = 0; i < COUNT(totalItems); i++)
+  for (uint8_t i = 0; i < size; i++)
   {
-    if (infoSettings.baudrate == i)
+    if (infoSettings.serial_port[portIndex] == i + minIndex)
     {
       totalItems[i].icon = CHARICON_CHECKED;
-      cur_item = i;
+      curItem = i;
     }
     else
     {
       totalItems[i].icon = CHARICON_UNCHECKED;
     }
     totalItems[i].itemType = LIST_LABEL;
-    totalItems[i].titlelabel.address = (uint8_t *) item_baudrate_str[i];
+    totalItems[i].titlelabel.address = (uint8_t *) baudrateNames[i + minIndex];
   }
-  uint16_t curPage = cur_item / LISTITEM_PER_PAGE;
 
-  listViewCreate(title, totalItems, COUNT(totalItems), &curPage, true, NULL, NULL);
+  curPage = curItem / LISTITEM_PER_PAGE;
+
+  listViewCreate(title, totalItems, size, &curPage, true, NULL, NULL);
 
   while (infoMenu.menu[infoMenu.cur] == menuBaudrate)
   {
     curIndex = listViewGetSelectedIndex();
 
-    if (curIndex < COUNT(totalItems) && curIndex != cur_item)
+    if (curIndex < size && curIndex != curItem)
     {  // has changed
-      totalItems[cur_item].icon = CHARICON_UNCHECKED;
-      listViewRefreshItem(cur_item);  // refresh unchecked status
-      cur_item = curIndex;
-      totalItems[cur_item].icon = CHARICON_CHECKED;
-      listViewRefreshItem(cur_item);  // refresh checked status
+      totalItems[curItem].icon = CHARICON_UNCHECKED;
+      listViewRefreshItem(curItem);  // refresh unchecked status
+      curItem = curIndex;
+      totalItems[curItem].icon = CHARICON_CHECKED;
+      listViewRefreshItem(curItem);  // refresh checked status
 
-      infoSettings.baudrate = cur_item;
-      Serial_ReSourceDeInit();  // Serial_Init() will malloc a dynamic memory, so Serial_DeInit() first to free, then malloc again.
-      Serial_ReSourceInit();
-      reminderMessage(LABEL_UNCONNECTED, STATUS_UNCONNECT);
+      infoSettings.serial_port[portIndex] = curItem + minIndex;
+      Serial_DeInit(portIndex);
+      Serial_Init(portIndex);
     }
 
     loopProcess();
@@ -107,6 +109,37 @@ void menuBaudrate(void)
   if (memcmp(&now, &infoSettings, sizeof(SETTINGS)))
   {
     storePara();
+  }
+}
+
+void menuSerialPorts(void)
+{
+  LABEL title = {LABEL_SERIAL_PORTS};
+  LISTITEM totalItems[SERIAL_PORT_COUNT];
+  KEY_VALUES curIndex = KEY_IDLE;
+
+  for (uint8_t i = PORT_1; i < SERIAL_PORT_COUNT; i++)
+  {
+    totalItems[i].icon = CHARICON_EDIT;
+    totalItems[i].itemType = LIST_CUSTOMVALUE;
+    totalItems[i].titlelabel.address = (uint8_t *) serialPort[i].desc;
+    totalItems[i].valueLabel.index = LABEL_DYNAMIC;  // must be LABEL_DYNAMIC or LABEL_CUSTOM_VALUE in order to use dynamic text
+    setDynamicTextValue(i, (char *) baudrateNames[infoSettings.serial_port[i]]);
+  }
+
+  listViewCreate(title, totalItems, SERIAL_PORT_COUNT, NULL, true, NULL, NULL);
+
+  while (infoMenu.menu[infoMenu.cur] == menuSerialPorts)
+  {
+    curIndex = listViewGetSelectedIndex();
+
+    if (curIndex < (KEY_VALUES)SERIAL_PORT_COUNT)
+    {
+      portIndex = curIndex;
+      infoMenu.menu[++infoMenu.cur] = menuBaudrate;
+    }
+
+    loopProcess();
   }
 }
 
@@ -122,7 +155,7 @@ void menuConnectionSettings(void)
     switch (curIndex)
     {
       case KEY_ICON_0:
-        infoMenu.menu[++infoMenu.cur] = menuBaudrate;
+        infoMenu.menu[++infoMenu.cur] = menuSerialPorts;
         break;
 
       case KEY_ICON_1:
@@ -144,7 +177,7 @@ void menuConnectionSettings(void)
         infoMenu.cur--;
         break;
 
-      default :
+      default:
         break;
     }
 

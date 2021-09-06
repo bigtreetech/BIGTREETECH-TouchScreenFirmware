@@ -1,7 +1,7 @@
 #ifndef _SPI_H_
 #define _SPI_H_
 
-#include "stm32f10x.h"
+#include <stdint.h>
 
 #define _SPI1     0
 #define _SPI2     1

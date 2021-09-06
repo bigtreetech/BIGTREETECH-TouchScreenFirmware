@@ -7,9 +7,30 @@ static uint8_t cmd_index = 0;
 static bool ispolling = true;
 
 // Is there a code character in the current gcode command.
+bool isFullCmdQueue(void)
+{
+  return (infoCmd.count >= CMD_MAX_LIST);
+}
+
+bool isNotEmptyCmdQueue(void)
+{
+  return (infoCmd.count || infoHost.wait);
+}
+
+bool isEnqueued(const char *cmd)
+{
+  bool found = false;
+  for (int i = 0; i < infoCmd.count && !found; ++i)
+  {
+    found = strcmp(cmd, infoCmd.queue[(infoCmd.index_r + i) % CMD_MAX_LIST].gcode) == 0;
+  }
+  return found;
+}
+
+// Check the presence of the specified 'code' character in the current gcode command.
 static bool cmd_seen(char code)
 {
-  for (cmd_index = 0; infoCmd.queue[infoCmd.index_r].gcode[cmd_index] != 0 && cmd_index < CMD_MAX_CHAR; cmd_index++)
+  for (cmd_index = 0; cmd_index < CMD_MAX_CHAR && infoCmd.queue[infoCmd.index_r].gcode[cmd_index] != 0; cmd_index++)
   {
     if (infoCmd.queue[infoCmd.index_r].gcode[cmd_index] == code)
     {
@@ -20,36 +41,37 @@ static bool cmd_seen(char code)
   return false;
 }
 
-// Get the int after 'code', Call after cmd_seen('code').
+// Get the int after 'code'. Call after cmd_seen('code').
 static int32_t cmd_value(void)
 {
   return (strtol(&infoCmd.queue[infoCmd.index_r].gcode[cmd_index], NULL, 10));
 }
 
-// Get the float after 'code', Call after cmd_seen('code').
+// Get the float after 'code'. Call after cmd_seen('code').
 static float cmd_float(void)
 {
   return (strtod(&infoCmd.queue[infoCmd.index_r].gcode[cmd_index], NULL));
 }
 
-// check if 'string' start with 'search'
+// Check if 'string' starts with 'search'.
 static bool startsWith(TCHAR *search, TCHAR *string)
 {
   return (strstr(string, search) - string == cmd_index) ? true : false;
 }
 
-// Common store cmd
+// Common store cmd.
 void commonStoreCmd(GCODE_QUEUE *pQueue, const char* format, va_list va)
 {
   vsnprintf(pQueue->queue[pQueue->index_w].gcode, CMD_MAX_CHAR, format, va);
 
-  pQueue->queue[pQueue->index_w].src = SERIAL_PORT;
+  pQueue->queue[pQueue->index_w].port_index = PORT_1;  // port index for SERIAL_PORT
   pQueue->index_w = (pQueue->index_w + 1) % CMD_MAX_LIST;
   pQueue->count++;
 }
 
-// Store gcode cmd to infoCmd queue, this cmd will be sent by UART in sendQueueCmd(),
-// If the infoCmd queue is full, reminde in title bar.
+// Store gcode cmd to infoCmd queue.
+// This command will be sent to the printer by sendQueueCmd().
+// If the infoCmd queue is full, a reminder message is displayed and the command is discarded.
 bool storeCmd(const char * format,...)
 {
   if (strlen(format) == 0) return false;
@@ -70,8 +92,10 @@ bool storeCmd(const char * format,...)
   return true;
 }
 
-// Store gcode cmd to infoCmd queue, this cmd will be sent by UART in sendQueueCmd(),
-// If the infoCmd queue is full, reminde in title bar,  waiting for available queue and store the command.
+// Store gcode cmd to infoCmd queue.
+// This command will be sent to the printer by sendQueueCmd().
+// If the infoCmd queue is full, a reminder message is displayed and it will wait the queue
+// is available to store the command.
 void mustStoreCmd(const char * format,...)
 {
   if (strlen(format) == 0) return;
@@ -94,7 +118,7 @@ void mustStoreCmd(const char * format,...)
   va_end(va);
 }
 
-// Store Script cmd to infoCmd queue
+// Store Script cmd to infoCmd queue.
 // For example: "M502\nM500\n" will be split into two commands "M502\n", "M500\n"
 void mustStoreScript(const char * format,...)
 {
@@ -124,11 +148,13 @@ void mustStoreScript(const char * format,...)
   }
 }
 
-// Store from UART cmd(such as: ESP3D, OctoPrint, else TouchScreen) to infoCmd queue, this cmd will be sent by UART in sendQueueCmd(),
-// If the infoCmd queue is full, reminde in title bar.
-bool storeCmdFromUART(uint8_t port, const char * gcode)
+// Store gcode cmd received from UART (e.g. ESP3D, OctoPrint, other TouchScreen etc...) to infoCmd queue.
+// This command will be sent to the printer by sendQueueCmd().
+// If the infoCmd queue is full, a reminder message is displayed and the command is discarded.
+bool storeCmdFromUART(uint8_t portIndex, const char * gcode)
 {
   if (strlen(gcode) == 0) return false;
+
   GCODE_QUEUE *pQueue = &infoCmd;
 
   if (pQueue->count >= CMD_MAX_LIST)
@@ -139,15 +165,16 @@ bool storeCmdFromUART(uint8_t port, const char * gcode)
 
   strncpy(pQueue->queue[pQueue->index_w].gcode, gcode, CMD_MAX_CHAR);
 
-  pQueue->queue[pQueue->index_w].src = port;
+  pQueue->queue[pQueue->index_w].port_index = portIndex;
   pQueue->index_w = (pQueue->index_w + 1) % CMD_MAX_LIST;
   pQueue->count++;
 
   return true;
 }
 
-// Store gcode cmd to infoCacheCmd queue, this cmd will be move to infoCmd in loopPrintFromTFT() -> moveCacheToCmd(),
-// this function is only for restore printing status after power failed.
+// Store gcode cmd to infoCacheCmd queue.
+// This command will be moved to infoCmd queue by loopPrintFromTFT() -> moveCacheToCmd().
+// This function is used only to restore the printing status after a power failed.
 void mustStoreCacheCmd(const char * format,...)
 {
   GCODE_QUEUE *pQueue = &infoCacheCmd;
@@ -180,7 +207,7 @@ bool moveCacheToCmd(void)
   return true;
 }
 
-// Clear all gcode cmd in infoCmd queue for abort printing.
+// Clear all gcode cmd in infoCmd queue when printing is aborted.
 void clearCmdQueue(void)
 {
   infoCmd.count = infoCmd.index_w = infoCmd.index_r = 0;
@@ -189,20 +216,21 @@ void clearCmdQueue(void)
   printSetUpdateWaiting(false);
 }
 
-// remove last line from cmd queue
+// Remove last gcode cmd from infoCmd queue.
 void purgeLastCmd(bool purged, bool avoidTerminal)
 {
   char * purgeStr = "[Purged] ";
 
   if (!avoidTerminal)
   {
-    if(purged)
+    if (purged)
       terminalCache(purgeStr, TERMINAL_GCODE);
     terminalCache(infoCmd.queue[infoCmd.index_r].gcode, TERMINAL_GCODE);
   }
 
   #if defined(SERIAL_DEBUG_PORT) && defined(DEBUG_SERIAL_COMM)
     // dump serial data sent to debug port
+    Serial_Puts(SERIAL_DEBUG_PORT, serialPort[infoCmd.queue[infoCmd.index_r].port_index].id);  // serial port ID (e.g. "2" for SERIAL_PORT_2)
     Serial_Puts(SERIAL_DEBUG_PORT, ">>");
     if (purged)
       Serial_Puts(SERIAL_DEBUG_PORT, purgeStr);
@@ -213,7 +241,7 @@ void purgeLastCmd(bool purged, bool avoidTerminal)
   infoCmd.index_r = (infoCmd.index_r + 1) % CMD_MAX_LIST;
 }
 
-// Parse and send gcode cmd in infoCmd.
+// Parse and send gcode cmd in infoCmd queue.
 void sendQueueCmd(void)
 {
   if (infoHost.wait == true) return;
@@ -223,7 +251,7 @@ void sendQueueCmd(void)
   uint16_t  cmd = 0;
   cmd_index = 0;
   // check if cmd is from TFT or other host
-  bool fromTFT = (infoCmd.queue[infoCmd.index_r].src == SERIAL_PORT);
+  bool fromTFT = (infoCmd.queue[infoCmd.index_r].port_index == PORT_1);  // port index for SERIAL_PORT
 
   if (!ispolling && fromTFT)
   { // ignore any query from TFT
@@ -405,6 +433,11 @@ void sendQueueCmd(void)
             break;
 
           case 27:  // M27
+            if (rrfStatusIsMacroBusy())
+            {
+              purgeLastCmd(true, avoid_terminal);
+              return;
+            }
             if (!fromTFT)
             {
               if (isPrinting() && infoFile.source < BOARD_SD)  // if printing from TFT
@@ -487,6 +520,12 @@ void sendQueueCmd(void)
             }
             break;
 
+          case 98:  // RRF macro execution, do not wait for it to complete
+            Serial_Puts(SERIAL_PORT, infoCmd.queue[infoCmd.index_r].gcode);
+            infoHost.wait = false;
+            purgeLastCmd(true, avoid_terminal);
+            return;
+
           case 115:  // M115 TFT
             if (!fromTFT && startsWith("M115 TFT", infoCmd.queue[infoCmd.index_r].gcode))
             {
@@ -546,10 +585,15 @@ void sendQueueCmd(void)
 
         case 73:
           if (cmd_seen('P'))
+          {
             setPrintProgressPercentage(cmd_value());
+          }
 
           if (cmd_seen('R'))
+          {
             setPrintRemainingTime((cmd_value() * 60));
+            setM73_presence(0);  // disable parsing remaning time from gCode comments
+          }
 
           if (!infoMachineSettings.buildPercent)  // if M73 is not supported by Marlin, skip it
           {
@@ -590,14 +634,24 @@ void sendQueueCmd(void)
         }
 
         case 105:  // M105
+          if (rrfStatusIsMacroBusy())
+          {
+            purgeLastCmd(true, avoid_terminal);
+            return;
+          }
           if (fromTFT)
           {
             heatSetUpdateWaiting(false);
-            avoid_terminal = !infoSettings.terminalACK;
+            avoid_terminal = !infoSettings.terminal_ack;
           }
           break;
 
         case 155:  // M155
+          if (rrfStatusIsMacroBusy())
+          {
+            purgeLastCmd(true, avoid_terminal);
+            return;
+          }
           if (fromTFT)
           {
             heatSetUpdateWaiting(false);
@@ -887,6 +941,18 @@ void sendQueueCmd(void)
           break;
         }
 
+        case 292:
+        case 408:
+          // RRF does not send 'ok' while executing M98
+          if (rrfStatusIsMacroBusy())
+          {
+            Serial_Puts(SERIAL_PORT, infoCmd.queue[infoCmd.index_r].gcode);
+            infoHost.wait = false;
+            purgeLastCmd(true, avoid_terminal);
+            return;
+          }
+          break;
+
         case 420:  // M420
           // ABL state will be set through parsACK.c after receiving confirmation message from the printer
           // to prevent wrong state in case of error.
@@ -911,7 +977,7 @@ void sendQueueCmd(void)
           {
             // purge and pause only if emulated M600 is enabled.
             // if emulated M600 is disabled then let the printer pause the print to avoid premature pause
-            if (infoSettings.emulate_m600 == 1)
+            if (infoSettings.emulated_m600 == 1)
             {
               purgeLastCmd(true, avoid_terminal);
               printPause(true, PAUSE_NORMAL);
@@ -926,7 +992,7 @@ void sendQueueCmd(void)
             {
               // purge and pause only if emulated M600 is enabled.
               // if emulated M600 is disabled then let the printer pause the print to avoid premature pause
-              if (infoSettings.emulate_m600 == 1)
+              if (infoSettings.emulated_m600 == 1)
               {
                 purgeLastCmd(true, avoid_terminal);
                 printPause(true, PAUSE_NORMAL);
@@ -935,7 +1001,7 @@ void sendQueueCmd(void)
             }
             break;
         #endif
-        
+
         case 665:  // Delta Configuration / Delta Tower Angle
         {
           if (cmd_seen('H')) setParameter(P_DELTA_CONFIGURATION, 0, cmd_float());
@@ -1051,7 +1117,7 @@ void sendQueueCmd(void)
           storeCmd("M503 S0\n");
           break;
 
-        #if ENABLE_BL_VALUE > 0  // if not Disabled
+        #if BED_LEVELING_TYPE > 0  // if not Disabled
           case 29:  // G29
           {
             if (infoMachineSettings.firmwareType != FW_REPRAPFW)
@@ -1132,7 +1198,7 @@ void sendQueueCmd(void)
 
   infoHost.wait = infoHost.connected;
 
-  setCurrentAckSrc(infoCmd.queue[infoCmd.index_r].src);
+  setCurrentAckSrc(infoCmd.queue[infoCmd.index_r].port_index);
   Serial_Puts(SERIAL_PORT, infoCmd.queue[infoCmd.index_r].gcode);
   purgeLastCmd(false, avoid_terminal);
 }  // sendQueueCmd

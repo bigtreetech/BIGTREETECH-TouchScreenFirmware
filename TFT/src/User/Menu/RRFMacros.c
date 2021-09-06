@@ -1,97 +1,37 @@
 #include "RRFMacros.h"
 #include "includes.h"
+#include "RRFM20Parser.hpp"
 
-/***
- * TODOS:
- *  proper subdirectory support,
- *  move away from half-using Vfs functions,
- *  sort order: Number_files first in order, hide Number_; alphabetical, directories alphabetical
- ***/
-
-/************************************************************************/
-
+static const char *running_macro_name;
 extern const GUI_RECT titleRect;
 
 // Scan files in RRF
 void scanInfoFilesFs(void)
 {
   clearInfoFile();
-  char *data = request_M20_macros(infoFile.title);
-
-  data = strtok(data, "]");  // to end of array
-
-  char *line = strtok(strstr(data, "files\":[") + 8, ",");
-  for (; line != NULL; line = strtok(NULL, ","))
-  {
-    char *pline = line + 1;
-
-    if (strchr(pline, '*') == NULL)
-    {
-      // FILE
-      if (infoFile.fileCount >= FILE_NUM)
-        continue;  // gcode max number is FILE_NUM
-
-      char *Pstr_tmp = strrchr(line, '"');
-      if (Pstr_tmp != NULL)
-        *Pstr_tmp = 0;                // remove right quote
-      Pstr_tmp = strrchr(line, '"');  // remove initial quote
-      if (Pstr_tmp == NULL)
-        Pstr_tmp = line;
-      else
-        Pstr_tmp++;
-      infoFile.Longfile[infoFile.fileCount] = malloc(strlen(Pstr_tmp) + 1);
-
-      strcpy(infoFile.Longfile[infoFile.fileCount], Pstr_tmp);
-
-      infoFile.file[infoFile.fileCount] = malloc(strlen(pline) + 1);
-      if (infoFile.file[infoFile.fileCount] == NULL)
-        break;
-      strcpy(infoFile.file[infoFile.fileCount++], pline);
-    }
-    else
-    {
-      // DIRECTORY
-      if (infoFile.folderCount >= FOLDER_NUM)
-        continue;  // folder max number is FOLDER_NUM
-
-      char *rest = pline + 1;
-      char *folder = strtok_r(rest, "\"", &rest);
-
-      bool found = false;
-      for (int i = 0; i < infoFile.folderCount; i++)
-      {
-        if (strcmp(folder, infoFile.folder[i]) == 0)
-        {
-          found = true;
-          break;
-        }
-      }
-
-      if (!found)
-      {
-        uint16_t len = strlen(folder) + 1;
-        infoFile.folder[infoFile.folderCount] = malloc(len);
-        if (infoFile.folder[infoFile.folderCount] == NULL)
-          break;
-        strcpy(infoFile.folder[infoFile.folderCount++], folder);
-      }
-    }
-  }
-
+  char *data = request_M20_rrf(infoFile.title);
+  parseMacroListResponse(data);
   clearRequestCommandInfo();
 }
 
-void runMacro(void)
+void rrfShowRunningMacro(void)
 {
-  char info[100];
-  sprintf(info, "%s - %s\n", textSelect(LABEL_MACROS), infoFile.title);
-  GUI_Clear(BACKGROUND_COLOR);
-  GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, (uint8_t *)info);
+  GUI_Clear(MENU_BACKGROUND_COLOR);
+  GUI_SetColor(infoSettings.reminder_color);
+  GUI_DispStringInPrectEOL(&titleRect, LABEL_BUSY);
+  GUI_RestoreColorDefault();
+  GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, (uint8_t *)running_macro_name);
+}
+
+void runMacro(const char *display_name)
+{
+  running_macro_name = display_name;
+  rrfShowRunningMacro();
 
   request_M98(infoFile.title);
 
   ExitDir();
-  Delay_ms(500);
+  infoMenu.menu[++infoMenu.cur] = menuDummy;  // force a redraw
 }
 
 // Draw Macro file list
@@ -114,10 +54,7 @@ void macroListDraw(LISTITEM * item, uint16_t index, uint8_t itemPos)
     item->titlelabel.index = LABEL_DYNAMIC;
     item->itemType = LIST_LABEL;
 
-    if (infoFile.source == BOARD_SD)
-      setDynamicLabel(itemPos, infoFile.Longfile[index - infoFile.folderCount]);
-    else
-      setDynamicLabel(itemPos, infoFile.file[index - infoFile.folderCount]);
+    setDynamicLabel(itemPos, infoFile.file[index - infoFile.folderCount]);
   }
 }
 
@@ -128,7 +65,7 @@ void menuCallMacro(void)
   uint8_t update = 1;
   infoFile.source = BOARD_SD;
 
-  GUI_Clear(BACKGROUND_COLOR);
+  GUI_Clear(MENU_BACKGROUND_COLOR);
   GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, textSelect(LABEL_LOADING));
 
   scanInfoFilesFs();
@@ -178,13 +115,10 @@ void menuCallMacro(void)
             if (infoHost.connected != true)
               break;
 
-            if (EnterDir(infoFile.file[key_num - infoFile.folderCount]) == false)
+            if (EnterDir(infoFile.Longfile[key_num - infoFile.folderCount]) == false)
               break;
 
-            char buf[93];
-            sprintf(buf, "Do you want to start:\n %.65s?\n", infoFile.title);
-            setDialogText(LABEL_INFO, (uint8_t *)buf, LABEL_CONFIRM, LABEL_CANCEL);
-            showDialog(DIALOG_TYPE_QUESTION, runMacro, ExitDir, NULL);
+            runMacro(infoFile.file[key_num - infoFile.folderCount]);
           }
         }
         break;

@@ -14,9 +14,19 @@
   #define ROOT_DIR "TFTxx"
 #endif
 
+// Hardware manufacturer
+#ifndef HARDWARE_MANUFACTURER
+  #define HARDWARE_MANUFACTURER "BIGTREETECH_"
+#endif
+
 // Hardware version config
 #ifndef HARDWARE_VERSION
   #define HARDWARE_VERSION "TFTxx_Vx.x"
+#endif
+
+// Software manufacturer
+#ifndef SOFTWARE_MANUFACTURER
+  #define SOFTWARE_MANUFACTURER HARDWARE_VERSION"."
 #endif
 
 // LCD interface

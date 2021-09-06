@@ -1,181 +1,193 @@
 #ifndef _CONFIGURATION_H_
 #define _CONFIGURATION_H_
-#define CONFIG_VERSION 20210711
 
-//===========================================================================
-//============================ Developer Settings ===========================
-//===========================================================================
+#define CONFIG_VERSION 20210829
+
+//====================================================================================================
+//=============================== Settings Configurable On config.ini ================================
+//====================================================================================================
+
+//================================================================================
+//=============================== General Settings ===============================
+//================================================================================
 
 /**
- * Screenshot for documentation
- * Long press touch screen capture the current full screen to SD card
- * Only for documentation purposes, DON'T enable it for normal printing.
- */
-//#define SCREEN_SHOT_TO_SD
-
-//===========================================================================
-//============================== Debug Settings =============================
-//===========================================================================
-
-/* If one of the DEBUG_x below is defined the SERIAL_DEBUG_PORT defined in board specific Pin_xx.h file
- * will be used for debugging purposes. DON'T enable one of the DEBUG_x below for normal printing.
+ * Serial Ports (Primary and Supplementary)
+ * Serial ports connected to devices such as Printer, ESP3D, OctoPrint, other TFTs etc.
+ * In order to successfully establish a communication through a serial port, set a baudrate
+ * matching the baudrate configured on the connected device.
+ * Disable the serial port when it is not in use and/or not connected to a device (floating) to
+ * avoid to receive and process wrong data due to possible electromagnetic interference (EMI).
  *
- * Warning: SERIAL_DEBUG_PORT needs to be activated specifically. Please consider settings MULTI_SERIAL > 0
- * in the Configuration.h or set e.g. "multi_serial: 2" in the config.ini.
- * If the TFT is only showing the boot logo and is not responding anymore, check the MULTI_SERIAL setting.
- * If you update the config.ini you need to reset the TFT *twice* (first reset to update the config, second
- * reset to enable the SERIAL_DEBUG_PORT due to the changed firmware config).
- */
-
-/**
- * Generic Debug
- * Uncomment/Enable to enable arbitrary debug serial communication to SERIAL_DEBUG_PORT defined in board specific Pin_xx.h file.
- */
-//#define DEBUG_SERIAL_GENERIC
-
-/**
- * Serial Communication Debug
- * Uncomment/Enable to forward/dump all serial communication to SERIAL_DEBUG_PORT defined in board specific Pin_xx.h file.
- */
-//#define DEBUG_SERIAL_COMM
-
-/**
- * Config File Debug
- * Uncomment/Enable to show debug information during config file processing.
- */
-//#define DEBUG_SERIAL_CONFIG
-
-#if defined(DEBUG_SERIAL_GENERIC) || defined(DEBUG_SERIAL_CONFIG) || defined(DEBUG_SERIAL_COMM)
-  #define SERIAL_DEBUG_ENABLED
-#else
-  #undef SERIAL_DEBUG_ENABLED
-#endif
-
-//===========================================================================
-//============================= General Settings ============================
-//===========================================================================
-
-// Enable Status Screen
-// Enable this to show status screen as the default home screen. Disabling it will show a static menu.
-#define ENABLE_STATUS_SCREEN true  // To enabled: true | To disabled: false (Default: true)
-
-/**
- * Smart Home
- * If enabled, long press "Back" button triggers Home screen
- * It doesn't interfere with the "Screenshot" and "Marlin/Touch Mode" other than if
- * enabled, long press "Back" will not trigger "Screenshot" or "Marlin/Touch Mode"
- */
-#define SMART_HOME
-
-/**
- * This setting determines the communication speed of the printer.
- * 250000 works in most cases, but you might try a lower speed if
- * you commonly experience drop-outs during host printing.
- * You may try up to 1000000 to speed up SD file transfer.
+ * NOTES:
+ *   - Serial port P1 is the primary serial connection to the printer and cannot be disabled.
+ *   - A baudrate of 250000 works in most cases, but you might try a lower speed if you
+ *     commonly experience drop-outs during host printing.
+ *     You may try up to 1000000 to speed up SD file transfer.
  *
- * Options: [2400: 0, 9600: 1, 19200: 2, 38400: 3, 57600: 4, 115200: 5, 250000: 6, 500000: 7, 1000000: 8]
+ *   Format: [serial_port: P1:<baudrate> P2:<baudrate> P3:<baudrate> P4:<baudrate>
+ *   Target port: P1: Printer
+ *                P2: WIFI    (e.g. ESP3D)
+ *                P3: UART 3  (e.g. OctoPrint)
+ *                P4: UART 4
+ *   Value range: P1: [min: 1, max: 9]
+ *                P2: [min: 0, max: 9]
+ *                P3: [min: 0, max: 9]
+ *                P4: [min: 0, max: 9]
+ *   Options: [OFF (port disabled): 0, 2400: 1, 9600: 2, 19200: 3, 38400: 4, 57600: 5, 115200: 6, 250000: 7, 500000: 8, 1000000: 9]
  */
-#define BAUDRATE 6 // Default: 5
+#define PRIMARY_BAUDRATE 7  // Default: 6
 
 /**
- * Default Primary Language (for Touch-Mode only)
- * Select the language to display on the LCD while in Touch Mode.
+ * Emulated M600
+ * The TFT intercepts the M600 gcode (filament change) and emulates the handling logic
+ * otherwise provided by Marlin firmware.
  *
- * NOTE: To add/flash a second language copy the required "language_xx.ini" file from
- *       "Language Packs" folder to the SD root folder. Then preset the reset button
- *       to load/flash the copied language file.
+ * NOTE: Enable it, in case Marlin firmware does not properly support M600 on the mainboard.
  *
- * Options: ENGLISH,    CHINESE,  RUSSIAN,     JAPANESE,   ARMENIAN,  GERMAN,        CZECH,
- *          SPANISH,    FRENCH,   PORTUGUESE,  ITALIAN,    POLISH,    SLOVAK,        DUTCH,
- *          HUNGARIAN,  TURKISH,  GREEK,       SLOVENIAN,  CATALAN,   TRAD_CHINESE,  UKRAINIAN
+ *   Options: [disable: 0, enable: 1]
  */
-#define DEFAULT_LANGUAGE ENGLISH  // Default: ENGLISH
+#define EMULATED_M600 1  // Default: 1
+
+//================================================================================
+//================================= UI Settings ==================================
+//================================================================================
 
 /**
- * Default Touch Mode Color Options
+ * Status Screen
+ * Select the default home screen while in Touch Mode.
+ * If enabled, the Status Screen menu will become the default home screen.
+ * If disabled, the Main menu will become the default home screen.
  *
- * Options:  0: WHITE,      1: BLACK,       2: RED,      3: GREEN,     4: BLUE,   5: CYAN,
- *           6: MAGENTA,    7: YELLOW,      8: ORANGE,   9: PURPLE,   10: LIME,  11: BROWN,
- *          12: DARKBLUE,  13: DARKGREEN,  14: GRAY,    15: DARKGRAY
+ * NOTE: Both the Status Screen and Main menus display the current temperature, fan and speeds.
+ *       Furthermore, the Status Screen menu provides the status area reporting the printer notifications.
+ *
+ *   Options: [disable: 0, enable: 1]
  */
-#define TITLE_BACKGROUND_COLOR      1  // Title background color (Default: 1)
-#define BACKGROUND_COLOR            1  // Background color (Default: 1)
-#define FONT_COLOR                  0  // Font foreground color (Default: 0)
-#define REMINDER_FONT_COLOR         2  // Reminder font color, such as: "No print attached", "Busy processing", etc. (Default: 2)
-#define VOLUME_REMINDER_FONT_COLOR  5  // Volume reminder font color, such as: "Card inserted", "Card removed" (Default: 5)
-#define STATUS_XYZ_BG_COLOR        15  // Background color for X Y Z position display in Status Screen. (Default: 15)
-#define LISTVIEW_BORDER_COLOR      15  // Border color in List view (Default: 15)
-#define LISTVIEW_ICON_COLOR        15  // icon color in List view (Default: 15)
+#define STATUS_SCREEN 1  // Default: 1
 
-// Mesh Leveling Display Colors
+/**
+ * Default Touch Mode Colors
+ * Set colors used in Touch Mode.
+ *
+ *   Options: [ WHITE: 0,  BLACK: 1,  RED: 2,  GREEN: 3,      BLUE: 4,       CYAN: 5,  MAGENTA: 6,    YELLOW: 7,
+ *             ORANGE: 8, PURPLE: 9, LIME: 10, BROWN: 11, DARKBLUE: 12, DARKGREEN: 13,    GRAY: 14, DARKGRAY: 15]
+ */
+#define TITLE_BACKGROUND_COLOR    1  // Title background color (Default: 1)
+#define MENU_BACKGROUND_COLOR     1  // Menu background color (Default: 1)
+#define MENU_FONT_COLOR           0  // Menu font color (Default: 0)
+#define REMINDER_FONT_COLOR       2  // Reminder font color, such as: "No print attached", "Busy processing", etc (Default: 2)
+#define STATUS_FONT_COLOR         5  // Status (e.g. volume reminder, ABL probing point etc...) font color, such as: "Card inserted", "Card removed" (Default: 5)
+#define STATUS_XYZ_BG_COLOR      15  // Backgroud color for X Y Z position display in Status Screen menu (Default: 15)
+#define LISTVIEW_BORDER_COLOR    15  // List View border color (Default: 15)
+#define LISTVIEW_BUTTON_BG_COLOR 15  // List View button background color (Default: 15)
+
+// Mesh Leveling Display Colors (Mesh Editor)
 // Set the colors used for drawing the mesh with the minimun and maximum value in the grid.
 #define MESH_MIN_COLOR 7  // Default: 7
 #define MESH_MAX_COLOR 2  // Default: 2
 
-//===========================================================================
-//=========================== Marlin Mode Settings ==========================
-//===========================================================================
-
 /**
- * Default UI Mode
- * Mode switching is still possible by holding down the encorder for two seconds.
+ * Notification Style For ACK Messages
+ * Set the notification style to use for displaying the ACK messages which start with "echo:".
  *
- * Options: MODE_MARLIN (Marlin Mode)
- *          MODE_SERIAL_TSC (Touch Mode)
+ * NOTE: The OFF value is applied to any ACK message type (e.g. even to known echo ACK).
+ *       It means that any kind of ACK message is silently discarded.
+ *
+ *   Options: [OFF: 0, POPUP: 1, TOAST: 2]
+ *     OFF:   No notification. The message is ignored.
+ *     POPUP: Display a popup window for user confirmation.
+ *     TOAST: A non-blocking Toast notification is displayed for few seconds. No user interaction is needed.
  */
-#define DEFAULT_LCD_MODE MODE_SERIAL_TSC  // Default: MODE_SERIAL_TSC
+#define ACK_NOTIFICATION 1  // Default: 1
 
 /**
- * Default Marlin Mode Background & Font Color Options
- * These colors can be changed in Touch mode, but can also be set here.
+ * Fan Speed In Percentage
+ * Show fan speed in percentage. If disabled fan speeed will be displayed as PWM values.
  *
- * Options:  0: WHITE,      1: BLACK,       2: RED,      3: GREEN,     4: BLUE,   5: CYAN,
- *           6: MAGENTA,    7: YELLOW,      8: ORANGE,   9: PURPLE,   10: LIME,  11: BROWN,
- *          12: DARKBLUE,  13: DARKGREEN,  14: GRAY,    15: DARKGRAY
+ *   Options: [disable: 0, enable: 1]
  */
-#define MARLIN_BKCOLOR 1  // Default: 1
-#define MARLIN_FNCOLOR 0  // Default: 0
-
-// Text displayed at the top of the TFT in Marlin Mode
-#define MARLIN_BANNER_TEXT "Marlin Mode"  // Default: "Marlin Mode"
-
-// Show banner text at the top of the TFT in Marlin Mode
-#define MARLIN_SHOW_BANNER true  // To enabled: true | To disabled: false (Default: true)
+#define FAN_SPEED_PERCENTAGE 1  // Default: 1
 
 /**
- * Run Marlin Mode in Fullscreen
+ * Notification M117
+ * If enabled, any notification received from Marlin through "//action:notification" is also
+ * stored on the notification screen. The notification screen reporting the history of the
+ * received notifications is displayed pressing on the notification bar.
  *
- * Options: 0: Disabled (RECOMMENDED FOR TFT24)
- *          1: Enabled
+ * NOTE: Marlin notifications are also always displayed on the Status Screen menu.
+ *       Furthermore, they are also displayed on the notification bar as toast messages
+ *       in case the current menu is not the Status Screen menu.
+ *
+ *   Options: [disable: 0, enable: 1]
  */
-#define MARLIN_MODE_FULLSCREEN 0  // Default: 0
+#define NOTIFICATION_M117 0  // Default: 0
+
+//================================================================================
+//============================= Marlin Mode Settings =============================
+//========== (only for TFT24 V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70 V3.0) ==========
+//================================================================================
 
 /**
- * Keep Serial always On (ONLY SUPPORTED ON TFT24 V1.1, TFT35 V3.0, AND TFT28 V3.0)
- * Keep UART (Serial communication) alive in Marlin Mode.
- * Allow seamless OctoPrint UART connection to the TFT's UART/serial expansion port no matter which
- * mode the TFT is in.
+ * Default Mode
+ * Set Marlin/Touch Mode as the default mode at startup.
  *
- * Options: [0: Disabled, 1: Enabled]
+ * NOTE: Mode switching is possible only for Marlin Mode and Touch Mode by a long press of
+ *       1.5 seconds on the display or holding down the encorder button for 1.5 seconds.
+ *
+ *   Options: [Marlin Mode: 0, Touch Mode: 1, Blocked Marlin Mode: 2, Blocked Touch Mode: 3]
+ */
+#define DEFAULT_MODE 1  // Default: 1
+
+/**
+ * Serial Always ON
+ * Keep UART (serial communication) alive in Marlin Mode.
+ * Allows seamless OctoPrint UART connection to the TFT's UART/serial expansion port
+ * no matter which mode the TFT is in.
+ *
+ *   Options: [disable: 0, enable: 1]
  */
 #define SERIAL_ALWAYS_ON 0  // Default: 0
 
 /**
- * LCD/Touch Encoder
- * In case LCD/Touch Encoder's sliding buttons (pin LCD_ENCA_PIN and LCD_ENCB_PIN)
- * don't produce any movement on menu, try to increase the delay (e.g. 64).
+ * Default Marlin Mode Background & Font Colors
+ * Set colors used in Marlin Mode.
+ *
+ *   Options: [ WHITE: 0,  BLACK: 1,  RED: 2,  GREEN: 3,      BLUE: 4,       CYAN: 5,  MAGENTA: 6,    YELLOW: 7,
+ *             ORANGE: 8, PURPLE: 9, LIME: 10, BROWN: 11, DARKBLUE: 12, DARKGREEN: 13,    GRAY: 14, DARKGRAY: 15]
  */
+#define MARLIN_BACKGROUND_COLOR 1  // Marlin Mode background color (Default: 1)
+#define MARLIN_FONT_COLOR       0  // Marlin Mode font color (Default: 0)
 
+/**
+ * Fullscreen Marlin Mode
+ * Run Marlin Mode in fullscreen.
+ *
+ * NOTE: Disable is recommended for TFT24.
+ *
+ *   Options: [disable: 0, enable: 1]
+ */
+#define MARLIN_FULLSCREEN 0  // Default: 0
 
-#define LCD_ENCODER_DELAY 8  // (MicroSeconds) 1 MicroSeconds = 0.000001 Seconds (Default: 8)
+/**
+ * Show Marlin Mode Title
+ * Show banner text at the top of the TFT in Marlin Mode.
+ *
+ *   Options: [disable: 0, enable: 1]
+ */
+#define MARLIN_SHOW_TITLE 1  // Default: 1
 
+/**
+ * Marlin Mode Title
+ * Banner text displayed at the top of the TFT in Marlin Mode.
+ *
+ *   Value range: [min: 3, max: 20 characthers]
+ */
+#define MARLIN_TITLE "Marlin Mode"  // Default: "Marlin Mode"
 
-//===========================================================================
-//=========================== Machine Settings ==============================
-//===========================================================================
-
-#define DELTA_PRINTER false  // Set to true if printer is a Delta. Default: false.
-#define REMOVABLE_PROBE false // Set to true if printer have a removable probe. Default: false.
+//================================================================================
+//========================== Printer / Machine Settings ==========================
+//================================================================================
 
 #define HOTEND_NUM      1  // set in 1~6
 #define EXTRUDER_NUM    1  // set in 1~6
@@ -185,13 +197,21 @@
 #define ENABLE_CTRL_FAN 1  // Set 0 to disable & 1 to enable controller fan speed control for Idle and Active
                            // cooling if marlin supports ontroller fan (M710).
 
-#define PREHEAT_LABELS   {"PLA", "PETG", "ABS", "WOOD", "TPU", "NYLON"}
-#define PREHEAT_HOTEND   {210,   235,    230,   170,    220,   250}
-#define PREHEAT_BED      {60,    80,     90,    50,     50,    90}
+// PID autotune
+#define PID_CMD_MARLIN      {"M303 U1 C8 E0", "M303 U1 C8 E1", "M303 U1 C8 E2", "M303 U1 C8 E3", "M303 U1 C8 E4", "M303 U1 C8 E5", "M303 U1 C8 E-1", ""}
+#define PID_CMD_RRF         {"M303 T0",       "M303 T1",       "M303 T2",       "M303 T3",       "M303 T4",       "M303 T5",       "M303 H0",        ""}
+#define PID_PROCESS_TIMEOUT (15 * 60000)  // (MilliSeconds, 1 minute = 60000 MilliSeconds)
 
+// Preheat
+#define PREHEAT_LABELS {"PLA", "PETG", "ABS", "WOOD", "TPU", "NYLON"}
+#define PREHEAT_HOTEND {210,   240,    230,   170,    220,   250}
+#define PREHEAT_BED    { 60,    80,     90,    50,     50,    90}
+
+// Heat
 #define HEAT_MAX_TEMP   {275,       275,       275,       275,       275,       275,       150,    60}
 #define HEAT_SIGN_ID    {"T0:",     "T1:",     "T2:",     "T3:",     "T4:",     "T5:",     "B:",   "C:"}
 #define HEAT_DISPLAY_ID {"T0",      "T1",      "T2",      "T3",      "T4",      "T5",      "Bed",  "Chamber"}
+#define HEAT_SHORT_ID   {"T0",      "T1",      "T2",      "T3",      "T4",      "T5",      "Bed",  "Ch."}
 #define HEAT_CMD        {"M104 T0", "M104 T1", "M104 T2", "M104 T3", "M104 T4", "M104 T5", "M140", "M141"}
 #define HEAT_WAIT_CMD   {"M109 T0", "M109 T1", "M109 T2", "M109 T3", "M109 T4", "M109 T5", "M190", "M191"}
 
@@ -206,10 +226,18 @@
  * Cooling fan have index from 0 to 5.
  * Controller fan have two speed (Active and Idle) index 6 and 7.
  */
-#define FAN_MAX_PWM    {255,  255,  255,  255,  255,  255,  255,   255}
+#define FAN_MAX_PWM    {255,   255,   255,   255,   255,   255,   255,   255}
 #define FAN_DISPLAY_ID {"F0 ", "F1 ", "F2 ", "F3 ", "F4 ", "F5 ", "CtS", "CtI"}
 #define FAN_CMD        {"M106 P0 S%d\n", "M106 P1 S%d\n", "M106 P2 S%d\n", "M106 P3 S%d\n", "M106 P4 S%d\n", "M106 P5 S%d\n", \
                         "M710 S%d\n",    "M710 I%d\n" }
+
+// Size of machine
+#define X_MIN_POS   0
+#define Y_MIN_POS   0
+#define Z_MIN_POS   0
+#define X_MAX_POS 300
+#define Y_MAX_POS 300
+#define Z_MAX_POS 390
 
 // Speed/flow rate names displayed in status screen
 #define SPEED_ID {"Sp.", "Fr."}  // (speed, flow rate)
@@ -232,22 +260,6 @@
 #define EXTRUDE_SLOW_SPEED    60
 #define EXTRUDE_NORMAL_SPEED  300
 #define EXTRUDE_FAST_SPEED    900
-
-// Size of machine
-#define X_MIN_POS 0
-#define Y_MIN_POS 0
-#define Z_MIN_POS 0
-#define X_MAX_POS 300
-#define Y_MAX_POS 300
-#define Z_MAX_POS 350
-
-/**
- * Raised Z height for probing
- * Z height to raise / drop after homing (G28) before starting to probe a point.
- *
- * WARNING: It MUST be negative (e.g. -50mm) for a Delta printer to avoid crashing into the top of the tower.
- */
-#define PROBING_Z_RAISE 20.0f
 
 // Pause Settings
 #define NOZZLE_PAUSE_RETRACT_LENGTH               15  // (mm)
@@ -296,150 +308,406 @@
 #define BABYSTEP_MAX_STEP       1.0f
 
 /**
- * SD support
+ * Auto Save/Load Bed Leveling Data
+ * The TFT will auto-detect if Auto Bed Level is available.
+ * Enable this will send "M500" after "G29" to store leveling value and send "M420 S1"
+ * to enable leveling state after startup.
+ *
+ *   Options: [disable: 0, enable: 1]
+ */
+#define AUTO_LOAD_LEVELING 1  // Default: 1
+
+/**
+ * Onboard / Printer SD
  * Starting from Marlin Bugfix 2.0.x Distribution Date: 2020-04-27 & above, the TFT will auto detect
  * On-Board SD Card and auto-configure M27 AutoReport with M115 command.
  * Set the time interval to poll SD Printing status if Marlin reports M27 AutoReport as disabled.
  */
-#define M27_REFRESH             3     // Time in sec for M27 command
-#define M27_WATCH_OTHER_SOURCES true  // if true the polling on M27 report is always active. Case: SD print
-                                      // started not from TFT35
+#define M27_REFRESH_TIME  3  // Time in sec for M27 command
+#define M27_ALWAYS_ACTIVE 1  // if "1" the polling on M27 report is always active. Case: SD print started not from TFT35
+                             // if "0" no polling on M27
 
 /**
- * Bed Leveling
- * The TFT will attempt to auto detect Bed Leveing type with marlin firmware.
- * Set to 1 to enable auto-detect (Marlin only) or choose one of the options below if auto-detect
- * does not work.
+ * Probing Z Raise (Probe Offset, Mesh Editor)
+ * Used by the Probe Offset / Mesh Editor menu for the Z offset / Z height tuning process.
+ * Raise / drop Z axis by this relative value after homing (G28) before starting to probe a point.
  *
- * WARNING: If you're not sure, leave on auto-detect or disabled.
- *          UBL has extra options other leveling systems might not have.
- *
- * Options: [0: Disabled, 1: Auto-detect, 2: ABL, 3: BBL, 4: UBL, 5: MBL]
+ * NOTES:
+ *   - It MUST BE a value >= 0 (e.g. 20) for a Cartesian printer to avoid crashing into the bed.
+ *   - It MUST BE a value <= 0 (e.g. -50) for a Delta printer to avoid crashing into the top of the tower.
  */
-#define ENABLE_BL_VALUE 1  // Default: 1
+#define PROBING_Z_RAISE 20.0f
 
 /**
- * TouchMI settings (on ABL menu)
- * Enable this option for settings TouchMI sensor on ABL Menu (Init, Z Offset, Save, Test).
+ * TouchMI settings (ABL)
+ * Enable this option for displaying TouchMI sensor settings in ABL menu (Init, Z Offset, Save, Test).
  *
- * Options: [0: Disabled, 1: Enabled]
+ *   Options: [disable: 0, enable: 1]
  */
-#define TOUCHMI_SENSOR_VALUE 0  // Default: 0
+#define TOUCHMI_SENSOR 0  // Default: 0
+
+//================================================================================
+//============================ Power Supply Settings =============================
+//==================== (only if connected to TFT controller) =====================
+//================================================================================
 
 /**
- * MBL settings
- * Apply the "level_z_pos" configurable parameter value as the
- * starting Z height for each point during MBL process.
- * If not enabled, you can set the desired starting Z height
- * in Marlin fw (MANUAL_PROBE_START_Z in Configuration.h).
+ * Active HIGH Power Supply Logic
+ * Used in case it is supported by the TFT.
+ * The power supply uses this HIGH signal logic to stay ON.
+ * The power supply uses the opposite of this logic to stay OFF.
+ *
+ *   Options: [disable: 0, enable: 1]
  */
-#define ENABLE_MBL_START_Z
+#define PS_ACTIVE_HIGH 1  // Default: 1 ("0" for ATX (1), "1" for X-Box (2))
 
-// Mesh Leveling Max Grid points
+/**
+ * Power Supply Auto Shutdown Temperature
+ * Maximum hotend temperature for automatic shutdown after printing, if automatic shutdown is enabled.
+ * The printer will shutdown automatically if the hotend temperature is below this value.
+ * If the hotend temperature is higher than this value the fans will be turned on to cooldown and it
+ * will wait for the hotend temperature to drop below this value before shutting down automatically.
+ */
+#define PS_AUTO_SHUTDOWN_TEMP 50  // Default: 50 (*C)
+
+//================================================================================
+//=========================== Filament Runout Settings ===========================
+//==================== (only if connected to TFT controller) =====================
+//================================================================================
+
+/**
+ * NOTES for users having a filament sensor connected to the mainboard:
+ *   1) Define "FIL_SENSOR_TYPE 0" below to disable the sensor handling on the TFT.
+ *   2) Configure the sensor in the firmware of your mainboard.
+ *   3) Add M75 to "PRINT_START_GCODE" and M77 to "PRINT_END_GCODE" of the TFT (or your slicer).
+ */
+
+/**
+ * Default Filament Runout Sensor
+ * Select the type of filament runout sensor and its default enabled/disabled state.
+ *
+ *   Options: [Normal Disabled: 0, Normal Enabled: 1, Smart Disabled: 2, Smart Enabled: 3]
+ */
+#define FIL_RUNOUT 0  // Default: 0
+
+/**
+ * Inverted Filament Runout Sensor Logic
+ * The sensor uses an inverted logic.
+ *
+ *   Options: [disable: 0, enable: 1]
+ */
+#define FIL_RUNOUT_INVERTED 1  // Default: 1
+
+/**
+ * NC (Normal Close) Filament Runout Sensor
+ * The sensor is of type NC.
+ *
+ *   Options: [Normal Open: 0, Normal Close: 1]
+ */
+#define FIL_RUNOUT_NC 1  // Default: 1
+
+// Filament Runout Noise Threshold
+// Pause print when filament runout is detected at least for this time period.
+#define FIL_RUNOUT_NOISE_THRESHOLD 100   // Default: 100 (ms)
+
+// Smart Filament Runout Detection
+// Used in conjuction with an SFS (Smart Filamanent Sensor) based on an encoder disc that
+// toggles runout pin as filament moves.
+#define FIL_RUNOUT_DISTANCE 7  // Default: 7 (mm)
+
+//================================================================================
+//==================== Power Loss Recovery & BTT UPS Settings ====================
+//================================================================================
+
+/**
+ * Most suitable for Delta printers since most printers will
+ * crash into printed model when homing after powerloss.
+ */
+
+/**
+ * Power Loss Recovery Homing
+ * Home before power loss recovery.
+ *
+ *   Options: [disable: 0, enable: 1]
+ */
+#define PL_RECOVERY_HOME 0  // Default: 0
+
+// Power Loss Recovery Z Raise
+// Raise Z axis on resume (on power loss with UPS).
+#define PL_RECOVERY_Z_RAISE 10  // Default: 10 (mm)
+
+/**
+ * BTT Mini UPS Support
+ * Enable backup power/UPS to move Z axis on power loss.
+ *
+ *   Options: [disable: 0, enable: 1]
+ */
+#define BTT_MINI_UPS 0  // Default: 0
+
+//================================================================================
+//======================== Other Device-Specific Settings ========================
+//================================================================================
+
+/**
+ * Default LCD Brightness Levels (only for TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
+ * Default brightness values for LCD.
+ *
+ *   Options: [OFF: 0, 5%: 1, 10%: 2, 20%: 3, 30%: 4, 40%: 5, 50%: 6, 60%: 7, 70%: 8, 80%: 9, 90%: 10, 100%: 11]
+ */
+#define LCD_BRIGHTNESS      11  // Default display brightness (Default: 11)
+#define LCD_IDLE_BRIGHTNESS  3  // Display brightness when device is idle (Default: 3)
+
+/**
+ * Default LCD Idle Time (only for TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
+ * The LCD screen will dim to idle brightness, if the display is not touched for the
+ * period of the LCD idle time.
+ *
+ *   Options: [OFF: 0, 5sec: 1, 10sec: 2, 30sec: 3, 1min: 4, 2min: 5, 5min: 6, CUSTOM: 7]
+ */
+#define LCD_IDLE_TIME 0  // Default: 0
+
+// Custom value in seconds. This will be used if LCD_IDLE_TIME is set to 7 (CUSTOM Seconds)
+#define IDLE_TIME_CUSTOM (10 * 60)
+
+/**
+ * Knob LED Color (only for TFT28/TFT35_E3/TFT43/TFT50/TFT70 V3.0)
+ * Knob LED color at startup.
+ *
+ *   Options: [OFF: 0, WHITE: 1, RED: 2, ORANGE: 3, YELLOW: 4, GREEN: 5, BLUE: 6, INDIGO: 7, VIOLET: 8]
+ */
+#define KNOB_LED_COLOR 1  // Default: 1
+
+// Keep the LED state in Marlin Mode
+#define KEEP_KNOB_LED_COLOR_MARLIN_MODE
+
+//================================================================================
+//============================ Custom Gcode Commands =============================
+//================================================================================
+
+/**
+ * Custom Gcode Commands
+ * Up to 15 custom gcode commands that will be available in the Custom menu.
+ *
+ * Usage:
+ *   - To enable a custom command, remove "//" at the begining of custom commands label & gcode.
+ *   - To disable a custom command, add "//" at the begining of custom commands label & gcode.
+ *
+ * NOTE: If the values are left blank then default name and gcode will be used.
+ *
+ *   Value range: label: [min: 3, max: 75 characters]
+ *                gcode: [min: 3, max: 75 characters]
+ */
+#define CUSTOM_LABEL_0 "Disable Steppers"
+#define CUSTOM_GCODE_0 "M84\n"
+#define CUSTOM_LABEL_1 "Init SD Card"
+#define CUSTOM_GCODE_1 "M21\n"
+#define CUSTOM_LABEL_2 "Release SD Card"
+#define CUSTOM_GCODE_2 "M22\n"
+#define CUSTOM_LABEL_3 "Enable Leveling State"
+#define CUSTOM_GCODE_3 "M420 S1\n"
+#define CUSTOM_LABEL_4 "Save to EEPROM"
+#define CUSTOM_GCODE_4 "M500\n"
+#define CUSTOM_LABEL_5 "Restore from EEPROM"
+#define CUSTOM_GCODE_5 "M501\n"
+#define CUSTOM_LABEL_6 "EEPROM Defaults"
+#define CUSTOM_GCODE_6 "M502\n"
+//#define CUSTOM_LABEL_7 "Custom7"
+//#define CUSTOM_GCODE_7 "M105\n"
+//#define CUSTOM_LABEL_8 "Custom8"
+//#define CUSTOM_GCODE_8 "M105\n"
+//#define CUSTOM_LABEL_9 "Custom9"
+//#define CUSTOM_GCODE_9 "M105\n"
+//#define CUSTOM_LABEL_10 "Custom10"
+//#define CUSTOM_GCODE_10 "M105\n"
+//#define CUSTOM_LABEL_11 "Custom11"
+//#define CUSTOM_GCODE_11 "M105\n"
+//#define CUSTOM_LABEL_12 "Custom12"
+//#define CUSTOM_GCODE_12 "M105\n"
+//#define CUSTOM_LABEL_13 "Custom13"
+//#define CUSTOM_GCODE_13 "M105\n"
+//#define CUSTOM_LABEL_14 "Custom14"
+//#define CUSTOM_GCODE_14 "M105\n"
+
+//================================================================================
+//====================== Start, End & Cancel Gcode Commands ======================
+//================================================================================
+
+/**
+ * Start/End/Cancel Gcode
+ * Gcode that runs after a print starts, ends, or canceled.
+ * Enable Start/End/Cancel gcode in SETTINGS -> FEATURE menu.
+ *
+ * NOTES for users having a filament sensor connected to the mainboard:
+ *   1) Enable the start/end gcode.
+ *   2) Add the following commands to the start/end gcode:
+ *      - START_GCODE: M75\n
+ *      - END_GCODE: M77\n
+ *
+ *   Value range: [min: 3, max: 75 characters]
+ */
+
+// Start Gcode
+// This gcode will runs before starting a print.
+#define START_GCODE "G28 XY R10\n"  // Raise Z 10mm before homing X & Y
+
+// End Gcode
+// This gcode will runs after a print is completed.
+#define END_GCODE "G90\nG1 E-4\nG92 E0\nM18\n"  // Switch to absolute positioning, reduce filament pressure by
+                                                // performing small retract, reset extruder position, disable steppers
+
+// Cancel Gcode
+// This gcode will runs when a print is canceled.
+#define CANCEL_GCODE "M104 S0\nM140 S0\nG28 XY R10\nM107\nM18\n"  // Home XY and raise Z 10mm
+
+//====================================================================================================
+//============================ Settings Configurable At Compile Time Only ============================
+//====================================================================================================
+
+//================================================================================
+//========================== Developer / Debug Settings ==========================
+//================================================================================
+
+/**
+ * Screenshot For Documentation
+ * A press on touch screen or on encoder button will take and save a full screen screenshot to SD card.
+ * Only for documentation purposes. DON'T enable it for normal printing.
+ *
+ * For TFT with an encoder "LCD_ENCODER_SUPPORT":
+ * - A press on touch screen to trigger a screenshot in Marlin mode
+ * - A press on encoder button to trigger a screenshot in Touch mode
+ *
+ * For TFT with no encoder:
+ * - A long press of 1.5 seconds on touch screen to trigger a screenshot
+ *
+ * WARNING for TFT35 V2, TFT35 V3, TFT35 B1 V3 and TFT35 E3 V3:
+ *   This feature requires that pin 39 on the 40 pins TFT connector is switched from GND to 3.3V.
+ *   Otherwise, the color read out is incorrect.
+ */
+//#define SCREEN_SHOT_TO_SD  // Default: commented (disabled)
+
+/**
+ * If one of the DEBUG_x below is defined the SERIAL_DEBUG_PORT defined in board specific Pin_xx.h file
+ * will be used for debugging purposes. DON'T enable one of the DEBUG_x below for normal printing.
+ *
+ * Warning: SERIAL_DEBUG_PORT needs to be activated specifically. Please consider settings MULTI_SERIAL > 0
+ * in the Configuration.h or set e.g. "multi_serial: 2" in the config.ini.
+ * If the TFT is only showing the boot logo and is not responding anymore, check the MULTI_SERIAL setting.
+ * If you update the config.ini you need to reset the TFT *twice* (first reset to update the config, second
+ * reset to enable the SERIAL_DEBUG_PORT due to the changed firmware config).
+ */
+
+/**
+ * Generic Debug
+ * Uncomment/Enable to enable arbitrary debug serial communication to SERIAL_DEBUG_PORT defined in board specific Pin_xx.h file.
+ */
+//#define DEBUG_SERIAL_GENERIC  // Default: commented (disabled)
+
+/**
+ * Serial Communication Debug
+ * Uncomment/Enable to forward/dump all serial communication to SERIAL_DEBUG_PORT defined in board specific Pin_xx.h file.
+ */
+//#define DEBUG_SERIAL_COMM  // Default: commented (disabled)
+
+/**
+ * Config File Debug
+ * Uncomment/Enable to show debug information during config file processing.
+ */
+//#define DEBUG_SERIAL_CONFIG  // Default: commented (disabled)
+
+#if defined(DEBUG_SERIAL_GENERIC) || defined(DEBUG_SERIAL_CONFIG) || defined(DEBUG_SERIAL_COMM)
+  #define SERIAL_DEBUG_ENABLED
+#else
+  #undef SERIAL_DEBUG_ENABLED
+#endif
+
+//================================================================================
+//========================== Printer / Machine Settings ==========================
+//================================================================================
+
+// Mesh Leveling Max Grid Points (Mesh Editor)
 // Set the maximum number of grid points per dimension.
 #define MESH_GRID_MAX_POINTS_X 15  // (Minimum 1, Maximum 15)
 #define MESH_GRID_MAX_POINTS_Y 15  // (Minimum 1, Maximum 15)
 
 /**
- * Auto save/load Bed Leveling data
- * The TFT will auto detect if BL data are available.
- * Enable this will send "M500" after "G29" to store leveling value
- * and send "M420 S1" to enable leveling state after startup.
+ * Bed Leveling Type
+ * The TFT will attempt to auto detect bed leveing type with marlin firmware.
+ * Set to 1 to enable auto-detect (Marlin only) or choose one of the options
+ * below if auto-detect does not work.
  *
- * Options: [0: Disabled, 1: Enabled]
+ * WARNING: If you're not sure, leave on auto-detect or disabled.
+ *          UBL has extra options other leveling systems might not have.
+ *
+ *   Options: [disable: 0, auto-detect: 1, ABL: 2, BBL: 3, UBL: 4, MBL: 5]
  */
-#define AUTO_SAVE_LOAD_BL_VALUE 1  // Default: 1
-
-// PID autotune
-#define PID_CMD_MARLIN {"M303 U1 C8 E0", "M303 U1 C8 E1", "M303 U1 C8 E2", "M303 U1 C8 E3", "M303 U1 C8 E4", "M303 U1 C8 E5", "M303 U1 C8 E-1", ""}
-#define PID_CMD_RRF {"M303 T0", "M303 T1", "M303 T2", "M303 T3", "M303 T4", "M303 T5", "M303 H0", ""}
-#define PID_PROCESS_TIMEOUT (15 * 60000)  // (MilliSeconds, 1 minute = 60000 MilliSeconds)
+#define BED_LEVELING_TYPE 1  // Default: 1
 
 /**
- * M600: Emulate M600
- * The TFT intercepts the M600 gcode (filament change) and emulates the logic instead of passing it to Marlin firmware.
- *
- * NOTE: Enable it, in case Marlin firmware does not properly support M600 on the mainboard.
+ * MBL Settings
+ * Apply the "level_z_pos" configurable parameter value as the
+ * starting Z height for each point during MBL process.
+ * If not enabled, you can set the desired starting Z height
+ * in Marlin fw (MANUAL_PROBE_START_Z in Configuration.h).
  */
-#define EMULATE_M600 true  // To enabled: true | To disabled: false (Default: true)
+#define MBL_START_Z  // Default: uncommented (enabled)
 
 /**
  * M601: Pause Print
  * PrusaSlicer can add M601 on certain height.
  * Acts here like manual pause.
  */
-#define NOZZLE_PAUSE_M601
+#define NOZZLE_PAUSE_M601  // Default: uncommented (enabled)
 
 /**
- * M701, M702: Marlin filament load unload gcodes support
+ * M701, M702: Marlin Filament Load / Unload Gcodes Support
  * FILAMENT_LOAD_UNLOAD_GCODES option on Marlin configuration_adv.h need to be uncommented.
  * Adds a submenu to the movement menu for selecting load and unload actions.
  */
-#define LOAD_UNLOAD_M701_M702
-
-//===========================================================================
-//========================== Other UI Settings ==============================
-//===========================================================================
-
-// Show bootscreen when starting up
-#define SHOW_BTT_BOOTSCREEN
-
-// Bootscreen logo time in ms
-#define BTT_BOOTSCREEN_TIME 3000
-
-// Enable alternative Move Menu Buttons Layout matching the direction of actual printer axis
-// Update the icons from alternate icon folder.
-#define ALTERNATIVE_MOVE_MENU
+#define LOAD_UNLOAD_M701_M702  // Default: uncommented (enabled)
 
 /**
- * Friendly Z offset language
- * Replace decrease/increase and "-" & "+" icons with down/up and friendly icons.
- */
-#define FRIENDLY_Z_OFFSET_LANGUAGE
-
-/**
- * Quick EEPROM Menu
- * Enable EEPROM menu (save/load/reset buttons) in Settings > Machine Menu.
+ * Delta Probe Type
+ * Probe type in case of a Delta printer.
+ * Set to 0 in case of not Delta printer.
  *
- * NOTE: If disabled, EEPROM operations can also be accessed in the (settings > machine > parameters) menu.
+ *   Options: [disable: 0, fixed-probe: 1, removable-probe: 2]
  */
-#define QUICK_EEPROM_BUTTON
+#define DELTA_PROBE_TYPE 0  // Default: 0
+
+//================================================================================
+//================================= UI Settings ==================================
+//================================================================================
 
 /**
- * Startup Knob LED Color (TFT28 V3.0, TFT35 E3.0, TFT43 V3.0, TFT50 V3.0 & TFT70 V3.0)
+ * Default Primary Language (for Touch-Mode only)
+ * Select the language to display on the LCD while in Touch Mode.
  *
- * Options: 0: LED_OFF,     1: LED_WHITE,   2: LED_RED,
- *          3: LED_ORANGE,  4: LED_YELLOW,  5: LED_GREEN,
- *          6: LED_BLUE,    7: LED_INDIGO,  8: LED_VIOLET
+ * NOTE: To add/flash a second language copy the required "language_xx.ini" file from
+ *       "Language Packs" folder to the SD root folder.
+ *       Then press the reset button to load/flash the copied language file.
+ *
+ *   Options: [ENGLISH,    CHINESE,  RUSSIAN,     JAPANESE,   ARMENIAN,  GERMAN,        CZECH,
+ *             SPANISH,    FRENCH,   PORTUGUESE,  ITALIAN,    POLISH,    SLOVAK,        DUTCH,
+ *             HUNGARIAN,  TURKISH,  GREEK,       SLOVENIAN,  CATALAN,   TRAD_CHINESE,  UKRAINIAN]
+ */
+#define DEFAULT_LANGUAGE ENGLISH  // Default: ENGLISH
+
+/**
+ * Rapid Serial Communication
+ * More frequent Serial communicaiton while printing.
+ * Send and parse G-codes more frequently while drawing on screen to
+ * prevent printer idling and stuttering due to empty printer buffer.
+ *
+ * NOTE: This may slow down graphics while switching menus while printing.
 */
-#define STARTUP_KNOB_LED_COLOR 1  // Default: 1
-
-// Keep the LED state in Marlin Mode
-#define KEEP_KNOB_LED_COLOR_MARLIN_MODE
+#define RAPID_SERIAL_COMM  // Default: uncommented (enabled)
 
 /**
- * LCD Brightness and LCD IDLE Brightness (TFT28 V3.0, TFT35 E3.0, TFT43 V3.0, TFT50 V3.0 & TFT70 V3.0)
- *
- * Options: 0: OFF,          1:  5 Percent,   2: 10 Percent,
- *          3: 20 Percent,   4: 30 Percent,   5: 40 Percent,
- *          6: 50 Percent,   7: 60 Percent,   8: 70 Percent,
- *          9: 80 Percent,  10: 90 Percent,  11: 100 Percent
+ * LCD/Touch Encoder
+ * In case LCD/Touch Encoder's sliding buttons (pin LCD_ENCA_PIN and LCD_ENCB_PIN)
+ * don't produce any movement on menu, try to increase the delay in ms (e.g. 64).
  */
-#define DEFAULT_LCD_BRIGHTNESS       11  // Default: 11
-#define DEFAULT_LCD_IDLE_BRIGHTNESS   3  // Default: 3
-
-/**
- * Idle LCD diming Timer (TFT28 V3.0, TFT35 E3.0, TFT43 V3.0, TFT50 V3.0 & TFT70 V3.0)
- * The LCD screen will dim to idle brightness,
- * if the display is not touched for the period of the lcd idle timer.
- *
- * Options: 0: OFF,          1: 5 Seconds,      2: 10 Seconds,
- *          3: 30 Seconds,   4: 60 Seconds,     5: 120 Seconds,
- *          6: 300 Seconds,  7: CUSTOM Seconds
- */
-#define DEFAULT_LCD_IDLE_TIMER  0  // Default: 0
-#define LCD_DIM_CUSTOM_SECONDS (10 * 60)  // Custom value in seconds. This will be used if DEFAULT_LCD_IDLE_TIMER
-                                          // is set to 7 (CUSTOM Seconds).
+#define LCD_ENCODER_DELAY 8  // Default: 8 (ms) (1 ms = 0.000001 seconds)
 
 /**
  * Buzzer Settings
@@ -450,97 +718,120 @@
  * NOTE: Test audio output with the G-Code:
  *       M300 S<frequency Hz> P<duration MilliSeconds>
  */
-#define BUZZER_FREQUENCY_DURATION_MS     20  // (MilliSeconds) Default: 20
-#define BUZZER_FREQUENCY_HZ           10000  // (Hz) Default: 10000 (20Hz to 60000Hz)
+#define BUZZER_FREQUENCY_DURATION_MS    20  // (MilliSeconds) Default: 20
+#define BUZZER_FREQUENCY_HZ          10000  // (Hz) Default: 10000 (20Hz to 60000Hz)
 
 /**
- * Buzzer pin state when buzzer is idle or no sound is playing
+ * Buzzer Stop Level
+ * Buzzer pin state when buzzer is idle or no sound is playing.
  *
- * Options: [HIGH, LOW]
+ *   Options: [HIGH, LOW]
  */
 #define BUZZER_STOP_LEVEL LOW  // Default: LOW
 
+// Show bootscreen when starting up
+#define SHOW_BTT_BOOTSCREEN  // Default: uncommented (enabled)
+
+// Bootscreen logo time in ms
+#define BTT_BOOTSCREEN_TIME 3000  // Default: 3000
+
 /**
- * Toast notification duration (in MilliSeconds)
+ * Smart Home
+ * If enabled, long press "Back" button triggers Home screen
+ * It doesn't interfere with the "Screenshot" and "Marlin/Touch Mode" other than if
+ * enabled, long press "Back" will not trigger "Screenshot" or "Marlin/Touch Mode"
+ */
+#define SMART_HOME  // Default: uncommented (enabled)
+
+/**
+ * Alternative Move Menu Layout
+ * Enable alternative Move Menu Buttons Layout matching the direction
+ * of actual printer axis Update the icons from alternate icon folder.
+ */
+#define ALTERNATIVE_MOVE_MENU
+
+/**
+ * Friendly Z Offset Language
+ * Replace decrease/increase and "-" & "+" icons with down/up and friendly icons.
+ */
+#define FRIENDLY_Z_OFFSET_LANGUAGE  // Default: uncommented (enabled)
+
+/**
+ * Quick EEPROM Menu
+ * Enable EEPROM menu (save/load/reset buttons) in Settings > Machine Menu.
+ *
+ * NOTE: If disabled, EEPROM operations can also be accessed in the (settings > machine > parameters) menu.
+ */
+#define QUICK_EEPROM_BUTTON  // Default: uncommented (enabled)
+
+/**
+ * Toast Notification Duration (in MilliSeconds)
  * Set the duration for displaying toast notification on top of the screen.
  */
 #define TOAST_DURATION (3 * 1000)  // (MilliSeconds)  1000 MilliSeconds = 1 Second
 
 /**
- * Notification style for ACK messages
- * Set the notification style to use for displaying the ACK messages which start with 'echo:'.
- *
- * NOTE: The OFF value is applied to any ACK message type (e.g. even to known echo ACK).
- *       It means that any kind of ACK message is silently discard.
- *
- * Options: [0: OFF, 1: POPUP, 2: TOAST]
- *  OFF:   No notification. The message is ignored.
- *  POPUP: Display a popup window for user confirmation.
- *  TOAST: A Toast notification is displayed for few seconds. No user interaction is needed.
- */
-#define ACK_NOTIFICATION_STYLE 1  // Default: 1
-
-// Fan speed as a percentage instead of PWM value
-#define SHOW_FAN_PERCENTAGE true  // To enabled: true | To disabled: false (Default: true)
-
-/**
- * Keyboard on left side (Mesh Editor, RGB Settings Custom)
+ * Keyboard On Left Side (Mesh Editor, RGB Settings Custom)
  * By default the keyboard is drawn on right side of the screen.
  * Enable KEYBOARD_ON_LEFT to draw the keyboard on left side of the screen.
  */
-//#define KEYBOARD_ON_LEFT
+//#define KEYBOARD_ON_LEFT  // Default: commented (disabled)
 
 //
-// Terminal Keyboard / Numpad settings
+// Terminal Keyboard / Numpad Settings
 //
-
-// Terminal Keyboard / Numpad theme
-// Uncomment to enable Material theme for keyboard and Numpad
-#define KEYBOARD_MATERIAL_THEME  // Default: disabled
 
 /**
- * Color scheme for the Terminal Keyboard / Numpad
+ * Terminal Keyboard / Numpad Theme
+ * Uncomment to enable Material theme for keyboard and Numpad.
+ */
+#define KEYBOARD_MATERIAL_THEME  // Default: commented (disabled)
+
+/**
+ * Terminal Keyboard / Numpad Color Layout
+ * Color layout for the Terminal Keyboard / Numpad.
  *
- * Options: [0: Default, 1: Invert, 2: High-Contrast]
- *  Default: The keyboard follows system background and border colors. (Material Dark
- *           if KEYBOARD_MATERIAL_THEME is enabled).
- *  Invert: The keyboard is drawn with background swapped with border colors. (Material
- *          Light if KEYBOARD_MATERIAL_THEME is enabled).
- *  High-Contrast: Use white and black colors for high contrast.
+ *   Options: [Default: 0, Invert: 1, High Contrast: 2]
+ *     Default:       The keyboard follows system background and border colors.
+ *                    (Material Dark if KEYBOARD_MATERIAL_THEME is enabled).
+ *     Invert:        The keyboard is drawn with background swapped with border colors.
+ *                    (Material Light if KEYBOARD_MATERIAL_THEME is enabled).
+ *     High Contrast: Use white and black colors for high contrast.
  */
 #define KEYBOARD_COLOR_LAYOUT 0  // Default: 0
 
 /**
- * Color scheme for the Terminal text display
+ * Terminal Text Color Scheme
+ * Color scheme for displaying text in Terminal menu.
  *
- * Options: [0: Material Dark, 1: Material Light, 2: High-Contrast]
- *  Material Dark: Dark background with light font color and orange command font color.
- *  Material Light: Light background with dark font color and orange command font color.
- *  High-Contrast: Black background with white font color and orange command font color.
+ *   Options: [Material Dark: 0, Material Light: 1, High Contrast: 2]
+ *     Material Dark:  Dark background with light font color and orange command font color.
+ *     Material Light: Light background with dark font color and orange command font color.
+ *     High Contrast:  Black background with white font color and orange command font color.
  */
 #define TERMINAL_COLOR_SCHEME 0  // Default: 0
 
 /**
- * QWERTY/QWERTZ keyboard layout
+ * QWERTY/QWERTZ Keyboard Layout
  * Keyboard layout for Terminal Keyboard (Only for TFT70 V3.0).
  *
- * Options: [0: qwerty, 1: qwertz, 2: azerty]
- *  default: The keyboard has an alphabetically order.
- *  qwerty: The typically keyboard Layout for english.
- *  qwertz: The typically keyboard Layout for german.
- *  azerty: The typically keyboard Layout for french.
+ *   Options: [qwerty: 0, qwertz: 1, azerty: 2]
+ *     default: The keyboard has an alphabetically order.
+ *     qwerty:  The typically keyboard Layout for english.
+ *     qwertz:  The typically keyboard Layout for german.
+ *     azerty:  The typically keyboard Layout for french.
  */
 #define TERMINAL_KEYBOARD_LAYOUT 0  // Default: 0
 
 /**
- * Progress bar layout on Printing menu
+ * Progress Bar Layout (Printing menu)
  * Uncomment to enable a progress bar with 10% markers.
  * Comment to enable a standard progress bar.
  */
-//#define MARKED_PROGRESS_BAR  // Default: disabled
+//#define MARKED_PROGRESS_BAR  // Default: commented (disabled)
 
 /**
- * Live text background color rendering technique on Printing menu
+ * Live Text Background Color Rendering Technique (Printing menu)
  * Uncomment to enable the sampling and use of a uniform background color across all the icons.
  * Comment to enable a standard rendering based on the sampling and use, in a pixel by pixel basis,
  * of the underlying icon background colors.
@@ -551,153 +842,28 @@
  *       so it can improve the print quality.
  *       Suitable in particular for the TFTs with a not fast HW (e.g. 24, 48 MHz).
  */
-#define UNIFORM_LIVE_TEXT_BG_COLOR  // Default: disabled
+#define UNIFORM_LIVE_TEXT_BG_COLOR  // Default: commented (disabled)
 
 /**
- * Show embedded thumbnails of gcode files
+ * Show Embedded Thumbnails Of Gcode Files
  *
- * Options: [0: classic, 1: RGB565 bitmap, 2: Base64 PNG]
- *  classic: RGB565 bitmaps for all possible thumbnail sizes are embedded
- *    in the gcode file at fixed file offsets. It is fastest to parse but least flexible.
- *  RGB565 bitmap:
- *    A specific thumbnail comment identifies the location of a  single 'classic'
- *    embedded RB565 bitmap thumbnail. It is almost as fast as classic and
- *    flexible but requires a dedicated post-processing of gcode files for
- *    most slicers. "Classic" is used as fallback.
- *  Base64 PNG:
- *    A specific thumbnail comment identifies the location of a Base64-encoded
- *    PNG thumbnail. It is slower as classic but most flexible. It does _not_
- *    require dedicated post-processing of gcode files for most slicers.
- *    "RGB565 bitmap" and "Classic" are used as fallback.
+ * NOTE: "Base64 PNG" option utilizes about 43kb statically allocated RAM and about 1kb dynamically
+ *       allocated RAM. Therefore this option is only suitable for devices >96KB RAM.
+ *       If you choose "Base64 PNG" on such a low RAM device it will automatically downgraded to
+ *       "RGB565 bitmap" option.
  *
- *  Restrictions:
- *    "Base64 PNG" option utilizes about 43kb statically allocated RAM and
- *    about 1kb dynamically allocated RAM. Therefore this option is only suitable
- *    for devices >96KB RAM.
- *    If you choose "Base64 PNG" on such a low RAM device it will automatically
- *    downgraded to "RGB565 bitmap" option.
+ *   Options: [Classic: 0, RGB565 Bitmap: 1, Base64 PNG: 2]
+ *     Classic:       RGB565 bitmaps for all possible thumbnail sizes are embedded in the gcode
+ *                    file at fixed file offsets. It is fastest to parse but least flexible.
+ *     RGB565 Bitmap: A specific thumbnail comment identifies the location of a single "Classic"
+ *                    embedded RB565 bitmap thumbnail. It is almost as fast as classic and
+ *                    flexible but requires a dedicated post-processing of gcode files for
+ *                    most slicers. "Classic" is used as fallback.
+ *     Base64 PNG:    A specific thumbnail comment identifies the location of a Base64-encoded
+ *                    PNG thumbnail. It is slower as classic but most flexible. It does _not_
+ *                    require dedicated post-processing of gcode files for most slicers.
+ *                    "RGB565 bitmap" and "Classic" are used as fallback.
  */
 #define THUMBNAIL_PARSER 0  // Default: 0
-
-//===========================================================================
-//=========================== Other Settings ================================
-//===========================================================================
-
-// Power Supply
-#define PS_ON_ACTIVE_HIGH true  // Set 'false' for ATX (1), 'true' for X-Box (2)
-
-/**
- * Maximum hotend temperature for automatic shutdown after printing
- * If automatic shutdown(Auto Power) is enabled, the printer will shutdown automatically if the
- * hotend temperature is below this value. If the hotend temperature is higher than this value
- * the fans will be turned on to cool down and it will wait for the hotend temperature to drop below
- * this value before shutting down automatically.
- */
-#define AUTO_SHUT_DOWN_MAXTEMP 50
-
-/**
- * Filament Runout Settings (if connected to TFT controller only)
- *
- * Select the type of filament/runout sensor and its default enabled/disabled state.
- *
- * NOTE: If the sensor is connected to the board, then this must be set to 0 (Disabled) or 'OFF' in
- *       the TFT Display. It is recommended to add a M75 code to the 'start_gcode' option and add a
- *       M77 code to the 'end_gcode' and enable both in config.ini file.
- *
- *       Example (in config.ini):
- *         end_gcode_enabled:1
- *         start_gcode_enabled:1
- *         start_gcode:M75\n
- *         end_gcode:M77\n
- *
- * Options: [0: Normal Disabled, 1: Normal Enabled, 2: Smart Disabled, 3: Smart Enabled]
-*/
-#define FIL_SENSOR_TYPE 0
-
-// Filament runout detection
-#define FIL_RUNOUT_INVERTING true  // Set to false to invert the logic of the sensor. (Default: true)
-#define FIL_NOISE_THRESHOLD  100   // (MilliSeconds) Pause print when filament runout is detected atleast for this duration.
-
-// Smart filament runout detection
-// For use with an encoder disc that toggles runout pin as filament moves.
-#define FILAMENT_RUNOUT_DISTANCE_MM 7
-
-//
-// Power Loss Recovery
-// Most suitable for Delta printers since most printers will crash into printed model when homing after powerloss.
-//
-
-// Home before power loss recovery
-#define HOME_BEFORE_PLR false  // To enabled: true | To disabled: false (Default: false)
-
-// Backup power / UPS to move Z axis on power loss
-#define BTT_MINI_UPS false  // To enabled: true | To disabled: false (Default: false)
-
-// Raise Z axis on resume (on power loss with UPS)
-#define POWER_LOSS_ZRAISE 10  // (mm) Default: 10
-
-/**
- * Rapid Serial Communication
- * More frequent Serial communicaiton while printing.
- * Send and parse G-codes more frequently while drawing on screen to prevent printer idling and stuttering due to
- * empty printer buffer.
- *
- * NOTE: This may slow down graphics while switching menus while printing.
-*/
-#define RAPID_SERIAL_COMM
-
-/**
- * Custom G-code Commands
- *
- * Support for up to 15 custom G-codes. Uncomment CUSTOM_*_LABEL and CUSTOM_*_GCODE to enable custom G-code.
- * CUSTOM_X_LABEL is the name of the custom button, CUSTOM_X_GCODE is the G-code to be sent by the custom button,
- * this should always end with a New-Line character '\n'.
- */
-#define CUSTOM_0_LABEL "Disable Steppers"
-#define CUSTOM_0_GCODE "M84\n"
-#define CUSTOM_1_LABEL "Init SD Card"
-#define CUSTOM_1_GCODE "M21\n"
-#define CUSTOM_2_LABEL "Release SD Card"
-#define CUSTOM_2_GCODE "M22\n"
-#define CUSTOM_3_LABEL "Enable Leveling State"
-#define CUSTOM_3_GCODE "M420 S1\n"
-#define CUSTOM_4_LABEL "Save to EEPROM"
-#define CUSTOM_4_GCODE "M500\n"
-#define CUSTOM_5_LABEL "Restore from EEPROM"
-#define CUSTOM_5_GCODE "M501\n"
-#define CUSTOM_6_LABEL "EEPROM Defaults"
-#define CUSTOM_6_GCODE "M502\n"
-//#define CUSTOM_7_LABEL "Custom7"
-//#define CUSTOM_7_GCODE "M105\n"
-//#define CUSTOM_8_LABEL "Custom8"
-//#define CUSTOM_8_GCODE "M105\n"
-//#define CUSTOM_9_LABEL "Custom9"
-//#define CUSTOM_9_GCODE "M105\n"
-//#define CUSTOM_10_LABEL "Custom10"
-//#define CUSTOM_10_GCODE "M105\n"
-//#define CUSTOM_11_LABEL "Custom11"
-//#define CUSTOM_11_GCODE "M105\n"
-//#define CUSTOM_12_LABEL "Custom12"
-//#define CUSTOM_12_GCODE "M105\n"
-//#define CUSTOM_13_LABEL "Custom13"
-//#define CUSTOM_13_GCODE "M105\n"
-//#define CUSTOM_14_LABEL "Custom14"
-//#define CUSTOM_14_GCODE "M105\n"
-
-/**
- * Start/End/Cancel G-code
- *
- * G-code that runs after a print starts, ends, or canceled.
- * Enable Start & End G-code in SETTINGS -> FEATURE menu.
- */
-// Start G-code - run this G-code before starting print
-#define PRINT_START_GCODE "M75\n" // Raise Z 10mm before homing X & Y
-
-// End G-code - run this G-code after finishing print
-#define PRINT_END_GCODE "G90\nG1 E-4\nG92 E0\nM18\n"  // Switch to absolute positioning, reduce filament pressure by
-                                                      // performing small retract, reset extruder position, disable steppers
-
-// Cancel G-code - run this G-code after canceling print
-#define PRINT_CANCEL_GCODE "M104 S0\nM140 S0\nM106 S255\nG28 XY R10\nM107\n" // Shutdown heaters, statr fan, home XY, raise Z 10mm, shutdown fan
 
 #endif
