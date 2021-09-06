@@ -89,6 +89,39 @@ const ITEM itemIsPrinting[3] = {
   {ICON_BACK,                    LABEL_BACK},
 };
 
+static void setLayerHeightText(char * layer_height_txt)
+{
+  float layer_height;
+  layer_height = (infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS);
+  if (layer_height > 0)
+  {
+    sprintf(layer_height_txt, "%6.2fmm", layer_height);
+  }
+  else
+  {
+    strcpy(layer_height_txt, " --- mm ");  // leading and trailing space char so the text is centered on both rows
+  }
+}
+
+static void setLayerNumberTxt(char * layer_number_txt)
+{
+  if (getLayerNumber() > 0)
+  {
+    if (getLayerCount() > 0)
+    {
+      sprintf(layer_number_txt, "%u/%u", getLayerNumber(), getLayerCount());
+    }
+    else
+    {
+      sprintf(layer_number_txt, "%u", getLayerNumber());
+    }
+  }
+  else
+  {
+    strcpy(layer_number_txt, "---");
+  }
+}
+
 void menuBeforePrinting(void)
 {
   // load stat/end/cancel gcodes from spi flash
@@ -238,7 +271,7 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
       case ICON_POS_Z:
         if (layerDisplayType == SHOW_LAYER_BOTH)
         {
-          sprintf(tempstr, "%6.2fmm", (infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS));
+          setLayerHeightText(tempstr);
         }
         else if (layerDisplayType == CLEAN_LAYER_NUMBER || layerDisplayType == CLEAN_LAYER_BOTH)
         {
@@ -299,25 +332,11 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
       case ICON_POS_Z:
         if (layerDisplayType == SHOW_LAYER_HEIGHT)  // layer height
         {
-          sprintf(tempstr, "%3.2fmm", (infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS));
+          setLayerHeightText(tempstr);
         }
         else if (layerDisplayType == SHOW_LAYER_NUMBER || layerDisplayType == SHOW_LAYER_BOTH)  // layer number or height & number (both)
         {
-          if (getLayerNumber() > 0)
-          {
-            if (getLayerCount() > 0)
-            {
-              sprintf(tempstr, "%u/%u", getLayerNumber(), getLayerCount());
-            }
-            else
-            {
-              sprintf(tempstr, "%u", getLayerNumber());
-            }
-          }
-          else
-          {
-            sprintf(tempstr, "-");
-          }
+          setLayerNumberTxt(tempstr);
         }
         else
         {
@@ -498,7 +517,7 @@ void printInfoPopup(void)
 
   sprintf(showInfo, (char*)textSelect(LABEL_PRINT_TIME), hour, min, sec);
 
-  if (infoPrintSummary.length == 0 && infoPrintSummary.weight == 0 && infoPrintSummary.cost == 0)
+  if (infoPrintSummary.length + infoPrintSummary.weight + infoPrintSummary.cost == 0)  // all  equals 0
   {
     strcat(showInfo, (char *)textSelect(LABEL_NO_FILAMENT_STATS));
   }
