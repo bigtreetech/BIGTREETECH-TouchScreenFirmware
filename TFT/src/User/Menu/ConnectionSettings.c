@@ -5,11 +5,11 @@ void MB_Reset() // by Lori
 {
   #ifdef PS_ON_PIN
     PS_ON_Off();
-    Serial_ReSourceDeInit();
+    Serial_DeInit(PORT_1);
     infoHost.connected = false;    
     Delay_ms(100);
     PS_ON_On();
-    Serial_ReSourceInit();
+    Serial_Init(PORT_1);
   #endif
 }
 
