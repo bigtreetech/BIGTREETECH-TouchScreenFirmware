@@ -276,10 +276,11 @@ void request_M98(char *filename)
     loopProcess();
   }
 
-  //clearRequestCommandInfo();  //shall be call after copying the buffer ...
-  return requestCommandInfo.cmd_rev_buf;
   // Wait for macro to complete
-  loopProcessToCondition(&rrfStatusIsBusy);
+  while (rrfStatusIsBusy())
+  {
+    loopProcess();
+  }
   rrfStatusQueryNormal();
 }
 
