@@ -56,7 +56,7 @@ void gocdeIconDraw(void)
     if (EnterDir(infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.folderCount]) == false)
       break;
     // if model preview bmp exists, display bmp directly without writing to flash
-    if (model_DirectDisplay(getIconStartPoint(i), infoFile.title) != true)
+    if (infoMachineSettings.firmwareType == FW_REPRAPFW || !model_DirectDisplay(getIconStartPoint(i), infoFile.title))
     {
       curItem.icon = ICON_FILE;
       menuDrawItem(&curItem, i);
