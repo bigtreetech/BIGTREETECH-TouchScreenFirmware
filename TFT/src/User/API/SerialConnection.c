@@ -15,7 +15,7 @@ const SERIAL_PORT_INFO serialPort[SERIAL_PORT_COUNT] = {
     {SERIAL_PORT_3, SERIAL_PORT_3_QUEUE_SIZE, "3", "3 - UART3"},
   #endif
   #ifdef SERIAL_PORT_4
-    {SERIAL_PORT_4, SERIAL_PORT_4_QUEUE_SIZE, "4", "4 - UART4"},
+    {SERIAL_PORT_4, SERIAL_PORT_4_QUEUE_SIZE, "4", "4 - UART4"}
   #endif
 };
 
