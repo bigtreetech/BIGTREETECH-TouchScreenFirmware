@@ -5,9 +5,6 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
-
-void SetLevelCornerPosition(uint8_t point, float position);
 void menuLevelCorner(void);
 
 #ifdef __cplusplus

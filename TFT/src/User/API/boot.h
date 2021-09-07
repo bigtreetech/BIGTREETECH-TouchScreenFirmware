@@ -18,7 +18,7 @@ extern "C" {
   #define LARGE_FONT_SIZE           0x3000
   #define _8X16_FONT_SIZE           0x1000
   #define FLASH_SIGN_SIZE           0x1000  // store status of last font/icon/config update
-  #define LANGUAGE_SIZE            0x14000  // Language pack size
+  #define LANGUAGE_SIZE            0x15000  // Language pack size
   #define STRINGS_STORE_MAX_SIZE    0x1000  // label strings max size
   #define PREHEAT_STORE_MAX_SIZE    0x1000  // preheat setting max size
   #define PRINT_GCODES_MAX_SIZE     0x5000  // start/end/cancel gcodes  max size

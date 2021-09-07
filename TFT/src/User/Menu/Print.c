@@ -314,6 +314,14 @@ void menuPrintFromSource(void)
 
 void menuPrint(void)
 {
+  if (infoMachineSettings.firmwareType == FW_REPRAPFW)
+  {
+    list_mode = infoSettings.files_list_mode;
+    infoFile.source = BOARD_SD;
+    infoMenu.menu[infoMenu.cur] = menuPrintFromSource;
+    goto selectEnd;
+  }
+
   MENUITEMS sourceSelItems = {
     // title
     LABEL_PRINT,
@@ -349,7 +357,7 @@ void menuPrint(void)
     switch (key_num)
     {
       case KEY_ICON_0:
-        list_mode = infoSettings.file_listmode;  // follow list mode setting in TFT sd card
+        list_mode = infoSettings.files_list_mode;  // follow list mode setting in TFT sd card
         infoFile.source = TFT_SD;
         infoMenu.menu[++infoMenu.cur] = menuPrintFromSource;
         infoMenu.menu[++infoMenu.cur] = menuPrintRestore;
@@ -357,7 +365,7 @@ void menuPrint(void)
 
       #ifdef U_DISK_SUPPORT
         case KEY_ICON_1:
-          list_mode = infoSettings.file_listmode;  // follow list mode setting in usb disk
+          list_mode = infoSettings.files_list_mode;  // follow list mode setting in usb disk
           infoFile.source = TFT_UDISK;
           infoMenu.menu[++infoMenu.cur] = menuPrintFromSource;
           infoMenu.menu[++infoMenu.cur] = menuPrintRestore;

@@ -111,7 +111,7 @@ void menuMachineSettings(void)
     LABEL_MACHINE_SETTINGS,
     // icon                          label
     {
-      {ICON_PARAMETER,               LABEL_PARAMETER_SETTING},
+      {ICON_PARAMETER,               LABEL_PARAMETER_SETTINGS},
       {ICON_GCODE,                   LABEL_TERMINAL},
       {ICON_CUSTOM,                  LABEL_CUSTOM},
       {ICON_RGB_SETTINGS,            LABEL_RGB_SETTINGS},
@@ -125,6 +125,12 @@ void menuMachineSettings(void)
       {ICON_BACK,                    LABEL_BACK},
     }
   };
+
+  if (infoMachineSettings.firmwareType == FW_REPRAPFW)
+  {
+    ITEM no_custom = { ICON_BACKGROUND, LABEL_BACKGROUND };
+    machineSettingsItems.items[2] = no_custom;
+  }
 
   KEY_VALUES curIndex = KEY_IDLE;
   const ITEM itemCaseLight = {ICON_CASE_LIGHT, LABEL_CASE_LIGHT};
@@ -148,7 +154,8 @@ void menuMachineSettings(void)
         break;
 
       case KEY_ICON_2:
-        infoMenu.menu[++infoMenu.cur] = menuCustom;
+        if (infoMachineSettings.firmwareType != FW_REPRAPFW)
+          infoMenu.menu[++infoMenu.cur] = menuCustom;
         break;
 
       case KEY_ICON_3:

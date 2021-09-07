@@ -67,7 +67,7 @@ TCHAR *getCurFileSource(void)
 
     case BOARD_SD:
     case BOARD_SD_REMOTE:
-      return "bSD:";
+      return infoMachineSettings.firmwareType == FW_REPRAPFW ? "gcodes" : "bSD:";
 
     default:
       break;

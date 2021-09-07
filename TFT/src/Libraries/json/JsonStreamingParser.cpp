@@ -26,6 +26,8 @@ See more at http://blog.squix.ch and https://github.com/squix78/json-streaming-p
 #include "JsonStreamingParser.hpp"
 #include <string.h>
 
+JsonStreamingParser jsonStreamingParser;
+
 JsonStreamingParser::JsonStreamingParser() {
     reset();
 }

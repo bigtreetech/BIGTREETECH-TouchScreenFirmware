@@ -1,9 +1,12 @@
 #include "parseACK.h"
 #include "includes.h"
+#include "RRFParseACK.hpp"
 
-char dmaL2Cache[ACK_MAX_SIZE];
+#define L2_CACHE_SIZE 512  // including ending character '\0'
+
+char dmaL2Cache[L2_CACHE_SIZE];
 static uint16_t ack_index = 0;
-static uint8_t ack_cur_src = SERIAL_PORT;
+static uint8_t ack_src_port_index = PORT_1;  // port index for SERIAL_PORT;
 
 static const char errormagic[] = "Error:";
 static const char echomagic[] = "echo:";
@@ -11,7 +14,6 @@ static const char warningmagic[] = "Warning:";                     // RRF warnin
 static const char messagemagic[] = "message";                      // RRF message in Json format
 static const char errorZProbe[] = "ZProbe triggered before move";  // smoothieware message
 
-bool portSeen[_UART_CNT] = {false, false, false, false, false, false};
 bool hostDialog = false;
 
 struct HOST_ACTION
@@ -57,20 +59,24 @@ const ECHO knownEcho[] = {
   {ECHO_NOTIFY_NONE, "Unknown command: \"M150"},  // M150
 };
 
-// uint8_t forceIgnore[ECHO_ID_COUNT] = {0};
+//uint8_t forceIgnore[ECHO_ID_COUNT] = {0};
 
-void setCurrentAckSrc(uint8_t src)
+//void setIgnoreEcho(ECHO_ID msgId, bool state)
+//{
+//  forceIgnore[msgId] = state;
+//}
+
+void setCurrentAckSrc(uint8_t portIndex)
 {
-  ack_cur_src = src;
-  portSeen[src] = true;
+  ack_src_port_index = portIndex;
 }
 
 static bool ack_seen(const char * str)
 {
   uint16_t i;
-  for (ack_index = 0; ack_index < ACK_MAX_SIZE && dmaL2Cache[ack_index] != 0; ack_index++)
+  for (ack_index = 0; ack_index < L2_CACHE_SIZE && dmaL2Cache[ack_index] != 0; ack_index++)
   {
-    for (i = 0; str[i] != 0 && dmaL2Cache[ack_index + i] != 0 && dmaL2Cache[ack_index + i] == str[i]; i++)
+    for (i = 0; (ack_index + i) < L2_CACHE_SIZE && str[i] != 0 && dmaL2Cache[ack_index + i] == str[i]; i++)
     {}
     if (str[i] == 0)
     {
@@ -85,10 +91,9 @@ static bool ack_continue_seen(const char * str)
 { // unlike "ack_seen()", this retains "ack_index" if the searched string is not found
   uint16_t i;
   uint16_t indexBackup = ack_index;
-
-  for (; ack_index < ACK_MAX_SIZE && dmaL2Cache[ack_index] != 0; ack_index++)
+  for (; ack_index < L2_CACHE_SIZE && dmaL2Cache[ack_index] != 0; ack_index++)
   {
-    for (i = 0; str[i] != 0 && dmaL2Cache[ack_index + i] != 0 && dmaL2Cache[ack_index + i] == str[i]; i++)
+    for (i = 0; (ack_index + i) < L2_CACHE_SIZE && str[i] != 0 && dmaL2Cache[ack_index + i] == str[i]; i++)
     {}
     if (str[i] == 0)
     {
@@ -103,7 +108,7 @@ static bool ack_continue_seen(const char * str)
 static bool ack_cmp(const char * str)
 {
   uint16_t i;
-  for (i = 0; i < ACK_MAX_SIZE && str[i] != 0 && dmaL2Cache[i] != 0; i++)
+  for (i = 0; i < L2_CACHE_SIZE && dmaL2Cache[i] != 0 && str[i] != 0; i++)
   {
     if (str[i] != dmaL2Cache[i])
       return false;
@@ -153,9 +158,9 @@ void ackPopupInfo(const char * info)
 
   // play notification sound if buzzer for ACK is enabled
   if (info == errormagic)
-    BUZZER_PLAY(sound_error);
+    BUZZER_PLAY(SOUND_ERROR);
   else if (info == echomagic && infoSettings.ack_notification == 1)
-    BUZZER_PLAY(sound_notify);
+    BUZZER_PLAY(SOUND_NOTIFY);
 
   // set echo message in status screen
   if (info == echomagic || info == messagemagic)
@@ -179,11 +184,6 @@ void ackPopupInfo(const char * info)
     addNotification(DIALOG_TYPE_ERROR, (char *)info, (char *)dmaL2Cache + ack_index, show_dialog);
   }
 }
-
-//void setIgnoreEcho(ECHO_ID msgId, bool state)
-//{
-//  forceIgnore[msgId] = state;
-//}
 
 bool processKnownEcho(void)
 {
@@ -214,7 +214,7 @@ bool processKnownEcho(void)
       }
       else if (knownEcho[i].notifyType == ECHO_NOTIFY_DIALOG)
       {
-        BUZZER_PLAY(sound_notify);
+        BUZZER_PLAY(SOUND_NOTIFY);
         addNotification(DIALOG_TYPE_INFO, (char *)echomagic, (char *)dmaL2Cache + ack_index, true);
       }
     //}
@@ -222,22 +222,28 @@ bool processKnownEcho(void)
   return isKnown;
 }
 
-bool dmaL1NotEmpty(uint8_t port)
+bool syncL2CacheFromL1(uint8_t port)
 {
-  return dmaL1Data[port].rIndex != dmaL1Data[port].wIndex;
-}
+  DMA_CIRCULAR_BUFFER * dmaL1Data_ptr = &dmaL1Data[port];  // make access to most used variables/attributes faster reducing also the code
+  uint16_t * rIndex_ptr = &dmaL1Data_ptr->rIndex;          // make access to most used variables/attributes faster reducing also the code
 
-void syncL2CacheFromL1(uint8_t port)
-{
+  if (*rIndex_ptr == dmaL1Data_ptr->wIndex)  // if L1 cache is empty
+    return false;
+
   uint16_t i = 0;
 
-  while (dmaL1NotEmpty(port))
+  while (i < (L2_CACHE_SIZE - 1) && *rIndex_ptr != dmaL1Data_ptr->wIndex)  // retrieve data until L2 cache is full or L1 cache is empty
   {
-    dmaL2Cache[i] = dmaL1Data[port].cache[dmaL1Data[port].rIndex];
-    dmaL1Data[port].rIndex = (dmaL1Data[port].rIndex + 1) % dmaL1Data[port].cacheSize;
-    if (dmaL2Cache[i++] == '\n') break;
+    dmaL2Cache[i] = dmaL1Data_ptr->cache[*rIndex_ptr];
+    *rIndex_ptr = (*rIndex_ptr + 1) % dmaL1Data_ptr->cacheSize;
+
+    if (dmaL2Cache[i++] == '\n')
+      break;
   }
-  dmaL2Cache[i] = 0;  // End character
+
+  dmaL2Cache[i] = 0;  // end character
+
+  return true;
 }
 
 void hostActionCommands(void)
@@ -345,21 +351,21 @@ void hostActionCommands(void)
     switch (hostAction.button)
     {
       case 0:
-        BUZZER_PLAY(sound_notify);
+        BUZZER_PLAY(SOUND_NOTIFY);
         setDialogText((uint8_t *)"Message", (uint8_t *)hostAction.prompt_begin, LABEL_CONFIRM,
                       LABEL_BACKGROUND);
         showDialog(DIALOG_TYPE_ALERT, setRunoutAlarmFalse, NULL, NULL);
         break;
 
       case 1:
-        BUZZER_PLAY(sound_notify);
+        BUZZER_PLAY(SOUND_NOTIFY);
         setDialogText((uint8_t *)"Action command", (uint8_t *)hostAction.prompt_begin, (uint8_t *)hostAction.prompt_button1,
                       LABEL_BACKGROUND);
         showDialog(DIALOG_TYPE_ALERT, breakAndContinue, NULL, NULL);
         break;
 
       case 2:
-        BUZZER_PLAY(sound_notify);
+        BUZZER_PLAY(SOUND_NOTIFY);
         setDialogText((uint8_t *)"Action command", (uint8_t *)hostAction.prompt_begin, (uint8_t *)hostAction.prompt_button1,
                       (uint8_t *)hostAction.prompt_button2);
         showDialog(DIALOG_TYPE_ALERT, resumeAndPurge, resumeAndContinue, NULL);
@@ -372,10 +378,9 @@ void parseACK(void)
 {
   if (infoHost.rx_ok[SERIAL_PORT] != true) return;  // not get response data
 
-  while (dmaL1NotEmpty(SERIAL_PORT))
+  while (syncL2CacheFromL1(SERIAL_PORT))  // if some data are retrieved from L1 to L2 cache
   {
     bool avoid_terminal = false;
-    syncL2CacheFromL1(SERIAL_PORT);
     infoHost.rx_ok[SERIAL_PORT] = false;
 
     #if defined(SERIAL_DEBUG_PORT) && defined(DEBUG_SERIAL_COMM)
@@ -422,6 +427,7 @@ void parseACK(void)
         storeCmd("M211\n");  // retrieve the software endstops state
       }
       infoHost.connected = true;
+      requestCommandInfo.inJson = false;
     }
 
     // Onboard sd Gcode command response
@@ -442,15 +448,34 @@ void parseACK(void)
         requestCommandInfo.inError = true;
         requestCommandInfo.inWaitResponse = false;
 
-        strcpy(requestCommandInfo.cmd_rev_buf, dmaL2Cache);
-        BUZZER_PLAY(sound_error);
+        if (requestCommandInfo.stream_handler != NULL)
+        {
+          clearRequestCommandInfo(); // unused if the streaming handler is involved.
+          requestCommandInfo.stream_handler(dmaL2Cache);
+        }
+        else
+        {
+          strcpy(requestCommandInfo.cmd_rev_buf, dmaL2Cache);
+        }
+        BUZZER_PLAY(SOUND_ERROR);
         goto parse_end;
       }
+      requestCommandInfo.inJson = false;
     }
 
     if (requestCommandInfo.inResponse)
     {
-      if (strlen(requestCommandInfo.cmd_rev_buf) + strlen(dmaL2Cache) < CMD_MAX_REV)
+      if (requestCommandInfo.stream_handler != NULL)
+      {
+        clearRequestCommandInfo(); // unused if the streaming handler is involved.
+        requestCommandInfo.stream_handler(dmaL2Cache);
+        if (ack_seen(requestCommandInfo.stopMagic))
+        {
+          requestCommandInfo.done = true;
+          requestCommandInfo.inResponse = false;
+        }
+      }
+      else if (strlen(requestCommandInfo.cmd_rev_buf) + strlen(dmaL2Cache) < CMD_MAX_REV)
       {
         strcat(requestCommandInfo.cmd_rev_buf, dmaL2Cache);
         if (ack_seen(requestCommandInfo.stopMagic))
@@ -466,9 +491,23 @@ void parseACK(void)
         ackPopupInfo(errormagic);
       }
       infoHost.wait = false;
+      requestCommandInfo.inJson = false;
       goto parse_end;
     }
     // Onboard sd Gcode command response end
+
+    if (!requestCommandInfo.inWaitResponse && !requestCommandInfo.inResponse && infoMachineSettings.firmwareType == FW_REPRAPFW)
+    {
+      if (strchr(dmaL2Cache, '{') != NULL)
+      {
+        requestCommandInfo.inJson = true;
+      }
+    }
+
+    if (requestCommandInfo.inJson)
+    {
+      rrfParseACK(dmaL2Cache);
+    }
 
     if (ack_cmp("ok\n"))
     {
@@ -501,7 +540,7 @@ void parseACK(void)
               heatSyncTargetTemp(i, ack_second_value() + 0.5f);
           }
         }
-        avoid_terminal = !infoSettings.terminalACK;
+        avoid_terminal = !infoSettings.terminal_ack;
         updateNextHeatCheckTime();
       }
       // parse and store M114, current position
@@ -528,20 +567,10 @@ void parseACK(void)
         coordinateSetExtruderActualSteps(ack_value());
       }
       // parse and store feed rate percentage
-      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW && ack_seen("Speed factor: ")) ||
-               ack_seen("FR:"))
+      else if (ack_seen("FR:"))
       {
         speedSetCurPercent(0, ack_value());
         speedQuerySetWait(false);
-      }
-      // parse and store flow rate percentage in case of RepRapFirmware
-      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && ack_seen("Extrusion factor"))
-      {
-        if (ack_continue_seen(": "))
-        {
-          speedSetCurPercent(1, ack_value());
-          speedQuerySetWait(false);
-        }
       }
       // parse and store flow rate percentage
       else if (ack_seen("Flow: "))
@@ -568,15 +597,6 @@ void parseACK(void)
         if (ack_seen("S"))
         {
           fanSetCurSpeed(i, ack_value());
-        }
-      }
-      // parse and store flow rate percentage in case of RepRapFirmware
-      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && ack_seen("fanPercent\":["))
-      {
-        for (uint8_t i = 0; i < infoSettings.fan_count; i++)
-        {
-          fanSetPercent(i, ack_value() + 0.5f);
-          ack_continue_seen(",");
         }
       }
       // parse and store M710, controller fan
@@ -672,17 +692,17 @@ void parseACK(void)
       // parse and store build volume size
       else if (ack_seen("work:"))
       {
-        if (ack_seen("min:"))
+        if (ack_continue_seen("min:"))
         {
-          if (ack_seen("X:")) infoSettings.machine_size_min[X_AXIS] = ack_value();
-          if (ack_seen("Y:")) infoSettings.machine_size_min[Y_AXIS] = ack_value();
-          if (ack_seen("Z:")) infoSettings.machine_size_min[Z_AXIS] = ack_value();
+          if (ack_continue_seen("x:")) infoSettings.machine_size_min[X_AXIS] = ack_value();
+          if (ack_continue_seen("y:")) infoSettings.machine_size_min[Y_AXIS] = ack_value();
+          if (ack_continue_seen("z:")) infoSettings.machine_size_min[Z_AXIS] = ack_value();
         }
-        if (ack_seen("max:"))
+        if (ack_continue_seen("max:"))
         {
-          if (ack_seen("X:")) infoSettings.machine_size_max[X_AXIS] = ack_value();
-          if (ack_seen("Y:")) infoSettings.machine_size_max[Y_AXIS] = ack_value();
-          if (ack_seen("Z:")) infoSettings.machine_size_max[Z_AXIS] = ack_value();
+          if (ack_continue_seen("x:")) infoSettings.machine_size_max[X_AXIS] = ack_value();
+          if (ack_continue_seen("y:")) infoSettings.machine_size_max[Y_AXIS] = ack_value();
+          if (ack_continue_seen("z:")) infoSettings.machine_size_max[Z_AXIS] = ack_value();
         }
       }
       // parse M48, Repeatability Test
@@ -714,7 +734,7 @@ void parseACK(void)
         tmpMsg[6] = '\0';
         if (strcmp(tmpMsg, "Mean: ") == 0)
         {
-          SetLevelCornerPosition(4, ack_value());  // save value for Lever Corner display
+          levelingSetProbedPoint(-1, -1, ack_value());  // save probed Z value
           sprintf(tmpMsg, "%s\nStandard Deviation: %0.5f", (char *)getDialogMsgStr(), ack_value());
           setDialogText((uint8_t* )"Repeatability Test", (uint8_t *)tmpMsg, LABEL_CONFIRM, LABEL_BACKGROUND);
           showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
@@ -815,36 +835,13 @@ void parseACK(void)
       {
         mblUpdateStatus(true);
       }
-      // G30 feedback to get the 4 corners Z value returned by Marlin for LevelCorner function
+      // parse G30, feedback to get the 4 corners Z value returned by Marlin for LevelCorner menu
       else if (ack_seen("Bed X: "))
       {
-        float valx = ack_value();
-        float valy = 0;
-        if (ack_seen("Y: ")) valy = ack_value();
-        if (ack_seen("Z: "))
-        {
-          uint16_t x_mid = infoSettings.machine_size_min[X_AXIS] +
-                           (infoSettings.machine_size_max[X_AXIS] - infoSettings.machine_size_min[X_AXIS]) / 2;
-          uint16_t y_mid = infoSettings.machine_size_min[Y_AXIS] +
-                           (infoSettings.machine_size_max[Y_AXIS] - infoSettings.machine_size_min[Y_AXIS]) / 2;
-
-          if ((valx < x_mid) && (valy < y_mid))
-          {
-            SetLevelCornerPosition(0, ack_value());
-          }
-          else if ((valx > x_mid) && (valy < y_mid))
-          {
-            SetLevelCornerPosition(1, ack_value());
-          }
-          else if ((valx > x_mid) && (valy > y_mid))
-          {
-            SetLevelCornerPosition(2, ack_value());
-          }
-          else if ((valx < x_mid) && (valy > y_mid))
-          {
-            SetLevelCornerPosition(3, ack_value());
-          }
-        }
+        float x = ack_value();
+        float y = 0;
+        if (ack_seen("Y: ")) y = ack_value();
+        if (ack_seen("Z: ")) levelingSetProbedPoint(x, y, ack_value());  // save probed Z value
       }
 
       //----------------------------------------
@@ -1071,7 +1068,7 @@ void parseACK(void)
         if (ack_seen("Z")) setParameter(P_BUMPSENSITIVITY, STEPPER_INDEX_Z + i, ack_value());
       }
       // parse and store ABL type if auto-detect is enabled
-      #if ENABLE_BL_VALUE == 1
+      #if BED_LEVELING_TYPE == 1
         else if (ack_seen("Auto Bed Leveling"))
         {
           infoMachineSettings.leveling = BL_ABL;
@@ -1183,7 +1180,7 @@ void parseACK(void)
       {
         infoMachineSettings.promptSupport = ack_value();
       }
-      else if (ack_seen("Cap:SDCARD:") && infoSettings.onboardSD == AUTO)
+      else if (ack_seen("Cap:SDCARD:") && infoSettings.onboard_sd == AUTO)
       {
         infoMachineSettings.onboard_sd_support = ack_value();
       }
@@ -1191,7 +1188,7 @@ void parseACK(void)
       {
         infoMachineSettings.autoReportSDStatus = ack_value();
       }
-      else if (ack_seen("Cap:LONG_FILENAME:") && infoSettings.longFileName == AUTO)
+      else if (ack_seen("Cap:LONG_FILENAME:") && infoSettings.long_filename == AUTO)
       {
         infoMachineSettings.long_filename_support = ack_value();
       }
@@ -1283,22 +1280,23 @@ void parseACK(void)
     }
 
   parse_end:
-    if (ack_cur_src != SERIAL_PORT)
-    {
-      Serial_Puts(ack_cur_src, dmaL2Cache);
+    if (ack_src_port_index != PORT_1)  // if the ACK message is related to a gcode originated by a supplementary serial port,
+    {                                  // forward the message to the supplementary serial port
+      Serial_Puts(serialPort[ack_src_port_index].port, dmaL2Cache);
     }
-    else if (!ack_seen("ok") || ack_seen("T:") || ack_seen("T0:"))
-    {
-      // make sure we pass on spontaneous messages to all connected ports (since these can come unrequested)
-      for (int port = 0; port < _UART_CNT; port++)
+    #ifdef SERIAL_PORT_2
+      else if (!ack_seen("ok") || ack_seen("T:") || ack_seen("T0:"))  // if a spontaneous ACK message
       {
-        if (port != SERIAL_PORT && portSeen[port])
+        // pass on the spontaneous ACK message to all the supplementary serial ports (since these messages come unrequested)
+        for (uint8_t i = PORT_2; i < SERIAL_PORT_COUNT; i++)
         {
-          // pass on this one to anyone else who might be listening
-          Serial_Puts(port, dmaL2Cache);
+          if (infoSettings.serial_port[i] > 0)  // if serial port is enabled
+          {
+            Serial_Puts(serialPort[i].port, dmaL2Cache);  // pass on the ACK message to the port
+          }
         }
       }
-    }
+    #endif
 
     if (avoid_terminal != true)
     {
@@ -1310,16 +1308,23 @@ void parseACK(void)
 void parseRcvGcode(void)
 {
   #ifdef SERIAL_PORT_2
-    uint8_t i = 0;
-    for (i = 0; i < _UART_CNT; i++)
+    uint8_t port;
+
+    // scan all the supplementary serial ports
+    for (uint8_t i = PORT_2; i < SERIAL_PORT_COUNT; i++)
     {
-      if (i != SERIAL_PORT && infoHost.rx_ok[i] == true)
+      if (infoSettings.serial_port[i] > 0)  // if serial port is enabled
       {
-        infoHost.rx_ok[i] = false;
-        while (dmaL1NotEmpty(i))
+        port = serialPort[i].port;
+
+        if (infoHost.rx_ok[port] == true)
         {
-          syncL2CacheFromL1(i);
-          storeCmdFromUART(i, dmaL2Cache);
+          infoHost.rx_ok[port] = false;
+
+          while (syncL2CacheFromL1(port))  // if some data are retrieved from L1 to L2 cache
+          {
+            storeCmdFromUART(i, dmaL2Cache);
+          }
         }
       }
     }
