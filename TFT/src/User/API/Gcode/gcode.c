@@ -50,6 +50,7 @@ static void resetRequestCommandInfo(
 
   loopProcessToCondition(&isNotEmptyCmdQueue);  // wait for the communication to be clean before requestCommand
 
+  requestCommandInfo.stream_handler = NULL;
   requestCommandInfo.inWaitResponse = true;
   requestCommandInfo.inResponse = false;
   requestCommandInfo.done = false;
@@ -262,15 +263,12 @@ void request_M98(char *filename)
 }
 
 // nextdir path must start with "macros" or "gcodes"
-char *request_M20_rrf(char *nextdir)
+void request_M20_rrf(char *nextdir, bool with_ts, FP_STREAM_HANDLER handler)
 {
   resetRequestCommandInfo("{", "}", "Error:", NULL, NULL);
+  requestCommandInfo.stream_handler = handler;
 
-  mustStoreCmd("M20 S2 P\"/%s\"\n", nextdir);
+  mustStoreCmd("M20 S%d P\"/%s\"\n", with_ts ? 3 : 2, nextdir);
 
-  // Wait for response
   loopProcessToCondition(&isWaitingResponse);
-
-  //clearRequestCommandInfo();  //shall be call after copying the buffer ...
-  return requestCommandInfo.cmd_rev_buf;
 }

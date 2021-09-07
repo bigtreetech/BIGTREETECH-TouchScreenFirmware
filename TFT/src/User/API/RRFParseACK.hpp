@@ -39,6 +39,7 @@ private:
   uint32_t m291_timeo = 0;
 
 public:
+  bool need_parser_reset = false;
   inline void startDocument() {}
   inline void startObject() {}
   inline void endObject() {}
