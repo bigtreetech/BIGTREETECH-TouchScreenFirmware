@@ -81,7 +81,7 @@ void USART_IRQHandler(uint8_t port)
 
     dmaL1Data[port].wIndex = dmaL1Data[port].cacheSize - Serial[port].dma_chanel->CNDTR;
     uint16_t wIndex = (dmaL1Data[port].wIndex == 0) ? dmaL1Data[port].cacheSize : dmaL1Data[port].wIndex;
-    if (dmaL1Data[port].cache[wIndex-1] == '\n')  // Receive completed
+    if (dmaL1Data[port].cache[wIndex - 1] == '\n')  // Receive completed
     {
       infoHost.rx_ok[port] = true;
     }
