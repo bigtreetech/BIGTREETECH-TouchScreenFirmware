@@ -14,6 +14,45 @@ static bool macro_busy = false;
 
 void rrfStatusSet(char status)
 {
+  if (rrf_status != status)
+  {
+    switch (status)
+    {
+      case 'R':
+      case 'P':
+        switch (rrf_status)
+        {
+          case 'D':
+          case 'A':
+            setHostDialog(false);
+            setPrintResume(true);
+            break;
+          case 'I':
+            // parseACK will take care of going to the print screen
+            mustStoreCmd("M409 K\"job.file.fileName\"\n");
+            break;
+        }
+        break;
+
+      case 'I':
+        switch (rrf_status)
+        {
+          case 'P':
+          case 'R':
+          case 'A':
+          case 'D':
+            setPrintAbort(); // done is the same as abort
+            break;
+        }
+        break;
+
+      case 'D':
+      case 'A':
+        if (rrf_status == 'P')
+          setPrintPause(false, PAUSE_EXTERNAL);
+        break;
+    }
+  }
   rrf_status = status;
   if (status != 'B')
   {

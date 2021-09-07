@@ -9,9 +9,7 @@ extern const GUI_RECT titleRect;
 void scanInfoFilesFs(void)
 {
   clearInfoFile();
-  char *data = request_M20_rrf(infoFile.title);
-  parseMacroListResponse(data);
-  clearRequestCommandInfo();
+  request_M20_rrf(infoFile.title, false, parseMacroListResponse);
 }
 
 void rrfShowRunningMacro(void)
@@ -63,6 +61,7 @@ void menuCallMacro(void)
 {
   uint16_t key_num = KEY_IDLE;
   uint8_t update = 1;
+  infoFile.cur_page = 0;
   infoFile.source = BOARD_SD;
 
   GUI_Clear(MENU_BACKGROUND_COLOR);

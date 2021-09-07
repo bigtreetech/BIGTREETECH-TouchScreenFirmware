@@ -65,7 +65,12 @@ struct HOST_ACTION
 //  forceIgnore[msgId] = state;
 //}
 
-bool isHostDialog()
+bool setHostDialog(bool isHostDialog)
+{
+  return hostDialog = isHostDialog;
+}
+
+bool getHostDialog(void)
 {
   return hostDialog;
 }
@@ -467,7 +472,15 @@ void parseACK(void)
         requestCommandInfo.inError = true;
         requestCommandInfo.inWaitResponse = false;
 
-        strcpy(requestCommandInfo.cmd_rev_buf, dmaL2Cache);
+        if (requestCommandInfo.stream_handler != NULL)
+        {
+          clearRequestCommandInfo(); // unused if the streaming handler is involved.
+          requestCommandInfo.stream_handler(dmaL2Cache);
+        }
+        else
+        {
+          strcpy(requestCommandInfo.cmd_rev_buf, dmaL2Cache);
+        }
         BUZZER_PLAY(SOUND_ERROR);
         goto parse_end;
       }
@@ -476,7 +489,17 @@ void parseACK(void)
 
     if (requestCommandInfo.inResponse)
     {
-      if (strlen(requestCommandInfo.cmd_rev_buf) + strlen(dmaL2Cache) < CMD_MAX_REV)
+      if (requestCommandInfo.stream_handler != NULL)
+      {
+        clearRequestCommandInfo(); // unused if the streaming handler is involved.
+        requestCommandInfo.stream_handler(dmaL2Cache);
+        if (ack_seen(requestCommandInfo.stopMagic))
+        {
+          requestCommandInfo.done = true;
+          requestCommandInfo.inResponse = false;
+        }
+      }
+      else if (strlen(requestCommandInfo.cmd_rev_buf) + strlen(dmaL2Cache) < CMD_MAX_REV)
       {
         strcat(requestCommandInfo.cmd_rev_buf, dmaL2Cache);
         if (ack_seen(requestCommandInfo.stopMagic))

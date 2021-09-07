@@ -133,3 +133,5 @@ class JsonStreamingParser {
     void setListener(JsonListener* listener);
     void reset();
 };
+
+extern JsonStreamingParser jsonStreamingParser;

@@ -126,6 +126,12 @@ void menuMachineSettings(void)
     }
   };
 
+  if (infoMachineSettings.firmwareType == FW_REPRAPFW)
+  {
+    ITEM no_custom = { ICON_BACKGROUND, LABEL_BACKGROUND };
+    machineSettingsItems.items[2] = no_custom;
+  }
+
   KEY_VALUES curIndex = KEY_IDLE;
   const ITEM itemCaseLight = {ICON_CASE_LIGHT, LABEL_CASE_LIGHT};
 
@@ -148,7 +154,8 @@ void menuMachineSettings(void)
         break;
 
       case KEY_ICON_2:
-        infoMenu.menu[++infoMenu.cur] = menuCustom;
+        if (infoMachineSettings.firmwareType != FW_REPRAPFW)
+          infoMenu.menu[++infoMenu.cur] = menuCustom;
         break;
 
       case KEY_ICON_3:

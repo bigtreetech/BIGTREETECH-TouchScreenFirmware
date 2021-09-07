@@ -342,7 +342,7 @@ void menuPrint(void)
 {
   if (infoMachineSettings.firmwareType == FW_REPRAPFW)
   {
-    list_mode = true;  // force list mode in Onboard sd card
+    list_mode = infoSettings.files_list_mode;
     infoFile.source = BOARD_SD;
     infoMenu.menu[infoMenu.cur] = menuPrintFromSource;
     goto selectEnd;

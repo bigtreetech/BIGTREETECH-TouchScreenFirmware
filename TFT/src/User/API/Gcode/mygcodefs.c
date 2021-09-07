@@ -15,9 +15,10 @@ echo:SD card ok
   return request_M21();
 }
 
-void rrfScanPrintFilesGcodeFs(void)
+static inline void rrfScanPrintFilesGcodeFs(void)
 {
-  parseJobListResponse(request_M20_rrf(infoFile.title));
+  // TODO detect files_sort_by and set with_ts appropriately once M20 S3 works
+  request_M20_rrf(infoFile.title, false, parseJobListResponse);
 }
 
 //static uint32_t date = 0;
