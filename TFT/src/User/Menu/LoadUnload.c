@@ -129,12 +129,28 @@ void menuLoadUnload(void)
           case HEATED:
             if (lastCmd == UNLOAD_REQUESTED)
             { // unload
-              mustStoreCmd("M702 T%d\n", tool_index);
+              if (infoMachineSettings.firmwareType != FW_REPRAPFW)
+              {
+                mustStoreCmd("M702 T%d\n", tool_index);
+              }
+              else
+              {
+                mustStoreCmd("T%d\n", tool_index);
+                request_M98("sys/unload.g");
+              }
               lastCmd = UNLOAD_STARTED;
             }
             else  // LOAD_REQUESTED
             { // load
-              mustStoreCmd("M701 T%d\n", tool_index);
+              if (infoMachineSettings.firmwareType != FW_REPRAPFW)
+              {
+                mustStoreCmd("M701 T%d\n", tool_index);
+              }
+              else
+              {
+                mustStoreCmd("T%d\n", tool_index);
+                request_M98("sys/load.g");
+              }
               lastCmd = LOAD_STARTED;
             }
          }
