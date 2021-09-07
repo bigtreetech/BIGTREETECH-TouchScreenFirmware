@@ -65,9 +65,9 @@ struct HOST_ACTION
 //  forceIgnore[msgId] = state;
 //}
 
-bool setHostDialog(bool isHostDialog)
+void setHostDialog(bool isHostDialog)
 {
-  return hostDialog = isHostDialog;
+  hostDialog = isHostDialog;
 }
 
 bool getHostDialog(void)
