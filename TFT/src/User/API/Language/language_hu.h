@@ -3,7 +3,8 @@
 
     // config.ini Parameter Settings - Screen Settings and Feature Settings
     #define STRING_EMULATED_M600          "Emulált M600"
-    #define STRING_ROTATE_UI              "Forgatás"
+    #define STRING_EMULATED_M109_M190     "Emulated M109 / M190"
+    #define STRING_ROTATED_UI             "Forgatás"
     #define STRING_LANGUAGE               "Magyar"
     #define STRING_ACK_NOTIFICATION       "ACK Értesítési stílus"
     #define STRING_FILES_SORT_BY          "Fájlok rendezése"
@@ -31,7 +32,7 @@
     #define STRING_LCD_BRIGHTNESS         "Fényerősség"
     #define STRING_LCD_IDLE_BRIGHTNESS    "LCD Halványítás"
     #define STRING_LCD_IDLE_TIME          "LCD Halványítási idő"
-    #define STRING_BLOCK_TOUCH_ON_IDLE    "Érintés tiltás alapjáraton"
+    #define STRING_LCD_LOCK_ON_IDLE       "Érintés tiltás alapjáraton"
     #define STRING_KNOB_LED_COLOR         "Forgatógomb LED"
     #define STRING_KNOB_LED_IDLE          "Forgatógomb tétlen"
     #define STRING_START_GCODE_ENABLED    "Kezdő G-Kód"

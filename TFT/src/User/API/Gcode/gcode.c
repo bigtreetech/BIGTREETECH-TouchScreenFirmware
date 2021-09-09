@@ -246,8 +246,8 @@ void request_M0(void)
 
 void request_M98(char *filename)
 {
-  char command[CMD_MAX_CHAR];
-  snprintf(command, CMD_MAX_CHAR, "M98 P/%s\n", filename);
+  CMD command;
+  snprintf(command, CMD_MAX_SIZE, "M98 P/%s\n", filename);
   rrfStatusSetMacroBusy();
   mustStoreCmd(command);
   // prevent a race condition when rrfStatusQuery returns !busy before executing the macro

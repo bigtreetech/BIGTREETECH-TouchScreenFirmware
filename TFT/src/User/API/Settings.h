@@ -13,11 +13,11 @@ extern "C" {
 // Config version support
 // change if new elements/keywords are added/removed/changed in the configuration.h Format YYYYMMDD
 // this number should match CONFIG_VERSION in configuration.h
-#define CONFIG_SUPPPORT 20210829
+#define CONFIG_SUPPPORT 20210903
 
 #define FONT_FLASH_SIGN       20210522  // (YYYYMMDD) change if fonts require updating
-#define CONFIG_FLASH_SIGN     20210829  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
-#define LANGUAGE_FLASH_SIGN   20210829  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
+#define CONFIG_FLASH_SIGN     20210903  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
+#define LANGUAGE_FLASH_SIGN   20210903  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
 #define ICON_FLASH_SIGN       20210711  // (YYYYMMDD) change if any icon(s) is added or removed
 
 #define FONT_CHECK_SIGN       (FONT_FLASH_SIGN + WORD_UNICODE + FLASH_SIGN_ADDR)
@@ -63,6 +63,44 @@ enum
   sign_count
 };
 
+// General Settings
+
+typedef enum
+{
+  EMULATED_M600 = 0,
+  EMULATED_M109_M190
+} GENERAL_SETTINGS;
+
+// UI Settings
+
+typedef enum
+{
+  SORT_DATE_NEW_FIRST = 0,
+  SORT_DATE_OLD_FIRST,
+  SORT_NAME_ASCENDING,
+  SORT_NAME_DESCENDING,
+  SORT_BY_COUNT
+} SORT_BY;
+
+typedef enum
+{
+  PERCENTAGE_ELAPSED = 0,
+  PERCENTAGE_REMAINING,
+  ELAPSED_REMAINING
+} PROGRESS_DISPLAY;
+
+typedef enum
+{
+  SHOW_LAYER_HEIGHT,
+  CLEAN_LAYER_HEIGHT,
+  SHOW_LAYER_NUMBER,
+  CLEAN_LAYER_NUMBER,
+  SHOW_LAYER_BOTH,
+  CLEAN_LAYER_BOTH
+} LAYER_TYPE;
+
+// Marlin Mode Settings (only for TFT24 V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
+
 typedef enum
 {
   MODE_MARLIN = 0,
@@ -80,14 +118,27 @@ typedef enum
   MODE_TYPE_COUNT
 } MARLIN_MODE_TYPE;
 
+// Printer / Machine Settings
+
 typedef enum
 {
-  SORT_DATE_NEW_FIRST = 0,
-  SORT_DATE_OLD_FIRST,
-  SORT_NAME_ASCENDING,
-  SORT_NAME_DESCENDING,
-  SORT_BY_COUNT
-} SORT_BY;
+  FEEDRATE_XY = 0,
+  FEEDRATE_Z,
+  FEEDRATE_E,
+  FEEDRATE_COUNT
+} FEEDRATE_INDEX;
+
+// Filament Runout Settings (only if connected to TFT controller)
+
+typedef enum
+{
+  RUNOUT_ENABLED = 0,
+  RUNOUT_SENSOR_TYPE,
+  RUNOUT_INVERTED,
+  RUNOUT_NO_NC
+} RUNOUT_SETTINGS;
+
+// Other Device-Specific Settings
 
 typedef enum
 {
@@ -98,55 +149,24 @@ typedef enum
   SOUND_TYPE_COUNT
 } SOUND_TYPE;
 
-typedef enum
-{
-  RUNOUT_ENABLED = 0,
-  RUNOUT_SENSOR_TYPE,
-  RUNOUT_INVERTED,
-  RUNOUT_NO_NC,
-} RUNOUT_SETTINGS;
+// Start, End & Cancel Gcode Commands
 
 typedef enum
 {
   SEND_GCODES_START_PRINT = 0,
   SEND_GCODES_END_PRINT,
   SEND_GCODES_CANCEL_PRINT,
-  SEND_GCODES_COUNT,
+  SEND_GCODES_COUNT
 } SEND_GCODES_TYPE;
-
-typedef enum
-{
-  PERCENTAGE_ELAPSED = 0,
-  PERCENTAGE_REMAINING,
-  ELAPSED_REMAINING,
-} PROGRESS_DISPLAY;
-
-typedef enum
-{
-  SHOW_LAYER_HEIGHT,
-  CLEAN_LAYER_HEIGHT,
-  SHOW_LAYER_NUMBER,
-  CLEAN_LAYER_NUMBER,
-  SHOW_LAYER_BOTH,
-  CLEAN_LAYER_BOTH,
-} LAYER_TYPE;
-
-typedef enum
-{
-  FEEDRATE_XY = 0,
-  FEEDRATE_Z,
-  FEEDRATE_E,
-  FEEDRATE_COUNT,
-} FEEDRATE_INDEX;
 
 typedef struct
 {
   // General Settings
   uint8_t  serial_port[MAX_SERIAL_PORT_COUNT];
-  uint8_t  emulated_m600;
+  uint8_t  general_settings;  // emulated M600 / M109 / M190 toggles (Bit Values)
 
   // UI Settings
-  uint8_t  rotate_ui;
+  uint8_t  rotated_ui;
   uint8_t  language;
   uint8_t  status_screen;
   uint16_t title_bg_color;
@@ -240,7 +260,7 @@ typedef struct
   uint8_t  lcd_brightness;
   uint8_t  lcd_idle_brightness;
   uint8_t  lcd_idle_time;
-  uint8_t  block_touch_on_idle;
+  uint8_t  lcd_lock_on_idle;
   uint8_t  knob_led_color;
   uint8_t  knob_led_idle;
   uint8_t  neopixel_pixels;
@@ -314,9 +334,9 @@ typedef struct
   uint8_t caseLightsBrightness;
   uint8_t emergencyParser;
   uint8_t promptSupport;
-  uint8_t onboard_sd_support;
+  uint8_t onboardSD;
   uint8_t autoReportSDStatus;
-  uint8_t long_filename_support;
+  uint8_t longFilename;
   uint8_t babyStepping;
   uint8_t buildPercent;
   uint8_t softwareEndstops;

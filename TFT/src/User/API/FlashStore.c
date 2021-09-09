@@ -68,7 +68,7 @@ void readStoredPara(void)
   else
   {
     memcpy(&infoSettings, data + (index += 4), sizeof(SETTINGS));
-    if ((paraStatus & PARA_TSC_EXIST) == 0) infoSettings.rotate_ui = DISABLED;
+    if ((paraStatus & PARA_TSC_EXIST) == 0) infoSettings.rotated_ui = DISABLED;
   }
 }
 

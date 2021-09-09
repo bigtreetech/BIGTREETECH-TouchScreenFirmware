@@ -15,10 +15,7 @@ extern "C" {
 #endif
 
 #if LCD_ENCODER_SUPPORT
-  #define LCD_ENC_PULSES_PER_STEP  4
-  #define LCD_ENC_BUTTON_INTERVAL 20  // 20ms
-
-  extern int16_t encoderPosition;
+  extern int16_t encoderPosition;  // make it available for reading the current rotation value
 
   void LCD_Enc_Init(void);
   bool LCD_Enc_ReadBtn(uint16_t interval);  // return the button press state. Interval is in milli seconds

@@ -580,7 +580,7 @@ void menuPrinting(void)
 
   if (lastPrinting == true)
   {
-    if (infoMachineSettings.long_filename_support == ENABLED && infoFile.source == BOARD_SD)
+    if (infoMachineSettings.longFilename == ENABLED && infoFile.source == BOARD_SD)
       printingItems.title.address = (uint8_t *) infoFile.Longfile[infoFile.fileIndex];
     else
       printingItems.title.address = getPrintName(infoFile.title);
@@ -777,7 +777,7 @@ void menuPrinting(void)
       case PS_KEY_6:
         if (isPrinting())
         {
-          if (isHostDialog())
+          if (getHostDialog())
             addToast(DIALOG_TYPE_ERROR, (char *)textSelect(LABEL_BUSY));
           else if (getPrintRunout())
             addToast(DIALOG_TYPE_ERROR, (char *)textSelect(LABEL_FILAMENT_RUNOUT));

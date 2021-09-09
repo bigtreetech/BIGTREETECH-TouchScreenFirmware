@@ -446,7 +446,7 @@ void menuBrightnessSettings(void)
     {CHARICON_BLANK,     LIST_CUSTOMVALUE, LABEL_LCD_BRIGHTNESS,      LABEL_DYNAMIC},
     {CHARICON_BLANK,     LIST_CUSTOMVALUE, LABEL_LCD_IDLE_BRIGHTNESS, LABEL_DYNAMIC},
     {CHARICON_BLANK,     LIST_CUSTOMVALUE, LABEL_LCD_IDLE_TIME,       LABEL_DYNAMIC},
-    {CHARICON_TOGGLE_ON, LIST_TOGGLE,      LABEL_BLOCK_TOUCH_ON_IDLE, LABEL_BACKGROUND},
+    {CHARICON_TOGGLE_ON, LIST_TOGGLE,      LABEL_LCD_LOCK_ON_IDLE,    LABEL_BACKGROUND},
   };
 
   uint16_t curIndex = KEY_IDLE;
@@ -460,7 +460,7 @@ void menuBrightnessSettings(void)
   setDynamicTextValue(1, tempstr);
 
   brightnessitems[2].valueLabel = lcd_idle_time_names[infoSettings.lcd_idle_time];
-  brightnessitems[3].icon = iconToggle[infoSettings.block_touch_on_idle];
+  brightnessitems[3].icon = iconToggle[infoSettings.lcd_lock_on_idle];
 
   listViewCreate(title, brightnessitems, COUNT(brightnessitems), NULL, true, NULL, NULL);
 
@@ -492,8 +492,8 @@ void menuBrightnessSettings(void)
         break;
 
       case 3:
-        infoSettings.block_touch_on_idle = (infoSettings.block_touch_on_idle + 1) % 2;
-        brightnessitems[curIndex].icon = iconToggle[infoSettings.block_touch_on_idle];
+        infoSettings.lcd_lock_on_idle = (infoSettings.lcd_lock_on_idle + 1) % 2;
+        brightnessitems[curIndex].icon = iconToggle[infoSettings.lcd_lock_on_idle];
         break;
 
       default:
@@ -521,7 +521,7 @@ void menuScreenSettings(void)
     LABEL_SCREEN_SETTINGS,
     // icon                          label
     {
-      {ICON_ROTATE_UI,               LABEL_ROTATE_UI},
+      {ICON_ROTATE_UI,               LABEL_ROTATED_UI},
       {ICON_TOUCHSCREEN_ADJUST,      LABEL_TOUCHSCREEN_ADJUST},
       {ICON_LANGUAGE,                LABEL_LANGUAGE},
       {ICON_FEATURE_SETTINGS,        LABEL_UI_SETTINGS},
@@ -560,8 +560,8 @@ void menuScreenSettings(void)
     switch (curIndex)
     {
       case KEY_ICON_0:
-        infoSettings.rotate_ui = !infoSettings.rotate_ui;
-        LCD_RefreshDirection(infoSettings.rotate_ui);
+        infoSettings.rotated_ui = !infoSettings.rotated_ui;
+        LCD_RefreshDirection(infoSettings.rotated_ui);
         TSC_Calibration();
         menuDrawPage(&screenSettingsItems);
         break;

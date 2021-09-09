@@ -464,7 +464,7 @@ void loopReminderClear(void)
       return;
 
     case STATUS_BUSY:
-      if (infoCmd.count == CMD_MAX_LIST)
+      if (isFullCmdQueue())
         return;
       break;
 
@@ -950,8 +950,12 @@ void loopBackEnd(void)
   parseACK();
   // Parse comment from gCode file
   parseComment();
-  // Parse the received Gcode from other UART, such as: ESP3D, etc...
-  parseRcvGcode();
+
+  #ifdef SERIAL_PORT_2
+    // Parse the received Gcode from other UART, such as: ESP3D, etc...
+    parseRcvGcode();
+  #endif
+
   // Temperature monitor
   loopCheckHeater();
   // Fan speed monitor
@@ -964,7 +968,7 @@ void loopBackEnd(void)
     loopBuzzer();
   #endif
 
-  if (infoMachineSettings.onboard_sd_support == ENABLED)
+  if (infoMachineSettings.onboardSD == ENABLED)
   {
     loopPrintFromHost();  // handle a print from onboard SD or remote host, if any
   }

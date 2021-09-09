@@ -3,7 +3,8 @@
 
     // config.ini Parameter Settings - Screen Settings and Feature Settings
     #define STRING_EMULATED_M600          "Emuliere M600"
-    #define STRING_ROTATE_UI              "UI drehen"
+    #define STRING_EMULATED_M109_M190     "Emulated M109 / M190"
+    #define STRING_ROTATED_UI             "UI drehen"
     #define STRING_LANGUAGE               "Deutsch"
     #define STRING_ACK_NOTIFICATION       "ACK - Stil"
     #define STRING_FILES_SORT_BY          "Sortiere Dateien nach"
@@ -31,7 +32,7 @@
     #define STRING_LCD_BRIGHTNESS         "LCD-Helligkeit"
     #define STRING_LCD_IDLE_BRIGHTNESS    "LCD-Timeout-Helligkeit"
     #define STRING_LCD_IDLE_TIME          "LCD-Timeout"
-    #define STRING_BLOCK_TOUCH_ON_IDLE    "Kein Touch im Standby"
+    #define STRING_LCD_LOCK_ON_IDLE       "Kein Touch im Standby"
     #define STRING_KNOB_LED_COLOR         "Drehknopf LED Farbe"
     #define STRING_KNOB_LED_IDLE          "Drehknopf LED idle Farbe"
     #define STRING_START_GCODE_ENABLED    "Gcode vor Druck"
