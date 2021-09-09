@@ -217,16 +217,14 @@ void menuPid(void)
   menuDrawPage(&pidItems);
   temperatureReDraw(curTool_index, &pidHeaterTarget[curTool_index], false);
 
-  #if LCD_ENCODER_SUPPORT
-    encoderPosition = 0;
-  #endif
-
   while (infoMenu.menu[infoMenu.cur] == menuPid)
   {
     key_num = menuKeyGetValue();
+
     switch (key_num)
     {
       case KEY_ICON_0:
+      case KEY_DECREASE:
         if (pidHeaterTarget[curTool_index] > 0)
           pidHeaterTarget[curTool_index] =
               NOBEYOND(0, pidHeaterTarget[curTool_index] - degreeSteps[degreeSteps_index],
@@ -248,6 +246,7 @@ void menuPid(void)
       }
 
       case KEY_ICON_3:
+      case KEY_INCREASE:
         if (pidHeaterTarget[curTool_index] < infoSettings.max_temp[curTool_index])
           pidHeaterTarget[curTool_index] =
               NOBEYOND(0, pidHeaterTarget[curTool_index] + degreeSteps[degreeSteps_index],
@@ -301,28 +300,6 @@ void menuPid(void)
         break;
 
       default:
-        #if LCD_ENCODER_SUPPORT
-          if (encoderPosition)
-          {
-            if (encoderPosition > 0)
-            {
-              if (pidHeaterTarget[curTool_index] < infoSettings.max_temp[curTool_index])
-                pidHeaterTarget[curTool_index] =
-                    NOBEYOND(0, pidHeaterTarget[curTool_index] + degreeSteps[degreeSteps_index],
-                             infoSettings.max_temp[curTool_index]);
-            }
-            else  // if < 0
-            {
-              if (pidHeaterTarget[curTool_index] > 0)
-                pidHeaterTarget[curTool_index] =
-                    NOBEYOND(0, pidHeaterTarget[curTool_index] - degreeSteps[degreeSteps_index],
-                             infoSettings.max_temp[curTool_index]);
-            }
-
-            temperatureReDraw(curTool_index, &pidHeaterTarget[curTool_index], true);
-            encoderPosition = 0;
-          }
-        #endif
         break;
     }
 

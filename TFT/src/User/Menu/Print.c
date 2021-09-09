@@ -167,6 +167,7 @@ void menuPrintFromSource(void)
 
   KEY_VALUES key_num = KEY_IDLE;
   uint8_t update = 1;
+  uint8_t pageCount = (infoFile.folderCount + infoFile.fileCount + (NUM_PER_PAGE - 1)) / NUM_PER_PAGE;
 
   GUI_Clear(infoSettings.bg_color);
   GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, LABEL_LOADING);
@@ -193,19 +194,20 @@ void menuPrintFromSource(void)
     infoMenu.cur--;
   }
 
-  #if LCD_ENCODER_SUPPORT
-    encoderPosition = 0;
-  #endif
 
   while (infoMenu.menu[infoMenu.cur] == menuPrintFromSource)
   {
-    if (list_mode != true) // select item from icon view
+    if (list_mode != true)  // select item from icon view
     {
       key_num = menuKeyGetValue();
+      pageCount = (infoFile.folderCount + infoFile.fileCount + (NUM_PER_PAGE - 1)) / NUM_PER_PAGE;
+
+      // read encoder position and change key index to page up/down
 
       switch (key_num)
       {
         case KEY_ICON_5:
+        case KEY_DECREASE:
           if (infoFile.cur_page > 0)
           {
             infoFile.cur_page--;
@@ -214,7 +216,8 @@ void menuPrintFromSource(void)
           break;
 
         case KEY_ICON_6:
-          if (infoFile.cur_page + 1 < (infoFile.folderCount + infoFile.fileCount + (NUM_PER_PAGE - 1)) / NUM_PER_PAGE)
+        case KEY_INCREASE:
+          if (infoFile.cur_page + 1 < pageCount)
           {
             infoFile.cur_page++;
             update = 1;
@@ -223,6 +226,7 @@ void menuPrintFromSource(void)
 
         case KEY_ICON_7:
           infoFile.cur_page = 0;
+
           if (IsRootDir() == true)
           {
             clearInfoFile();
@@ -238,29 +242,6 @@ void menuPrintFromSource(void)
           break;
 
         case KEY_IDLE:
-          #if LCD_ENCODER_SUPPORT
-            if (encoderPosition)  // if a page scrolling is requested
-            {
-              if (encoderPosition < 0)  // if page up
-              {
-                if (infoFile.cur_page > 0)
-                {
-                  infoFile.cur_page--;
-                  update = 1;
-                }
-              }
-              else  // if page down
-              {
-                if (infoFile.cur_page + 1 < (infoFile.folderCount + infoFile.fileCount + (NUM_PER_PAGE - 1)) / NUM_PER_PAGE)
-                {
-                  infoFile.cur_page++;
-                  update = 1;
-                }
-              }
-
-              encoderPosition = 0;
-            }
-          #endif
           break;
 
         default:
@@ -288,8 +269,8 @@ void menuPrintFromSource(void)
           }
           break;
 
-        case KEY_PAGEUP:
-        case KEY_PAGEDOWN:
+        case KEY_DECREASE:
+        case KEY_INCREASE:
         case KEY_IDLE:
           break;
 
