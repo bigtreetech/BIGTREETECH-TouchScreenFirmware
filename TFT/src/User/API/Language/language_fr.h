@@ -3,7 +3,8 @@
 
     // config.ini Parameter Settings - Screen Settings and Feature Settings
     #define STRING_EMULATED_M600          "Emuler M600"
-    #define STRING_ROTATE_UI              "Rotation"
+    #define STRING_EMULATED_M109_M190     "Emulated M109 / M190"
+    #define STRING_ROTATED_UI             "Rotation"
     #define STRING_LANGUAGE               "Français"
     #define STRING_ACK_NOTIFICATION       "Style de notification ACK"
     #define STRING_FILES_SORT_BY          "Trier les fichiers par"
@@ -31,7 +32,7 @@
     #define STRING_LCD_BRIGHTNESS         "Luminosité"
     #define STRING_LCD_IDLE_BRIGHTNESS    "Diminution luminosité"
     #define STRING_LCD_IDLE_TIME          "Durée avant diminution"
-    #define STRING_BLOCK_TOUCH_ON_IDLE    "Bloquer touches en veille"
+    #define STRING_LCD_LOCK_ON_IDLE       "Bloquer touches en veille"
     #define STRING_KNOB_LED_COLOR         "LED du bouton rotatif"
     #define STRING_KNOB_LED_IDLE          "Veille du bouton rotatif"
     #define STRING_START_GCODE_ENABLED    "Gcode avant l'impression"

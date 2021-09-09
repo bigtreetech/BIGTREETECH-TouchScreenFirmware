@@ -22,9 +22,9 @@ extern "C" {
 #define text_startx      (LCD_WIDTH / 2)
 
 // thumbnail parser options
-#define PARSER_CLASSIC      0
-#define PARSER_RGB565       1
-#define PARSER_BASE64PNG    2
+#define PARSER_CLASSIC   0
+#define PARSER_RGB565    1
+#define PARSER_BASE64PNG 2
 
 void LOGO_ReadDisplay(void);
 void ICON_PartialReadDisplay(uint16_t sx, uint16_t sy, int16_t width, int16_t height, uint8_t icon, uint16_t isx, uint16_t isy);

@@ -4,6 +4,7 @@
 SETTINGS infoSettings;
 MACHINESETTINGS infoMachineSettings;
 
+const uint8_t default_general_settings = 0b00000011;  // emulated M600 / M109 / M190 enabled
 const uint16_t default_max_temp[]      = HEAT_MAX_TEMP;
 const uint16_t default_max_fanPWM[]    = FAN_MAX_PWM;
 const uint16_t default_size_min[]      = {X_MIN_POS, Y_MIN_POS, Z_MIN_POS};
@@ -24,10 +25,10 @@ void infoSettingsReset(void)
 {
 // General Settings
   infoSettings.serial_port[0]         = PRIMARY_BAUDRATE;  // primary serial port
-  infoSettings.emulated_m600          = EMULATED_M600;
+  infoSettings.general_settings       = default_general_settings;
 
 // UI Settings
-  infoSettings.rotate_ui              = DISABLED;
+  infoSettings.rotated_ui             = DISABLED;
   infoSettings.language               = LANG_DEFAULT;
   infoSettings.status_screen          = STATUS_SCREEN;
   infoSettings.title_bg_color         = lcd_colors[TITLE_BACKGROUND_COLOR];
@@ -115,7 +116,7 @@ void infoSettingsReset(void)
   infoSettings.lcd_brightness         = LCD_BRIGHTNESS;
   infoSettings.lcd_idle_brightness    = LCD_IDLE_BRIGHTNESS;
   infoSettings.lcd_idle_time          = LCD_IDLE_TIME;
-  infoSettings.block_touch_on_idle    = DISABLED;
+  infoSettings.lcd_lock_on_idle       = DISABLED;
   infoSettings.knob_led_color         = KNOB_LED_COLOR;
   infoSettings.knob_led_idle          = ENABLED;
   #ifdef NEOPIXEL_PIXELS
@@ -185,9 +186,9 @@ void initMachineSetting(void)
   infoMachineSettings.caseLightsBrightness    = DISABLED;
   infoMachineSettings.emergencyParser         = DISABLED;
   infoMachineSettings.promptSupport           = DISABLED;
-  infoMachineSettings.onboard_sd_support      = DISABLED;
+  infoMachineSettings.onboardSD               = DISABLED;
   infoMachineSettings.autoReportSDStatus      = DISABLED;
-  infoMachineSettings.long_filename_support   = DISABLED;
+  infoMachineSettings.longFilename            = DISABLED;
   infoMachineSettings.babyStepping            = DISABLED;
   infoMachineSettings.buildPercent            = DISABLED;
   infoMachineSettings.softwareEndstops        = ENABLED;
@@ -229,10 +230,10 @@ void setupMachine(void)
     infoMachineSettings.autoReportSDStatus      = DISABLED;
   }
   if (infoSettings.onboard_sd != AUTO)
-    infoMachineSettings.onboard_sd_support = infoSettings.onboard_sd;
+    infoMachineSettings.onboardSD = infoSettings.onboard_sd;
 
   if (infoSettings.long_filename != AUTO)
-    infoMachineSettings.long_filename_support = infoSettings.long_filename;
+    infoMachineSettings.longFilename = infoSettings.long_filename;
 
   mustStoreCmd("M503 S0\n");
 

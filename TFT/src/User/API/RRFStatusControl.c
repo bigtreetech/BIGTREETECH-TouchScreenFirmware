@@ -24,7 +24,7 @@ void rrfStatusSet(char status)
         {
           case 'D':
           case 'A':
-            hostDialog = false;
+            setHostDialog(false);
             setPrintResume(true);
             break;
           case 'I':

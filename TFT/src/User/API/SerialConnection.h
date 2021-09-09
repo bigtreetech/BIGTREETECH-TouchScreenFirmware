@@ -40,8 +40,8 @@ extern const SERIAL_PORT_INFO serialPort[SERIAL_PORT_COUNT];  // serial port (in
 extern const uint32_t baudrateValues[BAUDRATE_COUNT];         // baudrate values
 extern const char * const baudrateNames[BAUDRATE_COUNT];      // baudrate names
 
-void Serial_Init(int8_t port);    // -1 to apply to all serial ports (primary and supplementary)
-void Serial_DeInit(int8_t port);  // -1 to apply to all serial ports (primary and supplementary)
+void Serial_Init(SERIAL_PORT_INDEX port);    // index ALL_PORTS to apply to all serial ports (primary and supplementary)
+void Serial_DeInit(SERIAL_PORT_INDEX port);  // index ALL_PORTS to apply to all serial ports (primary and supplementary)
 
 #ifdef __cplusplus
 }

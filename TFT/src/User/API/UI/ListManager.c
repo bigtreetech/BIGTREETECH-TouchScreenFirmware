@@ -48,6 +48,10 @@ void listViewCreate(LABEL title, LISTITEM * items, uint16_t maxItems, uint16_t *
 
   listViewSetCurPage(curPageIndex);
   menuDrawListPage(&listItems);
+
+  #if LCD_ENCODER_SUPPORT
+    encoderPosition = 0;
+  #endif
 }
 
 // Set/Update List view title
@@ -207,6 +211,23 @@ uint16_t listViewGetSelectedIndex(void)
       return KEY_BACK;
 
     default:
-      return KEY_IDLE;
+      #if LCD_ENCODER_SUPPORT
+        if (encoderPosition)  // if a page scrolling is requested
+        {
+          if (encoderPosition < 0)  // if page up
+          {
+            encoderPosition = 0;
+            listViewPreviousPage();
+            return KEY_PAGEUP;
+          }
+          else  // if page down
+          {
+            encoderPosition = 0;
+            listViewNextPage();
+            return KEY_PAGEDOWN;
+          }
+        }
+      #endif
+      return KEY_IDLE;  // if no key is pressed and no page scrolling is requested
   }
 }

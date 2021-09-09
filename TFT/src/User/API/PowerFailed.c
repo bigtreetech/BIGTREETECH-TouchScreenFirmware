@@ -72,7 +72,7 @@ void powerFailedCache(uint32_t offset)
 
   if (infoBreakPoint.axis[Z_AXIS] == coordinateGetAxisTarget(Z_AXIS)) return;  // Z axis no changed.
   if (create_ok == false) return;
-  if (infoCacheCmd.count != 0) return;
+  if (isNotEmptyCmdQueue()) return;
   if (!isPaused())
   { // not paused, update printing progress status.
     infoBreakPoint.offset = offset;

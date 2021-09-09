@@ -3,7 +3,8 @@
 
     // config.ini Parameter Settings - Screen Settings and Feature Settings
     #define STRING_EMULATED_M600          "Emulated M600"
-    #define STRING_ROTATE_UI              "顯示方向"
+    #define STRING_EMULATED_M109_M190     "Emulated M109 / M190"
+    #define STRING_ROTATED_UI             "顯示方向"
     #define STRING_LANGUAGE               "正體中文"
     #define STRING_ACK_NOTIFICATION       "ACK 弹窗类型"
     #define STRING_FILES_SORT_BY          "Sort files by"
@@ -31,7 +32,7 @@
     #define STRING_LCD_BRIGHTNESS         "螢幕亮度"
     #define STRING_LCD_IDLE_BRIGHTNESS    "睡眠狀態螢幕亮度"
     #define STRING_LCD_IDLE_TIME          "螢幕進入睡眠時間"
-    #define STRING_BLOCK_TOUCH_ON_IDLE    "Block touch on idle"
+    #define STRING_LCD_LOCK_ON_IDLE       "LCD lock on idle"
     #define STRING_KNOB_LED_COLOR         "旋鈕LED顏色"
     #define STRING_KNOB_LED_IDLE          "旋鈕LED自動睡眠"
     #define STRING_START_GCODE_ENABLED    "執行起始G-code"

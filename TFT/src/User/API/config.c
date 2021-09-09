@@ -74,7 +74,7 @@ bool getConfigFromFile(void)
     PRINTDEBUG(configCustomGcodes->gcode[1]);
     if (scheduleRotate)
     {
-      LCD_RefreshDirection(infoSettings.rotate_ui);
+      LCD_RefreshDirection(infoSettings.rotated_ui);
       TSC_Calibration();
     }
     storePara();
@@ -458,7 +458,7 @@ void resetConfig(void)
   tempCG.count = n;
 
   // restore strings store
-  strcpy(tempST.marlin_title, MARLIN_BANNER_TEXT);
+  strcpy(tempST.marlin_title, MARLIN_TITLE);
 
   for (int i = 0; i < PREHEAT_COUNT; i++)
   {
@@ -555,16 +555,17 @@ void parseConfigKey(uint16_t index)
       break;
 
     case C_INDEX_EMULATED_M600:
-      infoSettings.emulated_m600 = getOnOff();
+    case C_INDEX_EMULATED_M109_M190:
+      SET_BIT_VALUE(infoSettings.general_settings, (index - C_INDEX_EMULATED_M600), getOnOff());
       break;
 
     //----------------------------UI Settings
 
-    case C_INDEX_ROTATE_UI:
-      if (infoSettings.rotate_ui != getOnOff())
+    case C_INDEX_ROTATED_UI:
+      if (infoSettings.rotated_ui != getOnOff())
       {
         scheduleRotate = true;
-        infoSettings.rotate_ui = getOnOff();
+        infoSettings.rotated_ui = getOnOff();
       }
       break;
 
@@ -978,8 +979,8 @@ void parseConfigKey(uint16_t index)
         SET_VALID_INT_VALUE(infoSettings.lcd_idle_time, 0, LCD_IDLE_TIME_COUNT - 1);
         break;
 
-      case C_INDEX_BLOCK_TOUCH_ON_IDLE:
-        infoSettings.block_touch_on_idle = getOnOff();
+      case C_INDEX_LCD_LOCK_ON_IDLE:
+        infoSettings.lcd_lock_on_idle = getOnOff();
         break;
     #endif
 

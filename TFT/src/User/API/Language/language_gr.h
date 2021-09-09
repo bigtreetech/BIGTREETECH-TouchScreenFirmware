@@ -3,7 +3,8 @@
 
     // config.ini Parameter Settings - Screen Settings and Feature Settings
     #define STRING_EMULATED_M600          "Emulated M600"
-    #define STRING_ROTATE_UI              "Περιστροφή UI"
+    #define STRING_EMULATED_M109_M190     "Emulated M109 / M190"
+    #define STRING_ROTATED_UI             "Περιστροφή UI"
     #define STRING_LANGUAGE               "Ελληνικά"
     #define STRING_ACK_NOTIFICATION       "ACK notification style"
     #define STRING_FILES_SORT_BY          "Sort files by"
@@ -31,7 +32,7 @@
     #define STRING_LCD_BRIGHTNESS         "Φωτεινότητα"
     #define STRING_LCD_IDLE_BRIGHTNESS    "Φωτεινότητα LCD σκοτεινή"
     #define STRING_LCD_IDLE_TIME          "Xρονομετρητής αδράνειας οθόνης"
-    #define STRING_BLOCK_TOUCH_ON_IDLE    "Block touch on idle"
+    #define STRING_LCD_LOCK_ON_IDLE       "LCD lock on idle"
     #define STRING_KNOB_LED_COLOR         "LED περιστροφικού κουμπιού"
     #define STRING_KNOB_LED_IDLE          "Rotary Knob LED idle"
     #define STRING_START_GCODE_ENABLED    "Αρχικό Gcode προ εκτύπωσης"

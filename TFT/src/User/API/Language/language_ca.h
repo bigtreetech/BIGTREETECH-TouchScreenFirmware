@@ -3,7 +3,8 @@
 
     // config.ini Parameter Settings - Screen Settings and Feature Settings
     #define STRING_EMULATED_M600          "Emulated M600"
-    #define STRING_ROTATE_UI              "Rotar"
+    #define STRING_EMULATED_M109_M190     "Emulated M109 / M190"
+    #define STRING_ROTATED_UI             "Rotar"
     #define STRING_LANGUAGE               "Català"
     #define STRING_ACK_NOTIFICATION       "ACK notification style"
     #define STRING_FILES_SORT_BY          "Sort files by"
@@ -31,7 +32,7 @@
     #define STRING_LCD_BRIGHTNESS         "Lluminositat"
     #define STRING_LCD_IDLE_BRIGHTNESS    "Dim Lluminositat LCD"
     #define STRING_LCD_IDLE_TIME          "Temporitzador inactiu LCD"
-    #define STRING_BLOCK_TOUCH_ON_IDLE    "Block touch on idle"
+    #define STRING_LCD_LOCK_ON_IDLE       "LCD lock on idle"
     #define STRING_KNOB_LED_COLOR         "Perilla rotativa LED"
     #define STRING_KNOB_LED_IDLE          "Rotary Knob LED idle"
     #define STRING_START_GCODE_ENABLED    "Enviar Gcode inicial"

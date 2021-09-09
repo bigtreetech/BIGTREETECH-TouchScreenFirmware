@@ -70,7 +70,7 @@ bool scanPrintFilesGcodeFs(void)
       if (infoFile.fileCount >= FILE_NUM)
         continue;  // Gcode max number is FILE_NUM
 
-      if (infoMachineSettings.long_filename_support == ENABLED)
+      if (infoMachineSettings.longFilename == ENABLED)
       {
         char *Pstr_tmp = strrchr(line, ' ');
         if (Pstr_tmp != NULL)

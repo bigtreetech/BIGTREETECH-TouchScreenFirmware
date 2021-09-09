@@ -7,8 +7,7 @@ extern "C" {
 
 #include <stdbool.h>
 #include <stdint.h>
-
-extern bool hostDialog;
+#include "SerialConnection.h"
 
 // append at the end of this list the id of any new echo message for
 // which a specific popup message type must be used to notify the user
@@ -34,12 +33,15 @@ typedef enum
   ECHO_ID_COUNT,
 } ECHO_ID;
 
-inline bool isHostDialog() {return hostDialog;}
-
 //void setIgnoreEcho(ECHO_ID msgId, bool state);
-void setCurrentAckSrc(uint8_t portIndex);
+void setHostDialog(bool isHostDialog);
+bool getHostDialog(void);
+void setCurrentAckSrc(SERIAL_PORT_INDEX portIndex);
 void parseACK(void);
-void parseRcvGcode(void);
+
+#ifdef SERIAL_PORT_2
+  void parseRcvGcode(void);
+#endif
 
 #ifdef __cplusplus
 }
