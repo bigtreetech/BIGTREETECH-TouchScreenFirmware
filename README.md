@@ -444,28 +444,35 @@ Thumbnail image sizes are:
 If this setting is not visible within the Prusa-Slicer you need to enable _Expert Settings Mode_:
 ![ps-expert-settings](https://user-images.githubusercontent.com/54359396/121323041-c7e07300-c90f-11eb-9644-e12e31f7b5f9.png)
 
+
+
 ### TFT Screen Configuration and support for RRF
 
-Overview
+**Overview:**
+
 The most recent version of the standard bigtreetech TFT firmware has built in support for RepRapFirmware. The pre-built images have this enabled by default.
 
-Loading the firmware
+**Loading the firmware:**
+
 There is now an RRF config.ini
 It needs to be renamed from config_rrf.ini to config.ini for flashing of the firmware.
 
-Config.g Changes
+**Config.g Changes:**
+
 Add the following line to your config.g to enable the screen: M575 P1 S2 B57600
 
-Implemented features:
+**Implemented features:**
 
 Auto detect fw type + separate config.ini for easier setup
 -Temperature/movement/cooling status monitoring and control
+
 - Print status monitoring with mid-print tuneing/pausing
 - Macro support
 - Print from onboard/external SD card
 - Please see [Feature request #1791](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/issues/1791) for more information.
 
-Menu system for macros
+**Menu system for macros:**
+
 - Thumbnail and menu system support for onboard gcodes
 - Load/unload menu
 - PID tune menu
