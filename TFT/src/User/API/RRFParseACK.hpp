@@ -14,17 +14,49 @@ extern "C"
 #include "JsonStreamingParser.hpp"
 #include <string.h>
 
-#define FANS "fanPercent"
-#define SPEED "sfactor"
-#define EXTRUSION "efactor"
-#define STATUS "status"
-#define MBOX_SEQ "msgBox.seq"
-#define MBOX_MODE "msgBox.mode"
-#define MBOX_TIMEO "msgBox.timeout"
-#define MBOX_MSG "msgBox.msg"
-#define MBOX_TITLE "msgBox.title"
+#define STATUS      "status"
+#define HEATERS     "heaters"
+#define ACTIVE      "active"
+#define STANDBY     "standby"
+#define HSTAT       "hstat"
+#define POS         "pos"
+#define SPEED       "sfactor"
+#define EXTRUSION   "efactor"
+#define BABYSTEP    "babystep"
+#define FAN_PERCENT "fanPercent"
+#define MBOX_SEQ    "msgBox.seq"
+#define MBOX_MODE   "msgBox.mode"
+#define MBOX_TIMEO  "msgBox.timeout"
+#define MBOX_MSG    "msgBox.msg"
+#define MBOX_TITLE  "msgBox.title"
+#define RESP        "resp"
 
-enum DOCUMENT_STATE { none, fan_percent, sfactor, efactor, status, mbox_seq, mbox_mode, mbox_timeo, mbox_msg, mbox_title };
+enum DOCUMENT_STATE 
+{ 
+  none, 
+  status,
+  heaters,
+  active,
+  standby,
+  hstat,
+  pos,
+  machine,
+  sfactor,
+  efactor,
+  baby_step,
+  tool,
+  probe,
+  fan_percent,
+  fanRPM,
+  homed,
+  mbox_seq, 
+  mbox_mode, 
+  mbox_timeo, 
+  mbox_msg, 
+  mbox_title,
+  resp 
+};
+
 class ParseACKJsonParser : public JsonListener
 {
 
@@ -57,9 +89,25 @@ public:
 
   inline void key(const char *key)
   {
-    if (strcmp(FANS, key) == 0)
+    if (strcmp(STATUS, key) == 0)
     {
-      state = fan_percent;
+      state = status;
+    }
+    else if (strcmp(HEATERS, key) == 0)
+    {
+      state = heaters;
+    }
+    else if (strcmp(ACTIVE, key) == 0)
+    {
+      state = active;
+    }
+    else if (strcmp(HSTAT, key) == 0)
+    {
+      state = hstat;
+    }
+    else if (strcmp(POS, key) == 0)
+    {
+      state = pos;
     }
     else if (strcmp(SPEED, key) == 0)
     {
@@ -69,9 +117,13 @@ public:
     {
       state = efactor;
     }
-    else if (strcmp(STATUS, key) == 0)
+    else if (strcmp(BABYSTEP, key) == 0)
     {
-      state = status;
+      state = baby_step;
+    }
+    else if (strcmp(FAN_PERCENT, key) == 0)
+    {
+      state = fan_percent;
     }
     else if (strcmp(MBOX_SEQ, key) == 0)
     {
@@ -93,6 +145,11 @@ public:
     {
       state = mbox_timeo;
     }
+    else if (strcmp(RESP, key) == 0)
+    {
+      state = resp;
+    }
+
     else
     {
       state = none;

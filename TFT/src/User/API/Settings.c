@@ -234,14 +234,13 @@ void setupMachine(void)
 
   if (infoSettings.long_filename != AUTO)
     infoMachineSettings.longFilename = infoSettings.long_filename;
-
-  mustStoreCmd("M503 S0\n");
-
+    
   if (infoMachineSettings.firmwareType == FW_REPRAPFW)
   {
-    mustStoreCmd("M555 P2\n");  //  Set RRF compatibility behaves similar to 2: Marlin
-    mustStoreCmd("M552\n");     // query network state, populate IP if the screen boots up after RRF
+    mustStoreCmd("M552\n");   // query network state, populate IP if the screen boots up after RRF
+    return;
   }
+  mustStoreCmd("M503 S0\n");
   mustStoreCmd("M82\n");  // Set extruder to absolute mode
   mustStoreCmd("G90\n");  // Set to Absolute Positioning
 }

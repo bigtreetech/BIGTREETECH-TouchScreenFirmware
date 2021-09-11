@@ -30,6 +30,8 @@ void rrfStatusSet(char status)
           case 'I':
             // parseACK will take care of going to the print screen
             mustStoreCmd("M409 K\"job.file.fileName\"\n");
+            setPrintHost(true);
+            setPrintResume(false);
             break;
         }
         break;
