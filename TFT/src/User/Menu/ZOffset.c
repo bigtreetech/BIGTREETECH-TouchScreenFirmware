@@ -131,21 +131,17 @@ void menuZOffset(void)
   menuDrawPage(&zOffsetItems);
   zOffsetDraw(offsetGetStatus(), now);
 
-  #if LCD_ENCODER_SUPPORT
-    encoderPosition = 0;
-  #endif
-
   while (infoMenu.menu[infoMenu.cur] == menuZOffset)
   {
+    key_num = menuKeyGetValue();
     unit = moveLenSteps[curUnit_index];
-
     z_offset = offsetGetValue();  // always load current Z offset
 
-    key_num = menuKeyGetValue();
     switch (key_num)
     {
       // decrease Z offset
       case KEY_ICON_0:
+      case KEY_DECREASE:
         if (!offsetGetStatus())
           zOffsetNotifyError(false);
         else
@@ -161,6 +157,7 @@ void menuZOffset(void)
 
       // increase Z offset
       case KEY_ICON_3:
+      case KEY_INCREASE:
         if (!offsetGetStatus())
           zOffsetNotifyError(false);
         else
@@ -239,17 +236,6 @@ void menuZOffset(void)
         break;
 
       default:
-        #if LCD_ENCODER_SUPPORT
-          if (encoderPosition)
-          {
-            if (!offsetGetStatus())
-              zOffsetNotifyError(false);
-            else
-              z_offset = offsetUpdateValue(unit, encoderPosition < 0 ? -1 : 1);
-
-            encoderPosition = 0;
-          }
-        #endif
         break;
     }
 

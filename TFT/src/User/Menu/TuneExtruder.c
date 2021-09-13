@@ -94,19 +94,16 @@ void menuTuneExtruder(void)
   menuDrawPage(&tuneExtruderItems);
   temperatureReDraw(tool_index, NULL, false);
 
-  #if LCD_ENCODER_SUPPORT
-    encoderPosition = 0;
-  #endif
-
   while (infoMenu.menu[infoMenu.cur] == menuTuneExtruder)
   {
+    key_num = menuKeyGetValue();
     actCurrent = heatGetCurrentTemp(tool_index);
     actTarget = heatGetTargetTemp(tool_index);
 
-    key_num = menuKeyGetValue();
     switch (key_num)
     {
       case KEY_ICON_0:
+      case KEY_DECREASE:
         heatSetTargetTemp(tool_index, actTarget - degreeSteps[degreeSteps_index]);
         break;
 
@@ -123,6 +120,7 @@ void menuTuneExtruder(void)
       }
 
       case KEY_ICON_3:
+      case KEY_INCREASE:
         heatSetTargetTemp(tool_index, actTarget + degreeSteps[degreeSteps_index]);
         break;
 
@@ -155,14 +153,7 @@ void menuTuneExtruder(void)
         }
         break;
 
-      default :
-        #if LCD_ENCODER_SUPPORT
-          if (encoderPosition)
-          {
-            heatSetTargetTemp(tool_index, actTarget + degreeSteps[degreeSteps_index] * encoderPosition);
-            encoderPosition = 0;
-          }
-        #endif
+      default:
         break;
     }
 
@@ -242,20 +233,19 @@ void menuNewExtruderESteps(void)
   menuDrawPage(&newExtruderESteps);
   showNewESteps(measured_length, old_esteps, &new_esteps);
 
-  #if LCD_ENCODER_SUPPORT
-    encoderPosition = 0;
-  #endif
-
   while (infoMenu.menu[infoMenu.cur] == menuNewExtruderESteps)
   {
     key_num = menuKeyGetValue();
+
     switch (key_num)
     {
       case KEY_ICON_0:
+      case KEY_DECREASE:
         measured_length -= moveLenSteps[extStep_index];
         break;
 
       case KEY_ICON_3:
+      case KEY_INCREASE:
         measured_length += moveLenSteps[extStep_index];
         break;
 
@@ -285,14 +275,7 @@ void menuNewExtruderESteps(void)
         infoMenu.cur--;
         break;
 
-      default :
-        #if LCD_ENCODER_SUPPORT
-          if (encoderPosition)
-          {
-            measured_length += moveLenSteps[extStep_index] * encoderPosition;
-            encoderPosition = 0;
-          }
-        #endif
+      default:
         break;
     }
 

@@ -62,9 +62,7 @@ bool storeCmd(const char * format, ...)
 {
   if (strlen(format) == 0) return false;
 
-  GCODE_QUEUE * pQueue = &infoCmd;
-
-  if (pQueue->count >= CMD_QUEUE_SIZE)
+  if (infoCmd.count >= CMD_QUEUE_SIZE)
   {
     reminderMessage(LABEL_BUSY, STATUS_BUSY);
     return false;
@@ -72,7 +70,7 @@ bool storeCmd(const char * format, ...)
 
   va_list va;
   va_start(va, format);
-  commonStoreCmd(pQueue, format, va);
+  commonStoreCmd(&infoCmd, format, va);
   va_end(va);
 
   return true;
@@ -86,18 +84,15 @@ void mustStoreCmd(const char * format, ...)
 {
   if (strlen(format) == 0) return;
 
-  GCODE_QUEUE * pQueue = &infoCmd;
-
-  if (pQueue->count >= CMD_QUEUE_SIZE)
+  if (infoCmd.count >= CMD_QUEUE_SIZE)
   {
     reminderMessage(LABEL_BUSY, STATUS_BUSY);
-
     loopProcessToCondition(&isFullCmdQueue);  // wait for a free slot in the queue in case the queue is currently full
   }
 
   va_list va;
   va_start(va, format);
-  commonStoreCmd(pQueue, format, va);
+  commonStoreCmd(&infoCmd, format, va);
   va_end(va);
 }
 
@@ -138,19 +133,17 @@ bool storeCmdFromUART(SERIAL_PORT_INDEX portIndex, const CMD cmd)
 {
   if (strlen(cmd) == 0) return false;
 
-  GCODE_QUEUE * pQueue = &infoCmd;
-
-  if (pQueue->count >= CMD_QUEUE_SIZE)
+  if (infoCmd.count >= CMD_QUEUE_SIZE)
   {
     reminderMessage(LABEL_BUSY, STATUS_BUSY);
     return false;
   }
 
-  strncpy(pQueue->queue[pQueue->index_w].gcode, cmd, CMD_MAX_SIZE);
+  strncpy(infoCmd.queue[infoCmd.index_w].gcode, cmd, CMD_MAX_SIZE);
 
-  pQueue->queue[pQueue->index_w].port_index = portIndex;
-  pQueue->index_w = (pQueue->index_w + 1) % CMD_QUEUE_SIZE;
-  pQueue->count++;
+  infoCmd.queue[infoCmd.index_w].port_index = portIndex;
+  infoCmd.index_w = (infoCmd.index_w + 1) % CMD_QUEUE_SIZE;
+  infoCmd.count++;
 
   return true;
 }
@@ -160,18 +153,15 @@ bool storeCmdFromUART(SERIAL_PORT_INDEX portIndex, const CMD cmd)
 // This function is used only to restore the printing status after a power failed.
 void mustStoreCacheCmd(const char * format, ...)
 {
-  GCODE_QUEUE * pQueue = &infoCacheCmd;
-
-  if (pQueue->count >= CMD_QUEUE_SIZE)
+  if (infoCmd.count >= CMD_QUEUE_SIZE)
   {
     reminderMessage(LABEL_BUSY, STATUS_BUSY);
-
     loopProcessToCondition(&isFullCmdQueue);  // wait for a free slot in the queue in case the queue is currently full
   }
 
   va_list va;
   va_start(va, format);
-  commonStoreCmd(pQueue, format, va);
+  commonStoreCmd(&infoCmd, format, va);
   va_end(va);
 }
 

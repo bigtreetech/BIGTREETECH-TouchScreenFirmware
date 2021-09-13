@@ -55,16 +55,14 @@ void menuSpeed(void)
   menuDrawPage(&percentageItems);
   percentageReDraw(item_index, false);
 
-  #if LCD_ENCODER_SUPPORT
-    encoderPosition = 0;
-  #endif
-
   while (infoMenu.menu[infoMenu.cur] == menuSpeed)
   {
     key_num = menuKeyGetValue();
+
     switch (key_num)
     {
       case KEY_ICON_0:
+      case KEY_DECREASE:
         if (speedGetSetPercent(item_index) > SPEED_MIN)
           speedSetPercent(item_index, speedGetSetPercent(item_index) - percentSteps[percentSteps_index]);
         break;
@@ -82,6 +80,7 @@ void menuSpeed(void)
       }
 
       case KEY_ICON_3:
+      case KEY_INCREASE:
         if (speedGetSetPercent(item_index) < SPEED_MAX)
           speedSetPercent(item_index, speedGetSetPercent(item_index) + percentSteps[percentSteps_index]);
         break;
@@ -112,16 +111,6 @@ void menuSpeed(void)
         break;
 
       default:
-        #if LCD_ENCODER_SUPPORT
-          if (encoderPosition)
-          {
-            if (speedGetSetPercent(item_index) < SPEED_MAX && encoderPosition > 0)
-              speedSetPercent(item_index, speedGetSetPercent(item_index) + percentSteps[percentSteps_index]);
-            else if (speedGetSetPercent(item_index) > SPEED_MIN && encoderPosition < 0)
-              speedSetPercent(item_index, speedGetSetPercent(item_index) - percentSteps[percentSteps_index]);
-            encoderPosition = 0;
-          }
-        #endif
         break;
     }
 

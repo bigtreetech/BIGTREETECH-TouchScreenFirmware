@@ -59,18 +59,16 @@ void menuExtrude(void)
   menuDrawPage(&extrudeItems);
   extruderReDraw(curExtruder_index, extrKnownCoord, false);
 
-  #if LCD_ENCODER_SUPPORT
-    encoderPosition = 0;
-  #endif
-
   heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
 
   while (infoMenu.menu[infoMenu.cur] == menuExtrude)
   {
     key_num = menuKeyGetValue();
+
     switch (key_num)
     {
       case KEY_ICON_0:
+      case KEY_DECREASE:
         extrNewCoord -= extlenSteps[extlenSteps_index];
         break;
 
@@ -85,6 +83,7 @@ void menuExtrude(void)
       }
 
       case KEY_ICON_3:
+      case KEY_INCREASE:
         extrNewCoord += extlenSteps[extlenSteps_index];
         break;
 
@@ -123,13 +122,6 @@ void menuExtrude(void)
         break;
 
       default:
-        #if LCD_ENCODER_SUPPORT
-          if (encoderPosition)
-          {
-            extrNewCoord += extlenSteps[extlenSteps_index] * encoderPosition;
-            encoderPosition = 0;
-          }
-        #endif
         break;
     }
 

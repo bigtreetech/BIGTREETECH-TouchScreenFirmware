@@ -101,10 +101,6 @@ float menuMeshTuner(uint16_t col, uint16_t row, float value)
   menuDrawPage(&meshItems);
   meshDraw(col, row, now);
 
-  #if LCD_ENCODER_SUPPORT
-    encoderPosition = 0;
-  #endif
-
   while (true)
   {
     unit = moveLenSteps[curUnit_index];
@@ -112,15 +108,18 @@ float menuMeshTuner(uint16_t col, uint16_t row, float value)
     curValue = coordinateGetAxisActual(Z_AXIS);
 
     key_num = menuKeyGetValue();
+
     switch (key_num)
     {
       // decrease Z height
       case KEY_ICON_0:
+      case KEY_DECREASE:
         probeHeightMove(unit, -1);
         break;
 
       // increase Z height
       case KEY_ICON_3:
+      case KEY_INCREASE:
         probeHeightMove(unit, 1);
         break;
 
@@ -153,14 +152,6 @@ float menuMeshTuner(uint16_t col, uint16_t row, float value)
         break;
 
       default:
-        #if LCD_ENCODER_SUPPORT
-          if (encoderPosition)
-          {
-            probeHeightMove(unit, encoderPosition < 0 ? -1 : 1);
-
-            encoderPosition = 0;
-          }
-        #endif
         break;
     }
 

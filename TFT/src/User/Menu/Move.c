@@ -126,10 +126,6 @@ void menuMove(void)
   menuDrawPage(&moveItems);
   drawXYZ();
 
-  #if LCD_ENCODER_SUPPORT
-    encoderPosition = 0;
-  #endif
-
   while (infoMenu.menu[infoMenu.cur] == menuMove)
   {
     key_num = menuKeyGetValue();
@@ -168,14 +164,16 @@ void menuMove(void)
 
         case KEY_ICON_7: infoMenu.cur--; break;
       #endif
+
+        case KEY_INCREASE:
+          storeMoveCmd(nowAxis, 1);
+          break;
+
+        case KEY_DECREASE:
+          storeMoveCmd(nowAxis, -1);
+          break;
+
         default:
-          #if LCD_ENCODER_SUPPORT
-            if (encoderPosition)
-            {
-              storeMoveCmd(nowAxis, encoderPosition > 0 ? 1 : -1);
-              encoderPosition = 0;
-            }
-          #endif
           break;
     }
 
