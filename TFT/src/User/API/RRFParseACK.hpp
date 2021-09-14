@@ -30,6 +30,7 @@ extern "C"
 #define MBOX_MSG    "msgBox.msg"
 #define MBOX_TITLE  "msgBox.title"
 #define RESP        "resp"
+#define RESULT      "result"
 
 enum DOCUMENT_STATE 
 { 
@@ -40,7 +41,6 @@ enum DOCUMENT_STATE
   standby,
   hstat,
   pos,
-  machine,
   sfactor,
   efactor,
   baby_step,
@@ -48,13 +48,13 @@ enum DOCUMENT_STATE
   probe,
   fan_percent,
   fanRPM,
-  homed,
   mbox_seq, 
   mbox_mode, 
   mbox_timeo, 
   mbox_msg, 
   mbox_title,
-  resp 
+  resp,
+  result
 };
 
 class ParseACKJsonParser : public JsonListener
@@ -149,7 +149,10 @@ public:
     {
       state = resp;
     }
-
+    else if (strcmp(RESULT, key) == 0)
+    {
+      state = result;
+    }
     else
     {
       state = none;

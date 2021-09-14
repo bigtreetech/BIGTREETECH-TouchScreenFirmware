@@ -110,7 +110,7 @@ void ParseACKJsonParser::value(const char *value)
       rrfStatusSet(value[0]);
       break;
     case heaters:
-      if (index == 0 )
+      if (index == 0)
       {
         heatSetCurrentTemp(BED, strtod((char *)value, NULL) + 0.5f);
       }
@@ -120,7 +120,7 @@ void ParseACKJsonParser::value(const char *value)
       }
       break;
     case active:
-      if (index == 0 )
+      if (index == 0)
       {
         heatSyncTargetTemp(BED, strtod((char *)value, NULL) + 0.5f);
       }
@@ -128,6 +128,8 @@ void ParseACKJsonParser::value(const char *value)
       {
         heatSyncTargetTemp(index - 1, strtod((char *)value, NULL) + 0.5f);
       }
+      break;
+    case standby:
       break;
     case hstat:
       if (strtod((char *)value, NULL) == 3)
@@ -159,11 +161,15 @@ void ParseACKJsonParser::value(const char *value)
       break;
     case tool:
       break;
+    case probe:
+      break;
     case fan_percent:
       if (index != 0 && index <= infoSettings.fan_count) // index 0 is an alias for default tool fan
       {
         fanSetPercent(index - 1, strtod((char *)value, NULL) + 0.5f);
       }
+      break;
+    case fanRPM:
       break;
     case mbox_seq:
       seq = strtod((char *)value, NULL);
@@ -216,30 +222,23 @@ void ParseACKJsonParser::value(const char *value)
         string_end = strstr(string_start, (char *)"/");
         setPrintProgress(atoi(string_start + 14), atoi(string_end + 1));
       }
-      else if (strstr(value, (char *)"Cancelled printing"))    //{"seq":488,"resp":"Cancelled printing file 0:/gcodes/test.gcode, print time was 0h 1m\n"}
-      {
-        setPrintAbort();
-      }
-      else if (strstr(value, (char *)"Finished printing"))   //{"seq":1222,"resp":"Finished printing file 0:/gcodes/text.gcode, print time was 0h 0m\n"}
-      {
-        setPrintHost(false);
-        printComplete();
-      }
       else if (strstr(value, (char *)"Auto tuning heater") && strstr(value, (char *)"completed"))
       {
         pidUpdateStatus(true);
       }
-      else if (strstr(value, (char *)"Error: M303") || strstr(value, (char *)"Auto tune of heater") && strstr(value, (char *)"failed"))
+      else if (strstr(value, (char *)"Error: M303") || (strstr(value, (char *)"Auto tune of heater") && strstr(value, (char *)"failed")))
       {
         pidUpdateStatus(false);
       }
 
       break;
-
+    case result:
+        strcpy(infoFile.title, value);
+        setPrintHost(true);
+        // setPrintResume(false);
+      break;
     case none:
       break;
-    default:
-     break;
   }
   if (in_array)
     ++index;
