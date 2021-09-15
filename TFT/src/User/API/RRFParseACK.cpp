@@ -233,9 +233,12 @@ void ParseACKJsonParser::value(const char *value)
 
       break;
     case result:
-        strcpy(infoFile.title, value);
-        setPrintHost(true);
-        // setPrintResume(false);
+        if (starting_print)
+        {
+          strcpy(infoFile.title, value);
+          setPrintHost(true);
+          starting_print = false;
+        }
       break;
     case none:
       break;
