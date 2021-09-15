@@ -352,7 +352,6 @@ void hostActionCommands(void)
       // pass value "true" to report the host is printing without waiting
       // from Marlin (when notification ack "SD printing byte" is caught)
       setPrintResume(true);
-
       hostAction.prompt_show = false;
       Serial_Puts(SERIAL_PORT, "M876 S0\n");  // auto-respond to a prompt request that is not shown on the TFT
     
