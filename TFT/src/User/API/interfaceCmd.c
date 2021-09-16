@@ -544,7 +544,6 @@ void sendQueueCmd(void)
 
           case 98:  // RRF macro execution, do not wait for it to complete
             sendCmd(false, avoid_terminal);
-            infoHost.wait = false;
             return;
 
           case 115:  // M115 TFT
@@ -974,7 +973,6 @@ void sendQueueCmd(void)
           if (rrfStatusIsMacroBusy())
           {
             sendCmd(false, avoid_terminal);
-            infoHost.wait = false;
             return;
           }
           break;
@@ -1051,7 +1049,6 @@ void sendQueueCmd(void)
         #ifdef LOAD_UNLOAD_M701_M702
           case 701:  // M701 Load filament
           case 702:  // M702 Unload filament
-            infoHost.wait = true;
             break;
         #endif
 
@@ -1232,5 +1229,4 @@ void sendQueueCmd(void)
 
   // if TFT is in listening mode, purge the command
   sendCmd(true, avoid_terminal);  // purge the command
-  infoHost.wait = false;
 }  // sendQueueCmd
