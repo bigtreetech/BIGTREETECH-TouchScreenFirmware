@@ -1,23 +1,20 @@
 #include "ConnectionSettings.h"
 #include "includes.h"
 
-const MENUITEMS connectionSettingsItems = {
-  // title
-  LABEL_CONNECTION_SETTINGS,
-  // icon                          label
-  {
-    {ICON_BAUD_RATE,               LABEL_SERIAL_PORTS},
-    {ICON_DISCONNECT,              LABEL_DISCONNECT},
-    {ICON_STOP,                    LABEL_EMERGENCYSTOP},
-    {ICON_SHUT_DOWN,               LABEL_SHUT_DOWN},
-    {ICON_BACKGROUND,              LABEL_BACKGROUND},
-    {ICON_BACKGROUND,              LABEL_BACKGROUND},
-    {ICON_BACKGROUND,              LABEL_BACKGROUND},
-    {ICON_BACK,                    LABEL_BACK},
-  }
-};
-
 SERIAL_PORT_INDEX portIndex = 0;  // index on serialPort array
+
+void updateListeningMode(MENUITEMS * menu)
+{
+  if (GET_BIT(infoSettings.general_settings, LISTENING_MODE) == 1)
+  {
+    menu->items[4].label.index = LABEL_OFF;
+    reminderMessage(LABEL_LISTENING, STATUS_LISTENING);
+  }
+  else
+  {
+    menu->items[4].label.index = LABEL_ON;
+  }
+}
 
 // Set uart pins to input, free uart
 void menuDisconnect(void)
@@ -134,8 +131,25 @@ void menuSerialPorts(void)
 
 void menuConnectionSettings(void)
 {
+  MENUITEMS connectionSettingsItems = {
+    // title
+    LABEL_CONNECTION_SETTINGS,
+    // icon                          label
+    {
+      {ICON_BAUD_RATE,               LABEL_SERIAL_PORTS},
+      {ICON_DISCONNECT,              LABEL_DISCONNECT},
+      {ICON_STOP,                    LABEL_EMERGENCYSTOP},
+      {ICON_SHUT_DOWN,               LABEL_SHUT_DOWN},
+      {ICON_BAUD_RATE,               LABEL_ON},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_BACK,                    LABEL_BACK},
+    }
+  };
+
   KEY_VALUES curIndex = KEY_IDLE;
 
+  updateListeningMode(&connectionSettingsItems);
   menuDrawPage(&connectionSettingsItems);
 
   while (infoMenu.menu[infoMenu.cur] == menuConnectionSettings)
@@ -160,6 +174,14 @@ void menuConnectionSettings(void)
 
       case KEY_ICON_3:
         storeCmd("M81\n");
+        break;
+
+      case KEY_ICON_4:
+        TOGGLE_BIT(infoSettings.general_settings, LISTENING_MODE);
+        storePara();
+
+        updateListeningMode(&connectionSettingsItems);
+        menuDrawItem(&connectionSettingsItems.items[4], 4);
         break;
 
       case KEY_ICON_7:

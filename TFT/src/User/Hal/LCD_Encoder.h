@@ -7,8 +7,8 @@ extern "C" {
 
 #include <stdbool.h>
 #include <stdint.h>
-#include "menu.h"
 #include "variants.h"  // for ENC_ACTIVE_SIGNAL, LCD_ENCODER_SUPPORT etc...
+#include "menu.h"
 
 #if ENC_ACTIVE_SIGNAL
   void LCD_Enc_InitActiveSignal(bool marlinType_LCD12864);

@@ -2,13 +2,10 @@
 #include "includes.h"
 #include <string.h>
 
-#define TOKEN_DELIMITERS     " :=_"
-#define HIGH_TO_LOW_CASE 32  // 'a' - 'A'
+#define TOKEN_DELIMITERS " :=_"
+#define HIGH_TO_LOW_CASE     32  // 'a' - 'A'
 
 COMMENT gCode_comment = {0, true};
-static uint16_t layerNumber = 0;
-static uint16_t layerCount = 0;
-static uint32_t totalTime = 0;
 bool M73R_presence = false;
 
 void lowerCase (char * tempChar)
@@ -20,29 +17,9 @@ void lowerCase (char * tempChar)
     }
 }
 
-uint16_t getLayerNumber()
-{
-  return layerNumber;
-}
-
-uint16_t getLayerCount()
-{
-  return layerCount;
-}
-
-void setLayerNumber(uint16_t layer_number)
-{
-  layerNumber = layer_number;
-}
-
 void setM73_presence(bool present)
 {
   M73R_presence = present;
-}
-
-void setTotalTime(uint32_t time)
-{
-  totalTime = time;
 }
 
 void parseComment()
@@ -66,14 +43,14 @@ void parseComment()
           temp_char = strtok(NULL, TOKEN_DELIMITERS);
           temp_value = strtoul(temp_char, NULL, 0);
           if (temp_value != 0)
-            layerCount = temp_value;
+            setPrintLayerCount(temp_value);
         }
         else if (temp_char[0] >= '0' && temp_char[0] <= '9')  // check if a number is found
         {
           temp_value = strtoul(temp_char, NULL, 0);
 
           // if there is "layer 0" add an offset of 1 (avoiding using an offset variable)
-          layerNumber = (layerNumber == temp_value) ? temp_value + 1: temp_value;
+          setPrintLayerNumber((getPrintLayerNumber() == temp_value) ? temp_value + 1: temp_value);
         }
       }
       // continue here with "else if" for another token that starts with "l" or "L"
@@ -84,20 +61,20 @@ void parseComment()
     {
       temp_char = strtok(gCode_comment.content, TOKEN_DELIMITERS);
       lowerCase(temp_char);
-      if (strcmp(temp_char, "time") == 0 && M73R_presence == false)// check if first word is "time"
-      {// Cura specific
+      if (strcmp(temp_char, "time") == 0 && M73R_presence == false)  // check if first word is "time"
+      { // Cura specific
         temp_char = strtok(NULL, TOKEN_DELIMITERS);
         lowerCase(temp_char);
-        if (strcmp(temp_char, "elapsed") == 0 && totalTime > 0)  // check if next word is "elapsed"
+        if (strcmp(temp_char, "elapsed") == 0 && getPrintExpectedTime() > 0)  // check if next word is "elapsed"
         {
           temp_char = strtok(NULL, TOKEN_DELIMITERS);
           temp_value = strtoul(temp_char, NULL, 0);  // get the elapsed time in seconds
-          setPrintRemainingTime(totalTime - temp_value);
+          setPrintRemainingTime(getPrintExpectedTime() - temp_value);
         }
         else if (temp_char[0] >= '0' && temp_char[0] <= '9')  // check if a number is found
         {
-          totalTime = strtoul(temp_char, NULL, 0);
-          setPrintRemainingTime(totalTime);
+          setPrintExpectedTime(strtoul(temp_char, NULL, 0));
+          setPrintRemainingTime(getPrintExpectedTime());
         }
       }
       // continue here with "else if" for another token that starts with "t" or "T"
@@ -108,8 +85,8 @@ void parseComment()
     {
       temp_char = strtok(gCode_comment.content, TOKEN_DELIMITERS);
       lowerCase(temp_char);
-      if (strcmp(temp_char, "remaining") == 0 && M73R_presence == false)// check if first word is "remaining"
-      {// IdeaMaker specific
+      if (strcmp(temp_char, "remaining") == 0 && M73R_presence == false)  // check if first word is "remaining"
+      { // IdeaMaker specific
         temp_char = strtok(NULL, TOKEN_DELIMITERS);
         lowerCase(temp_char);
         if (strcmp(temp_char, "time") == 0)  // check if next word is "time"

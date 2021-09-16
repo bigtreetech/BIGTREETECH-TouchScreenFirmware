@@ -46,7 +46,6 @@ void menuHeat(void)
   {
     actCurrent = heatGetCurrentTemp(tool_index);
     actTarget = heatGetTargetTemp(tool_index);
-
     key_num = menuKeyGetValue();
 
     switch (key_num)

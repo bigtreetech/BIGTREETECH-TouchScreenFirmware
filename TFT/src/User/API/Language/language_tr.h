@@ -143,6 +143,7 @@
     #define STRING_BUSY                   "İşlem sürüyor, bekleyiniz..."
     #define STRING_LOADING                "Yükleniyor..."
     #define STRING_UNCONNECTED            "Yazıcı bağlı değil!"
+    #define STRING_LISTENING              "TFT in Listening Mode!"
 
     // Process Info
     #define STRING_INFO                   "Bilgi" //Info Sign

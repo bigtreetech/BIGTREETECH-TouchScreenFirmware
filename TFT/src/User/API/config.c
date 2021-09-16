@@ -556,7 +556,7 @@ void parseConfigKey(uint16_t index)
 
     case C_INDEX_EMULATED_M600:
     case C_INDEX_EMULATED_M109_M190:
-      SET_BIT_VALUE(infoSettings.general_settings, (index - C_INDEX_EMULATED_M600), getOnOff());
+      SET_BIT_VALUE(infoSettings.general_settings, ((index - C_INDEX_EMULATED_M600) + EMULATED_M600), getOnOff());
       break;
 
     //----------------------------UI Settings

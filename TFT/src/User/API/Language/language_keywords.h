@@ -150,6 +150,7 @@ extern "C" {
 #define LANG_KEY_BUSY                         "label_busy:"
 #define LANG_KEY_LOADING                      "label_loading:"
 #define LANG_KEY_UNCONNECTED                  "label_unconnected:"
+#define LANG_KEY_LISTENING                    "label_listening:"
 
 // Process Info
 #define LANG_KEY_INFO                         "label_info:" //Info Sign

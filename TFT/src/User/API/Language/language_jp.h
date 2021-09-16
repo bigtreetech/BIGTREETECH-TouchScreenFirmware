@@ -143,6 +143,7 @@
     #define STRING_BUSY                   "ビジー状態、しばらくお待ちください..."
     #define STRING_LOADING                "ロッド中..."
     #define STRING_UNCONNECTED            "プリンターに連続していない!"
+    #define STRING_LISTENING              "TFT in Listening Mode!"
 
     // Process Info
     #define STRING_INFO                   "情報"

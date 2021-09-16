@@ -143,6 +143,7 @@
     #define STRING_BUSY                   "Ծանրաբեռնված է"
     #define STRING_LOADING                "Բեռնում է..."
     #define STRING_UNCONNECTED            "Տպիչը կցված չէ"
+    #define STRING_LISTENING              "TFT in Listening Mode!"
 
     // Process Info
     #define STRING_INFO                   "Info"

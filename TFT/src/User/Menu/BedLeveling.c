@@ -1,7 +1,7 @@
 #include "BedLeveling.h"
 #include "includes.h"
 
-static inline void blUpdateState(MENUITEMS *menu)
+void blUpdateState(MENUITEMS * menu)
 {
   if (getParameter(P_ABL_STATE, 0) == ENABLED)
   {
@@ -13,7 +13,6 @@ static inline void blUpdateState(MENUITEMS *menu)
     menu->items[3].icon = ICON_LEVELING_OFF;
     menu->items[3].label.index = LABEL_BL_DISABLE;
   }
-  menuDrawItem(&menu->items[3], 3);
 }
 
 #if DELTA_PROBE_TYPE == 2  // if Delta printer with removable probe
@@ -72,11 +71,7 @@ void menuBedLeveling(void)
       break;
   }
 
-  if (getParameter(P_ABL_STATE, 0) == ENABLED)
-  {
-    bedLevelingItems.items[3].icon = ICON_LEVELING_ON;
-    bedLevelingItems.items[3].label.index = LABEL_BL_ENABLE;
-  }
+  blUpdateState(&bedLevelingItems);
 
   if (infoMachineSettings.zProbe == ENABLED)
   {
@@ -156,7 +151,9 @@ void menuBedLeveling(void)
     if (levelStateOld != getParameter(P_ABL_STATE, 0))
     {
       levelStateOld = getParameter(P_ABL_STATE, 0);
+
       blUpdateState(&bedLevelingItems);
+      menuDrawItem(&bedLevelingItems.items[3], 3);
     }
 
     loopProcess();

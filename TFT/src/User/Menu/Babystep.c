@@ -121,9 +121,9 @@ void menuBabystep(void)
 
   while (infoMenu.menu[infoMenu.cur] == menuBabystep)
   {
-    key_num = menuKeyGetValue();
     unit = moveLenSteps[moveLenSteps_index];
     babystep = babystepGetValue();  // always load current babystep
+    key_num = menuKeyGetValue();
 
     switch (key_num)
     {

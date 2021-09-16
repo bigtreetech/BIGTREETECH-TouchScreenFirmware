@@ -143,6 +143,7 @@
     #define STRING_BUSY                   "В процессе, ждите..."
     #define STRING_LOADING                "Загрузка..."
     #define STRING_UNCONNECTED            "Нет подключения!"
+    #define STRING_LISTENING              "TFT in Listening Mode!"
 
     // Process Info
     #define STRING_INFO                   "Информация"
