@@ -6,6 +6,7 @@
 #define HIGH_TO_LOW_CASE     32  // 'a' - 'A'
 
 COMMENT gCode_comment = {0, true};
+bool M73R_presence = false;
 
 void lowerCase (char * tempChar)
 {
@@ -14,6 +15,11 @@ void lowerCase (char * tempChar)
       if (tempChar[i] >= 'A' && tempChar[i] <= 'Z')
         tempChar[i] = tempChar[i] + HIGH_TO_LOW_CASE;
     }
+}
+
+void setM73_presence(bool present)
+{
+  M73R_presence = present;
 }
 
 void parseComment()
@@ -55,7 +61,7 @@ void parseComment()
     {
       temp_char = strtok(gCode_comment.content, TOKEN_DELIMITERS);
       lowerCase(temp_char);
-      if (strcmp(temp_char, "time") == 0)  // check if first word is "time"
+      if (strcmp(temp_char, "time") == 0 && M73R_presence == false)  // check if first word is "time"
       { // Cura specific
         temp_char = strtok(NULL, TOKEN_DELIMITERS);
         lowerCase(temp_char);
@@ -79,7 +85,7 @@ void parseComment()
     {
       temp_char = strtok(gCode_comment.content, TOKEN_DELIMITERS);
       lowerCase(temp_char);
-      if (strcmp(temp_char, "remaining") == 0)  // check if first word is "remaining"
+      if (strcmp(temp_char, "remaining") == 0 && M73R_presence == false)  // check if first word is "remaining"
       { // IdeaMaker specific
         temp_char = strtok(NULL, TOKEN_DELIMITERS);
         lowerCase(temp_char);

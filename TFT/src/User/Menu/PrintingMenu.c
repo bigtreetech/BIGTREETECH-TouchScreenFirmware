@@ -189,6 +189,7 @@ void menuBeforePrinting(void)
   layerDisplayType = infoSettings.layer_disp_type * 2;
   coordinateSetAxisActual(Z_AXIS, 0);
   coordinateSetAxisTarget(Z_AXIS, 0);
+  setM73_presence(false);
 
   infoMenu.menu[infoMenu.cur] = menuPrinting;
 }
