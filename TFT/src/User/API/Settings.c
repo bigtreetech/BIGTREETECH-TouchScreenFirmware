@@ -234,13 +234,12 @@ void setupMachine(FW_TYPE fwType)
     infoMachineSettings.leveling        = BL_ABL;
     infoMachineSettings.emergencyParser = ENABLED;
   }
-
-  if (infoMachineSettings.firmwareType == FW_REPRAPFW)
+  else if (infoMachineSettings.firmwareType == FW_REPRAPFW)
   {
     infoMachineSettings.softwareEndstops = ENABLED;
 
-    mustStoreCmd("M555 P2\n");  // Set RRF compatibility behaves similar to 2: Marlin
-    mustStoreCmd("M552\n");     // query network state, populate IP if the screen boots up after RRF
+    mustStoreCmd("M552\n");  // query network state, populate IP if the screen boots up after RRF
+    return;
   }
 
   mustStoreCmd("M503 S0\n");

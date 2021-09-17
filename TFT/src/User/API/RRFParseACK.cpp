@@ -42,7 +42,7 @@ static uint32_t expire_time = 0;
 
 static void m291_confirm(void)
 {
-  if (m291_mode > 1) mustStoreCmd("M292 P0\n");
+  if (m291_mode >= 1) mustStoreCmd("M292 P0\n");
   if (rrfStatusIsMacroBusy())
     rrfShowRunningMacro();
 }
@@ -102,13 +102,53 @@ void ParseACKJsonParser::endDocument()
 void ParseACKJsonParser::value(const char *value)
 {
   uint32_t seq;
+  char *string_end;
+  char *string_start;
   switch (state)
   {
-    case fan_percent:
-      if (index != 0 && index <= infoSettings.fan_count) // index 0 is an alias for default tool fan
+    case status:
+      rrfStatusSet(value[0]);
+      break;
+    case heaters:
+      if (index == 0)
       {
-        fanSetPercent(index - 1, strtod((char *)value, NULL) + 0.5f);
+        heatSetCurrentTemp(BED, strtod((char *)value, NULL) + 0.5f);
       }
+      else if (index <= INVALID_HEATER)
+      {
+        heatSetCurrentTemp(index - 1, strtod((char *)value, NULL) + 0.5f);
+      }
+      break;
+    case active:
+      if (index == 0)
+      {
+        heatSyncTargetTemp(BED, strtod((char *)value, NULL) + 0.5f);
+      }
+      else if (index <= INVALID_HEATER)
+      {
+        heatSyncTargetTemp(index - 1, strtod((char *)value, NULL) + 0.5f);
+      }
+      break;
+    case standby:
+      break;
+    case hstat:
+      if (strtod((char *)value, NULL) == 3)
+      {
+        if (index == 0)
+        {
+          heatSetTargetTemp(BED, 0);
+        }
+        else if (index <= INVALID_HEATER)
+        {
+          heatSetTargetTemp(index - 1, 0);
+        }
+      }
+      break;
+    case pos:
+      coordinateSetAxisActual((AXIS)index, strtod((char *)value, NULL));
+      break;
+    case sfactor:
+      speedSetCurPercent(0, strtod((char *)value, NULL));
       break;
     case efactor:
       if (index == heatGetCurrentTool())
@@ -116,11 +156,20 @@ void ParseACKJsonParser::value(const char *value)
         speedSetCurPercent(1, strtod((char *)value, NULL));
       }
       break;
-    case sfactor:
-      speedSetCurPercent(0, strtod((char *)value, NULL));
+    case baby_step:
+      babystepSetValue(strtod((char *)value, NULL));
       break;
-    case status:
-      rrfStatusSet(value[0]);
+    case tool:
+      break;
+    case probe:
+      break;
+    case fan_percent:
+      if (index != 0 && index <= infoSettings.fan_count) // index 0 is an alias for default tool fan
+      {
+        fanSetPercent(index - 1, strtod((char *)value, NULL) + 0.5f);
+      }
+      break;
+    case fanRPM:
       break;
     case mbox_seq:
       seq = strtod((char *)value, NULL);
@@ -140,6 +189,56 @@ void ParseACKJsonParser::value(const char *value)
       break;
     case mbox_timeo:
       m291_timeo = strtod((char *)value, NULL) * 1000;
+      break;
+    case resp:
+      if (strstr(value, (char *)"Steps/"))       //parse M92
+      {
+        if ((value = strstr(value, (char *)"X: ")) != NULL ) setParameter(P_STEPS_PER_MM, AXIS_INDEX_X,  atoi(value + 3));
+        if ((value = strstr(value, (char *)"Y: ")) != NULL ) setParameter(P_STEPS_PER_MM, AXIS_INDEX_Y,  atoi(value + 3));
+        if ((value = strstr(value, (char *)"Z: ")) != NULL ) setParameter(P_STEPS_PER_MM, AXIS_INDEX_Z,  atoi(value + 3));
+        if ((value = strstr(value, (char *)"E: ")) != NULL ) setParameter(P_STEPS_PER_MM, AXIS_INDEX_E0, atoi(value + 3));
+      }
+      else if ((string_start = strstr(value, (char *)"RepRapFirmware")) != NULL)    // parse M115
+      {
+        setupMachine(FW_REPRAPFW);
+        string_end = strstr(string_start, "ELECTRONICS");
+        infoSetFirmwareName((uint8_t *)string_start, string_end-string_start);
+      }
+      else if ((string_start = strstr(value, (char *)"access point")) != NULL)    //parse M552 
+      {
+        string_end = strstr(string_start, ",");
+        string_start += 13;
+        infoSetAccessPoint((uint8_t *)string_start,  string_end-string_start);
+
+        if ((string_start = strstr(string_start, (char *)"IP address")) != NULL)
+        {
+          string_end = strstr(string_start, "\\n");
+          string_start += 11;
+          infoSetIPAddress((uint8_t *)string_start,  string_end-string_start);
+        }
+      }
+      else if ((string_start = strstr(value, (char *)"printing byte")) != NULL)       // parse M27  {"seq":21,"resp":"SD printing byte 1226/5040433\n"}
+      {
+        string_end = strstr(string_start, (char *)"/");
+        setPrintProgress(atoi(string_start + 14), atoi(string_end + 1));
+      }
+      else if (strstr(value, (char *)"Auto tuning heater") && strstr(value, (char *)"completed"))
+      {
+        pidUpdateStatus(true);
+      }
+      else if (strstr(value, (char *)"Error: M303") || (strstr(value, (char *)"Auto tune of heater") && strstr(value, (char *)"failed")))
+      {
+        pidUpdateStatus(false);
+      }
+
+      break;
+    case result:
+        if (starting_print)
+        {
+          strcpy(infoFile.title, value);
+          setPrintHost(true);
+          starting_print = false;
+        }
       break;
     case none:
       break;
