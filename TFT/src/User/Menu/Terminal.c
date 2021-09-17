@@ -872,7 +872,7 @@ void menuTerminal(void)
   terminalData = &termPage;
   curView = 1;
 
-  for(uint8_t i = 0; i < termPage.maxPageCount; i++)
+  for (uint8_t i = 0; i < termPage.maxPageCount; i++)
   {
     termPage.ptr[i] = terminalBuf;
   }
