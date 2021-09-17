@@ -12,6 +12,10 @@ bool mountGcodeSDCard(void)
 SENDING:M21
 echo:SD card ok
 */
+  if (infoMachineSettings.firmwareType == FW_REPRAPFW)
+  {
+    return true;
+  }
   return request_M21();
 }
 

@@ -352,12 +352,9 @@ void hostActionCommands(void)
       // pass value "true" to report the host is printing without waiting
       // from Marlin (when notification ack "SD printing byte" is caught)
       setPrintResume(true);
-
-      if (infoMachineSettings.firmwareType != FW_REPRAPFW)
-      {
-        hostAction.prompt_show = false;
-        Serial_Puts(SERIAL_PORT, "M876 S0\n");  // auto-respond to a prompt request that is not shown on the TFT
-      }
+      hostAction.prompt_show = false;
+      Serial_Puts(SERIAL_PORT, "M876 S0\n");  // auto-respond to a prompt request that is not shown on the TFT
+    
     }
     else if (ack_seen("Reheating"))
     {
@@ -444,6 +441,7 @@ void parseACK(void)
         infoHost.wait = false;
         storeCmd("M92\n");
         storeCmd("M115\n");
+        coordinateQuerySetWait(true);
       }
 
       if (infoMachineSettings.firmwareType == FW_NOT_DETECTED)  // if never connected to the printer since boot
@@ -534,10 +532,17 @@ void parseACK(void)
 
     if (requestCommandInfo.inJson)
     {
-      rrfParseACK(dmaL2Cache);
+      if (ack_seen(magic_warning))
+      {
+        ackPopupInfo(magic_warning);
+      }
+      else
+      {
+        rrfParseACK(dmaL2Cache);
+      }
+      infoHost.wait = false;  
     }
-
-    if (ack_cmp("ok\n"))
+    else if (ack_cmp("ok\n"))
     {
       infoHost.wait = false;
     }
@@ -662,21 +667,12 @@ void parseACK(void)
         }
         hasFilamentData = true;
       }
-      else if (infoMachineSettings.onboardSD == ENABLED &&
-               ack_seen(infoMachineSettings.firmwareType != FW_REPRAPFW ? "File opened:" : "job.file.fileName"))
+      else if (infoMachineSettings.onboardSD == ENABLED && ack_seen("File opened:"))
       {
         char * fileEndString;
-        if (infoMachineSettings.firmwareType != FW_REPRAPFW)
-        {
-          // Marlin
-          fileEndString = " Size:";  // File opened: 1A29A~1.GCO Size: 6974
-        }
-        else
-        {
-          // RRF
-          ack_seen("result\":\"0:/gcodes/");  // {"key":"job.file.fileName","flags": "","result":"0:/gcodes/pig-4H.gcode"}
-          fileEndString = "\"";
-        }
+
+        // Marlin
+        fileEndString = " Size:";  // File opened: 1A29A~1.GCO Size: 6974
 
         uint16_t start_index = ack_index;
         uint16_t end_index = ack_continue_seen(fileEndString) ? (ack_index - strlen(fileEndString)) : start_index;
@@ -697,8 +693,7 @@ void parseACK(void)
                infoFile.source >= BOARD_SD &&
                ack_seen("SD printing byte"))
       {
-        if (infoMachineSettings.firmwareType != FW_REPRAPFW)
-          setPrintResume(false);
+        setPrintResume(false);
 
         // Parsing printing data
         // Example: SD printing byte 123/12345
@@ -707,7 +702,7 @@ void parseACK(void)
       }
       else if (infoMachineSettings.onboardSD == ENABLED &&
                infoFile.source >= BOARD_SD &&
-               ack_seen(infoMachineSettings.firmwareType != FW_REPRAPFW ? "Done printing file" : "Finished printing file"))
+               ack_seen("Done printing file"))
       {
         setPrintHost(false);
         printComplete();
@@ -798,16 +793,6 @@ void parseACK(void)
       {
         pidUpdateStatus(false);
       }
-      // parse M303, PID Autotune completed message in case of RRF
-      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && ack_seen("Auto tuning heater") && ack_seen("completed"))
-      {
-        pidUpdateStatus(true);
-      }
-      // parse M303, PID Autotune failed message in case of RRF
-      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && (ack_seen("Error: M303") || (ack_seen("Auto tune of heater") && ack_seen("failed"))))
-      {
-        pidUpdateStatus(false);
-      }
       // parse and store M355, Case light message
       else if (ack_seen("Case light:"))
       {
@@ -888,14 +873,6 @@ void parseACK(void)
 
         uint8_t i = (ack_seen("T")) ? ack_value() : 0;
         if (ack_seen("E")) setParameter(P_STEPS_PER_MM, AXIS_INDEX_E0 + i, ack_value());
-      }
-      // parse and store stepper steps/mm values incase of RepRapFirmware
-      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && (ack_seen("Steps")))
-      {
-        if (ack_seen("X: ")) setParameter(P_STEPS_PER_MM, AXIS_INDEX_X, ack_value());
-        if (ack_seen("Y: ")) setParameter(P_STEPS_PER_MM, AXIS_INDEX_Y, ack_value());
-        if (ack_seen("Z: ")) setParameter(P_STEPS_PER_MM, AXIS_INDEX_Z, ack_value());
-        if (ack_seen("E: ")) setParameter(P_STEPS_PER_MM, AXIS_INDEX_E0, ack_value());
       }
       // parse and store Filament settings values
       else if (ack_seen("M200"))
@@ -1121,11 +1098,6 @@ void parseACK(void)
         {
           infoMachineSettings.firmwareType = FW_MARLIN;
         }
-        else if (ack_seen("RepRapFirmware"))
-        {
-          infoMachineSettings.firmwareType = FW_REPRAPFW;
-          setupMachine();
-        }
         else if (ack_seen("Smoothieware"))
         {
           infoMachineSettings.firmwareType = FW_SMOOTHIEWARE;
@@ -1140,8 +1112,6 @@ void parseACK(void)
           string_end = ack_index - sizeof("FIRMWARE_URL:");
         else if (ack_seen("SOURCE_CODE_URL:"))  // For Marlin
           string_end = ack_index - sizeof("SOURCE_CODE_URL:");
-        else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && ack_seen("ELECTRONICS"))  // For RepRapFirmware
-          string_end = ack_index - sizeof("ELECTRONICS");
 
         infoSetFirmwareName(string, string_end - string_start);  // Set firmware name
 
@@ -1249,38 +1219,6 @@ void parseACK(void)
         if (!processKnownEcho())  // if no known echo was found and processed, then popup the echo message
         {
           ackPopupInfo(magic_echo);
-        }
-      }
-
-      // keep it here and parse it the latest
-      else if (infoMachineSettings.firmwareType == FW_REPRAPFW)
-      {
-        if (ack_seen(magic_warning))
-        {
-          ackPopupInfo(magic_warning);
-        }
-        else if (ack_seen(magic_message))
-        {
-          ackPopupInfo(magic_message);
-        }
-        else if (ack_seen("access point "))
-        {
-          uint8_t * string = (uint8_t *)&dmaL2Cache[ack_index];
-          uint16_t string_start = ack_index;
-          uint16_t string_end = string_start;
-          if (ack_seen(","))
-            string_end = ack_index - 1 ;
-
-          infoSetAccessPoint(string, string_end - string_start);  // Set access poing
-
-          if (ack_seen("IP address "))
-          {
-            string = (uint8_t *)&dmaL2Cache[ack_index];
-            string_start = ack_index;
-            if (ack_seen("\n"))
-              string_end = ack_index - 1;
-            infoSetIPAddress(string, string_end - string_start);  // Set IP address
-          }
         }
       }
       else if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE)

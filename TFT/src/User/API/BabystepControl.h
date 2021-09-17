@@ -10,6 +10,9 @@ extern "C" {
 // Reset only babystep value to default value
 float babystepReset(void);
 
+// Set current babystep value
+void babystepSetValue(float babystep);
+
 // Get current babystep value
 float babystepGetValue(void);
 
