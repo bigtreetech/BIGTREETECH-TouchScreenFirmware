@@ -92,7 +92,7 @@ void HW_Init(void)
     TSC_Calibration();
     storePara();
   }
-  else if (readIsRestored())
+  else if (readIsNotStored())
   {
     storePara();
   }

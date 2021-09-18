@@ -77,7 +77,7 @@ bool getConfigFromFile(void)
       LCD_RefreshDirection(infoSettings.rotated_ui);
       TSC_Calibration();
     }
-    storePara();
+    storePara();  // TODO: The touch sign will also be written if the touch calibration data is invalid
     saveConfig();
     PRINTDEBUG("config saved\n");
     return true;
