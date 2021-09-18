@@ -62,7 +62,7 @@ void readStoredPara(void)
   sign = byteToWord(data + (index += 4), 4);
   if (sign != PARA_SIGN)  // If the settings parameter is illegal, reset settings parameter
   {
-    paraStatus = PARA_WAS_RESTORED;
+    paraStatus |= PARA_NOT_STORED;
     initSettings();
   }
   else
