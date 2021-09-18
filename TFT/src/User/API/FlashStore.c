@@ -9,7 +9,7 @@
 enum
 {
   PARA_TSC_EXIST = (1 << 0),
-  PARA_WAS_RESTORED = (1<< 1),
+  PARA_NOT_STORED = (1<< 1),
 };
 
 int32_t TSC_Para[7];
@@ -93,7 +93,7 @@ bool readIsTSCExist(void)
   return ((paraStatus & PARA_TSC_EXIST) != 0);
 }
 
-bool readIsRestored(void)
+bool readIsNotStored(void)
 {
-  return ((paraStatus & PARA_WAS_RESTORED) != 0);
+  return ((paraStatus & PARA_NOT_STORED) != 0);
 }

@@ -17,7 +17,7 @@ extern SETTINGS infoSettings;
 void readStoredPara(void);
 void storePara(void);
 bool readIsTSCExist(void);
-bool readIsRestored(void);
+bool readIsNotStored(void);
 
 #ifdef __cplusplus
 }
