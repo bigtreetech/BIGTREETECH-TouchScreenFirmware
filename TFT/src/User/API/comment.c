@@ -71,9 +71,14 @@ void parseComment()
         else if (temp_char[0] >= '0' && temp_char[0] <= '9')  // check if a number is found
         {
           temp_value = strtoul(temp_char, NULL, 0);
-
-          // if there is "layer 0" add an offset of 1 (avoiding using an offset variable)
-          layerNumber = (layerNumber == temp_value) ? temp_value + 1: temp_value;
+          if (temp_value == 0)
+          { //  for object by object printing, when print goes to the next object
+            layerNumber = 1;
+          }
+          else
+          { // if there is "layer 0" add an offset of 1 (avoiding using an offset variable)
+            layerNumber = (layerNumber == temp_value) ? temp_value + 1: temp_value;
+          }
         }
       }
       // continue here with "else if" for another token that starts with "l" or "L"
