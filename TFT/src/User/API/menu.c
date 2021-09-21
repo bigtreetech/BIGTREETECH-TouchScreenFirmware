@@ -588,7 +588,7 @@ void menuReDrawCurTitle(void)
   {
     if (curMenuItems == NULL)
       return;
-    menuDrawTitle(labelGetAddress(&curMenuItems->title));
+    configlabelGetAddress(&curMenuItems->title));
   }
   else if (menuType == MENU_TYPE_FULLSCREEN)
   {
