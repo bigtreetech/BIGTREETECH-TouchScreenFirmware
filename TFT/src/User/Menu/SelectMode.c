@@ -73,10 +73,6 @@ void menuMode(void)
       ;  // wait for touch release
   #endif
 
-  #if LCD_ENCODER_SUPPORT
-    encoderPosition = 0;
-  #endif
-
   while (infoMenu.menu[infoMenu.cur] == menuMode)
   {
     MKEY_VALUES key_num = MKeyGetValue();

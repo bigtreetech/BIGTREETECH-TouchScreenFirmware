@@ -69,6 +69,7 @@ void menuLevelCorner(void)
 
   KEY_VALUES key_num = KEY_IDLE;
   char iconText[LEVELING_POINT_COUNT][15];
+  LEVELING_POINT levelingPoint;
 
   if (coordinateIsKnown() == false)
     probeHeightHomeAndRaise();  // home and raise nozzle
@@ -146,10 +147,12 @@ void menuLevelCorner(void)
         break;
     }
 
-    if (levelingGetProbedPoint() != LEVEL_NO_POINT)
+    levelingPoint = levelingGetProbedPoint();
+
+    if (levelingPoint != LEVEL_NO_POINT)
     {
-      levelCornerPosition[levelingGetProbedPoint()] = levelingGetProbedZ();
-      refreshValue(&levelCornerItems, levelingGetProbedPoint());
+      levelCornerPosition[levelingPoint] = levelingGetProbedZ();
+      refreshValue(&levelCornerItems, levelingPoint);
 
       levelingResetProbedPoint();  // reset to check for new updates
     }

@@ -17,6 +17,10 @@ void Mode_Switch(void)
     case MODE_SERIAL_TSC:
       GUI_RestoreColorDefault();
 
+      infoMachineSettings.firmwareType = FW_NOT_DETECTED;
+      infoHost.wait = false;
+      heatSetUpdateWaiting(false);
+
       if (infoSettings.status_screen == 1)  // if Status Screen menu is selected
         infoMenu.menu[infoMenu.cur] = menuStatus;  // status screen as default home screen on boot
       else

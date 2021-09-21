@@ -10,7 +10,8 @@ extern "C" {
 
 // config.ini Parameter Settings - Screen Settings and Feature Settings
 #define LANG_KEY_EMULATED_M600                "label_emulated_m600:"
-#define LANG_KEY_ROTATE_UI                    "label_rotate_ui:"
+#define LANG_KEY_EMULATED_M109_M190           "label_emulated_m109_m190:"
+#define LANG_KEY_ROTATED_UI                   "label_rotated_ui:"
 #define LANG_KEY_LANGUAGE                     "label_language:"
 #define LANG_KEY_ACK_NOTIFICATION             "label_ack_notification:"
 #define LANG_KEY_FILES_SORT_BY                "label_files_sort_by:"
@@ -38,7 +39,7 @@ extern "C" {
 #define LANG_KEY_LCD_BRIGHTNESS               "label_lcd_brightness:"
 #define LANG_KEY_LCD_IDLE_BRIGHTNESS          "label_lcd_idle_brightness:"
 #define LANG_KEY_LCD_IDLE_TIME                "label_lcd_idle_time:"
-#define LANG_KEY_BLOCK_TOUCH_ON_IDLE          "label_block_touch_on_idle:"
+#define LANG_KEY_LCD_LOCK_ON_IDLE             "label_lcd_lock_on_idle:"
 #define LANG_KEY_KNOB_LED_COLOR               "label_knob_led_color:"
 #define LANG_KEY_KNOB_LED_IDLE                "label_knob_led_idle:"
 #define LANG_KEY_START_GCODE_ENABLED          "label_start_gcode_enabled:"

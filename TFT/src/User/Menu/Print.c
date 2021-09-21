@@ -56,7 +56,7 @@ void gocdeIconDraw(void)
     if (EnterDir(infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.folderCount]) == false)
       break;
     // if model preview bmp exists, display bmp directly without writing to flash
-    if (model_DirectDisplay(getIconStartPoint(i), infoFile.title) != true)
+    if (infoMachineSettings.firmwareType == FW_REPRAPFW || !model_DirectDisplay(getIconStartPoint(i), infoFile.title))
     {
       curItem.icon = ICON_FILE;
       menuDrawItem(&curItem, i);
@@ -90,7 +90,7 @@ void gocdeListDraw(LISTITEM * item, uint16_t index, uint8_t itemPos)
     item->icon = CHARICON_FILE;
     item->itemType = LIST_LABEL;
     item->titlelabel.index = LABEL_DYNAMIC;
-    if (infoMachineSettings.long_filename_support == ENABLED && infoFile.source == BOARD_SD)
+    if (infoMachineSettings.longFilename == ENABLED && infoFile.source == BOARD_SD)
       setDynamicLabel(itemPos, infoFile.Longfile[index - infoFile.folderCount]);
     else
       setDynamicLabel(itemPos, infoFile.file[index - infoFile.folderCount]);
@@ -134,7 +134,7 @@ bool printPageItemSelected(uint16_t index)
 
       char temp_info[FILE_NUM + 50];
       sprintf(temp_info, (char *)textSelect(LABEL_START_PRINT),
-              (uint8_t *)((infoMachineSettings.long_filename_support == ENABLED && infoFile.source == BOARD_SD) ?
+              (uint8_t *)((infoMachineSettings.longFilename == ENABLED && infoFile.source == BOARD_SD) ?
                               infoFile.Longfile[infoFile.fileIndex] :
                               infoFile.file[infoFile.fileIndex]));
       // confirm file selction
@@ -167,6 +167,7 @@ void menuPrintFromSource(void)
 
   KEY_VALUES key_num = KEY_IDLE;
   uint8_t update = 1;
+  uint8_t pageCount = (infoFile.folderCount + infoFile.fileCount + (NUM_PER_PAGE - 1)) / NUM_PER_PAGE;
 
   GUI_Clear(infoSettings.bg_color);
   GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, LABEL_LOADING);
@@ -193,16 +194,20 @@ void menuPrintFromSource(void)
     infoMenu.cur--;
   }
 
+
   while (infoMenu.menu[infoMenu.cur] == menuPrintFromSource)
   {
-
-    if (list_mode != true) // select item from icon view
+    if (list_mode != true)  // select item from icon view
     {
       key_num = menuKeyGetValue();
+      pageCount = (infoFile.folderCount + infoFile.fileCount + (NUM_PER_PAGE - 1)) / NUM_PER_PAGE;
+
+      // read encoder position and change key index to page up/down
 
       switch (key_num)
       {
         case KEY_ICON_5:
+        case KEY_DECREASE:
           if (infoFile.cur_page > 0)
           {
             infoFile.cur_page--;
@@ -211,7 +216,8 @@ void menuPrintFromSource(void)
           break;
 
         case KEY_ICON_6:
-          if (infoFile.cur_page + 1 < (infoFile.folderCount + infoFile.fileCount + (NUM_PER_PAGE - 1)) / NUM_PER_PAGE)
+        case KEY_INCREASE:
+          if (infoFile.cur_page + 1 < pageCount)
           {
             infoFile.cur_page++;
             update = 1;
@@ -220,6 +226,7 @@ void menuPrintFromSource(void)
 
         case KEY_ICON_7:
           infoFile.cur_page = 0;
+
           if (IsRootDir() == true)
           {
             clearInfoFile();
@@ -262,8 +269,8 @@ void menuPrintFromSource(void)
           }
           break;
 
-        case KEY_PAGEUP:
-        case KEY_PAGEDOWN:
+        case KEY_DECREASE:
+        case KEY_INCREASE:
         case KEY_IDLE:
           break;
 
@@ -316,7 +323,7 @@ void menuPrint(void)
 {
   if (infoMachineSettings.firmwareType == FW_REPRAPFW)
   {
-    list_mode = true;  // force list mode in Onboard sd card
+    list_mode = infoSettings.files_list_mode;
     infoFile.source = BOARD_SD;
     infoMenu.menu[infoMenu.cur] = menuPrintFromSource;
     goto selectEnd;
@@ -346,8 +353,8 @@ void menuPrint(void)
 
   KEY_VALUES key_num = KEY_IDLE;
 
-  sourceSelItems.items[ONBOARD_SD_INDEX].icon = (infoMachineSettings.onboard_sd_support == ENABLED) ? ICON_ONBOARD_SD : ICON_BACKGROUND;
-  sourceSelItems.items[ONBOARD_SD_INDEX].label.index = (infoMachineSettings.onboard_sd_support == ENABLED) ? LABEL_ONBOARDSD : LABEL_BACKGROUND;
+  sourceSelItems.items[ONBOARD_SD_INDEX].icon = (infoMachineSettings.onboardSD == ENABLED) ? ICON_ONBOARD_SD : ICON_BACKGROUND;
+  sourceSelItems.items[ONBOARD_SD_INDEX].label.index = (infoMachineSettings.onboardSD == ENABLED) ? LABEL_ONBOARDSD : LABEL_BACKGROUND;
 
   menuDrawPage(&sourceSelItems);
 
@@ -374,7 +381,7 @@ void menuPrint(void)
       #else
         case KEY_ICON_1:
       #endif
-        if (infoMachineSettings.onboard_sd_support == ENABLED)
+        if (infoMachineSettings.onboardSD == ENABLED)
         {
           list_mode = true;  // force list mode in Onboard sd card
           infoFile.source = BOARD_SD;

@@ -50,6 +50,7 @@ static void resetRequestCommandInfo(
 
   loopProcessToCondition(&isNotEmptyCmdQueue);  // wait for the communication to be clean before requestCommand
 
+  requestCommandInfo.stream_handler = NULL;
   requestCommandInfo.inWaitResponse = true;
   requestCommandInfo.inResponse = false;
   requestCommandInfo.done = false;
@@ -66,12 +67,9 @@ static void resetRequestCommandInfo(
 */
 bool request_M21(void)
 {
-  const char * sdString = (infoMachineSettings.firmwareType == FW_REPRAPFW) ? "card mounted " : "SD card ";
-  const char * errString1 = (infoMachineSettings.firmwareType == FW_REPRAPFW) ? "Error" : "No SD card";
-
-  resetRequestCommandInfo(sdString,               // The magic to identify the start
+  resetRequestCommandInfo("SD card ",               // The magic to identify the start
                           "ok",                   // The magic to identify the stop
-                          errString1,             // The first magic to identify the error response
+                          "No SD card",             // The first magic to identify the error response
                           "SD init fail",         // The second error magic
                           "volume.init failed");  // The third error magic
 
@@ -245,8 +243,8 @@ void request_M0(void)
 
 void request_M98(char *filename)
 {
-  char command[CMD_MAX_CHAR];
-  snprintf(command, CMD_MAX_CHAR, "M98 P/%s\n", filename);
+  CMD command;
+  snprintf(command, CMD_MAX_SIZE, "M98 P/%s\n", filename);
   rrfStatusSetMacroBusy();
   mustStoreCmd(command);
   // prevent a race condition when rrfStatusQuery returns !busy before executing the macro
@@ -262,15 +260,12 @@ void request_M98(char *filename)
 }
 
 // nextdir path must start with "macros" or "gcodes"
-char *request_M20_rrf(char *nextdir)
+void request_M20_rrf(char *nextdir, bool with_ts, FP_STREAM_HANDLER handler)
 {
   resetRequestCommandInfo("{", "}", "Error:", NULL, NULL);
+  requestCommandInfo.stream_handler = handler;
 
-  mustStoreCmd("M20 S2 P\"/%s\"\n", nextdir);
+  mustStoreCmd("M20 S%d P\"/%s\"\n", with_ts ? 3 : 2, nextdir);
 
-  // Wait for response
   loopProcessToCondition(&isWaitingResponse);
-
-  //clearRequestCommandInfo();  //shall be call after copying the buffer ...
-  return requestCommandInfo.cmd_rev_buf;
 }

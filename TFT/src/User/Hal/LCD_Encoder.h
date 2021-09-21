@@ -7,6 +7,7 @@ extern "C" {
 
 #include <stdbool.h>
 #include <stdint.h>
+#include "menu.h"
 #include "variants.h"  // for ENC_ACTIVE_SIGNAL, LCD_ENCODER_SUPPORT etc...
 
 #if ENC_ACTIVE_SIGNAL
@@ -15,10 +16,7 @@ extern "C" {
 #endif
 
 #if LCD_ENCODER_SUPPORT
-  #define LCD_ENC_PULSES_PER_STEP  4
-  #define LCD_ENC_BUTTON_INTERVAL 20  // 20ms
-
-  extern int16_t encoderPosition;
+  extern int16_t encoderPosition;  // make it available for reading the current rotation value
 
   void LCD_Enc_Init(void);
   bool LCD_Enc_ReadBtn(uint16_t interval);  // return the button press state. Interval is in milli seconds
@@ -26,6 +24,7 @@ extern "C" {
   void LCD_Enc_SendPulse(uint8_t num);      // send a pulse to the encoder
   bool LCD_Enc_CheckState(void);
   void LCD_Enc_CheckSteps(void);
+  KEY_VALUES LCD_Enc_KeyValue(void);  // return a value from provided variables based on encoder position
 #endif
 
 #ifdef __cplusplus

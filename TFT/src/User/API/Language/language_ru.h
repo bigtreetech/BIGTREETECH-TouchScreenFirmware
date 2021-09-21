@@ -3,7 +3,8 @@
 
     // config.ini Parameter Settings - Screen Settings and Feature Settings
     #define STRING_EMULATED_M600          "Эмуляция M600"
-    #define STRING_ROTATE_UI              "Переворот"
+    #define STRING_EMULATED_M109_M190     "Emulated M109 / M190"
+    #define STRING_ROTATED_UI             "Переворот"
     #define STRING_LANGUAGE               "Русский"
     #define STRING_ACK_NOTIFICATION       "ACK стиль уведомления"
     #define STRING_FILES_SORT_BY          "Сортировать по"
@@ -31,7 +32,7 @@
     #define STRING_LCD_BRIGHTNESS         "Яркость"
     #define STRING_LCD_IDLE_BRIGHTNESS    "Регулировка яркости LCD"
     #define STRING_LCD_IDLE_TIME          "Время до гашения LCD"
-    #define STRING_BLOCK_TOUCH_ON_IDLE    "Block touch on idle"
+    #define STRING_LCD_LOCK_ON_IDLE       "LCD lock on idle"
     #define STRING_KNOB_LED_COLOR         "Подсветка энкодера"
     #define STRING_KNOB_LED_IDLE          "Простой подсветки энкодера"
     #define STRING_START_GCODE_ENABLED    "G-код перед печатью"

@@ -392,7 +392,9 @@ MENU_TYPE getMenuType(void)
   return menuType;
 }
 
-void setMenu(MENU_TYPE menu_type, LABEL * title, uint16_t rectCount, const GUI_RECT * menuRect, void(*action_redraw)(uint8_t position, uint8_t is_press), void (* menu_redraw)(void))
+void setMenu(MENU_TYPE menu_type, LABEL * title, uint16_t rectCount, const GUI_RECT * menuRect,
+             void(*action_redraw)(uint8_t position, uint8_t is_press),
+             void (*menu_redraw)(void))
 {
   menuType = menu_type;
   curRect = menuRect;
@@ -400,6 +402,10 @@ void setMenu(MENU_TYPE menu_type, LABEL * title, uint16_t rectCount, const GUI_R
   curTitle = title;
   TSC_ReDrawIcon = action_redraw;
   curMenuRedrawHandle = menu_redraw;
+
+  #if LCD_ENCODER_SUPPORT
+    encoderPosition = 0;
+  #endif
 }
 
 void reminderSetUnConnected(void)
@@ -464,7 +470,7 @@ void loopReminderClear(void)
       return;
 
     case STATUS_BUSY:
-      if (infoCmd.count == CMD_MAX_LIST)
+      if (isFullCmdQueue())
         return;
       break;
 
@@ -608,11 +614,16 @@ void menuDrawPage(const MENUITEMS *menuItems)
 
   menuClearGaps();  // Use this function instead of GUI_Clear to eliminate the splash screen when clearing the screen.
   menuDrawTitle(labelGetAddress(&menuItems->title));
+
   for (i = 0; i < ITEM_PER_PAGE; i++)
   {
     menuDrawItem(&menuItems->items[i], i);
     RAPID_PRINTING_COMM()  // perform backend printing loop between drawing icons to avoid printer idling
   }
+
+  #if LCD_ENCODER_SUPPORT
+    encoderPosition = 0;
+  #endif
 }
 
 // Draw the entire interface
@@ -639,6 +650,10 @@ void menuDrawListPage(const LISTITEMS *listItems)
       menuDrawListItem(&curListItems->items[i], i);
     RAPID_PRINTING_COMM()  // perform backend printing loop between drawing icons to avoid printer idling
   }
+
+  #if LCD_ENCODER_SUPPORT
+    encoderPosition = 0;
+  #endif
 }
 
 // Show live info text on icons
@@ -849,6 +864,11 @@ KEY_VALUES menuKeyGetValue(void)
     tempkey = KEY_IDLE;
   }
 
+  #if LCD_ENCODER_SUPPORT
+    if (tempkey == KEY_IDLE)
+      tempkey = LCD_Enc_KeyValue();
+  #endif
+
   return tempkey;
 }
 
@@ -950,8 +970,12 @@ void loopBackEnd(void)
   parseACK();
   // Parse comment from gCode file
   parseComment();
-  // Parse the received Gcode from other UART, such as: ESP3D, etc...
-  parseRcvGcode();
+
+  #ifdef SERIAL_PORT_2
+    // Parse the received Gcode from other UART, such as: ESP3D, etc...
+    parseRcvGcode();
+  #endif
+
   // Temperature monitor
   loopCheckHeater();
   // Fan speed monitor
@@ -964,7 +988,7 @@ void loopBackEnd(void)
     loopBuzzer();
   #endif
 
-  if (infoMachineSettings.onboard_sd_support == ENABLED)
+  if (infoMachineSettings.onboardSD == ENABLED)
   {
     loopPrintFromHost();  // handle a print from onboard SD or remote host, if any
   }

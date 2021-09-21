@@ -119,26 +119,23 @@ void menuBabystep(void)
   menuDrawPage(&babyStepItems);
   babyReDraw(now_babystep, now_z_offset, force_z_offset, false);
 
-  #if LCD_ENCODER_SUPPORT
-    encoderPosition = 0;
-  #endif
-
   while (infoMenu.menu[infoMenu.cur] == menuBabystep)
   {
+    key_num = menuKeyGetValue();
     unit = moveLenSteps[moveLenSteps_index];
-
     babystep = babystepGetValue();  // always load current babystep
 
-    key_num = menuKeyGetValue();
     switch (key_num)
     {
       // decrease babystep / Z offset
       case KEY_ICON_0:
+      case KEY_DECREASE:
         babystep = babystepUpdateValue(unit, -1);
         break;
 
       // increase babystep / Z offset
       case KEY_ICON_3:
+      case KEY_INCREASE:
         babystep = babystepUpdateValue(unit, 1);
         break;
 
@@ -156,7 +153,6 @@ void menuBabystep(void)
       // change unit
       case KEY_ICON_5:
         moveLenSteps_index = (moveLenSteps_index + 1) % ITEM_FINE_MOVE_LEN_NUM;
-
         babyStepItems.items[key_num] = itemMoveLen[moveLenSteps_index];
 
         menuDrawItem(&babyStepItems.items[key_num], key_num);
@@ -177,14 +173,6 @@ void menuBabystep(void)
         break;
 
       default:
-        #if LCD_ENCODER_SUPPORT
-          if (encoderPosition)
-          {
-            babystep = babystepUpdateValue(unit, encoderPosition < 0 ? -1 : 1);
-
-            encoderPosition = 0;
-          }
-        #endif
         break;
     }
 

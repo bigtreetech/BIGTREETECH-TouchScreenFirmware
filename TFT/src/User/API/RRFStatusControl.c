@@ -8,12 +8,75 @@
 // I=idle, P=printing from SD card, S=stopped (i.e. needs a reset), C=running config file (i.e starting up),
 // A=paused, D=pausing, R=resuming from a pause, B=busy (e.g. running a macro), F=performing firmware update
 static char rrf_status = 'I';
+static bool was_printing = false;
 
 static uint16_t rrf_query_interval = RRF_NORMAL_STATUS_QUERY_MS;
 static bool macro_busy = false;
+bool starting_print = false;
 
 void rrfStatusSet(char status)
 {
+  if (rrf_status != status)
+  {
+    switch (status)
+    {
+      case 'R':
+      case 'P':
+        switch (rrf_status)
+        {
+          case 'D':
+          case 'A':
+            setHostDialog(false);
+            setPrintResume(true);
+            break;
+          case 'I':
+            // RRFParseACK will take care of going to the print screen
+            mustStoreCmd("M409 K\"job.file.fileName\"\n");
+            starting_print = true;
+            break;
+        }
+        break;
+
+      case 'I':
+        switch (rrf_status)
+        {
+          case 'P':
+          case 'R':
+          case 'A':
+          case 'D':
+            setPrintAbort(); // done is the same as abort
+            break;
+
+          case 'B':
+            if (was_printing)
+              setPrintAbort();
+            break;
+        }
+        break;
+
+      case 'D':
+      case 'A':
+        if (rrf_status == 'P')
+          setPrintPause(false, PAUSE_EXTERNAL);
+        break;
+
+      case 'B':
+        switch (rrf_status)
+        {
+          case 'P':
+          case 'R':
+          case 'A':
+          case 'D':
+            was_printing = true;
+            break;
+
+          default:
+            was_printing = false;
+            break;
+        }
+        break;
+    }
+  }
   rrf_status = status;
   if (status != 'B')
   {

@@ -89,6 +89,39 @@ const ITEM itemIsPrinting[3] = {
   {ICON_BACK,                    LABEL_BACK},
 };
 
+static void setLayerHeightText(char * layer_height_txt)
+{
+  float layer_height;
+  layer_height = (infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS);
+  if (layer_height > 0)
+  {
+    sprintf(layer_height_txt, "%6.2fmm", layer_height);
+  }
+  else
+  {
+    strcpy(layer_height_txt, " --- mm ");  // leading and trailing space char so the text is centered on both rows
+  }
+}
+
+static void setLayerNumberTxt(char * layer_number_txt)
+{
+  if (getLayerNumber() > 0)
+  {
+    if (getLayerCount() > 0)
+    {
+      sprintf(layer_number_txt, "%u/%u", getLayerNumber(), getLayerCount());
+    }
+    else
+    {
+      sprintf(layer_number_txt, "%u", getLayerNumber());
+    }
+  }
+  else
+  {
+    strcpy(layer_number_txt, "---");
+  }
+}
+
 void menuBeforePrinting(void)
 {
   // load stat/end/cancel gcodes from spi flash
@@ -151,10 +184,12 @@ void menuBeforePrinting(void)
       return;
   }
 
-  // initialize things before print start
+  // initialize things before the print starts
   progDisplayType = infoSettings.prog_disp_type;
   layerDisplayType = infoSettings.layer_disp_type * 2;
   setLayerNumber(0);
+  coordinateSetAxisActual(Z_AXIS, 0);
+  coordinateSetAxisTarget(Z_AXIS, 0);
   setM73_presence(false);
   setTotalTime(0);
   
@@ -236,7 +271,7 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
       case ICON_POS_Z:
         if (layerDisplayType == SHOW_LAYER_BOTH)
         {
-          sprintf(tempstr, "%6.2fmm", (infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS));
+          setLayerHeightText(tempstr);
         }
         else if (layerDisplayType == CLEAN_LAYER_NUMBER || layerDisplayType == CLEAN_LAYER_BOTH)
         {
@@ -297,25 +332,11 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
       case ICON_POS_Z:
         if (layerDisplayType == SHOW_LAYER_HEIGHT)  // layer height
         {
-          sprintf(tempstr, "%3.2fmm", (infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS));
+          setLayerHeightText(tempstr);
         }
         else if (layerDisplayType == SHOW_LAYER_NUMBER || layerDisplayType == SHOW_LAYER_BOTH)  // layer number or height & number (both)
         {
-          if (getLayerNumber() > 0)
-          {
-            if (getLayerCount() > 0)
-            {
-              sprintf(tempstr, "%u/%u", getLayerNumber(), getLayerCount());
-            }
-            else
-            {
-              sprintf(tempstr, "%u", getLayerNumber());
-            }
-          }
-          else
-          {
-            sprintf(tempstr, "-");
-          }
+          setLayerNumberTxt(tempstr);
         }
         else
         {
@@ -496,7 +517,7 @@ void printInfoPopup(void)
 
   sprintf(showInfo, (char*)textSelect(LABEL_PRINT_TIME), hour, min, sec);
 
-  if (infoPrintSummary.length == 0 && infoPrintSummary.weight == 0 && infoPrintSummary.cost == 0)
+  if (infoPrintSummary.length + infoPrintSummary.weight + infoPrintSummary.cost == 0)  // all  equals 0
   {
     strcat(showInfo, (char *)textSelect(LABEL_NO_FILAMENT_STATS));
   }
@@ -559,7 +580,7 @@ void menuPrinting(void)
 
   if (lastPrinting == true)
   {
-    if (infoMachineSettings.long_filename_support == ENABLED && infoFile.source == BOARD_SD)
+    if (infoMachineSettings.longFilename == ENABLED && infoFile.source == BOARD_SD)
       printingItems.title.address = (uint8_t *) infoFile.Longfile[infoFile.fileIndex];
     else
       printingItems.title.address = getPrintName(infoFile.title);
@@ -681,6 +702,7 @@ void menuPrinting(void)
       if (curLayerNumber != prevLayerNumber)
       {
         prevLayerNumber = curLayerNumber;
+        RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
         reDrawPrintingValue(ICON_POS_Z, PRINT_BOTTOM_ROW);
       }
     }
@@ -755,7 +777,7 @@ void menuPrinting(void)
       case PS_KEY_6:
         if (isPrinting())
         {
-          if (isHostDialog())
+          if (getHostDialog())
             addToast(DIALOG_TYPE_ERROR, (char *)textSelect(LABEL_BUSY));
           else if (getPrintRunout())
             addToast(DIALOG_TYPE_ERROR, (char *)textSelect(LABEL_FILAMENT_RUNOUT));

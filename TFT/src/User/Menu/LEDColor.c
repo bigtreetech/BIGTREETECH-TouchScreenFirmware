@@ -28,6 +28,8 @@ typedef enum
   LED_KEY_CANCEL,
   LED_KEY_OK,
   // no need to declare key numbers if no special task is performed by the key
+  LED_KEY_INCREASE = KEY_INCREASE,
+  LED_KEY_DECREASE = KEY_DECREASE,
   LED_KEY_IDLE = IDLE_TOUCH,
 } LED_KEY_VALUES;
 
@@ -386,10 +388,6 @@ void menuLEDColorCustom(void)
 
   ledDrawMenu();
 
-  #if LCD_ENCODER_SUPPORT
-    encoderPosition = 0;
-  #endif
-
   while (infoMenu.menu[infoMenu.cur] == menuLEDColorCustom)
   {
     key_num = menuKeyGetValue();
@@ -400,7 +398,6 @@ void menuLEDColorCustom(void)
         if (ledPage > 0)
         {
           ledPage--;
-
           updateForced = true;
         }
         break;
@@ -410,7 +407,6 @@ void menuLEDColorCustom(void)
         if (ledPage < (PAGE_NUM - 1))
         {
           ledPage++;
-
           updateForced = true;
         }
         break;
@@ -433,18 +429,19 @@ void menuLEDColorCustom(void)
         break;
 
       // use rotary encoder to update LED component value
-      case LED_KEY_IDLE:
-        #if LCD_ENCODER_SUPPORT
-          if (encoderPosition)
-          {
-            curValue = ledUpdateComponentValue(ledIndex, 1, (encoderPosition > 0) ? 1 : -1);
+      case LED_KEY_INCREASE:
+        curValue = ledUpdateComponentValue(ledIndex, 1, 1);
+        break;
 
-            encoderPosition = 0;
-          }
-        #endif
+      case LED_KEY_DECREASE:
+        curValue = ledUpdateComponentValue(ledIndex, 1, -1);
+        break;
+
+      case LED_KEY_IDLE:
         break;
 
       default:
+      {
         ledIndex = ledGetControlIndex(key_num);  // get control index
 
         switch (ledGetControlSubIndex(key_num))  // get control sub index
@@ -452,7 +449,6 @@ void menuLEDColorCustom(void)
           case 1:
           {
             curValue = ledEditComponentValue(ledIndex);
-
             sendingNeeded = true;
 
             ledDrawMenu();
@@ -473,6 +469,7 @@ void menuLEDColorCustom(void)
             break;
         }
         break;
+      }
     }
 
     if (updateForced)

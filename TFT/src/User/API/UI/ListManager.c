@@ -179,7 +179,7 @@ uint16_t listViewGetSelectedIndex(void)
   if (key_num < LISTITEM_PER_PAGE)
   {
     // return actual item index
-    uint8_t cur_index = curPageIndex * LISTITEM_PER_PAGE + key_num;
+    uint16_t cur_index = curPageIndex * LISTITEM_PER_PAGE + key_num;
 
     if (cur_index < maxItemCount)
     {
@@ -193,10 +193,12 @@ uint16_t listViewGetSelectedIndex(void)
   // check function keypress
   switch (key_num)
   {
+    case KEY_DECREASE:
     case KEY_INDEX_PAGEUP:
       listViewPreviousPage();
       return KEY_PAGEUP;
 
+    case KEY_INCREASE:
     case KEY_INDEX_PAGEDOWN:
       listViewNextPage();
       return KEY_PAGEDOWN;
@@ -207,6 +209,6 @@ uint16_t listViewGetSelectedIndex(void)
       return KEY_BACK;
 
     default:
-      return KEY_IDLE;
+      return KEY_IDLE;  // if no key is pressed and no page scrolling is requested
   }
 }

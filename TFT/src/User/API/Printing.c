@@ -238,7 +238,7 @@ void initPrintSummary(void)
 
 void preparePrintSummary(void)
 {
-  if (infoMachineSettings.long_filename_support == ENABLED && infoFile.source == BOARD_SD)
+  if (infoMachineSettings.longFilename == ENABLED && infoFile.source == BOARD_SD)
     sprintf(infoPrintSummary.name,"%." STRINGIFY(SUMMARY_NAME_LEN) "s", infoFile.Longfile[infoFile.fileIndex]);
   else
     sprintf(infoPrintSummary.name,"%." STRINGIFY(SUMMARY_NAME_LEN) "s", getPrintName(infoFile.title));
@@ -645,11 +645,12 @@ void loopPrintFromTFT(void)
   bool    read_comment = false;
   bool    read_leading_space = true;
   char    read_char;
+  CMD     gcode;
   uint8_t gCode_count = 0;
   uint8_t comment_count = 0;
   UINT    br = 0;
 
-  if (heatHasWaiting() || infoCmd.count || infoPrinting.pause) return;
+  if (heatHasWaiting() || isNotEmptyCmdQueue() || infoPrinting.pause) return;
 
   if (moveCacheToCmd() == true) return;
 
@@ -668,11 +669,9 @@ void loopPrintFromTFT(void)
     {
       if (gCode_count != 0)
       {
-        infoCmd.queue[infoCmd.index_w].gcode[gCode_count++] = '\n';
-        infoCmd.queue[infoCmd.index_w].gcode[gCode_count] = 0;  // terminate string
-        infoCmd.queue[infoCmd.index_w].port_index = PORT_1;     // port index for SERIAL_PORT
-        infoCmd.index_w = (infoCmd.index_w + 1) % CMD_MAX_LIST;
-        infoCmd.count++;
+        gcode[gCode_count++] = '\n';
+        gcode[gCode_count] = 0;  // terminate string
+        storeCmdFromUART(PORT_1, gcode);
       }
 
       if (comment_count != 0)
@@ -690,9 +689,9 @@ void loopPrintFromTFT(void)
       read_comment = false;
       read_leading_space = true;
     }
-    else if (!read_comment && gCode_count >= CMD_MAX_CHAR - 2)
+    else if (!read_comment && gCode_count >= CMD_MAX_SIZE - 2)
     {}  // if command length is beyond the maximum, ignore the following bytes
-    else if (read_comment && comment_count >= CMD_MAX_CHAR - 2)
+    else if (read_comment && comment_count >= CMD_MAX_SIZE - 2)
     {}  // if comment length is beyond the maximum, ignore the following bytes
     else
     {
@@ -711,11 +710,11 @@ void loopPrintFromTFT(void)
 
         if (!read_leading_space && read_char != '\r')
         {
-          if (!read_comment)   // normal gcode
+          if (!read_comment)  // normal gcode
           {
-            infoCmd.queue[infoCmd.index_w].gcode[gCode_count++] = read_char;
+            gcode[gCode_count++] = read_char;
           }
-          else // comment
+          else  // comment
           {
             gCode_comment.content[comment_count++] = read_char;
           }

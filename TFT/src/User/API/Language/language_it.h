@@ -3,7 +3,8 @@
 
     // config.ini Parameter Settings - Screen Settings and Feature Settings
     #define STRING_EMULATED_M600          "M600 emulato"
-    #define STRING_ROTATE_UI              "Ruota"
+    #define STRING_EMULATED_M109_M190     "M109 / M190 emulati"
+    #define STRING_ROTATED_UI             "Ruota"
     #define STRING_LANGUAGE               "Italiano"
     #define STRING_ACK_NOTIFICATION       "Tipo di popup"
     #define STRING_FILES_SORT_BY          "Ordina file per"
@@ -31,7 +32,7 @@
     #define STRING_LCD_BRIGHTNESS         "Luminosità"
     #define STRING_LCD_IDLE_BRIGHTNESS    "Luminosità in idle"
     #define STRING_LCD_IDLE_TIME          "Timer luminosità"
-    #define STRING_BLOCK_TOUCH_ON_IDLE    "Block touch on idle"
+    #define STRING_LCD_LOCK_ON_IDLE       "Blocco LCD in idle"
     #define STRING_KNOB_LED_COLOR         "LED manopola "
     #define STRING_KNOB_LED_IDLE          "LED manopola spento"
     #define STRING_START_GCODE_ENABLED    "Inserisci start gcode"

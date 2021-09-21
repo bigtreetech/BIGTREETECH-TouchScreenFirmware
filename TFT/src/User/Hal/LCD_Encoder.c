@@ -100,23 +100,23 @@ void LCD_Enc_SendPulse(uint8_t num)
 
     case 1:
       GPIO_SetLevel(LCD_BTN_PIN, 0);
-      Delay_us(LCD_ENCODER_DELAY);
+      Delay_us(LCD_ENC_DELAY);
       GPIO_SetLevel(LCD_BTN_PIN, 1);
       break;
 
     case 2:
       GPIO_SetLevel(LCD_ENCA_PIN, 1);
       GPIO_SetLevel(LCD_ENCB_PIN, 1);
-      Delay_us(LCD_ENCODER_DELAY);
+      Delay_us(LCD_ENC_DELAY);
       GPIO_SetLevel(LCD_ENCA_PIN, 0);
       GPIO_SetLevel(LCD_ENCB_PIN, 1);
-      Delay_us(LCD_ENCODER_DELAY);
+      Delay_us(LCD_ENC_DELAY);
       GPIO_SetLevel(LCD_ENCA_PIN, 0);
       GPIO_SetLevel(LCD_ENCB_PIN, 0);
-      Delay_us(LCD_ENCODER_DELAY);
+      Delay_us(LCD_ENC_DELAY);
       GPIO_SetLevel(LCD_ENCA_PIN, 1);
       GPIO_SetLevel(LCD_ENCB_PIN, 0);
-      Delay_us(LCD_ENCODER_DELAY);
+      Delay_us(LCD_ENC_DELAY);
       GPIO_SetLevel(LCD_ENCA_PIN, 1);
       GPIO_SetLevel(LCD_ENCB_PIN, 1);
       break;
@@ -124,16 +124,16 @@ void LCD_Enc_SendPulse(uint8_t num)
     case 3:
       GPIO_SetLevel(LCD_ENCA_PIN, 1);
       GPIO_SetLevel(LCD_ENCB_PIN, 1);
-      Delay_us(LCD_ENCODER_DELAY);
+      Delay_us(LCD_ENC_DELAY);
       GPIO_SetLevel(LCD_ENCA_PIN, 1);
       GPIO_SetLevel(LCD_ENCB_PIN, 0);
-      Delay_us(LCD_ENCODER_DELAY);
+      Delay_us(LCD_ENC_DELAY);
       GPIO_SetLevel(LCD_ENCA_PIN, 0);
       GPIO_SetLevel(LCD_ENCB_PIN, 0);
-      Delay_us(LCD_ENCODER_DELAY);
+      Delay_us(LCD_ENC_DELAY);
       GPIO_SetLevel(LCD_ENCA_PIN, 0);
       GPIO_SetLevel(LCD_ENCB_PIN, 1);
-      Delay_us(LCD_ENCODER_DELAY);
+      Delay_us(LCD_ENC_DELAY);
       GPIO_SetLevel(LCD_ENCA_PIN, 1);
       GPIO_SetLevel(LCD_ENCB_PIN, 1);
       break;
@@ -184,6 +184,20 @@ void LCD_Enc_CheckSteps(void)
   {
     encoderPosition += encoderDiff / (LCD_ENC_PULSES_PER_STEP);
     encoderDiff = 0;
+  }
+}
+
+KEY_VALUES LCD_Enc_KeyValue(void)
+{
+  if (encoderPosition == 0)
+  {
+    return KEY_IDLE;
+  }
+  else
+  {
+    int16_t encPosTemp = encoderPosition;
+    encoderPosition = 0;
+    return (encPosTemp > 0) ? KEY_INCREASE : KEY_DECREASE;
   }
 }
 

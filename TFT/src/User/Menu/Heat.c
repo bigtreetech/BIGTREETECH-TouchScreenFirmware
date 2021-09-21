@@ -42,19 +42,17 @@ void menuHeat(void)
   menuDrawPage(&heatItems);
   temperatureReDraw(tool_index, NULL, false);
 
-  #if LCD_ENCODER_SUPPORT
-    encoderPosition = 0;
-  #endif
-
   while (infoMenu.menu[infoMenu.cur] == menuHeat)
   {
     actCurrent = heatGetCurrentTemp(tool_index);
     actTarget = heatGetTargetTemp(tool_index);
 
     key_num = menuKeyGetValue();
+
     switch (key_num)
     {
       case KEY_ICON_0:
+      case KEY_DECREASE:
         heatSetTargetTemp(tool_index, actTarget - degreeSteps[degreeSteps_index]);
         break;
 
@@ -71,6 +69,7 @@ void menuHeat(void)
       }
 
       case KEY_ICON_3:
+      case KEY_INCREASE:
         heatSetTargetTemp(tool_index, actTarget + degreeSteps[degreeSteps_index]);
         break;
 
@@ -102,16 +101,6 @@ void menuHeat(void)
         break;
 
       default:
-        #if LCD_ENCODER_SUPPORT
-          if (encoderPosition)
-          {
-            if (encoderPosition > 0)
-              heatSetTargetTemp(tool_index, actTarget + degreeSteps[degreeSteps_index]);
-            else  // if < 0)
-              heatSetTargetTemp(tool_index, actTarget - degreeSteps[degreeSteps_index]);
-            encoderPosition = 0;
-          }
-        #endif
         break;
     }
 

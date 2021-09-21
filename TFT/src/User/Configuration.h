@@ -1,7 +1,7 @@
 #ifndef _CONFIGURATION_H_
 #define _CONFIGURATION_H_
 
-#define CONFIG_VERSION 20210829
+#define CONFIG_VERSION 20210903
 
 //====================================================================================================
 //=============================== Settings Configurable On config.ini ================================
@@ -38,17 +38,6 @@
  */
 #define PRIMARY_BAUDRATE 6  // Default: 6
 
-/**
- * Emulated M600
- * The TFT intercepts the M600 gcode (filament change) and emulates the handling logic
- * otherwise provided by Marlin firmware.
- *
- * NOTE: Enable it, in case Marlin firmware does not properly support M600 on the mainboard.
- *
- *   Options: [disable: 0, enable: 1]
- */
-#define EMULATED_M600 1  // Default: 1
-
 //================================================================================
 //================================= UI Settings ==================================
 //================================================================================
@@ -67,7 +56,7 @@
 #define STATUS_SCREEN 1  // Default: 1
 
 /**
- * Default Touch Mode Colors
+ * Touch Mode Colors
  * Set colors used in Touch Mode.
  *
  *   Options: [ WHITE: 0,  BLACK: 1,  RED: 2,  GREEN: 3,      BLUE: 4,       CYAN: 5,  MAGENTA: 6,    YELLOW: 7,
@@ -150,7 +139,7 @@
 #define SERIAL_ALWAYS_ON 0  // Default: 0
 
 /**
- * Default Marlin Mode Background & Font Colors
+ * Marlin Mode Background & Font Colors
  * Set colors used in Marlin Mode.
  *
  *   Options: [ WHITE: 0,  BLACK: 1,  RED: 2,  GREEN: 3,      BLUE: 4,       CYAN: 5,  MAGENTA: 6,    YELLOW: 7,
@@ -246,12 +235,12 @@
 #define AXIS_DISPLAY_ID    {"X", "Y", "Z", "E0", "E1"}  // (X, Y, Z, E0, E1)
 #define STEPPER_DISPLAY_ID {"X", "X2", "Y", "Y2", "Z", "Z2", "E0", "E1"}  // (X, X2, Y, Y2, Z, Z2, E0, E1)
 
-// Default X & Y speed (mm/min)
+// X & Y speed (mm/min)
 #define SPEED_XY_SLOW   1000
 #define SPEED_XY_NORMAL 3000
 #define SPEED_XY_FAST   5000
 
-// Default Z speed (mm/min)
+// Z speed (mm/min)
 #define SPEED_Z_SLOW   500
 #define SPEED_Z_NORMAL 1000
 #define SPEED_Z_FAST   2000
@@ -383,7 +372,7 @@
  */
 
 /**
- * Default Filament Runout Sensor
+ * Filament Runout Sensor
  * Select the type of filament runout sensor and its default enabled/disabled state.
  *
  *   Options: [Normal Disabled: 0, Normal Enabled: 1, Smart Disabled: 2, Smart Enabled: 3]
@@ -449,16 +438,16 @@
 //================================================================================
 
 /**
- * Default LCD Brightness Levels (only for TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
- * Default brightness values for LCD.
+ * LCD Brightness Levels (only for TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
+ * Brightness levels for LCD.
  *
  *   Options: [OFF: 0, 5%: 1, 10%: 2, 20%: 3, 30%: 4, 40%: 5, 50%: 6, 60%: 7, 70%: 8, 80%: 9, 90%: 10, 100%: 11]
  */
-#define LCD_BRIGHTNESS      11  // Default display brightness (Default: 11)
-#define LCD_IDLE_BRIGHTNESS  3  // Display brightness when device is idle (Default: 3)
+#define LCD_BRIGHTNESS      11  // LCD brightness level (Default: 11)
+#define LCD_IDLE_BRIGHTNESS  3  // LCD brightness level when device is idle (Default: 3)
 
 /**
- * Default LCD Idle Time (only for TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
+ * LCD Idle Time (only for TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
  * The LCD screen will dim to idle brightness, if the display is not touched for the
  * period of the LCD idle time.
  *
@@ -535,7 +524,7 @@
 /**
  * Start/End/Cancel Gcode
  * Gcode that runs after a print starts, ends, or canceled.
- * Enable Start/End/Cancel gcode in SETTINGS -> FEATURE menu.
+ * Enable Start/End/Cancel gcode in Settings -> Feature menu.
  *
  * NOTES for users having a filament sensor connected to the mainboard:
  *   1) Enable the start/end gcode.
@@ -589,11 +578,11 @@
  * If one of the DEBUG_x below is defined the SERIAL_DEBUG_PORT defined in board specific Pin_xx.h file
  * will be used for debugging purposes. DON'T enable one of the DEBUG_x below for normal printing.
  *
- * Warning: SERIAL_DEBUG_PORT needs to be activated specifically. Please consider settings MULTI_SERIAL > 0
- * in the Configuration.h or set e.g. "multi_serial: 2" in the config.ini.
- * If the TFT is only showing the boot logo and is not responding anymore, check the MULTI_SERIAL setting.
- * If you update the config.ini you need to reset the TFT *twice* (first reset to update the config, second
- * reset to enable the SERIAL_DEBUG_PORT due to the changed firmware config).
+ * WARNINGS:
+ *   - SERIAL_DEBUG_PORT needs to be activated specifically. Please consider SERIAL_PORT setting in the config.ini.
+ *   - If the TFT is only showing the boot logo and is not responding anymore, check the SERIAL_PORT setting.
+ *   - If you update the config.ini you need to reset the TFT *twice* (first reset to update the config, second
+ *     reset to enable the SERIAL_DEBUG_PORT due to the changed firmware config).
  */
 
 /**
@@ -679,8 +668,8 @@
 //================================================================================
 
 /**
- * Default Primary Language (for Touch-Mode only)
- * Select the language to display on the LCD while in Touch Mode.
+ * Primary Language (for Touch-Mode only)
+ * Select the language to use on the LCD while in Touch Mode.
  *
  * NOTE: To add/flash a second language copy the required "language_xx.ini" file from
  *       "Language Packs" folder to the SD root folder.
@@ -703,23 +692,25 @@
 #define RAPID_SERIAL_COMM  // Default: uncommented (enabled)
 
 /**
- * LCD/Touch Encoder
- * In case LCD/Touch Encoder's sliding buttons (pin LCD_ENCA_PIN and LCD_ENCB_PIN)
- * don't produce any movement on menu, try to increase the delay in ms (e.g. 64).
+ * LCD Encoder Settings (HW Rotary Encoder)
+ * In case LCD Encoder's sliding buttons (pin LCD_ENCA_PIN and LCD_ENCB_PIN) don't produce
+ * any movement on menu, try to increase the delay (in MilliSeconds) (e.g. 64).
  */
-#define LCD_ENCODER_DELAY 8  // Default: 8 (ms) (1 ms = 0.000001 seconds)
+#define LCD_ENC_DELAY            8  // in ms. Default: 8
+#define LCD_ENC_PULSES_PER_STEP  4  // Default: 4
+#define LCD_ENC_BUTTON_INTERVAL 20  // in ms. Default: 20
 
 /**
  * Buzzer Settings
  * The duration and frequency for the UI feedback sound.
  * Set these to 0 to disable audio feedback in the LCD menus.
- * Only valid for SERIAL_TSC LCD MODE and if BUZZER_PIN is set or available.
+ * Only valid for Touch Mode and if BUZZER_PIN is set or available.
  *
  * NOTE: Test audio output with the G-Code:
  *       M300 S<frequency Hz> P<duration MilliSeconds>
  */
-#define BUZZER_FREQUENCY_DURATION_MS    20  // (MilliSeconds) Default: 20
-#define BUZZER_FREQUENCY_HZ          10000  // (Hz) Default: 10000 (20Hz to 60000Hz)
+#define BUZZER_FREQUENCY_DURATION_MS    20  // in ms. Default: 20
+#define BUZZER_FREQUENCY_HZ          10000  // in Hz (20Hz to 60000Hz). Default: 10000
 
 /**
  * Buzzer Stop Level
@@ -758,9 +749,10 @@
 
 /**
  * Quick EEPROM Menu
- * Enable EEPROM menu (save/load/reset buttons) in Settings > Machine Menu.
+ * Enable EEPROM menu (save/load/reset buttons) in Settings -> Machine menu.
  *
- * NOTE: If disabled, EEPROM operations can also be accessed in the (settings > machine > parameters) menu.
+ * NOTE: If disabled, EEPROM operations can also be accessed in
+ *       Settings -> Machine -> Parameter Settings menu.
  */
 #define QUICK_EEPROM_BUTTON  // Default: uncommented (enabled)
 
@@ -768,10 +760,10 @@
  * Toast Notification Duration (in MilliSeconds)
  * Set the duration for displaying toast notification on top of the screen.
  */
-#define TOAST_DURATION (3 * 1000)  // (MilliSeconds)  1000 MilliSeconds = 1 Second
+#define TOAST_DURATION (3 * 1000)  // in ms. Default: 3 * 1000
 
 /**
- * Keyboard On Left Side (Mesh Editor, RGB Settings Custom)
+ * Keyboard On Left Side (Mesh Editor, LED Color Custom)
  * By default the keyboard is drawn on right side of the screen.
  * Enable KEYBOARD_ON_LEFT to draw the keyboard on left side of the screen.
  */

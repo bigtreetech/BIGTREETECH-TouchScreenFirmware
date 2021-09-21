@@ -86,6 +86,8 @@ typedef enum
   ME_KEY_NEXT,
   ME_KEY_DOWN,
   ME_KEY_NUM,                                              // number of keys
+  ME_KEY_INCREASE = KEY_INCREASE,
+  ME_KEY_DECREASE = KEY_DECREASE,
   ME_KEY_IDLE = IDLE_TOUCH,
 } MESH_KEY_VALUES;
 
@@ -835,16 +837,13 @@ void menuMeshEditor(void)
 
   meshDrawMenu();
 
-  #if LCD_ENCODER_SUPPORT
-    encoderPosition = 0;
-  #endif
-
   while (infoMenu.menu[infoMenu.cur] == menuMeshEditor)
   {
     curStatus = meshGetStatus();                           // always load current status
     curIndex = meshGetIndex();                             // always load current index
 
     key_num = menuKeyGetValue();
+
     switch (key_num)
     {
       case ME_KEY_UP:
@@ -856,10 +855,12 @@ void menuMeshEditor(void)
         break;
 
       case ME_KEY_PREV:
+      case ME_KEY_DECREASE:
         curIndex = meshSetIndex(curIndex - 1);
         break;
 
       case ME_KEY_NEXT:
+      case ME_KEY_INCREASE:
         curIndex = meshSetIndex(curIndex + 1);
         break;
 
@@ -904,14 +905,6 @@ void menuMeshEditor(void)
         break;
 
       default:
-        #if LCD_ENCODER_SUPPORT
-          if (encoderPosition)
-          {
-            curIndex = meshSetIndex(curIndex + encoderPosition);
-
-            encoderPosition = 0;
-          }
-        #endif
         break;
     }
 

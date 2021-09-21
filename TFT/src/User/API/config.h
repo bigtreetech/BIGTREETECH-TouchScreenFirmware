@@ -17,9 +17,10 @@ extern "C" {
 //-----------------------------General Settings
 #define CONFIG_SERIAL_PORT            "serial_port:"
 #define CONFIG_EMULATED_M600          "emulated_m600:"
+#define CONFIG_EMULATED_M109_M190     "emulated_m109_m190:"
 
 //-----------------------------UI Settings
-#define CONFIG_ROTATE_UI              "rotate_ui:"
+#define CONFIG_ROTATED_UI             "rotated_ui:"
 #define CONFIG_LANGUAGE               "language:"
 #define CONFIG_STATUS_SCREEN          "status_screen:"
 #define CONFIG_TITLE_BG_COLOR         "title_background_color:"
@@ -120,7 +121,7 @@ extern "C" {
 #define CONFIG_LCD_BRIGHTNESS         "lcd_brightness:"
 #define CONFIG_LCD_IDLE_BRIGHTNESS    "lcd_idle_brightness:"
 #define CONFIG_LCD_IDLE_TIME          "lcd_idle_time:"
-#define CONFIG_BLOCK_TOUCH_ON_IDLE    "block_touch_on_idle:"
+#define CONFIG_LCD_LOCK_ON_IDLE       "lcd_lock_on_idle:"
 #define CONFIG_KNOB_LED_COLOR         "knob_led_color:"
 #define CONFIG_KNOB_LED_IDLE          "knob_led_idle:"
 #define CONFIG_NEOPIXEL_PIXELS        "neopixel_pixels:"

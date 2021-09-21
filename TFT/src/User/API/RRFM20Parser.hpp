@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "ff.h"
+#include "gcode.h"
 #include "vfs.h"
 
 #ifdef __cplusplus
@@ -15,9 +16,10 @@ extern "C"
     bool is_directory;
     TCHAR *display_name;
     TCHAR *file_name;
+    uint32_t timestamp;
   } M20_LIST_ITEM;
-  void parseMacroListResponse(const char *data);
   void parseJobListResponse(const char *data);
+  void parseMacroListResponse(const char *data);
 #ifdef __cplusplus
 }
 #endif
@@ -26,24 +28,46 @@ extern "C"
 #include "JsonStreamingParser.hpp"
 #include <string.h>
 
-static const char *FILES = "files";
+#define FILES "files"
+#define FILES_TYPE "type"
+#define FILES_NAME "name"
+#define FILES_DATE "date"
+enum RRFM20ParserState { none, type, name, date };
+
 class RRFM20Parser : public JsonListener
 {
 
 private:
   bool in_array = false;
+  bool in_object = false;
   bool in_files = false;
   uint16_t fileCount = 0;
+  RRFM20ParserState state = none;
   M20_LIST_ITEM fileList[FILE_NUM];
 
 public:
   bool macro_sort = false;
+  bool need_reset = false;
 
+  virtual ~RRFM20Parser() {}
   inline void startDocument() {}
-  inline void startObject() {}
-  inline void endObject() {}
+  virtual void startObject();
+  virtual void endObject();
   inline void whitespace(char c) {}
   virtual void endDocument();
+  virtual void key(const char *key);
+  virtual void value(const char *value);
+
+  inline void reset()
+  {
+    in_array = false;
+    in_object = false;
+    in_files = false;
+    fileCount = 0;
+    state = none;
+    need_reset = false;
+  }
+
   inline void startArray()
   {
     in_array = in_files;
@@ -51,18 +75,9 @@ public:
   inline void endArray()
   {
     in_array = false;
+    in_files = false;
   }
 
-  inline void key(const char *key)
-  {
-    in_files = strcmp(FILES, key) == 0;
-  }
-  inline void value(const char *value)
-  {
-    if (in_array)
-      handle_value(value);
-  }
-  void handle_value(const char *value);
 };
 #endif
 
