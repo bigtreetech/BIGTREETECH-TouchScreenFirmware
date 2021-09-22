@@ -51,7 +51,7 @@ void HW_Init(void)
   LCD_RefreshDirection(infoSettings.rotated_ui);  // refresh display direction after reading settings
   scanUpdates();                                  // scan icon, fonts and config files
   checkflashSign();                               // check font/icon/config signature in SPI flash for update
-  initMachineSetting();                           // load default machine settings
+  initMachineSettings();                          // load default machine settings
 
   #ifdef LED_COLOR_PIN
     knob_LED_Init();
@@ -104,9 +104,6 @@ void HW_Init(void)
 
 void HW_InitMode(uint8_t mode)
 {
-  if (infoSettings.serial_always_on == ENABLED)  // disable serial comm if `serial_always_on` is disabled
-    Serial_Init(ALL_PORTS);
-
   if (mode == MODE_SERIAL_TSC)
   {
     Serial_Init(ALL_PORTS);  // enable serial comm in Touch mode
@@ -115,7 +112,7 @@ void HW_InitMode(uint8_t mode)
       Buzzer_Config();
     #endif
 
-    #if LED_COLOR_PIN  // enable knob led only in Touch mode
+    #if LED_COLOR_PIN  // enable knob LED only in Touch mode
       #ifndef KEEP_KNOB_LED_COLOR_MARLIN_MODE  // set last saved color after initialization
         knob_LED_Init();
         Knob_LED_SetColor(led_colors[infoSettings.knob_led_color], infoSettings.neopixel_pixels);
@@ -128,15 +125,17 @@ void HW_InitMode(uint8_t mode)
   }
   else
   {
-    if (infoSettings.serial_always_on == DISABLED)  // disable serial comm if `serial_always_on` is disabled
+    if (infoSettings.serial_always_on == ENABLED)  // enable serial comm if `serial_always_on` is enabled
+      Serial_Init(ALL_PORTS);
+    else  // disable serial comm if `serial_always_on` is disabled
       Serial_DeInit(ALL_PORTS);
 
     #ifdef BUZZER_PIN  // disable buzzer in Marlin mode
       Buzzer_DeConfig();
     #endif
 
-    #if LED_COLOR_PIN
-      #ifndef KEEP_KNOB_LED_COLOR_MARLIN_MODE  // disable knob led in Marlin mode
+    #if LED_COLOR_PIN  // disable knob LED in Marlin mode
+      #ifndef KEEP_KNOB_LED_COLOR_MARLIN_MODE
         knob_LED_DeInit();
       #endif
     #endif

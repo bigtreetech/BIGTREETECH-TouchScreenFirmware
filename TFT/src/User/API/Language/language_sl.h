@@ -143,6 +143,7 @@
     #define STRING_BUSY                   "Zaseden s procesiranjem, prosim počakaj..."
     #define STRING_LOADING                "Nalagam..."
     #define STRING_UNCONNECTED            "Nobenega tiskalnika priključenega!"
+    #define STRING_LISTENING              "TFT in Listening Mode!"
 
     // Process Info
     #define STRING_INFO                   "Info" //Info Sign

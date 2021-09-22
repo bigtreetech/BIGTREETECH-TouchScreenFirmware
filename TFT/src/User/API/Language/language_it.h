@@ -143,6 +143,7 @@
     #define STRING_BUSY                   "Stampante occupata, attendere..."
     #define STRING_LOADING                "Caricamento..."
     #define STRING_UNCONNECTED            "Stampante non connessa"
+    #define STRING_LISTENING              "TFT in Listening Mode!"
 
     // Process Info
     #define STRING_INFO                   "Info"

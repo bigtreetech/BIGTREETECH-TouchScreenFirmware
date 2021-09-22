@@ -52,8 +52,7 @@ bool hostDialog = false;
 struct HOST_ACTION
 {
   char prompt_begin[30];
-  char prompt_button1[20];
-  char prompt_button2[20];
+  char prompt_button[2][20];
   bool prompt_show;         // Show popup reminder or not
   uint8_t button;           // Number of buttons
 } hostAction;
@@ -279,9 +278,6 @@ bool processKnownEcho(void)
 
 void hostActionCommands(void)
 {
-  char * find = strchr(dmaL2Cache + ack_index, '\n');
-  *find = '\0';
-
   if (ack_seen(":notification "))
   {
     uint16_t index = ack_index;  // save the current index for further usage
@@ -354,7 +350,6 @@ void hostActionCommands(void)
       setPrintResume(true);
       hostAction.prompt_show = false;
       Serial_Puts(SERIAL_PORT, "M876 S0\n");  // auto-respond to a prompt request that is not shown on the TFT
-    
     }
     else if (ack_seen("Reheating"))
     {
@@ -364,38 +359,29 @@ void hostActionCommands(void)
   }
   else if (ack_seen(":prompt_button "))
   {
-    hostAction.button++;
-    if (hostAction.button == 1)
-    {
-      strcpy(hostAction.prompt_button1, dmaL2Cache + ack_index);
-    }
-    else
-    {
-      strcpy(hostAction.prompt_button2, dmaL2Cache + ack_index);
-    }
+    strcpy(hostAction.prompt_button[hostAction.button++], dmaL2Cache + ack_index);
   }
   else if (ack_seen(":prompt_show") && hostAction.prompt_show)
   {
+    BUZZER_PLAY(SOUND_NOTIFY);
+
     switch (hostAction.button)
     {
       case 0:
-        BUZZER_PLAY(SOUND_NOTIFY);
         setDialogText((uint8_t *)"Message", (uint8_t *)hostAction.prompt_begin, LABEL_CONFIRM,
                       LABEL_BACKGROUND);
         showDialog(DIALOG_TYPE_ALERT, setRunoutAlarmFalse, NULL, NULL);
         break;
 
       case 1:
-        BUZZER_PLAY(SOUND_NOTIFY);
-        setDialogText((uint8_t *)"Action command", (uint8_t *)hostAction.prompt_begin, (uint8_t *)hostAction.prompt_button1,
+        setDialogText((uint8_t *)"Action command", (uint8_t *)hostAction.prompt_begin, (uint8_t *)hostAction.prompt_button[0],
                       LABEL_BACKGROUND);
         showDialog(DIALOG_TYPE_ALERT, breakAndContinue, NULL, NULL);
         break;
 
       case 2:
-        BUZZER_PLAY(SOUND_NOTIFY);
-        setDialogText((uint8_t *)"Action command", (uint8_t *)hostAction.prompt_begin, (uint8_t *)hostAction.prompt_button1,
-                      (uint8_t *)hostAction.prompt_button2);
+        setDialogText((uint8_t *)"Action command", (uint8_t *)hostAction.prompt_begin, (uint8_t *)hostAction.prompt_button[0],
+                      (uint8_t *)hostAction.prompt_button[1]);
         showDialog(DIALOG_TYPE_ALERT, resumeAndPurge, resumeAndContinue, NULL);
         break;
     }
@@ -406,13 +392,13 @@ void parseACK(void)
 {
   while (syncL2CacheFromL1(SERIAL_PORT))  // if some data are retrieved from L1 to L2 cache
   {
-    bool avoid_terminal = false;
-
     #if defined(SERIAL_DEBUG_PORT) && defined(DEBUG_SERIAL_COMM)
       // dump raw serial data received to debug port
       Serial_Puts(SERIAL_DEBUG_PORT, "<<");
       Serial_Puts(SERIAL_DEBUG_PORT, dmaL2Cache);
     #endif
+
+    bool avoid_terminal = false;
 
     if (infoHost.connected == false)  // Not connected to printer
     {
@@ -436,22 +422,19 @@ void parseACK(void)
 
       if (!ack_seen("@"))  // It's RepRapFirmware
       {
-        infoMachineSettings.firmwareType = FW_REPRAPFW;
-        infoMachineSettings.softwareEndstops = ENABLED;
-        infoHost.wait = false;
         storeCmd("M92\n");
-        storeCmd("M115\n");
+        storeCmd("M115\n");  // as last command to identify the FW type!
         coordinateQuerySetWait(true);
       }
-
-      if (infoMachineSettings.firmwareType == FW_NOT_DETECTED)  // if never connected to the printer since boot
+	  else if (infoMachineSettings.firmwareType == FW_NOT_DETECTED)  // if never connected to the printer since boot
       {
         storeCmd("M503\n");  // Query detailed printer capabilities
         storeCmd("M92\n");   // Steps/mm of extruder is an important parameter for Smart filament runout
                              // Avoid can't getting this parameter due to disabled M503 in Marlin
-        storeCmd("M115\n");
         storeCmd("M211\n");  // retrieve the software endstops state
+        storeCmd("M115\n");  // as last command to identify the FW type!
       }
+
       infoHost.connected = true;
       requestCommandInfo.inJson = false;
     }
@@ -540,7 +523,7 @@ void parseACK(void)
       {
         rrfParseACK(dmaL2Cache);
       }
-      infoHost.wait = false;  
+      infoHost.wait = false;
     }
     else if (ack_cmp("ok\n"))
     {
@@ -1096,18 +1079,21 @@ void parseACK(void)
 
         if (ack_seen("Marlin"))
         {
-          infoMachineSettings.firmwareType = FW_MARLIN;
+          setupMachine(FW_MARLIN);
+        }
+        else if (ack_seen("RepRapFirmware"))
+        {
+          setupMachine(FW_REPRAPFW);
         }
         else if (ack_seen("Smoothieware"))
         {
-          infoMachineSettings.firmwareType = FW_SMOOTHIEWARE;
-          setupMachine();
+          setupMachine(FW_SMOOTHIEWARE);
         }
         else
         {
-          infoMachineSettings.firmwareType = FW_UNKNOWN;
-          setupMachine();
+          setupMachine(FW_UNKNOWN);
         }
+
         if (ack_seen("FIRMWARE_URL:"))  // For Smoothieware
           string_end = ack_index - sizeof("FIRMWARE_URL:");
         else if (ack_seen("SOURCE_CODE_URL:"))  // For Marlin
@@ -1127,6 +1113,7 @@ void parseACK(void)
             }
             string_end = ack_index - sizeof("EXTRUDER_COUNT:");
           }
+
           infoSetMachineType(string, string_end - string_start);  // Set firmware name
         }
       }
@@ -1201,7 +1188,6 @@ void parseACK(void)
       else if (ack_seen("Cap:CHAMBER_TEMPERATURE:"))
       {
         infoSettings.chamber_en = ack_value();
-        setupMachine();
       }
 
       //----------------------------------------
@@ -1249,6 +1235,8 @@ void parseACK(void)
     if (ack_port_index != PORT_1)  // if the ACK message is related to a gcode originated by a supplementary serial port,
     {                              // forward the message to the supplementary serial port
       Serial_Puts(serialPort[ack_port_index].port, dmaL2Cache);
+      ack_port_index = PORT_1;  // reset ACK port index to avoid wrong relaying (in case no more commands will
+                                // be sent by interfaceCmd) of any successive spontaneous ACK message
     }
     #ifdef SERIAL_PORT_2
       else if (!ack_seen("ok") || ack_seen("T:") || ack_seen("T0:"))  // if a spontaneous ACK message

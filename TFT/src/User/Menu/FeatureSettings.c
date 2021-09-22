@@ -56,7 +56,7 @@ void updateFeatureSettings(uint8_t item_index)
   {
     case SKEY_EMULATED_M600:
     case SKEY_EMULATED_M109_M190:
-      TOGGLE_BIT(infoSettings.general_settings, (item_index - SKEY_EMULATED_M600));
+      TOGGLE_BIT(infoSettings.general_settings, ((item_index - SKEY_EMULATED_M600) + EMULATED_M600));
       break;
 
     case SKEY_SERIAL_ALWAYS_ON:
@@ -128,7 +128,7 @@ void loadFeatureSettings(LISTITEM * item, uint16_t item_index, uint8_t itemPos)
     {
       case SKEY_EMULATED_M600:
       case SKEY_EMULATED_M109_M190:
-        item->icon = iconToggle[GET_BIT(infoSettings.general_settings, (item_index - SKEY_EMULATED_M600))];
+        item->icon = iconToggle[GET_BIT(infoSettings.general_settings, ((item_index - SKEY_EMULATED_M600) + EMULATED_M600))];
         break;
 
       case SKEY_SERIAL_ALWAYS_ON:
@@ -195,7 +195,7 @@ void loadFeatureSettings(LISTITEM * item, uint16_t item_index, uint8_t itemPos)
 
 void resetSettings(void)
 {
-  infoSettingsReset();
+  initSettings();
   storePara();
   popupReminder(DIALOG_TYPE_SUCCESS, LABEL_INFO, LABEL_SETTINGS_RESET_DONE);
 }

@@ -841,7 +841,6 @@ void menuMeshEditor(void)
   {
     curStatus = meshGetStatus();                           // always load current status
     curIndex = meshGetIndex();                             // always load current index
-
     key_num = menuKeyGetValue();
 
     switch (key_num)

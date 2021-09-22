@@ -143,6 +143,7 @@
     #define STRING_BUSY                   "Bitte warten ..."
     #define STRING_LOADING                "Lade ..."
     #define STRING_UNCONNECTED            "Keine Verbindung zum Drucker!"
+    #define STRING_LISTENING              "TFT in Listening Mode!"
 
     // Process Info
     #define STRING_INFO                   "Info" //Info Sign

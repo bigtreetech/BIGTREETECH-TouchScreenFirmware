@@ -105,15 +105,17 @@ static void setLayerHeightText(char * layer_height_txt)
 
 static void setLayerNumberTxt(char * layer_number_txt)
 {
-  if (getLayerNumber() > 0)
+  uint16_t layerNumber = getPrintLayerNumber();
+  uint16_t layerCount = getPrintLayerCount();
+  if (layerNumber > 0)
   {
-    if (getLayerCount() > 0)
-    {
-      sprintf(layer_number_txt, "%u/%u", getLayerNumber(), getLayerCount());
+    if (layerCount > 0 && layerCount < 1000)
+    { // there's no space to display layer number & count if the layer count is above 999
+      sprintf(layer_number_txt, " %u/%u ", layerNumber, layerCount);
     }
     else
     {
-      sprintf(layer_number_txt, "%u", getLayerNumber());
+      sprintf(layer_number_txt, "%s%u%s", "  ", layerNumber, "  ");
     }
   }
   else
@@ -187,12 +189,10 @@ void menuBeforePrinting(void)
   // initialize things before the print starts
   progDisplayType = infoSettings.prog_disp_type;
   layerDisplayType = infoSettings.layer_disp_type * 2;
-  setLayerNumber(0);
   coordinateSetAxisActual(Z_AXIS, 0);
   coordinateSetAxisTarget(Z_AXIS, 0);
   setM73_presence(false);
-  setTotalTime(0);
-  
+
   infoMenu.menu[infoMenu.cur] = menuPrinting;
 }
 
@@ -698,7 +698,7 @@ void menuPrinting(void)
 
     if (layerDisplayType == SHOW_LAYER_BOTH || layerDisplayType == SHOW_LAYER_NUMBER)
     {
-      curLayerNumber = getLayerNumber();
+      curLayerNumber = getPrintLayerNumber();
       if (curLayerNumber != prevLayerNumber)
       {
         prevLayerNumber = curLayerNumber;

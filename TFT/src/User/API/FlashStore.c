@@ -5,7 +5,7 @@
 #define TSC_SIGN  0x20200512  // DO NOT MODIFY
 #define PARA_SIGN 0x20210829  // (YYYYMMDD) If a new setting parameter is added,
                               // modify here and initialize the initial value
-                              // in the "infoSettingsReset()" function
+                              // in the "initSettings()" function
 enum
 {
   PARA_TSC_EXIST = (1 << 0),
@@ -63,7 +63,7 @@ void readStoredPara(void)
   if (sign != PARA_SIGN)  // If the settings parameter is illegal, reset settings parameter
   {
     paraStatus |= PARA_NOT_STORED;
-    infoSettingsReset();
+    initSettings();
   }
   else
   {

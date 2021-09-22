@@ -143,6 +143,7 @@
     #define STRING_BUSY                   "系統繁忙請稍等"
     #define STRING_LOADING                "讀取中"
     #define STRING_UNCONNECTED            "尚未連線到主機板"
+    #define STRING_LISTENING              "TFT in Listening Mode!"
 
     // Process Info
     #define STRING_INFO                   "提示" //Info Sign

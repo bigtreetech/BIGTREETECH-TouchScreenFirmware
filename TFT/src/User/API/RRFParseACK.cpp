@@ -200,7 +200,7 @@ void ParseACKJsonParser::value(const char *value)
       }
       else if ((string_start = strstr(value, (char *)"RepRapFirmware")) != NULL)    // parse M115
       {
-        setupMachine();
+        setupMachine(FW_REPRAPFW);
         string_end = strstr(string_start, "ELECTRONICS");
         infoSetFirmwareName((uint8_t *)string_start, string_end-string_start);
       }

@@ -143,6 +143,7 @@
     #define STRING_BUSY                   "系统繁忙,请稍候..."
     #define STRING_LOADING                "加载中..."
     #define STRING_UNCONNECTED            "未连接到打印机!"
+    #define STRING_LISTENING              "TFT in Listening Mode!"
 
     // Process Info
     #define STRING_INFO                   "提示"
