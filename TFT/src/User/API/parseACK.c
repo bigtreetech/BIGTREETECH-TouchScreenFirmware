@@ -52,8 +52,7 @@ bool hostDialog = false;
 struct HOST_ACTION
 {
   char prompt_begin[30];
-  char prompt_button1[20];
-  char prompt_button2[20];
+  char prompt_button[2][20];
   bool prompt_show;         // Show popup reminder or not
   uint8_t button;           // Number of buttons
 } hostAction;
@@ -279,9 +278,6 @@ bool processKnownEcho(void)
 
 void hostActionCommands(void)
 {
-  char * find = strchr(dmaL2Cache + ack_index, '\n');
-  *find = '\0';
-
   if (ack_seen(":notification "))
   {
     uint16_t index = ack_index;  // save the current index for further usage
@@ -363,38 +359,29 @@ void hostActionCommands(void)
   }
   else if (ack_seen(":prompt_button "))
   {
-    hostAction.button++;
-    if (hostAction.button == 1)
-    {
-      strcpy(hostAction.prompt_button1, dmaL2Cache + ack_index);
-    }
-    else
-    {
-      strcpy(hostAction.prompt_button2, dmaL2Cache + ack_index);
-    }
+    strcpy(hostAction.prompt_button[hostAction.button++], dmaL2Cache + ack_index);
   }
   else if (ack_seen(":prompt_show") && hostAction.prompt_show)
   {
+    BUZZER_PLAY(SOUND_NOTIFY);
+
     switch (hostAction.button)
     {
       case 0:
-        BUZZER_PLAY(SOUND_NOTIFY);
         setDialogText((uint8_t *)"Message", (uint8_t *)hostAction.prompt_begin, LABEL_CONFIRM,
                       LABEL_BACKGROUND);
         showDialog(DIALOG_TYPE_ALERT, setRunoutAlarmFalse, NULL, NULL);
         break;
 
       case 1:
-        BUZZER_PLAY(SOUND_NOTIFY);
-        setDialogText((uint8_t *)"Action command", (uint8_t *)hostAction.prompt_begin, (uint8_t *)hostAction.prompt_button1,
+        setDialogText((uint8_t *)"Action command", (uint8_t *)hostAction.prompt_begin, (uint8_t *)hostAction.prompt_button[0],
                       LABEL_BACKGROUND);
         showDialog(DIALOG_TYPE_ALERT, breakAndContinue, NULL, NULL);
         break;
 
       case 2:
-        BUZZER_PLAY(SOUND_NOTIFY);
-        setDialogText((uint8_t *)"Action command", (uint8_t *)hostAction.prompt_begin, (uint8_t *)hostAction.prompt_button1,
-                      (uint8_t *)hostAction.prompt_button2);
+        setDialogText((uint8_t *)"Action command", (uint8_t *)hostAction.prompt_begin, (uint8_t *)hostAction.prompt_button[0],
+                      (uint8_t *)hostAction.prompt_button[1]);
         showDialog(DIALOG_TYPE_ALERT, resumeAndPurge, resumeAndContinue, NULL);
         break;
     }
@@ -536,7 +523,7 @@ void parseACK(void)
       {
         rrfParseACK(dmaL2Cache);
       }
-      infoHost.wait = false;  
+      infoHost.wait = false;
     }
     else if (ack_cmp("ok\n"))
     {

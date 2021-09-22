@@ -105,15 +105,17 @@ static void setLayerHeightText(char * layer_height_txt)
 
 static void setLayerNumberTxt(char * layer_number_txt)
 {
-  if (getPrintLayerNumber() > 0)
+  uint16_t layerNumber = getPrintLayerNumber();
+  uint16_t layerCount = getPrintLayerCount();
+  if (layerNumber > 0)
   {
-    if (getPrintLayerCount() > 0)
-    {
-      sprintf(layer_number_txt, "%u/%u", getPrintLayerNumber(), getPrintLayerCount());
+    if (layerCount > 0 && layerCount < 1000)
+    { // there's no space to display layer number & count if the layer count is above 999
+      sprintf(layer_number_txt, " %u/%u ", layerNumber, layerCount);
     }
     else
     {
-      sprintf(layer_number_txt, "%u", getPrintLayerNumber());
+      sprintf(layer_number_txt, "%s%u%s", "  ", layerNumber, "  ");
     }
   }
   else
