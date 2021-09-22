@@ -28,6 +28,25 @@ typedef enum
 
 typedef struct
 {
+  FIL        file;
+  uint32_t   size;                // Gcode file total size
+  uint32_t   cur;                 // Gcode file printed size
+  uint32_t   expectedTime;        // expected print duration in sec
+  uint32_t   time;                // current elapsed time in sec
+  uint32_t   remainingTime;       // current remaining time in sec (if set with M73 or M117)
+  uint16_t   layerNumber;
+  uint16_t   layerCount;
+  uint8_t    prevProgress;
+  uint8_t    progress;
+  bool       progressFromSlicer;  // 1: progress controlled by Slicer (if set with M73)
+  bool       runout;              // 1: runout in printing, 0: idle
+  bool       printing;            // 1: means printing, 0: means idle
+  bool       pause;               // 1: means paused
+  PAUSE_TYPE pauseType;           // pause type trigged by different sources and gcodes like M0 & M600
+} PRINTING;
+
+typedef struct
+{
   // data
   char name[SUMMARY_NAME_LEN + 1];
   uint32_t time;
@@ -36,6 +55,7 @@ typedef struct
   float cost;
 } PRINT_SUMMARY;
 
+extern PRINTING infoPrinting;
 extern PRINT_SUMMARY infoPrintSummary;
 
 bool isHostPrinting(void);  // condition callback for loopProcessToCondition()
@@ -48,34 +68,16 @@ void breakAndContinue(void);
 void resumeAndPurge(void);
 void resumeAndContinue(void);
 
-void setPrintExpectedTime(uint32_t expectedTime);
-uint32_t getPrintExpectedTime(void);
-
 void setPrintTime(uint32_t elapsedTime);
 uint32_t getPrintTime(void);
 void getPrintTimeDetail(uint8_t * hour, uint8_t * min, uint8_t * sec);
 
 void setPrintRemainingTime(int32_t remainingTime);  // used for M73 Rxx and M117 Time Left xx
 void parsePrintRemainingTime(char * buffer);        // used for M117 Time Left xx
-uint32_t getPrintRemainingTime();
 void getPrintRemainingTimeDetail(uint8_t * hour, uint8_t * min, uint8_t * sec);
 
-void setPrintLayerNumber(uint16_t layerNumber);
-uint16_t getPrintLayerNumber();
-
-void setPrintLayerCount(uint16_t layerCount);
-uint16_t getPrintLayerCount();
-
-uint32_t getPrintSize(void);
-uint32_t getPrintCur(void);
-
-void setPrintProgress(float cur, float size);
 void setPrintProgressPercentage(uint8_t percentage);  // used by M73 Pxx
 bool updatePrintProgress(void);
-uint8_t getPrintProgress(void);
-
-void setPrintRunout(bool runout);
-bool getPrintRunout(void);
 
 //
 // commented because NOT externally invoked

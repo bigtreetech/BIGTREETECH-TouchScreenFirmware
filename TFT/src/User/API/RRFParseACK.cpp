@@ -220,7 +220,8 @@ void ParseACKJsonParser::value(const char *value)
       else if ((string_start = strstr(value, (char *)"printing byte")) != NULL)       // parse M27  {"seq":21,"resp":"SD printing byte 1226/5040433\n"}
       {
         string_end = strstr(string_start, (char *)"/");
-        setPrintProgress(atoi(string_start + 14), atoi(string_end + 1));
+        infoPrinting.cur = atoi(string_start + 14);
+        infoPrinting.size = atoi(string_end + 1);
       }
       else if (strstr(value, (char *)"Auto tuning heater") && strstr(value, (char *)"completed"))
       {

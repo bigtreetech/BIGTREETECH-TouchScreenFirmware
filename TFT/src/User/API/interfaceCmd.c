@@ -478,7 +478,7 @@ void sendQueueCmd(void)
                   Serial_Puts(SERIAL_PORT_2, ".\n");
                 }
                 char buf[55];
-                sprintf(buf, "%s printing byte %d/%d\n", (infoFile.source == TFT_SD) ? "TFT SD" : "TFT USB", getPrintCur(), getPrintSize());
+                sprintf(buf, "%s printing byte %d/%d\n", (infoFile.source == TFT_SD) ? "TFT SD" : "TFT USB", infoPrinting.cur, infoPrinting.size);
                 Serial_Puts(SERIAL_PORT_2, buf);
                 Serial_Puts(SERIAL_PORT_2, "ok\n");
                 sendCmd(true, avoid_terminal);

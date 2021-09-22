@@ -105,17 +105,15 @@ static void setLayerHeightText(char * layer_height_txt)
 
 static void setLayerNumberTxt(char * layer_number_txt)
 {
-  uint16_t layerNumber = getPrintLayerNumber();
-  uint16_t layerCount = getPrintLayerCount();
-  if (layerNumber > 0)
+  if (infoPrinting.layerNumber > 0)
   {
-    if (layerCount > 0 && layerCount < 1000)
+    if (infoPrinting.layerCount > 0 && infoPrinting.layerCount < 1000)
     { // there's no space to display layer number & count if the layer count is above 999
-      sprintf(layer_number_txt, " %u/%u ", layerNumber, layerCount);
+      sprintf(layer_number_txt, " %u/%u ", infoPrinting.layerNumber, infoPrinting.layerCount);
     }
     else
     {
-      sprintf(layer_number_txt, "%s%u%s", "  ", layerNumber, "  ");
+      sprintf(layer_number_txt, "%s%u%s", "  ", infoPrinting.layerNumber, "  ");
     }
   }
   else
@@ -252,9 +250,9 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
 
       case ICON_POS_TIM:
       {
-        if ((getPrintRemainingTime() == 0) || (progDisplayType != ELAPSED_REMAINING))
+        if ((infoPrinting.remainingTime == 0) || (progDisplayType != ELAPSED_REMAINING))
         {
-          uint8_t printProgress = getPrintProgress();
+          uint8_t printProgress = infoPrinting.progress;
           snprintf(tempstr, 9, "%d%%      ", printProgress);
         }
         else
@@ -320,7 +318,7 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
         {
           uint8_t hour, min, sec;
 
-          if ((getPrintRemainingTime() == 0) || (progDisplayType == PERCENTAGE_ELAPSED))
+          if ((infoPrinting.remainingTime == 0) || (progDisplayType == PERCENTAGE_ELAPSED))
             getPrintTimeDetail(&hour, &min, &sec);
           else
             getPrintRemainingTimeDetail(&hour, &min, &sec);
@@ -446,7 +444,7 @@ static inline void reDrawProgressBar(uint8_t prevProgress, uint8_t nextProgress,
 
 static inline void reDrawProgress(uint8_t prevProgress)
 {
-  uint8_t nextProgress = getPrintProgress();
+  uint8_t nextProgress = infoPrinting.progress;
 
   if (nextProgress != prevProgress)
   { // we need speed, do not draw anything if progress isn't changed
@@ -636,12 +634,12 @@ void menuPrinting(void)
     }
 
     // check printing progress
-    if (getPrintSize() != 0)
+    if (infoPrinting.size != 0)
     {
       // check print time change
-      if (time != getPrintTime())
+      if (time != infoPrinting.time)
       {
-        time = getPrintTime();
+        time = infoPrinting.time;
         RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
         if (progDisplayType == ELAPSED_REMAINING)
         {
@@ -658,17 +656,17 @@ void menuPrinting(void)
       {
         RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
         reDrawProgress(oldProgress);
-        oldProgress = getPrintProgress();
+        oldProgress = infoPrinting.progress;
       }
     }
     else
     {
-      if (getPrintProgress() != 100)
+      if (infoPrinting.progress != 100)
       {
         reDrawPrintingValue(ICON_POS_TIM, PRINT_BOTTOM_ROW);
         updatePrintProgress();
         reDrawProgress(oldProgress);
-        oldProgress = getPrintProgress();
+        oldProgress = infoPrinting.progress;
       }
     }
 
@@ -698,7 +696,7 @@ void menuPrinting(void)
 
     if (layerDisplayType == SHOW_LAYER_BOTH || layerDisplayType == SHOW_LAYER_NUMBER)
     {
-      curLayerNumber = getPrintLayerNumber();
+      curLayerNumber = infoPrinting.layerNumber;
       if (curLayerNumber != prevLayerNumber)
       {
         prevLayerNumber = curLayerNumber;
@@ -779,7 +777,7 @@ void menuPrinting(void)
         {
           if (getHostDialog())
             addToast(DIALOG_TYPE_ERROR, (char *)textSelect(LABEL_BUSY));
-          else if (getPrintRunout())
+          else if (infoPrinting.runout)
             addToast(DIALOG_TYPE_ERROR, (char *)textSelect(LABEL_FILAMENT_RUNOUT));
           else
             printPause(!isPaused(), PAUSE_NORMAL);

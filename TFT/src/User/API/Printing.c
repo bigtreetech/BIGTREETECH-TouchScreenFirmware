@@ -1,25 +1,6 @@
 #include "Printing.h"
 #include "includes.h"
 
-typedef struct
-{
-  FIL        file;
-  uint32_t   size;                // Gcode file total size
-  uint32_t   cur;                 // Gcode file printed size
-  uint32_t   expectedTime;        // expected print duration in sec
-  uint32_t   time;                // current elapsed time in sec
-  uint32_t   remainingTime;       // current remaining time in sec (if set with M73 or M117)
-  uint16_t   layerNumber;
-  uint16_t   layerCount;
-  uint8_t    prevProgress;
-  uint8_t    progress;
-  bool       progressFromSlicer;  // 1: progress controlled by Slicer (if set with M73)
-  bool       runout;              // 1: runout in printing, 0: idle
-  bool       printing;            // 1: means printing, 0: means idle
-  bool       pause;               // 1: means paused
-  PAUSE_TYPE pauseType;           // pause type trigged by different sources and gcodes like M0 & M600
-} PRINTING;
-
 PRINTING infoPrinting;
 PRINT_SUMMARY infoPrintSummary = {.name[0] = '\0', 0, 0, 0, 0};
 
@@ -68,16 +49,6 @@ void resumeAndContinue(void)
   Serial_Puts(SERIAL_PORT, "M876 S1\n");
 }
 
-void setPrintExpectedTime(uint32_t expectedTime)
-{
-  infoPrinting.expectedTime = expectedTime;
-}
-
-uint32_t getPrintExpectedTime(void)
-{
-  return infoPrinting.expectedTime;
-}
-
 void setPrintTime(uint32_t elapsedTime)
 {
   if (elapsedTime % 1000 == 0)
@@ -90,11 +61,6 @@ void setPrintTime(uint32_t elapsedTime)
         infoPrinting.remainingTime--;
     }
   }
-}
-
-uint32_t getPrintTime(void)
-{
-  return infoPrinting.time;
 }
 
 void getPrintTimeDetail(uint8_t * hour, uint8_t * min, uint8_t * sec)
@@ -125,52 +91,11 @@ void parsePrintRemainingTime(char * buffer)
   setPrintRemainingTime(((int32_t) (hour) * 3600) + ((int32_t) (min) * 60) + (int32_t) (sec));
 }
 
-uint32_t getPrintRemainingTime()
-{
-  return infoPrinting.remainingTime;
-}
-
 void getPrintRemainingTimeDetail(uint8_t * hour, uint8_t * min, uint8_t * sec)
 {
   *hour = infoPrinting.remainingTime / 3600;
   *min = infoPrinting.remainingTime % 3600 / 60;
   *sec = infoPrinting.remainingTime % 60;
-}
-
-void setPrintLayerNumber(uint16_t layerNumber)
-{
-  infoPrinting.layerNumber = layerNumber;
-}
-
-uint16_t getPrintLayerNumber()
-{
-  return infoPrinting.layerNumber;
-}
-
-void setPrintLayerCount(uint16_t layerCount)
-{
-  infoPrinting.layerCount = layerCount;
-}
-
-uint16_t getPrintLayerCount()
-{
-  return infoPrinting.layerCount;
-}
-
-uint32_t getPrintSize(void)
-{
-  return infoPrinting.size;
-}
-
-uint32_t getPrintCur(void)
-{
-  return infoPrinting.cur;
-}
-
-void setPrintProgress(float cur, float size)
-{
-  infoPrinting.cur = cur;
-  infoPrinting.size = size;
 }
 
 void setPrintProgressPercentage(uint8_t percentage)
@@ -200,21 +125,6 @@ bool updatePrintProgress(void)
   }
 
   return false;
-}
-
-uint8_t getPrintProgress(void)
-{
-  return infoPrinting.progress;
-}
-
-void setPrintRunout(bool runout)
-{
-  infoPrinting.runout = runout;
-}
-
-bool getPrintRunout(void)
-{
-  return infoPrinting.runout;
 }
 
 // Shut down menu, when the hotend temperature is higher than "AUTO_SHUT_DOWN_MAXTEMP"

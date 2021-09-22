@@ -680,7 +680,8 @@ void parseACK(void)
 
         // Parsing printing data
         // Example: SD printing byte 123/12345
-        setPrintProgress(ack_value(), ack_second_value());
+        infoPrinting.cur = ack_value();
+        infoPrinting.size = ack_second_value();
         //powerFailedCache(position);
       }
       else if (infoMachineSettings.onboardSD == ENABLED &&

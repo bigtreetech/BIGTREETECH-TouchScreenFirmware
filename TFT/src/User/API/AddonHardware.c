@@ -236,14 +236,14 @@ void FIL_BE_CheckRunout(void)
   if (!(GET_BIT(infoSettings.runout, 0)))  // Filament runout turn off
     return;
 
-  setPrintRunout(FIL_IsRunout());  // Need constant scanning to filter interference
+  infoPrinting.runout = FIL_IsRunout();  // Need constant scanning to filter interference
 }
 
 void FIL_FE_CheckRunout(void)
 {
   static uint32_t nextReminderTime = 0;
 
-  if (!getPrintRunout() && !getRunoutAlarm())
+  if (!infoPrinting.runout && !getRunoutAlarm())
     return;
 
   if (printPause(true, PAUSE_NORMAL) && !getRunoutAlarm())  // If not printing, printPause() function will always fail

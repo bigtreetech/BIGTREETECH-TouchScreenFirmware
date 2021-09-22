@@ -43,14 +43,14 @@ void parseComment()
           temp_char = strtok(NULL, TOKEN_DELIMITERS);
           temp_value = strtoul(temp_char, NULL, 0);
           if (temp_value != 0)
-            setPrintLayerCount(temp_value);
+            infoPrinting.layerCount = temp_value;
         }
         else if (temp_char[0] >= '0' && temp_char[0] <= '9')  // check if a number is found
         {
           temp_value = strtoul(temp_char, NULL, 0);
           // "temp_value == 0" for object by object printing, when print goes to the next object
           // if there is "layer 0" add an offset of 1 (avoiding using an offset variable)
-          setPrintLayerNumber(((temp_value == 0) || (getPrintLayerNumber() == temp_value)) ? temp_value + 1: temp_value);
+          infoPrinting.layerNumber = ((temp_value == 0) || (infoPrinting.layerNumber == temp_value)) ? temp_value + 1: temp_value;
         }
       }
       // continue here with "else if" for another token that starts with "l" or "L"
@@ -66,16 +66,16 @@ void parseComment()
       { 
         temp_char = strtok(NULL, TOKEN_DELIMITERS);
         lowerCase(temp_char);
-        if (strcmp(temp_char, "elapsed") == 0 && getPrintExpectedTime() > 0)  // check if next word is "elapsed"
+        if (strcmp(temp_char, "elapsed") == 0 && infoPrinting.expectedTime > 0)  // check if next word is "elapsed"
         {
           temp_char = strtok(NULL, TOKEN_DELIMITERS);
           temp_value = strtoul(temp_char, NULL, 0);  // get the elapsed time in seconds
-          setPrintRemainingTime(getPrintExpectedTime() - temp_value);
+          setPrintRemainingTime(infoPrinting.expectedTime - temp_value);
         }
         else if (temp_char[0] >= '0' && temp_char[0] <= '9')  // check if a number is found
         {
-          setPrintExpectedTime(strtoul(temp_char, NULL, 0));
-          setPrintRemainingTime(getPrintExpectedTime());
+          infoPrinting.expectedTime = strtoul(temp_char, NULL, 0);
+          setPrintRemainingTime(infoPrinting.expectedTime);
         }
       }
       // continue here with "else if" for another token that starts with "t" or "T"
