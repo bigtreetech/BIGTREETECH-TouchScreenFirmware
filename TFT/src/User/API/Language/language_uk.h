@@ -143,6 +143,7 @@
     #define STRING_BUSY                   "Опрацювання, зачекайте ..."
     #define STRING_LOADING                "Завантаження ..."
     #define STRING_UNCONNECTED            "Принтер не підключено!"
+    #define STRING_LISTENING              "TFT in Listening Mode!"
 
     // Process Info
     #define STRING_INFO                   "\u0884 Інформація" // Info Sign

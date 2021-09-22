@@ -143,6 +143,7 @@
     #define STRING_BUSY                   "Απασχολημένη επεξεργασία, παρακάλω περιμένετε ..."
     #define STRING_LOADING                "Φόρτωση..."
     #define STRING_UNCONNECTED            "Δεν υπάρχει συνδεδεμένος εκτυπωτής!"
+    #define STRING_LISTENING              "TFT in Listening Mode!"
 
     // Process Info
     #define STRING_INFO                   "\u0884 Πληροφορίες" //Info Sign

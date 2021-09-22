@@ -2,9 +2,9 @@
 #include "includes.h"
 
 SETTINGS infoSettings;
-MACHINESETTINGS infoMachineSettings;
+MACHINE_SETTINGS infoMachineSettings;
 
-const uint8_t default_general_settings = 0b00000011;  // emulated M600 / M109 / M190 enabled
+const uint8_t default_general_settings = 0b00000110;  // listening mode disabled, emulated M600 and emulated M109 / M190 enabled
 const uint16_t default_max_temp[]      = HEAT_MAX_TEMP;
 const uint16_t default_max_fanPWM[]    = FAN_MAX_PWM;
 const uint16_t default_size_min[]      = {X_MIN_POS, Y_MIN_POS, Z_MIN_POS};
@@ -20,8 +20,8 @@ const uint8_t default_custom_enabled[] = CUSTOM_GCODE_ENABLED;
 const uint8_t default_sounds           = 0b00001111;  // all sounds enabled
 const uint8_t default_inverted_axis    = 0b00000000;  // all inverted axis disabled
 
-// Reset settings data
-void infoSettingsReset(void)
+// Init settings data with default values
+void initSettings(void)
 {
 // General Settings
   infoSettings.serial_port[0]         = PRIMARY_BAUDRATE;  // primary serial port
@@ -171,7 +171,7 @@ void infoSettingsReset(void)
   resetConfig();
 }
 
-void initMachineSetting(void)
+void initMachineSettings(void)
 {
   // some settings are assumes as active unless reported disabled by marlin
   infoMachineSettings.firmwareType            = FW_NOT_DETECTED;  // set fimware type to not_detected to avoid repeated ABL gcode on mode change
@@ -192,16 +192,23 @@ void initMachineSetting(void)
   infoMachineSettings.babyStepping            = DISABLED;
   infoMachineSettings.buildPercent            = DISABLED;
   infoMachineSettings.softwareEndstops        = ENABLED;
+
+  // reset the state to restart the temperature polling process
+  // needed by parseAck() function to establish the connection
+  heatSetUpdateWaiting(false);
 }
 
-void setupMachine(void)
+void setupMachine(FW_TYPE fwType)
 {
-  // Avoid repeated calls caused by manually sending M115 in terminal menu
-  static bool firstCall = true;
-  if (!firstCall) return;
-  firstCall = false;
+  if (infoMachineSettings.firmwareType != FW_NOT_DETECTED)  // Avoid repeated calls caused by manually sending M115 in terminal menu
+    return;
 
-  #ifdef BED_LEVELING_TYPE
+  if (GET_BIT(infoSettings.general_settings, LISTENING_MODE) == 1)  // if TFT in listening mode, display a reminder message
+    reminderMessage(LABEL_LISTENING, STATUS_LISTENING);
+
+  infoMachineSettings.firmwareType = fwType;
+
+  #if BED_LEVELING_TYPE > 1  // if not disabled and not auto-detect
     #if BED_LEVELING_TYPE == 2
         infoMachineSettings.leveling = BL_ABL;
     #elif BED_LEVELING_TYPE == 3
@@ -214,32 +221,27 @@ void setupMachine(void)
   #endif
 
   if (infoMachineSettings.leveling != BL_DISABLED && infoMachineSettings.EEPROM == 1 && infoSettings.auto_load_leveling == 1)
-  {
     storeCmd("M420 S1\n");
-  }
 
-  if (infoMachineSettings.firmwareType != FW_MARLIN)  // Smoothieware does not report detailed M115 capabilities
-  {
-    infoMachineSettings.EEPROM                  = ENABLED;
-    infoMachineSettings.autoReportTemp          = DISABLED;
-    infoMachineSettings.autoReportPos           = DISABLED;
-    infoMachineSettings.leveling                = ENABLED;
-    infoMachineSettings.zProbe                  = ENABLED;
-    infoMachineSettings.levelingData            = ENABLED;
-    infoMachineSettings.emergencyParser         = ENABLED;
-    infoMachineSettings.autoReportSDStatus      = DISABLED;
-  }
   if (infoSettings.onboard_sd != AUTO)
     infoMachineSettings.onboardSD = infoSettings.onboard_sd;
 
   if (infoSettings.long_filename != AUTO)
     infoMachineSettings.longFilename = infoSettings.long_filename;
-    
-  if (infoMachineSettings.firmwareType == FW_REPRAPFW)
+
+  if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE)  // Smoothieware does not report detailed M115 capabilities
   {
-    mustStoreCmd("M552\n");   // query network state, populate IP if the screen boots up after RRF
+    infoMachineSettings.leveling        = BL_ABL;
+    infoMachineSettings.emergencyParser = ENABLED;
+  }
+  else if (infoMachineSettings.firmwareType == FW_REPRAPFW)
+  {
+    infoMachineSettings.softwareEndstops = ENABLED;
+
+    mustStoreCmd("M552\n");  // query network state, populate IP if the screen boots up after RRF
     return;
   }
+
   mustStoreCmd("M503 S0\n");
   mustStoreCmd("M82\n");  // Set extruder to absolute mode
   mustStoreCmd("G90\n");  // Set to Absolute Positioning
@@ -249,6 +251,7 @@ float flashUsedPercentage(void)
 {
   uint32_t total = W25Qxx_ReadCapacity();
   float percent = ((float)FLASH_USED * 100) / total;
+
   return percent;
 }
 

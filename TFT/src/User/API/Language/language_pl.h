@@ -143,6 +143,7 @@
     #define STRING_BUSY                   "Trwa przetwarzanie, proszę czekać..."
     #define STRING_LOADING                "Loading..."
     #define STRING_UNCONNECTED            "Drukarka nie podłączona!"
+    #define STRING_LISTENING              "TFT in Listening Mode!"
 
     // Process Info
     #define STRING_INFO                   "Info"

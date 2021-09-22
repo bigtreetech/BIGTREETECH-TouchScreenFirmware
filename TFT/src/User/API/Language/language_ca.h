@@ -143,6 +143,7 @@
     #define STRING_BUSY                   "Processament ocupat, si us plau esperi ..."
     #define STRING_LOADING                "Carregant ..."
     #define STRING_UNCONNECTED            "No hi ha comunicació amb impressora!"
+    #define STRING_LISTENING              "TFT in Listening Mode!"
 
     // Process Info
     #define STRING_INFO                   "Informació"

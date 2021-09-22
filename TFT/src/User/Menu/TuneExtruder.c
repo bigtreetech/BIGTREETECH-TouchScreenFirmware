@@ -96,9 +96,9 @@ void menuTuneExtruder(void)
 
   while (infoMenu.menu[infoMenu.cur] == menuTuneExtruder)
   {
-    key_num = menuKeyGetValue();
     actCurrent = heatGetCurrentTemp(tool_index);
     actTarget = heatGetTargetTemp(tool_index);
+    key_num = menuKeyGetValue();
 
     switch (key_num)
     {

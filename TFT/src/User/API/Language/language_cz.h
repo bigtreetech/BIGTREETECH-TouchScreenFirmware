@@ -143,6 +143,7 @@
     #define STRING_BUSY                   "Zpracovávám, čekejte prosím..."
     #define STRING_LOADING                "Nahrávám..."
     #define STRING_UNCONNECTED            "Tiskárna není připojena!"
+    #define STRING_LISTENING              "TFT in Listening Mode!"
 
     // Process Info
     #define STRING_INFO                   "Info"

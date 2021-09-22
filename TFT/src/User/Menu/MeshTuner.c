@@ -104,9 +104,7 @@ float menuMeshTuner(uint16_t col, uint16_t row, float value)
   while (true)
   {
     unit = moveLenSteps[curUnit_index];
-
     curValue = coordinateGetAxisActual(Z_AXIS);
-
     key_num = menuKeyGetValue();
 
     switch (key_num)

@@ -201,29 +201,41 @@ void updateCmd(const char * buf)
   cmd_len = strlen(cmd_ptr);  // new length of gcode
 }
 
-// Remove leading gcode cmd from infoCmd queue.
-void purgeCmd(bool purged, bool avoidTerminal)
+// Send gcode cmd to printer and remove leading gcode cmd from infoCmd queue.
+bool sendCmd(bool purge, bool avoidTerminal)
 {
   char * purgeStr = "[Purged] ";
 
-  if (!avoidTerminal)
-  {
-    if (purged)
-      terminalCache(purgeStr, strlen(purgeStr), cmd_port_index, TERMINAL_GCODE);
-    terminalCache(cmd_ptr, cmd_len, cmd_port_index, TERMINAL_GCODE);
-  }
+  if (GET_BIT(infoSettings.general_settings, LISTENING_MODE) == 1 &&  // if TFT is in listening mode and FW type was already detected,
+      infoMachineSettings.firmwareType != FW_NOT_DETECTED)            // purge the command
+    purge = true;
 
   #if defined(SERIAL_DEBUG_PORT) && defined(DEBUG_SERIAL_COMM)
     // dump serial data sent to debug port
     Serial_Puts(SERIAL_DEBUG_PORT, serialPort[cmd_port_index].id);  // serial port ID (e.g. "2" for SERIAL_PORT_2)
     Serial_Puts(SERIAL_DEBUG_PORT, ">>");
-    if (purged)
+    if (purge)
       Serial_Puts(SERIAL_DEBUG_PORT, purgeStr);
     Serial_Puts(SERIAL_DEBUG_PORT, cmd_ptr);
   #endif
 
+  if (!purge)  // if command is not purged, send it to printer
+  {
+    Serial_Puts(SERIAL_PORT, cmd_ptr);
+    setCurrentAckSrc(cmd_port_index);
+  }
+
+  if (!avoidTerminal)
+  {
+    if (purge)
+      terminalCache(purgeStr, strlen(purgeStr), cmd_port_index, TERMINAL_GCODE);
+    terminalCache(cmd_ptr, cmd_len, cmd_port_index, TERMINAL_GCODE);
+  }
+
   infoCmd.count--;
   infoCmd.index_r = (infoCmd.index_r + 1) % CMD_QUEUE_SIZE;
+
+  return !purge;  // return true if command was sent. Otherwise, return false
 }
 
 // Check if 'cmd' starts with 'key'.
@@ -272,7 +284,7 @@ void sendQueueCmd(void)
 
   if (!isPolling && fromTFT)
   { // ignore any query from TFT
-    purgeCmd(true, avoid_terminal);
+    sendCmd(true, avoid_terminal);
     return;
   }
 
@@ -296,7 +308,7 @@ void sendQueueCmd(void)
             // pause if printing from TFT and purge M0/M1 command.
             if (infoFile.source < BOARD_SD )
             {
-              purgeCmd(true, avoid_terminal);
+              sendCmd(true, avoid_terminal);
               printPause(true, PAUSE_M0);
               return;
             }
@@ -352,7 +364,7 @@ void sendQueueCmd(void)
                   }
                 }
                 Serial_Puts(SERIAL_PORT_2, "End file list\nok\n");
-                purgeCmd(true, avoid_terminal);
+                sendCmd(true, avoid_terminal);
                 return;
               }
             }
@@ -404,7 +416,7 @@ void sendQueueCmd(void)
                   Serial_Puts(SERIAL_PORT_2, "\n");
                 }
                 Serial_Puts(SERIAL_PORT_2, "ok\n");
-                purgeCmd(true, avoid_terminal);
+                sendCmd(true, avoid_terminal);
                 return;
               }
             }
@@ -417,8 +429,8 @@ void sendQueueCmd(void)
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
                 // case the function loopProcess() is invoked by the following function printPause()
-                purgeCmd(true, avoid_terminal);
                 Serial_Puts(SERIAL_PORT_2, "ok\n");
+                sendCmd(true, avoid_terminal);
 
                 if (!isPrinting())  // if not printing, start a new print
                 {
@@ -442,7 +454,7 @@ void sendQueueCmd(void)
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
                 // case the function loopProcess() is invoked by the following function printPause()
                 Serial_Puts(SERIAL_PORT_2, "ok\n");
-                purgeCmd(true, avoid_terminal);
+                sendCmd(true, avoid_terminal);
                 printPause(true, PAUSE_NORMAL);
                 return;
               }
@@ -452,7 +464,7 @@ void sendQueueCmd(void)
           case 27:  // M27
             if (rrfStatusIsMacroBusy())
             {
-              purgeCmd(true, avoid_terminal);
+              sendCmd(true, avoid_terminal);
               return;
             }
             if (!fromTFT)
@@ -469,7 +481,7 @@ void sendQueueCmd(void)
                 sprintf(buf, "%s printing byte %d/%d\n", (infoFile.source == TFT_SD) ? "TFT SD" : "TFT USB", getPrintCur(), getPrintSize());
                 Serial_Puts(SERIAL_PORT_2, buf);
                 Serial_Puts(SERIAL_PORT_2, "ok\n");
-                purgeCmd(true, avoid_terminal);
+                sendCmd(true, avoid_terminal);
                 return;
               }
             }
@@ -488,8 +500,7 @@ void sendQueueCmd(void)
             if (!fromTFT)
             {
               // force send M29 directly and purge to avoid any loopback
-              Serial_Puts(SERIAL_PORT, cmd_ptr);
-              purgeCmd(true, avoid_terminal);
+              sendCmd(false, avoid_terminal);
 
               mustStoreScript("M105\nM114\nM220\n");
               storeCmd("M221 D%d\n", heatGetCurrentTool());
@@ -531,16 +542,14 @@ void sendQueueCmd(void)
                   Serial_Puts(SERIAL_PORT_2, filepath);
                   Serial_Puts(SERIAL_PORT_2, ".\nok\n");
                 }
-                purgeCmd(true, avoid_terminal);
+                sendCmd(true, avoid_terminal);
                 return;
               }
             }
             break;
 
           case 98:  // RRF macro execution, do not wait for it to complete
-            Serial_Puts(SERIAL_PORT, cmd_ptr);
-            infoHost.wait = false;
-            purgeCmd(true, avoid_terminal);
+            sendCmd(false, avoid_terminal);
             return;
 
           case 115:  // M115 TFT
@@ -559,7 +568,7 @@ void sendQueueCmd(void)
               sprintf(buf, "Cap:FAN_CTRL_NUM:%d\n", infoSettings.ctrl_fan_en ? MAX_CRTL_FAN_COUNT : 0);
               Serial_Puts(SERIAL_PORT_2, buf);
               Serial_Puts(SERIAL_PORT_2, "ok\n");
-              purgeCmd(true, avoid_terminal);
+              sendCmd(true, avoid_terminal);
               return;
             }
             break;
@@ -572,7 +581,7 @@ void sendQueueCmd(void)
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
                 // case the function loopProcess() is invoked by the following function printPause()
                 Serial_Puts(SERIAL_PORT_2, "ok\n");
-                purgeCmd(true, avoid_terminal);
+                sendCmd(true, avoid_terminal);
                 printPause(true, PAUSE_NORMAL);
                 return;
               }
@@ -587,7 +596,7 @@ void sendQueueCmd(void)
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
                 // case the function loopProcess() is invoked by the following function printAbort()
                 Serial_Puts(SERIAL_PORT_2, "ok\n");
-                purgeCmd(true, avoid_terminal);
+                sendCmd(true, avoid_terminal);
                 printAbort();
                 return;
               }
@@ -609,12 +618,12 @@ void sendQueueCmd(void)
           if (cmd_seen('R'))
           {
             setPrintRemainingTime((cmd_value() * 60));
-            setM73_presence(0);  // disable parsing remaning time from gCode comments
+            setM73_presence(true);  // disable parsing remaning time from gCode comments
           }
 
           if (!infoMachineSettings.buildPercent)  // if M73 is not supported by Marlin, skip it
           {
-            purgeCmd(true, avoid_terminal);
+            sendCmd(true, avoid_terminal);
             return;
           }
           break;
@@ -653,7 +662,7 @@ void sendQueueCmd(void)
         case 105:  // M105
           if (rrfStatusIsMacroBusy())
           {
-            purgeCmd(true, avoid_terminal);
+            sendCmd(true, avoid_terminal);
             return;
           }
           if (fromTFT)
@@ -666,7 +675,7 @@ void sendQueueCmd(void)
         case 155:  // M155
           if (rrfStatusIsMacroBusy())
           {
-            purgeCmd(true, avoid_terminal);
+            sendCmd(true, avoid_terminal);
             return;
           }
           if (fromTFT)
@@ -942,7 +951,7 @@ void sendQueueCmd(void)
                 Buzzer_TurnOn(hz, ms);
                 if (!fromTFT && cmd_start_with(cmd_ptr, "M300 TFT"))
                 {
-                  purgeCmd(true, avoid_terminal);
+                  sendCmd(true, avoid_terminal);
                   return;
                 }
               }
@@ -969,9 +978,7 @@ void sendQueueCmd(void)
           // RRF does not send 'ok' while executing M98
           if (rrfStatusIsMacroBusy())
           {
-            Serial_Puts(SERIAL_PORT, cmd_ptr);
-            infoHost.wait = false;
-            purgeCmd(true, avoid_terminal);
+            sendCmd(false, avoid_terminal);
             return;
           }
           break;
@@ -1002,7 +1009,7 @@ void sendQueueCmd(void)
             // if emulated M600 is disabled then let the printer pause the print to avoid premature pause
             if (GET_BIT(infoSettings.general_settings, EMULATED_M600) == 1)
             {
-              purgeCmd(true, avoid_terminal);
+              sendCmd(true, avoid_terminal);
               printPause(true, PAUSE_NORMAL);
               return;
             }
@@ -1017,7 +1024,7 @@ void sendQueueCmd(void)
               // if emulated M600 is disabled then let the printer pause the print to avoid premature pause
               if (GET_BIT(infoSettings.general_settings, EMULATED_M600) == 1)
               {
-                purgeCmd(true, avoid_terminal);
+                sendCmd(true, avoid_terminal);
                 printPause(true, PAUSE_NORMAL);
                 return;
               }
@@ -1044,13 +1051,6 @@ void sendQueueCmd(void)
           if (cmd_seen('Z')) setParameter(P_DELTA_ENDSTOP, 2, cmd_float());
           break;
         }
-
-        #ifdef LOAD_UNLOAD_M701_M702
-          case 701:  // M701 Load filament
-          case 702:  // M702 Unload filament
-            infoHost.wait = true;
-            break;
-        #endif
 
         case 710:  // M710 Controller Fan
         {
@@ -1216,12 +1216,8 @@ void sendQueueCmd(void)
       cmd = strtol(&cmd_ptr[cmd_index + 1], NULL, 10);
       heatSetCurrentTool(cmd);
       break;
-
   }  // end parsing cmd
 
-  infoHost.wait = infoHost.connected;
-
-  setCurrentAckSrc(cmd_port_index);
-  Serial_Puts(SERIAL_PORT, cmd_ptr);
-  purgeCmd(false, avoid_terminal);
+  if (sendCmd(false, avoid_terminal) == true)  // if command was sent
+    infoHost.wait = infoHost.connected;
 }  // sendQueueCmd

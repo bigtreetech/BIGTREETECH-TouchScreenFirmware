@@ -143,6 +143,7 @@
     #define STRING_BUSY                   "Feldolgozás alatt, kérlek várj..."
     #define STRING_LOADING                "Betöltés..."
     #define STRING_UNCONNECTED            "Nincs nyomtató csatlakoztatva!"
+    #define STRING_LISTENING              "TFT in Listening Mode!"
 
     // Process Info
     #define STRING_INFO                   "Infó"
