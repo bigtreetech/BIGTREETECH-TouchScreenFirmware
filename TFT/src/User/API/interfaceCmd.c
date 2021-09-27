@@ -654,7 +654,7 @@ void sendQueueCmd(void)
           if (cmd_seen('Y')) setParameter(P_STEPS_PER_MM, AXIS_INDEX_Y, cmd_float());
           if (cmd_seen('Z')) setParameter(P_STEPS_PER_MM, AXIS_INDEX_Z, cmd_float());
 
-          uint8_t i = 0; (cmd_seen('T')) ? cmd_value() : 0;
+          uint8_t i = (cmd_seen('T')) ? cmd_value() : 0;
           if (cmd_seen('E')) setParameter(P_STEPS_PER_MM, AXIS_INDEX_E0 + i, cmd_float());
           break;
         }
