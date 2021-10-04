@@ -206,8 +206,8 @@ void ack_values_sum(float * data)
 void ackPopupInfo(const char * info)
 {
   bool show_dialog = true;
-  if (infoMenu.menu[infoMenu.cur] == menuTerminal ||
-      (infoMenu.menu[infoMenu.cur] == menuStatus && info == magic_echo))
+  if (MENU_IS(menuTerminal) ||
+      (MENU_IS(menuStatus) && info == magic_echo))
     show_dialog = false;
 
   // play notification sound if buzzer for ACK is enabled
@@ -220,7 +220,7 @@ void ackPopupInfo(const char * info)
   if (info == magic_echo || info == magic_message)
   {
     // ignore all messages if parameter settings is open
-    if (infoMenu.menu[infoMenu.cur] == menuParameterSettings)
+    if (MENU_IS(menuParameterSettings))
       return;
 
     // show notification based on notificaiton settings
@@ -292,7 +292,7 @@ void hostActionCommands(void)
 
       if (!ack_seen("Ready."))  // avoid to display unneeded/frequent useless notifications (e.g. "My printer Ready.")
       {
-        if (infoMenu.menu[infoMenu.cur] != menuStatus)  // don't show it when in menuStatus
+        if (MENU_IS_NOT(menuStatus))  // don't show it when in menuStatus
           addToast(DIALOG_TYPE_INFO, dmaL2Cache + index);
 
         if (infoSettings.notification_m117 == ENABLED)

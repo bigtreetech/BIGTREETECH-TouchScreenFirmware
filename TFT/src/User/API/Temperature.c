@@ -286,7 +286,7 @@ void loopCheckHeater(void)
     if (heatHasWaiting())
       continue;
 
-    if (infoMenu.menu[infoMenu.cur] == menuHeat)
+    if (MENU_IS(menuHeat))
       break;
     heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
   }

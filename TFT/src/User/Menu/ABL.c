@@ -129,7 +129,7 @@ void menuUBLSaveLoad(void)
 
   menuDrawPage(&UBLSaveLoadItems);
 
-  while (infoMenu.menu[infoMenu.cur] == menuUBLSaveLoad)
+  while (MENU_IS(menuUBLSaveLoad))
   {
     key_num = menuKeyGetValue();
     switch (key_num)
@@ -155,7 +155,7 @@ void menuUBLSaveLoad(void)
         else
         {
           ublSlotSaved = false;
-          infoMenu.cur--;
+          CLOSE_MENU();
         }
         break;
 
@@ -170,11 +170,11 @@ void menuUBLSaveLoad(void)
 void menuUBLSave(void)
 {
   ublIsSaving = true;
-  infoMenu.menu[++infoMenu.cur] = menuUBLSaveLoad;
+  OPEN_MENU(menuUBLSaveLoad);
 }
 
 void menuUBLLoad(void)
 {
   ublIsSaving = false;
-  infoMenu.menu[++infoMenu.cur] = menuUBLSaveLoad;
+  OPEN_MENU(menuUBLSaveLoad);
 }

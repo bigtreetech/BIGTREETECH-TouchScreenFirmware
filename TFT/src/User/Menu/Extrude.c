@@ -61,7 +61,7 @@ void menuExtrude(void)
 
   heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
 
-  while (infoMenu.menu[infoMenu.cur] == menuExtrude)
+  while (MENU_IS(menuExtrude))
   {
     key_num = menuKeyGetValue();
 
@@ -77,7 +77,6 @@ void menuExtrude(void)
         float val = editFloatValue(extlenSteps[COUNT(extlenSteps) - 1] * -1, extlenSteps[COUNT(extlenSteps) - 1], 0, 0);
         extrNewCoord += val;
 
-        menuDrawPage(&extrudeItems);
         extruderReDraw(curExtruder_index, extrKnownCoord, false);
         break;
       }
@@ -91,12 +90,11 @@ void menuExtrude(void)
         if (infoSettings.ext_count > 1)
         {
           curExtruder_index = (curExtruder_index + 1) % infoSettings.ext_count;
-
           extruderReDraw(curExtruder_index, extrKnownCoord, false);
         }
         else
         {
-          infoMenu.menu[++infoMenu.cur] = menuHeat;
+          OPEN_MENU(menuHeat);
           eAxisBackup.backedUp = false;  // exiting from Extrude menu (user might never come back by "Back" long press in Heat menu)
         }
         break;
@@ -117,7 +115,7 @@ void menuExtrude(void)
 
       case KEY_ICON_7:
         cooldownTemperature();
-        infoMenu.cur--;
+        CLOSE_MENU();
         eAxisBackup.backedUp = false;  // exiting from Extrude menu, no need for it anymore
         break;
 

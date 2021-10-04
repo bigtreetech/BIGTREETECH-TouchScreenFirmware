@@ -19,12 +19,12 @@ void extrudeMinTemp_OK(void)
 static inline void turnHeaterOff(void)
 {
   heatSetTargetTemp(tool_index, 0);
-  infoMenu.cur--;
+  CLOSE_MENU();
 }
 
 static inline void returnToTuning(void)
 {
-  infoMenu.cur--;
+  CLOSE_MENU();
 }
 
 void showNewESteps(const float measured_length, const float old_esteps, float * new_esteps)
@@ -59,7 +59,7 @@ static inline void extrudeFilament(void)
   // extrude 100MM
   mustStoreScript("M83\nG1 F50 E%.2f\nM82\n", EXTRUDE_LEN);
 
-  infoMenu.menu[++infoMenu.cur] = menuNewExtruderESteps;
+  OPEN_MENU(menuNewExtruderESteps);
 }
 // end Esteps part
 
@@ -94,7 +94,7 @@ void menuTuneExtruder(void)
   menuDrawPage(&tuneExtruderItems);
   temperatureReDraw(tool_index, NULL, false);
 
-  while (infoMenu.menu[infoMenu.cur] == menuTuneExtruder)
+  while (MENU_IS(menuTuneExtruder))
   {
     actCurrent = heatGetCurrentTemp(tool_index);
     actTarget = heatGetTargetTemp(tool_index);
@@ -114,7 +114,6 @@ void menuTuneExtruder(void)
         if (val != actTarget)
           heatSetTargetTemp(tool_index, val);
 
-        menuDrawPage(&tuneExtruderItems);
         temperatureReDraw(tool_index, NULL, false);
         break;
       }
@@ -149,7 +148,7 @@ void menuTuneExtruder(void)
         }
         else
         {
-          infoMenu.cur--;
+          CLOSE_MENU();
         }
         break;
 
@@ -233,7 +232,7 @@ void menuNewExtruderESteps(void)
   menuDrawPage(&newExtruderESteps);
   showNewESteps(measured_length, old_esteps, &new_esteps);
 
-  while (infoMenu.menu[infoMenu.cur] == menuNewExtruderESteps)
+  while (MENU_IS(menuNewExtruderESteps))
   {
     key_num = menuKeyGetValue();
 
@@ -272,7 +271,7 @@ void menuNewExtruderESteps(void)
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       default:

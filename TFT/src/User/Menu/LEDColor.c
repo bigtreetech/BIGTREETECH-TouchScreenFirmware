@@ -388,7 +388,7 @@ void menuLEDColorCustom(void)
 
   ledDrawMenu();
 
-  while (infoMenu.menu[infoMenu.cur] == menuLEDColorCustom)
+  while (MENU_IS(menuLEDColorCustom))
   {
     key_num = menuKeyGetValue();
     switch (key_num)
@@ -418,7 +418,7 @@ void menuLEDColorCustom(void)
 
       // restore original LED color and exit
       case LED_KEY_CANCEL:
-        infoMenu.cur--;
+        CLOSE_MENU();
         // no break here
 
       // restore original LED color
@@ -529,7 +529,7 @@ void menuLEDColor(void)
 
   menuDrawPage(&LEDColorItems);
 
-  while (infoMenu.menu[infoMenu.cur] == menuLEDColor)
+  while (MENU_IS(menuLEDColor))
   {
     key_num = menuKeyGetValue();
     switch (key_num)
@@ -556,7 +556,7 @@ void menuLEDColor(void)
 
       // custom LED color
       case KEY_ICON_4:
-        infoMenu.menu[++infoMenu.cur] = menuLEDColorCustom;
+        OPEN_MENU(menuLEDColorCustom);
         break;
 
       // turn off
@@ -565,7 +565,7 @@ void menuLEDColor(void)
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       default:

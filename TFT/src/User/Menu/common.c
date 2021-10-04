@@ -275,6 +275,12 @@ int32_t editIntValue(int32_t minValue, int32_t maxValue, int32_t resetValue, int
   sprintf(tempstr, "Min:%i | Max:%i", minValue, maxValue);
   val = numPadInt((uint8_t *) tempstr, value, resetValue, false);
 
+  // redraw menu
+  if (getMenuType() == MENU_TYPE_ICON)
+    menuDrawPage(getCurMenuItems());
+  else if(getMenuType() == MENU_TYPE_LISTVIEW)
+    listViewRefreshMenu();
+
   return NOBEYOND(minValue, val, maxValue);
 }
 

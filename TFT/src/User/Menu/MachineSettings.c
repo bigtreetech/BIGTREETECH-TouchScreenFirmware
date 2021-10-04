@@ -22,7 +22,7 @@ void menuCustom(void)
 
   listViewCreate(title, customItems, customcodes.count, NULL, true, NULL, NULL);
 
-  while (infoMenu.menu[infoMenu.cur] == menuCustom)
+  while (MENU_IS(menuCustom))
   {
     curIndex = listViewGetSelectedIndex();
 
@@ -57,7 +57,7 @@ void menuEepromSettings(void)
 
   menuDrawPage(&eepromSettingsItems);
 
-  while (infoMenu.menu[infoMenu.cur] == menuEepromSettings)
+  while (MENU_IS(menuEepromSettings))
   {
     curIndex = menuKeyGetValue();
     switch (curIndex)
@@ -90,7 +90,7 @@ void menuEepromSettings(void)
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       default:
@@ -140,45 +140,45 @@ void menuMachineSettings(void)
 
   menuDrawPage(&machineSettingsItems);
 
-  while (infoMenu.menu[infoMenu.cur] == menuMachineSettings)
+  while (MENU_IS(menuMachineSettings))
   {
     curIndex = menuKeyGetValue();
     switch (curIndex)
     {
       case KEY_ICON_0:
-        infoMenu.menu[++infoMenu.cur] = menuParameterSettings;
+        OPEN_MENU(menuParameterSettings);
         break;
 
       case KEY_ICON_1:
-        infoMenu.menu[++infoMenu.cur] = menuTerminal;
+        OPEN_MENU(menuTerminal);
         break;
 
       case KEY_ICON_2:
         if (infoMachineSettings.firmwareType != FW_REPRAPFW)
-          infoMenu.menu[++infoMenu.cur] = menuCustom;
+          OPEN_MENU(menuCustom);
         break;
 
       case KEY_ICON_3:
-        infoMenu.menu[++infoMenu.cur] = menuLEDColor;
+        OPEN_MENU(menuLEDColor);
         break;
 
       case KEY_ICON_4:
-        infoMenu.menu[++infoMenu.cur] = menuTuning;
+        OPEN_MENU(menuTuning);
         break;
 
       #ifdef QUICK_EEPROM_BUTTON
         case KEY_ICON_5:
-          infoMenu.menu[++infoMenu.cur] = menuEepromSettings;
+          OPEN_MENU(menuEepromSettings);
           break;
       #endif
 
       case KEY_ICON_6:
         if (infoMachineSettings.caseLightsBrightness == ENABLED)
-          infoMenu.menu[++infoMenu.cur] = menuCaseLight;
+          OPEN_MENU(menuCaseLight);
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       default:

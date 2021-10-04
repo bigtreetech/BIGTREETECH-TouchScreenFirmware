@@ -40,21 +40,21 @@ void menuUnifiedMove(void)
 
   menuDrawPage(&UnifiedMoveItems);
 
-  while (infoMenu.menu[infoMenu.cur] == menuUnifiedMove)
+  while (MENU_IS(menuUnifiedMove))
   {
     key_num = menuKeyGetValue();
     switch (key_num)
     {
       case KEY_ICON_0:
-        infoMenu.menu[++infoMenu.cur] = menuHome;
+        OPEN_MENU(menuHome);
         break;
 
       case KEY_ICON_1:
-        infoMenu.menu[++infoMenu.cur] = menuMove;
+        OPEN_MENU(menuMove);
         break;
 
       case KEY_ICON_2:
-        infoMenu.menu[++infoMenu.cur] = menuExtrude;
+        OPEN_MENU(menuExtrude);
         break;
 
       case KEY_ICON_3:
@@ -62,12 +62,12 @@ void menuUnifiedMove(void)
         break;
 
       case KEY_ICON_4:
-        infoMenu.menu[++infoMenu.cur] = menuBabystep;
+        OPEN_MENU(menuBabystep);
         break;
 
       case KEY_ICON_5:
         #if DELTA_PROBE_TYPE == 0  // if not Delta printer
-          infoMenu.menu[++infoMenu.cur] = menuManualLeveling;
+          OPEN_MENU(menuManualLeveling);
         #else
           #if DELTA_PROBE_TYPE != 2  // if not removable probe
             deltaCalibration();
@@ -80,11 +80,11 @@ void menuUnifiedMove(void)
 
       case KEY_ICON_6:
         if (infoMachineSettings.leveling != BL_DISABLED)
-          infoMenu.menu[++infoMenu.cur] = menuBedLeveling;
+          OPEN_MENU(menuBedLeveling);
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       default:

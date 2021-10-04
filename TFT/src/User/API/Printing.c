@@ -364,7 +364,7 @@ static inline void printRemoteStart(void)
   initPrintSummary();  // init print summary
 
   infoMenu.cur = 1;  // Clear menu buffer when printing menu is active by remote
-  infoMenu.menu[infoMenu.cur] = menuPrinting;
+  REPLACE_MENU(menuPrinting);
 }
 
 void printStart(FIL * file, uint32_t size)
@@ -765,7 +765,7 @@ void loopPrintFromTFT(void)
 void loopPrintFromHost(void)
 {
   #ifdef HAS_EMULATOR
-    if (infoMenu.menu[infoMenu.cur] == menuMarlinMode) return;
+    if (MENU_IS(menuMarlinMode)) return;
   #endif
 
   if (infoHost.printing && !infoPrinting.printing)  // if a print starting form a remote host is intercepted
@@ -775,7 +775,7 @@ void loopPrintFromHost(void)
 
   if (infoFile.source < BOARD_SD) return;
   if (infoMachineSettings.autoReportSDStatus == ENABLED) return;
-  if (infoMenu.menu[infoMenu.cur] == menuTerminal) return;
+  if (MENU_IS(menuTerminal)) return;
   if (!infoSettings.m27_active && !infoPrinting.printing) return;
 
   static uint32_t nextCheckPrintTime = 0;

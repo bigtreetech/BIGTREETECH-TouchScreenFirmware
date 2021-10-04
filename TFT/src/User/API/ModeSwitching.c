@@ -22,9 +22,9 @@ void Mode_Switch(void)
       initMachineSettings();
 
       if (infoSettings.status_screen == 1)  // if Status Screen menu is selected
-        infoMenu.menu[infoMenu.cur] = menuStatus;  // status screen as default home screen on boot
+        REPLACE_MENU(menuStatus);  // status screen as default home screen on boot
       else
-        infoMenu.menu[infoMenu.cur] = menuMain;  // classic UI
+        REPLACE_MENU(menuMain);  // classic UI
 
       #ifdef SHOW_BTT_BOOTSCREEN
         if (modeFreshBoot)
@@ -51,7 +51,7 @@ void Mode_Switch(void)
         if (infoSettings.serial_always_on == ENABLED)
           updateNextHeatCheckTime();  // send "M105" after a delay, because of mega2560 will be hanged when received data at startup
 
-        infoMenu.menu[infoMenu.cur] = menuMarlinMode;
+        REPLACE_MENU(menuMarlinMode);
       #endif
       break;
   }
@@ -67,7 +67,7 @@ void Mode_CheckSwitching(void)
   if (isPrinting() || infoHost.printing || modeSwitching)
     return;
 
-  if (infoMenu.menu[infoMenu.cur] == menuMode)
+  if (MENU_IS(menuMode))
     return;
 //  #endif
 
@@ -81,6 +81,6 @@ void Mode_CheckSwitching(void)
     if (infoSettings.mode >= MODE_COUNT)  // if blocked mode, then exit
       return;
 
-    infoMenu.menu[++infoMenu.cur] = menuMode;
+    OPEN_MENU(menuMode);
   }
 }

@@ -55,7 +55,7 @@ void menuCaseLight(void)
   menuDrawPage(&caseLightItems);
   caseLightBrightnessReDraw();
 
-  while (infoMenu.menu[infoMenu.cur] == menuCaseLight)
+  while (MENU_IS(menuCaseLight))
   {
     key_num = menuKeyGetValue();
 
@@ -77,7 +77,7 @@ void menuCaseLight(void)
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       default:
