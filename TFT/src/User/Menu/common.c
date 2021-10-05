@@ -293,6 +293,12 @@ float editFloatValue(float minValue, float maxValue, float resetValue, float val
   sprintf(tempstr, "Min:%.2f | Max:%.2f", minValue, maxValue);
   val = numPadFloat((uint8_t *) tempstr, value, resetValue, true);
 
+  // redraw menu
+  if (getMenuType() == MENU_TYPE_ICON)
+    menuDrawPage(getCurMenuItems());
+  else if(getMenuType() == MENU_TYPE_LISTVIEW)
+    listViewRefreshMenu();
+
   return NOBEYOND(minValue, val, maxValue);
 }
 
