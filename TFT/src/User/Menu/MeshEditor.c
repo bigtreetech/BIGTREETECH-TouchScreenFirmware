@@ -813,7 +813,7 @@ void meshUpdateData(char *dataRow)
 
     popupReminder(DIALOG_TYPE_ERROR, LABEL_MESH_EDITOR, (uint8_t *) tempMsg);
 
-    CLOSE_MENU();                                        // exit from mesh editor menu. it avoids to loop in case of persistent error
+    CLOSE_MENU();                                          // exit from mesh editor menu. it avoids to loop in case of persistent error
 
     meshDeallocData();                                     // deallocate mesh data
   }
