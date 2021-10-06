@@ -20,7 +20,7 @@ void menuPrintRestore(void)
     popupDrawPage(DIALOG_TYPE_QUESTION, bottomDoubleBtn, textSelect(LABEL_POWER_FAILED), (uint8_t* )infoFile.title,
                   (uint8_t*)okTxt, (uint8_t*)cancelTxt);
 
-    while (infoMenu.menu[infoMenu.cur] == menuPrintRestore)
+    while (MENU_IS(menuPrintRestore))
     {
       key_num = KEY_GetValue(2, doubleBtnRect);
       switch (key_num)
@@ -35,7 +35,7 @@ void menuPrintRestore(void)
         case KEY_POPUP_CANCEL:
           powerFailedDelete();
           ExitDir();
-          infoMenu.cur--;
+          CLOSE_MENU();
           break;
       }
 
@@ -44,7 +44,7 @@ void menuPrintRestore(void)
         {
           resetInfoFile();
           powerFailedClear();
-          infoMenu.cur--;
+          CLOSE_MENU();
         }
       #endif
 
@@ -53,6 +53,6 @@ void menuPrintRestore(void)
   }
   else
   {
-    infoMenu.cur--;
+    CLOSE_MENU();
   }
 }

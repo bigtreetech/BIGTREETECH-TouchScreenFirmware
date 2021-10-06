@@ -484,7 +484,7 @@ static inline void menuKeyboardView(void)
 
   while (curView == 1)
   {
-    if (infoMenu.menu[infoMenu.cur] != menuTerminal)
+    if (MENU_IS_NOT(menuTerminal))
       break;
 
     key_num = menuKeyGetValue();
@@ -494,7 +494,7 @@ static inline void menuKeyboardView(void)
         break;
 
       case GKEY_BACK:
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       case GKEY_SEND:
@@ -572,7 +572,7 @@ static inline void saveGcodeTerminalCache(const char * str, uint16_t strLen)
 
 void terminalCache(const char * stream, uint16_t streamLen, SERIAL_PORT_INDEX portIndex, TERMINAL_SRC src)
 {
-  if (infoMenu.menu[infoMenu.cur] != menuTerminal)
+  if (MENU_IS_NOT(menuTerminal))
     return;
 
   char * srcID[TERMINAL_COUNT] = {"\5", "\6"};
@@ -727,7 +727,7 @@ void menuTerminalWindow(void)
 
   while (curView == 2)
   {
-    if (infoMenu.menu[infoMenu.cur] != menuTerminal)
+    if (MENU_IS_NOT(menuTerminal))
       break;
 
     key_num = menuKeyGetValue();
@@ -877,7 +877,7 @@ void menuTerminal(void)
     termPage.ptr[i] = terminalBuf;
   }
 
-  while (infoMenu.menu[infoMenu.cur] == menuTerminal)
+  while (MENU_IS(menuTerminal))
   {
     if (curView == 1)
       menuKeyboardView();

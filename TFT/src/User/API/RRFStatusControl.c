@@ -125,7 +125,7 @@ void rrfStatusQuery(void)
     static uint32_t rrf_next_query_time = 0;
 
     // don't send status queries while in the terminal menu to avoid flooding the console
-    if (OS_GetTimeMs() > rrf_next_query_time && infoMenu.menu[infoMenu.cur] != menuTerminal)
+    if (OS_GetTimeMs() > rrf_next_query_time && MENU_IS_NOT(menuTerminal))
     {
       rrf_next_query_time = OS_GetTimeMs() + rrf_query_interval;
       storeCmd("M408 S0\n");

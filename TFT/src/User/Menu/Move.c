@@ -126,7 +126,7 @@ void menuMove(void)
   menuDrawPage(&moveItems);
   drawXYZ();
 
-  while (infoMenu.menu[infoMenu.cur] == menuMove)
+  while (MENU_IS(menuMove))
   {
     key_num = menuKeyGetValue();
     switch (key_num)
@@ -146,7 +146,7 @@ void menuMove(void)
         case KEY_ICON_5: storeMoveCmd(Y_AXIS, -1); break;  // Y move decrease if no invert
         case KEY_ICON_6: storeMoveCmd(X_AXIS, 1); break;   // X move increase if no invert
 
-        case KEY_ICON_7: infoMenu.cur--; break;
+        case KEY_ICON_7: CLOSE_MENU(); break;
       #else
         case KEY_ICON_0: storeMoveCmd(X_AXIS, 1); break;   // X move increase if no invert
         case KEY_ICON_1: storeMoveCmd(Y_AXIS, 1); break;   // Y move increase if no invert
@@ -162,7 +162,7 @@ void menuMove(void)
         case KEY_ICON_5: storeMoveCmd(Y_AXIS, -1); break;  // Y move decrease if no invert
         case KEY_ICON_6: storeMoveCmd(Z_AXIS, -1); break;  // Z move down if no invert
 
-        case KEY_ICON_7: infoMenu.cur--; break;
+        case KEY_ICON_7: CLOSE_MENU(); break;
       #endif
 
         case KEY_INCREASE:

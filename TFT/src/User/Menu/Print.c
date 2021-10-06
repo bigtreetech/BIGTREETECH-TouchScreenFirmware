@@ -100,7 +100,7 @@ void gocdeListDraw(LISTITEM * item, uint16_t index, uint8_t itemPos)
 // start print
 void startPrint(void)
 {
-  infoMenu.menu[++infoMenu.cur] = menuBeforePrinting;
+  OPEN_MENU(menuBeforePrinting);
 }
 
 // open selected file/folder
@@ -174,7 +174,7 @@ void menuPrintFromSource(void)
 
   if (mountFS() == true && scanPrintFiles() == true)
   {
-    if (infoMenu.menu[infoMenu.cur] != menuPrintFromSource)  // Menu index be modify when "scanPrintFilesGcodeFs". (echo,error,warning popup windows)
+    if (MENU_IS_NOT(menuPrintFromSource))  // Menu index be modify when "scanPrintFilesGcodeFs". (echo,error,warning popup windows)
     {
       return;
     }
@@ -191,11 +191,11 @@ void menuPrintFromSource(void)
     else
       GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, labelVolumeError[infoFile.source]);
     Delay_ms(1000);
-    infoMenu.cur--;
+    CLOSE_MENU();
   }
 
 
-  while (infoMenu.menu[infoMenu.cur] == menuPrintFromSource)
+  while (MENU_IS(menuPrintFromSource))
   {
     if (list_mode != true)  // select item from icon view
     {
@@ -230,7 +230,7 @@ void menuPrintFromSource(void)
           if (IsRootDir() == true)
           {
             clearInfoFile();
-            infoMenu.cur--;
+            CLOSE_MENU();
             break;
           }
           else
@@ -259,7 +259,7 @@ void menuPrintFromSource(void)
           if (IsRootDir() == true)
           {
             clearInfoFile();
-            infoMenu.cur--;
+            CLOSE_MENU();
           }
           else
           {
@@ -311,7 +311,7 @@ void menuPrintFromSource(void)
       if (isVolumeExist(infoFile.source) != true)
       {
         resetInfoFile();
-        infoMenu.cur--;
+        CLOSE_MENU();
       }
     #endif
 
@@ -325,7 +325,7 @@ void menuPrint(void)
   {
     list_mode = infoSettings.files_list_mode;
     infoFile.source = BOARD_SD;
-    infoMenu.menu[infoMenu.cur] = menuPrintFromSource;
+    REPLACE_MENU(menuPrintFromSource);
     goto selectEnd;
   }
 
@@ -358,7 +358,7 @@ void menuPrint(void)
 
   menuDrawPage(&sourceSelItems);
 
-  while (infoMenu.menu[infoMenu.cur] == menuPrint)
+  while (MENU_IS(menuPrint))
   {
     key_num = menuKeyGetValue();
     switch (key_num)
@@ -366,16 +366,16 @@ void menuPrint(void)
       case KEY_ICON_0:
         list_mode = infoSettings.files_list_mode;  // follow list mode setting in TFT sd card
         infoFile.source = TFT_SD;
-        infoMenu.menu[++infoMenu.cur] = menuPrintFromSource;
-        infoMenu.menu[++infoMenu.cur] = menuPrintRestore;
+        OPEN_MENU(menuPrintFromSource);
+        OPEN_MENU(menuPrintRestore);
         goto selectEnd;
 
       #ifdef U_DISK_SUPPORT
         case KEY_ICON_1:
           list_mode = infoSettings.files_list_mode;  // follow list mode setting in usb disk
           infoFile.source = TFT_UDISK;
-          infoMenu.menu[++infoMenu.cur] = menuPrintFromSource;
-          infoMenu.menu[++infoMenu.cur] = menuPrintRestore;
+          OPEN_MENU(menuPrintFromSource);
+          OPEN_MENU(menuPrintRestore);
           goto selectEnd;
         case KEY_ICON_2:
       #else
@@ -385,7 +385,7 @@ void menuPrint(void)
         {
           list_mode = true;  // force list mode in Onboard sd card
           infoFile.source = BOARD_SD;
-          infoMenu.menu[++infoMenu.cur] = menuPrintFromSource;  // TODO: fix here,  onboard sd card PLR feature
+          OPEN_MENU(menuPrintFromSource);  // TODO: fix here,  onboard sd card PLR feature
           goto selectEnd;
         }
         break;
@@ -396,7 +396,7 @@ void menuPrint(void)
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur--;
+        CLOSE_MENU();
         return;
 
       default:

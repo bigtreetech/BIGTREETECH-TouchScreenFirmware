@@ -55,7 +55,7 @@ void menuSpeed(void)
   menuDrawPage(&percentageItems);
   percentageReDraw(item_index, false);
 
-  while (infoMenu.menu[infoMenu.cur] == menuSpeed)
+  while (MENU_IS(menuSpeed))
   {
     key_num = menuKeyGetValue();
 
@@ -74,7 +74,6 @@ void menuSpeed(void)
         if (val != speedGetSetPercent(item_index))
           speedSetPercent(item_index, val);
 
-        menuDrawPage(&percentageItems);
         percentageReDraw(item_index, false);
         break;
       }
@@ -107,7 +106,7 @@ void menuSpeed(void)
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       default:

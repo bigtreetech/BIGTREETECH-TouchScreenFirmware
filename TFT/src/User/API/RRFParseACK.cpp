@@ -59,7 +59,7 @@ static void m291_loop(void)
 {
   if (m291_mode == -1 || (expire_time > 0 && OS_GetTimeMs() > expire_time))
   {
-    infoMenu.cur--;
+    CLOSE_MENU();
     if (rrfStatusIsMacroBusy())
       rrfShowRunningMacro();
   }
@@ -204,7 +204,7 @@ void ParseACKJsonParser::value(const char *value)
         string_end = strstr(string_start, "ELECTRONICS");
         infoSetFirmwareName((uint8_t *)string_start, string_end-string_start);
       }
-      else if ((string_start = strstr(value, (char *)"access point")) != NULL)    //parse M552 
+      else if ((string_start = strstr(value, (char *)"access point")) != NULL)    //parse M552
       {
         string_end = strstr(string_start, ",");
         string_start += 13;

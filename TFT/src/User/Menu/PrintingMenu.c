@@ -143,7 +143,7 @@ void menuBeforePrinting(void)
         if (size == 0)
         {
           ExitDir();
-          infoMenu.cur--;
+          CLOSE_MENU();
           return;
         }
 
@@ -168,7 +168,7 @@ void menuBeforePrinting(void)
         if (f_open(&file, infoFile.title, FA_OPEN_EXISTING | FA_READ) != FR_OK)
         {
           ExitDir();
-          infoMenu.cur--;
+          CLOSE_MENU();
           return;
         }
 
@@ -182,7 +182,7 @@ void menuBeforePrinting(void)
 
     default:
       ExitDir();
-      infoMenu.cur--;
+      CLOSE_MENU();
       return;
   }
 
@@ -193,7 +193,7 @@ void menuBeforePrinting(void)
   coordinateSetAxisTarget(Z_AXIS, 0);
   setM73_presence(false);
 
-  infoMenu.menu[infoMenu.cur] = menuPrinting;
+  REPLACE_MENU(menuPrinting);
 }
 
 static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
@@ -504,7 +504,7 @@ void drawPrintInfo(void)
 void stopConfirm(void)
 {
   printAbort();
-  infoMenu.cur--;
+  CLOSE_MENU();
 }
 
 void printInfoPopup(void)
@@ -604,7 +604,7 @@ void menuPrinting(void)
   if (lastPrinting == false)
     drawPrintInfo();
 
-  while (infoMenu.menu[infoMenu.cur] == menuPrinting)
+  while (MENU_IS(menuPrinting))
   {
     //Scroll_DispString(&titleScroll, LEFT);  // Scroll display file name will take too many CPU cycles
 
@@ -737,16 +737,16 @@ void menuPrinting(void)
     {
       case PS_KEY_0:
         heatSetCurrentIndex(currentTool);
-        infoMenu.menu[++infoMenu.cur] = menuHeat;
+        OPEN_MENU(menuHeat);
         break;
 
       case PS_KEY_1:
         heatSetCurrentIndex(BED + currentBCIndex);
-        infoMenu.menu[++infoMenu.cur] = menuHeat;
+        OPEN_MENU(menuHeat);
         break;
 
       case PS_KEY_2:
-        infoMenu.menu[++infoMenu.cur] = menuFan;
+        OPEN_MENU(menuFan);
         break;
 
       case PS_KEY_3:
@@ -771,7 +771,7 @@ void menuPrinting(void)
         break;
 
       case PS_KEY_5:
-        infoMenu.menu[++infoMenu.cur] = menuSpeed;
+        OPEN_MENU(menuSpeed);
         break;
 
       case PS_KEY_6:
@@ -793,11 +793,11 @@ void menuPrinting(void)
         break;
 
       case PS_KEY_7:
-        infoMenu.menu[++infoMenu.cur] = menuBabystep;
+        OPEN_MENU(menuBabystep);
         break;
 
       case PS_KEY_8:
-        infoMenu.menu[++infoMenu.cur] = menuMore;
+        OPEN_MENU(menuMore);
         break;
 
       case PS_KEY_9:
@@ -809,7 +809,7 @@ void menuPrinting(void)
         else
         {
           clearInfoPrint();
-          infoMenu.cur--;
+          CLOSE_MENU();
         }
         break;
 

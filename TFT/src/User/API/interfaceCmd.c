@@ -774,7 +774,7 @@ void sendQueueCmd(void)
 
             statusScreen_setMsg((uint8_t *)"M117", (uint8_t *)&message);
 
-            if (infoMenu.menu[infoMenu.cur] != menuStatus)
+            if (MENU_IS_NOT(menuStatus))
             {
               addToast(DIALOG_TYPE_INFO, message);
             }

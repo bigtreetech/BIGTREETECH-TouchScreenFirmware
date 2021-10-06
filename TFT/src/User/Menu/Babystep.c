@@ -119,7 +119,7 @@ void menuBabystep(void)
   menuDrawPage(&babyStepItems);
   babyReDraw(now_babystep, now_z_offset, force_z_offset, false);
 
-  while (infoMenu.menu[infoMenu.cur] == menuBabystep)
+  while (MENU_IS(menuBabystep))
   {
     unit = moveLenSteps[moveLenSteps_index];
     babystep = babystepGetValue();  // always load current babystep
@@ -169,7 +169,7 @@ void menuBabystep(void)
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       default:

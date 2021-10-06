@@ -42,7 +42,7 @@ void menuFan(void)
   menuDrawPage(&fanItems);
   fanReDraw(fan_index, false);
 
-  while (infoMenu.menu[infoMenu.cur] == menuFan)
+  while (MENU_IS(menuFan))
   {
     key_num = menuKeyGetValue();
 
@@ -78,7 +78,6 @@ void menuFan(void)
             fanSetSpeed(fan_index, val);
         }
 
-        menuDrawPage(&fanItems);
         fanReDraw(fan_index, false);
         break;
       }
@@ -120,7 +119,7 @@ void menuFan(void)
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       default:

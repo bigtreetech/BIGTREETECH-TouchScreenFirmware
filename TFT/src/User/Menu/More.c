@@ -24,13 +24,13 @@ const MENUITEMS moreItems = {
 void isPauseExtrude(void)
 {
   if (printPause(true, PAUSE_NORMAL))
-    infoMenu.menu[infoMenu.cur] = menuExtrude;
+    REPLACE_MENU(menuExtrude);
 }
 
 void isPauseLoadUnload(void)
 {
   if (printPause(true, PAUSE_NORMAL))
-    infoMenu.menu[infoMenu.cur] = menuLoadUnload;
+    REPLACE_MENU(menuLoadUnload);
 }
 
 void menuMore(void)
@@ -39,17 +39,17 @@ void menuMore(void)
 
   menuDrawPage(&moreItems);
 
-  while (infoMenu.menu[infoMenu.cur] == menuMore)
+  while (MENU_IS(menuMore))
   {
     key_num = menuKeyGetValue();
     switch (key_num)
     {
       case KEY_ICON_0:
-        infoMenu.menu[++infoMenu.cur] = menuHeat;
+        OPEN_MENU(menuHeat);
         break;
 
       case KEY_ICON_1:
-        infoMenu.menu[++infoMenu.cur] = menuFan;
+        OPEN_MENU(menuFan);
         break;
 
       case KEY_ICON_2:
@@ -60,20 +60,20 @@ void menuMore(void)
         }
         else
         {
-          infoMenu.menu[++infoMenu.cur] = menuExtrude;
+          OPEN_MENU(menuExtrude);
         }
         break;
 
       case KEY_ICON_3:
-        infoMenu.menu[++infoMenu.cur] = menuSpeed;
+        OPEN_MENU(menuSpeed);
         break;
 
       case KEY_ICON_4:
-        infoMenu.menu[++infoMenu.cur] = menuFeatureSettings;
+        OPEN_MENU(menuFeatureSettings);
         break;
 
       case KEY_ICON_5:
-        infoMenu.menu[++infoMenu.cur] = menuMachineSettings;
+        OPEN_MENU(menuMachineSettings);
         break;
 
       case KEY_ICON_6:
@@ -85,15 +85,15 @@ void menuMore(void)
           }
           else
           {
-            infoMenu.menu[++infoMenu.cur] = menuLoadUnload;
+            OPEN_MENU(menuLoadUnload);
           }
         #else
-          infoMenu.menu[++infoMenu.cur] = menuTerminal;
+          OPEN_MENU(menuTerminal);
         #endif
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       default:

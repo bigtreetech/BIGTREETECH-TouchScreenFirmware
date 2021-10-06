@@ -73,7 +73,7 @@ void menuMode(void)
       ;  // wait for touch release
   #endif
 
-  while (infoMenu.menu[infoMenu.cur] == menuMode)
+  while (MENU_IS(menuMode))
   {
     MKEY_VALUES key_num = MKeyGetValue();
 
