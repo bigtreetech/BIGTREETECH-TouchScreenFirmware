@@ -128,7 +128,7 @@ void menuPidWait(void)
   GUI_DispString(20, BYTE_HEIGHT * 5, textSelect(LABEL_PID_START_INFO_2));
   GUI_DispStringInRectEOL(20, BYTE_HEIGHT * 7, LCD_WIDTH - 20, LCD_HEIGHT, textSelect(LABEL_PID_START_INFO_3));
 
-  while (infoMenu.menu[infoMenu.cur] == menuPidWait)
+  while (MENU_IS(menuPidWait))
   {
     if (!isPressed)  // if touch screen is not yet pressed
     {
@@ -141,7 +141,7 @@ void menuPidWait(void)
     }
 
     if (isReleased)
-      infoMenu.cur--;
+      CLOSE_MENU();
 
     pidCheckTimeout();
 
@@ -177,7 +177,7 @@ static inline void pidStart(void)
   mustStoreCmd("M107\n");             // stop fan
   mustStoreCmd("M150 R0 U255 B0\n");  // set LED light to GREEN
 
-  infoMenu.menu[++infoMenu.cur] = menuPidWait;
+  OPEN_MENU(menuPidWait);
 }
 
 void menuPid(void)
@@ -217,7 +217,7 @@ void menuPid(void)
   menuDrawPage(&pidItems);
   temperatureReDraw(curTool_index, &pidHeaterTarget[curTool_index], false);
 
-  while (infoMenu.menu[infoMenu.cur] == menuPid)
+  while (MENU_IS(menuPid))
   {
     key_num = menuKeyGetValue();
 
@@ -240,7 +240,6 @@ void menuPid(void)
         if (val != pidHeaterTarget[curTool_index])  // if value is different than target, change it
           pidHeaterTarget[curTool_index] = val;
 
-        menuDrawPage(&pidItems);
         temperatureReDraw(curTool_index, &pidHeaterTarget[curTool_index], false);
         break;
       }
@@ -296,7 +295,7 @@ void menuPid(void)
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       default:

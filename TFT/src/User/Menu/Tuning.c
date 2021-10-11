@@ -23,27 +23,27 @@ void menuTuning(void)
 
   menuDrawPage(&TuningItems);
 
-  while (infoMenu.menu[infoMenu.cur] == menuTuning)
+  while (MENU_IS(menuTuning))
   {
     key_num = menuKeyGetValue();
     switch (key_num)
     {
       case KEY_ICON_0:
-        infoMenu.menu[++infoMenu.cur] = menuPid;
+        OPEN_MENU(menuPid);
         break;
 
       case KEY_ICON_1:
-        infoMenu.menu[++infoMenu.cur] = menuTuneExtruder;
+        OPEN_MENU(menuTuneExtruder);
         break;
 
       case KEY_ICON_2:
         storeCmd("M206\n");
         zOffsetSetMenu(false);  // use Home Offset menu
-        infoMenu.menu[++infoMenu.cur] = menuZOffset;
+        OPEN_MENU(menuZOffset);
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       default:

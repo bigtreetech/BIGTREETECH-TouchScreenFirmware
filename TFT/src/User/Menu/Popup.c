@@ -95,19 +95,19 @@ void popupDrawPage(DIALOG_TYPE type, BUTTON * btn, const uint8_t * title, const 
 
 void menuDialog(void)
 {
-  while (infoMenu.menu[infoMenu.cur] == menuDialog)
+  while (MENU_IS(menuDialog))
   {
     uint16_t key_num = KEY_GetValue(buttonNum, cur_btn_rect);
     switch (key_num)
     {
       case KEY_POPUP_CONFIRM:
-        infoMenu.cur--;
+        CLOSE_MENU();
         if (action_ok != NULL)
           action_ok();
         break;
 
       case KEY_POPUP_CANCEL:
-        infoMenu.cur--;
+        CLOSE_MENU();
         if (action_cancel != NULL)
           action_cancel();
         break;
@@ -235,8 +235,8 @@ void loopPopup(void)
   }
 
   // avoid to nest menuDialog popup type (while a menuNotification popup type can be overridden)
-  if (infoMenu.menu[infoMenu.cur] != menuDialog)
+  if (MENU_IS_NOT(menuDialog))
   { // handle the user interaction, then reload the previous menu
-    infoMenu.menu[++infoMenu.cur] = menuDialog;
+    OPEN_MENU(menuDialog);
   }
 }

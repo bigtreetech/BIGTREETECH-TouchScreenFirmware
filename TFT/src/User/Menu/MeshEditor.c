@@ -813,7 +813,7 @@ void meshUpdateData(char *dataRow)
 
     popupReminder(DIALOG_TYPE_ERROR, LABEL_MESH_EDITOR, (uint8_t *) tempMsg);
 
-    infoMenu.cur--;                                        // exit from mesh editor menu. it avoids to loop in case of persistent error
+    CLOSE_MENU();                                          // exit from mesh editor menu. it avoids to loop in case of persistent error
 
     meshDeallocData();                                     // deallocate mesh data
   }
@@ -837,7 +837,7 @@ void menuMeshEditor(void)
 
   meshDrawMenu();
 
-  while (infoMenu.menu[infoMenu.cur] == menuMeshEditor)
+  while (MENU_IS(menuMeshEditor))
   {
     curStatus = meshGetStatus();                           // always load current status
     curIndex = meshGetIndex();                             // always load current index
@@ -900,7 +900,7 @@ void menuMeshEditor(void)
       case ME_KEY_OK:
         forceExit = true;
 
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       default:

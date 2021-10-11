@@ -23,7 +23,7 @@ void menuTouchMi(void)
 
   menuDrawPage(&touchmiItems);
 
-  while (infoMenu.menu[infoMenu.cur] == menuTouchMi)
+  while (MENU_IS(menuTouchMi))
   {
     key_num = menuKeyGetValue();
     switch (key_num)
@@ -60,7 +60,7 @@ void menuTouchMi(void)
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       default:

@@ -205,7 +205,7 @@ uint16_t listViewGetSelectedIndex(void)
 
     case KEY_INDEX_BACK:
       if (handleBack)
-        infoMenu.cur--;
+        CLOSE_MENU();
       return KEY_BACK;
 
     default:

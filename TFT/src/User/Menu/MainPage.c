@@ -39,24 +39,24 @@ void menuMain(void)
 
   menuDrawPage(&mainPageItems);
 
-  while (infoMenu.menu[infoMenu.cur] == menuMain)
+  while (MENU_IS(menuMain))
   {
     key_num = menuKeyGetValue();
     switch (key_num)
     {
       case KEY_ICON_0:
-        infoMenu.menu[++infoMenu.cur] = menuUnifiedHeat;
+        OPEN_MENU(menuUnifiedHeat);
         break;
 
       case KEY_ICON_1:
-        infoMenu.menu[++infoMenu.cur] = menuUnifiedMove;
+        OPEN_MENU(menuUnifiedMove);
         break;
 
       case KEY_ICON_2:
         #ifdef LOAD_UNLOAD_M701_M702
-          infoMenu.menu[++infoMenu.cur] = menuLoadUnload;
+          OPEN_MENU(menuLoadUnload);
         #else
-          infoMenu.menu[++infoMenu.cur] = menuExtrude;
+          OPEN_MENU(menuExtrude);
         #endif
         break;
 
@@ -68,30 +68,30 @@ void menuMain(void)
         break;
 
       case KEY_ICON_4:
-        infoMenu.menu[++infoMenu.cur] = menuTerminal;
+        OPEN_MENU(menuTerminal);
         break;
 
       case KEY_ICON_5:
         if (infoMachineSettings.firmwareType == FW_REPRAPFW)
         {
           strcpy(infoFile.title, "Macros");
-          infoMenu.menu[++infoMenu.cur] = menuCallMacro;
+          OPEN_MENU(menuCallMacro);
         }
         else
         {
-          infoMenu.menu[++infoMenu.cur] = menuCustom;
+          OPEN_MENU(menuCustom);
         }
         break;
 
       case KEY_ICON_6:
-        infoMenu.menu[++infoMenu.cur] = menuSettings;
+        OPEN_MENU(menuSettings);
         break;
 
       case KEY_ICON_7:
         if (infoSettings.status_screen != 1)
-          infoMenu.menu[++infoMenu.cur] = menuPrint;
+          OPEN_MENU(menuPrint);
         else
-          infoMenu.cur--;
+          CLOSE_MENU();
         break;
 
       default:

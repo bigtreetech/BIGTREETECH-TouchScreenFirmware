@@ -237,7 +237,7 @@ void menuFeatureSettings(void)
 
   listViewCreate(title, settingPage, SKEY_COUNT, &fe_cur_page, true, NULL, loadFeatureSettings);
 
-  while (infoMenu.menu[infoMenu.cur] == menuFeatureSettings)
+  while (MENU_IS(menuFeatureSettings))
   {
     index = listViewGetSelectedIndex();
 

@@ -96,7 +96,7 @@ void menuLevelCorner(void)
   menuDrawPage(&levelCornerItems);
   drawProbeAccuracyIcon(&levelCornerItems);
 
-  while (infoMenu.menu[infoMenu.cur] == menuLevelCorner)
+  while (MENU_IS(menuLevelCorner))
   {
     key_num = menuKeyGetValue();
     switch (key_num)
@@ -113,7 +113,6 @@ void menuLevelCorner(void)
       {
         infoSettings.level_edge = editIntValue(edge_min, LEVELING_EDGE_DISTANCE_MAX,
                                                LEVELING_EDGE_DISTANCE_DEFAULT, infoSettings.level_edge);
-        menuDrawPage(&levelCornerItems);
         break;
       }
 
@@ -140,7 +139,7 @@ void menuLevelCorner(void)
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       default:

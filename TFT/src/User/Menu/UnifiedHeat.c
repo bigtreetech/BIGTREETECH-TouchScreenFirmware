@@ -23,21 +23,21 @@ void menuUnifiedHeat(void)
 
   menuDrawPage(&UnifiedHeatItems);
 
-  while (infoMenu.menu[infoMenu.cur] == menuUnifiedHeat)
+  while (MENU_IS(menuUnifiedHeat))
   {
     key_num = menuKeyGetValue();
     switch (key_num)
     {
       case KEY_ICON_0:
-        infoMenu.menu[++infoMenu.cur] = menuPreheat;
+        OPEN_MENU(menuPreheat);
         break;
 
       case KEY_ICON_1:
-        infoMenu.menu[++infoMenu.cur] = menuHeat;
+        OPEN_MENU(menuHeat);
         break;
 
       case KEY_ICON_2:
-        infoMenu.menu[++infoMenu.cur] = menuFan;
+        OPEN_MENU(menuFan);
         break;
 
       case KEY_ICON_5:
@@ -45,7 +45,7 @@ void menuUnifiedHeat(void)
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       default:

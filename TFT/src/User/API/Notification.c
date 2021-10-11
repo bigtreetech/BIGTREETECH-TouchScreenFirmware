@@ -151,7 +151,7 @@ void addNotification(DIALOG_TYPE style, char *title, char *text, bool ShowDialog
   strncpy(msglist[nextMsgIndex].title, title, MAX_MSG_TITLE_LENGTH);
   msglist[nextMsgIndex].title[MAX_MSG_TITLE_LENGTH - 1] = 0;  //ensure string ends with null terminator
 
-  if (ShowDialog && infoMenu.menu[infoMenu.cur] != menuNotification)
+  if (ShowDialog && MENU_IS_NOT(menuNotification))
     popupReminder(style, (uint8_t *)title, (uint8_t *)msglist[nextMsgIndex].text);
 
   if (nextMsgIndex < MAX_MSG_COUNT) nextMsgIndex += 1;  //(nextMsgIndex + 1) % MAX_MSG_COUNT;
@@ -205,9 +205,9 @@ void titleBarPress(void)
 {
   if (getMenuType() == MENU_TYPE_ICON || getMenuType() == MENU_TYPE_LISTVIEW)
   {
-    if (infoMenu.menu[infoMenu.cur] != menuNotification)
+    if (MENU_IS_NOT(menuNotification))
     {
-      infoMenu.menu[++infoMenu.cur] = menuNotification;
+      OPEN_MENU(menuNotification);
     }
   }
 }

@@ -654,7 +654,7 @@ void sendQueueCmd(void)
           if (cmd_seen('Y')) setParameter(P_STEPS_PER_MM, AXIS_INDEX_Y, cmd_float());
           if (cmd_seen('Z')) setParameter(P_STEPS_PER_MM, AXIS_INDEX_Z, cmd_float());
 
-          uint8_t i = 0; (cmd_seen('T')) ? cmd_value() : 0;
+          uint8_t i = (cmd_seen('T')) ? cmd_value() : 0;
           if (cmd_seen('E')) setParameter(P_STEPS_PER_MM, AXIS_INDEX_E0 + i, cmd_float());
           break;
         }
@@ -774,7 +774,7 @@ void sendQueueCmd(void)
 
             statusScreen_setMsg((uint8_t *)"M117", (uint8_t *)&message);
 
-            if (infoMenu.menu[infoMenu.cur] != menuStatus)
+            if (MENU_IS_NOT(menuStatus))
             {
               addToast(DIALOG_TYPE_INFO, message);
             }
