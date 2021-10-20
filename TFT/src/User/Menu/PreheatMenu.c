@@ -93,7 +93,7 @@ void menuPreheat(void)
     refreshPreheatIcon(&preheatStore, i, &preheatItems.items[i]);
   }
 
-  while (infoMenu.menu[infoMenu.cur] == menuPreheat)
+  while (MENU_IS(menuPreheat))
   {
     key_num = menuKeyGetValue();
     switch (key_num)
@@ -129,7 +129,7 @@ void menuPreheat(void)
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       default:

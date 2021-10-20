@@ -24,6 +24,7 @@ const LABEL itemToggleSmart[ITEM_TOGGLE_SMART_NUM] =
 typedef enum
 {
   SKEY_EMULATED_M600 = 0,
+  SKEY_EMULATED_M109_M190,
   SKEY_SERIAL_ALWAYS_ON,
   SKEY_SPEED,
   SKEY_AUTO_LOAD_LEVELING,
@@ -54,7 +55,8 @@ void updateFeatureSettings(uint8_t item_index)
   switch (item_index)
   {
     case SKEY_EMULATED_M600:
-      infoSettings.emulated_m600 = (infoSettings.emulated_m600 + 1) % ITEM_TOGGLE_NUM;
+    case SKEY_EMULATED_M109_M190:
+      TOGGLE_BIT(infoSettings.general_settings, ((item_index - SKEY_EMULATED_M600) + EMULATED_M600));
       break;
 
     case SKEY_SERIAL_ALWAYS_ON:
@@ -125,7 +127,8 @@ void loadFeatureSettings(LISTITEM * item, uint16_t item_index, uint8_t itemPos)
     switch (item_index)
     {
       case SKEY_EMULATED_M600:
-        item->icon = iconToggle[infoSettings.emulated_m600];
+      case SKEY_EMULATED_M109_M190:
+        item->icon = iconToggle[GET_BIT(infoSettings.general_settings, ((item_index - SKEY_EMULATED_M600) + EMULATED_M600))];
         break;
 
       case SKEY_SERIAL_ALWAYS_ON:
@@ -192,7 +195,7 @@ void loadFeatureSettings(LISTITEM * item, uint16_t item_index, uint8_t itemPos)
 
 void resetSettings(void)
 {
-  infoSettingsReset();
+  initSettings();
   storePara();
   popupReminder(DIALOG_TYPE_SUCCESS, LABEL_INFO, LABEL_SETTINGS_RESET_DONE);
 }
@@ -204,6 +207,7 @@ void menuFeatureSettings(void)
   // set item types
   LISTITEM settingPage[SKEY_COUNT] = {
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_EMULATED_M600,          LABEL_BACKGROUND},
+    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_EMULATED_M109_M190,     LABEL_BACKGROUND},
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_SERIAL_ALWAYS_ON,       LABEL_BACKGROUND},
     {CHARICON_BLANK,       LIST_CUSTOMVALUE,   LABEL_MOVE_SPEED,             LABEL_NORMAL},
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_AUTO_LOAD_LEVELING,     LABEL_BACKGROUND},
@@ -233,7 +237,7 @@ void menuFeatureSettings(void)
 
   listViewCreate(title, settingPage, SKEY_COUNT, &fe_cur_page, true, NULL, loadFeatureSettings);
 
-  while (infoMenu.menu[infoMenu.cur] == menuFeatureSettings)
+  while (MENU_IS(menuFeatureSettings))
   {
     index = listViewGetSelectedIndex();
 

@@ -70,7 +70,7 @@ void menuEmulatorFontColor(void)
 
   listViewCreate(title, totalItems, COUNT(totalItems), &curPage, true, NULL, NULL);
 
-  while (infoMenu.menu[infoMenu.cur] == menuEmulatorFontColor)
+  while (MENU_IS(menuEmulatorFontColor))
   {
     curIndex = listViewGetSelectedIndex();
 
@@ -124,7 +124,7 @@ void menuEmulatorBGColor(void)
 
   listViewCreate(title, totalItems, COUNT(totalItems), &curPage, true, NULL, NULL);
 
-  while (infoMenu.menu[infoMenu.cur] == menuEmulatorBGColor)
+  while (MENU_IS(menuEmulatorBGColor))
   {
     curIndex = listViewGetSelectedIndex();
 
@@ -182,18 +182,18 @@ void menuMarlinModeSettings(void)
 
   listViewCreate(title, marlinModeitems, COUNT(marlinModeitems), NULL, true, NULL, NULL);
 
-  while (infoMenu.menu[infoMenu.cur] == menuMarlinModeSettings)
+  while (MENU_IS(menuMarlinModeSettings))
   {
     curIndex = listViewGetSelectedIndex();
 
     switch (curIndex)
     {
       case 0:
-        infoMenu.menu[++infoMenu.cur] = menuEmulatorFontColor;
+        OPEN_MENU(menuEmulatorFontColor);
         break;
 
       case 1:
-        infoMenu.menu[++infoMenu.cur] = menuEmulatorBGColor;
+        OPEN_MENU(menuEmulatorBGColor);
         break;
 
       case 2:
@@ -255,7 +255,7 @@ void menuLanguage(void)
 
   listViewCreate(title, totalItems, COUNT(totalItems), &curPage, true, NULL, NULL);
 
-  while (infoMenu.menu[infoMenu.cur] == menuLanguage)
+  while (MENU_IS(menuLanguage))
   {
     curIndex = listViewGetSelectedIndex();
 
@@ -325,7 +325,7 @@ void menuUISettings(void)
 
   listViewCreate(title, uiItems, COUNT(uiItems), NULL, true, NULL, NULL);
 
-  while (infoMenu.menu[infoMenu.cur] == menuUISettings)
+  while (MENU_IS(menuUISettings))
   {
     curIndex = listViewGetSelectedIndex();
     switch (curIndex)
@@ -414,7 +414,7 @@ void menuSoundSettings(void)
 
   listViewCreate(title, sounditems, COUNT(sounditems), NULL, true, NULL, NULL);
 
-  while (infoMenu.menu[infoMenu.cur] == menuSoundSettings)
+  while (MENU_IS(menuSoundSettings))
   {
     curIndex = listViewGetSelectedIndex();
 
@@ -446,7 +446,7 @@ void menuBrightnessSettings(void)
     {CHARICON_BLANK,     LIST_CUSTOMVALUE, LABEL_LCD_BRIGHTNESS,      LABEL_DYNAMIC},
     {CHARICON_BLANK,     LIST_CUSTOMVALUE, LABEL_LCD_IDLE_BRIGHTNESS, LABEL_DYNAMIC},
     {CHARICON_BLANK,     LIST_CUSTOMVALUE, LABEL_LCD_IDLE_TIME,       LABEL_DYNAMIC},
-    {CHARICON_TOGGLE_ON, LIST_TOGGLE,      LABEL_BLOCK_TOUCH_ON_IDLE, LABEL_BACKGROUND},
+    {CHARICON_TOGGLE_ON, LIST_TOGGLE,      LABEL_LCD_LOCK_ON_IDLE,    LABEL_BACKGROUND},
   };
 
   uint16_t curIndex = KEY_IDLE;
@@ -460,11 +460,11 @@ void menuBrightnessSettings(void)
   setDynamicTextValue(1, tempstr);
 
   brightnessitems[2].valueLabel = lcd_idle_time_names[infoSettings.lcd_idle_time];
-  brightnessitems[3].icon = iconToggle[infoSettings.block_touch_on_idle];
+  brightnessitems[3].icon = iconToggle[infoSettings.lcd_lock_on_idle];
 
   listViewCreate(title, brightnessitems, COUNT(brightnessitems), NULL, true, NULL, NULL);
 
-  while (infoMenu.menu[infoMenu.cur] == menuBrightnessSettings)
+  while (MENU_IS(menuBrightnessSettings))
   {
     curIndex = listViewGetSelectedIndex();
     switch (curIndex)
@@ -492,8 +492,8 @@ void menuBrightnessSettings(void)
         break;
 
       case 3:
-        infoSettings.block_touch_on_idle = (infoSettings.block_touch_on_idle + 1) % 2;
-        brightnessitems[curIndex].icon = iconToggle[infoSettings.block_touch_on_idle];
+        infoSettings.lcd_lock_on_idle = (infoSettings.lcd_lock_on_idle + 1) % 2;
+        brightnessitems[curIndex].icon = iconToggle[infoSettings.lcd_lock_on_idle];
         break;
 
       default:
@@ -521,7 +521,7 @@ void menuScreenSettings(void)
     LABEL_SCREEN_SETTINGS,
     // icon                          label
     {
-      {ICON_ROTATE_UI,               LABEL_ROTATE_UI},
+      {ICON_ROTATE_UI,               LABEL_ROTATED_UI},
       {ICON_TOUCHSCREEN_ADJUST,      LABEL_TOUCHSCREEN_ADJUST},
       {ICON_LANGUAGE,                LABEL_LANGUAGE},
       {ICON_FEATURE_SETTINGS,        LABEL_UI_SETTINGS},
@@ -554,14 +554,14 @@ void menuScreenSettings(void)
 
   menuDrawPage(&screenSettingsItems);
 
-  while (infoMenu.menu[infoMenu.cur] == menuScreenSettings)
+  while (MENU_IS(menuScreenSettings))
   {
     curIndex = menuKeyGetValue();
     switch (curIndex)
     {
       case KEY_ICON_0:
-        infoSettings.rotate_ui = !infoSettings.rotate_ui;
-        LCD_RefreshDirection(infoSettings.rotate_ui);
+        infoSettings.rotated_ui = !infoSettings.rotated_ui;
+        LCD_RefreshDirection(infoSettings.rotated_ui);
         TSC_Calibration();
         menuDrawPage(&screenSettingsItems);
         break;
@@ -573,36 +573,36 @@ void menuScreenSettings(void)
 
       case KEY_ICON_2:
         if (getFlashSignStatus(lang_sign))
-          infoMenu.menu[++infoMenu.cur] = menuLanguage;
+          OPEN_MENU(menuLanguage);
         else
           popupReminder(DIALOG_TYPE_ALERT, (uint8_t *)"Language not available",
                         (uint8_t *)"To change Language first flash a Language pack ini file.");
         break;
 
       case KEY_ICON_3:
-        infoMenu.menu[++infoMenu.cur] = menuUISettings;
+        OPEN_MENU(menuUISettings);
         break;
 
       #ifdef BUZZER_PIN
         case KEY_INDEX_BUZZER:
-          infoMenu.menu[++infoMenu.cur] = menuSoundSettings;
+          OPEN_MENU(menuSoundSettings);
           break;
       #endif
 
       #ifdef LCD_LED_PWM_CHANNEL
         case KEY_INDEX_BRIGHTNESS:
-          infoMenu.menu[++infoMenu.cur] = menuBrightnessSettings;
+          OPEN_MENU(menuBrightnessSettings);
           break;
       #endif
 
       #ifdef ST7920_EMULATOR
         case KEY_INDEX_EMULATOR:
-          infoMenu.menu[++infoMenu.cur] = menuMarlinModeSettings;
+          OPEN_MENU(menuMarlinModeSettings);
           break;
       #endif
 
       case KEY_ICON_7:
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       default:

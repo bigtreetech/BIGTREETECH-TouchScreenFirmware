@@ -1,84 +1,69 @@
 #include "interfaceCmd.h"
 #include "includes.h"
 
+#define CMD_QUEUE_SIZE 20
+
+typedef struct
+{
+  CMD gcode;
+  SERIAL_PORT_INDEX port_index;  // 0: for SERIAL_PORT, 1: for SERIAL_PORT_2 etc...
+} GCODE_INFO;
+
+typedef struct
+{
+  GCODE_INFO queue[CMD_QUEUE_SIZE];
+  uint8_t index_r;  // Ring buffer read position
+  uint8_t index_w;  // Ring buffer write position
+  uint8_t count;    // Count of commands in the queue
+} GCODE_QUEUE;
+
 GCODE_QUEUE infoCmd;
 GCODE_QUEUE infoCacheCmd;  // Only when heatHasWaiting() is false the cmd in this cache will move to infoCmd queue.
-static uint8_t cmd_index = 0;
-static bool ispolling = true;
+char * cmd_ptr;
+uint8_t cmd_len;
+uint8_t cmd_index;
+SERIAL_PORT_INDEX cmd_port_index;  // index of serial port originating the gcode
+bool isPolling = true;
 
 // Is there a code character in the current gcode command.
 bool isFullCmdQueue(void)
 {
-  return (infoCmd.count >= CMD_MAX_LIST);
+  return (infoCmd.count >= CMD_QUEUE_SIZE);
 }
 
 bool isNotEmptyCmdQueue(void)
 {
-  return (infoCmd.count || infoHost.wait);
+  return (infoCmd.count != 0 || infoHost.wait == true);
 }
 
-bool isEnqueued(const char *cmd)
+bool isEnqueued(const CMD cmd)
 {
   bool found = false;
   for (int i = 0; i < infoCmd.count && !found; ++i)
   {
-    found = strcmp(cmd, infoCmd.queue[(infoCmd.index_r + i) % CMD_MAX_LIST].gcode) == 0;
+    found = strcmp(cmd, infoCmd.queue[(infoCmd.index_r + i) % CMD_QUEUE_SIZE].gcode) == 0;
   }
   return found;
 }
 
-// Check the presence of the specified 'code' character in the current gcode command.
-static bool cmd_seen(char code)
-{
-  for (cmd_index = 0; cmd_index < CMD_MAX_CHAR && infoCmd.queue[infoCmd.index_r].gcode[cmd_index] != 0; cmd_index++)
-  {
-    if (infoCmd.queue[infoCmd.index_r].gcode[cmd_index] == code)
-    {
-      cmd_index += 1;
-      return true;
-    }
-  }
-  return false;
-}
-
-// Get the int after 'code'. Call after cmd_seen('code').
-static int32_t cmd_value(void)
-{
-  return (strtol(&infoCmd.queue[infoCmd.index_r].gcode[cmd_index], NULL, 10));
-}
-
-// Get the float after 'code'. Call after cmd_seen('code').
-static float cmd_float(void)
-{
-  return (strtod(&infoCmd.queue[infoCmd.index_r].gcode[cmd_index], NULL));
-}
-
-// Check if 'string' starts with 'search'.
-static bool startsWith(TCHAR *search, TCHAR *string)
-{
-  return (strstr(string, search) - string == cmd_index) ? true : false;
-}
-
 // Common store cmd.
-void commonStoreCmd(GCODE_QUEUE *pQueue, const char* format, va_list va)
+void commonStoreCmd(GCODE_QUEUE * pQueue, const char * format, va_list va)
 {
-  vsnprintf(pQueue->queue[pQueue->index_w].gcode, CMD_MAX_CHAR, format, va);
+  vsnprintf(pQueue->queue[pQueue->index_w].gcode, CMD_MAX_SIZE, format, va);
 
   pQueue->queue[pQueue->index_w].port_index = PORT_1;  // port index for SERIAL_PORT
-  pQueue->index_w = (pQueue->index_w + 1) % CMD_MAX_LIST;
+  pQueue->index_w = (pQueue->index_w + 1) % CMD_QUEUE_SIZE;
   pQueue->count++;
 }
 
 // Store gcode cmd to infoCmd queue.
 // This command will be sent to the printer by sendQueueCmd().
 // If the infoCmd queue is full, a reminder message is displayed and the command is discarded.
-bool storeCmd(const char * format,...)
+bool storeCmd(const char * format, ...)
 {
   if (strlen(format) == 0) return false;
 
-  GCODE_QUEUE *pQueue = &infoCmd;
-
-  if (pQueue->count >= CMD_MAX_LIST)
+  if (infoCmd.count >= CMD_QUEUE_SIZE)
   {
     reminderMessage(LABEL_BUSY, STATUS_BUSY);
     return false;
@@ -86,7 +71,7 @@ bool storeCmd(const char * format,...)
 
   va_list va;
   va_start(va, format);
-  commonStoreCmd(pQueue, format, va);
+  commonStoreCmd(&infoCmd, format, va);
   va_end(va);
 
   return true;
@@ -96,31 +81,29 @@ bool storeCmd(const char * format,...)
 // This command will be sent to the printer by sendQueueCmd().
 // If the infoCmd queue is full, a reminder message is displayed and it will wait the queue
 // is available to store the command.
-void mustStoreCmd(const char * format,...)
+void mustStoreCmd(const char * format, ...)
 {
   if (strlen(format) == 0) return;
 
-  GCODE_QUEUE *pQueue = &infoCmd;
-
-  if (pQueue->count >= CMD_MAX_LIST)
+  if (infoCmd.count >= CMD_QUEUE_SIZE)
   {
     reminderMessage(LABEL_BUSY, STATUS_BUSY);
   }  
 
-  while (pQueue->count >= CMD_MAX_LIST)
+  while (isFullCmdQueue())
   {
     loopProcess();
   }
 
   va_list va;
   va_start(va, format);
-  commonStoreCmd(pQueue, format, va);
+  commonStoreCmd(&infoCmd, format, va);
   va_end(va);
 }
 
 // Store Script cmd to infoCmd queue.
 // For example: "M502\nM500\n" will be split into two commands "M502\n", "M500\n"
-void mustStoreScript(const char * format,...)
+void mustStoreScript(const char * format, ...)
 {
   if (strlen(format) == 0) return;
 
@@ -130,9 +113,9 @@ void mustStoreScript(const char * format,...)
   vsnprintf(script, 256, format, va);
   va_end(va);
 
-  char *p = script;
+  char * p = script;
   uint16_t i = 0;
-  char cmd[CMD_MAX_CHAR];
+  CMD cmd;
   for (;;)
   {
     char c = *p++;
@@ -151,23 +134,21 @@ void mustStoreScript(const char * format,...)
 // Store gcode cmd received from UART (e.g. ESP3D, OctoPrint, other TouchScreen etc...) to infoCmd queue.
 // This command will be sent to the printer by sendQueueCmd().
 // If the infoCmd queue is full, a reminder message is displayed and the command is discarded.
-bool storeCmdFromUART(uint8_t portIndex, const char * gcode)
+bool storeCmdFromUART(SERIAL_PORT_INDEX portIndex, const CMD cmd)
 {
-  if (strlen(gcode) == 0) return false;
+  if (strlen(cmd) == 0) return false;
 
-  GCODE_QUEUE *pQueue = &infoCmd;
-
-  if (pQueue->count >= CMD_MAX_LIST)
+  if (infoCmd.count >= CMD_QUEUE_SIZE)
   {
     reminderMessage(LABEL_BUSY, STATUS_BUSY);
     return false;
   }
 
-  strncpy(pQueue->queue[pQueue->index_w].gcode, gcode, CMD_MAX_CHAR);
+  strncpy(infoCmd.queue[infoCmd.index_w].gcode, cmd, CMD_MAX_SIZE);
 
-  pQueue->queue[pQueue->index_w].port_index = portIndex;
-  pQueue->index_w = (pQueue->index_w + 1) % CMD_MAX_LIST;
-  pQueue->count++;
+  infoCmd.queue[infoCmd.index_w].port_index = portIndex;
+  infoCmd.index_w = (infoCmd.index_w + 1) % CMD_QUEUE_SIZE;
+  infoCmd.count++;
 
   return true;
 }
@@ -175,35 +156,33 @@ bool storeCmdFromUART(uint8_t portIndex, const char * gcode)
 // Store gcode cmd to infoCacheCmd queue.
 // This command will be moved to infoCmd queue by loopPrintFromTFT() -> moveCacheToCmd().
 // This function is used only to restore the printing status after a power failed.
-void mustStoreCacheCmd(const char * format,...)
+void mustStoreCacheCmd(const char * format, ...)
 {
-  GCODE_QUEUE *pQueue = &infoCacheCmd;
-
-  if (pQueue->count >= CMD_MAX_LIST)
+  if (infoCmd.count >= CMD_QUEUE_SIZE)
   {
     reminderMessage(LABEL_BUSY, STATUS_BUSY);
   }
 
-  while (pQueue->count >= CMD_MAX_LIST)
+  while (isFullCmdQueue())
   {
     loopProcess();
   }
 
   va_list va;
   va_start(va, format);
-  commonStoreCmd(pQueue, format, va);
+  commonStoreCmd(&infoCmd, format, va);
   va_end(va);
 }
 
 // Move gcode cmd from infoCacheCmd to infoCmd queue.
 bool moveCacheToCmd(void)
 {
-  if (infoCmd.count >= CMD_MAX_LIST) return false;
+  if (infoCmd.count >= CMD_QUEUE_SIZE) return false;
   if (infoCacheCmd.count == 0) return false;
 
   storeCmd("%s", infoCacheCmd.queue[infoCacheCmd.index_r].gcode);
   infoCacheCmd.count--;
-  infoCacheCmd.index_r = (infoCacheCmd.index_r + 1) % CMD_MAX_LIST;
+  infoCacheCmd.index_r = (infoCacheCmd.index_r + 1) % CMD_QUEUE_SIZE;
   return true;
 }
 
@@ -216,29 +195,88 @@ void clearCmdQueue(void)
   printSetUpdateWaiting(false);
 }
 
-// Remove last gcode cmd from infoCmd queue.
-void purgeLastCmd(bool purged, bool avoidTerminal)
+static inline bool getCmd(void)
+{
+  cmd_ptr = &infoCmd.queue[infoCmd.index_r].gcode[0];          // gcode
+  cmd_len = strlen(cmd_ptr);                                   // length of gcode
+  cmd_port_index = infoCmd.queue[infoCmd.index_r].port_index;  // index of serial port originating the gcode
+
+  return (cmd_port_index == PORT_1);  // if gcode is originated by TFT (SERIAL_PORT), return true
+}
+
+void updateCmd(const char * buf)
+{
+  strcat(cmd_ptr, buf);       // append buf to gcode
+  cmd_len = strlen(cmd_ptr);  // new length of gcode
+}
+
+// Send gcode cmd to printer and remove leading gcode cmd from infoCmd queue.
+bool sendCmd(bool purge, bool avoidTerminal)
 {
   char * purgeStr = "[Purged] ";
 
-  if (!avoidTerminal)
-  {
-    if (purged)
-      terminalCache(purgeStr, TERMINAL_GCODE);
-    terminalCache(infoCmd.queue[infoCmd.index_r].gcode, TERMINAL_GCODE);
-  }
+  if (GET_BIT(infoSettings.general_settings, LISTENING_MODE) == 1 &&  // if TFT is in listening mode and FW type was already detected,
+      infoMachineSettings.firmwareType != FW_NOT_DETECTED)            // purge the command
+    purge = true;
 
   #if defined(SERIAL_DEBUG_PORT) && defined(DEBUG_SERIAL_COMM)
     // dump serial data sent to debug port
-    Serial_Puts(SERIAL_DEBUG_PORT, serialPort[infoCmd.queue[infoCmd.index_r].port_index].id);  // serial port ID (e.g. "2" for SERIAL_PORT_2)
+    Serial_Puts(SERIAL_DEBUG_PORT, serialPort[cmd_port_index].id);  // serial port ID (e.g. "2" for SERIAL_PORT_2)
     Serial_Puts(SERIAL_DEBUG_PORT, ">>");
-    if (purged)
+    if (purge)
       Serial_Puts(SERIAL_DEBUG_PORT, purgeStr);
-    Serial_Puts(SERIAL_DEBUG_PORT, infoCmd.queue[infoCmd.index_r].gcode);
+    Serial_Puts(SERIAL_DEBUG_PORT, cmd_ptr);
   #endif
 
+  if (!purge)  // if command is not purged, send it to printer
+  {
+    Serial_Puts(SERIAL_PORT, cmd_ptr);
+    setCurrentAckSrc(cmd_port_index);
+  }
+
+  if (!avoidTerminal)
+  {
+    if (purge)
+      terminalCache(purgeStr, strlen(purgeStr), cmd_port_index, TERMINAL_GCODE);
+    terminalCache(cmd_ptr, cmd_len, cmd_port_index, TERMINAL_GCODE);
+  }
+
   infoCmd.count--;
-  infoCmd.index_r = (infoCmd.index_r + 1) % CMD_MAX_LIST;
+  infoCmd.index_r = (infoCmd.index_r + 1) % CMD_QUEUE_SIZE;
+
+  return !purge;  // return true if command was sent. Otherwise, return false
+}
+
+// Check if 'cmd' starts with 'key'.
+static bool cmd_start_with(const CMD cmd, const char * key)
+{
+  return (strstr(cmd, key) - cmd == cmd_index) ? true : false;
+}
+
+// Check the presence of the specified 'code' character in the current gcode command.
+static bool cmd_seen(char code)
+{
+  for (cmd_index = 0; cmd_index < cmd_len; cmd_index++)
+  {
+    if (cmd_ptr[cmd_index] == code)
+    {
+      cmd_index += 1;
+      return true;
+    }
+  }
+  return false;
+}
+
+// Get the int after 'code'. Call after cmd_seen('code').
+static int32_t cmd_value(void)
+{
+  return (strtol(&cmd_ptr[cmd_index], NULL, 10));
+}
+
+// Get the float after 'code'. Call after cmd_seen('code').
+static float cmd_float(void)
+{
+  return (strtod(&cmd_ptr[cmd_index], NULL));
 }
 
 // Parse and send gcode cmd in infoCmd queue.
@@ -248,28 +286,28 @@ void sendQueueCmd(void)
   if (infoCmd.count == 0) return;
 
   bool avoid_terminal = false;
-  uint16_t  cmd = 0;
+  uint16_t cmd = 0;
   cmd_index = 0;
   // check if cmd is from TFT or other host
-  bool fromTFT = (infoCmd.queue[infoCmd.index_r].port_index == PORT_1);  // port index for SERIAL_PORT
+  bool fromTFT = getCmd();  // retrieve leading gcode in the queue
 
-  if (!ispolling && fromTFT)
+  if (!isPolling && fromTFT)
   { // ignore any query from TFT
-    purgeLastCmd(true, avoid_terminal);
+    sendCmd(true, avoid_terminal);
     return;
   }
 
   // Skip line number from stored gcode for internal parsing purpose
-  if (infoCmd.queue[infoCmd.index_r].gcode[0] == 'N')
+  if (cmd_ptr[0] == 'N')
   {
-    cmd_index = strcspn(infoCmd.queue[infoCmd.index_r].gcode, " ") + 1;
+    cmd_index = strcspn(cmd_ptr, " ") + 1;
   }
 
-  switch (infoCmd.queue[infoCmd.index_r].gcode[cmd_index])
+  switch (cmd_ptr[cmd_index])
   {
     // parse M-codes
     case 'M':
-      cmd = strtol(&infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 1], NULL, 10);
+      cmd = strtol(&cmd_ptr[cmd_index + 1], NULL, 10);
       switch (cmd)
       {
         case 0:
@@ -279,7 +317,7 @@ void sendQueueCmd(void)
             // pause if printing from TFT and purge M0/M1 command.
             if (infoFile.source < BOARD_SD )
             {
-              purgeLastCmd(true, avoid_terminal);
+              sendCmd(true, avoid_terminal);
               printPause(true, PAUSE_M0);
               return;
             }
@@ -301,15 +339,15 @@ void sendQueueCmd(void)
           case 20:  // M20
             if (!fromTFT)
             {
-              if (startsWith("M20 SD:", infoCmd.queue[infoCmd.index_r].gcode) ||
-                  startsWith("M20 U:", infoCmd.queue[infoCmd.index_r].gcode))
+              if (cmd_start_with(cmd_ptr, "M20 SD:") ||
+                  cmd_start_with(cmd_ptr, "M20 U:"))
               {
-                if (startsWith("M20 SD:", infoCmd.queue[infoCmd.index_r].gcode))
+                if (cmd_start_with(cmd_ptr, "M20 SD:"))
                   infoFile.source = TFT_SD;
                 else
                   infoFile.source = TFT_UDISK;
 
-                strncpy(infoFile.title, &infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 4], MAX_PATH_LEN);
+                strncpy(infoFile.title, &cmd_ptr[cmd_index + 4], MAX_PATH_LEN);
                 // strip out any checksum that might be in the string
                 for (int i = 0; i < MAX_PATH_LEN && infoFile.title[i] != 0; i++)
                 {
@@ -335,7 +373,7 @@ void sendQueueCmd(void)
                   }
                 }
                 Serial_Puts(SERIAL_PORT_2, "End file list\nok\n");
-                purgeLastCmd(true, avoid_terminal);
+                sendCmd(true, avoid_terminal);
                 return;
               }
             }
@@ -344,16 +382,16 @@ void sendQueueCmd(void)
           case 23:  // M23
             if (!fromTFT)
             {
-              if (startsWith("M23 SD:", infoCmd.queue[infoCmd.index_r].gcode) ||
-                  startsWith("M23 U:", infoCmd.queue[infoCmd.index_r].gcode))
+              if (cmd_start_with(cmd_ptr, "M23 SD:") ||
+                  cmd_start_with(cmd_ptr, "M23 U:"))
               {
-                if (startsWith("M23 SD:", infoCmd.queue[infoCmd.index_r].gcode))
+                if (cmd_start_with(cmd_ptr, "M23 SD:"))
                   infoFile.source = TFT_SD;
                 else
                   infoFile.source = TFT_UDISK;
 
                 resetInfoFile();
-                strncpy(infoFile.title, &infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 4], MAX_PATH_LEN);
+                strncpy(infoFile.title, &cmd_ptr[cmd_index + 4], MAX_PATH_LEN);
                 // strip out any checksum that might be in the string
                 for (int i = 0; i < MAX_PATH_LEN && infoFile.title[i] != 0 ; i++)
                 {
@@ -387,7 +425,7 @@ void sendQueueCmd(void)
                   Serial_Puts(SERIAL_PORT_2, "\n");
                 }
                 Serial_Puts(SERIAL_PORT_2, "ok\n");
-                purgeLastCmd(true, avoid_terminal);
+                sendCmd(true, avoid_terminal);
                 return;
               }
             }
@@ -400,8 +438,8 @@ void sendQueueCmd(void)
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
                 // case the function loopProcess() is invoked by the following function printPause()
-                purgeLastCmd(true, avoid_terminal);
                 Serial_Puts(SERIAL_PORT_2, "ok\n");
+                sendCmd(true, avoid_terminal);
 
                 if (!isPrinting())  // if not printing, start a new print
                 {
@@ -425,7 +463,7 @@ void sendQueueCmd(void)
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
                 // case the function loopProcess() is invoked by the following function printPause()
                 Serial_Puts(SERIAL_PORT_2, "ok\n");
-                purgeLastCmd(true, avoid_terminal);
+                sendCmd(true, avoid_terminal);
                 printPause(true, PAUSE_NORMAL);
                 return;
               }
@@ -435,7 +473,7 @@ void sendQueueCmd(void)
           case 27:  // M27
             if (rrfStatusIsMacroBusy())
             {
-              purgeLastCmd(true, avoid_terminal);
+              sendCmd(true, avoid_terminal);
               return;
             }
             if (!fromTFT)
@@ -452,7 +490,7 @@ void sendQueueCmd(void)
                 sprintf(buf, "%s printing byte %d/%d\n", (infoFile.source == TFT_SD) ? "TFT SD" : "TFT USB", getPrintCur(), getPrintSize());
                 Serial_Puts(SERIAL_PORT_2, buf);
                 Serial_Puts(SERIAL_PORT_2, "ok\n");
-                purgeLastCmd(true, avoid_terminal);
+                sendCmd(true, avoid_terminal);
                 return;
               }
             }
@@ -464,19 +502,18 @@ void sendQueueCmd(void)
 
           case 28:  // M28
             if (!fromTFT)
-              ispolling = false;
+              isPolling = false;
             break;
 
           case 29:  // M29
             if (!fromTFT)
             {
               // force send M29 directly and purge to avoid any loopback
-              Serial_Puts(SERIAL_PORT, infoCmd.queue[infoCmd.index_r].gcode);
-              purgeLastCmd(true, avoid_terminal);
+              sendCmd(false, avoid_terminal);
 
               mustStoreScript("M105\nM114\nM220\n");
               storeCmd("M221 D%d\n", heatGetCurrentTool());
-              ispolling = true;
+              isPolling = true;
               return;
             }
             break;
@@ -484,15 +521,15 @@ void sendQueueCmd(void)
           case 30:  // M30
             if (!fromTFT)
             {
-              if (startsWith("M30 SD:", infoCmd.queue[infoCmd.index_r].gcode) ||
-                  startsWith("M30 U:", infoCmd.queue[infoCmd.index_r].gcode))
+              if (cmd_start_with(cmd_ptr, "M30 SD:") ||
+                  cmd_start_with(cmd_ptr, "M30 U:"))
               {
-                if (startsWith("M30 SD:", infoCmd.queue[infoCmd.index_r].gcode))
+                if (cmd_start_with(cmd_ptr, "M30 SD:"))
                   infoFile.source = TFT_SD;
                 else
                   infoFile.source = TFT_UDISK;
                 TCHAR filepath[MAX_PATH_LEN];
-                strncpy(filepath, &infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 4], MAX_PATH_LEN);
+                strncpy(filepath, &cmd_ptr[cmd_index + 4], MAX_PATH_LEN);
                 // strip out any checksum that might be in the string
                 for (int i = 0; i < MAX_PATH_LEN && filepath[i] != 0 ; i++)
                 {
@@ -514,20 +551,18 @@ void sendQueueCmd(void)
                   Serial_Puts(SERIAL_PORT_2, filepath);
                   Serial_Puts(SERIAL_PORT_2, ".\nok\n");
                 }
-                purgeLastCmd(true, avoid_terminal);
+                sendCmd(true, avoid_terminal);
                 return;
               }
             }
             break;
 
           case 98:  // RRF macro execution, do not wait for it to complete
-            Serial_Puts(SERIAL_PORT, infoCmd.queue[infoCmd.index_r].gcode);
-            infoHost.wait = false;
-            purgeLastCmd(true, avoid_terminal);
+            sendCmd(false, avoid_terminal);
             return;
 
           case 115:  // M115 TFT
-            if (!fromTFT && startsWith("M115 TFT", infoCmd.queue[infoCmd.index_r].gcode))
+            if (!fromTFT && cmd_start_with(cmd_ptr, "M115 TFT"))
             {
               char buf[50];
               Serial_Puts(SERIAL_PORT_2,
@@ -542,7 +577,7 @@ void sendQueueCmd(void)
               sprintf(buf, "Cap:FAN_CTRL_NUM:%d\n", infoSettings.ctrl_fan_en ? MAX_CRTL_FAN_COUNT : 0);
               Serial_Puts(SERIAL_PORT_2, buf);
               Serial_Puts(SERIAL_PORT_2, "ok\n");
-              purgeLastCmd(true, avoid_terminal);
+              sendCmd(true, avoid_terminal);
               return;
             }
             break;
@@ -555,7 +590,7 @@ void sendQueueCmd(void)
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
                 // case the function loopProcess() is invoked by the following function printPause()
                 Serial_Puts(SERIAL_PORT_2, "ok\n");
-                purgeLastCmd(true, avoid_terminal);
+                sendCmd(true, avoid_terminal);
                 printPause(true, PAUSE_NORMAL);
                 return;
               }
@@ -570,7 +605,7 @@ void sendQueueCmd(void)
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
                 // case the function loopProcess() is invoked by the following function printAbort()
                 Serial_Puts(SERIAL_PORT_2, "ok\n");
-                purgeLastCmd(true, avoid_terminal);
+                sendCmd(true, avoid_terminal);
                 printAbort();
                 return;
               }
@@ -592,12 +627,12 @@ void sendQueueCmd(void)
           if (cmd_seen('R'))
           {
             setPrintRemainingTime((cmd_value() * 60));
-            setM73_presence(0);  // disable parsing remaning time from gCode comments
+            setM73_presence(true);  // disable parsing remaning time from gCode comments
           }
 
           if (!infoMachineSettings.buildPercent)  // if M73 is not supported by Marlin, skip it
           {
-            purgeLastCmd(true, avoid_terminal);
+            sendCmd(true, avoid_terminal);
             return;
           }
           break;
@@ -628,7 +663,7 @@ void sendQueueCmd(void)
           if (cmd_seen('Y')) setParameter(P_STEPS_PER_MM, AXIS_INDEX_Y, cmd_float());
           if (cmd_seen('Z')) setParameter(P_STEPS_PER_MM, AXIS_INDEX_Z, cmd_float());
 
-          uint8_t i = 0; (cmd_seen('T')) ? cmd_value() : 0;
+          uint8_t i = (cmd_seen('T')) ? cmd_value() : 0;
           if (cmd_seen('E')) setParameter(P_STEPS_PER_MM, AXIS_INDEX_E0 + i, cmd_float());
           break;
         }
@@ -636,7 +671,7 @@ void sendQueueCmd(void)
         case 105:  // M105
           if (rrfStatusIsMacroBusy())
           {
-            purgeLastCmd(true, avoid_terminal);
+            sendCmd(true, avoid_terminal);
             return;
           }
           if (fromTFT)
@@ -649,7 +684,7 @@ void sendQueueCmd(void)
         case 155:  // M155
           if (rrfStatusIsMacroBusy())
           {
-            purgeLastCmd(true, avoid_terminal);
+            sendCmd(true, avoid_terminal);
             return;
           }
           if (fromTFT)
@@ -663,7 +698,7 @@ void sendQueueCmd(void)
             {
               char buf[12];
               sprintf(buf, "S%u\n", heatGetUpdateSeconds());
-              strcat(infoCmd.queue[infoCmd.index_r].gcode, (const char*)buf);
+              updateCmd(buf);
             }
           }
           break;
@@ -685,11 +720,14 @@ void sendQueueCmd(void)
         case 109: // M109
           if (fromTFT)
           {
-            infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 3] = '4';  // Avoid send M109 to Marlin
+            if (GET_BIT(infoSettings.general_settings, EMULATED_M109_M190) == 0)  // if emulated M109 / M190 is disabled
+              break;
+
+            cmd_ptr[cmd_index + 3] = '4';  // Avoid send M109 to Marlin
             uint8_t i = cmd_seen('T') ? cmd_value() : heatGetCurrentHotend();
             if (cmd_seen('R'))
             {
-              infoCmd.queue[infoCmd.index_r].gcode[cmd_index - 1] = 'S';
+              cmd_ptr[cmd_index - 1] = 'S';
               heatSetIsWaiting(i, WAIT_COOLING_HEATING);
             }
             else
@@ -710,7 +748,7 @@ void sendQueueCmd(void)
             {
               char buf[12];
               sprintf(buf, "S%u\n", heatGetTargetTemp(i));
-              strcat(infoCmd.queue[infoCmd.index_r].gcode,(const char*)buf);
+              updateCmd(buf);
               heatSetSendWaiting(i, false);
             }
           }
@@ -724,17 +762,17 @@ void sendQueueCmd(void)
           break;
 
         case 117:  // M117
-          if (startsWith("Time Left", &infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 5]))
+          if (cmd_start_with(&cmd_ptr[cmd_index + 5], "Time Left"))
           {
-            parsePrintRemainingTime(&infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 14]);
+            parsePrintRemainingTime(&cmd_ptr[cmd_index + 14]);
           }
           else
           {
-            char message[CMD_MAX_CHAR];
+            CMD message;
 
-            strncpy(message, &infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 4], CMD_MAX_CHAR);
+            strncpy(message, &cmd_ptr[cmd_index + 4], CMD_MAX_SIZE);
             // strip out any checksum that might be in the string
-            for (int i = 0; i < CMD_MAX_CHAR && message[i] != 0; i++)
+            for (int i = 0; i < CMD_MAX_SIZE && message[i] != 0; i++)
             {
               if (message[i] == '*')
               {
@@ -745,7 +783,7 @@ void sendQueueCmd(void)
 
             statusScreen_setMsg((uint8_t *)"M117", (uint8_t *)&message);
 
-            if (infoMenu.menu[infoMenu.cur] != menuStatus)
+            if (MENU_IS_NOT(menuStatus))
             {
               addToast(DIALOG_TYPE_INFO, message);
             }
@@ -755,10 +793,13 @@ void sendQueueCmd(void)
         case 190:  // M190
           if (fromTFT)
           {
-            infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 2] = '4';  // Avoid send M190 to Marlin
+            if (GET_BIT(infoSettings.general_settings, EMULATED_M109_M190) == 0)  // if emulated M109 / M190 is disabled
+              break;
+
+            cmd_ptr[cmd_index + 2] = '4';  // Avoid send M190 to Marlin
             if (cmd_seen('R'))
             {
-              infoCmd.queue[infoCmd.index_r].gcode[cmd_index - 1] = 'S';
+              cmd_ptr[cmd_index - 1] = 'S';
               heatSetIsWaiting(BED, WAIT_COOLING_HEATING);
             }
             else
@@ -778,7 +819,7 @@ void sendQueueCmd(void)
             {
               char buf[12];
               sprintf(buf, "S%u\n", heatGetTargetTemp(BED));
-              strcat(infoCmd.queue[infoCmd.index_r].gcode, (const char *)buf);
+              updateCmd(buf);
               heatSetSendWaiting(BED, false);
             }
           }
@@ -787,10 +828,10 @@ void sendQueueCmd(void)
         case 191:  // M191
           if (fromTFT)
           {
-            infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 2] = '4';  // Avoid send M191 to Marlin
+            cmd_ptr[cmd_index + 2] = '4';  // Avoid send M191 to Marlin
             if (cmd_seen('R'))
             {
-              infoCmd.queue[infoCmd.index_r].gcode[cmd_index - 1] = 'S';
+              cmd_ptr[cmd_index - 1] = 'S';
               heatSetIsWaiting(CHAMBER, WAIT_COOLING_HEATING);
             }
             else
@@ -810,7 +851,7 @@ void sendQueueCmd(void)
             {
               char buf[12];
               sprintf(buf, "S%u\n", heatGetTargetTemp(CHAMBER));
-              strcat(infoCmd.queue[infoCmd.index_r].gcode, (const char *)buf);
+              updateCmd(buf);
               heatSetSendWaiting(CHAMBER, false);
             }
           }
@@ -917,9 +958,9 @@ void sendQueueCmd(void)
               {
                 uint16_t ms = cmd_value();
                 Buzzer_TurnOn(hz, ms);
-                if (!fromTFT && startsWith("M300 TFT", infoCmd.queue[infoCmd.index_r].gcode))
+                if (!fromTFT && cmd_start_with(cmd_ptr, "M300 TFT"))
                 {
-                  purgeLastCmd(true, avoid_terminal);
+                  sendCmd(true, avoid_terminal);
                   return;
                 }
               }
@@ -946,9 +987,7 @@ void sendQueueCmd(void)
           // RRF does not send 'ok' while executing M98
           if (rrfStatusIsMacroBusy())
           {
-            Serial_Puts(SERIAL_PORT, infoCmd.queue[infoCmd.index_r].gcode);
-            infoHost.wait = false;
-            purgeLastCmd(true, avoid_terminal);
+            sendCmd(false, avoid_terminal);
             return;
           }
           break;
@@ -977,9 +1016,9 @@ void sendQueueCmd(void)
           {
             // purge and pause only if emulated M600 is enabled.
             // if emulated M600 is disabled then let the printer pause the print to avoid premature pause
-            if (infoSettings.emulated_m600 == 1)
+            if (GET_BIT(infoSettings.general_settings, EMULATED_M600) == 1)
             {
-              purgeLastCmd(true, avoid_terminal);
+              sendCmd(true, avoid_terminal);
               printPause(true, PAUSE_NORMAL);
               return;
             }
@@ -992,9 +1031,9 @@ void sendQueueCmd(void)
             {
               // purge and pause only if emulated M600 is enabled.
               // if emulated M600 is disabled then let the printer pause the print to avoid premature pause
-              if (infoSettings.emulated_m600 == 1)
+              if (GET_BIT(infoSettings.general_settings, EMULATED_M600) == 1)
               {
-                purgeLastCmd(true, avoid_terminal);
+                sendCmd(true, avoid_terminal);
                 printPause(true, PAUSE_NORMAL);
                 return;
               }
@@ -1021,13 +1060,6 @@ void sendQueueCmd(void)
           if (cmd_seen('Z')) setParameter(P_DELTA_ENDSTOP, 2, cmd_float());
           break;
         }
-
-        #ifdef LOAD_UNLOAD_M701_M702
-          case 701:  // M701 Load filament
-          case 702:  // M702 Unload filament
-            infoHost.wait = true;
-            break;
-        #endif
 
         case 710:  // M710 Controller Fan
         {
@@ -1088,7 +1120,7 @@ void sendQueueCmd(void)
       break;  // end parsing M-codes
 
     case 'G':
-      cmd = strtol(&infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 1], NULL, 10);
+      cmd = strtol(&cmd_ptr[cmd_index + 1], NULL, 10);
       switch (cmd)
       {
         case 0:  // G0
@@ -1133,7 +1165,7 @@ void sendQueueCmd(void)
                 storeCmd("M117 UBL inactive\n");
               }
             }
-            else
+            else  // if RRF
             {
               if (cmd_seen('S'))
               {
@@ -1190,15 +1222,11 @@ void sendQueueCmd(void)
       break;  // end parsing G-codes
 
     case 'T':
-      cmd = strtol(&infoCmd.queue[infoCmd.index_r].gcode[cmd_index + 1], NULL, 10);
+      cmd = strtol(&cmd_ptr[cmd_index + 1], NULL, 10);
       heatSetCurrentTool(cmd);
       break;
-
   }  // end parsing cmd
 
-  infoHost.wait = infoHost.connected;
-
-  setCurrentAckSrc(infoCmd.queue[infoCmd.index_r].port_index);
-  Serial_Puts(SERIAL_PORT, infoCmd.queue[infoCmd.index_r].gcode);
-  purgeLastCmd(false, avoid_terminal);
+  if (sendCmd(false, avoid_terminal) == true)  // if command was sent
+    infoHost.wait = infoHost.connected;
 }  // sendQueueCmd

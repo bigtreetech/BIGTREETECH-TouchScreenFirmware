@@ -79,16 +79,16 @@ void menuExtrude(void)
     mustStoreCmd("M83\n");
   }
 
-  #if LCD_ENCODER_SUPPORT
-    encoderPosition = 0;
-  #endif
+  heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
 
-  while (infoMenu.menu[infoMenu.cur] == menuExtrude)
+  while (MENU_IS(menuExtrude))
   {
     key_num = menuKeyGetValue();
+
     switch (key_num)
     {
       case KEY_ICON_0:
+      case KEY_DECREASE:
         eTemp = 0 - extlenSteps[extlenSteps_index];
         break;
 
@@ -103,6 +103,7 @@ void menuExtrude(void)
       }
 
       case KEY_ICON_3:
+      case KEY_INCREASE:
         eTemp = extlenSteps[extlenSteps_index];
         break;
 
@@ -110,12 +111,11 @@ void menuExtrude(void)
         if (infoSettings.ext_count > 1)
         {
           curExtruder_index = (curExtruder_index + 1) % infoSettings.ext_count;
-
           extruderReDraw(curExtruder_index, eLength, false);
         }
         else
         {
-          infoMenu.menu[++infoMenu.cur] = menuHeat;
+          OPEN_MENU(menuHeat);
           eAxisBackup.backedUp = false;  // exiting from Extrude menu (user might never come back by "Back" long press in Heat menu)
         }
         break;
@@ -136,18 +136,11 @@ void menuExtrude(void)
 
       case KEY_ICON_7:
         cooldownTemperature();
-        infoMenu.cur--;
+        CLOSE_MENU();
         eAxisBackup.backedUp = false;  // exiting from Extrude menu, no need for it anymore
         break;
 
       default:
-        #if LCD_ENCODER_SUPPORT
-          if (encoderPosition)
-          {
-            eTemp += extlenSteps[extlenSteps_index] * encoderPosition;
-            encoderPosition = 0;
-          }
-        #endif
         break;
     }
 

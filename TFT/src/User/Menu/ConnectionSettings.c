@@ -13,22 +13,20 @@ void MB_Reset() // by Lori
   #endif
 }
 
-const MENUITEMS connectionSettingsItems = {
-  // title
-  LABEL_CONNECTION_SETTINGS,
-  // icon                          label
-  {
-    {ICON_BAUD_RATE,               LABEL_SERIAL_PORTS},
-    {ICON_DISCONNECT,              LABEL_DISCONNECT},
-    {ICON_STOP,                    LABEL_EMERGENCYSTOP},
-    {ICON_RESET_VALUE,             LABEL_RESET},
-    {ICON_BACKGROUND,              LABEL_BACKGROUND},
-    {ICON_BACKGROUND,              LABEL_BACKGROUND},
-    {ICON_BACKGROUND,              LABEL_BACKGROUND},
-    {ICON_BACK,                    LABEL_BACK},}
-};
+SERIAL_PORT_INDEX portIndex = 0;  // index on serialPort array
 
-uint8_t portIndex = 0;  // index on serialPort array
+void updateListeningMode(MENUITEMS * menu)
+{
+  if (GET_BIT(infoSettings.general_settings, LISTENING_MODE) == 1)
+  {
+    menu->items[4].label.index = LABEL_OFF;
+    reminderMessage(LABEL_LISTENING, STATUS_LISTENING);
+  }
+  else
+  {
+    menu->items[4].label.index = LABEL_ON;
+  }
+}
 
 // Set uart pins to input, free uart
 void menuDisconnect(void)
@@ -52,13 +50,13 @@ void menuDisconnect(void)
   }
   Serial_Init(ALL_PORTS);
 
-  infoMenu.cur--;
+  CLOSE_MENU();
 }
 
 void menuBaudrate(void)
 {
   LABEL title = {LABEL_BAUDRATE};
-  uint8_t minIndex = portIndex == 0 ? 1 : 0;  // if primary serial port, set minIndex to 1 (value OFF is skipped)
+  uint8_t minIndex = portIndex == PORT_1 ? 1 : 0;  // if primary serial port, set minIndex to 1 (value OFF is skipped)
   uint8_t size = BAUDRATE_COUNT - minIndex;
   LISTITEM totalItems[size];
   KEY_VALUES curIndex = KEY_IDLE;
@@ -86,7 +84,7 @@ void menuBaudrate(void)
 
   listViewCreate(title, totalItems, size, &curPage, true, NULL, NULL);
 
-  while (infoMenu.menu[infoMenu.cur] == menuBaudrate)
+  while (MENU_IS(menuBaudrate))
   {
     curIndex = listViewGetSelectedIndex();
 
@@ -118,7 +116,7 @@ void menuSerialPorts(void)
   LISTITEM totalItems[SERIAL_PORT_COUNT];
   KEY_VALUES curIndex = KEY_IDLE;
 
-  for (uint8_t i = PORT_1; i < SERIAL_PORT_COUNT; i++)
+  for (SERIAL_PORT_INDEX i = PORT_1; i < SERIAL_PORT_COUNT; i++)
   {
     totalItems[i].icon = CHARICON_EDIT;
     totalItems[i].itemType = LIST_CUSTOMVALUE;
@@ -129,14 +127,14 @@ void menuSerialPorts(void)
 
   listViewCreate(title, totalItems, SERIAL_PORT_COUNT, NULL, true, NULL, NULL);
 
-  while (infoMenu.menu[infoMenu.cur] == menuSerialPorts)
+  while (MENU_IS(menuSerialPorts))
   {
     curIndex = listViewGetSelectedIndex();
 
     if (curIndex < (KEY_VALUES)SERIAL_PORT_COUNT)
     {
-      portIndex = curIndex;
-      infoMenu.menu[++infoMenu.cur] = menuBaudrate;
+      portIndex = (SERIAL_PORT_INDEX)curIndex;
+      OPEN_MENU(menuBaudrate);
     }
 
     loopProcess();
@@ -145,21 +143,38 @@ void menuSerialPorts(void)
 
 void menuConnectionSettings(void)
 {
+  MENUITEMS connectionSettingsItems = {
+    // title
+    LABEL_CONNECTION_SETTINGS,
+    // icon                          label
+    {
+      {ICON_BAUD_RATE,               LABEL_SERIAL_PORTS},
+      {ICON_DISCONNECT,              LABEL_DISCONNECT},
+      {ICON_STOP,                    LABEL_EMERGENCYSTOP},
+      {ICON_SHUT_DOWN,               LABEL_SHUT_DOWN},
+      {ICON_BAUD_RATE,               LABEL_ON},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_BACK,                    LABEL_BACK},
+    }
+  };
+
   KEY_VALUES curIndex = KEY_IDLE;
 
+  updateListeningMode(&connectionSettingsItems);
   menuDrawPage(&connectionSettingsItems);
 
-  while (infoMenu.menu[infoMenu.cur] == menuConnectionSettings)
+  while (MENU_IS(menuConnectionSettings))
   {
     curIndex = menuKeyGetValue();
     switch (curIndex)
     {
       case KEY_ICON_0:
-        infoMenu.menu[++infoMenu.cur] = menuSerialPorts;
+        OPEN_MENU(menuSerialPorts);
         break;
 
       case KEY_ICON_1:
-        infoMenu.menu[++infoMenu.cur] = menuDisconnect;
+        OPEN_MENU(menuDisconnect);
         break;
 
       case KEY_ICON_2:
@@ -173,8 +188,16 @@ void menuConnectionSettings(void)
         MB_Reset(); // by Lori
         break;
 
+      case KEY_ICON_4:
+        TOGGLE_BIT(infoSettings.general_settings, LISTENING_MODE);
+        storePara();
+
+        updateListeningMode(&connectionSettingsItems);
+        menuDrawItem(&connectionSettingsItems.items[4], 4);
+        break;
+
       case KEY_ICON_7:
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       default:

@@ -25,7 +25,7 @@ void menuBLTouch(void)
 
   menuDrawPage(&BLTouchItems);
 
-  while (infoMenu.menu[infoMenu.cur] == menuBLTouch)
+  while (MENU_IS(menuBLTouch))
   {
     key_num = menuKeyGetValue();
     switch (key_num)
@@ -52,7 +52,7 @@ void menuBLTouch(void)
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       default:

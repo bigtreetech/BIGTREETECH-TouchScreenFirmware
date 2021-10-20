@@ -162,7 +162,7 @@ void menuInfo(void)
   while (isPress()) loopBackEnd();
 
   GUI_RestoreColorDefault();
-  infoMenu.cur--;
+  CLOSE_MENU();
 }
 
 void menuSettings(void)
@@ -171,34 +171,34 @@ void menuSettings(void)
 
   menuDrawPage(&settingsItems);
 
-  while (infoMenu.menu[infoMenu.cur] == menuSettings)
+  while (MENU_IS(menuSettings))
   {
     key_num = menuKeyGetValue();
     switch (key_num)
     {
       case KEY_ICON_0:
-        infoMenu.menu[++infoMenu.cur] = menuScreenSettings;
+        OPEN_MENU(menuScreenSettings);
         break;
 
       case KEY_ICON_1:
         mustStoreCmd("M503 S0\n");
-        infoMenu.menu[++infoMenu.cur] = menuMachineSettings;
+        OPEN_MENU(menuMachineSettings);
         break;
 
       case KEY_ICON_2:
-        infoMenu.menu[++infoMenu.cur] = menuFeatureSettings;
+        OPEN_MENU(menuFeatureSettings);
         break;
 
       case KEY_ICON_3:
-        infoMenu.menu[++infoMenu.cur] = menuInfo;
+        OPEN_MENU(menuInfo);
         break;
 
       case KEY_ICON_4:
-        infoMenu.menu[++infoMenu.cur] = menuConnectionSettings;
+        OPEN_MENU(menuConnectionSettings);
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       default:

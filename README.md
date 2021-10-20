@@ -101,6 +101,8 @@ In order the TFT firmware is able to provide all of its functionalities/features
 
 `EEPROM_SETTINGS` (in Configuration.h)
 
+`BABYSTEPPING` (in Configuration_adv.h)
+
 `AUTO_REPORT_TEMPERATURES` (in Configuration_adv.h)
 
 `AUTO_REPORT_POSITION` (in Configuration_adv.h)
@@ -149,19 +151,11 @@ In order the TFT firmware is able to provide all of its functionalities/features
 
 
 
-**Options to support Babystep menu:**
-
-`BABYSTEPPING` (in Configuration_adv.h)
-
-
-
-**Options to support repeatability test to test probe accuracy (M48):**
+**Options to fully support Bed Leveling menu:**
 
 `Z_MIN_PROBE_REPEATABILITY_TEST` (in Configuration.h)
 
-
-
-**Options to support alignment of multiple Z steppers using a bed probe (G34):**
+`G26_MESH_VALIDATION (in Configuration.h)` (in Configuration.h)
 
 `Z_STEPPER_AUTO_ALIGN` (in Configuration_adv.h)
 
@@ -187,7 +181,9 @@ B: In case your mainboard provides **EXP1 and EXP2**, you have to connect 2 ribb
 
 C: In case you have an **"E3" mainboard** which provides a **single EXP connector**, you have to connect 1 ribbon cable connecting EXP of the mainboard to **EXP3** of the TFT. In case your TFT does **not** provide an EXP3 connector but only two 10pin connectors (TFT24 v1.1 for example) you will need a "Y-split" cable with one 10pin connector on one side (for the mainboard) and two 10pin connectors on the other side (for the TFT). In the Marlin firmware of your mainboard, make sure that **ONLY** the "`CR10_STOCKDISPLAY`" is activated in Configuration.h and that all other controllers are **De**activated (especially the "`REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER`").
 
-![118848226-d74f3c00-b8ce-11eb-8210-d9e61a8f5650](https://user-images.githubusercontent.com/54359396/121323737-5ead2f80-c910-11eb-936e-c2815dab360a.png)
+![Thomas White July 2021-1](https://user-images.githubusercontent.com/54359396/132397091-d596abcf-750f-422a-bb59-afafc246dc58.jpg)
+![Thomas White July 2021-2](https://user-images.githubusercontent.com/54359396/132397098-136247da-c11e-4783-a163-4147a73094e1.jpg)
+![Thomas White July 2021-3](https://user-images.githubusercontent.com/54359396/132397106-57d8b5c5-715a-4748-8d80-60eaac76477f.jpg)
 
 
 
@@ -197,8 +193,6 @@ C: In case you have an **"E3" mainboard** which provides a **single EXP connecto
 | :----------------------------------------------------------: | :----------------------------------------------------------: |
 | ![status screen 0](https://user-images.githubusercontent.com/54359396/103319145-09035b80-4a31-11eb-91d0-dd761a48b6f5.png) | ![Unified Material Main Screen](https://user-images.githubusercontent.com/54359396/98742038-03cd4d00-23ae-11eb-9552-36dc02fe66f4.png) |
 | In config.ini define: General Settings<br/>Enable Status Screen<br/># Select the Main Screen flavour<br/># Options: [Enable: 1, Disable: 0]<br/>**status_screen: 0** | In config.ini define: General Settings<br/>Enable Status Screen<br/># Select the Main Screen flavour<br/># Options: [Enable: 1, Disable: 0]<br/>**status_screen: 1** |
-
-
 
 
 
@@ -214,7 +208,10 @@ C: In case you have an **"E3" mainboard** which provides a **single EXP connecto
 | ![Hybrid Red Menu Material Mainscreen](https://user-images.githubusercontent.com/54359396/98869176-a995c000-2471-11eb-94da-a0bc41abf3e9.png) | ![Monochrome TFT35](https://user-images.githubusercontent.com/54359396/110254523-d5dccb80-7f8f-11eb-86a5-2d52ecd7ca4d.png) |
 | Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update - Hybrid Red Menu Material theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update/THEME_Hybrid%20Red%20Menu%20Material%20theme) folder | Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update - Hybrid Mono Menu Material theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update/THEME_Hybrid%20Mono%20Menu%20Material%20theme) folder |
 
-
+| Rep Rap Firmware Dark  Theme by **[xPew](https://github.com/xPew)** |                                                              |
+| :----------------------------------------------------------: | ------------------------------------------------------------ |
+| ![Mainscreen-Rep Rap FW Dark](https://user-images.githubusercontent.com/54359396/132403911-067d5cba-942e-496a-9f24-c4b1c9be99d5.png) | ![Mainscreen](https://user-images.githubusercontent.com/54359396/132404369-948e7677-6d17-4a9a-ad7e-25ebc46b3fdb.png) |
+| Use firmware, icons, and fonts from the [`Copy to SD Card root directory to update - Rep Rap Firmware Dark theme`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update/THEME_Rep%20Rap%20Firmware%20Dark%20theme) folder |                                                              |
 
 
 
@@ -447,45 +444,35 @@ Thumbnail image sizes are:
 If this setting is not visible within the Prusa-Slicer you need to enable _Expert Settings Mode_:
 ![ps-expert-settings](https://user-images.githubusercontent.com/54359396/121323041-c7e07300-c90f-11eb-9644-e12e31f7b5f9.png)
 
+
+
 ### TFT Screen Configuration and support for RRF
 
-Overview
+**Overview:**
+
 The most recent version of the standard bigtreetech TFT firmware has built in support for RepRapFirmware. The pre-built images have this enabled by default.
 
-Loading the firmware
+**Loading the firmware:**
+
 There is now an RRF config.ini
 It needs to be renamed from config_rrf.ini to config.ini for flashing of the firmware.
 
-Config.g Changes
+**Config.g Changes:**
+
 Add the following line to your config.g to enable the screen: M575 P1 S2 B57600
 
-Start.g Changes
-Add the following line in your start.g file to allow the screen to know when a job has started.
-M409 K"job.file.fileName"
-
-Stop.g Changes
-Add the following line in your stop.g file to allow the screen to know when a job has stopped.
-M118 P2 S"//action:cancel"
-M0 also need to be added to your stop gcode in your slicer to allow stop.g to be ran.
-
-Pause.g Changes
-Add the following line in your pause.g file to allow the screen to know when a job has been aused.
-M118 P2 S"//action::paused"
-
-Cancel.g Changes
-Add the following line in your cancel.g file to allow the screen to know when a job has been cancelled.
-M118 P2 S"//action::prompt_begin Resuming"
-
-Implemented features:
+**Implemented features:**
 
 Auto detect fw type + separate config.ini for easier setup
 -Temperature/movement/cooling status monitoring and control
+
 - Print status monitoring with mid-print tuneing/pausing
 - Macro support
 - Print from onboard/external SD card
 - Please see [Feature request #1791](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/issues/1791) for more information.
 
-Menu system for macros
+**Menu system for macros:**
+
 - Thumbnail and menu system support for onboard gcodes
 - Load/unload menu
 - PID tune menu

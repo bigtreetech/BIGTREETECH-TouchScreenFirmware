@@ -70,7 +70,7 @@ void menuLoadUnload(void)
 
   heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
 
-  while (infoMenu.menu[infoMenu.cur] == menuLoadUnload)
+  while (MENU_IS(menuLoadUnload))
   {
     key_num = menuKeyGetValue();
 
@@ -110,7 +110,7 @@ void menuLoadUnload(void)
           break;
 
         case KEY_ICON_5:  // heat menu
-          infoMenu.menu[++infoMenu.cur] = menuHeat;
+          OPEN_MENU(menuHeat);
           lastCmd = NONE;
           eAxisBackup.backedUp = false;  // exiting from Extrude menu (user might never come back by "Back" long press in Heat menu)
           break;
@@ -123,7 +123,7 @@ void menuLoadUnload(void)
         case KEY_ICON_7:  // back
           cooldownTemperature();
           lastCmd = NONE;
-          infoMenu.cur--;
+          CLOSE_MENU();
           eAxisBackup.backedUp = false;  // the user exited from menu (not any other process/popup/etc)
           break;
 
@@ -146,12 +146,28 @@ void menuLoadUnload(void)
           case HEATED:
             if (lastCmd == UNLOAD_REQUESTED)
             { // unload
-              mustStoreCmd("M702 T%d\n", tool_index);
+              if (infoMachineSettings.firmwareType != FW_REPRAPFW)
+              {
+                mustStoreCmd("M702 T%d\n", tool_index);
+              }
+              else
+              {
+                mustStoreCmd("T%d\n", tool_index);
+                request_M98("sys/unload.g");
+              }
               lastCmd = UNLOAD_STARTED;
             }
             else  // LOAD_REQUESTED
             { // load
-              mustStoreCmd("M701 T%d\n", tool_index);
+              if (infoMachineSettings.firmwareType != FW_REPRAPFW)
+              {
+                mustStoreCmd("M701 T%d\n", tool_index);
+              }
+              else
+              {
+                mustStoreCmd("T%d\n", tool_index);
+                request_M98("sys/load.g");
+              }
               lastCmd = LOAD_STARTED;
             }
          }

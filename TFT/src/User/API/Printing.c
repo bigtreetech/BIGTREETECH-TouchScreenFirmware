@@ -4,10 +4,13 @@
 typedef struct
 {
   FIL        file;
+  uint32_t   size;                // Gcode file total size
+  uint32_t   cur;                 // Gcode file printed size
+  uint32_t   expectedTime;        // expected print duration in sec
   uint32_t   time;                // current elapsed time in sec
   uint32_t   remainingTime;       // current remaining time in sec (if set with M73 or M117)
-  uint32_t   size;                // Gcode file total size
-  uint32_t   cur;                 // Gcode has printed file size
+  uint16_t   layerNumber;
+  uint16_t   layerCount;
   uint8_t    prevProgress;
   uint8_t    progress;
   bool       progressFromSlicer;  // 1: progress controlled by Slicer (if set with M73)
@@ -58,6 +61,16 @@ void resumeAndContinue(void)
   setRunoutAlarmFalse();
   clearCmdQueue();
   Serial_Puts(SERIAL_PORT, "M876 S1\n");
+}
+
+void setPrintExpectedTime(uint32_t expectedTime)
+{
+  infoPrinting.expectedTime = expectedTime;
+}
+
+uint32_t getPrintExpectedTime(void)
+{
+  return infoPrinting.expectedTime;
 }
 
 void setPrintTime(uint32_t elapsedTime)
@@ -117,6 +130,26 @@ void getPrintRemainingTimeDetail(uint8_t * hour, uint8_t * min, uint8_t * sec)
   *hour = infoPrinting.remainingTime / 3600;
   *min = infoPrinting.remainingTime % 3600 / 60;
   *sec = infoPrinting.remainingTime % 60;
+}
+
+void setPrintLayerNumber(uint16_t layerNumber)
+{
+  infoPrinting.layerNumber = layerNumber;
+}
+
+uint16_t getPrintLayerNumber()
+{
+  return infoPrinting.layerNumber;
+}
+
+void setPrintLayerCount(uint16_t layerCount)
+{
+  infoPrinting.layerCount = layerCount;
+}
+
+uint16_t getPrintLayerCount()
+{
+  return infoPrinting.layerCount;
 }
 
 uint32_t getPrintSize(void)
@@ -233,7 +266,7 @@ void initPrintSummary(void)
 
 void preparePrintSummary(void)
 {
-  if (infoMachineSettings.long_filename_support == ENABLED && infoFile.source == BOARD_SD)
+  if (infoMachineSettings.longFilename == ENABLED && infoFile.source == BOARD_SD)
     sprintf(infoPrintSummary.name,"%." STRINGIFY(SUMMARY_NAME_LEN) "s", infoFile.Longfile[infoFile.fileIndex]);
   else
     sprintf(infoPrintSummary.name,"%." STRINGIFY(SUMMARY_NAME_LEN) "s", getPrintName(infoFile.title));
@@ -326,7 +359,7 @@ static inline void printRemoteStart(void)
   initPrintSummary();  // init print summary
 
   infoMenu.cur = 1;  // Clear menu buffer when printing menu is active by remote
-  infoMenu.menu[infoMenu.cur] = menuPrinting;
+  REPLACE_MENU(menuPrinting);
 }
 
 void printStart(FIL * file, uint32_t size)
@@ -647,11 +680,12 @@ void loopPrintFromTFT(void)
   bool    read_comment = false;
   bool    read_leading_space = true;
   char    read_char;
+  CMD     gcode;
   uint8_t gCode_count = 0;
   uint8_t comment_count = 0;
   UINT    br = 0;
 
-  if (heatHasWaiting() || infoCmd.count || infoPrinting.pause) return;
+  if (heatHasWaiting() || isNotEmptyCmdQueue() || infoPrinting.pause) return;
 
   if (moveCacheToCmd() == true) return;
 
@@ -670,11 +704,9 @@ void loopPrintFromTFT(void)
     {
       if (gCode_count != 0)
       {
-        infoCmd.queue[infoCmd.index_w].gcode[gCode_count++] = '\n';
-        infoCmd.queue[infoCmd.index_w].gcode[gCode_count] = 0;  // terminate string
-        infoCmd.queue[infoCmd.index_w].port_index = PORT_1;     // port index for SERIAL_PORT
-        infoCmd.index_w = (infoCmd.index_w + 1) % CMD_MAX_LIST;
-        infoCmd.count++;
+        gcode[gCode_count++] = '\n';
+        gcode[gCode_count] = 0;  // terminate string
+        storeCmdFromUART(PORT_1, gcode);
       }
 
       if (comment_count != 0)
@@ -692,9 +724,9 @@ void loopPrintFromTFT(void)
       read_comment = false;
       read_leading_space = true;
     }
-    else if (!read_comment && gCode_count >= CMD_MAX_CHAR - 2)
+    else if (!read_comment && gCode_count >= CMD_MAX_SIZE - 2)
     {}  // if command length is beyond the maximum, ignore the following bytes
-    else if (read_comment && comment_count >= CMD_MAX_CHAR - 2)
+    else if (read_comment && comment_count >= CMD_MAX_SIZE - 2)
     {}  // if comment length is beyond the maximum, ignore the following bytes
     else
     {
@@ -713,11 +745,11 @@ void loopPrintFromTFT(void)
 
         if (!read_leading_space && read_char != '\r')
         {
-          if (!read_comment)   // normal gcode
+          if (!read_comment)  // normal gcode
           {
-            infoCmd.queue[infoCmd.index_w].gcode[gCode_count++] = read_char;
+            gcode[gCode_count++] = read_char;
           }
-          else // comment
+          else  // comment
           {
             gCode_comment.content[comment_count++] = read_char;
           }
@@ -735,7 +767,7 @@ void loopPrintFromTFT(void)
 void loopPrintFromHost(void)
 {
   #ifdef HAS_EMULATOR
-    if (infoMenu.menu[infoMenu.cur] == menuMarlinMode) return;
+    if (MENU_IS(menuMarlinMode)) return;
   #endif
 
   if (infoHost.printing && !infoPrinting.printing)  // if a print starting form a remote host is intercepted
@@ -745,7 +777,7 @@ void loopPrintFromHost(void)
 
   if (infoFile.source < BOARD_SD) return;
   if (infoMachineSettings.autoReportSDStatus == ENABLED) return;
-  if (infoMenu.menu[infoMenu.cur] == menuTerminal) return;
+  if (MENU_IS(menuTerminal)) return;
   if (!infoSettings.m27_active && !infoPrinting.printing) return;
 
   static uint32_t nextCheckPrintTime = 0;

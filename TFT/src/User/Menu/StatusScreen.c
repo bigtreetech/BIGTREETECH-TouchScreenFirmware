@@ -286,7 +286,7 @@ void menuStatus(void)
   drawStatus();
   drawStatusScreenMsg();
 
-  while (infoMenu.menu[infoMenu.cur] == menuStatus)
+  while (MENU_IS(menuStatus))
   {
     if (infoHost.connected != lastConnection_status)
     {
@@ -304,48 +304,49 @@ void menuStatus(void)
     {
       case KEY_ICON_0:
         heatSetCurrentIndex(currentTool);
-        infoMenu.menu[++infoMenu.cur] = menuHeat;
+        OPEN_MENU(menuHeat);
         break;
 
       case KEY_ICON_1:
         heatSetCurrentIndex(BED + currentBCIndex);
-        infoMenu.menu[++infoMenu.cur] = menuHeat;
+        OPEN_MENU(menuHeat);
         break;
 
       case KEY_ICON_2:
-        infoMenu.menu[++infoMenu.cur] = menuFan;
+        OPEN_MENU(menuFan);
         break;
 
       case KEY_SPEEDMENU:
         SET_SPEEDMENUINDEX(0);
-        infoMenu.menu[++infoMenu.cur] = menuSpeed;
+        OPEN_MENU(menuSpeed);
         break;
 
       #ifdef TFT70_V3_0
         case KEY_FLOWMENU:
           SET_SPEEDMENUINDEX(1);
-          infoMenu.menu[++infoMenu.cur] = menuSpeed;
+          OPEN_MENU(menuSpeed);
           break;
       #endif
 
       case KEY_MAINMENU:
-        infoMenu.menu[++infoMenu.cur] = menuMain;
+        OPEN_MENU(menuMain);
         break;
 
       case KEY_ICON_7:
-        infoMenu.menu[++infoMenu.cur] = menuPrint;
+        OPEN_MENU(menuPrint);
         break;
       case KEY_LABEL_0:  // by Lori
       case KEY_LABEL_1:  // by Lori
       case KEY_LABEL_2:  // by Lori
       case KEY_LABEL_3:  // by Lori
-        infoMenu.menu[++infoMenu.cur] = menuUnifiedMove;
+        OPEN_MENU(menuUnifiedMove);
         break;
       case KEY_INFOBOX:
         // infoMenu.menu[++infoMenu.cur] = menuNotification;
-        infoMenu.menu[++infoMenu.cur] = menuTerminal;  // by Lori
+        OPEN_MENU(menuTerminal);  // by Lori
 
-      default:break;
+      default:
+        break;
     }
 
     toggleTool();

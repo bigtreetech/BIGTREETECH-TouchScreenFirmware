@@ -1,7 +1,7 @@
 #include "BedLeveling.h"
 #include "includes.h"
 
-static inline void blUpdateState(MENUITEMS *menu)
+void blUpdateState(MENUITEMS * menu)
 {
   if (getParameter(P_ABL_STATE, 0) == ENABLED)
   {
@@ -13,20 +13,19 @@ static inline void blUpdateState(MENUITEMS *menu)
     menu->items[3].icon = ICON_LEVELING_OFF;
     menu->items[3].label.index = LABEL_BL_DISABLE;
   }
-  menuDrawItem(&menu->items[3], 3);
 }
 
 #if DELTA_PROBE_TYPE == 2  // if Delta printer with removable probe
   void deltaMeshEditor(void)
   {
-    infoMenu.menu[++infoMenu.cur] = menuMeshEditor;
+    OPEN_MENU(menuMeshEditor);
   }
 
   void deltaZOffset(void)
   {
     storeCmd("M851\n");
     zOffsetSetMenu(true);  // use Probe Offset menu
-    infoMenu.menu[++infoMenu.cur] = menuZOffset;
+    OPEN_MENU(menuZOffset);
   }
 #endif
 
@@ -72,11 +71,7 @@ void menuBedLeveling(void)
       break;
   }
 
-  if (getParameter(P_ABL_STATE, 0) == ENABLED)
-  {
-    bedLevelingItems.items[3].icon = ICON_LEVELING_ON;
-    bedLevelingItems.items[3].label.index = LABEL_BL_ENABLE;
-  }
+  blUpdateState(&bedLevelingItems);
 
   if (infoMachineSettings.zProbe == ENABLED)
   {
@@ -86,18 +81,18 @@ void menuBedLeveling(void)
 
   menuDrawPage(&bedLevelingItems);
 
-  while (infoMenu.menu[infoMenu.cur] == menuBedLeveling)
+  while (MENU_IS(menuBedLeveling))
   {
     key_num = menuKeyGetValue();
     switch (key_num)
     {
       case KEY_ICON_0:
-        infoMenu.menu[++infoMenu.cur] = menuBedLevelingLayer2;
+        OPEN_MENU(menuBedLevelingLayer2);
         break;
 
       case KEY_ICON_1:
         #if DELTA_PROBE_TYPE != 2
-          infoMenu.menu[++infoMenu.cur] = menuMeshEditor;
+          OPEN_MENU(menuMeshEditor);
         #else
           setDialogText(LABEL_WARNING, LABEL_DISCONNECT_PROBE, LABEL_CONTINUE, LABEL_CANCEL);
           showDialog(DIALOG_TYPE_ALERT, deltaMeshEditor, NULL, NULL);
@@ -105,7 +100,7 @@ void menuBedLeveling(void)
         break;
 
       case KEY_ICON_2:
-        infoMenu.menu[++infoMenu.cur] = menuMeshValid;
+        OPEN_MENU(menuMeshValid);
         break;
 
       case KEY_ICON_3:
@@ -132,7 +127,7 @@ void menuBedLeveling(void)
           #if DELTA_PROBE_TYPE != 2
             storeCmd("M851\n");
             zOffsetSetMenu(true);  // use Probe Offset menu
-            infoMenu.menu[++infoMenu.cur] = menuZOffset;
+            OPEN_MENU(menuZOffset);
           #else
             setDialogText(LABEL_WARNING, LABEL_DISCONNECT_PROBE, LABEL_CONTINUE, LABEL_CANCEL);
             showDialog(DIALOG_TYPE_ALERT, deltaZOffset, NULL, NULL);
@@ -141,12 +136,12 @@ void menuBedLeveling(void)
         break;
 
       case KEY_ICON_6:
-        infoMenu.menu[++infoMenu.cur] = menuUnifiedHeat;
+        OPEN_MENU(menuUnifiedHeat);
         break;
 
       case KEY_ICON_7:
         cooldownTemperature();
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       default:
@@ -156,7 +151,9 @@ void menuBedLeveling(void)
     if (levelStateOld != getParameter(P_ABL_STATE, 0))
     {
       levelStateOld = getParameter(P_ABL_STATE, 0);
+
       blUpdateState(&bedLevelingItems);
+      menuDrawItem(&bedLevelingItems.items[3], 3);
     }
 
     loopProcess();

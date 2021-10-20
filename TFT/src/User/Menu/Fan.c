@@ -42,16 +42,14 @@ void menuFan(void)
   menuDrawPage(&fanItems);
   fanReDraw(fan_index, false);
 
-  #if LCD_ENCODER_SUPPORT
-    encoderPosition = 0;
-  #endif
-
-  while (infoMenu.menu[infoMenu.cur] == menuFan)
+  while (MENU_IS(menuFan))
   {
     key_num = menuKeyGetValue();
+
     switch (key_num)
     {
       case KEY_ICON_0:
+      case KEY_DECREASE:
         if (fanGetSetSpeed(fan_index) > 0)
         {
           if (infoSettings.fan_percentage == 1)
@@ -80,12 +78,12 @@ void menuFan(void)
             fanSetSpeed(fan_index, val);
         }
 
-        menuDrawPage(&fanItems);
         fanReDraw(fan_index, false);
         break;
       }
 
       case KEY_ICON_3:
+      case KEY_INCREASE:
         if (fanGetSetSpeed(fan_index) < infoSettings.fan_max[fan_index])
         {
           if (infoSettings.fan_percentage == 1)
@@ -121,31 +119,10 @@ void menuFan(void)
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       default:
-        #if LCD_ENCODER_SUPPORT
-          if (encoderPosition)
-          {
-            if (fanGetSetSpeed(fan_index) < infoSettings.fan_max[fan_index] && encoderPosition > 0)
-            {
-              if (infoSettings.fan_percentage == 1)
-                fanSetPercent(fan_index, fanGetSetPercent(fan_index) + 1);
-              else
-                fanSetSpeed(fan_index, fanGetSetSpeed(fan_index) + 1);
-            }
-
-            if (fanGetSetSpeed(fan_index) > 0 && encoderPosition < 0)
-            {
-              if (infoSettings.fan_percentage == 1)
-                fanSetPercent(fan_index, fanGetSetPercent(fan_index) - 1);
-              else
-                fanSetSpeed(fan_index, fanGetSetSpeed(fan_index) - 1);
-            }
-            encoderPosition = 0;
-          }
-        #endif
         break;
     }
 

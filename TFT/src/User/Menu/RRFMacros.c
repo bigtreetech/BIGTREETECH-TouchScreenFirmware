@@ -9,9 +9,7 @@ extern const GUI_RECT titleRect;
 void scanInfoFilesFs(void)
 {
   clearInfoFile();
-  char *data = request_M20_rrf(infoFile.title);
-  parseMacroListResponse(data);
-  clearRequestCommandInfo();
+  request_M20_rrf(infoFile.title, false, parseMacroListResponse);
 }
 
 void rrfShowRunningMacro(void)
@@ -31,7 +29,7 @@ void runMacro(const char *display_name)
   request_M98(infoFile.title);
 
   ExitDir();
-  infoMenu.menu[++infoMenu.cur] = menuDummy;  // force a redraw
+  OPEN_MENU(menuDummy);  // force a redraw
 }
 
 // Draw Macro file list
@@ -63,6 +61,7 @@ void menuCallMacro(void)
 {
   uint16_t key_num = KEY_IDLE;
   uint8_t update = 1;
+  infoFile.cur_page = 0;
   infoFile.source = BOARD_SD;
 
   GUI_Clear(MENU_BACKGROUND_COLOR);
@@ -70,7 +69,7 @@ void menuCallMacro(void)
 
   scanInfoFilesFs();
 
-  while (infoMenu.menu[infoMenu.cur] == menuCallMacro)
+  while (MENU_IS(menuCallMacro))
   {
     GUI_SetBkColor(infoSettings.title_bg_color);
     Scroll_DispString(&scrollLine, LEFT);
@@ -85,7 +84,7 @@ void menuCallMacro(void)
         if (IsRootDir() == true)
         {
           clearInfoFile();
-          infoMenu.cur--;
+          CLOSE_MENU();
           break;
         }
         else

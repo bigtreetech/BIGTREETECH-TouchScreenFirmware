@@ -10,6 +10,7 @@ extern "C" {
 #include "FlashStore.h"
 #include "SerialConnection.h"
 #include "Settings.h"
+#include "ui_draw.h"
 
 // check size of settings against max allocated size at compile time
 #define SIZE_CHECK(object) ((void)sizeof(char[1 - 2*!!(object)]))
@@ -22,22 +23,22 @@ extern "C" {
 //=============================== Settings Configurable On config.ini ================================
 //====================================================================================================
 
-#if BAUDRATE < 0 || BAUDRATE >= BAUDRATE_COUNT
-  #error "invalid Baudrate index. Pleas select a value only from options provided in configuration.h"
+#if PRIMARY_BAUDRATE < 0 || PRIMARY_BAUDRATE >= BAUDRATE_COUNT
+  #error "invalid PRIMARY_BAUDRATE index. Pleas select a value only from options provided in configuration.h"
 #endif
 
 #ifndef ST7920_EMULATOR
   #if defined(_PIN_TFT35_V2_0_H_) || defined(_PIN_TFT35_V1_0_H_)
-    #ifdef DEFAULT_LCD_MODE
-      #undef DEFAULT_LCD_MODE
+    #ifdef DEFAULT_MODE
+      #undef DEFAULT_MODE
     #endif
-    #define DEFAULT_LCD_MODE MODE_SERIAL_TSC  // Just set hardcoded here.
-    //#warning "DEFAULT_LCD_MODE supports only SERIAL_TSC. Please update/check your configuration."
+    #define DEFAULT_MODE 1  // Just set hardcoded here.
+    //#warning "DEFAULT_MODE supports only Touch Mode. Please update/check your configuration."
   #endif
 #endif
 
-#ifndef MARLIN_BANNER_TEXT
-  #define MARLIN_BANNER_TEXT "Marlin Mode"
+#ifndef MARLIN_TITLE
+  #define MARLIN_TITLE "Marlin Mode"
 #endif
 
 #if HOTEND_NUM > MAX_HOTEND_COUNT
@@ -52,30 +53,30 @@ extern "C" {
   #error "FAN_NUM can not be more than 6"
 #endif
 
-#if FIL_SENSOR_TYPE > 3 || FIL_SENSOR_TYPE < 0
-  #error "FIL_SENSOR_TYPE cannot be greater than 3 or less than 0"
+#if FIL_RUNOUT < 0 || FIL_RUNOUT > 3
+  #error "FIL_RUNOUT cannot be less than 0 or greater than 3"
 #endif
 
 #ifdef LED_COLOR_PIN
-  #ifdef STARTUP_KNOB_LED_COLOR
-    #if STARTUP_KNOB_LED_COLOR < 0
-      #error "STARTUP_KNOB_LED_COLOR cannot be less than 1"
+  #ifdef KNOB_LED_COLOR
+    #if KNOB_LED_COLOR < 0
+      #error "KNOB_LED_COLOR cannot be less than 1"
     #endif
 
-    #if STARTUP_KNOB_LED_COLOR > 8
-      #error "STARTUP_KNOB_LED_COLOR cannot be greater than 9"
+    #if KNOB_LED_COLOR > 8
+      #error "KNOB_LED_COLOR cannot be greater than 9"
     #endif
   #else
-    #define STARTUP_KNOB_LED_COLOR 0
+    #define KNOB_LED_COLOR 0
   #endif
 #else
-  #ifdef STARTUP_KNOB_LED_COLOR
-    #if STARTUP_KNOB_LED_COLOR > 0
-      //#warning "STARTUP_KNOB_LED_COLOR is not supported on this target and must be set to 0"
-      #undef STARTUP_KNOB_LED_COLOR
+  #ifdef KNOB_LED_COLOR
+    #if KNOB_LED_COLOR > 0
+      //#warning "KNOB_LED_COLOR is not supported on this target and must be set to 0"
+      #undef KNOB_LED_COLOR
     #endif
   #endif
-  #define STARTUP_KNOB_LED_COLOR 0
+  #define KNOB_LED_COLOR 0
 #endif
 
 #ifdef CUSTOM_LABEL_0
