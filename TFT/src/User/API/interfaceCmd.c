@@ -63,7 +63,7 @@ bool storeCmd(const char * format, ...)
 {
   if (strlen(format) == 0) return false;
 
-  if (infoCmd.count >= CMD_QUEUE_SIZE)
+  if (isFullCmdQueue())
   {
     reminderMessage(LABEL_BUSY, STATUS_BUSY);
     return false;
@@ -85,7 +85,7 @@ void mustStoreCmd(const char * format, ...)
 {
   if (strlen(format) == 0) return;
 
-  if (infoCmd.count >= CMD_QUEUE_SIZE)
+  if (isFullCmdQueue())
   {
     reminderMessage(LABEL_BUSY, STATUS_BUSY);
   }  
@@ -138,7 +138,7 @@ bool storeCmdFromUART(SERIAL_PORT_INDEX portIndex, const CMD cmd)
 {
   if (strlen(cmd) == 0) return false;
 
-  if (infoCmd.count >= CMD_QUEUE_SIZE)
+  if (isFullCmdQueue())
   {
     reminderMessage(LABEL_BUSY, STATUS_BUSY);
     return false;
@@ -158,7 +158,7 @@ bool storeCmdFromUART(SERIAL_PORT_INDEX portIndex, const CMD cmd)
 // This function is used only to restore the printing status after a power failed.
 void mustStoreCacheCmd(const char * format, ...)
 {
-  if (infoCmd.count >= CMD_QUEUE_SIZE)
+  if (isFullCmdQueue())
   {
     reminderMessage(LABEL_BUSY, STATUS_BUSY);
   }
@@ -177,7 +177,7 @@ void mustStoreCacheCmd(const char * format, ...)
 // Move gcode cmd from infoCacheCmd to infoCmd queue.
 bool moveCacheToCmd(void)
 {
-  if (infoCmd.count >= CMD_QUEUE_SIZE) return false;
+  if (isFullCmdQueue()) return false;
   if (infoCacheCmd.count == 0) return false;
 
   storeCmd("%s", infoCacheCmd.queue[infoCacheCmd.index_r].gcode);

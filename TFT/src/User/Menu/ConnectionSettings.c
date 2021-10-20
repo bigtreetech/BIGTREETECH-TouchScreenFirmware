@@ -151,7 +151,7 @@ void menuConnectionSettings(void)
       {ICON_BAUD_RATE,               LABEL_SERIAL_PORTS},
       {ICON_DISCONNECT,              LABEL_DISCONNECT},
       {ICON_STOP,                    LABEL_EMERGENCYSTOP},
-      {ICON_SHUT_DOWN,               LABEL_SHUT_DOWN},
+      {ICON_RESET_VALUE,             LABEL_RESET},
       {ICON_BAUD_RATE,               LABEL_ON},
       {ICON_BACKGROUND,              LABEL_BACKGROUND},
       {ICON_BACKGROUND,              LABEL_BACKGROUND},

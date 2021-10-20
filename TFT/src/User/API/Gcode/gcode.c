@@ -48,7 +48,10 @@ static void resetRequestCommandInfo(
   if (string_error2)
     requestCommandInfo.error_num = 3;
 
-  loopProcessToCondition(&isNotEmptyCmdQueue);  // wait for the communication to be clean before requestCommand
+  while (isNotEmptyCmdQueue())
+  {
+    loopProcess();  // Wait for the communication to be clean before requestCommand
+  }
 
   requestCommandInfo.stream_handler = NULL;
   requestCommandInfo.stream_handler = NULL;
@@ -294,7 +297,4 @@ void request_M20_rrf(char *nextdir, bool with_ts, FP_STREAM_HANDLER handler)
   {
     loopProcess();
   }
-
-  //clearRequestCommandInfo();  //shall be call after copying the buffer ...
-  return requestCommandInfo.cmd_rev_buf;
 }

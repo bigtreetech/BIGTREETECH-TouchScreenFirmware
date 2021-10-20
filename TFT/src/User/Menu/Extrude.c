@@ -46,26 +46,10 @@ void menuExtrude(void)
 
   if (eAxisBackup.backedUp == false)
   {
-    if (isNotEmptyCmdQueue())
+    while (isNotEmptyCmdQueue())
     {
-      if ((strncmp(infoCmd.queue[infoCmd.index_r].gcode, "M155", 4) != 0) || (infoCmd.count > 1))
-      { // avoid splash when returning from "Heat" menu
-        popupSplash(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, LABEL_BUSY);
-      }
-
-      while (isNotEmptyCmdQueue())
-      {
-        loopProcess();
-      }
-
-      if (getMenuType() == MENU_TYPE_DIALOG)
-      { // redraw screen to make popup disappear
-        menuDrawPage(&extrudeItems);
-        extruderReDraw(curExtruder_index, eLength, false);
-        infoMenu.menu[infoMenu.cur] = menuExtrude;  // in case of a popup, no need to reload the menu with menuDummy()
-      }
+      loopProcess();
     }
-
     eAxisBackup.coordinate = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
     eAxisBackup.feedrate = coordinateGetFeedRate();
     eAxisBackup.relative = eGetRelative();
