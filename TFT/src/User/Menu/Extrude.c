@@ -46,14 +46,14 @@ void menuExtrude(void)
 
   if (eAxisBackup.backedUp == false)
   {
-    if (infoCmd.count != 0)
+    if (isNotEmptyCmdQueue())
     {
       if ((strncmp(infoCmd.queue[infoCmd.index_r].gcode, "M155", 4) != 0) || (infoCmd.count > 1))
       { // avoid splash when returning from "Heat" menu
         popupSplash(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, LABEL_BUSY);
       }
 
-      while (infoCmd.count != 0)
+      while (isNotEmptyCmdQueue())
       {
         loopProcess();
       }

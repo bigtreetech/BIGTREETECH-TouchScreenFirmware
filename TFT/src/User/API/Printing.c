@@ -524,7 +524,7 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType)
     case TFT_SD:
       if (infoPrinting.pause == true && pauseType == PAUSE_M0)
       {
-        while (infoCmd.count != 0)
+        while (isNotEmptyCmdQueue())
         {
           loopProcess();
         }
