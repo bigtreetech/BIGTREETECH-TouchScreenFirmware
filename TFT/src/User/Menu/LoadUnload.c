@@ -45,24 +45,9 @@ void menuLoadUnload(void)
 
   if (eAxisBackup.backedUp == false)
   {
-    if (infoCmd.count != 0)
+    while (isNotEmptyCmdQueue())
     {
-      if ((strncmp(infoCmd.queue[infoCmd.index_r].gcode, "M155", 4) != 0) || (infoCmd.count > 1))
-      { // avoid splash when returning from "Heat" menu
-        popupSplash(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, LABEL_BUSY);
-      }
-
-      while (infoCmd.count != 0)
-      {
-        loopProcess();
-      }
-
-      if (getMenuType() == MENU_TYPE_DIALOG)
-      { // redraw screen to make popup disappear
-        menuDrawPage(&loadUnloadItems);
-        temperatureReDraw(tool_index, NULL, false);
-        infoMenu.menu[infoMenu.cur] = menuLoadUnload;  // in case of a popup, no need to reload the menu with menuDummy()
-      }
+      loopProcess();
     }
     eAxisBackup.coordinate = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
     eAxisBackup.backedUp = true;
