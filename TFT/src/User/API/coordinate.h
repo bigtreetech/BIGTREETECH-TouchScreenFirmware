@@ -28,7 +28,7 @@ typedef struct
   float coordinate;
   uint32_t feedrate;
   bool relative;
-  bool backedUp;
+  bool handled;
 } E_AXIS_BACKUP;
 
 extern const char axis_id[TOTAL_AXIS];
