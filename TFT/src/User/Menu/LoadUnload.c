@@ -43,14 +43,14 @@ void menuLoadUnload(void)
   menuDrawPage(&loadUnloadItems);
   temperatureReDraw(tool_index, NULL, false);
 
-  if (eAxisBackup.backedUp == false)
+  if (eAxisBackup.handled == false)
   {
     while (isNotEmptyCmdQueue())
     {
       loopProcess();
     }
     eAxisBackup.coordinate = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
-    eAxisBackup.backedUp = true;
+    eAxisBackup.handled = true;
   }
 
   heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
@@ -87,6 +87,19 @@ void menuLoadUnload(void)
           lastCmd = LOAD_REQUESTED;
           break;
 
+        case KEY_INFOBOX:  // edit nozzle temp
+        {
+          int16_t actTarget = heatGetTargetTemp(tool_index);
+          int16_t val = editIntValue(0, infoSettings.max_temp[tool_index], 0, actTarget);
+
+          if (val != actTarget)
+            heatSetTargetTemp(tool_index, val);
+
+          temperatureReDraw(tool_index, NULL, false);
+          lastCmd = NONE;
+          break;
+        }
+
         case KEY_ICON_4:  // nozzle select
           tool_index = (tool_index + 1) % infoSettings.hotend_count;
 
@@ -95,9 +108,10 @@ void menuLoadUnload(void)
           break;
 
         case KEY_ICON_5:  // heat menu
+          heatSetCurrentIndex(currentTool);  // preselect current nozzle for "Heat" menu
           OPEN_MENU(menuHeat);
+          eAxisBackup.handled = false;  // exiting from Extrude menu (user might never come back by "Back" long press in Heat menu)
           lastCmd = NONE;
-          eAxisBackup.backedUp = false;  // exiting from Extrude menu (user might never come back by "Back" long press in Heat menu)
           break;
 
         case KEY_ICON_6:  // cool down nozzle
@@ -109,7 +123,7 @@ void menuLoadUnload(void)
           cooldownTemperature();
           lastCmd = NONE;
           CLOSE_MENU();
-          eAxisBackup.backedUp = false;  // the user exited from menu (not any other process/popup/etc)
+          eAxisBackup.handled = false;  // the user exited from menu (not any other process/popup/etc)
           break;
 
         default:
@@ -162,7 +176,7 @@ void menuLoadUnload(void)
     loopProcess();
   }
 
-  if (eAxisBackup.backedUp == false)  // the user exited from menu (not any other process/popup/etc)
+  if (eAxisBackup.handled == false)  // the user exited from menu (not any other process/popup/etc)
   {
     mustStoreCmd("G92 E%.5f\n", eAxisBackup.coordinate);  // reset E axis position in Marlin to pre - load/unload state
   }
