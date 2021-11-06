@@ -18,7 +18,7 @@ void levelingGetPointCoords(LEVELING_POINT_COORDS coords)
     x_right = temp;
   }
 
-  if (infoSettings.leveling_inverted_y_axis)
+  if (infoSettings.inverted_ly_axis)
   {
     int16_t temp = y_bottom;  // Swap lower and upper
     y_bottom = y_top;

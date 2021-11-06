@@ -10,9 +10,9 @@ extern "C" {
 
 typedef enum
 {
-  TERMINAL_GCODE = 0,
-  TERMINAL_ACK,
-  TERMINAL_COUNT
+  _TERMINAL_GCODE = 0,
+  _TERMINAL_ACK,
+  _TERMINAL_COUNT
 } TERMINAL_SRC;
 
 void menuTerminal(void);
