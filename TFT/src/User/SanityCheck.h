@@ -289,6 +289,58 @@ extern "C" {
   #undef KEYBOARD_MATERIAL_THEME
 #endif
 
+#ifdef TERMINAL_COLOR_SCHEME
+  #if TERMINAL_COLOR_SCHEME > 2
+    #error "TERMINAL_COLOR_SCHEME cannot be greater than 2"
+  #endif
+
+  #if TERMINAL_COLOR_SCHEME < 0
+    #error "TERMINAL_COLOR_SCHEME cannot be less than 0"
+  #endif
+#endif
+#ifndef TERMINAL_COLOR_SCHEME
+  #define TERMINAL_COLOR_SCHEME 0
+#endif
+
+#ifdef TERMINAL_KEYBOARD_LAYOUT
+  #if TERMINAL_KEYBOARD_LAYOUT > 2
+    #error "TERMINAL_KEYBOARD_LAYOUT cannot be greater than 2"
+  #endif
+
+  #if TERMINAL_KEYBOARD_LAYOUT < 0
+    #error "TERMINAL_KEYBOARD_LAYOUT cannot be less than 0"
+  #endif
+#endif
+#ifndef TERMINAL_KEYBOARD_LAYOUT
+  #define TERMINAL_KEYBOARD_LAYOUT 0
+#endif
+
+#ifdef LIVE_TEXT_BG_COLOR_PRINTING
+  #if LIVE_TEXT_BG_COLOR_PRINTING > 2
+    #error "LIVE_TEXT_BG_COLOR_PRINTING cannot be greater than 2"
+  #endif
+
+  #if LIVE_TEXT_BG_COLOR_PRINTING < 0
+    #error "LIVE_TEXT_BG_COLOR_PRINTING cannot be less than 0"
+  #endif
+#endif
+#ifndef LIVE_TEXT_BG_COLOR_PRINTING
+  #define LIVE_TEXT_BG_COLOR_PRINTING 0
+#endif
+
+#ifdef LIVE_TEXT_BG_COLOR_STATUS
+  #if LIVE_TEXT_BG_COLOR_STATUS > 6
+    #error "LIVE_TEXT_BG_COLOR_STATUS cannot be greater than 6"
+  #endif
+
+  #if LIVE_TEXT_BG_COLOR_STATUS < 0
+    #error "LIVE_TEXT_BG_COLOR_STATUS cannot be less than 0"
+  #endif
+#endif
+#ifndef LIVE_TEXT_BG_COLOR_STATUS
+  #define LIVE_TEXT_BG_COLOR_STATUS 0
+#endif
+
 #if THUMBNAIL_PARSER == PARSER_BASE64PNG
   #if RAM_SIZE < 96
     // Decoding Base64-encoded PNGs is not possible due to memory requirements. Downgrading to the "RGB565 bitmap" option.
