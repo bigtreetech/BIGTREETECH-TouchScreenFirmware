@@ -819,13 +819,14 @@ KEY_VALUES menuKeyGetValue(void)
               tempkey = KEY_TITLEBAR;
           }
           else if ((MENU_IS(menuHeat)) ||
-                  (MENU_IS(menuPid)) ||
-                  (MENU_IS(menuTuneExtruder)) ||
-                  (MENU_IS(menuFan)) ||
-                  (MENU_IS(menuExtrude)) ||
-                  (MENU_IS(menuSpeed)) ||
-                  (MENU_IS(menuZOffset)) ||
-                  (MENU_IS(menuMBL)))
+                   (MENU_IS(menuLoadUnload)) ||
+                   (MENU_IS(menuPid)) ||
+                   (MENU_IS(menuTuneExtruder)) ||
+                   (MENU_IS(menuFan)) ||
+                   (MENU_IS(menuExtrude)) ||
+                   (MENU_IS(menuSpeed)) ||
+                   (MENU_IS(menuZOffset)) ||
+                   (MENU_IS(menuMBL)))
           {
             tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keysIN), rect_of_keysIN);
           }
