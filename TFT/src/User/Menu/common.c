@@ -267,7 +267,7 @@ void percentageReDraw(uint8_t itemIndex, bool skipHeader)
 }
 
 static void redrawMenu(MENU_TYPE menuType)
-{// used only when exiting from numpad
+{ // used only when exiting from numpad
   if (menuType == MENU_TYPE_ICON)
     menuDrawPage(getCurMenuItems());
   else if(menuType == MENU_TYPE_LISTVIEW)

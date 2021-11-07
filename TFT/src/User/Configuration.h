@@ -627,7 +627,7 @@
 
 /**
  * NOTES for users having a filament sensor connected to the mainboard:
- *   1) Define "fil_runout:0" below to disable the sensor handling on the TFT.
+ *   1) Define "fil_runout 0" below to disable the sensor handling on the TFT.
  *   2) Configure the sensor in the firmware of your mainboard.
  *   3) Add M75 to "start_gcode" and M77 to "end_gcode" of the TFT (or your slicer).
  */
@@ -803,8 +803,8 @@
  * Up to 15 custom G-code commands that will be available in the Custom menu.
  *
  * Usage:
- *   - To enable a custom command, remove "#" at the begining of custom commands label & G-code.
- *   - To disable a custom command, add "#" at the begining of custom commands label & G-code.
+ *   - To enable a custom command, remove "//" at the begining of custom commands label & G-code.
+ *   - To disable a custom command, add "//" at the begining of custom commands label & G-code.
  *
  * NOTE: If the values are left blank then default name and G-code will be used.
  *

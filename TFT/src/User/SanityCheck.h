@@ -24,19 +24,19 @@ extern "C" {
 //====================================================================================================
 
 #if SP_1 < 1 || SP_1 >= BAUDRATE_COUNT
-  #error "invalid SP_1 index. Please select a value only from options provided in configuration.h"
+  #error "invalid SP_1 index. Please select a value only from options provided in Configuration.h"
 #endif
 
 #if SP_2 < 0 || SP_2 >= BAUDRATE_COUNT
-  #error "invalid SP_2 index. Please select a value only from options provided in configuration.h"
+  #error "invalid SP_2 index. Please select a value only from options provided in Configuration.h"
 #endif
 
 #if SP_3 < 0 || SP_3 >= BAUDRATE_COUNT
-  #error "invalid SP_3 index. Please select a value only from options provided in configuration.h"
+  #error "invalid SP_3 index. Please select a value only from options provided in Configuration.h"
 #endif
 
 #if SP_4 < 0 || SP_4 >= BAUDRATE_COUNT
-  #error "invalid SP_4 index. Please select a value only from options provided in configuration.h"
+  #error "invalid SP_4 index. Please select a value only from options provided in Configuration.h"
 #endif
 
 #ifdef TERMINAL_COLOR_SCHEME
@@ -65,7 +65,7 @@ extern "C" {
   #define MARLIN_TITLE "Marlin Mode"
 #endif
 
-#if HOTEND_COUNT < 1 || HOTEND_COUNT> MAX_HOTEND_COUNT
+#if HOTEND_COUNT < 1 || HOTEND_COUNT > MAX_HOTEND_COUNT
   #error "HOTEND_COUNT cannot be less than 1 or greater than 6"
 #endif
 
