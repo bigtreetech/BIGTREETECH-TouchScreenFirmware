@@ -627,9 +627,9 @@
 
 /**
  * NOTES for users having a filament sensor connected to the mainboard:
- *   1) Define "fil_runout 0" below to disable the sensor handling on the TFT.
+ *   1) Define "FIL_RUNOUT 0" below to disable the sensor handling on the TFT.
  *   2) Configure the sensor in the firmware of your mainboard.
- *   3) Add M75 to "start_gcode" and M77 to "end_gcode" of the TFT (or your slicer).
+ *   3) Add M75 to "START_GCODE" and M77 to "END_GCODE" of the TFT (or your slicer).
  */
 
 /**
@@ -851,8 +851,8 @@
  * NOTES for users having a filament sensor connected to the mainboard:
  *   1) Enable the start/end G-code below.
  *   2) Add the following commands to the start/end G-code:
- *      - start_gcode: M75\n
- *      - end_gcode: M77\n
+ *      - START_GCODE: M75\n
+ *      - END_GCODE: M77\n
  */
 
 /**
