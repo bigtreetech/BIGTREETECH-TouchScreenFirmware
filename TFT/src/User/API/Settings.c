@@ -120,7 +120,11 @@ void initSettings(void)
   infoSettings.lcd_lock_on_idle       = LCD_LOCK_ON_IDLE;
   infoSettings.knob_led_color         = KNOB_LED_COLOR;
   infoSettings.knob_led_idle          = KNOB_LED_IDLE;
-  infoSettings.neopixel_pixels        = NEOPIXEL_PIXELS;
+  #ifdef NEOPIXEL_PIXELS
+    infoSettings.neopixel_pixels      = NEOPIXEL_PIXELS;
+  #else
+    infoSettings.neopixel_pixels      = 0;
+  #endif
 
 // Start, End & Cancel G-code Commands
   infoSettings.send_gcodes            = ((START_GCODE_ENABLED << SEND_GCODES_START_PRINT) | (END_GCODE_ENABLED << SEND_GCODES_END_PRINT) |
