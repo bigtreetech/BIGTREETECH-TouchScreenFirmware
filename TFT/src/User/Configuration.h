@@ -864,16 +864,13 @@
 
 /**
  * Start, End and Cancel G-code
+ * START_GCODE will run before starting a print if "START_GCODE_ENABLED" is enabled.
+ * END_GCODE will run after a print is completed if "END_GCODE_ENABLED" is enabled.
+ * CANCEL_GCODE will run when a print is canceled if "CANCEL_GCODE_ENABLED" is enabled.
  *   Value range: [min: 3, max: 75 characters]
  */
-
-// This G-code will run before starting a print if "start_gcode_enabled" is enabled.
-#define START_GCODE "G28 XY R20\n"
-
-// This G-code will run after a print is completed if "end_gcode_enabled" is enabled.
-#define END_GCODE "M104 S0\nM140 S0\nM107\nM18\n"
-
-// This G-code will run when a print is canceled if "cancel_gcode_enabled" is enabled.
+#define START_GCODE  "G28 XY R20\n"
+#define END_GCODE    "M104 S0\nM140 S0\nM107\nM18\n"
 #define CANCEL_GCODE "M104 S0\nM140 S0\nG28 XY R10\nM107\nM18\n"
 
 //====================================================================================================
