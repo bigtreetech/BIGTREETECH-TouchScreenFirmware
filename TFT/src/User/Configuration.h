@@ -790,8 +790,8 @@
  * Greater than 0 means the number of LEDs in the strip.
  *   Value range: [min: 0, max: 200]
  */
-//#define NEOPIXEL_PIXELS 0  // Default: commented (use default value for TFT variant)
-                             // Uncomment to override default value for TFT variant
+//#define NEOPIXEL_PIXELS 0  // Default: commented (use default value for TFT variant).
+                             // Uncomment it to override default value for TFT variant
 
 //================================================================================
 //============================ Custom G-code Commands ============================
