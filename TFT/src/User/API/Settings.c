@@ -86,8 +86,8 @@ void initSettings(void)
 
   infoSettings.move_speed             = 1;  // index on infoSettings.axis_speed, infoSettings.ext_speed
 
-  infoSettings.inverted_axis          = ((INVERTED_X_AXIS << X_AXIS) | (INVERTED_Y_AXIS << Y_AXIS) | (INVERTED_Z_AXIS << Z_AXIS));
-  infoSettings.inverted_ly_axis       = INVERTED_LY_AXIS;
+  infoSettings.inverted_axis          = ((INVERTED_X_AXIS << X_AXIS) | (INVERTED_Y_AXIS << Y_AXIS) |
+                                         (INVERTED_Z_AXIS << Z_AXIS) | (INVERTED_LY_AXIS << (Z_AXIS + 1)));
 
   infoSettings.probing_z_offset       = PROBING_Z_OFFSET;
   infoSettings.probing_z_raise        = PROBING_Z_RAISE;

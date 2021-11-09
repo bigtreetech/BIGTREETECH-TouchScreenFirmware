@@ -233,8 +233,7 @@ typedef struct
 
   uint8_t  move_speed;  // index on infoSettings.axis_speed, infoSettings.ext_speed
 
-  uint8_t  inverted_axis;  // invert X Y Z axis (Bit Values)
-  uint8_t  inverted_ly_axis;
+  uint8_t  inverted_axis;  // invert X Y Z axis and leveling Y axis (Bit Values)
   uint8_t  probing_z_offset;
   float    probing_z_raise;
   uint8_t  z_steppers_alignment;
