@@ -406,6 +406,7 @@ void parseACK(void)
       if (ack_seen(magic_error)) ackPopupInfo(magic_error);
 
       // the first response should be such as "T:25/50\n"
+      // The "T:0" response is specifically for Marlin when EXTRUDER_COUNT:0
       if (!(ack_seen("@") && ack_seen("T:")) && !ack_seen("T0:") && !ack_seen("T:0")) goto parse_end;
 
       // find hotend count and setup heaters
