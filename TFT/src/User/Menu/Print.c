@@ -194,7 +194,6 @@ void menuPrintFromSource(void)
     CLOSE_MENU();
   }
 
-
   while (MENU_IS(menuPrintFromSource))
   {
     if (list_mode != true)  // select item from icon view
@@ -211,7 +210,7 @@ void menuPrintFromSource(void)
           if (infoFile.cur_page > 0)
           {
             infoFile.cur_page--;
-            update = 1;
+            update = 2;  // request no title bar update
           }
           break;
 
@@ -220,7 +219,7 @@ void menuPrintFromSource(void)
           if (infoFile.cur_page + 1 < pageCount)
           {
             infoFile.cur_page++;
-            update = 1;
+            update = 2;  // request no title bar update
           }
           break;
 
@@ -269,8 +268,8 @@ void menuPrintFromSource(void)
           }
           break;
 
-        case KEY_DECREASE:
-        case KEY_INCREASE:
+        case KEY_PAGEUP:
+        case KEY_PAGEDOWN:
         case KEY_IDLE:
           break;
 
@@ -284,23 +283,23 @@ void menuPrintFromSource(void)
     // refresh file menu
     if (update)
     {
-      update = 0;
-
       if (list_mode != true)
       {
         printIconItems.title.address = (uint8_t *)infoFile.title;
         gocdeIconDraw();
+
+        if (update != 2)  // update title only when entering/exiting to/from directory
+          menuDrawTitle((uint8_t *)infoFile.title);
       }
       else
-      {
+      { // title bar is also drawn by listViewCreate
         listViewCreate((LABEL){.address = (uint8_t *)infoFile.title}, NULL, infoFile.folderCount + infoFile.fileCount,
                        &infoFile.cur_page, false, NULL, gocdeListDraw);
       }
 
       Scroll_CreatePara(&scrollLine, (uint8_t *)infoFile.title, &titleRect);
-      GUI_SetBkColor(infoSettings.title_bg_color);
-      GUI_ClearRect(0, 0, LCD_WIDTH, TITLE_END_Y);
-      GUI_SetBkColor(infoSettings.bg_color);
+
+      update = 0;  // finally reset update request
     }
 
     GUI_SetBkColor(infoSettings.title_bg_color);

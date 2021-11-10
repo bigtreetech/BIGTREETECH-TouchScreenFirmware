@@ -117,7 +117,7 @@ X_CONFIG(LCD_LOCK_ON_IDLE)
 X_CONFIG(KNOB_LED_COLOR)
 X_CONFIG(KNOB_LED_IDLE)
 X_CONFIG(NEOPIXEL_PIXELS)
-//-----------------------------Custom Gcode Commands
+//-----------------------------Custom G-code Commands
 X_CONFIG(CUSTOM_LABEL_1)
 X_CONFIG(CUSTOM_LABEL_2)
 X_CONFIG(CUSTOM_LABEL_3)
@@ -148,7 +148,7 @@ X_CONFIG(CUSTOM_GCODE_12)
 X_CONFIG(CUSTOM_GCODE_13)
 X_CONFIG(CUSTOM_GCODE_14)
 X_CONFIG(CUSTOM_GCODE_15)
-//-----------------------------Start, End & Cancel Gcode Commands
+//-----------------------------Start, End & Cancel G-code Commands
 X_CONFIG(START_GCODE_ENABLED)
 X_CONFIG(END_GCODE_ENABLED)
 X_CONFIG(CANCEL_GCODE_ENABLED)

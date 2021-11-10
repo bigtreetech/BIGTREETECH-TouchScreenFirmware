@@ -1254,7 +1254,7 @@ void parseACK(void)
 
     if (avoid_terminal != true)
     {
-      terminalCache(dmaL2Cache, dmaL2Cache_len, ack_port_index, TERMINAL_ACK);
+      terminalCache(dmaL2Cache, dmaL2Cache_len, ack_port_index, SRC_TERMINAL_ACK);
     }
   }
 }
