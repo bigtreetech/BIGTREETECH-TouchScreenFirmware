@@ -426,7 +426,7 @@ void parseACK(void)
         storeCmd("M115\n");  // as last command to identify the FW type!
         coordinateQuerySetWait(true);
       }
-	  else if (infoMachineSettings.firmwareType == FW_NOT_DETECTED)  // if never connected to the printer since boot
+      else if (infoMachineSettings.firmwareType == FW_NOT_DETECTED)  // if never connected to the printer since boot
       {
         storeCmd("M503\n");  // Query detailed printer capabilities
         storeCmd("M92\n");   // Steps/mm of extruder is an important parameter for Smart filament runout
