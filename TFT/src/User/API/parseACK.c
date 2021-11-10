@@ -414,7 +414,6 @@ void parseACK(void)
       {
         if (!ack_seen(heaterID[i])) break;
       }
-      infoSettings.hotend_count = i ? i : 1;
       if (infoSettings.ext_count < infoSettings.hotend_count) infoSettings.ext_count = infoSettings.hotend_count;
       if (ack_seen(heaterID[BED])) infoSettings.bed_en = ENABLED;
       if (ack_seen(heaterID[CHAMBER])) infoSettings.chamber_en = ENABLED;

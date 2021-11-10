@@ -38,6 +38,12 @@ void loopSpeed(void)
 {
   for (uint8_t i = 0; i < SPEED_NUM; i++)
   {
+    if (infoSettings.ext_count == 0 && i > 0)
+    {
+        // Don't poll M221 if there are no extruders
+        continue;
+    }
+
     if (GET_BIT(needSetPercent, i) && (OS_GetTimeMs() > nextSpeedTime))
     {
       if (storeCmd("%s S%d D%d\n", speedCmd[i], setPercent[i], heatGetCurrentTool()))

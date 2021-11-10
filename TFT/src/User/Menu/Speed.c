@@ -84,7 +84,10 @@ void menuSpeed(void)
         break;
 
       case KEY_ICON_4:
-        item_index = (item_index + 1) % SPEED_NUM;
+        if (infoSettings.ext_count > 0)
+        {
+          item_index = (item_index + 1) % SPEED_NUM;
+        }
         percentageItems.title.index = itemPercentTypeTitle[item_index];
         percentageItems.items[key_num] = itemPercentType[item_index];
 
