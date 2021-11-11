@@ -40,8 +40,8 @@ void loopSpeed(void)
   {
     if (infoSettings.ext_count == 0 && i > 0)
     {
-        // Don't poll M221 if there are no extruders
-        continue;
+      // Don't poll M221 if there are no extruders
+      continue;
     }
 
     if (GET_BIT(needSetPercent, i) && (OS_GetTimeMs() > nextSpeedTime))
