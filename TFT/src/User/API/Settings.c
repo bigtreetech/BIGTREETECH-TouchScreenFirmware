@@ -27,7 +27,7 @@ void initSettings(void)
 
 // UI Settings
   infoSettings.rotated_ui             = ROTATED_UI;
-  infoSettings.language               = LANGUAGE;
+  infoSettings.language               = LANGUAGE_MODE;
   infoSettings.status_screen          = STATUS_SCREEN;
   infoSettings.title_bg_color         = lcd_colors[TITLE_BACKGROUND_COLOR];
   infoSettings.bg_color               = lcd_colors[MENU_BACKGROUND_COLOR];
@@ -69,7 +69,7 @@ void initSettings(void)
   infoSettings.ctrl_fan_en            = CONTROLLER_FAN;
   infoSettings.min_ext_temp           = MIN_TEMP;
   infoSettings.auto_load_leveling     = AUTO_LOAD_LEVELING;
-  infoSettings.onboard_sd             = ONBOARD_SD;  // ENABLED / DISABLED / AUTO
+  infoSettings.onboard_sd             = DEFAULT_ONBOARD_SD;  // ENABLED / DISABLED / AUTO
   infoSettings.m27_refresh_time       = M27_REFRESH_TIME;
   infoSettings.m27_active             = M27_ALWAYS_ACTIVE;
   infoSettings.long_filename          = LONG_FILENAME;  // ENABLED / DISABLED / AUTO

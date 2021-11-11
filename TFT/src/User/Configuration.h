@@ -86,7 +86,7 @@
  *
  *   Options: [Primary Language (english): 0, Secondary Language: 1]
  */
-#define LANGUAGE 0  // Default: 0
+#define LANGUAGE_MODE 0  // Default: 0
 
 /**
  * Status Screen
@@ -455,7 +455,7 @@
  * Auto-detect is not available for other firmwares like Smoothieware.
  *   Options: [disable: 0, enable: 1, auto-detect: 2]
  */
-#define ONBOARD_SD 2  // Default: 2
+#define DEFAULT_ONBOARD_SD 2  // Default: 2
 
 /**
  * M27 Printing Status Refresh Time
