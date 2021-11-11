@@ -2,47 +2,47 @@
 #include "includes.h"
 #include "language_keywords.h"
 
-#if DEFAULT_LANGUAGE == ENGLISH
+#if SYSTEM_LANGUAGE == ENGLISH
 #include "language_en.h"
-#elif DEFAULT_LANGUAGE == CHINESE
+#elif SYSTEM_LANGUAGE == CHINESE
 #include "language_cn.h"
-#elif DEFAULT_LANGUAGE == RUSSIAN
+#elif SYSTEM_LANGUAGE == RUSSIAN
 #include "language_ru.h"
-#elif DEFAULT_LANGUAGE == JAPANESE
+#elif SYSTEM_LANGUAGE == JAPANESE
 #include "language_jp.h"
-#elif DEFAULT_LANGUAGE == GERMAN
+#elif SYSTEM_LANGUAGE == GERMAN
 #include "language_de.h"
-#elif DEFAULT_LANGUAGE == ARMENIAN
+#elif SYSTEM_LANGUAGE == ARMENIAN
 #include "language_am.h"
-#elif DEFAULT_LANGUAGE == CZECH
+#elif SYSTEM_LANGUAGE == CZECH
 #include "language_cz.h"
-#elif DEFAULT_LANGUAGE == SPANISH
+#elif SYSTEM_LANGUAGE == SPANISH
 #include "language_es.h"
-#elif DEFAULT_LANGUAGE == FRENCH
+#elif SYSTEM_LANGUAGE == FRENCH
 #include "language_fr.h"
-#elif DEFAULT_LANGUAGE == PORTUGUESE
+#elif SYSTEM_LANGUAGE == PORTUGUESE
 #include "language_pt.h"
-#elif DEFAULT_LANGUAGE == ITALIAN
+#elif SYSTEM_LANGUAGE == ITALIAN
 #include "language_it.h"
-#elif DEFAULT_LANGUAGE == POLISH
+#elif SYSTEM_LANGUAGE == POLISH
 #include "language_pl.h"
-#elif DEFAULT_LANGUAGE == SLOVAK
+#elif SYSTEM_LANGUAGE == SLOVAK
 #include "language_sk.h"
-#elif DEFAULT_LANGUAGE == DUTCH
+#elif SYSTEM_LANGUAGE == DUTCH
 #include "language_nl.h"
-#elif DEFAULT_LANGUAGE == HUNGARIAN
+#elif SYSTEM_LANGUAGE == HUNGARIAN
 #include "language_hu.h"
-#elif DEFAULT_LANGUAGE == TURKISH
+#elif SYSTEM_LANGUAGE == TURKISH
 #include "language_tr.h"
-#elif DEFAULT_LANGUAGE == GREEK
+#elif SYSTEM_LANGUAGE == GREEK
 #include "language_gr.h"
-#elif DEFAULT_LANGUAGE == SLOVENIAN
+#elif SYSTEM_LANGUAGE == SLOVENIAN
 #include "language_sl.h"
-#elif DEFAULT_LANGUAGE == CATALAN
+#elif SYSTEM_LANGUAGE == CATALAN
 #include "language_ca.h"
-#elif DEFAULT_LANGUAGE == TRAD_CHINESE
+#elif SYSTEM_LANGUAGE == TRAD_CHINESE
 #include "language_tc.h"
-#elif DEFAULT_LANGUAGE == UKRAINIAN
+#elif SYSTEM_LANGUAGE == UKRAINIAN
 #include "language_uk.h"
 #else
   #error "Error: invalid language defined"

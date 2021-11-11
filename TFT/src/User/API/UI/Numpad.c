@@ -245,7 +245,7 @@ double numPadFloat(uint8_t * title, double old_val, double reset_val, bool negat
         if (nowIndex == 1)  // last character deleted
         {
           if (ParameterBuf[0] == '0')
-          {// '0' cannot be deleted
+          { // '0' cannot be deleted
             BUZZER_PLAY(SOUND_DENY);
             break;
           }

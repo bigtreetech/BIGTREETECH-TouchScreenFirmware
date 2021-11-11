@@ -474,7 +474,7 @@ void loopReminderClear(void)
       break;
 
     case STATUS_LISTENING:
-      if (GET_BIT(infoSettings.general_settings, LISTENING_MODE) == 1)
+      if (GET_BIT(infoSettings.general_settings, INDEX_LISTENING_MODE) == 1)
         return;
       break;
 
