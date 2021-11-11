@@ -27,7 +27,7 @@ void initSettings(void)
 
 // UI Settings
   infoSettings.rotated_ui             = ROTATED_UI;
-  infoSettings.language               = LANGUAGE_MODE;
+  infoSettings.language               = DEFAULT_LANGUAGE;
   infoSettings.status_screen          = STATUS_SCREEN;
   infoSettings.title_bg_color         = lcd_colors[TITLE_BACKGROUND_COLOR];
   infoSettings.bg_color               = lcd_colors[MENU_BACKGROUND_COLOR];

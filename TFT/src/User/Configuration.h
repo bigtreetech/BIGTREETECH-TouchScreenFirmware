@@ -86,7 +86,7 @@
  *
  *   Options: [Primary Language (english): 0, Secondary Language: 1]
  */
-#define LANGUAGE_MODE 0  // Default: 0
+#define DEFAULT_LANGUAGE 0  // Default: 0
 
 /**
  * Status Screen
@@ -106,7 +106,7 @@
  * Set colors used in Touch Mode.
  *
  * NOTE: Select an option from the provided list or set the color (RGB888 format) hex value directly
- *       (start with “0x”), such as: Red: 0xFF0000, Green: 0x00FF00, Blue: 0x0000FF.
+ *       (start with "0x"), such as: Red: 0xFF0000, Green: 0x00FF00, Blue: 0x0000FF.
  *
  *   Options: [ WHITE: 0,  BLACK: 1,  RED: 2,  GREEN: 3,      BLUE: 4,       CYAN: 5,  MAGENTA: 6,    YELLOW: 7,
  *             ORANGE: 8, PURPLE: 9, LIME: 10, BROWN: 11, DARKBLUE: 12, DARKGREEN: 13,    GRAY: 14, DARKGRAY: 15]
@@ -272,7 +272,7 @@
  * Set colors used in Marlin Mode.
  *
  * NOTE: Select an option from the provided list or set the color (RGB888 format) hex value directly
- *       (start with “0x”), such as: Red: 0xFF0000, Green: 0x00FF00, Blue: 0x0000FF.
+ *       (start with "0x"), such as: Red: 0xFF0000, Green: 0x00FF00, Blue: 0x0000FF.
  *
  *   Options: [ WHITE: 0,  BLACK: 1,  RED: 2,  GREEN: 3,      BLUE: 4,       CYAN: 5,  MAGENTA: 6,    YELLOW: 7,
  *             ORANGE: 8, PURPLE: 9, LIME: 10, BROWN: 11, DARKBLUE: 12, DARKGREEN: 13,    GRAY: 14, DARKGRAY: 15]
@@ -359,7 +359,7 @@
 /**
  * Bed / Extruder / Chamber Maximum Temperatures
  *   Format: [max_temp: T0:<max temp> T1:<max temp> T2:<max temp> T3:<max temp> T4:<max temp> T5:<max temp> BED:<max temp> CHAMBER:<max temp>]
- *   Unit: [temperature in °C]
+ *   Unit: [temperature in Â°C]
  *   Value range: hotend:  [min: 20, max: 1000]
  *                bed:     [min: 20, max: 400]
  *                chamber: [min: 20, max: 200]
@@ -370,7 +370,7 @@
  * Cold Extrusion Minimum Temperature
  * Minimum temperature needed to extrude/retract.
  * Any extrusion/retraction below this temperature will be prevented.
- *   Unit: [temperature in °C]
+ *   Unit: [temperature in Â°C]
  *   Value range: [min: 20, max: 1000]
  */
 #define MIN_TEMP 180  // Default: 180
@@ -578,7 +578,7 @@
  * Preheat Temperatures
  *   Format: [preheat_name_X:<name>]
  *           [preheat_temp_X:T<hotend temp> B<bed temp>]
- *   Unit: [temperature in °C]
+ *   Unit: [temperature in Â°C]
  *   Value range: name:        [min: 3, max: 20 characters]
  *                hotend temp: [min: 20, max: 1000]
  *                bed temp:    [min: 20, max: 400]
@@ -615,7 +615,7 @@
  * The printer will shutdown automatically if the hotend temperature is below this value.
  * If the hotend temperature is higher than this value the fans will be turned on to cooldown and it
  * will wait for the hotend temperature to drop below this value before shutting down automatically.
- *   Unit: [temperature in °C]
+ *   Unit: [temperature in Â°C]
  *   Value range: [min: 20, max: 1000]
  */
 #define PS_AUTO_SHUTDOWN_TEMP 50  // Default: 50
@@ -1065,7 +1065,7 @@
  *             SPANISH,    FRENCH,   PORTUGUESE,  ITALIAN,    POLISH,    SLOVAK,        DUTCH,
  *             HUNGARIAN,  TURKISH,  GREEK,       SLOVENIAN,  CATALAN,   TRAD_CHINESE,  UKRAINIAN]
  */
-#define DEFAULT_LANGUAGE ENGLISH  // Default: ENGLISH
+#define SYSTEM_LANGUAGE ENGLISH  // Default: ENGLISH
 
 /**
  * Rapid Serial Communication
