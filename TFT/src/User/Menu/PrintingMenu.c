@@ -40,10 +40,6 @@ const GUI_RECT printinfo_val_rect[6] = {
 const GUI_RECT progressBar = {PROGRESS_BAR_X0, PICON_START_Y + PICON_HEIGHT * 2 + PICON_SPACE_Y * 2 + 1,
                               PROGRESS_BAR_X1, ICON_START_Y + ICON_HEIGHT + SPACE_Y - PICON_SPACE_Y - 1};
 
-#ifdef UNIFORM_LIVE_TEXT_BG_COLOR
-  uint16_t textBgColor;
-#endif
-
 enum
 {
   PRINT_ICON = (1 << 0),
@@ -199,6 +195,7 @@ void menuBeforePrinting(void)
 static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
 {
   uint8_t icon = printingIcon[icon_pos];
+  const GUI_RECT *rect = &rect_of_keyPS[icon_pos];
   char tempstr[14];
 
   switch (icon_pos)
@@ -217,19 +214,26 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
       break;
   }
 
-  if (draw_type & PRINT_ICON)
-  {
-    ICON_ReadDisplay(rect_of_keyPS[icon_pos].x0, rect_of_keyPS[icon_pos].y0, icon);
-    GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-  }
-  else
-  {
-    ICON_PrepareRead(rect_of_keyPS[icon_pos].x0, rect_of_keyPS[icon_pos].y0, icon);
-  }
+  #if LIVE_TEXT_BG_COLOR_PRINTING > 0  // it allows to eliminate flickering on alternating icons
+    if (draw_type & PRINT_ICON)
+      ICON_PartialReadDisplay(rect->x0, rect->y0, PICON_TITLE_X, -1, icon, 0, 0);
 
-  #ifdef UNIFORM_LIVE_TEXT_BG_COLOR  // it set the sampled background color as the background color to be used
-    GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
-    GUI_SetBkColor(textBgColor);
+    ICON_PrepareRead(rect->x0, rect->y0, icon);
+
+    #if LIVE_TEXT_BG_COLOR_PRINTING == 2  // if sampled icon background uniform color has to be used
+      GUI_SetBkColor(ICON_ReadPixel(rect->x0 + PICON_TITLE_X, rect->y0 + PICON_TITLE_Y));
+      GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
+    #endif
+  #else
+    if (draw_type & PRINT_ICON)
+    {
+      ICON_ReadDisplay(rect->x0, rect->y0, icon);
+      GUI_SetTextMode(GUI_TEXTMODE_TRANS);
+    }
+    else
+    {
+      ICON_PrepareRead(rect->x0, rect->y0, icon);
+    }
   #endif
 
   if (draw_type & PRINT_TOP_ROW)
@@ -292,7 +296,7 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
         break;
     }
 
-    GUI_DispString(rect_of_keyPS[icon_pos].x0 + PICON_TITLE_X, rect_of_keyPS[icon_pos].y0 + PICON_TITLE_Y, textString);
+    GUI_DispString(rect->x0 + PICON_TITLE_X, rect->y0 + PICON_TITLE_Y, textString);
   }
 
   if (draw_type & PRINT_BOTTOM_ROW)
@@ -355,8 +359,12 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
     GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (uint8_t *)tempstr);
   }
 
-  if (!(draw_type & PRINT_ICON))
+  #if LIVE_TEXT_BG_COLOR_PRINTING > 0
     ICON_PrepareReadEnd();
+  #else
+    if (!(draw_type & PRINT_ICON))
+      ICON_PrepareReadEnd();
+  #endif
 }  // reDrawPrintingValue
 
 static inline void toggleInfo(void)
@@ -374,14 +382,7 @@ static inline void toggleInfo(void)
     {
       currentBCIndex = (currentBCIndex + 1) % 2;
       RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
-
-      #ifdef UNIFORM_LIVE_TEXT_BG_COLOR  // it allows to eliminate flickering on alternating icons
-        ICON_PartialReadDisplay(rect_of_keyPS[ICON_POS_BED].x0, rect_of_keyPS[ICON_POS_BED].y0, PICON_TITLE_X, -1,
-                                (currentBCIndex == 0) ? ICON_PRINTING_BED : ICON_PRINTING_CHAMBER, 0, 0);
-        reDrawPrintingValue(ICON_POS_BED, PRINT_TOP_ROW | PRINT_BOTTOM_ROW);
-      #else
-        reDrawPrintingValue(ICON_POS_BED, PRINT_ICON | PRINT_TOP_ROW | PRINT_BOTTOM_ROW);
-      #endif
+      reDrawPrintingValue(ICON_POS_BED, PRINT_ICON | PRINT_TOP_ROW | PRINT_BOTTOM_ROW);
     }
     else
     {
@@ -402,14 +403,7 @@ static inline void toggleInfo(void)
 
     currentSpeedID = (currentSpeedID + 1) % 2;
     RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
-
-    #ifdef UNIFORM_LIVE_TEXT_BG_COLOR  // it allows to eliminate flickering on alternating icons
-      ICON_PartialReadDisplay(rect_of_keyPS[ICON_POS_SPD].x0, rect_of_keyPS[ICON_POS_SPD].y0, PICON_TITLE_X, -1,
-                              (currentSpeedID == 0) ? ICON_PRINTING_SPEED : ICON_PRINTING_FLOW, 0, 0);
-      reDrawPrintingValue(ICON_POS_SPD, PRINT_TOP_ROW | PRINT_BOTTOM_ROW);
-    #else
-      reDrawPrintingValue(ICON_POS_SPD, PRINT_ICON | PRINT_TOP_ROW | PRINT_BOTTOM_ROW);
-    #endif
+    reDrawPrintingValue(ICON_POS_SPD, PRINT_ICON | PRINT_TOP_ROW | PRINT_BOTTOM_ROW);
 
     speedQuery();
 
@@ -463,14 +457,14 @@ static inline void reDrawProgress(uint8_t prevProgress)
 
 static inline void printingDrawPage(void)
 {
-  #ifdef UNIFORM_LIVE_TEXT_BG_COLOR  // it samples the background color from an icon
-    ICON_PrepareRead(rect_of_keyPS[ICON_POS_EXT].x0, rect_of_keyPS[ICON_POS_EXT].y0, ICON_PRINTING_NOZZLE);
-    textBgColor = ICON_ReadPixel(rect_of_keyPS[ICON_POS_EXT].x0 + PICON_TITLE_X, rect_of_keyPS[ICON_POS_EXT].y0 + PICON_TITLE_Y);
-    ICON_PrepareReadEnd();
-  #endif
-
   for (uint8_t i = 0; i < 6; i++)
+  {
+    #if LIVE_TEXT_BG_COLOR_PRINTING > 0
+      ICON_ReadDisplay(rect_of_keyPS[i].x0, rect_of_keyPS[i].y0, printingIcon[i]);
+    #endif
+
     reDrawPrintingValue(i, PRINT_ICON | PRINT_TOP_ROW | PRINT_BOTTOM_ROW);
+  }
 
   // progress
   GUI_SetColor(ORANGE);

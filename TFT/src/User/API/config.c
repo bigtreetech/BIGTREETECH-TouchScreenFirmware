@@ -556,7 +556,7 @@ void parseConfigKey(uint16_t index)
 
     case C_INDEX_EMULATED_M600:
     case C_INDEX_EMULATED_M109_M190:
-      SET_BIT_VALUE(infoSettings.general_settings, ((index - C_INDEX_EMULATED_M600) + EMULATED_M600), getOnOff());
+      SET_BIT_VALUE(infoSettings.general_settings, ((index - C_INDEX_EMULATED_M600) + INDEX_EMULATED_M600), getOnOff());
       break;
 
     //----------------------------UI Settings
@@ -844,7 +844,7 @@ void parseConfigKey(uint16_t index)
       if (key_seen("X")) SET_BIT_VALUE(infoSettings.inverted_axis, X_AXIS, getOnOff());
       if (key_seen("Y")) SET_BIT_VALUE(infoSettings.inverted_axis, Y_AXIS, getOnOff());
       if (key_seen("Z")) SET_BIT_VALUE(infoSettings.inverted_axis, Z_AXIS, getOnOff());
-      if (key_seen("LY")) infoSettings.leveling_inverted_y_axis = getOnOff();
+      if (key_seen("LY")) SET_BIT_VALUE(infoSettings.inverted_axis, E_AXIS, getOnOff());  // leveling Y axis
       break;
 
     case C_INDEX_PROBING_Z_OFFSET:
@@ -1001,7 +1001,7 @@ void parseConfigKey(uint16_t index)
         break;
     #endif
 
-    //----------------------------Custom Gcode Commands
+    //----------------------------Custom G-code Commands
 
     case C_INDEX_CUSTOM_LABEL_1:
     case C_INDEX_CUSTOM_LABEL_2:
@@ -1062,7 +1062,7 @@ void parseConfigKey(uint16_t index)
       break;
     }
 
-    //----------------------------Start, End & Cancel Gcode Commands
+    //----------------------------Start, End & Cancel G-code Commands
 
     case C_INDEX_START_GCODE_ENABLED:
     case C_INDEX_END_GCODE_ENABLED:

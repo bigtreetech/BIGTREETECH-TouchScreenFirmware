@@ -125,7 +125,7 @@ extern "C" {
 #define CONFIG_KNOB_LED_COLOR         "knob_led_color:"
 #define CONFIG_KNOB_LED_IDLE          "knob_led_idle:"
 #define CONFIG_NEOPIXEL_PIXELS        "neopixel_pixels:"
-//-----------------------------Custom Gcode Commands
+//-----------------------------Custom G-code Commands
 #define CONFIG_CUSTOM_LABEL_1         "custom_label_1:"
 #define CONFIG_CUSTOM_LABEL_2         "custom_label_2:"
 #define CONFIG_CUSTOM_LABEL_3         "custom_label_3:"
@@ -156,7 +156,7 @@ extern "C" {
 #define CONFIG_CUSTOM_GCODE_13        "custom_gcode_13:"
 #define CONFIG_CUSTOM_GCODE_14        "custom_gcode_14:"
 #define CONFIG_CUSTOM_GCODE_15        "custom_gcode_15:"
-//-----------------------------Start, End & Cancel Gcode Commands
+//-----------------------------Start, End & Cancel G-code Commands
 #define CONFIG_START_GCODE_ENABLED    "start_gcode_enabled:"
 #define CONFIG_END_GCODE_ENABLED      "end_gcode_enabled:"
 #define CONFIG_CANCEL_GCODE_ENABLED   "cancel_gcode_enabled:"
