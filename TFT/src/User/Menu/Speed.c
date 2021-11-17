@@ -42,8 +42,7 @@ void menuSpeed(void)
   KEY_VALUES key_num = KEY_IDLE;
   LASTSPEED lastSpeed;
 
-  if (infoMachineSettings.firmwareType != FW_REPRAPFW)
-    storeCmd("M220\nM221\n");  // RRF has current settings via periodic polling (fanQuery)
+  speedQuery();
 
   speedSetPercent(item_index, speedGetCurPercent(item_index));
   lastSpeed = (LASTSPEED) {speedGetCurPercent(item_index), speedGetSetPercent(item_index)};
@@ -85,7 +84,10 @@ void menuSpeed(void)
         break;
 
       case KEY_ICON_4:
-        item_index = (item_index + 1) % SPEED_NUM;
+        if (infoSettings.ext_count > 0)
+        {
+          item_index = (item_index + 1) % SPEED_NUM;
+        }
         percentageItems.title.index = itemPercentTypeTitle[item_index];
         percentageItems.items[key_num] = itemPercentType[item_index];
 
