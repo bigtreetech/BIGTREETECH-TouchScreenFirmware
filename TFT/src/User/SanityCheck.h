@@ -65,12 +65,12 @@ extern "C" {
   #define MARLIN_TITLE "Marlin Mode"
 #endif
 
-#if HOTEND_COUNT < 1 || HOTEND_COUNT > MAX_HOTEND_COUNT
-  #error "HOTEND_COUNT cannot be less than 1 or greater than 6"
+#if HOTEND_COUNT < 0 || HOTEND_COUNT > MAX_HOTEND_COUNT
+  #error "HOTEND_COUNT cannot be less than 0 or greater than 6"
 #endif
 
-#if EXTRUDER_COUNT < 1 || EXTRUDER_COUNT > MAX_EXT_COUNT
-  #error "EXTRUDER_COUNT cannot be less than 1 or greater than 6"
+#if EXTRUDER_COUNT < 0 || EXTRUDER_COUNT > MAX_EXT_COUNT
+  #error "EXTRUDER_COUNT cannot be less than 0 or greater than 6"
 #endif
 
 #if FAN_COUNT < 1 || FAN_COUNT > MAX_FAN_COUNT
