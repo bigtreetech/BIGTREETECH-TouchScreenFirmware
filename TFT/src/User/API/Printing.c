@@ -584,10 +584,14 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType)
           if (isCoorRelative == true)    mustStoreCmd("G90\n");
           if (isExtrudeRelative == true) mustStoreCmd("M82\n");
 
-          if (heatGetCurrentTemp(heatGetCurrentHotend()) > infoSettings.min_ext_temp)
+          if (extrusionDuringPrintPause == true)
+          {
+            extrusionDuringPrintPause = false;
+          }
+          else if (heatGetCurrentTemp(heatGetCurrentHotend()) > infoSettings.min_ext_temp)
           {
             mustStoreCmd("G1 E%.5f F%d\n", tmp.axis[E_AXIS] - infoSettings.pause_retract_len + infoSettings.resume_purge_len,
-                         infoSettings.pause_feedrate[FEEDRATE_E]);
+                        infoSettings.pause_feedrate[FEEDRATE_E]);
           }
 
           if (coordinateIsKnown())

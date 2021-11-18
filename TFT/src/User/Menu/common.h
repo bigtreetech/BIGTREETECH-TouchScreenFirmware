@@ -60,6 +60,9 @@ extern const uint16_t iconToggle[ITEM_TOGGLE_NUM];
 // Check if next screen update is due
 bool nextScreenUpdate(uint32_t duration);
 
+// fLag for extrusion during Print -> Pause
+extern bool extrusionDuringPrintPause;
+
 #ifdef FRIENDLY_Z_OFFSET_LANGUAGE
   void invertZAxisIcons(MENUITEMS * menuItems);
 
