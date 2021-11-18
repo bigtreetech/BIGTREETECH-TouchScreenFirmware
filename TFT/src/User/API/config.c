@@ -704,7 +704,7 @@ void parseConfigKey(uint16_t index)
     //----------------------------Printer / Machine Settings
 
     case C_INDEX_HOTEND_COUNT:
-      SET_VALID_INT_VALUE(infoSettings.hotend_count, 1, MAX_HOTEND_COUNT);
+      SET_VALID_INT_VALUE(infoSettings.hotend_count, 0, MAX_HOTEND_COUNT);
       break;
 
     case C_INDEX_HEATED_BED:
@@ -716,7 +716,7 @@ void parseConfigKey(uint16_t index)
       break;
 
     case C_INDEX_EXT_COUNT:
-      SET_VALID_INT_VALUE(infoSettings.ext_count, 1, MAX_EXT_COUNT);
+      SET_VALID_INT_VALUE(infoSettings.ext_count, 0, MAX_EXT_COUNT);
       break;
 
     case C_INDEX_FAN_COUNT:

@@ -1,5 +1,6 @@
 #include "interfaceCmd.h"
 #include "includes.h"
+#include "RRFSendCmd.h"
 
 #define CMD_QUEUE_SIZE 20
 
@@ -221,7 +222,14 @@ bool sendCmd(bool purge, bool avoidTerminal)
 
   if (!purge)  // if command is not purged, send it to printer
   {
-    Serial_Puts(SERIAL_PORT, cmd_ptr);
+    if (infoMachineSettings.firmwareType != FW_REPRAPFW && infoMachineSettings.firmwareType != FW_NOT_DETECTED)
+    {
+      Serial_Puts(SERIAL_PORT, cmd_ptr);
+    }
+    else
+    {
+      rrfSendCmd(cmd_ptr);
+    }
     setCurrentAckSrc(cmd_port_index);
   }
 
