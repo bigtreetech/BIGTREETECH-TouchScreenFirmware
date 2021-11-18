@@ -406,7 +406,8 @@ void parseACK(void)
       if (ack_seen(magic_error)) ackPopupInfo(magic_error);
 
       // the first response should be such as "T:25/50\n"
-      if (!(ack_seen("@") && ack_seen("T:")) && !ack_seen("T0:")) goto parse_end;
+      // The "T:0" response is specifically for Marlin when EXTRUDER_COUNT:0
+      if (!(ack_seen("@") && ack_seen("T:")) && !ack_seen("T0:") && !ack_seen("T:0")) goto parse_end;
 
       // find hotend count and setup heaters
       uint8_t i;
@@ -414,7 +415,6 @@ void parseACK(void)
       {
         if (!ack_seen(heaterID[i])) break;
       }
-      infoSettings.hotend_count = i ? i : 1;
       if (infoSettings.ext_count < infoSettings.hotend_count) infoSettings.ext_count = infoSettings.hotend_count;
       if (ack_seen(heaterID[BED])) infoSettings.bed_en = ENABLED;
       if (ack_seen(heaterID[CHAMBER])) infoSettings.chamber_en = ENABLED;
@@ -426,7 +426,7 @@ void parseACK(void)
         storeCmd("M115\n");  // as last command to identify the FW type!
         coordinateQuerySetWait(true);
       }
-	  else if (infoMachineSettings.firmwareType == FW_NOT_DETECTED)  // if never connected to the printer since boot
+      else if (infoMachineSettings.firmwareType == FW_NOT_DETECTED)  // if never connected to the printer since boot
       {
         storeCmd("M503\n");  // Query detailed printer capabilities
         storeCmd("M92\n");   // Steps/mm of extruder is an important parameter for Smart filament runout

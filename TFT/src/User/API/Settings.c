@@ -244,7 +244,11 @@ void setupMachine(FW_TYPE fwType)
   }
 
   mustStoreCmd("M503 S0\n");
-  mustStoreCmd("M82\n");  // Set extruder to absolute mode
+  if (infoSettings.hotend_count > 0)
+  {
+    // This is good, but we need to set the extruder number first, and it's defaulting to 1.
+    mustStoreCmd("M82\n");  // Set extruder to absolute mode
+  }
   mustStoreCmd("G90\n");  // Set to Absolute Positioning
 }
 
