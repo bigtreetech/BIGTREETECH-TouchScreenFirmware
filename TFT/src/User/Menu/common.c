@@ -13,9 +13,6 @@ uint8_t currentFan = 0;
 uint8_t currentSpeedID = 0;
 static uint32_t lastTime = 0;
 
-// fLag for extrusion during Print -> Pause
-bool extrusionDuringPrintPause = false;
-
 //Icons list for tool change
 const ITEM itemTool[MAX_HEATER_COUNT] =
 {

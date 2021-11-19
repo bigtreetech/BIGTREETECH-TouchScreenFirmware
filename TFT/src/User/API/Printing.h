@@ -38,6 +38,8 @@ typedef struct
 
 extern PRINT_SUMMARY infoPrintSummary;
 
+void setExtrusionDuringPause(bool extruded);
+
 bool isHostPrinting(void);  // condition callback for loopProcessToCondition()
 
 void setRunoutAlarmTrue(void);

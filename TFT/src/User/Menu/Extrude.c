@@ -146,7 +146,7 @@ void menuExtrude(void)
             extruderReDraw(curExtruder_index, extrNewCoord, true);
             if (isPrinting() && isPaused())
             {
-              extrusionDuringPrintPause = true;
+              setExtrusionDuringPause(true);
             }
           }
           break;

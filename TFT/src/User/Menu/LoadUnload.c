@@ -169,7 +169,7 @@ void menuLoadUnload(void)
             }
             if (isPrinting() && isPaused())
             {
-              extrusionDuringPrintPause = true;
+              setExtrusionDuringPause(true);
             }
          }
       }
