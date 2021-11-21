@@ -36,7 +36,7 @@
 #define SSICON_COUNT              4
 #define SSICON_WIDTH              ICON_WIDTH
 #define SSICON_HEIGHT             ICON_HEIGHT
-#define SSICON_VAL_Y0             57
+#define SSICON_VAL_Y0             55
 #define SSICON_VAL_COLOR          BLACK
 #define SSICON_NAME_Y0            5
 #define SSICON_NAME_COLOR         WHITE
@@ -53,8 +53,8 @@
 
 // Heating Menu
 #define PREHEAT_TITLE_Y   3
-#define PREHEAT_TOOL_Y    33
-#define PREHEAT_BED_Y     56
+#define PREHEAT_TOOL_Y    32
+#define PREHEAT_BED_Y     55
 
 // Printing menu
 #define PICON_LG_WIDTH     106
