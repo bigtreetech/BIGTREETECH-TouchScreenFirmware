@@ -166,7 +166,7 @@ void menuPrintFromSource(void)
   };
 
   KEY_VALUES key_num = KEY_IDLE;
-  bool update = true;
+  uint8_t update = 1;  // 0: no update, 1: update with title bar, 2: update without title bar
   uint8_t pageCount = (infoFile.folderCount + infoFile.fileCount + (NUM_PER_PAGE - 1)) / NUM_PER_PAGE;
 
   GUI_Clear(infoSettings.bg_color);
@@ -236,7 +236,7 @@ void menuPrintFromSource(void)
           {
             ExitDir();
             scanPrintFiles();
-            update = true;
+            update = 1;
           }
           break;
 
@@ -264,7 +264,7 @@ void menuPrintFromSource(void)
           {
             ExitDir();
             scanPrintFiles();
-            update = true;
+            update = 1;
           }
           break;
 
@@ -275,13 +275,13 @@ void menuPrintFromSource(void)
 
         default:
           if (printPageItemSelected(key_num))
-            update = true;
+            update = 1;
           break;
       }
     }
 
     // refresh file menu
-    if (update)
+    if (update != 0)
     {
       if (list_mode != true)
       {

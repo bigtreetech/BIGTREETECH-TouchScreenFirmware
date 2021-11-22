@@ -169,6 +169,10 @@ void menuLoadUnload(void)
               }
               lastCmd = LOAD_STARTED;
             }
+            if (isPrinting() && isPaused())
+            {
+              setExtrusionDuringPause(true);
+            }
          }
       }
     }

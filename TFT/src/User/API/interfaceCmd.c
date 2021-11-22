@@ -231,7 +231,7 @@ bool sendCmd(bool purge, bool avoidTerminal)
 
   if (!purge)  // if command is not purged, send it to printer
   {
-    if (infoMachineSettings.firmwareType != FW_REPRAPFW && infoMachineSettings.firmwareType != FW_NOT_DETECTED)
+    if (infoMachineSettings.firmwareType != FW_REPRAPFW)
     {
       Serial_Puts(SERIAL_PORT, cmd_ptr);
     }

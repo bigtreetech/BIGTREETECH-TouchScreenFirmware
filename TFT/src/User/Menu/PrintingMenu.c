@@ -772,7 +772,7 @@ void menuPrinting(void)
 
       case PS_KEY_6:
         if (isPrinting())
-        {
+        { // Pause button
           if (getHostDialog())
             addToast(DIALOG_TYPE_ERROR, (char *)textSelect(LABEL_BUSY));
           else if (getPrintRunout())
@@ -781,7 +781,7 @@ void menuPrinting(void)
             printPause(!isPaused(), PAUSE_NORMAL);
         }
         else
-        {
+        { // Main button
           clearInfoPrint();
           clearInfoFile();
           infoMenu.cur = 0;

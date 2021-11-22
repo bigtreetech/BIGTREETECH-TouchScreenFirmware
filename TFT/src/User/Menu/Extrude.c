@@ -150,6 +150,10 @@ void menuExtrude(void)
             eLength += eTemp;
             eTemp = 0;
             extruderReDraw(curExtruder_index, eLength, true);
+            if (isPrinting() && isPaused())
+            {
+              setExtrusionDuringPause(true);
+            }
           }
           break;
       }
