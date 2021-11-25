@@ -88,6 +88,7 @@ void menuSpeed(void)
         {
           item_index = (item_index + 1) % SPEED_NUM;
         }
+
         percentageItems.title.index = itemPercentTypeTitle[item_index];
         percentageItems.items[key_num] = itemPercentType[item_index];
 

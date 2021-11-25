@@ -59,8 +59,8 @@ extern "C" {
 enum
 {
   #define X_ICON(NAME) ICON_##NAME ,
-  #include "icon_list.inc"
-  #undef  X_ICON
+    #include "icon_list.inc"
+  #undef X_ICON
   // add new icons in icon_list.inc only
   //ICON_RESERVE
 
@@ -74,8 +74,8 @@ enum
 enum
 {
   #define X_SMALLICON(NAME) SMALL_ICON_##NAME ,
-  #include "small_icon_list.inc"
-  #undef  X_SMALLICON
+    #include "small_icon_list.inc"
+  #undef X_SMALLICON
   // add new icons in small_icon_list.inc only
   // Back ground sign
   SMALL_ICON_BACKGROUND
