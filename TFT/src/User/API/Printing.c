@@ -447,7 +447,7 @@ void printStart(FIL * file, uint32_t size)
     case TFT_SD:
       infoPrinting.file = *file;
       infoPrinting.cur = infoPrinting.file.fptr;
-      setExtrusionDuringPause(true);
+      setExtrusionDuringPause(false);
       break;
   }
 }
