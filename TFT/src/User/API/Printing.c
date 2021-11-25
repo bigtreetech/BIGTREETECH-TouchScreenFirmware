@@ -24,8 +24,14 @@ PRINTING infoPrinting;
 PRINT_SUMMARY infoPrintSummary = {.name[0] = '\0', 0, 0, 0, 0};
 
 static bool updateM27_waiting = false;
+static bool extrusionDuringPause = false;  // flag for extrusion during Print -> Pause
 static float last_E_pos;
 bool filamentRunoutAlarm;
+
+void setExtrusionDuringPause(bool extruded)
+{
+  extrusionDuringPause = extruded;
+}
 
 bool isHostPrinting(void)
 {
@@ -441,6 +447,7 @@ void printStart(FIL * file, uint32_t size)
     case TFT_SD:
       infoPrinting.file = *file;
       infoPrinting.cur = infoPrinting.file.fptr;
+      setExtrusionDuringPause(false);
       break;
   }
 }
@@ -629,8 +636,12 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType)
           if (isCoorRelative == true)    mustStoreCmd("G90\n");
           if (isExtrudeRelative == true) mustStoreCmd("M82\n");
 
-          if (heatGetCurrentTemp(heatGetCurrentHotend()) > infoSettings.min_ext_temp)
-          {
+          if (extrusionDuringPause == true)  // check if extrusion done during Print -> Pause
+          { // no purge
+            extrusionDuringPause = false;
+          }
+          else if (heatGetCurrentTemp(heatGetCurrentHotend()) > infoSettings.min_ext_temp)
+          { // purge
             mustStoreCmd("G1 E%.5f F%d\n", tmp.axis[E_AXIS] - infoSettings.pause_retract_len + infoSettings.resume_purge_len,
                          infoSettings.pause_feedrate[FEEDRATE_E]);
           }
