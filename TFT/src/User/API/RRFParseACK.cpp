@@ -235,8 +235,7 @@ void ParseACKJsonParser::value(const char *value)
     case result:
         if (starting_print)
         {
-          strcpy(infoFile.title, value);
-          setPrintHost(true);
+          printRemoteStart(value);
           starting_print = false;
         }
       break;

@@ -20,6 +20,10 @@
   #include "sdio_sdcard.h"
 #endif
 
+#include <stdbool.h>
+
+#define MAX_RETRY_ATTEMPTS_COUNT 100  // used by handleDiskError function
+
 // Definitions of physical drive number for each drive
 #define DEV_MMC 0  // MMC/SD card to physical drive 0
 #define DEV_USB 1  // USB disk to physical drive 1
@@ -76,6 +80,29 @@ DSTATUS disk_initialize(
   return diskStatus[pdrv];
 }
 
+bool handleDiskError(BYTE pdrv, uint8_t * errorNum)
+{
+  // PUT HERE ANY SPECIFIC ERROR HANDLING PROCEDURE
+  //
+  // current error handling procedure based on device re-initialization
+  // for a maximum number of retry attempts
+
+  // return "false" to force an abort or "true" to force a retry
+  if (++(*errorNum) <= MAX_RETRY_ATTEMPTS_COUNT)
+  {
+    if (pdrv == DEV_MMC)
+      SD_Init();
+//    else  // if DEV_USB, the following code is already invoked by USBH_UDISK_Read / _Write so you can leave it commented out
+//      HCD_IsDeviceConnected(&USB_OTG_Core);
+
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
 /*-----------------------------------------------------------------------*/
 /* Read Sector(s)                                                        */
 /*-----------------------------------------------------------------------*/
@@ -90,23 +117,28 @@ DRESULT disk_read(
   if (!count) return RES_PARERR;
   if (diskStatus[pdrv] & STA_NOINIT) return RES_NOTRDY;
 
-  switch (pdrv)
+  uint8_t errorNum = 0;
+
+  do
   {
-    case DEV_MMC:
-      while (SD_ReadDisk(buff, sector, count))  // read error
-      {
-        SD_Init();  //init again
-      }
-      return RES_OK;
+    switch (pdrv)
+    {
+      case DEV_MMC:
+        if (SD_ReadDisk(buff, sector, count) == 0)  // no read error
+          return RES_OK;
+        break;
 
-    case DEV_USB:
-      if (USBH_UDISK_Read(buff, sector, count) == 0)
-        return RES_OK;
-      else
-        return RES_ERROR;
-  }
+      case DEV_USB:
+        if (USBH_UDISK_Read(buff, sector, count) == 0)  // no read error
+          return RES_OK;
+        break;
 
-  return RES_PARERR;
+      default:
+        return RES_PARERR;
+    }
+  } while (handleDiskError(pdrv, &errorNum));  // read error, retry or exit with error
+
+  return RES_ERROR;
 }
 
 /*-----------------------------------------------------------------------*/
@@ -126,23 +158,28 @@ DRESULT disk_write(
   if (diskStatus[pdrv] & STA_NOINIT) return RES_NOTRDY;
   if (diskStatus[pdrv] & STA_PROTECT) return RES_WRPRT;
 
-  switch (pdrv)
+  uint8_t errorNum = 0;
+
+  do
   {
-    case DEV_MMC:
-      while (SD_WriteDisk((uint8_t*)buff, sector, count))  // write error
-      {
-        SD_Init();  // init again
-      }
-      return RES_OK;
+    switch (pdrv)
+    {
+      case DEV_MMC:
+        if (SD_WriteDisk((uint8_t*)buff, sector, count) == 0)  // no write error
+          return RES_OK;
+        break;
 
-    case DEV_USB:
-      if (USBH_UDISK_Write((uint8_t*)buff, sector, count) == 0)
-        return RES_OK;
-      else
-        return RES_ERROR;
-  }
+      case DEV_USB:
+        if (USBH_UDISK_Write((uint8_t*)buff, sector, count) == 0)  // no write error
+          return RES_OK;
+        break;
 
-  return RES_PARERR;
+      default:
+        return RES_PARERR;
+    }
+  } while (handleDiskError(pdrv, &errorNum));  // write error, retry or exit with error
+
+  return RES_ERROR;
 }
 
 #endif

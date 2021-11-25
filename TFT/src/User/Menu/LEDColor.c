@@ -163,7 +163,10 @@ uint8_t ledIndex = 0;
 
 void ledSendValue(const LED_VECT * led)
 {
-  storeCmd("M150 R%d U%d B%d W%d P%d I%d\n", (*led)[0], (*led)[1], (*led)[2], (*led)[3], (*led)[4], (*led)[5]);
+  if (infoMachineSettings.firmwareType != FW_REPRAPFW)
+    storeCmd("M150 R%d U%d B%d W%d P%d I%d\n", (*led)[0], (*led)[1], (*led)[2], (*led)[3], (*led)[4], (*led)[5]);
+  else
+    storeCmd("M150 X2 R%d U%d B%d P%d\n", (*led)[0], (*led)[1], (*led)[2], (*led)[4]);
 }
 
 void ledGetValue(LED_VECT * led)

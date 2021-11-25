@@ -6,9 +6,9 @@ float probedZ = 0.0f;                         // last Z offset measured by probe
 
 void levelingGetPointCoords(LEVELING_POINT_COORDS coords)
 {
-  int16_t x_left = infoSettings.machine_size_min[X_AXIS] + infoSettings.level_edge;
+  int16_t x_left = ((infoSettings.machine_size_min[X_AXIS] < 0) ? 0 : infoSettings.machine_size_min[X_AXIS]) + infoSettings.level_edge;
   int16_t x_right = infoSettings.machine_size_max[X_AXIS] - infoSettings.level_edge;
-  int16_t y_bottom = infoSettings.machine_size_min[Y_AXIS] + infoSettings.level_edge;
+  int16_t y_bottom = ((infoSettings.machine_size_min[Y_AXIS] < 0) ? 0 : infoSettings.machine_size_min[Y_AXIS]) + infoSettings.level_edge;
   int16_t y_top = infoSettings.machine_size_max[Y_AXIS] - infoSettings.level_edge;
 
   if (GET_BIT(infoSettings.inverted_axis, X_AXIS))
