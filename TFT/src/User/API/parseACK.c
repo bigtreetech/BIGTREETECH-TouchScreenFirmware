@@ -282,8 +282,12 @@ void hostActionCommands(void)
   {
     uint16_t index = ack_index;  // save the current index for further usage
 
-    if (ack_seen("Time Left"))
-    {
+    if (ack_seen("Data Left"))  // parsing printing data left
+    { // format: Data Left <XXXX>/<YYYY> (e.g. Data Left 123/12345)
+      setPrintProgress(ack_value(), ack_second_value());
+    }
+    else if (ack_seen("Time Left"))  // parsing printing time left
+    { // format: Time Left <XX>h<YY>m<ZZ>s (e.g. Time Left 02h04m06s)
       parsePrintRemainingTime((char *)dmaL2Cache + ack_index);
     }
     else
@@ -300,7 +304,15 @@ void hostActionCommands(void)
       }
     }
   }
-  else if (ack_seen(":paused") || ack_seen(":pause"))
+  else if (ack_seen(":print_start"))  // print started from remote host (e.g. USB, Octoprint etc...)
+  {
+    printRemoteStart(NULL);
+  }
+  else if (ack_seen(":print_end"))  // print ended from remote host (e.g. USB, Octoprint etc...)
+  {
+    printEnd();
+  }
+  else if (ack_seen(":pause") || ack_seen(":paused"))
   {
     if (infoMachineSettings.firmwareType == FW_MARLIN)
     {
@@ -310,8 +322,6 @@ void hostActionCommands(void)
       //  hostDialog = false;     // enable Resume/Pause button in the Printing menu
     }
 
-    // pass value "false" to let Marlin report when the host is not
-    // printing (when notification ack "Not SD printing" is caught)
     setPrintPause(false, PAUSE_EXTERNAL);
 
     if (ack_seen("filament_runout"))
@@ -319,15 +329,13 @@ void hostActionCommands(void)
       setRunoutAlarmTrue();
     }
   }
-  else if (ack_seen(":resumed") || ack_seen(":resume"))
+  else if (ack_seen(":resume") || ack_seen(":resumed"))
   {
     hostDialog = false;  // enable Resume/Pause button in the Printing menu
 
-    // pass value "true" to report the host is printing without waiting
-    // from Marlin (when notification ack "SD printing byte" is caught)
     setPrintResume(true);
   }
-  else if (ack_seen(":cancel"))  // To be added to Marlin abortprint routine
+  else if (ack_seen(":cancel"))  // to be added to Marlin abortprint routine
   {
     setPrintAbort();
   }
@@ -339,15 +347,12 @@ void hostActionCommands(void)
 
     if (ack_seen("Nozzle Parked"))
     {
-      // pass value "false" to let Marlin report when the host is not
-      // printing (when notification ack "Not SD printing" is caught)
       setPrintPause(false, PAUSE_EXTERNAL);
     }
-    else if (ack_seen("Resuming"))  // resuming from onboard SD or TFT
+    else if (ack_seen("Resuming"))  // resuming from TFT or (remote) onboard SD
     {
-      // pass value "true" to report the host is printing without waiting
-      // from Marlin (when notification ack "SD printing byte" is caught)
       setPrintResume(true);
+
       hostAction.prompt_show = false;
       Serial_Puts(SERIAL_PORT, "M876 S0\n");  // auto-respond to a prompt request that is not shown on the TFT
     }
@@ -660,35 +665,35 @@ void parseACK(void)
         uint16_t start_index = ack_index;
         uint16_t end_index = ack_continue_seen(fileEndString) ? (ack_index - strlen(fileEndString)) : start_index;
         uint16_t path_len = MIN(end_index - start_index, MAX_PATH_LEN - strlen(getCurFileSource()) - 1);
-        sprintf(infoFile.title,"%s/", getCurFileSource());
-        strncat(infoFile.title, dmaL2Cache + start_index, path_len);
-        infoFile.title[path_len + strlen(getCurFileSource()) + 1] = '\0';
+        char file_name[MAX_PATH_LEN];
+        sprintf(file_name, "%s/", getCurFileSource());
+        strncat(file_name, dmaL2Cache + start_index, path_len);
+        file_name[path_len + strlen(getCurFileSource()) + 1] = '\0';
 
-        setPrintHost(true);
+        printRemoteStart(file_name);
       }
       else if (infoMachineSettings.onboardSD == ENABLED &&
-               infoFile.source >= BOARD_SD &&
-               ack_seen("Not SD printing"))
+               infoFile.source >= BOARD_SD && infoFile.source <= BOARD_SD_REMOTE &&
+               ack_seen("Not SD printing"))  // if printing from (remote) onboard SD
       {
         setPrintPause(true, PAUSE_EXTERNAL);
       }
       else if (infoMachineSettings.onboardSD == ENABLED &&
-               infoFile.source >= BOARD_SD &&
-               ack_seen("SD printing byte"))
+               infoFile.source >= BOARD_SD && infoFile.source <= BOARD_SD_REMOTE &&
+               ack_seen("SD printing byte"))  // if printing from (remote) onboard SD
       {
         setPrintResume(false);
 
-        // Parsing printing data
-        // Example: SD printing byte 123/12345
+        // parsing printing data
+        // format: SD printing byte <XXXX>/<YYYY> (e.g. SD printing byte 123/12345)
         setPrintProgress(ack_value(), ack_second_value());
         //powerFailedCache(position);
       }
       else if (infoMachineSettings.onboardSD == ENABLED &&
-               infoFile.source >= BOARD_SD &&
-               ack_seen("Done printing file"))
+               infoFile.source >= BOARD_SD && infoFile.source <= BOARD_SD_REMOTE &&
+               ack_seen("Done printing file"))  // if printing from (remote) onboard SD
       {
-        setPrintHost(false);
-        printComplete();
+        printEnd();
       }
 
       //----------------------------------------

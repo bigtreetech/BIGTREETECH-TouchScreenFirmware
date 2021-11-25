@@ -49,7 +49,8 @@ void sendChar(const char c)
   }
 }
 
-void rrfSendCmd(const char* cmd_ptr) {
+void rrfSendCmd(const char* cmd_ptr)
+{
   while (*cmd_ptr != 0)
   {
     sendChar(*cmd_ptr++);

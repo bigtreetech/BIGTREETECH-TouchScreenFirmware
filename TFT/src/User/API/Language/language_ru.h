@@ -4,6 +4,7 @@
     // config.ini Parameter Settings - Screen Settings and Feature Settings
     #define STRING_EMULATED_M600          "Эмуляция M600"
     #define STRING_EMULATED_M109_M190     "Emulated M109 / M190"
+    #define STRING_FILE_COMMENT_PARSING   "File comment parsing"
     #define STRING_ROTATED_UI             "Переворот"
     #define STRING_LANGUAGE               "Русский"
     #define STRING_ACK_NOTIFICATION       "ACK стиль уведомления"

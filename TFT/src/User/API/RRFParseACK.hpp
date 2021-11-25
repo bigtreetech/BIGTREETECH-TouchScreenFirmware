@@ -32,9 +32,9 @@ extern "C"
 #define RESP        "resp"
 #define RESULT      "result"
 
-enum DOCUMENT_STATE 
-{ 
-  none, 
+enum DOCUMENT_STATE
+{
+  none,
   status,
   heaters,
   active,
@@ -48,10 +48,10 @@ enum DOCUMENT_STATE
   probe,
   fan_percent,
   fanRPM,
-  mbox_seq, 
-  mbox_mode, 
-  mbox_timeo, 
-  mbox_msg, 
+  mbox_seq,
+  mbox_mode,
+  mbox_timeo,
+  mbox_msg,
   mbox_title,
   resp,
   result

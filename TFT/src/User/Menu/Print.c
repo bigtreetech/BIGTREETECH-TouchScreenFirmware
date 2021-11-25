@@ -166,7 +166,7 @@ void menuPrintFromSource(void)
   };
 
   KEY_VALUES key_num = KEY_IDLE;
-  uint8_t update = 1;
+  uint8_t update = 1;  // 0: no update, 1: update with title bar, 2: update without title bar
   uint8_t pageCount = (infoFile.folderCount + infoFile.fileCount + (NUM_PER_PAGE - 1)) / NUM_PER_PAGE;
 
   GUI_Clear(infoSettings.bg_color);
@@ -281,7 +281,7 @@ void menuPrintFromSource(void)
     }
 
     // refresh file menu
-    if (update)
+    if (update != 0)
     {
       if (list_mode != true)
       {
@@ -363,7 +363,7 @@ void menuPrint(void)
     switch (key_num)
     {
       case KEY_ICON_0:
-        list_mode = infoSettings.files_list_mode;  // follow list mode setting in TFT sd card
+        list_mode = infoSettings.files_list_mode;  // follow list mode setting in TFT SD card
         infoFile.source = TFT_SD;
         OPEN_MENU(menuPrintFromSource);
         OPEN_MENU(menuPrintRestore);
@@ -371,7 +371,7 @@ void menuPrint(void)
 
       #ifdef U_DISK_SUPPORT
         case KEY_ICON_1:
-          list_mode = infoSettings.files_list_mode;  // follow list mode setting in usb disk
+          list_mode = infoSettings.files_list_mode;  // follow list mode setting in TFT USB stick
           infoFile.source = TFT_UDISK;
           OPEN_MENU(menuPrintFromSource);
           OPEN_MENU(menuPrintRestore);
