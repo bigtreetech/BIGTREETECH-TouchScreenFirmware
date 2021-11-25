@@ -15,7 +15,7 @@ bool isPrintModelIcon(void)
 
 bool mountFS(void)
 {
-  //  resetInfoFile();  //needn't this
+  //  resetInfoFile();  // needn't this
   switch (infoFile.source)
   {
     case TFT_SD:
@@ -97,6 +97,7 @@ bool scanPrintFiles(void)
 
     case BOARD_SD:
       return scanPrintFilesGcodeFs();
+
     default:
       return false;
   }
