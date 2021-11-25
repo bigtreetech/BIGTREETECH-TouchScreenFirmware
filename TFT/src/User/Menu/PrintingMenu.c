@@ -131,10 +131,6 @@ void menuBeforePrinting(void)
         uint32_t size;
 
         size = request_M23_M36(infoFile.title + (infoMachineSettings.firmwareType == FW_REPRAPFW ? 0 : 5));
-        //if (powerFailedCreate(infoFile.title) == false)
-        //{
-        //
-        //}  // FIXME: Powerfail resume is not yet supported for ONBOARD_SD. Need more work.
 
         if (size == 0)
         {
@@ -142,15 +138,6 @@ void menuBeforePrinting(void)
           CLOSE_MENU();
           return;
         }
-
-        //if (powerFailedExist())
-        //{
-        request_M24(0);
-        //}
-        //else
-        //{
-        //request_M24(infoBreakPoint.offset);
-        //}
 
         printStart(NULL, size);
         break;
@@ -168,9 +155,9 @@ void menuBeforePrinting(void)
           return;
         }
 
-        if (powerFailedCreate(infoFile.title) == false)
+        if (powerFailedCreate(infoFile.title) == false)  // open Power-loss Recovery file
         {}
-        powerFailedlSeek(&file);
+        powerFailedlSeek(&file);  // seek on Power-loss Recovery file
 
         printStart(&file, f_size(&file));
         break;
@@ -187,7 +174,7 @@ void menuBeforePrinting(void)
   layerDisplayType = infoSettings.layer_disp_type * 2;
   coordinateSetAxisActual(Z_AXIS, 0);
   coordinateSetAxisTarget(Z_AXIS, 0);
-  setM73_presence(false);
+  setM73R_presence(false);
 
   REPLACE_MENU(menuPrinting);
 }
@@ -770,8 +757,8 @@ void menuPrinting(void)
 
       case PS_KEY_6:
         if (isPrinting())
-        {
-          if (getHostDialog())
+        { // Pause button
+          if (getHostDialog() || isRemoteHostPrinting())
             addToast(DIALOG_TYPE_ERROR, (char *)textSelect(LABEL_BUSY));
           else if (getPrintRunout())
             addToast(DIALOG_TYPE_ERROR, (char *)textSelect(LABEL_FILAMENT_RUNOUT));
@@ -779,7 +766,7 @@ void menuPrinting(void)
             printPause(!isPaused(), PAUSE_NORMAL);
         }
         else
-        {
+        { // Main button
           clearInfoPrint();
           clearInfoFile();
           infoMenu.cur = 0;
@@ -797,8 +784,15 @@ void menuPrinting(void)
       case PS_KEY_9:
         if (isPrinting())
         {
-          setDialogText(LABEL_WARNING, LABEL_STOP_PRINT, LABEL_CONFIRM, LABEL_CANCEL);
-          showDialog(DIALOG_TYPE_ALERT, stopConfirm, NULL, NULL);
+          if (isRemoteHostPrinting())
+          {
+            addToast(DIALOG_TYPE_ERROR, (char *)textSelect(LABEL_BUSY));
+          }
+          else
+          {
+            setDialogText(LABEL_WARNING, LABEL_STOP_PRINT, LABEL_CONFIRM, LABEL_CANCEL);
+            showDialog(DIALOG_TYPE_ALERT, stopConfirm, NULL, NULL);
+          }
         }
         else
         {

@@ -38,6 +38,8 @@ typedef struct
 
 extern PRINT_SUMMARY infoPrintSummary;
 
+void setExtrusionDuringPause(bool extruded);
+
 bool isHostPrinting(void);  // condition callback for loopProcessToCondition()
 
 void setRunoutAlarmTrue(void);
@@ -87,28 +89,28 @@ bool getPrintRunout(void);
 //void preparePrintSummary(void);
 //void sendPrintCodes(uint8_t index);
 
-void printSetUpdateWaiting(bool isWaiting);       // called in interfaceCmd.c
-void updatePrintUsedFilament(void);               // called in PrintingMenu.c
-uint8_t * getPrintName(char * path);              // called in PrintingMenu.c
-void clearInfoPrint(void);                        // called in PrintingMenu.c
+void printSetUpdateWaiting(bool isWaiting);           // called in interfaceCmd.c
+void updatePrintUsedFilament(void);                   // called in PrintingMenu.c
+uint8_t * getPrintName(char * path);                  // called in PrintingMenu.c
+void clearInfoPrint(void);                            // called in PrintingMenu.c
 
-void printStart(FIL * file, uint32_t size);       // it also sends start gcode
-void printEnd(void);                              // it also sends end gcode
-
-void printComplete(void);                         // print successfully completed
-void printAbort(void);                            // it also sends cancel gcode
+void printComplete(void);                             // print complete
+void printRemoteStart(const char * filename);         // print started from remote onboard SD or remote host
+void printStart(FIL * file, uint32_t size);           // it also sends start gcode
+void printEnd(void);                                  // it also sends end gcode
+void printAbort(void);                                // it also sends cancel gcode
 bool printPause(bool isPause, PAUSE_TYPE pauseType);
 
 bool isPrinting(void);
 bool isPaused(void);
+bool isRemoteHostPrinting(void);
 
-void setPrintHost(bool isPrinting);
 void setPrintAbort(void);
 void setPrintPause(bool updateHost, PAUSE_TYPE pauseType);
 void setPrintResume(bool updateHost);
 
-void loopPrintFromTFT(void);   // called in loopBackEnd(). It handles a print from TFT, if any
-void loopPrintFromHost(void);  // called in loopBackEnd(). It handles a print from onboard SD or remote host (e.g. USB), if any
+void loopPrintFromTFT(void);        // called in loopBackEnd(). It handles a print from TFT, if any
+void loopPrintFromOnboardSD(void);  // called in loopBackEnd(). It handles a print from (remote) onboard SD, if any
 
 #ifdef __cplusplus
 }

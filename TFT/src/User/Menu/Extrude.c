@@ -144,6 +144,10 @@ void menuExtrude(void)
           {
             extrKnownCoord = extrNewCoord;
             extruderReDraw(curExtruder_index, extrNewCoord, true);
+            if (isPrinting() && isPaused())
+            {
+              setExtrusionDuringPause(true);
+            }
           }
           break;
       }
