@@ -18,9 +18,9 @@ const GUI_RECT  rectProgressframe = {BYTE_WIDTH/2-2, LCD_HEIGHT-(BYTE_HEIGHT*2+B
 const GUI_POINT pointProgressText = {BYTE_WIDTH/2-2, LCD_HEIGHT-(BYTE_HEIGHT*4)};
 
 const char * const config_keywords[CONFIG_COUNT] = {
-#define X_CONFIG(NAME) CONFIG_##NAME,
-  #include "config.inc"
-#undef X_CONFIG
+  #define X_CONFIG(NAME) CONFIG_##NAME ,
+    #include "config.inc"
+  #undef X_CONFIG
 };
 
 const char * const cgList[] = CUSTOM_GCODE_LIST;
@@ -556,6 +556,7 @@ void parseConfigKey(uint16_t index)
 
     case C_INDEX_EMULATED_M600:
     case C_INDEX_EMULATED_M109_M190:
+    case C_INDEX_FILE_COMMENT_PARSING:
       SET_BIT_VALUE(infoSettings.general_settings, ((index - C_INDEX_EMULATED_M600) + INDEX_EMULATED_M600), getOnOff());
       break;
 
@@ -749,7 +750,7 @@ void parseConfigKey(uint16_t index)
       if (key_seen("F3:")) SET_VALID_INT_VALUE(infoSettings.fan_max[3], MIN_FAN_SPEED, MAX_FAN_SPEED);
       if (key_seen("F4:")) SET_VALID_INT_VALUE(infoSettings.fan_max[4], MIN_FAN_SPEED, MAX_FAN_SPEED);
       if (key_seen("F5:")) SET_VALID_INT_VALUE(infoSettings.fan_max[5], MIN_FAN_SPEED, MAX_FAN_SPEED);
-      if (key_seen("CtL:")) SET_VALID_INT_VALUE(infoSettings.fan_max[6], MIN_FAN_SPEED, MAX_FAN_SPEED);
+      if (key_seen("CtA:")) SET_VALID_INT_VALUE(infoSettings.fan_max[6], MIN_FAN_SPEED, MAX_FAN_SPEED);
       if (key_seen("CtI:")) SET_VALID_INT_VALUE(infoSettings.fan_max[7], MIN_FAN_SPEED, MAX_FAN_SPEED);
       break;
 

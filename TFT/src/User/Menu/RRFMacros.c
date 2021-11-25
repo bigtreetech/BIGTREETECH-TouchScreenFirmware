@@ -140,4 +140,3 @@ void menuCallMacro(void)
     loopProcess();
   }
 }
-
