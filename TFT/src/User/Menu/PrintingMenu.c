@@ -381,7 +381,7 @@ static inline void toggleInfo(void)
     {
       do
       {
-        currentFan = (currentFan + 1) % MAX_FAN_COUNT;
+        currentFan = (currentFan + 1) % MAX_COOLING_FAN_COUNT;
       } while (!fanIsValid(currentFan));
 
       RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
