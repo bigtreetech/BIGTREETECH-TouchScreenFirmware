@@ -690,7 +690,7 @@ void loopReminderClear(void)
       break;
 
     case STATUS_LISTENING:
-      if (GET_BIT(infoSettings.general_settings, LISTENING_MODE) == 1)
+      if (GET_BIT(infoSettings.general_settings, INDEX_LISTENING_MODE) == 1)
         return;
       break;
 
@@ -1053,13 +1053,14 @@ KEY_VALUES menuKeyGetValue(void)
               tempkey = KEY_TITLEBAR;
           }
           else if ((MENU_IS(menuHeat)) ||
-                  (MENU_IS(menuPid)) ||
-                  (MENU_IS(menuTuneExtruder)) ||
-                  (MENU_IS(menuFan)) ||
-                  (MENU_IS(menuExtrude)) ||
-                  (MENU_IS(menuSpeed)) ||
-                  (MENU_IS(menuZOffset)) ||
-                  (MENU_IS(menuMBL)))
+                   (MENU_IS(menuLoadUnload)) ||
+                   (MENU_IS(menuPid)) ||
+                   (MENU_IS(menuTuneExtruder)) ||
+                   (MENU_IS(menuFan)) ||
+                   (MENU_IS(menuExtrude)) ||
+                   (MENU_IS(menuSpeed)) ||
+                   (MENU_IS(menuZOffset)) ||
+                   (MENU_IS(menuMBL)))
           {
             tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keysIN), rect_of_keysIN);
           }
@@ -1201,8 +1202,11 @@ void loopBackEnd(void)
   sendQueueCmd();
   // Parse the received slave response information
   parseACK();
-  // Parse comment from gCode file
-  parseComment();
+
+  if (GET_BIT(infoSettings.general_settings, INDEX_FILE_COMMENT_PARSING) == 1)  // if file comment parsing is enabled
+  {
+    parseComment();  // Parse comment from gCode file
+  }
 
   #ifdef SERIAL_PORT_2
     // Parse the received Gcode from other UART, such as: ESP3D, etc...
@@ -1223,7 +1227,7 @@ void loopBackEnd(void)
 
   if (infoMachineSettings.onboardSD == ENABLED)
   {
-    loopPrintFromHost();  // handle a print from onboard SD or remote host, if any
+    loopPrintFromOnboardSD();  // handle a print from (remote) onboard SD, if any
   }
 
   #ifdef U_DISK_SUPPORT

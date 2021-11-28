@@ -13,12 +13,12 @@ extern "C" {
 // Config version support
 // change if new elements/keywords are added/removed/changed in the configuration.h Format YYYYMMDD
 // this number should match CONFIG_VERSION in configuration.h
-#define CONFIG_SUPPPORT 20210914
+#define CONFIG_SUPPPORT 20211111
 
 #define FONT_FLASH_SIGN       20210522  // (YYYYMMDD) change if fonts require updating
-#define CONFIG_FLASH_SIGN     20210914  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
-#define LANGUAGE_FLASH_SIGN   20210903  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
-#define ICON_FLASH_SIGN       20210711  // (YYYYMMDD) change if any icon(s) is added or removed
+#define CONFIG_FLASH_SIGN     20211111  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
+#define LANGUAGE_FLASH_SIGN   20211111  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
+#define ICON_FLASH_SIGN       20211115  // (YYYYMMDD) change if any icon(s) is added or removed
 
 #define FONT_CHECK_SIGN       (FONT_FLASH_SIGN + WORD_UNICODE + FLASH_SIGN_ADDR)
 #define CONFIG_CHECK_SIGN     (CONFIG_FLASH_SIGN + STRINGS_STORE_ADDR + \
@@ -67,9 +67,10 @@ enum
 
 typedef enum
 {
-  LISTENING_MODE = 0,
-  EMULATED_M600,
-  EMULATED_M109_M190
+  INDEX_LISTENING_MODE = 0,
+  INDEX_EMULATED_M600,
+  INDEX_EMULATED_M109_M190,
+  INDEX_FILE_COMMENT_PARSING
 } GENERAL_SETTINGS;
 
 // UI Settings
@@ -150,7 +151,7 @@ typedef enum
   SOUND_TYPE_COUNT
 } SOUND_TYPE;
 
-// Start, End & Cancel Gcode Commands
+// Start, End & Cancel G-code Commands
 
 typedef enum
 {
@@ -164,7 +165,7 @@ typedef struct
 {
   // General Settings
   uint8_t  serial_port[MAX_SERIAL_PORT_COUNT];
-  uint8_t  general_settings;  // emulated M600 / M109 / M190 toggles (Bit Values)
+  uint8_t  general_settings;  // emulated M600 / emulated M109-M190 / file comment parsing toggles (Bit Values)
 
   // UI Settings
   uint8_t  rotated_ui;
@@ -233,8 +234,7 @@ typedef struct
 
   uint8_t  move_speed;  // index on infoSettings.axis_speed, infoSettings.ext_speed
 
-  uint8_t  inverted_axis;  // invert X Y Z axis (Bit Values)
-  uint8_t  leveling_inverted_y_axis;
+  uint8_t  inverted_axis;  // invert X Y Z axis and leveling Y axis (Bit Values)
   uint8_t  probing_z_offset;
   float    probing_z_raise;
   uint8_t  z_steppers_alignment;
@@ -253,7 +253,7 @@ typedef struct
   // Power Loss Recovery & BTT UPS Settings
   uint8_t  plr;
   uint8_t  plr_home;
-  uint8_t  plr_z_raise;
+  float    plr_z_raise;
   uint8_t  btt_ups;
 
   // Other Device-Specific Settings
@@ -266,7 +266,7 @@ typedef struct
   uint8_t  knob_led_idle;
   uint8_t  neopixel_pixels;
 
-  // Start, End & Cancel Gcode Commands
+  // Start, End & Cancel G-code Commands
   uint8_t  send_gcodes;  // send printing gcodes toggles (Bit Values)
 } SETTINGS;
 

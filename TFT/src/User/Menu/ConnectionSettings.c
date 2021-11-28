@@ -5,7 +5,7 @@ SERIAL_PORT_INDEX portIndex = 0;  // index on serialPort array
 
 void updateListeningMode(MENUITEMS * menu)
 {
-  if (GET_BIT(infoSettings.general_settings, LISTENING_MODE) == 1)
+  if (GET_BIT(infoSettings.general_settings, INDEX_LISTENING_MODE) == 1)
   {
     menu->items[4].label.index = LABEL_OFF;
     reminderMessage(LABEL_LISTENING, STATUS_LISTENING);
@@ -177,7 +177,7 @@ void menuConnectionSettings(void)
         break;
 
       case KEY_ICON_4:
-        TOGGLE_BIT(infoSettings.general_settings, LISTENING_MODE);
+        TOGGLE_BIT(infoSettings.general_settings, INDEX_LISTENING_MODE);
         storePara();
 
         updateListeningMode(&connectionSettingsItems);

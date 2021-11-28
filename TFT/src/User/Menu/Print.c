@@ -185,7 +185,7 @@ void menuPrintFromSource(void)
   };
 
   KEY_VALUES key_num = KEY_IDLE;
-  uint8_t update = 1;
+  uint8_t update = 1;  // 0: no update, 1: update with title bar, 2: update without title bar
   uint8_t pageCount = (infoFile.folderCount + infoFile.fileCount + (NUM_PER_PAGE - 1)) / NUM_PER_PAGE;
 
   GUI_Clear(infoSettings.bg_color);
@@ -213,7 +213,6 @@ void menuPrintFromSource(void)
     CLOSE_MENU();
   }
 
-
   while (MENU_IS(menuPrintFromSource))
   {
     if (list_mode != true)  // select item from icon view
@@ -230,7 +229,7 @@ void menuPrintFromSource(void)
           if (infoFile.cur_page > 0)
           {
             infoFile.cur_page--;
-            update = 1;
+            update = 2;  // request no title bar update
           }
           break;
 
@@ -239,7 +238,7 @@ void menuPrintFromSource(void)
           if (infoFile.cur_page + 1 < pageCount)
           {
             infoFile.cur_page++;
-            update = 1;
+            update = 2;  // request no title bar update
           }
           break;
 
@@ -288,8 +287,8 @@ void menuPrintFromSource(void)
           }
           break;
 
-        case KEY_DECREASE:
-        case KEY_INCREASE:
+        case KEY_PAGEUP:
+        case KEY_PAGEDOWN:
         case KEY_IDLE:
           break;
 
@@ -301,25 +300,25 @@ void menuPrintFromSource(void)
     }
 
     // refresh file menu
-    if (update)
+    if (update != 0)
     {
-      update = 0;
-
       if (list_mode != true)
       {
         printIconItems.title.address = (uint8_t *)infoFile.title;
         gocdeIconDraw();
+
+        if (update != 2)  // update title only when entering/exiting to/from directory
+          menuDrawTitle((uint8_t *)infoFile.title);
       }
       else
-      {
+      { // title bar is also drawn by listViewCreate
         listViewCreate((LABEL){.address = (uint8_t *)infoFile.title}, NULL, infoFile.folderCount + infoFile.fileCount,
                        &infoFile.cur_page, false, NULL, gocdeListDraw);
       }
 
       Scroll_CreatePara(&scrollLine, (uint8_t *)infoFile.title, &titleRect);
-      GUI_SetBkColor(infoSettings.title_bg_color);
-      GUI_ClearRect(0, 0, LCD_WIDTH, TITLE_END_Y);
-      GUI_SetBkColor(infoSettings.bg_color);
+
+      update = 0;  // finally reset update request
     }
 
     GUI_SetBkColor(infoSettings.title_bg_color);
@@ -383,7 +382,7 @@ void menuPrint(void)
     switch (key_num)
     {
       case KEY_ICON_0:
-        list_mode = infoSettings.files_list_mode;  // follow list mode setting in TFT sd card
+        list_mode = infoSettings.files_list_mode;  // follow list mode setting in TFT SD card
         infoFile.source = TFT_SD;
         OPEN_MENU(menuPrintFromSource);
         OPEN_MENU(menuPrintRestore);
@@ -391,7 +390,7 @@ void menuPrint(void)
 
       #ifdef U_DISK_SUPPORT
         case KEY_ICON_1:
-          list_mode = infoSettings.files_list_mode;  // follow list mode setting in usb disk
+          list_mode = infoSettings.files_list_mode;  // follow list mode setting in TFT USB stick
           infoFile.source = TFT_UDISK;
           OPEN_MENU(menuPrintFromSource);
           OPEN_MENU(menuPrintRestore);

@@ -4,6 +4,7 @@
     // config.ini Parameter Settings - Screen Settings and Feature Settings
     #define STRING_EMULATED_M600          "Emuler M600"
     #define STRING_EMULATED_M109_M190     "Emulated M109 / M190"
+    #define STRING_FILE_COMMENT_PARSING   "File comment parsing"
     #define STRING_ROTATED_UI             "Rotation"
     #define STRING_LANGUAGE               "Français"
     #define STRING_ACK_NOTIFICATION       "Style de notification ACK"
@@ -360,6 +361,6 @@
     #define STRING_MESH_VALID             "Test Mesh"
     #define STRING_CONNECT_PROBE          "Connectez le palpeur avant de démarrer le processus. Veillez à le déconnecter ensuite."
     #define STRING_DISCONNECT_PROBE       "Assurez-vous d'avoir déconnecté le palpeur avant d'utiliser cette fonctionnalité."
-    #define STRING_CALIBRATION            "Calibration"
+    #define STRING_CALIBRATION            "Calibrate"
 
 #endif

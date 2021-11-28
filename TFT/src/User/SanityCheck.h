@@ -23,8 +23,32 @@ extern "C" {
 //=============================== Settings Configurable On config.ini ================================
 //====================================================================================================
 
-#if PRIMARY_BAUDRATE < 0 || PRIMARY_BAUDRATE >= BAUDRATE_COUNT
-  #error "invalid PRIMARY_BAUDRATE index. Pleas select a value only from options provided in configuration.h"
+#if SP_1 < 1 || SP_1 >= BAUDRATE_COUNT
+  #error "invalid SP_1 index. Please select a value only from options provided in Configuration.h"
+#endif
+
+#if SP_2 < 0 || SP_2 >= BAUDRATE_COUNT
+  #error "invalid SP_2 index. Please select a value only from options provided in Configuration.h"
+#endif
+
+#if SP_3 < 0 || SP_3 >= BAUDRATE_COUNT
+  #error "invalid SP_3 index. Please select a value only from options provided in Configuration.h"
+#endif
+
+#if SP_4 < 0 || SP_4 >= BAUDRATE_COUNT
+  #error "invalid SP_4 index. Please select a value only from options provided in Configuration.h"
+#endif
+
+#ifdef TERMINAL_COLOR_SCHEME
+  #if TERMINAL_COLOR_SCHEME > 2
+    #error "TERMINAL_COLOR_SCHEME cannot be greater than 2"
+  #endif
+
+  #if TERMINAL_COLOR_SCHEME < 0
+    #error "TERMINAL_COLOR_SCHEME cannot be less than 0"
+  #endif
+#else
+  #define TERMINAL_COLOR_SCHEME 0
 #endif
 
 #ifndef ST7920_EMULATOR
@@ -41,16 +65,16 @@ extern "C" {
   #define MARLIN_TITLE "Marlin Mode"
 #endif
 
-#if HOTEND_NUM > MAX_HOTEND_COUNT
-  #error "HOTEND_NUM can not be more than 6"
+#if HOTEND_COUNT < 0 || HOTEND_COUNT > MAX_HOTEND_COUNT
+  #error "HOTEND_COUNT cannot be less than 0 or greater than 6"
 #endif
 
-#if EXTRUDER_NUM > MAX_EXT_COUNT
-  #error "EXTRUDER_NUM can not be more than 6"
+#if EXTRUDER_COUNT < 0 || EXTRUDER_COUNT > MAX_EXT_COUNT
+  #error "EXTRUDER_COUNT cannot be less than 0 or greater than 6"
 #endif
 
-#if FAN_NUM > MAX_FAN_COUNT
-  #error "FAN_NUM can not be more than 6"
+#if FAN_COUNT < 1 || FAN_COUNT > MAX_FAN_COUNT
+  #error "FAN_COUNT cannot be less than 1 or greater than 6"
 #endif
 
 #if FIL_RUNOUT < 0 || FIL_RUNOUT > 3
@@ -229,8 +253,7 @@ extern "C" {
   #if MESH_GRID_MAX_POINTS_X < 1
     #error "MESH_GRID_MAX_POINTS_X cannot be less than 1"
   #endif
-#endif
-#ifndef MESH_GRID_MAX_POINTS_X
+#else
   #define MESH_GRID_MAX_POINTS_X 10
 #endif
 
@@ -242,8 +265,7 @@ extern "C" {
   #if MESH_GRID_MAX_POINTS_Y < 1
     #error "MESH_GRID_MAX_POINTS_Y cannot be less than 1"
   #endif
-#endif
-#ifndef MESH_GRID_MAX_POINTS_Y
+#else
   #define MESH_GRID_MAX_POINTS_Y 10
 #endif
 
@@ -255,8 +277,7 @@ extern "C" {
   #if BED_LEVELING_TYPE < 0
     #error "BED_LEVELING_TYPE cannot be less than 0"
   #endif
-#endif
-#ifndef BED_LEVELING_TYPE
+#else
   #define BED_LEVELING_TYPE 1
 #endif
 
@@ -268,8 +289,7 @@ extern "C" {
   #if DELTA_PROBE_TYPE < 0
     #error "DELTA_PROBE_TYPE cannot be less than 0"
   #endif
-#endif
-#ifndef DELTA_PROBE_TYPE
+#else
   #define DELTA_PROBE_TYPE 0
 #endif
 
@@ -281,12 +301,48 @@ extern "C" {
   #if KEYBOARD_COLOR_LAYOUT < 0
     #error "KEYBOARD_COLOR_LAYOUT cannot be less than 0"
   #endif
-#endif
-#ifndef KEYBOARD_COLOR_LAYOUT
+#else
   #define KEYBOARD_COLOR_LAYOUT 0
 #endif
+
 #if KEYBOARD_COLOR_LAYOUT == 2 && defined(KEYBOARD_MATERIAL_THEME)
   #undef KEYBOARD_MATERIAL_THEME
+#endif
+
+#ifdef TERMINAL_KEYBOARD_LAYOUT
+  #if TERMINAL_KEYBOARD_LAYOUT > 2
+    #error "TERMINAL_KEYBOARD_LAYOUT cannot be greater than 2"
+  #endif
+
+  #if TERMINAL_KEYBOARD_LAYOUT < 0
+    #error "TERMINAL_KEYBOARD_LAYOUT cannot be less than 0"
+  #endif
+#else
+  #define TERMINAL_KEYBOARD_LAYOUT 0
+#endif
+
+#ifdef LIVE_TEXT_BG_COLOR_PRINTING
+  #if LIVE_TEXT_BG_COLOR_PRINTING > 2
+    #error "LIVE_TEXT_BG_COLOR_PRINTING cannot be greater than 2"
+  #endif
+
+  #if LIVE_TEXT_BG_COLOR_PRINTING < 0
+    #error "LIVE_TEXT_BG_COLOR_PRINTING cannot be less than 0"
+  #endif
+#else
+  #define LIVE_TEXT_BG_COLOR_PRINTING 0
+#endif
+
+#ifdef LIVE_TEXT_BG_COLOR_STATUS
+  #if LIVE_TEXT_BG_COLOR_STATUS > 6
+    #error "LIVE_TEXT_BG_COLOR_STATUS cannot be greater than 6"
+  #endif
+
+  #if LIVE_TEXT_BG_COLOR_STATUS < 0
+    #error "LIVE_TEXT_BG_COLOR_STATUS cannot be less than 0"
+  #endif
+#else
+  #define LIVE_TEXT_BG_COLOR_STATUS 0
 #endif
 
 #if THUMBNAIL_PARSER == PARSER_BASE64PNG

@@ -105,16 +105,14 @@
 
 #if defined (STM32F10X_LD_VL) || defined (STM32F10X_MD_VL) || defined (STM32F10X_HD_VL)
 /* #define SYSCLK_FREQ_HSE    HSE_VALUE */
- #define SYSCLK_FREQ_24MHz  24000000
-#elif defined (MKS_TFT)
- #define SYSCLK_FREQ_48MHz  48000000
+  #define SYSCLK_FREQ_24MHz  24000000
 #else
 /* #define SYSCLK_FREQ_HSE    HSE_VALUE */
 /* #define SYSCLK_FREQ_24MHz  24000000 */
 /* #define SYSCLK_FREQ_36MHz  36000000 */
 /* #define SYSCLK_FREQ_48MHz  48000000 */
 /* #define SYSCLK_FREQ_56MHz  56000000 */
-#define SYSCLK_FREQ_72MHz  72000000
+  #define SYSCLK_FREQ_72MHz  72000000
 #endif
 
 /*!< Uncomment the following line if you need to use external SRAM mounted
@@ -1022,7 +1020,6 @@ static void SetSysClockTo72(void)
     FLASH->ACR &= (uint32_t)((uint32_t)~FLASH_ACR_LATENCY);
     FLASH->ACR |= (uint32_t)FLASH_ACR_LATENCY_2;
 
-
     /* HCLK = SYSCLK */
     RCC->CFGR |= (uint32_t)RCC_CFGR_HPRE_DIV1;
 
@@ -1033,14 +1030,25 @@ static void SetSysClockTo72(void)
     RCC->CFGR |= (uint32_t)RCC_CFGR_PPRE1_DIV2;
 
 #ifdef STM32F10X_CL
-    /* Configure PLLs ------------------------------------------------------*/
-    /* PLL2 configuration: PLL2CLK = (HSE / 2) * 10 = 40 MHz */
-    /* PREDIV1 configuration: PREDIV1CLK = PLL2 / 5 = 8 MHz */
+    #if !defined (MKS_TFT)
+      /* Configure PLLs ------------------------------------------------------*/
+      /* PLL2 configuration: PLL2CLK = (HSE / 2) * 10 = 40 MHz */
+      /* PREDIV1 configuration: PREDIV1CLK = PLL2 / 5 = 8 MHz */
 
-    RCC->CFGR2 &= (uint32_t)~(RCC_CFGR2_PREDIV2 | RCC_CFGR2_PLL2MUL |
-                              RCC_CFGR2_PREDIV1 | RCC_CFGR2_PREDIV1SRC);
-    RCC->CFGR2 |= (uint32_t)(RCC_CFGR2_PREDIV2_DIV2 | RCC_CFGR2_PLL2MUL10 |
-                             RCC_CFGR2_PREDIV1SRC_PLL2 | RCC_CFGR2_PREDIV1_DIV5);
+      RCC->CFGR2 &= (uint32_t)~(RCC_CFGR2_PREDIV2 | RCC_CFGR2_PLL2MUL |
+                                RCC_CFGR2_PREDIV1 | RCC_CFGR2_PREDIV1SRC);
+      RCC->CFGR2 |= (uint32_t)(RCC_CFGR2_PREDIV2_DIV2 | RCC_CFGR2_PLL2MUL10 |
+                               RCC_CFGR2_PREDIV1SRC_PLL2 | RCC_CFGR2_PREDIV1_DIV5);
+    #else /* if MKS_TFT */
+      /* Configure PLLs ------------------------------------------------------*/
+      /* PLL2 configuration: PLL2CLK = (HSE / 5) * 8 = 40 MHz */
+      /* PREDIV1 configuration: PREDIV1CLK = PLL2 / 5 = 8 MHz */
+
+      RCC->CFGR2 &= (uint32_t)~(RCC_CFGR2_PREDIV2 | RCC_CFGR2_PLL2MUL |
+                                RCC_CFGR2_PREDIV1 | RCC_CFGR2_PREDIV1SRC);
+      RCC->CFGR2 |= (uint32_t)(RCC_CFGR2_PREDIV2_DIV5 | RCC_CFGR2_PLL2MUL8 |
+                               RCC_CFGR2_PREDIV1SRC_PLL2 | RCC_CFGR2_PREDIV1_DIV5);
+    #endif /* MKS_TFT */
 
     /* Enable PLL2 */
     RCC->CR |= RCC_CR_PLL2ON;

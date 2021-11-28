@@ -1,5 +1,6 @@
 #include "interfaceCmd.h"
 #include "includes.h"
+#include "RRFSendCmd.h"
 
 #define CMD_QUEUE_SIZE 20
 
@@ -206,8 +207,8 @@ bool sendCmd(bool purge, bool avoidTerminal)
 {
   char * purgeStr = "[Purged] ";
 
-  if (GET_BIT(infoSettings.general_settings, LISTENING_MODE) == 1 &&  // if TFT is in listening mode and FW type was already detected,
-      infoMachineSettings.firmwareType != FW_NOT_DETECTED)            // purge the command
+  if (GET_BIT(infoSettings.general_settings, INDEX_LISTENING_MODE) == 1 &&  // if TFT is in listening mode and FW type was already detected,
+      infoMachineSettings.firmwareType != FW_NOT_DETECTED)                  // purge the command
     purge = true;
 
   #if defined(SERIAL_DEBUG_PORT) && defined(DEBUG_SERIAL_COMM)
@@ -221,15 +222,18 @@ bool sendCmd(bool purge, bool avoidTerminal)
 
   if (!purge)  // if command is not purged, send it to printer
   {
-    Serial_Puts(SERIAL_PORT, cmd_ptr);
+    if (infoMachineSettings.firmwareType != FW_REPRAPFW)
+      Serial_Puts(SERIAL_PORT, cmd_ptr);
+    else
+      rrfSendCmd(cmd_ptr);
     setCurrentAckSrc(cmd_port_index);
   }
 
   if (!avoidTerminal)
   {
     if (purge)
-      terminalCache(purgeStr, strlen(purgeStr), cmd_port_index, TERMINAL_GCODE);
-    terminalCache(cmd_ptr, cmd_len, cmd_port_index, TERMINAL_GCODE);
+      terminalCache(purgeStr, strlen(purgeStr), cmd_port_index, SRC_TERMINAL_GCODE);
+    terminalCache(cmd_ptr, cmd_len, cmd_port_index, SRC_TERMINAL_GCODE);
   }
 
   infoCmd.count--;
@@ -618,7 +622,7 @@ void sendQueueCmd(void)
           if (cmd_seen('R'))
           {
             setPrintRemainingTime((cmd_value() * 60));
-            setM73_presence(true);  // disable parsing remaning time from gCode comments
+            setM73R_presence(true);  // disable parsing remaning time from gCode comments
           }
 
           if (!infoMachineSettings.buildPercent)  // if M73 is not supported by Marlin, skip it
@@ -711,7 +715,7 @@ void sendQueueCmd(void)
         case 109: // M109
           if (fromTFT)
           {
-            if (GET_BIT(infoSettings.general_settings, EMULATED_M109_M190) == 0)  // if emulated M109 / M190 is disabled
+            if (GET_BIT(infoSettings.general_settings, INDEX_EMULATED_M109_M190) == 0)  // if emulated M109 / M190 is disabled
               break;
 
             cmd_ptr[cmd_index + 3] = '4';  // Avoid send M109 to Marlin
@@ -784,7 +788,7 @@ void sendQueueCmd(void)
         case 190:  // M190
           if (fromTFT)
           {
-            if (GET_BIT(infoSettings.general_settings, EMULATED_M109_M190) == 0)  // if emulated M109 / M190 is disabled
+            if (GET_BIT(infoSettings.general_settings, INDEX_EMULATED_M109_M190) == 0)  // if emulated M109 / M190 is disabled
               break;
 
             cmd_ptr[cmd_index + 2] = '4';  // Avoid send M190 to Marlin
@@ -1007,7 +1011,7 @@ void sendQueueCmd(void)
           {
             // purge and pause only if emulated M600 is enabled.
             // if emulated M600 is disabled then let the printer pause the print to avoid premature pause
-            if (GET_BIT(infoSettings.general_settings, EMULATED_M600) == 1)
+            if (GET_BIT(infoSettings.general_settings, INDEX_EMULATED_M600) == 1)
             {
               sendCmd(true, avoid_terminal);
               printPause(true, PAUSE_NORMAL);
@@ -1022,7 +1026,7 @@ void sendQueueCmd(void)
             {
               // purge and pause only if emulated M600 is enabled.
               // if emulated M600 is disabled then let the printer pause the print to avoid premature pause
-              if (GET_BIT(infoSettings.general_settings, EMULATED_M600) == 1)
+              if (GET_BIT(infoSettings.general_settings, INDEX_EMULATED_M600) == 1)
               {
                 sendCmd(true, avoid_terminal);
                 printPause(true, PAUSE_NORMAL);
