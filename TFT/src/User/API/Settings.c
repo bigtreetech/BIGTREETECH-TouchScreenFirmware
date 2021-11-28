@@ -27,7 +27,11 @@ void initSettings(void)
                                          (FILE_COMMENT_PARSING << INDEX_FILE_COMMENT_PARSING));
 
 // UI Settings
-  infoSettings.rotated_ui             = ROTATED_UI;
+  #ifdef PORTRAIT
+    infoSettings.rotated_ui             = 3;
+  #else
+    infoSettings.rotated_ui             = ROTATED_UI;
+  #endif
   infoSettings.language               = LANGUAGE;
   infoSettings.status_screen          = STATUS_SCREEN;
   infoSettings.title_bg_color         = lcd_colors[TITLE_BACKGROUND_COLOR];
