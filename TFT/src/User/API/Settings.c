@@ -28,7 +28,11 @@ void initSettings(void)
   infoSettings.general_settings       = default_general_settings;
 
 // UI Settings
-  infoSettings.rotated_ui             = DISABLED;
+  #ifdef PORTRAIT
+    infoSettings.rotated_ui             = 3;
+  #else
+    infoSettings.rotated_ui             = DISABLED;
+  #endif
   infoSettings.language               = LANG_DEFAULT;
   infoSettings.status_screen          = STATUS_SCREEN;
   infoSettings.title_bg_color         = lcd_colors[TITLE_BACKGROUND_COLOR];
