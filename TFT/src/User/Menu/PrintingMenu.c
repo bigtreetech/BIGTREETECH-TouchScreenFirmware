@@ -40,6 +40,69 @@ const GUI_RECT printinfo_val_rect[6] = {
 const GUI_RECT progressBar = {PROGRESS_BAR_X0, PICON_START_Y + PICON_HEIGHT * 2 + PICON_SPACE_Y * 2 + 1,
                               PROGRESS_BAR_X1, ICON_START_Y + ICON_HEIGHT + SPACE_Y - PICON_SPACE_Y - 1};
 
+// progress bar colors
+#if PROGRESS_BAR_COLOR == 0  // ORANGE
+  #define PB_BORDER ORANGE
+  #define PB_FILL MAT_ORANGE
+  #define PB_BCKG DARKGRAY
+  #define PB_STRIPE_ELAPSED BLACK
+  #define PB_STRIPE_REMAINING PB_FILL
+#elif PROGRESS_BAR_COLOR == 1  // YELLOW
+  #define PB_BORDER YELLOW
+  #define PB_FILL MAT_YELLOW
+  #define PB_BCKG DARKGRAY
+  #define PB_STRIPE_ELAPSED BLACK
+  #define PB_STRIPE_REMAINING PB_FILL
+#elif PROGRESS_BAR_COLOR == 2  // RED
+  #define PB_BORDER RED
+  #define PB_FILL MAT_RED
+  #define PB_BCKG DARKGRAY
+  #define PB_STRIPE_ELAPSED BLACK
+  #define PB_STRIPE_REMAINING PB_FILL
+#elif PROGRESS_BAR_COLOR == 3  // GREEN
+  #define PB_BORDER GREEN
+  #define PB_FILL MAT_GREEN
+  #define PB_BCKG DARKGRAY
+  #define PB_STRIPE_ELAPSED BLACK
+  #define PB_STRIPE_REMAINING PB_FILL
+#elif PROGRESS_BAR_COLOR == 4  // BLUE
+  #define PB_BORDER BLUE
+  #define PB_FILL MAT_BLUE
+  #define PB_BCKG DARKGRAY
+  #define PB_STRIPE_ELAPSED BLACK
+  #define PB_STRIPE_REMAINING PB_FILL
+#elif PROGRESS_BAR_COLOR == 5  // CYAN
+  #define PB_BORDER CYAN
+  #define PB_FILL MAT_CYAN
+  #define PB_BCKG DARKGRAY
+  #define PB_STRIPE_ELAPSED BLACK
+  #define PB_STRIPE_REMAINING PB_FILL
+#elif PROGRESS_BAR_COLOR == 6  // MAGENTA
+  #define PB_BORDER MAGENTA
+  #define PB_FILL MAT_MAGENTA
+  #define PB_BCKG DARKGRAY
+  #define PB_STRIPE_ELAPSED BLACK
+  #define PB_STRIPE_REMAINING PB_FILL
+#elif PROGRESS_BAR_COLOR == 7  // PURPLE
+  #define PB_BORDER PURPLE
+  #define PB_FILL MAT_PURPLE
+  #define PB_BCKG DARKGRAY
+  #define PB_STRIPE_ELAPSED BLACK
+  #define PB_STRIPE_REMAINING PB_FILL
+#elif PROGRESS_BAR_COLOR == 8  // LIME
+  #define PB_BORDER LIME
+  #define PB_FILL MAT_LIME
+  #define PB_BCKG DARKGRAY
+  #define PB_STRIPE_ELAPSED BLACK
+  #define PB_STRIPE_REMAINING PB_FILL
+#elif PROGRESS_BAR_COLOR == 9  // GRAY
+  #define PB_BORDER MAT_LOWWHITE
+  #define PB_FILL GRAY
+  #define PB_BCKG DARKGRAY
+  #define PB_STRIPE_ELAPSED BLACK
+  #define PB_STRIPE_REMAINING PB_FILL
+#endif
+
 enum
 {
   PRINT_ICON = (1 << 0),
@@ -432,9 +495,9 @@ static inline void reDrawProgress(uint8_t prevProgress)
   if (nextProgress != prevProgress)
   { // we need speed, do not draw anything if progress isn't changed
     if (nextProgress > prevProgress)
-      reDrawProgressBar(prevProgress, nextProgress, MAT_ORANGE, BLACK);
+      reDrawProgressBar(prevProgress, nextProgress, PB_FILL, PB_STRIPE_ELAPSED);
     else  // if regress, swap indexes and colors
-      reDrawProgressBar(nextProgress, prevProgress, DARKGRAY, MAT_ORANGE);
+      reDrawProgressBar(nextProgress, prevProgress, PB_BCKG, PB_STRIPE_REMAINING);
     if (progDisplayType != ELAPSED_REMAINING)
     {
       reDrawPrintingValue(ICON_POS_TIM, PRINT_TOP_ROW);
@@ -454,10 +517,10 @@ static inline void printingDrawPage(void)
   }
 
   // progress
-  GUI_SetColor(ORANGE);
+  GUI_SetColor(PB_BORDER);
   GUI_DrawRect(progressBar.x0 - 1, progressBar.y0 - 1, progressBar.x1 + 1, progressBar.y1 + 1);  // draw progress bar border
   GUI_RestoreColorDefault();
-  reDrawProgressBar(0, 100, DARKGRAY, MAT_ORANGE);  // draw progress bar
+  reDrawProgressBar(0, 100, PB_BCKG, PB_STRIPE_REMAINING);  // draw progress bar
   reDrawProgress(0);  // draw progress
 }
 
