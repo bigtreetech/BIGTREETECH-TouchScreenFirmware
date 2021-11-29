@@ -481,7 +481,7 @@ void menuClearGaps(void)
     {rect_of_key[6].x1,  rect_of_key[6].y0,  rect_of_key[7].x0,  LCD_HEIGHT},
     {rect_of_key[7].x1,  rect_of_key[6].y0,  LCD_WIDTH,  LCD_HEIGHT}
   };
-#elif
+#else
   const GUI_RECT gaps[] = {
     {0,                  0,                  LCD_WIDTH,          TITLE_END_Y},
     {0,                  TITLE_END_Y,        LCD_WIDTH,          rect_of_key[0].y0},
