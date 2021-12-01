@@ -1265,6 +1265,14 @@
 #define PROGRESS_BAR_COLOR 0  // Default: 0
 
 /**
+ * The color of the values on the status screen
+ * Some topics require the inverse display of color values on live status screen icons.
+ * For example: THEME_Rep Rap Firmware Dark  - options 1
+ *   Options: [ Black: 0, White: 1 ]
+ */
+#define VALUE_COLOR 0 // Default: 0
+
+/**
  * Progress Bar Layout (Printing menu)
  * Uncomment to enable a progress bar with 10% markers.
  * Comment to enable a standard progress bar.
