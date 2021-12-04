@@ -112,7 +112,7 @@ void menuInfo(void)
 
   // spi flash info
   float usedMB = (float)FLASH_USED/1048576;
-  sprintf(buf, "Used %.2f%% (%.2fMB/%uMB)", flashUsedPercentage(), usedMB, (W25Qxx_ReadCapacity()/1048576));
+  sprintf(buf, "Used %.2f%% (%.2fMB/%uMB)", flashUsedPercentage(), usedMB, (W25Qxx_ReadCapacity() / 1048576));
 
   const uint16_t top_y = 0; //(LCD_HEIGHT - (7 * BYTE_HEIGHT)) / 2;  // 8 firmware info lines + 1 SPI flash info line
   const uint16_t start_x = strlen("Firmware:") * BYTE_WIDTH;

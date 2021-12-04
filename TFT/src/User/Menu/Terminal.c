@@ -40,32 +40,6 @@ typedef enum
   TERM_IDLE = IDLE_TOUCH,
 } TERMINAL_KEY_VALUES;
 
-#ifndef KEYBOARD_MATERIAL_THEME
-  #if KEYBOARD_COLOR_LAYOUT == 0
-    #define KEY_FONT_COLOR     infoSettings.font_color
-    #define KEY_BG_COLOR       infoSettings.bg_color
-    #define KEY_BORDER_COLOR   infoSettings.list_border_color
-    #define KEY_BORDER_COLOR_2 DARKGRAY
-  #elif KEYBOARD_COLOR_LAYOUT == 1
-    #define KEY_FONT_COLOR     infoSettings.font_color
-    #define KEY_BG_COLOR       infoSettings.list_border_color
-    #define KEY_BORDER_COLOR   infoSettings.bg_color
-    #define KEY_BORDER_COLOR_2 DARKGRAY
-  #else
-    #define KEY_FONT_COLOR     BLACK
-    #define KEY_BG_COLOR       WHITE
-    #define KEY_BORDER_COLOR   0x2174
-    #define KEY_BORDER_COLOR_2 DARKGRAY
-  #endif
-
-  #define KB_BG_COLOR          BLACK
-  #define BAR_FONT_COLOR       WHITE
-  #define BAR_BG_COLOR         0x2174
-  #define BAR_BORDER_COLOR     0x4b0d
-  #define TEXTBOX_FONT_COLOR   BLACK
-  #define TEXTBOX_BG_COLOR     0xFFF2
-#endif
-
 // keyboard layouts
 #define LAYOUT_1_COL_COUNT 6
 #define LAYOUT_1_ROW_COUNT 4
@@ -334,7 +308,7 @@ static inline void keyboardDrawButton(uint8_t index, uint8_t isPressed)
 
   // Setup colors and button info
   #ifdef KEYBOARD_MATERIAL_THEME
-    uint16_t fontcolor = KEY_FONT_COLOR;
+    uint16_t fontcolor = CTRL_FONT_COLOR;
     uint16_t bgcolor = KEY_BG_COLOR;
     GUI_RECT rectBtn = {editorKeyRect[index].x0 + 3, editorKeyRect[index].y0 + 3,
                         editorKeyRect[index].x1 - 3, editorKeyRect[index].y1 - 3};
@@ -342,21 +316,19 @@ static inline void keyboardDrawButton(uint8_t index, uint8_t isPressed)
     switch (index)
     {
       case GKEY_SEND:
-        fontcolor = CTRL_FONT_COLOR;
-        bgcolor = MAT_GREEN;
+        bgcolor = CTRL_SEND_BG_COLOR;
         break;
 
       case GKEY_BACK:
-        fontcolor = CTRL_FONT_COLOR;
-        bgcolor = MAT_RED;
+        bgcolor = CTRL_BACK_BG_COLOR;
         break;
 
       case GKEY_ABC_123:
-        fontcolor = CTRL_FONT_COLOR;
-        bgcolor = MAT_SLATE;
+        bgcolor = CTRL_ABC_BG_COLOR;
         break;
 
       default:
+        fontcolor = KEY_FONT_COLOR;
         break;
     }
 
@@ -640,7 +612,7 @@ static inline void terminalDrawButton(uint8_t index, uint8_t isPressed)
     if (index == TERM_BACK)
     {
       fontcolor = CTRL_FONT_COLOR;
-      bgcolor = MAT_RED;
+      bgcolor = CTRL_BACK_BG_COLOR;
     }
 
     BUTTON btn = {.fontColor  = fontcolor,
