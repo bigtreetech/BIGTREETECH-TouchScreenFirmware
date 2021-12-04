@@ -1272,6 +1272,14 @@
 //#define MARKED_PROGRESS_BAR  // Default: commented (disabled)
 
 /**
+ * The color of the values on the status screen
+ * Some topics require the inverse display of color values on live status screen icons.
+ * Uncomment for example: THEME_Rep Rap Firmware Dark 
+ * Comment for standard color
+ */
+//#define VALUE_COLOR // Default: commented (disabled)
+
+/**
  * Live Text Background Color Rendering Technique (Printing menu and Status Screen menu)
  * When enabled, it allows to eliminate the flickering on alternating icons avoiding to
  * draw the icon background under the live text area.
