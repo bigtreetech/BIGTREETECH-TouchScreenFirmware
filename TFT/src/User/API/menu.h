@@ -171,7 +171,7 @@ extern const GUI_RECT rect_of_key[MENU_RECT_COUNT];
 extern const GUI_RECT rect_of_keySS[SS_RECT_COUNT];
 extern const GUI_RECT rect_of_keyPS[];
 extern const GUI_RECT rect_of_keyPS_end[];
-extern const GUI_RECT rect_of_keyPS_draw[]; //Used to draw VERTICAL GUI printing menu
+extern const GUI_RECT rect_of_keyPS_draw[];  // Used to draw VERTICAL GUI printing menu
 
 extern const GUI_RECT rect_of_titleBar[1];
 
