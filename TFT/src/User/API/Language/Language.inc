@@ -1,6 +1,17 @@
+/**
+ * Word Keywords Generation
+ * Usage: X_WORD(VALUE)
+ * 'VALUE' is the keyword name without the 'WORD_'
+ *
+ * Description: https://en.wikipedia.org/wiki/X_Macro
+ *
+ * After changing/adding/removing a word, change the LANGUAGE_FLASH_SIGN in Settings.h
+ */
+
 // config.ini Parameter Settings - Screen Settings and Feature Settings
 X_WORD (EMULATED_M600)
 X_WORD (EMULATED_M109_M190)
+X_WORD (FILE_COMMENT_PARSING)
 X_WORD (ROTATED_UI)
 X_WORD (LANGUAGE)
 X_WORD (ACK_NOTIFICATION)
@@ -358,3 +369,4 @@ X_WORD (MESH_VALID)
 X_WORD (CONNECT_PROBE)
 X_WORD (DISCONNECT_PROBE)
 X_WORD (CALIBRATION)
+// After changing/adding/removing a word, change the LANGUAGE_FLASH_SIGN in Settings.h

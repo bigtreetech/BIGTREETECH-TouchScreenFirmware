@@ -232,13 +232,9 @@ bool sendCmd(bool purge, bool avoidTerminal)
   if (!purge)  // if command is not purged, send it to printer
   {
     if (infoMachineSettings.firmwareType != FW_REPRAPFW)
-    {
       Serial_Puts(SERIAL_PORT, cmd_ptr);
-    }
     else
-    {
       rrfSendCmd(cmd_ptr);
-    }
     setCurrentAckSrc(cmd_port_index);
   }
 
@@ -635,7 +631,7 @@ void sendQueueCmd(void)
           if (cmd_seen('R'))
           {
             setPrintRemainingTime((cmd_value() * 60));
-            setM73_presence(true);  // disable parsing remaning time from gCode comments
+            setM73R_presence(true);  // disable parsing remaning time from gCode comments
           }
 
           if (!infoMachineSettings.buildPercent)  // if M73 is not supported by Marlin, skip it

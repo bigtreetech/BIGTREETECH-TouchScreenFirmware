@@ -243,7 +243,13 @@ void drawStatus(void)
   lvIcon.lines[1].v_align = CENTER;
   lvIcon.lines[1].pos = ss_val_point;
   lvIcon.lines[1].font = VAL_LARGE_FONT;
-  lvIcon.lines[1].fn_color = SSICON_VAL_COLOR;
+  
+  #ifdef VALUE_COLOR
+    lvIcon.lines[1].fn_color = SSICON_NAME_COLOR;
+  #else
+    lvIcon.lines[1].fn_color = SSICON_VAL_COLOR;
+  #endif  
+  
   lvIcon.lines[1].text_mode = GUI_TEXTMODE_TRANS;  // default value
 
   #ifndef TFT70_V3_0

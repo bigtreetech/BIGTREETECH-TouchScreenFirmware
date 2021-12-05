@@ -363,7 +363,7 @@ void menuPrint(void)
     switch (key_num)
     {
       case KEY_ICON_0:
-        list_mode = infoSettings.files_list_mode;  // follow list mode setting in TFT sd card
+        list_mode = infoSettings.files_list_mode;  // follow list mode setting in TFT SD card
         infoFile.source = TFT_SD;
         OPEN_MENU(menuPrintFromSource);
         OPEN_MENU(menuPrintRestore);
@@ -371,7 +371,7 @@ void menuPrint(void)
 
       #ifdef U_DISK_SUPPORT
         case KEY_ICON_1:
-          list_mode = infoSettings.files_list_mode;  // follow list mode setting in usb disk
+          list_mode = infoSettings.files_list_mode;  // follow list mode setting in TFT USB stick
           infoFile.source = TFT_UDISK;
           OPEN_MENU(menuPrintFromSource);
           OPEN_MENU(menuPrintRestore);
