@@ -526,6 +526,8 @@ void menuClearGaps(void)
     }
   }
   #else  // clear gaps on Landscape Mode except TFT70
+  void menuClearGaps(void)
+  {
     const GUI_RECT gaps[] = {
       {0,                  0,                  LCD_WIDTH,          TITLE_END_Y},
       {0,                  TITLE_END_Y,        LCD_WIDTH,          rect_of_key[0].y0},
@@ -541,6 +543,7 @@ void menuClearGaps(void)
     GUI_SetBkColor(infoSettings.bg_color);
     for (uint8_t i = 1; i < COUNT(gaps); i++)
       GUI_ClearPrect(gaps + i);
+  }
   #endif
 #endif
 

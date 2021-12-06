@@ -17,7 +17,7 @@
 #ifdef PORTRAIT
   #define XYZ_STATUS " X: %.2f  Y: %.2f  Z: %.2f "
 #else
-  #define XZY_STATUS "   X: %.2f   Y: %.2f   Z: %.2f   "
+  #define XYZ_STATUS "   X: %.2f   Y: %.2f   Z: %.2f   "
 #endif
 
 const MENUITEMS StatusItems = {
