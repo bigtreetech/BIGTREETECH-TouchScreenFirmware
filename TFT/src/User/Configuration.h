@@ -181,7 +181,7 @@
 
 /**
  * Files Fullname View
- * Display fullname for files in list mode / icon mode menu.
+ * Display fullname for files in List Mode / Icon Mode menu.
  * If disabled, any file extension starting with ".g" or ".G" (e.g. ".g", ".gco", ".gcode" etc.) will be hidden.
  *   Options: [disable: 0, enable: 1]
  */
