@@ -412,7 +412,7 @@ static inline void toggleInfo(void)
     {
       do
       {
-        currentFan = (currentFan + 1) % MAX_FAN_COUNT;
+        currentFan = (currentFan + 1) % MAX_COOLING_FAN_COUNT;
       } while (!fanIsValid(currentFan));
 
       RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
@@ -463,9 +463,9 @@ static inline void reDrawProgress(uint8_t prevProgress)
   if (nextProgress != prevProgress)
   { // we need speed, do not draw anything if progress isn't changed
     if (nextProgress > prevProgress)
-      reDrawProgressBar(prevProgress, nextProgress, MAT_ORANGE, BLACK);
+      reDrawProgressBar(prevProgress, nextProgress, PB_FILL, PB_STRIPE_ELAPSED);
     else  // if regress, swap indexes and colors
-      reDrawProgressBar(nextProgress, prevProgress, DARKGRAY, MAT_ORANGE);
+      reDrawProgressBar(nextProgress, prevProgress, PB_BCKG, PB_STRIPE_REMAINING);
     if (progDisplayType != ELAPSED_REMAINING)
     {
       reDrawPrintingValue(ICON_POS_TIM, PRINT_TOP_ROW);
@@ -485,10 +485,10 @@ static inline void printingDrawPage(void)
   }
 
   // progress
-  GUI_SetColor(ORANGE);
+  GUI_SetColor(PB_BORDER);
   GUI_DrawRect(progressBar.x0 - 1, progressBar.y0 - 1, progressBar.x1 + 1, progressBar.y1 + 1);  // draw progress bar border
   GUI_RestoreColorDefault();
-  reDrawProgressBar(0, 100, DARKGRAY, MAT_ORANGE);  // draw progress bar
+  reDrawProgressBar(0, 100, PB_BCKG, PB_STRIPE_REMAINING);  // draw progress bar
   reDrawProgress(0);  // draw progress
 }
 
@@ -498,7 +498,7 @@ void drawPrintInfo(void)
 
   IMAGE_ReadDisplay(rect_of_keySS[KEY_INFOBOX].x0, rect_of_keySS[KEY_INFOBOX].y0, INFOBOX_ADDR);
 
-  GUI_SetColor(INFOMSG_BKCOLOR);
+  GUI_SetColor(INFOMSG_BG_COLOR);
   GUI_DispString(rect_of_keySS[KEY_INFOBOX].x0 + STATUS_MSG_ICON_XOFFSET, rect_of_keySS[KEY_INFOBOX].y0 + STATUS_MSG_ICON_YOFFSET,
                  IconCharSelect(CHARICON_INFO));
   GUI_DispStringInRectEOL(rect_of_keySS[KEY_INFOBOX].x0 + BYTE_HEIGHT + STATUS_MSG_TITLE_XOFFSET,
@@ -507,8 +507,8 @@ void drawPrintInfo(void)
                           rect_of_keySS[KEY_INFOBOX].y1 - STATUS_MSG_ICON_YOFFSET,
                           (uint8_t *)textSelect(LABEL_PRINT_FINISHED));
 
-  GUI_SetColor(INFOMSG_COLOR);
-  GUI_SetBkColor(INFOMSG_BKCOLOR);
+  GUI_SetColor(INFOMSG_FONT_COLOR);
+  GUI_SetBkColor(INFOMSG_BG_COLOR);
   GUI_DispStringInPrect(&msgRect, LABEL_CLICK_FOR_MORE);
   GUI_RestoreColorDefault();
 }

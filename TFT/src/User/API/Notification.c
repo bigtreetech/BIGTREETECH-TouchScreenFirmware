@@ -2,43 +2,43 @@
 #include "includes.h"
 #include "my_misc.h"
 
-//area for toast notification
+// area for toast notification
 const GUI_RECT toastRect = {START_X + TITLE_END_Y - (TOAST_Y_PAD * 2), TOAST_Y_PAD, LCD_WIDTH - START_X, TITLE_END_Y - TOAST_Y_PAD};
 const GUI_RECT toastIconRect = {START_X, TOAST_Y_PAD, START_X + TITLE_END_Y - (TOAST_Y_PAD * 2), TITLE_END_Y - TOAST_Y_PAD};
 
-//toast notification variables
+// toast notification variables
 static TOAST toastlist[TOAST_MSG_COUNT];
 
-static uint8_t nextToastIndex = 0;   //next index to store new toast
+static uint8_t nextToastIndex = 0;   // next index to store new toast
 static uint8_t curToastDisplay = 0;  // current toast notification being displayed
-static uint32_t nextToastTime = 0;   //time to change to next notification
+static uint32_t nextToastTime = 0;   // time to change to next notification
 
 static NOTIFICATION msglist[MAX_MSG_COUNT];
-static uint8_t nextMsgIndex = 0;  //next index to store new message
+static uint8_t nextMsgIndex = 0;  // next index to store new message
 static void (*notificationHandler)() = NULL;
 
 bool _toastRunning = false;
 
-//Add new message to toast notification queue
+// add new message to toast notification queue
 void addToast(DIALOG_TYPE style, char * text)
 {
   LCD_WAKE();
 
   TOAST t;
   strncpy(t.text, text, TOAST_MSG_LENGTH);
-  t.text[TOAST_MSG_LENGTH - 1] = 0;  //ensure string ends with null terminator
+  t.text[TOAST_MSG_LENGTH - 1] = 0;  // ensure string ends with null terminator
   t.isNew = true;
   toastlist[nextToastIndex] = t;
   nextToastIndex = (nextToastIndex + 1) % TOAST_MSG_COUNT;
 }
 
-//check if notification is currently displayed
+// check if notification is currently displayed
 bool toastRunning(void)
 {
   return _toastRunning;
 }
 
-//check if any new notification is available
+// check if any new notification is available
 bool toastAvailable(void)
 {
   for (int i = 0; i < TOAST_MSG_COUNT; i++)
@@ -49,7 +49,7 @@ bool toastAvailable(void)
   return false;
 }
 
-//show next notification
+// show next notification
 void drawToast(bool redraw)
 {
   if (!redraw)
@@ -57,27 +57,27 @@ void drawToast(bool redraw)
 
   if (toastlist[curToastDisplay].isNew == true || redraw)
   {
-    //Set toast notification running status
+    // set toast notification running status
     _toastRunning = true;
 
-    // Draw icon
+    // draw icon
     uint8_t *icon;
     uint8_t cursound;
     if (toastlist[curToastDisplay].style == DIALOG_TYPE_ERROR)
     {
-      GUI_SetColor(MAT_RED);
+      GUI_SetColor(NOTIF_ICON_ERROR_BG_COLOR);
       icon = IconCharSelect(CHARICON_ERROR);
       cursound = SOUND_ERROR;
     }
     else if (toastlist[curToastDisplay].style == DIALOG_TYPE_SUCCESS)
     {
-      GUI_SetColor(MAT_GREEN);
+      GUI_SetColor(NOTIF_ICON_SUCCESS_BG_COLOR);
       icon = IconCharSelect(CHARICON_OK_ROUND);
       cursound = SOUND_SUCCESS;
     }
     else
     {
-      GUI_SetColor(MAT_BLUE);
+      GUI_SetColor(NOTIF_ICON_INFO_BG_COLOR);
       icon = IconCharSelect(CHARICON_INFO);
       cursound = SOUND_TOAST;
     }
@@ -87,19 +87,19 @@ void drawToast(bool redraw)
 
     GUI_SetTextMode(GUI_TEXTMODE_TRANS);
     GUI_FillPrect(&toastIconRect);
-    GUI_SetColor(WHITE);
+    GUI_SetColor(NOTIF_ICON_FG_COLOR);
     GUI_DispStringInPrect(&toastIconRect, icon);
 
-    //draw text
-    GUI_SetColor(MAT_LOWWHITE);
+    // draw text
+    GUI_SetColor(NOTIF_TEXT_BG_COLOR);
     GUI_FillPrect(&toastRect);
-    GUI_SetColor(DARKGRAY);
+    GUI_SetColor(NOTIF_TEXT_FONT_COLOR);
     GUI_DispStringInPrect(&toastRect, (uint8_t *)toastlist[curToastDisplay].text);
 
-    //set current toast notification as old/completed
+    // set current toast notification as old/completed
     toastlist[curToastDisplay].isNew = false;
 
-    //set new timer if notification is new
+    // set new timer if notification is new
     if (!redraw)
       nextToastTime = OS_GetTimeMs() + TOAST_DURATION;
 
@@ -107,7 +107,7 @@ void drawToast(bool redraw)
   }
 }
 
-//check and control toast notification display
+// check and control toast notification display
 void loopToast(void)
 {
   if (getMenuType() == MENU_TYPE_FULLSCREEN)
@@ -129,14 +129,14 @@ void loopToast(void)
   }
 }
 
-//Add new message to notification queue
+// add new message to notification queue
 void addNotification(DIALOG_TYPE style, char *title, char *text, bool ShowDialog)
 {
   LCD_WAKE();
 
   if (nextMsgIndex > MAX_MSG_COUNT - 1)
   {
-    //remove oldest message and move all messages up one step
+    // remove oldest message and move all messages up one step
     for (int i = 0; i < MAX_MSG_COUNT - 1; i++)
     {
       memcpy(&msglist[i], &msglist[i + 1], sizeof(NOTIFICATION));
@@ -144,12 +144,12 @@ void addNotification(DIALOG_TYPE style, char *title, char *text, bool ShowDialog
     nextMsgIndex = MAX_MSG_COUNT - 1;
   }
 
-  //store message
+  // store message
   msglist[nextMsgIndex].style  = style;
   strncpy(msglist[nextMsgIndex].text, text, MAX_MSG_LENGTH);
-  msglist[nextMsgIndex].text[MAX_MSG_LENGTH - 1] = 0;  //ensure string ends with null terminator
+  msglist[nextMsgIndex].text[MAX_MSG_LENGTH - 1] = 0;  // ensure string ends with null terminator
   strncpy(msglist[nextMsgIndex].title, title, MAX_MSG_TITLE_LENGTH);
-  msglist[nextMsgIndex].title[MAX_MSG_TITLE_LENGTH - 1] = 0;  //ensure string ends with null terminator
+  msglist[nextMsgIndex].title[MAX_MSG_TITLE_LENGTH - 1] = 0;  // ensure string ends with null terminator
 
   if (ShowDialog && MENU_IS_NOT(menuNotification))
     popupReminder(style, (uint8_t *)title, (uint8_t *)msglist[nextMsgIndex].text);
@@ -164,14 +164,14 @@ void addNotification(DIALOG_TYPE style, char *title, char *text, bool ShowDialog
   statusScreen_setMsg((uint8_t *)title, (uint8_t *)text);
 }
 
-//Replay a notification
+// replay a notification
 void replayNotification(uint8_t index)
 {
   if (index < nextMsgIndex)
     popupReminder(msglist[index].style, (uint8_t *)msglist[index].title, (uint8_t *)msglist[index].text);
 }
 
-//Retrive a stored notification
+// retrieve a stored notification
 NOTIFICATION *getNotification(uint8_t index)
 {
   if (strlen(msglist[index].title) > 0 && strlen(msglist[index].text) > 0)
@@ -200,7 +200,7 @@ void clearNotification(void)
   statusScreen_setReady();
 }
 
-//check if pressed on titlebar area
+// check if pressed on titlebar area
 void titleBarPress(void)
 {
   if (getMenuType() == MENU_TYPE_ICON || getMenuType() == MENU_TYPE_LISTVIEW)
