@@ -340,7 +340,7 @@ void drawStatus(void)
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
   GUI_SetColor(GANTRYLBL_COLOR);
   GUI_SetBkColor(infoSettings.status_xyz_bg_color);
-  sprintf(tempstr, XYZ_STATUS, coordinateGetAxisActual(X_AXIS), coordinateGetAxisActual(Y_AXIS), 
+  sprintf(tempstr, XYZ_STATUS, coordinateGetAxisActual(X_AXIS), coordinateGetAxisActual(Y_AXIS),
           coordinateGetAxisActual(Z_AXIS));
   GUI_DispStringInPrect(&RecGantry, (uint8_t *)tempstr);
 
