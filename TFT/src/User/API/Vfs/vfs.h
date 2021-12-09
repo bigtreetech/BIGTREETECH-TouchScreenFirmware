@@ -44,12 +44,15 @@ bool isPrintModelIcon(void);
 bool mountFS(void);
 bool scanPrintFiles(void);
 
-TCHAR* getCurFileSource(void);
+TCHAR * getCurFileSource(void);
 void clearInfoFile(void);
 void resetInfoFile(void);
-bool EnterDir(char *nextdir);
+bool EnterDir(char * nextdir);
 void ExitDir(void);
 bool IsRootDir(void);
+char * isSupportedFile(char * filename);
+char * hideFileExtension(uint8_t index);
+char * restoreFileExtension(uint8_t index);
 
 bool isVolumeExist(uint8_t src);
 void loopVolumeSource(void);

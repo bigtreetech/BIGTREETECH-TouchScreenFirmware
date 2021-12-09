@@ -186,6 +186,7 @@ typedef struct
   uint8_t  ack_notification;
   uint8_t  files_sort_by;
   uint8_t  files_list_mode;
+  uint8_t  files_fullname_view;
   uint8_t  fan_percentage;
   uint8_t  persistent_info;
   uint8_t  terminal_ack;

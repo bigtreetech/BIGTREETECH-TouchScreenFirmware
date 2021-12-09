@@ -180,6 +180,14 @@
 #define FILES_LIST_MODE 1  // Default: 1
 
 /**
+ * Files Fullname View
+ * Display fullname for files in list mode / icon mode menu.
+ * If disabled, any file extension starting with ".g" or ".G" (e.g. ".g", ".gco", ".gcode" etc.) will be hidden.
+ *   Options: [disable: 0, enable: 1]
+ */
+#define FILES_FULLNAME_VIEW 1  // Default: 1
+
+/**
  * Fan Speed In Percentage
  * Show fan speed in percentage. If disabled fan speeed will be displayed as PWM values.
  *   Options: [disable: 0, enable: 1]
