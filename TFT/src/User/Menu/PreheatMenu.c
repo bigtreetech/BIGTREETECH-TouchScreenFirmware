@@ -25,26 +25,26 @@ void refreshPreheatIcon(PREHEAT_STORE * preheatStore, int8_t index, const ITEM *
   lvIcon.enabled[1] = true;
   lvIcon.enabled[2] = true;
 
-  //set preheat title properties
+  // set preheat title properties
   lvIcon.lines[0].h_align = CENTER;
   lvIcon.lines[0].v_align = TOP;
-  lvIcon.lines[0].fn_color = WHITE;
+  lvIcon.lines[0].fn_color = PH_VAL_COLOR;
   lvIcon.lines[0].text_mode = GUI_TEXTMODE_TRANS;
   lvIcon.lines[0].pos = preheat_title;
   lvIcon.lines[0].font = FONT_SIZE_NORMAL;
 
-  //set preheat tool propertites
+  // set preheat tool propertites
   lvIcon.lines[1].h_align = RIGHT;
   lvIcon.lines[1].v_align = CENTER;
-  lvIcon.lines[1].fn_color = WHITE;
+  lvIcon.lines[1].fn_color = PH_VAL_COLOR;
   lvIcon.lines[1].text_mode = GUI_TEXTMODE_TRANS;
   lvIcon.lines[1].pos = preheat_val_tool;
   lvIcon.lines[1].font = FONT_SIZE_NORMAL;
 
-  //set preheat bed properties
+  // set preheat bed properties
   lvIcon.lines[2].h_align = RIGHT;
   lvIcon.lines[2].v_align = CENTER;
-  lvIcon.lines[2].fn_color = WHITE;
+  lvIcon.lines[2].fn_color = PH_VAL_COLOR;
   lvIcon.lines[2].text_mode = GUI_TEXTMODE_TRANS;
   lvIcon.lines[2].pos = preheat_val_bed;
   lvIcon.lines[2].font = FONT_SIZE_NORMAL;

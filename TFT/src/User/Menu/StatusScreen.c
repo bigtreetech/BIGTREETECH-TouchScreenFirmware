@@ -59,7 +59,7 @@ const char *const SpeedID[2] = SPEED_ID;
 const GUI_POINT ss_title_point = {SSICON_WIDTH - BYTE_WIDTH / 2, SSICON_NAME_Y0};
 const GUI_POINT ss_val_point   = {SSICON_WIDTH / 2, SSICON_VAL_Y0};
 #ifdef TFT70_V3_0
-  const GUI_POINT ss_val2_point = {SSICON_WIDTH/2, SSICON_VAL2_Y0};
+  const GUI_POINT ss_val_point_2 = {SSICON_WIDTH / 2, SSICON_VAL_Y0_2};
 #endif
 
 // info box msg area
@@ -235,7 +235,7 @@ void drawStatus(void)
   lvIcon.lines[0].v_align = TOP;
   lvIcon.lines[0].pos = ss_title_point;
   lvIcon.lines[0].font = NAME_LARGE_FONT;
-  lvIcon.lines[0].fn_color = SSICON_NAME_COLOR;
+  lvIcon.lines[0].fn_color = SS_NAME_COLOR;
   lvIcon.lines[0].text_mode = GUI_TEXTMODE_TRANS;  // default value
 
   lvIcon.enabled[1] = true;
@@ -243,7 +243,7 @@ void drawStatus(void)
   lvIcon.lines[1].v_align = CENTER;
   lvIcon.lines[1].pos = ss_val_point;
   lvIcon.lines[1].font = VAL_LARGE_FONT;
-  lvIcon.lines[1].fn_color = SSICON_VAL_COLOR;
+  lvIcon.lines[1].fn_color = SS_VAL_COLOR;
   lvIcon.lines[1].text_mode = GUI_TEXTMODE_TRANS;  // default value
 
   #ifndef TFT70_V3_0
@@ -252,9 +252,9 @@ void drawStatus(void)
     lvIcon.enabled[2] = true;
     lvIcon.lines[2].h_align = CENTER;
     lvIcon.lines[2].v_align = CENTER;
-    lvIcon.lines[2].pos = ss_val2_point;
-    lvIcon.lines[2].font = VAL2_LARGE_FONT;
-    lvIcon.lines[2].fn_color = SSICON_VAL2_COLOR;
+    lvIcon.lines[2].pos = ss_val_point_2;
+    lvIcon.lines[2].font = VAL_LARGE_FONT_2;
+    lvIcon.lines[2].fn_color = SS_VAL_COLOR_2;
     lvIcon.lines[2].text_mode = GUI_TEXTMODE_TRANS;  // default value
   #endif
 
@@ -324,8 +324,8 @@ void drawStatus(void)
   #endif
 
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
-  GUI_SetColor(GANTRYLBL_COLOR);
-  GUI_SetBkColor(infoSettings.status_xyz_bg_color);
+  GUI_SetColor(GANTRY_XYZ_FONT_COLOR);
+  GUI_SetBkColor(GANTRY_XYZ_BG_COLOR);
   sprintf(tempstr, "   X: %.2f   Y: %.2f   Z: %.2f   ", coordinateGetAxisActual(X_AXIS), coordinateGetAxisActual(Y_AXIS),
           coordinateGetAxisActual(Z_AXIS));
   GUI_DispStringInPrect(&RecGantry, (uint8_t *)tempstr);
@@ -363,7 +363,7 @@ void drawStatusScreenMsg(void)
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
   IMAGE_ReadDisplay(rect_of_keySS[KEY_INFOBOX].x0, rect_of_keySS[KEY_INFOBOX].y0, INFOBOX_ADDR);
-  GUI_SetColor(INFOMSG_BKCOLOR);
+  GUI_SetColor(INFOMSG_BG_COLOR);
   GUI_DispString(rect_of_keySS[KEY_INFOBOX].x0 + STATUS_MSG_ICON_XOFFSET,
                  rect_of_keySS[KEY_INFOBOX].y0 + STATUS_MSG_ICON_YOFFSET,
                  IconCharSelect(CHARICON_INFO));
@@ -372,7 +372,7 @@ void drawStatusScreenMsg(void)
                  rect_of_keySS[KEY_INFOBOX].y0 + STATUS_MSG_ICON_YOFFSET,
                  (uint8_t *)msgtitle);
 
-  GUI_SetBkColor(INFOMSG_BKCOLOR);
+  GUI_SetBkColor(INFOMSG_BG_COLOR);
   GUI_FillPrect(&msgRect);
   Scroll_CreatePara(&scrollLine, (uint8_t *)msgbody, &msgRect);
   GUI_RestoreColorDefault();
@@ -382,8 +382,8 @@ void drawStatusScreenMsg(void)
 
 static inline void scrollMsg(void)
 {
-  GUI_SetBkColor(INFOMSG_BKCOLOR);
-  GUI_SetColor(INFOMSG_COLOR);
+  GUI_SetBkColor(INFOMSG_BG_COLOR);
+  GUI_SetColor(INFOMSG_FONT_COLOR);
   Scroll_DispString(&scrollLine, CENTER);
   GUI_RestoreColorDefault();
 }
