@@ -100,12 +100,6 @@ typedef enum
   ME_AREA_IDLE = IDLE_TOUCH,
 } MESH_AREA_VALUES;
 
-// colors
-#define MESH_FONT_COLOR     infoSettings.font_color
-#define MESH_BG_COLOR       infoSettings.bg_color
-#define MESH_BORDER_COLOR   infoSettings.list_border_color
-#define MESH_BORDER_COLOR_2 0x4b0d
-
 // layout sizes
 #define MESH_GRID_HEIGHT     (LCD_HEIGHT - ICON_START_Y)
 #define MESH_GRID_WIDTH      MESH_GRID_HEIGHT

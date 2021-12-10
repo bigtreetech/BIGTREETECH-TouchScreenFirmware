@@ -19,15 +19,15 @@ const GUI_RECT doubleBtnRect[] = {POPUP_RECT_DOUBLE_CONFIRM, POPUP_RECT_DOUBLE_C
 static const GUI_RECT singleBtnRect = POPUP_RECT_SINGLE_CONFIRM;
 
 static WINDOW window = {
-  DIALOG_TYPE_INFO,             // default window type
-  POPUP_RECT_WINDOW,            // rectangle position and size of popup window
-  POPUP_TITLE_HEIGHT,           // height of title bar
-  POPUP_BOTTOM_HEIGHT,          // height of action bar
-  2,                            // window border width
-  GRAY,                         // window border color
-  {DARKGRAY, MAT_LOWWHITE},     // Title bar font color / background color
-  {DARKGRAY, MAT_LOWWHITE},     // Message area font color / background color
-  {DARKGRAY, MAT_LOWWHITE},     // actionbar font color / background color
+  DIALOG_TYPE_INFO,                                  // default window type
+  POPUP_RECT_WINDOW,                                 // rectangle position and size of popup window
+  POPUP_TITLE_HEIGHT,                                // height of title bar
+  POPUP_BOTTOM_HEIGHT,                               // height of action bar
+  2,                                                 // window border width
+  POPUP_BORDER_COLOR,                                // window border color
+  {POPUP_TITLE_FONT_COLOR, POPUP_TITLE_BG_COLOR},    // Title bar font color / background color
+  {POPUP_MSG_FONT_COLOR, POPUP_MSG_BG_COLOR},        // Message area font color / background color
+  {POPUP_ACTION_FONT_COLOR, POPUP_ACTION_BG_COLOR},  // action bar font color / background color
 };
 
 static BUTTON *windowButton =  NULL;

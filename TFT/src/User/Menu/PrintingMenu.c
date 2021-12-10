@@ -530,7 +530,7 @@ void drawPrintInfo(void)
 
   IMAGE_ReadDisplay(rect_of_keySS[KEY_INFOBOX].x0, rect_of_keySS[KEY_INFOBOX].y0, INFOBOX_ADDR);
 
-  GUI_SetColor(INFOMSG_BKCOLOR);
+  GUI_SetColor(INFOMSG_BG_COLOR);
   GUI_DispString(rect_of_keySS[KEY_INFOBOX].x0 + STATUS_MSG_ICON_XOFFSET, rect_of_keySS[KEY_INFOBOX].y0 + STATUS_MSG_ICON_YOFFSET,
                  IconCharSelect(CHARICON_INFO));
   GUI_DispStringInRectEOL(rect_of_keySS[KEY_INFOBOX].x0 + BYTE_HEIGHT + STATUS_MSG_TITLE_XOFFSET,
@@ -539,8 +539,8 @@ void drawPrintInfo(void)
                           rect_of_keySS[KEY_INFOBOX].y1 - STATUS_MSG_ICON_YOFFSET,
                           (uint8_t *)textSelect(LABEL_PRINT_FINISHED));
 
-  GUI_SetColor(INFOMSG_COLOR);
-  GUI_SetBkColor(INFOMSG_BKCOLOR);
+  GUI_SetColor(INFOMSG_FONT_COLOR);
+  GUI_SetBkColor(INFOMSG_BG_COLOR);
   GUI_DispStringInPrect(&msgRect, LABEL_CLICK_FOR_MORE);
   GUI_RestoreColorDefault();
 }
