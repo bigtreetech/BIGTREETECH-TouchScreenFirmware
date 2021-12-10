@@ -634,8 +634,8 @@ void parseConfigKey(uint16_t index)
       infoSettings.files_list_mode = getOnOff();
       break;
 
-    case C_INDEX_FILES_FULLNAME_VIEW:
-      infoSettings.files_fullname_view = getOnOff();
+    case C_INDEX_FILENAME_EXTENSION:
+      infoSettings.filename_extension = getOnOff();
       break;
 
     case C_INDEX_FAN_SPEED_PERCENTAGE:

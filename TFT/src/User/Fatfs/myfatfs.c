@@ -105,10 +105,10 @@ bool scanPrintFilesFatFs(void)
       if (infoFile.fileCount >= FILE_NUM)
         continue;
 
-      if (isSupportedFile(finfo.fname) == NULL)  // if filename doesn't provide a supported file extension
+      if (isSupportedFile(finfo.fname) == NULL)  // if filename doesn't provide a supported filename extension
         continue;
 
-      infoFile.file[infoFile.fileCount] = malloc(len + 1);  // plus one extra byte for file extension check
+      infoFile.file[infoFile.fileCount] = malloc(len + 1);  // plus one extra byte for filename extension check
       if (infoFile.file[infoFile.fileCount] == NULL)
         break;
 
@@ -116,7 +116,7 @@ bool scanPrintFilesFatFs(void)
       fileDate[infoFile.fileCount] = (finfo.fdate * 100000) + finfo.ftime;
       // copy file name
       strcpy(infoFile.file[infoFile.fileCount], finfo.fname);
-      infoFile.file[infoFile.fileCount][len] = 0;  // set to 0 the extra byte for file extension check
+      infoFile.file[infoFile.fileCount][len] = 0;  // set to 0 the extra byte for filename extension check
       infoFile.Longfile[infoFile.fileCount] = 0;   // long filename is not supported, so always set it to 0
       infoFile.fileCount++;
     }

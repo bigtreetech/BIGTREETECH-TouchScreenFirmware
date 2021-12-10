@@ -292,7 +292,7 @@ void menuUISettings(void)
     {CHARICON_BLANK,     LIST_CUSTOMVALUE, LABEL_ACK_NOTIFICATION,     LABEL_DYNAMIC},
     {CHARICON_BLANK,     LIST_CUSTOMVALUE, LABEL_FILES_SORT_BY,        LABEL_DYNAMIC},
     {CHARICON_TOGGLE_ON, LIST_TOGGLE,      LABEL_FILES_LIST_MODE,      LABEL_BACKGROUND},
-    {CHARICON_TOGGLE_ON, LIST_TOGGLE,      LABEL_FILES_FULLNAME_VIEW,  LABEL_BACKGROUND},
+    {CHARICON_TOGGLE_ON, LIST_TOGGLE,      LABEL_FILENAME_EXTENSION,   LABEL_BACKGROUND},
     {CHARICON_TOGGLE_ON, LIST_TOGGLE,      LABEL_FAN_SPEED_PERCENTAGE, LABEL_BACKGROUND},
     {CHARICON_TOGGLE_ON, LIST_TOGGLE,      LABEL_PERSISTENT_INFO,      LABEL_BACKGROUND},
     {CHARICON_TOGGLE_ON, LIST_TOGGLE,      LABEL_TERMINAL_ACK,         LABEL_BACKGROUND},
@@ -312,7 +312,7 @@ void menuUISettings(void)
   setDynamicTextValue(0, (char *)itemNotificationType[infoSettings.ack_notification]);
   setDynamicTextValue(1, (char *)itemSortBy[infoSettings.files_sort_by]);
   uiItems[2].icon = iconToggle[infoSettings.files_list_mode];
-  uiItems[3].icon = iconToggle[infoSettings.files_fullname_view];
+  uiItems[3].icon = iconToggle[infoSettings.filename_extension];
   uiItems[4].icon = iconToggle[infoSettings.fan_percentage];
   uiItems[5].icon = iconToggle[infoSettings.persistent_info];
   uiItems[6].icon = iconToggle[infoSettings.terminal_ack];
@@ -348,8 +348,8 @@ void menuUISettings(void)
         break;
 
       case 3:
-        infoSettings.files_fullname_view = (infoSettings.files_fullname_view + 1) % ITEM_TOGGLE_NUM;
-        uiItems[curIndex].icon = iconToggle[infoSettings.files_fullname_view];
+        infoSettings.filename_extension = (infoSettings.filename_extension + 1) % ITEM_TOGGLE_NUM;
+        uiItems[curIndex].icon = iconToggle[infoSettings.filename_extension];
         break;
 
       case 4:
