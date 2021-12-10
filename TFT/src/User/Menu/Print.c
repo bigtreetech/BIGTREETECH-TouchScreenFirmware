@@ -40,7 +40,7 @@ void normalNameDisp(const GUI_RECT *rect, uint8_t *name)
 void gocdeIconDraw(void)
 {
   uint8_t i = 0;
-  uint8_t baseIndex = infoFile.cur_page * NUM_PER_PAGE;
+  uint8_t baseIndex = infoFile.curPage * NUM_PER_PAGE;
   ITEM curItem = {ICON_BACKGROUND, LABEL_BACKGROUND};
 
   // draw folders
@@ -115,7 +115,7 @@ bool printPageItemSelected(uint16_t index)
     else
     {
       scanPrintFiles();
-      infoFile.cur_page = 0;
+      infoFile.curPage = 0;
     }
   }
   else if (index < infoFile.folderCount + infoFile.fileCount)  // gcode file
@@ -206,24 +206,24 @@ void menuPrintFromSource(void)
       {
         case KEY_ICON_5:
         case KEY_DECREASE:
-          if (infoFile.cur_page > 0)
+          if (infoFile.curPage > 0)
           {
-            infoFile.cur_page--;
+            infoFile.curPage--;
             update = 2;  // request no title bar update
           }
           break;
 
         case KEY_ICON_6:
         case KEY_INCREASE:
-          if (infoFile.cur_page + 1 < pageCount)
+          if (infoFile.curPage + 1 < pageCount)
           {
-            infoFile.cur_page++;
+            infoFile.curPage++;
             update = 2;  // request no title bar update
           }
           break;
 
         case KEY_ICON_7:
-          infoFile.cur_page = 0;
+          infoFile.curPage = 0;
 
           if (IsRootDir() == true)
           {
@@ -243,7 +243,7 @@ void menuPrintFromSource(void)
           break;
 
         default:
-          if (printPageItemSelected(infoFile.cur_page * NUM_PER_PAGE + key_num))
+          if (printPageItemSelected(infoFile.curPage * NUM_PER_PAGE + key_num))
             update = 1;
           break;
       }
@@ -294,7 +294,7 @@ void menuPrintFromSource(void)
       else
       { // title bar is also drawn by listViewCreate
         listViewCreate((LABEL){.address = (uint8_t *)infoFile.title}, NULL, infoFile.folderCount + infoFile.fileCount,
-                       &infoFile.cur_page, false, NULL, gocdeListDraw);
+                       &infoFile.curPage, false, NULL, gocdeListDraw);
       }
 
       Scroll_CreatePara(&scrollLine, (uint8_t *)infoFile.title, &titleRect);

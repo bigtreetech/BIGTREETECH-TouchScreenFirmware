@@ -117,7 +117,7 @@ bool scanPrintFilesFatFs(void)
       // copy file name
       strcpy(infoFile.file[infoFile.fileCount], finfo.fname);
       infoFile.file[infoFile.fileCount][len] = 0;  // set to 0 the extra byte for filename extension check
-      infoFile.Longfile[infoFile.fileCount] = 0;   // long filename is not supported, so always set it to 0
+      infoFile.longFile[infoFile.fileCount] = 0;   // long filename is not supported, so always set it to 0
       infoFile.fileCount++;
     }
   }

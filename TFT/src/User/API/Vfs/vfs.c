@@ -5,12 +5,12 @@ MYFILE infoFile = {"?:", {0}, {0}, 0, 0, 0, 0, TFT_SD, {0}};
 
 void setPrintModelIcon(bool exist)
 {
-  infoFile.model_icon = exist;
+  infoFile.modelIcon = exist;
 }
 
 bool isPrintModelIcon(void)
 {
-  return infoFile.model_icon;
+  return infoFile.modelIcon;
 }
 
 bool mountFS(void)
@@ -49,9 +49,9 @@ void clearInfoFile(void)
     free(infoFile.file[i]);
     infoFile.file[i] = 0;
 
-    if (infoFile.Longfile[i] != 0)  // long filename is optional so we need to check its presence
-      free(infoFile.Longfile[i]);
-    infoFile.Longfile[i] = 0;
+    if (infoFile.longFile[i] != 0)  // long filename is optional so we need to check its presence
+      free(infoFile.longFile[i]);
+    infoFile.longFile[i] = 0;
   }
   infoFile.folderCount = 0;
   infoFile.fileCount = 0;
@@ -157,7 +157,7 @@ char * hideFileExtension(uint8_t index)
 
   if (infoMachineSettings.longFilename == ENABLED && infoFile.source == BOARD_SD)
   {
-    filename = infoFile.Longfile[index];
+    filename = infoFile.longFile[index];
 
     if (infoSettings.filename_extension == 0)  // if filename extension is disabled
     {
@@ -183,7 +183,7 @@ char * restoreFileExtension(uint8_t index)
 
   if (infoMachineSettings.longFilename == ENABLED && infoFile.source == BOARD_SD)
   {
-    filename = infoFile.Longfile[index];
+    filename = infoFile.longFile[index];
 
     if (infoSettings.filename_extension == 0)  // if filename extension is disabled
     {
