@@ -45,7 +45,7 @@ void drawXYZ(void)
     sprintf(tempstr, "Z:%.2f  ", coordinateGetAxisActual(Z_AXIS));
     GUI_DispString(START_X + 3 * SPACE_X + 3 * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
   #endif
-  
+
   GUI_SetColor(infoSettings.font_color);
 }
 
