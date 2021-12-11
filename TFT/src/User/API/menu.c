@@ -3,7 +3,6 @@
 #include "ListItem.h"
 #include "Notification.h"
 
-
 #ifdef PORTRAIT
 // exhibitRect is 2 ICON Space in the Lowest Row and 2 Center column.
 const GUI_RECT exhibitRect = {
@@ -709,7 +708,7 @@ void busyIndicator(SYS_STATUS status)
 {
   if (status == STATUS_BUSY)
   {
-    GUI_SetColor(YELLOW);
+    GUI_SetColor(MENU_BUSY_DOT_COLOR);
     GUI_FillCircle(busySign.rect.x0, (busySign.rect.y1 - busySign.rect.y0) / 2, (busySign.rect.x1-busySign.rect.x0) / 2);
     GUI_SetColor(infoSettings.font_color);
   }

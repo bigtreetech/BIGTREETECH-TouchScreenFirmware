@@ -337,7 +337,7 @@ void drawStatus(void)
     drawLiveText(3, &lvIcon, &SpeedItems[currentSpeedID]);
   #endif
 
-  GUI_SetTextMode(GUI_TEXTMODE_NORMAL);  
+  GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
   GUI_SetColor(GANTRY_XYZ_FONT_COLOR);
   GUI_SetBkColor(GANTRY_XYZ_BG_COLOR);
   sprintf(tempstr, XYZ_STATUS, coordinateGetAxisActual(X_AXIS), coordinateGetAxisActual(Y_AXIS),
