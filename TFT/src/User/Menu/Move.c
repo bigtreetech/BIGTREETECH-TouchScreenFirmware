@@ -28,9 +28,10 @@ void storeMoveCmd(AXIS xyz, int8_t direction)
 
 void drawXYZ(void)
 {
-  char tempstr[20];
-  GUI_SetColor(INFOBOX_ICON_COLOR);
-  #ifdef PORTRAIT
+  char tempstr[20]; 
+  GUI_SetColor(infoSettings.status_color);
+
+ #ifdef PORTRAIT
     sprintf(tempstr, "X:%.2f  Y:%.2f  Z:%2.f", coordinateGetAxisActual(X_AXIS), coordinateGetAxisActual(Y_AXIS),
             coordinateGetAxisActual(Z_AXIS));
     GUI_DispString(START_X + 1 * SPACE_X + 1 * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
@@ -44,7 +45,7 @@ void drawXYZ(void)
     sprintf(tempstr, "Z:%.2f  ", coordinateGetAxisActual(Z_AXIS));
     GUI_DispString(START_X + 3 * SPACE_X + 3 * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
   #endif
-
+  
   GUI_SetColor(infoSettings.font_color);
 }
 

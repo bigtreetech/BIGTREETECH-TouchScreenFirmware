@@ -205,7 +205,7 @@ void dispIconFail(uint8_t *lbl, BMPUPDATE_STAT bmpState)
   char * stat_txt;
   char error_txt[30];
 
-  GUI_SetColor(RED);
+  GUI_SetColor(infoSettings.reminder_color);
   GUI_ClearPrect(&labelFailedRect);
   GUI_DispString(labelFailedRect.x0, labelFailedRect.y0, lbl);
 

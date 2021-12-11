@@ -71,7 +71,7 @@ void drawKeypadButton(uint8_t index, uint8_t isPressed)
   if (index >= COUNT(rect_of_numkey)) return;
 
   #ifdef KEYBOARD_MATERIAL_THEME
-    uint16_t fontcolor = KEY_FONT_COLOR;
+    uint16_t fontcolor = CTRL_FONT_COLOR;
     uint16_t bgcolor = KEY_BG_COLOR;
     GUI_RECT rectBtn = {rect_of_numkey[index].x0 + 4, rect_of_numkey[index].y0 + 4,
                         rect_of_numkey[index].x1 - 4, rect_of_numkey[index].y1 - 4};
@@ -79,24 +79,25 @@ void drawKeypadButton(uint8_t index, uint8_t isPressed)
     switch (index)
     {
       case NUM_KEY_OK:
-        fontcolor = CTRL_FONT_COLOR;
-        bgcolor = MAT_GREEN;
+        bgcolor = CTRL_SEND_BG_COLOR;
         break;
+
       case NUM_KEY_DEL:
-        fontcolor = CTRL_FONT_COLOR;
-        bgcolor = MAT_ORANGE;
+        bgcolor = CTRL_DEL_BG_COLOR;
         break;
+
       case NUM_KEY_EXIT:
-        fontcolor = CTRL_FONT_COLOR;
-        bgcolor = MAT_RED;
+        bgcolor = CTRL_BACK_BG_COLOR;
         break;
+
       case NUM_KEY_RESET:
-        fontcolor = CTRL_FONT_COLOR;
-        bgcolor = MAT_SLATE;
+        bgcolor = CTRL_ABC_BG_COLOR;
         break;
+
       default:
+        fontcolor = KEY_FONT_COLOR;
         break;
-     }
+    }
 
     BUTTON btn = {.fontColor  = fontcolor,
                   .backColor  = bgcolor,
@@ -113,14 +114,12 @@ void drawKeypadButton(uint8_t index, uint8_t isPressed)
     if (!(index == NUM_KEY_DEC && GET_BIT(numpadType, 0)) && !(index == NUM_KEY_MINUS && !GET_BIT(numpadType, 1)))
       GUI_DrawButton(&btn, isPressed);
     setFontSize(FONT_SIZE_NORMAL);
-    #else
-
+  #else
     if (!isPressed)
-      GUI_SetColor(BLACK);
+      GUI_SetColor(infoSettings.bg_color);
     GUI_DrawRect(rect_of_numkey[index].x0 + 2, rect_of_numkey[index].y0 + 2, rect_of_numkey[index].x1-2, rect_of_numkey[index].y1 - 2);
     GUI_SetColor(infoSettings.font_color);
-
-    #endif  // KEYBOARD_MATERIAL_THEME
+  #endif  // KEYBOARD_MATERIAL_THEME
 }
 
 void Draw_keyboard(uint8_t * title, bool numberOnly, bool negative)
@@ -179,7 +178,6 @@ void Draw_keyboard(uint8_t * title, bool numberOnly, bool negative)
     drawCharIcon(&rect_of_numkey[NUM_KEY_DEL], CENTER, CHARICON_POINT_LEFT, false, 0);
     drawCharIcon(&rect_of_numkey[NUM_KEY_EXIT], CENTER, CHARICON_CANCEL, false, 0);
     drawCharIcon(&rect_of_numkey[NUM_KEY_RESET], CENTER, CHARICON_RESET, false, 0);
-
   #endif  // KEYBOARD_MATERIAL_THEME
 
   GUI_DispStringInPrect(&arrowRect,(uint8_t *)"\u089A");

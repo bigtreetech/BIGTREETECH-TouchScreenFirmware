@@ -321,6 +321,18 @@ extern "C" {
   #define TERMINAL_KEYBOARD_LAYOUT 0
 #endif
 
+#ifdef PROGRESS_BAR_COLOR
+  #if PROGRESS_BAR_COLOR > 9
+    #error "PROGRESS_BAR_COLOR cannot be greater than 9"
+  #endif
+
+  #if PROGRESS_BAR_COLOR < 0
+    #error "PROGRESS_BAR_COLOR cannot be less than 0"
+  #endif
+#else
+  #define PROGRESS_BAR_COLOR 0
+#endif
+
 #ifdef LIVE_TEXT_BG_COLOR_PRINTING
   #if LIVE_TEXT_BG_COLOR_PRINTING > 2
     #error "LIVE_TEXT_BG_COLOR_PRINTING cannot be greater than 2"
