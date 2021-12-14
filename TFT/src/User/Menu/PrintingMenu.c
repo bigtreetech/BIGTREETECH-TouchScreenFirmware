@@ -562,7 +562,7 @@ void menuPrinting(void)
   if (lastPrinting == true)
   {
     if (infoMachineSettings.longFilename == ENABLED && infoFile.source == BOARD_SD)
-      printingItems.title.address = (uint8_t *) infoFile.Longfile[infoFile.fileIndex];
+      printingItems.title.address = (uint8_t *) infoFile.longFile[infoFile.fileIndex];
     else
       printingItems.title.address = getPrintName(infoFile.title);
 

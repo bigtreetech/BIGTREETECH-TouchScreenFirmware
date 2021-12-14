@@ -10,6 +10,7 @@
     #define STRING_ACK_NOTIFICATION       "Styl oznámení ACK"
     #define STRING_FILES_SORT_BY          "Řazení souboru"
     #define STRING_FILES_LIST_MODE        "Soubory jako seznam"
+    #define STRING_FILENAME_EXTENSION     "Show filename extension"
     #define STRING_FAN_SPEED_PERCENTAGE   "Rychlost ventilátoru v %"
     #define STRING_PERSISTENT_INFO        "Zobrazení stavových ikon"
     #define STRING_TERMINAL_ACK           "zobrazit ACK Terminálu"

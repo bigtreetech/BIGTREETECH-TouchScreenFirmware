@@ -120,7 +120,7 @@ void RRFM20Parser::endDocument()
     }
     else
     {
-      infoFile.Longfile[infoFile.fileCount] = fileList[i].file_name;
+      infoFile.longFile[infoFile.fileCount] = fileList[i].file_name;
       infoFile.file[infoFile.fileCount++] = fileList[i].display_name;
     }
   }

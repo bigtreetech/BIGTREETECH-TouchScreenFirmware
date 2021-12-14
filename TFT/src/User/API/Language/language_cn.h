@@ -10,6 +10,7 @@
     #define STRING_ACK_NOTIFICATION       "ACK 弹窗类型"
     #define STRING_FILES_SORT_BY          "Sort files by"
     #define STRING_FILES_LIST_MODE        "文件浏览列表模式"
+    #define STRING_FILENAME_EXTENSION     "Show filename extension"
     #define STRING_FAN_SPEED_PERCENTAGE   "百分比显示风扇速度"
     #define STRING_PERSISTENT_INFO        "顶部温度信息"
     #define STRING_TERMINAL_ACK           "在G-code终端中显示温度信息"

@@ -10,6 +10,7 @@
     #define STRING_ACK_NOTIFICATION       "Tipo di popup"
     #define STRING_FILES_SORT_BY          "Ordina file per"
     #define STRING_FILES_LIST_MODE        "File in modalità lista"
+    #define STRING_FILENAME_EXTENSION     "Mostra estensione file"
     #define STRING_FAN_SPEED_PERCENTAGE   "Ventola in percentuale"
     #define STRING_PERSISTENT_INFO        "Mostra barra di stato"
     #define STRING_TERMINAL_ACK           "Mostra ACK in console"

@@ -45,6 +45,7 @@ void initSettings(void)
   infoSettings.ack_notification       = ACK_NOTIFICATION;
   infoSettings.files_sort_by          = FILES_SORT_BY;
   infoSettings.files_list_mode        = FILES_LIST_MODE;
+  infoSettings.filename_extension     = FILENAME_EXTENSION;
   infoSettings.fan_percentage         = FAN_SPEED_PERCENTAGE;
   infoSettings.persistent_info        = PERSISTENT_INFO;
   infoSettings.terminal_ack           = TERMINAL_ACK;

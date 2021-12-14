@@ -10,6 +10,7 @@
     #define STRING_ACK_NOTIFICATION       "Onay mesajı stili"
     #define STRING_FILES_SORT_BY          "Sort files by"
     #define STRING_FILES_LIST_MODE        "Liste Görünümü"
+    #define STRING_FILENAME_EXTENSION     "Show filename extension"
     #define STRING_FAN_SPEED_PERCENTAGE   "Yüzdesel Fan Hızı"
     #define STRING_PERSISTENT_INFO        "Kalıcı Durum Mesajı"
     #define STRING_TERMINAL_ACK           "Terminalde onay mesajları"

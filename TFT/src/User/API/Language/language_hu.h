@@ -10,6 +10,7 @@
     #define STRING_ACK_NOTIFICATION       "ACK Értesítési stílus"
     #define STRING_FILES_SORT_BY          "Fájlok rendezése"
     #define STRING_FILES_LIST_MODE        "Fájlnéző listamód"
+    #define STRING_FILENAME_EXTENSION     "Show filename extension"
     #define STRING_FAN_SPEED_PERCENTAGE   "Ventilátor sebesség %-ban"
     #define STRING_PERSISTENT_INFO        "Állandó állapotinfó"
     #define STRING_TERMINAL_ACK           "ACK Megjelenítése"
