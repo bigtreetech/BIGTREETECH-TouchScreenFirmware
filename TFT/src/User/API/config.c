@@ -563,11 +563,11 @@ void parseConfigKey(uint16_t index)
     //----------------------------UI Settings
 
     case C_INDEX_ROTATED_UI:
-      if (infoSettings.rotated_ui != getOnOff())
-      {
-        scheduleRotate = true;
-        infoSettings.rotated_ui = getOnOff();
-      }
+      #ifdef PORTRAIT
+        SET_VALID_INT_VALUE(infoSettings.rotated_ui, 2, 3);
+      #else
+        SET_VALID_INT_VALUE(infoSettings.rotated_ui, 0, 1);
+      #endif
       break;
 
     case C_INDEX_LANGUAGE:

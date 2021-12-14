@@ -10,11 +10,21 @@ extern "C" {
 #include "variants.h"
 #include "GUI.h"
 
-#define SPACE_X          ((LCD_WIDTH - ICON_WIDTH * 4) / 4)
+#ifdef PORTRAIT
+  #define SPACE_X          ((LCD_WIDTH - ICON_WIDTH * 3) / 3)
+  #define SPACE_X_PER_ICON (LCD_WIDTH / 3)
+#else
+  #define SPACE_X          ((LCD_WIDTH - ICON_WIDTH * 4) / 4)
+  #define SPACE_X_PER_ICON (LCD_WIDTH / 4)
+#endif
 #define START_X          (SPACE_X / 2)
-#define SPACE_X_PER_ICON (LCD_WIDTH / 4)
 
-#define SPACE_Y          ((LCD_HEIGHT - ICON_START_Y - ICON_HEIGHT * 2) / 2)
+
+#ifdef PORTRAIT
+  #define SPACE_Y          ((LCD_HEIGHT - ICON_START_Y - ICON_HEIGHT * 3) / 3)
+#else
+  #define SPACE_Y          ((LCD_HEIGHT - ICON_START_Y - ICON_HEIGHT * 2) / 2)
+#endif
 
 // select marlin or bigtree
 #define SPACE_SELEX      ((LCD_WIDTH - ICON_WIDTH * 2) / 4)
