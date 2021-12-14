@@ -22,6 +22,8 @@
 
 #if defined(TFT24_V1_1)
   #include "pin_TFT24_V1_1.h"
+#elif defined(TFT24_V1_1_P)
+  #include "pin_TFT24_V1_1_P.h"
 #elif defined(TFT28_V1_0)
   #include "pin_TFT28_V1_0.h"
 #elif defined(TFT28_V3_0)

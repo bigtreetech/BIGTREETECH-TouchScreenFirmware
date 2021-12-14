@@ -21,8 +21,13 @@ extern "C" {
 
 #define CENTER_Y         ((exhibitRect.y1 - exhibitRect.y0) / 2 + exhibitRect.y0)
 #define CENTER_X         ((exhibitRect.x1 - exhibitRect.x0 - BYTE_WIDTH) / 2 + exhibitRect.x0)
-#define LISTITEM_WIDTH   (LCD_WIDTH - (3 * START_X) - LIST_ICON_WIDTH)
-#define LISTITEM_HEIGHT  ((LCD_HEIGHT - ICON_START_Y - START_X) / 5)
+#ifdef PORTRAIT
+  #define LISTITEM_WIDTH   (LCD_WIDTH - (3 * START_X))
+  #define LISTITEM_HEIGHT  ((LCD_HEIGHT - ICON_START_Y - START_X) / 6)
+#else
+  #define LISTITEM_WIDTH   (LCD_WIDTH - (3 * START_X) - LIST_ICON_WIDTH)
+  #define LISTITEM_HEIGHT  ((LCD_HEIGHT - ICON_START_Y - START_X) / 5)
+#endif
 #define LISTICON_SPACE_Y ((LCD_HEIGHT - ICON_START_Y - START_X - (3 * LIST_ICON_HEIGHT)) / 2)
 
 typedef enum
@@ -166,6 +171,7 @@ extern const GUI_RECT rect_of_key[MENU_RECT_COUNT];
 extern const GUI_RECT rect_of_keySS[SS_RECT_COUNT];
 extern const GUI_RECT rect_of_keyPS[];
 extern const GUI_RECT rect_of_keyPS_end[];
+extern const GUI_RECT rect_of_keyPS_draw[];  // Used to draw VERTICAL GUI printing menu
 
 extern const GUI_RECT rect_of_titleBar[1];
 
