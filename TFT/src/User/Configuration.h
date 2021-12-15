@@ -1,7 +1,7 @@
 #ifndef _CONFIGURATION_H_
 #define _CONFIGURATION_H_
 
-#define CONFIG_VERSION 20211210
+#define CONFIG_VERSION 20211213
 
 //====================================================================================================
 //=============================== Settings Configurable On config.ini ================================
@@ -77,6 +77,14 @@
  *   Options: [disable: 0, enable: 1]
  */
 #define FILE_COMMENT_PARSING 1  // Default: 1
+
+/**
+ * Event LED
+ * When printing from TFT SD / TFT U Disk, the TFT periodically sets the printer's (neopixel) LED color
+ * and TFT's knob LED color, if any, according to the current nozzle and bed temperatures.
+ *   Options: [disable: 0, enable: 1]
+ */
+#define EVENT_LED 1  // Default: 1
 
 //================================================================================
 //================================= UI Settings ==================================

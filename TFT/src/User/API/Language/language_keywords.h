@@ -12,6 +12,7 @@ extern "C" {
 #define LANG_KEY_EMULATED_M600                "label_emulated_m600:"
 #define LANG_KEY_EMULATED_M109_M190           "label_emulated_m109_m190:"
 #define LANG_KEY_FILE_COMMENT_PARSING         "label_file_comment_parsing:"
+#define LANG_KEY_EVENT_LED                    "label_event_led:"
 #define LANG_KEY_ROTATED_UI                   "label_rotated_ui:"
 #define LANG_KEY_LANGUAGE                     "label_language:"
 #define LANG_KEY_ACK_NOTIFICATION             "label_ack_notification:"

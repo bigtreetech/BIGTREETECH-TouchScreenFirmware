@@ -83,6 +83,7 @@
 #include "LCD_Colors.h"
 #include "LCD_Dimming.h"
 #include "LED_Colors.h"
+#include "LED_Event.h"
 #include "LevelingControl.h"
 #include "MachineParameters.h"
 #include "menu.h"

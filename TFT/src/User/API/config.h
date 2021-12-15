@@ -19,6 +19,7 @@ extern "C" {
 #define CONFIG_EMULATED_M600          "emulated_m600:"
 #define CONFIG_EMULATED_M109_M190     "emulated_m109_m190:"
 #define CONFIG_FILE_COMMENT_PARSING   "file_comment_parsing:"
+#define CONFIG_EVENT_LED              "event_led:"
 
 //-----------------------------UI Settings
 #define CONFIG_ROTATED_UI             "rotated_ui:"

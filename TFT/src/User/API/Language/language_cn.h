@@ -5,6 +5,7 @@
     #define STRING_EMULATED_M600          "模拟M600"
     #define STRING_EMULATED_M109_M190     "Emulated M109 / M190"
     #define STRING_FILE_COMMENT_PARSING   "File comment parsing"
+    #define STRING_EVENT_LED              "Event LED"
     #define STRING_ROTATED_UI             "旋转界面"
     #define STRING_LANGUAGE               "简体中文"
     #define STRING_ACK_NOTIFICATION       "ACK 弹窗类型"
