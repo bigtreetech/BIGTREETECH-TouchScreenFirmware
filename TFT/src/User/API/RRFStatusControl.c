@@ -8,9 +8,11 @@
 // I=idle, P=printing from SD card, S=stopped (i.e. needs a reset), C=running config file (i.e starting up),
 // A=paused, D=pausing, R=resuming from a pause, B=busy (e.g. running a macro), F=performing firmware update
 static char rrf_status = 'I';
+static bool was_printing = false;
 
 static uint16_t rrf_query_interval = RRF_NORMAL_STATUS_QUERY_MS;
 static bool macro_busy = false;
+bool starting_print = false;
 
 void rrfStatusSet(char status)
 {
@@ -28,8 +30,9 @@ void rrfStatusSet(char status)
             setPrintResume(true);
             break;
           case 'I':
-            // parseACK will take care of going to the print screen
+            // RRFParseACK will take care of going to the print screen
             mustStoreCmd("M409 K\"job.file.fileName\"\n");
+            starting_print = true;
             break;
         }
         break;
@@ -43,6 +46,11 @@ void rrfStatusSet(char status)
           case 'D':
             setPrintAbort(); // done is the same as abort
             break;
+
+          case 'B':
+            if (was_printing)
+              setPrintAbort();
+            break;
         }
         break;
 
@@ -50,6 +58,22 @@ void rrfStatusSet(char status)
       case 'A':
         if (rrf_status == 'P')
           setPrintPause(false, PAUSE_EXTERNAL);
+        break;
+
+      case 'B':
+        switch (rrf_status)
+        {
+          case 'P':
+          case 'R':
+          case 'A':
+          case 'D':
+            was_printing = true;
+            break;
+
+          default:
+            was_printing = false;
+            break;
+        }
         break;
     }
   }
@@ -101,7 +125,7 @@ void rrfStatusQuery(void)
     static uint32_t rrf_next_query_time = 0;
 
     // don't send status queries while in the terminal menu to avoid flooding the console
-    if (OS_GetTimeMs() > rrf_next_query_time && infoMenu.menu[infoMenu.cur] != menuTerminal)
+    if (OS_GetTimeMs() > rrf_next_query_time && MENU_IS_NOT(menuTerminal))
     {
       rrf_next_query_time = OS_GetTimeMs() + rrf_query_interval;
       storeCmd("M408 S0\n");

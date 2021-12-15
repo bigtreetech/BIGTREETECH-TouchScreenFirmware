@@ -52,8 +52,7 @@ bool hostDialog = false;
 struct HOST_ACTION
 {
   char prompt_begin[30];
-  char prompt_button1[20];
-  char prompt_button2[20];
+  char prompt_button[2][20];
   bool prompt_show;         // Show popup reminder or not
   uint8_t button;           // Number of buttons
 } hostAction;
@@ -207,8 +206,8 @@ void ack_values_sum(float * data)
 void ackPopupInfo(const char * info)
 {
   bool show_dialog = true;
-  if (infoMenu.menu[infoMenu.cur] == menuTerminal ||
-      (infoMenu.menu[infoMenu.cur] == menuStatus && info == magic_echo))
+  if (MENU_IS(menuTerminal) ||
+      (MENU_IS(menuStatus) && info == magic_echo))
     show_dialog = false;
 
   // play notification sound if buzzer for ACK is enabled
@@ -221,7 +220,7 @@ void ackPopupInfo(const char * info)
   if (info == magic_echo || info == magic_message)
   {
     // ignore all messages if parameter settings is open
-    if (infoMenu.menu[infoMenu.cur] == menuParameterSettings)
+    if (MENU_IS(menuParameterSettings))
       return;
 
     // show notification based on notificaiton settings
@@ -279,15 +278,16 @@ bool processKnownEcho(void)
 
 void hostActionCommands(void)
 {
-  char * find = strchr(dmaL2Cache + ack_index, '\n');
-  *find = '\0';
-
   if (ack_seen(":notification "))
   {
     uint16_t index = ack_index;  // save the current index for further usage
 
-    if (ack_seen("Time Left"))
-    {
+    if (ack_seen("Data Left"))  // parsing printing data left
+    { // format: Data Left <XXXX>/<YYYY> (e.g. Data Left 123/12345)
+      setPrintProgress(ack_value(), ack_second_value());
+    }
+    else if (ack_seen("Time Left"))  // parsing printing time left
+    { // format: Time Left <XX>h<YY>m<ZZ>s (e.g. Time Left 02h04m06s)
       parsePrintRemainingTime((char *)dmaL2Cache + ack_index);
     }
     else
@@ -296,7 +296,7 @@ void hostActionCommands(void)
 
       if (!ack_seen("Ready."))  // avoid to display unneeded/frequent useless notifications (e.g. "My printer Ready.")
       {
-        if (infoMenu.menu[infoMenu.cur] != menuStatus)  // don't show it when in menuStatus
+        if (MENU_IS_NOT(menuStatus))  // don't show it when in menuStatus
           addToast(DIALOG_TYPE_INFO, dmaL2Cache + index);
 
         if (infoSettings.notification_m117 == ENABLED)
@@ -304,7 +304,15 @@ void hostActionCommands(void)
       }
     }
   }
-  else if (ack_seen(":paused") || ack_seen(":pause"))
+  else if (ack_seen(":print_start"))  // print started from remote host (e.g. USB, Octoprint etc...)
+  {
+    printRemoteStart(NULL);
+  }
+  else if (ack_seen(":print_end"))  // print ended from remote host (e.g. USB, Octoprint etc...)
+  {
+    printEnd();
+  }
+  else if (ack_seen(":pause") || ack_seen(":paused"))
   {
     if (infoMachineSettings.firmwareType == FW_MARLIN)
     {
@@ -314,8 +322,6 @@ void hostActionCommands(void)
       //  hostDialog = false;     // enable Resume/Pause button in the Printing menu
     }
 
-    // pass value "false" to let Marlin report when the host is not
-    // printing (when notification ack "Not SD printing" is caught)
     setPrintPause(false, PAUSE_EXTERNAL);
 
     if (ack_seen("filament_runout"))
@@ -323,15 +329,13 @@ void hostActionCommands(void)
       setRunoutAlarmTrue();
     }
   }
-  else if (ack_seen(":resumed") || ack_seen(":resume"))
+  else if (ack_seen(":resume") || ack_seen(":resumed"))
   {
     hostDialog = false;  // enable Resume/Pause button in the Printing menu
 
-    // pass value "true" to report the host is printing without waiting
-    // from Marlin (when notification ack "SD printing byte" is caught)
     setPrintResume(true);
   }
-  else if (ack_seen(":cancel"))  // To be added to Marlin abortprint routine
+  else if (ack_seen(":cancel"))  // to be added to Marlin abortprint routine
   {
     setPrintAbort();
   }
@@ -343,21 +347,14 @@ void hostActionCommands(void)
 
     if (ack_seen("Nozzle Parked"))
     {
-      // pass value "false" to let Marlin report when the host is not
-      // printing (when notification ack "Not SD printing" is caught)
       setPrintPause(false, PAUSE_EXTERNAL);
     }
-    else if (ack_seen("Resuming"))  // resuming from onboard SD or TFT
+    else if (ack_seen("Resuming"))  // resuming from TFT or (remote) onboard SD
     {
-      // pass value "true" to report the host is printing without waiting
-      // from Marlin (when notification ack "SD printing byte" is caught)
       setPrintResume(true);
 
-      if (infoMachineSettings.firmwareType != FW_REPRAPFW)
-      {
-        hostAction.prompt_show = false;
-        Serial_Puts(SERIAL_PORT, "M876 S0\n");  // auto-respond to a prompt request that is not shown on the TFT
-      }
+      hostAction.prompt_show = false;
+      Serial_Puts(SERIAL_PORT, "M876 S0\n");  // auto-respond to a prompt request that is not shown on the TFT
     }
     else if (ack_seen("Reheating"))
     {
@@ -367,38 +364,29 @@ void hostActionCommands(void)
   }
   else if (ack_seen(":prompt_button "))
   {
-    hostAction.button++;
-    if (hostAction.button == 1)
-    {
-      strcpy(hostAction.prompt_button1, dmaL2Cache + ack_index);
-    }
-    else
-    {
-      strcpy(hostAction.prompt_button2, dmaL2Cache + ack_index);
-    }
+    strcpy(hostAction.prompt_button[hostAction.button++], dmaL2Cache + ack_index);
   }
   else if (ack_seen(":prompt_show") && hostAction.prompt_show)
   {
+    BUZZER_PLAY(SOUND_NOTIFY);
+
     switch (hostAction.button)
     {
       case 0:
-        BUZZER_PLAY(SOUND_NOTIFY);
         setDialogText((uint8_t *)"Message", (uint8_t *)hostAction.prompt_begin, LABEL_CONFIRM,
                       LABEL_BACKGROUND);
         showDialog(DIALOG_TYPE_ALERT, setRunoutAlarmFalse, NULL, NULL);
         break;
 
       case 1:
-        BUZZER_PLAY(SOUND_NOTIFY);
-        setDialogText((uint8_t *)"Action command", (uint8_t *)hostAction.prompt_begin, (uint8_t *)hostAction.prompt_button1,
+        setDialogText((uint8_t *)"Action command", (uint8_t *)hostAction.prompt_begin, (uint8_t *)hostAction.prompt_button[0],
                       LABEL_BACKGROUND);
         showDialog(DIALOG_TYPE_ALERT, breakAndContinue, NULL, NULL);
         break;
 
       case 2:
-        BUZZER_PLAY(SOUND_NOTIFY);
-        setDialogText((uint8_t *)"Action command", (uint8_t *)hostAction.prompt_begin, (uint8_t *)hostAction.prompt_button1,
-                      (uint8_t *)hostAction.prompt_button2);
+        setDialogText((uint8_t *)"Action command", (uint8_t *)hostAction.prompt_begin, (uint8_t *)hostAction.prompt_button[0],
+                      (uint8_t *)hostAction.prompt_button[1]);
         showDialog(DIALOG_TYPE_ALERT, resumeAndPurge, resumeAndContinue, NULL);
         break;
     }
@@ -409,13 +397,13 @@ void parseACK(void)
 {
   while (syncL2CacheFromL1(SERIAL_PORT))  // if some data are retrieved from L1 to L2 cache
   {
-    bool avoid_terminal = false;
-
     #if defined(SERIAL_DEBUG_PORT) && defined(DEBUG_SERIAL_COMM)
       // dump raw serial data received to debug port
       Serial_Puts(SERIAL_DEBUG_PORT, "<<");
       Serial_Puts(SERIAL_DEBUG_PORT, dmaL2Cache);
     #endif
+
+    bool avoid_terminal = false;
 
     if (infoHost.connected == false)  // Not connected to printer
     {
@@ -423,7 +411,8 @@ void parseACK(void)
       if (ack_seen(magic_error)) ackPopupInfo(magic_error);
 
       // the first response should be such as "T:25/50\n"
-      if (!(ack_seen("@") && ack_seen("T:")) && !ack_seen("T0:")) goto parse_end;
+      // The "T:0" response is specifically for Marlin when EXTRUDER_COUNT:0
+      if (!(ack_seen("@") && ack_seen("T:")) && !ack_seen("T0:") && !ack_seen("T:0")) goto parse_end;
 
       // find hotend count and setup heaters
       uint8_t i;
@@ -431,7 +420,6 @@ void parseACK(void)
       {
         if (!ack_seen(heaterID[i])) break;
       }
-      infoSettings.hotend_count = i ? i : 1;
       if (infoSettings.ext_count < infoSettings.hotend_count) infoSettings.ext_count = infoSettings.hotend_count;
       if (ack_seen(heaterID[BED])) infoSettings.bed_en = ENABLED;
       if (ack_seen(heaterID[CHAMBER])) infoSettings.chamber_en = ENABLED;
@@ -439,21 +427,19 @@ void parseACK(void)
 
       if (!ack_seen("@"))  // It's RepRapFirmware
       {
-        infoMachineSettings.firmwareType = FW_REPRAPFW;
-        infoMachineSettings.softwareEndstops = ENABLED;
-        infoHost.wait = false;
         storeCmd("M92\n");
-        storeCmd("M115\n");
+        storeCmd("M115\n");  // as last command to identify the FW type!
+        coordinateQuerySetWait(true);
       }
-
-      if (infoMachineSettings.firmwareType == FW_NOT_DETECTED)  // if never connected to the printer since boot
+      else if (infoMachineSettings.firmwareType == FW_NOT_DETECTED)  // if never connected to the printer since boot
       {
         storeCmd("M503\n");  // Query detailed printer capabilities
         storeCmd("M92\n");   // Steps/mm of extruder is an important parameter for Smart filament runout
                              // Avoid can't getting this parameter due to disabled M503 in Marlin
-        storeCmd("M115\n");
         storeCmd("M211\n");  // retrieve the software endstops state
+        storeCmd("M115\n");  // as last command to identify the FW type!
       }
+
       infoHost.connected = true;
       requestCommandInfo.inJson = false;
     }
@@ -534,10 +520,17 @@ void parseACK(void)
 
     if (requestCommandInfo.inJson)
     {
-      rrfParseACK(dmaL2Cache);
+      if (ack_seen(magic_warning))
+      {
+        ackPopupInfo(magic_warning);
+      }
+      else
+      {
+        rrfParseACK(dmaL2Cache);
+      }
+      infoHost.wait = false;
     }
-
-    if (ack_cmp("ok\n"))
+    else if (ack_cmp("ok\n"))
     {
       infoHost.wait = false;
     }
@@ -662,55 +655,45 @@ void parseACK(void)
         }
         hasFilamentData = true;
       }
-      else if (infoMachineSettings.onboardSD == ENABLED &&
-               ack_seen(infoMachineSettings.firmwareType != FW_REPRAPFW ? "File opened:" : "job.file.fileName"))
+      else if (infoMachineSettings.onboardSD == ENABLED && ack_seen("File opened:"))
       {
         char * fileEndString;
-        if (infoMachineSettings.firmwareType != FW_REPRAPFW)
-        {
-          // Marlin
-          fileEndString = " Size:";  // File opened: 1A29A~1.GCO Size: 6974
-        }
-        else
-        {
-          // RRF
-          ack_seen("result\":\"0:/gcodes/");  // {"key":"job.file.fileName","flags": "","result":"0:/gcodes/pig-4H.gcode"}
-          fileEndString = "\"";
-        }
+
+        // Marlin
+        fileEndString = " Size:";  // File opened: 1A29A~1.GCO Size: 6974
 
         uint16_t start_index = ack_index;
         uint16_t end_index = ack_continue_seen(fileEndString) ? (ack_index - strlen(fileEndString)) : start_index;
         uint16_t path_len = MIN(end_index - start_index, MAX_PATH_LEN - strlen(getCurFileSource()) - 1);
-        sprintf(infoFile.title,"%s/", getCurFileSource());
-        strncat(infoFile.title, dmaL2Cache + start_index, path_len);
-        infoFile.title[path_len + strlen(getCurFileSource()) + 1] = '\0';
+        char file_name[MAX_PATH_LEN];
+        sprintf(file_name, "%s/", getCurFileSource());
+        strncat(file_name, dmaL2Cache + start_index, path_len);
+        file_name[path_len + strlen(getCurFileSource()) + 1] = '\0';
 
-        setPrintHost(true);
+        printRemoteStart(file_name);
       }
       else if (infoMachineSettings.onboardSD == ENABLED &&
-               infoFile.source >= BOARD_SD &&
-               ack_seen("Not SD printing"))
+               infoFile.source >= BOARD_SD && infoFile.source <= BOARD_SD_REMOTE &&
+               ack_seen("Not SD printing"))  // if printing from (remote) onboard SD
       {
         setPrintPause(true, PAUSE_EXTERNAL);
       }
       else if (infoMachineSettings.onboardSD == ENABLED &&
-               infoFile.source >= BOARD_SD &&
-               ack_seen("SD printing byte"))
+               infoFile.source >= BOARD_SD && infoFile.source <= BOARD_SD_REMOTE &&
+               ack_seen("SD printing byte"))  // if printing from (remote) onboard SD
       {
-        if (infoMachineSettings.firmwareType != FW_REPRAPFW)
-          setPrintResume(false);
+        setPrintResume(false);
 
-        // Parsing printing data
-        // Example: SD printing byte 123/12345
+        // parsing printing data
+        // format: SD printing byte <XXXX>/<YYYY> (e.g. SD printing byte 123/12345)
         setPrintProgress(ack_value(), ack_second_value());
         //powerFailedCache(position);
       }
       else if (infoMachineSettings.onboardSD == ENABLED &&
-               infoFile.source >= BOARD_SD &&
-               ack_seen(infoMachineSettings.firmwareType != FW_REPRAPFW ? "Done printing file" : "Finished printing file"))
+               infoFile.source >= BOARD_SD && infoFile.source <= BOARD_SD_REMOTE &&
+               ack_seen("Done printing file"))  // if printing from (remote) onboard SD
       {
-        setPrintHost(false);
-        printComplete();
+        printEnd();
       }
 
       //----------------------------------------
@@ -798,16 +781,6 @@ void parseACK(void)
       {
         pidUpdateStatus(false);
       }
-      // parse M303, PID Autotune completed message in case of RRF
-      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && ack_seen("Auto tuning heater") && ack_seen("completed"))
-      {
-        pidUpdateStatus(true);
-      }
-      // parse M303, PID Autotune failed message in case of RRF
-      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && (ack_seen("Error: M303") || (ack_seen("Auto tune of heater") && ack_seen("failed"))))
-      {
-        pidUpdateStatus(false);
-      }
       // parse and store M355, Case light message
       else if (ack_seen("Case light:"))
       {
@@ -888,14 +861,6 @@ void parseACK(void)
 
         uint8_t i = (ack_seen("T")) ? ack_value() : 0;
         if (ack_seen("E")) setParameter(P_STEPS_PER_MM, AXIS_INDEX_E0 + i, ack_value());
-      }
-      // parse and store stepper steps/mm values incase of RepRapFirmware
-      else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && (ack_seen("Steps")))
-      {
-        if (ack_seen("X: ")) setParameter(P_STEPS_PER_MM, AXIS_INDEX_X, ack_value());
-        if (ack_seen("Y: ")) setParameter(P_STEPS_PER_MM, AXIS_INDEX_Y, ack_value());
-        if (ack_seen("Z: ")) setParameter(P_STEPS_PER_MM, AXIS_INDEX_Z, ack_value());
-        if (ack_seen("E: ")) setParameter(P_STEPS_PER_MM, AXIS_INDEX_E0, ack_value());
       }
       // parse and store Filament settings values
       else if (ack_seen("M200"))
@@ -1119,29 +1084,25 @@ void parseACK(void)
 
         if (ack_seen("Marlin"))
         {
-          infoMachineSettings.firmwareType = FW_MARLIN;
+          setupMachine(FW_MARLIN);
         }
         else if (ack_seen("RepRapFirmware"))
         {
-          infoMachineSettings.firmwareType = FW_REPRAPFW;
-          setupMachine();
+          setupMachine(FW_REPRAPFW);
         }
         else if (ack_seen("Smoothieware"))
         {
-          infoMachineSettings.firmwareType = FW_SMOOTHIEWARE;
-          setupMachine();
+          setupMachine(FW_SMOOTHIEWARE);
         }
         else
         {
-          infoMachineSettings.firmwareType = FW_UNKNOWN;
-          setupMachine();
+          setupMachine(FW_UNKNOWN);
         }
+
         if (ack_seen("FIRMWARE_URL:"))  // For Smoothieware
           string_end = ack_index - sizeof("FIRMWARE_URL:");
         else if (ack_seen("SOURCE_CODE_URL:"))  // For Marlin
           string_end = ack_index - sizeof("SOURCE_CODE_URL:");
-        else if ((infoMachineSettings.firmwareType == FW_REPRAPFW) && ack_seen("ELECTRONICS"))  // For RepRapFirmware
-          string_end = ack_index - sizeof("ELECTRONICS");
 
         infoSetFirmwareName(string, string_end - string_start);  // Set firmware name
 
@@ -1157,6 +1118,7 @@ void parseACK(void)
             }
             string_end = ack_index - sizeof("EXTRUDER_COUNT:");
           }
+
           infoSetMachineType(string, string_end - string_start);  // Set firmware name
         }
       }
@@ -1231,7 +1193,6 @@ void parseACK(void)
       else if (ack_seen("Cap:CHAMBER_TEMPERATURE:"))
       {
         infoSettings.chamber_en = ack_value();
-        setupMachine();
       }
 
       //----------------------------------------
@@ -1249,38 +1210,6 @@ void parseACK(void)
         if (!processKnownEcho())  // if no known echo was found and processed, then popup the echo message
         {
           ackPopupInfo(magic_echo);
-        }
-      }
-
-      // keep it here and parse it the latest
-      else if (infoMachineSettings.firmwareType == FW_REPRAPFW)
-      {
-        if (ack_seen(magic_warning))
-        {
-          ackPopupInfo(magic_warning);
-        }
-        else if (ack_seen(magic_message))
-        {
-          ackPopupInfo(magic_message);
-        }
-        else if (ack_seen("access point "))
-        {
-          uint8_t * string = (uint8_t *)&dmaL2Cache[ack_index];
-          uint16_t string_start = ack_index;
-          uint16_t string_end = string_start;
-          if (ack_seen(","))
-            string_end = ack_index - 1 ;
-
-          infoSetAccessPoint(string, string_end - string_start);  // Set access poing
-
-          if (ack_seen("IP address "))
-          {
-            string = (uint8_t *)&dmaL2Cache[ack_index];
-            string_start = ack_index;
-            if (ack_seen("\n"))
-              string_end = ack_index - 1;
-            infoSetIPAddress(string, string_end - string_start);  // Set IP address
-          }
         }
       }
       else if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE)
@@ -1311,6 +1240,8 @@ void parseACK(void)
     if (ack_port_index != PORT_1)  // if the ACK message is related to a gcode originated by a supplementary serial port,
     {                              // forward the message to the supplementary serial port
       Serial_Puts(serialPort[ack_port_index].port, dmaL2Cache);
+      ack_port_index = PORT_1;  // reset ACK port index to avoid wrong relaying (in case no more commands will
+                                // be sent by interfaceCmd) of any successive spontaneous ACK message
     }
     #ifdef SERIAL_PORT_2
       else if (!ack_seen("ok") || ack_seen("T:") || ack_seen("T0:"))  // if a spontaneous ACK message
@@ -1328,7 +1259,7 @@ void parseACK(void)
 
     if (avoid_terminal != true)
     {
-      terminalCache(dmaL2Cache, dmaL2Cache_len, ack_port_index, TERMINAL_ACK);
+      terminalCache(dmaL2Cache, dmaL2Cache_len, ack_port_index, SRC_TERMINAL_ACK);
     }
   }
 }

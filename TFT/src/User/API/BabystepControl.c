@@ -14,6 +14,12 @@ float babystepReset(void)
   return babystep_value;
 }
 
+// Set current babystep value
+void babystepSetValue(float babystep)
+{
+  babystep_value = babystep;
+}
+
 // Get current babystep value
 float babystepGetValue(void)
 {

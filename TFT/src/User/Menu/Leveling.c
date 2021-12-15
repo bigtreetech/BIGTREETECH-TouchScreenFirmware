@@ -23,7 +23,7 @@ void menuManualLeveling(void)
 
   menuDrawPage(&manualLevelingItems);
 
-  while (infoMenu.menu[infoMenu.cur] == menuManualLeveling)
+  while (MENU_IS(menuManualLeveling))
   {
     key_num = menuKeyGetValue();
     switch (key_num)
@@ -38,9 +38,8 @@ void menuManualLeveling(void)
 
       case KEY_ICON_2:
       {
-        infoSettings.level_edge = editIntValue(LEVELING_EDGE_DISTANCE_MIN, LEVELING_EDGE_DISTANCE_MAX, LEVELING_EDGE_DISTANCE_DEFAULT, infoSettings.level_edge);
-
-        menuDrawPage(&manualLevelingItems);
+        infoSettings.level_edge = editIntValue(LEVELING_EDGE_DISTANCE_MIN, LEVELING_EDGE_DISTANCE_MAX,
+                                               LEVELING_EDGE_DISTANCE_DEFAULT, infoSettings.level_edge);
         break;
       }
 
@@ -61,7 +60,7 @@ void menuManualLeveling(void)
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       default:

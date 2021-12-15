@@ -15,8 +15,8 @@ const GUI_RECT rect_of_mode[MODE_COUNT] = {
 };
 
 const uint8_t icon_mode [MODE_COUNT] = {
-  ICON_MARLIN,
-  ICON_BIGTREETECH,
+  ICON_MARLIN_MODE,
+  ICON_TOUCH_MODE,
 };
 
 void drawModeIcon(void)
@@ -73,11 +73,7 @@ void menuMode(void)
       ;  // wait for touch release
   #endif
 
-  #if LCD_ENCODER_SUPPORT
-    encoderPosition = 0;
-  #endif
-
-  while (infoMenu.menu[infoMenu.cur] == menuMode)
+  while (MENU_IS(menuMode))
   {
     MKEY_VALUES key_num = MKeyGetValue();
 

@@ -18,9 +18,9 @@ const GUI_RECT  rectProgressframe = {BYTE_WIDTH/2-2, LCD_HEIGHT-(BYTE_HEIGHT*2+B
 const GUI_POINT pointProgressText = {BYTE_WIDTH/2-2, LCD_HEIGHT-(BYTE_HEIGHT*4)};
 
 const char * const config_keywords[CONFIG_COUNT] = {
-#define X_CONFIG(NAME) CONFIG_##NAME,
-  #include "config.inc"
-#undef X_CONFIG
+  #define X_CONFIG(NAME) CONFIG_##NAME ,
+    #include "config.inc"
+  #undef X_CONFIG
 };
 
 const char * const cgList[] = CUSTOM_GCODE_LIST;
@@ -77,7 +77,7 @@ bool getConfigFromFile(void)
       LCD_RefreshDirection(infoSettings.rotated_ui);
       TSC_Calibration();
     }
-    storePara();
+    storePara();  // TODO: The touch sign will also be written if the touch calibration data is invalid
     saveConfig();
     PRINTDEBUG("config saved\n");
     return true;
@@ -556,17 +556,18 @@ void parseConfigKey(uint16_t index)
 
     case C_INDEX_EMULATED_M600:
     case C_INDEX_EMULATED_M109_M190:
-      SET_BIT_VALUE(infoSettings.general_settings, (index - C_INDEX_EMULATED_M600), getOnOff());
+    case C_INDEX_FILE_COMMENT_PARSING:
+      SET_BIT_VALUE(infoSettings.general_settings, ((index - C_INDEX_EMULATED_M600) + INDEX_EMULATED_M600), getOnOff());
       break;
 
     //----------------------------UI Settings
 
     case C_INDEX_ROTATED_UI:
-      if (infoSettings.rotated_ui != getOnOff())
-      {
-        scheduleRotate = true;
-        infoSettings.rotated_ui = getOnOff();
-      }
+      #ifdef PORTRAIT
+        SET_VALID_INT_VALUE(infoSettings.rotated_ui, 2, 3);
+      #else
+        SET_VALID_INT_VALUE(infoSettings.rotated_ui, 0, 1);
+      #endif
       break;
 
     case C_INDEX_LANGUAGE:
@@ -631,6 +632,10 @@ void parseConfigKey(uint16_t index)
 
     case C_INDEX_FILES_LIST_MODE:
       infoSettings.files_list_mode = getOnOff();
+      break;
+
+    case C_INDEX_FILENAME_EXTENSION:
+      infoSettings.filename_extension = getOnOff();
       break;
 
     case C_INDEX_FAN_SPEED_PERCENTAGE:
@@ -704,7 +709,7 @@ void parseConfigKey(uint16_t index)
     //----------------------------Printer / Machine Settings
 
     case C_INDEX_HOTEND_COUNT:
-      SET_VALID_INT_VALUE(infoSettings.hotend_count, 1, MAX_HOTEND_COUNT);
+      SET_VALID_INT_VALUE(infoSettings.hotend_count, 0, MAX_HOTEND_COUNT);
       break;
 
     case C_INDEX_HEATED_BED:
@@ -716,7 +721,7 @@ void parseConfigKey(uint16_t index)
       break;
 
     case C_INDEX_EXT_COUNT:
-      SET_VALID_INT_VALUE(infoSettings.ext_count, 1, MAX_EXT_COUNT);
+      SET_VALID_INT_VALUE(infoSettings.ext_count, 0, MAX_EXT_COUNT);
       break;
 
     case C_INDEX_FAN_COUNT:
@@ -749,7 +754,7 @@ void parseConfigKey(uint16_t index)
       if (key_seen("F3:")) SET_VALID_INT_VALUE(infoSettings.fan_max[3], MIN_FAN_SPEED, MAX_FAN_SPEED);
       if (key_seen("F4:")) SET_VALID_INT_VALUE(infoSettings.fan_max[4], MIN_FAN_SPEED, MAX_FAN_SPEED);
       if (key_seen("F5:")) SET_VALID_INT_VALUE(infoSettings.fan_max[5], MIN_FAN_SPEED, MAX_FAN_SPEED);
-      if (key_seen("CtL:")) SET_VALID_INT_VALUE(infoSettings.fan_max[6], MIN_FAN_SPEED, MAX_FAN_SPEED);
+      if (key_seen("CtA:")) SET_VALID_INT_VALUE(infoSettings.fan_max[6], MIN_FAN_SPEED, MAX_FAN_SPEED);
       if (key_seen("CtI:")) SET_VALID_INT_VALUE(infoSettings.fan_max[7], MIN_FAN_SPEED, MAX_FAN_SPEED);
       break;
 
@@ -844,7 +849,7 @@ void parseConfigKey(uint16_t index)
       if (key_seen("X")) SET_BIT_VALUE(infoSettings.inverted_axis, X_AXIS, getOnOff());
       if (key_seen("Y")) SET_BIT_VALUE(infoSettings.inverted_axis, Y_AXIS, getOnOff());
       if (key_seen("Z")) SET_BIT_VALUE(infoSettings.inverted_axis, Z_AXIS, getOnOff());
-      if (key_seen("LY")) infoSettings.leveling_inverted_y_axis = getOnOff();
+      if (key_seen("LY")) SET_BIT_VALUE(infoSettings.inverted_axis, E_AXIS, getOnOff());  // leveling Y axis
       break;
 
     case C_INDEX_PROBING_Z_OFFSET:
@@ -1001,7 +1006,7 @@ void parseConfigKey(uint16_t index)
         break;
     #endif
 
-    //----------------------------Custom Gcode Commands
+    //----------------------------Custom G-code Commands
 
     case C_INDEX_CUSTOM_LABEL_1:
     case C_INDEX_CUSTOM_LABEL_2:
@@ -1062,7 +1067,7 @@ void parseConfigKey(uint16_t index)
       break;
     }
 
-    //----------------------------Start, End & Cancel Gcode Commands
+    //----------------------------Start, End & Cancel G-code Commands
 
     case C_INDEX_START_GCODE_ENABLED:
     case C_INDEX_END_GCODE_ENABLED:

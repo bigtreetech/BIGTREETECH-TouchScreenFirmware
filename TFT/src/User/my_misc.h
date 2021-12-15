@@ -7,13 +7,20 @@ extern "C" {
 
 #include <stdint.h>
 
+// Menu Macros
+#define OPEN_MENU(x)    infoMenu.menu[++infoMenu.cur] = x
+#define REPLACE_MENU(x) infoMenu.menu[infoMenu.cur] = x
+#define CLOSE_MENU()    infoMenu.cur--
+#define MENU_IS(x)      infoMenu.menu[infoMenu.cur] == x
+#define MENU_IS_NOT(x)  infoMenu.menu[infoMenu.cur] != x
+
 // Macros to make a string from a macro
 #define STRINGIFY_(M) #M
-#define STRINGIFY(M) STRINGIFY_(M)
+#define STRINGIFY(M)  STRINGIFY_(M)
 
 #define COUNT(n) (sizeof(n)/sizeof(n[0]))
 
-#define ABS(n) ((n) > 0 ? (n) : -(n))
+#define ABS(n)    ((n) > 0 ? (n) : -(n))
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #define MIN(a, b) ((a) > (b) ? (b) : (a))
 #define NOBEYOND(min, v, max) MAX(min, MIN(v, max))

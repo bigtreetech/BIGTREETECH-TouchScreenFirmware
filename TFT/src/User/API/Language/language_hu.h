@@ -3,12 +3,14 @@
 
     // config.ini Parameter Settings - Screen Settings and Feature Settings
     #define STRING_EMULATED_M600          "Emulált M600"
-    #define STRING_EMULATED_M109_M190     "Emulated M109 / M190"
+    #define STRING_EMULATED_M109_M190     "Emulált M109 / M190"
+    #define STRING_FILE_COMMENT_PARSING   "Fájl megjegyzés elemzése"
     #define STRING_ROTATED_UI             "Forgatás"
     #define STRING_LANGUAGE               "Magyar"
     #define STRING_ACK_NOTIFICATION       "ACK Értesítési stílus"
     #define STRING_FILES_SORT_BY          "Fájlok rendezése"
     #define STRING_FILES_LIST_MODE        "Fájlnéző listamód"
+    #define STRING_FILENAME_EXTENSION     "Show filename extension"
     #define STRING_FAN_SPEED_PERCENTAGE   "Ventilátor sebesség %-ban"
     #define STRING_PERSISTENT_INFO        "Állandó állapotinfó"
     #define STRING_TERMINAL_ACK           "ACK Megjelenítése"
@@ -143,6 +145,7 @@
     #define STRING_BUSY                   "Feldolgozás alatt, kérlek várj..."
     #define STRING_LOADING                "Betöltés..."
     #define STRING_UNCONNECTED            "Nincs nyomtató csatlakoztatva!"
+    #define STRING_LISTENING              "TFT Hallgatási módban!"
 
     // Process Info
     #define STRING_INFO                   "Infó"

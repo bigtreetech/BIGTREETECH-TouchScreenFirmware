@@ -4,11 +4,13 @@
     // config.ini Parameter Settings - Screen Settings and Feature Settings
     #define STRING_EMULATED_M600          "Emulated M600"
     #define STRING_EMULATED_M109_M190     "Emulated M109 / M190"
+    #define STRING_FILE_COMMENT_PARSING   "File comment parsing"
     #define STRING_ROTATED_UI             "Rotar"
     #define STRING_LANGUAGE               "Català"
     #define STRING_ACK_NOTIFICATION       "ACK notification style"
     #define STRING_FILES_SORT_BY          "Sort files by"
     #define STRING_FILES_LIST_MODE        "Mode de visualització de fitxers"
+    #define STRING_FILENAME_EXTENSION     "Show filename extension"
     #define STRING_FAN_SPEED_PERCENTAGE   "Fan Speed As Percentage"
     #define STRING_PERSISTENT_INFO        "Informació d'estat persistent"
     #define STRING_TERMINAL_ACK           "Mostra ACK a la terminal"
@@ -143,6 +145,7 @@
     #define STRING_BUSY                   "Processament ocupat, si us plau esperi ..."
     #define STRING_LOADING                "Carregant ..."
     #define STRING_UNCONNECTED            "No hi ha comunicació amb impressora!"
+    #define STRING_LISTENING              "TFT in Listening Mode!"
 
     // Process Info
     #define STRING_INFO                   "Informació"
@@ -359,6 +362,6 @@
     #define STRING_MESH_VALID             "Mesh Validation"
     #define STRING_CONNECT_PROBE          "Connect probe before starting the process. Make sure to disconnect it afterwards."
     #define STRING_DISCONNECT_PROBE       "Make sure you have disconnected probe before using this feature."
-    #define STRING_CALIBRATION            "Calibration"
+    #define STRING_CALIBRATION            "Calibrate"
 
 #endif

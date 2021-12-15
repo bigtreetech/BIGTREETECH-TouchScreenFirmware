@@ -71,7 +71,7 @@ void drawKeypadButton(uint8_t index, uint8_t isPressed)
   if (index >= COUNT(rect_of_numkey)) return;
 
   #ifdef KEYBOARD_MATERIAL_THEME
-    uint16_t fontcolor = KEY_FONT_COLOR;
+    uint16_t fontcolor = CTRL_FONT_COLOR;
     uint16_t bgcolor = KEY_BG_COLOR;
     GUI_RECT rectBtn = {rect_of_numkey[index].x0 + 4, rect_of_numkey[index].y0 + 4,
                         rect_of_numkey[index].x1 - 4, rect_of_numkey[index].y1 - 4};
@@ -79,24 +79,25 @@ void drawKeypadButton(uint8_t index, uint8_t isPressed)
     switch (index)
     {
       case NUM_KEY_OK:
-        fontcolor = CTRL_FONT_COLOR;
-        bgcolor = MAT_GREEN;
+        bgcolor = CTRL_SEND_BG_COLOR;
         break;
+
       case NUM_KEY_DEL:
-        fontcolor = CTRL_FONT_COLOR;
-        bgcolor = MAT_ORANGE;
+        bgcolor = CTRL_DEL_BG_COLOR;
         break;
+
       case NUM_KEY_EXIT:
-        fontcolor = CTRL_FONT_COLOR;
-        bgcolor = MAT_RED;
+        bgcolor = CTRL_BACK_BG_COLOR;
         break;
+
       case NUM_KEY_RESET:
-        fontcolor = CTRL_FONT_COLOR;
-        bgcolor = MAT_SLATE;
+        bgcolor = CTRL_ABC_BG_COLOR;
         break;
+
       default:
+        fontcolor = KEY_FONT_COLOR;
         break;
-     }
+    }
 
     BUTTON btn = {.fontColor  = fontcolor,
                   .backColor  = bgcolor,
@@ -113,14 +114,12 @@ void drawKeypadButton(uint8_t index, uint8_t isPressed)
     if (!(index == NUM_KEY_DEC && GET_BIT(numpadType, 0)) && !(index == NUM_KEY_MINUS && !GET_BIT(numpadType, 1)))
       GUI_DrawButton(&btn, isPressed);
     setFontSize(FONT_SIZE_NORMAL);
-    #else
-
+  #else
     if (!isPressed)
-      GUI_SetColor(BLACK);
+      GUI_SetColor(infoSettings.bg_color);
     GUI_DrawRect(rect_of_numkey[index].x0 + 2, rect_of_numkey[index].y0 + 2, rect_of_numkey[index].x1-2, rect_of_numkey[index].y1 - 2);
     GUI_SetColor(infoSettings.font_color);
-
-    #endif  // KEYBOARD_MATERIAL_THEME
+  #endif  // KEYBOARD_MATERIAL_THEME
 }
 
 void Draw_keyboard(uint8_t * title, bool numberOnly, bool negative)
@@ -179,7 +178,6 @@ void Draw_keyboard(uint8_t * title, bool numberOnly, bool negative)
     drawCharIcon(&rect_of_numkey[NUM_KEY_DEL], CENTER, CHARICON_POINT_LEFT, false, 0);
     drawCharIcon(&rect_of_numkey[NUM_KEY_EXIT], CENTER, CHARICON_CANCEL, false, 0);
     drawCharIcon(&rect_of_numkey[NUM_KEY_RESET], CENTER, CHARICON_RESET, false, 0);
-
   #endif  // KEYBOARD_MATERIAL_THEME
 
   GUI_DispStringInPrect(&arrowRect,(uint8_t *)"\u089A");
@@ -212,7 +210,7 @@ double numPadFloat(uint8_t * title, double old_val, double reset_val, bool negat
   NUM_KEY_VALUES key_num = NUM_KEY_IDLE;
   touchSound = false;
 
-  uint8_t nowIndex = 0;
+  uint8_t nowIndex;
   uint8_t lastIndex = 0;
   char ParameterBuf[FLOAT_BUF_LENGTH + 1] = {0};
   uint8_t prec = (old_val == 0) ? 0 : 3;
@@ -242,22 +240,32 @@ double numPadFloat(uint8_t * title, double old_val, double reset_val, bool negat
         return old_val;
 
       case NUM_KEY_DEL:
-        if (nowIndex)
+        if (nowIndex == 1)  // last character deleted
         {
-          ParameterBuf[--nowIndex] = 0;
-          valueFirstPress = false;
-          BUZZER_PLAY(SOUND_KEYPRESS);
+          if (ParameterBuf[0] == '0')
+          { // '0' cannot be deleted
+            BUZZER_PLAY(SOUND_DENY);
+            break;
+          }
+          else
+          {
+            ParameterBuf[0] = '0';
+            lastIndex = 0;  // this will trigger a value redraw
+          }
         }
         else
         {
-          BUZZER_PLAY(SOUND_DENY);
+          ParameterBuf[--nowIndex] = 0;
         }
+
+        BUZZER_PLAY(SOUND_KEYPRESS);
+        valueFirstPress = false;
         break;
 
       case NUM_KEY_RESET:
         sprintf(ParameterBuf, "%.*f", prec, reset_val);
         nowIndex = strlen(ParameterBuf);
-        lastIndex = nowIndex + 1;
+        lastIndex = 0;
         valueFirstPress = true;
         BUZZER_PLAY(SOUND_KEYPRESS);
         break;
@@ -275,13 +283,19 @@ double numPadFloat(uint8_t * title, double old_val, double reset_val, bool negat
         if (valueFirstPress == true)
         {
           valueFirstPress = false;
-          ParameterBuf[0] = '0';
-          nowIndex = 1;
+          nowIndex = lastIndex = 0;
         }
         if (nowIndex < FLOAT_BUF_LENGTH - 1)
         {
-          if (ParameterBuf[0] == '0' && nowIndex == 1)
+          if (ParameterBuf[0] == '0' && nowIndex == 1)  // avoid "0x", change to "x"
+          {
             nowIndex = lastIndex = 0;
+          }
+          else if(ParameterBuf[0] == '-' && ParameterBuf[1] == '0' && nowIndex == 2)  // avoid "-0x", change to "-x"
+          {
+            nowIndex = lastIndex = 1;
+          }
+
           ParameterBuf[nowIndex++] = numPadKeyChar[key_num][0];
           ParameterBuf[nowIndex] = 0;
           BUZZER_PLAY(SOUND_KEYPRESS);
@@ -296,14 +310,16 @@ double numPadFloat(uint8_t * title, double old_val, double reset_val, bool negat
         if (valueFirstPress == true)
         {
           valueFirstPress = false;
-          ParameterBuf[0] = 0;
-          nowIndex = lastIndex = 0;
+          ParameterBuf[0] = '0';
+          nowIndex = lastIndex = 1;
         }
         if (!strchr((const char *)ParameterBuf, numPadKeyChar[key_num][0]) && nowIndex < (FLOAT_BUF_LENGTH - 1))
         {
-          if (nowIndex == 0 || (nowIndex == 1 && strchr((const char *)ParameterBuf, '-')))  // check if no number exits or only minus exists
-            ParameterBuf[nowIndex++] = '0';                                                 // add zero before decimal sign if it is the first character
-          ParameterBuf[nowIndex++] = numPadKeyChar[key_num][0];
+          if (nowIndex == 1 && ParameterBuf[0] == '-')  // check if minus sign and no other number
+          {
+            ParameterBuf[nowIndex++] = '0';             // add zero between minus and decimal sign
+          }
+          ParameterBuf[nowIndex++] = '.';
           ParameterBuf[nowIndex] = 0;
           BUZZER_PLAY(SOUND_KEYPRESS);
         }
@@ -319,13 +335,14 @@ double numPadFloat(uint8_t * title, double old_val, double reset_val, bool negat
           if (valueFirstPress == true)
           {
             valueFirstPress = false;
-            ParameterBuf[0] = 0;
-            nowIndex = lastIndex = 0;
+            ParameterBuf[0] = '0';
+            nowIndex = 1;
           }
-          if (!strchr((const char *)ParameterBuf, numPadKeyChar[key_num][0]) && nowIndex == 0)
+          if (nowIndex == 1 && ParameterBuf[0] == '0')
           {
-            ParameterBuf[nowIndex++] = numPadKeyChar[key_num][0];
-            ParameterBuf[nowIndex] = 0;
+            ParameterBuf[0] = '-';
+            ParameterBuf[1] = 0;
+            lastIndex = 0;  // this will trigger a value redraw
             BUZZER_PLAY(SOUND_KEYPRESS);
           }
           else
@@ -336,17 +353,14 @@ double numPadFloat(uint8_t * title, double old_val, double reset_val, bool negat
         break;
 
       case NUM_KEY_OK:
-        if (nowIndex > 0)
+        if (nowIndex == 1 && ParameterBuf[0] == '-')
         {
-          if (nowIndex == 1 && (strchr((const char *)ParameterBuf, '.') || strchr((const char *)ParameterBuf, '-')))
-          {
-            BUZZER_PLAY(SOUND_DENY);
-            break;
-          }
-          BUZZER_PLAY(SOUND_OK);
-          touchSound = true;
-          return strtod(ParameterBuf, NULL);
+          BUZZER_PLAY(SOUND_DENY);
+          break;
         }
+        BUZZER_PLAY(SOUND_OK);
+        touchSound = true;
+        return strtod(ParameterBuf, NULL);
 
       default:
         break;

@@ -57,7 +57,7 @@ void menuMarlinMode(void)
 
   marlinInit(&marlinQueue);
 
-  while (infoMenu.menu[infoMenu.cur] == menuMarlinMode)
+  while (MENU_IS(menuMarlinMode))
   {
     while (marlinGetData(&data))
     {

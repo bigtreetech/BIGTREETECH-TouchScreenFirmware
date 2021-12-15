@@ -4,11 +4,13 @@
     // config.ini Parameter Settings - Screen Settings and Feature Settings
     #define STRING_EMULATED_M600          "Emulated M600"
     #define STRING_EMULATED_M109_M190     "Emulated M109 / M190"
+    #define STRING_FILE_COMMENT_PARSING   "File comment parsing"
     #define STRING_ROTATED_UI             "顯示方向"
     #define STRING_LANGUAGE               "正體中文"
     #define STRING_ACK_NOTIFICATION       "ACK 弹窗类型"
     #define STRING_FILES_SORT_BY          "Sort files by"
     #define STRING_FILES_LIST_MODE        "文件預覽列表模式"
+    #define STRING_FILENAME_EXTENSION     "Show filename extension"
     #define STRING_FAN_SPEED_PERCENTAGE   "Fan Speed As Percentage"
     #define STRING_PERSISTENT_INFO        "頂部溫度訊息"
     #define STRING_TERMINAL_ACK           "在G-code終端顯示溫度"
@@ -143,6 +145,7 @@
     #define STRING_BUSY                   "系統繁忙請稍等"
     #define STRING_LOADING                "讀取中"
     #define STRING_UNCONNECTED            "尚未連線到主機板"
+    #define STRING_LISTENING              "TFT in Listening Mode!"
 
     // Process Info
     #define STRING_INFO                   "提示" //Info Sign
@@ -359,6 +362,6 @@
     #define STRING_MESH_VALID             "Mesh Validation"
     #define STRING_CONNECT_PROBE          "Connect probe before starting the process. Make sure to disconnect it afterwards."
     #define STRING_DISCONNECT_PROBE       "Make sure you have disconnected probe before using this feature."
-    #define STRING_CALIBRATION            "Calibration"
+    #define STRING_CALIBRATION            "Calibrate"
 
 #endif

@@ -19,12 +19,12 @@ void extrudeMinTemp_OK(void)
 static inline void turnHeaterOff(void)
 {
   heatSetTargetTemp(tool_index, 0);
-  infoMenu.cur--;
+  CLOSE_MENU();
 }
 
 static inline void returnToTuning(void)
 {
-  infoMenu.cur--;
+  CLOSE_MENU();
 }
 
 void showNewESteps(const float measured_length, const float old_esteps, float * new_esteps)
@@ -59,7 +59,7 @@ static inline void extrudeFilament(void)
   // extrude 100MM
   mustStoreScript("M83\nG1 F50 E%.2f\nM82\n", EXTRUDE_LEN);
 
-  infoMenu.menu[++infoMenu.cur] = menuNewExtruderESteps;
+  OPEN_MENU(menuNewExtruderESteps);
 }
 // end Esteps part
 
@@ -94,19 +94,16 @@ void menuTuneExtruder(void)
   menuDrawPage(&tuneExtruderItems);
   temperatureReDraw(tool_index, NULL, false);
 
-  #if LCD_ENCODER_SUPPORT
-    encoderPosition = 0;
-  #endif
-
-  while (infoMenu.menu[infoMenu.cur] == menuTuneExtruder)
+  while (MENU_IS(menuTuneExtruder))
   {
     actCurrent = heatGetCurrentTemp(tool_index);
     actTarget = heatGetTargetTemp(tool_index);
-
     key_num = menuKeyGetValue();
+
     switch (key_num)
     {
       case KEY_ICON_0:
+      case KEY_DECREASE:
         heatSetTargetTemp(tool_index, actTarget - degreeSteps[degreeSteps_index]);
         break;
 
@@ -117,12 +114,12 @@ void menuTuneExtruder(void)
         if (val != actTarget)
           heatSetTargetTemp(tool_index, val);
 
-        menuDrawPage(&tuneExtruderItems);
         temperatureReDraw(tool_index, NULL, false);
         break;
       }
 
       case KEY_ICON_3:
+      case KEY_INCREASE:
         heatSetTargetTemp(tool_index, actTarget + degreeSteps[degreeSteps_index]);
         break;
 
@@ -151,18 +148,11 @@ void menuTuneExtruder(void)
         }
         else
         {
-          infoMenu.cur--;
+          CLOSE_MENU();
         }
         break;
 
-      default :
-        #if LCD_ENCODER_SUPPORT
-          if (encoderPosition)
-          {
-            heatSetTargetTemp(tool_index, actTarget + degreeSteps[degreeSteps_index] * encoderPosition);
-            encoderPosition = 0;
-          }
-        #endif
+      default:
         break;
     }
 
@@ -242,20 +232,19 @@ void menuNewExtruderESteps(void)
   menuDrawPage(&newExtruderESteps);
   showNewESteps(measured_length, old_esteps, &new_esteps);
 
-  #if LCD_ENCODER_SUPPORT
-    encoderPosition = 0;
-  #endif
-
-  while (infoMenu.menu[infoMenu.cur] == menuNewExtruderESteps)
+  while (MENU_IS(menuNewExtruderESteps))
   {
     key_num = menuKeyGetValue();
+
     switch (key_num)
     {
       case KEY_ICON_0:
+      case KEY_DECREASE:
         measured_length -= moveLenSteps[extStep_index];
         break;
 
       case KEY_ICON_3:
+      case KEY_INCREASE:
         measured_length += moveLenSteps[extStep_index];
         break;
 
@@ -282,17 +271,10 @@ void menuNewExtruderESteps(void)
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
-      default :
-        #if LCD_ENCODER_SUPPORT
-          if (encoderPosition)
-          {
-            measured_length += moveLenSteps[extStep_index] * encoderPosition;
-            encoderPosition = 0;
-          }
-        #endif
+      default:
         break;
     }
 

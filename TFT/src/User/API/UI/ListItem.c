@@ -46,7 +46,7 @@ void DrawListItemPress(const GUI_RECT * rect, bool pressed)
 {
   if (pressed != false)
   {
-    GUI_SetColor(WHITE);
+    GUI_SetColor(LI_KEY_PRESSED_COLOR);
     GUI_DrawPrect(rect);
   }
   else
@@ -82,7 +82,7 @@ void ListItem_Display(const GUI_RECT * rect, uint8_t position, const LISTITEM * 
       }
       if (pressed != false)
       {
-        GUI_SetColor(WHITE);
+        GUI_SetColor(LI_KEY_PRESSED_COLOR);
         GUI_DrawPrect(rect);
       }
     }
@@ -207,7 +207,7 @@ void ListItem_DisplayCustomValue(const GUI_RECT * rect, LABEL value, int i)
   GUI_SetColor(infoSettings.list_border_color);
   GUI_DrawPrect(&rectVal);
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-  GUI_SetColor(MAT_LOWWHITE);
+  GUI_SetColor(LI_VAL_COLOR);
 
   if (value.index == LABEL_CUSTOM_VALUE || value.index == LABEL_DYNAMIC)  // show custom text value
     GUI_DispStringInPrect(&rectVal, (uint8_t *)getDynamicTextValue(i));

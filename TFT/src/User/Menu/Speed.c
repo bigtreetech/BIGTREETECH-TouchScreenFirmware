@@ -42,8 +42,7 @@ void menuSpeed(void)
   KEY_VALUES key_num = KEY_IDLE;
   LASTSPEED lastSpeed;
 
-  if (infoMachineSettings.firmwareType != FW_REPRAPFW)
-    storeCmd("M220\nM221\n");  // RRF has current settings via periodic polling (fanQuery)
+  speedQuery();
 
   speedSetPercent(item_index, speedGetCurPercent(item_index));
   lastSpeed = (LASTSPEED) {speedGetCurPercent(item_index), speedGetSetPercent(item_index)};
@@ -55,16 +54,14 @@ void menuSpeed(void)
   menuDrawPage(&percentageItems);
   percentageReDraw(item_index, false);
 
-  #if LCD_ENCODER_SUPPORT
-    encoderPosition = 0;
-  #endif
-
-  while (infoMenu.menu[infoMenu.cur] == menuSpeed)
+  while (MENU_IS(menuSpeed))
   {
     key_num = menuKeyGetValue();
+
     switch (key_num)
     {
       case KEY_ICON_0:
+      case KEY_DECREASE:
         if (speedGetSetPercent(item_index) > SPEED_MIN)
           speedSetPercent(item_index, speedGetSetPercent(item_index) - percentSteps[percentSteps_index]);
         break;
@@ -76,18 +73,22 @@ void menuSpeed(void)
         if (val != speedGetSetPercent(item_index))
           speedSetPercent(item_index, val);
 
-        menuDrawPage(&percentageItems);
         percentageReDraw(item_index, false);
         break;
       }
 
       case KEY_ICON_3:
+      case KEY_INCREASE:
         if (speedGetSetPercent(item_index) < SPEED_MAX)
           speedSetPercent(item_index, speedGetSetPercent(item_index) + percentSteps[percentSteps_index]);
         break;
 
       case KEY_ICON_4:
-        item_index = (item_index + 1) % SPEED_NUM;
+        if (infoSettings.ext_count > 0)
+        {
+          item_index = (item_index + 1) % SPEED_NUM;
+        }
+
         percentageItems.title.index = itemPercentTypeTitle[item_index];
         percentageItems.items[key_num] = itemPercentType[item_index];
 
@@ -108,20 +109,10 @@ void menuSpeed(void)
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       default:
-        #if LCD_ENCODER_SUPPORT
-          if (encoderPosition)
-          {
-            if (speedGetSetPercent(item_index) < SPEED_MAX && encoderPosition > 0)
-              speedSetPercent(item_index, speedGetSetPercent(item_index) + percentSteps[percentSteps_index]);
-            else if (speedGetSetPercent(item_index) > SPEED_MIN && encoderPosition < 0)
-              speedSetPercent(item_index, speedGetSetPercent(item_index) - percentSteps[percentSteps_index]);
-            encoderPosition = 0;
-          }
-        #endif
         break;
     }
 

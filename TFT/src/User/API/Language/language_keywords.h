@@ -11,11 +11,13 @@ extern "C" {
 // config.ini Parameter Settings - Screen Settings and Feature Settings
 #define LANG_KEY_EMULATED_M600                "label_emulated_m600:"
 #define LANG_KEY_EMULATED_M109_M190           "label_emulated_m109_m190:"
+#define LANG_KEY_FILE_COMMENT_PARSING         "label_file_comment_parsing:"
 #define LANG_KEY_ROTATED_UI                   "label_rotated_ui:"
 #define LANG_KEY_LANGUAGE                     "label_language:"
 #define LANG_KEY_ACK_NOTIFICATION             "label_ack_notification:"
 #define LANG_KEY_FILES_SORT_BY                "label_files_sort_by:"
 #define LANG_KEY_FILES_LIST_MODE              "label_files_list_mode:"
+#define LANG_KEY_FILENAME_EXTENSION           "label_filename_extension:"
 #define LANG_KEY_FAN_SPEED_PERCENTAGE         "label_fan_speed_percentage:"
 #define LANG_KEY_PERSISTENT_INFO              "label_persistent_info:"
 #define LANG_KEY_TERMINAL_ACK                 "label_terminal_ack:"
@@ -150,6 +152,7 @@ extern "C" {
 #define LANG_KEY_BUSY                         "label_busy:"
 #define LANG_KEY_LOADING                      "label_loading:"
 #define LANG_KEY_UNCONNECTED                  "label_unconnected:"
+#define LANG_KEY_LISTENING                    "label_listening:"
 
 // Process Info
 #define LANG_KEY_INFO                         "label_info:" //Info Sign

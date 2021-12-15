@@ -63,7 +63,7 @@ void menuNotification(void)
   loadNotificationItems();
   setNotificationHandler(loadNotificationItems);
 
-  while (infoMenu.menu[infoMenu.cur] == menuNotification)
+  while (MENU_IS(menuNotification))
   {
     key_num = menuKeyGetValue();
     switch (key_num)
@@ -80,7 +80,7 @@ void menuNotification(void)
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       default:

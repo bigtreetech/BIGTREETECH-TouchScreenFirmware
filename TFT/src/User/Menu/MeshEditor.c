@@ -86,6 +86,8 @@ typedef enum
   ME_KEY_NEXT,
   ME_KEY_DOWN,
   ME_KEY_NUM,                                              // number of keys
+  ME_KEY_INCREASE = KEY_INCREASE,
+  ME_KEY_DECREASE = KEY_DECREASE,
   ME_KEY_IDLE = IDLE_TOUCH,
 } MESH_KEY_VALUES;
 
@@ -97,12 +99,6 @@ typedef enum
   ME_AREA_NUM,                                             // number of areas
   ME_AREA_IDLE = IDLE_TOUCH,
 } MESH_AREA_VALUES;
-
-// colors
-#define MESH_FONT_COLOR     infoSettings.font_color
-#define MESH_BG_COLOR       infoSettings.bg_color
-#define MESH_BORDER_COLOR   infoSettings.list_border_color
-#define MESH_BORDER_COLOR_2 0x4b0d
 
 // layout sizes
 #define MESH_GRID_HEIGHT     (LCD_HEIGHT - ICON_START_Y)
@@ -811,7 +807,7 @@ void meshUpdateData(char *dataRow)
 
     popupReminder(DIALOG_TYPE_ERROR, LABEL_MESH_EDITOR, (uint8_t *) tempMsg);
 
-    infoMenu.cur--;                                        // exit from mesh editor menu. it avoids to loop in case of persistent error
+    CLOSE_MENU();                                          // exit from mesh editor menu. it avoids to loop in case of persistent error
 
     meshDeallocData();                                     // deallocate mesh data
   }
@@ -835,16 +831,12 @@ void menuMeshEditor(void)
 
   meshDrawMenu();
 
-  #if LCD_ENCODER_SUPPORT
-    encoderPosition = 0;
-  #endif
-
-  while (infoMenu.menu[infoMenu.cur] == menuMeshEditor)
+  while (MENU_IS(menuMeshEditor))
   {
     curStatus = meshGetStatus();                           // always load current status
     curIndex = meshGetIndex();                             // always load current index
-
     key_num = menuKeyGetValue();
+
     switch (key_num)
     {
       case ME_KEY_UP:
@@ -856,10 +848,12 @@ void menuMeshEditor(void)
         break;
 
       case ME_KEY_PREV:
+      case ME_KEY_DECREASE:
         curIndex = meshSetIndex(curIndex - 1);
         break;
 
       case ME_KEY_NEXT:
+      case ME_KEY_INCREASE:
         curIndex = meshSetIndex(curIndex + 1);
         break;
 
@@ -900,18 +894,10 @@ void menuMeshEditor(void)
       case ME_KEY_OK:
         forceExit = true;
 
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       default:
-        #if LCD_ENCODER_SUPPORT
-          if (encoderPosition)
-          {
-            curIndex = meshSetIndex(curIndex + encoderPosition);
-
-            encoderPosition = 0;
-          }
-        #endif
         break;
     }
 
