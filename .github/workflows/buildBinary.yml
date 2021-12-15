@@ -54,8 +54,6 @@ jobs:
         run: platformio run --environment BIGTREE_TFT28_V3_0
       - name: Build TFT24 V1.1
         run: platformio run --environment BIGTREE_TFT24_V1_1
-      - name: Build TFT24 V1.1 P
-        run: platformio run --environment BIGTREE_TFT24_V1_1_P
       - name: Build GD_TFT24 V1.1   
         run: platformio run --environment BIGTREE_GD_TFT24_V1_1
       - name: Build MKS TFT32 V1.3
