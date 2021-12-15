@@ -172,21 +172,17 @@ void menuMBL(void)
   mblDrawHeader(!mblRunning ? NULL : &mblPoint);
   mblDrawValue(now);
 
-  #if LCD_ENCODER_SUPPORT
-    encoderPosition = 0;
-  #endif
-
-  while (infoMenu.menu[infoMenu.cur] == menuMBL)
+  while (MENU_IS(menuMBL))
   {
     unit = moveLenSteps[curUnit_index];
-
     curValue = coordinateGetAxisActual(Z_AXIS);
-
     key_num = menuKeyGetValue();
+
     switch (key_num)
     {
       // decrease Z height
       case KEY_ICON_0:
+      case KEY_DECREASE:
         if (!mblRunning)
           mblNotifyError(false);
         else
@@ -197,11 +193,12 @@ void menuMBL(void)
         if (mblRunning)
           mblNotifyError(true);
         else
-          infoMenu.menu[++infoMenu.cur] = menuUnifiedHeat;
+          OPEN_MENU(menuUnifiedHeat);
         break;
 
       // increase Z height
       case KEY_ICON_3:
+      case KEY_INCREASE:
         if (!mblRunning)
           mblNotifyError(false);
         else
@@ -256,21 +253,10 @@ void menuMBL(void)
         if (mblRunning)
           mblAbort();
 
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       default:
-        #if LCD_ENCODER_SUPPORT
-          if (encoderPosition)
-          {
-            if (!mblRunning)
-              mblNotifyError(false);
-            else
-              probeHeightMove(unit, encoderPosition < 0 ? -1 : 1);
-
-            encoderPosition = 0;
-          }
-        #endif
         break;
     }
 

@@ -18,7 +18,7 @@
     "onboard_tools": [
       "cmsis-dap"
     ],
-    "openocd_board": "stm32f4",
+    "openocd_target": "stm32f4x",
     "svd_path": "STM32F40x.svd"
   },
   "frameworks": [

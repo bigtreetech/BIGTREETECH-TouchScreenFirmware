@@ -8,6 +8,7 @@ extern "C" {
 #include <stdbool.h>
 #include <stdint.h>
 #include "variants.h"  // for ENC_ACTIVE_SIGNAL, LCD_ENCODER_SUPPORT etc...
+#include "menu.h"
 
 #if ENC_ACTIVE_SIGNAL
   void LCD_Enc_InitActiveSignal(bool marlinType_LCD12864);
@@ -23,6 +24,7 @@ extern "C" {
   void LCD_Enc_SendPulse(uint8_t num);      // send a pulse to the encoder
   bool LCD_Enc_CheckState(void);
   void LCD_Enc_CheckSteps(void);
+  KEY_VALUES LCD_Enc_KeyValue(void);  // return a value from provided variables based on encoder position
 #endif
 
 #ifdef __cplusplus

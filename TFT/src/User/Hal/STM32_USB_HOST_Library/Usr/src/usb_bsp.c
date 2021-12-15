@@ -42,11 +42,7 @@ void USB_OTG_BSP_Init(USB_OTG_CORE_HANDLE * pdev)
   // EXTI_InitTypeDef EXTI_InitStructure;
 #ifdef STM32F10X_CL
 
-#if defined(MKS_TFT)
-  RCC_OTGFSCLKConfig(RCC_OTGFSCLKSource_PLLVCO_Div2);
-#else
   RCC_OTGFSCLKConfig(RCC_OTGFSCLKSource_PLLVCO_Div3);
-#endif
   RCC_AHBPeriphClockCmd(RCC_AHBPeriph_OTG_FS, ENABLE);
 
 #else                           // USE_STM322xG_EVAL

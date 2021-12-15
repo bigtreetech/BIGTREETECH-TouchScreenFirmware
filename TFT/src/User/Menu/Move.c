@@ -29,16 +29,22 @@ void storeMoveCmd(AXIS xyz, int8_t direction)
 void drawXYZ(void)
 {
   char tempstr[20];
-  GUI_SetColor(INFOBOX_ICON_COLOR);
+  GUI_SetColor(infoSettings.status_color);
 
-  sprintf(tempstr, "X:%.2f  ", coordinateGetAxisActual(X_AXIS));
-  GUI_DispString(START_X + 1 * SPACE_X + 1 * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
+ #ifdef PORTRAIT
+    sprintf(tempstr, "X:%.2f  Y:%.2f  Z:%2.f", coordinateGetAxisActual(X_AXIS), coordinateGetAxisActual(Y_AXIS),
+            coordinateGetAxisActual(Z_AXIS));
+    GUI_DispString(START_X + 1 * SPACE_X + 1 * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
+  #else
+    sprintf(tempstr, "X:%.2f  ", coordinateGetAxisActual(X_AXIS));
+    GUI_DispString(START_X + 1 * SPACE_X + 1 * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
 
-  sprintf(tempstr, "Y:%.2f  ", coordinateGetAxisActual(Y_AXIS));
-  GUI_DispString(START_X + 2 * SPACE_X + 2 * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
+    sprintf(tempstr, "Y:%.2f  ", coordinateGetAxisActual(Y_AXIS));
+    GUI_DispString(START_X + 2 * SPACE_X + 2 * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
 
-  sprintf(tempstr, "Z:%.2f  ", coordinateGetAxisActual(Z_AXIS));
-  GUI_DispString(START_X + 3 * SPACE_X + 3 * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
+    sprintf(tempstr, "Z:%.2f  ", coordinateGetAxisActual(Z_AXIS));
+    GUI_DispString(START_X + 3 * SPACE_X + 3 * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
+  #endif
 
   GUI_SetColor(infoSettings.font_color);
 }
@@ -126,11 +132,7 @@ void menuMove(void)
   menuDrawPage(&moveItems);
   drawXYZ();
 
-  #if LCD_ENCODER_SUPPORT
-    encoderPosition = 0;
-  #endif
-
-  while (infoMenu.menu[infoMenu.cur] == menuMove)
+  while (MENU_IS(menuMove))
   {
     key_num = menuKeyGetValue();
     switch (key_num)
@@ -150,7 +152,7 @@ void menuMove(void)
         case KEY_ICON_5: storeMoveCmd(Y_AXIS, -1); break;  // Y move decrease if no invert
         case KEY_ICON_6: storeMoveCmd(X_AXIS, 1); break;   // X move increase if no invert
 
-        case KEY_ICON_7: infoMenu.cur--; break;
+        case KEY_ICON_7: CLOSE_MENU(); break;
       #else
         case KEY_ICON_0: storeMoveCmd(X_AXIS, 1); break;   // X move increase if no invert
         case KEY_ICON_1: storeMoveCmd(Y_AXIS, 1); break;   // Y move increase if no invert
@@ -166,16 +168,18 @@ void menuMove(void)
         case KEY_ICON_5: storeMoveCmd(Y_AXIS, -1); break;  // Y move decrease if no invert
         case KEY_ICON_6: storeMoveCmd(Z_AXIS, -1); break;  // Z move down if no invert
 
-        case KEY_ICON_7: infoMenu.cur--; break;
+        case KEY_ICON_7: CLOSE_MENU(); break;
       #endif
+
+        case KEY_INCREASE:
+          storeMoveCmd(nowAxis, 1);
+          break;
+
+        case KEY_DECREASE:
+          storeMoveCmd(nowAxis, -1);
+          break;
+
         default:
-          #if LCD_ENCODER_SUPPORT
-            if (encoderPosition)
-            {
-              storeMoveCmd(nowAxis, encoderPosition > 0 ? 1 : -1);
-              encoderPosition = 0;
-            }
-          #endif
           break;
     }
 

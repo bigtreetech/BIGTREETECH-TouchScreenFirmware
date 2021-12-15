@@ -187,4 +187,18 @@ void LCD_Enc_CheckSteps(void)
   }
 }
 
+KEY_VALUES LCD_Enc_KeyValue(void)
+{
+  if (encoderPosition == 0)
+  {
+    return KEY_IDLE;
+  }
+  else
+  {
+    int16_t encPosTemp = encoderPosition;
+    encoderPosition = 0;
+    return (encPosTemp > 0) ? KEY_INCREASE : KEY_DECREASE;
+  }
+}
+
 #endif  // LCD_ENCODER_SUPPORT

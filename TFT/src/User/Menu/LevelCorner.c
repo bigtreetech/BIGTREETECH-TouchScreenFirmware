@@ -31,14 +31,14 @@ static inline void drawProbeAccuracyIcon(MENUITEMS * levelItems)
 
   lvIcon.lines[0].h_align = LEFT;
   lvIcon.lines[0].v_align = BOTTOM;
-  lvIcon.lines[0].fn_color = ORANGE;
+  lvIcon.lines[0].fn_color = LC_VAL_COLOR;
   lvIcon.lines[0].text_mode = GUI_TEXTMODE_TRANS;
   lvIcon.lines[0].pos = loc;
   lvIcon.lines[0].font = FONT_SIZE_NORMAL;
 
   lvIcon.lines[1].h_align = LEFT;
   lvIcon.lines[1].v_align = BOTTOM;
-  lvIcon.lines[1].fn_color = WHITE;
+  lvIcon.lines[1].fn_color = LC_VAL_COLOR_2;
   lvIcon.lines[1].text_mode = GUI_TEXTMODE_TRANS;
   lvIcon.lines[1].pos = (GUI_POINT){loc.x - 2, loc.y - 2};
   lvIcon.lines[1].font = FONT_SIZE_NORMAL;
@@ -96,7 +96,7 @@ void menuLevelCorner(void)
   menuDrawPage(&levelCornerItems);
   drawProbeAccuracyIcon(&levelCornerItems);
 
-  while (infoMenu.menu[infoMenu.cur] == menuLevelCorner)
+  while (MENU_IS(menuLevelCorner))
   {
     key_num = menuKeyGetValue();
     switch (key_num)
@@ -113,7 +113,6 @@ void menuLevelCorner(void)
       {
         infoSettings.level_edge = editIntValue(edge_min, LEVELING_EDGE_DISTANCE_MAX,
                                                LEVELING_EDGE_DISTANCE_DEFAULT, infoSettings.level_edge);
-        menuDrawPage(&levelCornerItems);
         break;
       }
 
@@ -140,7 +139,7 @@ void menuLevelCorner(void)
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       default:

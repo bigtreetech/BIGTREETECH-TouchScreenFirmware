@@ -4,11 +4,13 @@
     // config.ini Parameter Settings - Screen Settings and Feature Settings
     #define STRING_EMULATED_M600          "Emuliere M600"
     #define STRING_EMULATED_M109_M190     "Emulated M109 / M190"
+    #define STRING_FILE_COMMENT_PARSING   "File comment parsing"
     #define STRING_ROTATED_UI             "UI drehen"
     #define STRING_LANGUAGE               "Deutsch"
     #define STRING_ACK_NOTIFICATION       "ACK - Stil"
     #define STRING_FILES_SORT_BY          "Sortiere Dateien nach"
     #define STRING_FILES_LIST_MODE        "Dateien als Liste"
+    #define STRING_FILENAME_EXTENSION     "Show filename extension"
     #define STRING_FAN_SPEED_PERCENTAGE   "Lüft. Geschw. in Prozent"
     #define STRING_PERSISTENT_INFO        "Persistente Status Info"
     #define STRING_TERMINAL_ACK           "Zeige ACK im Terminal"
@@ -143,6 +145,7 @@
     #define STRING_BUSY                   "Bitte warten ..."
     #define STRING_LOADING                "Lade ..."
     #define STRING_UNCONNECTED            "Keine Verbindung zum Drucker!"
+    #define STRING_LISTENING              "TFT in Listening Mode!"
 
     // Process Info
     #define STRING_INFO                   "Info" //Info Sign

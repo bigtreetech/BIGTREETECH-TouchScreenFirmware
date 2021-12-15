@@ -29,7 +29,7 @@ void runMacro(const char *display_name)
   request_M98(infoFile.title);
 
   ExitDir();
-  infoMenu.menu[++infoMenu.cur] = menuDummy;  // force a redraw
+  OPEN_MENU(menuDummy);  // force a redraw
 }
 
 // Draw Macro file list
@@ -61,7 +61,7 @@ void menuCallMacro(void)
 {
   uint16_t key_num = KEY_IDLE;
   uint8_t update = 1;
-  infoFile.cur_page = 0;
+  infoFile.curPage = 0;
   infoFile.source = BOARD_SD;
 
   GUI_Clear(MENU_BACKGROUND_COLOR);
@@ -69,7 +69,7 @@ void menuCallMacro(void)
 
   scanInfoFilesFs();
 
-  while (infoMenu.menu[infoMenu.cur] == menuCallMacro)
+  while (MENU_IS(menuCallMacro))
   {
     GUI_SetBkColor(infoSettings.title_bg_color);
     Scroll_DispString(&scrollLine, LEFT);
@@ -80,11 +80,11 @@ void menuCallMacro(void)
     switch (key_num)
     {
       case KEY_BACK:
-        infoFile.cur_page = 0;
+        infoFile.curPage = 0;
         if (IsRootDir() == true)
         {
           clearInfoFile();
-          infoMenu.cur--;
+          CLOSE_MENU();
           break;
         }
         else
@@ -107,14 +107,14 @@ void menuCallMacro(void)
               break;
             scanInfoFilesFs();
             update = 1;
-            infoFile.cur_page = 0;
+            infoFile.curPage = 0;
           }
           else if (key_num < infoFile.fileCount + infoFile.folderCount)  // gcode
           {
             if (infoHost.connected != true)
               break;
 
-            if (EnterDir(infoFile.Longfile[key_num - infoFile.folderCount]) == false)
+            if (EnterDir(infoFile.longFile[key_num - infoFile.folderCount]) == false)
               break;
 
             runMacro(infoFile.file[key_num - infoFile.folderCount]);
@@ -128,7 +128,7 @@ void menuCallMacro(void)
       update = 0;
 
       listViewCreate((LABEL){.address = (uint8_t *)infoFile.title}, NULL, infoFile.folderCount + infoFile.fileCount,
-                       &infoFile.cur_page, false, NULL, macroListDraw);
+                       &infoFile.curPage, false, NULL, macroListDraw);
 
       // set scrolling title text
       Scroll_CreatePara(&scrollLine, (uint8_t *)infoFile.title, &titleRect);
@@ -140,4 +140,3 @@ void menuCallMacro(void)
     loopProcess();
   }
 }
-

@@ -149,7 +149,7 @@ void menuShowParameter(void)
 
   listViewCreate(parameterTypes[curParameter], NULL, enabledElementCount, NULL, false, NULL, loadElements);
 
-  while (infoMenu.menu[infoMenu.cur] == menuShowParameter)
+  while (MENU_IS(menuShowParameter))
   {
     curIndex = listViewGetSelectedIndex();
 
@@ -160,7 +160,7 @@ void menuShowParameter(void)
         {
           parametersChanged = true;
         }
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       default:
@@ -242,7 +242,7 @@ void menuParameterSettings(void)
 
   listViewCreate(title, NULL, totalItems, &psCurPage, false, NULL, loadParameters);
 
-  while (infoMenu.menu[infoMenu.cur] == menuParameterSettings)
+  while (MENU_IS(menuParameterSettings))
   {
     curIndex = listViewGetSelectedIndex();
 
@@ -258,7 +258,7 @@ void menuParameterSettings(void)
         else
         {
           psCurPage = 0;
-          infoMenu.cur--;
+          CLOSE_MENU();
         }
         break;
 
@@ -270,7 +270,7 @@ void menuParameterSettings(void)
           if (curParameter < PARAMETERS_COUNT)
           {
             mustStoreCmd("M503 S0\n");
-            infoMenu.menu[++infoMenu.cur] = menuShowParameter;
+            OPEN_MENU(menuShowParameter);
           }
           break;
         }

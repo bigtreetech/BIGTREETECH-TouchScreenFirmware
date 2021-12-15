@@ -67,12 +67,9 @@ static void resetRequestCommandInfo(
 */
 bool request_M21(void)
 {
-  const char * sdString = (infoMachineSettings.firmwareType == FW_REPRAPFW) ? "card mounted " : "SD card ";
-  const char * errString1 = (infoMachineSettings.firmwareType == FW_REPRAPFW) ? "Error" : "No SD card";
-
-  resetRequestCommandInfo(sdString,               // The magic to identify the start
+  resetRequestCommandInfo("SD card ",               // The magic to identify the start
                           "ok",                   // The magic to identify the stop
-                          errString1,             // The first magic to identify the error response
+                          "No SD card",             // The first magic to identify the error response
                           "SD init fail",         // The second error magic
                           "volume.init failed");  // The third error magic
 

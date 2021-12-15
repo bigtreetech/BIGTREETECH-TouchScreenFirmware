@@ -125,7 +125,23 @@
   void ILI9341_SetDirection(uint8_t rotate)
   {
     LCD_WR_REG(0X36);
-    LCD_WR_DATA(rotate ? ILI9341_180_DEGREE_REG_VALUE : ILI9341_0_DEGREE_REG_VALUE);
+    switch (rotate)
+    {
+      case 0:
+        LCD_WR_DATA(ILI9341_180_DEGREE_REG_VALUE);
+        break;
+      case 1:
+        LCD_WR_DATA(ILI9341_0_DEGREE_REG_VALUE);
+        break;
+      case 2:
+        LCD_WR_DATA(ILI9341_90_DEGREE_REG_VALUE);
+        break;
+      case 3:
+        LCD_WR_DATA(ILI9341_270_DEGREE_REG_VALUE);
+        break;
+      default:
+        LCD_WR_DATA(ILI9341_180_DEGREE_REG_VALUE);        
+    }
   }
 
   void ILI9341_SetWindow(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey)

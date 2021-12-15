@@ -128,7 +128,7 @@ void menuPidWait(void)
   GUI_DispString(20, BYTE_HEIGHT * 5, textSelect(LABEL_PID_START_INFO_2));
   GUI_DispStringInRectEOL(20, BYTE_HEIGHT * 7, LCD_WIDTH - 20, LCD_HEIGHT, textSelect(LABEL_PID_START_INFO_3));
 
-  while (infoMenu.menu[infoMenu.cur] == menuPidWait)
+  while (MENU_IS(menuPidWait))
   {
     if (!isPressed)  // if touch screen is not yet pressed
     {
@@ -141,7 +141,7 @@ void menuPidWait(void)
     }
 
     if (isReleased)
-      infoMenu.cur--;
+      CLOSE_MENU();
 
     pidCheckTimeout();
 
@@ -177,7 +177,7 @@ static inline void pidStart(void)
   mustStoreCmd("M107\n");             // stop fan
   mustStoreCmd("M150 R0 U255 B0\n");  // set LED light to GREEN
 
-  infoMenu.menu[++infoMenu.cur] = menuPidWait;
+  OPEN_MENU(menuPidWait);
 }
 
 void menuPid(void)
@@ -217,16 +217,14 @@ void menuPid(void)
   menuDrawPage(&pidItems);
   temperatureReDraw(curTool_index, &pidHeaterTarget[curTool_index], false);
 
-  #if LCD_ENCODER_SUPPORT
-    encoderPosition = 0;
-  #endif
-
-  while (infoMenu.menu[infoMenu.cur] == menuPid)
+  while (MENU_IS(menuPid))
   {
     key_num = menuKeyGetValue();
+
     switch (key_num)
     {
       case KEY_ICON_0:
+      case KEY_DECREASE:
         if (pidHeaterTarget[curTool_index] > 0)
           pidHeaterTarget[curTool_index] =
               NOBEYOND(0, pidHeaterTarget[curTool_index] - degreeSteps[degreeSteps_index],
@@ -242,12 +240,12 @@ void menuPid(void)
         if (val != pidHeaterTarget[curTool_index])  // if value is different than target, change it
           pidHeaterTarget[curTool_index] = val;
 
-        menuDrawPage(&pidItems);
         temperatureReDraw(curTool_index, &pidHeaterTarget[curTool_index], false);
         break;
       }
 
       case KEY_ICON_3:
+      case KEY_INCREASE:
         if (pidHeaterTarget[curTool_index] < infoSettings.max_temp[curTool_index])
           pidHeaterTarget[curTool_index] =
               NOBEYOND(0, pidHeaterTarget[curTool_index] + degreeSteps[degreeSteps_index],
@@ -297,32 +295,10 @@ void menuPid(void)
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       default:
-        #if LCD_ENCODER_SUPPORT
-          if (encoderPosition)
-          {
-            if (encoderPosition > 0)
-            {
-              if (pidHeaterTarget[curTool_index] < infoSettings.max_temp[curTool_index])
-                pidHeaterTarget[curTool_index] =
-                    NOBEYOND(0, pidHeaterTarget[curTool_index] + degreeSteps[degreeSteps_index],
-                             infoSettings.max_temp[curTool_index]);
-            }
-            else  // if < 0
-            {
-              if (pidHeaterTarget[curTool_index] > 0)
-                pidHeaterTarget[curTool_index] =
-                    NOBEYOND(0, pidHeaterTarget[curTool_index] - degreeSteps[degreeSteps_index],
-                             infoSettings.max_temp[curTool_index]);
-            }
-
-            temperatureReDraw(curTool_index, &pidHeaterTarget[curTool_index], true);
-            encoderPosition = 0;
-          }
-        #endif
         break;
     }
 

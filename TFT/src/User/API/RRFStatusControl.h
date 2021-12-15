@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #include <stdbool.h>
+extern bool starting_print;
 
 void rrfStatusQuery(void);
 void rrfStatusQueryFast(void);

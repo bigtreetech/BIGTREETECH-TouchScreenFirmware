@@ -4,11 +4,13 @@
     // config.ini Parameter Settings - Screen Settings and Feature Settings
     #define STRING_EMULATED_M600          "Emulated M600"
     #define STRING_EMULATED_M109_M190     "Emulated M109 / M190"
+    #define STRING_FILE_COMMENT_PARSING   "File comment parsing"
     #define STRING_ROTATED_UI             "Rotate UI"
     #define STRING_LANGUAGE               "English"
     #define STRING_ACK_NOTIFICATION       "ACK notification style"
     #define STRING_FILES_SORT_BY          "Sort files by"
     #define STRING_FILES_LIST_MODE        "Files viewer List Mode"
+    #define STRING_FILENAME_EXTENSION     "Show filename extension"
     #define STRING_FAN_SPEED_PERCENTAGE   "Fan Speed in Percentage"
     #define STRING_PERSISTENT_INFO        "Persistent Status Info"
     #define STRING_TERMINAL_ACK           "Show ACK in Terminal"
@@ -143,6 +145,7 @@
     #define STRING_BUSY                   "Busy processing, please wait..."
     #define STRING_LOADING                "Loading..."
     #define STRING_UNCONNECTED            "No printer attached!"
+    #define STRING_LISTENING              "TFT in Listening Mode!"
 
     // Process Info
     #define STRING_INFO                   "Info"  // Info Sign
@@ -359,6 +362,6 @@
     #define STRING_MESH_VALID             "Mesh Validation"
     #define STRING_CONNECT_PROBE          "Connect probe before starting the process. Make sure to disconnect it afterwards."
     #define STRING_DISCONNECT_PROBE       "Make sure you have disconnected probe before using this feature."
-    #define STRING_CALIBRATION            "Calibration"
+    #define STRING_CALIBRATION            "Calibrate"
 
 #endif

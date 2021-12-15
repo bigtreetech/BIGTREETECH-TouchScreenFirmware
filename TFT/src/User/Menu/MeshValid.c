@@ -30,7 +30,7 @@ void menuMeshValid(void)
     refreshPreheatIcon(&preheatStore, i, &meshValidItems.items[i]);
   }
 
-  while (infoMenu.menu[infoMenu.cur] == menuMeshValid)
+  while (MENU_IS(menuMeshValid))
   {
     key_num = menuKeyGetValue();
     switch (key_num)
@@ -55,7 +55,7 @@ void menuMeshValid(void)
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       default:

@@ -4,11 +4,13 @@
     // config.ini Parameter Settings - Screen Settings and Feature Settings
     #define STRING_EMULATED_M600          "模拟M600"
     #define STRING_EMULATED_M109_M190     "Emulated M109 / M190"
+    #define STRING_FILE_COMMENT_PARSING   "File comment parsing"
     #define STRING_ROTATED_UI             "旋转界面"
     #define STRING_LANGUAGE               "简体中文"
     #define STRING_ACK_NOTIFICATION       "ACK 弹窗类型"
     #define STRING_FILES_SORT_BY          "Sort files by"
     #define STRING_FILES_LIST_MODE        "文件浏览列表模式"
+    #define STRING_FILENAME_EXTENSION     "Show filename extension"
     #define STRING_FAN_SPEED_PERCENTAGE   "百分比显示风扇速度"
     #define STRING_PERSISTENT_INFO        "顶部温度信息"
     #define STRING_TERMINAL_ACK           "在G-code终端中显示温度信息"
@@ -143,6 +145,7 @@
     #define STRING_BUSY                   "系统繁忙,请稍候..."
     #define STRING_LOADING                "加载中..."
     #define STRING_UNCONNECTED            "未连接到打印机!"
+    #define STRING_LISTENING              "TFT in Listening Mode!"
 
     // Process Info
     #define STRING_INFO                   "提示"

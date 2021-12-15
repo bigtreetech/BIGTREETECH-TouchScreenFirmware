@@ -91,7 +91,7 @@ void loopScreenShot(void)
    * - A long press of 1.5 seconds on touch screen to trigger a screenshot
    */
   #if LCD_ENCODER_SUPPORT
-    bool (*screenShotTriggered)(uint16_t ) = (infoMenu.menu[infoMenu.cur] == menuMarlinMode) ? Touch_Enc_ReadPen : LCD_Enc_ReadBtn;
+    bool (*screenShotTriggered)(uint16_t ) = (MENU_IS(menuMarlinMode)) ? Touch_Enc_ReadPen : LCD_Enc_ReadBtn;
 
     #define SCREEN_SHOT_TRIGGERED() screenShotTriggered(LCD_ENC_BUTTON_INTERVAL)
   #else
