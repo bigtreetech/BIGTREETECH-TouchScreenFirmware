@@ -417,18 +417,25 @@ Octoprint can optionally trigger some actions to the TFT sending specific gcodes
 
 **start:**
 M118 A1 P0 action:print_start
+  
 **end:**
 M118 A1 P0 action:print_end
+  
 **cancel:**
 M118 A1 P0 action:cancel
+  
 **pause:**
 M118 A1 P0 action:pause
+  
 **resume:**
 M118 A1 P0 action:resume
+  
 **time remaining progress:**
 M118 A1 P0 action:notification Time Left hms (e.g. 02h04m06s)
+  
 M117 Time Left hms
 **file data progress:**
+  
 M118 A1 P0 action:notification Data Left / (e.g. 123/12345)
 M117 Data Left /
 
