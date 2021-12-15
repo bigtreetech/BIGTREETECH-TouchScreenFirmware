@@ -10,6 +10,7 @@
     #define STRING_ACK_NOTIFICATION       "ACK notification style"
     #define STRING_FILES_SORT_BY          "Sort files by"
     #define STRING_FILES_LIST_MODE        "Zobraziť súbory ako zoznam"
+    #define STRING_FILENAME_EXTENSION     "Show filename extension"
     #define STRING_FAN_SPEED_PERCENTAGE   "Fan Speed As Percentage"
     #define STRING_PERSISTENT_INFO        "Trvalé info o stave"
     #define STRING_TERMINAL_ACK           "Show ACK in Terminal"

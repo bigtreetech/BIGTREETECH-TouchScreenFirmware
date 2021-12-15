@@ -86,7 +86,7 @@ bool scanPrintFilesFatFs(void)
       break;
 
     len = strlen(finfo.fname) + 1;
-    if ((finfo.fattrib & AM_DIR) == AM_DIR)
+    if ((finfo.fattrib & AM_DIR) == AM_DIR)  // if folder
     {
       if (infoFile.folderCount >= FOLDER_NUM)
         continue;
@@ -100,22 +100,25 @@ bool scanPrintFilesFatFs(void)
       // copy folder name
       memcpy(infoFile.folder[infoFile.folderCount++], finfo.fname, len);
     }
-    else
+    else  // if file
     {
       if (infoFile.fileCount >= FILE_NUM)
         continue;
 
-      if (strstr(finfo.fname, ".g") == NULL)  // support "*.g","*.gco" and "*.gcode"
+      if (isSupportedFile(finfo.fname) == NULL)  // if filename doesn't provide a supported filename extension
         continue;
 
-      infoFile.file[infoFile.fileCount] = malloc(len);
+      infoFile.file[infoFile.fileCount] = malloc(len + 1);  // plus one extra byte for filename extension check
       if (infoFile.file[infoFile.fileCount] == NULL)
         break;
 
       // copy date/time modified
       fileDate[infoFile.fileCount] = (finfo.fdate * 100000) + finfo.ftime;
       // copy file name
-      memcpy(infoFile.file[infoFile.fileCount++], finfo.fname, len);
+      strcpy(infoFile.file[infoFile.fileCount], finfo.fname);
+      infoFile.file[infoFile.fileCount][len] = 0;  // set to 0 the extra byte for filename extension check
+      infoFile.longFile[infoFile.fileCount] = 0;   // long filename is not supported, so always set it to 0
+      infoFile.fileCount++;
     }
   }
 

@@ -10,6 +10,7 @@
     #define STRING_ACK_NOTIFICATION       "ACK стиль уведомления"
     #define STRING_FILES_SORT_BY          "Сортировать по"
     #define STRING_FILES_LIST_MODE        "Файлы в режиме строк"
+    #define STRING_FILENAME_EXTENSION     "Show filename extension"
     #define STRING_FAN_SPEED_PERCENTAGE   "Скорость вентилятора в процентах"
     #define STRING_PERSISTENT_INFO        "Нагрев в инфостроке"
     #define STRING_TERMINAL_ACK           "ACK терминала (C°)"

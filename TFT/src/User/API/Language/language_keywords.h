@@ -17,6 +17,7 @@ extern "C" {
 #define LANG_KEY_ACK_NOTIFICATION             "label_ack_notification:"
 #define LANG_KEY_FILES_SORT_BY                "label_files_sort_by:"
 #define LANG_KEY_FILES_LIST_MODE              "label_files_list_mode:"
+#define LANG_KEY_FILENAME_EXTENSION           "label_filename_extension:"
 #define LANG_KEY_FAN_SPEED_PERCENTAGE         "label_fan_speed_percentage:"
 #define LANG_KEY_PERSISTENT_INFO              "label_persistent_info:"
 #define LANG_KEY_TERMINAL_ACK                 "label_terminal_ack:"

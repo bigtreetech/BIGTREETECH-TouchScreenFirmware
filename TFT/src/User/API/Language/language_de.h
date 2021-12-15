@@ -10,6 +10,7 @@
     #define STRING_ACK_NOTIFICATION       "ACK - Stil"
     #define STRING_FILES_SORT_BY          "Sortiere Dateien nach"
     #define STRING_FILES_LIST_MODE        "Dateien als Liste"
+    #define STRING_FILENAME_EXTENSION     "Show filename extension"
     #define STRING_FAN_SPEED_PERCENTAGE   "Lüft. Geschw. in Prozent"
     #define STRING_PERSISTENT_INFO        "Persistente Status Info"
     #define STRING_TERMINAL_ACK           "Zeige ACK im Terminal"

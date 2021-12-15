@@ -292,6 +292,7 @@ void menuUISettings(void)
     {CHARICON_BLANK,     LIST_CUSTOMVALUE, LABEL_ACK_NOTIFICATION,     LABEL_DYNAMIC},
     {CHARICON_BLANK,     LIST_CUSTOMVALUE, LABEL_FILES_SORT_BY,        LABEL_DYNAMIC},
     {CHARICON_TOGGLE_ON, LIST_TOGGLE,      LABEL_FILES_LIST_MODE,      LABEL_BACKGROUND},
+    {CHARICON_TOGGLE_ON, LIST_TOGGLE,      LABEL_FILENAME_EXTENSION,   LABEL_BACKGROUND},
     {CHARICON_TOGGLE_ON, LIST_TOGGLE,      LABEL_FAN_SPEED_PERCENTAGE, LABEL_BACKGROUND},
     {CHARICON_TOGGLE_ON, LIST_TOGGLE,      LABEL_PERSISTENT_INFO,      LABEL_BACKGROUND},
     {CHARICON_TOGGLE_ON, LIST_TOGGLE,      LABEL_TERMINAL_ACK,         LABEL_BACKGROUND},
@@ -311,15 +312,16 @@ void menuUISettings(void)
   setDynamicTextValue(0, (char *)itemNotificationType[infoSettings.ack_notification]);
   setDynamicTextValue(1, (char *)itemSortBy[infoSettings.files_sort_by]);
   uiItems[2].icon = iconToggle[infoSettings.files_list_mode];
-  uiItems[3].icon = iconToggle[infoSettings.fan_percentage];
-  uiItems[4].icon = iconToggle[infoSettings.persistent_info];
-  uiItems[5].icon = iconToggle[infoSettings.terminal_ack];
+  uiItems[3].icon = iconToggle[infoSettings.filename_extension];
+  uiItems[4].icon = iconToggle[infoSettings.fan_percentage];
+  uiItems[5].icon = iconToggle[infoSettings.persistent_info];
+  uiItems[6].icon = iconToggle[infoSettings.terminal_ack];
 
   #ifdef LED_COLOR_PIN
-    uiItems[6].valueLabel = led_color_names[infoSettings.knob_led_color];
+    uiItems[7].valueLabel = led_color_names[infoSettings.knob_led_color];
 
     #ifdef LCD_LED_PWM_CHANNEL
-      uiItems[7].icon = iconToggle[infoSettings.knob_led_idle];
+      uiItems[8].icon = iconToggle[infoSettings.knob_led_idle];
     #endif
   #endif
 
@@ -346,29 +348,34 @@ void menuUISettings(void)
         break;
 
       case 3:
+        infoSettings.filename_extension = (infoSettings.filename_extension + 1) % ITEM_TOGGLE_NUM;
+        uiItems[curIndex].icon = iconToggle[infoSettings.filename_extension];
+        break;
+
+      case 4:
         infoSettings.fan_percentage = (infoSettings.fan_percentage + 1) % ITEM_TOGGLE_NUM;
         uiItems[curIndex].icon = iconToggle[infoSettings.fan_percentage];
         break;
 
-      case 4:
+      case 5:
         infoSettings.persistent_info = (infoSettings.persistent_info + 1) % ITEM_TOGGLE_NUM;
         uiItems[curIndex].icon = iconToggle[infoSettings.persistent_info];
         break;
 
-      case 5:
+      case 6:
         infoSettings.terminal_ack = (infoSettings.terminal_ack + 1) % ITEM_TOGGLE_NUM;
         uiItems[curIndex].icon = iconToggle[infoSettings.terminal_ack];
         break;
 
       #ifdef LED_COLOR_PIN
-        case 6:
+        case 7:
           infoSettings.knob_led_color = (infoSettings.knob_led_color + 1 ) % LED_COLOR_COUNT;
           uiItems[curIndex].valueLabel = led_color_names[infoSettings.knob_led_color];
           Knob_LED_SetColor(led_colors[infoSettings.knob_led_color], infoSettings.neopixel_pixels);
           break;
 
         #ifdef LCD_LED_PWM_CHANNEL
-          case 7:
+          case 8:
             infoSettings.knob_led_idle = (infoSettings.knob_led_idle + 1) % ITEM_TOGGLE_NUM;
             uiItems[curIndex].icon = iconToggle[infoSettings.knob_led_idle];
             break;
@@ -560,7 +567,10 @@ void menuScreenSettings(void)
     switch (curIndex)
     {
       case KEY_ICON_0:
-        infoSettings.rotated_ui = !infoSettings.rotated_ui;
+        if (infoSettings.rotated_ui == 0 || infoSettings.rotated_ui == 2) //support VERTICAL GUI
+          infoSettings.rotated_ui++;
+        else
+          infoSettings.rotated_ui--;
         LCD_RefreshDirection(infoSettings.rotated_ui);
         TSC_Calibration();
         menuDrawPage(&screenSettingsItems);

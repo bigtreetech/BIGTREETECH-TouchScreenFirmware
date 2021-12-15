@@ -49,7 +49,7 @@ void HD44780_Config(CIRCULAR_QUEUE *queue)
   NVIC_InitTypeDef NVIC_InitStructure;
 
   // Connect GPIOB15 to the interrupt line
-  #if !defined(TFT24_V1_1)
+  #if !defined(TFT24_V1_1) && !defined(TFT24_V1_1_P)
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);           // Enable SYSCFG clock
     SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOB, EXTI_PinSource15);   // PB15 is connected to interrupt line 15
   #else

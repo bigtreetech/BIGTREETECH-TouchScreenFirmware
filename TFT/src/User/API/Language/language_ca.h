@@ -10,6 +10,7 @@
     #define STRING_ACK_NOTIFICATION       "ACK notification style"
     #define STRING_FILES_SORT_BY          "Sort files by"
     #define STRING_FILES_LIST_MODE        "Mode de visualització de fitxers"
+    #define STRING_FILENAME_EXTENSION     "Show filename extension"
     #define STRING_FAN_SPEED_PERCENTAGE   "Fan Speed As Percentage"
     #define STRING_PERSISTENT_INFO        "Informació d'estat persistent"
     #define STRING_TERMINAL_ACK           "Mostra ACK a la terminal"

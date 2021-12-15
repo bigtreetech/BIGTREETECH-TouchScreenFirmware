@@ -9,22 +9,41 @@ static bool list_mode = true;
 
 const GUI_RECT titleRect = {10, (TITLE_END_Y - BYTE_HEIGHT) / 2, LCD_WIDTH - 10, (TITLE_END_Y - BYTE_HEIGHT) / 2 + BYTE_HEIGHT};
 
-const GUI_RECT gcodeRect[NUM_PER_PAGE] = {
-  {BYTE_WIDTH/2+0*SPACE_X_PER_ICON, 1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2,
-   1*SPACE_X_PER_ICON-BYTE_WIDTH/2, 1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
+#ifdef PORTRAIT
+  const GUI_RECT gcodeRect[NUM_PER_PAGE] = {
+    {BYTE_WIDTH/2+0*SPACE_X_PER_ICON, 1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2,
+     1*SPACE_X_PER_ICON-BYTE_WIDTH/2, 1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
 
-  {BYTE_WIDTH/2+1*SPACE_X_PER_ICON, 1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2,
-   2*SPACE_X_PER_ICON-BYTE_WIDTH/2, 1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
+    {BYTE_WIDTH/2+1*SPACE_X_PER_ICON, 1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2,
+     2*SPACE_X_PER_ICON-BYTE_WIDTH/2, 1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
 
-  {BYTE_WIDTH/2+2*SPACE_X_PER_ICON, 1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2,
-   3*SPACE_X_PER_ICON-BYTE_WIDTH/2, 1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
+    {BYTE_WIDTH/2+2*SPACE_X_PER_ICON, 1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2,
+     3*SPACE_X_PER_ICON-BYTE_WIDTH/2, 1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
 
-  {BYTE_WIDTH/2+3*SPACE_X_PER_ICON, 1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2,
-   4*SPACE_X_PER_ICON-BYTE_WIDTH/2, 1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
+    {BYTE_WIDTH/2+0*SPACE_X_PER_ICON, 2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2,
+     1*SPACE_X_PER_ICON-BYTE_WIDTH/2, 2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
 
-  {BYTE_WIDTH/2+0*SPACE_X_PER_ICON, 2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2,
-   1*SPACE_X_PER_ICON-BYTE_WIDTH/2, 2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
-};
+    {BYTE_WIDTH/2+1*SPACE_X_PER_ICON, 2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2,
+     2*SPACE_X_PER_ICON-BYTE_WIDTH/2, 2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
+  };
+#else
+  const GUI_RECT gcodeRect[NUM_PER_PAGE] = {
+    {BYTE_WIDTH/2+0*SPACE_X_PER_ICON, 1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2,
+     1*SPACE_X_PER_ICON-BYTE_WIDTH/2, 1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
+
+    {BYTE_WIDTH/2+1*SPACE_X_PER_ICON, 1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2,
+     2*SPACE_X_PER_ICON-BYTE_WIDTH/2, 1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
+
+    {BYTE_WIDTH/2+2*SPACE_X_PER_ICON, 1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2,
+     3*SPACE_X_PER_ICON-BYTE_WIDTH/2, 1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
+
+    {BYTE_WIDTH/2+3*SPACE_X_PER_ICON, 1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2,
+     4*SPACE_X_PER_ICON-BYTE_WIDTH/2, 1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
+
+    {BYTE_WIDTH/2+0*SPACE_X_PER_ICON, 2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2,
+     1*SPACE_X_PER_ICON-BYTE_WIDTH/2, 2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
+  };
+#endif
 
 void normalNameDisp(const GUI_RECT *rect, uint8_t *name)
 {
@@ -40,20 +59,21 @@ void normalNameDisp(const GUI_RECT *rect, uint8_t *name)
 void gocdeIconDraw(void)
 {
   uint8_t i = 0;
+  uint8_t baseIndex = infoFile.curPage * NUM_PER_PAGE;
   ITEM curItem = {ICON_BACKGROUND, LABEL_BACKGROUND};
 
   // draw folders
-  for (i = 0; (i + infoFile.cur_page * NUM_PER_PAGE < infoFile.folderCount) && (i < NUM_PER_PAGE); i++)
+  for (i = 0; (i + baseIndex < infoFile.folderCount) && (i < NUM_PER_PAGE); i++)
   {
     curItem.icon = ICON_FOLDER;
     menuDrawItem(&curItem, i);
-    normalNameDisp(&gcodeRect[i], (uint8_t*)infoFile.folder[i + infoFile.cur_page * NUM_PER_PAGE]);
+    normalNameDisp(&gcodeRect[i], (uint8_t*)infoFile.folder[i + baseIndex]);
   }
 
-  // draw files
-  for (; (i + infoFile.cur_page * NUM_PER_PAGE < infoFile.fileCount + infoFile.folderCount) && (i < NUM_PER_PAGE); i++)
+  // draw gcode files
+  for (; (i + baseIndex < infoFile.folderCount + infoFile.fileCount) && (i < NUM_PER_PAGE); i++)
   {
-    if (EnterDir(infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.folderCount]) == false)
+    if (EnterDir(infoFile.file[i + baseIndex - infoFile.folderCount]) == false)  // always use short filename for file path
       break;
     // if model preview bmp exists, display bmp directly without writing to flash
     if (infoMachineSettings.firmwareType == FW_REPRAPFW || !model_DirectDisplay(getIconStartPoint(i), infoFile.title))
@@ -62,7 +82,9 @@ void gocdeIconDraw(void)
       menuDrawItem(&curItem, i);
     }
     ExitDir();
-    normalNameDisp(&gcodeRect[i], (uint8_t*)infoFile.file[i + infoFile.cur_page * NUM_PER_PAGE - infoFile.folderCount]);
+
+    hideFileExtension(i + baseIndex - infoFile.folderCount);  // hide filename extension if filename extension feature is disabled
+    normalNameDisp(&gcodeRect[i], (uint8_t*)infoFile.file[i + baseIndex - infoFile.folderCount]);  // always use short filename
   }
 
   // clear blank icons
@@ -76,24 +98,19 @@ void gocdeIconDraw(void)
 // update items in list mode
 void gocdeListDraw(LISTITEM * item, uint16_t index, uint8_t itemPos)
 {
-  if (index < infoFile.folderCount)
+  if (index < infoFile.folderCount)  // folder
   {
-    // folder
     item->icon = CHARICON_FOLDER;
     item->titlelabel.index = LABEL_DYNAMIC;
     item->itemType = LIST_LABEL;
     setDynamicLabel(itemPos, infoFile.folder[index]);
   }
-  else if (index < (infoFile.fileCount + infoFile.folderCount))
+  else if (index < (infoFile.folderCount + infoFile.fileCount))  // gcode file
   {
-    // gcode file
     item->icon = CHARICON_FILE;
     item->itemType = LIST_LABEL;
     item->titlelabel.index = LABEL_DYNAMIC;
-    if (infoMachineSettings.longFilename == ENABLED && infoFile.source == BOARD_SD)
-      setDynamicLabel(itemPos, infoFile.Longfile[index - infoFile.folderCount]);
-    else
-      setDynamicLabel(itemPos, infoFile.file[index - infoFile.folderCount]);
+    setDynamicLabel(itemPos, hideFileExtension(index - infoFile.folderCount));  // hide filename extension if filename extension feature is disabled
   }
 }
 
@@ -107,6 +124,7 @@ void startPrint(void)
 bool printPageItemSelected(uint16_t index)
 {
   bool hasUpdate = true;
+
   if (index < infoFile.folderCount)  // folder
   {
     if (EnterDir(infoFile.folder[index]) == false)
@@ -116,14 +134,15 @@ bool printPageItemSelected(uint16_t index)
     else
     {
       scanPrintFiles();
-      infoFile.cur_page = 0;
+      infoFile.curPage = 0;
     }
   }
-  else if (index < infoFile.folderCount + infoFile.fileCount)  // gcode
+  else if (index < infoFile.folderCount + infoFile.fileCount)  // gcode file
   {
     infoFile.fileIndex = index - infoFile.folderCount;
+    char * filename = restoreFileExtension(infoFile.fileIndex);  // restore filename extension if filename extension feature is disabled
 
-    if (infoHost.connected != true || EnterDir(infoFile.file[infoFile.fileIndex]) == false)
+    if (infoHost.connected != true || EnterDir(infoFile.file[infoFile.fileIndex]) == false)  // always use short filename for file path
     {
       hasUpdate = false;
     }
@@ -133,10 +152,8 @@ bool printPageItemSelected(uint16_t index)
       setPrintModelIcon(infoFile.source < BOARD_SD && model_DecodeToFlash(infoFile.title));
 
       char temp_info[FILE_NUM + 50];
-      sprintf(temp_info, (char *)textSelect(LABEL_START_PRINT),
-              (uint8_t *)((infoMachineSettings.longFilename == ENABLED && infoFile.source == BOARD_SD) ?
-                              infoFile.Longfile[infoFile.fileIndex] :
-                              infoFile.file[infoFile.fileIndex]));
+      sprintf(temp_info, (char *)textSelect(LABEL_START_PRINT), (uint8_t *)(filename));  // display short or long filename
+
       // confirm file selction
       setDialogText(LABEL_PRINT, (uint8_t *)temp_info, LABEL_CONFIRM, LABEL_CANCEL);
       showDialog(DIALOG_TYPE_QUESTION, startPrint, ExitDir, NULL);
@@ -144,6 +161,7 @@ bool printPageItemSelected(uint16_t index)
       hasUpdate = false;
     }
   }
+
   return hasUpdate;
 }
 
@@ -207,24 +225,24 @@ void menuPrintFromSource(void)
       {
         case KEY_ICON_5:
         case KEY_DECREASE:
-          if (infoFile.cur_page > 0)
+          if (infoFile.curPage > 0)
           {
-            infoFile.cur_page--;
+            infoFile.curPage--;
             update = 2;  // request no title bar update
           }
           break;
 
         case KEY_ICON_6:
         case KEY_INCREASE:
-          if (infoFile.cur_page + 1 < pageCount)
+          if (infoFile.curPage + 1 < pageCount)
           {
-            infoFile.cur_page++;
+            infoFile.curPage++;
             update = 2;  // request no title bar update
           }
           break;
 
         case KEY_ICON_7:
-          infoFile.cur_page = 0;
+          infoFile.curPage = 0;
 
           if (IsRootDir() == true)
           {
@@ -244,7 +262,8 @@ void menuPrintFromSource(void)
           break;
 
         default:
-          update = printPageItemSelected(infoFile.cur_page * NUM_PER_PAGE + key_num);
+          if (printPageItemSelected(infoFile.curPage * NUM_PER_PAGE + key_num))
+            update = 1;
           break;
       }
     }
@@ -294,7 +313,7 @@ void menuPrintFromSource(void)
       else
       { // title bar is also drawn by listViewCreate
         listViewCreate((LABEL){.address = (uint8_t *)infoFile.title}, NULL, infoFile.folderCount + infoFile.fileCount,
-                       &infoFile.cur_page, false, NULL, gocdeListDraw);
+                       &infoFile.curPage, false, NULL, gocdeListDraw);
       }
 
       Scroll_CreatePara(&scrollLine, (uint8_t *)infoFile.title, &titleRect);

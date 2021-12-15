@@ -27,7 +27,11 @@ void initSettings(void)
                                          (FILE_COMMENT_PARSING << INDEX_FILE_COMMENT_PARSING));
 
 // UI Settings
-  infoSettings.rotated_ui             = ROTATED_UI;
+  #ifdef PORTRAIT
+    infoSettings.rotated_ui             = 3;
+  #else
+    infoSettings.rotated_ui             = ROTATED_UI;
+  #endif
   infoSettings.language               = LANGUAGE;
   infoSettings.status_screen          = STATUS_SCREEN;
   infoSettings.title_bg_color         = lcd_colors[TITLE_BACKGROUND_COLOR];
@@ -45,6 +49,7 @@ void initSettings(void)
   infoSettings.ack_notification       = ACK_NOTIFICATION;
   infoSettings.files_sort_by          = FILES_SORT_BY;
   infoSettings.files_list_mode        = FILES_LIST_MODE;
+  infoSettings.filename_extension     = FILENAME_EXTENSION;
   infoSettings.fan_percentage         = FAN_SPEED_PERCENTAGE;
   infoSettings.persistent_info        = PERSISTENT_INFO;
   infoSettings.terminal_ack           = TERMINAL_ACK;
