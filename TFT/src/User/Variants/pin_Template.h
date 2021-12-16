@@ -1,8 +1,10 @@
-#ifndef _PIN_TEMPLATE_H_ // modify to actual filename !!!
-#define _PIN_TEMPLATE_H_ // modify to actual filename !!!
+#ifndef _PIN_TEMPLATE_H_  // modify to actual filename !!!
+#define _PIN_TEMPLATE_H_  // modify to actual filename !!!
 
 // MCU type (STM32F10x, STM32F2xx, STM32F4xx)
 //#include "stm32fxxx.h"
+
+#undef PORTRAIT_MODE  // comment this line in case the TFT variant supports Portrait Mode
 
 // LCD resolution, font and icon size
 #ifndef TFT_RESOLUTION
@@ -25,11 +27,7 @@
 
 // Hardware version config
 #ifndef HARDWARE_VERSION
-  #ifdef PORTRAIT_MODE
-    #define HARDWARE_VERSION "TFTxx_Vx.x_P"
-  #else
-    #define HARDWARE_VERSION "TFTxx_Vx.x"
-  #endif
+  #define HARDWARE_VERSION "TFTxx_Vx.x"
 #endif
 
 // Software manufacturer

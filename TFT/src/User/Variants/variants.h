@@ -68,7 +68,7 @@
 #define _FONT_H(size) (size >> 8)
 #define _FONT_W(size) (size & 0xFF)
 
-#define FONT_SIZE_NORMAL _FONT_SIZE(BYTE_HEIGHT, BYTE_WIDTH)  // Normal font for common menu
+#define FONT_SIZE_NORMAL _FONT_SIZE(BYTE_HEIGHT, BYTE_WIDTH)              // Normal font for common menu etc...
 #define FONT_SIZE_LARGE  _FONT_SIZE(LARGE_BYTE_HEIGHT, LARGE_BYTE_WIDTH)  // Large font for numpad menu etc...
 
 #endif

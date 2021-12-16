@@ -73,7 +73,12 @@
   void SSD1963_SetDirection(uint8_t rotate)
   {
     LCD_WR_REG(0X36);
-    LCD_WR_DATA(rotate ? SSD1963_180_DEGREE_REG_VALUE : SSD1963_0_DEGREE_REG_VALUE);
+  
+    #ifdef PORTRAIT_MODE
+      LCD_WR_DATA(rotate ? SSD1963_270_DEGREE_REG_VALUE : SSD1963_90_DEGREE_REG_VALUE);
+    #else
+      LCD_WR_DATA(rotate ? SSD1963_180_DEGREE_REG_VALUE : SSD1963_0_DEGREE_REG_VALUE);
+    #endif
   }
 
   void SSD1963_SetWindow(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey)

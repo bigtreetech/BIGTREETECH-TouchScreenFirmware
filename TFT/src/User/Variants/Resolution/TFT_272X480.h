@@ -1,8 +1,8 @@
-#ifndef _TFT_480_272_H_
-#define _TFT_480_272_H_
+#ifndef _TFT_272_480_H_
+#define _TFT_272_480_H_
 
-#define LCD_WIDTH  480
-#define LCD_HEIGHT 272
+#define LCD_WIDTH  272
+#define LCD_HEIGHT 480
 
 #ifndef BYTE_HEIGHT
   #define BYTE_HEIGHT 24
@@ -20,8 +20,8 @@
 
 #define ICON_WIDTH   95
 #define ICON_HEIGHT  80
-#define TITLE_END_Y  30                  // title height
-#define ICON_START_Y (TITLE_END_Y + 10)  // top margin
+#define TITLE_END_Y  25                 // title height
+#define ICON_START_Y (TITLE_END_Y + 4)  // top margin
 
 #define LIST_ICON_WIDTH  85
 #define LIST_ICON_HEIGHT 60
@@ -33,7 +33,7 @@
 #define SMALLICON_HEIGHT 55
 
 // Status Screen menu
-#define SSICON_COUNT             4
+#define SSICON_COUNT             2
 #define SSICON_WIDTH             ICON_WIDTH
 #define SSICON_HEIGHT            ICON_HEIGHT
 #define SSICON_NAME_Y0           5
@@ -58,9 +58,9 @@
 #define PICON_LG_WIDTH  154
 #define PICON_SM_WIDTH  121
 #define PICON_HEIGHT    48
-#define PICON_SPACE_X   ((LCD_WIDTH - PICON_LG_WIDTH * 2 - PICON_SM_WIDTH - SPACE_X) / 2)
+#define PICON_SPACE_X   (LCD_WIDTH - PICON_LG_WIDTH * 2 - SPACE_X)
 #define PICON_SPACE_Y   ((ICON_HEIGHT + SPACE_Y - PICON_HEIGHT * 2) / 4)
-#define PICON_START_Y   (TITLE_END_Y + 5)
+#define PICON_START_Y   (TITLE_END_Y + 4 + (ICON_HEIGHT + SPACE_Y - PICON_HEIGHT * 2 - PICON_SPACE_Y * 2))
 #define PICON_TITLE_X   52
 #define PICON_TITLE_Y   0
 #define PICON_VAL_X     PICON_TITLE_X
@@ -73,9 +73,10 @@
 #define POPUP_TITLE_HEIGHT        35
 #define POPUP_BOTTOM_HEIGHT       50
 #define POPUP_BUTTON_HEIGHT       35
-#define POPUP_RECT_SINGLE_CONFIRM {180, LCD_HEIGHT - SPACE_Y / 2 - 10 - POPUP_BUTTON_HEIGHT, 300, LCD_HEIGHT - SPACE_Y / 2 - 5}
-#define POPUP_RECT_DOUBLE_CONFIRM {90,  LCD_HEIGHT - SPACE_Y / 2 - 10 - POPUP_BUTTON_HEIGHT, 210, LCD_HEIGHT - SPACE_Y / 2 - 5}
-#define POPUP_RECT_DOUBLE_CANCEL  {270, LCD_HEIGHT - SPACE_Y / 2 - 10 - POPUP_BUTTON_HEIGHT, 390, LCD_HEIGHT - SPACE_Y / 2 - 5}
+#define POPUP_BUTTON_WIDTH        ((LCD_WIDTH - SPACE_X * 7) / 2)
+#define POPUP_RECT_SINGLE_CONFIRM {LCD_WIDTH / 2 - POPUP_BUTTON_WIDTH / 2, LCD_HEIGHT - SPACE_Y - 5 - POPUP_BUTTON_HEIGHT, LCD_WIDTH / 2 + POPUP_BUTTON_WIDTH / 2, LCD_HEIGHT - SPACE_Y - 5}
+#define POPUP_RECT_DOUBLE_CONFIRM {SPACE_X * 3, LCD_HEIGHT - SPACE_Y - 5 - POPUP_BUTTON_HEIGHT, SPACE_X * 3 + POPUP_BUTTON_WIDTH, LCD_HEIGHT - SPACE_Y - 5}
+#define POPUP_RECT_DOUBLE_CANCEL  {SPACE_X * 4 + POPUP_BUTTON_WIDTH * 1, LCD_HEIGHT - SPACE_Y - 5 - POPUP_BUTTON_HEIGHT, SPACE_X * 4 + POPUP_BUTTON_WIDTH * 2, LCD_HEIGHT - SPACE_Y - 5}
 
 // The offset of the model preview icon in the gcode file
 #define MODEL_PREVIEW_OFFSET 0x4D6E
