@@ -158,17 +158,10 @@ static inline void pidStart(void)
   pidUpdateCounter();  // update the number of set temperatures (number of PID processes to execute)
   pidTimeout = OS_GetTimeMs() + PID_PROCESS_TIMEOUT;  // set timeout for overall PID process
 
-  KNOB_LED_SET_COLOR(LED_RED, infoSettings.neopixel_pixels);  // set knob LED light to RED
+  LED_SetColor(255, 0, 0);  // set (neopixel) LED light to RED
 
   if (infoMachineSettings.firmwareType != FW_REPRAPFW)
-  {
-    mustStoreCmd("M150 R255 U0 B0 P255 I255\n");  // set (neopixel) LED light to RED
-    mustStoreCmd("M106 S255\n");                  // set fan speed to max
-  }
-  else
-  {
-    mustStoreCmd("M150 X2 R255 U0 B0 P255\n");    // set (neopixel) LED light to RED
-  }
+    mustStoreCmd("M106 S255\n");  // set fan speed to max
 
   mustStoreCmd("G4 S1\n");  // wait 1 sec
 
@@ -183,12 +176,7 @@ static inline void pidStart(void)
 
   mustStoreCmd("M107\n");  // stop fan
 
-  if (infoMachineSettings.firmwareType != FW_REPRAPFW)
-    mustStoreCmd("M150 R0 U255 B0 P255 I255\n");  // set (neopixel) LED light to GREEN
-  else
-    mustStoreCmd("M150 X2 R0 U255 B0 P255\n");    // set (neopixel) LED light to GREEN
-
-  KNOB_LED_SET_COLOR(LED_GREEN, infoSettings.neopixel_pixels);  // set knob LED light to GREEN
+  LED_SetColor(0, 255, 0);  // set (neopixel) LED light to GREEN
 
   OPEN_MENU(menuPidWait);
 }

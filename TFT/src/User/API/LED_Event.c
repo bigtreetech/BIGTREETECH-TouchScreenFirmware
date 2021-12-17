@@ -1,246 +1,186 @@
 #include "LED_Event.h"
 #include "includes.h"
 
-#define UPDATE_TIME  2000  // 1 seconds is 1000
-#define MAXCOLD_TEMP 50
-#define DEFAULT_COLDTEMP 25
+#define UPDATE_TIME 2000  // 1 seconds is 1000
 
 uint32_t lastUpdateTime = 0;
-uint8_t prevPixelColor = 0;
+uint8_t prevLedValue = 0;
 bool heatingDone = false;
-bool finishedPrint = false;
-#ifdef LED_COLOR_PIN
-  #ifdef LCD_LED_PWM_CHANNEL
-    bool idle_ledmode_previous = false;
-  #endif
+bool printingDone = false;
+
+#if defined(LED_COLOR_PIN) && defined(LCD_LED_PWM_CHANNEL)
+  bool knob_led_idle = false;
+
+  #define SET_KNOB_LED_IDLE(enabled) setKnobLedIdle(enabled)
+#else
+  #define SET_KNOB_LED_IDLE(enabled)
 #endif
-uint16_t coldTemperature = 0;
+
+//#define ROOM_TEMPERATURE
+#ifdef ROOM_TEMPERATURE
+  #define MAX_COLD_TEMP     50
+  #define DEFAULT_COLD_TEMP 25
+
+  uint16_t coldTemperature = 0;
+
+  #define COLD_TEMPERATURE coldTemperature
+#else
+  #define COLD_TEMPERATURE 0
+#endif
 
 inline static bool nextUpdate(void)
 {
   uint32_t curTime = OS_GetTimeMs();
+
   if (curTime > (lastUpdateTime + UPDATE_TIME))
   {
     lastUpdateTime = curTime;
+
     return true;
   }
+
+  return false;
+}
+
+#if defined(LED_COLOR_PIN) && defined(LCD_LED_PWM_CHANNEL)
+
+void setKnobLedIdle(bool enabled)
+{
+  if (!enabled)
+  { // set infoSettings.knob_led_idle temporary to OFF
+    if (infoSettings.knob_led_idle && !knob_led_idle)
+    {
+      knob_led_idle = true;
+      infoSettings.knob_led_idle = 0;  // turn knob_led_idle off
+    }
+  }
   else
-  {
-    return false;
+  { // make sure that infoSettings.knob_led_idle is back in business
+    if (knob_led_idle)
+    {
+      knob_led_idle = false;
+      infoSettings.knob_led_idle = 1;  // turn knob_led_idle on
+    }
   }
 }
 
-void LED_SetEventColor(void)
-{
-  if (!nextUpdate())
-    return;
+#endif  // defined(LED_COLOR_PIN) && defined(LCD_LED_PWM_CHANNEL)
 
-  // Let's estimate the room temperature
+#ifdef ROOM_TEMPERATURE
+
+void getColdTemperature(void)
+{ // let's estimate the room temperature
   if (coldTemperature == 0)
   {
     uint16_t hotendCurrentTemp = heatGetCurrentTemp(NOZZLE0);
-    uint16_t bedCurrentTemp    = heatGetCurrentTemp(BED);
+    uint16_t bedCurrentTemp = heatGetCurrentTemp(BED);
     uint8_t divider = 0;
-    if (hotendCurrentTemp < MAXCOLD_TEMP)
+
+    if (hotendCurrentTemp < MAX_COLD_TEMP)
     {
       coldTemperature = hotendCurrentTemp;
       divider++;
     }
-    if (bedCurrentTemp < MAXCOLD_TEMP)
+
+    if (bedCurrentTemp < MAX_COLD_TEMP)
     {
       coldTemperature = bedCurrentTemp;
       divider++;
     }
+
     if (coldTemperature == 0)
-    {
-      coldTemperature = DEFAULT_COLDTEMP;
-    }
+      coldTemperature = DEFAULT_COLD_TEMP;
     else
-    {
       coldTemperature = coldTemperature / divider;
-    }
   }
+}
+
+#endif  // ROOM_TEMPERATURE
+
+void LED_CheckEvent(void)
+{
+  #ifdef ROOM_TEMPERATURE
+    getColdTemperature();
+  #endif
 
   if (!isPrinting())
   {
-    // Not printing/
-    // Check if the previous color has been set.
-    // If not, return to reduce cycletime
-    if (prevPixelColor == 0) return;
+    if (prevLedValue == 0)  // if no color was set yet, nothing to do
+      return;
 
-    // There was a previous color.
-    // Set every led to the correct color.
-
-    // Reset flag heating done
-    heatingDone = false;
-
-    if (infoMenu.menu[infoMenu.cur] != menuPrinting)
+    if (!(MENU_IS(menuPrinting)))
     {
-      #ifdef LED_COLOR_PIN
-        #ifdef LCD_LED_PWM_CHANNEL
-          // Make sure that the knob_led_idle is back in business
-          if (idle_ledmode_previous)
-          {
-            idle_ledmode_previous = false;
-            infoSettings.knob_led_idle = 1;
-          }
-        #endif
-      #endif
+      prevLedValue = 0;      // reset color to default value
+      heatingDone = false;   // reset flag to "false"
+      printingDone = false;  // reset flag to "false"
 
-      // Restore colors to default value
-      prevPixelColor = 0;
+      LED_SetColor(0, 0, 0);    // set (neopixel) LED light to OFF
+      SET_KNOB_LED_IDLE(true);  // make sure that infoSettings.knob_led_idle is back in business
+      LCD_WAKE();               // if LCD is dimmed, restore LCD and encoder knob LED to their default values
 
-      // Reset print fineshed bool
-      finishedPrint = false;
-
-      // Turn off neopixels and set knob led back to default
-      storeCmd("M150 R0 U0 B0 P0\n");
-
-      #ifdef LED_COLOR_PIN
-        #ifdef LCD_LED_PWM_CHANNEL
-          // set the screen to the max brightness
-          // The encoder knob will get it's default color.
-//          lcd_dim.dimmed = true; // Force dimmed mode
-          LCD_WAKE();
-        #endif
-      #endif
       return;
     }
 
-  
-    if (finishedPrint)
-    {
-      // Check if print is already marked as ready.
-      // No need to change the LED's  again
+    if (printingDone)  // if printing is finished, nothing to do
       return;
-    }
 
-    #ifdef LED_COLOR_PIN
-      #ifdef LCD_LED_PWM_CHANNEL
-      // set the knob_led_idle temperorly to OFF
-      if (infoSettings.knob_led_idle && !idle_ledmode_previous)
-      {
-        idle_ledmode_previous = true;
-        infoSettings.knob_led_idle = 0; //Temperory turn off led idle
-      }
-      #endif
-    #endif
+    printingDone = true;  // set flag to "true"
 
-    // Set neopixel and ledknob to green
-    storeCmd("M150 R0 U255 B0 P255\n");
-
-    KNOB_LED_SET_COLOR(LED_GREEN, infoSettings.neopixel_pixels);  // set knob LED light to GREEN
-
-    finishedPrint = true;
-    return;
+    LED_SetColor(0, 255, 0);   // set (neopixel) LED light to GREEN
+    SET_KNOB_LED_IDLE(false);  // set infoSettings.knob_led_idle temporary to OFF
   }
   else
   {
+    if (!isTFTPrinting() || heatingDone)  // if not printng from TFT or if heating is finished, nothing to do
+      return;
 
-    if (heatingDone)
-    {
-      return; // Go back when preheating is finished
-    }
+    if (!nextUpdate())  // if not time for a new update, nothing to do
+      return;
 
-    // Store current target temperature values to reduce cycle time
-    uint16_t hotendTargetTemp = heatGetTargetTemp(0);
+    // store current target temperature values
+    uint16_t hotendTargetTemp = heatGetTargetTemp(NOZZLE0);
     uint16_t bedTargetTemp = heatGetTargetTemp(BED);
 
-    if (hotendTargetTemp == 0 && bedTargetTemp == 0)
-    {
-      return; //No temperature set "yet". Do nothing.
-    }
+    if (hotendTargetTemp == 0 && bedTargetTemp == 0)  // if no temperature is set yet, nothing to do
+      return;
 
-    #ifdef LED_COLOR_PIN
-      #ifdef LCD_LED_PWM_CHANNEL
-        // set the knob_led_idle temperorly to OFF
-        if (infoSettings.knob_led_idle && !idle_ledmode_previous)
-        {
-          idle_ledmode_previous = true;
-          infoSettings.knob_led_idle = 0; //Temperory turn off led idle
-        }
-      #endif
-    #endif
-
-    // Store current temperature values to reduce cycle time
-    uint16_t hotendCurrentTemp = heatGetCurrentTemp(0);
+    // store current temperature values
+    uint16_t hotendCurrentTemp = heatGetCurrentTemp(NOZZLE0);
     uint16_t bedCurrentTemp = heatGetCurrentTemp(BED);
 
-    // Check if the temperature already reached it's target temperature
+    // check if both bed and hotend reached their target temperatures
     if (hotendTargetTemp > 0 && bedTargetTemp > 0 &&
-        hotendCurrentTemp >= hotendTargetTemp - 5 &&
-        bedCurrentTemp >= bedTargetTemp - 5)
+        hotendCurrentTemp >= hotendTargetTemp - TEMPERATURE_RANGE &&
+        bedCurrentTemp >= bedTargetTemp - TEMPERATURE_RANGE)
     {
-      // Bed and hotend are on temperature. Set neopixel to white
-      storeCmd("M150 R255 U255 B255 P255\n");
+      prevLedValue = 255;  // set with a value just in case heating is immediately reached (e.g. nozzle and bed were already heated)
+      heatingDone = true;  // set flag to "true"
 
-      // Restore the encoder to the previous state
-      #ifdef LED_COLOR_PIN
-        #ifdef LCD_LED_PWM_CHANNEL
-          // Set the knob_led_idle on again
-          if (idle_ledmode_previous)
-          {
-            idle_ledmode_previous = false;
-            infoSettings.knob_led_idle = 1;
-          }
-        #endif
-      #endif
+      LED_SetColor(255, 255, 255);  // set (neopixel) LED light to WHITE
+      SET_KNOB_LED_IDLE(true);      // make sure that infoSettings.knob_led_idle is back in business
+      LCD_WAKE();                   // if LCD is dimmed, restore LCD and encoder knob LED to their default values
 
-      // set the screen to the max brightness
-      // The encoder knob will get it's default color.
-      LCD_WAKE();
-
-      // Set the flag heating done to true
-      heatingDone = true;
       return;
     }
 
-    uint8_t newLedValue = 0;
-    if (hotendTargetTemp > 0 && bedTargetTemp > 0 &&
-        bedCurrentTemp >= bedTargetTemp - 5)
-    {
-      // Only use total temperature when hotend and bed heat up at the same time
-      uint16_t totalTemperature = hotendTargetTemp + bedTargetTemp;
-      newLedValue = map(hotendCurrentTemp + bedCurrentTemp, coldTemperature, totalTemperature, 0, 255);
-    }
-    else
-    {
-      if (hotendTargetTemp == 0)
-      {
-        newLedValue = map(bedCurrentTemp, coldTemperature, bedTargetTemp, 0, 125);
-      }
-      else
-      {
-        newLedValue = map(hotendCurrentTemp, coldTemperature, hotendTargetTemp, 125, 255);
-      }
-    }
+    long newLedValue = 0;
 
-    if (!(newLedValue > prevPixelColor))
-    {
-      // Previous led value is the same as the current one.
-      // Rest of the code is not needed to execute.
+    // only use total temperature when hotend and bed heat up at the same time
+    if (hotendTargetTemp > 0 && bedTargetTemp > 0 && bedCurrentTemp >= bedTargetTemp - TEMPERATURE_RANGE)
+      newLedValue = map(hotendCurrentTemp + bedCurrentTemp, COLD_TEMPERATURE, hotendTargetTemp + bedTargetTemp, 0, 255);
+    else if (hotendTargetTemp > 0)
+      newLedValue = map(hotendCurrentTemp, COLD_TEMPERATURE, hotendTargetTemp, 128, 255);
+    else if (bedTargetTemp > 0)
+      newLedValue = map(bedCurrentTemp, COLD_TEMPERATURE, bedTargetTemp, 0, 127);
+
+    newLedValue = NOBEYOND(0, newLedValue, 255);  // be sure new value is in range 0-255
+
+    if (!((uint8_t)(newLedValue) > prevLedValue))  // if new value is not bigger than previous one, nothing to do
       return;
-    }
 
-    // Set the neopixel color
-    storeCmd("M150 R%i U0 B%i P255\n", newLedValue, 255 - newLedValue);
+    prevLedValue = (uint8_t)(newLedValue);  // save new value as previous one
 
-    #ifdef LED_COLOR_PIN
-      uint32_t newPixelColor = 0;
-      newPixelColor |= (uint32_t)(newLedValue) << 8;
-      newPixelColor |= (uint32_t)(255 - newLedValue);
-
-      //WEG
-      //char tempstr[60];
-      //sprintf(tempstr, "NEW %i | R:%i B:%i | LV: %i", newPixelColor, colorRed, colorBlue, newLedValue);
-      //GUI_DispString(100, 0, (u8 *)tempstr);
-      //END WEG
-
-      // Color the Knob led when available
-      KNOB_LED_SET_COLOR(newPixelColor, infoSettings.neopixel_pixels);
-    #endif
-
-    prevPixelColor = newLedValue;
-    return;
+    LED_SetColor(newLedValue, 0, 255 - newLedValue);  // set (neopixel) LED light
+    SET_KNOB_LED_IDLE(false);                         // set infoSettings.knob_led_idle temporary to OFF
   }
 }

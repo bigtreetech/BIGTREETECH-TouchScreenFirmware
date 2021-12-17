@@ -103,6 +103,7 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType);
 
 bool isPrinting(void);
 bool isPaused(void);
+bool isTFTPrinting(void);
 bool isRemoteHostPrinting(void);
 
 void setPrintAbort(void);

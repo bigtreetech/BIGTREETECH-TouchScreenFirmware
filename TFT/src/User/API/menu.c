@@ -1297,7 +1297,7 @@ void loopBackEnd(void)
   #endif
 
   if (GET_BIT(infoSettings.general_settings, INDEX_EVENT_LED) == 1)
-    LED_SetEventColor();
+    LED_CheckEvent();
 
   if (infoMachineSettings.caseLightsBrightness == ENABLED)
   {
