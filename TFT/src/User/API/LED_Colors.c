@@ -30,12 +30,15 @@ const LABEL led_color_names[LED_COLOR_COUNT] = {
 
 #endif  // LED_COLOR_PIN
 
-void LED_SetColor(uint8_t r, uint8_t g, uint8_t b)
+void LED_SetColor(uint8_t r, uint8_t g, uint8_t b, bool skipPrinterLed)
 {
-  if (infoMachineSettings.firmwareType != FW_REPRAPFW)
-    storeCmd("M150 R%i U%i B%i P255\n", r, g, b);
-  else
-    storeCmd("M150 X2 R%i U%i B%i P255\n", r, g, b);
+  if (!skipPrinterLed)
+  {
+    if (infoMachineSettings.firmwareType != FW_REPRAPFW)
+      storeCmd("M150 R%i U%i B%i P255\n", r, g, b);
+    else
+      storeCmd("M150 X2 R%i U%i B%i P255\n", r, g, b);
+  }
 
   #ifdef LED_COLOR_PIN
     uint32_t knobLedColor = 0;  // GRB format
