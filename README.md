@@ -48,11 +48,12 @@ Important information related to BigTreeTech's TFT touchscreen 3D printer contro
 
 - [Appendix](#appendix)
 
+  - [Integration with Octoprint](#integration-with-octoprint)
   - [Embedded Gcode Thumbnails](#embedded-gcode-thumbnails)
   - [TFT Screen Configuration and support for RRF](#tft-screen-configuration-and-support-for-rrf)
   - [Setup of BTT TFT35 E3 V3 with MKS SGEN L Mainboards](#setup-of-btt-tft35-e3-v3-with-mks-sgen-l-mainboards)
   - [Show more statistics at the end of the print](#show-more-statistics-at-the-end-of-the-print)
-
+  
   
 
 
@@ -408,9 +409,44 @@ See [BIGTREETECH-TouchScreenFirmware/releases](https://github.com/bigtreetech/BI
 
 
 
-
-
 ## Appendix
+
+### Integration with Octoprint
+
+Octoprint can optionally trigger some actions to the TFT sending specific gcodes. The following actions and the related triggering gcodes are currently supported by the TFT fw:
+
+**start:**
+M118 A1 P0 action:print_start
+  
+**end:**
+M118 A1 P0 action:print_end
+  
+**cancel:**
+M118 A1 P0 action:cancel
+  
+**pause:**
+M118 A1 P0 action:pause
+  
+**resume:**
+M118 A1 P0 action:resume
+  
+**time remaining progress:**
+M118 A1 P0 action:notification Time Left hms (e.g. 02h04m06s)
+  
+M117 Time Left hms
+**file data progress:**
+  
+M118 A1 P0 action:notification Data Left / (e.g. 123/12345)
+M117 Data Left /
+
+When the trigger "print_start" is received, the TFT switches to Printing menu.
+Once on Printing menu, the "pause", "resume" and "stop" buttons on the menu will be disabled.
+That means only Octoprint will control the print.
+Only on print end or cancel the TFT Printing menu is finalized (statistics available etc...) and unlocked (it can be closed).
+
+**NOTE:** A new plugin on Octoprint implementing the above protocol should be the preferable way (available to everyone)
+
+
 
 ### Embedded Gcode Thumbnails
 
@@ -469,7 +505,7 @@ Auto detect fw type + separate config.ini for easier setup
 - Print status monitoring with mid-print tuneing/pausing
 - Macro support
 - Print from onboard/external SD card
-- Please see [Feature request #1791](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/issues/1791) for more information.
+- Please see [RRF further tweaks #2278](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/issues/2278) for more information.
 
 **Menu system for macros:**
 
@@ -477,6 +513,8 @@ Auto detect fw type + separate config.ini for easier setup
 - Load/unload menu
 - PID tune menu
 
+  
+  
 ### Setup of BTT TFT35 E3 V3 with MKS SGEN L Mainboards
 
 The following mainboards are covered by this document.
