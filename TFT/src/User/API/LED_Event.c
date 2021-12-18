@@ -8,14 +8,6 @@ uint8_t prevLedValue = 0;
 bool heatingDone = false;
 bool printingDone = false;
 
-#if defined(LED_COLOR_PIN) && defined(LCD_LED_PWM_CHANNEL)
-  bool knob_led_idle = false;
-
-  #define SET_KNOB_LED_IDLE(enabled) setKnobLedIdle(enabled)
-#else
-  #define SET_KNOB_LED_IDLE(enabled)
-#endif
-
 //#define ROOM_TEMPERATURE
 #ifdef ROOM_TEMPERATURE
   #define MAX_COLD_TEMP     50
@@ -41,30 +33,6 @@ inline static bool nextUpdate(void)
 
   return false;
 }
-
-#if defined(LED_COLOR_PIN) && defined(LCD_LED_PWM_CHANNEL)
-
-void setKnobLedIdle(bool enabled)
-{
-  if (!enabled)
-  { // set infoSettings.knob_led_idle temporary to OFF
-    if (infoSettings.knob_led_idle && !knob_led_idle)
-    {
-      knob_led_idle = true;
-      infoSettings.knob_led_idle = 0;  // turn knob_led_idle off
-    }
-  }
-  else
-  { // make sure that infoSettings.knob_led_idle is back in business
-    if (knob_led_idle)
-    {
-      knob_led_idle = false;
-      infoSettings.knob_led_idle = 1;  // turn knob_led_idle on
-    }
-  }
-}
-
-#endif  // defined(LED_COLOR_PIN) && defined(LCD_LED_PWM_CHANNEL)
 
 #ifdef ROOM_TEMPERATURE
 
@@ -114,9 +82,8 @@ void LED_CheckEvent(void)
       heatingDone = false;   // reset flag to "false"
       printingDone = false;  // reset flag to "false"
 
-      LED_SetColor(0, 0, 0);    // set (neopixel) LED light to OFF
-      SET_KNOB_LED_IDLE(true);  // make sure that infoSettings.knob_led_idle is back in business
-      LCD_WAKE();               // if LCD is dimmed, restore LCD and encoder knob LED to their default values
+      LED_SetColor(0, 0, 0);        // set (neopixel) LED light to OFF
+      LCD_SET_KNOB_LED_IDLE(true);  // restore infoSettings.knob_led_idle and knob LED color to their default values
 
       return;
     }
@@ -126,8 +93,8 @@ void LED_CheckEvent(void)
 
     printingDone = true;  // set flag to "true"
 
-    LED_SetColor(0, 255, 0);   // set (neopixel) LED light to GREEN
-    SET_KNOB_LED_IDLE(false);  // set infoSettings.knob_led_idle temporary to OFF
+    LED_SetColor(0, 255, 0);       // set (neopixel) LED light to GREEN
+    LCD_SET_KNOB_LED_IDLE(false);  // set infoSettings.knob_led_idle temporary to OFF
   }
   else
   {
@@ -157,8 +124,7 @@ void LED_CheckEvent(void)
       heatingDone = true;  // set flag to "true"
 
       LED_SetColor(255, 255, 255);  // set (neopixel) LED light to WHITE
-      SET_KNOB_LED_IDLE(true);      // make sure that infoSettings.knob_led_idle is back in business
-      LCD_WAKE();                   // if LCD is dimmed, restore LCD and encoder knob LED to their default values
+      LCD_SET_KNOB_LED_IDLE(true);  // restore infoSettings.knob_led_idle and knob LED color to their default values
 
       return;
     }
@@ -181,6 +147,6 @@ void LED_CheckEvent(void)
     prevLedValue = (uint8_t)(newLedValue);  // save new value as previous one
 
     LED_SetColor(newLedValue, 0, 255 - newLedValue);  // set (neopixel) LED light
-    SET_KNOB_LED_IDLE(false);                         // set infoSettings.knob_led_idle temporary to OFF
+    LCD_SET_KNOB_LED_IDLE(false);                     // set infoSettings.knob_led_idle temporary to OFF
   }
 }
