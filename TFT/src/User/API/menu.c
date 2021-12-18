@@ -3,6 +3,8 @@
 #include "ListItem.h"
 #include "Notification.h"
 
+#define STATUS_BAR_REFRESH_TIME 2000  // refresh time in ms
+
 #ifdef PORTRAIT
 // exhibitRect is 2 ICON Space in the Lowest Row and 2 Center column.
 const GUI_RECT exhibitRect = {
@@ -674,7 +676,7 @@ void reminderMessage(int16_t inf, SYS_STATUS status)
 
   reminder.inf = inf;
   reminder.status = status;
-  reminder.time = OS_GetTimeMs() + 2000;  // 2 seconds
+  reminder.time = OS_GetTimeMs() + STATUS_BAR_REFRESH_TIME;
 
   if (menuType != MENU_TYPE_FULLSCREEN)
   {
@@ -693,7 +695,7 @@ void volumeReminderMessage(int16_t inf, SYS_STATUS status)
 
   volumeReminder.inf = inf;
   volumeReminder.status = status;
-  volumeReminder.time = OS_GetTimeMs() + 2000;
+  volumeReminder.time = OS_GetTimeMs() + STATUS_BAR_REFRESH_TIME;
 
   if (menuType != MENU_TYPE_FULLSCREEN)
   {
@@ -713,7 +715,7 @@ void busyIndicator(SYS_STATUS status)
     GUI_SetColor(infoSettings.font_color);
   }
   busySign.status = status;
-  busySign.time = OS_GetTimeMs() + 2000;
+  busySign.time = OS_GetTimeMs() + STATUS_BAR_REFRESH_TIME;
 }
 
 void loopReminderClear(void)
@@ -840,14 +842,24 @@ void menuReDrawCurTitle(void)
   {
     if (curListItems == NULL)
       return;
-    if (curListItems->title.index < LABEL_BACKGROUND)
-      menuDrawTitle(labelGetAddress(&curListItems->title));
+    menuDrawTitle(labelGetAddress(&curListItems->title));
   }
   else if (menuType == MENU_TYPE_ICON)
   {
     if (curMenuItems == NULL)
       return;
+
+    if (MENU_IS(menuPrinting) && infoSettings.filename_extension == 0)
+    { // temporarily hide filename extension if filename extension feature is disabled
+      hideFileExtension((char *) curMenuItems->title.address);
+    }
+
     menuDrawTitle(labelGetAddress(&curMenuItems->title));
+
+    if (MENU_IS(menuPrinting) && infoSettings.filename_extension == 0)
+    { // restore the temporarily hidden extension
+      restoreFileExtension((char *) curMenuItems->title.address);
+    }
   }
   else if (menuType == MENU_TYPE_FULLSCREEN)
   {
@@ -892,11 +904,21 @@ void menuDrawPage(const MENUITEMS *menuItems)
   #endif
 
   menuClearGaps();
-  menuDrawTitle(labelGetAddress(&menuItems->title));
+  if (MENU_IS(menuPrinting) && infoSettings.filename_extension == 0)
+  { // temporarily hide filename extension if filename extension feature is disabled
+    hideFileExtension((char *) curMenuItems->title.address);
+  }
+
+  menuDrawTitle(labelGetAddress(&curMenuItems->title));
+
+  if (MENU_IS(menuPrinting) && infoSettings.filename_extension == 0)
+  { // restore the temporarily hidden extension
+    restoreFileExtension((char *) curMenuItems->title.address);
+  }
 
   for (i = 0; i < ITEM_PER_PAGE; i++)
   {
-    menuDrawItem(&menuItems->items[i], i);
+    menuDrawItem(&curMenuItems->items[i], i);
     RAPID_PRINTING_COMM()  // perform backend printing loop between drawing icons to avoid printer idling
   }
 

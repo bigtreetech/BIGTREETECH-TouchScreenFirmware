@@ -551,7 +551,17 @@ void printInfoPopup(void)
       strcat(showInfo, tempstr);
     }
   }
+  if (infoSettings.filename_extension == 0)
+  { // temporarily hide filename extension if filename extension feature is disabled
+    hideFileExtension(infoPrintSummary.name);
+  }
+
   popupReminder(DIALOG_TYPE_INFO, (uint8_t *)infoPrintSummary.name, (uint8_t *)showInfo);
+
+  if (infoSettings.filename_extension == 0)
+  { // restore the temporarily hidden extension
+    restoreFileExtension(infoPrintSummary.name);
+  }
 }
 
 void menuPrinting(void)

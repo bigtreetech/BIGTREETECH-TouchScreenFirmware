@@ -83,7 +83,10 @@ void gocdeIconDraw(void)
     }
     ExitDir();
 
-    hideFileExtension(i + baseIndex - infoFile.folderCount);  // hide filename extension if filename extension feature is disabled
+    if (infoSettings.filename_extension == 0)
+    { // temporarily hide filename extension if filename extension feature is disabled
+      hideFileExtension(infoFile.file[i + baseIndex - infoFile.folderCount]);
+    }
     normalNameDisp(&gcodeRect[i], (uint8_t*)infoFile.file[i + baseIndex - infoFile.folderCount]);  // always use short filename
   }
 
@@ -110,7 +113,18 @@ void gocdeListDraw(LISTITEM * item, uint16_t index, uint8_t itemPos)
     item->icon = CHARICON_FILE;
     item->itemType = LIST_LABEL;
     item->titlelabel.index = LABEL_DYNAMIC;
-    setDynamicLabel(itemPos, hideFileExtension(index - infoFile.folderCount));  // hide filename extension if filename extension feature is disabled
+
+    if (infoSettings.filename_extension == 0)
+    { // temporarily hide filename extension if filename extension feature is disabled
+      hideFileExtension(infoFile.file[index - infoFile.folderCount]);
+      if (infoMachineSettings.longFilename == ENABLED && infoFile.source == BOARD_SD)
+      {
+        hideFileExtension(infoFile.longFile[index - infoFile.folderCount]);
+      }
+    }
+
+    setDynamicLabel(itemPos, (infoMachineSettings.longFilename == ENABLED && infoFile.source == BOARD_SD) ?
+                    infoFile.longFile[index - infoFile.folderCount] : infoFile.file[index - infoFile.folderCount]);
   }
 }
 
@@ -140,7 +154,15 @@ bool printPageItemSelected(uint16_t index)
   else if (index < infoFile.folderCount + infoFile.fileCount)  // gcode file
   {
     infoFile.fileIndex = index - infoFile.folderCount;
-    char * filename = restoreFileExtension(infoFile.fileIndex);  // restore filename extension if filename extension feature is disabled
+
+    if (infoSettings.filename_extension == 0)
+    { // restore the temporarily hidden extension
+      restoreFileExtension(infoFile.file[infoFile.fileIndex]);
+      if (infoMachineSettings.longFilename == ENABLED && infoFile.source == BOARD_SD)
+      {
+        restoreFileExtension(infoFile.longFile[index - infoFile.folderCount]);
+      }
+    }
 
     if (infoHost.connected != true || EnterDir(infoFile.file[infoFile.fileIndex]) == false)  // always use short filename for file path
     {
@@ -152,7 +174,14 @@ bool printPageItemSelected(uint16_t index)
       setPrintModelIcon(infoFile.source < BOARD_SD && model_DecodeToFlash(infoFile.title));
 
       char temp_info[FILE_NUM + 50];
-      sprintf(temp_info, (char *)textSelect(LABEL_START_PRINT), (uint8_t *)(filename));  // display short or long filename
+      sprintf(temp_info, (char *)textSelect(LABEL_START_PRINT),
+              (uint8_t *)((infoMachineSettings.longFilename == ENABLED && infoFile.source == BOARD_SD) ?
+                           infoFile.longFile[infoFile.fileIndex] : infoFile.file[infoFile.fileIndex]));
+                           
+      if (infoSettings.filename_extension == 0)
+      {// remove extension if extension feature is disabled
+        hideFileExtension(temp_info);
+      }
 
       // confirm file selction
       setDialogText(LABEL_PRINT, (uint8_t *)temp_info, LABEL_CONFIRM, LABEL_CANCEL);
@@ -312,7 +341,7 @@ void menuPrintFromSource(void)
       }
       else
       { // title bar is also drawn by listViewCreate
-        listViewCreate((LABEL){.address = (uint8_t *)infoFile.title}, NULL, infoFile.folderCount + infoFile.fileCount,
+        listViewCreate((LABEL){.index = LABEL_DYNAMIC, .address = (uint8_t *)infoFile.title}, NULL, infoFile.folderCount + infoFile.fileCount,
                        &infoFile.curPage, false, NULL, gocdeListDraw);
       }
 

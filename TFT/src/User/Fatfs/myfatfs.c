@@ -105,7 +105,7 @@ bool scanPrintFilesFatFs(void)
       if (infoFile.fileCount >= FILE_NUM)
         continue;
 
-      if (isSupportedFile(finfo.fname) == NULL)  // if filename doesn't provide a supported filename extension
+      if (isSupportedFile(finfo.fname) == false)  // if filename doesn't provide a supported filename extension
         continue;
 
       infoFile.file[infoFile.fileCount] = malloc(len + 1);  // plus one extra byte for filename extension check

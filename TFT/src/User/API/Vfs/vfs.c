@@ -132,67 +132,29 @@ bool IsRootDir(void)
 }
 
 // check if filename provides a supported filename extension
-char * isSupportedFile(char * filename)
+bool isSupportedFile(char * filename)
 {
-  char * extPos = strstr(filename, ".g");  // support "*.g","*.gco" and "*.gcode"
+  char tmpName[FILE_NUM];
+  strcpy(tmpName, filename);
 
-  if (extPos == NULL)
-    extPos = strstr(filename, ".G");  // support "*.g","*.gco" and "*.gcode"
+  char * extPos = strrchr(tmpName, '.');  // find extension position (last ".", in case there's more than one)
 
-  return extPos;
+  if (extPos != NULL && (strcmp(strlwr(extPos), ".gco") == 0 || strcmp(strlwr(extPos), ".gcode") == 0))
+  {
+    return true;
+  }
+
+  return false;
 }
 
-char * hideFileExtension(uint8_t index)
+void hideFileExtension(char * filename)
 {
-  char * filename = infoFile.file[index];
-  char * extPos;
-
-  if (infoSettings.filename_extension == 0)  // if filename extension is disabled
-  {
-    extPos = isSupportedFile(filename);
-
-    if (extPos != NULL)  // if filename provides a supported filename extension
-      filename[extPos - filename] = 0;  // temporary hide filename extension
-  }
-
-  if (infoMachineSettings.longFilename == ENABLED && infoFile.source == BOARD_SD)
-  {
-    filename = infoFile.longFile[index];
-
-    if (infoSettings.filename_extension == 0)  // if filename extension is disabled
-    {
-      extPos = isSupportedFile(filename);
-
-      if (extPos != NULL)  // if filename provides a supported filename extension
-        filename[extPos - filename] = 0;  // temporary hide filename extension
-    }
-  }
-
-  return filename;
+  filename[strrchr(filename, '.') - filename] = '\0';
 }
 
-char * restoreFileExtension(uint8_t index)
+void restoreFileExtension(char * filename)
 {
-  char * filename = infoFile.file[index];
-
-  if (infoSettings.filename_extension == 0)  // if filename extension is disabled
-  {
-    if (filename[strlen(filename) + 1] != 0)  // check extra byte for filename extension check. If 0, no filename extension was previously hidden
-      filename[strlen(filename)] = '.';       // restore filename extension
-  }
-
-  if (infoMachineSettings.longFilename == ENABLED && infoFile.source == BOARD_SD)
-  {
-    filename = infoFile.longFile[index];
-
-    if (infoSettings.filename_extension == 0)  // if filename extension is disabled
-    {
-      if (filename[strlen(filename) + 1] != 0)  // check extra byte for filename extension check. If 0, no filename extension was previously hidden
-        filename[strlen(filename)] = '.';       // restore filename extension
-    }
-  }
-
-  return filename;
+  filename[strlen(filename)] = '.';
 }
 
 // Volume exist detect

@@ -50,9 +50,9 @@ void resetInfoFile(void);
 bool EnterDir(char * nextdir);
 void ExitDir(void);
 bool IsRootDir(void);
-char * isSupportedFile(char * filename);
-char * hideFileExtension(uint8_t index);
-char * restoreFileExtension(uint8_t index);
+bool isSupportedFile(char * filename);
+void hideFileExtension(char * filename);
+void restoreFileExtension(char * filename);
 
 bool isVolumeExist(uint8_t src);
 void loopVolumeSource(void);
