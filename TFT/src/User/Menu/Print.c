@@ -83,7 +83,7 @@ void gocdeIconDraw(void)
     }
     ExitDir();
 
-    hideFileExtension(i + baseIndex - infoFile.folderCount);  // hide filename extension if filename extension feature is disabled
+    hideFileIndexExtension(i + baseIndex - infoFile.folderCount);  // hide filename extension if filename extension feature is disabled
     normalNameDisp(&gcodeRect[i], (uint8_t*)infoFile.file[i + baseIndex - infoFile.folderCount]);  // always use short filename
   }
 
@@ -110,7 +110,7 @@ void gocdeListDraw(LISTITEM * item, uint16_t index, uint8_t itemPos)
     item->icon = CHARICON_FILE;
     item->itemType = LIST_LABEL;
     item->titlelabel.index = LABEL_DYNAMIC;
-    setDynamicLabel(itemPos, hideFileExtension(index - infoFile.folderCount));  // hide filename extension if filename extension feature is disabled
+    setDynamicLabel(itemPos, hideFileIndexExtension(index - infoFile.folderCount));  // hide filename extension if filename extension feature is disabled
   }
 }
 
@@ -140,7 +140,7 @@ bool printPageItemSelected(uint16_t index)
   else if (index < infoFile.folderCount + infoFile.fileCount)  // gcode file
   {
     infoFile.fileIndex = index - infoFile.folderCount;
-    char * filename = restoreFileExtension(infoFile.fileIndex);  // restore filename extension if filename extension feature is disabled
+    char * filename = restoreFileIndexExtension(infoFile.fileIndex);  // restore filename extension if filename extension feature is disabled
 
     if (infoHost.connected != true || EnterDir(infoFile.file[infoFile.fileIndex]) == false)  // always use short filename for file path
     {
@@ -155,7 +155,7 @@ bool printPageItemSelected(uint16_t index)
       sprintf(temp_info, (char *)textSelect(LABEL_START_PRINT), (uint8_t *)(filename));  // display short or long filename
 
       // confirm file selction
-      setDialogText(LABEL_PRINT, (uint8_t *)temp_info, LABEL_CONFIRM, LABEL_CANCEL);
+      setDialogText(LABEL_PRINT, (uint8_t *)hideFileExtension(temp_info, 305), LABEL_CONFIRM, LABEL_CANCEL);
       showDialog(DIALOG_TYPE_QUESTION, startPrint, ExitDir, NULL);
 
       hasUpdate = false;
@@ -312,7 +312,7 @@ void menuPrintFromSource(void)
       }
       else
       { // title bar is also drawn by listViewCreate
-        listViewCreate((LABEL){.address = (uint8_t *)infoFile.title}, NULL, infoFile.folderCount + infoFile.fileCount,
+        listViewCreate((LABEL){.index  = LABEL_DYNAMIC, .address = (uint8_t *)infoFile.title}, NULL, infoFile.folderCount + infoFile.fileCount,
                        &infoFile.curPage, false, NULL, gocdeListDraw);
       }
 

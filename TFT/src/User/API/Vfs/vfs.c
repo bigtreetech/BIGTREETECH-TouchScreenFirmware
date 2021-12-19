@@ -132,64 +132,102 @@ bool IsRootDir(void)
 }
 
 // check if filename provides a supported filename extension
-char * isSupportedFile(char * filename)
+char *isSupportedFile(char * filename)
 {
-  char * extPos = strstr(filename, ".g");  // support "*.g","*.gco" and "*.gcode"
+  char tmpName[FILE_NUM];
+  strcpy(tmpName, filename);
+  char *extPos = strrchr(tmpName, '.');  // check last "." in the name where extension is supposed to start
 
-  if (extPos == NULL)
-    extPos = strstr(filename, ".G");  // support "*.g","*.gco" and "*.gcode"
+  if (extPos != NULL)
+  {
+    if (strlwr(extPos)[1] == 'g')
+    {
+      extPos = strrchr(filename, '.');  // support "*.g","*.gco" and "*.gcode"
+    }
+    else
+    {
+      extPos = NULL;
+    }
+  }
 
   return extPos;
 }
-
-char * hideFileExtension(uint8_t index)
+/**
+  * @brief  Temporarily remove extension 
+  * @param  filename: targeted filename
+  * @param  maxLength: the max length of the "filename" parameter as it was defined.
+  *         It is needed to check if extension hide flag can be added.
+  * @retval pointer to the resulting name
+  */
+ char *hideFileExtension(char * filename, uint16_t maxLength)
 {
-  char * filename = infoFile.file[index];
   char * extPos;
+
+  if (strlen(filename) == maxLength)
+    return filename;
 
   if (infoSettings.filename_extension == 0)  // if filename extension is disabled
   {
     extPos = isSupportedFile(filename);
-
     if (extPos != NULL)  // if filename provides a supported filename extension
-      filename[extPos - filename] = 0;  // temporary hide filename extension
-  }
-
-  if (infoMachineSettings.longFilename == ENABLED && infoFile.source == BOARD_SD)
-  {
-    filename = infoFile.longFile[index];
-
-    if (infoSettings.filename_extension == 0)  // if filename extension is disabled
     {
-      extPos = isSupportedFile(filename);
-
-      if (extPos != NULL)  // if filename provides a supported filename extension
-        filename[extPos - filename] = 0;  // temporary hide filename extension
+      filename[strlen(filename) + 1] = 1;  // set extension hide flag
+      filename[extPos - filename] = 0;  // temporary hide filename extension
     }
   }
 
   return filename;
 }
 
-char * restoreFileExtension(uint8_t index)
+/**
+  * @brief  Restore the temprarily hidden extension 
+  * @param  filename: targeted filename
+  * @param  maxLength: the max length of the "filename" parameter as it was defined.
+  *         It is needed to check if extension hide flag can be retrieved.
+  * @retval pointer to the resulting name
+  */
+char *restoreFileExtension(char *filename, uint16_t maxLength)
 {
-  char * filename = infoFile.file[index];
+  if (strlen(filename) == maxLength)
+    return filename;
 
   if (infoSettings.filename_extension == 0)  // if filename extension is disabled
   {
     if (filename[strlen(filename) + 1] != 0)  // check extra byte for filename extension check. If 0, no filename extension was previously hidden
+    {
       filename[strlen(filename)] = '.';       // restore filename extension
+      filename[strlen(filename) + 1] = 0;     // reset file extension hide flag
+    }
   }
+
+  return filename;
+}
+
+char *hideFileIndexExtension(uint8_t index)
+{
+  char * filename = infoFile.file[index];
+
+  hideFileExtension(filename, FILE_NUM);
 
   if (infoMachineSettings.longFilename == ENABLED && infoFile.source == BOARD_SD)
   {
     filename = infoFile.longFile[index];
+    hideFileExtension(filename, FILE_NUM);
+  }
 
-    if (infoSettings.filename_extension == 0)  // if filename extension is disabled
-    {
-      if (filename[strlen(filename) + 1] != 0)  // check extra byte for filename extension check. If 0, no filename extension was previously hidden
-        filename[strlen(filename)] = '.';       // restore filename extension
-    }
+  return filename;
+}
+
+char *restoreFileIndexExtension(uint8_t index)
+{
+  char * filename = infoFile.file[index];
+
+  restoreFileExtension(filename, FILE_NUM);
+
+  if (infoMachineSettings.longFilename == ENABLED && infoFile.source == BOARD_SD)
+  {
+    filename = infoFile.longFile[index];
+    restoreFileExtension(filename, FILE_NUM);
   }
 
   return filename;

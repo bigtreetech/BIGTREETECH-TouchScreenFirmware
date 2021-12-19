@@ -819,7 +819,16 @@ void menuDrawTitle(const uint8_t *content)
   GUI_SetBkColor(infoSettings.title_bg_color);
   if (content)
   {
-    GUI_DispLenString(10, start_y, content, LCD_WIDTH - 20, true);
+    if (MENU_IS(menuPrinting))
+    {
+      hideFileExtension((char *)content, FILE_NUM);
+      GUI_DispLenString(10, start_y, content, LCD_WIDTH - 20, true);
+      restoreFileExtension((char *)content, FILE_NUM);
+    }
+    else
+    {
+      GUI_DispLenString(10, start_y, content, LCD_WIDTH - 20, true);
+    }
     start_x += GUI_StrPixelWidth(content);
     if (start_x > LCD_WIDTH-20) start_x = LCD_WIDTH - 20;
   }
@@ -840,8 +849,7 @@ void menuReDrawCurTitle(void)
   {
     if (curListItems == NULL)
       return;
-    if (curListItems->title.index < LABEL_BACKGROUND)
-      menuDrawTitle(labelGetAddress(&curListItems->title));
+    menuDrawTitle(labelGetAddress(&curListItems->title));
   }
   else if (menuType == MENU_TYPE_ICON)
   {
