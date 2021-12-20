@@ -6,7 +6,7 @@
 const GUI_RECT exhibitRect = {
 #ifdef PORTRAIT_MODE
   // exhibitRect is 2 ICON Space in the Lowest Row and 2 Center column.
-  0.5*ICON_WIDTH+0*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  2.5*ICON_WIDTH+1*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y
+  0.5*ICON_WIDTH+1*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  2.5*ICON_WIDTH+2*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y
 #else  // Landscape Mode
   // exhibitRect is 2 ICON Space in the Upper Row and 2 Center column.
   1*ICON_WIDTH+1*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  3*ICON_WIDTH+2*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y
@@ -17,15 +17,15 @@ const GUI_RECT exhibitRect = {
 const GUI_RECT rect_of_keysIN[TM_RECT_COUNT] = {
 #ifdef PORTRAIT_MODE
   // 8 icons area VERTICAL GUI
-  {0*ICON_WIDTH+0*SPACE_X+START_X,    1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  1*ICON_WIDTH+0*SPACE_X+START_X,    2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},  // decrease
-  {0.5*ICON_WIDTH+0*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  1.5*ICON_WIDTH+0*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y},  // empty
-  {1.5*ICON_WIDTH+1*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  2.5*ICON_WIDTH+1*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y},  // empty
-  {2*ICON_WIDTH+2*SPACE_X+START_X,    1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  3*ICON_WIDTH+2*SPACE_X+START_X,    2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},  // increase
-  {0*ICON_WIDTH+0*SPACE_X+START_X,    2*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y,  1*ICON_WIDTH+0*SPACE_X+START_X,    3*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y},  // type
+  {0*ICON_WIDTH+0*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  1*ICON_WIDTH+0*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},  // decrease
+  {0, 0, 0, 0},
+  {0, 0, 0, 0},
+  {2*ICON_WIDTH+2*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  3*ICON_WIDTH+2*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},  // increase
+  {0*ICON_WIDTH+0*SPACE_X+START_X,  2*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y,  1*ICON_WIDTH+0*SPACE_X+START_X,  3*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y},  // type
 
-  {1*ICON_WIDTH+1*SPACE_X+START_X,    1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  2*ICON_WIDTH+1*SPACE_X+START_X,    2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},  // increment
-  {1*ICON_WIDTH+1*SPACE_X+START_X,    2*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y,  2*ICON_WIDTH+1*SPACE_X+START_X,    3*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y},  // stop
-  {2*ICON_WIDTH+2*SPACE_X+START_X,    2*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y,  3*ICON_WIDTH+2*SPACE_X+START_X,    3*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y},  // usually back button
+  {1*ICON_WIDTH+1*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  2*ICON_WIDTH+1*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},  // increment
+  {1*ICON_WIDTH+1*SPACE_X+START_X,  2*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y,  2*ICON_WIDTH+1*SPACE_X+START_X,  3*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y},  // stop
+  {2*ICON_WIDTH+2*SPACE_X+START_X,  2*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y,  3*ICON_WIDTH+2*SPACE_X+START_X,  3*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y},  // usually back button
 
   // 8 labels area
   {0*SPACE_X_PER_ICON,    2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  1*SPACE_X_PER_ICON,    2*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y},
@@ -41,8 +41,8 @@ const GUI_RECT rect_of_keysIN[TM_RECT_COUNT] = {
   // title bar area
   {0, 0, LCD_WIDTH, ICON_START_Y},
 
-  // display area bottom row
-  {0.5*ICON_WIDTH+0*SPACE_X+START_X,  2*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y,  1.5*ICON_WIDTH+1*SPACE_X+START_X,  3*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y}
+  // display area
+  {0.5*ICON_WIDTH+1*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  2.5*ICON_WIDTH+2*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y}
 #else  // Landscape Mode
   // 8 icons area DEFAULT LANDSCAPE GUI
   {0*ICON_WIDTH+0*SPACE_X+START_X,  0*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y,  1*ICON_WIDTH+0*SPACE_X+START_X,  1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y},
@@ -484,26 +484,27 @@ void menuClearGaps(void)
     {rect_of_keySS[2].x1,   rect_of_keySS[0].y0,   LCD_WIDTH,            LCD_HEIGHT},
   };
 
-  if ((MENU_IS(menuHeat)) ||
-      (MENU_IS(menuLoadUnload)) ||
-      (MENU_IS(menuPid)) ||
-      (MENU_IS(menuTuneExtruder)) ||
-      (MENU_IS(menuFan)) ||
-      (MENU_IS(menuExtrude)) ||
-      (MENU_IS(menuSpeed)) ||
-      (MENU_IS(menuZOffset)) ||
-      (MENU_IS(menuMBL)) ||
-      (MENU_IS(menuStatus)) ||
-      (MENU_IS(menuBabystep)))
+  if (MENU_IS(menuPrinting))
+  {
+    GUI_Clear(MENU_BACKGROUND_COLOR);
+  }
+  else if ((MENU_IS(menuStatus)) ||
+           (MENU_IS(menuHeat)) ||
+           (MENU_IS(menuLoadUnload)) ||
+           (MENU_IS(menuPid)) ||
+           (MENU_IS(menuTuneExtruder)) ||
+           (MENU_IS(menuFan)) ||
+           (MENU_IS(menuExtrude)) ||
+           (MENU_IS(menuSpeed)) ||
+           (MENU_IS(menuZOffset)) ||
+           (MENU_IS(menuMBL)) ||
+           (MENU_IS(menuBabystep)) ||
+           (MENU_IS(menuMeshEditor)))
   {
     GUI_ClearPrect(gapsSS);
     GUI_SetBkColor(infoSettings.bg_color);
     for (uint8_t i = 1; i < COUNT(gapsSS); i++)
       GUI_ClearPrect(gapsSS + i);
-  }
-  else if (MENU_IS(menuPrinting))
-  {
-    GUI_Clear(MENU_BACKGROUND_COLOR);
   }
   else
   {
@@ -860,15 +861,16 @@ void menuDrawPage(const MENUITEMS *menuItems)
     else if (MENU_IS(menuStatus))
       curRect = rect_of_keySS;
     else if ((MENU_IS(menuHeat)) ||
-            (MENU_IS(menuLoadUnload)) ||
-            (MENU_IS(menuPid)) ||
-            (MENU_IS(menuTuneExtruder)) ||
-            (MENU_IS(menuFan)) ||
-            (MENU_IS(menuExtrude)) ||
-            (MENU_IS(menuSpeed)) ||
-            (MENU_IS(menuZOffset)) ||
-            (MENU_IS(menuMBL)) ||
-            (MENU_IS(menuBabystep)))
+             (MENU_IS(menuLoadUnload)) ||
+             (MENU_IS(menuPid)) ||
+             (MENU_IS(menuTuneExtruder)) ||
+             (MENU_IS(menuFan)) ||
+             (MENU_IS(menuExtrude)) ||
+             (MENU_IS(menuSpeed)) ||
+             (MENU_IS(menuZOffset)) ||
+             (MENU_IS(menuMBL)) ||
+             (MENU_IS(menuBabystep)) ||
+             (MENU_IS(menuMeshEditor)))
       curRect = rect_of_keysIN;
     else
       curRect = rect_of_key;
@@ -1092,7 +1094,8 @@ KEY_VALUES menuKeyGetValue(void)
                    (MENU_IS(menuSpeed)) ||
                    (MENU_IS(menuZOffset)) ||
                    (MENU_IS(menuMBL)) ||
-                   (MENU_IS(menuBabystep)))
+                   (MENU_IS(menuBabystep)) ||
+                   (MENU_IS(menuMeshEditor)))
           {
             tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keysIN), rect_of_keysIN);
           }

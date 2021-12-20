@@ -491,12 +491,6 @@ void menuStatus(void)
         OPEN_MENU(menuMain);
         break;
 
-      #ifdef PORTRAIT_MODE
-        case KEY_ICON_5:
-          OPEN_MENU(menuPrint);
-          break;
-      #endif
-
       case KEY_ICON_7:
         OPEN_MENU(menuPrint);
         break;

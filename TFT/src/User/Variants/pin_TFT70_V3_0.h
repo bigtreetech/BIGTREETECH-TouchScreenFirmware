@@ -10,6 +10,8 @@
 #ifndef TFT_RESOLUTION
   #define TFT_RESOLUTION
   #ifdef PORTRAIT_MODE
+    #undef TFT70_V3_0  // if Portrait Mode, undefine TFT70_V3 in order to apply standard layout on Printing and Status Screen menus
+
     #include "./Resolution/TFT_480X800.h"
   #else
     #include "./Resolution/TFT_800X480.h"
