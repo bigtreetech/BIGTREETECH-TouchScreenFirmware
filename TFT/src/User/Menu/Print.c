@@ -155,7 +155,7 @@ bool printPageItemSelected(uint16_t index)
       sprintf(temp_info, (char *)textSelect(LABEL_START_PRINT), (uint8_t *)(filename));  // display short or long filename
 
       // confirm file selction
-      setDialogText(LABEL_PRINT, (uint8_t *)hideFileExtension(temp_info, sizeof(temp_info)), LABEL_CONFIRM, LABEL_CANCEL);
+      setDialogText(LABEL_PRINT, (uint8_t *)temp_info, LABEL_CONFIRM, LABEL_CANCEL);
       showDialog(DIALOG_TYPE_QUESTION, startPrint, ExitDir, NULL);
 
       hasUpdate = false;
@@ -410,7 +410,7 @@ void menuPrint(void)
 
       case KEY_ICON_4:
         if (infoPrintSummary.name[0] != 0)
-          printInfoPopup();
+          printSummaryPopup();
         break;
 
       case KEY_ICON_7:

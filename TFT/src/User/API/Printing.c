@@ -277,12 +277,10 @@ void initPrintSummary(void)
 
 void preparePrintSummary(void)
 {
-  hideFileIndexExtension(infoFile.fileIndex);
   if (infoMachineSettings.longFilename == ENABLED && infoFile.source == BOARD_SD)
     sprintf(infoPrintSummary.name,"%." STRINGIFY(SUMMARY_NAME_LEN) "s", infoFile.longFile[infoFile.fileIndex]);
   else
     sprintf(infoPrintSummary.name,"%." STRINGIFY(SUMMARY_NAME_LEN) "s", infoFile.file[infoFile.fileIndex]);
-  restoreFileIndexExtension(infoFile.fileIndex);
 
   infoPrintSummary.time = infoPrinting.time;
 

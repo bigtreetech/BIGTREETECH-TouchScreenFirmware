@@ -119,7 +119,6 @@ bool scanPrintFilesGcodeFs(void)
           break;
         }
         strcpy(infoFile.longFile[infoFile.fileCount], Pstr_tmp);
-        infoFile.longFile[infoFile.fileCount][strlen(Pstr_tmp) + 1] = 0;  // set to 0 the extra byte for filename extension check
         clearRequestCommandInfo();  // finally free the buffer allocated by M33, if any
       }
       else  // if long filename is not supported
@@ -150,13 +149,12 @@ bool scanPrintFilesGcodeFs(void)
       }
 
       strcpy(infoFile.file[infoFile.fileCount], file);
-      infoFile.file[infoFile.fileCount][strlen(file) + 1] = 0;  // set to 0 the extra byte for filename extension check
       infoFile.fileCount++;
     }
     else  // if DIRECTORY
     {
       if (infoFile.folderCount >= FOLDER_NUM)
-        continue;  // floder max number is FOLDER_NUM
+        continue;  // folder max number is FOLDER_NUM
 
       char* rest = pline;
       char* folder = strtok_r(rest, "/", &rest);

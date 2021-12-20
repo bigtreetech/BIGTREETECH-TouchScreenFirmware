@@ -16,10 +16,10 @@ void menuPrintRestore(void)
     char cancelTxt[MAX_LANG_LABEL_LENGTH];
     loadLabelText((uint8_t*)okTxt, LABEL_CONFIRM);
     loadLabelText((uint8_t*)cancelTxt, LABEL_CANCEL);
-    hideFileExtension(infoFile.title, MAX_PATH_LEN);
+
     popupDrawPage(DIALOG_TYPE_QUESTION, bottomDoubleBtn, textSelect(LABEL_POWER_FAILED), (uint8_t* )infoFile.title,
                   (uint8_t*)okTxt, (uint8_t*)cancelTxt);
-    restoreFileExtension(infoFile.title, MAX_PATH_LEN);
+
     while (MENU_IS(menuPrintRestore))
     {
       key_num = KEY_GetValue(2, doubleBtnRect);

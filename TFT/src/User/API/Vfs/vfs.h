@@ -51,8 +51,8 @@ bool EnterDir(char * nextdir);
 void ExitDir(void);
 bool IsRootDir(void);
 char *isSupportedFile(char * filename);
-char *hideFileExtension(char * filename, uint16_t maxLength);
-char *restoreFileExtension(char *filename, uint16_t maxLength);
+char *hideFileExtension(char * filename);
+char *restoreFileExtension(char *filename);
 char *hideFileIndexExtension(uint8_t index);
 char *restoreFileIndexExtension(uint8_t index);
 

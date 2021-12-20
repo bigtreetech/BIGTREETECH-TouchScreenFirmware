@@ -819,11 +819,11 @@ void menuDrawTitle(const uint8_t *content)
   GUI_SetBkColor(infoSettings.title_bg_color);
   if (content)
   {
-    if (MENU_IS(menuPrinting))
+    if (MENU_IS(menuPrinting) && infoSettings.filename_extension == 0)
     {
-      hideFileExtension((char *)content, FILE_NUM);
+      hideFileExtension((char *)content);
       GUI_DispLenString(10, start_y, content, LCD_WIDTH - 20, true);
-      restoreFileExtension((char *)content, FILE_NUM);
+      restoreFileExtension((char *)content);
     }
     else
     {
