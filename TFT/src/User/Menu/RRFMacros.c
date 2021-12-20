@@ -127,7 +127,7 @@ void menuCallMacro(void)
     {
       update = 0;
 
-      listViewCreate((LABEL){.address = (uint8_t *)infoFile.title}, NULL, infoFile.folderCount + infoFile.fileCount,
+      listViewCreate((LABEL){.index = LABEL_DYNAMIC, .address = (uint8_t *)infoFile.title}, NULL, infoFile.folderCount + infoFile.fileCount,
                        &infoFile.curPage, false, NULL, macroListDraw);
 
       // set scrolling title text
