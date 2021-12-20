@@ -91,7 +91,7 @@ typedef union
 } LABEL;
 
 // always initialize label to default values
-#define init_label(X) LABEL X = {.index = LABEL_BACKGROUND}
+#define init_label(X) LABEL X = {.index = LABEL_NULL}
 
 typedef struct
 {
