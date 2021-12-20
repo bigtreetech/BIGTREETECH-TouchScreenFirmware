@@ -1350,6 +1350,6 @@
  *                    require dedicated post-processing of gcode files for most slicers.
  *                    "RGB565 bitmap" and "Classic" are used as fallback.
  */
-#define THUMBNAIL_PARSER 2  // Default: 0
+#define THUMBNAIL_PARSER 0  // Default: 0
 
 #endif

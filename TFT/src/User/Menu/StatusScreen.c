@@ -26,8 +26,8 @@ const MENUITEMS StatusItems = {
   // icon                          label
   {
     {ICON_STATUS_NOZZLE,           LABEL_NULL},
-    {ICON_STATUS_BED,                    LABEL_NULL},
-    {ICON_STATUS_FAN,                    LABEL_NULL},
+    {ICON_STATUS_BED,              LABEL_NULL},
+    {ICON_STATUS_FAN,              LABEL_NULL},
     {ICON_STATUS_SPEED,            LABEL_NULL},
     #ifdef TFT70_V3_0
       {ICON_STATUS_FLOW,             LABEL_NULL},
@@ -43,7 +43,7 @@ const MENUITEMS StatusItems = {
 
 const ITEM BedItems[2] = {
   // icon                        label
-  {ICON_STATUS_BED,                    LABEL_NULL},
+  {ICON_STATUS_BED,              LABEL_NULL},
   {ICON_STATUS_CHAMBER,          LABEL_NULL},
 };
 
@@ -489,7 +489,7 @@ void menuStatus(void)
       case KEY_MAINMENU:
         OPEN_MENU(menuMain);
         break;
-        
+
       #ifdef PORTRAIT
         case KEY_ICON_5:
           OPEN_MENU(menuPrint);
