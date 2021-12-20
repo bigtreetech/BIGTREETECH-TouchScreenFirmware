@@ -900,11 +900,11 @@ void menuDrawPage(const MENUITEMS *menuItems)
   #endif
 
   menuClearGaps();
-  menuDrawTitle(labelGetAddress(&menuItems->title));
+  menuDrawTitle(labelGetAddress(&curMenuItems->title));
 
   for (i = 0; i < ITEM_PER_PAGE; i++)
   {
-    menuDrawItem(&menuItems->items[i], i);
+    menuDrawItem(&curMenuItems->items[i], i);
     RAPID_PRINTING_COMM()  // perform backend printing loop between drawing icons to avoid printer idling
   }
 

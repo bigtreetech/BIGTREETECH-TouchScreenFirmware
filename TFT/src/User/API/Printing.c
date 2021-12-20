@@ -336,19 +336,6 @@ void updatePrintUsedFilament(void)
   last_E_pos = E_pos;
 }
 
-// only return gcode file name except path
-// for example:"SD:/test/123.gcode"
-// only return "123.gcode"
-uint8_t * getPrintName(char * path)
-{
-  char * name = strrchr(path, '/');
-
-  if (name != NULL)
-    return (uint8_t *)(name + 1);
-  else
-    return (uint8_t *)path;
-}
-
 void clearInfoPrint(void)
 {
   memset(&infoPrinting, 0, sizeof(PRINTING));

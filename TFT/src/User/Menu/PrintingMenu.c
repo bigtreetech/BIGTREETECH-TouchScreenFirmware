@@ -595,7 +595,7 @@ void menuPrinting(void)
     if (infoMachineSettings.longFilename == ENABLED && infoFile.source == BOARD_SD)
       printingItems.title.address = (uint8_t *) infoFile.longFile[infoFile.fileIndex];
     else
-      printingItems.title.address = getPrintName(infoFile.title);
+      printingItems.title.address = (uint8_t *) infoFile.file[infoFile.fileIndex];
 
     printingItems.items[KEY_ICON_4] = itemIsPause[lastPause];
     printingItems.items[KEY_ICON_5].icon = (infoFile.source < BOARD_SD && isPrintModelIcon()) ? ICON_PREVIEW : ICON_BABYSTEP;
