@@ -134,20 +134,11 @@ bool IsRootDir(void)
 // check if filename provides a supported filename extension
 char *isSupportedFile(char * filename)
 {
-  char tmpName[FILE_NUM];
-  strcpy(tmpName, filename);
-  char *extPos = strrchr(tmpName, '.');  // check last "." in the name where extension is supposed to start
+  char *extPos = strrchr(filename, '.');  // check last "." in the name where extension is supposed to start
 
-  if (extPos != NULL)
+  if (extPos != NULL && extPos[1] != 'g' && extPos[1] != 'G')
   {
-    if (strlwr(extPos)[1] == 'g')
-    {
-      extPos = strrchr(filename, '.');  // support "*.g","*.gco" and "*.gcode"
-    }
-    else
-    {
-      extPos = NULL;
-    }
+    extPos = NULL;
   }
 
   return extPos;
@@ -175,7 +166,7 @@ char *isSupportedFile(char * filename)
       filename[extPos - filename] = 0;  // temporary hide filename extension
     }
   }
-
+  
   return filename;
 }
 
