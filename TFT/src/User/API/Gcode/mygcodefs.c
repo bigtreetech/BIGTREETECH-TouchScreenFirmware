@@ -112,13 +112,14 @@ bool scanPrintFilesGcodeFs(void)
         else
           Pstr_tmp++;
 
-        infoFile.longFile[infoFile.fileCount] = malloc(strlen(Pstr_tmp) + 2);  // plus one extra byte for filename extension check
+        infoFile.longFile[infoFile.fileCount] = malloc(strlen(Pstr_tmp) + 2);  // "+ 2": space for terminating null character and the flag for filename extension check
         if (infoFile.longFile[infoFile.fileCount] == NULL)
         {
           clearRequestCommandInfo();
           break;
         }
-        strcpy(infoFile.longFile[infoFile.fileCount], Pstr_tmp);
+        // copy file name and set the flag for filename extension check
+        strncpy(infoFile.longFile[infoFile.fileCount], Pstr_tmp, strlen(Pstr_tmp) + 2);  // "+2":  terminating null character and the flag for filename extension check
         clearRequestCommandInfo();  // finally free the buffer allocated by M33, if any
       }
       else  // if long filename is not supported
@@ -139,7 +140,7 @@ bool scanPrintFilesGcodeFs(void)
         continue;
       }*/
 
-      infoFile.file[infoFile.fileCount] = malloc(strlen(file) + 2);  // plus one extra byte for filename extension check
+      infoFile.file[infoFile.fileCount] = malloc(strlen(file) + 2);  // "+ 2": space for terminating null character and the flag for filename extension check
       if (infoFile.file[infoFile.fileCount] == NULL)
       {
         if (infoFile.longFile[infoFile.fileCount] != 0)
@@ -147,8 +148,8 @@ bool scanPrintFilesGcodeFs(void)
 
         break;
       }
-
-      strcpy(infoFile.file[infoFile.fileCount], file);
+      // copy file name and set the flag for filename extension check
+      strncpy(infoFile.file[infoFile.fileCount], file, strlen(file) + 2);  // "+2":  terminating null character and the flag for filename extension check
       infoFile.fileCount++;
     }
     else  // if DIRECTORY

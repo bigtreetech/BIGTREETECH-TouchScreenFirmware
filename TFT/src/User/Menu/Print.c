@@ -83,7 +83,7 @@ void gocdeIconDraw(void)
     }
     ExitDir();
 
-    hideFileIndexExtension(i + baseIndex - infoFile.folderCount);  // hide filename extension if filename extension feature is disabled
+    hideFileExtension(i + baseIndex - infoFile.folderCount);  // hide filename extension if filename extension feature is disabled
     normalNameDisp(&gcodeRect[i], (uint8_t*)infoFile.file[i + baseIndex - infoFile.folderCount]);  // always use short filename
   }
 
@@ -110,7 +110,7 @@ void gocdeListDraw(LISTITEM * item, uint16_t index, uint8_t itemPos)
     item->icon = CHARICON_FILE;
     item->itemType = LIST_LABEL;
     item->titlelabel.index = LABEL_DYNAMIC;
-    setDynamicLabel(itemPos, hideFileIndexExtension(index - infoFile.folderCount));  // hide filename extension if filename extension feature is disabled
+    setDynamicLabel(itemPos, hideFileExtension(index - infoFile.folderCount));  // hide filename extension if filename extension feature is disabled
   }
 }
 
@@ -140,7 +140,7 @@ bool printPageItemSelected(uint16_t index)
   else if (index < infoFile.folderCount + infoFile.fileCount)  // gcode file
   {
     infoFile.fileIndex = index - infoFile.folderCount;
-    char * filename = restoreFileIndexExtension(infoFile.fileIndex);  // restore filename extension if filename extension feature is disabled
+    char * filename = restoreFileExtension(infoFile.fileIndex);  // restore filename extension if filename extension feature is disabled
 
     if (infoHost.connected != true || EnterDir(infoFile.file[infoFile.fileIndex]) == false)  // always use short filename for file path
     {

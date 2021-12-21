@@ -50,11 +50,11 @@ void resetInfoFile(void);
 bool EnterDir(char * nextdir);
 void ExitDir(void);
 bool IsRootDir(void);
-char *isSupportedFile(char * filename);
-char *hideFileExtension(char * filename);
-char *restoreFileExtension(char *filename);
-char *hideFileIndexExtension(uint8_t index);
-char *restoreFileIndexExtension(uint8_t index);
+char * isSupportedFile(char * filename);
+char * hideExtension(char * filename);
+char * restoreExtension(char * filename);
+char * hideFileExtension(uint8_t index);
+char * restoreFileExtension(uint8_t index);
 
 bool isVolumeExist(uint8_t src);
 void loopVolumeSource(void);

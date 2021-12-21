@@ -821,9 +821,9 @@ void menuDrawTitle(const uint8_t *content)
   {
     if (MENU_IS(menuPrinting) && infoSettings.filename_extension == 0)
     {
-      hideFileExtension((char *)content);
+      hideExtension((char *)content);
       GUI_DispLenString(10, start_y, content, LCD_WIDTH - 20, true);
-      restoreFileExtension((char *)content);
+      restoreExtension((char *)content);
     }
     else
     {
