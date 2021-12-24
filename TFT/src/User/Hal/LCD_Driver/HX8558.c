@@ -111,7 +111,12 @@
   void HX8558_SetDirection(uint8_t rotate)
   {
     LCD_WR_REG(0X36);
-    LCD_WR_DATA(rotate ? HX8558_180_DEGREE_REG_VALUE : HX8558_0_DEGREE_REG_VALUE);
+  
+    #ifdef PORTRAIT_MODE
+      LCD_WR_DATA(rotate ? HX8558_270_DEGREE_REG_VALUE : HX8558_90_DEGREE_REG_VALUE);
+    #else
+      LCD_WR_DATA(rotate ? HX8558_180_DEGREE_REG_VALUE : HX8558_0_DEGREE_REG_VALUE);
+    #endif
   }
 
   void HX8558_SetWindow(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey)

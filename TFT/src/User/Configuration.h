@@ -1,7 +1,7 @@
 #ifndef _CONFIGURATION_H_
 #define _CONFIGURATION_H_
 
-#define CONFIG_VERSION 20211210
+#define CONFIG_VERSION 20211213
 
 //====================================================================================================
 //=============================== Settings Configurable On config.ini ================================
@@ -64,6 +64,18 @@
  *   Options: [disable: 0, enable: 1]
  */
 #define EMULATED_M109_M190 1  // Default: 1
+
+/**
+ * Event LED
+ * When printing from TFT SD / TFT U Disk, the TFT periodically sets the printer's (neopixel) LED color
+ * and TFT's knob LED color, if any, according to the current nozzle and bed temperatures.
+ *
+ * NOTE: If "EMULATED_M109_M190" is disabled (heating controlled by printer), the TFT cannot control the
+ *       printer's (neopixel) LED during heating. It will control only the TFT's knob LED, if any.
+ *
+ *   Options: [disable: 0, enable: 1]
+ */
+#define EVENT_LED 1  // Default: 1
 
 /**
  * G-code File Comment Parsing

@@ -20,8 +20,8 @@
 
 #define ICON_WIDTH   70
 #define ICON_HEIGHT  70
-#define TITLE_END_Y  30
-#define ICON_START_Y (TITLE_END_Y + 10)
+#define TITLE_END_Y  30                  // title height
+#define ICON_START_Y (TITLE_END_Y + 10)  // top margin
 
 #define LIST_ICON_WIDTH  55
 #define LIST_ICON_HEIGHT 50

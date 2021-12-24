@@ -22,8 +22,6 @@
 
 #if defined(TFT24_V1_1)
   #include "pin_TFT24_V1_1.h"
-#elif defined(TFT24_V1_1_P)
-  #include "pin_TFT24_V1_1_P.h"
 #elif defined(TFT28_V1_0)
   #include "pin_TFT28_V1_0.h"
 #elif defined(TFT28_V3_0)
@@ -70,7 +68,7 @@
 #define _FONT_H(size) (size >> 8)
 #define _FONT_W(size) (size & 0xFF)
 
-#define FONT_SIZE_NORMAL _FONT_SIZE(BYTE_HEIGHT, BYTE_WIDTH)  // Normal font for common menu
+#define FONT_SIZE_NORMAL _FONT_SIZE(BYTE_HEIGHT, BYTE_WIDTH)              // Normal font for common menu etc...
 #define FONT_SIZE_LARGE  _FONT_SIZE(LARGE_BYTE_HEIGHT, LARGE_BYTE_WIDTH)  // Large font for numpad menu etc...
 
 #endif

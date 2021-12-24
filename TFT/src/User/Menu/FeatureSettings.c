@@ -25,6 +25,7 @@ typedef enum
 {
   SKEY_EMULATED_M600 = 0,
   SKEY_EMULATED_M109_M190,
+  SKEY_EVENT_LED,
   SKEY_FILE_COMMENT_PARSING,
   SKEY_SERIAL_ALWAYS_ON,
   SKEY_SPEED,
@@ -57,6 +58,7 @@ void updateFeatureSettings(uint8_t item_index)
   {
     case SKEY_EMULATED_M600:
     case SKEY_EMULATED_M109_M190:
+    case SKEY_EVENT_LED:
     case SKEY_FILE_COMMENT_PARSING:
       TOGGLE_BIT(infoSettings.general_settings, ((item_index - SKEY_EMULATED_M600) + INDEX_EMULATED_M600));
       break;
@@ -130,6 +132,7 @@ void loadFeatureSettings(LISTITEM * item, uint16_t item_index, uint8_t itemPos)
     {
       case SKEY_EMULATED_M600:
       case SKEY_EMULATED_M109_M190:
+      case SKEY_EVENT_LED:
       case SKEY_FILE_COMMENT_PARSING:
         item->icon = iconToggle[GET_BIT(infoSettings.general_settings, ((item_index - SKEY_EMULATED_M600) + INDEX_EMULATED_M600))];
         break;
@@ -211,6 +214,7 @@ void menuFeatureSettings(void)
   LISTITEM settingPage[SKEY_COUNT] = {
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_EMULATED_M600,          LABEL_BACKGROUND},
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_EMULATED_M109_M190,     LABEL_BACKGROUND},
+    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_EVENT_LED,              LABEL_BACKGROUND},
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_FILE_COMMENT_PARSING,   LABEL_BACKGROUND},
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_SERIAL_ALWAYS_ON,       LABEL_BACKGROUND},
     {CHARICON_BLANK,       LIST_CUSTOMVALUE,   LABEL_MOVE_SPEED,             LABEL_NORMAL},
