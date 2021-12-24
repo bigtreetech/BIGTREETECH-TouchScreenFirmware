@@ -4,8 +4,8 @@
 
   #include "SSD1963.h"
   // SSD1963  resolution max:864*480
-  #define SSD_HOR_RESOLUTION LCD_WIDTH   // LCD width pixel
-  #define SSD_VER_RESOLUTION LCD_HEIGHT  // LCD height pixel
+  #define SSD_HOR_RESOLUTION LCD_HARDWARE_WIDTH   // LCD width pixel
+  #define SSD_VER_RESOLUTION LCD_HARDWARE_HEIGHT  // LCD height pixel
 
   #define SSD_HT  (SSD_HOR_RESOLUTION+SSD_HOR_BACK_PORCH+SSD_HOR_FRONT_PORCH)
   #define SSD_HPS (SSD_HOR_BACK_PORCH)
@@ -73,15 +73,20 @@
   void SSD1963_SetDirection(uint8_t rotate)
   {
     LCD_WR_REG(0X36);
-    LCD_WR_DATA(rotate ? SSD1963_180_DEGREE_REG_VALUE : SSD1963_0_DEGREE_REG_VALUE);
+  
+    #ifdef PORTRAIT_MODE
+      LCD_WR_DATA(rotate ? SSD1963_270_DEGREE_REG_VALUE : SSD1963_90_DEGREE_REG_VALUE);
+    #else
+      LCD_WR_DATA(rotate ? SSD1963_180_DEGREE_REG_VALUE : SSD1963_0_DEGREE_REG_VALUE);
+    #endif
   }
 
   void SSD1963_SetWindow(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey)
   {
-    LCD_WR_REG(0x2A);
+    LCD_WR_REG(SSD1963_CMD_SET_X);
     LCD_WR_DATA(sx>>8);LCD_WR_DATA(sx&0xFF);
     LCD_WR_DATA(ex>>8);LCD_WR_DATA(ex&0xFF);
-    LCD_WR_REG(0x2B);
+    LCD_WR_REG(SSD1963_CMD_SET_Y);
     LCD_WR_DATA(sy>>8);LCD_WR_DATA(sy&0xFF);
     LCD_WR_DATA(ey>>8);LCD_WR_DATA(ey&0xFF);
     LCD_WR_REG(0x2C);  // Ready to write memory

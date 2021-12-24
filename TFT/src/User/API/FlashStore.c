@@ -3,7 +3,7 @@
 #include <string.h>
 
 #define TSC_SIGN  0x20200512  // DO NOT MODIFY
-#define PARA_SIGN 0x20211210  // (YYYYMMDD) If a new setting parameter is added,
+#define PARA_SIGN 0x20211213  // (YYYYMMDD) If a new setting parameter is added,
                               // modify here and initialize the initial value
                               // in the "initSettings()" function
 enum
@@ -68,7 +68,7 @@ void readStoredPara(void)
   else
   {
     memcpy(&infoSettings, data + (index += 4), sizeof(SETTINGS));
-    // if ((paraStatus & PARA_TSC_EXIST) == 0) infoSettings.rotated_ui = DISABLED;  // Unecessarily rotates UI to Default??
+    //if ((paraStatus & PARA_TSC_EXIST) == 0) infoSettings.rotated_ui = DISABLED;  // unecessarily rotates UI to Default?
   }
 }
 

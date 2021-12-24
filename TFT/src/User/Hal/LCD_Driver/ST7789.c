@@ -75,7 +75,12 @@
   void ST7789_SetDirection(uint8_t rotate)
   {
     LCD_WR_REG(0X36);
-    LCD_WR_DATA(rotate ? ST7789_180_DEGREE_REG_VALUE : ST7789_0_DEGREE_REG_VALUE);
+  
+    #ifdef PORTRAIT_MODE
+      LCD_WR_DATA(rotate ? ST7789_270_DEGREE_REG_VALUE : ST7789_90_DEGREE_REG_VALUE);
+    #else
+      LCD_WR_DATA(rotate ? ST7789_180_DEGREE_REG_VALUE : ST7789_0_DEGREE_REG_VALUE);
+    #endif
   }
 
   void ST7789_SetWindow(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey)

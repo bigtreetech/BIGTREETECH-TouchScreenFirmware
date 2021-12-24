@@ -10,17 +10,17 @@ extern "C" {
 #include "variants.h"
 #include "GUI.h"
 
-#ifdef PORTRAIT
+#ifdef PORTRAIT_MODE
   #define SPACE_X          ((LCD_WIDTH - ICON_WIDTH * 3) / 3)
   #define SPACE_X_PER_ICON (LCD_WIDTH / 3)
 #else
   #define SPACE_X          ((LCD_WIDTH - ICON_WIDTH * 4) / 4)
   #define SPACE_X_PER_ICON (LCD_WIDTH / 4)
 #endif
-#define START_X          (SPACE_X / 2)
 
+#define START_X            (SPACE_X / 2)
 
-#ifdef PORTRAIT
+#ifdef PORTRAIT_MODE
   #define SPACE_Y          ((LCD_HEIGHT - ICON_START_Y - ICON_HEIGHT * 3) / 3)
 #else
   #define SPACE_Y          ((LCD_HEIGHT - ICON_START_Y - ICON_HEIGHT * 2) / 2)

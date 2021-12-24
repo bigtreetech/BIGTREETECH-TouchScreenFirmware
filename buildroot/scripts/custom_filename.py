@@ -8,6 +8,8 @@ flags = {k: v for (k, v) in build_flags.get("CPPDEFINES")}
 filename = flags.get("BINARY_FILENAME")
 if filename == None:
     filename = flags.get("HARDWARE") + "." + flags.get("SOFTWARE_VERSION")
+if flags.get("PORTRAIT_MODE") != None:
+    filename = filename + flags.get("PORTRAIT_MODE")
 #print(filename)
 print("Done.")
 

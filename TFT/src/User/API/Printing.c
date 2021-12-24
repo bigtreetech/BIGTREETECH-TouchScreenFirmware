@@ -679,6 +679,11 @@ bool isPaused(void)
   return infoPrinting.pause;
 }
 
+bool isTFTPrinting(void)
+{
+  return (infoPrinting.printing && infoFile.source < BOARD_SD) ? true : false;
+}
+
 bool isRemoteHostPrinting(void)
 {
   return (infoPrinting.printing && infoFile.source == REMOTE_HOST) ? true : false;

@@ -567,10 +567,7 @@ void menuScreenSettings(void)
     switch (curIndex)
     {
       case KEY_ICON_0:
-        if (infoSettings.rotated_ui == 0 || infoSettings.rotated_ui == 2) //support VERTICAL GUI
-          infoSettings.rotated_ui++;
-        else
-          infoSettings.rotated_ui--;
+        infoSettings.rotated_ui = !infoSettings.rotated_ui;
         LCD_RefreshDirection(infoSettings.rotated_ui);
         TSC_Calibration();
         menuDrawPage(&screenSettingsItems);
