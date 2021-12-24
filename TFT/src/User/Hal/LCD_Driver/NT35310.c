@@ -56,7 +56,12 @@
   void NT35310_SetDirection(uint8_t rotate)
   {
     LCD_WR_REG(0X36);
-    LCD_WR_DATA(rotate ? NT35310_180_DEGREE_REG_VALUE : NT35310_0_DEGREE_REG_VALUE);
+  
+    #ifdef PORTRAIT_MODE
+      LCD_WR_DATA(rotate ? NT35310_270_DEGREE_REG_VALUE : NT35310_90_DEGREE_REG_VALUE);
+    #else
+      LCD_WR_DATA(rotate ? NT35310_180_DEGREE_REG_VALUE : NT35310_0_DEGREE_REG_VALUE);
+    #endif
   }
 
   void NT35310_SetWindow(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey)

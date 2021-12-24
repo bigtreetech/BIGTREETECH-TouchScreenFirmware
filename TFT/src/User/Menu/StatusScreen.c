@@ -14,7 +14,7 @@
 
 #define UPDATE_TOOL_TIME 2000  // 1 seconds is 1000
 
-#ifdef PORTRAIT
+#ifdef PORTRAIT_MODE
   #define XYZ_STATUS " X: %.2f  Y: %.2f  Z: %.2f "
 #else
   #define XYZ_STATUS "   X: %.2f   Y: %.2f   Z: %.2f   "
@@ -69,15 +69,15 @@ const GUI_POINT ss_val_point   = {SSICON_WIDTH / 2, SSICON_VAL_Y0};
 #endif
 
 // info box msg area
-#ifdef PORTRAIT
-  const  GUI_RECT msgRect = {START_X + 0.5 * ICON_WIDTH + 0 * SPACE_X + 2,   ICON_START_Y +  0 * ICON_HEIGHT + 0 * SPACE_Y + STATUS_MSG_BODY_YOFFSET,
-                             START_X + 2.5 * ICON_WIDTH + 1 * SPACE_X - 2,   ICON_START_Y +  1 * ICON_HEIGHT + 0 * SPACE_Y - STATUS_MSG_BODY_BOTTOM};
+#ifdef PORTRAIT_MODE
+  const  GUI_RECT msgRect = {START_X + 0.5 * ICON_WIDTH + 0 * SPACE_X + 2, ICON_START_Y +  0 * ICON_HEIGHT + 0 * SPACE_Y + STATUS_MSG_BODY_YOFFSET,
+                             START_X + 2.5 * ICON_WIDTH + 1 * SPACE_X - 2, ICON_START_Y +  1 * ICON_HEIGHT + 0 * SPACE_Y - STATUS_MSG_BODY_BOTTOM};
 
   const GUI_RECT RecGantry = {START_X-2,                                SSICON_HEIGHT + ICON_START_Y + STATUS_GANTRY_YOFFSET,
                               START_X+2 + 3 * ICON_WIDTH + 2 * SPACE_X, ICON_HEIGHT + SPACE_Y + ICON_START_Y - STATUS_GANTRY_YOFFSET};
 #else
-  const  GUI_RECT msgRect = {START_X + 1 * ICON_WIDTH + 1 * SPACE_X + 2,   ICON_START_Y +  1 * ICON_HEIGHT + 1 * SPACE_Y + STATUS_MSG_BODY_YOFFSET,
-                             START_X + 3 * ICON_WIDTH + 2 * SPACE_X - 2,   ICON_START_Y +  2 * ICON_HEIGHT + 1 * SPACE_Y - STATUS_MSG_BODY_BOTTOM};
+  const  GUI_RECT msgRect = {START_X + 1 * ICON_WIDTH + 1 * SPACE_X + 2, ICON_START_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + STATUS_MSG_BODY_YOFFSET,
+                             START_X + 3 * ICON_WIDTH + 2 * SPACE_X - 2, ICON_START_Y + 2 * ICON_HEIGHT + 1 * SPACE_Y - STATUS_MSG_BODY_BOTTOM};
 
   const GUI_RECT RecGantry = {START_X,                                SSICON_HEIGHT + ICON_START_Y + STATUS_GANTRY_YOFFSET,
                               START_X + 4 * ICON_WIDTH + 3 * SPACE_X, ICON_HEIGHT + SPACE_Y + ICON_START_Y - STATUS_GANTRY_YOFFSET};
@@ -343,6 +343,7 @@ void drawStatus(void)
   sprintf(tempstr, XYZ_STATUS, coordinateGetAxisActual(X_AXIS), coordinateGetAxisActual(Y_AXIS),
           coordinateGetAxisActual(Z_AXIS));
   GUI_DispStringInPrect(&RecGantry, (uint8_t *)tempstr);
+
   GUI_RestoreColorDefault();
 }
 
@@ -489,12 +490,6 @@ void menuStatus(void)
       case KEY_MAINMENU:
         OPEN_MENU(menuMain);
         break;
-        
-      #ifdef PORTRAIT
-        case KEY_ICON_5:
-          OPEN_MENU(menuPrint);
-          break;
-      #endif
 
       case KEY_ICON_7:
         OPEN_MENU(menuPrint);

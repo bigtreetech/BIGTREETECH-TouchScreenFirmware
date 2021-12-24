@@ -13,10 +13,10 @@ extern "C" {
 // Config version support
 // change if new elements/keywords are added/removed/changed in the configuration.h Format YYYYMMDD
 // this number should match CONFIG_VERSION in configuration.h
-#define CONFIG_SUPPPORT 20211210
+#define CONFIG_SUPPPORT 20211213
 
 #define FONT_FLASH_SIGN       20210522  // (YYYYMMDD) change if fonts require updating
-#define CONFIG_FLASH_SIGN     20211210  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
+#define CONFIG_FLASH_SIGN     20211213  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
 #define LANGUAGE_FLASH_SIGN   20211111  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
 #define ICON_FLASH_SIGN       20211122  // (YYYYMMDD) change if any icon(s) is added or removed
 
@@ -70,6 +70,7 @@ typedef enum
   INDEX_LISTENING_MODE = 0,
   INDEX_EMULATED_M600,
   INDEX_EMULATED_M109_M190,
+  INDEX_EVENT_LED,
   INDEX_FILE_COMMENT_PARSING
 } GENERAL_SETTINGS;
 

@@ -7,6 +7,8 @@ extern "C" {
 
 #define NT35310_0_DEGREE_REG_VALUE   0X60
 #define NT35310_180_DEGREE_REG_VALUE 0XA0
+#define NT35310_90_DEGREE_REG_VALUE  0XC0
+#define NT35310_270_DEGREE_REG_VALUE 0X00
 
 uint8_t LCD_DriveIsNT35310(void);
 void NT35310_Init_Sequential(void);
