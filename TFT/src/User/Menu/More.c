@@ -1,93 +1,105 @@
-#include "includes.h"
 #include "More.h"
-
-void menuIsPause(void)
-{
-  u16 key_num = IDLE_TOUCH;
-
-  popupDrawPage(DIALOG_TYPE_ALERT, bottomDoubleBtn, textSelect(LABEL_WARNING),
-                  textSelect(LABEL_IS_PAUSE), textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL));
-
-  while(infoMenu.menu[infoMenu.cur] == menuIsPause)
-  {
-    key_num = KEY_GetValue(2, doubleBtnRect);
-    switch(key_num)
-    {
-      case KEY_POPUP_CONFIRM:
-        if(setPrintPause(true,false))
-          infoMenu.menu[infoMenu.cur]=menuExtrude;
-        break;
-
-      case KEY_POPUP_CANCEL:
-        infoMenu.cur--;
-        break;
-    }
-    loopProcess();
-  }
-}
+#include "includes.h"
 
 const MENUITEMS moreItems = {
-//  title
-LABEL_MORE,
-// icon                       label
- {{ICON_HEAT,                 LABEL_HEAT},
-  {ICON_FAN,                  LABEL_FAN},
-  {ICON_EXTRUDE,              LABEL_EXTRUDE},
-  {ICON_PERCENTAGE,           LABEL_PERCENTAGE},
-  {ICON_BABYSTEP,             LABEL_BABYSTEP},
-  {ICON_FEATURE_SETTINGS,     LABEL_FEATURE_SETTINGS},
-  {ICON_MACHINE_SETTINGS,     LABEL_MACHINE_SETTINGS},
-  {ICON_BACK,                 LABEL_BACK},}
+  // title
+  LABEL_MORE,
+  // icon                          label
+  {
+    {ICON_HEAT,                    LABEL_HEAT},
+    {ICON_FAN,                     LABEL_FAN},
+    {ICON_EXTRUDE,                 LABEL_EXTRUDE},
+    {ICON_PERCENTAGE,              LABEL_PERCENTAGE},
+    {ICON_FEATURE_SETTINGS,        LABEL_FEATURE_SETTINGS},
+    {ICON_MACHINE_SETTINGS,        LABEL_MACHINE_SETTINGS},
+    #ifdef LOAD_UNLOAD_M701_M702
+      {ICON_EXTRUDE,                 LABEL_LOAD_UNLOAD_SHORT},
+    #else
+      {ICON_GCODE,                   LABEL_TERMINAL},
+    #endif
+    {ICON_BACK,                    LABEL_BACK},
+  }
 };
+
+void isPauseExtrude(void)
+{
+  if (printPause(true, PAUSE_NORMAL))
+    REPLACE_MENU(menuExtrude);
+}
+
+void isPauseLoadUnload(void)
+{
+  if (printPause(true, PAUSE_NORMAL))
+    REPLACE_MENU(menuLoadUnload);
+}
 
 void menuMore(void)
 {
-  KEY_VALUES  key_num = KEY_IDLE;
+  KEY_VALUES key_num = KEY_IDLE;
 
   menuDrawPage(&moreItems);
-  while(infoMenu.menu[infoMenu.cur] == menuMore)
+
+  while (MENU_IS(menuMore))
   {
     key_num = menuKeyGetValue();
-    switch(key_num)
+    switch (key_num)
     {
       case KEY_ICON_0:
-        infoMenu.menu[++infoMenu.cur] = menuHeat;
+        OPEN_MENU(menuHeat);
         break;
 
       case KEY_ICON_1:
-        infoMenu.menu[++infoMenu.cur] = menuFan;
+        OPEN_MENU(menuFan);
         break;
 
       case KEY_ICON_2:
-        if (isPrinting() && !isPause()) // need paused before extrude
-          infoMenu.menu[++infoMenu.cur] = menuIsPause;
+        if (isPrinting() && !isPaused())  // need paused before extrude
+        {
+          setDialogText(LABEL_WARNING, LABEL_IS_PAUSE, LABEL_CONFIRM, LABEL_CANCEL);
+          showDialog(DIALOG_TYPE_ALERT, isPauseExtrude, NULL, NULL);
+        }
         else
-          infoMenu.menu[++infoMenu.cur] = menuExtrude;
+        {
+          OPEN_MENU(menuExtrude);
+        }
         break;
 
       case KEY_ICON_3:
-        infoMenu.menu[++infoMenu.cur] = menuSpeed;
+        OPEN_MENU(menuSpeed);
         break;
 
       case KEY_ICON_4:
-        infoMenu.menu[++infoMenu.cur] = menuBabyStep;
+        OPEN_MENU(menuFeatureSettings);
         break;
 
       case KEY_ICON_5:
-        infoMenu.menu[++infoMenu.cur] = menuFeatureSettings;
+        OPEN_MENU(menuMachineSettings);
         break;
 
       case KEY_ICON_6:
-        infoMenu.menu[++infoMenu.cur] = menuMachineSettings;
+        #ifdef LOAD_UNLOAD_M701_M702
+          if (isPrinting() && !isPaused())  // need paused before extrude
+          {
+            setDialogText(LABEL_WARNING, LABEL_IS_PAUSE, LABEL_CONFIRM, LABEL_CANCEL);
+            showDialog(DIALOG_TYPE_ALERT, isPauseLoadUnload, NULL, NULL);
+          }
+          else
+          {
+            OPEN_MENU(menuLoadUnload);
+          }
+        #else
+          OPEN_MENU(menuTerminal);
+        #endif
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
       default:
         break;
     }
+
     loopProcess();
   }
 }

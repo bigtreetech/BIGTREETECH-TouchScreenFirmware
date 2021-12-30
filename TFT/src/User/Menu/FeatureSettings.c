@@ -1,52 +1,29 @@
 #include "FeatureSettings.h"
 #include "includes.h"
 
+static uint16_t fe_cur_page = 0;
 
-LISTITEMS featureSettingsItems = {
-// title
-LABEL_FEATURE_SETTINGS,
-// icon                 ItemType      Item Title        item value text(only for custom value)
+// parameter values
+
+#define ITEM_TOGGLE_AUTO_NUM 3
+const LABEL itemToggleAuto[ITEM_TOGGLE_AUTO_NUM] =
 {
-  {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
-  {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
-  {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
-  {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
-  {ICONCHAR_BACKGROUND, LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
-  {ICONCHAR_PAGEUP,     LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
-  {ICONCHAR_PAGEDOWN,   LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},
-  {ICONCHAR_BACK,       LIST_LABEL,  LABEL_BACKGROUND, LABEL_BACKGROUND},}
+  LABEL_OFF,
+  LABEL_ON,
+  LABEL_AUTO
 };
 
-//
-//setup item states
-//
-#define TOGGLE_NUM   2
-const uint16_t toggleitem[TOGGLE_NUM] = {ICONCHAR_TOGGLE_OFF,ICONCHAR_TOGGLE_ON};
+#define ITEM_TOGGLE_SMART_NUM 2
+const LABEL itemToggleSmart[ITEM_TOGGLE_SMART_NUM] =
+{
+  LABEL_ON,
+  LABEL_SMART
+};
 
-#ifdef FIL_RUNOUT_PIN
-  #define ITEM_RUNOUT_NUM 3
-  const LABEL itemRunout[ITEM_RUNOUT_NUM] = {
-                                              //item value text(only for custom value)
-                                              LABEL_OFF,
-                                              LABEL_ON,
-                                              LABEL_SMART
-                                            };
-
-#endif  // FIL_RUNOUT_PIN
-
-#define ITEM_SPEED_NUM 3
-const LABEL itemMoveSpeed[ITEM_SPEED_NUM] = {
-                                              //item value text(only for custom value)
-                                              LABEL_SLOW_SPEED,
-                                              LABEL_NORMAL_SPEED,
-                                              LABEL_FAST_SPEED
-                                            };
-
-//
-//add key number index of the items
-//
+// add key number index of the items
 typedef enum
 {
+<<<<<<< HEAD
   SKEY_ACK = 0,
   SKEY_CNC,
   SKEY_LASER,
@@ -93,53 +70,49 @@ LISTITEM settingPage[SKEY_COUNT] = {
   {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_INVERT_XAXIS,             LABEL_BACKGROUND  },
   {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_INVERT_YAXIS,             LABEL_BACKGROUND  },
   {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_INVERT_ZAXIS,             LABEL_BACKGROUND  },
+=======
+  SKEY_EMULATED_M600 = 0,
+  SKEY_EMULATED_M109_M190,
+  SKEY_EVENT_LED,
+  SKEY_FILE_COMMENT_PARSING,
+  SKEY_SERIAL_ALWAYS_ON,
+  SKEY_SPEED,
+  SKEY_AUTO_LOAD_LEVELING,
+  SKEY_PROBING_Z_OFFSET,
+  SKEY_Z_STEPPERS_ALIGNMENT,
+
+>>>>>>> btt_main/master
   #ifdef PS_ON_PIN
-    {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,      LABEL_AUTO_SHUT_DOWN,           LABEL_BACKGROUND  },
+    SKEY_PS_AUTO_SHUTDOWN,
   #endif
+
   #ifdef FIL_RUNOUT_PIN
-    {ICONCHAR_BLANK,     LIST_CUSTOMVALUE,   LABEL_FILAMENT_SENSOR,          LABEL_OFF         },
+    SKEY_FIL_RUNOUT,
   #endif
-  {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_MOVE_SPEED,               LABEL_NORMAL_SPEED},
-  {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_SEND_START_GCODE,         LABEL_BACKGROUND  },
-  {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_SEND_END_GCODE,           LABEL_BACKGROUND  },
-  {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_SEND_CANCEL_GCODE,        LABEL_BACKGROUND  },
-  {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_PERSISTENT_STATUS_INFO,   LABEL_BACKGROUND  },
-  {ICONCHAR_TOGGLE_ON,  LIST_TOGGLE,        LABEL_FILE_LISTMODE,            LABEL_BACKGROUND  },
-  #ifdef LED_COLOR_PIN
-    {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_KNOB_LED,                 LABEL_OFF         },
-  #endif
-  #ifdef LCD_LED_PWM_CHANNEL
-  {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_LCD_BRIGHTNESS,           LABEL_DYNAMIC },
-  {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_LCD_BRIGHTNESS_DIM,       LABEL_DYNAMIC },
-  {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_LCD_DIM_IDLE_TIMER,       LABEL_DYNAMIC },
-  #endif
-  #ifdef ST7920_SPI
-  {ICONCHAR_BLANK,      LIST_TOGGLE,        LABEL_ST7920_FULLSCREEN,        LABEL_OFF         },
-  #endif
-  // Keep reset settings always at the bottom of the settings menu list.
-  {ICONCHAR_BLANK,      LIST_MOREBUTTON,    LABEL_SETTING_RESET,            LABEL_BACKGROUND  }
-};
 
-void resetSettings(void)
-{
-  infoSettingsReset();
-  storePara();
-  popupReminder(DIALOG_TYPE_SUCCESS, textSelect(LABEL_INFO), textSelect(LABEL_RESET_SETTINGS_DONE));
-}
+  SKEY_PL_RECOVERY,
+  SKEY_PL_RECOVERY_HOME,
+  SKEY_BTT_MINI_UPS,
+  SKEY_START_GCODE_ENABLED,
+  SKEY_END_GCODE_ENABLED,
+  SKEY_CANCEL_GCODE_ENABLED,
+  SKEY_RESET_SETTINGS,        // Keep reset always at the bottom of the settings menu list.
+  SKEY_COUNT                  // keep this always at the end
+} SKEY_LIST;
 
-//
-//perform action on button press
-//
-void updateFeatureSettings(uint8_t key_val)
+// perform action on button press
+void updateFeatureSettings(uint8_t item_index)
 {
-  uint8_t item_index = fe_cur_page*LISTITEM_PER_PAGE+ key_val;
   switch (item_index)
   {
-    case SKEY_ACK:
-      infoSettings.terminalACK = (infoSettings.terminalACK + 1) % TOGGLE_NUM;
-      settingPage[item_index].icon = toggleitem[infoSettings.terminalACK];
+    case SKEY_EMULATED_M600:
+    case SKEY_EMULATED_M109_M190:
+    case SKEY_EVENT_LED:
+    case SKEY_FILE_COMMENT_PARSING:
+      TOGGLE_BIT(infoSettings.general_settings, ((item_index - SKEY_EMULATED_M600) + INDEX_EMULATED_M600));
       break;
 
+<<<<<<< HEAD
     case SKEY_CNC:
       infoSettings.cnc_mode = (infoSettings.cnc_mode + 1) % TOGGLE_NUM;
       settingPage[item_index].icon = toggleitem[infoSettings.cnc_mode];
@@ -154,128 +127,83 @@ void updateFeatureSettings(uint8_t key_val)
       infoSettings.invert_axis[X_AXIS] = (infoSettings.invert_axis[X_AXIS] + 1) % TOGGLE_NUM;
       settingPage[item_index].icon = toggleitem[infoSettings.invert_axis[X_AXIS]];
      break;
-
-    case SKEY_INVERT_Y:
-      infoSettings.invert_axis[Y_AXIS] = (infoSettings.invert_axis[Y_AXIS] + 1) % TOGGLE_NUM;
-      settingPage[item_index].icon = toggleitem[infoSettings.invert_axis[Y_AXIS]];
+=======
+    case SKEY_SERIAL_ALWAYS_ON:
+      infoSettings.serial_always_on = (infoSettings.serial_always_on + 1) % ITEM_TOGGLE_NUM;
       break;
-
-    case SKEY_INVERT_Z:
-      infoSettings.invert_axis[Z_AXIS] = (infoSettings.invert_axis[Z_AXIS] + 1) % TOGGLE_NUM;
-      settingPage[item_index].icon = toggleitem[infoSettings.invert_axis[Z_AXIS]];
-      break;
-
-    #ifdef PS_ON_PIN
-      case SKEY_POWER:
-      infoSettings.auto_off = (infoSettings.auto_off + 1) % TOGGLE_NUM;
-      settingPage[item_index].icon = toggleitem[infoSettings.auto_off];
-      break;
-    #endif
-
-    #ifdef FIL_RUNOUT_PIN
-      case SKEY_RUNOUT:
-        infoSettings.runout = (infoSettings.runout + 1) % ITEM_RUNOUT_NUM;
-        settingPage[item_index].valueLabel = itemRunout[infoSettings.runout];
-        break;
-    #endif
+>>>>>>> btt_main/master
 
     case SKEY_SPEED:
       infoSettings.move_speed = (infoSettings.move_speed + 1) % ITEM_SPEED_NUM;
-      settingPage[item_index].valueLabel = itemMoveSpeed[infoSettings.move_speed];
       break;
 
-    case SKEY_STARTGCODE:
-      infoSettings.send_start_gcode = (infoSettings.send_start_gcode + 1) % TOGGLE_NUM;
-      settingPage[item_index].icon = toggleitem[infoSettings.send_start_gcode];
+    case SKEY_AUTO_LOAD_LEVELING:
+      infoSettings.auto_load_leveling = (infoSettings.auto_load_leveling + 1) % ITEM_TOGGLE_NUM;
       break;
 
-    case SKEY_ENDGCODE:
-      infoSettings.send_end_gcode = (infoSettings.send_end_gcode + 1) % TOGGLE_NUM;
-      settingPage[item_index].icon = toggleitem[infoSettings.send_end_gcode];
+    case SKEY_PROBING_Z_OFFSET:
+      infoSettings.probing_z_offset = (infoSettings.probing_z_offset + 1) % ITEM_TOGGLE_NUM;
       break;
 
-    case SKEY_CANCELGCODE:
-      infoSettings.send_cancel_gcode = (infoSettings.send_cancel_gcode + 1) % TOGGLE_NUM;
-      settingPage[item_index].icon = toggleitem[infoSettings.send_cancel_gcode];
+    case SKEY_Z_STEPPERS_ALIGNMENT:
+      infoSettings.z_steppers_alignment = (infoSettings.z_steppers_alignment + 1) % ITEM_TOGGLE_NUM;
       break;
 
-    case SKEY_PERSISTENTINFO:
-      infoSettings.persistent_info = (infoSettings.persistent_info + 1) % TOGGLE_NUM;
-      settingPage[item_index].icon = toggleitem[infoSettings.persistent_info];
-      break;
-
-    case SKEY_FILELIST:
-      infoSettings.file_listmode = (infoSettings.file_listmode + 1) % TOGGLE_NUM;
-      settingPage[item_index].icon = toggleitem[infoSettings.file_listmode];
-      break;
-
-    #ifdef LED_COLOR_PIN
-      case SKEY_KNOB:
-        infoSettings.knob_led_color = (infoSettings.knob_led_color + 1 ) % LED_COLOR_NUM;
-        settingPage[item_index].valueLabel = itemLedcolor[infoSettings.knob_led_color];
-        WS2812_Send_DAT(led_color[infoSettings.knob_led_color]);
+    #ifdef PS_ON_PIN
+      case SKEY_PS_AUTO_SHUTDOWN:
+        infoSettings.auto_shutdown = (infoSettings.auto_shutdown + 1) % ITEM_TOGGLE_AUTO_NUM;
         break;
     #endif
+
+    #ifdef FIL_RUNOUT_PIN
+      case SKEY_FIL_RUNOUT:
+        infoSettings.runout ^= (1U << 0);
+        break;
+    #endif
+
+    case SKEY_PL_RECOVERY:
+      infoSettings.plr = (infoSettings.plr + 1) % ITEM_TOGGLE_NUM;
+      break;
+
+    case SKEY_PL_RECOVERY_HOME:
+      infoSettings.plr_home = (infoSettings.plr_home + 1) % ITEM_TOGGLE_NUM;
+      break;
+
+    case SKEY_BTT_MINI_UPS:
+      infoSettings.btt_ups = (infoSettings.btt_ups + 1) % ITEM_TOGGLE_NUM;
+      break;
+
+    case SKEY_START_GCODE_ENABLED:
+    case SKEY_END_GCODE_ENABLED:
+    case SKEY_CANCEL_GCODE_ENABLED:
+      TOGGLE_BIT(infoSettings.send_gcodes, (item_index - SKEY_START_GCODE_ENABLED));
+      break;
 
     case SKEY_RESET_SETTINGS:
-      showDialog(DIALOG_TYPE_ALERT, textSelect(LABEL_SETTING_RESET), textSelect(LABEL_RESET_SETTINGS_INFO),
-                  textSelect(LABEL_CONFIRM), textSelect(LABEL_CANCEL) ,resetSettings,NULL,NULL);
+      setDialogText(LABEL_SETTINGS_RESET, LABEL_SETTINGS_RESET_INFO, LABEL_CONFIRM, LABEL_CANCEL);
+      showDialog(DIALOG_TYPE_ALERT, resetSettings, NULL, NULL);
       break;
-
-    #ifdef LCD_LED_PWM_CHANNEL
-      case SKEY_LCD_BRIGHTNESS:
-      {
-        infoSettings.lcd_brightness = (infoSettings.lcd_brightness + 1) % ITEM_BRIGHTNESS_NUM;
-        char tempstr[8];
-        sprintf(tempstr,(char *)textSelect(LABEL_PERCENT_VALUE),LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
-        setDynamicTextValue(key_val,tempstr);
-        Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
-        break;
-      }
-
-      case SKEY_LCD_BRIGTHNESS_DIM:
-      {
-        infoSettings.lcd_idle_brightness = (infoSettings.lcd_idle_brightness + 1) % ITEM_BRIGHTNESS_NUM;
-        char tempstr[8];
-        sprintf(tempstr,(char *)textSelect(LABEL_PERCENT_VALUE),LCD_BRIGHTNESS[infoSettings.lcd_idle_brightness]);
-        setDynamicTextValue(key_val,tempstr);
-        break;
-      }
-
-      case SKEY_LCD_DIM_IDLE_TIMER:
-        infoSettings.lcd_idle_timer = (infoSettings.lcd_idle_timer + 1) % ITEM_SECONDS_NUM;
-        settingPage[item_index].valueLabel = itemDimTime[infoSettings.lcd_idle_timer];
-        break;
-    #endif //LCD_LED_PWM_CHANNEL
-
-    #ifdef ST7920_SPI
-    case SKEY_ST7920_FULLSCREEN:
-      infoSettings.marlin_mode_fullscreen = (infoSettings.marlin_mode_fullscreen + 1) % TOGGLE_NUM;
-      settingPage[item_index].icon = toggleitem[infoSettings.marlin_mode_fullscreen];
-      break;
-    #endif
 
     default:
       return;
   }
-   featureSettingsItems.items[key_val] = settingPage[item_index];
-}
+}  // updateFeatureSettings
 
-//
-//load values on page change and reload
-//
-void loadFeatureSettings(){
-  for (uint8_t i = 0; i < LISTITEM_PER_PAGE; i++)
+// load values on page change and reload
+void loadFeatureSettings(LISTITEM * item, uint16_t item_index, uint8_t itemPos)
+{
+  if (item_index < SKEY_COUNT)
   {
-    uint8_t item_index = fe_cur_page * LISTITEM_PER_PAGE + i;
-    if (item_index < SKEY_COUNT)
+    switch (item_index)
     {
-      switch (item_index)
-      {
-      case SKEY_ACK:
-        settingPage[item_index].icon = toggleitem[infoSettings.terminalACK];
+      case SKEY_EMULATED_M600:
+      case SKEY_EMULATED_M109_M190:
+      case SKEY_EVENT_LED:
+      case SKEY_FILE_COMMENT_PARSING:
+        item->icon = iconToggle[GET_BIT(infoSettings.general_settings, ((item_index - SKEY_EMULATED_M600) + INDEX_EMULATED_M600))];
         break;
 
+<<<<<<< HEAD
       case SKEY_CNC:
         settingPage[item_index].icon = toggleitem[infoSettings.cnc_mode];
         break;
@@ -286,170 +214,130 @@ void loadFeatureSettings(){
 
       case SKEY_INVERT_X:
         settingPage[item_index].icon = toggleitem[infoSettings.invert_axis[X_AXIS]];
+=======
+      case SKEY_SERIAL_ALWAYS_ON:
+        item->icon = iconToggle[infoSettings.serial_always_on];
+>>>>>>> btt_main/master
         break;
 
-      case SKEY_INVERT_Y:
-        settingPage[item_index].icon = toggleitem[infoSettings.invert_axis[Y_AXIS]];
+      case SKEY_SPEED:
+        item->valueLabel = itemSpeed[infoSettings.move_speed].label;
         break;
 
-      case SKEY_INVERT_Z:
-        settingPage[item_index].icon = toggleitem[infoSettings.invert_axis[Z_AXIS]];
+      case SKEY_AUTO_LOAD_LEVELING:
+        item->icon = iconToggle[infoSettings.auto_load_leveling];
+        break;
+
+      case SKEY_PROBING_Z_OFFSET:
+        item->icon = iconToggle[infoSettings.probing_z_offset];
+        break;
+
+      case SKEY_Z_STEPPERS_ALIGNMENT:
+        item->icon = iconToggle[infoSettings.z_steppers_alignment];
         break;
 
       #ifdef PS_ON_PIN
-        case SKEY_POWER:
-          settingPage[item_index].icon = toggleitem[infoSettings.auto_off];
+        case SKEY_PS_AUTO_SHUTDOWN:
+          item->valueLabel = itemToggleAuto[infoSettings.auto_shutdown];
           break;
       #endif
 
       #ifdef FIL_RUNOUT_PIN
-        case SKEY_RUNOUT:
-          settingPage[item_index].valueLabel = itemRunout[infoSettings.runout];
+        case SKEY_FIL_RUNOUT:
+        {
+          LABEL sensorLabel = itemToggleSmart[GET_BIT(infoSettings.runout, 1)];
+          item->valueLabel.index = (GET_BIT(infoSettings.runout, 0)) ? sensorLabel.index : LABEL_OFF ;
           break;
+        }
       #endif
 
-      case SKEY_SPEED:
-        settingPage[item_index].valueLabel = itemMoveSpeed[infoSettings.move_speed];
+      case SKEY_PL_RECOVERY:
+        item->icon = iconToggle[infoSettings.plr];
         break;
 
-      case SKEY_STARTGCODE:
-        settingPage[item_index].icon = toggleitem[infoSettings.send_start_gcode];
+      case SKEY_PL_RECOVERY_HOME:
+        item->icon = iconToggle[infoSettings.plr_home];
         break;
 
-      case SKEY_ENDGCODE:
-        settingPage[item_index].icon = toggleitem[infoSettings.send_end_gcode];
+      case SKEY_BTT_MINI_UPS:
+        item->icon = iconToggle[infoSettings.btt_ups];
         break;
 
-      case SKEY_CANCELGCODE:
-        settingPage[item_index].icon = toggleitem[infoSettings.send_cancel_gcode];
+      case SKEY_START_GCODE_ENABLED:
+      case SKEY_END_GCODE_ENABLED:
+      case SKEY_CANCEL_GCODE_ENABLED:
+        item->icon = iconToggle[GET_BIT(infoSettings.send_gcodes, (item_index - SKEY_START_GCODE_ENABLED))];
         break;
 
-      case SKEY_PERSISTENTINFO:
-        settingPage[item_index].icon = toggleitem[infoSettings.persistent_info];
-        break;
-
-      case SKEY_FILELIST:
-        settingPage[item_index].icon = toggleitem[infoSettings.file_listmode];
-        break;
       case SKEY_RESET_SETTINGS:
         break;
-      #ifdef LED_COLOR_PIN
-        case SKEY_KNOB:
-          settingPage[item_index].valueLabel = itemLedcolor[infoSettings.knob_led_color];
-          featureSettingsItems.items[i] = settingPage[item_index];
-          break;
-        #endif
-      #ifdef LCD_LED_PWM_CHANNEL
-        case SKEY_LCD_BRIGHTNESS:
-        {
-          char tempstr[8];
-          sprintf(tempstr, (char *)textSelect(LABEL_PERCENT_VALUE), LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
-          setDynamicTextValue(i, tempstr);
-          break;
-        }
-        case SKEY_LCD_BRIGTHNESS_DIM:
-        {
-          char tempstr[8];
-          sprintf(tempstr, (char *)textSelect(LABEL_PERCENT_VALUE), LCD_BRIGHTNESS[infoSettings.lcd_idle_brightness]);
-          setDynamicTextValue(i, tempstr);
-          break;
-        }
-        case SKEY_LCD_DIM_IDLE_TIMER:
-          settingPage[item_index].valueLabel = itemDimTime[infoSettings.lcd_idle_timer];
-          break;
-      #endif //PS_ON_PIN
 
-      #ifdef ST7920_SPI
-        case SKEY_ST7920_FULLSCREEN:
-          settingPage[item_index].icon = toggleitem[infoSettings.marlin_mode_fullscreen];
-          break;
-      #endif
       default:
         break;
-      }
-      featureSettingsItems.items[i] = settingPage[item_index];
-    }
-    else
-    {
-      featureSettingsItems.items[i].icon = ICONCHAR_BACKGROUND;
     }
   }
-  // set page up down button according to page count and current page
-  if (SKEY_COUNT <= LISTITEM_PER_PAGE)
-  {
-    featureSettingsItems.items[5].icon = ICONCHAR_BACKGROUND;
-    featureSettingsItems.items[6].icon = ICONCHAR_BACKGROUND;
-  }
-  else
-  {
-    if(fe_cur_page == 0){
-      featureSettingsItems.items[5].icon = ICONCHAR_BACKGROUND;
-      featureSettingsItems.items[6].icon = ICONCHAR_PAGEDOWN;
-    }
-    else if(fe_cur_page == (FE_PAGE_COUNT-1)){
-      featureSettingsItems.items[5].icon = ICONCHAR_PAGEUP;
-      featureSettingsItems.items[6].icon = ICONCHAR_BACKGROUND;
-    }
-    else
-    {
-      featureSettingsItems.items[5].icon = ICONCHAR_PAGEUP;
-      featureSettingsItems.items[6].icon = ICONCHAR_PAGEDOWN;
-    }
-  }
-  //menuDrawListItem(&featureSettingsItems.items[5],5);
-  //menuDrawListItem(&featureSettingsItems.items[6],6);
+}  // loadFeatureSettings
 
+void resetSettings(void)
+{
+  initSettings();
+  storePara();
+  popupReminder(DIALOG_TYPE_SUCCESS, LABEL_INFO, LABEL_SETTINGS_RESET_DONE);
 }
-
 
 void menuFeatureSettings(void)
 {
-  KEY_VALUES key_num = KEY_IDLE;
+  LABEL title = {LABEL_FEATURE_SETTINGS};
+
+  // set item types
+  LISTITEM settingPage[SKEY_COUNT] = {
+    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_EMULATED_M600,          LABEL_BACKGROUND},
+    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_EMULATED_M109_M190,     LABEL_BACKGROUND},
+    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_EVENT_LED,              LABEL_BACKGROUND},
+    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_FILE_COMMENT_PARSING,   LABEL_BACKGROUND},
+    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_SERIAL_ALWAYS_ON,       LABEL_BACKGROUND},
+    {CHARICON_BLANK,       LIST_CUSTOMVALUE,   LABEL_MOVE_SPEED,             LABEL_NORMAL},
+    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_AUTO_LOAD_LEVELING,     LABEL_BACKGROUND},
+    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_PROBING_Z_OFFSET,       LABEL_BACKGROUND},
+    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_Z_STEPPERS_ALIGNMENT,   LABEL_BACKGROUND},
+
+    #ifdef PS_ON_PIN
+      {CHARICON_BLANK,       LIST_CUSTOMVALUE,   LABEL_PS_AUTO_SHUTDOWN,       LABEL_OFF},
+    #endif
+
+    #ifdef FIL_RUNOUT_PIN
+      {CHARICON_BLANK,       LIST_CUSTOMVALUE,   LABEL_FIL_RUNOUT,             LABEL_OFF},
+    #endif
+
+    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_PL_RECOVERY,            LABEL_BACKGROUND},
+    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_PL_RECOVERY_HOME,       LABEL_BACKGROUND},
+    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_BTT_MINI_UPS,           LABEL_BACKGROUND},
+    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_START_GCODE_ENABLED,    LABEL_BACKGROUND},
+    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_END_GCODE_ENABLED,      LABEL_BACKGROUND},
+    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_CANCEL_GCODE_ENABLED,   LABEL_BACKGROUND},
+    // Keep reset settings always at the bottom of the settings menu list.
+    {CHARICON_BLANK,       LIST_MOREBUTTON,    LABEL_SETTINGS_RESET,         LABEL_BACKGROUND}
+  };
+
+  uint16_t index = KEY_IDLE;
   SETTINGS now = infoSettings;
-  loadFeatureSettings();
-  menuDrawListPage(&featureSettingsItems);
 
-  while (infoMenu.menu[infoMenu.cur] == menuFeatureSettings)
+  listViewCreate(title, settingPage, SKEY_COUNT, &fe_cur_page, true, NULL, loadFeatureSettings);
+
+  while (MENU_IS(menuFeatureSettings))
   {
-    key_num = menuKeyGetValue();
-    switch (key_num)
+    index = listViewGetSelectedIndex();
+
+    if (index < SKEY_COUNT)
     {
-    case KEY_ICON_5:
-      if(FE_PAGE_COUNT > 1){
-        if (fe_cur_page > 0){
-          fe_cur_page--;
-          loadFeatureSettings();
-          menuRefreshListPage();
-        }
-      }
-      break;
-
-    case KEY_ICON_6:
-      if(FE_PAGE_COUNT > 1){
-        if (fe_cur_page < FE_PAGE_COUNT - 1){
-          fe_cur_page++;
-          loadFeatureSettings();
-          menuRefreshListPage();
-        }
-      }
-      break;
-
-    case KEY_ICON_7:
-      fe_cur_page = 0;
-      infoMenu.cur--;
-      break;
-    default:
-      if(key_num < LISTITEM_PER_PAGE){
-      updateFeatureSettings(key_num);
-      menuDrawListItem(&featureSettingsItems.items[key_num],key_num);
-      }
-      break;
+      updateFeatureSettings(index);
+      listViewRefreshItem(index);
     }
 
     loopProcess();
   }
 
-  if(memcmp(&now, &infoSettings, sizeof(SETTINGS)))
+  if (memcmp(&now, &infoSettings, sizeof(SETTINGS)))
   {
     storePara();
   }

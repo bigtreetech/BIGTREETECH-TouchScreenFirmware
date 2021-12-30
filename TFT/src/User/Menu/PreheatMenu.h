@@ -1,16 +1,26 @@
-#ifndef _PREHEATMENU_H_
-#define _PREHEATMENU_H_
+#ifndef _PREHEAT_MENU_H_
+#define _PREHEAT_MENU_H_
 
-#include "Configuration.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <stdint.h>
+#include "menu.h"
+#include "Settings.h"
 
 typedef enum
 {
   BOTH = 0,
   BED_PREHEAT = 1,
   NOZZLE0_PREHEAT = 2,
-}TOOLPREHEAT;
+} TOOLPREHEAT;
 
-
+void refreshPreheatIcon(PREHEAT_STORE * preheatStore, int8_t index, const ITEM * menuitem);
 void menuPreheat(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

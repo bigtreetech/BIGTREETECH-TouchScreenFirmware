@@ -1,18 +1,20 @@
-#ifndef _PRINTINGMENU_H_
-#define _PRINTINGMENU_H_
-#include "variants.h"
-#include "stdbool.h"
-#include "ff.h"
+#ifndef _PRINTING_MENU_H_
+#define _PRINTING_MENU_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <stdbool.h>
 
 void menuBeforePrinting(void);
 void menuPrinting(void);
-void menuStopPrinting(void);
+void printInfoPopup(void);
 
-void printingDrawPage(void);
-void reDrawProgress(int icon_pos);
-void reValueNozzle(int icon_pos);
-void reValueBed(int icon_pos);
-void reDrawTime(int icon_pos);
-void reDrawLayer(int icon_pos);
+extern bool hasFilamentData;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

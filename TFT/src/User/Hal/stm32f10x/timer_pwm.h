@@ -1,14 +1,14 @@
 #ifndef _TIMER_PWM_H_
 #define _TIMER_PWM_H_
 
-#include "stm32f10x.h"
+#include <stdint.h>
 
 #define _TIM1    0
 #define _TIM2    1
 #define _TIM3    2
 #define _TIM4    3
 #define _TIM5    4
-#define _TIM6    5 // NOTE: TIM6 & TIM7 basic timer, can not PWM generation
+#define _TIM6    5  // NOTE: TIM6 & TIM7 basic timer, can not PWM generation
 #define _TIM7    6
 #define _TIM8    7
 #define _TIM_CNT 8

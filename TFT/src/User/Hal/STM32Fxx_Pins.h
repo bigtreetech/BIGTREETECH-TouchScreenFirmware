@@ -1,6 +1,10 @@
 #ifndef _STM32FXX_PINS_
 #define _STM32FXX_PINS_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define _GPIOA_MAP 0
 #define _GPIOB_MAP 1
 #define _GPIOC_MAP 2
@@ -203,5 +207,9 @@
 
 #define GPIO_GET_PORT(n) (((n)>>8) & 0xFF)
 #define GPIO_GET_PIN(n) ((n) & 0xFF)
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

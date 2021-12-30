@@ -1,9 +1,15 @@
 #ifndef _PRINT_H_
 #define _PRINT_H_
-#include "includes.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 void menuPrintFromSource(void);
 void menuPrint(void);
-bool get_Pre_Icon(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

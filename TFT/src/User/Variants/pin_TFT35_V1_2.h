@@ -1,5 +1,5 @@
-#ifndef _PIN_TFT35_V1_2_H_ // modify to actual filename !!!
-#define _PIN_TFT35_V1_2_H_ // modify to actual filename !!!
+#ifndef _PIN_TFT35_V1_2_H_  // modify to actual filename !!!
+#define _PIN_TFT35_V1_2_H_  // modify to actual filename !!!
 
 // Hardware version config
 #ifndef HARDWARE_VERSION
@@ -8,13 +8,11 @@
 
 // LCD interface
 #ifndef TFTLCD_DRIVER
-  #define TFTLCD_DRIVER ILI9488  // Type of LCD driver, now support[RM68042, ILI9488, ILI9341, ST7789, HX8558].
-  #define TFTLCD_DRIVER_SPEED         0x03
-  #define TFTLCD_0_DEGREE_REG_VALUE   0X28
-  #define TFTLCD_180_DEGREE_REG_VALUE 0XE8
+  #define TFTLCD_DRIVER       ILI9488  // Type of LCD driver, now support[RM68042, ILI9488, ILI9341, ST7789, HX8558].
+  #define TFTLCD_DRIVER_SPEED 0x03
 #endif
 #ifndef LCD_DATA_16BIT
-  #define LCD_DATA_16BIT 1 // LCD data 16bit or 8bit
+  #define LCD_DATA_16BIT 1  // LCD data 16bit or 8bit
 #endif
 
 #include "pin_TFT35_V1_0.h"

@@ -1,53 +1,77 @@
 #include "SpeedControl.h"
 #include "includes.h"
 
-static u16 percent[SPEED_NUM]     = {100,   100};     //Speed  Flow
-static u16 lastPercent[SPEED_NUM] = {100,   100}; //Speed  Flow
-static u16 curPercent[SPEED_NUM]  = {100,   100};  //Speed  Flow
+#define NEXT_SPEED_WAIT 500  // 1 second is 1000
 
-static bool send_waiting[SPEED_NUM];
+const char *const speedCmd[SPEED_NUM] = {"M220", "M221"};
 
-void speedSetSendWaiting(u8 tool, bool isWaiting)
+static uint16_t setPercent[SPEED_NUM] = {100, 100};
+static uint16_t curPercent[SPEED_NUM] = {100, 100};
+static uint8_t  needSetPercent = 0;
+
+static bool speedQueryWait = false;
+static uint32_t nextSpeedTime = 0;
+
+void speedSetCurPercent(uint8_t tool, uint16_t per)
 {
-  send_waiting[tool] = isWaiting;
+  curPercent[tool] = per;
 }
 
-void speedSetPercent(u8 tool, u16 per)
+uint16_t speedGetCurPercent(uint8_t tool)
 {
-  percent[tool]=limitValue(SPEED_MIN, per, SPEED_MAX);
+  return curPercent[tool];
 }
 
-u16 speedGetPercent(u8 tool)
+void speedSetPercent(uint8_t tool, uint16_t per)
 {
-  return percent[tool];
+  uint16_t value = NOBEYOND(SPEED_MIN, per, SPEED_MAX);
+  SET_BIT_VALUE(needSetPercent, tool, value != curPercent[tool]);
+  setPercent[tool] = value;
 }
 
-bool SpeedChanged(u8 i)
+uint16_t speedGetSetPercent(uint8_t tool)
 {
-  if (lastPercent[i] != percent[i])
-  {
-    lastPercent[i] = percent[i];
-    send_waiting[i] = false;
-    return true;
-  }
-  else
-  {
-    send_waiting[i] = true;
-    return false;
-  }
+  return setPercent[tool];
 }
 
 void loopSpeed(void)
 {
-  for(u8 i = 0; i < SPEED_NUM;i++)
-    if(curPercent[i] != percent[i])
+  for (uint8_t i = 0; i < SPEED_NUM; i++)
+  {
+    if (infoSettings.ext_count == 0 && i > 0)
     {
-      curPercent[i] = percent[i];
-      if(send_waiting[i] != true)
-      {
-        send_waiting[i] = true;
-      char *speedCmd[SPEED_NUM] = {"M220","M221"};
-      storeCmd("%s S%d\n",speedCmd[i], percent[i]);
-      }
+      // Don't poll M221 if there are no extruders
+      continue;
     }
+
+    if (GET_BIT(needSetPercent, i) && (OS_GetTimeMs() > nextSpeedTime))
+    {
+      if (storeCmd("%s S%d D%d\n", speedCmd[i], setPercent[i], heatGetCurrentTool()))
+      {
+        SET_BIT_OFF(needSetPercent, i);
+      }
+
+      nextSpeedTime = OS_GetTimeMs() + NEXT_SPEED_WAIT;  // avoid rapid fire, clogging the queue
+    }
+  }
+}
+
+void speedQuerySetWait(bool wait)
+{
+  speedQueryWait = wait;
+}
+
+void speedQuery(void)
+{
+  if (infoHost.connected && !infoHost.wait && !speedQueryWait && infoMachineSettings.firmwareType != FW_REPRAPFW)
+  {
+    if (infoSettings.ext_count > 0)
+    {
+      speedQueryWait = storeCmd("M220\nM221\n");
+    }
+    else
+    {
+      speedQueryWait = storeCmd("M220\n");
+    }
+  }
 }

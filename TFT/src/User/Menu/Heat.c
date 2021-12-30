@@ -1,132 +1,118 @@
 #include "Heat.h"
 #include "includes.h"
 
-//1 title, ITEM_PER_PAGE items (icon + label)
-MENUITEMS heatItems = {
-// title
-LABEL_HEAT,
-// icon                       label
- {{ICON_DEC,                  LABEL_DEC},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_INC,                  LABEL_INC},
-  {ICON_NOZZLE,               LABEL_NOZZLE},
-  {ICON_5_DEGREE,             LABEL_5_DEGREE},
-  {ICON_STOP,                 LABEL_STOP},
-  {ICON_BACK,                 LABEL_BACK},}
-};
+static uint8_t tool_index = NOZZLE0;
+static uint8_t degreeSteps_index = 1;
 
-const ITEM itemTool[] = {
-// icon                       label
-  {ICON_BED,                  LABEL_BED},
-  {ICON_NOZZLE,               LABEL_NOZZLE},
-  {ICON_NOZZLE,               LABEL_NOZZLE},
-  {ICON_NOZZLE,               LABEL_NOZZLE},
-  {ICON_NOZZLE,               LABEL_NOZZLE},
-  {ICON_NOZZLE,               LABEL_NOZZLE},
-  {ICON_NOZZLE,               LABEL_NOZZLE},
-};
-
-#define ITEM_DEGREE_NUM 3
-
-const ITEM itemDegree[ITEM_DEGREE_NUM] = {
-// icon                       label
-  {ICON_1_DEGREE,             LABEL_1_DEGREE},
-  {ICON_5_DEGREE,             LABEL_5_DEGREE},
-  {ICON_10_DEGREE,            LABEL_10_DEGREE},
-};
-
-const  u8 item_degree[ITEM_DEGREE_NUM] = {1, 5, 10};
-static u8 item_degree_i = 1;
-
-// Show/draw temperature in heat menu
-void showTemperature(TOOL tool)
+void heatSetCurrentIndex(uint8_t index)
 {
-  char tempstr[20];
-
-  sprintf(tempstr, "%-15s", heatDisplayID[tool]);
-  GUI_DispString(exhibitRect.x0, exhibitRect.y0, (u8 *)tempstr);
-
-  sprintf(tempstr, "%4d/%-4d", heatGetCurrentTemp(tool), heatGetTargetTemp(tool));
-  setLargeFont(true);
-  GUI_DispStringInPrect(&exhibitRect, (u8 *)tempstr);
-  setLargeFont(false);
+  tool_index = index;
 }
 
 void menuHeat(void)
 {
-  KEY_VALUES  key_num = KEY_IDLE;
+  // 1 title, ITEM_PER_PAGE items (icon + label)
+  MENUITEMS heatItems = {
+    // title
+    LABEL_HEAT,
+    // icon                          label
+    {
+      {ICON_DEC,                     LABEL_DEC},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_INC,                     LABEL_INC},
+      {ICON_NOZZLE,                  LABEL_NOZZLE},
+      {ICON_5_DEGREE,                LABEL_5_DEGREE},
+      {ICON_STOP,                    LABEL_STOP},
+      {ICON_BACK,                    LABEL_BACK},
+    }
+  };
 
-  heatSetUpdateTime(TEMPERATURE_QUERY_FAST_DURATION);
+  KEY_VALUES key_num = KEY_IDLE;
+  int16_t lastCurrent = heatGetCurrentTemp(tool_index);
+  int16_t lastTarget = heatGetTargetTemp(tool_index);
+  int16_t actCurrent;
+  int16_t actTarget;
 
-  heatItems.items[KEY_ICON_4] = itemTool[heatGetCurrentTool()];
+  heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
+
+  heatItems.items[KEY_ICON_4] = itemTool[tool_index];
+  heatItems.items[KEY_ICON_5] = itemDegreeSteps[degreeSteps_index];
+
   menuDrawPage(&heatItems);
-  showTemperature(heatGetCurrentTool());
+  temperatureReDraw(tool_index, NULL, false);
 
-  #if LCD_ENCODER_SUPPORT
-    encoderPosition = 0;
-  #endif
-
-  while(infoMenu.menu[infoMenu.cur] == menuHeat)
+  while (MENU_IS(menuHeat))
   {
+    actCurrent = heatGetCurrentTemp(tool_index);
+    actTarget = heatGetTargetTemp(tool_index);
     key_num = menuKeyGetValue();
-    int16_t t_temp = heatGetTargetTemp(heatGetCurrentTool());
-    TOOL c_tool = heatGetCurrentTool();
-    switch(key_num)
+
+    switch (key_num)
     {
       case KEY_ICON_0:
-          heatSetTargetTemp(c_tool, limitValue( 0, t_temp - item_degree[item_degree_i], infoSettings.max_temp[c_tool]));
+      case KEY_DECREASE:
+        heatSetTargetTemp(tool_index, actTarget - degreeSteps[degreeSteps_index]);
         break;
 
+      case KEY_INFOBOX:
+      {
+        int16_t val = editIntValue(0, infoSettings.max_temp[tool_index], 0, actTarget);
+
+        if (val != actTarget)
+          heatSetTargetTemp(tool_index, val);
+
+        temperatureReDraw(tool_index, NULL, false);
+        break;
+      }
+
       case KEY_ICON_3:
-          heatSetTargetTemp(c_tool, limitValue( 0, t_temp + item_degree[item_degree_i], infoSettings.max_temp[c_tool]));
+      case KEY_INCREASE:
+        heatSetTargetTemp(tool_index, actTarget + degreeSteps[degreeSteps_index]);
         break;
 
       case KEY_ICON_4:
-        c_tool = (TOOL)(c_tool + 1) % (HEATER_COUNT);
-        heatSetCurrentTool(c_tool);
-        heatItems.items[key_num] = itemTool[c_tool];
+        do
+        {
+          tool_index = (tool_index + 1) % MAX_HEATER_COUNT;
+        } while (!heaterDisplayIsValid(tool_index));
+
+        heatItems.items[key_num] = itemTool[tool_index];
+
         menuDrawItem(&heatItems.items[key_num], key_num);
+        temperatureReDraw(tool_index, NULL, false);
         break;
 
       case KEY_ICON_5:
-        item_degree_i = (item_degree_i+1) % ITEM_DEGREE_NUM;
-        heatItems.items[key_num] = itemDegree[item_degree_i];
+        degreeSteps_index = (degreeSteps_index + 1) % ITEM_DEGREE_NUM;
+        heatItems.items[key_num] = itemDegreeSteps[degreeSteps_index];
+
         menuDrawItem(&heatItems.items[key_num], key_num);
         break;
 
       case KEY_ICON_6:
-        heatSetTargetTemp(c_tool, 0);
+        heatSetTargetTemp(tool_index, 0);
         break;
 
       case KEY_ICON_7:
-        infoMenu.cur--;
+        CLOSE_MENU();
         break;
 
-      default :
-        #if LCD_ENCODER_SUPPORT
-          if(encoderPosition)
-          {
-            if(encoderPosition > 0)
-                heatSetTargetTemp(c_tool, limitValue(0, t_temp + item_degree[item_degree_i], infoSettings.max_temp[c_tool]));
-            if(encoderPosition < 0)
-                heatSetTargetTemp(c_tool, limitValue(0, t_temp - item_degree[item_degree_i], infoSettings.max_temp[c_tool]));
-            encoderPosition = 0;
-          }
-        #endif
+      default:
         break;
     }
 
-    if (heatToolChanged())
-      showTemperature(c_tool);
-
-    if (heatCurrentTempChanged(c_tool) || heatTargetTempChanged(c_tool))
-      showTemperature(c_tool);
+    if (lastCurrent != actCurrent || lastTarget != actTarget)
+    {
+      lastCurrent = actCurrent;
+      lastTarget = actTarget;
+      temperatureReDraw(tool_index, NULL, true);
+    }
 
     loopProcess();
   }
 
   // Set slow update time if not waiting for target temperature
-  if(heatHasWaiting() == false)
-    heatSetUpdateTime(TEMPERATURE_QUERY_SLOW_DURATION);
+  if (heatHasWaiting() == false)
+    heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
 }

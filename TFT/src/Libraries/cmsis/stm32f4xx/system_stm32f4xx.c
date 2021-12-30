@@ -433,23 +433,23 @@
   * @{
   */
 
-#if defined(STM32F40_41xxx)
-  uint32_t SystemCoreClock = 168000000;
-#endif /* STM32F40_41xxx */
+// #if defined(STM32F40_41xxx)
+//   uint32_t SystemCoreClock = 168000000;
+// #endif /* STM32F40_41xxx */
 
-#if defined(STM32F427_437xx) || defined(STM32F429_439xx) || defined(STM32F446xx) || defined(STM32F469_479xx)
-  uint32_t SystemCoreClock = 180000000;
-#endif /* STM32F427_437x || STM32F429_439xx || STM32F446xx || STM32F469_479xx */
+// #if defined(STM32F427_437xx) || defined(STM32F429_439xx) || defined(STM32F446xx) || defined(STM32F469_479xx)
+//   uint32_t SystemCoreClock = 180000000;
+// #endif /* STM32F427_437x || STM32F429_439xx || STM32F446xx || STM32F469_479xx */
 
-#if defined(STM32F401xx)
-  uint32_t SystemCoreClock = 84000000;
-#endif /* STM32F401xx */
+// #if defined(STM32F401xx)
+//   uint32_t SystemCoreClock = 84000000;
+// #endif /* STM32F401xx */
 
-#if defined(STM32F410xx) || defined(STM32F411xE) || defined(STM32F412xG) || defined(STM32F413_423xx)
-  uint32_t SystemCoreClock = 100000000;
-#endif /* STM32F410xx || STM32F401xE || STM32F412xG || STM32F413_423xx */
+// #if defined(STM32F410xx) || defined(STM32F411xE) || defined(STM32F412xG) || defined(STM32F413_423xx)
+//   uint32_t SystemCoreClock = 100000000;
+// #endif /* STM32F410xx || STM32F401xE || STM32F412xG || STM32F413_423xx */
 
-__I uint8_t AHBPrescTable[16] = {0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 6, 7, 8, 9};
+// __I uint8_t AHBPrescTable[16] = {0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 6, 7, 8, 9};
 
 /**
   * @}
@@ -480,7 +480,7 @@ static void SystemInit_ExtMemCtl(void);
   * @param  None
   * @retval None
   */
-void SystemInit(void)
+void SystemClockInit(void)
 {
   /* FPU settings ------------------------------------------------------------*/
   #if (__FPU_PRESENT == 1) && (__FPU_USED == 1)
@@ -557,91 +557,91 @@ void SystemInit(void)
   * @param  None
   * @retval None
   */
-void SystemCoreClockUpdate(void)
-{
-  uint32_t tmp = 0, pllvco = 0, pllp = 2, pllsource = 0, pllm = 2;
-#if defined(STM32F412xG) || defined(STM32F413_423xx) || defined(STM32F446xx)  
-  uint32_t pllr = 2;
-#endif /* STM32F412xG || STM32F413_423xx || STM32F446xx */
-  /* Get SYSCLK source -------------------------------------------------------*/
-  tmp = RCC->CFGR & RCC_CFGR_SWS;
+// void SystemCoreClockUpdate(void)
+// {
+//   uint32_t tmp = 0, pllvco = 0, pllp = 2, pllsource = 0, pllm = 2;
+// #if defined(STM32F412xG) || defined(STM32F413_423xx) || defined(STM32F446xx)  
+//   uint32_t pllr = 2;
+// #endif /* STM32F412xG || STM32F413_423xx || STM32F446xx */
+//   /* Get SYSCLK source -------------------------------------------------------*/
+//   tmp = RCC->CFGR & RCC_CFGR_SWS;
 
-  switch (tmp)
-  {
-    case 0x00:  /* HSI used as system clock source */
-      SystemCoreClock = HSI_VALUE;
-      break;
-    case 0x04:  /* HSE used as system clock source */
-      SystemCoreClock = HSE_VALUE;
-      break;
-    case 0x08:  /* PLL P used as system clock source */
-       /* PLL_VCO = (HSE_VALUE or HSI_VALUE / PLL_M) * PLL_N
-         SYSCLK = PLL_VCO / PLL_P
-         */    
-      pllsource = (RCC->PLLCFGR & RCC_PLLCFGR_PLLSRC) >> 22;
-      pllm = RCC->PLLCFGR & RCC_PLLCFGR_PLLM;
+//   switch (tmp)
+//   {
+//     case 0x00:  /* HSI used as system clock source */
+//       SystemCoreClock = HSI_VALUE;
+//       break;
+//     case 0x04:  /* HSE used as system clock source */
+//       SystemCoreClock = HSE_VALUE;
+//       break;
+//     case 0x08:  /* PLL P used as system clock source */
+//        /* PLL_VCO = (HSE_VALUE or HSI_VALUE / PLL_M) * PLL_N
+//          SYSCLK = PLL_VCO / PLL_P
+//          */    
+//       pllsource = (RCC->PLLCFGR & RCC_PLLCFGR_PLLSRC) >> 22;
+//       pllm = RCC->PLLCFGR & RCC_PLLCFGR_PLLM;
       
-#if defined(STM32F40_41xxx) || defined(STM32F427_437xx) || defined(STM32F429_439xx) || defined(STM32F401xx) || defined(STM32F412xG) || defined(STM32F413_423xx) || defined(STM32F446xx) || defined(STM32F469_479xx)
-      if (pllsource != 0)
-      {
-        /* HSE used as PLL clock source */
-        pllvco = (HSE_VALUE / pllm) * ((RCC->PLLCFGR & RCC_PLLCFGR_PLLN) >> 6);
-      }
-      else
-      {
-        /* HSI used as PLL clock source */
-        pllvco = (HSI_VALUE / pllm) * ((RCC->PLLCFGR & RCC_PLLCFGR_PLLN) >> 6);
-      }
-#elif defined(STM32F410xx) || defined(STM32F411xE)
-#if defined(USE_HSE_BYPASS)
-      if (pllsource != 0)
-      {
-        /* HSE used as PLL clock source */
-        pllvco = (HSE_BYPASS_INPUT_FREQUENCY / pllm) * ((RCC->PLLCFGR & RCC_PLLCFGR_PLLN) >> 6);
-      }  
-#else  
-      if (pllsource == 0)
-      {
-        /* HSI used as PLL clock source */
-        pllvco = (HSI_VALUE / pllm) * ((RCC->PLLCFGR & RCC_PLLCFGR_PLLN) >> 6);
-      }  
-#endif /* USE_HSE_BYPASS */  
-#endif /* STM32F40_41xxx || STM32F427_437xx || STM32F429_439xx || STM32F401xx || STM32F412xG || STM32F413_423xx ||  STM32F446xx || STM32F469_479xx */  
-      pllp = (((RCC->PLLCFGR & RCC_PLLCFGR_PLLP) >>16) + 1 ) *2;
-      SystemCoreClock = pllvco/pllp;      
-      break;
-#if defined(STM32F412xG) || defined(STM32F413_423xx) || defined(STM32F446xx)      
-      case 0x0C:  /* PLL R used as system clock source */
-       /* PLL_VCO = (HSE_VALUE or HSI_VALUE / PLL_M) * PLL_N
-         SYSCLK = PLL_VCO / PLL_R
-         */    
-      pllsource = (RCC->PLLCFGR & RCC_PLLCFGR_PLLSRC) >> 22;
-      pllm = RCC->PLLCFGR & RCC_PLLCFGR_PLLM;
-      if (pllsource != 0)
-      {
-        /* HSE used as PLL clock source */
-        pllvco = (HSE_VALUE / pllm) * ((RCC->PLLCFGR & RCC_PLLCFGR_PLLN) >> 6);
-      }
-      else
-      {
-        /* HSI used as PLL clock source */
-        pllvco = (HSI_VALUE / pllm) * ((RCC->PLLCFGR & RCC_PLLCFGR_PLLN) >> 6);      
-      }
+// #if defined(STM32F40_41xxx) || defined(STM32F427_437xx) || defined(STM32F429_439xx) || defined(STM32F401xx) || defined(STM32F412xG) || defined(STM32F413_423xx) || defined(STM32F446xx) || defined(STM32F469_479xx)
+//       if (pllsource != 0)
+//       {
+//         /* HSE used as PLL clock source */
+//         pllvco = (HSE_VALUE / pllm) * ((RCC->PLLCFGR & RCC_PLLCFGR_PLLN) >> 6);
+//       }
+//       else
+//       {
+//         /* HSI used as PLL clock source */
+//         pllvco = (HSI_VALUE / pllm) * ((RCC->PLLCFGR & RCC_PLLCFGR_PLLN) >> 6);
+//       }
+// #elif defined(STM32F410xx) || defined(STM32F411xE)
+// #if defined(USE_HSE_BYPASS)
+//       if (pllsource != 0)
+//       {
+//         /* HSE used as PLL clock source */
+//         pllvco = (HSE_BYPASS_INPUT_FREQUENCY / pllm) * ((RCC->PLLCFGR & RCC_PLLCFGR_PLLN) >> 6);
+//       }  
+// #else  
+//       if (pllsource == 0)
+//       {
+//         /* HSI used as PLL clock source */
+//         pllvco = (HSI_VALUE / pllm) * ((RCC->PLLCFGR & RCC_PLLCFGR_PLLN) >> 6);
+//       }  
+// #endif /* USE_HSE_BYPASS */  
+// #endif /* STM32F40_41xxx || STM32F427_437xx || STM32F429_439xx || STM32F401xx || STM32F412xG || STM32F413_423xx ||  STM32F446xx || STM32F469_479xx */  
+//       pllp = (((RCC->PLLCFGR & RCC_PLLCFGR_PLLP) >>16) + 1 ) *2;
+//       SystemCoreClock = pllvco/pllp;      
+//       break;
+// #if defined(STM32F412xG) || defined(STM32F413_423xx) || defined(STM32F446xx)      
+//       case 0x0C:  /* PLL R used as system clock source */
+//        /* PLL_VCO = (HSE_VALUE or HSI_VALUE / PLL_M) * PLL_N
+//          SYSCLK = PLL_VCO / PLL_R
+//          */    
+//       pllsource = (RCC->PLLCFGR & RCC_PLLCFGR_PLLSRC) >> 22;
+//       pllm = RCC->PLLCFGR & RCC_PLLCFGR_PLLM;
+//       if (pllsource != 0)
+//       {
+//         /* HSE used as PLL clock source */
+//         pllvco = (HSE_VALUE / pllm) * ((RCC->PLLCFGR & RCC_PLLCFGR_PLLN) >> 6);
+//       }
+//       else
+//       {
+//         /* HSI used as PLL clock source */
+//         pllvco = (HSI_VALUE / pllm) * ((RCC->PLLCFGR & RCC_PLLCFGR_PLLN) >> 6);      
+//       }
  
-      pllr = (((RCC->PLLCFGR & RCC_PLLCFGR_PLLR) >>28) + 1 ) *2;
-      SystemCoreClock = pllvco/pllr;      
-      break;
-#endif /* STM32F412xG || STM32F413_423xx || STM32F446xx */
-    default:
-      SystemCoreClock = HSI_VALUE;
-      break;
-  }
-  /* Compute HCLK frequency --------------------------------------------------*/
-  /* Get HCLK prescaler */
-  tmp = AHBPrescTable[((RCC->CFGR & RCC_CFGR_HPRE) >> 4)];
-  /* HCLK frequency */
-  SystemCoreClock >>= tmp;
-}
+//       pllr = (((RCC->PLLCFGR & RCC_PLLCFGR_PLLR) >>28) + 1 ) *2;
+//       SystemCoreClock = pllvco/pllr;      
+//       break;
+// #endif /* STM32F412xG || STM32F413_423xx || STM32F446xx */
+//     default:
+//       SystemCoreClock = HSI_VALUE;
+//       break;
+//   }
+//   /* Compute HCLK frequency --------------------------------------------------*/
+//   /* Get HCLK prescaler */
+//   tmp = AHBPrescTable[((RCC->CFGR & RCC_CFGR_HPRE) >> 4)];
+//   /* HCLK frequency */
+//   SystemCoreClock >>= tmp;
+// }
 
 /**
   * @brief  Configures the System clock source, PLL Multiplier and Divider factors, 

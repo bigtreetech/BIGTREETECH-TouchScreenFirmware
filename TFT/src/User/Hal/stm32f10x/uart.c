@@ -1,4 +1,5 @@
 #include "uart.h"
+#include "variants.h"  // for USART1_TX_PIN etc...
 #include "GPIO_Init.h"
 
 // USART1 default pins config
@@ -54,11 +55,11 @@ static volatile uint32_t* const rcc_uart_en[_UART_CNT] = {
 };
 
 static const uint32_t rcc_uart_bit[_UART_CNT] = {
-  0x00004000, // RCC_APB2  bit 14
-  0x00020000, // RCC_APB1  bit 17
-  0x00040000, // RCC_APB1  bit 18
-  0x00080000, // RCC_APB1  bit 19
-  0x00100000, // RCC_APB1  bit 20
+  0x00004000,  // RCC_APB2  bit 14
+  0x00020000,  // RCC_APB1  bit 17
+  0x00040000,  // RCC_APB1  bit 18
+  0x00080000,  // RCC_APB1  bit 19
+  0x00100000,  // RCC_APB1  bit 20
 };
 
 static USART_TypeDef* const uart[_UART_CNT] = {
@@ -68,8 +69,8 @@ static USART_TypeDef* const uart[_UART_CNT] = {
   UART4,   // TX--PC10 RX--PC11
   UART5};  // TX--PC12 RX--PD2
 
-static const uint16_t uart_tx[_UART_CNT] = {USART1_TX_PIN, USART2_TX_PIN, USART3_TX_PIN, UART4_TX_PIN, UART5_TX_PIN}; // TX
-static const uint16_t uart_rx[_UART_CNT] = {USART1_RX_PIN, USART2_RX_PIN, USART3_RX_PIN, UART4_RX_PIN, UART5_RX_PIN}; // RX
+static const uint16_t uart_tx[_UART_CNT] = {USART1_TX_PIN, USART2_TX_PIN, USART3_TX_PIN, UART4_TX_PIN, UART5_TX_PIN};  // TX
+static const uint16_t uart_rx[_UART_CNT] = {USART1_RX_PIN, USART2_RX_PIN, USART3_RX_PIN, UART4_RX_PIN, UART5_RX_PIN};  // RX
 
 void UART_GPIO_Init(uint8_t port)
 {
@@ -79,7 +80,7 @@ void UART_GPIO_Init(uint8_t port)
 
 void UART_GPIO_DeInit(uint8_t port)
 {
-  //set tx/rx to input
+  // set tx/rx to input
   GPIO_InitSet(uart_tx[port], MGPIO_MODE_IPN, 0);
   GPIO_InitSet(uart_rx[port], MGPIO_MODE_IPN, 0);
 }
@@ -87,9 +88,9 @@ void UART_GPIO_DeInit(uint8_t port)
 void UART_Protocol_Init(uint8_t port,uint32_t baud)
 {
   USART_InitTypeDef USART_InitStructure;
-  
+
   *rcc_uart_en[port] |= rcc_uart_bit[port];
-  
+
   USART_InitStructure.USART_BaudRate = baud;
   USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
   USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
@@ -120,26 +121,27 @@ void UART_Config(uint8_t port, uint32_t baud, uint16_t usart_it)
 {
   UART_Protocol_Init(port, baud);
   UART_IRQ_Init(port, usart_it);
-  UART_GPIO_Init(port);   // Finally, initialize IO, else will send 0xFF.
+  UART_GPIO_Init(port);  // Finally, initialize IO, else will send 0xFF.
 }
 
 void UART_DeConfig(uint8_t port)
 {
   UART_GPIO_DeInit(port);
+
   *rcc_uart_rst[port] |= rcc_uart_bit[port];
   *rcc_uart_rst[port] &= ~rcc_uart_bit[port];
 }
 
 void UART_Write(uint8_t port, uint8_t d)
 {
-  while((uart[port]->SR & USART_FLAG_TC) == (uint16_t)RESET);
+  while ((uart[port]->SR & USART_FLAG_TC) == (uint16_t)RESET);
   uart[port]->DR = ((u16)d & (uint16_t)0x01FF);
 }
 void UART_Puts(uint8_t port, uint8_t *str)
 {
   while (*str)
   {
-    while((uart[port]->SR & USART_FLAG_TC) == (uint16_t)RESET);
+    while ((uart[port]->SR & USART_FLAG_TC) == (uint16_t)RESET);
     uart[port]->DR = ((u16)*str++ & (uint16_t)0x01FF);
   }
 }

@@ -3,103 +3,154 @@
 
 #include "variants.h"
 
-#include <stdio.h>
+// standard libs
 #include <stdarg.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "my_misc.h"
-#include "printf/printf.h"
 
-#include "os_timer.h"
+// User
 #include "delay.h"
+#include "my_misc.h"
+#include "os_timer.h"
+#include "SanityCheck.h"
 
-#include "boot.h"
-
-#include "Colors.h"
-#include "lcd.h"
-#include "LCD_Init.h"
+// User/HAL/stm32f10x or // HAL/stm32f2_f4xx
 #include "lcd_dma.h"
-#include "GUI.h"
+#include "lcd.h"
+#include "Serial.h"
+#include "spi_slave.h"  // it uses infoSettings. HAL should be independent by that!
+#include "spi.h"
+#include "timer_pwm.h"
+#include "uart.h"
+
+// User/HAL/USB
+#include "usbh_msc_core.h"  // HAL/STM32_USB_HOST_Library/Class/MSC/inc
+#include "usbh_core.h"      // HAL/STM32_USB_HOST_Library/Core/inc
+#include "usbh_usr.h"       // HAL/STM32_USB_HOST_Library/Usr/inc
+
+// User/HAL
+#include "buzzer.h"
+#include "Knob_LED.h"
+#include "LCD_Encoder.h"
+#include "LCD_Init.h"
+#include "sd.h"
+#include "sw_spi.h"
+#include "w25qxx.h"
+#include "xpt2046.h"
+
+// User/Fatfs
+#include "ff.h"
+#include "myfatfs.h"
+
+// User/API
+#include "Gcode/gcode.h"
+#include "Gcode/mygcodefs.h"
+#include "printf/printf.h"
+#include "Vfs/vfs.h"
+
+// User/API/Language
 #include "Language.h"
 #include "utf8_decode.h"
 
-#include "uart.h"
-#include "Serial.h"
-#include "spi.h"
-#include "sw_spi.h"
-#include "spi_slave.h"
-#include "timer_pwm.h"
-
-#include "usbh_core.h"
-#include "usbh_usr.h"
-#include "usbh_msc_core.h"
-
-#include "sd.h"
-#include "w25qxx.h"
-#include "xpt2046.h"
-#include "buzzer.h"
-
-#include "LCD_Encoder.h"
-#include "ST7920_Simulator.h"
+// User/API/UI
+#include "CharIcon.h"
+#include "GUI.h"
+#include "HD44780_Emulator.h"  // it uses infoSettings
+#include "ListItem.h"          // it uses infoSettings
+#include "ListManager.h"
+#include "Numpad.h"            // it uses infoSettings
+#include "ST7920_Emulator.h"   // it uses infoSettings
+#include "TouchProcess.h"
 #include "ui_draw.h"
-#include "touch_process.h"
-#include "interfaceCmd.h"
+
+// User/API
+#include "AddonHardware.h"
+#include "BabystepControl.h"
+#include "boot.h"
+#include "BuzzerControl.h"
+#include "CaseLightControl.h"
+#include "comment.h"
+#include "config.h"
 #include "coordinate.h"
-#include "ff.h"
-#include "Vfs/vfs.h"
-#include "myfatfs.h"
-#include "Gcode/gcode.h"
-#include "Gcode/mygcodefs.h"
-#include "flashStore.h"
-#include "parseACK.h"
-#include "Selectmode.h"
-#include "Temperature.h"
-#include "Settings.h"
-#include "Printing.h"
-#include "MachineParameters.h"
+#include "debug.h"
 #include "FanControl.h"
-#include "SpeedControl.h"
-
-#include "extend.h"
-#include "list_item.h"
-#include "list_widget.h"
-#include "Numpad.h"
-#include "SanityCheck.h"
-
-//menu
+#include "FlashStore.h"
+#include "HomeOffsetControl.h"
+#include "HW_Init.h"
+#include "interfaceCmd.h"
+#include "LCD_Colors.h"
+#include "LCD_Dimming.h"
+#include "LED_Colors.h"
+#include "LED_Event.h"
+#include "LevelingControl.h"
+#include "MachineParameters.h"
 #include "menu.h"
-#include "MainPage.h"
-#include "Heat.h"
-#include "PreheatMenu.h"
-#include "Move.h"
-#include "Home.h"
-#include "Print.h"
+#include "ModeSwitching.h"
+#include "Notification.h"
+#include "parseACK.h"
+#include "PowerFailed.h"
 #include "Printing.h"
-#include "More.h"
-#include "Speed.h"
-#include "BabyStep.h"
-#include "ledcolor.h"
-#include "Parametersetting.h"
+#include "ProbeHeightControl.h"
+#include "ProbeOffsetControl.h"
+#include "RRFStatusControl.h"
+#include "ScreenShot.h"
+#include "SerialConnection.h"
+#include "Settings.h"
+#include "SpeedControl.h"
+#include "Temperature.h"
+#include "Touch_Encoder.h"
 
+// User/Menu
+#include "ABL.h"
+#include "Babystep.h"
+#include "BedLeveling.h"
+#include "BedLevelingLayer2.h"
+#include "BLTouch.h"
+#include "CaseLight.h"
+#include "common.h"
+#include "ConnectionSettings.h"
 #include "Extrude.h"
 #include "Fan.h"
-#include "SettingsMenu.h"
-#include "PrintingMenu.h"
-#include "ScreenSettings.h"
-#include "MachineSettings.h"
 #include "FeatureSettings.h"
-#include "SendGcode.h"
-#include "leveling.h"
-#include "ProbeOffset.h"
-#include "PowerFailed.h"
-
+#include "Heat.h"
+#include "Home.h"
+#include "LEDColor.h"
+#include "LevelCorner.h"
+#include "Leveling.h"
+#include "LoadUnload.h"
+#include "MachineSettings.h"
+#include "MainPage.h"
+#include "MarlinMode.h"
+#include "MBL.h"
+#include "MeshEditor.h"
+#include "MeshTuner.h"
+#include "MeshValid.h"
+#include "More.h"
+#include "Move.h"
+#include "NotificationMenu.h"
+#include "ParameterSettings.h"
+#include "PersistentInfo.h"
+#include "Pid.h"
 #include "Popup.h"
-#include "Mode.h"
-
-#include "UnifiedMove.h"
-#include "UnifiedHeat.h"
+#include "PreheatMenu.h"
+#include "Print.h"
+#include "PrintingMenu.h"
+#include "PrintRestore.h"
+#include "RRFMacros.h"
+#include "ScreenSettings.h"
+#include "SelectMode.h"
+#include "SettingsMenu.h"
+#include "Speed.h"
 #include "StatusScreen.h"
+#include "Terminal.h"
+#include "Touchmi.h"
+#include "TuneExtruder.h"
+#include "Tuning.h"
+#include "UnifiedHeat.h"
+#include "UnifiedMove.h"
+#include "ZOffset.h"
 
 #include "Spindle.h"
 
@@ -109,27 +160,28 @@ typedef void (*FP_MENU)(void);
 typedef struct
 {
   FP_MENU menu[MAX_MENU_DEPTH];  // Menu function buffer
-  u8      cur;                   // Current menu index in buffer
-}MENU;
+  uint8_t cur;                   // Current menu index in buffer
+} MENU;
 
 extern MENU infoMenu;
 
 typedef struct
 {
-  bool wait;       //Whether wait for Marlin's response
-  bool rx_ok[_UART_CNT]; //Whether receive Marlin's response or get Gcode by other UART(ESP3D/OctoPrint)
-  bool connected;  //Whether have connected to Marlin
-  bool printing;   //Whether the host is busy in printing execution. ( USB serial printing and GCODE print from onboard)
-}HOST;
+  bool wait;              // Whether wait for Marlin's response
+  bool rx_ok[_UART_CNT];  // Whether receive Marlin's response or get Gcode by other UART(ESP3D/OctoPrint)
+  bool connected;         // Whether have connected to Marlin
+  bool printing;          // Whether the host is busy in printing execution. (USB serial printing and GCODE print from onboard)
+} HOST;
 
 extern HOST infoHost;
 
 typedef struct
 {
   RCC_ClocksTypeDef rccClocks;
-  u32 PCLK1_Timer_Frequency;
-  u32 PCLK2_Timer_Frequency;
-}CLOCKS;
+  uint32_t PCLK1_Timer_Frequency;
+  uint32_t PCLK2_Timer_Frequency;
+} CLOCKS;
+
 extern CLOCKS mcuClocks;
 
 #endif

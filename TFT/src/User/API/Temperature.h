@@ -1,77 +1,104 @@
 #ifndef _TEMPERATURE_H_
 #define _TEMPERATURE_H_
 
-#include "stdint.h"
-#include "stdbool.h"
-#include "Configuration.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <stdbool.h>
+#include <stdint.h>
 #include "Settings.h"
 
-#define TEMPERATURE_QUERY_FAST_DURATION 1000  // "M105" query temperature every 1s
-#define TEMPERATURE_QUERY_SLOW_DURATION 3000  // 3s
-
-typedef enum {
-  WAIT_NONE = 0,
-  WAIT_HEATING,
-  WAIT_COOLING_HEATING,
-}HEATER_WAIT;
+#define TEMPERATURE_QUERY_FAST_SECONDS 1  // "M105" temperature query delay in heat menu or while heating.
+#define TEMPERATURE_QUERY_SLOW_SECONDS 3  // temperature query delay when idle
+#define TEMPERATURE_RANGE              2  // temperature difference to treat temperature reached target
+#define NOZZLE_TEMP_LAG                5  // nozzle max allowed lag
 
 typedef enum
 {
-  BED = 0,
-  NOZZLE0 = 1,
-  HEATER_NUM = MAX_HEATER_COUNT
-}TOOL;
+  WAIT_NONE = 0,
+  WAIT_HEATING,
+  WAIT_COOLING_HEATING,
+} HEATER_WAIT;
+
+typedef enum
+{
+  SETTLED = 0,
+  HEATING,
+  COOLING,
+} HEATER_STATUS;
+
+enum
+{
+  NOZZLE0 = 0,
+  NOZZLE1,
+  NOZZLE2,
+  NOZZLE3,
+  NOZZLE4,
+  NOZZLE5,
+  BED = MAX_HOTEND_COUNT,
+  CHAMBER,
+  INVALID_HEATER,
+};
 
 typedef struct
 {
-  int16_t current,
-          target;
+  int16_t current;
+  int16_t target;
   HEATER_WAIT waiting;
-}_HEATER;
+  HEATER_STATUS status;
+} _HEATER;
 
 typedef struct
 {
-  _HEATER T[HEATER_NUM];
-  TOOL    tool;
-  TOOL    nozzle;
-}HEATER;
+  union
+  {
+    struct
+    {
+      _HEATER hotend[MAX_HOTEND_COUNT];
+      _HEATER bed;
+      _HEATER chamber;
+    };
+    _HEATER T[MAX_HEATER_COUNT];
+  };
+  uint8_t toolIndex;
+} HEATER;
 
+extern const char *const heaterID[];
+extern const char *const heatDisplayID[];
+extern const char *const heatShortID[];
+extern const char *const heatCmd[];
+extern const char *const heatWaitCmd[];
 
-extern const char* toolID[];
-extern const char* const heatDisplayID[];
-extern const char* heatCmd[];
-extern const char* heatWaitCmd[];
+void heatSetTargetTemp(uint8_t index, int16_t temp);
+void heatSyncTargetTemp(uint8_t index, int16_t temp);
+uint16_t heatGetTargetTemp(uint8_t index);
+void heatSetCurrentTemp(uint8_t index, int16_t temp);
+int16_t heatGetCurrentTemp(uint8_t index);
+void heatCoolDown(void);
 
+void heatSetCurrentTool(uint8_t tool);
+uint8_t heatGetCurrentTool(void);
+uint8_t heatGetCurrentHotend(void);
+bool heaterDisplayIsValid(uint8_t index);
 
-void heatSetTargetTemp(TOOL tool, uint16_t temp);
-void heatSyncTargetTemp(TOOL tool, uint16_t temp);
-uint16_t heatGetTargetTemp(TOOL tool);
-void heatSetCurrentTemp(TOOL tool, int16_t temp);
-int16_t heatGetCurrentTemp(TOOL tool);
-
-void heatSetCurrentTool(TOOL tool);
-TOOL heatGetCurrentTool(void);
-bool heatToolChanged(void);
-void heatSetCurrentToolNozzle(TOOL tool);
-TOOL heatGetCurrentToolNozzle(void);
-bool heatNozzleChanged(void);
-
-bool heatGetIsWaiting(TOOL tool);
+bool heatGetIsWaiting(uint8_t index);
 bool heatHasWaiting(void);
-void heatSetIsWaiting(TOOL tool,HEATER_WAIT isWaiting);
+void heatSetIsWaiting(uint8_t index, HEATER_WAIT isWaiting);
 void heatClearIsWaiting(void);
 
 void updateNextHeatCheckTime(void);
-void heatSetUpdateTime(uint32_t time);
+void heatSetUpdateSeconds(uint8_t seconds);
+uint8_t heatGetUpdateSeconds(void);
+void heatSyncUpdateSeconds(uint8_t seconds);
 void heatSetUpdateWaiting(bool isWaiting);
-void heatSetSendWaiting(TOOL tool, bool isWaiting);
-bool heatGetSendWaiting(TOOL tool);
-bool heatCurrentTempChanged(TOOL tool);
-bool heatTargetTempChanged(TOOL tool);
-
+void heatSetSendWaiting(uint8_t index, bool isWaiting);
+bool heatGetSendWaiting(uint8_t index);
 
 void loopCheckHeater(void);
 
-
+#ifdef __cplusplus
+}
+#endif
 
 #endif

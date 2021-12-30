@@ -1,19 +1,20 @@
 #include "Home.h"
 #include "includes.h"
 
-//1��title(����), ITEM_PER_PAGE��item(ͼ��+��ǩ)
 const MENUITEMS homeItems = {
-//   title
-LABEL_HOME,
-// icon                       label
- {{ICON_HOME,                 LABEL_HOME},
-  {ICON_X_HOME,               LABEL_X},
-  {ICON_Y_HOME,               LABEL_Y},
-  {ICON_Z_HOME,               LABEL_Z},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACKGROUND,           LABEL_BACKGROUND},
-  {ICON_BACK,                 LABEL_BACK},}
+  // title
+  LABEL_HOME,
+  // icon                          label
+  {
+    {ICON_HOME,                    LABEL_HOME},
+    {ICON_X_HOME,                  LABEL_X},
+    {ICON_Y_HOME,                  LABEL_Y},
+    {ICON_Z_HOME,                  LABEL_Z},
+    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_BACK,                    LABEL_BACK},
+  }
 };
 
 const MENUITEMS cncHomeItems = {
@@ -33,6 +34,7 @@ LABEL_HOME,
 void menuHome(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
+<<<<<<< HEAD
   if (infoSettings.cnc_mode == 1)
   {
     menuDrawPage(&cncHomeItems);
@@ -75,9 +77,24 @@ void menuHome(void)
         default:break;
         case KEY_ICON_7: infoMenu.cur--;      break;
       }
+=======
+
+  menuDrawPage(&homeItems);
+
+  while (MENU_IS(menuHome))
+  {
+    key_num = menuKeyGetValue();
+    switch (key_num)
+    {
+      case KEY_ICON_0: storeCmd("G28\n");   break;
+      case KEY_ICON_1: storeCmd("G28 X\n"); break;
+      case KEY_ICON_2: storeCmd("G28 Y\n"); break;
+      case KEY_ICON_3: storeCmd("G28 Z\n"); break;
+      case KEY_ICON_7: CLOSE_MENU();      break;
+      default: break;
+>>>>>>> btt_main/master
     }
 
     loopProcess();
   }
 }
-
