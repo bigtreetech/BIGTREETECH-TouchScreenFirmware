@@ -552,7 +552,7 @@ static const GUI_RECT *curRect = NULL;  // current menu layout grid
 static uint16_t curRectCount = 0;       // current menu layout rect count
 
 static REMINDER reminder = {{0, 0, LCD_WIDTH, TITLE_END_Y}, 0, STATUS_DISCONNECTED, LABEL_UNCONNECTED};
-static REMINDER volumeReminder = {{0, 0, LCD_WIDTH, TITLE_END_Y}, 0, STATUS_IDLE, LABEL_BACKGROUND};
+static REMINDER volumeReminder = {{0, 0, LCD_WIDTH, TITLE_END_Y}, 0, STATUS_IDLE, LABEL_NULL};
 static REMINDER busySign = {{LCD_WIDTH - 5, 0, LCD_WIDTH, 5}, 0, STATUS_BUSY, LABEL_BUSY};
 
 MENUITEMS *getCurMenuItems(void)
@@ -574,7 +574,7 @@ GUI_POINT getIconStartPoint(int index)
 
 uint8_t *labelGetAddress(const LABEL *label)
 {
-  if (label->index == LABEL_BACKGROUND)  // No content in label
+  if (label->index == LABEL_NULL)  // No content in label
     return NULL;
   if (label->index < LABEL_NUM)  // Index of language
     return textSelect(label->index);
@@ -591,7 +591,7 @@ void menuDrawItem(const ITEM *item, uint8_t position)
 void menuDrawIconOnly(const ITEM *item, uint8_t position)
 {
   const GUI_RECT *rect = curRect + position;
-  if (item->icon != ICON_BACKGROUND)
+  if (item->icon != ICON_NULL)
     ICON_ReadDisplay(rect->x0, rect->y0, item->icon);
   else
     GUI_ClearPrect(rect);
@@ -609,7 +609,7 @@ void menuDrawIconText(const ITEM *item, uint8_t position)
 void menuDrawListItem(const LISTITEM *item, uint8_t position)
 {
   const GUI_RECT *rect = rect_of_keyListView + position;
-  if (item->icon == CHARICON_BACKGROUND)
+  if (item->icon == CHARICON_NULL)
   {
     GUI_ClearPrect(rect);
   }
@@ -826,7 +826,7 @@ void menuReDrawCurTitle(void)
   {
     if (curListItems == NULL)
       return;
-    if (curListItems->title.index < LABEL_BACKGROUND)
+    if (curListItems->title.index < LABEL_NULL)
       menuDrawTitle(labelGetAddress(&curListItems->title));
   }
   else if (menuType == MENU_TYPE_ICON)
@@ -912,7 +912,7 @@ void menuDrawListPage(const LISTITEMS *listItems)
   for (i = 0; i < ITEM_PER_PAGE; i++)
   {
     //const GUI_RECT *rect = rect_of_keyListView + i;
-    if (curListItems->items[i].icon != CHARICON_BACKGROUND)
+    if (curListItems->items[i].icon != CHARICON_NULL)
       menuDrawListItem(&curListItems->items[i], i);
     RAPID_PRINTING_COMM()  // perform backend printing loop between drawing icons to avoid printer idling
   }
@@ -1018,7 +1018,7 @@ void itemDrawIconPress(uint8_t position, uint8_t is_press)
   if (menuType == MENU_TYPE_ICON)
   {
     if (curMenuItems == NULL) return;
-    if (curMenuItems->items[position].icon == ICON_BACKGROUND) return;
+    if (curMenuItems->items[position].icon == ICON_NULL) return;
 
     const GUI_RECT *rect = curRect + position;
 
@@ -1034,7 +1034,7 @@ void itemDrawIconPress(uint8_t position, uint8_t is_press)
 
     const GUI_RECT *rect = rect_of_keyListView + position;
 
-    if (curListItems->items[position].icon == CHARICON_BACKGROUND)
+    if (curListItems->items[position].icon == CHARICON_NULL)
     {
       GUI_ClearPrect(rect);
       return;

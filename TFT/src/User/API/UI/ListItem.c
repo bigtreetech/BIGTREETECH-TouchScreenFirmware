@@ -68,13 +68,13 @@ void ListItem_Display(const GUI_RECT * rect, uint8_t position, const LISTITEM * 
 
   if (position >= LISTITEM_PER_PAGE)
   {
-    if (curitem->icon != CHARICON_BACKGROUND)
+    if (curitem->icon != CHARICON_NULL)
     {
       if (curitem->icon != CHARICON_BLANK)
       {
         drawCharIcon(rect, CENTER, curitem->icon, true, infoSettings.list_button_bg_color);
       }
-      else if (curitem->icon == CHARICON_BLANK && curitem->titlelabel.index != LABEL_BACKGROUND)
+      else if (curitem->icon == CHARICON_BLANK && curitem->titlelabel.index != LABEL_NULL)
       {
         GUI_SetBkColor(infoSettings.list_button_bg_color);
         GUI_ClearPrect(rect);
@@ -93,7 +93,7 @@ void ListItem_Display(const GUI_RECT * rect, uint8_t position, const LISTITEM * 
     GUI_RestoreColorDefault();
   }
   // draw list items
-  else if (curitem->icon != CHARICON_BACKGROUND)
+  else if (curitem->icon != CHARICON_NULL)
   {
     GUI_POINT pos = getTextStartPoint(rect->x0, rect->y0, rect->x1, rect->y1, LEFT, (char *)IconCharSelect(curitem->icon));
     int textarea_width;
@@ -168,7 +168,7 @@ void ListItem_Display(const GUI_RECT * rect, uint8_t position, const LISTITEM * 
 // draw title text of list item
 void draw_itemtitle(GUI_POINT pos, LABEL label, uint8_t position, int textarea_width)
 {
-  if (label.index != LABEL_BACKGROUND)
+  if (label.index != LABEL_NULL)
   {
     int textarea_width = LISTITEM_WIDTH - (pos.x + 1);  // width after removing the width for icon
     if (label.index == LABEL_DYNAMIC)

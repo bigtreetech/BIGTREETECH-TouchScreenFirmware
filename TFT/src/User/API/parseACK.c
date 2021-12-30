@@ -373,20 +373,19 @@ void hostActionCommands(void)
     switch (hostAction.button)
     {
       case 0:
-        setDialogText((uint8_t *)"Message", (uint8_t *)hostAction.prompt_begin, LABEL_CONFIRM,
-                      LABEL_BACKGROUND);
+        setDialogText((uint8_t *)"Message", (uint8_t *)hostAction.prompt_begin, LABEL_CONFIRM, LABEL_NULL);
         showDialog(DIALOG_TYPE_ALERT, setRunoutAlarmFalse, NULL, NULL);
         break;
 
       case 1:
-        setDialogText((uint8_t *)"Action command", (uint8_t *)hostAction.prompt_begin, (uint8_t *)hostAction.prompt_button[0],
-                      LABEL_BACKGROUND);
+        setDialogText((uint8_t *)"Action command", (uint8_t *)hostAction.prompt_begin,
+                      (uint8_t *)hostAction.prompt_button[0], LABEL_NULL);
         showDialog(DIALOG_TYPE_ALERT, breakAndContinue, NULL, NULL);
         break;
 
       case 2:
-        setDialogText((uint8_t *)"Action command", (uint8_t *)hostAction.prompt_begin, (uint8_t *)hostAction.prompt_button[0],
-                      (uint8_t *)hostAction.prompt_button[1]);
+        setDialogText((uint8_t *)"Action command", (uint8_t *)hostAction.prompt_begin,
+                      (uint8_t *)hostAction.prompt_button[0], (uint8_t *)hostAction.prompt_button[1]);
         showDialog(DIALOG_TYPE_ALERT, resumeAndPurge, resumeAndContinue, NULL);
         break;
     }
@@ -630,7 +629,7 @@ void parseACK(void)
       // parse pause message
       else if (!infoMachineSettings.promptSupport && ack_seen("paused for user"))
       {
-        setDialogText((uint8_t *)"Printer is Paused", (uint8_t *)"Paused for user\ncontinue?", LABEL_CONFIRM, LABEL_BACKGROUND);
+        setDialogText((uint8_t *)"Printer is Paused", (uint8_t *)"Paused for user\ncontinue?", LABEL_CONFIRM, LABEL_NULL);
         showDialog(DIALOG_TYPE_QUESTION, breakAndContinue, NULL, NULL);
       }
       // parse host action commands. Required "HOST_ACTION_COMMANDS" and other settings in Marlin
@@ -734,7 +733,7 @@ void parseACK(void)
         {
           sprintf (&tmpMsg[strlen(tmpMsg)], "\nRange: %0.5f", ack_value());
         }
-        setDialogText((uint8_t *)"Repeatability Test", (uint8_t *)tmpMsg, LABEL_CONFIRM, LABEL_BACKGROUND);
+        setDialogText((uint8_t *)"Repeatability Test", (uint8_t *)tmpMsg, LABEL_CONFIRM, LABEL_NULL);
         showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
       }
       // parse M48, Standard Deviation
@@ -747,7 +746,7 @@ void parseACK(void)
         {
           levelingSetProbedPoint(-1, -1, ack_value());  // save probed Z value
           sprintf(tmpMsg, "%s\nStandard Deviation: %0.5f", (char *)getDialogMsgStr(), ack_value());
-          setDialogText((uint8_t *)"Repeatability Test", (uint8_t *)tmpMsg, LABEL_CONFIRM, LABEL_BACKGROUND);
+          setDialogText((uint8_t *)"Repeatability Test", (uint8_t *)tmpMsg, LABEL_CONFIRM, LABEL_NULL);
           showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
         }
       }

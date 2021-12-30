@@ -25,32 +25,32 @@ const MENUITEMS StatusItems = {
   LABEL_READY,
   // icon                          label
   {
-    {ICON_STATUS_NOZZLE,           LABEL_BACKGROUND},
-    {ICON_STATUS_BED,              LABEL_BACKGROUND},
-    {ICON_STATUS_FAN,              LABEL_BACKGROUND},
-    {ICON_STATUS_SPEED,            LABEL_BACKGROUND},
+    {ICON_STATUS_NOZZLE,           LABEL_NULL},
+    {ICON_STATUS_BED,              LABEL_NULL},
+    {ICON_STATUS_FAN,              LABEL_NULL},
+    {ICON_STATUS_SPEED,            LABEL_NULL},
     #ifdef TFT70_V3_0
-      {ICON_STATUS_FLOW,             LABEL_BACKGROUND},
+      {ICON_STATUS_FLOW,             LABEL_NULL},
       {ICON_MAINMENU,                LABEL_MAINMENU},
     #else
       {ICON_MAINMENU,                LABEL_MAINMENU},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_NULL,                    LABEL_NULL},
     #endif
-    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_NULL,                    LABEL_NULL},
     {ICON_PRINT,                   LABEL_PRINT},
   }
 };
 
 const ITEM BedItems[2] = {
   // icon                        label
-  {ICON_STATUS_BED,              LABEL_BACKGROUND},
-  {ICON_STATUS_CHAMBER,          LABEL_BACKGROUND},
+  {ICON_STATUS_BED,              LABEL_NULL},
+  {ICON_STATUS_CHAMBER,          LABEL_NULL},
 };
 
 const ITEM SpeedItems[2] = {
   // icon                        label
-  {ICON_STATUS_SPEED,            LABEL_BACKGROUND},
-  {ICON_STATUS_FLOW,             LABEL_BACKGROUND},
+  {ICON_STATUS_SPEED,            LABEL_NULL},
+  {ICON_STATUS_FLOW,             LABEL_NULL},
 };
 
 static int8_t lastConnection_status = -1;

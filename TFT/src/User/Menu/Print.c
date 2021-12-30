@@ -58,7 +58,7 @@ void gocdeIconDraw(void)
 {
   uint8_t i = 0;
   uint8_t baseIndex = infoFile.curPage * NUM_PER_PAGE;
-  ITEM curItem = {ICON_BACKGROUND, LABEL_BACKGROUND};
+  ITEM curItem = {ICON_NULL, LABEL_NULL};
 
   // draw folders
   for (i = 0; (i + baseIndex < infoFile.folderCount) && (i < NUM_PER_PAGE); i++)
@@ -88,7 +88,7 @@ void gocdeIconDraw(void)
   // clear blank icons
   for (; (i < NUM_PER_PAGE); i++)
   {
-    curItem.icon = ICON_BACKGROUND;
+    curItem.icon = ICON_NULL;
     menuDrawItem(&curItem, i);
   }
 }
@@ -167,14 +167,14 @@ void menuPrintFromSource(void)
 {
   MENUITEMS printIconItems = {
     // title
-    LABEL_BACKGROUND,
+    LABEL_NULL,
     // icon                          label
     {
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
       {ICON_PAGE_UP,                 LABEL_PAGE_UP},
       {ICON_PAGE_DOWN,               LABEL_PAGE_DOWN},
       {ICON_BACK,                    LABEL_BACK},
@@ -355,22 +355,22 @@ void menuPrint(void)
         {ICON_U_DISK,                  LABEL_U_DISK},
         #define ONBOARD_SD_INDEX 2
       #else
-        {ICON_BACKGROUND,              LABEL_BACKGROUND},
+        {ICON_NULL,                    LABEL_NULL},
         #define ONBOARD_SD_INDEX 1
       #endif
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
       {ICON_SCREEN_INFO,             LABEL_PREVIOUS_PRINT_DATA},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
       {ICON_BACK,                    LABEL_BACK},
     }
   };
 
   KEY_VALUES key_num = KEY_IDLE;
 
-  sourceSelItems.items[ONBOARD_SD_INDEX].icon = (infoMachineSettings.onboardSD == ENABLED) ? ICON_ONBOARD_SD : ICON_BACKGROUND;
-  sourceSelItems.items[ONBOARD_SD_INDEX].label.index = (infoMachineSettings.onboardSD == ENABLED) ? LABEL_ONBOARDSD : LABEL_BACKGROUND;
+  sourceSelItems.items[ONBOARD_SD_INDEX].icon = (infoMachineSettings.onboardSD == ENABLED) ? ICON_ONBOARD_SD : ICON_NULL;
+  sourceSelItems.items[ONBOARD_SD_INDEX].label.index = (infoMachineSettings.onboardSD == ENABLED) ? LABEL_ONBOARDSD : LABEL_NULL;
 
   menuDrawPage(&sourceSelItems);
 

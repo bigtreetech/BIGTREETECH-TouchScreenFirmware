@@ -524,7 +524,7 @@ void printAbort(void)
 
       if (infoHost.printing)
       {
-        setDialogText(LABEL_SCREEN_INFO, LABEL_BUSY, LABEL_BACKGROUND, LABEL_BACKGROUND);
+        setDialogText(LABEL_SCREEN_INFO, LABEL_BUSY, LABEL_NULL, LABEL_NULL);
         showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
 
         loopProcessToCondition(&isHostPrinting);  // wait for the printer to settle down

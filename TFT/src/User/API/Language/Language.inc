@@ -50,41 +50,41 @@ X_WORD (END_GCODE_ENABLED)
 X_WORD (CANCEL_GCODE_ENABLED)
 
 // Machine Parameter Settings - Param Title (ordered by gcode)
-X_WORD (STEPS_SETTING)                           // M92
-X_WORD (FILAMENT_SETTING)                        // M200
-X_WORD (MAXACCELERATION)                         // M201
-X_WORD (MAXFEEDRATE)                             // M203
-X_WORD (ACCELERATION)                            // M204
-X_WORD (JERK)                                    // M205
-X_WORD (JUNCTION_DEVIATION)                      // M205
-X_WORD (HOME_OFFSET)                             // M206
-X_WORD (FWRETRACT)                               // M207
-X_WORD (FWRECOVER)                               // M208
-X_WORD (RETRACT_AUTO)                            // M209
-X_WORD (HOTEND_OFFSET)                           // M218
-X_WORD (STEALTH_CHOP)                            // M569
-X_WORD (DELTA_CONFIGURATION)                     // M665
-X_WORD (DELTA_TOWER_ANGLE)                       // M665
-X_WORD (DELTA_ENDSTOP)                           // M666
-X_WORD (PROBE_OFFSET)                            // M851
-X_WORD (LIN_ADVANCE)                             // M900
-X_WORD (CURRENT_SETTING)                         // M906
-X_WORD (HYBRID_THRESHOLD)                        // M913
-X_WORD (BUMP_SENSITIVITY)                        // M914
-X_WORD (MBL_OFFSET)                              // G29
+X_WORD (STEPS_SETTING)        // M92
+X_WORD (FILAMENT_SETTING)     // M200
+X_WORD (MAXACCELERATION)      // M201
+X_WORD (MAXFEEDRATE)          // M203
+X_WORD (ACCELERATION)         // M204
+X_WORD (JERK)                 // M205
+X_WORD (JUNCTION_DEVIATION)   // M205
+X_WORD (HOME_OFFSET)          // M206
+X_WORD (FWRETRACT)            // M207
+X_WORD (FWRECOVER)            // M208
+X_WORD (RETRACT_AUTO)         // M209
+X_WORD (HOTEND_OFFSET)        // M218
+X_WORD (STEALTH_CHOP)         // M569
+X_WORD (DELTA_CONFIGURATION)  // M665
+X_WORD (DELTA_TOWER_ANGLE)    // M665
+X_WORD (DELTA_ENDSTOP)        // M666
+X_WORD (PROBE_OFFSET)         // M851
+X_WORD (LIN_ADVANCE)          // M900
+X_WORD (CURRENT_SETTING)      // M906
+X_WORD (HYBRID_THRESHOLD)     // M913
+X_WORD (BUMP_SENSITIVITY)     // M914
+X_WORD (MBL_OFFSET)           // G29
 
 // Machine Parameter Settings - Param Attributes (ordered by gcode)
-X_WORD (PRINT_ACCELERATION)                      // M204
-X_WORD (RETRACT_ACCELERATION)                    // M204
-X_WORD (TRAVEL_ACCELERATION)                     // M204
-X_WORD (RETRACT_LENGTH)                          // M207
-X_WORD (RETRACT_SWAP_LENGTH)                     // M207
-X_WORD (RETRACT_FEEDRATE)                        // M207
-X_WORD (RETRACT_Z_LIFT)                          // M207
-X_WORD (RECOVER_LENGTH)                          // M208
-X_WORD (SWAP_RECOVER_LENGTH)                     // M208
-X_WORD (RECOVER_FEEDRATE)                        // M208
-X_WORD (SWAP_RECOVER_FEEDRATE)                   // M208
+X_WORD (PRINT_ACCELERATION)     // M204
+X_WORD (RETRACT_ACCELERATION)   // M204
+X_WORD (TRAVEL_ACCELERATION)    // M204
+X_WORD (RETRACT_LENGTH)         // M207
+X_WORD (RETRACT_SWAP_LENGTH)    // M207
+X_WORD (RETRACT_FEEDRATE)       // M207
+X_WORD (RETRACT_Z_LIFT)         // M207
+X_WORD (RECOVER_LENGTH)         // M208
+X_WORD (SWAP_RECOVER_LENGTH)    // M208
+X_WORD (RECOVER_FEEDRATE)       // M208
+X_WORD (SWAP_RECOVER_FEEDRATE)  // M208
 
 // Save / Load
 X_WORD (SAVE)

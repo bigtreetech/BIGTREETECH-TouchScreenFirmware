@@ -31,12 +31,12 @@ extern "C" {
 #define MAT_RED       0xE124
 #define MAT_GREEN     0x254B
 #define MAT_BLUE      0x24BD
-#define MAT_CYAN      0xA6DB
-#define MAT_MAGENTA   0xD3FA
+#define MAT_CYAN      0x157C
+#define MAT_MAGENTA   0x9135
 #define MAT_YELLOW    0xED80
 #define MAT_ORANGE    0xF3A0
-#define MAT_PURPLE    0x9C19
-#define MAT_LIME      0xC6EC
+#define MAT_PURPLE    0x61D6
+#define MAT_LIME      0xC6C6
 #define MAT_DARKGRAY  0x52AA
 #define MAT_LOWWHITE  0xCE79
 #define MAT_SLATE     0x4B0D

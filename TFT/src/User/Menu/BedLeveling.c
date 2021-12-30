@@ -41,7 +41,7 @@ void menuBedLeveling(void)
       {ICON_MESH_VALID,              LABEL_MESH_VALID},
       {ICON_LEVELING_OFF,            LABEL_BL_DISABLE},
       {ICON_Z_FADE,                  LABEL_ABL_Z},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_NULL,                    LABEL_NULL},
       {ICON_HEAT_FAN,                LABEL_UNIFIEDHEAT},
       {ICON_BACK,                    LABEL_BACK},
     }

@@ -77,7 +77,7 @@ void ParseACKJsonParser::endDocument()
     _setDialogTitleStr((uint8_t *)(m291_title == NULL ? M291 : m291_title));
     _setDialogMsgStr((uint8_t *)m291_msg);
     _setDialogOkTextLabel(LABEL_CONFIRM);
-    _setDialogCancelTextLabel(m291_mode > 2 ? LABEL_CANCEL : LABEL_BACKGROUND);
+    _setDialogCancelTextLabel(m291_mode > 2 ? LABEL_CANCEL : LABEL_NULL);
     expire_time = m291_timeo > 0 ? OS_GetTimeMs() + m291_timeo : 0;
     showDialog(m291_mode > 2 ? DIALOG_TYPE_QUESTION : DIALOG_TYPE_INFO, m291_confirm,
         m291_mode > 2 ? m291_cancel : NULL, m291_loop);
