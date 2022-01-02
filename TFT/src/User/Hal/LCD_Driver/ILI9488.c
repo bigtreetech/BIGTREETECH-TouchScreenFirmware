@@ -56,7 +56,12 @@
   void ILI9488_SetDirection(uint8_t rotate)
   {
     LCD_WR_REG(0X36);
-    LCD_WR_DATA(rotate ? ILI9488_180_DEGREE_REG_VALUE : ILI9488_0_DEGREE_REG_VALUE);
+  
+    #ifdef PORTRAIT_MODE
+      LCD_WR_DATA(rotate ? ILI9488_270_DEGREE_REG_VALUE : ILI9488_90_DEGREE_REG_VALUE);
+    #else
+      LCD_WR_DATA(rotate ? ILI9488_180_DEGREE_REG_VALUE : ILI9488_0_DEGREE_REG_VALUE);
+    #endif
   }
 
   void ILI9488_SetWindow(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey)

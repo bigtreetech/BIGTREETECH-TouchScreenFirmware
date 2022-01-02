@@ -1,10 +1,14 @@
-#ifndef _PIN_TFT28_V3_0_H_ // modify to actual filename !!!
-#define _PIN_TFT28_V3_0_H_ // modify to actual filename !!!
+#ifndef _PIN_TFT28_V3_0_H_  // modify to actual filename !!!
+#define _PIN_TFT28_V3_0_H_  // modify to actual filename !!!
 
 // LCD resolution, font and icon size
 #ifndef TFT_RESOLUTION
   #define TFT_RESOLUTION
-  #include "./Resolution/TFT_320X240.h"
+  #ifdef PORTRAIT_MODE
+    #include "./Resolution/TFT_240X320.h"
+  #else
+    #include "./Resolution/TFT_320X240.h"
+  #endif
 #endif
 
 #ifndef ROOT_DIR

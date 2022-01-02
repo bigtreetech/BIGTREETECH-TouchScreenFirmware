@@ -134,4 +134,33 @@ void LCD_CheckDimming(void)
   }
 }
 
+#ifdef LED_COLOR_PIN
+
+bool knob_led_idle = false;
+
+void LCD_SetKnobLedIdle(bool enabled)
+{
+  if (!enabled)
+  { // set infoSettings.knob_led_idle temporary to OFF
+    if (infoSettings.knob_led_idle && !knob_led_idle)
+    {
+      knob_led_idle = true;
+      infoSettings.knob_led_idle = 0;  // turn knob_led_idle off
+    }
+  }
+  else
+  { // make sure that infoSettings.knob_led_idle is back in business
+    if (knob_led_idle)
+    {
+      knob_led_idle = false;
+      infoSettings.knob_led_idle = 1;  // turn knob_led_idle on
+    }
+
+    // always restore default knob LED color
+    Knob_LED_SetColor(led_colors[infoSettings.knob_led_color], infoSettings.neopixel_pixels);
+  }
+}
+
+#endif  // LED_COLOR_PIN
+
 #endif  // LCD_LED_PWM_CHANNEL

@@ -31,7 +31,7 @@ void drawXYZ(void)
   char tempstr[20];
   GUI_SetColor(infoSettings.status_color);
 
- #ifdef PORTRAIT
+  #ifdef PORTRAIT_MODE
     sprintf(tempstr, "X:%.2f  Y:%.2f  Z:%2.f", coordinateGetAxisActual(X_AXIS), coordinateGetAxisActual(Y_AXIS),
             coordinateGetAxisActual(Z_AXIS));
     GUI_DispString(START_X + 1 * SPACE_X + 1 * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);

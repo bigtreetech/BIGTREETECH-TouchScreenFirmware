@@ -122,7 +122,7 @@ bool updateIcon(void)
   uint16_t notfound = 0;
   char nowBmp[64];
   char tempstr[50];
-  char * bootLogoPath = BMP_ROOT_DIR "/Logo.bmp";
+  char * bootLogoPath = BMP_ROOT_DIR "/Logo" STR_PORTRAIT ".bmp";
   char * infoboxPath = BMP_ROOT_DIR "/InfoBox.bmp";
   BMPUPDATE_STAT bmpState;
 

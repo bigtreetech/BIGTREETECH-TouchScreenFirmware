@@ -62,6 +62,8 @@ void pidUpdateStatus(bool succeeded)
   {
     pidRunning = false;
 
+    LED_SetColor(0, 255, 0, false);  // set (neopixel) LED light to GREEN
+
     if (pidSucceeded)  // if all the PID processes successfully terminated, allow to save to EEPROM
     {
       BUZZER_PLAY(SOUND_SUCCESS);
@@ -96,8 +98,11 @@ static inline void pidCheckTimeout(void)
     if (OS_GetTimeMs() > pidTimeout)
     {
       pidRunning = false;
-//      uint8_t pidCounter = 0;  // we voluntary don't reset (commented out the code) also pidCounter and pidSucceeded to let the
-//      pidSucceeded = false;  // pidUpdateStatus function allow to handle status updates eventually arriving after the timeout
+      //pidCounter = 0;        // we voluntary don't reset (commented out the code) also pidCounter and pidSucceeded to let the
+      //pidSucceeded = false;  // pidUpdateStatus function allow to handle status updates eventually arriving after the timeout
+
+      LED_SetColor(0, 255, 0, false);  // set (neopixel) LED light to GREEN
+
       LABELCHAR(tempMsg, LABEL_TIMEOUT_REACHED);
 
       sprintf(&tempMsg[strlen(tempMsg)], "\n %s", textSelect(LABEL_BUSY));
@@ -158,12 +163,13 @@ static inline void pidStart(void)
   pidUpdateCounter();  // update the number of set temperatures (number of PID processes to execute)
   pidTimeout = OS_GetTimeMs() + PID_PROCESS_TIMEOUT;  // set timeout for overall PID process
 
-  mustStoreCmd("M150 R255 U0 B0\n");  // set LED light to RED
+  LED_SetColor(255, 0, 0, false);  // set (neopixel) LED light to RED
+  LCD_SET_KNOB_LED_IDLE(false);    // set infoSettings.knob_led_idle temporary to OFF
+
   if (infoMachineSettings.firmwareType != FW_REPRAPFW)
-  {
-    mustStoreCmd("M106 S255\n");      // set fan speed to max
-  }
-  mustStoreCmd("G4 S1\n");            // wait 1 sec
+    mustStoreCmd("M106 S255\n");  // set fan speed to max
+
+  mustStoreCmd("G4 S1\n");  // wait 1 sec
 
   for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)  // hotends + bed + chamber
   {
@@ -174,8 +180,7 @@ static inline void pidStart(void)
     }
   }
 
-  mustStoreCmd("M107\n");             // stop fan
-  mustStoreCmd("M150 R0 U255 B0\n");  // set LED light to GREEN
+  mustStoreCmd("M107\n");  // stop fan
 
   OPEN_MENU(menuPidWait);
 }
@@ -295,6 +300,9 @@ void menuPid(void)
         break;
 
       case KEY_ICON_7:
+        LED_SetColor(0, 0, 0, false);  // set (neopixel) LED light to OFF
+        LCD_SET_KNOB_LED_IDLE(true);   // restore infoSettings.knob_led_idle and knob LED color to their default values
+
         CLOSE_MENU();
         break;
 

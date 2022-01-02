@@ -1,5 +1,5 @@
-#ifndef _PIN_MKS_TFT28_NEW_GENIUS_H_ // modify to actual filename !!!
-#define _PIN_MKS_TFT28_NEW_GENIUS_H_ // modify to actual filename !!!
+#ifndef _PIN_MKS_TFT28_NEW_GENIUS_H_  // modify to actual filename !!!
+#define _PIN_MKS_TFT28_NEW_GENIUS_H_  // modify to actual filename !!!
 
 // Hardware version config
 #ifndef HARDWARE_VERSION
