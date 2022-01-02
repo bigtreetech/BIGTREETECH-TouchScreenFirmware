@@ -119,7 +119,7 @@ bool scanPrintFilesGcodeFs(void)
           break;
         }
         // copy file name and set the flag for filename extension check
-        strncpy(infoFile.longFile[infoFile.fileCount], Pstr_tmp, strlen(Pstr_tmp) + 2);  // "+2":  terminating null character and the flag for filename extension check
+        strncpy(infoFile.longFile[infoFile.fileCount], Pstr_tmp, strlen(Pstr_tmp) + 2);  // "+2": space for terminating null character and the flag for filename extension check
         clearRequestCommandInfo();  // finally free the buffer allocated by M33, if any
       }
       else  // if long filename is not supported
@@ -149,7 +149,7 @@ bool scanPrintFilesGcodeFs(void)
         break;
       }
       // copy file name and set the flag for filename extension check
-      strncpy(infoFile.file[infoFile.fileCount], file, strlen(file) + 2);  // "+2":  terminating null character and the flag for filename extension check
+      strncpy(infoFile.file[infoFile.fileCount], file, strlen(file) + 2);  // "+2": space for terminating null character and the flag for filename extension check
       infoFile.fileCount++;
     }
     else  // if DIRECTORY

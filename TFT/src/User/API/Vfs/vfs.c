@@ -152,7 +152,7 @@ char * hideExtension(char * filename)
 {
   char * extPos = isSupportedFile(filename);
 
-  if (extPos != NULL)  // if filename provides a supported filename extension
+  if (extPos != NULL && filename[strlen(filename) + 1] == 0)  // protect against hiding extension if already hidden (ex. Letter.g.gcode)
   {
     filename[extPos - filename] = 0;  // temporarily hide filename extension
   }
