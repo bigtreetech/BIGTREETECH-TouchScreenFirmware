@@ -25,7 +25,7 @@ void menuUnifiedMove(void)
       #else
         {ICON_DELTA_CALIBRATE,         LABEL_CALIBRATION},
       #endif
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_NULL,                    LABEL_NULL},
       {ICON_BACK,                    LABEL_BACK},
     }
   };

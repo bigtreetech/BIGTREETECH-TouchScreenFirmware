@@ -45,10 +45,10 @@ void menuEepromSettings(void)
       {ICON_EEPROM_SAVE,     LABEL_SAVE},
       {ICON_EEPROM_RESTORE,  LABEL_RESTORE},
       {ICON_EEPROM_RESET,    LABEL_RESET},
-      {ICON_BACKGROUND,      LABEL_BACKGROUND},
-      {ICON_BACKGROUND,      LABEL_BACKGROUND},
-      {ICON_BACKGROUND,      LABEL_BACKGROUND},
-      {ICON_BACKGROUND,      LABEL_BACKGROUND},
+      {ICON_NULL,            LABEL_NULL},
+      {ICON_NULL,            LABEL_NULL},
+      {ICON_NULL,            LABEL_NULL},
+      {ICON_NULL,            LABEL_NULL},
       {ICON_BACK,            LABEL_BACK},
     }
   };
@@ -119,16 +119,16 @@ void menuMachineSettings(void)
       #ifdef QUICK_EEPROM_BUTTON
         {ICON_EEPROM_SAVE,             LABEL_EEPROM_SETTINGS},
       #else
-        {ICON_BACKGROUND,              LABEL_BACKGROUND},
+        {ICON_NULL,                    LABEL_NULL},
       #endif
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_NULL,                    LABEL_NULL},
       {ICON_BACK,                    LABEL_BACK},
     }
   };
 
   if (infoMachineSettings.firmwareType == FW_REPRAPFW)
   {
-    ITEM no_custom = { ICON_BACKGROUND, LABEL_BACKGROUND };
+    ITEM no_custom = { ICON_NULL, LABEL_NULL };
     machineSettingsItems.items[2] = no_custom;
   }
 

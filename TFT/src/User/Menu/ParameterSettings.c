@@ -33,9 +33,9 @@ const LABEL parameterTypes[PARAMETERS_COUNT] = {
 
 const LISTITEM eepromItems[P_SETTINGS_COUNT] = {
 // icon            ItemType    Item Title              item value text(only for custom value)
-  {CHARICON_SAVE,  LIST_LABEL, LABEL_SETTINGS_SAVE,    LABEL_BACKGROUND},
-  {CHARICON_UNDO,  LIST_LABEL, LABEL_SETTINGS_RESTORE, LABEL_BACKGROUND},
-  {CHARICON_RESET, LIST_LABEL, LABEL_SETTINGS_RESET,   LABEL_BACKGROUND},
+  {CHARICON_SAVE,  LIST_LABEL, LABEL_SETTINGS_SAVE,    LABEL_NULL},
+  {CHARICON_UNDO,  LIST_LABEL, LABEL_SETTINGS_RESTORE, LABEL_NULL},
+  {CHARICON_RESET, LIST_LABEL, LABEL_SETTINGS_RESET,   LABEL_NULL},
 };
 
 // Load elements for selected parameter
@@ -125,12 +125,12 @@ void loadElements(LISTITEM * parameterMainItem, uint16_t index, uint8_t itemPos)
     }
     else
     {
-      parameterMainItem->icon = CHARICON_BACKGROUND;
+      parameterMainItem->icon = CHARICON_NULL;
     }
   }
   else
   {
-    parameterMainItem->icon = CHARICON_BACKGROUND;
+    parameterMainItem->icon = CHARICON_NULL;
   }
 }
 
@@ -220,7 +220,7 @@ void loadParameters(LISTITEM * parameterMainItem, uint16_t index, uint8_t itemPo
     }
     else
     {
-      parameterMainItem->icon = CHARICON_BACKGROUND;
+      parameterMainItem->icon = CHARICON_NULL;
     }
   }
   else
@@ -228,7 +228,7 @@ void loadParameters(LISTITEM * parameterMainItem, uint16_t index, uint8_t itemPo
     if (infoMachineSettings.EEPROM == 1 && index < totalItems)
       *parameterMainItem = eepromItems[(index - enabledParameterCount)];
     else
-      parameterMainItem->icon = CHARICON_BACKGROUND;
+      parameterMainItem->icon = CHARICON_NULL;
   }
 }
 

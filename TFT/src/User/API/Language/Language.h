@@ -47,7 +47,7 @@ enum {
   // add new keywords in 'Language.inc' file only
   // keep the following always at the end of this list
   LABEL_NUM,
-  LABEL_BACKGROUND,
+  LABEL_NULL,
   LABEL_DYNAMIC,
   LABEL_CUSTOM_VALUE,
 };

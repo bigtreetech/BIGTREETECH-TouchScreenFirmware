@@ -82,7 +82,7 @@ uint8_t *textSelect(uint16_t sel)
 
 uint32_t getLabelFlashAddr(uint16_t index)
 {
-  if (index > LABEL_BACKGROUND) return LANGUAGE_ADDR;
+  if (index > LABEL_NULL) return LANGUAGE_ADDR;
   return (LANGUAGE_ADDR + (MAX_LANG_LABEL_LENGTH * index));
 }
 

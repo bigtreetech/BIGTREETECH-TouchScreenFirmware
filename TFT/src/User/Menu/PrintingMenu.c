@@ -108,7 +108,7 @@ const ITEM itemIsPause[2] = {
 
 const ITEM itemIsPrinting[3] = {
   // icon                        label
-  {ICON_BACKGROUND,              LABEL_BACKGROUND},
+  {ICON_NULL,                    LABEL_NULL},
   {ICON_MAINMENU,                LABEL_MAIN_SCREEN},
   {ICON_BACK,                    LABEL_BACK},
 };
@@ -556,15 +556,15 @@ void menuPrinting(void)
   // 1 title, ITEM_PER_PAGE items (icon + label)
   MENUITEMS printingItems = {
     // title
-    LABEL_BACKGROUND,
+    LABEL_NULL,
     // icon                          label
     {
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BABYSTEP},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,              LABEL_BABYSTEP},
       {ICON_MORE,                    LABEL_MORE},
       {ICON_STOP,                    LABEL_STOP},
     }

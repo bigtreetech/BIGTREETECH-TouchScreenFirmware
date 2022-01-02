@@ -1358,7 +1358,7 @@
  *                    flexible but requires a dedicated post-processing of gcode files for
  *                    most slicers. "Classic" is used as fallback.
  *     Base64 PNG:    A specific thumbnail comment identifies the location of a Base64-encoded
- *                    PNG thumbnail. It is slower as classic but most flexible. It does _not_
+ *                    PNG thumbnail. It is slower as classic but most flexible. It does not
  *                    require dedicated post-processing of gcode files for most slicers.
  *                    "RGB565 bitmap" and "Classic" are used as fallback.
  */

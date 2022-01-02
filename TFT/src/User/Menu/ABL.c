@@ -109,9 +109,9 @@ void menuUBLSaveLoad(void)
       {ICON_EEPROM_SAVE,             LABEL_ABL_SLOT1},
       {ICON_EEPROM_SAVE,             LABEL_ABL_SLOT2},
       {ICON_EEPROM_SAVE,             LABEL_ABL_SLOT3},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
       {ICON_BACK,                    LABEL_BACK},
     }
   };

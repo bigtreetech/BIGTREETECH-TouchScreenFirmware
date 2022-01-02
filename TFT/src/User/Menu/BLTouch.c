@@ -13,8 +13,8 @@ const MENUITEMS BLTouchItems = {
     {ICON_BLTOUCH_DEPLOY,          LABEL_DEPLOY},
     {ICON_BLTOUCH_STOW,            LABEL_STOW},
     {ICON_BLTOUCH_REPEAT,          LABEL_REPEAT},
-    {ICON_BACKGROUND,              LABEL_BACKGROUND},
-    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_NULL,                    LABEL_NULL},
+    {ICON_NULL,                    LABEL_NULL},
     {ICON_BACK,                    LABEL_BACK},
   }
 };

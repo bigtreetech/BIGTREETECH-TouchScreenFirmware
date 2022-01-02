@@ -10,9 +10,9 @@ const MENUITEMS homeItems = {
     {ICON_X_HOME,                  LABEL_X},
     {ICON_Y_HOME,                  LABEL_Y},
     {ICON_Z_HOME,                  LABEL_Z},
-    {ICON_BACKGROUND,              LABEL_BACKGROUND},
-    {ICON_BACKGROUND,              LABEL_BACKGROUND},
-    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_NULL,                    LABEL_NULL},
+    {ICON_NULL,                    LABEL_NULL},
+    {ICON_NULL,                    LABEL_NULL},
     {ICON_BACK,                    LABEL_BACK},
   }
 };
